@@ -2,529 +2,135 @@ Return-Path: <SRS0=5OmT=ZH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16769C432C3
-	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 04:03:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA1B2C432C3
+	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 04:03:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C6B4D206F4
-	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 04:03:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF788206F4
+	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 04:03:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="XpWwCgjP"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mb2EJDZ2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbfKOEDA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Nov 2019 23:03:00 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:31454 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726661AbfKOEC7 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 14 Nov 2019 23:02:59 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAF402PN016639
-        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 20:02:58 -0800
+        id S1727089AbfKOEDH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Nov 2019 23:03:07 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:26248 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726958AbfKOEDH (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 14 Nov 2019 23:03:07 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAF42wfT013923
+        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 20:03:05 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=w5F6WrJ+YCeULNoZ3EYje0j/DstTBIvRLjrUvGDNhGw=;
- b=XpWwCgjPUtMQBvEWTAwoQgryM8jXdYiRY/VJRR4RWzomPe1zegnghvcKI1vH058HfFR0
- S8hh6MTWaaO40UoRt0Q7DwC1ubML2hXY9NQ/JDhuczBZTB6O1XNBAc3HxiZb+HRCO1uC
- Evygb4MqSARWcICB4gSnFFpUVYVKKVO5zdc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2w8u0tk7gh-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 20:02:58 -0800
-Received: from 2401:db00:30:6012:face:0:17:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 14 Nov 2019 20:02:55 -0800
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=NjD6iYWWXMn0edcBKgfvhlw6MnG/DFIs2+m4hGfsSm8=;
+ b=mb2EJDZ2qIR1UaujUnsf79m7DMkoNimJb/5DQEK8D2NSTjn0i+bc2Imw/zcUSnHU8sLO
+ rMaoXzQG6DASVc1kxQXQ9mkGAMgal+0tIk2Rr3odjwJ6SgRcH23rLRkKPDY1LGOiI7U6
+ 1q0u7YxuLYhoWCGawdwqSOxH597PdUwAIp8= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2w9gffu7n2-11
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 14 Nov 2019 20:03:05 -0800
+Received: from 2401:db00:2120:81ca:face:0:31:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Thu, 14 Nov 2019 20:02:53 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 95F502EC1AEC; Thu, 14 Nov 2019 20:02:53 -0800 (PST)
+        id 4057F2EC1AEC; Thu, 14 Nov 2019 20:02:49 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>
+        Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 2/4] bpf: add mmap() support for BPF_MAP_TYPE_ARRAY
-Date:   Thu, 14 Nov 2019 20:02:23 -0800
-Message-ID: <20191115040225.2147245-3-andriin@fb.com>
+Subject: [PATCH v4 bpf-next 0/4] Add support for memory-mapping BPF array maps
+Date:   Thu, 14 Nov 2019 20:02:21 -0800
+Message-ID: <20191115040225.2147245-1-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191115040225.2147245-1-andriin@fb.com>
-References: <20191115040225.2147245-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-14_07:2019-11-14,2019-11-14 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- suspectscore=25 malwarescore=0 adultscore=0 lowpriorityscore=0
- priorityscore=1501 phishscore=0 bulkscore=0 mlxlogscore=999
- impostorscore=0 mlxscore=0 clxscore=1015 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-1910280000
- definitions=main-1911150034
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ bulkscore=0 mlxscore=0 clxscore=1015 malwarescore=0 mlxlogscore=521
+ suspectscore=8 lowpriorityscore=0 phishscore=0 adultscore=0
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-1911150035
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add ability to memory-map contents of BPF array map. This is extremely useful
-for working with BPF global data from userspace programs. It allows to avoid
-typical bpf_map_{lookup,update}_elem operations, improving both performance
-and usability.
+This patch set adds ability to memory-map BPF array maps (single- and
+multi-element). The primary use case is memory-mapping BPF array maps, created
+to back global data variables, created by libbpf implicitly. This allows for
+much better usability, along with avoiding syscalls to read or update data
+completely.
 
-There had to be special considerations for map freezing, to avoid having
-writable memory view into a frozen map. To solve this issue, map freezing and
-mmap-ing is happening under mutex now:
-  - if map is already frozen, no writable mapping is allowed;
-  - if map has writable memory mappings active (accounted in map->writecnt),
-    map freezing will keep failing with -EBUSY;
-  - once number of writable memory mappings drops to zero, map freezing can be
-    performed again.
+Due to memory-mapping requirements, BPF array map that is supposed to be
+memory-mapped, has to be created with special BPF_F_MMAPABLE attribute, which
+triggers slightly different memory allocation strategy internally. See
+patch 1 for details.
 
-Only non-per-CPU plain arrays are supported right now. Maps with spinlocks
-can't be memory mapped either.
+Libbpf is extended to detect kernel support for this flag, and if supported,
+will specify it for all global data maps automatically.
 
-For BPF_F_MMAPABLE array, memory allocation has to be done through vmalloc()
-to be mmap()'able. We also need to make sure that array data memory is
-page-sized and page-aligned, so we over-allocate memory in such a way that
-struct bpf_array is at the end of a single page of memory with array->value
-being aligned with the start of the second page. On deallocation we need to
-accomodate this memory arrangement to free vmalloc()'ed memory correctly.
+Patch #1 refactors bpf_map_inc() and converts bpf_map's refcnt to atomic64_t
+to make refcounting never fail.
 
-One important consideration regarding how memory-mapping subsystem functions.
-Memory-mapping subsystem provides few optional callbacks, among them open()
-and close().  close() is called for each memory region that is unmapped, so
-that users can decrease their reference counters and free up resources, if
-necessary. open() is *almost* symmetrical: it's called for each memory region
-that is being mapped, **except** the very first one. So bpf_map_mmap does
-initial refcnt bump, while open() will do any extra ones after that. Thus
-number of close() calls is equal to number of open() calls plus one more.
+v3->v4:
+- add mmap's open() callback to fix refcounting (Johannes);
+- switch to remap_vmalloc_pages() instead of custom fault handler (Johannes);
+- converted bpf_map's refcnt/usercnt into atomic64_t;
+- provide default bpf_map_default_vmops handling open/close properly;
 
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Rik van Riel <riel@surriel.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- include/linux/bpf.h            | 11 ++--
- include/linux/vmalloc.h        |  1 +
- include/uapi/linux/bpf.h       |  3 ++
- kernel/bpf/arraymap.c          | 59 +++++++++++++++++---
- kernel/bpf/syscall.c           | 99 ++++++++++++++++++++++++++++++++--
- mm/vmalloc.c                   | 20 +++++++
- tools/include/uapi/linux/bpf.h |  3 ++
- 7 files changed, 184 insertions(+), 12 deletions(-)
+v2->v3:
+- change allocation strategy to avoid extra pointer dereference (Jakub);
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 6fbe599fb977..8021fce98868 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -12,6 +12,7 @@
- #include <linux/err.h>
- #include <linux/rbtree_latch.h>
- #include <linux/numa.h>
-+#include <linux/mm_types.h>
- #include <linux/wait.h>
- #include <linux/u64_stats_sync.h>
- 
-@@ -66,6 +67,7 @@ struct bpf_map_ops {
- 				     u64 *imm, u32 off);
- 	int (*map_direct_value_meta)(const struct bpf_map *map,
- 				     u64 imm, u32 *off);
-+	int (*map_mmap)(struct bpf_map *map, struct vm_area_struct *vma);
- };
- 
- struct bpf_map_memory {
-@@ -94,9 +96,10 @@ struct bpf_map {
- 	u32 btf_value_type_id;
- 	struct btf *btf;
- 	struct bpf_map_memory memory;
-+	char name[BPF_OBJ_NAME_LEN];
- 	bool unpriv_array;
--	bool frozen; /* write-once */
--	/* 48 bytes hole */
-+	bool frozen; /* write-once; write-protected by freeze_mutex */
-+	/* 22 bytes hole */
- 
- 	/* The 3rd and 4th cacheline with misc members to avoid false sharing
- 	 * particularly with refcounting.
-@@ -104,7 +107,8 @@ struct bpf_map {
- 	atomic64_t refcnt ____cacheline_aligned;
- 	atomic64_t usercnt;
- 	struct work_struct work;
--	char name[BPF_OBJ_NAME_LEN];
-+	struct mutex freeze_mutex;
-+	u64 writecnt; /* writable mmap cnt; protected by freeze_mutex */
- };
- 
- static inline bool map_value_has_spin_lock(const struct bpf_map *map)
-@@ -689,6 +693,7 @@ void bpf_map_charge_finish(struct bpf_map_memory *mem);
- void bpf_map_charge_move(struct bpf_map_memory *dst,
- 			 struct bpf_map_memory *src);
- void *bpf_map_area_alloc(size_t size, int numa_node);
-+void *bpf_map_area_mmapable_alloc(size_t size, int numa_node);
- void bpf_map_area_free(void *base);
- void bpf_map_init_from_attr(struct bpf_map *map, union bpf_attr *attr);
- 
-diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-index 4e7809408073..b4c58a191eb1 100644
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -93,6 +93,7 @@ extern void *vzalloc(unsigned long size);
- extern void *vmalloc_user(unsigned long size);
- extern void *vmalloc_node(unsigned long size, int node);
- extern void *vzalloc_node(unsigned long size, int node);
-+extern void *vmalloc_user_node_flags(unsigned long size, int node, gfp_t flags);
- extern void *vmalloc_exec(unsigned long size);
- extern void *vmalloc_32(unsigned long size);
- extern void *vmalloc_32_user(unsigned long size);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index df6809a76404..bb39b53622d9 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -346,6 +346,9 @@ enum bpf_attach_type {
- /* Clone map from listener for newly accepted socket */
- #define BPF_F_CLONE		(1U << 9)
- 
-+/* Enable memory-mapping BPF map */
-+#define BPF_F_MMAPABLE		(1U << 10)
-+
- /* flags for BPF_PROG_QUERY */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
- 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 1c65ce0098a9..baff45aed6ed 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -14,7 +14,7 @@
- #include "map_in_map.h"
- 
- #define ARRAY_CREATE_FLAG_MASK \
--	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
-+	(BPF_F_NUMA_NODE | BPF_F_MMAPABLE | BPF_F_ACCESS_MASK)
- 
- static void bpf_array_free_percpu(struct bpf_array *array)
- {
-@@ -59,6 +59,10 @@ int array_map_alloc_check(union bpf_attr *attr)
- 	    (percpu && numa_node != NUMA_NO_NODE))
- 		return -EINVAL;
- 
-+	if (attr->map_type != BPF_MAP_TYPE_ARRAY &&
-+	    attr->map_flags & BPF_F_MMAPABLE)
-+		return -EINVAL;
-+
- 	if (attr->value_size > KMALLOC_MAX_SIZE)
- 		/* if value_size is bigger, the user space won't be able to
- 		 * access the elements.
-@@ -102,10 +106,19 @@ static struct bpf_map *array_map_alloc(union bpf_attr *attr)
- 	}
- 
- 	array_size = sizeof(*array);
--	if (percpu)
-+	if (percpu) {
- 		array_size += (u64) max_entries * sizeof(void *);
--	else
--		array_size += (u64) max_entries * elem_size;
-+	} else {
-+		/* rely on vmalloc() to return page-aligned memory and
-+		 * ensure array->value is exactly page-aligned
-+		 */
-+		if (attr->map_flags & BPF_F_MMAPABLE) {
-+			array_size = PAGE_ALIGN(array_size);
-+			array_size += PAGE_ALIGN((u64) max_entries * elem_size);
-+		} else {
-+			array_size += (u64) max_entries * elem_size;
-+		}
-+	}
- 
- 	/* make sure there is no u32 overflow later in round_up() */
- 	cost = array_size;
-@@ -117,7 +130,20 @@ static struct bpf_map *array_map_alloc(union bpf_attr *attr)
- 		return ERR_PTR(ret);
- 
- 	/* allocate all map elements and zero-initialize them */
--	array = bpf_map_area_alloc(array_size, numa_node);
-+	if (attr->map_flags & BPF_F_MMAPABLE) {
-+		void *data;
-+
-+		/* kmalloc'ed memory can't be mmap'ed, use explicit vmalloc */
-+		data = bpf_map_area_mmapable_alloc(array_size, numa_node);
-+		if (!data) {
-+			bpf_map_charge_finish(&mem);
-+			return ERR_PTR(-ENOMEM);
-+		}
-+		array = data + PAGE_ALIGN(sizeof(struct bpf_array))
-+			- offsetof(struct bpf_array, value);
-+	} else {
-+		array = bpf_map_area_alloc(array_size, numa_node);
-+	}
- 	if (!array) {
- 		bpf_map_charge_finish(&mem);
- 		return ERR_PTR(-ENOMEM);
-@@ -350,6 +376,11 @@ static int array_map_delete_elem(struct bpf_map *map, void *key)
- 	return -EINVAL;
- }
- 
-+static void *array_map_vmalloc_addr(struct bpf_array *array)
-+{
-+	return (void *)round_down((unsigned long)array, PAGE_SIZE);
-+}
-+
- /* Called when map->refcnt goes to zero, either from workqueue or from syscall */
- static void array_map_free(struct bpf_map *map)
- {
-@@ -365,7 +396,10 @@ static void array_map_free(struct bpf_map *map)
- 	if (array->map.map_type == BPF_MAP_TYPE_PERCPU_ARRAY)
- 		bpf_array_free_percpu(array);
- 
--	bpf_map_area_free(array);
-+	if (array->map.map_flags & BPF_F_MMAPABLE)
-+		bpf_map_area_free(array_map_vmalloc_addr(array));
-+	else
-+		bpf_map_area_free(array);
- }
- 
- static void array_map_seq_show_elem(struct bpf_map *map, void *key,
-@@ -444,6 +478,18 @@ static int array_map_check_btf(const struct bpf_map *map,
- 	return 0;
- }
- 
-+int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
-+{
-+	struct bpf_array *array = container_of(map, struct bpf_array, map);
-+	pgoff_t pgoff = PAGE_ALIGN(sizeof(*array)) >> PAGE_SHIFT;
-+	int err;
-+
-+	if (!(map->map_flags & BPF_F_MMAPABLE))
-+		return -EINVAL;
-+
-+	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array), pgoff);
-+}
-+
- const struct bpf_map_ops array_map_ops = {
- 	.map_alloc_check = array_map_alloc_check,
- 	.map_alloc = array_map_alloc,
-@@ -455,6 +501,7 @@ const struct bpf_map_ops array_map_ops = {
- 	.map_gen_lookup = array_map_gen_lookup,
- 	.map_direct_value_addr = array_map_direct_value_addr,
- 	.map_direct_value_meta = array_map_direct_value_meta,
-+	.map_mmap = array_map_mmap,
- 	.map_seq_show_elem = array_map_seq_show_elem,
- 	.map_check_btf = array_map_check_btf,
- };
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 9d8b56d660d7..810e53990641 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -127,7 +127,7 @@ static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
- 	return map;
- }
- 
--void *bpf_map_area_alloc(size_t size, int numa_node)
-+static void *__bpf_map_area_alloc(size_t size, int numa_node, bool mmapable)
- {
- 	/* We really just want to fail instead of triggering OOM killer
- 	 * under memory pressure, therefore we set __GFP_NORETRY to kmalloc,
-@@ -142,18 +142,33 @@ void *bpf_map_area_alloc(size_t size, int numa_node)
- 	const gfp_t flags = __GFP_NOWARN | __GFP_ZERO;
- 	void *area;
- 
--	if (size <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)) {
-+	/* kmalloc()'ed memory can't be mmap()'ed */
-+	if (!mmapable && size <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)) {
- 		area = kmalloc_node(size, GFP_USER | __GFP_NORETRY | flags,
- 				    numa_node);
- 		if (area != NULL)
- 			return area;
- 	}
--
-+	if (mmapable) {
-+		BUG_ON(!PAGE_ALIGNED(size));
-+		return vmalloc_user_node_flags(size, numa_node, GFP_KERNEL |
-+					       __GFP_RETRY_MAYFAIL | flags);
-+	}
- 	return __vmalloc_node_flags_caller(size, numa_node,
- 					   GFP_KERNEL | __GFP_RETRY_MAYFAIL |
- 					   flags, __builtin_return_address(0));
- }
- 
-+void *bpf_map_area_alloc(size_t size, int numa_node)
-+{
-+	return __bpf_map_area_alloc(size, numa_node, false);
-+}
-+
-+void *bpf_map_area_mmapable_alloc(size_t size, int numa_node)
-+{
-+	return __bpf_map_area_alloc(size, numa_node, true);
-+}
-+
- void bpf_map_area_free(void *area)
- {
- 	kvfree(area);
-@@ -425,6 +440,74 @@ static ssize_t bpf_dummy_write(struct file *filp, const char __user *buf,
- 	return -EINVAL;
- }
- 
-+/* called for any extra memory-mapped regions (except initial) */
-+static void bpf_map_mmap_open(struct vm_area_struct *vma)
-+{
-+	struct bpf_map *map = vma->vm_file->private_data;
-+
-+	bpf_map_inc(map);
-+
-+	if (vma->vm_flags & VM_WRITE) {
-+		mutex_lock(&map->freeze_mutex);
-+		map->writecnt++;
-+		mutex_unlock(&map->freeze_mutex);
-+	}
-+}
-+
-+/* called for all unmapped memory region (including initial) */
-+static void bpf_map_mmap_close(struct vm_area_struct *vma)
-+{
-+	struct bpf_map *map = vma->vm_file->private_data;
-+
-+	if (vma->vm_flags & VM_WRITE) {
-+		mutex_lock(&map->freeze_mutex);
-+		map->writecnt--;
-+		mutex_unlock(&map->freeze_mutex);
-+	}
-+
-+	bpf_map_put(map);
-+}
-+
-+static const struct vm_operations_struct bpf_map_default_vmops = {
-+	.open		= bpf_map_mmap_open,
-+	.close		= bpf_map_mmap_close,
-+};
-+
-+static int bpf_map_mmap(struct file *filp, struct vm_area_struct *vma)
-+{
-+	struct bpf_map *map = filp->private_data;
-+	int err;
-+
-+	if (!map->ops->map_mmap || map_value_has_spin_lock(map))
-+		return -ENOTSUPP;
-+
-+	if (!(vma->vm_flags & VM_SHARED))
-+		return -EINVAL;
-+
-+	mutex_lock(&map->freeze_mutex);
-+
-+	if ((vma->vm_flags & VM_WRITE) && map->frozen) {
-+		err = -EPERM;
-+		goto out;
-+	}
-+
-+	/* set default open/close callbacks */
-+	vma->vm_ops = &bpf_map_default_vmops;
-+	vma->vm_private_data = map;
-+
-+	err = map->ops->map_mmap(map, vma);
-+	if (err)
-+		goto out;
-+
-+	bpf_map_inc(map);
-+
-+	if (vma->vm_flags & VM_WRITE)
-+		map->writecnt++;
-+out:
-+	mutex_unlock(&map->freeze_mutex);
-+	return err;
-+}
-+
- const struct file_operations bpf_map_fops = {
- #ifdef CONFIG_PROC_FS
- 	.show_fdinfo	= bpf_map_show_fdinfo,
-@@ -432,6 +515,7 @@ const struct file_operations bpf_map_fops = {
- 	.release	= bpf_map_release,
- 	.read		= bpf_dummy_read,
- 	.write		= bpf_dummy_write,
-+	.mmap		= bpf_map_mmap,
- };
- 
- int bpf_map_new_fd(struct bpf_map *map, int flags)
-@@ -577,6 +661,7 @@ static int map_create(union bpf_attr *attr)
- 
- 	atomic64_set(&map->refcnt, 1);
- 	atomic64_set(&map->usercnt, 1);
-+	mutex_init(&map->freeze_mutex);
- 
- 	if (attr->btf_key_type_id || attr->btf_value_type_id) {
- 		struct btf *btf;
-@@ -1163,6 +1248,13 @@ static int map_freeze(const union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
-+
-+	mutex_lock(&map->freeze_mutex);
-+
-+	if (map->writecnt) {
-+		err = -EBUSY;
-+		goto err_put;
-+	}
- 	if (READ_ONCE(map->frozen)) {
- 		err = -EBUSY;
- 		goto err_put;
-@@ -1174,6 +1266,7 @@ static int map_freeze(const union bpf_attr *attr)
- 
- 	WRITE_ONCE(map->frozen, true);
- err_put:
-+	mutex_unlock(&map->freeze_mutex);
- 	fdput(f);
- 	return err;
- }
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index a3c70e275f4e..4a7d7459c4f9 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -2671,6 +2671,26 @@ void *vzalloc_node(unsigned long size, int node)
- }
- EXPORT_SYMBOL(vzalloc_node);
- 
-+/**
-+ * vmalloc_user_node_flags - allocate memory for userspace on a specific node
-+ * @size: allocation size
-+ * @node: numa node
-+ * @flags: flags for the page level allocator
-+ *
-+ * The resulting memory area is zeroed so it can be mapped to userspace
-+ * without leaking data.
-+ *
-+ * Return: pointer to the allocated memory or %NULL on error
-+ */
-+void *vmalloc_user_node_flags(unsigned long size, int node, gfp_t flags)
-+{
-+	return __vmalloc_node_range(size, SHMLBA,  VMALLOC_START, VMALLOC_END,
-+				    flags | __GFP_ZERO, PAGE_KERNEL,
-+				    VM_USERMAP, node,
-+				    __builtin_return_address(0));
-+}
-+EXPORT_SYMBOL(vmalloc_user_node_flags);
-+
- /**
-  * vmalloc_exec - allocate virtually contiguous, executable memory
-  * @size:	  allocation size
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index df6809a76404..bb39b53622d9 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -346,6 +346,9 @@ enum bpf_attach_type {
- /* Clone map from listener for newly accepted socket */
- #define BPF_F_CLONE		(1U << 9)
- 
-+/* Enable memory-mapping BPF map */
-+#define BPF_F_MMAPABLE		(1U << 10)
-+
- /* flags for BPF_PROG_QUERY */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
- 
+v1->v2:
+- fix map lookup code generation for BPF_F_MMAPABLE case;
+- prevent BPF_F_MMAPABLE flag for all but plain array map type;
+- centralize ref-counting in generic bpf_map_mmap();
+- don't use uref counting (Alexei);
+- use vfree() directly;
+- print flags with %x (Song);
+- extend tests to verify bpf_map_{lookup,update}_elem() logic as well.
+
+
+Andrii Nakryiko (4):
+  bpf: switch bpf_map ref counter to 64bit so bpf_map_inc never fails
+  bpf: add mmap() support for BPF_MAP_TYPE_ARRAY
+  libbpf: make global data internal arrays mmap()-able, if possible
+  selftests/bpf: add BPF_TYPE_MAP_ARRAY mmap() tests
+
+ .../net/ethernet/netronome/nfp/bpf/offload.c  |   4 +-
+ include/linux/bpf.h                           |  21 +-
+ include/linux/vmalloc.h                       |   1 +
+ include/uapi/linux/bpf.h                      |   3 +
+ kernel/bpf/arraymap.c                         |  59 ++++-
+ kernel/bpf/inode.c                            |   2 +-
+ kernel/bpf/map_in_map.c                       |   2 +-
+ kernel/bpf/syscall.c                          | 150 +++++++++---
+ kernel/bpf/verifier.c                         |   6 +-
+ kernel/bpf/xskmap.c                           |   6 +-
+ mm/vmalloc.c                                  |  20 ++
+ net/core/bpf_sk_storage.c                     |   2 +-
+ tools/include/uapi/linux/bpf.h                |   3 +
+ tools/lib/bpf/libbpf.c                        |  32 ++-
+ .../selftests/bpf/prog_tests/core_reloc.c     |  45 ++--
+ tools/testing/selftests/bpf/prog_tests/mmap.c | 220 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_mmap.c |  45 ++++
+ 17 files changed, 540 insertions(+), 81 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/mmap.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_mmap.c
+
 -- 
 2.17.1
 
