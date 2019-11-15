@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1952C43141
-	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 01:04:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCE23C432C3
+	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 01:04:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BDA2820725
-	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 01:04:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A85E620725
+	for <bpf@archiver.kernel.org>; Fri, 15 Nov 2019 01:04:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727080AbfKOBEW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Nov 2019 20:04:22 -0500
-Received: from www62.your-server.de ([213.133.104.62]:50736 "EHLO
+        id S1727112AbfKOBEV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Nov 2019 20:04:21 -0500
+Received: from www62.your-server.de ([213.133.104.62]:50706 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727254AbfKOBEV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1727080AbfKOBEV (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 14 Nov 2019 20:04:21 -0500
 Received: from 57.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.57] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1iVQ27-00080z-Qt; Fri, 15 Nov 2019 02:04:19 +0100
+        id 1iVQ26-00080Y-8P; Fri, 15 Nov 2019 02:04:18 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     john.fastabend@gmail.com, netdev@vger.kernel.org,
         bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH rfc bpf-next 4/8] bpf: move owner type,jited info into array auxillary data
-Date:   Fri, 15 Nov 2019 02:03:58 +0100
-Message-Id: <ba2d30018f57b5608e04e105c6f6692e687698b4.1573779287.git.daniel@iogearbox.net>
+Subject: [PATCH rfc bpf-next 1/8] bpf, x86: generalize and extend bpf_arch_text_poke for direct jumps
+Date:   Fri, 15 Nov 2019 02:03:55 +0100
+Message-Id: <d2364bbaca1569b04e2434d8b58a458f21c685ef.1573779287.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1573779287.git.daniel@iogearbox.net>
 References: <cover.1573779287.git.daniel@iogearbox.net>
@@ -42,179 +42,178 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We're going to extend this with further information which is only
-relevant for prog array at this point. Given this info is not used
-in critical path, move it into its own structure such that the main
-array map structure can be kept on diet.
+Add BPF_MOD_{NOP_TO_JUMP,JUMP_TO_JUMP,JUMP_TO_NOP} patching for x86
+JIT in order to be able to patch direct jumps or nop them out. We need
+this facility in order to patch tail call jumps and in later work also
+BPF static keys.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- include/linux/bpf.h     | 18 +++++++++++-------
- kernel/bpf/arraymap.c   | 32 ++++++++++++++++++++++++++++++--
- kernel/bpf/core.c       | 11 +++++------
- kernel/bpf/map_in_map.c |  5 ++---
- kernel/bpf/syscall.c    | 16 ++++++----------
- 5 files changed, 54 insertions(+), 28 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 64 ++++++++++++++++++++++++++-----------
+ include/linux/bpf.h         |  6 ++++
+ 2 files changed, 52 insertions(+), 18 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index ed1725539891..40337fa0e463 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -556,17 +556,21 @@ struct bpf_prog_aux {
- 	};
- };
- 
-+struct bpf_array_aux {
-+	/* 'Ownership' of prog array is claimed by the first program that
-+	 * is going to use this map or by the first program which FD is
-+	 * stored in the map to make sure that all callers and callees have
-+	 * the same prog type and JITed flag.
-+	 */
-+	enum bpf_prog_type type;
-+	bool jited;
-+};
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 2e586f579945..66921f2aeece 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -203,8 +203,9 @@ struct jit_context {
+ /* Maximum number of bytes emitted while JITing one eBPF insn */
+ #define BPF_MAX_INSN_SIZE	128
+ #define BPF_INSN_SAFETY		64
+-/* number of bytes emit_call() needs to generate call instruction */
+-#define X86_CALL_SIZE		5
 +
- struct bpf_array {
- 	struct bpf_map map;
- 	u32 elem_size;
- 	u32 index_mask;
--	/* 'ownership' of prog_array is claimed by the first program that
--	 * is going to use this map or by the first program which FD is stored
--	 * in the map to make sure that all callers and callees have the same
--	 * prog_type and JITed flag
--	 */
--	enum bpf_prog_type owner_prog_type;
--	bool owner_jited;
-+	struct bpf_array_aux *aux;
- 	union {
- 		char value[0] __aligned(8);
- 		void *ptrs[0] __aligned(8);
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 1c65ce0098a9..88c1363b2925 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -625,10 +625,38 @@ static void prog_array_map_seq_show_elem(struct bpf_map *map, void *key,
- 	rcu_read_unlock();
++/* Number of bytes emit_patchable() needs to generate instructions */
++#define X86_PATCHABLE_SIZE	5
+ 
+ #define PROLOGUE_SIZE		25
+ 
+@@ -215,7 +216,7 @@ struct jit_context {
+ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf)
+ {
+ 	u8 *prog = *pprog;
+-	int cnt = X86_CALL_SIZE;
++	int cnt = X86_PATCHABLE_SIZE;
+ 
+ 	/* BPF trampoline can be made to work without these nops,
+ 	 * but let's waste 5 bytes for now and optimize later
+@@ -480,64 +481,91 @@ static void emit_stx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
+ 	*pprog = prog;
  }
  
-+static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)
+-static int emit_call(u8 **pprog, void *func, void *ip)
++static int emit_patchable(u8 **pprog, void *func, void *ip, u8 b1)
+ {
+ 	u8 *prog = *pprog;
+ 	int cnt = 0;
+ 	s64 offset;
+ 
+-	offset = func - (ip + X86_CALL_SIZE);
++	offset = func - (ip + X86_PATCHABLE_SIZE);
+ 	if (!is_simm32(offset)) {
+ 		pr_err("Target call %p is out of range\n", func);
+ 		return -EINVAL;
+ 	}
+-	EMIT1_off32(0xE8, offset);
++	EMIT1_off32(b1, offset);
+ 	*pprog = prog;
+ 	return 0;
+ }
+ 
++static int emit_call(u8 **pprog, void *func, void *ip)
 +{
-+	struct bpf_array_aux *aux;
-+	struct bpf_map *map;
++	return emit_patchable(pprog, func, ip, 0xE8);
++}
 +
-+	aux = kzalloc(sizeof(*aux), GFP_KERNEL);
-+	if (!aux)
-+		return ERR_PTR(-ENOMEM);
++static int emit_jump(u8 **pprog, void *func, void *ip)
++{
++	return emit_patchable(pprog, func, ip, 0xE9);
++}
 +
-+	map = array_map_alloc(attr);
-+	if (IS_ERR(map)) {
-+		kfree(aux);
-+		return map;
+ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 		       void *old_addr, void *new_addr)
+ {
+-	u8 old_insn[X86_CALL_SIZE] = {};
+-	u8 new_insn[X86_CALL_SIZE] = {};
++	int (*emit_patch)(u8 **pprog, void *func, void *ip);
++	u8 old_insn[X86_PATCHABLE_SIZE] = {};
++	u8 new_insn[X86_PATCHABLE_SIZE] = {};
+ 	u8 *prog;
+ 	int ret;
+ 
+ 	if (!is_kernel_text((long)ip) &&
+ 	    !is_bpf_text_address((long)ip))
+-		/* BPF trampoline in modules is not supported */
++		/* BPF poking in modules is not supported */
+ 		return -EINVAL;
+ 
++	switch (t) {
++	case BPF_MOD_NOP_TO_CALL ... BPF_MOD_CALL_TO_NOP:
++		emit_patch = emit_call;
++		break;
++	case BPF_MOD_NOP_TO_JUMP ... BPF_MOD_JUMP_TO_NOP:
++		emit_patch = emit_jump;
++		break;
++	default:
++		return -ENOTSUPP;
 +	}
 +
-+	container_of(map, struct bpf_array, map)->aux = aux;
-+	return map;
-+}
+ 	if (old_addr) {
+ 		prog = old_insn;
+-		ret = emit_call(&prog, old_addr, (void *)ip);
++		ret = emit_patch(&prog, old_addr, (void *)ip);
+ 		if (ret)
+ 			return ret;
+ 	}
+ 	if (new_addr) {
+ 		prog = new_insn;
+-		ret = emit_call(&prog, new_addr, (void *)ip);
++		ret = emit_patch(&prog, new_addr, (void *)ip);
+ 		if (ret)
+ 			return ret;
+ 	}
 +
-+static void prog_array_map_free(struct bpf_map *map)
-+{
-+	struct bpf_array_aux *aux;
-+
-+	aux = container_of(map, struct bpf_array, map)->aux;
-+	kfree(aux);
-+	fd_array_map_free(map);
-+}
-+
- const struct bpf_map_ops prog_array_map_ops = {
- 	.map_alloc_check = fd_array_map_alloc_check,
--	.map_alloc = array_map_alloc,
--	.map_free = fd_array_map_free,
-+	.map_alloc = prog_array_map_alloc,
-+	.map_free = prog_array_map_free,
- 	.map_get_next_key = array_map_get_next_key,
- 	.map_lookup_elem = fd_array_map_lookup_elem,
- 	.map_delete_elem = fd_array_map_delete_elem,
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 516ef5923eea..c359d0a94896 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1687,18 +1687,17 @@ bool bpf_prog_array_compatible(struct bpf_array *array,
- 	if (fp->kprobe_override)
- 		return false;
- 
--	if (!array->owner_prog_type) {
-+	if (!array->aux->type) {
- 		/* There's no owner yet where we could check for
- 		 * compatibility.
+ 	ret = -EBUSY;
+ 	mutex_lock(&text_mutex);
+ 	switch (t) {
+ 	case BPF_MOD_NOP_TO_CALL:
+-		if (memcmp(ip, ideal_nops[NOP_ATOMIC5], X86_CALL_SIZE))
++	case BPF_MOD_NOP_TO_JUMP:
++		if (memcmp(ip, ideal_nops[NOP_ATOMIC5], X86_PATCHABLE_SIZE))
+ 			goto out;
+-		text_poke_bp(ip, new_insn, X86_CALL_SIZE, NULL);
++		text_poke_bp(ip, new_insn, X86_PATCHABLE_SIZE, NULL);
+ 		break;
+ 	case BPF_MOD_CALL_TO_CALL:
+-		if (memcmp(ip, old_insn, X86_CALL_SIZE))
++	case BPF_MOD_JUMP_TO_JUMP:
++		if (memcmp(ip, old_insn, X86_PATCHABLE_SIZE))
+ 			goto out;
+-		text_poke_bp(ip, new_insn, X86_CALL_SIZE, NULL);
++		text_poke_bp(ip, new_insn, X86_PATCHABLE_SIZE, NULL);
+ 		break;
+ 	case BPF_MOD_CALL_TO_NOP:
+-		if (memcmp(ip, old_insn, X86_CALL_SIZE))
++	case BPF_MOD_JUMP_TO_NOP:
++		if (memcmp(ip, old_insn, X86_PATCHABLE_SIZE))
+ 			goto out;
+-		text_poke_bp(ip, ideal_nops[NOP_ATOMIC5], X86_CALL_SIZE, NULL);
++		text_poke_bp(ip, ideal_nops[NOP_ATOMIC5], X86_PATCHABLE_SIZE,
++			     NULL);
+ 		break;
+ 	}
+ 	ret = 0;
+@@ -1394,7 +1422,7 @@ int arch_prepare_bpf_trampoline(void *image, struct btf_func_model *m, u32 flags
+ 		/* skip patched call instruction and point orig_call to actual
+ 		 * body of the kernel function.
  		 */
--		array->owner_prog_type = fp->type;
--		array->owner_jited = fp->jited;
--
-+		array->aux->type  = fp->type;
-+		array->aux->jited = fp->jited;
- 		return true;
- 	}
+-		orig_call += X86_CALL_SIZE;
++		orig_call += X86_PATCHABLE_SIZE;
  
--	return array->owner_prog_type == fp->type &&
--	       array->owner_jited == fp->jited;
-+	return array->aux->type  == fp->type &&
-+	       array->aux->jited == fp->jited;
- }
+ 	prog = image;
  
- static int bpf_check_tail_call(const struct bpf_prog *fp)
-diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
-index fab4fb134547..296f4ac76211 100644
---- a/kernel/bpf/map_in_map.c
-+++ b/kernel/bpf/map_in_map.c
-@@ -17,9 +17,8 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
- 	if (IS_ERR(inner_map))
- 		return inner_map;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 42c112d2b3a9..562d9ade2926 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1283,10 +1283,16 @@ static inline u32 bpf_xdp_sock_convert_ctx_access(enum bpf_access_type type,
+ #endif /* CONFIG_INET */
  
--	/* prog_array->owner_prog_type and owner_jited
--	 * is a runtime binding.  Doing static check alone
--	 * in the verifier is not enough.
-+	/* prog_array->aux->{type,jited} is a runtime binding.
-+	 * Doing static check alone in the verifier is not enough.
- 	 */
- 	if (inner_map->map_type == BPF_MAP_TYPE_PROG_ARRAY ||
- 	    inner_map->map_type == BPF_MAP_TYPE_CGROUP_STORAGE ||
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 1b311742a2ea..81057e5922d5 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -371,13 +371,12 @@ static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
- {
- 	const struct bpf_map *map = filp->private_data;
- 	const struct bpf_array *array;
--	u32 owner_prog_type = 0;
--	u32 owner_jited = 0;
-+	u32 type = 0, jited = 0;
+ enum bpf_text_poke_type {
++	/* All call-related pokes. */
+ 	BPF_MOD_NOP_TO_CALL,
+ 	BPF_MOD_CALL_TO_CALL,
+ 	BPF_MOD_CALL_TO_NOP,
++	/* All jump-related pokes. */
++	BPF_MOD_NOP_TO_JUMP,
++	BPF_MOD_JUMP_TO_JUMP,
++	BPF_MOD_JUMP_TO_NOP,
+ };
++
+ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 		       void *addr1, void *addr2);
  
- 	if (map->map_type == BPF_MAP_TYPE_PROG_ARRAY) {
- 		array = container_of(map, struct bpf_array, map);
--		owner_prog_type = array->owner_prog_type;
--		owner_jited = array->owner_jited;
-+		type  = array->aux->type;
-+		jited = array->aux->jited;
- 	}
- 
- 	seq_printf(m,
-@@ -397,12 +396,9 @@ static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
- 		   map->memory.pages * 1ULL << PAGE_SHIFT,
- 		   map->id,
- 		   READ_ONCE(map->frozen));
--
--	if (owner_prog_type) {
--		seq_printf(m, "owner_prog_type:\t%u\n",
--			   owner_prog_type);
--		seq_printf(m, "owner_jited:\t%u\n",
--			   owner_jited);
-+	if (type) {
-+		seq_printf(m, "owner_prog_type:\t%u\n", type);
-+		seq_printf(m, "owner_jited:\t%u\n", jited);
- 	}
- }
- #endif
 -- 
 2.21.0
 
