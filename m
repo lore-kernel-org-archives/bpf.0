@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD0D5C33C8C
-	for <bpf@archiver.kernel.org>; Sat, 16 Nov 2019 16:16:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C050DC432C3
+	for <bpf@archiver.kernel.org>; Sat, 16 Nov 2019 16:18:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 85C7B21845
-	for <bpf@archiver.kernel.org>; Sat, 16 Nov 2019 16:16:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A4B021823
+	for <bpf@archiver.kernel.org>; Sat, 16 Nov 2019 16:18:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573920982;
-	bh=kpwFn9Sc0MqKe83RqXYHAMb6fci+1VqMYohUynAsflo=;
+	s=default; t=1573921135;
+	bh=2Wlb3YZLDLsri+AOZgu2/8+1BzXQy5enQQEq+o4T+ec=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=dbrtaRb4O/k+o7hfYJm/bldM6WfOFiNL1DdeyKwNr/Fcd2zPzJ8NE7L5n9Ab2XtJF
-	 u9DPk0y/gu/mmN6hXR/qqVkdutAiiasimyI6r1RVBHfSd4zg+eGoBeaC3/zjlkTwWX
-	 2etzP0mxBi2zgwBB85m8zDn/INS1TppfG9yP1aKQ=
+	b=TbxoXLR4ur30NLhCE2o6xx6CpBVx+65ct+yWjlHen6f4IfriV0+YResVJl1f1aZ1h
+	 e0blbRQHN/XZPjb7Ds8Bwkr/F9IOVKFXH0AvIe2mDe/OTxLA9Wbdfcm4JoPwJMRTOH
+	 P57uQb+7aCcKCnONxOsQ6QfveTuGi2yPoCpAsgG0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729600AbfKPPrD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 16 Nov 2019 10:47:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53666 "EHLO mail.kernel.org"
+        id S1729371AbfKPPqZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 16 Nov 2019 10:46:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52736 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729590AbfKPPrD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:47:03 -0500
+        id S1728005AbfKPPqY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:46:24 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A8392208C0;
-        Sat, 16 Nov 2019 15:47:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A24CE2077B;
+        Sat, 16 Nov 2019 15:46:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919222;
-        bh=kpwFn9Sc0MqKe83RqXYHAMb6fci+1VqMYohUynAsflo=;
+        s=default; t=1573919184;
+        bh=2Wlb3YZLDLsri+AOZgu2/8+1BzXQy5enQQEq+o4T+ec=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a29uFegIVK4un+F882O4vXwR1DsN6Z6JqKYw2CHrj6n1ycMY3npVDTzYYhRnKDIil
-         fRvaqCTE2YN6N8SnPBTXpJ+ocd7oeVb8iOKsLNTSWy2SFMj0ieLDsBzYdc8YER+1Zi
-         U11Xc/9Ly4nELU6xyj0aveASfQOynZqSzcBMBjaA=
+        b=sqoSDrdJ+xpHDojuI2ZxA8eoqYTJpyMwjJYDrnkv/rUCQ4qrthsYBnfKyh/mNdJ3e
+         m3nprN5a7pHTZBtyq0Z37Ty/XSFgIaf1f3pIi6t2i1palCiNemEFIJY/ddDK9gG5I/
+         mjD3KDyUrjRd1Vu9Yrn9LgYtkKux8u/PRw9hvIjM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Quentin Monnet <quentin.monnet@netronome.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Taehee Yoo <ap420073@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 225/237] tools: bpftool: pass an argument to silence open_obj_pinned()
-Date:   Sat, 16 Nov 2019 10:41:00 -0500
-Message-Id: <20191116154113.7417-225-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 192/237] net: bpfilter: fix iptables failure if bpfilter_umh is disabled
+Date:   Sat, 16 Nov 2019 10:40:27 -0500
+Message-Id: <20191116154113.7417-192-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
 References: <20191116154113.7417-1-sashal@kernel.org>
@@ -60,104 +59,65 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Quentin Monnet <quentin.monnet@netronome.com>
+From: Taehee Yoo <ap420073@gmail.com>
 
-[ Upstream commit f120919f9905a2cad9dea792a28a11fb623f72c1 ]
+[ Upstream commit 97adaddaa6db7a8af81b9b11e30cbe3628cd6700 ]
 
-Function open_obj_pinned() prints error messages when it fails to open a
-link in the BPF virtual file system. However, in some occasions it is
-not desirable to print an error, for example when we parse all links
-under the bpffs root, and the error is due to some paths actually being
-symbolic links.
+When iptables command is executed, ip_{set/get}sockopt() try to upload
+bpfilter.ko if bpfilter is enabled. if it couldn't find bpfilter.ko,
+command is failed.
+bpfilter.ko is generated if CONFIG_BPFILTER_UMH is enabled.
+ip_{set/get}sockopt() only checks CONFIG_BPFILTER.
+So that if CONFIG_BPFILTER is enabled and CONFIG_BPFILTER_UMH is disabled,
+iptables command is always failed.
 
-Example output:
+test config:
+   CONFIG_BPFILTER=y
+   # CONFIG_BPFILTER_UMH is not set
 
-    # ls -l /sys/fs/bpf/
-    lrwxrwxrwx 1 root root 0 Oct 18 19:00 ip -> /sys/fs/bpf/tc/
-    drwx------ 3 root root 0 Oct 18 19:00 tc
-    lrwxrwxrwx 1 root root 0 Oct 18 19:00 xdp -> /sys/fs/bpf/tc/
+test command:
+   %iptables -L
+   iptables: No chain/target/match by that name.
 
-    # bpftool --bpffs prog show
-    Error: bpf obj get (/sys/fs/bpf): Permission denied
-    Error: bpf obj get (/sys/fs/bpf): Permission denied
-
-    # strace -e bpf bpftool --bpffs prog show
-    bpf(BPF_OBJ_GET, {pathname="/sys/fs/bpf/ip", bpf_fd=0}, 72) = -1 EACCES (Permission denied)
-    Error: bpf obj get (/sys/fs/bpf): Permission denied
-    bpf(BPF_OBJ_GET, {pathname="/sys/fs/bpf/xdp", bpf_fd=0}, 72) = -1 EACCES (Permission denied)
-    Error: bpf obj get (/sys/fs/bpf): Permission denied
-    ...
-
-To fix it, pass a bool as a second argument to the function, and prevent
-it from printing an error when the argument is set to true.
-
-Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Fixes: d2ba09c17a06 ("net: add skeleton of bpfilter kernel module")
+Signed-off-by: Taehee Yoo <ap420073@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/common.c | 15 ++++++++-------
- tools/bpf/bpftool/main.h   |  2 +-
- 2 files changed, 9 insertions(+), 8 deletions(-)
+ net/ipv4/ip_sockglue.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index be7aebff0c1e5..158469f57461d 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -130,16 +130,17 @@ static int mnt_bpffs(const char *target, char *buff, size_t bufflen)
- 	return 0;
- }
+diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
+index b7a26120d5521..82f341e84faec 100644
+--- a/net/ipv4/ip_sockglue.c
++++ b/net/ipv4/ip_sockglue.c
+@@ -1244,7 +1244,7 @@ int ip_setsockopt(struct sock *sk, int level,
+ 		return -ENOPROTOOPT;
  
--int open_obj_pinned(char *path)
-+int open_obj_pinned(char *path, bool quiet)
- {
- 	int fd;
+ 	err = do_ip_setsockopt(sk, level, optname, optval, optlen);
+-#ifdef CONFIG_BPFILTER
++#if IS_ENABLED(CONFIG_BPFILTER_UMH)
+ 	if (optname >= BPFILTER_IPT_SO_SET_REPLACE &&
+ 	    optname < BPFILTER_IPT_SET_MAX)
+ 		err = bpfilter_ip_set_sockopt(sk, optname, optval, optlen);
+@@ -1557,7 +1557,7 @@ int ip_getsockopt(struct sock *sk, int level,
+ 	int err;
  
- 	fd = bpf_obj_get(path);
- 	if (fd < 0) {
--		p_err("bpf obj get (%s): %s", path,
--		      errno == EACCES && !is_bpffs(dirname(path)) ?
--		    "directory not in bpf file system (bpffs)" :
--		    strerror(errno));
-+		if (!quiet)
-+			p_err("bpf obj get (%s): %s", path,
-+			      errno == EACCES && !is_bpffs(dirname(path)) ?
-+			    "directory not in bpf file system (bpffs)" :
-+			    strerror(errno));
- 		return -1;
- 	}
+ 	err = do_ip_getsockopt(sk, level, optname, optval, optlen, 0);
+-#ifdef CONFIG_BPFILTER
++#if IS_ENABLED(CONFIG_BPFILTER_UMH)
+ 	if (optname >= BPFILTER_IPT_SO_GET_INFO &&
+ 	    optname < BPFILTER_IPT_GET_MAX)
+ 		err = bpfilter_ip_get_sockopt(sk, optname, optval, optlen);
+@@ -1594,7 +1594,7 @@ int compat_ip_getsockopt(struct sock *sk, int level, int optname,
+ 	err = do_ip_getsockopt(sk, level, optname, optval, optlen,
+ 		MSG_CMSG_COMPAT);
  
-@@ -151,7 +152,7 @@ int open_obj_pinned_any(char *path, enum bpf_obj_type exp_type)
- 	enum bpf_obj_type type;
- 	int fd;
- 
--	fd = open_obj_pinned(path);
-+	fd = open_obj_pinned(path, false);
- 	if (fd < 0)
- 		return -1;
- 
-@@ -384,7 +385,7 @@ int build_pinned_obj_table(struct pinned_obj_table *tab,
- 		while ((ftse = fts_read(fts))) {
- 			if (!(ftse->fts_info & FTS_F))
- 				continue;
--			fd = open_obj_pinned(ftse->fts_path);
-+			fd = open_obj_pinned(ftse->fts_path, true);
- 			if (fd < 0)
- 				continue;
- 
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 238e734d75b3e..057a227bdb9f9 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -126,7 +126,7 @@ int cmd_select(const struct cmd *cmds, int argc, char **argv,
- int get_fd_type(int fd);
- const char *get_fd_type_name(enum bpf_obj_type type);
- char *get_fdinfo(int fd, const char *key);
--int open_obj_pinned(char *path);
-+int open_obj_pinned(char *path, bool quiet);
- int open_obj_pinned_any(char *path, enum bpf_obj_type exp_type);
- int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(__u32));
- int do_pin_fd(int fd, const char *name);
+-#ifdef CONFIG_BPFILTER
++#if IS_ENABLED(CONFIG_BPFILTER_UMH)
+ 	if (optname >= BPFILTER_IPT_SO_GET_INFO &&
+ 	    optname < BPFILTER_IPT_GET_MAX)
+ 		err = bpfilter_ip_get_sockopt(sk, optname, optval, optlen);
 -- 
 2.20.1
 
