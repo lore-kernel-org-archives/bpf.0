@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3613EC432C3
-	for <bpf@archiver.kernel.org>; Sat, 16 Nov 2019 15:49:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B2B2C43215
+	for <bpf@archiver.kernel.org>; Sat, 16 Nov 2019 15:57:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E6B0E2081E
-	for <bpf@archiver.kernel.org>; Sat, 16 Nov 2019 15:49:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69E182089D
+	for <bpf@archiver.kernel.org>; Sat, 16 Nov 2019 15:57:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573919352;
-	bh=HsPWwmDEIMEtsZTabfg0H5Vjz9voDV9fpRM5MsHpzpw=;
+	s=default; t=1573919870;
+	bh=XG6M1hzv8XhY4iOKrWkg5siTD+kulaoXjNwWMJyp5aU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Ov4mijnGVPpAW/nftf/7U64DxR3+W6xmG25ar1gkJeYUpiYY4EnmJdVbTDn66b8i3
-	 6rDxgIWDuIkg9Mdh6tvuWAtmzdK89fmCCblrdidNK7Pnt+IpxyYfqHDPMIcsm3Nns+
-	 35hyZ+ItldzvGHlcgCczPl6Gb1keBl7w/0QSDRw8=
+	b=ybqHlaXnv1xQHXxg/UOyjdCWW15sPS+DXxSxnf1mkIaC5BuM1MYK5pcXeqfTW44dl
+	 uvcFCy2MPcv9GA99YfKk5PK4vszlSpRFsu9yo39J8peDaeAQKQShvAi3aXmMjGNgaa
+	 HSF+H69eQWnSphEy3XPO49It5L30Tdzwmlp16NHA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729037AbfKPPs6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 16 Nov 2019 10:48:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56350 "EHLO mail.kernel.org"
+        id S1730401AbfKPPye (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 16 Nov 2019 10:54:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36194 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730236AbfKPPs6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:48:58 -0500
+        id S1731462AbfKPPya (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:54:30 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1E7022086A;
-        Sat, 16 Nov 2019 15:48:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7829021845;
+        Sat, 16 Nov 2019 15:54:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919337;
-        bh=HsPWwmDEIMEtsZTabfg0H5Vjz9voDV9fpRM5MsHpzpw=;
+        s=default; t=1573919669;
+        bh=XG6M1hzv8XhY4iOKrWkg5siTD+kulaoXjNwWMJyp5aU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qPkZ0RWBlRmZUlrCMs1PzBx6T3OLoSPeotxvUx3fcuBCzhr5gSQ+xGqyziWvON3OV
-         E14ZCzt04i2IcCuP5LX6eeVFNasEZfM6TycsKHMAH6s5LQPrpX1sGQbsmlyxuOhFIj
-         6p7MIzPfvFr3V6C60tMTNsTG1/aGPc3YvzVlEyGw=
+        b=LrhsFaVcYG97s/AtGihQut5A3NXUr3o02UellBFuj8pIzZvQ6TZcfqetb9eYYH8PU
+         2QRPoi/gWMY9Z7OegRZhOLxr9C4gVxgHKoBWQhzPDLmhC7N9Ti6oScdJxVnYQfepFa
+         7ipwENmqSEWmbuxR9mqfx9g/15cW2kPvl8HPbQ3I=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, sparclinux@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 077/150] sparc64: Rework xchg() definition to avoid warnings.
-Date:   Sat, 16 Nov 2019 10:46:15 -0500
-Message-Id: <20191116154729.9573-77-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 40/77] sparc64: Rework xchg() definition to avoid warnings.
+Date:   Sat, 16 Nov 2019 10:53:02 -0500
+Message-Id: <20191116155339.11909-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191116154729.9573-1-sashal@kernel.org>
-References: <20191116154729.9573-1-sashal@kernel.org>
+In-Reply-To: <20191116155339.11909-1-sashal@kernel.org>
+References: <20191116155339.11909-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -82,10 +82,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/arch/sparc/include/asm/cmpxchg_64.h b/arch/sparc/include/asm/cmpxchg_64.h
-index f71ef3729888f..316faa0130bab 100644
+index faa2f61058c27..92f0a46ace78e 100644
 --- a/arch/sparc/include/asm/cmpxchg_64.h
 +++ b/arch/sparc/include/asm/cmpxchg_64.h
-@@ -52,7 +52,12 @@ static inline unsigned long xchg64(__volatile__ unsigned long *m, unsigned long
+@@ -40,7 +40,12 @@ static inline unsigned long xchg64(__volatile__ unsigned long *m, unsigned long
  	return val;
  }
  
