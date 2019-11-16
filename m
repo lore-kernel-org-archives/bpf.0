@@ -2,280 +2,155 @@ Return-Path: <SRS0=JBMC=ZI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F610C43141
-	for <bpf@archiver.kernel.org>; Sat, 16 Nov 2019 16:25:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3148C432C3
+	for <bpf@archiver.kernel.org>; Sat, 16 Nov 2019 18:10:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 781F9214DE
-	for <bpf@archiver.kernel.org>; Sat, 16 Nov 2019 16:25:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573921556;
-	bh=qtEvDNQ1hGh5OvtIarObqpS47qN5mS+O16aIP/RsG7M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vj3hCL/5L5bEp3ln8JqWgKGWtTcamEjyQXpEdI1Cvxe0IoRdmsdc24G26tywGF0Bx
-	 BgrUnfphGcqd50UidsPmpD1MyaP2HhBWmTs+Lb/Pb6fV6NaTEHSFn8202XJFGLf1Cv
-	 5CNRX/e+5e+coyMTG/X2LWpRv7qATyF6u9KhKhCI=
+	by mail.kernel.org (Postfix) with ESMTP id B698521823
+	for <bpf@archiver.kernel.org>; Sat, 16 Nov 2019 18:10:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729035AbfKPQZt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 16 Nov 2019 11:25:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45436 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728115AbfKPPmC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:42:02 -0500
-Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0DE642075E;
-        Sat, 16 Nov 2019 15:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573918921;
-        bh=qtEvDNQ1hGh5OvtIarObqpS47qN5mS+O16aIP/RsG7M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MiLOFB6iRTN1ThVwrQTes/BobsGmd+kQVfG5jtB05Bv9WXOhdrSD596YJPz5WxqJU
-         20pPqHnKSSHouwK96raUtZMIBiYP/1ydbNQiEaymOPEhuEFD5jAuckexim7npuAtj2
-         lnt9v+X5xphK8RL5JNhOlLxNRqMws9rS78HvJhow=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jakub Kicinski <jakub.kicinski@netronome.com>,
-        David Beckett <david.beckett@netronome.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
+        id S1727634AbfKPSKK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 16 Nov 2019 13:10:10 -0500
+Received: from mx2.suse.de ([195.135.220.15]:49284 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727437AbfKPSKK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 16 Nov 2019 13:10:10 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id ECC11B13A;
+        Sat, 16 Nov 2019 18:10:02 +0000 (UTC)
+Date:   Sun, 17 Nov 2019 05:09:34 +1100
+From:   Aleksa Sarai <asarai@suse.de>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>, Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, oss-drivers@netronome.com
-Subject: [PATCH AUTOSEL 4.19 046/237] nfp: bpf: protect against mis-initializing atomic counters
-Date:   Sat, 16 Nov 2019 10:38:01 -0500
-Message-Id: <20191116154113.7417-46-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
-References: <20191116154113.7417-1-sashal@kernel.org>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        dev@opencontainers.org, containers@lists.linux-foundation.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-api@vger.kernel.org,
+        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v16 02/12] namei: allow nd_jump_link() to produce errors
+Message-ID: <20191116180934.fajrkc4jqcewiuqd@yavin.dot.cyphar.com>
+References: <20191116002802.6663-1-cyphar@cyphar.com>
+ <20191116002802.6663-3-cyphar@cyphar.com>
+ <20191116003702.GX26530@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ushqsy2n2ywnjdre"
+Content-Disposition: inline
+In-Reply-To: <20191116003702.GX26530@ZenIV.linux.org.uk>
+User-Agent: NeoMutt/20180716
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jakub Kicinski <jakub.kicinski@netronome.com>
 
-[ Upstream commit 527db74b71ee5a279f818aae51f2c26b4e5c7648 ]
+--ushqsy2n2ywnjdre
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Atomic operations on the NFP are currently always in big endian.
-The driver keeps track of regions of memory storing atomic values
-and byte swaps them accordingly.  There are corner cases where
-the map values may be initialized before the driver knows they
-are used as atomic counters.  This can happen either when the
-datapath is performing the update and the stack contents are
-unknown or when map is updated before the program which will
-use it for atomic values is loaded.
+On 2019-11-16, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> On Sat, Nov 16, 2019 at 11:27:52AM +1100, Aleksa Sarai wrote:
+> > +	error =3D nd_jump_link(&path);
+> > +	if (error)
+> > +		path_put(&path);
+>=20
+> > +	error =3D nd_jump_link(&ns_path);
+> > +	if (error)
+> > +		path_put(&ns_path);
+>=20
+> > +	error =3D nd_jump_link(&path);
+> > +	if (error)
+> > +		path_put(&path);
+>=20
+> 3 calls.  Exact same boilerplate in each to handle a failure case.
+> Which spells "wrong calling conventions"; it's absolutely clear
+> that we want that path_put() inside nd_jump_link().
+>=20
+> The rule should be this: reference that used to be held in
+> *path is consumed in any case.  On success it goes into
+> nd->path, on error it's just dropped, but in any case, the
+> caller has the same refcounting environment to deal with.
+>=20
+> If you need the same boilerplate cleanup on failure again and again,
+> the calling conventions are wrong and need to be fixed.
 
-To avoid situation where user initializes the value to 0 1 2 3
-and then after loading a program which uses the word as an atomic
-counter starts reading 3 2 1 0 - only allow atomic counters to be
-initialized to endian-neutral values.
+Will do.
 
-For updates from the datapath the stack information may not be
-as precise, so just allow initializing such values to 0.
+> And I'm not sure that int is the right return type here, to be honest.
+> void * might be better - return ERR_PTR() or NULL, so that the value
+> could be used as return value of ->get_link() that calls that thing.
 
-Example code which would break:
-struct bpf_map_def SEC("maps") rxcnt = {
-       .type = BPF_MAP_TYPE_HASH,
-       .key_size = sizeof(__u32),
-       .value_size = sizeof(__u64),
-       .max_entries = 1,
-};
+I don't agree, given that the few callers of ns_get_path() are
+inconsistent with regards to whether they should use IS_ERR() or check
+for NULL, not to mention that "void *error" reads to me as being very
+odd given how common "int error" is throughout the kernel. There's also
+the "error =3D=3D ERR_PTR(-EAGAIN)" checks which also read as being quite
+odd too.
 
-int xdp_prog1()
-{
-      	__u64 nonzeroval = 3;
-	__u32 key = 0;
-	__u64 *value;
+But the main motivating factor for changing it was that the one use
+where "void *" is useful (proc_ns_get_link) becomes needlessly ugly
+because of the "nd_jump_link() can return errors" change:
 
-	value = bpf_map_lookup_elem(&rxcnt, &key);
-	if (!value)
-		bpf_map_update_elem(&rxcnt, &key, &nonzeroval, BPF_ANY);
-	else
-		__sync_fetch_and_add(value, 1);
+	error =3D ERR_PTR(nd_jump_link(&ns_path));
 
-	return XDP_PASS;
-}
+Or probably (if you don't want to rely on ERR_PTR(0) =3D=3D NULL):
 
-$ offload bpftool map dump
-key: 00 00 00 00 value: 00 00 00 03 00 00 00 00
+	int err =3D nd_jump_link(&ns_path);
+	if (err)
+		error =3D ERR_PTR(err);
 
-should be:
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
 
-$ offload bpftool map dump
-key: 00 00 00 00 value: 03 00 00 00 00 00 00 00
+--ushqsy2n2ywnjdre
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Reported-by: David Beckett <david.beckett@netronome.com>
-Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/ethernet/netronome/nfp/bpf/main.h |  7 ++-
- .../net/ethernet/netronome/nfp/bpf/offload.c  | 18 +++++-
- .../net/ethernet/netronome/nfp/bpf/verifier.c | 58 +++++++++++++++++--
- 3 files changed, 76 insertions(+), 7 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/net/ethernet/netronome/nfp/bpf/main.h b/drivers/net/ethernet/netronome/nfp/bpf/main.h
-index dbd00982fd2b6..2134045e14c36 100644
---- a/drivers/net/ethernet/netronome/nfp/bpf/main.h
-+++ b/drivers/net/ethernet/netronome/nfp/bpf/main.h
-@@ -206,6 +206,11 @@ enum nfp_bpf_map_use {
- 	NFP_MAP_USE_ATOMIC_CNT,
- };
- 
-+struct nfp_bpf_map_word {
-+	unsigned char type		:4;
-+	unsigned char non_zero_update	:1;
-+};
-+
- /**
-  * struct nfp_bpf_map - private per-map data attached to BPF maps for offload
-  * @offmap:	pointer to the offloaded BPF map
-@@ -219,7 +224,7 @@ struct nfp_bpf_map {
- 	struct nfp_app_bpf *bpf;
- 	u32 tid;
- 	struct list_head l;
--	enum nfp_bpf_map_use use_map[];
-+	struct nfp_bpf_map_word use_map[];
- };
- 
- struct nfp_bpf_neutral_map {
-diff --git a/drivers/net/ethernet/netronome/nfp/bpf/offload.c b/drivers/net/ethernet/netronome/nfp/bpf/offload.c
-index 1ccd6371a15b5..6140e4650b71c 100644
---- a/drivers/net/ethernet/netronome/nfp/bpf/offload.c
-+++ b/drivers/net/ethernet/netronome/nfp/bpf/offload.c
-@@ -299,10 +299,25 @@ static void nfp_map_bpf_byte_swap(struct nfp_bpf_map *nfp_map, void *value)
- 	unsigned int i;
- 
- 	for (i = 0; i < DIV_ROUND_UP(nfp_map->offmap->map.value_size, 4); i++)
--		if (nfp_map->use_map[i] == NFP_MAP_USE_ATOMIC_CNT)
-+		if (nfp_map->use_map[i].type == NFP_MAP_USE_ATOMIC_CNT)
- 			word[i] = (__force u32)cpu_to_be32(word[i]);
- }
- 
-+/* Mark value as unsafely initialized in case it becomes atomic later
-+ * and we didn't byte swap something non-byte swap neutral.
-+ */
-+static void
-+nfp_map_bpf_byte_swap_record(struct nfp_bpf_map *nfp_map, void *value)
-+{
-+	u32 *word = value;
-+	unsigned int i;
-+
-+	for (i = 0; i < DIV_ROUND_UP(nfp_map->offmap->map.value_size, 4); i++)
-+		if (nfp_map->use_map[i].type == NFP_MAP_UNUSED &&
-+		    word[i] != (__force u32)cpu_to_be32(word[i]))
-+			nfp_map->use_map[i].non_zero_update = 1;
-+}
-+
- static int
- nfp_bpf_map_lookup_entry(struct bpf_offloaded_map *offmap,
- 			 void *key, void *value)
-@@ -322,6 +337,7 @@ nfp_bpf_map_update_entry(struct bpf_offloaded_map *offmap,
- 			 void *key, void *value, u64 flags)
- {
- 	nfp_map_bpf_byte_swap(offmap->dev_priv, value);
-+	nfp_map_bpf_byte_swap_record(offmap->dev_priv, value);
- 	return nfp_bpf_ctrl_update_entry(offmap, key, value, flags);
- }
- 
-diff --git a/drivers/net/ethernet/netronome/nfp/bpf/verifier.c b/drivers/net/ethernet/netronome/nfp/bpf/verifier.c
-index a6e9248669e14..db7e186dae56d 100644
---- a/drivers/net/ethernet/netronome/nfp/bpf/verifier.c
-+++ b/drivers/net/ethernet/netronome/nfp/bpf/verifier.c
-@@ -108,6 +108,46 @@ nfp_record_adjust_head(struct nfp_app_bpf *bpf, struct nfp_prog *nfp_prog,
- 	nfp_prog->adjust_head_location = location;
- }
- 
-+static bool nfp_bpf_map_update_value_ok(struct bpf_verifier_env *env)
-+{
-+	const struct bpf_reg_state *reg1 = cur_regs(env) + BPF_REG_1;
-+	const struct bpf_reg_state *reg3 = cur_regs(env) + BPF_REG_3;
-+	struct bpf_offloaded_map *offmap;
-+	struct bpf_func_state *state;
-+	struct nfp_bpf_map *nfp_map;
-+	int off, i;
-+
-+	state = env->cur_state->frame[reg3->frameno];
-+
-+	/* We need to record each time update happens with non-zero words,
-+	 * in case such word is used in atomic operations.
-+	 * Implicitly depend on nfp_bpf_stack_arg_ok(reg3) being run before.
-+	 */
-+
-+	offmap = map_to_offmap(reg1->map_ptr);
-+	nfp_map = offmap->dev_priv;
-+	off = reg3->off + reg3->var_off.value;
-+
-+	for (i = 0; i < offmap->map.value_size; i++) {
-+		struct bpf_stack_state *stack_entry;
-+		unsigned int soff;
-+
-+		soff = -(off + i) - 1;
-+		stack_entry = &state->stack[soff / BPF_REG_SIZE];
-+		if (stack_entry->slot_type[soff % BPF_REG_SIZE] == STACK_ZERO)
-+			continue;
-+
-+		if (nfp_map->use_map[i / 4].type == NFP_MAP_USE_ATOMIC_CNT) {
-+			pr_vlog(env, "value at offset %d/%d may be non-zero, bpf_map_update_elem() is required to initialize atomic counters to zero to avoid offload endian issues\n",
-+				i, soff);
-+			return false;
-+		}
-+		nfp_map->use_map[i / 4].non_zero_update = 1;
-+	}
-+
-+	return true;
-+}
-+
- static int
- nfp_bpf_stack_arg_ok(const char *fname, struct bpf_verifier_env *env,
- 		     const struct bpf_reg_state *reg,
-@@ -198,7 +238,8 @@ nfp_bpf_check_call(struct nfp_prog *nfp_prog, struct bpf_verifier_env *env,
- 					 bpf->helpers.map_update, reg1) ||
- 		    !nfp_bpf_stack_arg_ok("map_update", env, reg2,
- 					  meta->func_id ? &meta->arg2 : NULL) ||
--		    !nfp_bpf_stack_arg_ok("map_update", env, reg3, NULL))
-+		    !nfp_bpf_stack_arg_ok("map_update", env, reg3, NULL) ||
-+		    !nfp_bpf_map_update_value_ok(env))
- 			return -EOPNOTSUPP;
- 		break;
- 
-@@ -376,15 +417,22 @@ nfp_bpf_map_mark_used_one(struct bpf_verifier_env *env,
- 			  struct nfp_bpf_map *nfp_map,
- 			  unsigned int off, enum nfp_bpf_map_use use)
- {
--	if (nfp_map->use_map[off / 4] != NFP_MAP_UNUSED &&
--	    nfp_map->use_map[off / 4] != use) {
-+	if (nfp_map->use_map[off / 4].type != NFP_MAP_UNUSED &&
-+	    nfp_map->use_map[off / 4].type != use) {
- 		pr_vlog(env, "map value use type conflict %s vs %s off: %u\n",
--			nfp_bpf_map_use_name(nfp_map->use_map[off / 4]),
-+			nfp_bpf_map_use_name(nfp_map->use_map[off / 4].type),
- 			nfp_bpf_map_use_name(use), off);
- 		return -EOPNOTSUPP;
- 	}
- 
--	nfp_map->use_map[off / 4] = use;
-+	if (nfp_map->use_map[off / 4].non_zero_update &&
-+	    use == NFP_MAP_USE_ATOMIC_CNT) {
-+		pr_vlog(env, "atomic counter in map value may already be initialized to non-zero value off: %u\n",
-+			off);
-+		return -EOPNOTSUPP;
-+	}
-+
-+	nfp_map->use_map[off / 4].type = use;
- 
- 	return 0;
- }
--- 
-2.20.1
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXdA7WwAKCRCdlLljIbnQ
+EkhIAQCTW+ppymqPGqw4uOB2Z70GQdn52zl46zQ6xxp5L3kEHQD9FZ2+HHtYsZC+
+LGfFupqoyojLXID+lx72AXf4CJ7KLw4=
+=aGSY
+-----END PGP SIGNATURE-----
 
+--ushqsy2n2ywnjdre--
