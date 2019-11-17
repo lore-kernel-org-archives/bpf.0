@@ -2,157 +2,98 @@ Return-Path: <SRS0=ChZX=ZJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED500C43141
-	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 17:28:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFC30C432C0
+	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 18:27:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C9EC320855
-	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 17:28:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 973E120850
+	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 18:27:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Lrkzr5yM"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="b7Zjzeuz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726315AbfKQR2X (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 17 Nov 2019 12:28:23 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:15534 "EHLO
+        id S1726070AbfKQS1I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 17 Nov 2019 13:27:08 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39382 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726085AbfKQR2T (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 17 Nov 2019 12:28:19 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAHHPf2F023626
-        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 09:28:18 -0800
+        by vger.kernel.org with ESMTP id S1726067AbfKQS1I (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 17 Nov 2019 13:27:08 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAHIDmvb015306
+        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 10:27:07 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=9cDQKABTP46VQhYMyTMEld1LWTgfKVYS/6ldiraza8g=;
- b=Lrkzr5yM6adAoN+ocdMIbgHmUi+vmbRY0SpwIhK43de2df+cFqc6vdUOFPS9WrGyiUQi
- m+9IZVt4E8wour07rulBeEhYHp7Ep2TiSHq3bKRelwOlQkINpVf61sBZWsq5up+J63i2
- AN6odXgDta/+0nOkpN66hmc4vKIT3U9R3zo= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wb1nk23rb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 09:28:18 -0800
-Received: from 2401:db00:12:9028:face:0:29:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Sun, 17 Nov 2019 09:28:17 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id DC6A42EC0551; Sun, 17 Nov 2019 09:28:16 -0800 (PST)
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=Id/xz5T6cVkgT7vDEOpqKTf7IXAQcdNmo7QN0fMWvPY=;
+ b=b7ZjzeuzkPN0Lac02OL3hnAI9krb2Okg6qOpEJY8Ic2e5V4sItPWcqd7eg3sAguo1UAw
+ YClTs9WjSg3mJ+rN9+jSqN3cY9LDhZy03aN1gELf+/9FYw8l/mzA2PY6BqIK5nJVOFtt
+ aKslQDuA9yxUbBaqIBXZ4iqn28ZwH0K3jtU= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wb1pvk55n-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 10:27:07 -0800
+Received: from 2401:db00:2050:5076:face:0:1f:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Sun, 17 Nov 2019 10:27:06 -0800
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 2A8C33701AEE; Sun, 17 Nov 2019 10:27:04 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v6 bpf-next 4/5] libbpf: make global data internal arrays mmap()-able, if possible
-Date:   Sun, 17 Nov 2019 09:28:05 -0800
-Message-ID: <20191117172806.2195367-5-andriin@fb.com>
+Subject: [PATCH bpf-next 0/2] [bpf] allow s32/u32 return types in verifier for bpf helpers
+Date:   Sun, 17 Nov 2019 10:27:04 -0800
+Message-ID: <20191117182704.656602-1-yhs@fb.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191117172806.2195367-1-andriin@fb.com>
-References: <20191117172806.2195367-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-17_03:2019-11-15,2019-11-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 phishscore=0
- malwarescore=0 lowpriorityscore=0 impostorscore=0 priorityscore=1501
- mlxlogscore=999 suspectscore=8 adultscore=0 mlxscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911170167
+ definitions=2019-11-17_04:2019-11-15,2019-11-17 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ malwarescore=0 clxscore=1015 lowpriorityscore=0 mlxlogscore=494
+ suspectscore=13 impostorscore=0 bulkscore=0 spamscore=0 mlxscore=0
+ priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-1911170175
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add detection of BPF_F_MMAPABLE flag support for arrays and add it as an extra
-flag to internal global data maps, if supported by kernel. This allows users
-to memory-map global data and use it without BPF map operations, greatly
-simplifying user experience.
+Currently, for all helpers with integer return type,
+the verifier permits a single return type, RET_INTEGER,
+which represents 64-bit return value from the helper,
+and the verifier will assign 64-bit value ranges for these
+return values. Such an assumption is different
+from what compiler sees and the generated code with
+llvm alu32 mode, and may lead verification failure.
 
-Acked-by: Song Liu <songliubraving@fb.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/libbpf.c | 32 ++++++++++++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
+This patch enhanced verifier to handle s32/u32 helper
+return values properly to avoid verification failure
+due to conservative return value range marking.
+Patch #1 commit message has details of explanation and
+Patch #2 added test cases to selftests test_verifier.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7132c6bdec02..15e91a1d6c11 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -142,6 +142,8 @@ struct bpf_capabilities {
- 	__u32 btf_func:1;
- 	/* BTF_KIND_VAR and BTF_KIND_DATASEC support */
- 	__u32 btf_datasec:1;
-+	/* BPF_F_MMAPABLE is supported for arrays */
-+	__u32 array_mmap:1;
- };
- 
- /*
-@@ -857,8 +859,6 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
- 		pr_warn("failed to alloc map name\n");
- 		return -ENOMEM;
- 	}
--	pr_debug("map '%s' (global data): at sec_idx %d, offset %zu.\n",
--		 map_name, map->sec_idx, map->sec_offset);
- 
- 	def = &map->def;
- 	def->type = BPF_MAP_TYPE_ARRAY;
-@@ -866,6 +866,12 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
- 	def->value_size = data->d_size;
- 	def->max_entries = 1;
- 	def->map_flags = type == LIBBPF_MAP_RODATA ? BPF_F_RDONLY_PROG : 0;
-+	if (obj->caps.array_mmap)
-+		def->map_flags |= BPF_F_MMAPABLE;
-+
-+	pr_debug("map '%s' (global data): at sec_idx %d, offset %zu, flags %x.\n",
-+		 map_name, map->sec_idx, map->sec_offset, def->map_flags);
-+
- 	if (data_buff) {
- 		*data_buff = malloc(data->d_size);
- 		if (!*data_buff) {
-@@ -2161,6 +2167,27 @@ static int bpf_object__probe_btf_datasec(struct bpf_object *obj)
- 	return 0;
- }
- 
-+static int bpf_object__probe_array_mmap(struct bpf_object *obj)
-+{
-+	struct bpf_create_map_attr attr = {
-+		.map_type = BPF_MAP_TYPE_ARRAY,
-+		.map_flags = BPF_F_MMAPABLE,
-+		.key_size = sizeof(int),
-+		.value_size = sizeof(int),
-+		.max_entries = 1,
-+	};
-+	int fd;
-+
-+	fd = bpf_create_map_xattr(&attr);
-+	if (fd >= 0) {
-+		obj->caps.array_mmap = 1;
-+		close(fd);
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
- static int
- bpf_object__probe_caps(struct bpf_object *obj)
- {
-@@ -2169,6 +2196,7 @@ bpf_object__probe_caps(struct bpf_object *obj)
- 		bpf_object__probe_global_data,
- 		bpf_object__probe_btf_func,
- 		bpf_object__probe_btf_datasec,
-+		bpf_object__probe_array_mmap,
- 	};
- 	int i, ret;
- 
+Yonghong Song (2):
+  [bpf] allow s32/u32 return types in verifier for bpf helpers
+  [tools/bpf] add verifier test for s32/u32 helper return values
+
+ include/linux/bpf.h                           |  4 +-
+ kernel/bpf/helpers.c                          |  8 +--
+ kernel/bpf/verifier.c                         | 30 +++++++++--
+ kernel/trace/bpf_trace.c                      |  4 +-
+ net/core/filter.c                             | 16 +++---
+ .../selftests/bpf/verifier/helper_ret.c       | 50 +++++++++++++++++++
+ 6 files changed, 94 insertions(+), 18 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/verifier/helper_ret.c
+
 -- 
 2.17.1
 
