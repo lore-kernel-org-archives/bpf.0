@@ -2,96 +2,127 @@ Return-Path: <SRS0=ChZX=ZJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B3E3C432C3
-	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 07:08:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14125C432C0
+	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 07:12:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 23AB42084D
-	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 07:08:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D581C20740
+	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 07:12:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="oIAkDEIA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EkigySVB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726045AbfKQHIm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 17 Nov 2019 02:08:42 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:25880 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726047AbfKQHIm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 17 Nov 2019 02:08:42 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAH78clw021871
-        for <bpf@vger.kernel.org>; Sat, 16 Nov 2019 23:08:40 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=/VzIcsamFL10eFHhA9+aq4VqhPaMm0NUDW1QyjEMgqc=;
- b=oIAkDEIAoKUBvCdl7JgWkbQVlxyvpyClYYTXTm8Bw3f4/2LJDf9S/IPog6QVl6J06Ehq
- Do/3d91k3tw4nuiEY2BNa+3KpaKjmi21e7BBgrnpDIwvhbo+bg6Udy/4E9ZF9c3FmmoN
- cri+Oq/fk8o+UHQk1BWjnzA1bv61T3cGfFU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2waftjsfwu-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 16 Nov 2019 23:08:40 -0800
-Received: from 2401:db00:2120:80d4:face:0:39:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sat, 16 Nov 2019 23:08:15 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id B626E2EC19AE; Sat, 16 Nov 2019 23:08:13 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 1/6] selftests/bpf: ensure no DWARF relocations for BPF object files
-Date:   Sat, 16 Nov 2019 23:08:02 -0800
-Message-ID: <20191117070807.251360-2-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191117070807.251360-1-andriin@fb.com>
-References: <20191117070807.251360-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1725923AbfKQHMR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 17 Nov 2019 02:12:17 -0500
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:33712 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbfKQHMR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 17 Nov 2019 02:12:17 -0500
+Received: by mail-qk1-f195.google.com with SMTP id 71so11754333qkl.0;
+        Sat, 16 Nov 2019 23:12:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iLXpGetQwa/Hk9xyKIHJmBZjiHT8LdP1v+KHfrz/uWU=;
+        b=EkigySVBdyktgT1E6aLKqiAcR5hShNu8TSN+LNBVG18mXCAGmXK34Ui5bhHhVKmoHF
+         hPqzVicwFdIqRi0qhGPUpAh0Z1TuFe4vHGhjafFJZ+N1t0ArQWjnXBOEdFteXZE5q7dR
+         Umvy4yFXYB6Sw/7HK+M32p1lsYIj1632QC9zEA2NRGN5fR+Q8zAF8sHTrXfXDFAw4/i0
+         nAbshvhdyygvNN2UAHaQNFgHEnlhZhAIwUpDhV3X3fM6zLjcHZGaH9rYQApSSIB220IP
+         sAPnGPIu9BL/gq+XzLnZ5PeZnw9xnVbGOaMVsGxRd4miAVUnAeQ2DjgGzl+AgQgGFJth
+         6hhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iLXpGetQwa/Hk9xyKIHJmBZjiHT8LdP1v+KHfrz/uWU=;
+        b=fYCLkFWBJ2TjhyDEvNqnyxRF0j1j17q6MZwH4XiIQuUtqWkcZGbowq1ixPZyxy2xwU
+         tJ8Ml+jTQ4vogigJ0mvSGH88vr/FVdxtMxtKW69AuuDUIJ1UihLIlhL3QzWPDpvaeJTm
+         r/MoudNC06NMRSwpw6a+qdZY3zr4Loav+CJGY97GPAklS6njDWiYp0M6x8dSOv6zhIJW
+         q+auTR9xBn/sYmTwPXFB8yYkoS8WcadDLtA5A8QQAkn9AX5pk9vG6YWTvwklmsXy/VP5
+         fJ1fVqKmjoi0p/6OXRMMMya4L74FILhcH8EdZzs03X7LXN+f32/H/0BS8HmavX/ZaWhl
+         YwMw==
+X-Gm-Message-State: APjAAAVuxjJX4URPxUQr7uTdwQCZDrDprYINjvjasrwHS1FlJ4MKJiNS
+        usXpn1aQXMBffN07yj01v/Po8lkjXwsqcHOhlCk=
+X-Google-Smtp-Source: APXvYqwlpgbxUGmKJ0HAEnlJjpLtcvgOWFHaBfqCk8lQp2nAEcUoYwS0930x6rP3bQX2uk/+Og7JiVGeFzj5vbayXwg=
+X-Received: by 2002:a37:aa8b:: with SMTP id t133mr7429291qke.449.1573974735770;
+ Sat, 16 Nov 2019 23:12:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-17_01:2019-11-15,2019-11-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 phishscore=0 bulkscore=0 priorityscore=1501
- mlxlogscore=788 clxscore=1015 mlxscore=0 spamscore=0 impostorscore=0
- suspectscore=8 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911170067
-X-FB-Internal: deliver
+References: <20191117070807.251360-1-andriin@fb.com>
+In-Reply-To: <20191117070807.251360-1-andriin@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Sat, 16 Nov 2019 23:12:04 -0800
+Message-ID: <CAEf4BzYCNo5GeVGMhp3fhysQ=_axAf=23PtwaZs-yAyafmXC9g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/6] Add libbpf-provided extern variables support
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add -mattr=dwarfris attribute to llc to avoid having relocations against DWARF
-data. These relocations make it impossible to inspect DWARF contents: all
-strings are invalid.
+On Sat, Nov 16, 2019 at 11:08 PM Andrii Nakryiko <andriin@fb.com> wrote:
+>
+> It's often important for BPF program to know kernel version or some speci=
+fic
+> config values (e.g., CONFIG_HZ to convert jiffies to seconds) and change =
+or
+> adjust program logic based on their values. As of today, any such need ha=
+s to
+> be resolved by recompiling BPF program for specific kernel and kernel
+> configuration. In practice this is usually achieved by using BCC and its
+> embedded LLVM/Clang. With such set up #ifdef CONFIG_XXX and similar
+> compile-time constructs allow to deal with kernel varieties.
+>
+> With CO-RE (Compile Once =E2=80=93 Run Everywhere) approach, this is not =
+an option,
+> unfortunately. All such logic variations have to be done as a normal
+> C language constructs (i.e., if/else, variables, etc), not a preprocessor
+> directives. This patch series add support for such advanced scenarios thr=
+ough
+> C extern variables. These extern variables will be recognized by libbpf a=
+nd
+> supplied through extra .extern internal map, similarly to global data. Th=
+is
+> .extern map is read-only, which allows BPF verifier to track its content
+> precisely as constants. That gives an opportunity to have pre-compiled BP=
+F
+> program, which can potentially use BPF functionality (e.g., BPF helpers) =
+or
+> kernel features (types, fields, etc), that are available only on a subset=
+ of
+> targeted kernels, while effectively eleminating (through verifier's dead =
+code
+> detection) such unsupported functionality for other kernels (typically, o=
+lder
+> versions). Patch #5 contains all the details. Patch #5 explicitly tests
+> a scenario of using unsupported BPF helper, to validate the approach.
+>
+> As part of this patch set, libbpf also allows usage of initialized global
+> (non-static) variables, which provides better Clang semantics, which is c=
+loser
+> and better aligned witht kernel vs userspace BPF map contents sharing.
+>
+> Outline of the patch set:
+> - patches #1-#3 do some preliminary refactorings of libbpf relocation log=
+ic
+>   and some more clean ups;
+> - patch #4 allows non-static variables and converts few tests to use them=
+;
+> - patch #5 adds support for externs to libbpf;
+> - patch #6 adds tests for externs.
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/testing/selftests/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Forgot to mention, this patch set is based off of patch set adding
+mmap()-support for BPF maps, because I use that functionality for
+selftests. In the worst case scenario, I can switch tests to
+old-fashioned bpf_map_update_elem()/bpf_map_lookup_elem() interface.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b03dc2298fea..5737888cd6a7 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -161,7 +161,7 @@ $(OUTPUT)/flow_dissector_load.o: flow_dissector_load.h
- define CLANG_BPF_BUILD_RULE
- 	($(CLANG) $3 -O2 -target bpf -emit-llvm				\
- 		-c $1 -o - || echo "BPF obj compilation failed") | 	\
--	$(LLC) -march=bpf -mcpu=probe $4 -filetype=obj -o $2
-+	$(LLC) -mattr=dwarfris -march=bpf -mcpu=probe $4 -filetype=obj -o $2
- endef
- # Similar to CLANG_BPF_BUILD_RULE, but using native Clang and bpf LLC
- define CLANG_NATIVE_BPF_BUILD_RULE
--- 
-2.17.1
-
+[...]
