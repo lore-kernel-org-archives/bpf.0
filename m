@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE04DC43141
-	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 17:28:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 420B9C432C0
+	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 17:28:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 85285206D9
-	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 17:28:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 103CB206D9
+	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 17:28:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Zu4egPzx"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="GxhtKHXI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726271AbfKQR2Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 17 Nov 2019 12:28:16 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11762 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726032AbfKQR2Q (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 17 Nov 2019 12:28:16 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAHHPl22002499
-        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 09:28:15 -0800
+        id S1726082AbfKQR2W (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 17 Nov 2019 12:28:22 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13022 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726423AbfKQR2W (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 17 Nov 2019 12:28:22 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAHHNjJF004308
+        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 09:28:20 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=lOYiIw2L00Jmt7jzpWQlfvJwmchRN5NMUOO5xe6Lo8M=;
- b=Zu4egPzx0snt9aYkiqrMIkVgWIvM1HScjlaNhUR2xCEipTD1iciihwhdbgqRYk5zBmbc
- bEuccJopnrhZlInOF+mPzOIFgJmOIB/v82rYQ1DDREeY8vtIEJmQ6CjLMhvrkFgOqlGA
- /BdRJCpSznEwmcEDmgX3ya41l2BBLZY3Dzw= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wb1pet3wn-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 09:28:15 -0800
-Received: from 2401:db00:2120:81dc:face:0:23:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Sun, 17 Nov 2019 09:28:14 -0800
+ content-type; s=facebook; bh=sVaT+OfRUIT8nvCiT7mvqQsEr02Sb6mu9pDM1VXI5gE=;
+ b=GxhtKHXINwFzSCsNojDG4+k1dWd7QahtlHK5FPI6F6BTWcS4lMdnV+am3ltT1XY4Wgxe
+ oBE57mFa1yyRpHpK+N7U6bABGkSOeqZzG+Yn39Zt0RFVlOG2cGsPKJiyfHrgXw3ae7MW
+ bU94Y4H8Chv6bjsRcwkLPBQR5cBt1uGs//Y= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2waftjus4e-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 09:28:20 -0800
+Received: from 2401:db00:2050:5076:face:0:9:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Sun, 17 Nov 2019 09:28:19 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 758042EC0551; Sun, 17 Nov 2019 09:28:12 -0800 (PST)
+        id 1CE622EC0551; Sun, 17 Nov 2019 09:28:19 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v6 bpf-next 2/5] bpf: convert bpf_prog refcnt to atomic64_t
-Date:   Sun, 17 Nov 2019 09:28:03 -0800
-Message-ID: <20191117172806.2195367-3-andriin@fb.com>
+Subject: [PATCH v6 bpf-next 5/5] selftests/bpf: add BPF_TYPE_MAP_ARRAY mmap() tests
+Date:   Sun, 17 Nov 2019 09:28:06 -0800
+Message-ID: <20191117172806.2195367-6-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191117172806.2195367-1-andriin@fb.com>
 References: <20191117172806.2195367-1-andriin@fb.com>
@@ -59,10 +59,10 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-17_03:2019-11-15,2019-11-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 malwarescore=0 phishscore=0
- bulkscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999 suspectscore=25
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 phishscore=0 bulkscore=0 priorityscore=1501
+ mlxlogscore=814 clxscore=1015 mlxscore=0 spamscore=0 impostorscore=0
+ suspectscore=67 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1911170167
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,389 +70,401 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Similarly to bpf_map's refcnt/usercnt, convert bpf_prog's refcnt to atomic64
-and remove artificial 32k limit. This allows to make bpf_prog's refcounting
-non-failing, simplifying logic of users of bpf_prog_add/bpf_prog_inc.
+Add selftests validating mmap()-ing BPF array maps: both single-element and
+multi-element ones. Check that plain bpf_map_update_elem() and
+bpf_map_lookup_elem() work correctly with memory-mapped array. Also convert
+CO-RE relocation tests to use memory-mapped views of global data.
 
-Validated compilation by running allyesconfig kernel build.
-
-Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  9 ++----
- .../net/ethernet/cavium/thunder/nicvf_main.c  |  9 ++----
- .../net/ethernet/freescale/dpaa2/dpaa2-eth.c  |  7 ++---
- .../net/ethernet/mellanox/mlx4/en_netdev.c    | 24 ++++-----------
- .../net/ethernet/mellanox/mlx5/core/en_main.c | 18 ++++-------
- drivers/net/ethernet/qlogic/qede/qede_main.c  |  8 ++---
- drivers/net/virtio_net.c                      |  7 ++---
- include/linux/bpf.h                           | 13 ++++----
- kernel/bpf/inode.c                            |  5 ++--
- kernel/bpf/syscall.c                          | 30 ++++++-------------
- kernel/events/core.c                          |  7 ++---
- 11 files changed, 40 insertions(+), 97 deletions(-)
+ .../selftests/bpf/prog_tests/core_reloc.c     |  45 ++--
+ tools/testing/selftests/bpf/prog_tests/mmap.c | 220 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_mmap.c |  45 ++++
+ 3 files changed, 292 insertions(+), 18 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/mmap.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_mmap.c
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index c07172429c70..9da4fbee3cf7 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -3171,13 +3171,8 @@ static int bnxt_init_one_rx_ring(struct bnxt *bp, int ring_nr)
- 	bnxt_init_rxbd_pages(ring, type);
+diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+index f94bd071536b..ec9e2fdd6b89 100644
+--- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
++++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
+ #include "progs/core_reloc_types.h"
++#include <sys/mman.h>
  
- 	if (BNXT_RX_PAGE_MODE(bp) && bp->xdp_prog) {
--		rxr->xdp_prog = bpf_prog_add(bp->xdp_prog, 1);
--		if (IS_ERR(rxr->xdp_prog)) {
--			int rc = PTR_ERR(rxr->xdp_prog);
--
--			rxr->xdp_prog = NULL;
--			return rc;
--		}
-+		bpf_prog_add(bp->xdp_prog, 1);
-+		rxr->xdp_prog = bp->xdp_prog;
- 	}
- 	prod = rxr->rx_prod;
- 	for (i = 0; i < bp->rx_ring_size; i++) {
-diff --git a/drivers/net/ethernet/cavium/thunder/nicvf_main.c b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-index 40a44dcb3d9b..f28409279ea4 100644
---- a/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-+++ b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-@@ -1876,13 +1876,8 @@ static int nicvf_xdp_setup(struct nicvf *nic, struct bpf_prog *prog)
+ #define STRUCT_TO_CHAR_PTR(struct_name) (const char *)&(struct struct_name)
  
- 	if (nic->xdp_prog) {
- 		/* Attach BPF program */
--		nic->xdp_prog = bpf_prog_add(nic->xdp_prog, nic->rx_queues - 1);
--		if (!IS_ERR(nic->xdp_prog)) {
--			bpf_attached = true;
--		} else {
--			ret = PTR_ERR(nic->xdp_prog);
--			nic->xdp_prog = NULL;
--		}
-+		bpf_prog_add(nic->xdp_prog, nic->rx_queues - 1);
-+		bpf_attached = true;
- 	}
- 
- 	/* Calculate Tx queues needed for XDP and network stack */
-diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-index c26c0a7cbb6b..acc56606d3a5 100644
---- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-@@ -1807,11 +1807,8 @@ static int setup_xdp(struct net_device *dev, struct bpf_prog *prog)
- 	if (prog && !xdp_mtu_valid(priv, dev->mtu))
- 		return -EINVAL;
- 
--	if (prog) {
--		prog = bpf_prog_add(prog, priv->num_channels);
--		if (IS_ERR(prog))
--			return PTR_ERR(prog);
--	}
-+	if (prog)
-+		bpf_prog_add(prog, priv->num_channels);
- 
- 	up = netif_running(dev);
- 	need_update = (!!priv->xdp_prog != !!prog);
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-index 40ec5acf79c0..d4697beeacc2 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-@@ -2286,11 +2286,7 @@ int mlx4_en_try_alloc_resources(struct mlx4_en_priv *priv,
- 		lockdep_is_held(&priv->mdev->state_lock));
- 
- 	if (xdp_prog && carry_xdp_prog) {
--		xdp_prog = bpf_prog_add(xdp_prog, tmp->rx_ring_num);
--		if (IS_ERR(xdp_prog)) {
--			mlx4_en_free_resources(tmp);
--			return PTR_ERR(xdp_prog);
--		}
-+		bpf_prog_add(xdp_prog, tmp->rx_ring_num);
- 		for (i = 0; i < tmp->rx_ring_num; i++)
- 			rcu_assign_pointer(tmp->rx_ring[i]->xdp_prog,
- 					   xdp_prog);
-@@ -2782,11 +2778,9 @@ static int mlx4_xdp_set(struct net_device *dev, struct bpf_prog *prog)
- 	 * program for a new one.
- 	 */
- 	if (priv->tx_ring_num[TX_XDP] == xdp_ring_num) {
--		if (prog) {
--			prog = bpf_prog_add(prog, priv->rx_ring_num - 1);
--			if (IS_ERR(prog))
--				return PTR_ERR(prog);
--		}
-+		if (prog)
-+			bpf_prog_add(prog, priv->rx_ring_num - 1);
-+
- 		mutex_lock(&mdev->state_lock);
- 		for (i = 0; i < priv->rx_ring_num; i++) {
- 			old_prog = rcu_dereference_protected(
-@@ -2807,13 +2801,8 @@ static int mlx4_xdp_set(struct net_device *dev, struct bpf_prog *prog)
- 	if (!tmp)
- 		return -ENOMEM;
- 
--	if (prog) {
--		prog = bpf_prog_add(prog, priv->rx_ring_num - 1);
--		if (IS_ERR(prog)) {
--			err = PTR_ERR(prog);
--			goto out;
--		}
--	}
-+	if (prog)
-+		bpf_prog_add(prog, priv->rx_ring_num - 1);
- 
- 	mutex_lock(&mdev->state_lock);
- 	memcpy(&new_prof, priv->prof, sizeof(struct mlx4_en_port_profile));
-@@ -2862,7 +2851,6 @@ static int mlx4_xdp_set(struct net_device *dev, struct bpf_prog *prog)
- 
- unlock_out:
- 	mutex_unlock(&mdev->state_lock);
--out:
- 	kfree(tmp);
- 	return err;
- }
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index 772bfdbdeb9c..1d4a66fb466a 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -408,12 +408,9 @@ static int mlx5e_alloc_rq(struct mlx5e_channel *c,
- 		rq->stats = &c->priv->channel_stats[c->ix].rq;
- 	INIT_WORK(&rq->recover_work, mlx5e_rq_err_cqe_work);
- 
--	rq->xdp_prog = params->xdp_prog ? bpf_prog_inc(params->xdp_prog) : NULL;
--	if (IS_ERR(rq->xdp_prog)) {
--		err = PTR_ERR(rq->xdp_prog);
--		rq->xdp_prog = NULL;
--		goto err_rq_wq_destroy;
--	}
-+	if (params->xdp_prog)
-+		bpf_prog_inc(params->xdp_prog);
-+	rq->xdp_prog = params->xdp_prog;
- 
- 	rq_xdp_ix = rq->ix;
- 	if (xsk)
-@@ -4406,16 +4403,11 @@ static int mlx5e_xdp_set(struct net_device *netdev, struct bpf_prog *prog)
- 	/* no need for full reset when exchanging programs */
- 	reset = (!priv->channels.params.xdp_prog || !prog);
- 
--	if (was_opened && !reset) {
-+	if (was_opened && !reset)
- 		/* num_channels is invariant here, so we can take the
- 		 * batched reference right upfront.
- 		 */
--		prog = bpf_prog_add(prog, priv->channels.num);
--		if (IS_ERR(prog)) {
--			err = PTR_ERR(prog);
--			goto unlock;
--		}
--	}
-+		bpf_prog_add(prog, priv->channels.num);
- 
- 	if (was_opened && reset) {
- 		struct mlx5e_channels new_channels = {};
-diff --git a/drivers/net/ethernet/qlogic/qede/qede_main.c b/drivers/net/ethernet/qlogic/qede/qede_main.c
-index 8d1c208f778f..1e26964fe4e9 100644
---- a/drivers/net/ethernet/qlogic/qede/qede_main.c
-+++ b/drivers/net/ethernet/qlogic/qede/qede_main.c
-@@ -2107,12 +2107,8 @@ static int qede_start_queues(struct qede_dev *edev, bool clear_stats)
- 			if (rc)
- 				goto out;
- 
--			fp->rxq->xdp_prog = bpf_prog_add(edev->xdp_prog, 1);
--			if (IS_ERR(fp->rxq->xdp_prog)) {
--				rc = PTR_ERR(fp->rxq->xdp_prog);
--				fp->rxq->xdp_prog = NULL;
--				goto out;
--			}
-+			bpf_prog_add(edev->xdp_prog, 1);
-+			fp->rxq->xdp_prog = edev->xdp_prog;
- 		}
- 
- 		if (fp->type & QEDE_FASTPATH_TX) {
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 5a635f028bdc..4d7d5434cc5d 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2445,11 +2445,8 @@ static int virtnet_xdp_set(struct net_device *dev, struct bpf_prog *prog,
- 	if (!prog && !old_prog)
- 		return 0;
- 
--	if (prog) {
--		prog = bpf_prog_add(prog, vi->max_queue_pairs - 1);
--		if (IS_ERR(prog))
--			return PTR_ERR(prog);
--	}
-+	if (prog)
-+		bpf_prog_add(prog, vi->max_queue_pairs - 1);
- 
- 	/* Make sure NAPI is not using any XDP TX queues for RX. */
- 	if (netif_running(dev)) {
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 34a34445c009..fb606dc61a3a 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -485,7 +485,7 @@ struct bpf_func_info_aux {
+@@ -453,8 +454,15 @@ struct data {
+ 	char out[256];
  };
  
- struct bpf_prog_aux {
--	atomic_t refcnt;
-+	atomic64_t refcnt;
- 	u32 used_map_cnt;
- 	u32 max_ctx_offset;
- 	u32 max_pkt_offset;
-@@ -770,9 +770,9 @@ extern const struct bpf_verifier_ops xdp_analyzer_ops;
- struct bpf_prog *bpf_prog_get(u32 ufd);
- struct bpf_prog *bpf_prog_get_type_dev(u32 ufd, enum bpf_prog_type type,
- 				       bool attach_drv);
--struct bpf_prog * __must_check bpf_prog_add(struct bpf_prog *prog, int i);
-+void bpf_prog_add(struct bpf_prog *prog, int i);
- void bpf_prog_sub(struct bpf_prog *prog, int i);
--struct bpf_prog * __must_check bpf_prog_inc(struct bpf_prog *prog);
-+void bpf_prog_inc(struct bpf_prog *prog);
- struct bpf_prog * __must_check bpf_prog_inc_not_zero(struct bpf_prog *prog);
- void bpf_prog_put(struct bpf_prog *prog);
- int __bpf_prog_charge(struct user_struct *user, u32 pages);
-@@ -912,10 +912,8 @@ static inline struct bpf_prog *bpf_prog_get_type_dev(u32 ufd,
- 	return ERR_PTR(-EOPNOTSUPP);
- }
- 
--static inline struct bpf_prog * __must_check bpf_prog_add(struct bpf_prog *prog,
--							  int i)
-+static inline void bpf_prog_add(struct bpf_prog *prog, int i)
++static size_t roundup_page(size_t sz)
++{
++	long page_size = sysconf(_SC_PAGE_SIZE);
++	return (sz + page_size - 1) / page_size * page_size;
++}
++
+ void test_core_reloc(void)
  {
--	return ERR_PTR(-EOPNOTSUPP);
- }
++	const size_t mmap_sz = roundup_page(sizeof(struct data));
+ 	struct bpf_object_load_attr load_attr = {};
+ 	struct core_reloc_test_case *test_case;
+ 	const char *tp_name, *probe_name;
+@@ -463,8 +471,8 @@ void test_core_reloc(void)
+ 	struct bpf_map *data_map;
+ 	struct bpf_program *prog;
+ 	struct bpf_object *obj;
+-	const int zero = 0;
+-	struct data data;
++	struct data *data;
++	void *mmap_data = NULL;
  
- static inline void bpf_prog_sub(struct bpf_prog *prog, int i)
-@@ -926,9 +924,8 @@ static inline void bpf_prog_put(struct bpf_prog *prog)
- {
- }
+ 	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
+ 		test_case = &test_cases[i];
+@@ -476,8 +484,7 @@ void test_core_reloc(void)
+ 		);
  
--static inline struct bpf_prog * __must_check bpf_prog_inc(struct bpf_prog *prog)
-+static inline void bpf_prog_inc(struct bpf_prog *prog)
- {
--	return ERR_PTR(-EOPNOTSUPP);
- }
+ 		obj = bpf_object__open_file(test_case->bpf_obj_file, &opts);
+-		if (CHECK(IS_ERR_OR_NULL(obj), "obj_open",
+-			  "failed to open '%s': %ld\n",
++		if (CHECK(IS_ERR(obj), "obj_open", "failed to open '%s': %ld\n",
+ 			  test_case->bpf_obj_file, PTR_ERR(obj)))
+ 			continue;
  
- static inline struct bpf_prog *__must_check
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 2f17f24258dc..ecf42bec38c0 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -31,7 +31,7 @@ static void *bpf_any_get(void *raw, enum bpf_type type)
- {
- 	switch (type) {
- 	case BPF_TYPE_PROG:
--		raw = bpf_prog_inc(raw);
-+		bpf_prog_inc(raw);
- 		break;
- 	case BPF_TYPE_MAP:
- 		bpf_map_inc_with_uref(raw);
-@@ -534,7 +534,8 @@ static struct bpf_prog *__get_prog_inode(struct inode *inode, enum bpf_prog_type
- 	if (!bpf_prog_get_ok(prog, &type, false))
- 		return ERR_PTR(-EINVAL);
+@@ -519,24 +526,22 @@ void test_core_reloc(void)
+ 		if (CHECK(!data_map, "find_data_map", "data map not found\n"))
+ 			goto cleanup;
  
--	return bpf_prog_inc(prog);
-+	bpf_prog_inc(prog);
-+	return prog;
- }
- 
- struct bpf_prog *bpf_prog_get_type_path(const char *name, enum bpf_prog_type type)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 20030751b7a2..52fe4bacb330 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1339,7 +1339,7 @@ static void __bpf_prog_put_noref(struct bpf_prog *prog, bool deferred)
- 
- static void __bpf_prog_put(struct bpf_prog *prog, bool do_idr_lock)
- {
--	if (atomic_dec_and_test(&prog->aux->refcnt)) {
-+	if (atomic64_dec_and_test(&prog->aux->refcnt)) {
- 		perf_event_bpf_event(prog, PERF_BPF_EVENT_PROG_UNLOAD, 0);
- 		/* bpf_prog_free_id() must be called first */
- 		bpf_prog_free_id(prog, do_idr_lock);
-@@ -1445,16 +1445,9 @@ static struct bpf_prog *____bpf_prog_get(struct fd f)
- 	return f.file->private_data;
- }
- 
--/* prog's refcnt limit */
--#define BPF_MAX_REFCNT 32768
+-		memset(&data, 0, sizeof(data));
+-		memcpy(data.in, test_case->input, test_case->input_len);
 -
--struct bpf_prog *bpf_prog_add(struct bpf_prog *prog, int i)
-+void bpf_prog_add(struct bpf_prog *prog, int i)
- {
--	if (atomic_add_return(i, &prog->aux->refcnt) > BPF_MAX_REFCNT) {
--		atomic_sub(i, &prog->aux->refcnt);
--		return ERR_PTR(-EBUSY);
--	}
--	return prog;
-+	atomic64_add(i, &prog->aux->refcnt);
- }
- EXPORT_SYMBOL_GPL(bpf_prog_add);
+-		err = bpf_map_update_elem(bpf_map__fd(data_map),
+-					  &zero, &data, 0);
+-		if (CHECK(err, "update_data_map",
+-			  "failed to update .data map: %d\n", err))
++		mmap_data = mmap(NULL, mmap_sz, PROT_READ | PROT_WRITE,
++				 MAP_SHARED, bpf_map__fd(data_map), 0);
++		if (CHECK(mmap_data == MAP_FAILED, "mmap",
++			  ".bss mmap failed: %d", errno)) {
++			mmap_data = NULL;
+ 			goto cleanup;
++		}
++		data = mmap_data;
++
++		memset(mmap_data, 0, sizeof(*data));
++		memcpy(data->in, test_case->input, test_case->input_len);
  
-@@ -1465,13 +1458,13 @@ void bpf_prog_sub(struct bpf_prog *prog, int i)
- 	 * path holds a reference to the program, thus atomic_sub() can
- 	 * be safely used in such cases!
- 	 */
--	WARN_ON(atomic_sub_return(i, &prog->aux->refcnt) == 0);
-+	WARN_ON(atomic64_sub_return(i, &prog->aux->refcnt) == 0);
- }
- EXPORT_SYMBOL_GPL(bpf_prog_sub);
+ 		/* trigger test run */
+ 		usleep(1);
  
--struct bpf_prog *bpf_prog_inc(struct bpf_prog *prog)
-+void bpf_prog_inc(struct bpf_prog *prog)
- {
--	return bpf_prog_add(prog, 1);
-+	atomic64_inc(&prog->aux->refcnt);
- }
- EXPORT_SYMBOL_GPL(bpf_prog_inc);
- 
-@@ -1480,12 +1473,7 @@ struct bpf_prog *bpf_prog_inc_not_zero(struct bpf_prog *prog)
- {
- 	int refold;
- 
--	refold = atomic_fetch_add_unless(&prog->aux->refcnt, 1, 0);
+-		err = bpf_map_lookup_elem(bpf_map__fd(data_map), &zero, &data);
+-		if (CHECK(err, "get_result",
+-			  "failed to get output data: %d\n", err))
+-			goto cleanup;
 -
--	if (refold >= BPF_MAX_REFCNT) {
--		__bpf_prog_put(prog, false);
--		return ERR_PTR(-EBUSY);
--	}
-+	refold = atomic64_fetch_add_unless(&prog->aux->refcnt, 1, 0);
+-		equal = memcmp(data.out, test_case->output,
++		equal = memcmp(data->out, test_case->output,
+ 			       test_case->output_len) == 0;
+ 		if (CHECK(!equal, "check_result",
+ 			  "input/output data don't match\n")) {
+@@ -548,12 +553,16 @@ void test_core_reloc(void)
+ 			}
+ 			for (j = 0; j < test_case->output_len; j++) {
+ 				printf("output byte #%d: EXP 0x%02hhx GOT 0x%02hhx\n",
+-				       j, test_case->output[j], data.out[j]);
++				       j, test_case->output[j], data->out[j]);
+ 			}
+ 			goto cleanup;
+ 		}
  
- 	if (!refold)
- 		return ERR_PTR(-ENOENT);
-@@ -1523,7 +1511,7 @@ static struct bpf_prog *__bpf_prog_get(u32 ufd, enum bpf_prog_type *attach_type,
- 		goto out;
- 	}
- 
--	prog = bpf_prog_inc(prog);
-+	bpf_prog_inc(prog);
- out:
- 	fdput(f);
- 	return prog;
-@@ -1714,7 +1702,7 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 	prog->orig_prog = NULL;
- 	prog->jited = 0;
- 
--	atomic_set(&prog->aux->refcnt, 1);
-+	atomic64_set(&prog->aux->refcnt, 1);
- 	prog->gpl_compatible = is_gpl ? 1 : 0;
- 
- 	if (bpf_prog_is_dev_bound(prog->aux)) {
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index aec8dba2bea4..73c616876597 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -10477,12 +10477,9 @@ perf_event_alloc(struct perf_event_attr *attr, int cpu,
- 		context = parent_event->overflow_handler_context;
- #if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_EVENT_TRACING)
- 		if (overflow_handler == bpf_overflow_handler) {
--			struct bpf_prog *prog = bpf_prog_inc(parent_event->prog);
-+			struct bpf_prog *prog = parent_event->prog;
- 
--			if (IS_ERR(prog)) {
--				err = PTR_ERR(prog);
--				goto err_ns;
--			}
-+			bpf_prog_inc(prog);
- 			event->prog = prog;
- 			event->orig_overflow_handler =
- 				parent_event->orig_overflow_handler;
+ cleanup:
++		if (mmap_data) {
++			CHECK_FAIL(munmap(mmap_data, mmap_sz));
++			mmap_data = NULL;
++		}
+ 		if (!IS_ERR_OR_NULL(link)) {
+ 			bpf_link__destroy(link);
+ 			link = NULL;
+diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
+new file mode 100644
+index 000000000000..051a6d48762c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
+@@ -0,0 +1,220 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <sys/mman.h>
++
++struct map_data {
++	__u64 val[512 * 4];
++};
++
++struct bss_data {
++	__u64 in_val;
++	__u64 out_val;
++};
++
++static size_t roundup_page(size_t sz)
++{
++	long page_size = sysconf(_SC_PAGE_SIZE);
++	return (sz + page_size - 1) / page_size * page_size;
++}
++
++void test_mmap(void)
++{
++	const char *file = "test_mmap.o";
++	const char *probe_name = "raw_tracepoint/sys_enter";
++	const char *tp_name = "sys_enter";
++	const size_t bss_sz = roundup_page(sizeof(struct bss_data));
++	const size_t map_sz = roundup_page(sizeof(struct map_data));
++	const int zero = 0, one = 1, two = 2, far = 1500;
++	const long page_size = sysconf(_SC_PAGE_SIZE);
++	int err, duration = 0, i, data_map_fd;
++	struct bpf_program *prog;
++	struct bpf_object *obj;
++	struct bpf_link *link = NULL;
++	struct bpf_map *data_map, *bss_map;
++	void *bss_mmaped = NULL, *map_mmaped = NULL, *tmp1, *tmp2;
++	volatile struct bss_data *bss_data;
++	volatile struct map_data *map_data;
++	__u64 val = 0;
++
++	obj = bpf_object__open_file("test_mmap.o", NULL);
++	if (CHECK(IS_ERR(obj), "obj_open", "failed to open '%s': %ld\n",
++		  file, PTR_ERR(obj)))
++		return;
++	prog = bpf_object__find_program_by_title(obj, probe_name);
++	if (CHECK(!prog, "find_probe", "prog '%s' not found\n", probe_name))
++		goto cleanup;
++	err = bpf_object__load(obj);
++	if (CHECK(err, "obj_load", "failed to load prog '%s': %d\n",
++		  probe_name, err))
++		goto cleanup;
++
++	bss_map = bpf_object__find_map_by_name(obj, "test_mma.bss");
++	if (CHECK(!bss_map, "find_bss_map", ".bss map not found\n"))
++		goto cleanup;
++	data_map = bpf_object__find_map_by_name(obj, "data_map");
++	if (CHECK(!data_map, "find_data_map", "data_map map not found\n"))
++		goto cleanup;
++	data_map_fd = bpf_map__fd(data_map);
++
++	bss_mmaped = mmap(NULL, bss_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
++			  bpf_map__fd(bss_map), 0);
++	if (CHECK(bss_mmaped == MAP_FAILED, "bss_mmap",
++		  ".bss mmap failed: %d\n", errno)) {
++		bss_mmaped = NULL;
++		goto cleanup;
++	}
++	/* map as R/W first */
++	map_mmaped = mmap(NULL, map_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
++			  data_map_fd, 0);
++	if (CHECK(map_mmaped == MAP_FAILED, "data_mmap",
++		  "data_map mmap failed: %d\n", errno)) {
++		map_mmaped = NULL;
++		goto cleanup;
++	}
++
++	bss_data = bss_mmaped;
++	map_data = map_mmaped;
++
++	CHECK_FAIL(bss_data->in_val);
++	CHECK_FAIL(bss_data->out_val);
++	CHECK_FAIL(map_data->val[0]);
++	CHECK_FAIL(map_data->val[1]);
++	CHECK_FAIL(map_data->val[2]);
++	CHECK_FAIL(map_data->val[far]);
++
++	link = bpf_program__attach_raw_tracepoint(prog, tp_name);
++	if (CHECK(IS_ERR(link), "attach_raw_tp", "err %ld\n", PTR_ERR(link)))
++		goto cleanup;
++
++	bss_data->in_val = 123;
++	val = 111;
++	CHECK_FAIL(bpf_map_update_elem(data_map_fd, &zero, &val, 0));
++
++	usleep(1);
++
++	CHECK_FAIL(bss_data->in_val != 123);
++	CHECK_FAIL(bss_data->out_val != 123);
++	CHECK_FAIL(map_data->val[0] != 111);
++	CHECK_FAIL(map_data->val[1] != 222);
++	CHECK_FAIL(map_data->val[2] != 123);
++	CHECK_FAIL(map_data->val[far] != 3 * 123);
++
++	CHECK_FAIL(bpf_map_lookup_elem(data_map_fd, &zero, &val));
++	CHECK_FAIL(val != 111);
++	CHECK_FAIL(bpf_map_lookup_elem(data_map_fd, &one, &val));
++	CHECK_FAIL(val != 222);
++	CHECK_FAIL(bpf_map_lookup_elem(data_map_fd, &two, &val));
++	CHECK_FAIL(val != 123);
++	CHECK_FAIL(bpf_map_lookup_elem(data_map_fd, &far, &val));
++	CHECK_FAIL(val != 3 * 123);
++
++	/* data_map freeze should fail due to R/W mmap() */
++	err = bpf_map_freeze(data_map_fd);
++	if (CHECK(!err || errno != EBUSY, "no_freeze",
++		  "data_map freeze succeeded: err=%d, errno=%d\n", err, errno))
++		goto cleanup;
++
++	/* unmap R/W mapping */
++	err = munmap(map_mmaped, map_sz);
++	map_mmaped = NULL;
++	if (CHECK(err, "data_map_munmap", "data_map munmap failed: %d\n", errno))
++		goto cleanup;
++
++	/* re-map as R/O now */
++	map_mmaped = mmap(NULL, map_sz, PROT_READ, MAP_SHARED, data_map_fd, 0);
++	if (CHECK(map_mmaped == MAP_FAILED, "data_mmap",
++		  "data_map R/O mmap failed: %d\n", errno)) {
++		map_mmaped = NULL;
++		goto cleanup;
++	}
++	map_data = map_mmaped;
++
++	/* map/unmap in a loop to test ref counting */
++	for (i = 0; i < 10; i++) {
++		int flags = i % 2 ? PROT_READ : PROT_WRITE;
++		void *p;
++
++		p = mmap(NULL, map_sz, flags, MAP_SHARED, data_map_fd, 0);
++		if (CHECK_FAIL(p == MAP_FAILED))
++			goto cleanup;
++		err = munmap(p, map_sz);
++		if (CHECK_FAIL(err))
++			goto cleanup;
++	}
++
++	/* data_map freeze should now succeed due to no R/W mapping */
++	err = bpf_map_freeze(data_map_fd);
++	if (CHECK(err, "freeze", "data_map freeze failed: err=%d, errno=%d\n",
++		  err, errno))
++		goto cleanup;
++
++	/* mapping as R/W now should fail */
++	tmp1 = mmap(NULL, map_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
++		    data_map_fd, 0);
++	if (CHECK(tmp1 != MAP_FAILED, "data_mmap", "mmap succeeded\n")) {
++		munmap(tmp1, map_sz);
++		goto cleanup;
++	}
++
++	bss_data->in_val = 321;
++	usleep(1);
++	CHECK_FAIL(bss_data->in_val != 321);
++	CHECK_FAIL(bss_data->out_val != 321);
++	CHECK_FAIL(map_data->val[0] != 111);
++	CHECK_FAIL(map_data->val[1] != 222);
++	CHECK_FAIL(map_data->val[2] != 321);
++	CHECK_FAIL(map_data->val[far] != 3 * 321);
++
++	/* check some more advanced mmap() manipulations */
++
++	/* map all but last page: pages 1-3 mapped */
++	tmp1 = mmap(NULL, 3 * page_size, PROT_READ, MAP_SHARED,
++			  data_map_fd, 0);
++	if (CHECK(tmp1 == MAP_FAILED, "adv_mmap1", "errno %d\n", errno))
++		goto cleanup;
++
++	/* unmap second page: pages 1, 3 mapped */
++	err = munmap(tmp1 + page_size, page_size);
++	if (CHECK(err, "adv_mmap2", "errno %d\n", errno)) {
++		munmap(tmp1, map_sz);
++		goto cleanup;
++	}
++
++	/* map page 2 back */
++	tmp2 = mmap(tmp1 + page_size, page_size, PROT_READ,
++		    MAP_SHARED | MAP_FIXED, data_map_fd, 0);
++	if (CHECK(tmp2 == MAP_FAILED, "adv_mmap3", "errno %d\n", errno)) {
++		munmap(tmp1, page_size);
++		munmap(tmp1 + 2*page_size, page_size);
++		goto cleanup;
++	}
++	CHECK(tmp1 + page_size != tmp2, "adv_mmap4",
++	      "tmp1: %p, tmp2: %p\n", tmp1, tmp2);
++
++	/* re-map all 4 pages */
++	tmp2 = mmap(tmp1, 4 * page_size, PROT_READ, MAP_SHARED | MAP_FIXED,
++		    data_map_fd, 0);
++	if (CHECK(tmp2 == MAP_FAILED, "adv_mmap5", "errno %d\n", errno)) {
++		munmap(tmp1, 3 * page_size); /* unmap page 1 */
++		goto cleanup;
++	}
++	CHECK(tmp1 != tmp2, "adv_mmap6", "tmp1: %p, tmp2: %p\n", tmp1, tmp2);
++
++	map_data = tmp2;
++	CHECK_FAIL(bss_data->in_val != 321);
++	CHECK_FAIL(bss_data->out_val != 321);
++	CHECK_FAIL(map_data->val[0] != 111);
++	CHECK_FAIL(map_data->val[1] != 222);
++	CHECK_FAIL(map_data->val[2] != 321);
++	CHECK_FAIL(map_data->val[far] != 3 * 321);
++
++	munmap(tmp2, 4 * page_size);
++cleanup:
++	if (bss_mmaped)
++		CHECK_FAIL(munmap(bss_mmaped, bss_sz));
++	if (map_mmaped)
++		CHECK_FAIL(munmap(map_mmaped, map_sz));
++	if (!IS_ERR_OR_NULL(link))
++		bpf_link__destroy(link);
++	bpf_object__close(obj);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_mmap.c b/tools/testing/selftests/bpf/progs/test_mmap.c
+new file mode 100644
+index 000000000000..0d2ec9fbcf61
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_mmap.c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2019 Facebook
++
++#include <linux/bpf.h>
++#include <stdint.h>
++#include "bpf_helpers.h"
++
++char _license[] SEC("license") = "GPL";
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 512 * 4); /* at least 4 pages of data */
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__type(key, __u32);
++	__type(value, __u64);
++} data_map SEC(".maps");
++
++static volatile __u64 in_val;
++static volatile __u64 out_val;
++
++SEC("raw_tracepoint/sys_enter")
++int test_mmap(void *ctx)
++{
++	int zero = 0, one = 1, two = 2, far = 1500;
++	__u64 val, *p;
++
++	out_val = in_val;
++
++	/* data_map[2] = in_val; */
++	bpf_map_update_elem(&data_map, &two, (const void *)&in_val, 0);
++
++	/* data_map[1] = data_map[0] * 2; */
++	p = bpf_map_lookup_elem(&data_map, &zero);
++	if (p) {
++		val = (*p) * 2;
++		bpf_map_update_elem(&data_map, &one, &val, 0);
++	}
++
++	/* data_map[far] = in_val * 3; */
++	val = in_val * 3;
++	bpf_map_update_elem(&data_map, &far, &val, 0);
++
++	return 0;
++}
++
 -- 
 2.17.1
 
