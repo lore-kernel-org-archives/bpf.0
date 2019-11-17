@@ -5,52 +5,54 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 420B9C432C0
-	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 17:28:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6DCAC43215
+	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 17:28:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 103CB206D9
-	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 17:28:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9180C2084D
+	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 17:28:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="GxhtKHXI"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="FbNGgMR6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726082AbfKQR2W (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 17 Nov 2019 12:28:22 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13022 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726423AbfKQR2W (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 17 Nov 2019 12:28:22 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAHHNjJF004308
-        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 09:28:20 -0800
+        id S1726451AbfKQR2X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 17 Nov 2019 12:28:23 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:58994 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726315AbfKQR2T (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 17 Nov 2019 12:28:19 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id xAHHPn7K010374
+        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 09:28:17 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=sVaT+OfRUIT8nvCiT7mvqQsEr02Sb6mu9pDM1VXI5gE=;
- b=GxhtKHXINwFzSCsNojDG4+k1dWd7QahtlHK5FPI6F6BTWcS4lMdnV+am3ltT1XY4Wgxe
- oBE57mFa1yyRpHpK+N7U6bABGkSOeqZzG+Yn39Zt0RFVlOG2cGsPKJiyfHrgXw3ae7MW
- bU94Y4H8Chv6bjsRcwkLPBQR5cBt1uGs//Y= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2waftjus4e-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 09:28:20 -0800
-Received: from 2401:db00:2050:5076:face:0:9:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Sun, 17 Nov 2019 09:28:19 -0800
+ content-type; s=facebook; bh=110FubEvOVE+nW9NAeKepaAYYd7LPl0b4QVFM00cuCo=;
+ b=FbNGgMR6b2+LoA6z6C4YPIYF43p1WMBkBEX2laVSRWsj17n2q1zsG2QAzhMd/eGMR3qV
+ 02kStzxZ7BE6rxibcOwlNsR26zblj6/9CVispqDe5zCMVHNrYEBZahlpJGayNFcWiGuT
+ taXkE0c+TEe88F7jOZnvdth2MTHuA2IaorE= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by m0089730.ppops.net with ESMTP id 2wadg0wad8-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 09:28:17 -0800
+Received: from 2401:db00:30:6012:face:0:17:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Sun, 17 Nov 2019 09:28:15 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 1CE622EC0551; Sun, 17 Nov 2019 09:28:19 -0800 (PST)
+        id A88772EC0551; Sun, 17 Nov 2019 09:28:14 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
+        Andrii Nakryiko <andriin@fb.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v6 bpf-next 5/5] selftests/bpf: add BPF_TYPE_MAP_ARRAY mmap() tests
-Date:   Sun, 17 Nov 2019 09:28:06 -0800
-Message-ID: <20191117172806.2195367-6-andriin@fb.com>
+Subject: [PATCH v6 bpf-next 3/5] bpf: add mmap() support for BPF_MAP_TYPE_ARRAY
+Date:   Sun, 17 Nov 2019 09:28:04 -0800
+Message-ID: <20191117172806.2195367-4-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191117172806.2195367-1-andriin@fb.com>
 References: <20191117172806.2195367-1-andriin@fb.com>
@@ -59,10 +61,10 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-17_03:2019-11-15,2019-11-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 phishscore=0 bulkscore=0 priorityscore=1501
- mlxlogscore=814 clxscore=1015 mlxscore=0 spamscore=0 impostorscore=0
- suspectscore=67 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ mlxlogscore=999 mlxscore=0 suspectscore=25 malwarescore=0 impostorscore=0
+ adultscore=0 priorityscore=1501 clxscore=1015 phishscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1911170167
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,401 +72,458 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add selftests validating mmap()-ing BPF array maps: both single-element and
-multi-element ones. Check that plain bpf_map_update_elem() and
-bpf_map_lookup_elem() work correctly with memory-mapped array. Also convert
-CO-RE relocation tests to use memory-mapped views of global data.
+Add ability to memory-map contents of BPF array map. This is extremely useful
+for working with BPF global data from userspace programs. It allows to avoid
+typical bpf_map_{lookup,update}_elem operations, improving both performance
+and usability.
 
+There had to be special considerations for map freezing, to avoid having
+writable memory view into a frozen map. To solve this issue, map freezing and
+mmap-ing is happening under mutex now:
+  - if map is already frozen, no writable mapping is allowed;
+  - if map has writable memory mappings active (accounted in map->writecnt),
+    map freezing will keep failing with -EBUSY;
+  - once number of writable memory mappings drops to zero, map freezing can be
+    performed again.
+
+Only non-per-CPU plain arrays are supported right now. Maps with spinlocks
+can't be memory mapped either.
+
+For BPF_F_MMAPABLE array, memory allocation has to be done through vmalloc()
+to be mmap()'able. We also need to make sure that array data memory is
+page-sized and page-aligned, so we over-allocate memory in such a way that
+struct bpf_array is at the end of a single page of memory with array->value
+being aligned with the start of the second page. On deallocation we need to
+accomodate this memory arrangement to free vmalloc()'ed memory correctly.
+
+One important consideration regarding how memory-mapping subsystem functions.
+Memory-mapping subsystem provides few optional callbacks, among them open()
+and close().  close() is called for each memory region that is unmapped, so
+that users can decrease their reference counters and free up resources, if
+necessary. open() is *almost* symmetrical: it's called for each memory region
+that is being mapped, **except** the very first one. So bpf_map_mmap does
+initial refcnt bump, while open() will do any extra ones after that. Thus
+number of close() calls is equal to number of open() calls plus one more.
+
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Rik van Riel <riel@surriel.com>
 Acked-by: Song Liu <songliubraving@fb.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../selftests/bpf/prog_tests/core_reloc.c     |  45 ++--
- tools/testing/selftests/bpf/prog_tests/mmap.c | 220 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/test_mmap.c |  45 ++++
- 3 files changed, 292 insertions(+), 18 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/mmap.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_mmap.c
+ include/linux/bpf.h            | 11 ++--
+ include/linux/vmalloc.h        |  1 +
+ include/uapi/linux/bpf.h       |  3 ++
+ kernel/bpf/arraymap.c          | 58 +++++++++++++++++---
+ kernel/bpf/syscall.c           | 99 ++++++++++++++++++++++++++++++++--
+ mm/vmalloc.c                   | 20 +++++++
+ tools/include/uapi/linux/bpf.h |  3 ++
+ 7 files changed, 183 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-index f94bd071536b..ec9e2fdd6b89 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
- #include "progs/core_reloc_types.h"
-+#include <sys/mman.h>
- 
- #define STRUCT_TO_CHAR_PTR(struct_name) (const char *)&(struct struct_name)
- 
-@@ -453,8 +454,15 @@ struct data {
- 	char out[256];
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index fb606dc61a3a..e913dd5946ae 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -12,6 +12,7 @@
+ #include <linux/err.h>
+ #include <linux/rbtree_latch.h>
+ #include <linux/numa.h>
++#include <linux/mm_types.h>
+ #include <linux/wait.h>
+ #include <linux/u64_stats_sync.h>
+ #include <linux/refcount.h>
+@@ -68,6 +69,7 @@ struct bpf_map_ops {
+ 				     u64 *imm, u32 off);
+ 	int (*map_direct_value_meta)(const struct bpf_map *map,
+ 				     u64 imm, u32 *off);
++	int (*map_mmap)(struct bpf_map *map, struct vm_area_struct *vma);
  };
  
-+static size_t roundup_page(size_t sz)
-+{
-+	long page_size = sysconf(_SC_PAGE_SIZE);
-+	return (sz + page_size - 1) / page_size * page_size;
-+}
+ struct bpf_map_memory {
+@@ -96,9 +98,10 @@ struct bpf_map {
+ 	u32 btf_value_type_id;
+ 	struct btf *btf;
+ 	struct bpf_map_memory memory;
++	char name[BPF_OBJ_NAME_LEN];
+ 	bool unpriv_array;
+-	bool frozen; /* write-once */
+-	/* 48 bytes hole */
++	bool frozen; /* write-once; write-protected by freeze_mutex */
++	/* 22 bytes hole */
+ 
+ 	/* The 3rd and 4th cacheline with misc members to avoid false sharing
+ 	 * particularly with refcounting.
+@@ -106,7 +109,8 @@ struct bpf_map {
+ 	atomic64_t refcnt ____cacheline_aligned;
+ 	atomic64_t usercnt;
+ 	struct work_struct work;
+-	char name[BPF_OBJ_NAME_LEN];
++	struct mutex freeze_mutex;
++	u64 writecnt; /* writable mmap cnt; protected by freeze_mutex */
+ };
+ 
+ static inline bool map_value_has_spin_lock(const struct bpf_map *map)
+@@ -795,6 +799,7 @@ void bpf_map_charge_finish(struct bpf_map_memory *mem);
+ void bpf_map_charge_move(struct bpf_map_memory *dst,
+ 			 struct bpf_map_memory *src);
+ void *bpf_map_area_alloc(size_t size, int numa_node);
++void *bpf_map_area_mmapable_alloc(size_t size, int numa_node);
+ void bpf_map_area_free(void *base);
+ void bpf_map_init_from_attr(struct bpf_map *map, union bpf_attr *attr);
+ 
+diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+index 4e7809408073..b4c58a191eb1 100644
+--- a/include/linux/vmalloc.h
++++ b/include/linux/vmalloc.h
+@@ -93,6 +93,7 @@ extern void *vzalloc(unsigned long size);
+ extern void *vmalloc_user(unsigned long size);
+ extern void *vmalloc_node(unsigned long size, int node);
+ extern void *vzalloc_node(unsigned long size, int node);
++extern void *vmalloc_user_node_flags(unsigned long size, int node, gfp_t flags);
+ extern void *vmalloc_exec(unsigned long size);
+ extern void *vmalloc_32(unsigned long size);
+ extern void *vmalloc_32_user(unsigned long size);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 4842a134b202..dbbcf0b02970 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -348,6 +348,9 @@ enum bpf_attach_type {
+ /* Clone map from listener for newly accepted socket */
+ #define BPF_F_CLONE		(1U << 9)
+ 
++/* Enable memory-mapping BPF map */
++#define BPF_F_MMAPABLE		(1U << 10)
 +
- void test_core_reloc(void)
+ /* flags for BPF_PROG_QUERY */
+ #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
+ 
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 1c65ce0098a9..a42097c36b0c 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -14,7 +14,7 @@
+ #include "map_in_map.h"
+ 
+ #define ARRAY_CREATE_FLAG_MASK \
+-	(BPF_F_NUMA_NODE | BPF_F_ACCESS_MASK)
++	(BPF_F_NUMA_NODE | BPF_F_MMAPABLE | BPF_F_ACCESS_MASK)
+ 
+ static void bpf_array_free_percpu(struct bpf_array *array)
  {
-+	const size_t mmap_sz = roundup_page(sizeof(struct data));
- 	struct bpf_object_load_attr load_attr = {};
- 	struct core_reloc_test_case *test_case;
- 	const char *tp_name, *probe_name;
-@@ -463,8 +471,8 @@ void test_core_reloc(void)
- 	struct bpf_map *data_map;
- 	struct bpf_program *prog;
- 	struct bpf_object *obj;
--	const int zero = 0;
--	struct data data;
-+	struct data *data;
-+	void *mmap_data = NULL;
+@@ -59,6 +59,10 @@ int array_map_alloc_check(union bpf_attr *attr)
+ 	    (percpu && numa_node != NUMA_NO_NODE))
+ 		return -EINVAL;
  
- 	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
- 		test_case = &test_cases[i];
-@@ -476,8 +484,7 @@ void test_core_reloc(void)
- 		);
- 
- 		obj = bpf_object__open_file(test_case->bpf_obj_file, &opts);
--		if (CHECK(IS_ERR_OR_NULL(obj), "obj_open",
--			  "failed to open '%s': %ld\n",
-+		if (CHECK(IS_ERR(obj), "obj_open", "failed to open '%s': %ld\n",
- 			  test_case->bpf_obj_file, PTR_ERR(obj)))
- 			continue;
- 
-@@ -519,24 +526,22 @@ void test_core_reloc(void)
- 		if (CHECK(!data_map, "find_data_map", "data map not found\n"))
- 			goto cleanup;
- 
--		memset(&data, 0, sizeof(data));
--		memcpy(data.in, test_case->input, test_case->input_len);
--
--		err = bpf_map_update_elem(bpf_map__fd(data_map),
--					  &zero, &data, 0);
--		if (CHECK(err, "update_data_map",
--			  "failed to update .data map: %d\n", err))
-+		mmap_data = mmap(NULL, mmap_sz, PROT_READ | PROT_WRITE,
-+				 MAP_SHARED, bpf_map__fd(data_map), 0);
-+		if (CHECK(mmap_data == MAP_FAILED, "mmap",
-+			  ".bss mmap failed: %d", errno)) {
-+			mmap_data = NULL;
- 			goto cleanup;
-+		}
-+		data = mmap_data;
++	if (attr->map_type != BPF_MAP_TYPE_ARRAY &&
++	    attr->map_flags & BPF_F_MMAPABLE)
++		return -EINVAL;
 +
-+		memset(mmap_data, 0, sizeof(*data));
-+		memcpy(data->in, test_case->input, test_case->input_len);
+ 	if (attr->value_size > KMALLOC_MAX_SIZE)
+ 		/* if value_size is bigger, the user space won't be able to
+ 		 * access the elements.
+@@ -102,10 +106,19 @@ static struct bpf_map *array_map_alloc(union bpf_attr *attr)
+ 	}
  
- 		/* trigger test run */
- 		usleep(1);
- 
--		err = bpf_map_lookup_elem(bpf_map__fd(data_map), &zero, &data);
--		if (CHECK(err, "get_result",
--			  "failed to get output data: %d\n", err))
--			goto cleanup;
--
--		equal = memcmp(data.out, test_case->output,
-+		equal = memcmp(data->out, test_case->output,
- 			       test_case->output_len) == 0;
- 		if (CHECK(!equal, "check_result",
- 			  "input/output data don't match\n")) {
-@@ -548,12 +553,16 @@ void test_core_reloc(void)
- 			}
- 			for (j = 0; j < test_case->output_len; j++) {
- 				printf("output byte #%d: EXP 0x%02hhx GOT 0x%02hhx\n",
--				       j, test_case->output[j], data.out[j]);
-+				       j, test_case->output[j], data->out[j]);
- 			}
- 			goto cleanup;
- 		}
- 
- cleanup:
-+		if (mmap_data) {
-+			CHECK_FAIL(munmap(mmap_data, mmap_sz));
-+			mmap_data = NULL;
+ 	array_size = sizeof(*array);
+-	if (percpu)
++	if (percpu) {
+ 		array_size += (u64) max_entries * sizeof(void *);
+-	else
+-		array_size += (u64) max_entries * elem_size;
++	} else {
++		/* rely on vmalloc() to return page-aligned memory and
++		 * ensure array->value is exactly page-aligned
++		 */
++		if (attr->map_flags & BPF_F_MMAPABLE) {
++			array_size = PAGE_ALIGN(array_size);
++			array_size += PAGE_ALIGN((u64) max_entries * elem_size);
++		} else {
++			array_size += (u64) max_entries * elem_size;
 +		}
- 		if (!IS_ERR_OR_NULL(link)) {
- 			bpf_link__destroy(link);
- 			link = NULL;
-diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
-new file mode 100644
-index 000000000000..051a6d48762c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
-@@ -0,0 +1,220 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <sys/mman.h>
++	}
+ 
+ 	/* make sure there is no u32 overflow later in round_up() */
+ 	cost = array_size;
+@@ -117,7 +130,20 @@ static struct bpf_map *array_map_alloc(union bpf_attr *attr)
+ 		return ERR_PTR(ret);
+ 
+ 	/* allocate all map elements and zero-initialize them */
+-	array = bpf_map_area_alloc(array_size, numa_node);
++	if (attr->map_flags & BPF_F_MMAPABLE) {
++		void *data;
 +
-+struct map_data {
-+	__u64 val[512 * 4];
++		/* kmalloc'ed memory can't be mmap'ed, use explicit vmalloc */
++		data = bpf_map_area_mmapable_alloc(array_size, numa_node);
++		if (!data) {
++			bpf_map_charge_finish(&mem);
++			return ERR_PTR(-ENOMEM);
++		}
++		array = data + PAGE_ALIGN(sizeof(struct bpf_array))
++			- offsetof(struct bpf_array, value);
++	} else {
++		array = bpf_map_area_alloc(array_size, numa_node);
++	}
+ 	if (!array) {
+ 		bpf_map_charge_finish(&mem);
+ 		return ERR_PTR(-ENOMEM);
+@@ -350,6 +376,11 @@ static int array_map_delete_elem(struct bpf_map *map, void *key)
+ 	return -EINVAL;
+ }
+ 
++static void *array_map_vmalloc_addr(struct bpf_array *array)
++{
++	return (void *)round_down((unsigned long)array, PAGE_SIZE);
++}
++
+ /* Called when map->refcnt goes to zero, either from workqueue or from syscall */
+ static void array_map_free(struct bpf_map *map)
+ {
+@@ -365,7 +396,10 @@ static void array_map_free(struct bpf_map *map)
+ 	if (array->map.map_type == BPF_MAP_TYPE_PERCPU_ARRAY)
+ 		bpf_array_free_percpu(array);
+ 
+-	bpf_map_area_free(array);
++	if (array->map.map_flags & BPF_F_MMAPABLE)
++		bpf_map_area_free(array_map_vmalloc_addr(array));
++	else
++		bpf_map_area_free(array);
+ }
+ 
+ static void array_map_seq_show_elem(struct bpf_map *map, void *key,
+@@ -444,6 +478,17 @@ static int array_map_check_btf(const struct bpf_map *map,
+ 	return 0;
+ }
+ 
++int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
++{
++	struct bpf_array *array = container_of(map, struct bpf_array, map);
++	pgoff_t pgoff = PAGE_ALIGN(sizeof(*array)) >> PAGE_SHIFT;
++
++	if (!(map->map_flags & BPF_F_MMAPABLE))
++		return -EINVAL;
++
++	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array), pgoff);
++}
++
+ const struct bpf_map_ops array_map_ops = {
+ 	.map_alloc_check = array_map_alloc_check,
+ 	.map_alloc = array_map_alloc,
+@@ -455,6 +500,7 @@ const struct bpf_map_ops array_map_ops = {
+ 	.map_gen_lookup = array_map_gen_lookup,
+ 	.map_direct_value_addr = array_map_direct_value_addr,
+ 	.map_direct_value_meta = array_map_direct_value_meta,
++	.map_mmap = array_map_mmap,
+ 	.map_seq_show_elem = array_map_seq_show_elem,
+ 	.map_check_btf = array_map_check_btf,
+ };
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 52fe4bacb330..bac3becf9f90 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -127,7 +127,7 @@ static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
+ 	return map;
+ }
+ 
+-void *bpf_map_area_alloc(size_t size, int numa_node)
++static void *__bpf_map_area_alloc(size_t size, int numa_node, bool mmapable)
+ {
+ 	/* We really just want to fail instead of triggering OOM killer
+ 	 * under memory pressure, therefore we set __GFP_NORETRY to kmalloc,
+@@ -142,18 +142,33 @@ void *bpf_map_area_alloc(size_t size, int numa_node)
+ 	const gfp_t flags = __GFP_NOWARN | __GFP_ZERO;
+ 	void *area;
+ 
+-	if (size <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)) {
++	/* kmalloc()'ed memory can't be mmap()'ed */
++	if (!mmapable && size <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)) {
+ 		area = kmalloc_node(size, GFP_USER | __GFP_NORETRY | flags,
+ 				    numa_node);
+ 		if (area != NULL)
+ 			return area;
+ 	}
+-
++	if (mmapable) {
++		BUG_ON(!PAGE_ALIGNED(size));
++		return vmalloc_user_node_flags(size, numa_node, GFP_KERNEL |
++					       __GFP_RETRY_MAYFAIL | flags);
++	}
+ 	return __vmalloc_node_flags_caller(size, numa_node,
+ 					   GFP_KERNEL | __GFP_RETRY_MAYFAIL |
+ 					   flags, __builtin_return_address(0));
+ }
+ 
++void *bpf_map_area_alloc(size_t size, int numa_node)
++{
++	return __bpf_map_area_alloc(size, numa_node, false);
++}
++
++void *bpf_map_area_mmapable_alloc(size_t size, int numa_node)
++{
++	return __bpf_map_area_alloc(size, numa_node, true);
++}
++
+ void bpf_map_area_free(void *area)
+ {
+ 	kvfree(area);
+@@ -425,6 +440,74 @@ static ssize_t bpf_dummy_write(struct file *filp, const char __user *buf,
+ 	return -EINVAL;
+ }
+ 
++/* called for any extra memory-mapped regions (except initial) */
++static void bpf_map_mmap_open(struct vm_area_struct *vma)
++{
++	struct bpf_map *map = vma->vm_file->private_data;
++
++	bpf_map_inc_with_uref(map);
++
++	if (vma->vm_flags & VM_WRITE) {
++		mutex_lock(&map->freeze_mutex);
++		map->writecnt++;
++		mutex_unlock(&map->freeze_mutex);
++	}
++}
++
++/* called for all unmapped memory region (including initial) */
++static void bpf_map_mmap_close(struct vm_area_struct *vma)
++{
++	struct bpf_map *map = vma->vm_file->private_data;
++
++	if (vma->vm_flags & VM_WRITE) {
++		mutex_lock(&map->freeze_mutex);
++		map->writecnt--;
++		mutex_unlock(&map->freeze_mutex);
++	}
++
++	bpf_map_put_with_uref(map);
++}
++
++static const struct vm_operations_struct bpf_map_default_vmops = {
++	.open		= bpf_map_mmap_open,
++	.close		= bpf_map_mmap_close,
 +};
 +
-+struct bss_data {
-+	__u64 in_val;
-+	__u64 out_val;
-+};
-+
-+static size_t roundup_page(size_t sz)
++static int bpf_map_mmap(struct file *filp, struct vm_area_struct *vma)
 +{
-+	long page_size = sysconf(_SC_PAGE_SIZE);
-+	return (sz + page_size - 1) / page_size * page_size;
++	struct bpf_map *map = filp->private_data;
++	int err;
++
++	if (!map->ops->map_mmap || map_value_has_spin_lock(map))
++		return -ENOTSUPP;
++
++	if (!(vma->vm_flags & VM_SHARED))
++		return -EINVAL;
++
++	mutex_lock(&map->freeze_mutex);
++
++	if ((vma->vm_flags & VM_WRITE) && map->frozen) {
++		err = -EPERM;
++		goto out;
++	}
++
++	/* set default open/close callbacks */
++	vma->vm_ops = &bpf_map_default_vmops;
++	vma->vm_private_data = map;
++
++	err = map->ops->map_mmap(map, vma);
++	if (err)
++		goto out;
++
++	bpf_map_inc_with_uref(map);
++
++	if (vma->vm_flags & VM_WRITE)
++		map->writecnt++;
++out:
++	mutex_unlock(&map->freeze_mutex);
++	return err;
 +}
 +
-+void test_mmap(void)
+ const struct file_operations bpf_map_fops = {
+ #ifdef CONFIG_PROC_FS
+ 	.show_fdinfo	= bpf_map_show_fdinfo,
+@@ -432,6 +515,7 @@ const struct file_operations bpf_map_fops = {
+ 	.release	= bpf_map_release,
+ 	.read		= bpf_dummy_read,
+ 	.write		= bpf_dummy_write,
++	.mmap		= bpf_map_mmap,
+ };
+ 
+ int bpf_map_new_fd(struct bpf_map *map, int flags)
+@@ -577,6 +661,7 @@ static int map_create(union bpf_attr *attr)
+ 
+ 	atomic64_set(&map->refcnt, 1);
+ 	atomic64_set(&map->usercnt, 1);
++	mutex_init(&map->freeze_mutex);
+ 
+ 	if (attr->btf_key_type_id || attr->btf_value_type_id) {
+ 		struct btf *btf;
+@@ -1163,6 +1248,13 @@ static int map_freeze(const union bpf_attr *attr)
+ 	map = __bpf_map_get(f);
+ 	if (IS_ERR(map))
+ 		return PTR_ERR(map);
++
++	mutex_lock(&map->freeze_mutex);
++
++	if (map->writecnt) {
++		err = -EBUSY;
++		goto err_put;
++	}
+ 	if (READ_ONCE(map->frozen)) {
+ 		err = -EBUSY;
+ 		goto err_put;
+@@ -1174,6 +1266,7 @@ static int map_freeze(const union bpf_attr *attr)
+ 
+ 	WRITE_ONCE(map->frozen, true);
+ err_put:
++	mutex_unlock(&map->freeze_mutex);
+ 	fdput(f);
+ 	return err;
+ }
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index a3c70e275f4e..4a7d7459c4f9 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -2671,6 +2671,26 @@ void *vzalloc_node(unsigned long size, int node)
+ }
+ EXPORT_SYMBOL(vzalloc_node);
+ 
++/**
++ * vmalloc_user_node_flags - allocate memory for userspace on a specific node
++ * @size: allocation size
++ * @node: numa node
++ * @flags: flags for the page level allocator
++ *
++ * The resulting memory area is zeroed so it can be mapped to userspace
++ * without leaking data.
++ *
++ * Return: pointer to the allocated memory or %NULL on error
++ */
++void *vmalloc_user_node_flags(unsigned long size, int node, gfp_t flags)
 +{
-+	const char *file = "test_mmap.o";
-+	const char *probe_name = "raw_tracepoint/sys_enter";
-+	const char *tp_name = "sys_enter";
-+	const size_t bss_sz = roundup_page(sizeof(struct bss_data));
-+	const size_t map_sz = roundup_page(sizeof(struct map_data));
-+	const int zero = 0, one = 1, two = 2, far = 1500;
-+	const long page_size = sysconf(_SC_PAGE_SIZE);
-+	int err, duration = 0, i, data_map_fd;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	struct bpf_link *link = NULL;
-+	struct bpf_map *data_map, *bss_map;
-+	void *bss_mmaped = NULL, *map_mmaped = NULL, *tmp1, *tmp2;
-+	volatile struct bss_data *bss_data;
-+	volatile struct map_data *map_data;
-+	__u64 val = 0;
-+
-+	obj = bpf_object__open_file("test_mmap.o", NULL);
-+	if (CHECK(IS_ERR(obj), "obj_open", "failed to open '%s': %ld\n",
-+		  file, PTR_ERR(obj)))
-+		return;
-+	prog = bpf_object__find_program_by_title(obj, probe_name);
-+	if (CHECK(!prog, "find_probe", "prog '%s' not found\n", probe_name))
-+		goto cleanup;
-+	err = bpf_object__load(obj);
-+	if (CHECK(err, "obj_load", "failed to load prog '%s': %d\n",
-+		  probe_name, err))
-+		goto cleanup;
-+
-+	bss_map = bpf_object__find_map_by_name(obj, "test_mma.bss");
-+	if (CHECK(!bss_map, "find_bss_map", ".bss map not found\n"))
-+		goto cleanup;
-+	data_map = bpf_object__find_map_by_name(obj, "data_map");
-+	if (CHECK(!data_map, "find_data_map", "data_map map not found\n"))
-+		goto cleanup;
-+	data_map_fd = bpf_map__fd(data_map);
-+
-+	bss_mmaped = mmap(NULL, bss_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
-+			  bpf_map__fd(bss_map), 0);
-+	if (CHECK(bss_mmaped == MAP_FAILED, "bss_mmap",
-+		  ".bss mmap failed: %d\n", errno)) {
-+		bss_mmaped = NULL;
-+		goto cleanup;
-+	}
-+	/* map as R/W first */
-+	map_mmaped = mmap(NULL, map_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
-+			  data_map_fd, 0);
-+	if (CHECK(map_mmaped == MAP_FAILED, "data_mmap",
-+		  "data_map mmap failed: %d\n", errno)) {
-+		map_mmaped = NULL;
-+		goto cleanup;
-+	}
-+
-+	bss_data = bss_mmaped;
-+	map_data = map_mmaped;
-+
-+	CHECK_FAIL(bss_data->in_val);
-+	CHECK_FAIL(bss_data->out_val);
-+	CHECK_FAIL(map_data->val[0]);
-+	CHECK_FAIL(map_data->val[1]);
-+	CHECK_FAIL(map_data->val[2]);
-+	CHECK_FAIL(map_data->val[far]);
-+
-+	link = bpf_program__attach_raw_tracepoint(prog, tp_name);
-+	if (CHECK(IS_ERR(link), "attach_raw_tp", "err %ld\n", PTR_ERR(link)))
-+		goto cleanup;
-+
-+	bss_data->in_val = 123;
-+	val = 111;
-+	CHECK_FAIL(bpf_map_update_elem(data_map_fd, &zero, &val, 0));
-+
-+	usleep(1);
-+
-+	CHECK_FAIL(bss_data->in_val != 123);
-+	CHECK_FAIL(bss_data->out_val != 123);
-+	CHECK_FAIL(map_data->val[0] != 111);
-+	CHECK_FAIL(map_data->val[1] != 222);
-+	CHECK_FAIL(map_data->val[2] != 123);
-+	CHECK_FAIL(map_data->val[far] != 3 * 123);
-+
-+	CHECK_FAIL(bpf_map_lookup_elem(data_map_fd, &zero, &val));
-+	CHECK_FAIL(val != 111);
-+	CHECK_FAIL(bpf_map_lookup_elem(data_map_fd, &one, &val));
-+	CHECK_FAIL(val != 222);
-+	CHECK_FAIL(bpf_map_lookup_elem(data_map_fd, &two, &val));
-+	CHECK_FAIL(val != 123);
-+	CHECK_FAIL(bpf_map_lookup_elem(data_map_fd, &far, &val));
-+	CHECK_FAIL(val != 3 * 123);
-+
-+	/* data_map freeze should fail due to R/W mmap() */
-+	err = bpf_map_freeze(data_map_fd);
-+	if (CHECK(!err || errno != EBUSY, "no_freeze",
-+		  "data_map freeze succeeded: err=%d, errno=%d\n", err, errno))
-+		goto cleanup;
-+
-+	/* unmap R/W mapping */
-+	err = munmap(map_mmaped, map_sz);
-+	map_mmaped = NULL;
-+	if (CHECK(err, "data_map_munmap", "data_map munmap failed: %d\n", errno))
-+		goto cleanup;
-+
-+	/* re-map as R/O now */
-+	map_mmaped = mmap(NULL, map_sz, PROT_READ, MAP_SHARED, data_map_fd, 0);
-+	if (CHECK(map_mmaped == MAP_FAILED, "data_mmap",
-+		  "data_map R/O mmap failed: %d\n", errno)) {
-+		map_mmaped = NULL;
-+		goto cleanup;
-+	}
-+	map_data = map_mmaped;
-+
-+	/* map/unmap in a loop to test ref counting */
-+	for (i = 0; i < 10; i++) {
-+		int flags = i % 2 ? PROT_READ : PROT_WRITE;
-+		void *p;
-+
-+		p = mmap(NULL, map_sz, flags, MAP_SHARED, data_map_fd, 0);
-+		if (CHECK_FAIL(p == MAP_FAILED))
-+			goto cleanup;
-+		err = munmap(p, map_sz);
-+		if (CHECK_FAIL(err))
-+			goto cleanup;
-+	}
-+
-+	/* data_map freeze should now succeed due to no R/W mapping */
-+	err = bpf_map_freeze(data_map_fd);
-+	if (CHECK(err, "freeze", "data_map freeze failed: err=%d, errno=%d\n",
-+		  err, errno))
-+		goto cleanup;
-+
-+	/* mapping as R/W now should fail */
-+	tmp1 = mmap(NULL, map_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
-+		    data_map_fd, 0);
-+	if (CHECK(tmp1 != MAP_FAILED, "data_mmap", "mmap succeeded\n")) {
-+		munmap(tmp1, map_sz);
-+		goto cleanup;
-+	}
-+
-+	bss_data->in_val = 321;
-+	usleep(1);
-+	CHECK_FAIL(bss_data->in_val != 321);
-+	CHECK_FAIL(bss_data->out_val != 321);
-+	CHECK_FAIL(map_data->val[0] != 111);
-+	CHECK_FAIL(map_data->val[1] != 222);
-+	CHECK_FAIL(map_data->val[2] != 321);
-+	CHECK_FAIL(map_data->val[far] != 3 * 321);
-+
-+	/* check some more advanced mmap() manipulations */
-+
-+	/* map all but last page: pages 1-3 mapped */
-+	tmp1 = mmap(NULL, 3 * page_size, PROT_READ, MAP_SHARED,
-+			  data_map_fd, 0);
-+	if (CHECK(tmp1 == MAP_FAILED, "adv_mmap1", "errno %d\n", errno))
-+		goto cleanup;
-+
-+	/* unmap second page: pages 1, 3 mapped */
-+	err = munmap(tmp1 + page_size, page_size);
-+	if (CHECK(err, "adv_mmap2", "errno %d\n", errno)) {
-+		munmap(tmp1, map_sz);
-+		goto cleanup;
-+	}
-+
-+	/* map page 2 back */
-+	tmp2 = mmap(tmp1 + page_size, page_size, PROT_READ,
-+		    MAP_SHARED | MAP_FIXED, data_map_fd, 0);
-+	if (CHECK(tmp2 == MAP_FAILED, "adv_mmap3", "errno %d\n", errno)) {
-+		munmap(tmp1, page_size);
-+		munmap(tmp1 + 2*page_size, page_size);
-+		goto cleanup;
-+	}
-+	CHECK(tmp1 + page_size != tmp2, "adv_mmap4",
-+	      "tmp1: %p, tmp2: %p\n", tmp1, tmp2);
-+
-+	/* re-map all 4 pages */
-+	tmp2 = mmap(tmp1, 4 * page_size, PROT_READ, MAP_SHARED | MAP_FIXED,
-+		    data_map_fd, 0);
-+	if (CHECK(tmp2 == MAP_FAILED, "adv_mmap5", "errno %d\n", errno)) {
-+		munmap(tmp1, 3 * page_size); /* unmap page 1 */
-+		goto cleanup;
-+	}
-+	CHECK(tmp1 != tmp2, "adv_mmap6", "tmp1: %p, tmp2: %p\n", tmp1, tmp2);
-+
-+	map_data = tmp2;
-+	CHECK_FAIL(bss_data->in_val != 321);
-+	CHECK_FAIL(bss_data->out_val != 321);
-+	CHECK_FAIL(map_data->val[0] != 111);
-+	CHECK_FAIL(map_data->val[1] != 222);
-+	CHECK_FAIL(map_data->val[2] != 321);
-+	CHECK_FAIL(map_data->val[far] != 3 * 321);
-+
-+	munmap(tmp2, 4 * page_size);
-+cleanup:
-+	if (bss_mmaped)
-+		CHECK_FAIL(munmap(bss_mmaped, bss_sz));
-+	if (map_mmaped)
-+		CHECK_FAIL(munmap(map_mmaped, map_sz));
-+	if (!IS_ERR_OR_NULL(link))
-+		bpf_link__destroy(link);
-+	bpf_object__close(obj);
++	return __vmalloc_node_range(size, SHMLBA,  VMALLOC_START, VMALLOC_END,
++				    flags | __GFP_ZERO, PAGE_KERNEL,
++				    VM_USERMAP, node,
++				    __builtin_return_address(0));
 +}
-diff --git a/tools/testing/selftests/bpf/progs/test_mmap.c b/tools/testing/selftests/bpf/progs/test_mmap.c
-new file mode 100644
-index 000000000000..0d2ec9fbcf61
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_mmap.c
-@@ -0,0 +1,45 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
++EXPORT_SYMBOL(vmalloc_user_node_flags);
 +
-+#include <linux/bpf.h>
-+#include <stdint.h>
-+#include "bpf_helpers.h"
+ /**
+  * vmalloc_exec - allocate virtually contiguous, executable memory
+  * @size:	  allocation size
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 4842a134b202..dbbcf0b02970 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -348,6 +348,9 @@ enum bpf_attach_type {
+ /* Clone map from listener for newly accepted socket */
+ #define BPF_F_CLONE		(1U << 9)
+ 
++/* Enable memory-mapping BPF map */
++#define BPF_F_MMAPABLE		(1U << 10)
 +
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 512 * 4); /* at least 4 pages of data */
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} data_map SEC(".maps");
-+
-+static volatile __u64 in_val;
-+static volatile __u64 out_val;
-+
-+SEC("raw_tracepoint/sys_enter")
-+int test_mmap(void *ctx)
-+{
-+	int zero = 0, one = 1, two = 2, far = 1500;
-+	__u64 val, *p;
-+
-+	out_val = in_val;
-+
-+	/* data_map[2] = in_val; */
-+	bpf_map_update_elem(&data_map, &two, (const void *)&in_val, 0);
-+
-+	/* data_map[1] = data_map[0] * 2; */
-+	p = bpf_map_lookup_elem(&data_map, &zero);
-+	if (p) {
-+		val = (*p) * 2;
-+		bpf_map_update_elem(&data_map, &one, &val, 0);
-+	}
-+
-+	/* data_map[far] = in_val * 3; */
-+	val = in_val * 3;
-+	bpf_map_update_elem(&data_map, &far, &val, 0);
-+
-+	return 0;
-+}
-+
+ /* flags for BPF_PROG_QUERY */
+ #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
+ 
 -- 
 2.17.1
 
