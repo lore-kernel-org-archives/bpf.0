@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3266BC43215
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9AB5C43141
 	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 07:08:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0A6162075C
+	by mail.kernel.org (Postfix) with ESMTP id 879AD2084D
 	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 07:08:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="gjGaU55c"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cTIGbkNn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbfKQHIV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 17 Nov 2019 02:08:21 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13008 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725959AbfKQHIV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 17 Nov 2019 02:08:21 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id xAH77gXm014906
-        for <bpf@vger.kernel.org>; Sat, 16 Nov 2019 23:08:20 -0800
+        id S1726046AbfKQHI1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 17 Nov 2019 02:08:27 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:18298 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725959AbfKQHI0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 17 Nov 2019 02:08:26 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAH70Mhe004695
+        for <bpf@vger.kernel.org>; Sat, 16 Nov 2019 23:08:26 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=oZYLdEUDKPXcr8YUD7u9d6EvKlyuyedwmqbcejyfSKM=;
- b=gjGaU55coi+a8dnsVqToPtKb4/NyugW27P7kDR9ASJ17ty4zjZKj2/lfbsWxR1Eo5n6Z
- QGfTn5y44PF6067gt5LXqm8U2Rvhg1pj+1ZM1UtIBm4ExpU3Hpul/Ji9gWvqi3Lw08S4
- QBdcAkilFWg1i9n5D8ILGcn80FEV/sPO7aQ= 
+ content-type; s=facebook; bh=IcatGvRSFQ0Db8PR3m70ZRWD79Xvdw2xGUQSX0WwBTE=;
+ b=cTIGbkNnncwBvW6GDOoDmLLV0niF+AVwSZx7zF4Xd4CE+NoQ+I6lat0jZCZZZvwE1AnA
+ tcCZsyOg87hoSAx7AFCAtgRrzrXD64pkFj4500SFuzNbUjgnqmd3KuHcBEljfvMXcRXq
+ teOZmElfeNfULnVoGpTENOk2njGKPWi1o+U= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by m0001303.ppops.net with ESMTP id 2wadnn2xv8-1
+        by mx0a-00082601.pphosted.com with ESMTP id 2wae1as9n7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 16 Nov 2019 23:08:19 -0800
-Received: from 2401:db00:30:600c:face:0:39:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sat, 16 Nov 2019 23:08:26 -0800
+Received: from 2401:db00:12:909f:face:0:3:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Sat, 16 Nov 2019 23:08:18 -0800
+ Sat, 16 Nov 2019 23:08:25 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 36FF82EC19AE; Sat, 16 Nov 2019 23:08:18 -0800 (PST)
+        id DA1122EC19AE; Sat, 16 Nov 2019 23:08:24 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 3/6] libbpf: fix various errors and warning reported by checkpatch.pl
-Date:   Sat, 16 Nov 2019 23:08:04 -0800
-Message-ID: <20191117070807.251360-4-andriin@fb.com>
+Subject: [PATCH bpf-next 6/6] selftests/bpf: add tests for libbpf-provided externs
+Date:   Sat, 16 Nov 2019 23:08:07 -0800
+Message-ID: <20191117070807.251360-7-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191117070807.251360-1-andriin@fb.com>
 References: <20191117070807.251360-1-andriin@fb.com>
@@ -59,157 +59,272 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-11-17_01:2019-11-15,2019-11-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- suspectscore=9 adultscore=0 phishscore=0 bulkscore=0 mlxlogscore=999
- lowpriorityscore=0 impostorscore=0 clxscore=1015 priorityscore=1501
- mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911170067
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ suspectscore=8 bulkscore=0 phishscore=0 mlxlogscore=710 lowpriorityscore=0
+ spamscore=0 priorityscore=1501 malwarescore=0 impostorscore=0 mlxscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1911170066
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix a bunch of warnings and errors reported by checkpatch.pl, to make it
-easier to spot new problems.
+Add a set of tests validating libbpf-provided extern variables. One crucial
+feature that's tested is dead code elimination together with using invalid BPF
+helper. CONFIG_MISSING is not supposed to exist and should always be specified
+by libbpf as zero, which allows BPF verifier to correctly do branch pruning
+and not fail validation, when invalid BPF helper is called from dead if branch.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 38 +++++++++++++++++++++-----------------
- 1 file changed, 21 insertions(+), 17 deletions(-)
+ .../selftests/bpf/prog_tests/core_extern.c    | 186 ++++++++++++++++++
+ .../selftests/bpf/progs/test_core_extern.c    |  43 ++++
+ 2 files changed, 229 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/core_extern.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_core_extern.c
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0fdca01f7e57..f6232aeefb9e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -105,7 +105,7 @@ void libbpf_print(enum libbpf_print_level level, const char *format, ...)
- 	err = action;			\
- 	if (err)			\
- 		goto out;		\
--} while(0)
-+} while (0)
- 
- 
- /* Copied from tools/perf/util/util.h */
-@@ -965,8 +965,7 @@ static int bpf_object__init_user_maps(struct bpf_object *obj, bool strict)
- 		 obj->path, nr_maps, data->d_size);
- 
- 	if (!data->d_size || nr_maps == 0 || (data->d_size % nr_maps) != 0) {
--		pr_warn("unable to determine map definition size "
--			"section %s, %d maps in %zd bytes\n",
-+		pr_warn("unable to determine map definition size section %s, %d maps in %zd bytes\n",
- 			obj->path, nr_maps, data->d_size);
- 		return -EINVAL;
- 	}
-@@ -1030,12 +1029,11 @@ static int bpf_object__init_user_maps(struct bpf_object *obj, bool strict)
- 			 * incompatible.
- 			 */
- 			char *b;
+diff --git a/tools/testing/selftests/bpf/prog_tests/core_extern.c b/tools/testing/selftests/bpf/prog_tests/core_extern.c
+new file mode 100644
+index 000000000000..2a87a5f1de4d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/core_extern.c
+@@ -0,0 +1,186 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <sys/mman.h>
++#include <sys/utsname.h>
++#include <linux/version.h>
 +
- 			for (b = ((char *)def) + sizeof(struct bpf_map_def);
- 			     b < ((char *)def) + map_def_sz; b++) {
- 				if (*b != 0) {
--					pr_warn("maps section in %s: \"%s\" "
--						"has unrecognized, non-zero "
--						"options\n",
-+					pr_warn("maps section in %s: \"%s\" has unrecognized, non-zero options\n",
- 						obj->path, map_name);
- 					if (strict)
- 						return -EINVAL;
-@@ -1073,7 +1071,8 @@ skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id)
-  */
- static bool get_map_field_int(const char *map_name, const struct btf *btf,
- 			      const struct btf_type *def,
--			      const struct btf_member *m, __u32 *res) {
-+			      const struct btf_member *m, __u32 *res)
++static size_t roundup_page(size_t sz)
 +{
- 	const struct btf_type *t = skip_mods_and_typedefs(btf, m->type, NULL);
- 	const char *name = btf__name_by_offset(btf, m->name_off);
- 	const struct btf_array *arr_info;
-@@ -1387,7 +1386,8 @@ static int bpf_object__init_user_btf_maps(struct bpf_object *obj, bool strict,
- 	for (i = 0; i < vlen; i++) {
- 		err = bpf_object__init_user_btf_map(obj, sec, i,
- 						    obj->efile.btf_maps_shndx,
--						    data, strict, pin_root_path);
-+						    data, strict,
-+						    pin_root_path);
- 		if (err)
- 			return err;
- 	}
-@@ -1673,12 +1673,14 @@ static int bpf_object__elf_collect(struct bpf_object *obj, bool relaxed_maps,
- 				if (strcmp(name, ".text") == 0)
- 					obj->efile.text_shndx = idx;
- 				err = bpf_object__add_program(obj, data->d_buf,
--							      data->d_size, name, idx);
-+							      data->d_size,
-+							      name, idx);
- 				if (err) {
- 					char errmsg[STRERR_BUFSIZE];
--					char *cp = libbpf_strerror_r(-err, errmsg,
--								     sizeof(errmsg));
-+					char *cp;
- 
-+					cp = libbpf_strerror_r(-err, errmsg,
-+							       sizeof(errmsg));
- 					pr_warn("failed to alloc program %s (%s): %s",
- 						name, obj->path, cp);
- 					return err;
-@@ -1824,7 +1826,7 @@ static int bpf_program__record_reloc(struct bpf_program *prog,
- 	}
- 
- 	if (insn->code != (BPF_LD | BPF_IMM | BPF_DW)) {
--		pr_warn("bpf: relocation: invalid relo for insns[%d].code 0x%x\n",
-+		pr_warn("invalid relo for insns[%d].code 0x%x\n",
- 			insn_idx, insn->code);
- 		return -LIBBPF_ERRNO__RELOC;
- 	}
-@@ -2140,7 +2142,7 @@ bpf_object__probe_global_data(struct bpf_object *obj)
- 
- static int bpf_object__probe_btf_func(struct bpf_object *obj)
- {
--	const char strs[] = "\0int\0x\0a";
-+	static const char strs[] = "\0int\0x\0a";
- 	/* void x(int a) {} */
- 	__u32 types[] = {
- 		/* int */
-@@ -2166,7 +2168,7 @@ static int bpf_object__probe_btf_func(struct bpf_object *obj)
- 
- static int bpf_object__probe_btf_datasec(struct bpf_object *obj)
- {
--	const char strs[] = "\0x\0.data";
-+	static const char strs[] = "\0x\0.data";
- 	/* static int a; */
- 	__u32 types[] = {
- 		/* int */
-@@ -5107,7 +5109,7 @@ int libbpf_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
- 		*expected_attach_type = section_names[i].expected_attach_type;
- 		return 0;
- 	}
--	pr_warn("failed to guess program type based on ELF section name '%s'\n", name);
-+	pr_warn("failed to guess program type from ELF section '%s'\n", name);
- 	type_names = libbpf_get_type_names(false);
- 	if (type_names != NULL) {
- 		pr_info("supported section(type) names are:%s\n", type_names);
-@@ -6333,7 +6335,8 @@ static struct bpf_prog_info_array_desc bpf_prog_info_array_desc[] = {
- 
- };
- 
--static __u32 bpf_prog_info_read_offset_u32(struct bpf_prog_info *info, int offset)
-+static __u32 bpf_prog_info_read_offset_u32(struct bpf_prog_info *info,
-+					   int offset)
- {
- 	__u32 *array = (__u32 *)info;
- 
-@@ -6342,7 +6345,8 @@ static __u32 bpf_prog_info_read_offset_u32(struct bpf_prog_info *info, int offse
- 	return -(int)offset;
- }
- 
--static __u64 bpf_prog_info_read_offset_u64(struct bpf_prog_info *info, int offset)
-+static __u64 bpf_prog_info_read_offset_u64(struct bpf_prog_info *info,
-+					   int offset)
- {
- 	__u64 *array = (__u64 *)info;
- 
++	long page_size = sysconf(_SC_PAGE_SIZE);
++	return (sz + page_size - 1) / page_size * page_size;
++}
++
++static uint32_t get_kernel_version(void)
++{
++	uint32_t major, minor, patch;
++	struct utsname info;
++
++	uname(&info);
++	if (sscanf(info.release, "%u.%u.%u", &major, &minor, &patch) != 3)
++		return 0;
++	return KERNEL_VERSION(major, minor, patch);
++}
++
++struct data {
++	uint64_t kern_ver;
++	uint64_t tristate_val;
++	uint64_t bool_val;
++	uint64_t int_val;
++	uint64_t missing_val;
++};
++
++static struct test_case {
++	const char *name;
++	const char *cfg;
++	const char *cfg_path;
++	bool fails;
++	struct data data;
++} test_cases[] = {
++	{ .name = "default search path", .cfg_path = NULL },
++	{ .name = "/proc/config.gz", .cfg_path = "/proc/config.gz" },
++	{ .name = "missing config", .fails = true,
++	  .cfg_path = "/proc/invalid-config.gz" },
++	{
++		.name = "custom values",
++		.cfg = "CONFIG_TRISTATE=m\n"
++		       "CONFIG_BOOL=y\n"
++		       "CONFIG_INT=123456\n",
++		.data = {
++			.tristate_val = 2,
++			.bool_val = 1,
++			.int_val = 123456,
++		},
++	},
++	{
++		/* there is no real typing, so any valid value is accepted */
++		.name = "mixed up types",
++		.cfg = "CONFIG_TRISTATE=123\n"
++		       "CONFIG_BOOL=m\n"
++		       "CONFIG_INT=y\n",
++		.data = {
++			.tristate_val = 123,
++			.bool_val = 2,
++			.int_val = 1,
++		},
++	},
++	{
++		/* somewhat weird behavior of strtoull */
++		.name = "negative int",
++		.cfg = "CONFIG_INT=-12\n",
++		.data = { .int_val = (uint64_t)-12 },
++	},
++	{ .name = "bad tristate", .fails = true, .cfg = "CONFIG_TRISTATE=M" },
++	{ .name = "bad bool", .fails = true, .cfg = "CONFIG_BOOL=X" },
++	{ .name = "int (not int)", .fails = true, .cfg = "CONFIG_INT=abc" },
++	{ .name = "int (string)", .fails = true, .cfg = "CONFIG_INT=\"abc\"" },
++	{ .name = "int (empty)", .fails = true, .cfg = "CONFIG_INT=" },
++	{ .name = "int (mixed up 1)", .fails = true, .cfg = "CONFIG_INT=123abc",
++	  .fails = true, },
++	{ .name = "int (mixed up 2)", .fails = true, .cfg = "CONFIG_INT=123abc\n",
++	  .fails = true, },
++	{ .name = "int (too big)", .fails = true,
++	  .cfg = "CONFIG_INT=123456789123456789123\n" },
++};
++
++void test_core_extern(void)
++{
++	const char *file = "test_core_extern.o";
++	const char *probe_name = "raw_tp/sys_enter";
++	const char *tp_name = "sys_enter";
++	const size_t bss_sz = roundup_page(sizeof(struct data));
++	const uint32_t kern_ver = get_kernel_version();
++	int err, duration = 0, i;
++	struct bpf_program *prog;
++	struct bpf_object *obj;
++	struct bpf_link *link = NULL;
++	struct bpf_map *bss_map;
++	void *bss_mmaped = NULL;
++	volatile struct data *data;
++
++	for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
++		char tmp_cfg_path[] = "/tmp/test_core_extern_cfg.XXXXXX";
++		const struct test_case *t = &test_cases[i];
++		DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts,
++			.kernel_config_path = t->cfg_path,
++		);
++
++		if (!test__start_subtest(t->name))
++			continue;
++
++		if (t->cfg) {
++			size_t n = strlen(t->cfg) + 1;
++			int fd = mkstemp(tmp_cfg_path);
++
++			if (CHECK(fd < 0, "mkstemp", "errno: %d\n", errno))
++				continue;
++			printf("using '%s' as config file\n", tmp_cfg_path);
++			if (CHECK_FAIL(write(fd, t->cfg, n) != n))
++				continue;
++			close(fd);
++			opts.kernel_config_path = tmp_cfg_path;
++		}
++
++		obj = bpf_object__open_file("test_core_extern.o", &opts);
++		if (t->fails) {
++			CHECK(!IS_ERR(obj), "obj_open",
++			      "shouldn't succeed opening '%s'!\n", file);
++			goto cleanup;
++		} else {
++			if (CHECK(IS_ERR(obj), "obj_open",
++				  "failed to open '%s': %ld\n",
++				  file, PTR_ERR(obj)))
++				goto cleanup;
++		}
++		prog = bpf_object__find_program_by_title(obj, probe_name);
++		if (CHECK(!prog, "find_prog", "prog %s missing\n", probe_name))
++			goto cleanup;
++		err = bpf_object__load(obj);
++		if (CHECK(err, "obj_load", "failed to load prog '%s': %d\n",
++			  probe_name, err))
++			goto cleanup;
++		bss_map = bpf_object__find_map_by_name(obj, "test_cor.bss");
++		if (CHECK(!bss_map, "find_bss_map", ".bss map not found\n"))
++			goto cleanup;
++		bss_mmaped = mmap(NULL, bss_sz, PROT_READ | PROT_WRITE,
++				  MAP_SHARED, bpf_map__fd(bss_map), 0);
++		if (CHECK(bss_mmaped == MAP_FAILED, "bss_mmap",
++			  ".bss mmap failed: %d\n", errno)) {
++			bss_mmaped = NULL;
++			goto cleanup;
++		}
++		data = bss_mmaped;
++
++		link = bpf_program__attach_raw_tracepoint(prog, tp_name);
++		if (CHECK(IS_ERR(link), "attach_raw_tp", "err %ld\n", PTR_ERR(link)))
++			goto cleanup;
++
++		usleep(1);
++
++		CHECK(data->kern_ver != kern_ver, "kern_ver",
++		      "exp %x, got %lx\n", kern_ver, data->kern_ver);
++		CHECK(data->missing_val != 0xDEADC0DE, "missing_val",
++		      "exp %x, got %lx\n", 0xDEADC0DE, data->missing_val);
++		CHECK(data->bool_val != t->data.bool_val, "bool_val",
++		      "exp %lx, got %lx\n", t->data.bool_val, data->bool_val);
++		CHECK(data->tristate_val != t->data.tristate_val,
++		      "tristate_val", "exp %lx, got %lx\n",
++		      t->data.tristate_val, data->tristate_val);
++		CHECK(data->int_val != t->data.int_val, "int_val",
++		      "exp %lx, got %lx\n", t->data.int_val, data->int_val);
++
++cleanup:
++		if (t->cfg)
++			unlink(tmp_cfg_path);
++		if (bss_mmaped) {
++			CHECK_FAIL(munmap(bss_mmaped, bss_sz));
++			bss_mmaped = NULL;
++			data = NULL;
++		}
++		if (!IS_ERR_OR_NULL(link)) {
++			bpf_link__destroy(link);
++			link = NULL;
++		}
++		if (!IS_ERR_OR_NULL(obj))
++			bpf_object__close(obj);
++	}
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_core_extern.c b/tools/testing/selftests/bpf/progs/test_core_extern.c
+new file mode 100644
+index 000000000000..adbc74113265
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_core_extern.c
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2017 Facebook
++
++#include <stdint.h>
++#include <linux/ptrace.h>
++#include <linux/bpf.h>
++#include "bpf_helpers.h"
++
++/* non-existing BPF helper, to test dead code elimination */
++static int (*bpf_missing_helper)(const void *arg1, int arg2) = (void *) 999;
++
++extern uint64_t LINUX_KERNEL_VERSION;
++extern uint64_t CONFIG_TRISTATE;
++extern uint64_t CONFIG_BOOL;
++extern uint64_t CONFIG_INT;
++extern uint64_t CONFIG_MISSING;
++
++volatile struct {
++	uint64_t kern_ver;
++	uint64_t tristate_val;
++	uint64_t bool_val;
++	uint64_t int_val;
++	uint64_t missing_val;
++} out = {};
++
++SEC("raw_tp/sys_enter")
++int handle_sys_enter(struct pt_regs *ctx)
++{
++	out.kern_ver = LINUX_KERNEL_VERSION;
++	out.tristate_val = CONFIG_TRISTATE;
++	out.bool_val = CONFIG_BOOL;
++	out.int_val = CONFIG_INT;
++
++	if (CONFIG_MISSING)
++		/* invalid, but dead code - never executed */
++		out.missing_val = bpf_missing_helper(ctx, 123);
++	else
++		out.missing_val = 0xDEADC0DE;
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.17.1
 
