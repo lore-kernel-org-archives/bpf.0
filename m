@@ -1,138 +1,192 @@
-Return-Path: <SRS0=ChZX=ZJ=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=lSwV=ZK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1CC6C432C0
-	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 21:40:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFC18C432C0
+	for <bpf@archiver.kernel.org>; Mon, 18 Nov 2019 04:50:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E3DF2068D
-	for <bpf@archiver.kernel.org>; Sun, 17 Nov 2019 21:40:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E5BC2071E
+	for <bpf@archiver.kernel.org>; Mon, 18 Nov 2019 04:50:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="DEQCAaA3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z2xjwOAm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726128AbfKQVkn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 17 Nov 2019 16:40:43 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:29652 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726119AbfKQVkn (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 17 Nov 2019 16:40:43 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAHLXYIw021318
-        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 13:40:40 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=HkZaXgIXoPhZIEMWaqtkBfh/2ljj+4jP7u2qJ4cV+8o=;
- b=DEQCAaA3lQScMaWwMmLeNtz/mBJ+mIZsVIGzvoLP3k3ymBxIC4SYxoG2GI0EYzqTYI03
- +xbF2kB9Hy6D7ZRPphlutYgTh4WB7aAdX2HpWtZjcTBGEvf/kZCm7YXhNpb6y5uSQJcs
- TSgCT+pQ0fOSz+xmNk4MD985DVC1A0MhLug= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2waftk045t-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 17 Nov 2019 13:40:40 -0800
-Received: from 2401:db00:2120:81dc:face:0:23:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Sun, 17 Nov 2019 13:40:38 -0800
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 7B0583702037; Sun, 17 Nov 2019 13:40:36 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next] [tools/bpf] workaround an alu32 sub-register spilling issue
-Date:   Sun, 17 Nov 2019 13:40:36 -0800
-Message-ID: <20191117214036.1309510-1-yhs@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-17_05:2019-11-15,2019-11-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 phishscore=0 bulkscore=0 priorityscore=1501
- mlxlogscore=450 clxscore=1015 mlxscore=0 spamscore=0 impostorscore=0
- suspectscore=13 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911170205
-X-FB-Internal: deliver
+        id S1726328AbfKREuG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 17 Nov 2019 23:50:06 -0500
+Received: from mail-il1-f174.google.com ([209.85.166.174]:34226 "EHLO
+        mail-il1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726314AbfKREuF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 17 Nov 2019 23:50:05 -0500
+Received: by mail-il1-f174.google.com with SMTP id p6so14787680ilp.1;
+        Sun, 17 Nov 2019 20:50:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=YKSzNSLCGVARoV4IzLhVDV/kTBoDozr3C6yn2Fuxg1k=;
+        b=Z2xjwOAmfKKqdvg5n8To/ssWafXo4w4yBsXKbEC6TdowR5PYUXCtjbmzzZUxe+cJPB
+         7aljvhGs8UoUYeIv64+AbvFlvXGG55hlS3+yWlE55zSoD+tbISSJTho3E4/ACuU+wnPR
+         GAi3wPBswZ/8oXNcRklpeqc9n+3vdOPsNWlmyj5E+WGpYrT1NFgiUliUi+lgTM0l31F0
+         mRcFAhWb/j4QSzCW77hb216sOrC4hmJCt0m25mp7LcQmB9qGWrJSC/5uTBwFtLOFTnkv
+         R6Om+e3GCiod9m9fLgKHQ1Yc1uM+jIM2Wp7XuZOjba/ztY6rXe2MrsFPUs42eNgtpnOw
+         dgDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=YKSzNSLCGVARoV4IzLhVDV/kTBoDozr3C6yn2Fuxg1k=;
+        b=NM+VIeyLcBcD37Iq9ITz4uiEn0Ggqef3AH21Sui63GuDHWD1raA2QcwIBcAqvmxXJC
+         b+aKeQxjXKKFI+s9e4ZNzwcM+8QuQVpDRSd6zbYSZxzN2qAVPzf+x5rMbVZMyLY+tEab
+         ET7AZ17qsEFo3/l2V43BfUVC2UKI0GElrg8z30/bWi3NFBM0e0zpFWA7alIkVZjvBCYq
+         JNJUVgoIqlzBrVOe/CNRwvR1T9APTWqsrJH5gDgn4o4MFwGjIliZO6UtG4XqRWxOLxf0
+         OquzqX8hFkhOnp30wIEbeBFx7uPvFbw3w7tX0PjlX6M7BqU4yc49Urn/qAkpn4PtZW3I
+         EUuQ==
+X-Gm-Message-State: APjAAAWcLyK2QESbHjsAELEhtE9enXwQ6g5eFgmSkUuBKWlE8N9ga1U9
+        I3N5jznWJQfpJvsz3vZa9eJkVwET
+X-Google-Smtp-Source: APXvYqycncGGpWNXBEbCLHcFAEotjKyFI4i6edHZh+rF9DgYORTzeAAMunmmvyZjj9XD53pDCuYmrw==
+X-Received: by 2002:a92:1705:: with SMTP id u5mr13975207ill.151.1574052604513;
+        Sun, 17 Nov 2019 20:50:04 -0800 (PST)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id c16sm3242110ioh.57.2019.11.17.20.50.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Nov 2019 20:50:03 -0800 (PST)
+Date:   Sun, 17 Nov 2019 20:49:54 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <5dd222f214374_63b82b118b2685b42d@john-XPS-13-9370.notmuch>
+In-Reply-To: <CA+FuTSdaAawmZ2N8nfDDKu3XLpXBbMtcCT0q4FntDD2gn8ASUw@mail.gmail.com>
+References: <CA+FuTSfTMuKv8s0zdS6YzLC14bNdPQxi2mu7ak6e_sS+qyyrFg@mail.gmail.com>
+ <5dcf24ddc492e_66d2acadef865b4b2@john-XPS-13-9370.notmuch>
+ <CA+FuTSdaAawmZ2N8nfDDKu3XLpXBbMtcCT0q4FntDD2gn8ASUw@mail.gmail.com>
+Subject: Re: combining sockmap + ktls
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, with latest llvm trunk, selftest test_progs failed
-obj file test_seg6_loop.o with the following error
-in verifier:
-  infinite loop detected at insn 76
-The byte code sequence looks like below, and noted
-that alu32 has been turned off by default for better
-generated codes in general:
-      48:       w3 = 100
-      49:       *(u32 *)(r10 - 68) = r3
-      ...
-  ;             if (tlv.type == SR6_TLV_PADDING) {
-      76:       if w3 == 5 goto -18 <LBB0_19>
-      ...
-      85:       r1 = *(u32 *)(r10 - 68)
-  ;     for (int i = 0; i < 100; i++) {
-      86:       w1 += -1
-      87:       if w1 == 0 goto +5 <LBB0_20>
-      88:       *(u32 *)(r10 - 68) = r1
+Willem de Bruijn wrote:
+> > > For this workload, more interesting is sk_msg directly to icept
+> > > egress, anyway. This works without ktls. Support for ktls is added in
+> > > commit d3b18ad31f93 ("tls: add bpf support to sk_msg handling"). The
+> > > relevant callback function tls_sw_sendpage_locked was not immediately
+> > > used and subsequently removed in commit cc1dbdfed023 ("Revert
+> > > "net/tls: remove unused function tls_sw_sendpage_locked""). It appears
+> > > to work once reverting that change, plus registering the function
+> >
+> > I don't fully understand this. Are you saying a BPF_SK_MSG_VERDICT
+> > program attach to a ktls socket is not being called? Or packets are
+> > being dropped or ...? Or that the program doesn't work even with
+> > just KTLS and no bpf involved.
+> 
+> Not the verdict program. The setup is as follows:
+> 
+>   client --> icept.1 -- (optionally ktls) --> icept.2 --> server
+> 
+> I'm trying to redirect on send from the client directly into the send
+> side of the ktls socket, to avoid waking up the icept.1 process
+> completely. The ktls enabled socket has no BPF programs associated.
+> 
 
-The main reason for verification failure is due to
-partial spills at r10 - 68 for induction variable "i".
+Ah ok. This is probably the least optimized case, we've focused mostly
+on the ingress sk_msg case so far.
 
-Current verifier only handles spills with 8-byte values.
-The above 4-byte value spill to stack is treated to
-STACK_MISC and its content is not saved. For the above example,
-    w3 = 100
-      R3_w=inv100 fp-64_w=inv1086626730498
-    *(u32 *)(r10 - 68) = r3
-      R3_w=inv100 fp-64_w=inv1086626730498
-    ...
-    r1 = *(u32 *)(r10 - 68)
-      R1_w=inv(id=0,umax_value=4294967295,var_off=(0x0; 0xffffffff))
-      fp-64=inv1086626730498
+> >
+> > >
+> > >         @@ -859,6 +861,7 @@ static int __init tls_register(void)
+> > >
+> > >                 tls_sw_proto_ops = inet_stream_ops;
+> > >                 tls_sw_proto_ops.splice_read = tls_sw_splice_read;
+> > >         +       tls_sw_proto_ops.sendpage_locked   = tls_sw_sendpage_locked,
+> > >
+> > > and additionally allowing MSG_NO_SHARED_FRAGS:
+> > >
+> > >          int tls_sw_sendpage_locked(struct sock *sk, struct page *page,
+> > >                                     int offset, size_t size, int flags)
+> > >          {
+> > >                if (flags & ~(MSG_MORE | MSG_DONTWAIT | MSG_NOSIGNAL |
+> > >         -                     MSG_SENDPAGE_NOTLAST | MSG_SENDPAGE_NOPOLICY))
+> > >         +                     MSG_SENDPAGE_NOTLAST |
+> > > MSG_SENDPAGE_NOPOLICY | MSG_NO_SHARED_FRAGS))
+> > >                          return -ENOTSUPP;
+> > >
+> >
+> > If you had added MSG_NO_SHARED_FRAGS to the existing tls_sw_sendpage
+> > would that have been sufficient?
+> 
+> No, the stack trace I observed is
+> 
+>   tcp_bpf_sendmsg_redir
+>     tcp_bpf_push_locked
+>       tcp_bpf_push
+>         kernel_sendpage_locked
+>           sock->ops->sendpage_locked
+> 
+> which never tries tls_sw_sendpage. Perhaps the relevant part is the
+> following in tcp_bpf_push?
+> 
+>                 if (has_tx_ulp) {
+>                         flags |= MSG_SENDPAGE_NOPOLICY;
+>                         ret = kernel_sendpage_locked(sk,
+>                                                      page, off, size, flags);
+>                 } else {
+>                         ret = do_tcp_sendpages(sk, page, off, size, flags);
+>                 }
+> 
 
-To resolve this issue, verifier needs to be extended to
-track sub-registers in spilling, or llvm needs to enhanced
-to prevent sub-register spilling in register allocation
-phase. The former will increase verifier complexity and
-the latter will need some llvm "hacking".
+Got it, want to submit a fix? Or I can this is a bug.
 
-Let us workaround this issue by declaring the induction
-variable as "long" type so spilling will happen at non
-sub-register level. We can revisit this later if sub-register
-spilling causes similar or other verification issues.
+> > > and not registering parser+verdict programs on the destination socket.
+> > > Note that without ktls this mode also works with such programs
+> > > attached.
+> >
+> > Right ingress + ktls is known to be broken at the moment. Also I have
+> > plans to cleanup ingress side at some point. The current model is a
+> > bit clumsy IMO. The workqueue adds latency spikes on the 99+
+> > percentiles. At this point it makes the ingress side similar to the
+> > egress side without a workqueue and with verdict+parser done in a
+> > single program.
+> 
+> Good to know thanks. Then I won't spend too much time on this.
+> 
+> > >
+> > > Lastly, sockmap splicing from icept ingress to egress (no sk_msg) also
+> > > stops working when I enable ktls on the egress socket. I'm taking a
+> > > look at that next. But this email is long enough already ;)
+> >
+> > Yes this is a known bug I've got a set of patches to address this.
+> 
+> Same thing. Good to know I'm not crazy :)
+> 
+> > I've
+> > been trying to get to it for awhile now and just resolved a few other
+> > things on my side so plan to do this Monday/Tuesday next week.
+> 
+> To be clear, I don't mean to pressure at all. Was just running through
+> a variety of points in the option space. The sk_msg  plus redirect to
+> egress of a ktls-enabled socket is the variant I'm most interested in.
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- tools/testing/selftests/bpf/progs/test_seg6_loop.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+No pressure I need to get my queue here out I've been sitting on it
+for awhile.
 
-diff --git a/tools/testing/selftests/bpf/progs/test_seg6_loop.c b/tools/testing/selftests/bpf/progs/test_seg6_loop.c
-index c4d104428643..69880c1e7700 100644
---- a/tools/testing/selftests/bpf/progs/test_seg6_loop.c
-+++ b/tools/testing/selftests/bpf/progs/test_seg6_loop.c
-@@ -132,8 +132,10 @@ static __always_inline int is_valid_tlv_boundary(struct __sk_buff *skb,
- 	*pad_off = 0;
- 
- 	// we can only go as far as ~10 TLVs due to the BPF max stack size
-+	// workaround: define induction variable "i" as "long" instead
-+	// of "int" to prevent alu32 sub-register spilling.
- 	#pragma clang loop unroll(disable)
--	for (int i = 0; i < 100; i++) {
-+	for (long i = 0; i < 100; i++) {
- 		struct sr6_tlv_t tlv;
- 
- 		if (cur_off == *tlv_off)
--- 
-2.17.1
+> 
+> Do let me know if there's anything I can help out with. Thanks for
+> your quick answer!
 
+Can you send out a fix for above sendpage_locked case?
+
+Thanks,
+John
