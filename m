@@ -1,221 +1,122 @@
-Return-Path: <SRS0=PdPE=ZJ=vger.kernel.org=linux-m68k-owner@kernel.org>
+Return-Path: <SRS0=lSwV=ZK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C075C432C3
-	for <linux-m68k@archiver.kernel.org>; Sun, 17 Nov 2019 01:29:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB8FCC432C0
+	for <bpf@archiver.kernel.org>; Mon, 18 Nov 2019 21:36:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E8E3B20730
-	for <linux-m68k@archiver.kernel.org>; Sun, 17 Nov 2019 01:29:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBAF722312
+	for <bpf@archiver.kernel.org>; Mon, 18 Nov 2019 21:36:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726201AbfKQB3d (ORCPT <rfc822;linux-m68k@archiver.kernel.org>);
-        Sat, 16 Nov 2019 20:29:33 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46200 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725308AbfKQB3d (ORCPT <rfc822;linux-m68k@lists.linux-m68k.org>);
-        Sat, 16 Nov 2019 20:29:33 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id D918BAC31;
-        Sun, 17 Nov 2019 01:29:28 +0000 (UTC)
-Date:   Sun, 17 Nov 2019 12:28:58 +1100
-From:   Aleksa Sarai <asarai@suse.de>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        dev@opencontainers.org, containers@lists.linux-foundation.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-api@vger.kernel.org,
-        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: [PATCH v17 13/13] Documentation: path-lookup: include new LOOKUP
- flags
-Message-ID: <20191117012858.47t7zd3pbdlqz2mv@yavin.dot.cyphar.com>
-References: <20191117011713.13032-1-cyphar@cyphar.com>
+        id S1726760AbfKRVgC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Nov 2019 16:36:02 -0500
+Received: from www62.your-server.de ([213.133.104.62]:54312 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726272AbfKRVgC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Nov 2019 16:36:02 -0500
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iWogh-00009f-Mj; Mon, 18 Nov 2019 22:35:59 +0100
+Received: from [178.197.248.45] (helo=pc-9.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iWogh-0001gt-Bk; Mon, 18 Nov 2019 22:35:59 +0100
+Subject: Re: [PATCH rfc bpf-next 6/8] bpf: add poke dependency tracking for
+ prog array maps
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        john fastabend <john.fastabend@gmail.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+References: <cover.1573779287.git.daniel@iogearbox.net>
+ <ff9a3829fb46802262a20dbad1123cd66c118b8b.1573779287.git.daniel@iogearbox.net>
+ <CAEf4BzaxyULFPYd8OGfoc5FLSDt2ecppLFakjRJ2TyK5F-fJOw@mail.gmail.com>
+ <4ae5ae7b-d7bb-4a59-0f5f-0f7f41bd6f6d@iogearbox.net>
+ <CAEf4BzZ9SaQ_idpP8P8mG26KC72GG+xY57A76nsBCvOPSxOJEA@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <c21cff3f-c504-15ee-1d27-e9e45d1d9bc6@iogearbox.net>
+Date:   Mon, 18 Nov 2019 22:35:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191117011713.13032-1-cyphar@cyphar.com>
-User-Agent: NeoMutt/20180716
-Sender: linux-m68k-owner@vger.kernel.org
+In-Reply-To: <CAEf4BzZ9SaQ_idpP8P8mG26KC72GG+xY57A76nsBCvOPSxOJEA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25637/Mon Nov 18 10:53:23 2019)
+Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
-List-ID: <linux-m68k.vger.kernel.org>
-X-Mailing-List: linux-m68k@vger.kernel.org
-Message-ID: <20191117012858.333P5R3B1d0Encx-zecmyhzboUGHekH5FE8qFNTmrcg@z>
+List-ID: <bpf.vger.kernel.org>
+X-Mailing-List: bpf@vger.kernel.org
 
-Now that we have new LOOKUP flags, we should document them in the
-relevant path-walking documentation. And now that we've settled on a
-common name for nd_jump_link() style symlinks ("magic links"), use that
-term where magic-link semantics are described.
+On 11/18/19 7:46 PM, Andrii Nakryiko wrote:
+> On Mon, Nov 18, 2019 at 10:39 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>> On 11/18/19 6:39 PM, Andrii Nakryiko wrote:
+>>> On Thu, Nov 14, 2019 at 5:04 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>>>>
+>>>> This work adds program tracking to prog array maps. This is needed such
+>>>> that upon prog array updates/deletions we can fix up all programs which
+>>>> make use of this tail call map. We add ops->map_poke_{un,}track() helpers
+>>>> to maps to maintain the list of programs and ops->map_poke_run() for
+>>>> triggering the actual update. bpf_array_aux is extended to contain the
+>>>> list head and poke_mutex in order to serialize program patching during
+>>>> updates/deletions. bpf_free_used_maps() will untrack the program shortly
+>>>> before dropping the reference to the map.
+>>>>
+>>>> The prog_array_map_poke_run() is triggered during updates/deletions and
+>>>> walks the maintained prog list. It checks in their poke_tabs whether the
+>>>> map and key is matching and runs the actual bpf_arch_text_poke() for
+>>>> patching in the nop or new jmp location. Depending on the type of update,
+>>>> we use one of BPF_MOD_{NOP_TO_JUMP,JUMP_TO_NOP,JUMP_TO_JUMP}.
+>>>>
+>>>> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+>>>> ---
+>>>>    include/linux/bpf.h   |  36 +++++++++++++
+>>>>    kernel/bpf/arraymap.c | 120 +++++++++++++++++++++++++++++++++++++++++-
+>>>>    kernel/bpf/core.c     |   9 +++-
+>>>>    3 files changed, 162 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>>>> index 0ff06a0d0058..62a369fb8d98 100644
+>>>> --- a/include/linux/bpf.h
+>>>> +++ b/include/linux/bpf.h
+>>>> @@ -21,6 +21,7 @@ struct bpf_verifier_env;
+>>>>    struct bpf_verifier_log;
+>>>>    struct perf_event;
+>>>>    struct bpf_prog;
+>>>> +struct bpf_prog_aux;
+>>>>    struct bpf_map;
+>>>>    struct sock;
+>>>>    struct seq_file;
+>>>> @@ -63,6 +64,12 @@ struct bpf_map_ops {
+>>>>                                const struct btf_type *key_type,
+>>>>                                const struct btf_type *value_type);
+>>>>
+>>>> +       /* Prog poke tracking helpers. */
+>>>> +       int (*map_poke_track)(struct bpf_map *map, struct bpf_prog_aux *aux);
+>>>> +       void (*map_poke_untrack)(struct bpf_map *map, struct bpf_prog_aux *aux);
+>>>> +       void (*map_poke_run)(struct bpf_map *map, u32 key, struct bpf_prog *old,
+>>>> +                            struct bpf_prog *new);
+>>>
+>>> You are passing bpf_prog_aux for track/untrack, but bpf_prog itself
+>>> for run. Maybe stick to just bpf_prog everywhere?
+>>
+>> This needs to be bpf_prog_aux as prog itself is not stable yet and can still
+>> change, but aux itself is stable.
+> 
+> no one will prevent doing container_of() and get bpf_prog itself, so
+> it's just an implicit knowledge that bpf_prog might be incomplete yet,
+> that has to be remembered (btw, might be good to add a brief comment
+> stating that). But I don't feel strongly either way.
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
- Documentation/filesystems/path-lookup.rst | 68 +++++++++++++++++++++--
- 1 file changed, 62 insertions(+), 6 deletions(-)
+Makes sense, expanded the comment to state this.
 
-diff --git a/Documentation/filesystems/path-lookup.rst b/Documentation/filesystems/path-lookup.rst
-index 434a07b0002b..a3216979298b 100644
---- a/Documentation/filesystems/path-lookup.rst
-+++ b/Documentation/filesystems/path-lookup.rst
-@@ -13,6 +13,7 @@ It has subsequently been updated to reflect changes in the kernel
- including:
- 
- - per-directory parallel name lookup.
-+- ``openat2()`` resolution restriction flags.
- 
- Introduction to pathname lookup
- ===============================
-@@ -235,6 +236,13 @@ renamed.  If ``d_lookup`` finds that a rename happened while it
- unsuccessfully scanned a chain in the hash table, it simply tries
- again.
- 
-+``rename_lock`` is also used to detect and defend against potential attacks
-+against ``LOOKUP_BENEATH`` and ``LOOKUP_IN_ROOT`` when resolving ".." (where
-+the parent directory is moved outside the root, bypassing the ``path_equal()``
-+check). If ``rename_lock`` is updated during the lookup and the path encounters
-+a "..", a potential attack occurred and ``handle_dots()`` will bail out with
-+``-EAGAIN``.
-+
- inode->i_rwsem
- ~~~~~~~~~~~~~~
- 
-@@ -348,6 +356,13 @@ any changes to any mount points while stepping up.  This locking is
- needed to stabilize the link to the mounted-on dentry, which the
- refcount on the mount itself doesn't ensure.
- 
-+``mount_lock`` is also used to detect and defend against potential attacks
-+against ``LOOKUP_BENEATH`` and ``LOOKUP_IN_ROOT`` when resolving ".." (where
-+the parent directory is moved outside the root, bypassing the ``path_equal()``
-+check). If ``mount_lock`` is updated during the lookup and the path encounters
-+a "..", a potential attack occurred and ``handle_dots()`` will bail out with
-+``-EAGAIN``.
-+
- RCU
- ~~~
- 
-@@ -405,6 +420,10 @@ is requested.  Keeping a reference in the ``nameidata`` ensures that
- only one root is in effect for the entire path walk, even if it races
- with a ``chroot()`` system call.
- 
-+It should be noted that in the case of ``LOOKUP_IN_ROOT`` or
-+``LOOKUP_BENEATH``, the effective root becomes the directory file descriptor
-+passed to ``openat2()`` (which exposes these ``LOOKUP_`` flags).
-+
- The root is needed when either of two conditions holds: (1) either the
- pathname or a symbolic link starts with a "'/'", or (2) a "``..``"
- component is being handled, since "``..``" from the root must always stay
-@@ -1149,7 +1168,7 @@ so ``NULL`` is returned to indicate that the symlink can be released and
- the stack frame discarded.
- 
- The other case involves things in ``/proc`` that look like symlinks but
--aren't really::
-+aren't really (and are therefore commonly referred to as "magic-links")::
- 
-      $ ls -l /proc/self/fd/1
-      lrwx------ 1 neilb neilb 64 Jun 13 10:19 /proc/self/fd/1 -> /dev/pts/4
-@@ -1286,7 +1305,9 @@ A few flags
- A suitable way to wrap up this tour of pathname walking is to list
- the various flags that can be stored in the ``nameidata`` to guide the
- lookup process.  Many of these are only meaningful on the final
--component, others reflect the current state of the pathname lookup.
-+component, others reflect the current state of the pathname lookup, and some
-+apply restrictions to all path components encountered in the path lookup.
-+
- And then there is ``LOOKUP_EMPTY``, which doesn't fit conceptually with
- the others.  If this is not set, an empty pathname causes an error
- very early on.  If it is set, empty pathnames are not considered to be
-@@ -1310,13 +1331,48 @@ longer needed.
- ``LOOKUP_JUMPED`` means that the current dentry was chosen not because
- it had the right name but for some other reason.  This happens when
- following "``..``", following a symlink to ``/``, crossing a mount point
--or accessing a "``/proc/$PID/fd/$FD``" symlink.  In this case the
--filesystem has not been asked to revalidate the name (with
--``d_revalidate()``).  In such cases the inode may still need to be
--revalidated, so ``d_op->d_weak_revalidate()`` is called if
-+or accessing a "``/proc/$PID/fd/$FD``" symlink (also known as a "magic
-+link"). In this case the filesystem has not been asked to revalidate the
-+name (with ``d_revalidate()``).  In such cases the inode may still need
-+to be revalidated, so ``d_op->d_weak_revalidate()`` is called if
- ``LOOKUP_JUMPED`` is set when the look completes - which may be at the
- final component or, when creating, unlinking, or renaming, at the penultimate component.
- 
-+Resolution-restriction flags
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+In order to allow userspace to protect itself against certain race conditions
-+and attack scenarios involving changing path components, a series of flags are
-+available which apply restrictions to all path components encountered during
-+path lookup. These flags are exposed through ``openat2()``'s ``resolve`` field.
-+
-+``LOOKUP_NO_SYMLINKS`` blocks all symlink traversals (including magic-links).
-+This is distinctly different from ``LOOKUP_FOLLOW``, because the latter only
-+relates to restricting the following of trailing symlinks.
-+
-+``LOOKUP_NO_MAGICLINKS`` blocks all magic-link traversals. Filesystems must
-+ensure that they return errors from ``nd_jump_link()``, because that is how
-+``LOOKUP_NO_MAGICLINKS`` and other magic-link restrictions are implemented.
-+
-+``LOOKUP_NO_XDEV`` blocks all ``vfsmount`` traversals (this includes both
-+bind-mounts and ordinary mounts). Note that the ``vfsmount`` which contains the
-+lookup is determined by the first mountpoint the path lookup reaches --
-+absolute paths start with the ``vfsmount`` of ``/``, and relative paths start
-+with the ``dfd``'s ``vfsmount``. Magic-links are only permitted if the
-+``vfsmount`` of the path is unchanged.
-+
-+``LOOKUP_BENEATH`` blocks any path components which resolve outside the
-+starting point of the resolution. This is done by blocking ``nd_jump_root()``
-+as well as blocking ".." if it would jump outside the starting point.
-+``rename_lock`` and ``mount_lock`` are used to detect attacks against the
-+resolution of "..". Magic-links are also blocked.
-+
-+``LOOKUP_IN_ROOT`` resolves all path components as though the starting point
-+were the filesystem root. ``nd_jump_root()`` brings the resolution back to to
-+the starting point, and ".." at the starting point will act as a no-op. As with
-+``LOOKUP_BENEATH``, ``rename_lock`` and ``mount_lock`` are used to detect
-+attacks against ".." resolution. Magic-links are also blocked.
-+
- Final-component flags
- ~~~~~~~~~~~~~~~~~~~~~
- 
--- 
-2.24.0
-
+Thanks,
+Daniel
