@@ -2,311 +2,420 @@ Return-Path: <SRS0=WdG8=ZL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A450FC43215
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 13:28:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61745C432C0
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 13:47:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7AFB4222C7
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 13:28:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E5A7206B6
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 13:47:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IrmrH0jZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lhXZ+eKy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725798AbfKSN2D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Nov 2019 08:28:03 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:43957 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727809AbfKSN1y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Nov 2019 08:27:54 -0500
-Received: by mail-pl1-f193.google.com with SMTP id a18so11766362plm.10;
-        Tue, 19 Nov 2019 05:27:53 -0800 (PST)
+        id S1726202AbfKSNr3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Nov 2019 08:47:29 -0500
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:44013 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725904AbfKSNr3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Nov 2019 08:47:29 -0500
+Received: by mail-ua1-f68.google.com with SMTP id k11so6509393ual.10;
+        Tue, 19 Nov 2019 05:47:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=Q8mvfB32bgpLAowD/QjT9mhQHmZ53A0Crul9TxiFP+s=;
-        b=IrmrH0jZrMRZcPR/AWn/ozFtqexIpA7lRjw/isiCnzl5enXiCGGa3pjRcV0UFb5DtP
-         +AjhxOXUGlVHdVLvYPn0M4dFdX/jPZfRidvcChopH/fn70Fyar5Sd3A7YOPSoymtTlAb
-         AGcKADcv4BKdyVyw6ywBNNRpsRZ23SoV3hSQUWiKVdc+OSeHppEvn1TiJ5v87u1E73T0
-         IcJBpGDYSkFiHJqbY6br22GfT4AZCETBqwagTaWyB8ne/NCDYmtyrBVBYGuUWE2I58se
-         K/LSnIdTwHL6xVidCFlT6EGLZZafUZApUujOKqdE2mvgCntzbB6vc5eCIBwnd0lgUtyM
-         DhtA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gB6LL2IuJ2qWmWm72MuwyFZejYLe1ArO37Ascw9he74=;
+        b=lhXZ+eKyWs4qbl1wCIl1FGjBvlkriVtDebbekx7atrDl4bw6x4C6yrm5N+rGx7iXP7
+         Bn+CN0lISFs2ODqD8PESDfhfOIxNrOrrH3d6dGVxKYo+zUpnp2yb6zsRrFAKvAhJq2Y+
+         YVs8BBraBxa26IjHd6YgU/OKZCDEe6g7XhQiGme7JAz9jjxNK9QE2hjmRC7Y6W03A+J4
+         8lDfXXDjkcN3WXRr/9soCHRSC+D18QyQGIfRWB5lNynPWD+kluaLXR0rcSwX4I4myvIk
+         ie7W11xgFZ+wo+a2GXtRqdgtOSzdFM3WPD6fkVRNbd+yICw0Lx/93MWKJ05NlYuSJZaL
+         k0IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=Q8mvfB32bgpLAowD/QjT9mhQHmZ53A0Crul9TxiFP+s=;
-        b=KWl2Zr0gH4N8L6hSv6hscYRlyguUHsFOu3SY3U/yahTvQwJ4lTLDdBes6QQx/VasY2
-         gLbzLT83W0Q6dvFeP4ruDvGkPFC1fIYmfErVEDUZlnqjjIB9SSMh24vJAtnoRo8bGy2J
-         URCkoEQr4j2PFpsbWSK3PiVBHl4kBuWvwYv0b8RHx6G2K2YdanTdShPrrNbnrQ0aHzTf
-         AdiI/8yRhenBpDpQOw05IoUxD8ZAHmX+OWZWLm8Z3iPHS6qtlxpL5NkwzSfIzbJpSSXC
-         dlh+O9Xl/UWRykmF5kELv8Gwa+o4hw1AqZe+SrPBHdKYBUtBJqPVBtgW94+zbhiEXXXN
-         Kq1A==
-X-Gm-Message-State: APjAAAXjTBsgfHPBupMouNDsL0DwOtBqxJXHyUl2A1ChsYt2IDm0xata
-        OLAQUs2SG5TlaiC/rVrse2esuxIBqRM=
-X-Google-Smtp-Source: APXvYqwougi+RQrlnepkVPYBzUsVNFzuWQcxKHPaZLTdoF7bh2BZvz+oJCEomVtPzK9G+ci2aImQyA==
-X-Received: by 2002:a17:902:b789:: with SMTP id e9mr4194903pls.4.1574170072939;
-        Tue, 19 Nov 2019 05:27:52 -0800 (PST)
-Received: from ubuntu-18.04-x8664 ([128.1.49.85])
-        by smtp.gmail.com with ESMTPSA id v189sm25990458pfv.133.2019.11.19.05.27.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Nov 2019 05:27:52 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gB6LL2IuJ2qWmWm72MuwyFZejYLe1ArO37Ascw9he74=;
+        b=PRpOSfS8xMuD2tGGCQcGVA6iExNF9y6NW/TVzuu+mjzfuKeXOBc+wMdmB3gkca5lAG
+         fkVXgoQVIYw6Mc8D/yUnFxRDJhvxMZQb+bX31WC4MEko0J7ZqwfOocoRMqJhuUDZ0rYm
+         YAFAbxxB9HrwogEbR64FNS+eWX7DcHozwAxdFO9HyE03Ij0UwI2Fr4EwRIUqx6hgUrGm
+         ZSmzAeY9P+i2DRvPrAy/0BkQCCBOZ93JnJfsnjiQM6Fxp56RjA5+a0CAevRfCQGgc4+H
+         6jm/rc8/59N0HAqxgzhb/SM2J2cOVRctSsxy2GSNjWpxe7IDNUfdesWj0EbXIRREu0sd
+         dmyQ==
+X-Gm-Message-State: APjAAAVihaUBx3p0aalprMFPgxGJfMk4Jy1c0D3ud2GuxEWtqtASlQHd
+        DY4DqWk8tL3J0sFUKTsy6Ct+aOzWLFEWVaAOWd8IfR3AlTQ=
+X-Google-Smtp-Source: APXvYqzuFqJsLFzl+F4ziawHbHd9pBi+ZAU44K3y+jeDwjl2z1mGkP1KC+foqs3nAeA+Y+2DvwYCKFNBIV5hX0gDFv8=
+X-Received: by 2002:ab0:189a:: with SMTP id t26mr21072608uag.87.1574171246261;
+ Tue, 19 Nov 2019 05:47:26 -0800 (PST)
+MIME-Version: 1.0
+References: <20191115135901.8114-1-ethercflow@gmail.com> <CAEf4BzZ5sEDDmX4hYJFJ4-rB1ZftZ9=yVv3Y=WNSdLVXA6sipg@mail.gmail.com>
+In-Reply-To: <CAEf4BzZ5sEDDmX4hYJFJ4-rB1ZftZ9=yVv3Y=WNSdLVXA6sipg@mail.gmail.com>
 From:   Wenbo Zhang <ethercflow@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org.com, daniel@iogearbox.net, yhs@fb.com,
-        andrii.nakryiko@gmail.com, netdev@vger.kernel.org
-Subject: [PATCH bpf-next v10 1/2] bpf: add new helper get_file_path for mapping a file descriptor to a pathname
-Date:   Tue, 19 Nov 2019 08:27:37 -0500
-Message-Id: <e8b1281b7405eb4b6c1f094169e6efd2c8cc95da.1574162990.git.ethercflow@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1574162990.git.ethercflow@gmail.com>
-References: <cover.1574162990.git.ethercflow@gmail.com>
-In-Reply-To: <cover.1574162990.git.ethercflow@gmail.com>
-References: <cover.1574162990.git.ethercflow@gmail.com>
+Date:   Tue, 19 Nov 2019 21:47:16 +0800
+Message-ID: <CABtjQmZ4nnPf7H-gH7dgrefwbECZfP2hyh8_0dgVBr4MdSxWAQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4] selftests/bpf: test for bpf_get_file_path()
+ from raw tracepoint
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>, Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When people want to identify which file system files are being opened,
-read, and written to, they can use this helper with file descriptor as
-input to achieve this goal. Other pseudo filesystems are also supported.
+> I like this much better, so much simpler BPF program and userspace
+> parts has less unnecessary moving pieces. I just have minor nits
+> below.
 
-This requirement is mainly discussed here:
+Thank you for your patience, you're so sweet. I've read your comments
+and will fix them and resubmit as patchset.
 
-  https://github.com/iovisor/bcc/issues/237
+> you can just pass NULL for opts, as you are not really using any
 
-v9->v10: addressed Andrii's feedback
-- send this patch together with the patch selftests as one patch series
+Agree, and I found if opt is NULL,
 
-v8->v9:
-- format helper description
+> const char *obj_file =3D "./test_get_file_path.o";
 
-v7->v8: addressed Alexei's feedback
-- use fget_raw instead of fdget_raw, as fdget_raw is only used inside fs/
-- ensure we're in user context which is safe fot the help to run
-- filter unmountable pseudo filesystem, because they don't have real path
-- supplement the description of this helper function
+must be changed to "test_get_file_path.o", or bpf_obj_name_cpy will
+return -EINVAL. :)
 
-v6->v7:
-- fix missing signed-off-by line
 
-v5->v6: addressed Andrii's feedback
-- avoid unnecessary goto end by having two explicit returns
+> your patch subject says "raw tracepoint", but you are really using a
+> normal tracepoint here
 
-v4->v5: addressed Andrii and Daniel's feedback
-- rename bpf_fd2path to bpf_get_file_path to be consistent with other
-helper's names
-- when fdget_raw fails, set ret to -EBADF instead of -EINVAL
-- remove fdput from fdget_raw's error path
-- use IS_ERR instead of IS_ERR_OR_NULL as d_path ether returns a pointer
-into the buffer or an error code if the path was too long
-- modify the normal path's return value to return copied string length
-including NUL
-- update this helper description's Return bits.
+Sorry for this,  I'll make it keep up with the code
 
-v3->v4: addressed Daniel's feedback
-- fix missing fdput()
-- move fd2path from kernel/bpf/trace.c to kernel/trace/bpf_trace.c
-- move fd2path's test code to another patch
-- add comment to explain why use fdget_raw instead of fdget
+> see comment below, you can just use getpid(), as this test is single-thre=
+aded
 
-v2->v3: addressed Yonghong's feedback
-- remove unnecessary LOCKDOWN_BPF_READ
-- refactor error handling section for enhanced readability
-- provide a test case in tools/testing/selftests/bpf
+> you don't have to use thread id, given test_progs is single-threaded,
+> so can do (bpf_get_current_pid_tgid() >> 32) here and use getpid() in
+> userspace part.
 
-v1->v2: addressed Daniel's feedback
-- fix backward compatibility
-- add this helper description
-- fix signed-off name
+I found I was thinking too much. I thought test_progs maybe
+multi-threaded one day,
+so I used SYS_gettid. I feel that it is very bad now. It will make
+people misunderstand that it
+is multi-threaded. Thank you for point it out.
 
-Signed-off-by: Wenbo Zhang <ethercflow@gmail.com>
----
- include/uapi/linux/bpf.h       | 29 +++++++++++++++-
- kernel/trace/bpf_trace.c       | 63 ++++++++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h | 29 +++++++++++++++-
- 3 files changed, 119 insertions(+), 2 deletions(-)
+> nit: unnecessary parens around check
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index dbbcf0b02970..71d9705df120 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -2821,6 +2821,32 @@ union bpf_attr {
-  * 	Return
-  * 		On success, the strictly positive length of the string,	including
-  * 		the trailing NUL character. On error, a negative value.
-+ *
-+ * int bpf_get_file_path(char *path, u32 size, int fd)
-+ *	Description
-+ *		Get **file** atrribute from the current task by *fd*, then call
-+ *		**d_path** to get it's absolute path and copy it as string into
-+ *		*path* of *size*. Notice the **path** don't support unmountable
-+ *		pseudo filesystems as they don't have path (eg: SOCKFS, PIPEFS).
-+ *		The *size* must be strictly positive. On success, the helper
-+ *		makes sure that the *path* is NUL-terminated, and the buffer
-+ *		could be:
-+ *		- a regular full path (include mountable fs eg: /proc, /sys)
-+ *		- a regular full path with "(deleted)" at the end.
-+ *		On failure, it is filled with zeroes.
-+ *	Return
-+ *		On success, returns the length of the copied string INCLUDING
-+ *		the trailing NUL.
-+ *
-+ *		On failure, the returned value is one of the following:
-+ *
-+ *		**-EPERM** if no permission to get the path (eg: in irq ctx).
-+ *
-+ *		**-EBADF** if *fd* is invalid.
-+ *
-+ *		**-EINVAL** if *fd* corresponds to a unmountable pseudo fs
-+ *
-+ *		**-ENAMETOOLONG** if full path is longer than *size*
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -2938,7 +2964,8 @@ union bpf_attr {
- 	FN(probe_read_user),		\
- 	FN(probe_read_kernel),		\
- 	FN(probe_read_user_str),	\
--	FN(probe_read_kernel_str),
-+	FN(probe_read_kernel_str),	\
-+	FN(get_file_path),
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index ffc91d4935ac..c77e55418f1e 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -762,6 +762,67 @@ static const struct bpf_func_proto bpf_send_signal_proto = {
- 	.arg1_type	= ARG_ANYTHING,
- };
- 
-+BPF_CALL_3(bpf_get_file_path, char *, dst, u32, size, int, fd)
-+{
-+	struct file *f;
-+	char *p;
-+	int ret = -EBADF;
-+
-+	/* Ensure we're in user context which is safe for the helper to
-+	 * run. This helper has no business in a kthread.
-+	 */
-+	if (unlikely(in_interrupt() ||
-+		     current->flags & (PF_KTHREAD | PF_EXITING)))
-+		return -EPERM;
-+
-+	/* Use fget_raw instead of fget to support O_PATH, and it doesn't
-+	 * have any sleepable code, so it's ok to be here.
-+	 */
-+	f = fget_raw(fd);
-+	if (!f)
-+		goto error;
-+
-+	/* For unmountable pseudo filesystem, it seems to have no meaning
-+	 * to get their fake paths as they don't have path, and to be no
-+	 * way to validate this function pointer can be always safe to call
-+	 * in the current context.
-+	 */
-+	if (f->f_path.dentry->d_op && f->f_path.dentry->d_op->d_dname)
-+		return -EINVAL;
-+
-+	/* After filter unmountable pseudo filesytem, d_path won't call
-+	 * dentry->d_op->d_name(), the normally path doesn't have any
-+	 * sleepable code, and despite it uses the current macro to get
-+	 * fs_struct (current->fs), we've already ensured we're in user
-+	 * context, so it's ok to be here.
-+	 */
-+	p = d_path(&f->f_path, dst, size);
-+	if (IS_ERR(p)) {
-+		ret = PTR_ERR(p);
-+		fput(f);
-+		goto error;
-+	}
-+
-+	ret = strlen(p);
-+	memmove(dst, p, ret);
-+	dst[ret++] = '\0';
-+	fput(f);
-+	return ret;
-+
-+error:
-+	memset(dst, '0', size);
-+	return ret;
-+}
-+
-+static const struct bpf_func_proto bpf_get_file_path_proto = {
-+	.func       = bpf_get_file_path,
-+	.gpl_only   = true,
-+	.ret_type   = RET_INTEGER,
-+	.arg1_type  = ARG_PTR_TO_UNINIT_MEM,
-+	.arg2_type  = ARG_CONST_SIZE,
-+	.arg3_type  = ARG_ANYTHING,
-+};
-+
- static const struct bpf_func_proto *
- tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -822,6 +883,8 @@ tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- #endif
- 	case BPF_FUNC_send_signal:
- 		return &bpf_send_signal_proto;
-+	case BPF_FUNC_get_file_path:
-+		return &bpf_get_file_path_proto;
- 	default:
- 		return NULL;
- 	}
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index dbbcf0b02970..71d9705df120 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2821,6 +2821,32 @@ union bpf_attr {
-  * 	Return
-  * 		On success, the strictly positive length of the string,	including
-  * 		the trailing NUL character. On error, a negative value.
-+ *
-+ * int bpf_get_file_path(char *path, u32 size, int fd)
-+ *	Description
-+ *		Get **file** atrribute from the current task by *fd*, then call
-+ *		**d_path** to get it's absolute path and copy it as string into
-+ *		*path* of *size*. Notice the **path** don't support unmountable
-+ *		pseudo filesystems as they don't have path (eg: SOCKFS, PIPEFS).
-+ *		The *size* must be strictly positive. On success, the helper
-+ *		makes sure that the *path* is NUL-terminated, and the buffer
-+ *		could be:
-+ *		- a regular full path (include mountable fs eg: /proc, /sys)
-+ *		- a regular full path with "(deleted)" at the end.
-+ *		On failure, it is filled with zeroes.
-+ *	Return
-+ *		On success, returns the length of the copied string INCLUDING
-+ *		the trailing NUL.
-+ *
-+ *		On failure, the returned value is one of the following:
-+ *
-+ *		**-EPERM** if no permission to get the path (eg: in irq ctx).
-+ *
-+ *		**-EBADF** if *fd* is invalid.
-+ *
-+ *		**-EINVAL** if *fd* corresponds to a unmountable pseudo fs
-+ *
-+ *		**-ENAMETOOLONG** if full path is longer than *size*
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -2938,7 +2964,8 @@ union bpf_attr {
- 	FN(probe_read_user),		\
- 	FN(probe_read_kernel),		\
- 	FN(probe_read_user_str),	\
--	FN(probe_read_kernel_str),
-+	FN(probe_read_kernel_str),	\
-+	FN(get_file_path),
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
--- 
-2.17.1
+Agree, I'll fix this.
 
+
+Thank you.
+
+Andrii Nakryiko <andrii.nakryiko@gmail.com> =E4=BA=8E2019=E5=B9=B411=E6=9C=
+=8818=E6=97=A5=E5=91=A8=E4=B8=80 =E4=B8=8B=E5=8D=882:45=E5=86=99=E9=81=93=
+=EF=BC=9A
+
+>
+> On Fri, Nov 15, 2019 at 5:59 AM Wenbo Zhang <ethercflow@gmail.com> wrote:
+> >
+> > trace fstat events by raw tracepoint sys_enter:newfstat, and handle eve=
+nts
+> > only produced by test_file_get_path, which call fstat on several differ=
+ent
+> > types of files to test bpf_get_file_path's feature.
+> >
+> > v3->v4: addressed Andrii's feedback
+> > - use a set of fd instead of fds array
+> > - use global variables instead of maps (in v3, I mistakenly thought tha=
+t
+> > the bpf maps are global variables.)
+> > - remove uncessary global variable path_info_index
+> > - remove fd compare as the fstat's order is fixed
+> >
+> > v2->v3: addressed Andrii's feedback
+> > - use global data instead of perf_buffer to simplified code
+> >
+> > v1->v2: addressed Daniel's feedback
+> > - rename bpf_fd2path to bpf_get_file_path to be consistent with other
+> > helper's names
+> >
+> > Signed-off-by: Wenbo Zhang <ethercflow@gmail.com>
+> > ---
+>
+> I like this much better, so much simpler BPF program and userspace
+> parts has less unnecessary moving pieces. I just have minor nits
+> below.
+>
+> But I think you should send this patch together with the patch adding
+> helper as one patch series. Both patches are either going to get
+> accepted together, or declined together; having them as a patch set is
+> more meaningful.
+>
+> >  .../selftests/bpf/prog_tests/get_file_path.c  | 173 ++++++++++++++++++
+> >  .../selftests/bpf/progs/test_get_file_path.c  |  43 +++++
+> >  2 files changed, 216 insertions(+)
+> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/get_file_pat=
+h.c
+> >  create mode 100644 tools/testing/selftests/bpf/progs/test_get_file_pat=
+h.c
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/get_file_path.c b/t=
+ools/testing/selftests/bpf/prog_tests/get_file_path.c
+> > new file mode 100644
+> > index 000000000000..446ee4dd20e2
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/prog_tests/get_file_path.c
+> > @@ -0,0 +1,173 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +#define _GNU_SOURCE
+> > +#include <test_progs.h>
+> > +#include <sys/stat.h>
+> > +#include <linux/sched.h>
+> > +#include <sys/syscall.h>
+> > +
+> > +#define MAX_PATH_LEN           128
+> > +#define MAX_FDS                        7
+> > +#define MAX_EVENT_NUM          16
+> > +
+> > +static struct file_path_test_data {
+> > +       pid_t pid;
+> > +       __u32 cnt;
+> > +       __u32 fds[MAX_EVENT_NUM];
+> > +       char paths[MAX_EVENT_NUM][MAX_PATH_LEN];
+> > +} src, dst;
+> > +
+> > +static inline int set_pathname(int fd)
+> > +{
+> > +       char buf[MAX_PATH_LEN];
+> > +
+> > +       snprintf(buf, MAX_PATH_LEN, "/proc/%d/fd/%d", src.pid, fd);
+> > +       src.fds[src.cnt] =3D fd;
+> > +       return readlink(buf, src.paths[src.cnt++], MAX_PATH_LEN);
+> > +}
+> > +
+> > +static int trigger_fstat_events(pid_t pid)
+> > +{
+> > +       int pipefd[2] =3D { -1, -1 };
+> > +       int sockfd =3D -1, procfd =3D -1, devfd =3D -1;
+> > +       int localfd =3D -1, indicatorfd =3D -1;
+> > +       struct stat fileStat;
+> > +       int ret =3D -1;
+> > +
+> > +       /* unmountable pseudo-filesystems */
+> > +       if (CHECK_FAIL(pipe(pipefd) < 0))
+> > +               return ret;
+> > +       /* unmountable pseudo-filesystems */
+> > +       sockfd =3D socket(AF_INET, SOCK_STREAM, 0);
+> > +       if (CHECK_FAIL(sockfd < 0))
+> > +               goto out_close;
+> > +       /* mountable pseudo-filesystems */
+> > +       procfd =3D open("/proc/self/comm", O_RDONLY);
+> > +       if (CHECK_FAIL(procfd < 0))
+> > +               goto out_close;
+> > +       devfd =3D open("/dev/urandom", O_RDONLY);
+> > +       if (CHECK_FAIL(devfd < 0))
+> > +               goto out_close;
+> > +       localfd =3D open("/tmp/fd2path_loadgen.txt", O_CREAT|O_RDONLY);
+> > +       if (CHECK_FAIL(localfd < 0))
+> > +               goto out_close;
+> > +       /* bpf_get_file_path will return path with (deleted) */
+> > +       remove("/tmp/fd2path_loadgen.txt");
+> > +       indicatorfd =3D open("/tmp/", O_PATH);
+> > +       if (CHECK_FAIL(indicatorfd < 0))
+> > +               goto out_close;
+> > +
+> > +       src.pid =3D pid;
+> > +
+> > +       ret =3D set_pathname(pipefd[0]);
+> > +       if (CHECK_FAIL(ret < 0))
+> > +               goto out_close;
+> > +       ret =3D set_pathname(pipefd[1]);
+> > +       if (CHECK_FAIL(ret < 0))
+> > +               goto out_close;
+> > +       ret =3D set_pathname(sockfd);
+> > +       if (CHECK_FAIL(ret < 0))
+> > +               goto out_close;
+> > +       ret =3D set_pathname(procfd);
+> > +       if (CHECK_FAIL(ret < 0))
+> > +               goto out_close;
+> > +       ret =3D set_pathname(devfd);
+> > +       if (CHECK_FAIL(ret < 0))
+> > +               goto out_close;
+> > +       ret =3D set_pathname(localfd);
+> > +       if (CHECK_FAIL(ret < 0))
+> > +               goto out_close;
+> > +       ret =3D set_pathname(indicatorfd);
+> > +       if (CHECK_FAIL(ret < 0))
+> > +               goto out_close;
+> > +
+> > +       fstat(pipefd[0], &fileStat);
+> > +       fstat(pipefd[1], &fileStat);
+> > +       fstat(sockfd, &fileStat);
+> > +       fstat(procfd, &fileStat);
+> > +       fstat(devfd, &fileStat);
+> > +       fstat(localfd, &fileStat);
+> > +       fstat(indicatorfd, &fileStat);
+> > +
+> > +out_close:
+> > +       close(indicatorfd);
+> > +       close(localfd);
+> > +       close(devfd);
+> > +       close(procfd);
+> > +       close(sockfd);
+> > +       close(pipefd[1]);
+> > +       close(pipefd[0]);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +void test_get_file_path(void)
+> > +{
+> > +       const char *prog_name =3D "tracepoint/syscalls/sys_enter_newfst=
+at";
+> > +       const char *obj_file =3D "./test_get_file_path.o";
+> > +       DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts, );
+> > +       int err, results_map_fd, duration =3D 0;
+> > +       struct bpf_program *tp_prog =3D NULL;
+> > +       struct bpf_link *tp_link =3D NULL;
+> > +       struct bpf_object *obj =3D NULL;
+> > +       const int zero =3D 0;
+> > +
+> > +       obj =3D bpf_object__open_file(obj_file, &opts);
+>
+> you can just pass NULL for opts, as you are not really using any
+>
+> > +       if (CHECK(IS_ERR(obj), "obj_open_file", "err %ld\n", PTR_ERR(ob=
+j)))
+> > +               return;
+> > +
+> > +       tp_prog =3D bpf_object__find_program_by_title(obj, prog_name);
+> > +       if (CHECK(!tp_prog, "find_tp",
+> > +                 "prog '%s' not found\n", prog_name))
+> > +               goto cleanup;
+> > +
+> > +       err =3D bpf_object__load(obj);
+> > +       if (CHECK(err, "obj_load", "err %d\n", err))
+> > +               goto cleanup;
+> > +
+> > +       results_map_fd =3D bpf_find_map(__func__, obj, "test_get.bss");
+> > +       if (CHECK(results_map_fd < 0, "find_bss_map",
+> > +                 "err %d\n", results_map_fd))
+> > +               goto cleanup;
+> > +
+> > +       tp_link =3D bpf_program__attach_tracepoint(tp_prog, "syscalls",
+> > +                                                "sys_enter_newfstat");
+>
+> your patch subject says "raw tracepoint", but you are really using a
+> normal tracepoint here
+>
+> > +       if (CHECK(IS_ERR(tp_link), "attach_tp",
+> > +                 "err %ld\n", PTR_ERR(tp_link))) {
+> > +               tp_link =3D NULL;
+> > +               goto cleanup;
+> > +       }
+> > +
+> > +       dst.pid =3D syscall(SYS_gettid);
+>
+> see comment below, you can just use getpid(), as this test is single-thre=
+aded
+>
+> > +       err =3D bpf_map_update_elem(results_map_fd, &zero, &dst, 0);
+> > +       if (CHECK(err, "update_elem",
+> > +                 "failed to set pid filter: %d\n", err))
+> > +               goto cleanup;
+> > +
+> > +       err =3D trigger_fstat_events(dst.pid);
+> > +       if (CHECK_FAIL(err < 0))
+> > +               goto cleanup;
+> > +
+> > +       err =3D bpf_map_lookup_elem(results_map_fd, &zero, &dst);
+> > +       if (CHECK(err, "get_results",
+> > +                 "failed to get results: %d\n", err))
+> > +               goto cleanup;
+> > +
+> > +       for (int i =3D 0; i < MAX_FDS; i++) {
+> > +               if (i < 3) {
+> > +                       CHECK((dst.paths[i][0] !=3D '\0'), "get_file_pa=
+th",
+>
+> nit: unnecessary parens around check
+>
+> > +                              "failed to filter fs [%d]: %u(%s) vs %u(=
+%s)\n",
+> > +                              i, src.fds[i], src.paths[i], dst.fds[i],
+> > +                              dst.paths[i]);
+> > +               } else {
+> > +                       err =3D strncmp(src.paths[i], dst.paths[i], MAX=
+_PATH_LEN);
+> > +                       CHECK(err !=3D 0, "get_file_path",
+> > +                              "failed to get path[%d]: %u(%s) vs %u(%s=
+)\n",
+> > +                              i, src.fds[i], src.paths[i], dst.fds[i],
+> > +                              dst.paths[i]);
+> > +               }
+> > +       }
+> > +
+> > +cleanup:
+> > +       bpf_link__destroy(tp_link);
+> > +       bpf_object__close(obj);
+> > +}
+> > diff --git a/tools/testing/selftests/bpf/progs/test_get_file_path.c b/t=
+ools/testing/selftests/bpf/progs/test_get_file_path.c
+> > new file mode 100644
+> > index 000000000000..c006fa05e32b
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/progs/test_get_file_path.c
+> > @@ -0,0 +1,43 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +
+> > +#include <linux/bpf.h>
+> > +#include <linux/ptrace.h>
+> > +#include <string.h>
+> > +#include <unistd.h>
+> > +#include "bpf_helpers.h"
+> > +#include "bpf_tracing.h"
+> > +
+> > +#define MAX_PATH_LEN           128
+> > +#define MAX_EVENT_NUM          16
+> > +
+> > +static struct file_path_test_data {
+> > +       pid_t pid;
+> > +       __u32 cnt;
+> > +       __u32 fds[MAX_EVENT_NUM];
+> > +       char paths[MAX_EVENT_NUM][MAX_PATH_LEN];
+> > +} data;
+> > +
+> > +struct sys_enter_newfstat_args {
+> > +       unsigned long long pad1;
+> > +       unsigned long long pad2;
+> > +       unsigned int fd;
+> > +};
+> > +
+> > +SEC("tracepoint/syscalls/sys_enter_newfstat")
+> > +int bpf_prog(struct sys_enter_newfstat_args *args)
+> > +{
+> > +       pid_t pid =3D bpf_get_current_pid_tgid();
+>
+> you don't have to use thread id, given test_progs is single-threaded,
+> so can do (bpf_get_current_pid_tgid() >> 32) here and use getpid() in
+> userspace part.
+>
+> > +
+> > +       if (pid !=3D data.pid)
+> > +               return 0;
+> > +       if (data.cnt >=3D MAX_EVENT_NUM)
+> > +               return 0;
+> > +
+> > +       data.fds[data.cnt] =3D args->fd;
+> > +       bpf_get_file_path(data.paths[data.cnt], MAX_PATH_LEN, args->fd)=
+;
+> > +       data.cnt++;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +char _license[] SEC("license") =3D "GPL";
+> > --
+> > 2.17.1
+> >
