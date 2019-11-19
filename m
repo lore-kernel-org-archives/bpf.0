@@ -8,57 +8,56 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2AE6C432C3
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:31:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 275B2C43215
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:31:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7505E22465
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:31:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0401122465
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:31:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fD0abG5c"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NM4XR6WW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727597AbfKSTbI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Nov 2019 14:31:08 -0500
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:54440 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727576AbfKSTbH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Nov 2019 14:31:07 -0500
-Received: by mail-pf1-f202.google.com with SMTP id 2so17484099pfv.21
-        for <bpf@vger.kernel.org>; Tue, 19 Nov 2019 11:31:06 -0800 (PST)
+        id S1727549AbfKSTbE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Nov 2019 14:31:04 -0500
+Received: from mail-qv1-f74.google.com ([209.85.219.74]:35780 "EHLO
+        mail-qv1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727498AbfKSTbE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Nov 2019 14:31:04 -0500
+Received: by mail-qv1-f74.google.com with SMTP id d3so12348994qvz.2
+        for <bpf@vger.kernel.org>; Tue, 19 Nov 2019 11:31:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=vOGdWKkLZw+fnwsKztc5Xhx6sgiytcIM3uQq3wSpoPY=;
-        b=fD0abG5cMWtSthF8awD7gX4qx8kK59gTADR0EBrVD3nGRiZz614u+uZbjqr8zK9cVB
-         x/tmy4rL3RFbOn3vTIO0GRrW4g86Py4+f3LKH9m5b79UdcN7Hu3WOK6fJO3gsjGNPpoD
-         ok32+N3PNMkNiHCZm3rWij8ThooSDjZL2xjqebbx/yezL5DUA54NVw2GSC1kyurUylUj
-         51ZCEs2ivNGVNgWr7CWru9Aj9aKlZ05iUWE+P+HrutQITPGAJKiKvqWCU7RRLWZnInDM
-         2MiNXX9sCX7QezWEE9D92nEoDLZ3HjlzLG8thxkQB15LGo9PG1F0XlHljRipxC/8sS0g
-         W+YQ==
+        bh=+lN+OnV/OGJwrxgrmDkzu2oxVw2ucT8UYsYGvvebriE=;
+        b=NM4XR6WWNRFmctuup2sP4jTFMScoszHL0nwBVfSPrvc1hbAKi1GXF75Ngf634ArcMF
+         llrHQtDYx0UjImSHtxD2z9RK5M1KdBOeTVIsUWTIJZXbSmvem3sEHxWz27I1vig7o6ea
+         VGrW2X6jeyynS7LkI/0IcRJpnIfRUR4qZujUzTbdeLb89zD+6oS12LzXAzEpLIILR9fo
+         fBWk7Uc1JfRL5AB5szAXP4ag4PvOx7nIIniJVo83+U4X9Pvu9tfMRx58vTGi1A6wFJC6
+         a9JFAzmx8xpL+V+rgG6cNcLTHH/03nuozbgzj1cmsV7swyn/p39g2aO7cSkrinAK3ope
+         Y4Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=vOGdWKkLZw+fnwsKztc5Xhx6sgiytcIM3uQq3wSpoPY=;
-        b=q1N54KzRZJWwc37CJs4ERK/Z9oGDqez7KlLUXsc8rLgsBipl1GhMo1trCGY2BUd4h2
-         hAoAqR0hPyattWv2Kwut7zy6sFmsQLjopgjAjBxXyxusXQlEM4bsFHPoE5h11QdJLg3E
-         Fpf49oAMPu+EdvJ5og3HP6LzOOfYTSDdp5RUNt4JmNk3bEAFKb7BKCAZMiahtc7W1Bsd
-         BXMSPI3ykw68ekg2pvqcB6jGAMApKVXY3tniE4W/ngHGl68UjrIwMPq36ppaufI6IWft
-         yAUSk0W1CfnT7XFEAUaOe6KxliZKvRD7JTJKjqj+sqUt0TznkTXwOiwmSy4Zh6beBleZ
-         4Iqg==
-X-Gm-Message-State: APjAAAWQ1YvZkddm2kpiejS2LKiz3BcK6tAf34E2b6ebCgFy3oYrG70b
-        HH2tDNoPUCZkxqr8UniOhYtaTRNxgX4Q
-X-Google-Smtp-Source: APXvYqyso4pIsRCIKj+mbEI/YKn/Jx2s4xp+YSqDX8EfM1n3NV90GXmXRfHtR/JpSzL7iTSU3F76PyGumonF
-X-Received: by 2002:a63:596:: with SMTP id 144mr7644456pgf.207.1574191866162;
- Tue, 19 Nov 2019 11:31:06 -0800 (PST)
-Date:   Tue, 19 Nov 2019 11:30:36 -0800
+        bh=+lN+OnV/OGJwrxgrmDkzu2oxVw2ucT8UYsYGvvebriE=;
+        b=taE4C3GNJYA27zjlzJ2HgZmjBT6rSievHk/qVfrArO9f+5UTBAlXAQZ9ebYJ3fqCEk
+         WHbxaQp5Y6Oig/cOPscY6PCTsbMTz4ruI6tSjimJSaRt4zFh2RYBGwv1z9wu0vR2pCPh
+         NmShbhyGi7UmaejVyud5D/nIQ49F+Av3rrIWwdgTWsI8yszadM/WAwmOotVHb9ZV5mXR
+         l5NeQnyLvU22DnicgZX2HoOWexTU6g74+8wG0h5ilwEdZ4P8e/bpP/ewjzsJxcXWqYUD
+         KRFfSzkFTCXQlJRamLOTAX2YTQiPiDnQu5Fn1mq+PYfcnlRGNx0FFcp/iPFEAdg5s39r
+         UIDA==
+X-Gm-Message-State: APjAAAW7S1iIcPW7BBwh7WwglHtSaQ5/bgJuSOvC/d6AuocznOcoCgd/
+        QOyxccFU6f4j8B9l5AQk6Bt/B0cc5/1R
+X-Google-Smtp-Source: APXvYqxf+GNA8hu6R+vVbmfguwH7wdM89U2nb3UrGK4fF8N3LhjgyQzIbjEIuhA5rVO3LUKs+aI2rRRkLbzy
+X-Received: by 2002:ac8:783:: with SMTP id l3mr34181632qth.257.1574191861009;
+ Tue, 19 Nov 2019 11:31:01 -0800 (PST)
+Date:   Tue, 19 Nov 2019 11:30:34 -0800
 In-Reply-To: <20191119193036.92831-1-brianvv@google.com>
-Message-Id: <20191119193036.92831-10-brianvv@google.com>
+Message-Id: <20191119193036.92831-8-brianvv@google.com>
 Mime-Version: 1.0
 References: <20191119193036.92831-1-brianvv@google.com>
 X-Mailer: git-send-email 2.24.0.432.g9d3f5f5b63-goog
-Subject: [PATCH v2 bpf-next 9/9] selftests/bpf: add batch ops testing to array
- bpf map
+Subject: [PATCH v2 bpf-next 7/9] libbpf: add libbpf support to batch ops
 From:   Brian Vazquez <brianvv@google.com>
 To:     Brian Vazquez <brianvv.kernel@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -68,153 +67,138 @@ Cc:     Yonghong Song <yhs@fb.com>, Stanislav Fomichev <sdf@google.com>,
         Petar Penkov <ppenkov@google.com>,
         Willem de Bruijn <willemb@google.com>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Brian Vazquez <brianvv@google.com>
+        bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Tested bpf_map_lookup_batch() and bpf_map_update_batch()
-functionality.
+From: Yonghong Song <yhs@fb.com>
 
-  $ ./test_maps
-      ...
-        test_map_lookup_and_delete_batch_array:PASS
-      ...
+Added four libbpf API functions to support map batch operations:
+  . int bpf_map_delete_batch( ... )
+  . int bpf_map_lookup_batch( ... )
+  . int bpf_map_lookup_and_delete_batch( ... )
+  . int bpf_map_update_batch( ... )
 
-Signed-off-by: Brian Vazquez <brianvv@google.com>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- .../map_lookup_and_delete_batch_array.c       | 119 ++++++++++++++++++
- 1 file changed, 119 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch_array.c
+ tools/lib/bpf/bpf.c      | 61 ++++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/bpf.h      | 14 +++++++++
+ tools/lib/bpf/libbpf.map |  4 +++
+ 3 files changed, 79 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch_array.c b/tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch_array.c
-new file mode 100644
-index 0000000000000..cbec72ad38609
---- /dev/null
-+++ b/tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch_array.c
-@@ -0,0 +1,119 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <stdio.h>
-+#include <errno.h>
-+#include <string.h>
-+
-+#include <bpf/bpf.h>
-+#include <bpf/libbpf.h>
-+
-+#include <test_maps.h>
-+
-+static void map_batch_update(int map_fd, __u32 max_entries, int *keys,
-+			     int *values)
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 98596e15390fb..9acd9309b47b3 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -443,6 +443,67 @@ int bpf_map_freeze(int fd)
+ 	return sys_bpf(BPF_MAP_FREEZE, &attr, sizeof(attr));
+ }
+ 
++static int bpf_map_batch_common(int cmd, int fd, void  *in_batch,
++				void *out_batch, void *keys, void *values,
++				__u32 *count, __u64 elem_flags,
++				__u64 flags)
 +{
-+	int i, err;
++	union bpf_attr attr = {};
++	int ret;
 +
-+	for (i = 0; i < max_entries; i++) {
-+		keys[i] = i;
-+		values[i] = i + 1;
-+	}
++	memset(&attr, 0, sizeof(attr));
++	attr.batch.map_fd = fd;
++	attr.batch.in_batch = ptr_to_u64(in_batch);
++	attr.batch.out_batch = ptr_to_u64(out_batch);
++	attr.batch.keys = ptr_to_u64(keys);
++	attr.batch.values = ptr_to_u64(values);
++	if (count)
++		attr.batch.count = *count;
++	attr.batch.elem_flags = elem_flags;
++	attr.batch.flags = flags;
 +
-+	err = bpf_map_update_batch(map_fd, keys, values, &max_entries, 0, 0);
-+	CHECK(err, "bpf_map_update_batch()", "error:%s\n", strerror(errno));
++	ret = sys_bpf(cmd, &attr, sizeof(attr));
++	if (count)
++		*count = attr.batch.count;
++
++	return ret;
 +}
 +
-+static void map_batch_verify(int *visited, __u32 max_entries,
-+			     int *keys, int *values)
++int bpf_map_delete_batch(int fd, void *in_batch, void *out_batch, __u32 *count,
++			 __u64 elem_flags, __u64 flags)
 +{
-+	int i;
-+
-+	memset(visited, 0, max_entries * sizeof(*visited));
-+	for (i = 0; i < max_entries; i++) {
-+		CHECK(keys[i] + 1 != values[i], "key/value checking",
-+		      "error: i %d key %d value %d\n", i, keys[i], values[i]);
-+		visited[i] = 1;
-+	}
-+	for (i = 0; i < max_entries; i++) {
-+		CHECK(visited[i] != 1, "visited checking",
-+		      "error: keys array at index %d missing\n", i);
-+	}
++	return bpf_map_batch_common(BPF_MAP_DELETE_BATCH, fd, in_batch,
++				    out_batch, NULL, NULL, count,
++				    elem_flags, flags);
 +}
 +
-+void test_map_lookup_and_delete_batch_array(void)
++int bpf_map_lookup_batch(int fd, void *in_batch, void *out_batch, void *keys,
++			 void *values, __u32 *count,
++			 __u64 elem_flags, __u64 flags)
 +{
-+	struct bpf_create_map_attr xattr = {
-+		.name = "array_map",
-+		.map_type = BPF_MAP_TYPE_ARRAY,
-+		.key_size = sizeof(int),
-+		.value_size = sizeof(int),
-+	};
-+	int map_fd, *keys, *values, *visited;
-+	__u32 count, total, total_success;
-+	const __u32 max_entries = 10;
-+	int err, i, step;
-+	bool nospace_err;
-+	__u64 batch = 0;
-+
-+	xattr.max_entries = max_entries;
-+	map_fd = bpf_create_map_xattr(&xattr);
-+	CHECK(map_fd == -1,
-+	      "bpf_create_map_xattr()", "error:%s\n", strerror(errno));
-+
-+	keys = malloc(max_entries * sizeof(int));
-+	values = malloc(max_entries * sizeof(int));
-+	visited = malloc(max_entries * sizeof(int));
-+	CHECK(!keys || !values || !visited, "malloc()", "error:%s\n",
-+	      strerror(errno));
-+
-+	/* populate elements to the map */
-+	map_batch_update(map_fd, max_entries, keys, values);
-+
-+	/* test 1: lookup in a loop with various steps. */
-+	total_success = 0;
-+	for (step = 1; step < max_entries; step++) {
-+		map_batch_update(map_fd, max_entries, keys, values);
-+		memset(keys, 0, max_entries * sizeof(*keys));
-+		memset(values, 0, max_entries * sizeof(*values));
-+		batch = 0;
-+		total = 0;
-+		i = 0;
-+		/* iteratively lookup/delete elements with 'step'
-+		 * elements each.
-+		 */
-+		count = step;
-+		nospace_err = false;
-+		while (true) {
-+			err = bpf_map_lookup_batch(map_fd,
-+						total ? &batch : NULL, &batch,
-+						keys + total,
-+						values + total,
-+						&count, 0, 0);
-+
-+			CHECK((err && errno != ENOENT), "lookup with steps",
-+			      "error: %s\n", strerror(errno));
-+
-+			total += count;
-+
-+			if (err)
-+				break;
-+
-+			i++;
-+		}
-+
-+		if (nospace_err == true)
-+			continue;
-+
-+		CHECK(total != max_entries, "lookup with steps",
-+		      "total = %u, max_entries = %u\n", total, max_entries);
-+
-+		map_batch_verify(visited, max_entries, keys, values);
-+
-+		total_success++;
-+	}
-+
-+	CHECK(total_success == 0, "check total_success",
-+	      "unexpected failure\n");
-+
-+	printf("%s:PASS\n", __func__);
++	return bpf_map_batch_common(BPF_MAP_LOOKUP_BATCH, fd, in_batch,
++				    out_batch, keys, values, count,
++				    elem_flags, flags);
 +}
++
++int bpf_map_lookup_and_delete_batch(int fd, void *in_batch, void *out_batch,
++				    void *keys, void *values,
++				    __u32 *count, __u64 elem_flags,
++				    __u64 flags)
++{
++	return bpf_map_batch_common(BPF_MAP_LOOKUP_AND_DELETE_BATCH,
++				    fd, in_batch, out_batch, keys, values,
++				    count, elem_flags, flags);
++}
++
++int bpf_map_update_batch(int fd, void *keys, void *values, __u32 *count,
++			 __u64 elem_flags, __u64 flags)
++{
++	return bpf_map_batch_common(BPF_MAP_UPDATE_BATCH,
++				    fd, NULL, NULL, keys, values,
++				    count, elem_flags, flags);
++}
++
+ int bpf_obj_pin(int fd, const char *pathname)
+ {
+ 	union bpf_attr attr;
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 3c791fa8e68e8..3ec63384400f1 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -126,6 +126,20 @@ LIBBPF_API int bpf_map_lookup_and_delete_elem(int fd, const void *key,
+ LIBBPF_API int bpf_map_delete_elem(int fd, const void *key);
+ LIBBPF_API int bpf_map_get_next_key(int fd, const void *key, void *next_key);
+ LIBBPF_API int bpf_map_freeze(int fd);
++LIBBPF_API int bpf_map_delete_batch(int fd, void *in_batch, void *out_batch,
++				    __u32 *count, __u64 elem_flags,
++				    __u64 flags);
++LIBBPF_API int bpf_map_lookup_batch(int fd, void *in_batch, void *out_batch,
++				    void *keys, void *values, __u32 *count,
++				    __u64 elem_flags, __u64 flags);
++LIBBPF_API int bpf_map_lookup_and_delete_batch(int fd, void *in_batch,
++					       void *out_batch, void *keys,
++					       void *values, __u32 *count,
++					       __u64 elem_flags, __u64 flags);
++LIBBPF_API int bpf_map_update_batch(int fd, void *keys, void *values,
++				    __u32 *count, __u64 elem_flags,
++				    __u64 flags);
++
+ LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
+ LIBBPF_API int bpf_obj_get(const char *pathname);
+ LIBBPF_API int bpf_prog_attach(int prog_fd, int attachable_fd,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 8ddc2c40e482d..56462fea66f74 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -207,4 +207,8 @@ LIBBPF_0.0.6 {
+ 		bpf_program__size;
+ 		btf__find_by_name_kind;
+ 		libbpf_find_vmlinux_btf_id;
++		bpf_map_delete_batch;
++		bpf_map_lookup_and_delete_batch;
++		bpf_map_lookup_batch;
++		bpf_map_update_batch;
+ } LIBBPF_0.0.5;
 -- 
 2.24.0.432.g9d3f5f5b63-goog
 
