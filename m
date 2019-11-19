@@ -2,44 +2,44 @@ Return-Path: <SRS0=WdG8=ZL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65388C432C3
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B01BCC43215
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:57:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 40883223B0
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:57:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B4C9223B0
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:57:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="EioC/Zie"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="em5VDggO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726911AbfKST5R (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Nov 2019 14:57:17 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55530 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726722AbfKST5Q (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 19 Nov 2019 14:57:16 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAJJoNw5019761
-        for <bpf@vger.kernel.org>; Tue, 19 Nov 2019 11:57:16 -0800
+        id S1727036AbfKST5T (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Nov 2019 14:57:19 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:27014 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727031AbfKST5T (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 19 Nov 2019 14:57:19 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAJJtl8q002510
+        for <bpf@vger.kernel.org>; Tue, 19 Nov 2019 11:57:17 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=L436sXJ8GdyOxGsIUr9my29l6XfcyJU4WoztqEny7jw=;
- b=EioC/ZieCR1FoUsXZNtxAPI9JJt3RtAYD+Coe5Zu+K3EXbbwRPVWy12YRkFNoSW2Q3Tp
- LFNhupTcU5oKqeNUbGw6x8LVEsVRCnWcc/XkPkZqRUs9eII4EITVu/gQmyf+ZBC/dWhP
- 9Kt5YvWPI9+AttocP/yIyGEJWnHJYvZNfyU= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=qM5slAFLCoBQ1cEs+mAqecjT6P+aVBUZq0z2t0DI8Vs=;
+ b=em5VDggOpQ9J7hu94g2So9Fz+CWeIcHuME6+K5Jw3AuzryVwn3+RWBPmv6AMwD1YL2cU
+ N1EVUBQl3M/OSeuXkm0l7glmFTZg6WybC0oDipJPThHIwn2F6c2wtS4VzYh8A+CqJ+UA
+ 9MB+7Xb5Hnxf+/lo/It/srScsq1ySZ5KdwU= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wb1pfm1bg-2
+        by mx0a-00082601.pphosted.com with ESMTP id 2wcm54gyyb-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 19 Nov 2019 11:57:16 -0800
-Received: from 2401:db00:2050:5102:face:0:37:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 19 Nov 2019 11:57:17 -0800
+Received: from 2401:db00:2120:81dc:face:0:23:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Tue, 19 Nov 2019 11:57:14 -0800
+ Tue, 19 Nov 2019 11:57:15 -0800
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 7CA6E3702314; Tue, 19 Nov 2019 11:57:11 -0800 (PST)
+        id 281AD3702314; Tue, 19 Nov 2019 11:57:14 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -47,59 +47,95 @@ To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 0/3] bpf: allow s32/u32 return types in verifier for bpf helpers
-Date:   Tue, 19 Nov 2019 11:57:11 -0800
-Message-ID: <20191119195711.3691681-1-yhs@fb.com>
+Subject: [PATCH bpf-next v2 3/3] tools/bpf: add verifier test for s32/u32 helper return values
+Date:   Tue, 19 Nov 2019 11:57:14 -0800
+Message-ID: <20191119195714.3692123-1-yhs@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191119195711.3691681-1-yhs@fb.com>
+References: <20191119195711.3691681-1-yhs@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-19_06:2019-11-15,2019-11-19 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 malwarescore=0 phishscore=0
- bulkscore=0 clxscore=1015 mlxscore=0 mlxlogscore=467 suspectscore=13
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911190163
+ definitions=2019-11-19_07:2019-11-15,2019-11-19 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015 mlxscore=0
+ suspectscore=13 bulkscore=0 phishscore=0 priorityscore=1501
+ mlxlogscore=480 adultscore=0 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-1911190163
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, for all helpers with integer return type,
-the verifier permits a single return type, RET_INTEGER,
-which represents 64-bit return value from the helper,
-and the verifier will assign 64-bit value ranges for these
-return values. Such an assumption is different
-from what compiler sees and the generated code with
-llvm alu32 mode, and may lead verification failure.
+Added two verifier tests for helper returning s32/u32.
+The return value is refined with jmp32 instruction and
+later the whole r0 is used. With the previous patch,
+two tests will fail.
 
-This patch set enhanced verifier to handle s32/u32 helper
-return values properly to avoid verification failure
-due to conservative return value range marking.
-Patch #1 refactored the verifier code to have an internal helper
-  which will be used in Patch #2.
-Patch #2 added 32-bit helper return type support.
-  The commit message has details of explanation.
-Patch #3 added two test cases to selftests test_verifier.
-
-Yonghong Song (3):
-  bpf: add a helper to set preciseness of an unknown register
-  bpf: allow s32/u32 return types in verifier for bpf helpers
-  tools/bpf: add verifier test for s32/u32 helper return values
-
- include/linux/bpf.h                           |  4 +-
- include/linux/tnum.h                          |  3 +-
- kernel/bpf/helpers.c                          |  8 +--
- kernel/bpf/tnum.c                             |  3 +-
- kernel/bpf/verifier.c                         | 50 ++++++++++++++++---
- kernel/trace/bpf_trace.c                      |  4 +-
- net/core/filter.c                             | 16 +++---
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
  .../selftests/bpf/verifier/helper_ret.c       | 50 +++++++++++++++++++
- 8 files changed, 113 insertions(+), 25 deletions(-)
+ 1 file changed, 50 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/verifier/helper_ret.c
 
+diff --git a/tools/testing/selftests/bpf/verifier/helper_ret.c b/tools/testing/selftests/bpf/verifier/helper_ret.c
+new file mode 100644
+index 000000000000..7850a52645a7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier/helper_ret.c
+@@ -0,0 +1,50 @@
++{
++	"helper_ret: get_cgroup_classid: __u32",
++	.insns = {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 6),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_get_cgroup_classid),
++	BPF_JMP32_IMM(BPF_JGE, BPF_REG_0, 7, 2),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_6, BPF_REG_0),
++	BPF_ST_MEM(BPF_B, BPF_REG_6, 0, 0),
++        BPF_MOV32_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.fixup_map_hash_48b = { 4 },
++	.result = ACCEPT,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"helper_ret: skb_pull_data: __s32",
++	.insns = {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 8),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
++	BPF_MOV64_IMM(BPF_REG_2, 4),
++	BPF_EMIT_CALL(BPF_FUNC_skb_pull_data),
++	BPF_JMP32_IMM(BPF_JSLT, BPF_REG_0, 1, 3),
++	BPF_JMP32_IMM(BPF_JSGE, BPF_REG_0, 7, 2),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_6, BPF_REG_0),
++	BPF_ST_MEM(BPF_B, BPF_REG_6, 0, 0),
++        BPF_MOV32_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.fixup_map_hash_48b = { 4 },
++	.result = ACCEPT,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
 -- 
 2.17.1
 
