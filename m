@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45085C33C9D
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 01:38:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 475F8C33CA0
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 01:38:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1E35D222D1
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 01:38:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20380222D1
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 01:38:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727162AbfKSBi6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Nov 2019 20:38:58 -0500
-Received: from www62.your-server.de ([213.133.104.62]:53698 "EHLO
+        id S1727114AbfKSBiu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Nov 2019 20:38:50 -0500
+Received: from www62.your-server.de ([213.133.104.62]:53664 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727110AbfKSBiu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726814AbfKSBiu (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 18 Nov 2019 20:38:50 -0500
 Received: from 45.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.45] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1iWsTg-0002ko-OZ; Tue, 19 Nov 2019 02:38:48 +0100
+        id 1iWsTf-0002kK-3k; Tue, 19 Nov 2019 02:38:47 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     john.fastabend@gmail.com, andrii.nakryiko@gmail.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next 8/8] bpf, testing: add various tail call test cases
-Date:   Tue, 19 Nov 2019 02:38:39 +0100
-Message-Id: <fee9a309e61c4abee212b6287f41637aae78acbe.1574126683.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next 5/8] bpf: add poke dependency tracking for prog array maps
+Date:   Tue, 19 Nov 2019 02:38:36 +0100
+Message-Id: <41436f9a5d5dd8ef5e88e05b1439e68428fdf2a3.1574126683.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1574126683.git.daniel@iogearbox.net>
 References: <cover.1574126683.git.daniel@iogearbox.net>
@@ -44,359 +44,321 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add several BPF kselftest cases for tail calls which test the various
-patch directions (NOP -> JMP, JMP -> JMP, JMP -> NOP), and that multiple
-locations are patched.
+This work adds program tracking to prog array maps. This is needed such
+that upon prog array updates/deletions we can fix up all programs which
+make use of this tail call map. We add ops->map_poke_{un,}track() helpers
+to maps to maintain the list of programs and ops->map_poke_run() for
+triggering the actual update. bpf_array_aux is extended to contain the
+list head and poke_mutex in order to serialize program patching during
+updates/deletions. bpf_free_used_maps() will untrack the program shortly
+before dropping the reference to the map.
 
-  # ./test_progs -n 44
-  #44 tailcalls:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+The prog_array_map_poke_run() is triggered during updates/deletions and
+walks the maintained prog list. It checks in their poke_tabs whether the
+map and key is matching and runs the actual bpf_arch_text_poke() for
+patching in the nop or new jmp location. Depending on the type of update,
+we use one of BPF_MOD_{NOP_TO_JUMP,JUMP_TO_NOP,JUMP_TO_JUMP}.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- .../selftests/bpf/prog_tests/tailcalls.c      | 210 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/tailcall1.c |  48 ++++
- tools/testing/selftests/bpf/progs/tailcall2.c |  59 +++++
- 3 files changed, 317 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tailcalls.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall1.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall2.c
+ include/linux/bpf.h   |  36 ++++++++++
+ kernel/bpf/arraymap.c | 151 +++++++++++++++++++++++++++++++++++++++++-
+ kernel/bpf/core.c     |   9 ++-
+ 3 files changed, 193 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-new file mode 100644
-index 000000000000..6862bb5f9688
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-@@ -0,0 +1,210 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index cad4382c1265..c599bd5071fc 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -22,6 +22,7 @@ struct bpf_verifier_env;
+ struct bpf_verifier_log;
+ struct perf_event;
+ struct bpf_prog;
++struct bpf_prog_aux;
+ struct bpf_map;
+ struct sock;
+ struct seq_file;
+@@ -64,6 +65,12 @@ struct bpf_map_ops {
+ 			     const struct btf_type *key_type,
+ 			     const struct btf_type *value_type);
+ 
++	/* Prog poke tracking helpers. */
++	int (*map_poke_track)(struct bpf_map *map, struct bpf_prog_aux *aux);
++	void (*map_poke_untrack)(struct bpf_map *map, struct bpf_prog_aux *aux);
++	void (*map_poke_run)(struct bpf_map *map, u32 key, struct bpf_prog *old,
++			     struct bpf_prog *new);
 +
-+static void test_tailcall_1(void)
+ 	/* Direct value access helpers. */
+ 	int (*map_direct_value_addr)(const struct bpf_map *map,
+ 				     u64 *imm, u32 off);
+@@ -588,6 +595,9 @@ struct bpf_array_aux {
+ 	 */
+ 	enum bpf_prog_type type;
+ 	bool jited;
++	/* Programs with direct jumps into programs part of this array. */
++	struct list_head poke_progs;
++	struct mutex poke_mutex;
+ };
+ 
+ struct bpf_array {
+@@ -1325,4 +1335,30 @@ enum bpf_text_poke_type {
+ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 		       void *addr1, void *addr2);
+ 
++static inline void bpf_map_poke_lock(struct bpf_map *map)
++	__acquires(&container_of(map, struct bpf_array, map)->aux->poke_mutex)
 +{
-+	int err, map_fd, prog_fd, main_fd, i, j;
-+	struct bpf_map *prog_array;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	__u32 retval, duration;
-+	char prog_name[32];
-+	char buff[128] = {};
++#ifdef CONFIG_BPF_SYSCALL
++	struct bpf_array_aux *aux;
 +
-+	err = bpf_prog_load("tailcall1.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
-+			    &prog_fd);
-+	if (CHECK_FAIL(err))
-+		return;
-+
-+	prog = bpf_object__find_program_by_title(obj, "classifier");
-+	if (CHECK_FAIL(!prog))
-+		goto out;
-+
-+	main_fd = bpf_program__fd(prog);
-+	if (CHECK_FAIL(main_fd < 0))
-+		goto out;
-+
-+	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
-+	if (CHECK_FAIL(!prog_array))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(prog_array);
-+	if (CHECK_FAIL(map_fd < 0))
-+		goto out;
-+
-+	/* Testing NOP -> JMP */
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
-+
-+		prog = bpf_object__find_program_by_title(obj, prog_name);
-+		if (CHECK_FAIL(!prog))
-+			goto out;
-+
-+		prog_fd = bpf_program__fd(prog);
-+		if (CHECK_FAIL(prog_fd < 0))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+					&duration, &retval, NULL);
-+		CHECK(err || retval != i, "tailcall",
-+		      "err %d errno %d retval %d\n", err, errno, retval);
-+
-+		err = bpf_map_delete_elem(map_fd, &i);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	/* Testing JMP -> NOP */
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 3, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+
-+	/* Testing JMP -> JMP */
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
-+
-+		prog = bpf_object__find_program_by_title(obj, prog_name);
-+		if (CHECK_FAIL(!prog))
-+			goto out;
-+
-+		prog_fd = bpf_program__fd(prog);
-+		if (CHECK_FAIL(prog_fd < 0))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 0, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		j = bpf_map__def(prog_array)->max_entries - 1 - i;
-+		snprintf(prog_name, sizeof(prog_name), "classifier/%i", j);
-+
-+		prog = bpf_object__find_program_by_title(obj, prog_name);
-+		if (CHECK_FAIL(!prog))
-+			goto out;
-+
-+		prog_fd = bpf_program__fd(prog);
-+		if (CHECK_FAIL(prog_fd < 0))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		j = bpf_map__def(prog_array)->max_entries - 1 - i;
-+
-+		err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+					&duration, &retval, NULL);
-+		CHECK(err || retval != j, "tailcall",
-+		      "err %d errno %d retval %d\n", err, errno, retval);
-+
-+		err = bpf_map_delete_elem(map_fd, &i);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 3, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+out:
-+	bpf_object__close(obj);
++	aux = container_of(map, struct bpf_array, map)->aux;
++	if (aux)
++		mutex_lock(&aux->poke_mutex);
++#endif
++	__acquire(&aux->poke_mutex);
 +}
 +
-+static void test_tailcall_2(void)
++static inline void bpf_map_poke_unlock(struct bpf_map *map)
++	__releases(&container_of(map, struct bpf_array, map)->aux->poke_mutex)
 +{
-+	int err, map_fd, prog_fd, main_fd, i;
-+	struct bpf_map *prog_array;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	__u32 retval, duration;
-+	char prog_name[32];
-+	char buff[128] = {};
++#ifdef CONFIG_BPF_SYSCALL
++	struct bpf_array_aux *aux;
 +
-+	err = bpf_prog_load("tailcall2.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
-+			    &prog_fd);
-+	if (CHECK_FAIL(err))
-+		return;
++	aux = container_of(map, struct bpf_array, map)->aux;
++	if (aux)
++		mutex_unlock(&aux->poke_mutex);
++#endif
++	__release(&aux->poke_mutex);
++}
 +
-+	prog = bpf_object__find_program_by_title(obj, "classifier");
-+	if (CHECK_FAIL(!prog))
-+		goto out;
+ #endif /* _LINUX_BPF_H */
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 5be12db129cc..d2b559c6659e 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -586,10 +586,14 @@ int bpf_fd_array_map_update_elem(struct bpf_map *map, struct file *map_file,
+ 	if (IS_ERR(new_ptr))
+ 		return PTR_ERR(new_ptr);
+ 
++	bpf_map_poke_lock(map);
+ 	old_ptr = xchg(array->ptrs + index, new_ptr);
++	if (map->ops->map_poke_run)
++		map->ops->map_poke_run(map, index, old_ptr, new_ptr);
++	bpf_map_poke_unlock(map);
 +
-+	main_fd = bpf_program__fd(prog);
-+	if (CHECK_FAIL(main_fd < 0))
-+		goto out;
+ 	if (old_ptr)
+ 		map->ops->map_fd_put_ptr(old_ptr);
+-
+ 	return 0;
+ }
+ 
+@@ -602,7 +606,12 @@ static int fd_array_map_delete_elem(struct bpf_map *map, void *key)
+ 	if (index >= array->map.max_entries)
+ 		return -E2BIG;
+ 
++	bpf_map_poke_lock(map);
+ 	old_ptr = xchg(array->ptrs + index, NULL);
++	if (map->ops->map_poke_run)
++		map->ops->map_poke_run(map, index, old_ptr, NULL);
++	bpf_map_poke_unlock(map);
 +
-+	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
-+	if (CHECK_FAIL(!prog_array))
-+		goto out;
+ 	if (old_ptr) {
+ 		map->ops->map_fd_put_ptr(old_ptr);
+ 		return 0;
+@@ -671,6 +680,135 @@ static void prog_array_map_seq_show_elem(struct bpf_map *map, void *key,
+ 	rcu_read_unlock();
+ }
+ 
++struct prog_poke_elem {
++	struct list_head list;
++	struct bpf_prog_aux *aux;
++};
 +
-+	map_fd = bpf_map__fd(prog_array);
-+	if (CHECK_FAIL(map_fd < 0))
-+		goto out;
++static int prog_array_map_poke_track(struct bpf_map *map,
++				     struct bpf_prog_aux *prog_aux)
++{
++	struct prog_poke_elem *elem;
++	struct bpf_array_aux *aux;
++	int ret = 0;
 +
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
-+
-+		prog = bpf_object__find_program_by_title(obj, prog_name);
-+		if (CHECK_FAIL(!prog))
-+			goto out;
-+
-+		prog_fd = bpf_program__fd(prog);
-+		if (CHECK_FAIL(prog_fd < 0))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+		if (CHECK_FAIL(err))
++	aux = container_of(map, struct bpf_array, map)->aux;
++	mutex_lock(&aux->poke_mutex);
++	list_for_each_entry(elem, &aux->poke_progs, list) {
++		if (elem->aux == prog_aux)
 +			goto out;
 +	}
 +
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 2, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+
-+	/* Testing JMP -> NOP in entry() and bpf_func_1() */
-+	i = 2;
-+	err = bpf_map_delete_elem(map_fd, &i);
-+	if (CHECK_FAIL(err))
++	elem = kmalloc(sizeof(*elem), GFP_KERNEL);
++	if (!elem) {
++		ret = -ENOMEM;
 +		goto out;
-+
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 1, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+
-+	i = 0;
-+	err = bpf_map_delete_elem(map_fd, &i);
-+	if (CHECK_FAIL(err))
-+		goto out;
-+
-+	/* Tail call limit */
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 3, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+out:
-+	bpf_object__close(obj);
-+}
-+
-+void test_tailcalls(void)
-+{
-+	test_tailcall_1();
-+	test_tailcall_2();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/tailcall1.c b/tools/testing/selftests/bpf/progs/tailcall1.c
-new file mode 100644
-index 000000000000..63531e1a9fa4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall1.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+
-+#include "bpf_helpers.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 3);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
-+
-+#define TAIL_FUNC(x) 				\
-+	SEC("classifier/" #x)			\
-+	int bpf_func_##x(struct __sk_buff *skb)	\
-+	{					\
-+		return x;			\
 +	}
-+TAIL_FUNC(0)
-+TAIL_FUNC(1)
-+TAIL_FUNC(2)
 +
-+SEC("classifier")
-+int entry(struct __sk_buff *skb)
-+{
-+	/* Multiple locations to make sure we patch
-+	 * all of them.
++	INIT_LIST_HEAD(&elem->list);
++	/* We must track the program's aux info at this point in time
++	 * since the program pointer itself may not be stable yet, see
++	 * also comment in prog_array_map_poke_run().
 +	 */
-+	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call(skb, &jmp_table, 0);
++	elem->aux = prog_aux;
 +
-+	bpf_tail_call(skb, &jmp_table, 1);
-+	bpf_tail_call(skb, &jmp_table, 1);
-+	bpf_tail_call(skb, &jmp_table, 1);
-+	bpf_tail_call(skb, &jmp_table, 1);
-+
-+	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call(skb, &jmp_table, 2);
-+
-+	return 3;
++	list_add_tail(&elem->list, &aux->poke_progs);
++out:
++	mutex_unlock(&aux->poke_mutex);
++	return ret;
 +}
 +
-+char __license[] SEC("license") = "GPL";
-+int _version SEC("version") = 1;
-diff --git a/tools/testing/selftests/bpf/progs/tailcall2.c b/tools/testing/selftests/bpf/progs/tailcall2.c
-new file mode 100644
-index 000000000000..21c85c477210
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall2.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+
-+#include "bpf_helpers.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 5);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
-+
-+SEC("classifier/0")
-+int bpf_func_0(struct __sk_buff *skb)
++static void prog_array_map_poke_untrack(struct bpf_map *map,
++					struct bpf_prog_aux *prog_aux)
 +{
-+	bpf_tail_call(skb, &jmp_table, 1);
-+	return 0;
++	struct prog_poke_elem *elem, *tmp;
++	struct bpf_array_aux *aux;
++
++	aux = container_of(map, struct bpf_array, map)->aux;
++	mutex_lock(&aux->poke_mutex);
++	list_for_each_entry_safe(elem, tmp, &aux->poke_progs, list) {
++		if (elem->aux == prog_aux) {
++			list_del_init(&elem->list);
++			kfree(elem);
++		}
++	}
++	mutex_unlock(&aux->poke_mutex);
 +}
 +
-+SEC("classifier/1")
-+int bpf_func_1(struct __sk_buff *skb)
++static void prog_array_map_poke_run(struct bpf_map *map, u32 key,
++				    struct bpf_prog *old,
++				    struct bpf_prog *new)
 +{
-+	bpf_tail_call(skb, &jmp_table, 2);
-+	return 1;
++	enum bpf_text_poke_type type;
++	struct prog_poke_elem *elem;
++	struct bpf_array_aux *aux;
++
++	if (!old && new)
++		type = BPF_MOD_NOP_TO_JUMP;
++	else if (old && !new)
++		type = BPF_MOD_JUMP_TO_NOP;
++	else if (old && new)
++		type = BPF_MOD_JUMP_TO_JUMP;
++	else
++		return;
++
++	aux = container_of(map, struct bpf_array, map)->aux;
++	WARN_ON_ONCE(!mutex_is_locked(&aux->poke_mutex));
++
++	list_for_each_entry(elem, &aux->poke_progs, list) {
++		struct bpf_jit_poke_descriptor *poke;
++		int i, ret;
++
++		for (i = 0; i < elem->aux->size_poke_tab; i++) {
++			poke = &elem->aux->poke_tab[i];
++
++			/* Few things to be aware of:
++			 *
++			 * 1) We can only ever access aux in this context, but
++			 *    not aux->prog since it might not be stable yet and
++			 *    there could be danger of use after free otherwise.
++			 * 2) Initially when we start tracking aux, the program
++			 *    is not JITed yet and also does not have a kallsyms
++			 *    entry. We skip these as poke->ip_stable is not
++			 *    active yet. The JIT will do the final fixup before
++			 *    setting it stable. The various poke->ip_stable are
++			 *    successively activated, so tail call updates can
++			 *    arrive from here while JIT is still finishing its
++			 *    final fixup for non-activated poke entries.
++			 * 3) On program teardown, the program's kallsym entry gets
++			 *    removed out of RCU callback, but we can only untrack
++			 *    from sleepable context, therefore bpf_arch_text_poke()
++			 *    might not see that this is in BPF text section and
++			 *    bails out with -EINVAL. As these are unreachable since
++			 *    RCU grace period already passed, we simply skip them.
++			 * 4) Also programs reaching refcount of zero while patching
++			 *    is in progress is okay since we're protected under
++			 *    poke_mutex and untrack the programs before the JIT
++			 *    buffer is freed. When we're still in the middle of
++			 *    patching and suddenly kallsyms entry of the program
++			 *    gets evicted, we just skip the rest which is fine due
++			 *    to point 3).
++			 * 5) Any other error happening below from bpf_arch_text_poke()
++			 *    is a unexpected bug.
++			 */
++			if (!READ_ONCE(poke->ip_stable))
++				continue;
++			if (poke->reason != BPF_POKE_REASON_TAIL_CALL)
++				continue;
++			if (poke->tail_call.map != map ||
++			    poke->tail_call.key != key)
++				continue;
++
++			ret = bpf_arch_text_poke(poke->ip, type,
++						 old ? (u8 *)old->bpf_func +
++						 poke->adj_off : NULL,
++						 new ? (u8 *)new->bpf_func +
++						 poke->adj_off : NULL);
++			BUG_ON(ret < 0 && ret != -EINVAL);
++		}
++	}
 +}
 +
-+SEC("classifier/2")
-+int bpf_func_2(struct __sk_buff *skb)
-+{
-+	return 2;
-+}
+ static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)
+ {
+ 	struct bpf_array_aux *aux;
+@@ -680,6 +818,9 @@ static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)
+ 	if (!aux)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	INIT_LIST_HEAD(&aux->poke_progs);
++	mutex_init(&aux->poke_mutex);
 +
-+SEC("classifier/3")
-+int bpf_func_3(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &jmp_table, 4);
-+	return 3;
-+}
-+
-+SEC("classifier/4")
-+int bpf_func_4(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &jmp_table, 3);
-+	return 4;
-+}
-+
-+SEC("classifier")
-+int entry(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &jmp_table, 0);
-+	/* Check multi-prog update. */
-+	bpf_tail_call(skb, &jmp_table, 2);
-+	/* Check tail call limit. */
-+	bpf_tail_call(skb, &jmp_table, 3);
-+	return 3;
-+}
-+
-+char __license[] SEC("license") = "GPL";
-+int _version SEC("version") = 1;
+ 	map = array_map_alloc(attr);
+ 	if (IS_ERR(map)) {
+ 		kfree(aux);
+@@ -692,9 +833,14 @@ static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)
+ 
+ static void prog_array_map_free(struct bpf_map *map)
+ {
++	struct prog_poke_elem *elem, *tmp;
+ 	struct bpf_array_aux *aux;
+ 
+ 	aux = container_of(map, struct bpf_array, map)->aux;
++	list_for_each_entry_safe(elem, tmp, &aux->poke_progs, list) {
++		list_del_init(&elem->list);
++		kfree(elem);
++	}
+ 	kfree(aux);
+ 	fd_array_map_free(map);
+ }
+@@ -703,6 +849,9 @@ const struct bpf_map_ops prog_array_map_ops = {
+ 	.map_alloc_check = fd_array_map_alloc_check,
+ 	.map_alloc = prog_array_map_alloc,
+ 	.map_free = prog_array_map_free,
++	.map_poke_track = prog_array_map_poke_track,
++	.map_poke_untrack = prog_array_map_poke_untrack,
++	.map_poke_run = prog_array_map_poke_run,
+ 	.map_get_next_key = array_map_get_next_key,
+ 	.map_lookup_elem = fd_array_map_lookup_elem,
+ 	.map_delete_elem = fd_array_map_delete_elem,
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 608b7085e0c9..49e32acad7d8 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2050,11 +2050,16 @@ static void bpf_free_cgroup_storage(struct bpf_prog_aux *aux)
+ 
+ static void bpf_free_used_maps(struct bpf_prog_aux *aux)
+ {
++	struct bpf_map *map;
+ 	int i;
+ 
+ 	bpf_free_cgroup_storage(aux);
+-	for (i = 0; i < aux->used_map_cnt; i++)
+-		bpf_map_put(aux->used_maps[i]);
++	for (i = 0; i < aux->used_map_cnt; i++) {
++		map = aux->used_maps[i];
++		if (map->ops->map_poke_untrack)
++			map->ops->map_poke_untrack(map, aux);
++		bpf_map_put(map);
++	}
+ 	kfree(aux->used_maps);
+ }
+ 
 -- 
 2.21.0
 
