@@ -8,57 +8,57 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2DA4C432C0
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:30:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29523C43215
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:31:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 96B932245D
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:30:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6EDD22464
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:31:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XtwPjozv"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Cmi03rmw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727334AbfKSTav (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Nov 2019 14:30:51 -0500
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:56013 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727212AbfKSTat (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Nov 2019 14:30:49 -0500
-Received: by mail-vk1-f201.google.com with SMTP id n6so10250369vke.22
-        for <bpf@vger.kernel.org>; Tue, 19 Nov 2019 11:30:48 -0800 (PST)
+        id S1727512AbfKSTbF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Nov 2019 14:31:05 -0500
+Received: from mail-pg1-f201.google.com ([209.85.215.201]:51859 "EHLO
+        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727535AbfKSTbF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Nov 2019 14:31:05 -0500
+Received: by mail-pg1-f201.google.com with SMTP id f18so4026231pgh.18
+        for <bpf@vger.kernel.org>; Tue, 19 Nov 2019 11:31:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=BU9DBWW2HRmi8gaM0qUEqABgtZ1XVgljZH1NSHAlVa8=;
-        b=XtwPjozvlUmOzNljiZwCmT3QoDNXX+G5PoG1sWdDK/NV2k0FpJn6xgJibB/exhoPxN
-         EdPpy0quITzbShznByLhs+3Ul1dlH/I8Hdw2x5zUzJ/ZmvJ8fBpmEsyjAzX/N1NlIp5K
-         sspeqi13SrvJn5A0YnysnK4KEJidNWDHThbxZKxLdfQbCq3pyS20hxcN+3V2Btmhaphl
-         /P1x4/Tjkv7pamotGAnYNZ/wHDLqselSXLQ7xysN7JGSi05ronR85Uj9+fZFsqDsGQkA
-         JUBZzSjO8JjnXxIiEdTm7ldoUQTb8fc1iOKWNkuyzimr91MealwabgBn1apU9PhQKBQN
-         /YBA==
+        bh=UVq6jpQg/LNjDNZAINhBK5BhAgNJ+pc6Cyp4zXHQ5bk=;
+        b=Cmi03rmwd//plD6T6OyZ0hvhNFrDL0J81Qra4TZilKuIiud/Eals/ds9ajIhcTHzpa
+         0rxRyib9k8QYpS9iOCxXnZ4IggyuYyaP+/EeSyaUNDiDg1HRPl7FPkeBbFzOkwOYfwi0
+         /wd28w4jzMYma6uMVcQXiOrwJVw9j7diDhfocjonEK6wEmJBoFFDS0o58GTZPGvPtq/v
+         rydVrgkLMErJQAIZ1Wy54HCK4PUSkICy3Hqu39g9iv/2u5t4DTJZuTMPRyf4UH0vfBUw
+         66Ocf89l+zmLYxIouwso9+flH4N6osHha3P5GdmKW3qRieepVOtgn0JS6Um4Z5Lu/5N/
+         zHFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=BU9DBWW2HRmi8gaM0qUEqABgtZ1XVgljZH1NSHAlVa8=;
-        b=S9HzMQfEZFC5SS2ION6yvqxv5yPg5j1zlo9DrGu2nVNBaYx0OLn8N00CcSLyTKqApu
-         IH+YhIz4otBjD/xGpXkaDn9slrOgvGiN+BRhF3w3Etiy30RwEBih38qOyLbhZDjgmASd
-         6jEKmKUAedTlM2Xv/cRUd9SOo7/FTve2e9zRY3+GzKkHbiUQWF9XFZe+6yYrOEwIsp8x
-         5pmDWHTzppnS91FNV08WSHZp+E/rSt72JKCp025DhjLKLWQh2aea0hAaSb2vvBJl+UrZ
-         y9QTQEZzSEVOxUqidEEBUDXaJP6yijQFXgFVCxi33v4w1Jsy/xulnSAaIRbHUY57kaAb
-         ueig==
-X-Gm-Message-State: APjAAAXkCv8QB1Yc8sE3HDdmXn9r2vti/TbsP6UYzCCZUA8KvkaKKqKh
-        ClMUrbzquAMQLxNjU2V+BB59m3a6BIjk
-X-Google-Smtp-Source: APXvYqyQ1nwNFQEYf1+pCLtAq5u9nv/hY74ajRfzunnSJv9aAeYBDYoBf9/AAtv3yTJJpTgG2sRflKvoQCzQ
-X-Received: by 2002:ab0:200c:: with SMTP id v12mr20984611uak.26.1574191848119;
- Tue, 19 Nov 2019 11:30:48 -0800 (PST)
-Date:   Tue, 19 Nov 2019 11:30:29 -0800
+        bh=UVq6jpQg/LNjDNZAINhBK5BhAgNJ+pc6Cyp4zXHQ5bk=;
+        b=LxGrOuvT4Y/U8BdYdfuUzEB+k3iI5aTyzfqhStBkQvXjmXe6EHGX7CrgDogEoMTnez
+         rl7l2VGD9biFN0W0/lT5NXA49Q0YKJJM1X6o9OEm6TTmchDq/5YysgozapiUcPXCU+VZ
+         jcj2YiEkk+Ma//AXReYMg1wxLzsbKPcZh75dCSOGNlexiwBYFS5q6FgZY752g3b3LRHB
+         cB3sN01DHs1bP8PxXrs8l/bu7fu6QoDFbnAp+1AX/46Pz3SIGR7IgX41D/C700NLVC/n
+         72azCAzmN85XDzpTdRuYtOsysJBoVZAS4MJmzykinyGEjnsKDL/R5ribaPgSWjxV9MvB
+         gFlg==
+X-Gm-Message-State: APjAAAUk6HzE2KP82j7jERpkTWS0093P+h5eOmN2etg/ODnvWbDglJGw
+        hiRt4t6FEqRrRt8Ltx9EfUI198CB1W6i
+X-Google-Smtp-Source: APXvYqzM02kO6RhwHi8KQwUiwrhvbj3RsvoKVxBf7q0qYIiqEuz5qZ8IOVzl8y6qv6pOLHl2zSvlGy7/tsP5
+X-Received: by 2002:a63:a804:: with SMTP id o4mr6874477pgf.401.1574191863504;
+ Tue, 19 Nov 2019 11:31:03 -0800 (PST)
+Date:   Tue, 19 Nov 2019 11:30:35 -0800
 In-Reply-To: <20191119193036.92831-1-brianvv@google.com>
-Message-Id: <20191119193036.92831-3-brianvv@google.com>
+Message-Id: <20191119193036.92831-9-brianvv@google.com>
 Mime-Version: 1.0
 References: <20191119193036.92831-1-brianvv@google.com>
 X-Mailer: git-send-email 2.24.0.432.g9d3f5f5b63-goog
-Subject: [PATCH v2 bpf-next 2/9] bpf: add generic support for lookup and
- lookup_and_delete batch ops
+Subject: [PATCH v2 bpf-next 8/9] selftests/bpf: add batch ops testing for hmap
+ and hmap_percpu
 From:   Brian Vazquez <brianvv@google.com>
 To:     Brian Vazquez <brianvv.kernel@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -75,328 +75,286 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit introduces generic support for the bpf_map_lookup_batch and
-bpf_map_lookup_and_delete_batch ops. This implementation can be used by
-almost all the bpf maps since its core implementation is relying on the
-existing map_get_next_key, map_lookup_elem and map_delete_elem
-functions. The bpf syscall subcommands introduced are:
+From: Yonghong Song <yhs@fb.com>
 
-  BPF_MAP_LOOKUP_BATCH
-  BPF_MAP_LOOKUP_AND_DELETE_BATCH
+Tested bpf_map_lookup_and_delete_batch() and bpf_map_update_batch()
+functionality.
+  $ ./test_maps
+    ...
+      test_hmap_lookup_and_delete_batch:PASS
+      test_pcpu_hmap_lookup_and_delete_batch:PASS
+    ...
 
-The UAPI attribute is:
-
-  struct { /* struct used by BPF_MAP_*_BATCH commands */
-         __aligned_u64   in_batch;       /* start batch,
-                                          * NULL to start from beginning
-                                          */
-         __aligned_u64   out_batch;      /* output: next start batch */
-         __aligned_u64   keys;
-         __aligned_u64   values;
-         __u32           count;          /* input/output:
-                                          * input: # of key/value
-                                          * elements
-                                          * output: # of filled elements
-                                          */
-         __u32           map_fd;
-         __u64           elem_flags;
-         __u64           flags;
-  } batch;
-
-in_batch/out_batch are opaque values use to communicate between
-user/kernel space, in_batch/out_batch must be of key_size length.
-
-To start iterating from the beginning in_batch must be null,
-count is the # of key/value elements to retrieve. Note that the 'keys'
-buffer must be a buffer of key_size * count size and the 'values' buffer
-must be value_size * count, where value_size must be aligned to 8 bytes
-by userspace if it's dealing with percpu maps. 'count' will contain the
-number of keys/values successfully retrieved. Note that 'count' is an
-input/output variable and it can contain a lower value after a call.
-
-If there's no more entries to retrieve, ENOENT will be returned. If error
-is ENOENT, count might be > 0 in case it copied some values but there were
-no more entries to retrieve.
-
-Note that if the return code is an error and not -EFAULT,
-count indicates the number of elements successfully processed.
-
-Suggested-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Brian Vazquez <brianvv@google.com>
 Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Brian Vazquez <brianvv@google.com>
 ---
- include/linux/bpf.h      |  11 +++
- include/uapi/linux/bpf.h |  19 +++++
- kernel/bpf/syscall.c     | 176 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 206 insertions(+)
+ .../map_lookup_and_delete_batch_htab.c        | 257 ++++++++++++++++++
+ 1 file changed, 257 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch_htab.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 5b81cde47314e..767a823dbac74 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -41,6 +41,11 @@ struct bpf_map_ops {
- 	int (*map_get_next_key)(struct bpf_map *map, void *key, void *next_key);
- 	void (*map_release_uref)(struct bpf_map *map);
- 	void *(*map_lookup_elem_sys_only)(struct bpf_map *map, void *key);
-+	int (*map_lookup_batch)(struct bpf_map *map, const union bpf_attr *attr,
-+				union bpf_attr __user *uattr);
-+	int (*map_lookup_and_delete_batch)(struct bpf_map *map,
-+					   const union bpf_attr *attr,
-+					   union bpf_attr __user *uattr);
- 
- 	/* funcs callable from userspace and from eBPF programs */
- 	void *(*map_lookup_elem)(struct bpf_map *map, void *key);
-@@ -797,6 +802,12 @@ void bpf_map_charge_move(struct bpf_map_memory *dst,
- void *bpf_map_area_alloc(size_t size, int numa_node);
- void bpf_map_area_free(void *base);
- void bpf_map_init_from_attr(struct bpf_map *map, union bpf_attr *attr);
-+int  generic_map_lookup_batch(struct bpf_map *map,
-+			      const union bpf_attr *attr,
-+			      union bpf_attr __user *uattr);
-+int  generic_map_lookup_and_delete_batch(struct bpf_map *map,
-+					 const union bpf_attr *attr,
-+					 union bpf_attr __user *uattr);
- 
- extern int sysctl_unprivileged_bpf_disabled;
- 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 4842a134b202a..e60b7b7cda61a 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -107,6 +107,8 @@ enum bpf_cmd {
- 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
- 	BPF_MAP_FREEZE,
- 	BPF_BTF_GET_NEXT_ID,
-+	BPF_MAP_LOOKUP_BATCH,
-+	BPF_MAP_LOOKUP_AND_DELETE_BATCH,
- };
- 
- enum bpf_map_type {
-@@ -400,6 +402,23 @@ union bpf_attr {
- 		__u64		flags;
- 	};
- 
-+	struct { /* struct used by BPF_MAP_*_BATCH commands */
-+		__aligned_u64	in_batch;	/* start batch,
-+						 * NULL to start from beginning
-+						 */
-+		__aligned_u64	out_batch;	/* output: next start batch */
-+		__aligned_u64	keys;
-+		__aligned_u64	values;
-+		__u32		count;		/* input/output:
-+						 * input: # of key/value
-+						 * elements
-+						 * output: # of filled elements
-+						 */
-+		__u32		map_fd;
-+		__u64		elem_flags;
-+		__u64		flags;
-+	} batch;
+diff --git a/tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch_htab.c b/tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch_htab.c
+new file mode 100644
+index 0000000000000..93e024cb85c60
+--- /dev/null
++++ b/tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch_htab.c
+@@ -0,0 +1,257 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2019 Facebook  */
++#include <stdio.h>
++#include <errno.h>
++#include <string.h>
 +
- 	struct { /* anonymous struct used by BPF_PROG_LOAD command */
- 		__u32		prog_type;	/* one of enum bpf_prog_type */
- 		__u32		insn_cnt;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index cc714c9d5b4cc..d0d3d0e0eaca4 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1127,6 +1127,124 @@ static int map_get_next_key(union bpf_attr *attr)
- 	return err;
- }
- 
-+static int __generic_map_lookup_batch(struct bpf_map *map,
-+				      const union bpf_attr *attr,
-+				      union bpf_attr __user *uattr,
-+				      bool do_delete)
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
++
++#include <bpf_util.h>
++#include <test_maps.h>
++
++static void map_batch_update(int map_fd, __u32 max_entries, int *keys,
++			     void *values, bool is_pcpu)
 +{
-+	void __user *ubatch = u64_to_user_ptr(attr->batch.in_batch);
-+	void __user *uobatch = u64_to_user_ptr(attr->batch.out_batch);
-+	void __user *values = u64_to_user_ptr(attr->batch.values);
-+	void __user *keys = u64_to_user_ptr(attr->batch.keys);
-+	void *buf, *prev_key, *key, *value;
-+	u32 value_size, cp, max_count;
-+	bool first_key = false;
-+	int err, retry = 3;
++	typedef BPF_DECLARE_PERCPU(int, value);
++	int i, j, err;
++	value *v;
 +
-+	if (attr->batch.elem_flags & ~BPF_F_LOCK)
-+		return -EINVAL;
++	if (is_pcpu)
++		v = (value *)values;
 +
-+	if ((attr->batch.elem_flags & BPF_F_LOCK) &&
-+	    !map_value_has_spin_lock(map)) {
-+		err = -EINVAL;
-+		goto err_put;
++	for (i = 0; i < max_entries; i++) {
++		keys[i] = i + 1;
++		if (is_pcpu)
++			for (j = 0; j < bpf_num_possible_cpus(); j++)
++				bpf_percpu(v[i], j) = i + 2 + j;
++		else
++			((int *)values)[i] = i + 2;
 +	}
 +
-+	if (map->map_type == BPF_MAP_TYPE_QUEUE ||
-+	    map->map_type == BPF_MAP_TYPE_STACK) {
-+		err = -ENOTSUPP;
-+		goto err_put;
++	err = bpf_map_update_batch(map_fd, keys, values, &max_entries, 0, 0);
++	CHECK(err, "bpf_map_update_batch()", "error:%s\n", strerror(errno));
++}
++
++static void map_batch_verify(int *visited, __u32 max_entries,
++			     int *keys, void *values, bool is_pcpu)
++{
++	typedef BPF_DECLARE_PERCPU(int, value);
++	value *v;
++	int i, j;
++
++	if (is_pcpu)
++		v = (value *)values;
++
++	memset(visited, 0, max_entries * sizeof(*visited));
++	for (i = 0; i < max_entries; i++) {
++
++		if (is_pcpu) {
++			for (j = 0; j < bpf_num_possible_cpus(); j++) {
++				CHECK(keys[i] + 1 + j != bpf_percpu(v[i], j),
++				      "key/value checking",
++				      "error: i %d j %d key %d value %d\n",
++				      i, j, keys[i], bpf_percpu(v[i],  j));
++			}
++		} else {
++			CHECK(keys[i] + 1 != ((int *)values)[i],
++			      "key/value checking",
++			      "error: i %d key %d value %d\n", i, keys[i],
++			      ((int *)values)[i]);
++		}
++
++		visited[i] = 1;
++
 +	}
-+
-+	value_size = bpf_map_value_size(map);
-+
-+	max_count = attr->batch.count;
-+	if (!max_count)
-+		return 0;
-+
-+	err = -ENOMEM;
-+	buf = kmalloc(map->key_size + value_size, GFP_USER | __GFP_NOWARN);
-+	if (!buf)
-+		goto err_put;
-+
-+	err = -EFAULT;
-+	first_key = false;
-+	if (ubatch && copy_from_user(buf, ubatch, map->key_size))
-+		goto free_buf;
-+	key = buf;
-+	value = key + map->key_size;
-+	if (!ubatch) {
-+		prev_key = NULL;
-+		first_key = true;
++	for (i = 0; i < max_entries; i++) {
++		CHECK(visited[i] != 1, "visited checking",
++		      "error: keys array at index %d missing\n", i);
 +	}
++}
++
++void __test_map_lookup_and_delete_batch(bool is_pcpu)
++{
++	int map_type = is_pcpu ? BPF_MAP_TYPE_PERCPU_HASH : BPF_MAP_TYPE_HASH;
++	struct bpf_create_map_attr xattr = {
++		.name = "hash_map",
++		.map_type = map_type,
++		.key_size = sizeof(int),
++		.value_size = sizeof(int),
++	};
++	typedef BPF_DECLARE_PERCPU(int, value);
++	int map_fd, *keys, *visited, key;
++	__u32 batch = 0, count, total, total_success;
++	const __u32 max_entries = 10;
++	int err, i, step, value_size;
++	value pcpu_values[10];
++	bool nospace_err;
++	void *values;
++
++	xattr.max_entries = max_entries;
++	map_fd = bpf_create_map_xattr(&xattr);
++	CHECK(map_fd == -1,
++	      "bpf_create_map_xattr()", "error:%s\n", strerror(errno));
++
++	value_size = is_pcpu ? sizeof(value) : sizeof(int);
++	keys = malloc(max_entries * sizeof(int));
++	if (is_pcpu)
++		values = pcpu_values;
++	else
++		values = malloc(max_entries * sizeof(int));
++	visited = malloc(max_entries * sizeof(int));
++	CHECK(!keys || !values || !visited, "malloc()",
++	      "error:%s\n", strerror(errno));
++
++	/* test 1: lookup/delete an empty hash table, -ENOENT */
++	count = max_entries;
++	err = bpf_map_lookup_and_delete_batch(map_fd, NULL, &batch, keys,
++					      values, &count, 0, 0);
++	CHECK((err && errno != ENOENT), "empty map",
++	      "error: %s\n", strerror(errno));
++
++	/* populate elements to the map */
++	map_batch_update(map_fd, max_entries, keys, values, is_pcpu);
++
++	/* test 2: lookup/delete with count = 0, success */
++	batch = 0;
++	count = 0;
++	err = bpf_map_lookup_and_delete_batch(map_fd, NULL, &batch, keys,
++					      values, &count, 0, 0);
++	CHECK(err, "count = 0", "error: %s\n", strerror(errno));
++
++	/* test 3: lookup/delete with count = max_entries, success */
++	memset(keys, 0, max_entries * sizeof(*keys));
++	memset(values, 0, max_entries * value_size);
++	count = max_entries;
++	batch = 0;
++	err = bpf_map_lookup_and_delete_batch(map_fd, NULL, &batch, keys,
++					      values, &count, 0, 0);
++	CHECK((err && errno != ENOENT), "count = max_entries",
++	       "error: %s\n", strerror(errno));
++	CHECK(count != max_entries, "count = max_entries",
++	      "count = %u, max_entries = %u\n", count, max_entries);
++	map_batch_verify(visited, max_entries, keys, values, is_pcpu);
++
++	/* bpf_map_get_next_key() should return -ENOENT for an empty map. */
++	err = bpf_map_get_next_key(map_fd, NULL, &key);
++	CHECK(!err, "bpf_map_get_next_key()", "error: %s\n", strerror(errno));
++
++	/* test 4: lookup/delete in a loop with various steps. */
++	total_success = 0;
++	for (step = 1; step < max_entries; step++) {
++		map_batch_update(map_fd, max_entries, keys, values, is_pcpu);
++		memset(keys, 0, max_entries * sizeof(*keys));
++		memset(values, 0, max_entries * value_size);
++		batch = 0;
++		total = 0;
++		i = 0;
++		/* iteratively lookup/delete elements with 'step'
++		 * elements each
++		 */
++		count = step;
++		nospace_err = false;
++		while (true) {
++			err = bpf_map_lookup_batch(map_fd,
++						   total ? &batch : NULL,
++						   &batch, keys + total,
++						   values +
++						   total * value_size,
++						   &count, 0, 0);
++			/* It is possible that we are failing due to buffer size
++			 * not big enough. In such cases, let us just exit and
++			 * go with large steps. Not that a buffer size with
++			 * max_entries should always work.
++			 */
++			if (err && errno == ENOSPC) {
++				nospace_err = true;
++				break;
++			}
 +
 +
-+	for (cp = 0; cp < max_count; cp++) {
-+		if (cp || first_key) {
-+			rcu_read_lock();
-+			err = map->ops->map_get_next_key(map, prev_key, key);
-+			rcu_read_unlock();
++			CHECK((err && errno != ENOENT), "lookup with steps",
++			      "error: %s\n", strerror(errno));
++
++			total += count;
 +			if (err)
 +				break;
-+		}
-+		err = bpf_map_copy_value(map, key, value,
-+					 attr->batch.elem_flags, do_delete);
 +
-+		if (err == -ENOENT) {
-+			if (retry) {
-+				retry--;
-+				continue;
++			i++;
++		}
++		if (nospace_err == true)
++			continue;
++
++		CHECK(total != max_entries, "lookup with steps",
++		      "total = %u, max_entries = %u\n", total, max_entries);
++		map_batch_verify(visited, max_entries, keys, values, is_pcpu);
++
++		memset(keys, 0, max_entries * sizeof(*keys));
++		memset(values, 0, max_entries * value_size);
++		batch = 0;
++		total = 0;
++		i = 0;
++		/* iteratively lookup/delete elements with 'step'
++		 * elements each
++		 */
++		count = step;
++		nospace_err = false;
++		while (true) {
++			err = bpf_map_lookup_and_delete_batch(map_fd,
++							total ? &batch : NULL,
++							&batch, keys + total,
++							values +
++							total * value_size,
++							&count, 0, 0);
++			/* It is possible that we are failing due to buffer size
++			 * not big enough. In such cases, let us just exit and
++			 * go with large steps. Not that a buffer size with
++			 * max_entries should always work.
++			 */
++			if (err && errno == ENOSPC) {
++				nospace_err = true;
++				break;
 +			}
-+			err = -EINTR;
-+			break;
++
++			CHECK((err && errno != ENOENT), "lookup with steps",
++			      "error: %s\n", strerror(errno));
++
++			total += count;
++			if (err)
++				break;
++			i++;
 +		}
 +
-+		if (err)
-+			goto free_buf;
++		if (nospace_err == true)
++			continue;
 +
-+		if (copy_to_user(keys + cp * map->key_size, key,
-+				 map->key_size)) {
-+			err = -EFAULT;
-+			goto free_buf;
-+		}
-+		if (copy_to_user(values + cp * value_size, value, value_size)) {
-+			err = -EFAULT;
-+			goto free_buf;
-+		}
++		CHECK(total != max_entries, "lookup/delete with steps",
++		      "total = %u, max_entries = %u\n", total, max_entries);
 +
-+		prev_key = key;
-+		retry = 3;
-+	}
-+	if (!err) {
-+		rcu_read_lock();
-+		err = map->ops->map_get_next_key(map, prev_key, key);
-+		rcu_read_unlock();
++		map_batch_verify(visited, max_entries, keys, values, is_pcpu);
++		err = bpf_map_get_next_key(map_fd, NULL, &key);
++		CHECK(!err, "bpf_map_get_next_key()", "error: %s\n",
++		      strerror(errno));
++
++		total_success++;
 +	}
 +
-+	if ((copy_to_user(&uattr->batch.count, &cp, sizeof(cp)) ||
-+		    (copy_to_user(uobatch, key, map->key_size))))
-+		err = -EFAULT;
-+
-+free_buf:
-+	kfree(buf);
-+err_put:
-+	return err;
++	CHECK(total_success == 0, "check total_success",
++	      "unexpected failure\n");
 +}
 +
-+int generic_map_lookup_batch(struct bpf_map *map,
-+			     const union bpf_attr *attr,
-+			     union bpf_attr __user *uattr)
++void test_hmap_lookup_and_delete_batch(void)
 +{
-+	return __generic_map_lookup_batch(map, attr, uattr, false);
++	__test_map_lookup_and_delete_batch(false);
++	printf("%s:PASS\n", __func__);
 +}
 +
-+int generic_map_lookup_and_delete_batch(struct bpf_map *map,
-+					const union bpf_attr *attr,
-+					union bpf_attr __user *uattr)
++void test_pcpu_hmap_lookup_and_delete_batch(void)
 +{
-+	return __generic_map_lookup_batch(map, attr, uattr, true);
++	__test_map_lookup_and_delete_batch(true);
++	printf("%s:PASS\n", __func__);
 +}
 +
- #define BPF_MAP_LOOKUP_AND_DELETE_ELEM_LAST_FIELD value
- 
- static int map_lookup_and_delete_elem(union bpf_attr *attr)
-@@ -2956,6 +3074,57 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
- 	return err;
- }
- 
-+#define BPF_MAP_BATCH_LAST_FIELD batch.flags
-+
-+#define BPF_DO_BATCH(fn)			\
-+	do {					\
-+		if (!fn) {			\
-+			err = -ENOTSUPP;	\
-+			goto err_put;		\
-+		}				\
-+		err = fn(map, attr, uattr);	\
-+	} while (0)
-+
-+static int bpf_map_do_batch(const union bpf_attr *attr,
-+			    union bpf_attr __user *uattr,
-+			    int cmd)
++void test_map_lookup_and_delete_batch_htab(void)
 +{
-+	struct bpf_map *map;
-+	int err, ufd;
-+	struct fd f;
-+
-+	if (CHECK_ATTR(BPF_MAP_BATCH))
-+		return -EINVAL;
-+
-+	ufd = attr->batch.map_fd;
-+	f = fdget(ufd);
-+	map = __bpf_map_get(f);
-+	if (IS_ERR(map))
-+		return PTR_ERR(map);
-+
-+	if ((cmd == BPF_MAP_LOOKUP_BATCH ||
-+	     cmd == BPF_MAP_LOOKUP_AND_DELETE_BATCH) &&
-+	    !(map_get_sys_perms(map, f) & FMODE_CAN_READ)) {
-+		err = -EPERM;
-+		goto err_put;
-+	}
-+
-+	if (cmd != BPF_MAP_LOOKUP_BATCH &&
-+	    !(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
-+		err = -EPERM;
-+		goto err_put;
-+	}
-+
-+	if (cmd == BPF_MAP_LOOKUP_BATCH)
-+		BPF_DO_BATCH(map->ops->map_lookup_batch);
-+	else
-+		BPF_DO_BATCH(map->ops->map_lookup_and_delete_batch);
-+
-+err_put:
-+	fdput(f);
-+	return err;
++	test_hmap_lookup_and_delete_batch();
++	test_pcpu_hmap_lookup_and_delete_batch();
 +}
-+
- SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size)
- {
- 	union bpf_attr attr = {};
-@@ -3053,6 +3222,13 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
- 	case BPF_MAP_LOOKUP_AND_DELETE_ELEM:
- 		err = map_lookup_and_delete_elem(&attr);
- 		break;
-+	case BPF_MAP_LOOKUP_BATCH:
-+		err = bpf_map_do_batch(&attr, uattr, BPF_MAP_LOOKUP_BATCH);
-+		break;
-+	case BPF_MAP_LOOKUP_AND_DELETE_BATCH:
-+		err = bpf_map_do_batch(&attr, uattr,
-+				       BPF_MAP_LOOKUP_AND_DELETE_BATCH);
-+		break;
- 	default:
- 		err = -EINVAL;
- 		break;
 -- 
 2.24.0.432.g9d3f5f5b63-goog
 
