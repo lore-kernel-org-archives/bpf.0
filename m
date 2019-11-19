@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 475F8C33CA0
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 01:38:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F7FFC432C0
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 01:39:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 20380222D1
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 01:38:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F4137222D1
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 01:39:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727114AbfKSBiu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Nov 2019 20:38:50 -0500
-Received: from www62.your-server.de ([213.133.104.62]:53664 "EHLO
+        id S1727113AbfKSBir (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Nov 2019 20:38:47 -0500
+Received: from www62.your-server.de ([213.133.104.62]:53642 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726814AbfKSBiu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Nov 2019 20:38:50 -0500
+        with ESMTP id S1726814AbfKSBiq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Nov 2019 20:38:46 -0500
 Received: from 45.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.45] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1iWsTf-0002kK-3k; Tue, 19 Nov 2019 02:38:47 +0100
+        id 1iWsTc-0002jo-Lr; Tue, 19 Nov 2019 02:38:44 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     john.fastabend@gmail.com, andrii.nakryiko@gmail.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next 5/8] bpf: add poke dependency tracking for prog array maps
-Date:   Tue, 19 Nov 2019 02:38:36 +0100
-Message-Id: <41436f9a5d5dd8ef5e88e05b1439e68428fdf2a3.1574126683.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next 1/8] bpf, x86: generalize and extend bpf_arch_text_poke for direct jumps
+Date:   Tue, 19 Nov 2019 02:38:32 +0100
+Message-Id: <ad08df844b3b111e371d30191b2789facfd120ed.1574126683.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1574126683.git.daniel@iogearbox.net>
 References: <cover.1574126683.git.daniel@iogearbox.net>
@@ -44,320 +44,177 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This work adds program tracking to prog array maps. This is needed such
-that upon prog array updates/deletions we can fix up all programs which
-make use of this tail call map. We add ops->map_poke_{un,}track() helpers
-to maps to maintain the list of programs and ops->map_poke_run() for
-triggering the actual update. bpf_array_aux is extended to contain the
-list head and poke_mutex in order to serialize program patching during
-updates/deletions. bpf_free_used_maps() will untrack the program shortly
-before dropping the reference to the map.
-
-The prog_array_map_poke_run() is triggered during updates/deletions and
-walks the maintained prog list. It checks in their poke_tabs whether the
-map and key is matching and runs the actual bpf_arch_text_poke() for
-patching in the nop or new jmp location. Depending on the type of update,
-we use one of BPF_MOD_{NOP_TO_JUMP,JUMP_TO_NOP,JUMP_TO_JUMP}.
+Add BPF_MOD_{NOP_TO_JUMP,JUMP_TO_JUMP,JUMP_TO_NOP} patching for x86
+JIT in order to be able to patch direct jumps or nop them out. We need
+this facility in order to patch tail call jumps and in later work also
+BPF static keys.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- include/linux/bpf.h   |  36 ++++++++++
- kernel/bpf/arraymap.c | 151 +++++++++++++++++++++++++++++++++++++++++-
- kernel/bpf/core.c     |   9 ++-
- 3 files changed, 193 insertions(+), 3 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 64 ++++++++++++++++++++++++++-----------
+ include/linux/bpf.h         |  6 ++++
+ 2 files changed, 52 insertions(+), 18 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index cad4382c1265..c599bd5071fc 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -22,6 +22,7 @@ struct bpf_verifier_env;
- struct bpf_verifier_log;
- struct perf_event;
- struct bpf_prog;
-+struct bpf_prog_aux;
- struct bpf_map;
- struct sock;
- struct seq_file;
-@@ -64,6 +65,12 @@ struct bpf_map_ops {
- 			     const struct btf_type *key_type,
- 			     const struct btf_type *value_type);
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 2e586f579945..f438bd3b7689 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -203,8 +203,9 @@ struct jit_context {
+ /* Maximum number of bytes emitted while JITing one eBPF insn */
+ #define BPF_MAX_INSN_SIZE	128
+ #define BPF_INSN_SAFETY		64
+-/* number of bytes emit_call() needs to generate call instruction */
+-#define X86_CALL_SIZE		5
++
++/* Number of bytes emit_patch() needs to generate instructions */
++#define X86_PATCH_SIZE		5
  
-+	/* Prog poke tracking helpers. */
-+	int (*map_poke_track)(struct bpf_map *map, struct bpf_prog_aux *aux);
-+	void (*map_poke_untrack)(struct bpf_map *map, struct bpf_prog_aux *aux);
-+	void (*map_poke_run)(struct bpf_map *map, u32 key, struct bpf_prog *old,
-+			     struct bpf_prog *new);
-+
- 	/* Direct value access helpers. */
- 	int (*map_direct_value_addr)(const struct bpf_map *map,
- 				     u64 *imm, u32 off);
-@@ -588,6 +595,9 @@ struct bpf_array_aux {
- 	 */
- 	enum bpf_prog_type type;
- 	bool jited;
-+	/* Programs with direct jumps into programs part of this array. */
-+	struct list_head poke_progs;
-+	struct mutex poke_mutex;
- };
+ #define PROLOGUE_SIZE		25
  
- struct bpf_array {
-@@ -1325,4 +1335,30 @@ enum bpf_text_poke_type {
- int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		       void *addr1, void *addr2);
+@@ -215,7 +216,7 @@ struct jit_context {
+ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf)
+ {
+ 	u8 *prog = *pprog;
+-	int cnt = X86_CALL_SIZE;
++	int cnt = X86_PATCH_SIZE;
  
-+static inline void bpf_map_poke_lock(struct bpf_map *map)
-+	__acquires(&container_of(map, struct bpf_array, map)->aux->poke_mutex)
-+{
-+#ifdef CONFIG_BPF_SYSCALL
-+	struct bpf_array_aux *aux;
-+
-+	aux = container_of(map, struct bpf_array, map)->aux;
-+	if (aux)
-+		mutex_lock(&aux->poke_mutex);
-+#endif
-+	__acquire(&aux->poke_mutex);
-+}
-+
-+static inline void bpf_map_poke_unlock(struct bpf_map *map)
-+	__releases(&container_of(map, struct bpf_array, map)->aux->poke_mutex)
-+{
-+#ifdef CONFIG_BPF_SYSCALL
-+	struct bpf_array_aux *aux;
-+
-+	aux = container_of(map, struct bpf_array, map)->aux;
-+	if (aux)
-+		mutex_unlock(&aux->poke_mutex);
-+#endif
-+	__release(&aux->poke_mutex);
-+}
-+
- #endif /* _LINUX_BPF_H */
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 5be12db129cc..d2b559c6659e 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -586,10 +586,14 @@ int bpf_fd_array_map_update_elem(struct bpf_map *map, struct file *map_file,
- 	if (IS_ERR(new_ptr))
- 		return PTR_ERR(new_ptr);
+ 	/* BPF trampoline can be made to work without these nops,
+ 	 * but let's waste 5 bytes for now and optimize later
+@@ -480,64 +481,91 @@ static void emit_stx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
+ 	*pprog = prog;
+ }
  
-+	bpf_map_poke_lock(map);
- 	old_ptr = xchg(array->ptrs + index, new_ptr);
-+	if (map->ops->map_poke_run)
-+		map->ops->map_poke_run(map, index, old_ptr, new_ptr);
-+	bpf_map_poke_unlock(map);
-+
- 	if (old_ptr)
- 		map->ops->map_fd_put_ptr(old_ptr);
--
+-static int emit_call(u8 **pprog, void *func, void *ip)
++static int emit_patch(u8 **pprog, void *func, void *ip, u8 opcode)
+ {
+ 	u8 *prog = *pprog;
+ 	int cnt = 0;
+ 	s64 offset;
+ 
+-	offset = func - (ip + X86_CALL_SIZE);
++	offset = func - (ip + X86_PATCH_SIZE);
+ 	if (!is_simm32(offset)) {
+ 		pr_err("Target call %p is out of range\n", func);
+ 		return -EINVAL;
+ 	}
+-	EMIT1_off32(0xE8, offset);
++	EMIT1_off32(opcode, offset);
+ 	*pprog = prog;
  	return 0;
  }
  
-@@ -602,7 +606,12 @@ static int fd_array_map_delete_elem(struct bpf_map *map, void *key)
- 	if (index >= array->map.max_entries)
- 		return -E2BIG;
- 
-+	bpf_map_poke_lock(map);
- 	old_ptr = xchg(array->ptrs + index, NULL);
-+	if (map->ops->map_poke_run)
-+		map->ops->map_poke_run(map, index, old_ptr, NULL);
-+	bpf_map_poke_unlock(map);
-+
- 	if (old_ptr) {
- 		map->ops->map_fd_put_ptr(old_ptr);
- 		return 0;
-@@ -671,6 +680,135 @@ static void prog_array_map_seq_show_elem(struct bpf_map *map, void *key,
- 	rcu_read_unlock();
- }
- 
-+struct prog_poke_elem {
-+	struct list_head list;
-+	struct bpf_prog_aux *aux;
-+};
-+
-+static int prog_array_map_poke_track(struct bpf_map *map,
-+				     struct bpf_prog_aux *prog_aux)
++static int emit_call(u8 **pprog, void *func, void *ip)
 +{
-+	struct prog_poke_elem *elem;
-+	struct bpf_array_aux *aux;
-+	int ret = 0;
-+
-+	aux = container_of(map, struct bpf_array, map)->aux;
-+	mutex_lock(&aux->poke_mutex);
-+	list_for_each_entry(elem, &aux->poke_progs, list) {
-+		if (elem->aux == prog_aux)
-+			goto out;
-+	}
-+
-+	elem = kmalloc(sizeof(*elem), GFP_KERNEL);
-+	if (!elem) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	INIT_LIST_HEAD(&elem->list);
-+	/* We must track the program's aux info at this point in time
-+	 * since the program pointer itself may not be stable yet, see
-+	 * also comment in prog_array_map_poke_run().
-+	 */
-+	elem->aux = prog_aux;
-+
-+	list_add_tail(&elem->list, &aux->poke_progs);
-+out:
-+	mutex_unlock(&aux->poke_mutex);
-+	return ret;
++	return emit_patch(pprog, func, ip, 0xE8);
 +}
 +
-+static void prog_array_map_poke_untrack(struct bpf_map *map,
-+					struct bpf_prog_aux *prog_aux)
++static int emit_jump(u8 **pprog, void *func, void *ip)
 +{
-+	struct prog_poke_elem *elem, *tmp;
-+	struct bpf_array_aux *aux;
-+
-+	aux = container_of(map, struct bpf_array, map)->aux;
-+	mutex_lock(&aux->poke_mutex);
-+	list_for_each_entry_safe(elem, tmp, &aux->poke_progs, list) {
-+		if (elem->aux == prog_aux) {
-+			list_del_init(&elem->list);
-+			kfree(elem);
-+		}
-+	}
-+	mutex_unlock(&aux->poke_mutex);
++	return emit_patch(pprog, func, ip, 0xE9);
 +}
 +
-+static void prog_array_map_poke_run(struct bpf_map *map, u32 key,
-+				    struct bpf_prog *old,
-+				    struct bpf_prog *new)
-+{
-+	enum bpf_text_poke_type type;
-+	struct prog_poke_elem *elem;
-+	struct bpf_array_aux *aux;
-+
-+	if (!old && new)
-+		type = BPF_MOD_NOP_TO_JUMP;
-+	else if (old && !new)
-+		type = BPF_MOD_JUMP_TO_NOP;
-+	else if (old && new)
-+		type = BPF_MOD_JUMP_TO_JUMP;
-+	else
-+		return;
-+
-+	aux = container_of(map, struct bpf_array, map)->aux;
-+	WARN_ON_ONCE(!mutex_is_locked(&aux->poke_mutex));
-+
-+	list_for_each_entry(elem, &aux->poke_progs, list) {
-+		struct bpf_jit_poke_descriptor *poke;
-+		int i, ret;
-+
-+		for (i = 0; i < elem->aux->size_poke_tab; i++) {
-+			poke = &elem->aux->poke_tab[i];
-+
-+			/* Few things to be aware of:
-+			 *
-+			 * 1) We can only ever access aux in this context, but
-+			 *    not aux->prog since it might not be stable yet and
-+			 *    there could be danger of use after free otherwise.
-+			 * 2) Initially when we start tracking aux, the program
-+			 *    is not JITed yet and also does not have a kallsyms
-+			 *    entry. We skip these as poke->ip_stable is not
-+			 *    active yet. The JIT will do the final fixup before
-+			 *    setting it stable. The various poke->ip_stable are
-+			 *    successively activated, so tail call updates can
-+			 *    arrive from here while JIT is still finishing its
-+			 *    final fixup for non-activated poke entries.
-+			 * 3) On program teardown, the program's kallsym entry gets
-+			 *    removed out of RCU callback, but we can only untrack
-+			 *    from sleepable context, therefore bpf_arch_text_poke()
-+			 *    might not see that this is in BPF text section and
-+			 *    bails out with -EINVAL. As these are unreachable since
-+			 *    RCU grace period already passed, we simply skip them.
-+			 * 4) Also programs reaching refcount of zero while patching
-+			 *    is in progress is okay since we're protected under
-+			 *    poke_mutex and untrack the programs before the JIT
-+			 *    buffer is freed. When we're still in the middle of
-+			 *    patching and suddenly kallsyms entry of the program
-+			 *    gets evicted, we just skip the rest which is fine due
-+			 *    to point 3).
-+			 * 5) Any other error happening below from bpf_arch_text_poke()
-+			 *    is a unexpected bug.
-+			 */
-+			if (!READ_ONCE(poke->ip_stable))
-+				continue;
-+			if (poke->reason != BPF_POKE_REASON_TAIL_CALL)
-+				continue;
-+			if (poke->tail_call.map != map ||
-+			    poke->tail_call.key != key)
-+				continue;
-+
-+			ret = bpf_arch_text_poke(poke->ip, type,
-+						 old ? (u8 *)old->bpf_func +
-+						 poke->adj_off : NULL,
-+						 new ? (u8 *)new->bpf_func +
-+						 poke->adj_off : NULL);
-+			BUG_ON(ret < 0 && ret != -EINVAL);
-+		}
-+	}
-+}
-+
- static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)
+ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 		       void *old_addr, void *new_addr)
  {
- 	struct bpf_array_aux *aux;
-@@ -680,6 +818,9 @@ static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)
- 	if (!aux)
- 		return ERR_PTR(-ENOMEM);
+-	u8 old_insn[X86_CALL_SIZE] = {};
+-	u8 new_insn[X86_CALL_SIZE] = {};
++	int (*emit_patch_fn)(u8 **pprog, void *func, void *ip);
++	u8 old_insn[X86_PATCH_SIZE] = {};
++	u8 new_insn[X86_PATCH_SIZE] = {};
+ 	u8 *prog;
+ 	int ret;
  
-+	INIT_LIST_HEAD(&aux->poke_progs);
-+	mutex_init(&aux->poke_mutex);
+ 	if (!is_kernel_text((long)ip) &&
+ 	    !is_bpf_text_address((long)ip))
+-		/* BPF trampoline in modules is not supported */
++		/* BPF poking in modules is not supported */
+ 		return -EINVAL;
+ 
++	switch (t) {
++	case BPF_MOD_NOP_TO_CALL ... BPF_MOD_CALL_TO_NOP:
++		emit_patch_fn = emit_call;
++		break;
++	case BPF_MOD_NOP_TO_JUMP ... BPF_MOD_JUMP_TO_NOP:
++		emit_patch_fn = emit_jump;
++		break;
++	default:
++		return -ENOTSUPP;
++	}
 +
- 	map = array_map_alloc(attr);
- 	if (IS_ERR(map)) {
- 		kfree(aux);
-@@ -692,9 +833,14 @@ static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)
+ 	if (old_addr) {
+ 		prog = old_insn;
+-		ret = emit_call(&prog, old_addr, (void *)ip);
++		ret = emit_patch_fn(&prog, old_addr, (void *)ip);
+ 		if (ret)
+ 			return ret;
+ 	}
+ 	if (new_addr) {
+ 		prog = new_insn;
+-		ret = emit_call(&prog, new_addr, (void *)ip);
++		ret = emit_patch_fn(&prog, new_addr, (void *)ip);
+ 		if (ret)
+ 			return ret;
+ 	}
++
+ 	ret = -EBUSY;
+ 	mutex_lock(&text_mutex);
+ 	switch (t) {
+ 	case BPF_MOD_NOP_TO_CALL:
+-		if (memcmp(ip, ideal_nops[NOP_ATOMIC5], X86_CALL_SIZE))
++	case BPF_MOD_NOP_TO_JUMP:
++		if (memcmp(ip, ideal_nops[NOP_ATOMIC5], X86_PATCH_SIZE))
+ 			goto out;
+-		text_poke_bp(ip, new_insn, X86_CALL_SIZE, NULL);
++		text_poke_bp(ip, new_insn, X86_PATCH_SIZE, NULL);
+ 		break;
+ 	case BPF_MOD_CALL_TO_CALL:
+-		if (memcmp(ip, old_insn, X86_CALL_SIZE))
++	case BPF_MOD_JUMP_TO_JUMP:
++		if (memcmp(ip, old_insn, X86_PATCH_SIZE))
+ 			goto out;
+-		text_poke_bp(ip, new_insn, X86_CALL_SIZE, NULL);
++		text_poke_bp(ip, new_insn, X86_PATCH_SIZE, NULL);
+ 		break;
+ 	case BPF_MOD_CALL_TO_NOP:
+-		if (memcmp(ip, old_insn, X86_CALL_SIZE))
++	case BPF_MOD_JUMP_TO_NOP:
++		if (memcmp(ip, old_insn, X86_PATCH_SIZE))
+ 			goto out;
+-		text_poke_bp(ip, ideal_nops[NOP_ATOMIC5], X86_CALL_SIZE, NULL);
++		text_poke_bp(ip, ideal_nops[NOP_ATOMIC5], X86_PATCH_SIZE,
++			     NULL);
+ 		break;
+ 	}
+ 	ret = 0;
+@@ -1394,7 +1422,7 @@ int arch_prepare_bpf_trampoline(void *image, struct btf_func_model *m, u32 flags
+ 		/* skip patched call instruction and point orig_call to actual
+ 		 * body of the kernel function.
+ 		 */
+-		orig_call += X86_CALL_SIZE;
++		orig_call += X86_PATCH_SIZE;
  
- static void prog_array_map_free(struct bpf_map *map)
- {
-+	struct prog_poke_elem *elem, *tmp;
- 	struct bpf_array_aux *aux;
+ 	prog = image;
  
- 	aux = container_of(map, struct bpf_array, map)->aux;
-+	list_for_each_entry_safe(elem, tmp, &aux->poke_progs, list) {
-+		list_del_init(&elem->list);
-+		kfree(elem);
-+	}
- 	kfree(aux);
- 	fd_array_map_free(map);
- }
-@@ -703,6 +849,9 @@ const struct bpf_map_ops prog_array_map_ops = {
- 	.map_alloc_check = fd_array_map_alloc_check,
- 	.map_alloc = prog_array_map_alloc,
- 	.map_free = prog_array_map_free,
-+	.map_poke_track = prog_array_map_poke_track,
-+	.map_poke_untrack = prog_array_map_poke_untrack,
-+	.map_poke_run = prog_array_map_poke_run,
- 	.map_get_next_key = array_map_get_next_key,
- 	.map_lookup_elem = fd_array_map_lookup_elem,
- 	.map_delete_elem = fd_array_map_delete_elem,
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 608b7085e0c9..49e32acad7d8 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2050,11 +2050,16 @@ static void bpf_free_cgroup_storage(struct bpf_prog_aux *aux)
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index e913dd5946ae..46b2c3bdc155 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1284,10 +1284,16 @@ static inline u32 bpf_xdp_sock_convert_ctx_access(enum bpf_access_type type,
+ #endif /* CONFIG_INET */
  
- static void bpf_free_used_maps(struct bpf_prog_aux *aux)
- {
-+	struct bpf_map *map;
- 	int i;
- 
- 	bpf_free_cgroup_storage(aux);
--	for (i = 0; i < aux->used_map_cnt; i++)
--		bpf_map_put(aux->used_maps[i]);
-+	for (i = 0; i < aux->used_map_cnt; i++) {
-+		map = aux->used_maps[i];
-+		if (map->ops->map_poke_untrack)
-+			map->ops->map_poke_untrack(map, aux);
-+		bpf_map_put(map);
-+	}
- 	kfree(aux->used_maps);
- }
+ enum bpf_text_poke_type {
++	/* All call-related pokes. */
+ 	BPF_MOD_NOP_TO_CALL,
+ 	BPF_MOD_CALL_TO_CALL,
+ 	BPF_MOD_CALL_TO_NOP,
++	/* All jump-related pokes. */
++	BPF_MOD_NOP_TO_JUMP,
++	BPF_MOD_JUMP_TO_JUMP,
++	BPF_MOD_JUMP_TO_NOP,
+ };
++
+ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 		       void *addr1, void *addr2);
  
 -- 
 2.21.0
