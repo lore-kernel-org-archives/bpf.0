@@ -2,116 +2,122 @@ Return-Path: <SRS0=WdG8=ZL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3747C43215
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 06:04:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6B86C43215
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 06:10:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B4C53206DA
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 06:04:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C8FF21850
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 06:10:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pzo7t/rd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KyWCOhP8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728592AbfKSGEm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Nov 2019 01:04:42 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43217 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728668AbfKSGEm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Nov 2019 01:04:42 -0500
-Received: by mail-lj1-f194.google.com with SMTP id y23so21841560ljh.10;
-        Mon, 18 Nov 2019 22:04:40 -0800 (PST)
+        id S1727969AbfKSF0a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Nov 2019 00:26:30 -0500
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:39731 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728571AbfKSF0a (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Nov 2019 00:26:30 -0500
+Received: by mail-qk1-f195.google.com with SMTP id 15so16741674qkh.6
+        for <bpf@vger.kernel.org>; Mon, 18 Nov 2019 21:26:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LWwgCpo+ONcCb1xvseKQ8V1GFmEQ8iCPPdkSeh2r6dE=;
-        b=Pzo7t/rdLPqs5Nh2p+mkIgQ+P64x4igcfBM1hW/EFhKBXktBcoEdHd4i1xc6go+vDe
-         Ki3j3wlgAUso/nWk2wqVzKzEHyoKr/dtEHuCxoUtlQiS/ZyvqlEyCNshAFkDSAGRjNrr
-         Q2fONQKrfaS7iMz21SbEZ4lggxI/mu85xksbOwA2t+cwhB8VFVeJE/A4PGH1GqWi+U+E
-         IbjnhBKUZ/yDt7iVe45EBNvSus8oPgEHqqBXBbU9B5SsPRb+FmJdI7bxh4ROMD0t175A
-         YsWIofbiM8o8V2AyNusI5krU33Z7BdAFg6tCQmqeSJO5pkH75ohFRe9XTUQfCdCVXIbK
-         TqMA==
+        bh=podFF2nwPATgk6Vyaa+JKA//o6jLZZVDQvx/NXLG1qw=;
+        b=KyWCOhP8jnpTna7LokuJ3F0YPjpGUTp7v8hiLdPCgezIrdQViDb5ELCsIgqA+PbW7V
+         3hfj6V5icMIBejEYWnkhZfwtBaL9nKmrwhkhajivZ5Yy8fDRwTR7nNSViN48nzdzR4RL
+         z0UjUmwB1jqafeMb0lIDHDKFQAyNgYrmApymj8vZ2y5GfYY8Ag7Fqahe3sB9XLqxmTcA
+         bdjaL5FGV9B20YEyeHawFdceEettYdOYR8a1LJDxavzTYLJV+3OPThmSgCSxaKp45FfS
+         oWtmlStL+Ct/bbTpMr6kEjr71Nse3C8LetBocRbMpqYjHPgmtAFxSdcNI8k8ju5qZUa2
+         m35Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LWwgCpo+ONcCb1xvseKQ8V1GFmEQ8iCPPdkSeh2r6dE=;
-        b=JARsTbbGTzUxRijVlvSZ6PTc9FdHBoGKjiP7wULR3/mL2jEmCNvqU3F8M47gzjtwym
-         EEGkwiI7CH72Fl2biL1zYzhdxbiSjUE6PQXLgrphz69gexBM4UPErWuciAjBB0viBrg2
-         mDZc+OIQsE/ril4sknuOEFcZbW16lHA8WO5uUWpzcQDa0UcfHleoCiB9zKaWQJa89qMA
-         YswXwrQ3Zy6auD7pzbsGefbtvNiVO2ChAIqy0Kye30tnR5ntt528fgPDPloaDBJBNN8M
-         OOD9PsLsZXqAKyxBGBkNX1MGkAPbzNIrKCFqoDXoqa+cQUk2PrN5CY+MF9sGxuQrUfkb
-         Ov5w==
-X-Gm-Message-State: APjAAAU78UhCDeWExt/Mag5Mon6XvmamHqJxnnz8n5LE2q2qdXxRTzhl
-        hyeXZCyVh0L/lTSDeH451JEOG1D/zWjD5T2hSuA=
-X-Google-Smtp-Source: APXvYqwtBfqqZPW51aleFh11Rq4IMdt72P+yjWQChrFc5L2+g8hcqM9UfSWGDKHEwtgDfjNdefSRYxkwkV8XSN5wPEs=
-X-Received: by 2002:a2e:970a:: with SMTP id r10mr2346980lji.142.1574143479689;
- Mon, 18 Nov 2019 22:04:39 -0800 (PST)
+        bh=podFF2nwPATgk6Vyaa+JKA//o6jLZZVDQvx/NXLG1qw=;
+        b=iva1Gr8YBsrdHw0zEnOX37trRKKM8PASJVn9KHmwDx7JUKIvDazQcpuq4XUYPTCLhC
+         g1colfB6d2UJhAslXG//4+T6w5kIh7+WARsQfdWzPQbXrTZTVAj7OVLhSrCqR0lUMvhK
+         dTU4ya4FXRtQFTFdCYO5iMAwmFDy4OukaUYmLXJfnXb70UPHJ0+mGOXCa3JCwqPUWbtS
+         WKKWd2CBAQuNFsAvpFkEVLSFtYe3hPl488m6LIPYOk1ftYL46N637RsK2huLVTNo+9e4
+         ZGxIaM1e7rqSXQ1tVoeP8739VlMm6/G58huSKHb4tbwe50dKCDa+syUR3BlVJuzfQCgM
+         11/g==
+X-Gm-Message-State: APjAAAWzNfkwYcdvPq/j+Yij/y6dqzitYwAmZWqpFpOvlvjnGnS0Mdne
+        6cnyUw6NoDC6OlgODRMz0z+/o9J8UbUz/Y+sNDJwng==
+X-Google-Smtp-Source: APXvYqwflmyefFY6nZjcYclr6qXpeKQ0p3jimSeMmqtsPPXbdgiEFdjyKSl93F3ZmOOWiM3pqjYuyMaUYB8dyh2z1vs=
+X-Received: by 2002:a37:94e:: with SMTP id 75mr27389233qkj.49.1574141188100;
+ Mon, 18 Nov 2019 21:26:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20191114194636.811109457@goodmis.org> <20191114194738.938540273@goodmis.org>
- <20191115215125.mbqv7taqnx376yed@ast-mbp.dhcp.thefacebook.com> <20191117171835.35af6c0e@gandalf.local.home>
-In-Reply-To: <20191117171835.35af6c0e@gandalf.local.home>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 18 Nov 2019 22:04:28 -0800
-Message-ID: <CAADnVQ+OzTikM9EhrfsC7NFsVYhATW1SVHxK64w3xn9qpk81pg@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/2] ftrace: Add modify_ftrace_direct()
-To:     Steven Rostedt <rostedt@goodmis.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Ingo Molnar <mingo@kernel.org>
+References: <20191119014357.98465-1-brianvv@google.com> <20191119014357.98465-6-brianvv@google.com>
+ <20191119042012.3wpj5porwkntpfm4@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20191119042012.3wpj5porwkntpfm4@ast-mbp.dhcp.thefacebook.com>
+From:   Brian Vazquez <brianvv@google.com>
+Date:   Mon, 18 Nov 2019 21:26:17 -0800
+Message-ID: <CAMzD94Rv2ysZuMOwMFtZqPVjnhYdx-t2N=ekZzgVNeRapd86Ow@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 5/9] bpf: add batch ops to all htab bpf map
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Brian Vazquez <brianvv.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yonghong Song <yhs@fb.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Petar Penkov <ppenkov@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Nov 17, 2019 at 2:18 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Mon, Nov 18, 2019 at 8:35 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On Fri, 15 Nov 2019 13:51:26 -0800
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> On Mon, Nov 18, 2019 at 05:43:53PM -0800, Brian Vazquez wrote:
+> > From: Yonghong Song <yhs@fb.com>
+> >
+> > htab can't use generic batch support due some problematic behaviours
+> > inherent to the datastructre, i.e. while iterating the bpf map  a
+> > concurrent program might delete the next entry that batch was about to
+> > use, in this case there's no easy solution to retrieve the next entry
+> > and the issua has been discussed multiple times (see [1] and [2]).
+> > The only way hmap can be traversed without the problem previously
+> > exposed is by making sure that the map is traversing entire buckets.
+> > This commit implements those strict requirements for hmap, the
+> > implementation follows the same interaction that generic support with
+> > some exceptions:
+> >
+> >  - If keys/values buffer are not big enough to traverse a bucket,
+> >    ENOSPC will be returned.
+> >  - out_batch contains the value of the next bucket in the iteration, not
+> >  the next key, but this is transparent for the user since the user
+> >  should never use out_batch for other than bpf batch syscalls.
+> >
+> > Note that only lookup and lookup_and_delete batch ops require the hmap
+> > specific implementation and update/delete batch ops can be the generic
+> > ones.
+> >
+> > [1] https://lore.kernel.org/bpf/20190724165803.87470-1-brianvv@google.com/
+> > [2] https://lore.kernel.org/bpf/20190906225434.3635421-1-yhs@fb.com/
+> >
+> > Co-authored-by: Brian Vazquez <brianvv@google.com>
+> > Signed-off-by: Brian Vazquez <brianvv@google.com>
+> > Signed-off-by: Yonghong Song <yhs@fb.com>
 >
-> > Thanks a lot for implementing it.
-> > Switching to iterator just to modify the call.. hmm.
-> > So "call direct_bpf_A" gets replaced to "call ftrace_stub" to do the iterator
-> > only to patch "call direct_bpf_B" later. I'm struggling to see why do that when
-> > arch can provide call to call rewrite easily. x86 and others have such ability
-> > already. I don't understand why you want to sacrifice simplicity here.
-> > Anyway with all 3 apis (register, modify, unreg) it looks complete.
-> > I'll start playing with it on Monday.
+> SOB order is not quite correct.
+> If the patch was mainly developed by Yonghong it should have his 'From:'
+> then his SOB and then your SOB.
+> You can drop Co-authored-by field.
 >
-> Now if you take my latest for-next branch, and add the patch below,
+Thanks for clarifying, will fix in v2.
 
-I took your for-next without the extra patch and used it from bpf trampoline.
-It's looking good so far. Passed basic testing. Will add more stress tests.
+> Patch 2 was also mainly done by Yonghong or not ?
+> If so it should have his 'From:' field.6504484251
 
-Do you mind doing:
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 73eb2e93593f..6ddb203ca550 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -256,16 +256,16 @@ struct ftrace_direct_func
-*ftrace_find_direct_func(unsigned long addr);
- # define ftrace_direct_func_count 0
- static inline int register_ftrace_direct(unsigned long ip, unsigned long addr)
- {
--       return -ENODEV;
-+       return -ENOTSUPP;
- }
- static inline int unregister_ftrace_direct(unsigned long ip, unsigned
-long addr)
- {
--       return -ENODEV;
-+       return -ENOTSUPP;
- }
- static inline int modify_ftrace_direct(unsigned long ip,
-                                       unsigned long old_addr,
-unsigned long new_addr)
- {
--       return -ENODEV;
-+       return -ENOTSUPP;
- }
-
-otherwise ENODEV is a valid error when ip is incorrect which is
-indistinguishable from ftrace not compiled in.
+Generic support was done by me, but will double check the rest of the
+patches and fix them if needed.
