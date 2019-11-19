@@ -2,71 +2,76 @@ Return-Path: <SRS0=WdG8=ZL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E0C3C432C3
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 14:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E5A5C432C0
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 15:13:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2968F222A9
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 14:21:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 121312231C
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 15:13:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="AeSgyU6o"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726202AbfKSOVs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Nov 2019 09:21:48 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:49818 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725280AbfKSOVs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Nov 2019 09:21:48 -0500
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 1B77656ADDA5E797D26F;
-        Tue, 19 Nov 2019 22:21:42 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Tue, 19 Nov 2019
- 22:21:34 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <kafai@fb.com>,
-        <songliubraving@fb.com>, <yhs@fb.com>, <andriin@fb.com>
-CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH bpf-next] bpf: Make array_map_mmap static
-Date:   Tue, 19 Nov 2019 22:21:13 +0800
-Message-ID: <20191119142113.15388-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1728172AbfKSPNO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Nov 2019 10:13:14 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:60410 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726637AbfKSPNO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Nov 2019 10:13:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=5qNH0rNiKvfJDdxRh+5cWf5BX5eczgkRcY4ZPO+/TwE=; b=AeSgyU6o4dXFLLWUZleLPkNoT
+        eAzZI8/6uO1O9y77MQOs+XCcjHmi0zxAB9CrGV37e4tfw0e770USNb5cN+4i9hm+Fh3zQRkDV5lIX
+        aranSHGIniwfHvdiburKsDj209T9LGjp7NOJWeOGcBRViKjJiwBZzHi4H1f9jYpXVdTkVQjoVFANa
+        7farnFptcQCJwW4/gcij9/ORkWhAFYyof2raVQ/3R2B9E7BqeDx0GOlQLy+hlvFuNiUnnGS5jOtjL
+        VLYI0VkXeAtT/AmBgHieLmigNhEoNWWvzSa4cus8tFr/NfLFVTvy/K+Y2SSlGwYFfjQOEy3xBu4Qf
+        O6lqi5n6Q==;
+Received: from [2601:1c0:6280:3f0::5a22]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iX5Bp-0003Nl-Mu; Tue, 19 Nov 2019 15:13:13 +0000
+Subject: Re: linux-next: Tree for Nov 19 (bpf)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf@vger.kernel.org,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <20191119194658.39af50d0@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <ac0b86e4-611b-81d1-ba09-e819218efe3f@infradead.org>
+Date:   Tue, 19 Nov 2019 07:13:12 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20191119194658.39af50d0@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix sparse warning:
+On 11/19/19 12:46 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20191118:
+> 
 
-kernel/bpf/arraymap.c:481:5: warning:
- symbol 'array_map_mmap' was not declared. Should it be static?
+on i386 or x86_64:
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- kernel/bpf/arraymap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+../kernel/bpf/btf.c:3466:1: error: empty enum is invalid
+ };
+ ^
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index a42097c..633c8c7 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -478,7 +478,7 @@ static int array_map_check_btf(const struct bpf_map *map,
- 	return 0;
- }
- 
--int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
-+static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
- {
- 	struct bpf_array *array = container_of(map, struct bpf_array, map);
- 	pgoff_t pgoff = PAGE_ALIGN(sizeof(*array)) >> PAGE_SHIFT;
+when CONFIG_NET is not set/enabled.
+
+
 -- 
-2.7.4
-
-
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
