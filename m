@@ -2,158 +2,114 @@ Return-Path: <SRS0=WdG8=ZL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECB3CC432C0
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:31:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 399C3C432C0
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:57:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BE47C2245B
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:31:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 110CD223B0
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 19:57:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AQhhVmFW"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="kRK+NYh0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbfKSTap (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Nov 2019 14:30:45 -0500
-Received: from mail-pj1-f73.google.com ([209.85.216.73]:35971 "EHLO
-        mail-pj1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726939AbfKSTap (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Nov 2019 14:30:45 -0500
-Received: by mail-pj1-f73.google.com with SMTP id o4so1593813pjp.3
-        for <bpf@vger.kernel.org>; Tue, 19 Nov 2019 11:30:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=C47Ki3HabBbaxKIHhsS43LGLmAjUHPP9alFct2tZKio=;
-        b=AQhhVmFWnFPcXgEc/Fk9f4e4x5ge44nDIJoAhq06dkr8uxhVWVodJBcAw6jHJBnHSv
-         XVLDjEH6hlcjYJCj8rmlXhSI/MzVybNW+HRETZq0VCQE23W/K10hRk2FBE0iUcwF4eF9
-         pocSqz04vLq6s74RaiVdieK/1p1PXI3RWfzPnp2NwquFVjrOT0w/+XdF+FmKOFzDDZfy
-         nVFpwnL1fjbAmDA3yMmCu6c0GSj2cuTtbUtJhIZPof7fXdPVAkhiXCYs5FAvRIja2vNE
-         y/33W28eNuTi/lhOFQG1DbNU/ICiItg7jIV1B243hN15HdPLDo6YW7tXTQXzBdHtFWrU
-         /q2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=C47Ki3HabBbaxKIHhsS43LGLmAjUHPP9alFct2tZKio=;
-        b=aKLK/5kMhINUQ65SZVVosWlJn8wIZk5BpWdlfdszL7q0sNkW5fsN7/PCTghj8Pkf1Z
-         j9Xn92rwqAhmatVptsADlCuWpp6BtGRq0Fdxo5qAzP4NYI0jqQeSA++MSdRpfQzDkp4X
-         ulEFxuhg74bka4af2DThd2IkXiAwjXqBqBKejgIMuSCF5F7SxwfJRhJmkpkwcgWpMNSY
-         U9etjJ9tH2ynH6xifEeSoW4nJdeej7s1aYf70VGeIdzIGJOXMX2BmJ4JPE1+Emgs2GB2
-         KmLuDk35npsf/bY00pd+JPU9s7puqzRzBgJGfjEvvrI6M1dSU0jOCmpXMoPp0oLtdEIB
-         l1kQ==
-X-Gm-Message-State: APjAAAXQ21dNiGP9J16RS+mbP2oHcxhxkQ/2aChL3zNyHwqhb5/XwY8y
-        T3bR5tKfeSU53QGZA/mutPOupGrvunge
-X-Google-Smtp-Source: APXvYqzNIz68u9dcwE5s1aVXZ2ZnlnOhQePgjaRrwKXmA62Rg/x1cqHffWrblYFqeoJW0i+OdYASh4loV7Gh
-X-Received: by 2002:a63:a34e:: with SMTP id v14mr7487127pgn.58.1574191842857;
- Tue, 19 Nov 2019 11:30:42 -0800 (PST)
-Date:   Tue, 19 Nov 2019 11:30:27 -0800
-Message-Id: <20191119193036.92831-1-brianvv@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.24.0.432.g9d3f5f5b63-goog
-Subject: [PATCH v2 bpf-next 0/9] add bpf batch ops to process more than 1 elem
-From:   Brian Vazquez <brianvv@google.com>
-To:     Brian Vazquez <brianvv.kernel@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Yonghong Song <yhs@fb.com>, Stanislav Fomichev <sdf@google.com>,
-        Petar Penkov <ppenkov@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Brian Vazquez <brianvv@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726874AbfKST5O (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Nov 2019 14:57:14 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37370 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726722AbfKST5O (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 19 Nov 2019 14:57:14 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAJJusbh000499
+        for <bpf@vger.kernel.org>; Tue, 19 Nov 2019 11:57:14 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=0P4TrnQ5rmtpj5v3ue8RxaRIxEp8lpQaFp9/61+p9PA=;
+ b=kRK+NYh0UIMD3jnzvovZCbOBU04U2xn0Xs69XxJdVE5ABvI2XGk8aZKaA87L9zZ+Giw1
+ 9Lj6EDCuk7oWRQYk8BYbF0iW2Zk/9eCXXHRvzsaSVxdcY6SuVfk6obH0KMgVlck6GG2D
+ vLqYGS2EyruFeOmbHGhivSFLlRnNgEP9/0o= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wcnrv0dvu-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 19 Nov 2019 11:57:14 -0800
+Received: from 2401:db00:30:600c:face:0:1f:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 19 Nov 2019 11:57:12 -0800
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id B0878370243D; Tue, 19 Nov 2019 11:57:11 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next v2 1/3] bpf: add a helper to set preciseness of an unknown register
+Date:   Tue, 19 Nov 2019 11:57:11 -0800
+Message-ID: <20191119195711.3691868-1-yhs@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191119195711.3691681-1-yhs@fb.com>
+References: <20191119195711.3691681-1-yhs@fb.com>
+X-FB-Internal: Safe
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-19_07:2019-11-15,2019-11-19 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 spamscore=0
+ mlxlogscore=770 impostorscore=0 lowpriorityscore=0 priorityscore=1501
+ clxscore=1015 phishscore=0 malwarescore=0 suspectscore=13 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1911190163
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch series introduce batch ops that can be added to bpf maps to
-lookup/lookup_and_delete/update/delete more than 1 element at the time,
-this is specially useful when syscall overhead is a problem and in case
-of hmap it will provide a reliable way of traversing them.
+The patch refactored verifier.c function __mark_reg_unbounded()
+to have a helper function __set_unknown_reg_precise() to
+set the preciseness of an unknown register. The helper will
+be used in the next patch to set the preciseness of
+an unknown sub-register.
 
-The implementation inclues a generic approach that could potentially be
-used by any bpf map and adds it to arraymap, it also includes the specific
-implementation of hashmaps which are traversed using buckets instead
-of keys.
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ kernel/bpf/verifier.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-The bpf syscall subcommands introduced are:
-
-  BPF_MAP_LOOKUP_BATCH
-  BPF_MAP_LOOKUP_AND_DELETE_BATCH
-  BPF_MAP_UPDATE_BATCH
-  BPF_MAP_DELETE_BATCH
-
-The UAPI attribute is:
-
-  struct { /* struct used by BPF_MAP_*_BATCH commands */
-         __aligned_u64   in_batch;       /* start batch,
-                                          * NULL to start from beginning
-                                          */
-         __aligned_u64   out_batch;      /* output: next start batch */
-         __aligned_u64   keys;
-         __aligned_u64   values;
-         __u32           count;          /* input/output:
-                                          * input: # of key/value
-                                          * elements
-                                          * output: # of filled elements
-                                          */
-         __u32           map_fd;
-         __u64           elem_flags;
-         __u64           flags;
-  } batch;
-
-
-in_batch and out_batch are only used for lookup and lookup_and_delete since
-those are the only two operations that attempt to traverse the map.
-
-update/delete batch ops should provide the keys/values that user wants
-to modify.
-
-Here are the previous discussions on the batch processing:
- - https://lore.kernel.org/bpf/20190724165803.87470-1-brianvv@google.com/
- - https://lore.kernel.org/bpf/20190829064502.2750303-1-yhs@fb.com/
- - https://lore.kernel.org/bpf/20190906225434.3635421-1-yhs@fb.com/
-
-Changelog since v1:
- - Fix SOB ordering and remove Co-authored-by tag (Alexei)
-
-Changelog since RFC:
- - Change batch to in_batch and out_batch to support more flexible opaque
-   values to iterate the bpf maps.
- - Remove update/delete specific batch ops for htab and use the generic
-   implementations instead.
-
-Brian Vazquez (5):
-  bpf: add bpf_map_{value_size,update_value,map_copy_value} functions
-  bpf: add generic support for lookup and lookup_and_delete batch ops
-  bpf: add generic support for update and delete batch ops
-  bpf: add lookup and updated batch ops to arraymap
-  selftests/bpf: add batch ops testing to array bpf map
-
-Yonghong Song (4):
-  bpf: add batch ops to all htab bpf map
-  tools/bpf: sync uapi header bpf.h
-  libbpf: add libbpf support to batch ops
-  selftests/bpf: add batch ops testing for hmap and hmap_percpu
-
- include/linux/bpf.h                           |  21 +
- include/uapi/linux/bpf.h                      |  21 +
- kernel/bpf/arraymap.c                         |   2 +
- kernel/bpf/hashtab.c                          | 244 ++++++++
- kernel/bpf/syscall.c                          | 571 ++++++++++++++----
- tools/include/uapi/linux/bpf.h                |  21 +
- tools/lib/bpf/bpf.c                           |  61 ++
- tools/lib/bpf/bpf.h                           |  14 +
- tools/lib/bpf/libbpf.map                      |   4 +
- .../map_lookup_and_delete_batch_array.c       | 119 ++++
- .../map_lookup_and_delete_batch_htab.c        | 257 ++++++++
- 11 files changed, 1215 insertions(+), 120 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch_array.c
- create mode 100644 tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch_htab.c
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9f59f7a19dd0..a344b08aef77 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1007,6 +1007,14 @@ static void __reg_bound_offset(struct bpf_reg_state *reg)
+ 						 reg->umax_value));
+ }
+ 
++/* constant backtracking is enabled for root without bpf2bpf calls */
++static void __set_unknown_reg_precise(struct bpf_verifier_env *env,
++				      struct bpf_reg_state *reg)
++{
++	reg->precise = env->subprog_cnt > 1 || !env->allow_ptr_leaks ?
++			true : false;
++}
++
+ /* Reset the min/max bounds of a register */
+ static void __mark_reg_unbounded(struct bpf_reg_state *reg)
+ {
+@@ -1042,9 +1050,7 @@ static void mark_reg_unknown(struct bpf_verifier_env *env,
+ 	}
+ 	regs += regno;
+ 	__mark_reg_unknown(regs);
+-	/* constant backtracking is enabled for root without bpf2bpf calls */
+-	regs->precise = env->subprog_cnt > 1 || !env->allow_ptr_leaks ?
+-			true : false;
++	__set_unknown_reg_precise(env, regs);
+ }
+ 
+ static void __mark_reg_not_init(struct bpf_reg_state *reg)
 -- 
-2.24.0.432.g9d3f5f5b63-goog
+2.17.1
 
