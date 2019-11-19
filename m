@@ -2,220 +2,155 @@ Return-Path: <SRS0=WdG8=ZL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F7FFC432C0
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 01:39:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF4D5C432C0
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 01:44:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F4137222D1
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 01:39:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8ACE222ED
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 01:44:10 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bY/KO6kx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727113AbfKSBir (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Nov 2019 20:38:47 -0500
-Received: from www62.your-server.de ([213.133.104.62]:53642 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726814AbfKSBiq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Nov 2019 20:38:46 -0500
-Received: from 45.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.45] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1iWsTc-0002jo-Lr; Tue, 19 Nov 2019 02:38:44 +0100
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     ast@kernel.org
-Cc:     john.fastabend@gmail.com, andrii.nakryiko@gmail.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next 1/8] bpf, x86: generalize and extend bpf_arch_text_poke for direct jumps
-Date:   Tue, 19 Nov 2019 02:38:32 +0100
-Message-Id: <ad08df844b3b111e371d30191b2789facfd120ed.1574126683.git.daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.1574126683.git.daniel@iogearbox.net>
-References: <cover.1574126683.git.daniel@iogearbox.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.101.4/25637/Mon Nov 18 10:53:23 2019)
+        id S1727016AbfKSBoF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Nov 2019 20:44:05 -0500
+Received: from mail-pl1-f201.google.com ([209.85.214.201]:36206 "EHLO
+        mail-pl1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726994AbfKSBoF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Nov 2019 20:44:05 -0500
+Received: by mail-pl1-f201.google.com with SMTP id g16so12200540plq.3
+        for <bpf@vger.kernel.org>; Mon, 18 Nov 2019 17:44:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=cGWE/qyVtF0Xm0XRgmS6v65MJoSNg2ouKO2ndi7seNg=;
+        b=bY/KO6kxybSTMKllU0VSmuUp+hH40TarSc/VXouqS7EBfHj591iNMpKxkqYuVxFYHx
+         RvL8p5NL+w33OCuaho+ZKJsPc4VJZuOx8JnxfZiYvZIu3CDdSIHY8/ep7GUTHBZQPKHv
+         N6vRZOcQeGBrbAcztIl7TsIzRJeiQkfdPF3u3dTu2+vMg2A99GH/vkECiIa10i0L124M
+         jcTZVaX0jLsElwKI6XDWBJVmHXRlzIYfEGjIkNfrKlU43Ixu4zekvM2oc4M/AGLTMoIn
+         cIXJ50FH0992QNNkzwQ64vWbxzxzzaamsnZBqfoRrO0YmEmXORQz6zb/1yXwDM7Il87G
+         FUEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=cGWE/qyVtF0Xm0XRgmS6v65MJoSNg2ouKO2ndi7seNg=;
+        b=BAwgkwlV+wMxQxXT+MGlLzcDhiN9Vn1RI1Olbe7WV3qE2OS2h5ADzTMiU1SzcTa8fA
+         PZma1BhXLCiyds9ZblHWp22WEUC4oS0Cq/IMe3ahpXj6HsrFLkCAjN3mBh5dMvfI+8FU
+         A/SoppLawfXbwdDjHp7qvBrw/qOxG2TrKY51wEVrOT00VPSPobznZQaxfas6KPd/SezA
+         M7c/nw+Qm5uXVxnMRjA3HhLeN6QBchmbkRQcwN7sxBKLlCZ6bIWTDdKnywHzHNgip93m
+         bIiw94KTp3U1OZlcnynv9V6zgHv7hrccxlBktj1ktV2011BaV2uM8kDh2mxPEA7/R+VD
+         DupQ==
+X-Gm-Message-State: APjAAAWRKNweHlZUufUaSEe1O90k/z2ApbJvXvj/nqYvkrCRpR3P/arm
+        /4AqjDwRMMKjK4D37en4d0Msre5Vrgbh
+X-Google-Smtp-Source: APXvYqzp94KW+lXm0LZaQQNGcUtXuvrutP74p5xG+E2LoUBDzNYsDXea2jiZSeUfPgrKOo233sI5FDiQ+9Xu
+X-Received: by 2002:a63:e26:: with SMTP id d38mr2621764pgl.44.1574127844187;
+ Mon, 18 Nov 2019 17:44:04 -0800 (PST)
+Date:   Mon, 18 Nov 2019 17:43:48 -0800
+Message-Id: <20191119014357.98465-1-brianvv@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.24.0.432.g9d3f5f5b63-goog
+Subject: [PATCH bpf-next 0/9] add bpf batch ops to process more than 1 elem
+From:   Brian Vazquez <brianvv@google.com>
+To:     Brian Vazquez <brianvv.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     Yonghong Song <yhs@fb.com>, Stanislav Fomichev <sdf@google.com>,
+        Petar Penkov <ppenkov@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Brian Vazquez <brianvv@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add BPF_MOD_{NOP_TO_JUMP,JUMP_TO_JUMP,JUMP_TO_NOP} patching for x86
-JIT in order to be able to patch direct jumps or nop them out. We need
-this facility in order to patch tail call jumps and in later work also
-BPF static keys.
+This patch series introduce batch ops that can be added to bpf maps to
+lookup/lookup_and_delete/update/delete more than 1 element at the time,
+this is specially useful when syscall overhead is a problem and in case
+of hmap it will provide a reliable way of traversing them.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- arch/x86/net/bpf_jit_comp.c | 64 ++++++++++++++++++++++++++-----------
- include/linux/bpf.h         |  6 ++++
- 2 files changed, 52 insertions(+), 18 deletions(-)
+The implementation inclues a generic approach that could potentially be
+used by any bpf map and adds it to arraymap, it also includes the specific
+implementation of hashmaps which are traversed using buckets instead
+of keys.
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 2e586f579945..f438bd3b7689 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -203,8 +203,9 @@ struct jit_context {
- /* Maximum number of bytes emitted while JITing one eBPF insn */
- #define BPF_MAX_INSN_SIZE	128
- #define BPF_INSN_SAFETY		64
--/* number of bytes emit_call() needs to generate call instruction */
--#define X86_CALL_SIZE		5
-+
-+/* Number of bytes emit_patch() needs to generate instructions */
-+#define X86_PATCH_SIZE		5
- 
- #define PROLOGUE_SIZE		25
- 
-@@ -215,7 +216,7 @@ struct jit_context {
- static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf)
- {
- 	u8 *prog = *pprog;
--	int cnt = X86_CALL_SIZE;
-+	int cnt = X86_PATCH_SIZE;
- 
- 	/* BPF trampoline can be made to work without these nops,
- 	 * but let's waste 5 bytes for now and optimize later
-@@ -480,64 +481,91 @@ static void emit_stx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
- 	*pprog = prog;
- }
- 
--static int emit_call(u8 **pprog, void *func, void *ip)
-+static int emit_patch(u8 **pprog, void *func, void *ip, u8 opcode)
- {
- 	u8 *prog = *pprog;
- 	int cnt = 0;
- 	s64 offset;
- 
--	offset = func - (ip + X86_CALL_SIZE);
-+	offset = func - (ip + X86_PATCH_SIZE);
- 	if (!is_simm32(offset)) {
- 		pr_err("Target call %p is out of range\n", func);
- 		return -EINVAL;
- 	}
--	EMIT1_off32(0xE8, offset);
-+	EMIT1_off32(opcode, offset);
- 	*pprog = prog;
- 	return 0;
- }
- 
-+static int emit_call(u8 **pprog, void *func, void *ip)
-+{
-+	return emit_patch(pprog, func, ip, 0xE8);
-+}
-+
-+static int emit_jump(u8 **pprog, void *func, void *ip)
-+{
-+	return emit_patch(pprog, func, ip, 0xE9);
-+}
-+
- int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		       void *old_addr, void *new_addr)
- {
--	u8 old_insn[X86_CALL_SIZE] = {};
--	u8 new_insn[X86_CALL_SIZE] = {};
-+	int (*emit_patch_fn)(u8 **pprog, void *func, void *ip);
-+	u8 old_insn[X86_PATCH_SIZE] = {};
-+	u8 new_insn[X86_PATCH_SIZE] = {};
- 	u8 *prog;
- 	int ret;
- 
- 	if (!is_kernel_text((long)ip) &&
- 	    !is_bpf_text_address((long)ip))
--		/* BPF trampoline in modules is not supported */
-+		/* BPF poking in modules is not supported */
- 		return -EINVAL;
- 
-+	switch (t) {
-+	case BPF_MOD_NOP_TO_CALL ... BPF_MOD_CALL_TO_NOP:
-+		emit_patch_fn = emit_call;
-+		break;
-+	case BPF_MOD_NOP_TO_JUMP ... BPF_MOD_JUMP_TO_NOP:
-+		emit_patch_fn = emit_jump;
-+		break;
-+	default:
-+		return -ENOTSUPP;
-+	}
-+
- 	if (old_addr) {
- 		prog = old_insn;
--		ret = emit_call(&prog, old_addr, (void *)ip);
-+		ret = emit_patch_fn(&prog, old_addr, (void *)ip);
- 		if (ret)
- 			return ret;
- 	}
- 	if (new_addr) {
- 		prog = new_insn;
--		ret = emit_call(&prog, new_addr, (void *)ip);
-+		ret = emit_patch_fn(&prog, new_addr, (void *)ip);
- 		if (ret)
- 			return ret;
- 	}
-+
- 	ret = -EBUSY;
- 	mutex_lock(&text_mutex);
- 	switch (t) {
- 	case BPF_MOD_NOP_TO_CALL:
--		if (memcmp(ip, ideal_nops[NOP_ATOMIC5], X86_CALL_SIZE))
-+	case BPF_MOD_NOP_TO_JUMP:
-+		if (memcmp(ip, ideal_nops[NOP_ATOMIC5], X86_PATCH_SIZE))
- 			goto out;
--		text_poke_bp(ip, new_insn, X86_CALL_SIZE, NULL);
-+		text_poke_bp(ip, new_insn, X86_PATCH_SIZE, NULL);
- 		break;
- 	case BPF_MOD_CALL_TO_CALL:
--		if (memcmp(ip, old_insn, X86_CALL_SIZE))
-+	case BPF_MOD_JUMP_TO_JUMP:
-+		if (memcmp(ip, old_insn, X86_PATCH_SIZE))
- 			goto out;
--		text_poke_bp(ip, new_insn, X86_CALL_SIZE, NULL);
-+		text_poke_bp(ip, new_insn, X86_PATCH_SIZE, NULL);
- 		break;
- 	case BPF_MOD_CALL_TO_NOP:
--		if (memcmp(ip, old_insn, X86_CALL_SIZE))
-+	case BPF_MOD_JUMP_TO_NOP:
-+		if (memcmp(ip, old_insn, X86_PATCH_SIZE))
- 			goto out;
--		text_poke_bp(ip, ideal_nops[NOP_ATOMIC5], X86_CALL_SIZE, NULL);
-+		text_poke_bp(ip, ideal_nops[NOP_ATOMIC5], X86_PATCH_SIZE,
-+			     NULL);
- 		break;
- 	}
- 	ret = 0;
-@@ -1394,7 +1422,7 @@ int arch_prepare_bpf_trampoline(void *image, struct btf_func_model *m, u32 flags
- 		/* skip patched call instruction and point orig_call to actual
- 		 * body of the kernel function.
- 		 */
--		orig_call += X86_CALL_SIZE;
-+		orig_call += X86_PATCH_SIZE;
- 
- 	prog = image;
- 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index e913dd5946ae..46b2c3bdc155 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1284,10 +1284,16 @@ static inline u32 bpf_xdp_sock_convert_ctx_access(enum bpf_access_type type,
- #endif /* CONFIG_INET */
- 
- enum bpf_text_poke_type {
-+	/* All call-related pokes. */
- 	BPF_MOD_NOP_TO_CALL,
- 	BPF_MOD_CALL_TO_CALL,
- 	BPF_MOD_CALL_TO_NOP,
-+	/* All jump-related pokes. */
-+	BPF_MOD_NOP_TO_JUMP,
-+	BPF_MOD_JUMP_TO_JUMP,
-+	BPF_MOD_JUMP_TO_NOP,
- };
-+
- int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		       void *addr1, void *addr2);
- 
+The bpf syscall subcommands introduced are:
+
+  BPF_MAP_LOOKUP_BATCH
+  BPF_MAP_LOOKUP_AND_DELETE_BATCH
+  BPF_MAP_UPDATE_BATCH
+  BPF_MAP_DELETE_BATCH
+
+The UAPI attribute is:
+
+  struct { /* struct used by BPF_MAP_*_BATCH commands */
+         __aligned_u64   in_batch;       /* start batch,
+                                          * NULL to start from beginning
+                                          */
+         __aligned_u64   out_batch;      /* output: next start batch */
+         __aligned_u64   keys;
+         __aligned_u64   values;
+         __u32           count;          /* input/output:
+                                          * input: # of key/value
+                                          * elements
+                                          * output: # of filled elements
+                                          */
+         __u32           map_fd;
+         __u64           elem_flags;
+         __u64           flags;
+  } batch;
+
+
+in_batch and out_batch are only used for lookup and lookup_and_delete since
+those are the only two operations that attempt to traverse the map.
+
+update/delete batch ops should provide the keys/values that user wants
+to modify.
+
+Here are the previous discussions on the batch processing:
+ - https://lore.kernel.org/bpf/20190724165803.87470-1-brianvv@google.com/
+ - https://lore.kernel.org/bpf/20190829064502.2750303-1-yhs@fb.com/
+ - https://lore.kernel.org/bpf/20190906225434.3635421-1-yhs@fb.com/
+
+Changelog since RFC:
+ - Change batch to in_batch and out_batch to support more flexible opaque
+   values to iterate the bpf maps.
+ - Remove update/delete specific batch ops for htab and use the generic
+   implementations instead.
+
+Brian Vazquez (6):
+  bpf: add bpf_map_{value_size,update_value,map_copy_value} functions
+  bpf: add generic support for lookup and lookup_and_delete batch ops
+  bpf: add generic support for update and delete batch ops
+  bpf: add lookup and updated batch ops to arraymap
+  tools/bpf: sync uapi header bpf.h
+  selftests/bpf: add batch ops testing to array bpf map
+
+Yonghong Song (3):
+  bpf: add batch ops to all htab bpf map
+  libbpf: add libbpf support to batch ops
+  selftests/bpf: add batch ops testing for hmap and hmap_percpu
+
+ include/linux/bpf.h                           |  21 +
+ include/uapi/linux/bpf.h                      |  21 +
+ kernel/bpf/arraymap.c                         |   2 +
+ kernel/bpf/hashtab.c                          | 244 ++++++++
+ kernel/bpf/syscall.c                          | 571 ++++++++++++++----
+ tools/include/uapi/linux/bpf.h                |  21 +
+ tools/lib/bpf/bpf.c                           |  61 ++
+ tools/lib/bpf/bpf.h                           |  14 +
+ tools/lib/bpf/libbpf.map                      |   4 +
+ .../map_lookup_and_delete_batch_array.c       | 119 ++++
+ .../map_lookup_and_delete_batch_htab.c        | 257 ++++++++
+ 11 files changed, 1215 insertions(+), 120 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch_array.c
+ create mode 100644 tools/testing/selftests/bpf/map_tests/map_lookup_and_delete_batch_htab.c
+
 -- 
-2.21.0
+2.24.0.432.g9d3f5f5b63-goog
 
