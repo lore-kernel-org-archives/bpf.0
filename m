@@ -2,222 +2,117 @@ Return-Path: <SRS0=WdG8=ZL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47614C47411
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 08:21:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EBCCC432C3
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 08:43:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2069F222A0
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 08:21:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 709FE21D7B
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 08:43:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="BeFB+A+E"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RJ0N/+tJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbfKSIQu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Nov 2019 03:16:50 -0500
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:15357 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725784AbfKSIQu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Nov 2019 03:16:50 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dd3a4f30000>; Tue, 19 Nov 2019 00:16:51 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 19 Nov 2019 00:16:48 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 19 Nov 2019 00:16:48 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 19 Nov
- 2019 08:16:47 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 19 Nov 2019 08:16:47 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dd3a4ed0008>; Tue, 19 Nov 2019 00:16:46 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH v6 01/24] mm/gup: pass flags arg to __gup_device_* functions
-Date:   Tue, 19 Nov 2019 00:16:20 -0800
-Message-ID: <20191119081643.1866232-2-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191119081643.1866232-1-jhubbard@nvidia.com>
-References: <20191119081643.1866232-1-jhubbard@nvidia.com>
+        id S1726825AbfKSInJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Nov 2019 03:43:09 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:43511 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725798AbfKSInI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Nov 2019 03:43:08 -0500
+Received: by mail-oi1-f195.google.com with SMTP id l20so18124003oie.10;
+        Tue, 19 Nov 2019 00:43:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v/mDkshH35krYGIcPe3UVwAraJNURQQjI1DwQdPxnyw=;
+        b=RJ0N/+tJOjLQGrFWcli88Fzip5D5+7bQdfI31Rga+whmF3pumyCghWYvfRfThJh5hJ
+         XTvq4MVbfjxir4NUT4yI6gFq0eKvEjHqLbnC0s0jEQMJtsjlf2sXwwuMMs8l9sujmyGp
+         COLoH0x4DkEaN1XeDopDzgQx17qQte/Y+W5mwQKIAP7BG4GAh+6YR85L1aVGP4uMsya8
+         2x5RqMSjrXfmp6ggA4SA4ygmt24XW54tBWk/zfn+ZpDJ0xwauLRtieeaOnaITshW8fT7
+         UW2lXQy3itW8tEoEcj7dw9ISHZHo9baJAeEz7460liOtxa9w38bgDcZyPU1O6qZZM+l3
+         xeNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v/mDkshH35krYGIcPe3UVwAraJNURQQjI1DwQdPxnyw=;
+        b=We6FXZ87+o11EFKRKN7297GmvGuydQKRC54Gd4RgZta8DexOPZYbLbb/ryWa1QJLY8
+         SBJSlb+V2ZND7SrkwYF0IJ1PJvM91wz+e/sOS1KJh7+UcXg441USxj5DQAqPctWKLlUr
+         FahscEIjLGyxj4CrxoV/JIX/XP/zs1NXSXbLbjhfW69j+kTykrYA7yofNyOX533Htu5Y
+         kUmYtlpq9rxQbNEFOhsztixZxjwR0s/SntocvTJuO34VJg2mEaoY7EHjA4BhOp10S5qb
+         JibtI17OZ382OT5+/icxBNGseI+5udZb/bShj9fo0e+JpiB8+GgFL4SsegFmXxWz+5hj
+         1MAA==
+X-Gm-Message-State: APjAAAX8lOr6GWzM6npeWhIsiLl9ptYyzLkyBO4XFm+Ozlgu4xtOUgky
+        DE1prq8FXn98iEuoSuUJJZKHLMPo3ENeYJ3W63Y=
+X-Google-Smtp-Source: APXvYqwqQmZr8xiGHAtlQpSHBkO2jeSbsvCCCR2ELA6wUZ8mlisIbvspwWKfTbMvO46yWsKYmuga89dEAqYfFFpNDD8=
+X-Received: by 2002:aca:4945:: with SMTP id w66mr3164282oia.98.1574152986206;
+ Tue, 19 Nov 2019 00:43:06 -0800 (PST)
 MIME-Version: 1.0
-X-NVConfidentiality: public
+References: <20191119001951.92930-1-lrizzo@google.com>
+In-Reply-To: <20191119001951.92930-1-lrizzo@google.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Tue, 19 Nov 2019 09:42:55 +0100
+Message-ID: <CAJ8uoz2EsL76DyfCNP4taFyF9_ES0riV34-FURDDV_KRAAVyvA@mail.gmail.com>
+Subject: Re: [PATCH v2] net-af_xdp: use correct number of channels from ethtool
+To:     Luigi Rizzo <lrizzo@google.com>
+Cc:     "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, rizzo@iet.unipi.it
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574151411; bh=shQdk3aSV65MVp9nCFIR9V5hifAIbJq1aZuVoQR8zJ0=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Type:Content-Transfer-Encoding;
-        b=BeFB+A+EJ4mKjCv+/UFQ4KvRmvqdyjoWqtWaibjOPbCpARHJdf2BQCQj0Y5VYK2SK
-         l4yZ90D68hdTXPCnOTR8pAtb21gqPg1SGtOTRMOm/B8hMOaAZ8dQS5wTi9dsLxXPtb
-         i4va/2iA6HIzBf+9wQW4kJJSQzMfFSUs0Vou9prfpmaND6CYavsinow28ibfv30yph
-         C2EC8doSqu/g7/B76TfjNUMReCFcBZbpy3XTq7OjKJ68xEUTnNhNMwBRjlxjIwGFoJ
-         MN1jgXaLuV6UcOdOZI0IPuf9eOnbuFZglMCLrUVLgvDJQp6pjEehLD+NYHX/nNFExC
-         Ho6R0samwlY6w==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A subsequent patch requires access to gup flags, so
-pass the flags argument through to the __gup_device_*
-functions.
+On Tue, Nov 19, 2019 at 1:20 AM Luigi Rizzo <lrizzo@google.com> wrote:
+>
+> Drivers use different fields to report the number of channels, so take
+> the maximum of all data channels (rx, tx, combined) when determining the
+> size of the xsk map. The current code used only 'combined' which was set
+> to 0 in some drivers e.g. mlx4.
+>
+> Tested: compiled and run xdpsock -q 3 -r -S on mlx4
+> Signed-off-by: Luigi Rizzo <lrizzo@google.com>
+> ---
+>  tools/lib/bpf/xsk.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+> index 74d84f36a5b24..37921375f4d45 100644
+> --- a/tools/lib/bpf/xsk.c
+> +++ b/tools/lib/bpf/xsk.c
+> @@ -431,13 +431,18 @@ static int xsk_get_max_queues(struct xsk_socket *xsk)
+>                 goto out;
+>         }
+>
+> -       if (err || channels.max_combined == 0)
+> +       if (err) {
+>                 /* If the device says it has no channels, then all traffic
+>                  * is sent to a single stream, so max queues = 1.
+>                  */
+>                 ret = 1;
+> -       else
+> -               ret = channels.max_combined;
+> +       } else {
+> +               /* Take the max of rx, tx, combined. Drivers return
+> +                * the number of channels in different ways.
+> +                */
+> +               ret = max(channels.max_rx, channels.max_tx);
+> +               ret = max(ret, (int)channels.max_combined);
+> +       }
+>
+>  out:
+>         close(fd);
+> --
+> 2.24.0.432.g9d3f5f5b63-goog
+>
 
-Also placate checkpatch.pl by shortening a nearby line.
+Thanks Luigi.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- mm/gup.c | 28 ++++++++++++++++++----------
- 1 file changed, 18 insertions(+), 10 deletions(-)
-
-diff --git a/mm/gup.c b/mm/gup.c
-index 8f236a335ae9..85caf76b3012 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1890,7 +1890,8 @@ static int gup_pte_range(pmd_t pmd, unsigned long add=
-r, unsigned long end,
-=20
- #if defined(CONFIG_ARCH_HAS_PTE_DEVMAP) && defined(CONFIG_TRANSPARENT_HUGE=
-PAGE)
- static int __gup_device_huge(unsigned long pfn, unsigned long addr,
--		unsigned long end, struct page **pages, int *nr)
-+			     unsigned long end, unsigned int flags,
-+			     struct page **pages, int *nr)
- {
- 	int nr_start =3D *nr;
- 	struct dev_pagemap *pgmap =3D NULL;
-@@ -1916,13 +1917,14 @@ static int __gup_device_huge(unsigned long pfn, uns=
-igned long addr,
- }
-=20
- static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long ad=
-dr,
--		unsigned long end, struct page **pages, int *nr)
-+				 unsigned long end, unsigned int flags,
-+				 struct page **pages, int *nr)
- {
- 	unsigned long fault_pfn;
- 	int nr_start =3D *nr;
-=20
- 	fault_pfn =3D pmd_pfn(orig) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
--	if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
-+	if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
- 		return 0;
-=20
- 	if (unlikely(pmd_val(orig) !=3D pmd_val(*pmdp))) {
-@@ -1933,13 +1935,14 @@ static int __gup_device_huge_pmd(pmd_t orig, pmd_t =
-*pmdp, unsigned long addr,
- }
-=20
- static int __gup_device_huge_pud(pud_t orig, pud_t *pudp, unsigned long ad=
-dr,
--		unsigned long end, struct page **pages, int *nr)
-+				 unsigned long end, unsigned int flags,
-+				 struct page **pages, int *nr)
- {
- 	unsigned long fault_pfn;
- 	int nr_start =3D *nr;
-=20
- 	fault_pfn =3D pud_pfn(orig) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
--	if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
-+	if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
- 		return 0;
-=20
- 	if (unlikely(pud_val(orig) !=3D pud_val(*pudp))) {
-@@ -1950,14 +1953,16 @@ static int __gup_device_huge_pud(pud_t orig, pud_t =
-*pudp, unsigned long addr,
- }
- #else
- static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long ad=
-dr,
--		unsigned long end, struct page **pages, int *nr)
-+				 unsigned long end, unsigned int flags,
-+				 struct page **pages, int *nr)
- {
- 	BUILD_BUG();
- 	return 0;
- }
-=20
- static int __gup_device_huge_pud(pud_t pud, pud_t *pudp, unsigned long add=
-r,
--		unsigned long end, struct page **pages, int *nr)
-+				 unsigned long end, unsigned int flags,
-+				 struct page **pages, int *nr)
- {
- 	BUILD_BUG();
- 	return 0;
-@@ -2062,7 +2067,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsi=
-gned long addr,
- 	if (pmd_devmap(orig)) {
- 		if (unlikely(flags & FOLL_LONGTERM))
- 			return 0;
--		return __gup_device_huge_pmd(orig, pmdp, addr, end, pages, nr);
-+		return __gup_device_huge_pmd(orig, pmdp, addr, end, flags,
-+					     pages, nr);
- 	}
-=20
- 	refs =3D 0;
-@@ -2092,7 +2098,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsi=
-gned long addr,
- }
-=20
- static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
--		unsigned long end, unsigned int flags, struct page **pages, int *nr)
-+			unsigned long end, unsigned int flags,
-+			struct page **pages, int *nr)
- {
- 	struct page *head, *page;
- 	int refs;
-@@ -2103,7 +2110,8 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, unsi=
-gned long addr,
- 	if (pud_devmap(orig)) {
- 		if (unlikely(flags & FOLL_LONGTERM))
- 			return 0;
--		return __gup_device_huge_pud(orig, pudp, addr, end, pages, nr);
-+		return __gup_device_huge_pud(orig, pudp, addr, end, flags,
-+					     pages, nr);
- 	}
-=20
- 	refs =3D 0;
---=20
-2.24.0
-
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
