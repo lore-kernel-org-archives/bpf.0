@@ -2,145 +2,99 @@ Return-Path: <SRS0=WdG8=ZL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9FF4C432C0
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 05:29:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AD4CC432C0
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 05:59:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7BFAE22309
-	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 05:29:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1574141357;
-	bh=8JMcbCa2WKKz+0rsNJcoxlfJyTxFxkW6Mt8zV/xTAdU=;
-	h=Date:From:To:Subject:References:In-Reply-To:List-ID:From;
-	b=AnZfgI5qd6sdsh/HZ540hx79XVhoIOESv2b3+4TEVOJOkK2BklpLeogP1qyxrdjGg
-	 3N7gL+7VGdSWS9BVODb7rV0oNatrWNEekcxETqcyEM12rzLpQfacsHC++GhEAIBw7f
-	 bn+h9pQjjthZKtG8SBhqVCYjD2EDf5riSd9Q4xAw=
+	by mail.kernel.org (Postfix) with ESMTP id 41AB6222C7
+	for <bpf@archiver.kernel.org>; Tue, 19 Nov 2019 05:59:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XHjzPY42"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728962AbfKSF3P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Nov 2019 00:29:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47770 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728944AbfKSF3P (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Nov 2019 00:29:15 -0500
-Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5EA8421823;
-        Tue, 19 Nov 2019 05:29:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574141354;
-        bh=8JMcbCa2WKKz+0rsNJcoxlfJyTxFxkW6Mt8zV/xTAdU=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=qabvm+IvlkJYQun3fh27xE5jpHp5kNB4XaC5w+hBEUkzXWqYOJ9RD7p4ruZVj2C+a
-         Q0g2vTvCkC2rV+GHtwbgcE92wdyNLRaiwlUeX9rV/6oQV49PegVHILWShVFQjwlt9v
-         sC35xaQOKfKinpwSGZYPN/n64Iuf4AKMwwhgB3Ww=
-Date:   Mon, 18 Nov 2019 21:29:12 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        syzbot <syzbot+83979935eb6304f8cd46@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: kernel panic: stack is corrupted in __lock_acquire (4)
-Message-ID: <20191119052912.GM163020@sol.localdomain>
-References: <0000000000009b3b80058af452ae@google.com>
- <0000000000000ec274059185a63e@google.com>
- <CACT4Y+aT5z65OZE6_TQieU5zUYWDvDtAogC45f6ifLkshBK2iw@mail.gmail.com>
- <20191017162505.GB726@sol.localdomain>
- <20191017163007.GC726@sol.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191017163007.GC726@sol.localdomain>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+        id S1727836AbfKSF7M (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Nov 2019 00:59:12 -0500
+Received: from mail-il1-f194.google.com ([209.85.166.194]:45598 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730873AbfKSFr7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Nov 2019 00:47:59 -0500
+Received: by mail-il1-f194.google.com with SMTP id o18so18458361ils.12;
+        Mon, 18 Nov 2019 21:47:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=IPbz9l190FdmmP/HIacCh9FEoAxpsKjWPjvXe684Hi8=;
+        b=XHjzPY426lID6GEuEBPHFjTp/lisw9NDm0k1lmLR6G1YFopEh5wKt9cmkl3lstJUy5
+         S32P0X9iVj9mpTQs+zB4Rd5Wee2mACD/+79dFlmwbfaHBgkbqrgSNa58zzms/nIbH7BB
+         XDrT0DUJqFO8BAO4GWosLVMg2N+JdA4O72YpJhXot6i7xPjQiB0Ibi0WPeLqLEntMq1M
+         qW3ENXNVvJQtyJrjMp3POrto4Y89ezTcTz0pHqsx0GrJxKZmQ/u+n8Pd3Zaee5Avlv5r
+         70a/Czns9D1ZHY09tiDo605EEkytT9o9067hU5D8rE+jzEeVe97TA8dynz76C2UR362R
+         5Azw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=IPbz9l190FdmmP/HIacCh9FEoAxpsKjWPjvXe684Hi8=;
+        b=NsSUIvBGID2HP9Wt/FlYr3cbLVfO6Qf4VMJmdJDqp1WwovD7aZMmkfRfeINfTQ6nky
+         YRgUKyVMcQW+9ue6tctZLP6Wn5/LwyQyxeYWhED9iwZrrH5UMtk43bWe4lNVAXcqnkat
+         ITknwR6UPdFShCQ9Gv/xEmLOXCVlX7NLQl8vrpgU2A3BHDTNECxearzASSA89ZNa6d2d
+         Q4vAGnxbLd05tNFsvns2w+KrpJgACSXDqVsmp9ABaj7cNVAxe73rowA+B/Ndc4EPkBhe
+         XdzUaQlt1JJyXhQ7IPE996kyNTmcsBFmmH+jcDVJP3d+uIKCcSBaXa6LJhDcTzTvUcSh
+         Gb6A==
+X-Gm-Message-State: APjAAAVHWZsvreb1H1n810eruq2oO4MqFUDQWsxo75BMl6WmyQsl8glB
+        LApm2+s8+dniQ3cbGYQ5xYA=
+X-Google-Smtp-Source: APXvYqzX7QU2fknvTCLaROE5n/eN1zTPJpliVi7yGVgZU1K2YvZg2/ZGxiI0abhRTKOg+8K+zRv47g==
+X-Received: by 2002:a92:6611:: with SMTP id a17mr19096397ilc.148.1574142478680;
+        Mon, 18 Nov 2019 21:47:58 -0800 (PST)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id z24sm4023653ioc.47.2019.11.18.21.47.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Nov 2019 21:47:58 -0800 (PST)
+Date:   Mon, 18 Nov 2019 21:47:49 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, john.fastabend@gmail.com,
+        jakub.kicinski@netronome.com, daniel@iogearbox.net,
+        Willem de Bruijn <willemb@google.com>
+Message-ID: <5dd38205959a5_613b2afc5fa285c4e6@john-XPS-13-9370.notmuch>
+In-Reply-To: <20191118154051.242699-1-willemdebruijn.kernel@gmail.com>
+References: <20191118154051.242699-1-willemdebruijn.kernel@gmail.com>
+Subject: RE: [PATCH] net/tls: enable sk_msg redirect to tls socket egress
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 09:30:07AM -0700, Eric Biggers wrote:
-> On Thu, Oct 17, 2019 at 09:25:05AM -0700, Eric Biggers wrote:
-> > On Sun, Sep 01, 2019 at 08:23:42PM -0700, 'Dmitry Vyukov' via syzkaller-bugs wrote:
-> > > On Sun, Sep 1, 2019 at 3:48 PM syzbot
-> > > <syzbot+83979935eb6304f8cd46@syzkaller.appspotmail.com> wrote:
-> > > >
-> > > > syzbot has found a reproducer for the following crash on:
-> > > >
-> > > > HEAD commit:    38320f69 Merge branch 'Minor-cleanup-in-devlink'
-> > > > git tree:       net-next
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=13d74356600000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=1bbf70b6300045af
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=83979935eb6304f8cd46
-> > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1008b232600000
-> > > 
-> > > Stack corruption + bpf maps in repro triggers some bells. +bpf mailing list.
-> > > 
-> > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > > Reported-by: syzbot+83979935eb6304f8cd46@syzkaller.appspotmail.com
-> > > >
-> > > > Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in:
-> > > > __lock_acquire+0x36fa/0x4c30 kernel/locking/lockdep.c:3907
-> > > > CPU: 0 PID: 8662 Comm: syz-executor.4 Not tainted 5.3.0-rc6+ #153
-> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > > > Google 01/01/2011
-> > > > Call Trace:
-> > > > Kernel Offset: disabled
-> > > > Rebooting in 86400 seconds..
-> > > >
-> > 
-> > This is still reproducible on latest net tree, but using a different kconfig I
-> > was able to get a more informative crash output.  Apparently tcp_bpf_unhash() is
-> > being called recursively.  Anyone know why this might happen?
-> > 
-> > This is using the syzkaller language reproducer linked above -- I ran it with:
-> > 
-> > 	syz-execprog -threaded=1 -collide=1 -cover=0 -repeat=0 -procs=8 -sandbox=none -enable=net_dev,net_reset,tun syz_bpf.txt
-> > 
-> > Crash report on net/master:
-> > 
-> > PANIC: double fault, error_code: 0x0
-> > CPU: 3 PID: 8328 Comm: syz-executor Not tainted 5.4.0-rc1-00118-ge497c20e2036 #31
-> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20191013_105130-anatol 04/01/2014
-> > RIP: 0010:mark_lock+0x4/0x640 kernel/locking/lockdep.c:3631
-> > Code: a2 7f 27 01 85 c0 0f 84 f3 42 00 00 48 8d 65 d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 66 66 2e 0f 1f 84 00 00 00 00 00 55 48 89 e5 <41> 57 41 56 41 55 41 54 53 48 83 ec 18 83 fa 08 76 21 44 8b 25 ab
-> > RSP: 0018:ffffc9000010d000 EFLAGS: 00010046
-> > RAX: 0000000000000000 RBX: 0000000000000005 RCX: 0000000000000000
-> > RDX: 0000000000000008 RSI: ffff888071f92dd8 RDI: ffff888071f92600
-> > RBP: ffffc9000010d000 R08: 0000000000000000 R09: 0000000000022023
-> > R10: 00000000000000c8 R11: 0000000000000000 R12: ffff888071f92600
-> > R13: ffff888071f92dd8 R14: 0000000000000023 R15: 0000000000000000
-> > FS:  00007ff9f7765700(0000) GS:ffff88807fd80000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: ffffc9000010cff8 CR3: 000000000221d000 CR4: 00000000003406e0
-> > Call Trace:
-> >  <IRQ>
-> >  mark_usage kernel/locking/lockdep.c:3592 [inline]
-> >  __lock_acquire+0x22f/0xf80 kernel/locking/lockdep.c:3909
-> >  lock_acquire+0x99/0x170 kernel/locking/lockdep.c:4487
-> >  rcu_lock_acquire include/linux/rcupdate.h:208 [inline]
-> >  rcu_read_lock include/linux/rcupdate.h:599 [inline]
-> >  tcp_bpf_unhash+0x33/0x1d0 net/ipv4/tcp_bpf.c:549
-> >  tcp_bpf_unhash+0x19b/0x1d0 net/ipv4/tcp_bpf.c:554
-> >  tcp_bpf_unhash+0x19b/0x1d0 net/ipv4/tcp_bpf.c:554
-> >  tcp_bpf_unhash+0x19b/0x1d0 net/ipv4/tcp_bpf.c:554
-> >  tcp_bpf_unhash+0x19b/0x1d0 net/ipv4/tcp_bpf.c:554
-> [...]
+Willem de Bruijn wrote:
+> From: Willem de Bruijn <willemb@google.com>
 > 
-> Recursive tcp_bpf_unhash() also showed up in
-> "BUG: unable to handle kernel paging request in tls_prots"
-> (https://lkml.kernel.org/lkml/000000000000d7bcbb058c3758a1@google.com/T/)
-> which was claimed to be fixed by
-> "bpf: sockmap/tls, close can race with map free".
-> But that fix was months ago; this crash is on latest net tree.
+> Bring back tls_sw_sendpage_locked. sk_msg redirection into a socket
+> with TLS_TX takes the following path:
 > 
+>   tcp_bpf_sendmsg_redir
+>     tcp_bpf_push_locked
+>       tcp_bpf_push
+>         kernel_sendpage_locked
+>           sock->ops->sendpage_locked
+> 
+> Also update the flags test in tls_sw_sendpage_locked to allow flag
+> MSG_NO_SHARED_FRAGS. bpf_tcp_sendmsg sets this.
+> 
+> Link: https://lore.kernel.org/netdev/CA+FuTSdaAawmZ2N8nfDDKu3XLpXBbMtcCT0q4FntDD2gn8ASUw@mail.gmail.com/T/#t
+> Link: https://github.com/wdebruij/kerneltools/commits/icept.2
+> Fixes: 0608c69c9a80 ("bpf: sk_msg, sock{map|hash} redirect through ULP")
+> Fixes: f3de19af0f5b ("Revert \"net/tls: remove unused function tls_sw_sendpage_locked\"")
+> Signed-off-by: Willem de Bruijn <willemb@google.com>
+> ---
 
-Is anyone planning to look into this?  This is still occurring on net-next
-(4 days ago).
-
-- Eric
+Acked-by: John Fastabend <john.fastabend@gmail.com>
