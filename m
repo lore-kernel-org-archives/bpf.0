@@ -2,70 +2,148 @@ Return-Path: <SRS0=ZGki=ZN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 651CAC432C3
-	for <bpf@archiver.kernel.org>; Thu, 21 Nov 2019 07:18:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FC68C432C0
+	for <bpf@archiver.kernel.org>; Thu, 21 Nov 2019 07:18:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 372DE20872
-	for <bpf@archiver.kernel.org>; Thu, 21 Nov 2019 07:18:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 21B7020872
+	for <bpf@archiver.kernel.org>; Thu, 21 Nov 2019 07:18:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EhqskhIh"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="UDv7hXGr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbfKUHSH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Nov 2019 02:18:07 -0500
-Received: from mail-lf1-f54.google.com ([209.85.167.54]:40738 "EHLO
-        mail-lf1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727050AbfKUHSF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Nov 2019 02:18:05 -0500
-Received: by mail-lf1-f54.google.com with SMTP id v24so1709352lfi.7
-        for <bpf@vger.kernel.org>; Wed, 20 Nov 2019 23:18:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=sHDD4rZjcvAKSZL0sB2cnt1gkKhkiAqFUr7Nwb4duCU=;
-        b=EhqskhIhN7Kzl9Py8useMCWBkBso6B1TCzeVFKsP5WNi6nmOUYWSwMMga9U8/jJe6S
-         Y453aOvnz1bdrrcJkaz3jS7D6JUBlstWEP08pdNWlhRxbj80wTD5au28gdjwlePWFbiO
-         uBBbm8yz5aa0DsMQWMWWTtDdL2d1N+lc7AVY5OnTm2da/XIPKsonvRbgf/BtpTw1aC2K
-         HI4dxw5M1Ad4wUWyWMQWkchxi+DIJqrCG4r0Sk0SV+ZcFkQsjhVgfkxBG2U2207qulyn
-         muL3C61G2Z92w+hztWVKvvjHohPiuCzE49FWGIXfdcQSlzC5yI1dUcI2fr3oNdfZk9Qc
-         QtfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=sHDD4rZjcvAKSZL0sB2cnt1gkKhkiAqFUr7Nwb4duCU=;
-        b=TwTkJ2GCAcI0yG1/iBZcXZEGytla0ko1u1u9uLGIYf2udEsYkp+fG1tHQvrXmenqgZ
-         HR7JMB0PWtutpI3HbzzuRIX3e2pcKPmPyICvsmY2XDKTyMcnz8OJVUFWpZmWik3Lhi2U
-         BarYGczxVaPNFLNGUSPEhTeWRsS+J62lepATbSfvXmzj0Q+xUsVFGpPNNcUHMfzLqdhB
-         /Q0CSbeRu6P7YX85GZZkSBR/S2QmlMAYG4AUJcnJEoczxn4bbKTqL//8e/aSwPqwJk7g
-         uMFhw4rc40P0PDY1SPuh6Bnx4YvV56RGHl+/yue/QF0qnlz3ZfjexSzM5qS5ubzEWeid
-         HzXQ==
-X-Gm-Message-State: APjAAAVmXM2OxiYJB6op5GmNOZ/YYZZKEeGA8J8BQWHpZ86ovnWaLvrA
-        rnbKiRGKVH0hC4CsyyUz3aC2I3sMDG7zl09A3j4=
-X-Google-Smtp-Source: APXvYqzO15NdwrAImDU0kPkTCMTNp1m28yKJvnMXpjrieVAEBgCcTNfArcccEmYTA7AqJCIA1aXEGkGkdtDhtlU0w0o=
-X-Received: by 2002:a05:6512:511:: with SMTP id o17mr6238648lfb.167.1574320682120;
- Wed, 20 Nov 2019 23:18:02 -0800 (PST)
+        id S1727360AbfKUHRp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Nov 2019 02:17:45 -0500
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:13023 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727050AbfKUHN7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Nov 2019 02:13:59 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dd639380001>; Wed, 20 Nov 2019 23:14:00 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Wed, 20 Nov 2019 23:13:57 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Wed, 20 Nov 2019 23:13:57 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 21 Nov
+ 2019 07:13:57 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 21 Nov 2019 07:13:57 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5dd639350000>; Wed, 20 Nov 2019 23:13:57 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v7 19/24] vfio, mm: pin_user_pages (FOLL_PIN) and put_user_page() conversion
+Date:   Wed, 20 Nov 2019 23:13:49 -0800
+Message-ID: <20191121071354.456618-20-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191121071354.456618-1-jhubbard@nvidia.com>
+References: <20191121071354.456618-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 20 Nov 2019 23:17:50 -0800
-Message-ID: <CAADnVQJ8NN3YV3Dws_V0gAiM21dH0=UDw6G=2O0OhYQ7Jj1CuA@mail.gmail.com>
-Subject: test failures after merge
-To:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1574320440; bh=nI3kBsm1YYmEZh4r0pGrnWMl68q+Rq4M7HG7pTJrYP4=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=UDv7hXGrBG/yd6ToTnVLxiTw9r1H4giBXZNVJ6DpNhyAl4KY/tyMaq+wFxnHOdMtV
+         i6AkoGUNL3wEyFlwt9HbgsAyf/SniOPZK9HqqqTkGWvp95bKLP4ZrPVIbebeGhFVNg
+         eSmLsDzCah1dUYnfTnfSryQIs4sk8ta+DUuaK7rV4th2Fx3ncB3J6jdaJrhY1OwcOK
+         fgT1xS6ChSchMjYwgaCp4F9NxbbSvQLXsqEHs80t/lCoGAURk4yw10TZK1u8rEw5I4
+         fjDaykUkkaLbGldcR6iMqKlwWiFfTSZxzqAG1djSZcHsSLWbP7WLlivUWKovbw8neX
+         NjXDeQTFV8djg==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Andrii,
+1. Change vfio from get_user_pages_remote(), to
+pin_user_pages_remote().
 
-after bpf-next got merged into net-next new failures appeared:
-./test_progs -n 5/1
-test_core_reloc:FAIL:check_result output byte #0: EXP 0x01 GOT 0x01
-Could you please take a look?
-Thanks!
+2. Because all FOLL_PIN-acquired pages must be released via
+put_user_page(), also convert the put_page() call over to
+put_user_pages_dirty_lock().
+
+Note that this effectively changes the code's behavior in
+vfio_iommu_type1.c: put_pfn(): it now ultimately calls
+set_page_dirty_lock(), instead of set_page_dirty(). This is
+probably more accurate.
+
+As Christoph Hellwig put it, "set_page_dirty() is only safe if we are
+dealing with a file backed page where we have reference on the inode it
+hangs off." [1]
+
+[1] https://lore.kernel.org/r/20190723153640.GB720@lst.de
+
+Cc: Alex Williamson <alex.williamson@redhat.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ drivers/vfio/vfio_iommu_type1.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type=
+1.c
+index c7a111ad9975..18aa36b56896 100644
+--- a/drivers/vfio/vfio_iommu_type1.c
++++ b/drivers/vfio/vfio_iommu_type1.c
+@@ -327,9 +327,8 @@ static int put_pfn(unsigned long pfn, int prot)
+ {
+ 	if (!is_invalid_reserved_pfn(pfn)) {
+ 		struct page *page =3D pfn_to_page(pfn);
+-		if (prot & IOMMU_WRITE)
+-			SetPageDirty(page);
+-		put_page(page);
++
++		put_user_pages_dirty_lock(&page, 1, prot & IOMMU_WRITE);
+ 		return 1;
+ 	}
+ 	return 0;
+@@ -347,7 +346,7 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned=
+ long vaddr,
+ 		flags |=3D FOLL_WRITE;
+=20
+ 	down_read(&mm->mmap_sem);
+-	ret =3D get_user_pages_remote(NULL, mm, vaddr, 1, flags | FOLL_LONGTERM,
++	ret =3D pin_user_pages_remote(NULL, mm, vaddr, 1, flags | FOLL_LONGTERM,
+ 				    page, NULL, NULL);
+ 	if (ret =3D=3D 1) {
+ 		*pfn =3D page_to_pfn(page[0]);
+--=20
+2.24.0
+
