@@ -2,192 +2,79 @@ Return-Path: <SRS0=ZGki=ZN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC772C432C3
-	for <bpf@archiver.kernel.org>; Thu, 21 Nov 2019 17:06:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABB8CC432C0
+	for <bpf@archiver.kernel.org>; Thu, 21 Nov 2019 17:18:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AE16C20692
-	for <bpf@archiver.kernel.org>; Thu, 21 Nov 2019 17:06:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 63BE12070E
+	for <bpf@archiver.kernel.org>; Thu, 21 Nov 2019 17:18:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NHCUwKLM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H2YJ3ICG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727104AbfKURGz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Nov 2019 12:06:55 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:50198 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726912AbfKURGz (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 21 Nov 2019 12:06:55 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xALGxMad012686
-        for <bpf@vger.kernel.org>; Thu, 21 Nov 2019 09:06:53 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=/f3TJc24kT2Fl/zq/XaI9B46jjvNZ1jCHXxlSAtd9/8=;
- b=NHCUwKLM43FXQ2i4fKf/Rm0SFw9I1josyxArsCt+4XFMNxOsRk99WYCzZWEGkY2eLVj7
- vfX+WaXTxpvEz8HpD1sofsK8I4XMIkzezvn6x4OwSTVPBiqmG/evwRKUvFpzXDKUQwFP
- 0E/4R4lK+ieB+Mmuvqa4y36HNT0sL0Fm5jc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wdjuvf5n3-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 21 Nov 2019 09:06:53 -0800
-Received: from 2401:db00:2120:81ca:face:0:31:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 21 Nov 2019 09:06:51 -0800
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id A98523701F42; Thu, 21 Nov 2019 09:06:50 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 1/2] bpf: provide better register bounds after jmp32 instructions
-Date:   Thu, 21 Nov 2019 09:06:50 -0800
-Message-ID: <20191121170650.449030-1-yhs@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191121170650.448973-1-yhs@fb.com>
-References: <20191121170650.448973-1-yhs@fb.com>
-X-FB-Internal: Safe
+        id S1726293AbfKURSi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Nov 2019 12:18:38 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:40513 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726279AbfKURSh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Nov 2019 12:18:37 -0500
+Received: by mail-lj1-f193.google.com with SMTP id q2so4117387ljg.7;
+        Thu, 21 Nov 2019 09:18:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xN6nbu9DL5W8hgvBdkR7MXQdL0l/GpycEKoXFkz+Odg=;
+        b=H2YJ3ICG1oQr0+rDhEh3v7q9fc+vMwT119tRsg1oFRuhLUEB3xGNE62PZYKB6+iLam
+         lJf6CWbLPxOfKAvQP95NqjnMleeHuevFrl+AMz2zhk69DwAi9nIAOyTOBnzTvzz7I1Hi
+         YW7+C3kVZ/uCWZQ+M6//Z1O48Umricm35bA08+xMdbGcKNL0Rt8sfdPLL7BFJUUHn4CI
+         uajG2WOIhW7F9NRjGgAJmPbHAooR2Z0cSkAaAMVwQJXbcQtz/+JrhmlATf4mLk7AjH2r
+         SBhN2Lb1aFs4JsHtAKVdk1Cj4CYyIrz7fQHKliIlAmoIkJ8lQM5LRZOyhxCTcpYC9xGy
+         VTJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xN6nbu9DL5W8hgvBdkR7MXQdL0l/GpycEKoXFkz+Odg=;
+        b=gSHLL5AruWNUVkaCbbrOZwfpB2ULMa8qUw5uSL/KyDlYDHkmB71UWah5O61/mpyV3m
+         0j9pC/8oOIBnJMs0roGjhim6Bcn1SeM+8omqlfvy+p0rJYJ4hMq5M6Sh3ZVWBWnjxUVA
+         5+9kBnFlcUZ3LS8pClwy3lsun26ECBEa5nosW7VjCnjVJB9SXjRUe7GhD/2M88u28p8O
+         WOrXQdHb7v3AYoUkBkD31aU/uR4UoQqyUskuG8JWbrYXR74T3dThJV6tYsGIo6SaDS2/
+         AtZpQH/94foe8UIjyZKeNgU0zKLUC53QLQ8QmyyMLpH6BCAFf1yru50TpmJRFKVK5BHb
+         6dIA==
+X-Gm-Message-State: APjAAAU6zPf4zbDVJYDjiis7WlnLec6PCnIAQLqBADKdun6tKSvCyIku
+        iCcOKCnfe2eGaQrEC4z6dkDhc3yqpqYelNj7/30=
+X-Google-Smtp-Source: APXvYqzBs/CZZ9Ag7/TeD6ZlCw4t/k6QjEQ+ryJvqwSf6Se2GZEfp+Pa+e1aYqkoinnHVGbV7tUkq9trvdzMkAP3rCI=
+X-Received: by 2002:a2e:85d5:: with SMTP id h21mr8630846ljj.243.1574356715361;
+ Thu, 21 Nov 2019 09:18:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-21_04:2019-11-21,2019-11-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=1
- mlxlogscore=684 mlxscore=0 phishscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1911210148
-X-FB-Internal: deliver
+References: <20191121070743.1309473-1-andriin@fb.com>
+In-Reply-To: <20191121070743.1309473-1-andriin@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 21 Nov 2019 09:18:23 -0800
+Message-ID: <CAADnVQLH2-HurZ3VAgtzmjrLCs9+1C9PaZ4=DNUofiJXV4grCw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/4] Support global variables
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With latest llvm (trunk https://github.com/llvm/llvm-project),
-test_progs, which has +alu32 enabled, failed for strobemeta.o.
-The verifier output looks like below with edit to replace large
-decimal numbers with hex ones.
- 193: (85) call bpf_probe_read_user_str#114
-   R0=inv(id=0)
- 194: (26) if w0 > 0x1 goto pc+4
-   R0_w=inv(id=0,umax_value=0xffffffff00000001)
- 195: (6b) *(u16 *)(r7 +80) = r0
- 196: (bc) w6 = w0
-   R6_w=inv(id=0,umax_value=0xffffffff,var_off=(0x0; 0xffffffff))
- 197: (67) r6 <<= 32
-   R6_w=inv(id=0,smax_value=0x7fffffff00000000,umax_value=0xffffffff00000000,
-            var_off=(0x0; 0xffffffff00000000))
- 198: (77) r6 >>= 32
-   R6=inv(id=0,umax_value=0xffffffff,var_off=(0x0; 0xffffffff))
- ...
- 201: (79) r8 = *(u64 *)(r10 -416)
-   R8_w=map_value(id=0,off=40,ks=4,vs=13872,imm=0)
- 202: (0f) r8 += r6
-   R8_w=map_value(id=0,off=40,ks=4,vs=13872,umax_value=0xffffffff,var_off=(0x0; 0xffffffff))
- 203: (07) r8 += 9696
-   R8_w=map_value(id=0,off=9736,ks=4,vs=13872,umax_value=0xffffffff,var_off=(0x0; 0xffffffff))
- ...
- 255: (bf) r1 = r8
-   R1_w=map_value(id=0,off=9736,ks=4,vs=13872,umax_value=0xffffffff,var_off=(0x0; 0xffffffff))
- ...
- 257: (85) call bpf_probe_read_user_str#114
- R1 unbounded memory access, make sure to bounds check any array access into a map
+On Wed, Nov 20, 2019 at 11:08 PM Andrii Nakryiko <andriin@fb.com> wrote:
+>
+> This patch set salvages all the non-extern-specific changes out of blocked
+> externs patch set ([0]). In addition to small clean ups, it also refactors
+> libbpf's handling of relocations and allows support for global (non-static)
+> variables.
 
-The value range for register r6 at insn 198 should be really just 0/1.
-The umax_value=0xffffffff caused later verification failure.
-
-After jmp instructions, the current verifier already tried to use just
-obtained information to get better register range. The current mechanism is
-for 64bit register only. This patch implemented to tighten the range
-for 32bit sub-registers after jmp32 instructions.
-With the patch, we have the below range ranges for the
-above code sequence:
- 193: (85) call bpf_probe_read_user_str#114
-   R0=inv(id=0)
- 194: (26) if w0 > 0x1 goto pc+4
-   R0_w=inv(id=0,smax_value=0x7fffffff00000001,umax_value=0xffffffff00000001,
-            var_off=(0x0; 0xffffffff00000001))
- 195: (6b) *(u16 *)(r7 +80) = r0
- 196: (bc) w6 = w0
-   R6_w=inv(id=0,umax_value=0xffffffff,var_off=(0x0; 0x1))
- 197: (67) r6 <<= 32
-   R6_w=inv(id=0,umax_value=0x100000000,var_off=(0x0; 0x100000000))
- 198: (77) r6 >>= 32
-   R6=inv(id=0,umax_value=1,var_off=(0x0; 0x1))
- ...
- 201: (79) r8 = *(u64 *)(r10 -416)
-   R8_w=map_value(id=0,off=40,ks=4,vs=13872,imm=0)
- 202: (0f) r8 += r6
-   R8_w=map_value(id=0,off=40,ks=4,vs=13872,umax_value=1,var_off=(0x0; 0x1))
- 203: (07) r8 += 9696
-   R8_w=map_value(id=0,off=9736,ks=4,vs=13872,umax_value=1,var_off=(0x0; 0x1))
- ...
- 255: (bf) r1 = r8
-   R1_w=map_value(id=0,off=9736,ks=4,vs=13872,umax_value=1,var_off=(0x0; 0x1))
- ...
- 257: (85) call bpf_probe_read_user_str#114
- ...
-
-At insn 194, the register R0 has better var_off.mask and smax_value.
-Especially, the var_off.mask ensures later lshift and rshift
-maintains proper value range.
-
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- kernel/bpf/verifier.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9f59f7a19dd0..fc85714428c7 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1007,6 +1007,17 @@ static void __reg_bound_offset(struct bpf_reg_state *reg)
- 						 reg->umax_value));
- }
- 
-+static void __reg_bound_offset32(struct bpf_reg_state *reg)
-+{
-+	u64 mask = 0xffffFFFF;
-+	struct tnum range = tnum_range(reg->umin_value & mask,
-+				       reg->umax_value & mask);
-+	struct tnum lo32 = tnum_cast(reg->var_off, 4);
-+	struct tnum hi32 = tnum_lshift(tnum_rshift(reg->var_off, 32), 32);
-+
-+	reg->var_off = tnum_or(hi32, tnum_intersect(lo32, range));
-+}
-+
- /* Reset the min/max bounds of a register */
- static void __mark_reg_unbounded(struct bpf_reg_state *reg)
- {
-@@ -5589,6 +5600,10 @@ static void reg_set_min_max(struct bpf_reg_state *true_reg,
- 	/* We might have learned some bits from the bounds. */
- 	__reg_bound_offset(false_reg);
- 	__reg_bound_offset(true_reg);
-+	if (is_jmp32) {
-+		__reg_bound_offset32(false_reg);
-+		__reg_bound_offset32(true_reg);
-+	}
- 	/* Intersecting with the old var_off might have improved our bounds
- 	 * slightly.  e.g. if umax was 0x7f...f and var_off was (0; 0xf...fc),
- 	 * then new var_off is (0; 0x7f...fc) which improves our umax.
-@@ -5698,6 +5713,10 @@ static void reg_set_min_max_inv(struct bpf_reg_state *true_reg,
- 	/* We might have learned some bits from the bounds. */
- 	__reg_bound_offset(false_reg);
- 	__reg_bound_offset(true_reg);
-+	if (is_jmp32) {
-+		__reg_bound_offset32(false_reg);
-+		__reg_bound_offset32(true_reg);
-+	}
- 	/* Intersecting with the old var_off might have improved our bounds
- 	 * slightly.  e.g. if umax was 0x7f...f and var_off was (0; 0xf...fc),
- 	 * then new var_off is (0; 0x7f...fc) which improves our umax.
--- 
-2.17.1
-
+Applied. Thanks
