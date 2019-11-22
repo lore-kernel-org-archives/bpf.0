@@ -7,48 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6509DC43215
-	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 05:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19F06C432C3
+	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 05:55:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 306672068F
-	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 05:55:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC0BB20659
+	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 05:55:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1574402104;
-	bh=5SJfNXeOwIOAk15jkQn2Gv0V++ANh4fNNJIoak3Vnec=;
+	s=default; t=1574402113;
+	bh=aEig3xLJ0ayeEDQUT+Zv0DbOuIHBjOVxj1yI+WpZ7DI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EdPg3gH3V72YtH8Q5d+zKto/mKZFMSg2Gs8YHtCC6tXlTU8PuJ3mrmKBu8tMSBM5I
-	 DSpKcnmR8X/EiER476qk3I4K8fG6TmhIGeHmspSK335Rs9yQa1UPipbz4Bbazb4002
-	 3LQBOs6PEK8JhYzBd0GjpR8iypikI16n/mNC6jFo=
+	b=fWmc4fUx/euKPkYBDzqajBmky6UO1mIzoLXbr+9cXKN24Il6/1BK9I+TGSxHnbNLl
+	 Px+1Ua0JCZbJ61jP4A4U6xkAsw8xZJdDnnk6IqpHAudFldW8pFQdpPUcbJuARnOhKl
+	 iNIhU/K2KKVyt7A91/MSTRgRrZzCnJUe9dfp+KUw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726563AbfKVFy5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Nov 2019 00:54:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58976 "EHLO mail.kernel.org"
+        id S1728737AbfKVFw6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Nov 2019 00:52:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58868 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728736AbfKVFxA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Nov 2019 00:53:00 -0500
+        id S1727521AbfKVFw4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Nov 2019 00:52:56 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CE6E7207FA;
-        Fri, 22 Nov 2019 05:52:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D42A2071B;
+        Fri, 22 Nov 2019 05:52:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574401979;
-        bh=5SJfNXeOwIOAk15jkQn2Gv0V++ANh4fNNJIoak3Vnec=;
+        s=default; t=1574401975;
+        bh=aEig3xLJ0ayeEDQUT+Zv0DbOuIHBjOVxj1yI+WpZ7DI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ElxX2+VT3BPOopzIDaLl4hUIHaE6XMPqsOFZ1owcCSz3TTMKMhL2cCzAvIPXq1PNu
-         ZB04tKEAZUdzyrU4TfIiW3GxAclWzFyVFOEOEfTcvYkaTvkgn9XJHXXXK0CYXAIyCX
-         +MApf16jET9R16kfvJZwiQRUaOtHrPh0tQplTJBA=
+        b=vmsAQMm2y+oZPVsr+Yy5XevbpNZaK7/X7VWtBPD0gb7KzeiU7m3dbAnSvsntG4Trn
+         LdTlyIEjMI31FhrD7hq1ti6O5OUFN4JuHACFXlUirFlz80Lmo6vlHIZGfn0joI8mFD
+         5YSLwM4VngliGfiH4zerBqhQmhDoAwuR1lZw3oEM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Peng Sun <sironhide0null@gmail.com>,
         Martin KaFai Lau <kafai@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 199/219] bpf: drop refcount if bpf_map_new_fd() fails in map_create()
-Date:   Fri, 22 Nov 2019 00:48:50 -0500
-Message-Id: <20191122054911.1750-191-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 195/219] bpf: decrease usercnt if bpf_map_new_fd() fails in bpf_map_get_fd_by_id()
+Date:   Fri, 22 Nov 2019 00:48:47 -0500
+Message-Id: <20191122054911.1750-188-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191122054911.1750-1-sashal@kernel.org>
 References: <20191122054911.1750-1-sashal@kernel.org>
@@ -63,41 +62,34 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Peng Sun <sironhide0null@gmail.com>
 
-[ Upstream commit 352d20d611414715353ee65fc206ee57ab1a6984 ]
+[ Upstream commit 781e62823cb81b972dc8652c1827205cda2ac9ac ]
 
-In bpf/syscall.c, map_create() first set map->usercnt to 1, a file
-descriptor is supposed to return to userspace. When bpf_map_new_fd()
-fails, drop the refcount.
+In bpf/syscall.c, bpf_map_get_fd_by_id() use bpf_map_inc_not_zero()
+to increase the refcount, both map->refcnt and map->usercnt. Then, if
+bpf_map_new_fd() fails, should handle map->usercnt too.
 
 Fixes: bd5f5f4ecb78 ("bpf: Add BPF_MAP_GET_FD_BY_ID")
 Signed-off-by: Peng Sun <sironhide0null@gmail.com>
 Acked-by: Martin KaFai Lau <kafai@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/syscall.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/syscall.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 90bb0c05c10e9..596959288eb9e 100644
+index 6e544e364821e..90bb0c05c10e9 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -559,12 +559,12 @@ static int map_create(union bpf_attr *attr)
- 	err = bpf_map_new_fd(map, f_flags);
- 	if (err < 0) {
- 		/* failed to allocate fd.
--		 * bpf_map_put() is needed because the above
-+		 * bpf_map_put_with_uref() is needed because the above
- 		 * bpf_map_alloc_id() has published the map
- 		 * to the userspace and the userspace may
- 		 * have refcnt-ed it through BPF_MAP_GET_FD_BY_ID.
- 		 */
+@@ -1887,7 +1887,7 @@ static int bpf_map_get_fd_by_id(const union bpf_attr *attr)
+ 
+ 	fd = bpf_map_new_fd(map, f_flags);
+ 	if (fd < 0)
 -		bpf_map_put(map);
 +		bpf_map_put_with_uref(map);
- 		return err;
- 	}
  
+ 	return fd;
+ }
 -- 
 2.20.1
 
