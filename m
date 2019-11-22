@@ -6,31 +6,31 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EFF5C432C0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8BA5C33C9A
 	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 20:08:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6BB4E2068F
+	by mail.kernel.org (Postfix) with ESMTP id C8D552070E
 	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 20:08:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727130AbfKVUIV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Nov 2019 15:08:21 -0500
-Received: from www62.your-server.de ([213.133.104.62]:37404 "EHLO
+        id S1727139AbfKVUIW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Nov 2019 15:08:22 -0500
+Received: from www62.your-server.de ([213.133.104.62]:37364 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726775AbfKVUIQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726921AbfKVUIQ (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 22 Nov 2019 15:08:16 -0500
 Received: from 30.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.30] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1iYFDy-0004Zi-Ja; Fri, 22 Nov 2019 21:08:14 +0100
+        id 1iYFDx-0004ZF-Ie; Fri, 22 Nov 2019 21:08:13 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     john.fastabend@gmail.com, andrii.nakryiko@gmail.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v2 8/8] bpf, testing: add various tail call test cases
-Date:   Fri, 22 Nov 2019 21:08:01 +0100
-Message-Id: <3d6cbecbeb171117dccfe153306e479798fb608d.1574452833.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 6/8] bpf: constant map key tracking for prog array pokes
+Date:   Fri, 22 Nov 2019 21:07:59 +0100
+Message-Id: <e8db37f6b2ae60402fa40216c96738ee9b316c32.1574452833.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1574452833.git.daniel@iogearbox.net>
 References: <cover.1574452833.git.daniel@iogearbox.net>
@@ -43,781 +43,275 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add several BPF kselftest cases for tail calls which test the various
-patch directions, and that multiple locations are patched in same and
-different programs.
+Add tracking of constant keys into tail call maps. The signature of
+bpf_tail_call_proto is that arg1 is ctx, arg2 map pointer and arg3
+is a index key. The direct call approach for tail calls can be enabled
+if the verifier asserted that for all branches leading to the tail call
+helper invocation, the map pointer and index key were both constant
+and the same.
 
-  # ./test_progs -n 45
-   #45/1 tailcall_1:OK
-   #45/2 tailcall_2:OK
-   #45/3 tailcall_3:OK
-   #45/4 tailcall_4:OK
-   #45/5 tailcall_5:OK
-   #45 tailcalls:OK
-  Summary: 1/5 PASSED, 0 SKIPPED, 0 FAILED
+Tracking of map pointers we already do from prior work via c93552c443eb
+("bpf: properly enforce index mask to prevent out-of-bounds speculation")
+and 09772d92cd5a ("bpf: avoid retpoline for lookup/update/ delete calls
+on maps").
 
-I've also verified the JITed dump after each of the rewrite cases that
-it matches expectations.
+Given the tail call map index key is not on stack but directly in the
+register, we can add similar tracking approach and later in fixup_bpf_calls()
+add a poke descriptor to the progs poke_tab with the relevant information
+for the JITing phase.
 
-Also regular test_verifier suite passes fine which contains further tail
-call tests:
+We internally reuse insn->imm for the rewritten BPF_JMP | BPF_TAIL_CALL
+instruction in order to point into the prog's poke_tab, and keep insn->imm
+as 0 as indicator that current indirect tail call emission must be used.
+Note that publishing to the tracker must happen at the end of fixup_bpf_calls()
+since adding elements to the poke_tab reallocates its memory, so we need
+to wait until its in final state.
 
-  # ./test_verifier
-  [...]
-  Summary: 1563 PASSED, 0 SKIPPED, 0 FAILED
-
-Checked under JIT, interpreter and JIT + hardening.
+Future work can generalize and add similar approach to optimize plain
+array map lookups. Difference there is that we need to look into the key
+value that sits on stack. For clarity in bpf_insn_aux_data, map_state
+has been renamed into map_ptr_state, so we get map_{ptr,key}_state as
+trackers.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- .../selftests/bpf/prog_tests/tailcalls.c      | 487 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/tailcall1.c |  48 ++
- tools/testing/selftests/bpf/progs/tailcall2.c |  59 +++
- tools/testing/selftests/bpf/progs/tailcall3.c |  31 ++
- tools/testing/selftests/bpf/progs/tailcall4.c |  33 ++
- tools/testing/selftests/bpf/progs/tailcall5.c |  40 ++
- 6 files changed, 698 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tailcalls.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall1.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall2.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall3.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall4.c
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall5.c
+ include/linux/bpf_verifier.h |   3 +-
+ kernel/bpf/verifier.c        | 120 ++++++++++++++++++++++++++++++++---
+ 2 files changed, 113 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-new file mode 100644
-index 000000000000..bb8fe646dd9f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-@@ -0,0 +1,487 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index cdd08bf0ec06..26e40de9ef55 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -293,7 +293,7 @@ struct bpf_verifier_state_list {
+ struct bpf_insn_aux_data {
+ 	union {
+ 		enum bpf_reg_type ptr_type;	/* pointer type for load/store insns */
+-		unsigned long map_state;	/* pointer/poison value for maps */
++		unsigned long map_ptr_state;	/* pointer/poison value for maps */
+ 		s32 call_imm;			/* saved imm field of call insn */
+ 		u32 alu_limit;			/* limit for add/sub register with pointer */
+ 		struct {
+@@ -301,6 +301,7 @@ struct bpf_insn_aux_data {
+ 			u32 map_off;		/* offset from value base address */
+ 		};
+ 	};
++	u64 map_key_state; /* constant (32 bit) key tracking for maps */
+ 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
+ 	int sanitize_stack_off; /* stack slot to be cleared */
+ 	bool seen; /* this insn was processed by the verifier */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9f59f7a19dd0..c4e17583b9bf 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -171,6 +171,9 @@ struct bpf_verifier_stack_elem {
+ #define BPF_COMPLEXITY_LIMIT_JMP_SEQ	8192
+ #define BPF_COMPLEXITY_LIMIT_STATES	64
+ 
++#define BPF_MAP_KEY_POISON	(1ULL << 63)
++#define BPF_MAP_KEY_SEEN	(1ULL << 62)
 +
-+/* test_tailcall_1 checks basic functionality by patching multiple locations
-+ * in a single program for a single tail call slot with nop->jmp, jmp->nop
-+ * and jmp->jmp rewrites. Also checks for nop->nop.
-+ */
-+static void test_tailcall_1(void)
-+{
-+	int err, map_fd, prog_fd, main_fd, i, j;
-+	struct bpf_map *prog_array;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	__u32 retval, duration;
-+	char prog_name[32];
-+	char buff[128] = {};
-+
-+	err = bpf_prog_load("tailcall1.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
-+			    &prog_fd);
-+	if (CHECK_FAIL(err))
-+		return;
-+
-+	prog = bpf_object__find_program_by_title(obj, "classifier");
-+	if (CHECK_FAIL(!prog))
-+		goto out;
-+
-+	main_fd = bpf_program__fd(prog);
-+	if (CHECK_FAIL(main_fd < 0))
-+		goto out;
-+
-+	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
-+	if (CHECK_FAIL(!prog_array))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(prog_array);
-+	if (CHECK_FAIL(map_fd < 0))
-+		goto out;
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
-+
-+		prog = bpf_object__find_program_by_title(obj, prog_name);
-+		if (CHECK_FAIL(!prog))
-+			goto out;
-+
-+		prog_fd = bpf_program__fd(prog);
-+		if (CHECK_FAIL(prog_fd < 0))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+					&duration, &retval, NULL);
-+		CHECK(err || retval != i, "tailcall",
-+		      "err %d errno %d retval %d\n", err, errno, retval);
-+
-+		err = bpf_map_delete_elem(map_fd, &i);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 3, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
-+
-+		prog = bpf_object__find_program_by_title(obj, prog_name);
-+		if (CHECK_FAIL(!prog))
-+			goto out;
-+
-+		prog_fd = bpf_program__fd(prog);
-+		if (CHECK_FAIL(prog_fd < 0))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 0, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		j = bpf_map__def(prog_array)->max_entries - 1 - i;
-+		snprintf(prog_name, sizeof(prog_name), "classifier/%i", j);
-+
-+		prog = bpf_object__find_program_by_title(obj, prog_name);
-+		if (CHECK_FAIL(!prog))
-+			goto out;
-+
-+		prog_fd = bpf_program__fd(prog);
-+		if (CHECK_FAIL(prog_fd < 0))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		j = bpf_map__def(prog_array)->max_entries - 1 - i;
-+
-+		err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+					&duration, &retval, NULL);
-+		CHECK(err || retval != j, "tailcall",
-+		      "err %d errno %d retval %d\n", err, errno, retval);
-+
-+		err = bpf_map_delete_elem(map_fd, &i);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 3, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		err = bpf_map_delete_elem(map_fd, &i);
-+		if (CHECK_FAIL(err >= 0 || errno != ENOENT))
-+			goto out;
-+
-+		err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+					&duration, &retval, NULL);
-+		CHECK(err || retval != 3, "tailcall",
-+		      "err %d errno %d retval %d\n", err, errno, retval);
-+	}
-+
-+out:
-+	bpf_object__close(obj);
+ #define BPF_MAP_PTR_UNPRIV	1UL
+ #define BPF_MAP_PTR_POISON	((void *)((0xeB9FUL << 1) +	\
+ 					  POISON_POINTER_DELTA))
+@@ -178,12 +181,12 @@ struct bpf_verifier_stack_elem {
+ 
+ static bool bpf_map_ptr_poisoned(const struct bpf_insn_aux_data *aux)
+ {
+-	return BPF_MAP_PTR(aux->map_state) == BPF_MAP_PTR_POISON;
++	return BPF_MAP_PTR(aux->map_ptr_state) == BPF_MAP_PTR_POISON;
+ }
+ 
+ static bool bpf_map_ptr_unpriv(const struct bpf_insn_aux_data *aux)
+ {
+-	return aux->map_state & BPF_MAP_PTR_UNPRIV;
++	return aux->map_ptr_state & BPF_MAP_PTR_UNPRIV;
+ }
+ 
+ static void bpf_map_ptr_store(struct bpf_insn_aux_data *aux,
+@@ -191,8 +194,31 @@ static void bpf_map_ptr_store(struct bpf_insn_aux_data *aux,
+ {
+ 	BUILD_BUG_ON((unsigned long)BPF_MAP_PTR_POISON & BPF_MAP_PTR_UNPRIV);
+ 	unpriv |= bpf_map_ptr_unpriv(aux);
+-	aux->map_state = (unsigned long)map |
+-			 (unpriv ? BPF_MAP_PTR_UNPRIV : 0UL);
++	aux->map_ptr_state = (unsigned long)map |
++			     (unpriv ? BPF_MAP_PTR_UNPRIV : 0UL);
 +}
 +
-+/* test_tailcall_2 checks that patching multiple programs for a single
-+ * tail call slot works. It also jumps through several programs and tests
-+ * the tail call limit counter.
-+ */
-+static void test_tailcall_2(void)
++static bool bpf_map_key_poisoned(const struct bpf_insn_aux_data *aux)
 +{
-+	int err, map_fd, prog_fd, main_fd, i;
-+	struct bpf_map *prog_array;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	__u32 retval, duration;
-+	char prog_name[32];
-+	char buff[128] = {};
-+
-+	err = bpf_prog_load("tailcall2.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
-+			    &prog_fd);
-+	if (CHECK_FAIL(err))
-+		return;
-+
-+	prog = bpf_object__find_program_by_title(obj, "classifier");
-+	if (CHECK_FAIL(!prog))
-+		goto out;
-+
-+	main_fd = bpf_program__fd(prog);
-+	if (CHECK_FAIL(main_fd < 0))
-+		goto out;
-+
-+	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
-+	if (CHECK_FAIL(!prog_array))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(prog_array);
-+	if (CHECK_FAIL(map_fd < 0))
-+		goto out;
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
-+
-+		prog = bpf_object__find_program_by_title(obj, prog_name);
-+		if (CHECK_FAIL(!prog))
-+			goto out;
-+
-+		prog_fd = bpf_program__fd(prog);
-+		if (CHECK_FAIL(prog_fd < 0))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 2, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+
-+	i = 2;
-+	err = bpf_map_delete_elem(map_fd, &i);
-+	if (CHECK_FAIL(err))
-+		goto out;
-+
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 1, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+
-+	i = 0;
-+	err = bpf_map_delete_elem(map_fd, &i);
-+	if (CHECK_FAIL(err))
-+		goto out;
-+
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 3, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+out:
-+	bpf_object__close(obj);
++	return aux->map_key_state & BPF_MAP_KEY_POISON;
 +}
 +
-+/* test_tailcall_3 checks that the count value of the tail call limit
-+ * enforcement matches with expectations.
-+ */
-+static void test_tailcall_3(void)
++static bool bpf_map_key_unseen(const struct bpf_insn_aux_data *aux)
 +{
-+	int err, map_fd, prog_fd, main_fd, data_fd, i, val;
-+	struct bpf_map *prog_array, *data_map;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	__u32 retval, duration;
-+	char buff[128] = {};
-+
-+	err = bpf_prog_load("tailcall3.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
-+			    &prog_fd);
-+	if (CHECK_FAIL(err))
-+		return;
-+
-+	prog = bpf_object__find_program_by_title(obj, "classifier");
-+	if (CHECK_FAIL(!prog))
-+		goto out;
-+
-+	main_fd = bpf_program__fd(prog);
-+	if (CHECK_FAIL(main_fd < 0))
-+		goto out;
-+
-+	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
-+	if (CHECK_FAIL(!prog_array))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(prog_array);
-+	if (CHECK_FAIL(map_fd < 0))
-+		goto out;
-+
-+	prog = bpf_object__find_program_by_title(obj, "classifier/0");
-+	if (CHECK_FAIL(!prog))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(prog);
-+	if (CHECK_FAIL(prog_fd < 0))
-+		goto out;
-+
-+	i = 0;
-+	err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+	if (CHECK_FAIL(err))
-+		goto out;
-+
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 1, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+
-+	data_map = bpf_object__find_map_by_name(obj, "tailcall.bss");
-+	if (CHECK_FAIL(!data_map || !bpf_map__is_internal(data_map)))
-+		return;
-+
-+	data_fd = bpf_map__fd(data_map);
-+	if (CHECK_FAIL(map_fd < 0))
-+		return;
-+
-+	i = 0;
-+	err = bpf_map_lookup_elem(data_fd, &i, &val);
-+	CHECK(err || val != 33, "tailcall count", "err %d errno %d count %d\n",
-+	      err, errno, val);
-+
-+	i = 0;
-+	err = bpf_map_delete_elem(map_fd, &i);
-+	if (CHECK_FAIL(err))
-+		goto out;
-+
-+	err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+				&duration, &retval, NULL);
-+	CHECK(err || retval != 0, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+out:
-+	bpf_object__close(obj);
++	return !(aux->map_key_state & BPF_MAP_KEY_SEEN);
 +}
 +
-+/* test_tailcall_4 checks that the kernel properly selects indirect jump
-+ * for the case where the key is not known. Latter is passed via global
-+ * data to select different targets we can compare return value of.
-+ */
-+static void test_tailcall_4(void)
++static u64 bpf_map_key_immediate(const struct bpf_insn_aux_data *aux)
 +{
-+	int err, map_fd, prog_fd, main_fd, data_fd, i;
-+	struct bpf_map *prog_array, *data_map;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	__u32 retval, duration;
-+	static const int zero = 0;
-+	char buff[128] = {};
-+	char prog_name[32];
-+
-+	err = bpf_prog_load("tailcall4.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
-+			    &prog_fd);
-+	if (CHECK_FAIL(err))
-+		return;
-+
-+	prog = bpf_object__find_program_by_title(obj, "classifier");
-+	if (CHECK_FAIL(!prog))
-+		goto out;
-+
-+	main_fd = bpf_program__fd(prog);
-+	if (CHECK_FAIL(main_fd < 0))
-+		goto out;
-+
-+	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
-+	if (CHECK_FAIL(!prog_array))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(prog_array);
-+	if (CHECK_FAIL(map_fd < 0))
-+		goto out;
-+
-+	data_map = bpf_object__find_map_by_name(obj, "tailcall.bss");
-+	if (CHECK_FAIL(!data_map || !bpf_map__is_internal(data_map)))
-+		return;
-+
-+	data_fd = bpf_map__fd(data_map);
-+	if (CHECK_FAIL(map_fd < 0))
-+		return;
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
-+
-+		prog = bpf_object__find_program_by_title(obj, prog_name);
-+		if (CHECK_FAIL(!prog))
-+			goto out;
-+
-+		prog_fd = bpf_program__fd(prog);
-+		if (CHECK_FAIL(prog_fd < 0))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		err = bpf_map_update_elem(data_fd, &zero, &i, BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+
-+		err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+					&duration, &retval, NULL);
-+		CHECK(err || retval != i, "tailcall",
-+		      "err %d errno %d retval %d\n", err, errno, retval);
-+	}
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		err = bpf_map_update_elem(data_fd, &zero, &i, BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+
-+		err = bpf_map_delete_elem(map_fd, &i);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+
-+		err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+					&duration, &retval, NULL);
-+		CHECK(err || retval != 3, "tailcall",
-+		      "err %d errno %d retval %d\n", err, errno, retval);
-+	}
-+out:
-+	bpf_object__close(obj);
++	return aux->map_key_state & ~(BPF_MAP_KEY_SEEN | BPF_MAP_KEY_POISON);
 +}
 +
-+/* test_tailcall_5 probes similarly to test_tailcall_4 that the kernel generates
-+ * an indirect jump when the keys are const but different from different branches.
-+ */
-+static void test_tailcall_5(void)
++static void bpf_map_key_store(struct bpf_insn_aux_data *aux, u64 state)
 +{
-+	int err, map_fd, prog_fd, main_fd, data_fd, i, key[] = { 1111, 1234, 5678 };
-+	struct bpf_map *prog_array, *data_map;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	__u32 retval, duration;
-+	static const int zero = 0;
-+	char buff[128] = {};
-+	char prog_name[32];
++	bool poisoned = bpf_map_key_poisoned(aux);
 +
-+	err = bpf_prog_load("tailcall5.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
-+			    &prog_fd);
-+	if (CHECK_FAIL(err))
-+		return;
++	aux->map_key_state = state | BPF_MAP_KEY_SEEN |
++			     (poisoned ? BPF_MAP_KEY_POISON : 0ULL);
+ }
+ 
+ struct bpf_call_arg_meta {
+@@ -4079,15 +4105,49 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ 		return -EACCES;
+ 	}
+ 
+-	if (!BPF_MAP_PTR(aux->map_state))
++	if (!BPF_MAP_PTR(aux->map_ptr_state))
+ 		bpf_map_ptr_store(aux, meta->map_ptr,
+ 				  meta->map_ptr->unpriv_array);
+-	else if (BPF_MAP_PTR(aux->map_state) != meta->map_ptr)
++	else if (BPF_MAP_PTR(aux->map_ptr_state) != meta->map_ptr)
+ 		bpf_map_ptr_store(aux, BPF_MAP_PTR_POISON,
+ 				  meta->map_ptr->unpriv_array);
+ 	return 0;
+ }
+ 
++static int
++record_func_key(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
++		int func_id, int insn_idx)
++{
++	struct bpf_insn_aux_data *aux = &env->insn_aux_data[insn_idx];
++	struct bpf_reg_state *regs = cur_regs(env), *reg;
++	struct bpf_map *map = meta->map_ptr;
++	struct tnum range;
++	u64 val;
 +
-+	prog = bpf_object__find_program_by_title(obj, "classifier");
-+	if (CHECK_FAIL(!prog))
-+		goto out;
-+
-+	main_fd = bpf_program__fd(prog);
-+	if (CHECK_FAIL(main_fd < 0))
-+		goto out;
-+
-+	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
-+	if (CHECK_FAIL(!prog_array))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(prog_array);
-+	if (CHECK_FAIL(map_fd < 0))
-+		goto out;
-+
-+	data_map = bpf_object__find_map_by_name(obj, "tailcall.bss");
-+	if (CHECK_FAIL(!data_map || !bpf_map__is_internal(data_map)))
-+		return;
-+
-+	data_fd = bpf_map__fd(data_map);
-+	if (CHECK_FAIL(map_fd < 0))
-+		return;
-+
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
-+
-+		prog = bpf_object__find_program_by_title(obj, prog_name);
-+		if (CHECK_FAIL(!prog))
-+			goto out;
-+
-+		prog_fd = bpf_program__fd(prog);
-+		if (CHECK_FAIL(prog_fd < 0))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
++	if (func_id != BPF_FUNC_tail_call)
++		return 0;
++	if (!map || map->map_type != BPF_MAP_TYPE_PROG_ARRAY) {
++		verbose(env, "kernel subsystem misconfigured verifier\n");
++		return -EINVAL;
 +	}
 +
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		err = bpf_map_update_elem(data_fd, &zero, &key[i], BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
++	range = tnum_range(0, map->max_entries - 1);
++	reg = &regs[BPF_REG_3];
 +
-+		err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+					&duration, &retval, NULL);
-+		CHECK(err || retval != i, "tailcall",
-+		      "err %d errno %d retval %d\n", err, errno, retval);
++	if (!register_is_const(reg) || !tnum_in(range, reg->var_off)) {
++		bpf_map_key_store(aux, BPF_MAP_KEY_POISON);
++		return 0;
 +	}
 +
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		err = bpf_map_update_elem(data_fd, &zero, &key[i], BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+
-+		err = bpf_map_delete_elem(map_fd, &i);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+
-+		err = bpf_prog_test_run(main_fd, 1, buff, sizeof(buff), 0,
-+					&duration, &retval, NULL);
-+		CHECK(err || retval != 3, "tailcall",
-+		      "err %d errno %d retval %d\n", err, errno, retval);
-+	}
-+out:
-+	bpf_object__close(obj);
-+}
-+
-+void test_tailcalls(void)
-+{
-+	if (test__start_subtest("tailcall_1"))
-+		test_tailcall_1();
-+	if (test__start_subtest("tailcall_2"))
-+		test_tailcall_2();
-+	if (test__start_subtest("tailcall_3"))
-+		test_tailcall_3();
-+	if (test__start_subtest("tailcall_4"))
-+		test_tailcall_4();
-+	if (test__start_subtest("tailcall_5"))
-+		test_tailcall_5();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/tailcall1.c b/tools/testing/selftests/bpf/progs/tailcall1.c
-new file mode 100644
-index 000000000000..63531e1a9fa4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall1.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+
-+#include "bpf_helpers.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 3);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
-+
-+#define TAIL_FUNC(x) 				\
-+	SEC("classifier/" #x)			\
-+	int bpf_func_##x(struct __sk_buff *skb)	\
-+	{					\
-+		return x;			\
-+	}
-+TAIL_FUNC(0)
-+TAIL_FUNC(1)
-+TAIL_FUNC(2)
-+
-+SEC("classifier")
-+int entry(struct __sk_buff *skb)
-+{
-+	/* Multiple locations to make sure we patch
-+	 * all of them.
-+	 */
-+	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call(skb, &jmp_table, 0);
-+
-+	bpf_tail_call(skb, &jmp_table, 1);
-+	bpf_tail_call(skb, &jmp_table, 1);
-+	bpf_tail_call(skb, &jmp_table, 1);
-+	bpf_tail_call(skb, &jmp_table, 1);
-+
-+	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call(skb, &jmp_table, 2);
-+
-+	return 3;
-+}
-+
-+char __license[] SEC("license") = "GPL";
-+int _version SEC("version") = 1;
-diff --git a/tools/testing/selftests/bpf/progs/tailcall2.c b/tools/testing/selftests/bpf/progs/tailcall2.c
-new file mode 100644
-index 000000000000..21c85c477210
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall2.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+
-+#include "bpf_helpers.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 5);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
-+
-+SEC("classifier/0")
-+int bpf_func_0(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &jmp_table, 1);
++	val = reg->var_off.value;
++	if (bpf_map_key_unseen(aux))
++		bpf_map_key_store(aux, val);
++	else if (!bpf_map_key_poisoned(aux) &&
++		  bpf_map_key_immediate(aux) != val)
++		bpf_map_key_store(aux, BPF_MAP_KEY_POISON);
 +	return 0;
 +}
 +
-+SEC("classifier/1")
-+int bpf_func_1(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &jmp_table, 2);
-+	return 1;
-+}
+ static int check_reference_leak(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_func_state *state = cur_func(env);
+@@ -4162,6 +4222,10 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
+ 	if (err)
+ 		return err;
+ 
++	err = record_func_key(env, &meta, func_id, insn_idx);
++	if (err)
++		return err;
 +
-+SEC("classifier/2")
-+int bpf_func_2(struct __sk_buff *skb)
-+{
-+	return 2;
-+}
+ 	/* Mark slots with STACK_MISC in case of raw mode, stack offset
+ 	 * is inferred from register state.
+ 	 */
+@@ -9046,6 +9110,7 @@ static int fixup_call_args(struct bpf_verifier_env *env)
+ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_prog *prog = env->prog;
++	bool expect_blinding = bpf_jit_blinding_enabled(prog);
+ 	struct bpf_insn *insn = prog->insnsi;
+ 	const struct bpf_func_proto *fn;
+ 	const int insn_cnt = prog->len;
+@@ -9054,7 +9119,7 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 	struct bpf_insn insn_buf[16];
+ 	struct bpf_prog *new_prog;
+ 	struct bpf_map *map_ptr;
+-	int i, cnt, delta = 0;
++	int i, ret, cnt, delta = 0;
+ 
+ 	for (i = 0; i < insn_cnt; i++, insn++) {
+ 		if (insn->code == (BPF_ALU64 | BPF_MOD | BPF_X) ||
+@@ -9198,6 +9263,26 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 			insn->code = BPF_JMP | BPF_TAIL_CALL;
+ 
+ 			aux = &env->insn_aux_data[i + delta];
++			if (prog->jit_requested && !expect_blinding &&
++			    !bpf_map_key_poisoned(aux) &&
++			    !bpf_map_ptr_poisoned(aux) &&
++			    !bpf_map_ptr_unpriv(aux)) {
++				struct bpf_jit_poke_descriptor desc = {
++					.reason = BPF_POKE_REASON_TAIL_CALL,
++					.tail_call.map = BPF_MAP_PTR(aux->map_ptr_state),
++					.tail_call.key = bpf_map_key_immediate(aux),
++				};
 +
-+SEC("classifier/3")
-+int bpf_func_3(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &jmp_table, 4);
-+	return 3;
-+}
++				ret = bpf_jit_add_poke_descriptor(prog, &desc);
++				if (ret < 0) {
++					verbose(env, "adding tail call poke descriptor failed\n");
++					return ret;
++				}
 +
-+SEC("classifier/4")
-+int bpf_func_4(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &jmp_table, 3);
-+	return 4;
-+}
++				insn->imm = ret + 1;
++				continue;
++			}
 +
-+SEC("classifier")
-+int entry(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &jmp_table, 0);
-+	/* Check multi-prog update. */
-+	bpf_tail_call(skb, &jmp_table, 2);
-+	/* Check tail call limit. */
-+	bpf_tail_call(skb, &jmp_table, 3);
-+	return 3;
-+}
+ 			if (!bpf_map_ptr_unpriv(aux))
+ 				continue;
+ 
+@@ -9212,7 +9297,7 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 				return -EINVAL;
+ 			}
+ 
+-			map_ptr = BPF_MAP_PTR(aux->map_state);
++			map_ptr = BPF_MAP_PTR(aux->map_ptr_state);
+ 			insn_buf[0] = BPF_JMP_IMM(BPF_JGE, BPF_REG_3,
+ 						  map_ptr->max_entries, 2);
+ 			insn_buf[1] = BPF_ALU32_IMM(BPF_AND, BPF_REG_3,
+@@ -9246,7 +9331,7 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 			if (bpf_map_ptr_poisoned(aux))
+ 				goto patch_call_imm;
+ 
+-			map_ptr = BPF_MAP_PTR(aux->map_state);
++			map_ptr = BPF_MAP_PTR(aux->map_ptr_state);
+ 			ops = map_ptr->ops;
+ 			if (insn->imm == BPF_FUNC_map_lookup_elem &&
+ 			    ops->map_gen_lookup) {
+@@ -9326,6 +9411,23 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 		insn->imm = fn->func - __bpf_call_base;
+ 	}
+ 
++	/* Since poke tab is now finalized, publish aux to tracker. */
++	for (i = 0; i < prog->aux->size_poke_tab; i++) {
++		map_ptr = prog->aux->poke_tab[i].tail_call.map;
++		if (!map_ptr->ops->map_poke_track ||
++		    !map_ptr->ops->map_poke_untrack ||
++		    !map_ptr->ops->map_poke_run) {
++			verbose(env, "bpf verifier is misconfigured\n");
++			return -EINVAL;
++		}
 +
-+char __license[] SEC("license") = "GPL";
-+int _version SEC("version") = 1;
-diff --git a/tools/testing/selftests/bpf/progs/tailcall3.c b/tools/testing/selftests/bpf/progs/tailcall3.c
-new file mode 100644
-index 000000000000..1ecae198b8c1
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall3.c
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+
-+#include "bpf_helpers.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
-+
-+static volatile int count;
-+
-+SEC("classifier/0")
-+int bpf_func_0(struct __sk_buff *skb)
-+{
-+	count++;
-+	bpf_tail_call(skb, &jmp_table, 0);
-+	return 1;
-+}
-+
-+SEC("classifier")
-+int entry(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &jmp_table, 0);
-+	return 0;
-+}
-+
-+char __license[] SEC("license") = "GPL";
-+int _version SEC("version") = 1;
-diff --git a/tools/testing/selftests/bpf/progs/tailcall4.c b/tools/testing/selftests/bpf/progs/tailcall4.c
-new file mode 100644
-index 000000000000..499388758119
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall4.c
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+
-+#include "bpf_helpers.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 3);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
-+
-+static volatile int selector;
-+
-+#define TAIL_FUNC(x)				\
-+	SEC("classifier/" #x)			\
-+	int bpf_func_##x(struct __sk_buff *skb)	\
-+	{					\
-+		return x;			\
++		ret = map_ptr->ops->map_poke_track(map_ptr, prog->aux);
++		if (ret < 0) {
++			verbose(env, "tracking tail call prog failed\n");
++			return ret;
++		}
 +	}
-+TAIL_FUNC(0)
-+TAIL_FUNC(1)
-+TAIL_FUNC(2)
 +
-+SEC("classifier")
-+int entry(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &jmp_table, selector);
-+	return 3;
-+}
-+
-+char __license[] SEC("license") = "GPL";
-+int _version SEC("version") = 1;
-diff --git a/tools/testing/selftests/bpf/progs/tailcall5.c b/tools/testing/selftests/bpf/progs/tailcall5.c
-new file mode 100644
-index 000000000000..49c64eb53f19
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall5.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+
-+#include "bpf_helpers.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 3);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
-+
-+static volatile int selector;
-+
-+#define TAIL_FUNC(x)				\
-+	SEC("classifier/" #x)			\
-+	int bpf_func_##x(struct __sk_buff *skb)	\
-+	{					\
-+		return x;			\
-+	}
-+TAIL_FUNC(0)
-+TAIL_FUNC(1)
-+TAIL_FUNC(2)
-+
-+SEC("classifier")
-+int entry(struct __sk_buff *skb)
-+{
-+	int idx = 0;
-+
-+	if (selector == 1234)
-+		idx = 1;
-+	else if (selector == 5678)
-+		idx = 2;
-+
-+	bpf_tail_call(skb, &jmp_table, idx);
-+	return 3;
-+}
-+
-+char __license[] SEC("license") = "GPL";
-+int _version SEC("version") = 1;
+ 	return 0;
+ }
+ 
 -- 
 2.21.0
 
