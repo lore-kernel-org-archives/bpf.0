@@ -4,33 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8BA5C33C9A
-	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 20:08:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0FB0C43215
+	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 20:08:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C8D552070E
-	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 20:08:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7FB432068F
+	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 20:08:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727139AbfKVUIW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Nov 2019 15:08:22 -0500
-Received: from www62.your-server.de ([213.133.104.62]:37364 "EHLO
+        id S1727175AbfKVUI2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Nov 2019 15:08:28 -0500
+Received: from www62.your-server.de ([213.133.104.62]:37336 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726921AbfKVUIQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Nov 2019 15:08:16 -0500
+        with ESMTP id S1726568AbfKVUIN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Nov 2019 15:08:13 -0500
 Received: from 30.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.30] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1iYFDx-0004ZF-Ie; Fri, 22 Nov 2019 21:08:13 +0100
+        id 1iYFDw-0004Yk-1n; Fri, 22 Nov 2019 21:08:12 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     john.fastabend@gmail.com, andrii.nakryiko@gmail.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v2 6/8] bpf: constant map key tracking for prog array pokes
-Date:   Fri, 22 Nov 2019 21:07:59 +0100
-Message-Id: <e8db37f6b2ae60402fa40216c96738ee9b316c32.1574452833.git.daniel@iogearbox.net>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH bpf-next v2 3/8] bpf: move owner type,jited info into array auxiliary data
+Date:   Fri, 22 Nov 2019 21:07:56 +0100
+Message-Id: <b9ddccdb0f6f7026489ee955f16c96381e1e7238.1574452833.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1574452833.git.daniel@iogearbox.net>
 References: <cover.1574452833.git.daniel@iogearbox.net>
@@ -43,275 +45,180 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add tracking of constant keys into tail call maps. The signature of
-bpf_tail_call_proto is that arg1 is ctx, arg2 map pointer and arg3
-is a index key. The direct call approach for tail calls can be enabled
-if the verifier asserted that for all branches leading to the tail call
-helper invocation, the map pointer and index key were both constant
-and the same.
-
-Tracking of map pointers we already do from prior work via c93552c443eb
-("bpf: properly enforce index mask to prevent out-of-bounds speculation")
-and 09772d92cd5a ("bpf: avoid retpoline for lookup/update/ delete calls
-on maps").
-
-Given the tail call map index key is not on stack but directly in the
-register, we can add similar tracking approach and later in fixup_bpf_calls()
-add a poke descriptor to the progs poke_tab with the relevant information
-for the JITing phase.
-
-We internally reuse insn->imm for the rewritten BPF_JMP | BPF_TAIL_CALL
-instruction in order to point into the prog's poke_tab, and keep insn->imm
-as 0 as indicator that current indirect tail call emission must be used.
-Note that publishing to the tracker must happen at the end of fixup_bpf_calls()
-since adding elements to the poke_tab reallocates its memory, so we need
-to wait until its in final state.
-
-Future work can generalize and add similar approach to optimize plain
-array map lookups. Difference there is that we need to look into the key
-value that sits on stack. For clarity in bpf_insn_aux_data, map_state
-has been renamed into map_ptr_state, so we get map_{ptr,key}_state as
-trackers.
+We're going to extend this with further information which is only
+relevant for prog array at this point. Given this info is not used
+in critical path, move it into its own structure such that the main
+array map structure can be kept on diet.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- include/linux/bpf_verifier.h |   3 +-
- kernel/bpf/verifier.c        | 120 ++++++++++++++++++++++++++++++++---
- 2 files changed, 113 insertions(+), 10 deletions(-)
+ include/linux/bpf.h     | 18 +++++++++++-------
+ kernel/bpf/arraymap.c   | 32 ++++++++++++++++++++++++++++++--
+ kernel/bpf/core.c       | 11 +++++------
+ kernel/bpf/map_in_map.c |  5 ++---
+ kernel/bpf/syscall.c    | 16 ++++++----------
+ 5 files changed, 54 insertions(+), 28 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index cdd08bf0ec06..26e40de9ef55 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -293,7 +293,7 @@ struct bpf_verifier_state_list {
- struct bpf_insn_aux_data {
- 	union {
- 		enum bpf_reg_type ptr_type;	/* pointer type for load/store insns */
--		unsigned long map_state;	/* pointer/poison value for maps */
-+		unsigned long map_ptr_state;	/* pointer/poison value for maps */
- 		s32 call_imm;			/* saved imm field of call insn */
- 		u32 alu_limit;			/* limit for add/sub register with pointer */
- 		struct {
-@@ -301,6 +301,7 @@ struct bpf_insn_aux_data {
- 			u32 map_off;		/* offset from value base address */
- 		};
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 561b920f0bf7..c3b29061284e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -560,17 +560,21 @@ struct bpf_prog_aux {
  	};
-+	u64 map_key_state; /* constant (32 bit) key tracking for maps */
- 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
- 	int sanitize_stack_off; /* stack slot to be cleared */
- 	bool seen; /* this insn was processed by the verifier */
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9f59f7a19dd0..c4e17583b9bf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -171,6 +171,9 @@ struct bpf_verifier_stack_elem {
- #define BPF_COMPLEXITY_LIMIT_JMP_SEQ	8192
- #define BPF_COMPLEXITY_LIMIT_STATES	64
+ };
  
-+#define BPF_MAP_KEY_POISON	(1ULL << 63)
-+#define BPF_MAP_KEY_SEEN	(1ULL << 62)
++struct bpf_array_aux {
++	/* 'Ownership' of prog array is claimed by the first program that
++	 * is going to use this map or by the first program which FD is
++	 * stored in the map to make sure that all callers and callees have
++	 * the same prog type and JITed flag.
++	 */
++	enum bpf_prog_type type;
++	bool jited;
++};
 +
- #define BPF_MAP_PTR_UNPRIV	1UL
- #define BPF_MAP_PTR_POISON	((void *)((0xeB9FUL << 1) +	\
- 					  POISON_POINTER_DELTA))
-@@ -178,12 +181,12 @@ struct bpf_verifier_stack_elem {
- 
- static bool bpf_map_ptr_poisoned(const struct bpf_insn_aux_data *aux)
- {
--	return BPF_MAP_PTR(aux->map_state) == BPF_MAP_PTR_POISON;
-+	return BPF_MAP_PTR(aux->map_ptr_state) == BPF_MAP_PTR_POISON;
+ struct bpf_array {
+ 	struct bpf_map map;
+ 	u32 elem_size;
+ 	u32 index_mask;
+-	/* 'ownership' of prog_array is claimed by the first program that
+-	 * is going to use this map or by the first program which FD is stored
+-	 * in the map to make sure that all callers and callees have the same
+-	 * prog_type and JITed flag
+-	 */
+-	enum bpf_prog_type owner_prog_type;
+-	bool owner_jited;
++	struct bpf_array_aux *aux;
+ 	union {
+ 		char value[0] __aligned(8);
+ 		void *ptrs[0] __aligned(8);
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 633c8c701ff6..57da950ee55b 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -671,10 +671,38 @@ static void prog_array_map_seq_show_elem(struct bpf_map *map, void *key,
+ 	rcu_read_unlock();
  }
  
- static bool bpf_map_ptr_unpriv(const struct bpf_insn_aux_data *aux)
- {
--	return aux->map_state & BPF_MAP_PTR_UNPRIV;
-+	return aux->map_ptr_state & BPF_MAP_PTR_UNPRIV;
- }
++static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)
++{
++	struct bpf_array_aux *aux;
++	struct bpf_map *map;
++
++	aux = kzalloc(sizeof(*aux), GFP_KERNEL);
++	if (!aux)
++		return ERR_PTR(-ENOMEM);
++
++	map = array_map_alloc(attr);
++	if (IS_ERR(map)) {
++		kfree(aux);
++		return map;
++	}
++
++	container_of(map, struct bpf_array, map)->aux = aux;
++	return map;
++}
++
++static void prog_array_map_free(struct bpf_map *map)
++{
++	struct bpf_array_aux *aux;
++
++	aux = container_of(map, struct bpf_array, map)->aux;
++	kfree(aux);
++	fd_array_map_free(map);
++}
++
+ const struct bpf_map_ops prog_array_map_ops = {
+ 	.map_alloc_check = fd_array_map_alloc_check,
+-	.map_alloc = array_map_alloc,
+-	.map_free = fd_array_map_free,
++	.map_alloc = prog_array_map_alloc,
++	.map_free = prog_array_map_free,
+ 	.map_get_next_key = array_map_get_next_key,
+ 	.map_lookup_elem = fd_array_map_lookup_elem,
+ 	.map_delete_elem = fd_array_map_delete_elem,
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 0e825c164f1a..07af9c1d9cf1 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1691,18 +1691,17 @@ bool bpf_prog_array_compatible(struct bpf_array *array,
+ 	if (fp->kprobe_override)
+ 		return false;
  
- static void bpf_map_ptr_store(struct bpf_insn_aux_data *aux,
-@@ -191,8 +194,31 @@ static void bpf_map_ptr_store(struct bpf_insn_aux_data *aux,
- {
- 	BUILD_BUG_ON((unsigned long)BPF_MAP_PTR_POISON & BPF_MAP_PTR_UNPRIV);
- 	unpriv |= bpf_map_ptr_unpriv(aux);
--	aux->map_state = (unsigned long)map |
--			 (unpriv ? BPF_MAP_PTR_UNPRIV : 0UL);
-+	aux->map_ptr_state = (unsigned long)map |
-+			     (unpriv ? BPF_MAP_PTR_UNPRIV : 0UL);
-+}
-+
-+static bool bpf_map_key_poisoned(const struct bpf_insn_aux_data *aux)
-+{
-+	return aux->map_key_state & BPF_MAP_KEY_POISON;
-+}
-+
-+static bool bpf_map_key_unseen(const struct bpf_insn_aux_data *aux)
-+{
-+	return !(aux->map_key_state & BPF_MAP_KEY_SEEN);
-+}
-+
-+static u64 bpf_map_key_immediate(const struct bpf_insn_aux_data *aux)
-+{
-+	return aux->map_key_state & ~(BPF_MAP_KEY_SEEN | BPF_MAP_KEY_POISON);
-+}
-+
-+static void bpf_map_key_store(struct bpf_insn_aux_data *aux, u64 state)
-+{
-+	bool poisoned = bpf_map_key_poisoned(aux);
-+
-+	aux->map_key_state = state | BPF_MAP_KEY_SEEN |
-+			     (poisoned ? BPF_MAP_KEY_POISON : 0ULL);
- }
- 
- struct bpf_call_arg_meta {
-@@ -4079,15 +4105,49 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 		return -EACCES;
+-	if (!array->owner_prog_type) {
++	if (!array->aux->type) {
+ 		/* There's no owner yet where we could check for
+ 		 * compatibility.
+ 		 */
+-		array->owner_prog_type = fp->type;
+-		array->owner_jited = fp->jited;
+-
++		array->aux->type  = fp->type;
++		array->aux->jited = fp->jited;
+ 		return true;
  	}
  
--	if (!BPF_MAP_PTR(aux->map_state))
-+	if (!BPF_MAP_PTR(aux->map_ptr_state))
- 		bpf_map_ptr_store(aux, meta->map_ptr,
- 				  meta->map_ptr->unpriv_array);
--	else if (BPF_MAP_PTR(aux->map_state) != meta->map_ptr)
-+	else if (BPF_MAP_PTR(aux->map_ptr_state) != meta->map_ptr)
- 		bpf_map_ptr_store(aux, BPF_MAP_PTR_POISON,
- 				  meta->map_ptr->unpriv_array);
- 	return 0;
+-	return array->owner_prog_type == fp->type &&
+-	       array->owner_jited == fp->jited;
++	return array->aux->type  == fp->type &&
++	       array->aux->jited == fp->jited;
  }
  
-+static int
-+record_func_key(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
-+		int func_id, int insn_idx)
-+{
-+	struct bpf_insn_aux_data *aux = &env->insn_aux_data[insn_idx];
-+	struct bpf_reg_state *regs = cur_regs(env), *reg;
-+	struct bpf_map *map = meta->map_ptr;
-+	struct tnum range;
-+	u64 val;
-+
-+	if (func_id != BPF_FUNC_tail_call)
-+		return 0;
-+	if (!map || map->map_type != BPF_MAP_TYPE_PROG_ARRAY) {
-+		verbose(env, "kernel subsystem misconfigured verifier\n");
-+		return -EINVAL;
-+	}
-+
-+	range = tnum_range(0, map->max_entries - 1);
-+	reg = &regs[BPF_REG_3];
-+
-+	if (!register_is_const(reg) || !tnum_in(range, reg->var_off)) {
-+		bpf_map_key_store(aux, BPF_MAP_KEY_POISON);
-+		return 0;
-+	}
-+
-+	val = reg->var_off.value;
-+	if (bpf_map_key_unseen(aux))
-+		bpf_map_key_store(aux, val);
-+	else if (!bpf_map_key_poisoned(aux) &&
-+		  bpf_map_key_immediate(aux) != val)
-+		bpf_map_key_store(aux, BPF_MAP_KEY_POISON);
-+	return 0;
-+}
-+
- static int check_reference_leak(struct bpf_verifier_env *env)
- {
- 	struct bpf_func_state *state = cur_func(env);
-@@ -4162,6 +4222,10 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
- 	if (err)
- 		return err;
+ static int bpf_check_tail_call(const struct bpf_prog *fp)
+diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+index 4cbe987be35b..5e9366b33f0f 100644
+--- a/kernel/bpf/map_in_map.c
++++ b/kernel/bpf/map_in_map.c
+@@ -17,9 +17,8 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
+ 	if (IS_ERR(inner_map))
+ 		return inner_map;
  
-+	err = record_func_key(env, &meta, func_id, insn_idx);
-+	if (err)
-+		return err;
-+
- 	/* Mark slots with STACK_MISC in case of raw mode, stack offset
- 	 * is inferred from register state.
+-	/* prog_array->owner_prog_type and owner_jited
+-	 * is a runtime binding.  Doing static check alone
+-	 * in the verifier is not enough.
++	/* prog_array->aux->{type,jited} is a runtime binding.
++	 * Doing static check alone in the verifier is not enough.
  	 */
-@@ -9046,6 +9110,7 @@ static int fixup_call_args(struct bpf_verifier_env *env)
- static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 	if (inner_map->map_type == BPF_MAP_TYPE_PROG_ARRAY ||
+ 	    inner_map->map_type == BPF_MAP_TYPE_CGROUP_STORAGE ||
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 8fcd4790bafd..5a9873e58a01 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -390,13 +390,12 @@ static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
  {
- 	struct bpf_prog *prog = env->prog;
-+	bool expect_blinding = bpf_jit_blinding_enabled(prog);
- 	struct bpf_insn *insn = prog->insnsi;
- 	const struct bpf_func_proto *fn;
- 	const int insn_cnt = prog->len;
-@@ -9054,7 +9119,7 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 	struct bpf_insn insn_buf[16];
- 	struct bpf_prog *new_prog;
- 	struct bpf_map *map_ptr;
--	int i, cnt, delta = 0;
-+	int i, ret, cnt, delta = 0;
+ 	const struct bpf_map *map = filp->private_data;
+ 	const struct bpf_array *array;
+-	u32 owner_prog_type = 0;
+-	u32 owner_jited = 0;
++	u32 type = 0, jited = 0;
  
- 	for (i = 0; i < insn_cnt; i++, insn++) {
- 		if (insn->code == (BPF_ALU64 | BPF_MOD | BPF_X) ||
-@@ -9198,6 +9263,26 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 			insn->code = BPF_JMP | BPF_TAIL_CALL;
- 
- 			aux = &env->insn_aux_data[i + delta];
-+			if (prog->jit_requested && !expect_blinding &&
-+			    !bpf_map_key_poisoned(aux) &&
-+			    !bpf_map_ptr_poisoned(aux) &&
-+			    !bpf_map_ptr_unpriv(aux)) {
-+				struct bpf_jit_poke_descriptor desc = {
-+					.reason = BPF_POKE_REASON_TAIL_CALL,
-+					.tail_call.map = BPF_MAP_PTR(aux->map_ptr_state),
-+					.tail_call.key = bpf_map_key_immediate(aux),
-+				};
-+
-+				ret = bpf_jit_add_poke_descriptor(prog, &desc);
-+				if (ret < 0) {
-+					verbose(env, "adding tail call poke descriptor failed\n");
-+					return ret;
-+				}
-+
-+				insn->imm = ret + 1;
-+				continue;
-+			}
-+
- 			if (!bpf_map_ptr_unpriv(aux))
- 				continue;
- 
-@@ -9212,7 +9297,7 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 				return -EINVAL;
- 			}
- 
--			map_ptr = BPF_MAP_PTR(aux->map_state);
-+			map_ptr = BPF_MAP_PTR(aux->map_ptr_state);
- 			insn_buf[0] = BPF_JMP_IMM(BPF_JGE, BPF_REG_3,
- 						  map_ptr->max_entries, 2);
- 			insn_buf[1] = BPF_ALU32_IMM(BPF_AND, BPF_REG_3,
-@@ -9246,7 +9331,7 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 			if (bpf_map_ptr_poisoned(aux))
- 				goto patch_call_imm;
- 
--			map_ptr = BPF_MAP_PTR(aux->map_state);
-+			map_ptr = BPF_MAP_PTR(aux->map_ptr_state);
- 			ops = map_ptr->ops;
- 			if (insn->imm == BPF_FUNC_map_lookup_elem &&
- 			    ops->map_gen_lookup) {
-@@ -9326,6 +9411,23 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 		insn->imm = fn->func - __bpf_call_base;
+ 	if (map->map_type == BPF_MAP_TYPE_PROG_ARRAY) {
+ 		array = container_of(map, struct bpf_array, map);
+-		owner_prog_type = array->owner_prog_type;
+-		owner_jited = array->owner_jited;
++		type  = array->aux->type;
++		jited = array->aux->jited;
  	}
  
-+	/* Since poke tab is now finalized, publish aux to tracker. */
-+	for (i = 0; i < prog->aux->size_poke_tab; i++) {
-+		map_ptr = prog->aux->poke_tab[i].tail_call.map;
-+		if (!map_ptr->ops->map_poke_track ||
-+		    !map_ptr->ops->map_poke_untrack ||
-+		    !map_ptr->ops->map_poke_run) {
-+			verbose(env, "bpf verifier is misconfigured\n");
-+			return -EINVAL;
-+		}
-+
-+		ret = map_ptr->ops->map_poke_track(map_ptr, prog->aux);
-+		if (ret < 0) {
-+			verbose(env, "tracking tail call prog failed\n");
-+			return ret;
-+		}
-+	}
-+
- 	return 0;
+ 	seq_printf(m,
+@@ -416,12 +415,9 @@ static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
+ 		   map->memory.pages * 1ULL << PAGE_SHIFT,
+ 		   map->id,
+ 		   READ_ONCE(map->frozen));
+-
+-	if (owner_prog_type) {
+-		seq_printf(m, "owner_prog_type:\t%u\n",
+-			   owner_prog_type);
+-		seq_printf(m, "owner_jited:\t%u\n",
+-			   owner_jited);
++	if (type) {
++		seq_printf(m, "owner_prog_type:\t%u\n", type);
++		seq_printf(m, "owner_jited:\t%u\n", jited);
+ 	}
  }
- 
+ #endif
 -- 
 2.21.0
 
