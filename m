@@ -2,61 +2,63 @@ Return-Path: <SRS0=6bUS=ZO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1848C432C0
-	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 07:21:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ABA0C432C0
+	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 07:27:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6444D20659
-	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 07:21:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6CAE12068F
+	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 07:27:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uve6JgQ5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f9a9jG7Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726529AbfKVHVG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Nov 2019 02:21:06 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:34424 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726500AbfKVHVF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Nov 2019 02:21:05 -0500
-Received: by mail-lf1-f68.google.com with SMTP id l28so4740878lfj.1;
-        Thu, 21 Nov 2019 23:21:04 -0800 (PST)
+        id S1726248AbfKVH1N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Nov 2019 02:27:13 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:38649 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726018AbfKVH1N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Nov 2019 02:27:13 -0500
+Received: by mail-lj1-f196.google.com with SMTP id v8so6168197ljh.5;
+        Thu, 21 Nov 2019 23:27:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=hwH6xk8EcOcChp/d0fJ1SRbLCXpO7w1LH8vvcfWfSHI=;
-        b=uve6JgQ5neKG9r0ysbEkydnr/uC0rSwD/9iSavhBsZIdDKnrF4Vbmz9J4Z13ZAQKC0
-         XDTXIyAnJEBDt8DX6xkKC/uGkXo//BQ2qet0Nb0MCpatyd5eNftjF/Ino34DwGYU88DN
-         Ye0WXgEYUEwtFYcm+5Eral9m53t65nCuQQgd+SNODnnF/1QpLcQm83TEBBkyTOZPcPf2
-         gn0M0YX5ZZGGWzxza8ghcgx/2OJx38cnfkk0Sl+xiwM3V2tK6SXZmCSAsC5ki/kQq8tq
-         nA3+kYWsUdd4FU8/DZGtnPLymfWp2uFuwT5yVFcc1AtO7LlrqJefJ061ktN8bFmsqbX2
-         kUmg==
+        bh=JXodrqg0Ns9fDSfl3NpT9xgzI8A0tSboj9r6ouzs1nQ=;
+        b=f9a9jG7Yga7eCX/RCPBoI4sJjsG/OXDrxi4R1+XYPf03uDc1Pi83E6ZVRBCAUfknxA
+         UJkjRvMzjJ9iCDwX1zFBas9f+qAXCfDbIdxXvOlrrrkHZrlsRCqq/iafKohLQoDuYvZj
+         OZKGna5sMB6QI4KdO4oSb9NLFeiaB2ed//zsscR17sLeAyLgTkbe8Jbdyoh/wNoA+BEw
+         4nF1e7nbcQjyl5/2LXc54GaquYPr1ST4qKYklnn3yfSlavH3Y1tFXLTOYSPu9bVui5U6
+         6EWNnaRSCOCwlPKZJXXkc9zlisE8luR6jDxTcX8nbglCD/v/EXFaBAIHXWcRY2N1nBOB
+         4ukA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hwH6xk8EcOcChp/d0fJ1SRbLCXpO7w1LH8vvcfWfSHI=;
-        b=HhB1xF4flT3VII4qdm6aSzxSEKd1Fn9hokSV1ODAcPdHGa7T2t84mj1DHMbDNs3UrA
-         xp4sSXqPVieyVh8MpLEn6KEHwY0c2Pq45CrTZhtag/AsUVK2R/NH4qITAmG8JR4AjjBF
-         6g52ezdpWQFW81QD38yc3YwrkNhI7nSKTy1H94a8kYSHpuVqsWI+c6KUPU2hmE/Otl0u
-         +Y9g7eTVQBUA1WsKGI75QEJJowgu7ltBqExWrQGB8xfXSRwho6biJ0ZBOBp5AuzH78bs
-         Ce6vF7CH6qKIsxbHCQ81zSqBSjgv1UnhXkYHFt93zIPGISa3WyY5u9O9z/RENpVHwvrk
-         0z7A==
-X-Gm-Message-State: APjAAAXFlIg9wJCN17VraH0U2XpsM5QDlokwAs+rQc5soCspQ5v4bRoW
-        7dg4wVNwjKdG1fkJ4513LwkcJSXFhqnoELFl+aE=
-X-Google-Smtp-Source: APXvYqwVp8AXTuOk22q/9NaePjXQEWJnPgmidJIyOg4uzugUjjz5hkX3Vl9Bl+nsaNxByL0vPt3k8xxUinUNNNu4HoA=
-X-Received: by 2002:a19:9149:: with SMTP id y9mr11260110lfj.15.1574407263651;
- Thu, 21 Nov 2019 23:21:03 -0800 (PST)
+        bh=JXodrqg0Ns9fDSfl3NpT9xgzI8A0tSboj9r6ouzs1nQ=;
+        b=E+0sM2voBHWaAaJwqbRy4zcBEMj+YjH+lwaI4wYql4Emrhhts+y/f6oryEmgWbWA9u
+         l/E8paM9yD3jjmkILaHQWjou2r6Sq+fUOMdOZhf3Uw4/FA8G/vq9wGm/o53iiqPMx3K1
+         17GrNgk096JutszI9OfB3pg7TnvcCXM9S+EPXzq8BTvek9ft0w1iLRIEeI/2IeoBSAwK
+         uQkcEK35OK9LYK6iZeSHpup145b/zXlGcsiyTn87xJ4FQTh0tc697oGZvC4jnw4D2qHQ
+         DbTxRhDmqXvWgv7BEn3mFoGYTcg1/mTbkV2izUxmMj7t5IchJzRg/WAbQJ4i3XeBd3ks
+         2egQ==
+X-Gm-Message-State: APjAAAX/vnUb9JwE8KcZPYpudG4AcIUqs4nUxOOF7W5XYBX50BR4TioV
+        0m9sAE+v2QVBHCNHbBPLHFGhbyHGgNpX/Io8C8Y=
+X-Google-Smtp-Source: APXvYqxYs63Myf6KumzAMSV2SQQHoHtIOOwunSkfmhax/GjzRFVbYMQ2hws1G/UkzCLv7i2CGpQ9a+rsCoQ85pt7+7s=
+X-Received: by 2002:a2e:b5b8:: with SMTP id f24mr10676623ljn.188.1574407630969;
+ Thu, 21 Nov 2019 23:27:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20191122003527.551556-1-andriin@fb.com>
-In-Reply-To: <20191122003527.551556-1-andriin@fb.com>
+References: <20191121175900.3486133-1-andriin@fb.com>
+In-Reply-To: <20191121175900.3486133-1-andriin@fb.com>
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 21 Nov 2019 23:20:52 -0800
-Message-ID: <CAADnVQK2p05qdqNh1vh4XCZi5pyT1u7N2CJbeaBugk9JyPtUOQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] libbpf: fix bpf_object name determination for bpf_object__open_file()
+Date:   Thu, 21 Nov 2019 23:26:59 -0800
+Message-ID: <CAADnVQ+=NVQg_=eUudG3Q9knGHbwBzx8bKH+1oWemtpn23HfwA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: ensure core_reloc_kernel is
+ reading test_progs's data only
 To:     Andrii Nakryiko <andriin@fb.com>
 Cc:     bpf <bpf@vger.kernel.org>,
         Network Development <netdev@vger.kernel.org>,
@@ -70,17 +72,90 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 21, 2019 at 4:36 PM Andrii Nakryiko <andriin@fb.com> wrote:
+On Thu, Nov 21, 2019 at 9:59 AM Andrii Nakryiko <andriin@fb.com> wrote:
 >
-> If bpf_object__open_file() gets path like "some/dir/obj.o", it should derive
-> BPF object's name as "obj" (unless overriden through opts->object_name).
-> Instead, due to using `path` as a fallback value for opts->obj_name, path is
-> used as is for object name, so for above example BPF object's name will be
-> verbatim "some/dir/obj", which leads to all sorts of troubles, especially when
-> internal maps are concern (they are using up to 8 characters of object name).
-> Fix that by ensuring object_name stays NULL, unless overriden.
+> test_core_reloc_kernel.c selftest is the only CO-RE test that reads and
+> returns for validation calling thread's information (pid, tgid, comm). Thus it
+> has to make sure that only test_prog's invocations are honored.
 >
-> Fixes: 291ee02b5e40 ("libbpf: Refactor bpf_object__open APIs to use common opts")
+> Fixes: df36e621418b ("selftests/bpf: add CO-RE relocs testing setup")
+> Reported-by: Alexei Starovoitov <ast@kernel.org>
 > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> ---
+>  .../selftests/bpf/prog_tests/core_reloc.c        | 16 +++++++++++-----
+>  .../selftests/bpf/progs/test_core_reloc_kernel.c |  4 ++++
+>  2 files changed, 15 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+> index ec9e2fdd6b89..05fe85281ff7 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+> @@ -2,6 +2,7 @@
+>  #include <test_progs.h>
+>  #include "progs/core_reloc_types.h"
+>  #include <sys/mman.h>
+> +#include <sys/syscall.h>
+>
+>  #define STRUCT_TO_CHAR_PTR(struct_name) (const char *)&(struct struct_name)
+>
+> @@ -452,6 +453,7 @@ static struct core_reloc_test_case test_cases[] = {
+>  struct data {
+>         char in[256];
+>         char out[256];
+> +       uint64_t my_pid_tgid;
+>  };
+>
+>  static size_t roundup_page(size_t sz)
+> @@ -471,9 +473,12 @@ void test_core_reloc(void)
+>         struct bpf_map *data_map;
+>         struct bpf_program *prog;
+>         struct bpf_object *obj;
+> +       uint64_t my_pid_tgid;
+>         struct data *data;
+>         void *mmap_data = NULL;
+>
+> +       my_pid_tgid = getpid() | ((uint64_t)syscall(SYS_gettid) << 32);
+> +
+>         for (i = 0; i < ARRAY_SIZE(test_cases); i++) {
+>                 test_case = &test_cases[i];
+>                 if (!test__start_subtest(test_case->case_name))
+> @@ -517,11 +522,6 @@ void test_core_reloc(void)
+>                                 goto cleanup;
+>                 }
+>
+> -               link = bpf_program__attach_raw_tracepoint(prog, tp_name);
+> -               if (CHECK(IS_ERR(link), "attach_raw_tp", "err %ld\n",
+> -                         PTR_ERR(link)))
+> -                       goto cleanup;
+> -
+>                 data_map = bpf_object__find_map_by_name(obj, "test_cor.bss");
+>                 if (CHECK(!data_map, "find_data_map", "data map not found\n"))
+>                         goto cleanup;
+> @@ -537,6 +537,12 @@ void test_core_reloc(void)
+>
+>                 memset(mmap_data, 0, sizeof(*data));
+>                 memcpy(data->in, test_case->input, test_case->input_len);
+> +               data->my_pid_tgid = my_pid_tgid;
+> +
+> +               link = bpf_program__attach_raw_tracepoint(prog, tp_name);
+> +               if (CHECK(IS_ERR(link), "attach_raw_tp", "err %ld\n",
+> +                         PTR_ERR(link)))
+> +                       goto cleanup;
+>
+>                 /* trigger test run */
+>                 usleep(1);
+> diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
+> index a4b5e0562ed5..d2fe8f337846 100644
+> --- a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
+> +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
+> @@ -11,6 +11,7 @@ char _license[] SEC("license") = "GPL";
+>  static volatile struct data {
+>         char in[256];
+>         char out[256];
+> +       uint64_t my_pid_tgid;
+>  } data;
 
-Applied to bpf-next. Thanks
+There was a conflict here, since global data support patchset was
+already applied.
+I resolved it and applied to bpf-next.
+Thanks
