@@ -2,178 +2,159 @@ Return-Path: <SRS0=6bUS=ZO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35CF3C432C3
-	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 05:42:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 384A8C432C0
+	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 05:53:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 00B3120708
-	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 05:42:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mk7Reanp"
+	by mail.kernel.org (Postfix) with ESMTP id 0BF6F20659
+	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 05:53:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1574402036;
+	bh=HyUpOubg4nCTigLj213XCg7VyoiWNH/jI1E2Ve+V/hk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=XUIr8UW3Yoze9Bv98vLoqpQycWQ501HdltdBm0NzE60mQ9AiVy2sqCMDTjI7RatZE
+	 X/pdvFdY1J5fZEzsmMJdQJhviPw8FwpXU8FbWoDbgrnrwX9YwtdPftHpBeMYqStAU/
+	 hMb5X1qUrzVtSsHLJyyMl0OPZW79XciSc4JLyubw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726364AbfKVFm0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Nov 2019 00:42:26 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:45424 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbfKVFm0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Nov 2019 00:42:26 -0500
-Received: by mail-pj1-f65.google.com with SMTP id m71so2554610pjb.12;
-        Thu, 21 Nov 2019 21:42:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=N/xq13vGXiWvpwA7o5ubr/SQv5Qk0ryWNspqTCcKzVM=;
-        b=mk7ReanpUIZYts/l/C999xuOMmVLfqqzs0MpoR1zuoQN4LC7IuYHBNOcQffZo+nuMQ
-         fRs/cK/UpvkfmuoHbuGFfAnNKWuiT+iuA6g7M50zlj0RGROMEm5LYaGI7UrWsfeIX+zz
-         YQ9WC9D724dm4b6uLIGELStgYrnN+0l/SFokEmWU9OrWdVFGfCA9zXm9MDdEbdbBll/X
-         7+Hfo6naCHP0RniKY+2ayyh5FwQFI0xZpO/xSAv4J7JhKa3PE8qcjL3DdWmdpBX5zRXh
-         HFV/Tv8vj6OlvGMU0scc67F/g3qnIMOtk15cT7x2PvYdL58bCt+VZEPiUi6mqWXBDwnM
-         D+qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=N/xq13vGXiWvpwA7o5ubr/SQv5Qk0ryWNspqTCcKzVM=;
-        b=UzpWvSC8a8GfTkJlxcuaa27DmVuY2KEDMAD4cKB90qzOlGcWfUb+YR234l8yC4B6uK
-         SAGr4jiREUZhcuMDPNIPCx2EoiIkZ5ecgm/lM9zWeY6d9nYUe57zteyXEL1xbYRnv2mc
-         O+REBCyGb36XBHmX2/rK/FCSURckKhMsRunNBop9HU/NP1yKlt5bAEL9kwC0bkGQOX7g
-         qSqc7tMDjEOt2CECSM5kg5f3eyRL/sKImJkg9Cnr0O0KQ28oYqmjfQmBv7v4KOh8aljq
-         RB5Yh1qrRGZey/Yc8VbPoNpbkzaZ2vynj2Iu6/2eLsG/f9OGKW1Em9mP0ZJUq/SzKqXO
-         U2lw==
-X-Gm-Message-State: APjAAAWvuPtUny7QFUg86fMOgSvvSJnK0ltZzw5yv9xTKk6sn7kVRfi4
-        U/nKYyN9ntgh6jLhyPyljQ4=
-X-Google-Smtp-Source: APXvYqzstknxYzuGGKrXO06rsnCSJWi/aaRPTCAyTjuLKgzAc1ojp7WXFsQTvtnVoYwtnpeRtGrRRQ==
-X-Received: by 2002:a17:90b:300c:: with SMTP id hg12mr16713316pjb.75.1574401345200;
-        Thu, 21 Nov 2019 21:42:25 -0800 (PST)
-Received: from [172.20.20.103] ([222.151.198.97])
-        by smtp.gmail.com with ESMTPSA id h9sm5010634pgk.84.2019.11.21.21.42.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Nov 2019 21:42:24 -0800 (PST)
-Subject: Re: [RFC PATCH v2 bpf-next 00/15] xdp_flow: Flow offload to XDP
-To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
+        id S1727333AbfKVFxk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Nov 2019 00:53:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59392 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728842AbfKVFxW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Nov 2019 00:53:22 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 410692071B;
+        Fri, 22 Nov 2019 05:53:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574402001;
+        bh=HyUpOubg4nCTigLj213XCg7VyoiWNH/jI1E2Ve+V/hk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QeChBv8p+eEG21IQjiIT4ztd4wNSwnh5B4qZ0tGJNZ2eWlKQYpgB0esh4gHDEqjaF
+         /fsoSOF3ByKyOzAYrNqdNSNAbOBRkkSl/3LuZ+8++4KIaKCwUTDAIsb9Add8d7Oa/1
+         vJQpe9P6ttQA1N2OPi1lNX5DasPVdV+Xfkkqd9r4=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Pravin B Shelar <pshelar@ovn.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        William Tu <u9012063@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>
-References: <20191018040748.30593-1-toshiaki.makita1@gmail.com>
- <5da9d8c125fd4_31cf2adc704105c456@john-XPS-13-9370.notmuch>
- <22e6652c-e635-4349-c863-255d6c1c548b@gmail.com>
- <5daf34614a4af_30ac2b1cb5d205bce4@john-XPS-13-9370.notmuch>
- <87h840oese.fsf@toke.dk>
- <5db128153c75_549d2affde7825b85e@john-XPS-13-9370.notmuch>
- <87sgniladm.fsf@toke.dk> <a7f3d86b-c83c-7b0d-c426-684b8dfe4344@gmail.com>
- <87zhhmrz7w.fsf@toke.dk> <b2ecf3e6-a8f1-cfd9-0dd3-e5f4d5360c0b@gmail.com>
- <87zhhhnmg8.fsf@toke.dk> <640418c3-54ba-cd62-304f-fd9f73f25a42@gmail.com>
- <87blthox30.fsf@toke.dk> <c1b7ff64-6574-74c7-cd6b-5aa353ec80ce@gmail.com>
- <87lfsiocj5.fsf@toke.dk> <6e08f714-6284-6d0d-9cbe-711c64bf97aa@gmail.com>
- <87k17xcwoq.fsf@toke.dk>
-From:   Toshiaki Makita <toshiaki.makita1@gmail.com>
-Message-ID: <db38dee6-1db9-85f3-7a0c-0bcee13b12ea@gmail.com>
-Date:   Fri, 22 Nov 2019 14:42:18 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 218/219] xdp: fix cpumap redirect SKB creation bug
+Date:   Fri, 22 Nov 2019 00:49:09 -0500
+Message-Id: <20191122054911.1750-210-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191122054911.1750-1-sashal@kernel.org>
+References: <20191122054911.1750-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <87k17xcwoq.fsf@toke.dk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2019/11/18 19:20, Toke Høiland-Jørgensen wrote:
-> Toshiaki Makita <toshiaki.makita1@gmail.com> writes:
-> 
-> [... trimming the context a bit ...]
-> 
->>>>> Take your example of TC rules: You were proposing a flow like this:
->>>>>
->>>>> Userspace TC rule -> kernel rule table -> eBPF map -> generated XDP
->>>>> program
->>>>>
->>>>> Whereas what I mean is that we could do this instead:
->>>>>
->>>>> Userspace TC rule -> kernel rule table
->>>>>
->>>>> and separately
->>>>>
->>>>> XDP program -> bpf helper -> lookup in kernel rule table
->>>>
->>>> Thanks, now I see what you mean.
->>>> You expect an XDP program like this, right?
->>>>
->>>> int xdp_tc(struct xdp_md *ctx)
->>>> {
->>>> 	int act = bpf_xdp_tc_filter(ctx);
->>>> 	return act;
->>>> }
->>>
->>> Yes, basically, except that the XDP program would need to parse the
->>> packet first, and bpf_xdp_tc_filter() would take a parameter struct with
->>> the parsed values. See the usage of bpf_fib_lookup() in
->>> bpf/samples/xdp_fwd_kern.c
->>>
->>>> But doesn't this way lose a chance to reduce/minimize the program to
->>>> only use necessary features for this device?
->>>
->>> Not necessarily. Since the BPF program does the packet parsing and fills
->>> in the TC filter lookup data structure, it can limit what features are
->>> used that way (e.g., if I only want to do IPv6, I just parse the v6
->>> header, ignore TCP/UDP, and drop everything that's not IPv6). The lookup
->>> helper could also have a flag argument to disable some of the lookup
->>> features.
->>
->> It's unclear to me how to configure that.
->> Use options when attaching the program? Something like
->> $ xdp_tc attach eth0 --only-with ipv6
->> But can users always determine their necessary features in advance?
-> 
-> That's what I'm doing with xdp-filter now. But the answer to your second
-> question is likely to be 'probably not', so it would be good to not have
-> to do this :)
-> 
->> Frequent manual reconfiguration when TC rules frequently changes does
->> not sound nice. Or, add hook to kernel to listen any TC filter event
->> on some daemon and automatically reload the attached program?
-> 
-> Doesn't have to be a kernel hook; we could enhance the userspace tooling
-> to do it. Say we integrate it into 'tc':
-> 
-> - Add a new command 'tc xdp_accel enable <iface> --features [ipv6,etc]'
-> - When adding new rules, add the following logic:
->    - Check if XDP acceleration is enabled
->    - If it is, check whether the rule being added fits into the current
->      'feature set' loaded on that interface.
->      - If the rule needs more features, reload the XDP program to one
->        with the needed additional features.
->      - Or, alternatively, just warn the user and let them manually
->        replace it?
+From: Jesper Dangaard Brouer <brouer@redhat.com>
 
-Ok, but there are other userspace tools to configure tc in wild.
-python and golang have their own netlink library project.
-OVS embeds TC netlink handling code in itself. There may be more tools like this.
-I think at least we should have rtnl notification about TC and monitor it
-from daemon, if we want to reload the program from userspace tools.
+[ Upstream commit 676e4a6fe703f2dae699ee9d56f14516f9ada4ea ]
 
-Toshiaki Makita
+We want to avoid leaking pointer info from xdp_frame (that is placed in
+top of frame) like commit 6dfb970d3dbd ("xdp: avoid leaking info stored in
+frame data on page reuse"), and followup commit 97e19cce05e5 ("bpf:
+reserve xdp_frame size in xdp headroom") that reserve this headroom.
+
+These changes also affected how cpumap constructed SKBs, as xdpf->headroom
+size changed, the skb data starting point were in-effect shifted with 32
+bytes (sizeof xdp_frame). This was still okay, as the cpumap frame_size
+calculation also included xdpf->headroom which were reduced by same amount.
+
+A bug was introduced in commit 77ea5f4cbe20 ("bpf/cpumap: make sure
+frame_size for build_skb is aligned if headroom isn't"), where the
+xdpf->headroom became part of the SKB_DATA_ALIGN rounding up. This
+round-up to find the frame_size is in principle still correct as it does
+not exceed the 2048 bytes frame_size (which is max for ixgbe and i40e),
+but the 32 bytes offset of pkt_data_start puts this over the 2048 bytes
+limit. This cause skb_shared_info to spill into next frame. It is a little
+hard to trigger, as the SKB need to use above 15 skb_shinfo->frags[] as
+far as I calculate. This does happen in practise for TCP streams when
+skb_try_coalesce() kicks in.
+
+KASAN can be used to detect these wrong memory accesses, I've seen:
+ BUG: KASAN: use-after-free in skb_try_coalesce+0x3cb/0x760
+ BUG: KASAN: wild-memory-access in skb_release_data+0xe2/0x250
+
+Driver veth also construct a SKB from xdp_frame in this way, but is not
+affected, as it doesn't reserve/deduct the room (used by xdp_frame) from
+the SKB headroom. Instead is clears the pointers via xdp_scrub_frame(),
+and allows SKB to use this area.
+
+The fix in this patch is to do like veth and instead allow SKB to (re)use
+the area occupied by xdp_frame, by clearing via xdp_scrub_frame().  (This
+does kill the idea of the SKB being able to access (mem) info from this
+area, but I guess it was a bad idea anyhow, and it was already killed by
+the veth changes.)
+
+Fixes: 77ea5f4cbe20 ("bpf/cpumap: make sure frame_size for build_skb is aligned if headroom isn't")
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ kernel/bpf/cpumap.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 8974b3755670e..3c18260403dde 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -162,10 +162,14 @@ static void cpu_map_kthread_stop(struct work_struct *work)
+ static struct sk_buff *cpu_map_build_skb(struct bpf_cpu_map_entry *rcpu,
+ 					 struct xdp_frame *xdpf)
+ {
++	unsigned int hard_start_headroom;
+ 	unsigned int frame_size;
+ 	void *pkt_data_start;
+ 	struct sk_buff *skb;
+ 
++	/* Part of headroom was reserved to xdpf */
++	hard_start_headroom = sizeof(struct xdp_frame) +  xdpf->headroom;
++
+ 	/* build_skb need to place skb_shared_info after SKB end, and
+ 	 * also want to know the memory "truesize".  Thus, need to
+ 	 * know the memory frame size backing xdp_buff.
+@@ -183,15 +187,15 @@ static struct sk_buff *cpu_map_build_skb(struct bpf_cpu_map_entry *rcpu,
+ 	 * is not at a fixed memory location, with mixed length
+ 	 * packets, which is bad for cache-line hotness.
+ 	 */
+-	frame_size = SKB_DATA_ALIGN(xdpf->len + xdpf->headroom) +
++	frame_size = SKB_DATA_ALIGN(xdpf->len + hard_start_headroom) +
+ 		SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+ 
+-	pkt_data_start = xdpf->data - xdpf->headroom;
++	pkt_data_start = xdpf->data - hard_start_headroom;
+ 	skb = build_skb(pkt_data_start, frame_size);
+ 	if (!skb)
+ 		return NULL;
+ 
+-	skb_reserve(skb, xdpf->headroom);
++	skb_reserve(skb, hard_start_headroom);
+ 	__skb_put(skb, xdpf->len);
+ 	if (xdpf->metasize)
+ 		skb_metadata_set(skb, xdpf->metasize);
+@@ -205,6 +209,9 @@ static struct sk_buff *cpu_map_build_skb(struct bpf_cpu_map_entry *rcpu,
+ 	 * - RX ring dev queue index	(skb_record_rx_queue)
+ 	 */
+ 
++	/* Allow SKB to reuse area used by xdp_frame */
++	xdp_scrub_frame(xdpf);
++
+ 	return skb;
+ }
+ 
+-- 
+2.20.1
+
