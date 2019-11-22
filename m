@@ -4,53 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5506EC432C0
-	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 05:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2244EC432C0
+	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 06:23:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 22D6A2070A
-	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 05:59:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E061320409
+	for <bpf@archiver.kernel.org>; Fri, 22 Nov 2019 06:23:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1574402355;
-	bh=QApcd85KJGu+VIAEdaq2EaYQKmtUl3gmpV+llI2BE+Y=;
+	s=default; t=1574403834;
+	bh=ihPG//jNFj6mdLcSyAiHByfXaouHt8MxyYWi42hQ/NQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Uy5erMjwZvMYq98vpjBosiU8v+7R+ALufV5GBHwsr1VUpMPJhcXI+0oIEANKs8oQK
-	 sz2YG46k37fjr3i2YZM7ezn8jtEvTGfTObT/HhInzzFGqspI+0v7C0/wHC8iC0Zanh
-	 iBdieqZc/6TOlndkFX7u5FAB00/+dTskV6JaGsk4=
+	b=1/kHXUV5cKl3IgX9ROSShoFO3IfL52bfz4ikaUYC0pY0n29pJ5UomXOazU4khdQdZ
+	 Pi9S4+nWcuheFddDS+F5swtliyvIGGyk/bK0XID9YE8m/BoyndrztXMzWsv9hqqyyN
+	 wqyZuhus8SFQo59Pz1oiVLVfU5pHpPDRUh8wxlE0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726018AbfKVF7O (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Nov 2019 00:59:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36520 "EHLO mail.kernel.org"
+        id S1727401AbfKVGXq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Nov 2019 01:23:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56838 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729552AbfKVF5z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Nov 2019 00:57:55 -0500
+        id S1728213AbfKVFvi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Nov 2019 00:51:38 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7EA752072D;
-        Fri, 22 Nov 2019 05:57:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 91F2720726;
+        Fri, 22 Nov 2019 05:51:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574402275;
-        bh=QApcd85KJGu+VIAEdaq2EaYQKmtUl3gmpV+llI2BE+Y=;
+        s=default; t=1574401898;
+        bh=ihPG//jNFj6mdLcSyAiHByfXaouHt8MxyYWi42hQ/NQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nJ2Qr9+bAvxvAO0oFQ1F2MBQtPWRKzFBw249D79C5urEOrsbz8Nggn3BD3houF87A
-         q8qyII7awP7Fitk4IRLKdUUoIWzn+trRc2HUtFizOXoPqg3lOv6BcDQIr7Oy6k6lab
-         KK+skPq6aamV+Yqud3BPuCVtL7wUXKwPyi+5nyCo=
+        b=Ck3hL2BXqee42NFIpEabYZaHhrSGQGsmMHtlDaLV2D29zwEYpIATgY7FE8RnHoHeI
+         M+gZt15S3ivo30lal0hzfQZWC1hepGvpN5uYJxFb2p85XyTM3MeSXpt6MBq197u5ex
+         bxjxpti9bDFh34q3cVYoT6VnwkPOqGMskdNeSTFY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Peng Sun <sironhide0null@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 114/127] bpf: decrease usercnt if bpf_map_new_fd() fails in bpf_map_get_fd_by_id()
-Date:   Fri, 22 Nov 2019 00:55:32 -0500
-Message-Id: <20191122055544.3299-113-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 130/219] bpf/cpumap: make sure frame_size for build_skb is aligned if headroom isn't
+Date:   Fri, 22 Nov 2019 00:47:42 -0500
+Message-Id: <20191122054911.1750-123-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191122055544.3299-1-sashal@kernel.org>
-References: <20191122055544.3299-1-sashal@kernel.org>
+In-Reply-To: <20191122054911.1750-1-sashal@kernel.org>
+References: <20191122054911.1750-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,36 +59,41 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Peng Sun <sironhide0null@gmail.com>
+From: Jesper Dangaard Brouer <brouer@redhat.com>
 
-[ Upstream commit 781e62823cb81b972dc8652c1827205cda2ac9ac ]
+[ Upstream commit 77ea5f4cbe2084db9ab021ba73fb7eadf1610884 ]
 
-In bpf/syscall.c, bpf_map_get_fd_by_id() use bpf_map_inc_not_zero()
-to increase the refcount, both map->refcnt and map->usercnt. Then, if
-bpf_map_new_fd() fails, should handle map->usercnt too.
+The frame_size passed to build_skb must be aligned, else it is
+possible that the embedded struct skb_shared_info gets unaligned.
 
-Fixes: bd5f5f4ecb78 ("bpf: Add BPF_MAP_GET_FD_BY_ID")
-Signed-off-by: Peng Sun <sironhide0null@gmail.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
+For correctness make sure that xdpf->headroom in included in the
+alignment. No upstream drivers can hit this, as all XDP drivers provide
+an aligned headroom.  This was discovered when playing with implementing
+XDP support for mvneta, which have a 2 bytes DSA header, and this
+Marvell ARM64 platform didn't like doing atomic operations on an
+unaligned skb_shinfo(skb)->dataref addresses.
+
+Fixes: 1c601d829ab0 ("bpf: cpumap xdp_buff to skb conversion and allocation")
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/syscall.c | 2 +-
+ kernel/bpf/cpumap.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 59d2e94ecb798..34110450a78f2 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1354,7 +1354,7 @@ static int bpf_map_get_fd_by_id(const union bpf_attr *attr)
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 24aac0d0f4127..8974b3755670e 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -183,7 +183,7 @@ static struct sk_buff *cpu_map_build_skb(struct bpf_cpu_map_entry *rcpu,
+ 	 * is not at a fixed memory location, with mixed length
+ 	 * packets, which is bad for cache-line hotness.
+ 	 */
+-	frame_size = SKB_DATA_ALIGN(xdpf->len) + xdpf->headroom +
++	frame_size = SKB_DATA_ALIGN(xdpf->len + xdpf->headroom) +
+ 		SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
  
- 	fd = bpf_map_new_fd(map);
- 	if (fd < 0)
--		bpf_map_put(map);
-+		bpf_map_put_with_uref(map);
- 
- 	return fd;
- }
+ 	pkt_data_start = xdpf->data - xdpf->headroom;
 -- 
 2.20.1
 
