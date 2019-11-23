@@ -2,93 +2,165 @@ Return-Path: <SRS0=Pk2X=ZP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B442C432C0
-	for <bpf@archiver.kernel.org>; Sat, 23 Nov 2019 10:39:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B0E1C43215
+	for <bpf@archiver.kernel.org>; Sat, 23 Nov 2019 11:08:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2CA0F2071C
-	for <bpf@archiver.kernel.org>; Sat, 23 Nov 2019 10:39:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D669B20720
+	for <bpf@archiver.kernel.org>; Sat, 23 Nov 2019 11:08:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Nf2SOybh"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="qWJBwijo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbfKWKjT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 23 Nov 2019 05:39:19 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:38821 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726141AbfKWKjT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 23 Nov 2019 05:39:19 -0500
-Received: by mail-lf1-f67.google.com with SMTP id q28so7418291lfa.5
-        for <bpf@vger.kernel.org>; Sat, 23 Nov 2019 02:39:18 -0800 (PST)
+        id S1726368AbfKWLH5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 23 Nov 2019 06:07:57 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:36507 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726451AbfKWLH5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 23 Nov 2019 06:07:57 -0500
+Received: by mail-lj1-f193.google.com with SMTP id k15so10294689lja.3
+        for <bpf@vger.kernel.org>; Sat, 23 Nov 2019 03:07:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=1xzOfe1y+VyLkuUpRaIsR3HakWyx6MHP2tBZe2b4FVo=;
-        b=Nf2SOybhcfFbc7qcG8oCfgPB1F3sccVek4CPtJRKHezBVcazSHN2aJw+5QAX9eXYEh
-         Cbx3Jm60uxHF1l9ADTebkK01oApqI6qnfmmUIomyLWvJ/fX+JJPz8ReD7bL1n93TW3j5
-         7qxSWaXyqHDjWeiesV9WQf5Yiuqw2komM2xbw=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=4szVR/O76HqiTJlzrOTMqDMxaA5pR6qPc74y5Z8/h3U=;
+        b=qWJBwijohGKs7NYs1rJzvjjGZJCGQIC09lF9YenuzbvTZjoqxif/ZJgjI/uRrtCV70
+         UFqaTfW19UNWYSDvCzNfEyGqqqEVWrEFXJwExmWc0C1uiSsnGBZ8+70n789myQzhw/+a
+         9FqXLQaz4sCdgcvjS/ym/OzSBtkNroXuKdr7E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version:content-transfer-encoding;
-        bh=1xzOfe1y+VyLkuUpRaIsR3HakWyx6MHP2tBZe2b4FVo=;
-        b=gD5PWU5+HO8ZJD6rwBVEK0Uw2+P1yPfZYVfiYkMV+NrPoGtLCLti90iajx+7s2nZx0
-         y3yKcReFOak7Rot0ArWYw9/NJI/8N+guYeFWuDpcUr7bet+XDUkuIyvvvBHaE2fvYNnk
-         7vPRRowhFcOREHsCthRaxFb1ze6EoVU+LuYgL16D82iEdV5SZIKhvbVKMwYEyo0sc//H
-         sEXh9bdM7AsF/Tt73U5IyqMj4TLK5WIgZleytuXVRfTeWlopODVNAQ3HmmT6DdW8xj61
-         uHa5+aHQWa/doLk1QOr+gNm4uV/SlL0Z51CUxUxDKxmKNZWCpbLhoEnREfhTmfJYb5e2
-         3VIw==
-X-Gm-Message-State: APjAAAW8Ygmqy6iuaGcnBzd2OpCgJTiTupVYNdfR+DjGEsuUS+7jYPF5
-        OSc+f0sh7k9ObHnbDmpiqvA1uA==
-X-Google-Smtp-Source: APXvYqzKbOVl7yv6R554Y5GMZ59rAHOKllS0NtpqWo0mJ0fMZnjzJ4x2vNDkhXhPKWDZqWpFoB/ETw==
-X-Received: by 2002:ac2:4102:: with SMTP id b2mr15000556lfi.16.1574505557635;
-        Sat, 23 Nov 2019 02:39:17 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=4szVR/O76HqiTJlzrOTMqDMxaA5pR6qPc74y5Z8/h3U=;
+        b=QTuy4906L79Q80u1KqkrwKDVDwLjo7EvJzKKtfL06MbZPZnRRlrL/3VEhKqFR1VXdZ
+         Za2gTWudoV0/1xwTFFaNsIwsSc5Tee9qp7dn8gHVm08Y0sED4xYO/JczhmOVYL1cLYsY
+         3rVd7hSVUpwKLcGyBAiEYW0NMBhfyLRV47bO7xNWfftat4+AWj1JsmD4KNWdmavxR3Ty
+         8kMl7F9lQeqqznyc/OzdbvmmwItUTk6ldSiNnBqbf3rvsx0XCEPP4c883+xZ/V9OTVgj
+         gAG2dBeXfAEIHNQrIVLooxx+sg3uAPvUrntdlLKgcRaktJmmi40zRTg8S2U1z06pXHlU
+         zzEg==
+X-Gm-Message-State: APjAAAV9YKja/FD/EXGLgmn+cT7Od+/ITdvFYhZlKOO4fsGStPHU78+K
+        hJO18gGveeC7W9RuzrJWNz0V/vYHZ0rh7g==
+X-Google-Smtp-Source: APXvYqxj5SRVgsq3O/Gwn8oooPHLc/dW0czt66T54dYmjbM6DgNMxWNsEGyBo24n2IW72OIFnogz8Q==
+X-Received: by 2002:a05:651c:289:: with SMTP id b9mr15890456ljo.80.1574507274871;
+        Sat, 23 Nov 2019 03:07:54 -0800 (PST)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id x29sm566430lfg.45.2019.11.23.02.39.16
+        by smtp.gmail.com with ESMTPSA id t17sm596932ljc.88.2019.11.23.03.07.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Nov 2019 02:39:16 -0800 (PST)
-References: <cover.1574452833.git.daniel@iogearbox.net> <e8db37f6b2ae60402fa40216c96738ee9b316c32.1574452833.git.daniel@iogearbox.net>
-User-agent: mu4e 1.1.0; emacs 26.1
+        Sat, 23 Nov 2019 03:07:54 -0800 (PST)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     ast@kernel.org, john.fastabend@gmail.com,
-        andrii.nakryiko@gmail.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 6/8] bpf: constant map key tracking for prog array pokes
-In-reply-to: <e8db37f6b2ae60402fa40216c96738ee9b316c32.1574452833.git.daniel@iogearbox.net>
-Date:   Sat, 23 Nov 2019 11:39:15 +0100
-Message-ID: <87r21yop0s.fsf@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Subject: [PATCH bpf-next 1/8] bpf, sockmap: Return socket cookie on lookup from syscall
+Date:   Sat, 23 Nov 2019 12:07:44 +0100
+Message-Id: <20191123110751.6729-2-jakub@cloudflare.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191123110751.6729-1-jakub@cloudflare.com>
+References: <20191123110751.6729-1-jakub@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Nov 22, 2019 at 09:07 PM CET, Daniel Borkmann wrote:
+Tooling that populates the SOCKMAP with sockets from user-space needs a way
+to inspect its contents. Returning the struct sock * that SOCKMAP holds to
+user-space is neither safe nor useful. An approach established by
+REUSEPORT_SOCKARRAY is to return a socket cookie (a unique identifier)
+instead.
 
-[...]
+Since socket cookies are u64 values SOCKMAP needs to support such a value
+size for lookup to be possible. This requires special handling on update,
+though. Attempts to do a lookup on SOCKMAP holding u32 values will be met
+with ENOSPC error.
 
-> @@ -9046,6 +9110,7 @@ static int fixup_call_args(struct bpf_verifier_env =
-*env)
->  static int fixup_bpf_calls(struct bpf_verifier_env *env)
->  {
->  	struct bpf_prog *prog =3D env->prog;
-> +	bool expect_blinding =3D bpf_jit_blinding_enabled(prog);
->  	struct bpf_insn *insn =3D prog->insnsi;
->  	const struct bpf_func_proto *fn;
->  	const int insn_cnt =3D prog->len;
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+ net/core/sock_map.c | 31 +++++++++++++++++++++++++++++--
+ 1 file changed, 29 insertions(+), 2 deletions(-)
 
-I noticed this is breaking the build if CONFIG_BPF_JIT is not set:
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index eb114ee419b6..e8460fdc597d 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -10,6 +10,7 @@
+ #include <linux/skmsg.h>
+ #include <linux/list.h>
+ #include <linux/jhash.h>
++#include <linux/sock_diag.h>
+ 
+ struct bpf_stab {
+ 	struct bpf_map map;
+@@ -31,7 +32,8 @@ static struct bpf_map *sock_map_alloc(union bpf_attr *attr)
+ 		return ERR_PTR(-EPERM);
+ 	if (attr->max_entries == 0 ||
+ 	    attr->key_size    != 4 ||
+-	    attr->value_size  != 4 ||
++	    (attr->value_size != sizeof(u32) &&
++	     attr->value_size != sizeof(u64)) ||
+ 	    attr->map_flags & ~SOCK_CREATE_FLAG_MASK)
+ 		return ERR_PTR(-EINVAL);
+ 
+@@ -274,6 +276,23 @@ static void *sock_map_lookup(struct bpf_map *map, void *key)
+ 	return ERR_PTR(-EOPNOTSUPP);
+ }
+ 
++static void *sock_map_lookup_sys(struct bpf_map *map, void *key)
++{
++	struct sock *sk;
++
++	WARN_ON_ONCE(!rcu_read_lock_held());
++
++	if (map->value_size != sizeof(u64))
++		return ERR_PTR(-ENOSPC);
++
++	sk = __sock_map_lookup_elem(map, *(u32 *)key);
++	if (!sk)
++		return ERR_PTR(-ENOENT);
++
++	sock_gen_cookie(sk);
++	return &sk->sk_cookie;
++}
++
+ static int __sock_map_delete(struct bpf_stab *stab, struct sock *sk_test,
+ 			     struct sock **psk)
+ {
+@@ -399,12 +418,19 @@ static bool sock_map_sk_is_suitable(const struct sock *sk)
+ static int sock_map_update_elem(struct bpf_map *map, void *key,
+ 				void *value, u64 flags)
+ {
+-	u32 ufd = *(u32 *)value;
+ 	u32 idx = *(u32 *)key;
+ 	struct socket *sock;
+ 	struct sock *sk;
++	u64 ufd;
+ 	int ret;
+ 
++	if (map->value_size == sizeof(u64))
++		ufd = *(u64 *)value;
++	else
++		ufd = *(u32 *)value;
++	if (ufd > S32_MAX)
++		return -EINVAL;
++
+ 	sock = sockfd_lookup(ufd, &ret);
+ 	if (!sock)
+ 		return ret;
+@@ -500,6 +526,7 @@ const struct bpf_map_ops sock_map_ops = {
+ 	.map_alloc		= sock_map_alloc,
+ 	.map_free		= sock_map_free,
+ 	.map_get_next_key	= sock_map_get_next_key,
++	.map_lookup_elem_sys_only = sock_map_lookup_sys,
+ 	.map_update_elem	= sock_map_update_elem,
+ 	.map_delete_elem	= sock_map_delete_elem,
+ 	.map_lookup_elem	= sock_map_lookup,
+-- 
+2.20.1
 
-kernel/bpf/verifier.c: In function =E2=80=98fixup_bpf_calls=E2=80=99:
-kernel/bpf/verifier.c:9134:25: error: implicit declaration of function =E2=
-=80=98bpf_jit_blinding_enabled=E2=80=99; did you mean =E2=80=98bpf_jit_kall=
-syms_enabled=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-  bool expect_blinding =3D bpf_jit_blinding_enabled(prog);
-                         ^~~~~~~~~~~~~~~~~~~~~~~~
-                         bpf_jit_kallsyms_enabled
