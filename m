@@ -4,34 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAE80C432C0
-	for <bpf@archiver.kernel.org>; Sat, 23 Nov 2019 14:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28B50C432C0
+	for <bpf@archiver.kernel.org>; Sat, 23 Nov 2019 15:53:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DCF72068F
-	for <bpf@archiver.kernel.org>; Sat, 23 Nov 2019 14:03:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC8302070E
+	for <bpf@archiver.kernel.org>; Sat, 23 Nov 2019 15:53:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726620AbfKWODe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 23 Nov 2019 09:03:34 -0500
-Received: from mga01.intel.com ([192.55.52.88]:25125 "EHLO mga01.intel.com"
+        id S1726638AbfKWPxE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 23 Nov 2019 10:53:04 -0500
+Received: from mga05.intel.com ([192.55.52.43]:10022 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726524AbfKWODe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 23 Nov 2019 09:03:34 -0500
+        id S1726487AbfKWPxE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 23 Nov 2019 10:53:04 -0500
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Nov 2019 06:03:34 -0800
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Nov 2019 07:53:03 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,233,1571727600"; 
-   d="scan'208";a="216583206"
+X-IronPort-AV: E=Sophos;i="5.69,234,1571727600"; 
+   d="scan'208";a="407890582"
 Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Nov 2019 06:03:32 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 23 Nov 2019 07:53:01 -0800
 Received: from kbuild by lkp-server01 with local (Exim 4.89)
         (envelope-from <lkp@intel.com>)
-        id 1iYW0Z-000DXc-St; Sat, 23 Nov 2019 22:03:31 +0800
-Date:   Sat, 23 Nov 2019 22:03:22 +0800
+        id 1iYXiW-000GCG-Tb; Sat, 23 Nov 2019 23:53:00 +0800
+Date:   Sat, 23 Nov 2019 23:52:21 +0800
 From:   kbuild test robot <lkp@intel.com>
 To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>
 Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org, ast@kernel.org,
@@ -41,13 +42,13 @@ Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org, ast@kernel.org,
         magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
         ecree@solarflare.com, thoiland@redhat.com,
         andrii.nakryiko@gmail.com
-Subject: [RFC PATCH] bpf: bpf_dispatcher_lookup() can be static
-Message-ID: <20191123140322.kohmqp3rjcbxozqk@4978f4969bb8>
-References: <20191119160757.27714-2-bjorn.topel@gmail.com>
+Subject: [RFC PATCH] i40e: ____xdp_call_i40e_xdp_call_tramp can be static
+Message-ID: <20191123155221.s32llr6jsoxtdmoc@4978f4969bb8>
+References: <20191119160757.27714-4-bjorn.topel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191119160757.27714-2-bjorn.topel@gmail.com>
+In-Reply-To: <20191119160757.27714-4-bjorn.topel@gmail.com>
 X-Patchwork-Hint: ignore
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: bpf-owner@vger.kernel.org
@@ -56,22 +57,22 @@ List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 
-Fixes: 316d60dee82c ("bpf: introduce BPF dispatcher")
+Fixes: cfbcb56c2871 ("i40e: start using xdp_call.h")
 Signed-off-by: kbuild test robot <lkp@intel.com>
 ---
- dispatcher.c |    2 +-
+ i40e_main.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
-index 59a565107fd1d..30c964f94a173 100644
---- a/kernel/bpf/dispatcher.c
-+++ b/kernel/bpf/dispatcher.c
-@@ -45,7 +45,7 @@ struct bpf_dispatcher {
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+index 59b530e4198f2..6771d77871152 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_main.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+@@ -12518,7 +12518,7 @@ static netdev_features_t i40e_features_check(struct sk_buff *skb,
+ 	return features & ~(NETIF_F_CSUM_MASK | NETIF_F_GSO_MASK);
+ }
  
- static DEFINE_MUTEX(dispatcher_mutex);
+-DEFINE_XDP_CALL(i40e_xdp_call);
++static DEFINE_XDP_CALL(i40e_xdp_call);
  
--struct bpf_dispatcher *bpf_dispatcher_lookup(void *func)
-+static struct bpf_dispatcher *bpf_dispatcher_lookup(void *func)
- {
- 	struct bpf_dispatcher *d;
- 	struct hlist_head *head;
+ /**
+  * i40e_xdp_setup - add/remove an XDP program
