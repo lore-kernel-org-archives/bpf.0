@@ -2,66 +2,69 @@ Return-Path: <SRS0=Pk2X=ZP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B588DC432C0
-	for <bpf@archiver.kernel.org>; Sat, 23 Nov 2019 05:52:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF384C43215
+	for <bpf@archiver.kernel.org>; Sat, 23 Nov 2019 05:52:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 88D1A2071B
-	for <bpf@archiver.kernel.org>; Sat, 23 Nov 2019 05:52:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8519D20672
+	for <bpf@archiver.kernel.org>; Sat, 23 Nov 2019 05:52:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QrKD8w2m"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GLd+Ge48"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726304AbfKWFwB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726744AbfKWFwC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 23 Nov 2019 00:52:02 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:33132 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725973AbfKWFwB (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sat, 23 Nov 2019 00:52:01 -0500
-Received: from mail-pg1-f170.google.com ([209.85.215.170]:44462 "EHLO
-        mail-pg1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725973AbfKWFwA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 23 Nov 2019 00:52:00 -0500
-Received: by mail-pg1-f170.google.com with SMTP id e6so4450721pgi.11;
-        Fri, 22 Nov 2019 21:51:59 -0800 (PST)
+Received: by mail-pl1-f196.google.com with SMTP id ay6so4134315plb.0;
+        Fri, 22 Nov 2019 21:52:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zQ92mgVm1rR2M+K2diP3O/4E8CY55ARRKTkfWyR8vrI=;
-        b=QrKD8w2mOZdURS7pS0D+C/Xhcfg7c/Ko3nX8quIuijWzwhHbpPH0QnN4wX7uyTxT8C
-         oLxFfwVV6LOcWjhuuFtNOVkbL2WIR1Lh1SEtpFz5dTSajlrObEp/qH9B4PU6U1R4qHPj
-         ha5/D57P3K1pXEesqk2062pTYFWdxmjkEEXYNq5OwHBgUO1uR1jgAcDaT+mnaED6PTD2
-         Hx51insCJrKHwaqO3bqBZiX+O1OQDAEHlswI2pxbxQUtUS46OM105VGQwgdxDeM1DQ+f
-         vyRWv0VMx/m/spESa+6a0k70MvzlrBxmjY1G5eH00q0hCJlhh0RgCQccEwNkw1ThxyXL
-         4Log==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=v4PrA+SOKv4cHaWyIyu3RnovXT8/gc3K8y8DPAIgcqQ=;
+        b=GLd+Ge48I4pO6NXO8KcXFx2jIOTcT45blieRnY43S2PqaXSJJkPazQ8rA5b0E4kKDa
+         uiqni5mvtS20GYgFpeVp1I5z315z/FQz1yqovn9rGAL0RUcf4ofXXViYWJWVoPmgX2rY
+         KwiDZkVXZyZHnZ+RS0etAD7COHiLBudbLQf7MlTQPAIEPpYYh230HP+nyzAEasp4USYV
+         Aou5UyFsdqug+rEXEunu8fxTDeg8n1qfxMCWTZH/6nMcaUkYUi7nRJH+r1c/3YV7evUl
+         VICZRKR3C0TZsTKkoi+3+NVlpE3OTssM1jIyvksdOHA1Wzz+FRVz8a+qPLgMZsbJcFK+
+         WosA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zQ92mgVm1rR2M+K2diP3O/4E8CY55ARRKTkfWyR8vrI=;
-        b=JsfrOR6lNFHH2hznGc0OO2f7B6EZ+IntRJLoVohBFuz2WvUY4e0p1RNrC1ZGJ5lsnn
-         W91G6NBze4V3fnl75Qqxw7MnulafGmxMRvZiX+eBcJPh9PRG5enL+pgyBzINJSV/cofa
-         20NHkR7zPnGLLaxLIVAfJ1WdCUxevDeo7IGc1ptyBEo0UH2qI8kSRhRy8jkD9+5zSTGr
-         dms3d3AIjGK/y3Iiqx0fExCpoCF3LmWzK3CGhIAYMUsl6547bSZXFxkdQX9dn+Pgj7Ei
-         m1kAe2EATxxTDe8BRasvZoPnKXfPYjofdhAZ7xY9rk5768O61FsiBqap25JQ+uaeSGUU
-         GaQg==
-X-Gm-Message-State: APjAAAUoTYgfqrvmbBMcQljBVDLrBAFHspnt8Dq9h5bBvugfhOvp93GU
-        23+i1bbxasQfs0JQZlnGiw==
-X-Google-Smtp-Source: APXvYqzkMPk0vfE207LlYDSPcq8crGI33mkH1kcUkDBr0U0qD/QIqMfXR1IDdhlzbFDUy9m7KAsTdw==
-X-Received: by 2002:a63:ec03:: with SMTP id j3mr20470249pgh.212.1574488318574;
-        Fri, 22 Nov 2019 21:51:58 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=v4PrA+SOKv4cHaWyIyu3RnovXT8/gc3K8y8DPAIgcqQ=;
+        b=nnyADKm9JNSgHVJco5D1X/9MOPCt4DjiNMNHqeUWTZaGw8lvtO/wqwsYM3bRG+gWRD
+         GdkuhniQENPEVd33b1gDxvjcLjRnqIIyLLyTeWfnyfhGMXvy5uQjLSWepqwSq5ttQjaN
+         3OTRhRIyhoDmMcd9/9W8CwxlKJiNQSFXJRCEdtpWIkntcqz23xpFNDdsjVZNMdveztBc
+         c3AnYqqwf8m44Tnr86+D5VwNLKd0HjDoCoYjWzvTMyuI6JSnBCsvGMg5lhdkP0bsWsN5
+         YhpI56N3AYJ4JavO6uaPm7C4Nb/bqmYE37+cC1HBTfZOAV+9AcjalOoQ82VOEAuvzUxL
+         KlYA==
+X-Gm-Message-State: APjAAAXQDu8KaxmBFrqNlAFnZFwRYnwIDKgmSn1UsQYECSmrZE2NOE3Q
+        Q85LFJzutohCAX+VZTAemQ==
+X-Google-Smtp-Source: APXvYqyF0W5bzNAxP/NoIDjfCfkTlCRYrTIPmJwzYJXuQA6RewjsRrYJd1VcR+Hsv3EAvCTkCPiKYg==
+X-Received: by 2002:a17:90a:e90:: with SMTP id 16mr23719800pjx.65.1574488320990;
+        Fri, 22 Nov 2019 21:52:00 -0800 (PST)
 Received: from localhost.localdomain ([211.196.191.92])
-        by smtp.gmail.com with ESMTPSA id s22sm738350pjr.5.2019.11.22.21.51.56
+        by smtp.gmail.com with ESMTPSA id s22sm738350pjr.5.2019.11.22.21.51.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2019 21:51:58 -0800 (PST)
+        Fri, 22 Nov 2019 21:52:00 -0800 (PST)
 From:   "Daniel T. Lee" <danieltimlee@gmail.com>
 To:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH,bpf-next 0/2] Fix broken samples due to symbol mismatch
-Date:   Sat, 23 Nov 2019 14:51:49 +0900
-Message-Id: <20191123055151.9990-1-danieltimlee@gmail.com>
+Subject: [PATCH,bpf-next 1/2] samples: bpf: replace symbol compare of trace_event
+Date:   Sat, 23 Nov 2019 14:51:50 +0900
+Message-Id: <20191123055151.9990-2-danieltimlee@gmail.com>
 X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191123055151.9990-1-danieltimlee@gmail.com>
+References: <20191123055151.9990-1-danieltimlee@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -69,22 +72,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, there are broken samples due to symbol mismatch (missing or
-unused symbols). For example, the function open() calls the syscall 
-'sys_openat' instead of 'sys_open'. And there are no exact symbols such
-as 'sys_read' or 'sys_write' under kallsyms, instead the symbols have
-prefixes. And these error leads to broke of samples.
+Previously, when this sample is added, commit 1c47910ef8013
+("samples/bpf: add perf_event+bpf example"), a symbol 'sys_read' and
+'sys_write' has been used without no prefixes. But currently there are
+no exact symbols with these under kallsyms and this leads to failure.
 
-This Patchset fixes the problem by changing the symbol match.
+This commit changes exact compare to substring compare to keep compatible
+with exact symbol or prefixed symbol.
 
-Daniel T. Lee (2):
-  samples: bpf: replace symbol compare of trace_event
-  samples: bpf: fix syscall_tp due to unused syscall
+Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+---
+ samples/bpf/trace_event_user.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- samples/bpf/syscall_tp_kern.c  | 14 ++++++++++++++
- samples/bpf/trace_event_user.c |  4 ++--
- 2 files changed, 16 insertions(+), 2 deletions(-)
-
+diff --git a/samples/bpf/trace_event_user.c b/samples/bpf/trace_event_user.c
+index 16a16eadd509..749a50f2f9f3 100644
+--- a/samples/bpf/trace_event_user.c
++++ b/samples/bpf/trace_event_user.c
+@@ -37,9 +37,9 @@ static void print_ksym(__u64 addr)
+ 	}
+ 
+ 	printf("%s;", sym->name);
+-	if (!strcmp(sym->name, "sys_read"))
++	if (!strstr(sym->name, "sys_read"))
+ 		sys_read_seen = true;
+-	else if (!strcmp(sym->name, "sys_write"))
++	else if (!strstr(sym->name, "sys_write"))
+ 		sys_write_seen = true;
+ }
+ 
 -- 
 2.24.0
 
