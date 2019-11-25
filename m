@@ -2,163 +2,225 @@ Return-Path: <SRS0=POGc=ZR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4C55C43215
-	for <bpf@archiver.kernel.org>; Mon, 25 Nov 2019 04:23:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14256C432C3
+	for <bpf@archiver.kernel.org>; Mon, 25 Nov 2019 05:34:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8E95F20815
-	for <bpf@archiver.kernel.org>; Mon, 25 Nov 2019 04:23:42 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Ag+u7Sri"
+	by mail.kernel.org (Postfix) with ESMTP id E0C9220872
+	for <bpf@archiver.kernel.org>; Mon, 25 Nov 2019 05:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1574660057;
+	bh=R2JVbXCNZyDSL1W0Ab60dBRvrwuBziYmV9V6yDXSOfY=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=AXnohbXZXY+2hYi/PV8OJOEcv4Pre6PFYwheTn8zcyo82Snm+85G2Zy6NcjdndMYH
+	 zT6rnpjRS70tMVrrlcXnnaIoYt5m0F76nQPZV/CAPrWl1Xej8uv7vF+0n6Cm4Dptg6
+	 OT4jj12uusV58/i8pHSvfYP86uy+xlP+5OEdi67s=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727029AbfKYEUP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 24 Nov 2019 23:20:15 -0500
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:19303 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726977AbfKYEUP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 24 Nov 2019 23:20:15 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ddb56810000>; Sun, 24 Nov 2019 20:20:17 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sun, 24 Nov 2019 20:20:13 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sun, 24 Nov 2019 20:20:13 -0800
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 25 Nov
- 2019 04:20:13 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 25 Nov 2019 04:20:13 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5ddb567d0001>; Sun, 24 Nov 2019 20:20:13 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH 02/19] mm/gup: move try_get_compound_head() to top, fix minor issues
-Date:   Sun, 24 Nov 2019 20:19:54 -0800
-Message-ID: <20191125042011.3002372-3-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191125042011.3002372-1-jhubbard@nvidia.com>
-References: <20191125042011.3002372-1-jhubbard@nvidia.com>
+        id S1726980AbfKYFeR convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 25 Nov 2019 00:34:17 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:17508 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726876AbfKYFeQ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 25 Nov 2019 00:34:16 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAP5TQ3B022715
+        for <bpf@vger.kernel.org>; Sun, 24 Nov 2019 21:34:15 -0800
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wfny63vwj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 24 Nov 2019 21:34:15 -0800
+Received: from 2401:db00:2050:5076:face:0:1f:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Sun, 24 Nov 2019 21:34:14 -0800
+Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
+        id CA3B4760FF1; Sun, 24 Nov 2019 21:34:12 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
+To:     <davem@davemloft.net>
+CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: pull-request: bpf-next 2019-11-24
+Date:   Sun, 24 Nov 2019 21:34:12 -0800
+Message-ID: <20191125053412.1172278-1-ast@kernel.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574655617; bh=JKnh6awNMnXx+WkfJCjCpP/dD2pEJJn8AxQ3IWMhLGw=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=Ag+u7Srir8nvbObwGswAhksM3lf7yhFcBnF9prXEqkjmBbbMlv6MAuwygC5CTdfJ5
-         yE4lfgVi/yE60GFGtA5YNkQ6Ixmb8HKLSLW4UmelKpt3+hIwMQ2v0Xv2lkIRBq/Vz9
-         UyTjt6wkmv/nZ8z4gOSYJ8ODHkT4eW9VcCswEjTPRRKwV/MPtR/2JYgXJPBUa1TpC3
-         X61Mq+s8iu1E8+ey0/n2CT8DHSxzUkKRvGF7G2xUsQVyE52JcynPyIkq/Zd1uyYuWt
-         OjAf4OH2PMbY5AWLJfB/7CI7Kw9bUgcUGPSDczmntAYIcz7EXi+UxoWrCfAF0welk3
-         sIZFe64yADXzg==
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-24_04:2019-11-21,2019-11-24 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ suspectscore=4 priorityscore=1501 phishscore=0 bulkscore=0
+ lowpriorityscore=0 clxscore=1034 mlxscore=0 adultscore=0 impostorscore=0
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1911250050
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-An upcoming patch uses try_get_compound_head() more widely,
-so move it to the top of gup.c.
+Hi David,
 
-Also fix a tiny spelling error and a checkpatch.pl warning.
+The following pull-request contains BPF updates for your *net-next* tree.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- mm/gup.c | 29 +++++++++++++++--------------
- 1 file changed, 15 insertions(+), 14 deletions(-)
+We've added 27 non-merge commits during the last 4 day(s) which contain
+a total of 50 files changed, 2031 insertions(+), 548 deletions(-).
 
-diff --git a/mm/gup.c b/mm/gup.c
-index f764432914c4..3ecce297a47f 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -29,6 +29,21 @@ struct follow_page_context {
- 	unsigned int page_mask;
- };
-=20
-+/*
-+ * Return the compound head page with ref appropriately incremented,
-+ * or NULL if that failed.
-+ */
-+static inline struct page *try_get_compound_head(struct page *page, int re=
-fs)
-+{
-+	struct page *head =3D compound_head(page);
-+
-+	if (WARN_ON_ONCE(page_ref_count(head) < 0))
-+		return NULL;
-+	if (unlikely(!page_cache_add_speculative(head, refs)))
-+		return NULL;
-+	return head;
-+}
-+
- /**
-  * put_user_pages_dirty_lock() - release and optionally dirty gup-pinned p=
-ages
-  * @pages:  array of pages to be maybe marked dirty, and definitely releas=
-ed.
-@@ -1807,20 +1822,6 @@ static void __maybe_unused undo_dev_pagemap(int *nr,=
- int nr_start,
- 	}
- }
-=20
--/*
-- * Return the compund head page with ref appropriately incremented,
-- * or NULL if that failed.
-- */
--static inline struct page *try_get_compound_head(struct page *page, int re=
-fs)
--{
--	struct page *head =3D compound_head(page);
--	if (WARN_ON_ONCE(page_ref_count(head) < 0))
--		return NULL;
--	if (unlikely(!page_cache_add_speculative(head, refs)))
--		return NULL;
--	return head;
--}
--
- #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
- static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
- 			 unsigned int flags, struct page **pages, int *nr)
---=20
-2.24.0
+The main changes are:
 
+1) Optimize bpf_tail_call() from retpoline-ed indirect jump to direct jump,
+   from Daniel.
+
+2) Support global variables in libbpf, from Andrii.
+
+3) Cleanup selftests with BPF_TRACE_x() macro, from Martin.
+
+4) Fix devmap hash, from Toke.
+
+5) Fix register bounds after 32-bit conditional jumps, from Yonghong.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+
+There are 3 patch sets pending that we still consider for this merge window,
+so there could be one more PR shortly.
+
+Thanks a lot!
+
+Also thanks to reporters, reviewers and testers of commits in this pull-request:
+
+Alexei Starovoitov, Andrii Nakryiko, Björn Töpel, Jakub Kicinski, Jakub 
+Sitnicki, John Fastabend, Naresh Kamboju, Tetsuo Handa
+
+----------------------------------------------------------------
+
+The following changes since commit c392bccf2c1075b5d2cc9022d0116a516acb721d:
+
+  powerpc: Add const qual to local_read() parameter (2019-11-24 15:06:33 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git 
+
+for you to fetch changes up to b553a6ec570044fc1ae300c6fb24f9ce204c5894:
+
+  bpf: Simplify __bpf_arch_text_poke poke type handling (2019-11-24 17:12:11 -0800)
+
+----------------------------------------------------------------
+Alexei Starovoitov (4):
+      Merge branch 'libbpf-global-vars'
+      Merge branch 'jmp32-reg-bounds'
+      selftests/bpf: Add BPF trampoline performance test
+      Merge branch 'optimize-bpf_tail_call'
+
+Andrii Nakryiko (7):
+      selftests/bpf: Ensure no DWARF relocations for BPF object files
+      libbpf: Refactor relocation handling
+      libbpf: Fix various errors and warning reported by checkpatch.pl
+      libbpf: Support initialized global variables
+      selftests/bpf: Integrate verbose verifier log into test_progs
+      libbpf: Fix bpf_object name determination for bpf_object__open_file()
+      selftests/bpf: Ensure core_reloc_kernel is reading test_progs's data only
+
+Daniel Borkmann (10):
+      bpf, x86: Generalize and extend bpf_arch_text_poke for direct jumps
+      bpf: Move bpf_free_used_maps into sleepable section
+      bpf: Move owner type, jited info into array auxiliary data
+      bpf: Add initial poke descriptor table for jit images
+      bpf: Add poke dependency tracking for prog array maps
+      bpf: Constant map key tracking for prog array pokes
+      bpf, x86: Emit patchable direct jump as tail call
+      bpf, testing: Add various tail call test cases
+      bpf: Add bpf_jit_blinding_enabled for !CONFIG_BPF_JIT
+      bpf: Simplify __bpf_arch_text_poke poke type handling
+
+Jakub Kicinski (1):
+      selftests, bpftool: Skip the build test if not in tree
+
+Luc Van Oostenryck (1):
+      xsk: Fix xsk_poll()'s return type
+
+Martin KaFai Lau (1):
+      bpf: Introduce BPF_TRACE_x helper for the tracing tests
+
+Quentin Monnet (3):
+      tools, bpftool: Fix warning on ignored return value for 'read'
+      tools, bpf: Fix build for 'make -s tools/bpf O=<dir>'
+      selftests, bpftool: Set EXIT trap after usage function
+
+Toke Høiland-Jørgensen (1):
+      xdp: Fix cleanup on map free for devmap_hash map type
+
+Yonghong Song (2):
+      bpf: Provide better register bounds after jmp32 instructions
+      selftests/bpf: Add verifier tests for better jmp32 register bounds
+
+ arch/x86/net/bpf_jit_comp.c                        | 229 +++++++---
+ include/linux/bpf.h                                |  60 ++-
+ include/linux/bpf_verifier.h                       |   3 +-
+ include/linux/filter.h                             |  15 +
+ kernel/bpf/arraymap.c                              | 205 ++++++++-
+ kernel/bpf/core.c                                  |  73 ++-
+ kernel/bpf/devmap.c                                |  74 ++--
+ kernel/bpf/map_in_map.c                            |   5 +-
+ kernel/bpf/syscall.c                               |  56 +--
+ kernel/bpf/trampoline.c                            |   8 +-
+ kernel/bpf/verifier.c                              | 139 +++++-
+ net/xdp/xsk.c                                      |   8 +-
+ tools/bpf/Makefile                                 |   6 +
+ tools/bpf/bpftool/btf.c                            |   6 +-
+ tools/lib/bpf/bpf_helpers.h                        |  13 -
+ tools/lib/bpf/libbpf.c                             | 294 +++++++------
+ tools/testing/selftests/bpf/Makefile               |   2 +-
+ tools/testing/selftests/bpf/bpf_trace_helpers.h    |  58 +++
+ .../selftests/bpf/prog_tests/bpf_verif_scale.c     |   4 +-
+ .../testing/selftests/bpf/prog_tests/core_reloc.c  |  16 +-
+ tools/testing/selftests/bpf/prog_tests/tailcalls.c | 487 +++++++++++++++++++++
+ .../selftests/bpf/prog_tests/test_overhead.c       | 142 ++++++
+ tools/testing/selftests/bpf/progs/fentry_test.c    |  72 +--
+ tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c  |  27 +-
+ tools/testing/selftests/bpf/progs/fexit_test.c     |  83 +---
+ tools/testing/selftests/bpf/progs/kfree_skb.c      |  43 +-
+ tools/testing/selftests/bpf/progs/tailcall1.c      |  48 ++
+ tools/testing/selftests/bpf/progs/tailcall2.c      |  59 +++
+ tools/testing/selftests/bpf/progs/tailcall3.c      |  31 ++
+ tools/testing/selftests/bpf/progs/tailcall4.c      |  33 ++
+ tools/testing/selftests/bpf/progs/tailcall5.c      |  40 ++
+ .../selftests/bpf/progs/test_core_reloc_arrays.c   |   4 +-
+ .../bpf/progs/test_core_reloc_bitfields_direct.c   |   4 +-
+ .../bpf/progs/test_core_reloc_bitfields_probed.c   |   4 +-
+ .../bpf/progs/test_core_reloc_existence.c          |   4 +-
+ .../selftests/bpf/progs/test_core_reloc_flavors.c  |   4 +-
+ .../selftests/bpf/progs/test_core_reloc_ints.c     |   4 +-
+ .../selftests/bpf/progs/test_core_reloc_kernel.c   |   8 +-
+ .../selftests/bpf/progs/test_core_reloc_misc.c     |   4 +-
+ .../selftests/bpf/progs/test_core_reloc_mods.c     |   4 +-
+ .../selftests/bpf/progs/test_core_reloc_nesting.c  |   4 +-
+ .../bpf/progs/test_core_reloc_primitives.c         |   4 +-
+ .../bpf/progs/test_core_reloc_ptr_as_arr.c         |   4 +-
+ .../selftests/bpf/progs/test_core_reloc_size.c     |   4 +-
+ tools/testing/selftests/bpf/progs/test_overhead.c  |  39 ++
+ tools/testing/selftests/bpf/test_bpftool_build.sh  |  30 +-
+ tools/testing/selftests/bpf/test_progs.c           |  18 +-
+ tools/testing/selftests/bpf/test_progs.h           |  10 +-
+ tools/testing/selftests/bpf/test_stub.c            |   4 +
+ tools/testing/selftests/bpf/verifier/jmp32.c       |  83 ++++
+ 50 files changed, 2031 insertions(+), 548 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/bpf_trace_helpers.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tailcalls.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_overhead.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall1.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall2.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall3.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall4.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall5.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_overhead.c
