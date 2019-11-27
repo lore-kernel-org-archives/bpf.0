@@ -2,40 +2,40 @@ Return-Path: <SRS0=LM74=ZT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 877B3C432C0
-	for <bpf@archiver.kernel.org>; Wed, 27 Nov 2019 09:48:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CBF3C432C3
+	for <bpf@archiver.kernel.org>; Wed, 27 Nov 2019 09:49:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 57EE32071E
-	for <bpf@archiver.kernel.org>; Wed, 27 Nov 2019 09:48:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 720A12071E
+	for <bpf@archiver.kernel.org>; Wed, 27 Nov 2019 09:49:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1574848138;
-	bh=ClCXA8Vpm0xxQuJZfbxQ7kVMSuQKf74mRfmBlPUVQ3o=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=papWu/zNSCNqJIWZ+Lj378/nwpyjIDtGDBZllaHin9zkA9eBhDGcaSx6gy8+uSywJ
-	 k17bln0/ehWBxBhQRCYq2XQ4bxuTQUJz3NrcVsFTPM/7OCbQ+DR8YpNl0XGJD8pyYw
-	 QA1HKQzyfYOVVprnWpbFXEQ8PY8A14ezeq2YkGXI=
+	s=default; t=1574848145;
+	bh=nJvgfziQZ5qxpPdpQsa/lvhi0nOmAu/aS/yU9C8g9Mo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=HMx/cmzDKTRigoeBLRoA0f0+tYMD5RHffbM00lEmE2VgoVUqyqs1ygYX9BzLLmIrf
+	 VpUkC6hZkRIDlLQmCbV4DhukvmuZtj+RMttseNPEMz7Dchb1NaJeeDjeK/h/oIi1Vv
+	 82Ud1LMQP7eMcYZFxLb6nUwkDwdWpl++YBMTxcDU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726822AbfK0Jsy convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 27 Nov 2019 04:48:54 -0500
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:24204 "EHLO
+        id S1727050AbfK0JtE convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 27 Nov 2019 04:49:04 -0500
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:24396 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726634AbfK0Jsx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 27 Nov 2019 04:48:53 -0500
+        by vger.kernel.org with ESMTP id S1727033AbfK0JtE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 27 Nov 2019 04:49:04 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-87-NFXHfLVYNiSAs2jPeVzGOA-1; Wed, 27 Nov 2019 04:48:49 -0500
+ us-mta-160-N8QNudZsNuOKTM7DqNQzcw-1; Wed, 27 Nov 2019 04:49:00 -0500
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1BD0380183D;
-        Wed, 27 Nov 2019 09:48:47 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EB3FB107ACE3;
+        Wed, 27 Nov 2019 09:48:57 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.43.17.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B627E5D6C8;
-        Wed, 27 Nov 2019 09:48:38 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A52305D6C8;
+        Wed, 27 Nov 2019 09:48:54 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     lkml <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
@@ -51,59 +51,151 @@ Cc:     lkml <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH 0/3] perf/bpftool: Allow to link libbpf dynamically
-Date:   Wed, 27 Nov 2019 10:48:34 +0100
-Message-Id: <20191127094837.4045-1-jolsa@kernel.org>
+Subject: [PATCH 3/3] bpftool: Allow to link libbpf dynamically
+Date:   Wed, 27 Nov 2019 10:48:37 +0100
+Message-Id: <20191127094837.4045-4-jolsa@kernel.org>
+In-Reply-To: <20191127094837.4045-1-jolsa@kernel.org>
+References: <20191127094837.4045-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-MC-Unique: NFXHfLVYNiSAs2jPeVzGOA-1
+X-MC-Unique: N8QNudZsNuOKTM7DqNQzcw-1
 X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: 8BIT
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-hi,
-adding support to link bpftool with libbpf dynamically,
-and config change for perf.
+Currently we support only static linking with kernel's libbpf
+(tools/lib/bpf). This patch adds LIBBPF_DYNAMIC compile variable
+that triggers libbpf detection and bpf dynamic linking:
 
-It's now possible to use:
-  $ make -C tools/bpf/bpftool/ LIBBPF_DYNAMIC=1
+  $ make -C tools/bpf/bpftool make LIBBPF_DYNAMIC=1
 
-which will detect libbpf devel package with needed version,
-and if found, link it with bpftool.
+If libbpf is not installed, build (with LIBBPF_DYNAMIC=1) stops with:
 
-It's possible to use arbitrary installed libbpf:
+  $ make -C tools/bpf/bpftool LIBBPF_DYNAMIC=1
+    Auto-detecting system features:
+    ...                        libbfd: [ on  ]
+    ...        disassembler-four-args: [ on  ]
+    ...                          zlib: [ on  ]
+    ...                        libbpf: [ OFF ]
+
+  Makefile:102: *** Error: libbpf-devel is missing, please install it.  Stop.
+
+Adding specific bpftool's libbpf check for libbpf_netlink_open (LIBBPF_0.0.6)
+which is the latest we need for bpftool at the moment.
+
+Adding LIBBPF_DIR compile variable to allow linking with
+libbpf installed into specific directory:
+
+  $ make -C tools/lib/bpf/ prefix=/tmp/libbpf/ install_lib install_headers
   $ make -C tools/bpf/bpftool/ LIBBPF_DYNAMIC=1 LIBBPF_DIR=/tmp/libbpf/
 
-I based this change on top of Arnaldo's perf/core, because
-it contains libbpf feature detection code as dependency.
-It's now also synced with latest bpf-next, so Toke's change
-applies correctly.
+It might be needed to clean build tree first because features
+framework does not detect the change properly:
 
-Also available in:
-  git://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-  libbpf/dyn
+  $ make -C tools/build/feature clean
+  $ make -C tools/bpf/bpftool/ clean
 
-thanks,
-jirka
-
-
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (2):
-      perf tools: Allow to specify libbpf install directory
-      bpftool: Allow to link libbpf dynamically
+ tools/bpf/bpftool/Makefile        | 40 ++++++++++++++++++++++++++++++-
+ tools/build/feature/test-libbpf.c |  9 +++++++
+ 2 files changed, 48 insertions(+), 1 deletion(-)
 
-Toke Høiland-Jørgensen (1):
-      libbpf: Export netlink functions used by bpftool
-
- tools/bpf/bpftool/Makefile        | 40 +++++++++++++++++++++++++++++++++++++++-
- tools/build/feature/test-libbpf.c |  9 +++++++++
- tools/lib/bpf/libbpf.h            | 22 +++++++++++++---------
- tools/lib/bpf/libbpf.map          |  7 +++++++
- tools/lib/bpf/nlattr.h            | 15 ++++++++++-----
- tools/perf/Makefile.config        | 27 ++++++++++++++++++++-------
- 6 files changed, 98 insertions(+), 22 deletions(-)
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 39bc6f0f4f0b..2b6ed08cb31e 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -1,6 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++# LIBBPF_DYNAMIC to enable libbpf dynamic linking.
++
+ include ../../scripts/Makefile.include
+ include ../../scripts/utilities.mak
++include ../../scripts/Makefile.arch
++
++ifeq ($(LP64), 1)
++  libdir_relative = lib64
++else
++  libdir_relative = lib
++endif
+ 
+ ifeq ($(srctree),)
+ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+@@ -55,7 +64,7 @@ ifneq ($(EXTRA_LDFLAGS),)
+ LDFLAGS += $(EXTRA_LDFLAGS)
+ endif
+ 
+-LIBS = $(LIBBPF) -lelf -lz
++LIBS = -lelf -lz
+ 
+ INSTALL ?= install
+ RM ?= rm -f
+@@ -64,6 +73,23 @@ FEATURE_USER = .bpftool
+ FEATURE_TESTS = libbfd disassembler-four-args reallocarray zlib
+ FEATURE_DISPLAY = libbfd disassembler-four-args zlib
+ 
++ifdef LIBBPF_DYNAMIC
++  # Add libbpf check with the flags to ensure bpftool
++  # specific version is detected.
++  FEATURE_CHECK_CFLAGS-libbpf := -DBPFTOOL
++  FEATURE_TESTS   += libbpf
++  FEATURE_DISPLAY += libbpf
++
++  # for linking with debug library run:
++  # make LIBBPF_DYNAMIC=1 LIBBPF_DIR=/opt/libbpf
++  ifdef LIBBPF_DIR
++    LIBBPF_CFLAGS  := -I$(LIBBPF_DIR)/include
++    LIBBPF_LDFLAGS := -L$(LIBBPF_DIR)/$(libdir_relative)
++    FEATURE_CHECK_CFLAGS-libbpf  := $(LIBBPF_CFLAGS)
++    FEATURE_CHECK_LDFLAGS-libbpf := $(LIBBPF_LDFLAGS)
++  endif
++endif
++
+ check_feat := 1
+ NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
+ ifdef MAKECMDGOALS
+@@ -88,6 +114,18 @@ ifeq ($(feature-reallocarray), 0)
+ CFLAGS += -DCOMPAT_NEED_REALLOCARRAY
+ endif
+ 
++ifdef LIBBPF_DYNAMIC
++  ifeq ($(feature-libbpf), 1)
++    LIBS    += -lbpf
++    CFLAGS  += $(LIBBPF_CFLAGS)
++    LDFLAGS += $(LIBBPF_LDFLAGS)
++  else
++    dummy := $(error Error: No libbpf devel library found, please install libbpf-devel)
++  endif
++else
++  LIBS += $(LIBBPF)
++endif
++
+ include $(wildcard $(OUTPUT)*.d)
+ 
+ all: $(OUTPUT)bpftool
+diff --git a/tools/build/feature/test-libbpf.c b/tools/build/feature/test-libbpf.c
+index a508756cf4cc..93566d105a64 100644
+--- a/tools/build/feature/test-libbpf.c
++++ b/tools/build/feature/test-libbpf.c
+@@ -3,5 +3,14 @@
+ 
+ int main(void)
+ {
++#ifdef BPFTOOL
++	/*
++	 * libbpf_netlink_open (LIBBPF_0.0.6) is the latest
++	 * we need for bpftool at the moment
++	 */
++	libbpf_netlink_open(NULL);
++	return 0;
++#else
+ 	return bpf_object__open("test") ? 0 : -1;
++#endif
+ }
+-- 
+2.21.0
 
