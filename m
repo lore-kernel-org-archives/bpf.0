@@ -2,85 +2,100 @@ Return-Path: <SRS0=bJQw=ZX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8771DC432C0
-	for <bpf@archiver.kernel.org>; Sun,  1 Dec 2019 01:40:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D80B3C432C0
+	for <bpf@archiver.kernel.org>; Sun,  1 Dec 2019 17:54:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5F0312084E
-	for <bpf@archiver.kernel.org>; Sun,  1 Dec 2019 01:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1575164409;
-	bh=ajBvj1IaLYQkSA/v/7Hod991P4s7CVCuIKBejh5pxg0=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=zd7+xKJMRJzb4o3seWUii/oR9/oddysw8hgwYUpNU9XvCBebepxo/0iuPBhYpBT0s
-	 Fhvf46987uAmYHdutM2tSvxKmXAA1spJheWxSaU7E8LcTTH2v893kHt8LbfePlgGES
-	 7rN7UUwbKkyuJws36EUo1I2H8cP9jd2mAVc07U/I=
+	by mail.kernel.org (Postfix) with ESMTP id A981B2073C
+	for <bpf@archiver.kernel.org>; Sun,  1 Dec 2019 17:54:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nNyD2jej"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727034AbfLABkE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 30 Nov 2019 20:40:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46496 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726906AbfLABkE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 30 Nov 2019 20:40:04 -0500
-Subject: Re: [GIT PULL] seccomp updates for v5.5-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575164403;
-        bh=ajBvj1IaLYQkSA/v/7Hod991P4s7CVCuIKBejh5pxg0=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=kDQly26WJo5YJvsn/LzUkhhjzAbbvTcxecHnSpiUFC8U97ES9N5DdXAy/GZSEdcMO
-         okriinkm2YBXTi6WKKnlrAzV0PoPrCF2os90+EL++4P9JWLP7OjusJhRIZ5c4SPwIf
-         trItpK1jsUwqxZLH+Rd885EDUMUrMh7dkdsR/JSk=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <201911260818.9C5DC1E@keescook>
-References: <201911260818.9C5DC1E@keescook>
-X-PR-Tracked-List-Id: <linux-parisc.vger.kernel.org>
-X-PR-Tracked-Message-Id: <201911260818.9C5DC1E@keescook>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
- tags/seccomp-v5.5-rc1
-X-PR-Tracked-Commit-Id: 23b2c96fad21886c53f5e1a4ffedd45ddd2e85ba
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b94ae8ad9fe79da61231999f347f79645b909bda
-Message-Id: <157516440360.28955.6948106020327612727.pr-tracker-bot@kernel.org>
-Date:   Sun, 01 Dec 2019 01:40:03 +0000
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        David Abdurachmanov <david.abdurachmanov@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>, bpf@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        kernel test robot <rong.a.chen@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-um@lists.infradead.org,
-        Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>,
-        Tyler Hicks <tyhicks@canonical.com>,
-        Will Drewry <wad@chromium.org>, x86@kernel.org,
-        Yonghong Song <yhs@fb.com>
+        id S1727167AbfLARyR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 1 Dec 2019 12:54:17 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:39964 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726965AbfLARyQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 1 Dec 2019 12:54:16 -0500
+Received: by mail-lj1-f196.google.com with SMTP id s22so18249164ljs.7;
+        Sun, 01 Dec 2019 09:54:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9H9SCSoxkgNiJzR8uzVPTTAqyRK3SZr0ck3SspsH/y4=;
+        b=nNyD2jejk40SFGzFW4oZ45U5NcmczzOs0GpGLVTyu6RrJuVjqcwBSduqgEXAmfwM07
+         +VTCQjHDzQIjpb2Yo2xofhHX+JpaSGkcjLIiibVRw1mv8GgoxvgxtG+CNWPc3TLHxMsW
+         r99p/iY9aJr79LcUPaK5Lfo5p+DavAVeC9wpY4KbLgAt3n/d08zyrcVwcqrY3BIZ0u0H
+         tiuOOmnk791Wgxp/joAgNX5AOM6H1g1GqJ3ajTqqf0u90BUjuhjndpHyPEy5EiTqvAoj
+         qH+GgxERE6C3rAqkxV9aybIlqUEk/JU6cjAT0PPyemFV9JqVzGc1k1jUgafZGiQK43+9
+         Pq4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9H9SCSoxkgNiJzR8uzVPTTAqyRK3SZr0ck3SspsH/y4=;
+        b=ZBEbKyXxBoaeLSE13w8v+cwSEII7nKXxVLqFHCrsmOe9u1sKjLNRP9M4ztAsweg7wM
+         v+tSd4pRSwUxN13DQEOiA1SPbyH+PskfN1y6cgL8B6vxIsA/fUKRri6vUDAtkvtHJ5rb
+         NDlphRQ6vsflay/q5hg5RK9zX/jq4O/JGjulROCGaRCdIDNJPakBRQO8SI35iPpMs9+Q
+         jJVO+AYWicjtWyUoUuhTMlFazYj3CXLhrObfmT0rMGuAZMKQ7dVpvI2S6rLGFtMAcbMT
+         UFUyp25FN+WXCYIp+M3+QJzmf3Bea/xctUnyJ8EGokQsZjHI+qWRvyUTFMDv/xn8DugN
+         Izmw==
+X-Gm-Message-State: APjAAAVISwtk3iMAxcpvwYCRxPMZuIJ8ks6RNlvm134oU+OgC/bMu4JB
+        uLjTE73+PUSE+GeQHnLhSdQfZzgjzS4f8/ZvcB0=
+X-Google-Smtp-Source: APXvYqxoGaJMoLkaU0a3hunkmL+q4Au/MmUaEB2YHReelPt9T3RlRfOi4plWeH/1jGdOXm7NCc3VKDWHAKt7oX9SYsw=
+X-Received: by 2002:a2e:5850:: with SMTP id x16mr5087825ljd.228.1575222853104;
+ Sun, 01 Dec 2019 09:54:13 -0800 (PST)
+MIME-Version: 1.0
+References: <20191129222911.3710-1-daniel@iogearbox.net> <ec8264ad-8806-208a-1375-51e7cad1866e@gmail.com>
+ <10d4c87c-3d53-2dbf-d8c0-8b36863fec60@iogearbox.net>
+In-Reply-To: <10d4c87c-3d53-2dbf-d8c0-8b36863fec60@iogearbox.net>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sun, 1 Dec 2019 09:54:01 -0800
+Message-ID: <CAADnVQ+8nOiTXJYKV+36Yg8+bkxAJVW5LdcjqLVeEiLRyNLCDA@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: avoid setting bpf insns pages read-only when
+ prog is jited
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The pull request you sent on Tue, 26 Nov 2019 08:25:28 -0800:
+On Sat, Nov 30, 2019 at 1:52 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 11/30/19 2:37 AM, Eric Dumazet wrote:
+> > On 11/29/19 2:29 PM, Daniel Borkmann wrote:
+> >> For the case where the interpreter is compiled out or when the prog is jited
+> >> it is completely unnecessary to set the BPF insn pages as read-only. In fact,
+> >> on frequent churn of BPF programs, it could lead to performance degradation of
+> >> the system over time since it would break the direct map down to 4k pages when
+> >> calling set_memory_ro() for the insn buffer on x86-64 / arm64 and there is no
+> >> reverse operation. Thus, avoid breaking up large pages for data maps, and only
+> >> limit this to the module range used by the JIT where it is necessary to set
+> >> the image read-only and executable.
+> >
+> > Interesting... But why the non JIT case would need RO protection ?
+>
+> It was done for interpreter around 5 years ago mainly due to concerns from security
+> folks that the BPF insn image could get corrupted (through some other bug in the
+> kernel) in post-verifier stage by an attacker and then there's nothing really that
+> would provide any sort of protection guarantees; pretty much the same reasons why
+> e.g. modules are set to read-only in the kernel.
+>
+> > Do you have any performance measures to share ?
+>
+> No numbers, and I'm also not aware of any reports from users, but it was recently
+> brought to our attention from mm folks during discussion of a different set:
+>
+> https://lore.kernel.org/lkml/1572171452-7958-2-git-send-email-rppt@kernel.org/T/
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/seccomp-v5.5-rc1
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b94ae8ad9fe79da61231999f347f79645b909bda
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Applied. Thanks
