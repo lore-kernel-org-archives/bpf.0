@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66442C43215
-	for <bpf@archiver.kernel.org>; Mon,  2 Dec 2019 13:19:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87008C432C0
+	for <bpf@archiver.kernel.org>; Mon,  2 Dec 2019 13:19:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2DD6A20674
-	for <bpf@archiver.kernel.org>; Mon,  2 Dec 2019 13:19:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E5EC206E1
+	for <bpf@archiver.kernel.org>; Mon,  2 Dec 2019 13:19:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1575292777;
-	bh=oXVR7uVMiNKywYzVciNu05xt+4X+5gZCPFuIuvWtE3Q=;
+	s=default; t=1575292779;
+	bh=xFdDHMDucil0l/WSv7I/qeO7QjevPCx+8HkhptEceok=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=uX3Qwwc+WdnhXegd2HF0QLZNln8Rtd1J7OhTaJAYjpJwuC6AH9NNEGqerrVTo091H
-	 4/jy1bZ0XRhYdT5K2EWYWFoKr4RyTaSe47DZ7WBAdqnha8I8mx+8gSTcYThG2xd5fK
-	 vSmT8SdW8JuaVP4qW/pJlUTbvxSTRvLxwww1aPxA=
+	b=OoLreT2AbnCFUW8e8/2Z9kxYDrkpzNW8RULv+7TzL8naODg4KGMwTzcELduo0O5p0
+	 uihJEez4a/hegFRRuZKw8+fEYw0qRUbyv6ZCfdlqFy1MnHbmsSP6mIY2/PzlCkQFUd
+	 y91O91PRLBAKnrgI7ChuJc1ptQ2TZMrfiS3tPeZw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727618AbfLBNT0 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 2 Dec 2019 08:19:26 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:31705 "EHLO
+        id S1727604AbfLBNTY convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 2 Dec 2019 08:19:24 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:49830 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727602AbfLBNTZ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 2 Dec 2019 08:19:25 -0500
+        by vger.kernel.org with ESMTP id S1727599AbfLBNTV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 2 Dec 2019 08:19:21 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-313-PVHZUrw9Moq8WR9WIZ9dwA-1; Mon, 02 Dec 2019 08:19:21 -0500
+ us-mta-241-L6YVGIzUOva0u-xKKMLsHA-1; Mon, 02 Dec 2019 08:19:18 -0500
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2A7AA1800D45;
-        Mon,  2 Dec 2019 13:19:19 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.43.17.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B5B2B600C8;
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 68ED3107ACC7;
         Mon,  2 Dec 2019 13:19:15 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.43.17.48])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 73473600C8;
+        Mon,  2 Dec 2019 13:19:07 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     lkml <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
@@ -52,14 +52,14 @@ Cc:     lkml <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH 5/6] bpftool: Rename LIBBPF_PATH Makefile variable to LIBBPF_BUILD_PATH
-Date:   Mon,  2 Dec 2019 14:18:45 +0100
-Message-Id: <20191202131847.30837-6-jolsa@kernel.org>
+Subject: [PATCH 4/6] bpftool: Rename LIBBPF_OUTPUT Makefile variable to LIBBPF_BUILD_OUTPUT
+Date:   Mon,  2 Dec 2019 14:18:44 +0100
+Message-Id: <20191202131847.30837-5-jolsa@kernel.org>
 In-Reply-To: <20191202131847.30837-1-jolsa@kernel.org>
 References: <20191202131847.30837-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-MC-Unique: PVHZUrw9Moq8WR9WIZ9dwA-1
+X-MC-Unique: L6YVGIzUOva0u-xKKMLsHA-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: 8BIT
@@ -72,29 +72,40 @@ To properly describe the usage of the variable.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/bpf/bpftool/Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/bpf/bpftool/Makefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 38f831750ffe..e66d49bd6aff 100644
+index 512504956315..38f831750ffe 100644
 --- a/tools/bpf/bpftool/Makefile
 +++ b/tools/bpf/bpftool/Makefile
-@@ -33,12 +33,12 @@ LIBBPF_SRC_DIR = $(srctree)/tools/lib/bpf/
+@@ -32,8 +32,8 @@ endif
+ LIBBPF_SRC_DIR = $(srctree)/tools/lib/bpf/
  
  ifneq ($(OUTPUT),)
-   LIBBPF_BUILD_OUTPUT = $(OUTPUT)/libbpf/
--  LIBBPF_PATH = $(LIBBPF_BUILD_OUTPUT)
-+  LIBBPF_BUILD_PATH = $(LIBBPF_BUILD_OUTPUT)
+-  LIBBPF_OUTPUT = $(OUTPUT)/libbpf/
+-  LIBBPF_PATH = $(LIBBPF_OUTPUT)
++  LIBBPF_BUILD_OUTPUT = $(OUTPUT)/libbpf/
++  LIBBPF_PATH = $(LIBBPF_BUILD_OUTPUT)
  else
--  LIBBPF_PATH = $(LIBBPF_SRC_DIR)
-+  LIBBPF_BUILD_PATH = $(LIBBPF_SRC_DIR)
+   LIBBPF_PATH = $(LIBBPF_SRC_DIR)
  endif
- 
--LIBBPF = $(LIBBPF_PATH)libbpf.a
-+LIBBPF = $(LIBBPF_BUILD_PATH)libbpf.a
- 
+@@ -43,12 +43,12 @@ LIBBPF = $(LIBBPF_PATH)libbpf.a
  BPFTOOL_VERSION := $(shell make -rR --no-print-directory -sC ../../.. kernelversion)
  
+ $(LIBBPF): FORCE
+-	$(if $(LIBBPF_OUTPUT),@mkdir -p $(LIBBPF_OUTPUT))
+-	$(Q)$(MAKE) -C $(LIBBPF_SRC_DIR) OUTPUT=$(LIBBPF_OUTPUT) $(LIBBPF_OUTPUT)libbpf.a
++	$(if $(LIBBPF_BUILD_OUTPUT),@mkdir -p $(LIBBPF_BUILD_OUTPUT))
++	$(Q)$(MAKE) -C $(LIBBPF_SRC_DIR) OUTPUT=$(LIBBPF_BUILD_OUTPUT) $(LIBBPF_BUILD_OUTPUT)libbpf.a
+ 
+ $(LIBBPF)-clean:
+ 	$(call QUIET_CLEAN, libbpf)
+-	$(Q)$(MAKE) -C $(LIBBPF_SRC_DIR) OUTPUT=$(LIBBPF_OUTPUT) clean >/dev/null
++	$(Q)$(MAKE) -C $(LIBBPF_SRC_DIR) OUTPUT=$(LIBBPF_BUILD_OUTPUT) clean >/dev/null
+ 
+ prefix ?= /usr/local
+ bash_compdir ?= /usr/share/bash-completion/completions
 -- 
 2.21.0
 
