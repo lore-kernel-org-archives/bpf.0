@@ -4,38 +4,38 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93995C43215
-	for <bpf@archiver.kernel.org>; Mon,  2 Dec 2019 13:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66442C43215
+	for <bpf@archiver.kernel.org>; Mon,  2 Dec 2019 13:19:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6904320674
-	for <bpf@archiver.kernel.org>; Mon,  2 Dec 2019 13:19:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DD6A20674
+	for <bpf@archiver.kernel.org>; Mon,  2 Dec 2019 13:19:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1575292770;
-	bh=ta352u00Y9Sh/vXn7+ZQhT6z5MmNgcaRNDiZYABzNgU=;
+	s=default; t=1575292777;
+	bh=oXVR7uVMiNKywYzVciNu05xt+4X+5gZCPFuIuvWtE3Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=FiGZFMqDtyyVsIxnx22RFiU8HI76RWGYWaYjRYy4fe4J+sxa8kG4nx4ZeRBNAK0im
-	 bdsoxILpD5uYgQXwzRTad+wscBKLrsnvsdARh+LkDNSd7B3325Goplr/2RzMYjuD5Z
-	 2MYr0UHcObDH056EE1XY+BC9n8G9fyrLQqE7jsgk=
+	b=uX3Qwwc+WdnhXegd2HF0QLZNln8Rtd1J7OhTaJAYjpJwuC6AH9NNEGqerrVTo091H
+	 4/jy1bZ0XRhYdT5K2EWYWFoKr4RyTaSe47DZ7WBAdqnha8I8mx+8gSTcYThG2xd5fK
+	 vSmT8SdW8JuaVP4qW/pJlUTbvxSTRvLxwww1aPxA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727401AbfLBNTa convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 2 Dec 2019 08:19:30 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:46189 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727640AbfLBNT3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 2 Dec 2019 08:19:29 -0500
+        id S1727618AbfLBNT0 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 2 Dec 2019 08:19:26 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:31705 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727602AbfLBNTZ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 2 Dec 2019 08:19:25 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-77-Df7Z5Rv0PtOJKGMFN-1dpg-1; Mon, 02 Dec 2019 08:19:25 -0500
+ us-mta-313-PVHZUrw9Moq8WR9WIZ9dwA-1; Mon, 02 Dec 2019 08:19:21 -0500
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E750E1005502;
-        Mon,  2 Dec 2019 13:19:22 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.43.17.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7B063600C8;
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2A7AA1800D45;
         Mon,  2 Dec 2019 13:19:19 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.43.17.48])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B5B2B600C8;
+        Mon,  2 Dec 2019 13:19:15 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     lkml <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
@@ -52,14 +52,14 @@ Cc:     lkml <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         Quentin Monnet <quentin.monnet@netronome.com>
-Subject: [PATCH 6/6] selftests, bpftool: Add build test for libbpf dynamic linking
-Date:   Mon,  2 Dec 2019 14:18:46 +0100
-Message-Id: <20191202131847.30837-7-jolsa@kernel.org>
+Subject: [PATCH 5/6] bpftool: Rename LIBBPF_PATH Makefile variable to LIBBPF_BUILD_PATH
+Date:   Mon,  2 Dec 2019 14:18:45 +0100
+Message-Id: <20191202131847.30837-6-jolsa@kernel.org>
 In-Reply-To: <20191202131847.30837-1-jolsa@kernel.org>
 References: <20191202131847.30837-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-MC-Unique: Df7Z5Rv0PtOJKGMFN-1dpg-1
+X-MC-Unique: PVHZUrw9Moq8WR9WIZ9dwA-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: 8BIT
@@ -68,100 +68,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding new test to test_bpftool_build.sh script to
-test the dynamic linkage of libbpf for bpftool:
-
-  $ ./test_bpftool_build.sh
-  [SNIP]
-
-  ... with dynamic libbpf
-
-  $PWD:    /home/jolsa/kernel/linux-perf/tools/bpf/bpftool
-  command: make -s -C ../../build/feature clean >/dev/null
-  command: make -s -C ../../lib/bpf clean >/dev/null
-  command: make -s -C ../../lib/bpf prefix=/tmp/tmp.fG8O2Ps8ER install_lib install_headers >/dev/null
-  Parsed description of 117 helper function(s)
-  command: make -s clean >/dev/null
-  command: make -s LIBBPF_DYNAMIC=1 LIBBPF_DIR=/tmp/tmp.fG8O2Ps8ER >/dev/null
-  binary:  /home/jolsa/kernel/linux-perf/tools/bpf/bpftool/bpftool
-  binary:  linked with libbpf
-
-The test installs libbpf into temp directory
-and links bpftool dynamically with it.
+To properly describe the usage of the variable.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- .../selftests/bpf/test_bpftool_build.sh       | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ tools/bpf/bpftool/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_bpftool_build.sh b/tools/testing/selftests/bpf/test_bpftool_build.sh
-index ac349a5cea7e..e4a6a0520f8e 100755
---- a/tools/testing/selftests/bpf/test_bpftool_build.sh
-+++ b/tools/testing/selftests/bpf/test_bpftool_build.sh
-@@ -85,6 +85,55 @@ make_with_tmpdir() {
- 	echo
- }
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 38f831750ffe..e66d49bd6aff 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -33,12 +33,12 @@ LIBBPF_SRC_DIR = $(srctree)/tools/lib/bpf/
  
-+# Assumes current directory is tools/bpf/bpftool
-+make_with_dynamic_libbpf() {
-+	TMPDIR=$(mktemp -d)
-+	echo -e "\$PWD:    $PWD"
-+
-+	# It might be needed to clean build tree first because features
-+	# framework does not detect the change properly
-+	echo -e "command: make -s -C ../../build/feature clean >/dev/null"
-+	make $J -s -C ../../build/feature clean >/dev/null
-+	if [ $? -ne 0 ] ; then
-+		ERROR=1
-+	fi
-+	echo -e "command: make -s -C ../../lib/bpf clean >/dev/null"
-+	make $J -s -C ../../lib/bpf clean >/dev/null
-+	if [ $? -ne 0 ] ; then
-+		ERROR=1
-+	fi
-+
-+	# Now install libbpf into TMPDIR
-+	echo -e "command: make -s -C ../../lib/bpf prefix=$TMPDIR install_lib install_headers >/dev/null"
-+	make $J -s -C ../../lib/bpf prefix=$TMPDIR install_lib install_headers >/dev/null
-+	if [ $? -ne 0 ] ; then
-+		ERROR=1
-+	fi
-+
-+	# And final bpftool build (with clean first) with libbpf dynamic link
-+	echo -e "command: make -s clean >/dev/null"
-+	if [ $? -ne 0 ] ; then
-+		ERROR=1
-+	fi
-+	echo -e "command: make -s LIBBPF_DYNAMIC=1 LIBBPF_DIR=$TMPDIR >/dev/null"
-+	make $J -s LIBBPF_DYNAMIC=1 LIBBPF_DIR=$TMPDIR >/dev/null
-+	if [ $? -ne 0 ] ; then
-+		ERROR=1
-+	fi
-+
-+	check .
-+	ldd bpftool | grep -q libbpf.so
-+	if [ $? -ne 0 ] ; then
-+		printf "FAILURE: Did not find libbpf linked\n"
-+	else
-+		echo "binary:  linked with libbpf"
-+	fi
-+	make -s -C ../../lib/bpf clean
-+	make -s clean
-+	rm -rf -- $TMPDIR
-+	echo
-+}
-+
- echo "Trying to build bpftool"
- echo -e "... through kbuild\n"
+ ifneq ($(OUTPUT),)
+   LIBBPF_BUILD_OUTPUT = $(OUTPUT)/libbpf/
+-  LIBBPF_PATH = $(LIBBPF_BUILD_OUTPUT)
++  LIBBPF_BUILD_PATH = $(LIBBPF_BUILD_OUTPUT)
+ else
+-  LIBBPF_PATH = $(LIBBPF_SRC_DIR)
++  LIBBPF_BUILD_PATH = $(LIBBPF_SRC_DIR)
+ endif
  
-@@ -145,3 +194,7 @@ make_and_clean
- make_with_tmpdir OUTPUT
+-LIBBPF = $(LIBBPF_PATH)libbpf.a
++LIBBPF = $(LIBBPF_BUILD_PATH)libbpf.a
  
- make_with_tmpdir O
-+
-+echo -e "... with dynamic libbpf\n"
-+
-+make_with_dynamic_libbpf
+ BPFTOOL_VERSION := $(shell make -rR --no-print-directory -sC ../../.. kernelversion)
+ 
 -- 
 2.21.0
 
