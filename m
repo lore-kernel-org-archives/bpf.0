@@ -2,44 +2,44 @@ Return-Path: <SRS0=8K48=Z2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-14.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36A3DC2BBE2
-	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:00:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB47C0044D
+	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:00:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0E5A120833
-	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:00:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 79C8120640
+	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:00:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="P7klcLwa"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="REsmfa/k"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727257AbfLDHAp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Dec 2019 02:00:45 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:63028 "EHLO
+        id S1727298AbfLDHAx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Dec 2019 02:00:53 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:22242 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727154AbfLDHAm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Dec 2019 02:00:42 -0500
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB470bpd005674
-        for <bpf@vger.kernel.org>; Tue, 3 Dec 2019 23:00:40 -0800
+        by vger.kernel.org with ESMTP id S1727244AbfLDHAw (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Dec 2019 02:00:52 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB470btI026930
+        for <bpf@vger.kernel.org>; Tue, 3 Dec 2019 23:00:52 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=PGnBYs0RBjCCuJ/sYGPxTaAd4goN73bG7MRJLKaOaXw=;
- b=P7klcLwa9WeDmarCoNySchbgasOz2XOWN1dOWJ1IfZTXziMxGGyIy/H6zd+d2E0iGMPt
- NUvV7VfLMCWA3nmq66kGdb8g85rZSbslwod4cidE/CF2HWnrGuznlBEGS3hlbr5kkBBv
- jNza6iG6RmiZ22owXj1C9Sgg7jfreVCdiCM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wnvfgug2t-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 03 Dec 2019 23:00:40 -0800
-Received: from 2401:db00:2050:5076:face:0:7:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 3 Dec 2019 23:00:31 -0800
+ content-type; s=facebook; bh=zLJfyz30V6fjrCPzc9X1rGbufR063QO3iHx9yYUooMk=;
+ b=REsmfa/kRyhtFeCG1wXj1ZNGgQH1NyIfzo3wpUtAzyVg4eNdmxWOJp9yUbWGC9nChtyj
+ vQZGTxSFnQI82QWPy1+v6ZW0kANw+rgnhakVHPOi0CiIYHu16SpuaQIRZF6bELIWtv97
+ Ech5GV+RdyNMgUB87j/0VWsfJBv4PYAEK1M= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wnsxpm7kh-9
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 03 Dec 2019 23:00:52 -0800
+Received: from 2401:db00:12:909f:face:0:3:0 (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Tue, 3 Dec 2019 23:00:45 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 7B5752EC1853; Tue,  3 Dec 2019 23:00:31 -0800 (PST)
+        id D80492EC1853; Tue,  3 Dec 2019 23:00:44 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next 06/16] libbpf: expose BPF program's function name
-Date:   Tue, 3 Dec 2019 23:00:05 -0800
-Message-ID: <20191204070015.3523523-7-andriin@fb.com>
+Subject: [RFC PATCH bpf-next 12/16] libbpf/samples: add runqslower sample to libbpf samples
+Date:   Tue, 3 Dec 2019 23:00:11 -0800
+Message-ID: <20191204070015.3523523-13-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191204070015.3523523-1-andriin@fb.com>
 References: <20191204070015.3523523-1-andriin@fb.com>
@@ -59,10 +59,10 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-04_01:2019-12-04,2019-12-03 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=8
- phishscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0
- mlxlogscore=999 impostorscore=0 priorityscore=1501 bulkscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ adultscore=0 impostorscore=0 bulkscore=0 phishscore=0 suspectscore=2
+ lowpriorityscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1912040051
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,193 +70,419 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add APIs to get BPF program function name, as opposed to bpf_program__title(),
-which returns BPF program function's section name. Function name has a benefit
-of being a valid C identifier and uniquely identifies a specific BPF program,
-while section name can be duplicated across multiple independent BPF programs.
+Convert one of BCC tools (runqslower, [0]) to BPF CO-RE + libbpf. It matches
+its BCC-based counterpart 1-to-1, supporting all the same parameters and
+functionality. It is added under samples/runqslower subdirectory inside libbpf
+source dir.
 
-Add also bpf_object__find_program_by_name(), similar to
-bpf_object__find_program_by_title(), to facilitate looking up BPF programs by
-their C function names.
+runqslower sample utilizes BPF skeleton, auto-generated from BPF object file,
+as well as memory-mapped interface to global (read-only, in this case) data.
 
-Convert one of selftests to new API for look up.
+  [0] https://github.com/iovisor/bcc/blob/11bf5d02c895df9646c117c713082eb192825293/tools/runqslower.py
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c                        | 28 +++++++++++++++----
- tools/lib/bpf/libbpf.h                        |  9 ++++--
- tools/lib/bpf/libbpf.map                      |  2 ++
- .../selftests/bpf/prog_tests/rdonly_maps.c    | 11 +++-----
- 4 files changed, 36 insertions(+), 14 deletions(-)
+ tools/lib/bpf/samples/runqslower/.gitignore   |   2 +
+ tools/lib/bpf/samples/runqslower/Makefile     |  50 +++++
+ .../bpf/samples/runqslower/runqslower.bpf.c   | 105 ++++++++++
+ tools/lib/bpf/samples/runqslower/runqslower.c | 189 ++++++++++++++++++
+ tools/lib/bpf/samples/runqslower/runqslower.h |  13 ++
+ 5 files changed, 359 insertions(+)
+ create mode 100644 tools/lib/bpf/samples/runqslower/.gitignore
+ create mode 100644 tools/lib/bpf/samples/runqslower/Makefile
+ create mode 100644 tools/lib/bpf/samples/runqslower/runqslower.bpf.c
+ create mode 100644 tools/lib/bpf/samples/runqslower/runqslower.c
+ create mode 100644 tools/lib/bpf/samples/runqslower/runqslower.h
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index edfe1cf1e940..f13752c4d271 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -209,8 +209,8 @@ static const char * const libbpf_type_to_btf_name[] = {
- };
- 
- struct bpf_map {
--	int fd;
- 	char *name;
-+	int fd;
- 	int sec_idx;
- 	size_t sec_offset;
- 	int map_ifindex;
-@@ -1384,7 +1384,7 @@ static int bpf_object__init_user_btf_maps(struct bpf_object *obj, bool strict,
- }
- 
- static int bpf_object__init_maps(struct bpf_object *obj,
--				 struct bpf_object_open_opts *opts)
-+				 const struct bpf_object_open_opts *opts)
- {
- 	const char *pin_root_path = OPTS_GET(opts, pin_root_path, NULL);
- 	bool strict = !OPTS_GET(opts, relaxed_maps, false);
-@@ -1748,6 +1748,19 @@ bpf_object__find_program_by_title(const struct bpf_object *obj,
- 	return NULL;
- }
- 
-+struct bpf_program *
-+bpf_object__find_program_by_name(const struct bpf_object *obj,
-+				 const char *name)
-+{
-+	struct bpf_program *prog;
+diff --git a/tools/lib/bpf/samples/runqslower/.gitignore b/tools/lib/bpf/samples/runqslower/.gitignore
+new file mode 100644
+index 000000000000..404942cc9371
+--- /dev/null
++++ b/tools/lib/bpf/samples/runqslower/.gitignore
+@@ -0,0 +1,2 @@
++/.output
++/runqslower
+diff --git a/tools/lib/bpf/samples/runqslower/Makefile b/tools/lib/bpf/samples/runqslower/Makefile
+new file mode 100644
+index 000000000000..63c8248f3882
+--- /dev/null
++++ b/tools/lib/bpf/samples/runqslower/Makefile
+@@ -0,0 +1,50 @@
++# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++CLANG := clang
++LLC := llc
++LLVM-STRIP := llvm-strip
++BPFTOOL := bpftool
++VMLINUX_BTF := /sys/kernel/btf/vmlinux
++LIBBPF_SRC := ../..
++CFLAGS := -g -Wall
 +
-+	bpf_object__for_each_program(prog, obj) {
-+		if (!strcmp(prog->name, name))
-+			return prog;
++out := .output
++abs_out := $(abspath $(out))
++libbpf_src := $(abspath $(LIBBPF_SRC))
++
++.DELETE_ON_ERROR:
++
++.PHONY: all
++all: runqslower
++
++.PHONY: clean
++clean:
++	rm -rf $(out) runqslower
++
++runqslower: $(out)/runqslower.o $(out)/libbpf.a
++	$(CC) $(CFLAGS) -lelf $^ -o $@
++
++$(out)/vmlinux.h: $(VMLINUX_BTF) | $(out)
++	$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
++
++$(out)/libbpf.a: | $(out)
++	cd $(out) && $(MAKE) -C $(libbpf_src) OUTPUT=$(abs_out)/ $(abs_out)/libbpf.a
++
++$(out)/runqslower.o: runqslower.h $(out)/runqslower.bpf.o $(out)/runqslower.skel.h
++
++$(out)/runqslower.bpf.o: $(out)/vmlinux.h runqslower.h
++
++$(out)/%.skel.h: $(out)/%.bpf.o
++	$(BPFTOOL) gen skeleton $< > $@
++
++$(out)/%.bpf.o: %.bpf.c | $(out)
++	($(CLANG) -g -O2 -target bpf -emit-llvm -I$(out) -I$(LIBBPF_SRC)      \
++		  -c $(filter %.c,$^) -o - || echo "BPF compilation failed")  \
++	| $(LLC) -mattr=dwarfris -march=bpf -mcpu=probe -filetype=obj -o $@   \
++	&& $(LLVM-STRIP) -g $@
++
++$(out)/%.o: %.c | $(out)
++	$(CC) $(CFLAGS) -I$(LIBBPF_SRC) -I$(out) -c $(filter %.c,$^) -o $@
++
++$(out):
++	mkdir -p $(out)
++
+diff --git a/tools/lib/bpf/samples/runqslower/runqslower.bpf.c b/tools/lib/bpf/samples/runqslower/runqslower.bpf.c
+new file mode 100644
+index 000000000000..c0800d8bc620
+--- /dev/null
++++ b/tools/lib/bpf/samples/runqslower/runqslower.bpf.c
+@@ -0,0 +1,105 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2019 Facebook
++#include "vmlinux.h"
++#include "bpf_helpers.h"
++#include "bpf_core_read.h"
++#include "runqslower.h"
++
++#define TASK_RUNNING 0
++
++#define BPF_F_INDEX_MASK		0xffffffffULL
++#define BPF_F_CURRENT_CPU		BPF_F_INDEX_MASK
++
++const volatile __u64 min_us = 0;
++const volatile pid_t targ_pid = 0;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 10240);
++	__type(key, u32);
++	__type(value, u64);
++} start SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
++	__uint(key_size, sizeof(u32));
++	__uint(value_size, sizeof(u32));
++} events SEC(".maps");
++
++/* record enqueue timestamp */
++__always_inline
++static int trace_enqueue(u32 tgid, u32 pid)
++{
++	u64 ts;
++
++	if (!pid || (targ_pid && targ_pid != pid))
++		return 0;
++
++	ts = bpf_ktime_get_ns();
++	bpf_map_update_elem(&start, &pid, &ts, 0);
++	return 0;
++}
++
++SEC("raw_tracepoint/sched_wakeup")
++int handle__sched_wakeup(struct bpf_raw_tracepoint_args *ctx)
++{
++	/* TP_PROTO(struct task_struct *p) */
++	struct task_struct *p = (struct task_struct *)ctx->args[0];
++
++	return trace_enqueue(BPF_CORE_READ(p, tgid), BPF_CORE_READ(p, pid));
++}
++
++SEC("raw_tracepoint/sched_wakeup_new")
++int handle__sched_wakeup_new(struct bpf_raw_tracepoint_args *ctx)
++{
++	/* TP_PROTO(struct task_struct *p) */
++	struct task_struct *p = (struct task_struct *)ctx->args[0];
++
++	return trace_enqueue(BPF_CORE_READ(p, tgid), BPF_CORE_READ(p, pid));
++}
++
++SEC("raw_tracepoint/sched_switch")
++int handle__sched_switch(struct bpf_raw_tracepoint_args *ctx)
++{
++	/* TP_PROTO(bool preempt, struct task_struct *prev,
++	 *	    struct task_struct *next)
++	 */
++	struct task_struct *prev = (struct task_struct *)ctx->args[1];
++	struct task_struct *next = (struct task_struct *)ctx->args[2];
++	struct event event = {};
++	u64 *tsp, delta_us;
++	u32 pid, tgid;
++	long state;
++
++	/* ivcsw: treat like an enqueue event and store timestamp */
++	if (BPF_CORE_READ(prev, state) == TASK_RUNNING) {
++		tgid = BPF_CORE_READ(prev, tgid);
++		pid = BPF_CORE_READ(prev, pid);
++		trace_enqueue(tgid, pid);
 +	}
-+	return NULL;
++
++	tgid = BPF_CORE_READ(next, tgid);
++	pid = BPF_CORE_READ(next, pid);
++
++	/* fetch timestamp and calculate delta */
++	tsp = bpf_map_lookup_elem(&start, &pid);
++	if (!tsp)
++		return 0;   /* missed enqueue */
++
++	delta_us = (bpf_ktime_get_ns() - *tsp) / 1000;
++	if (min_us && delta_us <= min_us)
++		return 0;
++
++	event.pid = pid;
++	event.delta_us = delta_us;
++	bpf_get_current_comm(&event.task, sizeof(event.task));
++
++	/* output */
++	bpf_perf_event_output(ctx, &events, BPF_F_CURRENT_CPU,
++			      &event, sizeof(event));
++
++	bpf_map_delete_elem(&start, &pid);
++	return 0;
 +}
 +
- static bool bpf_object__shndx_is_data(const struct bpf_object *obj,
- 				      int shndx)
- {
-@@ -3893,7 +3906,7 @@ static int libbpf_find_attach_btf_id(const char *name,
- 				     __u32 attach_prog_fd);
- static struct bpf_object *
- __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
--		   struct bpf_object_open_opts *opts)
-+		   const struct bpf_object_open_opts *opts)
- {
- 	struct bpf_program *prog;
- 	struct bpf_object *obj;
-@@ -4002,7 +4015,7 @@ struct bpf_object *bpf_object__open(const char *path)
- }
- 
- struct bpf_object *
--bpf_object__open_file(const char *path, struct bpf_object_open_opts *opts)
-+bpf_object__open_file(const char *path, const struct bpf_object_open_opts *opts)
- {
- 	if (!path)
- 		return ERR_PTR(-EINVAL);
-@@ -4014,7 +4027,7 @@ bpf_object__open_file(const char *path, struct bpf_object_open_opts *opts)
- 
- struct bpf_object *
- bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
--		     struct bpf_object_open_opts *opts)
-+		     const struct bpf_object_open_opts *opts)
- {
- 	if (!obj_buf || obj_buf_sz == 0)
- 		return ERR_PTR(-EINVAL);
-@@ -4819,6 +4832,11 @@ void bpf_program__set_ifindex(struct bpf_program *prog, __u32 ifindex)
- 	prog->prog_ifindex = ifindex;
- }
- 
-+const char *bpf_program__name(const struct bpf_program *prog)
++char LICENSE[] SEC("license") = "GPL";
+diff --git a/tools/lib/bpf/samples/runqslower/runqslower.c b/tools/lib/bpf/samples/runqslower/runqslower.c
+new file mode 100644
+index 000000000000..1a0e7888472f
+--- /dev/null
++++ b/tools/lib/bpf/samples/runqslower/runqslower.c
+@@ -0,0 +1,189 @@
++// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++// Copyright (c) 2019 Facebook
++#include <argp.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/resource.h>
++#include <time.h>
++#include <libbpf.h>
++#include <bpf.h>
++#include "runqslower.h"
++#include "runqslower.skel.h"
++
++struct env {
++	pid_t pid;
++	__u64 min_us;
++	bool verbose;
++} env = {
++	.min_us = 10000,
++};
++
++const char *argp_program_version = "runqslower 0.1";
++const char *argp_program_bug_address = "<bpf@vger.kernel.org>";
++const char argp_program_doc[] =
++"runqslower    Trace long process scheduling delays.\n"
++"              For Linux, uses eBPF, BPF CO-RE, libbpf, BTF.\n"
++"\n"
++"This script traces high scheduling delays between tasks being\n"
++"ready to run and them running on CPU after that.\n"
++"\n"
++"USAGE: runqslower [-p PID] [min_us]\n"
++"\n"
++"EXAMPLES:\n"
++"    runqslower         # trace run queue latency higher than 10000 us (default)\n"
++"    runqslower 1000    # trace run queue latency higher than 1000 us\n"
++"    runqslower -p 123  # trace pid 123 only\n";
++
++static const struct argp_option opts[] = {
++	{ "pid", 'p', "PID", 0, "Process PID to trace"},
++	{ "verbose", 'v', NULL, 0, "Verbose debug output" },
++	{},
++};
++
++static error_t parse_arg(int key, char *arg, struct argp_state *state)
 +{
-+	return prog->name;
++	static int pos_args;
++	int pid;
++	long long min_us;
++
++	switch (key) {
++	case 'v':
++		env.verbose = true;
++		break;
++	case 'p':
++		errno = 0;
++		pid = strtol(arg, NULL, 10);
++		if (errno || pid <= 0) {
++			fprintf(stderr, "Invalid PID: %s\n", arg);
++			argp_usage(state);
++		}
++		env.pid = pid;
++		break;
++	case ARGP_KEY_ARG:
++		if (pos_args++) {
++			fprintf(stderr,
++				"Unrecognized positional argument: %s\n", arg);
++			argp_usage(state);
++		}
++		errno = 0;
++		min_us = strtoll(arg, NULL, 10);
++		if (errno || min_us <= 0) {
++			fprintf(stderr, "Invalid delay (in us): %s\n", arg);
++			argp_usage(state);
++		}
++		env.min_us = min_us;
++		break;
++	default:
++		return ARGP_ERR_UNKNOWN;
++	}
++	return 0;
 +}
 +
- const char *bpf_program__title(const struct bpf_program *prog, bool needs_copy)
- {
- 	const char *title;
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index fa803dde1f46..7fa583ebe56f 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -114,10 +114,10 @@ struct bpf_object_open_opts {
- 
- LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
- LIBBPF_API struct bpf_object *
--bpf_object__open_file(const char *path, struct bpf_object_open_opts *opts);
-+bpf_object__open_file(const char *path, const struct bpf_object_open_opts *opts);
- LIBBPF_API struct bpf_object *
- bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
--		     struct bpf_object_open_opts *opts);
-+		     const struct bpf_object_open_opts *opts);
- 
- /* deprecated bpf_object__open variants */
- LIBBPF_API struct bpf_object *
-@@ -156,6 +156,7 @@ struct bpf_object_load_attr {
- LIBBPF_API int bpf_object__load(struct bpf_object *obj);
- LIBBPF_API int bpf_object__load_xattr(struct bpf_object_load_attr *attr);
- LIBBPF_API int bpf_object__unload(struct bpf_object *obj);
++int libbpf_print_fn(enum libbpf_print_level level,
++		    const char *format, va_list args)
++{
++	if (level == LIBBPF_DEBUG && !env.verbose)
++		return 0;
++	return vfprintf(stderr, format, args);
++}
 +
- LIBBPF_API const char *bpf_object__name(const struct bpf_object *obj);
- LIBBPF_API unsigned int bpf_object__kversion(const struct bpf_object *obj);
- 
-@@ -166,6 +167,9 @@ LIBBPF_API int bpf_object__btf_fd(const struct bpf_object *obj);
- LIBBPF_API struct bpf_program *
- bpf_object__find_program_by_title(const struct bpf_object *obj,
- 				  const char *title);
-+LIBBPF_API struct bpf_program *
-+bpf_object__find_program_by_name(const struct bpf_object *obj,
-+				 const char *name);
- 
- LIBBPF_API struct bpf_object *bpf_object__next(struct bpf_object *prev);
- #define bpf_object__for_each_safe(pos, tmp)			\
-@@ -209,6 +213,7 @@ LIBBPF_API void *bpf_program__priv(const struct bpf_program *prog);
- LIBBPF_API void bpf_program__set_ifindex(struct bpf_program *prog,
- 					 __u32 ifindex);
- 
-+LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
- LIBBPF_API const char *bpf_program__title(const struct bpf_program *prog,
- 					  bool needs_copy);
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 757a88f64b5a..f2b2fa0f5c2a 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -211,5 +211,7 @@ LIBBPF_0.0.6 {
- 
- LIBBPF_0.0.7 {
- 	global:
-+		bpf_object__find_program_by_name;
- 		bpf_program__attach;
-+		bpf_program__name;
- } LIBBPF_0.0.6;
-diff --git a/tools/testing/selftests/bpf/prog_tests/rdonly_maps.c b/tools/testing/selftests/bpf/prog_tests/rdonly_maps.c
-index d90acc13d1ec..563e12120e77 100644
---- a/tools/testing/selftests/bpf/prog_tests/rdonly_maps.c
-+++ b/tools/testing/selftests/bpf/prog_tests/rdonly_maps.c
-@@ -16,14 +16,11 @@ struct rdonly_map_subtest {
- 
- void test_rdonly_maps(void)
- {
--	const char *prog_name_skip_loop = "raw_tracepoint/sys_enter:skip_loop";
--	const char *prog_name_part_loop = "raw_tracepoint/sys_enter:part_loop";
--	const char *prog_name_full_loop = "raw_tracepoint/sys_enter:full_loop";
- 	const char *file = "test_rdonly_maps.o";
- 	struct rdonly_map_subtest subtests[] = {
--		{ "skip loop", prog_name_skip_loop, 0, 0 },
--		{ "part loop", prog_name_part_loop, 3, 2 + 3 + 4 },
--		{ "full loop", prog_name_full_loop, 4, 2 + 3 + 4 + 5 },
-+		{ "skip loop", "skip_loop", 0, 0 },
-+		{ "part loop", "part_loop", 3, 2 + 3 + 4 },
-+		{ "full loop", "full_loop", 4, 2 + 3 + 4 + 5 },
- 	};
- 	int i, err, zero = 0, duration = 0;
- 	struct bpf_link *link = NULL;
-@@ -50,7 +47,7 @@ void test_rdonly_maps(void)
- 		if (!test__start_subtest(t->subtest_name))
- 			continue;
- 
--		prog = bpf_object__find_program_by_title(obj, t->prog_name);
-+		prog = bpf_object__find_program_by_name(obj, t->prog_name);
- 		if (CHECK(!prog, "find_prog", "prog '%s' not found\n",
- 			  t->prog_name))
- 			goto cleanup;
++static int bump_memlock_rlimit(void)
++{
++	struct rlimit rlim_new = {
++		.rlim_cur	= RLIM_INFINITY,
++		.rlim_max	= RLIM_INFINITY,
++	};
++
++	return setrlimit(RLIMIT_MEMLOCK, &rlim_new);
++}
++
++void handle_event(void *ctx, int cpu, void *data, __u32 data_sz)
++{
++	const struct event *e = data;
++	struct tm *tm;
++	char ts[32];
++	time_t t;
++
++	time(&t);
++	tm = localtime(&t);
++	strftime(ts, sizeof(ts), "%H:%M:%S", tm);
++	printf("%-8s %-16s %-6d %14llu\n", ts, e->task, e->pid, e->delta_us);
++}
++
++void handle_lost_events(void *ctx, int cpu, __u64 lost_cnt)
++{
++	printf("Lost %llu events on CPU #%d!\n", lost_cnt, cpu);
++}
++
++BPF_EMBED_OBJ(runqslower_bpf, ".output/runqslower.bpf.o");
++
++int main(int argc, char **argv)
++{
++	static const struct argp argp = {
++		.options = opts,
++		.parser = parse_arg,
++		.doc = argp_program_doc,
++	};
++	struct perf_buffer_opts pb_opts;
++	struct perf_buffer *pb = NULL;
++	struct runqslower_bpf *obj;
++	int err;
++
++	err = argp_parse(&argp, argc, argv, 0, NULL, NULL);
++	if (err)
++		return err;
++
++	libbpf_set_print(libbpf_print_fn);
++
++	err = bump_memlock_rlimit();
++	if (err) {
++		fprintf(stderr, "failed to increase rlimit: %d", err);
++		return 1;
++	}
++
++	obj = runqslower_bpf__open(&runqslower_bpf_embed);
++	if (!obj) {
++		fprintf(stderr, "failed to open and/or load BPF object\n");
++		return 1;
++	}
++
++	/* initialize global data (filtering options) */
++	obj->rodata->targ_pid = env.pid;
++	obj->rodata->min_us = env.min_us;
++
++	err = runqslower_bpf__load(obj);
++	if (err) {
++		fprintf(stderr, "failed to load BPF object: %d\n", err);
++		return 1;
++	}
++
++	err = runqslower_bpf__attach(obj);
++	if (err) {
++		fprintf(stderr, "failed to attach BPF programs\n");
++		goto cleanup;
++	}
++
++	printf("Tracing run queue latency higher than %llu us\n", env.min_us);
++	printf("%-8s %-16s %-6s %14s\n", "TIME", "COMM", "PID", "LAT(us)");
++
++	pb_opts.sample_cb = handle_event;
++	pb_opts.lost_cb = handle_lost_events;
++	pb = perf_buffer__new(bpf_map__fd(obj->maps.events), 64, &pb_opts);
++	err = libbpf_get_error(pb);
++	if (err) {
++		pb = NULL;
++		fprintf(stderr, "failed to open perf buffer: %d\n", err);
++		goto cleanup;
++	}
++
++	while ((err = perf_buffer__poll(pb, 100)) >= 0)
++		;
++	printf("Error polling perf buffer: %d\n", err);
++
++cleanup:
++	perf_buffer__free(pb);
++	runqslower_bpf__destroy(obj);
++
++	return err != 0;
++}
+diff --git a/tools/lib/bpf/samples/runqslower/runqslower.h b/tools/lib/bpf/samples/runqslower/runqslower.h
+new file mode 100644
+index 000000000000..9db225425e5f
+--- /dev/null
++++ b/tools/lib/bpf/samples/runqslower/runqslower.h
+@@ -0,0 +1,13 @@
++/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
++#ifndef __RUNQSLOWER_H
++#define __RUNQSLOWER_H
++
++#define TASK_COMM_LEN 16
++
++struct event {
++	char task[TASK_COMM_LEN];
++	__u64 delta_us;
++	pid_t pid;
++};
++
++#endif /* __RUNQSLOWER_H */
 -- 
 2.17.1
 
