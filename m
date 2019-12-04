@@ -2,44 +2,44 @@ Return-Path: <SRS0=8K48=Z2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB47C0044D
-	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:00:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E62AEC2BBE2
+	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:00:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 79C8120640
-	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:00:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F56320640
+	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:00:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="REsmfa/k"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="S1EE4fwz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727298AbfLDHAx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Dec 2019 02:00:53 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:22242 "EHLO
+        id S1727244AbfLDHA5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Dec 2019 02:00:57 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:31386 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727244AbfLDHAw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Dec 2019 02:00:52 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB470btI026930
-        for <bpf@vger.kernel.org>; Tue, 3 Dec 2019 23:00:52 -0800
+        by vger.kernel.org with ESMTP id S1727326AbfLDHAy (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Dec 2019 02:00:54 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB470bYM005604
+        for <bpf@vger.kernel.org>; Tue, 3 Dec 2019 23:00:53 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=zLJfyz30V6fjrCPzc9X1rGbufR063QO3iHx9yYUooMk=;
- b=REsmfa/kRyhtFeCG1wXj1ZNGgQH1NyIfzo3wpUtAzyVg4eNdmxWOJp9yUbWGC9nChtyj
- vQZGTxSFnQI82QWPy1+v6ZW0kANw+rgnhakVHPOi0CiIYHu16SpuaQIRZF6bELIWtv97
- Ech5GV+RdyNMgUB87j/0VWsfJBv4PYAEK1M= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wnsxpm7kh-9
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 03 Dec 2019 23:00:52 -0800
-Received: from 2401:db00:12:909f:face:0:3:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Tue, 3 Dec 2019 23:00:45 -0800
+ content-type; s=facebook; bh=SG18/sThYVUhO+lp14ytaA8FU1xE/vARTz3Cslj7d/s=;
+ b=S1EE4fwztjj+EnzYbD5lNNDq1UE9NqfRRhZN0z75n+a6zH21hDButxiimjg/JNDDsXNI
+ pZLO4TS/IJ8Av5YMF3E25qJndirl/yU1lpXxMUOaFNiw/pnSPiVt3e2Txqz22yw83Jgi
+ uRqpFNVbWU2XFKkj37sHwjxIKXSkUhDWtS0= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wnvfgug61-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 03 Dec 2019 23:00:53 -0800
+Received: from 2401:db00:2120:81ca:face:0:31:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 3 Dec 2019 23:00:52 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id D80492EC1853; Tue,  3 Dec 2019 23:00:44 -0800 (PST)
+        id 62BA52EC1853; Tue,  3 Dec 2019 23:00:49 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next 12/16] libbpf/samples: add runqslower sample to libbpf samples
-Date:   Tue, 3 Dec 2019 23:00:11 -0800
-Message-ID: <20191204070015.3523523-13-andriin@fb.com>
+Subject: [RFC PATCH bpf-next 14/16] selftests/bpf: convert few more selftest to skeletons
+Date:   Tue, 3 Dec 2019 23:00:13 -0800
+Message-ID: <20191204070015.3523523-15-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191204070015.3523523-1-andriin@fb.com>
 References: <20191204070015.3523523-1-andriin@fb.com>
@@ -59,10 +59,10 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-04_01:2019-12-04,2019-12-03 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- adultscore=0 impostorscore=0 bulkscore=0 phishscore=0 suspectscore=2
- lowpriorityscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=8
+ phishscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0
+ mlxlogscore=999 impostorscore=0 priorityscore=1501 bulkscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1912040051
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,419 +70,707 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert one of BCC tools (runqslower, [0]) to BPF CO-RE + libbpf. It matches
-its BCC-based counterpart 1-to-1, supporting all the same parameters and
-functionality. It is added under samples/runqslower subdirectory inside libbpf
-source dir.
-
-runqslower sample utilizes BPF skeleton, auto-generated from BPF object file,
-as well as memory-mapped interface to global (read-only, in this case) data.
-
-  [0] https://github.com/iovisor/bcc/blob/11bf5d02c895df9646c117c713082eb192825293/tools/runqslower.py
+Convert few more selftests to use generated BPF skeletons as a demonstration
+on how to use it.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/samples/runqslower/.gitignore   |   2 +
- tools/lib/bpf/samples/runqslower/Makefile     |  50 +++++
- .../bpf/samples/runqslower/runqslower.bpf.c   | 105 ++++++++++
- tools/lib/bpf/samples/runqslower/runqslower.c | 189 ++++++++++++++++++
- tools/lib/bpf/samples/runqslower/runqslower.h |  13 ++
- 5 files changed, 359 insertions(+)
- create mode 100644 tools/lib/bpf/samples/runqslower/.gitignore
- create mode 100644 tools/lib/bpf/samples/runqslower/Makefile
- create mode 100644 tools/lib/bpf/samples/runqslower/runqslower.bpf.c
- create mode 100644 tools/lib/bpf/samples/runqslower/runqslower.c
- create mode 100644 tools/lib/bpf/samples/runqslower/runqslower.h
+ .../selftests/bpf/prog_tests/fentry_fexit.c   | 105 ++++++------------
+ .../selftests/bpf/prog_tests/fentry_test.c    |  72 +++++-------
+ tools/testing/selftests/bpf/prog_tests/mmap.c |  58 ++++------
+ .../bpf/prog_tests/stacktrace_build_id.c      |  79 +++++--------
+ .../bpf/prog_tests/stacktrace_build_id_nmi.c  |  84 ++++++--------
+ 5 files changed, 149 insertions(+), 249 deletions(-)
 
-diff --git a/tools/lib/bpf/samples/runqslower/.gitignore b/tools/lib/bpf/samples/runqslower/.gitignore
-new file mode 100644
-index 000000000000..404942cc9371
---- /dev/null
-+++ b/tools/lib/bpf/samples/runqslower/.gitignore
-@@ -0,0 +1,2 @@
-+/.output
-+/runqslower
-diff --git a/tools/lib/bpf/samples/runqslower/Makefile b/tools/lib/bpf/samples/runqslower/Makefile
-new file mode 100644
-index 000000000000..63c8248f3882
---- /dev/null
-+++ b/tools/lib/bpf/samples/runqslower/Makefile
-@@ -0,0 +1,50 @@
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+CLANG := clang
-+LLC := llc
-+LLVM-STRIP := llvm-strip
-+BPFTOOL := bpftool
-+VMLINUX_BTF := /sys/kernel/btf/vmlinux
-+LIBBPF_SRC := ../..
-+CFLAGS := -g -Wall
+diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+index 40bcff2cc274..110fcf053fd0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+@@ -1,90 +1,59 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2019 Facebook */
+ #include <test_progs.h>
++#include "test_pkt_access.skel.h"
++#include "fentry_test.skel.h"
++#include "fexit_test.skel.h"
 +
-+out := .output
-+abs_out := $(abspath $(out))
-+libbpf_src := $(abspath $(LIBBPF_SRC))
++BPF_EMBED_OBJ(pkt_access, "test_pkt_access.o");
++BPF_EMBED_OBJ(fentry, "fentry_test.o");
++BPF_EMBED_OBJ(fexit, "fexit_test.o");
+ 
+ void test_fentry_fexit(void)
+ {
+-	struct bpf_prog_load_attr attr_fentry = {
+-		.file = "./fentry_test.o",
+-	};
+-	struct bpf_prog_load_attr attr_fexit = {
+-		.file = "./fexit_test.o",
+-	};
+-
+-	struct bpf_object *obj_fentry = NULL, *obj_fexit = NULL, *pkt_obj;
+-	struct bpf_map *data_map_fentry, *data_map_fexit;
+-	char fentry_name[] = "fentry/bpf_fentry_testX";
+-	char fexit_name[] = "fexit/bpf_fentry_testX";
+-	int err, pkt_fd, kfree_skb_fd, i;
+-	struct bpf_link *link[12] = {};
+-	struct bpf_program *prog[12];
+-	__u32 duration, retval;
+-	const int zero = 0;
+-	u64 result[12];
+-
+-	err = bpf_prog_load("./test_pkt_access.o", BPF_PROG_TYPE_SCHED_CLS,
+-			    &pkt_obj, &pkt_fd);
+-	if (CHECK(err, "prog_load sched cls", "err %d errno %d\n", err, errno))
++	struct test_pkt_access *pkt_skel = NULL;
++	struct fentry_test *fentry_skel = NULL;
++	struct fexit_test *fexit_skel = NULL;
++	__u64 *fentry_res, *fexit_res;
++	__u32 duration = 0, retval;
++	int err, pkt_fd, i;
 +
-+.DELETE_ON_ERROR:
-+
-+.PHONY: all
-+all: runqslower
-+
-+.PHONY: clean
-+clean:
-+	rm -rf $(out) runqslower
-+
-+runqslower: $(out)/runqslower.o $(out)/libbpf.a
-+	$(CC) $(CFLAGS) -lelf $^ -o $@
-+
-+$(out)/vmlinux.h: $(VMLINUX_BTF) | $(out)
-+	$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
-+
-+$(out)/libbpf.a: | $(out)
-+	cd $(out) && $(MAKE) -C $(libbpf_src) OUTPUT=$(abs_out)/ $(abs_out)/libbpf.a
-+
-+$(out)/runqslower.o: runqslower.h $(out)/runqslower.bpf.o $(out)/runqslower.skel.h
-+
-+$(out)/runqslower.bpf.o: $(out)/vmlinux.h runqslower.h
-+
-+$(out)/%.skel.h: $(out)/%.bpf.o
-+	$(BPFTOOL) gen skeleton $< > $@
-+
-+$(out)/%.bpf.o: %.bpf.c | $(out)
-+	($(CLANG) -g -O2 -target bpf -emit-llvm -I$(out) -I$(LIBBPF_SRC)      \
-+		  -c $(filter %.c,$^) -o - || echo "BPF compilation failed")  \
-+	| $(LLC) -mattr=dwarfris -march=bpf -mcpu=probe -filetype=obj -o $@   \
-+	&& $(LLVM-STRIP) -g $@
-+
-+$(out)/%.o: %.c | $(out)
-+	$(CC) $(CFLAGS) -I$(LIBBPF_SRC) -I$(out) -c $(filter %.c,$^) -o $@
-+
-+$(out):
-+	mkdir -p $(out)
-+
-diff --git a/tools/lib/bpf/samples/runqslower/runqslower.bpf.c b/tools/lib/bpf/samples/runqslower/runqslower.bpf.c
-new file mode 100644
-index 000000000000..c0800d8bc620
---- /dev/null
-+++ b/tools/lib/bpf/samples/runqslower/runqslower.bpf.c
-@@ -0,0 +1,105 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+#include "vmlinux.h"
-+#include "bpf_helpers.h"
-+#include "bpf_core_read.h"
-+#include "runqslower.h"
-+
-+#define TASK_RUNNING 0
-+
-+#define BPF_F_INDEX_MASK		0xffffffffULL
-+#define BPF_F_CURRENT_CPU		BPF_F_INDEX_MASK
-+
-+const volatile __u64 min_us = 0;
-+const volatile pid_t targ_pid = 0;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 10240);
-+	__type(key, u32);
-+	__type(value, u64);
-+} start SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
-+	__uint(key_size, sizeof(u32));
-+	__uint(value_size, sizeof(u32));
-+} events SEC(".maps");
-+
-+/* record enqueue timestamp */
-+__always_inline
-+static int trace_enqueue(u32 tgid, u32 pid)
-+{
-+	u64 ts;
-+
-+	if (!pid || (targ_pid && targ_pid != pid))
-+		return 0;
-+
-+	ts = bpf_ktime_get_ns();
-+	bpf_map_update_elem(&start, &pid, &ts, 0);
-+	return 0;
-+}
-+
-+SEC("raw_tracepoint/sched_wakeup")
-+int handle__sched_wakeup(struct bpf_raw_tracepoint_args *ctx)
-+{
-+	/* TP_PROTO(struct task_struct *p) */
-+	struct task_struct *p = (struct task_struct *)ctx->args[0];
-+
-+	return trace_enqueue(BPF_CORE_READ(p, tgid), BPF_CORE_READ(p, pid));
-+}
-+
-+SEC("raw_tracepoint/sched_wakeup_new")
-+int handle__sched_wakeup_new(struct bpf_raw_tracepoint_args *ctx)
-+{
-+	/* TP_PROTO(struct task_struct *p) */
-+	struct task_struct *p = (struct task_struct *)ctx->args[0];
-+
-+	return trace_enqueue(BPF_CORE_READ(p, tgid), BPF_CORE_READ(p, pid));
-+}
-+
-+SEC("raw_tracepoint/sched_switch")
-+int handle__sched_switch(struct bpf_raw_tracepoint_args *ctx)
-+{
-+	/* TP_PROTO(bool preempt, struct task_struct *prev,
-+	 *	    struct task_struct *next)
-+	 */
-+	struct task_struct *prev = (struct task_struct *)ctx->args[1];
-+	struct task_struct *next = (struct task_struct *)ctx->args[2];
-+	struct event event = {};
-+	u64 *tsp, delta_us;
-+	u32 pid, tgid;
-+	long state;
-+
-+	/* ivcsw: treat like an enqueue event and store timestamp */
-+	if (BPF_CORE_READ(prev, state) == TASK_RUNNING) {
-+		tgid = BPF_CORE_READ(prev, tgid);
-+		pid = BPF_CORE_READ(prev, pid);
-+		trace_enqueue(tgid, pid);
++	pkt_skel = test_pkt_access__open_and_load(&pkt_access_embed);
++	if (CHECK(!pkt_skel, "pkt_skel_load", "pkt_access skeleton failed\n"))
+ 		return;
+-	err = bpf_prog_load_xattr(&attr_fentry, &obj_fentry, &kfree_skb_fd);
+-	if (CHECK(err, "prog_load fail", "err %d errno %d\n", err, errno))
++	fentry_skel = fentry_test__open_and_load(&fentry_embed);
++	if (CHECK(!fentry_skel, "fentry_skel_load", "fentry skeleton failed\n"))
+ 		goto close_prog;
+-	err = bpf_prog_load_xattr(&attr_fexit, &obj_fexit, &kfree_skb_fd);
+-	if (CHECK(err, "prog_load fail", "err %d errno %d\n", err, errno))
++	fexit_skel = fexit_test__open_and_load(&fexit_embed);
++	if (CHECK(!fexit_skel, "fexit_skel_load", "fexit skeleton failed\n"))
+ 		goto close_prog;
+ 
+-	for (i = 0; i < 6; i++) {
+-		fentry_name[sizeof(fentry_name) - 2] = '1' + i;
+-		prog[i] = bpf_object__find_program_by_title(obj_fentry, fentry_name);
+-		if (CHECK(!prog[i], "find_prog", "prog %s not found\n", fentry_name))
+-			goto close_prog;
+-		link[i] = bpf_program__attach_trace(prog[i]);
+-		if (CHECK(IS_ERR(link[i]), "attach_trace", "failed to link\n"))
+-			goto close_prog;
+-	}
+-	data_map_fentry = bpf_object__find_map_by_name(obj_fentry, "fentry_t.bss");
+-	if (CHECK(!data_map_fentry, "find_data_map", "data map not found\n"))
++	err = fentry_test__attach(fentry_skel);
++	if (CHECK(err, "fentry_attach", "fentry attach failed: %d\n", err))
+ 		goto close_prog;
+-
+-	for (i = 6; i < 12; i++) {
+-		fexit_name[sizeof(fexit_name) - 2] = '1' + i - 6;
+-		prog[i] = bpf_object__find_program_by_title(obj_fexit, fexit_name);
+-		if (CHECK(!prog[i], "find_prog", "prog %s not found\n", fexit_name))
+-			goto close_prog;
+-		link[i] = bpf_program__attach_trace(prog[i]);
+-		if (CHECK(IS_ERR(link[i]), "attach_trace", "failed to link\n"))
+-			goto close_prog;
+-	}
+-	data_map_fexit = bpf_object__find_map_by_name(obj_fexit, "fexit_te.bss");
+-	if (CHECK(!data_map_fexit, "find_data_map", "data map not found\n"))
++	err = fexit_test__attach(fexit_skel);
++	if (CHECK(err, "fexit_attach", "fexit attach failed: %d\n", err))
+ 		goto close_prog;
+ 
++	pkt_fd = bpf_program__fd(pkt_skel->progs.test_pkt_access);
+ 	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v6, sizeof(pkt_v6),
+ 				NULL, NULL, &retval, &duration);
+ 	CHECK(err || retval, "ipv6",
+ 	      "err %d errno %d retval %d duration %d\n",
+ 	      err, errno, retval, duration);
+ 
+-	err = bpf_map_lookup_elem(bpf_map__fd(data_map_fentry), &zero, &result);
+-	if (CHECK(err, "get_result",
+-		  "failed to get output data: %d\n", err))
+-		goto close_prog;
+-
+-	err = bpf_map_lookup_elem(bpf_map__fd(data_map_fexit), &zero, result + 6);
+-	if (CHECK(err, "get_result",
+-		  "failed to get output data: %d\n", err))
+-		goto close_prog;
+-
+-	for (i = 0; i < 12; i++)
+-		if (CHECK(result[i] != 1, "result", "bpf_fentry_test%d failed err %ld\n",
+-			  i % 6 + 1, result[i]))
+-			goto close_prog;
++	fentry_res = (__u64 *)fentry_skel->bss;
++	fexit_res = (__u64 *)fexit_skel->bss;
++	printf("%lld\n", fentry_skel->bss->test1_result);
++	for (i = 0; i < 6; i++) {
++		CHECK(fentry_res[i] != 1, "result",
++		      "fentry_test%d failed err %lld\n", i + 1, fentry_res[i]);
++		CHECK(fexit_res[i] != 1, "result",
++		      "fexit_test%d failed err %lld\n", i + 1, fexit_res[i]);
 +	}
+ 
+ close_prog:
+-	for (i = 0; i < 12; i++)
+-		if (!IS_ERR_OR_NULL(link[i]))
+-			bpf_link__destroy(link[i]);
+-	bpf_object__close(obj_fentry);
+-	bpf_object__close(obj_fexit);
+-	bpf_object__close(pkt_obj);
++	test_pkt_access__destroy(pkt_skel);
++	fentry_test__destroy(fentry_skel);
++	fexit_test__destroy(fexit_skel);
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_test.c b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
+index 9fb103193878..46a4afdf507a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fentry_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
+@@ -1,64 +1,46 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2019 Facebook */
+ #include <test_progs.h>
++#include "test_pkt_access.skel.h"
++#include "fentry_test.skel.h"
 +
-+	tgid = BPF_CORE_READ(next, tgid);
-+	pid = BPF_CORE_READ(next, pid);
-+
-+	/* fetch timestamp and calculate delta */
-+	tsp = bpf_map_lookup_elem(&start, &pid);
-+	if (!tsp)
-+		return 0;   /* missed enqueue */
-+
-+	delta_us = (bpf_ktime_get_ns() - *tsp) / 1000;
-+	if (min_us && delta_us <= min_us)
-+		return 0;
-+
-+	event.pid = pid;
-+	event.delta_us = delta_us;
-+	bpf_get_current_comm(&event.task, sizeof(event.task));
-+
-+	/* output */
-+	bpf_perf_event_output(ctx, &events, BPF_F_CURRENT_CPU,
-+			      &event, sizeof(event));
-+
-+	bpf_map_delete_elem(&start, &pid);
-+	return 0;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
-diff --git a/tools/lib/bpf/samples/runqslower/runqslower.c b/tools/lib/bpf/samples/runqslower/runqslower.c
-new file mode 100644
-index 000000000000..1a0e7888472f
---- /dev/null
-+++ b/tools/lib/bpf/samples/runqslower/runqslower.c
-@@ -0,0 +1,189 @@
-+// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+// Copyright (c) 2019 Facebook
-+#include <argp.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/resource.h>
-+#include <time.h>
-+#include <libbpf.h>
-+#include <bpf.h>
-+#include "runqslower.h"
-+#include "runqslower.skel.h"
-+
-+struct env {
-+	pid_t pid;
-+	__u64 min_us;
-+	bool verbose;
-+} env = {
-+	.min_us = 10000,
-+};
-+
-+const char *argp_program_version = "runqslower 0.1";
-+const char *argp_program_bug_address = "<bpf@vger.kernel.org>";
-+const char argp_program_doc[] =
-+"runqslower    Trace long process scheduling delays.\n"
-+"              For Linux, uses eBPF, BPF CO-RE, libbpf, BTF.\n"
-+"\n"
-+"This script traces high scheduling delays between tasks being\n"
-+"ready to run and them running on CPU after that.\n"
-+"\n"
-+"USAGE: runqslower [-p PID] [min_us]\n"
-+"\n"
-+"EXAMPLES:\n"
-+"    runqslower         # trace run queue latency higher than 10000 us (default)\n"
-+"    runqslower 1000    # trace run queue latency higher than 1000 us\n"
-+"    runqslower -p 123  # trace pid 123 only\n";
-+
-+static const struct argp_option opts[] = {
-+	{ "pid", 'p', "PID", 0, "Process PID to trace"},
-+	{ "verbose", 'v', NULL, 0, "Verbose debug output" },
-+	{},
-+};
-+
-+static error_t parse_arg(int key, char *arg, struct argp_state *state)
-+{
-+	static int pos_args;
-+	int pid;
-+	long long min_us;
-+
-+	switch (key) {
-+	case 'v':
-+		env.verbose = true;
-+		break;
-+	case 'p':
-+		errno = 0;
-+		pid = strtol(arg, NULL, 10);
-+		if (errno || pid <= 0) {
-+			fprintf(stderr, "Invalid PID: %s\n", arg);
-+			argp_usage(state);
-+		}
-+		env.pid = pid;
-+		break;
-+	case ARGP_KEY_ARG:
-+		if (pos_args++) {
-+			fprintf(stderr,
-+				"Unrecognized positional argument: %s\n", arg);
-+			argp_usage(state);
-+		}
-+		errno = 0;
-+		min_us = strtoll(arg, NULL, 10);
-+		if (errno || min_us <= 0) {
-+			fprintf(stderr, "Invalid delay (in us): %s\n", arg);
-+			argp_usage(state);
-+		}
-+		env.min_us = min_us;
-+		break;
-+	default:
-+		return ARGP_ERR_UNKNOWN;
-+	}
-+	return 0;
-+}
-+
-+int libbpf_print_fn(enum libbpf_print_level level,
-+		    const char *format, va_list args)
-+{
-+	if (level == LIBBPF_DEBUG && !env.verbose)
-+		return 0;
-+	return vfprintf(stderr, format, args);
-+}
-+
-+static int bump_memlock_rlimit(void)
-+{
-+	struct rlimit rlim_new = {
-+		.rlim_cur	= RLIM_INFINITY,
-+		.rlim_max	= RLIM_INFINITY,
-+	};
-+
-+	return setrlimit(RLIMIT_MEMLOCK, &rlim_new);
-+}
-+
-+void handle_event(void *ctx, int cpu, void *data, __u32 data_sz)
-+{
-+	const struct event *e = data;
-+	struct tm *tm;
-+	char ts[32];
-+	time_t t;
-+
-+	time(&t);
-+	tm = localtime(&t);
-+	strftime(ts, sizeof(ts), "%H:%M:%S", tm);
-+	printf("%-8s %-16s %-6d %14llu\n", ts, e->task, e->pid, e->delta_us);
-+}
-+
-+void handle_lost_events(void *ctx, int cpu, __u64 lost_cnt)
-+{
-+	printf("Lost %llu events on CPU #%d!\n", lost_cnt, cpu);
-+}
-+
-+BPF_EMBED_OBJ(runqslower_bpf, ".output/runqslower.bpf.o");
-+
-+int main(int argc, char **argv)
-+{
-+	static const struct argp argp = {
-+		.options = opts,
-+		.parser = parse_arg,
-+		.doc = argp_program_doc,
-+	};
-+	struct perf_buffer_opts pb_opts;
-+	struct perf_buffer *pb = NULL;
-+	struct runqslower_bpf *obj;
-+	int err;
-+
-+	err = argp_parse(&argp, argc, argv, 0, NULL, NULL);
-+	if (err)
-+		return err;
-+
-+	libbpf_set_print(libbpf_print_fn);
-+
-+	err = bump_memlock_rlimit();
-+	if (err) {
-+		fprintf(stderr, "failed to increase rlimit: %d", err);
-+		return 1;
-+	}
-+
-+	obj = runqslower_bpf__open(&runqslower_bpf_embed);
-+	if (!obj) {
-+		fprintf(stderr, "failed to open and/or load BPF object\n");
-+		return 1;
-+	}
-+
-+	/* initialize global data (filtering options) */
-+	obj->rodata->targ_pid = env.pid;
-+	obj->rodata->min_us = env.min_us;
-+
-+	err = runqslower_bpf__load(obj);
-+	if (err) {
-+		fprintf(stderr, "failed to load BPF object: %d\n", err);
-+		return 1;
-+	}
-+
-+	err = runqslower_bpf__attach(obj);
-+	if (err) {
-+		fprintf(stderr, "failed to attach BPF programs\n");
++BPF_EMBED_OBJ_DECLARE(pkt_access);
++BPF_EMBED_OBJ_DECLARE(fentry);
+ 
+ void test_fentry_test(void)
+ {
+-	struct bpf_prog_load_attr attr = {
+-		.file = "./fentry_test.o",
+-	};
+-
+-	char prog_name[] = "fentry/bpf_fentry_testX";
+-	struct bpf_object *obj = NULL, *pkt_obj;
+-	int err, pkt_fd, kfree_skb_fd, i;
+-	struct bpf_link *link[6] = {};
+-	struct bpf_program *prog[6];
++	struct test_pkt_access *pkt_skel = NULL;
++	struct fentry_test *fentry_skel = NULL;
++	int err, pkt_fd, i;
+ 	__u32 duration, retval;
+-	struct bpf_map *data_map;
+-	const int zero = 0;
+-	u64 result[6];
++	__u64 *result;
+ 
+-	err = bpf_prog_load("./test_pkt_access.o", BPF_PROG_TYPE_SCHED_CLS,
+-			    &pkt_obj, &pkt_fd);
+-	if (CHECK(err, "prog_load sched cls", "err %d errno %d\n", err, errno))
++	pkt_skel = test_pkt_access__open_and_load(&pkt_access_embed);
++	if (CHECK(!pkt_skel, "pkt_skel_load", "pkt_access skeleton failed\n"))
+ 		return;
+-	err = bpf_prog_load_xattr(&attr, &obj, &kfree_skb_fd);
+-	if (CHECK(err, "prog_load fail", "err %d errno %d\n", err, errno))
+-		goto close_prog;
++	fentry_skel = fentry_test__open_and_load(&fentry_embed);
++	if (CHECK(!fentry_skel, "fentry_skel_load", "fentry skeleton failed\n"))
 +		goto cleanup;
-+	}
-+
-+	printf("Tracing run queue latency higher than %llu us\n", env.min_us);
-+	printf("%-8s %-16s %-6s %14s\n", "TIME", "COMM", "PID", "LAT(us)");
-+
-+	pb_opts.sample_cb = handle_event;
-+	pb_opts.lost_cb = handle_lost_events;
-+	pb = perf_buffer__new(bpf_map__fd(obj->maps.events), 64, &pb_opts);
-+	err = libbpf_get_error(pb);
-+	if (err) {
-+		pb = NULL;
-+		fprintf(stderr, "failed to open perf buffer: %d\n", err);
+ 
+-	for (i = 0; i < 6; i++) {
+-		prog_name[sizeof(prog_name) - 2] = '1' + i;
+-		prog[i] = bpf_object__find_program_by_title(obj, prog_name);
+-		if (CHECK(!prog[i], "find_prog", "prog %s not found\n", prog_name))
+-			goto close_prog;
+-		link[i] = bpf_program__attach_trace(prog[i]);
+-		if (CHECK(IS_ERR(link[i]), "attach_trace", "failed to link\n"))
+-			goto close_prog;
+-	}
+-	data_map = bpf_object__find_map_by_name(obj, "fentry_t.bss");
+-	if (CHECK(!data_map, "find_data_map", "data map not found\n"))
+-		goto close_prog;
++	err = fentry_test__attach(fentry_skel);
++	if (CHECK(err, "fentry_attach", "fentry attach failed: %d\n", err))
 +		goto cleanup;
+ 
++	pkt_fd = bpf_program__fd(pkt_skel->progs.test_pkt_access);
+ 	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v6, sizeof(pkt_v6),
+ 				NULL, NULL, &retval, &duration);
+ 	CHECK(err || retval, "ipv6",
+ 	      "err %d errno %d retval %d duration %d\n",
+ 	      err, errno, retval, duration);
+ 
+-	err = bpf_map_lookup_elem(bpf_map__fd(data_map), &zero, &result);
+-	if (CHECK(err, "get_result",
+-		  "failed to get output data: %d\n", err))
+-		goto close_prog;
+-
+-	for (i = 0; i < 6; i++)
+-		if (CHECK(result[i] != 1, "result", "bpf_fentry_test%d failed err %ld\n",
+-			  i + 1, result[i]))
+-			goto close_prog;
++	result = (__u64 *)fentry_skel->bss;
++	for (i = 0; i < 6; i++) {
++		if (CHECK(result[i] != 1, "result",
++			  "fentry_test%d failed err %lld\n", i + 1, result[i]))
++			goto cleanup;
 +	}
-+
-+	while ((err = perf_buffer__poll(pb, 100)) >= 0)
-+		;
-+	printf("Error polling perf buffer: %d\n", err);
-+
+ 
+-close_prog:
+-	for (i = 0; i < 6; i++)
+-		if (!IS_ERR_OR_NULL(link[i]))
+-			bpf_link__destroy(link[i]);
+-	bpf_object__close(obj);
+-	bpf_object__close(pkt_obj);
 +cleanup:
-+	perf_buffer__free(pb);
-+	runqslower_bpf__destroy(obj);
++	fentry_test__destroy(fentry_skel);
++	test_pkt_access__destroy(pkt_skel);
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
+index 051a6d48762c..95a44d37ccea 100644
+--- a/tools/testing/selftests/bpf/prog_tests/mmap.c
++++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
+@@ -1,59 +1,41 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
+ #include <sys/mman.h>
++#include "test_mmap.skel.h"
+ 
+ struct map_data {
+ 	__u64 val[512 * 4];
+ };
+ 
+-struct bss_data {
+-	__u64 in_val;
+-	__u64 out_val;
+-};
+-
+ static size_t roundup_page(size_t sz)
+ {
+ 	long page_size = sysconf(_SC_PAGE_SIZE);
+ 	return (sz + page_size - 1) / page_size * page_size;
+ }
+ 
++BPF_EMBED_OBJ(test_mmap, "test_mmap.o");
 +
-+	return err != 0;
-+}
-diff --git a/tools/lib/bpf/samples/runqslower/runqslower.h b/tools/lib/bpf/samples/runqslower/runqslower.h
-new file mode 100644
-index 000000000000..9db225425e5f
---- /dev/null
-+++ b/tools/lib/bpf/samples/runqslower/runqslower.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
-+#ifndef __RUNQSLOWER_H
-+#define __RUNQSLOWER_H
+ void test_mmap(void)
+ {
+-	const char *file = "test_mmap.o";
+-	const char *probe_name = "raw_tracepoint/sys_enter";
+-	const char *tp_name = "sys_enter";
+-	const size_t bss_sz = roundup_page(sizeof(struct bss_data));
++	const size_t bss_sz = roundup_page(sizeof(struct test_mmap__bss));
+ 	const size_t map_sz = roundup_page(sizeof(struct map_data));
+ 	const int zero = 0, one = 1, two = 2, far = 1500;
+ 	const long page_size = sysconf(_SC_PAGE_SIZE);
+ 	int err, duration = 0, i, data_map_fd;
+-	struct bpf_program *prog;
+-	struct bpf_object *obj;
+-	struct bpf_link *link = NULL;
+ 	struct bpf_map *data_map, *bss_map;
+ 	void *bss_mmaped = NULL, *map_mmaped = NULL, *tmp1, *tmp2;
+-	volatile struct bss_data *bss_data;
+-	volatile struct map_data *map_data;
++	struct test_mmap__bss *bss_data;
++	struct map_data *map_data;
++	struct test_mmap *skel;
+ 	__u64 val = 0;
+ 
+-	obj = bpf_object__open_file("test_mmap.o", NULL);
+-	if (CHECK(IS_ERR(obj), "obj_open", "failed to open '%s': %ld\n",
+-		  file, PTR_ERR(obj)))
 +
-+#define TASK_COMM_LEN 16
++	skel = test_mmap__open_and_load(&test_mmap_embed);
++	if (CHECK(!skel, "skel_open_and_load", "skeleton open/load failed\n"))
+ 		return;
+-	prog = bpf_object__find_program_by_title(obj, probe_name);
+-	if (CHECK(!prog, "find_probe", "prog '%s' not found\n", probe_name))
+-		goto cleanup;
+-	err = bpf_object__load(obj);
+-	if (CHECK(err, "obj_load", "failed to load prog '%s': %d\n",
+-		  probe_name, err))
+-		goto cleanup;
+ 
+-	bss_map = bpf_object__find_map_by_name(obj, "test_mma.bss");
+-	if (CHECK(!bss_map, "find_bss_map", ".bss map not found\n"))
+-		goto cleanup;
+-	data_map = bpf_object__find_map_by_name(obj, "data_map");
+-	if (CHECK(!data_map, "find_data_map", "data_map map not found\n"))
+-		goto cleanup;
++	bss_map = skel->maps.bss;
++	data_map = skel->maps.data_map;
+ 	data_map_fd = bpf_map__fd(data_map);
+ 
+ 	bss_mmaped = mmap(NULL, bss_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
+@@ -77,13 +59,15 @@ void test_mmap(void)
+ 
+ 	CHECK_FAIL(bss_data->in_val);
+ 	CHECK_FAIL(bss_data->out_val);
++	CHECK_FAIL(skel->bss->in_val);
++	CHECK_FAIL(skel->bss->out_val);
+ 	CHECK_FAIL(map_data->val[0]);
+ 	CHECK_FAIL(map_data->val[1]);
+ 	CHECK_FAIL(map_data->val[2]);
+ 	CHECK_FAIL(map_data->val[far]);
+ 
+-	link = bpf_program__attach_raw_tracepoint(prog, tp_name);
+-	if (CHECK(IS_ERR(link), "attach_raw_tp", "err %ld\n", PTR_ERR(link)))
++	err = test_mmap__attach(skel);
++	if (CHECK(err, "attach_raw_tp", "err %d\n", err))
+ 		goto cleanup;
+ 
+ 	bss_data->in_val = 123;
+@@ -94,6 +78,8 @@ void test_mmap(void)
+ 
+ 	CHECK_FAIL(bss_data->in_val != 123);
+ 	CHECK_FAIL(bss_data->out_val != 123);
++	CHECK_FAIL(skel->bss->in_val != 123);
++	CHECK_FAIL(skel->bss->out_val != 123);
+ 	CHECK_FAIL(map_data->val[0] != 111);
+ 	CHECK_FAIL(map_data->val[1] != 222);
+ 	CHECK_FAIL(map_data->val[2] != 123);
+@@ -160,6 +146,8 @@ void test_mmap(void)
+ 	usleep(1);
+ 	CHECK_FAIL(bss_data->in_val != 321);
+ 	CHECK_FAIL(bss_data->out_val != 321);
++	CHECK_FAIL(skel->bss->in_val != 321);
++	CHECK_FAIL(skel->bss->out_val != 321);
+ 	CHECK_FAIL(map_data->val[0] != 111);
+ 	CHECK_FAIL(map_data->val[1] != 222);
+ 	CHECK_FAIL(map_data->val[2] != 321);
+@@ -203,6 +191,8 @@ void test_mmap(void)
+ 	map_data = tmp2;
+ 	CHECK_FAIL(bss_data->in_val != 321);
+ 	CHECK_FAIL(bss_data->out_val != 321);
++	CHECK_FAIL(skel->bss->in_val != 321);
++	CHECK_FAIL(skel->bss->out_val != 321);
+ 	CHECK_FAIL(map_data->val[0] != 111);
+ 	CHECK_FAIL(map_data->val[1] != 222);
+ 	CHECK_FAIL(map_data->val[2] != 321);
+@@ -214,7 +204,5 @@ void test_mmap(void)
+ 		CHECK_FAIL(munmap(bss_mmaped, bss_sz));
+ 	if (map_mmaped)
+ 		CHECK_FAIL(munmap(map_mmaped, map_sz));
+-	if (!IS_ERR_OR_NULL(link))
+-		bpf_link__destroy(link);
+-	bpf_object__close(obj);
++	test_mmap__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
+index d841dced971f..4af8b8253f25 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
++++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
+@@ -1,16 +1,16 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
++#include "test_stacktrace_build_id.skel.h"
 +
-+struct event {
-+	char task[TASK_COMM_LEN];
-+	__u64 delta_us;
-+	pid_t pid;
-+};
++BPF_EMBED_OBJ(stacktrace_build_id, "test_stacktrace_build_id.o");
+ 
+ void test_stacktrace_build_id(void)
+ {
 +
-+#endif /* __RUNQSLOWER_H */
+ 	int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
+-	const char *prog_name = "tracepoint/random/urandom_read";
+-	const char *file = "./test_stacktrace_build_id.o";
+-	int err, prog_fd, stack_trace_len;
++	struct test_stacktrace_build_id *skel;
++	int err, stack_trace_len;
+ 	__u32 key, previous_key, val, duration = 0;
+-	struct bpf_program *prog;
+-	struct bpf_object *obj;
+-	struct bpf_link *link = NULL;
+ 	char buf[256];
+ 	int i, j;
+ 	struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
+@@ -18,43 +18,24 @@ void test_stacktrace_build_id(void)
+ 	int retry = 1;
+ 
+ retry:
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
+-	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
++	skel = test_stacktrace_build_id__open_and_load(&stacktrace_build_id_embed);
++	if (CHECK(!skel, "skel_open_and_load", "skeleton open/load failed\n"))
+ 		return;
+ 
+-	prog = bpf_object__find_program_by_title(obj, prog_name);
+-	if (CHECK(!prog, "find_prog", "prog '%s' not found\n", prog_name))
+-		goto close_prog;
+-
+-	link = bpf_program__attach_tracepoint(prog, "random", "urandom_read");
+-	if (CHECK(IS_ERR(link), "attach_tp", "err %ld\n", PTR_ERR(link)))
+-		goto close_prog;
++	err = test_stacktrace_build_id__attach(skel);
++	if (CHECK(err, "attach_tp", "err %d\n", err))
++		goto cleanup;
+ 
+ 	/* find map fds */
+-	control_map_fd = bpf_find_map(__func__, obj, "control_map");
+-	if (CHECK(control_map_fd < 0, "bpf_find_map control_map",
+-		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
+-
+-	stackid_hmap_fd = bpf_find_map(__func__, obj, "stackid_hmap");
+-	if (CHECK(stackid_hmap_fd < 0, "bpf_find_map stackid_hmap",
+-		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
+-
+-	stackmap_fd = bpf_find_map(__func__, obj, "stackmap");
+-	if (CHECK(stackmap_fd < 0, "bpf_find_map stackmap", "err %d errno %d\n",
+-		  err, errno))
+-		goto disable_pmu;
+-
+-	stack_amap_fd = bpf_find_map(__func__, obj, "stack_amap");
+-	if (CHECK(stack_amap_fd < 0, "bpf_find_map stack_amap",
+-		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++	control_map_fd = bpf_map__fd(skel->maps.control_map);
++	stackid_hmap_fd = bpf_map__fd(skel->maps.stackid_hmap);
++	stackmap_fd = bpf_map__fd(skel->maps.stackmap);
++	stack_amap_fd = bpf_map__fd(skel->maps.stack_amap);
+ 
+ 	if (CHECK_FAIL(system("dd if=/dev/urandom of=/dev/zero count=4 2> /dev/null")))
+-		goto disable_pmu;
++		goto cleanup;
+ 	if (CHECK_FAIL(system("./urandom_read")))
+-		goto disable_pmu;
++		goto cleanup;
+ 	/* disable stack trace collection */
+ 	key = 0;
+ 	val = 1;
+@@ -66,23 +47,23 @@ void test_stacktrace_build_id(void)
+ 	err = compare_map_keys(stackid_hmap_fd, stackmap_fd);
+ 	if (CHECK(err, "compare_map_keys stackid_hmap vs. stackmap",
+ 		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	err = compare_map_keys(stackmap_fd, stackid_hmap_fd);
+ 	if (CHECK(err, "compare_map_keys stackmap vs. stackid_hmap",
+ 		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	err = extract_build_id(buf, 256);
+ 
+ 	if (CHECK(err, "get build_id with readelf",
+ 		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	err = bpf_map_get_next_key(stackmap_fd, NULL, &key);
+ 	if (CHECK(err, "get_next_key from stackmap",
+ 		  "err %d, errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	do {
+ 		char build_id[64];
+@@ -90,7 +71,7 @@ void test_stacktrace_build_id(void)
+ 		err = bpf_map_lookup_elem(stackmap_fd, &key, id_offs);
+ 		if (CHECK(err, "lookup_elem from stackmap",
+ 			  "err %d, errno %d\n", err, errno))
+-			goto disable_pmu;
++			goto cleanup;
+ 		for (i = 0; i < PERF_MAX_STACK_DEPTH; ++i)
+ 			if (id_offs[i].status == BPF_STACK_BUILD_ID_VALID &&
+ 			    id_offs[i].offset != 0) {
+@@ -108,8 +89,7 @@ void test_stacktrace_build_id(void)
+ 	 * try it one more time.
+ 	 */
+ 	if (build_id_matches < 1 && retry--) {
+-		bpf_link__destroy(link);
+-		bpf_object__close(obj);
++		test_stacktrace_build_id__destroy(skel);
+ 		printf("%s:WARN:Didn't find expected build ID from the map, retrying\n",
+ 		       __func__);
+ 		goto retry;
+@@ -117,17 +97,14 @@ void test_stacktrace_build_id(void)
+ 
+ 	if (CHECK(build_id_matches < 1, "build id match",
+ 		  "Didn't find expected build ID from the map\n"))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+-	stack_trace_len = PERF_MAX_STACK_DEPTH
+-		* sizeof(struct bpf_stack_build_id);
++	stack_trace_len = PERF_MAX_STACK_DEPTH *
++			  sizeof(struct bpf_stack_build_id);
+ 	err = compare_stack_ips(stackmap_fd, stack_amap_fd, stack_trace_len);
+ 	CHECK(err, "compare_stack_ips stackmap vs. stack_amap",
+ 	      "err %d errno %d\n", err, errno);
+ 
+-disable_pmu:
+-	bpf_link__destroy(link);
+-
+-close_prog:
+-	bpf_object__close(obj);
++cleanup:
++	test_stacktrace_build_id__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+index f62aa0eb959b..32fb03881a7b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
++++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
++#include "test_stacktrace_build_id.skel.h"
+ 
+ static __u64 read_perf_max_sample_freq(void)
+ {
+@@ -14,21 +15,19 @@ static __u64 read_perf_max_sample_freq(void)
+ 	return sample_freq;
+ }
+ 
++BPF_EMBED_OBJ_DECLARE(stacktrace_build_id);
++
+ void test_stacktrace_build_id_nmi(void)
+ {
+-	int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
+-	const char *prog_name = "tracepoint/random/urandom_read";
+-	const char *file = "./test_stacktrace_build_id.o";
+-	int err, pmu_fd, prog_fd;
++	int control_map_fd, stackid_hmap_fd, stackmap_fd;
++	struct test_stacktrace_build_id *skel;
++	int err, pmu_fd;
+ 	struct perf_event_attr attr = {
+ 		.freq = 1,
+ 		.type = PERF_TYPE_HARDWARE,
+ 		.config = PERF_COUNT_HW_CPU_CYCLES,
+ 	};
+ 	__u32 key, previous_key, val, duration = 0;
+-	struct bpf_program *prog;
+-	struct bpf_object *obj;
+-	struct bpf_link *link;
+ 	char buf[256];
+ 	int i, j;
+ 	struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
+@@ -38,13 +37,16 @@ void test_stacktrace_build_id_nmi(void)
+ 	attr.sample_freq = read_perf_max_sample_freq();
+ 
+ retry:
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_PERF_EVENT, &obj, &prog_fd);
+-	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
++	skel = test_stacktrace_build_id__open(&stacktrace_build_id_embed);
++	if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
+ 		return;
+ 
+-	prog = bpf_object__find_program_by_title(obj, prog_name);
+-	if (CHECK(!prog, "find_prog", "prog '%s' not found\n", prog_name))
+-		goto close_prog;
++	/* override program type */
++	bpf_program__set_perf_event(skel->progs.oncpu);
++
++	err = test_stacktrace_build_id__load(skel);
++	if (CHECK(err, "skel_load", "skeleton load failed: %d\n", err))
++		goto cleanup;
+ 
+ 	pmu_fd = syscall(__NR_perf_event_open, &attr, -1 /* pid */,
+ 			 0 /* cpu 0 */, -1 /* group id */,
+@@ -52,40 +54,25 @@ void test_stacktrace_build_id_nmi(void)
+ 	if (CHECK(pmu_fd < 0, "perf_event_open",
+ 		  "err %d errno %d. Does the test host support PERF_COUNT_HW_CPU_CYCLES?\n",
+ 		  pmu_fd, errno))
+-		goto close_prog;
++		goto cleanup;
+ 
+-	link = bpf_program__attach_perf_event(prog, pmu_fd);
+-	if (CHECK(IS_ERR(link), "attach_perf_event",
+-		  "err %ld\n", PTR_ERR(link))) {
++	skel->links.oncpu = bpf_program__attach_perf_event(skel->progs.oncpu,
++							   pmu_fd);
++	if (CHECK(IS_ERR(skel->links.oncpu), "attach_perf_event",
++		  "err %ld\n", PTR_ERR(skel->links.oncpu))) {
+ 		close(pmu_fd);
+-		goto close_prog;
++		goto cleanup;
+ 	}
+ 
+ 	/* find map fds */
+-	control_map_fd = bpf_find_map(__func__, obj, "control_map");
+-	if (CHECK(control_map_fd < 0, "bpf_find_map control_map",
+-		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
+-
+-	stackid_hmap_fd = bpf_find_map(__func__, obj, "stackid_hmap");
+-	if (CHECK(stackid_hmap_fd < 0, "bpf_find_map stackid_hmap",
+-		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
+-
+-	stackmap_fd = bpf_find_map(__func__, obj, "stackmap");
+-	if (CHECK(stackmap_fd < 0, "bpf_find_map stackmap", "err %d errno %d\n",
+-		  err, errno))
+-		goto disable_pmu;
+-
+-	stack_amap_fd = bpf_find_map(__func__, obj, "stack_amap");
+-	if (CHECK(stack_amap_fd < 0, "bpf_find_map stack_amap",
+-		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++	control_map_fd = bpf_map__fd(skel->maps.control_map);
++	stackid_hmap_fd = bpf_map__fd(skel->maps.stackid_hmap);
++	stackmap_fd = bpf_map__fd(skel->maps.stackmap);
+ 
+ 	if (CHECK_FAIL(system("dd if=/dev/urandom of=/dev/zero count=4 2> /dev/null")))
+-		goto disable_pmu;
++		goto cleanup;
+ 	if (CHECK_FAIL(system("taskset 0x1 ./urandom_read 100000")))
+-		goto disable_pmu;
++		goto cleanup;
+ 	/* disable stack trace collection */
+ 	key = 0;
+ 	val = 1;
+@@ -97,23 +84,23 @@ void test_stacktrace_build_id_nmi(void)
+ 	err = compare_map_keys(stackid_hmap_fd, stackmap_fd);
+ 	if (CHECK(err, "compare_map_keys stackid_hmap vs. stackmap",
+ 		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	err = compare_map_keys(stackmap_fd, stackid_hmap_fd);
+ 	if (CHECK(err, "compare_map_keys stackmap vs. stackid_hmap",
+ 		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	err = extract_build_id(buf, 256);
+ 
+ 	if (CHECK(err, "get build_id with readelf",
+ 		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	err = bpf_map_get_next_key(stackmap_fd, NULL, &key);
+ 	if (CHECK(err, "get_next_key from stackmap",
+ 		  "err %d, errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	do {
+ 		char build_id[64];
+@@ -121,7 +108,7 @@ void test_stacktrace_build_id_nmi(void)
+ 		err = bpf_map_lookup_elem(stackmap_fd, &key, id_offs);
+ 		if (CHECK(err, "lookup_elem from stackmap",
+ 			  "err %d, errno %d\n", err, errno))
+-			goto disable_pmu;
++			goto cleanup;
+ 		for (i = 0; i < PERF_MAX_STACK_DEPTH; ++i)
+ 			if (id_offs[i].status == BPF_STACK_BUILD_ID_VALID &&
+ 			    id_offs[i].offset != 0) {
+@@ -139,8 +126,7 @@ void test_stacktrace_build_id_nmi(void)
+ 	 * try it one more time.
+ 	 */
+ 	if (build_id_matches < 1 && retry--) {
+-		bpf_link__destroy(link);
+-		bpf_object__close(obj);
++		test_stacktrace_build_id__destroy(skel);
+ 		printf("%s:WARN:Didn't find expected build ID from the map, retrying\n",
+ 		       __func__);
+ 		goto retry;
+@@ -148,7 +134,7 @@ void test_stacktrace_build_id_nmi(void)
+ 
+ 	if (CHECK(build_id_matches < 1, "build id match",
+ 		  "Didn't find expected build ID from the map\n"))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	/*
+ 	 * We intentionally skip compare_stack_ips(). This is because we
+@@ -157,8 +143,6 @@ void test_stacktrace_build_id_nmi(void)
+ 	 * BPF_STACK_BUILD_ID_IP;
+ 	 */
+ 
+-disable_pmu:
+-	bpf_link__destroy(link);
+-close_prog:
+-	bpf_object__close(obj);
++cleanup:
++	test_stacktrace_build_id__destroy(skel);
+ }
 -- 
 2.17.1
 
