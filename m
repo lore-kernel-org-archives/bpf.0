@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE6D5C2BBE2
-	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:01:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CFFDC43603
+	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:01:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 85DAE20863
-	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:01:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5D6520833
+	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:00:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="JyH1WpJh"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="p9zpGwkw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727273AbfLDHAp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Dec 2019 02:00:45 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14234 "EHLO
+        id S1727303AbfLDHAu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Dec 2019 02:00:50 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:57146 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727254AbfLDHAm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Dec 2019 02:00:42 -0500
+        by vger.kernel.org with ESMTP id S1727296AbfLDHAt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Dec 2019 02:00:49 -0500
 Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB470cUn020408
-        for <bpf@vger.kernel.org>; Tue, 3 Dec 2019 23:00:42 -0800
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB470bcZ020377
+        for <bpf@vger.kernel.org>; Tue, 3 Dec 2019 23:00:48 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=JC71UaOuUEYWvsktSZdFoK9vx9wnmj/YgDK2Peh+FSk=;
- b=JyH1WpJhKQthpEpwXBv0oLs+uuI0lgTgeye/uIaUT/8Q+XUT8+5SlTVlwbw3jxngbeUv
- kUMSBi9yIElld2vrEwrNe7ks8hw9otp1Rke6oNLTAfcYxRf1g7wwHyHOk1lo75wpIIwB
- qU8ODs9Eki7Rw2zb+z+jNpdWEz08f9kPHsc= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wn9csgj3w-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 03 Dec 2019 23:00:41 -0800
-Received: from 2401:db00:2120:80d4:face:0:39:0 (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Tue, 3 Dec 2019 23:00:26 -0800
+ content-type; s=facebook; bh=bMuI5s4ZGlVH9aiQ2OrfKQbHFggGD36OhbRZMbu9P+I=;
+ b=p9zpGwkw+Wv17GvalGwdKHZiYTgDYIS6/xBPodNJ7NhKLSM9KBE+I3anvh5HI29gbE53
+ wG+H4MiwYFoQ3MyeC2fpmV4y4g9qSB6TaqBFFTnm+r3QJglMDIvk5UaKgUedbBkcU0AR
+ XKLfAxakRXLymuVtBSsoU/1UwBA8SKY1LvI= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wn9csgj6n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 03 Dec 2019 23:00:47 -0800
+Received: from 2401:db00:2050:5076:face:0:7:0 (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 3 Dec 2019 23:00:40 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id CD6972EC1853; Tue,  3 Dec 2019 23:00:24 -0800 (PST)
+        id 615232EC1853; Tue,  3 Dec 2019 23:00:40 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next 03/16] libbpf: move non-public APIs from libbpf.h to libbpf_internal.h
-Date:   Tue, 3 Dec 2019 23:00:02 -0800
-Message-ID: <20191204070015.3523523-4-andriin@fb.com>
+Subject: [RFC PATCH bpf-next 10/16] libbpf: add experimental BPF object skeleton support
+Date:   Tue, 3 Dec 2019 23:00:09 -0800
+Message-ID: <20191204070015.3523523-11-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191204070015.3523523-1-andriin@fb.com>
 References: <20191204070015.3523523-1-andriin@fb.com>
@@ -61,7 +61,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-04_01:2019-12-04,2019-12-03 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  phishscore=0 adultscore=0 impostorscore=0 bulkscore=0 spamscore=0
- malwarescore=0 lowpriorityscore=0 suspectscore=8 mlxlogscore=999
+ malwarescore=0 lowpriorityscore=0 suspectscore=25 mlxlogscore=999
  mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1912040051
 X-FB-Internal: deliver
@@ -70,105 +70,239 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Few libbpf APIs are not public but currently exposed through libbpf.h to be
-used by bpftool. Move them to libbpf_internal.h, where intent of being
-non-stable and non-public is much more obvious.
+Add new set of APIs (currently experimental and not public), allowing to
+open/load/attach BPF object through BPF object skeleton, generated by bpftool
+for a specific BPF object file. All the xxx_skeleton() APIs wrap up
+corresponding bpf_object_xxx() APIs, but additionally also automate
+map/program lookups by name, global data initialization and mmap()-ing, etc.
+All this greatly improves and simplifies userspace usability of working with
+BPF programs. See follow up patches for examples.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/bpf/bpftool/net.c         |  1 +
- tools/lib/bpf/libbpf.h          | 17 -----------------
- tools/lib/bpf/libbpf.map        |  1 -
- tools/lib/bpf/libbpf_internal.h | 17 +++++++++++++++++
- 4 files changed, 18 insertions(+), 18 deletions(-)
+ tools/lib/bpf/libbpf.c          | 162 ++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf_internal.h |  40 ++++++++
+ 2 files changed, 202 insertions(+)
 
-diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
-index 4f52d3151616..d93bee298e54 100644
---- a/tools/bpf/bpftool/net.c
-+++ b/tools/bpf/bpftool/net.c
-@@ -18,6 +18,7 @@
- 
- #include <bpf.h>
- #include <nlattr.h>
-+#include "libbpf_internal.h"
- #include "main.h"
- #include "netlink_dumper.h"
- 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 804f445c9957..2698fbcb0c79 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -126,11 +126,6 @@ bpf_object__open_buffer(const void *obj_buf, size_t obj_buf_sz,
- LIBBPF_API struct bpf_object *
- bpf_object__open_xattr(struct bpf_object_open_attr *attr);
- 
--int bpf_object__section_size(const struct bpf_object *obj, const char *name,
--			     __u32 *size);
--int bpf_object__variable_offset(const struct bpf_object *obj, const char *name,
--				__u32 *off);
--
- enum libbpf_pin_type {
- 	LIBBPF_PIN_NONE,
- 	/* PIN_BY_NAME: pin maps by name (in /sys/fs/bpf by default) */
-@@ -514,18 +509,6 @@ bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
- 			   void **copy_mem, size_t *copy_size,
- 			   bpf_perf_event_print_t fn, void *private_data);
- 
--struct nlattr;
--typedef int (*libbpf_dump_nlmsg_t)(void *cookie, void *msg, struct nlattr **tb);
--int libbpf_netlink_open(unsigned int *nl_pid);
--int libbpf_nl_get_link(int sock, unsigned int nl_pid,
--		       libbpf_dump_nlmsg_t dump_link_nlmsg, void *cookie);
--int libbpf_nl_get_class(int sock, unsigned int nl_pid, int ifindex,
--			libbpf_dump_nlmsg_t dump_class_nlmsg, void *cookie);
--int libbpf_nl_get_qdisc(int sock, unsigned int nl_pid, int ifindex,
--			libbpf_dump_nlmsg_t dump_qdisc_nlmsg, void *cookie);
--int libbpf_nl_get_filter(int sock, unsigned int nl_pid, int ifindex, int handle,
--			 libbpf_dump_nlmsg_t dump_filter_nlmsg, void *cookie);
--
- struct bpf_prog_linfo;
- struct bpf_prog_info;
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 88dded011a84..757a88f64b5a 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -203,7 +203,6 @@ LIBBPF_0.0.6 {
- 		bpf_program__get_expected_attach_type;
- 		bpf_program__get_type;
- 		bpf_program__is_tracing;
--		bpf_program__name;
- 		bpf_program__set_tracing;
- 		bpf_program__size;
- 		btf__find_by_name_kind;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index a4cce8f1e6b1..0689398b0786 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -6727,3 +6727,165 @@ int libbpf_num_possible_cpus(void)
+ 	WRITE_ONCE(cpus, tmp_cpus);
+ 	return tmp_cpus;
+ }
++
++int bpf_object__open_skeleton(struct bpf_object_skeleton *s,
++			      const struct bpf_object_open_opts *opts)
++{
++	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, skel_opts,
++		.object_name = s->name,
++	);
++	struct bpf_object *obj;
++	int i;
++
++	/* Attempt to preserve opts->object_name, unless overriden by user
++	 * explicitly. Overwriting object name for skeletons is discouraged,
++	 * as it breaks global data maps, because they contain object name
++	 * prefix as their own map name prefix. When skeleton is generated,
++	 * bpftool is making an assumption that this name will stay the same.
++	 */
++	if (opts) {
++		memcpy(&skel_opts, opts, sizeof(*opts));
++		if (!opts->object_name)
++			skel_opts.object_name = s->name;
++	}
++
++	obj = bpf_object__open_mem(s->data, s->data_sz, &skel_opts);
++	if (IS_ERR(obj)) {
++		pr_warn("failed to initialize skeleton BPF object '%s': %ld\n",
++			s->name, PTR_ERR(obj));
++		return PTR_ERR(obj);
++	}
++
++	*s->obj = obj;
++
++	for (i = 0; i < s->map_cnt; i++) {
++		struct bpf_map **map = s->maps[i].map;
++		const char *name = s->maps[i].name;
++		void **mmaped = s->maps[i].mmaped;
++
++		*map = bpf_object__find_map_by_name(obj, name);
++		if (!*map) {
++			pr_warn("failed to find skeleton map '%s'\n", name);
++			return -ESRCH;
++		}
++
++		if (mmaped)
++			*mmaped = (*map)->mmaped;
++	}
++
++	for (i = 0; i < s->prog_cnt; i++) {
++		struct bpf_program **prog = s->progs[i].prog;
++		const char *name = s->progs[i].name;
++
++		*prog = bpf_object__find_program_by_name(obj, name);
++		if (!*prog) {
++			pr_warn("failed to find skeleton program '%s'\n", name);
++			return -ESRCH;
++		}
++	}
++
++	return 0;
++}
++
++int bpf_object__load_skeleton(struct bpf_object_skeleton *s, const void *opts)
++{
++	int i, err;
++
++	err = bpf_object__load(*s->obj);
++	if (err) {
++		pr_warn("failed to load BPF skeleton '%s': %d\n", s->name, err);
++		return err;
++	}
++
++	for (i = 0; i < s->map_cnt; i++) {
++		struct bpf_map *map = *s->maps[i].map;
++		size_t mmap_sz = bpf_map_mmap_sz(map);
++		int prot, map_fd = bpf_map__fd(map);
++		void **mmaped = s->maps[i].mmaped;
++		void *remapped;
++
++		if (!mmaped)
++			continue;
++
++		if (!(map->def.map_flags & BPF_F_MMAPABLE)) {
++			*mmaped = NULL;
++			continue;
++		}
++
++		if (map->def.map_flags & BPF_F_RDONLY_PROG)
++			prot = PROT_READ;
++		else
++			prot = PROT_READ | PROT_WRITE;
++
++		/* Remap anonymous mmap()-ed "map initialization image" as
++		 * a BPF map-backed mmap()-ed memory, but preserving the same
++		 * memory address. This will cause kernel to change process'
++		 * page table to point to a different piece of kernel memory,
++		 * but from userspace point of view memory address (and its
++		 * contents, being identical at this point) will stay the
++		 * same. This mapping will be released by bpf_object__close()
++		 * as per normal clean up procedure, so we don't need to worry
++		 * about it from skeleton's clean up perspective.
++		 */
++		remapped = mmap(*mmaped, mmap_sz, prot, MAP_SHARED | MAP_FIXED,
++				map_fd, 0);
++		if (remapped == MAP_FAILED) {
++			err = -errno;
++			*mmaped = NULL;
++			pr_warn("failed to re-mmap() map '%s': %d\n",
++				 bpf_map__name(map), err);
++			return err;
++		}
++	}
++
++	return 0;
++}
++
++int bpf_object__attach_skeleton(struct bpf_object_skeleton *s, const void *opts)
++{
++	int i;
++
++	for (i = 0; i < s->prog_cnt; i++) {
++		struct bpf_program *prog = *s->progs[i].prog;
++		struct bpf_link **link = s->progs[i].link;
++		const struct bpf_sec_def *sec_def;
++		const char *sec_name = bpf_program__title(prog, false);
++
++		sec_def = find_sec_def(sec_name);
++		if (!sec_def || !sec_def->attach_fn)
++			continue;
++
++		*link = sec_def->attach_fn(sec_def, prog);
++		if (IS_ERR(*link)) {
++			pr_warn("failed to auto-attach program '%s': %ld\n",
++				bpf_program__name(prog), PTR_ERR(*link));
++			return PTR_ERR(*link);
++		}
++	}
++
++	return 0;
++}
++
++void bpf_object__detach_skeleton(struct bpf_object_skeleton *s)
++{
++	int i;
++
++	for (i = 0; i < s->prog_cnt; i++) {
++		struct bpf_link **link = s->progs[i].link;
++
++		if (!IS_ERR_OR_NULL(*link))
++			bpf_link__destroy(*link);
++		*link = NULL;
++	}
++}
++
++void bpf_object__destroy_skeleton(struct bpf_object_skeleton *s)
++{
++	if (s->progs)
++		bpf_object__detach_skeleton(s);
++	if (s->obj)
++		bpf_object__close(*s->obj);
++	free(s->maps);
++	free(s->progs);
++	free(s);
++}
 diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 97ac17a64a58..7ee0c8691835 100644
+index bb7fd22eb0ab..dddcf234212a 100644
 --- a/tools/lib/bpf/libbpf_internal.h
 +++ b/tools/lib/bpf/libbpf_internal.h
-@@ -98,6 +98,23 @@ static inline bool libbpf_validate_opts(const char *opts,
- int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
- 			 const char *str_sec, size_t str_len);
+@@ -237,4 +237,44 @@ struct bpf_field_reloc {
+ 	enum bpf_field_info_kind kind;
+ };
  
-+int bpf_object__section_size(const struct bpf_object *obj, const char *name,
-+			     __u32 *size);
-+int bpf_object__variable_offset(const struct bpf_object *obj, const char *name,
-+				__u32 *off);
 +
-+struct nlattr;
-+typedef int (*libbpf_dump_nlmsg_t)(void *cookie, void *msg, struct nlattr **tb);
-+int libbpf_netlink_open(unsigned int *nl_pid);
-+int libbpf_nl_get_link(int sock, unsigned int nl_pid,
-+		       libbpf_dump_nlmsg_t dump_link_nlmsg, void *cookie);
-+int libbpf_nl_get_class(int sock, unsigned int nl_pid, int ifindex,
-+			libbpf_dump_nlmsg_t dump_class_nlmsg, void *cookie);
-+int libbpf_nl_get_qdisc(int sock, unsigned int nl_pid, int ifindex,
-+			libbpf_dump_nlmsg_t dump_qdisc_nlmsg, void *cookie);
-+int libbpf_nl_get_filter(int sock, unsigned int nl_pid, int ifindex, int handle,
-+			 libbpf_dump_nlmsg_t dump_filter_nlmsg, void *cookie);
++struct bpf_map_skeleton {
++	const char *name;
++	struct bpf_map **map;
++	void **mmaped;
++};
 +
- struct btf_ext_info {
- 	/*
- 	 * info points to the individual info section (e.g. func_info and
++struct bpf_prog_skeleton {
++	const char *name;
++	struct bpf_program **prog;
++	struct bpf_link **link;
++};
++
++struct bpf_object_skeleton {
++	size_t sz; /* size of this struct, for forward/backward compatibility */
++
++	const char *name;
++	void *data;
++	size_t data_sz;
++
++	struct bpf_object **obj;
++
++	int map_cnt;
++	int map_skel_sz; /* sizeof(struct bpf_skeleton_map) */
++	struct bpf_map_skeleton *maps;
++
++	int prog_cnt;
++	int prog_skel_sz; /* sizeof(struct bpf_skeleton_prog) */
++	struct bpf_prog_skeleton *progs;
++};
++
++int bpf_object__open_skeleton(struct bpf_object_skeleton *s,
++			      const struct bpf_object_open_opts *opts);
++int bpf_object__load_skeleton(struct bpf_object_skeleton *s,
++			      const void *opts);
++int bpf_object__attach_skeleton(struct bpf_object_skeleton *s,
++				const void *opts);
++void bpf_object__detach_skeleton(struct bpf_object_skeleton *s);
++void bpf_object__destroy_skeleton(struct bpf_object_skeleton *s);
++
+ #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
 -- 
 2.17.1
 
