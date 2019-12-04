@@ -2,181 +2,158 @@ Return-Path: <SRS0=8K48=Z2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F43DC0044D
-	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AE76C43603
+	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 08:15:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 39E752073B
-	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 07:01:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="oG+C0Y+h"
+	by mail.kernel.org (Postfix) with ESMTP id 3BEB52068E
+	for <bpf@archiver.kernel.org>; Wed,  4 Dec 2019 08:15:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727333AbfLDHA5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Dec 2019 02:00:57 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:27198 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727244AbfLDHAy (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Dec 2019 02:00:54 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB46rIJh011495
-        for <bpf@vger.kernel.org>; Tue, 3 Dec 2019 23:00:54 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=0LlH/nLl5Dr0wbAqBTCW+ZHkKV0tDv5/l0BIkKZ/fLY=;
- b=oG+C0Y+hpC33HLnv16ir+7mA2DolqFW7yivtu0gxPmJe8mlOBcbzU10ekWG+G7K+UBP/
- bjQerMATsJaa2QA+Umt3JJKAyc2wBlbCnzickEvbBKGJQHWb50owCP/AZ71wXRtzei9B
- 4rszqujRKCY9rF8Jrpwnb1OP41kgPZYa9BI= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wp7rnr250-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 03 Dec 2019 23:00:54 -0800
-Received: from 2401:db00:2120:81ca:face:0:31:0 (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 3 Dec 2019 23:00:52 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 97DFE2EC1853; Tue,  3 Dec 2019 23:00:51 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next 15/16] selftests/bpf: add test validating data section to struct convertion layout
-Date:   Tue, 3 Dec 2019 23:00:14 -0800
-Message-ID: <20191204070015.3523523-16-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191204070015.3523523-1-andriin@fb.com>
-References: <20191204070015.3523523-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1726679AbfLDIPK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Dec 2019 03:15:10 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:46544 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726217AbfLDIPJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Dec 2019 03:15:09 -0500
+Received: by mail-io1-f71.google.com with SMTP id b186so4524933iof.13
+        for <bpf@vger.kernel.org>; Wed, 04 Dec 2019 00:15:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=3gxsHwvlUUBpSvK315i8o2sg/roLIxlVFL41wPQysKk=;
+        b=qHhiDdtSbprYOCrmTzrS4EsREBgjhhnI5Vixu6SZ9oBL2nhcr5u7fj1N9ONke5KOzt
+         SkoevvmpQiu3WKoJOQExDhzOpAc9Dqz9WCvuz2W666QHzOWRyj6gqkkg6bORHayuNVYI
+         2zwcqIC9x/E/LEt2yZldAqDOiRch0ojcl4j1DxyJD9mjN8o+kAKU1GwKxwCQi39rPAKj
+         25Mb3nTMJZxtD1v9M4vjZ8QNpbotghwdcjyCnXHJ2OHHF1gUps7Xbg/Jx2Ue8OdoMTQ+
+         C8YxWezKbN5DaD4WGRN8gaklLgBcER41MTySeHx8DVIxVDYi/Bcur/QccjVvhu9+yRrc
+         ymTA==
+X-Gm-Message-State: APjAAAWB7w/j71j5eNCAEviV4QcoCD17vY8VjTIYzYygqhPpcv1wDthD
+        maERolkYahCI5zvze4eCM/+QmMLOTkcXMPArL151m4nW1JDO
+X-Google-Smtp-Source: APXvYqzIxmgXZ1QBxq9xD17imaY7z6J5sKHlCL+TCugehyRVkX/brVHwcBEz4gS5IceA/HyMOfHDPcia0dyBirhn7V2aKi4P33dF
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-04_01:2019-12-04,2019-12-03 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- lowpriorityscore=0 spamscore=0 impostorscore=0 mlxlogscore=935
- phishscore=0 suspectscore=8 priorityscore=1501 mlxscore=0 bulkscore=0
- malwarescore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1912040050
-X-FB-Internal: deliver
+X-Received: by 2002:a02:a148:: with SMTP id m8mr1878744jah.69.1575447308616;
+ Wed, 04 Dec 2019 00:15:08 -0800 (PST)
+Date:   Wed, 04 Dec 2019 00:15:08 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000314c120598dc69bd@google.com>
+Subject: BUG: unable to handle kernel paging request in pcpu_alloc
+From:   syzbot <syzbot+82e323920b78d54aaed5@syzkaller.appspotmail.com>
+To:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, kafai@fb.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a simple selftests validating datasection-to-struct layour dumping. Global
-variables are constructed in such a way as to cause both natural and
-artificial padding (through custom alignment requirement).
+Hello,
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+syzbot found the following crash on:
+
+HEAD commit:    1ab75b2e Add linux-next specific files for 20191203
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10edf2eae00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=de1505c727f0ec20
+dashboard link: https://syzkaller.appspot.com/bug?extid=82e323920b78d54aaed5
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=156ef061e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11641edae00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+82e323920b78d54aaed5@syzkaller.appspotmail.com
+
+RDX: 000000000000003c RSI: 0000000020000080 RDI: 0c00000000000000
+RBP: 0000000000000000 R08: 0000000000000002 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000018
+R13: 0000000000000004 R14: 0000000000000005 R15: 0000000000000000
+BUG: unable to handle page fault for address: fffff91ffff00000
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 21ffe6067 P4D 21ffe6067 PUD aa56c067 PMD aa56d067 PTE 0
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 8999 Comm: syz-executor865 Not tainted  
+5.4.0-next-20191203-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+RIP: 0010:memory_is_nonzero mm/kasan/generic.c:121 [inline]
+RIP: 0010:memory_is_poisoned_n mm/kasan/generic.c:135 [inline]
+RIP: 0010:memory_is_poisoned mm/kasan/generic.c:166 [inline]
+RIP: 0010:check_memory_region_inline mm/kasan/generic.c:182 [inline]
+RIP: 0010:check_memory_region+0x9c/0x1a0 mm/kasan/generic.c:192
+Code: c9 4d 0f 49 c1 49 c1 f8 03 45 85 c0 0f 84 10 01 00 00 41 83 e8 01 4e  
+8d 44 c0 08 eb 0d 48 83 c0 08 4c 39 c0 0f 84 a7 00 00 00 <48> 83 38 00 74  
+ed 4c 8d 40 08 eb 09 48 83 c0 01 49 39 c0 74 53 80
+RSP: 0018:ffffc90001f67a80 EFLAGS: 00010216
+RAX: fffff91ffff00000 RBX: fffff91ffff01000 RCX: ffffffff819e1589
+RDX: 0000000000000001 RSI: 0000000000008000 RDI: ffffe8ffff800000
+RBP: ffffc90001f67a98 R08: fffff91ffff01000 R09: 0000000000001000
+R10: fffff91ffff00fff R11: ffffe8ffff807fff R12: fffff91ffff00000
+R13: 0000000000008000 R14: 0000000000000000 R15: ffff88821fffd100
+FS:  00000000011a7880(0000) GS:ffff8880ae900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffff91ffff00000 CR3: 00000000a94ad000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+  memset+0x24/0x40 mm/kasan/common.c:107
+  memset include/linux/string.h:410 [inline]
+  pcpu_alloc+0x589/0x1380 mm/percpu.c:1734
+  __alloc_percpu_gfp+0x28/0x30 mm/percpu.c:1783
+  bpf_array_alloc_percpu kernel/bpf/arraymap.c:35 [inline]
+  array_map_alloc+0x698/0x7d0 kernel/bpf/arraymap.c:159
+  find_and_alloc_map kernel/bpf/syscall.c:123 [inline]
+  map_create kernel/bpf/syscall.c:654 [inline]
+  __do_sys_bpf+0x478/0x3810 kernel/bpf/syscall.c:3012
+  __se_sys_bpf kernel/bpf/syscall.c:2989 [inline]
+  __x64_sys_bpf+0x73/0xb0 kernel/bpf/syscall.c:2989
+  do_syscall_64+0xfa/0x790 arch/x86/entry/common.c:294
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x442f99
+Code: e8 ec 09 03 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 cb 08 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007ffc8aa156d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000442f99
+RDX: 000000000000003c RSI: 0000000020000080 RDI: 0c00000000000000
+RBP: 0000000000000000 R08: 0000000000000002 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000018
+R13: 0000000000000004 R14: 0000000000000005 R15: 0000000000000000
+Modules linked in:
+CR2: fffff91ffff00000
+---[ end trace 449f8b43dad6ffb8 ]---
+RIP: 0010:memory_is_nonzero mm/kasan/generic.c:121 [inline]
+RIP: 0010:memory_is_poisoned_n mm/kasan/generic.c:135 [inline]
+RIP: 0010:memory_is_poisoned mm/kasan/generic.c:166 [inline]
+RIP: 0010:check_memory_region_inline mm/kasan/generic.c:182 [inline]
+RIP: 0010:check_memory_region+0x9c/0x1a0 mm/kasan/generic.c:192
+Code: c9 4d 0f 49 c1 49 c1 f8 03 45 85 c0 0f 84 10 01 00 00 41 83 e8 01 4e  
+8d 44 c0 08 eb 0d 48 83 c0 08 4c 39 c0 0f 84 a7 00 00 00 <48> 83 38 00 74  
+ed 4c 8d 40 08 eb 09 48 83 c0 01 49 39 c0 74 53 80
+RSP: 0018:ffffc90001f67a80 EFLAGS: 00010216
+RAX: fffff91ffff00000 RBX: fffff91ffff01000 RCX: ffffffff819e1589
+RDX: 0000000000000001 RSI: 0000000000008000 RDI: ffffe8ffff800000
+RBP: ffffc90001f67a98 R08: fffff91ffff01000 R09: 0000000000001000
+R10: fffff91ffff00fff R11: ffffe8ffff807fff R12: fffff91ffff00000
+R13: 0000000000008000 R14: 0000000000000000 R15: ffff88821fffd100
+FS:  00000000011a7880(0000) GS:ffff8880ae900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffff91ffff00000 CR3: 00000000a94ad000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
 ---
- .../selftests/bpf/prog_tests/skeleton.c       | 47 +++++++++++++++++++
- .../selftests/bpf/progs/test_skeleton.c       | 36 ++++++++++++++
- 2 files changed, 83 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/skeleton.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_skeleton.c
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/skeleton.c b/tools/testing/selftests/bpf/prog_tests/skeleton.c
-new file mode 100644
-index 000000000000..d65a0203e1df
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/skeleton.c
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+
-+struct s {
-+	int a;
-+	long long b;
-+} __attribute__((packed));
-+
-+#include "test_skeleton.skel.h"
-+
-+BPF_EMBED_OBJ(skeleton, "test_skeleton.o");
-+
-+void test_skeleton(void)
-+{
-+	int duration = 0, err;
-+	struct test_skeleton* skel;
-+	struct test_skeleton__bss *bss;
-+
-+	skel = test_skeleton__open_and_load(&skeleton_embed);
-+	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
-+		return;
-+
-+	bss = skel->bss;
-+	bss->in1 = 1;
-+	bss->in2 = 2;
-+	bss->in3 = 3;
-+	bss->in4 = 4;
-+	bss->in5.a = 5;
-+	bss->in5.b = 6;
-+
-+	err = test_skeleton__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	/* trigger tracepoint */
-+	usleep(1);
-+
-+	CHECK(bss->out1 != 1, "res1", "got %d != exp %d\n", bss->out1, 1);
-+	CHECK(bss->out2 != 2, "res2", "got %lld != exp %d\n", bss->out2, 2);
-+	CHECK(bss->out3 != 3, "res3", "got %d != exp %d\n", (int)bss->out3, 3);
-+	CHECK(bss->out4 != 4, "res4", "got %lld != exp %d\n", bss->out4, 4);
-+	CHECK(bss->out5.a != 5, "res5", "got %d != exp %d\n", bss->out5.a, 5);
-+	CHECK(bss->out5.b != 6, "res6", "got %lld != exp %d\n", bss->out5.b, 6);
-+
-+cleanup:
-+	test_skeleton__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_skeleton.c b/tools/testing/selftests/bpf/progs/test_skeleton.c
-new file mode 100644
-index 000000000000..303a841c4d1c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_skeleton.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2017 Facebook
-+
-+#include <linux/bpf.h>
-+#include "bpf_helpers.h"
-+
-+struct s {
-+	int a;
-+	long long b;
-+} __attribute__((packed));
-+
-+int in1 = 0;
-+long long in2 = 0;
-+char in3 = '\0';
-+long long in4 __attribute__((aligned(64))) = 0;
-+struct s in5 = {};
-+
-+long long out2 = 0;
-+struct s out5 = {};
-+char out3 = 0;
-+long long out4 = 0;
-+int out1 = 0;
-+
-+
-+SEC("raw_tp/sys_enter")
-+int handler(const void *ctx)
-+{
-+	out1 = in1;
-+	out2 = in2;
-+	out3 = in3;
-+	out4 = in4;
-+	out5 = in5;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.17.1
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
