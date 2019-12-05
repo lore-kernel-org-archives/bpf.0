@@ -7,94 +7,75 @@ X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
 	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9912C43603
-	for <bpf@archiver.kernel.org>; Thu,  5 Dec 2019 01:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1ACBC43603
+	for <bpf@archiver.kernel.org>; Thu,  5 Dec 2019 01:57:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B05D620659
-	for <bpf@archiver.kernel.org>; Thu,  5 Dec 2019 01:55:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD83820659
+	for <bpf@archiver.kernel.org>; Thu,  5 Dec 2019 01:57:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EXOBckuU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QOerjfOB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728611AbfLEBzK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Dec 2019 20:55:10 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:38451 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728132AbfLEBzK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Dec 2019 20:55:10 -0500
-Received: by mail-lf1-f66.google.com with SMTP id r14so1169226lfm.5;
-        Wed, 04 Dec 2019 17:55:08 -0800 (PST)
+        id S1728393AbfLEB53 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Dec 2019 20:57:29 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:35626 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728132AbfLEB52 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Dec 2019 20:57:28 -0500
+Received: by mail-lf1-f67.google.com with SMTP id 15so1182854lfr.2;
+        Wed, 04 Dec 2019 17:57:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AKzXWEwIRz1LZ9hdxnkmpyoCOKiovqujudmWGgHLWno=;
-        b=EXOBckuU5kNuTa4VMjXcag2IBkksmjNBS5i/XX1nFeFr0Nu29yu7XXgnNBg2SN2DP2
-         3khVQaMQciRJy0g54UrR1MHldc4zUJ9iHttOpP4+ldFO6ywAHt9A+jDqtRJB4K1h9Wbi
-         HFSdSCAfX/Qowydudrrd5XP0nAv6fIriO0EP8GylyuLmXNR0bJ39Vj3Lm+JGzX+Sf985
-         TsGjFsyxkzQNZcdEwQLsj7+W9Sc7nFiq4ATqxRh0HQfhOSfdPQCSeMw457slFnvs+DgC
-         KKogLuVCwZwuSRVq9QuIJiL0gllButxOWuE2+z8ZFwfZ8nKNB6e6t8yTxoyYvvw7d1JF
-         B+9w==
+        bh=wB2iKdYbnrvcS7iCPzGVqbYFHk5+Z6aAqzKuHWp0eu8=;
+        b=QOerjfOBw920PTvSrAaWcYuQCXa7uLj+5AqqYhyO1HdOJR5LgXVWG4AD1gWChIrkXX
+         bytaKReLnpz5SVBmGP3yp+ttrDeN2p2gXpKcgIplYhgQTzu8FLYjEUCUbebWweXknbDv
+         kjNXOoWekDHSZmgHOHdOLAUD6vDbG/ejhcvagQWO9GtF/iLK7HkeTzO6QI/bxcXzZcI/
+         KPQOByG3Sm3RabPF6HKkPfWrEuwQ7QB8vsTLJGzOnIU06djimvhmmP+4usTVqBWKYuFv
+         0H107AtG3zdGzJrE8+91U9M0PWBHt7vleuWlkuLv8gmG/Hor4BQ8YKGPMO4lA55vsSdF
+         VRbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AKzXWEwIRz1LZ9hdxnkmpyoCOKiovqujudmWGgHLWno=;
-        b=ftSVuSemSnTVS9gH3R725Tp27BiM9ZxFI6nNlVcG8JA5JisQtw/ETh8ufnNwDNkife
-         uI84W3UAxao4GIKPI5okkywWK4C9OJKSL4Lxu7MQrWOAwm1noMv2BLTslBmy6iFp2/Ra
-         1kImqtzPjztBXF0ZrnhjE3aSl9rcJegE3beCUM4FzocUvROfOUyjHZc4xCFw/xuUjxj+
-         CwYzh+UsGM4Bz5De9T0ZP7r5CDVbNLmofS5f/CNHAfHLJ1PhFhhTaorEnRJlXBQjIk6a
-         25vS8jwCxGJHTHXoBFIUApcIGZUbUzLlbKeSyxgUzyxzsxQDkdEzIHXgI2U04vC2x6wk
-         jGNw==
-X-Gm-Message-State: APjAAAVXrteKuMmuF2T3MCmogGOUPwdrmq68/WVxJcZH0XpcTO4zn/VW
-        9grswNdNEDJ5kzclYOiWoB0rnLgS6l4jNT3CpwM=
-X-Google-Smtp-Source: APXvYqxcGnjlYV2RmqsXhOVUSQ/ffzUTUotg/9KcV8TxrwYB/t/52kqshlOu0ITq+2J3OcM3N9sjrW47s64jPK1UKZc=
-X-Received: by 2002:ac2:47ec:: with SMTP id b12mr3596318lfp.162.1575510907616;
- Wed, 04 Dec 2019 17:55:07 -0800 (PST)
+        bh=wB2iKdYbnrvcS7iCPzGVqbYFHk5+Z6aAqzKuHWp0eu8=;
+        b=RYzcQ4MKTkcvbAZ1PuFx2bW70sMgST32W+RuB3cqDs3YWa2N4duLLMJshRn4rqeoKy
+         dNv7kn6YWB3eNxBD5SNr5evIi7kTBpuIEX8tAi08jpI7IY7hb2rVInsLFyyqwINyTFx3
+         Dk9KieyKyKuE8m+0JLtIBFe3wG16ntuS1Aqo72I1TeCWpdveCQrfn4Gjz/WJQa2Qaxqv
+         71jhCpSBYZ9/FPRr9uoKr9wcMO52JlZi61tDVgguTs8DUAbbuqLuK/cHI3rnqB2pTAt/
+         ejO1Rra+0mc3NUmYETggKhwx6Z1DeZfrCzc0PDkJ/3fsDBcbmOh4V4gM6TdtyYZ2000F
+         e0Jw==
+X-Gm-Message-State: APjAAAU3Q516/jHkzOVXv1uISbBtDLmA5wlgJ8DT9BueknkgnkMV1PYI
+        VG+2HEElApeqlGXKpf/JlrR3NFVvthJgmwHRJmU=
+X-Google-Smtp-Source: APXvYqyOmdyQpRDOPWWb8nK3TIfxuvdAjbsqj+BxFanqZWYxvN8PXQgEQc3E6GkELkkOZDzboQb9hUbnD/dlAb8ICok=
+X-Received: by 2002:a19:9149:: with SMTP id y9mr3946061lfj.15.1575511046634;
+ Wed, 04 Dec 2019 17:57:26 -0800 (PST)
 MIME-Version: 1.0
-References: <157529025128.29832.5953245340679936909.stgit@firesoul>
-In-Reply-To: <157529025128.29832.5953245340679936909.stgit@firesoul>
+References: <20191202200143.250793-1-sdf@google.com>
+In-Reply-To: <20191202200143.250793-1-sdf@google.com>
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 4 Dec 2019 17:54:56 -0800
-Message-ID: <CAADnVQKBouDBQ-3FHJNcLHGoZL5STETw5caiujWNTrwfogEoAA@mail.gmail.com>
-Subject: Re: [bpf PATCH] samples/bpf: fix broken xdp_rxq_info due to map order assumptions
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Network Development <netdev@vger.kernel.org>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        "Daniel T. Lee" <danieltimlee@gmail.com>
+Date:   Wed, 4 Dec 2019 17:57:15 -0800
+Message-ID: <CAADnVQKMW0v6dxQ3DN6CcyDFRCE2cGC-ha-Ab0wTtv5qaXgk1Q@mail.gmail.com>
+Subject: Re: [PATCH bpf] selftests/bpf: don't hard-code root cgroup id
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Dec 2, 2019 at 4:37 AM Jesper Dangaard Brouer <brouer@redhat.com> wrote:
+On Mon, Dec 2, 2019 at 12:01 PM Stanislav Fomichev <sdf@google.com> wrote:
 >
-> In the days of using bpf_load.c the order in which the 'maps' sections
-> were defines in BPF side (*_kern.c) file, were used by userspace side
-> to identify the map via using the map order as an index. In effect the
-> order-index is created based on the order the maps sections are stored
-> in the ELF-object file, by the LLVM compiler.
+> Commit 40430452fd5d ("kernfs: use 64bit inos if ino_t is 64bit") changed
+> the way cgroup ids are exposed to the userspace. Instead of assuming
+> fixed root id, let's query it.
 >
-> This have also carried over in libbpf via API bpf_map__next(NULL, obj)
-> to extract maps in the order libbpf parsed the ELF-object file.
->
-> When BTF based maps were introduced a new section type ".maps" were
-> created. I found that the LLVM compiler doesn't create the ".maps"
-> sections in the order they are defined in the C-file. The order in the
-> ELF file is based on the order the map pointer is referenced in the code.
->
-> This combination of changes lead to xdp_rxq_info mixing up the map
-> file-descriptors in userspace, resulting in very broken behaviour, but
-> without warning the user.
->
-> This patch fix issue by instead using bpf_object__find_map_by_name()
-> to find maps via their names. (Note, this is the ELF name, which can
-> be longer than the name the kernel retains).
->
-> Fixes: be5bca44aa6b ("samples: bpf: convert some XDP samples from bpf_load to libbpf")
-> Fixes: 451d1dc886b5 ("samples: bpf: update map definition to new syntax BTF-defined map")
-> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> Fixes: 40430452fd5d ("kernfs: use 64bit inos if ino_t is 64bit")
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
 
-Applied. Thanks
+Applied. Thanks for the fix!
