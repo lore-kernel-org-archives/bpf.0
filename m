@@ -2,136 +2,81 @@ Return-Path: <SRS0=13Dn=Z3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E61CC43603
-	for <bpf@archiver.kernel.org>; Thu,  5 Dec 2019 01:25:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FB10C43603
+	for <bpf@archiver.kernel.org>; Thu,  5 Dec 2019 01:55:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 182492073B
-	for <bpf@archiver.kernel.org>; Thu,  5 Dec 2019 01:25:37 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="phmsT3F4"
+	by mail.kernel.org (Postfix) with ESMTP id 6FB9320659
+	for <bpf@archiver.kernel.org>; Thu,  5 Dec 2019 01:55:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728419AbfLEBZb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Dec 2019 20:25:31 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:34201 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728100AbfLEBZa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Dec 2019 20:25:30 -0500
-Received: by mail-pg1-f195.google.com with SMTP id r11so771201pgf.1;
-        Wed, 04 Dec 2019 17:25:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wXoUdUAHKBaISydzla24j9JfZxsUNvCsquV32FT8FOQ=;
-        b=phmsT3F4dF0M14EPNcg1am1sOwSFkUyx2bfTW7oyKgyBs6tMSSUqmQybaTa+SxoT8l
-         4R7XUIrwJohdQmYQsh0vmaFM1ddr0vjA2GinZKjqo8H2LshXlCu7S6RFyds0WDMO0d1g
-         z/+OlyBHFg5S7gyP932sjS2IOw/LCWfFvWNuV8p+BIJDXXUjiPOhSTOGbeneW4bhk/es
-         dvMFkLXqByYlBcuhwT7w8dIRrfyd/mpgGc6f6gfgzhtW0Ukscvu/KvTq82qV1VBQ+5VI
-         uO15mPsEf9USZPfc+63kqOnecNcfz9WZoeIEgHz+N9keViErJuJwSU5IE7Ej4lYHF1z7
-         PAJw==
+        id S1728470AbfLEBzB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Dec 2019 20:55:01 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:40915 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728321AbfLEBzB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Dec 2019 20:55:01 -0500
+Received: by mail-il1-f200.google.com with SMTP id s10so1307377ilh.7
+        for <bpf@vger.kernel.org>; Wed, 04 Dec 2019 17:55:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wXoUdUAHKBaISydzla24j9JfZxsUNvCsquV32FT8FOQ=;
-        b=dZVZgrGDEzjxfYYQo2xML8zb+ixwy9jzjr+fKFTO0JZMCKR0+RprKNpLLIXuVbguru
-         eAz/Km0VQqS8NGkqkrLN62NevfFXI3VkUfst1AQFDyIdbxKfK8yPOgL70Poxvll2As6r
-         eCbKNaJw0fF/NNdb9N4t38E8wrn3ArP0PZJmab6IX0kThHhhe6u2XZ0XxGtRSTjM1s0l
-         dscO598TYACn8sLi96gEEk3NLKMWrqLHlvQZ7NisO8v4Zch6ge5gVofRqm3fQOA2VIln
-         CI6N0QzdnYKrOuozOLo4TWxJvCpXItYJT3et0MSHAAKsQ9Pz4HU2kVUxUaFREL9DDLKd
-         y07A==
-X-Gm-Message-State: APjAAAW5t1GztWdmepr/qQdfw2rLMzqdAZg86Cv+tflelY3Nsa7JXnXH
-        IiOcFnnZWPcjSd7zi7Id7Ik=
-X-Google-Smtp-Source: APXvYqzmIQuYJ2DE6q81jtTR+ElGMC0qA/OyVhOQZZGU/rOaWupztTcnh3V+XBhGZqkkjdMUYLQDwQ==
-X-Received: by 2002:a63:5657:: with SMTP id g23mr6554594pgm.452.1575509129665;
-        Wed, 04 Dec 2019 17:25:29 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::f9fe])
-        by smtp.gmail.com with ESMTPSA id c68sm9907694pfc.156.2019.12.04.17.25.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Dec 2019 17:25:28 -0800 (PST)
-Date:   Wed, 4 Dec 2019 17:25:26 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     David Miller <davem@davemloft.net>
-Cc:     andrii.nakryiko@gmail.com, toke@redhat.com, jolsa@kernel.org,
-        acme@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, mingo@kernel.org,
-        namhyung@kernel.org, alexander.shishkin@linux.intel.com,
-        a.p.zijlstra@chello.nl, mpetlan@redhat.com, brouer@redhat.com,
-        daniel@iogearbox.net, kafai@fb.com, songliubraving@fb.com,
-        yhs@fb.com, andriin@fb.com, quentin.monnet@netronome.com
-Subject: Re: [PATCHv4 0/6] perf/bpftool: Allow to link libbpf dynamically
-Message-ID: <20191205012525.lpp5ilieupftpqrd@ast-mbp.dhcp.thefacebook.com>
-References: <20191204135405.3ffb9ad6@cakuba.netronome.com>
- <20191204233948.opvlopjkxe5o66lr@ast-mbp.dhcp.thefacebook.com>
- <20191204162348.49be5f1b@cakuba.netronome.com>
- <20191204.162929.2216543178968689201.davem@davemloft.net>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=4FLc7BuR7w3spPKHAoaSawNb5C2SfyMpTNFxv+oG8mk=;
+        b=YPeVC27Gup9Vo7SI73Hk06ITM2F1OdnWqwjteFBMmgZuIIylQZjT+pJy+yHCd3KP+1
+         3Jxqg0f1r+pNw5p/TbI2Ac4zk+Fr+6dEDnkzeiY+7jT0hxX1XgikT4cE4BLwJFTCflXY
+         b4/s+g28sFCjk8+nSauI8DIFgRQUer5Tt77j+kS9XnPXEz+AJ5YOQrx41scJw051/YPJ
+         /6ZI/dTYoi5xGMHKOpiLQrfB0tPGdgoDV4/F+1AmIU13JWscXzyA+rxXdQhlCmisUmsb
+         nATawlkE0nduW5hbukDYlZfrG+eXnnxJM9JOwsGyei//V+qEaSnkOu7OEOIMfJHjT84G
+         N+zw==
+X-Gm-Message-State: APjAAAXy7OV3Lhe0CMU89lpKlPOoycI+VxIPUfbpoghxOUbu5bBKnnRB
+        n+zbz2ur4pxrXPrQpun680B3jk7t5p4iAYkpOTYJgTtyf9HY
+X-Google-Smtp-Source: APXvYqzjP5/pIC/q5gNc7zKo2jBv47pzxF64WSrgioGICxedl/zZ1B9K/JruZLRezQwWnrssF3NgLpBc60Xng6Z/+9lTWhY+cHrY
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191204.162929.2216543178968689201.davem@davemloft.net>
-User-Agent: NeoMutt/20180223
+X-Received: by 2002:a92:4818:: with SMTP id v24mr6139534ila.96.1575510900571;
+ Wed, 04 Dec 2019 17:55:00 -0800 (PST)
+Date:   Wed, 04 Dec 2019 17:55:00 -0800
+In-Reply-To: <0000000000008399d40598d8a34d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000918b470598eb37b7@google.com>
+Subject: Re: KASAN: vmalloc-out-of-bounds Write in pcpu_alloc
+From:   syzbot <syzbot+59b7daa4315e07a994f1@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, andriin@fb.com, aryabinin@virtuozzo.com,
+        ast@kernel.org, bpf@vger.kernel.org, christophe.leroy@c-s.fr,
+        daniel@iogearbox.net, dja@axtens.net, dvyukov@google.com,
+        glider@google.com, gor@linux.ibm.com, kafai@fb.com,
+        linux-kernel@vger.kernel.org, mark.rutland@arm.com,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
+        yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Dec 04, 2019 at 04:29:29PM -0800, David Miller wrote:
-> From: Jakub Kicinski <jakub.kicinski@netronome.com>
-> Date: Wed, 4 Dec 2019 16:23:48 -0800
-> 
-> > Jokes aside, you may need to provide some reasoning on this one..
-> > The recommendation for packaging libbpf from GitHub never had any 
-> > clear justification either AFAICR.
-> > 
-> > I honestly don't see why location matters. bpftool started out on GitHub
-> > but we moved it into the tree for... ease of packaging/distribution(?!)
-> > Now it's handy to have it in the tree to reuse the uapi headers.
-> > 
-> > As much as I don't care if we move it (back) out of the tree - having
-> > two copies makes no sense to me. As does having it in the libbpf repo.
-> > The sync effort is not warranted. User confusion is not warranted.
-> 
-> Part of this story has to do with how bug fixes propagate via bpf-next
-> instead of the bpf tree, as I understand it.
-> 
-> But yeah it would be nice to have a clear documentation on all of the
-> reasoning.
-> 
-> On the distro side, people seem to not want to use the separate repo.
-> If you're supporting enterprise customers you don't just sync with
-> upstream, you cherry pick.  When cherry picking gets too painful, you
-> sync with upstream possibly eliding upstream new features you don't
-> want to appear in your supported product yet.
-> 
-> I agree with tying bpftool and libbpf into the _resulting_ binary
-> distro package, but I'm not totally convinced about separating them
-> out of the kernel source tree.
+syzbot has bisected this bug to:
 
-Looks like there is a confusion here.
-I'm not proposing to move bpftool out of kernel tree.
-The kernel+libbpf+bpftool+selftests already come as single patch set.
-bpftool has to stay in the kernel tree otherwise things like skeleton
-patchset won't be possible to accomplish without a lot of coordination
-between different trees and propagation delays.
+commit 0609ae011deb41c9629b7f5fd626dfa1ac9d16b0
+Author: Daniel Axtens <dja@axtens.net>
+Date:   Sun Dec 1 01:55:00 2019 +0000
 
-I'm proposing to tweak github/libbpf sync script to sync bpftool
-sources from kernel into github, so both libbpf and bpftool can be
-tested and packaged together.
-People are working on adding proper CI to github/libbpf.
-bpftool testing will automatically get more mileage out of that effort.
+     x86/kasan: support KASAN_VMALLOC
 
-github/libbpf is self contained. It should be built and tested
-on many different kernels and build environments (like any user
-space package should be). That's an important goal of CI.
-When bpftool is part of github/libbpf it will get the same treatment.
-I see only advantages and not a single disadvantage of building,
-testing, packaging bpftool out of github/libbpf.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10c70f36e00000
+start commit:   b3c424eb sch_cake: Add missing NLA policy entry TCA_CAKE_S..
+git tree:       bpf
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=12c70f36e00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14c70f36e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7d8ab2e0e09c2a82
+dashboard link: https://syzkaller.appspot.com/bug?extid=59b7daa4315e07a994f1
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=140df641e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=147dcc2ae00000
 
-To support stable libbpf+bpftool releases we can branch in github and push
-fixes into branches. Same CI can test master and stable branches.
+Reported-by: syzbot+59b7daa4315e07a994f1@syzkaller.appspotmail.com
+Fixes: 0609ae011deb ("x86/kasan: support KASAN_VMALLOC")
 
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
