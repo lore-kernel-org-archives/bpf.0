@@ -2,291 +2,264 @@ Return-Path: <SRS0=13Dn=Z3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3412FC2BD09
-	for <bpf@archiver.kernel.org>; Thu,  5 Dec 2019 15:51:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8F07C43603
+	for <bpf@archiver.kernel.org>; Thu,  5 Dec 2019 17:36:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 006C0206DB
-	for <bpf@archiver.kernel.org>; Thu,  5 Dec 2019 15:51:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0B612245C
+	for <bpf@archiver.kernel.org>; Thu,  5 Dec 2019 17:36:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=Mellanox.com header.i=@Mellanox.com header.b="QJyhFQl8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QCdwHy25"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729817AbfLEPvY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Dec 2019 10:51:24 -0500
-Received: from mail-eopbgr130085.outbound.protection.outlook.com ([40.107.13.85]:36854
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729830AbfLEPvX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 5 Dec 2019 10:51:23 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kp4MESk5GOn1KfMT/a2bb2LLWGA+m9AJeleKH/HZoAtw8M0iDKKIW5muVYFIHW+za1ckC9r31ekh2RiSPsPMGiKEbKRegTxAuLA4uwzv6AmdmeWjDGPX293iuhDNp6xQVIe4W7ldfWhqHHZE9Cjy+VTLz7JDuR43RVS5frUMGHasWgSQDoJeIbbZ+qVFnjJWRko+KhaygrhxLLPBeHx7qpx83GfwDUzmOASZCIZiwcz9wTj5CwPdlcvrcOtsL0EVn8EQYgsbgoJPTEdtZhll9zJG/e+S6VMGG7OxbC8zWmvmKE298OOkLEnwNDTFBk37741NwrVedWgSOLTSXjXWVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rRuwKOFMmYSodP+B1zZ0c4GlihNPibah6waj40tnEb0=;
- b=A/cICxH5SRxMdW61RJYgMezRbN90HCEMT88yub2h6djsCzAOqHK4EXg8y5iN/nLqtvqMDmXJ3sMTtWkOEs9RmJ2JzV9fZ/PKabS3/sO8PPMFfZ3lXNsk7r/iDuOlCcXHVidmzhZ5PtQMi1BMjRQ4qQAhqYdbVWrcQVwCAJhtRmLwOtFeXXkFGYq7Bl7A5LPQfyHTjksxQIhAoODfLL7jNKtnmbTqPrFZlJmn8sM3WSknbV/BUmie5hXJrBK2H0wWt7Gan2pEgCMkI/ZRGKceipm/ErG1jZeCD7WtmLeiBRpqOe7+grq6JVQsxPXVrgtHHdFMNCmZB5LVlGrmJkWy3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rRuwKOFMmYSodP+B1zZ0c4GlihNPibah6waj40tnEb0=;
- b=QJyhFQl8TsatcmWEdrywazg62DTZnLv8TMNI0ladoUhjIXmrgsV/Hu77dgVe5udZfoUgy+ZGZ4qF9M/f3s2FJUNjDBqV1pIrDlwNzIcJkCjpnogUvBb8HtuB2q1CFYsVa11DiyzNyjDIvrz2LVXpmNjZx8pM3bLvVUFk8y0o9zU=
-Received: from AM0PR05MB5875.eurprd05.prod.outlook.com (20.178.119.159) by
- AM0PR05MB5988.eurprd05.prod.outlook.com (20.178.117.78) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2495.18; Thu, 5 Dec 2019 15:51:14 +0000
-Received: from AM0PR05MB5875.eurprd05.prod.outlook.com
- ([fe80::dca5:7e63:8242:685e]) by AM0PR05MB5875.eurprd05.prod.outlook.com
- ([fe80::dca5:7e63:8242:685e%7]) with mapi id 15.20.2516.013; Thu, 5 Dec 2019
- 15:51:14 +0000
-From:   Maxim Mikityanskiy <maximmi@mellanox.com>
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@mellanox.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Maxim Mikityanskiy <maximmi@mellanox.com>
-Subject: [PATCH bpf 2/4] net/mlx5e: Fix concurrency issues between config flow
- and XSK
-Thread-Topic: [PATCH bpf 2/4] net/mlx5e: Fix concurrency issues between config
- flow and XSK
-Thread-Index: AQHVq4PS6Uynt1LTbkm/KSdAo9x1xA==
-Date:   Thu, 5 Dec 2019 15:51:13 +0000
-Message-ID: <20191205155028.28854-3-maximmi@mellanox.com>
-References: <20191205155028.28854-1-maximmi@mellanox.com>
-In-Reply-To: <20191205155028.28854-1-maximmi@mellanox.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: AM0PR06CA0044.eurprd06.prod.outlook.com
- (2603:10a6:208:aa::21) To AM0PR05MB5875.eurprd05.prod.outlook.com
- (2603:10a6:208:12d::31)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=maximmi@mellanox.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.20.1
-x-originating-ip: [94.188.199.18]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 446d4fbf-445e-4bb1-a5f4-08d7799af4f8
-x-ms-traffictypediagnostic: AM0PR05MB5988:|AM0PR05MB5988:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR05MB598816DED076585640780F0ED15C0@AM0PR05MB5988.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:538;
-x-forefront-prvs: 02426D11FE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(366004)(136003)(39860400002)(396003)(199004)(189003)(71200400001)(71190400001)(52116002)(305945005)(7416002)(186003)(66476007)(54906003)(99286004)(110136005)(14444005)(26005)(316002)(4326008)(6512007)(8676002)(6506007)(1076003)(8936002)(6486002)(102836004)(76176011)(107886003)(50226002)(14454004)(81166006)(2616005)(36756003)(11346002)(25786009)(81156014)(5660300002)(66946007)(66446008)(64756008)(66556008)(2906002)(478600001)(86362001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR05MB5988;H:AM0PR05MB5875.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: goAXb1whxJ1vdgdwYGt2dKefcIi0A4k+qb9QOinbQYN5TuZOlVkmNcLnjMUlfNOkF2IVHf1dPFEePPNe5xr+1LCJ8hzepe5pr1Rx0UhBuGCZ8PbSfgXNbTMEncBQAHV3i6q3HvDVBkYFXfTd4vj6Z+uHId013IjtiqeFEUveYhknOizuRFiYXkAPnMHV9mWfymsiKdiXhpJd27T5oIK0EdQA3mG/l3f+IPMOrcniVsA4h+Nxhq/fBN2ec504GfRYCKXPVFPzg4/+9MwfmF6dsqSWbxogENjSWpahUB2yV5aWK0r2gTUg+dZMIfYB86mStY+fHKCxLbgMRvxljiRZczmnxP5tPLBMIrVrixqs3tvVj6fNcQjWU6Npul2e2wrQRZMXzp3jkDjbyf0wkybJCQbyQ/rdfVtRuyBGnt43TODFqMD1GVd3dffmlInNc+Js
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1729994AbfLERgT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Dec 2019 12:36:19 -0500
+Received: from mail-il1-f193.google.com ([209.85.166.193]:42469 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729598AbfLERgT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 5 Dec 2019 12:36:19 -0500
+Received: by mail-il1-f193.google.com with SMTP id f6so3701641ilh.9;
+        Thu, 05 Dec 2019 09:36:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9r8Ip7gLNufbdlkcj1bRufSEaZRtnnkOiqEWEK5Wkj8=;
+        b=QCdwHy252jTHlEOoGAiFgRwtHBjRVwQisq6kUBJyTvPk5QVcjMFshT46Ntm8v6YBpI
+         ncm1/d8cHPT30UCzddCCwbs5YayBYJ6f4tql81V2ClPYPt/axUGjfrnhFkONrgAMVED7
+         DgtR6n5rKmipPHEvsmwdpRiF3/HtcV27nmxpi6KcjudUU/RNMsPf4bIdLMSAYeO4ZMsc
+         /YS6dsNXVPHE3tNIP3VtzY4e8jiSjXpTjFqRejAhN+wEq5BvyV+63NkFMjs0ccf1egfS
+         UN+mfLPzTuNqfUYMMFaye/gN/c0xRkVjJuSrN5dF9NbVSEWwRaBXBz7ngmBjeRvkKg/Q
+         sv/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9r8Ip7gLNufbdlkcj1bRufSEaZRtnnkOiqEWEK5Wkj8=;
+        b=D+jgcMpc60NFMBe62W8fhi5d6ADPuaQ+Upt2xFrCQEmzaTph1bwONzdf8bmtU08Gbk
+         l8UPbyeGpgW0wUuA8Ya0xvEZuOTAmi8jsaJzQCLFgyDjQFOrnjZTBVqgTGnb3HvPgWSs
+         QzAzOVIcVpMEOc9y6QC+TsnC6OdX3pkKfKQBXMtSFo+gChQuHgVwwfF7ptQpZ5OdCSXQ
+         2Z32DrWUqZsb77b+tUyWHTXqfHJDwJGM4CV7r0VfDowcla0LOr92csZehKdVr5i9C4d9
+         Pq3MGE+0hjcoa0TLkQ+teC23VDvyj0p8xbyYzAekI2jZM+QCoT+OLrBSq433vkJasl6G
+         LJpQ==
+X-Gm-Message-State: APjAAAWRZKBiEeUJmvrXxFEwY/ysqQF27oxcqXxVwHQSb/Kt3Lms8VXR
+        pDTxirnTyt2+V+fdaaTJVmMkr/fHqymIGVUnXHI=
+X-Google-Smtp-Source: APXvYqwuoxBs+Kc9r4//DIZcI+raCTJ/awkEH6bJTBDCd17n+wQ4rm9hVFwKGCJAhpCes22VivYOUXm0UBgh0VOOHUU=
+X-Received: by 2002:a92:4504:: with SMTP id s4mr9459210ila.116.1575567378097;
+ Thu, 05 Dec 2019 09:36:18 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 446d4fbf-445e-4bb1-a5f4-08d7799af4f8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Dec 2019 15:51:13.9784
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ksd4x5EI+7pvKm3HdNcriNOSKQa5wmQF9LDD+gnniQZXfNWmNz62udBOl8zJGYUu1Bje9tTwDVq18N09sBvLxA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR05MB5988
+References: <E53E0693-1C3A-4B47-B205-DC8E5DAF3619@redhat.com>
+ <CAADnVQKkLtG-QCZwxx-Bpz8-goh-_mSTtUSzpb_oTv9a-qLizg@mail.gmail.com>
+ <3AC9D2B7-9D2F-4286-80A2-1721B51B62CF@redhat.com> <CAADnVQJKSnoMVpQ3F86zBhFyo8WQ0vi65Z4QDtopLRrpK4yB8Q@mail.gmail.com>
+ <4BBF99E4-9554-44F7-8505-D4B8416554C4@redhat.com> <d588c894-a4e0-8b99-72a9-4429b27091df@fb.com>
+ <056E9F5E-4FDD-4636-A43A-EC98A06E84D3@redhat.com> <aa59532b-34a9-7887-f550-ef2859f0c9f1@fb.com>
+ <B7E0062E-37ED-46E6-AE64-EE3E2A0294EA@redhat.com> <7062345a-1060-89f6-0c02-eef2fe0d835a@fb.com>
+ <b8d80047-3bc1-5393-76a1-7517cb2b7280@fb.com> <E08A0006-E254-492C-92AB-408B58E456C0@redhat.com>
+ <F8CFD537-7907-4259-9C91-4649F799216B@redhat.com>
+In-Reply-To: <F8CFD537-7907-4259-9C91-4649F799216B@redhat.com>
+From:   Y Song <ys114321@gmail.com>
+Date:   Thu, 5 Dec 2019 09:35:42 -0800
+Message-ID: <CAH3MdRXr+3mUfrd8MPH-mDdNwD1szXRhz07s2C4dVQ0EkzDaAg@mail.gmail.com>
+Subject: Re: Trying the bpf trace a bpf xdp program
+To:     Eelco Chaudron <echaudro@redhat.com>
+Cc:     Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Xdp <xdp-newbies@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-After disabling resources necessary for XSK (the XDP program, channels,
-XSK queues), use synchronize_rcu to wait until the XSK wakeup function
-finishes, before freeing the resources.
+On Thu, Dec 5, 2019 at 4:41 AM Eelco Chaudron <echaudro@redhat.com> wrote:
+>
+>
+>
+> On 4 Dec 2019, at 19:52, Eelco Chaudron wrote:
+>
+> > On 4 Dec 2019, at 19:01, Yonghong Song wrote:
+> >
+> > <SNIP>
+> >
+> >>>> I=E2=80=99ve put my code on GitHub, maybe it=E2=80=99s just somethin=
+g stupid=E2=80=A6
+> >>
+> >> Thanks for the test case. This indeed a kernel bug.
+> >> The following change fixed the issue:
+> >>
+> >>
+> >> -bash-4.4$ git diff
+> >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> >> index a0482e1c4a77..034ef81f935b 100644
+> >> --- a/kernel/bpf/verifier.c
+> >> +++ b/kernel/bpf/verifier.c
+> >> @@ -9636,7 +9636,10 @@ static int check_attach_btf_id(struct
+> >> bpf_verifier_env *env)
+> >>                                  ret =3D -EINVAL;
+> >>                                  goto out;
+> >>                          }
+> >> -                       addr =3D (long)
+> >> tgt_prog->aux->func[subprog]->bpf_func;
+> >> +                       if (subprog =3D=3D 0)
+> >> +                               addr =3D (long) tgt_prog->bpf_func;
+> >> +                       else
+> >> +                               addr =3D (long)
+> >> tgt_prog->aux->func[subprog]->bpf_func;
+> >>                  } else {
+> >>                          addr =3D kallsyms_lookup_name(tname);
+> >>                          if (!addr) {
+> >> -bash-4.4$
+> >>
+> >> The reason is for a bpf program without any additional subprogram
+> >> (callees), tgt_prog->aux->func is not populated and is a NULL
+> >> pointer,
+> >> so the access tgt_prog->aux->func[0]->bpf_func will segfault.
+> >>
+> >> With the above change, your test works properly.
+> >
+> > Thanks for the quick response, and as you mention the test passes with
+> > the patch above.
+> >
+> > I will continue my experiments later this week, and let you know if I
+> > run into any other problems.
+> >
+>
+> With the following program I get some access errors:
+>
+> #define bpf_debug(fmt, ...)                         \
+> {                                                   \
+>    char __fmt[] =3D fmt;                               \
+>    bpf_trace_printk(__fmt, sizeof(__fmt),            \
+>                     ##__VA_ARGS__);                  \
+> }
+>
+> BPF_TRACE_2("fexit/xdp_prog_simple", trace_on_exit,
+>              struct xdp_md *, xdp, int, ret)
+> {
+>    __u32 rx_queue;
+>
+>    __builtin_preserve_access_index(({
+>          rx_queue =3D xdp->rx_queue_index;
+>        }));
+>
+>    bpf_debug("fexit: queue =3D %u, ret =3D %d\n", rx_queue, ret);
+>
+>    return 0;
+> }
+>
+> I assume the XDP context has not been vetted?
+>
+> libbpf: -- BEGIN DUMP LOG ---
+> libbpf:
+> func#0 @0
+> BPF program ctx type is not a struct
+> Type info disagrees with actual arguments due to compiler optimizations
+> 0: R1=3Dctx(id=3D0,off=3D0,imm=3D0) R10=3Dfp0
+> ; BPF_TRACE_2("fexit/xdp_prog_simple", trace_on_exit,
+> 0: (b7) r2 =3D 16
+> 1: R1=3Dctx(id=3D0,off=3D0,imm=3D0) R2_w=3Dinv16 R10=3Dfp0
+> ; BPF_TRACE_2("fexit/xdp_prog_simple", trace_on_exit,
+> 1: (79) r3 =3D *(u64 *)(r1 +0)
+> 2: R1=3Dctx(id=3D0,off=3D0,imm=3D0) R2_w=3Dinv16
+> R3_w=3Dptr_xdp_buff(id=3D0,off=3D0,imm=3D0) R10=3Dfp0
+> 2: (0f) r3 +=3D r2
+> last_idx 2 first_idx 0
+> regs=3D4 stack=3D0 before 1: (79) r3 =3D *(u64 *)(r1 +0)
+> regs=3D4 stack=3D0 before 0: (b7) r2 =3D 16
+> 3: R1=3Dctx(id=3D0,off=3D0,imm=3D0) R2_w=3DinvP16
+> R3_w=3Dptr_xdp_buff(id=3D0,off=3D16,imm=3D0) R10=3Dfp0
+> ; rx_queue =3D xdp->rx_queue_index;
+> 3: (61) r3 =3D *(u32 *)(r3 +0)
+> cannot access ptr member data_meta with moff 16 in struct xdp_buff with
+> off 16 size 4
+> verification time 102 usec
+> stack depth 0
+> processed 4 insns (limit 1000000) max_states_per_insn 0 total_states 0
+> peak_states 0 mark_read 0
+> libbpf: -- END LOG --
+>
 
-Suspend XSK wakeups during switching channels. If the XDP program is
-being removed, synchronize_rcu before closing the old channels to allow
-XSK wakeup to complete.
+It is a little tricky. The below change can make verifier happy. I did
+not test it so not sure whether produces correct result or not.
 
-Signed-off-by: Maxim Mikityanskiy <maximmi@mellanox.com>
----
- drivers/net/ethernet/mellanox/mlx5/core/en.h  |  2 +-
- .../net/ethernet/mellanox/mlx5/core/en/xdp.h  | 22 ++++++++-----------
- .../mellanox/mlx5/core/en/xsk/setup.c         |  1 +
- .../ethernet/mellanox/mlx5/core/en/xsk/tx.c   |  2 +-
- .../net/ethernet/mellanox/mlx5/core/en_main.c | 19 +---------------
- 5 files changed, 13 insertions(+), 33 deletions(-)
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+struct xdp_rxq_info {
+        __u32 queue_index;
+} __attribute__((preserve_access_index));
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/eth=
-ernet/mellanox/mlx5/core/en.h
-index f1a7bc46f1c0..61084c3744ba 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -760,7 +760,7 @@ enum {
- 	MLX5E_STATE_OPENED,
- 	MLX5E_STATE_DESTROYING,
- 	MLX5E_STATE_XDP_TX_ENABLED,
--	MLX5E_STATE_XDP_OPEN,
-+	MLX5E_STATE_XDP_ACTIVE,
- };
-=20
- struct mlx5e_rqt {
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h b/drivers/net=
-/ethernet/mellanox/mlx5/core/en/xdp.h
-index 36ac1e3816b9..d7587f40ecae 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.h
-@@ -75,12 +75,18 @@ int mlx5e_xdp_xmit(struct net_device *dev, int n, struc=
-t xdp_frame **frames,
- static inline void mlx5e_xdp_tx_enable(struct mlx5e_priv *priv)
- {
- 	set_bit(MLX5E_STATE_XDP_TX_ENABLED, &priv->state);
-+
-+	if (priv->channels.params.xdp_prog)
-+		set_bit(MLX5E_STATE_XDP_ACTIVE, &priv->state);
- }
-=20
- static inline void mlx5e_xdp_tx_disable(struct mlx5e_priv *priv)
- {
-+	if (priv->channels.params.xdp_prog)
-+		clear_bit(MLX5E_STATE_XDP_ACTIVE, &priv->state);
-+
- 	clear_bit(MLX5E_STATE_XDP_TX_ENABLED, &priv->state);
--	/* let other device's napi(s) see our new state */
-+	/* Let other device's napi(s) and XSK wakeups see our new state. */
- 	synchronize_rcu();
- }
-=20
-@@ -89,19 +95,9 @@ static inline bool mlx5e_xdp_tx_is_enabled(struct mlx5e_=
-priv *priv)
- 	return test_bit(MLX5E_STATE_XDP_TX_ENABLED, &priv->state);
- }
-=20
--static inline void mlx5e_xdp_set_open(struct mlx5e_priv *priv)
--{
--	set_bit(MLX5E_STATE_XDP_OPEN, &priv->state);
--}
--
--static inline void mlx5e_xdp_set_closed(struct mlx5e_priv *priv)
--{
--	clear_bit(MLX5E_STATE_XDP_OPEN, &priv->state);
--}
--
--static inline bool mlx5e_xdp_is_open(struct mlx5e_priv *priv)
-+static inline bool mlx5e_xdp_is_active(struct mlx5e_priv *priv)
- {
--	return test_bit(MLX5E_STATE_XDP_OPEN, &priv->state);
-+	return test_bit(MLX5E_STATE_XDP_ACTIVE, &priv->state);
- }
-=20
- static inline void mlx5e_xmit_xdp_doorbell(struct mlx5e_xdpsq *sq)
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c b/drive=
-rs/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-index 631af8dee517..c28cbae42331 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-@@ -144,6 +144,7 @@ void mlx5e_close_xsk(struct mlx5e_channel *c)
- {
- 	clear_bit(MLX5E_CHANNEL_STATE_XSK, c->state);
- 	napi_synchronize(&c->napi);
-+	synchronize_rcu(); /* Sync with the XSK wakeup. */
-=20
- 	mlx5e_close_rq(&c->xskrq);
- 	mlx5e_close_cq(&c->xskrq.cq);
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c b/drivers/=
-net/ethernet/mellanox/mlx5/core/en/xsk/tx.c
-index 87827477d38c..fe2d596cb361 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c
-@@ -14,7 +14,7 @@ int mlx5e_xsk_wakeup(struct net_device *dev, u32 qid, u32=
- flags)
- 	struct mlx5e_channel *c;
- 	u16 ix;
-=20
--	if (unlikely(!mlx5e_xdp_is_open(priv)))
-+	if (unlikely(!mlx5e_xdp_is_active(priv)))
- 		return -ENETDOWN;
-=20
- 	if (unlikely(!mlx5e_qid_get_ch_if_in_group(params, qid, MLX5E_RQ_GROUP_XS=
-K, &ix)))
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/ne=
-t/ethernet/mellanox/mlx5/core/en_main.c
-index 09ed7f5f688b..fe1a42fa214b 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -3006,12 +3006,9 @@ void mlx5e_timestamp_init(struct mlx5e_priv *priv)
- int mlx5e_open_locked(struct net_device *netdev)
- {
- 	struct mlx5e_priv *priv =3D netdev_priv(netdev);
--	bool is_xdp =3D priv->channels.params.xdp_prog;
- 	int err;
-=20
- 	set_bit(MLX5E_STATE_OPENED, &priv->state);
--	if (is_xdp)
--		mlx5e_xdp_set_open(priv);
-=20
- 	err =3D mlx5e_open_channels(priv, &priv->channels);
- 	if (err)
-@@ -3026,8 +3023,6 @@ int mlx5e_open_locked(struct net_device *netdev)
- 	return 0;
-=20
- err_clear_state_opened_flag:
--	if (is_xdp)
--		mlx5e_xdp_set_closed(priv);
- 	clear_bit(MLX5E_STATE_OPENED, &priv->state);
- 	return err;
- }
-@@ -3059,8 +3054,6 @@ int mlx5e_close_locked(struct net_device *netdev)
- 	if (!test_bit(MLX5E_STATE_OPENED, &priv->state))
- 		return 0;
-=20
--	if (priv->channels.params.xdp_prog)
--		mlx5e_xdp_set_closed(priv);
- 	clear_bit(MLX5E_STATE_OPENED, &priv->state);
-=20
- 	netif_carrier_off(priv->netdev);
-@@ -4377,16 +4370,6 @@ static int mlx5e_xdp_allowed(struct mlx5e_priv *priv=
-, struct bpf_prog *prog)
- 	return 0;
- }
-=20
--static int mlx5e_xdp_update_state(struct mlx5e_priv *priv)
--{
--	if (priv->channels.params.xdp_prog)
--		mlx5e_xdp_set_open(priv);
--	else
--		mlx5e_xdp_set_closed(priv);
--
--	return 0;
--}
--
- static int mlx5e_xdp_set(struct net_device *netdev, struct bpf_prog *prog)
- {
- 	struct mlx5e_priv *priv =3D netdev_priv(netdev);
-@@ -4421,7 +4404,7 @@ static int mlx5e_xdp_set(struct net_device *netdev, s=
-truct bpf_prog *prog)
- 		mlx5e_set_rq_type(priv->mdev, &new_channels.params);
- 		old_prog =3D priv->channels.params.xdp_prog;
-=20
--		err =3D mlx5e_safe_switch_channels(priv, &new_channels, mlx5e_xdp_update=
-_state);
-+		err =3D mlx5e_safe_switch_channels(priv, &new_channels, NULL);
- 		if (err)
- 			goto unlock;
- 	} else {
---=20
-2.20.1
+struct xdp_buff {
+        struct xdp_rxq_info *rxq;
+} __attribute__((preserve_access_index));
 
+BPF_TRACE_2("fexit/xdp_prog_simple", trace_on_exit,
+            struct xdp_buff *, ctx, int, ret)
+{
+   __u32 rx_queue;
+
+   rx_queue =3D ctx->rxq->queue_index;
+   bpf_debug("fexit: queue =3D %u, ret =3D %d\n", rx_queue, ret);
+
+   return 0;
+}
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+In the above, I am using newly added clang attribute "__preserve_access_ind=
+ex"
+(in llvm-project trunk since Nov. 13) to make code
+a little bit cleaner. The old way as in selftests fexit_bpf2bpf.c
+should work too.
+
+Basically, the argument for fexit function should be types actually
+passing to the jited function.
+For user visible 'xdp_md`. the jited function will receive `xdp_buff`.
+The access for each field
+sometimes is not one-to-one mapping. You need to check kernel code to
+find the correct
+way. We probably should make this part better to improve user experience.
+
+>
+> Trying to use the helpers, passes verification, however, it=E2=80=99s dum=
+ping
+> invalid content:
+>
+> BPF_TRACE_2("fexit/xdp_prog_simple", trace_on_exit,
+>              struct xdp_md *, xdp, int, ret)
+> {
+>    __u32 rx_queue;
+>
+>    bpf_probe_read_kernel(&rx_queue, sizeof(rx_queue),
+>                          __builtin_preserve_access_index(&xdp->rx_queue_i=
+ndex));
+>
+>    bpf_debug("fexit: queue =3D %u, ret =3D %d\n", rx_queue, ret);
+>    return 0;
+> }
+>
+> Debug output:
+>
+>     ping6-2752  [004] ..s1 60763.917790: 0: SIMPLE: [ifindex =3D 4, queue
+> =3D  0]
+>     ping6-2752  [004] ..s1 60763.917800: 0: fexit: queue =3D 2969379072,
+> ret =3D 2
+>     ping6-2752  [004] ..s1 60764.941817: 0: SIMPLE: [ifindex =3D 4, queue
+> =3D  0]
+>     ping6-2752  [004] ..s1 60764.941828: 0: fexit: queue =3D 2969379072,
+> ret =3D 2
+>     ping6-2752  [004] ..s1 60765.965835: 0: SIMPLE: [ifindex =3D 4, queue
+> =3D  0]
+>
+>
+> Tried the same with fentry for this function, but the same results as
+> fexit.
+>
+> Any hints?
+>
+> Thanks,
+>
+>
+> Eelco
+>
