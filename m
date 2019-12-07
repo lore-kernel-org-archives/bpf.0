@@ -1,186 +1,141 @@
-Return-Path: <SRS0=l/5z=Z4=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=Qj2L=Z5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8E23C43603
-	for <bpf@archiver.kernel.org>; Fri,  6 Dec 2019 21:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A2EEC43603
+	for <bpf@archiver.kernel.org>; Sat,  7 Dec 2019 16:51:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 94EB420867
-	for <bpf@archiver.kernel.org>; Fri,  6 Dec 2019 21:49:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1575668988;
-	bh=rH2zJkgs5wOc2cuunv+DSC7+qoXgQDCd5DOnzMtVcOI=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=iSVmpL4DkiGddV1DEZFdt7bu0ne2+vDXtMqN19JhekfirOA2SKjwP+bQ1Y6UXOgjk
-	 B2/cmf0EpEJ+rx5xwl+Ru7AjZ0qSy4bX+q2EdC3If2cYO5pxoidKcHRttNqtGhvtv5
-	 y2S2FKH0HolxOxul0mj8deoP7+h8jaqfE/BlGEU8=
+	by mail.kernel.org (Postfix) with ESMTP id C84582176D
+	for <bpf@archiver.kernel.org>; Sat,  7 Dec 2019 16:51:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l69R3OsN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726374AbfLFVts convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 6 Dec 2019 16:49:48 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:35791 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726353AbfLFVts (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 6 Dec 2019 16:49:48 -0500
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-247-p2pW0NpkOc2jkmcpH0K9QQ-1; Fri, 06 Dec 2019 16:49:43 -0500
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 68E5D800D4C;
-        Fri,  6 Dec 2019 21:49:41 +0000 (UTC)
-Received: from krava.redhat.com (ovpn-204-89.brq.redhat.com [10.40.204.89])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 24A1A5D9E1;
-        Fri,  6 Dec 2019 21:49:34 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-audit@redhat.com, Andrii Nakryiko <andriin@fb.com>,
-        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Steve Grubb <sgrubb@redhat.com>,
-        David Miller <davem@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>, Jiri Benc <jbenc@redhat.com>
-Subject: [PATCHv3] bpf: Emit audit messages upon successful prog load and unload
-Date:   Fri,  6 Dec 2019 22:49:34 +0100
-Message-Id: <20191206214934.11319-1-jolsa@kernel.org>
+        id S1726414AbfLGQvd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 7 Dec 2019 11:51:33 -0500
+Received: from mail-lf1-f48.google.com ([209.85.167.48]:45119 "EHLO
+        mail-lf1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbfLGQvd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 7 Dec 2019 11:51:33 -0500
+Received: by mail-lf1-f48.google.com with SMTP id 203so7549459lfa.12;
+        Sat, 07 Dec 2019 08:51:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=H1vWx0dAQL31p+IIogmLYF5ORkKGGbq821m3i9i/pV0=;
+        b=l69R3OsNyR8t6H+eyEVkm6Pd4gkWR//KmWOg0QJeklF4KOCui+kJR2cs5C1bxGbe6S
+         n8UrkgdMKNjN45eQG7BulPvf+iRK6RisLBZogM6CmZ0hS6wvDo9vfY+lUZ/FUDsL5Okg
+         BDffHDt/U+FLVT7IGYydylgTl+gsRcxpGv4ZLLYlOC/JRsvSes89W7lCOPMPplEqXskv
+         q9QKwfW9C9y4Q494hHR20oylhShzQyOqNmraRZMZT5KCAS8ZV1x107lnaJBUeLu2i9pn
+         b9IB0j2WETSn9zLnc5JEDYhACJ1dSeM38+it6R0C6iW8jjoMjqQfsVG+KUqAr/ExFkx7
+         SBOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=H1vWx0dAQL31p+IIogmLYF5ORkKGGbq821m3i9i/pV0=;
+        b=BSrDoLVCFYV7mt6fAeCs+vaSrIryNv17hWcIJZAwqOowpk7Rjid0XaddhlMOettKHV
+         REbShcKO6DCkbp5bgX57EtkM7WBOSSgNv08eqpfKdpka0un0OxwsSd6FAZ7lsaSXf75o
+         DszqXy+YnfnYHP569zrntyji2AOYbWhJ7dLDD3RWZIxX8x6USPNMAE1JzhJk4mdlQQF/
+         mARR6n5OhYIUBtCErCWW+8VL9tHHHeAMC+L8nmGX5eWdBfUpPMYK1tI/bBxNs5zK9KYu
+         BAYAh7F02H2G+h+uku1mJqRf77cMRoPtQt7rb2UoSlAj4yf3TBMFD/FWrd7ZF4n9cn2e
+         xteQ==
+X-Gm-Message-State: APjAAAWf5pwqEHTV2m0aIlFViiHFPTDdCn9k//dNQy60plz5AyNwIBC/
+        QOIeeP3o8/X2akz+hr1oR89b1zy4C9wMV+wQayU=
+X-Google-Smtp-Source: APXvYqybCyX9ONFN4SLNqXZu87KejRjU7J3OJArhn08ViTPNaLrkojkayz+3V1WmDeheyZ8DNsWnXbpS8vxZvIKIc0k=
+X-Received: by 2002:ac2:52a5:: with SMTP id r5mr11120850lfm.19.1575737491115;
+ Sat, 07 Dec 2019 08:51:31 -0800 (PST)
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-MC-Unique: p2pW0NpkOc2jkmcpH0K9QQ-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8BIT
+References: <E53E0693-1C3A-4B47-B205-DC8E5DAF3619@redhat.com>
+ <CAADnVQKkLtG-QCZwxx-Bpz8-goh-_mSTtUSzpb_oTv9a-qLizg@mail.gmail.com>
+ <3AC9D2B7-9D2F-4286-80A2-1721B51B62CF@redhat.com> <CAADnVQJKSnoMVpQ3F86zBhFyo8WQ0vi65Z4QDtopLRrpK4yB8Q@mail.gmail.com>
+ <4BBF99E4-9554-44F7-8505-D4B8416554C4@redhat.com> <d588c894-a4e0-8b99-72a9-4429b27091df@fb.com>
+ <056E9F5E-4FDD-4636-A43A-EC98A06E84D3@redhat.com> <aa59532b-34a9-7887-f550-ef2859f0c9f1@fb.com>
+ <B7E0062E-37ED-46E6-AE64-EE3E2A0294EA@redhat.com> <7062345a-1060-89f6-0c02-eef2fe0d835a@fb.com>
+ <b8d80047-3bc1-5393-76a1-7517cb2b7280@fb.com> <E08A0006-E254-492C-92AB-408B58E456C0@redhat.com>
+ <F8CFD537-7907-4259-9C91-4649F799216B@redhat.com> <CAH3MdRXr+3mUfrd8MPH-mDdNwD1szXRhz07s2C4dVQ0EkzDaAg@mail.gmail.com>
+ <78D7857B-82E4-42BC-85E1-E3D7C97BF840@redhat.com>
+In-Reply-To: <78D7857B-82E4-42BC-85E1-E3D7C97BF840@redhat.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sat, 7 Dec 2019 08:51:19 -0800
+Message-ID: <CAADnVQ+DHuDS2xZbjsEfBYX5t761dbCih6p-=NaCNU9OJEMk8A@mail.gmail.com>
+Subject: Re: Trying the bpf trace a bpf xdp program
+To:     Eelco Chaudron <echaudro@redhat.com>
+Cc:     Y Song <ys114321@gmail.com>, Yonghong Song <yhs@fb.com>,
+        Xdp <xdp-newbies@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+On Fri, Dec 6, 2019 at 5:05 AM Eelco Chaudron <echaudro@redhat.com> wrote:
+>
+> Thanks the hint that it should be the jitted arguments solved it=E2=80=A6=
+ And
+> you quick example worked, just in case some one else is playing with it,
+> here is my working example:
+>
+> // SPDX-License-Identifier: GPL-2.0
+> #include <linux/bpf.h>
+> #include "bpf_helpers.h"
+> #include "bpf_trace_helpers.h"
+>
+> #define bpf_debug(fmt, ...)                \
+> {                                          \
+>      char __fmt[] =3D fmt;                    \
+>      bpf_trace_printk(__fmt, sizeof(__fmt), \
+>                       ##__VA_ARGS__);       \
+> }
+>
+> struct net_device {
+>      /* Structure does not need to contain all entries,
+>       * as "preserve_access_index" will use BTF to fix this... */
+>      int                    ifindex;
+> } __attribute__((preserve_access_index));
+>
+> struct xdp_rxq_info {
+>      /* Structure does not need to contain all entries,
+>       * as "preserve_access_index" will use BTF to fix this... */
+>      struct net_device *dev;
+>      __u32 queue_index;
+> } __attribute__((preserve_access_index));
+>
+> struct xdp_buff {
+>      void *data;
+>      void *data_end;
+>      void *data_meta;
+>      void *data_hard_start;
+>      unsigned long handle;
+>      struct xdp_rxq_info *rxq;
+> } __attribute__((preserve_access_index));
+>
+>
+> BPF_TRACE_1("fentry/xdp_prog_simple", trace_on_entry,
+>              struct xdp_buff *, xdp)
+> {
+>      bpf_debug("fentry: [ifindex =3D %u, queue =3D  %u]\n",
+>                xdp->rxq->dev->ifindex, xdp->rxq->queue_index);
+>      return 0;
+> }
+>
+>
+> BPF_TRACE_2("fexit/xdp_prog_simple", trace_on_exit,
+>              struct xdp_buff*, xdp, int, ret)
+> {
+>      bpf_debug("fexit: [ifindex =3D %u, queue =3D  %u, ret =3D %d]\n",
+>                xdp->rxq->dev->ifindex, xdp->rxq->queue_index, ret);
 
-Allow for audit messages to be emitted upon BPF program load and
-unload for having a timeline of events. The load itself is in
-syscall context, so additional info about the process initiating
-the BPF prog creation can be logged and later directly correlated
-to the unload event.
+This is great. Could you submit it as selftests/bpf ?
+It will help others trying to do the same.
+May be instead of bpf_debug() use global variables so the test will be
+self checking ?
 
-The only info really needed from BPF side is the globally unique
-prog ID where then audit user space tooling can query / dump all
-info needed about the specific BPF program right upon load event
-and enrich the record, thus these changes needed here can be kept
-small and non-intrusive to the core.
-
-Raw example output:
-
-  # auditctl -D
-  # auditctl -a always,exit -F arch=x86_64 -S bpf
-  # ausearch --start recent -m 1334
-  ...
-  ----
-  time->Wed Nov 27 16:04:13 2019
-  type=PROCTITLE msg=audit(1574867053.120:84664): proctitle="./bpf"
-  type=SYSCALL msg=audit(1574867053.120:84664): arch=c000003e syscall=321   \
-    success=yes exit=3 a0=5 a1=7ffea484fbe0 a2=70 a3=0 items=0 ppid=7477    \
-    pid=12698 auid=1001 uid=1001 gid=1001 euid=1001 suid=1001 fsuid=1001    \
-    egid=1001 sgid=1001 fsgid=1001 tty=pts2 ses=4 comm="bpf"                \
-    exe="/home/jolsa/auditd/audit-testsuite/tests/bpf/bpf"                  \
-    subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=(null)
-  type=UNKNOWN[1334] msg=audit(1574867053.120:84664): prog-id=76 op=LOAD
-  ----
-  time->Wed Nov 27 16:04:13 2019
-  type=UNKNOWN[1334] msg=audit(1574867053.120:84665): prog-id=76 op=UNLOAD
-  ...
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Co-developed-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- include/uapi/linux/audit.h |  1 +
- kernel/bpf/syscall.c       | 33 +++++++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+)
-
-diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-index c89c6495983d..32a5db900f47 100644
---- a/include/uapi/linux/audit.h
-+++ b/include/uapi/linux/audit.h
-@@ -116,6 +116,7 @@
- #define AUDIT_FANOTIFY		1331	/* Fanotify access decision */
- #define AUDIT_TIME_INJOFFSET	1332	/* Timekeeping offset injected */
- #define AUDIT_TIME_ADJNTPVAL	1333	/* NTP value adjustment */
-+#define AUDIT_BPF		1334	/* BPF subsystem */
- 
- #define AUDIT_AVC		1400	/* SE Linux avc denial or grant */
- #define AUDIT_SELINUX_ERR	1401	/* Internal SE Linux Errors */
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index e3461ec59570..66b90eaf99fe 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -23,6 +23,7 @@
- #include <linux/timekeeping.h>
- #include <linux/ctype.h>
- #include <linux/nospec.h>
-+#include <linux/audit.h>
- #include <uapi/linux/btf.h>
- 
- #define IS_FD_ARRAY(map) ((map)->map_type == BPF_MAP_TYPE_PERF_EVENT_ARRAY || \
-@@ -1306,6 +1307,36 @@ static int find_prog_type(enum bpf_prog_type type, struct bpf_prog *prog)
- 	return 0;
- }
- 
-+enum bpf_audit {
-+	BPF_AUDIT_LOAD,
-+	BPF_AUDIT_UNLOAD,
-+	BPF_AUDIT_MAX,
-+};
-+
-+static const char * const bpf_audit_str[BPF_AUDIT_MAX] = {
-+	[BPF_AUDIT_LOAD]   = "LOAD",
-+	[BPF_AUDIT_UNLOAD] = "UNLOAD",
-+};
-+
-+static void bpf_audit_prog(const struct bpf_prog *prog, unsigned int op)
-+{
-+	struct audit_context *ctx = NULL;
-+	struct audit_buffer *ab;
-+
-+	if (WARN_ON_ONCE(op >= BPF_AUDIT_MAX))
-+		return;
-+	if (audit_enabled == AUDIT_OFF)
-+		return;
-+	if (op == BPF_AUDIT_LOAD)
-+		ctx = audit_context();
-+	ab = audit_log_start(ctx, GFP_ATOMIC, AUDIT_BPF);
-+	if (unlikely(!ab))
-+		return;
-+	audit_log_format(ab, "prog-id=%u op=%s",
-+			 prog->aux->id, bpf_audit_str[op]);
-+	audit_log_end(ab);
-+}
-+
- int __bpf_prog_charge(struct user_struct *user, u32 pages)
- {
- 	unsigned long memlock_limit = rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
-@@ -1421,6 +1452,7 @@ static void __bpf_prog_put(struct bpf_prog *prog, bool do_idr_lock)
- {
- 	if (atomic64_dec_and_test(&prog->aux->refcnt)) {
- 		perf_event_bpf_event(prog, PERF_BPF_EVENT_PROG_UNLOAD, 0);
-+		bpf_audit_prog(prog, BPF_AUDIT_UNLOAD);
- 		/* bpf_prog_free_id() must be called first */
- 		bpf_prog_free_id(prog, do_idr_lock);
- 		__bpf_prog_put_noref(prog, true);
-@@ -1830,6 +1862,7 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 	 */
- 	bpf_prog_kallsyms_add(prog);
- 	perf_event_bpf_event(prog, PERF_BPF_EVENT_PROG_LOAD, 0);
-+	bpf_audit_prog(prog, BPF_AUDIT_LOAD);
- 
- 	err = bpf_prog_new_fd(prog);
- 	if (err < 0)
--- 
-2.21.0
-
+Long term we should teach verifier to understand 'struct xdp_md*'
+in addition to 'struct xdp_buff *'. That will help ease of use.
