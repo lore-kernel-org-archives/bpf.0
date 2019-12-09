@@ -2,82 +2,93 @@ Return-Path: <SRS0=w0EI=Z7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EF70C43603
-	for <bpf@archiver.kernel.org>; Mon,  9 Dec 2019 21:15:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F985C43603
+	for <bpf@archiver.kernel.org>; Mon,  9 Dec 2019 21:27:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1A88C206D5
-	for <bpf@archiver.kernel.org>; Mon,  9 Dec 2019 21:15:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="A9Stev5A"
+	by mail.kernel.org (Postfix) with ESMTP id 29197206E0
+	for <bpf@archiver.kernel.org>; Mon,  9 Dec 2019 21:27:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbfLIVPj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Dec 2019 16:15:39 -0500
-Received: from mail-il1-f195.google.com ([209.85.166.195]:39166 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726483AbfLIVPj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 9 Dec 2019 16:15:39 -0500
-Received: by mail-il1-f195.google.com with SMTP id a7so14095176ild.6
-        for <bpf@vger.kernel.org>; Mon, 09 Dec 2019 13:15:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs.washington.edu; s=goo201206;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LG/614BqKYeqqzAMuAmVs1XZZYF0k1xuurp2HXiCCmY=;
-        b=A9Stev5AqloQC1ZtkUVGdq1AP5/fTv2T3N7Xi4NHhqF1zHE7T4Q2XZfauwQ9I71iF6
-         AwQBJiBS7lEI16cRnzmpgw6z5pgvGu7XV91StpMMLN4bDmn4u2nNc+1uF3CHYMA+0EYH
-         pX5iK+1xGouBTNKH8TYrgYGx58J2PbWJqx0n8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LG/614BqKYeqqzAMuAmVs1XZZYF0k1xuurp2HXiCCmY=;
-        b=FcpzxogSe4mMB0ig9CKP84L1ll0qHD4E2zI9uMFFUYOCy/DP+s48/Yp3f8sTsJn5KN
-         syoFACiG+S45Xh+Eaa1I+wvwVzGNe8kAz2pxSOp9z4haqsoZJ25U7uFl8e6W8SbsKklh
-         9ojgJrAvtpVPHw9yNKZxDuBQtsMrl+1vbs/umoTveO2vmVxaJxI1JR10JBIoZfSSH93V
-         l+l54o8UTkhntbV7QAp5mx9iLSDVnoxpiFSlcn9NZx9FVq+/BOf31xCgxCHdTzsB6T2y
-         1Gp6NPk5isn5yXNqBngnCugHXzfEGzMKix5FhZWafBm0jc4/IDdD1g25devQHmzsquv4
-         xKtQ==
-X-Gm-Message-State: APjAAAUi4RBgwxsvy7Wvf/qw7p0AM2a+ylk062fYf2IQxidQdZZI568S
-        HzM2Utf6sDCTAcJJgpOK6LokE8UlvY0dGsVfX0+0Bg==
-X-Google-Smtp-Source: APXvYqzh3UZWMUWlmFjctjV2C7aY8p4vEvt7LDAOemPKOAaaoVKi0COose4couisqD9FDRyrjewRb57JFJeMDI0UDEs=
-X-Received: by 2002:a92:1b41:: with SMTP id b62mr30148546ilb.251.1575926138783;
- Mon, 09 Dec 2019 13:15:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20191209173136.29615-1-bjorn.topel@gmail.com> <20191209173136.29615-4-bjorn.topel@gmail.com>
-In-Reply-To: <20191209173136.29615-4-bjorn.topel@gmail.com>
-From:   Luke Nelson <lukenels@cs.washington.edu>
-Date:   Mon, 9 Dec 2019 13:15:16 -0800
-Message-ID: <CADasFoA5iMv0Atakw_Jr7XP__K+--a735Qb2U-eNfJEzCXQRNQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/8] riscv, bpf: add support for far jumps and exits
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S1726366AbfLIV1e (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Dec 2019 16:27:34 -0500
+Received: from www62.your-server.de ([213.133.104.62]:52316 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726354AbfLIV1e (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 9 Dec 2019 16:27:34 -0500
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ieQYz-0005UU-5g; Mon, 09 Dec 2019 22:27:29 +0100
+Received: from [178.197.249.52] (helo=pc-9.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ieQYy-000RvL-Qi; Mon, 09 Dec 2019 22:27:28 +0100
+Subject: Re: [PATCH bpf-next 2/8] riscv, bpf: add support for far branching
+To:     Luke Nelson <lukenels@cs.washington.edu>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Netdev <netdev@vger.kernel.org>, linux-riscv@lists.infradead.org,
         bpf <bpf@vger.kernel.org>, Xi Wang <xi.wang@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20191209173136.29615-1-bjorn.topel@gmail.com>
+ <20191209173136.29615-3-bjorn.topel@gmail.com>
+ <CADasFoDOyJA0nDVCyA6EY78dHSSxxV+EXS=xUyLDW4_VhJvBkQ@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <2d5d1f2d-d4ab-2449-37c6-e5b319a778d6@iogearbox.net>
+Date:   Mon, 9 Dec 2019 22:27:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <CADasFoDOyJA0nDVCyA6EY78dHSSxxV+EXS=xUyLDW4_VhJvBkQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25658/Mon Dec  9 10:47:26 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Dec 9, 2019 at 9:32 AM Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com=
-> wrote:
->
-> This commit add support for far (offset > 21b) jumps and exits.
->
-> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com>
+On 12/9/19 10:08 PM, Luke Nelson wrote:
+[...]
+> We have been developing a formal verification tool for BPF JIT
+> compilers, which we have used in the past to find bugs in the RV64
+> and x32 BPF JITs:
+> 
+> https://unsat.cs.washington.edu/projects/serval/
+> 
+> Recently I added support for verifying the JIT for branch and jump
+> instructions, and thought it a good opportunity to verify these
+> patches that add support for far jumps and branching.
+> 
+> I ported these patches to our tool and ran verification, which
+> didn't find any bugs according to our specification of BPF and
+> RISC-V.
+> 
+> The tool and code are publicly available, and you can read a more
+> detailed writeup of the results here:
+> 
+> https://github.com/uw-unsat/bpf-jit-verif/tree/far-jump-review
+> 
+> Currently the tool works on a manually translated version of the
+> JIT from C to Rosette, but we are experimenting with ways of making
+> this process more automated.
 
-Similar to the other patch for far branching, we also used our tool
-to formally verify this patch for far jumps:
+This is awesome work! Did you also check for other architectures aside
+from riscv and x86-32, e.g. x86-64 or arm64?
 
-https://github.com/uw-unsat/bpf-jit-verif/tree/far-jump-review
+It would be great if we could add such verification tool under tools/bpf/
+which would then take the in-tree JIT-code as-is for its analysis and
+potentially even trigger a run out of BPF selftests. Any thoughts whether
+such path would be feasible wrt serval?
 
+> Reviewed-by: Luke Nelson <lukenels@cs.washington.edu>
+> Cc: Xi Wang <xi.wang@gmail.com>
 
-Reviewed-by: Luke Nelson <lukenels@cs.washington.edu>
-Cc: Xi Wang <xi.wang@gmail.com>
+Thanks,
+Daniel
