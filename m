@@ -1,46 +1,91 @@
-Return-Path: <SRS0=6yca=Z6=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=w0EI=Z7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75484C43603
-	for <bpf@archiver.kernel.org>; Sun,  8 Dec 2019 23:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0951C43603
+	for <bpf@archiver.kernel.org>; Mon,  9 Dec 2019 00:01:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 43A28205F4
-	for <bpf@archiver.kernel.org>; Sun,  8 Dec 2019 23:17:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72BB9206D5
+	for <bpf@archiver.kernel.org>; Mon,  9 Dec 2019 00:01:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1575849679;
+	bh=upH+iYJgCGMYMSUQ5ncMBmMpXEuvr8STOPwqw2/z1w0=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=tjVFxVTh3AUs4pXOWLqsw/GXl0w1czs9MhXa0MTstPBwg0RQM+2tXpB5QLcaRhv62
+	 odBOeIj1G3kJeavOic7RNcXivuEnIFFuB2+qoTr4YQ2AMhjLr4svox5FNquxMnFXQo
+	 G2LLmj12d+XKEJF1NizSAiCe3iqtXPdPCu75VwFs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbfLHXRM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 8 Dec 2019 18:17:12 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:53058 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726684AbfLHXRM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 8 Dec 2019 18:17:12 -0500
-Received: from localhost (unknown [IPv6:2601:601:9f00:1c3::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 2FB0915397947;
-        Sun,  8 Dec 2019 15:17:12 -0800 (PST)
-Date:   Sun, 08 Dec 2019 15:17:11 -0800 (PST)
-Message-Id: <20191208.151711.2227834913032509828.davem@davemloft.net>
-To:     netdev@vger.kernel.org
-CC:     bpf@vger.kernel.org
-Subject: net-next is OPEN...
-From:   David Miller <davem@davemloft.net>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sun, 08 Dec 2019 15:17:12 -0800 (PST)
+        id S1726901AbfLIABT convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 8 Dec 2019 19:01:19 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:20720 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726857AbfLIABT (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 8 Dec 2019 19:01:19 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB8NvIwt022078
+        for <bpf@vger.kernel.org>; Sun, 8 Dec 2019 16:01:17 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wrbwmdxyb-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 08 Dec 2019 16:01:17 -0800
+Received: from intmgw002.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Sun, 8 Dec 2019 16:01:16 -0800
+Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
+        id 85208760CCB; Sun,  8 Dec 2019 16:01:14 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
+To:     <davem@davemloft.net>
+CC:     <daniel@iogearbox.net>, <rostedt@goodmis.org>, <x86@kernel.org>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf 0/3] bpf: Make BPF trampoline friendly to ftrace
+Date:   Sun, 8 Dec 2019 16:01:11 -0800
+Message-ID: <20191209000114.1876138-1-ast@kernel.org>
+X-Mailer: git-send-email 2.23.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-08_07:2019-12-05,2019-12-08 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_midline policy=fb_default score=62 bulkscore=0 phishscore=0
+ adultscore=0 malwarescore=0 suspectscore=1 priorityscore=1501
+ mlxlogscore=-20 clxscore=1015 impostorscore=0 lowpriorityscore=0
+ mlxscore=62 spamscore=62 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912080207
+X-FB-Internal: spam
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Patch 1 - fix crash function_graph tracer encounters BPF trampoline
+Patch 2 - use register_ftrace_direct() API to attach BPF trampoline
+Patch 3 - simple test
 
-We're back online:
+Alexei Starovoitov (3):
+  ftrace: Fix function_graph tracer interaction with BPF trampoline
+  bpf: Make BPF trampoline use register_ftrace_direct() API
+  selftests/bpf: test function_graph tracer and bpf trampoline together
 
-	http://vger.kernel.org/~davem/net-next.html
+ arch/x86/kernel/ftrace.c                   | 14 -----
+ include/linux/bpf.h                        |  1 +
+ include/linux/ftrace.h                     |  5 ++
+ kernel/bpf/trampoline.c                    | 64 ++++++++++++++++++++--
+ kernel/trace/fgraph.c                      |  9 +++
+ kernel/trace/ftrace.c                      | 19 +++----
+ tools/testing/selftests/bpf/test_ftrace.sh | 39 +++++++++++++
+ 7 files changed, 119 insertions(+), 32 deletions(-)
+ create mode 100755 tools/testing/selftests/bpf/test_ftrace.sh
+
+-- 
+2.23.0
+
