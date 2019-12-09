@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80A04C2D0C3
-	for <bpf@archiver.kernel.org>; Mon,  9 Dec 2019 07:57:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD9CDC2D0C4
+	for <bpf@archiver.kernel.org>; Mon,  9 Dec 2019 07:57:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5BC4C206D3
-	for <bpf@archiver.kernel.org>; Mon,  9 Dec 2019 07:57:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E5442075B
+	for <bpf@archiver.kernel.org>; Mon,  9 Dec 2019 07:57:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727044AbfLIH5S (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Dec 2019 02:57:18 -0500
-Received: from mga05.intel.com ([192.55.52.43]:35356 "EHLO mga05.intel.com"
+        id S1727322AbfLIH51 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Dec 2019 02:57:27 -0500
+Received: from mga05.intel.com ([192.55.52.43]:35363 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727267AbfLIH5S (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 9 Dec 2019 02:57:18 -0500
+        id S1727286AbfLIH5Z (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 9 Dec 2019 02:57:25 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Dec 2019 23:57:15 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Dec 2019 23:57:24 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,294,1571727600"; 
-   d="scan'208";a="362846945"
+   d="scan'208";a="362846972"
 Received: from mkarlsso-mobl.ger.corp.intel.com (HELO localhost.localdomain) ([10.249.32.126])
-  by orsmga004.jf.intel.com with ESMTP; 08 Dec 2019 23:57:11 -0800
+  by orsmga004.jf.intel.com with ESMTP; 08 Dec 2019 23:57:22 -0800
 From:   Magnus Karlsson <magnus.karlsson@intel.com>
 To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
@@ -34,9 +34,9 @@ To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
 Cc:     bpf@vger.kernel.org, saeedm@mellanox.com,
         jeffrey.t.kirsher@intel.com, maciej.fijalkowski@intel.com,
         maciejromanfijalkowski@gmail.com
-Subject: [PATCH bpf-next 09/12] xsk: ixgbe: i40e: ice: mlx5: xsk_umem_discard_addr to xsk_umem_release_addr
-Date:   Mon,  9 Dec 2019 08:56:26 +0100
-Message-Id: <1575878189-31860-10-git-send-email-magnus.karlsson@intel.com>
+Subject: [PATCH bpf-next 12/12] xsk: use struct_size() helper
+Date:   Mon,  9 Dec 2019 08:56:29 +0100
+Message-Id: <1575878189-31860-13-git-send-email-magnus.karlsson@intel.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1575878189-31860-1-git-send-email-magnus.karlsson@intel.com>
 References: <1575878189-31860-1-git-send-email-magnus.karlsson@intel.com>
@@ -45,166 +45,49 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Change the name of xsk_umem_discard_addr to xsk_umem_release_addr to
-better reflect the new naming of the AF_XDP queue manipulation
-functions. As this functions is used by drivers implementing support
-for AF_XDP zero-copy, it requires a name change to these drivers. The
-function xsk_umem_release_addr_rq has also changed name in the same
-fashion.
+Improve readability and maintainability by using the struct_size()
+helper when allocating the AF_XDP rings.
 
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_xsk.c          |  4 ++--
- drivers/net/ethernet/intel/ice/ice_xsk.c            |  4 ++--
- drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c        |  4 ++--
- drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c |  2 +-
- include/net/xdp_sock.h                              | 10 +++++-----
- net/xdp/xsk.c                                       |  4 ++--
- 6 files changed, 14 insertions(+), 14 deletions(-)
+ net/xdp/xsk_queue.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index d07e1a8..20d6f11 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -269,7 +269,7 @@ static bool i40e_alloc_buffer_zc(struct i40e_ring *rx_ring,
- 
- 	bi->handle = xsk_umem_adjust_offset(umem, handle, umem->headroom);
- 
--	xsk_umem_discard_addr(umem);
-+	xsk_umem_release_addr(umem);
- 	return true;
+diff --git a/net/xdp/xsk_queue.c b/net/xdp/xsk_queue.c
+index b665045..c90e9c1 100644
+--- a/net/xdp/xsk_queue.c
++++ b/net/xdp/xsk_queue.c
+@@ -18,14 +18,14 @@ void xskq_set_umem(struct xsk_queue *q, u64 size, u64 chunk_mask)
+ 	q->chunk_mask = chunk_mask;
  }
  
-@@ -306,7 +306,7 @@ static bool i40e_alloc_buffer_slow_zc(struct i40e_ring *rx_ring,
- 
- 	bi->handle = xsk_umem_adjust_offset(umem, handle, umem->headroom);
- 
--	xsk_umem_discard_addr_rq(umem);
-+	xsk_umem_release_addr_rq(umem);
- 	return true;
- }
- 
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index cf9b8b2..0af1f0b 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -555,7 +555,7 @@ ice_alloc_buf_fast_zc(struct ice_ring *rx_ring, struct ice_rx_buf *rx_buf)
- 
- 	rx_buf->handle = handle + umem->headroom;
- 
--	xsk_umem_discard_addr(umem);
-+	xsk_umem_release_addr(umem);
- 	return true;
- }
- 
-@@ -591,7 +591,7 @@ ice_alloc_buf_slow_zc(struct ice_ring *rx_ring, struct ice_rx_buf *rx_buf)
- 
- 	rx_buf->handle = handle + umem->headroom;
- 
--	xsk_umem_discard_addr_rq(umem);
-+	xsk_umem_release_addr_rq(umem);
- 	return true;
- }
- 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-index d6feaac..1501d0a 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-@@ -277,7 +277,7 @@ static bool ixgbe_alloc_buffer_zc(struct ixgbe_ring *rx_ring,
- 
- 	bi->handle = xsk_umem_adjust_offset(umem, handle, umem->headroom);
- 
--	xsk_umem_discard_addr(umem);
-+	xsk_umem_release_addr(umem);
- 	return true;
- }
- 
-@@ -304,7 +304,7 @@ static bool ixgbe_alloc_buffer_slow_zc(struct ixgbe_ring *rx_ring,
- 
- 	bi->handle = xsk_umem_adjust_offset(umem, handle, umem->headroom);
- 
--	xsk_umem_discard_addr_rq(umem);
-+	xsk_umem_release_addr_rq(umem);
- 	return true;
- }
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
-index 475b6bd..62fc8a1 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
-@@ -35,7 +35,7 @@ int mlx5e_xsk_page_alloc_umem(struct mlx5e_rq *rq,
- 	 */
- 	dma_info->addr = xdp_umem_get_dma(umem, handle);
- 
--	xsk_umem_discard_addr_rq(umem);
-+	xsk_umem_release_addr_rq(umem);
- 
- 	dma_sync_single_for_device(rq->pdev, dma_info->addr, PAGE_SIZE,
- 				   DMA_BIDIRECTIONAL);
-diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index 0742aa9..b23f60d 100644
---- a/include/net/xdp_sock.h
-+++ b/include/net/xdp_sock.h
-@@ -120,7 +120,7 @@ bool xsk_is_setup_for_bpf_map(struct xdp_sock *xs);
- /* Used from netdev driver */
- bool xsk_umem_has_addrs(struct xdp_umem *umem, u32 cnt);
- bool xsk_umem_peek_addr(struct xdp_umem *umem, u64 *addr);
--void xsk_umem_discard_addr(struct xdp_umem *umem);
-+void xsk_umem_release_addr(struct xdp_umem *umem);
- void xsk_umem_complete_tx(struct xdp_umem *umem, u32 nb_entries);
- bool xsk_umem_consume_tx(struct xdp_umem *umem, struct xdp_desc *desc);
- void xsk_umem_consume_tx_done(struct xdp_umem *umem);
-@@ -210,12 +210,12 @@ static inline bool xsk_umem_peek_addr_rq(struct xdp_umem *umem, u64 *addr)
- 	return addr;
- }
- 
--static inline void xsk_umem_discard_addr_rq(struct xdp_umem *umem)
-+static inline void xsk_umem_release_addr_rq(struct xdp_umem *umem)
+-static u32 xskq_umem_get_ring_size(struct xsk_queue *q)
++static size_t xskq_get_ring_size(struct xsk_queue *q, bool umem_queue)
  {
- 	struct xdp_umem_fq_reuse *rq = umem->fq_reuse;
+-	return sizeof(struct xdp_umem_ring) + q->nentries * sizeof(u64);
+-}
++	struct xdp_umem_ring *umem_ring;
++	struct xdp_rxtx_ring *rxtx_ring;
  
- 	if (!rq->length)
--		xsk_umem_discard_addr(umem);
-+		xsk_umem_release_addr(umem);
- 	else
- 		rq->length--;
- }
-@@ -260,7 +260,7 @@ static inline u64 *xsk_umem_peek_addr(struct xdp_umem *umem, u64 *addr)
- 	return NULL;
- }
- 
--static inline void xsk_umem_discard_addr(struct xdp_umem *umem)
-+static inline void xsk_umem_release_addr(struct xdp_umem *umem)
- {
+-static u32 xskq_rxtx_get_ring_size(struct xsk_queue *q)
+-{
+-	return sizeof(struct xdp_ring) + q->nentries * sizeof(struct xdp_desc);
++	if (umem_queue)
++		return struct_size(umem_ring, desc, q->nentries);
++	return struct_size(rxtx_ring, desc, q->nentries);
  }
  
-@@ -334,7 +334,7 @@ static inline u64 *xsk_umem_peek_addr_rq(struct xdp_umem *umem, u64 *addr)
- 	return NULL;
- }
+ struct xsk_queue *xskq_create(u32 nentries, bool umem_queue)
+@@ -43,8 +43,7 @@ struct xsk_queue *xskq_create(u32 nentries, bool umem_queue)
  
--static inline void xsk_umem_discard_addr_rq(struct xdp_umem *umem)
-+static inline void xsk_umem_release_addr_rq(struct xdp_umem *umem)
- {
- }
+ 	gfp_flags = GFP_KERNEL | __GFP_ZERO | __GFP_NOWARN |
+ 		    __GFP_COMP  | __GFP_NORETRY;
+-	size = umem_queue ? xskq_umem_get_ring_size(q) :
+-	       xskq_rxtx_get_ring_size(q);
++	size = xskq_get_ring_size(q, umem_queue);
  
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 62e27a4..f0dd740 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -49,11 +49,11 @@ bool xsk_umem_peek_addr(struct xdp_umem *umem, u64 *addr)
- }
- EXPORT_SYMBOL(xsk_umem_peek_addr);
- 
--void xsk_umem_discard_addr(struct xdp_umem *umem)
-+void xsk_umem_release_addr(struct xdp_umem *umem)
- {
- 	xskq_cons_release(umem->fq);
- }
--EXPORT_SYMBOL(xsk_umem_discard_addr);
-+EXPORT_SYMBOL(xsk_umem_release_addr);
- 
- void xsk_set_rx_need_wakeup(struct xdp_umem *umem)
- {
+ 	q->ring = (struct xdp_ring *)__get_free_pages(gfp_flags,
+ 						      get_order(size));
 -- 
 2.7.4
 
