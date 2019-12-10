@@ -2,44 +2,44 @@ Return-Path: <SRS0=eM+6=2A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10F0DC43603
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 01:15:35 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DB8A82077B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E641C2BD09
 	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 01:15:34 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
+	by mail.kernel.org (Postfix) with ESMTP id DA7812077B
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 01:15:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Iuf5z6ag"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="CflxekR0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727221AbfLJBPe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Dec 2019 20:15:34 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:60804 "EHLO
+        id S1727674AbfLJBPO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Dec 2019 20:15:14 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:26462 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727675AbfLJBPK (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 9 Dec 2019 20:15:10 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBA1F6JX027001
-        for <bpf@vger.kernel.org>; Mon, 9 Dec 2019 17:15:09 -0800
+        by vger.kernel.org with ESMTP id S1727693AbfLJBPM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 9 Dec 2019 20:15:12 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBA1BTxX029291
+        for <bpf@vger.kernel.org>; Mon, 9 Dec 2019 17:15:11 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=miRau5+VJsH9JKRajjt8/XhGdNhygJx0xHfmp88I5a4=;
- b=Iuf5z6agaVu5UWPfUJ39MlFng/j2W0LKAnmMTQlBLueBkuyZYWa7MEiRgacrc7J6h3Ub
- 73bOcSNMacpC3Ilzf5QfZkz6HMllBWvqHp/0jXDErUu32bBrTb40Al+BXX+tQkcMxspW
- McUdWtZaJXuxw64q3Dm8VtYJdfv/OMUbrlE= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wrvye7yuq-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 09 Dec 2019 17:15:09 -0800
-Received: from intmgw001.05.ash5.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Mon, 9 Dec 2019 17:14:48 -0800
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=LUTHNVYWuBjbjY35u4Vz7T+dAc0ioyo3dFrR9Bb6LCo=;
+ b=CflxekR0rKyG4I2+WxOuXDjqg7kF2Ag/ySlnqqLDEhZ1ZlAh/Hx9YwNWjw7Ns5Xt4uvZ
+ m1YuhMxo/gJRmVz+zLxSqOOSD3yOQwSJaR9VJwNMT5H2bfYi6+IifYyyxObrZwKFnduo
+ apiSocBISSckHKtrfhe6+opNGWYSorc7J9Y= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wrvq1g28a-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 09 Dec 2019 17:15:11 -0800
+Received: from intmgw003.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Mon, 9 Dec 2019 17:15:09 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id CA5E92EC16B5; Mon,  9 Dec 2019 17:14:46 -0800 (PST)
+        id BE9AB2EC16B5; Mon,  9 Dec 2019 17:15:04 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,112 +48,120 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 00/15] Add code-generated BPF object skeleton support
-Date:   Mon, 9 Dec 2019 17:14:23 -0800
-Message-ID: <20191210011438.4182911-1-andriin@fb.com>
+Subject: [PATCH bpf-next 08/15] libbpf: postpone BTF ID finding for TRACING programs to load phase
+Date:   Mon, 9 Dec 2019 17:14:31 -0800
+Message-ID: <20191210011438.4182911-9-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191210011438.4182911-1-andriin@fb.com>
+References: <20191210011438.4182911-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-09_05:2019-12-09,2019-12-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- malwarescore=0 clxscore=1015 adultscore=0 impostorscore=0
- lowpriorityscore=0 mlxlogscore=999 suspectscore=8 spamscore=0
- priorityscore=1501 bulkscore=0 mlxscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-1910280000
- definitions=main-1912100009
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 suspectscore=9
+ priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 adultscore=0 mlxlogscore=999 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912100009
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set introduces an alternative and complimentary to existing libbpf
-API interface for working with BPF objects, maps, programs, and global data
-from userspace side. This approach is relying on code generation. bpftool
-produces a struct (a.k.a. skeleton) tailored and specific to provided BPF
-object file. It includes hard-coded fields and data structures for every map,
-program, link, and global data present.
+Move BTF ID determination for BPF_PROG_TYPE_TRACING programs to a load phase.
+Performing it at open step is inconvenient, because it prevents BPF skeleton
+generation on older host kernel, which doesn't contain BTF_KIND_FUNCs
+information in vmlinux BTF. This is a common set up, though, when, e.g.,
+selftests are compiled on older host kernel, but the test program itself is
+executed in qemu VM with bleeding edge kernel. Having this BTF searching
+performed at load time allows to successfully use bpf_object__open() for
+codegen and inspection of BPF object file.
 
-Altogether this approach significantly reduces amount of userspace boilerplate
-code required to open, load, attach, and work with BPF objects. It improves
-attach/detach story, by providing pre-allocated space for bpf_links, and
-ensuring they are properly detached on shutdown. It allows to do away with by
-name/title lookups of maps and programs, because libbpf's skeleton API, in
-conjunction with generated code from bpftool, is filling in hard-coded fields
-with actual pointers to corresponding struct bpf_map/bpf_program/bpf_link.
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/libbpf.c | 37 ++++++++++++++++++-------------------
+ 1 file changed, 18 insertions(+), 19 deletions(-)
 
-Also, thanks to BPF array mmap() support, working with global data (variables)
-from userspace is now as natural as it is from BPF side: each variable is just
-a struct field inside skeleton struct. Furthermore, this allows to have
-a natural way for userspace to pre-initialize global data (including
-previously impossible to initialize .rodata) by just assigning values to the
-same per-variable fields. Libbpf will carefully take into account this
-initialization image, will use it to pre-populate BPF maps at creation time,
-and will re-mmap() BPF map's contents at exactly the same userspace memory
-address such that it can continue working with all the same pointers without
-any interruptions. If kernel doesn't support mmap(), global data will still be
-successfully initialized, but after map creation global data structures inside
-skeleton will be NULL-ed out. This allows userspace application to gracefully
-handle lack of mmap() support, if necessary.
-
-A bunch of selftests are also converted to using skeletons, demonstrating
-significant simplification of userspace part of test and reduction in amount
-of code necessary.
-
-rfc->v1:
-- runqslower moved out into separate patch set waiting for vmlinux.h
-  improvements;
-- skeleton generation code deals with unknown internal maps more gracefully.
-
-Andrii Nakryiko (15):
-  libbpf: don't require root for bpf_object__open()
-  libbpf: add generic bpf_program__attach()
-  libbpf: move non-public APIs from libbpf.h to libbpf_internal.h
-  libbpf: add BPF_EMBED_OBJ macro for embedding BPF .o files
-  libbpf: expose field/var declaration emitting API internally
-  libbpf: expose BPF program's function name
-  libbpf: refactor global data map initialization
-  libbpf: postpone BTF ID finding for TRACING programs to load phase
-  libbpf: reduce log level of supported section names dump
-  libbpf: add experimental BPF object skeleton support
-  bpftool: add skeleton codegen command
-  selftests/bpf: add BPF skeletons selftests and convert attach_probe.c
-  selftests/bpf: convert few more selftest to skeletons
-  selftests/bpf: add test validating data section to struct convertion
-    layout
-  bpftool: add `gen skeleton` BASH completions
-
- tools/bpf/bpftool/Makefile                    |   2 +-
- tools/bpf/bpftool/bash-completion/bpftool     |  11 +
- tools/bpf/bpftool/gen.c                       | 530 ++++++++++++++++
- tools/bpf/bpftool/main.c                      |   3 +-
- tools/bpf/bpftool/main.h                      |   1 +
- tools/bpf/bpftool/net.c                       |   1 +
- tools/lib/bpf/btf_dump.c                      |  61 +-
- tools/lib/bpf/libbpf.c                        | 583 ++++++++++++++----
- tools/lib/bpf/libbpf.h                        |  63 +-
- tools/lib/bpf/libbpf.map                      |   4 +
- tools/lib/bpf/libbpf_internal.h               |  61 ++
- tools/testing/selftests/bpf/.gitignore        |   2 +
- tools/testing/selftests/bpf/Makefile          |  36 +-
- .../selftests/bpf/prog_tests/attach_probe.c   | 154 +----
- .../selftests/bpf/prog_tests/fentry_fexit.c   | 105 ++--
- .../selftests/bpf/prog_tests/fentry_test.c    |  72 +--
- tools/testing/selftests/bpf/prog_tests/mmap.c |  58 +-
- .../selftests/bpf/prog_tests/probe_user.c     |   6 +-
- .../selftests/bpf/prog_tests/rdonly_maps.c    |  11 +-
- .../selftests/bpf/prog_tests/skeleton.c       |  47 ++
- .../bpf/prog_tests/stacktrace_build_id.c      |  79 +--
- .../bpf/prog_tests/stacktrace_build_id_nmi.c  |  84 +--
- .../selftests/bpf/progs/test_attach_probe.c   |  34 +-
- .../selftests/bpf/progs/test_skeleton.c       |  36 ++
- 24 files changed, 1444 insertions(+), 600 deletions(-)
- create mode 100644 tools/bpf/bpftool/gen.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/skeleton.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_skeleton.c
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index ff00a767adfb..f4a3ed73c9f5 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -3811,11 +3811,22 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 	return ret;
+ }
+ 
+-int
+-bpf_program__load(struct bpf_program *prog,
+-		  char *license, __u32 kern_version)
++static int libbpf_find_attach_btf_id(const char *name,
++				     enum bpf_attach_type attach_type,
++				     __u32 attach_prog_fd);
++
++int bpf_program__load(struct bpf_program *prog, char *license, __u32 kern_ver)
+ {
+-	int err = 0, fd, i;
++	int err = 0, fd, i, btf_id;
++
++	if (prog->type == BPF_PROG_TYPE_TRACING) {
++		btf_id = libbpf_find_attach_btf_id(prog->section_name,
++						   prog->expected_attach_type,
++						   prog->attach_prog_fd);
++		if (btf_id <= 0)
++			return btf_id;
++		prog->attach_btf_id = btf_id;
++	}
+ 
+ 	if (prog->instances.nr < 0 || !prog->instances.fds) {
+ 		if (prog->preprocessor) {
+@@ -3839,7 +3850,7 @@ bpf_program__load(struct bpf_program *prog,
+ 				prog->section_name, prog->instances.nr);
+ 		}
+ 		err = load_program(prog, prog->insns, prog->insns_cnt,
+-				   license, kern_version, &fd);
++				   license, kern_ver, &fd);
+ 		if (!err)
+ 			prog->instances.fds[0] = fd;
+ 		goto out;
+@@ -3868,9 +3879,7 @@ bpf_program__load(struct bpf_program *prog,
+ 		}
+ 
+ 		err = load_program(prog, result.new_insn_ptr,
+-				   result.new_insn_cnt,
+-				   license, kern_version, &fd);
+-
++				   result.new_insn_cnt, license, kern_ver, &fd);
+ 		if (err) {
+ 			pr_warn("Loading the %dth instance of program '%s' failed\n",
+ 				i, prog->section_name);
+@@ -3914,9 +3923,6 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
+ 	return 0;
+ }
+ 
+-static int libbpf_find_attach_btf_id(const char *name,
+-				     enum bpf_attach_type attach_type,
+-				     __u32 attach_prog_fd);
+ static struct bpf_object *
+ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
+ 		   const struct bpf_object_open_opts *opts)
+@@ -3980,15 +3986,8 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
+ 
+ 		bpf_program__set_type(prog, prog_type);
+ 		bpf_program__set_expected_attach_type(prog, attach_type);
+-		if (prog_type == BPF_PROG_TYPE_TRACING) {
+-			err = libbpf_find_attach_btf_id(prog->section_name,
+-							attach_type,
+-							attach_prog_fd);
+-			if (err <= 0)
+-				goto out;
+-			prog->attach_btf_id = err;
++		if (prog_type == BPF_PROG_TYPE_TRACING)
+ 			prog->attach_prog_fd = attach_prog_fd;
+-		}
+ 	}
+ 
+ 	return obj;
 -- 
 2.17.1
 
