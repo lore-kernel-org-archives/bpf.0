@@ -2,115 +2,139 @@ Return-Path: <SRS0=eM+6=2A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14FD1C43603
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 05:32:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C751BC43603
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 05:50:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D80B32077B
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 05:32:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 96608206E0
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 05:50:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qo5TxFS7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qSwxAN8b"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbfLJFc5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 00:32:57 -0500
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:38556 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726824AbfLJFc5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 00:32:57 -0500
-Received: by mail-qt1-f195.google.com with SMTP id z15so1698072qts.5;
-        Mon, 09 Dec 2019 21:32:56 -0800 (PST)
+        id S1726417AbfLJFur (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 00:50:47 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:41157 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726085AbfLJFur (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 00:50:47 -0500
+Received: by mail-pl1-f194.google.com with SMTP id bd4so6823502plb.8;
+        Mon, 09 Dec 2019 21:50:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pARBlMYqvOprGNNaD4cEJATEpLkcbgueMuYWWsX5QXM=;
-        b=qo5TxFS7WobJt6/HnO+0OYNxmZnhCYVjZrLKJQoSbO6lrnLMxe6KlfvBB8frB3mo7B
-         oGW2M1VX04Z3YpVqCragD302lQgoQgJNiThPAXQEtDqn1zTrVBZaFVcEjjEKcATjLazG
-         AFabANzyETfrDtYMzu/wljj1p+KGt9702LDCxXGqZGQT4bYkFENJMRm8JJ8URwWp4At1
-         KZWlwOq18kvX482nrd/PRv4UdnK0kowOVVVCHz89VcoG6G3n86NOQUYrukup60HbJJsf
-         XoLT+xUpuOev5TEuAhnQvRion06QwWyacY86hI/JgaGhEwtgd6BUk1GboWUmg11dtxfA
-         yNIw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=LpfXDvbapYrtg2l9Hr3hABTZc33lhuy5qq0ylk91X+Q=;
+        b=qSwxAN8b8Gv8Vv+oD2m09XI18cpBuYrhV1pp+1XYvxa9rRTky+MnJw1WlTokgVMFyO
+         52G8hm9jR4EPSkVoXrdGQ+UAtxeczBiKa8Cz8Qo2wAkuOvAZiATuDodP/eTZrLdRVcad
+         nrX3pWYwihC+nlpY46x6jc1MvsUmeZ+wVhQfRXqkIp+/R7fh4TjbGbS6vOUBaiTAfD/y
+         semHCL1N6G+RV3Cj+upWk9anr2+tOr1gFfDlxZXBKGZ15m6R7ghP2u+UNlJof8cF7YGa
+         t5+lYUsa8L6ae6yCBJYHOjaeTAj/gSm0LhsqaS63zlPjtfC3X+Ozu9pAxb1NQi+vUWEQ
+         ETUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pARBlMYqvOprGNNaD4cEJATEpLkcbgueMuYWWsX5QXM=;
-        b=Ju75RcmZRaTwCpH8hWTJSLF1CzzpvYRDpppzODS+6/weLWM6Rzp1baf8ylO51/O4cP
-         afeu/Mz2kEMf6s5Gumq/KMWrdRHYVBTSJz40I9FYIp/DrXYI1IniKk/uaRbGm/RPBXpr
-         T4W+pmEqPj5EpD+9xw2qxHfHPRY09U5lYF7PRrqeBEdlIu9NorDx4ivREg3t4rXZclFH
-         XZzSWwPh7nFoVWkisIY0biSEchzmiy+2eq9wwzH9WtYH2KJiYo+byF/LWCVgtwfDPr35
-         n4KoHUVemcfj7VFWNodHUYFFch4Nz4iT38bteCiOFCNeKAEj222ES+80dYyB9pf3aEN7
-         aCHQ==
-X-Gm-Message-State: APjAAAXrXu1K5KcrTelzG9JLz9Qv347sPd2XZ5os2z8zXV8gXVutxTsR
-        x9FXGER4PnJTZYyA+XRG4SQ53K7W3vk0QpHpeKK/VYcFcgo=
-X-Google-Smtp-Source: APXvYqydE5ONyFyL4aFxrLVjR7W3kXqSnLjySLRaNX/it6I4quzW8g9mDD+vUVD7IBAjUumwGv2vuVfqDbY8nSsKWso=
-X-Received: by 2002:ac8:34b5:: with SMTP id w50mr1645379qtb.107.1575955975988;
- Mon, 09 Dec 2019 21:32:55 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=LpfXDvbapYrtg2l9Hr3hABTZc33lhuy5qq0ylk91X+Q=;
+        b=jyiQ5efiGGAawoAhESzN5v7mXBnu0HDK/6IAQL8bDm73HJueSWymaYRwb3bgvnP2lf
+         xZivQLMt4QtVn/vNwFmV7Y38YAlLdc1SGmUgd4Fnv0ZV/Ap+2LFHx8hv42tJUnC0dQHj
+         TaxsMdEX8+R3udRL+FfB9U2cxonYYlZc/8p0LzPCtKLWwop7E//lQiD3cGQAxihCpRD+
+         epBjitaPF5RMIGFKzUpBX1S1MyqRmC30sKRnqJ6aonKSO+qT9R5sG1wfBe3I4v9QJ6aH
+         SNwUnLKu6dVsoAqvfFYC6awcIMdXt26BxVO65kXNTfH/J8iN5qe2BD8iZ1aoiNCex8Yy
+         7hwQ==
+X-Gm-Message-State: APjAAAVlbGTyg+y2IdZHTkKg5VZdPeAMVw6ak1+IQ/CABTevTTmJzQjF
+        y2bb3ohf69Iuv9K1d0kI/Qt+BDAF
+X-Google-Smtp-Source: APXvYqxkQS5Qic7jTIUe4u8UBv/DEH4ck1R2GRCjzrKZzvAcB5b/OBMynr3+4Ols/OFhd0D/4nM5wQ==
+X-Received: by 2002:a17:90a:e2ce:: with SMTP id fr14mr3358388pjb.99.1575957046274;
+        Mon, 09 Dec 2019 21:50:46 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::ef95])
+        by smtp.gmail.com with ESMTPSA id y199sm1459100pfb.137.2019.12.09.21.50.44
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 09 Dec 2019 21:50:45 -0800 (PST)
+Date:   Mon, 9 Dec 2019 21:50:43 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        bpf@vger.kernel.org, magnus.karlsson@gmail.com,
+        magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
+        ecree@solarflare.com, thoiland@redhat.com,
+        andrii.nakryiko@gmail.com
+Subject: Re: [PATCH bpf-next v3 2/6] bpf: introduce BPF dispatcher
+Message-ID: <20191210055042.bhvm2gw633ts2gmg@ast-mbp.dhcp.thefacebook.com>
+References: <20191209135522.16576-1-bjorn.topel@gmail.com>
+ <20191209135522.16576-3-bjorn.topel@gmail.com>
 MIME-Version: 1.0
-References: <20191209173136.29615-1-bjorn.topel@gmail.com> <20191209173136.29615-3-bjorn.topel@gmail.com>
- <CADasFoDOyJA0nDVCyA6EY78dHSSxxV+EXS=xUyLDW4_VhJvBkQ@mail.gmail.com>
-In-Reply-To: <CADasFoDOyJA0nDVCyA6EY78dHSSxxV+EXS=xUyLDW4_VhJvBkQ@mail.gmail.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Tue, 10 Dec 2019 06:32:45 +0100
-Message-ID: <CAJ+HfNi4Ht_+a7+-NWE0LLfGRXJDq1g0cpuyshHY=BJ-+UX4ig@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/8] riscv, bpf: add support for far branching
-To:     Luke Nelson <lukenels@cs.washington.edu>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-riscv@lists.infradead.org,
-        bpf <bpf@vger.kernel.org>, Xi Wang <xi.wang@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191209135522.16576-3-bjorn.topel@gmail.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 9 Dec 2019 at 22:08, Luke Nelson <lukenels@cs.washington.edu> wrote=
-:
->
-> On Mon, Dec 9, 2019 at 9:32 AM Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.c=
-om> wrote:
-> >
-> > This commit adds branch relaxation to the BPF JIT, and with that
-> > support for far (offset greater than 12b) branching.
-> >
-> > The branch relaxation requires more than two passes to converge. For
-> > most programs it is three passes, but for larger programs it can be
-> > more.
-> >
-> > Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com>
->
-> We have been developing a formal verification tool for BPF JIT
-> compilers, which we have used in the past to find bugs in the RV64
-> and x32 BPF JITs:
->
-> https://unsat.cs.washington.edu/projects/serval/
->
-> Recently I added support for verifying the JIT for branch and jump
-> instructions, and thought it a good opportunity to verify these
-> patches that add support for far jumps and branching.
->
-> I ported these patches to our tool and ran verification, which
-> didn't find any bugs according to our specification of BPF and
-> RISC-V.
->
-> The tool and code are publicly available, and you can read a more
-> detailed writeup of the results here:
->
-> https://github.com/uw-unsat/bpf-jit-verif/tree/far-jump-review
->
-> Currently the tool works on a manually translated version of the
-> JIT from C to Rosette, but we are experimenting with ways of making
-> this process more automated.
->
->
-> Reviewed-by: Luke Nelson <lukenels@cs.washington.edu>
-> Cc: Xi Wang <xi.wang@gmail.com>
+On Mon, Dec 09, 2019 at 02:55:18PM +0100, Björn Töpel wrote:
+> +
+> +struct bpf_disp_prog {
+> +	struct bpf_prog *prog;
+> +	refcount_t users;
+> +};
+> +
+> +struct bpf_dispatcher {
+> +	void *func;
+> +	struct bpf_disp_prog progs[BPF_DISPATCHER_MAX];
+> +	int num_progs;
+> +	void *image;
+> +	u32 image_off;
+> +};
+> +
+> +static struct bpf_dispatcher *bpf_disp;
+> +
+> +static DEFINE_MUTEX(dispatcher_mutex);
+> +
+> +static struct bpf_dispatcher *bpf_dispatcher_lookup(void *func)
+> +{
+> +	struct bpf_dispatcher *d;
+> +	void *image;
+> +
+> +	if (bpf_disp) {
+> +		if (bpf_disp->func != func)
+> +			return NULL;
+> +		return bpf_disp;
+> +	}
+> +
+> +	d = kzalloc(sizeof(*d), GFP_KERNEL);
+> +	if (!d)
+> +		return NULL;
 
-Wow! Very cool! Thanks a bunch for this!
+The bpf_dispatcher_lookup() above makes this dispatch logic a bit difficult to
+extend, since it works for only one bpf_disp and additional dispatchers would
+need hash table. Yet your numbers show that even with retpoline=off there is a
+performance benefit. So dispatcher probably can be reused almost as-is to
+accelerate sched_cls programs.
+What I was trying to say in my previous feedback on this subject is that
+lookup() doesn't need to exist. That 'void *func' doesn't need to be a function
+that dispatcher uses. It can be 'struct bpf_dispatcher *' instead.
+And lookup() becomes init().
+Then bpf_dispatcher_change_prog() will be passing &bpf_dispatcher_xdp
+and bpf_dispatcher_xdp is defined via macro that supplies
+'struct bpf_dispatcher' above and instantiated in particular .c file
+that used that macro. Then dispatcher can be used in more than one place.
+No need for hash table. Multiple dispatchers are instantiated in places
+that need them via macro.
+The code will look like:
+bpf_prog_change_xdp(struct bpf_prog *prev_prog, struct bpf_prog *prog)
+{
+   bpf_dispatcher_change_prog(&bpf_dispatcher_xdp, prev_prog, prog);
+}
+Similarly sched_cls dispatcher for skb progs will do:
+   bpf_dispatcher_change_prog(&bpf_dispatcher_tc, prev_prog, prog);
+wdyt?
+
