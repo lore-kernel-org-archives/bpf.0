@@ -2,122 +2,122 @@ Return-Path: <SRS0=eM+6=2A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8443C00454
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:24:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91341C43603
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:24:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7C553214AF
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:24:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="KHpIsIRJ"
+	by mail.kernel.org (Postfix) with ESMTP id 5C7F8206D5
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:24:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1576013091;
+	bh=KROqiwEc4Yl8hYF9U4D/vGypWetk7u5BYKdW5/o94H0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=eEASmW5oG05UTUNZXgtf09EwUyVVNVFIcXG6Pt1WDAB9tLUY+ZX7lMCwoWAt/n6Uq
+	 enDQJgtsd/1eSCvWk+S5JeEescTieKl+hohX6vSSYeu0RCYQze4eGQcRXv/JXvLO+k
+	 ZoxeEN6q5D8NWk9c4DNTvBtbxbWTkadjeaK9KxAs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729037AbfLJVYc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:24:32 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:36078 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727506AbfLJVYb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:24:31 -0500
-Received: by mail-pf1-f193.google.com with SMTP id x184so465922pfb.3
-        for <bpf@vger.kernel.org>; Tue, 10 Dec 2019 13:24:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=y6ht5YW8dhI/whPoru8OJyyMGM1ELyH7ioiCN142OAA=;
-        b=KHpIsIRJFHpu/RE+iNns/3lFjXjW7dmPCYbVqVy2fJCsmV0QXQ+Sh1tnMDBlQiuHmc
-         dEdTZ91YLJNA0acWzBev8p8U2ZgM+kMxUf+plwKLeldKf/To+yI5l1o4i8w6eTKp67zG
-         5dOPnsWjpA1rf6+HIWCJ+ywJzhdiKHqRCJKdvupaO7nSR4TdgIp4YpeCGEU6UiV3+fdo
-         pD3cHPJrjOAoe4q81m+GIuaF74ThJeM9p4B2vthnNVJV3HZGRmtIY58FYWwYzY33SbtP
-         1bh8dCKk0ZyFnxfk0aH69bVqn3mpPv1B7xR9cPH+XqM+NS6HtwMQBT61qWveHYnZjywR
-         tVaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=y6ht5YW8dhI/whPoru8OJyyMGM1ELyH7ioiCN142OAA=;
-        b=ikUfTqknWzaH+874upzsD/7JWbUH3pN/C5VD3SPb0fJBJ86wbbWCs34loiIdF4aVDH
-         LsoaFSBrGWn4m9IbHJAlMDMP7HN7v5zmt5AWVfNcpmssu2x9/qg/iBAAdjN25qmSujQH
-         NzSBox69FF0vKgy3GeUMTpheTHn6rY6qfsmshc6HN9avG7MXvn3IG3c5Fdk48a9C/2g1
-         yurqXsruqglPiwQxYXydS9Jqux023qNqIrfzh5FW4QMXR3/YpIhfJ6Qglsm3WOqopfF5
-         wTej4/cOEfx+7gy1xjgr8372n/GMKwf1F1EqV8zSOhrstPEa7W0dyixfCaFcxZddXUYS
-         sGGw==
-X-Gm-Message-State: APjAAAWw79cjZxIjnHdQZ34yGUrNWlcphknTsRzbGzc/VSZpcWtohnmy
-        Fk1L91cSt2psRRbIhesl0+lB6KT9IZ0=
-X-Google-Smtp-Source: APXvYqzC6v4sPSMefQJvm+lNgRpCI17boTVEAvsS1g+uMr6wh21YyjZZNzvkuO7OK4RunNjrL9QxpA==
-X-Received: by 2002:a62:3045:: with SMTP id w66mr8948273pfw.122.1576013071142;
-        Tue, 10 Dec 2019 13:24:31 -0800 (PST)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id v29sm4200264pgl.88.2019.12.10.13.24.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 13:24:30 -0800 (PST)
-Date:   Tue, 10 Dec 2019 13:24:28 -0800
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        lkml <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Martin Lau <kafai@fb.com>
-Subject: Re: [PATCH bpf v2] bpftool: Don't crash on missing jited insns or
- ksyms
-Message-ID: <20191210132428.4470a7b0@cakuba.netronome.com>
-In-Reply-To: <87eexbhopo.fsf@toke.dk>
-References: <20191210181412.151226-1-toke@redhat.com>
-        <20191210125457.13f7821a@cakuba.netronome.com>
-        <87eexbhopo.fsf@toke.dk>
-Organization: Netronome Systems, Ltd.
+        id S1728594AbfLJVKr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:10:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60978 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728251AbfLJVKq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:10:46 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 758E3246A3;
+        Tue, 10 Dec 2019 21:10:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576012245;
+        bh=KROqiwEc4Yl8hYF9U4D/vGypWetk7u5BYKdW5/o94H0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Bs5EmLx+0etvN685ifWMOE5854B98UCqEkfX6MOgXyrVSfLY2dGdAgFYYFQL7Eucq
+         URHRWi4P32Eh5P+cC943b6IAkU4jXRvhXV6rWs92NwD5A5qyoZMEB39cVX1AJUPrA0
+         mIQH/vuYstUK9i5rqeAo2bORccOUMSV/TxWQHzz0=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 193/350] libbpf: Fix error handling in bpf_map__reuse_fd()
+Date:   Tue, 10 Dec 2019 16:04:58 -0500
+Message-Id: <20191210210735.9077-154-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
+References: <20191210210735.9077-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 10 Dec 2019 22:09:55 +0100, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> Jakub Kicinski <jakub.kicinski@netronome.com> writes:
-> > On Tue, 10 Dec 2019 19:14:12 +0100, Toke H=C3=B8iland-J=C3=B8rgensen wr=
-ote: =20
-> >> When the kptr_restrict sysctl is set, the kernel can fail to return
-> >> jited_ksyms or jited_prog_insns, but still have positive values in
-> >> nr_jited_ksyms and jited_prog_len. This causes bpftool to crash when t=
-rying
-> >> to dump the program because it only checks the len fields not the actu=
-al
-> >> pointers to the instructions and ksyms.
-> >>=20
-> >> Fix this by adding the missing checks.
-> >>=20
-> >> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> =20
-> >
-> > Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
-> >
-> > and
-> >
-> > Fixes: f84192ee00b7 ("tools: bpftool: resolve calls without using imm f=
-ield")
-> >
-> > ? =20
->=20
-> Yeah, guess so? Although I must admit it's not quite clear to me whether
-> bpftool gets stable backports, or if it follows the "only moving
-> forward" credo of libbpf?
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-bpftool does not have a GH repo, and seeing strength of Alexei's
-arguments in the recent discussion - I don't think it will. So no
-reason for bpftool to be "special" =E2=9D=84=EF=B8=8F.
+[ Upstream commit d1b4574a4b86565325ef2e545eda8dfc9aa07c60 ]
 
-Then again seeing Andrii's zeal for pushing the codegen stuff into
-bpftool, maybe Facebook's intention is to make it so.
+bpf_map__reuse_fd() was calling close() in the error path before returning
+an error value based on errno. However, close can change errno, so that can
+lead to potentially misleading error messages. Instead, explicitly store
+errno in the err variable before each goto.
 
-Hard to tell what to do when standard practices don't apply, sigh.
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Link: https://lore.kernel.org/bpf/157269297769.394725.12634985106772698611.stgit@toke.dk
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/lib/bpf/libbpf.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-> Anyhow, I don't suppose it'll hurt to have the Fixes: tag(s) in there;
-> does Patchwork pick these up (or can you guys do that when you apply
-> this?), or should I resend?
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index e0276520171b9..a267cd0c0ce28 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1897,16 +1897,22 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
+ 		return -errno;
+ 
+ 	new_fd = open("/", O_RDONLY | O_CLOEXEC);
+-	if (new_fd < 0)
++	if (new_fd < 0) {
++		err = -errno;
+ 		goto err_free_new_name;
++	}
+ 
+ 	new_fd = dup3(fd, new_fd, O_CLOEXEC);
+-	if (new_fd < 0)
++	if (new_fd < 0) {
++		err = -errno;
+ 		goto err_close_new_fd;
++	}
+ 
+ 	err = zclose(map->fd);
+-	if (err)
++	if (err) {
++		err = -errno;
+ 		goto err_close_new_fd;
++	}
+ 	free(map->name);
+ 
+ 	map->fd = new_fd;
+@@ -1925,7 +1931,7 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
+ 	close(new_fd);
+ err_free_new_name:
+ 	free(new_name);
+-	return -errno;
++	return err;
+ }
+ 
+ int bpf_map__resize(struct bpf_map *map, __u32 max_entries)
+-- 
+2.20.1
 
-I don't think it does, but perhaps Daniel's scripts do.
-
-Either way I don't think it's worth a resend.
