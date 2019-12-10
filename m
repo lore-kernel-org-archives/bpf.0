@@ -2,119 +2,158 @@ Return-Path: <SRS0=eM+6=2A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9030BC43603
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 01:15:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10F0DC43603
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 01:15:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 67B9B2077B
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 01:15:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB8A82077B
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 01:15:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="eGCQ7s7l"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Iuf5z6ag"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727553AbfLJBPc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Dec 2019 20:15:32 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:62670 "EHLO
+        id S1727221AbfLJBPe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Dec 2019 20:15:34 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:60804 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727221AbfLJBP0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 9 Dec 2019 20:15:26 -0500
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBA1BCoe019450
-        for <bpf@vger.kernel.org>; Mon, 9 Dec 2019 17:15:26 -0800
+        by vger.kernel.org with ESMTP id S1727675AbfLJBPK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 9 Dec 2019 20:15:10 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBA1F6JX027001
+        for <bpf@vger.kernel.org>; Mon, 9 Dec 2019 17:15:09 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=qoQnl4Q8PMXkMLEQ3ky0X4fTwA8dHghjtxQU5dM5zG4=;
- b=eGCQ7s7ltyB/5IxXqNCTi2RYCq37wyaxMtal7XgnDV429bm8nL7wWCRZT1kmeV6AwKbZ
- UGRMsUosL5tBKj+qc0C9YCj9Dc/UlavXgPn3JGpqgCFR61XAnhPYgNSL/T86z9InZAzk
- qH64py9rE72ukCudLqS9AR5Hz/o7IDUeVwI= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wt0cx09vh-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 09 Dec 2019 17:15:26 -0800
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 9 Dec 2019 17:15:22 -0800
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=miRau5+VJsH9JKRajjt8/XhGdNhygJx0xHfmp88I5a4=;
+ b=Iuf5z6agaVu5UWPfUJ39MlFng/j2W0LKAnmMTQlBLueBkuyZYWa7MEiRgacrc7J6h3Ub
+ 73bOcSNMacpC3Ilzf5QfZkz6HMllBWvqHp/0jXDErUu32bBrTb40Al+BXX+tQkcMxspW
+ McUdWtZaJXuxw64q3Dm8VtYJdfv/OMUbrlE= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wrvye7yuq-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 09 Dec 2019 17:15:09 -0800
+Received: from intmgw001.05.ash5.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Mon, 9 Dec 2019 17:14:48 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 928D12EC16B5; Mon,  9 Dec 2019 17:15:20 -0800 (PST)
+        id CA5E92EC16B5; Mon,  9 Dec 2019 17:14:46 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>
+        Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 15/15] bpftool: add `gen skeleton` BASH completions
-Date:   Mon, 9 Dec 2019 17:14:38 -0800
-Message-ID: <20191210011438.4182911-16-andriin@fb.com>
+Subject: [PATCH bpf-next 00/15] Add code-generated BPF object skeleton support
+Date:   Mon, 9 Dec 2019 17:14:23 -0800
+Message-ID: <20191210011438.4182911-1-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191210011438.4182911-1-andriin@fb.com>
-References: <20191210011438.4182911-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-09_05:2019-12-09,2019-12-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- impostorscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=918
- clxscore=1015 malwarescore=0 spamscore=0 phishscore=0 suspectscore=8
- adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912100009
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ malwarescore=0 clxscore=1015 adultscore=0 impostorscore=0
+ lowpriorityscore=0 mlxlogscore=999 suspectscore=8 spamscore=0
+ priorityscore=1501 bulkscore=0 mlxscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-1910280000
+ definitions=main-1912100009
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add BASH completions for gen sub-command.
+This patch set introduces an alternative and complimentary to existing libbpf
+API interface for working with BPF objects, maps, programs, and global data
+from userspace side. This approach is relying on code generation. bpftool
+produces a struct (a.k.a. skeleton) tailored and specific to provided BPF
+object file. It includes hard-coded fields and data structures for every map,
+program, link, and global data present.
 
-Cc: Quentin Monnet <quentin.monnet@netronome.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/bpf/bpftool/bash-completion/bpftool | 11 +++++++++++
- tools/bpf/bpftool/main.c                  |  2 +-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+Altogether this approach significantly reduces amount of userspace boilerplate
+code required to open, load, attach, and work with BPF objects. It improves
+attach/detach story, by providing pre-allocated space for bpf_links, and
+ensuring they are properly detached on shutdown. It allows to do away with by
+name/title lookups of maps and programs, because libbpf's skeleton API, in
+conjunction with generated code from bpftool, is filling in hard-coded fields
+with actual pointers to corresponding struct bpf_map/bpf_program/bpf_link.
 
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 70493a6da206..986519cc58d1 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -716,6 +716,17 @@ _bpftool()
-                     ;;
-             esac
-             ;;
-+        gen)
-+            case $command in
-+                skeleton)
-+                    _filedir
-+		    ;;
-+                *)
-+                    [[ $prev == $object ]] && \
-+                        COMPREPLY=( $( compgen -W 'skeleton help' -- "$cur" ) )
-+                    ;;
-+            esac
-+            ;;
-         cgroup)
-             case $command in
-                 show|list|tree)
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index 758b294e8a7d..1fe91c558508 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -58,7 +58,7 @@ static int do_help(int argc, char **argv)
- 		"       %s batch file FILE\n"
- 		"       %s version\n"
- 		"\n"
--		"       OBJECT := { prog | map | cgroup | perf | net | feature | btf }\n"
-+		"       OBJECT := { prog | map | cgroup | perf | net | feature | btf | gen }\n"
- 		"       " HELP_SPEC_OPTIONS "\n"
- 		"",
- 		bin_name, bin_name, bin_name);
+Also, thanks to BPF array mmap() support, working with global data (variables)
+from userspace is now as natural as it is from BPF side: each variable is just
+a struct field inside skeleton struct. Furthermore, this allows to have
+a natural way for userspace to pre-initialize global data (including
+previously impossible to initialize .rodata) by just assigning values to the
+same per-variable fields. Libbpf will carefully take into account this
+initialization image, will use it to pre-populate BPF maps at creation time,
+and will re-mmap() BPF map's contents at exactly the same userspace memory
+address such that it can continue working with all the same pointers without
+any interruptions. If kernel doesn't support mmap(), global data will still be
+successfully initialized, but after map creation global data structures inside
+skeleton will be NULL-ed out. This allows userspace application to gracefully
+handle lack of mmap() support, if necessary.
+
+A bunch of selftests are also converted to using skeletons, demonstrating
+significant simplification of userspace part of test and reduction in amount
+of code necessary.
+
+rfc->v1:
+- runqslower moved out into separate patch set waiting for vmlinux.h
+  improvements;
+- skeleton generation code deals with unknown internal maps more gracefully.
+
+Andrii Nakryiko (15):
+  libbpf: don't require root for bpf_object__open()
+  libbpf: add generic bpf_program__attach()
+  libbpf: move non-public APIs from libbpf.h to libbpf_internal.h
+  libbpf: add BPF_EMBED_OBJ macro for embedding BPF .o files
+  libbpf: expose field/var declaration emitting API internally
+  libbpf: expose BPF program's function name
+  libbpf: refactor global data map initialization
+  libbpf: postpone BTF ID finding for TRACING programs to load phase
+  libbpf: reduce log level of supported section names dump
+  libbpf: add experimental BPF object skeleton support
+  bpftool: add skeleton codegen command
+  selftests/bpf: add BPF skeletons selftests and convert attach_probe.c
+  selftests/bpf: convert few more selftest to skeletons
+  selftests/bpf: add test validating data section to struct convertion
+    layout
+  bpftool: add `gen skeleton` BASH completions
+
+ tools/bpf/bpftool/Makefile                    |   2 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |  11 +
+ tools/bpf/bpftool/gen.c                       | 530 ++++++++++++++++
+ tools/bpf/bpftool/main.c                      |   3 +-
+ tools/bpf/bpftool/main.h                      |   1 +
+ tools/bpf/bpftool/net.c                       |   1 +
+ tools/lib/bpf/btf_dump.c                      |  61 +-
+ tools/lib/bpf/libbpf.c                        | 583 ++++++++++++++----
+ tools/lib/bpf/libbpf.h                        |  63 +-
+ tools/lib/bpf/libbpf.map                      |   4 +
+ tools/lib/bpf/libbpf_internal.h               |  61 ++
+ tools/testing/selftests/bpf/.gitignore        |   2 +
+ tools/testing/selftests/bpf/Makefile          |  36 +-
+ .../selftests/bpf/prog_tests/attach_probe.c   | 154 +----
+ .../selftests/bpf/prog_tests/fentry_fexit.c   | 105 ++--
+ .../selftests/bpf/prog_tests/fentry_test.c    |  72 +--
+ tools/testing/selftests/bpf/prog_tests/mmap.c |  58 +-
+ .../selftests/bpf/prog_tests/probe_user.c     |   6 +-
+ .../selftests/bpf/prog_tests/rdonly_maps.c    |  11 +-
+ .../selftests/bpf/prog_tests/skeleton.c       |  47 ++
+ .../bpf/prog_tests/stacktrace_build_id.c      |  79 +--
+ .../bpf/prog_tests/stacktrace_build_id_nmi.c  |  84 +--
+ .../selftests/bpf/progs/test_attach_probe.c   |  34 +-
+ .../selftests/bpf/progs/test_skeleton.c       |  36 ++
+ 24 files changed, 1444 insertions(+), 600 deletions(-)
+ create mode 100644 tools/bpf/bpftool/gen.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/skeleton.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_skeleton.c
+
 -- 
 2.17.1
 
