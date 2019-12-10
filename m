@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E641C2BD09
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 01:15:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CF96C2D0C4
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 01:15:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DA7812077B
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 01:15:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 444C22077B
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 01:15:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="CflxekR0"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="rXe6/jjv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727674AbfLJBPO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Dec 2019 20:15:14 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:26462 "EHLO
+        id S1727675AbfLJBPe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Dec 2019 20:15:34 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:20822 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727693AbfLJBPM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 9 Dec 2019 20:15:12 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBA1BTxX029291
-        for <bpf@vger.kernel.org>; Mon, 9 Dec 2019 17:15:11 -0800
+        by vger.kernel.org with ESMTP id S1727690AbfLJBPK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 9 Dec 2019 20:15:10 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBA1F6Ja027001
+        for <bpf@vger.kernel.org>; Mon, 9 Dec 2019 17:15:10 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=LUTHNVYWuBjbjY35u4Vz7T+dAc0ioyo3dFrR9Bb6LCo=;
- b=CflxekR0rKyG4I2+WxOuXDjqg7kF2Ag/ySlnqqLDEhZ1ZlAh/Hx9YwNWjw7Ns5Xt4uvZ
- m1YuhMxo/gJRmVz+zLxSqOOSD3yOQwSJaR9VJwNMT5H2bfYi6+IifYyyxObrZwKFnduo
- apiSocBISSckHKtrfhe6+opNGWYSorc7J9Y= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wrvq1g28a-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 09 Dec 2019 17:15:11 -0800
-Received: from intmgw003.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 9 Dec 2019 17:15:09 -0800
+ content-type; s=facebook; bh=TICdj9MqdEBx5LXW2itojFdnMMVGOHbIG551LLsKUlA=;
+ b=rXe6/jjvisdD5d9EdCqCpjhLJz4fKcUCrLKM4UlJx6TErUKCoMR8IIFH239qU+/lu2Lk
+ 6PlbLks5o/HIP9lhmor1U9pLiT2esyxGY9Csq3ebu/7dORYFbd/3F4qTzdjmg3fIes8C
+ YQjML2aT6tz7j4Skr+9O9ZINdYbNarMYdJU= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wrvye7yuq-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 09 Dec 2019 17:15:10 -0800
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Mon, 9 Dec 2019 17:14:54 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id BE9AB2EC16B5; Mon,  9 Dec 2019 17:15:04 -0800 (PST)
+        id AAAEE2EC16B5; Mon,  9 Dec 2019 17:14:53 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 08/15] libbpf: postpone BTF ID finding for TRACING programs to load phase
-Date:   Mon, 9 Dec 2019 17:14:31 -0800
-Message-ID: <20191210011438.4182911-9-andriin@fb.com>
+Subject: [PATCH bpf-next 03/15] libbpf: move non-public APIs from libbpf.h to libbpf_internal.h
+Date:   Mon, 9 Dec 2019 17:14:26 -0800
+Message-ID: <20191210011438.4182911-4-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191210011438.4182911-1-andriin@fb.com>
 References: <20191210011438.4182911-1-andriin@fb.com>
@@ -59,109 +59,104 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-09_05:2019-12-09,2019-12-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 suspectscore=9
- priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1015 spamscore=0
- lowpriorityscore=0 adultscore=0 mlxlogscore=999 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912100009
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ malwarescore=0 clxscore=1015 adultscore=0 impostorscore=0
+ lowpriorityscore=0 mlxlogscore=999 suspectscore=8 spamscore=0
+ priorityscore=1501 bulkscore=0 mlxscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-1910280000
+ definitions=main-1912100009
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move BTF ID determination for BPF_PROG_TYPE_TRACING programs to a load phase.
-Performing it at open step is inconvenient, because it prevents BPF skeleton
-generation on older host kernel, which doesn't contain BTF_KIND_FUNCs
-information in vmlinux BTF. This is a common set up, though, when, e.g.,
-selftests are compiled on older host kernel, but the test program itself is
-executed in qemu VM with bleeding edge kernel. Having this BTF searching
-performed at load time allows to successfully use bpf_object__open() for
-codegen and inspection of BPF object file.
+Few libbpf APIs are not public but currently exposed through libbpf.h to be
+used by bpftool. Move them to libbpf_internal.h, where intent of being
+non-stable and non-public is much more obvious.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 37 ++++++++++++++++++-------------------
- 1 file changed, 18 insertions(+), 19 deletions(-)
+ tools/bpf/bpftool/net.c         |  1 +
+ tools/lib/bpf/libbpf.h          | 17 -----------------
+ tools/lib/bpf/libbpf_internal.h | 17 +++++++++++++++++
+ 3 files changed, 18 insertions(+), 17 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index ff00a767adfb..f4a3ed73c9f5 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -3811,11 +3811,22 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	return ret;
- }
+diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
+index 4f52d3151616..d93bee298e54 100644
+--- a/tools/bpf/bpftool/net.c
++++ b/tools/bpf/bpftool/net.c
+@@ -18,6 +18,7 @@
  
--int
--bpf_program__load(struct bpf_program *prog,
--		  char *license, __u32 kern_version)
-+static int libbpf_find_attach_btf_id(const char *name,
-+				     enum bpf_attach_type attach_type,
-+				     __u32 attach_prog_fd);
-+
-+int bpf_program__load(struct bpf_program *prog, char *license, __u32 kern_ver)
- {
--	int err = 0, fd, i;
-+	int err = 0, fd, i, btf_id;
-+
-+	if (prog->type == BPF_PROG_TYPE_TRACING) {
-+		btf_id = libbpf_find_attach_btf_id(prog->section_name,
-+						   prog->expected_attach_type,
-+						   prog->attach_prog_fd);
-+		if (btf_id <= 0)
-+			return btf_id;
-+		prog->attach_btf_id = btf_id;
-+	}
+ #include <bpf.h>
+ #include <nlattr.h>
++#include "libbpf_internal.h"
+ #include "main.h"
+ #include "netlink_dumper.h"
  
- 	if (prog->instances.nr < 0 || !prog->instances.fds) {
- 		if (prog->preprocessor) {
-@@ -3839,7 +3850,7 @@ bpf_program__load(struct bpf_program *prog,
- 				prog->section_name, prog->instances.nr);
- 		}
- 		err = load_program(prog, prog->insns, prog->insns_cnt,
--				   license, kern_version, &fd);
-+				   license, kern_ver, &fd);
- 		if (!err)
- 			prog->instances.fds[0] = fd;
- 		goto out;
-@@ -3868,9 +3879,7 @@ bpf_program__load(struct bpf_program *prog,
- 		}
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 804f445c9957..2698fbcb0c79 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -126,11 +126,6 @@ bpf_object__open_buffer(const void *obj_buf, size_t obj_buf_sz,
+ LIBBPF_API struct bpf_object *
+ bpf_object__open_xattr(struct bpf_object_open_attr *attr);
  
- 		err = load_program(prog, result.new_insn_ptr,
--				   result.new_insn_cnt,
--				   license, kern_version, &fd);
+-int bpf_object__section_size(const struct bpf_object *obj, const char *name,
+-			     __u32 *size);
+-int bpf_object__variable_offset(const struct bpf_object *obj, const char *name,
+-				__u32 *off);
 -
-+				   result.new_insn_cnt, license, kern_ver, &fd);
- 		if (err) {
- 			pr_warn("Loading the %dth instance of program '%s' failed\n",
- 				i, prog->section_name);
-@@ -3914,9 +3923,6 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
- 	return 0;
- }
+ enum libbpf_pin_type {
+ 	LIBBPF_PIN_NONE,
+ 	/* PIN_BY_NAME: pin maps by name (in /sys/fs/bpf by default) */
+@@ -514,18 +509,6 @@ bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
+ 			   void **copy_mem, size_t *copy_size,
+ 			   bpf_perf_event_print_t fn, void *private_data);
  
--static int libbpf_find_attach_btf_id(const char *name,
--				     enum bpf_attach_type attach_type,
--				     __u32 attach_prog_fd);
- static struct bpf_object *
- __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 		   const struct bpf_object_open_opts *opts)
-@@ -3980,15 +3986,8 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
+-struct nlattr;
+-typedef int (*libbpf_dump_nlmsg_t)(void *cookie, void *msg, struct nlattr **tb);
+-int libbpf_netlink_open(unsigned int *nl_pid);
+-int libbpf_nl_get_link(int sock, unsigned int nl_pid,
+-		       libbpf_dump_nlmsg_t dump_link_nlmsg, void *cookie);
+-int libbpf_nl_get_class(int sock, unsigned int nl_pid, int ifindex,
+-			libbpf_dump_nlmsg_t dump_class_nlmsg, void *cookie);
+-int libbpf_nl_get_qdisc(int sock, unsigned int nl_pid, int ifindex,
+-			libbpf_dump_nlmsg_t dump_qdisc_nlmsg, void *cookie);
+-int libbpf_nl_get_filter(int sock, unsigned int nl_pid, int ifindex, int handle,
+-			 libbpf_dump_nlmsg_t dump_filter_nlmsg, void *cookie);
+-
+ struct bpf_prog_linfo;
+ struct bpf_prog_info;
  
- 		bpf_program__set_type(prog, prog_type);
- 		bpf_program__set_expected_attach_type(prog, attach_type);
--		if (prog_type == BPF_PROG_TYPE_TRACING) {
--			err = libbpf_find_attach_btf_id(prog->section_name,
--							attach_type,
--							attach_prog_fd);
--			if (err <= 0)
--				goto out;
--			prog->attach_btf_id = err;
-+		if (prog_type == BPF_PROG_TYPE_TRACING)
- 			prog->attach_prog_fd = attach_prog_fd;
--		}
- 	}
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 97ac17a64a58..7ee0c8691835 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -98,6 +98,23 @@ static inline bool libbpf_validate_opts(const char *opts,
+ int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
+ 			 const char *str_sec, size_t str_len);
  
- 	return obj;
++int bpf_object__section_size(const struct bpf_object *obj, const char *name,
++			     __u32 *size);
++int bpf_object__variable_offset(const struct bpf_object *obj, const char *name,
++				__u32 *off);
++
++struct nlattr;
++typedef int (*libbpf_dump_nlmsg_t)(void *cookie, void *msg, struct nlattr **tb);
++int libbpf_netlink_open(unsigned int *nl_pid);
++int libbpf_nl_get_link(int sock, unsigned int nl_pid,
++		       libbpf_dump_nlmsg_t dump_link_nlmsg, void *cookie);
++int libbpf_nl_get_class(int sock, unsigned int nl_pid, int ifindex,
++			libbpf_dump_nlmsg_t dump_class_nlmsg, void *cookie);
++int libbpf_nl_get_qdisc(int sock, unsigned int nl_pid, int ifindex,
++			libbpf_dump_nlmsg_t dump_qdisc_nlmsg, void *cookie);
++int libbpf_nl_get_filter(int sock, unsigned int nl_pid, int ifindex, int handle,
++			 libbpf_dump_nlmsg_t dump_filter_nlmsg, void *cookie);
++
+ struct btf_ext_info {
+ 	/*
+ 	 * info points to the individual info section (e.g. func_info and
 -- 
 2.17.1
 
