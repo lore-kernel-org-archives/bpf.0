@@ -7,53 +7,51 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB122C00454
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:45:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67C9BC2D0BF
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:50:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AFFD4205C9
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:45:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2EC19214AF
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576014347;
-	bh=O9wvgMQOY4z6mdfhDgz/8/61sjmrTeVx4xKSD80smfI=;
+	s=default; t=1576014609;
+	bh=LpanFEyvR+xEw/Esxsx0CMwvEb4jJ3RN9Q+A3sYHxB8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=JwhQPm63rW8T5xTZo498BIqcBq3jdsBxDRVcilA0JToDEN/y786XCw+LvPKUpMsPq
-	 y7Psld6+XZK2mOL9dUZKKXx89z4DYLabT0wG9XcbpQyZ8fCsDjnQDrlwJ2m5Pu9mVT
-	 99bQ5U2czMOLaZZiwNIky3I1z5oAUoNO7yQgbpNQ=
+	b=NpvZdvQZM2o3kfQQEg2r91B1gNAvzunShcXVNX7/ltf9vW1gwTN4rr0GdJw8F/kPK
+	 wBbeUMykKlhOLjfBch23vCHlyoX+SS73mDSlfpNznDFb8mOBF0BuICWEfPqkeh+Jp0
+	 GAxv+bIWRK3eAE56cyiuWtHpq3an2Ni0pBiWU7OU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729544AbfLJVcz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:32:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36720 "EHLO mail.kernel.org"
+        id S1727193AbfLJVuH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:50:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55868 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729528AbfLJVcy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:32:54 -0500
+        id S1727856AbfLJVI2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:08:28 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C0BE205C9;
-        Tue, 10 Dec 2019 21:32:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F17AD2077B;
+        Tue, 10 Dec 2019 21:08:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576013573;
-        bh=O9wvgMQOY4z6mdfhDgz/8/61sjmrTeVx4xKSD80smfI=;
+        s=default; t=1576012107;
+        bh=LpanFEyvR+xEw/Esxsx0CMwvEb4jJ3RN9Q+A3sYHxB8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y2w2cb91hGpf9Cdo5/9adlcFno1hceBXmdb1TtDffl4KsPh2cKuef9wQHOyJZ22Il
-         gZxMqmm7PyHGwjgVusD/D9gdjHM4gfZNXXQrCUHd34J8IJ3pOtBIV71cAMlG/C5T+0
-         c0eRzTt6s4H/dTzmTDRKTR0nhFr36GuhxCfL16Ik=
+        b=r6SzZs8LbggStxLlKpVmIAwgtJEi61KoSHoCOkTe+pPIU/ma0gVLjGQkb6vgN5wYT
+         GGOagtq7Q9N80or2lG4lBrMfliWxMkHUlAF+o24BRLmbBIM5UkezT9ZvEWW0QswN6H
+         84ue1XgjfmHo4q5azsG54x5oXSFojhJGd3k299Ls=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+Cc:     Ilya Maximets <i.maximets@ovn.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 026/177] selftests/bpf: Correct path to include msg + path
-Date:   Tue, 10 Dec 2019 16:29:50 -0500
-Message-Id: <20191210213221.11921-26-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 081/350] libbpf: Fix passing uninitialized bytes to setsockopt
+Date:   Tue, 10 Dec 2019 16:03:06 -0500
+Message-Id: <20191210210735.9077-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210213221.11921-1-sashal@kernel.org>
-References: <20191210213221.11921-1-sashal@kernel.org>
+In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
+References: <20191210210735.9077-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -62,67 +60,45 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+From: Ilya Maximets <i.maximets@ovn.org>
 
-[ Upstream commit c588146378962786ddeec817f7736a53298a7b01 ]
+[ Upstream commit 25bfef430e960e695403b5d9c8dcc11b9f5d62be ]
 
-The "path" buf is supposed to contain path + printf msg up to 24 bytes.
-It will be cut anyway, but compiler generates truncation warns like:
+'struct xdp_umem_reg' has 4 bytes of padding at the end that makes
+valgrind complain about passing uninitialized stack memory to the
+syscall:
 
-"
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c: In
-function ‘setup_cgroup_environment’:
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:52:34:
-warning: ‘/cgroup.controllers’ directive output may be truncated
-writing 19 bytes into a region of size between 1 and 4097
-[-Wformat-truncation=]
-snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
-				  ^~~~~~~~~~~~~~~~~~~
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:52:2:
-note: ‘snprintf’ output between 20 and 4116 bytes into a destination
-of size 4097
-snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:72:34:
-warning: ‘/cgroup.subtree_control’ directive output may be truncated
-writing 23 bytes into a region of size between 1 and 4097
-[-Wformat-truncation=]
-snprintf(path, sizeof(path), "%s/cgroup.subtree_control",
-				  ^~~~~~~~~~~~~~~~~~~~~~~
-cgroup_path);
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:72:2:
-note: ‘snprintf’ output between 24 and 4120 bytes into a destination
-of size 4097
-snprintf(path, sizeof(path), "%s/cgroup.subtree_control",
-cgroup_path);
-"
+  Syscall param socketcall.setsockopt() points to uninitialised byte(s)
+    at 0x4E7AB7E: setsockopt (in /usr/lib64/libc-2.29.so)
+    by 0x4BDE035: xsk_umem__create@@LIBBPF_0.0.4 (xsk.c:172)
+  Uninitialised value was created by a stack allocation
+    at 0x4BDDEBA: xsk_umem__create@@LIBBPF_0.0.4 (xsk.c:140)
 
-In order to avoid warns, lets decrease buf size for cgroup workdir on
-24 bytes with assumption to include also "/cgroup.subtree_control" to
-the address. The cut will never happen anyway.
+Padding bytes appeared after introducing of a new 'flags' field.
+memset() is required to clear them.
 
-Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/bpf/20191002120404.26962-3-ivan.khoronzhuk@linaro.org
+Fixes: 10d30e301732 ("libbpf: add flags to umem config")
+Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Link: https://lore.kernel.org/bpf/20191009164929.17242-1-i.maximets@ovn.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/cgroup_helpers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/bpf/xsk.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index cf16948aad4ad..6af24f9a780de 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -44,7 +44,7 @@
-  */
- int setup_cgroup_environment(void)
- {
--	char cgroup_workdir[PATH_MAX + 1];
-+	char cgroup_workdir[PATH_MAX - 24];
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index a902838f9fccd..9d53480862030 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -163,6 +163,7 @@ int xsk_umem__create_v0_0_4(struct xsk_umem **umem_ptr, void *umem_area,
+ 	umem->umem_area = umem_area;
+ 	xsk_set_umem_config(&umem->config, usr_config);
  
- 	format_cgroup_path(cgroup_workdir, "");
- 
++	memset(&mr, 0, sizeof(mr));
+ 	mr.addr = (uintptr_t)umem_area;
+ 	mr.len = size;
+ 	mr.chunk_size = umem->config.frame_size;
 -- 
 2.20.1
 
