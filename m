@@ -2,118 +2,130 @@ Return-Path: <SRS0=eM+6=2A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3738C43603
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:29:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AD9FC00454
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:31:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 83ED2205C9
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:29:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QoR6Yr/J"
+	by mail.kernel.org (Postfix) with ESMTP id 7020D2073B
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:31:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1576013479;
+	bh=oW7QC7ZN3sDu53rgPYqBtojvRFrE+jG2HcylGdisCL0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=kSiWdhPvt8vlNDOQ9SvHBmP2OFkJZT36x+p/QqfLoKA6j/vZLLd81vM8f5IULS51h
+	 axvCV1lrHxbREOZHfRs2jC/VTK5tb5oDeiYVmdeW5A8dsF/q/HFFsRoaBM7VB/SmOl
+	 zhMNVGh0zPsllKLZg/KjKhakU7yemJRse6VTId4I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727160AbfLJV34 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:29:56 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:60809 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727230AbfLJVKB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:10:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1576012200;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6Dn0X1y8qWY4L6jupdvIYtGjXctpKGwYZyUlMuuX+gk=;
-        b=QoR6Yr/J4bbjg/p1mvjp7aha9lOWnKDi9ZOSF9vhAgamPAx0hMo1FaX41vIJkJE+j2Lh2K
-        ISZwzpZ2cts5uzgcrjzSZoPLxVlaazc7O+KU167PfBAEoT4Re2QMxxZODBx+13nljlG4+s
-        XZwH0VLWZ0q7q7gg9ZpkjHENCtlY+f4=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-341-3ZmF-bNKPJ6yMjV4_KvasA-1; Tue, 10 Dec 2019 16:09:59 -0500
-Received: by mail-lf1-f71.google.com with SMTP id a11so4336779lff.12
-        for <bpf@vger.kernel.org>; Tue, 10 Dec 2019 13:09:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=6Dn0X1y8qWY4L6jupdvIYtGjXctpKGwYZyUlMuuX+gk=;
-        b=k54/Ww4n5Yw4sgC11FqsE/hPQwiGjvhdt9S+Pa+bqAN+ck2qM+Y5YRt3WxV1AbSRrX
-         fZQny42et39EV2b1FIBsZXUAIhO2WSIFuf7aC9gpTiZU4f/JnlvaNXgCousr4sVy1it9
-         xKOkRKqZKCZwSsZY6zt+NKEdNyfSHM/0W55jNZiPtGb/7JPA9xeLbn5HkusMuZPut4HH
-         FkY9cKoVSPo8rpT6lc2E59y5d9hwQHuAQtUdsPFIgn9iXWKCeSzWC09pv13dLAj6YTBm
-         QJVhJEc2o9Ow8vBrDzD416g2buvtuQY1V/+3PCbiA361bQOYGjvqsGsN0ZkrpSnILUEB
-         KEKQ==
-X-Gm-Message-State: APjAAAVKQ/+udGV8fqrf/+ytxUfJHWFRtpzxamlG2SBFLS2kUG2tOtZ4
-        Wn4v8A+IxQk88k+CFZIooNewOvFywBsDf6DPpVO37UDJi8MwcWx///ph8D0vpAe/05K+GZJ9djN
-        Up/iejki0Pezy
-X-Received: by 2002:a2e:a408:: with SMTP id p8mr3996812ljn.145.1576012197596;
-        Tue, 10 Dec 2019 13:09:57 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxvMCPn/czOu2GRrVuQOc/gN/GQSbTQE0kUF3zFgRZi0rgmbc3zka5Cy/ldLQX+t9WQBZ45iA==
-X-Received: by 2002:a2e:a408:: with SMTP id p8mr3996800ljn.145.1576012197452;
-        Tue, 10 Dec 2019 13:09:57 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id f8sm2469467ljj.1.2019.12.10.13.09.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 13:09:56 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id E6C981803C1; Tue, 10 Dec 2019 22:09:55 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        lkml <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Martin Lau <kafai@fb.com>
-Subject: Re: [PATCH bpf v2] bpftool: Don't crash on missing jited insns or ksyms
-In-Reply-To: <20191210125457.13f7821a@cakuba.netronome.com>
-References: <20191210181412.151226-1-toke@redhat.com> <20191210125457.13f7821a@cakuba.netronome.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Tue, 10 Dec 2019 22:09:55 +0100
-Message-ID: <87eexbhopo.fsf@toke.dk>
+        id S1728215AbfLJVJf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:09:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58280 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728211AbfLJVJf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:09:35 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A5565246AF;
+        Tue, 10 Dec 2019 21:09:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576012174;
+        bh=oW7QC7ZN3sDu53rgPYqBtojvRFrE+jG2HcylGdisCL0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=W13duTr1XBqXhgqkrQaTsEqgF+fXheSzF8lFe2Mg5u6YODrQh7oshGRmE8G+M6YqL
+         slm3+4vxpN4i9I8fVhbMnhUJDwE+wYskAyz10Hrgt76xT5ZFb0Xh9G/hTlMoOgdPnC
+         mQjO8WHg1/J4Bk42ZnuHEng0iIYu97CR3vPLRqUU=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 132/350] selftests/bpf: Make a copy of subtest name
+Date:   Tue, 10 Dec 2019 16:03:57 -0500
+Message-Id: <20191210210735.9077-93-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
+References: <20191210210735.9077-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-MC-Unique: 3ZmF-bNKPJ6yMjV4_KvasA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jakub Kicinski <jakub.kicinski@netronome.com> writes:
+From: Andrii Nakryiko <andriin@fb.com>
 
-> On Tue, 10 Dec 2019 19:14:12 +0100, Toke H=C3=B8iland-J=C3=B8rgensen wrot=
-e:
->> When the kptr_restrict sysctl is set, the kernel can fail to return
->> jited_ksyms or jited_prog_insns, but still have positive values in
->> nr_jited_ksyms and jited_prog_len. This causes bpftool to crash when try=
-ing
->> to dump the program because it only checks the len fields not the actual
->> pointers to the instructions and ksyms.
->>=20
->> Fix this by adding the missing checks.
->>=20
->> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->
-> Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
->
-> and
->
-> Fixes: f84192ee00b7 ("tools: bpftool: resolve calls without using imm fie=
-ld")
->
-> ?
+[ Upstream commit f90415e9600c5227131531c0ed11514a2d3bbe62 ]
 
-Yeah, guess so? Although I must admit it's not quite clear to me whether
-bpftool gets stable backports, or if it follows the "only moving
-forward" credo of libbpf?
+test_progs never created a copy of subtest name, rather just stored
+pointer to whatever string test provided. This is bad as that string
+might be freed or modified by the end of subtest. Fix this by creating
+a copy of given subtest name when subtest starts.
 
-Anyhow, I don't suppose it'll hurt to have the Fixes: tag(s) in there;
-does Patchwork pick these up (or can you guys do that when you apply
-this?), or should I resend?
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20191021033902.3856966-6-andriin@fb.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/bpf/test_progs.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
--Toke
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index af75a1c7a4587..3bf18364c67c9 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -20,7 +20,7 @@ struct prog_test_def {
+ 	bool tested;
+ 	bool need_cgroup_cleanup;
+ 
+-	const char *subtest_name;
++	char *subtest_name;
+ 	int subtest_num;
+ 
+ 	/* store counts before subtest started */
+@@ -81,16 +81,17 @@ void test__end_subtest()
+ 	fprintf(env.stdout, "#%d/%d %s:%s\n",
+ 	       test->test_num, test->subtest_num,
+ 	       test->subtest_name, sub_error_cnt ? "FAIL" : "OK");
++
++	free(test->subtest_name);
++	test->subtest_name = NULL;
+ }
+ 
+ bool test__start_subtest(const char *name)
+ {
+ 	struct prog_test_def *test = env.test;
+ 
+-	if (test->subtest_name) {
++	if (test->subtest_name)
+ 		test__end_subtest();
+-		test->subtest_name = NULL;
+-	}
+ 
+ 	test->subtest_num++;
+ 
+@@ -104,7 +105,13 @@ bool test__start_subtest(const char *name)
+ 	if (!should_run(&env.subtest_selector, test->subtest_num, name))
+ 		return false;
+ 
+-	test->subtest_name = name;
++	test->subtest_name = strdup(name);
++	if (!test->subtest_name) {
++		fprintf(env.stderr,
++			"Subtest #%d: failed to copy subtest name!\n",
++			test->subtest_num);
++		return false;
++	}
+ 	env.test->old_error_cnt = env.test->error_cnt;
+ 
+ 	return true;
+-- 
+2.20.1
 
