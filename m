@@ -2,146 +2,122 @@ Return-Path: <SRS0=eM+6=2A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C59EC2D0BF
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:22:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8443C00454
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:24:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3261C2073B
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:22:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576012951;
-	bh=LBmAcdOL8kkDwBA4GTeeC+fsUOGxuypNFmGvcPP7ELU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=oB+AtVrwQEPcm3oWDxy2Y6Mb+GcbmNid34XN+UpNol2W4xIiv2HyqtOM7Uc86c7yS
-	 n/XVvdCDDlgPI3BbHb8wInBdO3S9T/TV0JVacQWCvSG3DGWQPlmZ3hDw3shQSbBYqs
-	 3mNH1Pn8UDOgM+ALWxLErgeuSrAO9DzgnLg/0ILo=
+	by mail.kernel.org (Postfix) with ESMTP id 7C553214AF
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:24:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="KHpIsIRJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728769AbfLJVLb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:11:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34260 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728762AbfLJVLb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:11:31 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9F10F246BB;
-        Tue, 10 Dec 2019 21:11:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012289;
-        bh=LBmAcdOL8kkDwBA4GTeeC+fsUOGxuypNFmGvcPP7ELU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jbrIdNI6ZmHO+ABshZR8fVt8zPStU4ccMwTTSFsly4dHm59QynTQobnIqSyRD/Ll5
-         0AMt+WuT7TQ9UaYBUQn3H3jcCbkY7ypFijiLrNgxscGe7oRK36B3ZxU3dLp7osfFmz
-         cSCiI8XYPAFfomOkM2gLOP7gBXn1yvlB+eQSWTWs=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <songliubraving@fb.com>,
-        Stephane Eranian <eranian@google.com>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        clang-built-linux@googlegroups.com, netdev@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.4 229/350] perf tools: Splice events onto evlist even on error
-Date:   Tue, 10 Dec 2019 16:05:34 -0500
-Message-Id: <20191210210735.9077-190-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
-References: <20191210210735.9077-1-sashal@kernel.org>
+        id S1729037AbfLJVYc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:24:32 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:36078 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727506AbfLJVYb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:24:31 -0500
+Received: by mail-pf1-f193.google.com with SMTP id x184so465922pfb.3
+        for <bpf@vger.kernel.org>; Tue, 10 Dec 2019 13:24:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=y6ht5YW8dhI/whPoru8OJyyMGM1ELyH7ioiCN142OAA=;
+        b=KHpIsIRJFHpu/RE+iNns/3lFjXjW7dmPCYbVqVy2fJCsmV0QXQ+Sh1tnMDBlQiuHmc
+         dEdTZ91YLJNA0acWzBev8p8U2ZgM+kMxUf+plwKLeldKf/To+yI5l1o4i8w6eTKp67zG
+         5dOPnsWjpA1rf6+HIWCJ+ywJzhdiKHqRCJKdvupaO7nSR4TdgIp4YpeCGEU6UiV3+fdo
+         pD3cHPJrjOAoe4q81m+GIuaF74ThJeM9p4B2vthnNVJV3HZGRmtIY58FYWwYzY33SbtP
+         1bh8dCKk0ZyFnxfk0aH69bVqn3mpPv1B7xR9cPH+XqM+NS6HtwMQBT61qWveHYnZjywR
+         tVaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=y6ht5YW8dhI/whPoru8OJyyMGM1ELyH7ioiCN142OAA=;
+        b=ikUfTqknWzaH+874upzsD/7JWbUH3pN/C5VD3SPb0fJBJ86wbbWCs34loiIdF4aVDH
+         LsoaFSBrGWn4m9IbHJAlMDMP7HN7v5zmt5AWVfNcpmssu2x9/qg/iBAAdjN25qmSujQH
+         NzSBox69FF0vKgy3GeUMTpheTHn6rY6qfsmshc6HN9avG7MXvn3IG3c5Fdk48a9C/2g1
+         yurqXsruqglPiwQxYXydS9Jqux023qNqIrfzh5FW4QMXR3/YpIhfJ6Qglsm3WOqopfF5
+         wTej4/cOEfx+7gy1xjgr8372n/GMKwf1F1EqV8zSOhrstPEa7W0dyixfCaFcxZddXUYS
+         sGGw==
+X-Gm-Message-State: APjAAAWw79cjZxIjnHdQZ34yGUrNWlcphknTsRzbGzc/VSZpcWtohnmy
+        Fk1L91cSt2psRRbIhesl0+lB6KT9IZ0=
+X-Google-Smtp-Source: APXvYqzC6v4sPSMefQJvm+lNgRpCI17boTVEAvsS1g+uMr6wh21YyjZZNzvkuO7OK4RunNjrL9QxpA==
+X-Received: by 2002:a62:3045:: with SMTP id w66mr8948273pfw.122.1576013071142;
+        Tue, 10 Dec 2019 13:24:31 -0800 (PST)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id v29sm4200264pgl.88.2019.12.10.13.24.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Dec 2019 13:24:30 -0800 (PST)
+Date:   Tue, 10 Dec 2019 13:24:28 -0800
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Martin Lau <kafai@fb.com>
+Subject: Re: [PATCH bpf v2] bpftool: Don't crash on missing jited insns or
+ ksyms
+Message-ID: <20191210132428.4470a7b0@cakuba.netronome.com>
+In-Reply-To: <87eexbhopo.fsf@toke.dk>
+References: <20191210181412.151226-1-toke@redhat.com>
+        <20191210125457.13f7821a@cakuba.netronome.com>
+        <87eexbhopo.fsf@toke.dk>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ian Rogers <irogers@google.com>
+On Tue, 10 Dec 2019 22:09:55 +0100, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+> Jakub Kicinski <jakub.kicinski@netronome.com> writes:
+> > On Tue, 10 Dec 2019 19:14:12 +0100, Toke H=C3=B8iland-J=C3=B8rgensen wr=
+ote: =20
+> >> When the kptr_restrict sysctl is set, the kernel can fail to return
+> >> jited_ksyms or jited_prog_insns, but still have positive values in
+> >> nr_jited_ksyms and jited_prog_len. This causes bpftool to crash when t=
+rying
+> >> to dump the program because it only checks the len fields not the actu=
+al
+> >> pointers to the instructions and ksyms.
+> >>=20
+> >> Fix this by adding the missing checks.
+> >>=20
+> >> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> =20
+> >
+> > Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
+> >
+> > and
+> >
+> > Fixes: f84192ee00b7 ("tools: bpftool: resolve calls without using imm f=
+ield")
+> >
+> > ? =20
+>=20
+> Yeah, guess so? Although I must admit it's not quite clear to me whether
+> bpftool gets stable backports, or if it follows the "only moving
+> forward" credo of libbpf?
 
-[ Upstream commit 8e8714c3d157568b7a769917a5e05573bbaf5af0 ]
+bpftool does not have a GH repo, and seeing strength of Alexei's
+arguments in the recent discussion - I don't think it will. So no
+reason for bpftool to be "special" =E2=9D=84=EF=B8=8F.
 
-If event parsing fails the event list is leaked, instead splice the list
-onto the out result and let the caller cleanup.
+Then again seeing Andrii's zeal for pushing the codegen stuff into
+bpftool, maybe Facebook's intention is to make it so.
 
-An example input for parse_events found by libFuzzer that reproduces
-this memory leak is 'm{'.
+Hard to tell what to do when standard practices don't apply, sigh.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jin Yao <yao.jin@linux.intel.com>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: bpf@vger.kernel.org
-Cc: clang-built-linux@googlegroups.com
-Cc: netdev@vger.kernel.org
-Link: http://lore.kernel.org/lkml/20191025180827.191916-5-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/perf/util/parse-events.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+> Anyhow, I don't suppose it'll hurt to have the Fixes: tag(s) in there;
+> does Patchwork pick these up (or can you guys do that when you apply
+> this?), or should I resend?
 
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index b5e2adef49de9..d5ea043d3fc4c 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -1927,15 +1927,20 @@ int parse_events(struct evlist *evlist, const char *str,
- 
- 	ret = parse_events__scanner(str, &parse_state, PE_START_EVENTS);
- 	perf_pmu__parse_cleanup();
-+
-+	if (!ret && list_empty(&parse_state.list)) {
-+		WARN_ONCE(true, "WARNING: event parser found nothing\n");
-+		return -1;
-+	}
-+
-+	/*
-+	 * Add list to the evlist even with errors to allow callers to clean up.
-+	 */
-+	perf_evlist__splice_list_tail(evlist, &parse_state.list);
-+
- 	if (!ret) {
- 		struct evsel *last;
- 
--		if (list_empty(&parse_state.list)) {
--			WARN_ONCE(true, "WARNING: event parser found nothing\n");
--			return -1;
--		}
--
--		perf_evlist__splice_list_tail(evlist, &parse_state.list);
- 		evlist->nr_groups += parse_state.nr_groups;
- 		last = evlist__last(evlist);
- 		last->cmdline_group_boundary = true;
--- 
-2.20.1
+I don't think it does, but perhaps Daniel's scripts do.
 
+Either way I don't think it's worth a resend.
