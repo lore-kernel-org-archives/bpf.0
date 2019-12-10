@@ -7,67 +7,67 @@ X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8B32C43603
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 19:59:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EFCAC43603
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 20:04:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9B06E2077B
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 19:59:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F2619207FF
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 20:04:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TUWXI4V6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rizqzxbt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbfLJT76 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 14:59:58 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:41507 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725999AbfLJT76 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 14:59:58 -0500
-Received: by mail-qk1-f194.google.com with SMTP id l124so5591434qkf.8;
-        Tue, 10 Dec 2019 11:59:57 -0800 (PST)
+        id S1726062AbfLJUET (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 15:04:19 -0500
+Received: from mail-qv1-f68.google.com ([209.85.219.68]:35622 "EHLO
+        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726045AbfLJUET (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 15:04:19 -0500
+Received: by mail-qv1-f68.google.com with SMTP id d17so4729411qvs.2;
+        Tue, 10 Dec 2019 12:04:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=ftjTNhVzo9C0Y9p3ygakz6BrTC5EY3OeVFYVC2Ii2XE=;
-        b=TUWXI4V65rdrQ1gUSTZWqBEY5KTwtTo09Xhb3zp5257LWMJ31/xkWSA+ybgEHyvSlp
-         k+uB0LUeO6gXfYJNKluFwkmgwdbtGvUeHXNzGDA63yCf1+2Xq5OmHNWrkBUNU+6FFL6J
-         Nj9Ewnkt88irThW1Ul4WBu1lsyifz1E0mQmW8wdeLNaSgw1XVOzdyXdeVwbcw7g5ZlAQ
-         djyNuSOJnO/LTua9iIVsdWorcks7bXcgLAgAOUzD7kzedT1s9azmFrdbQ13mygpsa562
-         t9bM+kUkzFWFqDya+Xs+LtOiw54zQ5ggxE1SitJ+Ei2vwDfZXbJRyOWCpLbjMXtd7CJ/
-         WSzQ==
+        bh=DUrLVjxdm4Lpth1BVppJIgm06ZEFu/gHIQjjv1fTq6U=;
+        b=RizqzxbtSWdVCijPI6xH1qD/FbjpnkAv2hlwG9t8Qv3FeMpHpSd5F+aRi+Jl4kCYIu
+         2U347NzRoHmbqB+Dy+pVjlbfgAYvGV6O16mhnXewymf/du2An8tqtM0WV/pRswjAfzbH
+         w6BoO5Jh90iQFMgvcyXmznNbZhEU9y7xbTmRFMyczTEXMXUrVh9Rd0XrJ9Zs/ejLx/wz
+         vwx8lBvQO+qibCMAgVwt0Ms5d4UkFkNL3l6cd0GW1XhqaB4GXa4Oetei+BMPysTZUoGj
+         AGPGAN2+bXX1WBw0VNVWXKcpK7+Q7z5MeclUNy/QwVCp/LH/Mcce5AErKysF6T+zWelX
+         eu2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ftjTNhVzo9C0Y9p3ygakz6BrTC5EY3OeVFYVC2Ii2XE=;
-        b=OvBafFz2jtGZc67CJQLCEIfUtHMATnI9cDpmQA8Y5udBBszg8mwSOuQtLWAou6fZnm
-         cAYqqZMlft6O7qoysotCU/nhLM6/HTUKZuUuXByHv+6RqKgtwUwn178mcggogFTOOMXL
-         oFhdz8zUXG4OQJP5RpI/BgPrE4XM0nA6vIGvnkODiAZSFTHLdkWIBHGpuLaN5Zk8ry9l
-         MiZNAyhl95GLlnFn1dcqsvJnQqmWwTbGfIg3RvTi4wQU0y4h8PzJMoSq02Z8QT+IHxsh
-         s2wdRhQ62oQ5vnIm04iVRU2NVdV3L2Y85WVL9hEYwi0fLxIrgkAwVcAT61Ua/x7tsCqz
-         IEag==
-X-Gm-Message-State: APjAAAWoiIJoxYH67AjrWkHh/vcnzLOD9tFQdk7F+5FwrYcwsiWUmfSi
-        BNSb7M279WJY/JLF/mBcDVe92fWFyw++LZ34UUcufo4g0i8=
-X-Google-Smtp-Source: APXvYqwzmXumLbnjLluk8LZmQQzn5FiGF0EmyEBzA5IYMhlOMnAk39r8nYnd1NjQEuKg7Ob2v+JndIB4Vn3ntLvHMj4=
-X-Received: by 2002:ae9:ee11:: with SMTP id i17mr31532763qkg.333.1576007996694;
- Tue, 10 Dec 2019 11:59:56 -0800 (PST)
+        bh=DUrLVjxdm4Lpth1BVppJIgm06ZEFu/gHIQjjv1fTq6U=;
+        b=Lv2F7VJYR7S7i+1Te7yQTs3xcCboypkTmsmMrjoZ2v//Hx3WJF+0Nq1Nwc7+D0oehC
+         4VhfBEvFpCjymNiadc6ASPr5+gu/j70NW2IwoFYJqAYy/AiunyuXMIg9AjaqDjthYD3c
+         Tr0ZswcDhJG9KCBUgsT1UnwuDkqWoy3aUGv52hD4HNXqsLlP67PAfiHfKFp/z4U+PEZM
+         eMsZcf0ywQt8P6Bdp434KY4w+R6SwFFewW/vmLo1KPVOHpWVfXuLZ3cJs1EsuoWdmpCv
+         c18ekivgSbenVr8lQ4flPqp91dTvdlfj8oHr5OJ9/IbjGSyiOkgCx8L7dIR/mnp9gB2i
+         HXGQ==
+X-Gm-Message-State: APjAAAW/CJLp2Tb28wq0v8/Lf81CuwgrgRk6tC6g+oL+UdEhAml+47y4
+        hmh8hnRSuUZJsx1gGNq+UkKCeDW++zQh5hPjCu8=
+X-Google-Smtp-Source: APXvYqwXn73WXUOpzstsgd2C49NE1hvr3MPlQCGS1Hm0PNizJIcHWrmAPihJdyZSSShKaIKC1o7kMY0acceBPG/8MSc=
+X-Received: by 2002:a05:6214:448:: with SMTP id cc8mr2118377qvb.10.1576008258356;
+ Tue, 10 Dec 2019 12:04:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20191209135522.16576-1-bjorn.topel@gmail.com>
-In-Reply-To: <20191209135522.16576-1-bjorn.topel@gmail.com>
+References: <20191209135522.16576-1-bjorn.topel@gmail.com> <0b45793e-6172-9c07-5bdb-2dc99e58e375@intel.com>
+In-Reply-To: <0b45793e-6172-9c07-5bdb-2dc99e58e375@intel.com>
 From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Tue, 10 Dec 2019 20:59:45 +0100
-Message-ID: <CAJ+HfNhN+0n1XAZ8-fvH9EDL44aEAfuhWHKOPzqfoavM9h+-nQ@mail.gmail.com>
+Date:   Tue, 10 Dec 2019 21:04:06 +0100
+Message-ID: <CAJ+HfNgG+zkyTnXUG_zQ+jVr0FcqavAAwV=MX7x=RhXGHXokow@mail.gmail.com>
 Subject: Re: [PATCH bpf-next v3 0/6] Introduce the BPF dispatcher
-To:     Netdev <netdev@vger.kernel.org>,
+To:     "Samudrala, Sridhar" <sridhar.samudrala@intel.com>
+Cc:     Netdev <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>,
         Magnus Karlsson <magnus.karlsson@gmail.com>,
         "Karlsson, Magnus" <magnus.karlsson@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
         Edward Cree <ecree@solarflare.com>,
         =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <thoiland@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
@@ -75,28 +75,53 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 9 Dec 2019 at 14:55, Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> =
-wrote:
+On Tue, 10 Dec 2019 at 20:28, Samudrala, Sridhar
+<sridhar.samudrala@intel.com> wrote:
 >
 [...]
+> > The tests were performed using the xdp_rxq_info sample program with
+> > the following command-line:
+> >
+> > 1. XDP_DRV:
+> >    # xdp_rxq_info --dev eth0 --action XDP_DROP
+> > 2. XDP_SKB:
+> >    # xdp_rxq_info --dev eth0 -S --action XDP_DROP
+> > 3. xdp-perf, from selftests/bpf:
+> >    # test_progs -v -t xdp_perf
 >
-> Discussion/feedback
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> My measurements did not show any improvements for the jump target 16 B
-> alignments. Maybe it would make sense to leave alignment out?
+> What is this test_progs? I don't see such ann app under selftests/bpf
 >
 
-I did a micro benchmark with "test_progs -t xdp_prog" for all sizes
-(max 48 aligned, max 64 non-aligned) of the dispatcher. I couldn't
-measure any difference at all, so I will leave the last patch out
-(aligning jump targets). If a workload appears where this is
-measurable, it can be added at that point.
+The "test_progs" program resides in tools/testing/selftests/bpf. The
+xdp_perf is part of the series!
 
-The micro benchmark also show that it makes little sense disabling the
-dispatcher when "mitigations=3Doff". The diff is within 1ns(!), when
-mitigations are off. I'll post the data as a reply to the v4 cover
-letter, so that the cover isn't clobbered with data. :-P
+>
+> > Run with mitigations=3Dauto
+> > -------------------------
+> >
+> > Baseline:
+> > 1. 22.0 Mpps
+> > 2. 3.8 Mpps
+> > 3. 15 ns
+> >
+> > Dispatcher:
+> > 1. 29.4 Mpps (+34%)
+> > 2. 4.0 Mpps  (+5%)
+> > 3. 5 ns      (+66%)
+> >
+> > Dispatcher (full; walk all entries, and fallback):
+> > 1. 20.4 Mpps (-7%)
+> > 2. 3.8 Mpps
+> > 3. 18 ns     (-20%)
+>
+> Are these packets received on a single queue? Or multiple queues?
+> Do you see similar improvements even with xdpsock?
+>
+
+Yes, just a single queue, regular XDP. I left out xdpsock for now, and
+only focus on the micro benchmark and XDP. I'll get back with xdpsock
+benchmarks.
 
 
+Cheers,
 Bj=C3=B6rn
