@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1930C00454
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:50:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2940C3F68F
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:50:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9B158214AF
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:50:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A2D1205C9
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:50:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576014609;
-	bh=ktijTs+YH0kLfd14gHw3DHO+Hfe8ZILGwhwxYVAJBvo=;
+	s=default; t=1576014626;
+	bh=ts474jo8X09F8Xjx0LlPALO9jEwtcGrtKgKurM6fb6g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=l7EO3ZuEBUsXdPq5YECJQD550M7uypoQ7I54c3LnfV1ibLNQTPI/AA2RDdbLMNKlU
-	 HnK+kQhMA3IKb+lUhuCKwdO2EMvcZn9LX3GCgmO7RiCCafX56OQgqum3BkayEMzlEl
-	 AZPK3Bmmxif8eoesdICqhB0jjg4u+uIH6JCC5ARI=
+	b=bFLRdzhVD0O5eMxdzzKEUEMql+FVOBAOUt0+1JxlBBY6vwiVkl0c5Qp6MVVuBUD6e
+	 wdWOR4YsNoYxgONXwuIqoQtw95Y7PaqsrBuW+ghLhHuuaAJ9gTzzZj0rUH4g0U7EBe
+	 CJX3r1MWTJmzO20ZrLfYt4SdWO8tnbesqF2aZvo0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729673AbfLJVuI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:50:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55832 "EHLO mail.kernel.org"
+        id S1727300AbfLJVuU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:50:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55782 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727300AbfLJVI1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:08:27 -0500
+        id S1726881AbfLJVIZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:08:25 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9AD3924697;
-        Tue, 10 Dec 2019 21:08:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 272E520652;
+        Tue, 10 Dec 2019 21:08:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012106;
-        bh=ktijTs+YH0kLfd14gHw3DHO+Hfe8ZILGwhwxYVAJBvo=;
+        s=default; t=1576012105;
+        bh=ts474jo8X09F8Xjx0LlPALO9jEwtcGrtKgKurM6fb6g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z/WiWGezgUfEQKQylHJNq0AnGLhlMB6ocznhrYY4xkPrNmzllKoTK3rPsvWokQbah
-         sOfPr4+pKMZa74vos42wgwgJYocZHvt/530xv/5HaTr1MK7vM1oe1ftOxPioWtGKFI
-         eNH1tESb8hWPwknC7J2CZUHGK1i7rUmS3WE4zndo=
+        b=SbiWEAFRjgihSzeonE53jPIa9oBruVtH9hAYd5Sk60ARdvivePTO5hHIQgXPNDRJd
+         KytqpGC/K8wMMVpKg22kkHRphpIfM5VFArpOxI6f0Ro5+svJEcDYZxr/p2WrYV6hMT
+         spaxhvLxpQ8EtCJeBp59/BaENiXqW7qKm62zvKRw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 080/350] libbpf: Fix struct end padding in btf_dump
-Date:   Tue, 10 Dec 2019 16:03:05 -0500
-Message-Id: <20191210210735.9077-41-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 079/350] selftests/bpf: Fix btf_dump padding test case
+Date:   Tue, 10 Dec 2019 16:03:04 -0500
+Message-Id: <20191210210735.9077-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -62,49 +63,45 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit b4099769f3321a8d258a47a8b4b9d278dad28a73 ]
+[ Upstream commit 76790c7c66ccc8695afc75e73f54c0ca86267ed2 ]
 
-Fix a case where explicit padding at the end of a struct is necessary
-due to non-standart alignment requirements of fields (which BTF doesn't
-capture explicitly).
+Existing padding test case for btf_dump has a good test that was
+supposed to test padding generation at the end of a struct, but its
+expected output was specified incorrectly. Fix this.
 
-Fixes: 351131b51c7a ("libbpf: add btf_dump API for BTF-to-C conversion")
+Fixes: 2d2a3ad872f8 ("selftests/bpf: add btf_dump BTF-to-C conversion tests")
 Reported-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Tested-by: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/bpf/20191008231009.2991130-2-andriin@fb.com
+Link: https://lore.kernel.org/bpf/20191008231009.2991130-4-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/btf_dump.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ .../testing/selftests/bpf/progs/btf_dump_test_case_padding.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index ede55fec36184..87f27e2664c5d 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -876,7 +876,6 @@ static void btf_dump_emit_struct_def(struct btf_dump *d,
- 	__u16 vlen = btf_vlen(t);
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+index 3a62119c74986..35c512818a56b 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+@@ -62,6 +62,10 @@ struct padded_a_lot {
+  *	long: 64;
+  *	long: 64;
+  *	int b;
++ *	long: 32;
++ *	long: 64;
++ *	long: 64;
++ *	long: 64;
+  *};
+  *
+  */
+@@ -95,7 +99,6 @@ struct zone_padding {
+ struct zone {
+ 	int a;
+ 	short b;
+-	short: 16;
+ 	struct zone_padding __pad__;
+ };
  
- 	packed = is_struct ? btf_is_struct_packed(d->btf, id, t) : 0;
--	align = packed ? 1 : btf_align_of(d->btf, id);
- 
- 	btf_dump_printf(d, "%s%s%s {",
- 			is_struct ? "struct" : "union",
-@@ -906,6 +905,13 @@ static void btf_dump_emit_struct_def(struct btf_dump *d,
- 		btf_dump_printf(d, ";");
- 	}
- 
-+	/* pad at the end, if necessary */
-+	if (is_struct) {
-+		align = packed ? 1 : btf_align_of(d->btf, id);
-+		btf_dump_emit_bit_padding(d, off, t->size * 8, 0, align,
-+					  lvl + 1);
-+	}
-+
- 	if (vlen)
- 		btf_dump_printf(d, "\n");
- 	btf_dump_printf(d, "%s}", pfx(lvl));
 -- 
 2.20.1
 
