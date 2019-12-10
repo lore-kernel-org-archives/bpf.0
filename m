@@ -7,47 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 611F7C2D0BF
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11383C00454
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:17:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3606B205C9
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:17:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8E70205C9
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576012627;
-	bh=QoJ3Syg8hUz1vs8n0YpMB+KOSVDZG36nwZBkQSVjOBU=;
+	s=default; t=1576012631;
+	bh=ZwC9R2gwg7CqpsLyXbIovA1NDpp7Eh9h2N7McZ70buQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=uDiOMkdFYoOgHl6YSV7/Uqn79VPY8BlcLVVZtBwoOF5pGvBUemrrsTkiizyr3AiQq
-	 J0eAppoDTfXDx/WZkegqxTbCHstCHmmSWIxJtDiWvFJoQ1bjCbMPWTOU0o/uTuKEJP
-	 azBhE5anejOujZpDkpTIcnKJpgj7Zvgx5SE5/jgE=
+	b=hzM04rkMKYsna/7xHS4KmSmB2ZLehvEXwYA4iyW2Mw0mp3RZtung6rqdqMC1s0PpV
+	 j3BehHb9az6qARCrXBOOvtgPxx9GhZm3/gRRJZhOYNvFsJqCoXDk+nqi8C5J11GUBE
+	 fwM13ypwMTekJrEk+JO6Aotc6BgWqVGh2Ucl3tD4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729193AbfLJVNG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:13:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38838 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729176AbfLJVNF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1728617AbfLJVNF (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 10 Dec 2019 16:13:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38792 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728879AbfLJVNE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:13:04 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D04A8205C9;
-        Tue, 10 Dec 2019 21:13:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8E7482465A;
+        Tue, 10 Dec 2019 21:13:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012384;
-        bh=QoJ3Syg8hUz1vs8n0YpMB+KOSVDZG36nwZBkQSVjOBU=;
+        s=default; t=1576012383;
+        bh=ZwC9R2gwg7CqpsLyXbIovA1NDpp7Eh9h2N7McZ70buQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JM1XRGj/48nZgf2TFEay/oGbrPTXZUPO80Oebzd3oD8ZZ3vmsN1IobvcLjk1zFncU
-         gEPJvTSYjos2SI21VdwHiPgh8iopK9VhSEou8CQob3qXL7Yj9SDTiX55+zJ6zHvimM
-         Gqgcqe5a34B4sNjk0xRkLbeXoAjSqFGgS2DVyRww=
+        b=UuiCd/JIEFCz+zOL8fscWigdlxYLXd8lIZOU6tAvzReyRVk1wmm6RXfzMFTRJNdvj
+         kC1IxYnGItOuNepiPXlrZOm1DlP3+t+dxWtlsxk/YFF7641rDPwTZG9Ememdfla9WY
+         CqxSjo7nv7Hu8oHMp+BGwXOlxyMxTp7byooQdQyE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yonghong Song <yhs@fb.com>, Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
+Cc:     Jiri Benc <jbenc@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Willem de Bruijn <willemb@google.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.4 307/350] selftests, bpf: Workaround an alu32 sub-register spilling issue
-Date:   Tue, 10 Dec 2019 16:06:52 -0500
-Message-Id: <20191210210735.9077-268-sashal@kernel.org>
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 306/350] selftests, bpf: Fix test_tc_tunnel hanging
+Date:   Tue, 10 Dec 2019 16:06:51 -0500
+Message-Id: <20191210210735.9077-267-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -60,80 +61,56 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Yonghong Song <yhs@fb.com>
+From: Jiri Benc <jbenc@redhat.com>
 
-[ Upstream commit 2ea2612b987ad703235c92be21d4e98ee9c2c67c ]
+[ Upstream commit 3b054b7133b4ad93671c82e8d6185258e3f1a7a5 ]
 
-Currently, with latest llvm trunk, selftest test_progs failed obj
-file test_seg6_loop.o with the following error in verifier:
+When run_kselftests.sh is run, it hangs after test_tc_tunnel.sh. The reason
+is test_tc_tunnel.sh ensures the server ('nc -l') is run all the time,
+starting it again every time it is expected to terminate. The exception is
+the final client_connect: the server is not started anymore, which ensures
+no process is kept running after the test is finished.
 
-  infinite loop detected at insn 76
+For a sit test, though, the script is terminated prematurely without the
+final client_connect and the 'nc' process keeps running. This in turn causes
+the run_one function in kselftest/runner.sh to hang forever, waiting for the
+runaway process to finish.
 
-The byte code sequence looks like below, and noted that alu32 has been
-turned off by default for better generated codes in general:
+Ensure a remaining server is terminated on cleanup.
 
-      48:       w3 = 100
-      49:       *(u32 *)(r10 - 68) = r3
-      ...
-  ;             if (tlv.type == SR6_TLV_PADDING) {
-      76:       if w3 == 5 goto -18 <LBB0_19>
-      ...
-      85:       r1 = *(u32 *)(r10 - 68)
-  ;     for (int i = 0; i < 100; i++) {
-      86:       w1 += -1
-      87:       if w1 == 0 goto +5 <LBB0_20>
-      88:       *(u32 *)(r10 - 68) = r1
-
-The main reason for verification failure is due to partial spills at
-r10 - 68 for induction variable "i".
-
-Current verifier only handles spills with 8-byte values. The above 4-byte
-value spill to stack is treated to STACK_MISC and its content is not
-saved. For the above example:
-
-    w3 = 100
-      R3_w=inv100 fp-64_w=inv1086626730498
-    *(u32 *)(r10 - 68) = r3
-      R3_w=inv100 fp-64_w=inv1086626730498
-    ...
-    r1 = *(u32 *)(r10 - 68)
-      R1_w=inv(id=0,umax_value=4294967295,var_off=(0x0; 0xffffffff))
-      fp-64=inv1086626730498
-
-To resolve this issue, verifier needs to be extended to track sub-registers
-in spilling, or llvm needs to enhanced to prevent sub-register spilling
-in register allocation phase. The former will increase verifier complexity
-and the latter will need some llvm "hacking".
-
-Let us workaround this issue by declaring the induction variable as "long"
-type so spilling will happen at non sub-register level. We can revisit this
-later if sub-register spilling causes similar or other verification issues.
-
-Signed-off-by: Yonghong Song <yhs@fb.com>
+Fixes: f6ad6accaa99 ("selftests/bpf: expand test_tc_tunnel with SIT encap")
+Signed-off-by: Jiri Benc <jbenc@redhat.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Link: https://lore.kernel.org/bpf/20191117214036.1309510-1-yhs@fb.com
+Acked-by: Willem de Bruijn <willemb@google.com>
+Link: https://lore.kernel.org/bpf/60919291657a9ee89c708d8aababc28ebe1420be.1573821780.git.jbenc@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_seg6_loop.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_tc_tunnel.sh | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_seg6_loop.c b/tools/testing/selftests/bpf/progs/test_seg6_loop.c
-index c4d104428643e..69880c1e7700c 100644
---- a/tools/testing/selftests/bpf/progs/test_seg6_loop.c
-+++ b/tools/testing/selftests/bpf/progs/test_seg6_loop.c
-@@ -132,8 +132,10 @@ static __always_inline int is_valid_tlv_boundary(struct __sk_buff *skb,
- 	*pad_off = 0;
+diff --git a/tools/testing/selftests/bpf/test_tc_tunnel.sh b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+index ff0d31d38061f..7c76b841b17bb 100755
+--- a/tools/testing/selftests/bpf/test_tc_tunnel.sh
++++ b/tools/testing/selftests/bpf/test_tc_tunnel.sh
+@@ -62,6 +62,10 @@ cleanup() {
+ 	if [[ -f "${infile}" ]]; then
+ 		rm "${infile}"
+ 	fi
++
++	if [[ -n $server_pid ]]; then
++		kill $server_pid 2> /dev/null
++	fi
+ }
  
- 	// we can only go as far as ~10 TLVs due to the BPF max stack size
-+	// workaround: define induction variable "i" as "long" instead
-+	// of "int" to prevent alu32 sub-register spilling.
- 	#pragma clang loop unroll(disable)
--	for (int i = 0; i < 100; i++) {
-+	for (long i = 0; i < 100; i++) {
- 		struct sr6_tlv_t tlv;
+ server_listen() {
+@@ -77,6 +81,7 @@ client_connect() {
  
- 		if (cur_off == *tlv_off)
+ verify_data() {
+ 	wait "${server_pid}"
++	server_pid=
+ 	# sha1sum returns two fields [sha1] [filepath]
+ 	# convert to bash array and access first elem
+ 	insum=($(sha1sum ${infile}))
 -- 
 2.20.1
 
