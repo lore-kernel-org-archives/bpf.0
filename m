@@ -2,208 +2,115 @@ Return-Path: <SRS0=eM+6=2A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8805C43603
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:31:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B82BC2D0C4
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:32:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 746D82073B
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:31:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576013508;
-	bh=llz9S6WiqrSWJvcdBeTcmMWA3GxRhPN9GqmdpxjJ+is=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=a5k+ectf0Yum2SAkSl4ZhyH4fQSnLOnKQsBj7PAdTP/2Qjxzv/r0l7rYbUtvib14x
-	 0J3A4V6cMN8L4u5WcUC9BWvwuyFShtbJGDW4OoTD/mntPvMvSicJj4FSd3NAMqh7v/
-	 OepgMqkHIoFVRLYu34fHthotbpPHxoPZyxlVZxew=
+	by mail.kernel.org (Postfix) with ESMTP id 4F6182073B
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:32:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bNBHfHD0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728142AbfLJVJX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:09:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57770 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728137AbfLJVJW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:09:22 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C1A4324696;
-        Tue, 10 Dec 2019 21:09:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012161;
-        bh=llz9S6WiqrSWJvcdBeTcmMWA3GxRhPN9GqmdpxjJ+is=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SXh3eEp8H2HPWaUYxh5zuPSoLDJ5wRBMUdYye5pOY4CKSg/Fr8IbYTKeBr9g7Byg4
-         njS5JJidVM5vxuofEbCCWCQJrwuAk9HBUNzwwmrp499wpeeKX/pKrZzO9sLBBVQ0Zu
-         EaIuY6fKSedzgVYfoeLK7ezvdV7MUnKlbu8RwxH4=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Song Liu <songliubraving@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+        id S1728074AbfLJVb4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:31:56 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:39079 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727166AbfLJVbw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:31:52 -0500
+Received: by mail-pl1-f193.google.com with SMTP id o9so376161plk.6;
+        Tue, 10 Dec 2019 13:31:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=WtDhoZ5ivvcVrikLoCcOpbuCN5K2xI6ePb8PHhBX/qY=;
+        b=bNBHfHD03h3hmMV1w1mftAhHlsANzeRmCm5ntICoRhmQwAgj90TCYu0exwqE/pdhgE
+         GdNZfSlxmS9+MnUMV7dWFoxBeYeAAQf7p2crlgBjwXDwXG1sXMJ6b1MjtryjbQIVfa8o
+         1SX/XqQOGXbyT71gHQYIa2IRm8lwQVeIcfLSC6L0EJSb4weQ0dZWQ4IVIG1HfR5u32U9
+         aDDBA5mO5vSpt3tWu9JReI7ZfKo8J0rhq/a1azkAzqGLiHXA4pg5d+2U8UoGB8QCy25N
+         AU5WmUYt1keRgOs0PN80AM32Fz5sEXch3w0CfnU5IBM5wCHJ0QTur7PEqplqQGIDlFXt
+         Nzbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=WtDhoZ5ivvcVrikLoCcOpbuCN5K2xI6ePb8PHhBX/qY=;
+        b=PthU7trMwPI5ZXqCmeKtyLsdZcrh3Vdx/4PWVmPDTk7pykpqLeJ5f6edfbu68Pgu//
+         mvHgnVpqNyt7vc5pFeIVCFqV00U0W4yyQNZC/RiqTcY+fOvhUN7rK8PwU1B/yuG9wA3w
+         rV7LU7w/C7tG9oJE/++LjXGJ1c5hhUWl/M3uraws3F6+XaTeXA4toUyKohpEQlxW0dfo
+         5NAHc+qnOSBc7Gj7w+9EA9/qCt+TF+RGhK2wiOBTwzqHkZrs92X0Nv/7nhVQ/g1WMr+L
+         mykBDZafrk6q1+OkV+Tm4HZWQ6rUEWUJUZGs/ss7CHBHatziXGQbm0IPSzO8cMJeOVdH
+         +N2g==
+X-Gm-Message-State: APjAAAVM48o/V+aK1nBZihPzmCeW8GgP+hTYVksQKsUtqqvIEYXNJfjr
+        WdiAOY3Ro7Gfmpgp1PzWeE4=
+X-Google-Smtp-Source: APXvYqwfHN9VmCdq6yL7ojouBK+46iwUO9cnHFSBSdaffvPSJZPzqJgNYzlxRmyGh/W0xuYKtbYMlw==
+X-Received: by 2002:a17:90a:8986:: with SMTP id v6mr7783380pjn.63.1576013511889;
+        Tue, 10 Dec 2019 13:31:51 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::3:a25c])
+        by smtp.gmail.com with ESMTPSA id o3sm3613026pju.13.2019.12.10.13.31.50
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 10 Dec 2019 13:31:51 -0800 (PST)
+Date:   Tue, 10 Dec 2019 13:31:50 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>
+Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 123/350] bpf/stackmap: Fix deadlock with rq_lock in bpf_get_stack()
-Date:   Tue, 10 Dec 2019 16:03:48 -0500
-Message-Id: <20191210210735.9077-84-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
-References: <20191210210735.9077-1-sashal@kernel.org>
+        lkml <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Martin Lau <kafai@fb.com>
+Subject: Re: [PATCH bpf v2] bpftool: Don't crash on missing jited insns or
+ ksyms
+Message-ID: <20191210213148.kqd6xdvqjkh3zxst@ast-mbp.dhcp.thefacebook.com>
+References: <20191210181412.151226-1-toke@redhat.com>
+ <20191210125457.13f7821a@cakuba.netronome.com>
+ <87eexbhopo.fsf@toke.dk>
+ <20191210132428.4470a7b0@cakuba.netronome.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191210132428.4470a7b0@cakuba.netronome.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Song Liu <songliubraving@fb.com>
+On Tue, Dec 10, 2019 at 01:24:28PM -0800, Jakub Kicinski wrote:
+> On Tue, 10 Dec 2019 22:09:55 +0100, Toke Høiland-Jørgensen wrote:
+> > Jakub Kicinski <jakub.kicinski@netronome.com> writes:
+> > > On Tue, 10 Dec 2019 19:14:12 +0100, Toke Høiland-Jørgensen wrote:  
+> > >> When the kptr_restrict sysctl is set, the kernel can fail to return
+> > >> jited_ksyms or jited_prog_insns, but still have positive values in
+> > >> nr_jited_ksyms and jited_prog_len. This causes bpftool to crash when trying
+> > >> to dump the program because it only checks the len fields not the actual
+> > >> pointers to the instructions and ksyms.
+> > >> 
+> > >> Fix this by adding the missing checks.
+> > >> 
+> > >> Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>  
+> > >
+> > > Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
+> > >
+> > > and
+> > >
+> > > Fixes: f84192ee00b7 ("tools: bpftool: resolve calls without using imm field")
+> > >
+> > > ?  
+> > 
+> > Yeah, guess so? Although I must admit it's not quite clear to me whether
+> > bpftool gets stable backports, or if it follows the "only moving
+> > forward" credo of libbpf?
+> 
+> bpftool does not have a GH repo, and seeing strength of Alexei's
+> arguments in the recent discussion - I don't think it will. So no
+> reason for bpftool to be "special"
 
-[ Upstream commit eac9153f2b584c702cea02c1f1a57d85aa9aea42 ]
-
-bpf stackmap with build-id lookup (BPF_F_STACK_BUILD_ID) can trigger A-A
-deadlock on rq_lock():
-
-rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
-[...]
-Call Trace:
- try_to_wake_up+0x1ad/0x590
- wake_up_q+0x54/0x80
- rwsem_wake+0x8a/0xb0
- bpf_get_stack+0x13c/0x150
- bpf_prog_fbdaf42eded9fe46_on_event+0x5e3/0x1000
- bpf_overflow_handler+0x60/0x100
- __perf_event_overflow+0x4f/0xf0
- perf_swevent_overflow+0x99/0xc0
- ___perf_sw_event+0xe7/0x120
- __schedule+0x47d/0x620
- schedule+0x29/0x90
- futex_wait_queue_me+0xb9/0x110
- futex_wait+0x139/0x230
- do_futex+0x2ac/0xa50
- __x64_sys_futex+0x13c/0x180
- do_syscall_64+0x42/0x100
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-This can be reproduced by:
-1. Start a multi-thread program that does parallel mmap() and malloc();
-2. taskset the program to 2 CPUs;
-3. Attach bpf program to trace_sched_switch and gather stackmap with
-   build-id, e.g. with trace.py from bcc tools:
-   trace.py -U -p <pid> -s <some-bin,some-lib> t:sched:sched_switch
-
-A sample reproducer is attached at the end.
-
-This could also trigger deadlock with other locks that are nested with
-rq_lock.
-
-Fix this by checking whether irqs are disabled. Since rq_lock and all
-other nested locks are irq safe, it is safe to do up_read() when irqs are
-not disable. If the irqs are disabled, postpone up_read() in irq_work.
-
-Fixes: 615755a77b24 ("bpf: extend stackmap to save binary_build_id+offset instead of address")
-Signed-off-by: Song Liu <songliubraving@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20191014171223.357174-1-songliubraving@fb.com
-
-Reproducer:
-============================ 8< ============================
-
-char *filename;
-
-void *worker(void *p)
-{
-        void *ptr;
-        int fd;
-        char *pptr;
-
-        fd = open(filename, O_RDONLY);
-        if (fd < 0)
-                return NULL;
-        while (1) {
-                struct timespec ts = {0, 1000 + rand() % 2000};
-
-                ptr = mmap(NULL, 4096 * 64, PROT_READ, MAP_PRIVATE, fd, 0);
-                usleep(1);
-                if (ptr == MAP_FAILED) {
-                        printf("failed to mmap\n");
-                        break;
-                }
-                munmap(ptr, 4096 * 64);
-                usleep(1);
-                pptr = malloc(1);
-                usleep(1);
-                pptr[0] = 1;
-                usleep(1);
-                free(pptr);
-                usleep(1);
-                nanosleep(&ts, NULL);
-        }
-        close(fd);
-        return NULL;
-}
-
-int main(int argc, char *argv[])
-{
-        void *ptr;
-        int i;
-        pthread_t threads[THREAD_COUNT];
-
-        if (argc < 2)
-                return 0;
-
-        filename = argv[1];
-
-        for (i = 0; i < THREAD_COUNT; i++) {
-                if (pthread_create(threads + i, NULL, worker, NULL)) {
-                        fprintf(stderr, "Error creating thread\n");
-                        return 0;
-                }
-        }
-
-        for (i = 0; i < THREAD_COUNT; i++)
-                pthread_join(threads[i], NULL);
-        return 0;
-}
-============================ 8< ============================
-
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- kernel/bpf/stackmap.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 052580c33d268..173e983619d77 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -287,7 +287,7 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 	bool irq_work_busy = false;
- 	struct stack_map_irq_work *work = NULL;
- 
--	if (in_nmi()) {
-+	if (irqs_disabled()) {
- 		work = this_cpu_ptr(&up_read_work);
- 		if (work->irq_work.flags & IRQ_WORK_BUSY)
- 			/* cannot queue more up_read, fallback */
-@@ -295,8 +295,9 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 	}
- 
- 	/*
--	 * We cannot do up_read() in nmi context. To do build_id lookup
--	 * in nmi context, we need to run up_read() in irq_work. We use
-+	 * We cannot do up_read() when the irq is disabled, because of
-+	 * risk to deadlock with rq_lock. To do build_id lookup when the
-+	 * irqs are disabled, we need to run up_read() in irq_work. We use
- 	 * a percpu variable to do the irq_work. If the irq_work is
- 	 * already used by another lookup, we fall back to report ips.
- 	 *
--- 
-2.20.1
+bpftool always was and will be a special user of libbpf.
 
