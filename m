@@ -2,146 +2,102 @@ Return-Path: <SRS0=eM+6=2A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4624EC2D0BF
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 05:56:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4BA1C43603
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 06:31:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1C59220652
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 05:56:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7677320637
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 06:31:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Z0uGtjzd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tQOU0We/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726983AbfLJFzw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 00:55:52 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:2831 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725942AbfLJFzw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 00:55:52 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5def33600000>; Mon, 09 Dec 2019 21:55:45 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 09 Dec 2019 21:55:50 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 09 Dec 2019 21:55:50 -0800
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 10 Dec
- 2019 05:55:50 +0000
-Received: from [10.2.166.216] (10.124.1.5) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 10 Dec
- 2019 05:55:49 +0000
-Subject: Re: [PATCH v8 20/26] powerpc: book3s64: convert to pin_user_pages()
- and put_user_page()
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Paul Mackerras" <paulus@samba.org>, Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20191209225344.99740-1-jhubbard@nvidia.com>
- <20191209225344.99740-21-jhubbard@nvidia.com>
- <08f5d716-8b31-b016-4994-19fbe829dc28@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <61e0c3a5-992e-4571-e22d-d63286ce10ec@nvidia.com>
-Date:   Mon, 9 Dec 2019 21:53:00 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1726953AbfLJGbj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 01:31:39 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:37198 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726819AbfLJGbj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 01:31:39 -0500
+Received: by mail-qk1-f194.google.com with SMTP id m188so15535398qkc.4;
+        Mon, 09 Dec 2019 22:31:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9iJIcIsuvyaKuPCjR081dtZXW++oZ7hj1JifXMC1F5Q=;
+        b=tQOU0We/iItFc8KG52IjN8yKcohDPXKl7RkDmRCr0JGDbwrqD739SRmZx4HGmE4duI
+         J0XY+auZyepuaZAvGnbKX4M4p+YIq7Efv67rta+b3j+CyjCd0EZT1RCxCvBb+60Gb9Ck
+         VLYhzDBNSrWqlwtit3o2w9SpLFsUDQIwDXzOQFY8+fcGXIIx6EA1NKNgIaDameUMHFSF
+         ybar8inmlhJw+69UVINPdq2Q/SvHrsAqgN5f/8AuSxN7phLbDq8Ew0FR+p9hZiy1Bc+T
+         dYDqmR70lInb3Av9ACUArifbaKLjrHCfEIaJ1aPxVQlPLmvw3vD97UJBHAGiOHoxK+n+
+         YHuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9iJIcIsuvyaKuPCjR081dtZXW++oZ7hj1JifXMC1F5Q=;
+        b=fO1Xnkb3jyU7aadqxhCI//KwNLph0gqb61NoWMxzazZCsjMWOVa4VzqZ1nrlrwViw7
+         OdJs4TRQzFnwm1MtPewLZv/OpTx68gcKjzHJZSSpLjAgo7Y98Nypz4a1Iu7fLwXgW5fN
+         ZCKWGXxkQ4AR8Sx+sQRqE4OWvhrmsU8cRU6WTp0nfj33mh82FsPJNZoESxg6tooJh1P6
+         CNvr833IkJBlAKe411gaRGGcmRS+tPUY162YZqw4SV8nS3DlJzNdy6BOhBvdiPPUuYXL
+         xnRrSW5e1rRim9wHoMWs5BLMbd3BN0uHzHMjIA4boYh6XNI6zO+34Jz1h5PH0cdAboyK
+         g/uQ==
+X-Gm-Message-State: APjAAAU4FSDS3muOsEMLIyT47NXkrwwQ/mUSOwTWBFj5vLKDNrphiB4J
+        2pxfmHXiiRp/jbe5PvsrwW9ZTPPutjqDSA/CFJw=
+X-Google-Smtp-Source: APXvYqx3F+LQFuqQ022bdlz/MnN6T1zHXpSEHoXO3K+x8qu9cpOaRxwv+CVqGdE058LR7mSeqLWqg50/WQvlj45HWMQ=
+X-Received: by 2002:a37:9c0f:: with SMTP id f15mr31583276qke.297.1575959497981;
+ Mon, 09 Dec 2019 22:31:37 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <08f5d716-8b31-b016-4994-19fbe829dc28@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1575957345; bh=hOQHo4yBws9X1nqgVCC1VdrUiF9Z86xIO4U2wGVXRCw=;
-        h=X-PGP-Universal:Subject:From:To:CC:References:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=Z0uGtjzdMedDuhQsG1jpU7HmbXe0kx1+9sLgOIk8Tsa+qSKrJwruITPp5YqsEqw/n
-         J6r9xabZ4a9OQN/Wl8LVj9LrtdwAy11ChiFmcjZZVTuORyZEi3yR7n2LRqkwn66Ltr
-         eeIwWiN6PGMYv9eL7SAOfeP4KVVco/4prZuZTjVwpd53jjxNLLJqGfcC9sxeGP6ykt
-         D8DJTJbSiZvX3LC8FmFbEGS2I/TRo6uZZSD6HwdT5k7HU7OxF7PBsCrAkF07RmEA1a
-         ZcPVotCE1aYXgj3rJWRvh8EJXUvCr0vK9kwBlCNWSwhBERf1C6gVTs8+AjkAsxO8km
-         d4nN+/tFy5PPg==
+References: <cover.1575916815.git.paul.chaignon@gmail.com> <966fe384383bf23a0ee1efe8d7291c78a3fb832b.1575916815.git.paul.chaignon@gmail.com>
+ <CAJ+HfNgFo8viKn3KzNfbmniPNUpjOv_QM4ua_V0RFLBpWCOBYw@mail.gmail.com>
+In-Reply-To: <CAJ+HfNgFo8viKn3KzNfbmniPNUpjOv_QM4ua_V0RFLBpWCOBYw@mail.gmail.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Date:   Tue, 10 Dec 2019 07:31:26 +0100
+Message-ID: <CAJ+HfNiqtF9T-C7a1NoSekSAW+Fpr2kH2EghLDiRmf_+-Uat-w@mail.gmail.com>
+Subject: Re: [PATCH bpf 1/2] bpf, riscv: limit to 33 tail calls
+To:     Paul Chaignon <paul.chaignon@orange.com>
+Cc:     Paul Burton <paulburton@kernel.org>,
+        Mahshid Khezri <khezri.mahshid@gmail.com>,
+        paul.chaignon@gmail.com, bpf <bpf@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 12/9/19 3:46 PM, John Hubbard wrote:
-> On 12/9/19 2:53 PM, John Hubbard wrote:
-> ...
->> @@ -212,10 +211,9 @@ static void mm_iommu_unpin(struct mm_iommu_table_group_mem_t *mem)
->>   		if (!page)
->>   			continue;
->>   
->> -		if (mem->hpas[i] & MM_IOMMU_TABLE_GROUP_PAGE_DIRTY)
->> -			SetPageDirty(page);
->> +		put_user_pages_dirty_lock(&page, 1,
->> +				mem->hpas[i] & MM_IOMMU_TABLE_GROUP_PAGE_DIRTY);
->>   
->> -		put_page(page);
-> 
-> 
-> Correction: this is somehow missing the fixes that resulted from Jan Kara's review (he
-> noted that we can't take a page lock in this context). I must have picked up the
-> wrong version of it, when I rebased for -rc1.
-> 
+On Mon, 9 Dec 2019 at 20:57, Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> =
+wrote:
+>
+> On Mon, 9 Dec 2019 at 19:52, Paul Chaignon <paul.chaignon@orange.com> wro=
+te:
+> >
+> > All BPF JIT compilers except RISC-V's and MIPS' enforce a 33-tail calls
+> > limit at runtime.  In addition, a test was recently added, in tailcalls=
+2,
+> > to check this limit.
+> >
+> > This patch updates the tail call limit in RISC-V's JIT compiler to allo=
+w
+> > 33 tail calls.  I tested it using the above selftest on an emulated
+> > RISCV64.
+> >
+>
+> 33! ICK! ;-) Thanks for finding this!
+>
+> Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com>
+>
 
-Andrew, given that the series is now in -mm, what's the preferred way for me to fix this?
-Send a v9 version of the whole series? Or something else?
-
-I'm still learning the ropes...
-
-thanks,
--- 
-John Hubbard
-NVIDIA
-
-> Will fix in the next version (including the commit description). Here's what the
-> corrected hunk will look like:
-> 
-> @@ -215,7 +214,8 @@ static void mm_iommu_unpin(struct mm_iommu_table_group_mem_t *mem)
->                  if (mem->hpas[i] & MM_IOMMU_TABLE_GROUP_PAGE_DIRTY)
->                          SetPageDirty(page);
->   
-> -               put_page(page);
-> +               put_user_page(page);
-> +
->                  mem->hpas[i] = 0;
->          }
->   }
-> 
-> 
-> thanks,
-> 
+...and somewhat related; One of the tailcall tests fail due to missing
+far-branch support in the emitter. I'll address this in the v2 of the
+"far branch" series.
