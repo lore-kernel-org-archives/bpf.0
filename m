@@ -2,126 +2,106 @@ Return-Path: <SRS0=eM+6=2A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FEC5C2D0BF
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 22:13:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61C96C43603
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 22:26:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 73F30207FF
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 22:13:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576015986;
-	bh=/5fAVxxUjSZJE4xH7IhLJ3O8MJfUsscc+boLpoxHZKY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=0sp93bRu++iAWO11pBBQ1YLCgRlSl3Y8NAV1PpvKeCx4AoWfKtz5l2s8PsBvNWnfd
-	 +WfuBAk8TsJtIO1m+6kB0Niz58WrQQZ8ZudtFJx/MXzyvAC4EAAOpzoBYMG7lLhX8o
-	 /udWQVVgs4Uiog+P+cLLRlvVo9uilOCX2k9AV8mg=
+	by mail.kernel.org (Postfix) with ESMTP id 36AD02073D
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 22:26:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728770AbfLJWM7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 17:12:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33606 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727778AbfLJWD3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:03:29 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 78725214D8;
-        Tue, 10 Dec 2019 22:03:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576015408;
-        bh=/5fAVxxUjSZJE4xH7IhLJ3O8MJfUsscc+boLpoxHZKY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yC/0tsArmwax6tMLh0MiNGvn2zcihBFd+kRecOUH7RDW1KxQWAzZYOg+sQ5gB34Hn
-         dHNfsahBQYo2iygtn55eHzeVeYKkj25F+YRmRyEmc/z24mmINW2rlBktjI0ZIQveUT
-         htUH4N9AfEdgAqLDvShVBVImsbZ2CTu77TVt7eJc=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        id S1726631AbfLJW0I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:26:08 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:45695 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726614AbfLJW0I (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:26:08 -0500
+Received: from 1.general.cascardo.us.vpn ([10.172.70.58] helo=calabresa)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <cascardo@canonical.com>)
+        id 1ienx8-0002Vk-Vd; Tue, 10 Dec 2019 22:25:59 +0000
+Date:   Tue, 10 Dec 2019 19:25:53 -0300
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     Justin Forbes <jmforbes@linuxtx.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Song Liu <songliubraving@fb.com>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 022/130] selftests/bpf: Correct path to include msg + path
-Date:   Tue, 10 Dec 2019 17:01:13 -0500
-Message-Id: <20191210220301.13262-22-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210220301.13262-1-sashal@kernel.org>
-References: <20191210220301.13262-1-sashal@kernel.org>
+        Andrii Nakryiko <andriin@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Aurelien Jarno <aurelien@aurel32.net>,
+        debian-kernel@lists.debian.org
+Subject: Re: [PATCH] libbpf: fix readelf output parsing on powerpc with
+ recent binutils
+Message-ID: <20191210222553.GA4580@calabresa>
+References: <20191201195728.4161537-1-aurelien@aurel32.net>
+ <87zhgbe0ix.fsf@mpe.ellerman.id.au>
+ <20191202093752.GA1535@localhost.localdomain>
+ <CAFxkdAqg6RaGbRrNN3e_nHfHFR-xxzZgjhi5AnppTxxwdg0VyQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFxkdAqg6RaGbRrNN3e_nHfHFR-xxzZgjhi5AnppTxxwdg0VyQ@mail.gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+On Tue, Dec 10, 2019 at 12:58:33PM -0600, Justin Forbes wrote:
+> On Mon, Dec 2, 2019 at 3:37 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> >
+> > On Mon, Dec 02, 2019 at 04:53:26PM +1100, Michael Ellerman wrote:
+> > > Aurelien Jarno <aurelien@aurel32.net> writes:
+> > > > On powerpc with recent versions of binutils, readelf outputs an extra
+> > > > field when dumping the symbols of an object file. For example:
+> > > >
+> > > >     35: 0000000000000838    96 FUNC    LOCAL  DEFAULT [<localentry>: 8]     1 btf_is_struct
+> > > >
+> > > > The extra "[<localentry>: 8]" prevents the GLOBAL_SYM_COUNT variable to
+> > > > be computed correctly and causes the checkabi target to fail.
+> > > >
+> > > > Fix that by looking for the symbol name in the last field instead of the
+> > > > 8th one. This way it should also cope with future extra fields.
+> > > >
+> > > > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+> > > > ---
+> > > >  tools/lib/bpf/Makefile | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > Thanks for fixing that, it's been on my very long list of test failures
+> > > for a while.
+> > >
+> > > Tested-by: Michael Ellerman <mpe@ellerman.id.au>
+> >
+> > Looks good & also continues to work on x86. Applied, thanks!
+> 
+> This actually seems to break horribly on PPC64le with binutils 2.33.1
+> resulting in:
+> Warning: Num of global symbols in sharedobjs/libbpf-in.o (32) does NOT
+> match with num of versioned symbols in libbpf.so (184). Please make
+> sure all LIBBPF_API symbols are versioned in libbpf.map.
+> 
+> This is the only arch that fails, with x86/arm/aarch64/s390 all
+> building fine.  Reverting this patch allows successful build across
+> all arches.
+> 
+> Justin
 
-[ Upstream commit c588146378962786ddeec817f7736a53298a7b01 ]
+Well, I ended up debugging this same issue and had the same fix as Jarno's when
+I noticed his fix was already applied.
 
-The "path" buf is supposed to contain path + printf msg up to 24 bytes.
-It will be cut anyway, but compiler generates truncation warns like:
+I just installed a system with the latest binutils, 2.33.1, and it still breaks
+without such fix. Can you tell what is the output of the following command on
+your system?
 
-"
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c: In
-function ‘setup_cgroup_environment’:
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:52:34:
-warning: ‘/cgroup.controllers’ directive output may be truncated
-writing 19 bytes into a region of size between 1 and 4097
-[-Wformat-truncation=]
-snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
-				  ^~~~~~~~~~~~~~~~~~~
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:52:2:
-note: ‘snprintf’ output between 20 and 4116 bytes into a destination
-of size 4097
-snprintf(path, sizeof(path), "%s/cgroup.controllers", cgroup_path);
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:72:34:
-warning: ‘/cgroup.subtree_control’ directive output may be truncated
-writing 23 bytes into a region of size between 1 and 4097
-[-Wformat-truncation=]
-snprintf(path, sizeof(path), "%s/cgroup.subtree_control",
-				  ^~~~~~~~~~~~~~~~~~~~~~~
-cgroup_path);
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:72:2:
-note: ‘snprintf’ output between 24 and 4120 bytes into a destination
-of size 4097
-snprintf(path, sizeof(path), "%s/cgroup.subtree_control",
-cgroup_path);
-"
+readelf -s --wide tools/lib/bpf/sharedobjs/libbpf-in.o | cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' | awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $0}' 
 
-In order to avoid warns, lets decrease buf size for cgroup workdir on
-24 bytes with assumption to include also "/cgroup.subtree_control" to
-the address. The cut will never happen anyway.
-
-Signed-off-by: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/bpf/20191002120404.26962-3-ivan.khoronzhuk@linaro.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- samples/bpf/cgroup_helpers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/samples/bpf/cgroup_helpers.c b/samples/bpf/cgroup_helpers.c
-index 09afaddfc9ba9..b5c09cd6c7bd7 100644
---- a/samples/bpf/cgroup_helpers.c
-+++ b/samples/bpf/cgroup_helpers.c
-@@ -43,7 +43,7 @@
-  */
- int setup_cgroup_environment(void)
- {
--	char cgroup_workdir[PATH_MAX + 1];
-+	char cgroup_workdir[PATH_MAX - 24];
- 
- 	format_cgroup_path(cgroup_workdir, "");
- 
--- 
-2.20.1
-
+Cascardo.
