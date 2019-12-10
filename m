@@ -2,147 +2,132 @@ Return-Path: <SRS0=eM+6=2A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 822ADC43603
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DEC3C43603
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 22:04:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 562FE2073B
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:52:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="TN/QOr87"
+	by mail.kernel.org (Postfix) with ESMTP id E1DCD22464
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 22:04:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1576015493;
+	bh=xaXdTT0WC7zzL+pYCxgzGvN3CFviciHZJBOc7SedoPg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=J2VI8yROpR1YZO6tItkObsQJ3/O/vzvCSgjM7qm4XPSLxbAMt0lxKCfn8CuQOz63A
+	 TASJNE5TGeER3XDnV3V23lkcENSqQpC/fbXOSBdlrnSShTP/3ulu3C0yzA1NadMO65
+	 wP9CgSULavJ7qavEe21QQvJKgVPl1jdNiB2PuKKg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729864AbfLJVwL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:52:11 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:43054 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727549AbfLJVwK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:52:10 -0500
-Received: by mail-pg1-f193.google.com with SMTP id b1so9509666pgq.10
-        for <bpf@vger.kernel.org>; Tue, 10 Dec 2019 13:52:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=x1llI4VQgR/NNv9VK0TWAuEng4/7tgvnedskGQElizQ=;
-        b=TN/QOr87yPqhW/2lzNiPS+Jz3xhAwg45MFbe+8DISDcdLzuEBd561ejk5h0oCDb20M
-         cyLB2KMxESf4Ub5nYgtAAseJcF8JrG2TpoOOK8qfqxLY6L6KKBaLA7FApvFfMTJYJ/nD
-         rzvsG3Hy5V1bVEoDwP+bo3VLKfoUq4aXJ0+Xo3Cp173dvNPBZF+DAqX8e0nbD2CZKk9O
-         p8kMwBsQHh50nLmmwHguAwJKH8eve5hwTsj2EHRkq2Yn4/MIPkhixNEv6PV5mPIdAWdX
-         BfndNieAlydYIPORzdzVGct5J8O1VK1nNaPidFt04JpeZqNZDd0NoNb9YkalSivZSsmd
-         CHKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=x1llI4VQgR/NNv9VK0TWAuEng4/7tgvnedskGQElizQ=;
-        b=k8MjY/eB1kior1rwfv5uwMyO7m5ViLrbaRrxNPm7yayued0EOooWLsu+tCl0qnZusj
-         66YSBlzaTe4g6UE8CaNCl7KW01foH5dBYhpfN+IAnoKgGUyIg+skhFYnJBoDQ0yTbki+
-         hdKujy61nk6OZueSsXejVx3F7cjXtttB9uyibUpFMbCcCks4QOWTT27XXo7ptlQLDHVO
-         6f8ST3rApBTUzCBoaLfXcc/BQKDoe2gluFZi27mpifBTIqXxa7tAYKX1p42Z7bkxhzMk
-         fWxJWEiC5jmN8Nq3kHuAjwaBnU9k3tf9rXrFV5+ssljBm8LWZmIBJdpnzHCYR9a6iyAc
-         98Jg==
-X-Gm-Message-State: APjAAAWvWNtjgzqYq5jUFEcvLM/M5VsO9nC9pHAlyLPGm30N65saBLjC
-        axBqaCqwcT2fldeG0DN7VBsTWDNTeZ0=
-X-Google-Smtp-Source: APXvYqxXcor3tR+WOkruu/D28GkGpulVaBRaudEGLcLcwEBe3xdOjEwVkq8bKvNdtbH3cY30xIG6Mg==
-X-Received: by 2002:a63:213:: with SMTP id 19mr329909pgc.160.1576014729720;
-        Tue, 10 Dec 2019 13:52:09 -0800 (PST)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id z13sm3865986pjz.15.2019.12.10.13.52.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 13:52:09 -0800 (PST)
-Date:   Tue, 10 Dec 2019 13:52:05 -0800
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
+        id S1729174AbfLJWEw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 17:04:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35850 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729163AbfLJWEv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:04:51 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D73472073B;
+        Tue, 10 Dec 2019 22:04:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576015490;
+        bh=xaXdTT0WC7zzL+pYCxgzGvN3CFviciHZJBOc7SedoPg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=okf9ZbQgi8r6a3/YNJ/V9cbP874fInhv7tWvPSPGM9Gv2XUW0D8JLKAKxxqrWtyQq
+         mbqS+lansU+AmkE0MNBB4/2Tf5bOElGbyu/GyNiWl67qdGQgIp0qGTjo+HpRhbw5it
+         DLOYc7Byxp+JuIW1jrZSb9Yqg+vvkH8GufdrWR6M=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        lkml <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Martin Lau <kafai@fb.com>
-Subject: Re: [PATCH bpf v2] bpftool: Don't crash on missing jited insns or
- ksyms
-Message-ID: <20191210135205.529044a4@cakuba.netronome.com>
-In-Reply-To: <20191210213148.kqd6xdvqjkh3zxst@ast-mbp.dhcp.thefacebook.com>
-References: <20191210181412.151226-1-toke@redhat.com>
-        <20191210125457.13f7821a@cakuba.netronome.com>
-        <87eexbhopo.fsf@toke.dk>
-        <20191210132428.4470a7b0@cakuba.netronome.com>
-        <20191210213148.kqd6xdvqjkh3zxst@ast-mbp.dhcp.thefacebook.com>
-Organization: Netronome Systems, Ltd.
+        Jin Yao <yao.jin@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com, netdev@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 091/130] perf parse: If pmu configuration fails free terms
+Date:   Tue, 10 Dec 2019 17:02:22 -0500
+Message-Id: <20191210220301.13262-91-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191210220301.13262-1-sashal@kernel.org>
+References: <20191210220301.13262-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 10 Dec 2019 13:31:50 -0800, Alexei Starovoitov wrote:
-> On Tue, Dec 10, 2019 at 01:24:28PM -0800, Jakub Kicinski wrote:
-> > On Tue, 10 Dec 2019 22:09:55 +0100, Toke H=C3=B8iland-J=C3=B8rgensen wr=
-ote: =20
-> > > Jakub Kicinski <jakub.kicinski@netronome.com> writes: =20
-> > > > On Tue, 10 Dec 2019 19:14:12 +0100, Toke H=C3=B8iland-J=C3=B8rgense=
-n wrote:   =20
-> > > >> When the kptr_restrict sysctl is set, the kernel can fail to return
-> > > >> jited_ksyms or jited_prog_insns, but still have positive values in
-> > > >> nr_jited_ksyms and jited_prog_len. This causes bpftool to crash wh=
-en trying
-> > > >> to dump the program because it only checks the len fields not the =
-actual
-> > > >> pointers to the instructions and ksyms.
-> > > >>=20
-> > > >> Fix this by adding the missing checks.
-> > > >>=20
-> > > >> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> =
-  =20
-> > > >
-> > > > Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
-> > > >
-> > > > and
-> > > >
-> > > > Fixes: f84192ee00b7 ("tools: bpftool: resolve calls without using i=
-mm field")
-> > > >
-> > > > ?   =20
-> > >=20
-> > > Yeah, guess so? Although I must admit it's not quite clear to me whet=
-her
-> > > bpftool gets stable backports, or if it follows the "only moving
-> > > forward" credo of libbpf? =20
-> >=20
-> > bpftool does not have a GH repo, and seeing strength of Alexei's
-> > arguments in the recent discussion - I don't think it will. So no
-> > reason for bpftool to be "special" =20
->=20
-> bpftool always was and will be a special user of libbpf.
+From: Ian Rogers <irogers@google.com>
 
-There we go again. Making proclamations without any justification or
-explanation.
+[ Upstream commit 38f2c4226e6bc3e8c41c318242821ba5dc825aba ]
 
-Maybe there is a language barrier between us, but I wrote the initial
-bpftool code, so I don't see how you (who authored one patch) can say
-what it was or is. Do you mean to say what you intend to make it?
+Avoid a memory leak when the configuration fails.
 
-bpftool was intended to be a CLI to BPF _kernel_ interface. libbpf was
-just the library that we all agreed to use moving forward for ELF
-loading.
+Signed-off-by: Ian Rogers <irogers@google.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jin Yao <yao.jin@linux.intel.com>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: clang-built-linux@googlegroups.com
+Cc: netdev@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20191030223448.12930-9-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/perf/util/parse-events.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-I'm not going to argue with you again. You kept bad mouthing iproute2
-and then your only argument was the reviews sometimes take longer than
-24 hours. Which I'm sure you have a lot of experience with:
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index 29e2bb304168c..096c52f296d77 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -1253,8 +1253,15 @@ static int __parse_events_add_pmu(struct parse_events_state *parse_state,
+ 	if (get_config_terms(head_config, &config_terms))
+ 		return -ENOMEM;
+ 
+-	if (perf_pmu__config(pmu, &attr, head_config, parse_state->error))
++	if (perf_pmu__config(pmu, &attr, head_config, parse_state->error)) {
++		struct perf_evsel_config_term *pos, *tmp;
++
++		list_for_each_entry_safe(pos, tmp, &config_terms, list) {
++			list_del_init(&pos->list);
++			free(pos);
++		}
+ 		return -EINVAL;
++	}
+ 
+ 	evsel = __add_event(list, &parse_state->idx, &attr,
+ 			    get_config_name(head_config), pmu,
+-- 
+2.20.1
 
-  iproute2$ git log --author=3DStarov --oneline=20
-4bfe68253670 iptnl: add support for collect_md flag in IPv4 and IPv6 tunnels
-
-  iproute2$ git log --author=3Dfb.com --oneline=20
-3da6d055d93f bpf: add btf func and func_proto kind support
-7a04dd84a7f9 bpf: check map symbol type properly with newer llvm compiler
-73451259daaa tc: fix ipv6 filter selector attribute for some prefix lengths
-0b4ea60b5a48 bpf: Add support for IFLA_XDP_PROG_ID
-4bfe68253670 iptnl: add support for collect_md flag in IPv4 and IPv6 tunnels
-414aeec90f82 ss: Add tcp_info fields data_segs_in/out
-409998c5a4eb iproute: ip-gue/ip-fou manpages
-
-Upstreaming bpftool was a big mistake, but we live and we learn.
