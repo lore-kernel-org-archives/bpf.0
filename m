@@ -7,46 +7,61 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5FB2C43603
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:21:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C59EC2D0BF
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:22:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8E4C3206D5
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:21:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3261C2073B
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:22:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576012896;
-	bh=ZgnB4lFM8X3vrrBvyCDddzp2I40k+9vWfvOWfY48zDg=;
+	s=default; t=1576012951;
+	bh=LBmAcdOL8kkDwBA4GTeeC+fsUOGxuypNFmGvcPP7ELU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=flEvqNtey6uR+kidhHpqJ3vCtm7G/OAwfR5Al+SeGcCES3ad+LbgZc0Dm+WqGSd0Y
-	 4bgLGjNEr6+PSyJ8Y+iV4NqLY6fUHImZDCwZ3skqd/fMeaetcnWbd1VTBv93xuFhUC
-	 CIYr7x2F9ner7XeuKERKJatdS4Y61dHfDn+smLpU=
+	b=oB+AtVrwQEPcm3oWDxy2Y6Mb+GcbmNid34XN+UpNol2W4xIiv2HyqtOM7Uc86c7yS
+	 n/XVvdCDDlgPI3BbHb8wInBdO3S9T/TV0JVacQWCvSG3DGWQPlmZ3hDw3shQSbBYqs
+	 3mNH1Pn8UDOgM+ALWxLErgeuSrAO9DzgnLg/0ILo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728543AbfLJVVV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:21:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34976 "EHLO mail.kernel.org"
+        id S1728769AbfLJVLb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:11:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34260 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728840AbfLJVLs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:11:48 -0500
+        id S1728762AbfLJVLb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:11:31 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A20CA24697;
-        Tue, 10 Dec 2019 21:11:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9F10F246BB;
+        Tue, 10 Dec 2019 21:11:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012307;
-        bh=ZgnB4lFM8X3vrrBvyCDddzp2I40k+9vWfvOWfY48zDg=;
+        s=default; t=1576012289;
+        bh=LBmAcdOL8kkDwBA4GTeeC+fsUOGxuypNFmGvcPP7ELU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aIx0yhS2vzMelBtWSrSnYlS4Y5BkGNWh1HmNUJEsYtQXWdHs5fDn+LVeuQMpKfbjg
-         cg0TE1ltgzk75StLY+3fD/DfV66WvM5tnOMkJAHXi0FjNtM6t64T23WrvC/YFvssPY
-         e4hiYqNFewrwRsMGoafgTHnEBFSOzkGLPpgBbqB8=
+        b=jbrIdNI6ZmHO+ABshZR8fVt8zPStU4ccMwTTSFsly4dHm59QynTQobnIqSyRD/Ll5
+         0AMt+WuT7TQ9UaYBUQn3H3jcCbkY7ypFijiLrNgxscGe7oRK36B3ZxU3dLp7osfFmz
+         cSCiI8XYPAFfomOkM2gLOP7gBXn1yvlB+eQSWTWs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
+Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 243/350] s390/bpf: Use kvcalloc for addrs array
-Date:   Tue, 10 Dec 2019 16:05:48 -0500
-Message-Id: <20191210210735.9077-204-sashal@kernel.org>
+        Jin Yao <yao.jin@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com, netdev@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 229/350] perf tools: Splice events onto evlist even on error
+Date:   Tue, 10 Dec 2019 16:05:34 -0500
+Message-Id: <20191210210735.9077-190-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -59,58 +74,74 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ilya Leoshkevich <iii@linux.ibm.com>
+From: Ian Rogers <irogers@google.com>
 
-[ Upstream commit 166f11d11f6f70439830d09bfa5552ec1b368494 ]
+[ Upstream commit 8e8714c3d157568b7a769917a5e05573bbaf5af0 ]
 
-A BPF program may consist of 1m instructions, which means JIT
-instruction-address mapping can be as large as 4m. s390 has
-FORCE_MAX_ZONEORDER=9 (for memory hotplug reasons), which means maximum
-kmalloc size is 1m. This makes it impossible to JIT programs with more
-than 256k instructions.
+If event parsing fails the event list is leaked, instead splice the list
+onto the out result and let the caller cleanup.
 
-Fix by using kvcalloc, which falls back to vmalloc for larger
-allocations. An alternative would be to use a radix tree, but that is
-not supported by bpf_prog_fill_jited_linfo.
+An example input for parse_events found by libFuzzer that reproduces
+this memory leak is 'm{'.
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20191107141838.92202-1-iii@linux.ibm.com
+Signed-off-by: Ian Rogers <irogers@google.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jin Yao <yao.jin@linux.intel.com>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: clang-built-linux@googlegroups.com
+Cc: netdev@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20191025180827.191916-5-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/net/bpf_jit_comp.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/perf/util/parse-events.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index ce88211b9c6cd..c8c16b5eed6be 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -23,6 +23,7 @@
- #include <linux/filter.h>
- #include <linux/init.h>
- #include <linux/bpf.h>
-+#include <linux/mm.h>
- #include <asm/cacheflush.h>
- #include <asm/dis.h>
- #include <asm/facility.h>
-@@ -1369,7 +1370,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
- 	}
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index b5e2adef49de9..d5ea043d3fc4c 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -1927,15 +1927,20 @@ int parse_events(struct evlist *evlist, const char *str,
  
- 	memset(&jit, 0, sizeof(jit));
--	jit.addrs = kcalloc(fp->len + 1, sizeof(*jit.addrs), GFP_KERNEL);
-+	jit.addrs = kvcalloc(fp->len + 1, sizeof(*jit.addrs), GFP_KERNEL);
- 	if (jit.addrs == NULL) {
- 		fp = orig_fp;
- 		goto out;
-@@ -1422,7 +1423,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
- 	if (!fp->is_func || extra_pass) {
- 		bpf_prog_fill_jited_linfo(fp, jit.addrs + 1);
- free_addrs:
--		kfree(jit.addrs);
-+		kvfree(jit.addrs);
- 		kfree(jit_data);
- 		fp->aux->jit_data = NULL;
- 	}
+ 	ret = parse_events__scanner(str, &parse_state, PE_START_EVENTS);
+ 	perf_pmu__parse_cleanup();
++
++	if (!ret && list_empty(&parse_state.list)) {
++		WARN_ONCE(true, "WARNING: event parser found nothing\n");
++		return -1;
++	}
++
++	/*
++	 * Add list to the evlist even with errors to allow callers to clean up.
++	 */
++	perf_evlist__splice_list_tail(evlist, &parse_state.list);
++
+ 	if (!ret) {
+ 		struct evsel *last;
+ 
+-		if (list_empty(&parse_state.list)) {
+-			WARN_ONCE(true, "WARNING: event parser found nothing\n");
+-			return -1;
+-		}
+-
+-		perf_evlist__splice_list_tail(evlist, &parse_state.list);
+ 		evlist->nr_groups += parse_state.nr_groups;
+ 		last = evlist__last(evlist);
+ 		last->cmdline_group_boundary = true;
 -- 
 2.20.1
 
