@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 884C9C2D0BF
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:20:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58480C3F68F
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:21:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4C8E5206D5
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:20:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 22E68206D5
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:21:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576012804;
-	bh=Jqioyw8RE0uZ1wbjjFkGDn2AqzNGFoGlgpOFosiAVI0=;
+	s=default; t=1576012894;
+	bh=xsdow0IJ77bvirW4eYEduP638RtJRXOzATouebVsj6E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EV+IPC0rj78gCUsBjMl/L1SAb6d9X6q5J1+vPNePcVin/YyT9r7jiRyJOYroA25Mw
-	 uMitOsvqtAto50KjtSMYPu3/lsUjpvM0lBAIMIq57YokBtnbgXpHgrLx1rlJVc1sVY
-	 7HGyNQqvpOGq5LBrYP9tRNJbohf18a837T8u6oYk=
+	b=VcpydFzyWB/y+bh3+GvlhqLuX+pEgg3aBr4kvlfBKtkREgE9lh5LZ+I5cAKLW0cU8
+	 TD2Nxc1aT8OnJWidcMnM92jhkuysfI2jAsjL6cNCfOKToMz4LNVaC2pYsTmiwuYZk5
+	 ZeZFaRVzZsjapc6TldZ37LiHsRIsVNAVDPKtZMfc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728886AbfLJVMS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:12:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35932 "EHLO mail.kernel.org"
+        id S1729241AbfLJVVW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:21:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34948 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728745AbfLJVMQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:12:16 -0500
+        id S1727942AbfLJVLq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:11:46 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E0EAE24697;
-        Tue, 10 Dec 2019 21:12:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8A85F246B8;
+        Tue, 10 Dec 2019 21:11:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012335;
-        bh=Jqioyw8RE0uZ1wbjjFkGDn2AqzNGFoGlgpOFosiAVI0=;
+        s=default; t=1576012306;
+        bh=xsdow0IJ77bvirW4eYEduP638RtJRXOzATouebVsj6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FkWtwiQOBgJTH2iKwRqp7FlT3oP7Dalb1/7yGCr4K3IWcnHG1J0ePIrgIMv17egTU
-         NwGLNbidTruYBv1DMIEO7Dhe867CK0/A8X6ZrPSw0eSgPFNq+wjjyS3Bx8UQgpagdJ
-         TxgTFvj9Y9NUlG1hGuNwthlwO2MV7ksYLkoAMeQo=
+        b=KNUtXVrwa1LHxxt/ekDYJ9e5o2bmNZC3mTxWDawAzPx8w3kuN+mDOes45HxHL33jh
+         WsdSX0bx+vB1gV2SKW5UTDFhH5dN/oorm6iz6D2/KlhwSyd3hXDET4qQ03O9oWxXED
+         +62oMOQutYqcpYw4z3HkEZ+aYlJDwNc/EgJhoVy8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yonghong Song <yhs@fb.com>, Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.4 267/350] bpf, testing: Workaround a verifier failure for test_progs
-Date:   Tue, 10 Dec 2019 16:06:12 -0500
-Message-Id: <20191210210735.9077-228-sashal@kernel.org>
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 242/350] libbpf: Fix negative FD close() in xsk_setup_xdp_prog()
+Date:   Tue, 10 Dec 2019 16:05:47 -0500
+Message-Id: <20191210210735.9077-203-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -60,116 +59,37 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Yonghong Song <yhs@fb.com>
+From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit b7a0d65d80a0c5034b366392624397a0915b7556 ]
+[ Upstream commit 9656b346b280c3e49c8a116c3a715f966633b161 ]
 
-With latest llvm compiler, running test_progs will have the following
-verifier failure for test_sysctl_loop1.o:
+Fix issue reported by static analysis (Coverity). If bpf_prog_get_fd_by_id()
+fails, xsk_lookup_bpf_maps() will fail as well and clean-up code will attempt
+close() with fd=-1. Fix by checking bpf_prog_get_fd_by_id() return result and
+exiting early.
 
-  libbpf: load bpf program failed: Permission denied
-  libbpf: -- BEGIN DUMP LOG ---
-  libbpf:
-  invalid indirect read from stack var_off (0x0; 0xff)+196 size 7
-  ...
-  libbpf: -- END LOG --
-  libbpf: failed to load program 'cgroup/sysctl'
-  libbpf: failed to load object 'test_sysctl_loop1.o'
-
-The related bytecode looks as below:
-
-  0000000000000308 LBB0_8:
-      97:       r4 = r10
-      98:       r4 += -288
-      99:       r4 += r7
-     100:       w8 &= 255
-     101:       r1 = r10
-     102:       r1 += -488
-     103:       r1 += r8
-     104:       r2 = 7
-     105:       r3 = 0
-     106:       call 106
-     107:       w1 = w0
-     108:       w1 += -1
-     109:       if w1 > 6 goto -24 <LBB0_5>
-     110:       w0 += w8
-     111:       r7 += 8
-     112:       w8 = w0
-     113:       if r7 != 224 goto -17 <LBB0_8>
-
-And source code:
-
-     for (i = 0; i < ARRAY_SIZE(tcp_mem); ++i) {
-             ret = bpf_strtoul(value + off, MAX_ULONG_STR_LEN, 0,
-                               tcp_mem + i);
-             if (ret <= 0 || ret > MAX_ULONG_STR_LEN)
-                     return 0;
-             off += ret & MAX_ULONG_STR_LEN;
-     }
-
-Current verifier is not able to conclude that register w0 before '+'
-at insn 110 has a range of 1 to 7 and thinks it is from 0 - 255. This
-leads to more conservative range for w8 at insn 112, and later verifier
-complaint.
-
-Let us workaround this issue until we found a compiler and/or verifier
-solution. The workaround in this patch is to make variable 'ret' volatile,
-which will force a reload and then '&' operation to ensure better value
-range. With this patch, I got the below byte code for the loop:
-
-  0000000000000328 LBB0_9:
-     101:       r4 = r10
-     102:       r4 += -288
-     103:       r4 += r7
-     104:       w8 &= 255
-     105:       r1 = r10
-     106:       r1 += -488
-     107:       r1 += r8
-     108:       r2 = 7
-     109:       r3 = 0
-     110:       call 106
-     111:       *(u32 *)(r10 - 64) = r0
-     112:       r1 = *(u32 *)(r10 - 64)
-     113:       if w1 s< 1 goto -28 <LBB0_5>
-     114:       r1 = *(u32 *)(r10 - 64)
-     115:       if w1 s> 7 goto -30 <LBB0_5>
-     116:       r1 = *(u32 *)(r10 - 64)
-     117:       w1 &= 7
-     118:       w1 += w8
-     119:       r7 += 8
-     120:       w8 = w1
-     121:       if r7 != 224 goto -21 <LBB0_9>
-
-Insn 117 did the '&' operation and we got more precise value range
-for 'w8' at insn 120. The test is happy then:
-
-  #3/17 test_sysctl_loop1.o:OK
-
-Signed-off-by: Yonghong Song <yhs@fb.com>
+Fixes: 10a13bb40e54 ("libbpf: remove qidconf and better support external bpf programs.")
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/bpf/20191107170045.2503480-1-yhs@fb.com
+Link: https://lore.kernel.org/bpf/20191107054059.313884-1-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/lib/bpf/xsk.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-index 608a06871572d..d22e438198cf7 100644
---- a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-+++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-@@ -44,7 +44,10 @@ int sysctl_tcp_mem(struct bpf_sysctl *ctx)
- 	unsigned long tcp_mem[TCP_MEM_LOOPS] = {};
- 	char value[MAX_VALUE_STR_LEN];
- 	unsigned char i, off = 0;
--	int ret;
-+	/* a workaround to prevent compiler from generating
-+	 * codes verifier cannot handle yet.
-+	 */
-+	volatile int ret;
- 
- 	if (ctx->write)
- 		return 0;
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index 9d53480862030..a73b79d293337 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -466,6 +466,8 @@ static int xsk_setup_xdp_prog(struct xsk_socket *xsk)
+ 		}
+ 	} else {
+ 		xsk->prog_fd = bpf_prog_get_fd_by_id(prog_id);
++		if (xsk->prog_fd < 0)
++			return -errno;
+ 		err = xsk_lookup_bpf_maps(xsk);
+ 		if (err) {
+ 			close(xsk->prog_fd);
 -- 
 2.20.1
 
