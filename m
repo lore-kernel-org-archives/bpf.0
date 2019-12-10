@@ -2,137 +2,132 @@ Return-Path: <SRS0=eM+6=2A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24715C00454
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:06:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ED5AC43603
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:11:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ED1F924681
-	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:06:48 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="ZymPCP05"
+	by mail.kernel.org (Postfix) with ESMTP id D607B246BF
+	for <bpf@archiver.kernel.org>; Tue, 10 Dec 2019 21:11:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1576012301;
+	bh=S7s86h+6KeqRF+X6M+MwymUuKKIUxWBoBrdACSS/7Z4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=jVMZPJsbatPbmnLOHXHkVcNzg/FTG+J3oi7j1ZWMRxeAuK/gRMonoA6oRckEfhmth
+	 w2+tZOkJFShLnOGyFzgJ8CazBxK2yCvaqmKB8AbXXBsgyRGHrc/yB1kHdFySE3PbYG
+	 DQkgJufDwDawciO6wr5UDrGHYMQtvLk/vOrh8Q4E=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbfLJVGr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 16:06:47 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:38612 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727091AbfLJVER (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:04:17 -0500
-Received: by mail-pg1-f196.google.com with SMTP id a33so9253965pgm.5
-        for <bpf@vger.kernel.org>; Tue, 10 Dec 2019 13:04:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=52e9X1zaffKYJZsm4RmvVJgpQnjkYQQHNeT1iKIz4Fo=;
-        b=ZymPCP05vBFAW9DNYFX7N3XT5LJ8qPdE57GZbZqx1laYeb6+PiPOcrHZucpRHkw3RF
-         +HhT8g5WpW9RfqKiQmEv5cnycoNIjexOTRAzPy3H8s38X+MEGdrGFSCU7U/BmWj9GxY7
-         4aP2CXu6Z10mxCtobp4MCv26iJDUPdpRPSkMnvgemsMOl4vStvBho0WRpQ3boVd862+8
-         qmHvxsYGZCSzoeM4PMUEFbbeO30xzwKH37TkA1UwRadmG/THMHtY+xq53ow8SoBqmyqH
-         eR0CIlwyxDmRYXqxxZq4ZcnEKE7OgY53LIYU8rX+YnL8N6qne6ngMkeW5m4HqI825ra9
-         RWhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=52e9X1zaffKYJZsm4RmvVJgpQnjkYQQHNeT1iKIz4Fo=;
-        b=RdoOK93Q31MbeJ5g07hDcmLesU5LvyFxRnP93e2WfRuh78z9JJaqXG+FszndBfzXGM
-         1Fan510edU9OhwpaDu/NqDJmFSmBApPTLrfstPBnp1HM98HRpcWCAu12lKSK6JYtbIKQ
-         l/4lrPxrcMEsL6quf3QcKfMTanYPkggtKi0WK+oICoQE4Y5YiOeU+ciyNOM5w9obn97Q
-         dLSaKUfHCvDjhao/ETr2lOY1uzMyivDqc4SOVff9MYV9/RQg3mmIgMKZLWZ6U1IR/1lG
-         EEs9mt7kyM4+2bXy5cRYY22CW/fMMmqXF3qIiWAjm8elbPc+HLJ7kLqI6drR4nRsPgEy
-         0A1Q==
-X-Gm-Message-State: APjAAAWEgVOaUrJ+oeBl0RUvMamJUNHqOeaJFfz5PU8iVcd0WI/Uf8aq
-        GfTE+v+bwzct/SW35RcV+TQ+RA==
-X-Google-Smtp-Source: APXvYqzT3032TbZ3ENm1RLKpX9StxiKnRGYboO8xIPBzbkiJ1TisWt/KtdY6P3zcDJsogSAYgBac7Q==
-X-Received: by 2002:aa7:98cd:: with SMTP id e13mr36083483pfm.56.1576011856940;
-        Tue, 10 Dec 2019 13:04:16 -0800 (PST)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id l14sm2397692pgt.42.2019.12.10.13.04.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 13:04:16 -0800 (PST)
-Date:   Tue, 10 Dec 2019 13:04:13 -0800
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Paul Chaignon <paul.chaignon@orange.com>
-Cc:     bpf@vger.kernel.org, Quentin Monnet <quentin.monnet@netronome.com>,
-        paul.chaignon@gmail.com, netdev@vger.kernel.org,
+        id S1728803AbfLJVLk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 16:11:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34600 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728525AbfLJVLj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:11:39 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2E9E3246AE;
+        Tue, 10 Dec 2019 21:11:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576012298;
+        bh=S7s86h+6KeqRF+X6M+MwymUuKKIUxWBoBrdACSS/7Z4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qVORyjm7NBbrZgnjLS/IDHC7F51Oehl6DXpemgkA5zRu/o1Xo8TEM6rkHISUMQbEf
+         wDvxNKuVIRQNuSnK9d2lcLVbOG69G9Yy7gv/plFpoHuxgqPysLt/3WCgPS94VABpqA
+         6FwMHoSpj58VuBZi4Sf8I7CG636qHAXGeL4i6AwY=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Alexei Starovoitov <ast@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Subject: Re: [PATCH bpf-next 2/3] bpftool: match programs by name
-Message-ID: <20191210124101.6d5be2dd@cakuba.netronome.com>
-In-Reply-To: <1e3ede4f901a36af342e71bc4fdd2b27fbf9a418.1575991886.git.paul.chaignon@orange.com>
-References: <cover.1575991886.git.paul.chaignon@orange.com>
-        <1e3ede4f901a36af342e71bc4fdd2b27fbf9a418.1575991886.git.paul.chaignon@orange.com>
-Organization: Netronome Systems, Ltd.
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com, netdev@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 235/350] perf parse: If pmu configuration fails free terms
+Date:   Tue, 10 Dec 2019 16:05:40 -0500
+Message-Id: <20191210210735.9077-196-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
+References: <20191210210735.9077-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 10 Dec 2019 17:06:42 +0100, Paul Chaignon wrote:
-> When working with frequently modified BPF programs, both the ID and the
-> tag may change.  bpftool currently doesn't provide a "stable" way to match
-> such programs.
-> 
-> This patch implements lookup by name for programs.  The show and dump
-> commands will return all programs with the given name, whereas other
-> commands will error out if several programs have the same name.
-> 
-> Signed-off-by: Paul Chaignon <paul.chaignon@orange.com>
+From: Ian Rogers <irogers@google.com>
 
-> @@ -164,7 +165,7 @@ prog_parse_fds(int *argc, char ***argv, int *fds)
->  		}
->  		return 1;
->  	} else if (is_prefix(**argv, "tag")) {
-> -		unsigned char tag[BPF_TAG_SIZE];
-> +		char tag[BPF_TAG_SIZE];
+[ Upstream commit 38f2c4226e6bc3e8c41c318242821ba5dc825aba ]
 
-Perhaps better to change the argument to prog_fd_by_nametag() to void *?
+Avoid a memory leak when the configuration fails.
 
->  
->  		NEXT_ARGP();
->  
-> @@ -176,7 +177,20 @@ prog_parse_fds(int *argc, char ***argv, int *fds)
->  		}
->  		NEXT_ARGP();
->  
-> -		return prog_fd_by_tag(tag, fds);
-> +		return prog_fd_by_nametag(tag, fds, true);
-> +	} else if (is_prefix(**argv, "name")) {
-> +		char *name;
-> +
-> +		NEXT_ARGP();
-> +
-> +		name = **argv;
-> +		if (strlen(name) > BPF_OBJ_NAME_LEN - 1) {
+Signed-off-by: Ian Rogers <irogers@google.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jin Yao <yao.jin@linux.intel.com>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: clang-built-linux@googlegroups.com
+Cc: netdev@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20191030223448.12930-9-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/perf/util/parse-events.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Is this needed? strncmp will simply never match, is it preferred to
-hard error?
-
-> +			p_err("can't parse name");
-> +			return -1;
-> +		}
-> +		NEXT_ARGP();
-> +
-> +		return prog_fd_by_nametag(name, fds, false);
->  	} else if (is_prefix(**argv, "pinned")) {
->  		char *path;
->  
-> @@ -191,7 +205,7 @@ prog_parse_fds(int *argc, char ***argv, int *fds)
->  		return 1;
->  	}
->  
-> -	p_err("expected 'id', 'tag' or 'pinned', got: '%s'?", **argv);
-> +	p_err("expected 'id', 'tag', 'name' or 'pinned', got: '%s'?", **argv);
->  	return -1;
->  }
->  
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index d5ea043d3fc4c..422ad1888e74f 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -1365,8 +1365,15 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
+ 	if (get_config_terms(head_config, &config_terms))
+ 		return -ENOMEM;
+ 
+-	if (perf_pmu__config(pmu, &attr, head_config, parse_state->error))
++	if (perf_pmu__config(pmu, &attr, head_config, parse_state->error)) {
++		struct perf_evsel_config_term *pos, *tmp;
++
++		list_for_each_entry_safe(pos, tmp, &config_terms, list) {
++			list_del_init(&pos->list);
++			free(pos);
++		}
+ 		return -EINVAL;
++	}
+ 
+ 	evsel = __add_event(list, &parse_state->idx, &attr,
+ 			    get_config_name(head_config), pmu,
+-- 
+2.20.1
 
