@@ -2,1375 +2,202 @@ Return-Path: <SRS0=sz96=2B=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8260C3F68F
-	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 06:50:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99381C43603
+	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 07:08:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 92A40214AF
-	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 06:50:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E95020836
+	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 07:08:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="DePKnRbT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dDPvUk3b"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727848AbfLKGu1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Dec 2019 01:50:27 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45806 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725800AbfLKGu0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 11 Dec 2019 01:50:26 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBB6oLRm011402
-        for <bpf@vger.kernel.org>; Tue, 10 Dec 2019 22:50:22 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=l7A/x05li2hG8Gm8T3u5fl+T0jAv5B3NM/X+OsFAIG0=;
- b=DePKnRbTHOpEiqXPYzpXDohTJkvScXtRCO1PLXWJr9qCvz5w/zScXYqUF7RRfzEGe/T9
- iTlZo3SvTmyw/D9l4Rsh7OdSLTcJI3BdGwE7ye3pjJlOO1TYYMBNPldkRD1Xs1n7S0hS
- chiRB4Hrp5VmrOKYyEP2S5q71E0LjYc6mqo= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wt831dks6-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 10 Dec 2019 22:50:22 -0800
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Tue, 10 Dec 2019 22:50:10 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 3ABE82EC194D; Tue, 10 Dec 2019 22:50:08 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 1/3] libbpf: support libbpf-provided extern variables
-Date:   Tue, 10 Dec 2019 22:50:00 -0800
-Message-ID: <20191211065002.2074074-2-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191211065002.2074074-1-andriin@fb.com>
-References: <20191211065002.2074074-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1726082AbfLKHID (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Dec 2019 02:08:03 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:44644 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727891AbfLKHIC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 11 Dec 2019 02:08:02 -0500
+Received: by mail-qk1-f194.google.com with SMTP id w127so6991315qkb.11;
+        Tue, 10 Dec 2019 23:08:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gdF9GzxX6MAV3V6PGDaLpgL1VAup8AtoWjDThUxpU4g=;
+        b=dDPvUk3bDwGhVEnfvduLd3ZWxnzvUzr9+p31H8KrIDp9gssMwpEUCteFnJCrVCrxes
+         xZmTHmgqoJOKaqdcpF2eJoOQAXdwBLTVL31PBwEHQ5pxucJY6FFziou3BRg1HIHb/a4n
+         xRK1KSt+qPnS3OR6sDAkV67sdMmT2/KKZkLzM9UHhlphpBw1F1oXrv0LppZ/1DHbBwTw
+         ajgV2RLKSmgWFgAFzykNYPhrnGHJls7zEbx8mo7fpnWiexOL+ApQWMY15uv9AQ4iATWR
+         yvH7ymQ6RpHcjrECwM15eSlayvcTPihX0pMnwRhJ5juyaVIiqUjiz1NTl1vF7DpCoQ5A
+         UiJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gdF9GzxX6MAV3V6PGDaLpgL1VAup8AtoWjDThUxpU4g=;
+        b=rnr5F/bbQsOmj4SMddI1cP3BW9QRhESXqYU2qq1eeXzZ7baLF5u8HSuyXIQvXGJOL/
+         SG97BsL08LC+xrvMOHSR/Jf4MudLPh7Q+iPOtBzT4u5a/Ars1zutvVHshHoN76YJFMNd
+         A/DqmZveWLtkNhPU1pkoGwS4zw51xehTUtH2gvsXzcYKtwAWQ9Kh2u1jIeD1kH98AULG
+         hYT1mugSmhlt8N7EPNIHf5f4fTjUP+v+VFghC2JGHVPMXAOR2lNABJtY/CoDhgjQk/k3
+         yp9K7tH9GUYa+8YFv27OXnXdfqoOvKIBq8V+3xdxDNgMq7jo/W8nGLH8jVIuhsaQBkBH
+         xf6w==
+X-Gm-Message-State: APjAAAUdz6krt5+EFR2UgTGggSiB1YaANmjpThLL5GZFKdYSBOWgaD8v
+        iSwIml+WjKrseWnkxibMsj4JygqY5gCR8BpvzKE=
+X-Google-Smtp-Source: APXvYqzkJ4+uwBNGRcujADuV0dcG66F156I3KOHRP9+c7mKsDNyFHDVWkKk4Ql1Wo73yItPq9HD3ynJvzszZbGCXSFw=
+X-Received: by 2002:a05:620a:5ae:: with SMTP id q14mr1534130qkq.437.1576048081327;
+ Tue, 10 Dec 2019 23:08:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-11_01:2019-12-10,2019-12-11 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 clxscore=1015
- mlxscore=0 impostorscore=0 suspectscore=29 malwarescore=0 adultscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912110058
-X-FB-Internal: deliver
+References: <20191210011438.4182911-1-andriin@fb.com> <20191210011438.4182911-12-andriin@fb.com>
+ <20191209175745.2d96a1f0@cakuba.netronome.com> <CAEf4Bzaow7w+TGyiF67pXn42TumxFZb7Q4BOQPPGfRJdyeY-ig@mail.gmail.com>
+ <20191210100536.7a57d5e1@cakuba.netronome.com> <20191210214407.GA3105713@mini-arch>
+ <CAEf4BzbSwoeKVnyJU7EoP86exNj3Eku5_+8MbEieZKt2MqrhbQ@mail.gmail.com> <20191210225900.GB3105713@mini-arch>
+In-Reply-To: <20191210225900.GB3105713@mini-arch>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 10 Dec 2019 23:07:50 -0800
+Message-ID: <CAEf4BzYtqywKn4yGQ+vq2sKod4XE03HYWWBfUiNvg=BXhgFdWg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 11/15] bpftool: add skeleton codegen command
+To:     Stanislav Fomichev <sdf@fomichev.me>
+Cc:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for extern variables, provided to BPF program by libbpf. Currently
-the following extern variables are supported:
-  - LINUX_KERNEL_VERSION; version of a kernel in which BPF program is
-    executing, follows KERNEL_VERSION() macro convention, can be 4- and 8-byte
-    long;
-  - CONFIG_xxx values; a set of values of actual kernel config. Tristate,
-    boolean, strings, and integer values are supported.
+On Tue, Dec 10, 2019 at 2:59 PM Stanislav Fomichev <sdf@fomichev.me> wrote:
+>
+> On 12/10, Andrii Nakryiko wrote:
+> > On Tue, Dec 10, 2019 at 1:44 PM Stanislav Fomichev <sdf@fomichev.me> wrote:
+> > >
+> > > On 12/10, Jakub Kicinski wrote:
+> > > > On Tue, 10 Dec 2019 09:11:31 -0800, Andrii Nakryiko wrote:
+> > > > > On Mon, Dec 9, 2019 at 5:57 PM Jakub Kicinski wrote:
+> > > > > > On Mon, 9 Dec 2019 17:14:34 -0800, Andrii Nakryiko wrote:
+> > > > > > > struct <object-name> {
+> > > > > > >       /* used by libbpf's skeleton API */
+> > > > > > >       struct bpf_object_skeleton *skeleton;
+> > > > > > >       /* bpf_object for libbpf APIs */
+> > > > > > >       struct bpf_object *obj;
+> > > > > > >       struct {
+> > > > > > >               /* for every defined map in BPF object: */
+> > > > > > >               struct bpf_map *<map-name>;
+> > > > > > >       } maps;
+> > > > > > >       struct {
+> > > > > > >               /* for every program in BPF object: */
+> > > > > > >               struct bpf_program *<program-name>;
+> > > > > > >       } progs;
+> > > > > > >       struct {
+> > > > > > >               /* for every program in BPF object: */
+> > > > > > >               struct bpf_link *<program-name>;
+> > > > > > >       } links;
+> > > > > > >       /* for every present global data section: */
+> > > > > > >       struct <object-name>__<one of bss, data, or rodata> {
+> > > > > > >               /* memory layout of corresponding data section,
+> > > > > > >                * with every defined variable represented as a struct field
+> > > > > > >                * with exactly the same type, but without const/volatile
+> > > > > > >                * modifiers, e.g.:
+> > > > > > >                */
+> > > > > > >                int *my_var_1;
+> > > > > > >                ...
+> > > > > > >       } *<one of bss, data, or rodata>;
+> > > > > > > };
+> > > > > >
+> > > > > > I think I understand how this is useful, but perhaps the problem here
+> > > > > > is that we're using C for everything, and simple programs for which
+> > > > > > loading the ELF is majority of the code would be better of being
+> > > > > > written in a dynamic language like python?  Would it perhaps be a
+> > > > > > better idea to work on some high-level language bindings than spend
+> > > > > > time writing code gens and working around limitations of C?
+> > > > >
+> > > > > None of this work prevents Python bindings and other improvements, is
+> > > > > it? Patches, as always, are greatly appreciated ;)
+> > > >
+> > > > This "do it yourself" shit is not really funny :/
+> > > >
+> > > > I'll stop providing feedback on BPF patches if you guy keep saying
+> > > > that :/ Maybe that's what you want.
+> > > >
+> > > > > This skeleton stuff is not just to save code, but in general to
+> > > > > simplify and streamline working with BPF program from userspace side.
+> > > > > Fortunately or not, but there are a lot of real-world applications
+> > > > > written in C and C++ that could benefit from this, so this is still
+> > > > > immensely useful. selftests/bpf themselves benefit a lot from this
+> > > > > work, see few of the last patches in this series.
+> > > >
+> > > > Maybe those applications are written in C and C++ _because_ there
+> > > > are no bindings for high level languages. I just wish BPF programming
+> > > > was less weird and adding some funky codegen is not getting us closer
+> > > > to that goal.
+> > > >
+> > > > In my experience code gen is nothing more than a hack to work around
+> > > > bad APIs, but experiences differ so that's not a solid argument.
+> > > *nod*
+> > >
+> > > We have a nice set of C++ wrappers around libbpf internally, so we can do
+> > > something like BpfMap<key type, value type> and get a much better interface
+> > > with type checking. Maybe we should focus on higher level languages instead?
+> > > We are open to open-sourcing our C++ bits if you want to collaborate.
+> >
+> > Python/C++ bindings and API wrappers are an orthogonal concerns here.
+> > I personally think it would be great to have both Python and C++
+> > specific API that uses libbpf under the cover. The only debatable
+> > thing is the logistics: where the source code lives, how it's kept in
+> > sync with libbpf, how we avoid crippling libbpf itself because
+> > something is hard or inconvenient to adapt w/ Python, etc.
+>
+> [..]
+> > The problem I'm trying to solve here is not really C-specific. I don't
+> > think you can solve it without code generation for C++. How do you
+> > "generate" BPF program-specific layout of .data, .bss, .rodata, etc
+> > data sections in such a way, where it's type safe (to the degree that
+> > language allows that, of course) and is not "stringly-based" API? This
+> > skeleton stuff provides a natural, convenient and type-safe way to
+> > work with global data from userspace pretty much at the same level of
+> > performance and convenience, as from BPF side. How can you achieve
+> > that w/ C++ without code generation? As for Python, sure you can do
+> > dynamic lookups based on just the name of property/method, but amount
+> > of overheads is not acceptable for all applications (and Python itself
+> > is not acceptable for those applications). In addition to that, C is
+> > the best way for other less popular languages (e.g., Rust) to leverage
+> > libbpf without investing lots of effort in re-implementing libbpf in
+> > Rust.
+> I'd say that a libbpf API similar to dlopen/dlsym is a more
+> straightforward thing to do. Have a way to "open" a section and
+> a way to find a symbol in it. Yes, it's a string-based API,
+> but there is nothing wrong with it. IMO, this is easier to
+> use/understand and I suppose Python/C++ wrappers are trivial.
 
-Set of possible values is determined by declared type of extern variable.
-Supported types of variables are:
-- Tristate values. Are represented as `enum libbpf_tristate`. Accepted values
-  are **strictly** 'y', 'n', or 'm', which are represented as TRI_YES, TRI_NO,
-  or TRI_MODULE, respectively.
-- Boolean values. Are represented as bool (_Bool) types. Accepted values are
-  'y' and 'n' only, turning into true/false values, respectively.
-- Single-character values. Can be used both as a substritute for
-  bool/tristate, or as a small-range integer:
-  - 'y'/'n'/'m' are represented as is, as characters 'y', 'n', or 'm';
-  - integers in a range [-128, 127] or [0, 255] (depending on signedness of
-    char in target architecture) are recognized and represented with
-    respective values of char type.
-- Strings. String values are declared as fixed-length char arrays. String of
-  up to that length will be accepted and put in first N bytes of char array,
-  with the rest of bytes zeroed out. Char array is always zero terminated. If
-  config string is longer, than can be fit in character array, it's an error,
-  and program load will fail. String literals in config have to be enclosed in
-  double quotes, just like C-style string literals.
-- Integers. 8-, 16-, 32-, and 64-bit integers are supported, both signed and
-  unsigned variants. Libbpf enforces parsed config value to be in the
-  supported range of corresponding integer type. Integers values in config can
-  be:
-  - decimal integers, with optional + and - signs;
-  - hexadecimal integers, prefixed with 0x or 0X;
-  - octal integers, starting with 0.
+Without digging through libbpf source code (or actually, look at code,
+but don't run any test program), what's the name of the map
+corresponding to .bss section, if object file is
+some_bpf_object_file.o? If you got it right (congrats, btw, it took me
+multiple attempts to memorize the pattern), how much time did you
+spend looking it up? Now compare it to `skel->maps.bss`. Further, if
+you use anonymous structs for your global vars, good luck maintaining
+two copies of that: one for BPF side and one for userspace.
 
-Config file itself is searched in /boot/config-$(uname -r) location with
-fallback to /proc/config.gz, unless config path is specified explicitly
-through bpf_object_open_opts' kernel_config_path option. Both gzipped and
-plain text formats are supported. Libbpf adds explicit dependency on zlib
-because of this, but this shouldn't be a problem, given libelf already depends
-on zlib.
+I never said there is anything wrong with current straightforward
+libbpf API, but I also never said it's the easiest and most
+user-friendly way to work with BPF either. So we'll have both
+code-generated interface and existing API. Furthermore, they are
+interoperable (you can pass skel->maps.whatever to any of the existing
+libbpf APIs, same for progs, links, obj itself). But there isn't much
+that can beat performance and usability of code-generated .data, .bss,
+.rodata (and now .extern) layout.
 
-All detected extern variables, are put into a separate .extern internal map.
-It, similarly to .rodata map, is marked as read-only from BPF program side, as
-well as is frozen on load. This allows BPF verifier to track extern values as
-constants and perform enhanced branch prediction and dead code elimination.
-This can be relied upon for doing kernel version/feature detection and using
-potentially unsupported field relocations or BPF helpers in a CO-RE-based BPF
-program, while still having a single version of BPF program running on old and
-new kernels. Selftests are validating this explicitly for unexisting BPF
-helper.
+>
+> As for type-safety: it's C, forget about it :-)
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- include/uapi/linux/btf.h             |   3 +-
- tools/include/uapi/linux/btf.h       |   7 +-
- tools/lib/bpf/Makefile               |  15 +-
- tools/lib/bpf/bpf_helpers.h          |   9 +
- tools/lib/bpf/btf.c                  |   9 +-
- tools/lib/bpf/libbpf.c               | 759 ++++++++++++++++++++++++---
- tools/lib/bpf/libbpf.h               |   6 +-
- tools/lib/bpf/libbpf_internal.h      |   6 +
- tools/testing/selftests/bpf/Makefile |   2 +-
- 9 files changed, 735 insertions(+), 81 deletions(-)
-
-diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
-index c02dec97e1ce..1a2898c482ee 100644
---- a/include/uapi/linux/btf.h
-+++ b/include/uapi/linux/btf.h
-@@ -142,7 +142,8 @@ struct btf_param {
- 
- enum {
- 	BTF_VAR_STATIC = 0,
--	BTF_VAR_GLOBAL_ALLOCATED,
-+	BTF_VAR_GLOBAL_ALLOCATED = 1,
-+	BTF_VAR_GLOBAL_EXTERN = 2,
- };
- 
- /* BTF_KIND_VAR is followed by a single "struct btf_var" to describe
-diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
-index 63ae4a39e58b..1a2898c482ee 100644
---- a/tools/include/uapi/linux/btf.h
-+++ b/tools/include/uapi/linux/btf.h
-@@ -22,9 +22,9 @@ struct btf_header {
- };
- 
- /* Max # of type identifier */
--#define BTF_MAX_TYPE	0x0000ffff
-+#define BTF_MAX_TYPE	0x000fffff
- /* Max offset into the string section */
--#define BTF_MAX_NAME_OFFSET	0x0000ffff
-+#define BTF_MAX_NAME_OFFSET	0x00ffffff
- /* Max # of struct/union/enum members or func args */
- #define BTF_MAX_VLEN	0xffff
- 
-@@ -142,7 +142,8 @@ struct btf_param {
- 
- enum {
- 	BTF_VAR_STATIC = 0,
--	BTF_VAR_GLOBAL_ALLOCATED,
-+	BTF_VAR_GLOBAL_ALLOCATED = 1,
-+	BTF_VAR_GLOBAL_EXTERN = 2,
- };
- 
- /* BTF_KIND_VAR is followed by a single "struct btf_var" to describe
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index defae23a0169..c3fdb2907b96 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -56,8 +56,8 @@ ifndef VERBOSE
- endif
- 
- FEATURE_USER = .libbpf
--FEATURE_TESTS = libelf libelf-mmap bpf reallocarray
--FEATURE_DISPLAY = libelf bpf
-+FEATURE_TESTS = libelf libelf-mmap zlib bpf reallocarray
-+FEATURE_DISPLAY = libelf zlib bpf
- 
- INCLUDES = -I. -I$(srctree)/tools/include -I$(srctree)/tools/arch/$(ARCH)/include/uapi -I$(srctree)/tools/include/uapi
- FEATURE_CHECK_CFLAGS-bpf = $(INCLUDES)
-@@ -159,7 +159,7 @@ all: fixdep
- 
- all_cmd: $(CMD_TARGETS) check
- 
--$(BPF_IN_SHARED): force elfdep bpfdep bpf_helper_defs.h
-+$(BPF_IN_SHARED): force elfdep zdep bpfdep bpf_helper_defs.h
- 	@(test -f ../../include/uapi/linux/bpf.h -a -f ../../../include/uapi/linux/bpf.h && ( \
- 	(diff -B ../../include/uapi/linux/bpf.h ../../../include/uapi/linux/bpf.h >/dev/null) || \
- 	echo "Warning: Kernel ABI header at 'tools/include/uapi/linux/bpf.h' differs from latest version at 'include/uapi/linux/bpf.h'" >&2 )) || true
-@@ -177,7 +177,7 @@ $(BPF_IN_SHARED): force elfdep bpfdep bpf_helper_defs.h
- 	echo "Warning: Kernel ABI header at 'tools/include/uapi/linux/if_xdp.h' differs from latest version at 'include/uapi/linux/if_xdp.h'" >&2 )) || true
- 	$(Q)$(MAKE) $(build)=libbpf OUTPUT=$(SHARED_OBJDIR) CFLAGS="$(CFLAGS) $(SHLIB_FLAGS)"
- 
--$(BPF_IN_STATIC): force elfdep bpfdep bpf_helper_defs.h
-+$(BPF_IN_STATIC): force elfdep zdep bpfdep bpf_helper_defs.h
- 	$(Q)$(MAKE) $(build)=libbpf OUTPUT=$(STATIC_OBJDIR)
- 
- bpf_helper_defs.h: $(srctree)/tools/include/uapi/linux/bpf.h
-@@ -189,7 +189,7 @@ $(OUTPUT)libbpf.so: $(OUTPUT)libbpf.so.$(LIBBPF_VERSION)
- $(OUTPUT)libbpf.so.$(LIBBPF_VERSION): $(BPF_IN_SHARED)
- 	$(QUIET_LINK)$(CC) $(LDFLAGS) \
- 		--shared -Wl,-soname,libbpf.so.$(LIBBPF_MAJOR_VERSION) \
--		-Wl,--version-script=$(VERSION_SCRIPT) $^ -lelf -o $@
-+		-Wl,--version-script=$(VERSION_SCRIPT) $^ -lelf -lz -o $@
- 	@ln -sf $(@F) $(OUTPUT)libbpf.so
- 	@ln -sf $(@F) $(OUTPUT)libbpf.so.$(LIBBPF_MAJOR_VERSION)
- 
-@@ -277,12 +277,15 @@ clean:
- 
- 
- 
--PHONY += force elfdep bpfdep cscope tags
-+PHONY += force elfdep zdep bpfdep cscope tags
- force:
- 
- elfdep:
- 	@if [ "$(feature-libelf)" != "1" ]; then echo "No libelf found"; exit 1 ; fi
- 
-+zdep:
-+	@if [ "$(feature-zlib)" != "1" ]; then echo "No zlib found"; exit 1 ; fi
-+
- bpfdep:
- 	@if [ "$(feature-bpf)" != "1" ]; then echo "BPF API too old"; exit 1 ; fi
- 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 0c7d28292898..aa46700075e1 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -25,6 +25,9 @@
- #ifndef __always_inline
- #define __always_inline __attribute__((always_inline))
- #endif
-+#ifndef __weak
-+#define __weak __attribute__((weak))
-+#endif
- 
- /*
-  * Helper structure used by eBPF C program
-@@ -44,4 +47,10 @@ enum libbpf_pin_type {
- 	LIBBPF_PIN_BY_NAME,
- };
- 
-+enum libbpf_tristate {
-+	TRI_NO = 0,
-+	TRI_YES = 1,
-+	TRI_MODULE = 2,
-+};
-+
- #endif
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 88efa2bb7137..3035fedd4a20 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -539,6 +539,12 @@ static int btf_fixup_datasec(struct bpf_object *obj, struct btf *btf,
- 		return -ENOENT;
- 	}
- 
-+	/* .extern datasec size and var offsets were set correctly during
-+	 * extern collection step, so just skip straight to sorting variables
-+	 */
-+	if (t->size)
-+		goto sort_vars;
-+
- 	ret = bpf_object__section_size(obj, name, &size);
- 	if (ret || !size || (t->size && t->size != size)) {
- 		pr_debug("Invalid size for section %s: %u bytes\n", name, size);
-@@ -575,7 +581,8 @@ static int btf_fixup_datasec(struct bpf_object *obj, struct btf *btf,
- 		vsi->offset = off;
- 	}
- 
--	qsort(t + 1, vars, sizeof(*vsi), compare_vsi_off);
-+sort_vars:
-+	qsort(btf_var_secinfos(t), vars, sizeof(*vsi), compare_vsi_off);
- 	return 0;
- }
- 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 6152266a864a..36b82463b467 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -44,6 +44,7 @@
- #include <tools/libc_compat.h>
- #include <libelf.h>
- #include <gelf.h>
-+#include <zlib.h>
- 
- #include "libbpf.h"
- #include "bpf.h"
-@@ -139,6 +140,20 @@ struct bpf_capabilities {
- 	__u32 array_mmap:1;
- };
- 
-+enum reloc_type {
-+	RELO_LD64,
-+	RELO_CALL,
-+	RELO_DATA,
-+	RELO_EXTERN,
-+};
-+
-+struct reloc_desc {
-+	enum reloc_type type;
-+	int insn_idx;
-+	int map_idx;
-+	int sym_off;
-+};
-+
- /*
-  * bpf_prog should be a better name but it has been used in
-  * linux/filter.h.
-@@ -157,16 +172,7 @@ struct bpf_program {
- 	size_t insns_cnt, main_prog_cnt;
- 	enum bpf_prog_type type;
- 
--	struct reloc_desc {
--		enum {
--			RELO_LD64,
--			RELO_CALL,
--			RELO_DATA,
--		} type;
--		int insn_idx;
--		int map_idx;
--		int sym_off;
--	} *reloc_desc;
-+	struct reloc_desc *reloc_desc;
- 	int nr_reloc;
- 	int log_level;
- 
-@@ -195,17 +201,24 @@ struct bpf_program {
- 	__u32 prog_flags;
- };
- 
-+#define DATA_SEC ".data"
-+#define BSS_SEC ".bss"
-+#define RODATA_SEC ".rodata"
-+#define EXTERN_SEC ".extern"
-+
- enum libbpf_map_type {
- 	LIBBPF_MAP_UNSPEC,
- 	LIBBPF_MAP_DATA,
- 	LIBBPF_MAP_BSS,
- 	LIBBPF_MAP_RODATA,
-+	LIBBPF_MAP_EXTERN,
- };
- 
- static const char * const libbpf_type_to_btf_name[] = {
--	[LIBBPF_MAP_DATA]	= ".data",
--	[LIBBPF_MAP_BSS]	= ".bss",
--	[LIBBPF_MAP_RODATA]	= ".rodata",
-+	[LIBBPF_MAP_DATA]	= DATA_SEC,
-+	[LIBBPF_MAP_BSS]	= BSS_SEC,
-+	[LIBBPF_MAP_RODATA]	= RODATA_SEC,
-+	[LIBBPF_MAP_EXTERN]	= EXTERN_SEC,
- };
- 
- struct bpf_map {
-@@ -227,6 +240,28 @@ struct bpf_map {
- 	bool reused;
- };
- 
-+enum extern_type {
-+	EXT_UNKNOWN,
-+	EXT_CHAR,
-+	EXT_BOOL,
-+	EXT_INT,
-+	EXT_TRISTATE,
-+	EXT_CHAR_ARR,
-+};
-+
-+struct extern_desc {
-+	const char *name;
-+	int sym_idx;
-+	int btf_id;
-+	enum extern_type type;
-+	int sz;
-+	int align;
-+	int data_off;
-+	bool is_signed;
-+	bool is_weak;
-+	bool is_set;
-+};
-+
- static LIST_HEAD(bpf_objects_list);
- 
- struct bpf_object {
-@@ -240,6 +275,11 @@ struct bpf_object {
- 	size_t nr_maps;
- 	size_t maps_cap;
- 
-+	char *kconfig_path;
-+	struct extern_desc *externs;
-+	int nr_extern;
-+	int extern_map_idx;
-+
- 	bool loaded;
- 	bool has_pseudo_calls;
- 	bool relaxed_core_relocs;
-@@ -267,6 +307,7 @@ struct bpf_object {
- 		int maps_shndx;
- 		int btf_maps_shndx;
- 		int text_shndx;
-+		int symbols_shndx;
- 		int data_shndx;
- 		int rodata_shndx;
- 		int bss_shndx;
-@@ -538,6 +579,7 @@ static struct bpf_object *bpf_object__new(const char *path,
- 	obj->efile.data_shndx = -1;
- 	obj->efile.rodata_shndx = -1;
- 	obj->efile.bss_shndx = -1;
-+	obj->extern_map_idx = -1;
- 
- 	obj->kern_version = get_kernel_version();
- 	obj->loaded = false;
-@@ -736,13 +778,13 @@ int bpf_object__section_size(const struct bpf_object *obj, const char *name,
- 	*size = 0;
- 	if (!name) {
- 		return -EINVAL;
--	} else if (!strcmp(name, ".data")) {
-+	} else if (!strcmp(name, DATA_SEC)) {
- 		if (obj->efile.data)
- 			*size = obj->efile.data->d_size;
--	} else if (!strcmp(name, ".bss")) {
-+	} else if (!strcmp(name, BSS_SEC)) {
- 		if (obj->efile.bss)
- 			*size = obj->efile.bss->d_size;
--	} else if (!strcmp(name, ".rodata")) {
-+	} else if (!strcmp(name, RODATA_SEC)) {
- 		if (obj->efile.rodata)
- 			*size = obj->efile.rodata->d_size;
- 	} else {
-@@ -835,7 +877,7 @@ static size_t bpf_map_mmap_sz(const struct bpf_map *map)
- 
- static int
- bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
--			      int sec_idx, Elf_Data *data)
-+			      int sec_idx, void *data, size_t data_sz)
- {
- 	char map_name[BPF_OBJ_NAME_LEN];
- 	struct bpf_map_def *def;
-@@ -860,9 +902,10 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
- 	def = &map->def;
- 	def->type = BPF_MAP_TYPE_ARRAY;
- 	def->key_size = sizeof(int);
--	def->value_size = data->d_size;
-+	def->value_size = data_sz;
- 	def->max_entries = 1;
--	def->map_flags = type == LIBBPF_MAP_RODATA ? BPF_F_RDONLY_PROG : 0;
-+	def->map_flags = type == LIBBPF_MAP_RODATA || type == LIBBPF_MAP_EXTERN
-+			 ? BPF_F_RDONLY_PROG : 0;
- 	def->map_flags |= BPF_F_MMAPABLE;
- 
- 	pr_debug("map '%s' (global data): at sec_idx %d, offset %zu, flags %x.\n",
-@@ -879,8 +922,8 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
- 		return err;
- 	}
- 
--	if (type != LIBBPF_MAP_BSS)
--		memcpy(map->mmaped, data->d_buf, data->d_size);
-+	if (data)
-+		memcpy(map->mmaped, data, data_sz);
- 
- 	pr_debug("map %td is \"%s\"\n", map - obj->maps, map->name);
- 	return 0;
-@@ -896,27 +939,283 @@ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
- 	if (obj->efile.data_shndx >= 0) {
- 		err = bpf_object__init_internal_map(obj, LIBBPF_MAP_DATA,
- 						    obj->efile.data_shndx,
--						    obj->efile.data);
-+						    obj->efile.data->d_buf,
-+						    obj->efile.data->d_size);
- 		if (err)
- 			return err;
- 	}
- 	if (obj->efile.rodata_shndx >= 0) {
- 		err = bpf_object__init_internal_map(obj, LIBBPF_MAP_RODATA,
- 						    obj->efile.rodata_shndx,
--						    obj->efile.rodata);
-+						    obj->efile.rodata->d_buf,
-+						    obj->efile.rodata->d_size);
- 		if (err)
- 			return err;
- 	}
- 	if (obj->efile.bss_shndx >= 0) {
- 		err = bpf_object__init_internal_map(obj, LIBBPF_MAP_BSS,
- 						    obj->efile.bss_shndx,
--						    obj->efile.bss);
-+						    NULL, /* zero-init */
-+						    obj->efile.bss->d_size);
- 		if (err)
- 			return err;
- 	}
- 	return 0;
- }
- 
-+
-+static struct extern_desc *find_extern_by_name(const struct bpf_object *obj,
-+					       const void *name)
-+{
-+	int i;
-+
-+	for (i = 0; i < obj->nr_extern; i++) {
-+		if (strcmp(obj->externs[i].name, name) == 0)
-+			return &obj->externs[i];
-+	}
-+	return NULL;
-+}
-+
-+static int set_ext_value_tri(struct extern_desc *ext, void *ext_val,
-+			     char value)
-+{
-+	switch (ext->type) {
-+	case EXT_BOOL:
-+		if (value == 'm') {
-+			pr_warn("extern %s=%c should be tristate or char\n",
-+				ext->name, value);
-+			return -EINVAL;
-+		}
-+		*(bool *)ext_val = value == 'y' ? true : false;
-+		break;
-+	case EXT_TRISTATE:
-+		if (value == 'y')
-+			*(enum libbpf_tristate *)ext_val = TRI_YES;
-+		else if (value == 'm')
-+			*(enum libbpf_tristate *)ext_val = TRI_MODULE;
-+		else /* value == 'n' */
-+			*(enum libbpf_tristate *)ext_val = TRI_NO;
-+		break;
-+	case EXT_CHAR:
-+		*(char *)ext_val = value;
-+		break;
-+	case EXT_UNKNOWN:
-+	case EXT_INT:
-+	case EXT_CHAR_ARR:
-+	default:
-+		pr_warn("extern %s=%c should be bool, tristate, or char\n",
-+			ext->name, value);
-+		return -EINVAL;
-+	}
-+	ext->is_set = true;
-+	return 0;
-+}
-+
-+static int set_ext_value_str(struct extern_desc *ext, void *ext_val,
-+			     const char *value)
-+{
-+	size_t len;
-+
-+	if (ext->type != EXT_CHAR_ARR) {
-+		pr_warn("extern %s=%s should char array\n", ext->name, value);
-+		return -EINVAL;
-+	}
-+
-+	len = strlen(value);
-+	if (value[len - 1] != '"') {
-+		pr_warn("extern '%s': invalid string config '%s'\n",
-+			ext->name, value);
-+		return -EINVAL;
-+	}
-+
-+	/* strip quotes */
-+	len -= 2;
-+	if (len + 1 > ext->sz) {
-+		pr_warn("extern '%s': too long string config %s (%zu bytes), up to %d expected\n",
-+			ext->name, value, len + 1, ext->sz);
-+		return -EINVAL;
-+	}
-+
-+	memcpy(ext_val, value + 1, len);
-+	ext->is_set = true;
-+	return 0;
-+}
-+
-+static int parse_u64(const char *value, __u64 *res)
-+{
-+	char *value_end;
-+	int err;
-+
-+	errno = 0;
-+	*res = strtoull(value, &value_end, 0);
-+	if (errno) {
-+		err = -errno;
-+		pr_warn("failed to parse '%s' as integer: %d\n", value, err);
-+		return err;
-+	}
-+	if (*value_end) {
-+		pr_warn("failed to parse '%s' as integer completely\n", value);
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+static bool is_ext_value_in_range(const struct extern_desc *ext, __u64 v)
-+{
-+	int bit_sz = ext->sz * 8;
-+
-+	if (ext->sz == 8)
-+		return true;
-+
-+	if (ext->is_signed)
-+		return v + (1ULL << (bit_sz - 1)) < (1ULL << bit_sz);
-+	else
-+		return (v >> bit_sz) == 0;
-+}
-+
-+static int set_ext_value_num(struct extern_desc *ext, void *ext_val,
-+			     __u64 value)
-+{
-+	if (ext->type != EXT_INT && ext->type != EXT_CHAR) {
-+		pr_warn("extern %s=%llu should be integer\n",
-+			ext->name, value);
-+		return -EINVAL;
-+	}
-+	if (!is_ext_value_in_range(ext, value)) {
-+		pr_warn("extern %s=%llu value doesn't fit in %d bytes\n",
-+			ext->name, value, ext->sz);
-+		return -ERANGE;
-+	}
-+	switch (ext->sz) {
-+		case 1: *(__u8 *)ext_val = value; break;
-+		case 2: *(__u16 *)ext_val = value; break;
-+		case 4: *(__u32 *)ext_val = value; break;
-+		case 8: *(__u64 *)ext_val = value; break;
-+		default:
-+			return -EINVAL;
-+	}
-+	ext->is_set = true;
-+	return 0;
-+}
-+
-+static int bpf_object__read_kernel_config(struct bpf_object *obj,
-+					  const char *config_path,
-+					  void *data)
-+{
-+	char buf[PATH_MAX], *sep, *value;
-+	struct extern_desc *ext;
-+	int len, err = 0;
-+	void *ext_val;
-+	__u64 num;
-+	gzFile file;
-+
-+	if (config_path) {
-+		file = gzopen(config_path, "r");
-+	} else {
-+		struct utsname uts;
-+
-+		uname(&uts);
-+		len = snprintf(buf, PATH_MAX, "/boot/config-%s", uts.release);
-+		if (len < 0)
-+			return -EINVAL;
-+		else if (len >= PATH_MAX)
-+			return -ENAMETOOLONG;
-+		/* gzopen also accepts uncompressed files. */
-+		file = gzopen(buf, "r");
-+		if (!file)
-+			file = gzopen("/proc/config.gz", "r");
-+	}
-+	if (!file) {
-+		pr_warn("failed to read kernel config at '%s'\n", config_path);
-+		return -ENOENT;
-+	}
-+
-+	while (gzgets(file, buf, sizeof(buf))) {
-+		if (strncmp(buf, "CONFIG_", 7))
-+			continue;
-+
-+		sep = strchr(buf, '=');
-+		if (!sep) {
-+			err = -EINVAL;
-+			pr_warn("failed to parse '%s': no separator\n", buf);
-+			goto out;
-+		}
-+		/* Trim ending '\n' */
-+		len = strlen(buf);
-+		if (buf[len - 1] == '\n')
-+			buf[len - 1] = '\0';
-+		/* Split on '=' and ensure that a value is present. */
-+		*sep = '\0';
-+		if (!sep[1]) {
-+			err = -EINVAL;
-+			*sep = '=';
-+			pr_warn("failed to parse '%s': no value\n", buf);
-+			goto out;
-+		}
-+
-+		ext = find_extern_by_name(obj, buf);
-+		if (!ext)
-+			continue;
-+		if (ext->is_set) {
-+			err = -EINVAL;
-+			pr_warn("re-defining extern '%s' not allowed\n", buf);
-+			goto out;
-+		}
-+
-+		ext_val = data + ext->data_off;
-+		value = sep + 1;
-+
-+		switch (*value) {
-+		case 'y': case 'n': case 'm':
-+			err = set_ext_value_tri(ext, ext_val, *value);
-+			break;
-+		case '"':
-+			err = set_ext_value_str(ext, ext_val, value);
-+			break;
-+		default:
-+			/* assume integer */
-+			err = parse_u64(value, &num);
-+			if (err) {
-+				pr_warn("extern %s=%s should be integer\n",
-+					ext->name, value);
-+				goto out;
-+			}
-+			err = set_ext_value_num(ext, ext_val, num);
-+			break;
-+		}
-+		if (err)
-+			goto out;
-+		pr_debug("extern %s=%s\n", ext->name, value);
-+	}
-+
-+out:
-+	gzclose(file);
-+	return err;
-+}
-+
-+static int bpf_object__init_extern_map(struct bpf_object *obj)
-+{
-+	struct extern_desc *last_ext;
-+	size_t map_sz;
-+	int err;
-+
-+	if (obj->nr_extern == 0)
-+		return 0;
-+
-+	last_ext = &obj->externs[obj->nr_extern - 1];
-+	map_sz = last_ext->data_off + last_ext->sz;
-+
-+	err = bpf_object__init_internal_map(obj, LIBBPF_MAP_EXTERN,
-+					    obj->efile.symbols_shndx,
-+					    NULL, map_sz);
-+	if (err)
-+		return err;
-+
-+	obj->extern_map_idx = obj->nr_maps - 1;
-+
-+	return 0;
-+}
-+
- static int bpf_object__init_user_maps(struct bpf_object *obj, bool strict)
- {
- 	Elf_Data *symbols = obj->efile.symbols;
-@@ -1394,19 +1693,17 @@ static int bpf_object__init_user_btf_maps(struct bpf_object *obj, bool strict,
- static int bpf_object__init_maps(struct bpf_object *obj,
- 				 const struct bpf_object_open_opts *opts)
- {
--	const char *pin_root_path = OPTS_GET(opts, pin_root_path, NULL);
--	bool strict = !OPTS_GET(opts, relaxed_maps, false);
-+	const char *pin_root_path;
-+	bool strict;
- 	int err;
- 
--	err = bpf_object__init_user_maps(obj, strict);
--	if (err)
--		return err;
-+	strict = !OPTS_GET(opts, relaxed_maps, false);
-+	pin_root_path = OPTS_GET(opts, pin_root_path, NULL);
- 
--	err = bpf_object__init_user_btf_maps(obj, strict, pin_root_path);
--	if (err)
--		return err;
--
--	err = bpf_object__init_global_data_maps(obj);
-+	err = bpf_object__init_user_maps(obj, strict);
-+	err = err ?: bpf_object__init_user_btf_maps(obj, strict, pin_root_path);
-+	err = err ?: bpf_object__init_global_data_maps(obj);
-+	err = err ?: bpf_object__init_extern_map(obj);
- 	if (err)
- 		return err;
- 
-@@ -1525,11 +1822,6 @@ static int bpf_object__init_btf(struct bpf_object *obj,
- 				BTF_ELF_SEC, err);
- 			goto out;
- 		}
--		err = btf__finalize_data(obj, obj->btf);
--		if (err) {
--			pr_warn("Error finalizing %s: %d.\n", BTF_ELF_SEC, err);
--			goto out;
--		}
- 	}
- 	if (btf_ext_data) {
- 		if (!obj->btf) {
-@@ -1563,6 +1855,30 @@ static int bpf_object__init_btf(struct bpf_object *obj,
- 	return 0;
- }
- 
-+static int bpf_object__finalize_btf(struct bpf_object *obj)
-+{
-+	int err;
-+
-+	if (!obj->btf)
-+		return 0;
-+
-+	err = btf__finalize_data(obj, obj->btf);
-+	if (!err)
-+		return 0;
-+
-+	pr_warn("Error finalizing %s: %d.\n", BTF_ELF_SEC, err);
-+	btf__free(obj->btf);
-+	obj->btf = NULL;
-+	btf_ext__free(obj->btf_ext);
-+	obj->btf_ext = NULL;
-+
-+	if (bpf_object__is_btf_mandatory(obj)) {
-+		pr_warn("BTF is required, but is missing or corrupted.\n");
-+		return -ENOENT;
-+	}
-+	return 0;
-+}
-+
- static int bpf_object__sanitize_and_load_btf(struct bpf_object *obj)
- {
- 	int err = 0;
-@@ -1663,6 +1979,7 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
- 				return -LIBBPF_ERRNO__FORMAT;
- 			}
- 			obj->efile.symbols = data;
-+			obj->efile.symbols_shndx = idx;
- 			obj->efile.strtabidx = sh.sh_link;
- 		} else if (sh.sh_type == SHT_PROGBITS && data->d_size > 0) {
- 			if (sh.sh_flags & SHF_EXECINSTR) {
-@@ -1681,10 +1998,10 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
- 						name, obj->path, cp);
- 					return err;
- 				}
--			} else if (strcmp(name, ".data") == 0) {
-+			} else if (strcmp(name, DATA_SEC) == 0) {
- 				obj->efile.data = data;
- 				obj->efile.data_shndx = idx;
--			} else if (strcmp(name, ".rodata") == 0) {
-+			} else if (strcmp(name, RODATA_SEC) == 0) {
- 				obj->efile.rodata = data;
- 				obj->efile.rodata_shndx = idx;
- 			} else {
-@@ -1714,7 +2031,8 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
- 
- 			obj->efile.reloc_sects[nr_sects].shdr = sh;
- 			obj->efile.reloc_sects[nr_sects].data = data;
--		} else if (sh.sh_type == SHT_NOBITS && strcmp(name, ".bss") == 0) {
-+		} else if (sh.sh_type == SHT_NOBITS &&
-+			   strcmp(name, BSS_SEC) == 0) {
- 			obj->efile.bss = data;
- 			obj->efile.bss_shndx = idx;
- 		} else {
-@@ -1729,6 +2047,211 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
- 	return bpf_object__init_btf(obj, btf_data, btf_ext_data);
- }
- 
-+static bool sym_is_extern(const GElf_Sym *sym)
-+{
-+	int bind = GELF_ST_BIND(sym->st_info);
-+	/* externs are symbols w/ type=NOTYPE, bind=GLOBAL|WEAK, section=UND */
-+	return sym->st_shndx == SHN_UNDEF &&
-+	       (bind == STB_GLOBAL || bind == STB_WEAK) &&
-+	       GELF_ST_TYPE(sym->st_info) == STT_NOTYPE;
-+}
-+
-+static int find_extern_btf_id(const struct btf *btf, const char *ext_name)
-+{
-+	const struct btf_type *t;
-+	const char *var_name;
-+	int i, n;
-+
-+	if (!btf)
-+		return -ESRCH;
-+
-+	n = btf__get_nr_types(btf);
-+	for (i = 1; i <= n; i++) {
-+		t = btf__type_by_id(btf, i);
-+
-+		if (!btf_is_var(t))
-+			continue;
-+
-+		var_name = btf__name_by_offset(btf, t->name_off);
-+		if (strcmp(var_name, ext_name))
-+			continue;
-+
-+		if (btf_var(t)->linkage != BTF_VAR_GLOBAL_EXTERN)
-+			return -EINVAL;
-+
-+		return i;
-+	}
-+
-+	return -ENOENT;
-+}
-+
-+static enum extern_type find_extern_type(const struct btf *btf, int id,
-+					 bool *is_signed)
-+{
-+	const struct btf_type *t;
-+	const char *name;
-+
-+	t = skip_mods_and_typedefs(btf, id, NULL);
-+	name = btf__name_by_offset(btf, t->name_off);
-+
-+	if (is_signed)
-+		*is_signed = false;
-+	switch (btf_kind(t)) {
-+	case BTF_KIND_INT: {
-+		int enc = btf_int_encoding(t);
-+
-+		if (enc & BTF_INT_BOOL)
-+			return t->size == 1 ? EXT_BOOL : EXT_UNKNOWN;
-+		if (is_signed)
-+			*is_signed = enc & BTF_INT_SIGNED;
-+		if (t->size == 1)
-+			return EXT_CHAR;
-+		if (t->size < 1 || t->size > 8 || (t->size & (t->size - 1)))
-+			return EXT_UNKNOWN;
-+		return EXT_INT;
-+	}
-+	case BTF_KIND_ENUM:
-+		if (t->size != 4)
-+			return EXT_UNKNOWN;
-+		if (strcmp(name, "libbpf_tristate"))
-+			return EXT_UNKNOWN;
-+		return EXT_TRISTATE;
-+	case BTF_KIND_ARRAY:
-+		if (btf_array(t)->nelems == 0)
-+			return EXT_UNKNOWN;
-+		if (find_extern_type(btf, btf_array(t)->type, NULL) != EXT_CHAR)
-+			return EXT_UNKNOWN;
-+		return EXT_CHAR_ARR;
-+	default:
-+		return EXT_UNKNOWN;
-+	}
-+}
-+
-+static int cmp_externs(const void *_a, const void *_b)
-+{
-+	const struct extern_desc *a = _a;
-+	const struct extern_desc *b = _b;
-+
-+	/* descending order by alignment requirements */
-+	if (a->align != b->align)
-+		return a->align > b->align ? -1 : 1;
-+	/* ascending order by size, within same alignment class */
-+	if (a->sz != b->sz)
-+		return a->sz < b->sz ? -1 : 1;
-+	/* resolve ties by name */
-+	return strcmp(a->name, b->name);
-+}
-+
-+static int bpf_object__collect_externs(struct bpf_object *obj)
-+{
-+	const struct btf_type *t;
-+	struct extern_desc *ext;
-+	int i, n, off, btf_id;
-+	struct btf_type *sec;
-+	const char *ext_name;
-+	Elf_Scn *scn;
-+	GElf_Shdr sh;
-+
-+	if (!obj->efile.symbols)
-+		return 0;
-+
-+	scn = elf_getscn(obj->efile.elf, obj->efile.symbols_shndx);
-+	if (!scn)
-+		return -LIBBPF_ERRNO__FORMAT;
-+	if (gelf_getshdr(scn, &sh) != &sh)
-+		return -LIBBPF_ERRNO__FORMAT;
-+	n = sh.sh_size / sh.sh_entsize;
-+
-+	pr_debug("looking for externs among %d symbols...\n", n);
-+	for (i = 0; i < n; i++) {
-+		GElf_Sym sym;
-+
-+		if (!gelf_getsym(obj->efile.symbols, i, &sym))
-+			return -LIBBPF_ERRNO__FORMAT;
-+		if (!sym_is_extern(&sym))
-+			continue;
-+		ext_name = elf_strptr(obj->efile.elf, obj->efile.strtabidx,
-+				      sym.st_name);
-+		if (!ext_name || !ext_name[0])
-+			continue;
-+
-+		ext = obj->externs;
-+		ext = reallocarray(ext, obj->nr_extern + 1, sizeof(*ext));
-+		if (!ext)
-+			return -ENOMEM;
-+		obj->externs = ext;
-+		ext = &ext[obj->nr_extern];
-+		memset(ext, 0, sizeof(*ext));
-+		obj->nr_extern++;
-+
-+		ext->btf_id = find_extern_btf_id(obj->btf, ext_name);
-+		if (ext->btf_id <= 0) {
-+			pr_warn("failed to find BTF for extern '%s': %d\n",
-+				ext_name, ext->btf_id);
-+			return ext->btf_id;
-+		}
-+		t = btf__type_by_id(obj->btf, ext->btf_id);
-+		ext->name = btf__name_by_offset(obj->btf, t->name_off);
-+		ext->sym_idx = i;
-+		ext->is_weak = GELF_ST_BIND(sym.st_info) == STB_WEAK;
-+		ext->sz = btf__resolve_size(obj->btf, t->type);
-+		if (ext->sz <= 0) {
-+			pr_warn("failed to resolve size of extern '%s': %d\n",
-+				ext_name, ext->sz);
-+			return ext->sz;
-+		}
-+		ext->align = btf_align_of(obj->btf, t->type);
-+		ext->type = find_extern_type(obj->btf, t->type,
-+					     &ext->is_signed);
-+		if (ext->type == EXT_UNKNOWN) {
-+			pr_warn("extern '%s' type is unsupported\n", ext_name);
-+			return -ENOTSUP;
-+		}
-+	}
-+	pr_debug("collected %d externs total\n", obj->nr_extern);
-+
-+	if (!obj->nr_extern)
-+		return 0;
-+
-+	/* sort externs by (alignment, size, name) and calculate their offsets
-+	 * within a map */
-+	qsort(obj->externs, obj->nr_extern, sizeof(*ext), cmp_externs);
-+	off = 0;
-+	for (i = 0; i < obj->nr_extern; i++) {
-+		ext = &obj->externs[i];
-+		ext->data_off = roundup(off, ext->align);
-+		off = ext->data_off + ext->sz;
-+		pr_debug("extern #%d: symbol %d, off %u, name %s\n",
-+			 i, ext->sym_idx, ext->data_off, ext->name);
-+	}
-+
-+	btf_id = btf__find_by_name(obj->btf, EXTERN_SEC);
-+	if (btf_id <= 0) {
-+		pr_warn("no BTF info found for '%s' datasec\n", EXTERN_SEC);
-+		return -ESRCH;
-+	}
-+
-+	sec = (struct btf_type *)btf__type_by_id(obj->btf, btf_id);
-+	sec->size = off;
-+	n = btf_vlen(sec);
-+	for (i = 0; i < n; i++) {
-+		struct btf_var_secinfo *vs = btf_var_secinfos(sec) + i;
-+
-+		t = btf__type_by_id(obj->btf, vs->type);
-+		ext_name = btf__name_by_offset(obj->btf, t->name_off);
-+		ext = find_extern_by_name(obj, ext_name);
-+		if (!ext) {
-+			pr_warn("failed to find extern definition for BTF var '%s'\n",
-+				ext_name);
-+			return -ESRCH;
-+		}
-+		vs->offset = ext->data_off;
-+		btf_var(t)->linkage = BTF_VAR_GLOBAL_ALLOCATED;
-+	}
-+
-+	return 0;
-+}
-+
- static struct bpf_program *
- bpf_object__find_prog_by_idx(struct bpf_object *obj, int idx)
- {
-@@ -1793,6 +2316,8 @@ bpf_object__section_to_libbpf_map_type(const struct bpf_object *obj, int shndx)
- 		return LIBBPF_MAP_BSS;
- 	else if (shndx == obj->efile.rodata_shndx)
- 		return LIBBPF_MAP_RODATA;
-+	else if (shndx == obj->efile.symbols_shndx)
-+		return LIBBPF_MAP_EXTERN;
- 	else
- 		return LIBBPF_MAP_UNSPEC;
- }
-@@ -1836,6 +2361,30 @@ static int bpf_program__record_reloc(struct bpf_program *prog,
- 			insn_idx, insn->code);
- 		return -LIBBPF_ERRNO__RELOC;
- 	}
-+
-+	if (sym_is_extern(sym)) {
-+		int sym_idx = GELF_R_SYM(rel->r_info);
-+		int i, n = obj->nr_extern;
-+		struct extern_desc *ext;
-+
-+		for (i = 0; i < n; i++) {
-+			ext = &obj->externs[i];
-+			if (ext->sym_idx == sym_idx)
-+				break;
-+		}
-+		if (i >= n) {
-+			pr_warn("extern relo failed to find extern for sym %d\n",
-+				sym_idx);
-+			return -LIBBPF_ERRNO__RELOC;
-+		}
-+		pr_debug("found extern #%d '%s' (sym %d, off %u) for insn %u\n",
-+			 i, ext->name, ext->sym_idx, ext->data_off, insn_idx);
-+		reloc_desc->type = RELO_EXTERN;
-+		reloc_desc->insn_idx = insn_idx;
-+		reloc_desc->sym_off = ext->data_off;
-+		return 0;
-+	}
-+
- 	if (!shdr_idx || shdr_idx >= SHN_LORESERVE) {
- 		pr_warn("invalid relo for \'%s\' in special section 0x%x; forgot to initialize global var?..\n",
- 			name, shdr_idx);
-@@ -2297,11 +2846,12 @@ bpf_object__reuse_map(struct bpf_map *map)
- static int
- bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
- {
-+	enum libbpf_map_type map_type = map->libbpf_type;
- 	char *cp, errmsg[STRERR_BUFSIZE];
- 	int err, zero = 0;
- 
--	/* Nothing to do here since kernel already zero-initializes .bss map. */
--	if (map->libbpf_type == LIBBPF_MAP_BSS)
-+	/* kernel already zero-initializes .bss map. */
-+	if (map_type == LIBBPF_MAP_BSS)
- 		return 0;
- 
- 	err = bpf_map_update_elem(map->fd, &zero, map->mmaped, 0);
-@@ -2313,8 +2863,8 @@ bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
- 		return err;
- 	}
- 
--	/* Freeze .rodata map as read-only from syscall side. */
--	if (map->libbpf_type == LIBBPF_MAP_RODATA) {
-+	/* Freeze .rodata and .extern map as read-only from syscall side. */
-+	if (map_type == LIBBPF_MAP_RODATA || map_type == LIBBPF_MAP_EXTERN) {
- 		err = bpf_map_freeze(map->fd);
- 		if (err) {
- 			err = -errno;
-@@ -3563,9 +4113,6 @@ bpf_program__reloc_text(struct bpf_program *prog, struct bpf_object *obj,
- 	size_t new_cnt;
- 	int err;
- 
--	if (relo->type != RELO_CALL)
--		return -LIBBPF_ERRNO__RELOC;
--
- 	if (prog->idx == obj->efile.text_shndx) {
- 		pr_warn("relo in .text insn %d into off %d (insn #%d)\n",
- 			relo->insn_idx, relo->sym_off, relo->sym_off / 8);
-@@ -3627,27 +4174,37 @@ bpf_program__relocate(struct bpf_program *prog, struct bpf_object *obj)
- 
- 	for (i = 0; i < prog->nr_reloc; i++) {
- 		struct reloc_desc *relo = &prog->reloc_desc[i];
-+		struct bpf_insn *insn = &prog->insns[relo->insn_idx];
- 
--		if (relo->type == RELO_LD64 || relo->type == RELO_DATA) {
--			struct bpf_insn *insn = &prog->insns[relo->insn_idx];
--
--			if (relo->insn_idx + 1 >= (int)prog->insns_cnt) {
--				pr_warn("relocation out of range: '%s'\n",
--					prog->section_name);
--				return -LIBBPF_ERRNO__RELOC;
--			}
-+		if (relo->insn_idx + 1 >= (int)prog->insns_cnt) {
-+			pr_warn("relocation out of range: '%s'\n",
-+				prog->section_name);
-+			return -LIBBPF_ERRNO__RELOC;
-+		}
- 
--			if (relo->type != RELO_DATA) {
--				insn[0].src_reg = BPF_PSEUDO_MAP_FD;
--			} else {
--				insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
--				insn[1].imm = insn[0].imm + relo->sym_off;
--			}
-+		switch (relo->type) {
-+		case RELO_LD64:
-+			insn[0].src_reg = BPF_PSEUDO_MAP_FD;
-+			insn[0].imm = obj->maps[relo->map_idx].fd;
-+			break;
-+		case RELO_DATA:
-+			insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
-+			insn[1].imm = insn[0].imm + relo->sym_off;
- 			insn[0].imm = obj->maps[relo->map_idx].fd;
--		} else if (relo->type == RELO_CALL) {
-+			break;
-+		case RELO_EXTERN:
-+			insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
-+			insn[0].imm = obj->maps[obj->extern_map_idx].fd;
-+			insn[1].imm = relo->sym_off;
-+			break;
-+		case RELO_CALL:
- 			err = bpf_program__reloc_text(prog, obj, relo);
- 			if (err)
- 				return err;
-+			break;
-+		default:
-+			pr_warn("relo #%d: bad relo type %d\n", i, relo->type);
-+			return -EINVAL;
- 		}
- 	}
- 
-@@ -3927,11 +4484,10 @@ static struct bpf_object *
- __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 		   const struct bpf_object_open_opts *opts)
- {
-+	const char *obj_name, *kconfig_path;
- 	struct bpf_program *prog;
- 	struct bpf_object *obj;
--	const char *obj_name;
- 	char tmp_name[64];
--	__u32 attach_prog_fd;
- 	int err;
- 
- 	if (elf_version(EV_CURRENT) == EV_NONE) {
-@@ -3960,11 +4516,18 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 		return obj;
- 
- 	obj->relaxed_core_relocs = OPTS_GET(opts, relaxed_core_relocs, false);
--	attach_prog_fd = OPTS_GET(opts, attach_prog_fd, 0);
-+	kconfig_path = OPTS_GET(opts, kconfig_path, NULL);
-+	if (kconfig_path) {
-+		obj->kconfig_path = strdup(kconfig_path);
-+		if (!obj->kconfig_path)
-+			return ERR_PTR(-ENOMEM);
-+	}
- 
- 	err = bpf_object__elf_init(obj);
- 	err = err ? : bpf_object__check_endianness(obj);
- 	err = err ? : bpf_object__elf_collect(obj);
-+	err = err ? : bpf_object__collect_externs(obj);
-+	err = err ? : bpf_object__finalize_btf(obj);
- 	err = err ? : bpf_object__init_maps(obj, opts);
- 	err = err ? : bpf_object__init_prog_names(obj);
- 	err = err ? : bpf_object__collect_reloc(obj);
-@@ -3987,7 +4550,7 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 		bpf_program__set_type(prog, prog_type);
- 		bpf_program__set_expected_attach_type(prog, attach_type);
- 		if (prog_type == BPF_PROG_TYPE_TRACING)
--			prog->attach_prog_fd = attach_prog_fd;
-+			prog->attach_prog_fd = OPTS_GET(opts, attach_prog_fd, 0);
- 	}
- 
- 	return obj;
-@@ -4098,6 +4661,61 @@ static int bpf_object__sanitize_maps(struct bpf_object *obj)
- 	return 0;
- }
- 
-+static int bpf_object__resolve_externs(struct bpf_object *obj,
-+				       const char *config_path)
-+{
-+	bool need_config = false;
-+	struct extern_desc *ext;
-+	int err, i;
-+	void *data;
-+
-+	if (obj->nr_extern == 0)
-+		return 0;
-+
-+	data = obj->maps[obj->extern_map_idx].mmaped;
-+
-+	for (i = 0; i < obj->nr_extern; i++) {
-+		ext = &obj->externs[i];
-+
-+		if (strcmp(ext->name, "LINUX_KERNEL_VERSION") == 0) {
-+			void *ext_val = data + ext->data_off;
-+			__u32 kver = get_kernel_version();
-+
-+			if (!kver) {
-+				pr_warn("failed to get kernel version\n");
-+				return -EINVAL;
-+			}
-+			err = set_ext_value_num(ext, ext_val, kver);
-+			if (err)
-+				return err;
-+			pr_debug("extern %s=0x%x\n", ext->name, kver);
-+		} else if (strncmp(ext->name, "CONFIG_", 7) == 0) {
-+			need_config = true;
-+		} else {
-+			pr_warn("unrecognized extern '%s'\n", ext->name);
-+			return -EINVAL;
-+		}
-+	}
-+	if (need_config) {
-+		err = bpf_object__read_kernel_config(obj, config_path, data);
-+		if (err)
-+			return -EINVAL;
-+	}
-+	for (i = 0; i < obj->nr_extern; i++) {
-+		ext = &obj->externs[i];
-+
-+		if (!ext->is_set && !ext->is_weak) {
-+			pr_warn("extern %s (strong) not resolved\n", ext->name);
-+			return -ESRCH;
-+		} else if (!ext->is_set) {
-+			pr_debug("extern %s (weak) not resolved, defaulting to zero\n",
-+				 ext->name);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
- {
- 	struct bpf_object *obj;
-@@ -4117,6 +4735,7 @@ int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
- 	obj->loaded = true;
- 
- 	err = bpf_object__probe_caps(obj);
-+	err = err ? : bpf_object__resolve_externs(obj, obj->kconfig_path);
- 	err = err ? : bpf_object__sanitize_and_load_btf(obj);
- 	err = err ? : bpf_object__sanitize_maps(obj);
- 	err = err ? : bpf_object__create_maps(obj);
-@@ -4710,6 +5329,10 @@ void bpf_object__close(struct bpf_object *obj)
- 		zfree(&map->pin_path);
- 	}
- 
-+	zfree(&obj->kconfig_path);
-+	zfree(&obj->externs);
-+	obj->nr_extern = 0;
-+
- 	zfree(&obj->maps);
- 	obj->nr_maps = 0;
- 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 7fa583ebe56f..9116a9f82e8f 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -109,8 +109,12 @@ struct bpf_object_open_opts {
- 	 */
- 	const char *pin_root_path;
- 	__u32 attach_prog_fd;
-+	/* kernel config file path override (for CONFIG_ externs); can point
-+	 * to either uncompressed text file or .gz file
-+	 */
-+	const char *kconfig_path;
- };
--#define bpf_object_open_opts__last_field attach_prog_fd
-+#define bpf_object_open_opts__last_field kconfig_path
- 
- LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
- LIBBPF_API struct bpf_object *
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 9e0f87473673..76670da5e120 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -275,4 +275,10 @@ int bpf_object__attach_skeleton(struct bpf_object_skeleton *s);
- void bpf_object__detach_skeleton(struct bpf_object_skeleton *s);
- void bpf_object__destroy_skeleton(struct bpf_object_skeleton *s);
- 
-+enum libbpf_tristate {
-+	TRI_NO = 0,
-+	TRI_YES = 1,
-+	TRI_MODULE = 2,
-+};
-+
- #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 01788c0d68dd..5e390cf58ea4 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -24,7 +24,7 @@ CFLAGS += -g -Wall -O2 $(GENFLAGS) -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR)	\
- 	  -I$(GENDIR) -I$(TOOLSINCDIR) -I$(CURDIR)			\
- 	  -Dbpf_prog_load=bpf_prog_test_load				\
- 	  -Dbpf_load_program=bpf_test_load_program
--LDLIBS += -lcap -lelf -lrt -lpthread
-+LDLIBS += -lcap -lelf -lz -lrt -lpthread
- 
- # Order correspond to 'make run_tests' order
- TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
--- 
-2.17.1
-
+C is weakly, but still typed language. There are types and they are
+helpful. Yes, you can disregard them and re-interpret values as
+anything, but that's beside the point.
