@@ -2,30 +2,32 @@ Return-Path: <SRS0=sz96=2B=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DAC2C00454
-	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 16:00:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7CABC43603
+	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 16:01:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ED9B02077B
-	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 16:00:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C8982077B
+	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 16:01:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733216AbfLKQAq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Dec 2019 11:00:46 -0500
-Received: from hall.aurel32.net ([195.154.113.88]:41108 "EHLO hall.aurel32.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731491AbfLKQAp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 11 Dec 2019 11:00:45 -0500
-Received: from aurel32 by hall.aurel32.net with local (Exim 4.92)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1if4Pk-0008An-F6; Wed, 11 Dec 2019 17:00:36 +0100
-Date:   Wed, 11 Dec 2019 17:00:36 +0100
-From:   Aurelien Jarno <aurelien@aurel32.net>
+        id S2388348AbfLKQBu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Dec 2019 11:01:50 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:45809 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731411AbfLKQBt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 11 Dec 2019 11:01:49 -0500
+Received: from 1.general.cascardo.us.vpn ([10.172.70.58] helo=calabresa)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <cascardo@canonical.com>)
+        id 1if4Ql-00025a-M4; Wed, 11 Dec 2019 16:01:40 +0000
+Date:   Wed, 11 Dec 2019 13:01:33 -0300
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 To:     Justin Forbes <jmforbes@linuxtx.org>
-Cc:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Song Liu <songliubraving@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -35,21 +37,11 @@ Cc:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
         "open list:BPF (Safe dynamic programs and tools)" 
         <bpf@vger.kernel.org>, linuxppc-dev@lists.ozlabs.org,
         Martin KaFai Lau <kafai@fb.com>,
+        Aurelien Jarno <aurelien@aurel32.net>,
         debian-kernel@lists.debian.org
 Subject: Re: [PATCH] libbpf: fix readelf output parsing on powerpc with
  recent binutils
-Message-ID: <20191211160036.GV2974@aurel32.net>
-Mail-Followup-To: Justin Forbes <jmforbes@linuxtx.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>, Andrii Nakryiko <andriin@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:BPF (Safe dynamic programs and tools)" <netdev@vger.kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        "open list:BPF (Safe dynamic programs and tools)" <bpf@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, Martin KaFai Lau <kafai@fb.com>,
-        debian-kernel@lists.debian.org
+Message-ID: <20191211160133.GB4580@calabresa>
 References: <20191201195728.4161537-1-aurelien@aurel32.net>
  <87zhgbe0ix.fsf@mpe.ellerman.id.au>
  <20191202093752.GA1535@localhost.localdomain>
@@ -60,13 +52,13 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <CAFxkdAp6Up0qSyp0sH0O1yD+5W3LvY-+-iniBrorcz2pMV+y-g@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2019-12-11 09:33, Justin Forbes wrote:
+On Wed, Dec 11, 2019 at 09:33:53AM -0600, Justin Forbes wrote:
 > On Tue, Dec 10, 2019 at 4:26 PM Thadeu Lima de Souza Cascardo
 > <cascardo@canonical.com> wrote:
 > >
@@ -123,17 +115,50 @@ On 2019-12-11 09:33, Justin Forbes wrote:
 > readelf -s --wide tools/lib/bpf/sharedobjs/libbpf-in.o | cut -d "@"
 > -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' | awk '/GLOBAL/ && /DEFAULT/ &&
 > !/UND/ {print $0}'
->    373: 00000000000141bc  1376 FUNC    GLOBAL DEFAULT    1 libbpf_num_possible_cpus [<localentry>: 8]
->    375: 000000000001869c   176 FUNC    GLOBAL DEFAULT    1 btf__free [<localentry>: 8]
+>    373: 00000000000141bc  1376 FUNC    GLOBAL DEFAULT    1
+> libbpf_num_possible_cpus [<localentry>: 8]
+>    375: 000000000001869c   176 FUNC    GLOBAL DEFAULT    1 btf__free
+> [<localentry>: 8]
+[...]
 
-It seems that in your case the localentry part is added after the symbol
-name. That doesn't match what is done in upstream binutils:
+This is a patch on binutils carried by Fedora:
 
-https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=binutils/readelf.c;hb=refs/heads/master#l11485
+https://src.fedoraproject.org/rpms/binutils/c/b8265c46f7ddae23a792ee8306fbaaeacba83bf8
 
-Which version of binutils are you using? It looks like your version has
-been modified to workaround this exact issue.
+" b8265c Have readelf display extra symbol information at the end of the line. "
 
--- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                 http://www.aurel32.net
+It has the following comment:
+
+# FIXME:    The proper fix would be to update the scripts that are expecting
+#           a fixed output from readelf.  But it seems that some of them are
+#           no longer being maintained.
+
+This commit is from 2017, had it been on binutils upstream, maybe the situation
+right now would be different.
+
+Honestly, it seems the best way out is to filter the other information in the
+libbpf Makefile.
+
+Does the following patch work for you?
+
+
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index 56ce6292071b..e6f99484d7d5 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -145,6 +145,7 @@ PC_FILE		:= $(addprefix $(OUTPUT),$(PC_FILE))
+ 
+ GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
+ 			   cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' | \
++			   sed 's/\[.*\]//' | \
+ 			   awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$8}' | \
+ 			   sort -u | wc -l)
+ VERSIONED_SYM_COUNT = $(shell readelf -s --wide $(OUTPUT)libbpf.so | \
+@@ -217,6 +218,7 @@ check_abi: $(OUTPUT)libbpf.so
+ 		     "versioned in $(VERSION_SCRIPT)." >&2;		 \
+ 		readelf -s --wide $(OUTPUT)libbpf-in.o |		 \
+ 		    cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' |	 \
++		    sed 's/\[.*\]//' |					 \
+ 		    awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$8}'|   \
+ 		    sort -u > $(OUTPUT)libbpf_global_syms.tmp;		 \
+ 		readelf -s --wide $(OUTPUT)libbpf.so |			 \
