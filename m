@@ -2,163 +2,156 @@ Return-Path: <SRS0=sz96=2B=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBC33C43603
-	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 02:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0D6EC3F68F
+	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 06:50:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B225720836
-	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 02:58:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 880F5214D8
+	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 06:50:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="PfPYZprn"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="rKsee+fV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727438AbfLKCxZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 21:53:25 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:16090 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726989AbfLKCxY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Dec 2019 21:53:24 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5df05a1d0000>; Tue, 10 Dec 2019 18:53:17 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 10 Dec 2019 18:53:23 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 10 Dec 2019 18:53:23 -0800
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 11 Dec
- 2019 02:53:23 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 11 Dec 2019 02:53:21 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5df05a210000>; Tue, 10 Dec 2019 18:53:21 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v9 02/25] mm/gup: move try_get_compound_head() to top, fix minor issues
-Date:   Tue, 10 Dec 2019 18:52:55 -0800
-Message-ID: <20191211025318.457113-3-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191211025318.457113-1-jhubbard@nvidia.com>
-References: <20191211025318.457113-1-jhubbard@nvidia.com>
+        id S1726988AbfLKGuL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Dec 2019 01:50:11 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:48770 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725800AbfLKGuK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 11 Dec 2019 01:50:10 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBB6n6oI003604
+        for <bpf@vger.kernel.org>; Tue, 10 Dec 2019 22:50:09 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=facebook;
+ bh=VFRtLBc7W10U+5ioQoLMMywjohLBuv1Bl8DUvZCi9ec=;
+ b=rKsee+fVp1TwVbknz2SRVRuDdqWQNjsgIP53FbX56Qb9iusGsttAjgX5BxtjFS5PbRgY
+ /F2PVhGstQQw7qiuyKaBzNzJnVfcLm9EA7ReFZRScw4rLZXVEVlxhMQznjYjmI3aizhU
+ vVAgWR8ejeK6WnaauTG/9tTDWtLgeZXfeks= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wteugbr98-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 10 Dec 2019 22:50:09 -0800
+Received: from intmgw002.05.ash5.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Tue, 10 Dec 2019 22:50:08 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id D26E12EC194D; Tue, 10 Dec 2019 22:50:05 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v2 bpf-next 0/3] Add libbpf-provided extern variables support
+Date:   Tue, 10 Dec 2019 22:49:59 -0800
+Message-ID: <20191211065002.2074074-1-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-NVConfidentiality: public
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1576032797; bh=JKnh6awNMnXx+WkfJCjCpP/dD2pEJJn8AxQ3IWMhLGw=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=PfPYZprnTSwrYOIbVEbIOU9oEZSIzngKZd9KZ9VaTWbuMTMD+XAfU9HnLo33s/4a8
-         hUvTGvn9UQPrWfjQCkgn39L2jTF3ZuNbXQWEgBj4VEc5oUU+8QiQCb33qs5apkuTKi
-         pxl9AiNIRq9PZqeTP3pOyohQO/6UsupKUcBMW1pC/hK/jvRFYqqgJd0+gOfJyBVNBU
-         uXcw0Xoyu4PNGZfCAwiuekjhqmDpSiOfdwIdqbgyGhXHWji1Li3YY4keeJtSY9YOI0
-         RzeZU/QeWJZgzQoLprO4WsZPMaydrjozB37tk7rpbmDGBtUbwNAeMAwi0W1LMWUUP9
-         HSj5S6+ovUsbA==
+X-FB-Internal: Safe
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-11_01:2019-12-10,2019-12-11 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ mlxlogscore=999 suspectscore=0 priorityscore=1501 mlxscore=0 spamscore=0
+ phishscore=0 impostorscore=0 adultscore=0 malwarescore=0 clxscore=1015
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912110058
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-An upcoming patch uses try_get_compound_head() more widely,
-so move it to the top of gup.c.
+It's often important for BPF program to know kernel version or some speci=
+fic
+config values (e.g., CONFIG_HZ to convert jiffies to seconds) and change =
+or
+adjust program logic based on their values. As of today, any such need ha=
+s to
+be resolved by recompiling BPF program for specific kernel and kernel
+configuration. In practice this is usually achieved by using BCC and its
+embedded LLVM/Clang. With such set up #ifdef CONFIG_XXX and similar
+compile-time constructs allow to deal with kernel varieties.
 
-Also fix a tiny spelling error and a checkpatch.pl warning.
+With CO-RE (Compile Once =E2=80=93 Run Everywhere) approach, this is not =
+an option,
+unfortunately. All such logic variations have to be done as a normal
+C language constructs (i.e., if/else, variables, etc), not a preprocessor
+directives. This patch series add support for such advanced scenarios thr=
+ough
+C extern variables. These extern variables will be recognized by libbpf a=
+nd
+supplied through extra .extern internal map, similarly to global data. Th=
+is
+.extern map is read-only, which allows BPF verifier to track its content
+precisely as constants. That gives an opportunity to have pre-compiled BP=
+F
+program, which can potentially use BPF functionality (e.g., BPF helpers) =
+or
+kernel features (types, fields, etc), that are available only on a subset=
+ of
+targeted kernels, while effectively eleminating (through verifier's dead =
+code
+detection) such unsupported functionality for other kernels (typically, o=
+lder
+versions). Patch #3 explicitly tests a scenario of using unsupported BPF
+helper, to validate the approach.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- mm/gup.c | 29 +++++++++++++++--------------
- 1 file changed, 15 insertions(+), 14 deletions(-)
+This patch set heavily relies on BTF type information emitted by compiler=
+ for
+each extern variable declaration. Based on specific types, libbpf does st=
+rict
+checks of config data values correctness. See patch #1 for details.
 
-diff --git a/mm/gup.c b/mm/gup.c
-index f764432914c4..3ecce297a47f 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -29,6 +29,21 @@ struct follow_page_context {
- 	unsigned int page_mask;
- };
-=20
-+/*
-+ * Return the compound head page with ref appropriately incremented,
-+ * or NULL if that failed.
-+ */
-+static inline struct page *try_get_compound_head(struct page *page, int re=
-fs)
-+{
-+	struct page *head =3D compound_head(page);
-+
-+	if (WARN_ON_ONCE(page_ref_count(head) < 0))
-+		return NULL;
-+	if (unlikely(!page_cache_add_speculative(head, refs)))
-+		return NULL;
-+	return head;
-+}
-+
- /**
-  * put_user_pages_dirty_lock() - release and optionally dirty gup-pinned p=
-ages
-  * @pages:  array of pages to be maybe marked dirty, and definitely releas=
-ed.
-@@ -1807,20 +1822,6 @@ static void __maybe_unused undo_dev_pagemap(int *nr,=
- int nr_start,
- 	}
- }
-=20
--/*
-- * Return the compund head page with ref appropriately incremented,
-- * or NULL if that failed.
-- */
--static inline struct page *try_get_compound_head(struct page *page, int re=
-fs)
--{
--	struct page *head =3D compound_head(page);
--	if (WARN_ON_ONCE(page_ref_count(head) < 0))
--		return NULL;
--	if (unlikely(!page_cache_add_speculative(head, refs)))
--		return NULL;
--	return head;
--}
--
- #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
- static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
- 			 unsigned int flags, struct page **pages, int *nr)
+Outline of the patch set:
+- patch #1 adds all of the libbpf internal machinery for externs support,
+  including setting up BTF information for .extern data section;
+- patch #2 adds support for .extern into BPF skeleton;
+- patch #3 adds externs selftests, as well as enhances test_skeleton.c te=
+st to
+  validate mmap()-ed .extern datasection functionality.
+
+This patch set is based off BPF skeleton patch set ([0]).
+
+  [0] https://patchwork.ozlabs.org/project/netdev/list/?series=3D147459&s=
+tate=3D*
+
+v1->v2:
+- use BTF type information for externs (Alexei);
+- add strings support;
+- add BPF skeleton support for .extern.
+
+Andrii Nakryiko (3):
+  libbpf: support libbpf-provided extern variables
+  bpftool: generate externs datasec in BPF skeleton
+  selftests/bpf: add tests for libbpf-provided externs
+
+ include/uapi/linux/btf.h                      |   3 +-
+ tools/bpf/bpftool/gen.c                       |   4 +
+ tools/include/uapi/linux/btf.h                |   7 +-
+ tools/lib/bpf/Makefile                        |  15 +-
+ tools/lib/bpf/bpf_helpers.h                   |   9 +
+ tools/lib/bpf/btf.c                           |   9 +-
+ tools/lib/bpf/libbpf.c                        | 769 ++++++++++++++++--
+ tools/lib/bpf/libbpf.h                        |   6 +-
+ tools/lib/bpf/libbpf_internal.h               |   6 +
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ .../selftests/bpf/prog_tests/core_extern.c    | 192 +++++
+ .../selftests/bpf/prog_tests/skeleton.c       |  18 +-
+ .../selftests/bpf/progs/test_core_extern.c    |  62 ++
+ .../selftests/bpf/progs/test_skeleton.c       |   9 +
+ 14 files changed, 1024 insertions(+), 87 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/core_extern.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_core_extern.c
+
 --=20
-2.24.0
+2.17.1
 
