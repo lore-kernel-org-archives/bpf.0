@@ -5,209 +5,179 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F76AC43603
-	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 02:34:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2035C2D0CA
+	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 02:53:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 29E8D2073B
-	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 02:34:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 98A842077B
+	for <bpf@archiver.kernel.org>; Wed, 11 Dec 2019 02:53:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="JGFK7zjo"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="XeEwBP2p"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727302AbfLKCej (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Dec 2019 21:34:39 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:26652 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727702AbfLKCej (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 10 Dec 2019 21:34:39 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBB2UIsu022471
-        for <bpf@vger.kernel.org>; Tue, 10 Dec 2019 18:34:38 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=+cHqEbvmQGf+cs9Z4CpXM8jVJsNUx1xdTw/3yOVpL8M=;
- b=JGFK7zjoADjMWHU3L7/kJMx56SOY+RLmt5FDwyKZHuzicGff2R2ZwmYWF0tYTfQNzwCM
- SJ/pzoiuUOfQNPy6a3h14cMU74bXk4NgtQcAtB/rHjWWJIWn0vSAmIH2mg+yco9wyGl0
- dKYLwFQrjCPAfaIibyhI/SGhCsPUGVmIy1A= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wt831cuwa-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 10 Dec 2019 18:34:38 -0800
-Received: from intmgw002.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 10 Dec 2019 18:34:37 -0800
-Received: by dev082.prn2.facebook.com (Postfix, from userid 572249)
-        id 617C33713892; Tue, 10 Dec 2019 18:34:34 -0800 (PST)
-Smtp-Origin-Hostprefix: dev
-From:   Andrey Ignatov <rdna@fb.com>
-Smtp-Origin-Hostname: dev082.prn2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Andrey Ignatov <rdna@fb.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next 5/5] selftests/bpf: Cover BPF_F_REPLACE in test_cgroup_attach
-Date:   Tue, 10 Dec 2019 18:33:31 -0800
-Message-ID: <829ef294f0395649f459334b48d4d9a6103a4fc1.1576031228.git.rdna@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1576031228.git.rdna@fb.com>
-References: <cover.1576031228.git.rdna@fb.com>
-X-FB-Internal: Safe
+        id S1727913AbfLKCxe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Dec 2019 21:53:34 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:2089 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727891AbfLKCxc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Dec 2019 21:53:32 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5df05a240000>; Tue, 10 Dec 2019 18:53:24 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 10 Dec 2019 18:53:30 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 10 Dec 2019 18:53:30 -0800
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 11 Dec
+ 2019 02:53:30 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 11 Dec 2019 02:53:29 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5df05a280000>; Tue, 10 Dec 2019 18:53:29 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v9 13/25] mm/process_vm_access: set FOLL_PIN via pin_user_pages_remote()
+Date:   Tue, 10 Dec 2019 18:53:06 -0800
+Message-ID: <20191211025318.457113-14-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191211025318.457113-1-jhubbard@nvidia.com>
+References: <20191211025318.457113-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-10_08:2019-12-10,2019-12-10 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 clxscore=1015
- mlxscore=0 impostorscore=0 suspectscore=13 malwarescore=0 adultscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=567 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912110021
-X-FB-Internal: deliver
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1576032804; bh=P8nVR+kV72iD6sM0eEn6ntwngrRbmURGxrL6qNBlbv8=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Type:Content-Transfer-Encoding;
+        b=XeEwBP2pTYdNaIYEG246RP/UGv4oCzI7HThRY4+SyCHY1b6FFnWIuAWaZeOk6ugC/
+         peWmXwtUB0VSt/MEU11EZRwef0YJMKQooOhhE2q1kE8KXOakW3G5DvLDex1uQtZ5L9
+         xb+t79vPiUYay+/jVra4UnbKZ6tzp+mSHzKGxGvgZki++im+lzwfYiEc8brUwhFWGO
+         0kF6XTIHYPb+jEuGMlr854+Lo1QfggvNTmm7LG9RdpyTPyilhmHkRxEmzrxhIaAOnH
+         FHHMHlkg6zfv7HpdX5KOo3hIMy+yo7B+sqK7BaEyE+LlV6MpG5DQAW5LL+EImWWv08
+         3GwOSeyrsoYwg==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Test replacement of a cgroup-bpf program attached with BPF_F_ALLOW_MULTI
-and possible failure modes: invalid combination of flags, invalid
-replace_bpf_fd, replacing a non-attachd to specified cgroup program.
+Convert process_vm_access to use the new pin_user_pages_remote()
+call, which sets FOLL_PIN. Setting FOLL_PIN is now required for
+code that requires tracking of pinned pages.
 
-Example of program replacing:
+Also, release the pages via put_user_page*().
 
-  # gdb -q ./test_cgroup_attach
-  Reading symbols from /data/users/rdna/bin/test_cgroup_attach...done.
-  ...
-  Breakpoint 1, test_multiprog () at test_cgroup_attach.c:442
-  442     test_cgroup_attach.c: No such file or directory.
-  (gdb)
-  [2]+  Stopped                 gdb -q ./test_cgroup_attach
-  # bpftool c s /mnt/cgroup2/cgroup-test-work-dir/cg1
-  ID       AttachType      AttachFlags     Name
-  35       egress          multi
-  36       egress          multi
-  # fg gdb -q ./test_cgroup_attach
-  c
-  Continuing.
-  Detaching after fork from child process 361.
+Also, rename "pages" to "pinned_pages", as this makes for
+easier reading of process_vm_rw_single_vec().
 
-  Breakpoint 2, test_multiprog () at test_cgroup_attach.c:453
-  453     in test_cgroup_attach.c
-  (gdb)
-  [2]+  Stopped                 gdb -q ./test_cgroup_attach
-  # bpftool c s /mnt/cgroup2/cgroup-test-work-dir/cg1
-  ID       AttachType      AttachFlags     Name
-  41       egress          multi
-  36       egress          multi
-
-Signed-off-by: Andrey Ignatov <rdna@fb.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Reviewed-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- .../selftests/bpf/test_cgroup_attach.c        | 61 +++++++++++++++++--
- 1 file changed, 56 insertions(+), 5 deletions(-)
+ mm/process_vm_access.c | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_cgroup_attach.c b/tools/testing/selftests/bpf/test_cgroup_attach.c
-index 7671909ee1cb..b9148d752207 100644
---- a/tools/testing/selftests/bpf/test_cgroup_attach.c
-+++ b/tools/testing/selftests/bpf/test_cgroup_attach.c
-@@ -250,7 +250,7 @@ static int prog_load_cnt(int verdict, int val)
- 		BPF_LD_MAP_FD(BPF_REG_1, map_fd),
- 		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
- 		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
--		BPF_MOV64_IMM(BPF_REG_1, val), /* r1 = 1 */
-+		BPF_MOV64_IMM(BPF_REG_1, val), /* r1 = val */
- 		BPF_RAW_INSN(BPF_STX | BPF_XADD | BPF_DW, BPF_REG_0, BPF_REG_1, 0, 0), /* xadd r0 += r1 */
- 
- 		BPF_LD_MAP_FD(BPF_REG_1, cgroup_storage_fd),
-@@ -290,11 +290,12 @@ static int test_multiprog(void)
- {
- 	__u32 prog_ids[4], prog_cnt = 0, attach_flags, saved_prog_id;
- 	int cg1 = 0, cg2 = 0, cg3 = 0, cg4 = 0, cg5 = 0, key = 0;
--	int drop_prog, allow_prog[6] = {}, rc = 0;
-+	int drop_prog, allow_prog[7] = {}, rc = 0;
-+	struct bpf_prog_attach_attr attach_attr;
- 	unsigned long long value;
- 	int i = 0;
- 
--	for (i = 0; i < 6; i++) {
-+	for (i = 0; i < ARRAY_SIZE(allow_prog); i++) {
- 		allow_prog[i] = prog_load_cnt(1, 1 << i);
- 		if (!allow_prog[i])
- 			goto err;
-@@ -400,6 +401,56 @@ static int test_multiprog(void)
- 	assert(bpf_map_lookup_elem(map_fd, &key, &value) == 0);
- 	assert(value == 1 + 2 + 8 + 16);
- 
-+	/* invalid input */
+diff --git a/mm/process_vm_access.c b/mm/process_vm_access.c
+index 357aa7bef6c0..fd20ab675b85 100644
+--- a/mm/process_vm_access.c
++++ b/mm/process_vm_access.c
+@@ -42,12 +42,11 @@ static int process_vm_rw_pages(struct page **pages,
+ 		if (copy > len)
+ 			copy =3D len;
+=20
+-		if (vm_write) {
++		if (vm_write)
+ 			copied =3D copy_page_from_iter(page, offset, copy, iter);
+-			set_page_dirty_lock(page);
+-		} else {
++		else
+ 			copied =3D copy_page_to_iter(page, offset, copy, iter);
+-		}
 +
-+	memset(&attach_attr, 0, sizeof(attach_attr));
-+	attach_attr.target_fd		= cg1;
-+	attach_attr.prog_fd		= allow_prog[6];
-+	attach_attr.replace_prog_fd	= allow_prog[0];
-+	attach_attr.type		= BPF_CGROUP_INET_EGRESS;
-+	attach_attr.flags		= BPF_F_ALLOW_OVERRIDE | BPF_F_REPLACE;
+ 		len -=3D copied;
+ 		if (copied < copy && iov_iter_count(iter))
+ 			return -EFAULT;
+@@ -96,7 +95,7 @@ static int process_vm_rw_single_vec(unsigned long addr,
+ 		flags |=3D FOLL_WRITE;
+=20
+ 	while (!rc && nr_pages && iov_iter_count(iter)) {
+-		int pages =3D min(nr_pages, max_pages_per_loop);
++		int pinned_pages =3D min(nr_pages, max_pages_per_loop);
+ 		int locked =3D 1;
+ 		size_t bytes;
+=20
+@@ -106,14 +105,15 @@ static int process_vm_rw_single_vec(unsigned long add=
+r,
+ 		 * current/current->mm
+ 		 */
+ 		down_read(&mm->mmap_sem);
+-		pages =3D get_user_pages_remote(task, mm, pa, pages, flags,
+-					      process_pages, NULL, &locked);
++		pinned_pages =3D pin_user_pages_remote(task, mm, pa, pinned_pages,
++						     flags, process_pages,
++						     NULL, &locked);
+ 		if (locked)
+ 			up_read(&mm->mmap_sem);
+-		if (pages <=3D 0)
++		if (pinned_pages <=3D 0)
+ 			return -EFAULT;
+=20
+-		bytes =3D pages * PAGE_SIZE - start_offset;
++		bytes =3D pinned_pages * PAGE_SIZE - start_offset;
+ 		if (bytes > len)
+ 			bytes =3D len;
+=20
+@@ -122,10 +122,12 @@ static int process_vm_rw_single_vec(unsigned long add=
+r,
+ 					 vm_write);
+ 		len -=3D bytes;
+ 		start_offset =3D 0;
+-		nr_pages -=3D pages;
+-		pa +=3D pages * PAGE_SIZE;
+-		while (pages)
+-			put_page(process_pages[--pages]);
++		nr_pages -=3D pinned_pages;
++		pa +=3D pinned_pages * PAGE_SIZE;
 +
-+	if (!bpf_prog_attach_xattr(&attach_attr)) {
-+		log_err("Unexpected success with OVERRIDE | REPLACE");
-+		goto err;
-+	}
-+	assert(errno == EINVAL);
-+
-+	attach_attr.flags = BPF_F_REPLACE;
-+	if (!bpf_prog_attach_xattr(&attach_attr)) {
-+		log_err("Unexpected success with REPLACE alone");
-+		goto err;
-+	}
-+	assert(errno == EINVAL);
-+	attach_attr.flags = BPF_F_ALLOW_MULTI | BPF_F_REPLACE;
-+
-+	attach_attr.replace_prog_fd = -1;
-+	if (!bpf_prog_attach_xattr(&attach_attr)) {
-+		log_err("Unexpected success with bad replace fd");
-+		goto err;
-+	}
-+	assert(errno == EBADF);
-+
-+	/* replacing a program that is not attached to cgroup should fail  */
-+	attach_attr.replace_prog_fd = allow_prog[3];
-+	if (!bpf_prog_attach_xattr(&attach_attr)) {
-+		log_err("Unexpected success: replace not-attached prog on cg1");
-+		goto err;
-+	}
-+	assert(errno == ENOENT);
-+	attach_attr.replace_prog_fd = allow_prog[0];
-+
-+	/* replace 1st from the top program */
-+	if (bpf_prog_attach_xattr(&attach_attr)) {
-+		log_err("Replace prog1 with prog7 on cg1");
-+		goto err;
-+	}
-+	value = 0;
-+	assert(bpf_map_update_elem(map_fd, &key, &value, 0) == 0);
-+	assert(system(PING_CMD) == 0);
-+	assert(bpf_map_lookup_elem(map_fd, &key, &value) == 0);
-+	assert(value == 64 + 2 + 8 + 16);
-+
- 	/* detach 3rd from bottom program and ping again */
- 	errno = 0;
- 	if (!bpf_prog_detach2(0, cg3, BPF_CGROUP_INET_EGRESS)) {
-@@ -414,7 +465,7 @@ static int test_multiprog(void)
- 	assert(bpf_map_update_elem(map_fd, &key, &value, 0) == 0);
- 	assert(system(PING_CMD) == 0);
- 	assert(bpf_map_lookup_elem(map_fd, &key, &value) == 0);
--	assert(value == 1 + 2 + 16);
-+	assert(value == 64 + 2 + 16);
- 
- 	/* detach 2nd from bottom program and ping again */
- 	if (bpf_prog_detach2(-1, cg4, BPF_CGROUP_INET_EGRESS)) {
-@@ -425,7 +476,7 @@ static int test_multiprog(void)
- 	assert(bpf_map_update_elem(map_fd, &key, &value, 0) == 0);
- 	assert(system(PING_CMD) == 0);
- 	assert(bpf_map_lookup_elem(map_fd, &key, &value) == 0);
--	assert(value == 1 + 2 + 4);
-+	assert(value == 64 + 2 + 4);
- 
- 	prog_cnt = 4;
- 	assert(bpf_prog_query(cg5, BPF_CGROUP_INET_EGRESS, BPF_F_QUERY_EFFECTIVE,
--- 
-2.17.1
++		/* If vm_write is set, the pages need to be made dirty: */
++		put_user_pages_dirty_lock(process_pages, pinned_pages,
++					  vm_write);
+ 	}
+=20
+ 	return rc;
+--=20
+2.24.0
 
