@@ -2,92 +2,69 @@ Return-Path: <SRS0=rg0W=2C=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.4 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B3D3C43603
-	for <bpf@archiver.kernel.org>; Thu, 12 Dec 2019 11:35:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36E32C43603
+	for <bpf@archiver.kernel.org>; Thu, 12 Dec 2019 16:19:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 35AF922527
-	for <bpf@archiver.kernel.org>; Thu, 12 Dec 2019 11:35:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 155F522527
+	for <bpf@archiver.kernel.org>; Thu, 12 Dec 2019 16:19:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729030AbfLLLfC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Dec 2019 06:35:02 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:35496 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729007AbfLLLfB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Dec 2019 06:35:01 -0500
-Received: by mail-io1-f71.google.com with SMTP id x10so1324955iob.2
-        for <bpf@vger.kernel.org>; Thu, 12 Dec 2019 03:35:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=zFl6E7DmT67W68XqVzR2aCsqjcFpWexNUq+6/CXmVUk=;
-        b=CU1DROT5UOeP9K14t6U+bBRLd7NDVaXSy9tX1N9RRowiu4QxEV0JW4y6KcYFbVeyer
-         AWzRJLcR46CGR/K5EO4pgzlKsAoPDd4S02RnQCln9nJOH+A0QWcbN943XJFfbqLEDRJQ
-         pZRCfaXWIEBXXC82xRgWIrFqRnzdQlIk45IZ8Vma6J4yRHVV8X/TQkhdQYAeTP6Zf/aA
-         FM1UZxLDoL/FdJbqfu1PXWBRVdPPts/n3cD5Q6kBek/MI6PpHWZCu8mdZCkkc5m6OP6z
-         dXWtKpXvq3em3UnK4yomVzxePMemkMT+vLqsM03so8Diq+oYZQQygIu3F2YWQxL0/ID1
-         M1ZQ==
-X-Gm-Message-State: APjAAAXrh/63yencqvYQQxVm8v5VH5+XYi6eUHjozReQWJiVuHzL8iI2
-        vVgilP3Qz6LypJAmA3F/wRwVjLpZBth9RlqHXJ+ZZhVYO9yk
-X-Google-Smtp-Source: APXvYqx7tAF42179GqyQGzxmn7mnoZxL7LgtxR3PNlsI/lOpd2FmYULEa+vakNib69tHnoQvSF7+iHISpB+uiby7hAsvBYRTiqDc
+        id S1729771AbfLLQTa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Dec 2019 11:19:30 -0500
+Received: from www62.your-server.de ([213.133.104.62]:57736 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729591AbfLLQTa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Dec 2019 11:19:30 -0500
+Received: from [194.230.159.122] (helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ifRBS-0007Ab-RJ; Thu, 12 Dec 2019 17:19:23 +0100
+Date:   Thu, 12 Dec 2019 17:19:22 +0100
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     Paul Burton <paulburton@kernel.org>
+Cc:     Paul Chaignon <paul.chaignon@orange.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>,
+        Mahshid Khezri <khezri.mahshid@gmail.com>,
+        paul.chaignon@gmail.com, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: Re: [PATCH bpf 2/2] bpf, mips: limit to 33 tail calls
+Message-ID: <20191212161922.GA1264@localhost.localdomain>
+References: <cover.1575916815.git.paul.chaignon@gmail.com>
+ <b8eb2caac1c25453c539248e56ca22f74b5316af.1575916815.git.paul.chaignon@gmail.com>
+ <20191210232316.aastpgbirqp4yaoi@lantea.localdomain>
 MIME-Version: 1.0
-X-Received: by 2002:a92:3b19:: with SMTP id i25mr7844146ila.85.1576150500982;
- Thu, 12 Dec 2019 03:35:00 -0800 (PST)
-Date:   Thu, 12 Dec 2019 03:35:00 -0800
-In-Reply-To: <000000000000b6b03205997b71cf@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b949ee0599802274@google.com>
-Subject: Re: BUG: corrupted list in __dentry_kill (2)
-From:   syzbot <syzbot+31043da7725b6ec210f1@syzkaller.appspotmail.com>
-To:     a@unstable.cc, alex.aring@gmail.com, allison@lohutok.net,
-        andrew@lunn.ch, andy@greyhouse.net, ap420073@gmail.com,
-        ast@domdv.de, ast@kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
-        bpf@vger.kernel.org, bridge@lists.linux-foundation.org,
-        cleech@redhat.com, daniel@iogearbox.net, davem@davemloft.net,
-        dsa@cumulusnetworks.com, dsahern@gmail.com, dvyukov@google.com,
-        f.fainelli@gmail.com, fw@strlen.de, gregkh@linuxfoundation.org,
-        haiyangz@microsoft.com, hawk@kernel.org, hdanton@sina.com,
-        idosch@mellanox.com, info@metux.net, j.vosburgh@gmail.com, j@w1.fi,
-        jakub.kicinski@netronome.com, jhs@mojatatu.com, jiri@mellanox.com,
-        jiri@resnulli.us, johan.hedberg@gmail.com, johannes.berg@intel.com,
-        john.fastabend@gmail.com, john.hurley@netronome.com,
-        jwi@linux.ibm.com, kafai@fb.com, kstewart@linuxfoundation.org,
-        kvalo@codeaurora.org, kys@microsoft.com,
-        linux-bluetooth@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-ppp@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-wpan@vger.kernel.org,
-        liuhangbin@gmail.com, marcel@holtmann.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191210232316.aastpgbirqp4yaoi@lantea.localdomain>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25661/Thu Dec 12 10:47:42 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-syzbot has bisected this bug to:
+On Tue, Dec 10, 2019 at 03:23:16PM -0800, Paul Burton wrote:
+> On Mon, Dec 09, 2019 at 07:52:52PM +0100, Paul Chaignon wrote:
+> > All BPF JIT compilers except RISC-V's and MIPS' enforce a 33-tail calls
+> > limit at runtime.  In addition, a test was recently added, in tailcalls2,
+> > to check this limit.
+> > 
+> > This patch updates the tail call limit in MIPS' JIT compiler to allow
+> > 33 tail calls.
+> > 
+> > Fixes: b6bd53f9c4e8 ("MIPS: Add missing file for eBPF JIT.")
+> > Reported-by: Mahshid Khezri <khezri.mahshid@gmail.com>
+> > Signed-off-by: Paul Chaignon <paul.chaignon@orange.com>
+> 
+> I'd be happy to take this through mips-fixes, but equally happy for it
+> to go through the BPF/net trees in which case:
 
-commit ab92d68fc22f9afab480153bd82a20f6e2533769
-Author: Taehee Yoo <ap420073@gmail.com>
-Date:   Mon Oct 21 18:47:51 2019 +0000
-
-     net: core: add generic lockdep keys
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12d37cb6e00000
-start commit:   938f49c8 Add linux-next specific files for 20191211
-git tree:       linux-next
-final crash:    https://syzkaller.appspot.com/x/report.txt?x=11d37cb6e00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16d37cb6e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=96834c884ba7bb81
-dashboard link: https://syzkaller.appspot.com/bug?extid=31043da7725b6ec210f1
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12dc83dae00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ac8396e00000
-
-Reported-by: syzbot+31043da7725b6ec210f1@syzkaller.appspotmail.com
-Fixes: ab92d68fc22f ("net: core: add generic lockdep keys")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+We took the series via bpf, thanks!
