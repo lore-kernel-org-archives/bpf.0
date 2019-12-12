@@ -2,177 +2,182 @@ Return-Path: <SRS0=rg0W=2C=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BC12C43603
-	for <bpf@archiver.kernel.org>; Thu, 12 Dec 2019 08:08:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B36DCC2D0D3
+	for <bpf@archiver.kernel.org>; Thu, 12 Dec 2019 08:19:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2BF13214AF
-	for <bpf@archiver.kernel.org>; Thu, 12 Dec 2019 08:08:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 88F8624658
+	for <bpf@archiver.kernel.org>; Thu, 12 Dec 2019 08:19:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dtbb4RG0"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="MvIn7JxY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728153AbfLLIIj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Dec 2019 03:08:39 -0500
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:46302 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728150AbfLLIIj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Dec 2019 03:08:39 -0500
-Received: by mail-qt1-f195.google.com with SMTP id 38so1496231qtb.13
-        for <bpf@vger.kernel.org>; Thu, 12 Dec 2019 00:08:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BJa6R6bLNvGylVw70cAGG7sB0GjXfOC2Z8O74knVzjw=;
-        b=Dtbb4RG0WsOBJF+0YVy0sYY0pvd6BTftmTac0GhA5iQZa8xO2gKTKOUJhdpotc1bPS
-         bcTiWofIHi8GZgQ34OM0KZhc3If2O9DIMkeoPOwuCrlTjzTTisp+rYv1Ospe3oMQfE4h
-         /Oc8x4hB3IOYFtvvujNZoGYtZ8k4VKE9Zp+sF1oWuuFbdfE4lrxMhTOcBSf64j+YvyVO
-         1yOoTb1k7xGPWSlf+iNtF5pboi29jhzcMgVl4xZTMBaGjZUWFvf3GXa2q7QGG8rul6Ea
-         G+X2FAGen2TefDz10Yl9rqR7dgJRK5rTgxh/eG47vkNPqIlLAyIkVlR7CBK2EtXwOUYD
-         vFvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BJa6R6bLNvGylVw70cAGG7sB0GjXfOC2Z8O74knVzjw=;
-        b=ikIFE5v3Y85Ss5nT3QwsMgLa9TQpvlcC9ty3npAxjJMyn84qWGhYQs21tA0SRHRQpW
-         2z65NuPiqp/ja0YGa6GNA9LeXhSRMpPkBNGdOy1T5R0aIVQ6riI3ok7MEVAg5W9hmFAe
-         PW98uQ7Mslt/pi1M5D78o/i48xhrZ+G+o5EE+iwHx0ShLIx86YZqQKofNgdNo6F6+NZd
-         zav9hiR4jHUaS/rsYCXfzOBXgzebcXLnizwoojRkrMoPLubc0r/RLudDGKm+R1cx/JI9
-         atsg3XgyT8YQWlhpit3Amp7Kvwv+k4NayV3JTk+oHRVpjZ4kzGLrbO3NKIYj09anREcY
-         5Apw==
-X-Gm-Message-State: APjAAAXySkoJqrH9gWOwL1M8+o9twe4fsCNmMUEF+WdPcrlZ+/Qdxp9V
-        kexXS9PJHojgHlq3Zt6FZgLTyMXZJIW4Wu8V9PM=
-X-Google-Smtp-Source: APXvYqw13BqFy1mdSdNdiZXWIzK3YYfesdv3c249Xve2NFboLyUy/y5uoTliHmuOY8XC71kB8pR94twHKqmqEFq7dhs=
-X-Received: by 2002:ac8:140c:: with SMTP id k12mr6388830qtj.117.1576138118269;
- Thu, 12 Dec 2019 00:08:38 -0800 (PST)
+        id S1728478AbfLLITh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Dec 2019 03:19:37 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:8747 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728453AbfLLITf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Dec 2019 03:19:35 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5df1f8020003>; Thu, 12 Dec 2019 00:19:15 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 12 Dec 2019 00:19:22 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 12 Dec 2019 00:19:22 -0800
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 12 Dec
+ 2019 08:19:19 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 12 Dec 2019 08:19:20 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5df1f8070009>; Thu, 12 Dec 2019 00:19:19 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v10 13/25] mm/process_vm_access: set FOLL_PIN via pin_user_pages_remote()
+Date:   Thu, 12 Dec 2019 00:19:05 -0800
+Message-ID: <20191212081917.1264184-14-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191212081917.1264184-1-jhubbard@nvidia.com>
+References: <20191212081917.1264184-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-References: <cover.1576031228.git.rdna@fb.com> <ceaea4e9eacdd0f75840f6c2684967342a6af164.1576031228.git.rdna@fb.com>
-In-Reply-To: <ceaea4e9eacdd0f75840f6c2684967342a6af164.1576031228.git.rdna@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 12 Dec 2019 00:08:27 -0800
-Message-ID: <CAEf4BzY0J=RLVdGfVx-WxJc0Zqgx9YMovQmaGcFxmT6-HM0JsQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 4/5] libbpf: Introduce bpf_prog_attach_xattr
-To:     Andrey Ignatov <rdna@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
+X-NVConfidentiality: public
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1576138755; bh=P8nVR+kV72iD6sM0eEn6ntwngrRbmURGxrL6qNBlbv8=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Type:Content-Transfer-Encoding;
+        b=MvIn7JxYckFlYX8qbf14DoVI+n5QUXUO+KWODHbNVA+IVx6MbobQIXA5Oh2UTMVDI
+         dRWRYcAKrV2uSPXfH9r9bA2K1l5ppFULpwLoubFEMLRQsU5vmOdYFT3+F16FzzSSkG
+         YEaFDSHr6dwNYogifTOemGgDAheAAVXPo1E++N0OoHoiKdB7xXNWqhY6zY7SmMLebj
+         vKzMlZJL85yKnUPumtq+6n95Qokeo7uQcQLm7PN053x5/7FKyD9v0J3P7aR9acP1Lf
+         qFLvDlSpDeHMIeE8TCr/S+okJmLLSWCeBjiutBLhgaEHKzdjvBhVKhDl6hovTozm5T
+         rLt7CJREcXzlA==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Dec 10, 2019 at 6:35 PM Andrey Ignatov <rdna@fb.com> wrote:
->
-> Introduce a new bpf_prog_attach_xattr function that accepts an
-> extendable structure and supports passing a new attribute to
-> BPF_PROG_ATTACH command: replace_prog_fd that is fd of previously
-> attached cgroup-bpf program to replace if recently introduced
-> BPF_F_REPLACE flag is used.
->
-> The new function is named to be consistent with other xattr-functions
-> (bpf_prog_test_run_xattr, bpf_create_map_xattr, bpf_load_program_xattr).
->
-> NOTE: DECLARE_LIBBPF_OPTS macro is not used here because it's available
-> in libbpf.h, and unavailable in bpf.h. Please let me know if the macro
-> should be shared in a common place and used here instead of declaring
-> struct bpf_prog_attach_attr directly.
->
+Convert process_vm_access to use the new pin_user_pages_remote()
+call, which sets FOLL_PIN. Setting FOLL_PIN is now required for
+code that requires tracking of pinned pages.
 
-I think doing opts is a better way to go forward. With current
-approach, next time we need another extra field, we'd need to add yet
-another function and/or symbol version existing one. BTW, with
-xxx_opts approach, we tried to keep mandatory arguments that are going
-to be always specified as first few arguments of a function, and other
-stuff that's optional (e.g., flags or replace_prog_fd seem to be good
-candidates), would go under opts. This differs from xattr way, which
-is why I'm pointing this out.
+Also, release the pages via put_user_page*().
 
-> Signed-off-by: Andrey Ignatov <rdna@fb.com>
-> ---
->  tools/lib/bpf/bpf.c      | 22 ++++++++++++++++++----
->  tools/lib/bpf/bpf.h      | 10 ++++++++++
->  tools/lib/bpf/libbpf.map |  5 +++++
->  3 files changed, 33 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 98596e15390f..5a2830fac227 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -466,14 +466,28 @@ int bpf_obj_get(const char *pathname)
->
->  int bpf_prog_attach(int prog_fd, int target_fd, enum bpf_attach_type type,
->                     unsigned int flags)
-> +{
-> +       struct bpf_prog_attach_attr attach_attr;
-> +
-> +       memset(&attach_attr, 0, sizeof(attach_attr));
-> +       attach_attr.target_fd   = target_fd;
-> +       attach_attr.prog_fd     = prog_fd;
-> +       attach_attr.type        = type;
-> +       attach_attr.flags       = flags;
-> +
-> +       return bpf_prog_attach_xattr(&attach_attr);
-> +}
-> +
-> +int bpf_prog_attach_xattr(const struct bpf_prog_attach_attr *attach_attr)
->  {
->         union bpf_attr attr;
->
->         memset(&attr, 0, sizeof(attr));
-> -       attr.target_fd     = target_fd;
-> -       attr.attach_bpf_fd = prog_fd;
-> -       attr.attach_type   = type;
-> -       attr.attach_flags  = flags;
-> +       attr.target_fd     = attach_attr->target_fd;
-> +       attr.attach_bpf_fd = attach_attr->prog_fd;
-> +       attr.attach_type   = attach_attr->type;
-> +       attr.attach_flags  = attach_attr->flags;
-> +       attr.replace_bpf_fd = attach_attr->replace_prog_fd;
->
->         return sys_bpf(BPF_PROG_ATTACH, &attr, sizeof(attr));
->  }
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 3c791fa8e68e..4b7269d3bae7 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -128,8 +128,18 @@ LIBBPF_API int bpf_map_get_next_key(int fd, const void *key, void *next_key);
->  LIBBPF_API int bpf_map_freeze(int fd);
->  LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
->  LIBBPF_API int bpf_obj_get(const char *pathname);
-> +
-> +struct bpf_prog_attach_attr {
-> +       int target_fd;
-> +       int prog_fd;
-> +       enum bpf_attach_type type;
-> +       unsigned int flags;
-> +       int replace_prog_fd;
-> +};
-> +
->  LIBBPF_API int bpf_prog_attach(int prog_fd, int attachable_fd,
->                                enum bpf_attach_type type, unsigned int flags);
-> +LIBBPF_API int bpf_prog_attach_xattr(const struct bpf_prog_attach_attr *attr);
->  LIBBPF_API int bpf_prog_detach(int attachable_fd, enum bpf_attach_type type);
->  LIBBPF_API int bpf_prog_detach2(int prog_fd, int attachable_fd,
->                                 enum bpf_attach_type type);
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 8ddc2c40e482..42b065454031 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -208,3 +208,8 @@ LIBBPF_0.0.6 {
->                 btf__find_by_name_kind;
->                 libbpf_find_vmlinux_btf_id;
->  } LIBBPF_0.0.5;
-> +
-> +LIBBPF_0.0.7 {
-> +       global:
-> +               bpf_prog_attach_xattr;
-> +} LIBBPF_0.0.6;
-> --
-> 2.17.1
->
+Also, rename "pages" to "pinned_pages", as this makes for
+easier reading of process_vm_rw_single_vec().
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+Reviewed-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ mm/process_vm_access.c | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
+
+diff --git a/mm/process_vm_access.c b/mm/process_vm_access.c
+index 357aa7bef6c0..fd20ab675b85 100644
+--- a/mm/process_vm_access.c
++++ b/mm/process_vm_access.c
+@@ -42,12 +42,11 @@ static int process_vm_rw_pages(struct page **pages,
+ 		if (copy > len)
+ 			copy =3D len;
+=20
+-		if (vm_write) {
++		if (vm_write)
+ 			copied =3D copy_page_from_iter(page, offset, copy, iter);
+-			set_page_dirty_lock(page);
+-		} else {
++		else
+ 			copied =3D copy_page_to_iter(page, offset, copy, iter);
+-		}
++
+ 		len -=3D copied;
+ 		if (copied < copy && iov_iter_count(iter))
+ 			return -EFAULT;
+@@ -96,7 +95,7 @@ static int process_vm_rw_single_vec(unsigned long addr,
+ 		flags |=3D FOLL_WRITE;
+=20
+ 	while (!rc && nr_pages && iov_iter_count(iter)) {
+-		int pages =3D min(nr_pages, max_pages_per_loop);
++		int pinned_pages =3D min(nr_pages, max_pages_per_loop);
+ 		int locked =3D 1;
+ 		size_t bytes;
+=20
+@@ -106,14 +105,15 @@ static int process_vm_rw_single_vec(unsigned long add=
+r,
+ 		 * current/current->mm
+ 		 */
+ 		down_read(&mm->mmap_sem);
+-		pages =3D get_user_pages_remote(task, mm, pa, pages, flags,
+-					      process_pages, NULL, &locked);
++		pinned_pages =3D pin_user_pages_remote(task, mm, pa, pinned_pages,
++						     flags, process_pages,
++						     NULL, &locked);
+ 		if (locked)
+ 			up_read(&mm->mmap_sem);
+-		if (pages <=3D 0)
++		if (pinned_pages <=3D 0)
+ 			return -EFAULT;
+=20
+-		bytes =3D pages * PAGE_SIZE - start_offset;
++		bytes =3D pinned_pages * PAGE_SIZE - start_offset;
+ 		if (bytes > len)
+ 			bytes =3D len;
+=20
+@@ -122,10 +122,12 @@ static int process_vm_rw_single_vec(unsigned long add=
+r,
+ 					 vm_write);
+ 		len -=3D bytes;
+ 		start_offset =3D 0;
+-		nr_pages -=3D pages;
+-		pa +=3D pages * PAGE_SIZE;
+-		while (pages)
+-			put_page(process_pages[--pages]);
++		nr_pages -=3D pinned_pages;
++		pa +=3D pinned_pages * PAGE_SIZE;
++
++		/* If vm_write is set, the pages need to be made dirty: */
++		put_user_pages_dirty_lock(process_pages, pinned_pages,
++					  vm_write);
+ 	}
+=20
+ 	return rc;
+--=20
+2.24.0
+
