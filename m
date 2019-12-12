@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 577B9C43603
-	for <bpf@archiver.kernel.org>; Thu, 12 Dec 2019 23:32:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD8AAC43603
+	for <bpf@archiver.kernel.org>; Thu, 12 Dec 2019 23:32:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 27F1A214AF
-	for <bpf@archiver.kernel.org>; Thu, 12 Dec 2019 23:32:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 75D9C214D8
+	for <bpf@archiver.kernel.org>; Thu, 12 Dec 2019 23:32:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="bMdPAXgq"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="OAxdsuc/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731107AbfLLXcA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Dec 2019 18:32:00 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:2118 "EHLO
+        id S1731158AbfLLXcN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Dec 2019 18:32:13 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:29990 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730934AbfLLXcA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 12 Dec 2019 18:32:00 -0500
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBCNVjSg027907
-        for <bpf@vger.kernel.org>; Thu, 12 Dec 2019 15:31:59 -0800
+        by vger.kernel.org with ESMTP id S1730934AbfLLXcN (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 12 Dec 2019 18:32:13 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBCNW6YG014899
+        for <bpf@vger.kernel.org>; Thu, 12 Dec 2019 15:32:12 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=A3sa158hA6zbREWxvxveyq8Gd95yJYYiwnsYK6hgXOc=;
- b=bMdPAXgqqXtfCDUQVAaOPUQ0yDYjhR8Muln85TEXZJ3GDbfnxHmwrJW5b5wkwON5H5wO
- W3SEcG7Sjj4+HcRxQYiNwpgvRku9kulldy/Sivqf1zvWF9HBXVFHDfKvn12xycto+wWt
- V+aanFxtVOR0G4VJcTC8qIMhs6Dk1GmVZ3w= 
+ content-type; s=facebook; bh=OcW1omHt06g7weuVljtwWO3YOx5fc0PEP7yb6YDWVAk=;
+ b=OAxdsuc/1A7waqEzR+kvXtKfuQVDuMNASUqIwAJm8llSxiw8dnZY+vwUrt2+wBnVW/u+
+ f9gf/j/vm26zo7nmmvUaU2XIdPrZPniOSc7/hTT8cz4IdwHttAQS3yqutBxWes1SBWAg
+ 0pqbzMDt45dY1mThOobd0MKY4Re2hGDBzWQ= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wu87qp3n6-14
+        by mx0a-00082601.pphosted.com with ESMTP id 2wub46dape-10
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 12 Dec 2019 15:31:59 -0800
+        for <bpf@vger.kernel.org>; Thu, 12 Dec 2019 15:32:11 -0800
 Received: from intmgw002.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 12 Dec 2019 15:31:10 -0800
+ 15.1.1713.5; Thu, 12 Dec 2019 15:31:26 -0800
 Received: by dev082.prn2.facebook.com (Postfix, from userid 572249)
-        id EE8BE3712A1F; Thu, 12 Dec 2019 15:31:07 -0800 (PST)
+        id 619D43712A1F; Thu, 12 Dec 2019 15:31:25 -0800 (PST)
 Smtp-Origin-Hostprefix: dev
 From:   Andrey Ignatov <rdna@fb.com>
 Smtp-Origin-Hostname: dev082.prn2.facebook.com
@@ -48,9 +48,9 @@ CC:     Andrey Ignatov <rdna@fb.com>, <ast@kernel.org>,
         <daniel@iogearbox.net>, <kafai@fb.com>, <andriin@fb.com>,
         <kernel-team@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 1/6] bpf: Simplify __cgroup_bpf_attach
-Date:   Thu, 12 Dec 2019 15:30:48 -0800
-Message-ID: <25b5a158a89c561088e7106bbc1319220be80ead.1576193131.git.rdna@fb.com>
+Subject: [PATCH v2 bpf-next 6/6] selftests/bpf: Cover BPF_F_REPLACE in test_cgroup_attach
+Date:   Thu, 12 Dec 2019 15:30:53 -0800
+Message-ID: <bc55a274ea572d237bd091819f38502fa837abb5.1576193131.git.rdna@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1576193131.git.rdna@fb.com>
 References: <cover.1576193131.git.rdna@fb.com>
@@ -59,149 +59,157 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-12_08:2019-12-12,2019-12-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- priorityscore=1501 clxscore=1015 impostorscore=0 malwarescore=0
- spamscore=0 mlxscore=0 suspectscore=38 phishscore=0 lowpriorityscore=0
- mlxlogscore=830 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1912120181
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ bulkscore=0 phishscore=0 adultscore=0 priorityscore=1501 mlxlogscore=390
+ lowpriorityscore=0 suspectscore=13 spamscore=0 mlxscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912120181
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-__cgroup_bpf_attach has a lot of identical code to handle two scenarios:
-BPF_F_ALLOW_MULTI is set and unset.
+Test replacement of a cgroup-bpf program attached with BPF_F_ALLOW_MULTI
+and possible failure modes: invalid combination of flags, invalid
+replace_bpf_fd, replacing a non-attachd to specified cgroup program.
 
-Simplify it by splitting the two main steps:
+Example of program replacing:
 
-* First, the decision is made whether a new bpf_prog_list entry should
-  be allocated or existing entry should be reused for the new program.
-  This decision is saved in replace_pl pointer;
+  # gdb -q ./test_cgroup_attach
+  Reading symbols from /data/users/rdna/bin/test_cgroup_attach...done.
+  ...
+  Breakpoint 1, test_multiprog () at test_cgroup_attach.c:443
+  443     test_cgroup_attach.c: No such file or directory.
+  (gdb)
+  [2]+  Stopped                 gdb -q ./test_cgroup_attach
+  # bpftool c s /mnt/cgroup2/cgroup-test-work-dir/cg1
+  ID       AttachType      AttachFlags     Name
+  35       egress          multi
+  36       egress          multi
+  # fg gdb -q ./test_cgroup_attach
+  c
+  Continuing.
+  Detaching after fork from child process 361.
 
-* Next, replace_pl pointer is used to handle both possible states of
-  BPF_F_ALLOW_MULTI flag (set / unset) instead of doing similar work for
-  them separately.
-
-This splitting, in turn, allows to make further simplifications:
-
-* The check for attaching same program twice in BPF_F_ALLOW_MULTI mode
-  can be done before allocating cgroup storage, so that if user tries to
-  attach same program twice no alloc/free happens as it was before;
-
-* pl_was_allocated becomes redundant so it's removed.
+  Breakpoint 2, test_multiprog () at test_cgroup_attach.c:454
+  454     in test_cgroup_attach.c
+  (gdb)
+  [2]+  Stopped                 gdb -q ./test_cgroup_attach
+  # bpftool c s /mnt/cgroup2/cgroup-test-work-dir/cg1
+  ID       AttachType      AttachFlags     Name
+  41       egress          multi
+  36       egress          multi
 
 Signed-off-by: Andrey Ignatov <rdna@fb.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- kernel/bpf/cgroup.c | 62 +++++++++++++++++----------------------------
- 1 file changed, 23 insertions(+), 39 deletions(-)
+ .../selftests/bpf/test_cgroup_attach.c        | 62 +++++++++++++++++--
+ 1 file changed, 57 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 9f90d3c92bda..e8cbdd1be687 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -295,9 +295,8 @@ int __cgroup_bpf_attach(struct cgroup *cgrp, struct bpf_prog *prog,
- 	struct bpf_prog *old_prog = NULL;
- 	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE],
- 		*old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {NULL};
-+	struct bpf_prog_list *pl, *replace_pl = NULL;
- 	enum bpf_cgroup_storage_type stype;
--	struct bpf_prog_list *pl;
--	bool pl_was_allocated;
- 	int err;
+diff --git a/tools/testing/selftests/bpf/test_cgroup_attach.c b/tools/testing/selftests/bpf/test_cgroup_attach.c
+index 7671909ee1cb..6c7971ffe683 100644
+--- a/tools/testing/selftests/bpf/test_cgroup_attach.c
++++ b/tools/testing/selftests/bpf/test_cgroup_attach.c
+@@ -250,7 +250,7 @@ static int prog_load_cnt(int verdict, int val)
+ 		BPF_LD_MAP_FD(BPF_REG_1, map_fd),
+ 		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+ 		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
+-		BPF_MOV64_IMM(BPF_REG_1, val), /* r1 = 1 */
++		BPF_MOV64_IMM(BPF_REG_1, val), /* r1 = val */
+ 		BPF_RAW_INSN(BPF_STX | BPF_XADD | BPF_DW, BPF_REG_0, BPF_REG_1, 0, 0), /* xadd r0 += r1 */
  
- 	if ((flags & BPF_F_ALLOW_OVERRIDE) && (flags & BPF_F_ALLOW_MULTI))
-@@ -317,6 +316,16 @@ int __cgroup_bpf_attach(struct cgroup *cgrp, struct bpf_prog *prog,
- 	if (prog_list_length(progs) >= BPF_CGROUP_MAX_PROGS)
- 		return -E2BIG;
+ 		BPF_LD_MAP_FD(BPF_REG_1, cgroup_storage_fd),
+@@ -290,11 +290,11 @@ static int test_multiprog(void)
+ {
+ 	__u32 prog_ids[4], prog_cnt = 0, attach_flags, saved_prog_id;
+ 	int cg1 = 0, cg2 = 0, cg3 = 0, cg4 = 0, cg5 = 0, key = 0;
+-	int drop_prog, allow_prog[6] = {}, rc = 0;
++	int drop_prog, allow_prog[7] = {}, rc = 0;
+ 	unsigned long long value;
+ 	int i = 0;
  
-+	if (flags & BPF_F_ALLOW_MULTI) {
-+		list_for_each_entry(pl, progs, node) {
-+			if (pl->prog == prog)
-+				/* disallow attaching the same prog twice */
-+				return -EINVAL;
-+		}
-+	} else if (!list_empty(progs)) {
-+		replace_pl = list_first_entry(progs, typeof(*pl), node);
+-	for (i = 0; i < 6; i++) {
++	for (i = 0; i < ARRAY_SIZE(allow_prog); i++) {
+ 		allow_prog[i] = prog_load_cnt(1, 1 << i);
+ 		if (!allow_prog[i])
+ 			goto err;
+@@ -400,6 +400,58 @@ static int test_multiprog(void)
+ 	assert(bpf_map_lookup_elem(map_fd, &key, &value) == 0);
+ 	assert(value == 1 + 2 + 8 + 16);
+ 
++	/* invalid input */
++
++	DECLARE_LIBBPF_OPTS(bpf_prog_attach_opts, attach_opts,
++		.target_fd		= cg1,
++		.prog_fd		= allow_prog[6],
++		.replace_prog_fd	= allow_prog[0],
++		.type			= BPF_CGROUP_INET_EGRESS,
++		.flags			= BPF_F_ALLOW_MULTI | BPF_F_REPLACE,
++	);
++
++	attach_opts.flags = BPF_F_ALLOW_OVERRIDE | BPF_F_REPLACE;
++	if (!bpf_prog_attach_xattr(&attach_opts)) {
++		log_err("Unexpected success with OVERRIDE | REPLACE");
++		goto err;
 +	}
++	assert(errno == EINVAL);
 +
- 	for_each_cgroup_storage_type(stype) {
- 		storage[stype] = bpf_cgroup_storage_alloc(prog, stype);
- 		if (IS_ERR(storage[stype])) {
-@@ -327,52 +336,27 @@ int __cgroup_bpf_attach(struct cgroup *cgrp, struct bpf_prog *prog,
- 		}
- 	}
- 
--	if (flags & BPF_F_ALLOW_MULTI) {
--		list_for_each_entry(pl, progs, node) {
--			if (pl->prog == prog) {
--				/* disallow attaching the same prog twice */
--				for_each_cgroup_storage_type(stype)
--					bpf_cgroup_storage_free(storage[stype]);
--				return -EINVAL;
--			}
-+	if (replace_pl) {
-+		pl = replace_pl;
-+		old_prog = pl->prog;
-+		for_each_cgroup_storage_type(stype) {
-+			old_storage[stype] = pl->storage[stype];
-+			bpf_cgroup_storage_unlink(old_storage[stype]);
- 		}
--
-+	} else {
- 		pl = kmalloc(sizeof(*pl), GFP_KERNEL);
- 		if (!pl) {
- 			for_each_cgroup_storage_type(stype)
- 				bpf_cgroup_storage_free(storage[stype]);
- 			return -ENOMEM;
- 		}
--
--		pl_was_allocated = true;
--		pl->prog = prog;
--		for_each_cgroup_storage_type(stype)
--			pl->storage[stype] = storage[stype];
- 		list_add_tail(&pl->node, progs);
--	} else {
--		if (list_empty(progs)) {
--			pl = kmalloc(sizeof(*pl), GFP_KERNEL);
--			if (!pl) {
--				for_each_cgroup_storage_type(stype)
--					bpf_cgroup_storage_free(storage[stype]);
--				return -ENOMEM;
--			}
--			pl_was_allocated = true;
--			list_add_tail(&pl->node, progs);
--		} else {
--			pl = list_first_entry(progs, typeof(*pl), node);
--			old_prog = pl->prog;
--			for_each_cgroup_storage_type(stype) {
--				old_storage[stype] = pl->storage[stype];
--				bpf_cgroup_storage_unlink(old_storage[stype]);
--			}
--			pl_was_allocated = false;
--		}
--		pl->prog = prog;
--		for_each_cgroup_storage_type(stype)
--			pl->storage[stype] = storage[stype];
- 	}
- 
-+	pl->prog = prog;
-+	for_each_cgroup_storage_type(stype)
-+		pl->storage[stype] = storage[stype];
++	attach_opts.flags = BPF_F_REPLACE;
++	if (!bpf_prog_attach_xattr(&attach_opts)) {
++		log_err("Unexpected success with REPLACE alone");
++		goto err;
++	}
++	assert(errno == EINVAL);
++	attach_opts.flags = BPF_F_ALLOW_MULTI | BPF_F_REPLACE;
 +
- 	cgrp->bpf.flags[type] = flags;
++	attach_opts.replace_prog_fd = -1;
++	if (!bpf_prog_attach_xattr(&attach_opts)) {
++		log_err("Unexpected success with bad replace fd");
++		goto err;
++	}
++	assert(errno == EBADF);
++
++	/* replacing a program that is not attached to cgroup should fail  */
++	attach_opts.replace_prog_fd = allow_prog[3];
++	if (!bpf_prog_attach_xattr(&attach_opts)) {
++		log_err("Unexpected success: replace not-attached prog on cg1");
++		goto err;
++	}
++	assert(errno == ENOENT);
++	attach_opts.replace_prog_fd = allow_prog[0];
++
++	/* replace 1st from the top program */
++	if (bpf_prog_attach_xattr(&attach_opts)) {
++		log_err("Replace prog1 with prog7 on cg1");
++		goto err;
++	}
++	value = 0;
++	assert(bpf_map_update_elem(map_fd, &key, &value, 0) == 0);
++	assert(system(PING_CMD) == 0);
++	assert(bpf_map_lookup_elem(map_fd, &key, &value) == 0);
++	assert(value == 64 + 2 + 8 + 16);
++
+ 	/* detach 3rd from bottom program and ping again */
+ 	errno = 0;
+ 	if (!bpf_prog_detach2(0, cg3, BPF_CGROUP_INET_EGRESS)) {
+@@ -414,7 +466,7 @@ static int test_multiprog(void)
+ 	assert(bpf_map_update_elem(map_fd, &key, &value, 0) == 0);
+ 	assert(system(PING_CMD) == 0);
+ 	assert(bpf_map_lookup_elem(map_fd, &key, &value) == 0);
+-	assert(value == 1 + 2 + 16);
++	assert(value == 64 + 2 + 16);
  
- 	err = update_effective_progs(cgrp, type);
-@@ -401,7 +385,7 @@ int __cgroup_bpf_attach(struct cgroup *cgrp, struct bpf_prog *prog,
- 		pl->storage[stype] = old_storage[stype];
- 		bpf_cgroup_storage_link(old_storage[stype], cgrp, type);
- 	}
--	if (pl_was_allocated) {
-+	if (!replace_pl) {
- 		list_del(&pl->node);
- 		kfree(pl);
- 	}
+ 	/* detach 2nd from bottom program and ping again */
+ 	if (bpf_prog_detach2(-1, cg4, BPF_CGROUP_INET_EGRESS)) {
+@@ -425,7 +477,7 @@ static int test_multiprog(void)
+ 	assert(bpf_map_update_elem(map_fd, &key, &value, 0) == 0);
+ 	assert(system(PING_CMD) == 0);
+ 	assert(bpf_map_lookup_elem(map_fd, &key, &value) == 0);
+-	assert(value == 1 + 2 + 4);
++	assert(value == 64 + 2 + 4);
+ 
+ 	prog_cnt = 4;
+ 	assert(bpf_prog_query(cg5, BPF_CGROUP_INET_EGRESS, BPF_F_QUERY_EFFECTIVE,
 -- 
 2.17.1
 
