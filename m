@@ -2,39 +2,53 @@ Return-Path: <SRS0=VESP=2D=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE9D7C7E0A8
-	for <bpf@archiver.kernel.org>; Fri, 13 Dec 2019 20:40:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1105C7E0B2
+	for <bpf@archiver.kernel.org>; Fri, 13 Dec 2019 20:40:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ECCD324765
-	for <bpf@archiver.kernel.org>; Fri, 13 Dec 2019 20:40:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 302E124790
+	for <bpf@archiver.kernel.org>; Fri, 13 Dec 2019 20:40:43 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="YkA/V1Sr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728533AbfLMSnk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Dec 2019 13:43:40 -0500
-Received: from smtprelay0166.hostedemail.com ([216.40.44.166]:35700 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728473AbfLMSnk (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 13 Dec 2019 13:43:40 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 39AD7182CED28;
-        Fri, 13 Dec 2019 18:43:38 +0000 (UTC)
-X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-HE-Tag: flame51_59855085f2047
-X-Filterd-Recvd-Size: 2377
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (Authenticated sender: nevets@goodmis.org)
-        by omf14.hostedemail.com (Postfix) with ESMTPA;
-        Fri, 13 Dec 2019 18:43:35 +0000 (UTC)
-Date:   Fri, 13 Dec 2019 13:43:33 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNl?= =?UTF-8?B?bg==?= 
-        <toke@redhat.com>, Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        id S1728612AbfLMSqu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Dec 2019 13:46:50 -0500
+Received: from merlin.infradead.org ([205.233.59.134]:51506 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728455AbfLMSqu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 13 Dec 2019 13:46:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=k6bX98yPAK/DWwqLyqs0Jt4qhMgt0hIUQCq2lotOApw=; b=YkA/V1SrXrgr0WXo9DcHht8QV
+        TqqvJGWVNJ6H22xf5/TmBH5JgYQ+V8YnsfttRvffykjeXO/T0IJaOx6TfbpGuJmbI20AShiBsLviH
+        Bx+S36f+y68qo6Gtjin0PdmZCwQwIafgVKXbpaChYxWwD7Kypcwa/WBmNgNq6Tm5lEU2xDq5US6wi
+        RhYQnyNqDrFfqXBY9Akut+5Wcg4IoqT2d4eKWwvWy+vpOzwMNJCJ6l3au5yMxCWC3JR2tgQcD/dE1
+        rjVZ65tfajlnPupA8sseaU5pKyx+UtyJVZDZ+pL4RdH9iVO/BvHjnp5H/rnJq3lZ666WrEuCYCMk1
+        Ei24SjF4w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1ifpxG-000125-Ir; Fri, 13 Dec 2019 18:46:22 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3E5C03058B4;
+        Fri, 13 Dec 2019 19:45:00 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 232B829D73AB4; Fri, 13 Dec 2019 19:46:21 +0100 (CET)
+Date:   Fri, 13 Dec 2019 19:46:21 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         lkml <linux-kernel@vger.kernel.org>,
@@ -48,40 +62,55 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         Quentin Monnet <quentin.monnet@netronome.com>
-Subject: Re: [RFC] btf: Some structs are doubled because of struct
- ring_buffer
-Message-ID: <20191213134333.19335555@gandalf.local.home>
-In-Reply-To: <20191213183646.GB8994@krava>
+Subject: Re: [RFC] btf: Some structs are doubled because of struct ring_buffer
+Message-ID: <20191213184621.GG2844@hirez.programming.kicks-ass.net>
 References: <20191213153553.GE20583@krava>
-        <20191213112438.773dff35@gandalf.local.home>
-        <20191213165155.vimm27wo7brkh3yu@ast-mbp.dhcp.thefacebook.com>
-        <20191213121118.236f55b8@gandalf.local.home>
-        <20191213180223.GE2844@hirez.programming.kicks-ass.net>
-        <20191213132941.6fa2d1bd@gandalf.local.home>
-        <20191213183646.GB8994@krava>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+ <20191213112438.773dff35@gandalf.local.home>
+ <20191213165155.vimm27wo7brkh3yu@ast-mbp.dhcp.thefacebook.com>
+ <20191213121118.236f55b8@gandalf.local.home>
+ <20191213180223.GE2844@hirez.programming.kicks-ass.net>
+ <20191213132941.6fa2d1bd@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191213132941.6fa2d1bd@gandalf.local.home>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 13 Dec 2019 19:36:46 +0100
-Jiri Olsa <jolsa@redhat.com> wrote:
+On Fri, Dec 13, 2019 at 01:29:41PM -0500, Steven Rostedt wrote:
+> On Fri, 13 Dec 2019 19:02:23 +0100
+> Peter Zijlstra <peterz@infradead.org> wrote:
 
-> > Thinking about this, perhaps we should remove the word "ring" from
-> > both. That is:
-> > 
-> >   perf_buffer and trace_buffer ?  
+> > Your ring buffer was so generic that I gave up trying to use it after
+> > trying for days :-( (the fundamental problem was that it was impossible
+> > to have a single cpu buffer; afaik that is still true today)
 > 
-> sounds good to me.. and too good to be true ;-)
-> please let me know if I should send the perf change
+> Yeah, but that could have been fixed, and the only reason it's not
+> today, is because it requires more overhead to do so.
+> 
+> IIRC, the main reason that you didn't use it then, is because it wasn't
+> fully lockless at the time (it is today), and you couldn't use it from
+> NMI context.
 
-Note, changing the other one is a lot more invasive. It's not as easy
-as I thought. I forgot that even blktrace uses it. And a lot of the
-trace event code is tied to the ring buffer code, as well as every
-tracer.
+What I remember is that I couldn't get a single cpu buffer, the whole
+per-cpu stuff was mangled in at the wrong layer. But who knows, my
+memory is faulty.
 
--- Steve
+
+> > How about we rename both? I'm a bit adverse to long names, so how about
+> > we rename the perf one to perf_buffer and the trace one to trace_buffer?
+> 
+> I'm fine with this idea! Now what do we call the ring buffer that
+> tracing uses, as it is not specific for tracing, it was optimized for
+> splicing. But sure, I can rename it to trace_buffer. I just finished
+> renaming perf's...
+> 
+> Thinking about this, perhaps we should remove the word "ring" from
+> both. That is:
+> 
+>   perf_buffer and trace_buffer ?
+
+That's what I just proposed, right? So ACK on that ;-)
