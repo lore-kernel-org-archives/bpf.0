@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A865AC43603
-	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04963C43603
+	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9842121655
-	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD4CA24125
+	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="pBzIR0uG"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jYSWf1H/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726931AbfLNBoN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Dec 2019 20:44:13 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:56264 "EHLO
+        id S1726976AbfLNBoS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Dec 2019 20:44:18 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:30916 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726916AbfLNBoL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 13 Dec 2019 20:44:11 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBE1aW8i023663
-        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:44:10 -0800
+        by vger.kernel.org with ESMTP id S1726968AbfLNBoR (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 13 Dec 2019 20:44:17 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBE1iEJ9004189
+        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:44:17 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=/x3pC75SO4L/lcCegdihmJjF8hBUx/f95tnWtXjEtb4=;
- b=pBzIR0uGopepBolgfCg3axUFb+kD1k8j5D0ssphEz5NcheVIdwf0a9shNnImN8z8ActT
- wWOq3G0XHllTG1qHvoZOn6SEGEzslas3gn0Hgy/Tyy+lFmqeMR3kngxqccAc5zcL7uGw
- pwgMfbG3LhA+L9uazzyNq3tnrG0IdMkxYHg= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wvkm20n21-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:44:10 -0800
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 13 Dec 2019 17:44:09 -0800
+ content-type; s=facebook; bh=MJYO7O2IlWjl6Ql+2uc+AbDrOWQy3lSeh+3EvgIF7VQ=;
+ b=jYSWf1H/NszNutaK7NtLf5PIC5RiLrjUffxfMxHh3dF3CjNR67MjY0xg3lOFFFsj9P2j
+ pNlrrONdcSF2og/9yo5afQpx9D8icW+GOAFsP853Txh2aX7m7G5yKWtqOdLIl2cLqECF
+ YFIjqauyqB5R6GBfvImPw9DSqWyeFS2LreU= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wvjpr0x5y-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:44:17 -0800
+Received: from intmgw002.05.ash5.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::128) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Fri, 13 Dec 2019 17:43:56 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 8EAD12EC1D51; Fri, 13 Dec 2019 17:44:08 -0800 (PST)
+        id DDB3E2EC1D51; Fri, 13 Dec 2019 17:43:54 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 11/17] libbpf: reduce log level of supported section names dump
-Date:   Fri, 13 Dec 2019 17:43:35 -0800
-Message-ID: <20191214014341.3442258-12-andriin@fb.com>
+Subject: [PATCH v4 bpf-next 05/17] libbpf: extract common user-facing helpers
+Date:   Fri, 13 Dec 2019 17:43:29 -0800
+Message-ID: <20191214014341.3442258-6-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191214014341.3442258-1-andriin@fb.com>
 References: <20191214014341.3442258-1-andriin@fb.com>
@@ -59,40 +59,166 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-13_09:2019-12-13,2019-12-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- phishscore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501
- mlxlogscore=856 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
- clxscore=1015 suspectscore=25 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1912140006
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ malwarescore=0 bulkscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ adultscore=0 lowpriorityscore=0 suspectscore=8 phishscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912140007
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It's quite spammy. And now that bpf_object__open() is trying to determine
-program type from its section name, we are getting these verbose messages all
-the time. Reduce their log level to DEBUG.
+LIBBPF_API and DECLARE_LIBBPF_OPTS are needed in many public libbpf API
+headers. Extract them into libbpf_common.h to avoid unnecessary
+interdependency between btf.h, libbpf.h, and bpf.h or code duplication.
 
-Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/bpf/bpf.h           |  6 ++----
+ tools/lib/bpf/btf.h           |  6 ++----
+ tools/lib/bpf/libbpf.h        | 28 ++------------------------
+ tools/lib/bpf/libbpf_common.h | 38 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 44 insertions(+), 34 deletions(-)
+ create mode 100644 tools/lib/bpf/libbpf_common.h
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 3488ac4f7015..b6bd6c47c919 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5196,7 +5196,7 @@ int libbpf_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
- 	pr_warn("failed to guess program type from ELF section '%s'\n", name);
- 	type_names = libbpf_get_type_names(false);
- 	if (type_names != NULL) {
--		pr_info("supported section(type) names are:%s\n", type_names);
-+		pr_debug("supported section(type) names are:%s\n", type_names);
- 		free(type_names);
- 	}
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 3c791fa8e68e..269807ce9ef5 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -28,14 +28,12 @@
+ #include <stddef.h>
+ #include <stdint.h>
  
++#include "libbpf_common.h"
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+ 
+-#ifndef LIBBPF_API
+-#define LIBBPF_API __attribute__((visibility("default")))
+-#endif
+-
+ struct bpf_create_map_attr {
+ 	const char *name;
+ 	enum bpf_map_type map_type;
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index d9ac73a02cde..5fc23b988deb 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -8,14 +8,12 @@
+ #include <linux/btf.h>
+ #include <linux/types.h>
+ 
++#include "libbpf_common.h"
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+ 
+-#ifndef LIBBPF_API
+-#define LIBBPF_API __attribute__((visibility("default")))
+-#endif
+-
+ #define BTF_ELF_SEC ".BTF"
+ #define BTF_EXT_ELF_SEC ".BTF.ext"
+ #define MAPS_ELF_SEC ".maps"
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index fa803dde1f46..49e6fa01024b 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -17,14 +17,12 @@
+ #include <sys/types.h>  // for size_t
+ #include <linux/bpf.h>
+ 
++#include "libbpf_common.h"
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+ 
+-#ifndef LIBBPF_API
+-#define LIBBPF_API __attribute__((visibility("default")))
+-#endif
+-
+ enum libbpf_errno {
+ 	__LIBBPF_ERRNO__START = 4000,
+ 
+@@ -67,28 +65,6 @@ struct bpf_object_open_attr {
+ 	enum bpf_prog_type prog_type;
+ };
+ 
+-/* Helper macro to declare and initialize libbpf options struct
+- *
+- * This dance with uninitialized declaration, followed by memset to zero,
+- * followed by assignment using compound literal syntax is done to preserve
+- * ability to use a nice struct field initialization syntax and **hopefully**
+- * have all the padding bytes initialized to zero. It's not guaranteed though,
+- * when copying literal, that compiler won't copy garbage in literal's padding
+- * bytes, but that's the best way I've found and it seems to work in practice.
+- *
+- * Macro declares opts struct of given type and name, zero-initializes,
+- * including any extra padding, it with memset() and then assigns initial
+- * values provided by users in struct initializer-syntax as varargs.
+- */
+-#define DECLARE_LIBBPF_OPTS(TYPE, NAME, ...)				    \
+-	struct TYPE NAME = ({ 						    \
+-		memset(&NAME, 0, sizeof(struct TYPE));			    \
+-		(struct TYPE) {						    \
+-			.sz = sizeof(struct TYPE),			    \
+-			__VA_ARGS__					    \
+-		};							    \
+-	})
+-
+ struct bpf_object_open_opts {
+ 	/* size of this struct, for forward/backward compatiblity */
+ 	size_t sz;
+diff --git a/tools/lib/bpf/libbpf_common.h b/tools/lib/bpf/libbpf_common.h
+new file mode 100644
+index 000000000000..4fb833840961
+--- /dev/null
++++ b/tools/lib/bpf/libbpf_common.h
+@@ -0,0 +1,38 @@
++/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
++
++/*
++ * Common user-facing libbpf helpers.
++ *
++ * Copyright (c) 2019 Facebook
++ */
++
++#ifndef __LIBBPF_LIBBPF_COMMON_H
++#define __LIBBPF_LIBBPF_COMMON_H
++
++#ifndef LIBBPF_API
++#define LIBBPF_API __attribute__((visibility("default")))
++#endif
++
++/* Helper macro to declare and initialize libbpf options struct
++ *
++ * This dance with uninitialized declaration, followed by memset to zero,
++ * followed by assignment using compound literal syntax is done to preserve
++ * ability to use a nice struct field initialization syntax and **hopefully**
++ * have all the padding bytes initialized to zero. It's not guaranteed though,
++ * when copying literal, that compiler won't copy garbage in literal's padding
++ * bytes, but that's the best way I've found and it seems to work in practice.
++ *
++ * Macro declares opts struct of given type and name, zero-initializes,
++ * including any extra padding, it with memset() and then assigns initial
++ * values provided by users in struct initializer-syntax as varargs.
++ */
++#define DECLARE_LIBBPF_OPTS(TYPE, NAME, ...)				    \
++	struct TYPE NAME = ({ 						    \
++		memset(&NAME, 0, sizeof(struct TYPE));			    \
++		(struct TYPE) {						    \
++			.sz = sizeof(struct TYPE),			    \
++			__VA_ARGS__					    \
++		};							    \
++	})
++
++#endif /* __LIBBPF_LIBBPF_COMMON_H */
 -- 
 2.17.1
 
