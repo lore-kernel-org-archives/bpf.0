@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EE22C3F68F
-	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C013C43603
+	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:45:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 09D3A2077B
-	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 523C52077B
+	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:45:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QCKi3LEn"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mW0fJ9yP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbfLNBo5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Dec 2019 20:44:57 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:51874 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727036AbfLNBo4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 13 Dec 2019 20:44:56 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBE1iEJU004189
-        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:44:55 -0800
+        id S1727036AbfLNBpC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Dec 2019 20:45:02 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:31786 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726422AbfLNBpB (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 13 Dec 2019 20:45:01 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBE1is8J030365
+        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:45:00 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=jGI/Jzkld73qMzs6xUv5jZJR6aWjeJSfCOCfbpbSCRE=;
- b=QCKi3LEny9zxscui7P1EvLX2sHVrQ6rDT2Ve1Mpc5HLc7Boyz9SrP5g1hR6fYsb0bDSg
- eslWdTOdxMDFJx0Qea0tZiliidO42z4mfinrcdNC77Eg/Gif6D4uaG0ZItBnHGTbs7F4
- oKLGBXZyfdfP1L4pU0B1+MPKgNPFpMpYdgc= 
+ content-type; s=facebook; bh=bLFzE3Y3sVf2dPIjfmvxNQFVV/5xlFFicvTHEi0xYEQ=;
+ b=mW0fJ9yPbqc266r+/7BHhU4PaHBX+V4KCLkxRBq2EX/pwhas0j9DKCkhGhDagzkfh21u
+ CQEmfLr6Z+ITUoWgF6ZtcloQyLH/LctYJGhUOtgr2rZdCu4lEUGxoOw26zaMTOffcGCF
+ +UXTjvsDP/qvECygWPKLse0aaWQ9WvMKUbw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wvjpr0x7c-11
+        by mx0a-00082601.pphosted.com with ESMTP id 2wv1r0w2pa-19
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:44:55 -0800
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:45:00 -0800
+Received: from intmgw001.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 13 Dec 2019 17:44:16 -0800
+ 15.1.1713.5; Fri, 13 Dec 2019 17:44:12 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 504072EC1D51; Fri, 13 Dec 2019 17:44:15 -0800 (PST)
+        id C6E7C2EC1D51; Fri, 13 Dec 2019 17:44:10 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 14/17] selftests/bpf: add BPF skeletons selftests and convert attach_probe.c
-Date:   Fri, 13 Dec 2019 17:43:38 -0800
-Message-ID: <20191214014341.3442258-15-andriin@fb.com>
+Subject: [PATCH v4 bpf-next 12/17] libbpf: add BPF object skeleton support
+Date:   Fri, 13 Dec 2019 17:43:36 -0800
+Message-ID: <20191214014341.3442258-13-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191214014341.3442258-1-andriin@fb.com>
 References: <20191214014341.3442258-1-andriin@fb.com>
@@ -59,401 +59,268 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-13_09:2019-12-13,2019-12-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- malwarescore=0 bulkscore=0 impostorscore=0 spamscore=0 priorityscore=1501
- adultscore=0 lowpriorityscore=0 suspectscore=9 phishscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912140007
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ priorityscore=1501 clxscore=1015 bulkscore=0 spamscore=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 impostorscore=0 phishscore=0
+ mlxlogscore=999 suspectscore=25 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-1912140007
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add BPF skeleton generation to selftest/bpf's Makefile. Convert attach_probe.c
-to use skeleton.
+Add new set of APIs, allowing to open/load/attach BPF object through BPF
+object skeleton, generated by bpftool for a specific BPF object file. All the
+xxx_skeleton() APIs wrap up corresponding bpf_object_xxx() APIs, but
+additionally also automate map/program lookups by name, global data
+initialization and mmap()-ing, etc.  All this greatly improves and simplifies
+userspace usability of working with BPF programs. See follow up patches for
+examples.
 
 Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/.gitignore        |   2 +
- tools/testing/selftests/bpf/Makefile          |  36 +++--
- .../selftests/bpf/prog_tests/attach_probe.c   | 135 +++++-------------
- .../selftests/bpf/progs/test_attach_probe.c   |  34 ++---
- 4 files changed, 74 insertions(+), 133 deletions(-)
+ tools/lib/bpf/libbpf.c   | 162 +++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.h   |  38 +++++++++
+ tools/lib/bpf/libbpf.map |   5 ++
+ 3 files changed, 205 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index 419652458da4..ce5af95ede42 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -38,5 +38,7 @@ test_hashmap
- test_btf_dump
- xdping
- test_cpp
-+*.skel.h
- /no_alu32
- /bpf_gcc
-+/tools
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 90de7d75b5c6..f70c8e735120 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -3,10 +3,12 @@ include ../../../../scripts/Kbuild.include
- include ../../../scripts/Makefile.arch
- 
- CURDIR := $(abspath .)
--LIBDIR := $(abspath ../../../lib)
-+TOOLSDIR := $(abspath ../../..)
-+LIBDIR := $(TOOLSDIR)/lib
- BPFDIR := $(LIBDIR)/bpf
--TOOLSDIR := $(abspath ../../../include)
--APIDIR := $(TOOLSDIR)/uapi
-+TOOLSINCDIR := $(TOOLSDIR)/include
-+BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
-+APIDIR := $(TOOLSINCDIR)/uapi
- GENDIR := $(abspath ../../../../include/generated)
- GENHDR := $(GENDIR)/autoconf.h
- 
-@@ -19,7 +21,7 @@ LLC		?= llc
- LLVM_OBJCOPY	?= llvm-objcopy
- BPF_GCC		?= $(shell command -v bpf-gcc;)
- CFLAGS += -g -Wall -O2 $(GENFLAGS) -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR)	\
--	  -I$(GENDIR) -I$(TOOLSDIR) -I$(CURDIR)				\
-+	  -I$(GENDIR) -I$(TOOLSINCDIR) -I$(CURDIR)			\
- 	  -Dbpf_prog_load=bpf_prog_test_load				\
- 	  -Dbpf_load_program=bpf_test_load_program
- LDLIBS += -lcap -lelf -lrt -lpthread
-@@ -117,6 +119,12 @@ $(OUTPUT)/test_cgroup_attach: cgroup_helpers.c
- # force a rebuild of BPFOBJ when its dependencies are updated
- force:
- 
-+DEFAULT_BPFTOOL := $(OUTPUT)/tools/usr/local/sbin/bpftool
-+BPFTOOL ?= $(DEFAULT_BPFTOOL)
-+
-+$(DEFAULT_BPFTOOL): force
-+	$(MAKE) -C $(BPFTOOLDIR) DESTDIR=$(OUTPUT)/tools install
-+
- $(BPFOBJ): force
- 	$(MAKE) -C $(BPFDIR) OUTPUT=$(OUTPUT)/
- 
-@@ -180,6 +188,8 @@ define GCC_BPF_BUILD_RULE
- 	$(BPF_GCC) $3 $4 -O2 -c $1 -o $2
- endef
- 
-+SKEL_BLACKLIST := btf__% test_pinning_invalid.c
-+
- # Set up extra TRUNNER_XXX "temporary" variables in the environment (relies on
- # $eval()) and pass control to DEFINE_TEST_RUNNER_RULES.
- # Parameters:
-@@ -195,8 +205,11 @@ TRUNNER_EXTRA_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o,		\
- 				 $$(filter %.c,$(TRUNNER_EXTRA_SOURCES)))
- TRUNNER_EXTRA_HDRS := $$(filter %.h,$(TRUNNER_EXTRA_SOURCES))
- TRUNNER_TESTS_HDR := $(TRUNNER_TESTS_DIR)/tests.h
--TRUNNER_BPF_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o,		\
--				$$(notdir $$(wildcard $(TRUNNER_BPF_PROGS_DIR)/*.c)))
-+TRUNNER_BPF_SRCS := $$(notdir $$(wildcard $(TRUNNER_BPF_PROGS_DIR)/*.c))
-+TRUNNER_BPF_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o, $$(TRUNNER_BPF_SRCS))
-+TRUNNER_BPF_SKELS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.skel.h,	\
-+				 $$(filter-out $(SKEL_BLACKLIST),	\
-+					       $$(TRUNNER_BPF_SRCS)))
- 
- # Evaluate rules now with extra TRUNNER_XXX variables above already defined
- $$(eval $$(call DEFINE_TEST_RUNNER_RULES,$1,$2))
-@@ -226,6 +239,11 @@ $(TRUNNER_BPF_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
- 	$$(call $(TRUNNER_BPF_BUILD_RULE),$$<,$$@,			\
- 					  $(TRUNNER_BPF_CFLAGS),	\
- 					  $(TRUNNER_BPF_LDFLAGS))
-+
-+$(TRUNNER_BPF_SKELS): $(TRUNNER_OUTPUT)/%.skel.h:			\
-+		      $(TRUNNER_OUTPUT)/%.o				\
-+		      | $(BPFTOOL) $(TRUNNER_OUTPUT)
-+	$$(BPFTOOL) gen skeleton $$< > $$@
- endif
- 
- # ensure we set up tests.h header generation rule just once
-@@ -245,6 +263,7 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
- 		      $(TRUNNER_TESTS_DIR)/%.c				\
- 		      $(TRUNNER_EXTRA_HDRS)				\
- 		      $(TRUNNER_BPF_OBJS)				\
-+		      $(TRUNNER_BPF_SKELS)				\
- 		      $$(BPFOBJ) | $(TRUNNER_OUTPUT)
- 	cd $$(@D) && $$(CC) $$(CFLAGS) -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F)
- 
-@@ -255,9 +274,9 @@ $(TRUNNER_EXTRA_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
- 		       $$(BPFOBJ) | $(TRUNNER_OUTPUT)
- 	$$(CC) $$(CFLAGS) -c $$< $$(LDLIBS) -o $$@
- 
-+# only copy extra resources if in flavored build
- $(TRUNNER_BINARY)-extras: $(TRUNNER_EXTRA_FILES) | $(TRUNNER_OUTPUT)
- ifneq ($2,)
--	# only copy extra resources if in flavored build
- 	cp -a $$^ $(TRUNNER_OUTPUT)/
- endif
- 
-@@ -323,4 +342,5 @@ $(OUTPUT)/test_cpp: test_cpp.cpp $(BPFOBJ)
- 
- EXTRA_CLEAN := $(TEST_CUSTOM_PROGS)					\
- 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
--	feature $(OUTPUT)/*.o $(OUTPUT)/no_alu32 $(OUTPUT)/bpf_gcc
-+	feature $(OUTPUT)/*.o $(OUTPUT)/no_alu32 $(OUTPUT)/bpf_gcc	\
-+	tools *.skel.h
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index b2e7c1424b07..60da1d08daa0 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include "test_attach_probe.skel.h"
- 
- ssize_t get_base_addr() {
- 	size_t start;
-@@ -25,26 +26,10 @@ BPF_EMBED_OBJ(probe, "test_attach_probe.o");
- 
- void test_attach_probe(void)
- {
--	const char *kprobe_name = "kprobe/sys_nanosleep";
--	const char *kretprobe_name = "kretprobe/sys_nanosleep";
--	const char *uprobe_name = "uprobe/trigger_func";
--	const char *uretprobe_name = "uretprobe/trigger_func";
--	const int kprobe_idx = 0, kretprobe_idx = 1;
--	const int uprobe_idx = 2, uretprobe_idx = 3;
--	const char *obj_name = "attach_probe";
--	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, open_opts,
--		.object_name = obj_name,
--		.relaxed_maps = true,
--	);
--	struct bpf_program *kprobe_prog, *kretprobe_prog;
--	struct bpf_program *uprobe_prog, *uretprobe_prog;
--	struct bpf_object *obj;
--	int err, duration = 0, res;
--	struct bpf_link *kprobe_link = NULL;
--	struct bpf_link *kretprobe_link = NULL;
--	struct bpf_link *uprobe_link = NULL;
--	struct bpf_link *uretprobe_link = NULL;
--	int results_map_fd;
-+	int duration = 0;
-+	struct bpf_link *kprobe_link, *kretprobe_link;
-+	struct bpf_link *uprobe_link, *uretprobe_link;
-+	struct test_attach_probe* skel;
- 	size_t uprobe_offset;
- 	ssize_t base_addr;
- 
-@@ -54,124 +39,68 @@ void test_attach_probe(void)
- 		return;
- 	uprobe_offset = (size_t)&get_base_addr - base_addr;
- 
--	/* open object */
--	obj = bpf_object__open_mem(probe_embed.data, probe_embed.size,
--				   &open_opts);
--	if (CHECK(IS_ERR(obj), "obj_open_mem", "err %ld\n", PTR_ERR(obj)))
-+	skel = test_attach_probe__open_and_load(&probe_embed);
-+	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
- 		return;
--
--	if (CHECK(strcmp(bpf_object__name(obj), obj_name), "obj_name",
--		  "wrong obj name '%s', expected '%s'\n",
--		  bpf_object__name(obj), obj_name))
--		goto cleanup;
--
--	kprobe_prog = bpf_object__find_program_by_title(obj, kprobe_name);
--	if (CHECK(!kprobe_prog, "find_probe",
--		  "prog '%s' not found\n", kprobe_name))
--		goto cleanup;
--	kretprobe_prog = bpf_object__find_program_by_title(obj, kretprobe_name);
--	if (CHECK(!kretprobe_prog, "find_probe",
--		  "prog '%s' not found\n", kretprobe_name))
--		goto cleanup;
--	uprobe_prog = bpf_object__find_program_by_title(obj, uprobe_name);
--	if (CHECK(!uprobe_prog, "find_probe",
--		  "prog '%s' not found\n", uprobe_name))
--		goto cleanup;
--	uretprobe_prog = bpf_object__find_program_by_title(obj, uretprobe_name);
--	if (CHECK(!uretprobe_prog, "find_probe",
--		  "prog '%s' not found\n", uretprobe_name))
-+	if (CHECK(!skel->bss, "check_bss", ".bss wasn't mmap()-ed\n"))
- 		goto cleanup;
- 
--	/* create maps && load programs */
--	err = bpf_object__load(obj);
--	if (CHECK(err, "obj_load", "err %d\n", err))
--		goto cleanup;
--
--	/* load maps */
--	results_map_fd = bpf_find_map(__func__, obj, "results_map");
--	if (CHECK(results_map_fd < 0, "find_results_map",
--		  "err %d\n", results_map_fd))
--		goto cleanup;
--
--	kprobe_link = bpf_program__attach_kprobe(kprobe_prog,
-+	kprobe_link = bpf_program__attach_kprobe(skel->progs.handle_kprobe,
- 						 false /* retprobe */,
- 						 SYS_NANOSLEEP_KPROBE_NAME);
- 	if (CHECK(IS_ERR(kprobe_link), "attach_kprobe",
--		  "err %ld\n", PTR_ERR(kprobe_link))) {
--		kprobe_link = NULL;
-+		  "err %ld\n", PTR_ERR(kprobe_link)))
- 		goto cleanup;
--	}
--	kretprobe_link = bpf_program__attach_kprobe(kretprobe_prog,
-+	skel->links.handle_kprobe = kprobe_link;
-+
-+	kretprobe_link = bpf_program__attach_kprobe(skel->progs.handle_kretprobe,
- 						    true /* retprobe */,
- 						    SYS_NANOSLEEP_KPROBE_NAME);
- 	if (CHECK(IS_ERR(kretprobe_link), "attach_kretprobe",
--		  "err %ld\n", PTR_ERR(kretprobe_link))) {
--		kretprobe_link = NULL;
-+		  "err %ld\n", PTR_ERR(kretprobe_link)))
- 		goto cleanup;
--	}
--	uprobe_link = bpf_program__attach_uprobe(uprobe_prog,
-+	skel->links.handle_kretprobe = kretprobe_link;
-+
-+	uprobe_link = bpf_program__attach_uprobe(skel->progs.handle_uprobe,
- 						 false /* retprobe */,
- 						 0 /* self pid */,
- 						 "/proc/self/exe",
- 						 uprobe_offset);
- 	if (CHECK(IS_ERR(uprobe_link), "attach_uprobe",
--		  "err %ld\n", PTR_ERR(uprobe_link))) {
--		uprobe_link = NULL;
-+		  "err %ld\n", PTR_ERR(uprobe_link)))
- 		goto cleanup;
--	}
--	uretprobe_link = bpf_program__attach_uprobe(uretprobe_prog,
-+	skel->links.handle_uprobe = uprobe_link;
-+
-+	uretprobe_link = bpf_program__attach_uprobe(skel->progs.handle_uretprobe,
- 						    true /* retprobe */,
- 						    -1 /* any pid */,
- 						    "/proc/self/exe",
- 						    uprobe_offset);
- 	if (CHECK(IS_ERR(uretprobe_link), "attach_uretprobe",
--		  "err %ld\n", PTR_ERR(uretprobe_link))) {
--		uretprobe_link = NULL;
-+		  "err %ld\n", PTR_ERR(uretprobe_link)))
- 		goto cleanup;
--	}
-+	skel->links.handle_uretprobe = uretprobe_link;
- 
- 	/* trigger & validate kprobe && kretprobe */
- 	usleep(1);
- 
--	err = bpf_map_lookup_elem(results_map_fd, &kprobe_idx, &res);
--	if (CHECK(err, "get_kprobe_res",
--		  "failed to get kprobe res: %d\n", err))
-+	if (CHECK(skel->bss->kprobe_res != 1, "check_kprobe_res",
-+		  "wrong kprobe res: %d\n", skel->bss->kprobe_res))
- 		goto cleanup;
--	if (CHECK(res != kprobe_idx + 1, "check_kprobe_res",
--		  "wrong kprobe res: %d\n", res))
--		goto cleanup;
--
--	err = bpf_map_lookup_elem(results_map_fd, &kretprobe_idx, &res);
--	if (CHECK(err, "get_kretprobe_res",
--		  "failed to get kretprobe res: %d\n", err))
--		goto cleanup;
--	if (CHECK(res != kretprobe_idx + 1, "check_kretprobe_res",
--		  "wrong kretprobe res: %d\n", res))
-+	if (CHECK(skel->bss->kretprobe_res != 2, "check_kretprobe_res",
-+		  "wrong kretprobe res: %d\n", skel->bss->kretprobe_res))
- 		goto cleanup;
- 
- 	/* trigger & validate uprobe & uretprobe */
- 	get_base_addr();
- 
--	err = bpf_map_lookup_elem(results_map_fd, &uprobe_idx, &res);
--	if (CHECK(err, "get_uprobe_res",
--		  "failed to get uprobe res: %d\n", err))
--		goto cleanup;
--	if (CHECK(res != uprobe_idx + 1, "check_uprobe_res",
--		  "wrong uprobe res: %d\n", res))
--		goto cleanup;
--
--	err = bpf_map_lookup_elem(results_map_fd, &uretprobe_idx, &res);
--	if (CHECK(err, "get_uretprobe_res",
--		  "failed to get uretprobe res: %d\n", err))
-+	if (CHECK(skel->bss->uprobe_res != 3, "check_uprobe_res",
-+		  "wrong uprobe res: %d\n", skel->bss->uprobe_res))
- 		goto cleanup;
--	if (CHECK(res != uretprobe_idx + 1, "check_uretprobe_res",
--		  "wrong uretprobe res: %d\n", res))
-+	if (CHECK(skel->bss->uretprobe_res != 4, "check_uretprobe_res",
-+		  "wrong uretprobe res: %d\n", skel->bss->uretprobe_res))
- 		goto cleanup;
- 
- cleanup:
--	bpf_link__destroy(kprobe_link);
--	bpf_link__destroy(kretprobe_link);
--	bpf_link__destroy(uprobe_link);
--	bpf_link__destroy(uretprobe_link);
--	bpf_object__close(obj);
-+	test_attach_probe__destroy(skel);
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index b6bd6c47c919..a1a902fa6e0c 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -6793,3 +6793,165 @@ int libbpf_num_possible_cpus(void)
+ 	WRITE_ONCE(cpus, tmp_cpus);
+ 	return tmp_cpus;
  }
-diff --git a/tools/testing/selftests/bpf/progs/test_attach_probe.c b/tools/testing/selftests/bpf/progs/test_attach_probe.c
-index 534621e38906..221b69700625 100644
---- a/tools/testing/selftests/bpf/progs/test_attach_probe.c
-+++ b/tools/testing/selftests/bpf/progs/test_attach_probe.c
-@@ -5,46 +5,36 @@
- #include <linux/bpf.h>
- #include "bpf_helpers.h"
++
++int bpf_object__open_skeleton(struct bpf_object_skeleton *s,
++			      const struct bpf_object_open_opts *opts)
++{
++	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, skel_opts,
++		.object_name = s->name,
++	);
++	struct bpf_object *obj;
++	int i;
++
++	/* Attempt to preserve opts->object_name, unless overriden by user
++	 * explicitly. Overwriting object name for skeletons is discouraged,
++	 * as it breaks global data maps, because they contain object name
++	 * prefix as their own map name prefix. When skeleton is generated,
++	 * bpftool is making an assumption that this name will stay the same.
++	 */
++	if (opts) {
++		memcpy(&skel_opts, opts, sizeof(*opts));
++		if (!opts->object_name)
++			skel_opts.object_name = s->name;
++	}
++
++	obj = bpf_object__open_mem(s->data, s->data_sz, &skel_opts);
++	if (IS_ERR(obj)) {
++		pr_warn("failed to initialize skeleton BPF object '%s': %ld\n",
++			s->name, PTR_ERR(obj));
++		return PTR_ERR(obj);
++	}
++
++	*s->obj = obj;
++
++	for (i = 0; i < s->map_cnt; i++) {
++		struct bpf_map **map = s->maps[i].map;
++		const char *name = s->maps[i].name;
++		void **mmaped = s->maps[i].mmaped;
++
++		*map = bpf_object__find_map_by_name(obj, name);
++		if (!*map) {
++			pr_warn("failed to find skeleton map '%s'\n", name);
++			return -ESRCH;
++		}
++
++		if (mmaped)
++			*mmaped = (*map)->mmaped;
++	}
++
++	for (i = 0; i < s->prog_cnt; i++) {
++		struct bpf_program **prog = s->progs[i].prog;
++		const char *name = s->progs[i].name;
++
++		*prog = bpf_object__find_program_by_name(obj, name);
++		if (!*prog) {
++			pr_warn("failed to find skeleton program '%s'\n", name);
++			return -ESRCH;
++		}
++	}
++
++	return 0;
++}
++
++int bpf_object__load_skeleton(struct bpf_object_skeleton *s)
++{
++	int i, err;
++
++	err = bpf_object__load(*s->obj);
++	if (err) {
++		pr_warn("failed to load BPF skeleton '%s': %d\n", s->name, err);
++		return err;
++	}
++
++	for (i = 0; i < s->map_cnt; i++) {
++		struct bpf_map *map = *s->maps[i].map;
++		size_t mmap_sz = bpf_map_mmap_sz(map);
++		int prot, map_fd = bpf_map__fd(map);
++		void **mmaped = s->maps[i].mmaped;
++		void *remapped;
++
++		if (!mmaped)
++			continue;
++
++		if (!(map->def.map_flags & BPF_F_MMAPABLE)) {
++			*mmaped = NULL;
++			continue;
++		}
++
++		if (map->def.map_flags & BPF_F_RDONLY_PROG)
++			prot = PROT_READ;
++		else
++			prot = PROT_READ | PROT_WRITE;
++
++		/* Remap anonymous mmap()-ed "map initialization image" as
++		 * a BPF map-backed mmap()-ed memory, but preserving the same
++		 * memory address. This will cause kernel to change process'
++		 * page table to point to a different piece of kernel memory,
++		 * but from userspace point of view memory address (and its
++		 * contents, being identical at this point) will stay the
++		 * same. This mapping will be released by bpf_object__close()
++		 * as per normal clean up procedure, so we don't need to worry
++		 * about it from skeleton's clean up perspective.
++		 */
++		remapped = mmap(*mmaped, mmap_sz, prot, MAP_SHARED | MAP_FIXED,
++				map_fd, 0);
++		if (remapped == MAP_FAILED) {
++			err = -errno;
++			*mmaped = NULL;
++			pr_warn("failed to re-mmap() map '%s': %d\n",
++				 bpf_map__name(map), err);
++			return err;
++		}
++	}
++
++	return 0;
++}
++
++int bpf_object__attach_skeleton(struct bpf_object_skeleton *s)
++{
++	int i;
++
++	for (i = 0; i < s->prog_cnt; i++) {
++		struct bpf_program *prog = *s->progs[i].prog;
++		struct bpf_link **link = s->progs[i].link;
++		const struct bpf_sec_def *sec_def;
++		const char *sec_name = bpf_program__title(prog, false);
++
++		sec_def = find_sec_def(sec_name);
++		if (!sec_def || !sec_def->attach_fn)
++			continue;
++
++		*link = sec_def->attach_fn(sec_def, prog);
++		if (IS_ERR(*link)) {
++			pr_warn("failed to auto-attach program '%s': %ld\n",
++				bpf_program__name(prog), PTR_ERR(*link));
++			return PTR_ERR(*link);
++		}
++	}
++
++	return 0;
++}
++
++void bpf_object__detach_skeleton(struct bpf_object_skeleton *s)
++{
++	int i;
++
++	for (i = 0; i < s->prog_cnt; i++) {
++		struct bpf_link **link = s->progs[i].link;
++
++		if (!IS_ERR_OR_NULL(*link))
++			bpf_link__destroy(*link);
++		*link = NULL;
++	}
++}
++
++void bpf_object__destroy_skeleton(struct bpf_object_skeleton *s)
++{
++	if (s->progs)
++		bpf_object__detach_skeleton(s);
++	if (s->obj)
++		bpf_object__close(*s->obj);
++	free(s->maps);
++	free(s->progs);
++	free(s);
++}
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index f37bd4a3e14b..623191e71415 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -631,6 +631,44 @@ BPF_EMBED_OBJ_DECLARE(NAME)
+ #define BPF_EMBED_OBJ(NAME, PATH) __BPF_EMBED_OBJ(NAME, PATH, 16, ".quad")
+ #endif
  
--struct {
--	__uint(type, BPF_MAP_TYPE_ARRAY);
--	__uint(max_entries, 4);
--	__type(key, int);
--	__type(value, int);
--} results_map SEC(".maps");
-+int kprobe_res = 0;
-+int kretprobe_res = 0;
-+int uprobe_res = 0;
-+int uretprobe_res = 0;
- 
- SEC("kprobe/sys_nanosleep")
--int handle_sys_nanosleep_entry(struct pt_regs *ctx)
-+int handle_kprobe(struct pt_regs *ctx)
- {
--	const int key = 0, value = 1;
--
--	bpf_map_update_elem(&results_map, &key, &value, 0);
-+	kprobe_res = 1;
- 	return 0;
- }
- 
- SEC("kretprobe/sys_nanosleep")
--int handle_sys_getpid_return(struct pt_regs *ctx)
-+int handle_kretprobe(struct pt_regs *ctx)
- {
--	const int key = 1, value = 2;
--
--	bpf_map_update_elem(&results_map, &key, &value, 0);
-+	kretprobe_res = 2;
- 	return 0;
- }
- 
- SEC("uprobe/trigger_func")
--int handle_uprobe_entry(struct pt_regs *ctx)
-+int handle_uprobe(struct pt_regs *ctx)
- {
--	const int key = 2, value = 3;
--
--	bpf_map_update_elem(&results_map, &key, &value, 0);
-+	uprobe_res = 3;
- 	return 0;
- }
- 
- SEC("uretprobe/trigger_func")
--int handle_uprobe_return(struct pt_regs *ctx)
-+int handle_uretprobe(struct pt_regs *ctx)
- {
--	const int key = 3, value = 4;
--
--	bpf_map_update_elem(&results_map, &key, &value, 0);
-+	uretprobe_res = 4;
- 	return 0;
- }
- 
++struct bpf_map_skeleton {
++	const char *name;
++	struct bpf_map **map;
++	void **mmaped;
++};
++
++struct bpf_prog_skeleton {
++	const char *name;
++	struct bpf_program **prog;
++	struct bpf_link **link;
++};
++
++struct bpf_object_skeleton {
++	size_t sz; /* size of this struct, for forward/backward compatibility */
++
++	const char *name;
++	void *data;
++	size_t data_sz;
++
++	struct bpf_object **obj;
++
++	int map_cnt;
++	int map_skel_sz; /* sizeof(struct bpf_skeleton_map) */
++	struct bpf_map_skeleton *maps;
++
++	int prog_cnt;
++	int prog_skel_sz; /* sizeof(struct bpf_skeleton_prog) */
++	struct bpf_prog_skeleton *progs;
++};
++
++LIBBPF_API int
++bpf_object__open_skeleton(struct bpf_object_skeleton *s,
++			  const struct bpf_object_open_opts *opts);
++LIBBPF_API int bpf_object__load_skeleton(struct bpf_object_skeleton *s);
++LIBBPF_API int bpf_object__attach_skeleton(struct bpf_object_skeleton *s);
++LIBBPF_API void bpf_object__detach_skeleton(struct bpf_object_skeleton *s);
++LIBBPF_API void bpf_object__destroy_skeleton(struct bpf_object_skeleton *s);
++
+ #ifdef __cplusplus
+ } /* extern "C" */
+ #endif
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 5a7630748eeb..1376d992a703 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -213,6 +213,11 @@ LIBBPF_0.0.7 {
+ 	global:
+ 		btf_dump__emit_type_decl;
+ 		bpf_object__find_program_by_name;
++		bpf_object__attach_skeleton;
++		bpf_object__destroy_skeleton;
++		bpf_object__detach_skeleton;
++		bpf_object__load_skeleton;
++		bpf_object__open_skeleton;
+ 		bpf_program__attach;
+ 		bpf_program__name;
+ 		btf__align_of;
 -- 
 2.17.1
 
