@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5639C2D0BF
-	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B76A5C2D0BF
+	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9EBAC21655
-	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 88C682077B
+	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mujxHyLe"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ii0h5WWX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726960AbfLNBoR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Dec 2019 20:44:17 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:26722 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726741AbfLNBoR (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 13 Dec 2019 20:44:17 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBE1hbbA016457
-        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:44:15 -0800
+        id S1726891AbfLNBoY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Dec 2019 20:44:24 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:39664 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726986AbfLNBoV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 13 Dec 2019 20:44:21 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id xBE1f4ia029939
+        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:44:19 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=uudS59nJXKcKgSwoy8HeWV3sxFUlPU2rQgorguE5igM=;
- b=mujxHyLeCPqPxxmLTblTcJmLRGMNKpjVX77tslqrXg18PQvxUW7X/Uo+iNByoW1tA6oj
- +MnERNtqB9AkYYw5bvzTwqzjEIKQZ6jDVhORanlA/cVsK4OAy50OyuH7GvrF6ASzl/iN
- TrMKCR66yAAVctswSPHr0/BbGXgDcOJrIcU= 
+ content-type; s=facebook; bh=DdxjFLFwL6Hb7mLiVGNCpnZcj6eWk5frMD+uXETZNH8=;
+ b=ii0h5WWX7qAtmidbfAmH95/hsE6T1BfO9vXdDyIsbF7dHWH+QmZPpykI1pRlBNTHu87Q
+ nJJ96T9YN+OsyQ1BJY/42Yux3eke64gf0NoH1COhuFYmU8/glYBt3oEBUgCtETEBLuip
+ 3lcvs4f8moHiO8VEw0U99yA5HLybzH4NtFg= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wvm79rh4k-2
+        by m0089730.ppops.net with ESMTP id 2wv8b03nsn-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:44:15 -0800
+        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:44:19 -0800
 Received: from intmgw001.05.ash5.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 13 Dec 2019 17:44:13 -0800
+ 15.1.1713.5; Fri, 13 Dec 2019 17:44:18 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 1331A2EC1D51; Fri, 13 Dec 2019 17:44:13 -0800 (PST)
+        id 9213C2EC1D51; Fri, 13 Dec 2019 17:44:17 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 13/17] bpftool: add skeleton codegen command
-Date:   Fri, 13 Dec 2019 17:43:37 -0800
-Message-ID: <20191214014341.3442258-14-andriin@fb.com>
+Subject: [PATCH v4 bpf-next 15/17] selftests/bpf: convert few more selftest to skeletons
+Date:   Fri, 13 Dec 2019 17:43:39 -0800
+Message-ID: <20191214014341.3442258-16-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191214014341.3442258-1-andriin@fb.com>
 References: <20191214014341.3442258-1-andriin@fb.com>
@@ -60,693 +60,718 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-13_09:2019-12-13,2019-12-13 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- suspectscore=25 bulkscore=0 priorityscore=1501 mlxscore=0 impostorscore=0
- clxscore=1015 spamscore=0 adultscore=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912140007
+ phishscore=0 priorityscore=1501 mlxlogscore=999 clxscore=1015 mlxscore=0
+ adultscore=0 bulkscore=0 suspectscore=8 spamscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912140006
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add `bpftool gen skeleton` command, which takes in compiled BPF .o object file
-and dumps a BPF skeleton struct and related code to work with that skeleton.
-Skeleton itself is tailored to a specific structure of provided BPF object
-file, containing accessors (just plain struct fields) for every map and
-program, as well as dedicated space for bpf_links. If BPF program is using
-global variables, corresponding structure definitions of compatible memory
-layout are emitted as well, making it possible to initialize and subsequently
-read/update global variables values using simple and clear C syntax for
-accessing fields. This skeleton majorly improves usability of
-opening/loading/attaching of BPF object, as well as interacting with it
-throughout the lifetime of loaded BPF object.
-
-Generated skeleton struct has the following structure:
-
-struct <object-name> {
-	/* used by libbpf's skeleton API */
-	struct bpf_object_skeleton *skeleton;
-	/* bpf_object for libbpf APIs */
-	struct bpf_object *obj;
-	struct {
-		/* for every defined map in BPF object: */
-		struct bpf_map *<map-name>;
-	} maps;
-	struct {
-		/* for every program in BPF object: */
-		struct bpf_program *<program-name>;
-	} progs;
-	struct {
-		/* for every program in BPF object: */
-		struct bpf_link *<program-name>;
-	} links;
-	/* for every present global data section: */
-	struct <object-name>__<one of bss, data, or rodata> {
-		/* memory layout of corresponding data section,
-		 * with every defined variable represented as a struct field
-		 * with exactly the same type, but without const/volatile
-		 * modifiers, e.g.:
-		 */
-		 int *my_var_1;
-		 ...
-	} *<one of bss, data, or rodata>;
-};
-
-This provides great usability improvements:
-- no need to look up maps and programs by name, instead just
-  my_obj->maps.my_map or my_obj->progs.my_prog would give necessary
-  bpf_map/bpf_program pointers, which user can pass to existing libbpf APIs;
-- pre-defined places for bpf_links, which will be automatically populated for
-  program types that libbpf knows how to attach automatically (currently
-  tracepoints, kprobe/kretprobe, raw tracepoint and tracing programs). On
-  tearing down skeleton, all active bpf_links will be destroyed (meaning BPF
-  programs will be detached, if they are attached). For cases in which libbpf
-  doesn't know how to auto-attach BPF program, user can manually create link
-  after loading skeleton and they will be auto-detached on skeleton
-  destruction:
-
-	my_obj->links.my_fancy_prog = bpf_program__attach_cgroup_whatever(
-		my_obj->progs.my_fancy_prog, <whatever extra param);
-
-- it's extremely easy and convenient to work with global data from userspace
-  now. Both for read-only and read/write variables, it's possible to
-  pre-initialize them before skeleton is loaded:
-
-	skel = my_obj__open(raw_embed_data);
-	my_obj->rodata->my_var = 123;
-	my_obj__load(skel); /* 123 will be initialization value for my_var */
-
-  After load, if kernel supports mmap() for BPF arrays, user can still read
-  (and write for .bss and .data) variables values, but at that point it will
-  be directly mmap()-ed to BPF array, backing global variables. This allows to
-  seamlessly exchange data with BPF side. From userspace program's POV, all
-  the pointers and memory contents stay the same, but mapped kernel memory
-  changes to point to created map.
-  If kernel doesn't yet support mmap() for BPF arrays, it's still possible to
-  use those data section structs to pre-initialize .bss, .data, and .rodata,
-  but after load their pointers will be reset to NULL, allowing user code to
-  gracefully handle this condition, if necessary.
+Convert few more selftests to use generated BPF skeletons as a demonstration
+on how to use it.
 
 Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/bpf/bpftool/gen.c  | 551 +++++++++++++++++++++++++++++++++++++++
- tools/bpf/bpftool/main.c |   3 +-
- tools/bpf/bpftool/main.h |   1 +
- 3 files changed, 554 insertions(+), 1 deletion(-)
- create mode 100644 tools/bpf/bpftool/gen.c
+ .../selftests/bpf/prog_tests/fentry_fexit.c   | 105 ++++++------------
+ .../selftests/bpf/prog_tests/fentry_test.c    |  72 +++++-------
+ tools/testing/selftests/bpf/prog_tests/mmap.c |  58 ++++------
+ .../bpf/prog_tests/stacktrace_build_id.c      |  79 +++++--------
+ .../bpf/prog_tests/stacktrace_build_id_nmi.c  |  84 ++++++--------
+ 5 files changed, 149 insertions(+), 249 deletions(-)
 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-new file mode 100644
-index 000000000000..7379dae35dca
---- /dev/null
-+++ b/tools/bpf/bpftool/gen.c
-@@ -0,0 +1,551 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/* Copyright (C) 2019 Facebook */
+diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+index 40bcff2cc274..110fcf053fd0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+@@ -1,90 +1,59 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2019 Facebook */
+ #include <test_progs.h>
++#include "test_pkt_access.skel.h"
++#include "fentry_test.skel.h"
++#include "fexit_test.skel.h"
 +
-+#ifndef _GNU_SOURCE
-+#define _GNU_SOURCE
-+#endif
-+#include <ctype.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/err.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <bpf.h>
-+#include <libbpf.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <unistd.h>
-+
-+#include "btf.h"
-+#include "libbpf_internal.h"
-+#include "json_writer.h"
-+#include "main.h"
-+
-+
-+#define MAX_OBJ_NAME_LEN 64
-+
-+static void sanitize_identifier(char *name)
-+{
-+	int i;
-+
-+	for (i = 0; name[i]; i++)
-+		if (!isalnum(name[i]) && name[i] != '_')
-+			name[i] = '_';
-+}
-+
-+static bool str_has_suffix(const char *str, const char *suffix)
-+{
-+	size_t i, n1 = strlen(str), n2 = strlen(suffix);
-+
-+	if (n1 < n2)
-+		return false;
-+
-+	for (i = 0; i < n2; i++) {
-+		if (str[n1 - i - 1] != suffix[n2 - i - 1])
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
-+static void get_obj_name(char *name, const char *file)
-+{
-+	/* Using basename() GNU version which doesn't modify arg. */
-+	strncpy(name, basename(file), MAX_OBJ_NAME_LEN - 1);
-+	name[MAX_OBJ_NAME_LEN - 1] = '\0';
-+	if (str_has_suffix(name, ".o"))
-+		name[strlen(name) - 2] = '\0';
-+	sanitize_identifier(name);
-+}
-+
-+static void get_header_guard(char *guard, const char *obj_name)
-+{
-+	int i;
-+
-+	sprintf(guard, "__%s_SKEL_H__", obj_name);
-+	for (i = 0; guard[i]; i++)
-+		guard[i] = toupper(guard[i]);
-+}
-+
-+static const char *get_map_ident(const struct bpf_map *map)
-+{
-+	const char *name = bpf_map__name(map);
-+
-+	if (!bpf_map__is_internal(map))
-+		return name;
-+
-+	if (str_has_suffix(name, ".data"))
-+		return "data";
-+	else if (str_has_suffix(name, ".rodata"))
-+		return "rodata";
-+	else if (str_has_suffix(name, ".bss"))
-+		return "bss";
-+	else
-+		return NULL;
-+}
-+
-+static void codegen_btf_dump_printf(void *ct, const char *fmt, va_list args)
-+{
-+	vprintf(fmt, args);
-+}
-+
-+static int codegen_datasec_def(struct bpf_object *obj,
-+			       struct btf *btf,
-+			       struct btf_dump *d,
-+			       const struct btf_type *sec,
-+			       const char *obj_name)
-+{
-+	const char *sec_name = btf__name_by_offset(btf, sec->name_off);
-+	const struct btf_var_secinfo *sec_var = btf_var_secinfos(sec);
-+	int i, err, off = 0, pad_cnt = 0, vlen = btf_vlen(sec);
-+	const char *sec_ident;
-+	char var_ident[256];
-+
-+	if (strcmp(sec_name, ".data") == 0)
-+		sec_ident = "data";
-+	else if (strcmp(sec_name, ".bss") == 0)
-+		sec_ident = "bss";
-+	else if (strcmp(sec_name, ".rodata") == 0)
-+		sec_ident = "rodata";
-+	else
-+		return 0;
-+
-+	printf("	struct %s__%s {\n", obj_name, sec_ident);
-+	for (i = 0; i < vlen; i++, sec_var++) {
-+		const struct btf_type *var = btf__type_by_id(btf, sec_var->type);
-+		const char *var_name = btf__name_by_offset(btf, var->name_off);
-+		DECLARE_LIBBPF_OPTS(btf_dump_emit_type_decl_opts, opts,
-+			.field_name = var_ident,
-+			.indent_level = 2,
-+		);
-+		int need_off = sec_var->offset, align_off, align;
-+		__u32 var_type_id = var->type;
-+		const struct btf_type *t;
-+
-+		t = btf__type_by_id(btf, var_type_id);
-+		while (btf_is_mod(t)) {
-+			var_type_id = t->type;
-+			t = btf__type_by_id(btf, var_type_id);
-+		}
-+
-+		if (off > need_off) {
-+			p_err("Something is wrong for %s's variable #%d: need offset %d, already at %d.\n",
-+			      sec_name, i, need_off, off);
-+			return -EINVAL;
-+		}
-+
-+		align = btf__align_of(btf, var->type);
-+		if (align <= 0) {
-+			p_err("Failed to determine alignment of variable '%s': %d",
-+			      var_name, align);
-+			return -EINVAL;
-+		}
-+
-+		align_off = (off + align - 1) / align * align;
-+		if (align_off != need_off) {
-+			printf("\t\tchar __pad%d[%d];\n",
-+			       pad_cnt, need_off - off);
-+			pad_cnt++;
-+		}
-+
-+		/* sanitize variable name, e.g., for static vars inside
-+		 * a function, it's name is '<function name>.<variable name>',
-+		 * which we'll turn into a '<function name>_<variable name>'
-+		 */
-+		var_ident[0] = '\0';
-+		strncat(var_ident, var_name, sizeof(var_ident) - 1);
-+		sanitize_identifier(var_ident);
-+
-+		printf("\t\t");
-+		err = btf_dump__emit_type_decl(d, var_type_id, &opts);
-+		if (err)
-+			return err;
-+		printf(";\n");
-+
-+		off = sec_var->offset + sec_var->size;
-+	}
-+	printf("	} *%s;\n", sec_ident);
-+	return 0;
-+}
-+
-+static int codegen_datasecs(struct bpf_object *obj, const char *obj_name)
-+{
-+	struct btf *btf = bpf_object__btf(obj);
-+	int n = btf__get_nr_types(btf);
-+	struct btf_dump *d;
-+	int i, err = 0;
-+
-+	d = btf_dump__new(btf, NULL, NULL, codegen_btf_dump_printf);
-+	if (IS_ERR(d))
-+		return PTR_ERR(d);
-+
-+	for (i = 1; i <= n; i++) {
-+		const struct btf_type *t = btf__type_by_id(btf, i);
-+
-+		if (!btf_is_datasec(t))
-+			continue;
-+
-+		err = codegen_datasec_def(obj, btf, d, t, obj_name);
-+		if (err)
-+			goto out;
-+	}
-+out:
-+	btf_dump__free(d);
-+	return err;
-+}
-+
-+static int codegen(const char *template, ...)
-+{
-+	const char *src, *end;
-+	int skip_tabs = 0, n;
-+	char *s, *dst;
-+	va_list args;
-+	char c;
-+
-+	n = strlen(template);
-+	s = malloc(n + 1);
-+	if (!s)
-+		return -ENOMEM;
-+	src = template;
-+	dst = s;
-+
-+	/* find out "baseline" indentation to skip */
-+	while ((c = *src++)) {
-+		if (c == '\t') {
-+			skip_tabs++;
-+		} else if (c == '\n') {
-+			break;
-+		} else {
-+			p_err("unrecognized character at pos %td in template '%s'",
-+			      src - template - 1, template);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	while (*src) {
-+		/* skip baseline indentation tabs */
-+		for (n = skip_tabs; n > 0; n--, src++) {
-+			if (*src != '\t') {
-+				p_err("not enough tabs at pos %td in template '%s'",
-+				      src - template - 1, template);
-+				return -EINVAL;
-+			}
-+		}
-+		/* trim trailing whitespace */
-+		end = strchrnul(src, '\n');
-+		for (n = end - src; n > 0 && isspace(src[n - 1]); n--)
-+			;
-+		memcpy(dst, src, n);
-+		dst += n;
-+		if (*end)
-+			*dst++ = '\n';
-+		src = *end ? end + 1 : end;
-+	}
-+	*dst++ = '\0';
-+
-+	/* print out using adjusted template */
-+	va_start(args, template);
-+	n = vprintf(s, args);
-+	va_end(args);
-+
-+	free(s);
-+	return n;
-+}
-+
-+static int do_skeleton(int argc, char **argv)
-+{
-+	char header_guard[MAX_OBJ_NAME_LEN + sizeof("__SKEL_H__")];
-+	size_t i, map_cnt = 0, prog_cnt = 0;
-+	char obj_name[MAX_OBJ_NAME_LEN];
-+	const char *file, *ident;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	struct bpf_map *map;
-+	struct btf *btf;
-+	int err = -1;
-+
-+	if (!REQ_ARGS(1)) {
-+		usage();
-+		return -1;
-+	}
-+	file = GET_ARG();
-+
-+	if (argc) {
-+		p_err("extra unknown arguments");
-+		return -1;
-+	}
-+
-+	obj = bpf_object__open_file(file, NULL);
-+	if (IS_ERR(obj)) {
-+		p_err("failed to open BPF object file: %ld", PTR_ERR(obj));
-+		return -1;
-+	}
-+
-+	get_obj_name(obj_name, file);
-+	get_header_guard(header_guard, obj_name);
-+
-+	bpf_object__for_each_map(map, obj) {
-+		ident = get_map_ident(map);
-+		if (!ident) {
-+			p_err("ignoring unrecognized internal map '%s'...",
-+			      bpf_map__name(map));
-+			continue;
-+		}
-+		map_cnt++;
-+	}
-+	bpf_object__for_each_program(prog, obj) {
-+		prog_cnt++;
-+	}
-+
-+	codegen("\
-+		\n\
-+		/* THIS FILE IS AUTOGENERATED! */			    \n\
-+		#ifndef %2$s						    \n\
-+		#define %2$s						    \n\
-+									    \n\
-+		#include <stdlib.h>					    \n\
-+		#include <libbpf.h>					    \n\
-+									    \n\
-+		struct %1$s {						    \n\
-+			struct bpf_object_skeleton *skeleton;		    \n\
-+			struct bpf_object *obj;				    \n\
-+		",
-+		obj_name, header_guard
-+	);
-+
-+	if (map_cnt) {
-+		printf("\tstruct {\n");
-+		bpf_object__for_each_map(map, obj) {
-+			ident = get_map_ident(map);
-+			if (!ident)
-+				continue;
-+			printf("\t\tstruct bpf_map *%s;\n", ident);
-+		}
-+		printf("\t} maps;\n");
-+	}
-+
-+	if (prog_cnt) {
-+		printf("\tstruct {\n");
-+		bpf_object__for_each_program(prog, obj) {
-+			printf("\t\tstruct bpf_program *%s;\n",
-+			       bpf_program__name(prog));
-+		}
-+		printf("\t} progs;\n");
-+		printf("\tstruct {\n");
-+		bpf_object__for_each_program(prog, obj) {
-+			printf("\t\tstruct bpf_link *%s;\n",
-+			       bpf_program__name(prog));
-+		}
-+		printf("\t} links;\n");
-+	}
-+
-+	btf = bpf_object__btf(obj);
-+	if (btf) {
-+		err = codegen_datasecs(obj, obj_name);
-+		if (err)
-+			goto out;
-+	}
-+
-+	codegen("\
-+		\n\
-+		};							    \n\
-+									    \n\
-+		static inline struct bpf_object_skeleton *		    \n\
-+		%1$s__create_skeleton(struct %1$s *obj, struct bpf_embed_data *embed)\n\
-+		{							    \n\
-+			struct bpf_object_skeleton *s;			    \n\
-+									    \n\
-+			s = calloc(1, sizeof(*s));			    \n\
-+			if (!s)						    \n\
-+				return NULL;				    \n\
-+									    \n\
-+			s->sz = sizeof(*s);				    \n\
-+			s->name = \"%1$s\";				    \n\
-+			s->data = embed->data;				    \n\
-+			s->data_sz = embed->size;			    \n\
-+			s->obj = &obj->obj;				    \n\
-+		",
-+		obj_name
-+	);
-+	if (map_cnt) {
-+		codegen("\
-+			\n\
-+									    \n\
-+				/* maps */				    \n\
-+				s->map_cnt = %zu;			    \n\
-+				s->map_skel_sz = sizeof(*s->maps);	    \n\
-+				s->maps = calloc(s->map_cnt, s->map_skel_sz);\n\
-+				if (!s->maps)				    \n\
-+					goto err;			    \n\
-+			",
-+			map_cnt
-+		);
-+		i = 0;
-+		bpf_object__for_each_map(map, obj) {
-+			const char *ident = get_map_ident(map);
-+
-+			if (!ident)
-+				continue;
-+
-+			codegen("\
-+				\n\
-+									    \n\
-+					s->maps[%zu].name = \"%s\";	    \n\
-+					s->maps[%zu].map = &obj->maps.%s;   \n\
-+				",
-+				i, bpf_map__name(map), i, ident);
-+			/* memory-mapped internal maps */
-+			if (bpf_map__is_internal(map) &&
-+			    (bpf_map__def(map)->map_flags & BPF_F_MMAPABLE)) {
-+				printf("\ts->maps[%zu].mmaped = (void **)&obj->%s;\n",
-+				       i, ident);
-+			}
-+			i++;
-+		}
-+	}
-+	if (prog_cnt) {
-+		codegen("\
-+			\n\
-+									    \n\
-+				/* programs */				    \n\
-+				s->prog_cnt = %zu;			    \n\
-+				s->prog_skel_sz = sizeof(*s->progs);	    \n\
-+				s->progs = calloc(s->prog_cnt, s->prog_skel_sz);\n\
-+				if (!s->progs)				    \n\
-+					goto err;			    \n\
-+			",
-+			prog_cnt
-+		);
-+		i = 0;
-+		bpf_object__for_each_program(prog, obj) {
-+			codegen("\
-+				\n\
-+									    \n\
-+					s->progs[%1$zu].name = \"%2$s\";    \n\
-+					s->progs[%1$zu].prog = &obj->progs.%2$s;\n\
-+					s->progs[%1$zu].link = &obj->links.%2$s;\n\
-+				",
-+				i, bpf_program__name(prog));
-+			i++;
-+		}
-+	}
-+	codegen("\
-+		\n\
-+									    \n\
-+			return s;					    \n\
-+		err:							    \n\
-+			bpf_object__destroy_skeleton(s);		    \n\
-+			return NULL;					    \n\
-+		}							    \n\
-+									    \n\
-+		static void						    \n\
-+		%1$s__destroy(struct %1$s *obj)				    \n\
-+		{							    \n\
-+			if (!obj)					    \n\
-+				return;					    \n\
-+			if (obj->skeleton)				    \n\
-+				bpf_object__destroy_skeleton(obj->skeleton);\n\
-+			free(obj);					    \n\
-+		}							    \n\
-+									    \n\
-+		static inline struct %1$s *				    \n\
-+		%1$s__open_opts(struct bpf_embed_data *embed, const struct bpf_object_open_opts *opts)\n\
-+		{							    \n\
-+			struct %1$s *obj;				    \n\
-+									    \n\
-+			obj = calloc(1, sizeof(*obj));			    \n\
-+			if (!obj)					    \n\
-+				return NULL;				    \n\
-+									    \n\
-+			obj->skeleton = %1$s__create_skeleton(obj, embed);  \n\
-+			if (!obj->skeleton)				    \n\
-+				goto err;				    \n\
-+									    \n\
-+			if (bpf_object__open_skeleton(obj->skeleton, opts)) \n\
-+				goto err;				    \n\
-+									    \n\
-+			return obj;					    \n\
-+		err:							    \n\
-+			%1$s__destroy(obj);				    \n\
-+			return NULL;					    \n\
-+		}							    \n\
-+									    \n\
-+		static inline struct %1$s *				    \n\
-+		%1$s__open(struct bpf_embed_data *embed)		    \n\
-+		{							    \n\
-+			return %1$s__open_opts(embed, NULL);		    \n\
-+		}							    \n\
-+									    \n\
-+		static inline int					    \n\
-+		%1$s__load(struct %1$s *obj)				    \n\
-+		{							    \n\
-+			return bpf_object__load_skeleton(obj->skeleton);    \n\
-+		}							    \n\
-+									    \n\
-+		static inline struct %1$s *				    \n\
-+		%1$s__open_and_load(struct bpf_embed_data *embed)	    \n\
-+		{							    \n\
-+			struct %1$s *obj;				    \n\
-+									    \n\
-+			obj = %1$s__open(embed);			    \n\
-+			if (!obj)					    \n\
-+				return NULL;				    \n\
-+			if (%1$s__load(obj)) {				    \n\
-+				%1$s__destroy(obj);			    \n\
-+				return NULL;				    \n\
-+			}						    \n\
-+			return obj;					    \n\
-+		}							    \n\
-+									    \n\
-+		static inline int					    \n\
-+		%1$s__attach(struct %1$s *obj)				    \n\
-+		{							    \n\
-+			return bpf_object__attach_skeleton(obj->skeleton);  \n\
-+		}							    \n\
-+									    \n\
-+		static inline void					    \n\
-+		%1$s__detach(struct %1$s *obj)				    \n\
-+		{							    \n\
-+			return bpf_object__detach_skeleton(obj->skeleton);  \n\
-+		}							    \n\
-+									    \n\
-+		#endif /* %2$s */					    \n\
-+		",
-+		obj_name, header_guard
-+	);
-+	err = 0;
-+out:
-+	bpf_object__close(obj);
-+	return err;
-+}
-+
-+static int do_help(int argc, char **argv)
-+{
-+	if (json_output) {
-+		jsonw_null(json_wtr);
-+		return 0;
-+	}
-+
-+	fprintf(stderr,
-+		"Usage: %1$s gen skeleton FILE\n"
-+		"       %1$s gen help\n"
-+		"\n"
-+		"       " HELP_SPEC_OPTIONS "\n"
-+		"",
-+		bin_name);
-+
-+	return 0;
-+}
-+
-+static const struct cmd cmds[] = {
-+	{ "skeleton",	do_skeleton },
-+	{ "help",	do_help },
-+	{ 0 }
-+};
-+
-+int do_gen(int argc, char **argv)
-+{
-+	return cmd_select(cmds, argc, argv, do_help);
-+}
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index 4764581ff9ea..1fe91c558508 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -58,7 +58,7 @@ static int do_help(int argc, char **argv)
- 		"       %s batch file FILE\n"
- 		"       %s version\n"
- 		"\n"
--		"       OBJECT := { prog | map | cgroup | perf | net | feature | btf }\n"
-+		"       OBJECT := { prog | map | cgroup | perf | net | feature | btf | gen }\n"
- 		"       " HELP_SPEC_OPTIONS "\n"
- 		"",
- 		bin_name, bin_name, bin_name);
-@@ -227,6 +227,7 @@ static const struct cmd cmds[] = {
- 	{ "net",	do_net },
- 	{ "feature",	do_feature },
- 	{ "btf",	do_btf },
-+	{ "gen",	do_gen },
- 	{ "version",	do_version },
- 	{ 0 }
- };
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 2899095f8254..7f49571bf6ce 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -155,6 +155,7 @@ int do_net(int argc, char **arg);
- int do_tracelog(int argc, char **arg);
- int do_feature(int argc, char **argv);
- int do_btf(int argc, char **argv);
-+int do_gen(int argc, char **argv);
++BPF_EMBED_OBJ(pkt_access, "test_pkt_access.o");
++BPF_EMBED_OBJ(fentry, "fentry_test.o");
++BPF_EMBED_OBJ(fexit, "fexit_test.o");
  
- int parse_u32_arg(int *argc, char ***argv, __u32 *val, const char *what);
- int prog_parse_fd(int *argc, char ***argv);
+ void test_fentry_fexit(void)
+ {
+-	struct bpf_prog_load_attr attr_fentry = {
+-		.file = "./fentry_test.o",
+-	};
+-	struct bpf_prog_load_attr attr_fexit = {
+-		.file = "./fexit_test.o",
+-	};
+-
+-	struct bpf_object *obj_fentry = NULL, *obj_fexit = NULL, *pkt_obj;
+-	struct bpf_map *data_map_fentry, *data_map_fexit;
+-	char fentry_name[] = "fentry/bpf_fentry_testX";
+-	char fexit_name[] = "fexit/bpf_fentry_testX";
+-	int err, pkt_fd, kfree_skb_fd, i;
+-	struct bpf_link *link[12] = {};
+-	struct bpf_program *prog[12];
+-	__u32 duration, retval;
+-	const int zero = 0;
+-	u64 result[12];
+-
+-	err = bpf_prog_load("./test_pkt_access.o", BPF_PROG_TYPE_SCHED_CLS,
+-			    &pkt_obj, &pkt_fd);
+-	if (CHECK(err, "prog_load sched cls", "err %d errno %d\n", err, errno))
++	struct test_pkt_access *pkt_skel = NULL;
++	struct fentry_test *fentry_skel = NULL;
++	struct fexit_test *fexit_skel = NULL;
++	__u64 *fentry_res, *fexit_res;
++	__u32 duration = 0, retval;
++	int err, pkt_fd, i;
++
++	pkt_skel = test_pkt_access__open_and_load(&pkt_access_embed);
++	if (CHECK(!pkt_skel, "pkt_skel_load", "pkt_access skeleton failed\n"))
+ 		return;
+-	err = bpf_prog_load_xattr(&attr_fentry, &obj_fentry, &kfree_skb_fd);
+-	if (CHECK(err, "prog_load fail", "err %d errno %d\n", err, errno))
++	fentry_skel = fentry_test__open_and_load(&fentry_embed);
++	if (CHECK(!fentry_skel, "fentry_skel_load", "fentry skeleton failed\n"))
+ 		goto close_prog;
+-	err = bpf_prog_load_xattr(&attr_fexit, &obj_fexit, &kfree_skb_fd);
+-	if (CHECK(err, "prog_load fail", "err %d errno %d\n", err, errno))
++	fexit_skel = fexit_test__open_and_load(&fexit_embed);
++	if (CHECK(!fexit_skel, "fexit_skel_load", "fexit skeleton failed\n"))
+ 		goto close_prog;
+ 
+-	for (i = 0; i < 6; i++) {
+-		fentry_name[sizeof(fentry_name) - 2] = '1' + i;
+-		prog[i] = bpf_object__find_program_by_title(obj_fentry, fentry_name);
+-		if (CHECK(!prog[i], "find_prog", "prog %s not found\n", fentry_name))
+-			goto close_prog;
+-		link[i] = bpf_program__attach_trace(prog[i]);
+-		if (CHECK(IS_ERR(link[i]), "attach_trace", "failed to link\n"))
+-			goto close_prog;
+-	}
+-	data_map_fentry = bpf_object__find_map_by_name(obj_fentry, "fentry_t.bss");
+-	if (CHECK(!data_map_fentry, "find_data_map", "data map not found\n"))
++	err = fentry_test__attach(fentry_skel);
++	if (CHECK(err, "fentry_attach", "fentry attach failed: %d\n", err))
+ 		goto close_prog;
+-
+-	for (i = 6; i < 12; i++) {
+-		fexit_name[sizeof(fexit_name) - 2] = '1' + i - 6;
+-		prog[i] = bpf_object__find_program_by_title(obj_fexit, fexit_name);
+-		if (CHECK(!prog[i], "find_prog", "prog %s not found\n", fexit_name))
+-			goto close_prog;
+-		link[i] = bpf_program__attach_trace(prog[i]);
+-		if (CHECK(IS_ERR(link[i]), "attach_trace", "failed to link\n"))
+-			goto close_prog;
+-	}
+-	data_map_fexit = bpf_object__find_map_by_name(obj_fexit, "fexit_te.bss");
+-	if (CHECK(!data_map_fexit, "find_data_map", "data map not found\n"))
++	err = fexit_test__attach(fexit_skel);
++	if (CHECK(err, "fexit_attach", "fexit attach failed: %d\n", err))
+ 		goto close_prog;
+ 
++	pkt_fd = bpf_program__fd(pkt_skel->progs.test_pkt_access);
+ 	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v6, sizeof(pkt_v6),
+ 				NULL, NULL, &retval, &duration);
+ 	CHECK(err || retval, "ipv6",
+ 	      "err %d errno %d retval %d duration %d\n",
+ 	      err, errno, retval, duration);
+ 
+-	err = bpf_map_lookup_elem(bpf_map__fd(data_map_fentry), &zero, &result);
+-	if (CHECK(err, "get_result",
+-		  "failed to get output data: %d\n", err))
+-		goto close_prog;
+-
+-	err = bpf_map_lookup_elem(bpf_map__fd(data_map_fexit), &zero, result + 6);
+-	if (CHECK(err, "get_result",
+-		  "failed to get output data: %d\n", err))
+-		goto close_prog;
+-
+-	for (i = 0; i < 12; i++)
+-		if (CHECK(result[i] != 1, "result", "bpf_fentry_test%d failed err %ld\n",
+-			  i % 6 + 1, result[i]))
+-			goto close_prog;
++	fentry_res = (__u64 *)fentry_skel->bss;
++	fexit_res = (__u64 *)fexit_skel->bss;
++	printf("%lld\n", fentry_skel->bss->test1_result);
++	for (i = 0; i < 6; i++) {
++		CHECK(fentry_res[i] != 1, "result",
++		      "fentry_test%d failed err %lld\n", i + 1, fentry_res[i]);
++		CHECK(fexit_res[i] != 1, "result",
++		      "fexit_test%d failed err %lld\n", i + 1, fexit_res[i]);
++	}
+ 
+ close_prog:
+-	for (i = 0; i < 12; i++)
+-		if (!IS_ERR_OR_NULL(link[i]))
+-			bpf_link__destroy(link[i]);
+-	bpf_object__close(obj_fentry);
+-	bpf_object__close(obj_fexit);
+-	bpf_object__close(pkt_obj);
++	test_pkt_access__destroy(pkt_skel);
++	fentry_test__destroy(fentry_skel);
++	fexit_test__destroy(fexit_skel);
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_test.c b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
+index 9fb103193878..46a4afdf507a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fentry_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
+@@ -1,64 +1,46 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2019 Facebook */
+ #include <test_progs.h>
++#include "test_pkt_access.skel.h"
++#include "fentry_test.skel.h"
++
++BPF_EMBED_OBJ_DECLARE(pkt_access);
++BPF_EMBED_OBJ_DECLARE(fentry);
+ 
+ void test_fentry_test(void)
+ {
+-	struct bpf_prog_load_attr attr = {
+-		.file = "./fentry_test.o",
+-	};
+-
+-	char prog_name[] = "fentry/bpf_fentry_testX";
+-	struct bpf_object *obj = NULL, *pkt_obj;
+-	int err, pkt_fd, kfree_skb_fd, i;
+-	struct bpf_link *link[6] = {};
+-	struct bpf_program *prog[6];
++	struct test_pkt_access *pkt_skel = NULL;
++	struct fentry_test *fentry_skel = NULL;
++	int err, pkt_fd, i;
+ 	__u32 duration, retval;
+-	struct bpf_map *data_map;
+-	const int zero = 0;
+-	u64 result[6];
++	__u64 *result;
+ 
+-	err = bpf_prog_load("./test_pkt_access.o", BPF_PROG_TYPE_SCHED_CLS,
+-			    &pkt_obj, &pkt_fd);
+-	if (CHECK(err, "prog_load sched cls", "err %d errno %d\n", err, errno))
++	pkt_skel = test_pkt_access__open_and_load(&pkt_access_embed);
++	if (CHECK(!pkt_skel, "pkt_skel_load", "pkt_access skeleton failed\n"))
+ 		return;
+-	err = bpf_prog_load_xattr(&attr, &obj, &kfree_skb_fd);
+-	if (CHECK(err, "prog_load fail", "err %d errno %d\n", err, errno))
+-		goto close_prog;
++	fentry_skel = fentry_test__open_and_load(&fentry_embed);
++	if (CHECK(!fentry_skel, "fentry_skel_load", "fentry skeleton failed\n"))
++		goto cleanup;
+ 
+-	for (i = 0; i < 6; i++) {
+-		prog_name[sizeof(prog_name) - 2] = '1' + i;
+-		prog[i] = bpf_object__find_program_by_title(obj, prog_name);
+-		if (CHECK(!prog[i], "find_prog", "prog %s not found\n", prog_name))
+-			goto close_prog;
+-		link[i] = bpf_program__attach_trace(prog[i]);
+-		if (CHECK(IS_ERR(link[i]), "attach_trace", "failed to link\n"))
+-			goto close_prog;
+-	}
+-	data_map = bpf_object__find_map_by_name(obj, "fentry_t.bss");
+-	if (CHECK(!data_map, "find_data_map", "data map not found\n"))
+-		goto close_prog;
++	err = fentry_test__attach(fentry_skel);
++	if (CHECK(err, "fentry_attach", "fentry attach failed: %d\n", err))
++		goto cleanup;
+ 
++	pkt_fd = bpf_program__fd(pkt_skel->progs.test_pkt_access);
+ 	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v6, sizeof(pkt_v6),
+ 				NULL, NULL, &retval, &duration);
+ 	CHECK(err || retval, "ipv6",
+ 	      "err %d errno %d retval %d duration %d\n",
+ 	      err, errno, retval, duration);
+ 
+-	err = bpf_map_lookup_elem(bpf_map__fd(data_map), &zero, &result);
+-	if (CHECK(err, "get_result",
+-		  "failed to get output data: %d\n", err))
+-		goto close_prog;
+-
+-	for (i = 0; i < 6; i++)
+-		if (CHECK(result[i] != 1, "result", "bpf_fentry_test%d failed err %ld\n",
+-			  i + 1, result[i]))
+-			goto close_prog;
++	result = (__u64 *)fentry_skel->bss;
++	for (i = 0; i < 6; i++) {
++		if (CHECK(result[i] != 1, "result",
++			  "fentry_test%d failed err %lld\n", i + 1, result[i]))
++			goto cleanup;
++	}
+ 
+-close_prog:
+-	for (i = 0; i < 6; i++)
+-		if (!IS_ERR_OR_NULL(link[i]))
+-			bpf_link__destroy(link[i]);
+-	bpf_object__close(obj);
+-	bpf_object__close(pkt_obj);
++cleanup:
++	fentry_test__destroy(fentry_skel);
++	test_pkt_access__destroy(pkt_skel);
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
+index 051a6d48762c..95a44d37ccea 100644
+--- a/tools/testing/selftests/bpf/prog_tests/mmap.c
++++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
+@@ -1,59 +1,41 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
+ #include <sys/mman.h>
++#include "test_mmap.skel.h"
+ 
+ struct map_data {
+ 	__u64 val[512 * 4];
+ };
+ 
+-struct bss_data {
+-	__u64 in_val;
+-	__u64 out_val;
+-};
+-
+ static size_t roundup_page(size_t sz)
+ {
+ 	long page_size = sysconf(_SC_PAGE_SIZE);
+ 	return (sz + page_size - 1) / page_size * page_size;
+ }
+ 
++BPF_EMBED_OBJ(test_mmap, "test_mmap.o");
++
+ void test_mmap(void)
+ {
+-	const char *file = "test_mmap.o";
+-	const char *probe_name = "raw_tracepoint/sys_enter";
+-	const char *tp_name = "sys_enter";
+-	const size_t bss_sz = roundup_page(sizeof(struct bss_data));
++	const size_t bss_sz = roundup_page(sizeof(struct test_mmap__bss));
+ 	const size_t map_sz = roundup_page(sizeof(struct map_data));
+ 	const int zero = 0, one = 1, two = 2, far = 1500;
+ 	const long page_size = sysconf(_SC_PAGE_SIZE);
+ 	int err, duration = 0, i, data_map_fd;
+-	struct bpf_program *prog;
+-	struct bpf_object *obj;
+-	struct bpf_link *link = NULL;
+ 	struct bpf_map *data_map, *bss_map;
+ 	void *bss_mmaped = NULL, *map_mmaped = NULL, *tmp1, *tmp2;
+-	volatile struct bss_data *bss_data;
+-	volatile struct map_data *map_data;
++	struct test_mmap__bss *bss_data;
++	struct map_data *map_data;
++	struct test_mmap *skel;
+ 	__u64 val = 0;
+ 
+-	obj = bpf_object__open_file("test_mmap.o", NULL);
+-	if (CHECK(IS_ERR(obj), "obj_open", "failed to open '%s': %ld\n",
+-		  file, PTR_ERR(obj)))
++
++	skel = test_mmap__open_and_load(&test_mmap_embed);
++	if (CHECK(!skel, "skel_open_and_load", "skeleton open/load failed\n"))
+ 		return;
+-	prog = bpf_object__find_program_by_title(obj, probe_name);
+-	if (CHECK(!prog, "find_probe", "prog '%s' not found\n", probe_name))
+-		goto cleanup;
+-	err = bpf_object__load(obj);
+-	if (CHECK(err, "obj_load", "failed to load prog '%s': %d\n",
+-		  probe_name, err))
+-		goto cleanup;
+ 
+-	bss_map = bpf_object__find_map_by_name(obj, "test_mma.bss");
+-	if (CHECK(!bss_map, "find_bss_map", ".bss map not found\n"))
+-		goto cleanup;
+-	data_map = bpf_object__find_map_by_name(obj, "data_map");
+-	if (CHECK(!data_map, "find_data_map", "data_map map not found\n"))
+-		goto cleanup;
++	bss_map = skel->maps.bss;
++	data_map = skel->maps.data_map;
+ 	data_map_fd = bpf_map__fd(data_map);
+ 
+ 	bss_mmaped = mmap(NULL, bss_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
+@@ -77,13 +59,15 @@ void test_mmap(void)
+ 
+ 	CHECK_FAIL(bss_data->in_val);
+ 	CHECK_FAIL(bss_data->out_val);
++	CHECK_FAIL(skel->bss->in_val);
++	CHECK_FAIL(skel->bss->out_val);
+ 	CHECK_FAIL(map_data->val[0]);
+ 	CHECK_FAIL(map_data->val[1]);
+ 	CHECK_FAIL(map_data->val[2]);
+ 	CHECK_FAIL(map_data->val[far]);
+ 
+-	link = bpf_program__attach_raw_tracepoint(prog, tp_name);
+-	if (CHECK(IS_ERR(link), "attach_raw_tp", "err %ld\n", PTR_ERR(link)))
++	err = test_mmap__attach(skel);
++	if (CHECK(err, "attach_raw_tp", "err %d\n", err))
+ 		goto cleanup;
+ 
+ 	bss_data->in_val = 123;
+@@ -94,6 +78,8 @@ void test_mmap(void)
+ 
+ 	CHECK_FAIL(bss_data->in_val != 123);
+ 	CHECK_FAIL(bss_data->out_val != 123);
++	CHECK_FAIL(skel->bss->in_val != 123);
++	CHECK_FAIL(skel->bss->out_val != 123);
+ 	CHECK_FAIL(map_data->val[0] != 111);
+ 	CHECK_FAIL(map_data->val[1] != 222);
+ 	CHECK_FAIL(map_data->val[2] != 123);
+@@ -160,6 +146,8 @@ void test_mmap(void)
+ 	usleep(1);
+ 	CHECK_FAIL(bss_data->in_val != 321);
+ 	CHECK_FAIL(bss_data->out_val != 321);
++	CHECK_FAIL(skel->bss->in_val != 321);
++	CHECK_FAIL(skel->bss->out_val != 321);
+ 	CHECK_FAIL(map_data->val[0] != 111);
+ 	CHECK_FAIL(map_data->val[1] != 222);
+ 	CHECK_FAIL(map_data->val[2] != 321);
+@@ -203,6 +191,8 @@ void test_mmap(void)
+ 	map_data = tmp2;
+ 	CHECK_FAIL(bss_data->in_val != 321);
+ 	CHECK_FAIL(bss_data->out_val != 321);
++	CHECK_FAIL(skel->bss->in_val != 321);
++	CHECK_FAIL(skel->bss->out_val != 321);
+ 	CHECK_FAIL(map_data->val[0] != 111);
+ 	CHECK_FAIL(map_data->val[1] != 222);
+ 	CHECK_FAIL(map_data->val[2] != 321);
+@@ -214,7 +204,5 @@ void test_mmap(void)
+ 		CHECK_FAIL(munmap(bss_mmaped, bss_sz));
+ 	if (map_mmaped)
+ 		CHECK_FAIL(munmap(map_mmaped, map_sz));
+-	if (!IS_ERR_OR_NULL(link))
+-		bpf_link__destroy(link);
+-	bpf_object__close(obj);
++	test_mmap__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
+index d841dced971f..4af8b8253f25 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
++++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
+@@ -1,16 +1,16 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
++#include "test_stacktrace_build_id.skel.h"
++
++BPF_EMBED_OBJ(stacktrace_build_id, "test_stacktrace_build_id.o");
+ 
+ void test_stacktrace_build_id(void)
+ {
++
+ 	int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
+-	const char *prog_name = "tracepoint/random/urandom_read";
+-	const char *file = "./test_stacktrace_build_id.o";
+-	int err, prog_fd, stack_trace_len;
++	struct test_stacktrace_build_id *skel;
++	int err, stack_trace_len;
+ 	__u32 key, previous_key, val, duration = 0;
+-	struct bpf_program *prog;
+-	struct bpf_object *obj;
+-	struct bpf_link *link = NULL;
+ 	char buf[256];
+ 	int i, j;
+ 	struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
+@@ -18,43 +18,24 @@ void test_stacktrace_build_id(void)
+ 	int retry = 1;
+ 
+ retry:
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
+-	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
++	skel = test_stacktrace_build_id__open_and_load(&stacktrace_build_id_embed);
++	if (CHECK(!skel, "skel_open_and_load", "skeleton open/load failed\n"))
+ 		return;
+ 
+-	prog = bpf_object__find_program_by_title(obj, prog_name);
+-	if (CHECK(!prog, "find_prog", "prog '%s' not found\n", prog_name))
+-		goto close_prog;
+-
+-	link = bpf_program__attach_tracepoint(prog, "random", "urandom_read");
+-	if (CHECK(IS_ERR(link), "attach_tp", "err %ld\n", PTR_ERR(link)))
+-		goto close_prog;
++	err = test_stacktrace_build_id__attach(skel);
++	if (CHECK(err, "attach_tp", "err %d\n", err))
++		goto cleanup;
+ 
+ 	/* find map fds */
+-	control_map_fd = bpf_find_map(__func__, obj, "control_map");
+-	if (CHECK(control_map_fd < 0, "bpf_find_map control_map",
+-		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
+-
+-	stackid_hmap_fd = bpf_find_map(__func__, obj, "stackid_hmap");
+-	if (CHECK(stackid_hmap_fd < 0, "bpf_find_map stackid_hmap",
+-		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
+-
+-	stackmap_fd = bpf_find_map(__func__, obj, "stackmap");
+-	if (CHECK(stackmap_fd < 0, "bpf_find_map stackmap", "err %d errno %d\n",
+-		  err, errno))
+-		goto disable_pmu;
+-
+-	stack_amap_fd = bpf_find_map(__func__, obj, "stack_amap");
+-	if (CHECK(stack_amap_fd < 0, "bpf_find_map stack_amap",
+-		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++	control_map_fd = bpf_map__fd(skel->maps.control_map);
++	stackid_hmap_fd = bpf_map__fd(skel->maps.stackid_hmap);
++	stackmap_fd = bpf_map__fd(skel->maps.stackmap);
++	stack_amap_fd = bpf_map__fd(skel->maps.stack_amap);
+ 
+ 	if (CHECK_FAIL(system("dd if=/dev/urandom of=/dev/zero count=4 2> /dev/null")))
+-		goto disable_pmu;
++		goto cleanup;
+ 	if (CHECK_FAIL(system("./urandom_read")))
+-		goto disable_pmu;
++		goto cleanup;
+ 	/* disable stack trace collection */
+ 	key = 0;
+ 	val = 1;
+@@ -66,23 +47,23 @@ void test_stacktrace_build_id(void)
+ 	err = compare_map_keys(stackid_hmap_fd, stackmap_fd);
+ 	if (CHECK(err, "compare_map_keys stackid_hmap vs. stackmap",
+ 		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	err = compare_map_keys(stackmap_fd, stackid_hmap_fd);
+ 	if (CHECK(err, "compare_map_keys stackmap vs. stackid_hmap",
+ 		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	err = extract_build_id(buf, 256);
+ 
+ 	if (CHECK(err, "get build_id with readelf",
+ 		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	err = bpf_map_get_next_key(stackmap_fd, NULL, &key);
+ 	if (CHECK(err, "get_next_key from stackmap",
+ 		  "err %d, errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	do {
+ 		char build_id[64];
+@@ -90,7 +71,7 @@ void test_stacktrace_build_id(void)
+ 		err = bpf_map_lookup_elem(stackmap_fd, &key, id_offs);
+ 		if (CHECK(err, "lookup_elem from stackmap",
+ 			  "err %d, errno %d\n", err, errno))
+-			goto disable_pmu;
++			goto cleanup;
+ 		for (i = 0; i < PERF_MAX_STACK_DEPTH; ++i)
+ 			if (id_offs[i].status == BPF_STACK_BUILD_ID_VALID &&
+ 			    id_offs[i].offset != 0) {
+@@ -108,8 +89,7 @@ void test_stacktrace_build_id(void)
+ 	 * try it one more time.
+ 	 */
+ 	if (build_id_matches < 1 && retry--) {
+-		bpf_link__destroy(link);
+-		bpf_object__close(obj);
++		test_stacktrace_build_id__destroy(skel);
+ 		printf("%s:WARN:Didn't find expected build ID from the map, retrying\n",
+ 		       __func__);
+ 		goto retry;
+@@ -117,17 +97,14 @@ void test_stacktrace_build_id(void)
+ 
+ 	if (CHECK(build_id_matches < 1, "build id match",
+ 		  "Didn't find expected build ID from the map\n"))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+-	stack_trace_len = PERF_MAX_STACK_DEPTH
+-		* sizeof(struct bpf_stack_build_id);
++	stack_trace_len = PERF_MAX_STACK_DEPTH *
++			  sizeof(struct bpf_stack_build_id);
+ 	err = compare_stack_ips(stackmap_fd, stack_amap_fd, stack_trace_len);
+ 	CHECK(err, "compare_stack_ips stackmap vs. stack_amap",
+ 	      "err %d errno %d\n", err, errno);
+ 
+-disable_pmu:
+-	bpf_link__destroy(link);
+-
+-close_prog:
+-	bpf_object__close(obj);
++cleanup:
++	test_stacktrace_build_id__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+index f62aa0eb959b..32fb03881a7b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
++++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
++#include "test_stacktrace_build_id.skel.h"
+ 
+ static __u64 read_perf_max_sample_freq(void)
+ {
+@@ -14,21 +15,19 @@ static __u64 read_perf_max_sample_freq(void)
+ 	return sample_freq;
+ }
+ 
++BPF_EMBED_OBJ_DECLARE(stacktrace_build_id);
++
+ void test_stacktrace_build_id_nmi(void)
+ {
+-	int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
+-	const char *prog_name = "tracepoint/random/urandom_read";
+-	const char *file = "./test_stacktrace_build_id.o";
+-	int err, pmu_fd, prog_fd;
++	int control_map_fd, stackid_hmap_fd, stackmap_fd;
++	struct test_stacktrace_build_id *skel;
++	int err, pmu_fd;
+ 	struct perf_event_attr attr = {
+ 		.freq = 1,
+ 		.type = PERF_TYPE_HARDWARE,
+ 		.config = PERF_COUNT_HW_CPU_CYCLES,
+ 	};
+ 	__u32 key, previous_key, val, duration = 0;
+-	struct bpf_program *prog;
+-	struct bpf_object *obj;
+-	struct bpf_link *link;
+ 	char buf[256];
+ 	int i, j;
+ 	struct bpf_stack_build_id id_offs[PERF_MAX_STACK_DEPTH];
+@@ -38,13 +37,16 @@ void test_stacktrace_build_id_nmi(void)
+ 	attr.sample_freq = read_perf_max_sample_freq();
+ 
+ retry:
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_PERF_EVENT, &obj, &prog_fd);
+-	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
++	skel = test_stacktrace_build_id__open(&stacktrace_build_id_embed);
++	if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
+ 		return;
+ 
+-	prog = bpf_object__find_program_by_title(obj, prog_name);
+-	if (CHECK(!prog, "find_prog", "prog '%s' not found\n", prog_name))
+-		goto close_prog;
++	/* override program type */
++	bpf_program__set_perf_event(skel->progs.oncpu);
++
++	err = test_stacktrace_build_id__load(skel);
++	if (CHECK(err, "skel_load", "skeleton load failed: %d\n", err))
++		goto cleanup;
+ 
+ 	pmu_fd = syscall(__NR_perf_event_open, &attr, -1 /* pid */,
+ 			 0 /* cpu 0 */, -1 /* group id */,
+@@ -52,40 +54,25 @@ void test_stacktrace_build_id_nmi(void)
+ 	if (CHECK(pmu_fd < 0, "perf_event_open",
+ 		  "err %d errno %d. Does the test host support PERF_COUNT_HW_CPU_CYCLES?\n",
+ 		  pmu_fd, errno))
+-		goto close_prog;
++		goto cleanup;
+ 
+-	link = bpf_program__attach_perf_event(prog, pmu_fd);
+-	if (CHECK(IS_ERR(link), "attach_perf_event",
+-		  "err %ld\n", PTR_ERR(link))) {
++	skel->links.oncpu = bpf_program__attach_perf_event(skel->progs.oncpu,
++							   pmu_fd);
++	if (CHECK(IS_ERR(skel->links.oncpu), "attach_perf_event",
++		  "err %ld\n", PTR_ERR(skel->links.oncpu))) {
+ 		close(pmu_fd);
+-		goto close_prog;
++		goto cleanup;
+ 	}
+ 
+ 	/* find map fds */
+-	control_map_fd = bpf_find_map(__func__, obj, "control_map");
+-	if (CHECK(control_map_fd < 0, "bpf_find_map control_map",
+-		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
+-
+-	stackid_hmap_fd = bpf_find_map(__func__, obj, "stackid_hmap");
+-	if (CHECK(stackid_hmap_fd < 0, "bpf_find_map stackid_hmap",
+-		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
+-
+-	stackmap_fd = bpf_find_map(__func__, obj, "stackmap");
+-	if (CHECK(stackmap_fd < 0, "bpf_find_map stackmap", "err %d errno %d\n",
+-		  err, errno))
+-		goto disable_pmu;
+-
+-	stack_amap_fd = bpf_find_map(__func__, obj, "stack_amap");
+-	if (CHECK(stack_amap_fd < 0, "bpf_find_map stack_amap",
+-		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++	control_map_fd = bpf_map__fd(skel->maps.control_map);
++	stackid_hmap_fd = bpf_map__fd(skel->maps.stackid_hmap);
++	stackmap_fd = bpf_map__fd(skel->maps.stackmap);
+ 
+ 	if (CHECK_FAIL(system("dd if=/dev/urandom of=/dev/zero count=4 2> /dev/null")))
+-		goto disable_pmu;
++		goto cleanup;
+ 	if (CHECK_FAIL(system("taskset 0x1 ./urandom_read 100000")))
+-		goto disable_pmu;
++		goto cleanup;
+ 	/* disable stack trace collection */
+ 	key = 0;
+ 	val = 1;
+@@ -97,23 +84,23 @@ void test_stacktrace_build_id_nmi(void)
+ 	err = compare_map_keys(stackid_hmap_fd, stackmap_fd);
+ 	if (CHECK(err, "compare_map_keys stackid_hmap vs. stackmap",
+ 		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	err = compare_map_keys(stackmap_fd, stackid_hmap_fd);
+ 	if (CHECK(err, "compare_map_keys stackmap vs. stackid_hmap",
+ 		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	err = extract_build_id(buf, 256);
+ 
+ 	if (CHECK(err, "get build_id with readelf",
+ 		  "err %d errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	err = bpf_map_get_next_key(stackmap_fd, NULL, &key);
+ 	if (CHECK(err, "get_next_key from stackmap",
+ 		  "err %d, errno %d\n", err, errno))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	do {
+ 		char build_id[64];
+@@ -121,7 +108,7 @@ void test_stacktrace_build_id_nmi(void)
+ 		err = bpf_map_lookup_elem(stackmap_fd, &key, id_offs);
+ 		if (CHECK(err, "lookup_elem from stackmap",
+ 			  "err %d, errno %d\n", err, errno))
+-			goto disable_pmu;
++			goto cleanup;
+ 		for (i = 0; i < PERF_MAX_STACK_DEPTH; ++i)
+ 			if (id_offs[i].status == BPF_STACK_BUILD_ID_VALID &&
+ 			    id_offs[i].offset != 0) {
+@@ -139,8 +126,7 @@ void test_stacktrace_build_id_nmi(void)
+ 	 * try it one more time.
+ 	 */
+ 	if (build_id_matches < 1 && retry--) {
+-		bpf_link__destroy(link);
+-		bpf_object__close(obj);
++		test_stacktrace_build_id__destroy(skel);
+ 		printf("%s:WARN:Didn't find expected build ID from the map, retrying\n",
+ 		       __func__);
+ 		goto retry;
+@@ -148,7 +134,7 @@ void test_stacktrace_build_id_nmi(void)
+ 
+ 	if (CHECK(build_id_matches < 1, "build id match",
+ 		  "Didn't find expected build ID from the map\n"))
+-		goto disable_pmu;
++		goto cleanup;
+ 
+ 	/*
+ 	 * We intentionally skip compare_stack_ips(). This is because we
+@@ -157,8 +143,6 @@ void test_stacktrace_build_id_nmi(void)
+ 	 * BPF_STACK_BUILD_ID_IP;
+ 	 */
+ 
+-disable_pmu:
+-	bpf_link__destroy(link);
+-close_prog:
+-	bpf_object__close(obj);
++cleanup:
++	test_stacktrace_build_id__destroy(skel);
+ }
 -- 
 2.17.1
 
