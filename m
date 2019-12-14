@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7549AC2D0BF
-	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2D37C43603
+	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 586732077B
-	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A47842077B
+	for <bpf@archiver.kernel.org>; Sat, 14 Dec 2019 01:44:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="H/kPfept"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="AqgTV7PF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726683AbfLNBoF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Dec 2019 20:44:05 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63968 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726855AbfLNBoA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 13 Dec 2019 20:44:00 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBE1daer012201
-        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:43:59 -0800
+        id S1726897AbfLNBoK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Dec 2019 20:44:10 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:44840 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726855AbfLNBoK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 13 Dec 2019 20:44:10 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBE1hpoF003445
+        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:44:08 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=cQgeeXbyiIZkT4g3VYta4xZNV49Al/mlcbRJ21wjcOA=;
- b=H/kPfeptT32tejwDzn6ixhPuYR3Qe4FtirYFQUKpqNYMJRyQdqH5sturWd05HCEpWCB/
- qKwhItxR4oC74fCwoGl0WQXE1FgRp/yvbYZ+qfYyQgd/mmwYjAHt7m9zIC2FH4AwGb3S
- HLKktQPQaW5eiDZtnk2lcwqgz59UnJjNPNY= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wvdw4j8y1-14
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:43:59 -0800
-Received: from intmgw005.05.ash5.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 13 Dec 2019 17:43:58 -0800
+ content-type; s=facebook; bh=neqyf+Gybfu175RC5s6CyKQK/Ixy7igfRqtOo6VTz9Q=;
+ b=AqgTV7PF2crHWevVj1ytm5OMG2fgGolYHAIlZcnOrmRFAH7PEHq4ezD9s26rNcFDZVKU
+ ezgAUWqAiSEOC1Xb9luEg76fYnz2Itjw2T1GvmXFyK2wt5sASeSEcWDyTfAOXe5VhxMO
+ SGQfWEJsAz9cVl7k6xdhpooAmM1Ze6FEbhk= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wvjpr0x5p-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 13 Dec 2019 17:44:08 -0800
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 13 Dec 2019 17:44:07 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 2AFF52EC1D51; Fri, 13 Dec 2019 17:43:57 -0800 (PST)
+        id A996F2EC1D51; Fri, 13 Dec 2019 17:44:01 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 06/17] libbpf: expose btf__align_of() API
-Date:   Fri, 13 Dec 2019 17:43:30 -0800
-Message-ID: <20191214014341.3442258-7-andriin@fb.com>
+Subject: [PATCH v4 bpf-next 08/17] libbpf: expose BPF program's function name
+Date:   Fri, 13 Dec 2019 17:43:32 -0800
+Message-ID: <20191214014341.3442258-9-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191214014341.3442258-1-andriin@fb.com>
 References: <20191214014341.3442258-1-andriin@fb.com>
@@ -59,186 +59,206 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-13_09:2019-12-13,2019-12-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 bulkscore=0
- adultscore=0 lowpriorityscore=0 clxscore=1015 impostorscore=0
- suspectscore=8 mlxscore=0 mlxlogscore=750 phishscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912140006
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ malwarescore=0 bulkscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ adultscore=0 lowpriorityscore=0 suspectscore=8 phishscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912140007
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Expose BTF API that calculates type alignment requirements.
+Add APIs to get BPF program function name, as opposed to bpf_program__title(),
+which returns BPF program function's section name. Function name has a benefit
+of being a valid C identifier and uniquely identifies a specific BPF program,
+while section name can be duplicated across multiple independent BPF programs.
 
+Add also bpf_object__find_program_by_name(), similar to
+bpf_object__find_program_by_title(), to facilitate looking up BPF programs by
+their C function names.
+
+Convert one of selftests to new API for look up.
+
+Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/btf.c      | 39 +++++++++++++++++++++++++++++++++
- tools/lib/bpf/btf.h      |  1 +
- tools/lib/bpf/btf_dump.c | 47 +++++-----------------------------------
- tools/lib/bpf/libbpf.map |  1 +
- 4 files changed, 47 insertions(+), 41 deletions(-)
+ tools/lib/bpf/libbpf.c                        | 28 +++++++++++++++----
+ tools/lib/bpf/libbpf.h                        |  9 ++++--
+ tools/lib/bpf/libbpf.map                      |  2 ++
+ .../selftests/bpf/prog_tests/rdonly_maps.c    | 11 +++-----
+ 4 files changed, 36 insertions(+), 14 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 88efa2bb7137..84fe82f27bef 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -278,6 +278,45 @@ __s64 btf__resolve_size(const struct btf *btf, __u32 type_id)
- 	return nelems * size;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 61b8cdf78332..e7a6b57d849c 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -209,8 +209,8 @@ static const char * const libbpf_type_to_btf_name[] = {
+ };
+ 
+ struct bpf_map {
+-	int fd;
+ 	char *name;
++	int fd;
+ 	int sec_idx;
+ 	size_t sec_offset;
+ 	int map_ifindex;
+@@ -1384,7 +1384,7 @@ static int bpf_object__init_user_btf_maps(struct bpf_object *obj, bool strict,
  }
  
-+int btf__align_of(const struct btf *btf, __u32 id)
+ static int bpf_object__init_maps(struct bpf_object *obj,
+-				 struct bpf_object_open_opts *opts)
++				 const struct bpf_object_open_opts *opts)
+ {
+ 	const char *pin_root_path = OPTS_GET(opts, pin_root_path, NULL);
+ 	bool strict = !OPTS_GET(opts, relaxed_maps, false);
+@@ -1748,6 +1748,19 @@ bpf_object__find_program_by_title(const struct bpf_object *obj,
+ 	return NULL;
+ }
+ 
++struct bpf_program *
++bpf_object__find_program_by_name(const struct bpf_object *obj,
++				 const char *name)
 +{
-+	const struct btf_type *t = btf__type_by_id(btf, id);
-+	__u16 kind = btf_kind(t);
++	struct bpf_program *prog;
 +
-+	switch (kind) {
-+	case BTF_KIND_INT:
-+	case BTF_KIND_ENUM:
-+		return min(sizeof(void *), t->size);
-+	case BTF_KIND_PTR:
-+		return sizeof(void *);
-+	case BTF_KIND_TYPEDEF:
-+	case BTF_KIND_VOLATILE:
-+	case BTF_KIND_CONST:
-+	case BTF_KIND_RESTRICT:
-+		return btf__align_of(btf, t->type);
-+	case BTF_KIND_ARRAY:
-+		return btf__align_of(btf, btf_array(t)->type);
-+	case BTF_KIND_STRUCT:
-+	case BTF_KIND_UNION: {
-+		const struct btf_member *m = btf_members(t);
-+		__u16 vlen = btf_vlen(t);
-+		int i, align = 1, t;
-+
-+		for (i = 0; i < vlen; i++, m++) {
-+			t = btf__align_of(btf, m->type);
-+			if (t <= 0)
-+				return t;
-+			align = max(align, t);
-+		}
-+
-+		return align;
++	bpf_object__for_each_program(prog, obj) {
++		if (!strcmp(prog->name, name))
++			return prog;
 +	}
-+	default:
-+		pr_warn("unsupported BTF_KIND:%u\n", btf_kind(t));
-+		return 0;
-+	}
++	return NULL;
 +}
 +
- int btf__resolve_type(const struct btf *btf, __u32 type_id)
+ static bool bpf_object__shndx_is_data(const struct bpf_object *obj,
+ 				      int shndx)
  {
- 	const struct btf_type *t;
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 5fc23b988deb..a114c8ef4f08 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -77,6 +77,7 @@ LIBBPF_API const struct btf_type *btf__type_by_id(const struct btf *btf,
- 						  __u32 id);
- LIBBPF_API __s64 btf__resolve_size(const struct btf *btf, __u32 type_id);
- LIBBPF_API int btf__resolve_type(const struct btf *btf, __u32 type_id);
-+LIBBPF_API int btf__align_of(const struct btf *btf, __u32 id);
- LIBBPF_API int btf__fd(const struct btf *btf);
- LIBBPF_API const void *btf__get_raw_data(const struct btf *btf, __u32 *size);
- LIBBPF_API const char *btf__name_by_offset(const struct btf *btf, __u32 offset);
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index cb126d8fcf75..53393026d085 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -752,41 +752,6 @@ static void btf_dump_emit_type(struct btf_dump *d, __u32 id, __u32 cont_id)
- 	}
+@@ -3894,7 +3907,7 @@ static int libbpf_find_attach_btf_id(const char *name,
+ 				     __u32 attach_prog_fd);
+ static struct bpf_object *
+ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
+-		   struct bpf_object_open_opts *opts)
++		   const struct bpf_object_open_opts *opts)
+ {
+ 	struct bpf_program *prog;
+ 	struct bpf_object *obj;
+@@ -4003,7 +4016,7 @@ struct bpf_object *bpf_object__open(const char *path)
  }
  
--static int btf_align_of(const struct btf *btf, __u32 id)
--{
--	const struct btf_type *t = btf__type_by_id(btf, id);
--	__u16 kind = btf_kind(t);
--
--	switch (kind) {
--	case BTF_KIND_INT:
--	case BTF_KIND_ENUM:
--		return min(sizeof(void *), t->size);
--	case BTF_KIND_PTR:
--		return sizeof(void *);
--	case BTF_KIND_TYPEDEF:
--	case BTF_KIND_VOLATILE:
--	case BTF_KIND_CONST:
--	case BTF_KIND_RESTRICT:
--		return btf_align_of(btf, t->type);
--	case BTF_KIND_ARRAY:
--		return btf_align_of(btf, btf_array(t)->type);
--	case BTF_KIND_STRUCT:
--	case BTF_KIND_UNION: {
--		const struct btf_member *m = btf_members(t);
--		__u16 vlen = btf_vlen(t);
--		int i, align = 1;
--
--		for (i = 0; i < vlen; i++, m++)
--			align = max(align, btf_align_of(btf, m->type));
--
--		return align;
--	}
--	default:
--		pr_warn("unsupported BTF_KIND:%u\n", btf_kind(t));
--		return 1;
--	}
--}
--
- static bool btf_is_struct_packed(const struct btf *btf, __u32 id,
- 				 const struct btf_type *t)
+ struct bpf_object *
+-bpf_object__open_file(const char *path, struct bpf_object_open_opts *opts)
++bpf_object__open_file(const char *path, const struct bpf_object_open_opts *opts)
  {
-@@ -794,18 +759,18 @@ static bool btf_is_struct_packed(const struct btf *btf, __u32 id,
- 	int align, i, bit_sz;
- 	__u16 vlen;
+ 	if (!path)
+ 		return ERR_PTR(-EINVAL);
+@@ -4015,7 +4028,7 @@ bpf_object__open_file(const char *path, struct bpf_object_open_opts *opts)
  
--	align = btf_align_of(btf, id);
-+	align = btf__align_of(btf, id);
- 	/* size of a non-packed struct has to be a multiple of its alignment*/
--	if (t->size % align)
-+	if (align && t->size % align)
- 		return true;
+ struct bpf_object *
+ bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
+-		     struct bpf_object_open_opts *opts)
++		     const struct bpf_object_open_opts *opts)
+ {
+ 	if (!obj_buf || obj_buf_sz == 0)
+ 		return ERR_PTR(-EINVAL);
+@@ -4820,6 +4833,11 @@ void bpf_program__set_ifindex(struct bpf_program *prog, __u32 ifindex)
+ 	prog->prog_ifindex = ifindex;
+ }
  
- 	m = btf_members(t);
- 	vlen = btf_vlen(t);
- 	/* all non-bitfield fields have to be naturally aligned */
- 	for (i = 0; i < vlen; i++, m++) {
--		align = btf_align_of(btf, m->type);
-+		align = btf__align_of(btf, m->type);
- 		bit_sz = btf_member_bitfield_size(t, i);
--		if (bit_sz == 0 && m->offset % (8 * align) != 0)
-+		if (align && bit_sz == 0 && m->offset % (8 * align) != 0)
- 			return true;
- 	}
++const char *bpf_program__name(const struct bpf_program *prog)
++{
++	return prog->name;
++}
++
+ const char *bpf_program__title(const struct bpf_program *prog, bool needs_copy)
+ {
+ 	const char *title;
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 49e6fa01024b..f37bd4a3e14b 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -90,10 +90,10 @@ struct bpf_object_open_opts {
  
-@@ -889,7 +854,7 @@ static void btf_dump_emit_struct_def(struct btf_dump *d,
- 		fname = btf_name_of(d, m->name_off);
- 		m_sz = btf_member_bitfield_size(t, i);
- 		m_off = btf_member_bit_offset(t, i);
--		align = packed ? 1 : btf_align_of(d->btf, m->type);
-+		align = packed ? 1 : btf__align_of(d->btf, m->type);
+ LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
+ LIBBPF_API struct bpf_object *
+-bpf_object__open_file(const char *path, struct bpf_object_open_opts *opts);
++bpf_object__open_file(const char *path, const struct bpf_object_open_opts *opts);
+ LIBBPF_API struct bpf_object *
+ bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
+-		     struct bpf_object_open_opts *opts);
++		     const struct bpf_object_open_opts *opts);
  
- 		btf_dump_emit_bit_padding(d, off, m_off, m_sz, align, lvl + 1);
- 		btf_dump_printf(d, "\n%s", pfx(lvl + 1));
-@@ -907,7 +872,7 @@ static void btf_dump_emit_struct_def(struct btf_dump *d,
+ /* deprecated bpf_object__open variants */
+ LIBBPF_API struct bpf_object *
+@@ -132,6 +132,7 @@ struct bpf_object_load_attr {
+ LIBBPF_API int bpf_object__load(struct bpf_object *obj);
+ LIBBPF_API int bpf_object__load_xattr(struct bpf_object_load_attr *attr);
+ LIBBPF_API int bpf_object__unload(struct bpf_object *obj);
++
+ LIBBPF_API const char *bpf_object__name(const struct bpf_object *obj);
+ LIBBPF_API unsigned int bpf_object__kversion(const struct bpf_object *obj);
  
- 	/* pad at the end, if necessary */
- 	if (is_struct) {
--		align = packed ? 1 : btf_align_of(d->btf, id);
-+		align = packed ? 1 : btf__align_of(d->btf, id);
- 		btf_dump_emit_bit_padding(d, off, t->size * 8, 0, align,
- 					  lvl + 1);
- 	}
+@@ -142,6 +143,9 @@ LIBBPF_API int bpf_object__btf_fd(const struct bpf_object *obj);
+ LIBBPF_API struct bpf_program *
+ bpf_object__find_program_by_title(const struct bpf_object *obj,
+ 				  const char *title);
++LIBBPF_API struct bpf_program *
++bpf_object__find_program_by_name(const struct bpf_object *obj,
++				 const char *name);
+ 
+ LIBBPF_API struct bpf_object *bpf_object__next(struct bpf_object *prev);
+ #define bpf_object__for_each_safe(pos, tmp)			\
+@@ -185,6 +189,7 @@ LIBBPF_API void *bpf_program__priv(const struct bpf_program *prog);
+ LIBBPF_API void bpf_program__set_ifindex(struct bpf_program *prog,
+ 					 __u32 ifindex);
+ 
++LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
+ LIBBPF_API const char *bpf_program__title(const struct bpf_program *prog,
+ 					  bool needs_copy);
+ 
 diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 757a88f64b5a..e7fcca36f186 100644
+index 990c7c0e2d9f..5a7630748eeb 100644
 --- a/tools/lib/bpf/libbpf.map
 +++ b/tools/lib/bpf/libbpf.map
-@@ -212,4 +212,5 @@ LIBBPF_0.0.6 {
+@@ -212,6 +212,8 @@ LIBBPF_0.0.6 {
  LIBBPF_0.0.7 {
  	global:
+ 		btf_dump__emit_type_decl;
++		bpf_object__find_program_by_name;
  		bpf_program__attach;
-+		btf__align_of;
++		bpf_program__name;
+ 		btf__align_of;
  } LIBBPF_0.0.6;
+diff --git a/tools/testing/selftests/bpf/prog_tests/rdonly_maps.c b/tools/testing/selftests/bpf/prog_tests/rdonly_maps.c
+index d90acc13d1ec..563e12120e77 100644
+--- a/tools/testing/selftests/bpf/prog_tests/rdonly_maps.c
++++ b/tools/testing/selftests/bpf/prog_tests/rdonly_maps.c
+@@ -16,14 +16,11 @@ struct rdonly_map_subtest {
+ 
+ void test_rdonly_maps(void)
+ {
+-	const char *prog_name_skip_loop = "raw_tracepoint/sys_enter:skip_loop";
+-	const char *prog_name_part_loop = "raw_tracepoint/sys_enter:part_loop";
+-	const char *prog_name_full_loop = "raw_tracepoint/sys_enter:full_loop";
+ 	const char *file = "test_rdonly_maps.o";
+ 	struct rdonly_map_subtest subtests[] = {
+-		{ "skip loop", prog_name_skip_loop, 0, 0 },
+-		{ "part loop", prog_name_part_loop, 3, 2 + 3 + 4 },
+-		{ "full loop", prog_name_full_loop, 4, 2 + 3 + 4 + 5 },
++		{ "skip loop", "skip_loop", 0, 0 },
++		{ "part loop", "part_loop", 3, 2 + 3 + 4 },
++		{ "full loop", "full_loop", 4, 2 + 3 + 4 + 5 },
+ 	};
+ 	int i, err, zero = 0, duration = 0;
+ 	struct bpf_link *link = NULL;
+@@ -50,7 +47,7 @@ void test_rdonly_maps(void)
+ 		if (!test__start_subtest(t->subtest_name))
+ 			continue;
+ 
+-		prog = bpf_object__find_program_by_title(obj, t->prog_name);
++		prog = bpf_object__find_program_by_name(obj, t->prog_name);
+ 		if (CHECK(!prog, "find_prog", "prog '%s' not found\n",
+ 			  t->prog_name))
+ 			goto cleanup;
 -- 
 2.17.1
 
