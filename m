@@ -2,171 +2,117 @@ Return-Path: <SRS0=nHBb=2F=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E8D5C43603
-	for <bpf@archiver.kernel.org>; Sun, 15 Dec 2019 07:09:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4471C43603
+	for <bpf@archiver.kernel.org>; Sun, 15 Dec 2019 15:53:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E8DF822B48
-	for <bpf@archiver.kernel.org>; Sun, 15 Dec 2019 07:09:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 87C2920726
+	for <bpf@archiver.kernel.org>; Sun, 15 Dec 2019 15:53:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="rQ6ck5RH"
+	dkim=pass (2048-bit key) header.d=umn.edu header.i=@umn.edu header.b="cnNd13+M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726099AbfLOHJP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 15 Dec 2019 02:09:15 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10462 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726061AbfLOHJP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 15 Dec 2019 02:09:15 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBF79Bpn005932
-        for <bpf@vger.kernel.org>; Sat, 14 Dec 2019 23:09:13 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=fNUmZ/c+Z7Qf0hb5SI6/I1PxqCXo+lk6rXrRg7XQwW0=;
- b=rQ6ck5RHlvvyd+JH0XpGzj6aD9yfVGM2UAmvAJiNLWa9WX7oV8bWWgDjpKRqDlgTGrCQ
- heCnoMrD4MgPhusnXzRDcrp8xja6Rhg0LbvWamv1FLQCRSELf6eMJLuYxeYQn0QGUhmf
- w0G1n4LHOJNH88v3IQQOeBIxrJQiXt+/D58= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wvxeqafj4-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 14 Dec 2019 23:09:13 -0800
-Received: from intmgw003.06.prn3.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Sat, 14 Dec 2019 23:08:48 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 367522EC1683; Sat, 14 Dec 2019 23:08:48 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 1/2] libbpf: support flexible arrays in CO-RE
-Date:   Sat, 14 Dec 2019 23:08:43 -0800
-Message-ID: <20191215070844.1014385-2-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191215070844.1014385-1-andriin@fb.com>
-References: <20191215070844.1014385-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1726426AbfLOPxi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 15 Dec 2019 10:53:38 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:47986 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726478AbfLOPxi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 15 Dec 2019 10:53:38 -0500
+X-Greylist: delayed 540 seconds by postgrey-1.27 at vger.kernel.org; Sun, 15 Dec 2019 10:53:37 EST
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 47bTH916Phz9vcq8
+        for <bpf@vger.kernel.org>; Sun, 15 Dec 2019 15:44:37 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id hlo2wTeHv9Ia for <bpf@vger.kernel.org>;
+        Sun, 15 Dec 2019 09:44:37 -0600 (CST)
+Received: from mail-yw1-f69.google.com (mail-yw1-f69.google.com [209.85.161.69])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 47bTH872mPz9vcpt
+        for <bpf@vger.kernel.org>; Sun, 15 Dec 2019 09:44:36 -0600 (CST)
+Received: by mail-yw1-f69.google.com with SMTP id j137so3797861ywa.8
+        for <bpf@vger.kernel.org>; Sun, 15 Dec 2019 07:44:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8MaXjt0FsXUXsO6312KufDDg3uo/7OWWPMETqU4hGeg=;
+        b=cnNd13+MtvIB7XKLTmQwE4VJKaQjPQ8wtnZCXQsg33NjgkokHMxaaT5QCrTgssaHde
+         POVQXccfXfAiF9O+b2ys327nAtgo48KwfPbgYIvTpe6B8IPeOhgiJanctpNfwK7v775X
+         qk2EJ2OKcHECm5gPYILCmLyU99qG+xCJijZ7lBUzlyZwI+gIe9UmmGJW//jWfUsxakyc
+         6es+JarwGukRoGu1J/Kiq1gdwfUgUVPfXTMi43KIqvtOzoC8G1GJ21bd3PikdG+QALT5
+         wwyD3GZ8nHLMqxrLYwIJX9X7bYEdR1hhlWXiCwufFOhGlmvTvBUQTWUI2XkhGCXV//uU
+         vA3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8MaXjt0FsXUXsO6312KufDDg3uo/7OWWPMETqU4hGeg=;
+        b=d2kQMiw0MJUC0uh/w75xyltvvDFQiv3VUZ7100PxI2A2IMDJNyfgaSPVzRQSZC4BM3
+         BMX2KWY/2XIG4Df/of5x5l2b9TQ6Rd8qo/1MfMjkc/e1F92jhZL75b8KlinyhNuivq3d
+         gxr20GG5NlownROHb+RJJ+zJFQRQHF25tqDOh113MYuJtb8fwn242jhznWYuRlwszHqc
+         AcTw1v5aMUAVXTUovHhQnd88oU0Ofh7LI7QEqkEo8adiHdocBHUntxjymjm7LQlNUAQJ
+         3VM6KixYhQoNXEqCainx44PFl0l8xf/q+xyEDaR5zMXP961NagUQSf64Gse9+L0hfvmB
+         cvHA==
+X-Gm-Message-State: APjAAAVTmFHpUT4FhcKKT6ARN8p6exm01xvfQZDkKs23WoC9wwZBaRcW
+        Bkp+4i3rEi0oEjHgTh8wyLRp7HBN739KwAR+2xPbtjg6ePTwAoGA3VYStTw4kxrAVeFGga+ht6f
+        6j0FjHb3kAk+MxOW+
+X-Received: by 2002:a25:bdc5:: with SMTP id g5mr9032684ybk.206.1576424676491;
+        Sun, 15 Dec 2019 07:44:36 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxfT6IU9GI6GwDtKMoF1A0NCGhTTkrNK7he9FRqEQKmqPMb/HlUzknbmIsjfrz3L+8vuWgxiA==
+X-Received: by 2002:a25:bdc5:: with SMTP id g5mr9032670ybk.206.1576424676248;
+        Sun, 15 Dec 2019 07:44:36 -0800 (PST)
+Received: from cs-u-syssec1.dtc.umn.edu (cs-u-syssec1.cs.umn.edu. [128.101.106.66])
+        by smtp.gmail.com with ESMTPSA id s3sm7164142ywf.22.2019.12.15.07.44.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Dec 2019 07:44:35 -0800 (PST)
+From:   Aditya Pakki <pakki001@umn.edu>
+To:     pakki001@umn.edu
+Cc:     kjlu@umn.edu, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] bpf: Replace BUG_ON when fp_old is NULL
+Date:   Sun, 15 Dec 2019 09:44:32 -0600
+Message-Id: <20191215154432.22399-1-pakki001@umn.edu>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-15_01:2019-12-13,2019-12-15 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=8
- spamscore=0 bulkscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
- adultscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=902 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912150067
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some data stuctures in kernel are defined with either zero-sized array or
-flexible (dimensionless) array at the end of a struct. Actual data of such
-array follows in memory immediately after the end of that struct, forming its
-variable-sized "body" of elements. Support such access pattern in CO-RE
-relocation handling.
+If fp_old is NULL in bpf_prog_realloc, the program does an assertion
+and crashes. However, we can continue execution by returning NULL to
+the upper callers. The patch fixes this issue.
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Aditya Pakki <pakki001@umn.edu>
 ---
- tools/lib/bpf/libbpf.c | 34 +++++++++++++++++++++++++++++-----
- 1 file changed, 29 insertions(+), 5 deletions(-)
+ kernel/bpf/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 27d5f7ecba32..51e7a25c6c88 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2537,6 +2537,21 @@ static bool str_is_empty(const char *s)
- 	return !s || !s[0];
- }
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 49e32acad7d8..4b46654fb26b 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -222,7 +222,8 @@ struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
+ 	u32 pages, delta;
+ 	int ret;
  
-+static bool is_flex_arr(const struct btf *btf,
-+			const struct bpf_core_accessor *acc,
-+			const struct btf_array *arr)
-+{
-+	const struct btf_type *t;
-+
-+	/* not a flexible array, if not inside a struct or has non-zero size */
-+	if (!acc->name || arr->nelems > 0)
-+		return false;
-+
-+	/* has to be the last member of enclosing struct */
-+	t = btf__type_by_id(btf, acc->type_id);
-+	return acc->idx == btf_vlen(t) - 1;
-+}
-+
- /*
-  * Turn bpf_field_reloc into a low- and high-level spec representation,
-  * validating correctness along the way, as well as calculating resulting
-@@ -2574,6 +2589,7 @@ static int bpf_core_spec_parse(const struct btf *btf,
- 			       struct bpf_core_spec *spec)
- {
- 	int access_idx, parsed_len, i;
-+	struct bpf_core_accessor *acc;
- 	const struct btf_type *t;
- 	const char *name;
- 	__u32 id;
-@@ -2621,6 +2637,7 @@ static int bpf_core_spec_parse(const struct btf *btf,
- 			return -EINVAL;
+-	BUG_ON(fp_old == NULL);
++	if (!fp_old)
++		return NULL;
  
- 		access_idx = spec->raw_spec[i];
-+		acc = &spec->spec[spec->len];
- 
- 		if (btf_is_composite(t)) {
- 			const struct btf_member *m;
-@@ -2638,18 +2655,23 @@ static int bpf_core_spec_parse(const struct btf *btf,
- 				if (str_is_empty(name))
- 					return -EINVAL;
- 
--				spec->spec[spec->len].type_id = id;
--				spec->spec[spec->len].idx = access_idx;
--				spec->spec[spec->len].name = name;
-+				acc->type_id = id;
-+				acc->idx = access_idx;
-+				acc->name = name;
- 				spec->len++;
- 			}
- 
- 			id = m->type;
- 		} else if (btf_is_array(t)) {
- 			const struct btf_array *a = btf_array(t);
-+			bool flex;
- 
- 			t = skip_mods_and_typedefs(btf, a->type, &id);
--			if (!t || access_idx >= a->nelems)
-+			if (!t)
-+				return -EINVAL;
-+
-+			flex = is_flex_arr(btf, acc - 1, a);
-+			if (!flex && access_idx >= a->nelems)
- 				return -EINVAL;
- 
- 			spec->spec[spec->len].type_id = id;
-@@ -2954,12 +2976,14 @@ static int bpf_core_spec_match(struct bpf_core_spec *local_spec,
- 			 */
- 			if (i > 0) {
- 				const struct btf_array *a;
-+				bool flex;
- 
- 				if (!btf_is_array(targ_type))
- 					return 0;
- 
- 				a = btf_array(targ_type);
--				if (local_acc->idx >= a->nelems)
-+				flex = is_flex_arr(targ_btf, targ_acc - 1, a);
-+				if (!flex && local_acc->idx >= a->nelems)
- 					return 0;
- 				if (!skip_mods_and_typedefs(targ_btf, a->type,
- 							    &targ_id))
+ 	size = round_up(size, PAGE_SIZE);
+ 	pages = size / PAGE_SIZE;
 -- 
-2.17.1
+2.20.1
 
