@@ -2,130 +2,100 @@ Return-Path: <SRS0=Avyz=2G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10A18C2D0CD
-	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:30:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ED64C43603
+	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:38:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DCA42207FF
-	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:30:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576521047;
-	bh=EwT10ETY9MI/NdSUuESri3Es+yuKxE44eF/VBhE5Dkg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=YpQBFwQWJmaxp+WSkjyf1lyf8IZxRhJ2MBjf1ix1wd1AyVJWKMhlQ9cHqYYqKnM8B
-	 O94JE8ImnO+jucN+uuZoMdnqXKlg2oXkkqv3+tJ7dp3ksuNi5D4hBSglA9haOCYVxo
-	 eR8+HDDaccmJ54VgxDUvG+Pg8+OlD+e6RrT7wCsM=
+	by mail.kernel.org (Postfix) with ESMTP id 216DD218AC
+	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:38:43 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mU3LT+5V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730755AbfLPSMV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Dec 2019 13:12:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57096 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730924AbfLPSMS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Dec 2019 13:12:18 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 103EF206B7;
-        Mon, 16 Dec 2019 18:12:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576519937;
-        bh=EwT10ETY9MI/NdSUuESri3Es+yuKxE44eF/VBhE5Dkg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uwnKulP14TAHsnlo1flBzSWOfuzC1UIbuW3qncqpJOM7EX61XfH2J/EIPWW8ymOZD
-         8xGXzXkN9TiyszGzRsEBCTFxsFEE1DO8fZYjLwpIpxA1eTFfghmPPuurW8XQhBWHL6
-         /T1E4SFCnenhJ2O3cj4zgMKsRQWthOzHwCF/deTU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Tyler Hicks <tyhicks@canonical.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Tycho Andersen <tycho@tycho.ws>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.3 131/180] seccomp: avoid overflow in implicit constant conversion
-Date:   Mon, 16 Dec 2019 18:49:31 +0100
-Message-Id: <20191216174841.842411126@linuxfoundation.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20191216174806.018988360@linuxfoundation.org>
-References: <20191216174806.018988360@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1727835AbfLPSij (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Dec 2019 13:38:39 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:59236 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729361AbfLPSij (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 16 Dec 2019 13:38:39 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBGIOMV9017052
+        for <bpf@vger.kernel.org>; Mon, 16 Dec 2019 10:38:38 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=kq1fRx8zSd/+q5wcJUQ5KdTFm36nQ4EAz3QAXz5XJDQ=;
+ b=mU3LT+5VAjraSr08R0tTP2+ERFG+fQAf7YP2utrNoMmdsNT/pDRanxSNtQ2B9L9L4gOw
+ mU3dl291n1um6s8ZU1Qc1ZlkWt26qsC8Ojy4NIGdxroqTRZtiv0qPVda1rShVoAONodj
+ eKZh+w3n4yz6cwQ8UIAj99dYwdL+kGDZcl4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wwgmcwdk9-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 16 Dec 2019 10:38:38 -0800
+Received: from intmgw001.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Mon, 16 Dec 2019 10:38:37 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 230802EC14BF; Mon, 16 Dec 2019 10:38:35 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Luca Boccassi <bluca@debian.org>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next] libbpf: add zlib as a dependency in pkg-config template
+Date:   Mon, 16 Dec 2019 10:38:29 -0800
+Message-ID: <20191216183830.3972964-1-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-16_07:2019-12-16,2019-12-16 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=916
+ suspectscore=8 bulkscore=0 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 malwarescore=0 phishscore=0 adultscore=0 mlxscore=0
+ clxscore=1015 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-1912160154
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Christian Brauner <christian.brauner@ubuntu.com>
+List zlib as another dependency of libbpf in pkg-config template.
+Verified it is correctly resolved to proper -lz flag:
 
-commit 223e660bc7638d126a0e4fbace4f33f2895788c4 upstream.
+$ make DESTDIR=/tmp/libbpf-install install
+$ pkg-config --libs /tmp/libbpf-install/usr/local/lib64/pkgconfig/libbpf.pc
+-L/usr/local/lib64 -lbpf
+$ pkg-config --libs --static /tmp/libbpf-install/usr/local/lib64/pkgconfig/libbpf.pc
+-L/usr/local/lib64 -lbpf -lelf -lz
 
-USER_NOTIF_MAGIC is assigned to int variables in this test so set it to INT_MAX
-to avoid warnings:
-
-seccomp_bpf.c: In function ‘user_notification_continue’:
-seccomp_bpf.c:3088:26: warning: overflow in implicit constant conversion [-Woverflow]
- #define USER_NOTIF_MAGIC 116983961184613L
-                          ^
-seccomp_bpf.c:3572:15: note: in expansion of macro ‘USER_NOTIF_MAGIC’
-  resp.error = USER_NOTIF_MAGIC;
-               ^~~~~~~~~~~~~~~~
-
-Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-Reviewed-by: Tyler Hicks <tyhicks@canonical.com>
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: Will Drewry <wad@chromium.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: Tycho Andersen <tycho@tycho.ws>
-Cc: stable@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Reviewed-by: Tycho Andersen <tycho@tycho.ws>
-Link: https://lore.kernel.org/r/20190920083007.11475-3-christian.brauner@ubuntu.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
+Fixes: 166750bc1dd2 ("libbpf: Support libbpf-provided extern variables")
+Cc: Luca Boccassi <bluca@debian.org>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.pc.template | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -35,6 +35,7 @@
- #include <stdbool.h>
- #include <string.h>
- #include <time.h>
-+#include <limits.h>
- #include <linux/elf.h>
- #include <sys/uio.h>
- #include <sys/utsname.h>
-@@ -3077,7 +3078,7 @@ static int user_trap_syscall(int nr, uns
- 	return seccomp(SECCOMP_SET_MODE_FILTER, flags, &prog);
- }
- 
--#define USER_NOTIF_MAGIC 116983961184613L
-+#define USER_NOTIF_MAGIC INT_MAX
- TEST(user_notification_basic)
- {
- 	pid_t pid;
-
+diff --git a/tools/lib/bpf/libbpf.pc.template b/tools/lib/bpf/libbpf.pc.template
+index ac17fcef2108..b45ed534bdfb 100644
+--- a/tools/lib/bpf/libbpf.pc.template
++++ b/tools/lib/bpf/libbpf.pc.template
+@@ -8,5 +8,5 @@ Name: libbpf
+ Description: BPF library
+ Version: @VERSION@
+ Libs: -L${libdir} -lbpf
+-Requires.private: libelf
++Requires.private: libelf zlib
+ Cflags: -I${includedir}
+-- 
+2.17.1
 
