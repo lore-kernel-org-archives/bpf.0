@@ -2,100 +2,155 @@ Return-Path: <SRS0=Avyz=2G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ED64C43603
-	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CF4FC2D0BF
+	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:42:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 216DD218AC
-	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:38:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6B77206A5
+	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:42:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mU3LT+5V"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N4lYk5st"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727835AbfLPSij (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Dec 2019 13:38:39 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:59236 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729361AbfLPSij (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 16 Dec 2019 13:38:39 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBGIOMV9017052
-        for <bpf@vger.kernel.org>; Mon, 16 Dec 2019 10:38:38 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=kq1fRx8zSd/+q5wcJUQ5KdTFm36nQ4EAz3QAXz5XJDQ=;
- b=mU3LT+5VAjraSr08R0tTP2+ERFG+fQAf7YP2utrNoMmdsNT/pDRanxSNtQ2B9L9L4gOw
- mU3dl291n1um6s8ZU1Qc1ZlkWt26qsC8Ojy4NIGdxroqTRZtiv0qPVda1rShVoAONodj
- eKZh+w3n4yz6cwQ8UIAj99dYwdL+kGDZcl4= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wwgmcwdk9-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 16 Dec 2019 10:38:38 -0800
-Received: from intmgw001.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 16 Dec 2019 10:38:37 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 230802EC14BF; Mon, 16 Dec 2019 10:38:35 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Luca Boccassi <bluca@debian.org>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next] libbpf: add zlib as a dependency in pkg-config template
-Date:   Mon, 16 Dec 2019 10:38:29 -0800
-Message-ID: <20191216183830.3972964-1-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
+        id S1728903AbfLPSAO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Dec 2019 13:00:14 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:41566 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728888AbfLPSAL (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 16 Dec 2019 13:00:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1576519209;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P8OYKMcfujhNjK8AEmQgJ/I1VwMzTEpLP9Q81r8ttM8=;
+        b=N4lYk5stYCWiIkDDEr5AkVISy6UsLyTHWV2/ka5gLy5h7Q08hV7un1ctfLiuyO3EwxMyA/
+        UOWpVdU3JMYdM8t9CtdEZTi+W9z1lCaHBW52yAwoFulsMrX/YzSUyAaV6C4AaRFuxuTi8s
+        B1QO5fK6QHZRlCOCMBS4mwBDbz8lco4=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-249--vZqa0RuO4mcETaeR5M2uQ-1; Mon, 16 Dec 2019 13:00:08 -0500
+X-MC-Unique: -vZqa0RuO4mcETaeR5M2uQ-1
+Received: by mail-lf1-f71.google.com with SMTP id d7so674067lfk.9
+        for <bpf@vger.kernel.org>; Mon, 16 Dec 2019 10:00:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=P8OYKMcfujhNjK8AEmQgJ/I1VwMzTEpLP9Q81r8ttM8=;
+        b=U0eP4UzR5dehJGJIxl5RUpTY0G8NiXJ2W5nxBwcuQ8G4sEuphRr4+ih5hqt0ciSftB
+         rUhHpIiNTkol8MNGlsBNh9VzoTY+akxBjAK46zSi8HLCBnf4k/tNlNtBCRXHsgYmMGCT
+         XpuH04/FRVXh/4Bp+Ud+0C8utbNSuGntelFqjCsm5yTwA/i55zblzyE+x8CtWWzFo2Az
+         axH50kLlQmcU4+CItI+lkCGpBvxC8avnn4+tStyEpmJQJfj77SH9+0F5ldtdaTteVRux
+         z+5K/inc1VoSVpHQugytbo+4v9414wMbX7yLLS6FX1aKEN1VT+wT4gz43NkhnnzRnE47
+         91yg==
+X-Gm-Message-State: APjAAAUfplMcDz8OZK8ErWgDuK7lOAVabWnRLpOwo1+8kb6qoySwGYfI
+        gOxGqLC8cuxl4rm9PYlurideAdGNBhvean2DpspVq02EeAMJICpc3QP6Sj1rsowEBHpwsMGcc09
+        E8PVbhoKGg+qC
+X-Received: by 2002:a19:6d13:: with SMTP id i19mr201115lfc.6.1576519206609;
+        Mon, 16 Dec 2019 10:00:06 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxh/vvO8yzMc5Mg/c6CA5AJMtI+JugQ5TVXTp2xmIojkcAcGAWuH7MDCiVVCg8O6WMEvdSLeQ==
+X-Received: by 2002:a19:6d13:: with SMTP id i19mr201101lfc.6.1576519206365;
+        Mon, 16 Dec 2019 10:00:06 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id m8sm9423870lfp.4.2019.12.16.10.00.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Dec 2019 10:00:05 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id A5500180960; Mon, 16 Dec 2019 19:00:04 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf\@vger.kernel.org" <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+Subject: Re: [PATCH bpf-next] libbpf: Print hint about ulimit when getting permission denied error
+In-Reply-To: <2146814b-f70e-b401-3ed3-4d113ab47e34@fb.com>
+References: <20191216124031.371482-1-toke@redhat.com> <2146814b-f70e-b401-3ed3-4d113ab47e34@fb.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Mon, 16 Dec 2019 19:00:04 +0100
+Message-ID: <87mubs882j.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-16_07:2019-12-16,2019-12-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=916
- suspectscore=8 bulkscore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 adultscore=0 mlxscore=0
- clxscore=1015 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1912160154
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-List zlib as another dependency of libbpf in pkg-config template.
-Verified it is correctly resolved to proper -lz flag:
+Yonghong Song <yhs@fb.com> writes:
 
-$ make DESTDIR=/tmp/libbpf-install install
-$ pkg-config --libs /tmp/libbpf-install/usr/local/lib64/pkgconfig/libbpf.pc
--L/usr/local/lib64 -lbpf
-$ pkg-config --libs --static /tmp/libbpf-install/usr/local/lib64/pkgconfig/libbpf.pc
--L/usr/local/lib64 -lbpf -lelf -lz
+> On 12/16/19 4:40 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> Probably the single most common error newcomers to XDP are stumped by is
+>> the 'permission denied' error they get when trying to load their program
+>> and 'ulimit -r' is set too low. For examples, see [0], [1].
+>>=20
+>> Since the error code is UAPI, we can't change that. Instead, this patch
+>> adds a few heuristics in libbpf and outputs an additional hint if they a=
+re
+>> met: If an EPERM is returned on map create or program load, and geteuid()
+>> shows we are root, and the current RLIMIT_MEMLOCK is not infinity, we
+>> output a hint about raising 'ulimit -r' as an additional log line.
+>>=20
+>> [0] https://marc.info/?l=3Dxdp-newbies&m=3D157043612505624&w=3D2
+>> [1] https://github.com/xdp-project/xdp-tutorial/issues/86
+>>=20
+>> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>
+> LGTM with one minor no-essential suggestion below.
+>
+> Acked-by: Yonghong Song <yhs@fb.com>
+>
+>> ---
+>>   tools/lib/bpf/libbpf.c | 21 +++++++++++++++++++++
+>>   1 file changed, 21 insertions(+)
+>>=20
+>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>> index a2cc7313763a..aec7995674d2 100644
+>> --- a/tools/lib/bpf/libbpf.c
+>> +++ b/tools/lib/bpf/libbpf.c
+>> @@ -41,6 +41,7 @@
+>>   #include <sys/types.h>
+>>   #include <sys/vfs.h>
+>>   #include <sys/utsname.h>
+>> +#include <sys/resource.h>
+>>   #include <tools/libc_compat.h>
+>>   #include <libelf.h>
+>>   #include <gelf.h>
+>> @@ -100,6 +101,24 @@ void libbpf_print(enum libbpf_print_level level, co=
+nst char *format, ...)
+>>   	va_end(args);
+>>   }
+>>=20=20=20
+>> +static void pr_perm_msg(int err)
+>> +{
+>> +	struct rlimit limit;
+>> +
+>> +	if (err !=3D -EPERM || geteuid() !=3D 0)
+>> +		return;
+>> +
+>> +	err =3D getrlimit(RLIMIT_MEMLOCK, &limit);
+>> +	if (err)
+>> +		return;
+>> +
+>> +	if (limit.rlim_cur =3D=3D RLIM_INFINITY)
+>> +		return;
+>> +
+>> +	pr_warn("permission error while running as root; try raising 'ulimit -=
+r'? current value: %lu\n",
+>> +		limit.rlim_cur);
+>
+> Here we print out in terms of bytes. Maybe in terms of kilo bytes or=20
+> mega bytes is more user friendly, esp. we want them to set a different=20
+> value?
 
-Fixes: 166750bc1dd2 ("libbpf: Support libbpf-provided extern variables")
-Cc: Luca Boccassi <bluca@debian.org>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/libbpf.pc.template | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yeah, thought about that, but was too lazy to actually implement it :)
 
-diff --git a/tools/lib/bpf/libbpf.pc.template b/tools/lib/bpf/libbpf.pc.template
-index ac17fcef2108..b45ed534bdfb 100644
---- a/tools/lib/bpf/libbpf.pc.template
-+++ b/tools/lib/bpf/libbpf.pc.template
-@@ -8,5 +8,5 @@ Name: libbpf
- Description: BPF library
- Version: @VERSION@
- Libs: -L${libdir} -lbpf
--Requires.private: libelf
-+Requires.private: libelf zlib
- Cflags: -I${includedir}
--- 
-2.17.1
+Can send a v2 with that added...
+
+-Toke
 
