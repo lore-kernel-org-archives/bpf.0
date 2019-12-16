@@ -2,97 +2,101 @@ Return-Path: <SRS0=Avyz=2G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 908C2C43603
-	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 07:17:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4815AC43603
+	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 07:18:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6140220725
-	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 07:17:33 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sc/pUz/2"
+	by mail.kernel.org (Postfix) with ESMTP id 248C120725
+	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 07:18:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726834AbfLPHRd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Dec 2019 02:17:33 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43279 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726565AbfLPHRc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Dec 2019 02:17:32 -0500
-Received: by mail-pf1-f195.google.com with SMTP id h14so3193202pfe.10;
-        Sun, 15 Dec 2019 23:17:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O679z1ZNxZm1L7wwDCHgL10vvD38qF9e8GlEICfZy6k=;
-        b=Sc/pUz/25KvSJzvdDVeJN2CMw/zO/3uatM88TdcrA0sh/cE2N5620lS2Aw6zmfl/rE
-         4qPI6iTn5faaMdrUUydZ0HGknTyQQYa0hFxjWwnDxWCeNCRHUDXUqviwlhN6nhWE878V
-         uBju3a4P5kTguMLB0EqE095N+SxXWV57DlCyrDjlLpq2vjACHBZPOgm1Ps9Hkvpb6e0S
-         Ghu/eG5hb4zr0JxQJWKeZj9sc2nZrDD+RsJ4RZi8kqNeGvta3E4ggAvSqPwEmzjmQuo/
-         Fa5KdAgKvVpWKfIkynf/5PxCqRi2e47sEgyTLkfanskXM3wAWGCXkzQNy1oA6QQ45pPW
-         l1TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O679z1ZNxZm1L7wwDCHgL10vvD38qF9e8GlEICfZy6k=;
-        b=m1G52PFszrhMf64sZ8NBcqJSv7c0/Gu9sC5z2cP5WXza5TNFj+CYX2xtBXc4vJVHVe
-         HikVvn6S8ErVDKZQgUx05QPqz36CAN+4BS6z9ygdGbQuom+qIPp2gJtwncK1zawyaEuF
-         HZds7XOJobLrtG38DNTmlgvZtF6NGZbbCXt1DtWnt0zwEkrtWoa5BkvtdFryTxFwUvYl
-         z4ceQ8viG4OvQXnTHn/v31vXU913Q8UPQeVYp0MrVP0IGv7lAS106XjamEP1uhwgcRF1
-         QVjjJabse0D2rQGRRxEoYmW1pmwyGi1VYd/4RejZjnAC627vfxuJOxVRDWkWu17MNa2C
-         Lsmg==
-X-Gm-Message-State: APjAAAXFCnE82Oj5+i5uFDLJyir3W7+3UJRYfiAm6Plkfif0qXInp3r4
-        +2MqKBbdWzy0WxXbHQiWu70=
-X-Google-Smtp-Source: APXvYqwTVIRmt/U52KL4OHTAMdEvkbuz1YvFg9Z4bE2uqiu5ZP/ZLlv45MEYAQJERla8zIgzu+2ibQ==
-X-Received: by 2002:aa7:9839:: with SMTP id q25mr14665848pfl.161.1576480652144;
-        Sun, 15 Dec 2019 23:17:32 -0800 (PST)
-Received: from localhost.localdomain ([222.151.198.97])
-        by smtp.gmail.com with ESMTPSA id q7sm20875486pfb.44.2019.12.15.23.17.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Dec 2019 23:17:31 -0800 (PST)
-From:   Prashant Bhole <prashantbhole.linux@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Prashant Bhole <prashantbhole.linux@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf] samples/bpf: reintroduce missed build targets
-Date:   Mon, 16 Dec 2019 16:16:19 +0900
-Message-Id: <20191216071619.25479-1-prashantbhole.linux@gmail.com>
-X-Mailer: git-send-email 2.21.0
+        id S1726657AbfLPHSE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Dec 2019 02:18:04 -0500
+Received: from mga06.intel.com ([134.134.136.31]:44493 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726558AbfLPHSE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 Dec 2019 02:18:04 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Dec 2019 23:18:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,320,1571727600"; 
+   d="scan'208";a="209211239"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga008.jf.intel.com with ESMTP; 15 Dec 2019 23:18:03 -0800
+Received: from [10.251.95.214] (abudanko-mobl.ccr.corp.intel.com [10.251.95.214])
+        by linux.intel.com (Postfix) with ESMTP id 6834958044E;
+        Sun, 15 Dec 2019 23:17:55 -0800 (PST)
+Subject: [PATCH v2 5/7] trace/bpf_trace: open access for CAP_SYS_PERFMON
+ privileged process
+From:   Alexey Budankov <alexey.budankov@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, jani.nikula@linux.intel.com,
+        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        Alexei Starovoitov <ast@kernel.org>,
+        james.bottomley@hansenpartnership.com, benh@kernel.crashing.org,
+        Casey Schaufler <casey@schaufler-ca.com>, serge@hallyn.com,
+        James Morris <jmorris@namei.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Andi Kleen <ak@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Igor Lubashev <ilubashe@akamai.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        intel-gfx@lists.freedesktop.org, bgregg@netflix.com,
+        Song Liu <songliubraving@fb.com>, bpf@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <26101427-c0a3-db9f-39e9-9e5f4ddd009c@linux.intel.com>
+Organization: Intel Corp.
+Message-ID: <e48f05eb-cca9-8dfa-9701-bcf5a96f035f@linux.intel.com>
+Date:   Mon, 16 Dec 2019 10:17:54 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <26101427-c0a3-db9f-39e9-9e5f4ddd009c@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add xdp_redirect and per_socket_stats_example in build targets.
-They got removed from build targets in Makefile reorganization.
 
-Fixes: 1d97c6c2511f ("samples/bpf: Base target programs rules on Makefile.target")
-Signed-off-by: Prashant Bhole <prashantbhole.linux@gmail.com>
+Open access to bpf_trace monitoring for CAP_SYS_PERFMON privileged processes.
+For backward compatibility reasons access to bpf_trace monitoring remains open
+for CAP_SYS_ADMIN privileged processes but CAP_SYS_ADMIN usage for secure
+bpf_trace monitoring is discouraged with respect to CAP_SYS_PERFMON capability.
+
+Signed-off-by: Alexey Budankov <alexey.budankov@linux.intel.com>
 ---
- samples/bpf/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/trace/bpf_trace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 1fc42ad8ff49..8003d2823fa8 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -38,6 +38,8 @@ tprogs-y += tc_l2_redirect
- tprogs-y += lwt_len_hist
- tprogs-y += xdp_tx_iptunnel
- tprogs-y += test_map_in_map
-+tprogs-y += per_socket_stats_example
-+tprogs-y += xdp_redirect
- tprogs-y += xdp_redirect_map
- tprogs-y += xdp_redirect_cpu
- tprogs-y += xdp_monitor
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 44bd08f2443b..0231bb363ef9 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1272,7 +1272,7 @@ int perf_event_query_prog_array(struct perf_event *event, void __user *info)
+ 	u32 *ids, prog_cnt, ids_len;
+ 	int ret;
+ 
+-	if (!capable(CAP_SYS_ADMIN))
++	if (!(capable(CAP_SYS_PERFMON) || capable(CAP_SYS_ADMIN)))
+ 		return -EPERM;
+ 	if (event->attr.type != PERF_TYPE_TRACEPOINT)
+ 		return -EINVAL;
 -- 
-2.21.0
+2.20.1
+
 
