@@ -5,63 +5,63 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44536C43603
-	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 09:13:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A58EC2D0D0
+	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 09:14:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 16F7D206D7
-	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 09:13:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F250B22522
+	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 09:14:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RwRGeVm1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qIUfuvAf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727056AbfLPJNz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Dec 2019 04:13:55 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:34832 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726313AbfLPJNz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Dec 2019 04:13:55 -0500
-Received: by mail-pg1-f194.google.com with SMTP id l24so3330854pgk.2;
-        Mon, 16 Dec 2019 01:13:55 -0800 (PST)
+        id S1727119AbfLPJOB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Dec 2019 04:14:01 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:32854 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727114AbfLPJOB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 Dec 2019 04:14:01 -0500
+Received: by mail-pf1-f193.google.com with SMTP id y206so5259709pfb.0;
+        Mon, 16 Dec 2019 01:14:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bYazlit0M4yBFQMfwCbOmC5g6AIzkoA/91yiEDZt7b0=;
-        b=RwRGeVm1aeN2qkJLadfLujw+Gg4mmYcLdCef5IRe1XA0xhjwByucNBCckRiVYY6fLO
-         4296nh+AjY2dK6wlGr86OM9pf7cguH6tlpQf7mVCmE9ZJhFyMvWHH1X5jR8DAxXPdrzK
-         Pq2mcImd24XixdeDeiReoUuU4bH2acto7KmAoYFdMkqUMLAKgT2mJIi3syGlZU4BFC3P
-         TSSxkz5RTMxufDP3glc76F5k57NP/Cxj5MleehiJXmq63EI0qxK7T7GEVKH6gXaZmUFM
-         qbH4Z0myz4VWg3u95JgmzKBXo23KfOmUgkcIZRXNLngGdkYKAf8Vguh9We/lv8iqrVqW
-         D2lA==
+        bh=rd0ylQkfUXD47lMr1COolacBtWcmBE98gO//niHtxXI=;
+        b=qIUfuvAf5plY9AdGHbegpurFDTmDKuRlVF3Lz0ZeeaL8aWA07KSjFUz5a4g3OkJJl0
+         7sbcqLQyJc8jhoPW73hcA42kFw6TJBw8xoN2xOZ80LkhaZbBFFE1384G2YNKLYH7cLvl
+         QjT5IkEKFLuNPoPbfMEzv/19Yt/x7PznYObaS7/cbRag8ccccqbCFYY2EhHR0mUtvjXX
+         REtJ63n76pIK3I7W2la1dJE4GhvFaWJDifDnthNlm55cutG1eDhWBvphwKnzV23yo/7W
+         gq5R4rR4ItY/qmIm48K0OthXZRU6AH2lqdbfKsN8cClVt9DIc9CB0VIrlfZxalpMo6lH
+         daHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bYazlit0M4yBFQMfwCbOmC5g6AIzkoA/91yiEDZt7b0=;
-        b=D3hX6XSBV6FFVSuKxCr31mXnql7hupfJEr1dhdRv0ZDJwJk3edjnSe8ZLcYqeSIP8P
-         1hluffqGxQUXjP6vI4c6BoX9EKH650/4t7+OzB6cAvswsy47Atb1lkAD5wSTfJxYM6Si
-         LM+7nojKxd2/peySVJjlDdsPfJlZd3Aiw1GhzV6LDqNSWhz+QlS8pSZtAIHYm9apHAiF
-         rNq38M8idp4IE8nJRCv/9R49MTdcTHsq+hRig7NgV9V6WDQLjpMVR0JqPJgZpVuMbs+w
-         2Vf/BZMmb1+anZAWd9BQYGTYQKu3NxxRlqSbL09pClyg/EBuEh4jmrxKGM3welIfzv9w
-         oH7A==
-X-Gm-Message-State: APjAAAVF56i/0EI6WKZHMxD6LTaIazhZXlPBDusFlvb5FuPi+4YwKNkV
-        E8D1I4yni4vMde3utFhn2NULE8JGZWg=
-X-Google-Smtp-Source: APXvYqya/ZK/sigSlCk224VfrvfZoRMNqXimX/XMn+BCFUGM3rt7mHAstLVa1xEVZ3DJ9X5w/O85hA==
-X-Received: by 2002:a63:5807:: with SMTP id m7mr15787129pgb.83.1576487634904;
-        Mon, 16 Dec 2019 01:13:54 -0800 (PST)
+        bh=rd0ylQkfUXD47lMr1COolacBtWcmBE98gO//niHtxXI=;
+        b=hnEzyrD7L3pzF4BilZuKH9vGLv2XLy7F8nEquKpRbfJoLRO2+/9jLWpr5Gh62H9rUi
+         jE5NdX/36tLJ4k1zlsAWtcwq2rPsFVwxv5hjRhBKICnmpThbh9CadKWCmAmZUb6UVBgg
+         bTkCkaxo9yqLYNeknvQIMcK4qankXecyTXA2/0h+EeL9E5ajQr8ZFBzJ5VrcwQXtecnr
+         9NECqh+gny57spvXNcdsYqfXndfKEZ2Uh1roHzvffI0W7JatyPU77tJE/Cv40hZtTZXp
+         TysljVXghjA6QPR5FviXmC5DR2DMycIPR/taX8ugLax8P/dfOXWr3lXfAfHG0oUispSe
+         mtPw==
+X-Gm-Message-State: APjAAAW0vPnuY9BMW3UxIYifR+8sceUZZ1XGF0OMYZvET0uGp/SPWoHt
+        +OKz4tHN4JA62jPtDRyx2Ck=
+X-Google-Smtp-Source: APXvYqwvlSWpPBFZbhR83GOWOvhvx/HkAxTGzSWuJq1dD/CdoLWHqImIZK+iC3ThDTzoYJwhgDpBeg==
+X-Received: by 2002:a63:1f0c:: with SMTP id f12mr17305605pgf.247.1576487640533;
+        Mon, 16 Dec 2019 01:14:00 -0800 (PST)
 Received: from btopel-mobl.ger.intel.com (fmdmzpr04-ext.fm.intel.com. [192.55.55.39])
-        by smtp.gmail.com with ESMTPSA id x21sm12505033pfn.164.2019.12.16.01.13.52
+        by smtp.gmail.com with ESMTPSA id x21sm12505033pfn.164.2019.12.16.01.13.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2019 01:13:54 -0800 (PST)
+        Mon, 16 Dec 2019 01:14:00 -0800 (PST)
 From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
 To:     daniel@iogearbox.net, ast@kernel.org, netdev@vger.kernel.org
 Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/9] riscv, bpf: fix broken BPF tail calls
-Date:   Mon, 16 Dec 2019 10:13:35 +0100
-Message-Id: <20191216091343.23260-2-bjorn.topel@gmail.com>
+Subject: [PATCH bpf-next v2 3/9] riscv, bpf: add support for far branching when emitting tail call
+Date:   Mon, 16 Dec 2019 10:13:37 +0100
+Message-Id: <20191216091343.23260-4-bjorn.topel@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191216091343.23260-1-bjorn.topel@gmail.com>
 References: <20191216091343.23260-1-bjorn.topel@gmail.com>
@@ -73,60 +73,67 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The BPF JIT incorrectly clobbered the a0 register, and did not flag
-usage of s5 register when BPF stack was being used.
+Start use the emit_branch() function in the tail call emitter in order
+to support far branching.
 
-Fixes: 2353ecc6f91f ("bpf, riscv: add BPF JIT for RV64G")
 Signed-off-by: Björn Töpel <bjorn.topel@gmail.com>
 ---
- arch/riscv/net/bpf_jit_comp.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ arch/riscv/net/bpf_jit_comp.c | 22 +++-------------------
+ 1 file changed, 3 insertions(+), 19 deletions(-)
 
 diff --git a/arch/riscv/net/bpf_jit_comp.c b/arch/riscv/net/bpf_jit_comp.c
-index 5451ef3845f2..1606ebd49666 100644
+index e599458a9bcd..c38c95df3440 100644
 --- a/arch/riscv/net/bpf_jit_comp.c
 +++ b/arch/riscv/net/bpf_jit_comp.c
-@@ -120,6 +120,11 @@ static bool seen_reg(int reg, struct rv_jit_context *ctx)
- 	return false;
+@@ -496,16 +496,6 @@ static int is_12b_check(int off, int insn)
+ 	return 0;
  }
  
-+static void mark_fp(struct rv_jit_context *ctx)
-+{
-+	__set_bit(RV_CTX_F_SEEN_S5, &ctx->flags);
-+}
-+
- static void mark_call(struct rv_jit_context *ctx)
+-static int is_13b_check(int off, int insn)
+-{
+-	if (!is_13b_int(off)) {
+-		pr_err("bpf-jit: insn=%d 13b < offset=%d not supported yet!\n",
+-		       insn, (int)off);
+-		return -1;
+-	}
+-	return 0;
+-}
+-
+ static int is_21b_check(int off, int insn)
  {
- 	__set_bit(RV_CTX_F_SEEN_CALL, &ctx->flags);
-@@ -596,7 +601,8 @@ static void __build_epilogue(u8 reg, struct rv_jit_context *ctx)
+ 	if (!is_21b_int(off)) {
+@@ -744,18 +734,14 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
+ 		return -1;
+ 	emit(rv_lwu(RV_REG_T1, off, RV_REG_A1), ctx);
+ 	off = (tc_ninsn - (ctx->ninsns - start_insn)) << 2;
+-	if (is_13b_check(off, insn))
+-		return -1;
+-	emit(rv_bgeu(RV_REG_A2, RV_REG_T1, off >> 1), ctx);
++	emit_branch(BPF_JGE, RV_REG_A2, RV_REG_T1, off, ctx);
  
- 	emit(rv_addi(RV_REG_SP, RV_REG_SP, stack_adjust), ctx);
- 	/* Set return value. */
--	emit(rv_addi(RV_REG_A0, RV_REG_A5, 0), ctx);
-+	if (reg == RV_REG_RA)
-+		emit(rv_addi(RV_REG_A0, RV_REG_A5, 0), ctx);
- 	emit(rv_jalr(RV_REG_ZERO, reg, 0), ctx);
- }
+ 	/* if (--TCC < 0)
+ 	 *     goto out;
+ 	 */
+ 	emit(rv_addi(RV_REG_T1, tcc, -1), ctx);
+ 	off = (tc_ninsn - (ctx->ninsns - start_insn)) << 2;
+-	if (is_13b_check(off, insn))
+-		return -1;
+-	emit(rv_blt(RV_REG_T1, RV_REG_ZERO, off >> 1), ctx);
++	emit_branch(BPF_JSLT, RV_REG_T1, RV_REG_ZERO, off, ctx);
  
-@@ -1426,6 +1432,10 @@ static void build_prologue(struct rv_jit_context *ctx)
- {
- 	int stack_adjust = 0, store_offset, bpf_stack_adjust;
+ 	/* prog = array->ptrs[index];
+ 	 * if (!prog)
+@@ -768,9 +754,7 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
+ 		return -1;
+ 	emit(rv_ld(RV_REG_T2, off, RV_REG_T2), ctx);
+ 	off = (tc_ninsn - (ctx->ninsns - start_insn)) << 2;
+-	if (is_13b_check(off, insn))
+-		return -1;
+-	emit(rv_beq(RV_REG_T2, RV_REG_ZERO, off >> 1), ctx);
++	emit_branch(BPF_JEQ, RV_REG_T2, RV_REG_ZERO, off, ctx);
  
-+	bpf_stack_adjust = round_up(ctx->prog->aux->stack_depth, 16);
-+	if (bpf_stack_adjust)
-+		mark_fp(ctx);
-+
- 	if (seen_reg(RV_REG_RA, ctx))
- 		stack_adjust += 8;
- 	stack_adjust += 8; /* RV_REG_FP */
-@@ -1443,7 +1453,6 @@ static void build_prologue(struct rv_jit_context *ctx)
- 		stack_adjust += 8;
- 
- 	stack_adjust = round_up(stack_adjust, 16);
--	bpf_stack_adjust = round_up(ctx->prog->aux->stack_depth, 16);
- 	stack_adjust += bpf_stack_adjust;
- 
- 	store_offset = stack_adjust - 8;
+ 	/* goto *(prog->bpf_func + 4); */
+ 	off = offsetof(struct bpf_prog, bpf_func);
 -- 
 2.20.1
 
