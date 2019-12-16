@@ -2,92 +2,169 @@ Return-Path: <SRS0=Avyz=2G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B190C43603
-	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:25:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98E3CC43603
+	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:30:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CFD4120674
-	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:25:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 677C0207FF
+	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:30:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uNc57GS+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Px/lX10T"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728154AbfLPSZU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Dec 2019 13:25:20 -0500
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:37084 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731626AbfLPSSL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Dec 2019 13:18:11 -0500
-Received: by mail-qt1-f195.google.com with SMTP id w47so6535631qtk.4;
-        Mon, 16 Dec 2019 10:18:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=aVIdbmjhSDvYURdJGBO4hrAy6vilyOLyBTa9JUkr1Bc=;
-        b=uNc57GS+pK9ryCHUL2YKrn+2eyUx9v0c7/GcpGykHEXM+J7jI4N7aKP1ir2aZsQ7aM
-         LSiq6oZuIg7lhCngpRn8W21ORm5YdRq2+0xqFkRQNcdOcbbRWwY6hmEjYVS1RkiekbsC
-         Mb/OZYvL5bQ+SIj1ne/rPXGOf9AXs+mJle60CXaXMSoNWP30OdEZ89ZuKeWEhbi0Sljq
-         3Gn6DGbSfI7YZ3Y89wFqDzpcS7724iu/jKYVs9FZeEZ+O4Sb9GwwqhztumFOCQ8MHErJ
-         lonrSxOKVC7+vFGho2O2PmrnJOliDA8RrKiY/bSe5amUGPBBWWZCRl4q1lC3GrO12XP6
-         tj0g==
+        id S1731195AbfLPSaW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Dec 2019 13:30:22 -0500
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:21118 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731011AbfLPSMw (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 16 Dec 2019 13:12:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1576519970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gG9VGGPZ6c4OJ26G78LddjiW5k2zffvrFpUIDfVi4Vk=;
+        b=Px/lX10TfCWwZ/WYWXUxqE9S9sYQH8FJ3zjcGYfN431OwjODWtxAqQYXnr6EQeE+4i4N6W
+        ixWjT1wpnIdzKWH9I5oVD6fx417QevFJlwd3JRHIMOMBVzegE4eZXYYS/JgTXwLtluolQB
+        ZzcqHh6w2WtpSp8MKSpSCMJjjFi2Yds=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-256-RPQyEhq4M1C6JYqzK4ZbUw-1; Mon, 16 Dec 2019 13:12:49 -0500
+X-MC-Unique: RPQyEhq4M1C6JYqzK4ZbUw-1
+Received: by mail-lj1-f197.google.com with SMTP id q191so2355894ljb.8
+        for <bpf@vger.kernel.org>; Mon, 16 Dec 2019 10:12:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=aVIdbmjhSDvYURdJGBO4hrAy6vilyOLyBTa9JUkr1Bc=;
-        b=PDdnGxliwX/3QU9dwVEw9mFmb0V3Ii6sY/EQ0MWYSUzQ//rq9yOKZrmMNRDE6v0o+T
-         WIxGuNFYSTu+8RWFgSSDnKf4J6rrg5IEIp5ZMCtiaztcaaQ+6Tvn3FZIjSLc9fBcX1KB
-         4M0przYAfPxtrr2FB883OUsm5YeTCTazpeb+7DdFeEbsJo28fdePr49qN/aIfjUElt6q
-         kLllPpvfSPzQCyWqCKuLXNVWsdcKMG/wxRchogQYt9CyzEeH8nCe1bekPZwP2WN4BDZH
-         hRgzBPyj6IVcvmyrCX/m0phaE8t5AR4S7QVBibK3mxs07Kzi+zgifW4w0sjd9z0LWO3C
-         pl/Q==
-X-Gm-Message-State: APjAAAXu2WBkr6v2dGrVMMvKAdBGSKTy0RyOE0LaWJZ63Y+K5HQzgaAk
-        22IG15s4zBPq3m745WepsQo/7I4rB94D0EYKidM=
-X-Google-Smtp-Source: APXvYqwNnMS/sGLMh1yvh3HaMoQe/JLQ94GhBaO27PGikqE7HgtGlM57avSLnco+xhHngt1Qye1+dTrwQFBq7nXFma4=
-X-Received: by 2002:ac8:2310:: with SMTP id a16mr621495qta.46.1576520290280;
- Mon, 16 Dec 2019 10:18:10 -0800 (PST)
-MIME-Version: 1.0
-References: <20191216152715.711308-1-toke@redhat.com>
-In-Reply-To: <20191216152715.711308-1-toke@redhat.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Mon, 16 Dec 2019 19:17:59 +0100
-Message-ID: <CAJ+HfNhYG_hzuFzX5sAH7ReotLtZWTP_9D2jA_iVMg+jUtXXCw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next] xdp: Add tracepoint on XDP program return
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gG9VGGPZ6c4OJ26G78LddjiW5k2zffvrFpUIDfVi4Vk=;
+        b=ASc1ODsIgzv2FfRhNsYsXpDgXxs+h/AYKaXf32WoovVTb91gPXP0eMd0iWTkWoMhkL
+         LUyDxwoCNUuuyFedZD5tM4HyOfkIbNFnWHnvOaym2hAKvuwwMWAfGrQwo5dv5OROH7pk
+         8OCdn9Pc/DYAW0ImJKVY39LtzxGijz3NGpvNiwn55lDQXNO2snWXC0B9/J6E/ZtP/UHc
+         jszq8CmrE2SM856bPRWIU0vLTV5tDQioHLFBidiHXHtXB/FXJKIjuafB92Jmer9bbbov
+         sn+n9rytAjIoWHB5XaBhPOJFJugwxBX9HshNBHWfLAOEv2nyVIg0uGAkzEQ6TPcLUR7S
+         gZ1w==
+X-Gm-Message-State: APjAAAVyrHzDOxjxH38idtXoOHSeryrOyJ6FipfwTs6RJYdHKOcehe8U
+        RoHQdM+IO/UHILurgq1rAcRRKBwMQ8Y8mlD9s77cV1B3QJpw9i1y9pHkdBnV4SgseTKsVLke4P8
+        MM+HQ4X5SuIvk
+X-Received: by 2002:a2e:8797:: with SMTP id n23mr298319lji.176.1576519967825;
+        Mon, 16 Dec 2019 10:12:47 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzib2wPbukcLs24+rc6P5JH52a4OsCYyY8YkGjR2Epph9CQfUt9aPxH1qqr+PIhM8j16xM9cw==
+X-Received: by 2002:a2e:8797:: with SMTP id n23mr298286lji.176.1576519967369;
+        Mon, 16 Dec 2019 10:12:47 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id q25sm11160992lji.7.2019.12.16.10.12.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Dec 2019 10:12:46 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id CDDF7180960; Mon, 16 Dec 2019 19:12:45 +0100 (CET)
+From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
         Jesper Dangaard Brouer <brouer@redhat.com>,
-        Ido Schimmel <idosch@idosch.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf-next v2] libbpf: Print hint about ulimit when getting permission denied error
+Date:   Mon, 16 Dec 2019 19:12:04 +0100
+Message-Id: <20191216181204.724953-1-toke@redhat.com>
+X-Mailer: git-send-email 2.24.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 16 Dec 2019 at 16:28, Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat=
-.com> wrote:
->
-> This adds a new tracepoint, xdp_prog_return, which is triggered at every
-> XDP program return. This was first discussed back in August[0] as a way t=
-o
-> hook XDP into the kernel drop_monitor framework, to have a one-stop place
-> to find all packet drops in the system.
->
-> Because trace/events/xdp.h includes filter.h, some ifdef guarding is need=
-ed
-> to be able to use the tracepoint from bpf_prog_run_xdp(). If anyone has a=
-ny
-> ideas for how to improve on this, please to speak up. Sending this RFC
-> because of this issue, and to get some feedback from Ido on whether this
-> tracepoint has enough data for drop_monitor usage.
->
+Probably the single most common error newcomers to XDP are stumped by is
+the 'permission denied' error they get when trying to load their program
+and 'ulimit -l' is set too low. For examples, see [0], [1].
 
-I get that it would be useful, but can it be solved with BPF tracing
-(i.e. tracing BPF with BPF)? It would be neat not adding another
-tracepoint in the fast-path...
+Since the error code is UAPI, we can't change that. Instead, this patch
+adds a few heuristics in libbpf and outputs an additional hint if they are
+met: If an EPERM is returned on map create or program load, and geteuid()
+shows we are root, and the current RLIMIT_MEMLOCK is not infinity, we
+output a hint about raising 'ulimit -l' as an additional log line.
+
+[0] https://marc.info/?l=xdp-newbies&m=157043612505624&w=2
+[1] https://github.com/xdp-project/xdp-tutorial/issues/86
+
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+v2:
+  - Format current output as KiB/MiB
+  - It's ulimit -l, not ulimit -r
+  
+ tools/lib/bpf/libbpf.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index a2cc7313763a..3fe42d6b0c2f 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -41,6 +41,7 @@
+ #include <sys/types.h>
+ #include <sys/vfs.h>
+ #include <sys/utsname.h>
++#include <sys/resource.h>
+ #include <tools/libc_compat.h>
+ #include <libelf.h>
+ #include <gelf.h>
+@@ -100,6 +101,32 @@ void libbpf_print(enum libbpf_print_level level, const char *format, ...)
+ 	va_end(args);
+ }
+ 
++static void pr_perm_msg(int err)
++{
++	struct rlimit limit;
++	char buf[100];
++
++	if (err != -EPERM || geteuid() != 0)
++		return;
++
++	err = getrlimit(RLIMIT_MEMLOCK, &limit);
++	if (err)
++		return;
++
++	if (limit.rlim_cur == RLIM_INFINITY)
++		return;
++
++	if (limit.rlim_cur < 1024)
++		snprintf(buf, sizeof(buf), "%lu bytes", limit.rlim_cur);
++	else if (limit.rlim_cur < 1024*1024)
++		snprintf(buf, sizeof(buf), "%.1f KiB", (double)limit.rlim_cur / 1024);
++	else
++		snprintf(buf, sizeof(buf), "%.1f MiB", (double)limit.rlim_cur / (1024*1024));
++
++	pr_warn("permission error while running as root; try raising 'ulimit -l'? current value: %s\n",
++		buf);
++}
++
+ #define STRERR_BUFSIZE  128
+ 
+ /* Copied from tools/perf/util/util.h */
+@@ -2983,6 +3010,7 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 			cp = libbpf_strerror_r(err, errmsg, sizeof(errmsg));
+ 			pr_warn("failed to create map (name: '%s'): %s(%d)\n",
+ 				map->name, cp, err);
++			pr_perm_msg(err);
+ 			for (j = 0; j < i; j++)
+ 				zclose(obj->maps[j].fd);
+ 			return err;
+@@ -4381,6 +4409,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 	ret = -errno;
+ 	cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+ 	pr_warn("load bpf program failed: %s\n", cp);
++	pr_perm_msg(ret);
+ 
+ 	if (log_buf && log_buf[0] != '\0') {
+ 		ret = -LIBBPF_ERRNO__VERIFY;
+-- 
+2.24.1
+
