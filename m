@@ -2,76 +2,64 @@ Return-Path: <SRS0=Avyz=2G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98E3CC43603
-	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:30:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10A18C2D0CD
+	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:30:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 677C0207FF
-	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:30:26 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Px/lX10T"
+	by mail.kernel.org (Postfix) with ESMTP id DCA42207FF
+	for <bpf@archiver.kernel.org>; Mon, 16 Dec 2019 18:30:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1576521047;
+	bh=EwT10ETY9MI/NdSUuESri3Es+yuKxE44eF/VBhE5Dkg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=YpQBFwQWJmaxp+WSkjyf1lyf8IZxRhJ2MBjf1ix1wd1AyVJWKMhlQ9cHqYYqKnM8B
+	 O94JE8ImnO+jucN+uuZoMdnqXKlg2oXkkqv3+tJ7dp3ksuNi5D4hBSglA9haOCYVxo
+	 eR8+HDDaccmJ54VgxDUvG+Pg8+OlD+e6RrT7wCsM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731195AbfLPSaW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Dec 2019 13:30:22 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:21118 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731011AbfLPSMw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 16 Dec 2019 13:12:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1576519970;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=gG9VGGPZ6c4OJ26G78LddjiW5k2zffvrFpUIDfVi4Vk=;
-        b=Px/lX10TfCWwZ/WYWXUxqE9S9sYQH8FJ3zjcGYfN431OwjODWtxAqQYXnr6EQeE+4i4N6W
-        ixWjT1wpnIdzKWH9I5oVD6fx417QevFJlwd3JRHIMOMBVzegE4eZXYYS/JgTXwLtluolQB
-        ZzcqHh6w2WtpSp8MKSpSCMJjjFi2Yds=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-256-RPQyEhq4M1C6JYqzK4ZbUw-1; Mon, 16 Dec 2019 13:12:49 -0500
-X-MC-Unique: RPQyEhq4M1C6JYqzK4ZbUw-1
-Received: by mail-lj1-f197.google.com with SMTP id q191so2355894ljb.8
-        for <bpf@vger.kernel.org>; Mon, 16 Dec 2019 10:12:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gG9VGGPZ6c4OJ26G78LddjiW5k2zffvrFpUIDfVi4Vk=;
-        b=ASc1ODsIgzv2FfRhNsYsXpDgXxs+h/AYKaXf32WoovVTb91gPXP0eMd0iWTkWoMhkL
-         LUyDxwoCNUuuyFedZD5tM4HyOfkIbNFnWHnvOaym2hAKvuwwMWAfGrQwo5dv5OROH7pk
-         8OCdn9Pc/DYAW0ImJKVY39LtzxGijz3NGpvNiwn55lDQXNO2snWXC0B9/J6E/ZtP/UHc
-         jszq8CmrE2SM856bPRWIU0vLTV5tDQioHLFBidiHXHtXB/FXJKIjuafB92Jmer9bbbov
-         sn+n9rytAjIoWHB5XaBhPOJFJugwxBX9HshNBHWfLAOEv2nyVIg0uGAkzEQ6TPcLUR7S
-         gZ1w==
-X-Gm-Message-State: APjAAAVyrHzDOxjxH38idtXoOHSeryrOyJ6FipfwTs6RJYdHKOcehe8U
-        RoHQdM+IO/UHILurgq1rAcRRKBwMQ8Y8mlD9s77cV1B3QJpw9i1y9pHkdBnV4SgseTKsVLke4P8
-        MM+HQ4X5SuIvk
-X-Received: by 2002:a2e:8797:: with SMTP id n23mr298319lji.176.1576519967825;
-        Mon, 16 Dec 2019 10:12:47 -0800 (PST)
-X-Google-Smtp-Source: APXvYqzib2wPbukcLs24+rc6P5JH52a4OsCYyY8YkGjR2Epph9CQfUt9aPxH1qqr+PIhM8j16xM9cw==
-X-Received: by 2002:a2e:8797:: with SMTP id n23mr298286lji.176.1576519967369;
-        Mon, 16 Dec 2019 10:12:47 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id q25sm11160992lji.7.2019.12.16.10.12.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2019 10:12:46 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id CDDF7180960; Mon, 16 Dec 2019 19:12:45 +0100 (CET)
-From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH bpf-next v2] libbpf: Print hint about ulimit when getting permission denied error
-Date:   Mon, 16 Dec 2019 19:12:04 +0100
-Message-Id: <20191216181204.724953-1-toke@redhat.com>
+        id S1730755AbfLPSMV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Dec 2019 13:12:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57096 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730924AbfLPSMS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 Dec 2019 13:12:18 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 103EF206B7;
+        Mon, 16 Dec 2019 18:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576519937;
+        bh=EwT10ETY9MI/NdSUuESri3Es+yuKxE44eF/VBhE5Dkg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=uwnKulP14TAHsnlo1flBzSWOfuzC1UIbuW3qncqpJOM7EX61XfH2J/EIPWW8ymOZD
+         8xGXzXkN9TiyszGzRsEBCTFxsFEE1DO8fZYjLwpIpxA1eTFfghmPPuurW8XQhBWHL6
+         /T1E4SFCnenhJ2O3cj4zgMKsRQWthOzHwCF/deTU=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Tyler Hicks <tyhicks@canonical.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Tycho Andersen <tycho@tycho.ws>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.3 131/180] seccomp: avoid overflow in implicit constant conversion
+Date:   Mon, 16 Dec 2019 18:49:31 +0100
+Message-Id: <20191216174841.842411126@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20191216174806.018988360@linuxfoundation.org>
+References: <20191216174806.018988360@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -80,91 +68,64 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Probably the single most common error newcomers to XDP are stumped by is
-the 'permission denied' error they get when trying to load their program
-and 'ulimit -l' is set too low. For examples, see [0], [1].
+From: Christian Brauner <christian.brauner@ubuntu.com>
 
-Since the error code is UAPI, we can't change that. Instead, this patch
-adds a few heuristics in libbpf and outputs an additional hint if they are
-met: If an EPERM is returned on map create or program load, and geteuid()
-shows we are root, and the current RLIMIT_MEMLOCK is not infinity, we
-output a hint about raising 'ulimit -l' as an additional log line.
+commit 223e660bc7638d126a0e4fbace4f33f2895788c4 upstream.
 
-[0] https://marc.info/?l=xdp-newbies&m=157043612505624&w=2
-[1] https://github.com/xdp-project/xdp-tutorial/issues/86
+USER_NOTIF_MAGIC is assigned to int variables in this test so set it to INT_MAX
+to avoid warnings:
 
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+seccomp_bpf.c: In function ‘user_notification_continue’:
+seccomp_bpf.c:3088:26: warning: overflow in implicit constant conversion [-Woverflow]
+ #define USER_NOTIF_MAGIC 116983961184613L
+                          ^
+seccomp_bpf.c:3572:15: note: in expansion of macro ‘USER_NOTIF_MAGIC’
+  resp.error = USER_NOTIF_MAGIC;
+               ^~~~~~~~~~~~~~~~
+
+Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Reviewed-by: Tyler Hicks <tyhicks@canonical.com>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Will Drewry <wad@chromium.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Tycho Andersen <tycho@tycho.ws>
+Cc: stable@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Reviewed-by: Tycho Andersen <tycho@tycho.ws>
+Link: https://lore.kernel.org/r/20190920083007.11475-3-christian.brauner@ubuntu.com
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
 ---
-v2:
-  - Format current output as KiB/MiB
-  - It's ulimit -l, not ulimit -r
-  
- tools/lib/bpf/libbpf.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ tools/testing/selftests/seccomp/seccomp_bpf.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index a2cc7313763a..3fe42d6b0c2f 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -41,6 +41,7 @@
- #include <sys/types.h>
- #include <sys/vfs.h>
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -35,6 +35,7 @@
+ #include <stdbool.h>
+ #include <string.h>
+ #include <time.h>
++#include <limits.h>
+ #include <linux/elf.h>
+ #include <sys/uio.h>
  #include <sys/utsname.h>
-+#include <sys/resource.h>
- #include <tools/libc_compat.h>
- #include <libelf.h>
- #include <gelf.h>
-@@ -100,6 +101,32 @@ void libbpf_print(enum libbpf_print_level level, const char *format, ...)
- 	va_end(args);
+@@ -3077,7 +3078,7 @@ static int user_trap_syscall(int nr, uns
+ 	return seccomp(SECCOMP_SET_MODE_FILTER, flags, &prog);
  }
  
-+static void pr_perm_msg(int err)
-+{
-+	struct rlimit limit;
-+	char buf[100];
-+
-+	if (err != -EPERM || geteuid() != 0)
-+		return;
-+
-+	err = getrlimit(RLIMIT_MEMLOCK, &limit);
-+	if (err)
-+		return;
-+
-+	if (limit.rlim_cur == RLIM_INFINITY)
-+		return;
-+
-+	if (limit.rlim_cur < 1024)
-+		snprintf(buf, sizeof(buf), "%lu bytes", limit.rlim_cur);
-+	else if (limit.rlim_cur < 1024*1024)
-+		snprintf(buf, sizeof(buf), "%.1f KiB", (double)limit.rlim_cur / 1024);
-+	else
-+		snprintf(buf, sizeof(buf), "%.1f MiB", (double)limit.rlim_cur / (1024*1024));
-+
-+	pr_warn("permission error while running as root; try raising 'ulimit -l'? current value: %s\n",
-+		buf);
-+}
-+
- #define STRERR_BUFSIZE  128
- 
- /* Copied from tools/perf/util/util.h */
-@@ -2983,6 +3010,7 @@ bpf_object__create_maps(struct bpf_object *obj)
- 			cp = libbpf_strerror_r(err, errmsg, sizeof(errmsg));
- 			pr_warn("failed to create map (name: '%s'): %s(%d)\n",
- 				map->name, cp, err);
-+			pr_perm_msg(err);
- 			for (j = 0; j < i; j++)
- 				zclose(obj->maps[j].fd);
- 			return err;
-@@ -4381,6 +4409,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	ret = -errno;
- 	cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
- 	pr_warn("load bpf program failed: %s\n", cp);
-+	pr_perm_msg(ret);
- 
- 	if (log_buf && log_buf[0] != '\0') {
- 		ret = -LIBBPF_ERRNO__VERIFY;
--- 
-2.24.1
+-#define USER_NOTIF_MAGIC 116983961184613L
++#define USER_NOTIF_MAGIC INT_MAX
+ TEST(user_notification_basic)
+ {
+ 	pid_t pid;
+
 
