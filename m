@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18968C43603
-	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 05:36:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9029AC43603
+	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 05:37:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D071E20733
-	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 05:36:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47DB52146E
+	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 05:37:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NOmgbJ6R"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="HAYx4O6M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727130AbfLQFgm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Dec 2019 00:36:42 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:60620 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726963AbfLQFgj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 17 Dec 2019 00:36:39 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBH5TQ3D026480
-        for <bpf@vger.kernel.org>; Mon, 16 Dec 2019 21:36:37 -0800
+        id S1727171AbfLQFhI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Dec 2019 00:37:08 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:24642 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725812AbfLQFhI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 17 Dec 2019 00:37:08 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBH5avIJ032392
+        for <bpf@vger.kernel.org>; Mon, 16 Dec 2019 21:37:05 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=U2FnVVd88r9vKq3mERSqE+BEIVPJPGLLu3y42olYkjc=;
- b=NOmgbJ6RPbsxC42uOejz0V8doS++6C6KCR+VTfJQHkfjER2uLWFPRLLFoTZ0WMlymy+p
- sd9LrD9n7byqwc31Y4E8w1P8RALzgRdboNxqhN+mFLWGcNrWjp7q2SZXYjgA9r+It/yT
- Tx9WG7WSO8JRTt/h1fmR6l0bY/4HPchSDmo= 
+ content-type; s=facebook; bh=JFrYrea0O9f4/3aJMkLvxlNMqEnYxGT2ydukCeBhtVc=;
+ b=HAYx4O6MeX2GEp/+S7oEg0E3CR0B6xDJFpLTl8ZB+4cPQRxWmw8mDWyca4NUupQeyplZ
+ NKHTkA7eb3SN/Xpo/gI2umQfU08lZGPiJY9iTLwukRV1kWX/Yqb9GODQxEswmN+twnmM
+ reSSk1v3rBHN6yfW9iVYSa3IpVxjsWHbVCE= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wwtq16ejn-1
+        by mx0a-00082601.pphosted.com with ESMTP id 2wwgc0qwpg-9
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 16 Dec 2019 21:36:37 -0800
+        for <bpf@vger.kernel.org>; Mon, 16 Dec 2019 21:37:05 -0800
 Received: from intmgw003.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 16 Dec 2019 21:36:36 -0800
+ 15.1.1713.5; Mon, 16 Dec 2019 21:36:33 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 08E272EC1AFA; Mon, 16 Dec 2019 21:36:35 -0800 (PST)
+        id 8E51E2EC1AFA; Mon, 16 Dec 2019 21:36:30 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 3/3] bpftool: add gen subcommand manpage
-Date:   Mon, 16 Dec 2019 21:36:26 -0800
-Message-ID: <20191217053626.2158870-4-andriin@fb.com>
+Subject: [PATCH bpf-next 1/3] bpftool, selftests/bpf: embed object file inside skeleton
+Date:   Mon, 16 Dec 2019 21:36:24 -0800
+Message-ID: <20191217053626.2158870-2-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191217053626.2158870-1-andriin@fb.com>
 References: <20191217053626.2158870-1-andriin@fb.com>
@@ -59,347 +59,527 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-17_01:2019-12-16,2019-12-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- suspectscore=25 phishscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 clxscore=1015 bulkscore=0 spamscore=0 mlxlogscore=999
- mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912170049
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ impostorscore=0 spamscore=0 phishscore=0 clxscore=1015 suspectscore=25
+ mlxlogscore=999 mlxscore=0 priorityscore=1501 lowpriorityscore=0
+ adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912170050
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bpftool-gen.rst describing skeleton on the high level. Also include
-a small, but complete, example BPF app (BPF side, userspace side, generated
-skeleton) in example section to demonstrate skeleton API and its usage.
+Embed contents of BPF object file used for BPF skeleton generation inside
+skeleton itself. This allows to keep BPF object file and its skeleton in sync
+at all times, and simpifies skeleton instantiation.
+
+Also switch existing selftests to not require BPF_EMBED_OBJ anymore.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../bpf/bpftool/Documentation/bpftool-gen.rst | 302 ++++++++++++++++++
- tools/bpf/bpftool/Documentation/bpftool.rst   |   3 +-
- 2 files changed, 304 insertions(+), 1 deletion(-)
- create mode 100644 tools/bpf/bpftool/Documentation/bpftool-gen.rst
+ tools/bpf/bpftool/gen.c                       | 226 +++++++++++-------
+ .../selftests/bpf/prog_tests/attach_probe.c   |   4 +-
+ .../selftests/bpf/prog_tests/core_extern.c    |   4 +-
+ .../selftests/bpf/prog_tests/fentry_fexit.c   |  10 +-
+ .../selftests/bpf/prog_tests/fentry_test.c    |   7 +-
+ tools/testing/selftests/bpf/prog_tests/mmap.c |   4 +-
+ .../selftests/bpf/prog_tests/skeleton.c       |   4 +-
+ .../bpf/prog_tests/stacktrace_build_id.c      |   4 +-
+ .../bpf/prog_tests/stacktrace_build_id_nmi.c  |   4 +-
+ 9 files changed, 152 insertions(+), 115 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-new file mode 100644
-index 000000000000..855d03b88590
---- /dev/null
-+++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-@@ -0,0 +1,302 @@
-+================
-+bpftool-gen
-+================
-+-------------------------------------------------------------------------------
-+tool for BPF code-generation
-+-------------------------------------------------------------------------------
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index f70088b4c19b..27dfbd363430 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -16,6 +16,7 @@
+ #include <libbpf.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <sys/mman.h>
+ #include <unistd.h>
+ 
+ #include "btf.h"
+@@ -261,14 +262,16 @@ static int codegen(const char *template, ...)
+ static int do_skeleton(int argc, char **argv)
+ {
+ 	char header_guard[MAX_OBJ_NAME_LEN + sizeof("__SKEL_H__")];
+-	size_t i, map_cnt = 0, prog_cnt = 0;
+-	char obj_name[MAX_OBJ_NAME_LEN];
++	size_t i, map_cnt = 0, prog_cnt = 0, file_sz, mmap_sz;
++	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts);
++	char obj_name[MAX_OBJ_NAME_LEN], *obj_data;
++	struct bpf_object *obj = NULL;
+ 	const char *file, *ident;
+ 	struct bpf_program *prog;
+-	struct bpf_object *obj;
++	int fd, len, err = -1;
+ 	struct bpf_map *map;
+ 	struct btf *btf;
+-	int err = -1;
++	struct stat st;
+ 
+ 	if (!REQ_ARGS(1)) {
+ 		usage();
+@@ -281,14 +284,31 @@ static int do_skeleton(int argc, char **argv)
+ 		return -1;
+ 	}
+ 
+-	obj = bpf_object__open_file(file, NULL);
+-	if (IS_ERR(obj)) {
+-		p_err("failed to open BPF object file: %ld", PTR_ERR(obj));
++	if (stat(file, &st)) {
++		p_err("failed to stat() %s: %s", file, strerror(errno));
+ 		return -1;
+ 	}
+-
++	file_sz = st.st_size;
++	mmap_sz = roundup(file_sz, sysconf(_SC_PAGE_SIZE));
++	fd = open(file, O_RDONLY);
++	if (fd < 0) {
++		p_err("failed to open() %s: %s", file, strerror(errno));
++		return -1;
++	}
++	obj_data = mmap(NULL, mmap_sz, PROT_READ, MAP_PRIVATE, fd, 0);
++	if (obj_data == MAP_FAILED) {
++		obj_data = NULL;
++		p_err("failed to mmap() %s: %s", file, strerror(errno));
++		goto out;
++	}
+ 	get_obj_name(obj_name, file);
+-	get_header_guard(header_guard, obj_name);
++	opts.object_name = obj_name;
++	obj = bpf_object__open_mem(obj_data, file_sz, &opts);
++	if (IS_ERR(obj)) {
++		obj = NULL;
++		p_err("failed to open BPF object file: %ld", PTR_ERR(obj));
++		goto out;
++	}
+ 
+ 	bpf_object__for_each_map(map, obj) {
+ 		ident = get_map_ident(map);
+@@ -303,8 +323,11 @@ static int do_skeleton(int argc, char **argv)
+ 		prog_cnt++;
+ 	}
+ 
++	get_header_guard(header_guard, obj_name);
+ 	codegen("\
+ 		\n\
++		/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */   \n\
++									    \n\
+ 		/* THIS FILE IS AUTOGENERATED! */			    \n\
+ 		#ifndef %2$s						    \n\
+ 		#define %2$s						    \n\
+@@ -356,8 +379,88 @@ static int do_skeleton(int argc, char **argv)
+ 		\n\
+ 		};							    \n\
+ 									    \n\
++		static void						    \n\
++		%1$s__destroy(struct %1$s *obj)				    \n\
++		{							    \n\
++			if (!obj)					    \n\
++				return;					    \n\
++			if (obj->skeleton)				    \n\
++				bpf_object__destroy_skeleton(obj->skeleton);\n\
++			free(obj);					    \n\
++		}							    \n\
++									    \n\
+ 		static inline struct bpf_object_skeleton *		    \n\
+-		%1$s__create_skeleton(struct %1$s *obj, struct bpf_embed_data *embed)\n\
++		%1$s__create_skeleton(struct %1$s *obj);		    \n\
++									    \n\
++		static inline struct %1$s *				    \n\
++		%1$s__open_opts(const struct bpf_object_open_opts *opts)    \n\
++		{							    \n\
++			struct %1$s *obj;				    \n\
++									    \n\
++			obj = calloc(1, sizeof(*obj));			    \n\
++			if (!obj)					    \n\
++				return NULL;				    \n\
++									    \n\
++			obj->skeleton = %1$s__create_skeleton(obj);	    \n\
++			if (!obj->skeleton)				    \n\
++				goto err;				    \n\
++									    \n\
++			if (bpf_object__open_skeleton(obj->skeleton, opts)) \n\
++				goto err;				    \n\
++									    \n\
++			return obj;					    \n\
++		err:							    \n\
++			%1$s__destroy(obj);				    \n\
++			return NULL;					    \n\
++		}							    \n\
++									    \n\
++		static inline struct %1$s *				    \n\
++		%1$s__open()						    \n\
++		{							    \n\
++			return %1$s__open_opts(NULL);			    \n\
++		}							    \n\
++									    \n\
++		static inline int					    \n\
++		%1$s__load(struct %1$s *obj)				    \n\
++		{							    \n\
++			return bpf_object__load_skeleton(obj->skeleton);    \n\
++		}							    \n\
++									    \n\
++		static inline struct %1$s *				    \n\
++		%1$s__open_and_load()					    \n\
++		{							    \n\
++			struct %1$s *obj;				    \n\
++									    \n\
++			obj = %1$s__open();				    \n\
++			if (!obj)					    \n\
++				return NULL;				    \n\
++			if (%1$s__load(obj)) {				    \n\
++				%1$s__destroy(obj);			    \n\
++				return NULL;				    \n\
++			}						    \n\
++			return obj;					    \n\
++		}							    \n\
++									    \n\
++		static inline int					    \n\
++		%1$s__attach(struct %1$s *obj)				    \n\
++		{							    \n\
++			return bpf_object__attach_skeleton(obj->skeleton);  \n\
++		}							    \n\
++									    \n\
++		static inline void					    \n\
++		%1$s__detach(struct %1$s *obj)				    \n\
++		{							    \n\
++			return bpf_object__detach_skeleton(obj->skeleton);  \n\
++		}							    \n\
++		",
++		obj_name
++	);
 +
-+:Manual section: 8
++	codegen("\
++		\n\
++									    \n\
++		static inline struct bpf_object_skeleton *		    \n\
++		%1$s__create_skeleton(struct %1$s *obj)			    \n\
+ 		{							    \n\
+ 			struct bpf_object_skeleton *s;			    \n\
+ 									    \n\
+@@ -367,8 +470,6 @@ static int do_skeleton(int argc, char **argv)
+ 									    \n\
+ 			s->sz = sizeof(*s);				    \n\
+ 			s->name = \"%1$s\";				    \n\
+-			s->data = embed->data;				    \n\
+-			s->data_sz = embed->size;			    \n\
+ 			s->obj = &obj->obj;				    \n\
+ 		",
+ 		obj_name
+@@ -438,90 +539,45 @@ static int do_skeleton(int argc, char **argv)
+ 	codegen("\
+ 		\n\
+ 									    \n\
++			s->data_sz = %d;				    \n\
++			s->data = \"\\					    \n\
++		",
++		file_sz);
 +
-+SYNOPSIS
-+========
++	/* embed contents of BPF object file */
++	for (i = 0, len = 0; i < file_sz; i++) {
++		int w = obj_data[i] ? 4 : 2;
 +
-+	**bpftool** [*OPTIONS*] **gen** *COMMAND*
++		len += w;
++		if (len > 78) {
++			printf("\\\n");
++			len = w;
++		}
++		if (!obj_data[i])
++			printf("\\0");
++		else
++			printf("\\x%02x", (unsigned char)obj_data[i]);
++	}
 +
-+	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] }
-+
-+	*COMMAND* := { **skeleton | **help** }
-+
-+GEN COMMANDS
-+=============
-+
-+|	**bpftool** **gen skeleton** *FILE*
-+|	**bpftool** **gen help**
-+
-+DESCRIPTION
-+===========
-+	**bpftool gen skeleton** *FILE*
-+		  Generate BPF skeleton C header file for a given *FILE*.
-+
-+		  BPF skeleton is an alternative interface to existing libbpf
-+		  APIs for working with BPF objects. Skeleton code is intended
-+		  to significantly shorten and simplify code to load and work
-+		  with BPF programs from userspace side. Generated code is
-+		  tailored to specific input BPF object *FILE*, reflecting its
-+		  structure by listing out available maps, program, variables,
-+		  etc. Skeleton eliminates the need to lookup mentioned
-+		  components by name. Instead, if skeleton instantiation
-+		  succeeds, they are populated in skeleton structure as valid
-+		  libbpf types (e.g., struct bpf_map pointer) and can be
-+		  passed to existing generic libbpf APIs.
-+
-+		  In addition to simple and reliable access to maps and
-+		  programs, skeleton provides a storage for BPF links (struct
-+		  bpf_link) for each BPF program within BPF object. When
-+		  requested, supported BPF programs will be automatically
-+		  attached and resulting BPF links stored for further use by
-+		  user in pre-allocated fields in skeleton struct. For BPF
-+		  programs that can't be automatically attached by libbpf,
-+		  user can attach them manually, but store resulting BPF link
-+		  in per-program link field. All such set up links will be
-+		  automatically destroyed on BPF skeleton destruction. This
-+		  eliminates the need for users to manage links manually and
-+		  rely on libbpf support to detach programs and free up
-+		  resources.
-+
-+		  Another facility provided by BPF skeleton is an interface to
-+		  global variables of all supported kinds: mutable, read-only,
-+		  as well as extern ones. This interface allows to pre-setup
-+		  initial values of variables before BPF object is loaded and
-+		  verified by kernel. For non-read-only variables, the same
-+		  interface can be used to fetch values of global variables on
-+		  userspace side, even if they are modified by BPF code.
-+
-+		  During skeleton generation, contents of source BPF object
-+		  *FILE* is embedded within generated code and is thus not
-+		  necessary to keep around. This ensures skeleton and BPF
-+		  object file are matching 1-to-1 and always stay in sync.
-+		  Generated code is dual-licensed under LGPL-2.1 and
-+		  BSD-2-Clause licenses.
-+
-+		  It is a design goal and guarantee that skeleton interfaces
-+		  are interoperable with generic libbpf APIs. User should
-+		  always be able to use skeleton API to create and load BPF
-+		  object, and later use libbpf APIs to keep working with
-+		  specific maps, programs, etc.
-+
-+		  As part of skeleton, few custom functions are generated.
-+		  Each of them is prefixed with object name, derived from
-+		  object file name. I.e., if BPF object file name is
-+		  **example.o**, BPF object name will be **example**. The
-+		  following custom functions are provided in such case:
-+
-+		  - **example__open** and **example__open_opts**.
-+		    These functions are used to instantiate skeleton. It
-+		    corresponds to libbpf's **bpf_object__open()** API.
-+		    **_opts** variants accepts extra **bpf_object_open_opts**
-+		    options.
-+
-+		  - **example__load**.
-+		    This functions creates maps, loads and verifies BPF
-+		    programs, initializes global data maps. It corresponds to
-+		    libppf's **bpf_object__load** API.
-+
-+		  - **example__open_and_load** combines **example__open** and
-+		    **example__load** invocations in one commonly used
-+		    operation.
-+
-+		  - **example__attach** and **example__detach**
-+		    This pair of functions allow to attach and detach,
-+		    correspondingly, already loaded BPF object. Only BPF
-+		    programs of types supported by libbpf for auto-attachment
-+		    will be auto-attached and their corresponding BPF links
-+		    instantiated. For other BPF programs, user can manually
-+		    create a BPF link and assign it to corresponding fields in
-+		    skeleton struct. **example__detach** will detach both
-+		    links created automatically, as well as those populated by
-+		    user manually.
-+
-+		  - **example__destroy**
-+		    Detach and unload BPF programs, free up all the resources
-+		    used by skeleton and BPF object.
-+
-+		  If BPF object has global variables, corresponding structs
-+		  with memory layout corresponding to global data datasection
-+		  layout will be created. Currently supported ones are: .data,
-+		  .bss, .rodata, and .extern structs/datasections. These
-+		  datasections/structs can be used to set up initial values of
-+		  variables, if set before **example__load**. Afterwards, if
-+		  target kernel supports memory-mapped BPF arrays, same
-+		  structs can be used to fetch and update (non-read-only)
-+		  data from userspace, with same simplicity as for BPF side.
-+
-+	**bpftool gen help**
-+		  Print short help message.
-+
-+OPTIONS
-+=======
-+	-h, --help
-+		  Print short generic help message (similar to **bpftool help**).
-+
-+	-V, --version
-+		  Print version number (similar to **bpftool version**).
-+
-+	-j, --json
-+		  Generate JSON output. For commands that cannot produce JSON,
-+		  this option has no effect.
-+
-+	-p, --pretty
-+		  Generate human-readable JSON output. Implies **-j**.
-+
-+	-d, --debug
-+		  Print all logs available from libbpf, including debug-level
-+		  information.
-+
-+EXAMPLES
-+========
-+**$ cat example.c**
-+::
-+
-+  #include <stdbool.h>
-+  #include <linux/ptrace.h>
-+  #include <linux/bpf.h>
-+  #include "bpf_helpers.h"
-+  
-+  const volatile int param1 = 42;
-+  bool global_flag = true;
-+  struct { int x; } data = {};
-+  
-+  struct {
-+  	__uint(type, BPF_MAP_TYPE_HASH);
-+  	__uint(max_entries, 128);
-+  	__type(key, int);
-+  	__type(value, long);
-+  } my_map SEC(".maps");
-+  
-+  SEC("raw_tp/sys_enter")
-+  int handle_sys_enter(struct pt_regs *ctx)
-+  {
-+  	static long my_static_var;
-+  	if (global_flag)
-+  		my_static_var++;
-+  	else
-+  		data.x += param1;
-+  	return 0;
-+  }
-+  
-+  SEC("raw_tp/sys_exit")
-+  int handle_sys_exit(struct pt_regs *ctx)
-+  {
-+  	int zero = 0;
-+  	bpf_map_lookup_elem(&my_map, &zero);
-+  	return 0;
-+  }
-+
-+This is example BPF application with two BPF programs and a mix of BPF maps
-+and global variables.
-+
-+**$ bpftool gen skeleton example.o**
-+::
-+
-+  /* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
-+  
-+  /* THIS FILE IS AUTOGENERATED! */
-+  #ifndef __EXAMPLE_SKEL_H__
-+  #define __EXAMPLE_SKEL_H__
-+  
-+  #include <stdlib.h>
-+  #include <libbpf.h>
-+  
-+  struct example {
-+  	struct bpf_object_skeleton *skeleton;
-+  	struct bpf_object *obj;
-+  	struct {
-+  		struct bpf_map *rodata;
-+  		struct bpf_map *data;
-+  		struct bpf_map *bss;
-+  		struct bpf_map *my_map;
-+  	} maps;
-+  	struct {
-+  		struct bpf_program *handle_sys_enter;
-+  		struct bpf_program *handle_sys_exit;
-+  	} progs;
-+  	struct {
-+  		struct bpf_link *handle_sys_enter;
-+  		struct bpf_link *handle_sys_exit;
-+  	} links;
-+  	struct example__bss {
-+  		struct {
-+  			int x;
-+  		} data;
-+  	} *bss;
-+  	struct example__data {
-+  		_Bool global_flag;
-+  		long int handle_sys_enter_my_static_var;
-+  	} *data;
-+  	struct example__rodata {
-+  		int param1;
-+  	} *rodata;
-+  };
-+  
-+  static void example__destroy(struct example *obj);
-+  static inline struct example *example__open_opts(
-+                const struct bpf_object_open_opts *opts);
-+  static inline struct example *example__open();
-+  static inline int example__load(struct example *obj);
-+  static inline struct example *example__open_and_load();
-+  static inline int example__attach(struct example *obj);
-+  static inline void example__detach(struct example *obj);
-+
-+  #endif /* __EXAMPLE_SKEL_H__ */
-+
-+**$ cat example_user.c**
-+::
-+  #include "example.skel.h"
-+  
-+  int main()
-+  {
-+  	struct example *skel;
-+  	int err = 0;
-+  
-+  	skel = example__open();
-+  	if (!skel)
-+  		goto cleanup;
-+  
-+  	skel->rodata->param1 = 128;
-+  
-+  	err = example__load(skel);
-+  	if (err)
-+  		goto cleanup;
-+  
-+  	err = example__attach(skel);
-+  	if (err)
-+  		goto cleanup;
-+  
-+  	/* all libbpf APIs are usable */
-+  	printf("my_map name: %s\n", bpf_map__name(skel->maps.my_map));
-+  	printf("sys_enter prog FD: %d\n",
-+  	       bpf_program__fd(skel->progs.handle_sys_enter));
-+  
-+  	/* detach and re-attach sys_exit program */
-+  	bpf_link__destroy(skel->links.handle_sys_exit);
-+  	skel->links.handle_sys_exit =
-+  		bpf_program__attach(skel->progs.handle_sys_exit);
-+  
-+  	printf("my_static_var: %ld\n",
-+  	       skel->bss->handle_sys_enter_my_static_var);
-+  
-+  cleanup:
-+  	example__destroy(skel);
-+  	return err;
-+  }
-+
-+**# ./example_user**
-+::
-+  my_map name: my_map
-+  sys_enter prog FD: 8
-+  my_static_var: 7
-+
-+This is a stripped-out version of skeleton generated for above example code.
-+
-+SEE ALSO
-+========
-+	**bpf**\ (2),
-+	**bpf-helpers**\ (7),
-+	**bpftool**\ (8),
-+	**bpftool-map**\ (8),
-+	**bpftool-prog**\ (8),
-+	**bpftool-cgroup**\ (8),
-+	**bpftool-feature**\ (8),
-+	**bpftool-net**\ (8),
-+	**bpftool-perf**\ (8),
-+	**bpftool-btf**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool.rst b/tools/bpf/bpftool/Documentation/bpftool.rst
-index 6a9c52ef84a9..34239fda69ed 100644
---- a/tools/bpf/bpftool/Documentation/bpftool.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool.rst
-@@ -81,4 +81,5 @@ SEE ALSO
- 	**bpftool-feature**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-btf**\ (8),
-+	**bpftool-gen**\ (8),
++	codegen("\
++		\n\
++		\";							    \n\
++									    \n\
+ 			return s;					    \n\
+ 		err:							    \n\
+ 			bpf_object__destroy_skeleton(s);		    \n\
+ 			return NULL;					    \n\
+ 		}							    \n\
+ 									    \n\
+-		static void						    \n\
+-		%1$s__destroy(struct %1$s *obj)				    \n\
+-		{							    \n\
+-			if (!obj)					    \n\
+-				return;					    \n\
+-			if (obj->skeleton)				    \n\
+-				bpf_object__destroy_skeleton(obj->skeleton);\n\
+-			free(obj);					    \n\
+-		}							    \n\
+-									    \n\
+-		static inline struct %1$s *				    \n\
+-		%1$s__open_opts(struct bpf_embed_data *embed, const struct bpf_object_open_opts *opts)\n\
+-		{							    \n\
+-			struct %1$s *obj;				    \n\
+-									    \n\
+-			obj = calloc(1, sizeof(*obj));			    \n\
+-			if (!obj)					    \n\
+-				return NULL;				    \n\
+-									    \n\
+-			obj->skeleton = %1$s__create_skeleton(obj, embed);  \n\
+-			if (!obj->skeleton)				    \n\
+-				goto err;				    \n\
+-									    \n\
+-			if (bpf_object__open_skeleton(obj->skeleton, opts)) \n\
+-				goto err;				    \n\
+-									    \n\
+-			return obj;					    \n\
+-		err:							    \n\
+-			%1$s__destroy(obj);				    \n\
+-			return NULL;					    \n\
+-		}							    \n\
+-									    \n\
+-		static inline struct %1$s *				    \n\
+-		%1$s__open(struct bpf_embed_data *embed)		    \n\
+-		{							    \n\
+-			return %1$s__open_opts(embed, NULL);		    \n\
+-		}							    \n\
+-									    \n\
+-		static inline int					    \n\
+-		%1$s__load(struct %1$s *obj)				    \n\
+-		{							    \n\
+-			return bpf_object__load_skeleton(obj->skeleton);    \n\
+-		}							    \n\
+-									    \n\
+-		static inline struct %1$s *				    \n\
+-		%1$s__open_and_load(struct bpf_embed_data *embed)	    \n\
+-		{							    \n\
+-			struct %1$s *obj;				    \n\
+-									    \n\
+-			obj = %1$s__open(embed);			    \n\
+-			if (!obj)					    \n\
+-				return NULL;				    \n\
+-			if (%1$s__load(obj)) {				    \n\
+-				%1$s__destroy(obj);			    \n\
+-				return NULL;				    \n\
+-			}						    \n\
+-			return obj;					    \n\
+-		}							    \n\
+-									    \n\
+-		static inline int					    \n\
+-		%1$s__attach(struct %1$s *obj)				    \n\
+-		{							    \n\
+-			return bpf_object__attach_skeleton(obj->skeleton);  \n\
+-		}							    \n\
+-									    \n\
+-		static inline void					    \n\
+-		%1$s__detach(struct %1$s *obj)				    \n\
+-		{							    \n\
+-			return bpf_object__detach_skeleton(obj->skeleton);  \n\
+-		}							    \n\
+-									    \n\
+ 		#endif /* %2$s */					    \n\
+ 		",
+-		obj_name, header_guard
+-	);
++		obj_name, header_guard);
+ 	err = 0;
+ out:
+ 	bpf_object__close(obj);
++	if (obj_data)
++		munmap(obj_data, mmap_sz);
++	close(fd);
+ 	return err;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+index 60da1d08daa0..5ed90ede2f1d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
++++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+@@ -22,8 +22,6 @@ ssize_t get_base_addr() {
+ 	return -EINVAL;
+ }
+ 
+-BPF_EMBED_OBJ(probe, "test_attach_probe.o");
+-
+ void test_attach_probe(void)
+ {
+ 	int duration = 0;
+@@ -39,7 +37,7 @@ void test_attach_probe(void)
+ 		return;
+ 	uprobe_offset = (size_t)&get_base_addr - base_addr;
+ 
+-	skel = test_attach_probe__open_and_load(&probe_embed);
++	skel = test_attach_probe__open_and_load();
+ 	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
+ 		return;
+ 	if (CHECK(!skel->bss, "check_bss", ".bss wasn't mmap()-ed\n"))
+diff --git a/tools/testing/selftests/bpf/prog_tests/core_extern.c b/tools/testing/selftests/bpf/prog_tests/core_extern.c
+index 30a7972e9012..5f03dc1de29e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/core_extern.c
++++ b/tools/testing/selftests/bpf/prog_tests/core_extern.c
+@@ -124,8 +124,6 @@ static struct test_case {
+ 	{ .name = "u64 (max+1)", .fails = 1, .cfg = CFG"CONFIG_ULONG=0x10000000000000000" },
+ };
+ 
+-BPF_EMBED_OBJ(core_extern, "test_core_extern.o");
+-
+ void test_core_extern(void)
+ {
+ 	const uint32_t kern_ver = get_kernel_version();
+@@ -159,7 +157,7 @@ void test_core_extern(void)
+ 			opts.kconfig_path = tmp_cfg_path;
+ 		}
+ 
+-		skel = test_core_extern__open_opts(&core_extern_embed, &opts);
++		skel = test_core_extern__open_opts(&opts);
+ 		if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
+ 			goto cleanup;
+ 		err = test_core_extern__load(skel);
+diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+index 110fcf053fd0..235ac4f67f5b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+@@ -5,10 +5,6 @@
+ #include "fentry_test.skel.h"
+ #include "fexit_test.skel.h"
+ 
+-BPF_EMBED_OBJ(pkt_access, "test_pkt_access.o");
+-BPF_EMBED_OBJ(fentry, "fentry_test.o");
+-BPF_EMBED_OBJ(fexit, "fexit_test.o");
+-
+ void test_fentry_fexit(void)
+ {
+ 	struct test_pkt_access *pkt_skel = NULL;
+@@ -18,13 +14,13 @@ void test_fentry_fexit(void)
+ 	__u32 duration = 0, retval;
+ 	int err, pkt_fd, i;
+ 
+-	pkt_skel = test_pkt_access__open_and_load(&pkt_access_embed);
++	pkt_skel = test_pkt_access__open_and_load();
+ 	if (CHECK(!pkt_skel, "pkt_skel_load", "pkt_access skeleton failed\n"))
+ 		return;
+-	fentry_skel = fentry_test__open_and_load(&fentry_embed);
++	fentry_skel = fentry_test__open_and_load();
+ 	if (CHECK(!fentry_skel, "fentry_skel_load", "fentry skeleton failed\n"))
+ 		goto close_prog;
+-	fexit_skel = fexit_test__open_and_load(&fexit_embed);
++	fexit_skel = fexit_test__open_and_load();
+ 	if (CHECK(!fexit_skel, "fexit_skel_load", "fexit skeleton failed\n"))
+ 		goto close_prog;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_test.c b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
+index 46a4afdf507a..e1a379f5f7d2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fentry_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
+@@ -4,9 +4,6 @@
+ #include "test_pkt_access.skel.h"
+ #include "fentry_test.skel.h"
+ 
+-BPF_EMBED_OBJ_DECLARE(pkt_access);
+-BPF_EMBED_OBJ_DECLARE(fentry);
+-
+ void test_fentry_test(void)
+ {
+ 	struct test_pkt_access *pkt_skel = NULL;
+@@ -15,10 +12,10 @@ void test_fentry_test(void)
+ 	__u32 duration, retval;
+ 	__u64 *result;
+ 
+-	pkt_skel = test_pkt_access__open_and_load(&pkt_access_embed);
++	pkt_skel = test_pkt_access__open_and_load();
+ 	if (CHECK(!pkt_skel, "pkt_skel_load", "pkt_access skeleton failed\n"))
+ 		return;
+-	fentry_skel = fentry_test__open_and_load(&fentry_embed);
++	fentry_skel = fentry_test__open_and_load();
+ 	if (CHECK(!fentry_skel, "fentry_skel_load", "fentry skeleton failed\n"))
+ 		goto cleanup;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
+index 95a44d37ccea..16a814eb4d64 100644
+--- a/tools/testing/selftests/bpf/prog_tests/mmap.c
++++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
+@@ -13,8 +13,6 @@ static size_t roundup_page(size_t sz)
+ 	return (sz + page_size - 1) / page_size * page_size;
+ }
+ 
+-BPF_EMBED_OBJ(test_mmap, "test_mmap.o");
+-
+ void test_mmap(void)
+ {
+ 	const size_t bss_sz = roundup_page(sizeof(struct test_mmap__bss));
+@@ -30,7 +28,7 @@ void test_mmap(void)
+ 	__u64 val = 0;
+ 
+ 
+-	skel = test_mmap__open_and_load(&test_mmap_embed);
++	skel = test_mmap__open_and_load();
+ 	if (CHECK(!skel, "skel_open_and_load", "skeleton open/load failed\n"))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/skeleton.c b/tools/testing/selftests/bpf/prog_tests/skeleton.c
+index 151cdad3ad0d..ec6f2aec3853 100644
+--- a/tools/testing/selftests/bpf/prog_tests/skeleton.c
++++ b/tools/testing/selftests/bpf/prog_tests/skeleton.c
+@@ -10,8 +10,6 @@ struct s {
+ 
+ #include "test_skeleton.skel.h"
+ 
+-BPF_EMBED_OBJ(skeleton, "test_skeleton.o");
+-
+ void test_skeleton(void)
+ {
+ 	int duration = 0, err;
+@@ -19,7 +17,7 @@ void test_skeleton(void)
+ 	struct test_skeleton__bss *bss;
+ 	struct test_skeleton__externs *exts;
+ 
+-	skel = test_skeleton__open(&skeleton_embed);
++	skel = test_skeleton__open();
+ 	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
+index 4af8b8253f25..e8399ae50e77 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
++++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id.c
+@@ -2,8 +2,6 @@
+ #include <test_progs.h>
+ #include "test_stacktrace_build_id.skel.h"
+ 
+-BPF_EMBED_OBJ(stacktrace_build_id, "test_stacktrace_build_id.o");
+-
+ void test_stacktrace_build_id(void)
+ {
+ 
+@@ -18,7 +16,7 @@ void test_stacktrace_build_id(void)
+ 	int retry = 1;
+ 
+ retry:
+-	skel = test_stacktrace_build_id__open_and_load(&stacktrace_build_id_embed);
++	skel = test_stacktrace_build_id__open_and_load();
+ 	if (CHECK(!skel, "skel_open_and_load", "skeleton open/load failed\n"))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+index 32fb03881a7b..8974450a4bdb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
++++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_build_id_nmi.c
+@@ -15,8 +15,6 @@ static __u64 read_perf_max_sample_freq(void)
+ 	return sample_freq;
+ }
+ 
+-BPF_EMBED_OBJ_DECLARE(stacktrace_build_id);
+-
+ void test_stacktrace_build_id_nmi(void)
+ {
+ 	int control_map_fd, stackid_hmap_fd, stackmap_fd;
+@@ -37,7 +35,7 @@ void test_stacktrace_build_id_nmi(void)
+ 	attr.sample_freq = read_perf_max_sample_freq();
+ 
+ retry:
+-	skel = test_stacktrace_build_id__open(&stacktrace_build_id_embed);
++	skel = test_stacktrace_build_id__open();
+ 	if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
+ 		return;
+ 
 -- 
 2.17.1
 
