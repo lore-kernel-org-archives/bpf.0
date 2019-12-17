@@ -2,105 +2,71 @@ Return-Path: <SRS0=5bl/=2H=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E58C6C2D0CD
-	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 23:01:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C270C43603
+	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 23:21:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BA7A22067C
-	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 23:01:01 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="UPeQfolM"
+	by mail.kernel.org (Postfix) with ESMTP id E58DB2176D
+	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 23:21:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbfLQXA5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Dec 2019 18:00:57 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46240 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726656AbfLQXAy (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 17 Dec 2019 18:00:54 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBHMsBS2002740
-        for <bpf@vger.kernel.org>; Tue, 17 Dec 2019 15:00:53 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=ZiK81MIalBtQF5DvkcqT7OXkB9XFoYW32vcKAQX0NE4=;
- b=UPeQfolMqsdmuKN3KyYdod51zhTzVTsrtrX0yWwgLwrxqge16I/R8kBHSRpX6YwaDWap
- HtcW89OlGjOYFDZBtlsPCh05/zuFHX8Gou9pewon87el3zDRCBs5LNFRDwfn2nScAABU
- QCuV+sfoB1XIqrLRXF9eXZwJwagrkSTbIv4= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wy1qrj5tq-20
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 17 Dec 2019 15:00:53 -0800
-Received: from intmgw001.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 17 Dec 2019 15:00:46 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 255C12EC1C52; Tue, 17 Dec 2019 15:00:44 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 0/3] Skeleton improvements and documentation
-Date:   Tue, 17 Dec 2019 15:00:35 -0800
-Message-ID: <20191217230038.1562848-1-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
+        id S1726582AbfLQXVx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Dec 2019 18:21:53 -0500
+Received: from www62.your-server.de ([213.133.104.62]:40852 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726561AbfLQXVx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Dec 2019 18:21:53 -0500
+Received: from sslproxy01.your-server.de ([88.198.220.130])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ihM9w-000678-W7; Wed, 18 Dec 2019 00:21:45 +0100
+Received: from [178.197.249.31] (helo=pc-9.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ihM9w-0005Ir-5Q; Wed, 18 Dec 2019 00:21:44 +0100
+Subject: Re: [PATCH bpf-next] libbpf: Fix libbpf_common.h when installing
+ libbpf through 'make install'
+To:     Yonghong Song <yhs@fb.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+References: <20191217112810.768078-1-toke@redhat.com>
+ <c6a49edd-3992-6ddc-58d9-2c37acdeeece@fb.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <7e88179c-155e-ce8c-4641-debad4ca0631@iogearbox.net>
+Date:   Wed, 18 Dec 2019 00:21:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-17_04:2019-12-17,2019-12-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=8
- lowpriorityscore=0 adultscore=0 bulkscore=0 priorityscore=1501
- clxscore=1015 mlxlogscore=999 spamscore=0 mlxscore=0 phishscore=0
- malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1912170183
-X-FB-Internal: deliver
+In-Reply-To: <c6a49edd-3992-6ddc-58d9-2c37acdeeece@fb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25666/Tue Dec 17 10:54:52 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Simplify skeleton usage by embedding source BPF object file inside skeleton
-itself. This allows to keep skeleton and object file in sync at all times with
-no chance of confusion.
+On 12/17/19 10:58 PM, Yonghong Song wrote:
+> On 12/17/19 3:28 AM, Toke Høiland-Jørgensen wrote:
+>> This fixes two issues with the newly introduced libbpf_common.h file:
+>>
+>> - The header failed to include <string.h> for the definition of memset()
+>> - The new file was not included in the install_headers rule in the Makefile
+>>
+>> Both of these issues cause breakage when installing libbpf with 'make
+>> install' and trying to use it in applications.
+>>
+>> Fixes: 544402d4b493 ("libbpf: Extract common user-facing helpers")
+>> Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+> 
+> Acked-by: Yonghong Song <yhs@fb.com>
 
-Also, add bpftool-gen.rst manpage, explaining concepts and ideas behind
-skeleton. In examples section it also includes a complete small BPF
-application utilizing skeleton, as a demonstration of API.
-
-Patch #2 also removes BPF_EMBED_OBJ, as there is currently no use of it.
-
-v1->v2:
-- remove whitespace from empty lines in code blocks (Yonghong).
-
-Andrii Nakryiko (3):
-  bpftool, selftests/bpf: embed object file inside skeleton
-  libbpf: remove BPF_EMBED_OBJ macro from libbpf.h
-  bpftool: add gen subcommand manpage
-
- .../bpf/bpftool/Documentation/bpftool-gen.rst | 302 ++++++++++++++++++
- tools/bpf/bpftool/Documentation/bpftool.rst   |   3 +-
- tools/bpf/bpftool/gen.c                       | 226 ++++++++-----
- tools/lib/bpf/libbpf.h                        |  35 --
- .../selftests/bpf/prog_tests/attach_probe.c   |   4 +-
- .../selftests/bpf/prog_tests/core_extern.c    |   4 +-
- .../selftests/bpf/prog_tests/fentry_fexit.c   |  10 +-
- .../selftests/bpf/prog_tests/fentry_test.c    |   7 +-
- tools/testing/selftests/bpf/prog_tests/mmap.c |   4 +-
- .../selftests/bpf/prog_tests/skeleton.c       |   4 +-
- .../bpf/prog_tests/stacktrace_build_id.c      |   4 +-
- .../bpf/prog_tests/stacktrace_build_id_nmi.c  |   4 +-
- 12 files changed, 456 insertions(+), 151 deletions(-)
- create mode 100644 tools/bpf/bpftool/Documentation/bpftool-gen.rst
-
--- 
-2.17.1
-
+Applied, thanks!
