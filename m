@@ -6,98 +6,184 @@ X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE705C43603
-	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 13:45:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8073C43603
+	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 13:59:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9A7C22072B
-	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 13:45:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA31421739
+	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 13:59:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728380AbfLQNpa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Dec 2019 08:45:30 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:50523 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726164AbfLQNpa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Dec 2019 08:45:30 -0500
-Received: from [192.168.1.155] ([95.114.21.161]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MfYgC-1i1FZn1CtU-00fzgB; Tue, 17 Dec 2019 14:45:11 +0100
-Subject: Re: [PATCH] RFC: platform driver registering via initcall tables
-To:     Greg KH <greg@kroah.com>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, dmitry.torokhov@gmail.com,
-        jacek.anaszewski@gmail.com, pavel@ucw.cz, dmurphy@ti.com,
-        arnd@arndb.de, masahiroy@kernel.org, michal.lkml@markovi.net,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
-        linux-gpio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-References: <20191217102219.29223-1-info@metux.net>
- <20191217103152.GB2914497@kroah.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Message-ID: <6422bc88-6d0a-7b51-aaa7-640c6961b177@metux.net>
-Date:   Tue, 17 Dec 2019 14:44:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728554AbfLQN71 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Dec 2019 08:59:27 -0500
+Received: from www62.your-server.de ([213.133.104.62]:60250 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728539AbfLQN71 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Dec 2019 08:59:27 -0500
+Received: from sslproxy01.your-server.de ([88.198.220.130])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ihDNj-0006QE-67; Tue, 17 Dec 2019 14:59:23 +0100
+Received: from [178.197.249.31] (helo=pc-9.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ihDNi-0005qq-Ot; Tue, 17 Dec 2019 14:59:22 +0100
+Subject: Re: [PATCH bpf-next 11/15] bpftool: add skeleton codegen command
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Kernel Team <kernel-team@fb.com>
+References: <20191210011438.4182911-1-andriin@fb.com>
+ <20191210011438.4182911-12-andriin@fb.com>
+ <20191216141608.GE14887@linux.fritz.box>
+ <CAEf4Bzb2=R0+D0XXrH0N1n1X+7i6aFkACS2gb0xAQFwcBHjVQA@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <448ba7d2-40c7-5175-c295-8ac123c40a84@iogearbox.net>
+Date:   Tue, 17 Dec 2019 14:59:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20191217103152.GB2914497@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: tl
+In-Reply-To: <CAEf4Bzb2=R0+D0XXrH0N1n1X+7i6aFkACS2gb0xAQFwcBHjVQA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:UIxsKeF+t4AJ8q6DRnqSCsifxsav8JqTSzPbvflDT49nTCN38N2
- kn8QUDipr/KlL5RzF2fLtyOuCzxNjxUSI4UZqAlp6xIsJjV2bywjnE+BMyjssnPF9+oH6ww
- j5NFvhGrB1pzGK+XoSpXibonoL3JFM9dGJqe8hfLnfeBH94z62AKKyID1MFmz2D/kfr9ua1
- +I6P+xiT9RjL5BBgRigTg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nhzDFcqFHhI=:Tt4Fe7MEEtN81vc41C7AoZ
- wctLg7SjkItjTD1J3EE0wIIRp68zGRkICb7akDkm7TzGVY/Jv10cHWbbYxhEfiW4whMmm7gx1
- calgbAvlJfzZju7vWqVRx24cZKnsPXbGGNQI6AltrredEl0JuONWHGFccnaBRDzW2rH1MKxpx
- 7guijvh0tF+MuaZMsUVm1dIggOl4cQFDElahLOqvviCWwKyID5OeS4sL9WhPMRRYqxAHM9q5O
- uPRf4lICI04o5CkAW0vu/jJU2fDAqqn8VRS8aZfQZtuRhCtoDTvZTEoOMN/icN7ljMBCxrxzO
- jKVvHCAs/ZD0+MWmVOPS6sdGZYhKGJfOrGUMZTIo07lGNMYuMdb6Mvx7qAuFP3Yttazz361XR
- WOiEbrlEia6jOwJTx0JGQiUkJqwUMutPSCYqHT+ZlswBl3PcXs2kTDeEimiMTkTWcs6cnQ5YJ
- 0Ev+Ibgd1aJ5uVBqPmFfJs821dyrQ/nj2kpivSX944s+JlT5J79FdHn3yG5tlk4NsXcGYZpDb
- +Su81EDqspIcaHEsqNYqm4wHR4C4MRln/yQ/qEtoFPV/rx6N17k0IIo+d/DbjDUJ5PoLA6scG
- u5HIncBDs/JHZGLSftyL04NMt7m/WCxdQ6vh4pOOgJ+pBlIOtaNs/sr2RGvaMd1drejh8xN8T
- oVqTHasq/lYf0bopjmsmrUnoodoESr4GakdnC5EivRzMSeLiz11uVTbijiJ6z5hpZxZEUXDoy
- GSj9nLs8W6dvwEJKDzhLDRZdwjHLl6WE/XxOcwxG3eQ2N/ab5WauSh8y5djcp7H16KpJZ6A69
- pcY7K1TMdNUlig8lhlUX+Ij4IEaClVQj0yKqknPNhhHZTCef462eFxVdARrJ0sbaH1PRWpIfH
- buhiRZ+mDZotLHFEAKJ93oZ2o67FNflSKVDFquVEZb6lab6XoEveVJVdH6nxtOBexbBLcxxXW
- ARVod/u0vtgm8aj0oa/n+a8Xz6kwOYwTrei/SbYDwnKT6YuTO5xQd
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25666/Tue Dec 17 10:54:52 2019)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 17.12.19 11:31, Greg KH wrote:
+On 12/16/19 7:53 PM, Andrii Nakryiko wrote:
+> On Mon, Dec 16, 2019 at 6:16 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>> On Mon, Dec 09, 2019 at 05:14:34PM -0800, Andrii Nakryiko wrote:
+>>> Add `bpftool gen skeleton` command, which takes in compiled BPF .o object file
+>>> and dumps a BPF skeleton struct and related code to work with that skeleton.
+>>> Skeleton itself is tailored to a specific structure of provided BPF object
+>>> file, containing accessors (just plain struct fields) for every map and
+>>> program, as well as dedicated space for bpf_links. If BPF program is using
+>>> global variables, corresponding structure definitions of compatible memory
+>>> layout are emitted as well, making it possible to initialize and subsequently
+>>> read/update global variables values using simple and clear C syntax for
+>>> accessing fields. This skeleton majorly improves usability of
+>>> opening/loading/attaching of BPF object, as well as interacting with it
+>>> throughout the lifetime of loaded BPF object.
+>>>
+>>> Generated skeleton struct has the following structure:
+>>>
+>>> struct <object-name> {
+>>>        /* used by libbpf's skeleton API */
+>>>        struct bpf_object_skeleton *skeleton;
+>>>        /* bpf_object for libbpf APIs */
+>>>        struct bpf_object *obj;
+>>>        struct {
+>>>                /* for every defined map in BPF object: */
+>>>                struct bpf_map *<map-name>;
+>>>        } maps;
+>>>        struct {
+>>>                /* for every program in BPF object: */
+>>>                struct bpf_program *<program-name>;
+>>>        } progs;
+>>>        struct {
+>>>                /* for every program in BPF object: */
+>>>                struct bpf_link *<program-name>;
+>>>        } links;
+>>>        /* for every present global data section: */
+>>>        struct <object-name>__<one of bss, data, or rodata> {
+>>>                /* memory layout of corresponding data section,
+>>>                 * with every defined variable represented as a struct field
+>>>                 * with exactly the same type, but without const/volatile
+>>>                 * modifiers, e.g.:
+>>>                 */
+>>>                 int *my_var_1;
+>>>                 ...
+>>>        } *<one of bss, data, or rodata>;
+>>> };
+>>>
+>>> This provides great usability improvements:
+>>> - no need to look up maps and programs by name, instead just
+>>>    my_obj->maps.my_map or my_obj->progs.my_prog would give necessary
+>>>    bpf_map/bpf_program pointers, which user can pass to existing libbpf APIs;
+>>> - pre-defined places for bpf_links, which will be automatically populated for
+>>>    program types that libbpf knows how to attach automatically (currently
+>>>    tracepoints, kprobe/kretprobe, raw tracepoint and tracing programs). On
+>>>    tearing down skeleton, all active bpf_links will be destroyed (meaning BPF
+>>>    programs will be detached, if they are attached). For cases in which libbpf
+>>>    doesn't know how to auto-attach BPF program, user can manually create link
+>>>    after loading skeleton and they will be auto-detached on skeleton
+>>>    destruction:
+>>>
+>>>        my_obj->links.my_fancy_prog = bpf_program__attach_cgroup_whatever(
+>>>                my_obj->progs.my_fancy_prog, <whatever extra param);
+>>>
+>>> - it's extremely easy and convenient to work with global data from userspace
+>>>    now. Both for read-only and read/write variables, it's possible to
+>>>    pre-initialize them before skeleton is loaded:
+>>>
+>>>        skel = my_obj__open(raw_embed_data);
+>>>        my_obj->rodata->my_var = 123;
+>>>        my_obj__load(skel); /* 123 will be initialization value for my_var */
+>>>
+>>>    After load, if kernel supports mmap() for BPF arrays, user can still read
+>>>    (and write for .bss and .data) variables values, but at that point it will
+>>>    be directly mmap()-ed to BPF array, backing global variables. This allows to
+>>>    seamlessly exchange data with BPF side. From userspace program's POV, all
+>>>    the pointers and memory contents stay the same, but mapped kernel memory
+>>>    changes to point to created map.
+>>>    If kernel doesn't yet support mmap() for BPF arrays, it's still possible to
+>>>    use those data section structs to pre-initialize .bss, .data, and .rodata,
+>>>    but after load their pointers will be reset to NULL, allowing user code to
+>>>    gracefully handle this condition, if necessary.
+>>>
+>>> Given a big surface area, skeleton is kept as an experimental non-public
+>>> API for now, until more feedback and real-world experience is collected.
+>>
+>> Can you elaborate on the plan here? This is until v5.6 is out and hence a new
+>> bpftool release implicitly where this becomes frozen / non-experimental?
+> 
+> Yes, I've exposed all those interfaces as public, thus they are going
+> to stabilize with new release of libbpf/bpftool. I've received some
+> good usability feedback from Alexei after he tried it out locally, so
+> I'm going to adjust auto-generated part a bit. Libbpf APIs were
+> designed with extensibility built in, so we can extend them as any
+> other APIs, if need be.
+> 
+>> There is also tools/bpf/bpftool/Documentation/bpftool-gen.rst missing. Given
+>> you aim to collect more feedback (?), it would be appropriate to document
+>> everything in there so users have a clue how to use it for getting started.
+> 
+> sure, will add it
 
-Hi,
+Thanks!
 
-> No, what is so "special" about platform drivers that they require this?
+>> Also, I think at least some more clarification is needed in such document on
+>> the following topics:
+>>
+>> - libbpf and bpftool is both 'GPL-2.0-only' or 'BSD-2-Clause'. Given this
+>>    is a code generator, what license is the `bpftool gen skeleton` result?
+>>    In any case, should there also be a header comment emitted via do_skeleton()?
+> 
+> Not a lawyer here, I assumed auto-generated code isn't copyrighted,
+> but how about I just emit SPDX header with the same license as libbpf
+> itself:
+> 
+> SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
 
-Nothing, of course ;-)
+Given this is mere output of the program and not derivative work of bpftool
+itself, as in bpftool copying chunks of its own code into the generated one,
+this should not need any restriction, but then you'd still need linking
+against libbpf itself to make everything work.
 
-It's the the starting point for this PoC. The idea actually is doing
-this for all other driver types, too (eg. spi, pci, usb, ...). But
-they'll need their own tables, as different *_register() functions have
-to be called - just haven't implemented that yet.
+>> - Clear statement that this codegen is an alternative to regular libbpf
+>>    API usage but that both are always kept feature-complete and hence not
+>>    disadvantaged in one way or another (to rule out any uncertainties for
+>>    users e.g. whether they now need to start rewriting their existing code
+>>    etc); with purpose of the former (codgen) to simplify loader interaction.
+> 
+> ok, will add that as well
+> 
+>>
+>> Thanks,
+>> Daniel
 
-> If anything, we should be moving _AWAY_ from platform drivers and use
-> real bus drivers instead.
-
-That would be nice, but, unfortunately, we have lots of devices which
-aren't attached to any (probing-capable) bus. That's why we have things
-like oftree, etc.
-
-> Please no, I don't see why this is even needed.
-
-The idea is getting rid of all the init code, which all just does the
-same, just calls some *_register() function.
-
-
---mtx
-
----
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
