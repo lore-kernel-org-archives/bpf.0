@@ -2,112 +2,131 @@ Return-Path: <SRS0=5bl/=2H=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31450C43603
-	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 22:55:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33FFFC2D0BF
+	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 23:00:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0230C2067C
-	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 22:55:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 077E821582
+	for <bpf@archiver.kernel.org>; Tue, 17 Dec 2019 23:00:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="duhypgM2"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mEu8JxWz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726072AbfLQWzB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Dec 2019 17:55:01 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:43804 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbfLQWzB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Dec 2019 17:55:01 -0500
-Received: by mail-qk1-f196.google.com with SMTP id t129so3558840qke.10;
-        Tue, 17 Dec 2019 14:55:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lL57QSrlVk6cTiuQk1HyrMwEZXGqqzlZkbf62cArXG8=;
-        b=duhypgM2wbfhjfjJ8u/CWYeg7aeo9kuoXNsKUoqufgbHkJsHV3sEyAplCgbBtmMh5E
-         e0iN2A0CpJarxhFI9GNWefXJvOooWeXy49erbELcpNkR6o9s3eKOpDibjey+p3GTu2xX
-         ojOI5lGdOY1UgnoiDVM0566mjrzXJB2vXaTagEuxJ5PpLBRauNzo562aIiP31sUbMEBD
-         S2/HOPqlPwrDpW1G30zbinK3B0aNUWDnfVcYJVZ9If9pERI7hladXyxVE5rggJ4jNUR+
-         e89Pjy8Swx/oSi3Gx/LNw0EIzV/Tt0M5cJNVVAKXD1RvRXainPMc63ppL3/Xe9/b6Ai9
-         OY/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lL57QSrlVk6cTiuQk1HyrMwEZXGqqzlZkbf62cArXG8=;
-        b=dt8QFLsIrYda4evEDguUda2nssr2sq3x1iCUKtaU0lZgT9MpqCZFM/z8S4AVOc4ETr
-         4f+GpLlCdHncNwkl//ypSJ/I3CxrS2lOS8N3cVPpoLKq4BcDQyGUTzGG3WPZCxcLcVIZ
-         DQUof7SxqhbCiLNbNoWEN4/J35Y0HAQzSuUdukrPPTgmbD/7tWhKUtI09BURjZg4Y6ru
-         a72XDitNbivMsazFChKsyH+bjbgMmWH99EpGOjPcnYoltzMa8ep5uamQy+zNimZerSzs
-         lF4xajm0XqAun5b/+OGwnJX3l71E6R7dOQAebCXMMso943GeOszj1x0D5uBSl+Y1wiIz
-         NLjg==
-X-Gm-Message-State: APjAAAWVMtRDDpEg5FI1vnjjV+/hr4foEQkhap2eunqQ2/UbcKopurnc
-        wzV18ZIH4+M3fkNIWY18212zGtLYYrhJgldvUbU=
-X-Google-Smtp-Source: APXvYqz/Bbg2IWpdBgB9n4mvSGL9+o8c/n1VbYAWPcaG7k4lkW3WYaVAcZSu+O/FZTY0WCDvXpdG8DRZCu8scLMniHU=
-X-Received: by 2002:ae9:e809:: with SMTP id a9mr498634qkg.92.1576623300502;
- Tue, 17 Dec 2019 14:55:00 -0800 (PST)
+        id S1726666AbfLQXAy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Dec 2019 18:00:54 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:20706 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726510AbfLQXAx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 17 Dec 2019 18:00:53 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id xBHMxn75011540
+        for <bpf@vger.kernel.org>; Tue, 17 Dec 2019 15:00:51 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=D6y+3jdJqwqJD4nYHmnSjqa/fowots0vevcZpt+xqds=;
+ b=mEu8JxWzKHcrFBC141230x7oD7FpOE3lcNjcBRGB98HKrADSpwyt2tyLCWBjWpj1BV/c
+ L5kIvag1upaYNS2D+Yx73MqrWYhUEKUzXtsDO84CANRE44cJe1AhuqumYuZMtobkY8GR
+ WpFxuDq3VUfrPEd0waS5cmNbXt5Yh0efy6g= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 2wxfm7pjta-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 17 Dec 2019 15:00:51 -0800
+Received: from intmgw001.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 17 Dec 2019 15:00:50 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id AC3802EC1C52; Tue, 17 Dec 2019 15:00:48 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v2 bpf-next 2/3] libbpf: remove BPF_EMBED_OBJ macro from libbpf.h
+Date:   Tue, 17 Dec 2019 15:00:37 -0800
+Message-ID: <20191217230038.1562848-3-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191217230038.1562848-1-andriin@fb.com>
+References: <20191217230038.1562848-1-andriin@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20191217053626.2158870-1-andriin@fb.com> <20191217053626.2158870-4-andriin@fb.com>
- <a722caf8-a4af-4476-d560-396dd30dfb0a@fb.com>
-In-Reply-To: <a722caf8-a4af-4476-d560-396dd30dfb0a@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 17 Dec 2019 14:54:49 -0800
-Message-ID: <CAEf4BzZa9Pp+ibccmn--jEY95LdOs2UZ1AJoQ9x51FjNGsVAiA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/3] bpftool: add gen subcommand manpage
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-17_04:2019-12-17,2019-12-17 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ suspectscore=8 clxscore=1015 bulkscore=0 mlxlogscore=999
+ lowpriorityscore=0 phishscore=0 mlxscore=0 priorityscore=1501 spamscore=0
+ impostorscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-1912170184
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 1:27 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 12/16/19 9:36 PM, Andrii Nakryiko wrote:
-> > Add bpftool-gen.rst describing skeleton on the high level. Also include
-> > a small, but complete, example BPF app (BPF side, userspace side, generated
-> > skeleton) in example section to demonstrate skeleton API and its usage.
-> >
-> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
->
-> When applying the patch locally (git apply <>), I see below:
-> -bash-4.4$ git apply ~/p3.txt
-> /home/yhs/p3.txt:183: trailing whitespace.
->
-> /home/yhs/p3.txt:187: trailing whitespace.
->
-> /home/yhs/p3.txt:189: space before tab in indent.
->          __uint(type, BPF_MAP_TYPE_HASH);
-> /home/yhs/p3.txt:190: space before tab in indent.
->          __uint(max_entries, 128);
-> /home/yhs/p3.txt:191: space before tab in indent.
->          __type(key, int);
-> warning: squelched 77 whitespace errors
-> warning: 82 lines add whitespace errors.
-> -bash-4.4$
->
-> space before tab might be fine since it is an code in the example file.
-> But tailing whitespaces probably should be fixed.
+Drop BPF_EMBED_OBJ and struct bpf_embed_data now that skeleton automatically
+embeds contents of its source object file. While BPF_EMBED_OBJ is useful
+independently of skeleton, we are currently don't have any use cases utilizing
+it, so let's remove them until/if we need it.
 
-I assumed that indentation in ReST's literal block has to be specified
-for all lines, including the empty ones. But seems like
-bpftool-btf.rst doesn't do that, and playing with some online editors
-indicates it's not necessary to indent empty lines to preserve all the
-code as single code block, so I'm going to remove them.
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/libbpf.h | 35 -----------------------------------
+ 1 file changed, 35 deletions(-)
 
->
-> With the above in mind,
->
-> Acked-by: Yonghong Song <yhs@fb.com>
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 6340823871e2..f7084235bae9 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -600,41 +600,6 @@ bpf_program__bpil_offs_to_addr(struct bpf_prog_info_linear *info_linear);
+  */
+ LIBBPF_API int libbpf_num_possible_cpus(void);
+ 
+-struct bpf_embed_data {
+-	void *data;
+-	size_t size;
+-};
+-
+-#define BPF_EMBED_OBJ_DECLARE(NAME)					\
+-extern struct bpf_embed_data NAME##_embed;				\
+-extern char NAME##_data[];						\
+-extern char NAME##_data_end[];
+-
+-#define __BPF_EMBED_OBJ(NAME, PATH, SZ, ASM_TYPE)			\
+-asm (									\
+-"	.pushsection \".rodata\", \"a\", @progbits		\n"	\
+-"	.global "#NAME"_data					\n"	\
+-#NAME"_data:							\n"	\
+-"	.incbin \"" PATH "\"					\n"	\
+-"	.global "#NAME"_data_end				\n"	\
+-#NAME"_data_end:						\n"	\
+-"	.global "#NAME"_embed					\n"	\
+-"	.type "#NAME"_embed, @object				\n"	\
+-"	.size "#NAME"_size, "#SZ"				\n"	\
+-"	.align 8,						\n"	\
+-#NAME"_embed:							\n"	\
+-"	"ASM_TYPE" "#NAME"_data					\n"	\
+-"	"ASM_TYPE" "#NAME"_data_end - "#NAME"_data 		\n"	\
+-"	.popsection						\n"	\
+-);									\
+-BPF_EMBED_OBJ_DECLARE(NAME)
+-
+-#if __SIZEOF_POINTER__ == 4
+-#define BPF_EMBED_OBJ(NAME, PATH) __BPF_EMBED_OBJ(NAME, PATH, 8, ".long")
+-#else
+-#define BPF_EMBED_OBJ(NAME, PATH) __BPF_EMBED_OBJ(NAME, PATH, 16, ".quad")
+-#endif
+-
+ struct bpf_map_skeleton {
+ 	const char *name;
+ 	struct bpf_map **map;
+-- 
+2.17.1
+
