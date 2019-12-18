@@ -2,173 +2,102 @@ Return-Path: <SRS0=5FJy=2I=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26DDCC43603
-	for <bpf@archiver.kernel.org>; Wed, 18 Dec 2019 15:11:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 643F6C43603
+	for <bpf@archiver.kernel.org>; Wed, 18 Dec 2019 15:37:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E59332146E
-	for <bpf@archiver.kernel.org>; Wed, 18 Dec 2019 15:11:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3592224650
+	for <bpf@archiver.kernel.org>; Wed, 18 Dec 2019 15:37:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov-name.20150623.gappssmtp.com header.i=@shutemov-name.20150623.gappssmtp.com header.b="Fkg0mQdK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gE7CYz+J"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727456AbfLRPLZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Dec 2019 10:11:25 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:34277 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727417AbfLRPLZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Dec 2019 10:11:25 -0500
-Received: by mail-lj1-f195.google.com with SMTP id k1so1888703ljg.1
-        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 07:11:23 -0800 (PST)
+        id S1726985AbfLRPhq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Dec 2019 10:37:46 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:44473 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726922AbfLRPhp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Dec 2019 10:37:45 -0500
+Received: by mail-lj1-f196.google.com with SMTP id u71so2627093lje.11;
+        Wed, 18 Dec 2019 07:37:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=0o452dtZDcKvnVAQ8Kj3Gm0Xbx2pj/IYUiQTJzQO9gE=;
-        b=Fkg0mQdKOLV1WZE8Z1XxbvNcqJdb67rz/Q/NjePD7qIU9ny1yPyJKOOfsOOA4OEkL5
-         u+WyT9wy7radyNji9r6O0NL01H1e+aRCp58B6flFwf4fmwkGrGcLEA71Xm7XdDJu9GCh
-         NowL3CKkqunsqL0t1gWO2GDCHsWK7l81/dWd7viQeajhILnoEgRkGoTYqA+M8YJN+p0m
-         /aiV9wMWADePF00JXxJUjmUrnTyi/mWhUAvDUJCJypvfxj0NKsQhgC5Ui4jhFwGIUnd8
-         yZmidC4lSdm9/1PCTq2HFveGp/PVULv2K8U0MH2xtFCdG4H6z4GEhB12BFgYynk34v3W
-         79nQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=V1pv88vY1+c95Jz3a5FVx/PZ15Axli8rimr1CN4blrM=;
+        b=gE7CYz+JSD09CXD7SVzajNg18yqQ4Q9b+EYidoEv88a2xAIw8hKAhIKZJI2X/nXjPu
+         2rYEakuHcDDWj6CtXwNJIlErh9GN5cWdc20H3cpdmMKHo0MeEfH2PyupwcsE6nCPksa3
+         JmZXCOZRr7gmAyBlNaBtnoi2falyqqeHMAIRTLNAS3hWhQyjx0bfy4LnHH2czoTvMgDA
+         I1mCP4215aFytv+QQxqm5FuS9hIAHRJmmjyhK4cBWLxtjHi2fs3r8qyN2VcfMhD+zTpI
+         o7Ek+l5p2RjQWAw8FjVs3FxiPeswNTxsqUxXPI6Ux5SR9rYiRC50a3JB34nEWLZtE8yq
+         EC5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0o452dtZDcKvnVAQ8Kj3Gm0Xbx2pj/IYUiQTJzQO9gE=;
-        b=cimG54f2sowNbqSx5EEKUJbyCudWVkHFt2mAT1iMKSImY+a8iM3fYAe0QuywAs79qU
-         Y03Ycc9x+anWG5VhXm2nCvx3QY4QDwUN0P0wI4nM0Z9H2i1XQ0WbRiOBJ8QOVYlV1Wdl
-         F6B0sqxwPvwMD3aq5p8RAkDalIzsxKM0tiM7xNJFt+AJNmyL42lWrOIbKGrgc8eBjyz7
-         dSuUueKEcG1rzLtyt/FJR/QvKD0Au45fnQjyPjl3JPlQr/48pVsFyyKENeI47Jr8p6l0
-         c/G7xv9BGaLbLoZCHsBq9sYo29CMj/ol5sGSLSUMU63IpdyqhwXIznr0bwmGp1CMQeMF
-         m5Aw==
-X-Gm-Message-State: APjAAAUYuNCHP17OFHhk30GXB/Gl2JKW28gPLHReFq9nirYPeBViuKcY
-        5k15xAuhbB6/iKyA36V3rswBwQ==
-X-Google-Smtp-Source: APXvYqwoxIn9nfRFjJUPqQwR+khLXfWKms5b5AuArgOziPlcTFDSZdYBhtuiosiiZzJKNtWPyEXDzg==
-X-Received: by 2002:a2e:58c:: with SMTP id 134mr2221234ljf.12.1576681882374;
-        Wed, 18 Dec 2019 07:11:22 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id i4sm1736919lji.0.2019.12.18.07.11.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2019 07:11:20 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 934571012CF; Wed, 18 Dec 2019 18:11:21 +0300 (+03)
-Date:   Wed, 18 Dec 2019 18:11:21 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        kirill.shutemov@linux.intel.com, justin.he@arm.com,
-        linux-mm@kvack.org,
-        syzbot <syzbot+9301f2f33873407d5b33@syzkaller.appspotmail.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        bpf <bpf@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, hawk@kernel.org,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        linux-kernel@vger.kernel.org,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Network Development <netdev@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        syzkaller-bugs@googlegroups.com, Yonghong Song <yhs@fb.com>
-Subject: Re: WARNING in wp_page_copy
-Message-ID: <20191218151121.nllpaaq4v5yictib@box>
-References: <000000000000a6f2030598bbe38c@google.com>
- <0000000000000e32950599ac5a96@google.com>
- <20191216150017.GA27202@linux.fritz.box>
- <CAJ8uoz3nCxcmnPonNunYhswskidn=PnN8=4_jXW4B=Xu4k_DoQ@mail.gmail.com>
- <CAJ8uoz312gDBGpqOJiKqrXn456sy6u+Gnvcvv_+0=EimasRoUw@mail.gmail.com>
- <20191217154031.GI5624@arrakis.emea.arm.com>
- <CAJ8uoz3yDK8sEE05cKA8siBi-Dc0wtbe1-zYgbz_-pd5t69j8w@mail.gmail.com>
- <20191217223808.GA14982@mbp>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=V1pv88vY1+c95Jz3a5FVx/PZ15Axli8rimr1CN4blrM=;
+        b=p6CTDduSlLoAwyU4BMl3JNSLRb1Zb+5k3TiqGNjHMMKbvGY8NCgyoEoyhPi0K7vnhm
+         CfKiD8q7fGbZXV0TG0ELT8qLJEswXQKCBgJ3NBsrVephzhu65KGaW09lDDl4+RywBmrQ
+         NDPcQCu/Z/Gdj4EneXFLMH8U0mtqJJpiHmQfok+MyFDfDb8/w2nXMrry7PdPp6dY8ATf
+         1X4AAXjM7m9BEPcrOybekiKsrFtnH8RX23Kkve9X0hmbxp0mI07rS6v3HWuQ3qL0ak0p
+         oUnUCfaaiNillJ0s5YJ+9OsfWdiUdxeY5cZ0e4EF7+jIkYqHWUwWSajotQ7cgSZeabw/
+         eP7w==
+X-Gm-Message-State: APjAAAUhE+kBGHNBkVKcjOC70Po3vMFXUhfGtE2ASPbgAodKQc2eY7Vp
+        nYpVE8o4dR40tNGn0j5n5hccJFgGsDhXF2DgAes=
+X-Google-Smtp-Source: APXvYqxIJ++8dRL9ZfsRJcNFRJQSeVd9jbMFdU5IPmtGdaYeZotYsE/8ANSYO9PeMCX2UotpO3fCe7uc62biwNds5s0=
+X-Received: by 2002:a2e:8e8d:: with SMTP id z13mr2253817ljk.10.1576683463773;
+ Wed, 18 Dec 2019 07:37:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191217223808.GA14982@mbp>
-User-Agent: NeoMutt/20180716
+References: <20191218112840.871338-1-toke@redhat.com>
+In-Reply-To: <20191218112840.871338-1-toke@redhat.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 18 Dec 2019 07:37:31 -0800
+Message-ID: <CAADnVQKP3-ebzctUi+7t9YcHkJWt-Y+BToksnhTBgbe2VseUCQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: Use PRIu64 when printing ulimit value
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 10:38:09PM +0000, Catalin Marinas wrote:
-> On Tue, Dec 17, 2019 at 04:57:34PM +0100, Magnus Karlsson wrote:
-> > On Tue, Dec 17, 2019 at 4:40 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > > On Tue, Dec 17, 2019 at 02:27:22PM +0100, Magnus Karlsson wrote:
-> > > > On Mon, Dec 16, 2019 at 4:10 PM Magnus Karlsson
-> > > > <magnus.karlsson@gmail.com> wrote:
-> > > > > On Mon, Dec 16, 2019 at 4:00 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> > > > > > On Sat, Dec 14, 2019 at 08:20:07AM -0800, syzbot wrote:
-> > > > > > > syzbot has found a reproducer for the following crash on:
-> > > > > > >
-> > > > > > > HEAD commit:    1d1997db Revert "nfp: abm: fix memory leak in nfp_abm_u32_..
-> > > > > > > git tree:       net-next
-> > > > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=1029f851e00000
-> > > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=cef1fd5032faee91
-> > > > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=9301f2f33873407d5b33
-> > > > > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > > > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=119d9fb1e00000
-> > > > > > >
-> > > > > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > > > > > Reported-by: syzbot+9301f2f33873407d5b33@syzkaller.appspotmail.com
-> > > > > >
-> > > > > > Bjorn / Magnus, given xsk below, PTAL, thanks!
-> > > > >
-> > > > > Thanks. I will take a look at it right away.
-> > > > >
-> > > > > /Magnus
-> > > >
-> > > > After looking through the syzcaller report, I have the following
-> > > > hypothesis that would dearly need some comments from MM-savy people
-> > > > out there. Syzcaller creates, using mmap, a memory area that is
-> > >
-> > > I guess that's not an anonymous mmap() since we don't seem to have a
-> > > struct page for src in cow_user_page() (the WARN_ON_ONCE path). Do you
-> > > have more information on the mmap() call?
-> > 
-> > I have this from the syzcaller logs:
-> > 
-> > mmap(&(0x7f0000001000/0x2000)=nil, 0x2000, 0xfffffe, 0x12, r8, 0x0)
-> > getsockopt$XDP_MMAP_OFFSETS(r8, 0x11b, 0x7, &(0x7f0000001300),
-> > &(0x7f0000000100)=0x60)
-> > 
-> > The full log can be found at:
-> > https://syzkaller.appspot.com/x/repro.syz?x=119d9fb1e00000
-> 
-> Thanks. Prior to mmap, we have:
-> 
-> r8 = socket$xdp(0x2c, 0x3, 0x0)
-> 
-> So basically we have an mmap() on a socket descriptor with a subsequent
-> copy_to_user() writing this range. We do we even end up doing CoW on
-> such mapping?
+On Wed, Dec 18, 2019 at 3:28 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>
+> Naresh pointed out that libbpf builds fail on 32-bit architectures becaus=
+e
+> rlimit.rlim_cur is defined as 'unsigned long long' on those architectures=
+.
+> Fix this by using the PRIu64 definition in printf.
+>
+> Fixes: dc3a2d254782 ("libbpf: Print hint about ulimit when getting permis=
+sion denied error")
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 3fe42d6b0c2f..ba31083998ce 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -117,7 +117,7 @@ static void pr_perm_msg(int err)
+>                 return;
+>
+>         if (limit.rlim_cur < 1024)
+> -               snprintf(buf, sizeof(buf), "%lu bytes", limit.rlim_cur);
+> +               snprintf(buf, sizeof(buf), "%"PRIu64" bytes", limit.rlim_=
+cur);
 
-It's a non-readable private mapping of a socket. Any write to it would
-cause CoW.
-
-BTW, how useful memory mapped sockets are? I don't know much about
-networking, but it looks like a rarely used feature that substantially
-increase attack surface. CAP_NET_RAW is easy to come by nowadays with
-user-ns.
-
-Few years back I was able to modify zero page via memory mapped socket...
-
-> Maybe the socket code should also implement the .fault()
-> file op. It needs more digging.
-
-Caller definitely does a weird thing here that doesn't suppose to produce
-a meaningful result. I think we can keep the warning for now just to make
-sure we don't have any more-or-less legitimate obscure use-case.
-
-But ultimately this WARN_ON_ONCE() has to be upgraded to SIGSEGV or
-SIGBUS. Pretending that we do anything meaningful here by clearing the
-page unlikely does anything useful to a user.
-
--- 
- Kirill A. Shutemov
+please use %zu and (size_t) cast like the rest of libbpf.
+Thanks!
