@@ -2,113 +2,130 @@ Return-Path: <SRS0=5FJy=2I=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-5.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6B76C43603
-	for <bpf@archiver.kernel.org>; Wed, 18 Dec 2019 22:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79D73C2D0BF
+	for <bpf@archiver.kernel.org>; Wed, 18 Dec 2019 22:18:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 97208218AC
-	for <bpf@archiver.kernel.org>; Wed, 18 Dec 2019 22:17:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CB41218AC
+	for <bpf@archiver.kernel.org>; Wed, 18 Dec 2019 22:18:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="V6ZRHO4e"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="UZ8jBMwY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbfLRWRN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Dec 2019 17:17:13 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10522 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726463AbfLRWRN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 18 Dec 2019 17:17:13 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id xBILu39n019459
-        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 14:17:11 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=6oVoRIUSx1VS5czrR0Dgk46K3WidI6qmXRlUZSbYIvI=;
- b=V6ZRHO4eTgUN1DGkMUCRPvG8nN+z+wgbdUNTbBaWvn9Erhc0QG+zlPStahKUj0nJgpp6
- u6vOV4eoJHBmhzo7Ip5Q2hNbbxC9mSlTuxSTofmEQQyMf5FF3MyrDxA4haqEh95WJeQ2
- mBTwAFy26QFRvQzUzzhaKDGVBBXVIc4Lp14= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 2wyhy23ce2-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 14:17:11 -0800
-Received: from intmgw004.05.ash5.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Wed, 18 Dec 2019 14:17:10 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id CAD252EC1761; Wed, 18 Dec 2019 14:17:08 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next] bpftool: work-around rst2man conversion bug
-Date:   Wed, 18 Dec 2019 14:17:07 -0800
-Message-ID: <20191218221707.2552199-1-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
+        id S1726617AbfLRWSg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Dec 2019 17:18:36 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:8890 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726387AbfLRWSg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Dec 2019 17:18:36 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dfaa5ad0000>; Wed, 18 Dec 2019 14:18:21 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Wed, 18 Dec 2019 14:18:31 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Wed, 18 Dec 2019 14:18:31 -0800
+Received: from [10.2.165.11] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 18 Dec
+ 2019 22:18:30 +0000
+Subject: Re: [PATCH v11 06/25] mm: fix get_user_pages_remote()'s handling of
+ FOLL_LONGTERM
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        Jason Gunthorpe <jgg@mellanox.com>
+References: <20191216222537.491123-1-jhubbard@nvidia.com>
+ <20191216222537.491123-7-jhubbard@nvidia.com>
+ <20191218161907.yczbijr3ngm7wwnj@box>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <c8d746ff-f544-6c9f-110b-215514fb4b5c@nvidia.com>
+Date:   Wed, 18 Dec 2019 14:15:40 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-18_07:2019-12-17,2019-12-18 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- suspectscore=8 spamscore=0 impostorscore=0 malwarescore=0 clxscore=1015
- mlxlogscore=774 bulkscore=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1912180168
-X-FB-Internal: deliver
+In-Reply-To: <20191218161907.yczbijr3ngm7wwnj@box>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1576707501; bh=sxjwJVdMWX10qxIPxn4THVxS9SYzoQiX2+nIJ9/LG7I=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=UZ8jBMwY32NgWwiJjZwTAPW3ja6CuPOAfe4SpG+9/CDwknPqX5qccd7q+WCVa0kre
+         Av1FM/rgDWBJQowSF6blVYewBi40/EoGKov0KLTmsD25hxZXVoFAuUTjqD9AjunTuW
+         zOw8acZ6PbPZg9ggfzbvjmuiESVGaX+/zsYCSMAQZrWJGMuf5ikxNna4ygsE1Jk8cJ
+         dHbTfbTsY5cfH+d0VRIX71N/Dllb+k91MxmporXWGxV5JQ3DVwfnyQEVBsHmZwuyup
+         I9epWsR1kc8VLnGg3SRALlsRj1gICz0/x78ascTmPUjlda17XHeoBT+12qtVoXpcGN
+         AwPIbnNqxY2bw==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Work-around what appears to be a bug in rst2man convertion tool, used to
-create man pages out of reStructureText-formatted documents. If text line
-starts with dot, rst2man will put it in resulting man file verbatim. This
-seems to cause man tool to interpret it as a directive/command (e.g., `.bs`), and
-subsequently not render entire line because it's unrecognized one.
+On 12/18/19 8:19 AM, Kirill A. Shutemov wrote:
+...
+>> diff --git a/mm/gup.c b/mm/gup.c
+>> index 3ecce297a47f..c0c56888e7cc 100644
+>> --- a/mm/gup.c
+>> +++ b/mm/gup.c
+>> @@ -29,6 +29,13 @@ struct follow_page_context {
+>>   	unsigned int page_mask;
+>>   };
+>>   
+>> +static __always_inline long __gup_longterm_locked(struct task_struct *tsk,
+>> +						  struct mm_struct *mm,
+>> +						  unsigned long start,
+>> +						  unsigned long nr_pages,
+>> +						  struct page **pages,
+>> +						  struct vm_area_struct **vmas,
+>> +						  unsigned int flags);
+> 
+> Any particular reason for the forward declaration? Maybe move
+> get_user_pages_remote() down?
+> 
 
-Enclose '.xxx' words in extra formatting to work around.
+Yes, that's exactly why: I was thinking it would be cleaner to put in the
+forward declaration, rather than moving code blocks, but either way seems
+reasonable. I'll go ahead and move the code blocks and delete the forward
+declaration, now that someone has weighed in in favor of that.
 
-Fixes: cb21ac588546 ("bpftool: Add gen subcommand manpage")
-Reported-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/bpf/bpftool/Documentation/bpftool-gen.rst | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
-
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-index b6a114bf908d..86a87da97d0b 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-@@ -112,13 +112,14 @@ DESCRIPTION
- 
- 		  If BPF object has global variables, corresponding structs
- 		  with memory layout corresponding to global data data section
--		  layout will be created. Currently supported ones are: .data,
--		  .bss, .rodata, and .extern structs/data sections. These
--		  data sections/structs can be used to set up initial values of
--		  variables, if set before **example__load**. Afterwards, if
--		  target kernel supports memory-mapped BPF arrays, same
--		  structs can be used to fetch and update (non-read-only)
--		  data from userspace, with same simplicity as for BPF side.
-+		  layout will be created. Currently supported ones are: *.data*,
-+		  *.bss*, *.rodata*, and *.kconfig* structs/data sections.
-+		  These data sections/structs can be used to set up initial
-+		  values of variables, if set before **example__load**.
-+		  Afterwards, if target kernel supports memory-mapped BPF
-+		  arrays, same structs can be used to fetch and update
-+		  (non-read-only) data from userspace, with same simplicity
-+		  as for BPF side.
- 
- 	**bpftool gen help**
- 		  Print short help message.
+thanks,
 -- 
-2.17.1
-
+John Hubbard
+NVIDIA
