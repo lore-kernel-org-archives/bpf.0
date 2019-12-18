@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C11AC43603
-	for <bpf@archiver.kernel.org>; Wed, 18 Dec 2019 21:43:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6B76C43603
+	for <bpf@archiver.kernel.org>; Wed, 18 Dec 2019 22:17:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B3A0C2176D
-	for <bpf@archiver.kernel.org>; Wed, 18 Dec 2019 21:43:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 97208218AC
+	for <bpf@archiver.kernel.org>; Wed, 18 Dec 2019 22:17:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fwp1ManF"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="V6ZRHO4e"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbfLRVnw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Dec 2019 16:43:52 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:43784 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726212AbfLRVnw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 18 Dec 2019 16:43:52 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBILhmMC003640
-        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 13:43:51 -0800
+        id S1726510AbfLRWRN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Dec 2019 17:17:13 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10522 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726463AbfLRWRN (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 18 Dec 2019 17:17:13 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id xBILu39n019459
+        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 14:17:11 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : mime-version : content-type; s=facebook;
- bh=4yUfY7Tjj7WNz8PiEy97qP9OQCzQNpzSlGf2IrDbw7w=;
- b=fwp1ManFKmbK+As9yZoqTl4ZnWQyc+L7u5fOQ9Zc8f7DTJm/AEv/MOJygbrJrMl0a5Kt
- MiXLpTSPeMCdWWiL1IqHDlDTZ9OwrpAE35eBzIxUCp15liqbto19VizftAW+wMvTXo7E
- ESbBaeAVGSY35QsCW71NuMEPLLGkLgWX0XU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wypvwhwqa-10
+ bh=6oVoRIUSx1VS5czrR0Dgk46K3WidI6qmXRlUZSbYIvI=;
+ b=V6ZRHO4eTgUN1DGkMUCRPvG8nN+z+wgbdUNTbBaWvn9Erhc0QG+zlPStahKUj0nJgpp6
+ u6vOV4eoJHBmhzo7Ip5Q2hNbbxC9mSlTuxSTofmEQQyMf5FF3MyrDxA4haqEh95WJeQ2
+ mBTwAFy26QFRvQzUzzhaKDGVBBXVIc4Lp14= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net with ESMTP id 2wyhy23ce2-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 13:43:51 -0800
-Received: from intmgw004.05.ash5.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 14:17:11 -0800
+Received: from intmgw004.05.ash5.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 18 Dec 2019 13:43:19 -0800
+ 15.1.1779.2; Wed, 18 Dec 2019 14:17:10 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 2E5AA2EC1DF5; Wed, 18 Dec 2019 13:43:18 -0800 (PST)
+        id CAD252EC1761; Wed, 18 Dec 2019 14:17:08 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,51 +48,67 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next] bpftool: simplify format string to not use positional args
-Date:   Wed, 18 Dec 2019 13:43:14 -0800
-Message-ID: <20191218214314.2403729-1-andriin@fb.com>
+Subject: [PATCH bpf-next] bpftool: work-around rst2man conversion bug
+Date:   Wed, 18 Dec 2019 14:17:07 -0800
+Message-ID: <20191218221707.2552199-1-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-18_07:2019-12-17,2019-12-18 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- priorityscore=1501 impostorscore=0 adultscore=0 mlxscore=0 phishscore=0
- mlxlogscore=866 malwarescore=0 suspectscore=8 lowpriorityscore=0
- clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912180166
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ suspectscore=8 spamscore=0 impostorscore=0 malwarescore=0 clxscore=1015
+ mlxlogscore=774 bulkscore=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-1912180168
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Change format string referring to just single argument out of two available.
-Some versions of libc can reject such format string.
+Work-around what appears to be a bug in rst2man convertion tool, used to
+create man pages out of reStructureText-formatted documents. If text line
+starts with dot, rst2man will put it in resulting man file verbatim. This
+seems to cause man tool to interpret it as a directive/command (e.g., `.bs`), and
+subsequently not render entire line because it's unrecognized one.
 
-Reported-by: Nikita Shirokov <tehnerd@tehnerd.com>
+Enclose '.xxx' words in extra formatting to work around.
+
+Fixes: cb21ac588546 ("bpftool: Add gen subcommand manpage")
+Reported-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/bpf/bpftool/gen.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/bpf/bpftool/Documentation/bpftool-gen.rst | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index 8d93c8f90f82..851c465f99dc 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -567,9 +567,9 @@ static int do_skeleton(int argc, char **argv)
- 			return -1;					    \n\
- 		}							    \n\
- 									    \n\
--		#endif /* %2$s */					    \n\
-+		#endif /* %s */						    \n\
- 		",
--		obj_name, header_guard);
-+		header_guard);
- 	err = 0;
- out:
- 	bpf_object__close(obj);
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+index b6a114bf908d..86a87da97d0b 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+@@ -112,13 +112,14 @@ DESCRIPTION
+ 
+ 		  If BPF object has global variables, corresponding structs
+ 		  with memory layout corresponding to global data data section
+-		  layout will be created. Currently supported ones are: .data,
+-		  .bss, .rodata, and .extern structs/data sections. These
+-		  data sections/structs can be used to set up initial values of
+-		  variables, if set before **example__load**. Afterwards, if
+-		  target kernel supports memory-mapped BPF arrays, same
+-		  structs can be used to fetch and update (non-read-only)
+-		  data from userspace, with same simplicity as for BPF side.
++		  layout will be created. Currently supported ones are: *.data*,
++		  *.bss*, *.rodata*, and *.kconfig* structs/data sections.
++		  These data sections/structs can be used to set up initial
++		  values of variables, if set before **example__load**.
++		  Afterwards, if target kernel supports memory-mapped BPF
++		  arrays, same structs can be used to fetch and update
++		  (non-read-only) data from userspace, with same simplicity
++		  as for BPF side.
+ 
+ 	**bpftool gen help**
+ 		  Print short help message.
 -- 
 2.17.1
 
