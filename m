@@ -2,492 +2,100 @@ Return-Path: <SRS0=D/lL=2J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2211C43603
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 07:07:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8495C43603
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 07:18:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 92E60227BF
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 07:07:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F34124650
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 07:18:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="AgIyVRPZ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HiuH/iSp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbfLSHHU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Dec 2019 02:07:20 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14962 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726683AbfLSHHT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 19 Dec 2019 02:07:19 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBJ74rql001577
-        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 23:07:18 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=i/nfJ9g/8Oowp0EVqL+rfUTc7myFvKJipbBX8PU5IlY=;
- b=AgIyVRPZfTVseRAhfJqdHxsT5xs1gSA8qNhjevJfMkTdga+jfNhP+inHAa87Sfx34dEu
- vZXu4DVpSyrhh/wdmH0LoYkJQXD7DTFs6xn5DeeArpuYDHnENQrLu1MQ98h7dpnFmRjh
- ALDG52SidSWznfoQBcDsxfxUG4Uf+6MO7Qg= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wy97upy3j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 23:07:18 -0800
-Received: from intmgw001.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 18 Dec 2019 23:07:10 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id A9F452EC16E6; Wed, 18 Dec 2019 23:07:04 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/3] libbpf/tools: add runqslower tool to libbpf
-Date:   Wed, 18 Dec 2019 23:06:57 -0800
-Message-ID: <20191219070659.424273-3-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191219070659.424273-1-andriin@fb.com>
-References: <20191219070659.424273-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1726340AbfLSHS2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Dec 2019 02:18:28 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:60239 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726303AbfLSHS2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Dec 2019 02:18:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1576739906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dvuyE3XNLiqrKcITgNM9IqSO03KcCDguA8aANa+9ouw=;
+        b=HiuH/iSpzYlB7D7SgG3p25vlyAgXg1xcu9o4adX4yUcinD4UagZOmgpkkOuakzvs3Pkbg6
+        sLfnSZQXrx1g14Gyice++Bp3KXKBK+IyUOIa7TQ8ov3qJ+pWAPZ0LaX6m3pWJFuQv6uyfl
+        F9prHiZyg82F1nZHP5RV/GD9I6pjH9Q=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-274-YCLQbHarP3it7edjCKN25Q-1; Thu, 19 Dec 2019 02:18:24 -0500
+X-MC-Unique: YCLQbHarP3it7edjCKN25Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DF557DBA5;
+        Thu, 19 Dec 2019 07:18:22 +0000 (UTC)
+Received: from carbon (ovpn-200-37.brq.redhat.com [10.40.200.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 24136620D8;
+        Thu, 19 Dec 2019 07:18:18 +0000 (UTC)
+Date:   Thu, 19 Dec 2019 08:18:15 +0100
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        bpf@vger.kernel.org, davem@davemloft.net,
+        jakub.kicinski@netronome.com, hawk@kernel.org,
+        john.fastabend@gmail.com, magnus.karlsson@intel.com,
+        jonathan.lemon@gmail.com
+Subject: Re: [PATCH bpf-next v2 0/8] Simplify
+ xdp_do_redirect_map()/xdp_do_flush_map() and XDP maps
+Message-ID: <20191219081815.0b07de1a@carbon>
+In-Reply-To: <20191219061006.21980-1-bjorn.topel@gmail.com>
+References: <20191219061006.21980-1-bjorn.topel@gmail.com>
+Organization: Red Hat Inc.
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-18_08:2019-12-17,2019-12-18 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- mlxlogscore=999 lowpriorityscore=0 mlxscore=0 suspectscore=2 bulkscore=0
- spamscore=0 malwarescore=0 clxscore=1015 priorityscore=1501
- impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1912190059
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert one of BCC tools (runqslower [0]) to BPF CO-RE + libbpf. It matches
-its BCC-based counterpart 1-to-1, supporting all the same parameters and
-functionality.
+On Thu, 19 Dec 2019 07:09:58 +0100
+Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> wrote:
 
-runqslower tool utilizes BPF skeleton, auto-generated from BPF object file,
-as well as memory-mapped interface to global (read-only, in this case) data.
-Its makefile also ensures auto-generation of "relocatable" vmlinux.h, which is
-necessary for BTF-typed raw tracepoints with direct memory access.
+>   $ sudo ./xdp_redirect_cpu --dev enp134s0f0 --cpu 22 xdp_cpu_map0
+                                                        ^^^^^^^^^^^^
+>  =20
+>   Running XDP/eBPF prog_name:xdp_cpu_map5_lb_hash_ip_pairs
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   XDP-cpumap      CPU:to  pps            drop-pps    extra-info
+>   XDP-RX          20      7723038        0           0
+>   XDP-RX          total   7723038        0
+[...]
 
-  [0] https://github.com/iovisor/bcc/blob/11bf5d02c895df9646c117c713082eb192825293/tools/runqslower.py
+Talking about how to invoke the 'xdp_redirect_cpu' program, I notice
+that you are using BPF-prog named: 'xdp_cpu_map5_lb_hash_ip_pairs'
+(default) but on cmdline it looks like you want 'xdp_cpu_map0'.=20
+You need to use '--prog xdp_cpu_map0'.  It will make a HUGE performance
+difference.
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/tools/runqslower/.gitignore     |   2 +
- tools/lib/bpf/tools/runqslower/Makefile       |  60 ++++++
- .../lib/bpf/tools/runqslower/runqslower.bpf.c | 101 ++++++++++
- tools/lib/bpf/tools/runqslower/runqslower.c   | 187 ++++++++++++++++++
- tools/lib/bpf/tools/runqslower/runqslower.h   |  13 ++
- 5 files changed, 363 insertions(+)
- create mode 100644 tools/lib/bpf/tools/runqslower/.gitignore
- create mode 100644 tools/lib/bpf/tools/runqslower/Makefile
- create mode 100644 tools/lib/bpf/tools/runqslower/runqslower.bpf.c
- create mode 100644 tools/lib/bpf/tools/runqslower/runqslower.c
- create mode 100644 tools/lib/bpf/tools/runqslower/runqslower.h
+Like:
+  sudo ./xdp_redirect_cpu --dev mlx5p1 --cpu 22 --prog xdp_cpu_map0
 
-diff --git a/tools/lib/bpf/tools/runqslower/.gitignore b/tools/lib/bpf/tools/runqslower/.gitignore
-new file mode 100644
-index 000000000000..404942cc9371
---- /dev/null
-+++ b/tools/lib/bpf/tools/runqslower/.gitignore
-@@ -0,0 +1,2 @@
-+/.output
-+/runqslower
-diff --git a/tools/lib/bpf/tools/runqslower/Makefile b/tools/lib/bpf/tools/runqslower/Makefile
-new file mode 100644
-index 000000000000..b87b1f9fe9da
---- /dev/null
-+++ b/tools/lib/bpf/tools/runqslower/Makefile
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+CLANG := clang
-+LLC := llc
-+LLVM_STRIP := llvm-strip
-+BPFTOOL := bpftool
-+LIBBPF_SRC := ../..
-+CFLAGS := -g -Wall
-+
-+# Try to detect best kernel BTF source
-+KERNEL_REL := $(shell uname -r)
-+ifneq ("$(wildcard /sys/kenerl/btf/vmlinux)","")
-+VMLINUX_BTF := /sys/kernel/btf/vmlinux
-+else ifneq ("$(wildcard /boot/vmlinux-$(KERNEL_REL))","")
-+VMLINUX_BTF := /boot/vmlinux-$(KERNEL_REL)
-+else
-+$(error "Can't detect kernel BTF, use VMLINUX_BTF to specify it explicitly")
-+endif
-+
-+out := .output
-+abs_out := $(abspath $(out))
-+libbpf_src := $(abspath $(LIBBPF_SRC))
-+
-+.DELETE_ON_ERROR:
-+
-+.PHONY: all
-+all: runqslower
-+
-+.PHONY: clean
-+clean:
-+	rm -rf $(out) runqslower
-+
-+runqslower: $(out)/runqslower.o $(out)/libbpf.a
-+	$(CC) $(CFLAGS) -lelf -lz $^ -o $@
-+
-+$(out)/vmlinux.h: $(VMLINUX_BTF) | $(out)
-+	$(BPFTOOL) btf dump file $(VMLINUX_BTF) format core > $@
-+
-+$(out)/libbpf.a: | $(out)
-+	cd $(out) &&							      \
-+	$(MAKE) -C $(libbpf_src) OUTPUT=$(abs_out)/ $(abs_out)/libbpf.a
-+
-+$(out)/runqslower.o: runqslower.h $(out)/runqslower.skel.h		      \
-+		     $(out)/runqslower.bpf.o
-+
-+$(out)/runqslower.bpf.o: $(out)/vmlinux.h runqslower.h
-+
-+$(out)/%.skel.h: $(out)/%.bpf.o
-+	$(BPFTOOL) gen skeleton $< > $@
-+
-+$(out)/%.bpf.o: %.bpf.c | $(out)
-+	$(CLANG) -g -O2 -target bpf -I$(out) -I$(LIBBPF_SRC)		      \
-+		 -c $(filter %.c,$^) -o $@ &&				      \
-+	$(LLVM_STRIP) -g $@
-+
-+$(out)/%.o: %.c | $(out)
-+	$(CC) $(CFLAGS) -I$(LIBBPF_SRC) -I$(out) -c $(filter %.c,$^) -o $@
-+
-+$(out):
-+	mkdir -p $(out)
-+
-diff --git a/tools/lib/bpf/tools/runqslower/runqslower.bpf.c b/tools/lib/bpf/tools/runqslower/runqslower.bpf.c
-new file mode 100644
-index 000000000000..7f078e8b1365
---- /dev/null
-+++ b/tools/lib/bpf/tools/runqslower/runqslower.bpf.c
-@@ -0,0 +1,101 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+#include "vmlinux.h"
-+#include "bpf_helpers.h"
-+#include "bpf_core_read.h"
-+#include "runqslower.h"
-+
-+#define TASK_RUNNING 0
-+
-+#define BPF_F_INDEX_MASK		0xffffffffULL
-+#define BPF_F_CURRENT_CPU		BPF_F_INDEX_MASK
-+
-+const volatile __u64 min_us = 0;
-+const volatile pid_t targ_pid = 0;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 10240);
-+	__type(key, u32);
-+	__type(value, u64);
-+} start SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
-+	__uint(key_size, sizeof(u32));
-+	__uint(value_size, sizeof(u32));
-+} events SEC(".maps");
-+
-+/* record enqueue timestamp */
-+__always_inline
-+static int trace_enqueue(u32 tgid, u32 pid)
-+{
-+	u64 ts;
-+
-+	if (!pid || (targ_pid && targ_pid != pid))
-+		return 0;
-+
-+	ts = bpf_ktime_get_ns();
-+	bpf_map_update_elem(&start, &pid, &ts, 0);
-+	return 0;
-+}
-+
-+SEC("tp_btf/sched_wakeup")
-+int handle__sched_wakeup(u64 *ctx)
-+{
-+	/* TP_PROTO(struct task_struct *p) */
-+	struct task_struct *p = (void *)ctx[0];
-+
-+	return trace_enqueue(p->tgid, p->pid);
-+}
-+
-+SEC("tp_btf/sched_wakeup_new")
-+int handle__sched_wakeup_new(u64 *ctx)
-+{
-+	/* TP_PROTO(struct task_struct *p) */
-+	struct task_struct *p = (void *)ctx[0];
-+
-+	return trace_enqueue(p->tgid, p->pid);
-+}
-+
-+SEC("tp_btf/sched_switch")
-+int handle__sched_switch(u64 *ctx)
-+{
-+	/* TP_PROTO(bool preempt, struct task_struct *prev,
-+	 *	    struct task_struct *next)
-+	 */
-+	struct task_struct *prev = (struct task_struct *)ctx[1];
-+	struct task_struct *next = (struct task_struct *)ctx[2];
-+	struct event event = {};
-+	u64 *tsp, delta_us;
-+	long state;
-+	u32 pid;
-+
-+	/* ivcsw: treat like an enqueue event and store timestamp */
-+	if (prev->state == TASK_RUNNING)
-+		trace_enqueue(prev->tgid, prev->pid);
-+
-+	pid = next->pid;
-+
-+	/* fetch timestamp and calculate delta */
-+	tsp = bpf_map_lookup_elem(&start, &pid);
-+	if (!tsp)
-+		return 0;   /* missed enqueue */
-+
-+	delta_us = (bpf_ktime_get_ns() - *tsp) / 1000;
-+	if (min_us && delta_us <= min_us)
-+		return 0;
-+
-+	event.pid = pid;
-+	event.delta_us = delta_us;
-+	bpf_get_current_comm(&event.task, sizeof(event.task));
-+
-+	/* output */
-+	bpf_perf_event_output(ctx, &events, BPF_F_CURRENT_CPU,
-+			      &event, sizeof(event));
-+
-+	bpf_map_delete_elem(&start, &pid);
-+	return 0;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
-diff --git a/tools/lib/bpf/tools/runqslower/runqslower.c b/tools/lib/bpf/tools/runqslower/runqslower.c
-new file mode 100644
-index 000000000000..996f0e2c560e
---- /dev/null
-+++ b/tools/lib/bpf/tools/runqslower/runqslower.c
-@@ -0,0 +1,187 @@
-+// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+// Copyright (c) 2019 Facebook
-+#include <argp.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/resource.h>
-+#include <time.h>
-+#include <libbpf.h>
-+#include <bpf.h>
-+#include "runqslower.h"
-+#include "runqslower.skel.h"
-+
-+struct env {
-+	pid_t pid;
-+	__u64 min_us;
-+	bool verbose;
-+} env = {
-+	.min_us = 10000,
-+};
-+
-+const char *argp_program_version = "runqslower 0.1";
-+const char *argp_program_bug_address = "<bpf@vger.kernel.org>";
-+const char argp_program_doc[] =
-+"runqslower    Trace long process scheduling delays.\n"
-+"              For Linux, uses eBPF, BPF CO-RE, libbpf, BTF.\n"
-+"\n"
-+"This script traces high scheduling delays between tasks being\n"
-+"ready to run and them running on CPU after that.\n"
-+"\n"
-+"USAGE: runqslower [-p PID] [min_us]\n"
-+"\n"
-+"EXAMPLES:\n"
-+"    runqslower         # trace run queue latency higher than 10000 us (default)\n"
-+"    runqslower 1000    # trace run queue latency higher than 1000 us\n"
-+"    runqslower -p 123  # trace pid 123 only\n";
-+
-+static const struct argp_option opts[] = {
-+	{ "pid", 'p', "PID", 0, "Process PID to trace"},
-+	{ "verbose", 'v', NULL, 0, "Verbose debug output" },
-+	{},
-+};
-+
-+static error_t parse_arg(int key, char *arg, struct argp_state *state)
-+{
-+	static int pos_args;
-+	int pid;
-+	long long min_us;
-+
-+	switch (key) {
-+	case 'v':
-+		env.verbose = true;
-+		break;
-+	case 'p':
-+		errno = 0;
-+		pid = strtol(arg, NULL, 10);
-+		if (errno || pid <= 0) {
-+			fprintf(stderr, "Invalid PID: %s\n", arg);
-+			argp_usage(state);
-+		}
-+		env.pid = pid;
-+		break;
-+	case ARGP_KEY_ARG:
-+		if (pos_args++) {
-+			fprintf(stderr,
-+				"Unrecognized positional argument: %s\n", arg);
-+			argp_usage(state);
-+		}
-+		errno = 0;
-+		min_us = strtoll(arg, NULL, 10);
-+		if (errno || min_us <= 0) {
-+			fprintf(stderr, "Invalid delay (in us): %s\n", arg);
-+			argp_usage(state);
-+		}
-+		env.min_us = min_us;
-+		break;
-+	default:
-+		return ARGP_ERR_UNKNOWN;
-+	}
-+	return 0;
-+}
-+
-+int libbpf_print_fn(enum libbpf_print_level level,
-+		    const char *format, va_list args)
-+{
-+	if (level == LIBBPF_DEBUG && !env.verbose)
-+		return 0;
-+	return vfprintf(stderr, format, args);
-+}
-+
-+static int bump_memlock_rlimit(void)
-+{
-+	struct rlimit rlim_new = {
-+		.rlim_cur	= RLIM_INFINITY,
-+		.rlim_max	= RLIM_INFINITY,
-+	};
-+
-+	return setrlimit(RLIMIT_MEMLOCK, &rlim_new);
-+}
-+
-+void handle_event(void *ctx, int cpu, void *data, __u32 data_sz)
-+{
-+	const struct event *e = data;
-+	struct tm *tm;
-+	char ts[32];
-+	time_t t;
-+
-+	time(&t);
-+	tm = localtime(&t);
-+	strftime(ts, sizeof(ts), "%H:%M:%S", tm);
-+	printf("%-8s %-16s %-6d %14llu\n", ts, e->task, e->pid, e->delta_us);
-+}
-+
-+void handle_lost_events(void *ctx, int cpu, __u64 lost_cnt)
-+{
-+	printf("Lost %llu events on CPU #%d!\n", lost_cnt, cpu);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	static const struct argp argp = {
-+		.options = opts,
-+		.parser = parse_arg,
-+		.doc = argp_program_doc,
-+	};
-+	struct perf_buffer_opts pb_opts;
-+	struct perf_buffer *pb = NULL;
-+	struct runqslower_bpf *obj;
-+	int err;
-+
-+	err = argp_parse(&argp, argc, argv, 0, NULL, NULL);
-+	if (err)
-+		return err;
-+
-+	libbpf_set_print(libbpf_print_fn);
-+
-+	err = bump_memlock_rlimit();
-+	if (err) {
-+		fprintf(stderr, "failed to increase rlimit: %d", err);
-+		return 1;
-+	}
-+
-+	obj = runqslower_bpf__open();
-+	if (!obj) {
-+		fprintf(stderr, "failed to open and/or load BPF object\n");
-+		return 1;
-+	}
-+
-+	/* initialize global data (filtering options) */
-+	obj->rodata->targ_pid = env.pid;
-+	obj->rodata->min_us = env.min_us;
-+
-+	err = runqslower_bpf__load(obj);
-+	if (err) {
-+		fprintf(stderr, "failed to load BPF object: %d\n", err);
-+		goto cleanup;
-+	}
-+
-+	err = runqslower_bpf__attach(obj);
-+	if (err) {
-+		fprintf(stderr, "failed to attach BPF programs\n");
-+		goto cleanup;
-+	}
-+
-+	printf("Tracing run queue latency higher than %llu us\n", env.min_us);
-+	printf("%-8s %-16s %-6s %14s\n", "TIME", "COMM", "PID", "LAT(us)");
-+
-+	pb_opts.sample_cb = handle_event;
-+	pb_opts.lost_cb = handle_lost_events;
-+	pb = perf_buffer__new(bpf_map__fd(obj->maps.events), 64, &pb_opts);
-+	err = libbpf_get_error(pb);
-+	if (err) {
-+		pb = NULL;
-+		fprintf(stderr, "failed to open perf buffer: %d\n", err);
-+		goto cleanup;
-+	}
-+
-+	while ((err = perf_buffer__poll(pb, 100)) >= 0)
-+		;
-+	printf("Error polling perf buffer: %d\n", err);
-+
-+cleanup:
-+	perf_buffer__free(pb);
-+	runqslower_bpf__destroy(obj);
-+
-+	return err != 0;
-+}
-diff --git a/tools/lib/bpf/tools/runqslower/runqslower.h b/tools/lib/bpf/tools/runqslower/runqslower.h
-new file mode 100644
-index 000000000000..9db225425e5f
---- /dev/null
-+++ b/tools/lib/bpf/tools/runqslower/runqslower.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
-+#ifndef __RUNQSLOWER_H
-+#define __RUNQSLOWER_H
-+
-+#define TASK_COMM_LEN 16
-+
-+struct event {
-+	char task[TASK_COMM_LEN];
-+	__u64 delta_us;
-+	pid_t pid;
-+};
-+
-+#endif /* __RUNQSLOWER_H */
--- 
-2.17.1
+
+
+(p.s. The load-balance hash_ip_pairs is the default, because it is
+usable for solving the most common issue, where the NIC is not
+RSS distributing traffic correctly, e.g. ixgbe Q-in-Q. And it is close
+to the Suricata approach.)
+--=20
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
