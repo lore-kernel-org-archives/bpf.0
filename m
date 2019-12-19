@@ -2,53 +2,39 @@ Return-Path: <SRS0=D/lL=2J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CA78C43603
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 16:00:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA1C1C43603
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 16:01:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 46A9924650
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 16:00:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B602A24650
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 16:01:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726778AbfLSQAF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Dec 2019 11:00:05 -0500
-Received: from www62.your-server.de ([213.133.104.62]:52706 "EHLO
+        id S1726808AbfLSQBW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Dec 2019 11:01:22 -0500
+Received: from www62.your-server.de ([213.133.104.62]:52996 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726789AbfLSQAF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Dec 2019 11:00:05 -0500
+        with ESMTP id S1726789AbfLSQBW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Dec 2019 11:01:22 -0500
 Received: from [2001:1620:665:0:5795:5b0a:e5d5:5944] (helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1ihyDR-0001RQ-Vz; Thu, 19 Dec 2019 16:59:54 +0100
-Date:   Thu, 19 Dec 2019 16:59:53 +0100
+        id 1ihyEh-0001XW-QH; Thu, 19 Dec 2019 17:01:11 +0100
+Date:   Thu, 19 Dec 2019 17:01:11 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>
-Cc:     Maxim Mikityanskiy <maximmi@mellanox.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@mellanox.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: [PATCH bpf v2 0/4] Fix concurrency issues between XSK wakeup and
- control path using RCU
-Message-ID: <20191219155953.GD4198@linux-9.fritz.box>
-References: <20191217162023.16011-1-maximmi@mellanox.com>
- <cfe64691-7a0f-5b8a-d511-ebe742cec3c0@intel.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix test_attach_probe
+Message-ID: <20191219160111.GA8564@linux-9.fritz.box>
+References: <20191219020442.1922617-1-ast@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cfe64691-7a0f-5b8a-d511-ebe742cec3c0@intel.com>
+In-Reply-To: <20191219020442.1922617-1-ast@kernel.org>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.101.4/25668/Thu Dec 19 10:55:58 2019)
@@ -57,15 +43,13 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 06:33:14PM +0100, Björn Töpel wrote:
-> On 2019-12-17 17:20, Maxim Mikityanskiy wrote:
-> > This series addresses the issue described in the commit message of the
-> > first patch: lack of synchronization between XSK wakeup and destroying
-> > the resources used by XSK wakeup. The idea is similar to
-> > napi_synchronize. The series contains fixes for the drivers that
-> > implement XSK. I haven't tested the changes to Intel's drivers, so,
-> > Intel guys, please review them.
+On Wed, Dec 18, 2019 at 06:04:42PM -0800, Alexei Starovoitov wrote:
+> Fix two issues in test_attach_probe:
+> 1. it was not able to parse /proc/self/maps beyond the first line,
+>    since %s means parse string until white space.
+> 2. offset has to be accounted for otherwise uprobed address is incorrect.
 > 
-> Max, thanks a lot for compiling the series on your vacation!
+> Fixes: 1e8611bbdfc9 ("selftests/bpf: add kprobe/uprobe selftests")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
 Applied, thanks!
