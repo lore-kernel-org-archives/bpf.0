@@ -2,159 +2,206 @@ Return-Path: <SRS0=D/lL=2J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25CD8C2D0D3
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 07:36:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 066CBC43603
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 07:45:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E975324684
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 07:36:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8635218AC
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 07:45:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="rn2yGjgw"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LEFnZsM9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726620AbfLSHg3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Dec 2019 02:36:29 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:4230 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726340AbfLSHg3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Dec 2019 02:36:29 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dfb28710000>; Wed, 18 Dec 2019 23:36:17 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 18 Dec 2019 23:36:27 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 18 Dec 2019 23:36:27 -0800
-Received: from [10.2.165.11] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 19 Dec
- 2019 07:36:25 +0000
-Subject: Re: [PATCH v11 04/25] mm: devmap: refactor 1-based refcounting for
- ZONE_DEVICE pages
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, KVM list <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        "Linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Netdev <netdev@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-References: <20191216222537.491123-1-jhubbard@nvidia.com>
- <20191216222537.491123-5-jhubbard@nvidia.com>
- <CAPcyv4hQBMxYMurxG=Vwh0=FKWoT3z-Kf=dqES1-icRV5bLwKg@mail.gmail.com>
- <d0a99e75-0175-0f31-f176-8c37c18a4108@nvidia.com>
- <CAPcyv4j+Zgom17UZ-6Njkij1R0UQ=vUQdnaEZj9qDezEUJSZGg@mail.gmail.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <a9782048-0c6a-b906-2bd6-3800269f4b01@nvidia.com>
-Date:   Wed, 18 Dec 2019 23:33:36 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1726439AbfLSHpO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Dec 2019 02:45:14 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7404 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726303AbfLSHpO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 19 Dec 2019 02:45:14 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBJ7erH0031420
+        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 23:45:13 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=A3sa158hA6zbREWxvxveyq8Gd95yJYYiwnsYK6hgXOc=;
+ b=LEFnZsM9zu2MO1uamafgYZDvDCH97S8wkzLtFpyRjn+9OdlIzXkPjFuMqfx3o/ZDf5Xe
+ oOoz6DObUn6oUqQ7ZmRu0xTQO0sZApNqYXn811Deovc2o1H/7CPVTEimVzMemkzRaJiR
+ V4rMPIQDYAVQ9Ji+iAxujoqZyJYeUssDuh8= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wykmqmtw6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 23:45:13 -0800
+Received: from intmgw001.06.prn3.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Wed, 18 Dec 2019 23:45:12 -0800
+Received: by dev082.prn2.facebook.com (Postfix, from userid 572249)
+        id 182BD37138B6; Wed, 18 Dec 2019 23:45:10 -0800 (PST)
+Smtp-Origin-Hostprefix: dev
+From:   Andrey Ignatov <rdna@fb.com>
+Smtp-Origin-Hostname: dev082.prn2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Andrey Ignatov <rdna@fb.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <kafai@fb.com>, <andriin@fb.com>,
+        <kernel-team@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH v4 bpf-next 1/6] bpf: Simplify __cgroup_bpf_attach
+Date:   Wed, 18 Dec 2019 23:44:33 -0800
+Message-ID: <c6193db6fe630797110b0d3ff06c125d093b834c.1576741281.git.rdna@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1576741281.git.rdna@fb.com>
+References: <cover.1576741281.git.rdna@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-In-Reply-To: <CAPcyv4j+Zgom17UZ-6Njkij1R0UQ=vUQdnaEZj9qDezEUJSZGg@mail.gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1576740978; bh=AwGIHszd33R/kLZlUt1Z4JwwlD2NSoQAiltNw2UIah0=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=rn2yGjgwQ9+/2v2mcxWjrZFxdrk3/eEgjxRU1LJiuOVyjVOa62J0tvoTcmLOK6fXS
-         xTiiEKdaSrRaYvKoHJFISdC+5xDr9wuGKGy6eL+p8mnXTv3WmxTBQ5uSD1vNUHW7Zv
-         FL1u5zml1dT0aGOGbVIB8FGZRe/vZmwx0E0SfZqPp5XPLjqF6k+D7FwuHs+yKnEljh
-         6K2DgflrDdhvNm7j657NcorkWkt+15POYkE/QPPC6A7qk9vcVVLh/jftFFqBiaLSef
-         +CbFHF0Oi6KJR9YDOdsjceXX460BQcgisIE59hm4mMu6iV3pT5dz1gvUWjcugiRrZC
-         tT/WLbmWB9r/w==
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-18_08:2019-12-17,2019-12-18 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ suspectscore=38 priorityscore=1501 malwarescore=0 mlxlogscore=819
+ impostorscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0
+ clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912190065
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 12/18/19 10:52 PM, Dan Williams wrote:
-> On Wed, Dec 18, 2019 at 9:51 PM John Hubbard <jhubbard@nvidia.com> wrote:
->>
->> On 12/18/19 9:27 PM, Dan Williams wrote:
->> ...
->>>> @@ -461,5 +449,5 @@ void __put_devmap_managed_page(struct page *page)
->>>>           page->mapping = NULL;
->>>>           page->pgmap->ops->page_free(page);
->>>>    }
->>>> -EXPORT_SYMBOL(__put_devmap_managed_page);
->>>> +EXPORT_SYMBOL(free_devmap_managed_page);
->>>
->>> This patch does not have a module consumer for
->>> free_devmap_managed_page(), so the export should move to the patch
->>> that needs the new export.
->>
->> Hi Dan,
->>
->> OK, I know that's a policy--although it seems quite pointless here given
->> that this is definitely going to need an EXPORT.
->>
->> At the moment, the series doesn't use it in any module at all, so I'll just
->> delete the EXPORT for now.
->>
->>>
->>> Also the only reason that put_devmap_managed_page() is EXPORT_SYMBOL
->>> instead of EXPORT_SYMBOL_GPL is that there was no practical way to
->>> hide the devmap details from evey module in the kernel that did
->>> put_page(). I would expect free_devmap_managed_page() to
->>> EXPORT_SYMBOL_GPL if it is not inlined into an existing exported
->>> static inline api.
->>>
->>
->> Sure, I'll change it to EXPORT_SYMBOL_GPL when the time comes. We do have
->> to be careful that we don't shut out normal put_page() types of callers,
->> but...glancing through the current callers, that doesn't look to be a problem.
->> Good. So it should be OK to do EXPORT_SYMBOL_GPL here.
->>
->> Are you *sure* you don't want to just pre-emptively EXPORT now, and save
->> looking at it again?
-> 
-> I'm positive. There is enough history for "trust me the consumer is
-> coming" turning out not to be true to justify the hassle in my mind. I
-> do trust you, but things happen.
-> 
+__cgroup_bpf_attach has a lot of identical code to handle two scenarios:
+BPF_F_ALLOW_MULTI is set and unset.
 
-OK, it's deleted locally. Thanks for looking at the patch. I'll post a v12 series
-that includes the change, once it looks like reviews are slowing down.
+Simplify it by splitting the two main steps:
 
+* First, the decision is made whether a new bpf_prog_list entry should
+  be allocated or existing entry should be reused for the new program.
+  This decision is saved in replace_pl pointer;
 
-thanks,
+* Next, replace_pl pointer is used to handle both possible states of
+  BPF_F_ALLOW_MULTI flag (set / unset) instead of doing similar work for
+  them separately.
+
+This splitting, in turn, allows to make further simplifications:
+
+* The check for attaching same program twice in BPF_F_ALLOW_MULTI mode
+  can be done before allocating cgroup storage, so that if user tries to
+  attach same program twice no alloc/free happens as it was before;
+
+* pl_was_allocated becomes redundant so it's removed.
+
+Signed-off-by: Andrey Ignatov <rdna@fb.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+---
+ kernel/bpf/cgroup.c | 62 +++++++++++++++++----------------------------
+ 1 file changed, 23 insertions(+), 39 deletions(-)
+
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 9f90d3c92bda..e8cbdd1be687 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -295,9 +295,8 @@ int __cgroup_bpf_attach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 	struct bpf_prog *old_prog = NULL;
+ 	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE],
+ 		*old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {NULL};
++	struct bpf_prog_list *pl, *replace_pl = NULL;
+ 	enum bpf_cgroup_storage_type stype;
+-	struct bpf_prog_list *pl;
+-	bool pl_was_allocated;
+ 	int err;
+ 
+ 	if ((flags & BPF_F_ALLOW_OVERRIDE) && (flags & BPF_F_ALLOW_MULTI))
+@@ -317,6 +316,16 @@ int __cgroup_bpf_attach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 	if (prog_list_length(progs) >= BPF_CGROUP_MAX_PROGS)
+ 		return -E2BIG;
+ 
++	if (flags & BPF_F_ALLOW_MULTI) {
++		list_for_each_entry(pl, progs, node) {
++			if (pl->prog == prog)
++				/* disallow attaching the same prog twice */
++				return -EINVAL;
++		}
++	} else if (!list_empty(progs)) {
++		replace_pl = list_first_entry(progs, typeof(*pl), node);
++	}
++
+ 	for_each_cgroup_storage_type(stype) {
+ 		storage[stype] = bpf_cgroup_storage_alloc(prog, stype);
+ 		if (IS_ERR(storage[stype])) {
+@@ -327,52 +336,27 @@ int __cgroup_bpf_attach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 		}
+ 	}
+ 
+-	if (flags & BPF_F_ALLOW_MULTI) {
+-		list_for_each_entry(pl, progs, node) {
+-			if (pl->prog == prog) {
+-				/* disallow attaching the same prog twice */
+-				for_each_cgroup_storage_type(stype)
+-					bpf_cgroup_storage_free(storage[stype]);
+-				return -EINVAL;
+-			}
++	if (replace_pl) {
++		pl = replace_pl;
++		old_prog = pl->prog;
++		for_each_cgroup_storage_type(stype) {
++			old_storage[stype] = pl->storage[stype];
++			bpf_cgroup_storage_unlink(old_storage[stype]);
+ 		}
+-
++	} else {
+ 		pl = kmalloc(sizeof(*pl), GFP_KERNEL);
+ 		if (!pl) {
+ 			for_each_cgroup_storage_type(stype)
+ 				bpf_cgroup_storage_free(storage[stype]);
+ 			return -ENOMEM;
+ 		}
+-
+-		pl_was_allocated = true;
+-		pl->prog = prog;
+-		for_each_cgroup_storage_type(stype)
+-			pl->storage[stype] = storage[stype];
+ 		list_add_tail(&pl->node, progs);
+-	} else {
+-		if (list_empty(progs)) {
+-			pl = kmalloc(sizeof(*pl), GFP_KERNEL);
+-			if (!pl) {
+-				for_each_cgroup_storage_type(stype)
+-					bpf_cgroup_storage_free(storage[stype]);
+-				return -ENOMEM;
+-			}
+-			pl_was_allocated = true;
+-			list_add_tail(&pl->node, progs);
+-		} else {
+-			pl = list_first_entry(progs, typeof(*pl), node);
+-			old_prog = pl->prog;
+-			for_each_cgroup_storage_type(stype) {
+-				old_storage[stype] = pl->storage[stype];
+-				bpf_cgroup_storage_unlink(old_storage[stype]);
+-			}
+-			pl_was_allocated = false;
+-		}
+-		pl->prog = prog;
+-		for_each_cgroup_storage_type(stype)
+-			pl->storage[stype] = storage[stype];
+ 	}
+ 
++	pl->prog = prog;
++	for_each_cgroup_storage_type(stype)
++		pl->storage[stype] = storage[stype];
++
+ 	cgrp->bpf.flags[type] = flags;
+ 
+ 	err = update_effective_progs(cgrp, type);
+@@ -401,7 +385,7 @@ int __cgroup_bpf_attach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 		pl->storage[stype] = old_storage[stype];
+ 		bpf_cgroup_storage_link(old_storage[stype], cgrp, type);
+ 	}
+-	if (pl_was_allocated) {
++	if (!replace_pl) {
+ 		list_del(&pl->node);
+ 		kfree(pl);
+ 	}
 -- 
-John Hubbard
-NVIDIA
+2.17.1
+
