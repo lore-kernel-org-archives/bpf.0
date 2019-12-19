@@ -2,272 +2,167 @@ Return-Path: <SRS0=D/lL=2J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04148C43603
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 00:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5862C43603
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 00:42:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C1AEF227BF
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 00:41:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 724F7222C2
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 00:42:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="qjIOKqdC"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="HrBgBEUO";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="FMyqVgoD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbfLSAl0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Dec 2019 19:41:26 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:12803 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726463AbfLSAl0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Dec 2019 19:41:26 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dfac6eb0000>; Wed, 18 Dec 2019 16:40:11 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 18 Dec 2019 16:40:40 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 18 Dec 2019 16:40:40 -0800
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 19 Dec
- 2019 00:40:40 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Thu, 19 Dec 2019 00:40:39 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dfac7070000>; Wed, 18 Dec 2019 16:40:39 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v12] mm: devmap: refactor 1-based refcounting for ZONE_DEVICE pages
-Date:   Wed, 18 Dec 2019 16:40:37 -0800
-Message-ID: <20191219004037.1198078-1-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20191218160420.gyt4c45e6zsnxqv6@box>
-References: <20191218160420.gyt4c45e6zsnxqv6@box>
+        id S1726616AbfLSAmQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Dec 2019 19:42:16 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:48088 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726559AbfLSAmQ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 18 Dec 2019 19:42:16 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBJ0fkNI007716;
+        Wed, 18 Dec 2019 16:42:03 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=rwkiZ4X4v6+r5af1WV7klUAIvWUjQTFduYq6ul+j+Lw=;
+ b=HrBgBEUOrwIvmp4jGa+4GI9HFmoCi2cq9Ekf6aLTo1UbieLe/p6afObuZLufxNcfITVz
+ ZtzlU4Wq0bw2t8hhQJZZ3cRDLl6qrcPwfpE4iQnSnalnmJWvWw7CDtkYFGR832KMBChS
+ Z/S+SLhIwqdZUX0VdcVv4aeOsBVFQ/wpTBw= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2wy61t6t7a-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 18 Dec 2019 16:42:03 -0800
+Received: from prn-mbx07.TheFacebook.com (2620:10d:c081:6::21) by
+ prn-hub03.TheFacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Wed, 18 Dec 2019 16:41:59 -0800
+Received: from prn-hub05.TheFacebook.com (2620:10d:c081:35::129) by
+ prn-mbx07.TheFacebook.com (2620:10d:c081:6::21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Wed, 18 Dec 2019 16:41:59 -0800
+Received: from NAM02-CY1-obe.outbound.protection.outlook.com (192.168.54.28)
+ by o365-in.thefacebook.com (192.168.16.29) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
+ via Frontend Transport; Wed, 18 Dec 2019 16:41:59 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YIJcjvLuEdmgo7uDvvP/Lij8SGwvQOfOm0xkTJTsp8wMeWycqartgPFLfN7/AD1X5/J+UifVqu75ycW/6M4+uCFwYXQroXZPE/snnEquG29w4RMTIhf5auu4p4rFeB8TYeyQoL8nRDTonozI69A3PlOa60KeSrJnIv+vZ+W75ms4NOU7uDIgDvGi7BislA15McbFwYaQrBebu6ert0DLEzW0jrzRyVSOS02ItW+DjmIaDAWHRLFfxlPlrepZF12XixJDF1BQRcO+QTE1PCaZ13sMraJF9dijSZkGD7tLjdsKRFXnohVvp3+jZj3y/mN4C37qXevHA3714SfLl/7z1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rwkiZ4X4v6+r5af1WV7klUAIvWUjQTFduYq6ul+j+Lw=;
+ b=UFa8fFmHVT4hxtfwRSnTa5WDTVkOkpOOv96i57r7zQ6Q1PzOFATkOMRhsfgm9g998J16HhIgrGlz1GETM6h9/GkgyfnGb0s5uSqwH6GGCbDNp0Y44/TCOJmP6i07Cdah7twGcPo8dbMa7orsd7ORwY7ajz3RUuuAVKKA4YMBDzzvwjsfC/usl98kV14xumzFCah5rA6KZ+Ps7sY0G6VRoV7aCe4FrH2xKejaaOzw66JMk6EuyQ7dd1o/3Ji9SmUugExGABn8Tvzo9qzmMmEw0ORXd/wafhDOyAgqbEM9iHCTXcuMe0Bh4z2qYQ/FEfb9PNjxvpUx6b5G8+i8tD+pPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rwkiZ4X4v6+r5af1WV7klUAIvWUjQTFduYq6ul+j+Lw=;
+ b=FMyqVgoDbkNrfgo3An90BF3eSk6pT0rTeqqd6QQHxvS63K797cy4G4fzPZpVBpJSpykV1gm2mEnue9rG2jQ+0eXy/yba13k2aQSVBQBa0Wapb45vGMH4s9W4pNTHSk/klh7vxHCui3HFNqmRuv9KcNBSiWnGQzjMLjnkoccFZkc=
+Received: from DM5PR15MB1675.namprd15.prod.outlook.com (10.175.107.145) by
+ DM5PR15MB1706.namprd15.prod.outlook.com (10.174.108.143) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2559.14; Thu, 19 Dec 2019 00:41:58 +0000
+Received: from DM5PR15MB1675.namprd15.prod.outlook.com
+ ([fe80::2844:b18d:c296:c23]) by DM5PR15MB1675.namprd15.prod.outlook.com
+ ([fe80::2844:b18d:c296:c23%8]) with mapi id 15.20.2538.019; Thu, 19 Dec 2019
+ 00:41:57 +0000
+From:   Yonghong Song <yhs@fb.com>
+To:     Andrii Nakryiko <andriin@fb.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>
+CC:     "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next] bpftool: work-around rst2man conversion bug
+Thread-Topic: [PATCH bpf-next] bpftool: work-around rst2man conversion bug
+Thread-Index: AQHVtfvFdG9maJpGtUqoLFWYlcsFrafAnkAA
+Date:   Thu, 19 Dec 2019 00:41:57 +0000
+Message-ID: <1689268b-3f09-0a8a-b1dc-8c739901d92f@fb.com>
+References: <20191218221707.2552199-1-andriin@fb.com>
+ <bc49104a-01a7-8731-e811-53a6c9861a48@fb.com>
+In-Reply-To: <bc49104a-01a7-8731-e811-53a6c9861a48@fb.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MWHPR21CA0047.namprd21.prod.outlook.com
+ (2603:10b6:300:129::33) To DM5PR15MB1675.namprd15.prod.outlook.com
+ (2603:10b6:3:11f::17)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:200::3:31e6]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6b93411c-7f82-4f23-aeb4-08d7841c4099
+x-ms-traffictypediagnostic: DM5PR15MB1706:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM5PR15MB1706DC9C76EC215C864200D6D3520@DM5PR15MB1706.namprd15.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0256C18696
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(366004)(376002)(136003)(396003)(39860400002)(189003)(199004)(2616005)(110136005)(52116002)(4326008)(81156014)(81166006)(54906003)(2906002)(71200400001)(53546011)(8936002)(86362001)(6486002)(8676002)(6512007)(31696002)(186003)(6506007)(66946007)(66446008)(66476007)(64756008)(66556008)(316002)(5660300002)(31686004)(478600001)(36756003)(21314003);DIR:OUT;SFP:1102;SCL:1;SRVR:DM5PR15MB1706;H:DM5PR15MB1675.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0fX8vTdn3X03LsXTPG3Uv7pebBW9O+qMctk47YqVaiIY5P8EBzHBA14qHF0PPzcgKMDNRabkFLbiYYfc8TRcPymJIIfTn8o4pfK5MhTqH1oDgf61qUxnZsjOPTwbhwf1gkNrdLwXN0u5tLdhkqqiHE4sLboFUrj4TwfD0WYqXD2jkrO0Yu3sfEKVduk64shwBa8TYjOWWWrkSvJ/iaO9XwIVrUFZPAokaVM3iCVIvKn4sQVxw5pIs8C+cvJdM9R2FKmir+Caqr+FphrkJdV67UrWPgKmp69E55TpLlVBVFKZHBn51c+KlguJtUXzTKNUBGANKI0tf0PHNCZXW8OotLmeL60FCeDO9RBYDYLPqM3bSHvr6OvGswnidFLyZy5yRL12D24hY6cnh6vt/MhF0COi4nV6qvLcAkMmvjWndkrP0s2ZJkJPIubDprLf++Gr0MeY0pxWt/3Bwth/wqeO7679E/zQJwcsp36NTTpPK1y6vhmWFbgJvcDykLv6vkUr
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F5D85845128FDE4BBF2E8C8147466C0F@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1576716012; bh=meY7XSFZGFTm0ReBYolvDdqRBgCh/HSlArb5Zg3NFvk=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Type:Content-Transfer-Encoding;
-        b=qjIOKqdCUd7FwtXps/EX5rcy2jzX7ECH7d3gscZlvPWK+USZzY1q0dAG+H1A1e4bW
-         xIdpfAI5t4vavi9qpNMvGtiweIkR1awxL4TYXPZwaeONkFcFN1zXQbpW/68snevPNj
-         5QIP3HFe/KnwTQJ5t/CB3h4eLlluOox9FBIYdqA3HpeElohSY3KZjP+6dBkbINRhFa
-         ZYRgTzuq1d6+3U/JsKziS6j7uhAZMlje1/Nk/EI1s0RtNW9Xt5H7STM2pMGvX9z96O
-         6weRpZ4IdcHq5gWYu+R05VYD+Ro8D3XakiiYQK6azXLHolwxZWIhC6GYnIMG6nSLyM
-         S6aDYq/kU5kxg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b93411c-7f82-4f23-aeb4-08d7841c4099
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Dec 2019 00:41:57.7487
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Po3EkqTpATe8tH21CZKMdN1sWd9tZfcrZaREadQc4rrd3N4w8WcU3PkzW6YUWTRL
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1706
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-18_08:2019-12-17,2019-12-18 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ malwarescore=0 mlxlogscore=881 bulkscore=0 phishscore=0 suspectscore=0
+ spamscore=0 impostorscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912190004
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-An upcoming patch changes and complicates the refcounting and
-especially the "put page" aspects of it. In order to keep
-everything clean, refactor the devmap page release routines:
-
-* Rename put_devmap_managed_page() to page_is_devmap_managed(),
-  and limit the functionality to "read only": return a bool,
-  with no side effects.
-
-* Add a new routine, put_devmap_managed_page(), to handle
-  decrementing the refcount for ZONE_DEVICE pages.
-
-* Change callers (just release_pages() and put_page()) to check
-  page_is_devmap_managed() before calling the new
-  put_devmap_managed_page() routine. This is a performance
-  point: put_page() is a hot path, so we need to avoid non-
-  inline function calls where possible.
-
-* Rename __put_devmap_managed_page() to free_devmap_managed_page(),
-  and limit the functionality to unconditionally freeing a devmap
-  page.
-
-This is originally based on a separate patch by Ira Weiny, which
-applied to an early version of the put_user_page() experiments.
-Since then, J=C3=A9r=C3=B4me Glisse suggested the refactoring described abo=
-ve.
-
-Cc: Christoph Hellwig <hch@lst.de>
-Suggested-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- include/linux/mm.h | 18 +++++++++++++-----
- mm/memremap.c      | 16 ++--------------
- mm/swap.c          | 27 ++++++++++++++++++++++++++-
- 3 files changed, 41 insertions(+), 20 deletions(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index c97ea3b694e6..87b54126e46d 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -952,9 +952,10 @@ static inline bool is_zone_device_page(const struct pa=
-ge *page)
- #endif
-=20
- #ifdef CONFIG_DEV_PAGEMAP_OPS
--void __put_devmap_managed_page(struct page *page);
-+void free_devmap_managed_page(struct page *page);
- DECLARE_STATIC_KEY_FALSE(devmap_managed_key);
--static inline bool put_devmap_managed_page(struct page *page)
-+
-+static inline bool page_is_devmap_managed(struct page *page)
- {
- 	if (!static_branch_unlikely(&devmap_managed_key))
- 		return false;
-@@ -963,7 +964,6 @@ static inline bool put_devmap_managed_page(struct page =
-*page)
- 	switch (page->pgmap->type) {
- 	case MEMORY_DEVICE_PRIVATE:
- 	case MEMORY_DEVICE_FS_DAX:
--		__put_devmap_managed_page(page);
- 		return true;
- 	default:
- 		break;
-@@ -971,11 +971,17 @@ static inline bool put_devmap_managed_page(struct pag=
-e *page)
- 	return false;
- }
-=20
-+void put_devmap_managed_page(struct page *page);
-+
- #else /* CONFIG_DEV_PAGEMAP_OPS */
--static inline bool put_devmap_managed_page(struct page *page)
-+static inline bool page_is_devmap_managed(struct page *page)
- {
- 	return false;
- }
-+
-+static inline void put_devmap_managed_page(struct page *page)
-+{
-+}
- #endif /* CONFIG_DEV_PAGEMAP_OPS */
-=20
- static inline bool is_device_private_page(const struct page *page)
-@@ -1028,8 +1034,10 @@ static inline void put_page(struct page *page)
- 	 * need to inform the device driver through callback. See
- 	 * include/linux/memremap.h and HMM for details.
- 	 */
--	if (put_devmap_managed_page(page))
-+	if (page_is_devmap_managed(page)) {
-+		put_devmap_managed_page(page);
- 		return;
-+	}
-=20
- 	if (put_page_testzero(page))
- 		__put_page(page);
-diff --git a/mm/memremap.c b/mm/memremap.c
-index e899fa876a62..2ba773859031 100644
---- a/mm/memremap.c
-+++ b/mm/memremap.c
-@@ -411,20 +411,8 @@ struct dev_pagemap *get_dev_pagemap(unsigned long pfn,
- EXPORT_SYMBOL_GPL(get_dev_pagemap);
-=20
- #ifdef CONFIG_DEV_PAGEMAP_OPS
--void __put_devmap_managed_page(struct page *page)
-+void free_devmap_managed_page(struct page *page)
- {
--	int count =3D page_ref_dec_return(page);
--
--	/* still busy */
--	if (count > 1)
--		return;
--
--	/* only triggered by the dev_pagemap shutdown path */
--	if (count =3D=3D 0) {
--		__put_page(page);
--		return;
--	}
--
- 	/* notify page idle for dax */
- 	if (!is_device_private_page(page)) {
- 		wake_up_var(&page->_refcount);
-@@ -461,5 +449,5 @@ void __put_devmap_managed_page(struct page *page)
- 	page->mapping =3D NULL;
- 	page->pgmap->ops->page_free(page);
- }
--EXPORT_SYMBOL(__put_devmap_managed_page);
-+EXPORT_SYMBOL(free_devmap_managed_page);
- #endif /* CONFIG_DEV_PAGEMAP_OPS */
-diff --git a/mm/swap.c b/mm/swap.c
-index 5341ae93861f..cf39d24ada2a 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -813,8 +813,10 @@ void release_pages(struct page **pages, int nr)
- 			 * processing, and instead, expect a call to
- 			 * put_page_testzero().
- 			 */
--			if (put_devmap_managed_page(page))
-+			if (page_is_devmap_managed(page)) {
-+				put_devmap_managed_page(page);
- 				continue;
-+			}
- 		}
-=20
- 		page =3D compound_head(page);
-@@ -1102,3 +1104,26 @@ void __init swap_setup(void)
- 	 * _really_ don't want to cluster much more
- 	 */
- }
-+
-+#ifdef CONFIG_DEV_PAGEMAP_OPS
-+void put_devmap_managed_page(struct page *page)
-+{
-+	int count;
-+
-+	if (WARN_ON_ONCE(!page_is_devmap_managed(page)))
-+		return;
-+
-+	count =3D page_ref_dec_return(page);
-+
-+	/*
-+	 * devmap page refcounts are 1-based, rather than 0-based: if
-+	 * refcount is 1, then the page is free and the refcount is
-+	 * stable because nobody holds a reference on the page.
-+	 */
-+	if (count =3D=3D 1)
-+		free_devmap_managed_page(page);
-+	else if (!count)
-+		__put_page(page);
-+}
-+EXPORT_SYMBOL(put_devmap_managed_page);
-+#endif
---=20
-2.24.1
-
+DQoNCk9uIDEyLzE4LzE5IDM6MzUgUE0sIFlvbmdob25nIFNvbmcgd3JvdGU6DQo+IA0KPiANCj4g
+T24gMTIvMTgvMTkgMjoxNyBQTSwgQW5kcmlpIE5ha3J5aWtvIHdyb3RlOg0KPj4gV29yay1hcm91
+bmQgd2hhdCBhcHBlYXJzIHRvIGJlIGEgYnVnIGluIHJzdDJtYW4gY29udmVydGlvbiB0b29sLCB1
+c2VkIHRvDQo+PiBjcmVhdGUgbWFuIHBhZ2VzIG91dCBvZiByZVN0cnVjdHVyZVRleHQtZm9ybWF0
+dGVkIGRvY3VtZW50cy4gSWYgdGV4dCBsaW5lDQo+PiBzdGFydHMgd2l0aCBkb3QsIHJzdDJtYW4g
+d2lsbCBwdXQgaXQgaW4gcmVzdWx0aW5nIG1hbiBmaWxlIHZlcmJhdGltLiBUaGlzDQo+PiBzZWVt
+cyB0byBjYXVzZSBtYW4gdG9vbCB0byBpbnRlcnByZXQgaXQgYXMgYSBkaXJlY3RpdmUvY29tbWFu
+ZCAoZS5nLiwgYC5ic2ApLCBhbmQNCj4+IHN1YnNlcXVlbnRseSBub3QgcmVuZGVyIGVudGlyZSBs
+aW5lIGJlY2F1c2UgaXQncyB1bnJlY29nbml6ZWQgb25lLg0KPj4NCj4+IEVuY2xvc2UgJy54eHgn
+IHdvcmRzIGluIGV4dHJhIGZvcm1hdHRpbmcgdG8gd29yayBhcm91bmQuDQo+Pg0KPj4gRml4ZXM6
+IGNiMjFhYzU4ODU0NiAoImJwZnRvb2w6IEFkZCBnZW4gc3ViY29tbWFuZCBtYW5wYWdlIikNCj4+
+IFJlcG9ydGVkLWJ5OiBBbGV4ZWkgU3Rhcm92b2l0b3YgPGFzdEBrZXJuZWwub3JnPg0KPj4gU2ln
+bmVkLW9mZi1ieTogQW5kcmlpIE5ha3J5aWtvIDxhbmRyaWluQGZiLmNvbT4NCg0KQWNrZWQtYnk6
+IFlvbmdob25nIFNvbmcgPHloc0BmYi5jb20NCg0KWy4uLl0NCj4+ICsJCSAgKi5ic3MqLCAqLnJv
+ZGF0YSosIGFuZCAqLmtjb25maWcqIHN0cnVjdHMvZGF0YSBzZWN0aW9ucy4NCj4+ICsJCSAgVGhl
+c2UgZGF0YSBzZWN0aW9ucy9zdHJ1Y3RzIGNhbiBiZSB1c2VkIHRvIHNldCB1cCBpbml0aWFsDQo+
+PiArCQkgIHZhbHVlcyBvZiB2YXJpYWJsZXMsIGlmIHNldCBiZWZvcmUgKipleGFtcGxlX19sb2Fk
+KiouDQo+PiArCQkgIEFmdGVyd2FyZHMsIGlmIHRhcmdldCBrZXJuZWwgc3VwcG9ydHMgbWVtb3J5
+LW1hcHBlZCBCUEYNCj4+ICsJCSAgYXJyYXlzLCBzYW1lIHN0cnVjdHMgY2FuIGJlIHVzZWQgdG8g
+ZmV0Y2ggYW5kIHVwZGF0ZQ0KPj4gKwkJICAobm9uLXJlYWQtb25seSkgZGF0YSBmcm9tIHVzZXJz
+cGFjZSwgd2l0aCBzYW1lIHNpbXBsaWNpdHkNCj4+ICsJCSAgYXMgZm9yIEJQRiBzaWRlLg0KPiAN
+Cj4gU3RpbGwgZG9lcyBub3QgbG9vayByaWdodC4NCj4gDQo+IEFmdGVyIGJ1aWxkLCBJIGRpZCBg
+bWFuIC4vYnBmdG9vbC1nZW4uOGAsIGFuZCBJIGdvdCB0aGUgZm9sbG93aW5nLA0KPiANCj4gICAg
+ICAgICAgICAgICAgICAgIHNwb25kaW5nIHRvIGdsb2JhbCBkYXRhIGRhdGEgc2VjdGlvbiBsYXlv
+dXQgd2lsbCBiZQ0KPiBjcmVhdGVkLiBDdXJyZW50bHkgc3VwcG9ydGVkIG9uZXMNCj4gICAgICAg
+ICAgICAgICAgICAgIGFyZTogLmRhdGEsIGRhdGEgc2VjdGlvbnMvc3RydWN0cyBjYW4gYmUgdXNl
+ZCB0byBzZXQNCj4gdXAgaW5pdGlhbCB2YWx1ZXMgb2YgIHZhcmlhYmxlcywNCj4gDQo+IC5ic3Ms
+IC5yb2RhdGEgLmtjb25maWcgZXRjLiBhcmUgbWlzc2luZy4gSSBhbSB1c2luZzoNCj4gDQo+IC1i
+YXNoLTQuNCQgbWFuIC0tdmVyc2lvbg0KPiBtYW4gMi42LjMNCg0KU29ycnkuIEFjdHVhbGx5IHRo
+aXMgcGF0Y2ggd29ya3MuIEkgYXBwbGllZCB0aGUgcHJldmlvdXMgcGF0Y2gNCiJicGZ0b29sOiBz
+aW1wbGlmeSBmb3JtYXQgc3RyaW5nIHRvIG5vdCB1c2UgcG9zaXRpb25hbCBhcmdzIiBhbmQgZ290
+DQp0aGUgYWJvdmUgcmVzdWx0Lg0K
