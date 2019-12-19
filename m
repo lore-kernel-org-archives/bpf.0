@@ -2,135 +2,110 @@ Return-Path: <SRS0=D/lL=2J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 173C4C2D0C1
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 19:09:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F067C43603
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 19:26:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D1AB7222C2
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 19:09:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F03424672
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 19:26:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TRvyQJhs";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="dc4a4usZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mtP4SWQn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728442AbfLSSkv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Dec 2019 13:40:51 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:34934 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728433AbfLSSku (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 19 Dec 2019 13:40:50 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBJIOWnv030655;
-        Thu, 19 Dec 2019 10:40:48 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=JLkr62kxaQ8Lhq+xeClwDTXJCp2ukT3Qs/q8Xh9vDkQ=;
- b=TRvyQJhsjQ1fGVnUDIiyIseWdXfK+GHu4IrwqIIKyl7KyVaC7D38dOVHvfLqv5MvdNQJ
- U1//rTS1XI7Qzw65RFuaV+ziCNQFf+Grj3SYdJ4dshjRUdTtEbpxWnR4w9k9y/CZPVTS
- un+jclEcuv5WUfEd0h5YaWDrQ5t974nSg+U= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wypvwpm5v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 19 Dec 2019 10:40:48 -0800
-Received: from ash-exhub103.TheFacebook.com (2620:10d:c0a8:82::c) by
- ash-exhub204.TheFacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 19 Dec 2019 10:40:47 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Thu, 19 Dec 2019 10:40:47 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GA3U96GuWkq/wFSYk1d39JMX7E9jYa6wOuemBexGACjySKk+XEoMDMSfp7la0AtXH3EmJ2igv45+a90WZX6QHsuWo4evtrVz82ET/rlmbB9+gxOycf/cfuyXg6eMbUDWTHkg1IoyY8UsYhPTxJ14qShwSe8RVtxALMGoSYcxx7ZHUPgTPiJ3DNpv2pCmD7SUrMaTGYy5JPsCxvR6CjLLD9D8vT6pyEed/lu4hYFFOmSzvOkR94BAYrJBEEmWNek1xBqCluURslLsnuqwMSx3XavDftEk0X2vcYi/PiKJpz3Dski+kafK5g8/kHVDrPNY/P322ecPl1xNFLsQV0X6gw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JLkr62kxaQ8Lhq+xeClwDTXJCp2ukT3Qs/q8Xh9vDkQ=;
- b=AV898UK6kT3Zzp7AnuQEVE8hEICHNJQ39ttXIq/wRiQEWkNhR0m6WlqRaT7Qng8DUI1To/CQO0mY6DviZgrwRV8BkRvQ6MKdQ8347CHXi1GzeWf7xHCIETU4/g11zv+lyKq747UI77EslCA4qAZ4/8OAv7F8Omj63oY5XQYcxK3D1Hmba7npZTIia+G3VdFQq25QTiossiAJCfCj3YoBq98lLY2/Nt60tKYSQ2hs4QUTRU4eMDJQkoqxgmXOF18/y0T+WSEZP/Owy9iPD1MeczVSPuWDFob9YZozsQ8DexiT3lpOoTrU2NY8hOGcvKK62ZXPNqV71NOYvcN9S2H8zw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JLkr62kxaQ8Lhq+xeClwDTXJCp2ukT3Qs/q8Xh9vDkQ=;
- b=dc4a4usZHgIE8fLP/CUcwbwJ2u2ixbttqxw027odvYWX1YwPEZF5Ec/k3HUzVUc9JSMNQtCcNXws/x509DJfxRTsMpf0U4LLZSWUPgjAInKIkt+f3kq1CY82s617mg9rnfyGowNBfxeeQ18ETs/NPLKAfOKPdEeZNuNVct+up6A=
-Received: from DM5PR15MB1675.namprd15.prod.outlook.com (10.175.107.145) by
- DM5PR15MB1929.namprd15.prod.outlook.com (10.174.247.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2538.20; Thu, 19 Dec 2019 18:40:33 +0000
-Received: from DM5PR15MB1675.namprd15.prod.outlook.com
- ([fe80::2844:b18d:c296:c23]) by DM5PR15MB1675.namprd15.prod.outlook.com
- ([fe80::2844:b18d:c296:c23%8]) with mapi id 15.20.2538.019; Thu, 19 Dec 2019
- 18:40:33 +0000
-From:   Yonghong Song <yhs@fb.com>
-To:     Carlos Neira <cneirabustos@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "brouer@redhat.com" <brouer@redhat.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH v16 4/5] tools/testing/selftests/bpf: Add self-tests for
- new helper bpf_get_ns_current_pid_tgid.
-Thread-Topic: [PATCH v16 4/5] tools/testing/selftests/bpf: Add self-tests for
- new helper bpf_get_ns_current_pid_tgid.
-Thread-Index: AQHVtcoJC8S7Q2cLIUOzL2UrYW39AKfBy/oA
-Date:   Thu, 19 Dec 2019 18:40:32 +0000
-Message-ID: <cb835536-1c71-5892-0fd0-1cbaf1d28eae@fb.com>
-References: <20191218173827.20584-1-cneirabustos@gmail.com>
- <20191218173827.20584-5-cneirabustos@gmail.com>
-In-Reply-To: <20191218173827.20584-5-cneirabustos@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MWHPR20CA0039.namprd20.prod.outlook.com
- (2603:10b6:300:ed::25) To DM5PR15MB1675.namprd15.prod.outlook.com
- (2603:10b6:3:11f::17)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:200::1:442e]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3be7e9d1-a18c-4605-d0c4-08d784b2ee01
-x-ms-traffictypediagnostic: DM5PR15MB1929:
-x-microsoft-antispam-prvs: <DM5PR15MB1929427A74E006D4C1904DC2D3520@DM5PR15MB1929.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:538;
-x-forefront-prvs: 0256C18696
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(136003)(376002)(346002)(39860400002)(396003)(199004)(189003)(66556008)(31696002)(64756008)(66446008)(53546011)(316002)(186003)(86362001)(8936002)(81166006)(81156014)(8676002)(558084003)(52116002)(54906003)(66946007)(6486002)(4326008)(110136005)(2906002)(31686004)(66476007)(5660300002)(36756003)(478600001)(6512007)(6506007)(2616005)(71200400001);DIR:OUT;SFP:1102;SCL:1;SRVR:DM5PR15MB1929;H:DM5PR15MB1675.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hC13F/wcKrszh3QFtOjXHKQH+2Kjgtc3VDGY/VNU31QzfCLFUoNxEw4MpWh0KOeAJ83Fj9mQhmlFNGeiTUzbupC91ln7J2GP4cru/VrzCayEHT10kNoKRc45Su8FgUkKE8kQ7kXEHnc/4HQ7MvW2/x7BfLgb5ALbpyi231I6eiyWjfE1MTV6nPH/oMyirba5HxELIMvzg34VCp42wm2/FBAMKSIDKBeSK7ht9EFzvbW5vYa7dDvXf4XIrQW218Tk6GRoY0/pZ1DefDhhl2XVZrju6hMZAG2yD7fYCMklNz4whZBQTnTjyH0BKuwYpQMmhxDdNp/7TLYrJHBQk6wLvKU/rztAUD3KyeoabPD+y3uRJ4Aq/RgU3wTX/CwmUHEZ/GxPv7+C+kKtCvkRIQYRNzMjqwL5Iu3BWMEDSwmdb4qLLwCMPI9Ba4iRZdGJy/wW
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3A3F4A8302F78E4C86F9EC2EE177269F@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726836AbfLST0v (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Dec 2019 14:26:51 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:40889 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727006AbfLST0u (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Dec 2019 14:26:50 -0500
+Received: by mail-pj1-f68.google.com with SMTP id bg7so2500254pjb.5;
+        Thu, 19 Dec 2019 11:26:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=DftQt3RvHQyNwWIgNSKTLfN/c3SX0qQWX26ozRGzZp0=;
+        b=mtP4SWQnCQIayG+skanJOLqxzsX5SSz+dtlLgRE45niiPKGC3mbAWOiMX/6Lc4b4ih
+         6bbi/asmpm4IKS0VqlltlPDuYq/EQ4zXQ8WHXS//ZnpEcMm7SDr33/LYuWQTR0PU1aGW
+         hNE8Fng6+SSoD7sjs3qAsVeSxis8dkD1pmo5mi/hTFVjfRWaWN4eRA0ZzrkJFKhduVXl
+         xprpHFEO4tzdah2P63fPndyxTa6g8J0ENULJXOzIXkkUmLbX40htOxvPZvHOHEpbWQI/
+         MEHZnu8BZFSWIVlyi+S025B/eGwJduS3rfWh0aLGiRNGSk5pMFwY8kZmZxZYjMblC/I0
+         x2yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DftQt3RvHQyNwWIgNSKTLfN/c3SX0qQWX26ozRGzZp0=;
+        b=BwiOespQBqVXdduSmgDaifB8/l/BvQZ2KtX2d0EyzRG8CS2d/nwp/pYlcj5GEJzpfR
+         Vt+dqSqF5PrgSvXM5EFGOOzqtHdyDZAl5TAx1d9xIPVIA9ZpGhQcmV84pdERamGcOHjn
+         m8SlXJyEZTG3fCUS32nzjdmhX96boT0N60xlkDXIf0+pkhc7KwIGoINd0UpkFkVagb27
+         yYPtfp2YSqolNGBrOR2ZP2/2M2UCHIEWFbxmmRJ5fDfc/+XPjRrkoiqayMB7uYTvTZ4d
+         MEDjdyOWp5GMG+PUExc85eAAMfToy3TEd4SO+8f60ieu91RA02RgMRUjBLENLCS/iF2E
+         cRGA==
+X-Gm-Message-State: APjAAAXWjRaS1Rl05/erSsJWZQCY1UzA+WTPblSy46RcMJqbrg/5EelG
+        JFk2aUvOV80q2EA1rWveDc8=
+X-Google-Smtp-Source: APXvYqxpl6RI/gMFNC+0gg2n47wEEeL4nKp6Q4ecO7bz3MFfwfHS9pRZNNDkxLKesrspcS9uUN+U5g==
+X-Received: by 2002:a17:90a:22e7:: with SMTP id s94mr11758225pjc.12.1576783609833;
+        Thu, 19 Dec 2019 11:26:49 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::6b48])
+        by smtp.gmail.com with ESMTPSA id v19sm7603526pju.27.2019.12.19.11.26.48
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 19 Dec 2019 11:26:48 -0800 (PST)
+Date:   Thu, 19 Dec 2019 11:26:47 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Edwin Peer <epeer@juniper.net>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Y Song <ys114321@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: [RFC PATCH bpf-next 0/2] unprivileged BPF_PROG_TEST_RUN
+Message-ID: <20191219192645.5tbvxlhuugstokxf@ast-mbp.dhcp.thefacebook.com>
+References: <20191219013534.125342-1-epeer@juniper.net>
+ <CAH3MdRUTcd7rjum12HBtrQ_nmyx0LvdOokZmA1YuhP2WtGfJqA@mail.gmail.com>
+ <69266F42-6D0B-4F0B-805C-414880AC253D@juniper.net>
+ <20191219154704.GC4198@linux-9.fritz.box>
+ <CEA84064-FF2B-4AA7-84EE-B768D6ABC077@juniper.net>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3be7e9d1-a18c-4605-d0c4-08d784b2ee01
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Dec 2019 18:40:33.0005
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9UJC/ESeAEaS9GEZ9jontd5pnTQGHHWdg6H6pKXn6OqRjgipvcFPB2vKjrdcdVmw
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1929
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-19_06:2019-12-17,2019-12-19 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- priorityscore=1501 impostorscore=0 adultscore=0 mlxscore=0 phishscore=0
- mlxlogscore=603 malwarescore=0 suspectscore=0 lowpriorityscore=0
- clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912190135
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CEA84064-FF2B-4AA7-84EE-B768D6ABC077@juniper.net>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-DQoNCk9uIDEyLzE4LzE5IDk6MzggQU0sIENhcmxvcyBOZWlyYSB3cm90ZToNCj4gU2VsZiB0ZXN0
-cyBhZGRlZCBmb3IgbmV3IGhlbHBlciBicGZfZ2V0X25zX2N1cnJlbnRfcGlkX3RnaWQNCj4gDQo+
-IFNpZ25lZC1vZmYtYnk6IENhcmxvcyBOZWlyYSA8Y25laXJhYnVzdG9zQGdtYWlsLmNvbT4NCg0K
-QWNrZWQtYnk6IFlvbmdob25nIFNvbmcgPHloc0BmYi5jb20+DQo=
+On Thu, Dec 19, 2019 at 05:05:42PM +0000, Edwin Peer wrote:
+> On 12/19/19, 07:47, "Daniel Borkmann" <daniel@iogearbox.net> wrote:
+> 
+> >  What about CAP_BPF?
+> 
+> What is the status of this? It might solve some of the problems, but it is still puts testing
+> BPF outside reach of normal users.
+
+why?
+I think CAP_BPF is solving exactly what you're trying to achieve.
+Use CAP_BPF to load _any_ program type and use prog_test_run to run it.
+While discussing CAP_BPF during plumbers conf we realized that the kernel doesn't need
+to check CAP_BPF for prog_test_run. It's user supplied data. No security risk. Though
+the kernel needs to make sure that dangerous helpers are not used for prog_test_run.
+Whether bpf_clone_redirect() is such helper is still tbd. Unpriv user can flood netdevs
+without any bpf.
+
+> > IIRC, there are also other issues e.g. you could abuse the test interface as a packet
+> >  generator (bpf_clone_redirect) which is not something fully unpriv should be doing.
+> 
+> Good point. I suspect solutions exist - I'm trying to ascertain if they are worth pursuing
+> or if the idea of unprivileged testing is a complete non-starter to begin with.
+> 
+> Are there other helpers of concern that come immediately to mind? A first stab might
+> add these to the list in the verifier that require privilege. This has the drawback that
+> programs that actually need this kind of functionality are beyond the test framework.
+
+So far majority of programs require root-only verifier features. The programs are
+getting more complex and benefit the most from testing. Relaxing test_run for unpriv
+progs is imo very narrow use case. I'd rather use CAP_BPF.
+
