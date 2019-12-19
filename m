@@ -2,165 +2,274 @@ Return-Path: <SRS0=D/lL=2J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFEA7C43603
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 21:18:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C814AC43603
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 21:19:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E6F3222C2
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 21:18:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8524A222C2
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 21:19:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=juniper.net header.i=@juniper.net header.b="xgwhkwff";
-	dkim=pass (1024-bit key) header.d=juniper.net header.i=@juniper.net header.b="i56bz1aY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fQpPOA5M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbfLSVSv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Dec 2019 16:18:51 -0500
-Received: from mx0b-00273201.pphosted.com ([67.231.152.164]:30232 "EHLO
-        mx0b-00273201.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726967AbfLSVSv (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 19 Dec 2019 16:18:51 -0500
-X-Greylist: delayed 4330 seconds by postgrey-1.27 at vger.kernel.org; Thu, 19 Dec 2019 16:18:50 EST
-Received: from pps.filterd (m0108162.ppops.net [127.0.0.1])
-        by mx0b-00273201.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBJK6NW8006532;
-        Thu, 19 Dec 2019 12:06:23 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=juniper.net; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=PPS1017;
- bh=2OOoPPZ3opPj95nLaLsYmfp+ijeBUkikHIAXzqVnTM8=;
- b=xgwhkwffYnLAPw9qlmGSGNd6YWIj54veeUyYQRCvJZhWxLW4WGA+N89Q7QtsZShVAnOl
- 7EgoP4yF/urs7OycVtt39cOjznY41zCwIt0+8leG9kmxHkiVoa8gJul03yNdTh4sHHfR
- 30dbviwqZg2VLN8Qm690LMqLoEKxFyLni58tIRN75Nf/cdHG6nnZQ7QFPh8Aw9z8rgbG
- Ux2EdfxdW0rdLkHsUho1rx88Pz6zyitura5LwXPGhPVK9d3ImU9I2y+lR8FCgPLEELsE
- Q/YT64nKohrGFZZiRWoJHauZ6hSPvqs5VZv8yH9G5OxoJdkd5jM2OqvgYf9Q9USJZP9X EQ== 
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2107.outbound.protection.outlook.com [104.47.55.107])
-        by mx0b-00273201.pphosted.com with ESMTP id 2x05dwh3c8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Dec 2019 12:06:23 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cNsqZcWxDsHYacut5OIPweDJ+CVUXJOBeVeD/8uKd1tTkPP/sD3gP/bteG3tKadnZURoVOSvwJAXJOK73voz61bz2O8XUAx+GR9buUcTf/XCslfiUWdSTNMY8iUoi/fgYgZTY4yaSiF16xG3Y/kTzOeY2BpLZnyyUDSS4N0tBPcU12LGhvQresA/5r7jApyJqC9B/vO8OiwURNbE0WW9nsMi+uP0ymx8WHtkWwiYccxwbn/1ppWDXaTX8G6FiE371b57+q6/3qsePVZWGYwOZ6dDti6qNahTEtmMJG304rQl91KBFdW//dBJGfahXYQavn1Y9RphfZXkX0rRTLqTsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2OOoPPZ3opPj95nLaLsYmfp+ijeBUkikHIAXzqVnTM8=;
- b=Prm0crSXBF1Ao53d0xdSYgL1kKF/S1j7di5Liv+6sYBMk+hy0YRcQNw/TW5JiaWjUb2yeQHUb8VKom7tcI4CtWe6DBLi1yM/TRedwNI++NsHDg6rXfwPvPv6ixMPoXr9NVWiSQfWcG7xUAaO9rRIzZlUSn11tEa8R9HkbQK2z6m8t3fVdNcYWGH9fonyQMRRzuIA2muGDCw6LANFYYFrmHZrR59anhpP7bUJuUNJsMosmEMhr/tTn4DFTdg45sZEaeP9UM1NzAhjoLG+71hIlpAHQXjXHyXTucCbKac5pSM3qOY26Av3vuzJMld+S5rCVedeGN0eF8xnLb09ULOnjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=juniper.net; dmarc=pass action=none header.from=juniper.net;
- dkim=pass header.d=juniper.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=juniper.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2OOoPPZ3opPj95nLaLsYmfp+ijeBUkikHIAXzqVnTM8=;
- b=i56bz1aYsXajXgJyLTSCi5jbVGEcdzC3jxRQCBWOuoR4JEF9n7V+oh5Dj9mqEQ8/pJyTWvZZyKRsj4iXVvxKEHM5GembgBJrE0A5GId6Rhu7t13z+K97UkIyczDV6/ncPCt7AgsU6jyj1EpYFTUFaxfB0jc6uo4WGiUOV4w6gV0=
-Received: from CY4PR0501MB3827.namprd05.prod.outlook.com (52.132.99.143) by
- CY4PR0501MB3715.namprd05.prod.outlook.com (52.132.100.157) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2538.6; Thu, 19 Dec 2019 20:06:21 +0000
-Received: from CY4PR0501MB3827.namprd05.prod.outlook.com
- ([fe80::8d77:6795:84cf:dd47]) by CY4PR0501MB3827.namprd05.prod.outlook.com
- ([fe80::8d77:6795:84cf:dd47%7]) with mapi id 15.20.2559.012; Thu, 19 Dec 2019
- 20:06:21 +0000
-From:   Edwin Peer <epeer@juniper.net>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     Daniel Borkmann <daniel@iogearbox.net>,
-        Y Song <ys114321@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [RFC PATCH bpf-next 0/2] unprivileged BPF_PROG_TEST_RUN
-Thread-Topic: [RFC PATCH bpf-next 0/2] unprivileged BPF_PROG_TEST_RUN
-Thread-Index: AQHVtgy6x2wMuQ42JECcwOBV53W8TKfBDSIA///4BwCAAJXcAP//j9uAgACtiID//4TxAA==
-Date:   Thu, 19 Dec 2019 20:06:21 +0000
-Message-ID: <9A7BE6FA-92FD-411F-BF8C-80484F1B0FBA@juniper.net>
-References: <20191219013534.125342-1-epeer@juniper.net>
- <CAH3MdRUTcd7rjum12HBtrQ_nmyx0LvdOokZmA1YuhP2WtGfJqA@mail.gmail.com>
- <69266F42-6D0B-4F0B-805C-414880AC253D@juniper.net>
- <20191219154704.GC4198@linux-9.fritz.box>
- <CEA84064-FF2B-4AA7-84EE-B768D6ABC077@juniper.net>
- <20191219192645.5tbvxlhuugstokxf@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20191219192645.5tbvxlhuugstokxf@ast-mbp.dhcp.thefacebook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_9784d817-3396-4a4f-b60c-3ef6b345fe55_Enabled=true;MSIP_Label_9784d817-3396-4a4f-b60c-3ef6b345fe55_Name=Juniper
- Business Use
- Only;MSIP_Label_9784d817-3396-4a4f-b60c-3ef6b345fe55_Enabled=true;MSIP_Label_9784d817-3396-4a4f-b60c-3ef6b345fe55_SiteId=bea78b3c-4cdb-4130-854a-1d193232e5f4;MSIP_Label_9784d817-3396-4a4f-b60c-3ef6b345fe55_ContentBits=0;MSIP_Label_9784d817-3396-4a4f-b60c-3ef6b345fe55_Method=Standard;MSIP_Label_9784d817-3396-4a4f-b60c-3ef6b345fe55_ActionId=dcdc48b8-d966-4fc9-9883-0000bd1c4933;MSIP_Label_9784d817-3396-4a4f-b60c-3ef6b345fe55_SetDate=2019-12-19T19:50:02Z;
-x-originating-ip: [66.129.242.11]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 61573581-6e21-4e75-c77d-08d784beeae6
-x-ms-traffictypediagnostic: CY4PR0501MB3715:
-x-microsoft-antispam-prvs: <CY4PR0501MB3715EBBE07B1784407A11357B3520@CY4PR0501MB3715.namprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0256C18696
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(396003)(366004)(376002)(39860400002)(346002)(199004)(189003)(6512007)(81166006)(81156014)(8676002)(6916009)(66476007)(66446008)(64756008)(66556008)(6486002)(86362001)(66946007)(76116006)(71200400001)(316002)(33656002)(91956017)(2616005)(2906002)(186003)(5660300002)(4326008)(36756003)(26005)(478600001)(8936002)(54906003)(6506007)(53546011);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR0501MB3715;H:CY4PR0501MB3827.namprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: juniper.net does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iP4dtOsRpEWkgRMQGOT2J1nBlsCZlIaifZZ5smMPy+v1OaxeJT+fHL2/8xWWX595WJInaL8fSCC25FQSL2DferdkgKvI0TM01ngKr3luhUAhrTwLugFA2tRYKbPT+tK3cVMYHIoL7ZhuYjJRXE/653XEO+fixfXSVfU5X32NsmDaf5ntShcWLgnx+m8CGapz4wyGwXIf959eWpU55OpF5RFvJ1GLcdCB6xtzh+M8L+YuX0KQR3dVK3hp/xTaABAnzWXrZJS4roftrnViivRwqCIp1bkkjm44aphEjCDqngOXtW4CijAsNhn2BeHKJgLnWRKtJtgXPrqhXjnFx41Sh5setqkudQAzZyFYGQpUCO1ipLOaZEB4a4xaLx1PT8GvSuuSvHARQz72tNlwDkRv2K35XCPa1IJMjTQXOYhTVMlKYD5eN08cP6Dnj3D19jn8
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <12C2DF504ADF2D40BD71437413C8DBC9@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727114AbfLSVTc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Dec 2019 16:19:32 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:36195 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726908AbfLSVTc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Dec 2019 16:19:32 -0500
+Received: by mail-qk1-f196.google.com with SMTP id a203so6238021qkc.3
+        for <bpf@vger.kernel.org>; Thu, 19 Dec 2019 13:19:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+pEThUkfLCVQcsuAZh2dFC/+jJp6frZH4J8kG7KGZ1g=;
+        b=fQpPOA5MDwAHabjkqANm9hv9bTKk88mvewYCOYForEEhgOxMAL0wl6lasW4iFC8KFP
+         Z4w3cyRZkBGdS1g9E19ijcJzwKBoe0eDnG+ly50Dk02nDLryO+kVAtYENR56vCBvFYzo
+         rTlA8WXOUpH4t+VJclgMAbNp//QfSnn4V6xqXDwwd+JLiAYloL47CRvHrVRGcX11epiV
+         h5N4u7BerTbLrHy30t//7P0nwumP7lO/mILCMqXJnwOLCocODa0WVWM8kEc7yu1dpQ0p
+         4Ut5tskP40yO60S9En6GUUDLEUCX//hWPHksJcqilu6BYSA2tI+xYE3GRE6Ox93Nn/cY
+         rbKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+pEThUkfLCVQcsuAZh2dFC/+jJp6frZH4J8kG7KGZ1g=;
+        b=iEcLF73nArkOny9PjaUWwm60PI4P5XAP/+UoEuL8X/p6sC5KIMQ6V5jUCp4yJXVrWA
+         eiRFa1i/8twphPqqnLYrg3nSHna+TCF5daaA4xRu3c5X2BsE/ElDCgJlTHuwvH6xSUlq
+         f+uaw4z3BZIX6NDCz2DgfXNxyi5dYURg3qST5WlzDzjuSV1MHr/q0cTdZevV2iPQX7Xh
+         rPb/aXTVrCsI2DMm7rSOudjkayNhAsjb853+nm6k5TjNXq0gWPp2uO3mQXuGPghoP+0H
+         m4A25cbzLO4kgUdYbavjXq3+6kXggCzKOET7ak6GWW/1pLcKN+PcaM0kV4o2N/4HiEAU
+         7xYA==
+X-Gm-Message-State: APjAAAUxa6Eh1Yk3pqyOe1hYbChC1Z6pJN4RRw46mHNHbs7PuhoV9gf+
+        btvpfR6qvAsRC2IYv5L9ferMrKQc5JiTX49Fsm4=
+X-Google-Smtp-Source: APXvYqzFADMejAGhkB7YEIfkUFAqqkAGfXPi3Oz5diHSayfMLl1Tf38utP+u60IXJER2ShnXzgeI9BAxv5+viv/fYlc=
+X-Received: by 2002:a05:620a:14a2:: with SMTP id x2mr10447920qkj.36.1576790370188;
+ Thu, 19 Dec 2019 13:19:30 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: juniper.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61573581-6e21-4e75-c77d-08d784beeae6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Dec 2019 20:06:21.4238
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: bea78b3c-4cdb-4130-854a-1d193232e5f4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /yM696A35pXHOIe7I87+DGRYtdDnGQs5d7EPOvO79BymCsrU8On2pNRSVTtKjhrU8Mp8z+gWSBw8+gXSBj4ejA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR0501MB3715
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-19_06:2019-12-17,2019-12-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_spam_notspam policy=outbound_spam score=0 clxscore=1011
- mlxlogscore=999 adultscore=0 suspectscore=0 lowpriorityscore=0
- impostorscore=0 spamscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912190147
+References: <cover.1576720240.git.rdna@fb.com> <31ac56887591418c2c098fabc14ad00de008e603.1576720240.git.rdna@fb.com>
+ <CAEf4BzYWJLJgCt4QCcThg4-kbPr=L+Nv2A5Nd0YknWWkuM05tg@mail.gmail.com>
+ <20191219073534.GC16266@rdna-mbp.dhcp.thefacebook.com> <CAEf4BzZUGqZd-Hc7jAgP=j8BRf1fDqRHMKtSW=dcGzU+V-j7XA@mail.gmail.com>
+ <20191219210907.GD16266@rdna-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20191219210907.GD16266@rdna-mbp.dhcp.thefacebook.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 19 Dec 2019 13:19:18 -0800
+Message-ID: <CAEf4BzYYvqUSqYXz-k+Q6LYhDde1jwSd90dMShqx5iUqOvY8ZQ@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 6/6] selftests/bpf: Test BPF_F_REPLACE in cgroup_attach_multi
+To:     Andrey Ignatov <rdna@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin Lau <kafai@fb.com>, Andrii Nakryiko <andriin@fb.com>,
+        Kernel Team <Kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gMTIvMTkvMTksIDExOjI2LCAiQWxleGVpIFN0YXJvdm9pdG92IiA8YWxleGVpLnN0YXJvdm9p
-dG92QGdtYWlsLmNvbT4gd3JvdGU6DQoNCj4gT24gVGh1LCBEZWMgMTksIDIwMTkgYXQgMDU6MDU6
-NDJQTSArMDAwMCwgRWR3aW4gUGVlciB3cm90ZToNCj4+IE9uIDEyLzE5LzE5LCAwNzo0NywgIkRh
-bmllbCBCb3JrbWFubiIgPGRhbmllbEBpb2dlYXJib3gubmV0PiB3cm90ZToNCj4+IA0KPj4gPiAg
-V2hhdCBhYm91dCBDQVBfQlBGPw0KPj4gDQo+PiBXaGF0IGlzIHRoZSBzdGF0dXMgb2YgdGhpcz8g
-SXQgbWlnaHQgc29sdmUgc29tZSBvZiB0aGUgcHJvYmxlbXMsIGJ1dCBpdCBpcyBzdGlsbCBwdXRz
-IHRlc3RpbmcNCj4+IEJQRiBvdXRzaWRlIHJlYWNoIG9mIG5vcm1hbCB1c2Vycy4NCj4gICAgDQo+
-IHdoeT8NCj4gSSB0aGluayBDQVBfQlBGIGlzIHNvbHZpbmcgZXhhY3RseSB3aGF0IHlvdSdyZSB0
-cnlpbmcgdG8gYWNoaWV2ZS4NCg0KSSdtIHRyeWluZyB0byBwcm92aWRlIGFjY2VzcyB0byBCUEYg
-dGVzdGluZyBpbmZyYXN0cnVjdHVyZSBmb3IgdW5wcml2aWxlZ2VkDQp1c2VycyAoYXNzdW1pbmcg
-aXQgY2FuIGJlIGRvbmUgaW4gYSBzYWZlIHdheSwgd2hpY2ggSSdtIGFzIHlldCB1bnN1cmUgb2Yp
-Lg0KQ0FQX0JQRiBpcyBub3QgdGhlIHNhbWUgdGhpbmcsIGJlY2F1c2UgYXQgbGVhc3Qgc29tZSBr
-aW5kIG9mIHJvb3QNCmludGVydmVudGlvbiBpcyByZXF1aXJlZCB0byBhdHRhaW4gQ0FQX0JQRiBp
-biB0aGUgZmlyc3QgcGxhY2UuDQoNCj4gV2hldGhlciBicGZfY2xvbmVfcmVkaXJlY3QoKSBpcyBz
-dWNoIGhlbHBlciBpcyBzdGlsbCB0YmQuIFVucHJpdiB1c2VyIGNhbiBmbG9vZCBuZXRkZXZzDQo+
-IHdpdGhvdXQgYW55IGJwZi4NCiAgIA0KVHJ1ZSwgYnV0IHByZXN1bWFibHkgc3VjaCB3b3VsZCBz
-dGlsbCBiZSBzdWJqZWN0IHRvIGFkbWluaXN0cmF0b3INCmNvbnRyb2xsZWQgUW9TIGFuZCBmaXJl
-d2FsbCBwb2xpY3k/IEFsc28gdW5wcml2aWxlZ2VkIHVzZXJzIHByZXN1bWFibHkNCmNhbid0IGNy
-ZWF0ZSBhcmJpdHJhcnkgcGFja2V0cyBjb21pbmcgZnJvbSBzcG9vZmVkIElQcyAvIE1BQ3MsIHdo
-aWNoIEkNCmJlbGlldmUgcmVxdWlyZXMgQ0FQX05FVF9SQVc/DQogDQo+PiBBcmUgdGhlcmUgb3Ro
-ZXIgaGVscGVycyBvZiBjb25jZXJuIHRoYXQgY29tZSBpbW1lZGlhdGVseSB0byBtaW5kPyBBIGZp
-cnN0IHN0YWIgbWlnaHQNCj4+IGFkZCB0aGVzZSB0byB0aGUgbGlzdCBpbiB0aGUgdmVyaWZpZXIg
-dGhhdCByZXF1aXJlIHByaXZpbGVnZS4gVGhpcyBoYXMgdGhlIGRyYXdiYWNrIHRoYXQNCj4+IHBy
-b2dyYW1zIHRoYXQgYWN0dWFsbHkgbmVlZCB0aGlzIGtpbmQgb2YgZnVuY3Rpb25hbGl0eSBhcmUg
-YmV5b25kIHRoZSB0ZXN0IGZyYW1ld29yay4NCj4gICAgDQo+ICAgU28gZmFyIG1ham9yaXR5IG9m
-IHByb2dyYW1zIHJlcXVpcmUgcm9vdC1vbmx5IHZlcmlmaWVyIGZlYXR1cmVzLiBUaGUgcHJvZ3Jh
-bXMgYXJlDQo+ICAgZ2V0dGluZyBtb3JlIGNvbXBsZXggYW5kIGJlbmVmaXQgdGhlIG1vc3QgZnJv
-bSB0ZXN0aW5nLiBSZWxheGluZyB0ZXN0X3J1biBmb3IgdW5wcml2DQo+ICAgcHJvZ3MgaXMgaW1v
-IHZlcnkgbmFycm93IHVzZSBjYXNlLiBJJ2QgcmF0aGVyIHVzZSBDQVBfQlBGLg0KICAgIA0KVGhl
-IG1vcmUgZWxhYm9yYXRlIHByb3Bvc2FsIGNhbGxlZCBmb3IgbW9ja2luZyB0aGVzZSBhc3BlY3Rz
-IGZvcg0KdGVzdGluZywgd2hpY2ggY291bGQgY29uY2VpdmFibHkgcmVzb2x2ZSB0aGlzPyBUaGF0
-IHNhaWQsIEkgc2VlIGFuDQppbmNyZW1lbnRhbCBwYXRoIHRvIHRoaXMsIGFkZGluZyBzdWNoIGFz
-IG5lZWRlZC4gVGhlIG5hcnJvd25lc3MNCm9mIHRoZSB1c2UgY2FzZSByZWFsbHkgZGVwZW5kcyBv
-biBleGFjdGx5IHdoYXQgeW91J3JlIHRyeWluZyB0byBkby4NClNvbWV0aGluZyBpbiBYRFAsIGZv
-ciBleGFtcGxlLCBoYXMgdmVyeSBsaXR0bGUga2VybmVsIGRlcGVuZGVuY2llcw0KKHBvc3NpYmx5
-IG5vbmUgdGhhdCB3b3VsZCBiZSBhZmZlY3RlZCBoZXJlKSBhbmQgcmVwcmVzZW50cyBhbiBlbnRp
-cmUNCmNsYXNzIG9mIHVzZSBjYXNlcyB0aGF0IGNvdWxkIGhhdmUgdW5wcml2aWxlZ2VkIHRlc3Rp
-bmcgYmUgc3VwcG9ydGVkLg0KDQpSZWdhcmRzLA0KRWR3aW4gUGVlcg0KDQo=
+On Thu, Dec 19, 2019 at 1:09 PM Andrey Ignatov <rdna@fb.com> wrote:
+>
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> [Thu, 2019-12-19 12:44 -0800]:
+> > On Wed, Dec 18, 2019 at 11:35 PM Andrey Ignatov <rdna@fb.com> wrote:
+> > >
+> > > Andrii Nakryiko <andrii.nakryiko@gmail.com> [Wed, 2019-12-18 21:59 -0800]:
+> > > > On Wed, Dec 18, 2019 at 6:17 PM Andrey Ignatov <rdna@fb.com> wrote:
+> > > > >
+> > > > > Test replacing a cgroup-bpf program attached with BPF_F_ALLOW_MULTI and
+> > > > > possible failure modes: invalid combination of flags, invalid
+> > > > > replace_bpf_fd, replacing a non-attachd to specified cgroup program.
+> > > > >
+> > > > > Example of program replacing:
+> > > > >
+> > > > >   # gdb -q --args ./test_progs --name=cgroup_attach_multi
+> > > > >   ...
+> > > > >   Breakpoint 1, test_cgroup_attach_multi () at cgroup_attach_multi.c:227
+> > > > >   (gdb)
+> > > > >   [1]+  Stopped                 gdb -q --args ./test_progs --name=cgroup_attach_multi
+> > > > >   # bpftool c s /mnt/cgroup2/cgroup-test-work-dir/cg1
+> > > > >   ID       AttachType      AttachFlags     Name
+> > > > >   2133     egress          multi
+> > > > >   2134     egress          multi
+> > > > >   # fg
+> > > > >   gdb -q --args ./test_progs --name=cgroup_attach_multi
+> > > > >   (gdb) c
+> > > > >   Continuing.
+> > > > >
+> > > > >   Breakpoint 2, test_cgroup_attach_multi () at cgroup_attach_multi.c:233
+> > > > >   (gdb)
+> > > > >   [1]+  Stopped                 gdb -q --args ./test_progs --name=cgroup_attach_multi
+> > > > >   # bpftool c s /mnt/cgroup2/cgroup-test-work-dir/cg1
+> > > > >   ID       AttachType      AttachFlags     Name
+> > > > >   2139     egress          multi
+> > > > >   2134     egress          multi
+> > > > >
+> > > > > Signed-off-by: Andrey Ignatov <rdna@fb.com>
+> > > > > ---
+> > > > >  .../bpf/prog_tests/cgroup_attach_multi.c      | 53 +++++++++++++++++--
+> > > > >  1 file changed, 50 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c
+> > > > > index 4eaab7435044..2ff21dbce179 100644
+> > > > > --- a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c
+> > > > > +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c
+> > > > > @@ -78,7 +78,8 @@ void test_cgroup_attach_multi(void)
+> > > > >  {
+> > > > >         __u32 prog_ids[4], prog_cnt = 0, attach_flags, saved_prog_id;
+> > > > >         int cg1 = 0, cg2 = 0, cg3 = 0, cg4 = 0, cg5 = 0, key = 0;
+> > > > > -       int allow_prog[6] = {-1};
+> > > > > +       DECLARE_LIBBPF_OPTS(bpf_prog_attach_opts, attach_opts);
+> > > > > +       int allow_prog[7] = {-1};
+> > > > >         unsigned long long value;
+> > > > >         __u32 duration = 0;
+> > > > >         int i = 0;
+> > > > > @@ -189,6 +190,52 @@ void test_cgroup_attach_multi(void)
+> > > > >         CHECK_FAIL(bpf_map_lookup_elem(map_fd, &key, &value));
+> > > > >         CHECK_FAIL(value != 1 + 2 + 8 + 16);
+> > > > >
+> > > > > +       /* test replace */
+> > > > > +
+> > > > > +       attach_opts.flags = BPF_F_ALLOW_OVERRIDE | BPF_F_REPLACE;
+> > > > > +       attach_opts.replace_prog_fd = allow_prog[0];
+> > > > > +       if (CHECK(!bpf_prog_attach_xattr(allow_prog[6], cg1,
+> > > > > +                                        BPF_CGROUP_INET_EGRESS, &attach_opts),
+> > > > > +                 "fail_prog_replace_override", "unexpected success\n"))
+> > > > > +               goto err;
+> > > > > +       CHECK_FAIL(errno != EINVAL);
+> > > >
+> > > > CHECK macro above can prints both in success and failure scenarios,
+> > > > which means that errno of bpf_prog_attach_xattr can be overriden by a
+> > > > bunch of other functions. So if this check is critical, you'd have to
+> > > > remember errno before calling CHECK. Same for all the check below.
+> > >
+> > > If bpf_prog_attach_xattr finishes successfully (what is unexpected
+> > > here), `goto err` will be taken and `CHECK_FAIL(errno != EINVAL)` won't
+> > > be run at all so "success" case is not a problem.
+> > >
+> > > If bpf_prog_attach_xattr fails (what is expected) it has to set errno
+> > > and this is the errno that will be checked by CHECK_FAIL, i.e. failure
+> > > case is not a problem at all.
+> > >
+> > > If you mean printf() that is called from "PASS" branch of CHECK then I
+> > > don't actually see a way to distinguish errno from failed
+> > > bpf_prog_attach_xattr (what would mean "PASS" for the CHECK) and
+> > > printf() from the CHECK() w/o changing CHECK() itself.
+> >
+> > well, of course you can do that:
+> >
+> > err = bpf_xxx(...);
+> > saved_errno = errno;
+> > if (CHECK(!err, ...))
+> >     goto handle_err;
+> > if (CHECK_FAIL(saved_errno)) { ... }
+> >
+> > It's just more cumbersome, but nothing impossible.
+>
+> Oh, yeah, that would work, but I agree that it doesn't look great :)
+>
+> > > I think CHECK() can be improved wrt errno so that it saves errno before
+> > > calling anything that can affect it and restore it afterwards. But this
+> > > is not specific to this patch so IMO it should be done separately with,
+> > > ideally, checking that it doesn't break some other tests.
+> >
+> > That might be a way to do this, of course. We can add that later.
+>
+> Sounds good. I can follow-up on the CHECK() change separately so that
+> every test that does similar checks doesn't have to have additional code
+> to deal with errno.
+
+great
+
+>
+> > I
+> > think that errno for error code is quite inconvenient, I wonder if it
+> > might be possible to retrofit kernel-style error code as a result
+> > instead. That's what we do for high-level libbpf API, it might be too
+> > late for low-level one though.
+>
+> There are a bunch of places that actually do it in bpf.c, e.g.
+> bpf_prog_test_run_xattr() and bpf_load_program_xattr() return -EINVAL
+> for error conditions unrelated to sys_bpf. I also added similar
+> thing in patch 4 (libbpf part) for `!OPTS_VALID` scenario.
+>
+> But for vast majority of cases where wrappers simply return whatever
+> sys_bpf returned IMO it makes sense to preserve the semantics similar to
+> that of sys_bpf since it's just thin wrappers. Again, just my opinion.
+>
+
+can we have both? keep setting errno, but return -errno as a result?
+If it's already a hybrid approach we are using, I don't think this
+will break anything.
+
+
+>
+> > > > > +
+> > > > > +       attach_opts.flags = BPF_F_REPLACE;
+> > > > > +       if (CHECK(!bpf_prog_attach_xattr(allow_prog[6], cg1,
+> > > > > +                                        BPF_CGROUP_INET_EGRESS, &attach_opts),
+> > > > > +                 "fail_prog_replace_no_multi", "unexpected success\n"))
+> > > > > +               goto err;
+> > > > > +       CHECK_FAIL(errno != EINVAL);
+> > > > > +
+> > > > > +       attach_opts.flags = BPF_F_ALLOW_MULTI | BPF_F_REPLACE;
+> > > > > +       attach_opts.replace_prog_fd = -1;
+> > > > > +       if (CHECK(!bpf_prog_attach_xattr(allow_prog[6], cg1,
+> > > > > +                                        BPF_CGROUP_INET_EGRESS, &attach_opts),
+> > > > > +                 "fail_prog_replace_bad_fd", "unexpected success\n"))
+> > > > > +               goto err;
+> > > > > +       CHECK_FAIL(errno != EBADF);
+> > > > > +
+> > > > > +       /* replacing a program that is not attached to cgroup should fail  */
+> > > > > +       attach_opts.replace_prog_fd = allow_prog[3];
+> > > > > +       if (CHECK(!bpf_prog_attach_xattr(allow_prog[6], cg1,
+> > > > > +                                        BPF_CGROUP_INET_EGRESS, &attach_opts),
+> > > > > +                 "fail_prog_replace_no_ent", "unexpected success\n"))
+> > > > > +               goto err;
+> > > > > +       CHECK_FAIL(errno != ENOENT);
+> > > > > +
+> > > > > +       /* replace 1st from the top program */
+> > > > > +       attach_opts.replace_prog_fd = allow_prog[0];
+> > > > > +       if (CHECK(bpf_prog_attach_xattr(allow_prog[6], cg1,
+> > > > > +                                       BPF_CGROUP_INET_EGRESS, &attach_opts),
+> > > > > +                 "prog_replace", "errno=%d\n", errno))
+> > > > > +               goto err;
+> > > > > +
+> > > > > +       value = 0;
+> > > > > +       CHECK_FAIL(bpf_map_update_elem(map_fd, &key, &value, 0));
+> > > > > +       CHECK_FAIL(system(PING_CMD));
+> > > > > +       CHECK_FAIL(bpf_map_lookup_elem(map_fd, &key, &value));
+> > > > > +       CHECK_FAIL(value != 64 + 2 + 8 + 16);
+> > > > > +
+> > > > >         /* detach 3rd from bottom program and ping again */
+> > > > >         if (CHECK(!bpf_prog_detach2(0, cg3, BPF_CGROUP_INET_EGRESS),
+> > > > >                   "fail_prog_detach_from_cg3", "unexpected success\n"))
+> > > > > @@ -202,7 +249,7 @@ void test_cgroup_attach_multi(void)
+> > > > >         CHECK_FAIL(bpf_map_update_elem(map_fd, &key, &value, 0));
+> > > > >         CHECK_FAIL(system(PING_CMD));
+> > > > >         CHECK_FAIL(bpf_map_lookup_elem(map_fd, &key, &value));
+> > > > > -       CHECK_FAIL(value != 1 + 2 + 16);
+> > > > > +       CHECK_FAIL(value != 64 + 2 + 16);
+> > > > >
+> > > > >         /* detach 2nd from bottom program and ping again */
+> > > > >         if (CHECK(bpf_prog_detach2(-1, cg4, BPF_CGROUP_INET_EGRESS),
+> > > > > @@ -213,7 +260,7 @@ void test_cgroup_attach_multi(void)
+> > > > >         CHECK_FAIL(bpf_map_update_elem(map_fd, &key, &value, 0));
+> > > > >         CHECK_FAIL(system(PING_CMD));
+> > > > >         CHECK_FAIL(bpf_map_lookup_elem(map_fd, &key, &value));
+> > > > > -       CHECK_FAIL(value != 1 + 2 + 4);
+> > > > > +       CHECK_FAIL(value != 64 + 2 + 4);
+> > > > >
+> > > > >         prog_cnt = 4;
+> > > > >         CHECK_FAIL(bpf_prog_query(cg5, BPF_CGROUP_INET_EGRESS,
+> > > > > --
+> > > > > 2.17.1
+> > > > >
+> > >
+> > > --
+> > > Andrey Ignatov
+>
+> --
+> Andrey Ignatov
