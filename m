@@ -4,127 +4,262 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5901C43603
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 07:45:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C685AC43603
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 08:54:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7C94C222C2
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 07:45:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 855EE227BF
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 08:54:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ihm3Q8yi"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Pxh1IHVE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726681AbfLSHpn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Dec 2019 02:45:43 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:52524 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726303AbfLSHpm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 19 Dec 2019 02:45:42 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBJ7efqV013436
-        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 23:45:42 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=UnJdQGO+RyHYsL8UiXgCY7P/R2giOX77rGChm1iO5q4=;
- b=ihm3Q8yivsl3jqIpn0keRwmFw0Z/wgy2jOxsdP4kjSWXIz8mHbInyKZ56NDAJterGbUe
- C5/4IB96xGxBFrY60b/6choyqklVJF42dRvfQZzxFD/kJjzjviQ+QF4421SmkeMVD0Xg
- D42wiEPxEGlSa8eUqzHO/bLo/0mWW+k6NHk= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2wyqv4khn5-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 18 Dec 2019 23:45:41 -0800
-Received: from intmgw001.06.prn3.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 18 Dec 2019 23:45:07 -0800
-Received: by dev082.prn2.facebook.com (Postfix, from userid 572249)
-        id AFEB937138B6; Wed, 18 Dec 2019 23:45:06 -0800 (PST)
-Smtp-Origin-Hostprefix: dev
-From:   Andrey Ignatov <rdna@fb.com>
-Smtp-Origin-Hostname: dev082.prn2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Andrey Ignatov <rdna@fb.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <kafai@fb.com>, <andriin@fb.com>,
-        <kernel-team@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v4 bpf-next 0/6] bpf: Support replacing cgroup-bpf program in MULTI mode
-Date:   Wed, 18 Dec 2019 23:44:32 -0800
-Message-ID: <cover.1576741281.git.rdna@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
+        id S1726591AbfLSIyJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Dec 2019 03:54:09 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:22555 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726599AbfLSIyJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Dec 2019 03:54:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1576745646;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RGKmuCh/hs93bvSIahOdYmIAUpgxSfJeTmTTEfOgM9I=;
+        b=Pxh1IHVEw782Zdqa8yk1v9ncpJSXD2nPNWPymR3FQ4DhbIKiWZ9MvotwzK1nEU+cK/MD2X
+        3adNXvnZlwSi6qypwM27wPq/KmJspOUS0HKgwFwW2WCKKdAZEycgSfBFVM1Szjm0FiuLoI
+        0V4qkos2Pg4Wju7lp6iGDULaXKoWXq4=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-175-bww8HuyTPX-ltqoqK9Kgcw-1; Thu, 19 Dec 2019 03:54:02 -0500
+X-MC-Unique: bww8HuyTPX-ltqoqK9Kgcw-1
+Received: by mail-lj1-f200.google.com with SMTP id z23so1664379ljk.21
+        for <bpf@vger.kernel.org>; Thu, 19 Dec 2019 00:54:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=RGKmuCh/hs93bvSIahOdYmIAUpgxSfJeTmTTEfOgM9I=;
+        b=JrLVCnUvqZVUnpn+UZk2c+z9WzBGDI6UdG3hJkSKlKihXFh2cyVXOIfE0q9j2P2b8c
+         F1tQWCBaMTrJlLqB5lHrPNc9yabwshjQYoIIzDplixR8XauBDRykJwjaGzec5ZuEPpxL
+         ONH5k+YXTZ2/BAu2Qh/vHPw7+1a2ZzedieaPetbD7TL5dIorfD/LFXRTD2Fr2BhjicJ/
+         Elzo3uLdTfjq6mdzjebnESt6NsOmF8ElixCvEOJfh1GbKWvnBRyeiPlCcwDXFkIjp+4x
+         m7rLtyFP0ybY1ufTpsoUp+Nog7EEwO5U5yYHqBMN9lJkPWzdqNkkGj3DFuo6LVLWHfsD
+         SLSQ==
+X-Gm-Message-State: APjAAAXzz+jpqOL+6TvtfXN/+NXRzLMHLc44WFL665tSgMaeIp4osHzk
+        om+NVPRsX4fYM6mw8pij4A15NrF1O2QVuo/XG0Tt3lw6RZGU19NH/BsKIc+6onYmgrcYV+kKJR4
+        OXh7SZPENt/n5
+X-Received: by 2002:a2e:8745:: with SMTP id q5mr5200627ljj.208.1576745640947;
+        Thu, 19 Dec 2019 00:54:00 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxXSbNYwHQg0NMGVzZETrPXKr2XptJ+FZdTtg8VCGO+wjP914Ho7PU9EY9fuHNiJLlSL4Qmmg==
+X-Received: by 2002:a2e:8745:: with SMTP id q5mr5200609ljj.208.1576745640653;
+        Thu, 19 Dec 2019 00:54:00 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id s18sm3060591ljj.36.2019.12.19.00.53.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2019 00:53:59 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id E37C3180969; Thu, 19 Dec 2019 09:53:58 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Martin Lau <kafai@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        Networking <netdev@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 11/13] bpf: libbpf: Add STRUCT_OPS support
+In-Reply-To: <CAEf4BzboyRio_KaQtd2eOqmH+x0FPfYp_CDfnUzv4H698j_wsQ@mail.gmail.com>
+References: <20191214004737.1652076-1-kafai@fb.com> <20191214004803.1653618-1-kafai@fb.com> <CAEf4BzbJoso7A0dn=xhOkFMOcKqZ6wYp=XoqGiL+FO+0VKqh5g@mail.gmail.com> <20191218070341.fd2ypexmeca5cefa@kafai-mbp.dhcp.thefacebook.com> <CAEf4BzaGcM6ose=2DJJO1qkRkiqEPR7gU4GizCvffADo5M29wA@mail.gmail.com> <20191218173350.nll5766abgkptjac@kafai-mbp.dhcp.thefacebook.com> <CAEf4BzboyRio_KaQtd2eOqmH+x0FPfYp_CDfnUzv4H698j_wsQ@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 19 Dec 2019 09:53:58 +0100
+Message-ID: <87fthg4rx5.fsf@toke.dk>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-18_08:2019-12-17,2019-12-18 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=624 mlxscore=0 priorityscore=1501
- impostorscore=0 phishscore=0 clxscore=1015 suspectscore=13 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912190065
-X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-v3->v4:
-- use OPTS_VALID and OPTS_GET to handle bpf_prog_attach_opts.
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-v2->v3:
-- rely on DECLARE_LIBBPF_OPTS from libbpf_common.h;
-- separate "required" and "optional" arguments in bpf_prog_attach_xattr;
-- convert test_cgroup_attach to prog_tests;
-- move the new selftest to prog_tests/cgroup_attach_multi.
+> On Wed, Dec 18, 2019 at 9:34 AM Martin Lau <kafai@fb.com> wrote:
+>>
+>> On Wed, Dec 18, 2019 at 08:34:25AM -0800, Andrii Nakryiko wrote:
+>> > On Tue, Dec 17, 2019 at 11:03 PM Martin Lau <kafai@fb.com> wrote:
+>> > >
+>> > > On Tue, Dec 17, 2019 at 07:07:23PM -0800, Andrii Nakryiko wrote:
+>> > > > On Fri, Dec 13, 2019 at 4:48 PM Martin KaFai Lau <kafai@fb.com> wrote:
+>> > > > >
+>> > > > > This patch adds BPF STRUCT_OPS support to libbpf.
+>> > > > >
+>> > > > > The only sec_name convention is SEC("struct_ops") to identify the
+>> > > > > struct ops implemented in BPF, e.g.
+>> > > > > SEC("struct_ops")
+>> > > > > struct tcp_congestion_ops dctcp = {
+>> > > > >         .init           = (void *)dctcp_init,  /* <-- a bpf_prog */
+>> > > > >         /* ... some more func prts ... */
+>> > > > >         .name           = "bpf_dctcp",
+>> > > > > };
+>> > > > >
+>> > > > > In the bpf_object__open phase, libbpf will look for the "struct_ops"
+>> > > > > elf section and find out what is the btf-type the "struct_ops" is
+>> > > > > implementing.  Note that the btf-type here is referring to
+>> > > > > a type in the bpf_prog.o's btf.  It will then collect (through SHT_REL)
+>> > > > > where are the bpf progs that the func ptrs are referring to.
+>> > > > >
+>> > > > > In the bpf_object__load phase, the prepare_struct_ops() will load
+>> > > > > the btf_vmlinux and obtain the corresponding kernel's btf-type.
+>> > > > > With the kernel's btf-type, it can then set the prog->type,
+>> > > > > prog->attach_btf_id and the prog->expected_attach_type.  Thus,
+>> > > > > the prog's properties do not rely on its section name.
+>> > > > >
+>> > > > > Currently, the bpf_prog's btf-type ==> btf_vmlinux's btf-type matching
+>> > > > > process is as simple as: member-name match + btf-kind match + size match.
+>> > > > > If these matching conditions fail, libbpf will reject.
+>> > > > > The current targeting support is "struct tcp_congestion_ops" which
+>> > > > > most of its members are function pointers.
+>> > > > > The member ordering of the bpf_prog's btf-type can be different from
+>> > > > > the btf_vmlinux's btf-type.
+>> > > > >
+>> > > > > Once the prog's properties are all set,
+>> > > > > the libbpf will proceed to load all the progs.
+>> > > > >
+>> > > > > After that, register_struct_ops() will create a map, finalize the
+>> > > > > map-value by populating it with the prog-fd, and then register this
+>> > > > > "struct_ops" to the kernel by updating the map-value to the map.
+>> > > > >
+>> > > > > By default, libbpf does not unregister the struct_ops from the kernel
+>> > > > > during bpf_object__close().  It can be changed by setting the new
+>> > > > > "unreg_st_ops" in bpf_object_open_opts.
+>> > > > >
+>> > > > > Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+>> > > > > ---
+>> > > >
+>> > > > This looks pretty good to me. The big two things is exposing structops
+>> > > > as real struct bpf_map, so that users can interact with it using
+>> > > > libbpf APIs, as well as splitting struct_ops map creation and
+>> > > > registration. bpf_object__load() should only make sure all maps are
+>> > > > created, progs are loaded/verified, but none of BPF program can yet be
+>> > > > called. Then attach is the phase where registration happens.
+>> > > Thanks for the review.
+>> > >
+>> > > [ ... ]
+>> > >
+>> > > > >  static inline __u64 ptr_to_u64(const void *ptr)
+>> > > > >  {
+>> > > > >         return (__u64) (unsigned long) ptr;
+>> > > > > @@ -233,6 +239,32 @@ struct bpf_map {
+>> > > > >         bool reused;
+>> > > > >  };
+>> > > > >
+>> > > > > +struct bpf_struct_ops {
+>> > > > > +       const char *var_name;
+>> > > > > +       const char *tname;
+>> > > > > +       const struct btf_type *type;
+>> > > > > +       struct bpf_program **progs;
+>> > > > > +       __u32 *kern_func_off;
+>> > > > > +       /* e.g. struct tcp_congestion_ops in bpf_prog's btf format */
+>> > > > > +       void *data;
+>> > > > > +       /* e.g. struct __bpf_tcp_congestion_ops in btf_vmlinux's btf
+>> > > >
+>> > > > Using __bpf_ prefix for this struct_ops-specific types is a bit too
+>> > > > generic (e.g., for raw_tp stuff Alexei used btf_trace_). So maybe make
+>> > > > it btf_ops_ or btf_structops_?
+>> > > Is it a concern on name collision?
+>> > >
+>> > > The prefix pick is to use a more representative name.
+>> > > struct_ops use many bpf pieces and btf is one of them.
+>> > > Very soon, all new codes will depend on BTF and btf_ prefix
+>> > > could become generic also.
+>> > >
+>> > > Unlike tracepoint, there is no non-btf version of struct_ops.
+>> >
+>> > Not so much name collision, as being able to immediately recognize
+>> > that it's used to provide type information for struct_ops. Think about
+>> > some automated tooling parsing vmlinux BTF and trying to create some
+>> > derivative types for those btf_trace_xxx and __bpf_xxx types. Having
+>> > unique prefix that identifies what kind of type-providing struct it is
+>> > is very useful to do generic tool like that. While __bpf_ isn't
+>> > specifying in any ways that it's for struct_ops.
+>> >
+>> > >
+>> > > >
+>> > > >
+>> > > > > +        * format.
+>> > > > > +        * struct __bpf_tcp_congestion_ops {
+>> > > > > +        *      [... some other kernel fields ...]
+>> > > > > +        *      struct tcp_congestion_ops data;
+>> > > > > +        * }
+>> > > > > +        * kern_vdata in the sizeof(struct __bpf_tcp_congestion_ops).
+>> > > >
+>> > > > Comment isn't very clear.. do you mean that data pointed to by
+>> > > > kern_vdata is of sizeof(...) bytes?
+>> > > >
+>> > > > > +        * prepare_struct_ops() will populate the "data" into
+>> > > > > +        * "kern_vdata".
+>> > > > > +        */
+>> > > > > +       void *kern_vdata;
+>> > > > > +       __u32 type_id;
+>> > > > > +       __u32 kern_vtype_id;
+>> > > > > +       __u32 kern_vtype_size;
+>> > > > > +       int fd;
+>> > > > > +       bool unreg;
+>> > > >
+>> > > > This unreg flag (and default behavior to not unregister) is bothering
+>> > > > me a bit.. Shouldn't this be controlled by map's lifetime, at least.
+>> > > > E.g., if no one pins that map - then struct_ops should be unregistered
+>> > > > on map destruction. If application wants to keep BPF programs
+>> > > > attached, it should make sure to pin map, before userspace part exits?
+>> > > > Is this problematic in any way?
+>> > > I don't think it should in the struct_ops case.  I think of the
+>> > > struct_ops map is a set of progs "attach" to a subsystem (tcp_cong
+>> > > in this case) and this map-progs stay (or keep attaching) until it is
+>> > > detached.  Like other attached bpf_prog keeps running without
+>> > > caring if the bpf_prog is pinned or not.
+>> >
+>> > I'll let someone else comment on how this behaves for cgroup, xdp,
+>> > etc,
+>> > but for tracing, for example, we have FD-based BPF links, which
+>> > will detach program automatically when FD is closed. I think the idea
+>> > is to extend this to other types of BPF programs as well, so there is
+>> > no risk of leaving some stray BPF program running after unintended
+>> Like xdp_prog, struct_ops does not have another fd-based-link.
+>> This link can be created for struct_ops, xdp_prog and others later.
+>> I don't see a conflict here.
+>
+> My point was that default behavior should be conservative: free up
+> resources automatically on process exit, unless specifically pinned by
+> user.
+> But this discussion made me realize that we miss one thing from
+> general bpf_link framework. See below.
+>
+>>
+>> > crash of userspace program. When application explicitly needs BPF
+>> > program to outlive its userspace control app, then this can be
+>> > achieved by pinning map/program in BPFFS.
+>> If the concern is about not leaving struct_ops behind,
+>> lets assume there is no "detach" and only depends on the very
+>> last userspace's handles (FD/pinned) of a map goes away,
+>> what may be an easy way to remove bpf_cubic from the system:
+>
+> Yeah, I think this "last map FD close frees up resources/detaches" is
+> a good behavior.
+>
+> Where we do have problem is with bpf_link__destroy() unconditionally
+> also detaching whatever was attached (tracepoint, kprobe, or whatever
+> was done to create bpf_link in the first place). Now,
+> bpf_link__destroy() has to be called by user (or skeleton) to at least
+> free up malloc()'ed structs. But it appears that it's not always
+> desirable that upon bpf_link destruction underlying BPF program gets
+> detached. I think this will be the case for xdp and others as well.
 
-v1->v2:
-- move DECLARE_LIBBPF_OPTS from libbpf.h to bpf.h (patch 4);
-- switch new libbpf API to OPTS framework;
-- switch selftest to libbpf OPTS framework.
+For XDP the model has thus far been "once attached, the program stays
+until explicitly detached". Changing that would certainly be surprising,
+so I agree that splitting the API is best (not that I'm sure how many
+XDP programs will end up using that API, but that's a different
+concern)...
 
-This patch set adds support for replacing cgroup-bpf programs attached with
-BPF_F_ALLOW_MULTI flag so that any program in a list can be updated to a new
-version without service interruption and order of programs can be preserved.
-
-Please see patch 3 for details on the use-case and API changes.
-
-Other patches:
-Patch 1 is preliminary refactoring of __cgroup_bpf_attach to simplify it.
-Patch 2 is minor cleanup of hierarchy_allows_attach.
-Patch 4 extends libbpf API to support new set of attach attributes.
-Patch 5 converts test_cgroup_attach to prog_tests.
-Patch 6 adds selftest coverage for the new API.
-
-
-Andrey Ignatov (6):
-  bpf: Simplify __cgroup_bpf_attach
-  bpf: Remove unused new_flags in hierarchy_allows_attach()
-  bpf: Support replacing cgroup-bpf program in MULTI mode
-  libbpf: Introduce bpf_prog_attach_xattr
-  selftests/bpf: Convert test_cgroup_attach to prog_tests
-  selftests/bpf: Test BPF_F_REPLACE in cgroup_attach_multi
-
- include/linux/bpf-cgroup.h                    |   4 +-
- include/uapi/linux/bpf.h                      |  10 +
- kernel/bpf/cgroup.c                           |  97 +--
- kernel/bpf/syscall.c                          |   4 +-
- kernel/cgroup/cgroup.c                        |   5 +-
- tools/include/uapi/linux/bpf.h                |  10 +
- tools/lib/bpf/bpf.c                           |  17 +-
- tools/lib/bpf/bpf.h                           |  11 +
- tools/lib/bpf/libbpf.map                      |   1 +
- tools/testing/selftests/bpf/.gitignore        |   1 -
- tools/testing/selftests/bpf/Makefile          |   3 +-
- .../bpf/prog_tests/cgroup_attach_autodetach.c | 111 ++++
- .../bpf/prog_tests/cgroup_attach_multi.c      | 285 +++++++++
- .../bpf/prog_tests/cgroup_attach_override.c   | 148 +++++
- .../selftests/bpf/test_cgroup_attach.c        | 571 ------------------
- 15 files changed, 652 insertions(+), 626 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_attach_autodetach.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_attach_override.c
- delete mode 100644 tools/testing/selftests/bpf/test_cgroup_attach.c
-
--- 
-2.17.1
+-Toke
 
