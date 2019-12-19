@@ -2,127 +2,137 @@ Return-Path: <SRS0=D/lL=2J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7ED1C2D0D2
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 00:39:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02950C43603
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 00:41:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A9C66222C2
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 00:39:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C914B222C2
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 00:41:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VgIZJcKN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X9hDYb1L"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726656AbfLSAjU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Dec 2019 19:39:20 -0500
-Received: from mail-qv1-f68.google.com ([209.85.219.68]:37537 "EHLO
-        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbfLSAjU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Dec 2019 19:39:20 -0500
-Received: by mail-qv1-f68.google.com with SMTP id f16so1542787qvi.4;
-        Wed, 18 Dec 2019 16:39:19 -0800 (PST)
+        id S1726561AbfLSAlF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Dec 2019 19:41:05 -0500
+Received: from mail-qv1-f67.google.com ([209.85.219.67]:35909 "EHLO
+        mail-qv1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726536AbfLSAlF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Dec 2019 19:41:05 -0500
+Received: by mail-qv1-f67.google.com with SMTP id m14so1547122qvl.3;
+        Wed, 18 Dec 2019 16:41:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0gGy9mmhKv4XmPMG4iklEGqIvuan5dYk915e0Jrphy8=;
-        b=VgIZJcKNUqUNsrYubaPqFIEE3wO21YBmkw1xz07UmUQW78NPZ0Krwv1e+NXbL2nA3n
-         cuwNj+15/YsThQa0e/2oRt8khvIwfI9Mbeni/qM3uh5IOhqS5vCNIuGGi/m3EJDuTmkp
-         BRq9JYYrRGYysbUVRQsAHe644pbw06OwzN9TBjzBDHhB9UHiCxdErwpz7UI4C7WTpa/L
-         9k3951Gf+ovQMx2BA7zmU0wb4jKyqJrBc1abY+lOtWqGzG+muUKI9mUKuVqY8uWPVY9D
-         B/iCEI1TdmbOzRmwwtl2zThjPQbIsKzmuvUVQ46josErDU2wxRqoU7D3y5EFMcUbTO67
-         5ZEA==
+         :cc;
+        bh=6ENbXLgUUzOfEcEXEG8XQeI7hw5PFUF1OSzEY4w4gS8=;
+        b=X9hDYb1LicvSxY06AASPf4+tkdckTa36DStYcKjZA/n0hsU7mR3WmO4YdFixSZTdaQ
+         cKEpsw/VfROV2QLIGXQnfRr4QNswMi+RDw7U7DpWgehlYQhssF2+kiXUYSTQEURCeiGK
+         MpnXvUTbIL49mcHnFZt28B2iMCIoBZx2RpW2Snc+HRQOhXY23qz/pVREjcf1wVUFG+J2
+         6iGWIrRdC/jgkx9ljmvoL/z/BNUP7kIQhoZ76lKcyEP5Tt1jwlb1IxektjnORfEBjlvZ
+         eRAY7uwMDCiaK+AQp3zIeow6PJ2H2FF3bzcaZ3qDqgW6ktPKSkcPj8TEC4YvyVEPV+zF
+         REPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0gGy9mmhKv4XmPMG4iklEGqIvuan5dYk915e0Jrphy8=;
-        b=HDuMIZsirAd00KrHkNJOj/vgnrWZZjY6c2jHBKVZbDYhGhqdAxwNcNAu/puDzZrciR
-         Gp9ypMxfCBLoDhfn+KwOT/qMuBdZEANFAcSS48KRF/6bcIl6+Thfzu4UzghTO1iZ9ZYS
-         tL/3DvdFnv+2Mjp7K/IfQHb3MjipJnpJNCeYrVSkDduWy/+WhwbPhlge+5BhDsR7cEW6
-         v8BB8uPvXuOOKDS0uF2OafwuyzI+Fujz2mfUTpx/PrPLKA5TqzfMYd+F4reAWTWb5AyW
-         DOAeqNh9WDu8jSOtqlS6BJHyV50N5slAyaUj8IXb4P10tjwg/abcUHpGm5qnhjOInm3Z
-         YRjg==
-X-Gm-Message-State: APjAAAUZHlvizxa8ihnahgq9pR1jFy2enF2V5p09l7gDxu80UFmzQ3FK
-        uOkViL0PmSs7SBFa66y/wmmAJYhlmbifzBEopAM=
-X-Google-Smtp-Source: APXvYqySchnU3zPsoisoStXlAIhMkEE9zMdxXIZvj8J/5HxHHXlX5fkZJZ3mf5TKmaP/UZugboJHLT9uq1tb9sQPtWA=
-X-Received: by 2002:ad4:514e:: with SMTP id g14mr5269010qvq.196.1576715959301;
- Wed, 18 Dec 2019 16:39:19 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=6ENbXLgUUzOfEcEXEG8XQeI7hw5PFUF1OSzEY4w4gS8=;
+        b=pdsWpORqo+uBiyEaWGSBJWqYy9Eiul9AfrDG4WeuHfoeLq6LpPkLs99kWq9SxBe+Ku
+         QGiPgNF+Ta5ONS0i/ovu1H3y9hJVfwfZpQOUQkc47htaXt8C+nS4mMJOQNsQY1nyP33f
+         TjlbKEkHhEkfuROEN2VOgFRQ+9v1hmUak5s8NSHmoUXnTvtC3Y/Ujgmcs6bTo4OLAUyP
+         EdUcrLw/PIHhqQaI+cGhFSSEVCTn+K3v/U1qfQv3jORX+UMIDxZY1BZt2FIwWN1LweF8
+         XGAUy5lkHDJwE+xMXQKnF15PqTd6C9DtOCI1SD06K7BYdDRPva90St9uUl19qVota0us
+         YE4A==
+X-Gm-Message-State: APjAAAVSgvUMv3+J1px400I1IfBvCdwb3K+MLup4qrIUxKGLIhM2YZNd
+        qpOe5wCcTZZzXAIys/UIoGjhhYv2ObydhPcqCPQ=
+X-Google-Smtp-Source: APXvYqyHBSDhZ8jl4btobVaxKpsh/07XMVnfrRpx/auUyMhvQlu1clVUwwnuSzHyqkZyL/ZRbyZ0oBMsg5hAeKVyft8=
+X-Received: by 2002:a0c:990d:: with SMTP id h13mr5104299qvd.247.1576716064147;
+ Wed, 18 Dec 2019 16:41:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20191218105400.2895-1-bjorn.topel@gmail.com> <20191218121132.4023f4f1@carbon>
- <CAJ+HfNgKsPN7V9r=N=hDoVb23-nk3q=y+Nv4jB3koPw0+4Zw9A@mail.gmail.com> <20191218130346.1a346606@carbon>
-In-Reply-To: <20191218130346.1a346606@carbon>
+References: <20191218221707.2552199-1-andriin@fb.com> <bc49104a-01a7-8731-e811-53a6c9861a48@fb.com>
+In-Reply-To: <bc49104a-01a7-8731-e811-53a6c9861a48@fb.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 18 Dec 2019 16:39:08 -0800
-Message-ID: <CAEf4BzZab=FvCuvKOKsj0M5RRoGuuXW2ME5EoDuqT8sJOd2Xtg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/8] Simplify xdp_do_redirect_map()/xdp_do_flush_map()
- and XDP maps
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        Netdev <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
+Date:   Wed, 18 Dec 2019 16:40:53 -0800
+Message-ID: <CAEf4BzboNRcqaeZ7drGCDiMqRRHjCipAG992rnn46fBSfcnxbQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpftool: work-around rst2man conversion bug
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 4:04 AM Jesper Dangaard Brouer
-<brouer@redhat.com> wrote:
+On Wed, Dec 18, 2019 at 3:35 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> On Wed, 18 Dec 2019 12:39:53 +0100
-> Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> wrote:
 >
-> > On Wed, 18 Dec 2019 at 12:11, Jesper Dangaard Brouer <brouer@redhat.com=
-> wrote:
-> > >
-> > > On Wed, 18 Dec 2019 11:53:52 +0100
-> > > Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> wrote:
-> > >
-> > > >   $ sudo ./xdp_redirect_cpu --dev enp134s0f0 --cpu 22 xdp_cpu_map0
-> > > >
-> > > >   Running XDP/eBPF prog_name:xdp_cpu_map5_lb_hash_ip_pairs
-> > > >   XDP-cpumap      CPU:to  pps            drop-pps    extra-info
-> > > >   XDP-RX          20      7723038        0           0
-> > > >   XDP-RX          total   7723038        0
-> > > >   cpumap_kthread  total   0              0           0
-> > > >   redirect_err    total   0              0
-> > > >   xdp_exception   total   0              0
-> > >
-> > > Hmm... I'm missing some counters on the kthread side.
-> > >
+>
+> On 12/18/19 2:17 PM, Andrii Nakryiko wrote:
+> > Work-around what appears to be a bug in rst2man convertion tool, used to
+> > create man pages out of reStructureText-formatted documents. If text line
+> > starts with dot, rst2man will put it in resulting man file verbatim. This
+> > seems to cause man tool to interpret it as a directive/command (e.g., `.bs`), and
+> > subsequently not render entire line because it's unrecognized one.
 > >
-> > Oh? Any ideas why? I just ran the upstream sample straight off.
+> > Enclose '.xxx' words in extra formatting to work around.
+> >
+> > Fixes: cb21ac588546 ("bpftool: Add gen subcommand manpage")
+> > Reported-by: Alexei Starovoitov <ast@kernel.org>
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> > ---
+> >   tools/bpf/bpftool/Documentation/bpftool-gen.rst | 15 ++++++++-------
+> >   1 file changed, 8 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+> > index b6a114bf908d..86a87da97d0b 100644
+> > --- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+> > +++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+> > @@ -112,13 +112,14 @@ DESCRIPTION
+> >
+> >                 If BPF object has global variables, corresponding structs
+> >                 with memory layout corresponding to global data data section
+> > -               layout will be created. Currently supported ones are: .data,
+> > -               .bss, .rodata, and .extern structs/data sections. These
+> > -               data sections/structs can be used to set up initial values of
+> > -               variables, if set before **example__load**. Afterwards, if
+> > -               target kernel supports memory-mapped BPF arrays, same
+> > -               structs can be used to fetch and update (non-read-only)
+> > -               data from userspace, with same simplicity as for BPF side.
+> > +               layout will be created. Currently supported ones are: *.data*,
+> > +               *.bss*, *.rodata*, and *.kconfig* structs/data sections.
+> > +               These data sections/structs can be used to set up initial
+> > +               values of variables, if set before **example__load**.
+> > +               Afterwards, if target kernel supports memory-mapped BPF
+> > +               arrays, same structs can be used to fetch and update
+> > +               (non-read-only) data from userspace, with same simplicity
+> > +               as for BPF side.
 >
-> Looks like it happened in commit: bbaf6029c49c ("samples/bpf: Convert
-> XDP samples to libbpf usage") (Cc Maciej).
+> Still does not look right.
 >
-> The old bpf_load.c will auto attach the tracepoints... for and libbpf
-> you have to be explicit about it.
+> After build, I did `man ./bpftool-gen.8`, and I got the following,
+>
+>                   sponding to global data data section layout will be
+> created. Currently supported ones
+>                   are: .data, data sections/structs can be used to set
+> up initial values of  variables,
+>
+> .bss, .rodata .kconfig etc. are missing. I am using:
+>
 
-... or you can use skeleton, which will auto-attach them as well,
-provided BPF program's section names follow expected naming
-convention. So it might be a good idea to try it out.
+looks like stale man page, can you please try re-building? Double
+checked on my side, it looks good here.
 
+> -bash-4.4$ man --version
+> man 2.6.3
 >
-> Can I ask you to also run a test with --stress-mode for
-> ./xdp_redirect_cpu, to flush out any potential RCU race-conditions
-> (don't provide output, this is just a robustness test).
->
-> --
-> Best regards,
->   Jesper Dangaard Brouer
->   MSc.CS, Principal Kernel Engineer at Red Hat
->   LinkedIn: http://www.linkedin.com/in/brouer
->
+> >
+> >       **bpftool gen help**
+> >                 Print short help message.
+> >
