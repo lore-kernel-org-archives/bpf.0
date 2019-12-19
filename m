@@ -2,189 +2,177 @@ Return-Path: <SRS0=D/lL=2J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27B6BC43603
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 21:16:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C1D3C43603
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 21:16:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DFFF024679
-	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 21:16:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF32C222C2
+	for <bpf@archiver.kernel.org>; Thu, 19 Dec 2019 21:16:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JCwFJ/j9"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="DpAgGRtL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726967AbfLSVQk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Dec 2019 16:16:40 -0500
-Received: from mail-qv1-f66.google.com ([209.85.219.66]:40235 "EHLO
-        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726880AbfLSVQk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Dec 2019 16:16:40 -0500
-Received: by mail-qv1-f66.google.com with SMTP id dp13so2815230qvb.7;
-        Thu, 19 Dec 2019 13:16:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6/hiWwf6dXlKT/Q//Vr0HTAFD4paNaUnM6qnrJ16qIc=;
-        b=JCwFJ/j9iBJozLV3VepWJ/aKAjHwnAScone6x0APc6PxiM++DpmBqaqHfnoe/5FsVj
-         cRLHoNjYv45A0eXRmX2NnaE39r19buW3ytlKfpLoZUwkv/NHJqxY1zl8ppLgvzetkxC/
-         poXaHBPbW+H4v5eMDBg52ccYxFzF5OZbJWrUmWqlH8nYHNlOajYLPnI4ecb8kN37EiDg
-         A5B5UzO8/7YaeFM2O0zi0Lx6X/Zcp8/w6N9qTexcST19PLW+rj3GSL4YMU7bfzbyrdv5
-         ZlxQTcJLGo9V2jxGjpFF6bWWVvCpXeHTnCAdzh4ntrj8Z/aNJGpisNjBx+NbrpoMqbDG
-         MObA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6/hiWwf6dXlKT/Q//Vr0HTAFD4paNaUnM6qnrJ16qIc=;
-        b=a6V4TCNHHYXCozflw3diLKkZ6OjiF/N6yfzlnPoC/HS08pHAS5N6yfw+3eXpjmDcBt
-         rQevYo2Z2Z6q1T5PxzQczuRygFCQccqqjrEHLpBoHI03yF12SUn4jXTBtqUwFa5WT0g5
-         IKIedj4SrWoPjcj9rMB1x/yS4wZroYiepXQzwTYkQl2Qexh7jBoS9ig8qK7xawC91RR7
-         YDXR9Sn7wGZY6NAUHBVi3UyopMG8zz1srhk2tQNlnuBHaTABYBeYCZdgpi3UK4r6FEiq
-         y9JV5/CMgNabhEG6tFF8XgvjouTvtHX3G4RtublxDt7g6CQCsgrHKk64fHsm8s8jkMZi
-         zqgA==
-X-Gm-Message-State: APjAAAVeE/h5Cwlo8HuiFNkmcRMCi88c7XoiARO/ykccIiJDaI1EXAKq
-        pS8GxZsaa2jg9lPX+3iBD0PO+SxtECafrBjkNIA=
-X-Google-Smtp-Source: APXvYqxX2O9DL3ANPlp5yK373uabnONlqwrS0M6y6JVInbPJDmHKKpqz4TBy/FcS5ovZQdiBJ/N7UD/wcIkRLycQlMI=
-X-Received: by 2002:ad4:4e34:: with SMTP id dm20mr9685558qvb.163.1576790198613;
- Thu, 19 Dec 2019 13:16:38 -0800 (PST)
+        id S1726963AbfLSVQq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Dec 2019 16:16:46 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:10406 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726880AbfLSVQq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Dec 2019 16:16:46 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dfbe8b30000>; Thu, 19 Dec 2019 13:16:35 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 19 Dec 2019 13:16:45 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 19 Dec 2019 13:16:45 -0800
+Received: from [10.2.165.11] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 19 Dec
+ 2019 21:16:42 +0000
+Subject: Re: [PATCH v11 00/25] mm/gup: track dma-pinned pages: FOLL_PIN
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+CC:     Leon Romanovsky <leon@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Alex Williamson" <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        Maor Gottlieb <maorg@mellanox.com>
+References: <20191216222537.491123-1-jhubbard@nvidia.com>
+ <20191219132607.GA410823@unreal>
+ <a4849322-8e17-119e-a664-80d9f95d850b@nvidia.com>
+ <20191219210743.GN17227@ziepe.ca>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <42a3e5c1-6301-db0b-5d09-212edf5ecf2a@nvidia.com>
+Date:   Thu, 19 Dec 2019 13:13:54 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-References: <20191219070659.424273-1-andriin@fb.com> <20191219070659.424273-3-andriin@fb.com>
- <97ddb036-c717-82a3-4a3b-58180d34a8ae@fb.com>
-In-Reply-To: <97ddb036-c717-82a3-4a3b-58180d34a8ae@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 19 Dec 2019 13:16:27 -0800
-Message-ID: <CAEf4BzYFwJiKdTfXvSjcygOSySUqavFY3zaHZ4-0wcSkvHXRdw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] libbpf/tools: add runqslower tool to libbpf
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191219210743.GN17227@ziepe.ca>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1576790195; bh=e+stzM4MKJvMbnHvF2MQtGYZPTDUXmhAC++H/dKblxU=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=DpAgGRtLU03goQ45lwT7ONh8PGmHo2uEl58mvIXxDE1nHXoSem5kfykU7etb/JcJL
+         /yvdQuNedqWs+SUfVSLa4E60NrM+DSMnCAe2ItTu7yCQ5BHkbAsDg8Mpyow9MA1pYC
+         3jVYe0GuNI9xJv3hjbBlrnChECIJB3Q5siLf6V5xGWCqbhXjMLlDdPH405dRvVKPVH
+         0B/YfWOP+8DomZJl09OCXT8zLxeag4uByq64+u082UEQpj/kDFhFOsIPO4HgJs9I5d
+         GI+vJAY5OMeBcbGVYpOeSe0O73rRuIYou0nCs6Mvptf4ghAI7UtlU7flZFGsoZAujM
+         ZE4962uBaaz9A==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 19, 2019 at 10:13 AM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 12/18/19 11:06 PM, Andrii Nakryiko wrote:
-> > Convert one of BCC tools (runqslower [0]) to BPF CO-RE + libbpf. It matches
-> > its BCC-based counterpart 1-to-1, supporting all the same parameters and
-> > functionality.
-> >
-> > runqslower tool utilizes BPF skeleton, auto-generated from BPF object file,
-> > as well as memory-mapped interface to global (read-only, in this case) data.
-> > Its makefile also ensures auto-generation of "relocatable" vmlinux.h, which is
-> > necessary for BTF-typed raw tracepoints with direct memory access.
-> >
-> >    [0] https://github.com/iovisor/bcc/blob/11bf5d02c895df9646c117c713082eb192825293/tools/runqslower.py
-> >
-> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> > ---
-> >   tools/lib/bpf/tools/runqslower/.gitignore     |   2 +
-> >   tools/lib/bpf/tools/runqslower/Makefile       |  60 ++++++
-> >   .../lib/bpf/tools/runqslower/runqslower.bpf.c | 101 ++++++++++
-> >   tools/lib/bpf/tools/runqslower/runqslower.c   | 187 ++++++++++++++++++
-> >   tools/lib/bpf/tools/runqslower/runqslower.h   |  13 ++
-> >   5 files changed, 363 insertions(+)
-> >   create mode 100644 tools/lib/bpf/tools/runqslower/.gitignore
-> >   create mode 100644 tools/lib/bpf/tools/runqslower/Makefile
-> >   create mode 100644 tools/lib/bpf/tools/runqslower/runqslower.bpf.c
-> >   create mode 100644 tools/lib/bpf/tools/runqslower/runqslower.c
-> >   create mode 100644 tools/lib/bpf/tools/runqslower/runqslower.h
-> >
-> > diff --git a/tools/lib/bpf/tools/runqslower/.gitignore b/tools/lib/bpf/tools/runqslower/.gitignore
-> > new file mode 100644
-> > index 000000000000..404942cc9371
-> > --- /dev/null
-> > +++ b/tools/lib/bpf/tools/runqslower/.gitignore
-> > @@ -0,0 +1,2 @@
-> > +/.output
-> > +/runqslower
-> > diff --git a/tools/lib/bpf/tools/runqslower/Makefile b/tools/lib/bpf/tools/runqslower/Makefile
-> > new file mode 100644
-> > index 000000000000..b87b1f9fe9da
-> > --- /dev/null
-> > +++ b/tools/lib/bpf/tools/runqslower/Makefile
-> > @@ -0,0 +1,60 @@
-> > +# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-> > +CLANG := clang
-> > +LLC := llc
-> > +LLVM_STRIP := llvm-strip
-> > +BPFTOOL := bpftool
->
-> Maybe it is better to use in-tree bpftool? This will ensure we use the
-> one shipped together with the source which should have needed functionality.
+On 12/19/19 1:07 PM, Jason Gunthorpe wrote:
+> On Thu, Dec 19, 2019 at 12:30:31PM -0800, John Hubbard wrote:
+>> On 12/19/19 5:26 AM, Leon Romanovsky wrote:
+>>> On Mon, Dec 16, 2019 at 02:25:12PM -0800, John Hubbard wrote:
+>>>> Hi,
+>>>>
+>>>> This implements an API naming change (put_user_page*() -->
+>>>> unpin_user_page*()), and also implements tracking of FOLL_PIN pages. It
+>>>> extends that tracking to a few select subsystems. More subsystems will
+>>>> be added in follow up work.
+>>>
+>>> Hi John,
+>>>
+>>> The patchset generates kernel panics in our IB testing. In our tests, we
+>>> allocated single memory block and registered multiple MRs using the single
+>>> block.
+>>>
+>>> The possible bad flow is:
+>>>    ib_umem_geti() ->
+>>>     pin_user_pages_fast(FOLL_WRITE) ->
+>>>      internal_get_user_pages_fast(FOLL_WRITE) ->
+>>>       gup_pgd_range() ->
+>>>        gup_huge_pd() ->
+>>>         gup_hugepte() ->
+>>>          try_grab_compound_head() ->
+>>
+>> Hi Leon,
+>>
+>> Thanks very much for the detailed report! So we're overflowing...
+>>
+>> At first look, this seems likely to be hitting a weak point in the
+>> GUP_PIN_COUNTING_BIAS-based design, one that I believed could be deferred
+>> (there's a writeup in Documentation/core-api/pin_user_page.rst, lines
+>> 99-121). Basically it's pretty easy to overflow the page->_refcount
+>> with huge pages if the pages have a *lot* of subpages.
+>>
+>> We can only do about 7 pins on 1GB huge pages that use 4KB subpages.
+> 
+> Considering that establishing these pins is entirely under user
+> control, we can't have a limit here.
 
-I can do that as well, though I tried to keep it close enough to how
-libbpf+CO-RE applications are going to be built in the wild, so tried
-to minimize amount of in-kernel source tree assumptions. Ideally both
-bpftool is installed and libbpf is available as a dynamic library in
-the system. But surely I can add bpftool auto-build and use that one.
+There's already a limit, it's just a much larger one. :) What does "no limit"
+really mean, numerically, to you in this case?
 
->
-> > +LIBBPF_SRC := ../..
-> > +CFLAGS := -g -Wall
-> > +
-> > +# Try to detect best kernel BTF source
-> > +KERNEL_REL := $(shell uname -r)
-> > +ifneq ("$(wildcard /sys/kenerl/btf/vmlinux)","")
-> > +VMLINUX_BTF := /sys/kernel/btf/vmlinux
-> > +else ifneq ("$(wildcard /boot/vmlinux-$(KERNEL_REL))","")
-> > +VMLINUX_BTF := /boot/vmlinux-$(KERNEL_REL)
-> > +else
-> > +$(error "Can't detect kernel BTF, use VMLINUX_BTF to specify it explicitly")
-> > +endif
-> > +
-> > +out := .output
-> > +abs_out := $(abspath $(out))
-> > +libbpf_src := $(abspath $(LIBBPF_SRC))
-> > +
-> > +.DELETE_ON_ERROR:
-> > +
-> > +.PHONY: all
-> > +all: runqslower
-> > +
-> > +.PHONY: clean
-> > +clean:
-> > +     rm -rf $(out) runqslower
-> > +
-> > +runqslower: $(out)/runqslower.o $(out)/libbpf.a
-> > +     $(CC) $(CFLAGS) -lelf -lz $^ -o $@
-> > +
-> > +$(out)/vmlinux.h: $(VMLINUX_BTF) | $(out)
-> > +     $(BPFTOOL) btf dump file $(VMLINUX_BTF) format core > $@
-> > +
-> > +$(out)/libbpf.a: | $(out)
-> > +     cd $(out) &&                                                          \
-> > +     $(MAKE) -C $(libbpf_src) OUTPUT=$(abs_out)/ $(abs_out)/libbpf.a
-> > +
-> > +$(out)/runqslower.o: runqslower.h $(out)/runqslower.skel.h                 \
-> > +                  $(out)/runqslower.bpf.o
-> > +
-> > +$(out)/runqslower.bpf.o: $(out)/vmlinux.h runqslower.h
-> > +
-> > +$(out)/%.skel.h: $(out)/%.bpf.o
-> > +     $(BPFTOOL) gen skeleton $< > $@
-> > +
-> > +$(out)/%.bpf.o: %.bpf.c | $(out)
-> > +     $(CLANG) -g -O2 -target bpf -I$(out) -I$(LIBBPF_SRC)                  \
-> > +              -c $(filter %.c,$^) -o $@ &&                                 \
-> > +     $(LLVM_STRIP) -g $@
-> > +
-> > +$(out)/%.o: %.c | $(out)
-> > +     $(CC) $(CFLAGS) -I$(LIBBPF_SRC) -I$(out) -c $(filter %.c,$^) -o $@
-> > +
-> > +$(out):
-> > +     mkdir -p $(out)
-> > +
-> [...]
+> 
+> If the number of allowed pins are exhausted then the
+> pin_user_pages_fast() must fail back to the user.
+
+
+I'll poke around the IB call stack and see how much of that return path
+is in place, if any. Because it's the same situation for get_user_pages_fast().
+This code just added a warning on overflow so we could spot it early.
+
+> 
+>> 3. It would be nice if I could reproduce this. I have a two-node mlx5 Infiniband
+>> test setup, but I have done only the tiniest bit of user space IB coding, so
+>> if you have any test programs that aren't too hard to deal with that could
+>> possibly hit this, or be tweaked to hit it, I'd be grateful. Keeping in mind
+>> that I'm not an advanced IB programmer. At all. :)
+> 
+> Clone this:
+> 
+> https://github.com/linux-rdma/rdma-core.git
+> 
+> Install all the required deps to build it (notably cython), see the README.md
+> 
+> $ ./build.sh
+> $ build/bin/run_tests.py
+> 
+> If you get things that far I think Leon can get a reproduction for you
+> 
+
+OK, here goes.
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
