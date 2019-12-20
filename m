@@ -6,43 +6,43 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E88D7C43603
-	for <bpf@archiver.kernel.org>; Fri, 20 Dec 2019 08:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C7C7C2D0D2
+	for <bpf@archiver.kernel.org>; Fri, 20 Dec 2019 08:55:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C602B24679
-	for <bpf@archiver.kernel.org>; Fri, 20 Dec 2019 08:55:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A5E724679
+	for <bpf@archiver.kernel.org>; Fri, 20 Dec 2019 08:55:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727391AbfLTIzX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Dec 2019 03:55:23 -0500
-Received: from mga09.intel.com ([134.134.136.24]:34862 "EHLO mga09.intel.com"
+        id S1727180AbfLTIz3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Dec 2019 03:55:29 -0500
+Received: from mga09.intel.com ([134.134.136.24]:34861 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727135AbfLTIzR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Dec 2019 03:55:17 -0500
+        id S1727211AbfLTIzP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Dec 2019 03:55:15 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 00:55:15 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,335,1571727600"; 
-   d="scan'208";a="218434383"
+   d="scan'208";a="218434375"
 Received: from unknown (HELO localhost.localdomain) ([10.190.210.212])
-  by orsmga006.jf.intel.com with ESMTP; 20 Dec 2019 00:55:13 -0800
+  by orsmga006.jf.intel.com with ESMTP; 20 Dec 2019 00:55:12 -0800
 Received: from localhost.localdomain (localhost [127.0.0.1])
-        by localhost.localdomain (8.15.2/8.15.2/Debian-10) with ESMTPS id xBK8tZRH005056
+        by localhost.localdomain (8.15.2/8.15.2/Debian-10) with ESMTPS id xBK8tYGH005036
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 20 Dec 2019 14:25:35 +0530
+        Fri, 20 Dec 2019 14:25:34 +0530
 Received: (from root@localhost)
-        by localhost.localdomain (8.15.2/8.15.2/Submit) id xBK8tZGF005055;
-        Fri, 20 Dec 2019 14:25:35 +0530
+        by localhost.localdomain (8.15.2/8.15.2/Submit) id xBK8tYtc005035;
+        Fri, 20 Dec 2019 14:25:34 +0530
 From:   Jay Jayatheerthan <jay.jayatheerthan@intel.com>
 To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
         jonathan.lemon@gmail.com
 Cc:     bpf@vger.kernel.org,
         Jay Jayatheerthan <jay.jayatheerthan@intel.com>
-Subject: [PATCH bpf-next 6/6] samples/bpf: xdpsock: Add option to specify transmit fill pattern
-Date:   Fri, 20 Dec 2019 14:25:30 +0530
-Message-Id: <20191220085530.4980-7-jay.jayatheerthan@intel.com>
+Subject: [PATCH bpf-next 1/6] samples/bpf: xdpsock: Add duration option to specify how long to run
+Date:   Fri, 20 Dec 2019 14:25:25 +0530
+Message-Id: <20191220085530.4980-2-jay.jayatheerthan@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191220085530.4980-1-jay.jayatheerthan@intel.com>
 References: <20191220085530.4980-1-jay.jayatheerthan@intel.com>
@@ -51,79 +51,135 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The UDP payload fill pattern can be specified using '-P' or '--tx-pkt-pattern'
-option. It is an unsigned 32 bit field and defaulted to 0x12345678.
-
-The IP and UDP checksum is calculated by the code as per the content of
-the packet before transmission.
+The application now supports '-d' or '--duration' option to specify number of
+seconds to run. This is used in tx, rx and l2fwd features. If this option is
+not provided, the application runs forever.
 
 Signed-off-by: Jay Jayatheerthan <jay.jayatheerthan@intel.com>
 ---
- samples/bpf/xdpsock_user.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ samples/bpf/xdpsock_user.c | 37 +++++++++++++++++++++++++++++++++++--
+ 1 file changed, 35 insertions(+), 2 deletions(-)
 
 diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-index 2297158a32bd..d74c4c83fc93 100644
+index e7829e5baaff..e188a79a9c31 100644
 --- a/samples/bpf/xdpsock_user.c
 +++ b/samples/bpf/xdpsock_user.c
-@@ -76,7 +76,7 @@ static bool benchmark_done;
- static u32 opt_batch_size = 64;
- static int opt_pkt_count;
- static u16 opt_pkt_size = MIN_PKT_SIZE;
--static u32 pkt_fill_pattern = 0x12345678;
-+static u32 opt_pkt_fill_pattern = 0x12345678;
+@@ -65,6 +65,9 @@ static u32 opt_xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
+ static const char *opt_if = "";
+ static int opt_ifindex;
+ static int opt_queue;
++static unsigned long opt_duration;
++static unsigned long start_time;
++static bool benchmark_done;
  static int opt_poll;
  static int opt_interval = 1;
  static u32 opt_xdp_bind_flags = XDP_USE_NEED_WAKEUP;
-@@ -517,7 +517,7 @@ static void gen_eth_hdr_data(void)
- 	udp_hdr->len = htons(UDP_PKT_SIZE);
+@@ -167,10 +170,21 @@ static void dump_stats(void)
+ 	}
+ }
  
- 	/* UDP data */
--	memset32_htonl(pkt_data + PKT_HDR_SIZE, pkt_fill_pattern,
-+	memset32_htonl(pkt_data + PKT_HDR_SIZE, opt_pkt_fill_pattern,
- 		       UDP_PKT_DATA_SIZE);
- 
- 	/* UDP header checksum */
-@@ -630,6 +630,7 @@ static struct option long_options[] = {
- 	{"batch-size", required_argument, 0, 'b'},
- 	{"tx-pkt-count", required_argument, 0, 'C'},
- 	{"tx-pkt-size", required_argument, 0, 's'},
-+	{"tx-pkt-pattern", required_argument, 0, 'P'},
++static bool is_benchmark_done(void)
++{
++	if (opt_duration > 0) {
++		unsigned long dt = (get_nsecs() - start_time);
++
++		if (dt >= opt_duration)
++			benchmark_done = true;
++	}
++	return benchmark_done;
++}
++
+ static void *poller(void *arg)
+ {
+ 	(void)arg;
+-	for (;;) {
++	while (!is_benchmark_done()) {
+ 		sleep(opt_interval);
+ 		dump_stats();
+ 	}
+@@ -375,6 +389,7 @@ static struct option long_options[] = {
+ 	{"unaligned", no_argument, 0, 'u'},
+ 	{"shared-umem", no_argument, 0, 'M'},
+ 	{"force", no_argument, 0, 'F'},
++	{"duration", required_argument, 0, 'd'},
  	{0, 0, 0, 0}
  };
  
-@@ -663,10 +664,11 @@ static void usage(const char *prog)
- 		"  -s, --tx-pkt-size=n	Transmit packet size.\n"
- 		"			(Default: %d bytes)\n"
- 		"			Min size: %d, Max size %d.\n"
-+		"  -P, --tx-pkt-pattern=nPacket fill pattern. Default: 0x%x\n"
+@@ -399,6 +414,8 @@ static void usage(const char *prog)
+ 		"  -u, --unaligned	Enable unaligned chunk placement\n"
+ 		"  -M, --shared-umem	Enable XDP_SHARED_UMEM\n"
+ 		"  -F, --force		Force loading the XDP prog\n"
++		"  -d, --duration=n	Duration in secs to run command.\n"
++		"			Default: forever.\n"
  		"\n";
- 	fprintf(stderr, str, prog, XSK_UMEM__DEFAULT_FRAME_SIZE,
- 		opt_batch_size, MIN_PKT_SIZE, MIN_PKT_SIZE,
--		XSK_UMEM__DEFAULT_FRAME_SIZE);
-+		XSK_UMEM__DEFAULT_FRAME_SIZE, opt_pkt_fill_pattern);
- 
+ 	fprintf(stderr, str, prog, XSK_UMEM__DEFAULT_FRAME_SIZE);
  	exit(EXIT_FAILURE);
- }
-@@ -678,7 +680,7 @@ static void parse_command_line(int argc, char **argv)
+@@ -411,7 +428,7 @@ static void parse_command_line(int argc, char **argv)
  	opterr = 0;
  
  	for (;;) {
--		c = getopt_long(argc, argv, "Frtli:q:pSNn:czf:muMd:b:C:s:",
-+		c = getopt_long(argc, argv, "Frtli:q:pSNn:czf:muMd:b:C:s:P:",
+-		c = getopt_long(argc, argv, "Frtli:q:psSNn:czf:muM",
++		c = getopt_long(argc, argv, "Frtli:q:psSNn:czf:muMd:",
  				long_options, &option_index);
  		if (c == -1)
  			break;
-@@ -756,6 +758,9 @@ static void parse_command_line(int argc, char **argv)
- 				usage(basename(argv[0]));
- 			}
+@@ -469,6 +486,10 @@ static void parse_command_line(int argc, char **argv)
+ 		case 'M':
+ 			opt_num_xsks = MAX_SOCKS;
  			break;
-+		case 'P':
-+			opt_pkt_fill_pattern = strtol(optarg, NULL, 16);
++		case 'd':
++			opt_duration = atoi(optarg);
++			opt_duration *= 1000000000;
 +			break;
  		default:
  			usage(basename(argv[0]));
  		}
+@@ -622,6 +643,9 @@ static void rx_drop_all(void)
+ 
+ 		for (i = 0; i < num_socks; i++)
+ 			rx_drop(xsks[i], fds);
++
++		if (benchmark_done)
++			break;
+ 	}
+ }
+ 
+@@ -671,6 +695,9 @@ static void tx_only_all(void)
+ 
+ 		for (i = 0; i < num_socks; i++)
+ 			tx_only(xsks[i], frame_nb[i]);
++
++		if (benchmark_done)
++			break;
+ 	}
+ }
+ 
+@@ -739,6 +766,9 @@ static void l2fwd_all(void)
+ 
+ 		for (i = 0; i < num_socks; i++)
+ 			l2fwd(xsks[i], fds);
++
++		if (benchmark_done)
++			break;
+ 	}
+ }
+ 
+@@ -852,6 +882,7 @@ int main(int argc, char **argv)
+ 		exit_with_error(ret);
+ 
+ 	prev_time = get_nsecs();
++	start_time = prev_time;
+ 
+ 	if (opt_bench == BENCH_RXDROP)
+ 		rx_drop_all();
+@@ -860,5 +891,7 @@ int main(int argc, char **argv)
+ 	else
+ 		l2fwd_all();
+ 
++	pthread_join(pt, NULL);
++
+ 	return 0;
+ }
 -- 
 2.17.1
 
