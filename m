@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99BD5C43603
-	for <bpf@archiver.kernel.org>; Fri, 20 Dec 2019 15:42:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 575F8C2D0D2
+	for <bpf@archiver.kernel.org>; Fri, 20 Dec 2019 15:42:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 625C424684
-	for <bpf@archiver.kernel.org>; Fri, 20 Dec 2019 15:42:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 23C14222C2
+	for <bpf@archiver.kernel.org>; Fri, 20 Dec 2019 15:42:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Za0Ik+yT"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ekYYzsl5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727499AbfLTPmJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Dec 2019 10:42:09 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:38760 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727422AbfLTPmI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Dec 2019 10:42:08 -0500
-Received: by mail-wr1-f65.google.com with SMTP id y17so9867549wrh.5
-        for <bpf@vger.kernel.org>; Fri, 20 Dec 2019 07:42:06 -0800 (PST)
+        id S1727654AbfLTPmV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Dec 2019 10:42:21 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:41936 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727630AbfLTPmT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Dec 2019 10:42:19 -0500
+Received: by mail-wr1-f67.google.com with SMTP id c9so9846278wrw.8
+        for <bpf@vger.kernel.org>; Fri, 20 Dec 2019 07:42:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6t1SoqwVuPN5RZrWbZ/JmprOHgDz/qxqketSjNkDxYQ=;
-        b=Za0Ik+yT8Naldmi7JYTHp0+WuOF/mI5o4+6wTWn6WVqreRl0BuH5kZGrkAT65FqOhL
-         ik4xff8Y0GYoREJjknBeExBw0poezt9BfP29XsTroIiGfvbmr3lTTPQvSc4q7cV48WMa
-         JD9UHz8JdBAmhXmajPinQmLxnyjUaYDP/S4UE=
+        bh=5zWF1EvSsIPmLOxhaJXNA5ILlHc0a+yRKkyOT6dTzZ0=;
+        b=ekYYzsl5m79LwnzVS7qykSQ/bDpL/PQ3sz6ILbns2uGcBdHs9gFfdJCiZU35xAZvBt
+         ALSFkkfruiwXpSdgmiS+xMCO3kqNS44kbO5+hwzdk3Xqh5cdHWQhqi2L6d2gr9RCm/fl
+         O5KtaLptB41j8CC4qrlMKbhgZ90Xylo/7IOfg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6t1SoqwVuPN5RZrWbZ/JmprOHgDz/qxqketSjNkDxYQ=;
-        b=PI4fU0inYpfRnH++C46jiH8UlHoB1d3T9g2swwUosTNTqiS60mGMSfCvj0ZdLBBBwc
-         1ZVsHkDKmULMbF9OGd642QkL5oKxiPjdcUCiDNHxOP9puoVsU6OD5HOIzJ2qkdAX/Ylw
-         8vUvz67L3OFxzqLNcU5Qv8CEMuHdKhGuFfhDf2jkSLNWj3MLFe+2tiVunSDLExJpz/7+
-         8ryPfLOqjHr22Y/isHfAAvWSskW/mtlSlZTw3NoqKsFk0q19LQLeGrRx3cvkYOY2HaV4
-         DOS2Qe+/lnf6B9jVJywQRQhsSgPUea7w+off9VX+UcMwg8pvFtrXV3HyD1f1UJHSna9L
-         9KaQ==
-X-Gm-Message-State: APjAAAWH11S5Q/ooFP3xcb32BTu3wt6b7rlrycQiPKAZ+s9itcOuBD8r
-        YYeHVRABxlQZ9FtUyujfRaQXCQ==
-X-Google-Smtp-Source: APXvYqzUw2zZWd01RnFUny0Ejrm3QP4gMWGxtDfpl5hA1PwIuv83c3ZBZMhLU1YB2ifHyAALBcDveA==
-X-Received: by 2002:a5d:6349:: with SMTP id b9mr16641794wrw.346.1576856525938;
-        Fri, 20 Dec 2019 07:42:05 -0800 (PST)
+        bh=5zWF1EvSsIPmLOxhaJXNA5ILlHc0a+yRKkyOT6dTzZ0=;
+        b=SB6jWpPCrJXJf5PES8iPRIbSDZp1uyHSN5EpKe7zOpblDL3aGF85lypmJ9sGLy62Ig
+         yAoLPFadc9wrr+Ao2bKUWM7YJoERbtAVUZ464SpXPXe75udKAyLJLxe/+LOVaPQ7WZvY
+         exkH2qO9Bbzxg+Pj1WL9PpH79LtlDGDP1ONiGimmz0n2ZrTvu0e2YBJYY3T6LjaofbLY
+         iiZA0dPxx/Y3b41bSVZIIffsnOBVK3rCTNmND5HNGZyULMacStWmlVQMQRatkpyisASq
+         qD+Dut3MwGww9R8R4uIfYQS7WIQLD9CBQNvOmd294XLKHGqDepIWeWZvRJUpPSndF/Dp
+         aCKg==
+X-Gm-Message-State: APjAAAWAd73+QBm8Gxe1sKw93n8CIid5aQrX0+qQFM+nA44i+2TVV6aU
+        tvnyZ2cmfuUPIQJ3E7Zvz2P1xg==
+X-Google-Smtp-Source: APXvYqwhzZbMjbi+ZJg+l9hDKucUyaSA8WMPRiw5JVHGlJMxsqgRYJf0NTeCQOf2APAkXBjQt/dlOA==
+X-Received: by 2002:a5d:5283:: with SMTP id c3mr16601729wrv.148.1576856537603;
+        Fri, 20 Dec 2019 07:42:17 -0800 (PST)
 Received: from kpsingh-kernel.localdomain ([2a00:79e1:abc:308:c46b:b838:66cf:6204])
-        by smtp.gmail.com with ESMTPSA id x11sm10118062wmg.46.2019.12.20.07.42.04
+        by smtp.gmail.com with ESMTPSA id x11sm10118062wmg.46.2019.12.20.07.42.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2019 07:42:05 -0800 (PST)
+        Fri, 20 Dec 2019 07:42:17 -0800 (PST)
 From:   KP Singh <kpsingh@chromium.org>
 To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         linux-security-module@vger.kernel.org
@@ -78,9 +78,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Quentin Monnet <quentin.monnet@netronome.com>,
         Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
-Subject: [PATCH bpf-next v1 02/13] bpf: lsm: Add a skeleton and config options
-Date:   Fri, 20 Dec 2019 16:41:57 +0100
-Message-Id: <20191220154208.15895-3-kpsingh@chromium.org>
+Subject: [PATCH bpf-next v1 11/13] tools/libbpf: Add bpf_program__attach_lsm
+Date:   Fri, 20 Dec 2019 16:42:06 +0100
+Message-Id: <20191220154208.15895-12-kpsingh@chromium.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191220154208.15895-1-kpsingh@chromium.org>
 References: <20191220154208.15895-1-kpsingh@chromium.org>
@@ -93,167 +93,198 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: KP Singh <kpsingh@google.com>
 
-The LSM can be enabled by CONFIG_SECURITY_BPF.
-Without CONFIG_SECURITY_BPF_ENFORCE, the LSM will run the
-attached eBPF programs but not enforce MAC policy based
-on the return value of the attached programs.
+Add functionality in libbpf to attach eBPF program to LSM hooks.
 
 Signed-off-by: KP Singh <kpsingh@google.com>
 ---
- MAINTAINERS           |  7 +++++++
- security/Kconfig      | 11 ++++++-----
- security/Makefile     |  2 ++
- security/bpf/Kconfig  | 25 +++++++++++++++++++++++++
- security/bpf/Makefile |  5 +++++
- security/bpf/lsm.c    | 28 ++++++++++++++++++++++++++++
- 6 files changed, 73 insertions(+), 5 deletions(-)
- create mode 100644 security/bpf/Kconfig
- create mode 100644 security/bpf/Makefile
- create mode 100644 security/bpf/lsm.c
+ tools/lib/bpf/libbpf.c   | 127 +++++++++++++++++++++++++++++++++++++--
+ tools/lib/bpf/libbpf.h   |   2 +
+ tools/lib/bpf/libbpf.map |   1 +
+ 3 files changed, 126 insertions(+), 4 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8f075b866aaf..3b82d8ff21fb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3175,6 +3175,13 @@ S:	Supported
- F:	arch/x86/net/
- X:	arch/x86/net/bpf_jit_comp32.c
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index b0b27d8e5a37..ab2b23b4f21f 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5122,8 +5122,8 @@ int libbpf_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
+ 	return -ESRCH;
+ }
  
-+BPF SECURITY MODULE
-+M:	KP Singh <kpsingh@chromium.org>
-+L:	linux-security-module@vger.kernel.org
-+L:	bpf@vger.kernel.org
-+S:	Maintained
-+F:	security/bpf/
-+
- BROADCOM B44 10/100 ETHERNET DRIVER
- M:	Michael Chan <michael.chan@broadcom.com>
- L:	netdev@vger.kernel.org
-diff --git a/security/Kconfig b/security/Kconfig
-index 2a1a2d396228..6f1aab195e7d 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -236,6 +236,7 @@ source "security/tomoyo/Kconfig"
- source "security/apparmor/Kconfig"
- source "security/loadpin/Kconfig"
- source "security/yama/Kconfig"
-+source "security/bpf/Kconfig"
- source "security/safesetid/Kconfig"
- source "security/lockdown/Kconfig"
+-static inline int __btf__typdef_with_prefix(struct btf *btf, const char *name,
+-					    const char *prefix)
++static inline int __btf__type_with_prefix(struct btf *btf, const char *name,
++					  const char *prefix)
+ {
  
-@@ -277,11 +278,11 @@ endchoice
+ 	size_t prefix_len = strlen(prefix);
+@@ -5149,9 +5149,9 @@ int libbpf_find_vmlinux_btf_id(const char *name,
+ 	}
  
- config LSM
- 	string "Ordered list of enabled LSMs"
--	default "lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor" if DEFAULT_SECURITY_SMACK
--	default "lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo" if DEFAULT_SECURITY_APPARMOR
--	default "lockdown,yama,loadpin,safesetid,integrity,tomoyo" if DEFAULT_SECURITY_TOMOYO
--	default "lockdown,yama,loadpin,safesetid,integrity" if DEFAULT_SECURITY_DAC
--	default "lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
-+	default "lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
-+	default "lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
-+	default "lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
-+	default "lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
-+	default "lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
- 	help
- 	  A comma-separated list of LSMs, in initialization order.
- 	  Any LSMs left off this list will be ignored. This can be
-diff --git a/security/Makefile b/security/Makefile
-index be1dd9d2cb2f..50e6821dd7b7 100644
---- a/security/Makefile
-+++ b/security/Makefile
-@@ -12,6 +12,7 @@ subdir-$(CONFIG_SECURITY_YAMA)		+= yama
- subdir-$(CONFIG_SECURITY_LOADPIN)	+= loadpin
- subdir-$(CONFIG_SECURITY_SAFESETID)    += safesetid
- subdir-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown
-+subdir-$(CONFIG_SECURITY_BPF)		+= bpf
+ 	if (attach_type == BPF_TRACE_RAW_TP)
+-		err = __btf__typdef_with_prefix(btf, name, BTF_TRACE_PREFIX);
++		err = __btf__type_with_prefix(btf, name, BTF_TRACE_PREFIX);
+ 	else if (attach_type == BPF_LSM_MAC)
+-		err = __btf__typdef_with_prefix(btf, name, BTF_LSM_PREFIX);
++		err = __btf__type_with_prefix(btf, name, BTF_LSM_PREFIX);
+ 	else
+ 		err = btf__find_by_name_kind(btf, name, BTF_KIND_FUNC);
  
- # always enable default capabilities
- obj-y					+= commoncap.o
-@@ -29,6 +30,7 @@ obj-$(CONFIG_SECURITY_YAMA)		+= yama/
- obj-$(CONFIG_SECURITY_LOADPIN)		+= loadpin/
- obj-$(CONFIG_SECURITY_SAFESETID)       += safesetid/
- obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
-+obj-$(CONFIG_SECURITY_BPF)		+= bpf/
- obj-$(CONFIG_CGROUP_DEVICE)		+= device_cgroup.o
+@@ -5502,6 +5502,18 @@ struct bpf_link_fd {
+ 	int fd; /* hook FD */
+ };
  
- # Object integrity file lists
-diff --git a/security/bpf/Kconfig b/security/bpf/Kconfig
-new file mode 100644
-index 000000000000..1aaa1340e795
---- /dev/null
-+++ b/security/bpf/Kconfig
-@@ -0,0 +1,25 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright 2019 Google LLC.
-+
-+config SECURITY_BPF
-+	bool "BPF-based MAC and audit policy"
-+	depends on SECURITY
-+	depends on SECURITYFS
-+	depends on BPF
-+	depends on BPF_SYSCALL
-+	help
-+	  This enables instrumentation of the security hooks with
-+	  eBPF programs. The LSM creates per-hook files in securityfs to which
-+	  eBPF programs can be attached.
-+
-+	  If you are unsure how to answer this question, answer N.
-+
-+config SECURITY_BPF_ENFORCE
-+	bool "Deny operations based on the evaluation of the attached programs"
-+	depends on SECURITY_BPF
-+	help
-+	  eBPF programs attached to hooks can be used for both auditing and
-+	  enforcement. Enabling enforcement implies that the evaluation result
-+	  from the attached eBPF programs will allow or deny the operation
-+	  guarded by the security hook.
-diff --git a/security/bpf/Makefile b/security/bpf/Makefile
-new file mode 100644
-index 000000000000..26a0ab6f99b7
---- /dev/null
-+++ b/security/bpf/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright 2019 Google LLC.
-+
-+obj-$(CONFIG_SECURITY_BPF) := lsm.o
-diff --git a/security/bpf/lsm.c b/security/bpf/lsm.c
-new file mode 100644
-index 000000000000..fe5c65bbdd45
---- /dev/null
-+++ b/security/bpf/lsm.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
 +/*
-+ * Copyright 2019 Google LLC.
++ * The other attach types allow the link to be destroyed by using an ioctl or
++ * an operation on some file descriptor that describes the attachment. An LSM
++ * hook can have multiple programs attached to each hook, so the link needs to
++ * specify the program that must be detached when the link is destroyed.
 + */
++struct bpf_link_lsm {
++	struct bpf_link link;
++	int hook_fd;
++	int prog_fd;
++};
 +
-+#include <linux/lsm_hooks.h>
+ static int bpf_link__destroy_perf_event(struct bpf_link *link)
+ {
+ 	struct bpf_link_fd *l = (void *)link;
+@@ -5876,6 +5888,113 @@ struct bpf_link *bpf_program__attach_trace(struct bpf_program *prog)
+ 	return (struct bpf_link *)link;
+ }
+ 
 +
-+static int process_execution(struct linux_binprm *bprm)
++static int bpf_link__destroy_lsm(struct bpf_link *link)
 +{
++	struct bpf_link_lsm *ll = container_of(link, struct bpf_link_lsm, link);
++	char errmsg[STRERR_BUFSIZE];
++	int ret;
++
++	ret = bpf_prog_detach2(ll->prog_fd, ll->hook_fd, BPF_LSM_MAC);
++	if (ret < 0) {
++		ret = -errno;
++		pr_warn("failed to detach from hook: %s\n",
++			libbpf_strerror_r(ret, errmsg, sizeof(errmsg)));
++		return ret;
++	}
++	close(ll->hook_fd);
 +	return 0;
 +}
 +
-+static struct security_hook_list lsm_hooks[] __lsm_ro_after_init = {
-+	LSM_HOOK_INIT(bprm_check_security, process_execution),
-+};
-+
-+static int __init lsm_init(void)
++static const char *__lsm_hook_name(const char *title)
 +{
-+	security_add_hooks(lsm_hooks, ARRAY_SIZE(lsm_hooks), "bpf");
-+	pr_info("eBPF and LSM are friends now.\n");
-+	return 0;
++
++	int i;
++
++	if (!title)
++		return ERR_PTR(-EINVAL);
++
++	for (i = 0; i < ARRAY_SIZE(section_names); i++) {
++		if (section_names[i].prog_type != BPF_PROG_TYPE_LSM)
++			continue;
++
++		if (strncmp(title, section_names[i].sec,
++			    section_names[i].len)) {
++			pr_warn("title for a LSM prog must begin with '%s'\n",
++				section_names[i].sec);
++			return ERR_PTR(-EINVAL);
++		}
++
++		return title + section_names[i].len;
++	}
++
++	pr_warn("could not find section information for BPF_PROG_TYPE_LSM\n");
++	return ERR_PTR(-ESRCH);
 +}
 +
-+DEFINE_LSM(bpf) = {
-+	.name = "bpf",
-+	.init = lsm_init,
-+};
++struct bpf_link *bpf_program__attach_lsm(struct bpf_program *prog)
++{
++	char hook_path[PATH_MAX] = "/sys/kernel/security/bpf/";
++	const char *title, *hook_name;
++	char errmsg[STRERR_BUFSIZE];
++	int prog_fd, target_fd, ret;
++	struct bpf_link_lsm *link;
++
++	title = bpf_program__title(prog, false);
++	if (IS_ERR(title)) {
++		pr_warn("could not determine title of the program\n");
++		return ERR_PTR(-EINVAL);
++	}
++
++	hook_name = __lsm_hook_name(title);
++	if (IS_ERR(hook_name)) {
++		pr_warn("could not determine LSM hook name from title '%s'\n",
++			title);
++		return ERR_PTR(-EINVAL);
++	}
++
++	prog_fd = bpf_program__fd(prog);
++	if (prog_fd < 0) {
++		pr_warn("program '%s': can't attach before loaded\n", title);
++		return ERR_PTR(-EINVAL);
++	}
++
++	link = malloc(sizeof(*link));
++	if (!link)
++		return ERR_PTR(-ENOMEM);
++	link->link.destroy = &bpf_link__destroy_lsm;
++
++	/* Attach the BPF program to the given hook */
++	strncat(hook_path, hook_name,
++		sizeof(hook_path) - (strlen(hook_path) + 1));
++	target_fd = open(hook_path, O_RDWR);
++	if (target_fd < 0) {
++		ret = -errno;
++		pr_warn("program '%s': failed to open to hook '%s': %s\n",
++			title, hook_path,
++			libbpf_strerror_r(ret, errmsg, sizeof(errmsg)));
++		return ERR_PTR(ret);
++	}
++
++	ret = bpf_prog_attach(prog_fd, target_fd, BPF_LSM_MAC,
++			      BPF_F_ALLOW_OVERRIDE);
++	if (ret < 0) {
++		ret = -errno;
++		pr_warn("program '%s': failed to attach to hook '%s': %s\n",
++			title, hook_name,
++			libbpf_strerror_r(ret, errmsg, sizeof(errmsg)));
++		goto error;
++	}
++
++	link->hook_fd = target_fd;
++	link->prog_fd = prog_fd;
++	return &link->link;
++
++error:
++	close(target_fd);
++	return ERR_PTR(ret);
++}
++
+ enum bpf_perf_event_ret
+ bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
+ 			   void **copy_mem, size_t *copy_size,
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 9cd69d602c82..655f27ad6ece 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -256,6 +256,8 @@ bpf_program__attach_raw_tracepoint(struct bpf_program *prog,
+ 
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_trace(struct bpf_program *prog);
++LIBBPF_API struct bpf_link *
++bpf_program__attach_lsm(struct bpf_program *prog);
+ struct bpf_insn;
+ 
+ /*
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 3d396149755d..5d64ba9b2a43 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -213,4 +213,5 @@ LIBBPF_0.0.7 {
+ 	global:
+ 		bpf_program__is_lsm;
+ 		bpf_program__set_lsm;
++		bpf_program__attach_lsm;
+ } LIBBPF_0.0.6;
 -- 
 2.20.1
 
