@@ -2,104 +2,142 @@ Return-Path: <SRS0=eFnQ=2K=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6D7EC2D0C0
-	for <bpf@archiver.kernel.org>; Fri, 20 Dec 2019 08:55:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF409C2D0C0
+	for <bpf@archiver.kernel.org>; Fri, 20 Dec 2019 09:22:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B7F2024679
-	for <bpf@archiver.kernel.org>; Fri, 20 Dec 2019 08:55:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF24224683
+	for <bpf@archiver.kernel.org>; Fri, 20 Dec 2019 09:22:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727239AbfLTIzP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Dec 2019 03:55:15 -0500
-Received: from mga09.intel.com ([134.134.136.24]:34861 "EHLO mga09.intel.com"
+        id S1727202AbfLTJWC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Dec 2019 04:22:02 -0500
+Received: from mx2.suse.de ([195.135.220.15]:46708 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727209AbfLTIzP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Dec 2019 03:55:15 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 00:55:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,335,1571727600"; 
-   d="scan'208";a="218434371"
-Received: from unknown (HELO localhost.localdomain) ([10.190.210.212])
-  by orsmga006.jf.intel.com with ESMTP; 20 Dec 2019 00:55:12 -0800
-Received: from localhost.localdomain (localhost [127.0.0.1])
-        by localhost.localdomain (8.15.2/8.15.2/Debian-10) with ESMTPS id xBK8tYhk005032
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 20 Dec 2019 14:25:34 +0530
-Received: (from root@localhost)
-        by localhost.localdomain (8.15.2/8.15.2/Submit) id xBK8tWEc005029;
-        Fri, 20 Dec 2019 14:25:32 +0530
-From:   Jay Jayatheerthan <jay.jayatheerthan@intel.com>
-To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        jonathan.lemon@gmail.com
-Cc:     bpf@vger.kernel.org,
-        Jay Jayatheerthan <jay.jayatheerthan@intel.com>
-Subject: [PATCH bpf-next 0/6] Enhancements to xdpsock application
-Date:   Fri, 20 Dec 2019 14:25:24 +0530
-Message-Id: <20191220085530.4980-1-jay.jayatheerthan@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727188AbfLTJWB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Dec 2019 04:22:01 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 98BD2AE00;
+        Fri, 20 Dec 2019 09:21:57 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 38E621E0B44; Fri, 20 Dec 2019 10:21:54 +0100 (CET)
+Date:   Fri, 20 Dec 2019 10:21:54 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Maor Gottlieb <maorg@mellanox.com>
+Subject: Re: [PATCH v11 00/25] mm/gup: track dma-pinned pages: FOLL_PIN
+Message-ID: <20191220092154.GA10068@quack2.suse.cz>
+References: <20191216222537.491123-1-jhubbard@nvidia.com>
+ <20191219132607.GA410823@unreal>
+ <a4849322-8e17-119e-a664-80d9f95d850b@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a4849322-8e17-119e-a664-80d9f95d850b@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series of patches enhances xdpsock application with command line
-parameters to set transmit packet size and fill pattern among other options.
-The application has also been enhanced to use Linux Ethernet/IP/UDP header
-structs and calculate IP and UDP checksums.
+On Thu 19-12-19 12:30:31, John Hubbard wrote:
+> On 12/19/19 5:26 AM, Leon Romanovsky wrote:
+> > On Mon, Dec 16, 2019 at 02:25:12PM -0800, John Hubbard wrote:
+> > > Hi,
+> > > 
+> > > This implements an API naming change (put_user_page*() -->
+> > > unpin_user_page*()), and also implements tracking of FOLL_PIN pages. It
+> > > extends that tracking to a few select subsystems. More subsystems will
+> > > be added in follow up work.
+> > 
+> > Hi John,
+> > 
+> > The patchset generates kernel panics in our IB testing. In our tests, we
+> > allocated single memory block and registered multiple MRs using the single
+> > block.
+> > 
+> > The possible bad flow is:
+> >   ib_umem_geti() ->
+> >    pin_user_pages_fast(FOLL_WRITE) ->
+> >     internal_get_user_pages_fast(FOLL_WRITE) ->
+> >      gup_pgd_range() ->
+> >       gup_huge_pd() ->
+> >        gup_hugepte() ->
+> >         try_grab_compound_head() ->
+> 
+> Hi Leon,
+> 
+> Thanks very much for the detailed report! So we're overflowing...
+> 
+> At first look, this seems likely to be hitting a weak point in the
+> GUP_PIN_COUNTING_BIAS-based design, one that I believed could be deferred
+> (there's a writeup in Documentation/core-api/pin_user_page.rst, lines
+> 99-121). Basically it's pretty easy to overflow the page->_refcount
+> with huge pages if the pages have a *lot* of subpages.
+> 
+> We can only do about 7 pins on 1GB huge pages that use 4KB subpages.
+> Do you have any idea how many pins (repeated pins on the same page, which
+> it sounds like you have) might be involved in your test case,
+> and the huge page and system page sizes? That would allow calculating
+> if we're likely overflowing for that reason.
+> 
+> So, ideas and next steps:
+> 
+> 1. Assuming that you *are* hitting this, I think I may have to fall back to
+> implementing the "deferred" part of this design, as part of this series, after
+> all. That means:
+> 
+>   For the pin/unpin calls at least, stop treating all pages as if they are
+>   a cluster of PAGE_SIZE pages; instead, retrieve a huge page as one page.
+>   That's not how it works now, and the need to hand back a huge array of
+>   subpages is part of the problem. This affects the callers too, so it's not
+>   a super quick change to make. (I was really hoping not to have to do this
+>   yet.)
 
-I have measured the performance of the xdpsock application before and after
-this patch set and have not been able to detect any difference.
+Does that mean that you would need to make all GUP users huge page aware?
+Otherwise I don't see how what you suggest would work... And I don't think
+making all GUP users huge page aware is realistic (effort-wise) or even
+wanted (maintenance overhead in all those places).
 
-Packet Size:
-------------
-There is a new option '-s' or '--tx-pkt-size' to specify the transmit packet
-size. It ranges from 47 to 4096 bytes. Default packet size is 64 bytes
-which is same as before.
+I believe there might be also a different solution for this: For
+transparent huge pages, we could find a space in 'struct page' of the
+second page in the huge page for proper pin counter and just account pins
+there so we'd have full width of 32-bits for it.
 
-Fill Pattern:
--------------
-The transmit UDP payload fill pattern is specified using '-P' or
-'--tx-pkt-pattern'option. It is an unsigned 32 bit field and defaulted
-to 0x12345678.
-
-Packet Count:
--------------
-The number of packets to send is specified using '-C' or '--tx-pkt-count'
-option. If it is not specified, the application sends packets forever.
-
-Batch Size:
------------
-The batch size for transmit, receive and l2fwd features of the application is
-specified using '-b' or '--batch-size' options. Default value when this option
-is not provided is 64 (same as before).
-
-Duration:
----------
-The application supports '-d' or '--duration' option to specify number of
-seconds to run. This is used in tx, rx and l2fwd features. If this option is
-not provided, the application runs for ever.
-
-This patchset has been applied against commit 99cacdc6f661f50f
-("Merge branch 'replace-cg_bpf-prog'")
-
-Jay Jayatheerthan (6):
-  samples/bpf: xdpsock: Add duration option to specify how long to run
-  samples/bpf: xdpsock: Use common code to handle signal and main exit
-  samples/bpf: xdpsock: Add option to specify batch size
-  samples/bpf: xdpsock: Add option to specify number of packets to send
-  samples/bpf: xdpsock: Add option to specify tx packet size
-  samples/bpf: xdpsock: Add option to specify transmit fill pattern
-
- samples/bpf/xdpsock_user.c | 426 +++++++++++++++++++++++++++++++++----
- 1 file changed, 387 insertions(+), 39 deletions(-)
-
+								Honza
 -- 
-2.17.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
