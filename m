@@ -2,44 +2,44 @@ Return-Path: <SRS0=01yY=2L=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2258BC43603
-	for <bpf@archiver.kernel.org>; Sat, 21 Dec 2019 06:26:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8E1CC2D0D2
+	for <bpf@archiver.kernel.org>; Sat, 21 Dec 2019 06:26:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DBE4D206EC
-	for <bpf@archiver.kernel.org>; Sat, 21 Dec 2019 06:26:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E9BB206EC
+	for <bpf@archiver.kernel.org>; Sat, 21 Dec 2019 06:26:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="HbeMk1Ug"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cftViNiZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725997AbfLUGZ7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 21 Dec 2019 01:25:59 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:10558 "EHLO
+        id S1726087AbfLUG0E (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 21 Dec 2019 01:26:04 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14000 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725845AbfLUGZ7 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 21 Dec 2019 01:25:59 -0500
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBL6MXu2001069
-        for <bpf@vger.kernel.org>; Fri, 20 Dec 2019 22:25:58 -0800
+        by vger.kernel.org with ESMTP id S1725774AbfLUG0E (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 21 Dec 2019 01:26:04 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBL6Q2bO027499
+        for <bpf@vger.kernel.org>; Fri, 20 Dec 2019 22:26:03 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=gIctzVgqF2q5WrsP2r3TZ7HikuxlAaCCX1oGTnrBGgk=;
- b=HbeMk1UgHFVgjfMT+jUT+bBCEJjr8SvVY0mX9h7+JUVHh3kOvfcC328+xjuvwe0niED8
- 9IdP8UXj6Q7IDzXDkkdpFy+on67GifFNhK1BkBzQ7nj8mUOt0ZggNmH2wVus3VlQFoxm
- jQBisvMcBbe4260zMzuz8mmCHhIMio79F1k= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=eqG7cGifLkLj0mZdEgac9irYO5y0Z8NYirVp/nkf54Q=;
+ b=cftViNiZcdUafosMqquCRAsATo3+6RTjGQscTbJwixis6j0zhGnKhUktJMuShbpxD7Cw
+ qVaCdKV9jrzVOYaOwRzMvy8Xp7JS4m3nw62re3Y4St//dVH6f5EGU4KfXuCp4Wg1Lgeg
+ JNfanaD2pISGGWgy5PnPJev5kpCHT5YGwQY= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2x0ehsgaum-1
+        by mx0a-00082601.pphosted.com with ESMTP id 2x12t6awxd-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 20 Dec 2019 22:25:58 -0800
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 20 Dec 2019 22:26:03 -0800
+Received: from intmgw004.05.ash5.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 20 Dec 2019 22:25:57 -0800
+ 15.1.1713.5; Fri, 20 Dec 2019 22:26:00 -0800
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 684C82946127; Fri, 20 Dec 2019 22:25:56 -0800 (PST)
+        id E63752946127; Fri, 20 Dec 2019 22:25:59 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -49,131 +49,77 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 00/11] Introduce BPF STRUCT_OPS
-Date:   Fri, 20 Dec 2019 22:25:56 -0800
-Message-ID: <20191221062556.1182261-1-kafai@fb.com>
+Subject: [PATCH bpf-next v2 02/11] bpf: Avoid storing modifier to info->btf_id
+Date:   Fri, 20 Dec 2019 22:25:59 -0800
+Message-ID: <20191221062559.1182467-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191221062556.1182261-1-kafai@fb.com>
+References: <20191221062556.1182261-1-kafai@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-21_01:2019-12-17,2019-12-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- priorityscore=1501 mlxlogscore=683 malwarescore=0 phishscore=0
- suspectscore=13 adultscore=0 lowpriorityscore=0 bulkscore=0 clxscore=1015
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1912210053
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ malwarescore=0 suspectscore=13 mlxlogscore=633 mlxscore=0 impostorscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 adultscore=0 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912210054
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series introduces BPF STRUCT_OPS.  It is an infra to allow
-implementing some specific kernel's function pointers in BPF.
-The first use case included in this series is to implement
-TCP congestion control algorithm in BPF  (i.e. implement
-struct tcp_congestion_ops in BPF).
+info->btf_id expects the btf_id of a struct, so it should
+store the final result after skipping modifiers (if any).
 
-There has been attempt to move the TCP CC to the user space
-(e.g. CCP in TCP).   The common arguments are faster turn around,
-get away from long-tail kernel versions in production...etc,
-which are legit points.
+It also takes this chanace to add a missing newline in one of the
+bpf_log() messages.
 
-BPF has been the continuous effort to join both kernel and
-userspace upsides together (e.g. XDP to gain the performance
-advantage without bypassing the kernel).  The recent BPF
-advancements (in particular BTF-aware verifier, BPF trampoline,
-BPF CO-RE...) made implementing kernel struct ops (e.g. tcp cc)
-possible in BPF.
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ kernel/bpf/btf.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-The idea is to allow implementing tcp_congestion_ops in bpf.
-It allows a faster turnaround for testing algorithm in the
-production while leveraging the existing (and continue growing) BPF
-feature/framework instead of building one specifically for
-userspace TCP CC.
-
-Please see individual patch for details.
-
-The bpftool support will be posted in follow-up patches.
-
-v2:
-- Dropped cubic for now.  They will be reposted
-  once there are more clarity in "jiffies" on both
-  bpf side (about the helper) and
-  tcp_cubic side (some of jiffies usages are being replaced
-  by tp->tcp_mstamp)
-- Remove unnecssary check on bitfield support from btf_struct_access()
-  (Yonghong)
-- BTF_TYPE_EMIT macro (Yonghong, Andrii)
-- value_name's length check to avoid an unlikely
-  type match during truncation case (Yonghong)
-- BUILD_BUG_ON to ensure no trampoline-image overrun
-  in the future (Yonghong)
-- Simplify get_next_key() (Yonghong)
-- Added comment to explain how to check mandatory
-  func ptr in net/ipv4/bpf_tcp_ca.c (Yonghong)
-- Rename "__bpf_" to "bpf_struct_ops_" for value prefix (Andrii)
-- Add comment to highlight the bpf_dctcp.c is not necessarily
-  the same as tcp_dctcp.c. (Alexei, Eric)
-- libbpf: Renmae "struct_ops" to ".struct_ops" for elf sec (Andrii)
-- libbpf: Expose struct_ops as a bpf_map (Andrii)
-- libbpf: Support multiple struct_ops in SEC(".struct_ops") (Andrii)
-- libbpf: Add bpf_map__attach_struct_ops()  (Andrii)
-
-Martin KaFai Lau (11):
-  bpf: Save PTR_TO_BTF_ID register state when spilling to stack
-  bpf: Avoid storing modifier to info->btf_id
-  bpf: Add enum support to btf_ctx_access()
-  bpf: Support bitfield read access in btf_struct_access
-  bpf: Introduce BPF_PROG_TYPE_STRUCT_OPS
-  bpf: Introduce BPF_MAP_TYPE_STRUCT_OPS
-  bpf: tcp: Support tcp_congestion_ops in bpf
-  bpf: Add BPF_FUNC_tcp_send_ack helper
-  bpf: Synch uapi bpf.h to tools/
-  bpf: libbpf: Add STRUCT_OPS support
-  bpf: Add bpf_dctcp example
-
- arch/x86/net/bpf_jit_comp.c                   |  11 +-
- include/linux/bpf.h                           |  79 ++-
- include/linux/bpf_types.h                     |   7 +
- include/linux/btf.h                           |  47 ++
- include/linux/filter.h                        |   2 +
- include/net/tcp.h                             |   1 +
- include/uapi/linux/bpf.h                      |  19 +-
- kernel/bpf/Makefile                           |   2 +-
- kernel/bpf/bpf_struct_ops.c                   | 586 ++++++++++++++++
- kernel/bpf/bpf_struct_ops_types.h             |   9 +
- kernel/bpf/btf.c                              | 129 ++--
- kernel/bpf/map_in_map.c                       |   3 +-
- kernel/bpf/syscall.c                          |  66 +-
- kernel/bpf/trampoline.c                       |   5 +-
- kernel/bpf/verifier.c                         | 140 +++-
- net/core/filter.c                             |   2 +-
- net/ipv4/Makefile                             |   4 +
- net/ipv4/bpf_tcp_ca.c                         | 248 +++++++
- net/ipv4/tcp_cong.c                           |  14 +-
- net/ipv4/tcp_ipv4.c                           |   6 +-
- net/ipv4/tcp_minisocks.c                      |   4 +-
- net/ipv4/tcp_output.c                         |   4 +-
- tools/include/uapi/linux/bpf.h                |  19 +-
- tools/lib/bpf/bpf.c                           |  10 +-
- tools/lib/bpf/bpf.h                           |   5 +-
- tools/lib/bpf/libbpf.c                        | 639 +++++++++++++++++-
- tools/lib/bpf/libbpf.h                        |   1 +
- tools/lib/bpf/libbpf.map                      |   1 +
- tools/lib/bpf/libbpf_probes.c                 |   2 +
- tools/testing/selftests/bpf/bpf_tcp_helpers.h | 228 +++++++
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 218 ++++++
- tools/testing/selftests/bpf/progs/bpf_dctcp.c | 210 ++++++
- 32 files changed, 2582 insertions(+), 139 deletions(-)
- create mode 100644 kernel/bpf/bpf_struct_ops.c
- create mode 100644 kernel/bpf/bpf_struct_ops_types.h
- create mode 100644 net/ipv4/bpf_tcp_ca.c
- create mode 100644 tools/testing/selftests/bpf/bpf_tcp_helpers.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_dctcp.c
-
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 7d40da240891..88359a4bccb0 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3696,7 +3696,6 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 
+ 	/* this is a pointer to another type */
+ 	info->reg_type = PTR_TO_BTF_ID;
+-	info->btf_id = t->type;
+ 
+ 	if (tgt_prog) {
+ 		ret = btf_translate_to_vmlinux(log, btf, t, tgt_prog->type);
+@@ -3707,10 +3706,14 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 			return false;
+ 		}
+ 	}
++
++	info->btf_id = t->type;
+ 	t = btf_type_by_id(btf, t->type);
+ 	/* skip modifiers */
+-	while (btf_type_is_modifier(t))
++	while (btf_type_is_modifier(t)) {
++		info->btf_id = t->type;
+ 		t = btf_type_by_id(btf, t->type);
++	}
+ 	if (!btf_type_is_struct(t)) {
+ 		bpf_log(log,
+ 			"func '%s' arg%d type %s is not a struct\n",
+@@ -3736,7 +3739,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ again:
+ 	tname = __btf_name_by_offset(btf_vmlinux, t->name_off);
+ 	if (!btf_type_is_struct(t)) {
+-		bpf_log(log, "Type '%s' is not a struct", tname);
++		bpf_log(log, "Type '%s' is not a struct\n", tname);
+ 		return -EINVAL;
+ 	}
+ 
 -- 
 2.17.1
 
