@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38EEAC43603
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FD86C2D0D2
 	for <bpf@archiver.kernel.org>; Sat, 21 Dec 2019 06:26:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0BE66206EC
+	by mail.kernel.org (Postfix) with ESMTP id 3CBD221D7E
 	for <bpf@archiver.kernel.org>; Sat, 21 Dec 2019 06:26:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="A65WBsqz"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZL12zYzw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726114AbfLUG0G (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726098AbfLUG0G (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sat, 21 Dec 2019 01:26:06 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:8988 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726098AbfLUG0F (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 21 Dec 2019 01:26:05 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBL6Q2bQ027499
-        for <bpf@vger.kernel.org>; Fri, 20 Dec 2019 22:26:04 -0800
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:47080 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725774AbfLUG0G (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 21 Dec 2019 01:26:06 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBL6OGNc018086
+        for <bpf@vger.kernel.org>; Fri, 20 Dec 2019 22:26:05 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=FqJDHT5zIe7EFMz3Q4YF3C2Z0DHiOuQJqZ3XrqSZTUg=;
- b=A65WBsqzn0ewMM709r5wIrbQmwaJ+oMaDriUtBCgFsd7n6J7wM+peCsX18VQ2ijFKrnn
- C73IpigUolz7/rZctEHXoNpzwbU0cfl2TDINCywT3Qm5/3Uzz9DTV2P44N71gbHLhCS1
- X1K/k2WLw8w2K+ro+bVHtbXtO/wYgha6Ngs= 
+ content-type; s=facebook; bh=VUoucxNvoU04kxSwC0y7LXEFAnHiltIJycpH3IypH+g=;
+ b=ZL12zYzw+ZRE4PT8WyqUkDV4BWx1byrjLqvMaMcFjRSQWxa8CUnvvPlNC0NNzRNgW8wb
+ scOIGcLEcW8Qr4SNLoZoi/ibqDTM6EJpocFwnqf2Nvj9Vvv6EgZExQYri+j4q75fNgwH
+ jIpMfolkxh4bYY+Rgc5t1qL5U0GRAq7VCNk= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2x12t6aww6-4
+        by mx0a-00082601.pphosted.com with ESMTP id 2x0m9ypfn5-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 20 Dec 2019 22:26:04 -0800
-Received: from intmgw005.05.ash5.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 20 Dec 2019 22:26:05 -0800
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 20 Dec 2019 22:25:57 -0800
+ 15.1.1713.5; Fri, 20 Dec 2019 22:26:04 -0800
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id A54BB2946127; Fri, 20 Dec 2019 22:25:57 -0800 (PST)
+        id 2C28F2946127; Fri, 20 Dec 2019 22:26:02 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -49,9 +49,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 01/11] bpf: Save PTR_TO_BTF_ID register state when spilling to stack
-Date:   Fri, 20 Dec 2019 22:25:57 -0800
-Message-ID: <20191221062557.1182372-1-kafai@fb.com>
+Subject: [PATCH bpf-next v2 03/11] bpf: Add enum support to btf_ctx_access()
+Date:   Fri, 20 Dec 2019 22:26:02 -0800
+Message-ID: <20191221062602.1182627-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191221062556.1182261-1-kafai@fb.com>
 References: <20191221062556.1182261-1-kafai@fb.com>
@@ -60,10 +60,10 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-21_01:2019-12-17,2019-12-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- malwarescore=0 suspectscore=13 mlxlogscore=666 mlxscore=0 impostorscore=0
- priorityscore=1501 bulkscore=0 phishscore=0 adultscore=0 clxscore=1015
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ mlxlogscore=833 clxscore=1015 adultscore=0 impostorscore=0 malwarescore=0
+ suspectscore=13 bulkscore=0 spamscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1912210054
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -71,27 +71,28 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch makes the verifier save the PTR_TO_BTF_ID register state when
-spilling to the stack.
+It allows bpf prog (e.g. tracing) to attach
+to a kernel function that takes enum argument.
 
 Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- kernel/bpf/verifier.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/bpf/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 034ef81f935b..408264c1d55b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1915,6 +1915,7 @@ static bool is_spillable_regtype(enum bpf_reg_type type)
- 	case PTR_TO_TCP_SOCK:
- 	case PTR_TO_TCP_SOCK_OR_NULL:
- 	case PTR_TO_XDP_SOCK:
-+	case PTR_TO_BTF_ID:
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 88359a4bccb0..6e652643849b 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3676,7 +3676,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 	/* skip modifiers */
+ 	while (btf_type_is_modifier(t))
+ 		t = btf_type_by_id(btf, t->type);
+-	if (btf_type_is_int(t))
++	if (btf_type_is_int(t) || btf_type_is_enum(t))
+ 		/* accessing a scalar */
  		return true;
- 	default:
- 		return false;
+ 	if (!btf_type_is_ptr(t)) {
 -- 
 2.17.1
 
