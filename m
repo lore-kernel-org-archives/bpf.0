@@ -2,147 +2,135 @@ Return-Path: <SRS0=01yY=2L=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEF29C43603
-	for <bpf@archiver.kernel.org>; Sat, 21 Dec 2019 06:26:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92E9BC2D0C0
+	for <bpf@archiver.kernel.org>; Sat, 21 Dec 2019 08:26:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A1EB6206EC
-	for <bpf@archiver.kernel.org>; Sat, 21 Dec 2019 06:26:54 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hu1i7vDi"
+	by mail.kernel.org (Postfix) with ESMTP id 5E2A521927
+	for <bpf@archiver.kernel.org>; Sat, 21 Dec 2019 08:26:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1576916765;
+	bh=yfe0+gECfjMeOf0g0RcldzMBeVJshSQYvuPVRG8ahjM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=hvrTT125tkMmZgF3CUXV3PnBcizviQ1ZEnb1mA/ErMMn4HNDrytdhCDvAAQ0/g5VS
+	 n72PR5g+vTPCVXEeI3c16sDcTzeG36aB/H74HTaV9hed2P9MnA3cwPl/T6jGkt3AHG
+	 EeuBJHrxi44Z+tgyt+wtBHNYig7F31UvLegxQcfw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726190AbfLUG0y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 21 Dec 2019 01:26:54 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:51092 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726098AbfLUG0y (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 21 Dec 2019 01:26:54 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBL6QrRq006854
-        for <bpf@vger.kernel.org>; Fri, 20 Dec 2019 22:26:53 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=9ZmtUZE0KCjT48/efHjhXGhS2xo6nY/ckyGFV+ODGE0=;
- b=hu1i7vDiQuQYg0TMMSiD8I12sVaUpkOwtCTQfWlyJMJ/2+RP4qS/smuSAeKqexoU3YHq
- jdBoqRhP2CiXbTbWO60R7zsUAOM3rer/2Oj6XCm0FQ3SJSz96vnR1W/hNVJX1HoRoEMv
- Z2aQgpGgeRErz3BMc9h0UsejWxMfd0Cqg1o= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2x0f1j051u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 20 Dec 2019 22:26:53 -0800
-Received: from intmgw001.05.ash5.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Fri, 20 Dec 2019 22:26:17 -0800
-Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id B684B2946127; Fri, 20 Dec 2019 22:26:15 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Martin KaFai Lau <kafai@fb.com>
-Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 09/11] bpf: Synch uapi bpf.h to tools/
-Date:   Fri, 20 Dec 2019 22:26:15 -0800
-Message-ID: <20191221062615.1183737-1-kafai@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191221062556.1182261-1-kafai@fb.com>
-References: <20191221062556.1182261-1-kafai@fb.com>
-X-FB-Internal: Safe
+        id S1726066AbfLUI0E (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 21 Dec 2019 03:26:04 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:46184 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725838AbfLUI0E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 21 Dec 2019 03:26:04 -0500
+Received: by mail-wr1-f67.google.com with SMTP id z7so11521914wrl.13;
+        Sat, 21 Dec 2019 00:26:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ebebit982XGYe1EwFDTKTd7VGALTM5sbxVsHsfjIDWQ=;
+        b=gxmSEryIwfcMS8axId+olPN2w2nQcn0PRimbn9oFyeFs2bKrs+Zo/0BddqjPV/4lDw
+         /7xrlppAavltFCSovWs5HtlhAH/StSo8htTkzbCB/eJJgorM4A93+Id3wuuU56cd0LJM
+         JVIpORvoEEXp4ixYiJh8sluPNe4QRtLpjB4yS1zpWt5IlwYVDY0LPfOvKIrklIJ/WBid
+         V6fYzCiw0LAKRgb9OkMVnqYNj0DVVQRVLYQkknAM0wtLccxwjtRu4t7HLgMQzLovbOyf
+         g8fyWvUlbFNoGGJUGqyyjXcmxMoXfW69Lm99N7MWCuGbQ+W+/cObgUb+TrnalnGi/7wF
+         mB+A==
+X-Gm-Message-State: APjAAAUxNLxHsE68wIz0UFJo8ZfzlzNeSks0/TXJ83vnDvZA2riHtvSs
+        OlDOJFqTIVoBv9IAiICRHa4kzLab8cP8/muVP68=
+X-Google-Smtp-Source: APXvYqyN/nlNTFjkh3vUc6+Q4oiDMIMZ7Sb2NgmXZ/Bu4shjyF92sRXQoJhRgCnhGsD4kOK/5wTbswDB5YTozKzjnOs=
+X-Received: by 2002:adf:ef10:: with SMTP id e16mr18632785wro.336.1576916762285;
+ Sat, 21 Dec 2019 00:26:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-21_01:2019-12-17,2019-12-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 bulkscore=0
- spamscore=0 phishscore=0 impostorscore=0 adultscore=0 mlxlogscore=968
- priorityscore=1501 suspectscore=13 malwarescore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-1912210054
-X-FB-Internal: deliver
+References: <20191220032558.3259098-1-namhyung@kernel.org> <CAEf4BzaZBSRK2M4LD-c12_2-QLa8+jpPs1E4nA9BNeUDskOMBQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzaZBSRK2M4LD-c12_2-QLa8+jpPs1E4nA9BNeUDskOMBQ@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Sat, 21 Dec 2019 17:25:51 +0900
+Message-ID: <CAM9d7cg0A0+Oq5uDS6ZJNzAgFsWc-Pd30GYC0+PxEXdcxAxBKg@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: Fix build on read-only filesystems
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch sync uapi bpf.h to tools/
+Hello,
 
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
----
- tools/include/uapi/linux/bpf.h | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+On Sat, Dec 21, 2019 at 5:29 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Dec 19, 2019 at 7:26 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > I got the following error when I tried to build perf on a read-only
+> > filesystem with O=dir option.
+> >
+> >   $ cd /some/where/ro/linux/tools/perf
+> >   $ make O=$HOME/build/perf
+> >   ...
+> >     CC       /home/namhyung/build/perf/lib.o
+> >   /bin/sh: bpf_helper_defs.h: Read-only file system
+> >   make[3]: *** [Makefile:184: bpf_helper_defs.h] Error 1
+> >   make[2]: *** [Makefile.perf:778: /home/namhyung/build/perf/libbpf.a] Error 2
+> >   make[2]: *** Waiting for unfinished jobs....
+> >     LD       /home/namhyung/build/perf/libperf-in.o
+> >     AR       /home/namhyung/build/perf/libperf.a
+> >     PERF_VERSION = 5.4.0
+> >   make[1]: *** [Makefile.perf:225: sub-make] Error 2
+> >   make: *** [Makefile:70: all] Error 2
+> >
+> > It was becaused bpf_helper_defs.h was generated in current directory.
+> > Move it to OUTPUT directory.
+> >
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > ---
+>
+> Overall nothing is obviously broken, except you need to fix up
+> selftests/bpf's Makefile as well.
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 7df436da542d..2d6a2e572f56 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -136,6 +136,7 @@ enum bpf_map_type {
- 	BPF_MAP_TYPE_STACK,
- 	BPF_MAP_TYPE_SK_STORAGE,
- 	BPF_MAP_TYPE_DEVMAP_HASH,
-+	BPF_MAP_TYPE_STRUCT_OPS,
- };
- 
- /* Note that tracing related programs such as
-@@ -174,6 +175,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
- 	BPF_PROG_TYPE_CGROUP_SOCKOPT,
- 	BPF_PROG_TYPE_TRACING,
-+	BPF_PROG_TYPE_STRUCT_OPS,
- };
- 
- enum bpf_attach_type {
-@@ -397,6 +399,10 @@ union bpf_attr {
- 		__u32	btf_fd;		/* fd pointing to a BTF type data */
- 		__u32	btf_key_type_id;	/* BTF type_id of the key */
- 		__u32	btf_value_type_id;	/* BTF type_id of the value */
-+		__u32	btf_vmlinux_value_type_id;/* BTF type_id of a kernel-
-+						   * struct stored as the
-+						   * map value
-+						   */
- 	};
- 
- 	struct { /* anonymous struct used by BPF_MAP_*_ELEM commands */
-@@ -2831,6 +2837,14 @@ union bpf_attr {
-  * 	Return
-  * 		On success, the strictly positive length of the string,	including
-  * 		the trailing NUL character. On error, a negative value.
-+ *
-+ * int bpf_tcp_send_ack(void *tp, u32 rcv_nxt)
-+ *	Description
-+ *		Send out a tcp-ack. *tp* is the in-kernel struct tcp_sock.
-+ *		*rcv_nxt* is the ack_seq to be sent out.
-+ *	Return
-+ *		0 on success, or a negative error in case of failure.
-+ *
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -2948,7 +2962,8 @@ union bpf_attr {
- 	FN(probe_read_user),		\
- 	FN(probe_read_kernel),		\
- 	FN(probe_read_user_str),	\
--	FN(probe_read_kernel_str),
-+	FN(probe_read_kernel_str),	\
-+	FN(tcp_send_ack),
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
-@@ -3349,7 +3364,7 @@ struct bpf_map_info {
- 	__u32 map_flags;
- 	char  name[BPF_OBJ_NAME_LEN];
- 	__u32 ifindex;
--	__u32 :32;
-+	__u32 btf_vmlinux_value_type_id;
- 	__u64 netns_dev;
- 	__u64 netns_ino;
- 	__u32 btf_id;
--- 
-2.17.1
+Thanks for pointing this out.  It's because bpf selftest also needs the
+bpf_helper_defs.h right?  But I'm currently having a problem with LLVM
+when building the selftests.  Can you help me testing the patch below?
+(It should be applied after this patch.  Are you ok with it?)
 
+
+>
+> BTW, this patch doesn't apply cleanly to latest bpf-next, so please rebase.
+>
+> Also subject prefix should look like [PATCH bpf-next] if it's meant to
+> be applied against bpf-next.
+
+Will do.
+
+Thanks
+Namhyung
+
+-----------8<-------------
+diff --git a/tools/testing/selftests/bpf/Makefile
+b/tools/testing/selftests/bpf/Makefile
+index 866fc1cadd7c..897877f7849b 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -151,9 +151,9 @@ $(DEFAULT_BPFTOOL): force
+ $(BPFOBJ): force
+        $(MAKE) -C $(BPFDIR) OUTPUT=$(OUTPUT)/
+
+-BPF_HELPERS := $(BPFDIR)/bpf_helper_defs.h $(wildcard $(BPFDIR)/bpf_*.h)
+-$(BPFDIR)/bpf_helper_defs.h:
+-       $(MAKE) -C $(BPFDIR) OUTPUT=$(OUTPUT)/ bpf_helper_defs.h
++BPF_HELPERS := $(OUTPUT)/bpf_helper_defs.h $(wildcard $(BPFDIR)/bpf_*.h)
++$(OUTPUT)/bpf_helper_defs.h:
++       $(MAKE) -C $(BPFDIR) OUTPUT=$(OUTPUT)/ $(OUTPUT)/bpf_helper_defs.h
+
+ # Get Clang's default includes on this system, as opposed to those seen by
+ # '-target bpf'. This fixes "missing" files on some architectures/distros,
