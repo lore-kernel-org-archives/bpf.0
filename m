@@ -7,66 +7,66 @@ X-Spam-Status: No, score=-14.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1211AC2D0C0
-	for <bpf@archiver.kernel.org>; Mon, 23 Dec 2019 18:58:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEEBAC2D0D5
+	for <bpf@archiver.kernel.org>; Mon, 23 Dec 2019 18:58:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C9FCB2075B
-	for <bpf@archiver.kernel.org>; Mon, 23 Dec 2019 18:58:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B65D2073A
+	for <bpf@archiver.kernel.org>; Mon, 23 Dec 2019 18:58:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T7/pNyTu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y7TjIfdh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726824AbfLWS6p (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Dec 2019 13:58:45 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:37059 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726766AbfLWS6p (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 Dec 2019 13:58:45 -0500
-Received: by mail-pg1-f194.google.com with SMTP id q127so9245175pga.4
-        for <bpf@vger.kernel.org>; Mon, 23 Dec 2019 10:58:44 -0800 (PST)
+        id S1726884AbfLWS6r (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Dec 2019 13:58:47 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:37218 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726834AbfLWS6q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 Dec 2019 13:58:46 -0500
+Received: by mail-pl1-f196.google.com with SMTP id c23so7521780plz.4
+        for <bpf@vger.kernel.org>; Mon, 23 Dec 2019 10:58:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:from:subject:cc:to:in-reply-to:references:message-id
          :mime-version:content-transfer-encoding;
-        bh=A7JVk1cXsoYFiiChroTLy8zZeWGRIe3FHpiOiUqKpGU=;
-        b=T7/pNyTuaDMWNBPwbrY1VYEKkvSk+2k6cVVmGNufeC4yFeaRCNG1EOnGzAl4vsy3ip
-         brXTVX476PPN5U4ebArZ2nPebc0oVhRIHDiDEaMQYICQGquIWyLEv5BGbXqJ92wWhEBJ
-         QfbyBjXs6syNuREWLyEGDXV0v+2U9wU0MGKSfIg1i7jMRnTH8akAZu5bEYPjiNBK4Qhz
-         9e06igomCGNBAWSSCd0mqbVS42WTolDEdkHddr5oBdiP/MjoYXKQNqetSlEcofQDUGup
-         FOfR8EIiuCK6FuHVBTlpMA771cX6mqWdiGiOg7uFi/ngXERB4gdbhvg2/xVPWsk8oUtt
-         elFQ==
+        bh=vFoEgxaEB1zc0DAr9pJZ8IZIOptwhmCYzlzwd9xd7k0=;
+        b=Y7TjIfdheQGrUncpijbP3hs1oxbU1c+HQHDUq2jIuY+c3aAGbPpUV6m+vTiPxOUj/f
+         KulYmNx1lXUqyX0K/YhvZxCzhIwdmK/b/rs1BuCVh6Ghy7UammYuYGo1gSb1706i4q/s
+         Yv9FxEElY0F0z/Xpjf/WF18DSYb9uZkZLZ6shBIIMmSzv1Ii2bU4r1JT0TnR2uyguxrZ
+         nlAxqLOajMsINDJoRu5fMQEtCmJEK13krcAf1PPCePWkeCLtYKw1G4IA01aZPwigFyM2
+         XeKcUcWZ/r/eqN6/rUHfXseLWZ3XgQ9sS3+Ove1As4+4ZA/3DF3pE8BALqz9+vT8ZXGC
+         nJiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:subject:cc:to:in-reply-to:references
          :message-id:mime-version:content-transfer-encoding;
-        bh=A7JVk1cXsoYFiiChroTLy8zZeWGRIe3FHpiOiUqKpGU=;
-        b=NoKkW91AFOMlPLGtGGqXuJazWWSml6ZhdFBsm3T1KTWmD7AfNBJDHkLh2p/0JucJaa
-         huWOyz0RXryZybItVby/HOCQGLU6vaI5cd5lwBdGvuH3DJYnC2aVvNyRRumqBlkfjf7F
-         +mzDGwpdydPhgzxbh1y5q8BDRFAX4Xfte4P01NjanWbvoDtW1uy4JBcizY6qVsLERjqv
-         ACjikA58BY9JOdGMpvwgeS6aYj7bB7kdAHf85WqU5qylNp2ZXb9Mv2HM+Kcb0TQUFx8M
-         g0M+MnJlLyqE7vVLkzGMkRKoRzOoFP+ExZtJSwESSMHpS6MxgULnFUH54mZS4NbEcUdB
-         I98g==
-X-Gm-Message-State: APjAAAUSC8VXTiB3s4wbMCjCTOly6spHt1FJhQQ27HdPSbrumMufFsbG
-        IMiePWMsG2UZByg9kzepx21GPg==
-X-Google-Smtp-Source: APXvYqy8VjDtj2M4YXOgNQVoS5W6G2214rRGeclX3IHaVhjTP1Xl1eEWmabjscdOkvOmZ8taN4sZIA==
-X-Received: by 2002:a63:3196:: with SMTP id x144mr32652805pgx.319.1577127523915;
-        Mon, 23 Dec 2019 10:58:43 -0800 (PST)
+        bh=vFoEgxaEB1zc0DAr9pJZ8IZIOptwhmCYzlzwd9xd7k0=;
+        b=egHa9Ot1teSPVzDSI8Q1TDWd6W8V5REIdNfwkfppMEu9Ryo1zy9pkBtCeHfxK9VWNi
+         2xpjkocMZB+WRY7CAWKxSDD+Qk8levnk8JWxBTuPE4UCsymq2YseaY8ifQD0nwuNfM1L
+         Ofp0v1ce0yPza4ooSS9Dse0BcAoN3LoI5daMl+QFn8Dw0rSsEjyXbI3dkRqgseEeJKVD
+         9MeqdcVpeOfPdsW2IGTQU0AZmZwmvO/Zn9R76ZY6t78mGVRZmZTx1CIeorHQ++FKzOe5
+         2Dl3Y5kUUTspTeNKwndsYmEayC9q5TInbQ5Xgaa23kkicOWU+rvGMVUxahKh/kqGYxdo
+         cgtA==
+X-Gm-Message-State: APjAAAXp0VFOFOiyuLftTsvtX6PFpNFuE2XEBed1rTf0KDDdoqrQkqyC
+        ysIsOWMSWP8PQRbUsy0duRjG7A==
+X-Google-Smtp-Source: APXvYqy14gp9fKJfJ2IsprI6RsHoI0uFkv1aR6vtNaqrvw2G9l8sGZR5y6mDDJYHrXI+5a8XC1/DRQ==
+X-Received: by 2002:a17:90a:1785:: with SMTP id q5mr590326pja.143.1577127526213;
+        Mon, 23 Dec 2019 10:58:46 -0800 (PST)
 Received: from localhost ([2620:0:1000:2514:7f69:cd98:a2a2:a03d])
-        by smtp.gmail.com with ESMTPSA id s130sm23094849pgc.82.2019.12.23.10.58.43
+        by smtp.gmail.com with ESMTPSA id r6sm25604177pfh.91.2019.12.23.10.58.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Dec 2019 10:58:43 -0800 (PST)
-Date:   Mon, 23 Dec 2019 10:58:43 -0800 (PST)
-X-Google-Original-Date: Mon, 23 Dec 2019 10:57:47 PST (-0800)
+        Mon, 23 Dec 2019 10:58:45 -0800 (PST)
+Date:   Mon, 23 Dec 2019 10:58:45 -0800 (PST)
+X-Google-Original-Date: Mon, 23 Dec 2019 10:58:41 PST (-0800)
 From:   Palmer Dabbelt <palmerdabbelt@google.com>
 X-Google-Original-From: Palmer Dabbelt <palmer@dabbelt.com>
-Subject:     Re: [PATCH bpf-next v2 7/9] riscv, bpf: optimize calls
+Subject:     Re: [PATCH bpf-next v2 9/9] riscv, perf: add arch specific perf_arch_bpf_user_pt_regs
 CC:     daniel@iogearbox.net, ast@kernel.org, netdev@vger.kernel.org,
         Bjorn Topel <bjorn.topel@gmail.com>,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
 To:     Bjorn Topel <bjorn.topel@gmail.com>
-In-Reply-To: <20191216091343.23260-8-bjorn.topel@gmail.com>
-References: <20191216091343.23260-8-bjorn.topel@gmail.com>
+In-Reply-To: <20191216091343.23260-10-bjorn.topel@gmail.com>
+References: <20191216091343.23260-10-bjorn.topel@gmail.com>
   <20191216091343.23260-1-bjorn.topel@gmail.com>
-Message-ID: <mhng-041b1051-f9ac-4cd8-95bf-731bb1bfbdb8@palmerdabbelt-glaptop>
+Message-ID: <mhng-96d54703-6e9d-45df-b204-a16fe8dc57e0@palmerdabbelt-glaptop>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -75,220 +75,28 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 16 Dec 2019 01:13:41 PST (-0800), Bjorn Topel wrote:
-> Instead of using emit_imm() and emit_jalr() which can expand to six
-> instructions, start using jal or auipc+jalr.
+On Mon, 16 Dec 2019 01:13:43 PST (-0800), Bjorn Topel wrote:
+> RISC-V was missing a proper perf_arch_bpf_user_pt_regs macro for
+> CONFIG_PERF_EVENT builds.
 >
 > Signed-off-by: Björn Töpel <bjorn.topel@gmail.com>
 > ---
->  arch/riscv/net/bpf_jit_comp.c | 101 +++++++++++++++++++++-------------
->  1 file changed, 64 insertions(+), 37 deletions(-)
+>  arch/riscv/include/asm/perf_event.h | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> diff --git a/arch/riscv/net/bpf_jit_comp.c b/arch/riscv/net/bpf_jit_comp.c
-> index 46cff093f526..8d7e3343a08c 100644
-> --- a/arch/riscv/net/bpf_jit_comp.c
-> +++ b/arch/riscv/net/bpf_jit_comp.c
-> @@ -811,11 +811,12 @@ static void emit_sext_32_rd(u8 *rd, struct rv_jit_context *ctx)
->  	*rd = RV_REG_T2;
->  }
+> diff --git a/arch/riscv/include/asm/perf_event.h b/arch/riscv/include/asm/perf_event.h
+> index aefbfaa6a781..0234048b12bc 100644
+> --- a/arch/riscv/include/asm/perf_event.h
+> +++ b/arch/riscv/include/asm/perf_event.h
+> @@ -82,4 +82,8 @@ struct riscv_pmu {
+>  	int		irq;
+>  };
 >
-> -static void emit_jump_and_link(u8 rd, int rvoff, struct rv_jit_context *ctx)
-> +static void emit_jump_and_link(u8 rd, s64 rvoff, bool force_jalr,
-> +			       struct rv_jit_context *ctx)
->  {
->  	s64 upper, lower;
->
-> -	if (is_21b_int(rvoff)) {
-> +	if (rvoff && is_21b_int(rvoff) && !force_jalr) {
->  		emit(rv_jal(rd, rvoff >> 1), ctx);
->  		return;
->  	}
-> @@ -832,6 +833,28 @@ static bool is_signed_bpf_cond(u8 cond)
->  		cond == BPF_JSGE || cond == BPF_JSLE;
->  }
->
-> +static int emit_call(bool fixed, u64 addr, struct rv_jit_context *ctx)
-> +{
-> +	s64 off = 0;
-> +	u64 ip;
-> +	u8 rd;
+> +#ifdef CONFIG_PERF_EVENTS
+> +#define perf_arch_bpf_user_pt_regs(regs) (struct user_regs_struct *)regs
+> +#endif
 > +
-> +	if (addr && ctx->insns) {
-> +		ip = (u64)(long)(ctx->insns + ctx->ninsns);
-> +		off = addr - ip;
-> +		if (!is_32b_int(off)) {
-> +			pr_err("bpf-jit: target call addr %pK is out of range\n",
-> +			       (void *)addr);
-> +			return -ERANGE;
-> +		}
-> +	}
-> +
-> +	emit_jump_and_link(RV_REG_RA, off, !fixed, ctx);
-> +	rd = bpf_to_rv_reg(BPF_REG_0, ctx);
-> +	emit(rv_addi(rd, RV_REG_A0, 0), ctx);
+>  #endif /* _ASM_RISCV_PERF_EVENT_H */
 
-Why are they out of order?  It seems like it'd be better to just have the BPF
-calling convention match the RISC-V calling convention, as that'd avoid
-juggling the registers around.
-
-> +	return 0;
-> +}
-> +
->  static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->  		     bool extra_pass)
->  {
-> @@ -1107,7 +1130,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->  	/* JUMP off */
->  	case BPF_JMP | BPF_JA:
->  		rvoff = rv_offset(i, off, ctx);
-> -		emit_jump_and_link(RV_REG_ZERO, rvoff, ctx);
-> +		emit_jump_and_link(RV_REG_ZERO, rvoff, false, ctx);
->  		break;
->
->  	/* IF (dst COND src) JUMP off */
-> @@ -1209,7 +1232,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->  	case BPF_JMP | BPF_CALL:
->  	{
->  		bool fixed;
-> -		int i, ret;
-> +		int ret;
->  		u64 addr;
->
->  		mark_call(ctx);
-> @@ -1217,20 +1240,9 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->  					    &fixed);
->  		if (ret < 0)
->  			return ret;
-> -		if (fixed) {
-> -			emit_imm(RV_REG_T1, addr, ctx);
-> -		} else {
-> -			i = ctx->ninsns;
-> -			emit_imm(RV_REG_T1, addr, ctx);
-> -			for (i = ctx->ninsns - i; i < 8; i++) {
-> -				/* nop */
-> -				emit(rv_addi(RV_REG_ZERO, RV_REG_ZERO, 0),
-> -				     ctx);
-> -			}
-> -		}
-> -		emit(rv_jalr(RV_REG_RA, RV_REG_T1, 0), ctx);
-> -		rd = bpf_to_rv_reg(BPF_REG_0, ctx);
-> -		emit(rv_addi(rd, RV_REG_A0, 0), ctx);
-> +		ret = emit_call(fixed, addr, ctx);
-> +		if (ret)
-> +			return ret;
->  		break;
->  	}
->  	/* tail call */
-> @@ -1245,7 +1257,7 @@ static int emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->  			break;
->
->  		rvoff = epilogue_offset(ctx);
-> -		emit_jump_and_link(RV_REG_ZERO, rvoff, ctx);
-> +		emit_jump_and_link(RV_REG_ZERO, rvoff, false, ctx);
->  		break;
->
->  	/* dst = imm64 */
-> @@ -1508,7 +1520,7 @@ static void build_epilogue(struct rv_jit_context *ctx)
->  	__build_epilogue(false, ctx);
->  }
->
-> -static int build_body(struct rv_jit_context *ctx, bool extra_pass)
-> +static int build_body(struct rv_jit_context *ctx, bool extra_pass, int *offset)
->  {
->  	const struct bpf_prog *prog = ctx->prog;
->  	int i;
-> @@ -1520,12 +1532,12 @@ static int build_body(struct rv_jit_context *ctx, bool extra_pass)
->  		ret = emit_insn(insn, ctx, extra_pass);
->  		if (ret > 0) {
->  			i++;
-> -			if (ctx->insns == NULL)
-> -				ctx->offset[i] = ctx->ninsns;
-> +			if (offset)
-> +				offset[i] = ctx->ninsns;
->  			continue;
->  		}
-> -		if (ctx->insns == NULL)
-> -			ctx->offset[i] = ctx->ninsns;
-> +		if (offset)
-> +			offset[i] = ctx->ninsns;
->  		if (ret)
->  			return ret;
->  	}
-> @@ -1553,8 +1565,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->  	struct bpf_prog *tmp, *orig_prog = prog;
->  	int pass = 0, prev_ninsns = 0, i;
->  	struct rv_jit_data *jit_data;
-> +	unsigned int image_size = 0;
->  	struct rv_jit_context *ctx;
-> -	unsigned int image_size;
->
->  	if (!prog->jit_requested)
->  		return orig_prog;
-> @@ -1599,36 +1611,51 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->  	for (i = 0; i < 16; i++) {
->  		pass++;
->  		ctx->ninsns = 0;
-> -		if (build_body(ctx, extra_pass)) {
-> +		if (build_body(ctx, extra_pass, ctx->offset)) {
->  			prog = orig_prog;
->  			goto out_offset;
->  		}
->  		build_prologue(ctx);
->  		ctx->epilogue_offset = ctx->ninsns;
->  		build_epilogue(ctx);
-> -		if (ctx->ninsns == prev_ninsns)
-> -			break;
-> +
-> +		if (ctx->ninsns == prev_ninsns) {
-> +			if (jit_data->header)
-> +				break;
-> +
-> +			image_size = sizeof(u32) * ctx->ninsns;
-> +			jit_data->header =
-> +				bpf_jit_binary_alloc(image_size,
-> +						     &jit_data->image,
-> +						     sizeof(u32),
-> +						     bpf_fill_ill_insns);
-> +			if (!jit_data->header) {
-> +				prog = orig_prog;
-> +				goto out_offset;
-> +			}
-> +
-> +			ctx->insns = (u32 *)jit_data->image;
-> +			/* Now, when the image is allocated, the image
-> +			 * can potentially shrink more (auipc/jalr ->
-> +			 * jal).
-> +			 */
-> +		}
-
-It seems like these fragments should go along with patch #2 that introduces the
-code, as I don't see anything above that makes this necessary here.
-
->  		prev_ninsns = ctx->ninsns;
->  	}
->
-> -	/* Allocate image, now that we know the size. */
-> -	image_size = sizeof(u32) * ctx->ninsns;
-> -	jit_data->header = bpf_jit_binary_alloc(image_size, &jit_data->image,
-> -						sizeof(u32),
-> -						bpf_fill_ill_insns);
-> -	if (!jit_data->header) {
-> +	if (i == 16) {
-> +		pr_err("bpf-jit: image did not converge in <%d passes!\n", i);
-> +		bpf_jit_binary_free(jit_data->header);
->  		prog = orig_prog;
->  		goto out_offset;
->  	}
->
-> -	/* Second, real pass, that acutally emits the image. */
-> -	ctx->insns = (u32 *)jit_data->image;
->  skip_init_ctx:
->  	pass++;
->  	ctx->ninsns = 0;
->
->  	build_prologue(ctx);
-> -	if (build_body(ctx, extra_pass)) {
-> +	if (build_body(ctx, extra_pass, NULL)) {
->  		bpf_jit_binary_free(jit_data->header);
->  		prog = orig_prog;
->  		goto out_offset;
+Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
+Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
