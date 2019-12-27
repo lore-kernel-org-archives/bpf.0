@@ -2,155 +2,122 @@ Return-Path: <SRS0=E1yZ=2R=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C31C0C2D0C6
-	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 16:17:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D855C2D0CE
+	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 17:45:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8DBFB20740
-	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 16:17:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC63322522
+	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 17:45:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1577468754;
+	bh=jQybQAdyx9ZBDl/KAmYyeRIYex04N12HCfmKKKywYCg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=quEz1WBbKCrsqtcROI2BykMP++frvRPh4B4ZH6EUZ0tOZnsgnbf8XOFNtgYrKXcPv
+	 70+qzWywjd6eB62lXSfg3W80ml8+9upROKWyzqCozx43rvVgLMb4xVlP+8xfWcTTWH
+	 jyoZS73umvXCYTnPtFgoFJtYoUZTikTxRemI5U3g=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726602AbfL0QRC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Dec 2019 11:17:02 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55263 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726562AbfL0QRB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Dec 2019 11:17:01 -0500
-Received: by mail-wm1-f65.google.com with SMTP id b19so8391616wmj.4;
-        Fri, 27 Dec 2019 08:17:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=SG7nr9ICGnz7OFhLtGkWxeugBCCgStuFW1fApxIreNQ=;
-        b=AgvVpyjDm8loZLo6+VCaFOMhnMTYCpy1QBINIh2InUpHnxTlZ+Cbnm/zCzRbYZryx0
-         ER+0KtW1zlc50u/C5UQkaxsF7M+nZ3cM7afQ0jcUDxjBWg51aRKZLcRRkXjnDHGS1DhO
-         DMvT64EGzawhNtJ43YJwX+Go7475w7HSgdituGVOeTqNs64FuPT7PtniLaK+uCMBvzVE
-         yPm/ugil5gUh5trjLV0skGPDYpJmyo1m0+Z8ZvP6D2YtvThH2NDU2aCNtWa+MLZArH3M
-         xgYm+TLKnksC5ZQWr5iANcPAQzvLPLfsFE+4+k4xRha90ASdr7ycIHZABT7ZhM2y8iaF
-         yEyg==
-X-Gm-Message-State: APjAAAUJplQw2ZIWj3lpTv9wqMnTrOvHPn5O8ENnhmrtBltT2HSNCTRv
-        SBt+6+5MW7B5cTxEp1ocf5/mSC61wnU=
-X-Google-Smtp-Source: APXvYqwOCSXkPlq/h42+G6nm5JcdbVPSDwMAAUSz+cYndNEyvgpZ9zzftenbWKl11ZiOJ1hDdyzCtg==
-X-Received: by 2002:a7b:c775:: with SMTP id x21mr20008536wmk.59.1577463419432;
-        Fri, 27 Dec 2019 08:16:59 -0800 (PST)
-Received: from Nover ([161.105.209.130])
-        by smtp.gmail.com with ESMTPSA id 60sm36190353wrn.86.2019.12.27.08.16.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Dec 2019 08:16:59 -0800 (PST)
-Date:   Fri, 27 Dec 2019 17:16:58 +0100
-From:   Paul Chaignon <paul.chaignon@orange.com>
-To:     bpf@vger.kernel.org
-Cc:     paul.chaignon@gmail.com, Alexei Starovoitov <ast@kernel.org>,
+        id S1728268AbfL0Rpy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Dec 2019 12:45:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43982 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728755AbfL0RpW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:45:22 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 147F7206CB;
+        Fri, 27 Dec 2019 17:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1577468721;
+        bh=jQybQAdyx9ZBDl/KAmYyeRIYex04N12HCfmKKKywYCg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=B8/T50fk2/0qKQbF94Hal0IuLUrNz2ORgB2tdZe4pBQeapVEfQ1YPOcjzUYg/dVoI
+         RJ+cAMyUDrGXrX5BV3w09SEpsS0EHzYPMQHoZZaOqpunj75un/3dRZisW8I2bCiZfn
+         /BM6D9+iKXUnAyZM9iFscwa1zZMPu6TNSzNBV4Mk=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Alexander Lobakin <alobakin@dlink.ru>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org
-Subject: [PATCH bpf-next] bpftool: allow match by name prefixes
-Message-ID: <20191227161657.GA16029@Nover>
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 75/84] net, sysctl: Fix compiler warning when only cBPF is present
+Date:   Fri, 27 Dec 2019 12:43:43 -0500
+Message-Id: <20191227174352.6264-75-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191227174352.6264-1-sashal@kernel.org>
+References: <20191227174352.6264-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch extends bpftool to support lookup of programs and maps by
-name prefixes (instead of full name only), as follows.
+From: Alexander Lobakin <alobakin@dlink.ru>
 
-  $ ./bpftool prog show name tcp_
-  19: kprobe  name tcp_cleanup_rbu  tag 639217cf5b184808  gpl
-      [...]
-  20: kprobe  name tcp_sendmsg  tag 6546b9784163ee69  gpl
-      [...]
+[ Upstream commit 1148f9adbe71415836a18a36c1b4ece999ab0973 ]
 
-Signed-off-by: Paul Chaignon <paul.chaignon@orange.com>
+proc_dointvec_minmax_bpf_restricted() has been firstly introduced
+in commit 2e4a30983b0f ("bpf: restrict access to core bpf sysctls")
+under CONFIG_HAVE_EBPF_JIT. Then, this ifdef has been removed in
+ede95a63b5e8 ("bpf: add bpf_jit_limit knob to restrict unpriv
+allocations"), because a new sysctl, bpf_jit_limit, made use of it.
+Finally, this parameter has become long instead of integer with
+fdadd04931c2 ("bpf: fix bpf_jit_limit knob for PAGE_SIZE >= 64K")
+and thus, a new proc_dolongvec_minmax_bpf_restricted() has been
+added.
+
+With this last change, we got back to that
+proc_dointvec_minmax_bpf_restricted() is used only under
+CONFIG_HAVE_EBPF_JIT, but the corresponding ifdef has not been
+brought back.
+
+So, in configurations like CONFIG_BPF_JIT=y && CONFIG_HAVE_EBPF_JIT=n
+since v4.20 we have:
+
+  CC      net/core/sysctl_net_core.o
+net/core/sysctl_net_core.c:292:1: warning: ‘proc_dointvec_minmax_bpf_restricted’ defined but not used [-Wunused-function]
+  292 | proc_dointvec_minmax_bpf_restricted(struct ctl_table *table, int write,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Suppress this by guarding it with CONFIG_HAVE_EBPF_JIT again.
+
+Fixes: fdadd04931c2 ("bpf: fix bpf_jit_limit knob for PAGE_SIZE >= 64K")
+Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20191218091821.7080-1-alobakin@dlink.ru
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/Documentation/bpftool-map.rst  | 4 ++--
- tools/bpf/bpftool/Documentation/bpftool-prog.rst | 2 +-
- tools/bpf/bpftool/main.h                         | 4 ++--
- tools/bpf/bpftool/map.c                          | 2 +-
- tools/bpf/bpftool/prog.c                         | 2 +-
- 5 files changed, 7 insertions(+), 7 deletions(-)
+ net/core/sysctl_net_core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-index cdeae8ae90ba..bcc38ff9da65 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -39,9 +39,9 @@ MAP COMMANDS
- |	**bpftool** **map freeze**     *MAP*
- |	**bpftool** **map help**
- |
--|	*MAP* := { **id** *MAP_ID* | **pinned** *FILE* | **name** *MAP_NAME* }
-+|	*MAP* := { **id** *MAP_ID* | **pinned** *FILE* | **name** *NAME_PREFIX* }
- |	*DATA* := { [**hex**] *BYTES* }
--|	*PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* | **name** *PROG_NAME* }
-+|	*PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* | **name** *NAME_PREFIX* }
- |	*VALUE* := { *DATA* | *MAP* | *PROG* }
- |	*UPDATE_FLAGS* := { **any** | **exist** | **noexist** }
- |	*TYPE* := { **hash** | **array** | **prog_array** | **perf_event_array** | **percpu_hash**
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 64ddf8a4c518..8e39ac362c16 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -33,7 +33,7 @@ PROG COMMANDS
- |	**bpftool** **prog help**
- |
- |	*MAP* := { **id** *MAP_ID* | **pinned** *FILE* }
--|	*PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* | **name** *PROG_NAME* }
-+|	*PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* | **name** *NAME_PREFIX* }
- |	*TYPE* := {
- |		**socket** | **kprobe** | **kretprobe** | **classifier** | **action** |
- |		**tracepoint** | **raw_tracepoint** | **xdp** | **perf_event** | **cgroup/skb** |
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 4e75b58d3989..8e70617e55fb 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -42,12 +42,12 @@
- #define BPF_TAG_FMT	"%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx"
+diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
+index d67ec17f2cc8..6cec08cd0bb9 100644
+--- a/net/core/sysctl_net_core.c
++++ b/net/core/sysctl_net_core.c
+@@ -281,6 +281,7 @@ static int proc_dointvec_minmax_bpf_enable(struct ctl_table *table, int write,
+ 	return ret;
+ }
  
- #define HELP_SPEC_PROGRAM						\
--	"PROG := { id PROG_ID | pinned FILE | tag PROG_TAG | name PROG_NAME }"
-+	"PROG := { id PROG_ID | pinned FILE | tag PROG_TAG | name NAME_PREFIX }"
- #define HELP_SPEC_OPTIONS						\
- 	"OPTIONS := { {-j|--json} [{-p|--pretty}] | {-f|--bpffs} |\n"	\
- 	"\t            {-m|--mapcompat} | {-n|--nomount} }"
- #define HELP_SPEC_MAP							\
--	"MAP := { id MAP_ID | pinned FILE | name MAP_NAME }"
-+	"MAP := { id MAP_ID | pinned FILE | name NAME_PREFIX }"
++# ifdef CONFIG_HAVE_EBPF_JIT
+ static int
+ proc_dointvec_minmax_bpf_restricted(struct ctl_table *table, int write,
+ 				    void __user *buffer, size_t *lenp,
+@@ -291,6 +292,7 @@ proc_dointvec_minmax_bpf_restricted(struct ctl_table *table, int write,
  
- static const char * const prog_type_name[] = {
- 	[BPF_PROG_TYPE_UNSPEC]			= "unspec",
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index c01f76fa6876..79e0d72ffdd2 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -125,7 +125,7 @@ static int map_fd_by_name(char *name, int **fds)
- 			goto err_close_fd;
- 		}
+ 	return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+ }
++# endif /* CONFIG_HAVE_EBPF_JIT */
  
--		if (strncmp(name, info.name, BPF_OBJ_NAME_LEN)) {
-+		if (!is_prefix(name, info.name)) {
- 			close(fd);
- 			continue;
- 		}
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 2221bae037f1..295509548c8b 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -117,7 +117,7 @@ static int prog_fd_by_nametag(void *nametag, int **fds, bool tag)
- 		}
- 
- 		if ((tag && memcmp(nametag, info.tag, BPF_TAG_SIZE)) ||
--		    (!tag && strncmp(nametag, info.name, BPF_OBJ_NAME_LEN))) {
-+		    (!tag && !is_prefix(nametag, info.name))) {
- 			close(fd);
- 			continue;
- 		}
+ static int
+ proc_dolongvec_minmax_bpf_restricted(struct ctl_table *table, int write,
 -- 
-2.17.1
+2.20.1
 
