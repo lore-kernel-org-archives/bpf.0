@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B99FDC47409
-	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 17:49:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA0D8C2D0CE
+	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 17:53:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 98058206CB
-	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 17:49:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7D5BD208C4
+	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 17:53:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1577468948;
-	bh=YgJ1Rj9xwayAqRHWe+d8iXp2E6DpWtapNBQW+ENO0ok=;
+	s=default; t=1577469192;
+	bh=ibcFiim1TCQTWYVsSeYM5j4nlS5Hx8fc/vR50CMOZMw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=0Mzx9ODtITZ1xmR/h5uv1CrZTD4DfzZSaZQCMYWezdWHs9ZW+lrICfOkTN786ZPLe
-	 Zy6hp5wcemZRfSGgaIZQFApImi9MS5kwqwVQxfdhUvF1D11bgP8cemMxCpm9OmbHMe
-	 /6HRub5TsOH7pejGQlkoVCLBYj5bhe75NrknKVO4=
+	b=w0BGHdHyzWNF4xEEjDKeV9k0Ghw3P6rAYRlSCjHp69IJImoG5Fr6rfmTNoPWMxWmk
+	 Wr94CltpJmGYoZXbaoiIXo0KE+qAWVG+1a4W+L4SmRBfh5obb7j4iy8PXlgouej/J/
+	 RIiyWhFLlaWxQExmrWA81Jp4EEVpWoLr6syNzazs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727666AbfL0RtH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Dec 2019 12:49:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42822 "EHLO mail.kernel.org"
+        id S1728036AbfL0Rm5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Dec 2019 12:42:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40174 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727612AbfL0Rof (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:44:35 -0500
+        id S1728033AbfL0Rm4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:42:56 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B961722522;
-        Fri, 27 Dec 2019 17:44:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 914A120CC7;
+        Fri, 27 Dec 2019 17:42:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577468674;
-        bh=YgJ1Rj9xwayAqRHWe+d8iXp2E6DpWtapNBQW+ENO0ok=;
+        s=default; t=1577468576;
+        bh=ibcFiim1TCQTWYVsSeYM5j4nlS5Hx8fc/vR50CMOZMw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KjtNQ0xFmWGUiaXa15XJvFLbxnB6XjejKN8/f7mpv8GqMN+U/wVfioD5zH1FRWDJi
-         p5EN8vwnOP3gMuumb6tpMgnu3FI03R538GIyTd2fyoKdOBCLHsEDrLjNV1zInTsNjW
-         i2mKC8jkmchHtrLbb+AcIJTt3MWGmDJ0j4Csufww=
+        b=Qx/z4sJfhvS4tHjc3DQUp28O8F1q4nFm2aWoSGw3+abvZD+TR9wCuknqQH4jCwbCW
+         F7czttE4DgVP9NfmWF3tNhKv6JMOfVZfKTX5MXP7EtFExwbmh1YGiJfs0Bf75aX5XC
+         /k6YYFiWR9owb46v9BE0PLSLmDKR10gLgS3ChWGs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paul Chaignon <paul.chaignon@orange.com>,
-        Mahshid Khezri <khezri.mahshid@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
+Cc:     Lorenz Bauer <lmb@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 34/84] bpf, mips: Limit to 33 tail calls
-Date:   Fri, 27 Dec 2019 12:43:02 -0500
-Message-Id: <20191227174352.6264-34-sashal@kernel.org>
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 100/187] bpf: Clear skb->tstamp in bpf_redirect when necessary
+Date:   Fri, 27 Dec 2019 12:39:28 -0500
+Message-Id: <20191227174055.4923-100-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191227174352.6264-1-sashal@kernel.org>
-References: <20191227174352.6264-1-sashal@kernel.org>
+In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
+References: <20191227174055.4923-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,59 +60,39 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Paul Chaignon <paul.chaignon@orange.com>
+From: Lorenz Bauer <lmb@cloudflare.com>
 
-[ Upstream commit e49e6f6db04e915dccb494ae10fa14888fea6f89 ]
+[ Upstream commit 5133498f4ad1123a5ffd4c08df6431dab882cc32 ]
 
-All BPF JIT compilers except RISC-V's and MIPS' enforce a 33-tail calls
-limit at runtime.  In addition, a test was recently added, in tailcalls2,
-to check this limit.
+Redirecting a packet from ingress to egress by using bpf_redirect
+breaks if the egress interface has an fq qdisc installed. This is the same
+problem as fixed in 'commit 8203e2d844d3 ("net: clear skb->tstamp in forwarding paths")
 
-This patch updates the tail call limit in MIPS' JIT compiler to allow
-33 tail calls.
+Clear skb->tstamp when redirecting into the egress path.
 
-Fixes: b6bd53f9c4e8 ("MIPS: Add missing file for eBPF JIT.")
-Reported-by: Mahshid Khezri <khezri.mahshid@gmail.com>
-Signed-off-by: Paul Chaignon <paul.chaignon@orange.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Link: https://lore.kernel.org/bpf/b8eb2caac1c25453c539248e56ca22f74b5316af.1575916815.git.paul.chaignon@gmail.com
+Fixes: 80b14dee2bea ("net: Add a new socket option for a future transmit time.")
+Fixes: fb420d5d91c1 ("tcp/fq: move back to CLOCK_MONOTONIC")
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/bpf/20191213180817.2510-1-lmb@cloudflare.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/net/ebpf_jit.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ net/core/filter.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/mips/net/ebpf_jit.c b/arch/mips/net/ebpf_jit.c
-index 9bda82ed75eb..3832c4628608 100644
---- a/arch/mips/net/ebpf_jit.c
-+++ b/arch/mips/net/ebpf_jit.c
-@@ -586,6 +586,7 @@ static void emit_const_to_reg(struct jit_ctx *ctx, int dst, u64 value)
- static int emit_bpf_tail_call(struct jit_ctx *ctx, int this_idx)
- {
- 	int off, b_off;
-+	int tcc_reg;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 6d0111bfdb4a..2f76461c120d 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2055,6 +2055,7 @@ static inline int __bpf_tx_skb(struct net_device *dev, struct sk_buff *skb)
+ 	}
  
- 	ctx->flags |= EBPF_SEEN_TC;
- 	/*
-@@ -598,14 +599,14 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int this_idx)
- 	b_off = b_imm(this_idx + 1, ctx);
- 	emit_instr(ctx, bne, MIPS_R_AT, MIPS_R_ZERO, b_off);
- 	/*
--	 * if (--TCC < 0)
-+	 * if (TCC-- < 0)
- 	 *     goto out;
- 	 */
- 	/* Delay slot */
--	emit_instr(ctx, daddiu, MIPS_R_T5,
--		   (ctx->flags & EBPF_TCC_IN_V1) ? MIPS_R_V1 : MIPS_R_S4, -1);
-+	tcc_reg = (ctx->flags & EBPF_TCC_IN_V1) ? MIPS_R_V1 : MIPS_R_S4;
-+	emit_instr(ctx, daddiu, MIPS_R_T5, tcc_reg, -1);
- 	b_off = b_imm(this_idx + 1, ctx);
--	emit_instr(ctx, bltz, MIPS_R_T5, b_off);
-+	emit_instr(ctx, bltz, tcc_reg, b_off);
- 	/*
- 	 * prog = array->ptrs[index];
- 	 * if (prog == NULL)
+ 	skb->dev = dev;
++	skb->tstamp = 0;
+ 
+ 	dev_xmit_recursion_inc();
+ 	ret = dev_queue_xmit(skb);
 -- 
 2.20.1
 
