@@ -2,100 +2,91 @@ Return-Path: <SRS0=E1yZ=2R=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85928C2D0C6
-	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 18:19:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6936C2D0C6
+	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 18:19:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 587DE20722
-	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 18:19:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1577470754;
-	bh=4qsaJPCsqdeGWjUH3Q5NHhiloyBEEgLcVzLHgGTZ9jQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vm7dFcBuOBBsRMDy9fg5LbzWQtoY6BbhTmrSfyzbrODnaInzHDcR+LRTKQC3JsNac
-	 2NdX5dL1dXmiVf+JUr7+lyXXxF0o7cLV37u0oW3gqndyKNtLh028u7WGGNofCuuMni
-	 j6luwoCWEVSG2DGZEmIjb7R3UMovSZFXXv49O4u0=
+	by mail.kernel.org (Postfix) with ESMTP id A510F20722
+	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 18:19:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727526AbfL0SO4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Dec 2019 13:14:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39434 "EHLO mail.kernel.org"
+        id S1727173AbfL0STP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Dec 2019 13:19:15 -0500
+Received: from mx2.suse.de ([195.135.220.15]:41764 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727503AbfL0SOz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Dec 2019 13:14:55 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7CC1A20CC7;
+        id S1727393AbfL0SO4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Dec 2019 13:14:56 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 11550ABEA;
         Fri, 27 Dec 2019 18:14:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577470495;
-        bh=4qsaJPCsqdeGWjUH3Q5NHhiloyBEEgLcVzLHgGTZ9jQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RRI/wfxZeSNv9eL3qnFDDVIvAzjpOBv0W2qGaqXeqBGc5ArhV7JL2g4V1dAZ5tb4d
-         hpAtNXItrX3gIEcD9WJJ3bsA7dplOy/KLMo7REq187va7bF9wI3nAUT8ULFwQ+aplQ
-         X/GLeulqi76wY5W9ccONvGNotZp/jDXCGvFdwhb8=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Daniel T. Lee" <danieltimlee@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 15/38] samples: bpf: Replace symbol compare of trace_event
-Date:   Fri, 27 Dec 2019 13:14:12 -0500
-Message-Id: <20191227181435.7644-15-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191227181435.7644-1-sashal@kernel.org>
-References: <20191227181435.7644-1-sashal@kernel.org>
+Date:   Fri, 27 Dec 2019 18:14:48 +0000
+From:   Michal Rostecki <mrostecki@opensuse.org>
+To:     mrostecki@opensuse.org
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 0/2] bpftool/libbpf: Add probe for large INSN
+ limit
+Message-ID: <20191227181448.GA452@wotan.suse.de>
+References: <20191227105346.867-1-mrostecki@opensuse.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191227105346.867-1-mrostecki@opensuse.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: "Daniel T. Lee" <danieltimlee@gmail.com>
+On Fri, Dec 27, 2019 at 11:53:44AM +0100, mrostecki@opensuse.org wrote:
+> From: Michal Rostecki <mrostecki@opensuse.org>
+> 
+> This series implements a new BPF feature probe which checks for the
+> commit c04c0d2b968a ("bpf: increase complexity limit and maximum program
+> size"), which increases the maximum program size to 1M. It's based on
+> the similar check in Cilium, althogh Cilium is already aiming to use
+> bpftool checks and eventually drop all its custom checks.
+> 
+> Examples of outputs:
+> 
+> # bpftool feature probe
+> [...]
+> Scanning miscellaneous eBPF features...
+> Large complexity limit and maximum program size (1M) is available
+> 
+> # bpftool feature probe macros
+> [...]
+> /*** eBPF misc features ***/
+> #define HAVE_HAVE_LARGE_INSN_LIMIT
+> 
+> # bpftool feature probe -j | jq '.["misc"]'
+> {
+>   "have_large_insn_limit": true
+> }
+> 
+> Michal Rostecki (2):
+>   libbpf: Add probe for large INSN limit
+>   bpftool: Add misc secion and probe for large INSN limit
+> 
+>  tools/bpf/bpftool/feature.c   | 18 ++++++++++++++++++
+>  tools/lib/bpf/libbpf.h        |  1 +
+>  tools/lib/bpf/libbpf.map      |  1 +
+>  tools/lib/bpf/libbpf_probes.c | 23 +++++++++++++++++++++++
+>  4 files changed, 43 insertions(+)
+> 
+> -- 
+> 2.16.4
+> 
 
-[ Upstream commit bba1b2a890253528c45aa66cf856f289a215bfbc ]
-
-Previously, when this sample is added, commit 1c47910ef8013
-("samples/bpf: add perf_event+bpf example"), a symbol 'sys_read' and
-'sys_write' has been used without no prefixes. But currently there are
-no exact symbols with these under kallsyms and this leads to failure.
-
-This commit changes exact compare to substring compare to keep compatible
-with exact symbol or prefixed symbol.
-
-Fixes: 1c47910ef8013 ("samples/bpf: add perf_event+bpf example")
-Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20191205080114.19766-2-danieltimlee@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- samples/bpf/trace_event_user.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/samples/bpf/trace_event_user.c b/samples/bpf/trace_event_user.c
-index 9a130d31ecf2..6fbb5eb9daf3 100644
---- a/samples/bpf/trace_event_user.c
-+++ b/samples/bpf/trace_event_user.c
-@@ -33,9 +33,9 @@ static void print_ksym(__u64 addr)
- 		return;
- 	sym = ksym_search(addr);
- 	printf("%s;", sym->name);
--	if (!strcmp(sym->name, "sys_read"))
-+	if (!strstr(sym->name, "sys_read"))
- 		sys_read_seen = true;
--	else if (!strcmp(sym->name, "sys_write"))
-+	else if (!strstr(sym->name, "sys_write"))
- 		sys_write_seen = true;
- }
- 
--- 
-2.20.1
-
+Sorry for sending this twice! I didn't see the thread immediately after
+sending the first time, so I though there is some problem with my
+@opensuse.org alias or SMTP server not accepting it. Please review this
+series, since I'm using @opensuse.org alias for upstream development
+more frequently than @suse.de.
