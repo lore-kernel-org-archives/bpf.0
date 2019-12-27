@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA0D8C2D0CE
-	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 17:53:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4126C2D0C6
+	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 17:54:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D5BD208C4
-	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 17:53:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8599E206CB
+	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 17:54:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1577469192;
-	bh=ibcFiim1TCQTWYVsSeYM5j4nlS5Hx8fc/vR50CMOZMw=;
+	s=default; t=1577469261;
+	bh=inSHXxAmEMnLtfzgN61sGOZo9j+enNoa1EQvuFtC+xQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=w0BGHdHyzWNF4xEEjDKeV9k0Ghw3P6rAYRlSCjHp69IJImoG5Fr6rfmTNoPWMxWmk
-	 Wr94CltpJmGYoZXbaoiIXo0KE+qAWVG+1a4W+L4SmRBfh5obb7j4iy8PXlgouej/J/
-	 RIiyWhFLlaWxQExmrWA81Jp4EEVpWoLr6syNzazs=
+	b=YBgLUj3ba4fnokz8FMaMCWLV48bOjUyZfmLrFRhkxuqwtSzyX2+bKvwqejoNmdCvd
+	 4hz7rDvRw0yySOgcVJndvf/dVDZAXSkxcuzzP5uS+S1zasikIcxZTvSzJgw9wRcQO7
+	 VUWXOZz3D1+dnvRRrmh0LY5QyXRw+oAQupakHdNg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728036AbfL0Rm5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Dec 2019 12:42:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40174 "EHLO mail.kernel.org"
+        id S1727907AbfL0Rmi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Dec 2019 12:42:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39554 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728033AbfL0Rm4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:42:56 -0500
+        id S1727900AbfL0Rmf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:42:35 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 914A120CC7;
-        Fri, 27 Dec 2019 17:42:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1A5E0218AC;
+        Fri, 27 Dec 2019 17:42:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577468576;
-        bh=ibcFiim1TCQTWYVsSeYM5j4nlS5Hx8fc/vR50CMOZMw=;
+        s=default; t=1577468554;
+        bh=inSHXxAmEMnLtfzgN61sGOZo9j+enNoa1EQvuFtC+xQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qx/z4sJfhvS4tHjc3DQUp28O8F1q4nFm2aWoSGw3+abvZD+TR9wCuknqQH4jCwbCW
-         F7czttE4DgVP9NfmWF3tNhKv6JMOfVZfKTX5MXP7EtFExwbmh1YGiJfs0Bf75aX5XC
-         /k6YYFiWR9owb46v9BE0PLSLmDKR10gLgS3ChWGs=
+        b=K6rAPHaVRkUH+wV59MSVeXDXe9dT0uYC5f/74nh8e0g1f+PcT+dfeC5a/h6LSZdEE
+         cXXx5/G+cEGzE2FkjWi9xK6/nZXCFXjewJIxV6lqy3Wcref2iTSiOLlVdJQNmTRHS4
+         U45UoS7eH/zkLQd3TdcWHpV6NdBuJeCfwpEEGLkY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lorenz Bauer <lmb@cloudflare.com>,
+Cc:     "Daniel T. Lee" <danieltimlee@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 100/187] bpf: Clear skb->tstamp in bpf_redirect when necessary
-Date:   Fri, 27 Dec 2019 12:39:28 -0500
-Message-Id: <20191227174055.4923-100-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 081/187] samples: bpf: fix syscall_tp due to unused syscall
+Date:   Fri, 27 Dec 2019 12:39:09 -0500
+Message-Id: <20191227174055.4923-81-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
 References: <20191227174055.4923-1-sashal@kernel.org>
@@ -60,39 +59,60 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Lorenz Bauer <lmb@cloudflare.com>
+From: "Daniel T. Lee" <danieltimlee@gmail.com>
 
-[ Upstream commit 5133498f4ad1123a5ffd4c08df6431dab882cc32 ]
+[ Upstream commit fe3300897cbfd76c6cb825776e5ac0ca50a91ca4 ]
 
-Redirecting a packet from ingress to egress by using bpf_redirect
-breaks if the egress interface has an fq qdisc installed. This is the same
-problem as fixed in 'commit 8203e2d844d3 ("net: clear skb->tstamp in forwarding paths")
+Currently, open() is called from the user program and it calls the syscall
+'sys_openat', not the 'sys_open'. This leads to an error of the program
+of user side, due to the fact that the counter maps are zero since no
+function such 'sys_open' is called.
 
-Clear skb->tstamp when redirecting into the egress path.
+This commit adds the kernel bpf program which are attached to the
+tracepoint 'sys_enter_openat' and 'sys_enter_openat'.
 
-Fixes: 80b14dee2bea ("net: Add a new socket option for a future transmit time.")
-Fixes: fb420d5d91c1 ("tcp/fq: move back to CLOCK_MONOTONIC")
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Fixes: 1da236b6be963 ("bpf: add a test case for syscalls/sys_{enter|exit}_* tracepoints")
+Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/bpf/20191213180817.2510-1-lmb@cloudflare.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/filter.c | 1 +
- 1 file changed, 1 insertion(+)
+ samples/bpf/syscall_tp_kern.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 6d0111bfdb4a..2f76461c120d 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2055,6 +2055,7 @@ static inline int __bpf_tx_skb(struct net_device *dev, struct sk_buff *skb)
- 	}
+diff --git a/samples/bpf/syscall_tp_kern.c b/samples/bpf/syscall_tp_kern.c
+index 1d78819ffef1..630ce8c4d5a2 100644
+--- a/samples/bpf/syscall_tp_kern.c
++++ b/samples/bpf/syscall_tp_kern.c
+@@ -47,13 +47,27 @@ static __always_inline void count(void *map)
+ SEC("tracepoint/syscalls/sys_enter_open")
+ int trace_enter_open(struct syscalls_enter_open_args *ctx)
+ {
+-	count((void *)&enter_open_map);
++	count(&enter_open_map);
++	return 0;
++}
++
++SEC("tracepoint/syscalls/sys_enter_openat")
++int trace_enter_open_at(struct syscalls_enter_open_args *ctx)
++{
++	count(&enter_open_map);
+ 	return 0;
+ }
  
- 	skb->dev = dev;
-+	skb->tstamp = 0;
- 
- 	dev_xmit_recursion_inc();
- 	ret = dev_queue_xmit(skb);
+ SEC("tracepoint/syscalls/sys_exit_open")
+ int trace_enter_exit(struct syscalls_exit_open_args *ctx)
+ {
+-	count((void *)&exit_open_map);
++	count(&exit_open_map);
++	return 0;
++}
++
++SEC("tracepoint/syscalls/sys_exit_openat")
++int trace_enter_exit_at(struct syscalls_exit_open_args *ctx)
++{
++	count(&exit_open_map);
+ 	return 0;
+ }
 -- 
 2.20.1
 
