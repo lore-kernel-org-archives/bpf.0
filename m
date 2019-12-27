@@ -7,52 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD77CC2D0C6
-	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 17:55:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E50E4C2D0DA
+	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 18:04:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E60720CC7
-	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 17:55:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C268220CC7
+	for <bpf@archiver.kernel.org>; Fri, 27 Dec 2019 18:04:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1577469313;
-	bh=sA28e4/Vn28o0eBK2OtFILC07rU4A36VwG070Roqi1Y=;
+	s=default; t=1577469865;
+	bh=MTf0aAiPTOiajZujZI+wd/PHq0w7Fnm3cm7lguMSgSo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=iDFIkODhChxeucB7wOo0sVAgwxBxBYiH2cEy2ACPfAtmeaoqZX7fqkS7PqwlGC3jP
-	 1Zm3JocQkSTyLyNtm5oiPKb7s6eThjwnvwLXMTJ1kUI+c+92rewLfX4jgol731BnNU
-	 J/hRhx+nsQNyYj/lq5UnbbZYQCcDnoY04tRUQWBQ=
+	b=ZyjCuB8HKZdzP+FhZWGiDHXmTLz4E1GoAAMCVa+C8pd/SK2+rNI7g8uNVml4pCSQ5
+	 XRAwxJL6Cci9VVfcoTnHckF0nFdrcREXBEybk25W/byNXLaP9G6AKkLQHDaSjAs40Q
+	 MV5Pa5qC7F/5qyG//fWNFM+EIUfuhxyfGTKP3/bc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727841AbfL0RmY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Dec 2019 12:42:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39252 "EHLO mail.kernel.org"
+        id S1728658AbfL0SDX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Dec 2019 13:03:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60610 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727456AbfL0RmX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:42:23 -0500
+        id S1728652AbfL0SDW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Dec 2019 13:03:22 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 836E624656;
-        Fri, 27 Dec 2019 17:42:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6D7E3218AC;
+        Fri, 27 Dec 2019 18:03:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577468542;
-        bh=sA28e4/Vn28o0eBK2OtFILC07rU4A36VwG070Roqi1Y=;
+        s=default; t=1577469802;
+        bh=MTf0aAiPTOiajZujZI+wd/PHq0w7Fnm3cm7lguMSgSo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TiKHpEc6CjWZYqHnTSwrNT6baXTcn23/DRReuzfA9XS8TZUMxmDmnBH5smo1ha96M
-         ehPvzrdCkn1N0u2vCUI6ia6pA8vZCNYLNODmvK+ehrpI7xlOCdF3zGXDsaubdsgEdu
-         d+76EAmFFcvYvSbQs3m1aOdCaEKFlLWSLbIiE72Q=
+        b=dKZfcH/9/J5+c6U8UBlDcLlXzcY8e6sVt2qby9gGJG/0Vvg6bKJWNuP3df8jw2Kzr
+         4duTQjYh0op4PbKbM2ffbiNb9jSyjGwI14WzMK0l18yp0kX0q7KtGsxVuszCb5Xbq4
+         prqEvmxptjB4HUhjKJcHb7Ew/Hy+cslqGu+TDGo8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paul Chaignon <paul.chaignon@orange.com>,
-        Mahshid Khezri <khezri.mahshid@gmail.com>,
+Cc:     Alexander Lobakin <alobakin@dlink.ru>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 071/187] bpf, riscv: Limit to 33 tail calls
-Date:   Fri, 27 Dec 2019 12:38:59 -0500
-Message-Id: <20191227174055.4923-71-sashal@kernel.org>
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 49/57] net, sysctl: Fix compiler warning when only cBPF is present
+Date:   Fri, 27 Dec 2019 13:02:14 -0500
+Message-Id: <20191227180222.7076-49-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
-References: <20191227174055.4923-1-sashal@kernel.org>
+In-Reply-To: <20191227180222.7076-1-sashal@kernel.org>
+References: <20191227180222.7076-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -63,51 +60,64 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Paul Chaignon <paul.chaignon@orange.com>
+From: Alexander Lobakin <alobakin@dlink.ru>
 
-[ Upstream commit 96bc4432f5ade1045521f3b247f516b1478166bd ]
+[ Upstream commit 1148f9adbe71415836a18a36c1b4ece999ab0973 ]
 
-All BPF JIT compilers except RISC-V's and MIPS' enforce a 33-tail calls
-limit at runtime.  In addition, a test was recently added, in tailcalls2,
-to check this limit.
+proc_dointvec_minmax_bpf_restricted() has been firstly introduced
+in commit 2e4a30983b0f ("bpf: restrict access to core bpf sysctls")
+under CONFIG_HAVE_EBPF_JIT. Then, this ifdef has been removed in
+ede95a63b5e8 ("bpf: add bpf_jit_limit knob to restrict unpriv
+allocations"), because a new sysctl, bpf_jit_limit, made use of it.
+Finally, this parameter has become long instead of integer with
+fdadd04931c2 ("bpf: fix bpf_jit_limit knob for PAGE_SIZE >= 64K")
+and thus, a new proc_dolongvec_minmax_bpf_restricted() has been
+added.
 
-This patch updates the tail call limit in RISC-V's JIT compiler to allow
-33 tail calls.  I tested it using the above selftest on an emulated
-RISCV64.
+With this last change, we got back to that
+proc_dointvec_minmax_bpf_restricted() is used only under
+CONFIG_HAVE_EBPF_JIT, but the corresponding ifdef has not been
+brought back.
 
-Fixes: 2353ecc6f91f ("bpf, riscv: add BPF JIT for RV64G")
-Reported-by: Mahshid Khezri <khezri.mahshid@gmail.com>
-Signed-off-by: Paul Chaignon <paul.chaignon@orange.com>
+So, in configurations like CONFIG_BPF_JIT=y && CONFIG_HAVE_EBPF_JIT=n
+since v4.20 we have:
+
+  CC      net/core/sysctl_net_core.o
+net/core/sysctl_net_core.c:292:1: warning: ‘proc_dointvec_minmax_bpf_restricted’ defined but not used [-Wunused-function]
+  292 | proc_dointvec_minmax_bpf_restricted(struct ctl_table *table, int write,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Suppress this by guarding it with CONFIG_HAVE_EBPF_JIT again.
+
+Fixes: fdadd04931c2 ("bpf: fix bpf_jit_limit knob for PAGE_SIZE >= 64K")
+Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Björn Töpel <bjorn.topel@gmail.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Link: https://lore.kernel.org/bpf/966fe384383bf23a0ee1efe8d7291c78a3fb832b.1575916815.git.paul.chaignon@gmail.com
+Link: https://lore.kernel.org/bpf/20191218091821.7080-1-alobakin@dlink.ru
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/net/bpf_jit_comp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/core/sysctl_net_core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/riscv/net/bpf_jit_comp.c b/arch/riscv/net/bpf_jit_comp.c
-index 5451ef3845f2..7fbf56aab661 100644
---- a/arch/riscv/net/bpf_jit_comp.c
-+++ b/arch/riscv/net/bpf_jit_comp.c
-@@ -631,14 +631,14 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
- 		return -1;
- 	emit(rv_bgeu(RV_REG_A2, RV_REG_T1, off >> 1), ctx);
+diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
+index 144cd1acd7e3..069e3c4fcc44 100644
+--- a/net/core/sysctl_net_core.c
++++ b/net/core/sysctl_net_core.c
+@@ -274,6 +274,7 @@ static int proc_dointvec_minmax_bpf_enable(struct ctl_table *table, int write,
+ 	return ret;
+ }
  
--	/* if (--TCC < 0)
-+	/* if (TCC-- < 0)
- 	 *     goto out;
- 	 */
- 	emit(rv_addi(RV_REG_T1, tcc, -1), ctx);
- 	off = (tc_ninsn - (ctx->ninsns - start_insn)) << 2;
- 	if (is_13b_check(off, insn))
- 		return -1;
--	emit(rv_blt(RV_REG_T1, RV_REG_ZERO, off >> 1), ctx);
-+	emit(rv_blt(tcc, RV_REG_ZERO, off >> 1), ctx);
++# ifdef CONFIG_HAVE_EBPF_JIT
+ static int
+ proc_dointvec_minmax_bpf_restricted(struct ctl_table *table, int write,
+ 				    void __user *buffer, size_t *lenp,
+@@ -284,6 +285,7 @@ proc_dointvec_minmax_bpf_restricted(struct ctl_table *table, int write,
  
- 	/* prog = array->ptrs[index];
- 	 * if (!prog)
+ 	return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+ }
++# endif /* CONFIG_HAVE_EBPF_JIT */
+ 
+ static int
+ proc_dolongvec_minmax_bpf_restricted(struct ctl_table *table, int write,
 -- 
 2.20.1
 
