@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BD70C2D0CE
-	for <bpf@archiver.kernel.org>; Tue, 31 Dec 2019 06:20:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 127E1C2D0DC
+	for <bpf@archiver.kernel.org>; Tue, 31 Dec 2019 06:20:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6ADA4206DB
+	by mail.kernel.org (Postfix) with ESMTP id CA4D6206DB
 	for <bpf@archiver.kernel.org>; Tue, 31 Dec 2019 06:20:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hp7Pey4N"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="OUNDirK/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725536AbfLaGUq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 31 Dec 2019 01:20:46 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:58264 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725554AbfLaGUq (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 31 Dec 2019 01:20:46 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id xBV6G7Ia017325
-        for <bpf@vger.kernel.org>; Mon, 30 Dec 2019 22:20:45 -0800
+        id S1726307AbfLaGUt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 31 Dec 2019 01:20:49 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:35370 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726293AbfLaGUt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 31 Dec 2019 01:20:49 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBV6FOL4007386
+        for <bpf@vger.kernel.org>; Mon, 30 Dec 2019 22:20:47 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=Xs6Cyjrmg4eoTZhcgS1Hfal2Da6EDpa0rmnIUuRE2Xo=;
- b=hp7Pey4NB8iMJDb0XdRc4s/5ff4ZfMT+uTxF4EKmjlKfPMbwjUrPBHHBWBVE6PpC496E
- AvDbCHsjcoWsdQn4iadUTX7KkzX6qJfV/d/pahrlXLUuOU2VegPoRXxujBN0uqvLx65R
- 3O3ynj/n/ue4OHEoqtT8W37zgN+s6idmQiQ= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 2x63e5hrds-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 30 Dec 2019 22:20:44 -0800
-Received: from intmgw002.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 30 Dec 2019 22:20:43 -0800
+ content-type; s=facebook; bh=30EPOy1ffVJYg6REh3jtH/nWup0JAgJw0cyP0UKgyM0=;
+ b=OUNDirK/Fc5JbHa1UQA83jVdzSfWxn9oNy3GiMg/BhBN0kotYncMRnky9zAd3Th0Cpmm
+ /ILjpmNWgBIh9USDcqSUwc6QIpYOpq2jJbOwqQLLO+BlI9z8QOM7lkV8L0Vv0zOhHNRD
+ TRn1EYYW04nsS0A8pUnWMGSM20xcblbXH+A= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2x65rq9ft7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 30 Dec 2019 22:20:47 -0800
+Received: from intmgw001.06.prn3.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Mon, 30 Dec 2019 22:20:46 -0800
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id C589F294410B; Mon, 30 Dec 2019 22:20:41 -0800 (PST)
+        id 4A549294410B; Mon, 30 Dec 2019 22:20:46 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -49,9 +49,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v3 02/11] bpf: Avoid storing modifier to info->btf_id
-Date:   Mon, 30 Dec 2019 22:20:41 -0800
-Message-ID: <20191231062041.280948-1-kafai@fb.com>
+Subject: [PATCH bpf-next v3 04/11] bpf: Support bitfield read access in btf_struct_access
+Date:   Mon, 30 Dec 2019 22:20:46 -0800
+Message-ID: <20191231062046.281300-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191231062037.280596-1-kafai@fb.com>
 References: <20191231062037.280596-1-kafai@fb.com>
@@ -60,10 +60,10 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
  definitions=2019-12-30_08:2019-12-27,2019-12-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 mlxscore=0
- malwarescore=0 suspectscore=13 bulkscore=0 clxscore=1015 impostorscore=0
- adultscore=0 spamscore=0 mlxlogscore=642 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ mlxlogscore=825 mlxscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=13
+ spamscore=0 clxscore=1015 phishscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-1912310050
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -71,55 +71,82 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-info->btf_id expects the btf_id of a struct, so it should
-store the final result after skipping modifiers (if any).
+This patch allows bitfield access as a scalar.
 
-It also takes this chanace to add a missing newline in one of the
-bpf_log() messages.
+It checks "off + size > t->size" to avoid accessing bitfield
+end up accessing beyond the struct.  This check is done
+outside of the loop since it is applicable to all access.
 
-Acked-by: Yonghong Song <yhs@fb.com>
+It also takes this chance to break early on the "off < moff" case.
+
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- kernel/bpf/btf.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ kernel/bpf/btf.c | 44 +++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 39 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index ed2075884724..497ecf62d79d 100644
+index 6a5ccb748a72..48bbde2e1c1e 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -3697,7 +3697,6 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 
- 	/* this is a pointer to another type */
- 	info->reg_type = PTR_TO_BTF_ID;
--	info->btf_id = t->type;
- 
- 	if (tgt_prog) {
- 		ret = btf_translate_to_vmlinux(log, btf, t, tgt_prog->type);
-@@ -3708,10 +3707,14 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 			return false;
- 		}
- 	}
-+
-+	info->btf_id = t->type;
- 	t = btf_type_by_id(btf, t->type);
- 	/* skip modifiers */
--	while (btf_type_is_modifier(t))
-+	while (btf_type_is_modifier(t)) {
-+		info->btf_id = t->type;
- 		t = btf_type_by_id(btf, t->type);
-+	}
- 	if (!btf_type_is_struct(t)) {
- 		bpf_log(log,
- 			"func '%s' arg%d type %s is not a struct\n",
-@@ -3737,7 +3740,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
- again:
- 	tname = __btf_name_by_offset(btf_vmlinux, t->name_off);
- 	if (!btf_type_is_struct(t)) {
--		bpf_log(log, "Type '%s' is not a struct", tname);
-+		bpf_log(log, "Type '%s' is not a struct\n", tname);
+@@ -3744,19 +3744,53 @@ int btf_struct_access(struct bpf_verifier_log *log,
  		return -EINVAL;
  	}
  
+-	for_each_member(i, t, member) {
+-		if (btf_member_bitfield_size(t, member))
+-			/* bitfields are not supported yet */
+-			continue;
++	if (off + size > t->size) {
++		bpf_log(log, "access beyond struct %s at off %u size %u\n",
++			tname, off, size);
++		return -EACCES;
++	}
+ 
++	for_each_member(i, t, member) {
+ 		/* offset of the field in bytes */
+ 		moff = btf_member_bit_offset(t, member) / 8;
+ 		if (off + size <= moff)
+ 			/* won't find anything, field is already too far */
+ 			break;
++
++		if (btf_member_bitfield_size(t, member)) {
++			u32 end_bit = btf_member_bit_offset(t, member) +
++				btf_member_bitfield_size(t, member);
++
++			/* off <= moff instead of off == moff because clang
++			 * does not generate a BTF member for anonymous
++			 * bitfield like the ":16" here:
++			 * struct {
++			 *	int :16;
++			 *	int x:8;
++			 * };
++			 */
++			if (off <= moff &&
++			    BITS_ROUNDUP_BYTES(end_bit) <= off + size)
++				return SCALAR_VALUE;
++
++			/* off may be accessing a following member
++			 *
++			 * or
++			 *
++			 * Doing partial access at either end of this
++			 * bitfield.  Continue on this case also to
++			 * treat it as not accessing this bitfield
++			 * and eventually error out as field not
++			 * found to keep it simple.
++			 * It could be relaxed if there was a legit
++			 * partial access case later.
++			 */
++			continue;
++		}
++
+ 		/* In case of "off" is pointing to holes of a struct */
+ 		if (off < moff)
+-			continue;
++			break;
+ 
+ 		/* type of the field */
+ 		mtype = btf_type_by_id(btf_vmlinux, member->type);
 -- 
 2.17.1
 
