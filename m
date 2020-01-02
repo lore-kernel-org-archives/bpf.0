@@ -1,122 +1,140 @@
-Return-Path: <SRS0=dw0a=2V=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=8idB=2X=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C6AFC2D0DD
-	for <bpf@archiver.kernel.org>; Tue, 31 Dec 2019 12:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C20DC2D0DC
+	for <bpf@archiver.kernel.org>; Thu,  2 Jan 2020 09:35:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1607B206E6
-	for <bpf@archiver.kernel.org>; Tue, 31 Dec 2019 12:13:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 32C0C217F4
+	for <bpf@archiver.kernel.org>; Thu,  2 Jan 2020 09:35:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726677AbfLaMNK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 31 Dec 2019 07:13:10 -0500
-Received: from smtp-sh.infomaniak.ch ([128.65.195.4]:42905 "EHLO
-        smtp-sh.infomaniak.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726334AbfLaMNK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 31 Dec 2019 07:13:10 -0500
-Received: from smtp-2-0000.mail.infomaniak.ch ([10.5.36.107])
-        by smtp-sh.infomaniak.ch (8.14.5/8.14.5) with ESMTP id xBVCCBnS003437
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 31 Dec 2019 13:12:11 +0100
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 36C571028F798;
-        Tue, 31 Dec 2019 13:12:07 +0100 (CET)
-Subject: Re: [PATCH bpf-next v1 00/13] MAC and Audit policy using eBPF (KRSI)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     KP Singh <kpsingh@chromium.org>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>,
-        Thomas Garnier <thgarnie@chromium.org>,
-        Michael Halcrow <mhalcrow@google.com>,
-        Paul Turner <pjt@google.com>,
-        Brendan Gregg <brendan.d.gregg@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>
-References: <20191220154208.15895-1-kpsingh@chromium.org>
- <a6b61f33-82dc-0c1c-7a6c-1926343ef63e@digikod.net>
- <201912301128.B37D55AB44@keescook>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Autocrypt: addr=mic@digikod.net; prefer-encrypt=mutual; keydata=
- mQINBFNUOTgBEAC5HCwtCH/iikbZRDkXUSZa078Fz8H/21oNdzi13NM0ZdeR9KVq28ZCBAud
- law2P+HhaPFuZLqzRiy+iNOumPgrUyNphLhxWby/JgD7hvhYs5HJgdX0VTwzGqprmAeDKbnS
- G0Q2zxmnkb1/ENRTfrOIBm5LwyRhWIw5hg+HKh88g6qztDHdVSGqgWGLhj7RqDgHCgC4kAve
- /tWwfnpmMMndi5V+wg5EanyiffjAq6GHwzWbal+u3lkV8zNo15VZ+6mOY3X6dfYFVeX8hAP4
- u6OxzK4dQhDMVnJux5jum8RXtkSASiQpvx80npFbToIMgziWoWPV+Ag3Ti9JsactNzygozjL
- G0j8nc4dtfdkFoflEqtFIz2ZVWlmvcjbxTbvFpK2TwbVSiXe3Iyn4FIatk8tPsyY+mwKLzsc
- RNXaOXXB3kza0JmmnOyLCZuCTkds8FHvEG3nMIvyzXiobFM5F2b5Xo5x0fSo2ycIXXWgNJFn
- X1QXiPEM+emIRH0q2mHNAdvDki/Ns+qmkI4MQjWNGLGzlzb2GJBb5jXmkxEhk0/hUXVK3WYu
- /jGRQAbyX3XASArcw4RNFWd6fwzsX4Ras52BwI2qZaVAh4OclArEoSh5lGweizpN+1K8SnxG
- zVmvUDS8MfwlO97Kge4jzD0nRFOVE/z2DOLp6ZOcdRTxmTZNEwARAQABtCJNaWNrYcOrbCBT
- YWxhw7xuIDxtaWNAZGlnaWtvZC5uZXQ+iQI9BBMBCgAnBQJTVDk4AhsDBQkLRzUABQsJCAcD
- BRUKCQgLBRYDAgEAAh4BAheAAAoJECkv1ZR9XFaW/64P/3wPay/u16aRGeRgUl7ZZ8aZ50WH
- kCZHmX/aemxBk4lKNjbghzQFcuRkLODN0HXHZqqObLo77BKrSiVwlPSTNguXs9R6IaRfITvP
- 6k1ka/1I5ItczhHq0Ewf0Qs9SUphIGa71aE0zoWC4AWMz/avx/tvPdI4HoQop4K3DCJU5BXS
- NYDVOc8Ug9Zq+C1dM3PnLbL1BR1/K3D+fqAetQ9Aq/KP1NnsfSYQvkMoHIJ/6s0p3cUTkWJ3
- 0TjkJliErYdn+V3Uj049XPe1KN04jldZ5MJDEQv5G3o4zEGcMpziYxw75t6SJ+/lzeJyzJjy
- uYYzg8fqxJ8x9CYVrG1s8xcXu9TqPzFcHszfl9N01gOaT5UbJrjI8d2b2SG7SR9Wzn9FWNdy
- Uc/r/enMcnRkiMgadt6qSG+Z0UMwxPt/DTOkv5ISxyY8IzDJDCZ5HrBd9hTmTSztS+UUC2r1
- 5ijaOSCTWtGgJz/86ERDiUULZmhmQ1C9On46ilAgKEq4Eg3fXy6+kMaZXT3RTDrCtVrD4U58
- 11KD1mR4y8WwW5LJvKikqspaqrEVC4AyAbLwEsdjVmEVkdFqm6qW4YbaK+g/Wkr0jxuJ0bVn
- PTABQxmDBVUxsE6qDy6+s8ZWoPfwI1FK2TZwoIH0OQiffSXx6mdEO5X4O4Pj7f8pz723xCxV
- 1hqz/rrZ
-Message-ID: <6bb12d3a-5613-2891-83af-43e3176481dc@digikod.net>
-Date:   Tue, 31 Dec 2019 13:11:51 +0100
-User-Agent: 
+        id S1727936AbgABJfK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jan 2020 04:35:10 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:41335 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727924AbgABJfK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jan 2020 04:35:10 -0500
+Received: by mail-il1-f199.google.com with SMTP id k9so34456666ili.8
+        for <bpf@vger.kernel.org>; Thu, 02 Jan 2020 01:35:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=vccpKWCKoUf8l6AatqgQWk56oswB+uFCmRgqQNd92sk=;
+        b=Y7HliXekeR3llqDyoAiIlbFxyor4bw6YNrTKKQesrjc1cwhjYfEUHuKlHdVhhxi12r
+         ZYYNkQjV6iUcUgXkU/VhChA20UV72jth2yvi3v7kO73gtiOZh1okWYv+bEI8Ff0AwHYp
+         lpgNhovdjhGfjM/GVszLlyEUjyYYzQt5zPJQg/GR94dcsCCqvP8fpHhuK+IMeWD0uRi8
+         u/AeEbhFxUySGDXRMNHy7EK9D5UOBwnpJfhurT/GkPoTmevlq4rZ962j2PAImIetJeyi
+         701tOx/dYC/9utfzJti/SwNxhjxLrKB8XUobQDZucJUu1DBZjLk/sHhvrpfAWDCj0/t2
+         10OA==
+X-Gm-Message-State: APjAAAW1RdZImvj9Jakcwt/avDWH16JiXGbFJcqd+ATYLB7QnEoHbkD9
+        hVCZRL0VWub4V1jIQqamivtscImIgdtrTfi31DWWobv2XtmH
+X-Google-Smtp-Source: APXvYqwgXiuGJScM9HTvKT1JKowivfEyDa3R3JABkpcQ+SmXuDFJz37fAWalmuc38j0znHS1uZnnEWq11pqt6O3wAlk/6oj1hXLh
 MIME-Version: 1.0
-In-Reply-To: <201912301128.B37D55AB44@keescook>
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+X-Received: by 2002:a6b:fc0c:: with SMTP id r12mr51294497ioh.189.1577957709959;
+ Thu, 02 Jan 2020 01:35:09 -0800 (PST)
+Date:   Thu, 02 Jan 2020 01:35:09 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c5d741059b24e89d@google.com>
+Subject: WARNING: locking bug in __inet6_bind
+From:   syzbot <syzbot+414dcdfe035bbcf35fc5@syzkaller.appspotmail.com>
+To:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, kafai@fb.com,
+        kuznet@ms2.inr.ac.ru, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Hello,
 
-On 30/12/2019 20:30, Kees Cook wrote:
-> On Fri, Dec 20, 2019 at 11:46:47PM +0100, Mickaël Salaün wrote:
->> I'm working on a version of Landlock without eBPF, but still with the
->> initial sought properties: safe unprivileged composability, modularity, and
->> dynamic update. I'll send this version soon.
->>
->> I hope that the work and experience from Landlock to bring eBPF to LSM will
->> continue to be used through KRSI. Landlock will now focus on the
->> unprivileged sandboxing part, without eBPF. Stay tuned!
-> 
-> Will it end up looking at all like pledge? I'm still struggling to come
-> up with a sensible pledge-like design on top of seccomp, especially
-> given the need to have it very closely tied to the running libc...
-> 
+syzbot found the following crash on:
 
-Yes, it's similar to Pledge/Unveil but with fine-grained control (and a
-more flexible design). And because it is not tied to syscall, there is
-no similar issues than with seccomp and libc. In fact, there is no more
-relationship with seccomp neither. The version I'm working on is similar
-in principle to the patch series v10 [1], without the usage complexity
-brought by eBPF, but with a more polished file-based access-control. The
-demo from LSS 2018 [2] gives an overview of the possibilities.
+HEAD commit:    bf8d1cd4 Merge tag 'scsi-fixes' of git://git.kernel.org/pu..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=155ac9fee00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ed9d672709340e35
+dashboard link: https://syzkaller.appspot.com/bug?extid=414dcdfe035bbcf35fc5
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1245bac6e00000
 
-[1] https://lore.kernel.org/lkml/20190721213116.23476-1-mic@digikod.net/
-[2] https://landlock.io/talks/2018-08-27_landlock-lss_demo-1-web.mkv
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+414dcdfe035bbcf35fc5@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 32733 at kernel/locking/lockdep.c:840  
+look_up_lock_class kernel/locking/lockdep.c:840 [inline]
+WARNING: CPU: 0 PID: 32733 at kernel/locking/lockdep.c:840  
+register_lock_class+0x206/0x1850 kernel/locking/lockdep.c:1185
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 32733 Comm: syz-executor.0 Not tainted 5.5.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x197/0x210 lib/dump_stack.c:118
+  panic+0x2e3/0x75c kernel/panic.c:221
+  __warn.cold+0x2f/0x3e kernel/panic.c:582
+  report_bug+0x289/0x300 lib/bug.c:195
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  fixup_bug arch/x86/kernel/traps.c:169 [inline]
+  do_error_trap+0x11b/0x200 arch/x86/kernel/traps.c:267
+  do_invalid_op+0x37/0x50 arch/x86/kernel/traps.c:286
+  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:look_up_lock_class kernel/locking/lockdep.c:840 [inline]
+RIP: 0010:register_lock_class+0x206/0x1850 kernel/locking/lockdep.c:1185
+Code: fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 aa 10 00 00 4c 3b 7b  
+18 44 8b 35 85 9e 08 0a 74 0b 48 81 3b a0 79 bb 8a 74 02 <0f> 0b 45 85 ed  
+0f 84 71 03 00 00 f6 85 70 ff ff ff 01 0f 85 64 03
+RSP: 0018:ffffc90003d17a28 EFLAGS: 00010006
+RAX: dffffc0000000000 RBX: ffff88809a06d120 RCX: 0000000000000000
+RDX: 1ffff1101340da27 RSI: 0000000000000000 RDI: ffff88809a06d138
+RBP: ffffc90003d17af0 R08: 1ffff920007a2f4d R09: ffffffff8b63b560
+R10: ffffffff8b2c5ce8 R11: 0000000000000000 R12: ffffffff8b3089e0
+R13: 0000000000000000 R14: 0000000000000000 R15: ffffffff88d4e000
+  __lock_acquire+0xf4/0x4a00 kernel/locking/lockdep.c:3837
+  lock_acquire+0x190/0x410 kernel/locking/lockdep.c:4485
+  __raw_spin_lock_bh include/linux/spinlock_api_smp.h:135 [inline]
+  _raw_spin_lock_bh+0x33/0x50 kernel/locking/spinlock.c:175
+  spin_lock_bh include/linux/spinlock.h:343 [inline]
+  lock_sock_nested+0x41/0x120 net/core/sock.c:2936
+  lock_sock include/net/sock.h:1531 [inline]
+  __inet6_bind+0x788/0x19b0 net/ipv6/af_inet6.c:300
+  inet6_bind+0xfa/0x155 net/ipv6/af_inet6.c:453
+  __sys_bind+0x239/0x290 net/socket.c:1649
+  __do_sys_bind net/socket.c:1660 [inline]
+  __se_sys_bind net/socket.c:1658 [inline]
+  __x64_sys_bind+0x73/0xb0 net/socket.c:1658
+  do_syscall_64+0xfa/0x790 arch/x86/entry/common.c:294
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x45a919
+Code: ad b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 7b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f66ae74ec78 EFLAGS: 00000246 ORIG_RAX: 0000000000000031
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 000000000045a919
+RDX: 000000000000001c RSI: 0000000020000000 RDI: 0000000000000004
+RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f66ae74f6d4
+R13: 00000000004c0ca5 R14: 00000000004d47d8 R15: 00000000ffffffff
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
