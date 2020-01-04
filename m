@@ -6,21 +6,21 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D6BAC32770
-	for <bpf@archiver.kernel.org>; Sat,  4 Jan 2020 19:53:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1BF3C3F68F
+	for <bpf@archiver.kernel.org>; Sat,  4 Jan 2020 19:53:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 239AF2465E
-	for <bpf@archiver.kernel.org>; Sat,  4 Jan 2020 19:53:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C08EA24655
+	for <bpf@archiver.kernel.org>; Sat,  4 Jan 2020 19:53:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726677AbgADTwq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 4 Jan 2020 14:52:46 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:35377 "EHLO
+        id S1726448AbgADTwo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 4 Jan 2020 14:52:44 -0500
+Received: from mout.kundenserver.de ([217.72.192.74]:33733 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbgADTwq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 4 Jan 2020 14:52:46 -0500
+        with ESMTP id S1726307AbgADTwo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 4 Jan 2020 14:52:44 -0500
 Received: from orion.localdomain ([95.114.65.70]) by mrelayeu.kundenserver.de
  (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MfpGR-1jKyQg2q3V-00gL4c; Sat, 04 Jan 2020 20:52:15 +0100
+ 1Mi2Bb-1jImZZ3gKf-00e89S; Sat, 04 Jan 2020 20:52:13 +0100
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     davem@davemloft.net, mareklindner@neomailbox.ch,
@@ -33,30 +33,30 @@ Cc:     davem@davemloft.net, mareklindner@neomailbox.ch,
         netdev@vger.kernel.org, linux-bluetooth@vger.kernel.org,
         tipc-discussion@lists.sourceforge.net,
         linux-hyperv@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 8/8] net: tipc: remove unneeded MODULE_VERSION() usage
-Date:   Sat,  4 Jan 2020 20:51:31 +0100
-Message-Id: <20200104195131.16577-8-info@metux.net>
+Subject: [PATCH 5/8] net: bluetooth: remove unneeded MODULE_VERSION() usage
+Date:   Sat,  4 Jan 2020 20:51:28 +0100
+Message-Id: <20200104195131.16577-5-info@metux.net>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20200104195131.16577-1-info@metux.net>
 References: <20200104195131.16577-1-info@metux.net>
-X-Provags-ID: V03:K1:e0iL8IFbjcCAHpd6BMZe1GejXvKwFuPi9wH+/YPt+bg2ITpBrYD
- nkU3ZJUAVBwFU0ddcB4rZq81KTDf7D5x/LPLhXDEM+JOe2BnSDuExsme3SMm1eC9ZevhTQK
- w0JOpAVBeESjGAiYwl9JJcfUtknbzHVCAag9+EmQP5KZfh1hU8xlfhCZr0fmzU3wyDFN0yk
- CeQMvuXvGKeXb+Pj8qAbg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:31eC9wPUGiI=:l+PE8pH7YuJeWPkcGeZYUV
- /jM9EZTd9WXG8OCxjkkaTp1WeYSC7fZm5FmoKOshuEwaZZjB2QEbLQHX7TZNvESwgw/HfBvsh
- v5S8zsJSsJtBJIDxCT6bssUkDV314Nln8elCc5QkEQq0sgRKFmkbVTJSm1qXDZg3iqNCrS2wn
- PQOvdLUoCOIaA+luAWcM5alqMKXXQGksIB+U71fz3c9vqtObY6p7aORR2sPjOorN1ZNXxCAB4
- +ahbhJXEkuslqrIiqMz5H5aMKNFo8p525j4LLOh4kcH2mVnSvNdKlpEYQRonWt+7+Fexd+irl
- 32Au7qqb0uqgpNXXw4Vi8EGLmHE3sGsRr+N6MaZzwgolIaLKYt1uHa2VOfZW82yGVLanyqRQI
- K6AKzdQEQSNpuFkuVlJn9d9YWAzMWLBAMZcOjg07olAwiHYOvk62Be9tsOncc5wpk1tPYD06e
- q5OxirdbCl2hNBSYFB4VfdSLOCY93nWdw2rnMNuLwxyWnUcUCEXJYGb6zvIN60xgdmzG/sXtM
- FMH+P4Kph+LFAsGui9lTjKgjWPa9Mqimt3jf0QWyrcLuVZUlhPw5Kr0n8d3fd1yeIoS4r/GCl
- M2kBmWJASBJv38KC9Fa+p+qB+tiP7YSQRed5AgKhXZbywFwNRfOkKcvsJx6q4B5ta39lUiIFV
- ljmz6RlDUAp3s3yUQgHJlMratrMyC/mjGuqwcNTsDDtXwuwyuUCvo9OHhR7vWyDAKiP3UKSq0
- bongl1fBCzsImpFJ4r+sz0k3L1aAJ7LfDJ9icHaXKiFb/v0ubOBn5UU6AEQmMJYrdcT044h1D
- FMsnF56uGfuzi+/fpkEbx8v78RWzDJ4cwF3eSQoUHJvBX86oo9gLGwTFJ+P1ipIrxcUMtnRlb
- RiCaNy0H84HcINVwB39g==
+X-Provags-ID: V03:K1:rqA9KHBG4cysDCokVxgm9Sj+YPWcsUNju7xr0PpY/iJlLx1AnGC
+ 5RZj76Enp58YNH9g0fqLvKXPzgCpzljXiNYc3I3D44rXQwcjCpwI6G7ZRwzO8DA0IwXF693
+ 97K4gNDoeKoJ9tvibFytZ0/+qxiRt8ncCmlIpyluZ87QlBMz5TImajPVGCSw8uhHfovz65b
+ 699C9ZVmaF1AfBfIqpYLw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Tuf0pe90wXk=:rWkZWxUGjuC0GX/5ngcmin
+ Xj6VzgAh8RrksJIeD2YdxtBpHEJPWVE//m1Vs3X48bw51sGYUBBrn5wlo1tPLXOt40AAU3Ful
+ 5eclNIwRfdlGunG/I7fw4SQpTFDI+0dipUUylX/qcty5kJN0HiQvONr9jysNbICdBmNKz+o5P
+ Fw2bQemWYa3JWU+iBMG/WMbgt1JgJb9Tc3Xk83TB51MV6A9OmupcCY1Eg877/ynGcSzBnL+dL
+ 2bB6471/uKuj8Vv5+gLU/3sv0wky3FzGJnQxkvPebgxvYA4a/uqaL9x7qg/ByBKXCtdjCUJyF
+ 6BJzh8FOzrhyzeTTscVMhouuID/mhmpkAwePcJlk2mObf0RO3b2q7XzxiD8X0sNQ2P6tyFq8X
+ u6bO5U8UdqRAfkmLren4wzXLSobBcpkTwcLSFUExq2WZdkWi4Gw4pU4c3aBk47rTy0BeGhQvL
+ Qn8ekWquBHZYGOUUsuI3dwOV6REobGz6f9fx2VY3XMBg72I5lI0gyGvor5FS1IGXPdYXOdT59
+ sqOZQfDa/mU6XAQ78JWuJF8jDn1E15YnhVNjOkP8EfQtHvK4A3Rd3ZM/6O5NrImoHVTJhThst
+ 9PDJkUsJeJ57hJbSJAWPtsE4jWNqo2pOhwNi+LOYVbbELA7ArXuVnwj3QqpAhtpmOjYxVrtCW
+ dBUv6Dyjsd0ZeO5iUETPVFLSGHmPp2aAflUybgPl3/t00Ow0BP+2Xc4YUNgPWJ1XeZkbQWRrZ
+ NAZIxoQ5GhKlXpuWSe86BOmNADRG2nD6W7o22eYWTp9seqccwz0kbL3KdqYRz6fjxdZN4wi0O
+ TtZzkCLKTWV0z0eVEQpdnOwZCYLJ3mOb9vL1I0sUSoYsQNJrk058bcDnkF3y/K8xREw6XWrG1
+ s1V5QzVKUrXsZyBVu9vQ==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -67,18 +67,88 @@ making sense is the kernel version.
 
 Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
 ---
- net/tipc/core.c | 1 -
- 1 file changed, 1 deletion(-)
+ net/bluetooth/6lowpan.c      | 3 ---
+ net/bluetooth/af_bluetooth.c | 1 -
+ net/bluetooth/bnep/core.c    | 1 -
+ net/bluetooth/cmtp/core.c    | 1 -
+ net/bluetooth/hidp/core.c    | 1 -
+ net/bluetooth/rfcomm/core.c  | 1 -
+ 6 files changed, 8 deletions(-)
 
-diff --git a/net/tipc/core.c b/net/tipc/core.c
-index 4f6dc74adf45..98dbc18a0dd8 100644
---- a/net/tipc/core.c
-+++ b/net/tipc/core.c
-@@ -221,4 +221,3 @@ module_exit(tipc_exit);
+diff --git a/net/bluetooth/6lowpan.c b/net/bluetooth/6lowpan.c
+index 4febc82a7c76..76fabc65b8a9 100644
+--- a/net/bluetooth/6lowpan.c
++++ b/net/bluetooth/6lowpan.c
+@@ -21,8 +21,6 @@
  
- MODULE_DESCRIPTION("TIPC: Transparent Inter Process Communication");
- MODULE_LICENSE("Dual BSD/GPL");
--MODULE_VERSION(TIPC_MOD_VER);
+ #include <net/6lowpan.h> /* for the compression support */
+ 
+-#define VERSION "0.1"
+-
+ static struct dentry *lowpan_enable_debugfs;
+ static struct dentry *lowpan_control_debugfs;
+ 
+@@ -1303,5 +1301,4 @@ module_exit(bt_6lowpan_exit);
+ 
+ MODULE_AUTHOR("Jukka Rissanen <jukka.rissanen@linux.intel.com>");
+ MODULE_DESCRIPTION("Bluetooth 6LoWPAN");
+-MODULE_VERSION(VERSION);
+ MODULE_LICENSE("GPL");
+diff --git a/net/bluetooth/af_bluetooth.c b/net/bluetooth/af_bluetooth.c
+index 3fd124927d4d..1a6972fac1f7 100644
+--- a/net/bluetooth/af_bluetooth.c
++++ b/net/bluetooth/af_bluetooth.c
+@@ -798,6 +798,5 @@ module_exit(bt_exit);
+ 
+ MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
+ MODULE_DESCRIPTION("Bluetooth Core ver " VERSION);
+-MODULE_VERSION(VERSION);
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS_NETPROTO(PF_BLUETOOTH);
+diff --git a/net/bluetooth/bnep/core.c b/net/bluetooth/bnep/core.c
+index 43c284158f63..96f0eb60deb0 100644
+--- a/net/bluetooth/bnep/core.c
++++ b/net/bluetooth/bnep/core.c
+@@ -764,6 +764,5 @@ MODULE_PARM_DESC(compress_dst, "Compress destination headers");
+ 
+ MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
+ MODULE_DESCRIPTION("Bluetooth BNEP ver " VERSION);
+-MODULE_VERSION(VERSION);
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS("bt-proto-4");
+diff --git a/net/bluetooth/cmtp/core.c b/net/bluetooth/cmtp/core.c
+index 07cfa3249f83..9a6306d7f738 100644
+--- a/net/bluetooth/cmtp/core.c
++++ b/net/bluetooth/cmtp/core.c
+@@ -511,6 +511,5 @@ module_exit(cmtp_exit);
+ 
+ MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
+ MODULE_DESCRIPTION("Bluetooth CMTP ver " VERSION);
+-MODULE_VERSION(VERSION);
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS("bt-proto-5");
+diff --git a/net/bluetooth/hidp/core.c b/net/bluetooth/hidp/core.c
+index bef84b95e2c4..a225ae5f1849 100644
+--- a/net/bluetooth/hidp/core.c
++++ b/net/bluetooth/hidp/core.c
+@@ -1475,6 +1475,5 @@ module_exit(hidp_exit);
+ MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
+ MODULE_AUTHOR("David Herrmann <dh.herrmann@gmail.com>");
+ MODULE_DESCRIPTION("Bluetooth HIDP ver " VERSION);
+-MODULE_VERSION(VERSION);
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS("bt-proto-6");
+diff --git a/net/bluetooth/rfcomm/core.c b/net/bluetooth/rfcomm/core.c
+index 3a9e9d9670be..e621fbb451b3 100644
+--- a/net/bluetooth/rfcomm/core.c
++++ b/net/bluetooth/rfcomm/core.c
+@@ -2245,6 +2245,5 @@ MODULE_PARM_DESC(l2cap_ertm, "Use L2CAP ERTM mode for connection");
+ 
+ MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
+ MODULE_DESCRIPTION("Bluetooth RFCOMM ver " VERSION);
+-MODULE_VERSION(VERSION);
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS("bt-proto-3");
 -- 
 2.11.0
 
