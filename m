@@ -2,123 +2,136 @@ Return-Path: <SRS0=gZB8=24=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFD8BC282DD
-	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 22:13:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B633C33C9E
+	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 22:46:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AC1E92072A
-	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 22:13:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 260982075A
+	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 22:46:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MakB0Ij7"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Z6iaSSFX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726142AbgAGWN4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Jan 2020 17:13:56 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:32989 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727127AbgAGWN4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Jan 2020 17:13:56 -0500
-Received: by mail-lf1-f65.google.com with SMTP id n25so932710lfl.0;
-        Tue, 07 Jan 2020 14:13:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AQRu3w6AKDS4yIwvHaMqQSMXX3fkE0yn2fW50+FsyJY=;
-        b=MakB0Ij7KZMS+Lh+PDtwFOJ7tVXxk4Fq88deYNxZ0n5QvtaneqTgeLbRac9DSML308
-         9bwfOLY2QsEY5Cm4nzjapuLiuJ/+xVqr+rErFJ4DKwNurBrX//uJ5YcG7dEgYMfuwFHk
-         IZwitekUaNvrMYH7htYbMQ5zbnQ2xZEEvrExlRwm9FgEsLrJdgxZn11p6WpvQdrGPVxK
-         RVly77MFVvbvBR4HVQfaPNgfYRVW8Fn9SkFaNRllVE1TR/6k5Hev1EiD5YMPW3eH6Gb7
-         liMznpjVU8nRHnpjrUFPBU0+syMwxcOI69mSzhXqOMHdNWaD0PkEeaE6dgqnjILg5anu
-         ib5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AQRu3w6AKDS4yIwvHaMqQSMXX3fkE0yn2fW50+FsyJY=;
-        b=mlP0YF2KIIrsRPtQXS1l4YuajZskJ/1q8K/8unXdBrR6QtBrUag2jkOzmBT0RcGNKU
-         yfiibvmVHz2dqHwhR1FYYOx5Gl8GH+HhbWuf2tIelvIyGobsHdttv1M0nq31SCZn02FT
-         9tg8PYOOCQrQdZ2+CIOjAo/IugUeazzuXRokGf2WiipddyEIOjdaZt1lXstF2Dlh2aeN
-         QKvzjSNE5RDrwPcIpWEPk+dV8mEg2zyECgx30Pr0sOC7tncGaHZG/PmOOqNgoHxjdAsn
-         4+7TubuztyO8VA2yf5+AtjS92h/O7j89kKllGMNR8O8GlotySS2VYwfv7d3LSnbjKeHN
-         ivYg==
-X-Gm-Message-State: APjAAAUAPaDDGqiwvLympn+6v5NE3VU1Szw0akXn+xi51+2gadawBc3h
-        womhcVgjiIr4rFOtIP3C29F69caa1QIcMo45AglxFDnH
-X-Google-Smtp-Source: APXvYqxxy7PmTgRzudRO4bvEVpb7KSFT8gSUqBDU98q8KT7q7woxpKTSFej/Y/h4PbvVA9booIeDbf0uIEV2Etls2lw=
-X-Received: by 2002:ac2:44d9:: with SMTP id d25mr983323lfm.15.1578435234170;
- Tue, 07 Jan 2020 14:13:54 -0800 (PST)
+        id S1727213AbgAGWqD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Jan 2020 17:46:03 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:4716 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727103AbgAGWqD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Jan 2020 17:46:03 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e150a170002>; Tue, 07 Jan 2020 14:45:44 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Tue, 07 Jan 2020 14:46:01 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Tue, 07 Jan 2020 14:46:01 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jan
+ 2020 22:46:00 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Tue, 7 Jan 2020 22:46:00 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e150a280007>; Tue, 07 Jan 2020 14:46:00 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v12 10/22] media/v4l2-core: set pages dirty upon releasing DMA buffers
+Date:   Tue, 7 Jan 2020 14:45:46 -0800
+Message-ID: <20200107224558.2362728-11-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200107224558.2362728-1-jhubbard@nvidia.com>
+References: <20200107224558.2362728-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-References: <20191229143740.29143-1-jolsa@kernel.org> <20191229143740.29143-3-jolsa@kernel.org>
- <20200106232719.nk4k27ijm4uuwwo3@ast-mbp> <20200107122513.GH290055@krava>
-In-Reply-To: <20200107122513.GH290055@krava>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 7 Jan 2020 14:13:42 -0800
-Message-ID: <CAADnVQKHPk=rcb_aV_SyL5iEyjxHtgv2XnTkDmeKFMHxgF0vbg@mail.gmail.com>
-Subject: Re: [PATCH 2/5] bpf: Add bpf_perf_event_output_kfunc
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andriin@fb.com>,
-        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        David Miller <davem@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1578437144; bh=ih2RO+T8DQuTrGlz/x5x738AinQPu7ycFnqRacKU5Ds=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=Z6iaSSFXRTiTLxjLrxhrEaa0/tAGwJGuO7v6Qb8loV87rWCn7DiimksAoTrXGmy7D
+         aLEA8f/JmbsKhLgk8lTsPFz0O3sCcoy1PSoTPy9FU2tXz5tt70uFYGv+WlF9U/RpZF
+         JtbGuneHFXqBRmppkWdDYqYyuHFET9k+x5LLGyVyrY+71pJIaR4QQHK+6OcX/JE9R0
+         X00B+3pdI5LEygwgSgCldMIMSTLJw56mpMFzfMjgocM3r11nzzxVV33rFTdkzHV75S
+         dMR3V5/vZt/Jr+zVW8KVJ0gcWh8D3XxEVtG1wEGG/FgtzwtNVWgoViKM0MWWqfPV92
+         Yp4tivnwNOCuA==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 7, 2020 at 4:25 AM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Mon, Jan 06, 2020 at 03:27:21PM -0800, Alexei Starovoitov wrote:
-> > On Sun, Dec 29, 2019 at 03:37:37PM +0100, Jiri Olsa wrote:
-> > > Adding support to use perf_event_output in
-> > > BPF_TRACE_FENTRY/BPF_TRACE_FEXIT programs.
-> > >
-> > > There are no pt_regs available in the trampoline,
-> > > so getting one via bpf_kfunc_regs array.
-> > >
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > ---
-> > >  kernel/trace/bpf_trace.c | 67 ++++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 67 insertions(+)
-> > >
-> > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > > index e5ef4ae9edb5..1b270bbd9016 100644
-> > > --- a/kernel/trace/bpf_trace.c
-> > > +++ b/kernel/trace/bpf_trace.c
-> > > @@ -1151,6 +1151,69 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-> > >     }
-> > >  }
-> > >
-> > > +struct bpf_kfunc_regs {
-> > > +   struct pt_regs regs[3];
-> > > +};
-> > > +
-> > > +static DEFINE_PER_CPU(struct bpf_kfunc_regs, bpf_kfunc_regs);
-> > > +static DEFINE_PER_CPU(int, bpf_kfunc_nest_level);
-> >
-> > Thanks a bunch for working on it.
-> >
-> > I don't understand why new regs array and nest level is needed.
-> > Can raw_tp_prog_func_proto() be reused as-is?
-> > Instead of patches 2,3,4 ?
->
-> I thought that we might want to trace functions within the
-> raw tracepoint call, which would be prevented if we used
-> the same nest variable
->
-> now I'm not sure if there's not some other issue with nesting
-> bpf programs like that.. I'll need to check
+After DMA is complete, and the device and CPU caches are synchronized,
+it's still required to mark the CPU pages as dirty, if the data was
+coming from the device. However, this driver was just issuing a
+bare put_page() call, without any set_page_dirty*() call.
 
-but nesting is what bpf_raw_tp_nest_level suppose to solve, no?
-I just realized that we already have three *_nest_level counters
-in that file. Not sure why one is not enough.
-There was an issue in the past when tracepoint, kprobe and skb
-collided and we had nasty memory corruption, but that was before
-_nest_level was introduced. Not sure how we got to three independent
-counters.
+Fix the problem, by calling set_page_dirty_lock() if the CPU pages
+were potentially receiving data from the device.
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ drivers/media/v4l2-core/videobuf-dma-sg.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2=
+-core/videobuf-dma-sg.c
+index 66a6c6c236a7..28262190c3ab 100644
+--- a/drivers/media/v4l2-core/videobuf-dma-sg.c
++++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
+@@ -349,8 +349,11 @@ int videobuf_dma_free(struct videobuf_dmabuf *dma)
+ 	BUG_ON(dma->sglen);
+=20
+ 	if (dma->pages) {
+-		for (i =3D 0; i < dma->nr_pages; i++)
++		for (i =3D 0; i < dma->nr_pages; i++) {
++			if (dma->direction =3D=3D DMA_FROM_DEVICE)
++				set_page_dirty_lock(dma->pages[i]);
+ 			put_page(dma->pages[i]);
++		}
+ 		kfree(dma->pages);
+ 		dma->pages =3D NULL;
+ 	}
+--=20
+2.24.1
+
