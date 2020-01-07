@@ -2,122 +2,97 @@ Return-Path: <SRS0=gZB8=24=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2742AC33CA1
-	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 21:16:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 474D7C282DD
+	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 21:23:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE5412072A
-	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 21:16:20 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GiqZG66r"
+	by mail.kernel.org (Postfix) with ESMTP id 20075206F0
+	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 21:23:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729519AbgAGVHV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Jan 2020 16:07:21 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:44924 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729512AbgAGVHU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Jan 2020 16:07:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1578431239;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JNe143lUBlPJvUoAND0z1zJ7yDh+xa2CeGg3UfgsADk=;
-        b=GiqZG66rVqDxsGP1CefkAC2CFxIbvII+Lu/Yx4wmzkwB5xXHZk4zpn4eOYFB1ppZAfsL/b
-        xp0L5U6UjdzWzoc6gsVUSj++ac35aj67tyKqAh+Kw5sgN0vfaJdVDuo57Uq06/eW7I5Nwi
-        ompOU0EY66AucmweWyuOHYZ2WpK4icc=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-139-9tD05UXaM8uNBpi0mCztVw-1; Tue, 07 Jan 2020 16:07:18 -0500
-X-MC-Unique: 9tD05UXaM8uNBpi0mCztVw-1
-Received: by mail-wr1-f71.google.com with SMTP id c6so481215wrm.18
-        for <bpf@vger.kernel.org>; Tue, 07 Jan 2020 13:07:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=JNe143lUBlPJvUoAND0z1zJ7yDh+xa2CeGg3UfgsADk=;
-        b=SlGm8p5FuA433BGxcVO/c/1X7Lw1A2OC5yl8dxHoI3UTGwiaaH22yJ2bBNtuRXpy3J
-         HcJlkzKbZmvHCqMu4mO5pe9iOs0rRJU9dtRHs8dzALoOeQ+TVWa1lI98tMEhUchfz0dV
-         9nUF0pDjEEvO4joulRVWxd8SD43f5kC6Z8WtgThOs4Laz2mqBYI6zXuiiZ3ck8jMhIcj
-         8ipe4jUqPzicbou6Xko7cspHPpeielTvInBzjgB3L8brUMwk2uFAF/jztrLtOG+reyg6
-         wJ3Xhf02p7wPRA0F+ayTNRTgR93L7BXC4RU8XPK6Skq99C7I6BYqOl24UdT7dLTrioiO
-         q4kQ==
-X-Gm-Message-State: APjAAAUnOotlwMJB5Z+y4JMOZPIiOf4dsw6FpFXJg4sOkq5hixjtI2MP
-        69IVJENMEdXEHKQX1WZ+8iwFCuyAlwo9JuMnP12BsnCwUg7rYIce7q2196Vo+ND0Jj8xSWt68Bv
-        mtUJnauzhj/4u
-X-Received: by 2002:a7b:cc81:: with SMTP id p1mr308257wma.62.1578431237277;
-        Tue, 07 Jan 2020 13:07:17 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwzD7oU1k7te+BkQ81Kudl84D0c6mOodyYSpZ74vwm0UYNvCJjrpB7SiMcbEpeXZO705uEF6A==
-X-Received: by 2002:a7b:cc81:: with SMTP id p1mr308245wma.62.1578431237101;
-        Tue, 07 Jan 2020 13:07:17 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id v8sm1423887wrw.2.2020.01.07.13.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2020 13:07:16 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id C7821180960; Tue,  7 Jan 2020 22:07:15 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     John Fastabend <john.fastabend@gmail.com>,
-        =?utf-8?B?QmrDtnJuIFTDtnBl?= =?utf-8?B?bA==?= 
-        <bjorn.topel@gmail.com>, netdev@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net
-Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        bpf@vger.kernel.org, davem@davemloft.net,
-        jakub.kicinski@netronome.com, hawk@kernel.org,
-        john.fastabend@gmail.com, magnus.karlsson@intel.com,
-        jonathan.lemon@gmail.com
-Subject: RE: [PATCH bpf-next v2 7/8] xdp: remove map_to_flush and map swap detection
-In-Reply-To: <5e14caaaab6f7_67962afd051fc5c06f@john-XPS-13-9370.notmuch>
-References: <20191219061006.21980-1-bjorn.topel@gmail.com> <20191219061006.21980-8-bjorn.topel@gmail.com> <5e14caaaab6f7_67962afd051fc5c06f@john-XPS-13-9370.notmuch>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Tue, 07 Jan 2020 22:07:15 +0100
-Message-ID: <87imlnht6k.fsf@toke.dk>
+        id S1728842AbgAGVXJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Jan 2020 16:23:09 -0500
+Received: from namei.org ([65.99.196.166]:55898 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728855AbgAGVXC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Jan 2020 16:23:02 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id 007LMRpJ014254;
+        Tue, 7 Jan 2020 21:22:27 GMT
+Date:   Wed, 8 Jan 2020 08:22:27 +1100 (AEDT)
+From:   James Morris <jmorris@namei.org>
+To:     KP Singh <kpsingh@chromium.org>
+cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Garnier <thgarnie@chromium.org>,
+        Michael Halcrow <mhalcrow@google.com>,
+        Paul Turner <pjt@google.com>,
+        Brendan Gregg <brendan.d.gregg@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Christian Brauner <christian@brauner.io>,
+        =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Quentin Monnet <quentin.monnet@netronome.com>,
+        Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
+Subject: Re: [PATCH bpf-next v1 06/13] bpf: lsm: Init Hooks and create files
+ in securityfs
+In-Reply-To: <20191220154208.15895-7-kpsingh@chromium.org>
+Message-ID: <alpine.LRH.2.21.2001080822090.9683@namei.org>
+References: <20191220154208.15895-1-kpsingh@chromium.org> <20191220154208.15895-7-kpsingh@chromium.org>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-John Fastabend <john.fastabend@gmail.com> writes:
+On Fri, 20 Dec 2019, KP Singh wrote:
 
-> Bj=C3=B6rn T=C3=B6pel wrote:
->> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
->>=20
->> Now that all XDP maps that can be used with bpf_redirect_map() tracks
->> entries to be flushed in a global fashion, there is not need to track
->> that the map has changed and flush from xdp_do_generic_map()
->> anymore. All entries will be flushed in xdp_do_flush_map().
->>=20
->> This means that the map_to_flush can be removed, and the corresponding
->> checks. Moving the flush logic to one place, xdp_do_flush_map(), give
->> a bulking behavior and performance boost.
->>=20
->> Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
->> ---
->
-> __dev_map_flush() still has rcu_read_lock/unlock() around flush_list by
-> this point, assuming I've followed along correctly. Can we drop those
-> now seeing its per CPU and all list ops are per-cpu inside napi context?
+> From: KP Singh <kpsingh@google.com>
+> 
+> The LSM creates files in securityfs for each hook registered with the
+> LSM.
+> 
+>     /sys/kernel/security/bpf/<h_name>
+> 
+> The list of LSM hooks are maintained in an internal header "hooks.h"
+> Eventually, this list should either be defined collectively in
+> include/linux/lsm_hooks.h or auto-generated from it.
+> 
+> * Creation of a file for the hook in the securityfs.
+> * Allocation of a bpf_lsm_hook data structure which stores
+>   a pointer to the dentry of the newly created file in securityfs.
+> * Creation of a typedef for the hook so that BTF information
+>   can be generated for the LSM hooks to:
+> 
+>   - Make them "Compile Once, Run Everywhere".
+>   - Pass the right arguments when the attached programs are run.
+>   - Verify the accesses made by the program by using the BTF
+>     information.
+> 
+> Signed-off-by: KP Singh <kpsingh@google.com>
 
-Hmm, I guess so? :)
 
-> Two reasons to consider, with this patch dev_map_flush() is always
-> called even if the list is empty so even in TX case without redirect.
-> But probably more important it makes the locking requirements more clear.
-> Could probably be done in a follow up patch but wanted to bring it up.
+Reviewed-by: James Morris <jamorris@linux.microsoft.com>
 
-This series was already merged, but I'll follow up with the non-map
-redirect change. This requires a bit of refactoring anyway, so I can
-incorporate the lock removal into that...
 
--Toke
+-- 
+James Morris
+<jmorris@namei.org>
 
