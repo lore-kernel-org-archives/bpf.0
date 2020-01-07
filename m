@@ -2,121 +2,101 @@ Return-Path: <SRS0=gZB8=24=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25BDDC3F68F
-	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 13:03:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68C6AC33C8C
+	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 13:05:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 055E82075A
-	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 13:03:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B5082087F
+	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 13:05:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LHol3jlt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727814AbgAGNDh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Jan 2020 08:03:37 -0500
-Received: from mx2.suse.de ([195.135.220.15]:35674 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726937AbgAGNDg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Jan 2020 08:03:36 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 788E4B193;
-        Tue,  7 Jan 2020 13:03:34 +0000 (UTC)
-From:   Michal Rostecki <mrostecki@opensuse.org>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
+        id S1727894AbgAGNF5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Jan 2020 08:05:57 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:50072 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726937AbgAGNF5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Jan 2020 08:05:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1578402356;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i7zyXIPB5Beun47R7crA6T6f7W4w5dVPrsfsDfO9g5Y=;
+        b=LHol3jltF3OJvGyxZuawUzOzpRH6Fub++WhLUahsLeevMw+ZDmv5X5H8mtFoWX07oZi8Ld
+        Ph6K4ZiChpA7EvvE9bG4D+WfDUfPfAlx3cMnCn9LVmVVOCwuFq5mfTivsuFVfFy7L9x/Ba
+        ix2Pm2r96vNKsGoiupcHY9jVELBC1SM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-206-G_jYcsIIPIWUKbEFo0HuQw-1; Tue, 07 Jan 2020 08:05:53 -0500
+X-MC-Unique: G_jYcsIIPIWUKbEFo0HuQw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 71492801E78;
+        Tue,  7 Jan 2020 13:05:51 +0000 (UTC)
+Received: from krava (unknown [10.43.17.48])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2197F272C4;
+        Tue,  7 Jan 2020 13:05:48 +0000 (UTC)
+Date:   Tue, 7 Jan 2020 14:05:46 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Andrii Nakryiko <andriin@fb.com>,
+        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
         Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Peter Wu <peter@lekensteyn.nl>,
-        Prashant Bhole <bhole_prashant_q7@lab.ntt.co.jp>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/2] libbpf: Add probe for large INSN limit
-Date:   Tue,  7 Jan 2020 14:03:05 +0100
-Message-Id: <20200107130308.20242-2-mrostecki@opensuse.org>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200107130308.20242-1-mrostecki@opensuse.org>
-References: <20200107130308.20242-1-mrostecki@opensuse.org>
+        David Miller <davem@redhat.com>, bjorn.topel@intel.com
+Subject: Re: [PATCH 5/5] bpf: Allow to resolve bpf trampoline in unwind
+Message-ID: <20200107130546.GI290055@krava>
+References: <20191229143740.29143-1-jolsa@kernel.org>
+ <20191229143740.29143-6-jolsa@kernel.org>
+ <20200106234639.fo2ctgkb5vumayyl@ast-mbp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200106234639.fo2ctgkb5vumayyl@ast-mbp>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce a new probe which checks whether kernel has large maximum
-program size (1M) which was increased in the following commit:
+On Mon, Jan 06, 2020 at 03:46:40PM -0800, Alexei Starovoitov wrote:
+> On Sun, Dec 29, 2019 at 03:37:40PM +0100, Jiri Olsa wrote:
+> > When unwinding the stack we need to identify each
+> > address to successfully continue. Adding latch tree
+> > to keep trampolines for quick lookup during the
+> > unwind.
+> > 
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ...
+> > +bool is_bpf_trampoline(void *addr)
+> > +{
+> > +	return latch_tree_find(addr, &tree, &tree_ops) != NULL;
+> > +}
+> > +
+> >  struct bpf_trampoline *bpf_trampoline_lookup(u64 key)
+> >  {
+> >  	struct bpf_trampoline *tr;
+> > @@ -65,6 +98,7 @@ struct bpf_trampoline *bpf_trampoline_lookup(u64 key)
+> >  	for (i = 0; i < BPF_TRAMP_MAX; i++)
+> >  		INIT_HLIST_HEAD(&tr->progs_hlist[i]);
+> >  	tr->image = image;
+> > +	latch_tree_insert(&tr->tnode, &tree, &tree_ops);
+> 
+> Thanks for the fix. I was thinking to apply it, but then realized that bpf
+> dispatcher logic has the same issue.
+> Could you generalize the fix for both?
+> May be bpf_jit_alloc_exec_page() can do latch_tree_insert() ?
+> and new version of bpf_jit_free_exec() is needed that will do latch_tree_erase().
+> Wdyt?
 
-c04c0d2b968a ("bpf: increase complexity limit and maximum program size")
+I need to check the dispatcher code, but seems ok.. will check
 
-Based on the similar check in Cilium[0], authored by Daniel Borkmann.
-
-[0] https://github.com/cilium/cilium/commit/657d0f585afd26232cfa5d4e70b6f64d2ea91596
-
-Co-authored-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
----
- tools/lib/bpf/libbpf.h        |  1 +
- tools/lib/bpf/libbpf.map      |  1 +
- tools/lib/bpf/libbpf_probes.c | 21 +++++++++++++++++++++
- 3 files changed, 23 insertions(+)
-
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index fe592ef48f1b..26bf539f1b3c 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -521,6 +521,7 @@ LIBBPF_API bool bpf_probe_prog_type(enum bpf_prog_type prog_type,
- LIBBPF_API bool bpf_probe_map_type(enum bpf_map_type map_type, __u32 ifindex);
- LIBBPF_API bool bpf_probe_helper(enum bpf_func_id id,
- 				 enum bpf_prog_type prog_type, __u32 ifindex);
-+LIBBPF_API bool bpf_probe_large_insn_limit(__u32 ifindex);
- 
- /*
-  * Get bpf_prog_info in continuous memory
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index e9713a574243..b300d74c921a 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -219,6 +219,7 @@ LIBBPF_0.0.7 {
- 		bpf_object__detach_skeleton;
- 		bpf_object__load_skeleton;
- 		bpf_object__open_skeleton;
-+		bpf_probe_large_insn_limit;
- 		bpf_prog_attach_xattr;
- 		bpf_program__attach;
- 		bpf_program__name;
-diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-index a9eb8b322671..221e6ad97012 100644
---- a/tools/lib/bpf/libbpf_probes.c
-+++ b/tools/lib/bpf/libbpf_probes.c
-@@ -321,3 +321,24 @@ bool bpf_probe_helper(enum bpf_func_id id, enum bpf_prog_type prog_type,
- 
- 	return res;
- }
-+
-+/*
-+ * Probe for availability of kernel commit (5.3):
-+ *
-+ * c04c0d2b968a ("bpf: increase complexity limit and maximum program size")
-+ */
-+bool bpf_probe_large_insn_limit(__u32 ifindex)
-+{
-+	struct bpf_insn insns[BPF_MAXINSNS + 1];
-+	int i;
-+
-+	for (i = 0; i < BPF_MAXINSNS; i++)
-+		insns[i] = BPF_MOV64_IMM(BPF_REG_0, 1);
-+	insns[BPF_MAXINSNS] = BPF_EXIT_INSN();
-+
-+	errno = 0;
-+	probe_load(BPF_PROG_TYPE_SCHED_CLS, insns, ARRAY_SIZE(insns), NULL, 0,
-+		   ifindex);
-+
-+	return errno != E2BIG && errno != EINVAL;
-+}
--- 
-2.16.4
+jirka
 
