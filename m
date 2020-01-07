@@ -2,97 +2,130 @@ Return-Path: <SRS0=gZB8=24=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 474D7C282DD
-	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 21:23:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8D60C33C9E
+	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 21:26:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 20075206F0
-	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 21:23:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC5B42080A
+	for <bpf@archiver.kernel.org>; Tue,  7 Jan 2020 21:26:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1578432378;
+	bh=+8/l5PDbTPjHpcojaSQlovgVrTLf3sxj8sgQ4f4RTCE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=L9MseEdF++ddjezbsdrJrgQWBHcRvYpRFlePs7yFrP3q0uSkWTdIyS47DnHsw8cMF
+	 7E603K0wvKdlR5//WTmJ6b6FTJR9gsZIGEqzR1jrHsXXoHBGOGrP3UrL71MgZNk5UW
+	 ff2yNnmqEi/8D515gxL/73A1Kq/FwyntN/EHiypw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728842AbgAGVXJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Jan 2020 16:23:09 -0500
-Received: from namei.org ([65.99.196.166]:55898 "EHLO namei.org"
+        id S1728054AbgAGU7F (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Jan 2020 15:59:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59570 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728855AbgAGVXC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Jan 2020 16:23:02 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 007LMRpJ014254;
-        Tue, 7 Jan 2020 21:22:27 GMT
-Date:   Wed, 8 Jan 2020 08:22:27 +1100 (AEDT)
-From:   James Morris <jmorris@namei.org>
-To:     KP Singh <kpsingh@chromium.org>
-cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
+        id S1728036AbgAGU7E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Jan 2020 15:59:04 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9B19A2087F;
+        Tue,  7 Jan 2020 20:59:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578430744;
+        bh=+8/l5PDbTPjHpcojaSQlovgVrTLf3sxj8sgQ4f4RTCE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=xd/I2THQfD9fwWq2l0VueCBWyySIJ5qh/674ou4KpZKnl0eqCh0l0rN8zZu9VSU10
+         vZEvBNSSNzj6o+sdQX2b+AKBJWqap/Rnxx66DrQXxVo7ryRTHPz31xMmeCTZ0joGxd
+         AUBFhLLs1JULdhrj7F6+95Z1UohgxF8nOkJUpZpk=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Alexander Lobakin <alobakin@dlink.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Garnier <thgarnie@chromium.org>,
-        Michael Halcrow <mhalcrow@google.com>,
-        Paul Turner <pjt@google.com>,
-        Brendan Gregg <brendan.d.gregg@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
-Subject: Re: [PATCH bpf-next v1 06/13] bpf: lsm: Init Hooks and create files
- in securityfs
-In-Reply-To: <20191220154208.15895-7-kpsingh@chromium.org>
-Message-ID: <alpine.LRH.2.21.2001080822090.9683@namei.org>
-References: <20191220154208.15895-1-kpsingh@chromium.org> <20191220154208.15895-7-kpsingh@chromium.org>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        Andrii Nakryiko <andriin@fb.com>, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH 5.4 077/191] MIPS: BPF: eBPF JIT: check for MIPS ISA compliance in Kconfig
+Date:   Tue,  7 Jan 2020 21:53:17 +0100
+Message-Id: <20200107205337.103399328@linuxfoundation.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200107205332.984228665@linuxfoundation.org>
+References: <20200107205332.984228665@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 20 Dec 2019, KP Singh wrote:
+From: Alexander Lobakin <alobakin@dlink.ru>
 
-> From: KP Singh <kpsingh@google.com>
-> 
-> The LSM creates files in securityfs for each hook registered with the
-> LSM.
-> 
->     /sys/kernel/security/bpf/<h_name>
-> 
-> The list of LSM hooks are maintained in an internal header "hooks.h"
-> Eventually, this list should either be defined collectively in
-> include/linux/lsm_hooks.h or auto-generated from it.
-> 
-> * Creation of a file for the hook in the securityfs.
-> * Allocation of a bpf_lsm_hook data structure which stores
->   a pointer to the dentry of the newly created file in securityfs.
-> * Creation of a typedef for the hook so that BTF information
->   can be generated for the LSM hooks to:
-> 
->   - Make them "Compile Once, Run Everywhere".
->   - Pass the right arguments when the attached programs are run.
->   - Verify the accesses made by the program by using the BTF
->     information.
-> 
-> Signed-off-by: KP Singh <kpsingh@google.com>
+commit f596cf0d8062cb5d0a4513a8b3afca318c13be10 upstream.
 
+It is completely wrong to check for compile-time MIPS ISA revision in
+the body of bpf_int_jit_compile() as it may lead to get MIPS JIT fully
+omitted by the CC while the rest system will think that the JIT is
+actually present and works [1].
+We can check if the selected CPU really supports MIPS eBPF JIT at
+configure time and avoid such situations when kernel can be built
+without both JIT and interpreter, but with CONFIG_BPF_SYSCALL=y.
 
-Reviewed-by: James Morris <jamorris@linux.microsoft.com>
+[1] https://lore.kernel.org/linux-mips/09d713a59665d745e21d021deeaebe0a@dlink.ru/
 
+Fixes: 716850ab104d ("MIPS: eBPF: Initial eBPF support for MIPS32 architecture.")
+Cc: <stable@vger.kernel.org> # v5.2+
+Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
+Signed-off-by: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: Hassan Naveed <hnaveed@wavecomp.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Andrii Nakryiko <andriin@fb.com>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
--- 
-James Morris
-<jmorris@namei.org>
+---
+ arch/mips/Kconfig        |    2 +-
+ arch/mips/net/ebpf_jit.c |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -46,7 +46,7 @@ config MIPS
+ 	select HAVE_ARCH_TRACEHOOK
+ 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if CPU_SUPPORTS_HUGEPAGES
+ 	select HAVE_ASM_MODVERSIONS
+-	select HAVE_EBPF_JIT if (64BIT && !CPU_MICROMIPS)
++	select HAVE_EBPF_JIT if 64BIT && !CPU_MICROMIPS && TARGET_ISA_REV >= 2
+ 	select HAVE_CONTEXT_TRACKING
+ 	select HAVE_COPY_THREAD_TLS
+ 	select HAVE_C_RECORDMCOUNT
+--- a/arch/mips/net/ebpf_jit.c
++++ b/arch/mips/net/ebpf_jit.c
+@@ -1803,7 +1803,7 @@ struct bpf_prog *bpf_int_jit_compile(str
+ 	unsigned int image_size;
+ 	u8 *image_ptr;
+ 
+-	if (!prog->jit_requested || MIPS_ISA_REV < 2)
++	if (!prog->jit_requested)
+ 		return prog;
+ 
+ 	tmp = bpf_jit_blind_constants(prog);
+
 
