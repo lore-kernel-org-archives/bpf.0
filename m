@@ -2,165 +2,275 @@ Return-Path: <SRS0=uCLx=25=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B080C33C9E
-	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 07:26:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69958C33C9B
+	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 08:42:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0C270205F4
-	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 07:26:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35D0E206DA
+	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 08:42:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1578468362;
-	bh=3AsZoo+i3cCGkkn6WsMuQ3CgEEQ2grhcUYesSgzMDdA=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=sZl5VzC+EeyrMM2zq+41OFh0g6y6ja1COd+iexKysX6AZjNBGlsvzMwUAEdRnlUjL
-	 t1NpsRNghzqn3m/w9xj3DgjlUbnRCpA3OXEWBVqzYH+GkFObo6trgb4uRC3hx8L528
-	 muOet8LGhAFTeipVpgsBs/RXkvAq2C+AzSPgZJUs=
+	s=default; t=1578472920;
+	bh=PXWKCUXCMzVMdtKOBwvy5/oEvTcWRUdl1Vb3OkpTR5Q=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=0mlb4FDzgXDdSweFndnxnxpJgxrHhM4mEmzPAh8Uo31fjj6QclP+cVc2h0r1+eSet
+	 qZhCTEwuav/EFDWRTOt1PwgOPkXPe3Ia51yF1l4mEmptWrAN4fRqZdqlAB7nnabO8v
+	 AeEvcvMl3Mfur2FdXI6yQH8GxpiycJ1DLgez6aPM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726895AbgAHH0A convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 8 Jan 2020 02:26:00 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:54272 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726715AbgAHHZ7 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 8 Jan 2020 02:25:59 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0087PTOp012698
-        for <bpf@vger.kernel.org>; Tue, 7 Jan 2020 23:25:58 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xcy1vkhvd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 07 Jan 2020 23:25:58 -0800
-Received: from intmgw004.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 7 Jan 2020 23:25:51 -0800
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id D159F760DB5; Tue,  7 Jan 2020 23:25:46 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 4/6] selftests/bpf: Add fexit-to-skb test for global funcs
-Date:   Tue, 7 Jan 2020 23:25:36 -0800
-Message-ID: <20200108072538.3359838-5-ast@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20200108072538.3359838-1-ast@kernel.org>
-References: <20200108072538.3359838-1-ast@kernel.org>
+        id S1726368AbgAHIl7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Jan 2020 03:41:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43162 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727346AbgAHIl5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Jan 2020 03:41:57 -0500
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 779D720882
+        for <bpf@vger.kernel.org>; Wed,  8 Jan 2020 08:41:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578472915;
+        bh=PXWKCUXCMzVMdtKOBwvy5/oEvTcWRUdl1Vb3OkpTR5Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=M9aBQBAFTIEBSLVIQXPNQIx5xRl6tnG/w3q7ncmKz18laMS58AwmCyudHt7Qg8sHU
+         wAJInX4TicDjT7rDP7P/3lyWC/WIIRxyDuEly0J4sPtTb/jQ8fHh4KuLct3rHblfVC
+         00D/ugrWbEdzQ/AqiuuqnUiFnZgoHR2yuW8MSmUg=
+Received: by mail-wm1-f52.google.com with SMTP id a5so1542258wmb.0
+        for <bpf@vger.kernel.org>; Wed, 08 Jan 2020 00:41:55 -0800 (PST)
+X-Gm-Message-State: APjAAAX2bkF79nBsGhlYvT6NVYhbEmCiSdjDcjKrj4hNLvigVkbMgUIp
+        UjevLtVSIaWiMbfw/mTkYVFlGAXNJB7kcn8eb6aJHQ==
+X-Google-Smtp-Source: APXvYqzt1cPoPFTMpvv8naNX973P9NV0bYWBJukID4v73DLtgoV6pd86vv2LMqwu+M/KA1E78eCU3sePwfHYc8Tqidg=
+X-Received: by 2002:a1c:3dc3:: with SMTP id k186mr2335219wma.95.1578472913806;
+ Wed, 08 Jan 2020 00:41:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-08_01:2020-01-07,2020-01-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- impostorscore=0 malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 suspectscore=1 adultscore=0 spamscore=0 mlxlogscore=999
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001080063
-X-FB-Internal: deliver
+References: <21bf6bb46544eab79e792980f82520f8fbdae9b5.camel@intel.com>
+ <DB882EE8-20B2-4631-A808-E5C968B24CEB@amacapital.net> <cdd157ef011efda92c9434f76141fc3aef174d85.camel@intel.com>
+In-Reply-To: <cdd157ef011efda92c9434f76141fc3aef174d85.camel@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Wed, 8 Jan 2020 00:41:42 -0800
+X-Gmail-Original-Message-ID: <CALCETrV_tGk=B3Hw0h9viW45wMqB_W+rwWzx6LnC3-vSATOUOA@mail.gmail.com>
+Message-ID: <CALCETrV_tGk=B3Hw0h9viW45wMqB_W+rwWzx6LnC3-vSATOUOA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Make trampolines W^X
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     "songliubraving@fb.com" <songliubraving@fb.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "kuznet@ms2.inr.ac.ru" <kuznet@ms2.inr.ac.ru>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "mjg59@google.com" <mjg59@google.com>,
+        "thgarnie@chromium.org" <thgarnie@chromium.org>,
+        "kpsingh@chromium.org" <kpsingh@chromium.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "revest@chromium.org" <revest@chromium.org>,
+        "jannh@google.com" <jannh@google.com>,
+        "namit@vmware.com" <namit@vmware.com>,
+        "jackmanb@chromium.org" <jackmanb@chromium.org>,
+        "kafai@fb.com" <kafai@fb.com>, "yhs@fb.com" <yhs@fb.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
+        "mhalcrow@google.com" <mhalcrow@google.com>,
+        "andriin@fb.com" <andriin@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add simple fexit prog type to skb prog type test when subprogram is a global
-function.
+> On Jan 7, 2020, at 9:01 AM, Edgecombe, Rick P <rick.p.edgecombe@intel.com=
+> wrote:
+>
+> =EF=BB=BFCC Nadav and Jessica.
+>
+> On Mon, 2020-01-06 at 15:36 -1000, Andy Lutomirski wrote:
+>>> On Jan 6, 2020, at 12:25 PM, Edgecombe, Rick P <rick.p.edgecombe@intel.=
+com>
+>>> wrote:
+>>>
+>>> =EF=BB=BFOn Sat, 2020-01-04 at 09:49 +0900, Andy Lutomirski wrote:
+>>>>>>> On Jan 4, 2020, at 8:47 AM, KP Singh <kpsingh@chromium.org> wrote:
+>>>>>>
+>>>>>> =EF=BB=BFFrom: KP Singh <kpsingh@google.com>
+>>>>>>
+>>>>>> The image for the BPF trampolines is allocated with
+>>>>>> bpf_jit_alloc_exe_page which marks this allocated page executable. T=
+his
+>>>>>> means that the allocated memory is W and X at the same time making i=
+t
+>>>>>> susceptible to WX based attacks.
+>>>>>>
+>>>>>> Since the allocated memory is shared between two trampolines (the
+>>>>>> current and the next), 2 pages must be allocated to adhere to W^X an=
+d
+>>>>>> the following sequence is obeyed where trampolines are modified:
+>>>>>
+>>>>> Can we please do better rather than piling garbage on top of garbage?
+>>>>>
+>>>>>>
+>>>>>> - Mark memory as non executable (set_memory_nx). While module_alloc =
+for
+>>>>>> x86 allocates the memory as PAGE_KERNEL and not PAGE_KERNEL_EXEC, no=
+t
+>>>>>> all implementations of module_alloc do so
+>>>>>
+>>>>> How about fixing this instead?
+>>>>>
+>>>>>> - Mark the memory as read/write (set_memory_rw)
+>>>>>
+>>>>> Probably harmless, but see above about fixing it.
+>>>>>
+>>>>>> - Modify the trampoline
+>>>>>
+>>>>> Seems reasonable. It=E2=80=99s worth noting that this whole approach =
+is
+>>>>> suboptimal:
+>>>>> the =E2=80=9Cmodule=E2=80=9D allocator should really be returning a l=
+ist of pages to be
+>>>>> written (not at the final address!) with the actual executable mappin=
+g to
+>>>>> be
+>>>>> materialized later, but that=E2=80=99s a bigger project that you=E2=
+=80=99re welcome to
+>>>>> ignore
+>>>>> for now.  (Concretely, it should produce a vmap address with backing =
+pages
+>>>>> but
+>>>>> with the vmap alias either entirely unmapped or read-only. A subseque=
+nt
+>>>>> healer
+>>>>> would, all at once, make the direct map pages RO or not-present and m=
+ake
+>>>>> the
+>>>>> vmap alias RX.)
+>>>>>> - Mark the memory as read-only (set_memory_ro)
+>>>>>> - Mark the memory as executable (set_memory_x)
+>>>>>
+>>>>> No, thanks. There=E2=80=99s very little excuse for doing two IPI flus=
+hes when one
+>>>>> would suffice.
+>>>>>
+>>>>> As far as I know, all architectures can do this with a single flush
+>>>>> without
+>>>>> races  x86 certainly can. The module freeing code gets this sequence
+>>>>> right.
+>>>>> Please reuse its mechanism or, if needed, export the relevant interfa=
+ces.
+>>>
+>>> So if I understand this right, some trampolines have been added that ar=
+e
+>>> currently set as RWX at modification time AND left that way during runt=
+ime?
+>>> The
+>>> discussion on the order of set_memory_() calls in the commit message ma=
+de me
+>>> think that this was just a modification time thing at first.
+>>
+>> I=E2=80=99m not sure what the status quo is.
+>>
+>> We really ought to have a genuinely good API for allocation and initiali=
+zation
+>> of text.  We can do so much better than set_memory_blahblah.
+>>
+>> FWIW, I have some ideas about making kernel flushes cheaper. It=E2=80=99=
+s currently
+>> blocked on finding some time and on tglx=E2=80=99s irqtrace work.
+>>
+>
+> Makes sense to me. I guess there are 6 types of text allocations now:
+> - These two BPF trampolines
+> - BPF JITs
+> - Modules
+> - Kprobes
+> - Ftrace
+>
+> All doing (or should be doing) pretty much the same thing. I believe Jess=
+ica had
+> said at one point that she didn't like all the other features using
+> module_alloc() as it was supposed to be just for real modules. Where woul=
+d the
+> API live?
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  |  1 +
- .../selftests/bpf/progs/fexit_bpf2bpf.c       | 15 ++++++++++
- .../selftests/bpf/progs/test_pkt_access.c     | 28 +++++++++++++++++++
- 3 files changed, 44 insertions(+)
+New header?  This shouldn=E2=80=99t matter that much.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-index b426bf2f97e4..7d3740d38965 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-@@ -98,6 +98,7 @@ static void test_target_yes_callees(void)
- 		"fexit/test_pkt_access",
- 		"fexit/test_pkt_access_subprog1",
- 		"fexit/test_pkt_access_subprog2",
-+		"fexit/test_pkt_access_subprog3",
- 	};
- 	test_fexit_bpf2bpf_common("./fexit_bpf2bpf.o",
- 				  "./test_pkt_access.o",
-diff --git a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
-index 2d211ee98a1c..81d7b4aaf79e 100644
---- a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
-@@ -79,4 +79,19 @@ int test_subprog2(struct args_subprog2 *ctx)
- 	test_result_subprog2 = 1;
- 	return 0;
- }
-+
-+__u64 test_result_subprog3 = 0;
-+BPF_TRACE_3("fexit/test_pkt_access_subprog3", test_subprog3,
-+	    int, val, struct sk_buff *, skb, int, ret)
-+{
-+	int len;
-+
-+	__builtin_preserve_access_index(({
-+		len = skb->len;
-+	}));
-+	if (len != 74 || ret != 74 * val || val != 3)
-+		return 0;
-+	test_result_subprog3 = 1;
-+	return 0;
-+}
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_pkt_access.c b/tools/testing/selftests/bpf/progs/test_pkt_access.c
-index 3a7b4b607ed3..b77cebf71e66 100644
---- a/tools/testing/selftests/bpf/progs/test_pkt_access.c
-+++ b/tools/testing/selftests/bpf/progs/test_pkt_access.c
-@@ -47,6 +47,32 @@ int test_pkt_access_subprog2(int val, volatile struct __sk_buff *skb)
- 	return skb->len * val;
- }
- 
-+#define MAX_STACK (512 - 2 * 32)
-+
-+__attribute__ ((noinline))
-+int get_skb_len(struct __sk_buff *skb)
-+{
-+	volatile char buf[MAX_STACK] = {};
-+
-+	return skb->len;
-+}
-+
-+int get_skb_ifindex(int, struct __sk_buff *skb, int);
-+
-+__attribute__ ((noinline))
-+int test_pkt_access_subprog3(int val, struct __sk_buff *skb)
-+{
-+	return get_skb_len(skb) * get_skb_ifindex(val, skb, 1);
-+}
-+
-+__attribute__ ((noinline))
-+int get_skb_ifindex(int val, struct __sk_buff *skb, int var)
-+{
-+	volatile char buf[MAX_STACK] = {};
-+
-+	return skb->ifindex * val * var;
-+}
-+
- SEC("classifier/test_pkt_access")
- int test_pkt_access(struct __sk_buff *skb)
- {
-@@ -82,6 +108,8 @@ int test_pkt_access(struct __sk_buff *skb)
- 		return TC_ACT_SHOT;
- 	if (test_pkt_access_subprog2(2, skb) != skb->len * 2)
- 		return TC_ACT_SHOT;
-+	if (test_pkt_access_subprog3(3, skb) != skb->len * 3 * skb->ifindex)
-+		return TC_ACT_SHOT;
- 	if (tcp) {
- 		if (((void *)(tcp) + 20) > data_end || proto != 6)
- 			return TC_ACT_SHOT;
--- 
-2.23.0
+Here are two strawman proposals.  All of this is very rough -- the
+actual data structures and signatures are likely problematic for
+multiple reasons.
 
+--- First proposal ---
+
+struct text_allocation {
+  void *final_addr;
+  struct page *pages;
+  int npages;
+};
+
+int text_alloc(struct text_allocation *out, size_t size);
+
+/* now final_addr is not accessible and pages is writable. */
+
+int text_freeze(struct text_allocation *alloc);
+
+/* now pages are not accessible and final_addr is RO.  Alternatively,
+pages are RO and final_addr is unmapped. */
+
+int text_finish(struct text_allocation *alloc);
+
+/* now final_addr is RX.  All done. */
+
+This gets it with just one flush and gives a chance to double-check in
+case of race attacks from other CPUs.  Double-checking is annoying,
+though.
+
+--- Second proposal ---
+
+struct text_allocation {
+  void *final_addr;
+  /* lots of opaque stuff including an mm_struct */
+  /* optional: list of struct page, but this isn't obviously useful */
+};
+
+int text_alloc(struct text_allocation *out, size_t size);
+
+/* Memory is allocated.  There is no way to access it at all right
+now.  The memory is RO or not present in the direct map. */
+
+void __user *text_activate_mapping(struct text_allocation *out);
+
+/* Now the text is RW at *user* address given by return value.
+Preemption is off if required by use_temporary_mm().  Real user memory
+cannot be accessed. */
+
+void text_deactivate_mapping(struct text_allocation *alloc);
+
+/* Now the memory is inaccessible again. */
+
+void text_finalize(struct text_allocation *alloc);
+
+/* Now it's RX or XO at the final address. */
+
+
+Pros of second approach:
+
+ - Inherently immune to cross-CPU attack.  No double-check.
+
+ - If we ever implement a cache of non-direct-mapped, unaliased pages,
+then it works with no flushes at all.  We could even relax it a bit to
+allow non-direct-mapped pages that may have RX / XO aliases but no W
+aliases.
+
+ - Can easily access without worrying about page boundaries.
+
+Cons:
+
+ - The use of a temporary mm is annoying -- you can't copy from user
+memory, for example.
