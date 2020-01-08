@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DB0DC33CA1
-	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 07:25:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B080C33C9E
+	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 07:26:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4542420705
-	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 07:25:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C270205F4
+	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 07:26:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1578468359;
-	bh=mrl4W6EMFLKca4Z5kFvmMBTVN/pspMUsu5RcCem5ybc=;
+	s=default; t=1578468362;
+	bh=3AsZoo+i3cCGkkn6WsMuQ3CgEEQ2grhcUYesSgzMDdA=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=bWKIllrjvt7ZD8zv2z8ZXdoNDzqVp4YJaHG77tmHb+eSNDjMcXsdfy9hzOGU/RwVf
-	 REtfVGta/ij8PUtxb1pHz64MPY9fdgATsjOUDwTvmGGKIrH5BO+sGId66gWEpeyG1O
-	 o2Gf9nlKgw4UX/b/F+zj46MmeHaS+fVEjr0XF/9M=
+	b=sZl5VzC+EeyrMM2zq+41OFh0g6y6ja1COd+iexKysX6AZjNBGlsvzMwUAEdRnlUjL
+	 t1NpsRNghzqn3m/w9xj3DgjlUbnRCpA3OXEWBVqzYH+GkFObo6trgb4uRC3hx8L528
+	 muOet8LGhAFTeipVpgsBs/RXkvAq2C+AzSPgZJUs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726856AbgAHHZ5 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 8 Jan 2020 02:25:57 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:17858 "EHLO
+        id S1726895AbgAHH0A convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 8 Jan 2020 02:26:00 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:54272 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726836AbgAHHZ4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 8 Jan 2020 02:25:56 -0500
+        by vger.kernel.org with ESMTP id S1726715AbgAHHZ7 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Jan 2020 02:25:59 -0500
 Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0087PTMK012689
-        for <bpf@vger.kernel.org>; Tue, 7 Jan 2020 23:25:56 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xcy1vkhv7-3
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0087PTOp012698
+        for <bpf@vger.kernel.org>; Tue, 7 Jan 2020 23:25:58 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xcy1vkhvd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 07 Jan 2020 23:25:56 -0800
-Received: from intmgw002.06.prn3.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 07 Jan 2020 23:25:58 -0800
+Received: from intmgw004.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Tue, 7 Jan 2020 23:25:54 -0800
+ 15.1.1713.5; Tue, 7 Jan 2020 23:25:51 -0800
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id EBC09760DB5; Tue,  7 Jan 2020 23:25:50 -0800 (PST)
+        id D159F760DB5; Tue,  7 Jan 2020 23:25:46 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -46,9 +46,9 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 6/6] selftests/bpf: Modify a test to check global functions
-Date:   Tue, 7 Jan 2020 23:25:38 -0800
-Message-ID: <20200108072538.3359838-7-ast@kernel.org>
+Subject: [PATCH bpf-next 4/6] selftests/bpf: Add fexit-to-skb test for global funcs
+Date:   Tue, 7 Jan 2020 23:25:36 -0800
+Message-ID: <20200108072538.3359838-5-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20200108072538.3359838-1-ast@kernel.org>
 References: <20200108072538.3359838-1-ast@kernel.org>
@@ -60,7 +60,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-01-08_01:2020-01-07,2020-01-08 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
  impostorscore=0 malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 suspectscore=1 adultscore=0 spamscore=0 mlxlogscore=664
+ lowpriorityscore=0 suspectscore=1 adultscore=0 spamscore=0 mlxlogscore=999
  priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-2001080063
 X-FB-Internal: deliver
@@ -69,37 +69,98 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make two static functions in test_xdp_noinline.c global:
-before: processed 2790 insns
-after: processed 2598 insns
+Add simple fexit prog type to skb prog type test when subprogram is a global
+function.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_xdp_noinline.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  |  1 +
+ .../selftests/bpf/progs/fexit_bpf2bpf.c       | 15 ++++++++++
+ .../selftests/bpf/progs/test_pkt_access.c     | 28 +++++++++++++++++++
+ 3 files changed, 44 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-index e88d7b9d65ab..f95bc1a17667 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-@@ -86,7 +86,7 @@ u32 jhash(const void *key, u32 length, u32 initval)
- 	return c;
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+index b426bf2f97e4..7d3740d38965 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+@@ -98,6 +98,7 @@ static void test_target_yes_callees(void)
+ 		"fexit/test_pkt_access",
+ 		"fexit/test_pkt_access_subprog1",
+ 		"fexit/test_pkt_access_subprog2",
++		"fexit/test_pkt_access_subprog3",
+ 	};
+ 	test_fexit_bpf2bpf_common("./fexit_bpf2bpf.o",
+ 				  "./test_pkt_access.o",
+diff --git a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
+index 2d211ee98a1c..81d7b4aaf79e 100644
+--- a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
+@@ -79,4 +79,19 @@ int test_subprog2(struct args_subprog2 *ctx)
+ 	test_result_subprog2 = 1;
+ 	return 0;
+ }
++
++__u64 test_result_subprog3 = 0;
++BPF_TRACE_3("fexit/test_pkt_access_subprog3", test_subprog3,
++	    int, val, struct sk_buff *, skb, int, ret)
++{
++	int len;
++
++	__builtin_preserve_access_index(({
++		len = skb->len;
++	}));
++	if (len != 74 || ret != 74 * val || val != 3)
++		return 0;
++	test_result_subprog3 = 1;
++	return 0;
++}
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_pkt_access.c b/tools/testing/selftests/bpf/progs/test_pkt_access.c
+index 3a7b4b607ed3..b77cebf71e66 100644
+--- a/tools/testing/selftests/bpf/progs/test_pkt_access.c
++++ b/tools/testing/selftests/bpf/progs/test_pkt_access.c
+@@ -47,6 +47,32 @@ int test_pkt_access_subprog2(int val, volatile struct __sk_buff *skb)
+ 	return skb->len * val;
  }
  
--static __attribute__ ((noinline))
++#define MAX_STACK (512 - 2 * 32)
++
 +__attribute__ ((noinline))
- u32 __jhash_nwords(u32 a, u32 b, u32 c, u32 initval)
- {
- 	a += initval;
-@@ -96,7 +96,7 @@ u32 __jhash_nwords(u32 a, u32 b, u32 c, u32 initval)
- 	return c;
- }
- 
--static __attribute__ ((noinline))
++int get_skb_len(struct __sk_buff *skb)
++{
++	volatile char buf[MAX_STACK] = {};
++
++	return skb->len;
++}
++
++int get_skb_ifindex(int, struct __sk_buff *skb, int);
++
 +__attribute__ ((noinline))
- u32 jhash_2words(u32 a, u32 b, u32 initval)
++int test_pkt_access_subprog3(int val, struct __sk_buff *skb)
++{
++	return get_skb_len(skb) * get_skb_ifindex(val, skb, 1);
++}
++
++__attribute__ ((noinline))
++int get_skb_ifindex(int val, struct __sk_buff *skb, int var)
++{
++	volatile char buf[MAX_STACK] = {};
++
++	return skb->ifindex * val * var;
++}
++
+ SEC("classifier/test_pkt_access")
+ int test_pkt_access(struct __sk_buff *skb)
  {
- 	return __jhash_nwords(a, b, 0, initval + JHASH_INITVAL + (2 << 2));
+@@ -82,6 +108,8 @@ int test_pkt_access(struct __sk_buff *skb)
+ 		return TC_ACT_SHOT;
+ 	if (test_pkt_access_subprog2(2, skb) != skb->len * 2)
+ 		return TC_ACT_SHOT;
++	if (test_pkt_access_subprog3(3, skb) != skb->len * 3 * skb->ifindex)
++		return TC_ACT_SHOT;
+ 	if (tcp) {
+ 		if (((void *)(tcp) + 20) > data_end || proto != 6)
+ 			return TC_ACT_SHOT;
 -- 
 2.23.0
 
