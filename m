@@ -2,42 +2,43 @@ Return-Path: <SRS0=uCLx=25=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55FD0C00523
-	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 07:25:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEB51C00523
+	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 07:25:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1F807205F4
-	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 07:25:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A4557205F4
+	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 07:25:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1578468351;
-	bh=8TPpdSu9IJs6Ub56yvJlAaEMPBJuLHOmmHLj5N5Ygi8=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=W081qjP1pHLMOtS+iC9ZAw7swAZ7lHdO853FGbFlR0IG0M9P3zmVqHLEfl+WGW0qO
-	 WXQZVBCRZmw/rxY3eghVU0d1CT/uxIMzDSMft1IMBur+OmtlYtmvWoOBstIGS7ZFzb
-	 MfjV46/ePDtY14Q/ipX5lHurMtFTFFsAO9uecA9o=
+	s=default; t=1578468352;
+	bh=H0O/dzGNaYMCYeBo6zgruChSnoCX/JDjomJUghwkA8M=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=d27/PbUGsneyi97xPmP/UrydhxvP/XhwX3QMkY6T7ePreVoIPpxcU+79gum9yoXw0
+	 zcYoo6+sYyIR+0XTX+BR9/8zEguZUZc+Ye9QB2U9F4JdO5aqCdb0iKEMc0TCAD+BQS
+	 Afi9itHDg1aekxPGaVxPXUAhK+sdUycwdYJOYjlM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbgAHHZu convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 8 Jan 2020 02:25:50 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:1304 "EHLO
+        id S1726770AbgAHHZw convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 8 Jan 2020 02:25:52 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7288 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725944AbgAHHZu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 8 Jan 2020 02:25:50 -0500
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0087PndV015493
-        for <bpf@vger.kernel.org>; Tue, 7 Jan 2020 23:25:49 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xd3ep1w2w-5
+        by vger.kernel.org with ESMTP id S1725944AbgAHHZv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Jan 2020 02:25:51 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0087PpXn027362
+        for <bpf@vger.kernel.org>; Tue, 7 Jan 2020 23:25:51 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xd26d2bra-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 07 Jan 2020 23:25:49 -0800
-Received: from intmgw002.41.prn1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 07 Jan 2020 23:25:51 -0800
+Received: from intmgw005.05.ash5.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Tue, 7 Jan 2020 23:25:48 -0800
+ 15.1.1713.5; Tue, 7 Jan 2020 23:25:49 -0800
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id A7FA2760DB5; Tue,  7 Jan 2020 23:25:38 -0800 (PST)
+        id DD893760DB5; Tue,  7 Jan 2020 23:25:48 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -45,20 +46,22 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 0/6] bpf: Introduce global functions
-Date:   Tue, 7 Jan 2020 23:25:32 -0800
-Message-ID: <20200108072538.3359838-1-ast@kernel.org>
+Subject: [PATCH bpf-next 5/6] selftests/bpf: Add a test for a large global function
+Date:   Tue, 7 Jan 2020 23:25:37 -0800
+Message-ID: <20200108072538.3359838-6-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20200108072538.3359838-1-ast@kernel.org>
+References: <20200108072538.3359838-1-ast@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-01-08_01:2020-01-07,2020-01-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- mlxlogscore=474 phishscore=0 clxscore=1034 impostorscore=0 mlxscore=0
- adultscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501
- suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ bulkscore=0 suspectscore=1 malwarescore=0 adultscore=0 clxscore=1034
+ priorityscore=1501 phishscore=0 mlxscore=0 mlxlogscore=989 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-2001080063
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -66,35 +69,69 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce static vs global functions and function by function verification.
-This is another step toward dynamic re-linking (or replacement) of global
-functions. See patch 3 for details. The rest are supporting patches.
+test results:
+pyperf50 with always_inlined the same function five times: processed 46378 insns
+pyperf50 with global function: processed 6102 insns
 
-Alexei Starovoitov (6):
-  libbpf: Sanitize BTF_KIND_FUNC linkage
-  libbpf: Collect static vs global info about functions
-  bpf: Introduce function-by-function verification
-  selftests/bpf: Add fexit-to-skb test for global funcs
-  selftests/bpf: Add a test for a large global function
-  selftests/bpf: Modify a test to check global functions
-
- include/linux/bpf.h                           |   7 +-
- include/linux/bpf_verifier.h                  |   7 +-
- include/uapi/linux/btf.h                      |   6 +
- kernel/bpf/btf.c                              | 147 ++++++++---
- kernel/bpf/verifier.c                         | 228 ++++++++++++++----
- tools/include/uapi/linux/btf.h                |   6 +
- tools/lib/bpf/libbpf.c                        | 150 +++++++++++-
- .../bpf/prog_tests/bpf_verif_scale.c          |   2 +
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  |   1 +
- .../selftests/bpf/progs/fexit_bpf2bpf.c       |  15 ++
- tools/testing/selftests/bpf/progs/pyperf.h    |   9 +-
- .../selftests/bpf/progs/pyperf_global.c       |   5 +
- .../selftests/bpf/progs/test_pkt_access.c     |  28 +++
- .../selftests/bpf/progs/test_xdp_noinline.c   |   4 +-
- 14 files changed, 528 insertions(+), 87 deletions(-)
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c | 2 ++
+ tools/testing/selftests/bpf/progs/pyperf.h               | 9 +++++++--
+ tools/testing/selftests/bpf/progs/pyperf_global.c        | 5 +++++
+ 3 files changed, 14 insertions(+), 2 deletions(-)
  create mode 100644 tools/testing/selftests/bpf/progs/pyperf_global.c
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+index 9486c13af6b2..e9f2f12ba06b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+@@ -48,6 +48,8 @@ void test_bpf_verif_scale(void)
+ 		{ "test_verif_scale2.o", BPF_PROG_TYPE_SCHED_CLS },
+ 		{ "test_verif_scale3.o", BPF_PROG_TYPE_SCHED_CLS },
+ 
++		{ "pyperf_global.o", BPF_PROG_TYPE_RAW_TRACEPOINT },
++
+ 		/* full unroll by llvm */
+ 		{ "pyperf50.o", BPF_PROG_TYPE_RAW_TRACEPOINT },
+ 		{ "pyperf100.o", BPF_PROG_TYPE_RAW_TRACEPOINT },
+diff --git a/tools/testing/selftests/bpf/progs/pyperf.h b/tools/testing/selftests/bpf/progs/pyperf.h
+index 71d383cc9b85..e186899954e9 100644
+--- a/tools/testing/selftests/bpf/progs/pyperf.h
++++ b/tools/testing/selftests/bpf/progs/pyperf.h
+@@ -154,7 +154,12 @@ struct {
+ 	__uint(value_size, sizeof(long long) * 127);
+ } stackmap SEC(".maps");
+ 
+-static __always_inline int __on_event(struct pt_regs *ctx)
++#ifdef GLOBAL_FUNC
++__attribute__((noinline))
++#else
++static __always_inline
++#endif
++int __on_event(struct bpf_raw_tracepoint_args *ctx)
+ {
+ 	uint64_t pid_tgid = bpf_get_current_pid_tgid();
+ 	pid_t pid = (pid_t)(pid_tgid >> 32);
+@@ -254,7 +259,7 @@ static __always_inline int __on_event(struct pt_regs *ctx)
+ }
+ 
+ SEC("raw_tracepoint/kfree_skb")
+-int on_event(struct pt_regs* ctx)
++int on_event(struct bpf_raw_tracepoint_args* ctx)
+ {
+ 	int i, ret = 0;
+ 	ret |= __on_event(ctx);
+diff --git a/tools/testing/selftests/bpf/progs/pyperf_global.c b/tools/testing/selftests/bpf/progs/pyperf_global.c
+new file mode 100644
+index 000000000000..079e78a7562b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/pyperf_global.c
+@@ -0,0 +1,5 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#define STACK_MAX_LEN 50
++#define GLOBAL_FUNC
++#include "pyperf.h"
 -- 
 2.23.0
 
