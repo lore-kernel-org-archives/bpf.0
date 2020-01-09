@@ -1,87 +1,98 @@
-Return-Path: <SRS0=uCLx=25=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=lXkO=26=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFE55C282DD
-	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 23:18:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D2CCC282DD
+	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 00:35:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8961E206DB
-	for <bpf@archiver.kernel.org>; Wed,  8 Jan 2020 23:18:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C63F6206ED
+	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 00:35:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q/lnrI8g"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="UKw5Cw8D"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727681AbgAHXSs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Jan 2020 18:18:48 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42806 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726758AbgAHXSs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Jan 2020 18:18:48 -0500
-Received: by mail-ot1-f68.google.com with SMTP id 66so5336090otd.9;
-        Wed, 08 Jan 2020 15:18:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gnh1eutVpqi321VrKyGmS6TYs/v+b41t3J1oX4U+fC8=;
-        b=q/lnrI8gyvk2f8L+VJrcwBC22Uz0v0GVQrwYJ7DJ2l+1sVF2r+Ry76kBCbFQLXP0Gz
-         3gzLFTOHAxl6Zsqd3kFyl2QaJDSEw6BPP5WyNdUdXasY5iQ3Bkp5ycQWTG4BgufbrmGz
-         vFOOU3BzGk+h1o5wQJbVFrz2nhv5Pa3xZCFFYS+QrxzFcc7anDwN0E7rLVcYeDfcS20Z
-         QSY7LypU895yqp5cDZHxbvzLPTfuGyynPY8fG4cMuurj1QZjmnYFBOfhXxoCXLV9wE06
-         QIziPiesadk6koFvOxJ268AHioN255/IOPDUMiSZGNNW/63Pe8CADdZ+/wfpszeI+S/Q
-         9PCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gnh1eutVpqi321VrKyGmS6TYs/v+b41t3J1oX4U+fC8=;
-        b=Cw/j45BujwBjuYWTo1UUXHElE4n2Pw//6+m/hZpY/6sbYyNyj82Pr6zhKofQ/AjhJs
-         1V7+5Qebo39BZMGUSXKWZHPn9QaWwd3xmAxq5I5PoictLXnFE2TCVyBniW31OP/NjrdQ
-         8wc8xjuYl/6REc3IhXkK20fykPraPWxlyPIlULbD851nhZ1emwwtmLXnaAW5LUWMYnut
-         EWweaiLZTJfcG3kd18YdJAoLFCMcSYS+vFY/oC1DYvmJM5LaYw/peLUo0pqjwsOONxiV
-         7wn8UoB7XlP5YcvyM6fae6539P47wxN8ZhB5FQ5uepHX6CCaSNbeRgKvMpJaQ3Nv8Dm+
-         LCCQ==
-X-Gm-Message-State: APjAAAUZ49jUGy30KpO3xpdM6kfpX7wilsLU2Rk49i5+On8zb93KtGZ3
-        cGl6lM6qj4UEPic6svYaCJ750ul2w+gQMdF8OsM=
-X-Google-Smtp-Source: APXvYqxgn2raXNI2+TsoD/gxAH2YTffmWaZpzZ8rc14d7w+9YefVvfo7DDLC9BWYtKvxuxCwSLMeRJzI3gs+vPep7/4=
-X-Received: by 2002:a9d:7851:: with SMTP id c17mr6313601otm.58.1578525527391;
- Wed, 08 Jan 2020 15:18:47 -0800 (PST)
+        id S1727237AbgAIAfC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Jan 2020 19:35:02 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32266 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726930AbgAIAfC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Jan 2020 19:35:02 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0090V5hm026013
+        for <bpf@vger.kernel.org>; Wed, 8 Jan 2020 16:35:01 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=M9EHpNrDr1lJ5Uo6eiTBlsMHkWM+vmH+MrEGGeU1TME=;
+ b=UKw5Cw8D7YmBi/QLL/VHTdkjtr6JWEMu3z+VBDrDmmDEMHt+P42z1M/8M9ny+S2LrF84
+ lzMfEalkTgwYInUT3NwDtqtAKo7sArYOcmVJ0FIIecehQSRrUMfcqQ565rFUcWmadQp0
+ HhZzV1Nbr6autPoSzuPpmWzVTO97hD5bh5g= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xdrj8gbat-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 08 Jan 2020 16:35:01 -0800
+Received: from intmgw004.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 8 Jan 2020 16:35:00 -0800
+Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
+        id 3B7122942576; Wed,  8 Jan 2020 16:34:59 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Martin KaFai Lau <kafai@fb.com>
+Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
+        <netdev@vger.kernel.org>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next v4 03/11] bpf: Add enum support to btf_ctx_access()
+Date:   Wed, 8 Jan 2020 16:34:59 -0800
+Message-ID: <20200109003459.3855366-1-kafai@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200109003453.3854769-1-kafai@fb.com>
+References: <20200109003453.3854769-1-kafai@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20200108192132.189221-1-sdf@google.com>
-In-Reply-To: <20200108192132.189221-1-sdf@google.com>
-From:   Petar Penkov <ppenkov.kernel@gmail.com>
-Date:   Wed, 8 Jan 2020 15:18:36 -0800
-Message-ID: <CAGdtWsS7hBF0d8F_Nidar-c+NRsDSwbk6K=cXbAOu-0kW74F8g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: restore original comm in test_overhead
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        davem@davemloft.net, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-08_07:2020-01-08,2020-01-08 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=13
+ adultscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0
+ clxscore=1015 mlxscore=0 mlxlogscore=844 priorityscore=1501 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001090003
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jan 8, 2020 at 11:49 AM Stanislav Fomichev <sdf@google.com> wrote:
->
-> test_overhead changes task comm in order to estimate BPF trampoline
-> overhead but never sets the comm back to the original one.
-> We have the tests (like core_reloc.c) that have 'test_progs'
-> as hard-coded expected comm, so let's try to preserve the
-> original comm.
->
-> Currently, everything works because the order of execution is:
-> first core_recloc, then test_overhead; but let's make it a bit
-> future-proof.
->
-> Other related changes: use 'test_overhead' as new comm instead of
-> 'test' to make it easy to debug and drop '\n' at the end.
->
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+It allows bpf prog (e.g. tracing) to attach
+to a kernel function that takes enum argument.
 
-Acked-by: Petar Penkov <ppenkov@google.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ kernel/bpf/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 497ecf62d79d..6a5ccb748a72 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3677,7 +3677,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 	/* skip modifiers */
+ 	while (btf_type_is_modifier(t))
+ 		t = btf_type_by_id(btf, t->type);
+-	if (btf_type_is_int(t))
++	if (btf_type_is_int(t) || btf_type_is_enum(t))
+ 		/* accessing a scalar */
+ 		return true;
+ 	if (!btf_type_is_ptr(t)) {
+-- 
+2.17.1
+
