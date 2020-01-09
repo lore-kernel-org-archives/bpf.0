@@ -2,154 +2,87 @@ Return-Path: <SRS0=lXkO=26=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7BD2C33C9E
-	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 00:55:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BACDBC33CA3
+	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 01:05:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8C5902067D
-	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 00:55:29 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="EcN/I4HI"
+	by mail.kernel.org (Postfix) with ESMTP id 851D12067D
+	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 01:05:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1578531912;
+	bh=FNlmc+/eAgBXxoCL8FGWCsvNNUglyxf7b3ZtgzFhf18=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=VG4YFRNPsM4DTImJfhVNE3zq96IeXmehzMw5EXFu/JNoKniexch7ksfNCGzLErrNl
+	 7skI/xUF9CXfHS9RKddBPvNOj6vVDAyCa4t6lkD+rPxNQ0I0Z7ASnxkvlrs8OS73HL
+	 LMUBrZls4BLli+5dMCF0+ZMCYUR2tfzBZvI/edg0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726758AbgAIAz3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Jan 2020 19:55:29 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13356 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726654AbgAIAz3 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 8 Jan 2020 19:55:29 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0090poru006804
-        for <bpf@vger.kernel.org>; Wed, 8 Jan 2020 16:54:13 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=/pWJcXcQBWqpluf4lPqib0xK+NGvb9abgy2A7MFnxeE=;
- b=EcN/I4HI2vQyCoeiA3iL3mqCgcmzXNwxgFf7SfZl4blgbUa9RwVsgqP9mcA9OdTRiqrP
- wJN6b4kkiT/xpzFxl6e06K1BzaMzyC2SIRZuMv0/Skz07yBI7z7PzhfOn5GQCowSswpP
- UxI46ATKhg1oLb9Sfhit+JVmQGL8Dg9TR9w= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xcy1vr7jh-10
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 08 Jan 2020 16:54:13 -0800
-Received: from intmgw002.41.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Wed, 8 Jan 2020 16:53:55 -0800
-Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 72C192942576; Wed,  8 Jan 2020 16:35:10 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Martin KaFai Lau <kafai@fb.com>
-Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v4 08/11] bpf: Add BPF_FUNC_tcp_send_ack helper
-Date:   Wed, 8 Jan 2020 16:35:10 -0800
-Message-ID: <20200109003510.3856253-1-kafai@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200109003453.3854769-1-kafai@fb.com>
-References: <20200109003453.3854769-1-kafai@fb.com>
-X-FB-Internal: Safe
+        id S1727786AbgAIBFK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Jan 2020 20:05:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58976 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727767AbgAIBFK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Jan 2020 20:05:10 -0500
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BCBC02072A;
+        Thu,  9 Jan 2020 01:05:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578531909;
+        bh=FNlmc+/eAgBXxoCL8FGWCsvNNUglyxf7b3ZtgzFhf18=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WeaTpxeV9OAgLar52QwUtI3qK7yFzKuYCCJIGy+UVVyku76D09Otq/YfzEIuNKR9S
+         tqNL/T3KyG9thrh8orphIlmOoQprjpC2NLl9SsiQlmytZ0vMWXeUKxWQMQmzjLCo5U
+         lZt4ZwGfBiokTAmrDUdA9XoeICVpbHJ+DuL511Ps=
+Received: by mail-qv1-f50.google.com with SMTP id n8so2273520qvg.11;
+        Wed, 08 Jan 2020 17:05:09 -0800 (PST)
+X-Gm-Message-State: APjAAAUUN00Xf3MqbEy29YkGZVLRYhSCXiNClhFFFyPrT9Xx6iwvKJ8q
+        gaeSxHk2+Et04QZIcCN9OzfQIsdqfPWFIe7n904=
+X-Google-Smtp-Source: APXvYqxmjiW+C9Z/rsYFmn2j5Y0xCdedwR5S6HI5cRWGgaN9Qz3VysE8C8EzQwxHlIihyiw/OfzIvfijh61/lmIy0oU=
+X-Received: by 2002:a05:6214:923:: with SMTP id dk3mr6437811qvb.96.1578531908825;
+ Wed, 08 Jan 2020 17:05:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-08_07:2020-01-08,2020-01-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- impostorscore=0 malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 suspectscore=13 adultscore=0 spamscore=0
- mlxlogscore=999 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-2001090005
-X-FB-Internal: deliver
+References: <20200108192132.189221-1-sdf@google.com> <CAGdtWsS7hBF0d8F_Nidar-c+NRsDSwbk6K=cXbAOu-0kW74F8g@mail.gmail.com>
+In-Reply-To: <CAGdtWsS7hBF0d8F_Nidar-c+NRsDSwbk6K=cXbAOu-0kW74F8g@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Wed, 8 Jan 2020 17:04:56 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW6_Xwo3x59B==NhnboQFY_xFqO8vn+OXeXzhnKGjyJiGg@mail.gmail.com>
+Message-ID: <CAPhsuW6_Xwo3x59B==NhnboQFY_xFqO8vn+OXeXzhnKGjyJiGg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: restore original comm in test_overhead
+To:     Petar Penkov <ppenkov.kernel@gmail.com>
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a helper to send out a tcp-ack.  It will be used in the later
-bpf_dctcp implementation that requires to send out an ack
-when the CE state changed.
+On Wed, Jan 8, 2020 at 3:19 PM Petar Penkov <ppenkov.kernel@gmail.com> wrote:
+>
+> On Wed, Jan 8, 2020 at 11:49 AM Stanislav Fomichev <sdf@google.com> wrote:
+> >
+> > test_overhead changes task comm in order to estimate BPF trampoline
+> > overhead but never sets the comm back to the original one.
+> > We have the tests (like core_reloc.c) that have 'test_progs'
+> > as hard-coded expected comm, so let's try to preserve the
+> > original comm.
+> >
+> > Currently, everything works because the order of execution is:
+> > first core_recloc, then test_overhead; but let's make it a bit
+> > future-proof.
+> >
+> > Other related changes: use 'test_overhead' as new comm instead of
+> > 'test' to make it easy to debug and drop '\n' at the end.
+> >
+> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
+>
+> Acked-by: Petar Penkov <ppenkov@google.com>
 
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
----
- include/uapi/linux/bpf.h | 11 ++++++++++-
- net/ipv4/bpf_tcp_ca.c    | 24 +++++++++++++++++++++++-
- 2 files changed, 33 insertions(+), 2 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 38059880963e..2d6a2e572f56 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -2837,6 +2837,14 @@ union bpf_attr {
-  * 	Return
-  * 		On success, the strictly positive length of the string,	including
-  * 		the trailing NUL character. On error, a negative value.
-+ *
-+ * int bpf_tcp_send_ack(void *tp, u32 rcv_nxt)
-+ *	Description
-+ *		Send out a tcp-ack. *tp* is the in-kernel struct tcp_sock.
-+ *		*rcv_nxt* is the ack_seq to be sent out.
-+ *	Return
-+ *		0 on success, or a negative error in case of failure.
-+ *
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -2954,7 +2962,8 @@ union bpf_attr {
- 	FN(probe_read_user),		\
- 	FN(probe_read_kernel),		\
- 	FN(probe_read_user_str),	\
--	FN(probe_read_kernel_str),
-+	FN(probe_read_kernel_str),	\
-+	FN(tcp_send_ack),
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
-diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-index 9c7745b958d7..574972bc7299 100644
---- a/net/ipv4/bpf_tcp_ca.c
-+++ b/net/ipv4/bpf_tcp_ca.c
-@@ -143,11 +143,33 @@ static int bpf_tcp_ca_btf_struct_access(struct bpf_verifier_log *log,
- 	return NOT_INIT;
- }
- 
-+BPF_CALL_2(bpf_tcp_send_ack, struct tcp_sock *, tp, u32, rcv_nxt)
-+{
-+	/* bpf_tcp_ca prog cannot have NULL tp */
-+	__tcp_send_ack((struct sock *)tp, rcv_nxt);
-+	return 0;
-+}
-+
-+static const struct bpf_func_proto bpf_tcp_send_ack_proto = {
-+	.func		= bpf_tcp_send_ack,
-+	.gpl_only	= false,
-+	/* In case we want to report error later */
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_BTF_ID,
-+	.arg2_type	= ARG_ANYTHING,
-+	.btf_id		= &tcp_sock_id,
-+};
-+
- static const struct bpf_func_proto *
- bpf_tcp_ca_get_func_proto(enum bpf_func_id func_id,
- 			  const struct bpf_prog *prog)
- {
--	return bpf_base_func_proto(func_id);
-+	switch (func_id) {
-+	case BPF_FUNC_tcp_send_ack:
-+		return &bpf_tcp_send_ack_proto;
-+	default:
-+		return bpf_base_func_proto(func_id);
-+	}
- }
- 
- static const struct bpf_verifier_ops bpf_tcp_ca_verifier_ops = {
--- 
-2.17.1
-
+Acked-by: Song Liu <songliubraving@fb.com>
