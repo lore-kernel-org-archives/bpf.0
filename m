@@ -2,42 +2,43 @@ Return-Path: <SRS0=lXkO=26=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A464C32771
-	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 06:37:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E1B0C32771
+	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 06:37:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3B7B12053B
-	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 06:37:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE5602053B
+	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 06:37:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1578551870;
-	bh=z4RD8/lKK7G3qtl+z9Xzlu88gzGec/kONKpOZkoSqE4=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=j2eV7FYod6FWAINAooMz0LDtNZBBR4CJq2EZR/iAKex7UIZzwYmj7VLrLT6tuJtLL
-	 3fK2P603DxneBN+sqOdMN4CoJBHh7MLMdWRjlOtwNgRtzFLDQxrtb8gy5q+hWaEpe2
-	 7xIiGykpZdoExHkedQf7prhcWmYHqit8YB8ojfzA=
+	s=default; t=1578551874;
+	bh=3TZpWw0PpLzFWG763IvVwmfOHYq/WiZ82cwNNNweLzM=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=hCBWuLwrbHXeDhaPTZJ7lw9CXjNH8uBQ75peWDNp1fknfMtSGrBhBOkTF9ib31eew
+	 nvOkxr3Yle+bF+OkLHBBKPPcv/zSccCsl7bveCF9XgwwJvjJDxpe3Ak00eC6tStDrI
+	 cVevUQVOHOAMggRe2qimbeomrFWx8i+bZNjhWDwU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728043AbgAIGht convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 9 Jan 2020 01:37:49 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:14518 "EHLO
+        id S1728126AbgAIGhx convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 9 Jan 2020 01:37:53 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22396 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727995AbgAIGht (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 9 Jan 2020 01:37:49 -0500
+        by vger.kernel.org with ESMTP id S1728032AbgAIGhw (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 9 Jan 2020 01:37:52 -0500
 Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0096S6O4008381
-        for <bpf@vger.kernel.org>; Wed, 8 Jan 2020 22:37:48 -0800
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xd5auy6kg-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 08 Jan 2020 22:37:48 -0800
-Received: from intmgw004.06.prn3.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Wed, 8 Jan 2020 22:37:46 -0800
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0096S64d008389
+        for <bpf@vger.kernel.org>; Wed, 8 Jan 2020 22:37:51 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xd5auy6kr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 08 Jan 2020 22:37:51 -0800
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 8 Jan 2020 22:37:51 -0800
 Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 8D1D3760FEC; Wed,  8 Jan 2020 22:37:45 -0800 (PST)
+        id A5064760FEC; Wed,  8 Jan 2020 22:37:49 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Alexei Starovoitov <ast@kernel.org>
 Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
@@ -45,17 +46,19 @@ To:     <davem@davemloft.net>
 CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 0/7] bpf: Introduce global functions
-Date:   Wed, 8 Jan 2020 22:37:38 -0800
-Message-ID: <20200109063745.3154913-1-ast@kernel.org>
+Subject: [PATCH v2 bpf-next 2/7] libbpf: Collect static vs global info about functions
+Date:   Wed, 8 Jan 2020 22:37:40 -0800
+Message-ID: <20200109063745.3154913-3-ast@kernel.org>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20200109063745.3154913-1-ast@kernel.org>
+References: <20200109063745.3154913-1-ast@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-01-09_01:2020-01-08,2020-01-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=393
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=998
  phishscore=0 spamscore=0 malwarescore=0 impostorscore=0 suspectscore=1
  bulkscore=0 mlxscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
  clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
@@ -66,58 +69,227 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-v1->v2:
-- addressed review comments from Song, Andrii, Yonghong
-- fixed memory leak in error path
-- added modified ctx check
-- added more tests in patch 7
+Collect static vs global information about BPF functions from ELF file and
+improve BTF with this additional info if compiler is too old and doesn't emit
+this information its own. There is no attempt to improve extern BTF.
 
-v1:
-Introduce static vs global functions and function by function verification.
-This is another step toward dynamic re-linking (or replacement) of global
-functions. See patch 3 for details. The rest are supporting patches.
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Song Liu <songliubraving@fb.com>
+---
+ tools/lib/bpf/btf.h    |   5 ++
+ tools/lib/bpf/libbpf.c | 115 +++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 116 insertions(+), 4 deletions(-)
 
-Alexei Starovoitov (7):
-  libbpf: Sanitize global functions
-  libbpf: Collect static vs global info about functions
-  bpf: Introduce function-by-function verification
-  selftests/bpf: Add fexit-to-skb test for global funcs
-  selftests/bpf: Add a test for a large global function
-  selftests/bpf: Modify a test to check global functions
-  selftests/bpf: Add unit tests for global functions
-
- include/linux/bpf.h                           |   7 +-
- include/linux/bpf_verifier.h                  |  10 +-
- include/uapi/linux/btf.h                      |   6 +
- kernel/bpf/btf.c                              | 175 +++++++++---
- kernel/bpf/verifier.c                         | 254 ++++++++++++++----
- tools/include/uapi/linux/btf.h                |   6 +
- tools/lib/bpf/btf.h                           |   5 +
- tools/lib/bpf/libbpf.c                        | 150 ++++++++++-
- .../bpf/prog_tests/bpf_verif_scale.c          |   2 +
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  |   1 +
- .../bpf/prog_tests/test_global_funcs.c        |  81 ++++++
- .../selftests/bpf/progs/fexit_bpf2bpf.c       |  15 ++
- tools/testing/selftests/bpf/progs/pyperf.h    |   9 +-
- .../selftests/bpf/progs/pyperf_global.c       |   5 +
- .../selftests/bpf/progs/test_global_func1.c   |  45 ++++
- .../selftests/bpf/progs/test_global_func2.c   |   4 +
- .../selftests/bpf/progs/test_global_func3.c   |  65 +++++
- .../selftests/bpf/progs/test_global_func4.c   |   4 +
- .../selftests/bpf/progs/test_global_func5.c   |  31 +++
- .../selftests/bpf/progs/test_global_func6.c   |  31 +++
- .../selftests/bpf/progs/test_pkt_access.c     |  28 ++
- .../selftests/bpf/progs/test_xdp_noinline.c   |   4 +-
- 22 files changed, 845 insertions(+), 93 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
- create mode 100644 tools/testing/selftests/bpf/progs/pyperf_global.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func1.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func2.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func3.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func4.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func5.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func6.c
-
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index 8d73f7f5551f..3cbb95b2616e 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -161,6 +161,11 @@ static inline __u16 btf_vlen(const struct btf_type *t)
+ 	return BTF_INFO_VLEN(t->info);
+ }
+ 
++static inline __u16 btf_func_linkage(const struct btf_type *t)
++{
++	return BTF_INFO_VLEN(t->info);
++}
++
+ static inline bool btf_kflag(const struct btf_type *t)
+ {
+ 	return BTF_INFO_KFLAG(t->info);
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 1039362a06a9..92996de52172 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -294,6 +294,12 @@ struct extern_desc {
+ 
+ static LIST_HEAD(bpf_objects_list);
+ 
++struct func_desc {
++	int insn_idx;
++	int sec_idx;
++	enum btf_func_linkage linkage;
++};
++
+ struct bpf_object {
+ 	char name[BPF_OBJ_NAME_LEN];
+ 	char license[64];
+@@ -304,6 +310,8 @@ struct bpf_object {
+ 	struct bpf_map *maps;
+ 	size_t nr_maps;
+ 	size_t maps_cap;
++	struct func_desc *funcs;
++	int nr_funcs;
+ 
+ 	char *kconfig;
+ 	struct extern_desc *externs;
+@@ -313,6 +321,7 @@ struct bpf_object {
+ 	bool loaded;
+ 	bool has_pseudo_calls;
+ 	bool relaxed_core_relocs;
++	bool compiler_emits_func_linkage;
+ 
+ 	/*
+ 	 * Information when doing elf related work. Only valid if fd
+@@ -526,10 +535,10 @@ bpf_object__init_prog_names(struct bpf_object *obj)
+ 				continue;
+ 			if (GELF_ST_BIND(sym.st_info) != STB_GLOBAL)
+ 				continue;
+-
+ 			name = elf_strptr(obj->efile.elf,
+ 					  obj->efile.strtabidx,
+ 					  sym.st_name);
++
+ 			if (!name) {
+ 				pr_warn("failed to get sym name string for prog %s\n",
+ 					prog->section_name);
+@@ -2232,6 +2241,34 @@ static int cmp_externs(const void *_a, const void *_b)
+ 	return strcmp(a->name, b->name);
+ }
+ 
++static int bpf_object__record_func_info(struct bpf_object *obj, GElf_Sym *sym)
++{
++	int bind = GELF_ST_BIND(sym->st_info);
++	bool static_func = bind == STB_LOCAL;
++	struct func_desc *f;
++
++	/*
++	 * Cannot check obj->caps.btf_func_global during elf open phase.
++	 * Otherwise could have skipped collection of this info.
++	 */
++
++	f = obj->funcs;
++	f = reallocarray(f, obj->nr_funcs + 1, sizeof(*f));
++	if (!f)
++		return -ENOMEM;
++	obj->funcs = f;
++	f = &f[obj->nr_funcs];
++	memset(f, 0, sizeof(*f));
++	obj->nr_funcs++;
++
++	f->insn_idx = sym->st_value / 8;
++	f->linkage = static_func ? BTF_FUNC_STATIC : BTF_FUNC_GLOBAL;
++	f->sec_idx = sym->st_shndx;
++	pr_debug("Func at insn %d sec %d linkage %d\n",
++		 f->insn_idx, f->sec_idx, f->linkage);
++	return 0;
++}
++
+ static int bpf_object__collect_externs(struct bpf_object *obj)
+ {
+ 	const struct btf_type *t;
+@@ -2258,6 +2295,12 @@ static int bpf_object__collect_externs(struct bpf_object *obj)
+ 
+ 		if (!gelf_getsym(obj->efile.symbols, i, &sym))
+ 			return -LIBBPF_ERRNO__FORMAT;
++		if (GELF_ST_TYPE(sym.st_info) == STT_FUNC) {
++			int err = bpf_object__record_func_info(obj, &sym);
++
++			if (err)
++				return err;
++		}
+ 		if (!sym_is_extern(&sym))
+ 			continue;
+ 		ext_name = elf_strptr(obj->efile.elf, obj->efile.strtabidx,
+@@ -3145,9 +3188,62 @@ check_btf_ext_reloc_err(struct bpf_program *prog, int err,
+ 	return 0;
+ }
+ 
++static int btf_ext_improve_func_info(struct bpf_object *obj,
++				     struct bpf_program *prog,
++				     __u32 sec_idx)
++{
++	struct bpf_func_info_min *info;
++	struct btf_type *t;
++	struct func_desc *f;
++	const char *name;
++	int i, j;
++
++	if (!obj->caps.btf_func_global || obj->compiler_emits_func_linkage)
++		/*
++		 * If kernel doesn't understand func linkage or compiler emits
++		 * it already into BTF then don't try to improve BTF based on
++		 * ELF info.
++		 */
++		return 0;
++
++	info = prog->func_info;
++	for (i = 0; i < prog->func_info_cnt; i++) {
++		for (j = 0; j < obj->nr_funcs; j++) {
++			f = &obj->funcs[j];
++			if (f->insn_idx != info->insn_off ||
++			    f->sec_idx != sec_idx)
++				continue;
++			t = (void *)btf__type_by_id(obj->btf, info->type_id);
++			if (!t)
++				return -EINVAL;
++			name = btf__name_by_offset(obj->btf, t->name_off);
++			if (!name)
++				return -EINVAL;
++			pr_debug("Func '%s' at insn %d btf_id %d linkage in BTF %d in ELF %d\n",
++				 name, info->insn_off, info->type_id,
++				 btf_func_linkage(t), f->linkage);
++			if (btf_func_linkage(t) == f->linkage) {
++				if (btf_func_linkage(t)) {
++					/* compiler emits func linkage. Don't touch BTF */
++					obj->compiler_emits_func_linkage = true;
++					return 0;
++				}
++			} else {
++				/* improve BTF with static vs global */
++				t->info = BTF_INFO_ENC(BTF_KIND_FUNC, 0,
++						       f->linkage);
++			}
++			break;
++		}
++		info = ((void *)info) + prog->func_info_rec_size;
++	}
++	return 0;
++}
++
+ static int
+ bpf_program_reloc_btf_ext(struct bpf_program *prog, struct bpf_object *obj,
+-			  const char *section_name,  __u32 insn_offset)
++			  const char *section_name, __u32 insn_offset,
++			  __u32 sec_idx)
+ {
+ 	int err;
+ 
+@@ -3168,6 +3264,15 @@ bpf_program_reloc_btf_ext(struct bpf_program *prog, struct bpf_object *obj,
+ 						       "bpf_func_info");
+ 
+ 		prog->func_info_rec_size = btf_ext__func_info_rec_size(obj->btf_ext);
++		if (!insn_offset) {
++			/*
++			 * improve BTF_KIND_FUNC when func_info is allocated
++			 * first time. Don't touch it during relocation.
++			 */
++			err = btf_ext_improve_func_info(obj, prog, sec_idx);
++			if (err)
++				return err;
++		}
+ 	}
+ 
+ 	if (!insn_offset || prog->line_info) {
+@@ -4308,7 +4413,8 @@ bpf_program__reloc_text(struct bpf_program *prog, struct bpf_object *obj,
+ 		if (obj->btf_ext) {
+ 			err = bpf_program_reloc_btf_ext(prog, obj,
+ 							text->section_name,
+-							prog->insns_cnt);
++							prog->insns_cnt,
++							text->idx);
+ 			if (err)
+ 				return err;
+ 		}
+@@ -4336,7 +4442,8 @@ bpf_program__relocate(struct bpf_program *prog, struct bpf_object *obj)
+ 
+ 	if (obj->btf_ext) {
+ 		err = bpf_program_reloc_btf_ext(prog, obj,
+-						prog->section_name, 0);
++						prog->section_name, 0,
++						prog->idx);
+ 		if (err)
+ 			return err;
+ 	}
 -- 
 2.23.0
 
