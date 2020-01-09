@@ -2,72 +2,72 @@ Return-Path: <SRS0=lXkO=26=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D277AC282DD
-	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 21:22:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03AA9C282DD
+	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 21:25:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 904612067D
-	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 21:22:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C4F9F2077C
+	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 21:25:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ouzldhhT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p64eofYK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725840AbgAIVW7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Jan 2020 16:22:59 -0500
-Received: from mail-il1-f194.google.com ([209.85.166.194]:46247 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725763AbgAIVW6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Jan 2020 16:22:58 -0500
-Received: by mail-il1-f194.google.com with SMTP id t17so38899ilm.13;
-        Thu, 09 Jan 2020 13:22:58 -0800 (PST)
+        id S1728588AbgAIVZn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Jan 2020 16:25:43 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:36655 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725763AbgAIVZn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Jan 2020 16:25:43 -0500
+Received: by mail-io1-f67.google.com with SMTP id d15so8807000iog.3;
+        Thu, 09 Jan 2020 13:25:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:message-id:in-reply-to:references:subject
          :mime-version:content-transfer-encoding;
-        bh=WraloYdZdtwOOBnxS9mfcGbFdjEwYDgsrd/DfdbfkyU=;
-        b=ouzldhhTo+VzZh84orsDT+6EKe8vJ8V5wn+iJl6jfbeZMcz7bMuvEqtiz/cKsuQtM6
-         NeLjdlKsGhhfnQkwF4duEhm8FvFcxvSammZbUNz1BKvDYYDXVmUvMp5spJmTGFD5Xkh+
-         +KoN148i9ekHT6U7iNJt9XjUTWTMeATQWZBPnAjIfRBMlFgjw5veKgMyptkXq6i1G6oK
-         hVYK5DUEBFuAh2QyNvt8qh3pPxawhqipPHLTt9OIbRvTHqPW+Eszsp85Kch1GjPuWVCs
-         D1a/OuUzBq0X7Nx9ZLxhjaOZB5G6RJeF/tRXR16yT7AvWhBwKzqTQ1OXD9lqh0v/AXGP
-         B6Mg==
+        bh=AuCVOpJkuZYE65RYLpf1B4iFvHjGfRQouDs+XczOndo=;
+        b=p64eofYK9oeCPFw8Zo1/iEf2/4l1dCaGTq73L+5EpPn0fZK4PM/bzOqdiyrieA3NF1
+         PsLWKLMpIsCAgSfzy7oCqWz3R5WHGrNQ30yfo4uwO4Ds6GhU9lACB0W7Oex39GjuUPJ9
+         nY8cFJBgl8NOd/ng0BnBsx2P4J5OaXrAq5OcBfBsp9wo0FuYFbjytJFfjctmlN+382cc
+         NjZtQ9D4krYQsfAmE6ePS2hNsq6npBDXVeqQPa+Hi5xaLiyP5092XdgWV9SFgjS+kE+I
+         sU3e0/GoX0EvDhtoXzGOVxypF2E2YDf8fsv5FoMnmSkSNM7qPZqcQoVQId+WyKYNzYWd
+         vy5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
          :references:subject:mime-version:content-transfer-encoding;
-        bh=WraloYdZdtwOOBnxS9mfcGbFdjEwYDgsrd/DfdbfkyU=;
-        b=HbWpwsoTZVzDIpxOfR7OK6sBKW59RTeLVAR6oiAtXBurjVaHozYa2wOSE0vLryIME+
-         crzDmUyAsss8dELgnd7tL98xxmTC0CPV0tZFSRxuuMy4XJN3e1m/04sNANHAfJ0mPsWD
-         dq4w3Ue1oVJbnorH9xreAbSAcxLqqov2Dr6fCK0tRvOi9S4EOwMXHs4be0OW4clWaM8s
-         AqGCncFHBOAC0gh5M9rWd3PTL5CZR7sJ2D9gcydFJTjKsz+LwZXIuB8lsNdMfTwn8GhJ
-         pPX4vrpyfN0YcZQOIsmmRm2J87dLdKRt+OtT+OEoN64eY/8oPcj2K900gzjdvsjNNHOZ
-         pvyw==
-X-Gm-Message-State: APjAAAXqCWDsU4sEVQC3Jqwa+liZ74Gda9+/6cufa/NmVKApuxiquwuW
-        D4jsCjPmA8i79QPM4dM/nadCaFNJ
-X-Google-Smtp-Source: APXvYqw47TA2cvVV8aJb4Fr9g2EPKZPjT6APv7mCmh/xR3oxsmevx+sk2sLKqvHhu4yMaxz7npwjSQ==
-X-Received: by 2002:a92:914a:: with SMTP id t71mr10960389ild.293.1578604977822;
-        Thu, 09 Jan 2020 13:22:57 -0800 (PST)
+        bh=AuCVOpJkuZYE65RYLpf1B4iFvHjGfRQouDs+XczOndo=;
+        b=qrUN8rCGDkt95O+VrtjeyEkdu6Z2ys92fAmuUPu1uvyKgSNvAktqfc68TVYS3mMuan
+         eF7iMsS5MMotGldxUaDuME86z2DCv4OEIMQre5UGiFUoA1Mks/+eqIrLIlTOEXNP/3/p
+         UIm4HlFCUF5FE7flxOyioFECrePJKr9TxWBOrZDFnFqr7F3LxojzW77KX+kUVUlWFVVL
+         i/csJk6U889txRpIdtxQCG88iOMdF26w2eiFfbzLo7jJGB8OwJWSpT6mF8+LqvnfYeCY
+         Q+PoxsSQg95HzsLLjtoGOQJVCNdhE5y3tJuEGnmtKmk+9s37aLHMiye9ZS/YN90Vbvut
+         AkVw==
+X-Gm-Message-State: APjAAAUuSsfX/kOR/8A0O42dWoIqawd48H0yZByrBPnu+WWtJ2zKOiJx
+        04nFcJKIOTbEO01Hum8H7Tc=
+X-Google-Smtp-Source: APXvYqxC12MAF27FGhFHFxwOJMwZeqbmfBs0U9vrTtY43nOyCc10QKpGBcY6i/DQr/WWgfS7NHmhAw==
+X-Received: by 2002:a05:6602:cd:: with SMTP id z13mr9821376ioe.291.1578605142509;
+        Thu, 09 Jan 2020 13:25:42 -0800 (PST)
 Received: from localhost ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id n22sm2519iog.14.2020.01.09.13.22.54
+        by smtp.gmail.com with ESMTPSA id g62sm16043ile.39.2020.01.09.13.25.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2020 13:22:57 -0800 (PST)
-Date:   Thu, 09 Jan 2020 13:22:49 -0800
+        Thu, 09 Jan 2020 13:25:42 -0800 (PST)
+Date:   Thu, 09 Jan 2020 13:25:33 -0800
 From:   John Fastabend <john.fastabend@gmail.com>
-To:     Jakub Sitnicki <jakub@cloudflare.com>,
+To:     Song Liu <song@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net
-Message-ID: <5e1799a913185_35982ae92e9d45bcc9@john-XPS-13-9370.notmuch>
-In-Reply-To: <87tv54syv8.fsf@cloudflare.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <5e179a4def787_28762abb601485c027@john-XPS-13-9370.notmuch>
+In-Reply-To: <CAPhsuW774z68g_Y-C1XU70H-x6S2mr+Hd0-qY02E9aZBJjepkA@mail.gmail.com>
 References: <157851776348.1732.12600714815781177085.stgit@ubuntu3-kvm2>
- <157851808101.1732.11616068811837364406.stgit@ubuntu3-kvm2>
- <87tv54syv8.fsf@cloudflare.com>
-Subject: Re: [bpf PATCH 3/9] bpf: sockmap/tls, push write_space updates
- through ulp updates
+ <157851817088.1732.14988301389495595092.stgit@ubuntu3-kvm2>
+ <CAPhsuW774z68g_Y-C1XU70H-x6S2mr+Hd0-qY02E9aZBJjepkA@mail.gmail.com>
+Subject: Re: [bpf PATCH 8/9] bpf: sockmap/tls, tls_push_record can not handle
+ zero length skmsg
 Mime-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
@@ -77,178 +77,16 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jakub Sitnicki wrote:
-> On Wed, Jan 08, 2020 at 10:14 PM CET, John Fastabend wrote:
-> > When sockmap sock with TLS enabled is removed we cleanup bpf/psock state
-> > and call tcp_update_ulp() to push updates to TLS ULP on top. However, we
-> > don't push the write_space callback up and instead simply overwrite the
-> > op with the psock stored previous op. This may or may not be correct so
-> > to ensure we don't overwrite the TLS write space hook pass this field to
-> > the ULP and have it fixup the ctx.
+Song Liu wrote:
+> On Wed, Jan 8, 2020 at 1:17 PM John Fastabend <john.fastabend@gmail.com> wrote:
 > >
-> > This completes a previous fix that pushed the ops through to the ULP
-> > but at the time missed doing this for write_space, presumably because
-> > write_space TLS hook was added around the same time.
-> >
-> > Fixes: 95fa145479fbc ("bpf: sockmap/tls, close can race with map free")
-> > Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-> > ---
-> >  include/linux/skmsg.h |   12 ++++++++----
-> >  include/net/tcp.h     |    6 ++++--
-> >  net/ipv4/tcp_ulp.c    |    6 ++++--
-> >  net/tls/tls_main.c    |   10 +++++++---
-> >  4 files changed, 23 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-> > index b6afe01f8592..14d61bba0b79 100644
-> > --- a/include/linux/skmsg.h
-> > +++ b/include/linux/skmsg.h
-> > @@ -359,17 +359,21 @@ static inline void sk_psock_restore_proto(struct sock *sk,
-> >  					  struct sk_psock *psock)
-> >  {
-> >  	sk->sk_prot->unhash = psock->saved_unhash;
-> > -	sk->sk_write_space = psock->saved_write_space;
-> >
-> >  	if (psock->sk_proto) {
-> >  		struct inet_connection_sock *icsk = inet_csk(sk);
-> >  		bool has_ulp = !!icsk->icsk_ulp_data;
-> >
-> > -		if (has_ulp)
-> > -			tcp_update_ulp(sk, psock->sk_proto);
-> > -		else
-> > +		if (has_ulp) {
-> > +			tcp_update_ulp(sk, psock->sk_proto,
-> > +				       psock->saved_write_space);
-> > +		} else {
-> >  			sk->sk_prot = psock->sk_proto;
-> > +			sk->sk_write_space = psock->saved_write_space;
-> > +		}
+> > When passed a zero length skmsg tls_push_record() causes a NULL ptr
+> > deref. To resolve for fixes do a simple length check at start of
+> > routine.
 > 
-> I'm wondering if we need the above fallback branch for no-ULP case?
-> tcp_update_ulp repeats the ULP check and has the same fallback. Perhaps
-> it can be reduced to:
+> Could you please include the stack dump for the NULL deref?
 > 
-> 	if (psock->sk_proto) {
-> 		tcp_update_ulp(sk, psock->sk_proto, psock->saved_write_space);
-> 		psock->sk_proto = NULL;
-> 	} else {
-> 		sk->sk_write_space = psock->saved_write_space;
-> 	}
+> Thanks,
+> Song
 
-Yeah that is a bit nicer. How about pushing it for bpf-next? I'm not
-sure its needed for bpf and the patch I pushed is the minimal change
-needed for the fix and pushes the saved_write_space around.
-
-> 
-> Then there's the question if it's okay to leave psock->sk_proto set and
-> potentially restore it more than once? Reading tls_update, the only user
-> ULP 'update' callback, it looks fine.
-> 
-> Can sk_psock_restore_proto be as simple as:
-> 
-> static inline void sk_psock_restore_proto(struct sock *sk,
-> 					  struct sk_psock *psock)
-> {
-> 	tcp_update_ulp(sk, psock->sk_proto, psock->saved_write_space);
-> }
-> 
-> ... or am I missing something?
-
-I think that is good. bpf-next?
-
-> 
-> Asking becuase I have a patch [0] like this in the queue and haven't
-> seen issues with it during testing.
-
-+1 Want to push it after we sort out this series?
-
-> 
-> -jkbs
-> 
-> [0] https://github.com/jsitnicki/linux/commit/2d2152593c8e6c5f38548796501a81a6ba20b6dc
-> 
-> >  		psock->sk_proto = NULL;
-> > +	} else {
-> > +		sk->sk_write_space = psock->saved_write_space;
-> >  	}
-> >  }
-> >
-> > diff --git a/include/net/tcp.h b/include/net/tcp.h
-> > index e460ea7f767b..e6f48384dc71 100644
-> > --- a/include/net/tcp.h
-> > +++ b/include/net/tcp.h
-> > @@ -2147,7 +2147,8 @@ struct tcp_ulp_ops {
-> >  	/* initialize ulp */
-> >  	int (*init)(struct sock *sk);
-> >  	/* update ulp */
-> > -	void (*update)(struct sock *sk, struct proto *p);
-> > +	void (*update)(struct sock *sk, struct proto *p,
-> > +		       void (*write_space)(struct sock *sk));
-> >  	/* cleanup ulp */
-> >  	void (*release)(struct sock *sk);
-> >  	/* diagnostic */
-> > @@ -2162,7 +2163,8 @@ void tcp_unregister_ulp(struct tcp_ulp_ops *type);
-> >  int tcp_set_ulp(struct sock *sk, const char *name);
-> >  void tcp_get_available_ulp(char *buf, size_t len);
-> >  void tcp_cleanup_ulp(struct sock *sk);
-> > -void tcp_update_ulp(struct sock *sk, struct proto *p);
-> > +void tcp_update_ulp(struct sock *sk, struct proto *p,
-> > +		    void (*write_space)(struct sock *sk));
-> >
-> >  #define MODULE_ALIAS_TCP_ULP(name)				\
-> >  	__MODULE_INFO(alias, alias_userspace, name);		\
-> > diff --git a/net/ipv4/tcp_ulp.c b/net/ipv4/tcp_ulp.c
-> > index 12ab5db2b71c..38d3ad141161 100644
-> > --- a/net/ipv4/tcp_ulp.c
-> > +++ b/net/ipv4/tcp_ulp.c
-> > @@ -99,17 +99,19 @@ void tcp_get_available_ulp(char *buf, size_t maxlen)
-> >  	rcu_read_unlock();
-> >  }
-> >
-> > -void tcp_update_ulp(struct sock *sk, struct proto *proto)
-> > +void tcp_update_ulp(struct sock *sk, struct proto *proto,
-> > +		    void (*write_space)(struct sock *sk))
-> >  {
-> >  	struct inet_connection_sock *icsk = inet_csk(sk);
-> >
-> >  	if (!icsk->icsk_ulp_ops) {
-> > +		sk->sk_write_space = write_space;
-> >  		sk->sk_prot = proto;
-> >  		return;
-> >  	}
-> >
-> >  	if (icsk->icsk_ulp_ops->update)
-> > -		icsk->icsk_ulp_ops->update(sk, proto);
-> > +		icsk->icsk_ulp_ops->update(sk, proto, write_space);
-> >  }
-> >
-> >  void tcp_cleanup_ulp(struct sock *sk)
-> > diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
-> > index dac24c7aa7d4..94774c0e5ff3 100644
-> > --- a/net/tls/tls_main.c
-> > +++ b/net/tls/tls_main.c
-> > @@ -732,15 +732,19 @@ static int tls_init(struct sock *sk)
-> >  	return rc;
-> >  }
-> >
-> > -static void tls_update(struct sock *sk, struct proto *p)
-> > +static void tls_update(struct sock *sk, struct proto *p,
-> > +		       void (*write_space)(struct sock *sk))
-> >  {
-> >  	struct tls_context *ctx;
-> >
-> >  	ctx = tls_get_ctx(sk);
-> > -	if (likely(ctx))
-> > +	if (likely(ctx)) {
-> > +		ctx->sk_write_space = write_space;
-> >  		ctx->sk_proto = p;
-> > -	else
-> > +	} else {
-> >  		sk->sk_prot = p;
-> > +		sk->sk_write_space = write_space;
-> > +	}
-> >  }
-> >
-> >  static int tls_get_info(const struct sock *sk, struct sk_buff *skb)
-
-
+Sure I'll send a v2 with the stack dump.
