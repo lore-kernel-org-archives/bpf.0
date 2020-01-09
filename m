@@ -2,115 +2,124 @@ Return-Path: <SRS0=lXkO=26=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FDDCC33CA1
-	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 21:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01A64C282DD
+	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 22:07:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3F45F2077C
-	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 21:25:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C25B22080D
+	for <bpf@archiver.kernel.org>; Thu,  9 Jan 2020 22:07:47 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="pAGT+6E4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725763AbgAIVZo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Jan 2020 16:25:44 -0500
-Received: from Chamillionaire.breakpoint.cc ([193.142.43.52]:57082 "EHLO
-        Chamillionaire.breakpoint.cc" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728579AbgAIVZo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 9 Jan 2020 16:25:44 -0500
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@strlen.de>)
-        id 1ipfJ2-0006kW-9m; Thu, 09 Jan 2020 22:25:28 +0100
-Date:   Thu, 9 Jan 2020 22:25:28 +0100
-From:   Florian Westphal <fw@strlen.de>
-To:     David Miller <davem@davemloft.net>
-Cc:     mathew.j.martineau@linux.intel.com, netdev@vger.kernel.org,
-        mptcp@lists.01.org, ast@kernel.org, daniel@iogearbox.net,
-        bpf@vger.kernel.org
-Subject: Re: [MPTCP] Re: [PATCH net-next v7 02/11] sock: Make sk_protocol a
- 16-bit value
-Message-ID: <20200109212528.GF795@breakpoint.cc>
-References: <20200109155924.30122-1-mathew.j.martineau@linux.intel.com>
- <20200109155924.30122-3-mathew.j.martineau@linux.intel.com>
- <20200109.110514.747612850299504416.davem@davemloft.net>
+        id S1726380AbgAIWHl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Jan 2020 17:07:41 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:12965 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbgAIWHk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Jan 2020 17:07:40 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e17a4190000>; Thu, 09 Jan 2020 14:07:21 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 09 Jan 2020 14:07:39 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 09 Jan 2020 14:07:39 -0800
+Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 9 Jan
+ 2020 22:07:38 +0000
+Subject: Re: [PATCH v12 00/22] mm/gup: prereqs to track dma-pinned pages:
+ FOLL_PIN
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20200107224558.2362728-1-jhubbard@nvidia.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <2a9145d4-586e-6489-64e4-0c54f47afaa1@nvidia.com>
+Date:   Thu, 9 Jan 2020 14:07:38 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200109.110514.747612850299504416.davem@davemloft.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200107224558.2362728-1-jhubbard@nvidia.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1578607641; bh=+NEvkiCKN4muU9xEMv7O0vL5DDgA+srq0dD5KyM2g5Y=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=pAGT+6E4t/5Sgzls83W8rrhD73PbNnbQX0v+uLgN6NdK6ox1s0YILXA5+Q9WkB7U5
+         Qgdq4MfQKXM00HXiVUvw/MN1+0Npjsn2yckDImY4OPUy9vKTHUQrRr5b/32qyPv6Y4
+         G8uphKhloBfTQ9ova5uKctNKv/z/ybtCLuSP2dniMP6oLwVdc9frqv+uSdiahegES7
+         HZtKpaUzMnUGCyRfUKLB2LXhSyGZIEwOR/UkaAhKUOx0B4NaRtt8Qz56svVPCLTYZD
+         6dBjR9cwNa9He9WTH1/ZpC5nBgZ5v8YIJX6cYUd/1MLjMgnC8wrJfdT7uC+HoO76Fq
+         StnhQb6FNJNXA==
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-David Miller <davem@davemloft.net> wrote:
-> From: Mat Martineau <mathew.j.martineau@linux.intel.com>
-> Date: Thu,  9 Jan 2020 07:59:15 -0800
+On 1/7/20 2:45 PM, John Hubbard wrote:
+> Hi,
 > 
-> > Match the 16-bit width of skbuff->protocol. Fills an 8-bit hole so
-> > sizeof(struct sock) does not change.
-> > 
-> > Also take care of BPF field access for sk_type/sk_protocol. Both of them
-> > are now outside the bitfield, so we can use load instructions without
-> > further shifting/masking.
-> > 
-> > v5 -> v6:
-> >  - update eBPF accessors, too (Intel's kbuild test robot)
-> > v2 -> v3:
-> >  - keep 'sk_type' 2 bytes aligned (Eric)
-> > v1 -> v2:
-> >  - preserve sk_pacing_shift as bit field (Eric)
-> > 
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: bpf@vger.kernel.org
-> > Co-developed-by: Paolo Abeni <pabeni@redhat.com>
-> > Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-> > Co-developed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-> > Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-> > Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+> The "track FOLL_PIN pages" would have been the very next patch, but it is
+> not included here because I'm still debugging a bug report from Leon.
+> Let's get all of the prerequisite work (it's been reviewed) into the tree
+> so that future reviews are easier. It's clear that any fixes that are
+> required to the tracking patch, won't affect these patches here.
 > 
-> This is worrisome for me.
+> This implements an API naming change (put_user_page*() -->
+> unpin_user_page*()), and also adds FOLL_PIN page support, up to
+> *but not including* actually tracking FOLL_PIN pages. It extends
+> the FOLL_PIN support to a few select subsystems. More subsystems will
+> be added in follow up work.
 > 
-> We have lots of places that now are going to be assigning  sk->sk_protocol
-> into a u8 somewhere else.  A lot of them are ok because limits are enforced
-> in various places, but for example:
-> 
-> net/ipv6/udp.c:	fl6.flowi6_proto = sk->sk_protocol;
-> net/l2tp/l2tp_ip6.c:	fl6.flowi6_proto = sk->sk_protocol;
-> 
-> net/ipv6/inet6_connection_sock.c:	fl6->flowi6_proto = sk->sk_protocol;
-> 
-> net/ipv6/af_inet6.c:		fl6.flowi6_proto = sk->sk_protocol;
-> net/ipv6/datagram.c:	fl6->flowi6_proto = sk->sk_protocol;
-> 
-> This is one just one small example situation, where flowi6_proto is a u8.
 
-There are parts in the stack (e.g. in setsockopt code paths) that test
-sk->sk_protocol vs. IPPROTO_TCP, then call tcp specific code under the sane
-assumption that sk is a tcp_sock struct.
+Hi Andrew and all,
 
-With 8bit sk_protocol, mptcp_sock structs (which is what kernel gets via
-file descriptor number) would be treated as a tcp socket, because
-"IPPROTO_MPTCP & 0xff" yields IPPROTO_TCP.
+To clarify: I'm hoping that this series can go into 5.6.
 
-Changing IPPROTO_MPTCP to a value <= 255 could lead to conflicts with
-real inet protocols in the future, so we can't redefine it to a 8bit
-value.
+Meanwhile, I'm working on tracking down and solving the problem that Leon
+reported, in the "track FOLL_PIN pages" patch, and that patch is not part of
+this series.
 
-If we keep sk_protocol as 8bit field, we will need to make sure that all
-places testing sk_protocol == IPPROTO_TCP gain an additional sanity check
-to tell tcp and mptcp sockets apart.  Moreover, any further changes to
-kernel code would need same extra test, so this is a non-starter to me.
-
-Alternatively we could change the first member of mptcp_sk struct from
-inet_connection_sock to a full tcp_sock struct.  Thats roughly 1k increase
-of mptcp_sock struct to ~ 3744 bytes, but then we would not have to
-worry about mptcp sockets ending up in tcp code paths.
-
-If you think such a size increase is ok I could give that solution a shot
-and see what other problems with 8bit sk_protocol might remain.
-
-Mat reported /sys/kernel/debug/tracing/trace lists mptcp sockets as
-IPPROTO_TCP in the '8 bit sk_protocol' case, but if thats the only issue
-this might have a smaller/acceptable "avoidance fix".
+thanks,
+-- 
+John Hubbard
+NVIDIA
