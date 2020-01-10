@@ -2,87 +2,180 @@ Return-Path: <SRS0=J/LN=27=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D04FBC33C99
-	for <bpf@archiver.kernel.org>; Fri, 10 Jan 2020 06:29:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE171C33C99
+	for <bpf@archiver.kernel.org>; Fri, 10 Jan 2020 06:41:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 98C492072E
-	for <bpf@archiver.kernel.org>; Fri, 10 Jan 2020 06:29:26 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GISKrf/V"
+	by mail.kernel.org (Postfix) with ESMTP id 9143E20721
+	for <bpf@archiver.kernel.org>; Fri, 10 Jan 2020 06:41:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1578638489;
+	bh=pOreIN0brFd/5Fx7xDn3DNupfecjzr7ODtKQ7g1jyoE=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=p6temCzQsn+W4tVu3toqp/FZe61e2MaXqId1y19fAZe3Uk+sZkT03wDhpSFJyQ7dt
+	 PnIY8hbTxjl9CgD7NsHuU4LD+wkkevVZgTQQSEEL/lJoAfmDd5YQ2ElmP5BJ8mf4p6
+	 9JO07ixZnmWZ0tXEYqhbz1Y6dE4RaeWF3cS3X7oc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731537AbgAJG30 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Jan 2020 01:29:26 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:37135 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731520AbgAJG30 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Jan 2020 01:29:26 -0500
-Received: by mail-qk1-f194.google.com with SMTP id 21so935787qky.4;
-        Thu, 09 Jan 2020 22:29:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SlbmF6x149/UwAmOGa35Bjng3DKciQXe2A1/DjMwWug=;
-        b=GISKrf/VlySaTnA9t5acnC7eN92dgD+oR/kOZfqX6w5tnH9/w/7sWY2cWtucO6bz8n
-         h4pwulaprd8ADkWdCF6hpLWTNF31YBBIwLbCU4+1KS5eFmFm41cDDLSIEWBK9YG8XrR0
-         RNmkO7PXHWCFwCH0N2xhHuHd9oz5mZVVXhcaAtpcTcjSNshmJWkc6/ScjEORmE4KnPn1
-         S7DHzc/JRuDbe9NJT+H3C/ktPQ3ww0ZXj1SZswHKhTmeIZ7rmnkmDxUMIH6QNjkg5vFN
-         JNv07zqxS5P4XGTo+ypOSVUNUFbFTFJwqNuTUUEyPLNCkN61gkYqqPPBF4d+UispeqMU
-         Qwnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SlbmF6x149/UwAmOGa35Bjng3DKciQXe2A1/DjMwWug=;
-        b=Bm0KdUzkMWH0Vl2D9giRO9t+JY4Nuk+hxLJ/n3kdsZlGIxhier7qkPmDcG0EBZrW4w
-         jQX5bEaQN4RLOt9euw/uTm6Fz4fFFarBfYl8K39s+u7q9d4PVATvXDAo7csynq5V1bzn
-         1sFUTD2smEEpYqGIKxTBt2ybCzagxXcoB8Z6wnsP9JzL3IDw3cmeBj98I3mFKeawQoSJ
-         vFceWq9kR3/UIoMucPXrNAWpYPOYR/aTTNbBW4wHTkVrBlPszfm3KJ1NITmsq8xVaLk2
-         cYI8Yth7COqpnEUq/mQyQxK4xx0IwzXvd0H00XUVz7S+OV6V8eqcziFGAZwHhGTKsxBr
-         PsWg==
-X-Gm-Message-State: APjAAAXJVs5/P9e7Houv2e2ECqpzMpCCHgZWtWj6IVsccq3MJA97mGLx
-        A2K8lZDxvaVH8GxHklEjp/273ZLEHkOExQolXRw=
-X-Google-Smtp-Source: APXvYqxA91uVB3M7x5SIebwRqJ6ZNN0S0Sjgcu6TLhT1J+RRMex/Kq18rjllNGIYsKmPUU61eYxR50h8V2cN6g9q4Ig=
-X-Received: by 2002:a05:620a:5ae:: with SMTP id q14mr1662440qkq.437.1578637765178;
- Thu, 09 Jan 2020 22:29:25 -0800 (PST)
+        id S1731573AbgAJGl3 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 10 Jan 2020 01:41:29 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37172 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731530AbgAJGl2 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 10 Jan 2020 01:41:28 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00A6aFjK025115
+        for <bpf@vger.kernel.org>; Thu, 9 Jan 2020 22:41:27 -0800
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xdtwdfdxd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 09 Jan 2020 22:41:27 -0800
+Received: from intmgw001.41.prn1.facebook.com (2620:10d:c081:10::13) by
+ mail.thefacebook.com (2620:10d:c081:35::126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
+ Thu, 9 Jan 2020 22:41:26 -0800
+Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
+        id 39A79760DBA; Thu,  9 Jan 2020 22:41:26 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
+To:     <davem@davemloft.net>
+CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v3 bpf-next 1/6] libbpf: Sanitize global functions
+Date:   Thu, 9 Jan 2020 22:41:19 -0800
+Message-ID: <20200110064124.1760511-2-ast@kernel.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20200110064124.1760511-1-ast@kernel.org>
+References: <20200110064124.1760511-1-ast@kernel.org>
 MIME-Version: 1.0
-References: <20200110051716.1591485-1-andriin@fb.com> <CAADnVQ+AtbJ1M-Fss5WocSP=EmKgyZrCYUN8NtOFSx5DeYf2gg@mail.gmail.com>
-In-Reply-To: <CAADnVQ+AtbJ1M-Fss5WocSP=EmKgyZrCYUN8NtOFSx5DeYf2gg@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 9 Jan 2020 22:29:14 -0800
-Message-ID: <CAEf4BzYCR4E-qRKN9EpJKKgwU=T8pYFcuhiH=vrnt2cGuDgmaQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] Fix usage of bpf_helper_defs.h in selftests/bpf
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-10_01:2020-01-10,2020-01-09 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ lowpriorityscore=0 spamscore=0 suspectscore=1 bulkscore=0 adultscore=0
+ impostorscore=0 clxscore=1034 malwarescore=0 priorityscore=1501
+ mlxlogscore=870 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-2001100055
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jan 9, 2020 at 9:58 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Jan 9, 2020 at 9:17 PM Andrii Nakryiko <andriin@fb.com> wrote:
-> >
-> > Fix issues with bpf_helper_defs.h usage in selftests/bpf. As part of that, fix
-> > the way clean up is performed for libbpf and selftests/bpf. Some for Makefile
-> > output clean ups as well.
->
-> feature auto-detect and few unnecessary installs are now
-> happening even when make shouldn't be doing anything.
-> But overall it's still an improvement.
+In case the kernel doesn't support BTF_FUNC_GLOBAL sanitize BTF produced by the
+compiler for global functions.
 
-It's because of bpftool dependency. Don't see an easy way around that
-yet, but I'll keep it on a back-burner...
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Song Liu <songliubraving@fb.com>
+---
+ tools/include/uapi/linux/btf.h |  6 ++++++
+ tools/lib/bpf/libbpf.c         | 35 +++++++++++++++++++++++++++++++++-
+ 2 files changed, 40 insertions(+), 1 deletion(-)
 
-> Applied. Thanks
+diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
+index 1a2898c482ee..5a667107ad2c 100644
+--- a/tools/include/uapi/linux/btf.h
++++ b/tools/include/uapi/linux/btf.h
+@@ -146,6 +146,12 @@ enum {
+ 	BTF_VAR_GLOBAL_EXTERN = 2,
+ };
+ 
++enum btf_func_linkage {
++	BTF_FUNC_STATIC = 0,
++	BTF_FUNC_GLOBAL = 1,
++	BTF_FUNC_EXTERN = 2,
++};
++
+ /* BTF_KIND_VAR is followed by a single "struct btf_var" to describe
+  * additional information related to the variable such as its linkage.
+  */
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index ee2620b2aa55..3afd780b0f06 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -173,6 +173,8 @@ struct bpf_capabilities {
+ 	__u32 btf_datasec:1;
+ 	/* BPF_F_MMAPABLE is supported for arrays */
+ 	__u32 array_mmap:1;
++	/* BTF_FUNC_GLOBAL is supported */
++	__u32 btf_func_global:1;
+ };
+ 
+ enum reloc_type {
+@@ -2209,13 +2211,14 @@ static bool section_have_execinstr(struct bpf_object *obj, int idx)
+ 
+ static void bpf_object__sanitize_btf(struct bpf_object *obj)
+ {
++	bool has_func_global = obj->caps.btf_func_global;
+ 	bool has_datasec = obj->caps.btf_datasec;
+ 	bool has_func = obj->caps.btf_func;
+ 	struct btf *btf = obj->btf;
+ 	struct btf_type *t;
+ 	int i, j, vlen;
+ 
+-	if (!obj->btf || (has_func && has_datasec))
++	if (!obj->btf || (has_func && has_datasec && has_func_global))
+ 		return;
+ 
+ 	for (i = 1; i <= btf__get_nr_types(btf); i++) {
+@@ -2263,6 +2266,9 @@ static void bpf_object__sanitize_btf(struct bpf_object *obj)
+ 		} else if (!has_func && btf_is_func(t)) {
+ 			/* replace FUNC with TYPEDEF */
+ 			t->info = BTF_INFO_ENC(BTF_KIND_TYPEDEF, 0, 0);
++		} else if (!has_func_global && btf_is_func(t)) {
++			/* replace BTF_FUNC_GLOBAL with BTF_FUNC_STATIC */
++			t->info = BTF_INFO_ENC(BTF_KIND_FUNC, 0, 0);
+ 		}
+ 	}
+ }
+@@ -3205,6 +3211,32 @@ static int bpf_object__probe_btf_func(struct bpf_object *obj)
+ 	return 0;
+ }
+ 
++static int bpf_object__probe_btf_func_global(struct bpf_object *obj)
++{
++	static const char strs[] = "\0int\0x\0a";
++	/* static void x(int a) {} */
++	__u32 types[] = {
++		/* int */
++		BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),  /* [1] */
++		/* FUNC_PROTO */                                /* [2] */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_FUNC_PROTO, 0, 1), 0),
++		BTF_PARAM_ENC(7, 1),
++		/* FUNC x BTF_FUNC_GLOBAL */                    /* [3] */
++		BTF_TYPE_ENC(5, BTF_INFO_ENC(BTF_KIND_FUNC, 0, BTF_FUNC_GLOBAL), 2),
++	};
++	int btf_fd;
++
++	btf_fd = libbpf__load_raw_btf((char *)types, sizeof(types),
++				      strs, sizeof(strs));
++	if (btf_fd >= 0) {
++		obj->caps.btf_func_global = 1;
++		close(btf_fd);
++		return 1;
++	}
++
++	return 0;
++}
++
+ static int bpf_object__probe_btf_datasec(struct bpf_object *obj)
+ {
+ 	static const char strs[] = "\0x\0.data";
+@@ -3260,6 +3292,7 @@ bpf_object__probe_caps(struct bpf_object *obj)
+ 		bpf_object__probe_name,
+ 		bpf_object__probe_global_data,
+ 		bpf_object__probe_btf_func,
++		bpf_object__probe_btf_func_global,
+ 		bpf_object__probe_btf_datasec,
+ 		bpf_object__probe_array_mmap,
+ 	};
+-- 
+2.23.0
+
