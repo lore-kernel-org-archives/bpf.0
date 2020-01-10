@@ -2,105 +2,81 @@ Return-Path: <SRS0=J/LN=27=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 812C7C33CA2
-	for <bpf@archiver.kernel.org>; Fri, 10 Jan 2020 06:41:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECD42C33C99
+	for <bpf@archiver.kernel.org>; Fri, 10 Jan 2020 06:50:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 591DC20721
-	for <bpf@archiver.kernel.org>; Fri, 10 Jan 2020 06:41:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1578638505;
-	bh=PXYM87UiXGGyzz6OY1YRIau6PJtb0/SWq5HxGSSGxIw=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=sBfHZHG5FzrU3bsvKwOFS+n4fDBICjcHXSLlnlcs5Ijdj/xulYNI/s3gAf077S+nT
-	 t71GZg0Mci4g4/38jgNTtcJRRSLE2cv6UyQ4mD+1amHaSoIbYJfrLI2ErvpXdy/WkK
-	 QNrxA4taTwAHUo4Pq6BiwpmkRhrCkZtBf1E2E/zo=
+	by mail.kernel.org (Postfix) with ESMTP id B9D4A2077B
+	for <bpf@archiver.kernel.org>; Fri, 10 Jan 2020 06:50:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731537AbgAJGlp convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 10 Jan 2020 01:41:45 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:35592 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731623AbgAJGlo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 10 Jan 2020 01:41:44 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00A6cLUu029021
-        for <bpf@vger.kernel.org>; Thu, 9 Jan 2020 22:41:43 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xe9eeb39w-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 09 Jan 2020 22:41:43 -0800
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Thu, 9 Jan 2020 22:41:41 -0800
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 5F69B760DBA; Thu,  9 Jan 2020 22:41:34 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 5/6] selftests/bpf: Modify a test to check global functions
-Date:   Thu, 9 Jan 2020 22:41:23 -0800
-Message-ID: <20200110064124.1760511-6-ast@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20200110064124.1760511-1-ast@kernel.org>
-References: <20200110064124.1760511-1-ast@kernel.org>
+        id S1731557AbgAJGuB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Jan 2020 01:50:01 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:47083 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731455AbgAJGuB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Jan 2020 01:50:01 -0500
+Received: by mail-il1-f198.google.com with SMTP id a2so878595ill.13
+        for <bpf@vger.kernel.org>; Thu, 09 Jan 2020 22:50:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=nSBEziQIAgMmreD/bwiDUMfwTZxHkivHwZB8qVu7K9M=;
+        b=e3FCdVM6QA++Z56EpZ1PeR7gsKdWLcgXd+QAwITsv9SneGb7o/cP/KqFGfQcgW73qP
+         W/97gmLZ1LwOx77lxGZ6OZfzWnOlSGs4eQJXl+SxXmcUtU3CEHktPrPxpfWTci4tY0F0
+         q5UncUXKgnXHL9THGcc4AFs2uPJ81/ZdtP8A85O6VxIb8zdzj/FDqvzgHU8G/frxDyul
+         jyNLKBNDcY1PtvyN1mHdon7lWuRj/sm6rfh5D+8V/Xr87mlGel1vY0/Z9tRGRM9JpX2d
+         B7yLdJz3czBZPtnQRrk0rXiGb+g9Sx8mamhehAqZBBxdkzlEV/R02Nw6LEVOWOGvhljR
+         FrSg==
+X-Gm-Message-State: APjAAAWA7uWIwFzC8kvUiYLfdcUw8eovthNblWcmavrmgU+fI189uM+W
+        OeO+zgDECjA+7d6zwn+fHilyV34Fc7SX9qqMS48ySvg8xEJm
+X-Google-Smtp-Source: APXvYqygb++rANaYFZ2skaGuTLPRW7b0m2B1Xr7kXiLH/wZnhkt0oZWvxvj3A3b+HGzLordUY9WM6fV0K7+EMxq+HVsg4swltiWA
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-10_01:2020-01-10,2020-01-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
- impostorscore=0 spamscore=0 bulkscore=0 malwarescore=0 adultscore=0
- clxscore=1015 lowpriorityscore=0 mlxlogscore=680 suspectscore=1
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001100055
-X-FB-Internal: deliver
+X-Received: by 2002:a92:84d1:: with SMTP id y78mr1319946ilk.69.1578639000707;
+ Thu, 09 Jan 2020 22:50:00 -0800 (PST)
+Date:   Thu, 09 Jan 2020 22:50:00 -0800
+In-Reply-To: <000000000000946842058bc1291d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ddae64059bc388dc@google.com>
+Subject: Re: WARNING in add_event_to_ctx
+From:   syzbot <syzbot+704bfe2c7d156640ad7a@syzkaller.appspotmail.com>
+To:     acme@kernel.org, acme@redhat.com,
+        alexander.shishkin@linux.intel.com, arvid.brodin@alten.se,
+        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, jbacik@fb.com, jolsa@redhat.com, kafai@fb.com,
+        kernel-team@fb.com, linux-kernel@vger.kernel.org, mingo@kernel.org,
+        mingo@redhat.com, namhyung@kernel.org, netdev@vger.kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        torvalds@linux-foundation.org, xiyou.wangcong@gmail.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make two static functions in test_xdp_noinline.c global:
-before: processed 2790 insns
-after: processed 2598 insns
+syzbot suspects this bug was fixed by commit:
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- tools/testing/selftests/bpf/progs/test_xdp_noinline.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+commit 311633b604063a8a5d3fbc74d0565b42df721f68
+Author: Cong Wang <xiyou.wangcong@gmail.com>
+Date:   Wed Jul 10 06:24:54 2019 +0000
 
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-index e88d7b9d65ab..f95bc1a17667 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-@@ -86,7 +86,7 @@ u32 jhash(const void *key, u32 length, u32 initval)
- 	return c;
- }
- 
--static __attribute__ ((noinline))
-+__attribute__ ((noinline))
- u32 __jhash_nwords(u32 a, u32 b, u32 c, u32 initval)
- {
- 	a += initval;
-@@ -96,7 +96,7 @@ u32 __jhash_nwords(u32 a, u32 b, u32 c, u32 initval)
- 	return c;
- }
- 
--static __attribute__ ((noinline))
-+__attribute__ ((noinline))
- u32 jhash_2words(u32 a, u32 b, u32 initval)
- {
- 	return __jhash_nwords(a, b, 0, initval + JHASH_INITVAL + (2 << 2));
--- 
-2.23.0
+     hsr: switch ->dellink() to ->ndo_uninit()
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1005033ee00000
+start commit:   6fbc7275 Linux 5.2-rc7
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bff6583efcfaed3f
+dashboard link: https://syzkaller.appspot.com/bug?extid=704bfe2c7d156640ad7a
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1016165da00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12b27be5a00000
+
+If the result looks correct, please mark the bug fixed by replying with:
+
+#syz fix: hsr: switch ->dellink() to ->ndo_uninit()
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
