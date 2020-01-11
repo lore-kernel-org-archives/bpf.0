@@ -2,53 +2,95 @@ Return-Path: <SRS0=glaE=3A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59E7BC33C9E
-	for <bpf@archiver.kernel.org>; Sat, 11 Jan 2020 07:11:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20AE6C282DD
+	for <bpf@archiver.kernel.org>; Sat, 11 Jan 2020 20:07:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 36262206DA
-	for <bpf@archiver.kernel.org>; Sat, 11 Jan 2020 07:11:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E79A52087F
+	for <bpf@archiver.kernel.org>; Sat, 11 Jan 2020 20:07:56 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=netronome-com.20150623.gappssmtp.com header.i=@netronome-com.20150623.gappssmtp.com header.b="O0noVxh6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728493AbgAKHLf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Jan 2020 02:11:35 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:44208 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728471AbgAKHLf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 11 Jan 2020 02:11:35 -0500
-Received: from localhost (unknown [IPv6:2601:601:9f00:1c3::f0c])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 6EBBF14FA41BF;
-        Fri, 10 Jan 2020 23:11:34 -0800 (PST)
-Date:   Fri, 10 Jan 2020 23:11:33 -0800 (PST)
-Message-Id: <20200110.231133.366069857384555250.davem@davemloft.net>
-To:     yuehaibing@huawei.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, jakub.kicinski@netronome.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH net-next] sfc: remove duplicated include from ef10.c
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200110013517.37685-1-yuehaibing@huawei.com>
-References: <20200110013517.37685-1-yuehaibing@huawei.com>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
+        id S1731119AbgAKUH4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Jan 2020 15:07:56 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43192 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731028AbgAKUH4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 11 Jan 2020 15:07:56 -0500
+Received: by mail-wr1-f65.google.com with SMTP id d16so4836362wre.10
+        for <bpf@vger.kernel.org>; Sat, 11 Jan 2020 12:07:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+VNlPdwEIw1gLI8EYc+Oh+CzRTvoHGfPoZx4pybzXSg=;
+        b=O0noVxh6LzCvy0EKWBAEYz6Y7s6KAH9TvYIkqlK1My+ZxZnPLRcFtrG+80+5diVvE7
+         iPKMhWBav5t90BTwaDbcIBYUjrvfZnEbR3SIiOPdKXv+NdNglG6eaOKGhB92W6LMpg6J
+         MV7z6ZDamg/O5cFqc2O/7GZF63ykA2SwDu1BzauYyVU1ARgBjCU1DTeIe4MwiSqPmI4B
+         qE4jUq/wSd+Eqvc9rZ+EwPFdWXmEBffWsvO+60NTQLARuSM7nUXPIZBoG3dTC0qa9pjp
+         AbdOPdqBFQuBh4+91CdFz59OTRrGsFBlq6rNXPMdQCccDn8caHGpHxajmH0wCHjEanqh
+         v6EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+VNlPdwEIw1gLI8EYc+Oh+CzRTvoHGfPoZx4pybzXSg=;
+        b=CD1vKNxuVVY36czbjt9RTY6aoYTttjUYnQGU+gkp8rTKhXM6u2UVyDZ3pa4qj3cqQh
+         pwVbwv+11HTkY0YBdMyTdfCarXIZVAdOPHYki5Dbt6lG+CGq+nw6qsZUEpm1qPjRPvhw
+         mbHjWv2T9vkGWSbwmf9dttNWcsTr3x7gpNOUSOfuIXRDUFldHOTwsIjVuInR0DMKS/1R
+         SmtUOA3gOZeHlHlpvLVS2unC786MtfOD9iCLc8cMY4FyyL1g/K/DlNoCNSKPoqq6pDwP
+         zvJjRvovplSZr6rpZT7ox3NM2L8lIfdjhleyFHXx9yaKYZRSy9226/c1S/qCga3bVBPV
+         Wm8g==
+X-Gm-Message-State: APjAAAWuBagqDZffBwS7Jq5U4jlNsr1Kot7fJMdFwX7VgkcEPw8s05Wh
+        HKJXauSDa7fV1tlI8ig7KdiLHw==
+X-Google-Smtp-Source: APXvYqyYHrS775LClc2nEuhBuINtxjvrZY80MRLMdlmpOZ8pppvXe1BLqjShxYxZIbzVde9VoN7xDA==
+X-Received: by 2002:adf:c746:: with SMTP id b6mr9647283wrh.298.1578773274680;
+        Sat, 11 Jan 2020 12:07:54 -0800 (PST)
+Received: from [192.168.1.2] ([194.35.117.39])
+        by smtp.gmail.com with ESMTPSA id b10sm7726368wrt.90.2020.01.11.12.07.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Jan 2020 12:07:53 -0800 (PST)
+Subject: Re: [PATCH bpf] bpftool: Fix printing incorrect pointer in
+ btf_dump_ptr
+To:     Martin KaFai Lau <kafai@fb.com>, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>, kernel-team@fb.com,
+        netdev@vger.kernel.org
+References: <20200110231644.3484151-1-kafai@fb.com>
+From:   Quentin Monnet <quentin.monnet@netronome.com>
+Message-ID: <2e5a0dfc-6b22-4a5f-d305-da920c9a44c7@netronome.com>
+Date:   Sat, 11 Jan 2020 20:07:52 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
+MIME-Version: 1.0
+In-Reply-To: <20200110231644.3484151-1-kafai@fb.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 10 Jan 2020 23:11:34 -0800 (PST)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: YueHaibing <yuehaibing@huawei.com>
-Date: Fri, 10 Jan 2020 01:35:17 +0000
-
-> Remove duplicated include.
+2020-01-10 15:16 UTC-0800 ~ Martin KaFai Lau <kafai@fb.com>
+> For plain text output, it incorrectly prints the pointer value
+> "void *data".  The "void *data" is actually pointing to memory that
+> contains a bpf-map's value.  The intention is to print the content of
+> the bpf-map's value instead of printing the pointer pointing to the
+> bpf-map's value.
 > 
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> In this case, a member of the bpf-map's value is a pointer type.
+> Thus, it should print the "*(void **)data".
+> 
+> Fixes: 22c349e8db89 ("tools: bpftool: fix format strings and arguments for jsonw_printf()")
+> Cc: Quentin Monnet <quentin.monnet@netronome.com>
+> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 
-Applied, thanks.
+My bad, thank you for the fix!
+
+Reviewed-by: Quentin Monnet <quentin.monnet@netronome.com>
