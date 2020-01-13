@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C091C3F68F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9781C33CB0
 	for <bpf@archiver.kernel.org>; Mon, 13 Jan 2020 07:32:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 21DA72073D
+	by mail.kernel.org (Postfix) with ESMTP id 9F6232073D
 	for <bpf@archiver.kernel.org>; Mon, 13 Jan 2020 07:32:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LxEHxKRI"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Gyn7mMvF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728847AbgAMHcI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jan 2020 02:32:08 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:59258 "EHLO
+        id S1728862AbgAMHcJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jan 2020 02:32:09 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:42472 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728862AbgAMHcG (ORCPT
+        by vger.kernel.org with ESMTP id S1728859AbgAMHcG (ORCPT
         <rfc822;bpf@vger.kernel.org>); Mon, 13 Jan 2020 02:32:06 -0500
 Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00D7VpGh025525
-        for <bpf@vger.kernel.org>; Sun, 12 Jan 2020 23:32:06 -0800
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00D7VqpA025545
+        for <bpf@vger.kernel.org>; Sun, 12 Jan 2020 23:32:05 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=g2L0ndR2Fb/5ZG+K7BX9PViazIin+aA4pa/dBMkl+i4=;
- b=LxEHxKRIdY1uUejZpWPsKxNaGTKqdmuGKsq2GDrXeiX/mCj6OY/KisIze5bBlrWqlOp7
- 7/fRSMQFBJ2AvgerBbazExoKFwiBWshDqH4El74MO8GhCZ185kbDUd6+H0we+CdkTnsr
- Zk+L0LZ1lr1ht02Ugq9OL4Yj6G6X6KZOGxY= 
+ content-type; s=facebook; bh=wrDuT1Q+OBHFng+pj7a2VJ7t2KmCR9W0BCZl5lHGyZw=;
+ b=Gyn7mMvF1HeiUDOwkLUm3pIEUsnWt9IL21LPpyzJymeSemX5HaS6m0tbuvD/2Kw6olxN
+ Xx68t66BSmLWk1e6BkCgbIsDjn7/xClrfcMzTjqctz0tgVdysO+BbI8lHGL3N37ZrWKj
+ uOF3tXUKcgoTWOmsDkZ9cMdbUHcy2K5v5WI= 
 Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xfy00u8yt-2
+        by mx0a-00082601.pphosted.com with ESMTP id 2xfy00u8x1-16
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
         for <bpf@vger.kernel.org>; Sun, 12 Jan 2020 23:32:05 -0800
 Received: from intmgw003.03.ash8.facebook.com (2620:10d:c081:10::13) by
- mail.thefacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.1713.5;
- Sun, 12 Jan 2020 23:32:03 -0800
+ Sun, 12 Jan 2020 23:31:56 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id B79B72EC2329; Sun, 12 Jan 2020 23:32:01 -0800 (PST)
+        id B4D062EC2329; Sun, 12 Jan 2020 23:31:52 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 6/6] selftests/bpf: build runqslower from selftests
-Date:   Sun, 12 Jan 2020 23:31:43 -0800
-Message-ID: <20200113073143.1779940-7-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 2/6] libbpf: clean up bpf_helper_defs.h generation output
+Date:   Sun, 12 Jan 2020 23:31:39 -0800
+Message-ID: <20200113073143.1779940-3-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200113073143.1779940-1-andriin@fb.com>
 References: <20200113073143.1779940-1-andriin@fb.com>
@@ -61,7 +61,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-01-13_01:2020-01-13,2020-01-13 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
  malwarescore=0 suspectscore=9 priorityscore=1501 spamscore=0 adultscore=0
- mlxscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=847 bulkscore=0
+ mlxscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=801 bulkscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-2001130063
 X-FB-Internal: deliver
@@ -70,39 +70,43 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Ensure runqslower tool is built as part of selftests to prevent it from bit
-rotting.
+bpf_helpers_doc.py script, used to generate bpf_helper_defs.h, unconditionally
+emits one informational message to stderr. Remove it and preserve stderr to
+contain only relevant errors. Also make sure script invocations command is
+muted by default in libbpf's Makefile.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/Makefile | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ scripts/bpf_helpers_doc.py | 2 --
+ tools/lib/bpf/Makefile     | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index bf9f7e415e95..246d09ffb296 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -73,7 +73,7 @@ TEST_PROGS_EXTENDED := with_addr.sh \
- # Compile but not part of 'make run_tests'
- TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
- 	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
--	test_lirc_mode2_user xdping test_cpp
-+	test_lirc_mode2_user xdping test_cpp runqslower
+diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
+index 7548569e8076..90baf7d70911 100755
+--- a/scripts/bpf_helpers_doc.py
++++ b/scripts/bpf_helpers_doc.py
+@@ -158,8 +158,6 @@ class HeaderParser(object):
+                 break
  
- TEST_CUSTOM_PROGS = urandom_read
+         self.reader.close()
+-        print('Parsed description of %d helper function(s)' % len(self.helpers),
+-              file=sys.stderr)
  
-@@ -124,6 +124,11 @@ $(OUTPUT)/test_stub.o: test_stub.c
- 	$(call msg,CC,,$@)
- 	$(CC) -c $(CFLAGS) -o $@ $<
+ ###############################################################################
  
-+.PHONY: $(OUTPUT)/runqslower
-+$(OUTPUT)/runqslower: force
-+	$(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower	      \
-+		    OUTPUT=$(CURDIR)/tools/
-+
- BPFOBJ := $(OUTPUT)/libbpf.a
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index db2afccde757..aee7f1a83c77 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -183,7 +183,7 @@ $(BPF_IN_STATIC): force elfdep zdep bpfdep $(BPF_HELPER_DEFS)
+ 	$(Q)$(MAKE) $(build)=libbpf OUTPUT=$(STATIC_OBJDIR)
  
- $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(OUTPUT)/test_stub.o $(BPFOBJ)
+ $(BPF_HELPER_DEFS): $(srctree)/tools/include/uapi/linux/bpf.h
+-	$(Q)$(srctree)/scripts/bpf_helpers_doc.py --header 		\
++	$(QUIET_GEN)$(srctree)/scripts/bpf_helpers_doc.py --header \
+ 		--file $(srctree)/tools/include/uapi/linux/bpf.h > $(BPF_HELPER_DEFS)
+ 
+ $(OUTPUT)libbpf.so: $(OUTPUT)libbpf.so.$(LIBBPF_VERSION)
 -- 
 2.17.1
 
