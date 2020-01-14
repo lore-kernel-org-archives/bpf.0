@@ -2,177 +2,145 @@ Return-Path: <SRS0=Nq9f=3D=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3168BC33CB3
-	for <bpf@archiver.kernel.org>; Tue, 14 Jan 2020 16:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2D8FC33C9E
+	for <bpf@archiver.kernel.org>; Tue, 14 Jan 2020 17:26:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 065FF24670
-	for <bpf@archiver.kernel.org>; Tue, 14 Jan 2020 16:47:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E28B2075B
+	for <bpf@archiver.kernel.org>; Tue, 14 Jan 2020 17:26:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="N9fADKpD"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="kCR69HTi";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="QqdJ8OUM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728880AbgANQqg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jan 2020 11:46:36 -0500
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:36001 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728753AbgANQqf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Jan 2020 11:46:35 -0500
-Received: by mail-pf1-f202.google.com with SMTP id 6so9106161pfv.3
-        for <bpf@vger.kernel.org>; Tue, 14 Jan 2020 08:46:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Y5paa4AX/DtiLn+XUHqwYVRo7c1ie192vd9rP9qKaQo=;
-        b=N9fADKpD0r9H67g2GPg3lDqgyoOfXJ8fqkefx5tT9gD6k1n1ANE1BcES4cW6eSVSL9
-         m+mHNzJRVgEZS2iHDBajZL7jTWuBsnomJVrGNzqSjNAcbpbfc28gOJiWeOuf8v+RpdyC
-         YEbKbD3B6s6a6emwyWBU+a2sAg273K8jbVDUaju/k9cIhXGUMurcMo4RmOW0pskS8Tvv
-         mzKHKBn/LykPk70TiHrKaxE7pkc60BF+jRKWehBV9fd7ewxx1sv3NGEgGumWizqgmBeQ
-         v4rYFbMsfGhSJUubHXCdH8TgiilWkeiptjsmMBhOxcQoq0uEwWs7Nwhyt2Fui2hoAiHG
-         eBKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Y5paa4AX/DtiLn+XUHqwYVRo7c1ie192vd9rP9qKaQo=;
-        b=DBIR2TMkUNP8pN4W1g/aRekiTHU95srKZAmWCGX1ZPjgNKyJ3Grarzx5yjxCFN6vti
-         dPvtaf/Sv4MVzmMX0lXLq1GcoJLWcciEEeVb+Fbcgqzdk+d6SbJRAD6oicmOfM9ljzpO
-         44EvNPzU4/VRfPreJ2AVA44Rqj1o7xk4lz6RVZoaJvUsmLlCfOaRw/Or3z8C1nfMK/ho
-         d3HeiOf1TKeSN9LY717c53ml5KwkM+Kj059xAPWURmjjp45CeI+1Z0WiAEgR3ViuVAHv
-         jEbuslGZDcS6SbHLZGhncoCl55BaQZKjPwd/+78jRm+H2TZsDlzX0c+hPNNuc0jUGHX4
-         tp1Q==
-X-Gm-Message-State: APjAAAVSkp/UOXtd24dnWX7NHIuB4WJWgt28NzaAYUKsBPn6vIOvYQpa
-        Dt1izcxCl5OJU0+48+XENql4utseeTBK
-X-Google-Smtp-Source: APXvYqzONT7nLLWPpiU9vD9Wp+N2yEKNO5DIOd5gU9RA8R5M3Deo/90nrxFN27n0MUo+5JWiD7QC2wZsDKqu
-X-Received: by 2002:a63:303:: with SMTP id 3mr27857755pgd.372.1579020394568;
- Tue, 14 Jan 2020 08:46:34 -0800 (PST)
-Date:   Tue, 14 Jan 2020 08:46:04 -0800
-Message-Id: <20200114164614.47029-1-brianvv@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.25.0.rc1.283.g88dfdc4193-goog
-Subject: [PATCH v4 bpf-next 0/9] add bpf batch ops to process more than 1 elem
-From:   Brian Vazquez <brianvv@google.com>
-To:     Brian Vazquez <brianvv.kernel@gmail.com>,
-        Brian Vazquez <brianvv@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Petar Penkov <ppenkov@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1726053AbgANR0i (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Jan 2020 12:26:38 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:54682 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726270AbgANR0h (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 14 Jan 2020 12:26:37 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00EHLs1L025159;
+        Tue, 14 Jan 2020 09:26:19 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=ggbzzuHfmqLqnNhgIEIUTrmM7sTRoqxqpua9bQ5rBO4=;
+ b=kCR69HTiiVs7bmjlhX3V2ykSHsDbHkSYY+UGZJFN4Cp6E8XG9oe0mG7ymGKv5JEJgH6H
+ 7IDptmRg5CU9ppRXpZ4h/StWUf/9XmbrojhnumOqcQLJcdHOR/9puvmjTzj92r1okEvb
+ 3Zd7590OHBovZsfkurA3rBtYgBubsnoV/1E= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xhd7r1j48-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 14 Jan 2020 09:26:19 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 14 Jan 2020 09:25:43 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GjlnkAzROtYeRx6dVZAgAQy6+o5OjAsVPCrKmkL2DZGhuR9Mmx7s+i1E/nhl7YQmsidXM8yCxnDRIqGhQAskbcZzhVB9OSG2y4tH5FXc7nhFgg6S/v1A8b/BD83bcvLtjbHggyM+4wwuj3mjhiNbeLzyZWTgzbEmQJ/G9HkSlSlDWF3oHuoBFUzWjoCrfSuczjZqte0bhqcvhpyQbvd/AoPoEZhfu5O5/0YNWkWl13kjqwA8ey+HlMNSEqzSzacih3KZTZjuVtdiQJKL+SsCZjk2a7S7RLSPRVsh8IiSiUuzm0/VlfQK1YZCXzmFRYLwCAdz92QAAjUpmAxaE+UzYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ggbzzuHfmqLqnNhgIEIUTrmM7sTRoqxqpua9bQ5rBO4=;
+ b=jWzCLhSd6/COn+Nb1s14ufsKG27+WO2yAuvdXelKcP0qJ+QATNi5a2HIZw3/IHkUvatO14R9AAUbWBXptRgz9auUWVbfet+lKXpp5cO7Z0OWG+uVKcm4K3oIB+UHA5XbZ8dZfTY2+ebDk3CchiTtDA//Rbb2DNL3a58yAbKP7MWj2FLL7f+tP6+48xQXGUCrd/MGgK/9nK4bx8cj5DTLgSJdiosaXWpED0njR54WJixZ1+92tBof8IbJ7IkAvOxtq4A/0o/0hWSHgPV7b0TVigDT2URenWCiiPazWUrfJJDCWdnpxQ7ENlBVBaR6RFFXwFLVQQBJRUDSSl1TXor/rQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ggbzzuHfmqLqnNhgIEIUTrmM7sTRoqxqpua9bQ5rBO4=;
+ b=QqdJ8OUMes2P+cNThDZC6B/LLSfDz+pNaum0SKJjzcPqZD/eKC2Amfig2TTytls7zz1Bm1inaQWjFx6dYsapkWOlqDU6eVZA0ejqdAKY/qkCoPaWVz2IKto1LNBAdk/THe/SWUHq+pZs7wrMQOvmxeJAZsp5Ghvh5iF5/mQQqOI=
+Received: from CH2PR15MB3621.namprd15.prod.outlook.com (52.132.231.95) by
+ CH2PR15MB3624.namprd15.prod.outlook.com (52.132.229.10) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2602.15; Tue, 14 Jan 2020 17:25:43 +0000
+Received: from CH2PR15MB3621.namprd15.prod.outlook.com
+ ([fe80::f85f:99be:50ab:2aa9]) by CH2PR15MB3621.namprd15.prod.outlook.com
+ ([fe80::f85f:99be:50ab:2aa9%7]) with mapi id 15.20.2623.015; Tue, 14 Jan 2020
+ 17:25:43 +0000
+Received: from [IPv6:2620:10d:c081:1131::1467] (2620:10d:c090:180::f7d5) by MWHPR17CA0061.namprd17.prod.outlook.com (2603:10b6:300:93::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2623.12 via Frontend Transport; Tue, 14 Jan 2020 17:25:41 +0000
+From:   Alexei Starovoitov <ast@fb.com>
+To:     Jiri Olsa <jolsa@redhat.com>, Andrii Nakryiko <andriin@fb.com>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: [PATCH v2 bpf-next 5/6] tools/bpf: add runqslower tool to
+ tools/bpf
+Thread-Topic: [PATCH v2 bpf-next 5/6] tools/bpf: add runqslower tool to
+ tools/bpf
+Thread-Index: AQHVyeON9FYoL/PNJ0OiETEd9NDI/6fqJ3YAgABECQA=
+Date:   Tue, 14 Jan 2020 17:25:42 +0000
+Message-ID: <d13fff52-e262-aadf-25cb-7166cb334be5@fb.com>
+References: <20200113073143.1779940-1-andriin@fb.com>
+ <20200113073143.1779940-6-andriin@fb.com> <20200114132208.GC170376@krava>
+In-Reply-To: <20200114132208.GC170376@krava>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MWHPR17CA0061.namprd17.prod.outlook.com
+ (2603:10b6:300:93::23) To CH2PR15MB3621.namprd15.prod.outlook.com
+ (2603:10b6:610:11::31)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:180::f7d5]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b07948b7-f40d-4b88-2827-08d79916c816
+x-ms-traffictypediagnostic: CH2PR15MB3624:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <CH2PR15MB36242F951CED7281D4F5D2D9D7340@CH2PR15MB3624.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-oob-tlc-oobclassifiers: OLM:3276;
+x-forefront-prvs: 028256169F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(376002)(39860400002)(346002)(396003)(366004)(189003)(199004)(81166006)(81156014)(8676002)(36756003)(2616005)(52116002)(31696002)(53546011)(6636002)(110136005)(54906003)(316002)(16526019)(31686004)(71200400001)(86362001)(66446008)(2906002)(478600001)(8936002)(186003)(66556008)(4744005)(66946007)(6486002)(4326008)(64756008)(5660300002)(66476007);DIR:OUT;SFP:1102;SCL:1;SRVR:CH2PR15MB3624;H:CH2PR15MB3621.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dyylqo3KlEtPHMvUrcny3fBHQFPa1my2amKlN1RGKMrZHg6h+1hRDecVqCt4pKPNTKFx1sIOKL9cV5jO1YaIFUNlskURFJRkHbKS+nh4MX33ZR683/cjVfcOjUEM87JtUM9g7ss/8QeowgZHFb5/aDSEhz5Tm31ZglAs1+9f7pdanUKJsUnaSVsiVhBzM50P7uYbn6WmYzDeKw6GxKywoqLcDKmmdhvGmux2aa5y13HIxO2FJzVAy8YEDh7l74rKKgIkbZgAeydAA722FpqqCRWJS2CGQuJafYn2x2G+SzbuiOuvxqaMbA3eB/mPwKotNZS+2pQQZcj7hSJTBFCAnqJcK4SQMtJpITCO5qUKXPoqBIquQErViICB0ne7n1hpSJBAUyjqH8tK0DHCOzmAEsXvJNRUzK4SSGmS+kwSY1MsD3xgJa1tBwMDuijt7+4E
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A84B7C6619115942875D274A3BB98502@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: b07948b7-f40d-4b88-2827-08d79916c816
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jan 2020 17:25:42.9275
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jVMaqVn1ToOHvtnU1rRPiIW9nptPX6+wb2lL5arxn/R/h+VnJ7kefUu8gStOm3Pu
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR15MB3624
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-14_04:2020-01-14,2020-01-14 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ impostorscore=0 adultscore=0 malwarescore=0 mlxscore=0 phishscore=0
+ spamscore=0 mlxlogscore=880 lowpriorityscore=0 clxscore=1011 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001140140
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch series introduce batch ops that can be added to bpf maps to
-lookup/lookup_and_delete/update/delete more than 1 element at the time,
-this is specially useful when syscall overhead is a problem and in case
-of hmap it will provide a reliable way of traversing them.
-
-The implementation inclues a generic approach that could potentially be
-used by any bpf map and adds it to arraymap, it also includes the specific
-implementation of hashmaps which are traversed using buckets instead
-of keys.
-
-The bpf syscall subcommands introduced are:
-
-  BPF_MAP_LOOKUP_BATCH
-  BPF_MAP_LOOKUP_AND_DELETE_BATCH
-  BPF_MAP_UPDATE_BATCH
-  BPF_MAP_DELETE_BATCH
-
-The UAPI attribute is:
-
-  struct { /* struct used by BPF_MAP_*_BATCH commands */
-         __aligned_u64   in_batch;       /* start batch,
-                                          * NULL to start from beginning
-                                          */
-         __aligned_u64   out_batch;      /* output: next start batch */
-         __aligned_u64   keys;
-         __aligned_u64   values;
-         __u32           count;          /* input/output:
-                                          * input: # of key/value
-                                          * elements
-                                          * output: # of filled elements
-                                          */
-         __u32           map_fd;
-         __u64           elem_flags;
-         __u64           flags;
-  } batch;
-
-
-in_batch and out_batch are only used for lookup and lookup_and_delete since
-those are the only two operations that attempt to traverse the map.
-
-update/delete batch ops should provide the keys/values that user wants
-to modify.
-
-Here are the previous discussions on the batch processing:
- - https://lore.kernel.org/bpf/20190724165803.87470-1-brianvv@google.com/
- - https://lore.kernel.org/bpf/20190829064502.2750303-1-yhs@fb.com/
- - https://lore.kernel.org/bpf/20190906225434.3635421-1-yhs@fb.com/
-
-Changelog sinve v3:
- - Do not use copy_to_user inside atomic region (Yonghong Song)
- - Use _opts approach on libbpf APIs (Andrii Nakryiko)
- - Drop generic_map_lookup_and_delete_batch support
- - Free malloc-ed memory in tests (Yonghong Song)
- - Reverse christmas tree (Yonghong Song)
- - Add acked labels
-
-Changelog sinve v2:
- - Add generic batch support for lpm_trie and test it (Yonghong Song)
- - Use define MAP_LOOKUP_RETRIES for retries (John Fastabend)
- - Return errors directly and remove labels (Yonghong Song)
- - Insert new API functions into libbpf alphabetically (Yonghong Song)
- - Change hlist_nulls_for_each_entry_rcu to
-   hlist_nulls_for_each_entry_safe in htab batch ops (Yonghong Song)
-
-Changelog since v1:
- - Fix SOB ordering and remove Co-authored-by tag (Alexei Starovoitov)
-
-Changelog since RFC:
- - Change batch to in_batch and out_batch to support more flexible opaque
-   values to iterate the bpf maps.
- - Remove update/delete specific batch ops for htab and use the generic
-   implementations instead.
-
-Brian Vazquez (5):
-  bpf: add bpf_map_{value_size,update_value,map_copy_value} functions
-  bpf: add generic support for lookup batch op
-  bpf: add generic support for update and delete batch ops
-  bpf: add lookup and update batch ops to arraymap
-  selftests/bpf: add batch ops testing to array bpf map
-
-Yonghong Song (4):
-  bpf: add batch ops to all htab bpf map
-  tools/bpf: sync uapi header bpf.h
-  libbpf: add libbpf support to batch ops
-  selftests/bpf: add batch ops testing for htab and htab_percpu map
-
- include/linux/bpf.h                           |  18 +
- include/uapi/linux/bpf.h                      |  21 +
- kernel/bpf/arraymap.c                         |   2 +
- kernel/bpf/hashtab.c                          | 258 +++++++++
- kernel/bpf/syscall.c                          | 548 ++++++++++++++----
- tools/include/uapi/linux/bpf.h                |  21 +
- tools/lib/bpf/bpf.c                           |  60 ++
- tools/lib/bpf/bpf.h                           |  22 +
- tools/lib/bpf/libbpf.map                      |   4 +
- .../bpf/map_tests/array_map_batch_ops.c       | 131 +++++
- .../bpf/map_tests/htab_map_batch_ops.c        | 285 +++++++++
- 11 files changed, 1242 insertions(+), 128 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
- create mode 100644 tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
-
--- 
-2.25.0.rc1.283.g88dfdc4193-goog
-
+T24gMS8xNC8yMCA1OjIyIEFNLCBKaXJpIE9sc2Egd3JvdGU6DQo+IE9uIFN1biwgSmFuIDEyLCAy
+MDIwIGF0IDExOjMxOjQyUE0gLTA4MDAsIEFuZHJpaSBOYWtyeWlrbyB3cm90ZToNCj4gDQo+IFNO
+SVANCj4gDQo+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvYnBmL3J1bnFzbG93ZXIvTWFrZWZpbGUgYi90
+b29scy9icGYvcnVucXNsb3dlci9NYWtlZmlsZQ0KPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4+
+IGluZGV4IDAwMDAwMDAwMDAwMC4uZjEzNjNhZThlNDczDQo+PiAtLS0gL2Rldi9udWxsDQo+PiAr
+KysgYi90b29scy9icGYvcnVucXNsb3dlci9NYWtlZmlsZQ0KPj4gQEAgLTAsMCArMSw4MCBAQA0K
+Pj4gKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChMR1BMLTIuMSBPUiBCU0QtMi1DbGF1c2Up
+DQo+PiArT1VUUFVUIDo9IC5vdXRwdXQNCj4+ICtDTEFORyA6PSBjbGFuZw0KPj4gK0xMQyA6PSBs
+bGMNCj4+ICtMTFZNX1NUUklQIDo9IGxsdm0tc3RyaXANCj4+ICtERUZBVUxUX0JQRlRPT0wgOj0g
+JChPVVRQVVQpL3NiaW4vYnBmdG9vbA0KPj4gK0JQRlRPT0wgPz0gJChERUZBVUxUX0JQRlRPT0wp
+DQo+PiArTElCQlBGX1NSQyA6PSAkKGFic3BhdGggLi4vLi4vbGliL2JwZikNCj4+ICtDRkxBR1Mg
+Oj0gLWcgLVdhbGwNCj4+ICsNCj4+ICsjIFRyeSB0byBkZXRlY3QgYmVzdCBrZXJuZWwgQlRGIHNv
+dXJjZQ0KPj4gK0tFUk5FTF9SRUwgOj0gJChzaGVsbCB1bmFtZSAtcikNCj4+ICtpZm5lcSAoIiQo
+d2lsZGNhcmQgL3N5cy9rZW5lcmwvYnRmL3ZtbGludXgpIiwiIikNCj4gDQo+IHMva2VuZXJsL2tl
+cm5lbC8NCg0KZWFnbGUgZXllIQ0KSSBmaXhlZCB1cCBpbiB0aGUgdHJlZS4gVGhhbmtzIQ0K
