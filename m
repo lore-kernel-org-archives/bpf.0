@@ -2,142 +2,363 @@ Return-Path: <SRS0=Nq9f=3D=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C08B8C33C9E
-	for <bpf@archiver.kernel.org>; Tue, 14 Jan 2020 20:15:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ED1AC33C9E
+	for <bpf@archiver.kernel.org>; Tue, 14 Jan 2020 21:11:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 95BEB24658
-	for <bpf@archiver.kernel.org>; Tue, 14 Jan 2020 20:15:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45A9924658
+	for <bpf@archiver.kernel.org>; Tue, 14 Jan 2020 21:11:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="bNQcHd+k"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="iRJQaTwL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727285AbgANUPM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jan 2020 15:15:12 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:13500 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726839AbgANUPL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Jan 2020 15:15:11 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e1e21390001>; Tue, 14 Jan 2020 12:14:49 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 14 Jan 2020 12:15:09 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 14 Jan 2020 12:15:09 -0800
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 14 Jan
- 2020 20:15:09 +0000
-Subject: Re: [PATCH v12 00/22] mm/gup: prereqs to track dma-pinned pages:
- FOLL_PIN
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20200107224558.2362728-1-jhubbard@nvidia.com>
- <2a9145d4-586e-6489-64e4-0c54f47afaa1@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <9d7f3c1a-6020-bdec-c513-80c5399e55d7@nvidia.com>
-Date:   Tue, 14 Jan 2020 12:15:08 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1728765AbgANVLt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Jan 2020 16:11:49 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32112 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727285AbgANVLs (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 14 Jan 2020 16:11:48 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00EL2E3n004358
+        for <bpf@vger.kernel.org>; Tue, 14 Jan 2020 13:11:47 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=+2KnbqcX17RhFIoVnB6HDEgWaRnSN/g51k126eSoYNw=;
+ b=iRJQaTwLgJDU/txpCEuhKzwUzFPkbmIH9Dkiq+XtaGhPgEp3wSdESBr4KxcmNe2e4TRF
+ coJAwohMAh3ZlEsSJcsLgT9j4J/soK9pTSOls5a4+2vv1zgSPqeDvIJtaQUCtjY4R4ue
+ tyGYYH7i7CSP8oVnjBE5KyzX1FScHp2Rqk8= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xgw2epya9-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 14 Jan 2020 13:11:47 -0800
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Tue, 14 Jan 2020 13:11:46 -0800
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 6DA97370257F; Tue, 14 Jan 2020 13:11:45 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next v2 2/2] tools/bpf: add self tests for bpf_send_signal_thread()
+Date:   Tue, 14 Jan 2020 13:11:45 -0800
+Message-ID: <20200114211145.3201733-1-yhs@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200114211143.3201505-1-yhs@fb.com>
+References: <20200114211143.3201505-1-yhs@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-In-Reply-To: <2a9145d4-586e-6489-64e4-0c54f47afaa1@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1579032890; bh=wLxNzNFRStaOZ7jAQIV4tH1wBKaWmBKZBOUdkq/PVGQ=;
-        h=X-PGP-Universal:Subject:From:To:CC:References:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=bNQcHd+kt2S6qArSD90PMkNX5LSRoo2toPf1fdY/D3ysgVjnnuMPbcBLvU4mGjBbT
-         LR4uZiIEi3/mAViybdXB1PH001dny/ndD230xDMGlhs7NAYpQR6mGLaj5Fl0H44uol
-         s/WH8SaFGbiYHrC+Jf2F7bChe3A2NqguquLvhseggPHll2epR/FoT6c0YMA6JGSKkp
-         eSDWR40pps95gbxdKKvy2DClT3lBSMdUwcemTQnf2Jrxy6nLuQLIDhcegQ+kyGcscI
-         uknj/1R1Mw2ETSzcXASW/vo/Q3g+SHupTZUPph9j3ZAnq/QlpAxhi10ckpA46Ke/0I
-         HjefW3dJ5Akvg==
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-14_06:2020-01-14,2020-01-14 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ mlxlogscore=999 clxscore=1015 spamscore=0 priorityscore=1501 bulkscore=0
+ malwarescore=0 adultscore=0 suspectscore=13 mlxscore=0 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001140161
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 1/9/20 2:07 PM, John Hubbard wrote:
-> On 1/7/20 2:45 PM, John Hubbard wrote:
->> Hi,
->>
->> The "track FOLL_PIN pages" would have been the very next patch, but it is
->> not included here because I'm still debugging a bug report from Leon.
->> Let's get all of the prerequisite work (it's been reviewed) into the tree
->> so that future reviews are easier. It's clear that any fixes that are
->> required to the tracking patch, won't affect these patches here.
->>
->> This implements an API naming change (put_user_page*() -->
->> unpin_user_page*()), and also adds FOLL_PIN page support, up to
->> *but not including* actually tracking FOLL_PIN pages. It extends
->> the FOLL_PIN support to a few select subsystems. More subsystems will
->> be added in follow up work.
->>
-> 
-> Hi Andrew and all,
-> 
-> To clarify: I'm hoping that this series can go into 5.6.
-> 
-> Meanwhile, I'm working on tracking down and solving the problem that Leon
-> reported, in the "track FOLL_PIN pages" patch, and that patch is not part of
-> this series.
-> 
+The test_progs send_signal() is amended to test
+bpf_send_signal_thread() as well.
 
-Hi Andrew and all,
+   $ ./test_progs -n 40
+   #40/1 send_signal_tracepoint:OK
+   #40/2 send_signal_perf:OK
+   #40/3 send_signal_nmi:OK
+   #40/4 send_signal_tracepoint_thread:OK
+   #40/5 send_signal_perf_thread:OK
+   #40/6 send_signal_nmi_thread:OK
+   #40 send_signal:OK
+   Summary: 1/6 PASSED, 0 SKIPPED, 0 FAILED
 
-Any thoughts on this?
+Also took this opportunity to rewrite the send_signal test
+using skeleton framework and array mmap to make code
+simpler and more readable.
 
-As for the not-included-yet tracking patch, my local testing still suggests the
-need to allow for larger refcounts of huge pages (in other words, I can write a test
-to pin huge pages many times, and overflow with the same backtrace that Leon has
-reported).
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ .../selftests/bpf/prog_tests/send_signal.c    | 111 ++++++++++--------
+ .../bpf/progs/test_send_signal_kern.c         |  51 ++++----
+ 2 files changed, 87 insertions(+), 75 deletions(-)
 
-The second struct page (I recall Jan suggested) can hold those, so I'm going to proceed
-with that approach, while waiting to see if Leon has any more test data for me.
-
-Again, I think this series is worth getting out of the way, in the meantime.
-
-
-thanks,
+diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+index b607112c64e7..14ec9cf218ed 100644
+--- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
++++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+@@ -1,5 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
++#include <sys/mman.h>
++#include "test_send_signal_kern.skel.h"
+ 
+ static volatile int sigusr1_received = 0;
+ 
+@@ -8,18 +10,26 @@ static void sigusr1_handler(int signum)
+ 	sigusr1_received++;
+ }
+ 
++static size_t roundup_page(size_t sz)
++{
++	long page_size = sysconf(_SC_PAGE_SIZE);
++	return (sz + page_size - 1) / page_size * page_size;
++}
++
+ static void test_send_signal_common(struct perf_event_attr *attr,
+-				    int prog_type,
++				    bool is_tp, bool signal_thread,
+ 				    const char *test_name)
+ {
+-	int err = -1, pmu_fd, prog_fd, info_map_fd, status_map_fd;
+-	const char *file = "./test_send_signal_kern.o";
+-	struct bpf_object *obj = NULL;
++	const size_t bss_sz = roundup_page(sizeof(struct test_send_signal_kern__bss));
++	struct test_send_signal_kern__bss *bss_data;
++	struct test_send_signal_kern *skel;
+ 	int pipe_c2p[2], pipe_p2c[2];
+-	__u32 key = 0, duration = 0;
++	struct bpf_map *bss_map;
++	void *bss_mmaped = NULL;
++	int err = -1, pmu_fd;
++	__u32 duration = 0;
+ 	char buf[256];
+ 	pid_t pid;
+-	__u64 val;
+ 
+ 	if (CHECK(pipe(pipe_c2p), test_name,
+ 		  "pipe pipe_c2p error: %s\n", strerror(errno)))
+@@ -73,45 +83,50 @@ static void test_send_signal_common(struct perf_event_attr *attr,
+ 	close(pipe_c2p[1]); /* close write */
+ 	close(pipe_p2c[0]); /* close read */
+ 
+-	err = bpf_prog_load(file, prog_type, &obj, &prog_fd);
+-	if (CHECK(err < 0, test_name, "bpf_prog_load error: %s\n",
+-		  strerror(errno)))
+-		goto prog_load_failure;
++	skel = test_send_signal_kern__open_and_load();
++	if (CHECK(!skel, "skel_open_and_load", "skeleton open_and_load failed\n"))
++		goto skel_open_load_failure;
++
++	bss_map = skel->maps.bss;
++	bss_mmaped = mmap(NULL, bss_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
++			  bpf_map__fd(bss_map), 0);
++	if (CHECK(bss_mmaped == MAP_FAILED, "bss_mmap",
++		  ".bss mmap failed: %d\n", errno)) {
++		bss_mmaped = NULL;
++		goto destroy_skel;
++	}
++
++	bss_data = bss_mmaped;
+ 
+ 	pmu_fd = syscall(__NR_perf_event_open, attr, pid, -1,
+ 			 -1 /* group id */, 0 /* flags */);
+ 	if (CHECK(pmu_fd < 0, test_name, "perf_event_open error: %s\n",
+ 		  strerror(errno))) {
+ 		err = -1;
+-		goto close_prog;
++		goto destroy_skel;
+ 	}
+ 
+-	err = ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0);
+-	if (CHECK(err < 0, test_name, "ioctl perf_event_ioc_enable error: %s\n",
+-		  strerror(errno)))
+-		goto disable_pmu;
+-
+-	err = ioctl(pmu_fd, PERF_EVENT_IOC_SET_BPF, prog_fd);
+-	if (CHECK(err < 0, test_name, "ioctl perf_event_ioc_set_bpf error: %s\n",
+-		  strerror(errno)))
+-		goto disable_pmu;
+-
+-	err = -1;
+-	info_map_fd = bpf_object__find_map_fd_by_name(obj, "info_map");
+-	if (CHECK(info_map_fd < 0, test_name, "find map %s error\n", "info_map"))
+-		goto disable_pmu;
+-
+-	status_map_fd = bpf_object__find_map_fd_by_name(obj, "status_map");
+-	if (CHECK(status_map_fd < 0, test_name, "find map %s error\n", "status_map"))
+-		goto disable_pmu;
++	if (is_tp) {
++		skel->links.send_signal_tp =
++			bpf_program__attach_perf_event(skel->progs.send_signal_tp, pmu_fd);
++		if (CHECK(IS_ERR(skel->links.send_signal_tp), "attach_perf_event",
++			"err %ld\n", PTR_ERR(skel->links.send_signal_tp)))
++			goto disable_pmu;
++	} else {
++		skel->links.send_signal_perf =
++			bpf_program__attach_perf_event(skel->progs.send_signal_perf, pmu_fd);
++		if (CHECK(IS_ERR(skel->links.send_signal_perf), "attach_perf_event",
++			"err %ld\n", PTR_ERR(skel->links.send_signal_perf)))
++			goto disable_pmu;
++	}
+ 
+ 	/* wait until child signal handler installed */
+ 	read(pipe_c2p[0], buf, 1);
+ 
+ 	/* trigger the bpf send_signal */
+-	key = 0;
+-	val = (((__u64)(SIGUSR1)) << 32) | pid;
+-	bpf_map_update_elem(info_map_fd, &key, &val, 0);
++	bss_data->pid = pid;
++	bss_data->sig = SIGUSR1;
++	bss_data->signal_thread = signal_thread;
+ 
+ 	/* notify child that bpf program can send_signal now */
+ 	write(pipe_p2c[1], buf, 1);
+@@ -132,15 +147,15 @@ static void test_send_signal_common(struct perf_event_attr *attr,
+ 
+ disable_pmu:
+ 	close(pmu_fd);
+-close_prog:
+-	bpf_object__close(obj);
+-prog_load_failure:
++destroy_skel:
++	test_send_signal_kern__destroy(skel);
++skel_open_load_failure:
+ 	close(pipe_c2p[0]);
+ 	close(pipe_p2c[1]);
+ 	wait(NULL);
+ }
+ 
+-static void test_send_signal_tracepoint(void)
++static void test_send_signal_tracepoint(bool signal_thread)
+ {
+ 	const char *id_path = "/sys/kernel/debug/tracing/events/syscalls/sys_enter_nanosleep/id";
+ 	struct perf_event_attr attr = {
+@@ -168,10 +183,10 @@ static void test_send_signal_tracepoint(void)
+ 
+ 	attr.config = strtol(buf, NULL, 0);
+ 
+-	test_send_signal_common(&attr, BPF_PROG_TYPE_TRACEPOINT, "tracepoint");
++	test_send_signal_common(&attr, true, signal_thread, "tracepoint");
+ }
+ 
+-static void test_send_signal_perf(void)
++static void test_send_signal_perf(bool signal_thread)
+ {
+ 	struct perf_event_attr attr = {
+ 		.sample_period = 1,
+@@ -179,11 +194,10 @@ static void test_send_signal_perf(void)
+ 		.config = PERF_COUNT_SW_CPU_CLOCK,
+ 	};
+ 
+-	test_send_signal_common(&attr, BPF_PROG_TYPE_PERF_EVENT,
+-				"perf_sw_event");
++	test_send_signal_common(&attr, false, signal_thread, "perf_sw_event");
+ }
+ 
+-static void test_send_signal_nmi(void)
++static void test_send_signal_nmi(bool signal_thread)
+ {
+ 	struct perf_event_attr attr = {
+ 		.sample_freq = 50,
+@@ -210,16 +224,21 @@ static void test_send_signal_nmi(void)
+ 		close(pmu_fd);
+ 	}
+ 
+-	test_send_signal_common(&attr, BPF_PROG_TYPE_PERF_EVENT,
+-				"perf_hw_event");
++	test_send_signal_common(&attr, false, signal_thread, "perf_hw_event");
+ }
+ 
+ void test_send_signal(void)
+ {
+ 	if (test__start_subtest("send_signal_tracepoint"))
+-		test_send_signal_tracepoint();
++		test_send_signal_tracepoint(false);
+ 	if (test__start_subtest("send_signal_perf"))
+-		test_send_signal_perf();
++		test_send_signal_perf(false);
+ 	if (test__start_subtest("send_signal_nmi"))
+-		test_send_signal_nmi();
++		test_send_signal_nmi(false);
++	if (test__start_subtest("send_signal_tracepoint_thread"))
++		test_send_signal_tracepoint(true);
++	if (test__start_subtest("send_signal_perf_thread"))
++		test_send_signal_perf(true);
++	if (test__start_subtest("send_signal_nmi_thread"))
++		test_send_signal_nmi(true);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_send_signal_kern.c b/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
+index 0e6be01157e6..726733f9f20b 100644
+--- a/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
+@@ -4,44 +4,37 @@
+ #include <linux/version.h>
+ #include "bpf_helpers.h"
+ 
+-struct {
+-	__uint(type, BPF_MAP_TYPE_ARRAY);
+-	__uint(max_entries, 1);
+-	__type(key, __u32);
+-	__type(value, __u64);
+-} info_map SEC(".maps");
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_ARRAY);
+-	__uint(max_entries, 1);
+-	__type(key, __u32);
+-	__type(value, __u64);
+-} status_map SEC(".maps");
+-
+-SEC("send_signal_demo")
+-int bpf_send_signal_test(void *ctx)
++__u32 sig = 0, pid = 0, status = 0, signal_thread = 0;
++
++static __always_inline int bpf_send_signal_test(void *ctx)
+ {
+-	__u64 *info_val, *status_val;
+-	__u32 key = 0, pid, sig;
+ 	int ret;
+ 
+-	status_val = bpf_map_lookup_elem(&status_map, &key);
+-	if (!status_val || *status_val != 0)
+-		return 0;
+-
+-	info_val = bpf_map_lookup_elem(&info_map, &key);
+-	if (!info_val || *info_val == 0)
++	if (status != 0 || sig == 0 || pid == 0)
+ 		return 0;
+ 
+-	sig = *info_val >> 32;
+-	pid = *info_val & 0xffffFFFF;
+-
+ 	if ((bpf_get_current_pid_tgid() >> 32) == pid) {
+-		ret = bpf_send_signal(sig);
++		if (signal_thread)
++			ret = bpf_send_signal_thread(sig);
++		else
++			ret = bpf_send_signal(sig);
+ 		if (ret == 0)
+-			*status_val = 1;
++			status = 1;
+ 	}
+ 
+ 	return 0;
+ }
++
++SEC("tracepoint/syscalls/sys_enter_nanosleep")
++int send_signal_tp(void *ctx)
++{
++	return bpf_send_signal_test(ctx);
++}
++
++SEC("perf_event")
++int send_signal_perf(void *ctx)
++{
++	return bpf_send_signal_test(ctx);
++}
++
+ char __license[] SEC("license") = "GPL";
 -- 
-John Hubbard
-NVIDIA
+2.17.1
+
