@@ -2,101 +2,269 @@ Return-Path: <SRS0=xBUo=3E=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA648C33CB2
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 22:22:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD8E1C32771
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 22:23:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B039F24679
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 22:22:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A76B322522
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 22:23:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="UTWObrSB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dEGsyMKi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730661AbgAOWW6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jan 2020 17:22:58 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13120 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730129AbgAOWW6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 15 Jan 2020 17:22:58 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00FMMoZf026607
-        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 14:22:56 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=qtFzyE4iiZiPqTpnphin2/gfu5t99YfwSg3NBgCO4xY=;
- b=UTWObrSB2d4GrS0OQmQxks6ApSxmtZIWuUyOhyhVudPvQWQ6+ejl3eODNJa7kjgg5h5x
- iwPjqaigjXEwFViPULgJRovKWfCyNxo/TR/JBWW3b0ZX6y6ZXEJe0GTtCOHG+lABfCa8
- aettlOx+NfWqqPv/8Gj4SBWPXlwgdEIoNF0= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xj9vcrfsy-14
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 14:22:56 -0800
-Received: from intmgw002.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 15 Jan 2020 14:22:42 -0800
-Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 6678C294163F; Wed, 15 Jan 2020 14:22:41 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Martin KaFai Lau <kafai@fb.com>
-Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+        id S1730673AbgAOWXV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jan 2020 17:23:21 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:35715 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730588AbgAOWXU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Jan 2020 17:23:20 -0500
+Received: by mail-pl1-f196.google.com with SMTP id g6so7437019plt.2;
+        Wed, 15 Jan 2020 14:23:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=39CS5GpmXuTwg03W2SVR081VJD0zzg51XXxFz2HsFP8=;
+        b=dEGsyMKiCZp/BhyZOc1rCAcVCdnQ84+uPow5LTQ61QN8w0yqWJJnIVMvN3mYa0/WR5
+         OiFpAIZtmuViFzfHFkoZteAisypniJFqDJRv6Oz8RQ9Z6gcRMd6aU0dXkILjmS0qRqYu
+         4FBp0ZcMblEd6eLSxJRkkDoPabSQd4RZCthIkchHUOZUtgZQ+eKgLMR84xoPmKtayl3Y
+         N/QWTqdoACAAsokCN5d1+B4Djode8dPylCpy01j2JKUl4wHqHrpnLUoj5KQevOa7er/E
+         /b0idl2rvOafFMFBcx3DG7Aan3VAn63/S+O1crbdpCbBOSUa5h9SSIie0k0Gk/KHgk8O
+         2ceg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=39CS5GpmXuTwg03W2SVR081VJD0zzg51XXxFz2HsFP8=;
+        b=JnPLI0dlNG7OvEevAJZqYo9BmneUUe6wPwJ+BRpx/CoG6lImxM17lwzQlvX+5PZkUt
+         o5Nzu382OnGaZnvPPFbJ2iC3wV8SfJuYoO3lOWUDnoVUB2+fwBGXtFt/2GTDYVL1gNRm
+         n984iEpTwBnrU2wCb72BFMufy4dqcBCjPiQeNNeuKpHzOxfmPisC5Dvu+d7xxiE3PB+A
+         KaWLFiC9QbPINDMiAUnBY+/PgSwbdIvVJuh6No9o1LJ8rJqhsxUe+XO3GwCtANtAb7Tn
+         aBZ2jWnD0+8sshHooyzJfZoAewgYIluJHm/egd2joVP7T4GI6ViD9yyqYXHe2hSIceqW
+         WiCg==
+X-Gm-Message-State: APjAAAWiAtjwGPaYOCdLZu0DUA9Mp0SynAtPrOiWMhslsPDzaTr3JX7v
+        9k8HqQ872MWm41A2yOEbK5w=
+X-Google-Smtp-Source: APXvYqyFkR+Wo+opdxJwELWfWISoegQhZNyLFiV4T0QPKL1sB9AmjY8V1fcGllMB/XZ4jFR5UMaooA==
+X-Received: by 2002:a17:902:6904:: with SMTP id j4mr12433225plk.88.1579126999203;
+        Wed, 15 Jan 2020 14:23:19 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::3:e760])
+        by smtp.gmail.com with ESMTPSA id h126sm23617846pfe.19.2020.01.15.14.23.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 Jan 2020 14:23:18 -0800 (PST)
+Date:   Wed, 15 Jan 2020 14:23:15 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Stephen Smalley <sds@tycho.nsa.gov>,
+        KP Singh <kpsingh@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Kees Cook <keescook@chromium.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, linux-security-module@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 0/5] bpftool: Support dumping a map with btf_vmlinux_value_type_id
-Date:   Wed, 15 Jan 2020 14:22:41 -0800
-Message-ID: <20200115222241.945672-1-kafai@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
+        Thomas Garnier <thgarnie@chromium.org>,
+        Michael Halcrow <mhalcrow@google.com>,
+        Paul Turner <pjt@google.com>,
+        Brendan Gregg <brendan.d.gregg@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Christian Brauner <christian@brauner.io>,
+        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Quentin Monnet <quentin.monnet@netronome.com>,
+        Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>,
+        Paul Moore <paul@paul-moore.com>
+Subject: Re: [PATCH bpf-next v1 00/13] MAC and Audit policy using eBPF (KRSI)
+Message-ID: <20200115222314.wiqamvax7vckgfv7@ast-mbp.dhcp.thefacebook.com>
+References: <alpine.LRH.2.21.2001100558550.31925@namei.org>
+ <20200109194302.GA85350@google.com>
+ <8e035f4d-5120-de6a-7ac8-a35841a92b8a@tycho.nsa.gov>
+ <20200110152758.GA260168@google.com>
+ <20200110175304.f3j4mtach4mccqtg@ast-mbp.dhcp.thefacebook.com>
+ <554ab109-0c23-aa82-779f-732d10f53d9c@tycho.nsa.gov>
+ <49a45583-b4fb-6353-a8d4-6f49287b26eb@tycho.nsa.gov>
+ <20200115024830.4ogd3mi5jy5hwr2v@ast-mbp.dhcp.thefacebook.com>
+ <38a82df5-7610-efe1-d6cd-76f6f68c6110@tycho.nsa.gov>
+ <20200115140953.GB3627564@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-15_03:2020-01-15,2020-01-15 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=529
- clxscore=1015 bulkscore=0 phishscore=0 adultscore=0 spamscore=0
- suspectscore=13 priorityscore=1501 malwarescore=0 impostorscore=0
- mlxscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-2001150167
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200115140953.GB3627564@kroah.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When a map is storing a kernel's struct, its
-map_info->btf_vmlinux_value_type_id is set.  The first map type
-supporting it is BPF_MAP_TYPE_STRUCT_OPS.
+On Wed, Jan 15, 2020 at 03:09:53PM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Jan 15, 2020 at 08:59:08AM -0500, Stephen Smalley wrote:
+> > On 1/14/20 9:48 PM, Alexei Starovoitov wrote:
+> > > On Tue, Jan 14, 2020 at 12:42:22PM -0500, Stephen Smalley wrote:
+> > > > On 1/14/20 11:54 AM, Stephen Smalley wrote:
+> > > > > On 1/10/20 12:53 PM, Alexei Starovoitov wrote:
+> > > > > > On Fri, Jan 10, 2020 at 04:27:58PM +0100, KP Singh wrote:
+> > > > > > > On 09-Jan 14:47, Stephen Smalley wrote:
+> > > > > > > > On 1/9/20 2:43 PM, KP Singh wrote:
+> > > > > > > > > On 10-Jan 06:07, James Morris wrote:
+> > > > > > > > > > On Thu, 9 Jan 2020, Stephen Smalley wrote:
+> > > > > > > > > > 
+> > > > > > > > > > > On 1/9/20 1:11 PM, James Morris wrote:
+> > > > > > > > > > > > On Wed, 8 Jan 2020, Stephen Smalley wrote:
+> > > > > > > > > > > > 
+> > > > > > > > > > > > > The cover letter subject line and the
+> > > > > > > > > > > > > Kconfig help text refer to it as a
+> > > > > > > > > > > > > BPF-based "MAC and Audit policy".  It
+> > > > > > > > > > > > > has an enforce config option that
+> > > > > > > > > > > > > enables the bpf programs to deny access,
+> > > > > > > > > > > > > providing access control. IIRC,
+> > > > > > > > > > > > > in
+> > > > > > > > > > > > > the earlier discussion threads, the BPF
+> > > > > > > > > > > > > maintainers suggested that Smack
+> > > > > > > > > > > > > and
+> > > > > > > > > > > > > other LSMs could be entirely
+> > > > > > > > > > > > > re-implemented via it in the future, and
+> > > > > > > > > > > > > that
+> > > > > > > > > > > > > such an implementation would be more optimal.
+> > > > > > > > > > > > 
+> > > > > > > > > > > > In this case, the eBPF code is similar to a
+> > > > > > > > > > > > kernel module, rather than a
+> > > > > > > > > > > > loadable policy file.  It's a loadable
+> > > > > > > > > > > > mechanism, rather than a policy, in
+> > > > > > > > > > > > my view.
+> > > > > > > > > > > 
+> > > > > > > > > > > I thought you frowned on dynamically loadable
+> > > > > > > > > > > LSMs for both security and
+> > > > > > > > > > > correctness reasons?
+> > > > > > > > > 
+> > > > > > > > > Based on the feedback from the lists we've updated the design for v2.
+> > > > > > > > > 
+> > > > > > > > > In v2, LSM hook callbacks are allocated dynamically using BPF
+> > > > > > > > > trampolines, appended to a separate security_hook_heads and run
+> > > > > > > > > only after the statically allocated hooks.
+> > > > > > > > > 
+> > > > > > > > > The security_hook_heads for all the other LSMs (SELinux, AppArmor etc)
+> > > > > > > > > still remains __lsm_ro_after_init and cannot be modified. We are still
+> > > > > > > > > working on v2 (not ready for review yet) but the general idea can be
+> > > > > > > > > seen here:
+> > > > > > > > > 
+> > > > > > > > >       https://github.com/sinkap/linux-krsi/blob/patch/v1/trampoline_prototype/security/bpf/lsm.c
+> > > > > > > > > 
+> > > > > > > > > 
+> > > > > > > > > > 
+> > > > > > > > > > Evaluating the security impact of this is the next
+> > > > > > > > > > step. My understanding
+> > > > > > > > > > is that eBPF via BTF is constrained to read only access to hook
+> > > > > > > > > > parameters, and that its behavior would be entirely restrictive.
+> > > > > > > > > > 
+> > > > > > > > > > I'd like to understand the security impact more
+> > > > > > > > > > fully, though.  Can the
+> > > > > > > > > > eBPF code make arbitrary writes to the kernel, or
+> > > > > > > > > > read anything other than
+> > > > > > > > > > the correctly bounded LSM hook parameters?
+> > > > > > > > > > 
+> > > > > > > > > 
+> > > > > > > > > As mentioned, the BPF verifier does not allow writes to BTF types.
+> > > > > > > > > 
+> > > > > > > > > > > And a traditional security module would necessarily fall
+> > > > > > > > > > > under GPL; is the eBPF code required to be
+> > > > > > > > > > > likewise?  If not, KRSI is a
+> > > > > > > > > > > gateway for proprietary LSMs...
+> > > > > > > > > > 
+> > > > > > > > > > Right, we do not want this to be a GPL bypass.
+> > > > > > > > > 
+> > > > > > > > > This is not intended to be a GPL bypass and the BPF verifier checks
+> > > > > > > > > for license compatibility of the loaded program with GPL.
+> > > > > > > > 
+> > > > > > > > IIUC, it checks that the program is GPL compatible if it
+> > > > > > > > uses a function
+> > > > > > > > marked GPL-only.  But what specifically is marked GPL-only
+> > > > > > > > that is required
+> > > > > > > > for eBPF programs using KRSI?
+> > > > > > > 
+> > > > > > > Good point! If no-one objects, I can add it to the BPF_PROG_TYPE_LSM
+> > > > > > > specific verification for the v2 of the patch-set which would require
+> > > > > > > all BPF-LSM programs to be GPL.
+> > > > > > 
+> > > > > > I don't think it's a good idea to enforce license on the program.
+> > > > > > The kernel doesn't do it for modules.
+> > > > > > For years all of BPF tracing progs were GPL because they have to use
+> > > > > > GPL-ed helpers to do anything meaningful.
+> > > > > > So for KRSI just make sure that all helpers are GPL-ed as well.
+> > > > > 
+> > > > > IIUC, the example eBPF code included in this patch series showed a
+> > > > > program that used a GPL-only helper for the purpose of reporting event
+> > > > > output to userspace. But it could have just as easily omitted the use of
+> > > > > that helper and still implemented its own arbitrary access control model
+> > > > > on the LSM hooks to which it attached.  It seems like the question is
+> > > > > whether the kernel developers are ok with exposing the entire LSM hook
+> > > > > interface and all the associated data structures to non-GPLd code,
+> > > > > irrespective of what helpers it may or may not use.
+> > > > 
+> > > > Also, to be clear, while kernel modules aren't necessarily GPL, prior to
+> > > > this patch series, all Linux security modules were necessarily GPLd in order
+> > > > to use the LSM interface.
+> > > 
+> > > Because they use securityfs_create_file() GPL-ed api, right?
+> > > but not because module license is enforced.
+> > 
+> > No, securityfs was a later addition and is not required by all LSMs either.
+> > Originally LSMs had to register their hooks via register_security(), which
+> > was intentionally EXPORT_SYMBOL_GPL() to avoid exposing the LSM interface to
+> > non-GPLd modules because there were significant concerns with doing so when
+> > LSM was first merged.  Then in 20510f2f4e2dabb0ff6c13901807627ec9452f98
+> > ("security: Convert LSM into a static interface"), the ability for loadable
+> > modules to use register_security() at all was removed, limiting its use to
+> > built-in modules.  In commit b1d9e6b0646d0e5ee5d9050bd236b6c65d66faef ("LSM:
+> > Switch to lists of hooks"), register_security() was replaced by
+> > security_add_hooks(), but this was likewise not exported for use by modules
+> > and could only be used by built-in code.  The bpf LSM is providing a shim
+> > that allows eBPF code to attach to these hooks that would otherwise not be
+> > exposed to non-GPLd code, so if the bpf LSM does not require the eBPF
+> > programs to also be GPLd, then that is a change from current practice.
+> > 
+> > > > So allowing non-GPL eBPF-based LSMs would be a
+> > > > change.
+> > > 
+> > > I don't see it this way. seccomp progs technically unlicensed. Yet they can
+> > > disallow any syscall. Primitive KRSI progs like
+> > > int bpf-prog(void*) { return REJECT; }
+> > > would be able to do selectively disable a syscall with an overhead acceptable
+> > > in production systems (unlike seccomp). I want this use case to be available to
+> > > people. It's a bait, because to do real progs people would need to GPL them.
+> > > Key helpers bpf_perf_event_output, bpf_ktime_get_ns, bpf_trace_printk are all
+> > > GPL-ed. It may look that most networking helpers are not-GPL, but real life is
+> > > different. To debug programs bpf_trace_printk() is necessary. To have
+> > > communication with user space bpf_perf_event_output() is necssary. To measure
+> > > anything or implement timestamps bpf_ktime_get_ns() is necessary. So today all
+> > > meaninful bpf programs are GPL. Those that are not GPL probably exist, but
+> > > they're toy programs. Hence I have zero concerns about GPL bypass coming from
+> > > tracing, networking, and, in the future, KRSI progs too.
+> > 
+> > You have more confidence than I do about that.  I would anticipate
+> > developers of out-of-tree LSMs latching onto this bpf LSM and using it to
+> > avoid GPL.  I don't see that any of those helpers are truly needed to
+> > implement an access control model.
+> 
+> Yeah, I'm with Stephen here, this should be explicitly marked for
+> GPL-only bpf code to prevent anyone from trying to route around the LSM
+> apis we have today.  We have enough problem with companies trying to do
+> that as-is, let's not give them any other ways to abuse our license.
 
-This series adds support to dump this kind of map with BTF.
-The first two patches are bug fixes which only applicable to
-in bpf-next.
-
-Please see individual patches for details.
-
-v2:
-- Expose bpf_find_kernel_btf() as a LIBBPF_API in patch 3 (Andrii)
-- Cache btf_vmlinux in bpftool/map.c (Andrii)
-
-Martin KaFai Lau (5):
-  bpftool: Fix a leak of btf object
-  bpftool: Fix missing BTF output for json during map dump
-  libbpf: Expose bpf_find_kernel_btf as a LIBBPF_API
-  bpftool: Add struct_ops map name
-  bpftool: Support dumping a map with btf_vmlinux_value_type_id
-
- tools/bpf/bpftool/map.c  | 103 ++++++++++++++++++++++++---------------
- tools/lib/bpf/btf.c      | 102 +++++++++++++++++++++++++++++++++++---
- tools/lib/bpf/btf.h      |   2 +
- tools/lib/bpf/libbpf.c   |  93 ++---------------------------------
- tools/lib/bpf/libbpf.map |   1 +
- 5 files changed, 167 insertions(+), 134 deletions(-)
-
--- 
-2.17.1
-
+Fine. Let's do per prog type check. We can undo it later when this early
+concerns prove to be overblown.
