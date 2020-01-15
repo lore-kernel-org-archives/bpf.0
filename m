@@ -2,103 +2,133 @@ Return-Path: <SRS0=xBUo=3E=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C127FC33CB3
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 22:17:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ED4DC33CB3
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 22:22:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8EC9A24671
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 22:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579126675;
-	bh=KRACwXXWKO/EznwyzDu7lnYus4D5z0F5HFebQ6mV67A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=iGF+yIoY4vdCHRTXTomrdI5/7PIPfnu5QU/R493j5to/oHLjEc5Ue4LCjc4TM/ba5
-	 p7/D35NkGh8CvsU9nqCACFc9kfRWND57u8P0K7mlpnTJwSgj0ihD8Mn8esauGKXRNv
-	 X2JcsB6SwjeRiQeK3viWrTHP+9fUy7LSdB8+/+Cc=
+	by mail.kernel.org (Postfix) with ESMTP id 70B74222C3
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 22:22:56 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Bw/unmh+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729785AbgAOWRz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jan 2020 17:17:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37364 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728899AbgAOWRz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Jan 2020 17:17:55 -0500
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B31C32187F;
-        Wed, 15 Jan 2020 22:17:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579126674;
-        bh=KRACwXXWKO/EznwyzDu7lnYus4D5z0F5HFebQ6mV67A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vQDz4L3I+zNXlHoV/yl0mng1PqZTdqI34xdNfY1tpzXxo7DwkfhndIBNVHQSuk5eS
-         bxE1ZS1d7WJnGwLZyKWeRL2QjzRf8jLzTN1R5FgFEY9cfNOCrkzdXaiKM2RS3tyd3U
-         Et/ca6hqUoSBV4mLJ/Y7o52mj9EGSwqjE4zs3zqQ=
-Date:   Thu, 16 Jan 2020 07:17:50 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jaswinder.singh@linaro.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net
-Subject: Re: [BUGFIX PATCH] selftests: Fix pthread link option
-Message-Id: <20200116071750.0bde391266ea7637ee041d8c@kernel.org>
-In-Reply-To: <20200115192528.kq44bg24ezsgo5hm@ast-mbp.dhcp.thefacebook.com>
-References: <157907976750.14189.12829891067375600434.stgit@devnote2>
-        <20200115192528.kq44bg24ezsgo5hm@ast-mbp.dhcp.thefacebook.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1729025AbgAOWWy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jan 2020 17:22:54 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:41126 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728899AbgAOWWy (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 15 Jan 2020 17:22:54 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00FMMA1t021469
+        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 14:22:52 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=Au1NW+TCBZHnyU0owvpPHDXCAXIBOkyFDZYaM//dsB4=;
+ b=Bw/unmh+dvWjxhq++DGug+0tknzTkln2JLi+JtgRPW8GmFe3yFm+3FIG6wdc+GeyHnFz
+ t6t6NsU2HA7l0EL13jF2ZG8LV0xkLOzZQ0W7L4CfO8pEw1dnJfj8ptV6c8QDT5SSeMJT
+ wKbD1M1TlAuA4SlWGprAOyKB7W7ZDBOnNFg= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xhp0fnehw-13
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 14:22:52 -0800
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 15 Jan 2020 14:22:52 -0800
+Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
+        id 9E8CA294163F; Wed, 15 Jan 2020 14:22:47 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Martin KaFai Lau <kafai@fb.com>
+Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
+        <netdev@vger.kernel.org>, Paul Chaignon <paul.chaignon@orange.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v2 bpf-next 1/5] bpftool: Fix a leak of btf object
+Date:   Wed, 15 Jan 2020 14:22:47 -0800
+Message-ID: <20200115222247.946035-1-kafai@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200115222241.945672-1-kafai@fb.com>
+References: <20200115222241.945672-1-kafai@fb.com>
+X-FB-Internal: Safe
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-15_03:2020-01-15,2020-01-15 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ impostorscore=0 bulkscore=0 phishscore=0 adultscore=0 spamscore=0
+ clxscore=1015 mlxscore=0 priorityscore=1501 suspectscore=38
+ mlxlogscore=922 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-2001150167
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 15 Jan 2020 11:25:30 -0800
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+When testing a map has btf or not, maps_have_btf() tests it by actually
+getting a btf_fd from sys_bpf(BPF_BTF_GET_FD_BY_ID). However, it
+forgot to btf__free() it.
 
-> On Wed, Jan 15, 2020 at 06:16:07PM +0900, Masami Hiramatsu wrote:
-> > To support pthread correctly, it is better to use -pthread
-> > instead of -lpthread.
-> > 
-> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > ---
-> >  tools/testing/selftests/bpf/Makefile               |    2 +-
-> >  tools/testing/selftests/membarrier/Makefile        |    2 +-
-> >  tools/testing/selftests/mqueue/Makefile            |    2 +-
-> >  tools/testing/selftests/net/Makefile               |    4 ++--
-> >  .../testing/selftests/powerpc/benchmarks/Makefile  |    4 ++--
-> >  tools/testing/selftests/powerpc/dscr/Makefile      |    2 +-
-> >  tools/testing/selftests/powerpc/mm/Makefile        |    2 +-
-> >  tools/testing/selftests/rseq/Makefile              |    2 +-
-> >  tools/testing/selftests/rtc/Makefile               |    2 +-
-> >  tools/testing/selftests/seccomp/Makefile           |    2 +-
-> >  tools/testing/selftests/timers/Makefile            |    2 +-
-> >  tools/testing/selftests/vm/Makefile                |    2 +-
-> >  12 files changed, 14 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index e2fd6f8d579c..419f58c53d12 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -22,7 +22,7 @@ CFLAGS += -g -Wall -O2 $(GENFLAGS) -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR)	\
-> >  	  -I$(GENDIR) -I$(TOOLSDIR) -I$(CURDIR)				\
-> >  	  -Dbpf_prog_load=bpf_prog_test_load				\
-> >  	  -Dbpf_load_program=bpf_test_load_program
-> > -LDLIBS += -lcap -lelf -lrt -lpthread
-> > +LDLIBS += -lcap -lelf -lrt -pthread
-> 
-> Please split this bit into separate patch and send it to bpf@vger targeting
-> bpf-next. selftests/bpf are going through a lot of changes and I'd like to
-> avoid any chance of conflicts.
+In maps_have_btf() stage, there is no need to test it by really
+calling sys_bpf(BPF_BTF_GET_FD_BY_ID). Testing non zero
+info.btf_id is good enough.
 
-OK, I'll split it.
+Also, the err_close case is unnecessary, and also causes double
+close() because the calling func do_dump() will close() all fds again.
 
-Thank you,
+Fixes: 99f9863a0c45 ("bpftool: Match maps by name")
+Cc: Paul Chaignon <paul.chaignon@orange.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ tools/bpf/bpftool/map.c | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
 
-
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index c01f76fa6876..e00e9e19d6b7 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -915,32 +915,20 @@ static int maps_have_btf(int *fds, int nb_fds)
+ {
+ 	struct bpf_map_info info = {};
+ 	__u32 len = sizeof(info);
+-	struct btf *btf = NULL;
+ 	int err, i;
+ 
+ 	for (i = 0; i < nb_fds; i++) {
+ 		err = bpf_obj_get_info_by_fd(fds[i], &info, &len);
+ 		if (err) {
+ 			p_err("can't get map info: %s", strerror(errno));
+-			goto err_close;
+-		}
+-
+-		err = btf__get_from_id(info.btf_id, &btf);
+-		if (err) {
+-			p_err("failed to get btf");
+-			goto err_close;
++			return -1;
+ 		}
+ 
+-		if (!btf)
++		if (!info.btf_id)
+ 			return 0;
+ 	}
+ 
+ 	return 1;
+-
+-err_close:
+-	for (; i < nb_fds; i++)
+-		close(fds[i]);
+-	return -1;
+ }
+ 
+ static int
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.17.1
+
