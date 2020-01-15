@@ -2,102 +2,128 @@ Return-Path: <SRS0=xBUo=3E=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49C88C32771
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 23:01:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5A5CC32771
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 23:04:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B9132187F
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 23:01:35 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="YQexo2IR"
+	by mail.kernel.org (Postfix) with ESMTP id C13492187F
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 23:04:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726587AbgAOXBe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jan 2020 18:01:34 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:61790 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726513AbgAOXBe (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 15 Jan 2020 18:01:34 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00FN1Nx0025713
-        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 15:01:34 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=Svw33mXkC278xPZCjfsNBV15VGImaWUIX5OWe4XT+oI=;
- b=YQexo2IRaJg4N7MIq8vxHpQDsCjwTTuxJcltRiQ3UIwrOoH7CC81r9NAMQXxxb9NXrX3
- y1PQoMTmp+b/dmuR0KtUhbCuiELz4GgpOTOvIeUkMkHbku+o0i+dZoMFiFZM5tq+Qcxg
- D3hB4NOIpCyrqP9n9YzX+lC5Vq2xgwmwZVU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xhahps7s5-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 15:01:34 -0800
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 15 Jan 2020 15:00:39 -0800
-Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id F14502941680; Wed, 15 Jan 2020 15:00:37 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Martin KaFai Lau <kafai@fb.com>
-Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 4/5] bpftool: Add struct_ops map name
-Date:   Wed, 15 Jan 2020 15:00:37 -0800
-Message-ID: <20200115230037.1102674-1-kafai@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200115230012.1100525-1-kafai@fb.com>
-References: <20200115230012.1100525-1-kafai@fb.com>
-X-FB-Internal: Safe
+        id S1728927AbgAOXEp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jan 2020 18:04:45 -0500
+Received: from www62.your-server.de ([213.133.104.62]:33576 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726513AbgAOXEp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Jan 2020 18:04:45 -0500
+Received: from 11.249.197.178.dynamic.dsl-lte-bonding.lssmb00p-msn.res.cust.swisscom.ch ([178.197.249.11] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1irriI-0005tU-4Z; Thu, 16 Jan 2020 00:04:38 +0100
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     davem@davemloft.net
+Cc:     jakub.kicinski@netronome.com, daniel@iogearbox.net, ast@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: pull-request: bpf 2020-01-15
+Date:   Thu, 16 Jan 2020 00:04:37 +0100
+Message-Id: <20200115230437.25033-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-15_03:2020-01-15,2020-01-15 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- bulkscore=0 mlxscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
- mlxlogscore=760 malwarescore=0 suspectscore=13 spamscore=0 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001150173
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25696/Wed Jan 15 14:34:23 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds BPF_MAP_TYPE_STRUCT_OPS to "struct_ops" name mapping
-so that "bpftool map show" can print the "struct_ops" map type
-properly.
+Hi David,
 
-[root@arch-fb-vm1 bpf]# ~/devshare/fb-kernel/linux/tools/bpf/bpftool/bpftool map show id 8
-8: struct_ops  name dctcp  flags 0x0
-	key 4B  value 256B  max_entries 1  memlock 4096B
-	btf_id 7
+The following pull-request contains BPF updates for your *net* tree.
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
----
- tools/bpf/bpftool/map.c | 1 +
- 1 file changed, 1 insertion(+)
+We've added 12 non-merge commits during the last 9 day(s) which contain
+a total of 13 files changed, 95 insertions(+), 43 deletions(-).
 
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 45c1eda6512c..4c5b15d736b6 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -48,6 +48,7 @@ const char * const map_type_name[] = {
- 	[BPF_MAP_TYPE_QUEUE]			= "queue",
- 	[BPF_MAP_TYPE_STACK]			= "stack",
- 	[BPF_MAP_TYPE_SK_STORAGE]		= "sk_storage",
-+	[BPF_MAP_TYPE_STRUCT_OPS]		= "struct_ops",
- };
- 
- const size_t map_type_name_size = ARRAY_SIZE(map_type_name);
--- 
-2.17.1
+The main changes are:
 
+1) Fix refcount leak for TCP time wait and request sockets for socket lookup
+   related BPF helpers, from Lorenz Bauer.
+
+2) Fix wrong verification of ARSH instruction under ALU32, from Daniel Borkmann.
+
+3) Batch of several sockmap and related TLS fixes found while operating
+   more complex BPF programs with Cilium and OpenSSL, from John Fastabend.
+
+4) Fix sockmap to read psock's ingress_msg queue before regular sk_receive_queue()
+   to avoid purging data upon teardown, from Lingpeng Chen.
+
+5) Fix printing incorrect pointer in bpftool's btf_dump_ptr() in order to properly
+   dump a BPF map's value with BTF, from Martin KaFai Lau.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+Thanks a lot!
+
+Also thanks to reporters, reviewers and testers of commits in this pull-request:
+
+Anatoly Trosinenko, Arika Chen, Jakub Sitnicki, Jonathan Lemon, Martin 
+KaFai Lau, Quentin Monnet, Song Liu, Yonghong Song
+
+----------------------------------------------------------------
+
+The following changes since commit da29f2d84bd10234df570b7f07cbd0166e738230:
+
+  net: stmmac: Fixed link does not need MDIO Bus (2020-01-07 13:40:29 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
+
+for you to fetch changes up to 85ddd9c3173102930c16b0cfe8dbb771af434532:
+
+  Merge branch 'bpf-sockmap-tls-fixes' (2020-01-15 23:26:23 +0100)
+
+----------------------------------------------------------------
+Daniel Borkmann (2):
+      bpf: Fix incorrect verifier simulation of ARSH under ALU32
+      Merge branch 'bpf-sockmap-tls-fixes'
+
+John Fastabend (8):
+      bpf: Sockmap/tls, during free we may call tcp_bpf_unhash() in loop
+      bpf: Sockmap, ensure sock lock held during tear down
+      bpf: Sockmap/tls, push write_space updates through ulp updates
+      bpf: Sockmap, skmsg helper overestimates push, pull, and pop bounds
+      bpf: Sockmap/tls, msg_push_data may leave end mark in place
+      bpf: Sockmap/tls, tls_sw can create a plaintext buf > encrypt buf
+      bpf: Sockmap/tls, skmsg can have wrapped skmsg that needs extra chaining
+      bpf: Sockmap/tls, fix pop data with SK_DROP return code
+
+Lingpeng Chen (1):
+      bpf/sockmap: Read psock ingress_msg before sk_receive_queue
+
+Lorenz Bauer (1):
+      net: bpf: Don't leak time wait and request sockets
+
+Martin KaFai Lau (1):
+      bpftool: Fix printing incorrect pointer in btf_dump_ptr
+
+ include/linux/skmsg.h          | 13 +++++++++----
+ include/linux/tnum.h           |  2 +-
+ include/net/tcp.h              |  6 ++++--
+ kernel/bpf/tnum.c              |  9 +++++++--
+ kernel/bpf/verifier.c          | 13 ++++++++++---
+ net/core/filter.c              | 20 ++++++++++----------
+ net/core/skmsg.c               |  2 ++
+ net/core/sock_map.c            |  7 ++++++-
+ net/ipv4/tcp_bpf.c             | 17 +++++++----------
+ net/ipv4/tcp_ulp.c             |  6 ++++--
+ net/tls/tls_main.c             | 10 +++++++---
+ net/tls/tls_sw.c               | 31 +++++++++++++++++++++++++++----
+ tools/bpf/bpftool/btf_dumper.c |  2 +-
+ 13 files changed, 95 insertions(+), 43 deletions(-)
