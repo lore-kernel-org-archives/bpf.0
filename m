@@ -2,115 +2,95 @@ Return-Path: <SRS0=xBUo=3E=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44732C32771
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 22:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7FF8C3F68F
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 22:38:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 16D4A2081E
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 22:37:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A33892081E
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 22:38:27 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PiI0p1wt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730643AbgAOWhT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jan 2020 17:37:19 -0500
-Received: from www62.your-server.de ([213.133.104.62]:57334 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729697AbgAOWhT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Jan 2020 17:37:19 -0500
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1irrHp-0003XL-1w; Wed, 15 Jan 2020 23:37:17 +0100
-Received: from [178.197.249.11] (helo=pc-9.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1irrHo-000480-On; Wed, 15 Jan 2020 23:37:16 +0100
-Subject: Re: [bpf PATCH v2 0/8] Fixes for sockmap/tls from more complex BPF
- progs
-To:     John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, ast@kernel.org, song@kernel.org,
-        jonathan.lemon@gmail.com
-References: <20200111061206.8028-1-john.fastabend@gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <5cde124f-9ba4-b178-7fb6-e8340e23faee@iogearbox.net>
-Date:   Wed, 15 Jan 2020 23:37:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1730710AbgAOWi1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jan 2020 17:38:27 -0500
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:45694 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730697AbgAOWiX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Jan 2020 17:38:23 -0500
+Received: by mail-qt1-f196.google.com with SMTP id w30so17232714qtd.12;
+        Wed, 15 Jan 2020 14:38:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vhOCiRt319pWUsd7g17NDpKsG5GEE5LkfuLBKivRRdo=;
+        b=PiI0p1wtxhJFe3JuvULZ3qXgyfwYoP0TWd6I3ovCmVlBtpaV0ii8iJt5TRrPgUhGZA
+         oHGzGCMVaaMgHILcUY3dD3n8og3Er+QgKgTIFeOv5ewrrpvJixIdVZdBnQQB8JmM/LLJ
+         4VJQWuqFkzd53TgQn6xZ2J1tbq+esiIngPA/5OEQsZ5wAPlJXNzMcMgg20CGTIgP0bA4
+         IbHTv71QRRswXew9pOWiH5CDlL4c/qacZ4qdqM0iqptdwTyVB3RUoFury/Sx6TuiAMQQ
+         0ICDZQz0Oby20/wYukY7j7gxVZAXA1g6T1xLcWjs0ttGhvnrXy/6Q5VtAEvWxb32W+/u
+         mu9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vhOCiRt319pWUsd7g17NDpKsG5GEE5LkfuLBKivRRdo=;
+        b=sUlAGvhdWOlmpSjE30vBr98/w4NlwSLKnARGkBNwD6E4K+9uGSuZ3SuDt2Xt2VffuU
+         8EDqJV84J1dEw0vlvgOVERNRDVGic39FSCmZHXeg6Nyg2kDYhFyTU3617g1NFRi6nhzh
+         BDo3lqX1Oo6f++KeKDIhyoydweYScIy6fNCAN6UBuHb4x6XKo4Smx0bjU8MSCTo9ibmv
+         qLDP+LC+u3tmlMyuxTr1SWtTP24xPXBsDmy7rBcdXq3F9MJpg+X6+kwS+OhW7/AWMuGu
+         QXTXMvUCCKaUv66uU14KepJ6pFslXJMl9jdW+FjbvjCCLgFIHiNoC9yQmikwgHPOv3xn
+         uHmg==
+X-Gm-Message-State: APjAAAXTBIB7ywnFwg9e7cNmsdA8iCq/9mHE4LYxTNtDW3sYw4tc2YjW
+        4fML05Vm66ICssL4/wN1i0dD1vp24sG+pE0jUMOXnult
+X-Google-Smtp-Source: APXvYqwOE9iNw5KvDDLQQfwsFh5E41X6mxODWQ38ud8hif8BGNtHEvEeIXhkMs9PN51lEr462yRkPzi1jEpb1Sd/2+w=
+X-Received: by 2002:ac8:7b29:: with SMTP id l9mr865008qtu.141.1579127902500;
+ Wed, 15 Jan 2020 14:38:22 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200111061206.8028-1-john.fastabend@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.101.4/25696/Wed Jan 15 14:34:23 2020)
+References: <20200115222241.945672-1-kafai@fb.com> <20200115222300.946936-1-kafai@fb.com>
+In-Reply-To: <20200115222300.946936-1-kafai@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 15 Jan 2020 14:38:11 -0800
+Message-ID: <CAEf4BzaAehB6v+4ZD1yGcu66iaJN2ptR-hVVND5JFxag3ZsO1Q@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 3/5] libbpf: Expose bpf_find_kernel_btf as a LIBBPF_API
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        Kernel Team <kernel-team@fb.com>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 1/11/20 7:11 AM, John Fastabend wrote:
-> To date our usage of sockmap/tls has been fairly simple, the BPF programs
-> did only well-defined pop, push, pull and apply/cork operations.
-> 
-> Now that we started to push more complex programs into sockmap we uncovered
-> a series of issues addressed here. Further OpenSSL3.0 version should be
-> released soon with kTLS support so its important to get any remaining
-> issues on BPF and kTLS support resolved.
-> 
-> Additionally, I have a patch under development to allow sockmap to be
-> enabled/disabled at runtime for Cilium endpoints. This allows us to stress
-> the map insert/delete with kTLS more than previously where Cilium only
-> added the socket to the map when it entered ESTABLISHED state and never
-> touched it from the control path side again relying on the sockets own
-> close() hook to remove it.
-> 
-> To test I have a set of test cases in test_sockmap.c that expose these
-> issues. Once we get fixes here merged and in bpf-next I'll submit the
-> tests to bpf-next tree to ensure we don't regress again. Also I've run
-> these patches in the Cilium CI with OpenSSL (master branch) this will
-> run tools such as netperf, ab, wrk2, curl, etc. to get a broad set of
-> testing.
-> 
-> I'm aware of two more issues that we are working to resolve in another
-> couple (probably two) patches. First we see an auth tag corruption in
-> kTLS when sending small 1byte chunks under stress. I've not pinned this
-> down yet. But, guessing because its under 1B stress tests it must be
-> some error path being triggered. And second we need to ensure BPF RX
-> programs are not skipped when kTLS ULP is loaded. This breaks some of
-> the sockmap selftests when running with kTLS. I'll send a follow up
-> for this.
-> 
-> v2: I dropped a patch that added !0 size check in tls_push_record
->      this originated from a panic I caught awhile ago with a trace
->      in the crypto stack. But I can not reproduce it anymore so will
->      dig into that and send another patch later if needed. Anyways
->      after a bit of thought it would be nicer if tls/crypto/bpf didn't
->      require special case handling for the !0 size.
-> 
-> John Fastabend (8):
->    bpf: sockmap/tls, during free we may call tcp_bpf_unhash() in loop
->    bpf: sockmap, ensure sock lock held during tear down
->    bpf: sockmap/tls, push write_space updates through ulp updates
->    bpf: sockmap, skmsg helper overestimates push, pull, and pop bounds
->    bpf: sockmap/tls, msg_push_data may leave end mark in place
->    bpf: sockmap/tls, tls_sw can create a plaintext buf > encrypt buf
->    bpf: sockmap/tls, skmsg can have wrapped skmsg that needs extra
->      chaining
->    bpf: sockmap/tls, fix pop data with SK_DROP return code
-> 
->   include/linux/skmsg.h | 13 +++++++++----
->   include/net/tcp.h     |  6 ++++--
->   net/core/filter.c     | 11 ++++++-----
->   net/core/skmsg.c      |  2 ++
->   net/core/sock_map.c   |  7 ++++++-
->   net/ipv4/tcp_bpf.c    |  5 +----
->   net/ipv4/tcp_ulp.c    |  6 ++++--
->   net/tls/tls_main.c    | 10 +++++++---
->   net/tls/tls_sw.c      | 31 +++++++++++++++++++++++++++----
->   9 files changed, 66 insertions(+), 25 deletions(-)
-> 
+On Wed, Jan 15, 2020 at 2:26 PM Martin KaFai Lau <kafai@fb.com> wrote:
+>
+> This patch exposes bpf_find_kernel_btf() as a LIBBPF_API.
+> It will be used in 'bpftool map dump' in a following patch
+> to dump a map with btf_vmlinux_value_type_id set.
+>
+> bpf_find_kernel_btf() is renamed to libbpf_find_kernel_btf()
+> and moved to btf.c.  As <linux/kernel.h> is included,
+> some of the max/min type casting needs to be fixed.
+>
+> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+> ---
 
-Applied, thanks!
+Thanks!
+
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+
+>  tools/lib/bpf/btf.c      | 102 ++++++++++++++++++++++++++++++++++++---
+>  tools/lib/bpf/btf.h      |   2 +
+>  tools/lib/bpf/libbpf.c   |  93 ++---------------------------------
+>  tools/lib/bpf/libbpf.map |   1 +
+>  4 files changed, 102 insertions(+), 96 deletions(-)
+>
+
+[...]
