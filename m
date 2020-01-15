@@ -7,56 +7,57 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0F69C32771
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 18:44:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CDF6C32771
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 18:44:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A93D22465A
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 18:44:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 286832465A
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 18:44:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gSilzt0P"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ebYO85PY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729061AbgAOSoM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jan 2020 13:44:12 -0500
-Received: from mail-pj1-f73.google.com ([209.85.216.73]:34881 "EHLO
-        mail-pj1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729279AbgAOSnf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Jan 2020 13:43:35 -0500
-Received: by mail-pj1-f73.google.com with SMTP id l8so477961pje.0
-        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 10:43:34 -0800 (PST)
+        id S1729146AbgAOSn0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jan 2020 13:43:26 -0500
+Received: from mail-qt1-f201.google.com ([209.85.160.201]:40763 "EHLO
+        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728596AbgAOSnZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Jan 2020 13:43:25 -0500
+Received: by mail-qt1-f201.google.com with SMTP id e37so11870914qtk.7
+        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 10:43:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=BUa2sGYQ5pE+WXHCee7JUKHRZrR8FCZKjHLXT2C4YTU=;
-        b=gSilzt0Py5C7B8PeUlFXzIaWrEfWpYQRf7qJRuSoPmzaRdLtoefLCqKt4Bd8BqrOxb
-         FR4EZ9Dfi0pAql/EDoC+U4z7Cpv32ErvwhPi3s6L92XAiOSWColy/iTzK2dMdglRJft0
-         rl53cee7V16Sbth0ryq16nBR36tlQ55YpoHyiKuNGS+W0eN9d94ZWB4tvPfh/jo6JVpQ
-         N40k0gTCWVUYQH4JalFly6SXbfJnbW0cSJ913MaU924kyhc+M0aTcgXTfUThoXwfuzCO
-         eug3jEJP0/WGDuo+CCI+H/4Bgr2FJ76wMR3+Bpz69chgmlh1vQRLaygc9Lgz1O81TYUv
-         6++Q==
+        bh=Jc5+7d7NtiEYIwbVpgtYmSFqbGpKI69cS8An9zRo6DQ=;
+        b=ebYO85PYKYyM1gQvISh1WFoTt54iljODvfFADMN5Lujvd3yN3fEeYdR01uCnKmJgtf
+         q2q3vl1yi6XChSfva3Yq12nVfCCjuyHR9MbZtsysW6ZR5Vh4etOZBjtxL4n6cdHn/E7L
+         ckeRzx0x04nPbys+opaGXqqWNuZPTDJghC9MTYqxIfyZGvvvKFr8PWGirvZCFxRcqOmm
+         AM8urMOnV6Tjm6xOV9xT5AYk3PV28cPJCjp+Uy+6zqkHF7BwhEM1Cqxjjf6E+5ROTP/p
+         Li9YUTNgD5xLY47+QZtLBwDbzSvfKxp23J2u6D5f+ALFXgyFRw4H3DXTF8YBgZQ5CYgx
+         KnYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=BUa2sGYQ5pE+WXHCee7JUKHRZrR8FCZKjHLXT2C4YTU=;
-        b=FWcDTq17yRLoTnq+SYrwvcRAdJngx9L2FTeO3esiTEAsUNYGYDRXpr1d0XBy2PaFU6
-         /KqViYMrGiIGeeQQf3JywkrYlNEhc67dEhnB19qNYaKslfxQxvEOYL/ePZaLryeUoHsR
-         V5c6Di3EMd/4S838lASXWgwH3Lttezp4kZWB+dksLCrakChMTGatN4Y3IgeNHcVl/kPR
-         7XuX+U/Uv8YmLsxGn2H3F3yiShYiLnADMMjG6K3sQp8gQjavUg+bkNagM3oNPNVZ/k4M
-         46DiS6G2ZdmHBzDvVjy387K8gsfGq6fRg8KXSqFpnAh3doCTBFpavYuOwElk3x2l0m77
-         yrrQ==
-X-Gm-Message-State: APjAAAUbVaF6ARMBK+SJik+LgX2ukr7RJyVPEGvaDyNzJdiKDX3z0fnM
-        5FILuECT/HDaG4FqEP7s3f4zVjZ/6CuD
-X-Google-Smtp-Source: APXvYqzv5gI0ULsp/bBoCIzGtI5FXE2rHyEEXw9SBUXCCbdcMUiowT1j+VNUPjxnoYXdFnUN4vSJAglqtm4Y
-X-Received: by 2002:a63:1322:: with SMTP id i34mr35499353pgl.163.1579113814157;
- Wed, 15 Jan 2020 10:43:34 -0800 (PST)
-Date:   Wed, 15 Jan 2020 10:43:04 -0800
+        bh=Jc5+7d7NtiEYIwbVpgtYmSFqbGpKI69cS8An9zRo6DQ=;
+        b=FQbkZVqtN4/CNAOwfmQurvpSl806oJvePcqcAU3TgJDzNmofkWfC6qV04dpgYy6iSu
+         BKOaUUlP/22RdI9RFR1/dPH2WvPyKHu6P0CMfepcBEwRw/eU9xh0IYEt7w3uS6B4YoOn
+         M3MMluAM+ajGkjxm2NGFD4a9e0RPqbwIDK3XQ/1dKau+DIq8pEtYFEyQJ3sWPEL/e0Rb
+         ndwutAp6h+G9i/iSRFQBH12p3v5nQLu6+H1BlzyNN5YjFu0aePwqQfvVWw+p2uK0mo5+
+         p1mVuJqRMUE5+ODG9XzQFmf5+gc9EgzhnqdB5Dn8f4rA86C0YS9XXdZzg9KGqQvjQXaW
+         AvGA==
+X-Gm-Message-State: APjAAAWT019fY4Yyon51ltQ+HIrrtDekYkNMGpQaX+DNwBPrKz/zZ+XP
+        +fqHe3YQq6sdkMGJUNTfwN1ILvFyQJ/A
+X-Google-Smtp-Source: APXvYqxnQKeSsJ9tODh/EvmIWwDOBtYI5Kkst4SxmLTSzNn9pq8QcNJNXaITN/H0/GuDPScqENreNlxD5kfI
+X-Received: by 2002:a05:6214:1103:: with SMTP id e3mr23612085qvs.159.1579113804047;
+ Wed, 15 Jan 2020 10:43:24 -0800 (PST)
+Date:   Wed, 15 Jan 2020 10:43:00 -0800
 In-Reply-To: <20200115184308.162644-1-brianvv@google.com>
-Message-Id: <20200115184308.162644-6-brianvv@google.com>
+Message-Id: <20200115184308.162644-2-brianvv@google.com>
 Mime-Version: 1.0
 References: <20200115184308.162644-1-brianvv@google.com>
 X-Mailer: git-send-email 2.25.0.rc1.283.g88dfdc4193-goog
-Subject: [PATCH v5 bpf-next 5/9] bpf: add batch ops to all htab bpf map
+Subject: [PATCH v5 bpf-next 1/9] bpf: add bpf_map_{value_size,update_value,map_copy_value}
+ functions
 From:   Brian Vazquez <brianvv@google.com>
 To:     Brian Vazquez <brianvv.kernel@gmail.com>,
         Brian Vazquez <brianvv@google.com>,
@@ -69,419 +70,349 @@ Cc:     Yonghong Song <yhs@fb.com>,
         Petar Penkov <ppenkov@google.com>,
         Willem de Bruijn <willemb@google.com>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
+        bpf@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Yonghong Song <yhs@fb.com>
+This commit moves reusable code from map_lookup_elem and map_update_elem
+to avoid code duplication in kernel/bpf/syscall.c.
 
-htab can't use generic batch support due some problematic behaviours
-inherent to the data structre, i.e. while iterating the bpf map  a
-concurrent program might delete the next entry that batch was about to
-use, in that case there's no easy solution to retrieve the next entry,
-the issue has been discussed multiple times (see [1] and [2]).
-
-The only way hmap can be traversed without the problem previously
-exposed is by making sure that the map is traversing entire buckets.
-This commit implements those strict requirements for hmap, the
-implementation follows the same interaction that generic support with
-some exceptions:
-
- - If keys/values buffer are not big enough to traverse a bucket,
-   ENOSPC will be returned.
- - out_batch contains the value of the next bucket in the iteration, not
-   the next key, but this is transparent for the user since the user
-   should never use out_batch for other than bpf batch syscalls.
-
-This commits implements BPF_MAP_LOOKUP_BATCH and adds support for new
-command BPF_MAP_LOOKUP_AND_DELETE_BATCH. Note that for update/delete
-batch ops it is possible to use the generic implementations.
-
-[1] https://lore.kernel.org/bpf/20190724165803.87470-1-brianvv@google.com/
-[2] https://lore.kernel.org/bpf/20190906225434.3635421-1-yhs@fb.com/
-
-Signed-off-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Brian Vazquez <brianvv@google.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 ---
- include/linux/bpf.h      |   3 +
- include/uapi/linux/bpf.h |   1 +
- kernel/bpf/hashtab.c     | 264 +++++++++++++++++++++++++++++++++++++++
- kernel/bpf/syscall.c     |   9 +-
- 4 files changed, 276 insertions(+), 1 deletion(-)
+ kernel/bpf/syscall.c | 280 +++++++++++++++++++++++--------------------
+ 1 file changed, 152 insertions(+), 128 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 05466ad6cf1c5..3517e32149a4f 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -46,6 +46,9 @@ struct bpf_map_ops {
- 	void *(*map_lookup_elem_sys_only)(struct bpf_map *map, void *key);
- 	int (*map_lookup_batch)(struct bpf_map *map, const union bpf_attr *attr,
- 				union bpf_attr __user *uattr);
-+	int (*map_lookup_and_delete_batch)(struct bpf_map *map,
-+					   const union bpf_attr *attr,
-+					   union bpf_attr __user *uattr);
- 	int (*map_update_batch)(struct bpf_map *map, const union bpf_attr *attr,
- 				union bpf_attr __user *uattr);
- 	int (*map_delete_batch)(struct bpf_map *map, const union bpf_attr *attr,
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index e8df9ca680e0c..9536729a03d57 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -108,6 +108,7 @@ enum bpf_cmd {
- 	BPF_MAP_FREEZE,
- 	BPF_BTF_GET_NEXT_ID,
- 	BPF_MAP_LOOKUP_BATCH,
-+	BPF_MAP_LOOKUP_AND_DELETE_BATCH,
- 	BPF_MAP_UPDATE_BATCH,
- 	BPF_MAP_DELETE_BATCH,
- };
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 22066a62c8c97..2d182c4ee9d99 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -17,6 +17,16 @@
- 	(BPF_F_NO_PREALLOC | BPF_F_NO_COMMON_LRU | BPF_F_NUMA_NODE |	\
- 	 BPF_F_ACCESS_MASK | BPF_F_ZERO_SEED)
- 
-+#define BATCH_OPS(_name)			\
-+	.map_lookup_batch =			\
-+	_name##_map_lookup_batch,		\
-+	.map_lookup_and_delete_batch =		\
-+	_name##_map_lookup_and_delete_batch,	\
-+	.map_update_batch =			\
-+	generic_map_update_batch,		\
-+	.map_delete_batch =			\
-+	generic_map_delete_batch
-+
- struct bucket {
- 	struct hlist_nulls_head head;
- 	raw_spinlock_t lock;
-@@ -1232,6 +1242,256 @@ static void htab_map_seq_show_elem(struct bpf_map *map, void *key,
- 	rcu_read_unlock();
- }
- 
-+static int
-+__htab_map_lookup_and_delete_batch(struct bpf_map *map,
-+				   const union bpf_attr *attr,
-+				   union bpf_attr __user *uattr,
-+				   bool do_delete, bool is_lru_map,
-+				   bool is_percpu)
-+{
-+	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
-+	u32 bucket_cnt, total, key_size, value_size, roundup_key_size;
-+	void *keys = NULL, *values = NULL, *value, *dst_key, *dst_val;
-+	void __user *uvalues = u64_to_user_ptr(attr->batch.values);
-+	void __user *ukeys = u64_to_user_ptr(attr->batch.keys);
-+	void *ubatch = u64_to_user_ptr(attr->batch.in_batch);
-+	u32 batch, max_count, size, bucket_size;
-+	u64 elem_map_flags, map_flags;
-+	struct hlist_nulls_head *head;
-+	struct hlist_nulls_node *n;
-+	unsigned long flags;
-+	struct htab_elem *l;
-+	struct bucket *b;
-+	int ret = 0;
-+
-+	elem_map_flags = attr->batch.elem_flags;
-+	if ((elem_map_flags & ~BPF_F_LOCK) ||
-+	    ((elem_map_flags & BPF_F_LOCK) && !map_value_has_spin_lock(map)))
-+		return -EINVAL;
-+
-+	map_flags = attr->batch.flags;
-+	if (map_flags)
-+		return -EINVAL;
-+
-+	max_count = attr->batch.count;
-+	if (!max_count)
-+		return 0;
-+
-+	if (put_user(0, &uattr->batch.count))
-+		return -EFAULT;
-+
-+	batch = 0;
-+	if (ubatch && copy_from_user(&batch, ubatch, sizeof(batch)))
-+		return -EFAULT;
-+
-+	if (batch >= htab->n_buckets)
-+		return -ENOENT;
-+
-+	key_size = htab->map.key_size;
-+	roundup_key_size = round_up(htab->map.key_size, 8);
-+	value_size = htab->map.value_size;
-+	size = round_up(value_size, 8);
-+	if (is_percpu)
-+		value_size = size * num_possible_cpus();
-+	total = 0;
-+	/* while experimenting with hash tables with sizes ranging from 10 to
-+	 * 1000, it was observed that a bucket can have upto 5 entries.
-+	 */
-+	bucket_size = 5;
-+
-+alloc:
-+	/* We cannot do copy_from_user or copy_to_user inside
-+	 * the rcu_read_lock. Allocate enough space here.
-+	 */
-+	keys = kvmalloc(key_size * bucket_size, GFP_USER | __GFP_NOWARN);
-+	values = kvmalloc(value_size * bucket_size, GFP_USER | __GFP_NOWARN);
-+	if (!keys || !values) {
-+		ret = -ENOMEM;
-+		goto after_loop;
-+	}
-+
-+again:
-+	preempt_disable();
-+	this_cpu_inc(bpf_prog_active);
-+	rcu_read_lock();
-+again_nocopy:
-+	dst_key = keys;
-+	dst_val = values;
-+	b = &htab->buckets[batch];
-+	head = &b->head;
-+	raw_spin_lock_irqsave(&b->lock, flags);
-+
-+	bucket_cnt = 0;
-+	hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
-+		bucket_cnt++;
-+
-+	if (bucket_cnt > (max_count - total)) {
-+		if (total == 0)
-+			ret = -ENOSPC;
-+		raw_spin_unlock_irqrestore(&b->lock, flags);
-+		rcu_read_unlock();
-+		this_cpu_dec(bpf_prog_active);
-+		preempt_enable();
-+		goto after_loop;
-+	}
-+
-+	if (bucket_cnt > bucket_size) {
-+		bucket_size = bucket_cnt;
-+		raw_spin_unlock_irqrestore(&b->lock, flags);
-+		rcu_read_unlock();
-+		this_cpu_dec(bpf_prog_active);
-+		preempt_enable();
-+		kvfree(keys);
-+		kvfree(values);
-+		goto alloc;
-+	}
-+
-+	hlist_nulls_for_each_entry_safe(l, n, head, hash_node) {
-+		memcpy(dst_key, l->key, key_size);
-+
-+		if (is_percpu) {
-+			int off = 0, cpu;
-+			void __percpu *pptr;
-+
-+			pptr = htab_elem_get_ptr(l, map->key_size);
-+			for_each_possible_cpu(cpu) {
-+				bpf_long_memcpy(dst_val + off,
-+						per_cpu_ptr(pptr, cpu), size);
-+				off += size;
-+			}
-+		} else {
-+			value = l->key + roundup_key_size;
-+			if (elem_map_flags & BPF_F_LOCK)
-+				copy_map_value_locked(map, dst_val, value,
-+						      true);
-+			else
-+				copy_map_value(map, dst_val, value);
-+			check_and_init_map_lock(map, dst_val);
-+		}
-+		if (do_delete) {
-+			hlist_nulls_del_rcu(&l->hash_node);
-+			if (is_lru_map)
-+				bpf_lru_push_free(&htab->lru, &l->lru_node);
-+			else
-+				free_htab_elem(htab, l);
-+		}
-+		dst_key += key_size;
-+		dst_val += value_size;
-+	}
-+
-+	raw_spin_unlock_irqrestore(&b->lock, flags);
-+	/* If we are not copying data, we can go to next bucket and avoid
-+	 * unlocking the rcu.
-+	 */
-+	if (!bucket_cnt && (batch + 1 < htab->n_buckets)) {
-+		batch++;
-+		goto again_nocopy;
-+	}
-+
-+	rcu_read_unlock();
-+	this_cpu_dec(bpf_prog_active);
-+	preempt_enable();
-+	if (bucket_cnt && (copy_to_user(ukeys + total * key_size, keys,
-+	    key_size * bucket_cnt) ||
-+	    copy_to_user(uvalues + total * value_size, values,
-+	    value_size * bucket_cnt))) {
-+		ret = -EFAULT;
-+		goto after_loop;
-+	}
-+
-+	total += bucket_cnt;
-+	batch++;
-+	if (batch >= htab->n_buckets) {
-+		ret = -ENOENT;
-+		goto after_loop;
-+	}
-+	goto again;
-+
-+after_loop:
-+	if (ret == -EFAULT)
-+		goto out;
-+
-+	/* copy # of entries and next batch */
-+	ubatch = u64_to_user_ptr(attr->batch.out_batch);
-+	if (copy_to_user(ubatch, &batch, sizeof(batch)) ||
-+	    put_user(total, &uattr->batch.count))
-+		ret = -EFAULT;
-+
-+out:
-+	kvfree(keys);
-+	kvfree(values);
-+	return ret;
-+}
-+
-+static int
-+htab_percpu_map_lookup_batch(struct bpf_map *map, const union bpf_attr *attr,
-+			     union bpf_attr __user *uattr)
-+{
-+	return __htab_map_lookup_and_delete_batch(map, attr, uattr, false,
-+						  false, true);
-+}
-+
-+static int
-+htab_percpu_map_lookup_and_delete_batch(struct bpf_map *map,
-+					const union bpf_attr *attr,
-+					union bpf_attr __user *uattr)
-+{
-+	return __htab_map_lookup_and_delete_batch(map, attr, uattr, true,
-+						  false, true);
-+}
-+
-+static int
-+htab_map_lookup_batch(struct bpf_map *map, const union bpf_attr *attr,
-+		      union bpf_attr __user *uattr)
-+{
-+	return __htab_map_lookup_and_delete_batch(map, attr, uattr, false,
-+						  false, false);
-+}
-+
-+static int
-+htab_map_lookup_and_delete_batch(struct bpf_map *map,
-+				 const union bpf_attr *attr,
-+				 union bpf_attr __user *uattr)
-+{
-+	return __htab_map_lookup_and_delete_batch(map, attr, uattr, true,
-+						  false, false);
-+}
-+
-+static int
-+htab_lru_percpu_map_lookup_batch(struct bpf_map *map,
-+				 const union bpf_attr *attr,
-+				 union bpf_attr __user *uattr)
-+{
-+	return __htab_map_lookup_and_delete_batch(map, attr, uattr, false,
-+						  true, true);
-+}
-+
-+static int
-+htab_lru_percpu_map_lookup_and_delete_batch(struct bpf_map *map,
-+					    const union bpf_attr *attr,
-+					    union bpf_attr __user *uattr)
-+{
-+	return __htab_map_lookup_and_delete_batch(map, attr, uattr, true,
-+						  true, true);
-+}
-+
-+static int
-+htab_lru_map_lookup_batch(struct bpf_map *map, const union bpf_attr *attr,
-+			  union bpf_attr __user *uattr)
-+{
-+	return __htab_map_lookup_and_delete_batch(map, attr, uattr, false,
-+						  true, false);
-+}
-+
-+static int
-+htab_lru_map_lookup_and_delete_batch(struct bpf_map *map,
-+				     const union bpf_attr *attr,
-+				     union bpf_attr __user *uattr)
-+{
-+	return __htab_map_lookup_and_delete_batch(map, attr, uattr, true,
-+						  true, false);
-+}
-+
- const struct bpf_map_ops htab_map_ops = {
- 	.map_alloc_check = htab_map_alloc_check,
- 	.map_alloc = htab_map_alloc,
-@@ -1242,6 +1502,7 @@ const struct bpf_map_ops htab_map_ops = {
- 	.map_delete_elem = htab_map_delete_elem,
- 	.map_gen_lookup = htab_map_gen_lookup,
- 	.map_seq_show_elem = htab_map_seq_show_elem,
-+	BATCH_OPS(htab),
- };
- 
- const struct bpf_map_ops htab_lru_map_ops = {
-@@ -1255,6 +1516,7 @@ const struct bpf_map_ops htab_lru_map_ops = {
- 	.map_delete_elem = htab_lru_map_delete_elem,
- 	.map_gen_lookup = htab_lru_map_gen_lookup,
- 	.map_seq_show_elem = htab_map_seq_show_elem,
-+	BATCH_OPS(htab_lru),
- };
- 
- /* Called from eBPF program */
-@@ -1368,6 +1630,7 @@ const struct bpf_map_ops htab_percpu_map_ops = {
- 	.map_update_elem = htab_percpu_map_update_elem,
- 	.map_delete_elem = htab_map_delete_elem,
- 	.map_seq_show_elem = htab_percpu_map_seq_show_elem,
-+	BATCH_OPS(htab_percpu),
- };
- 
- const struct bpf_map_ops htab_lru_percpu_map_ops = {
-@@ -1379,6 +1642,7 @@ const struct bpf_map_ops htab_lru_percpu_map_ops = {
- 	.map_update_elem = htab_lru_percpu_map_update_elem,
- 	.map_delete_elem = htab_lru_map_delete_elem,
- 	.map_seq_show_elem = htab_percpu_map_seq_show_elem,
-+	BATCH_OPS(htab_lru_percpu),
- };
- 
- static int fd_htab_map_alloc_check(union bpf_attr *attr)
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index ce8244d1ba99c..0d94d361379c3 100644
+index f9db72a96ec04..08b0b6e40454b 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -3310,7 +3310,8 @@ static int bpf_map_do_batch(const union bpf_attr *attr,
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
+@@ -129,6 +129,154 @@ static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
+ 	return map;
+ }
  
--	if (cmd == BPF_MAP_LOOKUP_BATCH &&
-+	if ((cmd == BPF_MAP_LOOKUP_BATCH ||
-+	     cmd == BPF_MAP_LOOKUP_AND_DELETE_BATCH) &&
- 	    !(map_get_sys_perms(map, f) & FMODE_CAN_READ)) {
- 		err = -EPERM;
++static u32 bpf_map_value_size(struct bpf_map *map)
++{
++	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
++	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
++	    map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY ||
++	    map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
++		return round_up(map->value_size, 8) * num_possible_cpus();
++	else if (IS_FD_MAP(map))
++		return sizeof(u32);
++	else
++		return  map->value_size;
++}
++
++static void maybe_wait_bpf_programs(struct bpf_map *map)
++{
++	/* Wait for any running BPF programs to complete so that
++	 * userspace, when we return to it, knows that all programs
++	 * that could be running use the new map value.
++	 */
++	if (map->map_type == BPF_MAP_TYPE_HASH_OF_MAPS ||
++	    map->map_type == BPF_MAP_TYPE_ARRAY_OF_MAPS)
++		synchronize_rcu();
++}
++
++static int bpf_map_update_value(struct bpf_map *map, struct fd f, void *key,
++				void *value, __u64 flags)
++{
++	int err;
++
++	/* Need to create a kthread, thus must support schedule */
++	if (bpf_map_is_dev_bound(map)) {
++		return bpf_map_offload_update_elem(map, key, value, flags);
++	} else if (map->map_type == BPF_MAP_TYPE_CPUMAP ||
++		   map->map_type == BPF_MAP_TYPE_SOCKHASH ||
++		   map->map_type == BPF_MAP_TYPE_SOCKMAP ||
++		   map->map_type == BPF_MAP_TYPE_STRUCT_OPS) {
++		return map->ops->map_update_elem(map, key, value, flags);
++	} else if (IS_FD_PROG_ARRAY(map)) {
++		return bpf_fd_array_map_update_elem(map, f.file, key, value,
++						    flags);
++	}
++
++	/* must increment bpf_prog_active to avoid kprobe+bpf triggering from
++	 * inside bpf map update or delete otherwise deadlocks are possible
++	 */
++	preempt_disable();
++	__this_cpu_inc(bpf_prog_active);
++	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
++	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
++		err = bpf_percpu_hash_update(map, key, value, flags);
++	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
++		err = bpf_percpu_array_update(map, key, value, flags);
++	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
++		err = bpf_percpu_cgroup_storage_update(map, key, value,
++						       flags);
++	} else if (IS_FD_ARRAY(map)) {
++		rcu_read_lock();
++		err = bpf_fd_array_map_update_elem(map, f.file, key, value,
++						   flags);
++		rcu_read_unlock();
++	} else if (map->map_type == BPF_MAP_TYPE_HASH_OF_MAPS) {
++		rcu_read_lock();
++		err = bpf_fd_htab_map_update_elem(map, f.file, key, value,
++						  flags);
++		rcu_read_unlock();
++	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
++		/* rcu_read_lock() is not needed */
++		err = bpf_fd_reuseport_array_update_elem(map, key, value,
++							 flags);
++	} else if (map->map_type == BPF_MAP_TYPE_QUEUE ||
++		   map->map_type == BPF_MAP_TYPE_STACK) {
++		err = map->ops->map_push_elem(map, value, flags);
++	} else {
++		rcu_read_lock();
++		err = map->ops->map_update_elem(map, key, value, flags);
++		rcu_read_unlock();
++	}
++	__this_cpu_dec(bpf_prog_active);
++	preempt_enable();
++	maybe_wait_bpf_programs(map);
++
++	return err;
++}
++
++static int bpf_map_copy_value(struct bpf_map *map, void *key, void *value,
++			      __u64 flags)
++{
++	void *ptr;
++	int err;
++
++	if (bpf_map_is_dev_bound(map)) {
++		err =  bpf_map_offload_lookup_elem(map, key, value);
++		return err;
++	}
++
++	preempt_disable();
++	this_cpu_inc(bpf_prog_active);
++	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
++	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
++		err = bpf_percpu_hash_copy(map, key, value);
++	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
++		err = bpf_percpu_array_copy(map, key, value);
++	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
++		err = bpf_percpu_cgroup_storage_copy(map, key, value);
++	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
++		err = bpf_stackmap_copy(map, key, value);
++	} else if (IS_FD_ARRAY(map) || IS_FD_PROG_ARRAY(map)) {
++		err = bpf_fd_array_map_lookup_elem(map, key, value);
++	} else if (IS_FD_HASH(map)) {
++		err = bpf_fd_htab_map_lookup_elem(map, key, value);
++	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
++		err = bpf_fd_reuseport_array_lookup_elem(map, key, value);
++	} else if (map->map_type == BPF_MAP_TYPE_QUEUE ||
++		   map->map_type == BPF_MAP_TYPE_STACK) {
++		err = map->ops->map_peek_elem(map, value);
++	} else if (map->map_type == BPF_MAP_TYPE_STRUCT_OPS) {
++		/* struct_ops map requires directly updating "value" */
++		err = bpf_struct_ops_map_sys_lookup_elem(map, key, value);
++	} else {
++		rcu_read_lock();
++		if (map->ops->map_lookup_elem_sys_only)
++			ptr = map->ops->map_lookup_elem_sys_only(map, key);
++		else
++			ptr = map->ops->map_lookup_elem(map, key);
++		if (IS_ERR(ptr)) {
++			err = PTR_ERR(ptr);
++		} else if (!ptr) {
++			err = -ENOENT;
++		} else {
++			err = 0;
++			if (flags & BPF_F_LOCK)
++				/* lock 'ptr' and copy everything but lock */
++				copy_map_value_locked(map, value, ptr, true);
++			else
++				copy_map_value(map, value, ptr);
++			/* mask lock, since value wasn't zero inited */
++			check_and_init_map_lock(map, value);
++		}
++		rcu_read_unlock();
++	}
++
++	this_cpu_dec(bpf_prog_active);
++	preempt_enable();
++	maybe_wait_bpf_programs(map);
++
++	return err;
++}
++
+ static void *__bpf_map_area_alloc(u64 size, int numa_node, bool mmapable)
+ {
+ 	/* We really just want to fail instead of triggering OOM killer
+@@ -827,7 +975,7 @@ static int map_lookup_elem(union bpf_attr *attr)
+ 	void __user *uvalue = u64_to_user_ptr(attr->value);
+ 	int ufd = attr->map_fd;
+ 	struct bpf_map *map;
+-	void *key, *value, *ptr;
++	void *key, *value;
+ 	u32 value_size;
+ 	struct fd f;
+ 	int err;
+@@ -859,75 +1007,14 @@ static int map_lookup_elem(union bpf_attr *attr)
  		goto err_put;
-@@ -3324,6 +3325,8 @@ static int bpf_map_do_batch(const union bpf_attr *attr,
+ 	}
  
- 	if (cmd == BPF_MAP_LOOKUP_BATCH)
- 		BPF_DO_BATCH(map->ops->map_lookup_batch);
-+	else if (cmd == BPF_MAP_LOOKUP_AND_DELETE_BATCH)
-+		BPF_DO_BATCH(map->ops->map_lookup_and_delete_batch);
- 	else if (cmd == BPF_MAP_UPDATE_BATCH)
- 		BPF_DO_BATCH(map->ops->map_update_batch);
- 	else
-@@ -3434,6 +3437,10 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
- 	case BPF_MAP_LOOKUP_BATCH:
- 		err = bpf_map_do_batch(&attr, uattr, BPF_MAP_LOOKUP_BATCH);
- 		break;
-+	case BPF_MAP_LOOKUP_AND_DELETE_BATCH:
-+		err = bpf_map_do_batch(&attr, uattr,
-+				       BPF_MAP_LOOKUP_AND_DELETE_BATCH);
-+		break;
- 	case BPF_MAP_UPDATE_BATCH:
- 		err = bpf_map_do_batch(&attr, uattr, BPF_MAP_UPDATE_BATCH);
- 		break;
+-	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
+-	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
+-	    map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY ||
+-	    map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
+-		value_size = round_up(map->value_size, 8) * num_possible_cpus();
+-	else if (IS_FD_MAP(map))
+-		value_size = sizeof(u32);
+-	else
+-		value_size = map->value_size;
++	value_size = bpf_map_value_size(map);
+ 
+ 	err = -ENOMEM;
+ 	value = kmalloc(value_size, GFP_USER | __GFP_NOWARN);
+ 	if (!value)
+ 		goto free_key;
+ 
+-	if (bpf_map_is_dev_bound(map)) {
+-		err = bpf_map_offload_lookup_elem(map, key, value);
+-		goto done;
+-	}
+-
+-	preempt_disable();
+-	this_cpu_inc(bpf_prog_active);
+-	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
+-	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
+-		err = bpf_percpu_hash_copy(map, key, value);
+-	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
+-		err = bpf_percpu_array_copy(map, key, value);
+-	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
+-		err = bpf_percpu_cgroup_storage_copy(map, key, value);
+-	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
+-		err = bpf_stackmap_copy(map, key, value);
+-	} else if (IS_FD_ARRAY(map) || IS_FD_PROG_ARRAY(map)) {
+-		err = bpf_fd_array_map_lookup_elem(map, key, value);
+-	} else if (IS_FD_HASH(map)) {
+-		err = bpf_fd_htab_map_lookup_elem(map, key, value);
+-	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
+-		err = bpf_fd_reuseport_array_lookup_elem(map, key, value);
+-	} else if (map->map_type == BPF_MAP_TYPE_QUEUE ||
+-		   map->map_type == BPF_MAP_TYPE_STACK) {
+-		err = map->ops->map_peek_elem(map, value);
+-	} else if (map->map_type == BPF_MAP_TYPE_STRUCT_OPS) {
+-		/* struct_ops map requires directly updating "value" */
+-		err = bpf_struct_ops_map_sys_lookup_elem(map, key, value);
+-	} else {
+-		rcu_read_lock();
+-		if (map->ops->map_lookup_elem_sys_only)
+-			ptr = map->ops->map_lookup_elem_sys_only(map, key);
+-		else
+-			ptr = map->ops->map_lookup_elem(map, key);
+-		if (IS_ERR(ptr)) {
+-			err = PTR_ERR(ptr);
+-		} else if (!ptr) {
+-			err = -ENOENT;
+-		} else {
+-			err = 0;
+-			if (attr->flags & BPF_F_LOCK)
+-				/* lock 'ptr' and copy everything but lock */
+-				copy_map_value_locked(map, value, ptr, true);
+-			else
+-				copy_map_value(map, value, ptr);
+-			/* mask lock, since value wasn't zero inited */
+-			check_and_init_map_lock(map, value);
+-		}
+-		rcu_read_unlock();
+-	}
+-	this_cpu_dec(bpf_prog_active);
+-	preempt_enable();
+-
+-done:
++	err = bpf_map_copy_value(map, key, value, attr->flags);
+ 	if (err)
+ 		goto free_value;
+ 
+@@ -946,16 +1033,6 @@ static int map_lookup_elem(union bpf_attr *attr)
+ 	return err;
+ }
+ 
+-static void maybe_wait_bpf_programs(struct bpf_map *map)
+-{
+-	/* Wait for any running BPF programs to complete so that
+-	 * userspace, when we return to it, knows that all programs
+-	 * that could be running use the new map value.
+-	 */
+-	if (map->map_type == BPF_MAP_TYPE_HASH_OF_MAPS ||
+-	    map->map_type == BPF_MAP_TYPE_ARRAY_OF_MAPS)
+-		synchronize_rcu();
+-}
+ 
+ #define BPF_MAP_UPDATE_ELEM_LAST_FIELD flags
+ 
+@@ -1011,61 +1088,8 @@ static int map_update_elem(union bpf_attr *attr)
+ 	if (copy_from_user(value, uvalue, value_size) != 0)
+ 		goto free_value;
+ 
+-	/* Need to create a kthread, thus must support schedule */
+-	if (bpf_map_is_dev_bound(map)) {
+-		err = bpf_map_offload_update_elem(map, key, value, attr->flags);
+-		goto out;
+-	} else if (map->map_type == BPF_MAP_TYPE_CPUMAP ||
+-		   map->map_type == BPF_MAP_TYPE_SOCKHASH ||
+-		   map->map_type == BPF_MAP_TYPE_SOCKMAP ||
+-		   map->map_type == BPF_MAP_TYPE_STRUCT_OPS) {
+-		err = map->ops->map_update_elem(map, key, value, attr->flags);
+-		goto out;
+-	} else if (IS_FD_PROG_ARRAY(map)) {
+-		err = bpf_fd_array_map_update_elem(map, f.file, key, value,
+-						   attr->flags);
+-		goto out;
+-	}
++	err = bpf_map_update_value(map, f, key, value, attr->flags);
+ 
+-	/* must increment bpf_prog_active to avoid kprobe+bpf triggering from
+-	 * inside bpf map update or delete otherwise deadlocks are possible
+-	 */
+-	preempt_disable();
+-	__this_cpu_inc(bpf_prog_active);
+-	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
+-	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
+-		err = bpf_percpu_hash_update(map, key, value, attr->flags);
+-	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
+-		err = bpf_percpu_array_update(map, key, value, attr->flags);
+-	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
+-		err = bpf_percpu_cgroup_storage_update(map, key, value,
+-						       attr->flags);
+-	} else if (IS_FD_ARRAY(map)) {
+-		rcu_read_lock();
+-		err = bpf_fd_array_map_update_elem(map, f.file, key, value,
+-						   attr->flags);
+-		rcu_read_unlock();
+-	} else if (map->map_type == BPF_MAP_TYPE_HASH_OF_MAPS) {
+-		rcu_read_lock();
+-		err = bpf_fd_htab_map_update_elem(map, f.file, key, value,
+-						  attr->flags);
+-		rcu_read_unlock();
+-	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
+-		/* rcu_read_lock() is not needed */
+-		err = bpf_fd_reuseport_array_update_elem(map, key, value,
+-							 attr->flags);
+-	} else if (map->map_type == BPF_MAP_TYPE_QUEUE ||
+-		   map->map_type == BPF_MAP_TYPE_STACK) {
+-		err = map->ops->map_push_elem(map, value, attr->flags);
+-	} else {
+-		rcu_read_lock();
+-		err = map->ops->map_update_elem(map, key, value, attr->flags);
+-		rcu_read_unlock();
+-	}
+-	__this_cpu_dec(bpf_prog_active);
+-	preempt_enable();
+-	maybe_wait_bpf_programs(map);
+-out:
+ free_value:
+ 	kfree(value);
+ free_key:
 -- 
 2.25.0.rc1.283.g88dfdc4193-goog
 
