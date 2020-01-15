@@ -2,417 +2,151 @@ Return-Path: <SRS0=xBUo=3E=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CDF6C32771
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 18:44:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73553C33CB3
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 19:09:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 286832465A
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 18:44:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E614207E0
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 19:09:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ebYO85PY"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="N8AfD8rb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729146AbgAOSn0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jan 2020 13:43:26 -0500
-Received: from mail-qt1-f201.google.com ([209.85.160.201]:40763 "EHLO
-        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728596AbgAOSnZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Jan 2020 13:43:25 -0500
-Received: by mail-qt1-f201.google.com with SMTP id e37so11870914qtk.7
-        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 10:43:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Jc5+7d7NtiEYIwbVpgtYmSFqbGpKI69cS8An9zRo6DQ=;
-        b=ebYO85PYKYyM1gQvISh1WFoTt54iljODvfFADMN5Lujvd3yN3fEeYdR01uCnKmJgtf
-         q2q3vl1yi6XChSfva3Yq12nVfCCjuyHR9MbZtsysW6ZR5Vh4etOZBjtxL4n6cdHn/E7L
-         ckeRzx0x04nPbys+opaGXqqWNuZPTDJghC9MTYqxIfyZGvvvKFr8PWGirvZCFxRcqOmm
-         AM8urMOnV6Tjm6xOV9xT5AYk3PV28cPJCjp+Uy+6zqkHF7BwhEM1Cqxjjf6E+5ROTP/p
-         Li9YUTNgD5xLY47+QZtLBwDbzSvfKxp23J2u6D5f+ALFXgyFRw4H3DXTF8YBgZQ5CYgx
-         KnYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Jc5+7d7NtiEYIwbVpgtYmSFqbGpKI69cS8An9zRo6DQ=;
-        b=FQbkZVqtN4/CNAOwfmQurvpSl806oJvePcqcAU3TgJDzNmofkWfC6qV04dpgYy6iSu
-         BKOaUUlP/22RdI9RFR1/dPH2WvPyKHu6P0CMfepcBEwRw/eU9xh0IYEt7w3uS6B4YoOn
-         M3MMluAM+ajGkjxm2NGFD4a9e0RPqbwIDK3XQ/1dKau+DIq8pEtYFEyQJ3sWPEL/e0Rb
-         ndwutAp6h+G9i/iSRFQBH12p3v5nQLu6+H1BlzyNN5YjFu0aePwqQfvVWw+p2uK0mo5+
-         p1mVuJqRMUE5+ODG9XzQFmf5+gc9EgzhnqdB5Dn8f4rA86C0YS9XXdZzg9KGqQvjQXaW
-         AvGA==
-X-Gm-Message-State: APjAAAWT019fY4Yyon51ltQ+HIrrtDekYkNMGpQaX+DNwBPrKz/zZ+XP
-        +fqHe3YQq6sdkMGJUNTfwN1ILvFyQJ/A
-X-Google-Smtp-Source: APXvYqxnQKeSsJ9tODh/EvmIWwDOBtYI5Kkst4SxmLTSzNn9pq8QcNJNXaITN/H0/GuDPScqENreNlxD5kfI
-X-Received: by 2002:a05:6214:1103:: with SMTP id e3mr23612085qvs.159.1579113804047;
- Wed, 15 Jan 2020 10:43:24 -0800 (PST)
-Date:   Wed, 15 Jan 2020 10:43:00 -0800
-In-Reply-To: <20200115184308.162644-1-brianvv@google.com>
-Message-Id: <20200115184308.162644-2-brianvv@google.com>
-Mime-Version: 1.0
-References: <20200115184308.162644-1-brianvv@google.com>
-X-Mailer: git-send-email 2.25.0.rc1.283.g88dfdc4193-goog
-Subject: [PATCH v5 bpf-next 1/9] bpf: add bpf_map_{value_size,update_value,map_copy_value}
- functions
-From:   Brian Vazquez <brianvv@google.com>
-To:     Brian Vazquez <brianvv.kernel@gmail.com>,
-        Brian Vazquez <brianvv@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Petar Penkov <ppenkov@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726362AbgAOTJK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jan 2020 14:09:10 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:6302 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726408AbgAOTJJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 15 Jan 2020 14:09:09 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00FJ6Uhj032166
+        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 11:09:08 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=NV7TS+75iDSwuIMyakiYMnCqDKkCl2ltmwicK3MpCKc=;
+ b=N8AfD8rb0GdMVdOMtvhIgRmhlnOczorGN//jbHcv1wPuaKG8E399JqEOiqHCde7mAzbT
+ nf6WK5hPxlRug4NDGqN/qZaFdHFlwC3Jihw5ynYPHCqvh8JpR9vqctmCT40v4s1TErFM
+ TqApY5DOuoTcUJGMuQFIOB7zZFSoNDNy6YQ= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xhwp4av2y-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 11:09:08 -0800
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 15 Jan 2020 11:09:05 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 74B242EC18C3; Wed, 15 Jan 2020 11:08:58 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>, <yhs@fb.com>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v2 bpf-next] libbpf: support .text sub-calls relocations
+Date:   Wed, 15 Jan 2020 11:08:56 -0800
+Message-ID: <20200115190856.2391325-1-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-15_02:2020-01-15,2020-01-15 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ clxscore=1015 mlxscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 adultscore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001150145
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit moves reusable code from map_lookup_elem and map_update_elem
-to avoid code duplication in kernel/bpf/syscall.c.
+The LLVM patch https://reviews.llvm.org/D72197 makes LLVM emit function call
+relocations within the same section. This includes a default .text section,
+which contains any BPF sub-programs. This wasn't the case before and so libbpf
+was able to get a way with slightly simpler handling of subprogram call
+relocations.
 
-Signed-off-by: Brian Vazquez <brianvv@google.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: Yonghong Song <yhs@fb.com>
+This patch adds support for .text section relocations. It needs to ensure
+correct order of relocations, so does two passes:
+- first, relocate .text instructions, if there are any relocations in it;
+- then process all the other programs and copy over patched .text instructions
+for all sub-program calls.
+
+v1->v2:
+- break early once .text program is processed.
+
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- kernel/bpf/syscall.c | 280 +++++++++++++++++++++++--------------------
- 1 file changed, 152 insertions(+), 128 deletions(-)
+ tools/lib/bpf/libbpf.c | 29 ++++++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index f9db72a96ec04..08b0b6e40454b 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -129,6 +129,154 @@ static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
- 	return map;
- }
- 
-+static u32 bpf_map_value_size(struct bpf_map *map)
-+{
-+	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-+	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
-+	    map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY ||
-+	    map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
-+		return round_up(map->value_size, 8) * num_possible_cpus();
-+	else if (IS_FD_MAP(map))
-+		return sizeof(u32);
-+	else
-+		return  map->value_size;
-+}
-+
-+static void maybe_wait_bpf_programs(struct bpf_map *map)
-+{
-+	/* Wait for any running BPF programs to complete so that
-+	 * userspace, when we return to it, knows that all programs
-+	 * that could be running use the new map value.
-+	 */
-+	if (map->map_type == BPF_MAP_TYPE_HASH_OF_MAPS ||
-+	    map->map_type == BPF_MAP_TYPE_ARRAY_OF_MAPS)
-+		synchronize_rcu();
-+}
-+
-+static int bpf_map_update_value(struct bpf_map *map, struct fd f, void *key,
-+				void *value, __u64 flags)
-+{
-+	int err;
-+
-+	/* Need to create a kthread, thus must support schedule */
-+	if (bpf_map_is_dev_bound(map)) {
-+		return bpf_map_offload_update_elem(map, key, value, flags);
-+	} else if (map->map_type == BPF_MAP_TYPE_CPUMAP ||
-+		   map->map_type == BPF_MAP_TYPE_SOCKHASH ||
-+		   map->map_type == BPF_MAP_TYPE_SOCKMAP ||
-+		   map->map_type == BPF_MAP_TYPE_STRUCT_OPS) {
-+		return map->ops->map_update_elem(map, key, value, flags);
-+	} else if (IS_FD_PROG_ARRAY(map)) {
-+		return bpf_fd_array_map_update_elem(map, f.file, key, value,
-+						    flags);
-+	}
-+
-+	/* must increment bpf_prog_active to avoid kprobe+bpf triggering from
-+	 * inside bpf map update or delete otherwise deadlocks are possible
-+	 */
-+	preempt_disable();
-+	__this_cpu_inc(bpf_prog_active);
-+	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-+	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
-+		err = bpf_percpu_hash_update(map, key, value, flags);
-+	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
-+		err = bpf_percpu_array_update(map, key, value, flags);
-+	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
-+		err = bpf_percpu_cgroup_storage_update(map, key, value,
-+						       flags);
-+	} else if (IS_FD_ARRAY(map)) {
-+		rcu_read_lock();
-+		err = bpf_fd_array_map_update_elem(map, f.file, key, value,
-+						   flags);
-+		rcu_read_unlock();
-+	} else if (map->map_type == BPF_MAP_TYPE_HASH_OF_MAPS) {
-+		rcu_read_lock();
-+		err = bpf_fd_htab_map_update_elem(map, f.file, key, value,
-+						  flags);
-+		rcu_read_unlock();
-+	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
-+		/* rcu_read_lock() is not needed */
-+		err = bpf_fd_reuseport_array_update_elem(map, key, value,
-+							 flags);
-+	} else if (map->map_type == BPF_MAP_TYPE_QUEUE ||
-+		   map->map_type == BPF_MAP_TYPE_STACK) {
-+		err = map->ops->map_push_elem(map, value, flags);
-+	} else {
-+		rcu_read_lock();
-+		err = map->ops->map_update_elem(map, key, value, flags);
-+		rcu_read_unlock();
-+	}
-+	__this_cpu_dec(bpf_prog_active);
-+	preempt_enable();
-+	maybe_wait_bpf_programs(map);
-+
-+	return err;
-+}
-+
-+static int bpf_map_copy_value(struct bpf_map *map, void *key, void *value,
-+			      __u64 flags)
-+{
-+	void *ptr;
-+	int err;
-+
-+	if (bpf_map_is_dev_bound(map)) {
-+		err =  bpf_map_offload_lookup_elem(map, key, value);
-+		return err;
-+	}
-+
-+	preempt_disable();
-+	this_cpu_inc(bpf_prog_active);
-+	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-+	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
-+		err = bpf_percpu_hash_copy(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
-+		err = bpf_percpu_array_copy(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
-+		err = bpf_percpu_cgroup_storage_copy(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
-+		err = bpf_stackmap_copy(map, key, value);
-+	} else if (IS_FD_ARRAY(map) || IS_FD_PROG_ARRAY(map)) {
-+		err = bpf_fd_array_map_lookup_elem(map, key, value);
-+	} else if (IS_FD_HASH(map)) {
-+		err = bpf_fd_htab_map_lookup_elem(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
-+		err = bpf_fd_reuseport_array_lookup_elem(map, key, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_QUEUE ||
-+		   map->map_type == BPF_MAP_TYPE_STACK) {
-+		err = map->ops->map_peek_elem(map, value);
-+	} else if (map->map_type == BPF_MAP_TYPE_STRUCT_OPS) {
-+		/* struct_ops map requires directly updating "value" */
-+		err = bpf_struct_ops_map_sys_lookup_elem(map, key, value);
-+	} else {
-+		rcu_read_lock();
-+		if (map->ops->map_lookup_elem_sys_only)
-+			ptr = map->ops->map_lookup_elem_sys_only(map, key);
-+		else
-+			ptr = map->ops->map_lookup_elem(map, key);
-+		if (IS_ERR(ptr)) {
-+			err = PTR_ERR(ptr);
-+		} else if (!ptr) {
-+			err = -ENOENT;
-+		} else {
-+			err = 0;
-+			if (flags & BPF_F_LOCK)
-+				/* lock 'ptr' and copy everything but lock */
-+				copy_map_value_locked(map, value, ptr, true);
-+			else
-+				copy_map_value(map, value, ptr);
-+			/* mask lock, since value wasn't zero inited */
-+			check_and_init_map_lock(map, value);
-+		}
-+		rcu_read_unlock();
-+	}
-+
-+	this_cpu_dec(bpf_prog_active);
-+	preempt_enable();
-+	maybe_wait_bpf_programs(map);
-+
-+	return err;
-+}
-+
- static void *__bpf_map_area_alloc(u64 size, int numa_node, bool mmapable)
- {
- 	/* We really just want to fail instead of triggering OOM killer
-@@ -827,7 +975,7 @@ static int map_lookup_elem(union bpf_attr *attr)
- 	void __user *uvalue = u64_to_user_ptr(attr->value);
- 	int ufd = attr->map_fd;
- 	struct bpf_map *map;
--	void *key, *value, *ptr;
-+	void *key, *value;
- 	u32 value_size;
- 	struct fd f;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 0c229f00a67e..23868883477f 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4692,13 +4692,7 @@ bpf_program__reloc_text(struct bpf_program *prog, struct bpf_object *obj,
+ 	size_t new_cnt;
  	int err;
-@@ -859,75 +1007,14 @@ static int map_lookup_elem(union bpf_attr *attr)
- 		goto err_put;
+ 
+-	if (prog->idx == obj->efile.text_shndx) {
+-		pr_warn("relo in .text insn %d into off %d (insn #%d)\n",
+-			relo->insn_idx, relo->sym_off, relo->sym_off / 8);
+-		return -LIBBPF_ERRNO__RELOC;
+-	}
+-
+-	if (prog->main_prog_cnt == 0) {
++	if (prog->idx != obj->efile.text_shndx && prog->main_prog_cnt == 0) {
+ 		text = bpf_object__find_prog_by_idx(obj, obj->efile.text_shndx);
+ 		if (!text) {
+ 			pr_warn("no .text section found yet relo into text exist\n");
+@@ -4728,6 +4722,7 @@ bpf_program__reloc_text(struct bpf_program *prog, struct bpf_object *obj,
+ 			 text->insns_cnt, text->section_name,
+ 			 prog->section_name);
  	}
++
+ 	insn = &prog->insns[relo->insn_idx];
+ 	insn->imm += relo->sym_off / 8 + prog->main_prog_cnt - relo->insn_idx;
+ 	return 0;
+@@ -4807,8 +4802,28 @@ bpf_object__relocate(struct bpf_object *obj, const char *targ_btf_path)
+ 			return err;
+ 		}
+ 	}
++	/* ensure .text is relocated first, as it's going to be copied as-is
++	 * later for sub-program calls
++	 */
++	for (i = 0; i < obj->nr_programs; i++) {
++		prog = &obj->programs[i];
++		if (prog->idx != obj->efile.text_shndx)
++			continue;
++
++		err = bpf_program__relocate(prog, obj);
++		if (err) {
++			pr_warn("failed to relocate '%s'\n", prog->section_name);
++			return err;
++		}
++		break;
++	}
++	/* now relocate everything but .text, which by now is relocated
++	 * properly, so we can copy raw sub-program instructions as is safely
++	 */
+ 	for (i = 0; i < obj->nr_programs; i++) {
+ 		prog = &obj->programs[i];
++		if (prog->idx == obj->efile.text_shndx)
++			continue;
  
--	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY ||
--	    map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
--		value_size = round_up(map->value_size, 8) * num_possible_cpus();
--	else if (IS_FD_MAP(map))
--		value_size = sizeof(u32);
--	else
--		value_size = map->value_size;
-+	value_size = bpf_map_value_size(map);
- 
- 	err = -ENOMEM;
- 	value = kmalloc(value_size, GFP_USER | __GFP_NOWARN);
- 	if (!value)
- 		goto free_key;
- 
--	if (bpf_map_is_dev_bound(map)) {
--		err = bpf_map_offload_lookup_elem(map, key, value);
--		goto done;
--	}
--
--	preempt_disable();
--	this_cpu_inc(bpf_prog_active);
--	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
--		err = bpf_percpu_hash_copy(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
--		err = bpf_percpu_array_copy(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
--		err = bpf_percpu_cgroup_storage_copy(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
--		err = bpf_stackmap_copy(map, key, value);
--	} else if (IS_FD_ARRAY(map) || IS_FD_PROG_ARRAY(map)) {
--		err = bpf_fd_array_map_lookup_elem(map, key, value);
--	} else if (IS_FD_HASH(map)) {
--		err = bpf_fd_htab_map_lookup_elem(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
--		err = bpf_fd_reuseport_array_lookup_elem(map, key, value);
--	} else if (map->map_type == BPF_MAP_TYPE_QUEUE ||
--		   map->map_type == BPF_MAP_TYPE_STACK) {
--		err = map->ops->map_peek_elem(map, value);
--	} else if (map->map_type == BPF_MAP_TYPE_STRUCT_OPS) {
--		/* struct_ops map requires directly updating "value" */
--		err = bpf_struct_ops_map_sys_lookup_elem(map, key, value);
--	} else {
--		rcu_read_lock();
--		if (map->ops->map_lookup_elem_sys_only)
--			ptr = map->ops->map_lookup_elem_sys_only(map, key);
--		else
--			ptr = map->ops->map_lookup_elem(map, key);
--		if (IS_ERR(ptr)) {
--			err = PTR_ERR(ptr);
--		} else if (!ptr) {
--			err = -ENOENT;
--		} else {
--			err = 0;
--			if (attr->flags & BPF_F_LOCK)
--				/* lock 'ptr' and copy everything but lock */
--				copy_map_value_locked(map, value, ptr, true);
--			else
--				copy_map_value(map, value, ptr);
--			/* mask lock, since value wasn't zero inited */
--			check_and_init_map_lock(map, value);
--		}
--		rcu_read_unlock();
--	}
--	this_cpu_dec(bpf_prog_active);
--	preempt_enable();
--
--done:
-+	err = bpf_map_copy_value(map, key, value, attr->flags);
- 	if (err)
- 		goto free_value;
- 
-@@ -946,16 +1033,6 @@ static int map_lookup_elem(union bpf_attr *attr)
- 	return err;
- }
- 
--static void maybe_wait_bpf_programs(struct bpf_map *map)
--{
--	/* Wait for any running BPF programs to complete so that
--	 * userspace, when we return to it, knows that all programs
--	 * that could be running use the new map value.
--	 */
--	if (map->map_type == BPF_MAP_TYPE_HASH_OF_MAPS ||
--	    map->map_type == BPF_MAP_TYPE_ARRAY_OF_MAPS)
--		synchronize_rcu();
--}
- 
- #define BPF_MAP_UPDATE_ELEM_LAST_FIELD flags
- 
-@@ -1011,61 +1088,8 @@ static int map_update_elem(union bpf_attr *attr)
- 	if (copy_from_user(value, uvalue, value_size) != 0)
- 		goto free_value;
- 
--	/* Need to create a kthread, thus must support schedule */
--	if (bpf_map_is_dev_bound(map)) {
--		err = bpf_map_offload_update_elem(map, key, value, attr->flags);
--		goto out;
--	} else if (map->map_type == BPF_MAP_TYPE_CPUMAP ||
--		   map->map_type == BPF_MAP_TYPE_SOCKHASH ||
--		   map->map_type == BPF_MAP_TYPE_SOCKMAP ||
--		   map->map_type == BPF_MAP_TYPE_STRUCT_OPS) {
--		err = map->ops->map_update_elem(map, key, value, attr->flags);
--		goto out;
--	} else if (IS_FD_PROG_ARRAY(map)) {
--		err = bpf_fd_array_map_update_elem(map, f.file, key, value,
--						   attr->flags);
--		goto out;
--	}
-+	err = bpf_map_update_value(map, f, key, value, attr->flags);
- 
--	/* must increment bpf_prog_active to avoid kprobe+bpf triggering from
--	 * inside bpf map update or delete otherwise deadlocks are possible
--	 */
--	preempt_disable();
--	__this_cpu_inc(bpf_prog_active);
--	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
--		err = bpf_percpu_hash_update(map, key, value, attr->flags);
--	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
--		err = bpf_percpu_array_update(map, key, value, attr->flags);
--	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
--		err = bpf_percpu_cgroup_storage_update(map, key, value,
--						       attr->flags);
--	} else if (IS_FD_ARRAY(map)) {
--		rcu_read_lock();
--		err = bpf_fd_array_map_update_elem(map, f.file, key, value,
--						   attr->flags);
--		rcu_read_unlock();
--	} else if (map->map_type == BPF_MAP_TYPE_HASH_OF_MAPS) {
--		rcu_read_lock();
--		err = bpf_fd_htab_map_update_elem(map, f.file, key, value,
--						  attr->flags);
--		rcu_read_unlock();
--	} else if (map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
--		/* rcu_read_lock() is not needed */
--		err = bpf_fd_reuseport_array_update_elem(map, key, value,
--							 attr->flags);
--	} else if (map->map_type == BPF_MAP_TYPE_QUEUE ||
--		   map->map_type == BPF_MAP_TYPE_STACK) {
--		err = map->ops->map_push_elem(map, value, attr->flags);
--	} else {
--		rcu_read_lock();
--		err = map->ops->map_update_elem(map, key, value, attr->flags);
--		rcu_read_unlock();
--	}
--	__this_cpu_dec(bpf_prog_active);
--	preempt_enable();
--	maybe_wait_bpf_programs(map);
--out:
- free_value:
- 	kfree(value);
- free_key:
+ 		err = bpf_program__relocate(prog, obj);
+ 		if (err) {
 -- 
-2.25.0.rc1.283.g88dfdc4193-goog
+2.17.1
 
