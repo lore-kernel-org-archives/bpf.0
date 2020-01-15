@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69E21C32771
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 18:44:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D53FC33CB6
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 18:44:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 46CD52467D
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 18:44:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 495BA2465A
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 18:44:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uRu8Ql4O"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u6yLAPqV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729160AbgAOSoC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jan 2020 13:44:02 -0500
-Received: from mail-pl1-f202.google.com ([209.85.214.202]:33092 "EHLO
-        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729388AbgAOSnh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Jan 2020 13:43:37 -0500
-Received: by mail-pl1-f202.google.com with SMTP id bd7so7340660plb.0
-        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 10:43:37 -0800 (PST)
+        id S1729299AbgAOSne (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jan 2020 13:43:34 -0500
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:40624 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729169AbgAOSnc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Jan 2020 13:43:32 -0500
+Received: by mail-pf1-f201.google.com with SMTP id d127so11420565pfa.7
+        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 10:43:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=xQls5+iJi5Kqz7m3pR6x7QjrYUU6eZohn0NALbSGdKM=;
-        b=uRu8Ql4OQe2tRaLyN4BrE2DzO8IeVWLi2wpeas1c8W1cbwT50VQ4hrVy7LBKcfIDne
-         kbAGW11znsVoK9quuUOlLQ0elOv7VjBCiXAfr6BresyWbkaGuazrWHb+leZly2Ph3DZI
-         O6mDiFPggpkCo+c1kyW6hySnLvFvMCP2sK1liTK0B1Krkycm4prBumLGlVIsfTkVLxZF
-         AbD6D2M4jpR2guEvJrYljDLBvS540vq03Wd32exylK90h+AOlHeOc1a+Q1GaRIugverK
-         Mg5oSJUGhqrWgHoCvlIIB7seQwLdKPFBPRRniyH3BZj0OHNvS1z2Xdjqn8rE6neaiFK1
-         qVbQ==
+        bh=bTzv6GNpgfrRZmeHOV0jVc+oFdZ9HuTWtPYHIUcg/W4=;
+        b=u6yLAPqVa3ro09ZQhcPDbZBH6GA5ByMOsoiAYioTquy1hYzT8AeaEuB4kL/6IqUBPx
+         0AqW1RIVD5mdOKoW9TemSg0AcKRhjLT3fUbCuIyhuy1yWsB7VlhrjwJkPRNshtCrszdb
+         F/1Pk3RRjKtgGFtVaKh/hwIV28EmWUB8esDtd+10tZGMRs2tIXL1Eh8Dl72vyVMDfkgn
+         Vl1LasdRigJ4pIrOOmCVj6GfgOZDFO2RQX1Gqxv2zrTraGVkFdNO+Iv+F+YDswQTy/dz
+         MtqEXUYbt2z18+QEjMLnKygiEOVfMNunMnm29fORAte0NRZSBRmHgylNnqlh76NQSB7G
+         GH9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=xQls5+iJi5Kqz7m3pR6x7QjrYUU6eZohn0NALbSGdKM=;
-        b=n0T001nqBDfcs4eNGv/yF1Vk16P0QWWACT8C8UW/Lwfn5F5lzN/shfnotM+6WZYCoO
-         qF6d7pUWUnfyk7shIv/66NTBBpTohohKBbou0o2TdWOuI+1MN4ZZl0xtVGXnPERxrhtc
-         bBH7mmB2uGFLFhohqoxeQOnUSAKYE4XWGBhJ0gvr2Gx9oX/gLx7zGRcss0bgqaWF1LbI
-         zEq2ufjthgHniNBnhuhF0lKjAaSnfuSxROpWufYLuCNptGGe4lCLnvkONT9U87tjRuHz
-         xg5mZwKulOdp99oAfT8MhiV6WX/e/+BSmfoWTDkwaD8A1MSJQfIEbpZ12RSaGZgYABO5
-         ywgw==
-X-Gm-Message-State: APjAAAUQOpIURBswliGow7VUX4SQ7B8Bq3FOFU1nYyKNJDeQesoDNKax
-        nWIEOg+/nHMglk0u9tYc54yQBnc72+sm
-X-Google-Smtp-Source: APXvYqw5Ows/8hwQ5OpgZH3vnFhIClHIpjJvEHfV11l+uWhlycMBwr24JyLQtkvI1Jahpm1ssHhjFsYA51Ri
-X-Received: by 2002:a63:a34b:: with SMTP id v11mr33495694pgn.229.1579113816781;
- Wed, 15 Jan 2020 10:43:36 -0800 (PST)
-Date:   Wed, 15 Jan 2020 10:43:05 -0800
+        bh=bTzv6GNpgfrRZmeHOV0jVc+oFdZ9HuTWtPYHIUcg/W4=;
+        b=gjDLiaLft6mA1iEc/NKLRQiM0RJ4vZJTKMYCbtu3Ag82zkCV7NUnSgNUdecLF9xvAv
+         UkhOWC77FchPjbZk8edlItC3FhPARvyqNQ4cpNn92FBtqMs/I4oTmiRc/XL/6Evfc7PQ
+         JZLsdM6dq3DCZzkHu55/yIH1dZRbhzcFfXSMEWEOP/qMm2G467IeQMpQDB7K5mCeWa5A
+         u4cdnFEPNeicGvfQdbvikiiEZgFIA2cfdG19QMr7zkFFyAc8FQExrs4DChUUO2rqBKcV
+         KTJ6ZT7e7FHhBVNJcsi1HFBwbZGtOG/WbudV73iFTbQlI9AQldFbKynd2tLf5q7dOtOk
+         qRtQ==
+X-Gm-Message-State: APjAAAVTYwibjex/ojtc/aVGxcl7dhWihHyeLKt0iF1MQVbwfkHpf8CF
+        6Iit7tNmwJql/gJ+vKeJsqggT5/oOwtR
+X-Google-Smtp-Source: APXvYqxTfe7jLbFuDD+gZt1hs9KW/RLDoX7XAgEuKsCqDnYZQRqqvUy6B5pjHryPABA00K3D9D/UlRd4jAFC
+X-Received: by 2002:a65:578e:: with SMTP id b14mr34722927pgr.444.1579113811637;
+ Wed, 15 Jan 2020 10:43:31 -0800 (PST)
+Date:   Wed, 15 Jan 2020 10:43:03 -0800
 In-Reply-To: <20200115184308.162644-1-brianvv@google.com>
-Message-Id: <20200115184308.162644-7-brianvv@google.com>
+Message-Id: <20200115184308.162644-5-brianvv@google.com>
 Mime-Version: 1.0
 References: <20200115184308.162644-1-brianvv@google.com>
 X-Mailer: git-send-email 2.25.0.rc1.283.g88dfdc4193-goog
-Subject: [PATCH v5 bpf-next 6/9] tools/bpf: sync uapi header bpf.h
+Subject: [PATCH v5 bpf-next 4/9] bpf: add lookup and update batch ops to arraymap
 From:   Brian Vazquez <brianvv@google.com>
 To:     Brian Vazquez <brianvv.kernel@gmail.com>,
         Brian Vazquez <brianvv@google.com>,
@@ -76,55 +76,29 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Yonghong Song <yhs@fb.com>
+This adds the generic batch ops functionality to bpf arraymap, note that
+since deletion is not a valid operation for arraymap, only batch and
+lookup are added.
 
-sync uapi header include/uapi/linux/bpf.h to
-tools/include/uapi/linux/bpf.h
-
-Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Brian Vazquez <brianvv@google.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 ---
- tools/include/uapi/linux/bpf.h | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ kernel/bpf/arraymap.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 52966e758fe59..9536729a03d57 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -107,6 +107,10 @@ enum bpf_cmd {
- 	BPF_MAP_LOOKUP_AND_DELETE_ELEM,
- 	BPF_MAP_FREEZE,
- 	BPF_BTF_GET_NEXT_ID,
-+	BPF_MAP_LOOKUP_BATCH,
-+	BPF_MAP_LOOKUP_AND_DELETE_BATCH,
-+	BPF_MAP_UPDATE_BATCH,
-+	BPF_MAP_DELETE_BATCH,
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index f0d19bbb9211e..95d77770353c9 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -503,6 +503,8 @@ const struct bpf_map_ops array_map_ops = {
+ 	.map_mmap = array_map_mmap,
+ 	.map_seq_show_elem = array_map_seq_show_elem,
+ 	.map_check_btf = array_map_check_btf,
++	.map_lookup_batch = generic_map_lookup_batch,
++	.map_update_batch = generic_map_update_batch,
  };
  
- enum bpf_map_type {
-@@ -420,6 +424,23 @@ union bpf_attr {
- 		__u64		flags;
- 	};
- 
-+	struct { /* struct used by BPF_MAP_*_BATCH commands */
-+		__aligned_u64	in_batch;	/* start batch,
-+						 * NULL to start from beginning
-+						 */
-+		__aligned_u64	out_batch;	/* output: next start batch */
-+		__aligned_u64	keys;
-+		__aligned_u64	values;
-+		__u32		count;		/* input/output:
-+						 * input: # of key/value
-+						 * elements
-+						 * output: # of filled elements
-+						 */
-+		__u32		map_fd;
-+		__u64		elem_flags;
-+		__u64		flags;
-+	} batch;
-+
- 	struct { /* anonymous struct used by BPF_PROG_LOAD command */
- 		__u32		prog_type;	/* one of enum bpf_prog_type */
- 		__u32		insn_cnt;
+ const struct bpf_map_ops percpu_array_map_ops = {
 -- 
 2.25.0.rc1.283.g88dfdc4193-goog
 
