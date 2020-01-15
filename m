@@ -5,52 +5,52 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BC44C32771
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 17:14:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9362DC47409
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 17:14:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2B1F1214AF
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 17:14:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6CA8F2467A
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 17:14:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Yga+W/iC"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NBBS9adp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729179AbgAOROB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jan 2020 12:14:01 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:45806 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729159AbgAORN1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Jan 2020 12:13:27 -0500
-Received: by mail-wr1-f65.google.com with SMTP id j42so16487255wrj.12
-        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 09:13:26 -0800 (PST)
+        id S1729040AbgAOROI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jan 2020 12:14:08 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:51632 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729057AbgAORNY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Jan 2020 12:13:24 -0500
+Received: by mail-wm1-f65.google.com with SMTP id d73so773815wmd.1
+        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 09:13:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LQxyMYtQgG6tF+BejS82EQt5eHXmPPeHraWUkmIc0QY=;
-        b=Yga+W/iCrwZEPrgbOH4uvmZSQ4eJbT4jPmG7QfaLvI8q/IhW+b3j6ruG6TShNLD0bP
-         AKf8N8df7zWHLD4+mWV28aqub0K6suL8XejKMq5vK88tmApvSDircxWWy86eNl+C96uz
-         ZrW0VwqLFo/ZEBPgHZGBi1vzL9BFTsATdWVCc=
+        bh=zt23Gw134AtqUrID89ClnKzSfIIutA/T+EnUaIX5zWA=;
+        b=NBBS9adpw1krpgiY6cgia1Zz9UP84IQn3ay0NYkaK4mkhuQ6ptlQvCtvk7gJTYaZzU
+         G96QBd2Kwfz1YmLA3BNnm4ldIcvGOn1U1rRlyoWxDAJLQpGF14Vmox6s1mdS0/SY/RVi
+         uUbb48ALx/0ajIj3PmDPnPk2Uh//4ogTSKK5I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LQxyMYtQgG6tF+BejS82EQt5eHXmPPeHraWUkmIc0QY=;
-        b=kzkuBFOfpP+6D85GYxAI4Seo9mjrC3m++6inTvpcvBM+DVFXVBP2+sD1KRkHD1EULK
-         Mf6PE0SQturuA8nD+j/qyiLocl2qSKg8dli5hk1hOr4wkTbXFdiYBTKEXB5tm+dzTWNE
-         IVBT4vKr7V6LVvzcBF4Lem6iUBoHae1qvgeY4AnrBDC6Ctv9gxUZdqkmilDhMWU1DQqB
-         1r0FHMg3twQzeF+f/SOiBEe8bW2XLjemOBnJxXVFOF7FoauTkSvhM8yS1RNzHCOz5oOY
-         n3xsIxJgXcwaeVLjeE7x/c6b6dnZANmiHjFRu+VxiLZ20fbEpwl+Y92bHpIsnvynzvJm
-         By1w==
-X-Gm-Message-State: APjAAAVszZubfOdoJwnnW6bRJ864njqVWpm49bfkvjwaDO6TGU0apsKw
-        xvrjPJP6H4d+dOz6XnYzP2CBuA==
-X-Google-Smtp-Source: APXvYqyStWbKFkVOZQVLej5NW5P7eiu3AV1pQZ7BoLB818RceL/4QpAvR2W5UVweCfin0rbmzynJVw==
-X-Received: by 2002:adf:ebd0:: with SMTP id v16mr33132617wrn.146.1579108405163;
-        Wed, 15 Jan 2020 09:13:25 -0800 (PST)
+        bh=zt23Gw134AtqUrID89ClnKzSfIIutA/T+EnUaIX5zWA=;
+        b=War0xuFPoT0bk/ZnJLgeqthXSVkCDw+4dztukYMUfSar0kCa3HJ/CJipC/xhAQsqEj
+         FoJ9MDrx3aZDIO7iqfUHilCCGBEMP9Yy15sTtt+4RG9FXCLjJxKLvgt8e0kEk3kEtHOr
+         XqrHYhhaR071aiJ6qZcSWm8kR9p2UZkAI+mkswQhuiWfUQKY6QAss1x1CjM5O94xbwaK
+         jHs2YPK/sHrWXNAS3sWUGdSA3NiVLsl/+7U7jt6ln2OoExB8jb4Cxok68n4RpmTgVAEL
+         Kg32ZN4eGyTnQYy6QIpAgkYKQs1TV0RSWD7IvJZ7SxV8gu9v3l5UMfQL+ybzm2+n+NT4
+         N+Dw==
+X-Gm-Message-State: APjAAAUI32sIxgBIZcL2O5Zrx/u4b9SNcfvvszx4ypB9VUB+jlaPT+nz
+        qqa5ojX9wf9T7KpJGizWBRcOVg==
+X-Google-Smtp-Source: APXvYqyqM2ZGAqYm77/2GaQNvQod38TkiKqGyB7jaqiFFZibyCpAIIJKzdKdqzdMmN/plWRlHGgMJA==
+X-Received: by 2002:a05:600c:224d:: with SMTP id a13mr937586wmm.57.1579108402877;
+        Wed, 15 Jan 2020 09:13:22 -0800 (PST)
 Received: from kpsingh-kernel.localdomain ([2620:0:105f:fd00:84f3:4331:4ae9:c5f1])
-        by smtp.gmail.com with ESMTPSA id d16sm26943227wrg.27.2020.01.15.09.13.24
+        by smtp.gmail.com with ESMTPSA id d16sm26943227wrg.27.2020.01.15.09.13.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2020 09:13:24 -0800 (PST)
+        Wed, 15 Jan 2020 09:13:22 -0800 (PST)
 From:   KP Singh <kpsingh@chromium.org>
 To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         linux-security-module@vger.kernel.org
@@ -78,9 +78,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Quentin Monnet <quentin.monnet@netronome.com>,
         Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
-Subject: [PATCH bpf-next v2 04/10] bpf: lsm: Add mutable hooks list for the BPF LSM
-Date:   Wed, 15 Jan 2020 18:13:27 +0100
-Message-Id: <20200115171333.28811-5-kpsingh@chromium.org>
+Subject: [PATCH bpf-next v2 02/10] bpf: lsm: Add a skeleton and config options
+Date:   Wed, 15 Jan 2020 18:13:25 +0100
+Message-Id: <20200115171333.28811-3-kpsingh@chromium.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200115171333.28811-1-kpsingh@chromium.org>
 References: <20200115171333.28811-1-kpsingh@chromium.org>
@@ -93,242 +93,161 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: KP Singh <kpsingh@google.com>
 
-- The list of hooks registered by an LSM is currently immutable as they
-  are declared with __lsm_ro_after_init and they are attached to a
-  security_hook_heads struct.
-- For the BPF LSM we need to de/register the hooks at runtime. Making
-  the existing security_hook_heads mutable broadens an
-  attack vector, so a separate security_hook_heads is added for only
-  those that ~must~ be mutable.
-- These mutable hooks are run only after all the static hooks have
-  successfully executed.
-
-This is based on the ideas discussed in:
-
-  https://lore.kernel.org/lkml/20180408065916.GA2832@ircssh-2.c.rugged-nimbus-611.internal
+The LSM can be enabled by CONFIG_SECURITY_BPF.
+Without CONFIG_SECURITY_BPF_ENFORCE, the LSM will run the
+attached eBPF programs but not enforce MAC policy based
+on the return value of the attached programs.
 
 Signed-off-by: KP Singh <kpsingh@google.com>
 ---
- MAINTAINERS             |  1 +
- include/linux/bpf_lsm.h | 71 +++++++++++++++++++++++++++++++++++++++++
- security/bpf/Kconfig    |  1 +
- security/bpf/Makefile   |  2 +-
- security/bpf/hooks.c    | 20 ++++++++++++
- security/bpf/lsm.c      |  9 +++++-
- security/security.c     | 24 +++++++-------
- 7 files changed, 115 insertions(+), 13 deletions(-)
- create mode 100644 include/linux/bpf_lsm.h
- create mode 100644 security/bpf/hooks.c
+ MAINTAINERS           |  7 +++++++
+ security/Kconfig      | 11 ++++++-----
+ security/Makefile     |  2 ++
+ security/bpf/Kconfig  | 22 ++++++++++++++++++++++
+ security/bpf/Makefile |  5 +++++
+ security/bpf/lsm.c    | 25 +++++++++++++++++++++++++
+ 6 files changed, 67 insertions(+), 5 deletions(-)
+ create mode 100644 security/bpf/Kconfig
+ create mode 100644 security/bpf/Makefile
+ create mode 100644 security/bpf/lsm.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 0941f478cfa5..02d7e05e9b75 100644
+index 66a2e5e07117..0941f478cfa5 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -3209,6 +3209,7 @@ L:	linux-security-module@vger.kernel.org
- L:	bpf@vger.kernel.org
- S:	Maintained
- F:	security/bpf/
-+F:	include/linux/bpf_lsm.h
+@@ -3203,6 +3203,13 @@ S:	Supported
+ F:	arch/x86/net/
+ X:	arch/x86/net/bpf_jit_comp32.c
  
++BPF SECURITY MODULE
++M:	KP Singh <kpsingh@chromium.org>
++L:	linux-security-module@vger.kernel.org
++L:	bpf@vger.kernel.org
++S:	Maintained
++F:	security/bpf/
++
  BROADCOM B44 10/100 ETHERNET DRIVER
  M:	Michael Chan <michael.chan@broadcom.com>
-diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-new file mode 100644
-index 000000000000..9883cf25241c
---- /dev/null
-+++ b/include/linux/bpf_lsm.h
-@@ -0,0 +1,71 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+/*
-+ * Copyright 2019 Google LLC.
-+ */
-+
-+#ifndef _LINUX_BPF_LSM_H
-+#define _LINUX_BPF_LSM_H
-+
-+#include <linux/bpf.h>
-+#include <linux/lsm_hooks.h>
-+
-+#ifdef CONFIG_SECURITY_BPF
-+
-+/* Mutable hooks defined at runtime and executed after all the statically
-+ * define LSM hooks.
-+ */
-+extern struct security_hook_heads bpf_lsm_hook_heads;
-+
-+int bpf_lsm_srcu_read_lock(void);
-+void bpf_lsm_srcu_read_unlock(int idx);
-+
-+#define CALL_BPF_LSM_VOID_HOOKS(FUNC, ...)			\
-+	do {							\
-+		struct security_hook_list *P;			\
-+		int _idx;					\
-+								\
-+		if (hlist_empty(&bpf_lsm_hook_heads.FUNC))	\
-+			break;					\
-+								\
-+		_idx = bpf_lsm_srcu_read_lock();		\
-+		hlist_for_each_entry(P, &bpf_lsm_hook_heads.FUNC, list) \
-+			P->hook.FUNC(__VA_ARGS__);		\
-+		bpf_lsm_srcu_read_unlock(_idx);			\
-+	} while (0)
-+
-+#define CALL_BPF_LSM_INT_HOOKS(RC, FUNC, ...) ({		\
-+	do {							\
-+		struct security_hook_list *P;			\
-+		int _idx;					\
-+								\
-+		if (hlist_empty(&bpf_lsm_hook_heads.FUNC))	\
-+			break;					\
-+								\
-+		_idx = bpf_lsm_srcu_read_lock();		\
-+								\
-+		hlist_for_each_entry(P,				\
-+			&bpf_lsm_hook_heads.FUNC, list) {	\
-+			RC = P->hook.FUNC(__VA_ARGS__);		\
-+			if (RC && IS_ENABLED(CONFIG_SECURITY_BPF_ENFORCE)) \
-+				break;				\
-+		}						\
-+		bpf_lsm_srcu_read_unlock(_idx);			\
-+	} while (0);						\
-+	IS_ENABLED(CONFIG_SECURITY_BPF_ENFORCE) ? RC : 0;	\
-+})
-+
-+#else /* !CONFIG_SECURITY_BPF */
-+
-+#define CALL_BPF_LSM_INT_HOOKS(RC, FUNC, ...) (RC)
-+#define CALL_BPF_LSM_VOID_HOOKS(...)
-+
-+static inline int bpf_lsm_srcu_read_lock(void)
-+{
-+	return 0;
-+}
-+static inline void bpf_lsm_srcu_read_unlock(int idx) {}
-+
-+#endif /* CONFIG_SECURITY_BPF */
-+
-+#endif /* _LINUX_BPF_LSM_H */
-diff --git a/security/bpf/Kconfig b/security/bpf/Kconfig
-index a5f6c67ae526..595e4ad597ae 100644
---- a/security/bpf/Kconfig
-+++ b/security/bpf/Kconfig
-@@ -6,6 +6,7 @@ config SECURITY_BPF
- 	bool "BPF-based MAC and audit policy"
- 	depends on SECURITY
- 	depends on BPF_SYSCALL
-+	depends on SRCU
- 	help
- 	  This enables instrumentation of the security hooks with
- 	  eBPF programs.
-diff --git a/security/bpf/Makefile b/security/bpf/Makefile
-index c78a8a056e7e..c526927c337d 100644
---- a/security/bpf/Makefile
-+++ b/security/bpf/Makefile
-@@ -2,4 +2,4 @@
- #
- # Copyright 2019 Google LLC.
+ L:	netdev@vger.kernel.org
+diff --git a/security/Kconfig b/security/Kconfig
+index 2a1a2d396228..6f1aab195e7d 100644
+--- a/security/Kconfig
++++ b/security/Kconfig
+@@ -236,6 +236,7 @@ source "security/tomoyo/Kconfig"
+ source "security/apparmor/Kconfig"
+ source "security/loadpin/Kconfig"
+ source "security/yama/Kconfig"
++source "security/bpf/Kconfig"
+ source "security/safesetid/Kconfig"
+ source "security/lockdown/Kconfig"
  
--obj-$(CONFIG_SECURITY_BPF) := lsm.o ops.o
-+obj-$(CONFIG_SECURITY_BPF) := lsm.o ops.o hooks.o
-diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
+@@ -277,11 +278,11 @@ endchoice
+ 
+ config LSM
+ 	string "Ordered list of enabled LSMs"
+-	default "lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor" if DEFAULT_SECURITY_SMACK
+-	default "lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo" if DEFAULT_SECURITY_APPARMOR
+-	default "lockdown,yama,loadpin,safesetid,integrity,tomoyo" if DEFAULT_SECURITY_TOMOYO
+-	default "lockdown,yama,loadpin,safesetid,integrity" if DEFAULT_SECURITY_DAC
+-	default "lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
++	default "lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
++	default "lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
++	default "lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
++	default "lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
++	default "lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
+ 	help
+ 	  A comma-separated list of LSMs, in initialization order.
+ 	  Any LSMs left off this list will be ignored. This can be
+diff --git a/security/Makefile b/security/Makefile
+index be1dd9d2cb2f..50e6821dd7b7 100644
+--- a/security/Makefile
++++ b/security/Makefile
+@@ -12,6 +12,7 @@ subdir-$(CONFIG_SECURITY_YAMA)		+= yama
+ subdir-$(CONFIG_SECURITY_LOADPIN)	+= loadpin
+ subdir-$(CONFIG_SECURITY_SAFESETID)    += safesetid
+ subdir-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown
++subdir-$(CONFIG_SECURITY_BPF)		+= bpf
+ 
+ # always enable default capabilities
+ obj-y					+= commoncap.o
+@@ -29,6 +30,7 @@ obj-$(CONFIG_SECURITY_YAMA)		+= yama/
+ obj-$(CONFIG_SECURITY_LOADPIN)		+= loadpin/
+ obj-$(CONFIG_SECURITY_SAFESETID)       += safesetid/
+ obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
++obj-$(CONFIG_SECURITY_BPF)		+= bpf/
+ obj-$(CONFIG_CGROUP_DEVICE)		+= device_cgroup.o
+ 
+ # Object integrity file lists
+diff --git a/security/bpf/Kconfig b/security/bpf/Kconfig
 new file mode 100644
-index 000000000000..b123d9cb4cd4
+index 000000000000..a5f6c67ae526
 --- /dev/null
-+++ b/security/bpf/hooks.c
-@@ -0,0 +1,20 @@
++++ b/security/bpf/Kconfig
+@@ -0,0 +1,22 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright 2019 Google LLC.
++
++config SECURITY_BPF
++	bool "BPF-based MAC and audit policy"
++	depends on SECURITY
++	depends on BPF_SYSCALL
++	help
++	  This enables instrumentation of the security hooks with
++	  eBPF programs.
++
++	  If you are unsure how to answer this question, answer N.
++
++config SECURITY_BPF_ENFORCE
++	bool "Deny operations based on the evaluation of the attached programs"
++	depends on SECURITY_BPF
++	help
++	  eBPF programs attached to hooks can be used for both auditing and
++	  enforcement. Enabling enforcement implies that the evaluation result
++	  from the attached eBPF programs will allow or deny the operation
++	  guarded by the security hook.
+diff --git a/security/bpf/Makefile b/security/bpf/Makefile
+new file mode 100644
+index 000000000000..26a0ab6f99b7
+--- /dev/null
++++ b/security/bpf/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright 2019 Google LLC.
++
++obj-$(CONFIG_SECURITY_BPF) := lsm.o
+diff --git a/security/bpf/lsm.c b/security/bpf/lsm.c
+new file mode 100644
+index 000000000000..5c5c14f990ce
+--- /dev/null
++++ b/security/bpf/lsm.c
+@@ -0,0 +1,25 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
 +/*
 + * Copyright 2019 Google LLC.
 + */
 +
-+#include <linux/bpf_lsm.h>
-+#include <linux/srcu.h>
++#include <linux/lsm_hooks.h>
 +
-+DEFINE_STATIC_SRCU(security_hook_srcu);
-+
-+int bpf_lsm_srcu_read_lock(void)
-+{
-+	return srcu_read_lock(&security_hook_srcu);
-+}
-+
-+void bpf_lsm_srcu_read_unlock(int idx)
-+{
-+	return srcu_read_unlock(&security_hook_srcu, idx);
-+}
-diff --git a/security/bpf/lsm.c b/security/bpf/lsm.c
-index 5c5c14f990ce..d4ea6aa9ddb8 100644
---- a/security/bpf/lsm.c
-+++ b/security/bpf/lsm.c
-@@ -4,14 +4,21 @@
-  * Copyright 2019 Google LLC.
-  */
- 
-+#include <linux/bpf_lsm.h>
- #include <linux/lsm_hooks.h>
- 
- /* This is only for internal hooks, always statically shipped as part of the
-- * BPF LSM. Statically defined hooks are appeneded to the security_hook_heads
-+ * BPF LSM. Statically defined hooks are appended to the security_hook_heads
-  * which is common for LSMs and R/O after init.
-  */
- static struct security_hook_list lsm_hooks[] __lsm_ro_after_init = {};
- 
-+/* Security hooks registered dynamically by the BPF LSM and must be accessed
-+ * by holding bpf_lsm_srcu_read_lock and bpf_lsm_srcu_read_unlock. The mutable
-+ * hooks dynamically allocated by the BPF LSM are appeneded here.
++/* This is only for internal hooks, always statically shipped as part of the
++ * BPF LSM. Statically defined hooks are appeneded to the security_hook_heads
++ * which is common for LSMs and R/O after init.
 + */
-+struct security_hook_heads bpf_lsm_hook_heads;
++static struct security_hook_list lsm_hooks[] __lsm_ro_after_init = {};
 +
- static int __init lsm_init(void)
- {
- 	security_add_hooks(lsm_hooks, ARRAY_SIZE(lsm_hooks), "bpf");
-diff --git a/security/security.c b/security/security.c
-index cd2d18d2d279..4a2eb4c089b2 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -27,6 +27,7 @@
- #include <linux/backing-dev.h>
- #include <linux/string.h>
- #include <linux/msg.h>
-+#include <linux/bpf_lsm.h>
- #include <net/flow.h>
- 
- #define MAX_LSM_EVM_XATTR	2
-@@ -652,20 +653,21 @@ static void __init lsm_early_task(struct task_struct *task)
- 								\
- 		hlist_for_each_entry(P, &security_hook_heads.FUNC, list) \
- 			P->hook.FUNC(__VA_ARGS__);		\
-+		CALL_BPF_LSM_VOID_HOOKS(FUNC, __VA_ARGS__);	\
- 	} while (0)
- 
--#define call_int_hook(FUNC, IRC, ...) ({			\
--	int RC = IRC;						\
--	do {							\
--		struct security_hook_list *P;			\
--								\
-+#define call_int_hook(FUNC, IRC, ...) ({				\
-+	int RC = IRC;							\
-+	do {								\
-+		struct security_hook_list *P;				\
- 		hlist_for_each_entry(P, &security_hook_heads.FUNC, list) { \
--			RC = P->hook.FUNC(__VA_ARGS__);		\
--			if (RC != 0)				\
--				break;				\
--		}						\
--	} while (0);						\
--	RC;							\
-+			RC = P->hook.FUNC(__VA_ARGS__);			\
-+			if (RC != 0)					\
-+				break;					\
-+		}							\
-+		RC = CALL_BPF_LSM_INT_HOOKS(RC, FUNC, __VA_ARGS__);	\
-+	} while (0);							\
-+	RC;								\
- })
- 
- /* Security operations */
++static int __init lsm_init(void)
++{
++	security_add_hooks(lsm_hooks, ARRAY_SIZE(lsm_hooks), "bpf");
++	pr_info("eBPF and LSM are friends now.\n");
++	return 0;
++}
++
++DEFINE_LSM(bpf) = {
++	.name = "bpf",
++	.init = lsm_init,
++};
 -- 
 2.20.1
 
