@@ -2,142 +2,254 @@ Return-Path: <SRS0=xBUo=3E=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B7B8C32771
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 17:04:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5857C32771
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 17:13:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 50BC02465A
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 17:04:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E6742467D
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 17:13:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Eo4HtcVs"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="JkYY+k1n"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728925AbgAOREV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jan 2020 12:04:21 -0500
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:39741 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728913AbgAOREU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Jan 2020 12:04:20 -0500
-Received: by mail-qk1-f195.google.com with SMTP id c16so16309316qko.6;
-        Wed, 15 Jan 2020 09:04:20 -0800 (PST)
+        id S1729138AbgAORN0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jan 2020 12:13:26 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:42231 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729141AbgAORN0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Jan 2020 12:13:26 -0500
+Received: by mail-wr1-f66.google.com with SMTP id q6so16457732wro.9
+        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 09:13:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PsbLbABTXD4Qu8uF7aDisjexRCEsD7P+Awjc7QJgJUw=;
-        b=Eo4HtcVscULVTpaG/1LjQidAei7dqGDxHcUhwgZVaBaEBtb7iJqyT3e9M4hVy+mHF0
-         YVWlpSN4jtZQ0UiPh/sZ14/KoxRmOEZzhlZbxoxCQIe7AKf5raKJ2Tr8TFVrmYy+4eKs
-         09RMWMc0q+QTorhgMMEl3lr5FhvrtT/tY/4lG55ZIcYyMcL/k5iZ4WUUDJ3QpYyOHRbB
-         F4Y6NeNP6JzGFspCNTEb/bDd3447FKh42vIrGDXQGVYD0Qbc1EsZ3bDQ+julBXQEYeSZ
-         VY6hlzoyLkFKrT2dW6jJfoq1BvEiQtFFcBslQ+o+e/VX/DRnWO2k2yDcC3NMfIe53qaZ
-         q4AA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1qpppvmxUsdoHOAo4Mt0fdfqe/zAKnsM8OMMV6DxgYo=;
+        b=JkYY+k1nQptDXMc1K3ZJXsjo5EisX3f4Se8aov6LIW3URg1EZSqPii8H35t2Ba5kRp
+         q3AbE+l2t7G2L+AHhLEma/CQnkJ4UcMWFTaMW8KbfeO+1yHA8NdorBrBU9Ye2uEtrOV/
+         VoaPDoyccqGCcJnIbKLR0oGRhJARcqBUxSlq0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PsbLbABTXD4Qu8uF7aDisjexRCEsD7P+Awjc7QJgJUw=;
-        b=ETjsFRguGsM4+IOnE3BEfeB9qEbDBpH0wxQIHKdgbeCETFaWmzbAcY8AanyeS3kkLE
-         lU5wlw4byfm1ANRjEmbOrotstAI4FxbPuZHrnVaSW9O35O9b31vPZkRr9FmFKjcud59Z
-         rh2CptepeloRio8nMOPUk+oyQhkD7r9tKlq+d6JYM09WGDKAXTJRq2JgI+tPfASJu2M8
-         zX5y4vAJAF7Ihn3WuKkizna5boGZI8LLTLqJMOr3qc5Y74XwiOQKEg8p3dDl+sfI4HrW
-         gmmFp+DqVPQ7tFg1lsrZQL8XMD5qRnMz5xrAkH2qMGlLyMHHk+5sU3tgsLWo05544TU1
-         bEXw==
-X-Gm-Message-State: APjAAAVzEJ8SSr+ShOmA7fdUNp8o6rdw1lf+PmEaj7+MwBcU26kOhqGh
-        mSZY56I3E+xNQ70W2mIzpf031sD+OOuOz6Z83qI=
-X-Google-Smtp-Source: APXvYqzptmX1rBDUY9rB4KsDHZntegLIwW/mLcolZ/1Oh/d7XIJPguREmTWwL1SoylwLuCJs/VkbVm/XXDKyILZVS+4=
-X-Received: by 2002:a05:620a:5ae:: with SMTP id q14mr24318793qkq.437.1579107859535;
- Wed, 15 Jan 2020 09:04:19 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1qpppvmxUsdoHOAo4Mt0fdfqe/zAKnsM8OMMV6DxgYo=;
+        b=W++4Cha5pcV72AsNrsHuRdUASGNEsvZRUIirnkr6cfIA6rd1g/8jA1UJJeAAbBgy7L
+         TbWUuVI5YxzwdCseaBv9jpp42LycA/3TJlUsf63B9ftQCAzbOuqJpeIGNvlPpSuk89+1
+         vGuSjjt2K33z5S3+IG1AHcSZJTEx0x2NDw4gsefjRF/6zbtsSvd1IoDJStglVKVEYvG/
+         0c+HtwkkjiVtbAGulxWomjiCBJVZqU4XM6PROAAMmHmTEWVb/JeXuElJ6v7/3Xc5MPl9
+         U5+YSaTnvaphsfziz8ugqRtg/sH7dAZrndRFCPWJTwaLeEP7aEEhke15To5eV9g/zM6+
+         S6Lg==
+X-Gm-Message-State: APjAAAV+zpwaN4OHHe77YseVp9xTefJUAYHfSxFlNpmMKm6C2ob0nbEb
+        P+gPMPj78Hi+ALWOX3ah+I9TeA==
+X-Google-Smtp-Source: APXvYqz/VjlQXnNTb8DZIKjOpRbcHFB5LHITo4nFweinfMbDgY2p9mOZN9D7fnWO11/ygS2/nbpcYA==
+X-Received: by 2002:a5d:608e:: with SMTP id w14mr33246082wrt.256.1579108404001;
+        Wed, 15 Jan 2020 09:13:24 -0800 (PST)
+Received: from kpsingh-kernel.localdomain ([2620:0:105f:fd00:84f3:4331:4ae9:c5f1])
+        by smtp.gmail.com with ESMTPSA id d16sm26943227wrg.27.2020.01.15.09.13.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jan 2020 09:13:23 -0800 (PST)
+From:   KP Singh <kpsingh@chromium.org>
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        James Morris <jmorris@namei.org>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Garnier <thgarnie@chromium.org>,
+        Michael Halcrow <mhalcrow@google.com>,
+        Paul Turner <pjt@google.com>,
+        Brendan Gregg <brendan.d.gregg@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Christian Brauner <christian@brauner.io>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Quentin Monnet <quentin.monnet@netronome.com>,
+        Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
+Subject: [PATCH bpf-next v2 03/10] bpf: lsm: Introduce types for eBPF based LSM
+Date:   Wed, 15 Jan 2020 18:13:26 +0100
+Message-Id: <20200115171333.28811-4-kpsingh@chromium.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200115171333.28811-1-kpsingh@chromium.org>
+References: <20200115171333.28811-1-kpsingh@chromium.org>
 MIME-Version: 1.0
-References: <157909410480.47481.11202505690938004673.stgit@xdp-tutorial>
-In-Reply-To: <157909410480.47481.11202505690938004673.stgit@xdp-tutorial>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 15 Jan 2020 09:04:08 -0800
-Message-ID: <CAEf4BzZmF6TUtGkmcWAP8T5+JH=CEqAvu-q=LntsoYbuZbePgw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Add a test for attaching a bpf
- fentry/fexit trace to an XDP program
-To:     Eelco Chaudron <echaudro@redhat.com>
-Cc:     bpf <bpf@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>, maciej.fijalkowski@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 5:15 AM Eelco Chaudron <echaudro@redhat.com> wrote:
->
-> Add a test that will attach a FENTRY and FEXIT program to the XDP test
-> program. It will also verify data from the XDP context on FENTRY and
-> verifies the return code on exit.
->
-> Signed-off-by: Eelco Chaudron <echaudro@redhat.com>
-> ---
+From: KP Singh <kpsingh@google.com>
 
-Looks good, thanks! You are just missing one CHECK() for
-bpf_map_update_elem below, please add it. With that:
+A new eBPF program type BPF_PROG_TYPE_LSM with an
+expected attach type of BPF_LSM_MAC. Attachment to LSM hooks is not
+implemented in this patch.
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
+On defining the types for the program, the macros expect that
+<prog_name>_prog_ops and <prog_name>_verifier_ops exist. This is
+implicitly required by the macro:
 
-> v2 -> v3:
->   - Incorporated review comments from Andrii and Maciej
->
-> v1 -> v2:
->   - Changed code to use the BPF skeleton
->   - Replace static volatile with global variable in eBPF code
->
->  .../testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c |   65 ++++++++++++++++++++
->  .../testing/selftests/bpf/progs/test_xdp_bpf2bpf.c |   44 ++++++++++++++
->  2 files changed, 109 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_bpf2bpf.c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
-> new file mode 100644
-> index 000000000000..6b56bdc73ebc
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
-> @@ -0,0 +1,65 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include <net/if.h>
-> +#include "test_xdp.skel.h"
-> +#include "test_xdp_bpf2bpf.skel.h"
-> +
-> +void test_xdp_bpf2bpf(void)
-> +{
-> +       __u32 duration = 0, retval, size;
-> +       char buf[128];
-> +       int err, pkt_fd, map_fd;
-> +       struct iphdr *iph = (void *)buf + sizeof(struct ethhdr);
-> +       struct iptnl_info value4 = {.family = AF_INET};
-> +       struct test_xdp *pkt_skel = NULL;
-> +       struct test_xdp_bpf2bpf *ftrace_skel = NULL;
-> +       struct vip key4 = {.protocol = 6, .family = AF_INET};
-> +       DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts);
-> +
-> +       /* Load XDP program to introspect */
-> +       pkt_skel = test_xdp__open_and_load();
-> +       if (CHECK(!pkt_skel, "pkt_skel_load", "test_xdp skeleton failed\n"))
-> +               return;
-> +
-> +       pkt_fd = bpf_program__fd(pkt_skel->progs._xdp_tx_iptunnel);
-> +
-> +       map_fd = bpf_map__fd(pkt_skel->maps.vip2tnl);
-> +       bpf_map_update_elem(map_fd, &key4, &value4, 0);
+  BPF_PROG_TYPE(BPF_PROG_TYPE_LSM, lsm, ...)
 
-CHECK()? Sorry, didn't spot first time.
+Signed-off-by: KP Singh <kpsingh@google.com>
+---
+ include/linux/bpf_types.h      |  4 ++++
+ include/uapi/linux/bpf.h       |  2 ++
+ kernel/bpf/syscall.c           |  6 ++++++
+ security/bpf/Makefile          |  2 +-
+ security/bpf/ops.c             | 28 ++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  2 ++
+ tools/lib/bpf/libbpf_probes.c  |  1 +
+ 7 files changed, 44 insertions(+), 1 deletion(-)
+ create mode 100644 security/bpf/ops.c
 
+diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
+index 9f326e6ef885..2f5b054500d7 100644
+--- a/include/linux/bpf_types.h
++++ b/include/linux/bpf_types.h
+@@ -68,6 +68,10 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_SK_REUSEPORT, sk_reuseport,
+ #if defined(CONFIG_BPF_JIT)
+ BPF_PROG_TYPE(BPF_PROG_TYPE_STRUCT_OPS, bpf_struct_ops,
+ 	      void *, void *)
++#ifdef CONFIG_SECURITY_BPF
++BPF_PROG_TYPE(BPF_PROG_TYPE_LSM, lsm,
++	       void *, void *)
++#endif /* CONFIG_SECURITY_BPF */
+ #endif
+ 
+ BPF_MAP_TYPE(BPF_MAP_TYPE_ARRAY, array_map_ops)
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 52966e758fe5..b6a725a8a21d 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -176,6 +176,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_CGROUP_SOCKOPT,
+ 	BPF_PROG_TYPE_TRACING,
+ 	BPF_PROG_TYPE_STRUCT_OPS,
++	BPF_PROG_TYPE_LSM,
+ };
+ 
+ enum bpf_attach_type {
+@@ -205,6 +206,7 @@ enum bpf_attach_type {
+ 	BPF_TRACE_RAW_TP,
+ 	BPF_TRACE_FENTRY,
+ 	BPF_TRACE_FEXIT,
++	BPF_LSM_MAC,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index f9db72a96ec0..2945739618c9 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2151,6 +2151,9 @@ static int bpf_prog_attach(const union bpf_attr *attr)
+ 	case BPF_LIRC_MODE2:
+ 		ptype = BPF_PROG_TYPE_LIRC_MODE2;
+ 		break;
++	case BPF_LSM_MAC:
++		ptype = BPF_PROG_TYPE_LSM;
++		break;
+ 	case BPF_FLOW_DISSECTOR:
+ 		ptype = BPF_PROG_TYPE_FLOW_DISSECTOR;
+ 		break;
+@@ -2182,6 +2185,9 @@ static int bpf_prog_attach(const union bpf_attr *attr)
+ 	case BPF_PROG_TYPE_LIRC_MODE2:
+ 		ret = lirc_prog_attach(attr, prog);
+ 		break;
++	case BPF_PROG_TYPE_LSM:
++		ret = -EINVAL;
++		break;
+ 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
+ 		ret = skb_flow_dissector_bpf_prog_attach(attr, prog);
+ 		break;
+diff --git a/security/bpf/Makefile b/security/bpf/Makefile
+index 26a0ab6f99b7..c78a8a056e7e 100644
+--- a/security/bpf/Makefile
++++ b/security/bpf/Makefile
+@@ -2,4 +2,4 @@
+ #
+ # Copyright 2019 Google LLC.
+ 
+-obj-$(CONFIG_SECURITY_BPF) := lsm.o
++obj-$(CONFIG_SECURITY_BPF) := lsm.o ops.o
+diff --git a/security/bpf/ops.c b/security/bpf/ops.c
+new file mode 100644
+index 000000000000..81c2bd9c0495
+--- /dev/null
++++ b/security/bpf/ops.c
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Copyright 2019 Google LLC.
++ */
++
++#include <linux/filter.h>
++#include <linux/bpf.h>
++
++const struct bpf_prog_ops lsm_prog_ops = {
++};
++
++static const struct bpf_func_proto *get_bpf_func_proto(
++	enum bpf_func_id func_id, const struct bpf_prog *prog)
++{
++	switch (func_id) {
++	case BPF_FUNC_map_lookup_elem:
++		return &bpf_map_lookup_elem_proto;
++	case BPF_FUNC_get_current_pid_tgid:
++		return &bpf_get_current_pid_tgid_proto;
++	default:
++		return NULL;
++	}
++}
++
++const struct bpf_verifier_ops lsm_verifier_ops = {
++	.get_func_proto = get_bpf_func_proto,
++};
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 52966e758fe5..b6a725a8a21d 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -176,6 +176,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_CGROUP_SOCKOPT,
+ 	BPF_PROG_TYPE_TRACING,
+ 	BPF_PROG_TYPE_STRUCT_OPS,
++	BPF_PROG_TYPE_LSM,
+ };
+ 
+ enum bpf_attach_type {
+@@ -205,6 +206,7 @@ enum bpf_attach_type {
+ 	BPF_TRACE_RAW_TP,
+ 	BPF_TRACE_FENTRY,
+ 	BPF_TRACE_FEXIT,
++	BPF_LSM_MAC,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+index 8cc992bc532a..2314889369cc 100644
+--- a/tools/lib/bpf/libbpf_probes.c
++++ b/tools/lib/bpf/libbpf_probes.c
+@@ -107,6 +107,7 @@ probe_load(enum bpf_prog_type prog_type, const struct bpf_insn *insns,
+ 	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+ 	case BPF_PROG_TYPE_TRACING:
+ 	case BPF_PROG_TYPE_STRUCT_OPS:
++	case BPF_PROG_TYPE_LSM:
+ 	default:
+ 		break;
+ 	}
+-- 
+2.20.1
 
-> +
-> +       /* Load trace program */
-> +       opts.attach_prog_fd = pkt_fd,
-> +       ftrace_skel = test_xdp_bpf2bpf__open_opts(&opts);
-> +       if (CHECK(!ftrace_skel, "__open", "ftrace skeleton failed\n"))
-> +               goto out;
-> +
-
-[...]
