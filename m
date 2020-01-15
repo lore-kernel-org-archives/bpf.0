@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FA85C33CB1
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 14:13:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5C6DC3F68F
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 14:15:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 226032465A
-	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 14:13:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BE772465A
+	for <bpf@archiver.kernel.org>; Wed, 15 Jan 2020 14:15:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U8mwVOrc"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WWzRj/zE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729339AbgAOOM7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jan 2020 09:12:59 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:23386 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729277AbgAOOM7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Jan 2020 09:12:59 -0500
+        id S1729702AbgAOOPW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jan 2020 09:15:22 -0500
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:50547 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729603AbgAOONH (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 15 Jan 2020 09:13:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579097577;
+        s=mimecast20190719; t=1579097586;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tdkfMOU4O1JSYnyvWTMVAu0Pbml2FCrACzP/iFrbkaQ=;
-        b=U8mwVOrcQ0wFH57DSFnxRKUN3Co5bbiBm8PRUjCoaNyIRHoTq7DN0R+tbY/IGU5zJtYqn+
-        Xo18lg49zQuot5qxgb5N2SzP8JqRczozzIp4wuJW6p/5hqzCZ5sCsPG8s0IY8dxlWsM4dQ
-        r7PiTtdw2l4L3lCnqGMzHwCSh4wEM/0=
+        bh=IbqVpRR/8QBodrEx/nm52YtktIoV5thrDtYdJd8vMNo=;
+        b=WWzRj/zEPVwOypGkvCxC4dQg0XFEetKYzoVJ3JV7USf78+OP/h+IAwEhdq5FMzEdcguQS1
+        uiUJbRvHFroLk7gLNgzB3Eh5wil5O0KCNsdSprGINWipQxXrD5mW7IDVN4pe/3nD/UrscU
+        mElp71l8J8YKIBMDnPEST7oNRSjC83c=
 Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
  [209.85.208.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-278-Ym5m_pxKNSinvzIqhqrlpA-1; Wed, 15 Jan 2020 09:12:56 -0500
-X-MC-Unique: Ym5m_pxKNSinvzIqhqrlpA-1
-Received: by mail-lj1-f199.google.com with SMTP id o9so4192785ljc.6
-        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 06:12:56 -0800 (PST)
+ us-mta-141-iQPIBZnXPKCmco_0vL6Ulg-1; Wed, 15 Jan 2020 09:13:05 -0500
+X-MC-Unique: iQPIBZnXPKCmco_0vL6Ulg-1
+Received: by mail-lj1-f199.google.com with SMTP id g5so4187427ljj.22
+        for <bpf@vger.kernel.org>; Wed, 15 Jan 2020 06:13:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=tdkfMOU4O1JSYnyvWTMVAu0Pbml2FCrACzP/iFrbkaQ=;
-        b=QObSW4+TbtabhG8GYXG59J8LrYTe6pnoq7+p81ZZ1N05xkzSNsrGJ3nZoLFaZQrsOo
-         TmrnQMBCMi0s9m1RhMjrEOZbvlY+qRJBFkqimcCUcAZ2R3LXfXFe5DO3Kqvqpy6gMCDB
-         umnmIWok/HCutho17oAzH64DpF1VTFtNittRN8huwUPVUeEnZubqfSi5zOl3tmhYEFZP
-         wU5XvtWex3XbhEUEk4G8pFNHjhP4oY7ibyGsPdYswgkvzTwGT9RVEnpGnnpS9MhGsLNB
-         yFznCxNg9oQWyF0wLvd/q4WXtl8EjX6JGFdmsIcxk0dAdgPwxMdYeRbttrSFgRjcWtGk
-         EkRA==
-X-Gm-Message-State: APjAAAUPR0KNbl832JeBz6ARVXH090Ow9XQQXtQTsWrjZwvukSZWTnj9
-        wEmgkieJA1ukIlDz8K1Kg3tg9ftuVl/igoOVSPPoIcq8u1bJrX4ymxvBPSCtItOnRSRATd+OTl5
-        gVEOinlw9fmmx
-X-Received: by 2002:ac2:58ea:: with SMTP id v10mr4813040lfo.202.1579097574927;
-        Wed, 15 Jan 2020 06:12:54 -0800 (PST)
-X-Google-Smtp-Source: APXvYqyUFS3e2zIy8rA7HqNCGr/3h2PBROEBA0CL5i8AxlW9KAm7efsIsFDqmChe4488tRaJn+o0VQ==
-X-Received: by 2002:ac2:58ea:: with SMTP id v10mr4813000lfo.202.1579097574687;
-        Wed, 15 Jan 2020 06:12:54 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 195sm9156230ljj.55.2020.01.15.06.12.53
+        bh=IbqVpRR/8QBodrEx/nm52YtktIoV5thrDtYdJd8vMNo=;
+        b=Gv65yF21pwPipmBLKkxQU+9HW76EIrPAqcklF7hQtK+fiZxDcxr3KPdbdY+3swZZ6N
+         ICLvIgyaBlvoGg6oE+Dd64B1sq8X2oFDDDPZrokrf+436qFE4VanO/Hqr2yq0ct0trVU
+         AoWtXqP9xMm6rV3i43VBVd48dzWwVqUwq59kmdIJxWO2fFDXodw0l9RlNw3dKfzNFi7O
+         wnZVihZdU/RXv6bS+UN6nrifXBnIs7Lt4Mrjqmx7Fg17c8XBrw/nohXbJ1uK8tXAkHDj
+         8WPBuoEfhj7vAOc6YA1F3OqqASi7N1UuBTWSEiLiOLPWtJG7S81gsAW3aQjPwQuHX0q1
+         nOYA==
+X-Gm-Message-State: APjAAAXR+s6zBYG8xB5Cv3ATQ/jzkIQjQnjXIt2UbOYn0llLausOLKzy
+        H8gEkmcfUHU0s96uH+Xj7fcZgTYvSbNegNbUE6ebkTw4gJYtKK1+BLuzuwXq1Ied7Y7IgAedlZD
+        c3Ex/CqikOecb
+X-Received: by 2002:a2e:97c1:: with SMTP id m1mr1938336ljj.270.1579097584087;
+        Wed, 15 Jan 2020 06:13:04 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxeIyk3JE8ypwVQPor3SVLXXAEfT2KWc9boLbeUl5AIb8BPG0kbZGTyLI5qwFLXqnWRk9pOSw==
+X-Received: by 2002:a2e:97c1:: with SMTP id m1mr1938317ljj.270.1579097583924;
+        Wed, 15 Jan 2020 06:13:03 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id t81sm8978733lff.25.2020.01.15.06.13.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2020 06:12:53 -0800 (PST)
+        Wed, 15 Jan 2020 06:13:03 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 149BD1804D6; Wed, 15 Jan 2020 15:12:52 +0100 (CET)
-Subject: [PATCH bpf-next v2 03/10] tools/runqslower: Use consistent include
- paths for libbpf
+        id 941A11804D6; Wed, 15 Jan 2020 15:12:57 +0100 (CET)
+Subject: [PATCH bpf-next v2 08/10] libbpf: Fix include of bpf_helpers.h when
+ libbpf is installed on system
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -87,8 +87,8 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Date:   Wed, 15 Jan 2020 15:12:52 +0100
-Message-ID: <157909757197.1192265.9826436565959764419.stgit@toke.dk>
+Date:   Wed, 15 Jan 2020 15:12:57 +0100
+Message-ID: <157909757751.1192265.13380767037659864244.stgit@toke.dk>
 In-Reply-To: <157909756858.1192265.6657542187065456112.stgit@toke.dk>
 References: <157909756858.1192265.6657542187065456112.stgit@toke.dk>
 User-Agent: StGit/0.21
@@ -102,76 +102,28 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-Fix the runqslower tool to include libbpf header files with the bpf/
-prefix, to be consistent with external users of the library. Also ensure
-that all includes of exported libbpf header files (those that are exported
-on 'make install' of the library) use bracketed includes instead of quoted.
-
-To not break the build, keep the old include path until everything has been
-changed to the new one; a subsequent patch will remove that.
+The change to use angled includes for bpf_helper_defs.h breaks compilation
+against libbpf when it is installed in the include path, since the file is
+installed in the bpf/ subdirectory of $INCLUDE_PATH. Fix this by adding the
+bpf/ prefix to the #include directive.
 
 Fixes: 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are taken from selftests dir")
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/bpf/runqslower/Makefile         |    5 +++--
- tools/bpf/runqslower/runqslower.bpf.c |    2 +-
- tools/bpf/runqslower/runqslower.c     |    4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ tools/lib/bpf/bpf_helpers.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-index fb93ce2bf2fe..3b7ae76c8ec4 100644
---- a/tools/bpf/runqslower/Makefile
-+++ b/tools/bpf/runqslower/Makefile
-@@ -5,6 +5,7 @@ LLC := llc
- LLVM_STRIP := llvm-strip
- DEFAULT_BPFTOOL := $(OUTPUT)/sbin/bpftool
- BPFTOOL ?= $(DEFAULT_BPFTOOL)
-+LIBBPF_INCLUDE := -I$(abspath ../../lib) -I$(abspath ../../lib/bpf)
- LIBBPF_SRC := $(abspath ../../lib/bpf)
- CFLAGS := -g -Wall
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index 050bb7bf5be6..fa43d649e7a2 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -2,7 +2,7 @@
+ #ifndef __BPF_HELPERS__
+ #define __BPF_HELPERS__
  
-@@ -59,13 +60,13 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
+-#include <bpf_helper_defs.h>
++#include <bpf/bpf_helper_defs.h>
  
- $(OUTPUT)/%.bpf.o: %.bpf.c $(OUTPUT)/libbpf.a | $(OUTPUT)
- 	$(call msg,BPF,$@)
--	$(Q)$(CLANG) -g -O2 -target bpf -I$(OUTPUT) -I$(LIBBPF_SRC)	      \
-+	$(Q)$(CLANG) -g -O2 -target bpf -I$(OUTPUT) $(LIBBPF_INCLUDE)	      \
- 		 -c $(filter %.c,$^) -o $@ &&				      \
- 	$(LLVM_STRIP) -g $@
- 
- $(OUTPUT)/%.o: %.c | $(OUTPUT)
- 	$(call msg,CC,$@)
--	$(Q)$(CC) $(CFLAGS) -I$(LIBBPF_SRC) -I$(OUTPUT) -c $(filter %.c,$^) -o $@
-+	$(Q)$(CC) $(CFLAGS) $(LIBBPF_INCLUDE) -I$(OUTPUT) -c $(filter %.c,$^) -o $@
- 
- $(OUTPUT):
- 	$(call msg,MKDIR,$@)
-diff --git a/tools/bpf/runqslower/runqslower.bpf.c b/tools/bpf/runqslower/runqslower.bpf.c
-index 623cce4d37f5..48a39f72fadf 100644
---- a/tools/bpf/runqslower/runqslower.bpf.c
-+++ b/tools/bpf/runqslower/runqslower.bpf.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2019 Facebook
- #include "vmlinux.h"
--#include <bpf_helpers.h>
-+#include <bpf/bpf_helpers.h>
- #include "runqslower.h"
- 
- #define TASK_RUNNING 0
-diff --git a/tools/bpf/runqslower/runqslower.c b/tools/bpf/runqslower/runqslower.c
-index 996f0e2c560e..d89715844952 100644
---- a/tools/bpf/runqslower/runqslower.c
-+++ b/tools/bpf/runqslower/runqslower.c
-@@ -6,8 +6,8 @@
- #include <string.h>
- #include <sys/resource.h>
- #include <time.h>
--#include <libbpf.h>
--#include <bpf.h>
-+#include <bpf/libbpf.h>
-+#include <bpf/bpf.h>
- #include "runqslower.h"
- #include "runqslower.skel.h"
- 
+ #define __uint(name, val) int (*name)[val]
+ #define __type(name, val) typeof(val) *name
 
