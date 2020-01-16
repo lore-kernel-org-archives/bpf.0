@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA525C33CB1
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 13:22:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2A21C33CB1
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 13:23:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7A01220661
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 13:22:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8464920661
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 13:23:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A9wQgrs8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Bgp/qYsq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729133AbgAPNWy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jan 2020 08:22:54 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:21789 "EHLO
+        id S1728909AbgAPNW1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jan 2020 08:22:27 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:57011 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726366AbgAPNWa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jan 2020 08:22:30 -0500
+        with ESMTP id S1728600AbgAPNWZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jan 2020 08:22:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579180949;
+        s=mimecast20190719; t=1579180943;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xYGxxZgSLFtlH8jcI3Nu4qoKg9CPPVXnWephfx6aPc4=;
-        b=A9wQgrs8/TEaPDSljURzycYnOsG0n6U9ZiCzUhQezl9lDEs74qXmiwSDvH7AdCQRvjIiRc
-        nNnRlkrHnZKQaHMOVN3S6BcIYQAdl+v9dxSxD/O//xYiHKLuV5LOEoG6wGR6NcEVsszAEG
-        RBPGASFMhlccUMQuACB6/sQsAvMfjbI=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-332-kr-IDM-tMCKGSNXSxOq3FQ-1; Thu, 16 Jan 2020 08:22:28 -0500
-X-MC-Unique: kr-IDM-tMCKGSNXSxOq3FQ-1
-Received: by mail-lj1-f199.google.com with SMTP id y15so5136121lji.1
-        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 05:22:28 -0800 (PST)
+        bh=L2f/3xqMCvPgjOWRi/4hBoG4txZFOAtpty8CahkBiCk=;
+        b=Bgp/qYsqcOk2AhDapd2Wap7sK6dE8tf4Sil4oO2eXOM5Kw0G6ia2JeInEazedmARE/e479
+        Ku1vOAUuGPXEEGlo4dBzbiLpbMizqVYk0VcyS6EVcIYjcEhVL2EGdq31VFFL3nBNyN5UR4
+        MQoeLKi133x46YEi0soSHr8dRiGmfuc=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-84-32SglkflOIe6nEywvsM1xQ-1; Thu, 16 Jan 2020 08:22:22 -0500
+X-MC-Unique: 32SglkflOIe6nEywvsM1xQ-1
+Received: by mail-lj1-f198.google.com with SMTP id y24so5143487ljc.19
+        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 05:22:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=xYGxxZgSLFtlH8jcI3Nu4qoKg9CPPVXnWephfx6aPc4=;
-        b=fCcZUQnS4bhnIgW8ePYge4czdIyc+9zsMEFR3w1BQNd3Yznpv82UTEIM4S1dmUOcHU
-         QO7H0rEtLSgG8vrz8SVR9BZuD3ahffoVE3ZIzUWiaXEL++bRx3gFyMEBOzHMKaeqJCal
-         1kcKrLorlpRIV4br8iUIwDhAWyPuBOw92sW4CAMEutx6c64CD06iNhXKAjxR+VVZYt8b
-         LKCzf/jKfZRX57M5sETcdIfpqsacVVMZw/UJ2G+wjdLzZBw1sWd4Q2Is/kRh7+QzeOL7
-         YlGT1eBXDG/N3dnuAQSTQTZ1LCXg74AE2Z3JmIW1TWy5l/m/ckb13PN9NGDipjHr0Qd9
-         +oyA==
-X-Gm-Message-State: APjAAAVFd+uJq7OnMQILg1px7BeB8AMCwIxPlKekOd8sQPv8QjPzEF8P
-        B7lsDoLPBb/6bGk8W5sXxIFkqkCNwHc7cX7zbdc198nnRGl8xAbedmGiRqzQTVWnpT+Cim7EVaP
-        lrYM1FAhXKVDW
-X-Received: by 2002:a2e:b52b:: with SMTP id z11mr2348632ljm.155.1579180947071;
-        Thu, 16 Jan 2020 05:22:27 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxfmdIbBJX76Kqg7+Yyy3+Jb6vlAiz8KLU+B3P9UXhqphkNxoSBonQsyrf+47I652QC3NESmg==
-X-Received: by 2002:a2e:b52b:: with SMTP id z11mr2348613ljm.155.1579180946842;
-        Thu, 16 Jan 2020 05:22:26 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id s22sm10945565ljm.41.2020.01.16.05.22.25
+        bh=L2f/3xqMCvPgjOWRi/4hBoG4txZFOAtpty8CahkBiCk=;
+        b=PmKnYXeztRqjfyD7I/ye1VNdev7nl40W8C2aS6g1TNZ1kpS3xaAnxKDtTv2djoZFgj
+         9oWgPIggvEK1WeHqv33buv+ddCpGsGpdP4lEueqULACOwAygHGz/yLwCkSeCFtjaN9j5
+         QN0U65foAaUeAXRCOQNeY3vnerWyFLq0GICYR9TSs5eslwfFc8sLfvFEaMuE61OVkGH9
+         zfoD+zr3Vlx/SwZ/POGnbwsXl+JFA1k01HW9PjnablhQV3gPavSLLCvxcolMy+BGXti6
+         JPVXlPuaNhwGQ4WCrDjdYCwC5IMJJRtfm90t/B6zJWrS3JS9A46hoQJP4dJuIPJFhmQt
+         aVGg==
+X-Gm-Message-State: APjAAAW33/HVk7wlPES2I/LZZcPSeaR5VyLJQHlY1A2cj5qFevdtaclE
+        gjn8bZVdI1SAo0vUjowpQQnT7u177Jn7nmJa2dE0vCjL6UGXkn4xs14B10MldCEhPYva5HEA1tP
+        3IaOxEjEDnpw5
+X-Received: by 2002:ac2:4909:: with SMTP id n9mr2519589lfi.21.1579180941345;
+        Thu, 16 Jan 2020 05:22:21 -0800 (PST)
+X-Google-Smtp-Source: APXvYqx7RbKsEGJIf7RVSb+wmQgd/Ns/aKeN6fJ+QOjJln4n2arZhUQqGwufoE6/BjDygelwzJbXtw==
+X-Received: by 2002:ac2:4909:: with SMTP id n9mr2519569lfi.21.1579180941159;
+        Thu, 16 Jan 2020 05:22:21 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id o12sm10794767ljj.79.2020.01.16.05.22.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2020 05:22:25 -0800 (PST)
+        Thu, 16 Jan 2020 05:22:20 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 19EEE1808D8; Thu, 16 Jan 2020 14:22:24 +0100 (CET)
-Subject: [PATCH bpf-next v3 11/11] libbpf: Fix include of bpf_helpers.h when
- libbpf is installed on system
+        id 9E2171804D7; Thu, 16 Jan 2020 14:22:19 +0100 (CET)
+Subject: [PATCH bpf-next v3 07/11] perf: Use consistent include paths for
+ libbpf
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -87,8 +87,8 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Date:   Thu, 16 Jan 2020 14:22:24 +0100
-Message-ID: <157918094400.1357254.5646603555325507261.stgit@toke.dk>
+Date:   Thu, 16 Jan 2020 14:22:19 +0100
+Message-ID: <157918093952.1357254.13512235914811343382.stgit@toke.dk>
 In-Reply-To: <157918093154.1357254.7616059374996162336.stgit@toke.dk>
 References: <157918093154.1357254.7616059374996162336.stgit@toke.dk>
 User-Agent: StGit/0.21
@@ -102,29 +102,89 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-The change to use angled includes for bpf_helper_defs.h breaks compilation
-against libbpf when it is installed in the include path, since the file is
-installed in the bpf/ subdirectory of $INCLUDE_PATH. Since we've now fixed
-the selftest Makefile to not require this anymore, revert back to
-double-quoted include so bpf_helpers.h works regardless of include path.
+Fix perf to include libbpf header files with the bpf/ prefix, to
+be consistent with external users of the library.
 
-Fixes: 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are taken from selftests dir")
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/lib/bpf/bpf_helpers.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/examples/bpf/5sec.c             |    2 +-
+ tools/perf/examples/bpf/empty.c            |    2 +-
+ tools/perf/examples/bpf/sys_enter_openat.c |    2 +-
+ tools/perf/include/bpf/pid_filter.h        |    2 +-
+ tools/perf/include/bpf/stdio.h             |    2 +-
+ tools/perf/include/bpf/unistd.h            |    2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 050bb7bf5be6..f69cc208778a 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -2,7 +2,7 @@
- #ifndef __BPF_HELPERS__
- #define __BPF_HELPERS__
+diff --git a/tools/perf/examples/bpf/5sec.c b/tools/perf/examples/bpf/5sec.c
+index b9c203219691..49f4f84da485 100644
+--- a/tools/perf/examples/bpf/5sec.c
++++ b/tools/perf/examples/bpf/5sec.c
+@@ -39,7 +39,7 @@
+    Copyright (C) 2018 Red Hat, Inc., Arnaldo Carvalho de Melo <acme@redhat.com>
+ */
  
--#include <bpf_helper_defs.h>
-+#include "bpf_helper_defs.h"
+-#include <bpf.h>
++#include <bpf/bpf.h>
  
- #define __uint(name, val) int (*name)[val]
- #define __type(name, val) typeof(val) *name
+ int probe(hrtimer_nanosleep, rqtp->tv_sec)(void *ctx, int err, long sec)
+ {
+diff --git a/tools/perf/examples/bpf/empty.c b/tools/perf/examples/bpf/empty.c
+index 3776d26db9e7..7d7fb0c9fe76 100644
+--- a/tools/perf/examples/bpf/empty.c
++++ b/tools/perf/examples/bpf/empty.c
+@@ -1,3 +1,3 @@
+-#include <bpf.h>
++#include <bpf/bpf.h>
+ 
+ license(GPL);
+diff --git a/tools/perf/examples/bpf/sys_enter_openat.c b/tools/perf/examples/bpf/sys_enter_openat.c
+index 9cd124b09392..c4481c390d23 100644
+--- a/tools/perf/examples/bpf/sys_enter_openat.c
++++ b/tools/perf/examples/bpf/sys_enter_openat.c
+@@ -14,7 +14,7 @@
+  * the return value.
+  */
+ 
+-#include <bpf.h>
++#include <bpf/bpf.h>
+ 
+ struct syscall_enter_openat_args {
+ 	unsigned long long unused;
+diff --git a/tools/perf/include/bpf/pid_filter.h b/tools/perf/include/bpf/pid_filter.h
+index 6e61c4bdf548..607189a315b2 100644
+--- a/tools/perf/include/bpf/pid_filter.h
++++ b/tools/perf/include/bpf/pid_filter.h
+@@ -3,7 +3,7 @@
+ #ifndef _PERF_BPF_PID_FILTER_
+ #define _PERF_BPF_PID_FILTER_
+ 
+-#include <bpf.h>
++#include <bpf/bpf.h>
+ 
+ #define pid_filter(name) pid_map(name, bool)
+ 
+diff --git a/tools/perf/include/bpf/stdio.h b/tools/perf/include/bpf/stdio.h
+index 316af5b2ff35..7ca6fa5463ee 100644
+--- a/tools/perf/include/bpf/stdio.h
++++ b/tools/perf/include/bpf/stdio.h
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+-#include <bpf.h>
++#include <bpf/bpf.h>
+ 
+ struct bpf_map SEC("maps") __bpf_stdout__ = {
+        .type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
+diff --git a/tools/perf/include/bpf/unistd.h b/tools/perf/include/bpf/unistd.h
+index ca7877f9a976..d1a35b6c649d 100644
+--- a/tools/perf/include/bpf/unistd.h
++++ b/tools/perf/include/bpf/unistd.h
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: LGPL-2.1
+ 
+-#include <bpf.h>
++#include <bpf/bpf.h>
+ 
+ static int (*bpf_get_current_pid_tgid)(void) = (void *)BPF_FUNC_get_current_pid_tgid;
+ 
 
