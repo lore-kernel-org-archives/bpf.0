@@ -2,68 +2,66 @@ Return-Path: <SRS0=iaO9=3F=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B098C33CB6
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 13:23:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01102C33CB8
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 13:23:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 301F020661
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 13:23:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC3732081E
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 13:23:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JPk1IALQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HUdirlk5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726903AbgAPNXI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jan 2020 08:23:08 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:44921 "EHLO
+        id S1727003AbgAPNXP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jan 2020 08:23:15 -0500
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:20710 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726726AbgAPNWX (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 16 Jan 2020 08:22:23 -0500
+        by vger.kernel.org with ESMTP id S1726988AbgAPNWV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 16 Jan 2020 08:22:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579180941;
+        s=mimecast20190719; t=1579180939;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dddkGyog6/ukNzxfITycfkaFpImnWg5YZpf57HIco9g=;
-        b=JPk1IALQ4iON3jTpKc9aPujw/uuB2qQ8jMmIK16RC4Eyj7Ikuz9rVd1wnOGl7ARyltgLIV
-        sS4ErMtapyDa8+scEBhfvHIldGUR5ezEKWkoOgrO91UVTwMfGS4STlyfmiLpo6W173+XgD
-        N8vS64q7iAuSEyHseqvj+wUeztQnypg=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AMsc5S0xMcgjEW2qrxehUY66QWA0j0Sqb1iZ7Fit5zc=;
+        b=HUdirlk5iO5ukMRg+bw8aldU0vpvUov/OlC+OKeFlOO72NIfzfOJw5oNcVxU5o/ca91dqa
+        fvvNTzA+BIhLeK2CPTy+JZ6NM5utayIaMEiVnrjupMonje7XzRvgFGFR7v6/lOS9Y1l8pp
+        2IcbydNdEwZWJ533dMmd1JJNwFI3hxQ=
 Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
  [209.85.208.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-146-RkdbxGaBOvqRK9zGZ-ThUg-1; Thu, 16 Jan 2020 08:22:20 -0500
-X-MC-Unique: RkdbxGaBOvqRK9zGZ-ThUg-1
-Received: by mail-lj1-f200.google.com with SMTP id v1so5126868lja.21
-        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 05:22:20 -0800 (PST)
+ us-mta-211-GXJfQZEkPM-FGqYlC0glNg-1; Thu, 16 Jan 2020 08:22:16 -0500
+X-MC-Unique: GXJfQZEkPM-FGqYlC0glNg-1
+Received: by mail-lj1-f200.google.com with SMTP id r14so5126288ljc.18
+        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 05:22:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=dddkGyog6/ukNzxfITycfkaFpImnWg5YZpf57HIco9g=;
-        b=nytu68jClcWMMYU+0aSdxQgJBOeOGUdw6Y+E9Nnbpn6rp722tHbsY9HF5bsLzBLVmn
-         xYemlIdxs0+7eoDpuKZIYine8izHvVTxS8Qg3Ey13H0OaRzoANjL3jdHbpdVrq3KeSnL
-         +TOAru+WIueS6S4oHY809iORUtqcO58lRHnilKoGoqdtLc9QiqRDW5uGl5b5thiRndoh
-         HC2Fe3GW/AIQxtPr2ql2HeMZ6SfgmPhtKdwvWtUimiZpLJdlqEiOGMhWVGhYnB4KH+2L
-         VbhgEQ/+APvGWmVEvZ2QlH0n2cdhwM0xZXcrkiHUA74xGbaNkeELFxCBeb2BYQLEs10i
-         mAFA==
-X-Gm-Message-State: APjAAAX54nAOsEnm/cAvHzZjPPdxAZiE/17Kzq8jTRUNGK4DixVmngzw
-        YdlwRxDztrycC4qPhQ5omkGIW3W1KlLZCBovwGOlWpq2eqzZQVrY1erZcqBZ67q0z3cHvJCMggK
-        bQI2Qal2OTE1K
-X-Received: by 2002:a19:3f51:: with SMTP id m78mr2377233lfa.70.1579180938885;
-        Thu, 16 Jan 2020 05:22:18 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxHM8ojNS2+z7RRp2C22+OxchWf4eKxJheokOyRKS33/7g/+IOIFCtNATZQpBdA7df3Cna3AQ==
-X-Received: by 2002:a19:3f51:: with SMTP id m78mr2377225lfa.70.1579180938699;
-        Thu, 16 Jan 2020 05:22:18 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id 140sm10713621lfk.78.2020.01.16.05.22.17
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=AMsc5S0xMcgjEW2qrxehUY66QWA0j0Sqb1iZ7Fit5zc=;
+        b=GDGDwDQZfRXOGhnqdKrgi8JQuRRVvIxaJnKFhGS4piC9J4/L39zb5NyzMCW2/xGb1f
+         oSrUUY8Qr/7hs2HccmK/sEnr24L9Sq9T3KI4dGMFFrJBtztQbmYksMf6L5cmxfHA0EtR
+         jhp3LYX3fmADEIxlqjkWPyQ8T6G9/cmL/IRXCCYG7Zi1DpXkhvZZC/2QvdOLJbVtB4C6
+         4CPrJoWrJQwseSPAZ5UgAFEvfpF2WgjGXSZcywICt7T9da7ZZTpb4+QCMXoT2XdGX/Nf
+         b/HsQUUdOIpBO7iIExDIqACDwUrTIFji2mCfsqgGOJSkQbkW+Z8A1bMaDjUhD7basJM6
+         13DA==
+X-Gm-Message-State: APjAAAW3mNrBzAD1gVN3R0UZ3p/nm7koRk8gBFdaURF0l0dYlaXa2y9t
+        5aArzjXgf02iqtj6+cL1G4yYok3DLJnYO39dVMxibbjA0hTCSKkGWNONg9adu8LQ+Z62JirbKS2
+        bsluadCI5Eb6/
+X-Received: by 2002:ac2:48bc:: with SMTP id u28mr2387999lfg.81.1579180935151;
+        Thu, 16 Jan 2020 05:22:15 -0800 (PST)
+X-Google-Smtp-Source: APXvYqy/r7ul8Drk3LH16UJermfh4geQBef4j9l/0V2jC34JFyVg/O9+pck3JO852Ih90Lwff9tEQQ==
+X-Received: by 2002:ac2:48bc:: with SMTP id u28mr2387961lfg.81.1579180934743;
+        Thu, 16 Jan 2020 05:22:14 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id r12sm10668431ljh.105.2020.01.16.05.22.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2020 05:22:18 -0800 (PST)
+        Thu, 16 Jan 2020 05:22:13 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 39AED1804D7; Thu, 16 Jan 2020 14:22:16 +0100 (CET)
-Subject: [PATCH bpf-next v3 04/11] tools/runqslower: Use consistent include
- paths for libbpf
+        id C0B6F1804D6; Thu, 16 Jan 2020 14:22:11 +0100 (CET)
+Subject: [PATCH bpf-next v3 00/11] tools: Use consistent libbpf include paths
+ everywhere
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -87,10 +85,8 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Date:   Thu, 16 Jan 2020 14:22:16 +0100
-Message-ID: <157918093613.1357254.10230277763921623892.stgit@toke.dk>
-In-Reply-To: <157918093154.1357254.7616059374996162336.stgit@toke.dk>
-References: <157918093154.1357254.7616059374996162336.stgit@toke.dk>
+Date:   Thu, 16 Jan 2020 14:22:11 +0100
+Message-ID: <157918093154.1357254.7616059374996162336.stgit@toke.dk>
 User-Agent: StGit/0.21
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -100,78 +96,308 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+The recent commit 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are
+taken from selftests dir") broke compilation against libbpf if it is installed
+on the system, and $INCLUDEDIR/bpf is not in the include path.
 
-Fix the runqslower tool to include libbpf header files with the bpf/
-prefix, to be consistent with external users of the library. Also ensure
-that all includes of exported libbpf header files (those that are exported
-on 'make install' of the library) use bracketed includes instead of quoted.
+Since having the bpf/ subdir of $INCLUDEDIR in the include path has never been a
+requirement for building against libbpf before, this needs to be fixed. One
+option is to just revert the offending commit and figure out a different way to
+achieve what it aims for. However, this series takes a different approach:
+Changing all in-tree users of libbpf to consistently use a bpf/ prefix in
+#include directives for header files from libbpf.
 
-To not break the build, keep the old include path until everything has been
-changed to the new one; a subsequent patch will remove that.
+This turns out to be a somewhat invasive change in the number of files touched;
+however, the actual changes to files are fairly trivial (most of them are simply
+made with 'sed'). Also, this approach has the advantage that it makes external
+and internal users consistent with each other, and ensures no future changes
+breaks things in the same way as the commit referenced above.
 
-Fixes: 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are taken from selftests dir")
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+The series is split to make the change for one tool subdir at a time, while
+trying not to break the build along the way. It is structured like this:
+
+- Patch 1-3: Trivial fixes to Makefiles for issues I discovered while changing
+  the include paths.
+
+- Patch 4-8: Change the include directives to use the bpf/ prefix, and updates
+  Makefiles to make sure tools/lib/ is part of the include path, but without
+  removing tools/lib/bpf
+
+- Patch 9-10: Remove tools/lib/bpf from include paths to make sure we don't
+  inadvertently re-introduce includes without the bpf/ prefix.
+
+- Patch 11: Change the bpf_helpers.h file in libbpf itself back to using a quoted
+  include for bpf_helper_defs.h (the original source of breakage).
+
+Changelog:
+
+v3:
+  - Don't add the kernel build dir to the runqslower Makefile, pass it in from
+    selftests instead.
+  - Use libbpf's 'make install_headers' in selftests instead of trying to
+    generate bpf_helper_defs.h in-place (to also work on read-only filesystems).
+  - Use a scratch builddir for both libbpf and bpftool when building in selftests.
+  - Revert bpf_helpers.h to quoted include instead of angled include with a bpf/
+    prefix.
+  - Fix a few style nits from Andrii
+
+v2:
+  - Do a full cleanup of libbpf includes instead of just changing the
+    bpf_helper_defs.h include.
+
 ---
- tools/bpf/runqslower/Makefile         |    5 +++--
- tools/bpf/runqslower/runqslower.bpf.c |    2 +-
- tools/bpf/runqslower/runqslower.c     |    4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-index 89fb7cd30f1a..c0512b830805 100644
---- a/tools/bpf/runqslower/Makefile
-+++ b/tools/bpf/runqslower/Makefile
-@@ -5,6 +5,7 @@ LLC := llc
- LLVM_STRIP := llvm-strip
- DEFAULT_BPFTOOL := $(OUTPUT)/sbin/bpftool
- BPFTOOL ?= $(DEFAULT_BPFTOOL)
-+LIBBPF_INCLUDE := -I$(abspath ../../lib) -I$(abspath ../../lib/bpf)
- LIBBPF_SRC := $(abspath ../../lib/bpf)
- CFLAGS := -g -Wall
- 
-@@ -57,13 +58,13 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
- 
- $(OUTPUT)/%.bpf.o: %.bpf.c $(OUTPUT)/libbpf.a | $(OUTPUT)
- 	$(call msg,BPF,$@)
--	$(Q)$(CLANG) -g -O2 -target bpf -I$(OUTPUT) -I$(LIBBPF_SRC)	      \
-+	$(Q)$(CLANG) -g -O2 -target bpf -I$(OUTPUT) $(LIBBPF_INCLUDE)	      \
- 		 -c $(filter %.c,$^) -o $@ &&				      \
- 	$(LLVM_STRIP) -g $@
- 
- $(OUTPUT)/%.o: %.c | $(OUTPUT)
- 	$(call msg,CC,$@)
--	$(Q)$(CC) $(CFLAGS) -I$(LIBBPF_SRC) -I$(OUTPUT) -c $(filter %.c,$^) -o $@
-+	$(Q)$(CC) $(CFLAGS) $(LIBBPF_INCLUDE) -I$(OUTPUT) -c $(filter %.c,$^) -o $@
- 
- $(OUTPUT):
- 	$(call msg,MKDIR,$@)
-diff --git a/tools/bpf/runqslower/runqslower.bpf.c b/tools/bpf/runqslower/runqslower.bpf.c
-index 623cce4d37f5..48a39f72fadf 100644
---- a/tools/bpf/runqslower/runqslower.bpf.c
-+++ b/tools/bpf/runqslower/runqslower.bpf.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2019 Facebook
- #include "vmlinux.h"
--#include <bpf_helpers.h>
-+#include <bpf/bpf_helpers.h>
- #include "runqslower.h"
- 
- #define TASK_RUNNING 0
-diff --git a/tools/bpf/runqslower/runqslower.c b/tools/bpf/runqslower/runqslower.c
-index 996f0e2c560e..d89715844952 100644
---- a/tools/bpf/runqslower/runqslower.c
-+++ b/tools/bpf/runqslower/runqslower.c
-@@ -6,8 +6,8 @@
- #include <string.h>
- #include <sys/resource.h>
- #include <time.h>
--#include <libbpf.h>
--#include <bpf.h>
-+#include <bpf/libbpf.h>
-+#include <bpf/bpf.h>
- #include "runqslower.h"
- #include "runqslower.skel.h"
- 
+Toke Høiland-Jørgensen (11):
+      samples/bpf: Don't try to remove user's homedir on clean
+      tools/bpf/runqslower: Fix override option for VMLINUX_BTF
+      selftests: Pass VMLINUX_BTF to runqslower Makefile
+      tools/runqslower: Use consistent include paths for libbpf
+      selftests: Use consistent include paths for libbpf
+      bpftool: Use consistent include paths for libbpf
+      perf: Use consistent include paths for libbpf
+      samples/bpf: Use consistent include paths for libbpf
+      selftests: Remove tools/lib/bpf from include path
+      tools/runqslower: Remove tools/lib/bpf from include path
+      libbpf: Fix include of bpf_helpers.h when libbpf is installed on system
+
+
+ samples/bpf/Makefile                               |    5 +-
+ samples/bpf/cpustat_kern.c                         |    2 -
+ samples/bpf/fds_example.c                          |    2 -
+ samples/bpf/hbm.c                                  |    4 +-
+ samples/bpf/hbm_kern.h                             |    4 +-
+ samples/bpf/ibumad_kern.c                          |    2 -
+ samples/bpf/ibumad_user.c                          |    2 -
+ samples/bpf/lathist_kern.c                         |    2 -
+ samples/bpf/lwt_len_hist_kern.c                    |    2 -
+ samples/bpf/map_perf_test_kern.c                   |    4 +-
+ samples/bpf/offwaketime_kern.c                     |    4 +-
+ samples/bpf/offwaketime_user.c                     |    2 -
+ samples/bpf/parse_ldabs.c                          |    2 -
+ samples/bpf/parse_simple.c                         |    2 -
+ samples/bpf/parse_varlen.c                         |    2 -
+ samples/bpf/sampleip_kern.c                        |    4 +-
+ samples/bpf/sampleip_user.c                        |    2 -
+ samples/bpf/sock_flags_kern.c                      |    2 -
+ samples/bpf/sockex1_kern.c                         |    2 -
+ samples/bpf/sockex1_user.c                         |    2 -
+ samples/bpf/sockex2_kern.c                         |    2 -
+ samples/bpf/sockex2_user.c                         |    2 -
+ samples/bpf/sockex3_kern.c                         |    2 -
+ samples/bpf/spintest_kern.c                        |    4 +-
+ samples/bpf/spintest_user.c                        |    2 -
+ samples/bpf/syscall_tp_kern.c                      |    2 -
+ samples/bpf/task_fd_query_kern.c                   |    2 -
+ samples/bpf/task_fd_query_user.c                   |    2 -
+ samples/bpf/tc_l2_redirect_kern.c                  |    2 -
+ samples/bpf/tcbpf1_kern.c                          |    2 -
+ samples/bpf/tcp_basertt_kern.c                     |    4 +-
+ samples/bpf/tcp_bufs_kern.c                        |    4 +-
+ samples/bpf/tcp_clamp_kern.c                       |    4 +-
+ samples/bpf/tcp_cong_kern.c                        |    4 +-
+ samples/bpf/tcp_dumpstats_kern.c                   |    4 +-
+ samples/bpf/tcp_iw_kern.c                          |    4 +-
+ samples/bpf/tcp_rwnd_kern.c                        |    4 +-
+ samples/bpf/tcp_synrto_kern.c                      |    4 +-
+ samples/bpf/tcp_tos_reflect_kern.c                 |    4 +-
+ samples/bpf/test_cgrp2_tc_kern.c                   |    2 -
+ samples/bpf/test_current_task_under_cgroup_kern.c  |    2 -
+ samples/bpf/test_lwt_bpf.c                         |    2 -
+ samples/bpf/test_map_in_map_kern.c                 |    4 +-
+ samples/bpf/test_overhead_kprobe_kern.c            |    4 +-
+ samples/bpf/test_overhead_raw_tp_kern.c            |    2 -
+ samples/bpf/test_overhead_tp_kern.c                |    2 -
+ samples/bpf/test_probe_write_user_kern.c           |    4 +-
+ samples/bpf/trace_event_kern.c                     |    4 +-
+ samples/bpf/trace_event_user.c                     |    2 -
+ samples/bpf/trace_output_kern.c                    |    2 -
+ samples/bpf/trace_output_user.c                    |    2 -
+ samples/bpf/tracex1_kern.c                         |    4 +-
+ samples/bpf/tracex2_kern.c                         |    4 +-
+ samples/bpf/tracex3_kern.c                         |    4 +-
+ samples/bpf/tracex4_kern.c                         |    4 +-
+ samples/bpf/tracex5_kern.c                         |    4 +-
+ samples/bpf/tracex6_kern.c                         |    2 -
+ samples/bpf/tracex7_kern.c                         |    2 -
+ samples/bpf/xdp1_kern.c                            |    2 -
+ samples/bpf/xdp1_user.c                            |    4 +-
+ samples/bpf/xdp2_kern.c                            |    2 -
+ samples/bpf/xdp2skb_meta_kern.c                    |    2 -
+ samples/bpf/xdp_adjust_tail_kern.c                 |    2 -
+ samples/bpf/xdp_adjust_tail_user.c                 |    4 +-
+ samples/bpf/xdp_fwd_kern.c                         |    2 -
+ samples/bpf/xdp_fwd_user.c                         |    2 -
+ samples/bpf/xdp_monitor_kern.c                     |    2 -
+ samples/bpf/xdp_redirect_cpu_kern.c                |    2 -
+ samples/bpf/xdp_redirect_cpu_user.c                |    2 -
+ samples/bpf/xdp_redirect_kern.c                    |    2 -
+ samples/bpf/xdp_redirect_map_kern.c                |    2 -
+ samples/bpf/xdp_redirect_map_user.c                |    2 -
+ samples/bpf/xdp_redirect_user.c                    |    2 -
+ samples/bpf/xdp_router_ipv4_kern.c                 |    2 -
+ samples/bpf/xdp_router_ipv4_user.c                 |    2 -
+ samples/bpf/xdp_rxq_info_kern.c                    |    2 -
+ samples/bpf/xdp_rxq_info_user.c                    |    4 +-
+ samples/bpf/xdp_sample_pkts_kern.c                 |    2 -
+ samples/bpf/xdp_sample_pkts_user.c                 |    2 -
+ samples/bpf/xdp_tx_iptunnel_kern.c                 |    2 -
+ samples/bpf/xdp_tx_iptunnel_user.c                 |    2 -
+ samples/bpf/xdpsock_kern.c                         |    2 -
+ samples/bpf/xdpsock_user.c                         |    6 +-
+ tools/bpf/bpftool/Documentation/bpftool-gen.rst    |    2 -
+ tools/bpf/bpftool/Makefile                         |    2 -
+ tools/bpf/bpftool/btf.c                            |    8 ++-
+ tools/bpf/bpftool/btf_dumper.c                     |    2 -
+ tools/bpf/bpftool/cgroup.c                         |    2 -
+ tools/bpf/bpftool/common.c                         |    4 +-
+ tools/bpf/bpftool/feature.c                        |    4 +-
+ tools/bpf/bpftool/gen.c                            |   10 ++--
+ tools/bpf/bpftool/jit_disasm.c                     |    2 -
+ tools/bpf/bpftool/main.c                           |    4 +-
+ tools/bpf/bpftool/map.c                            |    4 +-
+ tools/bpf/bpftool/map_perf_ring.c                  |    4 +-
+ tools/bpf/bpftool/net.c                            |    8 ++-
+ tools/bpf/bpftool/netlink_dumper.c                 |    4 +-
+ tools/bpf/bpftool/perf.c                           |    2 -
+ tools/bpf/bpftool/prog.c                           |    6 +-
+ tools/bpf/bpftool/xlated_dumper.c                  |    2 -
+ tools/bpf/runqslower/Makefile                      |   23 +++++----
+ tools/bpf/runqslower/runqslower.bpf.c              |    2 -
+ tools/bpf/runqslower/runqslower.c                  |    4 +-
+ tools/lib/bpf/bpf_helpers.h                        |    2 -
+ tools/perf/examples/bpf/5sec.c                     |    2 -
+ tools/perf/examples/bpf/empty.c                    |    2 -
+ tools/perf/examples/bpf/sys_enter_openat.c         |    2 -
+ tools/perf/include/bpf/pid_filter.h                |    2 -
+ tools/perf/include/bpf/stdio.h                     |    2 -
+ tools/perf/include/bpf/unistd.h                    |    2 -
+ tools/testing/selftests/bpf/.gitignore             |    1 
+ tools/testing/selftests/bpf/Makefile               |   52 ++++++++++++--------
+ tools/testing/selftests/bpf/bpf_tcp_helpers.h      |    4 +-
+ tools/testing/selftests/bpf/bpf_trace_helpers.h    |    2 -
+ tools/testing/selftests/bpf/bpf_util.h             |    2 -
+ tools/testing/selftests/bpf/prog_tests/cpu_mask.c  |    2 -
+ .../testing/selftests/bpf/prog_tests/perf_buffer.c |    2 -
+ tools/testing/selftests/bpf/progs/bpf_dctcp.c      |    2 -
+ tools/testing/selftests/bpf/progs/bpf_flow.c       |    4 +-
+ tools/testing/selftests/bpf/progs/connect4_prog.c  |    4 +-
+ tools/testing/selftests/bpf/progs/connect6_prog.c  |    4 +-
+ tools/testing/selftests/bpf/progs/dev_cgroup.c     |    2 -
+ tools/testing/selftests/bpf/progs/fentry_test.c    |    2 -
+ tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c  |    2 -
+ .../selftests/bpf/progs/fexit_bpf2bpf_simple.c     |    2 -
+ tools/testing/selftests/bpf/progs/fexit_test.c     |    2 -
+ .../selftests/bpf/progs/get_cgroup_id_kern.c       |    2 -
+ tools/testing/selftests/bpf/progs/kfree_skb.c      |    4 +-
+ tools/testing/selftests/bpf/progs/loop1.c          |    4 +-
+ tools/testing/selftests/bpf/progs/loop2.c          |    4 +-
+ tools/testing/selftests/bpf/progs/loop3.c          |    4 +-
+ tools/testing/selftests/bpf/progs/loop4.c          |    2 -
+ tools/testing/selftests/bpf/progs/loop5.c          |    2 -
+ tools/testing/selftests/bpf/progs/netcnt_prog.c    |    2 -
+ tools/testing/selftests/bpf/progs/pyperf.h         |    2 -
+ .../testing/selftests/bpf/progs/sample_map_ret0.c  |    2 -
+ tools/testing/selftests/bpf/progs/sendmsg4_prog.c  |    4 +-
+ tools/testing/selftests/bpf/progs/sendmsg6_prog.c  |    4 +-
+ .../selftests/bpf/progs/socket_cookie_prog.c       |    4 +-
+ .../selftests/bpf/progs/sockmap_parse_prog.c       |    4 +-
+ .../selftests/bpf/progs/sockmap_tcp_msg_prog.c     |    4 +-
+ .../selftests/bpf/progs/sockmap_verdict_prog.c     |    4 +-
+ .../testing/selftests/bpf/progs/sockopt_inherit.c  |    2 -
+ tools/testing/selftests/bpf/progs/sockopt_multi.c  |    2 -
+ tools/testing/selftests/bpf/progs/sockopt_sk.c     |    2 -
+ tools/testing/selftests/bpf/progs/strobemeta.h     |    2 -
+ tools/testing/selftests/bpf/progs/tailcall1.c      |    2 -
+ tools/testing/selftests/bpf/progs/tailcall2.c      |    2 -
+ tools/testing/selftests/bpf/progs/tailcall3.c      |    2 -
+ tools/testing/selftests/bpf/progs/tailcall4.c      |    2 -
+ tools/testing/selftests/bpf/progs/tailcall5.c      |    2 -
+ tools/testing/selftests/bpf/progs/tcp_rtt.c        |    2 -
+ .../testing/selftests/bpf/progs/test_adjust_tail.c |    2 -
+ .../selftests/bpf/progs/test_attach_probe.c        |    2 -
+ tools/testing/selftests/bpf/progs/test_btf_haskv.c |    2 -
+ tools/testing/selftests/bpf/progs/test_btf_newkv.c |    2 -
+ tools/testing/selftests/bpf/progs/test_btf_nokv.c  |    2 -
+ .../testing/selftests/bpf/progs/test_core_extern.c |    2 -
+ .../selftests/bpf/progs/test_core_reloc_arrays.c   |    4 +-
+ .../bpf/progs/test_core_reloc_bitfields_direct.c   |    4 +-
+ .../bpf/progs/test_core_reloc_bitfields_probed.c   |    4 +-
+ .../bpf/progs/test_core_reloc_existence.c          |    4 +-
+ .../selftests/bpf/progs/test_core_reloc_flavors.c  |    4 +-
+ .../selftests/bpf/progs/test_core_reloc_ints.c     |    4 +-
+ .../selftests/bpf/progs/test_core_reloc_kernel.c   |    4 +-
+ .../selftests/bpf/progs/test_core_reloc_misc.c     |    4 +-
+ .../selftests/bpf/progs/test_core_reloc_mods.c     |    4 +-
+ .../selftests/bpf/progs/test_core_reloc_nesting.c  |    4 +-
+ .../bpf/progs/test_core_reloc_primitives.c         |    4 +-
+ .../bpf/progs/test_core_reloc_ptr_as_arr.c         |    4 +-
+ .../selftests/bpf/progs/test_core_reloc_size.c     |    4 +-
+ .../selftests/bpf/progs/test_get_stack_rawtp.c     |    2 -
+ .../testing/selftests/bpf/progs/test_global_data.c |    2 -
+ .../selftests/bpf/progs/test_global_func1.c        |    2 -
+ .../selftests/bpf/progs/test_global_func3.c        |    2 -
+ .../selftests/bpf/progs/test_global_func5.c        |    2 -
+ .../selftests/bpf/progs/test_global_func6.c        |    2 -
+ .../selftests/bpf/progs/test_global_func7.c        |    2 -
+ tools/testing/selftests/bpf/progs/test_l4lb.c      |    4 +-
+ .../selftests/bpf/progs/test_l4lb_noinline.c       |    4 +-
+ .../selftests/bpf/progs/test_lirc_mode2_kern.c     |    2 -
+ .../selftests/bpf/progs/test_lwt_ip_encap.c        |    4 +-
+ .../selftests/bpf/progs/test_lwt_seg6local.c       |    4 +-
+ .../testing/selftests/bpf/progs/test_map_in_map.c  |    2 -
+ tools/testing/selftests/bpf/progs/test_map_lock.c  |    2 -
+ tools/testing/selftests/bpf/progs/test_mmap.c      |    2 -
+ tools/testing/selftests/bpf/progs/test_obj_id.c    |    2 -
+ tools/testing/selftests/bpf/progs/test_overhead.c  |    4 +-
+ .../testing/selftests/bpf/progs/test_perf_buffer.c |    2 -
+ tools/testing/selftests/bpf/progs/test_pinning.c   |    2 -
+ .../selftests/bpf/progs/test_pinning_invalid.c     |    2 -
+ .../testing/selftests/bpf/progs/test_pkt_access.c  |    4 +-
+ .../selftests/bpf/progs/test_pkt_md_access.c       |    2 -
+ .../testing/selftests/bpf/progs/test_probe_user.c  |    4 +-
+ .../selftests/bpf/progs/test_queue_stack_map.h     |    2 -
+ .../testing/selftests/bpf/progs/test_rdonly_maps.c |    2 -
+ tools/testing/selftests/bpf/progs/test_seg6_loop.c |    4 +-
+ .../bpf/progs/test_select_reuseport_kern.c         |    4 +-
+ .../selftests/bpf/progs/test_send_signal_kern.c    |    2 -
+ .../selftests/bpf/progs/test_sk_lookup_kern.c      |    4 +-
+ .../selftests/bpf/progs/test_skb_cgroup_id_kern.c  |    2 -
+ tools/testing/selftests/bpf/progs/test_skb_ctx.c   |    2 -
+ tools/testing/selftests/bpf/progs/test_skeleton.c  |    2 -
+ .../selftests/bpf/progs/test_sock_fields_kern.c    |    4 +-
+ tools/testing/selftests/bpf/progs/test_spin_lock.c |    2 -
+ .../selftests/bpf/progs/test_stacktrace_build_id.c |    2 -
+ .../selftests/bpf/progs/test_stacktrace_map.c      |    2 -
+ .../selftests/bpf/progs/test_sysctl_loop1.c        |    2 -
+ .../selftests/bpf/progs/test_sysctl_loop2.c        |    2 -
+ .../testing/selftests/bpf/progs/test_sysctl_prog.c |    2 -
+ tools/testing/selftests/bpf/progs/test_tc_edt.c    |    4 +-
+ tools/testing/selftests/bpf/progs/test_tc_tunnel.c |    4 +-
+ .../bpf/progs/test_tcp_check_syncookie_kern.c      |    4 +-
+ .../testing/selftests/bpf/progs/test_tcp_estats.c  |    2 -
+ .../testing/selftests/bpf/progs/test_tcpbpf_kern.c |    4 +-
+ .../selftests/bpf/progs/test_tcpnotify_kern.c      |    4 +-
+ .../testing/selftests/bpf/progs/test_tracepoint.c  |    2 -
+ .../testing/selftests/bpf/progs/test_tunnel_kern.c |    4 +-
+ .../selftests/bpf/progs/test_verif_scale1.c        |    2 -
+ .../selftests/bpf/progs/test_verif_scale2.c        |    2 -
+ .../selftests/bpf/progs/test_verif_scale3.c        |    2 -
+ tools/testing/selftests/bpf/progs/test_xdp.c       |    4 +-
+ tools/testing/selftests/bpf/progs/test_xdp_loop.c  |    4 +-
+ tools/testing/selftests/bpf/progs/test_xdp_meta.c  |    2 -
+ .../selftests/bpf/progs/test_xdp_noinline.c        |    4 +-
+ .../selftests/bpf/progs/test_xdp_redirect.c        |    2 -
+ tools/testing/selftests/bpf/progs/test_xdp_vlan.c  |    4 +-
+ tools/testing/selftests/bpf/progs/xdp_dummy.c      |    2 -
+ .../testing/selftests/bpf/progs/xdp_redirect_map.c |    2 -
+ tools/testing/selftests/bpf/progs/xdp_tx.c         |    2 -
+ tools/testing/selftests/bpf/progs/xdping_kern.c    |    4 +-
+ tools/testing/selftests/bpf/test_cpp.cpp           |    6 +-
+ tools/testing/selftests/bpf/test_hashmap.c         |    2 -
+ tools/testing/selftests/bpf/test_progs.h           |    2 -
+ tools/testing/selftests/bpf/test_sock.c            |    2 -
+ tools/testing/selftests/bpf/test_sockmap_kern.h    |    4 +-
+ tools/testing/selftests/bpf/test_sysctl.c          |    2 -
+ tools/testing/selftests/bpf/trace_helpers.h        |    2 -
+ 238 files changed, 381 insertions(+), 368 deletions(-)
 
