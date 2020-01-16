@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C568DC33CB7
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 18:45:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 369CBC33CAF
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 18:46:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9AB2D206E6
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 18:45:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 092C320661
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 18:46:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579200339;
-	bh=UjDRz+2jQ+4DGwwvu1ypOz4jh6xd6EedOG9bfUkItyg=;
+	s=default; t=1579200383;
+	bh=GxpxSfn4Aog9jObkkwzJClYhMneNU3fTJqn+IXbCiGo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=mFqGxbxyhqEgX5VcK5nf2N+xjNf//Xp5gCly9Rjyy5CW0V+S5QOTQpNbfR2meDpik
-	 PZDSIDi/VQZ9I1amUBQnJEyYHDSNe8Z7pkVVij73bGiuNI00DB6Z4SOeN71avjg0Yd
-	 M/651I51E6TKOM0SJ+P6lnCuGtgPDcIQ5wYaKOuw=
+	b=lcfvLjDzjI1CXLgZY5tVLwqnLoq46wLLN5E2+AEz7JuqsXsHPMrfApuDAM4zrJuVf
+	 qbVnfN/21yfsKhY8ks1tnMZBhJs0Qy6bMcYpTvbu1Zl22qJY7PWIp179HFnMHnw/sm
+	 6uDavoL76hSwHOnu5ZZEmw1yraAgYv0HQaGYrx/U=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729876AbgAPSpi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jan 2020 13:45:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49164 "EHLO mail.kernel.org"
+        id S2389874AbgAPRKX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jan 2020 12:10:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48412 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729290AbgAPRKh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:10:37 -0500
+        id S2389911AbgAPRKX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:10:23 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 45CD42468B;
-        Thu, 16 Jan 2020 17:10:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3B356205F4;
+        Thu, 16 Jan 2020 17:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194637;
-        bh=UjDRz+2jQ+4DGwwvu1ypOz4jh6xd6EedOG9bfUkItyg=;
+        s=default; t=1579194622;
+        bh=GxpxSfn4Aog9jObkkwzJClYhMneNU3fTJqn+IXbCiGo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yECtWdrdobRuWl9m/oCXb3Y8K7z7SQK5FKGcOHjXHOBy35uQ2e8vS6DICpiFp9MZH
-         FSSiGD64YnbtsxIirrHSddkJI5yREx8g7Y/rBROmt76qh6JHPsGqbs6EiMwPItJokd
-         WoCCvtEihKsdmI4ixgEJxTH3lXfKuSRm3EPYqZRs=
+        b=Wyz+O5Rwk/jbC8uaAyi+p+7sltSdczBBFyYQEAZ9cSDrEjrm3czSklo4fgikssVbQ
+         uFK52lkIgZ4Cv4p3oIVftIMLGNRGO8dfzkOJsXi5VdUZpmMlKaoo1qJVaaSEhUah66
+         qckkt7DThFaicMLB7iDYDm5RlT8fMqtANF+saWjQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Quentin Monnet <quentin.monnet@netronome.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        Brandon Cazander <brandon.cazander@multapplied.net>,
+        "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 495/671] tools: bpftool: fix format strings and arguments for jsonw_printf()
-Date:   Thu, 16 Jan 2020 12:02:13 -0500
-Message-Id: <20200116170509.12787-232-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 483/671] net: fix bpf_xdp_adjust_head regression for generic-XDP
+Date:   Thu, 16 Jan 2020 12:02:01 -0500
+Message-Id: <20200116170509.12787-220-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
 References: <20200116170509.12787-1-sashal@kernel.org>
@@ -60,58 +60,55 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Quentin Monnet <quentin.monnet@netronome.com>
+From: Jesper Dangaard Brouer <brouer@redhat.com>
 
-[ Upstream commit 22c349e8db89df86804d3ba23cef037ccd44a8bf ]
+[ Upstream commit 065af355470519bd184019a93ac579f22b036045 ]
 
-There are some mismatches between format strings and arguments passed to
-jsonw_printf() in the BTF dumper for bpftool, which seems harmless but
-may result in warnings if the "__printf()" attribute is used correctly
-for jsonw_printf(). Let's fix relevant format strings and type cast.
+When generic-XDP was moved to a later processing step by commit
+458bf2f224f0 ("net: core: support XDP generic on stacked devices.")
+a regression was introduced when using bpf_xdp_adjust_head.
 
-Fixes: b12d6ec09730 ("bpf: btf: add btf print functionality")
-Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+The issue is that after this commit the skb->network_header is now
+changed prior to calling generic XDP and not after. Thus, if the header
+is changed by XDP (via bpf_xdp_adjust_head), then skb->network_header
+also need to be updated again.  Fix by calling skb_reset_network_header().
+
+Fixes: 458bf2f224f0 ("net: core: support XDP generic on stacked devices.")
+Reported-by: Brandon Cazander <brandon.cazander@multapplied.net>
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/btf_dumper.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ net/core/dev.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
-index e4e6e2b3fd84..ff0cc3c17141 100644
---- a/tools/bpf/bpftool/btf_dumper.c
-+++ b/tools/bpf/bpftool/btf_dumper.c
-@@ -26,9 +26,9 @@ static void btf_dumper_ptr(const void *data, json_writer_t *jw,
- 			   bool is_plain_text)
- {
- 	if (is_plain_text)
--		jsonw_printf(jw, "%p", *(unsigned long *)data);
-+		jsonw_printf(jw, "%p", data);
- 	else
--		jsonw_printf(jw, "%u", *(unsigned long *)data);
-+		jsonw_printf(jw, "%lu", *(unsigned long *)data);
- }
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 935fe158cfaf..73ebacabfde8 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4349,12 +4349,17 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
  
- static int btf_dumper_modifier(const struct btf_dumper *d, __u32 type_id,
-@@ -129,7 +129,7 @@ static int btf_dumper_int(const struct btf_type *t, __u8 bit_offset,
- 	switch (BTF_INT_ENCODING(*int_type)) {
- 	case 0:
- 		if (BTF_INT_BITS(*int_type) == 64)
--			jsonw_printf(jw, "%lu", *(__u64 *)data);
-+			jsonw_printf(jw, "%llu", *(__u64 *)data);
- 		else if (BTF_INT_BITS(*int_type) == 32)
- 			jsonw_printf(jw, "%u", *(__u32 *)data);
- 		else if (BTF_INT_BITS(*int_type) == 16)
-@@ -142,7 +142,7 @@ static int btf_dumper_int(const struct btf_type *t, __u8 bit_offset,
- 		break;
- 	case BTF_INT_SIGNED:
- 		if (BTF_INT_BITS(*int_type) == 64)
--			jsonw_printf(jw, "%ld", *(long long *)data);
-+			jsonw_printf(jw, "%lld", *(long long *)data);
- 		else if (BTF_INT_BITS(*int_type) == 32)
- 			jsonw_printf(jw, "%d", *(int *)data);
- 		else if (BTF_INT_BITS(*int_type) == 16)
+ 	act = bpf_prog_run_xdp(xdp_prog, xdp);
+ 
++	/* check if bpf_xdp_adjust_head was used */
+ 	off = xdp->data - orig_data;
+-	if (off > 0)
+-		__skb_pull(skb, off);
+-	else if (off < 0)
+-		__skb_push(skb, -off);
+-	skb->mac_header += off;
++	if (off) {
++		if (off > 0)
++			__skb_pull(skb, off);
++		else if (off < 0)
++			__skb_push(skb, -off);
++
++		skb->mac_header += off;
++		skb_reset_network_header(skb);
++	}
+ 
+ 	/* check if bpf_xdp_adjust_tail was used. it can only "shrink"
+ 	 * pckt.
 -- 
 2.20.1
 
