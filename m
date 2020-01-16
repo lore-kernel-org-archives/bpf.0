@@ -7,48 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC692C33CAF
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 19:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 075F6C33CB3
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 19:20:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B7D3D2077B
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 19:19:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D29142073A
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 19:20:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579202398;
-	bh=hzYUfnj+TvROFTnB8URu/LAAbLUAone1jW+IXrnDv94=;
+	s=default; t=1579202443;
+	bh=64x82PQuv5pebgDgHhtSr+hFf0pKyR4SaaHfSStuJYU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=rZ1+pxRapAHXbzBUpng2iUSwJLcWzHzmqrikmzG02Ph8tSEsT0clShvfeKwRzJSTU
-	 Ph6dSUeQeVAhgFKQZM1ly+MHiQVARn/oSTRGxaZ2aX6MTOL+T0DhBQH7Qsfq8BB26G
-	 28lANE8Koug72gVNmFN2wGEK40jJJ/wPg8Eo39Ys=
+	b=gFvJA0QWBMoLh9j79aA+lShpdkGCxiE1UU6AJn7qP/At0/7h/GL/osIP5OpQb7CIN
+	 AadNbfbOHV0Ur4He4L3CzeefETUxmdptxQszjnRqNX3jhoivBzjS04YnTNrJoNnn1f
+	 nYTwsc8V8sqmbtFbKMS/qZnyvxGgzZ2JtjQAS0dQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731586AbgAPQyK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jan 2020 11:54:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38518 "EHLO mail.kernel.org"
+        id S1731268AbgAPQxz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jan 2020 11:53:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37938 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731575AbgAPQyK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:54:10 -0500
+        id S1731221AbgAPQxv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jan 2020 11:53:51 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5014D24656;
-        Thu, 16 Jan 2020 16:54:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DB9912464B;
+        Thu, 16 Jan 2020 16:53:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579193649;
-        bh=hzYUfnj+TvROFTnB8URu/LAAbLUAone1jW+IXrnDv94=;
+        s=default; t=1579193630;
+        bh=64x82PQuv5pebgDgHhtSr+hFf0pKyR4SaaHfSStuJYU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rIm7q0EPYvltQ9rP4MnkrxPYwItgW1IYaE4oKqRxy+XbwPl/rGMvMGgmzE2WPg0pn
-         9b2H//x6DMAviMPLRPUUMKCGNU0o2rATwOZAwrQSB0KleGoFeViD0bBnHSzsrUKXxO
-         zmg5pZ+IIBBFuagU+URstqkuNz1JaDLdJcq/c2Zc=
+        b=Piat3vyyqytUa/5WiJyI56c9wyzuGNQd5XuC9KHUahU7brCcjE6jtcoAr8r0Gte8D
+         Ysb0g/gPC5++4a+oY76TFmVPaKnL00V9bk5Fyk+CHAECwUcYJ3RjK7ToQRlbqJCdJ/
+         2BQ4dlqr+T5ybTNMQSYa40hTrbIgWZhoiT/LHKbo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-kbuild@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 179/205] bpf: Support pre-2.25-binutils objcopy for vmlinux BTF
-Date:   Thu, 16 Jan 2020 11:42:34 -0500
-Message-Id: <20200116164300.6705-179-sashal@kernel.org>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 164/205] bpf: skmsg, fix potential psock NULL pointer dereference
+Date:   Thu, 16 Jan 2020 11:42:19 -0500
+Message-Id: <20200116164300.6705-164-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
 References: <20200116164300.6705-1-sashal@kernel.org>
@@ -61,64 +60,64 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Stanislav Fomichev <sdf@google.com>
+From: John Fastabend <john.fastabend@gmail.com>
 
-[ Upstream commit da5fb18225b49b97bb37c51bcbbb2990a507c364 ]
+[ Upstream commit 8163999db445021f2651a8a47b5632483e8722ea ]
 
-If vmlinux BTF generation fails, but CONFIG_DEBUG_INFO_BTF is set,
-.BTF section of vmlinux is empty and kernel will prohibit
-BPF loading and return "in-kernel BTF is malformed".
+Report from Dan Carpenter,
 
---dump-section argument to binutils' objcopy was added in version 2.25.
-When using pre-2.25 binutils, BTF generation silently fails. Convert
-to --only-section which is present on pre-2.25 binutils.
+ net/core/skmsg.c:792 sk_psock_write_space()
+ error: we previously assumed 'psock' could be null (see line 790)
 
-Documentation/process/changes.rst states that binutils 2.21+
-is supported, not sure those standards apply to BPF subsystem.
+ net/core/skmsg.c
+   789 psock = sk_psock(sk);
+   790 if (likely(psock && sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)))
+ Check for NULL
+   791 schedule_work(&psock->work);
+   792 write_space = psock->saved_write_space;
+                     ^^^^^^^^^^^^^^^^^^^^^^^^
+   793          rcu_read_unlock();
+   794          write_space(sk);
 
-v2:
-* exit and print an error if gen_btf fails (John Fastabend)
+Ensure psock dereference on line 792 only occurs if psock is not null.
 
-v3:
-* resend with Andrii's Acked-by/Tested-by tags
-
-Fixes: 341dfcf8d78ea ("btf: expose BTF info through sysfs")
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Tested-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/bpf/20191127161410.57327-1-sdf@google.com
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/link-vmlinux.sh | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ net/core/skmsg.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 06495379fcd8..2998ddb323e3 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -127,7 +127,8 @@ gen_btf()
- 		cut -d, -f1 | cut -d' ' -f2)
- 	bin_format=$(LANG=C ${OBJDUMP} -f ${1} | grep 'file format' | \
- 		awk '{print $4}')
--	${OBJCOPY} --dump-section .BTF=.btf.vmlinux.bin ${1} 2>/dev/null
-+	${OBJCOPY} --set-section-flags .BTF=alloc -O binary \
-+		--only-section=.BTF ${1} .btf.vmlinux.bin 2>/dev/null
- 	${OBJCOPY} -I binary -O ${bin_format} -B ${bin_arch} \
- 		--rename-section .data=.BTF .btf.vmlinux.bin ${2}
- }
-@@ -253,6 +254,10 @@ btf_vmlinux_bin_o=""
- if [ -n "${CONFIG_DEBUG_INFO_BTF}" ]; then
- 	if gen_btf .tmp_vmlinux.btf .btf.vmlinux.bin.o ; then
- 		btf_vmlinux_bin_o=.btf.vmlinux.bin.o
-+	else
-+		echo >&2 "Failed to generate BTF for vmlinux"
-+		echo >&2 "Try to disable CONFIG_DEBUG_INFO_BTF"
-+		exit 1
- 	fi
- fi
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 0675d022584e..ded2d5227678 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -793,15 +793,18 @@ static void sk_psock_strp_data_ready(struct sock *sk)
+ static void sk_psock_write_space(struct sock *sk)
+ {
+ 	struct sk_psock *psock;
+-	void (*write_space)(struct sock *sk);
++	void (*write_space)(struct sock *sk) = NULL;
  
+ 	rcu_read_lock();
+ 	psock = sk_psock(sk);
+-	if (likely(psock && sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)))
+-		schedule_work(&psock->work);
+-	write_space = psock->saved_write_space;
++	if (likely(psock)) {
++		if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
++			schedule_work(&psock->work);
++		write_space = psock->saved_write_space;
++	}
+ 	rcu_read_unlock();
+-	write_space(sk);
++	if (write_space)
++		write_space(sk);
+ }
+ 
+ int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock)
 -- 
 2.20.1
 
