@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBA84C33CB7
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 14:45:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0499BC33CB1
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 14:46:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A69C320684
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 14:45:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B9ECC207E0
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 14:46:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579185957;
-	bh=9hKc13sX3wl6v6E7D/d/V41QrfhG81urjfZd9vMLYX4=;
+	s=default; t=1579185963;
+	bh=WZUGiEJ/e6urkguiLJzQqlix3oe6FHXiP6/1t/uZDcY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=CGybZ3EPzeTpH3y07vDqwCBhp6pwcHbKX89AxRephhWTYvIBd4LqznPTRv01k5bMa
-	 AtAZu9mRe+1CTKZV+r65wzaFhOVDRohGJCt+2pm64VcF0vQcO+x32tRW0ymfNYm7PE
-	 2J8gD68G9enyOOpskYjm8uLtFD/e9iWEOm6/NsUQ=
+	b=I00bHW9lU1YPbEwacOBGsYYO/9ymouq1ccWgpNkBC+Wj0jFATpe37s/3nGxEYBb7o
+	 0jbuimabQmPnGNMUUVOBaXdfHU/h7K46wOvJ7HggcewnwV0I/423pKF2o79g/nOQXq
+	 QDcQ4DVO8xfUAH1YoS959/XJZY4ebgxlHkzjRsMI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726970AbgAPOpu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jan 2020 09:45:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36164 "EHLO mail.kernel.org"
+        id S1726706AbgAPOqD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jan 2020 09:46:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36646 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728981AbgAPOpl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jan 2020 09:45:41 -0500
+        id S1726362AbgAPOqD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jan 2020 09:46:03 -0500
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7185E207E0;
-        Thu, 16 Jan 2020 14:45:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B010B20684;
+        Thu, 16 Jan 2020 14:45:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579185940;
-        bh=9hKc13sX3wl6v6E7D/d/V41QrfhG81urjfZd9vMLYX4=;
+        s=default; t=1579185961;
+        bh=WZUGiEJ/e6urkguiLJzQqlix3oe6FHXiP6/1t/uZDcY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aXCjgQXAXdlEr/vZiau2kV4qAhpzZrrfNBrM2+5Prkee16N6DHA9KY2W86t2+Lvjp
-         ATv0Pv8gD0L4yBDIOufPHLWGxr7n6/hWr76P6BimdtlqVzEU4mwfQdelNbN5tJrPyQ
-         ikJYFhEcAi6NsR2oHbiLNZvEd8c8e9rhUu5GkU64=
+        b=NajVxD9BjkTh37lS3Eer/hM2jcnRRJqK+01tzBHRpXwp2+QpQuprM47xpjwEh4h5E
+         1cvJFlgen0JuVnPlsu2Elhy6AKSwm/axkGzJXUROliAhruHYMreB6FJqmN/Cy2QrSc
+         +Y1Vgk94vNlle2Zj87s9Kr3m8V3GwwLpb2vmcct8=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Brendan Gregg <brendan.d.gregg@gmail.com>,
         Steven Rostedt <rostedt@goodmis.org>,
@@ -50,9 +50,9 @@ Cc:     mhiramat@kernel.org, Ingo Molnar <mingo@kernel.org>,
         joel@joelfernandes.org,
         "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
         Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
-Subject: [RFT PATCH 08/13] kprobes: Use workqueue for reclaiming kprobe insn cache pages
-Date:   Thu, 16 Jan 2020 23:45:33 +0900
-Message-Id: <157918593350.29301.7175144493909010321.stgit@devnote2>
+Subject: [RFT PATCH 10/13] kprobes: Make free_*insn_slot() mutex-less
+Date:   Thu, 16 Jan 2020 23:45:56 +0900
+Message-Id: <157918595628.29301.5657205433519510960.stgit@devnote2>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <157918584866.29301.6941815715391411338.stgit@devnote2>
 References: <157918584866.29301.6941815715391411338.stgit@devnote2>
@@ -65,123 +65,338 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use workqueues for reclaiming kprobe insn cache pages. This can
-split the heaviest part from the unregistration process.
+Rewrite kprobe_insn_cache implementation so that free_*insn_slot()
+do not acquire kprobe_insn_cache->mutex. This allows us to call it
+from call_rcu() callback function.
+
+For this purpose, this introduces flip-flop dirty generation in
+kprobe_insn_cache. When __free_insn_slot() is called, if a slot
+is dirty (this means it can be in use even after RCU grace period),
+it marks as "current-generation" dirty. The garbage collector
+(kprobe_insn_cache_gc()) flips the generation bit, waits enough
+safe period by synchronize_rcu_tasks(), and collect "previous-
+generation" dirty slots. In the results, it collects the dirty
+slots which was returned by __free_insn_slot() before the GC
+starts waiting the period (and the dirty slots which is returned
+while the safe period, will be marked as new-generation dirty.)
+Since the GC is not concurrently running, we do not need more
+than 2 generations. So it flips the generation bit instead of
+counting it up.
 
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- include/linux/kprobes.h |    2 ++
- kernel/kprobes.c        |   29 ++++++++++++++++++-----------
- 2 files changed, 20 insertions(+), 11 deletions(-)
+ arch/powerpc/kernel/optprobes.c |    1 
+ include/linux/kprobes.h         |    2 
+ kernel/kprobes.c                |  172 ++++++++++++++++++++++-----------------
+ 3 files changed, 96 insertions(+), 79 deletions(-)
 
+diff --git a/arch/powerpc/kernel/optprobes.c b/arch/powerpc/kernel/optprobes.c
+index 024f7aad1952..8304f3814515 100644
+--- a/arch/powerpc/kernel/optprobes.c
++++ b/arch/powerpc/kernel/optprobes.c
+@@ -53,7 +53,6 @@ struct kprobe_insn_cache kprobe_ppc_optinsn_slots = {
+ 	/* insn_size initialized later */
+ 	.alloc = __ppc_alloc_insn_page,
+ 	.free = __ppc_free_insn_page,
+-	.nr_garbage = 0,
+ };
+ 
+ /*
 diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index 04bdaf01112c..0f832817fca3 100644
+index 0f832817fca3..1cd53b7b8409 100644
 --- a/include/linux/kprobes.h
 +++ b/include/linux/kprobes.h
-@@ -245,6 +245,7 @@ struct kprobe_insn_cache {
+@@ -244,7 +244,7 @@ struct kprobe_insn_cache {
+ 	void (*free)(void *);	/* free insn page */
  	struct list_head pages; /* list of kprobe_insn_page */
  	size_t insn_size;	/* size of instruction slot */
- 	int nr_garbage;
-+	struct work_struct work;
+-	int nr_garbage;
++	int generation;		/* dirty generation */
+ 	struct work_struct work;
  };
  
- #ifdef __ARCH_WANT_KPROBES_INSN_SLOT
-@@ -254,6 +255,7 @@ extern void __free_insn_slot(struct kprobe_insn_cache *c,
- /* sleep-less address checking routine  */
- extern bool __is_insn_slot_addr(struct kprobe_insn_cache *c,
- 				unsigned long addr);
-+void kprobe_insn_cache_gc(struct work_struct *work);
- 
- #define DEFINE_INSN_CACHE_OPS(__name)					\
- extern struct kprobe_insn_cache kprobe_##__name##_slots;		\
 diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 09b0e33bc845..a9114923da4c 100644
+index 60ffc9d54d87..5c12eb7fa8e1 100644
 --- a/kernel/kprobes.c
 +++ b/kernel/kprobes.c
-@@ -126,8 +126,15 @@ struct kprobe_insn_cache kprobe_insn_slots = {
+@@ -90,8 +90,7 @@ struct kprobe_insn_page {
+ 	struct rcu_head rcu;
+ 	kprobe_opcode_t *insns;		/* Page of instruction slots */
+ 	struct kprobe_insn_cache *cache;
+-	int nused;
+-	int ngarbage;
++	atomic_t nused;
+ 	char slot_used[];
+ };
+ 
+@@ -106,8 +105,9 @@ static int slots_per_page(struct kprobe_insn_cache *c)
+ 
+ enum kprobe_slot_state {
+ 	SLOT_CLEAN = 0,
+-	SLOT_DIRTY = 1,
+-	SLOT_USED = 2,
++	SLOT_USED = 1,
++	SLOT_DIRTY0 = 2,
++	SLOT_DIRTY1 = 3,
+ };
+ 
+ void __weak *alloc_insn_page(void)
+@@ -126,7 +126,6 @@ struct kprobe_insn_cache kprobe_insn_slots = {
+ 	.free = free_insn_page,
  	.pages = LIST_HEAD_INIT(kprobe_insn_slots.pages),
  	.insn_size = MAX_INSN_SIZE,
- 	.nr_garbage = 0,
-+	.work = __WORK_INITIALIZER(kprobe_insn_slots.work,
-+				   kprobe_insn_cache_gc),
+-	.nr_garbage = 0,
+ 	.work = __WORK_INITIALIZER(kprobe_insn_slots.work,
+ 				   kprobe_insn_cache_gc),
  };
--static int collect_garbage_slots(struct kprobe_insn_cache *c);
-+
-+static void kick_kprobe_insn_cache_gc(struct kprobe_insn_cache *c)
-+{
-+	if (!work_pending(&c->work))
-+		schedule_work(&c->work);
-+}
+@@ -137,6 +136,22 @@ static void kick_kprobe_insn_cache_gc(struct kprobe_insn_cache *c)
+ 		schedule_work(&c->work);
+ }
  
++static void *try_to_get_clean_slot(struct kprobe_insn_page *kip)
++{
++	struct kprobe_insn_cache *c = kip->cache;
++	int i;
++
++	for (i = 0; i < slots_per_page(c); i++) {
++		if (kip->slot_used[i] == SLOT_CLEAN) {
++			kip->slot_used[i] = SLOT_USED;
++			atomic_inc(&kip->nused);
++			return kip->insns + (i * c->insn_size);
++		}
++	}
++
++	return NULL;
++}
++
  /**
   * __get_insn_slot() - Find a slot on an executable page for an instruction.
-@@ -140,7 +147,6 @@ kprobe_opcode_t *__get_insn_slot(struct kprobe_insn_cache *c)
+  * We allocate an executable page if there's no room on existing ones.
+@@ -145,25 +160,20 @@ kprobe_opcode_t *__get_insn_slot(struct kprobe_insn_cache *c)
+ {
+ 	struct kprobe_insn_page *kip;
+ 	kprobe_opcode_t *slot = NULL;
++	bool reclaimable = false;
  
  	/* Since the slot array is not protected by rcu, we need a mutex */
  	mutex_lock(&c->mutex);
-- retry:
  	list_for_each_entry(kip, &c->pages, list) {
- 		if (kip->nused < slots_per_page(c)) {
- 			int i;
-@@ -158,11 +164,7 @@ kprobe_opcode_t *__get_insn_slot(struct kprobe_insn_cache *c)
+-		if (kip->nused < slots_per_page(c)) {
+-			int i;
+-			for (i = 0; i < slots_per_page(c); i++) {
+-				if (kip->slot_used[i] == SLOT_CLEAN) {
+-					kip->slot_used[i] = SLOT_USED;
+-					kip->nused++;
+-					slot = kip->insns + (i * c->insn_size);
+-					goto out;
+-				}
+-			}
+-			/* kip->nused is broken. Fix it. */
+-			kip->nused = slots_per_page(c);
+-			WARN_ON(1);
++		if (atomic_read(&kip->nused) < slots_per_page(c)) {
++			slot = try_to_get_clean_slot(kip);
++			if (slot)
++				goto out;
++			reclaimable = true;
  		}
  	}
++	if (reclaimable)
++		kick_kprobe_insn_cache_gc(c);
  
--	/* If there are any garbage slots, collect it and try again. */
--	if (c->nr_garbage && collect_garbage_slots(c) == 0)
--		goto retry;
--
--	/* All out of space.  Need to allocate a new page. */
-+	/* All out of space. Need to allocate a new page. */
+ 	/* All out of space. Need to allocate a new page. */
  	kip = kmalloc(KPROBE_INSN_PAGE_SIZE(slots_per_page(c)), GFP_KERNEL);
- 	if (!kip)
- 		goto out;
-@@ -213,10 +215,12 @@ static int collect_one_slot(struct kprobe_insn_page *kip, int idx)
- 	return 0;
+@@ -183,8 +193,7 @@ kprobe_opcode_t *__get_insn_slot(struct kprobe_insn_cache *c)
+ 	INIT_LIST_HEAD(&kip->list);
+ 	memset(kip->slot_used, SLOT_CLEAN, slots_per_page(c));
+ 	kip->slot_used[0] = SLOT_USED;
+-	kip->nused = 1;
+-	kip->ngarbage = 0;
++	atomic_set(&kip->nused, 1);
+ 	kip->cache = c;
+ 	list_add_rcu(&kip->list, &c->pages);
+ 	slot = kip->insns;
+@@ -193,90 +202,106 @@ kprobe_opcode_t *__get_insn_slot(struct kprobe_insn_cache *c)
+ 	return slot;
  }
  
--static int collect_garbage_slots(struct kprobe_insn_cache *c)
-+void kprobe_insn_cache_gc(struct work_struct *work)
+-static void free_kprobe_insn_page(struct rcu_head *head)
++static void free_kprobe_insn_page_cb(struct rcu_head *head)
  {
-+	struct kprobe_insn_cache *c = container_of(work, typeof(*c), work);
- 	struct kprobe_insn_page *kip, *next;
+ 	struct kprobe_insn_page *kip = container_of(head, typeof(*kip), rcu);
  
-+	mutex_lock(&c->mutex);
+ 	kfree(kip);
+ }
+ 
+-/* Return 1 if all garbages are collected, otherwise 0. */
+-static int collect_one_slot(struct kprobe_insn_page *kip, int idx)
++static void free_kprobe_insn_page(struct kprobe_insn_page *kip)
+ {
+-	kip->slot_used[idx] = SLOT_CLEAN;
+-	kip->nused--;
+-	if (kip->nused == 0) {
+-		/*
+-		 * Page is no longer in use.  Free it unless
+-		 * it's the last one.  We keep the last one
+-		 * so as not to have to set it up again the
+-		 * next time somebody inserts a probe.
+-		 */
+-		if (!list_is_singular(&kip->list)) {
+-			list_del_rcu(&kip->list);
+-			kip->cache->free(kip->insns);
+-			call_rcu(&kip->rcu, free_kprobe_insn_page);
+-		}
+-		return 1;
++	if (WARN_ON_ONCE(atomic_read(&kip->nused) != 0))
++		return;
++	/*
++	 * Page is no longer in use.  Free it unless
++	 * it's the last one.  We keep the last one
++	 * so as not to have to set it up again the
++	 * next time somebody inserts a probe.
++	 */
++	if (!list_is_singular(&kip->list)) {
++		list_del_rcu(&kip->list);
++		kip->cache->free(kip->insns);
++		call_rcu(&kip->rcu, free_kprobe_insn_page_cb);
+ 	}
+-	return 0;
+ }
+ 
+ void kprobe_insn_cache_gc(struct work_struct *work)
+ {
+ 	struct kprobe_insn_cache *c = container_of(work, typeof(*c), work);
+ 	struct kprobe_insn_page *kip, *next;
++	int dirtygen = c->generation ? SLOT_DIRTY1 : SLOT_DIRTY0;
++	int i, nr;
+ 
+ 	mutex_lock(&c->mutex);
++
++	c->generation ^= 1;	/* flip generation (0->1, 1->0) */
++
++	/* Make sure the generation update is shown in __free_insn_slot() */
++	smp_wmb();
++
  	/* Ensure no-one is running on the garbages. */
  	synchronize_rcu_tasks();
  
-@@ -226,12 +230,13 @@ static int collect_garbage_slots(struct kprobe_insn_cache *c)
- 			continue;
- 		kip->ngarbage = 0;	/* we will collect all garbages */
+ 	list_for_each_entry_safe(kip, next, &c->pages, list) {
+-		int i;
+-		if (kip->ngarbage == 0)
+-			continue;
+-		kip->ngarbage = 0;	/* we will collect all garbages */
++		nr = 0;
++		/* Reclaim previous generation dirty slots */
  		for (i = 0; i < slots_per_page(c); i++) {
--			if (kip->slot_used[i] == SLOT_DIRTY && collect_one_slot(kip, i))
-+			if (kip->slot_used[i] == SLOT_DIRTY &&
-+			    collect_one_slot(kip, i))
- 				break;
+-			if (kip->slot_used[i] == SLOT_DIRTY &&
+-			    collect_one_slot(kip, i))
+-				break;
++			if (kip->slot_used[i] == dirtygen)
++				kip->slot_used[i] = SLOT_CLEAN;
++			else if (kip->slot_used[i] != SLOT_CLEAN)
++				nr++;
  		}
++		if (!nr)
++			free_kprobe_insn_page(kip);
  	}
- 	c->nr_garbage = 0;
--	return 0;
-+	mutex_unlock(&c->mutex);
+-	c->nr_garbage = 0;
+ 	mutex_unlock(&c->mutex);
  }
  
++static struct kprobe_insn_page *
++find_kprobe_insn_page(struct kprobe_insn_cache *c, unsigned long addr)
++{
++	struct kprobe_insn_page *kip;
++
++	list_for_each_entry_rcu(kip, &c->pages, list) {
++		if (addr >= (unsigned long)kip->insns &&
++		    addr < (unsigned long)kip->insns + PAGE_SIZE)
++			return kip;
++	}
++	return NULL;
++}
++
  void __free_insn_slot(struct kprobe_insn_cache *c,
-@@ -259,7 +264,7 @@ void __free_insn_slot(struct kprobe_insn_cache *c,
- 			kip->slot_used[idx] = SLOT_DIRTY;
- 			kip->ngarbage++;
- 			if (++c->nr_garbage > slots_per_page(c))
--				collect_garbage_slots(c);
-+				kick_kprobe_insn_cache_gc(c);
- 		} else {
- 			collect_one_slot(kip, idx);
- 		}
-@@ -299,6 +304,8 @@ struct kprobe_insn_cache kprobe_optinsn_slots = {
+ 		      kprobe_opcode_t *slot, int dirty)
+ {
+ 	struct kprobe_insn_page *kip;
++	int dirtygen;
+ 	long idx;
+ 
+-	mutex_lock(&c->mutex);
+-	list_for_each_entry(kip, &c->pages, list) {
++	rcu_read_lock();
++	kip = find_kprobe_insn_page(c, (unsigned long)slot);
++	if (kip) {
+ 		idx = ((long)slot - (long)kip->insns) /
+ 			(c->insn_size * sizeof(kprobe_opcode_t));
+-		if (idx >= 0 && idx < slots_per_page(c))
++		/* Check double free */
++		if (WARN_ON(kip->slot_used[idx] != SLOT_USED))
+ 			goto out;
+-	}
+-	/* Could not find this slot. */
+-	WARN_ON(1);
+-	kip = NULL;
++
++		/* Make sure to use new generation */
++		smp_rmb();
++
++		dirtygen = c->generation ? SLOT_DIRTY1 : SLOT_DIRTY0;
++		if (dirty)
++			kip->slot_used[idx] = dirtygen;
++		else
++			kip->slot_used[idx] = SLOT_CLEAN;
++
++		if (!atomic_dec_return(&kip->nused))
++			kick_kprobe_insn_cache_gc(c);
++	} else
++		WARN_ON(1);	/* Not found: what happen? */
+ out:
+-	/* Mark and sweep: this may sleep */
+-	if (kip) {
+-		/* Check double free */
+-		WARN_ON(kip->slot_used[idx] != SLOT_USED);
+-		if (dirty) {
+-			kip->slot_used[idx] = SLOT_DIRTY;
+-			kip->ngarbage++;
+-			if (++c->nr_garbage > slots_per_page(c))
+-				kick_kprobe_insn_cache_gc(c);
+-		} else {
+-			collect_one_slot(kip, idx);
+-		}
+-	}
+-	mutex_unlock(&c->mutex);
++	rcu_read_unlock();
+ }
+ 
+ /*
+@@ -286,17 +311,11 @@ void __free_insn_slot(struct kprobe_insn_cache *c,
+  */
+ bool __is_insn_slot_addr(struct kprobe_insn_cache *c, unsigned long addr)
+ {
+-	struct kprobe_insn_page *kip;
+ 	bool ret = false;
+ 
+ 	rcu_read_lock();
+-	list_for_each_entry_rcu(kip, &c->pages, list) {
+-		if (addr >= (unsigned long)kip->insns &&
+-		    addr < (unsigned long)kip->insns + PAGE_SIZE) {
+-			ret = true;
+-			break;
+-		}
+-	}
++	if (find_kprobe_insn_page(c, addr))
++		ret = true;
+ 	rcu_read_unlock();
+ 
+ 	return ret;
+@@ -310,7 +329,6 @@ struct kprobe_insn_cache kprobe_optinsn_slots = {
+ 	.free = free_insn_page,
  	.pages = LIST_HEAD_INIT(kprobe_optinsn_slots.pages),
  	/* .insn_size is initialized later */
- 	.nr_garbage = 0,
-+	.work = __WORK_INITIALIZER(kprobe_optinsn_slots.work,
-+				   kprobe_insn_cache_gc),
+-	.nr_garbage = 0,
+ 	.work = __WORK_INITIALIZER(kprobe_optinsn_slots.work,
+ 				   kprobe_insn_cache_gc),
  };
- #endif
- #endif
 
