@@ -2,262 +2,134 @@ Return-Path: <SRS0=iaO9=3F=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2E15C33CB1
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 12:53:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 167A3C33CB3
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 13:22:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 991D22073A
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 12:53:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DF113206D5
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 13:22:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="F/3g7YjN"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MehGw8Fu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726160AbgAPMxC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jan 2020 07:53:02 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53581 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726018AbgAPMxB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jan 2020 07:53:01 -0500
-Received: by mail-wm1-f68.google.com with SMTP id m24so3646262wmc.3
-        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 04:52:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/H5SBeOA2qr3HQ5ZzzppEj9vMjbQsFlElKjOkvtzBfI=;
-        b=F/3g7YjNoMDZLgepWCoyoLz6ghznx+zPPsT2GWzhJyZcg4z7dY5dBdhnr7miHMeZrb
-         nwaBGnXUkIqItnHEAnPSvb1ucZV6Ce9wk5xuZA4a9xz5rKsUioZHeE4wp1a69hrVRAEa
-         PhLnQjwKve3QXjjAf1ZBsBaV3IkzhCHeueQQM=
+        id S1726981AbgAPNWT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jan 2020 08:22:19 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:29094 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726706AbgAPNWT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jan 2020 08:22:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579180938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oVICxkwYE819T09jumS9b6kqZZVW9alGabNhw2Byv4c=;
+        b=MehGw8FuhOxw1YljfUgB4vcupBDm1XG63wylNeL61dql09evUk8BQnUk2ISTd3RG5zBTlv
+        ridh4qtjrR0ci2wGtx+qN7AcFPC7DoFOCalXgI0DgUAvVYNA5n8Jogo/q4yqRj5k426vC5
+        8c35nqE8bq6C9NcmQIlEUe1bdS2tKck=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-401-p5419GuOOgqUwLg4XvZpGw-1; Thu, 16 Jan 2020 08:22:16 -0500
+X-MC-Unique: p5419GuOOgqUwLg4XvZpGw-1
+Received: by mail-lj1-f197.google.com with SMTP id w6so5154846ljo.20
+        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 05:22:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/H5SBeOA2qr3HQ5ZzzppEj9vMjbQsFlElKjOkvtzBfI=;
-        b=JyocfV6jwgl8BUuuuO3tR0zTIBFNC+cIsoVLhLrEg+K1pbEeAs+MgQh+7rM8dv3l8D
-         Nmxcro5rVf6Gxnhl8EhWvNyYZxMQ3WysmcyugnbplOqn1MF/7m8JqwlNltFOQXNguMWX
-         RxF2Kf+gLxEr4IGh9ceIWWsJf6hkLKTCy9393G0L14hHu4+SkycO0Y/JhcfeVQSKd3NH
-         sO014utoWYZ0p81W//vtgxRtQEDN9RSq6DhFDlj5IpjJVJMVY8EXgT+jmTmYCx4cEPro
-         3+kNJqKTidi2n2X0uP4pIvx4QLbpN1kwbtNNdYHyrU355r9DBB3vvxttWgYjqEWeqVte
-         ybEg==
-X-Gm-Message-State: APjAAAW712GEzrHdob4yWH5nvCFWnHWWowknbRDZ+bEoRgufroWuiiaC
-        bP5ET/exW5W6qs+0787tmGgj1A==
-X-Google-Smtp-Source: APXvYqxv1iLYD4voaq/Xo7oWnkV8nxhX6RVYqz6A3PmEyTdSkSmfS8+WpyRWjLFCgWrOEamJ58+a5Q==
-X-Received: by 2002:a05:600c:2150:: with SMTP id v16mr5558117wml.156.1579179178700;
-        Thu, 16 Jan 2020 04:52:58 -0800 (PST)
-Received: from google.com ([2a00:79e0:42:204:8a21:ba0c:bb42:75ec])
-        by smtp.gmail.com with ESMTPSA id x11sm181653wmg.46.2020.01.16.04.52.57
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=oVICxkwYE819T09jumS9b6kqZZVW9alGabNhw2Byv4c=;
+        b=tcJa3DpgrNVXoN8l4xDxpkSMhvVZ90gTLgrs9NhOpfuNr403EEC5+btWJfd92jYhPk
+         nJtsjNG3n67ZN+ZhJnLxwUtWEXzZDg8asPWGhUW4CsMEfXlT4cs9kKxSVlUP1W0AiMt8
+         pDHx/yuoPA6avt+aPe8TI8657ERf3Hy4+sG/itjCdOyhlAxfQC5IDgCZeGXH3QscUbwC
+         UXGt+QW8DqGWSHD4eHbY94y9Y8ofn/hcY1xbfP4tScem5NyGv9e2gttA+T56XYc2KF4x
+         4c1F3T3rcDKECl100X0rQpHeBqZoyjZiytbcTxXmept6hIYNj94M4sQXlFYwLMffprFs
+         kOwA==
+X-Gm-Message-State: APjAAAV5i7kFCI19JDv5g+765AGyoYQEAkHSgtVQdX60M2vgZqhyXnlw
+        QMA2JDTLIqOJZVPfyuEJOF5lhyceB2nWMPRaROpzaz2luanF8vEw7VQ6OMI/RBTKwZN/hKG8s7o
+        /CuE25AZB5Vgg
+X-Received: by 2002:a2e:b007:: with SMTP id y7mr2286048ljk.215.1579180934266;
+        Thu, 16 Jan 2020 05:22:14 -0800 (PST)
+X-Google-Smtp-Source: APXvYqwQWrcaU+nW1F4XoH997rZHaa169MNBHkP1drBFjaeoj4ZaAxptcEhRwkbakFT89vmLfrEkOg==
+X-Received: by 2002:a2e:b007:: with SMTP id y7mr2286032ljk.215.1579180934124;
+        Thu, 16 Jan 2020 05:22:14 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id f16sm10703433ljn.17.2020.01.16.05.22.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2020 04:52:58 -0800 (PST)
-From:   KP Singh <kpsingh@chromium.org>
-X-Google-Original-From: KP Singh <kpsingh>
-Date:   Thu, 16 Jan 2020 13:52:56 +0100
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     KP Singh <kpsingh@chromium.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 02/10] bpf: lsm: Add a skeleton and config
- options
-Message-ID: <20200116125256.GE240584@google.com>
-References: <20200115171333.28811-1-kpsingh@chromium.org>
- <20200115171333.28811-3-kpsingh@chromium.org>
- <7b11f92b-259f-f2e1-924c-5c0518f49b3f@schaufler-ca.com>
+        Thu, 16 Jan 2020 05:22:13 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id D9E2F1804D7; Thu, 16 Jan 2020 14:22:12 +0100 (CET)
+Subject: [PATCH bpf-next v3 01/11] samples/bpf: Don't try to remove user's
+ homedir on clean
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Date:   Thu, 16 Jan 2020 14:22:12 +0100
+Message-ID: <157918093278.1357254.3453847369567754938.stgit@toke.dk>
+In-Reply-To: <157918093154.1357254.7616059374996162336.stgit@toke.dk>
+References: <157918093154.1357254.7616059374996162336.stgit@toke.dk>
+User-Agent: StGit/0.21
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7b11f92b-259f-f2e1-924c-5c0518f49b3f@schaufler-ca.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 15-Jan 23:04, Casey Schaufler wrote:
-> On 1/15/2020 9:13 AM, KP Singh wrote:
-> > From: KP Singh <kpsingh@google.com>
-> >
-> > The LSM can be enabled by CONFIG_SECURITY_BPF.
-> > Without CONFIG_SECURITY_BPF_ENFORCE, the LSM will run the
-> > attached eBPF programs but not enforce MAC policy based
-> > on the return value of the attached programs.
-> >
-> > Signed-off-by: KP Singh <kpsingh@google.com>
-> > ---
-> >  MAINTAINERS           |  7 +++++++
-> >  security/Kconfig      | 11 ++++++-----
-> >  security/Makefile     |  2 ++
-> >  security/bpf/Kconfig  | 22 ++++++++++++++++++++++
-> >  security/bpf/Makefile |  5 +++++
-> >  security/bpf/lsm.c    | 25 +++++++++++++++++++++++++
-> >  6 files changed, 67 insertions(+), 5 deletions(-)
-> >  create mode 100644 security/bpf/Kconfig
-> >  create mode 100644 security/bpf/Makefile
-> >  create mode 100644 security/bpf/lsm.c
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 66a2e5e07117..0941f478cfa5 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -3203,6 +3203,13 @@ S:	Supported
-> >  F:	arch/x86/net/
-> >  X:	arch/x86/net/bpf_jit_comp32.c
-> >  
-> > +BPF SECURITY MODULE
-> > +M:	KP Singh <kpsingh@chromium.org>
-> > +L:	linux-security-module@vger.kernel.org
-> > +L:	bpf@vger.kernel.org
-> > +S:	Maintained
-> > +F:	security/bpf/
-> > +
-> >  BROADCOM B44 10/100 ETHERNET DRIVER
-> >  M:	Michael Chan <michael.chan@broadcom.com>
-> >  L:	netdev@vger.kernel.org
-> > diff --git a/security/Kconfig b/security/Kconfig
-> > index 2a1a2d396228..6f1aab195e7d 100644
-> > --- a/security/Kconfig
-> > +++ b/security/Kconfig
-> > @@ -236,6 +236,7 @@ source "security/tomoyo/Kconfig"
-> >  source "security/apparmor/Kconfig"
-> >  source "security/loadpin/Kconfig"
-> >  source "security/yama/Kconfig"
-> > +source "security/bpf/Kconfig"
-> >  source "security/safesetid/Kconfig"
-> >  source "security/lockdown/Kconfig"
-> >  
-> > @@ -277,11 +278,11 @@ endchoice
-> >  
-> >  config LSM
-> >  	string "Ordered list of enabled LSMs"
-> > -	default "lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor" if DEFAULT_SECURITY_SMACK
-> > -	default "lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo" if DEFAULT_SECURITY_APPARMOR
-> > -	default "lockdown,yama,loadpin,safesetid,integrity,tomoyo" if DEFAULT_SECURITY_TOMOYO
-> > -	default "lockdown,yama,loadpin,safesetid,integrity" if DEFAULT_SECURITY_DAC
-> > -	default "lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
-> > +	default "lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
-> > +	default "lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
-> > +	default "lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
-> > +	default "lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
-> > +	default "lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
-> >  	help
-> >  	  A comma-separated list of LSMs, in initialization order.
-> >  	  Any LSMs left off this list will be ignored. This can be
-> > diff --git a/security/Makefile b/security/Makefile
-> > index be1dd9d2cb2f..50e6821dd7b7 100644
-> > --- a/security/Makefile
-> > +++ b/security/Makefile
-> > @@ -12,6 +12,7 @@ subdir-$(CONFIG_SECURITY_YAMA)		+= yama
-> >  subdir-$(CONFIG_SECURITY_LOADPIN)	+= loadpin
-> >  subdir-$(CONFIG_SECURITY_SAFESETID)    += safesetid
-> >  subdir-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown
-> > +subdir-$(CONFIG_SECURITY_BPF)		+= bpf
-> >  
-> >  # always enable default capabilities
-> >  obj-y					+= commoncap.o
-> > @@ -29,6 +30,7 @@ obj-$(CONFIG_SECURITY_YAMA)		+= yama/
-> >  obj-$(CONFIG_SECURITY_LOADPIN)		+= loadpin/
-> >  obj-$(CONFIG_SECURITY_SAFESETID)       += safesetid/
-> >  obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
-> > +obj-$(CONFIG_SECURITY_BPF)		+= bpf/
-> >  obj-$(CONFIG_CGROUP_DEVICE)		+= device_cgroup.o
-> >  
-> >  # Object integrity file lists
-> > diff --git a/security/bpf/Kconfig b/security/bpf/Kconfig
-> > new file mode 100644
-> > index 000000000000..a5f6c67ae526
-> > --- /dev/null
-> > +++ b/security/bpf/Kconfig
-> > @@ -0,0 +1,22 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +#
-> > +# Copyright 2019 Google LLC.
-> > +
-> > +config SECURITY_BPF
-> > +	bool "BPF-based MAC and audit policy"
-> > +	depends on SECURITY
-> > +	depends on BPF_SYSCALL
-> > +	help
-> > +	  This enables instrumentation of the security hooks with
-> > +	  eBPF programs.
-> > +
-> > +	  If you are unsure how to answer this question, answer N.
-> > +
-> > +config SECURITY_BPF_ENFORCE
-> > +	bool "Deny operations based on the evaluation of the attached programs"
-> > +	depends on SECURITY_BPF
-> > +	help
-> > +	  eBPF programs attached to hooks can be used for both auditing and
-> > +	  enforcement. Enabling enforcement implies that the evaluation result
-> > +	  from the attached eBPF programs will allow or deny the operation
-> > +	  guarded by the security hook.
-> > diff --git a/security/bpf/Makefile b/security/bpf/Makefile
-> > new file mode 100644
-> > index 000000000000..26a0ab6f99b7
-> > --- /dev/null
-> > +++ b/security/bpf/Makefile
-> > @@ -0,0 +1,5 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +#
-> > +# Copyright 2019 Google LLC.
-> > +
-> > +obj-$(CONFIG_SECURITY_BPF) := lsm.o
-> > diff --git a/security/bpf/lsm.c b/security/bpf/lsm.c
-> > new file mode 100644
-> > index 000000000000..5c5c14f990ce
-> > --- /dev/null
-> > +++ b/security/bpf/lsm.c
-> > @@ -0,0 +1,25 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +/*
-> > + * Copyright 2019 Google LLC.
-> > + */
-> > +
-> > +#include <linux/lsm_hooks.h>
-> > +
-> > +/* This is only for internal hooks, always statically shipped as part of the
-> > + * BPF LSM. Statically defined hooks are appeneded to the security_hook_heads
-> > + * which is common for LSMs and R/O after init.
-> > + */
-> > +static struct security_hook_list lsm_hooks[] __lsm_ro_after_init = {};
-> 
-> s/lsm_hooks/bpf_hooks/
-> 
-> The lsm prefix is for the infrastructure. The way you have it is massively confusing.
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-Good point, I changed this to bpf_lsm_hooks as we prefix most types
-with bpf_lsm_
+The 'clean' rule in the samples/bpf Makefile tries to remove backup
+files (ending in ~). However, if no such files exist, it will instead try
+to remove the user's home directory. While the attempt is mostly harmless,
+it does lead to a somewhat scary warning like this:
 
-> 
-> > +
-> > +static int __init lsm_init(void)
-> 
-> s/lsm_init/bpf_init/
-> 
-> Same reason. When I'm looking at several security modules at once I
-> need to be able to tell them apart.
+rm: cannot remove '~': Is a directory
 
-Changed to bpf_lsm_init.
+Fix this by using find instead of shell expansion to locate any actual
+backup files that need to be removed.
 
-> 
-> > +{
-> > +	security_add_hooks(lsm_hooks, ARRAY_SIZE(lsm_hooks), "bpf");
-> > +	pr_info("eBPF and LSM are friends now.\n");
-> 
-> Cute message, but not very informative if you haven't read the code.
-> "LSM support for eBPF active\n" is more likely to be comprehensible.
+Fixes: b62a796c109c ("samples/bpf: allow make to be run from samples/bpf/ directory")
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ samples/bpf/Makefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Agreed, Updated :)
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 5b89c0370f33..f86d713a17a5 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -254,7 +254,7 @@ all:
+ 
+ clean:
+ 	$(MAKE) -C ../../ M=$(CURDIR) clean
+-	@rm -f *~
++	@find $(CURDIR) -type f -name '*~' -delete
+ 
+ $(LIBBPF): FORCE
+ # Fix up variables inherited from Kbuild that tools/ build system won't like
 
-- KP
-
-> 
-> > +	return 0;
-> > +}
-> > +
-> > +DEFINE_LSM(bpf) = {
-> > +	.name = "bpf",
-> > +	.init = lsm_init,
-> > +};
-> 
