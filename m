@@ -4,54 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A3DFC33CB6
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 18:47:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1D47C33CAF
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 18:48:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C7FA02053B
-	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 18:47:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A86B32053B
+	for <bpf@archiver.kernel.org>; Thu, 16 Jan 2020 18:48:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579200449;
-	bh=2B3bXT8CnI5hWe6k7KaJCeDE79boiM4jCqVDhJWvomA=;
+	s=default; t=1579200500;
+	bh=6Wvt9vJWgQlGcJlbt5KEJbH/p4c5jmdOeNTFfjihnc4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=SMCWu+TSK7z/sPgUDyVYXEJbNkKhgoyZkvYnx3qWN1rqlgSf+86FN4VJAJL5xp3Kk
-	 KEBOZgABAgKU8esGbVX/KkPD6T6RVhihU+x6erifHBQkdioaKEtxy8VRvw+EwdiXNp
-	 4L2k/piG+o0l1WawAbV2zk07111ibx89YMLh0BSs=
+	b=PbdKrH3zYbrLIXFpLxZ8GV6gDVqfNdMHEKrFIFzqwDy1y3txbS6DcWiGRAu0WEnfc
+	 VPR3pUvv6tDx0ppD/VQCNlY9SUo2ny1Jvlrc9Wlz7mDB1XPvX6GeiO1oA5kAL2C3+J
+	 HWuSVk33hv4UAHCzMUQQRch0OkosyvUvejOca0CY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389836AbgAPSr3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jan 2020 13:47:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49080 "EHLO mail.kernel.org"
+        id S2388926AbgAPSsM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jan 2020 13:48:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46612 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390038AbgAPRKg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:10:36 -0500
+        id S2389758AbgAPRJv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:09:51 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EEB9B24684;
-        Thu, 16 Jan 2020 17:10:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 38CAB205F4;
+        Thu, 16 Jan 2020 17:09:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194635;
-        bh=2B3bXT8CnI5hWe6k7KaJCeDE79boiM4jCqVDhJWvomA=;
+        s=default; t=1579194590;
+        bh=6Wvt9vJWgQlGcJlbt5KEJbH/p4c5jmdOeNTFfjihnc4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=02vIvWHcevE37jvquAF9jqTq4UGdCWfDv5/X7DrGqMaeZXqIS59ABEpqJtF3/vrzY
-         TWRdfiVI82vhVsNyhOHcH60W+VYNHYhTtp0BwIY6ZntypcqMxEJlJJij21h3WSiJ7P
-         X+EgRNPRzDZEL5oSmwrrlR6eTckf/6z/mJ6xT05E=
+        b=V7sqlYPKkRtZgf/dbgK55YcuEHNqq3xlwFlpDrh34AFB8h9YOsOHGQf/6L/8K2m5r
+         ON9V2Kcs4qptgGVMN1ej6YfppoQym3eI73U+TJBTH7WfMYGp7UiFXNw4VYyifAvBRQ
+         PG6/cAO7ySyj04kKvE4NGUx443byLq2if+Kslmbg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Quentin Monnet <quentin.monnet@netronome.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+Cc:     Ilya Maximets <i.maximets@samsung.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        William Tu <u9012063@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 494/671] tools: bpftool: fix arguments for p_err() in do_event_pipe()
-Date:   Thu, 16 Jan 2020 12:02:12 -0500
-Message-Id: <20200116170509.12787-231-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 461/671] xdp: fix possible cq entry leak
+Date:   Thu, 16 Jan 2020 12:01:39 -0500
+Message-Id: <20200116170509.12787-198-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
 References: <20200116170509.12787-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -60,46 +62,64 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Quentin Monnet <quentin.monnet@netronome.com>
+From: Ilya Maximets <i.maximets@samsung.com>
 
-[ Upstream commit 9def249dc8409ffc1f5a1d7195f1c462f2b49c07 ]
+[ Upstream commit 675716400da6f15b9d3db04ef74ee74ca9a00af3 ]
 
-The last argument passed to some calls to the p_err() functions is not
-correct, it should be "*argv" instead of "**argv". This may lead to a
-segmentation fault error if CPU IDs or indices from the command line
-cannot be parsed correctly. Let's fix this.
+Completion queue address reservation could not be undone.
+In case of bad 'queue_id' or skb allocation failure, reserved entry
+will be leaked reducing the total capacity of completion queue.
 
-Fixes: f412eed9dfde ("tools: bpftool: add simple perf event output reader")
-Signed-off-by: Quentin Monnet <quentin.monnet@netronome.com>
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Fix that by moving reservation to the point where failure is not
+possible. Additionally, 'queue_id' checking moved out from the loop
+since there is no point to check it there.
+
+Fixes: 35fcde7f8deb ("xsk: support for Tx")
+Signed-off-by: Ilya Maximets <i.maximets@samsung.com>
+Acked-by: Björn Töpel <bjorn.topel@intel.com>
+Tested-by: William Tu <u9012063@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/map_perf_ring.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/xdp/xsk.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/tools/bpf/bpftool/map_perf_ring.c b/tools/bpf/bpftool/map_perf_ring.c
-index 6d41323be291..8ec0148d7426 100644
---- a/tools/bpf/bpftool/map_perf_ring.c
-+++ b/tools/bpf/bpftool/map_perf_ring.c
-@@ -205,7 +205,7 @@ int do_event_pipe(int argc, char **argv)
- 			NEXT_ARG();
- 			cpu = strtoul(*argv, &endptr, 0);
- 			if (*endptr) {
--				p_err("can't parse %s as CPU ID", **argv);
-+				p_err("can't parse %s as CPU ID", *argv);
- 				goto err_close_map;
- 			}
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 547fc4554b22..c90854bc3048 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -218,6 +218,9 @@ static int xsk_generic_xmit(struct sock *sk, struct msghdr *m,
  
-@@ -216,7 +216,7 @@ int do_event_pipe(int argc, char **argv)
- 			NEXT_ARG();
- 			index = strtoul(*argv, &endptr, 0);
- 			if (*endptr) {
--				p_err("can't parse %s as index", **argv);
-+				p_err("can't parse %s as index", *argv);
- 				goto err_close_map;
- 			}
+ 	mutex_lock(&xs->mutex);
  
++	if (xs->queue_id >= xs->dev->real_num_tx_queues)
++		goto out;
++
+ 	while (xskq_peek_desc(xs->tx, &desc)) {
+ 		char *buffer;
+ 		u64 addr;
+@@ -228,12 +231,6 @@ static int xsk_generic_xmit(struct sock *sk, struct msghdr *m,
+ 			goto out;
+ 		}
+ 
+-		if (xskq_reserve_addr(xs->umem->cq))
+-			goto out;
+-
+-		if (xs->queue_id >= xs->dev->real_num_tx_queues)
+-			goto out;
+-
+ 		len = desc.len;
+ 		skb = sock_alloc_send_skb(sk, len, 1, &err);
+ 		if (unlikely(!skb)) {
+@@ -245,7 +242,7 @@ static int xsk_generic_xmit(struct sock *sk, struct msghdr *m,
+ 		addr = desc.addr;
+ 		buffer = xdp_umem_get_data(xs->umem, addr);
+ 		err = skb_store_bits(skb, 0, buffer, len);
+-		if (unlikely(err)) {
++		if (unlikely(err) || xskq_reserve_addr(xs->umem->cq)) {
+ 			kfree_skb(skb);
+ 			goto out;
+ 		}
 -- 
 2.20.1
 
