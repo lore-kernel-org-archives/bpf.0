@@ -2,44 +2,44 @@ Return-Path: <SRS0=dKsF=3G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2765C33CB1
-	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 06:08:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E53F3C33CB6
+	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 06:08:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AB8A12072B
-	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 06:08:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBAB02083E
+	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 06:08:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="rpkz3eON"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="UcAJD3ZS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726827AbgAQGIM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Jan 2020 01:08:12 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18562 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726479AbgAQGIL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 17 Jan 2020 01:08:11 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00H651NA026226
-        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 22:08:10 -0800
+        id S1726631AbgAQGIO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Jan 2020 01:08:14 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11134 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726675AbgAQGIM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 17 Jan 2020 01:08:12 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00H61Z0C031387
+        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 22:08:11 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=7Dw7HIpmKvtHofKmBr8afkFIByJRi7dgdSnP8XhdMm4=;
- b=rpkz3eON2N0Kbk8S/GnuFbs8L61qvbcbB2iAv8rwH+kjC0aOI0wT3CDI1fqvpg6Unxv6
- 0MraDjNRAxpydKXzBjoJCuaAeod2d7H698dytwc2iYxSAhV9NhuxB15k4lToXZ9h4589
- ytZOz/Tgq7aHXqbPvQf4tgFOaFrpo/89mBA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xk0s1hc7y-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=Mi1w89sCou+O1RrZhaGhoPI8TQ+wxBWanqAzKMDVXJw=;
+ b=UcAJD3ZSCPzinYNv+Lsylc45aIGoFoVb1O8mPLBf3jWnSy+uyFt0jgxmsl3u8oh6sMg9
+ F0yR6AY5MV6e7raQJwgpyknOt3aYbnQYVeLhD05enpi67IdamUBeJ68de+vp6AdWEIe4
+ MmOQWpTvxMqHshsOqnxeaf6tT2FgWOwsbw4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xk0sbsbj3-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 22:08:10 -0800
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 22:08:11 -0800
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1779.2; Thu, 16 Jan 2020 22:08:09 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id C2C3B2EC1745; Thu, 16 Jan 2020 22:08:03 -0800 (PST)
+        id 9DE892EC1745; Thu, 16 Jan 2020 22:08:08 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,42 +48,86 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 0/4] Fix few unrelated small bugs and issues
-Date:   Thu, 16 Jan 2020 22:07:57 -0800
-Message-ID: <20200117060801.1311525-1-andriin@fb.com>
+Subject: [PATCH bpf-next 2/4] libbpf: simplify BTF initialization logic
+Date:   Thu, 16 Jan 2020 22:07:59 -0800
+Message-ID: <20200117060801.1311525-3-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200117060801.1311525-1-andriin@fb.com>
+References: <20200117060801.1311525-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-01-16_06:2020-01-16,2020-01-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- impostorscore=0 mlxscore=0 clxscore=1015 spamscore=0 adultscore=0
- phishscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
- mlxlogscore=597 suspectscore=8 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-2001170047
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ suspectscore=25 bulkscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ mlxlogscore=999 lowpriorityscore=0 phishscore=0 mlxscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001170047
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix few unrelated issues, found by static analysis tools (performed against
-libbpf's Github repo). Also fix compilation warning in bpftool polluting
-selftests Makefile output.
+Current implementation of bpf_object's BTF initialization is very convoluted
+and thus prone to errors. It doesn't have to be like that. This patch
+simplifies it significantly.
 
-Andrii Nakryiko (4):
-  libbpf: fix error handling bug in btf_dump__new
-  libbpf: simplify BTF initialization logic
-  libbpf: fix potential multiplication overflow in mmap() size
-    calculation
-  bpftool: avoid const discard compilation warning
+This code also triggered static analysis issues over logically dead code due
+to redundant error checks. This simplification should fix that as well.
 
- tools/bpf/bpftool/jit_disasm.c |  2 +-
- tools/lib/bpf/btf_dump.c       |  1 +
- tools/lib/bpf/libbpf.c         | 21 +++++++--------------
- 3 files changed, 9 insertions(+), 15 deletions(-)
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/libbpf.c | 19 ++++++-------------
+ 1 file changed, 6 insertions(+), 13 deletions(-)
 
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 3afaca9bce1d..3b0b88c3377d 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -2297,16 +2297,18 @@ static int bpf_object__init_btf(struct bpf_object *obj,
+ 				Elf_Data *btf_data,
+ 				Elf_Data *btf_ext_data)
+ {
+-	bool btf_required = bpf_object__is_btf_mandatory(obj);
+-	int err = 0;
++	int err = -ENOENT;
+ 
+ 	if (btf_data) {
+ 		obj->btf = btf__new(btf_data->d_buf, btf_data->d_size);
+ 		if (IS_ERR(obj->btf)) {
++			err = PTR_ERR(obj->btf);
++			obj->btf = NULL;
+ 			pr_warn("Error loading ELF section %s: %d.\n",
+ 				BTF_ELF_SEC, err);
+ 			goto out;
+ 		}
++		err = 0;
+ 	}
+ 	if (btf_ext_data) {
+ 		if (!obj->btf) {
+@@ -2324,18 +2326,9 @@ static int bpf_object__init_btf(struct bpf_object *obj,
+ 		}
+ 	}
+ out:
+-	if (err || IS_ERR(obj->btf)) {
+-		if (btf_required)
+-			err = err ? : PTR_ERR(obj->btf);
+-		else
+-			err = 0;
+-		if (!IS_ERR_OR_NULL(obj->btf))
+-			btf__free(obj->btf);
+-		obj->btf = NULL;
+-	}
+-	if (btf_required && !obj->btf) {
++	if (err && bpf_object__is_btf_mandatory(obj)) {
+ 		pr_warn("BTF is required, but is missing or corrupted.\n");
+-		return err == 0 ? -ENOENT : err;
++		return err;
+ 	}
+ 	return 0;
+ }
 -- 
 2.17.1
 
