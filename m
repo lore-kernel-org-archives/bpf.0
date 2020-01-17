@@ -2,88 +2,88 @@ Return-Path: <SRS0=dKsF=3G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7640C33CB3
-	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 04:19:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2765C33CB1
+	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 06:08:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A53BF2083E
-	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 04:19:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB8A12072B
+	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 06:08:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pvy9KYBi"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="rpkz3eON"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726378AbgAQETq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jan 2020 23:19:46 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:45412 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbgAQETq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jan 2020 23:19:46 -0500
-Received: by mail-lj1-f194.google.com with SMTP id j26so24982933ljc.12;
-        Thu, 16 Jan 2020 20:19:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=imSKWoC291eohZgsrWD/LjCtAqZICIklk9Wyz8HO8IY=;
-        b=Pvy9KYBiXH03e36P8s+6tBl671hsS8qjrJCk9h9JlzINU0ywwm5RcsoG7hIigjT2SM
-         2P5K74yX7ecNg7TTMunbxjaZf4KOWnx+/D53phoBptlSM8egR54Z3zJZeRoMqQ8rQDzj
-         4Fw5pyJnSQgUWiDVMV/s72o2EeD4jDQRMJrkEYZlXeC0O5p+nn6z/ENyW065b4HMkPOf
-         lSpr/GFQDfVDWnAABrr4v3Og0F8FANk9hrcZx6nN5YDAJkcv7xp0sSOaABM7Y7nuaacA
-         LGD81kItcNTSYNScfDU4WZejj3Z2Pgse3rej/r7gyBUuBPfNXo2RXEVcoYthRw0vWkgZ
-         hIlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=imSKWoC291eohZgsrWD/LjCtAqZICIklk9Wyz8HO8IY=;
-        b=Y4m4rgJBs7f5/aBZtqu2cK8JWcEC/xswSqwauOKL3/ihZDODdVJyfrs4KbgJz9i4v0
-         T2LcVFurJoXgeKZk8B14MOvObjhLBgiUByH+HOurAyr83XV9UNq7jcI2VIYUBbCsMkKj
-         /TXURsXc52JzlEz6Mfi/tyd3x5H86WZHwJJvN3zhdsoi6V8MUnhL61xvSZhks3r7QCtK
-         Nd7dmPzZookdKUx4i3NhObgydqm/nUz5SDEZ/kQdzxvYPtdDiQqTKFxxuXhxxQ9AArda
-         y3/2LmC1iGgJ9BmLr5Ebm0I7XrMiuCFuuxg+BqjAePfU9CI007Yl30fsjeNtJKdMoW75
-         MTWQ==
-X-Gm-Message-State: APjAAAXN3TeAcnB1+7n8qsR3liVODhQQeP+wR3GXpWejZMT7ZbQdH6ku
-        tBA6cejG7doT1517/DU+likaW9+uESiW79Fv3pw=
-X-Google-Smtp-Source: APXvYqzSEUXMlBj6dlKaHS7YXkz2fO4BuQk4KT4Tx/YQFscvfB/UfytOxrU6dSOWVwLi/Mp+XD8M89vCtQocmhysvYI=
-X-Received: by 2002:a2e:89d0:: with SMTP id c16mr4357865ljk.228.1579234783953;
- Thu, 16 Jan 2020 20:19:43 -0800 (PST)
+        id S1726827AbgAQGIM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Jan 2020 01:08:12 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18562 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726479AbgAQGIL (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 17 Jan 2020 01:08:11 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00H651NA026226
+        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 22:08:10 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=7Dw7HIpmKvtHofKmBr8afkFIByJRi7dgdSnP8XhdMm4=;
+ b=rpkz3eON2N0Kbk8S/GnuFbs8L61qvbcbB2iAv8rwH+kjC0aOI0wT3CDI1fqvpg6Unxv6
+ 0MraDjNRAxpydKXzBjoJCuaAeod2d7H698dytwc2iYxSAhV9NhuxB15k4lToXZ9h4589
+ ytZOz/Tgq7aHXqbPvQf4tgFOaFrpo/89mBA= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xk0s1hc7y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 22:08:10 -0800
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Thu, 16 Jan 2020 22:08:09 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id C2C3B2EC1745; Thu, 16 Jan 2020 22:08:03 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next 0/4] Fix few unrelated small bugs and issues
+Date:   Thu, 16 Jan 2020 22:07:57 -0800
+Message-ID: <20200117060801.1311525-1-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20200116145300.59056-1-yuehaibing@huawei.com> <CAMzD94T3TowoygCu3mAtd3WaZtSk1m1AVVpUHYB_bPAyE9QS3A@mail.gmail.com>
-In-Reply-To: <CAMzD94T3TowoygCu3mAtd3WaZtSk1m1AVVpUHYB_bPAyE9QS3A@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 16 Jan 2020 20:19:32 -0800
-Message-ID: <CAADnVQL_BwWCMGvxPjC-bFiSskhzDypRifQFRUmTZtWN11qx=w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Remove set but not used variable 'first_key'
-To:     Brian Vazquez <brianvv@google.com>
-Cc:     YueHaibing <yuehaibing@huawei.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Linux NetDev <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-16_06:2020-01-16,2020-01-16 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ impostorscore=0 mlxscore=0 clxscore=1015 spamscore=0 adultscore=0
+ phishscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ mlxlogscore=597 suspectscore=8 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-2001170047
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jan 16, 2020 at 5:41 PM Brian Vazquez <brianvv@google.com> wrote:
->
-> On Thu, Jan 16, 2020 at 5:38 PM YueHaibing <yuehaibing@huawei.com> wrote:
-> >
-> > kernel/bpf/syscall.c: In function generic_map_lookup_batch:
-> > kernel/bpf/syscall.c:1339:7: warning: variable first_key set but not used [-Wunused-but-set-variable]
-> >
-> > It is never used, so remove it.
->
-> Previous logic was using it but I forgot to delete it. Thanks for fixing it!
->
-> Acked-by: Brian Vazquez <brianvv@google.com>
+Fix few unrelated issues, found by static analysis tools (performed against
+libbpf's Github repo). Also fix compilation warning in bpftool polluting
+selftests Makefile output.
 
-Applied. Thanks
+Andrii Nakryiko (4):
+  libbpf: fix error handling bug in btf_dump__new
+  libbpf: simplify BTF initialization logic
+  libbpf: fix potential multiplication overflow in mmap() size
+    calculation
+  bpftool: avoid const discard compilation warning
+
+ tools/bpf/bpftool/jit_disasm.c |  2 +-
+ tools/lib/bpf/btf_dump.c       |  1 +
+ tools/lib/bpf/libbpf.c         | 21 +++++++--------------
+ 3 files changed, 9 insertions(+), 15 deletions(-)
+
+-- 
+2.17.1
+
