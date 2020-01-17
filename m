@@ -2,95 +2,116 @@ Return-Path: <SRS0=dKsF=3G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A156CC33CB1
-	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 06:08:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8339C33CB1
+	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 07:09:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 723B12072B
-	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 06:08:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A98AB2073A
+	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 07:09:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jlZioySW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aJsOM28d"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726983AbgAQGIV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Jan 2020 01:08:21 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36388 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726975AbgAQGIV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 17 Jan 2020 01:08:21 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00H68GCi001552
-        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 22:08:20 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=vD1go5ni0WhRe4tQ6LPinwyWhOOBkoLkD8RJOCcZBgc=;
- b=jlZioySWanjR54X8vEWAENUawzPYbepgk3TjEC3XvSYiC4FutfnuxWfYkM/4f4ZXhhXW
- h+db/ciDO+9a6EK06tXr1XVzMIZ3iI7KMbYl//TUyiqFp9VzlTvI4OzrQvonUz8YpmgN
- bfT+cjozuwUAFlagOxJoBsTl0YG6LHWRg6E= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xk0rn1bnw-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 16 Jan 2020 22:08:20 -0800
-Received: from intmgw004.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Thu, 16 Jan 2020 22:08:11 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 450352EC1745; Thu, 16 Jan 2020 22:08:06 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 1/4] libbpf: fix error handling bug in btf_dump__new
-Date:   Thu, 16 Jan 2020 22:07:58 -0800
-Message-ID: <20200117060801.1311525-2-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200117060801.1311525-1-andriin@fb.com>
-References: <20200117060801.1311525-1-andriin@fb.com>
-X-FB-Internal: Safe
+        id S1729190AbgAQHJT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Jan 2020 02:09:19 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40225 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726675AbgAQHJT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Jan 2020 02:09:19 -0500
+Received: by mail-pf1-f193.google.com with SMTP id q8so11498297pfh.7;
+        Thu, 16 Jan 2020 23:09:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wdv4lG5+idVQ+m2cyNBbBqOOGD1eK0711ACf52RUIc4=;
+        b=aJsOM28dpXZ3E8yQPEOztAAKh0xpxCFLkhTYwaEHs1EcjRoDAExICyUaKCl8eQcgBt
+         lRcGlYh5+dsIp4iz4iwJ2CXT9EZwzAkDdA7hp9dmyl/yK5HoTYtSdRohMolNyBot7Efk
+         bj9xgcy/TOeSmFb0xlOvfjdrGlpTrWH57/UJFrXoytseafv+bkKQF77f3HOQCcY+H+qj
+         PSZsQ/ZOGQiFKF3JzA0OAHfDa0QFFcGemYyADSXY/n3aVaRTR+vidF3hF/NF0n2v1Aaw
+         FdTq38fCusX6btAcYpFwxdc8xqcLiySKC5f3yTeybVCuRsvRL+wygRYr5V2XVDmSreAn
+         6Tlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wdv4lG5+idVQ+m2cyNBbBqOOGD1eK0711ACf52RUIc4=;
+        b=T/bxpF5FOW52pXySmdSJ4Yw+YOohzLAHzHuli1ke7IbmzW33UUCC4V/ZSdKG37yHCH
+         5LMkbO/FZGondGw1N3xpP8Y9g2nDGkjpDYgW1JyZOwVdXouAFjXrNNWvZ3VIVUeCBJim
+         Xc0DcgTzlbvrOqJebLKVNQY28GkDzJhEwRKqIbytf8B8pCNdaop8EJuNw9kEEh66LJdO
+         mVudPxerYwIqMmzTkZgiUqJVXutZc0C+feYUvbRU/3U1WPZ9lG1SBID4h9wX+LZS3fZh
+         2s8ZiF5OBKNwCjHbS9wWB4QbWvJ2km7p+I3vHyd1YARHSp1kOSOWek5IDO8b44rZvwvv
+         XL+Q==
+X-Gm-Message-State: APjAAAWBecQu2vXLzaI40reCPhYHI7StPjhXGGhGm0rNmYZfu7P4YPU1
+        SwC9RQZ/hFpY6fF7iuIPI+s=
+X-Google-Smtp-Source: APXvYqyb3bj9M993s5Sv5HFGu85yqw17yOfL9aJ9YFe1aQO9yygQMB0RMdH04XKyhJ5Yhytjze+r8w==
+X-Received: by 2002:a63:4e06:: with SMTP id c6mr43239499pgb.187.1579244958036;
+        Thu, 16 Jan 2020 23:09:18 -0800 (PST)
+Received: from hpg8-3.kern.oss.ntt.co.jp ([222.151.198.97])
+        by smtp.gmail.com with ESMTPSA id d4sm407499pjg.19.2020.01.16.23.09.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jan 2020 23:09:17 -0800 (PST)
+From:   Yoshiki Komachi <komachi.yoshiki@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Petar Penkov <ppenkov.kernel@gmail.com>
+Cc:     Yoshiki Komachi <komachi.yoshiki@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH v2 bpf 0/2] Fix the classification based on port ranges in bpf hook
+Date:   Fri, 17 Jan 2020 16:05:31 +0900
+Message-Id: <20200117070533.402240-1-komachi.yoshiki@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-16_06:2020-01-16,2020-01-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 suspectscore=8
- mlxlogscore=961 phishscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
- bulkscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001170048
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix missing jump to error handling in btf_dump__new, found by Coverity static
-code analysis.
+When I tried a test based on the selftest program for BPF flow dissector
+(test_flow_dissector.sh), I observed unexpected result as below:
 
-Fixes: 9f81654eebe8 ("libbpf: Expose BTF-to-C type declaration emitting API")
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/btf_dump.c | 1 +
- 1 file changed, 1 insertion(+)
+$ tc filter add dev lo parent ffff: protocol ip pref 1337 flower ip_proto \
+	udp src_port 8-10 action drop
+$ tools/testing/selftests/bpf/test_flow_dissector -i 4 -f 9 -F
+inner.dest4: 127.0.0.1
+inner.source4: 127.0.0.3
+pkts: tx=10 rx=10
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 885acebd4396..bd09ed1710f1 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -142,6 +142,7 @@ struct btf_dump *btf_dump__new(const struct btf *btf,
- 	if (IS_ERR(d->type_names)) {
- 		err = PTR_ERR(d->type_names);
- 		d->type_names = NULL;
-+		goto err;
- 	}
- 	d->ident_names = hashmap__new(str_hash_fn, str_equal_fn, NULL);
- 	if (IS_ERR(d->ident_names)) {
+The last rx means the number of received packets. I expected rx=0 in this
+test (i.e., all received packets should have been dropped), but it resulted
+in acceptance.
+
+Although the previous commit 8ffb055beae5 ("cls_flower: Fix the behavior
+using port ranges with hw-offload") added new flag and field toward filtering
+based on port ranges with hw-offload, it missed applying for BPF flow dissector
+then. As a result, BPF flow dissector currently stores data extracted from
+packets in incorrect field used for exact match whenever packets are classified
+by filters based on port ranges. Thus, they never match rules in such cases
+because flow dissector gives rise to generating incorrect flow keys.
+
+This series fixes the issue by replacing incorrect flag and field with new 
+ones in BPF flow dissector, and adds a test for filtering based on specified
+port ranges to the existing selftest program.
+
+Changes in v2:
+ - set key_ports to NULL at the top of __skb_flow_bpf_to_target()
+
+Yoshiki Komachi (2):
+  flow_dissector: Fix to use new variables for port ranges in bpf hook
+  selftests/bpf: Add test based on port range for BPF flow dissector
+
+ net/core/flow_dissector.c                          |  9 ++++++++-
+ tools/testing/selftests/bpf/test_flow_dissector.sh | 14 ++++++++++++++
+ 2 files changed, 22 insertions(+), 1 deletion(-)
+
 -- 
-2.17.1
+1.8.3.1
 
