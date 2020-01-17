@@ -2,127 +2,134 @@ Return-Path: <SRS0=dKsF=3G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 477A6C33CB1
-	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 10:44:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CA9DC33CB6
+	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 13:36:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 193712073A
-	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 10:44:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E729820728
+	for <bpf@archiver.kernel.org>; Fri, 17 Jan 2020 13:36:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="sXxQk0qJ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NBgagi4v"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726890AbgAQKoM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Jan 2020 05:44:12 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:48522 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726196AbgAQKoM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Jan 2020 05:44:12 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00HAhrjm009743;
-        Fri, 17 Jan 2020 10:44:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=Ulxn1uAtoZmo2eD1oSEZ9gbUUqYF6C/213tnsDyWzSk=;
- b=sXxQk0qJDP3fDmaVaVCMIp5heSrDDtsXWWZcV6/SMkygHuTQzQjgvCXUi5widw8IfNKs
- pMi1V1OCF9t0hBwqdf68s6zyPAROn5T/cBPeMcW7tNNvZVXH9N4YsmKp/XpgV7cUpyXK
- /L5a8tcl3T9hOZQM31pxvExn9qThB2i7WvbHew9HMlD05vdyt7NZPQVV3PrX2D7dch3z
- qZEkpj4D1sjFcLTMk3b1s9OE3Zisoce61xhuv4B1/2TDIZoM2pUZrt9dx4YTdlC04Hgt
- ClNx4V4Zbq/WegoNkFHViWXQnRH+OkZtkRiRZDVMW1Xao4T1Svc/ILPRvkWbLZ5mmQkP yw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 2xf74sqyhk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jan 2020 10:44:09 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00HAhFhv086380;
-        Fri, 17 Jan 2020 10:44:08 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2xk231kq7h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jan 2020 10:44:08 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 00HAi7Ii026936;
-        Fri, 17 Jan 2020 10:44:07 GMT
-Received: from kili.mountain (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 17 Jan 2020 02:44:06 -0800
-Date:   Fri, 17 Jan 2020 13:44:00 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     brianvv@google.com
-Cc:     bpf@vger.kernel.org
-Subject: [bug report] bpf: Add generic support for update and delete batch ops
-Message-ID: <20200117104400.iwfowq7z4epdvoww@kili.mountain>
+        id S1727519AbgAQNgo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Jan 2020 08:36:44 -0500
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:29034 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727028AbgAQNgn (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 17 Jan 2020 08:36:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579268202;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oVICxkwYE819T09jumS9b6kqZZVW9alGabNhw2Byv4c=;
+        b=NBgagi4vaVDraEVb5z2UKdz55Ow06HL4VwzW9qJzYRjo+al8258qd5DgxWAka0djOH1o33
+        gBg7BWxeCJNHe9I/wpip7Qt8epB/JM4qsS/P3oBPsHI/DbhRQfLFiUxUbBw9Ts8nR3zxBe
+        Ibl6F4CbmqlBoHVRrH5eGjfL1ZTplOM=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-361-ORCIiq0rOmuKKgr7b-BdqA-1; Fri, 17 Jan 2020 08:36:41 -0500
+X-MC-Unique: ORCIiq0rOmuKKgr7b-BdqA-1
+Received: by mail-lf1-f69.google.com with SMTP id t8so4356924lfc.21
+        for <bpf@vger.kernel.org>; Fri, 17 Jan 2020 05:36:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=oVICxkwYE819T09jumS9b6kqZZVW9alGabNhw2Byv4c=;
+        b=tDRua44o/MB5+SySNbcIUgjvD9F41Q8vUI4AGgHXW96ZU2l2ahfizNsrBKMPCI2Bsd
+         fhG3xaRcyqeL1l++q4i3LrgFtF9TwFRfvsYDAU3mfPfs4ph+pEV74+lKVJjKKwTMyp/H
+         dA+4VrqfpIOf+SKOzx38zVbraXPIcqFw0gp+8M/a2j15WtZ3i28fUlxC7jOMQS5y3RoX
+         dZiy5akEic5QzmNhDWUdN4njXZmQXfk6bMcI2bh+C+20+VXp7Y8HUJihriTa6MT8Ie/I
+         l3d9lAfG9cljduCMlB6nTrvIzRyxa/Cvv89PxDRm1bFlpoRuhIBJMoD0tmt4nypqvCJW
+         U5NQ==
+X-Gm-Message-State: APjAAAW421HWfqrXqxcU5I/X06YbVlu1CY8iCiCpADO8gZtXRONzP0XJ
+        DYjdh/B03fKpEsx2kLGUSrjOoVwLTVvCBC63AbdpF04JDs2iPkynBsMD+n7oh2MIOWBjy+qLi0L
+        9n9ThPLYkhzMl
+X-Received: by 2002:a2e:3504:: with SMTP id z4mr5730206ljz.273.1579268199908;
+        Fri, 17 Jan 2020 05:36:39 -0800 (PST)
+X-Google-Smtp-Source: APXvYqylN+0GVMNBaohq3jT5bbBFBEpPomA9QCEg65LVnS53cMW7Nhrc9Od5tPVFSrsyp0I8uvYr0A==
+X-Received: by 2002:a2e:3504:: with SMTP id z4mr5730180ljz.273.1579268199696;
+        Fri, 17 Jan 2020 05:36:39 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id w1sm11999480lfe.96.2020.01.17.05.36.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2020 05:36:39 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 317BF1804D7; Fri, 17 Jan 2020 14:36:38 +0100 (CET)
+Subject: [PATCH bpf-next v4 01/10] samples/bpf: Don't try to remove user's
+ homedir on clean
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Date:   Fri, 17 Jan 2020 14:36:38 +0100
+Message-ID: <157926819814.1555735.13181807141455624178.stgit@toke.dk>
+In-Reply-To: <157926819690.1555735.10756593211671752826.stgit@toke.dk>
+References: <157926819690.1555735.10756593211671752826.stgit@toke.dk>
+User-Agent: StGit/0.21
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9502 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=889
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001170083
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9502 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=935 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001170083
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello Brian Vazquez,
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-The patch aa2e93b8e58e: "bpf: Add generic support for update and
-delete batch ops" from Jan 15, 2020, leads to the following static
-checker warning:
+The 'clean' rule in the samples/bpf Makefile tries to remove backup
+files (ending in ~). However, if no such files exist, it will instead try
+to remove the user's home directory. While the attempt is mostly harmless,
+it does lead to a somewhat scary warning like this:
 
-	kernel/bpf/syscall.c:1322 generic_map_update_batch()
-	error: 'key' dereferencing possible ERR_PTR()
+rm: cannot remove '~': Is a directory
 
-kernel/bpf/syscall.c
-  1296  
-  1297          value = kmalloc(value_size, GFP_USER | __GFP_NOWARN);
-  1298          if (!value)
-  1299                  return -ENOMEM;
-  1300  
-  1301          for (cp = 0; cp < max_count; cp++) {
-  1302                  key = __bpf_copy_key(keys + cp * map->key_size, map->key_size);
-  1303                  if (IS_ERR(key)) {
-  1304                          err = PTR_ERR(key);
-  1305                          break;
-                                ^^^^^
-This will Oops.
+Fix this by using find instead of shell expansion to locate any actual
+backup files that need to be removed.
 
-  1306                  }
-  1307                  err = -EFAULT;
-  1308                  if (copy_from_user(value, values + cp * value_size, value_size))
-  1309                          break;
-  1310  
-  1311                  err = bpf_map_update_value(map, f, key, value,
-  1312                                             attr->batch.elem_flags);
-  1313  
-  1314                  if (err)
-  1315                          break;
+Fixes: b62a796c109c ("samples/bpf: allow make to be run from samples/bpf/ directory")
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ samples/bpf/Makefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But the success path seems to leak.  Anyway, either we free the last
-successful key or we are leaking so this doesn't seem workable.  Does
-map->key_size change?  Maybe move the allocation from __bpf_copy_key()
-to before the start of the loop.
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 5b89c0370f33..f86d713a17a5 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -254,7 +254,7 @@ all:
+ 
+ clean:
+ 	$(MAKE) -C ../../ M=$(CURDIR) clean
+-	@rm -f *~
++	@find $(CURDIR) -type f -name '*~' -delete
+ 
+ $(LIBBPF): FORCE
+ # Fix up variables inherited from Kbuild that tools/ build system won't like
 
-  1316          }
-  1317  
-  1318          if (copy_to_user(&uattr->batch.count, &cp, sizeof(cp)))
-  1319                  err = -EFAULT;
-  1320  
-  1321          kfree(value);
-  1322          kfree(key);
-  1323          return err;
-  1324  }
-
-regards,
-dan carpenter
