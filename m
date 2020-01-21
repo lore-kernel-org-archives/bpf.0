@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03038C2D0DB
-	for <bpf@archiver.kernel.org>; Tue, 21 Jan 2020 19:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12D79C2D0CE
+	for <bpf@archiver.kernel.org>; Tue, 21 Jan 2020 19:54:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CC4C024656
-	for <bpf@archiver.kernel.org>; Tue, 21 Jan 2020 19:54:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CE16924656
+	for <bpf@archiver.kernel.org>; Tue, 21 Jan 2020 19:54:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mXTpvQTm"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mdPSUSvK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728205AbgAUTy0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1728925AbgAUTy0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 21 Jan 2020 14:54:26 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:42486 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728853AbgAUTy0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 21 Jan 2020 14:54:26 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00LJpr3K000709
-        for <bpf@vger.kernel.org>; Tue, 21 Jan 2020 11:54:25 -0800
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11982 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727813AbgAUTyX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 21 Jan 2020 14:54:23 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00LJqcaV016079
+        for <bpf@vger.kernel.org>; Tue, 21 Jan 2020 11:54:22 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=4PyWDKYpsa2cjVMpH3P7OQvk3szcUPYHBiTfB+7LxcE=;
- b=mXTpvQTm7YQce80Ujt2/Kijg2Kg/9d+6j0B0DCqf7FAIhLSDQuYFD7DHYeO/8DI2ucPb
- QDNMX87ZPFfHpMYW9fnDyYF84mLkqE06SVQzgnf5dT7JxUvAD5shKtWE2/YWMUgFJF8f
- bG0787N6p+RyRlTkrF4f6t3w60Jfnlx6QnM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xnwtvjtd1-3
+ content-type; s=facebook; bh=aTBnajkVhnCIn48XAGN58xRK8qz/62jfbsJ8N33w5hY=;
+ b=mdPSUSvKzNuOagHUs5+I4vKOHtPdIAnbjHwTWqrhJgVe6AzuINaYqjgXHfDAcVFWEg1y
+ C0NDPu9xw4NLAEp+WQi7m0CvzKOzaV+YeoDCllEdldgo+YUOWSuAreGYTZDBJ4QDMhrG
+ vv9lZYtnWrQIl5M4lzazwtGfbRDBwHzojKk= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xnky84khb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 21 Jan 2020 11:54:25 -0800
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 21 Jan 2020 11:54:22 -0800
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Tue, 21 Jan 2020 11:54:24 -0800
+ 15.1.1779.2; Tue, 21 Jan 2020 11:54:21 -0800
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id EEEC729420B3; Tue, 21 Jan 2020 11:54:20 -0800 (PST)
+        id B11EC29420B3; Tue, 21 Jan 2020 11:54:14 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -50,9 +50,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Eric Dumazet <edumazet@google.com>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/3] bpf: Sync uapi bpf.h to tools/
-Date:   Tue, 21 Jan 2020 11:54:20 -0800
-Message-ID: <20200121195420.3757930-1-kafai@fb.com>
+Subject: [PATCH bpf-next 1/3] bpf: Add BPF_FUNC_jiffies64
+Date:   Tue, 21 Jan 2020 11:54:14 -0800
+Message-ID: <20200121195414.3757563-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200121195408.3756734-1-kafai@fb.com>
 References: <20200121195408.3756734-1-kafai@fb.com>
@@ -61,28 +61,57 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.634
  definitions=2020-01-21_06:2020-01-21,2020-01-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 mlxscore=0
- adultscore=0 clxscore=1015 suspectscore=13 priorityscore=1501 phishscore=0
- impostorscore=0 malwarescore=0 spamscore=0 mlxlogscore=832
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001210147
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 mlxlogscore=999 spamscore=0
+ bulkscore=0 malwarescore=0 suspectscore=13 impostorscore=0
+ lowpriorityscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-2001210147
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch sync uapi bpf.h to tools/.
+This patch adds a helper to read the 64bit jiffies.  It will be used
+in a later patch to implement the bpf_cubic.c.
+
+The helper is inlined.  "gen_inline" is added to "struct bpf_func_proto"
+to do that.  This helper is available to CAP_SYS_ADMIN.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/include/uapi/linux/bpf.h | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ include/linux/bpf.h      |  2 ++
+ include/uapi/linux/bpf.h |  9 ++++++++-
+ kernel/bpf/core.c        |  1 +
+ kernel/bpf/helpers.c     | 27 +++++++++++++++++++++++++++
+ kernel/bpf/verifier.c    | 18 ++++++++++++++++++
+ net/core/filter.c        |  2 ++
+ 6 files changed, 58 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 8e3b8f4ad183..3d85ef44b247 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -258,6 +258,7 @@ enum bpf_return_type {
+  */
+ struct bpf_func_proto {
+ 	u64 (*func)(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
++	u32 (*gen_inline)(struct bpf_insn *insn_buf);
+ 	bool gpl_only;
+ 	bool pkt_access;
+ 	enum bpf_return_type ret_type;
+@@ -1406,6 +1407,7 @@ extern const struct bpf_func_proto bpf_get_local_storage_proto;
+ extern const struct bpf_func_proto bpf_strtol_proto;
+ extern const struct bpf_func_proto bpf_strtoul_proto;
+ extern const struct bpf_func_proto bpf_tcp_sock_proto;
++extern const struct bpf_func_proto bpf_jiffies64_proto;
+ 
+ /* Shared helpers among cBPF and eBPF. */
+ void bpf_user_rnd_init_once(void);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
 index 033d90a2282d..d17c6bcd50cd 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
 @@ -2885,6 +2885,12 @@ union bpf_attr {
   *		**-EPERM** if no permission to send the *sig*.
   *
@@ -106,6 +135,105 @@ index 033d90a2282d..d17c6bcd50cd 100644
  
  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
   * function eBPF program intends to call
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 29d47aae0dd1..973a20d49749 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2137,6 +2137,7 @@ const struct bpf_func_proto bpf_map_pop_elem_proto __weak;
+ const struct bpf_func_proto bpf_map_peek_elem_proto __weak;
+ const struct bpf_func_proto bpf_spin_lock_proto __weak;
+ const struct bpf_func_proto bpf_spin_unlock_proto __weak;
++const struct bpf_func_proto bpf_jiffies64_proto __weak;
+ 
+ const struct bpf_func_proto bpf_get_prandom_u32_proto __weak;
+ const struct bpf_func_proto bpf_get_smp_processor_id_proto __weak;
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index cada974c9f4e..b241cfd350c4 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -11,6 +11,7 @@
+ #include <linux/uidgid.h>
+ #include <linux/filter.h>
+ #include <linux/ctype.h>
++#include <linux/jiffies.h>
+ 
+ #include "../../lib/kstrtox.h"
+ 
+@@ -312,6 +313,32 @@ void copy_map_value_locked(struct bpf_map *map, void *dst, void *src,
+ 	preempt_enable();
+ }
+ 
++static u32 bpf_jiffies64_gen_inline(struct bpf_insn *insn_buf)
++{
++	struct bpf_insn *insn = insn_buf;
++#if BITS_PER_LONG == 64
++	struct bpf_insn ld_jiffies_addr[2] = {
++		BPF_LD_IMM64(BPF_REG_0, (unsigned long)&jiffies),
++	};
++
++	BUILD_BUG_ON(sizeof(jiffies) != sizeof(unsigned long));
++
++	*insn++ = ld_jiffies_addr[0];
++	*insn++ = ld_jiffies_addr[1];
++	*insn++ = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 0);
++#else
++	*insn++ = BPF_EMIT_CALL(BPF_CAST_CALL(get_jiffies_64));
++#endif
++
++	return insn - insn_buf;
++}
++
++const struct bpf_func_proto bpf_jiffies64_proto = {
++	.gen_inline	= bpf_jiffies64_gen_inline,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++};
++
+ #ifdef CONFIG_CGROUPS
+ BPF_CALL_0(bpf_get_current_cgroup_id)
+ {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ca17dccc17ba..91818aad2f80 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9447,6 +9447,24 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 
+ patch_call_imm:
+ 		fn = env->ops->get_func_proto(insn->imm, env->prog);
++		if (fn->gen_inline) {
++			cnt = fn->gen_inline(insn_buf);
++			if (cnt == 0 || cnt >= ARRAY_SIZE(insn_buf)) {
++				verbose(env, "bpf verifier is misconfigured\n");
++				return -EINVAL;
++			}
++
++			new_prog = bpf_patch_insn_data(env, i + delta,
++						       insn_buf, cnt);
++			if (!new_prog)
++				return -ENOMEM;
++
++			delta    += cnt - 1;
++			env->prog = prog = new_prog;
++			insn      = new_prog->insnsi + i + delta;
++			continue;
++		}
++
+ 		/* all functions that have prototype and verifier allowed
+ 		 * programs to call them, must be real in-kernel functions
+ 		 */
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 17de6747d9e3..4bf3e4aa8a7a 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5923,6 +5923,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_spin_unlock_proto;
+ 	case BPF_FUNC_trace_printk:
+ 		return bpf_get_trace_printk_proto();
++	case BPF_FUNC_jiffies64:
++		return &bpf_jiffies64_proto;
+ 	default:
+ 		return NULL;
+ 	}
 -- 
 2.17.1
 
