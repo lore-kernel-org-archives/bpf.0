@@ -2,152 +2,117 @@ Return-Path: <SRS0=pBRf=3L=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 019BDC2D0DB
-	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 13:06:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3159C2D0DB
+	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 13:12:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CBAD624683
-	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 13:06:20 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="HELWQEDH"
+	by mail.kernel.org (Postfix) with ESMTP id C5A1A2467F
+	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 13:12:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1579698777;
+	bh=rF36Oz7wXrvLS/QAc8njrTJvSrYg9SsTB5g+8LbuheA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=bSoXVNGkcxKiV2Qc4bopUPgr8I0pLMUt64MRbbZ0lchZw3MAPcGsV3xSPtA5+L7ZH
+	 FmK6/D3gr5NFOzYGtIrax6zL/Twtuk+VSFSaywAlRkxolCrZJUnd7bcekHAfX719pm
+	 Jsraxn5ChJ3WqamPF0PP895Jko0+z8J2Ha/y8PrY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729316AbgAVNGR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jan 2020 08:06:17 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:36478 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729247AbgAVNGH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Jan 2020 08:06:07 -0500
-Received: by mail-lj1-f194.google.com with SMTP id r19so6729053ljg.3
-        for <bpf@vger.kernel.org>; Wed, 22 Jan 2020 05:06:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SBPO+HqnCTACPCYMS/LgCLu6FHz6w4VqNpcj8+EqcPY=;
-        b=HELWQEDHIeztsXOy3EwiKvTGCxJ8VsuGggXK+QmVRL47GAw7vx8csVKnVDgpKH32ZP
-         Y/waBDPZzzW9yXVldMTJiZR/3gau9IEmM8l9uHExMR1/MJMNu2BxMBh14LSEx0ysHJRD
-         SzkbA3K6gW9rGWc6NTUT0oqGUcKH59haZpdmc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SBPO+HqnCTACPCYMS/LgCLu6FHz6w4VqNpcj8+EqcPY=;
-        b=Kc+kHGlY4Hw34bv4aXSMT8y7/uM4+zfRI41op+J0JYFNps+ba7sMWsp8zG5GLuLthV
-         xOSKNZ+F3aE+5o2kTxnmpQ0GnXkB3N4vXfJCvfH35WCq7kABdbLGGHR95G14cBnNW49A
-         FLz01ebvGB2gGeLlxRD8PhK8BQIySfefLrS7s/kd4orcr4MQ0oC+lxip/VE9IAkbmMnq
-         DTYhZesnsdAViI6TVQlw+wAuVSqbcR/MbIrLkrTeINv62+M4rw8r8qEEGyuufYILmpU/
-         51MruXgwT3SyjDsH39z7wcGZKYTyyAqQI99EYg95s+c/VnnGdjTgMiZWEshKeyo3ABL4
-         fXpw==
-X-Gm-Message-State: APjAAAXeXobZ3Hih6ZQVt2WPcazbJB73zddjacfU3+qNpmfjUn17paLk
-        idsriG8K244hTebJ9m56bX31oiRiC+gVjA==
-X-Google-Smtp-Source: APXvYqwmqIGpSOVMxbCbXphbmVKHDviZernmAC1TY3JApxiJmI8uPQ7qbvhsKdJss6zJk9NGl25mEA==
-X-Received: by 2002:a2e:809a:: with SMTP id i26mr19707102ljg.108.1579698364867;
-        Wed, 22 Jan 2020 05:06:04 -0800 (PST)
-Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id q13sm19957047ljm.68.2020.01.22.05.06.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2020 05:06:04 -0800 (PST)
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        id S1728900AbgAVNM5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jan 2020 08:12:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59898 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727022AbgAVNM5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jan 2020 08:12:57 -0500
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8585B20678;
+        Wed, 22 Jan 2020 13:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579698776;
+        bh=rF36Oz7wXrvLS/QAc8njrTJvSrYg9SsTB5g+8LbuheA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LZC22PoSaj/z5pRc6iN1xz6R0PhJMSUaC9G+vHh3R1q1i31rZRmlNd26EvmG8YbT+
+         KQlSs1Wux++EWx0OR5ypDezuXdhpFHiAr9BThDa/CwiA5qR56fvkViSL7nRHNtLAjC
+         fjoVvVN7PinQsm1wfBu/t0uPvgWpuQF6uTWJFMC8=
+Date:   Wed, 22 Jan 2020 22:12:40 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Brendan Gregg <brendan.d.gregg@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>, Martin Lau <kafai@fb.com>
-Subject: [PATCH bpf-next v3 09/12] bpf: Allow selecting reuseport socket from a SOCKMAP
-Date:   Wed, 22 Jan 2020 14:05:46 +0100
-Message-Id: <20200122130549.832236-10-jakub@cloudflare.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200122130549.832236-1-jakub@cloudflare.com>
-References: <20200122130549.832236-1-jakub@cloudflare.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>, paulmck@kernel.org,
+        joel@joelfernandes.org,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
+Subject: Re: [RFT PATCH 04/13] kprobes: Make optimizer delay to 1 second
+Message-Id: <20200122221240.cef447446785f46862fee97a@kernel.org>
+In-Reply-To: <20200122071115.28e3c763@gandalf.local.home>
+References: <157918584866.29301.6941815715391411338.stgit@devnote2>
+        <157918589199.29301.4419459150054220408.stgit@devnote2>
+        <20200121192905.0f001c61@gandalf.local.home>
+        <20200122162317.0299cf722dd618147d97e89c@kernel.org>
+        <20200122071115.28e3c763@gandalf.local.home>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-SOCKMAP now supports storing references to listening sockets. Nothing keeps
-us from using it as an array of sockets to select from in BPF reuseport
-programs. Whitelist the map type with the bpf_sk_select_reuseport helper.
+On Wed, 22 Jan 2020 07:11:15 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-The restriction that the socket has to be a member of a reuseport group
-still applies. Socket from a SOCKMAP that does not have sk_reuseport_cb set
-is not a valid target and we signal it with -EINVAL.
+> On Wed, 22 Jan 2020 16:23:17 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+> > On Tue, 21 Jan 2020 19:29:05 -0500
+> > Steven Rostedt <rostedt@goodmis.org> wrote:
+> > 
+> > > On Thu, 16 Jan 2020 23:44:52 +0900
+> > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > >   
+> > > > Since the 5 jiffies delay for the optimizer is too
+> > > > short to wait for other probes, make it longer,
+> > > > like 1 second.  
+> > > 
+> > > Hi Masami,
+> > > 
+> > > Can you explain more *why* 5 jiffies is too short.  
+> > 
+> > Yes, I had introduced this 5 jiffies delay for multiple probe registration
+> > and unregistration like systemtap, which will use array-based interface to
+> > register/unregister. In that case, 5 jiffies will be enough for the delay
+> > to wait for other kprobe registration/unregsitration.
+> > 
+> > However, since perf and ftrace register/unregister probes one-by-one with
+> > RCU synchronization interval, the optimizer will be started before
+> > finishing to register/unregister all probes.
+> > And the optimizer locks kprobe_mutex a while -- RCU-tasks synchronization.
+> > Since the kprobe_mutex is also involved in disabling kprobes, this also
+> > stops probe-event disabling.
+> > 
+> > Maybe 5 jiffies is enough for adding/removing a few probe events, but
+> > not enough for dozens of probe events.
+> > 
+> 
+> Perhaps we should have a mechanism that can detect new probes being
+> added, and just continue to delay the optimization, instead of having
+> some arbitrary delay.
 
-This lifts the restriction that SOCKARRAY imposes, if SOCKMAP is used with
-reuseport BPF, the listening sockets can exist in more than one BPF map at
-the same time.
+Yes, that is what [03/13] does :) 
+Anyway, it seems that the RCU-synchronization takes more than 5 jiffies.
+And in that case, [03/13] still doesn't work. That's why I added this patch
+after that.
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
----
- kernel/bpf/verifier.c |  6 ++++--
- net/core/filter.c     | 15 ++++++++++-----
- 2 files changed, 14 insertions(+), 7 deletions(-)
+Thank you,
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ca17dccc17ba..99fd7f4e0a1f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3693,7 +3693,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
- 		if (func_id != BPF_FUNC_sk_redirect_map &&
- 		    func_id != BPF_FUNC_sock_map_update &&
- 		    func_id != BPF_FUNC_map_delete_elem &&
--		    func_id != BPF_FUNC_msg_redirect_map)
-+		    func_id != BPF_FUNC_msg_redirect_map &&
-+		    func_id != BPF_FUNC_sk_select_reuseport)
- 			goto error;
- 		break;
- 	case BPF_MAP_TYPE_SOCKHASH:
-@@ -3774,7 +3775,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
- 			goto error;
- 		break;
- 	case BPF_FUNC_sk_select_reuseport:
--		if (map->map_type != BPF_MAP_TYPE_REUSEPORT_SOCKARRAY)
-+		if (map->map_type != BPF_MAP_TYPE_REUSEPORT_SOCKARRAY &&
-+		    map->map_type != BPF_MAP_TYPE_SOCKMAP)
- 			goto error;
- 		break;
- 	case BPF_FUNC_map_peek_elem:
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 17de6747d9e3..e20f076ab9b0 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8625,6 +8625,7 @@ struct sock *bpf_run_sk_reuseport(struct sock_reuseport *reuse, struct sock *sk,
- BPF_CALL_4(sk_select_reuseport, struct sk_reuseport_kern *, reuse_kern,
- 	   struct bpf_map *, map, void *, key, u32, flags)
- {
-+	bool is_sockarray = map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY;
- 	struct sock_reuseport *reuse;
- 	struct sock *selected_sk;
- 
-@@ -8633,12 +8634,16 @@ BPF_CALL_4(sk_select_reuseport, struct sk_reuseport_kern *, reuse_kern,
- 		return -ENOENT;
- 
- 	reuse = rcu_dereference(selected_sk->sk_reuseport_cb);
--	if (!reuse)
--		/* selected_sk is unhashed (e.g. by close()) after the
--		 * above map_lookup_elem().  Treat selected_sk has already
--		 * been removed from the map.
-+	if (!reuse) {
-+		/* reuseport_array has only sk with non NULL sk_reuseport_cb.
-+		 * The only (!reuse) case here is - the sk has already been
-+		 * unhashed (e.g. by close()), so treat it as -ENOENT.
-+		 *
-+		 * Other maps (e.g. sock_map) do not provide this guarantee and
-+		 * the sk may never be in the reuseport group to begin with.
- 		 */
--		return -ENOENT;
-+		return is_sockarray ? -ENOENT : -EINVAL;
-+	}
- 
- 	if (unlikely(reuse->reuseport_id != reuse_kern->reuseport_id)) {
- 		struct sock *sk;
 -- 
-2.24.1
-
+Masami Hiramatsu <mhiramat@kernel.org>
