@@ -2,87 +2,87 @@ Return-Path: <SRS0=pBRf=3L=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC67FC2D0CE
-	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 00:10:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1CE1C2D0CE
+	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 00:29:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7B71724655
-	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 00:10:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Giz2AQrC"
+	by mail.kernel.org (Postfix) with ESMTP id C098824655
+	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 00:29:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727022AbgAVAKk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Jan 2020 19:10:40 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:40378 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726876AbgAVAKk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Jan 2020 19:10:40 -0500
-Received: by mail-lf1-f68.google.com with SMTP id i23so3864381lfo.7;
-        Tue, 21 Jan 2020 16:10:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Nal9yB7kJdeVk99Y/sDFy1uRo1yz7MQUPvmQCEZ0ElM=;
-        b=Giz2AQrCksTENgILThu/eIDptpz5MHByvJtnNtPpgbusYplW7OpyyfqVXKnuEwb/Yx
-         zNJXCwlm+zD5NcS/pkho4i/RdpYATPfsSrxUtqKS+Cn/Ietp7Yg/ImAgQnYKT4N6geyo
-         Oyr7luiMt9eqZAv8y1lIJMEhz6U5jID6G+xQUiCB+d4BSz9WFRP6WauG22EVX9ZFe2cA
-         D4l6vnCRLyIh9owO4n2Ztr8Puoea6qV1sGfKOTvlalD9HgOK5HkWfEPmgvRf6u23IbD/
-         3ic/cJ9Wn8PSEKENkM/cLnHcmVk5XXHFgw5lG0wLqN3psUnVWjIF5wDIo21WMiZgv+5P
-         +NTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Nal9yB7kJdeVk99Y/sDFy1uRo1yz7MQUPvmQCEZ0ElM=;
-        b=Nda5oWuKWXhS7qZJVf1NkeUYQmGKViegAXZsGhoo0JBsCL3BwNlX9FRRYRO+OdK0U8
-         horVp1oYEwfNcyIS957xwSA2dXvrEZtSraeqWeEaqUGDPqlpyys0d1fYC9jtwshZ//O6
-         7yV7SiNi49AYXAUyTtHdZtJuwfCtueeULyqe31Bly2KtM2b34iIXiv1pxXEednGEOpuV
-         QlYQENQLhdE/6JHdsnElqCP7m3PrhccwsFIWIwt2hDOjalNUcdJ7oawGb1hVJ80Z+SME
-         7neNnfakMMPU4IL+3JBb8LrdJE3dd260uS1FNWs1x97+f93nRmk1fAIx2hwuYbSITcMg
-         xTZQ==
-X-Gm-Message-State: APjAAAWI3XF8SQS44PGQ1KHYZlg7bw/dCcZ40tob0gbZGEOceu/3PyAM
-        jeRz+GbPEeQr7MhcX50kqv4IiUOh2I1bEOHqwOwnI+28y8A=
-X-Google-Smtp-Source: APXvYqymnQKgwkPlRb6K55b1YURfAkzYb2cdFDS+SI/kLRf4TPiacfhHblMLiqUcF1u+UO4D0SlhHAzQ40X7zRgnXiM=
-X-Received: by 2002:ac2:592e:: with SMTP id v14mr175421lfi.73.1579651837910;
- Tue, 21 Jan 2020 16:10:37 -0800 (PST)
-MIME-Version: 1.0
-References: <20200121120512.758929-1-jolsa@kernel.org> <20200121120512.758929-7-jolsa@kernel.org>
-In-Reply-To: <20200121120512.758929-7-jolsa@kernel.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 21 Jan 2020 16:10:26 -0800
-Message-ID: <CAADnVQJO7cObUhqLbEB6+hKaPj1SStNfuhzXShC1XmAt217y8g@mail.gmail.com>
-Subject: Re: [PATCH 6/6] selftest/bpf: Add test for allowed trampolines count
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        id S1727847AbgAVA3I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Jan 2020 19:29:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40240 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726970AbgAVA3I (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Jan 2020 19:29:08 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BF0D6217F4;
+        Wed, 22 Jan 2020 00:29:06 +0000 (UTC)
+Date:   Tue, 21 Jan 2020 19:29:05 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Brendan Gregg <brendan.d.gregg@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andriin@fb.com>,
-        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        David Miller <davem@redhat.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>, paulmck@kernel.org,
+        joel@joelfernandes.org,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
+Subject: Re: [RFT PATCH 04/13] kprobes: Make optimizer delay to 1 second
+Message-ID: <20200121192905.0f001c61@gandalf.local.home>
+In-Reply-To: <157918589199.29301.4419459150054220408.stgit@devnote2>
+References: <157918584866.29301.6941815715391411338.stgit@devnote2>
+        <157918589199.29301.4419459150054220408.stgit@devnote2>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 21, 2020 at 4:05 AM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> There's limit of 40 programs tht can be attached
-> to trampoline for one function. Adding test that
-> tries to attach that many plus one extra that needs
-> to fail.
->
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+On Thu, 16 Jan 2020 23:44:52 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-I don't mind another test. Just pointing out that there is one
-for this purpose already :)
-prog_tests/fexit_stress.c
-Yours is better. Mine wasn't that sophisticated. :)
+> Since the 5 jiffies delay for the optimizer is too
+> short to wait for other probes, make it longer,
+> like 1 second.
+
+Hi Masami,
+
+Can you explain more *why* 5 jiffies is too short.
+
+Thanks!
+
+-- Steve
+
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>  kernel/kprobes.c |    3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index 0dacdcecc90f..9c6e230852ad 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -469,7 +469,8 @@ static int kprobe_optimizer_queue_update;
+>  
+>  static void kprobe_optimizer(struct work_struct *work);
+>  static DECLARE_DELAYED_WORK(optimizing_work, kprobe_optimizer);
+> -#define OPTIMIZE_DELAY 5
+> +/* Wait 1 second for starting optimization */
+> +#define OPTIMIZE_DELAY HZ
+>  
+>  /*
+>   * Optimize (replace a breakpoint with a jump) kprobes listed on
+
