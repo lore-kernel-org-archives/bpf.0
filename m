@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BAA5C33CB8
-	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 13:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB5E7C33CAF
+	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 13:06:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4285424685
-	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 13:06:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1EE324683
+	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 13:06:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="dOmrXgs+"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="dHgHPgjh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729099AbgAVNGA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jan 2020 08:06:00 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:42815 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729074AbgAVNF7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Jan 2020 08:05:59 -0500
-Received: by mail-lf1-f66.google.com with SMTP id y19so5253978lfl.9
-        for <bpf@vger.kernel.org>; Wed, 22 Jan 2020 05:05:57 -0800 (PST)
+        id S1729275AbgAVNGK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jan 2020 08:06:10 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:36488 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729262AbgAVNGK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jan 2020 08:06:10 -0500
+Received: by mail-lj1-f196.google.com with SMTP id r19so6729218ljg.3
+        for <bpf@vger.kernel.org>; Wed, 22 Jan 2020 05:06:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cTVNuQ7EbbdFeGuZ+T31KnByBM1u0Tx/L1PeHjvJyOM=;
-        b=dOmrXgs+4O/D/yi1UwQWeK7zDZagyDcvn1btEqnmvJcgiFi7W7mPX2ObyfNvOL0ax5
-         ehpv8NFzEz1L0nOgQXPbRB3u6pTnmsHgL/gMrG9kfJ5qD6VlILoIKrOOK5oYtBqiAmzJ
-         SqEIJ25MFBubkZcoV3IGFRZ4yAQyLB6+OGy9I=
+        bh=4CXJwdpYP+mrY90uu9dxiHkdaf1zG454XQX7axBVn84=;
+        b=dHgHPgjhkf+fsHTosUYpWm7S7/i8URGOYyXndzmZwsqzO7dP8Z8ydQV0nkJ69APOJk
+         1Or2WL71Eb4BpAGY7vuDTCBAldr9vSaVL7aJaxS3HxvAnAYTlUCHm6v8Aq9U1kRq2DZy
+         uXzQAUJOlQ33Ef0GSs8xG30WLkn7OLSROp9DM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cTVNuQ7EbbdFeGuZ+T31KnByBM1u0Tx/L1PeHjvJyOM=;
-        b=A8bc3GBy2rH7isk8O2TMprNYMdw5xcxCCZjriIDVFMB/ydNGZveMmmdrWW7Y0EcL3k
-         K/sjF/1Rz8R3nSdw31K95IqGPlM1V6Cirm87Mmce77cAUrl2OZcjXnGxMTGMC27G76Zk
-         dcrhLQy/D1ZUi9Tn13iBKSaZ7pmgfuninwoORyqJYOzN97eAPYi+nfzzy26S767nE63b
-         hycD9qcnbKC+nESdLvyxb1JV6P8Zr5z7TyRFHEfHgfmp0oZnGGDs0vdXDJmAuK/j9UkO
-         bhZFVMV3y3zGsuAMNyVPR8o0D+QPr9BKiwmeO7svCTfLtRN6D+rJrhTmf/VR+IA7qwxi
-         78Yw==
-X-Gm-Message-State: APjAAAW8EO8dU/IFqi2DSZv2xt8mZdvMI+xewQFbq6oXCr1D6+6P0r2A
-        q8WSoGApTRPfjZLCR1qd/2KKBODs7n2/+g==
-X-Google-Smtp-Source: APXvYqxxu4m3yUrAvlLnluN0DUXi0Fq/ADitv153VxHcv3TYf2NE05z8mjtP3gdRUwoOqKMNVsz0qw==
-X-Received: by 2002:a05:6512:15d:: with SMTP id m29mr1810691lfo.51.1579698355732;
-        Wed, 22 Jan 2020 05:05:55 -0800 (PST)
+        bh=4CXJwdpYP+mrY90uu9dxiHkdaf1zG454XQX7axBVn84=;
+        b=fWxvJPU8GG8i83yLZykqPurMZzfHgVZ11BirBl3MV4jVlSAURef4yH+5DPAHoNW6Lz
+         S8ECDNvsdTM67wmzRFc6gmwTP+Oap7usmf+IfbGAp64fDE/97LFyj4AJ0xU2gWBGSy7y
+         NQS8lvcMYIK1q14KlwXt3ZDNuMnL826a/I4uVXKjP/736b+63ALViHga++7SuxedZ8v/
+         OnYSR33cigQold1eNynuq7yWeJO+X5mbJw7IQDLLzxTBdzpzJ0SpIyISptj3qdBKIIMR
+         Gc/7ar2PMtDnkJq2G5lmgsL7sFR1kZVv/uCvAEyUvdTufsW6FgDnXBlutWNzbIHO3ym3
+         /QSQ==
+X-Gm-Message-State: APjAAAXqYVhlTTrx60r6cMHpJ0X7aRM6drYTH9gi5Gaso2ZiQsG7sUYf
+        gqGZGa5GM8KbJ098/XEwrlKtjCY5EtjxNA==
+X-Google-Smtp-Source: APXvYqyyRm00NmG1GClGzLn7/tzjZtqqkh+67xvmDZIfAWQFN6vJJdw6jvJ1ngXUM7QgnM6PA5ohgg==
+X-Received: by 2002:a2e:9ad0:: with SMTP id p16mr20124781ljj.111.1579698367707;
+        Wed, 22 Jan 2020 05:06:07 -0800 (PST)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id z5sm20315211lji.40.2020.01.22.05.05.55
+        by smtp.gmail.com with ESMTPSA id g27sm20739184lfh.57.2020.01.22.05.06.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2020 05:05:55 -0800 (PST)
+        Wed, 22 Jan 2020 05:06:07 -0800 (PST)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
@@ -58,9 +58,9 @@ Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
         Lorenz Bauer <lmb@cloudflare.com>, Martin Lau <kafai@fb.com>
-Subject: [PATCH bpf-next v3 03/12] net, sk_msg: Clear sk_user_data pointer on clone if tagged
-Date:   Wed, 22 Jan 2020 14:05:40 +0100
-Message-Id: <20200122130549.832236-4-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v3 11/12] selftests/bpf: Extend SK_REUSEPORT tests to cover SOCKMAP
+Date:   Wed, 22 Jan 2020 14:05:48 +0100
+Message-Id: <20200122130549.832236-12-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200122130549.832236-1-jakub@cloudflare.com>
 References: <20200122130549.832236-1-jakub@cloudflare.com>
@@ -71,128 +71,144 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-sk_user_data can hold a pointer to an object that is not intended to be
-shared between the parent socket and the child that gets a pointer copy on
-clone. This is the case when sk_user_data points at reference-counted
-object, like struct sk_psock.
+Parametrize the SK_REUSEPORT tests so that the map type for storing sockets
+is not hard-coded in the test setup routine.
 
-One way to resolve it is to tag the pointer with a no-copy flag by
-repurposing its lowest bit. Based on the bit-flag value we clear the child
-sk_user_data pointer after cloning the parent socket.
-
-The no-copy flag is stored in the pointer itself as opposed to externally,
-say in socket flags, to guarantee that the pointer and the flag are copied
-from parent to child socket in an atomic fashion. Parent socket state is
-subject to change while copying, we don't hold any locks at that time.
-
-This approach relies on an assumption that sk_user_data holds a pointer to
-an object aligned at least 2 bytes. A manual audit of existing users of
-rcu_dereference_sk_user_data helper confirms our assumption.
-
-Also, an RCU-protected sk_user_data is not likely to hold a pointer to a
-char value or a pathological case of "struct { char c; }". To be safe, warn
-when the flag-bit is set when setting sk_user_data to catch any future
-misuses.
-
-It is worth considering why clearing sk_user_data unconditionally is not an
-option. There exist users, DRBD, NVMe, and Xen drivers being among them,
-that rely on the pointer being copied when cloning the listening socket.
-
-Potentially we could distinguish these users by checking if the listening
-socket has been created in kernel-space via sock_create_kern, and hence has
-sk_kern_sock flag set. However, this is not the case for NVMe and Xen
-drivers, which create sockets without marking them as belonging to the
-kernel.
+This, together with careful state cleaning after the tests, let's us run
+the test cases once with REUSEPORT_ARRAY and once with SOCKMAP (TCP only),
+to have test coverage for the latter as well.
 
 Acked-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- include/net/sock.h | 37 +++++++++++++++++++++++++++++++++++--
- net/core/skmsg.c   |  2 +-
- net/core/sock.c    |  6 ++++++
- 3 files changed, 42 insertions(+), 3 deletions(-)
+ .../bpf/prog_tests/select_reuseport.c         | 60 +++++++++++++++----
+ 1 file changed, 50 insertions(+), 10 deletions(-)
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 0891c55f1e82..93e359a03174 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -518,10 +518,43 @@ enum sk_pacing {
- 	SK_PACING_FQ		= 2,
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+index 2c37ae7dc214..e7b4abfca2ab 100644
+--- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+@@ -36,6 +36,7 @@ static int result_map, tmp_index_ovr_map, linum_map, data_check_map;
+ static enum result expected_results[NR_RESULTS];
+ static int sk_fds[REUSEPORT_ARRAY_SIZE];
+ static int reuseport_array = -1, outer_map = -1;
++static enum bpf_map_type inner_map_type;
+ static int select_by_skb_data_prog;
+ static int saved_tcp_syncookie = -1;
+ static struct bpf_object *obj;
+@@ -63,13 +64,15 @@ static union sa46 {
+ 	}								\
+ })
  
-+/* Pointer stored in sk_user_data might not be suitable for copying
-+ * when cloning the socket. For instance, it can point to a reference
-+ * counted object. sk_user_data bottom bit is set if pointer must not
-+ * be copied.
-+ */
-+#define SK_USER_DATA_NOCOPY	1UL
-+#define SK_USER_DATA_PTRMASK	~(SK_USER_DATA_NOCOPY)
+-static int create_maps(void)
++static int create_maps(enum bpf_map_type inner_type)
+ {
+ 	struct bpf_create_map_attr attr = {};
+ 
++	inner_map_type = inner_type;
 +
-+/**
-+ * sk_user_data_is_nocopy - Test if sk_user_data pointer must not be copied
-+ * @sk: socket
-+ */
-+static inline bool sk_user_data_is_nocopy(const struct sock *sk)
-+{
-+	return ((uintptr_t)sk->sk_user_data & SK_USER_DATA_NOCOPY);
+ 	/* Creating reuseport_array */
+ 	attr.name = "reuseport_array";
+-	attr.map_type = BPF_MAP_TYPE_REUSEPORT_SOCKARRAY;
++	attr.map_type = inner_type;
+ 	attr.key_size = sizeof(__u32);
+ 	attr.value_size = sizeof(__u32);
+ 	attr.max_entries = REUSEPORT_ARRAY_SIZE;
+@@ -694,12 +697,34 @@ static void cleanup_per_test(bool no_inner_map)
+ 
+ static void cleanup(void)
+ {
+-	if (outer_map != -1)
++	if (outer_map != -1) {
+ 		close(outer_map);
+-	if (reuseport_array != -1)
++		outer_map = -1;
++	}
++
++	if (reuseport_array != -1) {
+ 		close(reuseport_array);
+-	if (obj)
++		reuseport_array = -1;
++	}
++
++	if (obj) {
+ 		bpf_object__close(obj);
++		obj = NULL;
++	}
++
++	memset(expected_results, 0, sizeof(expected_results));
 +}
 +
- #define __sk_user_data(sk) ((*((void __rcu **)&(sk)->sk_user_data)))
++static const char *maptype_str(enum bpf_map_type type)
++{
++	switch (type) {
++	case BPF_MAP_TYPE_REUSEPORT_SOCKARRAY:
++		return "reuseport_sockarray";
++	case BPF_MAP_TYPE_SOCKMAP:
++		return "sockmap";
++	default:
++		return "unknown";
++	}
+ }
  
--#define rcu_dereference_sk_user_data(sk)	rcu_dereference(__sk_user_data((sk)))
--#define rcu_assign_sk_user_data(sk, ptr)	rcu_assign_pointer(__sk_user_data((sk)), ptr)
-+#define rcu_dereference_sk_user_data(sk)				\
-+({									\
-+	void *__tmp = rcu_dereference(__sk_user_data((sk)));		\
-+	(void *)((uintptr_t)__tmp & SK_USER_DATA_PTRMASK);		\
-+})
-+#define rcu_assign_sk_user_data(sk, ptr)				\
-+({									\
-+	uintptr_t __tmp = (uintptr_t)(ptr);				\
-+	WARN_ON_ONCE(__tmp & ~SK_USER_DATA_PTRMASK);			\
-+	rcu_assign_pointer(__sk_user_data((sk)), __tmp);		\
-+})
-+#define rcu_assign_sk_user_data_nocopy(sk, ptr)				\
-+({									\
-+	uintptr_t __tmp = (uintptr_t)(ptr);				\
-+	WARN_ON_ONCE(__tmp & ~SK_USER_DATA_PTRMASK);			\
-+	rcu_assign_pointer(__sk_user_data((sk)),			\
-+			   __tmp | SK_USER_DATA_NOCOPY);		\
-+})
+ static const char *family_str(sa_family_t family)
+@@ -747,13 +772,21 @@ static void test_config(int sotype, sa_family_t family, bool inany)
+ 	const struct test *t;
  
- /*
-  * SK_CAN_REUSE and SK_NO_REUSE on a socket mean that the socket is OK
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index ded2d5227678..eeb28cb85664 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -512,7 +512,7 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
- 	sk_psock_set_state(psock, SK_PSOCK_TX_ENABLED);
- 	refcount_set(&psock->refcnt, 1);
+ 	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
+-		snprintf(s, sizeof(s), "%s/%s %s %s",
++		snprintf(s, sizeof(s), "%s %s/%s %s %s",
++			 maptype_str(inner_map_type),
+ 			 family_str(family), sotype_str(sotype),
+ 			 inany ? "INANY" : "LOOPBACK", t->name);
  
--	rcu_assign_sk_user_data(sk, psock);
-+	rcu_assign_sk_user_data_nocopy(sk, psock);
- 	sock_hold(sk);
+ 		if (!test__start_subtest(s))
+ 			continue;
  
- 	return psock;
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 3953bb23f4d0..74662943af5c 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1864,6 +1864,12 @@ struct sock *sk_clone_lock(const struct sock *sk, const gfp_t priority)
- 			goto out;
- 		}
- 
-+		/* Clear sk_user_data if parent had the pointer tagged
-+		 * as not suitable for copying when cloning.
-+		 */
-+		if (sk_user_data_is_nocopy(newsk))
-+			RCU_INIT_POINTER(newsk->sk_user_data, NULL);
++		if (sotype == SOCK_DGRAM &&
++		    inner_map_type == BPF_MAP_TYPE_SOCKMAP) {
++			/* SOCKMAP doesn't support UDP yet */
++			test__skip();
++			continue;
++		}
 +
- 		newsk->sk_err	   = 0;
- 		newsk->sk_err_soft = 0;
- 		newsk->sk_priority = 0;
+ 		setup_per_test(sotype, family, inany, t->no_inner_map);
+ 		t->fn(sotype, family);
+ 		cleanup_per_test(t->no_inner_map);
+@@ -782,13 +815,20 @@ static void test_all(void)
+ 		test_config(c->sotype, c->family, c->inany);
+ }
+ 
+-void test_select_reuseport(void)
++void test_map_type(enum bpf_map_type mt)
+ {
+-	if (create_maps())
++	if (create_maps(mt))
+ 		goto out;
+ 	if (prepare_bpf_obj())
+ 		goto out;
+ 
++	test_all();
++out:
++	cleanup();
++}
++
++void test_select_reuseport(void)
++{
+ 	saved_tcp_fo = read_int_sysctl(TCP_FO_SYSCTL);
+ 	saved_tcp_syncookie = read_int_sysctl(TCP_SYNCOOKIE_SYSCTL);
+ 	if (saved_tcp_syncookie < 0 || saved_tcp_syncookie < 0)
+@@ -799,8 +839,8 @@ void test_select_reuseport(void)
+ 	if (disable_syncookie())
+ 		goto out;
+ 
+-	test_all();
++	test_map_type(BPF_MAP_TYPE_REUSEPORT_SOCKARRAY);
++	test_map_type(BPF_MAP_TYPE_SOCKMAP);
+ out:
+-	cleanup();
+ 	restore_sysctls();
+ }
 -- 
 2.24.1
 
