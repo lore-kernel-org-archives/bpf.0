@@ -2,101 +2,82 @@ Return-Path: <SRS0=pBRf=3L=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A93FC2D0CE
-	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 02:41:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EB4FC2D0CE
+	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 02:45:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E6F3C217F4
-	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 02:41:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579660912;
-	bh=jf83gq+/eWEf1p2lSaW9KXeSrM2R69MlmUDMljh4L3c=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=aoNczpaUwNsWKbxKXeNuRw8FdEjpdwJqkHzp7ZjNFUeK9477dfUl+G85a/yq/a2nm
-	 giOyBdxP7O/6/cx/UzgeTCXNmkgcioBoHTc24rNuZd0MBNwDcH9aVVlDjMRrWPgB1J
-	 EPKUaqZusXbAzzp4whOo2M+7UlGLKckIfdbJLyc4=
+	by mail.kernel.org (Postfix) with ESMTP id E6FAC24672
+	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 02:45:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LdhBJKN3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728901AbgAVClv convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 21 Jan 2020 21:41:51 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:1132 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728809AbgAVClv (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 21 Jan 2020 21:41:51 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00M2dJrl014539
-        for <bpf@vger.kernel.org>; Tue, 21 Jan 2020 18:41:50 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xp72p9st6-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 21 Jan 2020 18:41:50 -0800
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Tue, 21 Jan 2020 18:41:49 -0800
-Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
-        id 72523760C45; Tue, 21 Jan 2020 18:41:38 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
-To:     <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next] bpf: Fix error path under memory pressure
-Date:   Tue, 21 Jan 2020 18:41:38 -0800
-Message-ID: <20200122024138.3385590-1-ast@kernel.org>
-X-Mailer: git-send-email 2.23.0
+        id S1727817AbgAVCp5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Jan 2020 21:45:57 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:39154 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727141AbgAVCp5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Jan 2020 21:45:57 -0500
+Received: by mail-lj1-f194.google.com with SMTP id o11so4751746ljc.6;
+        Tue, 21 Jan 2020 18:45:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7LFWN2WUWKvDDimd9jmFQDhkOBo+JNf9WTQ4koPwnCE=;
+        b=LdhBJKN3y1rQbbLCpaGYom17Zdd4Eu6UzRYW8v9CjzywX6584VlwZF6JgHN36lJ/mt
+         HwveNE0/lcQoFhlU1jzIXaSENZvIjYiqKjT1Fgee33JCnEJ1MWeANn8IpLQkAkDavQoC
+         GWdODCv5AU87OmodDZaH+bnbRe3aGJPulrKcy/8AQ7hQCAToFQMgYdOCRHfRs3pFJOyj
+         Whcti5inXvEiUB8cBzHrpwLrMFj2e0vpytV2DDM1fnYOhmmDGJzRHIXeYiynjpaZQO7k
+         9KVAKbMteWJaNFU1q+fYx9OKXGDjcxtVv7WTVlnajDuP0HIEUNt1/WKDhhN7WhWZZ1Om
+         wOuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7LFWN2WUWKvDDimd9jmFQDhkOBo+JNf9WTQ4koPwnCE=;
+        b=fu/TapOQYxL1vgxvYYMlkq6naP8KMTAWhre6usvZkKlZYBGW4G57wwTUXtCP9iAjUC
+         pHBrN9SkKKUBCR6CUfsoqgbxxW5ENMmep4ceWnYwefO7qBV21yzxMNXzhiNMLx6XVhQs
+         7Fmfh2vQkI60KvvRMMMHgCp6qXQdVVzTr5x5mlfBNekTuGVXUXsZLoKFDTxCsWJoFGBR
+         /dUqCZSIV5O3YgxUP6AmCj4Vr9IxEdMEWsf3YJfTpu0uxUzXVodS671Pg+TOEsnmJuyV
+         Xz8KSEpsQTq/ZNr/Wx+T0UQ4O/IK8RVTnDeFUXT/v49vdipEkDP0Nime48V1IwjDcs1r
+         k14A==
+X-Gm-Message-State: APjAAAXo3TiRGuSyPy/RRosSL0ome5H60enGgqLbdHPbf0f9aCRHrt4H
+        vLpbi5uWwiVou2VCDQCn0jo85QG4DkydzAznZaw=
+X-Google-Smtp-Source: APXvYqxdRV1b6Rhgd3930aoAIy8bcjOeKovNqjij9JHsaR6hGeNcgeva/eklMDKQfLQxa9znUPV5xW5oHvTJwWmvxa8=
+X-Received: by 2002:a2e:b55c:: with SMTP id a28mr17753082ljn.260.1579661155077;
+ Tue, 21 Jan 2020 18:45:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-17_05:2020-01-16,2020-01-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- mlxlogscore=369 impostorscore=0 adultscore=0 suspectscore=3 bulkscore=10
- spamscore=0 lowpriorityscore=10 malwarescore=0 clxscore=1034 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001220019
-X-FB-Internal: deliver
+References: <20200122024138.3385590-1-ast@kernel.org>
+In-Reply-To: <20200122024138.3385590-1-ast@kernel.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 21 Jan 2020 18:45:43 -0800
+Message-ID: <CAADnVQ+HdfXVHnEBMkqbtE2fm2drd+4b8otrJR+Qkqb3_3OGdQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Fix error path under memory pressure
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Restore the 'if (env->cur_state)' check that was incorrectly removed during
-code move. Under memory pressure env->cur_state can be freed and zeroed inside
-do_check(). Hence the check is necessary.
+On Tue, Jan 21, 2020 at 6:42 PM Alexei Starovoitov <ast@kernel.org> wrote:
+>
+> Restore the 'if (env->cur_state)' check that was incorrectly removed during
+> code move. Under memory pressure env->cur_state can be freed and zeroed inside
+> do_check(). Hence the check is necessary.
+>
+> Fixes: 51c39bb1d5d1 ("bpf: Introduce function-by-function verification")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-Fixes: 51c39bb1d5d1 ("bpf: Introduce function-by-function verification")
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- kernel/bpf/verifier.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Forgot to add:
+Reported-by: syzbot+b296579ba5015704d9fa@syzkaller.appspotmail.com
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ca17dccc17ba..6defbec9eb62 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9594,8 +9594,13 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
- 
- 	ret = do_check(env);
- out:
--	free_verifier_state(env->cur_state, true);
--	env->cur_state = NULL;
-+	/* check for NULL is necessary, since cur_state can be freed inside
-+	 * do_check() under memory pressure.
-+	 */
-+	if (env->cur_state) {
-+		free_verifier_state(env->cur_state, true);
-+		env->cur_state = NULL;
-+	}
- 	while (!pop_stack(env, NULL, NULL));
- 	free_states(env);
- 	if (ret)
--- 
-2.23.0
-
+Daniel, pls add while applying.
