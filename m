@@ -2,55 +2,56 @@ Return-Path: <SRS0=pBRf=3L=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B36BC2D0DB
-	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 13:06:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 252A7C2D0DB
+	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 13:06:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 45B3524683
-	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 13:06:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF56B24683
+	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 13:06:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Hg2SMdcH"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="V4wQrNgv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729195AbgAVNGC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jan 2020 08:06:02 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:46487 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729137AbgAVNGB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Jan 2020 08:06:01 -0500
-Received: by mail-lf1-f66.google.com with SMTP id z26so5223515lfg.13
-        for <bpf@vger.kernel.org>; Wed, 22 Jan 2020 05:06:00 -0800 (PST)
+        id S1729158AbgAVNGE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jan 2020 08:06:04 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:45163 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729137AbgAVNGE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jan 2020 08:06:04 -0500
+Received: by mail-lj1-f196.google.com with SMTP id j26so6666959ljc.12
+        for <bpf@vger.kernel.org>; Wed, 22 Jan 2020 05:06:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3Tuq3upHhrC9mfKoTXSq3gzV/lZ6UhhXE1I0CiNF+d4=;
-        b=Hg2SMdcHrmbB+Rjj9qm8DzLYnMmLo9p6Y36i7FERwDjnRYHWSFwQTv26jjPZBDeIT3
-         2x3+1D5Fy4lcJcktHM5KNqzyWx2sfQauk1BOM5OT9K22Wlz5pCeeYb3k30A8IV5/721W
-         KkuGbGjXl3eSsZt3o9lpgxNlTnocHZJ2hA6lw=
+        bh=WDO2nKU1fG1HYrmFQY9JEu5IKkozhVaPgoSVYJJKkMI=;
+        b=V4wQrNgvRxPPH5lCCP8EnDGbaVYaDdy/hxai5VL5n1Q1L23749AhnMb/6STX2ELlI8
+         Y6XIahqQOiz4QE/oFc9stVAAfRpu6c19Xl3sCN8v0c9xuJHyIal/Os63u2PfKFxZZXSy
+         YkDOS6p1nYxXqPv5iIRvftR78ghX0yxeNZMMw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3Tuq3upHhrC9mfKoTXSq3gzV/lZ6UhhXE1I0CiNF+d4=;
-        b=VzM/RmYNMe8AHV4vIC18p+b0S06UsXHVHu/jgO5nzzCod7yX2x8MukZSybzgFc37Gy
-         zJqRHJANxqWRAID2vIju5B8y7Fp+9TIXtD8wvZM2YQUse/Px3m52McKaHhWmvtbhrl6J
-         DrWJab9WzH1rn9pTYIIQ7NObw1ZPQ1SLYyu/OgAAx40qXisUZGeaAJfIG6U1xf6p0SEm
-         C738JzISufYmBM/Ksk3einRqb5zHN4W038/kM/yHbRs4lj+Z9DQGvhG24yLQ8arNXMYl
-         10Sw71K6kPJ2cuRresee0T+ZQtiYChGzRJmV8vkJYmfMk7r3kJpcR4HOMKxrgG9Pc0fz
-         ZtIQ==
-X-Gm-Message-State: APjAAAXF8xd35gndpl64jiSfCJywEab+DtW106/93/YstbWc9dXHXrb7
-        Upu2tZfv8suOQ2vN3QaEYFH69tb3sBkTJA==
-X-Google-Smtp-Source: APXvYqw2aIUZt086l9I7n69eaN/oox0LrAUoEnniiu+OQXpG/62yxRUgImZoCioUFn3+Qba9XwXGxA==
-X-Received: by 2002:ac2:58fa:: with SMTP id v26mr1757005lfo.84.1579698358952;
-        Wed, 22 Jan 2020 05:05:58 -0800 (PST)
+        bh=WDO2nKU1fG1HYrmFQY9JEu5IKkozhVaPgoSVYJJKkMI=;
+        b=K5EQaYQWuYrM4XyHltW74cIZ1tvr9ytaiV4AoDruvp1pnBVJOdjuBKEMZHD3Av6KBX
+         YWQOyHYMmlflzmnoRv65uP1jNIEuZ+/1PagYSw46K+ZTECRtPE+NtQjUPRVQWCFfuCJi
+         gcuAWLJHybgsRdVbuNJUvemXTqWxCJNNF0Inq6ESC+fO8CjpB5bk/NnRTnZRfhqX98wq
+         /FA4MZSQHvgKyPkeeN8ViSW8kWAzCMb5W9J4CgXWQiBAku9lMMThmHzAjEpAe56ZvuYh
+         UCHbZVRZE4dKchyVhkN+NvLVOfFbkFH7x0xjNL895gejIApr0efXUObZrNym5JV1VZTC
+         FxqQ==
+X-Gm-Message-State: APjAAAVMyBxKDWwvRe0SH1KQnK7d3tG73z6/Gwnq+uTQ3BNryRq+HGhr
+        0uVmdI9SiVwQNUrvHtea4FiWuM7TGvJ6Rg==
+X-Google-Smtp-Source: APXvYqzBx66ktUhe3bGrmjmUCTeJGlUkEDWVtDztQ01dKIAxptJxribVaCAh0jxNbtnxboNvZkDq7w==
+X-Received: by 2002:a2e:b4cb:: with SMTP id r11mr19168856ljm.68.1579698361831;
+        Wed, 22 Jan 2020 05:06:01 -0800 (PST)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id t1sm20274973lji.98.2020.01.22.05.05.57
+        by smtp.gmail.com with ESMTPSA id t13sm20242233ljk.78.2020.01.22.05.06.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2020 05:05:58 -0800 (PST)
+        Wed, 22 Jan 2020 05:06:01 -0800 (PST)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
@@ -58,9 +59,9 @@ Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
         Lorenz Bauer <lmb@cloudflare.com>, Martin Lau <kafai@fb.com>
-Subject: [PATCH bpf-next v3 05/12] bpf, sockmap: Allow inserting listening TCP sockets into sockmap
-Date:   Wed, 22 Jan 2020 14:05:42 +0100
-Message-Id: <20200122130549.832236-6-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v3 07/12] bpf, sockmap: Return socket cookie on lookup from syscall
+Date:   Wed, 22 Jan 2020 14:05:44 +0100
+Message-Id: <20200122130549.832236-8-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200122130549.832236-1-jakub@cloudflare.com>
 References: <20200122130549.832236-1-jakub@cloudflare.com>
@@ -71,168 +72,97 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In order for sockmap type to become a generic collection for storing TCP
-sockets we need to loosen the checks during map update, while tightening
-the checks in redirect helpers.
+Tooling that populates the SOCKMAP with sockets from user-space needs a way
+to inspect its contents. Returning the struct sock * that SOCKMAP holds to
+user-space is neither safe nor useful. An approach established by
+REUSEPORT_SOCKARRAY is to return a socket cookie (a unique identifier)
+instead.
 
-Currently sockmap requires the TCP socket to be in established state (or
-transitioning out of SYN_RECV into established state when done from BPF),
-which prevents inserting listening sockets.
+Since socket cookies are u64 values, SOCKMAP needs to support such a value
+size for lookup to be possible. This requires special handling on update,
+though. Attempts to do a lookup on SOCKMAP holding u32 values will be met
+with ENOSPC error.
 
-Change the update pre-checks so the socket can also be in listening state.
-
-Since it doesn't make sense to redirect with sockmap to listening sockets,
-add appropriate socket state checks to BPF redirect helpers too.
-
-We leave sockhash as is for the moment, with no support for holding
-listening sockets. Therefore sockhash needs its own set of checks.
-
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- net/core/sock_map.c                     | 62 +++++++++++++++++++------
- tools/testing/selftests/bpf/test_maps.c |  6 +--
- 2 files changed, 50 insertions(+), 18 deletions(-)
+ net/core/sock_map.c | 29 +++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
 
 diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index eb114ee419b6..97bdceb29f09 100644
+index 439f1e0b995e..cabe85892ba3 100644
 --- a/net/core/sock_map.c
 +++ b/net/core/sock_map.c
-@@ -385,15 +385,44 @@ static int sock_map_update_common(struct bpf_map *map, u32 idx,
+@@ -10,6 +10,7 @@
+ #include <linux/skmsg.h>
+ #include <linux/list.h>
+ #include <linux/jhash.h>
++#include <linux/sock_diag.h>
+ 
+ struct bpf_stab {
+ 	struct bpf_map map;
+@@ -31,7 +32,8 @@ static struct bpf_map *sock_map_alloc(union bpf_attr *attr)
+ 		return ERR_PTR(-EPERM);
+ 	if (attr->max_entries == 0 ||
+ 	    attr->key_size    != 4 ||
+-	    attr->value_size  != 4 ||
++	    (attr->value_size != sizeof(u32) &&
++	     attr->value_size != sizeof(u64)) ||
+ 	    attr->map_flags & ~SOCK_CREATE_FLAG_MASK)
+ 		return ERR_PTR(-EINVAL);
+ 
+@@ -298,6 +300,21 @@ static void *sock_map_lookup(struct bpf_map *map, void *key)
+ 	return ERR_PTR(-EOPNOTSUPP);
  }
  
- static bool sock_map_op_okay(const struct bpf_sock_ops_kern *ops)
++static void *sock_map_lookup_sys(struct bpf_map *map, void *key)
 +{
-+	return ops->op == BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB ||
-+	       ops->op == BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB ||
-+	       ops->op == BPF_SOCK_OPS_TCP_LISTEN_CB;
++	struct sock *sk;
++
++	if (map->value_size != sizeof(u64))
++		return ERR_PTR(-ENOSPC);
++
++	sk = __sock_map_lookup_elem(map, *(u32 *)key);
++	if (!sk)
++		return ERR_PTR(-ENOENT);
++
++	sock_gen_cookie(sk);
++	return &sk->sk_cookie;
 +}
 +
-+static bool sock_hash_op_okay(const struct bpf_sock_ops_kern *ops)
+ static int __sock_map_delete(struct bpf_stab *stab, struct sock *sk_test,
+ 			     struct sock **psk)
  {
- 	return ops->op == BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB ||
- 	       ops->op == BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB;
- }
- 
-+/* Only TCP sockets can be inserted into the map. They must be either
-+ * in established or listening state. SYN_RECV is also allowed because
-+ * BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB happens just before socket
-+ * enters established state.
-+ */
- static bool sock_map_sk_is_suitable(const struct sock *sk)
- {
- 	return sk->sk_type == SOCK_STREAM &&
--	       sk->sk_protocol == IPPROTO_TCP;
-+	       sk->sk_protocol == IPPROTO_TCP &&
-+	       (1 << sk->sk_state) & (TCPF_ESTABLISHED |
-+				      TCPF_SYN_RECV |
-+				      TCPF_LISTEN);
-+}
-+
-+static bool sock_hash_sk_is_suitable(const struct sock *sk)
-+{
-+	return sk->sk_type == SOCK_STREAM &&
-+	       sk->sk_protocol == IPPROTO_TCP &&
-+	       (1 << sk->sk_state) & (TCPF_ESTABLISHED |
-+				      TCPF_SYN_RECV);
-+}
-+
-+/* Is sock in a state that allows redirecting into it? */
-+static bool sock_map_redirect_okay(const struct sock *sk)
-+{
-+	return sk->sk_state != TCP_LISTEN;
- }
- 
+@@ -460,12 +477,19 @@ static bool sock_map_redirect_okay(const struct sock *sk)
  static int sock_map_update_elem(struct bpf_map *map, void *key,
-@@ -413,8 +442,7 @@ static int sock_map_update_elem(struct bpf_map *map, void *key,
- 		ret = -EINVAL;
- 		goto out;
- 	}
--	if (!sock_map_sk_is_suitable(sk) ||
--	    sk->sk_state != TCP_ESTABLISHED) {
-+	if (!sock_map_sk_is_suitable(sk)) {
- 		ret = -EOPNOTSUPP;
- 		goto out;
- 	}
-@@ -454,13 +482,17 @@ BPF_CALL_4(bpf_sk_redirect_map, struct sk_buff *, skb,
- 	   struct bpf_map *, map, u32, key, u64, flags)
+ 				void *value, u64 flags)
  {
- 	struct tcp_skb_cb *tcb = TCP_SKB_CB(skb);
-+	struct sock *sk;
+-	u32 ufd = *(u32 *)value;
+ 	u32 idx = *(u32 *)key;
+ 	struct socket *sock;
+ 	struct sock *sk;
++	u64 ufd;
+ 	int ret;
  
- 	if (unlikely(flags & ~(BPF_F_INGRESS)))
- 		return SK_DROP;
--	tcb->bpf.flags = flags;
--	tcb->bpf.sk_redir = __sock_map_lookup_elem(map, key);
--	if (!tcb->bpf.sk_redir)
++	if (map->value_size == sizeof(u64))
++		ufd = *(u64 *)value;
++	else
++		ufd = *(u32 *)value;
++	if (ufd > S32_MAX)
++		return -EINVAL;
 +
-+	sk = __sock_map_lookup_elem(map, key);
-+	if (unlikely(!sk || !sock_map_redirect_okay(sk)))
- 		return SK_DROP;
-+
-+	tcb->bpf.flags = flags;
-+	tcb->bpf.sk_redir = sk;
- 	return SK_PASS;
- }
- 
-@@ -477,12 +509,17 @@ const struct bpf_func_proto bpf_sk_redirect_map_proto = {
- BPF_CALL_4(bpf_msg_redirect_map, struct sk_msg *, msg,
- 	   struct bpf_map *, map, u32, key, u64, flags)
- {
-+	struct sock *sk;
-+
- 	if (unlikely(flags & ~(BPF_F_INGRESS)))
- 		return SK_DROP;
--	msg->flags = flags;
--	msg->sk_redir = __sock_map_lookup_elem(map, key);
--	if (!msg->sk_redir)
-+
-+	sk = __sock_map_lookup_elem(map, key);
-+	if (unlikely(!sk || !sock_map_redirect_okay(sk)))
- 		return SK_DROP;
-+
-+	msg->flags = flags;
-+	msg->sk_redir = sk;
- 	return SK_PASS;
- }
- 
-@@ -736,8 +773,7 @@ static int sock_hash_update_elem(struct bpf_map *map, void *key,
- 		ret = -EINVAL;
- 		goto out;
- 	}
--	if (!sock_map_sk_is_suitable(sk) ||
--	    sk->sk_state != TCP_ESTABLISHED) {
-+	if (!sock_hash_sk_is_suitable(sk)) {
- 		ret = -EOPNOTSUPP;
- 		goto out;
- 	}
-@@ -882,8 +918,8 @@ BPF_CALL_4(bpf_sock_hash_update, struct bpf_sock_ops_kern *, sops,
- {
- 	WARN_ON_ONCE(!rcu_read_lock_held());
- 
--	if (likely(sock_map_sk_is_suitable(sops->sk) &&
--		   sock_map_op_okay(sops)))
-+	if (likely(sock_hash_sk_is_suitable(sops->sk) &&
-+		   sock_hash_op_okay(sops)))
- 		return sock_hash_update_common(map, key, sops->sk, flags);
- 	return -EOPNOTSUPP;
- }
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index 02eae1e864c2..c6766b2cff85 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -756,11 +756,7 @@ static void test_sockmap(unsigned int tasks, void *data)
- 	/* Test update without programs */
- 	for (i = 0; i < 6; i++) {
- 		err = bpf_map_update_elem(fd, &i, &sfd[i], BPF_ANY);
--		if (i < 2 && !err) {
--			printf("Allowed update sockmap '%i:%i' not in ESTABLISHED\n",
--			       i, sfd[i]);
--			goto out_sockmap;
--		} else if (i >= 2 && err) {
-+		if (err) {
- 			printf("Failed noprog update sockmap '%i:%i'\n",
- 			       i, sfd[i]);
- 			goto out_sockmap;
+ 	sock = sockfd_lookup(ufd, &ret);
+ 	if (!sock)
+ 		return ret;
+@@ -569,6 +593,7 @@ const struct bpf_map_ops sock_map_ops = {
+ 	.map_alloc		= sock_map_alloc,
+ 	.map_free		= sock_map_free,
+ 	.map_get_next_key	= sock_map_get_next_key,
++	.map_lookup_elem_sys_only = sock_map_lookup_sys,
+ 	.map_update_elem	= sock_map_update_elem,
+ 	.map_delete_elem	= sock_map_delete_elem,
+ 	.map_lookup_elem	= sock_map_lookup,
 -- 
 2.24.1
 
