@@ -2,148 +2,222 @@ Return-Path: <SRS0=pBRf=3L=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DF2DC33CAF
-	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 23:11:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3F5DC32771
+	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 23:36:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5F12524655
-	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 23:11:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F97024673
+	for <bpf@archiver.kernel.org>; Wed, 22 Jan 2020 23:36:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="m1xyj6NS";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="hryubOsI"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="nzb46Ead"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727312AbgAVXLy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jan 2020 18:11:54 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:27248 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725884AbgAVXLy (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jan 2020 18:11:54 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 00MMrAsQ030221;
-        Wed, 22 Jan 2020 15:11:41 -0800
+        id S1725933AbgAVXgy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jan 2020 18:36:54 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:63928 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725911AbgAVXgx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jan 2020 18:36:53 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00MNae0q007535
+        for <bpf@vger.kernel.org>; Wed, 22 Jan 2020 15:36:53 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=4X6gEVMAMq2RQTZ8Bs5xRdJ9CeWGBrh7CSSpKmRuI/8=;
- b=m1xyj6NS8l46Zsy6YfU8ck74qskorsBU2qRdpHlHqlO1GRSoLXrP3ujd2R0C61GSgank
- 4kOhg5f14A+ramSEnVXs8EC7A/AZelhXrqsSFko1+QYvAn8njCadBMfeJppDK9mIaoiL
- 7WV3WOu9CU60G0/VSnJ/eAUeOPtcewi7eSw= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 2xp5vs6rbt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 22 Jan 2020 15:11:41 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=mGtynbUlF9dsfQjKr3hXmaMYAHV2VWo66LsbtuBXKpI=;
+ b=nzb46EadnVAIWVvViuOMt3FDpvVM43vV6orDVSsRg7CEETx6+UwQmInicIGqCmhgU0Zb
+ /oVqwOeMGyNB8l0h0LOfIO4HWFTVQSUzZ2KGbTBW90vOKf8ZJlPU01+eJEBk34cORMKm
+ 8tENMS5F4Kp9jTxBF0Vl2YVDMBiiTxklJRU= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xp9a4wtdb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 22 Jan 2020 15:36:53 -0800
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Wed, 22 Jan 2020 15:11:40 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IEq1Ek2BW4ORzwrvPcqcav3389tatoNhgAM5wKjvns0ESVN34esSEZ0u5HwYcr+EpKqDCJT2n8+Nl3weQ8hy9YN7lvdKZ+LEUPISkdwLdPjA9wM2vWfYZkHlzk52kmBj9jMVuYGrv6tgCBMRhLqsq13eG20l+h57GFbtMtV55c1EC6kLko+422+AKcRmQFhg7u7Mxc5YMXvhu10I/mok63bTVxtChrg3q8sTmNN+KAhjQeNaTENSldEe+X3uHhBgvwWO6U3LFlm2elKI8x1m82IH5mIJ+V+9emwXjnyTaCTKUspTFceYM0SNPRPxxvbmNKTSDA7Soe8gnIiCNxC0WA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4X6gEVMAMq2RQTZ8Bs5xRdJ9CeWGBrh7CSSpKmRuI/8=;
- b=JYuDGYcTEN4MOhD+wmEeSjUOGJSPzruMndAQHp360fiqdQAxuF9O15jUu9JUWN27X7rt59cuoWISgb6kqkdkb1qEb9pyTOr/lJx4/MgQgFeKuuQEemw7UxO1wabWQA5L0dcX0IV8LgcgTNAYcRSgLp5WJgi/ihLywkRuxW2pB5B8N6kY1BlzmodwRZPMj9zTfiwFk/xaDGrV6n0123zcIFsRAq88ezJIuDwyPN+PsjwEN71dRpVHhaZZdwQkcJQYUwyQg1talQlsghRK7Ry2G+YkTFD7Is40gQHoQGbdQPtINCSdSZrhy7swgskqy/lVxepGuBnfNC1WK0WD6Tf/iA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4X6gEVMAMq2RQTZ8Bs5xRdJ9CeWGBrh7CSSpKmRuI/8=;
- b=hryubOsIdlVbc1ZjgdshrsRb70YNx99cfbFf2fV8c9etbPqoCHlpb/eLs9YSkQWJaa5PJvVRNycS6lKFlahzKkX96LZosGr5aGY1bbm4kaYBe8LKP9ve/+dkyr4rWiVTq0KyhaECtFPHII2prTV6f3ojx087BljZ8LWrug9Df74=
-Received: from MN2PR15MB3213.namprd15.prod.outlook.com (20.179.21.76) by
- MN2PR15MB2766.namprd15.prod.outlook.com (20.179.146.91) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2644.20; Wed, 22 Jan 2020 23:11:39 +0000
-Received: from MN2PR15MB3213.namprd15.prod.outlook.com
- ([fe80::6d1e:f2f7:d36:a42f]) by MN2PR15MB3213.namprd15.prod.outlook.com
- ([fe80::6d1e:f2f7:d36:a42f%4]) with mapi id 15.20.2644.027; Wed, 22 Jan 2020
- 23:11:39 +0000
-Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:180::ccdf) by MWHPR14CA0041.namprd14.prod.outlook.com (2603:10b6:300:12b::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.19 via Frontend Transport; Wed, 22 Jan 2020 23:11:37 +0000
-From:   Martin Lau <kafai@fb.com>
-To:     Jakub Sitnicki <jakub@cloudflare.com>
-CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ 15.1.1779.2; Wed, 22 Jan 2020 15:36:51 -0800
+Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
+        id 169162944F6C; Wed, 22 Jan 2020 15:36:46 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Martin KaFai Lau <kafai@fb.com>
+Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: Re: [PATCH bpf-next v3 06/12] bpf, sockmap: Don't set up sockmap
- progs for listening sockets
-Thread-Topic: [PATCH bpf-next v3 06/12] bpf, sockmap: Don't set up sockmap
- progs for listening sockets
-Thread-Index: AQHV0SS0YVQ89hBmX0ab1vzU0B+9tqf3UEuA
-Date:   Wed, 22 Jan 2020 23:11:39 +0000
-Message-ID: <20200122231135.igubfiivymp7usra@kafai-mbp.dhcp.thefacebook.com>
-References: <20200122130549.832236-1-jakub@cloudflare.com>
- <20200122130549.832236-7-jakub@cloudflare.com>
-In-Reply-To: <20200122130549.832236-7-jakub@cloudflare.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MWHPR14CA0041.namprd14.prod.outlook.com
- (2603:10b6:300:12b::27) To MN2PR15MB3213.namprd15.prod.outlook.com
- (2603:10b6:208:3d::12)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:180::ccdf]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f282a011-7b76-4fd9-20d8-08d79f906f63
-x-ms-traffictypediagnostic: MN2PR15MB2766:
-x-microsoft-antispam-prvs: <MN2PR15MB276654E67EC281C6A498DD8CD50C0@MN2PR15MB2766.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:4502;
-x-forefront-prvs: 029097202E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(136003)(346002)(396003)(376002)(366004)(199004)(189003)(316002)(6916009)(54906003)(86362001)(71200400001)(2906002)(4326008)(478600001)(8936002)(52116002)(66446008)(1076003)(7696005)(16526019)(66946007)(64756008)(8676002)(5660300002)(55016002)(66556008)(81156014)(4744005)(6506007)(9686003)(186003)(81166006)(66476007);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR15MB2766;H:MN2PR15MB3213.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: esUAHoLZE43k+VIgrG/8hYypVQKcRNpjdhPcrQxoy5EAqA0+9sIXEmD/B0S0y/wXGhT0cUppvFUa6M7qm89FRYmgaHei01JUHPl6r1ut02Tcu4c6x8mrXhCOxxIy/yoki+YkcEeTQ2PcUPkd2Xb/C4j1HPZqsr8snovaOt87hOxynrnP/iCMnKsppmnKCaAS4IYy+wodNS6v7gjmILLqODSklhJx+OjsLkydGEyP/cHuYPO0cYPxJVH/dmKDi1Hf+sG1ijIQJCA3SiY4m6RESOy6XW2RcUMJte/z3j/vf6qBwYJhNEr69jXo+haMDtLJYjqbimTFHiqp1Hct5r3bVQdPb/ouv5InrHkqTxHpsAmaZWvxOngR1g6rSSlVFfco2DFxYNEtkEh6IQ13DXkuCDUs4MNouzgpcDOxBFdRydtzqPeLoJhDB6H9xQp3+aMn
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <A5C092F48088A64F848F6C8EE4752DCC@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, <kernel-team@fb.com>,
+        <netdev@vger.kernel.org>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v3 bpf-next 1/3] bpf: Add BPF_FUNC_jiffies64
+Date:   Wed, 22 Jan 2020 15:36:46 -0800
+Message-ID: <20200122233646.903260-1-kafai@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200122233639.903041-1-kafai@fb.com>
+References: <20200122233639.903041-1-kafai@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: f282a011-7b76-4fd9-20d8-08d79f906f63
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jan 2020 23:11:39.1367
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UL+GZZ3LAWkhvOzs2UzViUfLgn9h9GGNgOs5tyUDxYmRIMPOqGG28VdIfVn4Zl6V
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB2766
-X-OriginatorOrg: fb.com
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-01-22_08:2020-01-22,2020-01-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- clxscore=1015 adultscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=738
- bulkscore=0 spamscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001220192
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 bulkscore=0
+ mlxlogscore=893 mlxscore=0 phishscore=0 clxscore=1015 suspectscore=13
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-1910280000 definitions=main-2001220196
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jan 22, 2020 at 02:05:43PM +0100, Jakub Sitnicki wrote:
-> Now that sockmap can hold listening sockets, when setting up the psock we
-> will (i) grab references to verdict/parser progs, and (2) override socket
-> upcalls sk_data_ready and sk_write_space.
->=20
-> We cannot redirect to listening sockets so we don't need to link the sock=
-et
-> to the BPF progs, but more importantly we don't want the listening socket
-> to have overridden upcalls because they would get inherited by child
-> sockets cloned from it.
->=20
-> Introduce a separate initialization path for listening sockets that does
-> not change the upcalls and ignores the BPF progs.
-The change makes sense to me.
+This patch adds a helper to read the 64bit jiffies.  It will be used
+in a later patch to implement the bpf_cubic.c.
 
-Acked-by: Martin KaFai Lau <kafai@fb.com>
+The helper is inlined for jit_requested and 64 BITS_PER_LONG
+as the map_gen_lookup().  Other cases could be considered together
+with map_gen_lookup() if needed.
+
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ include/linux/bpf.h      |  1 +
+ include/uapi/linux/bpf.h |  9 ++++++++-
+ kernel/bpf/core.c        |  1 +
+ kernel/bpf/helpers.c     | 12 ++++++++++++
+ kernel/bpf/verifier.c    | 24 ++++++++++++++++++++++++
+ net/core/filter.c        |  2 ++
+ 6 files changed, 48 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 05d16615054c..a9687861fd7e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1414,6 +1414,7 @@ extern const struct bpf_func_proto bpf_get_local_storage_proto;
+ extern const struct bpf_func_proto bpf_strtol_proto;
+ extern const struct bpf_func_proto bpf_strtoul_proto;
+ extern const struct bpf_func_proto bpf_tcp_sock_proto;
++extern const struct bpf_func_proto bpf_jiffies64_proto;
+ 
+ /* Shared helpers among cBPF and eBPF. */
+ void bpf_user_rnd_init_once(void);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index e81628eb059c..f1d74a2bd234 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -2886,6 +2886,12 @@ union bpf_attr {
+  *		**-EPERM** if no permission to send the *sig*.
+  *
+  *		**-EAGAIN** if bpf program can try again.
++ *
++ * u64 bpf_jiffies64(void)
++ *	Description
++ *		Obtain the 64bit jiffies
++ *	Return
++ *		The 64 bit jiffies
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3005,7 +3011,8 @@ union bpf_attr {
+ 	FN(probe_read_user_str),	\
+ 	FN(probe_read_kernel_str),	\
+ 	FN(tcp_send_ack),		\
+-	FN(send_signal_thread),
++	FN(send_signal_thread),		\
++	FN(jiffies64),
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+  * function eBPF program intends to call
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 29d47aae0dd1..973a20d49749 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2137,6 +2137,7 @@ const struct bpf_func_proto bpf_map_pop_elem_proto __weak;
+ const struct bpf_func_proto bpf_map_peek_elem_proto __weak;
+ const struct bpf_func_proto bpf_spin_lock_proto __weak;
+ const struct bpf_func_proto bpf_spin_unlock_proto __weak;
++const struct bpf_func_proto bpf_jiffies64_proto __weak;
+ 
+ const struct bpf_func_proto bpf_get_prandom_u32_proto __weak;
+ const struct bpf_func_proto bpf_get_smp_processor_id_proto __weak;
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index cada974c9f4e..d8b7b110a1c5 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -11,6 +11,7 @@
+ #include <linux/uidgid.h>
+ #include <linux/filter.h>
+ #include <linux/ctype.h>
++#include <linux/jiffies.h>
+ 
+ #include "../../lib/kstrtox.h"
+ 
+@@ -312,6 +313,17 @@ void copy_map_value_locked(struct bpf_map *map, void *dst, void *src,
+ 	preempt_enable();
+ }
+ 
++BPF_CALL_0(bpf_jiffies64)
++{
++	return get_jiffies_64();
++}
++
++const struct bpf_func_proto bpf_jiffies64_proto = {
++	.func		= bpf_jiffies64,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++};
++
+ #ifdef CONFIG_CGROUPS
+ BPF_CALL_0(bpf_get_current_cgroup_id)
+ {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9fe94f64f0ec..734abaa02123 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9445,6 +9445,30 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 			goto patch_call_imm;
+ 		}
+ 
++		if (prog->jit_requested && BITS_PER_LONG == 64 &&
++		    insn->imm == BPF_FUNC_jiffies64) {
++			struct bpf_insn ld_jiffies_addr[2] = {
++				BPF_LD_IMM64(BPF_REG_0,
++					     (unsigned long)&jiffies),
++			};
++
++			insn_buf[0] = ld_jiffies_addr[0];
++			insn_buf[1] = ld_jiffies_addr[1];
++			insn_buf[2] = BPF_LDX_MEM(BPF_DW, BPF_REG_0,
++						  BPF_REG_0, 0);
++			cnt = 3;
++
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
++						       cnt);
++			if (!new_prog)
++				return -ENOMEM;
++
++			delta    += cnt - 1;
++			env->prog = prog = new_prog;
++			insn      = new_prog->insnsi + i + delta;
++			continue;
++		}
++
+ patch_call_imm:
+ 		fn = env->ops->get_func_proto(insn->imm, env->prog);
+ 		/* all functions that have prototype and verifier allowed
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 17de6747d9e3..4bf3e4aa8a7a 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5923,6 +5923,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_spin_unlock_proto;
+ 	case BPF_FUNC_trace_printk:
+ 		return bpf_get_trace_printk_proto();
++	case BPF_FUNC_jiffies64:
++		return &bpf_jiffies64_proto;
+ 	default:
+ 		return NULL;
+ 	}
+-- 
+2.17.1
+
