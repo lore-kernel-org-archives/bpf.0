@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C613C2D0DB
-	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 15:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0996EC2D0DB
+	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 15:25:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E62EF24676
-	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 15:25:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D24E32467E
+	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 15:25:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AUMGBbBR"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DhF+pYEn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728767AbgAWPZl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jan 2020 10:25:41 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44098 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728765AbgAWPZ0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Jan 2020 10:25:26 -0500
-Received: by mail-pf1-f196.google.com with SMTP id 62so1677839pfu.11
-        for <bpf@vger.kernel.org>; Thu, 23 Jan 2020 07:25:25 -0800 (PST)
+        id S1728139AbgAWPZn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jan 2020 10:25:43 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:53558 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729242AbgAWPZV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jan 2020 10:25:21 -0500
+Received: by mail-pj1-f67.google.com with SMTP id n96so1351561pjc.3
+        for <bpf@vger.kernel.org>; Thu, 23 Jan 2020 07:25:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=MmRJe3DElaN6x34LdFhi955VR7hntKawxO/WlNWMHYE=;
-        b=AUMGBbBRa+ZQXAPMJHFivBlNtYgG7SGyNNJddvjw0j9t5D+tl6WBpRtKwA00qZpp6I
-         UBeptFdGetKXP781nQN6RIvmcL1Sv/j6lri1XRHEikkCMl3JgSnbte0w23AH6tk8nJN6
-         5MQ3BJjv+XiBHauGdU02oiWrDMmlmHwbYOHr4=
+        bh=gr0/iRYX6pdOjlgLU2+c3EE2UdU46bZbHnnZWF6Q8ck=;
+        b=DhF+pYEnaJLadjh0xvWG6frOgofZmY5KGQv0Ra7JLsEmIYIrXaDCwrhLH+KEJB3XfT
+         ZPXMaZmNsnIIzP/K8ifQzl/nqzBDbJJHIzezdOIFmW8aAo2ZHfWGIdpnUcLFQX2WaFEk
+         cAUI+5IeWTtj0jk9HcBsZYznFtXQGXC/FhTYE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MmRJe3DElaN6x34LdFhi955VR7hntKawxO/WlNWMHYE=;
-        b=OG/i3VuLNqKpVPnRGswu1RVnvXFOA1uTcWshrPKnxAWAGZU0Qt7tmASTbS9lRoXQXA
-         IxFzbW9NRp6mN6bYqIT4C4nK9aU032E7rWXwbFTgJWeD3waHOXD00cJsIwsIcU1UJkKk
-         dyAHi1M66mKy2SxvWhv+65rurdoSaHir3kimS2UfyqSaBoNEZi1ej69RhdOW+ReVdBSL
-         69D7DNKDfxaNdhbqSQqaTrxtRnqW96qgBqxgS4CdN+bCYD/IG4XyY0IBB697ozhP8R3j
-         WBVrR6vdpL0Lk6HzG9wML2ZzgirSlEN4Ogn45gTGnxkqRcbpvWRKliNBH+mOxvxsloki
-         /1MA==
-X-Gm-Message-State: APjAAAVO7J7mI74rOq7LlBnmlW6XCWCVWQXIZPOhwp4EHkBfY/X01nXR
-        vytgmJJxsczNtwtd1Xp4hTYpFA==
-X-Google-Smtp-Source: APXvYqwCfzKnHVrml3SIxl4VLRdTCUr8xN43FTo8AM8sb1ZHHMOJ28xhBQs7HKB4eiJVhYpFMzhezQ==
-X-Received: by 2002:a62:7c58:: with SMTP id x85mr4551590pfc.76.1579793125244;
-        Thu, 23 Jan 2020 07:25:25 -0800 (PST)
+        bh=gr0/iRYX6pdOjlgLU2+c3EE2UdU46bZbHnnZWF6Q8ck=;
+        b=ZQqcwIHYGneQagvaz9gnBuZu4qfmgdUDu8EBwztozLhDcnzRhImtn/CmVtBJTF0F1h
+         Pw71l69eTMZfCkcHVIKcEpqmS5/uMzycTI2I5kqDjdQJFSCDpXKGqGpSRT7iI1lf19m3
+         5QGWjVLleZdFYpekgGg/Fp367ib5nwlxBdvgDKsf/qzMxWbJ95xiLEvBptF5Fn9r7GKi
+         tFfoWlulb1SSg07J7JXvazrEkHaHTuMOobAZcaESqcpCaqpJIxGbCoR68C9CLMUG4dgv
+         03t+jAW6vCCyte5irAxoZ3rc3vWvDboD7TSjuoYzwvDDz6UYFAXQT29jPje5v3/3l6yI
+         1WwQ==
+X-Gm-Message-State: APjAAAWhH2ae3QePw+0hmGBrtfK6+2EjSXqodEvTqK2LH9Xjp0mxZXqg
+        Sg72Wbu1dIY47C4NMOcXgd2rIg==
+X-Google-Smtp-Source: APXvYqytWStB+PLHy6l1PwU0Kl/ckTbrVoaaES13I9k1Gj6vADdaBkpnZmW87jvwYSAwHUvvnl/NeA==
+X-Received: by 2002:a17:902:aa05:: with SMTP id be5mr16132824plb.142.1579793121265;
+        Thu, 23 Jan 2020 07:25:21 -0800 (PST)
 Received: from kpsingh-kernel.localdomain ([2a00:79e1:abc:122:bd8d:3f7b:87f7:16d1])
-        by smtp.gmail.com with ESMTPSA id v5sm3108118pfn.122.2020.01.23.07.25.23
+        by smtp.gmail.com with ESMTPSA id v5sm3108118pfn.122.2020.01.23.07.25.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2020 07:25:24 -0800 (PST)
+        Thu, 23 Jan 2020 07:25:20 -0800 (PST)
 From:   KP Singh <kpsingh@chromium.org>
 To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         linux-security-module@vger.kernel.org
@@ -81,9 +81,9 @@ Cc:     Brendan Jackman <jackmanb@google.com>,
         Stanislav Fomichev <sdf@google.com>,
         Quentin Monnet <quentin.monnet@netronome.com>,
         Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
-Subject: [PATCH bpf-next v3 09/10] bpf: lsm: Add selftests for BPF_PROG_TYPE_LSM
-Date:   Thu, 23 Jan 2020 07:24:39 -0800
-Message-Id: <20200123152440.28956-10-kpsingh@chromium.org>
+Subject: [PATCH bpf-next v3 07/10] bpf: lsm: Make the allocated callback RO+X
+Date:   Thu, 23 Jan 2020 07:24:37 -0800
+Message-Id: <20200123152440.28956-8-kpsingh@chromium.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200123152440.28956-1-kpsingh@chromium.org>
 References: <20200123152440.28956-1-kpsingh@chromium.org>
@@ -96,182 +96,42 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: KP Singh <kpsingh@google.com>
 
-* Load a BPF program that audits mprotect calls
-* Attach the program to the "file_mprotect" LSM hook.
-* Do an mprotect on some memory allocated on the heap
-* Verify if the audit event was received using the shared global
-  result variable.
+This patch is not needed after arch_bpf_prepare_trampoline
+moves to using text_poke.
+
+The two IPI TLB flushes can be further optimized if a new API to handle
+W^X in the kernel emerges as an outcome of:
+
+  https://lore.kernel.org/bpf/20200103234725.22846-1-kpsingh@chromium.org/
 
 Signed-off-by: KP Singh <kpsingh@google.com>
 Reviewed-by: Brendan Jackman <jackmanb@google.com>
 Reviewed-by: Florent Revest <revest@google.com>
 Reviewed-by: Thomas Garnier <thgarnie@google.com>
 ---
- MAINTAINERS                                   |  3 +
- tools/testing/selftests/bpf/lsm_helpers.h     | 19 ++++++
- .../bpf/prog_tests/lsm_mprotect_audit.c       | 58 +++++++++++++++++++
- .../selftests/bpf/progs/lsm_mprotect_audit.c  | 47 +++++++++++++++
- 4 files changed, 127 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/lsm_helpers.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_mprotect_audit.c
- create mode 100644 tools/testing/selftests/bpf/progs/lsm_mprotect_audit.c
+ security/bpf/hooks.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c606b3d89992..32236d89d00b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3210,6 +3210,9 @@ L:	bpf@vger.kernel.org
- S:	Maintained
- F:	security/bpf/
- F:	include/linux/bpf_lsm.h
-+F:	tools/testing/selftests/bpf/lsm_helpers.h
-+F:	tools/testing/selftests/bpf/progs/lsm_mprotect_audit.c
-+F:	tools/testing/selftests/bpf/prog_tests/lsm_mprotect_audit.c
+diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
+index f1d4fdcdb20e..beeeb8c1f9c2 100644
+--- a/security/bpf/hooks.c
++++ b/security/bpf/hooks.c
+@@ -190,6 +190,15 @@ static struct bpf_lsm_hook *bpf_lsm_hook_alloc(struct bpf_lsm_list *list,
+ 		goto error;
+ 	}
  
- BROADCOM B44 10/100 ETHERNET DRIVER
- M:	Michael Chan <michael.chan@broadcom.com>
-diff --git a/tools/testing/selftests/bpf/lsm_helpers.h b/tools/testing/selftests/bpf/lsm_helpers.h
-new file mode 100644
-index 000000000000..8bad08f77654
---- /dev/null
-+++ b/tools/testing/selftests/bpf/lsm_helpers.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+/*
-+ * Copyright 2019 Google LLC.
-+ */
-+#ifndef _LSM_HELPERS_H
-+#define _LSM_HELPERS_H
-+
-+struct lsm_mprotect_audit_result {
-+	/* This ensures that the LSM Hook only monitors the PID requested
-+	 * by the loader
++	/* First make the page read-only, and only then make it executable to
++	 * prevent it from being W+X in between.
 +	 */
-+	__u32 monitored_pid;
-+	/* The number of mprotect calls for the monitored PID.
++	set_memory_ro((unsigned long)image, 1);
++	/* More checks can be done here to ensure that nothing was changed
++	 * between arch_prepare_bpf_trampoline and set_memory_ro.
 +	 */
-+	__u32 mprotect_count;
-+};
++	set_memory_x((unsigned long)image, 1);
 +
-+#endif /* _LSM_HELPERS_H */
-diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_mprotect_audit.c b/tools/testing/selftests/bpf/prog_tests/lsm_mprotect_audit.c
-new file mode 100644
-index 000000000000..ff90b874eafc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/lsm_mprotect_audit.c
-@@ -0,0 +1,58 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright 2019 Google LLC.
-+ */
-+
-+#include <test_progs.h>
-+#include <sys/mman.h>
-+#include <unistd.h>
-+#include <malloc.h>
-+#include "lsm_helpers.h"
-+#include "lsm_mprotect_audit.skel.h"
-+
-+int heap_mprotect(void)
-+{
-+	void *buf;
-+	long sz;
-+
-+	sz = sysconf(_SC_PAGESIZE);
-+	if (sz < 0)
-+		return sz;
-+
-+	buf = memalign(sz, 2 * sz);
-+	if (buf == NULL)
-+		return -ENOMEM;
-+
-+	return mprotect(buf, sz, PROT_READ | PROT_EXEC);
-+}
-+
-+void test_lsm_mprotect_audit(void)
-+{
-+	struct lsm_mprotect_audit_result *result;
-+	struct lsm_mprotect_audit *skel = NULL;
-+	int err, duration = 0;
-+
-+	skel = lsm_mprotect_audit__open_and_load();
-+	if (CHECK(!skel, "skel_load", "lsm_mprotect_audit skeleton failed\n"))
-+		goto close_prog;
-+
-+	err = lsm_mprotect_audit__attach(skel);
-+	if (CHECK(err, "attach", "lsm_mprotect_audit attach failed: %d\n", err))
-+		goto close_prog;
-+
-+	result = &skel->bss->result;
-+	result->monitored_pid = getpid();
-+
-+	err = heap_mprotect();
-+	if (CHECK(err < 0, "heap_mprotect", "err %d errno %d\n", err, errno))
-+		goto close_prog;
-+
-+	/* Make sure mprotect_audit program was triggered
-+	 * and detected an mprotect on the heap.
-+	 */
-+	CHECK_FAIL(result->mprotect_count != 1);
-+
-+close_prog:
-+	lsm_mprotect_audit__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/lsm_mprotect_audit.c b/tools/testing/selftests/bpf/progs/lsm_mprotect_audit.c
-new file mode 100644
-index 000000000000..231cd64fd0f7
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/lsm_mprotect_audit.c
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright 2019 Google LLC.
-+ */
-+
-+#include <linux/bpf.h>
-+#include <stdbool.h>
-+#include "bpf_trace_helpers.h"
-+#include "lsm_helpers.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct lsm_mprotect_audit_result result = {
-+	.mprotect_count = 0,
-+	.monitored_pid = 0,
-+};
-+
-+/*
-+ * Define some of the structs used in the BPF program.
-+ * Only the field names and their sizes need to be the
-+ * same as the kernel type, the order is irrelevant.
-+ */
-+struct mm_struct {
-+	unsigned long start_brk, brk;
-+} __attribute__((preserve_access_index));
-+
-+struct vm_area_struct {
-+	unsigned long vm_start, vm_end;
-+	struct mm_struct *vm_mm;
-+} __attribute__((preserve_access_index));
-+
-+SEC("lsm/file_mprotect")
-+int BPF_PROG(mprotect_audit, struct vm_area_struct *vma,
-+	     unsigned long reqprot, unsigned long prot)
-+{
-+	__u32 pid = bpf_get_current_pid_tgid();
-+	int is_heap = 0;
-+
-+	is_heap = (vma->vm_start >= vma->vm_mm->start_brk &&
-+		   vma->vm_end <= vma->vm_mm->brk);
-+
-+	if (is_heap && result.monitored_pid == pid)
-+		result.mprotect_count++;
-+
-+	return 0;
-+}
+ 	hook = kzalloc(sizeof(struct bpf_lsm_hook), GFP_KERNEL);
+ 	if (!hook) {
+ 		ret = -ENOMEM;
 -- 
 2.20.1
 
