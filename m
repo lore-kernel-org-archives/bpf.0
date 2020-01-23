@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95F7EC2D0DB
-	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 17:00:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18433C33CAF
+	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 17:00:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6A31E24125
-	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 17:00:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E198E24125
+	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 17:00:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="rmcV1F+u"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="gtrzkuQ3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729860AbgAWRAA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jan 2020 12:00:00 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:34250 "EHLO
+        id S1729864AbgAWRAC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jan 2020 12:00:02 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:39934 "EHLO
         mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729797AbgAWQ7s (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Jan 2020 11:59:48 -0500
-Received: by mail-wr1-f68.google.com with SMTP id t2so3945960wrr.1
-        for <bpf@vger.kernel.org>; Thu, 23 Jan 2020 08:59:47 -0800 (PST)
+        with ESMTP id S1729746AbgAWQ7p (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jan 2020 11:59:45 -0500
+Received: by mail-wr1-f68.google.com with SMTP id y11so3905917wrt.6
+        for <bpf@vger.kernel.org>; Thu, 23 Jan 2020 08:59:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lzJSOoo0RY3SkOVg99jXaD0hCIShOjvh87S5WEoUKHA=;
-        b=rmcV1F+uEgQl1C9Bw8jxZiHVIX5+T5T3sxYSgR7I6GG/JUWe0M8tWN2DUqqzWdoYgX
-         N2B0KivXpJcrI72myxxmd5mlC6uuOjeJuGV48CFZb+1C4xJ7slk65KxrEZJDZHcr+vJB
-         gTkFp0ARrz5plhGXPSwjmnDPxsDwOS9CKDuE8=
+        bh=g7SvZ9phUNQgBFhv9EVqVUJXNc7V2T/+gA9/uB1lrNY=;
+        b=gtrzkuQ3f7nCSsbvZV+79p3YHEpiG55tz/BtLLT1TKC04h4wnV8nBZfVTy/oeleTWI
+         FLytsgneqoqPVgRerwb4UmFKfANQw/OyLCbDS9cyI8/FdPksxF1YRxNFYVfCmifcHrmO
+         gfDjmiP/5qHzq51cApwjJfE8JvSN2pHsTbzhE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lzJSOoo0RY3SkOVg99jXaD0hCIShOjvh87S5WEoUKHA=;
-        b=N/Cp2Lcyumci+MIdvLImrhJp1QluBNc71FCS/sBrWzjBHQYXvSWApkNZ5mUlswWsVn
-         W7rTnD/iDDcNj/KqRGeN5aeCHDtezbsWclXogyiatdif/7q1k438Ytzwgkbllr4Dj4Dp
-         MVdGyZjreRDL+rTPwJ1N1IvYSSFH9K1V8Y+irP66qlYAoVopfy3rJuuFjh2884/W6l/I
-         r7PFmwN6Nor/8pEY/KuZy/TayvOnj7icpEjlr9k4c03TkyLdTq/QfIhXRsCuE6IeuGg+
-         Y5SNedgsVtTB8b0dLZDEAVsVYfjO7hspALwFWTk+SH3ZtaxQ74PB8r8O2CzKZmFPaBvI
-         m1vw==
-X-Gm-Message-State: APjAAAVA7sjovsIJEygB6ftFWzDLQZIr67izaPE++SZ7CSFj9Z2wrIsS
-        ys4uzN7Z68vu8FXvZ0c3s37C8g==
-X-Google-Smtp-Source: APXvYqznD+zC0q/A4MhGzomvxakH4li9R6cnks1twXRbQNsnspUm7dxAarVtPVqc3Z3Kl1zIo2bzig==
-X-Received: by 2002:adf:fc03:: with SMTP id i3mr18956626wrr.306.1579798787004;
-        Thu, 23 Jan 2020 08:59:47 -0800 (PST)
+        bh=g7SvZ9phUNQgBFhv9EVqVUJXNc7V2T/+gA9/uB1lrNY=;
+        b=NKgsrsapkU3LzGFlrNUVL2JHUHOgcf5FLd41DHQTibquALMIPWGHRIsQZOHy0PaZ5W
+         3U9ohbn9rWz0pFgbYCj6IPNTatyQ4KlB+/OdPubc6tnH01ivT6bK6jQrGFrHEkbSAF7b
+         6tr0vLSsU4JqAcyYm/qWUBV5O/1TfsejhaFMV8LUcoPepenQlmihjn2xETJu+9/xNRrQ
+         gKW6dzesXPdz34yvAAnSzzNtue726Ib6bjKNJKxFbQILhTI92diYXetYF+cdoazMuRvW
+         vzBKpAmG7yeOKh6gvwrry0keoUUWHE1uZlsVHyrHO4LMCt1Iv1rGqoAnN1zgeqyYhm5z
+         AYVA==
+X-Gm-Message-State: APjAAAU823rfQwKsQfy8WPmfX8PG2OF8p349ULHbwrk4jCma5hInaGjP
+        jevxpsPheGwEUpU2o7otCTq46A==
+X-Google-Smtp-Source: APXvYqxZBMzloyeuvuGWMOXyEMsTRg357vgRAFLanDZW9K3hvo17Oc9CnYfhEOKDJRcCoIGSj/eFaA==
+X-Received: by 2002:adf:cf0a:: with SMTP id o10mr18246948wrj.325.1579798783545;
+        Thu, 23 Jan 2020 08:59:43 -0800 (PST)
 Received: from localhost.localdomain ([2a06:98c0:1000:8250:d0a9:6cca:1210:a574])
-        by smtp.gmail.com with ESMTPSA id u1sm3217698wmc.5.2020.01.23.08.59.45
+        by smtp.gmail.com with ESMTPSA id u1sm3217698wmc.5.2020.01.23.08.59.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2020 08:59:46 -0800 (PST)
+        Thu, 23 Jan 2020 08:59:42 -0800 (PST)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -60,9 +60,9 @@ To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
 Cc:     Lorenz Bauer <lmb@cloudflare.com>, linux-kselftest@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf 4/4] selftests: bpf: reset global state between reuseport test runs
-Date:   Thu, 23 Jan 2020 16:59:33 +0000
-Message-Id: <20200123165934.9584-5-lmb@cloudflare.com>
+Subject: [PATCH bpf 2/4] selftests: bpf: ignore RST packets for reuseport tests
+Date:   Thu, 23 Jan 2020 16:59:31 +0000
+Message-Id: <20200123165934.9584-3-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200123165934.9584-1-lmb@cloudflare.com>
 References: <20200123165934.9584-1-lmb@cloudflare.com>
@@ -73,42 +73,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, there is a lot of false positives if a single reuseport test
-fails. This is because expected_results and the result map are not cleared.
+The reuseport tests currently suffer from a race condition: RST
+packets count towards DROP_ERR_SKB_DATA, since they don't contain
+a valid struct cmd. Tests will spuriously fail depending on whether
+check_results is called before or after the RST is processed.
 
-Zero both after individual test runs, which fixes the mentioned false
-positives.
+Exit the BPF program early if FIN is set.
 
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- .../selftests/bpf/prog_tests/select_reuseport.c    | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ .../selftests/bpf/progs/test_select_reuseport_kern.c        | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-index 09a536af139a..0bab8b1ca1c3 100644
---- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-+++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-@@ -699,7 +699,19 @@ static void setup_per_test(int type, sa_family_t family, bool inany,
+diff --git a/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c b/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
+index d69a1f2bbbfd..26e77dcc7e91 100644
+--- a/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
+@@ -113,6 +113,12 @@ int _select_by_skb_data(struct sk_reuseport_md *reuse_md)
+ 		data_check.skb_ports[0] = th->source;
+ 		data_check.skb_ports[1] = th->dest;
  
- static void cleanup_per_test(bool no_inner_map)
- {
--	int i, err;
-+	int i, err, zero = 0;
++		if (th->fin)
++			/* The connection is being torn down at the end of a
++			 * test. It can't contain a cmd, so return early.
++			 */
++			return SK_PASS;
 +
-+	memset(expected_results, 0, sizeof(expected_results));
-+
-+	for (i = 0; i < NR_RESULTS; i++) {
-+		err = bpf_map_update_elem(result_map, &i, &zero, BPF_ANY);
-+		RET_IF(err, "reset elem in result_map",
-+		       "i:%u err:%d errno:%d\n", i, err, errno);
-+	}
-+
-+	err = bpf_map_update_elem(linum_map, &zero, &zero, BPF_ANY);
-+	RET_IF(err, "reset line number in linum_map", "err:%d errno:%d\n",
-+	       err, errno);
- 
- 	for (i = 0; i < REUSEPORT_ARRAY_SIZE; i++)
- 		close(sk_fds[i]);
+ 		if ((th->doff << 2) + sizeof(*cmd) > data_check.len)
+ 			GOTO_DONE(DROP_ERR_SKB_DATA);
+ 		if (bpf_skb_load_bytes(reuse_md, th->doff << 2, &cmd_copy,
 -- 
 2.20.1
 
