@@ -2,123 +2,121 @@ Return-Path: <SRS0=areF=3M=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE263C33CAA
-	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 21:23:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5619AC33CAA
+	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 21:29:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B91EF20704
-	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 21:23:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 213D322522
+	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 21:29:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="BmcQl186";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NYWc3pN9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oPAt2jQl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729543AbgAWVXt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jan 2020 16:23:49 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:44453 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728765AbgAWVXl (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 Jan 2020 16:23:41 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 9B82A5F91;
-        Thu, 23 Jan 2020 16:23:40 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 23 Jan 2020 16:23:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=i2TbaaLRbCuDS
-        5CihmwELlkML+zGJC6EN5XnNvRO3WY=; b=BmcQl186+HHoH0Gc6tj0f2bHqulnA
-        o13G5rDPgIg8yUEvyinOXBnrnQktIHKXMU9vzaujM6BeWpG/BghQv2bPl+L4VoM2
-        eFLg3sFHrdRdFYcmLiIaF8s9RmJjrl0DfmgI/hqnn+AZQWphvPoPnQtVR8a2/Z8O
-        Wf899bJkjtH8oeFkv67N9U2CSgYzUE8lQZ2TVs9buT4o9OFYk/17bw4A17ybKBkp
-        bJju5rZgr8vLteVBBCjpijU9nBw/G/XA/wHX/MF1XZwsKxaBZXxn3PIRFfpOBMYN
-        etLuSXpS3IJ/vrFVXx1kxJtQX7bVFFJpQs8J/0/3US+vOEnN+27ncaAuw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=i2TbaaLRbCuDS5CihmwELlkML+zGJC6EN5XnNvRO3WY=; b=NYWc3pN9
-        GCDQoQoAiu5AwTwk2oN3HZ/yuhYEOHs3bTUKDQ5TeWAWoiKU1BBBdE0mWL0to4o8
-        2c3y6eBNm6D3XYouCYfj/Hh3NeevNSIXI8k++MTAwvhAizZ8mPcWeGwr0RGASW5W
-        vuBEoWp/QuGnYRDUn/MYoBSq0QMGf0XTpbYx3CleN1dWqEbiGCrRbuClzfyZtNFD
-        eS60/jzZPTI8dSQqeDUXUPcYomUVd5g7rgcyjwn2o3YV/UkaehAffyYp0cT103/z
-        PydzRQndcbc+8npMt9iIUA393FX1ghoofKHH6Gt3pQZAxbHISz1DRNMUXAxcnDeg
-        HBAOcUKglln/Tg==
-X-ME-Sender: <xms:3A4qXmLhrsyAx6N-_869faNiwUxAXs6OFaNhwKMH1zwkkVT1y4L_Lw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrvddvgdelvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephffvuf
-    ffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceougig
-    uhesugiguhhuuhdrgiihiieqnecukfhppeduleelrddvtddurdeigedrudefheenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihu
-    uhhurdighiii
-X-ME-Proxy: <xmx:3A4qXib4cKgwBEPTaPhHeSWSrgrgvzGS8tMXrk6YzUNMHUEnah5BkQ>
-    <xmx:3A4qXhu5vq9tgHSe4IeW71aDg-irovLu4hvVVvGZHBrSDgS1q4Ccwg>
-    <xmx:3A4qXvsbZky1OzTelpkwP1KE1cweoMztidZJu5I6BgQtkBICLSgzsQ>
-    <xmx:3A4qXna1eMZAb76yBrVBxi0nZ_4UuZonF57hubU5lIcNvuXduY5yHw>
-Received: from dlxu-fedora-R90QNFJV.thefacebook.com (unknown [199.201.64.135])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 301283060AA8;
-        Thu, 23 Jan 2020 16:23:39 -0500 (EST)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        songliubraving@fb.com, yhs@fb.com, andriin@fb.com
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org
-Subject: [PATCH v3 bpf-next 2/3] tools/bpf: Sync uapi header bpf.h
-Date:   Thu, 23 Jan 2020 13:23:11 -0800
-Message-Id: <20200123212312.3963-3-dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.21.1
-In-Reply-To: <20200123212312.3963-1-dxu@dxuuu.xyz>
-References: <20200123212312.3963-1-dxu@dxuuu.xyz>
+        id S1728139AbgAWV25 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jan 2020 16:28:57 -0500
+Received: from mail-ua1-f67.google.com ([209.85.222.67]:38943 "EHLO
+        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726118AbgAWV25 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jan 2020 16:28:57 -0500
+Received: by mail-ua1-f67.google.com with SMTP id 73so42904uac.6;
+        Thu, 23 Jan 2020 13:28:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YSbU1uqjZPOEO1Y+Gw50u5Z+ggq+k7efj1RntkA3E9U=;
+        b=oPAt2jQlapEzqqZVJrKArIR0wSaVYzkP6sejlZbngsxvYIPYyDxnAQpP7+80ejkcjB
+         NQQ6Vze/aeClkDRc/5difGCA92dclJVwbmwr30eJ1i/xxEe+0zUn2fOApOulJRecJRjM
+         mZbmbA3s2XDKCHWV2qjv4J1nHMvGH0pl09dTFtBMUbJiIYs82Z1gR2r3M+xjz2kdEgNt
+         Sak9EB6jELEBFm+Xat7qdGrhzEdnbAxpwbSwoWsVFtT3vezMRn2BNJUL4REgvCDveC8S
+         lOrEqONEgloVs5rrpyVO8klYyypX01Q1M8MgIzqeZoUtom+Lc7waBhR8+sAQYA81zSYy
+         ythQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YSbU1uqjZPOEO1Y+Gw50u5Z+ggq+k7efj1RntkA3E9U=;
+        b=sijKP5MqIl7cIWeFlkKuQFGH8SzwsbHGapcRYkoX488ENQCXwaQ+s3nTpvXedJNe4+
+         yze2pCTw/GXeYZkR4C6QEkmEqvz+7uQufdPowepDgdtQXB2wbQ2/NAr5KfJEB4oZLFCE
+         zNF6CsEzlWcgOpUvrYdTqEec+vkFJK/KmyIJe8d5w0zuHxmJ2SyNGzvg+uXoyLo39WRE
+         fSoYYtnJq+4RKFBYOyoi3hBIsheaikkDy+I9b0KRRFQG01TDeVLUMl/bXCdzky2DIx/N
+         +LM339gSd3a1BOUJ4hKeiXCowGkzZYgvp6f353DigGgvNI8wpbvecJlwohlh31LGMryy
+         sGfw==
+X-Gm-Message-State: APjAAAVyUuQnw+XatPUIozefx+mZAjJT92KTLDO31CDKkbNbT65/18xG
+        LgPWnS3jw59gYPeDP413fdWr5JrsGFPb43mO54Y=
+X-Google-Smtp-Source: APXvYqwVZEiV2fpYrSjwSbTZs5ZwPqLIdvGiJS5S9P+hVVKDiZVc8XR0t8L+g9NhdkwSkiUOIr0hwkAGiQ+sIH7XIxY=
+X-Received: by 2002:ab0:40a3:: with SMTP id i32mr11123232uad.131.1579814935885;
+ Thu, 23 Jan 2020 13:28:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200118000128.15746-1-matthew.cover@stackpath.com>
+ <5e23c773d7a67_13602b2359ea05b824@john-XPS-13-9370.notmuch>
+ <CAGyo_hrUXWzui9FNiZpNGXjsphSreLEYYm4K7xkp+H+de=QKSA@mail.gmail.com>
+ <CAGyo_hpcO-f9uxQFDfKZNz=1t6Yux+LzxN1qLHKf6PXMAtWQ-w@mail.gmail.com> <360a11cd-2c41-159e-b92a-c7c1ec42767f@iogearbox.net>
+In-Reply-To: <360a11cd-2c41-159e-b92a-c7c1ec42767f@iogearbox.net>
+From:   Matt Cover <werekraken@gmail.com>
+Date:   Thu, 23 Jan 2020 14:28:43 -0700
+Message-ID: <CAGyo_hotjxvaWjL1VV4VMSviZcLMSmO8UQcVJFW_nV8=RTGNsQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: add bpf_ct_lookup_{tcp,udp}() helpers
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Quentin Monnet <quentin.monnet@netronome.com>,
+        Matthew Cover <matthew.cover@stackpath.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Andrey Ignatov <rdna@fb.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Jiong Wang <jiong.wang@netronome.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- tools/include/uapi/linux/bpf.h | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+On Mon, Jan 20, 2020 at 2:11 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 1/20/20 9:10 PM, Matt Cover wrote:
+> > On Mon, Jan 20, 2020 at 11:11 AM Matt Cover <werekraken@gmail.com> wrote:
+> >> On Sat, Jan 18, 2020 at 8:05 PM John Fastabend <john.fastabend@gmail.com> wrote:
+> >>> Matthew Cover wrote:
+> >>>> Allow looking up an nf_conn. This allows eBPF programs to leverage
+> >>>> nf_conntrack state for similar purposes to socket state use cases,
+> >>>> as provided by the socket lookup helpers. This is particularly
+> >>>> useful when nf_conntrack state is locally available, but socket
+> >>>> state is not.
+> >>>>
+> >>>> Signed-off-by: Matthew Cover <matthew.cover@stackpath.com>
+> >>>> ---
+> >>>
+> >>> Couple coding comments below. Also looks like a couple build errors
+> >>> so fix those up. I'm still thinking over this though.
+> >>
+> >> Thank you for taking the time to look this over. I will be looking
+> >> into the build issues.
+> >
+> > Looks like I missed static inline on a couple functions when
+> > nf_conntrack isn't builtin. I'll include the fix in v2.
+>
+> One of the big issues I'd see with this integration is that literally no-one
+> will be able to use it unless they manually recompile their distro kernel with
+> ct as builtin instead of module .. Have you considered writing a tcp/udp ct in
+> plain bpf? Perhaps would make sense to have some sort of tools/lib/bpf/util/
+> with bpf prog library code that can be included.
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index f1d74a2bd234..50c580c8a201 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2892,6 +2892,18 @@ union bpf_attr {
-  *		Obtain the 64bit jiffies
-  *	Return
-  *		The 64 bit jiffies
-+ *
-+ * int bpf_perf_prog_read_branches(struct bpf_perf_event_data *ctx, void *buf, u32 buf_size)
-+ *	Description
-+ *		For en eBPF program attached to a perf event, retrieve the
-+ *		branch records (struct perf_branch_entry) associated to *ctx*
-+ *		and store it in	the buffer pointed by *buf* up to size
-+ *		*buf_size* bytes.
-+ *
-+ *		Any unused parts of *buf* will be filled with zeros.
-+ *	Return
-+ *		On success, number of bytes written to *buf*. On error, a
-+ *		negative value.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3012,7 +3024,8 @@ union bpf_attr {
- 	FN(probe_read_kernel_str),	\
- 	FN(tcp_send_ack),		\
- 	FN(send_signal_thread),		\
--	FN(jiffies64),
-+	FN(jiffies64),			\
-+	FN(perf_prog_read_branches),
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
--- 
-2.21.1
-
+Daniel, sorry, I missed addressing your second point in my previous
+response. I agree that plain bpf ct is of interest. However, I still
+see value in these helpers, particularly when nf_conntrack is
+already in use. Reuse of info already in nf_conntrack avoids the
+memory cost of another ct table.
