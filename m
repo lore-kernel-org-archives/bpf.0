@@ -2,91 +2,64 @@ Return-Path: <SRS0=areF=3M=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E784AC33CB6
-	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 15:25:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55F6BC2D0DB
+	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 15:55:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BFDE924676
-	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 15:25:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D9EF22464
+	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 15:55:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Sd/REqC2"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="RrMGDWvF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728057AbgAWPZz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jan 2020 10:25:55 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35706 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729134AbgAWPZO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Jan 2020 10:25:14 -0500
-Received: by mail-pg1-f196.google.com with SMTP id l24so1553287pgk.2
-        for <bpf@vger.kernel.org>; Thu, 23 Jan 2020 07:25:14 -0800 (PST)
+        id S1728799AbgAWPzi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jan 2020 10:55:38 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:39909 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727296AbgAWPzi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jan 2020 10:55:38 -0500
+Received: by mail-wm1-f65.google.com with SMTP id 20so3045960wmj.4
+        for <bpf@vger.kernel.org>; Thu, 23 Jan 2020 07:55:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TOgW7lcXGtnBKERztN8ZYLITTM6bIMZTuIfirqHWInE=;
-        b=Sd/REqC2xMx3gXm3vWuonOosNbIknnr7sb8eU7WJ45Jkxi5hbmo3Rh9zHsOOlZ680F
-         dX2+GfvsBxzesS7kOJJWI0kLHbMedyxut5gEPoZXqhRmXKzSDAPLK4mLWzPlAH3qi0Kw
-         3fVx4g9e4N9XWruZLaoMzM+T5xinGEs2JOno8=
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YQdgWZakor9UpewkosavHchgak3obgMhwGLov7azvTA=;
+        b=RrMGDWvFd9COh4qIsCbgVs0i05vAUxZAd14nyGqfz10J9FqIWYgBhExzLTJOnCkslY
+         27/6XejKfzjACkAcsLSDDVEo0SXN000wteV9MgEH4EXV1vJHfzM4fwnwYttbb85j/AQ6
+         /GZUSSAQggMcC5JUSrnPEXNWD4f9Pccq9o0vM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TOgW7lcXGtnBKERztN8ZYLITTM6bIMZTuIfirqHWInE=;
-        b=j4loQvx1XVjhjaEI7rh1Gx3O2BzMqr5sOT3F2zif1HC7IoSFgAHYpImjTa/0A9ov+N
-         twDvwkDyIzZ8uIxfUaPrByL4K1hAJiVTuPRSLdXPx5LdMiZLpZXkcaxdQQdC7+fZC7Yl
-         sXZikFVaAYj5wToMpBT02Qxz5pruk9PkBnOeywW0TG2ycSUVFRLGHZIdgfgPzY4H3wsk
-         oIsz0ruWkJ6u7yaJNbZqdYW1KrNWqqStYtrLFOGJT0jtaVQPGA4HIVLRhoYDwaqQaPkf
-         jEsJggmIaHZbpu0VWgEG0yR846cR4aDek3WWHgtp9TecOiSZhC04yUYFJe8exUQWXXuC
-         TyDw==
-X-Gm-Message-State: APjAAAVqAxeprb3osB+f0CLprI8qn1MEgeO8bcC4lsJZjdu2nyoLodfR
-        4aOd3Ao5egajhw7omRXSo02d3g==
-X-Google-Smtp-Source: APXvYqygc+cRwf48735fBToutn7dQqalMu9GLbzzxo+aD4TUlffbFL4gbcJME4MCdblTk8HCTth2Lg==
-X-Received: by 2002:a65:6794:: with SMTP id e20mr4475292pgr.152.1579793113577;
-        Thu, 23 Jan 2020 07:25:13 -0800 (PST)
-Received: from kpsingh-kernel.localdomain ([2a00:79e1:abc:122:bd8d:3f7b:87f7:16d1])
-        by smtp.gmail.com with ESMTPSA id v5sm3108118pfn.122.2020.01.23.07.25.11
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YQdgWZakor9UpewkosavHchgak3obgMhwGLov7azvTA=;
+        b=NLp7OZNnHdQOqj8uKup2azTJGNiW6StjWD/KVicUmadvCXWk78dLy1qnTDVp5ZYM3K
+         AV6gOUH5EKMRRtajlg/xelYzzmKIdM6vdQCYRiNn1JEmhA+N9iTlHo6h8L8TRnhVgKjy
+         2jEHosUOpJWdbcUTnuv8RWeiYLT08B8wxDQ0VBY+OPHZsGenjqcJBpuvxXw1hF5zPyAs
+         Q663WanZS2M9tvrWbvN3kts8e+Ml+5P/zPOwFwMcYNv0lycYzzsUG3o7JnCnOMdJfF/n
+         X1akydR0X9UY0wS8dC7UtaDRO2msVzHd2ZGFY0NsfH4n1SxMihvxI0ewQfWqpP7ogtyC
+         ErPw==
+X-Gm-Message-State: APjAAAXDlOQKTxHZeLIndHFBOq2Pn6jcxFdO9d/VejqVFNJKRTRm6Jif
+        PgoMjK98H7q4WLSZul2zG35JkvbktusmsQ==
+X-Google-Smtp-Source: APXvYqyvMyXDUZihewE1n3b7kgfp7W453hgyGkio2AmOHarhdf9mA4R6xubjs0MY2tErh8RqZbTPYA==
+X-Received: by 2002:a1c:8055:: with SMTP id b82mr4940016wmd.127.1579794935538;
+        Thu, 23 Jan 2020 07:55:35 -0800 (PST)
+Received: from cloudflare.com ([176.221.114.230])
+        by smtp.gmail.com with ESMTPSA id u7sm3185584wmj.3.2020.01.23.07.55.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2020 07:25:12 -0800 (PST)
-From:   KP Singh <kpsingh@chromium.org>
-To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     Brendan Jackman <jackmanb@google.com>,
-        Florent Revest <revest@google.com>,
-        Thomas Garnier <thgarnie@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Garnier <thgarnie@chromium.org>,
-        Michael Halcrow <mhalcrow@google.com>,
-        Paul Turner <pjt@google.com>,
-        Brendan Gregg <brendan.d.gregg@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
-Subject: [PATCH bpf-next v3 03/10] bpf: lsm: Introduce types for eBPF based LSM
-Date:   Thu, 23 Jan 2020 07:24:33 -0800
-Message-Id: <20200123152440.28956-4-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200123152440.28956-1-kpsingh@chromium.org>
-References: <20200123152440.28956-1-kpsingh@chromium.org>
+        Thu, 23 Jan 2020 07:55:34 -0800 (PST)
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        Lorenz Bauer <lmb@cloudflare.com>, Martin Lau <kafai@fb.com>
+Subject: [PATCH bpf-next v4 00/12] Extend SOCKMAP to store listening sockets
+Date:   Thu, 23 Jan 2020 16:55:22 +0100
+Message-Id: <20200123155534.114313-1-jakub@cloudflare.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -94,168 +67,165 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: KP Singh <kpsingh@google.com>
+Make SOCKMAP a generic collection for listening as well as established
+sockets. This lets us use SOCKMAP BPF maps with reuseport BPF programs.
 
-A new eBPF program type BPF_PROG_TYPE_LSM with an
-expected attach type of BPF_LSM_MAC. Attachment to LSM hooks is not
-implemented in this patch.
+The biggest advantage of SOCKMAP over REUSEPORT_SOCKARRAY is that the
+former allows the socket can be in more than one map at the same time.
+However, until SOCKMAP gets extended to work with UDP, it is not a drop in
+replacement for REUSEPORT_SOCKARRAY.
 
-On defining the types for the program, the macros expect that
-<prog_name>_prog_ops and <prog_name>_verifier_ops exist. This is
-implicitly required by the macro:
+Having a BPF map type that can hold listening sockets, and can gracefully
+co-exist with reuseport BPF is important if, in the future, we want to have
+BPF programs that run at socket lookup time [0]. Cover letter for v1 of
+this series tells the full background story of how we got here [1].
 
-  BPF_PROG_TYPE(BPF_PROG_TYPE_LSM, lsm, ...)
+v4 doesn't bring any major changes. I've carried over Acks from v3 [2].
 
-Signed-off-by: KP Singh <kpsingh@google.com>
-Reviewed-by: Brendan Jackman <jackmanb@google.com>
-Reviewed-by: Florent Revest <revest@google.com>
-Reviewed-by: Thomas Garnier <thgarnie@google.com>
----
- include/linux/bpf_types.h      |  4 ++++
- include/uapi/linux/bpf.h       |  2 ++
- kernel/bpf/syscall.c           |  6 ++++++
- security/bpf/Makefile          |  2 +-
- security/bpf/ops.c             | 28 ++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  2 ++
- tools/lib/bpf/libbpf_probes.c  |  1 +
- 7 files changed, 44 insertions(+), 1 deletion(-)
- create mode 100644 security/bpf/ops.c
+As I mentioned in v3, patches 1 & 2 will be in conflict with what we currently
+have in bpf branch. "Fixes for sockmap/tls from more complex BPF progs" v2
+series [3] that landed recently in bpf branch also touch the psock tear-down
+path. I'll be happy to respin if bpf gets merged into bpf-next.
 
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index c81d4ece79a4..c36790b202e3 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -70,6 +70,10 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_STRUCT_OPS, bpf_struct_ops,
- 	      void *, void *)
- BPF_PROG_TYPE(BPF_PROG_TYPE_EXT, bpf_extension,
- 	      void *, void *)
-+#ifdef CONFIG_SECURITY_BPF
-+BPF_PROG_TYPE(BPF_PROG_TYPE_LSM, lsm,
-+	       void *, void *)
-+#endif /* CONFIG_SECURITY_BPF */
- #endif
- 
- BPF_MAP_TYPE(BPF_MAP_TYPE_ARRAY, array_map_ops)
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index f1d74a2bd234..2f1e24a8c4a4 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -181,6 +181,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_TRACING,
- 	BPF_PROG_TYPE_STRUCT_OPS,
- 	BPF_PROG_TYPE_EXT,
-+	BPF_PROG_TYPE_LSM,
- };
- 
- enum bpf_attach_type {
-@@ -210,6 +211,7 @@ enum bpf_attach_type {
- 	BPF_TRACE_RAW_TP,
- 	BPF_TRACE_FENTRY,
- 	BPF_TRACE_FEXIT,
-+	BPF_LSM_MAC,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index a91ad518c050..eab4a36ee889 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2396,6 +2396,9 @@ static int bpf_prog_attach(const union bpf_attr *attr)
- 	case BPF_LIRC_MODE2:
- 		ptype = BPF_PROG_TYPE_LIRC_MODE2;
- 		break;
-+	case BPF_LSM_MAC:
-+		ptype = BPF_PROG_TYPE_LSM;
-+		break;
- 	case BPF_FLOW_DISSECTOR:
- 		ptype = BPF_PROG_TYPE_FLOW_DISSECTOR;
- 		break;
-@@ -2427,6 +2430,9 @@ static int bpf_prog_attach(const union bpf_attr *attr)
- 	case BPF_PROG_TYPE_LIRC_MODE2:
- 		ret = lirc_prog_attach(attr, prog);
- 		break;
-+	case BPF_PROG_TYPE_LSM:
-+		ret = -EOPNOTSUPP;
-+		break;
- 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
- 		ret = skb_flow_dissector_bpf_prog_attach(attr, prog);
- 		break;
-diff --git a/security/bpf/Makefile b/security/bpf/Makefile
-index 26a0ab6f99b7..c78a8a056e7e 100644
---- a/security/bpf/Makefile
-+++ b/security/bpf/Makefile
-@@ -2,4 +2,4 @@
- #
- # Copyright 2019 Google LLC.
- 
--obj-$(CONFIG_SECURITY_BPF) := lsm.o
-+obj-$(CONFIG_SECURITY_BPF) := lsm.o ops.o
-diff --git a/security/bpf/ops.c b/security/bpf/ops.c
-new file mode 100644
-index 000000000000..81c2bd9c0495
---- /dev/null
-+++ b/security/bpf/ops.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright 2019 Google LLC.
-+ */
-+
-+#include <linux/filter.h>
-+#include <linux/bpf.h>
-+
-+const struct bpf_prog_ops lsm_prog_ops = {
-+};
-+
-+static const struct bpf_func_proto *get_bpf_func_proto(
-+	enum bpf_func_id func_id, const struct bpf_prog *prog)
-+{
-+	switch (func_id) {
-+	case BPF_FUNC_map_lookup_elem:
-+		return &bpf_map_lookup_elem_proto;
-+	case BPF_FUNC_get_current_pid_tgid:
-+		return &bpf_get_current_pid_tgid_proto;
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+const struct bpf_verifier_ops lsm_verifier_ops = {
-+	.get_func_proto = get_bpf_func_proto,
-+};
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index f1d74a2bd234..2f1e24a8c4a4 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -181,6 +181,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_TRACING,
- 	BPF_PROG_TYPE_STRUCT_OPS,
- 	BPF_PROG_TYPE_EXT,
-+	BPF_PROG_TYPE_LSM,
- };
- 
- enum bpf_attach_type {
-@@ -210,6 +211,7 @@ enum bpf_attach_type {
- 	BPF_TRACE_RAW_TP,
- 	BPF_TRACE_FENTRY,
- 	BPF_TRACE_FEXIT,
-+	BPF_LSM_MAC,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-index b782ebef6ac9..2c92059c0c90 100644
---- a/tools/lib/bpf/libbpf_probes.c
-+++ b/tools/lib/bpf/libbpf_probes.c
-@@ -108,6 +108,7 @@ probe_load(enum bpf_prog_type prog_type, const struct bpf_insn *insns,
- 	case BPF_PROG_TYPE_TRACING:
- 	case BPF_PROG_TYPE_STRUCT_OPS:
- 	case BPF_PROG_TYPE_EXT:
-+	case BPF_PROG_TYPE_LSM:
- 	default:
- 		break;
- 	}
+Series is also available on GH [4].
+
+Thanks,
+-jkbs
+
+[0] https://lore.kernel.org/bpf/20190828072250.29828-1-jakub@cloudflare.com/
+[1] https://lore.kernel.org/bpf/20191123110751.6729-1-jakub@cloudflare.com/
+[2] https://lore.kernel.org/bpf/20200122130549.832236-1-jakub@cloudflare.com/T/#t
+[3] https://lore.kernel.org/bpf/20200111061206.8028-1-john.fastabend@gmail.com/
+[4] https://github.com/jsitnicki/linux/commits/sockmap-reuseport-v4
+
+v3 -> v4:
+
+- Make tcp_bpf_clone parameter names consistent across function declaration
+  and definition. (Martin)
+
+- Use sock_map_redirect_okay helper everywhere we need to take a different
+  action for listening sockets. (Lorenz)
+
+- Expand comment explaining the need for a callback from reuseport to
+  sockarray code in reuseport_detach_sock. (Martin)
+
+- Mention the possibility of using a u64 counter for reuseport IDs in the
+  future in the description for patch 10. (Martin)
+
+v2 -> v3:
+
+- Generate reuseport ID when group is created. Please see patch 10
+  description for details. (Martin)
+
+- Fix the build when CONFIG_NET_SOCK_MSG is not selected by either
+  CONFIG_BPF_STREAM_PARSER or CONFIG_TLS. (kbuild bot & John)
+
+- Allow updating sockmap from BPF on BPF_SOCK_OPS_TCP_LISTEN_CB callback. An
+  oversight in previous iterations. Users may want to populate the sockmap with
+  listening sockets from BPF as well.
+
+- Removed RCU read lock assertion in sock_map_lookup_sys. (Martin)
+
+- Get rid of a warning when child socket was cloned with parent's psock
+  state. (John)
+
+- Check for tcp_bpf_unhash rather than tcp_bpf_recvmsg when deciding if
+  sk_proto needs restoring on clone. Check for recvmsg in the context of
+  listening socket cloning was confusing. (Martin)
+
+- Consolidate sock_map_sk_is_suitable with sock_map_update_okay. This led
+  to adding dedicated predicates for sockhash. Update self-tests
+  accordingly. (John)
+
+- Annotate unlikely branch in bpf_{sk,msg}_redirect_map when socket isn't
+  in a map, or isn't a valid redirect target. (John)
+
+- Document paired READ/WRITE_ONCE annotations and cover shared access in
+  more detail in patch 2 description. (John)
+
+- Correct a couple of log messages in sockmap_listen self-tests so the
+  message reflects the actual failure.
+
+- Rework reuseport tests from sockmap_listen suite so that ENOENT error
+  from bpf_sk_select_reuseport handler does not happen on happy path.
+
+v1 -> v2:
+
+- af_ops->syn_recv_sock callback is no longer overridden and burdened with
+  restoring sk_prot and clearing sk_user_data in the child socket. As child
+  socket is already hashed when syn_recv_sock returns, it is too late to
+  put it in the right state. Instead patches 3 & 4 address restoring
+  sk_prot and clearing sk_user_data before we hash the child socket.
+  (Pointed out by Martin Lau)
+
+- Annotate shared access to sk->sk_prot with READ_ONCE/WRITE_ONCE macros as
+  we write to it from sk_msg while socket might be getting cloned on
+  another CPU. (Suggested by John Fastabend)
+
+- Convert tests for SOCKMAP holding listening sockets to return-on-error
+  style, and hook them up to test_progs. Also use BPF skeleton for setup.
+  Add new tests to cover the race scenario discovered during v1 review.
+
+RFC -> v1:
+
+- Switch from overriding proto->accept to af_ops->syn_recv_sock, which
+  happens earlier. Clearing the psock state after accept() does not work
+  for child sockets that become orphaned (never got accepted). v4-mapped
+  sockets need special care.
+
+- Return the socket cookie on SOCKMAP lookup from syscall to be on par with
+  REUSEPORT_SOCKARRAY. Requires SOCKMAP to take u64 on lookup/update from
+  syscall.
+
+- Make bpf_sk_redirect_map (ingress) and bpf_msg_redirect_map (egress)
+  SOCKMAP helpers fail when target socket is a listening one.
+
+- Make bpf_sk_select_reuseport helper fail when target is a TCP established
+  socket.
+
+- Teach libbpf to recognize SK_REUSEPORT program type from section name.
+
+- Add a dedicated set of tests for SOCKMAP holding listening sockets,
+  covering map operations, overridden socket callbacks, and BPF helpers.
+
+
+Jakub Sitnicki (12):
+  bpf, sk_msg: Don't clear saved sock proto on restore
+  net, sk_msg: Annotate lockless access to sk_prot on clone
+  net, sk_msg: Clear sk_user_data pointer on clone if tagged
+  tcp_bpf: Don't let child socket inherit parent protocol ops on copy
+  bpf, sockmap: Allow inserting listening TCP sockets into sockmap
+  bpf, sockmap: Don't set up sockmap progs for listening sockets
+  bpf, sockmap: Return socket cookie on lookup from syscall
+  bpf, sockmap: Let all kernel-land lookup values in SOCKMAP
+  bpf: Allow selecting reuseport socket from a SOCKMAP
+  net: Generate reuseport group ID on group creation
+  selftests/bpf: Extend SK_REUSEPORT tests to cover SOCKMAP
+  selftests/bpf: Tests for SOCKMAP holding listening sockets
+
+ include/linux/skmsg.h                         |   15 +-
+ include/net/sock.h                            |   37 +-
+ include/net/sock_reuseport.h                  |    2 -
+ include/net/tcp.h                             |    7 +
+ kernel/bpf/reuseport_array.c                  |    5 -
+ kernel/bpf/verifier.c                         |    6 +-
+ net/core/filter.c                             |   27 +-
+ net/core/skmsg.c                              |    2 +-
+ net/core/sock.c                               |   11 +-
+ net/core/sock_map.c                           |  133 +-
+ net/core/sock_reuseport.c                     |   50 +-
+ net/ipv4/tcp_bpf.c                            |   17 +-
+ net/ipv4/tcp_minisocks.c                      |    2 +
+ net/ipv4/tcp_ulp.c                            |    3 +-
+ net/tls/tls_main.c                            |    3 +-
+ .../bpf/prog_tests/select_reuseport.c         |   60 +-
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 1455 +++++++++++++++++
+ .../selftests/bpf/progs/test_sockmap_listen.c |   77 +
+ tools/testing/selftests/bpf/test_maps.c       |    6 +-
+ 19 files changed, 1811 insertions(+), 107 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_listen.c
+
 -- 
-2.20.1
+2.24.1
 
