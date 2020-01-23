@@ -2,113 +2,146 @@ Return-Path: <SRS0=areF=3M=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C465C2D0DB
-	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 12:05:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23CD5C2D0DB
+	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 13:17:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6E7662467F
-	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 12:05:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EAC3C2467B
+	for <bpf@archiver.kernel.org>; Thu, 23 Jan 2020 13:17:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pkl7+p+1"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="AaKLcq1H"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726780AbgAWMFw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jan 2020 07:05:52 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43306 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726026AbgAWMFw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Jan 2020 07:05:52 -0500
-Received: by mail-pf1-f195.google.com with SMTP id x6so1438447pfo.10;
-        Thu, 23 Jan 2020 04:05:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CqY9YB2wAiI/Wp57Yy4bkMwCyRsVGvnd5+giEA8fZSk=;
-        b=pkl7+p+1Dr0758k+BCjkzs4ph/iqSiSuLUHgd/o8DCTfZPM1Xa0HUXTPlF7BDRUC4P
-         MO4SZ7wblivWzi/UgguYV0RSwHelwC6Zs71MY4RsjjHDBGvvoQhXHyaEgn3xwGmx6Laj
-         HSZTs/TaoMqLoG5tkLHtAMM7whbKuvEhl+iIABEFWkuknY9qMLd5eVd9EQQirj5kv3wY
-         k0tAGHXKlzbNIHNO8YMEGWfzfvvmwVZ/Q1SNJUOi1DQoOUpWDXQoXDq7DslZcDbhSPZm
-         F7dm1bZzKHYKG+rMTiRTxHzo+avb44OE8E1qsbFsN+44v22bINxc/DUSfnS4obhHPd5H
-         A2Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CqY9YB2wAiI/Wp57Yy4bkMwCyRsVGvnd5+giEA8fZSk=;
-        b=JJhDjdkaFYdAzX28DVAVRms45BYMQ61kgrfFALli2HyDOb40IAolF810Rr5dk7hCUI
-         xhsCy03alWg9q0N/0+dO+a5yzjdw3b5K1w1sBW07rnmuSi8sMeBwIiipb2uqQF2Wcp5w
-         FbwcbyuqDsBQ6csWoQ/t/zHR8QWm07Mmc6WgjGuSQ77rlu6BllE+UW4+d9gRrXfSnrr9
-         ShEdbruddKJugkdsgGpRj38zzUS9cMNRX9Hn4gVywri7HqvQcMA9g26ar49JUxX1VJId
-         HAYkX+XPhU8oveULLwWO3VZqPIJ4fLWl3pI7CiHb/cSwpPvM/FjqWuKwj1PHln7r8XZN
-         zhEg==
-X-Gm-Message-State: APjAAAWUaEBq+vTE1qfNj0OVisgtoiyLvsvLagHyeQrsKkMO48p2FNU4
-        CD7KOBOFAX3NEdv+RLq+lXQ=
-X-Google-Smtp-Source: APXvYqyyH5J0GupMgirTs+5mSj6AqYDWZ14SFy5qG7Ze2gsIZwMDdoS6reaTPzuQVkr8hVKTy8aekw==
-X-Received: by 2002:a63:e954:: with SMTP id q20mr3792032pgj.204.1579781151245;
-        Thu, 23 Jan 2020 04:05:51 -0800 (PST)
-Received: from localhost.localdomain ([103.211.17.138])
-        by smtp.googlemail.com with ESMTPSA id x18sm2643381pfr.26.2020.01.23.04.05.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2020 04:05:50 -0800 (PST)
-From:   Amol Grover <frextrite@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        id S1727523AbgAWNRP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jan 2020 08:17:15 -0500
+Received: from rnd-relay.smtp.broadcom.com ([192.19.229.170]:41776 "EHLO
+        rnd-relay.smtp.broadcom.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726026AbgAWNRP (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 23 Jan 2020 08:17:15 -0500
+X-Greylist: delayed 527 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Jan 2020 08:17:13 EST
+Received: from mail-irv-17.broadcom.com (mail-irv-17.lvn.broadcom.net [10.75.242.48])
+        by rnd-relay.smtp.broadcom.com (Postfix) with ESMTP id C21C330C123;
+        Thu, 23 Jan 2020 05:01:47 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 rnd-relay.smtp.broadcom.com C21C330C123
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+        s=dkimrelay; t=1579784507;
+        bh=GRbeVqWsXvHOOBiyzIBZ+swPrvzsE9qungb3Sc5kCHg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AaKLcq1HqgI96Pla0Fz4E2OjsKquCk2SOU1wtq/cyl3xZlgQixYJJT2a8zgQ5U7u2
+         HbWSE0aVgxBGr1mJ6hhaV6Ge93zaEfARcs1vWj25PDGaOOsQDlKCNM7eRKPxiSYmuK
+         VSg6ixTSxTkLzudFyFR7Ew/1NLW1BlRdqJj63rHc=
+Received: from lvnvde3894.broadcom.com (lvnvde3894.lvn.broadcom.net [10.175.127.104])
+        by mail-irv-17.broadcom.com (Postfix) with ESMTP id 5F78E140069;
+        Thu, 23 Jan 2020 05:08:25 -0800 (PST)
+Received: by lvnvde3894.broadcom.com (Postfix, from userid 55335)
+        id 58086220AF8; Thu, 23 Jan 2020 05:08:25 -0800 (PST)
+From:   Kalimuthu Velappan <kalimuthu.velappan@broadcom.com>
+To:     kalimuthu.velappan@broadcom.com
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Madhuparna Bhowmik <madhuparnabhowmik04@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Amol Grover <frextrite@gmail.com>
-Subject: [PATCH] bpf: devmap: Pass lockdep expression to RCU lists
-Date:   Thu, 23 Jan 2020 17:34:38 +0530
-Message-Id: <20200123120437.26506-1-frextrite@gmail.com>
-X-Mailer: git-send-email 2.24.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Andrii Nakryiko <andriin@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Stanislav Fomichev <sdf@google.com>,
+        Quentin Monnet <quentin.monnet@netronome.com>,
+        Andrey Ignatov <rdna@fb.com>,
+        netdev@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
+        bpf@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] Support for nlattr and nested_nlattr attribute search in EBPF filter
+Date:   Thu, 23 Jan 2020 05:08:12 -0800
+Message-Id: <20200123130816.24815-1-kalimuthu.velappan@broadcom.com>
+X-Mailer: git-send-email 2.18.0
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-head is traversed using hlist_for_each_entry_rcu outside an
-RCU read-side critical section but under the protection
-of dtab->index_lock.
+Added attribute search and nested attribute support in EBPF filter
+functionality.
 
-Hence, add corresponding lockdep expression to silence false-positive
-lockdep warnings, and harden RCU lists.
-
-Signed-off-by: Amol Grover <frextrite@gmail.com>
+Signed-off-by: Kalimuthu Velappan <kalimuthu.velappan@broadcom.com>
 ---
- kernel/bpf/devmap.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/uapi/linux/bpf.h       |  5 ++++-
+ net/core/filter.c              | 22 ++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  4 +++-
+ 3 files changed, 29 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index 3d3d61b5985b..b4b6b77f309c 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -293,7 +293,8 @@ struct bpf_dtab_netdev *__dev_map_hash_lookup_elem(struct bpf_map *map, u32 key)
- 	struct hlist_head *head = dev_map_index_hash(dtab, key);
- 	struct bpf_dtab_netdev *dev;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index dbbcf0b..ac9794c 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -2938,7 +2938,10 @@ union bpf_attr {
+ 	FN(probe_read_user),		\
+ 	FN(probe_read_kernel),		\
+ 	FN(probe_read_user_str),	\
+-	FN(probe_read_kernel_str),
++	FN(probe_read_kernel_str),  \
++	FN(skb_get_nlattr),     \
++	FN(skb_get_nlattr_nest),
++
  
--	hlist_for_each_entry_rcu(dev, head, index_hlist)
-+	hlist_for_each_entry_rcu(dev, head, index_hlist,
-+				 lockdep_is_held(&dtab->index_lock))
- 		if (dev->idx == key)
- 			return dev;
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+  * function eBPF program intends to call
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 538f6a7..56a87e1 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2699,6 +2699,24 @@ static const struct bpf_func_proto bpf_set_hash_invalid_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ };
  
++static const struct bpf_func_proto bpf_skb_get_nlattr_proto = {
++	.func		= bpf_skb_get_nlattr,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++	.arg2_type  = ARG_ANYTHING,
++	.arg3_type  = ARG_ANYTHING,
++};
++
++static const struct bpf_func_proto skb_get_nlattr_nest_proto = {
++	.func		= bpf_skb_get_nlattr_nest,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++	.arg2_type  = ARG_ANYTHING,
++	.arg3_type  = ARG_ANYTHING,
++};
++
+ BPF_CALL_2(bpf_set_hash, struct sk_buff *, skb, u32, hash)
+ {
+ 	/* Set user specified hash as L4(+), so that it gets returned
+@@ -6091,6 +6109,10 @@ sk_filter_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_get_socket_uid_proto;
+ 	case BPF_FUNC_perf_event_output:
+ 		return &bpf_skb_event_output_proto;
++	case BPF_FUNC_skb_get_nlattr:
++		return &bpf_skb_get_nlattr_proto;
++	case BPF_FUNC_skb_get_nlattr_nest:
++		return &skb_get_nlattr_nest_proto;
+ 	default:
+ 		return bpf_base_func_proto(func_id);
+ 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index dbbcf0b..3bfbc0e 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -2938,7 +2938,9 @@ union bpf_attr {
+ 	FN(probe_read_user),		\
+ 	FN(probe_read_kernel),		\
+ 	FN(probe_read_user_str),	\
+-	FN(probe_read_kernel_str),
++	FN(probe_read_kernel_str),  \
++	FN(skb_get_nlattr),     \
++	FN(skb_get_nlattr_nest),
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+  * function eBPF program intends to call
 -- 
-2.24.1
+2.7.4
 
