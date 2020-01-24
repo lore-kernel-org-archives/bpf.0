@@ -2,142 +2,158 @@ Return-Path: <SRS0=TRWS=3N=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FA7EC2D0DB
-	for <bpf@archiver.kernel.org>; Fri, 24 Jan 2020 21:17:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9448C2D0DB
+	for <bpf@archiver.kernel.org>; Fri, 24 Jan 2020 21:20:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 656A92075D
-	for <bpf@archiver.kernel.org>; Fri, 24 Jan 2020 21:17:31 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="R2iL/vqQ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WrHWdf37"
+	by mail.kernel.org (Postfix) with ESMTP id C4AAC2072C
+	for <bpf@archiver.kernel.org>; Fri, 24 Jan 2020 21:20:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387436AbgAXVRa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Jan 2020 16:17:30 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:54881 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387406AbgAXVRX (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 24 Jan 2020 16:17:23 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id A1D0164E4;
-        Fri, 24 Jan 2020 16:17:22 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 24 Jan 2020 16:17:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=PEBd4DWzODej2
-        abhMWWNjOymRVCPIBXIrODdzvDwZZE=; b=R2iL/vqQNSOGzl3P/5AAm/eE09NUR
-        v+6ry4PtqD6fdFfCXaQRqmA1mxSTnSE/CUW67dEvQQKxKab+5whdhtkFIICGNCUt
-        NhQyyRJE5+UYeJSYVU2Zxr3vFqc3EopoqjI1lAOAqg4L/oK+bSzQj0YaHrcC46/c
-        1zSANUdSuMXIoUYJiXtRkaF0zE0P9qmu6DDOJHRiC5RF6XNOqjyLxckSO97uFC0S
-        Rwx+mm4CMbfZWUQPYed5qksT+cwU1DMvMYLndZoFO8lfAEQSaTJ4V/tvbW+lbDkd
-        vz9m0x6ZsDZVepQc+0YJLKI2p4t0nQOVObMpwrw/E2Aq3OqepMk4iwQDg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=PEBd4DWzODej2abhMWWNjOymRVCPIBXIrODdzvDwZZE=; b=WrHWdf37
-        XL2+tWbzezoYky9x3HdZhZtfPu1Rd2mBBKyAn2K7LfIKEERPJfaEMEr69dPb9xW+
-        69CMQUr/6PJCgYuOdMBkxxgsQ4+7ohWWdu99QQry5R7934e1DYmhN9SNye1hntyK
-        6eIAxllr2DLfzPcdCuiln8kkaWA+FlNAqMKbkOs2HWzCdCweQMQ3rn6LfyR+kAg2
-        zkKS6HcjI49TGE9M7jXJmpmiYPjoSkZBOoEmUSoj+ffCq26BTGWuxptLMwbWdjBu
-        jOgpLWyn/CfHhs85e9kw2EKW4p6T0pDcJgWmJdIaIgghNezYn1aSEkgDzGvK+kWx
-        z6aGZl4QfzbLAg==
-X-ME-Sender: <xms:4l4rXr5lb-7hm-c_Slz-81trYXwC4gKZA2pA3lgDMIkQ9Te5mywzDg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrvdehgdduvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephffvuf
-    ffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceougig
-    uhesugiguhhuuhdrgiihiieqnecukfhppeduleelrddvtddurdeigedrgeenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhu
-    rdighiii
-X-ME-Proxy: <xmx:4l4rXvTvcX16kIqArClPnasWBbFUqXCj5-I-PNBQ9MA5ccgwVJy0XA>
-    <xmx:4l4rXucbdA-TYVxvD9mK5bPxxtyZZBlSQ4kTOEo-0PwhMln1w3TNcQ>
-    <xmx:4l4rXvQB0bAlkHffrtnfAzTD7Fs1ZxFCdaMHC1P4W8_rMW2H2_eMlQ>
-    <xmx:4l4rXp027stjtkZHuE9-SXdDy0B3MWoEYm6izPZFgvqZ1rjv9H-uFg>
-Received: from dlxu-fedora-R90QNFJV.thefacebook.com (prnvpn05.thefacebook.com [199.201.64.4])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 1338E3062B0D;
-        Fri, 24 Jan 2020 16:17:20 -0500 (EST)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        songliubraving@fb.com, yhs@fb.com, andriin@fb.com
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org
-Subject: [PATCH v4 bpf-next 2/3] tools/bpf: Sync uapi header bpf.h
-Date:   Fri, 24 Jan 2020 13:17:04 -0800
-Message-Id: <20200124211705.24759-3-dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.21.1
-In-Reply-To: <20200124211705.24759-1-dxu@dxuuu.xyz>
-References: <20200124211705.24759-1-dxu@dxuuu.xyz>
+        id S1729683AbgAXVUU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Jan 2020 16:20:20 -0500
+Received: from www62.your-server.de ([213.133.104.62]:46698 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729604AbgAXVUU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Jan 2020 16:20:20 -0500
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iv6NC-0007Hv-4z; Fri, 24 Jan 2020 22:20:14 +0100
+Received: from [178.197.248.48] (helo=pc-9.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iv6NB-000IWv-Ry; Fri, 24 Jan 2020 22:20:13 +0100
+Subject: Re: [Potential Spoof] [PATCH bpf-next] libbpf: improve handling of
+ failed CO-RE relocations
+To:     Martin Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Kernel Team <Kernel-team@fb.com>
+References: <20200124053837.2434679-1-andriin@fb.com>
+ <20200124072054.2kr25erckbclkwgv@kafai-mbp.dhcp.thefacebook.com>
+ <CAEf4BzbM7s8JWM8bPq=JdFX-ujkbYUifD7hNUQOGSJpJ7x5NJw@mail.gmail.com>
+ <20200124201241.722pbppudaiw4cz4@kafai-mbp.dhcp.thefacebook.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <379ee6c3-9de1-f552-406d-11fd8216c96b@iogearbox.net>
+Date:   Fri, 24 Jan 2020 22:20:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200124201241.722pbppudaiw4cz4@kafai-mbp.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25705/Fri Jan 24 12:39:10 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sync the header file in a separate commit to help with external sync.
+On 1/24/20 9:12 PM, Martin Lau wrote:
+> On Fri, Jan 24, 2020 at 10:30:12AM -0800, Andrii Nakryiko wrote:
+>> On Thu, Jan 23, 2020 at 11:21 PM Martin Lau <kafai@fb.com> wrote:
+>>> On Thu, Jan 23, 2020 at 09:38:37PM -0800, Andrii Nakryiko wrote:
+>>>> Previously, if libbpf failed to resolve CO-RE relocation for some
+>>>> instructions, it would either return error immediately, or, if
+>>>> .relaxed_core_relocs option was set, would replace relocatable offset/imm part
+>>>> of an instruction with a bogus value (-1). Neither approach is good, because
+>>>> there are many possible scenarios where relocation is expected to fail (e.g.,
+>>>> when some field knowingly can be missing on specific kernel versions). On the
+>>>> other hand, replacing offset with invalid one can hide programmer errors, if
+>>>> this relocation failue wasn't anticipated.
+>>>>
+>>>> This patch deprecates .relaxed_core_relocs option and changes the approach to
+>>>> always replacing instruction, for which relocation failed, with invalid BPF
+>>>> helper call instruction. For cases where this is expected, BPF program should
+>>>> already ensure that that instruction is unreachable, in which case this
+>>>> invalid instruction is going to be silently ignored. But if instruction wasn't
+>>>> guarded, BPF program will be rejected at verification step with verifier log
+>>>> pointing precisely to the place in assembly where the problem is.
+>>>>
+>>>> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+>>>> ---
+>>>>   tools/lib/bpf/libbpf.c | 95 +++++++++++++++++++++++++-----------------
+>>>>   tools/lib/bpf/libbpf.h |  6 ++-
+>>>>   2 files changed, 61 insertions(+), 40 deletions(-)
+>>>>
+>>>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>>>> index ae34b681ae82..39f1b7633a7c 100644
+>>>> --- a/tools/lib/bpf/libbpf.c
+>>>> +++ b/tools/lib/bpf/libbpf.c
+>>>> @@ -345,7 +345,6 @@ struct bpf_object {
+>>>>
+>>>>        bool loaded;
+>>>>        bool has_pseudo_calls;
+>>>> -     bool relaxed_core_relocs;
+>>>>
+>>>>        /*
+>>>>         * Information when doing elf related work. Only valid if fd
+>>>> @@ -4238,25 +4237,38 @@ static int bpf_core_calc_field_relo(const struct bpf_program *prog,
+>>>>    */
+>>>>   static int bpf_core_reloc_insn(struct bpf_program *prog,
+>>>>                               const struct bpf_field_reloc *relo,
+>>>> +                            int relo_idx,
+>>>>                               const struct bpf_core_spec *local_spec,
+>>>>                               const struct bpf_core_spec *targ_spec)
+>>>>   {
+>>>> -     bool failed = false, validate = true;
+>>>>        __u32 orig_val, new_val;
+>>>>        struct bpf_insn *insn;
+>>>> +     bool validate = true;
+>>>>        int insn_idx, err;
+>>>>        __u8 class;
+>>>>
+>>>>        if (relo->insn_off % sizeof(struct bpf_insn))
+>>>>                return -EINVAL;
+>>>>        insn_idx = relo->insn_off / sizeof(struct bpf_insn);
+>>>> +     insn = &prog->insns[insn_idx];
+>>>> +     class = BPF_CLASS(insn->code);
+>>>>
+>>>>        if (relo->kind == BPF_FIELD_EXISTS) {
+>>>>                orig_val = 1; /* can't generate EXISTS relo w/o local field */
+>>>>                new_val = targ_spec ? 1 : 0;
+>>>>        } else if (!targ_spec) {
+>>>> -             failed = true;
+>>>> -             new_val = (__u32)-1;
+>>>> +             pr_debug("prog '%s': relo #%d: substituting insn #%d w/ invalid insn\n",
+>>>> +                      bpf_program__title(prog, false), relo_idx, insn_idx);
+>>>> +             insn->code = BPF_JMP | BPF_CALL;
+>>>> +             insn->dst_reg = 0;
+>>>> +             insn->src_reg = 0;
+>>>> +             insn->off = 0;
+>>>> +             /* if this instruction is reachable (not a dead code),
+>>>> +              * verifier will complain with the following message:
+>>>> +              * invalid func unknown#195896080
+>>>> +              */
+>>>> +             insn->imm = 195896080; /* => 0xbad2310 => "bad relo" */
+>>> Should this value become a binded contract in uapi/bpf.h so
+>>> that the verifier can print a more meaningful name than "unknown#195896080"?
+>>
+>> It feels a bit premature to fix this in kernel. It's one of many ways
+>> we can do this, e.g., alternative would be using invalid opcode
+>> altogether. It's not yet clear what's the best way to report this from
+>> kernel. Maybe in the future verifier will have some better way to
+>> pinpoint where and what problem there is in user's program through
+>> some more structured approach than current free-form log.
+>>
+>> So what I'm trying to say is that we should probably get a bit more
+>> experience using these features first and understand what
+>> kernel/userspace interface should be for reporting issues like this,
+>> before setting anything in stone in verifier. For now, this
+>> "unknown#195896080" should be a pretty unique search term :)
+> Sure.  I think this value will never be used for real in the life time.
+> I was mostly worry this message will be confusing.  May be the loader
+> could be improved to catch this and interpret it in a more meaningful
+> way.
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- tools/include/uapi/linux/bpf.h | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
-
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index f1d74a2bd234..39bfba0091dc 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2892,6 +2892,25 @@ union bpf_attr {
-  *		Obtain the 64bit jiffies
-  *	Return
-  *		The 64 bit jiffies
-+ *
-+ * int bpf_perf_prog_read_branches(struct bpf_perf_event_data *ctx, void *buf, u32 buf_size, u64 flags)
-+ *	Description
-+ *		For an eBPF program attached to a perf event, retrieve the
-+ *		branch records (struct perf_branch_entry) associated to *ctx*
-+ *		and store it in	the buffer pointed by *buf* up to size
-+ *		*buf_size* bytes.
-+ *
-+ *		The *flags* can be set to **BPF_F_GET_BR_SIZE** to instead
-+ *		return the number of bytes required to store all the branch
-+ *		entries. If this flag is set, *buf* may be NULL.
-+ *	Return
-+ *		On success, number of bytes written to *buf*. On error, a
-+ *		negative value.
-+ *
-+ *		**-EINVAL** if arguments invalid or **buf_size** not a multiple
-+ *		of sizeof(struct perf_branch_entry).
-+ *
-+ *		**-ENOENT** if architecture does not support branch records.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3012,7 +3031,8 @@ union bpf_attr {
- 	FN(probe_read_kernel_str),	\
- 	FN(tcp_send_ack),		\
- 	FN(send_signal_thread),		\
--	FN(jiffies64),
-+	FN(jiffies64),			\
-+	FN(perf_prog_read_branches),
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
-@@ -3091,6 +3111,9 @@ enum bpf_func_id {
- /* BPF_FUNC_sk_storage_get flags */
- #define BPF_SK_STORAGE_GET_F_CREATE	(1ULL << 0)
- 
-+/* BPF_FUNC_perf_prog_read_branches flags. */
-+#define BPF_F_GET_BR_SIZE		(1ULL << 0)
-+
- /* Mode for BPF_FUNC_skb_adjust_room helper. */
- enum bpf_adj_room_mode {
- 	BPF_ADJ_ROOM_NET,
--- 
-2.21.1
-
+Agree with both of you that we might want to find a better error reporting
+mechanism here in future, but can be done on top of this. Applied, thanks!
