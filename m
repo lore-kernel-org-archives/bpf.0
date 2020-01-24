@@ -2,109 +2,93 @@ Return-Path: <SRS0=TRWS=3N=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1E3CC2D0DB
-	for <bpf@archiver.kernel.org>; Fri, 24 Jan 2020 11:43:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06359C2D0DB
+	for <bpf@archiver.kernel.org>; Fri, 24 Jan 2020 12:46:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 85B06206D4
-	for <bpf@archiver.kernel.org>; Fri, 24 Jan 2020 11:43:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CE6212070A
+	for <bpf@archiver.kernel.org>; Fri, 24 Jan 2020 12:46:00 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="pJ2traqM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387568AbgAXLDg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Jan 2020 06:03:36 -0500
-Received: from relay.sw.ru ([185.231.240.75]:60920 "EHLO relay.sw.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387424AbgAXLDd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 Jan 2020 06:03:33 -0500
-Received: from vvs-ws.sw.ru ([172.16.24.21])
-        by relay.sw.ru with esmtp (Exim 4.92.3)
-        (envelope-from <vvs@virtuozzo.com>)
-        id 1iuwk4-0001UQ-3m; Fri, 24 Jan 2020 14:03:12 +0300
-Subject: Re: [PATCH 1/1] map_seq_next should increase position index
-To:     Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
+        id S2388705AbgAXMqA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Jan 2020 07:46:00 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:32792 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387574AbgAXMqA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Jan 2020 07:46:00 -0500
+Received: by mail-lj1-f194.google.com with SMTP id y6so2389804lji.0
+        for <bpf@vger.kernel.org>; Fri, 24 Jan 2020 04:45:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=4XkP3XLOh0nhayuHg8yQANWqL4XcErc8i0KEhWGVI5w=;
+        b=pJ2traqMIEBz89vTlCvmqNCjxA0dgLCemW0DuwXv7HCJPmpmz4D6FQXOIJuwcmkWVN
+         ZBsAd3wxZtIAiDigSmxi4/m2a+Ck2JgKflDV1wiFmhJ5b4QMcPRMfoBaO6bthqhrYYyE
+         xbxi52IMmgUdz4EX8iXPFUp9Yl2u6w3xkBHCk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=4XkP3XLOh0nhayuHg8yQANWqL4XcErc8i0KEhWGVI5w=;
+        b=Wr59L64yGbixpjR8Swu8FsgawSZWUay3/x5Iqfg1/qj1qPtx9s4/K5kg5lEm0AuD3X
+         sF2s0ECBLyHi6DLudAOMJ0c1zcYZushsQM6ZeqxAh8Gy0VGlwjwcQcgff0lUBb91Q0yT
+         MpxhBXfwrir6ly68rtwWmtaheEyKfXf7sqXBTDg8PV4tDEUhzzxIvdfahVOJaiQuOXke
+         DgtON9o7mC5mTLTncdM0UO2LCICdek0jlD2QZHkfvimbz/WDZCAybg+9OdTPCaKDldd7
+         chnQVlJMpxusEgfhoXbSqicrCsZaA3LyRFV6y/zmlpkYnndgYN508tVkMkO+rEHaBVP6
+         ylTg==
+X-Gm-Message-State: APjAAAWOch1+EJyi3K96q2bw3LaIdh0q5eeoNXOXRgJjGnQEnzzICPZQ
+        3QQSrLfnDenw/8nXvUAA5WzApw==
+X-Google-Smtp-Source: APXvYqxSA7g27hjTyBey14Cy6XKoiAAJfwkh7rb8FJPBpBaJm+8bvoRFgntL7BvazURh9RFylGJtng==
+X-Received: by 2002:a2e:9804:: with SMTP id a4mr2011803ljj.10.1579869957666;
+        Fri, 24 Jan 2020 04:45:57 -0800 (PST)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id s2sm3001343lji.53.2020.01.24.04.45.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jan 2020 04:45:56 -0800 (PST)
+References: <20200123165934.9584-1-lmb@cloudflare.com> <20200124112754.19664-1-lmb@cloudflare.com>
+User-agent: mu4e 1.1.0; emacs 26.3
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-References: <d6e2df39-919e-8d37-0668-5c4bbf19f278@virtuozzo.com>
- <be6d3c0d-c9e6-d6f0-ac07-0467480e77d6@iogearbox.net>
-From:   Vasily Averin <vvs@virtuozzo.com>
-Message-ID: <468c8645-1441-2f7a-5fa8-8cc7737c44c7@virtuozzo.com>
-Date:   Fri, 24 Jan 2020 14:03:10 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 0/4] Various fixes for sockmap and reuseport tests
+In-reply-to: <20200124112754.19664-1-lmb@cloudflare.com>
+Date:   Fri, 24 Jan 2020 13:45:55 +0100
+Message-ID: <871rrp2fb0.fsf@cloudflare.com>
 MIME-Version: 1.0
-In-Reply-To: <be6d3c0d-c9e6-d6f0-ac07-0467480e77d6@iogearbox.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 1/24/20 1:03 PM, Daniel Borkmann wrote:
-> On 1/24/20 7:17 AM, Vasily Averin wrote:
->> if seq_file .next fuction does not change position index,
->> read after some lseek can generate unexpected output.
->>
->> https://bugzilla.kernel.org/show_bug.cgi?id=206283
->> Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
->> ---
->>   kernel/bpf/inode.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
->> index ecf42be..9008a20 100644
->> --- a/kernel/bpf/inode.c
->> +++ b/kernel/bpf/inode.c
->> @@ -196,6 +196,7 @@ static void *map_seq_next(struct seq_file *m, void *v, loff_t *pos)
->>       void *key = map_iter(m)->key;
->>       void *prev_key;
->>   +    (*pos)++;
->>       if (map_iter(m)->done)
->>           return NULL;
->>  
-> 
-> Hm, how did you test this change? Please elaborate, since in map_seq_next()
-> we do increment position index:
+On Fri, Jan 24, 2020 at 12:27 PM CET, Lorenz Bauer wrote:
+> I've fixed the commit messages, added Fixes tags and am submitting to bpf-next instead
+> of the bpf tree.
+>
+> There is still the question whether patch #1 needs to preserve O_RDONLY, which John
+> can hopefully answer.
+>
+> Lorenz Bauer (4):
+>   selftests: bpf: use a temporary file in test_sockmap
+>   selftests: bpf: ignore FIN packets for reuseport tests
+>   selftests: bpf: make reuseport test output more legible
+>   selftests: bpf: reset global state between reuseport test runs
+>
+>  .../bpf/prog_tests/select_reuseport.c         | 44 ++++++++++++++++---
+>  .../bpf/progs/test_select_reuseport_kern.c    |  6 +++
+>  tools/testing/selftests/bpf/test_sockmap.c    | 15 +++----
+>  3 files changed, 49 insertions(+), 16 deletions(-)
 
-Position index should be updated even if .next returns NULL.
+For the series:
 
-Sorry, I've not tested this case.
-
-$ dd if=AFFECTED_FILE bs=1000 skip=1
-
-With any huge bs it will generate last line.
-If you'll specify bs in middle of last line -- 
-dd will output rest of list line and then whole last line once again.
-
-> static void *map_seq_next(struct seq_file *m, void *v, loff_t *pos)
-> {
->         struct bpf_map *map = seq_file_to_map(m);
->         void *key = map_iter(m)->key;
->         void *prev_key;
-> 
->         if (map_iter(m)->done)
->                 return NULL;
-> 
->         if (unlikely(v == SEQ_START_TOKEN))
->                 prev_key = NULL;
->         else
->                 prev_key = key;
-> 
->         if (map->ops->map_get_next_key(map, prev_key, key)) {
->                 map_iter(m)->done = true;
->                 return NULL;
->         }
-> 
->         ++(*pos);                    <------------ here
-
-You are right, I've missed it, it should be removed.
-
->         return key;
-> }
-> 
-> With your change we'd increment twice. What is missing here?
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
