@@ -5,60 +5,59 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A57CBC33CB1
-	for <bpf@archiver.kernel.org>; Mon, 27 Jan 2020 12:55:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F1E7C35248
+	for <bpf@archiver.kernel.org>; Mon, 27 Jan 2020 12:56:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7E657214DB
+	by mail.kernel.org (Postfix) with ESMTP id D3A3D214AF
 	for <bpf@archiver.kernel.org>; Mon, 27 Jan 2020 12:55:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="KQcwpFLG"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="wCwr6ofG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727430AbgA0Mzx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Jan 2020 07:55:53 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:36464 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727107AbgA0Mzx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Jan 2020 07:55:53 -0500
-Received: by mail-lf1-f67.google.com with SMTP id f24so6120492lfh.3
-        for <bpf@vger.kernel.org>; Mon, 27 Jan 2020 04:55:51 -0800 (PST)
+        id S1728234AbgA0Mz7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Jan 2020 07:55:59 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:47047 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727046AbgA0Mzz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Jan 2020 07:55:55 -0500
+Received: by mail-lf1-f68.google.com with SMTP id z26so6089787lfg.13
+        for <bpf@vger.kernel.org>; Mon, 27 Jan 2020 04:55:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5TGuskX+oyn2N1Rk9g6dmvecHvmmmyDhj23M/Fkvjgg=;
-        b=KQcwpFLG/ZHJOfTM92ZqiG1GpCpTpXpHMY5kRLZgJN1LmFENnjTfMa42j0ItSlzjHK
-         0Wlb9ssei8E9O8GI5BgsokiVejTtDotcjY4Owyop8NNjUs8NDX117B76+y+9Hya6z4jg
-         rJdzhpxZQwolAnutz/422dt+0o0k382ZKkwi4=
+        bh=6L1pFikWkXxLBijQL4ejLKRtWder9wISNk8LYQjifpo=;
+        b=wCwr6ofGfCvauI2wdRxbfuPOQXw6ci1EUapkkHkX9+JeBURWAeItj6pHKk4kUASrDo
+         wSlHdaAg+Nu58p60aRbK8PBoEHBs7TXjEHG6bFWuf3Ip3NrYL98iuWoa/pLbteIim6Gd
+         Rqpkp+BkEDeAtqvpXtnIT+/AstqWSXGuO2d3Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5TGuskX+oyn2N1Rk9g6dmvecHvmmmyDhj23M/Fkvjgg=;
-        b=h02dAcGAfb9yOOKTBO+BTeqbPj319bR0kVg2W8/Bi/woJ2qaJAKLTjS6WsNV6kmTjR
-         NRr91OndqR6GHtBDieDYIVbKHBaCRvg0ivzZay9LeEHUxjTTriJ3B9EouB2jiuyXQur0
-         nnt10Yt4/qbOh5buUlkS+8/o2eUgHqu0bQI9ajghKc9Ldd/A0VEhaa8Q7Mba+KFYgFV+
-         uLbuPUsLOClg2AR0wFWwAFDw+OvmWiK8ycoO937s8cUw1qj9ODCfM+pgdPtJTVlBUBdG
-         HSn+rjMI9t7GUVuOzk9FWC7Jm2nu1tlh2ZD8gDQYr0OsaxpKZ/8paJGaprn/BPL1SzR7
-         jIrQ==
-X-Gm-Message-State: APjAAAVZ9ra6TtAXd3DLNkE/x268CKzVLbPREnB8QdQnf+TEVHrbXD8e
-        NZQzj6tW+ZEEl8IwFYr5j7PfBN6GWKTLeg==
-X-Google-Smtp-Source: APXvYqwd98CLxvniYU1iMrO/eKFVwc4OJa7cGL9c40EQ+JeNNkN//0q3KkwjaOrO++j9BizNVFA2GQ==
-X-Received: by 2002:a19:97:: with SMTP id 145mr8031233lfa.98.1580129750599;
-        Mon, 27 Jan 2020 04:55:50 -0800 (PST)
+        bh=6L1pFikWkXxLBijQL4ejLKRtWder9wISNk8LYQjifpo=;
+        b=lrDloibV04qfG6YIteMJ0ajmJe3c9FKqFRxBMTYkODdMtkpA20tEE6Ju04zYv2yySF
+         42J7BmrfQw9XNQwOZZtH0imTf0EU9iwLUoz1P8X2iIrMsKEdRFhYUWKvkVDKzCM9Rc/u
+         U9xtmmEOBPaBahH0u8+J28FYBSRYU4HavLaLe/ZTmvW269b4LdUlYMLw6S1UM6YPg3T0
+         2wCMzobSwPdPXMDDISSN724T9hdqGiB5LV+RgilMiAtBzcE67JPYNmTYdqZe7saofh9F
+         piVrGvfoexN2lRFUH0i96b9Ce37ZHyY9Squs3eDOiNGt4BChtHxY1fjjcwfUgfgFd4VA
+         ZpBQ==
+X-Gm-Message-State: APjAAAVBpVWNzmUBrnEnZulWSwzp+MMjZlSD47USz+9a8QuNfJ8yyvoo
+        9cFZr5kK40E59+Imfpu45FbS//bkJKyr+A==
+X-Google-Smtp-Source: APXvYqy3b49MKFTQCx+ScJqbB2vfMZTMVgj9YcNqFBPpoYW6LQmluErJasT6cjZH9H4w+mGuMbuQxw==
+X-Received: by 2002:a19:5f05:: with SMTP id t5mr8161987lfb.149.1580129753527;
+        Mon, 27 Jan 2020 04:55:53 -0800 (PST)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id u25sm1362858ljj.70.2020.01.27.04.55.49
+        by smtp.gmail.com with ESMTPSA id o69sm8129634lff.14.2020.01.27.04.55.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jan 2020 04:55:50 -0800 (PST)
+        Mon, 27 Jan 2020 04:55:53 -0800 (PST)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>
-Subject: [PATCH bpf-next v5 09/12] bpf: Allow selecting reuseport socket from a SOCKMAP
-Date:   Mon, 27 Jan 2020 13:55:31 +0100
-Message-Id: <20200127125534.137492-10-jakub@cloudflare.com>
+        John Fastabend <john.fastabend@gmail.com>
+Subject: [PATCH bpf-next v5 11/12] selftests/bpf: Extend SK_REUSEPORT tests to cover SOCKMAP
+Date:   Mon, 27 Jan 2020 13:55:33 +0100
+Message-Id: <20200127125534.137492-12-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200127125534.137492-1-jakub@cloudflare.com>
 References: <20200127125534.137492-1-jakub@cloudflare.com>
@@ -69,84 +68,144 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-SOCKMAP now supports storing references to listening sockets. Nothing keeps
-us from using it as an array of sockets to select from in BPF reuseport
-programs. Whitelist the map type with the bpf_sk_select_reuseport helper.
+Parametrize the SK_REUSEPORT tests so that the map type for storing sockets
+is not hard-coded in the test setup routine.
 
-The restriction that the socket has to be a member of a reuseport group
-still applies. Socket from a SOCKMAP that does not have sk_reuseport_cb set
-is not a valid target and we signal it with -EINVAL.
-
-This lifts the restriction that SOCKARRAY imposes, if SOCKMAP is used with
-reuseport BPF, the listening sockets can exist in more than one BPF map at
-the same time.
+This, together with careful state cleaning after the tests, let's us run
+the test cases once with REUSEPORT_ARRAY and once with SOCKMAP (TCP only),
+to have test coverage for the latter as well.
 
 Acked-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- kernel/bpf/verifier.c |  6 ++++--
- net/core/filter.c     | 15 ++++++++++-----
- 2 files changed, 14 insertions(+), 7 deletions(-)
+ .../bpf/prog_tests/select_reuseport.c         | 60 +++++++++++++++----
+ 1 file changed, 50 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1cc945daa9c8..9def066e6847 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3693,7 +3693,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
- 		if (func_id != BPF_FUNC_sk_redirect_map &&
- 		    func_id != BPF_FUNC_sock_map_update &&
- 		    func_id != BPF_FUNC_map_delete_elem &&
--		    func_id != BPF_FUNC_msg_redirect_map)
-+		    func_id != BPF_FUNC_msg_redirect_map &&
-+		    func_id != BPF_FUNC_sk_select_reuseport)
- 			goto error;
- 		break;
- 	case BPF_MAP_TYPE_SOCKHASH:
-@@ -3774,7 +3775,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
- 			goto error;
- 		break;
- 	case BPF_FUNC_sk_select_reuseport:
--		if (map->map_type != BPF_MAP_TYPE_REUSEPORT_SOCKARRAY)
-+		if (map->map_type != BPF_MAP_TYPE_REUSEPORT_SOCKARRAY &&
-+		    map->map_type != BPF_MAP_TYPE_SOCKMAP)
- 			goto error;
- 		break;
- 	case BPF_FUNC_map_peek_elem:
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 792e3744b915..6922f1a55383 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8620,6 +8620,7 @@ struct sock *bpf_run_sk_reuseport(struct sock_reuseport *reuse, struct sock *sk,
- BPF_CALL_4(sk_select_reuseport, struct sk_reuseport_kern *, reuse_kern,
- 	   struct bpf_map *, map, void *, key, u32, flags)
+diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+index 098bcae5f827..77115c6dde0c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+@@ -36,6 +36,7 @@ static int result_map, tmp_index_ovr_map, linum_map, data_check_map;
+ static __u32 expected_results[NR_RESULTS];
+ static int sk_fds[REUSEPORT_ARRAY_SIZE];
+ static int reuseport_array = -1, outer_map = -1;
++static enum bpf_map_type inner_map_type;
+ static int select_by_skb_data_prog;
+ static int saved_tcp_syncookie = -1;
+ static struct bpf_object *obj;
+@@ -63,13 +64,15 @@ static union sa46 {
+ 	}								\
+ })
+ 
+-static int create_maps(void)
++static int create_maps(enum bpf_map_type inner_type)
  {
-+	bool is_sockarray = map->map_type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY;
- 	struct sock_reuseport *reuse;
- 	struct sock *selected_sk;
+ 	struct bpf_create_map_attr attr = {};
  
-@@ -8628,12 +8629,16 @@ BPF_CALL_4(sk_select_reuseport, struct sk_reuseport_kern *, reuse_kern,
- 		return -ENOENT;
++	inner_map_type = inner_type;
++
+ 	/* Creating reuseport_array */
+ 	attr.name = "reuseport_array";
+-	attr.map_type = BPF_MAP_TYPE_REUSEPORT_SOCKARRAY;
++	attr.map_type = inner_type;
+ 	attr.key_size = sizeof(__u32);
+ 	attr.value_size = sizeof(__u32);
+ 	attr.max_entries = REUSEPORT_ARRAY_SIZE;
+@@ -726,12 +729,34 @@ static void cleanup_per_test(bool no_inner_map)
  
- 	reuse = rcu_dereference(selected_sk->sk_reuseport_cb);
--	if (!reuse)
--		/* selected_sk is unhashed (e.g. by close()) after the
--		 * above map_lookup_elem().  Treat selected_sk has already
--		 * been removed from the map.
-+	if (!reuse) {
-+		/* reuseport_array has only sk with non NULL sk_reuseport_cb.
-+		 * The only (!reuse) case here is - the sk has already been
-+		 * unhashed (e.g. by close()), so treat it as -ENOENT.
-+		 *
-+		 * Other maps (e.g. sock_map) do not provide this guarantee and
-+		 * the sk may never be in the reuseport group to begin with.
- 		 */
--		return -ENOENT;
-+		return is_sockarray ? -ENOENT : -EINVAL;
+ static void cleanup(void)
+ {
+-	if (outer_map != -1)
++	if (outer_map != -1) {
+ 		close(outer_map);
+-	if (reuseport_array != -1)
++		outer_map = -1;
 +	}
++
++	if (reuseport_array != -1) {
+ 		close(reuseport_array);
+-	if (obj)
++		reuseport_array = -1;
++	}
++
++	if (obj) {
+ 		bpf_object__close(obj);
++		obj = NULL;
++	}
++
++	memset(expected_results, 0, sizeof(expected_results));
++}
++
++static const char *maptype_str(enum bpf_map_type type)
++{
++	switch (type) {
++	case BPF_MAP_TYPE_REUSEPORT_SOCKARRAY:
++		return "reuseport_sockarray";
++	case BPF_MAP_TYPE_SOCKMAP:
++		return "sockmap";
++	default:
++		return "unknown";
++	}
+ }
  
- 	if (unlikely(reuse->reuseport_id != reuse_kern->reuseport_id)) {
- 		struct sock *sk;
+ static const char *family_str(sa_family_t family)
+@@ -779,13 +804,21 @@ static void test_config(int sotype, sa_family_t family, bool inany)
+ 	const struct test *t;
+ 
+ 	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
+-		snprintf(s, sizeof(s), "%s/%s %s %s",
++		snprintf(s, sizeof(s), "%s %s/%s %s %s",
++			 maptype_str(inner_map_type),
+ 			 family_str(family), sotype_str(sotype),
+ 			 inany ? "INANY" : "LOOPBACK", t->name);
+ 
+ 		if (!test__start_subtest(s))
+ 			continue;
+ 
++		if (sotype == SOCK_DGRAM &&
++		    inner_map_type == BPF_MAP_TYPE_SOCKMAP) {
++			/* SOCKMAP doesn't support UDP yet */
++			test__skip();
++			continue;
++		}
++
+ 		setup_per_test(sotype, family, inany, t->no_inner_map);
+ 		t->fn(sotype, family);
+ 		cleanup_per_test(t->no_inner_map);
+@@ -814,13 +847,20 @@ static void test_all(void)
+ 		test_config(c->sotype, c->family, c->inany);
+ }
+ 
+-void test_select_reuseport(void)
++void test_map_type(enum bpf_map_type mt)
+ {
+-	if (create_maps())
++	if (create_maps(mt))
+ 		goto out;
+ 	if (prepare_bpf_obj())
+ 		goto out;
+ 
++	test_all();
++out:
++	cleanup();
++}
++
++void test_select_reuseport(void)
++{
+ 	saved_tcp_fo = read_int_sysctl(TCP_FO_SYSCTL);
+ 	saved_tcp_syncookie = read_int_sysctl(TCP_SYNCOOKIE_SYSCTL);
+ 	if (saved_tcp_syncookie < 0 || saved_tcp_syncookie < 0)
+@@ -831,8 +871,8 @@ void test_select_reuseport(void)
+ 	if (disable_syncookie())
+ 		goto out;
+ 
+-	test_all();
++	test_map_type(BPF_MAP_TYPE_REUSEPORT_SOCKARRAY);
++	test_map_type(BPF_MAP_TYPE_SOCKMAP);
+ out:
+-	cleanup();
+ 	restore_sysctls();
+ }
 -- 
 2.24.1
 
