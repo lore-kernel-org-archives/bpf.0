@@ -2,167 +2,87 @@ Return-Path: <SRS0=FlKb=3Q=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38B40C33CB7
-	for <bpf@archiver.kernel.org>; Mon, 27 Jan 2020 12:56:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DEE8C3F68F
+	for <bpf@archiver.kernel.org>; Mon, 27 Jan 2020 13:01:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0FB1E214AF
-	for <bpf@archiver.kernel.org>; Mon, 27 Jan 2020 12:56:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EEF6C214DB
+	for <bpf@archiver.kernel.org>; Mon, 27 Jan 2020 13:01:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="LPrXsq/g"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ttIP3YTp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728783AbgA0M4H (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Jan 2020 07:56:07 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:42190 "EHLO
+        id S1725807AbgA0NBI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Jan 2020 08:01:08 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:33289 "EHLO
         mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726571AbgA0Mzs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Jan 2020 07:55:48 -0500
-Received: by mail-lf1-f65.google.com with SMTP id y19so6101468lfl.9
-        for <bpf@vger.kernel.org>; Mon, 27 Jan 2020 04:55:46 -0800 (PST)
+        with ESMTP id S1725975AbgA0NBI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Jan 2020 08:01:08 -0500
+Received: by mail-lf1-f65.google.com with SMTP id n25so6134602lfl.0
+        for <bpf@vger.kernel.org>; Mon, 27 Jan 2020 05:01:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3sMKCOVjXYbspFAszwvSlLxiNsGoib87qyH6av20+QQ=;
-        b=LPrXsq/gDsZPERfhhHV9UJIizOoomeiJQyzgjGlabihoAK9X3HpY3912dXkL8xV5+T
-         SnTJaM9vO9zWuXvj4dAKD37f/vD2LRitY2DSfFc+RPw1Jg3icNfkWcTkyVWuNeh1BRNX
-         2ox7tibOmWo3wlGH3FXB9/k+GP41gNx0BU7ik=
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=56+J5cIzO/HEZ3g1vNJEnErUzmgJTqUDxjwesQXEzIo=;
+        b=ttIP3YTpDOShSPys4IVs5UuwfuFi3dWkUO7TodM8qjGCE1nYcl3cFaV2URAFD+JOo2
+         pOnpBdqcT7+5fBg5NheUdlj5iWxB8c6eF2ugBLLlfk2jEct69UEZ6wHi3ZOVevX7UH/m
+         u3HS+Oi/U3b+GthBxBzAmjLt8o+vB17r+y8lw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3sMKCOVjXYbspFAszwvSlLxiNsGoib87qyH6av20+QQ=;
-        b=Hxx6WtMXhg48Vh766bmNwG5dXOGwIzmZfLN7osVBW3SF0tGwgi//dXif/e/PGCA86l
-         xIAZEjblDuUwBFOsFWw5mt0+eFvLrU/MENBKyLUnVpUDYqQjK7tif0QatNzWzAJ5aLe/
-         7uATamqHW9LJ96hxbQMptUtHim30e7+aqRzo9Ff72rluqC2ol48A18T15wRWfFZ/fqjZ
-         /z8Vg/Pwr7yiZuapepRcDrCmUo1hbUrn+i1Yjsh6iymYh6/m0KlMeID7dm7MVeaI8UON
-         PySJkvpVdrI9LJ3Wuuoane3Hl8u/Hs9Nhk083Rk+rqDJ4jfCm6rd+W/6ZqQLNl0jYBnj
-         tRwg==
-X-Gm-Message-State: APjAAAXE6asbuGJwXmD77ukXRrxipWAdC/a72ubNvZNX+8pITi4H6UbY
-        U0Pe1taznuJ24SklG7UhynS4T+8RhNnc3g==
-X-Google-Smtp-Source: APXvYqzJwJIyMQ5+RfRH06+3L4yzlYuSivEo3BF0OTh3WS41QR3bGmemCBQvjTyYeYuqWRNu8yE2vg==
-X-Received: by 2002:ac2:5979:: with SMTP id h25mr8401900lfp.203.1580129745713;
-        Mon, 27 Jan 2020 04:55:45 -0800 (PST)
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=56+J5cIzO/HEZ3g1vNJEnErUzmgJTqUDxjwesQXEzIo=;
+        b=HNv44MQU0vKLyR3Wwb32zlWWNs2KGCURRfNlCRqA6icNyFxN+1iA/NeVcvkWv0fSr9
+         AVHiqJni57EOEYt6ONvwd0pxMRXHRtN9UHTXNefxuZ7lzMl+gJ7nAEvNYjfEnjhRH7dk
+         WlZk02Lc4kux2vLW3gBBTDMCCTLFWOzbOD7dHx6XJT+zhq4BUN4yiukz0iVoZeP/jMg5
+         ec/R5PjrpglUpU/qFvzhrtj9aRVtTNop+t8m9zJYfVJAoZLDJ8myPTyOBOxqcLX9CVG5
+         lrPUwjT0Yo86VnCUv7WiwVoTVawBmrEbdnZcCQtVIOal4CalDzbXOv4RK5Da+sxrhXZh
+         Oo0g==
+X-Gm-Message-State: APjAAAW4k53DKXVjRmEcJUWR3xpJTgbreh56hp9Qem4K+xpuoBFfm9Z/
+        kLhWwTg26/lBp/6z+Jt52JZj5e6Iu2mojg==
+X-Google-Smtp-Source: APXvYqyMOJ6I4Hs85xIkf63tqrdh/5Q9W43SnodSZMkHn+4BfKchKgqmW5fkqZPgflReNenTVB5NtA==
+X-Received: by 2002:a19:ca59:: with SMTP id h25mr8011595lfj.27.1580130065573;
+        Mon, 27 Jan 2020 05:01:05 -0800 (PST)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id 144sm8203098lfi.67.2020.01.27.04.55.45
+        by smtp.gmail.com with ESMTPSA id i1sm8099259lji.71.2020.01.27.05.01.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jan 2020 04:55:45 -0800 (PST)
+        Mon, 27 Jan 2020 05:01:05 -0800 (PST)
+References: <20200127125534.137492-1-jakub@cloudflare.com>
+User-agent: mu4e 1.1.0; emacs 26.3
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        Martin KaFai Lau <kafai@fb.com>
-Subject: [PATCH bpf-next v5 06/12] bpf, sockmap: Don't set up sockmap progs for listening sockets
-Date:   Mon, 27 Jan 2020 13:55:28 +0100
-Message-Id: <20200127125534.137492-7-jakub@cloudflare.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200127125534.137492-1-jakub@cloudflare.com>
-References: <20200127125534.137492-1-jakub@cloudflare.com>
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com
+Subject: Re: [PATCH bpf-next v5 00/12] Extend SOCKMAP to store listening sockets
+In-reply-to: <20200127125534.137492-1-jakub@cloudflare.com>
+Date:   Mon, 27 Jan 2020 14:01:03 +0100
+Message-ID: <87eevlcauo.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now that sockmap can hold listening sockets, when setting up the psock we
-will (i) grab references to verdict/parser progs, and (2) override socket
-upcalls sk_data_ready and sk_write_space.
+On Mon, Jan 27, 2020 at 01:55 PM CET, Jakub Sitnicki wrote:
+> Make SOCKMAP a generic collection for listening as well as established
+> sockets. This lets us use SOCKMAP BPF maps with reuseport BPF programs.
+>
+> The biggest advantage of SOCKMAP over REUSEPORT_SOCKARRAY is that the
+> former allows the socket can be in more than one map at the same time.
+> However, until SOCKMAP gets extended to work with UDP, it is not a drop in
+> replacement for REUSEPORT_SOCKARRAY.
+>
+> Having a BPF map type that can hold listening sockets, and can gracefully
+> co-exist with reuseport BPF is important if, in the future, we want to have
+> BPF programs that run at socket lookup time [0]. Cover letter for v1 of
+> this series tells the full background story of how we got here [1].
+>
+> v5 is a rebase onto recent bpf-next. Patches 1 & 2 has conflicts. I carried
+> over the Acks.
 
-We cannot redirect to listening sockets so we don't need to link the socket
-to the BPF progs, but more importantly we don't want the listening socket
-to have overridden upcalls because they would get inherited by child
-sockets cloned from it.
+Should be: "Patches 1 & 2 *had* conflicts". Sorry for the typo :-)
 
-Introduce a separate initialization path for listening sockets that does
-not change the upcalls and ignores the BPF progs.
-
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
----
- net/core/sock_map.c | 45 ++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 38 insertions(+), 7 deletions(-)
-
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 954c4d23bc01..cadae12bb3d4 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -228,6 +228,30 @@ static int sock_map_link(struct bpf_map *map, struct sk_psock_progs *progs,
- 	return ret;
- }
- 
-+static int sock_map_link_no_progs(struct bpf_map *map, struct sock *sk)
-+{
-+	struct sk_psock *psock;
-+	int ret;
-+
-+	psock = sk_psock_get_checked(sk);
-+	if (IS_ERR(psock))
-+		return PTR_ERR(psock);
-+
-+	if (psock) {
-+		tcp_bpf_reinit(sk);
-+		return 0;
-+	}
-+
-+	psock = sk_psock_init(sk, map->numa_node);
-+	if (!psock)
-+		return -ENOMEM;
-+
-+	ret = tcp_bpf_init(sk);
-+	if (ret < 0)
-+		sk_psock_put(sk, psock);
-+	return ret;
-+}
-+
- static void sock_map_free(struct bpf_map *map)
- {
- 	struct bpf_stab *stab = container_of(map, struct bpf_stab, map);
-@@ -333,6 +357,12 @@ static int sock_map_get_next_key(struct bpf_map *map, void *key, void *next)
- 	return 0;
- }
- 
-+/* Is sock in a state that allows redirecting from/into it? */
-+static bool sock_map_redirect_okay(const struct sock *sk)
-+{
-+	return sk->sk_state != TCP_LISTEN;
-+}
-+
- static int sock_map_update_common(struct bpf_map *map, u32 idx,
- 				  struct sock *sk, u64 flags)
- {
-@@ -355,7 +385,14 @@ static int sock_map_update_common(struct bpf_map *map, u32 idx,
- 	if (!link)
- 		return -ENOMEM;
- 
--	ret = sock_map_link(map, &stab->progs, sk);
-+	/* Only sockets we can redirect into/from in BPF need to hold
-+	 * refs to parser/verdict progs and have their sk_data_ready
-+	 * and sk_write_space callbacks overridden.
-+	 */
-+	if (sock_map_redirect_okay(sk))
-+		ret = sock_map_link(map, &stab->progs, sk);
-+	else
-+		ret = sock_map_link_no_progs(map, sk);
- 	if (ret < 0)
- 		goto out_free;
- 
-@@ -422,12 +459,6 @@ static bool sock_hash_sk_is_suitable(const struct sock *sk)
- 				      TCPF_SYN_RECV);
- }
- 
--/* Is sock in a state that allows redirecting into it? */
--static bool sock_map_redirect_okay(const struct sock *sk)
--{
--	return sk->sk_state != TCP_LISTEN;
--}
--
- static int sock_map_update_elem(struct bpf_map *map, void *key,
- 				void *value, u64 flags)
- {
--- 
-2.24.1
-
+[...]
