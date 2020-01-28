@@ -1,144 +1,122 @@
-Return-Path: <SRS0=FlKb=3Q=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=ANq7=3R=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 507A8C2D0DB
-	for <bpf@archiver.kernel.org>; Mon, 27 Jan 2020 19:41:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36A9CC33CB7
+	for <bpf@archiver.kernel.org>; Tue, 28 Jan 2020 02:14:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2582D24686
-	for <bpf@archiver.kernel.org>; Mon, 27 Jan 2020 19:41:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C2242467F
+	for <bpf@archiver.kernel.org>; Tue, 28 Jan 2020 02:14:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="QyHY+Vts";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="czzgxx2r"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RF9nMOM9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726004AbgA0Tk4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Jan 2020 14:40:56 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:33695 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725845AbgA0Tku (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 27 Jan 2020 14:40:50 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id BC3C46750;
-        Mon, 27 Jan 2020 14:40:49 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 27 Jan 2020 14:40:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm2; bh=QijxjuOhiTJlpH+pSCqyCrQ0Dt
-        b85t6Huy4YLag+b5U=; b=QyHY+VtsOk5d3H4o6QrENWrA9kO/2fDYmItOSiwWbX
-        1euLK9y8B5DLSZX6Vnq96oB6lrYxI5LJaZ9vdNFBO825FDDFTmj0FlTqQ3J1pihM
-        8k1c1PIVRCDGM2gBGDzC024AbmTB5Y4k2MVf73CdE7WvHGCjdaLBNxv/B0/1fokr
-        cPMU/pRniwL4P/bEqF/LhOg0TYxARxeJtoMXmAr8biyNBRz4VMDD37dqLekSbyzp
-        zCCAA5puAq8oL2+Y0CC5p7JM5QRf51vmmAEvBwX0H8tiLMwNXaNm/FAa0R0hdI7b
-        tjTmH7Tmv5dQYbghjcbTMU7c93SubVMpHIblTqcrcJFQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=QijxjuOhiTJlpH+pS
-        CqyCrQ0Dtb85t6Huy4YLag+b5U=; b=czzgxx2rJXWQ35zpQUkx5M+4kXepV6mVO
-        FhHD74cj9NNdzCH3dQYwlw0zlKDpRAihfBtqpfSOQZGqVTjaErXk+1Xt83nXupJu
-        oy097xaOYJVaz5THLPp1EI7rtzK1LeIESZIH0Ny5RYL7jfn9QG3M0QwFEplJTMNO
-        FZh64Rkt4ZFnYfHUYBN3xoEnTvo8kZhl8J9/rdYS7G7X9D9erxXDWZl9/G4LYSCK
-        bTn9imS3c4vY1XZDzCjkLwsFAtq1vXqC2+oWTkPu5fA6bzta/wyHqxwjDBDGDIx/
-        Wu0u36wFVQwLapOaE9RLpc7wAFQw81kfvg3bYJX4JjzRyVrO7EM6w==
-X-ME-Sender: <xms:wDwvXgujWrg_ae7r2f7ix1eXiGNnwGFix0bT004xqXbMTQGY2CFLcQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrfedvgdduvdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    fufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihu
-    segugihuuhhurdighiiiqeenucfkphepudelledrvddtuddrieegrddufeelnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhu
-    uhdrgiihii
-X-ME-Proxy: <xmx:wDwvXnjAkcSOD4YnlJ7d4fOtVFHNRgQR97_jwgCEGokEBAX2oiFRxA>
-    <xmx:wDwvXq3e1odTVfrBgm0YASMiY9c025wHWyau72u68LylKWggcJEmDw>
-    <xmx:wDwvXrWwc-VuqLhCwx-X2y6HxzPCq-tbJUSbUJA2G2R6k3yt0OLtRw>
-    <xmx:wTwvXhycLQZvFMs7FOwkMT9uZPN4ZbI41LyA8sA4Bl_LpjJdB_2F8g>
-Received: from dlxu-fedora-R90QNFJV.thefacebook.com (unknown [199.201.64.139])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 2AF9D328005A;
-        Mon, 27 Jan 2020 14:40:47 -0500 (EST)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        songliubraving@fb.com, yhs@fb.com, andriin@fb.com
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org
-Subject: [PATCH v7 bpf-next 0/2] Add bpf_read_branch_records() helper
-Date:   Mon, 27 Jan 2020 11:40:29 -0800
-Message-Id: <20200127194031.19122-1-dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.21.1
+        id S1726725AbgA1COt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Jan 2020 21:14:49 -0500
+Received: from mail-pf1-f178.google.com ([209.85.210.178]:46350 "EHLO
+        mail-pf1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726080AbgA1COr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Jan 2020 21:14:47 -0500
+Received: by mail-pf1-f178.google.com with SMTP id k29so3318121pfp.13
+        for <bpf@vger.kernel.org>; Mon, 27 Jan 2020 18:14:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
+         :from:to;
+        bh=DrrSxaqg+xMHJET+xxCFd4AzKeXkcnr9cON2fZed2UM=;
+        b=RF9nMOM9cUcTpHOes6fCDFot2ORVBBSCK8xX151vp4yLYwGKEqjk1LuTUbuy/rYMUo
+         OB7cLFZX3tiVGf3mh7j55tR2V/wRiwGIYn0Pp4DcnTb7qRrxNvUo99NGQVrNzDg5pkK/
+         sSYcAjedIPNO4Uerbz8D6UaaqPtAyKJk0C0pm8A3nO3nfWqjC6PdUCrzye4Xbkpikeg8
+         UOjEUmWm5kuJ9uwJphYlQDPai4Dm0JE5K5m3CgLTreFAFGEF7ZvE2dYE1D33MvPeCtik
+         jcrDB1UucvsBipSDT9pfMlydmZVMDbaV1fws6wYK9YgRq8dTq5Il0or6opZDw4YxWxwf
+         oYYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:date:message-id:mime-version
+         :content-transfer-encoding:cc:from:to;
+        bh=DrrSxaqg+xMHJET+xxCFd4AzKeXkcnr9cON2fZed2UM=;
+        b=LFAvqOAvjoRCtKunK4qRxGWpslwlBQGbdMS6JYpW10a1Hj0nwgbWrpGK3n72LfNLTj
+         Ku2TpWH2OgLsMz6NV0gdh9DL9FgjOe1c187uvGfUq/0gY6ECPwc41uIEcWPM9dgPDino
+         mi/UYhWxKNtsc7jOPv7loAJyH4Us8j1/cYtSyENe1YviALoH08anUie7KilAZuqxXibN
+         aqweVilRB5o+oltYeeB9eMd04uZuwKFaR4n7JZ4sk9G3Zp9ieN1KcC0NqtTtBdcFOFDJ
+         ymh5tw1A088Hk9/J21LHaka5/5rSFVPhgK7lqeVEFWWD/1f1h5h0n6kKfk8Qu7ePiYry
+         NOPA==
+X-Gm-Message-State: APjAAAUSHIFFTyz/zYdk/F03+vw34WktA97GA15vIekrYa2powhXLf5P
+        /apiplSAJtb8A8PhcI3cOO/FnA==
+X-Google-Smtp-Source: APXvYqzQaE82BkrwN8enKVWh7LhvYVblBpdtkI68w4zgo2qGK/PKGkjLJeYUCgcwMaQr9ym7GELY6A==
+X-Received: by 2002:a63:ff5c:: with SMTP id s28mr22418848pgk.196.1580177685323;
+        Mon, 27 Jan 2020 18:14:45 -0800 (PST)
+Received: from localhost ([216.9.110.8])
+        by smtp.gmail.com with ESMTPSA id b15sm17010169pft.58.2020.01.27.18.14.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jan 2020 18:14:44 -0800 (PST)
+Subject: arm64: bpf: Elide some moves to a0 after calls
+Date:   Mon, 27 Jan 2020 18:11:41 -0800
+Message-Id: <20200128021145.36774-1-palmerdabbelt@google.com>
+X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Cc:     daniel@iogearbox.net, ast@kernel.org, zlim.lnx@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
+        shuah@kernel.org, Palmer Dabbelt <palmerdabbelt@google.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        clang-built-linux@googlegroups.com, kernel-team@android.com
+From:   Palmer Dabbelt <palmerdabbelt@google.com>
+To:     Bjorn Topel <bjorn.topel@gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Branch records are a CPU feature that can be configured to record
-certain branches that are taken during code execution. This data is
-particularly interesting for profile guided optimizations. perf has had
-branch record support for a while but the data collection can be a bit
-coarse grained.
+There's four patches here, but only one of them actually does anything.  The
+first patch fixes a BPF selftests build failure on my machine and has already
+been sent to the list separately.  The next three are just staged such that
+there are some patches that avoid changing any functionality pulled out from
+the whole point of those refactorings, with two cleanups and then the idea.
 
-We (Facebook) have seen in experiments that associating metadata with
-branch records can improve results (after postprocessing). We generally
-use bpf_probe_read_*() to get metadata out of userspace. That's why bpf
-support for branch records is useful.
+Maybe this is an odd thing to say in a cover letter, but I'm not actually sure
+this patch set is a good idea.  The issue of extra moves after calls came up as
+I was reviewing some unrelated performance optimizations to the RISC-V BPF JIT.
+I figured I'd take a whack at performing the optimization in the context of the
+arm64 port just to get a breath of fresh air, and I'm not convinced I like the
+results.
 
-Aside from this particular use case, having branch data available to bpf
-progs can be useful to get stack traces out of userspace applications
-that omit frame pointers.
+That said, I think I would accept something like this for the RISC-V port
+because we're already doing a multi-pass optimization for shrinking function
+addresses so it's not as much extra complexity over there.  If we do that we
+should probably start puling some of this code into the shared BPF compiler,
+but we're also opening the doors to more complicated BPF JIT optimizations.
+Given that the BPF JIT appears to have been designed explicitly to be
+simple/fast as opposed to perform complex optimization, I'm not sure this is a
+sane way to move forward.
 
-Changes in v7:
-- Const-ify and static-ify local var
-- Documentation formatting
+I figured I'd send the patch set out as more of a question than anything else.
+Specifically:
 
-Changes in v6:
-- Move #ifdef a little to avoid unused variable warnings on !x86
-- Test negative condition in selftest (-EINVAL on improperly configured
-  perf event)
-- Skip positive condition selftest on setups that don't support branch
-  records
+* How should I go about measuring the performance of these sort of
+  optimizations?  I'd like to balance the time it takes to run the JIT with the
+  time spent executing the program, but I don't have any feel for what real BPF
+  programs look like or have any benchmark suite to run.  Is there something
+  out there this should be benchmarked against?  (I'd also like to know that to
+  run those benchmarks on the RISC-V port.)
+* Is this the sort of thing that makes sense in a BPF JIT?  I guess I've just
+  realized I turned "review this patch" into a way bigger rabbit hole than I
+  really want to go down...
 
-Changes in v5:
-- Rename bpf_perf_prog_read_branches() -> bpf_read_branch_records()
-- Rename BPF_F_GET_BR_SIZE -> BPF_F_GET_BRANCH_RECORDS_SIZE
-- Squash tools/ bpf.h sync into selftest commit
+I worked on top of 5.4 for these, but trivially different versions of the
+patches applied on Linus' master a few days ago when I tried.  LMK if those
+aren't sane places to start from over here, I'm new to both arm64 and BPF so I
+might be a bit lost.
 
-Changes in v4:
-- Add BPF_F_GET_BR_SIZE flag
-- Return -ENOENT on unsupported architectures
-- Only accept initialized memory in helper
-- Check buffer size is multiple of sizeof(struct perf_branch_entry)
-- Use bpf skeleton in selftest
-- Add commit messages
-- Spelling and formatting
-
-Changes in v3:
-- Document filling unused buffer with zero
-- Formatting fixes
-- Rebase
-
-Changes in v2:
-- Change to a bpf helper instead of context access
-- Avoid mentioning Intel specific things
-
-Daniel Xu (2):
-  bpf: Add bpf_read_branch_records() helper
-  selftests/bpf: add bpf_read_branch_records() selftest
-
- include/uapi/linux/bpf.h                      |  25 ++-
- kernel/trace/bpf_trace.c                      |  41 ++++
- tools/include/uapi/linux/bpf.h                |  25 ++-
- .../selftests/bpf/prog_tests/perf_branches.c  | 182 ++++++++++++++++++
- .../selftests/bpf/progs/test_perf_branches.c  |  74 +++++++
- 5 files changed, 345 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_branches.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_perf_branches.c
-
--- 
-2.21.1
+[PATCH 1/4] selftests/bpf: Elide a check for LLVM versions that can't
+[PATCH 2/4] arm64: bpf: Convert bpf2a64 to a function
+[PATCH 3/4] arm64: bpf: Split the read and write halves of dst
+[PATCH 4/4] arm64: bpf: Elide some moves to a0 after calls
 
