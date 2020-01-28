@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F7E6C35248
-	for <bpf@archiver.kernel.org>; Tue, 28 Jan 2020 02:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D5D9C33CB7
+	for <bpf@archiver.kernel.org>; Tue, 28 Jan 2020 02:15:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DB1242173E
-	for <bpf@archiver.kernel.org>; Tue, 28 Jan 2020 02:14:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24E662173E
+	for <bpf@archiver.kernel.org>; Tue, 28 Jan 2020 02:15:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rnj6yTlt"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u2lemWY+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726852AbgA1COv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Jan 2020 21:14:51 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44756 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726758AbgA1COu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Jan 2020 21:14:50 -0500
-Received: by mail-pf1-f196.google.com with SMTP id y5so2754333pfb.11
-        for <bpf@vger.kernel.org>; Mon, 27 Jan 2020 18:14:50 -0800 (PST)
+        id S1727520AbgA1CPD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Jan 2020 21:15:03 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:34533 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727228AbgA1CPA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Jan 2020 21:15:00 -0500
+Received: by mail-pf1-f195.google.com with SMTP id i6so5836518pfc.1
+        for <bpf@vger.kernel.org>; Mon, 27 Jan 2020 18:15:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=subject:date:message-id:mime-version:content-transfer-encoding:cc
          :from:to:in-reply-to:references;
-        bh=B26eSG9gMaHSxZUV5pLyS5i7Lt3Ya0fKdNJyMPYapJg=;
-        b=rnj6yTltwKWYN3+9NJAw5sCB/fR2AAcye4lYI+VlXhtsAeDA2BY21GJ8k8CnQf7aQY
-         VdJ1qPrTM3EARaQkNVyPlmwk3OR0FZ1qhmjPYmqj747Fi6+MIUvvEt3r/xG932neiZRZ
-         G3MOKgdSY//mdAPafDURRAFv84ghi6Xg6+OIs6B82gN1iNzgi4TCJIbiKMAjvWHnWsI8
-         LfD/uSlWuMSGAOZ40hPJMvwD5XkCAeqbt+356MQtEucaALw0rbVlR+5ifj9W6OqwPggu
-         K+WgKDD0Sf0RDg9+u3AIFA8wMp9WAsRV6SFb5qwxtu0Spb25cBn4ycpFAc+FS2vQBAxJ
-         dq0g==
+        bh=jKrDfwDIxQNTXTrn+zwyb0TImugf3AGUmYGjhKrNRfc=;
+        b=u2lemWY+5dfIGEONMq7ElLsRYfcjPfM+zVFSnbwB2QUxDirC5Ap3qf9dj8uY7gGPbZ
+         yQVfbIClno3WHSVLbboD/umGxT1Ondur2zKycypuNc+lrqUPBsPQMWIpTjgeysbFRtlQ
+         aSeIMQCFc40GVw3J0rKBtHGMzTlyettIs1Wemi/9I5zpqjaMvhYMIhRycrye8tndglh5
+         O/b8yN9w4dCj+vHx7TY9dGzq5qZAcOvKsILaVWe9KhRk6UHTzxR1XzcWZrLl888sYPgc
+         qcbNy9Ynlefqre+vOJfZ44swu4fU2PSPraRNDMXkxJpUjS4Bqg12fMB7xKL38m9bNTut
+         WqJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:date:message-id:mime-version
          :content-transfer-encoding:cc:from:to:in-reply-to:references;
-        bh=B26eSG9gMaHSxZUV5pLyS5i7Lt3Ya0fKdNJyMPYapJg=;
-        b=g4rsU1QuoY3hFf88F4ctynEANk32gx+WDstbIJ+b/18KIkoPu/Zxk/Szjet6sCd+Xe
-         o2L1MdtP+CIe2nZahizbtJ+xzRAuMdZ6idkW2bLvNOILeVwnIaCUxejegCsKkRfHwXMm
-         CIFsgVAV4xTX0//yqn95Xfl47Kytf7m4I0sN+979sZ2rL0u/KSygVYvFmOEK55kt8jWZ
-         fRrtNm21MAEP4F1mbvI7jU9BpehnfNuoSNnrU5hJPnqqBHFl58wtJxTUj1utuyJHrCGq
-         GpPOHMYwJtL/o1yG0WrzpnNJ7GLOExzGQmG784IVB3BV27pkf3zEQBN2A9A2bi9U4mWx
-         AhMw==
-X-Gm-Message-State: APjAAAVWuX4/RlVvekRSgJFvPX+U05Vzewn7Pl0UEsMZ51lx04/V8hzH
-        RVbj+83La+w6a76lMBruVxgPFA==
-X-Google-Smtp-Source: APXvYqxWbxJsMQEFqUcP7zhlWCZa48n0RUY+fa4pHyARk3jQS+HZxuwfqCKurzNjpNa6tqaE0J+XAw==
-X-Received: by 2002:a62:2b8a:: with SMTP id r132mr1588482pfr.56.1580177689517;
-        Mon, 27 Jan 2020 18:14:49 -0800 (PST)
-Received: from localhost ([216.9.110.6])
-        by smtp.gmail.com with ESMTPSA id x21sm10370389pfq.76.2020.01.27.18.14.48
+        bh=jKrDfwDIxQNTXTrn+zwyb0TImugf3AGUmYGjhKrNRfc=;
+        b=t5sJDpU7yU7KNSOY18ELjpm/kJD7xtrwtFqnD8n1z1UtuF21TxaTxNgNvEAB3fanYR
+         /lKjwWdwKxc4b3x3N3apufaogGnnw5l4J+6Zs0l33yNYL0Y1B+Vncez0XoO+e6w9dOEY
+         +5Kvg/5r5tqMaGW8XHxP2JOxQbmFADhVYw7wWY3StxnBEvZ20tVm58qECgMteuGlYHe5
+         XZBwJeqfWRh3AtqefXIMt2XU5iIedvUvePHRkkYx2UazZVW+ZjEo6gc8XHACKrSytKeJ
+         5h7kV9P88Z/OOynndB6foJyFESsUbwDi+7sIJLQKDqmogzRn5H/4Sgik1Pyu/D+KvUD6
+         O9cw==
+X-Gm-Message-State: APjAAAXkHBPAWhrqUe2zJAaI/LoegGctZ0MiPZ/PnR59JNC1e2dTO33s
+        uSKp7Q+Q0+Ofpd8Hk0h38I4FPQ==
+X-Google-Smtp-Source: APXvYqyi/cnBTa1Klz/nM2JzLVC6bUlEiBW6MlgldDlvQ56qM/OW7gQzYxWPZZDg1UQWEFYCSCX5rw==
+X-Received: by 2002:a63:6d8d:: with SMTP id i135mr22565833pgc.90.1580177699348;
+        Mon, 27 Jan 2020 18:14:59 -0800 (PST)
+Received: from localhost ([216.9.110.7])
+        by smtp.gmail.com with ESMTPSA id k1sm10222394pfg.66.2020.01.27.18.14.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jan 2020 18:14:48 -0800 (PST)
-Subject: [PATCH 1/4] selftests/bpf: Elide a check for LLVM versions that can't compile it
-Date:   Mon, 27 Jan 2020 18:11:42 -0800
-Message-Id: <20200128021145.36774-2-palmerdabbelt@google.com>
+        Mon, 27 Jan 2020 18:14:58 -0800 (PST)
+Subject: [PATCH 3/4] arm64: bpf: Split the read and write halves of dst
+Date:   Mon, 27 Jan 2020 18:11:44 -0800
+Message-Id: <20200128021145.36774-4-palmerdabbelt@google.com>
 X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -77,54 +77,334 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The current stable LLVM BPF backend fails to compile the BPF selftests
-due to a compiler bug.  The bug has been fixed in trunk, but that fix
-hasn't landed in the binary packages I'm using yet (Fedora arm64).
-Without this workaround the tests don't compile for me.
+This patch is intended to change no functionality, it just allows me to do
+register renaming later.
 
-This patch triggers a preprocessor warning on LLVM versions that
-definitely have the bug.  The test may be conservative (ie, I'm not sure
-if 9.1 will have the fix), but it should at least make the current set
-of stable releases work together.
-
-See https://reviews.llvm.org/D69438 for more information on the fix.  I
-obtained the workaround from
-https://lore.kernel.org/linux-kselftest/aed8eda7-df20-069b-ea14-f06628984566@gmail.com/T/
-
-Fixes: 20a9ad2e7136 ("selftests/bpf: add CO-RE relocs array tests")
 Signed-off-by: Palmer Dabbelt <palmerdabbelt@google.com>
 ---
- .../testing/selftests/bpf/progs/test_core_reloc_arrays.c  | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm64/net/bpf_jit_comp.c | 107 +++++++++++++++++-----------------
+ 1 file changed, 54 insertions(+), 53 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c b/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c
-index bf67f0fdf743..c9a3e0585a84 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c
-@@ -40,15 +40,23 @@ int test_core_arrays(void *ctx)
- 	/* in->a[2] */
- 	if (BPF_CORE_READ(&out->a2, &in->a[2]))
- 		return 1;
-+#if defined(__clang__) && (__clang_major__ < 10) && (__clang_minor__ < 1)
-+# warning "clang 9.0 SEGVs on multidimensional arrays, see https://reviews.llvm.org/D69438"
-+#else
- 	/* in->b[1][2][3] */
- 	if (BPF_CORE_READ(&out->b123, &in->b[1][2][3]))
- 		return 1;
-+#endif
- 	/* in->c[1].c */
- 	if (BPF_CORE_READ(&out->c1c, &in->c[1].c))
- 		return 1;
-+#if defined(__clang__) && (__clang_major__ < 10) && (__clang_minor__ < 1)
-+# warning "clang 9.0 SEGVs on multidimensional arrays, see https://reviews.llvm.org/D69438"
-+#else
- 	/* in->d[0][0].d */
- 	if (BPF_CORE_READ(&out->d00d, &in->d[0][0].d))
- 		return 1;
-+#endif
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 8eee68705056..fba5b1b00cd7 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -348,7 +348,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 		      bool extra_pass)
+ {
+ 	const u8 code = insn->code;
+-	const u8 dst = bpf2a64(ctx, insn->dst_reg);
++	const u8 dstw = bpf2a64(ctx, insn->dst_reg);
++	const u8 dstr = bpf2a64(ctx, insn->dst_reg);
+ 	const u8 src = bpf2a64(ctx, insn->src_reg);
+ 	const u8 tmp = bpf2a64(ctx, TMP_REG_1);
+ 	const u8 tmp2 = bpf2a64(ctx, TMP_REG_2);
+@@ -377,32 +378,32 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	/* dst = src */
+ 	case BPF_ALU | BPF_MOV | BPF_X:
+ 	case BPF_ALU64 | BPF_MOV | BPF_X:
+-		emit(A64_MOV(is64, dst, src), ctx);
++		emit(A64_MOV(is64, dstw, src), ctx);
+ 		break;
+ 	/* dst = dst OP src */
+ 	case BPF_ALU | BPF_ADD | BPF_X:
+ 	case BPF_ALU64 | BPF_ADD | BPF_X:
+-		emit(A64_ADD(is64, dst, dst, src), ctx);
++		emit(A64_ADD(is64, dstw, dstr, src), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_SUB | BPF_X:
+ 	case BPF_ALU64 | BPF_SUB | BPF_X:
+-		emit(A64_SUB(is64, dst, dst, src), ctx);
++		emit(A64_SUB(is64, dstw, dstr, src), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_AND | BPF_X:
+ 	case BPF_ALU64 | BPF_AND | BPF_X:
+-		emit(A64_AND(is64, dst, dst, src), ctx);
++		emit(A64_AND(is64, dstw, dstr, src), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_OR | BPF_X:
+ 	case BPF_ALU64 | BPF_OR | BPF_X:
+-		emit(A64_ORR(is64, dst, dst, src), ctx);
++		emit(A64_ORR(is64, dstw, dstr, src), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_XOR | BPF_X:
+ 	case BPF_ALU64 | BPF_XOR | BPF_X:
+-		emit(A64_EOR(is64, dst, dst, src), ctx);
++		emit(A64_EOR(is64, dstw, dstr, src), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_MUL | BPF_X:
+ 	case BPF_ALU64 | BPF_MUL | BPF_X:
+-		emit(A64_MUL(is64, dst, dst, src), ctx);
++		emit(A64_MUL(is64, dstw, dstr, src), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_DIV | BPF_X:
+ 	case BPF_ALU64 | BPF_DIV | BPF_X:
+@@ -410,30 +411,30 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	case BPF_ALU64 | BPF_MOD | BPF_X:
+ 		switch (BPF_OP(code)) {
+ 		case BPF_DIV:
+-			emit(A64_UDIV(is64, dst, dst, src), ctx);
++			emit(A64_UDIV(is64, dstw, dstr, src), ctx);
+ 			break;
+ 		case BPF_MOD:
+-			emit(A64_UDIV(is64, tmp, dst, src), ctx);
+-			emit(A64_MSUB(is64, dst, dst, tmp, src), ctx);
++			emit(A64_UDIV(is64, tmp, dstr, src), ctx);
++			emit(A64_MSUB(is64, dstw, dstr, tmp, src), ctx);
+ 			break;
+ 		}
+ 		break;
+ 	case BPF_ALU | BPF_LSH | BPF_X:
+ 	case BPF_ALU64 | BPF_LSH | BPF_X:
+-		emit(A64_LSLV(is64, dst, dst, src), ctx);
++		emit(A64_LSLV(is64, dstw, dstr, src), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_RSH | BPF_X:
+ 	case BPF_ALU64 | BPF_RSH | BPF_X:
+-		emit(A64_LSRV(is64, dst, dst, src), ctx);
++		emit(A64_LSRV(is64, dstw, dstr, src), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_ARSH | BPF_X:
+ 	case BPF_ALU64 | BPF_ARSH | BPF_X:
+-		emit(A64_ASRV(is64, dst, dst, src), ctx);
++		emit(A64_ASRV(is64, dstw, dstr, src), ctx);
+ 		break;
+ 	/* dst = -dst */
+ 	case BPF_ALU | BPF_NEG:
+ 	case BPF_ALU64 | BPF_NEG:
+-		emit(A64_NEG(is64, dst, dst), ctx);
++		emit(A64_NEG(is64, dstw, dstr), ctx);
+ 		break;
+ 	/* dst = BSWAP##imm(dst) */
+ 	case BPF_ALU | BPF_END | BPF_FROM_LE:
+@@ -447,16 +448,16 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ #endif
+ 		switch (imm) {
+ 		case 16:
+-			emit(A64_REV16(is64, dst, dst), ctx);
++			emit(A64_REV16(is64, dstw, dstr), ctx);
+ 			/* zero-extend 16 bits into 64 bits */
+-			emit(A64_UXTH(is64, dst, dst), ctx);
++			emit(A64_UXTH(is64, dstw, dstr), ctx);
+ 			break;
+ 		case 32:
+-			emit(A64_REV32(is64, dst, dst), ctx);
++			emit(A64_REV32(is64, dstw, dstr), ctx);
+ 			/* upper 32 bits already cleared */
+ 			break;
+ 		case 64:
+-			emit(A64_REV64(dst, dst), ctx);
++			emit(A64_REV64(dstw, dstr), ctx);
+ 			break;
+ 		}
+ 		break;
+@@ -464,11 +465,11 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 		switch (imm) {
+ 		case 16:
+ 			/* zero-extend 16 bits into 64 bits */
+-			emit(A64_UXTH(is64, dst, dst), ctx);
++			emit(A64_UXTH(is64, dstw, dstr), ctx);
+ 			break;
+ 		case 32:
+ 			/* zero-extend 32 bits into 64 bits */
+-			emit(A64_UXTW(is64, dst, dst), ctx);
++			emit(A64_UXTW(is64, dstw, dstr), ctx);
+ 			break;
+ 		case 64:
+ 			/* nop */
+@@ -478,61 +479,61 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	/* dst = imm */
+ 	case BPF_ALU | BPF_MOV | BPF_K:
+ 	case BPF_ALU64 | BPF_MOV | BPF_K:
+-		emit_a64_mov_i(is64, dst, imm, ctx);
++		emit_a64_mov_i(is64, dstw, imm, ctx);
+ 		break;
+ 	/* dst = dst OP imm */
+ 	case BPF_ALU | BPF_ADD | BPF_K:
+ 	case BPF_ALU64 | BPF_ADD | BPF_K:
+ 		emit_a64_mov_i(is64, tmp, imm, ctx);
+-		emit(A64_ADD(is64, dst, dst, tmp), ctx);
++		emit(A64_ADD(is64, dstw, dstr, tmp), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_SUB | BPF_K:
+ 	case BPF_ALU64 | BPF_SUB | BPF_K:
+ 		emit_a64_mov_i(is64, tmp, imm, ctx);
+-		emit(A64_SUB(is64, dst, dst, tmp), ctx);
++		emit(A64_SUB(is64, dstw, dstr, tmp), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_AND | BPF_K:
+ 	case BPF_ALU64 | BPF_AND | BPF_K:
+ 		emit_a64_mov_i(is64, tmp, imm, ctx);
+-		emit(A64_AND(is64, dst, dst, tmp), ctx);
++		emit(A64_AND(is64, dstw, dstr, tmp), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_OR | BPF_K:
+ 	case BPF_ALU64 | BPF_OR | BPF_K:
+ 		emit_a64_mov_i(is64, tmp, imm, ctx);
+-		emit(A64_ORR(is64, dst, dst, tmp), ctx);
++		emit(A64_ORR(is64, dstw, dstr, tmp), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_XOR | BPF_K:
+ 	case BPF_ALU64 | BPF_XOR | BPF_K:
+ 		emit_a64_mov_i(is64, tmp, imm, ctx);
+-		emit(A64_EOR(is64, dst, dst, tmp), ctx);
++		emit(A64_EOR(is64, dstw, dstr, tmp), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_MUL | BPF_K:
+ 	case BPF_ALU64 | BPF_MUL | BPF_K:
+ 		emit_a64_mov_i(is64, tmp, imm, ctx);
+-		emit(A64_MUL(is64, dst, dst, tmp), ctx);
++		emit(A64_MUL(is64, dstw, dstr, tmp), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_DIV | BPF_K:
+ 	case BPF_ALU64 | BPF_DIV | BPF_K:
+ 		emit_a64_mov_i(is64, tmp, imm, ctx);
+-		emit(A64_UDIV(is64, dst, dst, tmp), ctx);
++		emit(A64_UDIV(is64, dstw, dstr, tmp), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_MOD | BPF_K:
+ 	case BPF_ALU64 | BPF_MOD | BPF_K:
+ 		emit_a64_mov_i(is64, tmp2, imm, ctx);
+-		emit(A64_UDIV(is64, tmp, dst, tmp2), ctx);
+-		emit(A64_MSUB(is64, dst, dst, tmp, tmp2), ctx);
++		emit(A64_UDIV(is64, tmp, dstr, tmp2), ctx);
++		emit(A64_MSUB(is64, dstw, dstr, tmp, tmp2), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_LSH | BPF_K:
+ 	case BPF_ALU64 | BPF_LSH | BPF_K:
+-		emit(A64_LSL(is64, dst, dst, imm), ctx);
++		emit(A64_LSL(is64, dstw, dstr, imm), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_RSH | BPF_K:
+ 	case BPF_ALU64 | BPF_RSH | BPF_K:
+-		emit(A64_LSR(is64, dst, dst, imm), ctx);
++		emit(A64_LSR(is64, dstw, dstr, imm), ctx);
+ 		break;
+ 	case BPF_ALU | BPF_ARSH | BPF_K:
+ 	case BPF_ALU64 | BPF_ARSH | BPF_K:
+-		emit(A64_ASR(is64, dst, dst, imm), ctx);
++		emit(A64_ASR(is64, dstw, dstr, imm), ctx);
+ 		break;
  
- 	return 0;
- }
+ 	/* JUMP off */
+@@ -562,7 +563,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	case BPF_JMP32 | BPF_JSLT | BPF_X:
+ 	case BPF_JMP32 | BPF_JSGE | BPF_X:
+ 	case BPF_JMP32 | BPF_JSLE | BPF_X:
+-		emit(A64_CMP(is64, dst, src), ctx);
++		emit(A64_CMP(is64, dstr, src), ctx);
+ emit_cond_jmp:
+ 		jmp_offset = bpf2a64_offset(i + off, i, ctx);
+ 		check_imm19(jmp_offset);
+@@ -605,7 +606,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 		break;
+ 	case BPF_JMP | BPF_JSET | BPF_X:
+ 	case BPF_JMP32 | BPF_JSET | BPF_X:
+-		emit(A64_TST(is64, dst, src), ctx);
++		emit(A64_TST(is64, dstr, src), ctx);
+ 		goto emit_cond_jmp;
+ 	/* IF (dst COND imm) JUMP off */
+ 	case BPF_JMP | BPF_JEQ | BPF_K:
+@@ -629,12 +630,12 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	case BPF_JMP32 | BPF_JSGE | BPF_K:
+ 	case BPF_JMP32 | BPF_JSLE | BPF_K:
+ 		emit_a64_mov_i(is64, tmp, imm, ctx);
+-		emit(A64_CMP(is64, dst, tmp), ctx);
++		emit(A64_CMP(is64, dstr, tmp), ctx);
+ 		goto emit_cond_jmp;
+ 	case BPF_JMP | BPF_JSET | BPF_K:
+ 	case BPF_JMP32 | BPF_JSET | BPF_K:
+ 		emit_a64_mov_i(is64, tmp, imm, ctx);
+-		emit(A64_TST(is64, dst, tmp), ctx);
++		emit(A64_TST(is64, dstr, tmp), ctx);
+ 		goto emit_cond_jmp;
+ 	/* function call */
+ 	case BPF_JMP | BPF_CALL:
+@@ -676,7 +677,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 		u64 imm64;
+ 
+ 		imm64 = (u64)insn1.imm << 32 | (u32)imm;
+-		emit_a64_mov_i64(dst, imm64, ctx);
++		emit_a64_mov_i64(dstw, imm64, ctx);
+ 
+ 		return 1;
+ 	}
+@@ -689,16 +690,16 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 		emit_a64_mov_i(1, tmp, off, ctx);
+ 		switch (BPF_SIZE(code)) {
+ 		case BPF_W:
+-			emit(A64_LDR32(dst, src, tmp), ctx);
++			emit(A64_LDR32(dstw, src, tmp), ctx);
+ 			break;
+ 		case BPF_H:
+-			emit(A64_LDRH(dst, src, tmp), ctx);
++			emit(A64_LDRH(dstw, src, tmp), ctx);
+ 			break;
+ 		case BPF_B:
+-			emit(A64_LDRB(dst, src, tmp), ctx);
++			emit(A64_LDRB(dstw, src, tmp), ctx);
+ 			break;
+ 		case BPF_DW:
+-			emit(A64_LDR64(dst, src, tmp), ctx);
++			emit(A64_LDR64(dstw, src, tmp), ctx);
+ 			break;
+ 		}
+ 		break;
+@@ -713,16 +714,16 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 		emit_a64_mov_i(1, tmp, imm, ctx);
+ 		switch (BPF_SIZE(code)) {
+ 		case BPF_W:
+-			emit(A64_STR32(tmp, dst, tmp2), ctx);
++			emit(A64_STR32(tmp, dstr, tmp2), ctx);
+ 			break;
+ 		case BPF_H:
+-			emit(A64_STRH(tmp, dst, tmp2), ctx);
++			emit(A64_STRH(tmp, dstr, tmp2), ctx);
+ 			break;
+ 		case BPF_B:
+-			emit(A64_STRB(tmp, dst, tmp2), ctx);
++			emit(A64_STRB(tmp, dstr, tmp2), ctx);
+ 			break;
+ 		case BPF_DW:
+-			emit(A64_STR64(tmp, dst, tmp2), ctx);
++			emit(A64_STR64(tmp, dstr, tmp2), ctx);
+ 			break;
+ 		}
+ 		break;
+@@ -735,16 +736,16 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 		emit_a64_mov_i(1, tmp, off, ctx);
+ 		switch (BPF_SIZE(code)) {
+ 		case BPF_W:
+-			emit(A64_STR32(src, dst, tmp), ctx);
++			emit(A64_STR32(src, dstr, tmp), ctx);
+ 			break;
+ 		case BPF_H:
+-			emit(A64_STRH(src, dst, tmp), ctx);
++			emit(A64_STRH(src, dstr, tmp), ctx);
+ 			break;
+ 		case BPF_B:
+-			emit(A64_STRB(src, dst, tmp), ctx);
++			emit(A64_STRB(src, dstr, tmp), ctx);
+ 			break;
+ 		case BPF_DW:
+-			emit(A64_STR64(src, dst, tmp), ctx);
++			emit(A64_STR64(src, dstr, tmp), ctx);
+ 			break;
+ 		}
+ 		break;
+@@ -754,10 +755,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	/* STX XADD: lock *(u64 *)(dst + off) += src */
+ 	case BPF_STX | BPF_XADD | BPF_DW:
+ 		if (!off) {
+-			reg = dst;
++			reg = dstr;
+ 		} else {
+ 			emit_a64_mov_i(1, tmp, off, ctx);
+-			emit(A64_ADD(1, tmp, tmp, dst), ctx);
++			emit(A64_ADD(1, tmp, tmp, dstr), ctx);
+ 			reg = tmp;
+ 		}
+ 		if (cpus_have_cap(ARM64_HAS_LSE_ATOMICS)) {
 -- 
 2.25.0.341.g760bfbb309-goog
 
