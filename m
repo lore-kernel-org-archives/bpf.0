@@ -2,61 +2,61 @@ Return-Path: <SRS0=ANq7=3R=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36A9CC33CB7
-	for <bpf@archiver.kernel.org>; Tue, 28 Jan 2020 02:14:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C6BC33CB1
+	for <bpf@archiver.kernel.org>; Tue, 28 Jan 2020 02:14:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0C2242467F
-	for <bpf@archiver.kernel.org>; Tue, 28 Jan 2020 02:14:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1CE602173E
+	for <bpf@archiver.kernel.org>; Tue, 28 Jan 2020 02:14:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RF9nMOM9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wIVx5InN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726725AbgA1COt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Jan 2020 21:14:49 -0500
-Received: from mail-pf1-f178.google.com ([209.85.210.178]:46350 "EHLO
-        mail-pf1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726080AbgA1COr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Jan 2020 21:14:47 -0500
-Received: by mail-pf1-f178.google.com with SMTP id k29so3318121pfp.13
-        for <bpf@vger.kernel.org>; Mon, 27 Jan 2020 18:14:46 -0800 (PST)
+        id S1726758AbgA1COz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Jan 2020 21:14:55 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:34659 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727215AbgA1COy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Jan 2020 21:14:54 -0500
+Received: by mail-pg1-f196.google.com with SMTP id r11so6156291pgf.1
+        for <bpf@vger.kernel.org>; Mon, 27 Jan 2020 18:14:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=subject:date:message-id:mime-version:content-transfer-encoding:cc
-         :from:to;
-        bh=DrrSxaqg+xMHJET+xxCFd4AzKeXkcnr9cON2fZed2UM=;
-        b=RF9nMOM9cUcTpHOes6fCDFot2ORVBBSCK8xX151vp4yLYwGKEqjk1LuTUbuy/rYMUo
-         OB7cLFZX3tiVGf3mh7j55tR2V/wRiwGIYn0Pp4DcnTb7qRrxNvUo99NGQVrNzDg5pkK/
-         sSYcAjedIPNO4Uerbz8D6UaaqPtAyKJk0C0pm8A3nO3nfWqjC6PdUCrzye4Xbkpikeg8
-         UOjEUmWm5kuJ9uwJphYlQDPai4Dm0JE5K5m3CgLTreFAFGEF7ZvE2dYE1D33MvPeCtik
-         jcrDB1UucvsBipSDT9pfMlydmZVMDbaV1fws6wYK9YgRq8dTq5Il0or6opZDw4YxWxwf
-         oYYg==
+         :from:to:in-reply-to:references;
+        bh=vlorJcvaP10UZfjLamGOOlyDMylrB7iiHsA2qcGcn2c=;
+        b=wIVx5InN6/DzJVEigJkJbaohW40EGIe8KYnsmlI6ruUV1jfOEXmaV23mBGuxsbBdZZ
+         7N5HJz6fhvoeGjRPqyHw4cQLMNsZap4dno9K9rOg88GKKO0wPpVtVk369vKFayuZU5Z3
+         5Flw1wwHLh9O9DQZQTciGdHwm1qbkIb8HtClNU6B1kMPffvLLLeTYvsIc7IFOTJGrRP3
+         SyzkIZz34nOkSB9/5HyV2JYgvxR9XE7nVDO+BkBUI5F0ICsuFrJAuKdJFfEYUNMGpkZ9
+         eQDk7IhpuBKghrnxUYESqFen0lnva69a+zckjFBNE2KlKqDRnZmXl4U5GhQiIVPVOm2I
+         L8Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:date:message-id:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=DrrSxaqg+xMHJET+xxCFd4AzKeXkcnr9cON2fZed2UM=;
-        b=LFAvqOAvjoRCtKunK4qRxGWpslwlBQGbdMS6JYpW10a1Hj0nwgbWrpGK3n72LfNLTj
-         Ku2TpWH2OgLsMz6NV0gdh9DL9FgjOe1c187uvGfUq/0gY6ECPwc41uIEcWPM9dgPDino
-         mi/UYhWxKNtsc7jOPv7loAJyH4Us8j1/cYtSyENe1YviALoH08anUie7KilAZuqxXibN
-         aqweVilRB5o+oltYeeB9eMd04uZuwKFaR4n7JZ4sk9G3Zp9ieN1KcC0NqtTtBdcFOFDJ
-         ymh5tw1A088Hk9/J21LHaka5/5rSFVPhgK7lqeVEFWWD/1f1h5h0n6kKfk8Qu7ePiYry
-         NOPA==
-X-Gm-Message-State: APjAAAUSHIFFTyz/zYdk/F03+vw34WktA97GA15vIekrYa2powhXLf5P
-        /apiplSAJtb8A8PhcI3cOO/FnA==
-X-Google-Smtp-Source: APXvYqzQaE82BkrwN8enKVWh7LhvYVblBpdtkI68w4zgo2qGK/PKGkjLJeYUCgcwMaQr9ym7GELY6A==
-X-Received: by 2002:a63:ff5c:: with SMTP id s28mr22418848pgk.196.1580177685323;
-        Mon, 27 Jan 2020 18:14:45 -0800 (PST)
-Received: from localhost ([216.9.110.8])
-        by smtp.gmail.com with ESMTPSA id b15sm17010169pft.58.2020.01.27.18.14.43
+         :content-transfer-encoding:cc:from:to:in-reply-to:references;
+        bh=vlorJcvaP10UZfjLamGOOlyDMylrB7iiHsA2qcGcn2c=;
+        b=WueK+AhGcnaIV1UL+lcs26KgNyWyHO0aFmHlEYo5WNh7Pe5FA+PSzBFY+B7PqtyImw
+         tZ3TXYMOKsD0jPYF/sXy7TenHliEinI+GGMKuJtj1P28oEC942f4pxHcDtwYDX0ycBua
+         hpUHLu0sm3AJBjUBvM64EzOjmRi2zfR45NPQCk1da5XJpyQMOpKL5P/+KZTQIn1guzmd
+         oFpOTrYZGBtiynWh8dt/QIZjb+efqhKJbWsmrHvWeBkRvCc8Tsk769ibWHW/wH4y9FUv
+         qK06uwaGOqc9+YJkLO62eRav1y9hV6Ym3HJf5Bz8zjDAosEF/h5UYk5hslAUTnasayWk
+         zV2Q==
+X-Gm-Message-State: APjAAAXNaetqRYsMGFqVok6x0wxfXRrGjDPW87p431NGKMhhRz/EtFTo
+        xbqijNZRXqWDaBaMJKA1mcoiqQ==
+X-Google-Smtp-Source: APXvYqwztG3P3KPhEdDXDM7eU2re4Pli6ZoCVOT/l3ew9l8F5p7fV2G51hn2C7+OmMraT7KvzDqk4w==
+X-Received: by 2002:a62:52d0:: with SMTP id g199mr1553020pfb.241.1580177693903;
+        Mon, 27 Jan 2020 18:14:53 -0800 (PST)
+Received: from localhost ([216.9.110.6])
+        by smtp.gmail.com with ESMTPSA id b12sm17391719pfi.157.2020.01.27.18.14.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jan 2020 18:14:44 -0800 (PST)
-Subject: arm64: bpf: Elide some moves to a0 after calls
-Date:   Mon, 27 Jan 2020 18:11:41 -0800
-Message-Id: <20200128021145.36774-1-palmerdabbelt@google.com>
+        Mon, 27 Jan 2020 18:14:53 -0800 (PST)
+Subject: [PATCH 2/4] arm64: bpf: Convert bpf2a64 to a function
+Date:   Mon, 27 Jan 2020 18:11:43 -0800
+Message-Id: <20200128021145.36774-3-palmerdabbelt@google.com>
 X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,53 +70,128 @@ Cc:     daniel@iogearbox.net, ast@kernel.org, zlim.lnx@gmail.com,
         clang-built-linux@googlegroups.com, kernel-team@android.com
 From:   Palmer Dabbelt <palmerdabbelt@google.com>
 To:     Bjorn Topel <bjorn.topel@gmail.com>
+In-Reply-To: <20200128021145.36774-1-palmerdabbelt@google.com>
+References: <20200128021145.36774-1-palmerdabbelt@google.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There's four patches here, but only one of them actually does anything.  The
-first patch fixes a BPF selftests build failure on my machine and has already
-been sent to the list separately.  The next three are just staged such that
-there are some patches that avoid changing any functionality pulled out from
-the whole point of those refactorings, with two cleanups and then the idea.
+This patch is intended to change no functionality, it just allows me to more
+cleanly add dynamic register mapping later.
 
-Maybe this is an odd thing to say in a cover letter, but I'm not actually sure
-this patch set is a good idea.  The issue of extra moves after calls came up as
-I was reviewing some unrelated performance optimizations to the RISC-V BPF JIT.
-I figured I'd take a whack at performing the optimization in the context of the
-arm64 port just to get a breath of fresh air, and I'm not convinced I like the
-results.
+Signed-off-by: Palmer Dabbelt <palmerdabbelt@google.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 53 +++++++++++++++++++----------------
+ 1 file changed, 29 insertions(+), 24 deletions(-)
 
-That said, I think I would accept something like this for the RISC-V port
-because we're already doing a multi-pass optimization for shrinking function
-addresses so it's not as much extra complexity over there.  If we do that we
-should probably start puling some of this code into the shared BPF compiler,
-but we're also opening the doors to more complicated BPF JIT optimizations.
-Given that the BPF JIT appears to have been designed explicitly to be
-simple/fast as opposed to perform complex optimization, I'm not sure this is a
-sane way to move forward.
-
-I figured I'd send the patch set out as more of a question than anything else.
-Specifically:
-
-* How should I go about measuring the performance of these sort of
-  optimizations?  I'd like to balance the time it takes to run the JIT with the
-  time spent executing the program, but I don't have any feel for what real BPF
-  programs look like or have any benchmark suite to run.  Is there something
-  out there this should be benchmarked against?  (I'd also like to know that to
-  run those benchmarks on the RISC-V port.)
-* Is this the sort of thing that makes sense in a BPF JIT?  I guess I've just
-  realized I turned "review this patch" into a way bigger rabbit hole than I
-  really want to go down...
-
-I worked on top of 5.4 for these, but trivially different versions of the
-patches applied on Linus' master a few days ago when I tried.  LMK if those
-aren't sane places to start from over here, I'm new to both arm64 and BPF so I
-might be a bit lost.
-
-[PATCH 1/4] selftests/bpf: Elide a check for LLVM versions that can't
-[PATCH 2/4] arm64: bpf: Convert bpf2a64 to a function
-[PATCH 3/4] arm64: bpf: Split the read and write halves of dst
-[PATCH 4/4] arm64: bpf: Elide some moves to a0 after calls
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index cdc79de0c794..8eee68705056 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -25,7 +25,7 @@
+ #define TMP_REG_3 (MAX_BPF_JIT_REG + 3)
+ 
+ /* Map BPF registers to A64 registers */
+-static const int bpf2a64[] = {
++static const int bpf2a64_default[] = {
+ 	/* return value from in-kernel function, and exit value from eBPF */
+ 	[BPF_REG_0] = A64_R(7),
+ 	/* arguments from eBPF program to in-kernel function */
+@@ -60,6 +60,11 @@ struct jit_ctx {
+ 	u32 stack_size;
+ };
+ 
++static inline int bpf2a64(struct jit_ctx *ctx, int bpf_reg)
++{
++	return bpf2a64_default[bpf_reg];
++}
++
+ static inline void emit(const u32 insn, struct jit_ctx *ctx)
+ {
+ 	if (ctx->image != NULL)
+@@ -176,12 +181,12 @@ static inline int epilogue_offset(const struct jit_ctx *ctx)
+ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+ {
+ 	const struct bpf_prog *prog = ctx->prog;
+-	const u8 r6 = bpf2a64[BPF_REG_6];
+-	const u8 r7 = bpf2a64[BPF_REG_7];
+-	const u8 r8 = bpf2a64[BPF_REG_8];
+-	const u8 r9 = bpf2a64[BPF_REG_9];
+-	const u8 fp = bpf2a64[BPF_REG_FP];
+-	const u8 tcc = bpf2a64[TCALL_CNT];
++	const u8 r6 = bpf2a64(ctx, BPF_REG_6);
++	const u8 r7 = bpf2a64(ctx, BPF_REG_7);
++	const u8 r8 = bpf2a64(ctx, BPF_REG_8);
++	const u8 r9 = bpf2a64(ctx, BPF_REG_9);
++	const u8 fp = bpf2a64(ctx, BPF_REG_FP);
++	const u8 tcc = bpf2a64(ctx, TCALL_CNT);
+ 	const int idx0 = ctx->idx;
+ 	int cur_offset;
+ 
+@@ -243,12 +248,12 @@ static int out_offset = -1; /* initialized on the first pass of build_body() */
+ static int emit_bpf_tail_call(struct jit_ctx *ctx)
+ {
+ 	/* bpf_tail_call(void *prog_ctx, struct bpf_array *array, u64 index) */
+-	const u8 r2 = bpf2a64[BPF_REG_2];
+-	const u8 r3 = bpf2a64[BPF_REG_3];
++	const u8 r2 = bpf2a64(ctx, BPF_REG_2);
++	const u8 r3 = bpf2a64(ctx, BPF_REG_3);
+ 
+-	const u8 tmp = bpf2a64[TMP_REG_1];
+-	const u8 prg = bpf2a64[TMP_REG_2];
+-	const u8 tcc = bpf2a64[TCALL_CNT];
++	const u8 tmp = bpf2a64(ctx, TMP_REG_1);
++	const u8 prg = bpf2a64(ctx, TMP_REG_2);
++	const u8 tcc = bpf2a64(ctx, TCALL_CNT);
+ 	const int idx0 = ctx->idx;
+ #define cur_offset (ctx->idx - idx0)
+ #define jmp_offset (out_offset - (cur_offset))
+@@ -307,12 +312,12 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx)
+ 
+ static void build_epilogue(struct jit_ctx *ctx)
+ {
+-	const u8 r0 = bpf2a64[BPF_REG_0];
+-	const u8 r6 = bpf2a64[BPF_REG_6];
+-	const u8 r7 = bpf2a64[BPF_REG_7];
+-	const u8 r8 = bpf2a64[BPF_REG_8];
+-	const u8 r9 = bpf2a64[BPF_REG_9];
+-	const u8 fp = bpf2a64[BPF_REG_FP];
++	const u8 r0 = bpf2a64(ctx, BPF_REG_0);
++	const u8 r6 = bpf2a64(ctx, BPF_REG_6);
++	const u8 r7 = bpf2a64(ctx, BPF_REG_7);
++	const u8 r8 = bpf2a64(ctx, BPF_REG_8);
++	const u8 r9 = bpf2a64(ctx, BPF_REG_9);
++	const u8 fp = bpf2a64(ctx, BPF_REG_FP);
+ 
+ 	/* We're done with BPF stack */
+ 	emit(A64_ADD_I(1, A64_SP, A64_SP, ctx->stack_size), ctx);
+@@ -343,11 +348,11 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 		      bool extra_pass)
+ {
+ 	const u8 code = insn->code;
+-	const u8 dst = bpf2a64[insn->dst_reg];
+-	const u8 src = bpf2a64[insn->src_reg];
+-	const u8 tmp = bpf2a64[TMP_REG_1];
+-	const u8 tmp2 = bpf2a64[TMP_REG_2];
+-	const u8 tmp3 = bpf2a64[TMP_REG_3];
++	const u8 dst = bpf2a64(ctx, insn->dst_reg);
++	const u8 src = bpf2a64(ctx, insn->src_reg);
++	const u8 tmp = bpf2a64(ctx, TMP_REG_1);
++	const u8 tmp2 = bpf2a64(ctx, TMP_REG_2);
++	const u8 tmp3 = bpf2a64(ctx, TMP_REG_3);
+ 	const s16 off = insn->off;
+ 	const s32 imm = insn->imm;
+ 	const int i = insn - ctx->prog->insnsi;
+@@ -634,7 +639,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	/* function call */
+ 	case BPF_JMP | BPF_CALL:
+ 	{
+-		const u8 r0 = bpf2a64[BPF_REG_0];
++		const u8 r0 = bpf2a64(ctx, BPF_REG_0);
+ 		bool func_addr_fixed;
+ 		u64 func_addr;
+ 		int ret;
+-- 
+2.25.0.341.g760bfbb309-goog
 
