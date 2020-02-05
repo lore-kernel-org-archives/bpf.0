@@ -2,74 +2,112 @@ Return-Path: <SRS0=QUaE=3Z=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DATE_IN_PAST_06_12,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A6EDC35254
-	for <bpf@archiver.kernel.org>; Wed,  5 Feb 2020 12:06:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BFC6C352A2
+	for <bpf@archiver.kernel.org>; Wed,  5 Feb 2020 16:38:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 42E2D2082E
-	for <bpf@archiver.kernel.org>; Wed,  5 Feb 2020 12:06:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DFB1620702
+	for <bpf@archiver.kernel.org>; Wed,  5 Feb 2020 16:38:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="QQC6AW2a";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="gbZaRipv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727771AbgBEMGb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Feb 2020 07:06:31 -0500
-Received: from mga14.intel.com ([192.55.52.115]:56042 "EHLO mga14.intel.com"
+        id S1726359AbgBEQie (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Feb 2020 11:38:34 -0500
+Received: from smtp.uniroma2.it ([160.80.6.23]:33558 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726575AbgBEMG2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Feb 2020 07:06:28 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Feb 2020 04:06:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,405,1574150400"; 
-   d="scan'208";a="254742602"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Feb 2020 04:06:26 -0800
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     ast@kernel.org, daniel@iogearbox.net
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, bjorn.topel@intel.com,
-        magnus.karlsson@intel.com, maximmi@mellanox.com
-Subject: [PATCH bpf 1/3] i40e: Relax i40e_xsk_wakeup's return value when PF is busy
-Date:   Wed,  5 Feb 2020 05:58:32 +0100
-Message-Id: <20200205045834.56795-2-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200205045834.56795-1-maciej.fijalkowski@intel.com>
-References: <20200205045834.56795-1-maciej.fijalkowski@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S1726678AbgBEQie (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Feb 2020 11:38:34 -0500
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 015GbSSg024337;
+        Wed, 5 Feb 2020 17:37:33 +0100
+Received: from lubuntu-18.04 (unknown [160.80.103.126])
+        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 0CA3B122908;
+        Wed,  5 Feb 2020 17:37:24 +0100 (CET)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+        s=ed201904; t=1580920644; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6+Z0uxaSywbrA//eJ07SOsgCkYFSRxtQ2TCp73WsBbo=;
+        b=QQC6AW2a6Xqxv4zeLYlsyu+fT3ES6fE6xMlHSde1JioMLGYidxl0IW4a6QaAxweri6tefd
+        sYl4PEMEmUe54TDg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+        t=1580920644; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6+Z0uxaSywbrA//eJ07SOsgCkYFSRxtQ2TCp73WsBbo=;
+        b=gbZaRipvvSdsWz+UR789bhLhOJwLQa3/YZP63UGihpUcq0Eb/LpdzRp/A3X8KP1jZwp7EQ
+        Vx52BecSRnbswjFORMRBgaAfKc0d2iwvvLdk/+n8+dt9uHgCq0EkaG7Zcv1RjMqzAkTCla
+        NwRsuuQJA4lvrknp53ox+asW0+6dSwfUirRK8A+moH3V4r3+21y5krAeugoaKI9d62qx1X
+        2hxQRwJz23D1iLKAJuzaQBDg9w932gD6HcRJ6P8byMt/I0LxlSP1GBjE6K95PsU6ns9eH9
+        SIwjKwBtl8rVCsLQNe16gnE+FSpTyei8Y98gtiqf4ERPTI/o6IJu5KNsAIuKNQ==
+Date:   Wed, 5 Feb 2020 17:37:23 +0100
+From:   Andrea Mayer <andrea.mayer@uniroma2.it>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Lebrun <dav.lebrun@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>, bpf@vger.kernel.org,
+        Paolo Lungaroni <paolo.lungaroni@cnit.it>
+Subject: Re: [net-next] seg6: add support for optional attributes during
+ behavior construction
+Message-Id: <20200205173723.927eeaab1c37d5d94173457e@uniroma2.it>
+In-Reply-To: <20200203150800.GQ414821@unreal>
+References: <20200203143658.1561-1-andrea.mayer@uniroma2.it>
+        <20200203150800.GQ414821@unreal>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Return -EAGAIN instead of -ENETDOWN to provide a slightly milder
-information to user space so that an application will know to retry the
-syscall when __I40E_CONFIG_BUSY bit is set on pf->state.
+On Mon, 3 Feb 2020 17:08:00 +0200
+Leon Romanovsky <leon@kernel.org> wrote:
 
-Fixes: b3873a5be757 ("net/i40e: Fix concurrency issues between config flow and XSK")
-Acked-by: Björn Töpel <bjorn.topel@intel.com>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- drivers/net/ethernet/intel/i40e/i40e_xsk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On Mon, Feb 03, 2020 at 03:36:58PM +0100, Andrea Mayer wrote:
+> > before this patch, each SRv6 behavior specifies a set of required
+> > [...]
+> >
+> > diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+> > index 85a5447a3e8d..480f1ab35221 100644
+> > --- a/net/ipv6/seg6_local.c
+> > +++ b/net/ipv6/seg6_local.c
+> > @@ -7,6 +7,13 @@
+> >   *  eBPF support: Mathieu Xhonneux <m.xhonneux@gmail.com>
+> >   */
+> >
+> > +/* Changes:
+> > + *
+> > + * Andrea Mayer <andrea.mayer@uniroma2.it>
+> > + *	add support for optional attributes during behavior construction
+> > + *
+> > + */
+> 
+> The lines above look strange in 2020 when all of us are using git.
+> 
+> Thanks
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index 42058fad6..0b7d29192 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -791,7 +791,7 @@ int i40e_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
- 	struct i40e_ring *ring;
- 
- 	if (test_bit(__I40E_CONFIG_BUSY, pf->state))
--		return -ENETDOWN;
-+		return -EAGAIN;
- 
- 	if (test_bit(__I40E_VSI_DOWN, vsi->state))
- 		return -ENETDOWN;
+Hi Leon,
+
+We forgot to remove it from the patch. I will remove in the next revision. 
+Thanks
+
 -- 
-2.20.1
-
+Andrea Mayer <andrea.mayer@uniroma2.it>
