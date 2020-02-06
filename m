@@ -2,177 +2,108 @@ Return-Path: <SRS0=PMnq=32=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B163BC352A3
-	for <bpf@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD959C33CAC
+	for <bpf@archiver.kernel.org>; Thu,  6 Feb 2020 17:52:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 87C8F20838
-	for <bpf@archiver.kernel.org>; Thu,  6 Feb 2020 15:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581002306;
-	bh=UnNMWC/0/qM4XcS+W8r6JNL2MhsJZ+d+LVYR7MJikgQ=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=jZcLcZ8UZuS1n2dNU2i8KNRqorAi7ab2IaP+PgMC9wCBr8Qm0nhPRyX+VYWLQoLYp
-	 pmds2M/vyNpbNIVsNdBjPhKDiH42LUmNfCMKt+wIJ3QpMgWpqFkQofxaR6Dz12BwlK
-	 r5wr/PV+SyFZxiV8QF/vYZ4gJa4T+gsN+NefRds4=
+	by mail.kernel.org (Postfix) with ESMTP id 86591214AF
+	for <bpf@archiver.kernel.org>; Thu,  6 Feb 2020 17:52:26 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="kEScl9tC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727702AbgBFPSX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:18:23 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38224 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727641AbgBFPSB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Feb 2020 10:18:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=eNDq33QOomCijKEVn1Z9oPH66Mc+mguHW+VeL5pLAhc=; b=So8I9geR14GrGuO9lA9c6sXiEo
-        7Ws15T/LX0KmsnmzEPlAAEj23x41YzqKtxcygM1Xqa3cte8wLkTcHLT/w0P+Mx8wvk79NQg2iSCJ6
-        fctuWwiTO348VpvHZBgzU9iqP9XQIh1Ohc78Tr+kj7Mm0cbBOWXGEsDO6B0PgI+o+1yyscaCOyL/A
-        8AD1Iv7rkKa0ycgY8nsAEugIElBxYwhWE91OCEI+owntY79wPXGI++GaM9OCtOmkpd9Nn8rpu7QfJ
-        72YqQZf8OZZXxyX88DBgxCoA76E6oyjzgcVYxeEFOzHXAyBfkpM9+mA0BT54q/c9g0dxFRCiSzrqF
-        UHHHAhNA==;
-Received: from [179.95.15.160] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iziul-0005jA-Al; Thu, 06 Feb 2020 15:17:59 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1iziuc-002oUk-B9; Thu, 06 Feb 2020 16:17:50 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        linux-doc@vger.kernel.org, Yonghong Song <yhs@fb.com>,
-        Jukka Rissanen <jukka.rissanen@linux.intel.com>,
-        netdev@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-wpan@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>, bpf@vger.kernel.org,
-        linux-decnet-user@lists.sourceforge.net,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-bluetooth@vger.kernel.org
-Subject: [PATCH 00/28] Manually convert network text files to ReST (part 1)
-Date:   Thu,  6 Feb 2020 16:17:20 +0100
-Message-Id: <cover.1581002062.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.24.1
+        id S1727630AbgBFRw0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Feb 2020 12:52:26 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:33182 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726990AbgBFRw0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Feb 2020 12:52:26 -0500
+Received: by mail-wm1-f65.google.com with SMTP id m10so1395845wmc.0
+        for <bpf@vger.kernel.org>; Thu, 06 Feb 2020 09:52:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EZIy1nOA8K0L0vhQAmHHSgkRpVJtZhSYMUdCC/VZJVs=;
+        b=kEScl9tCaKP/qVM+f5zKY1C/+RK0uYkAV66JWpIm/Tx0jw5PNuQZj+9v9yI7C49kpa
+         mx9SJ0Znwi4YX7uO6wD14S6o9RAVctMYQxtYGNL2Wb6BOn3TOnGdHyA9y+wd5b6gcHoH
+         rea6SrnBtg4ySUvtoh3zipt/oa1RldCjH9FSCcBD+KGtocVXDpJ7lmhvZhR3/PDD07PK
+         zukU0aslfdso76t7wsl6Bp/URmI2++hofBFUbRNBAJNtRpIOiDM9uxpTk1r7/vnLJwyr
+         hdwKb/5WZfXP4brfZm5q4hqORp+YKhzPV2RKGZIlT3oWbevpYeLiB43Ie0lIOYvQYc65
+         xN2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EZIy1nOA8K0L0vhQAmHHSgkRpVJtZhSYMUdCC/VZJVs=;
+        b=URsJmDAPbm5ts5zBR2uSDlZDqN+3L9X1cDlJSyoYJpZvpUQ4VQmUWUhGqtnpsY4lhm
+         Pm/BylcFQ6hEnDuDPlnF9jKaXIkh20uC3KghMjQRswvtjV2hNPH8qiVsqjOZ5sneIBsM
+         4RdTLIpdLR5O7IAnuZaPatpO+SENw7ux3C7IUxnqALmS4t74spbeQo1/VQbBu5BFRhJy
+         Ps7PtgElbNXc1zgamsh5y4n9ib0J7nNmG27qFn5eEBVQ+6m9HipybDQd33zkSAxiUqXC
+         V/7LzXLsM1C7CwkdBOad5gKQV4q0kwt6VNHLhF+vJwlKh1hDKTqS/URpJl2cufRnat3v
+         wrAw==
+X-Gm-Message-State: APjAAAWYi/0zMnFgbdhmKHo/BG3voPPj8P4gOsES60aGvkJhBh2pZH+A
+        vbBhZOVxXYKb5W5dTcMaGbY22CR679hYfA==
+X-Google-Smtp-Source: APXvYqytj9rLYPKVH0l2w6piVLQDo4vowmiLUacwx2yMvQYZmW9cHjJpjuB5WxY76qyo7jabccEqgA==
+X-Received: by 2002:a1c:65d6:: with SMTP id z205mr5668007wmb.38.1581011542708;
+        Thu, 06 Feb 2020 09:52:22 -0800 (PST)
+Received: from ?IPv6:2001:1620:665:0:d4b6:f719:ed17:25fe? ([2001:1620:665:0:d4b6:f719:ed17:25fe])
+        by smtp.gmail.com with ESMTPSA id o4sm47088wrw.15.2020.02.06.09.52.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Feb 2020 09:52:22 -0800 (PST)
+Subject: Re: [PATCH bpf] bpftool: Don't crash on missing xlated program
+ instructions
+To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        daniel@iogearbox.net, ast@fb.com
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org
+References: <20200206102906.112551-1-toke@redhat.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+Message-ID: <3faff584-3139-9ff1-c083-c0c4569fa81c@isovalent.com>
+Date:   Thu, 6 Feb 2020 17:52:20 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
+In-Reply-To: <20200206102906.112551-1-toke@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Manually convert Documentation/networking text files to ReST.
+2020-02-06 11:29 UTC+0100 ~ Toke Høiland-Jørgensen <toke@redhat.com>
+> Turns out the xlated program instructions can also be missing if
+> kptr_restrict sysctl is set. This means that the previous fix to check the
+> jited_prog_insns pointer was insufficient; add another check of the
+> xlated_prog_insns pointer as well.
+> 
+> Fixes: 5b79bcdf0362 ("bpftool: Don't crash on missing jited insns or ksyms")
+> Fixes: cae73f233923 ("bpftool: use bpf_program__get_prog_info_linear() in prog.c:do_dump()")
+> Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+> ---
+>   tools/bpf/bpftool/prog.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index a3521deca869..b352ab041160 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -536,7 +536,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
+>   		buf = (unsigned char *)(info->jited_prog_insns);
+>   		member_len = info->jited_prog_len;
+>   	} else {	/* DUMP_XLATED */
+> -		if (info->xlated_prog_len == 0) {
+> +		if (info->xlated_prog_len == 0 || !info->xlated_prog_insns) {
+>   			p_err("error retrieving insn dump: kernel.kptr_restrict set?");
+>   			return -1;
+>   		}
+> 
 
-As there are lots of unconverted files there, I have ~120 patches.
-So, I'll split the conversion into 4 parts. This is the first patch.
+The fix looks good, thanks!
 
-Mauro Carvalho Chehab (28):
-  docs: networking: caif: convert to ReST
-  docs: networking: convert 6lowpan.txt to ReST
-  docs: networking: convert 6pack.txt to ReST
-  docs: networking: convert altera_tse.txt to ReST
-  docs: networking: convert arcnet-hardware.txt to ReST
-  docs: networking: convert arcnet.txt to ReST
-  docs: networking: convert atm.txt to ReST
-  docs: networking: convert ax25.txt to ReST
-  docs: networking: convert baycom.txt to ReST
-  docs: networking: convert bonding.txt to ReST
-  docs: networking: convert cdc_mbim.txt to ReST
-  docs: networking: convert cops.txt to ReST
-  docs: networking: convert cxacru.txt to ReST
-  docs: networking: convert dccp.txt to ReST
-  docs: networking: convert dctcp.txt to ReST
-  docs: networking: convert decnet.txt to ReST
-  docs: networking: convert defza.txt to ReST
-  docs: networking: convert dns_resolver.txt to ReST
-  docs: networking: convert driver.txt to ReST
-  docs: networking: convert eql.txt to ReST
-  docs: networking: convert fib_trie.txt to ReST
-  docs: networking: convert filter.txt to ReST
-  docs: networking: convert fore200e.txt to ReST
-  docs: networking: convert framerelay.txt to ReST
-  docs: networking: convert generic-hdlc.txt to ReST
-  docs: networking: convert generic_netlink.txt to ReST
-  docs: networking: convert gen_stats.txt to ReST
-  docs: networking: convert gtp.txt to ReST
-
- .../networking/{6lowpan.txt => 6lowpan.rst}   |   29 +-
- .../networking/{6pack.txt => 6pack.rst}       |   46 +-
- .../{altera_tse.txt => altera_tse.rst}        |   87 +-
- ...rcnet-hardware.txt => arcnet-hardware.rst} | 2169 +++++++++--------
- .../networking/{arcnet.txt => arcnet.rst}     |  348 +--
- Documentation/networking/{atm.txt => atm.rst} |    6 +
- .../networking/{ax25.txt => ax25.rst}         |    6 +
- .../networking/{baycom.txt => baycom.rst}     |  110 +-
- .../networking/{bonding.txt => bonding.rst}   | 1273 +++++-----
- Documentation/networking/caif/caif.rst        |    2 -
- Documentation/networking/caif/index.rst       |   13 +
- .../caif/{Linux-CAIF.txt => linux_caif.rst}   |   54 +-
- Documentation/networking/caif/spi_porting.rst |  229 ++
- Documentation/networking/caif/spi_porting.txt |  208 --
- .../networking/{cdc_mbim.txt => cdc_mbim.rst} |   76 +-
- Documentation/networking/cops.rst             |   80 +
- Documentation/networking/cops.txt             |   63 -
- .../networking/{cxacru.txt => cxacru.rst}     |   86 +-
- .../networking/{dccp.txt => dccp.rst}         |   39 +-
- .../networking/{dctcp.txt => dctcp.rst}       |   14 +-
- .../networking/{decnet.txt => decnet.rst}     |   77 +-
- .../networking/{defza.txt => defza.rst}       |    8 +-
- .../{dns_resolver.txt => dns_resolver.rst}    |   52 +-
- .../networking/{driver.txt => driver.rst}     |   22 +-
- Documentation/networking/{eql.txt => eql.rst} |  445 ++--
- .../networking/{fib_trie.txt => fib_trie.rst} |   16 +-
- .../networking/{filter.txt => filter.rst}     |  850 ++++---
- .../networking/{fore200e.txt => fore200e.rst} |    8 +-
- .../{framerelay.txt => framerelay.rst}        |   21 +-
- .../{gen_stats.txt => gen_stats.rst}          |   98 +-
- .../{generic-hdlc.txt => generic-hdlc.rst}    |   86 +-
- ...eneric_netlink.txt => generic_netlink.rst} |    6 +
- Documentation/networking/{gtp.txt => gtp.rst} |   95 +-
- Documentation/networking/index.rst            |   28 +
- 34 files changed, 3610 insertions(+), 3140 deletions(-)
- rename Documentation/networking/{6lowpan.txt => 6lowpan.rst} (64%)
- rename Documentation/networking/{6pack.txt => 6pack.rst} (90%)
- rename Documentation/networking/{altera_tse.txt => altera_tse.rst} (85%)
- rename Documentation/networking/{arcnet-hardware.txt => arcnet-hardware.rst} (66%)
- rename Documentation/networking/{arcnet.txt => arcnet.rst} (76%)
- rename Documentation/networking/{atm.txt => atm.rst} (89%)
- rename Documentation/networking/{ax25.txt => ax25.rst} (91%)
- rename Documentation/networking/{baycom.txt => baycom.rst} (58%)
- rename Documentation/networking/{bonding.txt => bonding.rst} (75%)
- create mode 100644 Documentation/networking/caif/index.rst
- rename Documentation/networking/caif/{Linux-CAIF.txt => linux_caif.rst} (90%)
- create mode 100644 Documentation/networking/caif/spi_porting.rst
- delete mode 100644 Documentation/networking/caif/spi_porting.txt
- rename Documentation/networking/{cdc_mbim.txt => cdc_mbim.rst} (88%)
- create mode 100644 Documentation/networking/cops.rst
- delete mode 100644 Documentation/networking/cops.txt
- rename Documentation/networking/{cxacru.txt => cxacru.rst} (66%)
- rename Documentation/networking/{dccp.txt => dccp.rst} (94%)
- rename Documentation/networking/{dctcp.txt => dctcp.rst} (89%)
- rename Documentation/networking/{decnet.txt => decnet.rst} (87%)
- rename Documentation/networking/{defza.txt => defza.rst} (91%)
- rename Documentation/networking/{dns_resolver.txt => dns_resolver.rst} (89%)
- rename Documentation/networking/{driver.txt => driver.rst} (85%)
- rename Documentation/networking/{eql.txt => eql.rst} (62%)
- rename Documentation/networking/{fib_trie.txt => fib_trie.rst} (96%)
- rename Documentation/networking/{filter.txt => filter.rst} (77%)
- rename Documentation/networking/{fore200e.txt => fore200e.rst} (94%)
- rename Documentation/networking/{framerelay.txt => framerelay.rst} (93%)
- rename Documentation/networking/{gen_stats.txt => gen_stats.rst} (60%)
- rename Documentation/networking/{generic-hdlc.txt => generic-hdlc.rst} (75%)
- rename Documentation/networking/{generic_netlink.txt => generic_netlink.rst} (64%)
- rename Documentation/networking/{gtp.txt => gtp.rst} (79%)
-
--- 
-2.24.1
-
-
+Reviewed-by: Quentin Monnet <quentin@isovalent.com>
