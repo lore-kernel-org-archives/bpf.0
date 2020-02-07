@@ -2,158 +2,141 @@ Return-Path: <SRS0=Ojkz=33=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30E78C35250
-	for <bpf@archiver.kernel.org>; Fri,  7 Feb 2020 20:13:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B78F4C2BA83
+	for <bpf@archiver.kernel.org>; Fri,  7 Feb 2020 20:41:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0974E214AF
-	for <bpf@archiver.kernel.org>; Fri,  7 Feb 2020 20:13:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C5B0217BA
+	for <bpf@archiver.kernel.org>; Fri,  7 Feb 2020 20:41:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RKpQqBJb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c9WsLsAu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbgBGUNH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 7 Feb 2020 15:13:07 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:32803 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727005AbgBGUNG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 7 Feb 2020 15:13:06 -0500
-Received: by mail-pl1-f193.google.com with SMTP id ay11so202967plb.0;
-        Fri, 07 Feb 2020 12:13:06 -0800 (PST)
+        id S1727071AbgBGUlt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 Feb 2020 15:41:49 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:43235 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726947AbgBGUlt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 7 Feb 2020 15:41:49 -0500
+Received: by mail-wr1-f68.google.com with SMTP id z9so420058wrs.10;
+        Fri, 07 Feb 2020 12:41:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=kcQAMbXiKsyHfk8kEqjCjb6+QVO8ymQGE7x+ZDv0a5M=;
-        b=RKpQqBJbluyp2umIgj+e3Hn/E0+1a9K1Bviue7ZHC8diWUVzoGGx7cM85PaM6ydxLD
-         CYh3hCcRtJc/9S01lgNSBNslZSTiGNLh0zgf0vCzYfPDz3pQkD7Jaz1OhqKQVjoiPfcO
-         DGfmq/uKK2m00/50SylvosZuz5BP39/UXV37qA5+klu6pNuJ5VhPwPoF9OjqwB34I80O
-         F7LtLmPE+cV/q/xKMVPXsLhPN3KDC63/r8encJ0787LJXFfd5jxRHEvURtaxQQea5mfv
-         KdaenLAviB5cYk/qtWPSvh8mgPojlWaxiK52dMoTziKE2xP5Nm9uDf6iszeqCeaAI0V6
-         0BiA==
+         :content-disposition:in-reply-to;
+        bh=amtnYZDIodDtymgnnHHYpf6Z2v42o4sNsPms+JV379g=;
+        b=c9WsLsAuykRWxW7+FhitSQnnPVss4cV4Qg4MqYEQ0ITozOH6FZjYsRi4TBr5QNFhA6
+         y3hh5mrYST3tiQ5XN7miZbXHNiNbL2/4NZe2zNlrW3OLZYsxbtb/A4n4XvCaI1CYz3HL
+         ls+3dhPQkpklzY7IPaGjE3asQBO8b4uFJx3A975XQRkd2o5o3jnVyQADdZj5HBZdhG5v
+         72Dm86jm4hCwdzBEAH7go53a7XTwNrzS1FJhn3DFaMcxJO1sVJLT8wi43iRi+Snk3G84
+         WbQaACEJnlDC8vCg6hB0AH7u09i4/wetmAqaBn16t4pfggo7hoExszyDUPdB0lRfwRP5
+         eS3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=kcQAMbXiKsyHfk8kEqjCjb6+QVO8ymQGE7x+ZDv0a5M=;
-        b=f/7bnzY0fxJa4yYUAHvOg4IVItnbPoVzuD9GfyBWn/xWs7pEH9xBlpZztW+undC5Nj
-         l1ykgEO6DJAnSkvkoO1gZUWUdsc1b/VNbFAkZ5JNGS2GNCXJEvdUzBpPZ8WOTo0lMcAh
-         TeeZjxCfzKnxBHP/W3vkDRsXl2CdIpUNABHsfR28O0n/aYfKW4vPLlgdZ++xxo80mEGA
-         HHJh0qw7HUqQR4+OnrmdHtz5zSKYPpl7JJ9rDIY9UyzJeXO2IHtxEeyOlqsqTef2vN56
-         nobLzPa/9JPZGXReqDnoiwO/UuYnpRpRULfPOQzR7agikTpIE0wsP+YScnJXJPYWQelG
-         nl+g==
-X-Gm-Message-State: APjAAAUgIJqk0tm/MCwFy+o3Q+DF1xIm0by91EeT4fpN4enWEPvweaXY
-        Wa8WHlulhEu5AOZ2d0HejwA=
-X-Google-Smtp-Source: APXvYqwL80v+je9ysxmEnt4t9B4PfF81b9Xdht1ywC6cDF8hPAmyvBd1nJ/rbsyerp5AdJ1J8yZdUw==
-X-Received: by 2002:a17:902:9698:: with SMTP id n24mr89639plp.312.1581106385771;
-        Fri, 07 Feb 2020 12:13:05 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::1:3970])
-        by smtp.gmail.com with ESMTPSA id y64sm3716408pgb.25.2020.02.07.12.13.04
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 07 Feb 2020 12:13:05 -0800 (PST)
-Date:   Fri, 7 Feb 2020 12:13:03 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+         :mime-version:content-disposition:in-reply-to;
+        bh=amtnYZDIodDtymgnnHHYpf6Z2v42o4sNsPms+JV379g=;
+        b=pH5Tma00z4mcCWPgy1buA7bWBs6GSKjrB8Ki2Y603qyOu2qaOH4zl4o9vDjFiyZcsE
+         9OC2iKONx7pjoOfMZn6K8NxagbtKveVaVLwNdrvEKAwyH34OLKpy0SIkq4oFu2bvDvyt
+         b5JGN8v/OiuVPSreWkfJoRSUzvczEi6CJou1UkkWvC80/G7zoYfULIgJ2Lkr/MbIslem
+         bnps7det2nzQgdT01ynbHwWLFP1vp/1qnq+zpqS+tnvhwKvTcEi0WTS41VlVV1R3yP2K
+         NBrFsTRIG5nVNaldt1VZScQjiPdWnE6TQiXdvmIp8hEuDq+hs3njzNi1efwPRQGF1RRX
+         rFPg==
+X-Gm-Message-State: APjAAAXbmESXwSktcTizMW7C0EV2H3NVNPfJ2imePHlI8r/0Kgtpstvx
+        PXr9pFKIgzlclsmWemK8YOY=
+X-Google-Smtp-Source: APXvYqw68bKRM2th+f0utmDsBXIx+7dzBMUrBJ9SlzjtfxD80yRf+BhLYTicJuUVDtARGub91iM8IA==
+X-Received: by 2002:a5d:474d:: with SMTP id o13mr763917wrs.309.1581108106171;
+        Fri, 07 Feb 2020 12:41:46 -0800 (PST)
+Received: from ltop.local ([2a02:a03f:4017:df00:527:d70f:e855:bf1])
+        by smtp.gmail.com with ESMTPSA id y17sm4767743wrs.82.2020.02.07.12.41.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Feb 2020 12:41:45 -0800 (PST)
+Date:   Fri, 7 Feb 2020 21:41:44 +0100
+From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Martin KaFai Lau <kafai@fb.com>, bpf@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         David Miller <davem@davemloft.net>, kernel-team@fb.com,
         Linux-Sparse <linux-sparse@vger.kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
         Netdev <netdev@vger.kernel.org>,
         Randy Dunlap <rdunlap@infradead.org>
 Subject: Re: [PATCH bpf] bpf: Improve bucket_log calculation logic
-Message-ID: <20200207201301.wpq4abick4j3rucl@ast-mbp.dhcp.thefacebook.com>
+Message-ID: <20200207204144.hh4n4o643oqpcwed@ltop.local>
 References: <20200207081810.3918919-1-kafai@fb.com>
  <CAHk-=wieADOQcYkehVN7meevnd3jZrq06NkmyH9GGR==2rEpuQ@mail.gmail.com>
+ <CAHk-=wjbhawNieeiEig4LnPVRTRPgY8xag7NuAKuM9NKXCTLeQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wieADOQcYkehVN7meevnd3jZrq06NkmyH9GGR==2rEpuQ@mail.gmail.com>
-User-Agent: NeoMutt/20180223
+In-Reply-To: <CAHk-=wjbhawNieeiEig4LnPVRTRPgY8xag7NuAKuM9NKXCTLeQ@mail.gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 07, 2020 at 10:07:32AM -0800, Linus Torvalds wrote:
-> On Fri, Feb 7, 2020 at 12:18 AM Martin KaFai Lau <kafai@fb.com> wrote:
+On Fri, Feb 07, 2020 at 11:39:24AM -0800, Linus Torvalds wrote:
+> On Fri, Feb 7, 2020 at 10:07 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 > >
-> > It was reported that the max_t, ilog2, and roundup_pow_of_two macros have
-> > exponential effects on the number of states in the sparse checker.
+> > I do think this is a good test-case for sparse. Luc, have you looked
+> > at what it is that then makes sparse use *so* much memory for this one
+> > line?
 > 
-> Patch looks good, but I'd like to point out that it's not just sparse.
+> Looking at the profile, it's doing a lot of "copy_expression()".
 > 
-> You can see it with a simple
+> Which comes from inlining.
 > 
->     make net/core/bpf_sk_storage.i
->     grep 'smap->bucket_log = ' net/core/bpf_sk_storage.i | wc
-> 
-> and see the end result:
-> 
->       1  365071 2686974
-> 
-> That's one line (the assignment line) that is 2,686,974 characters in length.
+> I think the problem may be that with that macro expansion from hell we
+> end up with 28968 copies of cpumask_weight(), and sparse will inline
+> every one of them into the parse tree - even though basically none of
+> them are _used_.
 
-In addition to this patch I've tried:
-diff --git a/include/linux/log2.h b/include/linux/log2.h
-index 83a4a3ca3e8a..7363abf60854 100644
---- a/include/linux/log2.h
-+++ b/include/linux/log2.h
-@@ -74,74 +74,76 @@ unsigned long __rounddown_pow_of_two(unsigned long n)
-  * Use this where sparse expects a true constant expression, e.g. for array
-  * indices.
-  */
--#define const_ilog2(n)                         \
--(                                              \
--       __builtin_constant_p(n) ? (             \
--               (n) < 2 ? 0 :                   \
--               (n) & (1ULL << 63) ? 63 :       \
--               (n) & (1ULL << 62) ? 62 :       \
-...
-+#define __const_ilog2(n, unique_n) ({                  \
-+       typeof(n) unique_n = (n);                       \
-+       __builtin_constant_p(unique_n) ? (              \
-+               (unique_n) < 2 ? 0 :                    \
-+               (unique_n) & (1ULL << 63) ? 63 :        \
-+               (unique_n) & (1ULL << 62) ? 62 :        \
-+               (unique_n) & (1ULL << 61) ? 61 :        \
-+               (unique_n) & (1ULL << 60) ? 60 :        \
-+               (unique_n) & (1ULL << 59) ? 59 :        \
-...
-+               (unique_n) & (1ULL <<  3) ?  3 :        \
-+               (unique_n) & (1ULL <<  2) ?  2 :        \
-                1) :                            \
--       -1)
-+       -1; })
-+
-+#define const_ilog2(n) __const_ilog2(n, __UNIQUE_ID(__n))
+Yes, indeed. I was just what I saw too.
 
-and for this nested ilog2() case that caused this explosion
-the line got shorter: from 2.6M characters to 144k.
-Still a lot.
-Unfortunately this approach doesn't work in all cases:
-../include/linux/log2.h:77:36: error: braced-group within expression allowed only inside a function
-   77 | #define __const_ilog2(n, unique_n) ({   \
-      |                                    ^
-../include/linux/log2.h:146:24: note: in expansion of macro ‘__const_ilog2’
-  146 | #define const_ilog2(n) __const_ilog2(n, __UNIQUE_ID(__n))
-      |                        ^~~~~~~~~~~~~
-../include/linux/log2.h:161:2: note: in expansion of macro ‘const_ilog2’
-  161 |  const_ilog2(n) :  \
-      |  ^~~~~~~~~~~
-../include/linux/blockgroup_lock.h:14:27: note: in expansion of macro ‘ilog2’
-   14 | #define NR_BG_LOCKS (4 << ilog2(NR_CPUS < 32 ? NR_CPUS : 32))
-      |                           ^~~~~
-../include/linux/blockgroup_lock.h:24:24: note: in expansion of macro ‘NR_BG_LOCKS’
-   24 |  struct bgl_lock locks[NR_BG_LOCKS];
+> In fact, it's worse than that: we end up having a few rounds of
+> inlining thanks to
 
-Just fyi for folks who're looking at ilog2 and wondering
-why it was done this way without ({ })
+<snip> 
+
+> So we may have "only" 28968 calls to cpumask_weight(), but it results
+> in millions of expressions being expanded.
+
+Yes, roughly 1500 expressions per call (:
+ 
+> If we did some basic simplification of constant ops before inlining,
+> that would likely help a lot.
+> 
+> But currently sparse does inline function expansion at type evaluation
+> time - so long before it does any simplification of the tree at all.
+> 
+> So that explains why sparse happens to react _so_ badly to this thing.
+> A real compiler would do inlining much later.
+> 
+> Inlining that early is partly because originally one of the design
+> ideas in sparse was to make inline functions act basically as
+> templates, so they'd react to the types of the context. But it really
+> bites us in the ass here.
+> 
+> Luc, any ideas? Yes, this is solvable in the kernel, but it does show
+> that sparse simply does a _lot_ of unnecessary work.
+
+I never saw it so badly but it's not the first time I've bitten by
+the very early inlining. Independently of this, it would be handy to
+have an inliner at IR level, it shouldn't be very difficult but ...
+OTOH, it should really be straightforward would be to separate the
+current tree inliner from the type evaluation and instead run it just
+after expansion. The downsides would be:
+  * the tree would need to be walked once more;
+  * this may make the expansion less useful but it could be run again
+    after the inlining.
+
+[ If we would like to keep inline-as-template it would just need to be
+  able to detect such inlines at type evaluation and only inline those. ]
+
+I'll look more closely at all of it during the WE.
+
+-- Luc
