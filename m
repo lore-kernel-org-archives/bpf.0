@@ -4,38 +4,38 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B455EC35254
-	for <bpf@archiver.kernel.org>; Sat,  8 Feb 2020 15:42:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 513DAC35250
+	for <bpf@archiver.kernel.org>; Sat,  8 Feb 2020 15:42:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8DBDC22314
-	for <bpf@archiver.kernel.org>; Sat,  8 Feb 2020 15:42:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 26F6122522
+	for <bpf@archiver.kernel.org>; Sat,  8 Feb 2020 15:42:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581176567;
-	bh=gKAc0g5/0Q58N0siCsmqMN70aJIaKARGPFauRbiqu9E=;
+	s=default; t=1581176570;
+	bh=LuiB/MJHGWQ0E5FgyCc0/Ja7qj4/SQMZrAgfjt/eTDc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=NAAguu1kwnJNx+G7phBV0DMbYhyUIMI0ZZFDeC0WWt4VNZC23aX3AmjrkKdQFKGXs
-	 ke7eQWhypfbqZQpbljrr1zvuOsnxOuPceEWHNgTsvU6cYtM2dFZbx2nwtKS3ObCI5y
-	 aGEKfgopfiEw4BeQfreTjX3WSa9LUdsMVOCzJ4qo=
+	b=T+aR9loogJN12tMSN+p/FmpZLTCsTz2fYojaTnSIULq7Tn/P3oo8GvzgMsPz318n7
+	 hlXiQCa96hA8CjeWQ+E9CPSxnOeBjeFr3izhzfrcl0tdnuDXI6ovbonqr1ZkHl96Dl
+	 Nfn6RiWSfEhDLxdt+rmKpmoN/E+8RyPN3NtPyJo8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727524AbgBHPmr convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sat, 8 Feb 2020 10:42:47 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:58638 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727514AbgBHPmq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 8 Feb 2020 10:42:46 -0500
+        id S1727529AbgBHPmt convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sat, 8 Feb 2020 10:42:49 -0500
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:24472 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727514AbgBHPmt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 8 Feb 2020 10:42:49 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-163-_RoVVG3RPOK_370FP-FZng-1; Sat, 08 Feb 2020 10:42:41 -0500
+ us-mta-212-nlASWSeAPqe1w0HtI1lVug-1; Sat, 08 Feb 2020 10:42:44 -0500
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 85F65DB23;
-        Sat,  8 Feb 2020 15:42:39 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B83F4800D6C;
+        Sat,  8 Feb 2020 15:42:42 +0000 (UTC)
 Received: from krava.redhat.com (ovpn-204-79.brq.redhat.com [10.40.204.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8CD9D5C21B;
-        Sat,  8 Feb 2020 15:42:36 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DE9655C21B;
+        Sat,  8 Feb 2020 15:42:39 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
@@ -48,14 +48,14 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
         John Fastabend <john.fastabend@gmail.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: [PATCH 05/14] bpf: Add lnode list node to struct bpf_ksym
-Date:   Sat,  8 Feb 2020 16:42:00 +0100
-Message-Id: <20200208154209.1797988-6-jolsa@kernel.org>
+Subject: [PATCH 06/14] bpf: Add bpf_kallsyms_tree tree
+Date:   Sat,  8 Feb 2020 16:42:01 +0100
+Message-Id: <20200208154209.1797988-7-jolsa@kernel.org>
 In-Reply-To: <20200208154209.1797988-1-jolsa@kernel.org>
 References: <20200208154209.1797988-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-MC-Unique: _RoVVG3RPOK_370FP-FZng-1
+X-MC-Unique: nlASWSeAPqe1w0HtI1lVug-1
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: kernel.org
 Content-Type: text/plain; charset=WINDOWS-1252
@@ -65,118 +65,133 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding lnode list node to 'struct bpf_ksym' object,
-so the symbol itself can be chained and used in other
-objects like bpf_trampoline and bpf_dispatcher.
+The bpf_tree is used both for kallsyms iterations and searching
+for exception tables of bpf programs, which is needed only for
+bpf programs.
 
-Changing iterator to bpf_ksym in bpf_get_kallsym.
-
-This patch also changes the address used for bpf_prog
-displayed in /proc/kallsyms. Now it's the address of
-the whole bpf_prog region, not the address of the entry
-function. I think it make more sense for /proc/kallsyms
-to describe all the place used by bpf_prog. We can easily
-change it in future if needed.
+Adding bpf_kallsyms_tree that will hold symbols for all bpf_prog,
+bpf_trampoline and bpf_dispatcher objects and keeping bpf_tree
+only for bpf_prog objects exception tables search to keep it fast.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/bpf.h |  2 +-
- kernel/bpf/core.c   | 22 +++++++++++-----------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ include/linux/bpf.h |  1 +
+ kernel/bpf/core.c   | 60 ++++++++++++++++++++++++++++++++++++++++-----
+ 2 files changed, 55 insertions(+), 6 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 1327b07057a8..da67ca3afa2f 100644
+index da67ca3afa2f..151d7b1c8435 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -467,6 +467,7 @@ struct bpf_ksym {
- 	unsigned long		 start;
+@@ -468,6 +468,7 @@ struct bpf_ksym {
  	unsigned long		 end;
  	char			 name[KSYM_NAME_LEN];
-+	struct list_head	 lnode;
+ 	struct list_head	 lnode;
++	struct latch_tree_node	 tnode;
  };
  
  enum bpf_tramp_prog_type {
-@@ -649,7 +650,6 @@ struct bpf_prog_aux {
- 	struct bpf_jit_poke_descriptor *poke_tab;
- 	u32 size_poke_tab;
- 	struct latch_tree_node ksym_tnode;
--	struct list_head ksym_lnode;
- 	struct bpf_ksym ksym;
- 	const struct bpf_prog_ops *ops;
- 	struct bpf_map **used_maps;
 diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index f4f0b3ca95ae..b9b7077e60f3 100644
+index b9b7077e60f3..1daa72341450 100644
 --- a/kernel/bpf/core.c
 +++ b/kernel/bpf/core.c
-@@ -97,7 +97,7 @@ struct bpf_prog *bpf_prog_alloc_no_stats(unsigned int size, gfp_t gfp_extra_flag
- 	fp->aux->prog = fp;
- 	fp->jit_requested = ebpf_jit_enabled();
+@@ -606,8 +606,46 @@ static const struct latch_tree_ops bpf_tree_ops = {
+ 	.comp	= bpf_tree_comp,
+ };
  
--	INIT_LIST_HEAD_RCU(&fp->aux->ksym_lnode);
-+	INIT_LIST_HEAD_RCU(&fp->aux->ksym.lnode);
- 
- 	return fp;
- }
-@@ -612,18 +612,18 @@ static struct latch_tree_root bpf_tree __cacheline_aligned;
++static __always_inline unsigned long
++bpf_get_ksym_start(struct latch_tree_node *n)
++{
++	const struct bpf_ksym *ksym;
++
++	ksym = container_of(n, struct bpf_ksym, tnode);
++	return ksym->start;
++}
++
++static __always_inline bool
++bpf_ksym_tree_less(struct latch_tree_node *a,
++		   struct latch_tree_node *b)
++{
++	return bpf_get_ksym_start(a) < bpf_get_ksym_start(b);
++}
++
++static __always_inline int
++bpf_ksym_tree_comp(void *key, struct latch_tree_node *n)
++{
++	unsigned long val = (unsigned long)key;
++	const struct bpf_ksym *ksym;
++
++	ksym = container_of(n, struct bpf_ksym, tnode);
++
++	if (val < ksym->start)
++		return -1;
++	if (val >= ksym->end)
++		return  1;
++
++	return 0;
++}
++
++static const struct latch_tree_ops bpf_kallsyms_tree_ops = {
++	.less	= bpf_ksym_tree_less,
++	.comp	= bpf_ksym_tree_comp,
++};
++
+ static DEFINE_SPINLOCK(bpf_lock);
+ static LIST_HEAD(bpf_kallsyms);
++static struct latch_tree_root bpf_kallsyms_tree __cacheline_aligned;
+ static struct latch_tree_root bpf_tree __cacheline_aligned;
  
  static void bpf_prog_ksym_node_add(struct bpf_prog_aux *aux)
- {
--	WARN_ON_ONCE(!list_empty(&aux->ksym_lnode));
--	list_add_tail_rcu(&aux->ksym_lnode, &bpf_kallsyms);
-+	WARN_ON_ONCE(!list_empty(&aux->ksym.lnode));
-+	list_add_tail_rcu(&aux->ksym.lnode, &bpf_kallsyms);
+@@ -615,6 +653,7 @@ static void bpf_prog_ksym_node_add(struct bpf_prog_aux *aux)
+ 	WARN_ON_ONCE(!list_empty(&aux->ksym.lnode));
+ 	list_add_tail_rcu(&aux->ksym.lnode, &bpf_kallsyms);
  	latch_tree_insert(&aux->ksym_tnode, &bpf_tree, &bpf_tree_ops);
++	latch_tree_insert(&aux->ksym.tnode, &bpf_kallsyms_tree, &bpf_kallsyms_tree_ops);
  }
  
  static void bpf_prog_ksym_node_del(struct bpf_prog_aux *aux)
- {
--	if (list_empty(&aux->ksym_lnode))
-+	if (list_empty(&aux->ksym.lnode))
+@@ -623,6 +662,7 @@ static void bpf_prog_ksym_node_del(struct bpf_prog_aux *aux)
  		return;
  
  	latch_tree_erase(&aux->ksym_tnode, &bpf_tree, &bpf_tree_ops);
--	list_del_rcu(&aux->ksym_lnode);
-+	list_del_rcu(&aux->ksym.lnode);
++	latch_tree_erase(&aux->ksym.tnode, &bpf_kallsyms_tree, &bpf_kallsyms_tree_ops);
+ 	list_del_rcu(&aux->ksym.lnode);
  }
  
- static bool bpf_prog_kallsyms_candidate(const struct bpf_prog *fp)
-@@ -633,8 +633,8 @@ static bool bpf_prog_kallsyms_candidate(const struct bpf_prog *fp)
- 
- static bool bpf_prog_kallsyms_verify_off(const struct bpf_prog *fp)
- {
--	return list_empty(&fp->aux->ksym_lnode) ||
--	       fp->aux->ksym_lnode.prev == LIST_POISON2;
-+	return list_empty(&fp->aux->ksym.lnode) ||
-+	       fp->aux->ksym.lnode.prev == LIST_POISON2;
+@@ -671,19 +711,27 @@ static struct bpf_prog *bpf_prog_kallsyms_find(unsigned long addr)
+ 	       NULL;
  }
  
- void bpf_prog_kallsyms_add(struct bpf_prog *fp)
-@@ -728,7 +728,7 @@ const struct exception_table_entry *search_bpf_extables(unsigned long addr)
- int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- 		    char *sym)
++static struct bpf_ksym *bpf_ksym_find(unsigned long addr)
++{
++	struct latch_tree_node *n;
++
++	n = latch_tree_find((void *)addr, &bpf_kallsyms_tree, &bpf_kallsyms_tree_ops);
++	return n ? container_of(n, struct bpf_ksym, tnode) : NULL;
++}
++
+ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
+ 				 unsigned long *off, char *sym)
  {
--	struct bpf_prog_aux *aux;
+-	struct bpf_prog *prog;
 +	struct bpf_ksym *ksym;
- 	unsigned int it = 0;
- 	int ret = -ERANGE;
- 
-@@ -736,13 +736,13 @@ int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- 		return ret;
+ 	char *ret = NULL;
  
  	rcu_read_lock();
--	list_for_each_entry_rcu(aux, &bpf_kallsyms, ksym_lnode) {
-+	list_for_each_entry_rcu(ksym, &bpf_kallsyms, lnode) {
- 		if (it++ != symnum)
- 			continue;
+-	prog = bpf_prog_kallsyms_find(addr);
+-	if (prog) {
+-		unsigned long symbol_start = prog->aux->ksym.start;
+-		unsigned long symbol_end = prog->aux->ksym.end;
++	ksym = bpf_ksym_find(addr);
++	if (ksym) {
++		unsigned long symbol_start = ksym->start;
++		unsigned long symbol_end = ksym->end;
  
--		strncpy(sym, aux->ksym.name, KSYM_NAME_LEN);
+-		strncpy(sym, prog->aux->ksym.name, KSYM_NAME_LEN);
 +		strncpy(sym, ksym->name, KSYM_NAME_LEN);
  
--		*value = (unsigned long)aux->prog->bpf_func;
-+		*value = ksym->start;
- 		*type  = BPF_SYM_ELF_TYPE;
- 
- 		ret = 0;
+ 		ret = sym;
+ 		if (size)
 -- 
 2.24.1
 
