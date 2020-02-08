@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37DFBC35250
-	for <bpf@archiver.kernel.org>; Sat,  8 Feb 2020 15:43:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6223C35254
+	for <bpf@archiver.kernel.org>; Sat,  8 Feb 2020 15:43:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 108BE22464
-	for <bpf@archiver.kernel.org>; Sat,  8 Feb 2020 15:43:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 860122082E
+	for <bpf@archiver.kernel.org>; Sat,  8 Feb 2020 15:43:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581176580;
-	bh=xV2fnQ04DWVZnB3pstlAkw/PtgQFMKSpt5fDPB8sHeA=;
+	s=default; t=1581176581;
+	bh=Efwp8we5TDUw82MoH4D0u43DZsXefxidmnaSIcyLbJE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WIdLYwOzfWJEJfLOOLdt4CaCwlnMSTE8VrMaQZbmpyc5HYe/0QAc48961G4CLm0y2
-	 wB2/G7984KSGNujVQ5xY2WZA5XZKvT0lYCNwj6P3kibXmkGzLTct8jcGmtV6J99TdN
-	 BSqcvHUxdW5hdrscO25kt1Y2YgxSz1TgZzQM03Rk=
+	b=TBkgcHxE4Hkm1Mo9e5QIZ1KIW/OxJLwjMGfLgQ8OmVfLyPhIfp7kvSF1wcA0EmuSw
+	 3xRRDldAYuUWbduN52O5Rl+wklfE3blepdb/2BaQf63Gt9Wocoxf52lC0Rtt5W2uAn
+	 VK6fK0JjoqwYxZpGVMGEdMFT4l9IL/WSmFr1w1/s=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727551AbgBHPm7 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sat, 8 Feb 2020 10:42:59 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:26967 "EHLO
+        id S1727558AbgBHPnB convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sat, 8 Feb 2020 10:43:01 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:51943 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727527AbgBHPm7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 8 Feb 2020 10:42:59 -0500
+        with ESMTP id S1727546AbgBHPnB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 8 Feb 2020 10:43:01 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-216-9hSWATo-PHOSsWW2Or6T6g-1; Sat, 08 Feb 2020 10:42:51 -0500
+ us-mta-350-45redfCwPh-WpmZuHuWcIg-1; Sat, 08 Feb 2020 10:42:57 -0500
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4A4151800D42;
-        Sat,  8 Feb 2020 15:42:49 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D037C8014D1;
+        Sat,  8 Feb 2020 15:42:55 +0000 (UTC)
 Received: from krava.redhat.com (ovpn-204-79.brq.redhat.com [10.40.204.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6ADB95C21B;
-        Sat,  8 Feb 2020 15:42:46 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DD4225C28F;
+        Sat,  8 Feb 2020 15:42:52 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
@@ -48,14 +48,14 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
         John Fastabend <john.fastabend@gmail.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: [PATCH 08/14] bpf: Separate kallsyms add/del functions
-Date:   Sat,  8 Feb 2020 16:42:03 +0100
-Message-Id: <20200208154209.1797988-9-jolsa@kernel.org>
+Subject: [PATCH 10/14] bpf: Re-initialize lnode in bpf_ksym_del
+Date:   Sat,  8 Feb 2020 16:42:05 +0100
+Message-Id: <20200208154209.1797988-11-jolsa@kernel.org>
 In-Reply-To: <20200208154209.1797988-1-jolsa@kernel.org>
 References: <20200208154209.1797988-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-MC-Unique: 9hSWATo-PHOSsWW2Or6T6g-1
+X-MC-Unique: 45redfCwPh-WpmZuHuWcIg-1
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: kernel.org
 Content-Type: text/plain; charset=WINDOWS-1252
@@ -65,65 +65,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Moving bpf_prog_ksym_node_add/del to __bpf_ksym_add/del
-and changing the argument to 'struct bpf_ksym' object.
+When bpf_prog is removed from kallsyms it's on the way
+out to be removed, so we don't care about lnode state.
+
+However the bpf_ksym_del will be used also by bpf_trampoline
+and bpf_dispatcher objects, which stay allocated even when
+they are not in kallsyms list, hence the lnode re-init.
+
+The list_del_rcu commentary states that we need to call
+synchronize_rcu, before we can change/re-init the list_head
+pointers.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/bpf/core.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ kernel/bpf/core.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index f4c16b362858..ee082c79ac99 100644
+index 73242fd07893..66b17bea286e 100644
 --- a/kernel/bpf/core.c
 +++ b/kernel/bpf/core.c
-@@ -648,20 +648,20 @@ static LIST_HEAD(bpf_kallsyms);
- static struct latch_tree_root bpf_kallsyms_tree __cacheline_aligned;
- static struct latch_tree_root bpf_tree __cacheline_aligned;
- 
--static void bpf_prog_ksym_node_add(struct bpf_prog_aux *aux)
-+static void __bpf_ksym_add(struct bpf_ksym *ksym)
- {
--	WARN_ON_ONCE(!list_empty(&aux->ksym.lnode));
--	list_add_tail_rcu(&aux->ksym.lnode, &bpf_kallsyms);
--	latch_tree_insert(&aux->ksym.tnode, &bpf_kallsyms_tree, &bpf_kallsyms_tree_ops);
-+	WARN_ON_ONCE(!list_empty(&ksym->lnode));
-+	list_add_tail_rcu(&ksym->lnode, &bpf_kallsyms);
-+	latch_tree_insert(&ksym->tnode, &bpf_kallsyms_tree, &bpf_kallsyms_tree_ops);
- }
- 
--static void bpf_prog_ksym_node_del(struct bpf_prog_aux *aux)
-+static void __bpf_ksym_del(struct bpf_ksym *ksym)
- {
--	if (list_empty(&aux->ksym.lnode))
-+	if (list_empty(&ksym->lnode))
- 		return;
- 
--	latch_tree_erase(&aux->ksym.tnode, &bpf_kallsyms_tree, &bpf_kallsyms_tree_ops);
--	list_del_rcu(&aux->ksym.lnode);
-+	latch_tree_erase(&ksym->tnode, &bpf_kallsyms_tree, &bpf_kallsyms_tree_ops);
-+	list_del_rcu(&ksym->lnode);
+@@ -676,6 +676,13 @@ void bpf_ksym_del(struct bpf_ksym *ksym)
+ 	spin_lock_bh(&bpf_lock);
+ 	__bpf_ksym_del(ksym);
+ 	spin_unlock_bh(&bpf_lock);
++
++	/*
++	 * As explained in list_del_rcu, We must call synchronize_rcu
++	 * before changing list_head pointers.
++	 */
++	synchronize_rcu();
++	INIT_LIST_HEAD_RCU(&ksym->lnode);
  }
  
  static bool bpf_prog_kallsyms_candidate(const struct bpf_prog *fp)
-@@ -686,7 +686,7 @@ void bpf_prog_kallsyms_add(struct bpf_prog *fp)
- 
- 	spin_lock_bh(&bpf_lock);
- 	latch_tree_insert(&fp->aux->ksym_tnode, &bpf_tree, &bpf_tree_ops);
--	bpf_prog_ksym_node_add(fp->aux);
-+	__bpf_ksym_add(&fp->aux->ksym);
- 	spin_unlock_bh(&bpf_lock);
- }
- 
-@@ -697,7 +697,7 @@ void bpf_prog_kallsyms_del(struct bpf_prog *fp)
- 
- 	spin_lock_bh(&bpf_lock);
- 	latch_tree_erase(&fp->aux->ksym_tnode, &bpf_tree, &bpf_tree_ops);
--	bpf_prog_ksym_node_del(fp->aux);
-+	__bpf_ksym_del(&fp->aux->ksym);
- 	spin_unlock_bh(&bpf_lock);
- }
- 
 -- 
 2.24.1
 
