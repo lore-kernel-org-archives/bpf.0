@@ -2,134 +2,145 @@ Return-Path: <SRS0=0VAB=4B=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20635C2BA83
-	for <bpf@archiver.kernel.org>; Thu, 13 Feb 2020 15:45:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B47DBC3B18C
+	for <bpf@archiver.kernel.org>; Thu, 13 Feb 2020 16:23:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E676320661
-	for <bpf@archiver.kernel.org>; Thu, 13 Feb 2020 15:45:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A2CB2082F
+	for <bpf@archiver.kernel.org>; Thu, 13 Feb 2020 16:23:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="qUBPc+5f"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aTN8QghA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729437AbgBMPpJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Feb 2020 10:45:09 -0500
-Received: from gateway31.websitewelcome.com ([192.185.143.43]:29973 "EHLO
-        gateway31.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729501AbgBMPpE (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 13 Feb 2020 10:45:04 -0500
-X-Greylist: delayed 1401 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Feb 2020 10:45:03 EST
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway31.websitewelcome.com (Postfix) with ESMTP id E956B494E
-        for <bpf@vger.kernel.org>; Thu, 13 Feb 2020 09:21:41 -0600 (CST)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id 2GJBjQYpnAGTX2GJBjcaCO; Thu, 13 Feb 2020 09:21:41 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tlzInWey23Efbti3IVI7QK7bG7x1edOF4vWB/j8UuCg=; b=qUBPc+5fDEGt6M5dgwJulMJp+G
-        xcMtSAYOH/X0jV8IyUUPvs80Ttm+MXBgQ8qc27gOJWz05nEnxh4pFjiFklBTyOZgBCxQ0gkv0qNVU
-        oKGPrxltSRC+XnaTwGk/xuX5mhgyFpgQdq+I4gqPpsSIi2DpRDoQCe55ho30GyrzWIqoyuzXhHiwE
-        jyiSnpGoggRlGalXfSmMNqIutwrK5Wee4Z77OuIp/CvM13nU/t/nBmkfntKDkFRCSdgrqjor/APB0
-        5QE3/CkAoKBfUgQV9K5AT+4GfPe1H4rDZTWmD742+C+7oRRpkbCKEhX4WDPXJMHEDFtddVW2fo3hk
-        OXEc0N7Q==;
-Received: from [200.68.140.15] (port=29529 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1j2GJA-003BYr-8t; Thu, 13 Feb 2020 09:21:40 -0600
-Date:   Thu, 13 Feb 2020 09:24:16 -0600
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        id S1727772AbgBMQX6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Feb 2020 11:23:58 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:40445 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727999AbgBMQX5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Feb 2020 11:23:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1581611035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i18q2PNF44L0tvEOum/zQP+bXFTOtAUWikKBvD1Xl0I=;
+        b=aTN8QghAxBqaZCI2hEypV2eY7ZAA6/n/1THZk6YF0iAGRdfir46BDZBP4ozpVtSZu46Yg6
+        ydAOM/baQQQ6YNftfzYQkHZwcLbVXDS8aN6J6MbeKzujSVG+f3zWinV+s9qGqliZGhWsuV
+        dA+irRW7h5WFDQ2iTCuqDGzSFH4GRCQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-321-eTXqlYJSOLi-Ox_QbJVGwg-1; Thu, 13 Feb 2020 11:23:49 -0500
+X-MC-Unique: eTXqlYJSOLi-Ox_QbJVGwg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7E6C88018A7;
+        Thu, 13 Feb 2020 16:23:47 +0000 (UTC)
+Received: from krava (unknown [10.43.17.9])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A36E25C1BB;
+        Thu, 13 Feb 2020 16:23:44 +0000 (UTC)
+Date:   Thu, 13 Feb 2020 17:23:42 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Song Liu <songliubraving@fb.com>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] bpf: queue_stack_maps: Replace zero-length array with
- flexible-array member
-Message-ID: <20200213152416.GA1873@embeddedor>
+        Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@redhat.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
+Subject: Re: [PATCH 00/14] bpf: Add trampoline and dispatcher to
+ /proc/kallsyms
+Message-ID: <20200213162342.GB296320@krava>
+References: <20200208154209.1797988-1-jolsa@kernel.org>
+ <CAJ+HfNhBDU9c4-0D5RiHFZBq_LN7E=k8=rhL+VbmxJU7rdDBxQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 200.68.140.15
-X-Source-L: No
-X-Exim-ID: 1j2GJA-003BYr-8t
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [200.68.140.15]:29529
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 29
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+In-Reply-To: <CAJ+HfNhBDU9c4-0D5RiHFZBq_LN7E=k8=rhL+VbmxJU7rdDBxQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The current codebase makes use of the zero-length array language
-extension to the C90 standard, but the preferred mechanism to declare
-variable-length types such as these ones is a flexible array member[1][2],
-introduced in C99:
+On Mon, Feb 10, 2020 at 04:51:08PM +0100, Bj=F6rn T=F6pel wrote:
+> On Sat, 8 Feb 2020 at 16:42, Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > hi,
+> > this patchset adds trampoline and dispatcher objects
+> > to be visible in /proc/kallsyms. The last patch also
+> > adds sorting for all bpf objects in /proc/kallsyms.
+> >
+>=20
+> Thanks for working on this!
+>=20
+> I'm probably missing something with my perf setup; I've applied your
+> patches, and everything seem to work fine from an kallsyms
+> perspective:
+>=20
+> # grep bpf_dispatcher_xdp /proc/kallsyms
+> ...
+> ffffffffc0511000 t bpf_dispatcher_xdp   [bpf]
+>=20
+> However, when I run
+> # perf top
+>=20
+> I still see the undecorated one:
+> 0.90%  [unknown]                  [k] 0xffffffffc0511037
+>=20
+> Any ideas?
 
-struct foo {
-        int stuff;
-        struct boo array[];
-};
+heya,
+the code is little rusty and needs some fixing :-\
 
-By making use of the mechanism above, we will get a compiler warning
-in case the flexible array does not occur last in the structure, which
-will help us prevent some kind of undefined behavior bugs from being
-inadvertently introduced[3] to the codebase from now on.
+with the patch below on top of Arnaldo's perf/urgent branch,
+there's one workaround for now:
 
-Also, notice that, dynamic memory allocations won't be affected by
-this change:
+  # perf record --vmlinux /proc/kallsyms=20
+  ^C[ perf record: Woken up 0 times to write data ]
+  [ perf record: Captured and wrote 18.954 MB perf.data (348693 samples) =
+]
 
-"Flexible array members have incomplete type, and so the sizeof operator
-may not be applied. As a quirk of the original implementation of
-zero-length arrays, sizeof evaluates to zero."[1]
+  # perf report --kallsyms /proc/kallsyms | grep bpf_trampoline_13795
+     0.01%  sched-messaging  kallsyms                                [k] =
+bpf_trampoline_13795
+     0.00%  perf             kallsyms                                [k] =
+bpf_trampoline_13795
+     0.00%  :47547           kallsyms                                [k] =
+bpf_trampoline_13795
+     0.00%  :47546           kallsyms                                [k] =
+bpf_trampoline_13795
+     0.00%  :47544           kallsyms                                [k] =
+bpf_trampoline_13795
 
-This issue was found with the help of Coccinelle.
+with recent kcore/vmlinux changes we neglected kallsyms fallback,
+I'm preparing changes that will detect and use it automaticaly
 
-[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-[2] https://github.com/KSPP/linux/issues/21
-[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+jirka
 
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+
 ---
- kernel/bpf/queue_stack_maps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
-index f697647ceb54..30e1373fd437 100644
---- a/kernel/bpf/queue_stack_maps.c
-+++ b/kernel/bpf/queue_stack_maps.c
-@@ -19,7 +19,7 @@ struct bpf_queue_stack {
- 	u32 head, tail;
- 	u32 size; /* max_entries + 1 */
- 
--	char elements[0] __aligned(8);
-+	char elements[] __aligned(8);
- };
- 
- static struct bpf_queue_stack *bpf_queue_stack(struct bpf_map *map)
--- 
-2.25.0
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index fb5c2cd44d30..463ada5117f8 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -742,6 +742,7 @@ static int machine__process_ksymbol_register(struct m=
+achine *machine,
+ 		map->start =3D event->ksymbol.addr;
+ 		map->end =3D map->start + event->ksymbol.len;
+ 		maps__insert(&machine->kmaps, map);
++		dso__set_loaded(dso);
+ 	}
+=20
+ 	sym =3D symbol__new(map->map_ip(map, map->start),
 
