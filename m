@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A7AFC352A3
-	for <bpf@archiver.kernel.org>; Thu, 13 Feb 2020 21:01:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FD14C352A3
+	for <bpf@archiver.kernel.org>; Thu, 13 Feb 2020 21:01:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5FB7E206B6
-	for <bpf@archiver.kernel.org>; Thu, 13 Feb 2020 21:01:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2953721734
+	for <bpf@archiver.kernel.org>; Thu, 13 Feb 2020 21:01:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Ahn3aNRi"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="PoCedZYr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728107AbgBMVBd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Feb 2020 16:01:33 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:40740 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728034AbgBMVBa (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 13 Feb 2020 16:01:30 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01DL12su026625
-        for <bpf@vger.kernel.org>; Thu, 13 Feb 2020 13:01:29 -0800
+        id S1728036AbgBMVB3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Feb 2020 16:01:29 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:48206 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728012AbgBMVB3 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 13 Feb 2020 16:01:29 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01DL0pgW003853
+        for <bpf@vger.kernel.org>; Thu, 13 Feb 2020 13:01:28 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=Qow9JKY4oE3pQAjHYvfF82onevFNQU6h376iKCnwHIg=;
- b=Ahn3aNRi9jRjCEikkfhTvST4iph2slUyyXuBfLRoCLSAusDF5UTewwhb4M2Jf+YL8kIt
- 5IFfErDEJW0u11KDxKjTMNyWU86evOHzZ05g+TXG3ZI2YSZSwhjCOopciRU0zLxvvNED
- poEHFstnDn3cvLLVtETa1PczTgDkW6OlgiY= 
+ content-type; s=facebook; bh=v8Lkrz2gobavw9Yz2OAUEmb8WVq6qGCJLbPN7UHU4CM=;
+ b=PoCedZYrdwLAzqfymYhS5tiGNRatX7R3Fg8ce+zTRPr7Z69lpkNZeiEHu2wbzLOwK0VJ
+ jHhrKlu9YiM0zXyWJRjZRzCuY7Tw/tKXAX50wWILj11HkZonYiU/6gTXDQu4HT2v8QD+
+ +BM9/cDI6JKzWf4vMZZBGyVbiJOaB1bHpeE= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2y44cxuvmy-2
+        by mx0a-00082601.pphosted.com with ESMTP id 2y4qv664qb-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 13 Feb 2020 13:01:29 -0800
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 13 Feb 2020 13:01:28 -0800
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Thu, 13 Feb 2020 13:01:28 -0800
+ 15.1.1779.2; Thu, 13 Feb 2020 13:01:27 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 51DFD62E2004; Thu, 13 Feb 2020 13:01:22 -0800 (PST)
+        id E76CA62E1D26; Thu, 13 Feb 2020 13:01:21 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -47,9 +47,9 @@ To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
 CC:     <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC bpf-next 4/4] bpftool: Documentation for bpftool prog profile
-Date:   Thu, 13 Feb 2020 13:01:15 -0800
-Message-ID: <20200213210115.1455809-5-songliubraving@fb.com>
+Subject: [RFC bpf-next 2/4] libbpf: introduce bpf_program__overwrite_section_name()
+Date:   Thu, 13 Feb 2020 13:01:13 -0800
+Message-ID: <20200213210115.1455809-3-songliubraving@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200213210115.1455809-1-songliubraving@fb.com>
 References: <20200213210115.1455809-1-songliubraving@fb.com>
@@ -58,9 +58,9 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-02-13_08:2020-02-12,2020-02-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- bulkscore=0 spamscore=0 mlxscore=0 clxscore=1015 priorityscore=1501
- mlxlogscore=999 suspectscore=0 phishscore=0 adultscore=0 impostorscore=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ bulkscore=0 mlxlogscore=972 malwarescore=0 clxscore=1015 phishscore=0
+ spamscore=0 mlxscore=0 impostorscore=0 priorityscore=1501 adultscore=0
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2001150001 definitions=main-2002130150
 X-FB-Internal: deliver
@@ -69,62 +69,88 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add documentation for the new bpftool prog profile command.
+This is a temporary solution before Eelco Chaudron's work for
+bpf_program__set_attach_target():
+
+https://patchwork.ozlabs.org/patch/1237539/
 
 Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- .../bpf/bpftool/Documentation/bpftool-prog.rst  | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ tools/lib/bpf/libbpf.c   | 13 ++++++++++++-
+ tools/lib/bpf/libbpf.h   |  4 ++++
+ tools/lib/bpf/libbpf.map |  5 +++++
+ 3 files changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 64ddf8a4c518..22ff0df327a1 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -30,6 +30,7 @@ PROG COMMANDS
- |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
- |	**bpftool** **prog tracelog**
- |	**bpftool** **prog run** *PROG* **data_in** *FILE* [**data_out** *FILE* [**data_size_out** *L*]] [**ctx_in** *FILE* [**ctx_out** *FILE* [**ctx_size_out** *M*]]] [**repeat** *N*]
-+|	**bpftool** **prog profile** *DURATION* *PROG* *METRICs*
- |	**bpftool** **prog help**
- |
- |	*MAP* := { **id** *MAP_ID* | **pinned** *FILE* }
-@@ -47,6 +48,9 @@ PROG COMMANDS
- |       *ATTACH_TYPE* := {
- |		**msg_verdict** | **stream_verdict** | **stream_parser** | **flow_dissector**
- |	}
-+|	*METRIC* := {
-+|		**cycles** | **instructions** | **l1d_loads** | **llc_misses**
-+|	}
- 
- 
- DESCRIPTION
-@@ -188,6 +192,10 @@ DESCRIPTION
- 		  not all of them can take the **ctx_in**/**ctx_out**
- 		  arguments. bpftool does not perform checks on program types.
- 
-+	**bpftool prog profile** *DURATION* *PROG* *METRICs*
-+		  Profile *METRICs* for bpf program *PROG* for *DURATION*
-+		  seconds.
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 514b1a524abb..4c29a7181d57 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -238,6 +238,8 @@ struct bpf_program {
+ 	__u32 line_info_rec_size;
+ 	__u32 line_info_cnt;
+ 	__u32 prog_flags;
 +
- 	**bpftool prog help**
- 		  Print short help message.
++	char *overwritten_section_name;
+ };
  
-@@ -310,6 +318,15 @@ EXAMPLES
+ struct bpf_struct_ops {
+@@ -442,6 +444,7 @@ static void bpf_program__exit(struct bpf_program *prog)
+ 	zfree(&prog->pin_name);
+ 	zfree(&prog->insns);
+ 	zfree(&prog->reloc_desc);
++	zfree(&prog->overwritten_section_name);
  
- **# rm /sys/fs/bpf/xdp1**
+ 	prog->nr_reloc = 0;
+ 	prog->insns_cnt = 0;
+@@ -6637,7 +6640,7 @@ static int libbpf_find_attach_btf_id(struct bpf_program *prog)
+ {
+ 	enum bpf_attach_type attach_type = prog->expected_attach_type;
+ 	__u32 attach_prog_fd = prog->attach_prog_fd;
+-	const char *name = prog->section_name;
++	const char *name = prog->overwritten_section_name ? : prog->section_name;
+ 	int i, err;
  
-+|
-+| **# bpftool prog profile 20 id 810 cycles instructions**
+ 	if (!name)
+@@ -8396,3 +8399,11 @@ void bpf_object__destroy_skeleton(struct bpf_object_skeleton *s)
+ 	free(s->progs);
+ 	free(s);
+ }
 +
-+::
-+    cycles: duration 20 run_cnt 1368 miss_cnt 665
-+            counter 503377 enabled 668202 running 351857
-+    instructions: duration 20 run_cnt 1368 miss_cnt 707
-+	    counter 398625 enabled 502330 running 272014
++char *bpf_program__overwrite_section_name(struct bpf_program *prog,
++					  const char *sec_name)
++{
++	prog->overwritten_section_name = strdup(sec_name);
 +
- SEE ALSO
- ========
- 	**bpf**\ (2),
++	return prog->overwritten_section_name;
++}
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 3fe12c9d1f92..02f0d8b57cc4 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -595,6 +595,10 @@ bpf_program__bpil_addr_to_offs(struct bpf_prog_info_linear *info_linear);
+ LIBBPF_API void
+ bpf_program__bpil_offs_to_addr(struct bpf_prog_info_linear *info_linear);
+ 
++LIBBPF_API char *
++bpf_program__overwrite_section_name(struct bpf_program *prog,
++				    const char *sec_name);
++
+ /*
+  * A helper function to get the number of possible CPUs before looking up
+  * per-CPU maps. Negative errno is returned on failure.
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index b035122142bb..ed26c20729db 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -235,3 +235,8 @@ LIBBPF_0.0.7 {
+ 		btf__align_of;
+ 		libbpf_find_kernel_btf;
+ } LIBBPF_0.0.6;
++
++LIBBPF_0.0.8 {
++	global:
++		bpf_program__overwrite_section_name;
++} LIBBPF_0.0.7;
 -- 
 2.17.1
 
