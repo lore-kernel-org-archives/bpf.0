@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F158C3B1BA
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 18:15:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D73DC2BA83
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 18:15:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0745F22314
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 18:15:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4263A2168B
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 18:15:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581704139;
-	bh=SsqKa/ZjaIyluXId/sG0bPe98/YPUtYaCn6TggH3Gso=;
+	s=default; t=1581704148;
+	bh=JrHjtwzZrIE4QpB3v0AizW6puXMwCqlkDOToOFzYGYM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=bI5ax2bVVIHG3/RcOGmFc5mNX/YIgEmLVGqyPGcgUYk19UITx1Tx2kbntR/DhwPQR
-	 zVghbPOqv1CXxuE1YyQfAClgiGqnXp8ABYCQi6YwEGxETv3d5IAqvC4QDsOd+ealRk
-	 oWZ1Gsi7dcs9PPtSaoAE4nPf5J4QVKqbiczdc+S4=
+	b=lF7pEXjZS13Vn8rOcvqWXvuFYAaPwet6ps/qaVqhR/PrWdbmiYN9Lw+wN8mqrDKzt
+	 do3h9ukUMFnQKUGCn9abLwMHBToXmgw/2SF9elnSWfVch4b26cZt+xzxOi1kfBFLSr
+	 sFwCSOzQWKgs0dzSDE+hcHiDTu3gXX36Zroro7yM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730881AbgBNPvw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Feb 2020 10:51:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57086 "EHLO mail.kernel.org"
+        id S1728427AbgBNSPm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Feb 2020 13:15:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57064 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730868AbgBNPvv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:51:51 -0500
+        id S1730860AbgBNPvt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:51:49 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B28BF24649;
-        Fri, 14 Feb 2020 15:51:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5A2D5222C4;
+        Fri, 14 Feb 2020 15:51:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695510;
-        bh=SsqKa/ZjaIyluXId/sG0bPe98/YPUtYaCn6TggH3Gso=;
+        s=default; t=1581695509;
+        bh=JrHjtwzZrIE4QpB3v0AizW6puXMwCqlkDOToOFzYGYM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AtvGi7v5fOYZ29toUQ85qH3sIJ6hzq387qDqf/LRxus4gE0CbS7j1izda2BVLPnE+
-         7hTds4TURcIlNHY5iGEl2BVfhPV50MtyGAj91N01qlsBAyDvbZhMSm3DvZFieQS8oL
-         /IFACnDS3l1RD5MkwfLu1ubNoJS/hHvE4MQMmtp8=
+        b=GxigJgjfb3D51Jkjy+gZjeLiyjHX1/UqMVMVKWIkohKhk4M4GmAoua9bi17npNsq6
+         CKcapLI0h1saFEkdBD1F013g3reOcD7Mpg2rupIjBNVZhV4UBVrFNKyLCR7XqgVgzt
+         xP9+aJcH/4YQt8mU2F4yOUXclUbv/b4RZp3mpS7A=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lorenz Bauer <lmb@cloudflare.com>,
+Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 135/542] bpf, sockmap: Check update requirements after locking
-Date:   Fri, 14 Feb 2020 10:42:07 -0500
-Message-Id: <20200214154854.6746-135-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 134/542] bpf, sockhash: Synchronize_rcu before free'ing map
+Date:   Fri, 14 Feb 2020 10:42:06 -0500
+Message-Id: <20200214154854.6746-134-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
 References: <20200214154854.6746-1-sashal@kernel.org>
@@ -60,82 +60,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Lorenz Bauer <lmb@cloudflare.com>
+From: Jakub Sitnicki <jakub@cloudflare.com>
 
-[ Upstream commit 85b8ac01a421791d66c3a458a7f83cfd173fe3fa ]
+[ Upstream commit 0b2dc83906cf1e694e48003eae5df8fa63f76fd9 ]
 
-It's currently possible to insert sockets in unexpected states into
-a sockmap, due to a TOCTTOU when updating the map from a syscall.
-sock_map_update_elem checks that sk->sk_state == TCP_ESTABLISHED,
-locks the socket and then calls sock_map_update_common. At this
-point, the socket may have transitioned into another state, and
-the earlier assumptions don't hold anymore. Crucially, it's
-conceivable (though very unlikely) that a socket has become unhashed.
-This breaks the sockmap's assumption that it will get a callback
-via sk->sk_prot->unhash.
+We need to have a synchronize_rcu before free'ing the sockhash because any
+outstanding psock references will have a pointer to the map and when they
+use it, this could trigger a use after free.
 
-Fix this by checking the (fixed) sk_type and sk_protocol without the
-lock, followed by a locked check of sk_state.
+This is a sister fix for sockhash, following commit 2bb90e5cc90e ("bpf:
+sockmap, synchronize_rcu before free'ing map") which addressed sockmap,
+which comes from a manual audit.
 
-Unfortunately it's not possible to push the check down into
-sock_(map|hash)_update_common, since BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB
-run before the socket has transitioned from TCP_SYN_RECV into
-TCP_ESTABLISHED.
-
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Fixes: 604326b41a6fb ("bpf, sockmap: convert to generic sk_msg interface")
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-Link: https://lore.kernel.org/bpf/20200207103713.28175-1-lmb@cloudflare.com
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Link: https://lore.kernel.org/bpf/20200206111652.694507-3-jakub@cloudflare.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/sock_map.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ net/core/sock_map.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 058422b932607..b16ff3b8c6503 100644
+index 8998e356f4232..058422b932607 100644
 --- a/net/core/sock_map.c
 +++ b/net/core/sock_map.c
-@@ -417,14 +417,16 @@ static int sock_map_update_elem(struct bpf_map *map, void *key,
- 		ret = -EINVAL;
- 		goto out;
- 	}
--	if (!sock_map_sk_is_suitable(sk) ||
--	    sk->sk_state != TCP_ESTABLISHED) {
-+	if (!sock_map_sk_is_suitable(sk)) {
- 		ret = -EOPNOTSUPP;
- 		goto out;
- 	}
+@@ -250,6 +250,7 @@ static void sock_map_free(struct bpf_map *map)
+ 	raw_spin_unlock_bh(&stab->lock);
+ 	rcu_read_unlock();
  
- 	sock_map_sk_acquire(sk);
--	ret = sock_map_update_common(map, idx, sk, flags);
-+	if (sk->sk_state != TCP_ESTABLISHED)
-+		ret = -EOPNOTSUPP;
-+	else
-+		ret = sock_map_update_common(map, idx, sk, flags);
- 	sock_map_sk_release(sk);
- out:
- 	fput(sock->file);
-@@ -740,14 +742,16 @@ static int sock_hash_update_elem(struct bpf_map *map, void *key,
- 		ret = -EINVAL;
- 		goto out;
- 	}
--	if (!sock_map_sk_is_suitable(sk) ||
--	    sk->sk_state != TCP_ESTABLISHED) {
-+	if (!sock_map_sk_is_suitable(sk)) {
- 		ret = -EOPNOTSUPP;
- 		goto out;
- 	}
++	/* wait for psock readers accessing its map link */
+ 	synchronize_rcu();
  
- 	sock_map_sk_acquire(sk);
--	ret = sock_hash_update_common(map, key, sk, flags);
-+	if (sk->sk_state != TCP_ESTABLISHED)
-+		ret = -EOPNOTSUPP;
-+	else
-+		ret = sock_hash_update_common(map, key, sk, flags);
- 	sock_map_sk_release(sk);
- out:
- 	fput(sock->file);
+ 	bpf_map_area_free(stab->sks);
+@@ -873,6 +874,9 @@ static void sock_hash_free(struct bpf_map *map)
+ 	}
+ 	rcu_read_unlock();
+ 
++	/* wait for psock readers accessing its map link */
++	synchronize_rcu();
++
+ 	bpf_map_area_free(htab->buckets);
+ 	kfree(htab);
+ }
 -- 
 2.20.1
 
