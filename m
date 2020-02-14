@@ -2,131 +2,84 @@ Return-Path: <SRS0=yg+S=4C=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 277CCC2BA83
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78D5FC3B19F
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:44:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 01047217F4
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581698417;
-	bh=Ba+QKGRskXBXvu0aL2I2KaAkS6/2ikohdEhv5jDvwgE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ydB3Ruhs7M8jq4NQOrrosLW2nJ8POHAbU+ELml/Vpd2G7WhHvGl1ag8qyikXJUgUh
-	 3lG3v4T9Tu43+YIf2z0pB7uB2JEzBznZRHgbetDUNInWESijTJPMtKJyyCJoHMXYnX
-	 iJ8bISuMmX5TepBgPWRyFWXYVJpzHFoW6DhLtdFY=
+	by mail.kernel.org (Postfix) with ESMTP id 3DE8F2187F
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:44:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405729AbgBNQjz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Feb 2020 11:39:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59042 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393326AbgBNQXD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:23:03 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 740FD24768;
-        Fri, 14 Feb 2020 16:23:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697383;
-        bh=Ba+QKGRskXBXvu0aL2I2KaAkS6/2ikohdEhv5jDvwgE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mdMWciMj8iEskCf6Mmp0ynORluFwvLHnDay/UvheAkUrU+7ov7CJUzG8oYF34kdOb
-         64pOVdLKgxEBXYugCyzbGWJf/xvp/clNbvlDLw0+Bh50jgTQxIsJBNP0Vu/q+Ej3p9
-         hbhblqppxlS8EtwmrugQ3W431xlc3fr6PfkJqcCM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrey Zhizhikin <andrey.z@gmail.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Petr Mladek <pmladek@suse.com>, Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
+        id S2405414AbgBNQoY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Feb 2020 11:44:24 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:55573 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393028AbgBNQVi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:21:38 -0500
+Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1j2diC-0003I4-9O; Fri, 14 Feb 2020 17:21:04 +0100
+Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id 03740101DF6;
+        Fri, 14 Feb 2020 17:21:04 +0100 (CET)
+Message-Id: <20200214161503.070487511@linutronix.de>
+User-Agent: quilt/0.65
+Date:   Fri, 14 Feb 2020 14:39:19 +0100
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.9 079/141] tools lib api fs: Fix gcc9 stringop-truncation compilation error
-Date:   Fri, 14 Feb 2020 11:20:19 -0500
-Message-Id: <20200214162122.19794-79-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214162122.19794-1-sashal@kernel.org>
-References: <20200214162122.19794-1-sashal@kernel.org>
+        Sebastian Sewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Clark Williams <williams@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: [RFC patch 02/19] sched: Provide cant_migrate()
+References: <20200214133917.304937432@linutronix.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrey Zhizhikin <andrey.z@gmail.com>
+Some code pathes rely on preempt_disable() to prevent migration on a non RT
+enabled kernel. These preempt_disable/enable() pairs are substituted by
+migrate_disable/enable() pairs or other forms of RT specific protection. On
+RT these protections prevent migration but not preemption. Obviously a
+cant_sleep() check in such a section will trigger on RT because preemption
+is not disabled.
 
-[ Upstream commit 6794200fa3c9c3e6759dae099145f23e4310f4f7 ]
+Provide a cant_migrate() macro which maps to cant_sleep() on a non RT
+kernel and an empty placeholder for RT for now. The placeholder will be
+changed to a proper debug check along with the RT specific migration
+protection mechanism.
 
-GCC9 introduced string hardening mechanisms, which exhibits the error
-during fs api compilation:
-
-error: '__builtin_strncpy' specified bound 4096 equals destination size
-[-Werror=stringop-truncation]
-
-This comes when the length of copy passed to strncpy is is equal to
-destination size, which could potentially lead to buffer overflow.
-
-There is a need to mitigate this potential issue by limiting the size of
-destination by 1 and explicitly terminate the destination with NULL.
-
-Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andriin@fb.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Link: http://lore.kernel.org/lkml/20191211080109.18765-1-andrey.zhizhikin@leica-geosystems.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- tools/lib/api/fs/fs.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ include/linux/kernel.h |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/lib/api/fs/fs.c b/tools/lib/api/fs/fs.c
-index f99f49e4a31e6..21e714cf0126c 100644
---- a/tools/lib/api/fs/fs.c
-+++ b/tools/lib/api/fs/fs.c
-@@ -194,6 +194,7 @@ static bool fs__env_override(struct fs *fs)
- 	size_t name_len = strlen(fs->name);
- 	/* name + "_PATH" + '\0' */
- 	char upper_name[name_len + 5 + 1];
+--- a/include/linux/kernel.h
++++ b/include/linux/kernel.h
+@@ -257,6 +257,13 @@ extern void __cant_sleep(const char *fil
+ 
+ #define might_sleep_if(cond) do { if (cond) might_sleep(); } while (0)
+ 
++#ifndef CONFIG_PREEMPT_RT
++# define cant_migrate()		cant_sleep()
++#else
++  /* Placeholder for now */
++# define cant_migrate()		do { } while (0)
++#endif
 +
- 	memcpy(upper_name, fs->name, name_len);
- 	mem_toupper(upper_name, name_len);
- 	strcpy(&upper_name[name_len], "_PATH");
-@@ -203,7 +204,8 @@ static bool fs__env_override(struct fs *fs)
- 		return false;
- 
- 	fs->found = true;
--	strncpy(fs->path, override_path, sizeof(fs->path));
-+	strncpy(fs->path, override_path, sizeof(fs->path) - 1);
-+	fs->path[sizeof(fs->path) - 1] = '\0';
- 	return true;
- }
- 
--- 
-2.20.1
+ /**
+  * abs - return absolute value of an argument
+  * @x: the value.  If it is unsigned type, it is converted to signed type first.
 
