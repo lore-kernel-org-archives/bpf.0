@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9340C3B1A1
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B488C2BA83
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:44:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BCC3D2187F
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:44:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A94424684
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:44:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392695AbgBNQom (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Feb 2020 11:44:42 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:55569 "EHLO
+        id S2393002AbgBNQot (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Feb 2020 11:44:49 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:55567 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393002AbgBNQVf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S2392999AbgBNQVf (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 14 Feb 2020 11:21:35 -0500
 Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1j2diI-0003MC-Mg; Fri, 14 Feb 2020 17:21:10 +0100
+        id 1j2diC-0003I1-23; Fri, 14 Feb 2020 17:21:04 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id 91086103065;
-        Fri, 14 Feb 2020 17:21:06 +0100 (CET)
-Message-Id: <20200214161504.325142160@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id C1026101DF3;
+        Fri, 14 Feb 2020 17:21:03 +0100 (CET)
+Message-Id: <20200214161502.979460153@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Fri, 14 Feb 2020 14:39:31 +0100
+Date:   Fri, 14 Feb 2020 14:39:18 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
@@ -38,9 +38,12 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Clark Williams <williams@redhat.com>,
         Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
         Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: [RFC patch 14/19] bpf: Use migrate_disable() in hashtab code
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>
+Subject: [RFC patch 01/19] sched: Provide migrate_disable/enable() inlines
 References: <20200214133917.304937432@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,72 +52,73 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The required protection is that the caller cannot be migrated to a
-different CPU as these places take either a hash bucket lock or might
-trigger a kprobe inside the memory allocator. Both scenarios can lead to
-deadlocks. The deadlock prevention is per CPU by incrementing a per CPU
-variable which temporarily blocks the invocation of BPF programs from perf
-and kprobes.
+Currently code which solely needs to prevent migration of a task uses
+preempt_disable()/enable() pairs. This is the only reliable way to do so as
+setting the task affinity to a single CPU can be undone by a setaffinity
+operation from a different task/process. It's also significantly faster.
 
-Replace the preempt_disable/enable() pairs with migrate_disable/enable()
-pairs to prepare BPF to work on PREEMPT_RT enabled kernels. On a non-RT
-kernel this maps to preempt_disable/enable(), i.e. no functional change.
+RT provides a seperate migrate_disable/enable() mechanism which does not
+disable preemption to achieve the semantic requirements of a (almost) fully
+preemptible kernel.
+
+As it is unclear from looking at a given code path whether the intention is
+to disable preemption or migration, introduce migrate_disable/enable()
+inline functions which can be used to annotate code which merely needs to
+disable migration. Map them to preempt_disable/enable() for now. The RT
+substitution will be provided later.
+
+Code which is annotated that way documents that it has no requirement to
+protect against reentrancy of a preempting task. Either this is not
+required at all or the call sites are already serialized by other means.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Mel Gorman <mgorman@suse.de>
 ---
- kernel/bpf/hashtab.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ include/linux/preempt.h |   30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -698,11 +698,11 @@ static void htab_elem_free_rcu(struct rc
- 	 * we're calling kfree, otherwise deadlock is possible if kprobes
- 	 * are placed somewhere inside of slub
- 	 */
--	preempt_disable();
-+	migrate_disable();
- 	__this_cpu_inc(bpf_prog_active);
- 	htab_elem_free(htab, l);
- 	__this_cpu_dec(bpf_prog_active);
--	preempt_enable();
-+	migrate_enable();
- }
+--- a/include/linux/preempt.h
++++ b/include/linux/preempt.h
+@@ -322,4 +322,34 @@ static inline void preempt_notifier_init
  
- static void free_htab_elem(struct bpf_htab *htab, struct htab_elem *l)
-@@ -1327,7 +1327,7 @@ static int
- 	}
+ #endif
  
- again:
--	preempt_disable();
-+	migrate_disable();
- 	this_cpu_inc(bpf_prog_active);
- 	rcu_read_lock();
- again_nocopy:
-@@ -1347,7 +1347,7 @@ static int
- 		raw_spin_unlock_irqrestore(&b->lock, flags);
- 		rcu_read_unlock();
- 		this_cpu_dec(bpf_prog_active);
--		preempt_enable();
-+		migrate_enable();
- 		goto after_loop;
- 	}
- 
-@@ -1356,7 +1356,7 @@ static int
- 		raw_spin_unlock_irqrestore(&b->lock, flags);
- 		rcu_read_unlock();
- 		this_cpu_dec(bpf_prog_active);
--		preempt_enable();
-+		migrate_enable();
- 		kvfree(keys);
- 		kvfree(values);
- 		goto alloc;
-@@ -1406,7 +1406,7 @@ static int
- 
- 	rcu_read_unlock();
- 	this_cpu_dec(bpf_prog_active);
--	preempt_enable();
-+	migrate_enable();
- 	if (bucket_cnt && (copy_to_user(ukeys + total * key_size, keys,
- 	    key_size * bucket_cnt) ||
- 	    copy_to_user(uvalues + total * value_size, values,
++/**
++ * migrate_disable - Prevent migration of the current task
++ *
++ * Maps to preempt_disable() which also disables preemption. Use
++ * migrate_disable() to annotate that the intent is to prevent migration
++ * but not necessarily preemption.
++ *
++ * Can be invoked nested like preempt_disable() and needs the corresponding
++ * number of migrate_enable() invocations.
++ */
++static __always_inline void migrate_disable(void)
++{
++	preempt_disable();
++}
++
++/**
++ * migrate_enable - Allow migration of the current task
++ *
++ * Counterpart to migrate_disable().
++ *
++ * As migrate_disable() can be invoked nested only the uttermost invocation
++ * reenables migration.
++ *
++ * Currently mapped to preempt_enable().
++ */
++static __always_inline void migrate_enable(void)
++{
++	preempt_enable();
++}
++
+ #endif /* __LINUX_PREEMPT_H */
 
