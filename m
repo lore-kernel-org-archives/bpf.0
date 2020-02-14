@@ -4,51 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47259C2BA83
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 18:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F576C3B1B5
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 18:07:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1D32B2168B
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 18:06:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02BF32168B
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 18:07:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581703578;
-	bh=UsiEZwaNCOzGinm9GY9LYQeSFH9pbbl3cGztO6ANsr0=;
+	s=default; t=1581703644;
+	bh=MMvYnTh/h4R2QL5OTCI5uAa2vYTgJROedZx4TjC11Sw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=N5kAc/x7n0rVi1qoYvBZ+0+XiVj0MDWGFkme9xhtUhQRkgTEfkgpK2qd5JdyPTHse
-	 RY59+Lf5GBzLFmfcUYwTURZcuLDqpznzEn+nBKkqN+iC+CzgasXMWxjG24pW63ouLe
-	 JkhuL6mpz3yYFtNJ1oITnGfxuojafZpHAgVd0Pl8=
+	b=0mI0c+msgmkPTjJpGEqrW/9I4bvMzdI91GlHbsKEnDfA5hMIW+AVAInvx/slmRmUe
+	 ii+mvYp+W7DIujK4OFzvvf9LM5g2XADLPNSSBY9sDIvPOyuLfEZf/SZZqJc+ZnpIQr
+	 I5SN9jdR+XtjLA8wJR53nyXPP2J/fCR9/uacpAsA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388190AbgBNSGQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Feb 2020 13:06:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35492 "EHLO mail.kernel.org"
+        id S1731580AbgBNPyh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Feb 2020 10:54:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34944 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731103AbgBNPy4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:54:56 -0500
+        id S1731574AbgBNPyh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:54:37 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C80F824673;
-        Fri, 14 Feb 2020 15:54:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8C1352467C;
+        Fri, 14 Feb 2020 15:54:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695695;
-        bh=UsiEZwaNCOzGinm9GY9LYQeSFH9pbbl3cGztO6ANsr0=;
+        s=default; t=1581695676;
+        bh=MMvYnTh/h4R2QL5OTCI5uAa2vYTgJROedZx4TjC11Sw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n6JL2uVcr+8VOcuB2PA9dV57/JbWR500G8Myd7d6QAZNVfjvwU8i1/TPSIC7yjhXg
-         Hm2HZ9XFgUGMMgT/m1CUYnleEF6VXY39/2klzzqNGtt3ba4ZeTEqOAOJAFRr4zWQMG
-         NGxIsAuTiFZQEFgX0ujIUGn7t5Ls3691dRXFIDYk=
+        b=oYKrDpy+k9q+7XLgrLdd2rWLSwZ2Owk9n4NZb6qWxwTI8+JCqc7CiSmB+m9Asp5W1
+         MD49zZ5pI9iIIDKCUGXwjQxsd+buKJ8VDz41D0vlFPXIrqhzzFgMKTdBLrMDpHvpHC
+         w65V/TJEDG6QHWwfrouREeX9IQmmxwRHHDWO+nwk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mitch Williams <mitch.a.williams@intel.com>,
-        Andrew Bowers <andrewx.bowers@intel.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+Cc:     Hechao Li <hechaol@fb.com>, Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 278/542] ice: add extra check for null Rx descriptor
-Date:   Fri, 14 Feb 2020 10:44:30 -0500
-Message-Id: <20200214154854.6746-278-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 263/542] bpf: Print error message for bpftool cgroup show
+Date:   Fri, 14 Feb 2020 10:44:15 -0500
+Message-Id: <20200214154854.6746-263-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
 References: <20200214154854.6746-1-sashal@kernel.org>
@@ -61,56 +58,138 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Mitch Williams <mitch.a.williams@intel.com>
+From: Hechao Li <hechaol@fb.com>
 
-[ Upstream commit 1f45ebe0d8fbe6178670b663005f38ef8535db5d ]
+[ Upstream commit 1162f844030ac1ac7321b5e8f6c9badc7a11428f ]
 
-In the case where the hardware gives us a null Rx descriptor, it is
-theoretically possible that we could call one of our skb-construction
-functions with no data pointer, which would cause a panic.
+Currently, when bpftool cgroup show <path> has an error, no error
+message is printed. This is confusing because the user may think the
+result is empty.
 
-In real life, this will never happen - we only get null RX
-descriptors as the final descriptor in a chain of otherwise-valid
-descriptors. When this happens, the skb will be extant and we'll just
-call ice_add_rx_frag(), which can deal with empty data buffers.
+Before the change:
 
-Unfortunately, Coverity does not have intimate knowledge of our
-hardware, so we must add a check here.
+$ bpftool cgroup show /sys/fs/cgroup
+ID       AttachType      AttachFlags     Name
+$ echo $?
+255
 
-Signed-off-by: Mitch Williams <mitch.a.williams@intel.com>
-Tested-by: Andrew Bowers <andrewx.bowers@intel.com>
-Signed-off-by: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
+After the change:
+$ ./bpftool cgroup show /sys/fs/cgroup
+Error: can't query bpf programs attached to /sys/fs/cgroup: Operation
+not permitted
+
+v2: Rename check_query_cgroup_progs to cgroup_has_attached_progs
+
+Signed-off-by: Hechao Li <hechaol@fb.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20191224011742.3714301-1-hechaol@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_txrx.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ tools/bpf/bpftool/cgroup.c | 56 ++++++++++++++++++++++++++------------
+ 1 file changed, 39 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
-index 2c212f64d99f2..8b2b9e254d28d 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
-@@ -1071,13 +1071,16 @@ static int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
- 		ice_put_rx_buf(rx_ring, rx_buf);
- 		continue;
- construct_skb:
--		if (skb)
-+		if (skb) {
- 			ice_add_rx_frag(rx_ring, rx_buf, skb, size);
--		else if (ice_ring_uses_build_skb(rx_ring))
--			skb = ice_build_skb(rx_ring, rx_buf, &xdp);
--		else
-+		} else if (likely(xdp.data)) {
-+			if (ice_ring_uses_build_skb(rx_ring))
-+				skb = ice_build_skb(rx_ring, rx_buf, &xdp);
-+			else
-+				skb = ice_construct_skb(rx_ring, rx_buf, &xdp);
-+		} else {
- 			skb = ice_construct_skb(rx_ring, rx_buf, &xdp);
--
+diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
+index 1ef45e55039e1..2f017caa678dc 100644
+--- a/tools/bpf/bpftool/cgroup.c
++++ b/tools/bpf/bpftool/cgroup.c
+@@ -117,6 +117,25 @@ static int count_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type)
+ 	return prog_cnt;
+ }
+ 
++static int cgroup_has_attached_progs(int cgroup_fd)
++{
++	enum bpf_attach_type type;
++	bool no_prog = true;
++
++	for (type = 0; type < __MAX_BPF_ATTACH_TYPE; type++) {
++		int count = count_attached_bpf_progs(cgroup_fd, type);
++
++		if (count < 0 && errno != EINVAL)
++			return -1;
++
++		if (count > 0) {
++			no_prog = false;
++			break;
 +		}
- 		/* exit if we failed to retrieve a buffer */
- 		if (!skb) {
- 			rx_ring->rx_stats.alloc_buf_failed++;
++	}
++
++	return no_prog ? 0 : 1;
++}
+ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
+ 				   int level)
+ {
+@@ -161,6 +180,7 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
+ static int do_show(int argc, char **argv)
+ {
+ 	enum bpf_attach_type type;
++	int has_attached_progs;
+ 	const char *path;
+ 	int cgroup_fd;
+ 	int ret = -1;
+@@ -192,6 +212,16 @@ static int do_show(int argc, char **argv)
+ 		goto exit;
+ 	}
+ 
++	has_attached_progs = cgroup_has_attached_progs(cgroup_fd);
++	if (has_attached_progs < 0) {
++		p_err("can't query bpf programs attached to %s: %s",
++		      path, strerror(errno));
++		goto exit_cgroup;
++	} else if (!has_attached_progs) {
++		ret = 0;
++		goto exit_cgroup;
++	}
++
+ 	if (json_output)
+ 		jsonw_start_array(json_wtr);
+ 	else
+@@ -212,6 +242,7 @@ static int do_show(int argc, char **argv)
+ 	if (json_output)
+ 		jsonw_end_array(json_wtr);
+ 
++exit_cgroup:
+ 	close(cgroup_fd);
+ exit:
+ 	return ret;
+@@ -228,7 +259,7 @@ static int do_show_tree_fn(const char *fpath, const struct stat *sb,
+ 			   int typeflag, struct FTW *ftw)
+ {
+ 	enum bpf_attach_type type;
+-	bool skip = true;
++	int has_attached_progs;
+ 	int cgroup_fd;
+ 
+ 	if (typeflag != FTW_D)
+@@ -240,22 +271,13 @@ static int do_show_tree_fn(const char *fpath, const struct stat *sb,
+ 		return SHOW_TREE_FN_ERR;
+ 	}
+ 
+-	for (type = 0; type < __MAX_BPF_ATTACH_TYPE; type++) {
+-		int count = count_attached_bpf_progs(cgroup_fd, type);
+-
+-		if (count < 0 && errno != EINVAL) {
+-			p_err("can't query bpf programs attached to %s: %s",
+-			      fpath, strerror(errno));
+-			close(cgroup_fd);
+-			return SHOW_TREE_FN_ERR;
+-		}
+-		if (count > 0) {
+-			skip = false;
+-			break;
+-		}
+-	}
+-
+-	if (skip) {
++	has_attached_progs = cgroup_has_attached_progs(cgroup_fd);
++	if (has_attached_progs < 0) {
++		p_err("can't query bpf programs attached to %s: %s",
++		      fpath, strerror(errno));
++		close(cgroup_fd);
++		return SHOW_TREE_FN_ERR;
++	} else if (!has_attached_progs) {
+ 		close(cgroup_fd);
+ 		return 0;
+ 	}
 -- 
 2.20.1
 
