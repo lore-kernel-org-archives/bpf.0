@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58507C3B1A1
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:44:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9340C3B1A1
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:44:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2E52324694
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:44:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BCC3D2187F
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:44:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393023AbgBNQVg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Feb 2020 11:21:36 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:55571 "EHLO
+        id S2392695AbgBNQom (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Feb 2020 11:44:42 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:55569 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393004AbgBNQVg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:21:36 -0500
+        with ESMTP id S2393002AbgBNQVf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:21:35 -0500
 Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1j2diO-0003Qi-Lp; Fri, 14 Feb 2020 17:21:16 +0100
+        id 1j2diI-0003MC-Mg; Fri, 14 Feb 2020 17:21:10 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id A892B101DFA;
-        Fri, 14 Feb 2020 17:21:07 +0100 (CET)
-Message-Id: <20200214161504.827359174@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id 91086103065;
+        Fri, 14 Feb 2020 17:21:06 +0100 (CET)
+Message-Id: <20200214161504.325142160@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Fri, 14 Feb 2020 14:39:36 +0100
+Date:   Fri, 14 Feb 2020 14:39:31 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
@@ -40,7 +40,7 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Ingo Molnar <mingo@kernel.org>
-Subject: [RFC patch 19/19] bpf/stackmap: Dont trylock mmap_sem with PREEMPT_RT and interrupts disabled
+Subject: [RFC patch 14/19] bpf: Use migrate_disable() in hashtab code
 References: <20200214133917.304937432@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,61 +49,72 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: David Miller <davem@davemloft.net>
+The required protection is that the caller cannot be migrated to a
+different CPU as these places take either a hash bucket lock or might
+trigger a kprobe inside the memory allocator. Both scenarios can lead to
+deadlocks. The deadlock prevention is per CPU by incrementing a per CPU
+variable which temporarily blocks the invocation of BPF programs from perf
+and kprobes.
 
-In a RT kernel down_read_trylock() cannot be used from NMI context and
-up_read_non_owner() is another problematic issue.
+Replace the preempt_disable/enable() pairs with migrate_disable/enable()
+pairs to prepare BPF to work on PREEMPT_RT enabled kernels. On a non-RT
+kernel this maps to preempt_disable/enable(), i.e. no functional change.
 
-So in such a configuration, simply elide the annotated stackmap and
-just report the raw IPs.
-
-In the longer term, it might be possible to provide a atomic friendly
-versions of the page cache traversal which will at least provide the info
-if the pages are resident and don't need to be paged in.
-
-[ tglx: Use IS_ENABLED() to avoid the #ifdeffery, fixup the irq work
-  	callback and add a comment ]
-
-Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-
 ---
- kernel/bpf/stackmap.c |   18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ kernel/bpf/hashtab.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -40,6 +40,9 @@ static void do_up_read(struct irq_work *
- {
- 	struct stack_map_irq_work *work;
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -698,11 +698,11 @@ static void htab_elem_free_rcu(struct rc
+ 	 * we're calling kfree, otherwise deadlock is possible if kprobes
+ 	 * are placed somewhere inside of slub
+ 	 */
+-	preempt_disable();
++	migrate_disable();
+ 	__this_cpu_inc(bpf_prog_active);
+ 	htab_elem_free(htab, l);
+ 	__this_cpu_dec(bpf_prog_active);
+-	preempt_enable();
++	migrate_enable();
+ }
  
-+	if (WARN_ON_ONCE(IS_ENABLED(CONFIG_PREEMPT_RT)))
-+		return;
-+
- 	work = container_of(entry, struct stack_map_irq_work, irq_work);
- 	up_read_non_owner(work->sem);
- 	work->sem = NULL;
-@@ -288,10 +291,19 @@ static void stack_map_get_build_id_offse
- 	struct stack_map_irq_work *work = NULL;
- 
- 	if (irqs_disabled()) {
--		work = this_cpu_ptr(&up_read_work);
--		if (atomic_read(&work->irq_work.flags) & IRQ_WORK_BUSY)
--			/* cannot queue more up_read, fallback */
-+		if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
-+			work = this_cpu_ptr(&up_read_work);
-+			if (atomic_read(&work->irq_work.flags) & IRQ_WORK_BUSY) {
-+				/* cannot queue more up_read, fallback */
-+				irq_work_busy = true;
-+			}
-+		} else {
-+			/*
-+			 * PREEMPT_RT does not allow to trylock mmap sem in
-+			 * interrupt disabled context. Force the fallback code.
-+			 */
- 			irq_work_busy = true;
-+		}
+ static void free_htab_elem(struct bpf_htab *htab, struct htab_elem *l)
+@@ -1327,7 +1327,7 @@ static int
  	}
  
- 	/*
+ again:
+-	preempt_disable();
++	migrate_disable();
+ 	this_cpu_inc(bpf_prog_active);
+ 	rcu_read_lock();
+ again_nocopy:
+@@ -1347,7 +1347,7 @@ static int
+ 		raw_spin_unlock_irqrestore(&b->lock, flags);
+ 		rcu_read_unlock();
+ 		this_cpu_dec(bpf_prog_active);
+-		preempt_enable();
++		migrate_enable();
+ 		goto after_loop;
+ 	}
+ 
+@@ -1356,7 +1356,7 @@ static int
+ 		raw_spin_unlock_irqrestore(&b->lock, flags);
+ 		rcu_read_unlock();
+ 		this_cpu_dec(bpf_prog_active);
+-		preempt_enable();
++		migrate_enable();
+ 		kvfree(keys);
+ 		kvfree(values);
+ 		goto alloc;
+@@ -1406,7 +1406,7 @@ static int
+ 
+ 	rcu_read_unlock();
+ 	this_cpu_dec(bpf_prog_active);
+-	preempt_enable();
++	migrate_enable();
+ 	if (bucket_cnt && (copy_to_user(ukeys + total * key_size, keys,
+ 	    key_size * bucket_cnt) ||
+ 	    copy_to_user(uvalues + total * value_size, values,
 
