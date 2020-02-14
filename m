@@ -7,46 +7,55 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D9E6C3B1A1
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 17:04:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5384C3B1A8
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 17:07:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4B1042168B
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 17:04:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BB9A24673
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 17:07:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581699895;
-	bh=Y7jB+ZV6za5sKFnujUyx0EMJDwQuK6xqKOM5vsnZ9L8=;
+	s=default; t=1581700034;
+	bh=+PkrT4iG1T7Rl6JWmdEM27E+WQtpZRSY2P7dpNAA9Wc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=RhhO6JsyJ1IYK5fvO440FDtLdR6IcheviVxPp3xilL76KofZmSzLEFkqu13vroJwM
-	 yLofeEDRZS00MxXiL6HhPJ3ydenhjPVYd9bguBwSmou/a66KDY+4Yl62dD0Vt3MlPC
-	 LwNZxsGmLLZp3hMhD14CBrwoMLLHCfoZ83ia4FFk=
+	b=eSYVyuPL/IhA6DbbhMrl6HhVhmaORBTNMkuYLCGuEF3NIbZoxLcRQSAuyHDWHu4zP
+	 jhGTQWq8FnQkL5ZJpdtniQFEb0pEw5b4SwkfCBwzWCXv7t/nJGNEZ7HCt9CaJQ6yEs
+	 8H5YuR5/K0VzCO+JIwej9HZBUAVXZlxMPvDnriX0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391226AbgBNQPT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Feb 2020 11:15:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45414 "EHLO mail.kernel.org"
+        id S2392344AbgBNQOg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Feb 2020 11:14:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44182 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404099AbgBNQPS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:15:18 -0500
+        id S2391621AbgBNQOf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:14:35 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 82C5A246DC;
-        Fri, 14 Feb 2020 16:15:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2B2EB246D5;
+        Fri, 14 Feb 2020 16:14:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696918;
-        bh=Y7jB+ZV6za5sKFnujUyx0EMJDwQuK6xqKOM5vsnZ9L8=;
+        s=default; t=1581696875;
+        bh=+PkrT4iG1T7Rl6JWmdEM27E+WQtpZRSY2P7dpNAA9Wc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sjFvnt63p1vIwg4swe2hWGPtKaLKnMvWR0xz2ivyDUxTkHeAL2GL/3ozxyn7a0xtn
-         Yq+euzyFmDpp5rRz1emrFTNESiMpm45qN10slDhtHMGRDFf8VvhG2JImehn1Moe87T
-         WMlNcg3NnEw8GLtxnTvXACvkq95hvi6cLKGXZn9o=
+        b=PfAFHCrMBFJFB9CJcWxW+fgFWax0XA2UUEqpQ/Qb2HtggCS76YXuoaxiKuBou0FCC
+         twU0dLb3wbkHwKX/aq/a00FhZ+dQbkui3lBdbDhFvCjTnZthhFiMX6uCgI5T5ZFMfz
+         ZpRJo8HcaXYu6fZGicnQZCGmasffR31z4EZCx+WI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Li RongQing <lirongqing@baidu.com>,
+Cc:     Andrey Zhizhikin <andrey.z@gmail.com>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Petr Mladek <pmladek@suse.com>, Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 166/252] bpf: Return -EBADRQC for invalid map type in __bpf_tx_xdp_map
-Date:   Fri, 14 Feb 2020 11:10:21 -0500
-Message-Id: <20200214161147.15842-166-sashal@kernel.org>
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 131/252] tools lib api fs: Fix gcc9 stringop-truncation compilation error
+Date:   Fri, 14 Feb 2020 11:09:46 -0500
+Message-Id: <20200214161147.15842-131-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
 References: <20200214161147.15842-1-sashal@kernel.org>
@@ -59,43 +68,65 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Li RongQing <lirongqing@baidu.com>
+From: Andrey Zhizhikin <andrey.z@gmail.com>
 
-[ Upstream commit 0a29275b6300f39f78a87f2038bbfe5bdbaeca47 ]
+[ Upstream commit 6794200fa3c9c3e6759dae099145f23e4310f4f7 ]
 
-A negative value should be returned if map->map_type is invalid
-although that is impossible now, but if we run into such situation
-in future, then xdpbuff could be leaked.
+GCC9 introduced string hardening mechanisms, which exhibits the error
+during fs api compilation:
 
-Daniel Borkmann suggested:
+error: '__builtin_strncpy' specified bound 4096 equals destination size
+[-Werror=stringop-truncation]
 
--EBADRQC should be returned to stay consistent with generic XDP
-for the tracepoint output and not to be confused with -EOPNOTSUPP
-from other locations like dev_map_enqueue() when ndo_xdp_xmit is
-missing and such.
+This comes when the length of copy passed to strncpy is is equal to
+destination size, which could potentially lead to buffer overflow.
 
-Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Li RongQing <lirongqing@baidu.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/1578618277-18085-1-git-send-email-lirongqing@baidu.com
+There is a need to mitigate this potential issue by limiting the size of
+destination by 1 and explicitly terminate the destination with NULL.
+
+Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andriin@fb.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20191211080109.18765-1-andrey.zhizhikin@leica-geosystems.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/filter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/api/fs/fs.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 9daf1a4118b51..40b3af05c883c 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3207,7 +3207,7 @@ static int __bpf_tx_xdp_map(struct net_device *dev_rx, void *fwd,
- 		return err;
- 	}
- 	default:
--		break;
-+		return -EBADRQC;
- 	}
- 	return 0;
+diff --git a/tools/lib/api/fs/fs.c b/tools/lib/api/fs/fs.c
+index 7aba8243a0e7c..bd021a0eeef8c 100644
+--- a/tools/lib/api/fs/fs.c
++++ b/tools/lib/api/fs/fs.c
+@@ -210,6 +210,7 @@ static bool fs__env_override(struct fs *fs)
+ 	size_t name_len = strlen(fs->name);
+ 	/* name + "_PATH" + '\0' */
+ 	char upper_name[name_len + 5 + 1];
++
+ 	memcpy(upper_name, fs->name, name_len);
+ 	mem_toupper(upper_name, name_len);
+ 	strcpy(&upper_name[name_len], "_PATH");
+@@ -219,7 +220,8 @@ static bool fs__env_override(struct fs *fs)
+ 		return false;
+ 
+ 	fs->found = true;
+-	strncpy(fs->path, override_path, sizeof(fs->path));
++	strncpy(fs->path, override_path, sizeof(fs->path) - 1);
++	fs->path[sizeof(fs->path) - 1] = '\0';
+ 	return true;
  }
+ 
 -- 
 2.20.1
 
