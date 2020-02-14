@@ -4,54 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 033A8C2BA83
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 15:51:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4295C3B19D
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:01:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CC50C24689
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 15:51:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 938B32086A
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:01:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581695515;
-	bh=a427hp4mAZ4+pNfuW2wAhJwG6Fz8yU/Bnkot/sV7VBA=;
+	s=default; t=1581696075;
+	bh=vCOwDC4HiMKfA9asIcQGpE8w0AH9BpB7uecmviq9Qsc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jbiXxb9PJxv6AgZTS3Ldir/HSFLqrOPE24HXGrHi183jTvSHE4t9PQ8jSDLmqG9VV
-	 E3J0cgWqRoEzmsbgPAintvlB/UiQ5heo3BoBc3Tw0V2aTv8sK3PmMjJFpXNN2dJnWv
-	 6zm2S/bNQHb9gKy+CURV5qMsA83rSHxpNBtGtYvg=
+	b=P8wdwCalQqK6lU61Q7LAbpt7YE9uRNM10q4bILCxuBAi53zBqRSjOCCGZmw+OcJ1b
+	 0OwokSzjyRIyx8RKoAStNr68EoNxmyc0qJtwk7wB092RSBMBbSzBimM/JPxdPevLxl
+	 TLTOt0EPDJDzfB7mid1dpHnRYUxEdytuoXESgd98=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730896AbgBNPvz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Feb 2020 10:51:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57162 "EHLO mail.kernel.org"
+        id S2389121AbgBNQAV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Feb 2020 11:00:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45702 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730275AbgBNPvy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:51:54 -0500
+        id S2389115AbgBNQAU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:00:20 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8426924676;
-        Fri, 14 Feb 2020 15:51:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D57542086A;
+        Fri, 14 Feb 2020 16:00:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695513;
-        bh=a427hp4mAZ4+pNfuW2wAhJwG6Fz8yU/Bnkot/sV7VBA=;
+        s=default; t=1581696019;
+        bh=vCOwDC4HiMKfA9asIcQGpE8w0AH9BpB7uecmviq9Qsc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=py8KzrTNros6QR5eaQGk/5GCoXFmgHYn+CzoAwQ3VeRMXkiT6EOXqjAwl335pX8ge
-         qxUt/Xl7pRlp3r8jIJBGykLrPINLPf4BgCKGRPdLmE/g3WYx3KTPU1/+IDbpXVacEC
-         wgWOc6prqd6f3uLeV9RioDLd0fTngT7w3rgLiHkk=
+        b=NoH2aBHFXcTynOX7zXn9jT6EOQOJLS+WOExD4jUvdZB5WXHY2ixuwLaJu01TtuWM4
+         WVQPXKlWKBwSaG59QRvPZGnoo4FgsZXFeO6aNn0VT6mk4vlIYKty1TCknMRn1ajYV8
+         ldeH/soZX6TXxCk9/IZN/gUpRRdplpv3eBVZbKYo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
+Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 137/542] bpf, sockmap: Don't sleep while holding RCU lock on tear-down
-Date:   Fri, 14 Feb 2020 10:42:09 -0500
-Message-Id: <20200214154854.6746-137-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 535/542] i40e: Relax i40e_xsk_wakeup's return value when PF is busy
+Date:   Fri, 14 Feb 2020 10:48:47 -0500
+Message-Id: <20200214154854.6746-535-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
 References: <20200214154854.6746-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -60,143 +62,37 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-[ Upstream commit db6a5018b6e008c1d69c6628cdaa9541b8e70940 ]
+[ Upstream commit c77e9f09143822623dd71a0fdc84331129e97c3a ]
 
-rcu_read_lock is needed to protect access to psock inside sock_map_unref
-when tearing down the map. However, we can't afford to sleep in lock_sock
-while in RCU read-side critical section. Grab the RCU lock only after we
-have locked the socket.
+Return -EAGAIN instead of -ENETDOWN to provide a slightly milder
+information to user space so that an application will know to retry the
+syscall when __I40E_CONFIG_BUSY bit is set on pf->state.
 
-This fixes RCU warnings triggerable on a VM with 1 vCPU when free'ing a
-sockmap/sockhash that contains at least one socket:
-
-| =============================
-| WARNING: suspicious RCU usage
-| 5.5.0-04005-g8fc91b972b73 #450 Not tainted
-| -----------------------------
-| include/linux/rcupdate.h:272 Illegal context switch in RCU read-side critical section!
-|
-| other info that might help us debug this:
-|
-|
-| rcu_scheduler_active = 2, debug_locks = 1
-| 4 locks held by kworker/0:1/62:
-|  #0: ffff88813b019748 ((wq_completion)events){+.+.}, at: process_one_work+0x1d7/0x5e0
-|  #1: ffffc900000abe50 ((work_completion)(&map->work)){+.+.}, at: process_one_work+0x1d7/0x5e0
-|  #2: ffffffff82065d20 (rcu_read_lock){....}, at: sock_map_free+0x5/0x170
-|  #3: ffff8881368c5df8 (&stab->lock){+...}, at: sock_map_free+0x64/0x170
-|
-| stack backtrace:
-| CPU: 0 PID: 62 Comm: kworker/0:1 Not tainted 5.5.0-04005-g8fc91b972b73 #450
-| Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-buildvm-ppc64le-16.ppc.fedoraproject.org-3.fc31 04/01/2014
-| Workqueue: events bpf_map_free_deferred
-| Call Trace:
-|  dump_stack+0x71/0xa0
-|  ___might_sleep+0x105/0x190
-|  lock_sock_nested+0x28/0x90
-|  sock_map_free+0x95/0x170
-|  bpf_map_free_deferred+0x58/0x80
-|  process_one_work+0x260/0x5e0
-|  worker_thread+0x4d/0x3e0
-|  kthread+0x108/0x140
-|  ? process_one_work+0x5e0/0x5e0
-|  ? kthread_park+0x90/0x90
-|  ret_from_fork+0x3a/0x50
-
-| =============================
-| WARNING: suspicious RCU usage
-| 5.5.0-04005-g8fc91b972b73-dirty #452 Not tainted
-| -----------------------------
-| include/linux/rcupdate.h:272 Illegal context switch in RCU read-side critical section!
-|
-| other info that might help us debug this:
-|
-|
-| rcu_scheduler_active = 2, debug_locks = 1
-| 4 locks held by kworker/0:1/62:
-|  #0: ffff88813b019748 ((wq_completion)events){+.+.}, at: process_one_work+0x1d7/0x5e0
-|  #1: ffffc900000abe50 ((work_completion)(&map->work)){+.+.}, at: process_one_work+0x1d7/0x5e0
-|  #2: ffffffff82065d20 (rcu_read_lock){....}, at: sock_hash_free+0x5/0x1d0
-|  #3: ffff888139966e00 (&htab->buckets[i].lock){+...}, at: sock_hash_free+0x92/0x1d0
-|
-| stack backtrace:
-| CPU: 0 PID: 62 Comm: kworker/0:1 Not tainted 5.5.0-04005-g8fc91b972b73-dirty #452
-| Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-buildvm-ppc64le-16.ppc.fedoraproject.org-3.fc31 04/01/2014
-| Workqueue: events bpf_map_free_deferred
-| Call Trace:
-|  dump_stack+0x71/0xa0
-|  ___might_sleep+0x105/0x190
-|  lock_sock_nested+0x28/0x90
-|  sock_hash_free+0xec/0x1d0
-|  bpf_map_free_deferred+0x58/0x80
-|  process_one_work+0x260/0x5e0
-|  worker_thread+0x4d/0x3e0
-|  kthread+0x108/0x140
-|  ? process_one_work+0x5e0/0x5e0
-|  ? kthread_park+0x90/0x90
-|  ret_from_fork+0x3a/0x50
-
-Fixes: 7e81a3530206 ("bpf: Sockmap, ensure sock lock held during tear down")
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+Fixes: b3873a5be757 ("net/i40e: Fix concurrency issues between config flow and XSK")
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/bpf/20200206111652.694507-2-jakub@cloudflare.com
+Acked-by: Björn Töpel <bjorn.topel@intel.com>
+Link: https://lore.kernel.org/bpf/20200205045834.56795-2-maciej.fijalkowski@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/sock_map.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index b16ff3b8c6503..085cef5857bbf 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -234,7 +234,6 @@ static void sock_map_free(struct bpf_map *map)
- 	int i;
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+index f73cd917c44f7..3156de786d955 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+@@ -791,7 +791,7 @@ int i40e_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
+ 	struct i40e_ring *ring;
  
- 	synchronize_rcu();
--	rcu_read_lock();
- 	raw_spin_lock_bh(&stab->lock);
- 	for (i = 0; i < stab->map.max_entries; i++) {
- 		struct sock **psk = &stab->sks[i];
-@@ -243,12 +242,13 @@ static void sock_map_free(struct bpf_map *map)
- 		sk = xchg(psk, NULL);
- 		if (sk) {
- 			lock_sock(sk);
-+			rcu_read_lock();
- 			sock_map_unref(sk, psk);
-+			rcu_read_unlock();
- 			release_sock(sk);
- 		}
- 	}
- 	raw_spin_unlock_bh(&stab->lock);
--	rcu_read_unlock();
+ 	if (test_bit(__I40E_CONFIG_BUSY, pf->state))
+-		return -ENETDOWN;
++		return -EAGAIN;
  
- 	/* wait for psock readers accessing its map link */
- 	synchronize_rcu();
-@@ -864,19 +864,19 @@ static void sock_hash_free(struct bpf_map *map)
- 	int i;
- 
- 	synchronize_rcu();
--	rcu_read_lock();
- 	for (i = 0; i < htab->buckets_num; i++) {
- 		bucket = sock_hash_select_bucket(htab, i);
- 		raw_spin_lock_bh(&bucket->lock);
- 		hlist_for_each_entry_safe(elem, node, &bucket->head, node) {
- 			hlist_del_rcu(&elem->node);
- 			lock_sock(elem->sk);
-+			rcu_read_lock();
- 			sock_map_unref(elem->sk, elem);
-+			rcu_read_unlock();
- 			release_sock(elem->sk);
- 		}
- 		raw_spin_unlock_bh(&bucket->lock);
- 	}
--	rcu_read_unlock();
- 
- 	/* wait for psock readers accessing its map link */
- 	synchronize_rcu();
+ 	if (test_bit(__I40E_VSI_DOWN, vsi->state))
+ 		return -ENETDOWN;
 -- 
 2.20.1
 
