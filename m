@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDABEC3B19F
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:44:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1119DC3B1A1
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:45:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AFB9B2187F
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:44:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E569924684
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:45:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393569AbgBNQo7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S2394024AbgBNQo7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 14 Feb 2020 11:44:59 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:55558 "EHLO
+Received: from Galois.linutronix.de ([193.142.43.55]:55562 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392977AbgBNQVe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S2392982AbgBNQVe (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 14 Feb 2020 11:21:34 -0500
 Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1j2diC-0003I7-Hc; Fri, 14 Feb 2020 17:21:04 +0100
+        id 1j2diL-0003Qt-DD; Fri, 14 Feb 2020 17:21:13 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id 36C951004EC;
-        Fri, 14 Feb 2020 17:21:04 +0100 (CET)
-Message-Id: <20200214161503.178987057@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id 3DD57103068;
+        Fri, 14 Feb 2020 17:21:07 +0100 (CET)
+Message-Id: <20200214161504.632924390@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Fri, 14 Feb 2020 14:39:20 +0100
+Date:   Fri, 14 Feb 2020 14:39:34 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
@@ -40,7 +40,7 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Ingo Molnar <mingo@kernel.org>
-Subject: [RFC patch 03/19] bpf: Update locking comment in hashtab code
+Subject: [RFC patch 17/19] bpf: Prepare hashtab locking for PREEMPT_RT
 References: <20200214133917.304937432@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,81 +49,153 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The comment where the bucket lock is acquired says:
+PREEMPT_RT forbids certain operations like memory allocations (even with
+GFP_ATOMIC) from atomic contexts. This is required because even with
+GFP_ATOMIC the memory allocator calls into code pathes which acquire locks
+with long held lock sections. To ensure the deterministic behaviour these
+locks are regular spinlocks, which are converted to 'sleepable' spinlocks
+on RT. The only true atomic contexts on an RT kernel are the low level
+hardware handling, scheduling, low level interrupt handling, NMIs etc. None
+of these contexts should ever do memory allocations.
 
-  /* bpf_map_update_elem() can be called in_irq() */
+As regular device interrupt handlers and soft interrupts are forced into
+thread context, the existing code which does
+  spin_lock*(); alloc(GPF_ATOMIC); spin_unlock*();
+just works.
 
-which is not really helpful and aside of that it does not explain the
-subtle details of the hash bucket locks expecially in the context of BPF
-and perf, kprobes and tracing.
+In theory the BPF locks could be converted to regular spinlocks as well,
+but the bucket locks and percpu_freelist locks can be taken from arbitrary
+contexts (perf, kprobes, tracepoints) which are required to be atomic
+contexts even on RT. These mechanisms require preallocated maps, so there
+is no need to invoke memory allocations within the lock held sections.
 
-Add a comment at the top of the file which explains the protection scopes
-and the details how potential deadlocks are prevented.
+BPF maps which need dynamic allocation are only used from (forced) thread
+context on RT and can therefore use regular spinlocks which in turn allows
+to invoke memory allocations from the lock held section.
+
+To achieve this make the hash bucket lock a union of a raw and a regular
+spinlock and initialize and lock/unlock either the raw spinlock for
+preallocated maps or the regular variant for maps which require memory
+allocations.
+
+On a non RT kernel this distinction is neither possible nor required.
+spinlock maps to raw_spinlock and the extra code and conditional is
+optimized out by the compiler. No functional change.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- kernel/bpf/hashtab.c |   24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
+ kernel/bpf/hashtab.c |   65 +++++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 56 insertions(+), 9 deletions(-)
 
 --- a/kernel/bpf/hashtab.c
 +++ b/kernel/bpf/hashtab.c
-@@ -27,6 +27,26 @@
- 	.map_delete_batch =			\
- 	generic_map_delete_batch
- 
-+/*
-+ * The bucket lock has two protection scopes:
+@@ -46,10 +46,43 @@
+  * from one of these contexts completed. sys_bpf() uses the same mechanism
+  * by pinning the task to the current CPU and incrementing the recursion
+  * protection accross the map operation.
 + *
-+ * 1) Serializing concurrent operations from BPF programs on differrent
-+ *    CPUs
++ * This has subtle implications on PREEMPT_RT. PREEMPT_RT forbids certain
++ * operations like memory allocations (even with GFP_ATOMIC) from atomic
++ * contexts. This is required because even with GFP_ATOMIC the memory
++ * allocator calls into code pathes which acquire locks with long held lock
++ * sections. To ensure the deterministic behaviour these locks are regular
++ * spinlocks, which are converted to 'sleepable' spinlocks on RT. The only
++ * true atomic contexts on an RT kernel are the low level hardware
++ * handling, scheduling, low level interrupt handling, NMIs etc. None of
++ * these contexts should ever do memory allocations.
 + *
-+ * 2) Serializing concurrent operations from BPF programs and sys_bpf()
++ * As regular device interrupt handlers and soft interrupts are forced into
++ * thread context, the existing code which does
++ *   spin_lock*(); alloc(GPF_ATOMIC); spin_unlock*();
++ * just works.
 + *
-+ * BPF programs can execute in any context including perf, kprobes and
-+ * tracing. As there are almost no limits where perf, kprobes and tracing
-+ * can be invoked from the lock operations need to be protected against
-+ * deadlocks. Deadlocks can be caused by recursion and by an invocation in
-+ * the lock held section when functions which acquire this lock are invoked
-+ * from sys_bpf(). BPF recursion is prevented by incrementing the per CPU
-+ * variable bpf_prog_active, which prevents BPF programs attached to perf
-+ * events, kprobes and tracing to be invoked before the prior invocation
-+ * from one of these contexts completed. sys_bpf() uses the same mechanism
-+ * by pinning the task to the current CPU and incrementing the recursion
-+ * protection accross the map operation.
-+ */
++ * In theory the BPF locks could be converted to regular spinlocks as well,
++ * but the bucket locks and percpu_freelist locks can be taken from
++ * arbitrary contexts (perf, kprobes, tracepoints) which are required to be
++ * atomic contexts even on RT. These mechanisms require preallocated maps,
++ * so there is no need to invoke memory allocations within the lock held
++ * sections.
++ *
++ * BPF maps which need dynamic allocation are only used from (forced)
++ * thread context on RT and can therefore use regular spinlocks which in
++ * turn allows to invoke memory allocations from the lock held section.
++ *
++ * On a non RT kernel this distinction is neither possible nor required.
++ * spinlock maps to raw_spinlock and the extra code is optimized out by the
++ * compiler.
+  */
  struct bucket {
  	struct hlist_nulls_head head;
- 	raw_spinlock_t lock;
-@@ -872,7 +892,6 @@ static int htab_map_update_elem(struct b
- 		 */
+-	raw_spinlock_t lock;
++	union {
++		raw_spinlock_t raw_lock;
++		spinlock_t     lock;
++	};
+ };
+ 
+ struct bpf_htab {
+@@ -87,13 +120,26 @@ struct htab_elem {
+ 	char key[0] __aligned(8);
+ };
+ 
++static inline bool htab_is_prealloc(const struct bpf_htab *htab)
++{
++	return !(htab->map.map_flags & BPF_F_NO_PREALLOC);
++}
++
++static inline bool htab_use_raw_lock(const struct bpf_htab *htab)
++{
++	return (!IS_ENABLED(CONFIG_PREEMPT_RT) || htab_is_prealloc(htab));
++}
++
+ static void htab_init_buckets(struct bpf_htab *htab)
+ {
+ 	unsigned i;
+ 
+ 	for (i = 0; i < htab->n_buckets; i++) {
+ 		INIT_HLIST_NULLS_HEAD(&htab->buckets[i].head, i);
+-		raw_spin_lock_init(&htab->buckets[i].lock);
++		if (htab_use_raw_lock(htab))
++			raw_spin_lock_init(&htab->buckets[i].raw_lock);
++		else
++			spin_lock_init(&htab->buckets[i].lock);
  	}
+ }
  
--	/* bpf_map_update_elem() can be called in_irq() */
- 	raw_spin_lock_irqsave(&b->lock, flags);
+@@ -102,7 +148,10 @@ static inline unsigned long htab_lock_bu
+ {
+ 	unsigned long flags;
  
- 	l_old = lookup_elem_raw(head, hash, key, key_size);
-@@ -952,7 +971,6 @@ static int htab_lru_map_update_elem(stru
- 		return -ENOMEM;
- 	memcpy(l_new->key + round_up(map->key_size, 8), value, map->value_size);
+-	raw_spin_lock_irqsave(&b->lock, flags);
++	if (htab_use_raw_lock(htab))
++		raw_spin_lock_irqsave(&b->raw_lock, flags);
++	else
++		spin_lock_irqsave(&b->lock, flags);
+ 	return flags;
+ }
  
--	/* bpf_map_update_elem() can be called in_irq() */
- 	raw_spin_lock_irqsave(&b->lock, flags);
+@@ -110,7 +159,10 @@ static inline void htab_unlock_bucket(co
+ 				      struct bucket *b,
+ 				      unsigned long flags)
+ {
+-	raw_spin_unlock_irqrestore(&b->lock, flags);
++	if (htab_use_raw_lock(htab))
++		raw_spin_unlock_irqrestore(&b->raw_lock, flags);
++	else
++		spin_unlock_irqrestore(&b->lock, flags);
+ }
  
- 	l_old = lookup_elem_raw(head, hash, key, key_size);
-@@ -1007,7 +1025,6 @@ static int __htab_percpu_map_update_elem
- 	b = __select_bucket(htab, hash);
- 	head = &b->head;
+ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node);
+@@ -127,11 +179,6 @@ static bool htab_is_percpu(const struct
+ 		htab->map.map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH;
+ }
  
--	/* bpf_map_update_elem() can be called in_irq() */
- 	raw_spin_lock_irqsave(&b->lock, flags);
- 
- 	l_old = lookup_elem_raw(head, hash, key, key_size);
-@@ -1071,7 +1088,6 @@ static int __htab_lru_percpu_map_update_
- 			return -ENOMEM;
- 	}
- 
--	/* bpf_map_update_elem() can be called in_irq() */
- 	raw_spin_lock_irqsave(&b->lock, flags);
- 
- 	l_old = lookup_elem_raw(head, hash, key, key_size);
+-static bool htab_is_prealloc(const struct bpf_htab *htab)
+-{
+-	return !(htab->map.map_flags & BPF_F_NO_PREALLOC);
+-}
+-
+ static inline void htab_elem_set_ptr(struct htab_elem *l, u32 key_size,
+ 				     void __percpu *pptr)
+ {
 
