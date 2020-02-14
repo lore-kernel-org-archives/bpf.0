@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A51AC2BA83
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:33:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 277CCC2BA83
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:40:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3FA5C246B4
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:33:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01047217F4
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:40:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581697993;
-	bh=WfLUugpGPKXn/iHU2isoZ0mKXtTg4eIb74duBSFyh0I=;
+	s=default; t=1581698417;
+	bh=Ba+QKGRskXBXvu0aL2I2KaAkS6/2ikohdEhv5jDvwgE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=BfSjiTLXg5rn9iSbypAYbXePUbCaNdnqHGIW+7Kjf3sSQLC+dOneqzddYe44HIpGC
-	 mgr456xVjeX7RYJHO9MSl/mx6vPoorcOmzFhHAoLR+o9fBNTfcmMvDmGPRIFQeLNZN
-	 UE1ubojKSSUoQ5Rz/JwzAiLkrk1ieKFMQD86AvNQ=
+	b=ydB3Ruhs7M8jq4NQOrrosLW2nJ8POHAbU+ELml/Vpd2G7WhHvGl1ag8qyikXJUgUh
+	 3lG3v4T9Tu43+YIf2z0pB7uB2JEzBznZRHgbetDUNInWESijTJPMtKJyyCJoHMXYnX
+	 iJ8bISuMmX5TepBgPWRyFWXYVJpzHFoW6DhLtdFY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392914AbgBNQdF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Feb 2020 11:33:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35372 "EHLO mail.kernel.org"
+        id S2405729AbgBNQjz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Feb 2020 11:39:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59042 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406164AbgBNQZh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:25:37 -0500
+        id S2393326AbgBNQXD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:23:03 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EDBEF247C9;
-        Fri, 14 Feb 2020 16:25:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 740FD24768;
+        Fri, 14 Feb 2020 16:23:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697536;
-        bh=WfLUugpGPKXn/iHU2isoZ0mKXtTg4eIb74duBSFyh0I=;
+        s=default; t=1581697383;
+        bh=Ba+QKGRskXBXvu0aL2I2KaAkS6/2ikohdEhv5jDvwgE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gYW8HCa5coIQR3ZbOdeTwiYnkUutToI8a2H62Ep5Tae4Uhu9XK64PFVQqBSab5Vh+
-         f3Vg5gMeZeeCnPrgCCek0g+5aT61/pzfw4eexJsezu+NbEkk4tkmhMCgrozEo+KjiB
-         /WcdVqo2eLAM2jzxlVbGCdoD/p9Q7UOSdX+O8NQ8=
+        b=mdMWciMj8iEskCf6Mmp0ynORluFwvLHnDay/UvheAkUrU+7ov7CJUzG8oYF34kdOb
+         64pOVdLKgxEBXYugCyzbGWJf/xvp/clNbvlDLw0+Bh50jgTQxIsJBNP0Vu/q+Ej3p9
+         hbhblqppxlS8EtwmrugQ3W431xlc3fr6PfkJqcCM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrey Zhizhikin <andrey.z@gmail.com>,
@@ -53,12 +53,12 @@ Cc:     Andrey Zhizhikin <andrey.z@gmail.com>,
         bpf@vger.kernel.org, netdev@vger.kernel.org,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.4 057/100] tools lib api fs: Fix gcc9 stringop-truncation compilation error
-Date:   Fri, 14 Feb 2020 11:23:41 -0500
-Message-Id: <20200214162425.21071-57-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 079/141] tools lib api fs: Fix gcc9 stringop-truncation compilation error
+Date:   Fri, 14 Feb 2020 11:20:19 -0500
+Message-Id: <20200214162122.19794-79-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214162425.21071-1-sashal@kernel.org>
-References: <20200214162425.21071-1-sashal@kernel.org>
+In-Reply-To: <20200214162122.19794-1-sashal@kernel.org>
+References: <20200214162122.19794-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -106,10 +106,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tools/lib/api/fs/fs.c b/tools/lib/api/fs/fs.c
-index 459599d1b6c41..58f05748dd39e 100644
+index f99f49e4a31e6..21e714cf0126c 100644
 --- a/tools/lib/api/fs/fs.c
 +++ b/tools/lib/api/fs/fs.c
-@@ -179,6 +179,7 @@ static bool fs__env_override(struct fs *fs)
+@@ -194,6 +194,7 @@ static bool fs__env_override(struct fs *fs)
  	size_t name_len = strlen(fs->name);
  	/* name + "_PATH" + '\0' */
  	char upper_name[name_len + 5 + 1];
@@ -117,7 +117,7 @@ index 459599d1b6c41..58f05748dd39e 100644
  	memcpy(upper_name, fs->name, name_len);
  	mem_toupper(upper_name, name_len);
  	strcpy(&upper_name[name_len], "_PATH");
-@@ -188,7 +189,8 @@ static bool fs__env_override(struct fs *fs)
+@@ -203,7 +204,8 @@ static bool fs__env_override(struct fs *fs)
  		return false;
  
  	fs->found = true;
