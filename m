@@ -2,131 +2,76 @@ Return-Path: <SRS0=yg+S=4C=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E178DC3B1A1
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:19:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87758C2BA83
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:21:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BAAE024712
-	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:19:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581697167;
-	bh=z24xMhAOAsv3RMvG0Q89BdGt7Cz+HJ5sGckhBahJMxk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=lkA4IRr6UhK28Qf668VTb/1fFJ2MWW+RkWpy+YNfVXO56N7UvtTFwn6Rz4aKbXCVv
-	 +41b4G54kk83t3M4CYKkla+08YmEb/+0J3FDeTCFFrcFzgrrb4rOj8h6VR2zr/JchW
-	 2FU+4JvV0P7gMkiTVV3XPdOrXGNLf6vsfi3Y0W/U=
+	by mail.kernel.org (Postfix) with ESMTP id 62364246BE
+	for <bpf@archiver.kernel.org>; Fri, 14 Feb 2020 16:21:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392796AbgBNQT0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Feb 2020 11:19:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52464 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392792AbgBNQTZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:19:25 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1F4CD2470C;
-        Fri, 14 Feb 2020 16:19:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697164;
-        bh=z24xMhAOAsv3RMvG0Q89BdGt7Cz+HJ5sGckhBahJMxk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IEAX4ozbmnfCwV7LxSneo8uRy7JipFRN/e1CsCC6rXL8jIxClWW3w5RS6lDgbfjoX
-         ONQZsy0lKUeiW4ExhsQ3/n1IfVU2UFivaFQt/Q6LkyeUvRbBVK+KPD3IXwq4Okjybx
-         0ii9Z5UWQjavciksArUccYEQxI57xhs2tr6SEIUk=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrey Zhizhikin <andrey.z@gmail.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Petr Mladek <pmladek@suse.com>, Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
+        id S2393013AbgBNQVf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Feb 2020 11:21:35 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:55566 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392998AbgBNQVe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:21:34 -0500
+Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1j2diC-0003I9-Ou; Fri, 14 Feb 2020 17:21:04 +0100
+Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id 6B4A1101DF3;
+        Fri, 14 Feb 2020 17:21:04 +0100 (CET)
+Message-Id: <20200214161503.289763704@linutronix.de>
+User-Agent: quilt/0.65
+Date:   Fri, 14 Feb 2020 14:39:21 +0100
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.14 100/186] tools lib api fs: Fix gcc9 stringop-truncation compilation error
-Date:   Fri, 14 Feb 2020 11:15:49 -0500
-Message-Id: <20200214161715.18113-100-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
-References: <20200214161715.18113-1-sashal@kernel.org>
+        Sebastian Sewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Clark Williams <williams@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: [RFC patch 04/19] bpf/tracing: Remove redundant preempt_disable() in __bpf_trace_run()
+References: <20200214133917.304937432@linutronix.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrey Zhizhikin <andrey.z@gmail.com>
+__bpf_trace_run() disables preemption around the BPF_PROG_RUN() invocation.
 
-[ Upstream commit 6794200fa3c9c3e6759dae099145f23e4310f4f7 ]
+This is redundant because __bpf_trace_run() is invoked from a trace point
+via __DO_TRACE() which already disables preemption _before_ invoking any of
+the functions which are attached to a trace point.
 
-GCC9 introduced string hardening mechanisms, which exhibits the error
-during fs api compilation:
+Remove it.
 
-error: '__builtin_strncpy' specified bound 4096 equals destination size
-[-Werror=stringop-truncation]
-
-This comes when the length of copy passed to strncpy is is equal to
-destination size, which could potentially lead to buffer overflow.
-
-There is a need to mitigate this potential issue by limiting the size of
-destination by 1 and explicitly terminate the destination with NULL.
-
-Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andriin@fb.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Link: http://lore.kernel.org/lkml/20191211080109.18765-1-andrey.zhizhikin@leica-geosystems.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- tools/lib/api/fs/fs.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/trace/bpf_trace.c |    2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/tools/lib/api/fs/fs.c b/tools/lib/api/fs/fs.c
-index b24afc0e6e81c..45b50b89009aa 100644
---- a/tools/lib/api/fs/fs.c
-+++ b/tools/lib/api/fs/fs.c
-@@ -210,6 +210,7 @@ static bool fs__env_override(struct fs *fs)
- 	size_t name_len = strlen(fs->name);
- 	/* name + "_PATH" + '\0' */
- 	char upper_name[name_len + 5 + 1];
-+
- 	memcpy(upper_name, fs->name, name_len);
- 	mem_toupper(upper_name, name_len);
- 	strcpy(&upper_name[name_len], "_PATH");
-@@ -219,7 +220,8 @@ static bool fs__env_override(struct fs *fs)
- 		return false;
- 
- 	fs->found = true;
--	strncpy(fs->path, override_path, sizeof(fs->path));
-+	strncpy(fs->path, override_path, sizeof(fs->path) - 1);
-+	fs->path[sizeof(fs->path) - 1] = '\0';
- 	return true;
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1476,9 +1476,7 @@ static __always_inline
+ void __bpf_trace_run(struct bpf_prog *prog, u64 *args)
+ {
+ 	rcu_read_lock();
+-	preempt_disable();
+ 	(void) BPF_PROG_RUN(prog, args);
+-	preempt_enable();
+ 	rcu_read_unlock();
  }
  
--- 
-2.20.1
 
