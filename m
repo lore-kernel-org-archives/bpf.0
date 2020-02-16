@@ -4,38 +4,38 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C188C2BA83
-	for <bpf@archiver.kernel.org>; Sun, 16 Feb 2020 19:31:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09C17C76199
+	for <bpf@archiver.kernel.org>; Sun, 16 Feb 2020 19:32:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 10F822084E
-	for <bpf@archiver.kernel.org>; Sun, 16 Feb 2020 19:31:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6E9F2072C
+	for <bpf@archiver.kernel.org>; Sun, 16 Feb 2020 19:32:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581881515;
-	bh=FCtuSKuO8tBPMGuuiX1HaGM1sD/jjbPcgF/2xXaLsiE=;
+	s=default; t=1581881524;
+	bh=A6HMq46A0do9UU1QgMNuxbLiA5B0bi8j81mJe/opJpo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=iPZUsZhogpmoblEuPClDG6f0PMPxDtwxZN0+jlj8viim0dEHiRz610u4Gmv4v+ehS
-	 EsPFFV1s9cfAELJG2yLRKBZJCOKgHXtkayjB+YfIZ/4fEVUctYoqcYDKDS5aSbDYMt
-	 3jCE4kiMJr6puah/Qeixu1xOoC6paSJtkezXzldI=
+	b=fWDsL0i7Nl5FpLHgx0asXZKtLpiKHgqMxRtd9or01wVirgCHBgSxuIO7vx94Jy6vL
+	 TAMt1KQMAeEVnLJ0Ywwhi0C5acJI17/912ydfMIFk6J5021QBpFBhY1Wz2DsYg6lHX
+	 MEaNWgCu8CBMIAXMXX6cJGxLztaO9+AYURoATe5o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726037AbgBPTby convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 16 Feb 2020 14:31:54 -0500
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:30654 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726656AbgBPTby (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 16 Feb 2020 14:31:54 -0500
+        id S1727668AbgBPTcD convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 16 Feb 2020 14:32:03 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:34087 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726043AbgBPTcD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 16 Feb 2020 14:32:03 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-307-7nDvYxAmN4exEtzLaotL_Q-1; Sun, 16 Feb 2020 14:31:45 -0500
+ us-mta-217-M4y6KAKvO5aL9vvS_ikQCA-1; Sun, 16 Feb 2020 14:31:57 -0500
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D10801005516;
-        Sun, 16 Feb 2020 19:31:42 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E15DE1005516;
+        Sun, 16 Feb 2020 19:31:54 +0000 (UTC)
 Received: from krava.redhat.com (ovpn-204-28.brq.redhat.com [10.40.204.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8C6318AC5B;
-        Sun, 16 Feb 2020 19:31:39 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7269F8574E;
+        Sun, 16 Feb 2020 19:31:47 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
@@ -49,14 +49,14 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 16/18] perf tools: Synthesize bpf_trampoline/dispatcher ksymbol event
-Date:   Sun, 16 Feb 2020 20:30:03 +0100
-Message-Id: <20200216193005.144157-17-jolsa@kernel.org>
+Subject: [PATCH 18/18] perf annotate: Add base support for bpf_image
+Date:   Sun, 16 Feb 2020 20:30:05 +0100
+Message-Id: <20200216193005.144157-19-jolsa@kernel.org>
 In-Reply-To: <20200216193005.144157-1-jolsa@kernel.org>
 References: <20200216193005.144157-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-MC-Unique: 7nDvYxAmN4exEtzLaotL_Q-1
+X-MC-Unique: M4y6KAKvO5aL9vvS_ikQCA-1
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: kernel.org
 Content-Type: text/plain; charset=WINDOWS-1252
@@ -66,165 +66,132 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Synthesize bpf images (trampolines/dispatchers) on start,
-as ksymbol events from /proc/kallsyms. Having this perf
-can recognize samples from those images and perf report
-and top shows them correctly.
+Adding the DSO_BINARY_TYPE__BPF_IMAGE dso binary type
+to recognize bpf images that carry trampoline or dispatcher.
 
-The rest of the ksymbol handling is already in place from
-for the bpf programs monitoring, so only the initial state
-was needed.
+Upcoming patches will add support to read the image data,
+store it within the BPF feature in perf.data and display
+it for annotation purposes.
 
-perf report output:
+Currently we only display following message:
 
-  # Overhead  Command     Shared Object                  Symbol
-
-    12.37%  test_progs  [kernel.vmlinux]                 [k] entry_SYSCALL_64
-    11.80%  test_progs  [kernel.vmlinux]                 [k] syscall_return_via_sysret
-     9.63%  test_progs  bpf_prog_bcf7977d3b93787c_prog2  [k] bpf_prog_bcf7977d3b93787c_prog2
-     6.90%  test_progs  bpf_trampoline_24456             [k] bpf_trampoline_24456
-     6.36%  test_progs  [kernel.vmlinux]                 [k] memcpy_erms
+  # ./perf annotate bpf_trampoline_24456 --stdio
+   Percent |      Source code & Disassembly of . for cycles (504  ...
+  --------------------------------------------------------------- ...
+           :       to be implemented
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/perf/util/bpf-event.c | 98 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 98 insertions(+)
+ tools/perf/util/annotate.c | 20 ++++++++++++++++++++
+ tools/perf/util/dso.c      |  1 +
+ tools/perf/util/dso.h      |  1 +
+ tools/perf/util/machine.c  | 11 +++++++++++
+ tools/perf/util/symbol.c   |  1 +
+ 5 files changed, 34 insertions(+)
 
-diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
-index a3207d900339..120ec547ae75 100644
---- a/tools/perf/util/bpf-event.c
-+++ b/tools/perf/util/bpf-event.c
-@@ -6,6 +6,9 @@
- #include <bpf/libbpf.h>
- #include <linux/btf.h>
- #include <linux/err.h>
-+#include <linux/string.h>
-+#include <internal/lib.h>
-+#include <symbol/kallsyms.h>
- #include "bpf-event.h"
- #include "debug.h"
- #include "dso.h"
-@@ -290,11 +293,87 @@ static int perf_event__synthesize_one_bpf_prog(struct perf_session *session,
- 	return err ? -1 : 0;
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index ca73fb74ad03..d9e606e11936 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -1843,6 +1843,24 @@ static int symbol__disassemble_bpf(struct symbol *sym __maybe_unused,
+ }
+ #endif // defined(HAVE_LIBBFD_SUPPORT) && defined(HAVE_LIBBPF_SUPPORT)
+ 
++static int
++symbol__disassemble_bpf_image(struct symbol *sym,
++			      struct annotate_args *args)
++{
++	struct annotation *notes = symbol__annotation(sym);
++	struct disasm_line *dl;
++
++	args->offset = -1;
++	args->line = strdup("to be implemented");
++	args->line_nr = 0;
++	dl = disasm_line__new(args);
++	if (dl)
++		annotation_line__add(&dl->al, &notes->src->source);
++
++	free(args->line);
++	return 0;
++}
++
+ /*
+  * Possibly create a new version of line with tabs expanded. Returns the
+  * existing or new line, storage is updated if a new line is allocated. If
+@@ -1942,6 +1960,8 @@ static int symbol__disassemble(struct symbol *sym, struct annotate_args *args)
+ 
+ 	if (dso->binary_type == DSO_BINARY_TYPE__BPF_PROG_INFO) {
+ 		return symbol__disassemble_bpf(sym, args);
++	} else if (dso->binary_type == DSO_BINARY_TYPE__BPF_IMAGE) {
++		return symbol__disassemble_bpf_image(sym, args);
+ 	} else if (dso__is_kcore(dso)) {
+ 		kce.kcore_filename = symfs_filename;
+ 		kce.addr = map__rip_2objdump(map, sym->start);
+diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+index 91f21239608b..f338990e0fe6 100644
+--- a/tools/perf/util/dso.c
++++ b/tools/perf/util/dso.c
+@@ -191,6 +191,7 @@ int dso__read_binary_type_filename(const struct dso *dso,
+ 	case DSO_BINARY_TYPE__GUEST_KALLSYMS:
+ 	case DSO_BINARY_TYPE__JAVA_JIT:
+ 	case DSO_BINARY_TYPE__BPF_PROG_INFO:
++	case DSO_BINARY_TYPE__BPF_IMAGE:
+ 	case DSO_BINARY_TYPE__NOT_FOUND:
+ 		ret = -1;
+ 		break;
+diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+index 2db64b79617a..9553a1fd9e8a 100644
+--- a/tools/perf/util/dso.h
++++ b/tools/perf/util/dso.h
+@@ -40,6 +40,7 @@ enum dso_binary_type {
+ 	DSO_BINARY_TYPE__GUEST_KCORE,
+ 	DSO_BINARY_TYPE__OPENEMBEDDED_DEBUGINFO,
+ 	DSO_BINARY_TYPE__BPF_PROG_INFO,
++	DSO_BINARY_TYPE__BPF_IMAGE,
+ 	DSO_BINARY_TYPE__NOT_FOUND,
+ };
+ 
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index 463ada5117f8..372ed147bed5 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -719,6 +719,12 @@ int machine__process_switch_event(struct machine *machine __maybe_unused,
+ 	return 0;
  }
  
-+struct kallsyms_parse {
-+	union perf_event	*event;
-+	perf_event__handler_t	 process;
-+	struct machine		*machine;
-+	struct perf_tool	*tool;
-+};
-+
-+static int
-+process_bpf_image(char *name, u64 addr, struct kallsyms_parse *data)
++static int is_bpf_image(const char *name)
 +{
-+	struct machine *machine = data->machine;
-+	union perf_event *event = data->event;
-+	struct perf_record_ksymbol *ksymbol;
-+	u32 size;
-+
-+	ksymbol = &event->ksymbol;
-+
-+	/*
-+	 * The bpf image (trampoline/dispatcher) size is aligned to
-+	 * page, while it starts little bit after the page boundary.
-+	 */
-+	size = page_size - (addr - PERF_ALIGN(addr, page_size));
-+
-+	*ksymbol = (struct perf_record_ksymbol) {
-+		.header = {
-+			.type = PERF_RECORD_KSYMBOL,
-+			.size = offsetof(struct perf_record_ksymbol, name),
-+		},
-+		.addr      = addr,
-+		.len       = size,
-+		.ksym_type = PERF_RECORD_KSYMBOL_TYPE_BPF,
-+		.flags     = 0,
-+	};
-+
-+	strncpy(ksymbol->name, name, KSYM_NAME_LEN);
-+	ksymbol->header.size += PERF_ALIGN(strlen(name) + 1, sizeof(u64));
-+	memset((void *) event + event->header.size, 0, machine->id_hdr_size);
-+	event->header.size += machine->id_hdr_size;
-+
-+	return perf_tool__process_synth_event(data->tool, event, machine,
-+					      data->process);
++	return strncmp(name, "bpf_trampoline_", sizeof("bpf_trampoline_") - 1) ||
++	       strncmp(name, "bpf_dispatcher_", sizeof("bpf_dispatcher_") - 1);
 +}
 +
-+static int
-+kallsyms_process_symbol(void *data, const char *_name,
-+			char type __maybe_unused, u64 start)
-+{
-+	char *module, *name;
-+	unsigned long id;
-+	int err = 0;
+ static int machine__process_ksymbol_register(struct machine *machine,
+ 					     union perf_event *event,
+ 					     struct perf_sample *sample __maybe_unused)
+@@ -743,6 +749,11 @@ static int machine__process_ksymbol_register(struct machine *machine,
+ 		map->end = map->start + event->ksymbol.len;
+ 		maps__insert(&machine->kmaps, map);
+ 		dso__set_loaded(dso);
 +
-+	module = strchr(_name, '\t');
-+	if (!module)
-+		return 0;
-+
-+	/* We are going after [bpf] module ... */
-+	if (strcmp(module + 1, "[bpf]"))
-+		return 0;
-+
-+	name = memdup(_name, (module - _name) + 1);
-+	if (!name)
-+		return -ENOMEM;
-+
-+	name[module - _name] = 0;
-+
-+	/* .. and only for trampolines and dispatchers */
-+	if ((sscanf(name, "bpf_trampoline_%lu", &id) == 1) ||
-+	    (sscanf(name, "bpf_dispatcher_%lu", &id) == 1))
-+		err = process_bpf_image(name, start, data);
-+
-+	free(name);
-+	return err;
-+}
-+
- int perf_event__synthesize_bpf_events(struct perf_session *session,
- 				      perf_event__handler_t process,
- 				      struct machine *machine,
- 				      struct record_opts *opts)
- {
-+	const char *kallsyms_filename = "/proc/kallsyms";
-+	struct kallsyms_parse arg;
- 	union perf_event *event;
- 	__u32 id = 0;
- 	int err;
-@@ -303,6 +382,8 @@ int perf_event__synthesize_bpf_events(struct perf_session *session,
- 	event = malloc(sizeof(event->bpf) + KSYM_NAME_LEN + machine->id_hdr_size);
- 	if (!event)
- 		return -1;
-+
-+	/* Synthesize all the bpf programs in system. */
- 	while (true) {
- 		err = bpf_prog_get_next_id(id, &id);
- 		if (err) {
-@@ -335,6 +416,23 @@ int perf_event__synthesize_bpf_events(struct perf_session *session,
- 			break;
- 		}
++		if (is_bpf_image(event->ksymbol.name)) {
++			dso->binary_type = DSO_BINARY_TYPE__BPF_IMAGE;
++			dso__set_long_name(dso, "", false);
++		}
  	}
-+
-+	/* Synthesize all the bpf images - trampolines/dispatchers. */
-+	if (symbol_conf.kallsyms_name != NULL)
-+		kallsyms_filename = symbol_conf.kallsyms_name;
-+
-+	arg = (struct kallsyms_parse) {
-+		.event   = event,
-+		.process = process,
-+		.machine = machine,
-+		.tool    = session->tool,
-+	};
-+
-+	if (kallsyms__parse(kallsyms_filename, &arg, kallsyms_process_symbol)) {
-+		pr_err("%s: failed to synthesize bpf images: %s\n",
-+		       __func__, strerror(errno));
-+	}
-+
- 	free(event);
- 	return err;
- }
+ 
+ 	sym = symbol__new(map->map_ip(map, map->start),
+diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+index 3b379b1296f1..e6caec4b6054 100644
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -1537,6 +1537,7 @@ static bool dso__is_compatible_symtab_type(struct dso *dso, bool kmod,
+ 		return true;
+ 
+ 	case DSO_BINARY_TYPE__BPF_PROG_INFO:
++	case DSO_BINARY_TYPE__BPF_IMAGE:
+ 	case DSO_BINARY_TYPE__NOT_FOUND:
+ 	default:
+ 		return false;
 -- 
 2.24.1
 
