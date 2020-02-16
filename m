@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97E54C76199
-	for <bpf@archiver.kernel.org>; Sun, 16 Feb 2020 19:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E897EC76199
+	for <bpf@archiver.kernel.org>; Sun, 16 Feb 2020 19:31:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 74BDD2072C
-	for <bpf@archiver.kernel.org>; Sun, 16 Feb 2020 19:31:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF8B82072C
+	for <bpf@archiver.kernel.org>; Sun, 16 Feb 2020 19:31:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581881507;
-	bh=sawHfsfU8cMAViURLIbL3npsfBlahvIPnF451sGo9Qw=;
+	s=default; t=1581881512;
+	bh=1v0VN78/AoszyB1rtxNyYtjnY/cWXfBilkWzogeT6Tk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=D677gZg2RhPzpbY+1dSv5zJIvEphnYJMlq0RuAlaN9pfQ1vX3AR38xwOivR3NhYef
-	 mI3DxAWJ5FgsrlwzBaJ9S/C6hWkTzUGMmv/ex/SIVKYOdBJ0ZulEPzqM24rdbWGsQ3
-	 qcbQTgpskE4JPmRVHOeyxn3uaaxm8axGRFw1TWeE=
+	b=bjNItfTbcvVonzrrV1d+wWLiBsvBp7c57CQFxKhb/exW8pKv68UwtMplp9F4UfwIb
+	 dtB53pPJrrB5oStBLayKe+RCOno1czehssCGVVBHawvbJTdguXNyTriEYsiJVluwHk
+	 /iVX7/fwL26Mm8okihiVDIrpPaKXJyctmL+ieglY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725989AbgBPTbr convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 16 Feb 2020 14:31:47 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:49101 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727974AbgBPTbr (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 16 Feb 2020 14:31:47 -0500
+        id S1726043AbgBPTbw convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 16 Feb 2020 14:31:52 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:55298 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726037AbgBPTbw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 16 Feb 2020 14:31:52 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-48-yWm7D4X6ME2LOjQ8WjvdOQ-1; Sun, 16 Feb 2020 14:31:41 -0500
+ us-mta-357-Y5DUrDs0NLWg0Zu9CyZhTQ-1; Sun, 16 Feb 2020 14:31:49 -0500
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1C539107ACCA;
-        Sun, 16 Feb 2020 19:31:39 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 11FD2800D50;
+        Sun, 16 Feb 2020 19:31:47 +0000 (UTC)
 Received: from krava.redhat.com (ovpn-204-28.brq.redhat.com [10.40.204.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 465CD8AC5B;
-        Sun, 16 Feb 2020 19:31:32 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3A8E68574E;
+        Sun, 16 Feb 2020 19:31:43 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
@@ -49,14 +49,14 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 15/18] bpf: Sort bpf kallsyms symbols
-Date:   Sun, 16 Feb 2020 20:30:02 +0100
-Message-Id: <20200216193005.144157-16-jolsa@kernel.org>
+Subject: [PATCH 17/18] perf tools: Set ksymbol dso as loaded on arrival
+Date:   Sun, 16 Feb 2020 20:30:04 +0100
+Message-Id: <20200216193005.144157-18-jolsa@kernel.org>
 In-Reply-To: <20200216193005.144157-1-jolsa@kernel.org>
 References: <20200216193005.144157-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-MC-Unique: yWm7D4X6ME2LOjQ8WjvdOQ-1
+X-MC-Unique: Y5DUrDs0NLWg0Zu9CyZhTQ-1
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: kernel.org
 Content-Type: text/plain; charset=WINDOWS-1252
@@ -66,51 +66,31 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently we don't sort bpf_kallsyms and display symbols
-in proc/kallsyms as they come in via __bpf_ksym_add.
+There's no special load action for ksymbol data on
+map__load/dso__load action, where the kernel is getting
+loaded. It only gets confused with kernel kallsyms/vmlinux
+load for bpf object, which fails and could mess up with
+the map.
 
-Using the latch tree to get the next bpf_ksym object
-and insert the new symbol ahead of it.
+Disabling any further load of the map for ksymbol related dso/map.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/bpf/core.c | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+ tools/perf/util/machine.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 2f857bbfe05c..fa814179730c 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -651,9 +651,28 @@ static struct latch_tree_root bpf_progs_tree __cacheline_aligned;
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index fb5c2cd44d30..463ada5117f8 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -742,6 +742,7 @@ static int machine__process_ksymbol_register(struct machine *machine,
+ 		map->start = event->ksymbol.addr;
+ 		map->end = map->start + event->ksymbol.len;
+ 		maps__insert(&machine->kmaps, map);
++		dso__set_loaded(dso);
+ 	}
  
- static void __bpf_ksym_add(struct bpf_ksym *ksym)
- {
-+	struct list_head *head = &bpf_kallsyms;
-+	struct rb_node *next;
-+
- 	WARN_ON_ONCE(!list_empty(&ksym->lnode));
--	list_add_tail_rcu(&ksym->lnode, &bpf_kallsyms);
- 	latch_tree_insert(&ksym->tnode, &bpf_ksym_tree, &bpf_ksym_tree_ops);
-+
-+	/*
-+	 * Add ksym into bpf_kallsyms in ordered position,
-+	 * which is prepared for us by latch tree addition.
-+	 *
-+	 * Find out the next symbol and insert ksym right
-+	 * ahead of it. If ksym is the last one, just tail
-+	 * add to the bpf_kallsyms.
-+	 */
-+	next = rb_next(&ksym->tnode.node[0]);
-+	if (next) {
-+		struct bpf_ksym *ptr;
-+
-+		ptr = container_of(next, struct bpf_ksym, tnode.node[0]);
-+		head = &ptr->lnode;
-+	}
-+	list_add_tail_rcu(&ksym->lnode, head);
- }
- 
- void bpf_ksym_add(struct bpf_ksym *ksym)
+ 	sym = symbol__new(map->map_ip(map, map->start),
 -- 
 2.24.1
 
