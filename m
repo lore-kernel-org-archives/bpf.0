@@ -2,51 +2,78 @@ Return-Path: <SRS0=zGgN=4G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5158FC34022
-	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 00:15:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43C49C34022
+	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 03:05:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 24E2F20836
-	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 00:15:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581984908;
-	bh=wy2pRQV+bU+yOoXVAQAXXPoSzon9kgDk14ziMHLv6IE=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=eA7+NMcViQdgeI7U1XyzyAPrf2qt+hZflmFSwHfCJDdCXwj1aPA4KatHJsVjhp0l7
-	 HUyDfJAPbBDDVZIJ+xKxRLd64Mqle66MWffGkn9oAoaTzaR8WSBj1AY950rqLm7qNx
-	 7/ps6j2dud+WqHYr7sdA3tqTT//bJY9Nm3vl2ekE=
+	by mail.kernel.org (Postfix) with ESMTP id 0F5DB20801
+	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 03:05:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="v4qiLM8R";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="J3XKy8Ep"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726108AbgBRAPH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Feb 2020 19:15:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32780 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726140AbgBRAPH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Feb 2020 19:15:07 -0500
-Received: from localhost.localdomain (unknown [151.48.137.85])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 14541207FD;
-        Tue, 18 Feb 2020 00:15:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581984906;
-        bh=wy2pRQV+bU+yOoXVAQAXXPoSzon9kgDk14ziMHLv6IE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mR+EzqiQqBhBrktMURSKmDttWLwGKALjseyBBQBm5WzDoK8PaEjq0cZSLnI4fN4as
-         qqo58tAI3NtC3CJhREMRIYcvRD/xjBiYMV5R5az1aHizAGeHsNmE9iI/qXc0qIiMKY
-         3Rmj/Fe84ABCOLg5pNTMO+v2dWPUjHrmt6NjqNms=
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     netdev@vger.kernel.org
-Cc:     ilias.apalodimas@linaro.org, davem@davemloft.net,
-        lorenzo.bianconi@redhat.com, andrew@lunn.ch, brouer@redhat.com,
-        dsahern@kernel.org, bpf@vger.kernel.org
-Subject: [RFC net-next] net: mvneta: align xdp stats naming scheme to mlx5 driver
-Date:   Tue, 18 Feb 2020 01:14:29 +0100
-Message-Id: <526238d9bcc60500ed61da1a4af8b65af1af9583.1581984697.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.24.1
+        id S1726245AbgBRDFB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Feb 2020 22:05:01 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:40219 "EHLO
+        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726237AbgBRDFB (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 17 Feb 2020 22:05:01 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 8E03969A;
+        Mon, 17 Feb 2020 22:04:56 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 17 Feb 2020 22:04:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm2; bh=YZ/usbZEAgRJR
+        JQqoniG+SjdSG0TnzTAIojOtlHAvuE=; b=v4qiLM8R28KpHR1k1pnkmekX1mCdL
+        3p5LSFjTtxb4hyZ4Qu+JZeCu+vLf5TKnWFebosT/V7SwKfm+zSFpfjgCDeQA3KQo
+        4efXCL952Wtj8LWEE8dSgOVUBd1E1l13yyLMw3Yp5RLttyCuEytwKQAgPLkVJZ0M
+        4bhQQFBpjTfrvI3WEPsoAg79ksYkdrjjshO9DAhXKnGv6Gz4onCGkCY4nvfeRWQj
+        pB0pxssVlPaL37YPTpNEkqe3Yv4iFGTLo1IPrtcV/+f5rxAmaRJUH4AOJM2eyH3T
+        CWsuyv4kl+1F5Dznk30b3WNvnVWxrOXsF1IIPdGipPLt789sxt/J2zueQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; bh=YZ/usbZEAgRJRJQqoniG+SjdSG0TnzTAIojOtlHAvuE=; b=J3XKy8Ep
+        gEQzZznkZo59t8k9kAXFrmcDmHDXkTlEgd3K/S+0FncxHU6Ib+NY/ThWe1+f4qUj
+        s/H4F5lNuLRd48lNN+EEX07wAyxYFNCH0p3bDzr2v7JZRyw4KwDJeO7cFpCzyJGH
+        EizT8EH0zSZwLUerpHZZZu5FtBObVCzyqcHalWpaxaTdJX3X13cw/Gdypa5DS/j/
+        H5wW0Vi9IWtUXhu5LQmdXraCoC58c0ivhFruAGtbQ3pnklP6OpatzLys2DIJeTla
+        AGj+f5E8ayZwTZHFFfXmfenGBdQVtGUr05yYXhNZP2vVlbuO3e4VAfLZJiuaSuru
+        uY5FF62gW5H6rw==
+X-ME-Sender: <xms:UVRLXkCvmu9a6V1igBHikbDwEk13Z8SuHikknEEWX_5c9LCf712uzA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrjeejgdehfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnecujfgurhephffvuf
+    ffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceougig
+    uhesugiguhhuuhdrgiihiieqnecukfhppeduieefrdduudegrddufedtrddunecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhu
+    uhdrgiihii
+X-ME-Proxy: <xmx:UVRLXgMsogNJ63KwnNaeC7xk1HotK93I7nuHB2tYck0F0QQ3HagMOg>
+    <xmx:UVRLXuhO1CcevTLoivZCXZnbgODx-z1-Cxy7OJjfBbBCWd9ml4gKJg>
+    <xmx:UVRLXu0lYkb-xh2Avslt-XOx0edVznfJD03V-pYWj0XjYt1Dhss4Uw>
+    <xmx:WFRLXtffkCZe6089ZbbcmXu4wNndmliQ4-a6N7D2sXHwHlq6l90EDav55EQ>
+Received: from dlxu-fedora-R90QNFJV.thefacebook.com (unknown [163.114.130.1])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 069B93060D1A;
+        Mon, 17 Feb 2020 22:04:47 -0500 (EST)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        songliubraving@fb.com, yhs@fb.com, andriin@fb.com
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org
+Subject: [PATCH v8 bpf-next 1/2] bpf: Add bpf_read_branch_records() helper
+Date:   Mon, 17 Feb 2020 19:04:31 -0800
+Message-Id: <20200218030432.4600-2-dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.21.1
+In-Reply-To: <20200218030432.4600-1-dxu@dxuuu.xyz>
+References: <20200218030432.4600-1-dxu@dxuuu.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -54,97 +81,137 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce "rx" prefix in the name scheme for xdp counters
-on rx path.
-Differentiate between XDP_TX and ndo_xdp_xmit counters
+Branch records are a CPU feature that can be configured to record
+certain branches that are taken during code execution. This data is
+particularly interesting for profile guided optimizations. perf has had
+branch record support for a while but the data collection can be a bit
+coarse grained.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+We (Facebook) have seen in experiments that associating metadata with
+branch records can improve results (after postprocessing). We generally
+use bpf_probe_read_*() to get metadata out of userspace. That's why bpf
+support for branch records is useful.
+
+Aside from this particular use case, having branch data available to bpf
+progs can be useful to get stack traces out of userspace applications
+that omit frame pointers.
+
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- drivers/net/ethernet/marvell/mvneta.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+ include/uapi/linux/bpf.h | 25 +++++++++++++++++++++++-
+ kernel/trace/bpf_trace.c | 41 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 65 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index b7045b6a15c2..6223700dc3df 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -344,6 +344,7 @@ enum {
- 	ETHTOOL_XDP_REDIRECT,
- 	ETHTOOL_XDP_PASS,
- 	ETHTOOL_XDP_DROP,
-+	ETHTOOL_XDP_XMIT,
- 	ETHTOOL_XDP_TX,
- 	ETHTOOL_MAX_STATS,
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index f1d74a2bd234..a7e59756853f 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -2892,6 +2892,25 @@ union bpf_attr {
+  *		Obtain the 64bit jiffies
+  *	Return
+  *		The 64 bit jiffies
++ *
++ * int bpf_read_branch_records(struct bpf_perf_event_data *ctx, void *buf, u32 size, u64 flags)
++ *	Description
++ *		For an eBPF program attached to a perf event, retrieve the
++ *		branch records (struct perf_branch_entry) associated to *ctx*
++ *		and store it in	the buffer pointed by *buf* up to size
++ *		*size* bytes.
++ *	Return
++ *		On success, number of bytes written to *buf*. On error, a
++ *		negative value.
++ *
++ *		The *flags* can be set to **BPF_F_GET_BRANCH_RECORDS_SIZE** to
++ *		instead	return the number of bytes required to store all the
++ *		branch entries. If this flag is set, *buf* may be NULL.
++ *
++ *		**-EINVAL** if arguments invalid or **size** not a multiple
++ *		of sizeof(struct perf_branch_entry).
++ *
++ *		**-ENOENT** if architecture does not support branch records.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3012,7 +3031,8 @@ union bpf_attr {
+ 	FN(probe_read_kernel_str),	\
+ 	FN(tcp_send_ack),		\
+ 	FN(send_signal_thread),		\
+-	FN(jiffies64),
++	FN(jiffies64),			\
++	FN(read_branch_records),
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+  * function eBPF program intends to call
+@@ -3091,6 +3111,9 @@ enum bpf_func_id {
+ /* BPF_FUNC_sk_storage_get flags */
+ #define BPF_SK_STORAGE_GET_F_CREATE	(1ULL << 0)
+ 
++/* BPF_FUNC_read_branch_records flags. */
++#define BPF_F_GET_BRANCH_RECORDS_SIZE	(1ULL << 0)
++
+ /* Mode for BPF_FUNC_skb_adjust_room helper. */
+ enum bpf_adj_room_mode {
+ 	BPF_ADJ_ROOM_NET,
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 19e793aa441a..4d3c87a1d215 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1028,6 +1028,45 @@ static const struct bpf_func_proto bpf_perf_prog_read_value_proto = {
+          .arg3_type      = ARG_CONST_SIZE,
  };
-@@ -399,10 +400,11 @@ static const struct mvneta_statistic mvneta_statistics[] = {
- 	{ ETHTOOL_STAT_EEE_WAKEUP, T_SW, "eee_wakeup_errors", },
- 	{ ETHTOOL_STAT_SKB_ALLOC_ERR, T_SW, "skb_alloc_errors", },
- 	{ ETHTOOL_STAT_REFILL_ERR, T_SW, "refill_errors", },
--	{ ETHTOOL_XDP_REDIRECT, T_SW, "xdp_redirect", },
--	{ ETHTOOL_XDP_PASS, T_SW, "xdp_pass", },
--	{ ETHTOOL_XDP_DROP, T_SW, "xdp_drop", },
--	{ ETHTOOL_XDP_TX, T_SW, "xdp_tx", },
-+	{ ETHTOOL_XDP_REDIRECT, T_SW, "rx_xdp_redirect", },
-+	{ ETHTOOL_XDP_PASS, T_SW, "rx_xdp_pass", },
-+	{ ETHTOOL_XDP_DROP, T_SW, "rx_xdp_drop", },
-+	{ ETHTOOL_XDP_TX, T_SW, "rx_xdp_tx_xmit", },
-+	{ ETHTOOL_XDP_XMIT, T_SW, "tx_xdp_xmit", },
- };
  
- struct mvneta_stats {
-@@ -414,6 +416,7 @@ struct mvneta_stats {
- 	u64	xdp_redirect;
- 	u64	xdp_pass;
- 	u64	xdp_drop;
-+	u64	xdp_xmit;
- 	u64	xdp_tx;
- };
- 
-@@ -2050,7 +2053,10 @@ mvneta_xdp_submit_frame(struct mvneta_port *pp, struct mvneta_tx_queue *txq,
- 	u64_stats_update_begin(&stats->syncp);
- 	stats->es.ps.tx_bytes += xdpf->len;
- 	stats->es.ps.tx_packets++;
--	stats->es.ps.xdp_tx++;
-+	if (buf->type == MVNETA_TYPE_XDP_NDO)
-+		stats->es.ps.xdp_xmit++;
-+	else
-+		stats->es.ps.xdp_tx++;
- 	u64_stats_update_end(&stats->syncp);
- 
- 	mvneta_txq_inc_put(txq);
-@@ -4484,6 +4490,7 @@ mvneta_ethtool_update_pcpu_stats(struct mvneta_port *pp,
- 		u64 xdp_redirect;
- 		u64 xdp_pass;
- 		u64 xdp_drop;
-+		u64 xdp_xmit;
- 		u64 xdp_tx;
- 
- 		stats = per_cpu_ptr(pp->stats, cpu);
-@@ -4494,6 +4501,7 @@ mvneta_ethtool_update_pcpu_stats(struct mvneta_port *pp,
- 			xdp_redirect = stats->es.ps.xdp_redirect;
- 			xdp_pass = stats->es.ps.xdp_pass;
- 			xdp_drop = stats->es.ps.xdp_drop;
-+			xdp_xmit = stats->es.ps.xdp_xmit;
- 			xdp_tx = stats->es.ps.xdp_tx;
- 		} while (u64_stats_fetch_retry_irq(&stats->syncp, start));
- 
-@@ -4502,6 +4510,7 @@ mvneta_ethtool_update_pcpu_stats(struct mvneta_port *pp,
- 		es->ps.xdp_redirect += xdp_redirect;
- 		es->ps.xdp_pass += xdp_pass;
- 		es->ps.xdp_drop += xdp_drop;
-+		es->ps.xdp_xmit += xdp_xmit;
- 		es->ps.xdp_tx += xdp_tx;
++BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
++	   void *, buf, u32, size, u64, flags)
++{
++#ifndef CONFIG_X86
++	return -ENOENT;
++#else
++	static const u32 br_entry_size = sizeof(struct perf_branch_entry);
++	struct perf_branch_stack *br_stack = ctx->data->br_stack;
++	u32 to_copy;
++
++	if (unlikely(flags & ~BPF_F_GET_BRANCH_RECORDS_SIZE))
++		return -EINVAL;
++
++	if (unlikely(!br_stack))
++		return -EINVAL;
++
++	if (flags & BPF_F_GET_BRANCH_RECORDS_SIZE)
++		return br_stack->nr * br_entry_size;
++
++	if (!buf || (size % br_entry_size != 0))
++		return -EINVAL;
++
++	to_copy = min_t(u32, br_stack->nr * br_entry_size, size);
++	memcpy(buf, br_stack->entries, to_copy);
++
++	return to_copy;
++#endif
++}
++
++static const struct bpf_func_proto bpf_read_branch_records_proto = {
++	.func           = bpf_read_branch_records,
++	.gpl_only       = true,
++	.ret_type       = RET_INTEGER,
++	.arg1_type      = ARG_PTR_TO_CTX,
++	.arg2_type      = ARG_PTR_TO_MEM_OR_NULL,
++	.arg3_type      = ARG_CONST_SIZE_OR_ZERO,
++	.arg4_type      = ARG_ANYTHING,
++};
++
+ static const struct bpf_func_proto *
+ pe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+@@ -1040,6 +1079,8 @@ pe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_get_stack_proto_tp;
+ 	case BPF_FUNC_perf_prog_read_value:
+ 		return &bpf_perf_prog_read_value_proto;
++	case BPF_FUNC_read_branch_records:
++		return &bpf_read_branch_records_proto;
+ 	default:
+ 		return tracing_func_proto(func_id, prog);
  	}
- }
-@@ -4555,6 +4564,9 @@ static void mvneta_ethtool_update_stats(struct mvneta_port *pp)
- 			case ETHTOOL_XDP_TX:
- 				pp->ethtool_stats[i] = stats.ps.xdp_tx;
- 				break;
-+			case ETHTOOL_XDP_XMIT:
-+				pp->ethtool_stats[i] = stats.ps.xdp_xmit;
-+				break;
- 			}
- 			break;
- 		}
 -- 
-2.24.1
+2.21.1
 
