@@ -2,64 +2,66 @@ Return-Path: <SRS0=zGgN=4G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E0B6C34048
-	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 17:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10494C34048
+	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 17:10:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5D0D6208C4
-	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 17:10:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC3FE208C4
+	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 17:10:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ZsqEreAA"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="BOI5Ve+9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726556AbgBRRK3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Feb 2020 12:10:29 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:38537 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726610AbgBRRK3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Feb 2020 12:10:29 -0500
-Received: by mail-wr1-f67.google.com with SMTP id e8so2386158wrm.5
-        for <bpf@vger.kernel.org>; Tue, 18 Feb 2020 09:10:26 -0800 (PST)
+        id S1726707AbgBRRKc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Feb 2020 12:10:32 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:35235 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726764AbgBRRKb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Feb 2020 12:10:31 -0500
+Received: by mail-wm1-f66.google.com with SMTP id b17so3790481wmb.0
+        for <bpf@vger.kernel.org>; Tue, 18 Feb 2020 09:10:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0XiHdhttAxAt35KvQ6gLI6mAOK6DrCeSAtJNjRoQiOg=;
-        b=ZsqEreAA266BWljineYHPLkmK04ccmo8CPzRH35ATmDHcl8K/Itc68qvlYwMgxZUKZ
-         d/kKobu8Ybx9Jy/2yCKd5wrzE1GhvW1dbKC6LhwpjGsSqHYnUBQ8H32lzLUIQZ1Lv5WO
-         M3uHbywuc42CiP8Swmpptz/Z1dC7QlkTN8AHA=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iErDGLeYzQHnDlu4pDhNRNJjWqR/EZKacma+vcdQIyM=;
+        b=BOI5Ve+9dtgcPUmQGJFEL+0FnLXwb5Ls+ycGUCSxYlY9RDNy7w/+CX7t7HvNDt0/oH
+         8+A17ZgCbRHkVGC0bIZ/GC3KnYaIpGGz9+V9fQfKu6xZtHpEoyxc3HjZNdZew8+2c8Bn
+         O61RNqcExdy2f3met7mmjbKLqR1LmiJA3oQG4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0XiHdhttAxAt35KvQ6gLI6mAOK6DrCeSAtJNjRoQiOg=;
-        b=ZyF7+ytpS7sZzZsij4/0o92bfhl1RJIX3GdEfyd31FN5cSxoGiqrYtdXAhn8gUDhl3
-         WBGiwnn+0iPYlgb1enivxZ+vlBSrP1NH1V8cLdP7NZwOcJk20xSjAA66Om7zMmxUc0aL
-         VywubXuaiKRzKNZnsD0x9MLh2e3nhDDtmv4uiRKA/oJAZMQQAZxUYMhwKmJTunNl4zIc
-         bSZy+Scbe2x4IJSoZxATUORM2xkHlUHn818ew3UgpV5kRguiLrZSflVuzw88Ntx0/EYq
-         krCqrw2o8CyJmO4BDUqZnnz0kg03s39eGsir3ts8uz5cV54lSTrN6ji2nIDXEwG2WWBE
-         YaYA==
-X-Gm-Message-State: APjAAAVG3Xsp+48HeF0Bt94Kov1+1tOxPETDINm13riy98KBEiKSBP/Q
-        +kMh3GUmwvdeb3tODYPpAD8qp1quhbDpk6p4
-X-Google-Smtp-Source: APXvYqwljHPASYzgkoUzqpSvNi7K4IE7+8KngP6y8OAKJj37kG7H7mFY6oMbz86xqvQFG7arW32Iqg==
-X-Received: by 2002:a5d:4481:: with SMTP id j1mr29823196wrq.348.1582045825759;
-        Tue, 18 Feb 2020 09:10:25 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iErDGLeYzQHnDlu4pDhNRNJjWqR/EZKacma+vcdQIyM=;
+        b=gDlGpN/fswp0lbSXH0LB4MFpN3IFxxbp9XLQJ63TEIixYgdalw1l+4zLm3uHnTkM8c
+         DJm+bAvqBGaFcGRuOP0pXVLVKTYEjr3InLsG0CzXlmXI79kMwhcXJO+kS8rVixnMnejQ
+         z/ZtAPfP0oyZLlv7U4z3UupycvwxTUsiSZsTikMm039ueW8Osl6XOx41DqvvWFvCoUzY
+         LiqpCuY90wqSpVBbaN9HS4T6nAQW0p4GA109pajyyakD4z+q80+xZNVbFvO5lkohNRGR
+         QmodhOC6M0Ajd7moeRAh7FjVLUUQEo2dB9a4HVJ0M19S7QdBIgBUzogzoTH/L6pyxqls
+         8Wkg==
+X-Gm-Message-State: APjAAAV2fTqLFoYTn5LcjsvSNeEgy8EpnLL4V73KfR/+ByRQ3pqai1/y
+        uLVc90oxn5YSAjJ1cwoJH7r6sK1UarPxhdfo
+X-Google-Smtp-Source: APXvYqxFVAw6+sSO8kt7A/AIspyaCYt9Q/MZ2kHza1B+4Y9SjghpS8Psc5P5QwZBwc1GehjaBfbeIQ==
+X-Received: by 2002:a05:600c:291d:: with SMTP id i29mr4320406wmd.39.1582045829059;
+        Tue, 18 Feb 2020 09:10:29 -0800 (PST)
 Received: from cloudflare.com ([88.157.168.82])
-        by smtp.gmail.com with ESMTPSA id r3sm7037921wrn.34.2020.02.18.09.10.24
+        by smtp.gmail.com with ESMTPSA id g19sm3572281wmh.36.2020.02.18.09.10.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2020 09:10:25 -0800 (PST)
+        Tue, 18 Feb 2020 09:10:28 -0800 (PST)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         John Fastabend <john.fastabend@gmail.com>,
         Lorenz Bauer <lmb@cloudflare.com>, Martin Lau <kafai@fb.com>
-Subject: [PATCH bpf-next v7 00/11] Extend SOCKMAP/SOCKHASH to store listening sockets
-Date:   Tue, 18 Feb 2020 17:10:12 +0000
-Message-Id: <20200218171023.844439-1-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v7 02/11] net, sk_msg: Clear sk_user_data pointer on clone if tagged
+Date:   Tue, 18 Feb 2020 17:10:14 +0000
+Message-Id: <20200218171023.844439-3-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200218171023.844439-1-jakub@cloudflare.com>
+References: <20200218171023.844439-1-jakub@cloudflare.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -67,187 +69,128 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set turns SOCK{MAP,HASH} into generic collections for TCP
-sockets, both listening and established. Adding support for listening
-sockets enables us to use these BPF map types with reuseport BPF programs.
+sk_user_data can hold a pointer to an object that is not intended to be
+shared between the parent socket and the child that gets a pointer copy on
+clone. This is the case when sk_user_data points at reference-counted
+object, like struct sk_psock.
 
-Why? SOCKMAP and SOCKHASH, in comparison to REUSEPORT_SOCKARRAY, allow the
-socket to be in more than one map at the same time.
+One way to resolve it is to tag the pointer with a no-copy flag by
+repurposing its lowest bit. Based on the bit-flag value we clear the child
+sk_user_data pointer after cloning the parent socket.
 
-Having a BPF map type that can hold listening sockets, and gracefully
-co-exist with reuseport BPF is important if, in the future, we want
-BPF programs that run at socket lookup time [0]. Cover letter for v1 of
-this series tells the full story of how we got here [1].
+The no-copy flag is stored in the pointer itself as opposed to externally,
+say in socket flags, to guarantee that the pointer and the flag are copied
+from parent to child socket in an atomic fashion. Parent socket state is
+subject to change while copying, we don't hold any locks at that time.
 
-Although SOCK{MAP,HASH} are not a drop-in replacement for SOCKARRAY just
-yet, because UDP support is lacking, it's a step in this direction. We're
-working with Lorenz on extending SOCK{MAP,HASH} to hold UDP sockets, and
-expect to post RFC series for sockmap + UDP in the near future.
+This approach relies on an assumption that sk_user_data holds a pointer to
+an object aligned at least 2 bytes. A manual audit of existing users of
+rcu_dereference_sk_user_data helper confirms our assumption.
 
-I've dropped Acks from all patches that have been touched since v6.
+Also, an RCU-protected sk_user_data is not likely to hold a pointer to a
+char value or a pathological case of "struct { char c; }". To be safe, warn
+when the flag-bit is set when setting sk_user_data to catch any future
+misuses.
 
-The audit for missing READ_ONCE annotations for access to sk_prot is
-ongoing. Thus far I've found one location specific to TCP listening sockets
-that needed annotating. This got fixed it in this iteration. I wonder if
-sparse checker could be put to work to identify places where we have
-sk_prot access while not holding sk_lock...
+It is worth considering why clearing sk_user_data unconditionally is not an
+option. There exist users, DRBD, NVMe, and Xen drivers being among them,
+that rely on the pointer being copied when cloning the listening socket.
 
-The patch series depends on another one, posted earlier [2], that has been
-split out of it.
+Potentially we could distinguish these users by checking if the listening
+socket has been created in kernel-space via sock_create_kern, and hence has
+sk_kern_sock flag set. However, this is not the case for NVMe and Xen
+drivers, which create sockets without marking them as belonging to the
+kernel.
 
-Thanks,
-jkbs
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+ include/net/sock.h | 37 +++++++++++++++++++++++++++++++++++--
+ net/core/skmsg.c   |  2 +-
+ net/core/sock.c    |  6 ++++++
+ 3 files changed, 42 insertions(+), 3 deletions(-)
 
-[0] https://lore.kernel.org/bpf/20190828072250.29828-1-jakub@cloudflare.com/
-[1] https://lore.kernel.org/bpf/20191123110751.6729-1-jakub@cloudflare.com/
-[2] https://lore.kernel.org/bpf/20200217121530.754315-1-jakub@cloudflare.com/
-
-v6 -> v7:
-
-- Extended the series to cover SOCKHASH. (patches 4-8, 10-11) (John)
-
-- Rebased onto recent bpf-next. Resolved conflicts in recent fixes to
-  sk_state checks on sockmap/sockhash update path. (patch 4)
-
-- Added missing READ_ONCE annotation in sock_copy. (patch 1)
-
-- Split out patches that simplify sk_psock_restore_proto [2].
-
-v5 -> v6:
-
-- Added a fix-up for patch 1 which I forgot to commit in v5. Sigh.
-
-v4 -> v5:
-
-- Rebase onto recent bpf-next to resolve conflicts. (Daniel)
-
-v3 -> v4:
-
-- Make tcp_bpf_clone parameter names consistent across function declaration
-  and definition. (Martin)
-
-- Use sock_map_redirect_okay helper everywhere we need to take a different
-  action for listening sockets. (Lorenz)
-
-- Expand comment explaining the need for a callback from reuseport to
-  sockarray code in reuseport_detach_sock. (Martin)
-
-- Mention the possibility of using a u64 counter for reuseport IDs in the
-  future in the description for patch 10. (Martin)
-
-v2 -> v3:
-
-- Generate reuseport ID when group is created. Please see patch 10
-  description for details. (Martin)
-
-- Fix the build when CONFIG_NET_SOCK_MSG is not selected by either
-  CONFIG_BPF_STREAM_PARSER or CONFIG_TLS. (kbuild bot & John)
-
-- Allow updating sockmap from BPF on BPF_SOCK_OPS_TCP_LISTEN_CB callback. An
-  oversight in previous iterations. Users may want to populate the sockmap with
-  listening sockets from BPF as well.
-
-- Removed RCU read lock assertion in sock_map_lookup_sys. (Martin)
-
-- Get rid of a warning when child socket was cloned with parent's psock
-  state. (John)
-
-- Check for tcp_bpf_unhash rather than tcp_bpf_recvmsg when deciding if
-  sk_proto needs restoring on clone. Check for recvmsg in the context of
-  listening socket cloning was confusing. (Martin)
-
-- Consolidate sock_map_sk_is_suitable with sock_map_update_okay. This led
-  to adding dedicated predicates for sockhash. Update self-tests
-  accordingly. (John)
-
-- Annotate unlikely branch in bpf_{sk,msg}_redirect_map when socket isn't
-  in a map, or isn't a valid redirect target. (John)
-
-- Document paired READ/WRITE_ONCE annotations and cover shared access in
-  more detail in patch 2 description. (John)
-
-- Correct a couple of log messages in sockmap_listen self-tests so the
-  message reflects the actual failure.
-
-- Rework reuseport tests from sockmap_listen suite so that ENOENT error
-  from bpf_sk_select_reuseport handler does not happen on happy path.
-
-v1 -> v2:
-
-- af_ops->syn_recv_sock callback is no longer overridden and burdened with
-  restoring sk_prot and clearing sk_user_data in the child socket. As child
-  socket is already hashed when syn_recv_sock returns, it is too late to
-  put it in the right state. Instead patches 3 & 4 address restoring
-  sk_prot and clearing sk_user_data before we hash the child socket.
-  (Pointed out by Martin Lau)
-
-- Annotate shared access to sk->sk_prot with READ_ONCE/WRITE_ONCE macros as
-  we write to it from sk_msg while socket might be getting cloned on
-  another CPU. (Suggested by John Fastabend)
-
-- Convert tests for SOCKMAP holding listening sockets to return-on-error
-  style, and hook them up to test_progs. Also use BPF skeleton for setup.
-  Add new tests to cover the race scenario discovered during v1 review.
-
-RFC -> v1:
-
-- Switch from overriding proto->accept to af_ops->syn_recv_sock, which
-  happens earlier. Clearing the psock state after accept() does not work
-  for child sockets that become orphaned (never got accepted). v4-mapped
-  sockets need special care.
-
-- Return the socket cookie on SOCKMAP lookup from syscall to be on par with
-  REUSEPORT_SOCKARRAY. Requires SOCKMAP to take u64 on lookup/update from
-  syscall.
-
-- Make bpf_sk_redirect_map (ingress) and bpf_msg_redirect_map (egress)
-  SOCKMAP helpers fail when target socket is a listening one.
-
-- Make bpf_sk_select_reuseport helper fail when target is a TCP established
-  socket.
-
-- Teach libbpf to recognize SK_REUSEPORT program type from section name.
-
-- Add a dedicated set of tests for SOCKMAP holding listening sockets,
-  covering map operations, overridden socket callbacks, and BPF helpers.
-
-
-Jakub Sitnicki (11):
-  net, sk_msg: Annotate lockless access to sk_prot on clone
-  net, sk_msg: Clear sk_user_data pointer on clone if tagged
-  tcp_bpf: Don't let child socket inherit parent protocol ops on copy
-  bpf, sockmap: Allow inserting listening TCP sockets into sockmap
-  bpf, sockmap: Don't set up upcalls and progs for listening sockets
-  bpf, sockmap: Return socket cookie on lookup from syscall
-  bpf, sockmap: Let all kernel-land lookup values in SOCKMAP/SOCKHASH
-  bpf: Allow selecting reuseport socket from a SOCKMAP/SOCKHASH
-  net: Generate reuseport group ID on group creation
-  selftests/bpf: Extend SK_REUSEPORT tests to cover SOCKMAP/SOCKHASH
-  selftests/bpf: Tests for sockmap/sockhash holding listening sockets
-
- include/linux/skmsg.h                         |    3 +-
- include/net/sock.h                            |   37 +-
- include/net/sock_reuseport.h                  |    2 -
- include/net/tcp.h                             |    7 +
- kernel/bpf/reuseport_array.c                  |    5 -
- kernel/bpf/verifier.c                         |   10 +-
- net/core/filter.c                             |   27 +-
- net/core/skmsg.c                              |    2 +-
- net/core/sock.c                               |   14 +-
- net/core/sock_map.c                           |  167 +-
- net/core/sock_reuseport.c                     |   50 +-
- net/ipv4/tcp_bpf.c                            |   18 +-
- net/ipv4/tcp_minisocks.c                      |    2 +
- net/ipv4/tcp_ulp.c                            |    3 +-
- net/tls/tls_main.c                            |    3 +-
- .../bpf/prog_tests/select_reuseport.c         |   63 +-
- .../selftests/bpf/prog_tests/sockmap_listen.c | 1496 +++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_listen.c |   98 ++
- tools/testing/selftests/bpf/test_maps.c       |    6 +-
- 19 files changed, 1910 insertions(+), 103 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 02162b0378f7..9f37fdfd15d4 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -502,10 +502,43 @@ enum sk_pacing {
+ 	SK_PACING_FQ		= 2,
+ };
+ 
++/* Pointer stored in sk_user_data might not be suitable for copying
++ * when cloning the socket. For instance, it can point to a reference
++ * counted object. sk_user_data bottom bit is set if pointer must not
++ * be copied.
++ */
++#define SK_USER_DATA_NOCOPY	1UL
++#define SK_USER_DATA_PTRMASK	~(SK_USER_DATA_NOCOPY)
++
++/**
++ * sk_user_data_is_nocopy - Test if sk_user_data pointer must not be copied
++ * @sk: socket
++ */
++static inline bool sk_user_data_is_nocopy(const struct sock *sk)
++{
++	return ((uintptr_t)sk->sk_user_data & SK_USER_DATA_NOCOPY);
++}
++
+ #define __sk_user_data(sk) ((*((void __rcu **)&(sk)->sk_user_data)))
+ 
+-#define rcu_dereference_sk_user_data(sk)	rcu_dereference(__sk_user_data((sk)))
+-#define rcu_assign_sk_user_data(sk, ptr)	rcu_assign_pointer(__sk_user_data((sk)), ptr)
++#define rcu_dereference_sk_user_data(sk)				\
++({									\
++	void *__tmp = rcu_dereference(__sk_user_data((sk)));		\
++	(void *)((uintptr_t)__tmp & SK_USER_DATA_PTRMASK);		\
++})
++#define rcu_assign_sk_user_data(sk, ptr)				\
++({									\
++	uintptr_t __tmp = (uintptr_t)(ptr);				\
++	WARN_ON_ONCE(__tmp & ~SK_USER_DATA_PTRMASK);			\
++	rcu_assign_pointer(__sk_user_data((sk)), __tmp);		\
++})
++#define rcu_assign_sk_user_data_nocopy(sk, ptr)				\
++({									\
++	uintptr_t __tmp = (uintptr_t)(ptr);				\
++	WARN_ON_ONCE(__tmp & ~SK_USER_DATA_PTRMASK);			\
++	rcu_assign_pointer(__sk_user_data((sk)),			\
++			   __tmp | SK_USER_DATA_NOCOPY);		\
++})
+ 
+ /*
+  * SK_CAN_REUSE and SK_NO_REUSE on a socket mean that the socket is OK
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index ded2d5227678..eeb28cb85664 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -512,7 +512,7 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
+ 	sk_psock_set_state(psock, SK_PSOCK_TX_ENABLED);
+ 	refcount_set(&psock->refcnt, 1);
+ 
+-	rcu_assign_sk_user_data(sk, psock);
++	rcu_assign_sk_user_data_nocopy(sk, psock);
+ 	sock_hold(sk);
+ 
+ 	return psock;
+diff --git a/net/core/sock.c b/net/core/sock.c
+index bf1173b93eda..e4af4dbc1c9e 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1865,6 +1865,12 @@ struct sock *sk_clone_lock(const struct sock *sk, const gfp_t priority)
+ 			goto out;
+ 		}
+ 
++		/* Clear sk_user_data if parent had the pointer tagged
++		 * as not suitable for copying when cloning.
++		 */
++		if (sk_user_data_is_nocopy(newsk))
++			RCU_INIT_POINTER(newsk->sk_user_data, NULL);
++
+ 		newsk->sk_err	   = 0;
+ 		newsk->sk_err_soft = 0;
+ 		newsk->sk_priority = 0;
 -- 
 2.24.1
 
