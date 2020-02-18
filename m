@@ -2,326 +2,154 @@ Return-Path: <SRS0=zGgN=4G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D64D1C34026
-	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 19:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3549C34026
+	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 19:28:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AE70324670
-	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 19:03:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9964824654
+	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 19:28:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DvmqpHrn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbgBRTCg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Feb 2020 14:02:36 -0500
-Received: from mx2.suse.de ([195.135.220.15]:35592 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726464AbgBRTCg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Feb 2020 14:02:36 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 3EA46ABEA;
-        Tue, 18 Feb 2020 19:02:33 +0000 (UTC)
-From:   Michal Rostecki <mrostecki@opensuse.org>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 1/6] bpftool: Move out sections to separate functions
-Date:   Tue, 18 Feb 2020 20:02:18 +0100
-Message-Id: <20200218190224.22508-2-mrostecki@opensuse.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200218190224.22508-1-mrostecki@opensuse.org>
-References: <20200218190224.22508-1-mrostecki@opensuse.org>
-MIME-Version: 1.0
+        id S1726478AbgBRT2P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Feb 2020 14:28:15 -0500
+Received: from mail-pf1-f170.google.com ([209.85.210.170]:39163 "EHLO
+        mail-pf1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726352AbgBRT2P (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Feb 2020 14:28:15 -0500
+Received: by mail-pf1-f170.google.com with SMTP id 84so11140862pfy.6
+        for <bpf@vger.kernel.org>; Tue, 18 Feb 2020 11:28:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zhYJCkJXlPxXtgjObEVr42uyGuLn0+lKW2wKfP/UpCE=;
+        b=DvmqpHrnM5O330XZo1r4oQuSvPgecXnkvWf1HePsqxhXDtfRmjIjyRMJC5NXDcCYn+
+         OwvGhCTbVAvqmsw7DHX6CX7ayI8MRX80ZKZFm3l7gtOi8e7I+QXoV2LNG3hx3pvtvgiV
+         LSIt91cMdVZ0sjN19WquhWlHxwMKtoi8sHzngiTeNW13UUBuZJ+eKQMx92fEmu2wm/iA
+         Zt5J/EId0BdKG8K0owTwcXRs3abR2p6cDm6V/Hc1tImyyILCj1yMKM1SnD10oedygFij
+         qIgZMDYYyaPAr0O+2Mq3cmqiX39FLOwWYivab+YigA6JwRjURv6j+9wGEC6ZR3iOJu+H
+         mZDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=zhYJCkJXlPxXtgjObEVr42uyGuLn0+lKW2wKfP/UpCE=;
+        b=j1UP5nFvCAHMA2msTCqJDOZ0pp1mvp9eypuz+6WDgqewRzbI7C2hoOIWhw7IxNS00V
+         n4fsEdc39LmefllH/EuxX5nZ70JAGG+4AbIGuSvB1vStKLKXJ3nYTkngFwrZJIPYIFjw
+         +9tmlVK4pemgR2jVZN+0CYYlizXR6HS1gsfgthdtYqk06aISMgGAeb0BbXHUggFP6sEX
+         IGaFS8P0Au1V/F8jQLDaKGsp8s2e49HfmSh4u+a/ONtFVXcITOd4LHOOtcZ++kCd3qjg
+         75lKKa8Dba6xU075Z8iWykXKSkavtcRo5DSX0QoeFOOi8kjkFtaG3ClkJSovukECLoxY
+         PZwQ==
+X-Gm-Message-State: APjAAAWGPjphCmpCJVor8vMHJLxDBVjNu7sZjBrHPTtomMWqTfYU6P5w
+        5IBOHkcvy1zWl7cpzmcErwCJ7w==
+X-Google-Smtp-Source: APXvYqxvBhs/kNz46f0NM7yQK9O+VsDMro0hxwtL6uWXHEPpf1QvsgH3bBRF8NOa1+svFTWNKSApFA==
+X-Received: by 2002:a62:cfc1:: with SMTP id b184mr22611022pfg.55.1582054093924;
+        Tue, 18 Feb 2020 11:28:13 -0800 (PST)
+Received: from localhost ([2620:0:1000:2514:23a5:d584:6a92:3e3c])
+        by smtp.gmail.com with ESMTPSA id q12sm4931028pfh.158.2020.02.18.11.28.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Feb 2020 11:28:13 -0800 (PST)
+Date:   Tue, 18 Feb 2020 11:28:13 -0800 (PST)
+X-Google-Original-Date: Tue, 18 Feb 2020 11:28:02 PST (-0800)
+Subject:     Re: arm64: bpf: Elide some moves to a0 after calls
+In-Reply-To: <5e39d509c9edc_63882ad0d49345c08@john-XPS-13-9370.notmuch>
+CC:     Bjorn Topel <bjorn.topel@gmail.com>, daniel@iogearbox.net,
+        ast@kernel.org, zlim.lnx@gmail.com, catalin.marinas@arm.com,
+        will@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        andriin@fb.com, shuah@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        clang-built-linux@googlegroups.com, kernel-team@android.com
+From:   Palmer Dabbelt <palmerdabbelt@google.com>
+To:     john.fastabend@gmail.com
+Message-ID: <mhng-eae623ac-3032-4327-9b23-af9838e3e979@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Remove all calls of print_end_then_start_section function and for loops
-out from the do_probe function. Instead, provide separate functions for
-each section (like i.e. section_helpers) which are called in do_probe.
+On Tue, 04 Feb 2020 12:33:13 PST (-0800), john.fastabend@gmail.com wrote:
+> Björn Töpel wrote:
+>> On Tue, 28 Jan 2020 at 03:14, Palmer Dabbelt <palmerdabbelt@google.com> wrote:
+>> >
+>> > There's four patches here, but only one of them actually does anything.  The
+>> > first patch fixes a BPF selftests build failure on my machine and has already
+>> > been sent to the list separately.  The next three are just staged such that
+>> > there are some patches that avoid changing any functionality pulled out from
+>> > the whole point of those refactorings, with two cleanups and then the idea.
+>> >
+>> > Maybe this is an odd thing to say in a cover letter, but I'm not actually sure
+>> > this patch set is a good idea.  The issue of extra moves after calls came up as
+>> > I was reviewing some unrelated performance optimizations to the RISC-V BPF JIT.
+>> > I figured I'd take a whack at performing the optimization in the context of the
+>> > arm64 port just to get a breath of fresh air, and I'm not convinced I like the
+>> > results.
+>> >
+>> > That said, I think I would accept something like this for the RISC-V port
+>> > because we're already doing a multi-pass optimization for shrinking function
+>> > addresses so it's not as much extra complexity over there.  If we do that we
+>> > should probably start puling some of this code into the shared BPF compiler,
+>> > but we're also opening the doors to more complicated BPF JIT optimizations.
+>> > Given that the BPF JIT appears to have been designed explicitly to be
+>> > simple/fast as opposed to perform complex optimization, I'm not sure this is a
+>> > sane way to move forward.
+>> >
+>> 
+>> Obviously I can only speak for myself and the RISC-V JIT, but given
+>> that we already have opened the door for more advanced translations
+>> (branch relaxation e.g.), I think that this makes sense. At the same
+>> time we don't want to go all JVM on the JITs. :-P
+>
+> I'm not against it although if we start to go this route I would want some
+> way to quantify how we are increasing/descreasing load times.
+>
+>> 
+>> > I figured I'd send the patch set out as more of a question than anything else.
+>> > Specifically:
+>> >
+>> > * How should I go about measuring the performance of these sort of
+>> >   optimizations?  I'd like to balance the time it takes to run the JIT with the
+>> >   time spent executing the program, but I don't have any feel for what real BPF
+>> >   programs look like or have any benchmark suite to run.  Is there something
+>> >   out there this should be benchmarked against?  (I'd also like to know that to
+>> >   run those benchmarks on the RISC-V port.)
+>> 
+>> If you run the selftests 'test_progs' with -v it'll measure/print the
+>> execution time of the programs. I'd say *most* BPF program invokes a
+>> helper (via call). It would be interesting to see, for say the
+>> selftests, how often the optimization can be performed.
+>> 
+>> > * Is this the sort of thing that makes sense in a BPF JIT?  I guess I've just
+>> >   realized I turned "review this patch" into a way bigger rabbit hole than I
+>> >   really want to go down...
+>> >
+>> 
+>> I'd say 'yes'. My hunch, and the workloads I've seen, BPF programs are
+>> usually loaded, and then resident for a long time. So, the JIT time is
+>> not super critical. The FB/Cilium folks can definitely provide a
+>> better sample point, than my hunch. ;-)
+>
+> In our case the JIT time can be relevant because we are effectively holding
+> up a kubernetes pod load waiting for programs to load. However, we can
+> probably work-around it by doing more aggressive dynamic linking now that
+> this is starting to land.
+>
+> It would be interesting to have a test to measure load time in selftests
+> or selftests/benchmark/ perhaps. We have some of these out of tree we
+> could push in I think if there is interest.
 
-Next changes are going to allow probing chosen subsets of features.
-This change will make them more readable.
+I'd be interested in some sort of benchmark suite for BPF.  Something like
+selftests/bpf/benchmarks/ seems like a reasonable place to me.
 
-Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
----
- tools/bpf/bpftool/feature.c | 219 +++++++++++++++++++++---------------
- 1 file changed, 126 insertions(+), 93 deletions(-)
-
-diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-index 941873d778d8..345e4a2b4f53 100644
---- a/tools/bpf/bpftool/feature.c
-+++ b/tools/bpf/bpftool/feature.c
-@@ -112,18 +112,12 @@ print_start_section(const char *json_title, const char *plain_title,
- 	}
- }
- 
--static void
--print_end_then_start_section(const char *json_title, const char *plain_title,
--			     const char *define_comment,
--			     const char *define_prefix)
-+static void print_end_section(void)
- {
- 	if (json_output)
- 		jsonw_end_object(json_wtr);
- 	else
- 		printf("\n");
--
--	print_start_section(json_title, plain_title, define_comment,
--			    define_prefix);
- }
- 
- /* Probing functions */
-@@ -584,13 +578,130 @@ probe_large_insn_limit(const char *define_prefix, __u32 ifindex)
- 			   res, define_prefix);
- }
- 
-+static void
-+section_system_config(enum probe_component target, const char *define_prefix)
-+{
-+	switch (target) {
-+	case COMPONENT_KERNEL:
-+	case COMPONENT_UNSPEC:
-+		if (define_prefix)
-+			break;
-+
-+		print_start_section("system_config",
-+				    "Scanning system configuration...",
-+				    NULL, /* define_comment never used here */
-+				    NULL); /* define_prefix always NULL here */
-+		if (check_procfs()) {
-+			probe_unprivileged_disabled();
-+			probe_jit_enable();
-+			probe_jit_harden();
-+			probe_jit_kallsyms();
-+			probe_jit_limit();
-+		} else {
-+			p_info("/* procfs not mounted, skipping related probes */");
-+		}
-+		probe_kernel_image_config();
-+		print_end_section();
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static bool section_syscall_config(const char *define_prefix)
-+{
-+	bool res;
-+
-+	print_start_section("syscall_config",
-+			    "Scanning system call availability...",
-+			    "/*** System call availability ***/",
-+			    define_prefix);
-+	res = probe_bpf_syscall(define_prefix);
-+	print_end_section();
-+
-+	return res;
-+}
-+
-+static void
-+section_program_types(bool *supported_types, const char *define_prefix,
-+		      __u32 ifindex)
-+{
-+	unsigned int i;
-+
-+	print_start_section("program_types",
-+			    "Scanning eBPF program types...",
-+			    "/*** eBPF program types ***/",
-+			    define_prefix);
-+
-+	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
-+		probe_prog_type(i, supported_types, define_prefix, ifindex);
-+
-+	print_end_section();
-+}
-+
-+static void section_map_types(const char *define_prefix, __u32 ifindex)
-+{
-+	unsigned int i;
-+
-+	print_start_section("map_types",
-+			    "Scanning eBPF map types...",
-+			    "/*** eBPF map types ***/",
-+			    define_prefix);
-+
-+	for (i = BPF_MAP_TYPE_UNSPEC + 1; i < map_type_name_size; i++)
-+		probe_map_type(i, define_prefix, ifindex);
-+
-+	print_end_section();
-+}
-+
-+static void
-+section_helpers(bool *supported_types, const char *define_prefix, __u32 ifindex)
-+{
-+	unsigned int i;
-+
-+	print_start_section("helpers",
-+			    "Scanning eBPF helper functions...",
-+			    "/*** eBPF helper functions ***/",
-+			    define_prefix);
-+
-+	if (define_prefix)
-+		printf("/*\n"
-+		       " * Use %sHAVE_PROG_TYPE_HELPER(prog_type_name, helper_name)\n"
-+		       " * to determine if <helper_name> is available for <prog_type_name>,\n"
-+		       " * e.g.\n"
-+		       " *	#if %sHAVE_PROG_TYPE_HELPER(xdp, bpf_redirect)\n"
-+		       " *		// do stuff with this helper\n"
-+		       " *	#elif\n"
-+		       " *		// use a workaround\n"
-+		       " *	#endif\n"
-+		       " */\n"
-+		       "#define %sHAVE_PROG_TYPE_HELPER(prog_type, helper)	\\\n"
-+		       "	%sBPF__PROG_TYPE_ ## prog_type ## __HELPER_ ## helper\n",
-+		       define_prefix, define_prefix, define_prefix,
-+		       define_prefix);
-+	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
-+		probe_helpers_for_progtype(i, supported_types[i],
-+					   define_prefix, ifindex);
-+
-+	print_end_section();
-+}
-+
-+static void section_misc(const char *define_prefix, __u32 ifindex)
-+{
-+	print_start_section("misc",
-+			    "Scanning miscellaneous eBPF features...",
-+			    "/*** eBPF misc features ***/",
-+			    define_prefix);
-+	probe_large_insn_limit(define_prefix, ifindex);
-+	print_end_section();
-+}
-+
- static int do_probe(int argc, char **argv)
- {
- 	enum probe_component target = COMPONENT_UNSPEC;
- 	const char *define_prefix = NULL;
- 	bool supported_types[128] = {};
- 	__u32 ifindex = 0;
--	unsigned int i;
- 	char *ifname;
- 
- 	/* Detection assumes user has sufficient privileges (CAP_SYS_ADMIN).
-@@ -658,97 +769,19 @@ static int do_probe(int argc, char **argv)
- 		jsonw_start_object(json_wtr);
- 	}
- 
--	switch (target) {
--	case COMPONENT_KERNEL:
--	case COMPONENT_UNSPEC:
--		if (define_prefix)
--			break;
--
--		print_start_section("system_config",
--				    "Scanning system configuration...",
--				    NULL, /* define_comment never used here */
--				    NULL); /* define_prefix always NULL here */
--		if (check_procfs()) {
--			probe_unprivileged_disabled();
--			probe_jit_enable();
--			probe_jit_harden();
--			probe_jit_kallsyms();
--			probe_jit_limit();
--		} else {
--			p_info("/* procfs not mounted, skipping related probes */");
--		}
--		probe_kernel_image_config();
--		if (json_output)
--			jsonw_end_object(json_wtr);
--		else
--			printf("\n");
--		break;
--	default:
--		break;
--	}
--
--	print_start_section("syscall_config",
--			    "Scanning system call availability...",
--			    "/*** System call availability ***/",
--			    define_prefix);
--
--	if (!probe_bpf_syscall(define_prefix))
-+	section_system_config(target, define_prefix);
-+	if (!section_syscall_config(define_prefix))
- 		/* bpf() syscall unavailable, don't probe other BPF features */
- 		goto exit_close_json;
--
--	print_end_then_start_section("program_types",
--				     "Scanning eBPF program types...",
--				     "/*** eBPF program types ***/",
--				     define_prefix);
--
--	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
--		probe_prog_type(i, supported_types, define_prefix, ifindex);
--
--	print_end_then_start_section("map_types",
--				     "Scanning eBPF map types...",
--				     "/*** eBPF map types ***/",
--				     define_prefix);
--
--	for (i = BPF_MAP_TYPE_UNSPEC + 1; i < map_type_name_size; i++)
--		probe_map_type(i, define_prefix, ifindex);
--
--	print_end_then_start_section("helpers",
--				     "Scanning eBPF helper functions...",
--				     "/*** eBPF helper functions ***/",
--				     define_prefix);
--
--	if (define_prefix)
--		printf("/*\n"
--		       " * Use %sHAVE_PROG_TYPE_HELPER(prog_type_name, helper_name)\n"
--		       " * to determine if <helper_name> is available for <prog_type_name>,\n"
--		       " * e.g.\n"
--		       " *	#if %sHAVE_PROG_TYPE_HELPER(xdp, bpf_redirect)\n"
--		       " *		// do stuff with this helper\n"
--		       " *	#elif\n"
--		       " *		// use a workaround\n"
--		       " *	#endif\n"
--		       " */\n"
--		       "#define %sHAVE_PROG_TYPE_HELPER(prog_type, helper)	\\\n"
--		       "	%sBPF__PROG_TYPE_ ## prog_type ## __HELPER_ ## helper\n",
--		       define_prefix, define_prefix, define_prefix,
--		       define_prefix);
--	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
--		probe_helpers_for_progtype(i, supported_types[i],
--					   define_prefix, ifindex);
--
--	print_end_then_start_section("misc",
--				     "Scanning miscellaneous eBPF features...",
--				     "/*** eBPF misc features ***/",
--				     define_prefix);
--	probe_large_insn_limit(define_prefix, ifindex);
-+	section_program_types(supported_types, define_prefix, ifindex);
-+	section_map_types(define_prefix, ifindex);
-+	section_helpers(supported_types, define_prefix, ifindex);
-+	section_misc(define_prefix, ifindex);
- 
- exit_close_json:
--	if (json_output) {
--		/* End current "section" of probes */
--		jsonw_end_object(json_wtr);
-+	if (json_output)
- 		/* End root object */
- 		jsonw_end_object(json_wtr);
--	}
- 
- 	return 0;
- }
--- 
-2.25.0
-
+>
+>> 
+>> 
+>> Björn
