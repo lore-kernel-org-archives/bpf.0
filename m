@@ -2,63 +2,64 @@ Return-Path: <SRS0=zGgN=4G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 219F8C34026
-	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 17:10:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6548FC34048
+	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 17:10:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ECE36208C4
-	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 17:10:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3DBDB208C4
+	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 17:10:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Jv34iG7z"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="tYycTgws"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726788AbgBRRKc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Feb 2020 12:10:32 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:33094 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726707AbgBRRK3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Feb 2020 12:10:29 -0500
-Received: by mail-wm1-f68.google.com with SMTP id m10so2654298wmc.0
-        for <bpf@vger.kernel.org>; Tue, 18 Feb 2020 09:10:28 -0800 (PST)
+        id S1726948AbgBRRKk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Feb 2020 12:10:40 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:33258 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726882AbgBRRKj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Feb 2020 12:10:39 -0500
+Received: by mail-wr1-f65.google.com with SMTP id u6so24954259wrt.0
+        for <bpf@vger.kernel.org>; Tue, 18 Feb 2020 09:10:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YXqExacnZggF0X1fJkO+qE+caqN11IX81szwOsrBoUk=;
-        b=Jv34iG7zPrJHaVmneYCeTKZ5N7lY/enz1JJ2id6lmkdqXxNBZCjAEF/lnj5bJYST1g
-         PH6tMxneQgHqk9Rkd5yqhF/ZwHuQtuGwxnFShDRfHC9Seoc/dGCmfpvmFGLMqfEY3sNn
-         DCUHOtc6Ldzzcy2rt4V1FEt/hUFqvBOFsQbZk=
+        bh=AvILV5sd++2yz20AaI1JEY6SvwDzjXwDSBRjXm9Bc0I=;
+        b=tYycTgws14HRJbxNRyzbkSeEbHByISs2Usq5DA6DAjL8JrFKMOU0eQOoPkf5nsidif
+         G87FFDjQfqNsa/8sP+OQSiNuZ2Ly+/02EjY+tX5rLEBVCjmFWM1yhvOLVcIAGJ6boJuU
+         cf74nWO2fjEeasJJXeYx9vL104A99k2SUSe/k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YXqExacnZggF0X1fJkO+qE+caqN11IX81szwOsrBoUk=;
-        b=ei20yoFSru5B5IGYy4C3U9PlfOAFhOB5wIJmNSAzArl7Tf7/U2lUikSR/owLPKevfB
-         ejF2eRXT7wCYMX3iJDAsOJ9E3ljV4x+hEIfcrgYi86eSf/ax8X4cuxJnjJeGMNRBe3Wv
-         M9WiXKSccCRsD5PibflWrH0wF/Yyizu7v7q6+bBV43vX470D8Vao+/jmq3+AqoYzrgmo
-         mC+jdVmWI8RqpjeH3wUCUNCpJ1xh0wp7Xh1UaGKiVFCUFfvJqsxzdzRcgjgao7Q6bnpr
-         jbGn3JjRvM5oMbMRz1kFQNQIeKUe2gQghKA0ltGDV56XPlkNJsslvncPYcofoGpTD1tE
-         Wa/Q==
-X-Gm-Message-State: APjAAAWkf29UaAsDXrqds3zM8uFlBMm4Ck8wCzxHlKOhqxWkALP7uuZN
-        1RWuJLgGhE6givKh/eE4AcMwELrIUr5suNP9
-X-Google-Smtp-Source: APXvYqyEq1mXfxF9j+2MN2wYzWw28ntx7J6Yf5s6qC0ztv5+yXNQoyiyq9DnrPQ6nJmhdQIc+4rv1A==
-X-Received: by 2002:a1c:6588:: with SMTP id z130mr4136675wmb.0.1582045827429;
-        Tue, 18 Feb 2020 09:10:27 -0800 (PST)
+        bh=AvILV5sd++2yz20AaI1JEY6SvwDzjXwDSBRjXm9Bc0I=;
+        b=O9YGyez0uuiAn5gfcZN9GFA/rT+NInf7ymwj+rxMz5Z1TEUZbGXiol7kI/jKxvIIcy
+         5ZVwVngsZOH12h0lATEQPXRl7nGLK7GlAuHX/vp4UJK/qYPVlzEWghhd++cl9Vs+H/4Y
+         P2YDMbt6Syh0vix4IyLFQpeWq+AL5nIx2yQ3uOcsoCR9JsZD5cXZFa2PLrzsDWbm2xnK
+         PQIm7qqLmMTpj26StBUpe6Y9gtzXs34TzHjySL9g41Gv3c2oBN17lo+u3iu275stlwRG
+         ocb+nlkPV55UF1dBI0PvDl3NI0Mf/Lan83aM1UE3ce+LqLmZwgaTphB8DjGZDWQGnaLf
+         vY3A==
+X-Gm-Message-State: APjAAAUIauHEMz1Pv1tSlSQuskjk65TiPT7GkgREzzhMQ3TAWdzpcvBb
+        Uf91wSzp28fLaNosZH9N8ze7H180jf3Nc5yD
+X-Google-Smtp-Source: APXvYqzgkX/Dp81uuzPESM84eHCfeMQu0td+58MoSVdM8sSwmTANs2ejb2oy/yHW8Pfj9J3KR8+C6w==
+X-Received: by 2002:a5d:6089:: with SMTP id w9mr28568769wrt.94.1582045836782;
+        Tue, 18 Feb 2020 09:10:36 -0800 (PST)
 Received: from cloudflare.com ([88.157.168.82])
-        by smtp.gmail.com with ESMTPSA id z19sm3927370wmi.43.2020.02.18.09.10.26
+        by smtp.gmail.com with ESMTPSA id f8sm6984368wru.12.2020.02.18.09.10.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2020 09:10:26 -0800 (PST)
+        Tue, 18 Feb 2020 09:10:36 -0800 (PST)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         John Fastabend <john.fastabend@gmail.com>,
         Lorenz Bauer <lmb@cloudflare.com>, Martin Lau <kafai@fb.com>
-Subject: [PATCH bpf-next v7 01/11] net, sk_msg: Annotate lockless access to sk_prot on clone
-Date:   Tue, 18 Feb 2020 17:10:13 +0000
-Message-Id: <20200218171023.844439-2-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v7 07/11] bpf, sockmap: Let all kernel-land lookup values in SOCKMAP/SOCKHASH
+Date:   Tue, 18 Feb 2020 17:10:19 +0000
+Message-Id: <20200218171023.844439-8-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200218171023.844439-1-jakub@cloudflare.com>
 References: <20200218171023.844439-1-jakub@cloudflare.com>
@@ -69,156 +70,52 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-sk_msg and ULP frameworks override protocol callbacks pointer in
-sk->sk_prot, while tcp accesses it locklessly when cloning the listening
-socket, that is with neither sk_lock nor sk_callback_lock held.
+Don't require the kernel code, like BPF helpers, that needs access to
+SOCK{MAP,HASH} map contents to live in net/core/sock_map.c. Expose the
+lookup operation to all kernel-land.
 
-Once we enable use of listening sockets with sockmap (and hence sk_msg),
-there will be shared access to sk->sk_prot if socket is getting cloned
-while being inserted/deleted to/from the sockmap from another CPU:
-
-Read side:
-
-tcp_v4_rcv
-  sk = __inet_lookup_skb(...)
-  tcp_check_req(sk)
-    inet_csk(sk)->icsk_af_ops->syn_recv_sock
-      tcp_v4_syn_recv_sock
-        tcp_create_openreq_child
-          inet_csk_clone_lock
-            sk_clone_lock
-              READ_ONCE(sk->sk_prot)
-
-Write side:
-
-sock_map_ops->map_update_elem
-  sock_map_update_elem
-    sock_map_update_common
-      sock_map_link_no_progs
-        tcp_bpf_init
-          tcp_bpf_update_sk_prot
-            sk_psock_update_proto
-              WRITE_ONCE(sk->sk_prot, ops)
-
-sock_map_ops->map_delete_elem
-  sock_map_delete_elem
-    __sock_map_delete
-     sock_map_unref
-       sk_psock_put
-         sk_psock_drop
-           sk_psock_restore_proto
-             tcp_update_ulp
-               WRITE_ONCE(sk->sk_prot, proto)
-
-Mark the shared access with READ_ONCE/WRITE_ONCE annotations.
+Lookup from BPF context is not whitelisted yet. While syscalls have a
+dedicated lookup handler.
 
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- include/linux/skmsg.h | 3 ++-
- net/core/sock.c       | 8 +++++---
- net/ipv4/tcp_bpf.c    | 4 +++-
- net/ipv4/tcp_ulp.c    | 3 ++-
- net/tls/tls_main.c    | 3 ++-
- 5 files changed, 14 insertions(+), 7 deletions(-)
+ net/core/sock_map.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index d90ef61712a1..112765bd146d 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -352,7 +352,8 @@ static inline void sk_psock_update_proto(struct sock *sk,
- 	psock->saved_write_space = sk->sk_write_space;
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index f48c934d5da0..2e0f465295c3 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -301,7 +301,7 @@ static struct sock *__sock_map_lookup_elem(struct bpf_map *map, u32 key)
  
- 	psock->sk_proto = sk->sk_prot;
--	sk->sk_prot = ops;
-+	/* Pairs with lockless read in sk_clone_lock() */
-+	WRITE_ONCE(sk->sk_prot, ops);
- }
- 
- static inline void sk_psock_restore_proto(struct sock *sk,
-diff --git a/net/core/sock.c b/net/core/sock.c
-index a4c8fac781ff..bf1173b93eda 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1572,13 +1572,14 @@ static inline void sock_lock_init(struct sock *sk)
-  */
- static void sock_copy(struct sock *nsk, const struct sock *osk)
+ static void *sock_map_lookup(struct bpf_map *map, void *key)
  {
-+	const struct proto *prot = READ_ONCE(osk->sk_prot);
- #ifdef CONFIG_SECURITY_NETWORK
- 	void *sptr = nsk->sk_security;
- #endif
- 	memcpy(nsk, osk, offsetof(struct sock, sk_dontcopy_begin));
+-	return ERR_PTR(-EOPNOTSUPP);
++	return __sock_map_lookup_elem(map, *(u32 *)key);
+ }
  
- 	memcpy(&nsk->sk_dontcopy_end, &osk->sk_dontcopy_end,
--	       osk->sk_prot->obj_size - offsetof(struct sock, sk_dontcopy_end));
-+	       prot->obj_size - offsetof(struct sock, sk_dontcopy_end));
+ static void *sock_map_lookup_sys(struct bpf_map *map, void *key)
+@@ -991,6 +991,11 @@ static void *sock_hash_lookup_sys(struct bpf_map *map, void *key)
+ 	return &sk->sk_cookie;
+ }
  
- #ifdef CONFIG_SECURITY_NETWORK
- 	nsk->sk_security = sptr;
-@@ -1792,16 +1793,17 @@ static void sk_init_common(struct sock *sk)
-  */
- struct sock *sk_clone_lock(const struct sock *sk, const gfp_t priority)
++static void *sock_hash_lookup(struct bpf_map *map, void *key)
++{
++	return __sock_hash_lookup_elem(map, key);
++}
++
+ static void sock_hash_release_progs(struct bpf_map *map)
  {
-+	struct proto *prot = READ_ONCE(sk->sk_prot);
- 	struct sock *newsk;
- 	bool is_charged = true;
- 
--	newsk = sk_prot_alloc(sk->sk_prot, priority, sk->sk_family);
-+	newsk = sk_prot_alloc(prot, priority, sk->sk_family);
- 	if (newsk != NULL) {
- 		struct sk_filter *filter;
- 
- 		sock_copy(newsk, sk);
- 
--		newsk->sk_prot_creator = sk->sk_prot;
-+		newsk->sk_prot_creator = prot;
- 
- 		/* SANITY */
- 		if (likely(newsk->sk_net_refcnt))
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 8a01428f80c1..dd183b050642 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -645,8 +645,10 @@ static void tcp_bpf_reinit_sk_prot(struct sock *sk, struct sk_psock *psock)
- 	/* Reinit occurs when program types change e.g. TCP_BPF_TX is removed
- 	 * or added requiring sk_prot hook updates. We keep original saved
- 	 * hooks in this case.
-+	 *
-+	 * Pairs with lockless read in sk_clone_lock().
- 	 */
--	sk->sk_prot = &tcp_bpf_prots[family][config];
-+	WRITE_ONCE(sk->sk_prot, &tcp_bpf_prots[family][config]);
- }
- 
- static int tcp_bpf_assert_proto_ops(struct proto *ops)
-diff --git a/net/ipv4/tcp_ulp.c b/net/ipv4/tcp_ulp.c
-index 38d3ad141161..6c43fa189195 100644
---- a/net/ipv4/tcp_ulp.c
-+++ b/net/ipv4/tcp_ulp.c
-@@ -106,7 +106,8 @@ void tcp_update_ulp(struct sock *sk, struct proto *proto,
- 
- 	if (!icsk->icsk_ulp_ops) {
- 		sk->sk_write_space = write_space;
--		sk->sk_prot = proto;
-+		/* Pairs with lockless read in sk_clone_lock() */
-+		WRITE_ONCE(sk->sk_prot, proto);
- 		return;
- 	}
- 
-diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
-index 94774c0e5ff3..82225bcc1117 100644
---- a/net/tls/tls_main.c
-+++ b/net/tls/tls_main.c
-@@ -742,7 +742,8 @@ static void tls_update(struct sock *sk, struct proto *p,
- 		ctx->sk_write_space = write_space;
- 		ctx->sk_proto = p;
- 	} else {
--		sk->sk_prot = p;
-+		/* Pairs with lockless read in sk_clone_lock(). */
-+		WRITE_ONCE(sk->sk_prot, p);
- 		sk->sk_write_space = write_space;
- 	}
- }
+ 	psock_progs_drop(&container_of(map, struct bpf_htab, map)->progs);
+@@ -1079,7 +1084,7 @@ const struct bpf_map_ops sock_hash_ops = {
+ 	.map_get_next_key	= sock_hash_get_next_key,
+ 	.map_update_elem	= sock_hash_update_elem,
+ 	.map_delete_elem	= sock_hash_delete_elem,
+-	.map_lookup_elem	= sock_map_lookup,
++	.map_lookup_elem	= sock_hash_lookup,
+ 	.map_lookup_elem_sys_only = sock_hash_lookup_sys,
+ 	.map_release_uref	= sock_hash_release_progs,
+ 	.map_check_btf		= map_check_no_btf,
 -- 
 2.24.1
 
