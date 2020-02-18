@@ -2,64 +2,63 @@ Return-Path: <SRS0=zGgN=4G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA604C34047
-	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 17:10:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4FD8C34026
+	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 17:10:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B5206208C4
-	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 17:10:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B6DF9208C4
+	for <bpf@archiver.kernel.org>; Tue, 18 Feb 2020 17:10:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="dttY1S/0"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="lqpavL/Q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726791AbgBRRKj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Feb 2020 12:10:39 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:36654 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726852AbgBRRKi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Feb 2020 12:10:38 -0500
-Received: by mail-wm1-f65.google.com with SMTP id p17so3772006wma.1
-        for <bpf@vger.kernel.org>; Tue, 18 Feb 2020 09:10:36 -0800 (PST)
+        id S1727021AbgBRRKn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Feb 2020 12:10:43 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:40750 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726963AbgBRRKm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Feb 2020 12:10:42 -0500
+Received: by mail-wr1-f65.google.com with SMTP id t3so24874190wru.7
+        for <bpf@vger.kernel.org>; Tue, 18 Feb 2020 09:10:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5wT5YmZaXRIbm7ejB9zEZFmHSHKFjMJlKhfMjZNLGTA=;
-        b=dttY1S/0jTsxaj88aqteUE/XtCb5Pqe7xi5qq0J5JpGq8NBXxuQgVJjhkmRL4pWtdu
-         39DZ1cpNnMd5Zves9gjcvk5VHT0zQ4FNvLIP5s81t5avgrsjDaGMtS/sb02l6YnFz5ys
-         WjFtponoDJBU9g2EBSV2HWMYJnuC6Qn/JLBDM=
+        bh=a+K0GDkKeXK7SWH/qxdqJtZ1GU53mykhRAeEhoTbS2A=;
+        b=lqpavL/QOfmd/t6E9RCIw7narDmvL0oyvLi0yoiN2UQE6w1zCaZSQ2+xxyH+CnMbvd
+         HFOMGOxhYZB/mPYdi6OnbWeaxX+zp3v6vTjy+BdP9+Hu/hO7y6RjIG16qH6Zt87O/smu
+         h8zKcE1W4cKMz7whBrgI+U/jyao+NM/uDEzpo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5wT5YmZaXRIbm7ejB9zEZFmHSHKFjMJlKhfMjZNLGTA=;
-        b=puUZCXcPxr76pmb59L0ZR0j12AkrfGiFC7aDrrWTgspTdeNZmY98AOk61XH9MiMRpF
-         BeijtH48XdQhunXjcA31nXJvtS9rxEMlaVv6CjQlxGzHtnnQEwuXxb/k2axtdcrh9Z4K
-         DqFtjFPHOfkMie84k230Fq48qVUYaUauFxjJBNFpUJdhBV/xXQGKTUh8t2qDesQ9Yy4U
-         pemo2H9VIGUnlUzxNQ3llLUJB87T2aJ8tjCF4mslENwd33GZrHD8GS4AW/Y1o8JEZUEW
-         YyhlkV8tLRwcn2n7nHK+MIBRXBZXCi7LPeQ0DALAMxjNpEc97k298KYJhLY3LA98o5Zd
-         sbbw==
-X-Gm-Message-State: APjAAAWFCpUijOIhlsO6KmZdqMXDmIDxO+Aqz4MfbeK34wL1dzz9tCst
-        zs5TKEI0KsWcxM7fRyLHc7R2HBjqaSsDsevX
-X-Google-Smtp-Source: APXvYqxv1NtV6MO7EFHyO/rn0AosiQxulZRR1WK11a9trLs9SKXQVoF1Tp2yDy5Xx1BQiCP8DJqRww==
-X-Received: by 2002:a1c:490b:: with SMTP id w11mr3972315wma.96.1582045835187;
-        Tue, 18 Feb 2020 09:10:35 -0800 (PST)
+        bh=a+K0GDkKeXK7SWH/qxdqJtZ1GU53mykhRAeEhoTbS2A=;
+        b=YtgKlIBqNhf82p24JTrYAa84aPwWQuRb4WZP5nicitBLAF1ktClHQjN0Iinu2hF9tr
+         tkSyv/eOpNV5H9VNz7ISHftt6z59hm9Bu3xLoZ5uuHXWfUrIMp5egVtILiiufRb5Jsdn
+         8v3yH/5lrlfluSaE+YqONjVO78JYk8MZM5zhj2LPcBs0ba5flWyydIgkYBfsvA4RsUTO
+         Z8bB2mO4XOKJTge7ROKUUkCCl4tPAeSHqhX8TO8iM0PfIGRf8b/ivzB9T+yG/YivsD9Y
+         Bqbp79T5Uu8S1GmAXxTtIOSpTX5Tvf/YO+E7QLz7okkUn14amOd080O7uO1sdXb80mfN
+         Hs1A==
+X-Gm-Message-State: APjAAAXCoU2HtKTdtvAN+p4ZIqW34wHkerDyRPPTldsijO3boqOF6fCe
+        jrf6Rsb5Di6LsFATx2DCNYxiClvyYzjpjqri
+X-Google-Smtp-Source: APXvYqzoYX5x4Y7EnKGaH8QPEJsh1XG+b8Lbu1L0bIE0XvndJphhyPixQzMPwtOBdv3XKGoSKmrVog==
+X-Received: by 2002:a5d:678f:: with SMTP id v15mr30660348wru.27.1582045839854;
+        Tue, 18 Feb 2020 09:10:39 -0800 (PST)
 Received: from cloudflare.com ([88.157.168.82])
-        by smtp.gmail.com with ESMTPSA id a16sm7019701wrx.87.2020.02.18.09.10.34
+        by smtp.gmail.com with ESMTPSA id s23sm6995908wra.15.2020.02.18.09.10.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2020 09:10:34 -0800 (PST)
+        Tue, 18 Feb 2020 09:10:39 -0800 (PST)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         John Fastabend <john.fastabend@gmail.com>,
         Lorenz Bauer <lmb@cloudflare.com>, Martin Lau <kafai@fb.com>
-Subject: [PATCH bpf-next v7 06/11] bpf, sockmap: Return socket cookie on lookup from syscall
-Date:   Tue, 18 Feb 2020 17:10:18 +0000
-Message-Id: <20200218171023.844439-7-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v7 09/11] net: Generate reuseport group ID on group creation
+Date:   Tue, 18 Feb 2020 17:10:21 +0000
+Message-Id: <20200218171023.844439-10-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200218171023.844439-1-jakub@cloudflare.com>
 References: <20200218171023.844439-1-jakub@cloudflare.com>
@@ -70,153 +69,218 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Tooling that populates the SOCK{MAP,HASH} with sockets from user-space
-needs a way to inspect its contents. Returning the struct sock * that the
-map holds to user-space is neither safe nor useful. An approach established
-by REUSEPORT_SOCKARRAY is to return a socket cookie (a unique identifier)
-instead.
+Commit 736b46027eb4 ("net: Add ID (if needed) to sock_reuseport and expose
+reuseport_lock") has introduced lazy generation of reuseport group IDs that
+survive group resize.
 
-Since socket cookies are u64 values, SOCK{MAP,HASH} need to support such a
-value size for lookup to be possible. This requires special handling on
-update, though. Attempts to do a lookup on a map holding u32 values will be
-met with ENOSPC error.
+By comparing the identifier we check if BPF reuseport program is not trying
+to select a socket from a BPF map that belongs to a different reuseport
+group than the one the packet is for.
 
+Because SOCKARRAY used to be the only BPF map type that can be used with
+reuseport BPF, it was possible to delay the generation of reuseport group
+ID until a socket from the group was inserted into BPF map for the first
+time.
+
+Now that SOCK{MAP,HASH} can be used with reuseport BPF we have two options,
+either generate the reuseport ID on map update, like SOCKARRAY does, or
+allocate an ID from the start when reuseport group gets created.
+
+This patch takes the latter approach to keep sockmap free of calls into
+reuseport code. This streamlines the reuseport_id access as its lifetime
+now matches the longevity of reuseport object.
+
+The cost of this simplification, however, is that we allocate reuseport IDs
+for all SO_REUSEPORT users. Even those that don't use SOCKARRAY in their
+setups. With the way identifiers are currently generated, we can have at
+most S32_MAX reuseport groups, which hopefully is sufficient. If we ever
+get close to the limit, we can switch an u64 counter like sk_cookie.
+
+Another change is that we now always call into SOCKARRAY logic to unlink
+the socket from the map when unhashing or closing the socket. Previously we
+did it only when at least one socket from the group was in a BPF map.
+
+It is worth noting that this doesn't conflict with sockmap tear-down in
+case a socket is in a SOCK{MAP,HASH} and belongs to a reuseport
+group. sockmap tear-down happens first:
+
+  prot->unhash
+  `- tcp_bpf_unhash
+     |- tcp_bpf_remove
+     |  `- while (sk_psock_link_pop(psock))
+     |     `- sk_psock_unlink
+     |        `- sock_map_delete_from_link
+     |           `- __sock_map_delete
+     |              `- sock_map_unref
+     |                 `- sk_psock_put
+     |                    `- sk_psock_drop
+     |                       `- rcu_assign_sk_user_data(sk, NULL)
+     `- inet_unhash
+        `- reuseport_detach_sock
+           `- bpf_sk_reuseport_detach
+              `- WRITE_ONCE(sk->sk_user_data, NULL)
+
+Suggested-by: Martin Lau <kafai@fb.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- net/core/sock_map.c | 57 +++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 53 insertions(+), 4 deletions(-)
+ include/net/sock_reuseport.h |  2 --
+ kernel/bpf/reuseport_array.c |  5 ----
+ net/core/filter.c            | 12 +--------
+ net/core/sock_reuseport.c    | 50 +++++++++++++++---------------------
+ 4 files changed, 22 insertions(+), 47 deletions(-)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index a5103112a344..f48c934d5da0 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -10,6 +10,7 @@
- #include <linux/skmsg.h>
- #include <linux/list.h>
- #include <linux/jhash.h>
-+#include <linux/sock_diag.h>
- 
- struct bpf_stab {
- 	struct bpf_map map;
-@@ -31,7 +32,8 @@ static struct bpf_map *sock_map_alloc(union bpf_attr *attr)
- 		return ERR_PTR(-EPERM);
- 	if (attr->max_entries == 0 ||
- 	    attr->key_size    != 4 ||
--	    attr->value_size  != 4 ||
-+	    (attr->value_size != sizeof(u32) &&
-+	     attr->value_size != sizeof(u64)) ||
- 	    attr->map_flags & ~SOCK_CREATE_FLAG_MASK)
- 		return ERR_PTR(-EINVAL);
- 
-@@ -302,6 +304,21 @@ static void *sock_map_lookup(struct bpf_map *map, void *key)
- 	return ERR_PTR(-EOPNOTSUPP);
+diff --git a/include/net/sock_reuseport.h b/include/net/sock_reuseport.h
+index 43f4a818d88f..3ecaa15d1850 100644
+--- a/include/net/sock_reuseport.h
++++ b/include/net/sock_reuseport.h
+@@ -55,6 +55,4 @@ static inline bool reuseport_has_conns(struct sock *sk, bool set)
+ 	return ret;
  }
  
-+static void *sock_map_lookup_sys(struct bpf_map *map, void *key)
-+{
-+	struct sock *sk;
-+
-+	if (map->value_size != sizeof(u64))
-+		return ERR_PTR(-ENOSPC);
-+
-+	sk = __sock_map_lookup_elem(map, *(u32 *)key);
-+	if (!sk)
-+		return ERR_PTR(-ENOENT);
-+
-+	sock_gen_cookie(sk);
-+	return &sk->sk_cookie;
-+}
-+
- static int __sock_map_delete(struct bpf_stab *stab, struct sock *sk_test,
- 			     struct sock **psk)
- {
-@@ -445,11 +462,18 @@ static bool sock_map_sk_state_allowed(const struct sock *sk)
- static int sock_map_update_elem(struct bpf_map *map, void *key,
- 				void *value, u64 flags)
- {
--	u32 ufd = *(u32 *)value;
- 	u32 idx = *(u32 *)key;
- 	struct socket *sock;
- 	struct sock *sk;
- 	int ret;
-+	u64 ufd;
-+
-+	if (map->value_size == sizeof(u64))
-+		ufd = *(u64 *)value;
-+	else
-+		ufd = *(u32 *)value;
-+	if (ufd > S32_MAX)
-+		return -EINVAL;
+-int reuseport_get_id(struct sock_reuseport *reuse);
+-
+ #endif  /* _SOCK_REUSEPORT_H */
+diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
+index 50c083ba978c..01badd3eda7a 100644
+--- a/kernel/bpf/reuseport_array.c
++++ b/kernel/bpf/reuseport_array.c
+@@ -305,11 +305,6 @@ int bpf_fd_reuseport_array_update_elem(struct bpf_map *map, void *key,
+ 	if (err)
+ 		goto put_file_unlock;
  
- 	sock = sockfd_lookup(ufd, &ret);
- 	if (!sock)
-@@ -557,6 +581,7 @@ const struct bpf_map_ops sock_map_ops = {
- 	.map_alloc		= sock_map_alloc,
- 	.map_free		= sock_map_free,
- 	.map_get_next_key	= sock_map_get_next_key,
-+	.map_lookup_elem_sys_only = sock_map_lookup_sys,
- 	.map_update_elem	= sock_map_update_elem,
- 	.map_delete_elem	= sock_map_delete_elem,
- 	.map_lookup_elem	= sock_map_lookup,
-@@ -787,10 +812,17 @@ static int sock_hash_update_common(struct bpf_map *map, void *key,
- static int sock_hash_update_elem(struct bpf_map *map, void *key,
- 				 void *value, u64 flags)
- {
--	u32 ufd = *(u32 *)value;
- 	struct socket *sock;
- 	struct sock *sk;
- 	int ret;
-+	u64 ufd;
-+
-+	if (map->value_size == sizeof(u64))
-+		ufd = *(u64 *)value;
-+	else
-+		ufd = *(u32 *)value;
-+	if (ufd > S32_MAX)
-+		return -EINVAL;
+-	/* Ensure reuse->reuseport_id is set */
+-	err = reuseport_get_id(reuse);
+-	if (err < 0)
+-		goto put_file_unlock;
+-
+ 	WRITE_ONCE(nsk->sk_user_data, &array->ptrs[index]);
+ 	rcu_assign_pointer(array->ptrs[index], nsk);
+ 	free_osk = osk;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 77d2f471b3bb..925b23de218b 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8641,18 +8641,8 @@ BPF_CALL_4(sk_select_reuseport, struct sk_reuseport_kern *, reuse_kern,
+ 	}
  
- 	sock = sockfd_lookup(ufd, &ret);
- 	if (!sock)
-@@ -866,7 +898,8 @@ static struct bpf_map *sock_hash_alloc(union bpf_attr *attr)
- 		return ERR_PTR(-EPERM);
- 	if (attr->max_entries == 0 ||
- 	    attr->key_size    == 0 ||
--	    attr->value_size  != 4 ||
-+	    (attr->value_size != sizeof(u32) &&
-+	     attr->value_size != sizeof(u64)) ||
- 	    attr->map_flags & ~SOCK_CREATE_FLAG_MASK)
- 		return ERR_PTR(-EINVAL);
- 	if (attr->key_size > MAX_BPF_STACK)
-@@ -943,6 +976,21 @@ static void sock_hash_free(struct bpf_map *map)
- 	kfree(htab);
+ 	if (unlikely(reuse->reuseport_id != reuse_kern->reuseport_id)) {
+-		struct sock *sk;
+-
+-		if (unlikely(!reuse_kern->reuseport_id))
+-			/* There is a small race between adding the
+-			 * sk to the map and setting the
+-			 * reuse_kern->reuseport_id.
+-			 * Treat it as the sk has not been added to
+-			 * the bpf map yet.
+-			 */
+-			return -ENOENT;
++		struct sock *sk = reuse_kern->sk;
+ 
+-		sk = reuse_kern->sk;
+ 		if (sk->sk_protocol != selected_sk->sk_protocol)
+ 			return -EPROTOTYPE;
+ 		else if (sk->sk_family != selected_sk->sk_family)
+diff --git a/net/core/sock_reuseport.c b/net/core/sock_reuseport.c
+index 91e9f2223c39..adcb3aea576d 100644
+--- a/net/core/sock_reuseport.c
++++ b/net/core/sock_reuseport.c
+@@ -16,27 +16,8 @@
+ 
+ DEFINE_SPINLOCK(reuseport_lock);
+ 
+-#define REUSEPORT_MIN_ID 1
+ static DEFINE_IDA(reuseport_ida);
+ 
+-int reuseport_get_id(struct sock_reuseport *reuse)
+-{
+-	int id;
+-
+-	if (reuse->reuseport_id)
+-		return reuse->reuseport_id;
+-
+-	id = ida_simple_get(&reuseport_ida, REUSEPORT_MIN_ID, 0,
+-			    /* Called under reuseport_lock */
+-			    GFP_ATOMIC);
+-	if (id < 0)
+-		return id;
+-
+-	reuse->reuseport_id = id;
+-
+-	return reuse->reuseport_id;
+-}
+-
+ static struct sock_reuseport *__reuseport_alloc(unsigned int max_socks)
+ {
+ 	unsigned int size = sizeof(struct sock_reuseport) +
+@@ -55,6 +36,7 @@ static struct sock_reuseport *__reuseport_alloc(unsigned int max_socks)
+ int reuseport_alloc(struct sock *sk, bool bind_inany)
+ {
+ 	struct sock_reuseport *reuse;
++	int id, ret = 0;
+ 
+ 	/* bh lock used since this function call may precede hlist lock in
+ 	 * soft irq of receive path or setsockopt from process context
+@@ -78,10 +60,18 @@ int reuseport_alloc(struct sock *sk, bool bind_inany)
+ 
+ 	reuse = __reuseport_alloc(INIT_SOCKS);
+ 	if (!reuse) {
+-		spin_unlock_bh(&reuseport_lock);
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto out;
+ 	}
+ 
++	id = ida_alloc(&reuseport_ida, GFP_ATOMIC);
++	if (id < 0) {
++		kfree(reuse);
++		ret = id;
++		goto out;
++	}
++
++	reuse->reuseport_id = id;
+ 	reuse->socks[0] = sk;
+ 	reuse->num_socks = 1;
+ 	reuse->bind_inany = bind_inany;
+@@ -90,7 +80,7 @@ int reuseport_alloc(struct sock *sk, bool bind_inany)
+ out:
+ 	spin_unlock_bh(&reuseport_lock);
+ 
+-	return 0;
++	return ret;
+ }
+ EXPORT_SYMBOL(reuseport_alloc);
+ 
+@@ -134,8 +124,7 @@ static void reuseport_free_rcu(struct rcu_head *head)
+ 
+ 	reuse = container_of(head, struct sock_reuseport, rcu);
+ 	sk_reuseport_prog_free(rcu_dereference_protected(reuse->prog, 1));
+-	if (reuse->reuseport_id)
+-		ida_simple_remove(&reuseport_ida, reuse->reuseport_id);
++	ida_free(&reuseport_ida, reuse->reuseport_id);
+ 	kfree(reuse);
  }
  
-+static void *sock_hash_lookup_sys(struct bpf_map *map, void *key)
-+{
-+	struct sock *sk;
-+
-+	if (map->value_size != sizeof(u64))
-+		return ERR_PTR(-ENOSPC);
-+
-+	sk = __sock_hash_lookup_elem(map, key);
-+	if (!sk)
-+		return ERR_PTR(-ENOENT);
-+
-+	sock_gen_cookie(sk);
-+	return &sk->sk_cookie;
-+}
-+
- static void sock_hash_release_progs(struct bpf_map *map)
- {
- 	psock_progs_drop(&container_of(map, struct bpf_htab, map)->progs);
-@@ -1032,6 +1080,7 @@ const struct bpf_map_ops sock_hash_ops = {
- 	.map_update_elem	= sock_hash_update_elem,
- 	.map_delete_elem	= sock_hash_delete_elem,
- 	.map_lookup_elem	= sock_map_lookup,
-+	.map_lookup_elem_sys_only = sock_hash_lookup_sys,
- 	.map_release_uref	= sock_hash_release_progs,
- 	.map_check_btf		= map_check_no_btf,
- };
+@@ -199,12 +188,15 @@ void reuseport_detach_sock(struct sock *sk)
+ 	reuse = rcu_dereference_protected(sk->sk_reuseport_cb,
+ 					  lockdep_is_held(&reuseport_lock));
+ 
+-	/* At least one of the sk in this reuseport group is added to
+-	 * a bpf map.  Notify the bpf side.  The bpf map logic will
+-	 * remove the sk if it is indeed added to a bpf map.
++	/* Notify the bpf side. The sk may be added to a sockarray
++	 * map. If so, sockarray logic will remove it from the map.
++	 *
++	 * Other bpf map types that work with reuseport, like sockmap,
++	 * don't need an explicit callback from here. They override sk
++	 * unhash/close ops to remove the sk from the map before we
++	 * get to this point.
+ 	 */
+-	if (reuse->reuseport_id)
+-		bpf_sk_reuseport_detach(sk);
++	bpf_sk_reuseport_detach(sk);
+ 
+ 	rcu_assign_pointer(sk->sk_reuseport_cb, NULL);
+ 
 -- 
 2.24.1
 
