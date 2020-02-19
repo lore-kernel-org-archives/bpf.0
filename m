@@ -3,43 +3,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B996C34047
-	for <bpf@archiver.kernel.org>; Wed, 19 Feb 2020 13:29:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB70DC34047
+	for <bpf@archiver.kernel.org>; Wed, 19 Feb 2020 13:43:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DBE132465D
-	for <bpf@archiver.kernel.org>; Wed, 19 Feb 2020 13:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582118941;
-	bh=2Eok6QDwEYTXtMZn1ZUTzSuDcxAHDuGB/EMud+DtNVA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=hzJ9DO+tPVzOj7BfplwvMa+6r/MQpEEEntD7KqO/0c0IY5+t3ICTRld/d6YEMRsXP
-	 gPe5Ci9byDJ6dK6No9rhw3Y+/vhkeYjnRWx9YFVThcA88Fex6El3dmtES/tQN/Adwt
-	 xI14sl1l4gFKwd6mkGE25RU1dbLEeBbWE72D9VA8=
+	by mail.kernel.org (Postfix) with ESMTP id C0CA02465D
+	for <bpf@archiver.kernel.org>; Wed, 19 Feb 2020 13:43:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LGou5nXW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727274AbgBSN3A (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Feb 2020 08:29:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34218 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726725AbgBSN3A (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Feb 2020 08:29:00 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727488AbgBSNnM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Feb 2020 08:43:12 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:29733 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726671AbgBSNnL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Feb 2020 08:43:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1582119791;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ogUgNQHMZGphvFbHLWSXZKUdZldeedaIJcgIFpDuE+4=;
+        b=LGou5nXWPowBFdKeyD6YqWIlQ88pSSemR09EgY7sNaHZuTMDczhbUvU5+gggkKom+Qg8yf
+        15oCTc0Xu+xYVZ8BV4eOOL7QnUo390Fvkfej9HE8ns+SzIHvq1ue8lgYPSWfyEK65A57Qw
+        cwNbvfDMQrHj5y1uEKExsaSjhSHaHFo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-365-1C0NK7uANj6M3v3QxALrfQ-1; Wed, 19 Feb 2020 08:43:06 -0500
+X-MC-Unique: 1C0NK7uANj6M3v3QxALrfQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67BE824654;
-        Wed, 19 Feb 2020 13:28:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582118939;
-        bh=2Eok6QDwEYTXtMZn1ZUTzSuDcxAHDuGB/EMud+DtNVA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SDOquG1GvLtxm/+qKnQDLJtvjCuHprU5zHxrLLHPi9io2GUA4ex23J0n2NJ0n/lVy
-         7RdP3jPNxPm569R+/Wv6Eq+A1JxOTUow5q6tUIME8BX0EsMqB6O/1vuTcOys+2BB3Y
-         sTOjAecBi4r80oLBY38TAluXbBr8Rx6QOTKKRmGo=
-Date:   Wed, 19 Feb 2020 14:28:56 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C36288DE74D;
+        Wed, 19 Feb 2020 13:43:04 +0000 (UTC)
+Received: from carbon (ovpn-200-26.brq.redhat.com [10.40.200.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7D08A90F76;
+        Wed, 19 Feb 2020 13:42:55 +0000 (UTC)
+Date:   Wed, 19 Feb 2020 14:42:54 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Andrii Nakryiko <andriin@fb.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
@@ -49,44 +55,62 @@ Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         David Miller <davem@davemloft.net>,
         LKML <linux-kernel@vger.kernel.org>,
         Anders Roxell <anders.roxell@linaro.org>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4?= =?UTF-8?B?cmdlbnNlbg==?= 
+        <toke@redhat.com>, brouer@redhat.com
 Subject: Re: Kernel 5.5.4 build fail for BPF-selftests with latest LLVM
-Message-ID: <20200219132856.GA2836367@kroah.com>
+Message-ID: <20200219144254.36c3921b@carbon>
+In-Reply-To: <20200219132856.GA2836367@kroah.com>
 References: <20200219133012.7cb6ac9e@carbon>
+        <20200219132856.GA2836367@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200219133012.7cb6ac9e@carbon>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 01:30:12PM +0100, Jesper Dangaard Brouer wrote:
-> Hi Andrii,
+On Wed, 19 Feb 2020 14:28:56 +0100
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+
+> On Wed, Feb 19, 2020 at 01:30:12PM +0100, Jesper Dangaard Brouer wrote:
+> > Hi Andrii,
+> > 
+> > Downloaded tarball for kernel release 5.5.4, and I cannot compile
+> > tools/testing/selftests/bpf/ with latest LLVM release version 9.  
 > 
-> Downloaded tarball for kernel release 5.5.4, and I cannot compile
-> tools/testing/selftests/bpf/ with latest LLVM release version 9.
+> Is this something that recently broke?  If so, what commit caused it?
 
-Is this something that recently broke?  If so, what commit caused it?
+Digging through, it seems several commits.
 
-And has llvm 9 always worked here?
+> And has llvm 9 always worked here?
 
-> Looking closer at the build error messages, I can see that this is
-> caused by using LLVM features that (I assume) will be avail in release
-> 10. I find it very strange that we can release a kernel that have build
-> dependencies on a unreleased version of LLVM.
+Yes, llvm-9 used to work for tools/testing/selftests/bpf/.
 
-Is this the first time you have tried using llvm to build a kernel?
-This isn't a new thing :)
 
-> I love the new LLVM BTF features, but we cannot break users/CI-systems
-> that wants to run the BPF-selftests.
+> > Looking closer at the build error messages, I can see that this is
+> > caused by using LLVM features that (I assume) will be avail in release
+> > 10. I find it very strange that we can release a kernel that have build
+> > dependencies on a unreleased version of LLVM.  
+> 
+> Is this the first time you have tried using llvm to build a kernel?
+> This isn't a new thing :)
 
-Is this a regression from older kernels?
+LOL - we are talking past each-other... I'm not building the entire
+kernel with LLVM.  Notice I'm talking about the BPF-selftests located
+in directory tools/testing/selftests/bpf/.  Building the selftests
+programs are broken
 
-And does gcc work?
+We always use LLVM to build BPF programs (both samples/bpf/ and selftests).
 
-thanks,
+ 
+> > I love the new LLVM BTF features, but we cannot break users/CI-systems
+> > that wants to run the BPF-selftests.  
 
-greg k-h
+-- 
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
+
