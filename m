@@ -2,126 +2,144 @@ Return-Path: <SRS0=tRXP=4I=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B971FC11D20
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:58:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41376C11D24
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 23:06:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 87C6820679
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:58:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 14A7E206F4
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 23:06:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fUspCS98"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728993AbgBTU67 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Feb 2020 15:58:59 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:44155 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729172AbgBTU4i (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Feb 2020 15:56:38 -0500
-Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1j4sre-0007U2-1G; Thu, 20 Feb 2020 21:56:06 +0100
-Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id 7EBD710408E;
-        Thu, 20 Feb 2020 21:56:04 +0100 (CET)
-Message-Id: <20200220204618.426525659@linutronix.de>
-User-Agent: quilt/0.65
-Date:   Thu, 20 Feb 2020 21:45:28 +0100
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sebastian Sewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Clark Williams <williams@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [patch V2 11/20] bpf/tests: Use migrate disable instead of preempt disable
-References: <20200220204517.863202864@linutronix.de>
+        id S1729336AbgBTXGT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Feb 2020 18:06:19 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:8374 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727135AbgBTXGT (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 20 Feb 2020 18:06:19 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01KN6EvD011379
+        for <bpf@vger.kernel.org>; Thu, 20 Feb 2020 15:06:18 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=MESG69cFfDUetraqyLOHK3/VfUguFDCaDZdCXKWqQRg=;
+ b=fUspCS98Y2QUcN5Q5HXRf1doad22OoV5Klo98SHbcfrrq/970DynpQ6fhObx2hGVsaSp
+ PbhuhMbcywJb9HERBcmvmHPJOdj+oa7h8Go2kA2W4qbmOz75xzzR+6tK0rxJdc61DR3h
+ TVgWb1xpKBAIQegi4sPwSPr6Pq05eG+K268= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2y9y9nhbjv-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 20 Feb 2020 15:06:18 -0800
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Thu, 20 Feb 2020 15:06:08 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 8FF252EC2C3F; Thu, 20 Feb 2020 15:05:55 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>, Jiri Olsa <jolsa@kernel.org>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next] selftests/bpf: fix trampoline_count clean up logic
+Date:   Thu, 20 Feb 2020 15:05:46 -0800
+Message-ID: <20200220230546.769250-1-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-20_18:2020-02-19,2020-02-20 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=8 malwarescore=0
+ mlxlogscore=636 adultscore=0 bulkscore=0 spamscore=0 impostorscore=0
+ mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002200169
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: David Miller <davem@davemloft.net>
+Libbpf's Travis CI tests caught this issue. Ensure bpf_link and bpf_object
+clean up is performed correctly.
 
-Replace the preemption disable/enable with migrate_disable/enable() to
-reflect the actual requirement and to allow PREEMPT_RT to substitute it
-with an actual migration disable mechanism which does not disable
-preemption.
-
-[ tglx: Switched it over to migrate disable ]
-
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-
+Fixes: d633d57902a5 ("selftest/bpf: Add test for allowed trampolines count")
+Cc: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- lib/test_bpf.c     |    4 ++--
- net/bpf/test_run.c |    8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../bpf/prog_tests/trampoline_count.c         | 25 +++++++++++++------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
 
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -6660,14 +6660,14 @@ static int __run_one(const struct bpf_pr
- 	u64 start, finish;
- 	int ret = 0, i;
+diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+index 1f6ccdaed1ac..781c8d11604b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
++++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+@@ -55,31 +55,40 @@ void test_trampoline_count(void)
+ 	/* attach 'allowed' 40 trampoline programs */
+ 	for (i = 0; i < MAX_TRAMP_PROGS; i++) {
+ 		obj = bpf_object__open_file(object, NULL);
+-		if (CHECK(IS_ERR(obj), "obj_open_file", "err %ld\n", PTR_ERR(obj)))
++		if (CHECK(IS_ERR(obj), "obj_open_file", "err %ld\n", PTR_ERR(obj))) {
++			obj = NULL;
+ 			goto cleanup;
++		}
  
--	preempt_disable();
-+	migrate_disable();
- 	start = ktime_get_ns();
+ 		err = bpf_object__load(obj);
+ 		if (CHECK(err, "obj_load", "err %d\n", err))
+ 			goto cleanup;
+ 		inst[i].obj = obj;
++		obj = NULL;
  
- 	for (i = 0; i < runs; i++)
- 		ret = BPF_PROG_RUN(fp, data);
- 
- 	finish = ktime_get_ns();
--	preempt_enable();
-+	migrate_enable();
- 
- 	*duration = finish - start;
- 	do_div(*duration, runs);
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -37,7 +37,7 @@ static int bpf_test_run(struct bpf_prog
- 		repeat = 1;
- 
- 	rcu_read_lock();
--	preempt_disable();
-+	migrate_disable();
- 	time_start = ktime_get_ns();
- 	for (i = 0; i < repeat; i++) {
- 		bpf_cgroup_storage_set(storage);
-@@ -54,18 +54,18 @@ static int bpf_test_run(struct bpf_prog
- 
- 		if (need_resched()) {
- 			time_spent += ktime_get_ns() - time_start;
--			preempt_enable();
-+			migrate_enable();
- 			rcu_read_unlock();
- 
- 			cond_resched();
- 
- 			rcu_read_lock();
--			preempt_disable();
-+			migrate_disable();
- 			time_start = ktime_get_ns();
+ 		if (rand() % 2) {
+-			link = load(obj, fentry_name);
+-			if (CHECK(IS_ERR(link), "attach prog", "err %ld\n", PTR_ERR(link)))
++			link = load(inst[i].obj, fentry_name);
++			if (CHECK(IS_ERR(link), "attach prog", "err %ld\n", PTR_ERR(link))) {
++				link = NULL;
+ 				goto cleanup;
++			}
+ 			inst[i].link_fentry = link;
+ 		} else {
+-			link = load(obj, fexit_name);
+-			if (CHECK(IS_ERR(link), "attach prog", "err %ld\n", PTR_ERR(link)))
++			link = load(inst[i].obj, fexit_name);
++			if (CHECK(IS_ERR(link), "attach prog", "err %ld\n", PTR_ERR(link))) {
++				link = NULL;
+ 				goto cleanup;
++			}
+ 			inst[i].link_fexit = link;
  		}
  	}
- 	time_spent += ktime_get_ns() - time_start;
--	preempt_enable();
-+	migrate_enable();
- 	rcu_read_unlock();
  
- 	do_div(time_spent, repeat);
+ 	/* and try 1 extra.. */
+ 	obj = bpf_object__open_file(object, NULL);
+-	if (CHECK(IS_ERR(obj), "obj_open_file", "err %ld\n", PTR_ERR(obj)))
++	if (CHECK(IS_ERR(obj), "obj_open_file", "err %ld\n", PTR_ERR(obj))) {
++		obj = NULL;
+ 		goto cleanup;
++	}
+ 
+ 	err = bpf_object__load(obj);
+ 	if (CHECK(err, "obj_load", "err %d\n", err))
+@@ -104,7 +113,9 @@ void test_trampoline_count(void)
+ cleanup_extra:
+ 	bpf_object__close(obj);
+ cleanup:
+-	while (--i) {
++	if (i >= MAX_TRAMP_PROGS)
++		i = MAX_TRAMP_PROGS - 1;
++	for (; i >= 0; i--) {
+ 		bpf_link__destroy(inst[i].link_fentry);
+ 		bpf_link__destroy(inst[i].link_fexit);
+ 		bpf_object__close(inst[i].obj);
+-- 
+2.17.1
 
