@@ -2,128 +2,128 @@ Return-Path: <SRS0=tRXP=4I=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D891FC11D19
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 19:18:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33D4FC11D25
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:56:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B34CD2465D
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 19:18:52 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uf0O8u+T"
+	by mail.kernel.org (Postfix) with ESMTP id 1662520679
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:56:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728390AbgBTTSw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Feb 2020 14:18:52 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:54564 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728111AbgBTTSw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Feb 2020 14:18:52 -0500
-Received: by mail-pj1-f66.google.com with SMTP id dw13so1272049pjb.4;
-        Thu, 20 Feb 2020 11:18:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=rMhIIEZUgKeNZVyeBrXf1C0vRvoNcRcDaKcwizMaibs=;
-        b=Uf0O8u+TCDQjNTfqxcb7pdKzT0RQtcRKal2XfSILe8ZNYBq4r1ipuFOgPMy8NaF6F5
-         1ZdM34p4WSfuysS42LplXeiN5JNnzjtnNokeh5Q+sauL9gato/bBSuuxc7tfFQ4kYCRz
-         2CA+YhU+hIVmI1RTr3O5nf1iThf4FPGqM+5BQdGF/PfGHk6CfrIomkH0JjFlLJNUXMys
-         /HpHbvgMynqUhUbgxiWF3cE9mFDyIE3n2IZYAabaWvkDFl1NM4qLAW4NpigJ0NYgYnEq
-         FQPHACl4BJcJ5APXU7bhuYLA/GZMALl90Nz96X2m574RP4t1vXleQlj+V/5Onnr8GFgI
-         k/Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rMhIIEZUgKeNZVyeBrXf1C0vRvoNcRcDaKcwizMaibs=;
-        b=JD3jEt9+XzIZLFp3AUkjDehLp7gIBmuXzdFBpTP1Kq5qoceWKjEEqM7C60UEjaVsF5
-         ifz48qbOn7gGXDvFJ5uzAGJUMS4q4Fufa9tqS1eWRw1tMJCxtYWjZQNwGsSm9sHlZCsY
-         RUReeQHEtKJl61xuLhnLIVoa5FlaUmO59dTSRRTl0gMADrtTa16jQsf6K4zy4mfBkSei
-         O8san3EJAysZmvRLgrYJzacuP20V02vvQE/eQcTGwpAYyzRyJB46Ws9Rpl0enL+3ZJRb
-         VBedFUu6B+fnV574gq9/I054LJpKBViPMT7RxOTWw6+77Bi5A/xZGjcIyaRCSAwdf999
-         Oh2g==
-X-Gm-Message-State: APjAAAVHUaojVGt0HUpKzt+X8wdLsMu3VE4F/rEhTckUpIziZEVjChQt
-        Iss8Uvjc0vvuLDPJdeq08PI=
-X-Google-Smtp-Source: APXvYqw5JxeeJ/AWAadkS9nmdRGpCmWdRi47H8MKfTkbp2DWpc/mINUruptzlSs4Bv/cMOf01GMjHA==
-X-Received: by 2002:a17:902:348:: with SMTP id 66mr32468100pld.137.1582226329710;
-        Thu, 20 Feb 2020 11:18:49 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:500::5:f03d])
-        by smtp.gmail.com with ESMTPSA id j21sm213384pji.13.2020.02.20.11.18.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 20 Feb 2020 11:18:48 -0800 (PST)
-Date:   Thu, 20 Feb 2020 11:18:46 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     "Bird, Tim" <Tim.Bird@sony.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        shuah <shuah@kernel.org>,
-        Daniel =?utf-8?B?RMOtYXo=?= <daniel.diaz@linaro.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        BPF-dev-list <bpf@vger.kernel.org>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: Kernel 5.5.4 build fail for BPF-selftests with latest LLVM
-Message-ID: <20200220191845.u62nhohgzngbrpib@ast-mbp>
-References: <20200219192854.6b05b807@carbon>
- <CAEf4BzaRAK6-7aCCVOA6hjTevKuxgvZZnHeVgdj_ZWNn8wibYQ@mail.gmail.com>
- <20200219210609.20a097fb@carbon>
- <CAEUSe79Vn8wr=BOh0RzccYij_snZDY=2XGmHmR494wsQBBoo5Q@mail.gmail.com>
- <20200220002748.kpwvlz5xfmjm5fd5@ast-mbp>
- <4a26e6c6-500e-7b92-1e26-16e1e0233889@kernel.org>
- <20200220173740.7a3f9ad7@carbon>
- <MWHPR13MB0895649219625C5F7380314FFD130@MWHPR13MB0895.namprd13.prod.outlook.com>
- <20200220172612.7aqmiwrnizgsukvm@ast-mbp>
- <MWHPR13MB0895B185BC36759121D6F26AFD130@MWHPR13MB0895.namprd13.prod.outlook.com>
+        id S1729183AbgBTU4i (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Feb 2020 15:56:38 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:44150 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728400AbgBTU4i (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Feb 2020 15:56:38 -0500
+Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1j4srb-0007TG-QM; Thu, 20 Feb 2020 21:56:03 +0100
+Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id 5458C10408B;
+        Thu, 20 Feb 2020 21:56:03 +0100 (CET)
+Message-Id: <20200220204617.935490356@linutronix.de>
+User-Agent: quilt/0.65
+Date:   Thu, 20 Feb 2020 21:45:23 +0100
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sebastian Sewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Clark Williams <williams@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [patch V2 06/20] bpf: Dont iterate over possible CPUs with interrupts disabled
+References: <20200220204517.863202864@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MWHPR13MB0895B185BC36759121D6F26AFD130@MWHPR13MB0895.namprd13.prod.outlook.com>
-User-Agent: NeoMutt/20180223
+Content-Type: text/plain; charset=UTF-8
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 05:41:51PM +0000, Bird, Tim wrote:
-> 
-> So - do the BPF developers add new instructions to the virtual machine, that then
-> have to be added to both the compiler and the executor (VM implementation)?
+pcpu_freelist_populate() is disabling interrupts and then iterates over the
+possible CPUs. The reason why this disables interrupts is to silence
+lockdep because the invoked ___pcpu_freelist_push() takes spin locks.
 
-Right. New instructions are added to the kernel and llvm at the same time. The
-kernel and llvm release cadence and process are different which complicates it
-for us.
+Neither the interrupt disabling nor the locking are required in this
+function because it's called during initialization and the resulting map is
+not yet visible to anything.
 
-> It sounds like the compiler support and executor support is done in concert, and
-> that patches are at least accepted upstream (but possibly are not yet available in
-> a compiler release) for the compiler side.  What about the Linux kernel side?  Is the
-> support for a new instruction only in non-released kernels (say, in the BPF development
-> tree), or could it potentially be included in a released kernel, before the compiler
-> with matching support is released?  What would happen if a bug was found, and
-> compiler support for the instruction was delayed?  
+Split out the actual push assignement into an inline, call it from the loop
+and remove the interrupt disable.
 
-As with all chicken-and-egg problems the feature has to land in one of the
-repos first. That was one of the reasons llvm community switched to mono repo
-to avoid clang vs llvm conflicts. The kernel and llvm are not going to be in a
-single repo, so we have to orchestrate the landing. Most of the time it's easy,
-because we maintain both kernel and llvm components. But in some cases it's
-very difficult. For example we've delayed landing kernel and libbpf patches by
-about six month, since we couldn't get an agreement on how the feature has to
-be implemented in clang.
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ kernel/bpf/percpu_freelist.c |   20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-> I suppose that this would only
-> mean that the executor supported an instruction that never appeared in a compiled
-> BPF program? Is that right?
+--- a/kernel/bpf/percpu_freelist.c
++++ b/kernel/bpf/percpu_freelist.c
+@@ -25,12 +25,18 @@ void pcpu_freelist_destroy(struct pcpu_f
+ 	free_percpu(s->freelist);
+ }
+ 
++static inline void pcpu_freelist_push_node(struct pcpu_freelist_head *head,
++					   struct pcpu_freelist_node *node)
++{
++	node->next = head->first;
++	head->first = node;
++}
++
+ static inline void ___pcpu_freelist_push(struct pcpu_freelist_head *head,
+ 					 struct pcpu_freelist_node *node)
+ {
+ 	raw_spin_lock(&head->lock);
+-	node->next = head->first;
+-	head->first = node;
++	pcpu_freelist_push_node(head, node);
+ 	raw_spin_unlock(&head->lock);
+ }
+ 
+@@ -56,21 +62,16 @@ void pcpu_freelist_populate(struct pcpu_
+ 			    u32 nr_elems)
+ {
+ 	struct pcpu_freelist_head *head;
+-	unsigned long flags;
+ 	int i, cpu, pcpu_entries;
+ 
+ 	pcpu_entries = nr_elems / num_possible_cpus() + 1;
+ 	i = 0;
+ 
+-	/* disable irq to workaround lockdep false positive
+-	 * in bpf usage pcpu_freelist_populate() will never race
+-	 * with pcpu_freelist_push()
+-	 */
+-	local_irq_save(flags);
+ 	for_each_possible_cpu(cpu) {
+ again:
+ 		head = per_cpu_ptr(s->freelist, cpu);
+-		___pcpu_freelist_push(head, buf);
++		/* No locking required as this is not visible yet. */
++		pcpu_freelist_push_node(head, buf);
+ 		i++;
+ 		buf += elem_size;
+ 		if (i == nr_elems)
+@@ -78,7 +79,6 @@ void pcpu_freelist_populate(struct pcpu_
+ 		if (i % pcpu_entries)
+ 			goto again;
+ 	}
+-	local_irq_restore(flags);
+ }
+ 
+ struct pcpu_freelist_node *__pcpu_freelist_pop(struct pcpu_freelist *s)
 
-The answer is yes. It is the case that the kernel supports certain bpf
-instructions, but llvm doesn't know how to emit them. But it has nothing to do
-with landing of features and release cadence.
