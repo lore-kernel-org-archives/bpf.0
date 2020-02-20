@@ -2,179 +2,124 @@ Return-Path: <SRS0=tRXP=4I=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FD5FC5ACC4
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 00:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F14CC34031
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 04:19:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 465CF24670
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 00:47:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582159647;
-	bh=IoyCu3Rfg36TnWgV/FX467X5fODdY0uZIig5iWzvj2Y=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=YABOQLv0LdTdjTI48m17tKcRmQU3bK0H+b/+DdL1NEfA4vzLvW7Y6tMHhE4g5au+H
-	 ez/mTdD5Sw6ShSdBDXnsbNN8orTTw48rWffaDKdOO/w0QIalo3s4NnB3NrXnjo44q0
-	 FnKR33FtM9B671JOlpYYqNdjw4Yd0rRT+cOhWJEg=
+	by mail.kernel.org (Postfix) with ESMTP id 43F6124670
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 04:19:59 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cm67H6/W"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727001AbgBTAr0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Feb 2020 19:47:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37434 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726962AbgBTAr0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Feb 2020 19:47:26 -0500
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 793792465D;
-        Thu, 20 Feb 2020 00:47:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582159645;
-        bh=IoyCu3Rfg36TnWgV/FX467X5fODdY0uZIig5iWzvj2Y=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=dk0aWK516QpktQDynoQnd5IU3diktxkycW0Dz2cwfjo3LG73XXp9yPtJol9GJVjBE
-         mpyTvwkvUQD1H+YXNjkl9x5u6vrrnrEdrVHo6o6gKRjL732msJctzi9ekPggT78WRt
-         eGR9BGUQfx2yzpuFdPqTeoYIAkn68YZU+BfYT720=
-Subject: Re: Kernel 5.5.4 build fail for BPF-selftests with latest LLVM
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        BPF-dev-list <bpf@vger.kernel.org>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        shuah <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20200219133012.7cb6ac9e@carbon>
- <CAADnVQKQRKtDz0Boy=-cudc4eKGXB-yParGZv6qvYcQR4uMUQQ@mail.gmail.com>
- <20200219180348.40393e28@carbon>
- <CAEf4Bza9imKymHfv_LpSFE=kNB5=ZapTS3SCdeZsDdtrUrUGcg@mail.gmail.com>
- <20200219192854.6b05b807@carbon>
- <CAEf4BzaRAK6-7aCCVOA6hjTevKuxgvZZnHeVgdj_ZWNn8wibYQ@mail.gmail.com>
- <20200219210609.20a097fb@carbon>
- <CAEUSe79Vn8wr=BOh0RzccYij_snZDY=2XGmHmR494wsQBBoo5Q@mail.gmail.com>
- <20200220002748.kpwvlz5xfmjm5fd5@ast-mbp>
-From:   shuah <shuah@kernel.org>
-Message-ID: <4a26e6c6-500e-7b92-1e26-16e1e0233889@kernel.org>
-Date:   Wed, 19 Feb 2020 17:47:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727747AbgBTET7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Feb 2020 23:19:59 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:36187 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727576AbgBTET6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Feb 2020 23:19:58 -0500
+Received: by mail-pl1-f195.google.com with SMTP id a6so1026297plm.3;
+        Wed, 19 Feb 2020 20:19:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=FYRx+ojWKka5dOzfxYown+hh6IqyoQrFZkYXQNdVQwQ=;
+        b=cm67H6/W2R77cF1SonxMWOSDPb/Xxz0VqEWjgmb7kn9I4ShrLmsP/HORD8S+VpEX3q
+         1uNIXhUlql+bIDWvHnxkipPT71yMfPSewxr55YMWkXt2bHpZQYQSEit9VUgEie7tzydS
+         RCIDH5Z8KPvRdj9qwniOL8e88vKoa4f3B1FUA7u7h1kdTzz8sXoFCFeVxsN3xF8wYyOd
+         HDHmDHyheDgyNyIc7kbQ3mq+G0uiyOkQGxmZKnddHOTKwu3EMA1jnUQQ9TMkqWSqbfHh
+         CkaWB/nxleCHGd5bdTcan7BCDAx/TOxKSEtjqKAhyv88ypMMOCjaMjoESxelBlZTvR9u
+         qoRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=FYRx+ojWKka5dOzfxYown+hh6IqyoQrFZkYXQNdVQwQ=;
+        b=KDHN05QLJl5mHEK9H1yaN7uIv/zVfWZqntsoTItua0gJzXIZaTFQcTnOjGmQ2CiuSo
+         psTWJhM0p50b03cYSXhcAkJf8U/LkH2/Wk/F3gST80wpbjkGDwoNvJf+yAcAkodJtim/
+         Svgy0+UWU/TlnDG8+swGi9OUrcJZiYUlwqoFT2UU5kCn/D7Hr/H3ZM4Tv6j6Hmz3PNnC
+         elID08+zoVFRSXMLvFh5VhKQR79F3TikToyBvkRSW7ARddQiAwvZXs0NzWj1mOsbMJHf
+         i7i0vV351mUzbnrUixbBPvr0CRPzcEnWJ7J9meVxKQmP3nHCdVVHFlQZOB5wMJjy4Vcw
+         1Yxg==
+X-Gm-Message-State: APjAAAU8lbA4PpTIppzurZce/SE2RAnHhoHSsRInARisn3RgKSzl5IBs
+        EyCkjoT4GE/Ap5dbAiPqLSu6e047
+X-Google-Smtp-Source: APXvYqxKVrgoGUcRaA4sFoZcAOJCUTszg1jREcxjR8hwOxGHo5rNwVGV9YX8qC3aH+ZUpjiRnmz1Zw==
+X-Received: by 2002:a17:902:9a09:: with SMTP id v9mr28436709plp.341.1582172396600;
+        Wed, 19 Feb 2020 20:19:56 -0800 (PST)
+Received: from ast-mbp ([2620:10d:c090:400::5:3283])
+        by smtp.gmail.com with ESMTPSA id r6sm1222468pfh.91.2020.02.19.20.19.54
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 19 Feb 2020 20:19:55 -0800 (PST)
+Date:   Wed, 19 Feb 2020 20:19:52 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, bpf <bpf@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Clark Williams <williams@redhat.com>,
+        rostedt <rostedt@goodmis.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: [RFC patch 14/19] bpf: Use migrate_disable() in hashtab code
+Message-ID: <20200220041951.rhsr3zstl6fkbmfn@ast-mbp>
+References: <20200214133917.304937432@linutronix.de>
+ <20200214161504.325142160@linutronix.de>
+ <20200214191126.lbiusetaxecdl3of@localhost>
+ <87imk9t02r.fsf@nanos.tec.linutronix.de>
+ <20200218233641.i7fyf36zxocgucap@ast-mbp>
+ <1127123648.641.1582125448879.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
-In-Reply-To: <20200220002748.kpwvlz5xfmjm5fd5@ast-mbp>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1127123648.641.1582125448879.JavaMail.zimbra@efficios.com>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2/19/20 5:27 PM, Alexei Starovoitov wrote:
-> On Wed, Feb 19, 2020 at 03:59:41PM -0600, Daniel Díaz wrote:
->>>
->>> When I download a specific kernel release, how can I know what LLVM
->>> git-hash or version I need (to use BPF-selftests)?
+On Wed, Feb 19, 2020 at 10:17:28AM -0500, Mathieu Desnoyers wrote:
+> ----- On Feb 18, 2020, at 6:36 PM, Alexei Starovoitov alexei.starovoitov@gmail.com wrote:
 > 
-> as discussed we're going to add documentation-like file that will
-> list required commits in tools.
-> This will be enforced for future llvm/pahole commits.
+> [...]
 > 
->>> Do you think it is reasonable to require end-users to compile their own
->>> bleeding edge version of LLVM, to use BPF-selftests?
+> > If I can use migrate_disable() without RT it will help my work on sleepable
+> > BPF programs. I would only have to worry about rcu_read_lock() since
+> > preempt_disable() is nicely addressed.
 > 
-> absolutely.
-
-+ linux-kselftest@vger.kernel.org
-
-End-users in this context are users and not necessarily developers.
-
-> If a developer wants to send a patch they must run all selftests and
-> all of them must pass in their environment.
-> "but I'm adding a tracing feature and don't care about networking tests
-> failing"... is not acceptable.
-
-This is a reasonable expectation when a developers sends bpf patches.
-
+> Hi Alexei,
 > 
->>> I do hope that some end-users of BPF-selftests will be CI-systems.
->>> That also implies that CI-system maintainers need to constantly do
->>> "latest built from sources" of LLVM git-tree to keep up.  Is that a
->>> reasonable requirement when buying a CI-system in the cloud?
+> You may want to consider using SRCU rather than RCU if you need to sleep while
+> holding a RCU read-side lock.
 > 
-> "buying CI-system in the cloud" ?
-> If I could buy such system I would pay for it out of my own pocket to save
-> maintainer's and developer's time.
+> This is the synchronization approach I consider for adding the ability to take page
+> faults when doing syscall tracing.
 > 
->> We [1] are end users of kselftests and many other test suites [2]. We
->> run all of our testing on every git-push on linux-stable-rc, mainline,
->> and linux-next -- approximately 1 million tests per week. We have a
->> dedicated engineering team looking after this CI infrastructure and
->> test results, and as such, I can wholeheartedly echo Jesper's
->> sentiment here: We would really like to help kernel maintainers and
->> developers by automatically testing their code in real hardware, but
->> the BPF kselftests are difficult to work with from a CI perspective.
->> We have caught and reported [3] many [4] build [5] failures [6] in the
->> past for libbpf/Perf, but building is just one of the pieces. We are
->> unable to run the entire BPF kselftests because only a part of the
->> code builds, so our testing is very limited there.
->>
->> We hope that this situation can be improved and that our and everyone
->> else's automated testing can help you guys too. For this to work out,
->> we need some help.
+> Then you'll be able to replace preempt_disable() by combining SRCU and
+> migrate_disable():
 > 
-
-It would be helpful understand what "help" is in this context.
-
-> I don't understand what kind of help you need. Just install the latest tools.
-
-What would be helpful is to write bpf tests such that older tests that
-worked on older llvm versions continue to work and with some indication
-on which tests require new bleeding edge tools.
-
-> Both the latest llvm and the latest pahole are required.
-
-It would be helpful if you can elaborate why latest tools are a
-requirement.
-
-> If by 'help' you mean to tweak selftests to skip tests then it's a nack.
-> We have human driven CI. Every developer must run selftests/bpf before
-> emailing the patches. Myself and Daniel run them as well before applying.
-> These manual runs is the only thing that keeps bpf tree going.
-> If selftests get to skip tests humans will miss those errors.
-> When I don't see '0 SKIPPED, 0 FAILED' I go and investigate.
-> Anything but zero is a path to broken kernels.
+> AFAIU eBPF currently uses preempt_disable() for two reasons:
 > 
-> Imagine the tests would get skipped when pahole is too old.
-> That would mean all of the kernel features from year 2019
-> would get skipped. Is there a point of running such selftests?
-> I think the value is not just zero. The value is negative.
-> Such selftests that run old stuff would give false believe
-> that they do something meaningful.
-> "but CI can do build only tests"... If 'helping' such CI means hurting the
-> key developer/maintainer workflow such CI is on its own.
-> 
+> - Ensure the thread is not migrated,
+>   -> can be replaced by migrate_disable() in RT
+> - Provide RCU existence guarantee through sched-RCU
+>   -> can be replaced by SRCU, which allows sleeping and taking page faults.
 
-Skipping tests will be useless. I am with you on that. However,
-figuring out how to maintain some level of backward compatibility
-to run at least older tests and warn users to upgrade would be
-helpful.
-
-I suspect currently users are ignoring bpf failures because they
-are unable to keep up with the requirement to install newer tools
-to run the tests. This isn't great either.
-
-Users that care are sharing their pain to see if they can get some
-help or explanation on why new tools are required every so often.
-I don't think everybody understands why. :)
-
-thanks,
--- Shuah
+bpf is using normal rcu to protect map values
+and rcu+preempt to protect per-cpu map values.
+srcu is certainly under consideration. It hasn't been used due to performance
+implications. atomics and barriers are too heavy for certain use cases. So we
+have to keep rcu where performance matters, but cannot fork map implementations
+to rcu and srcu due to huge code bloat. So far I've been thinking to introduce
+explicit helper bpf_rcu_read_lock() and let programs use it directly instead of
+implicit rcu_read_lock() that is done outside of bpf prog. The tricky part is
+teaching verifier to enforce critical section.
