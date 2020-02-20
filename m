@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33D4FC11D25
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F7D4C11D20
 	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:56:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1662520679
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:56:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9D6820679
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:56:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729183AbgBTU4i (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Feb 2020 15:56:38 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:44150 "EHLO
+        id S1729196AbgBTU4j (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Feb 2020 15:56:39 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:44146 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728400AbgBTU4i (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Feb 2020 15:56:38 -0500
+        with ESMTP id S1729055AbgBTU4h (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Feb 2020 15:56:37 -0500
 Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1j4srb-0007TG-QM; Thu, 20 Feb 2020 21:56:03 +0100
+        id 1j4srh-0007aD-R1; Thu, 20 Feb 2020 21:56:10 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id 5458C10408B;
-        Thu, 20 Feb 2020 21:56:03 +0100 (CET)
-Message-Id: <20200220204617.935490356@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id 4521010408B;
+        Thu, 20 Feb 2020 21:56:04 +0100 (CET)
+Message-Id: <20200220204618.320890020@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Thu, 20 Feb 2020 21:45:23 +0100
+Date:   Thu, 20 Feb 2020 21:45:27 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
@@ -43,7 +43,7 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Vinicius Costa Gomes <vinicius.gomes@intel.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [patch V2 06/20] bpf: Dont iterate over possible CPUs with interrupts disabled
+Subject: [patch V2 10/20] trace/bpf: Use migrate disable in trace_call_bpf()
 References: <20200220204517.863202864@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +55,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-pcpu_freelist_populate() is disabling interrupts and then iterates over the
-possible CPUs. The reason why this disables interrupts is to silence
-lockdep because the invoked ___pcpu_freelist_push() takes spin locks.
+BPF does not require preemption disable. It only requires to stay on the
+same CPU while running a program. Reflect this by replacing
+preempt_disable/enable() with migrate_disable/enable() pairs.
 
-Neither the interrupt disabling nor the locking are required in this
-function because it's called during initialization and the resulting map is
-not yet visible to anything.
-
-Split out the actual push assignement into an inline, call it from the loop
-and remove the interrupt disable.
+On a non-RT kernel this maps to preempt_disable/enable().
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- kernel/bpf/percpu_freelist.c |   20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ kernel/trace/bpf_trace.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/kernel/bpf/percpu_freelist.c
-+++ b/kernel/bpf/percpu_freelist.c
-@@ -25,12 +25,18 @@ void pcpu_freelist_destroy(struct pcpu_f
- 	free_percpu(s->freelist);
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -83,7 +83,7 @@ unsigned int trace_call_bpf(struct trace
+ 	if (in_nmi()) /* not supported yet */
+ 		return 1;
+ 
+-	preempt_disable();
++	migrate_disable();
+ 
+ 	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
+ 		/*
+@@ -115,7 +115,7 @@ unsigned int trace_call_bpf(struct trace
+ 
+  out:
+ 	__this_cpu_dec(bpf_prog_active);
+-	preempt_enable();
++	migrate_enable();
+ 
+ 	return ret;
  }
- 
-+static inline void pcpu_freelist_push_node(struct pcpu_freelist_head *head,
-+					   struct pcpu_freelist_node *node)
-+{
-+	node->next = head->first;
-+	head->first = node;
-+}
-+
- static inline void ___pcpu_freelist_push(struct pcpu_freelist_head *head,
- 					 struct pcpu_freelist_node *node)
- {
- 	raw_spin_lock(&head->lock);
--	node->next = head->first;
--	head->first = node;
-+	pcpu_freelist_push_node(head, node);
- 	raw_spin_unlock(&head->lock);
- }
- 
-@@ -56,21 +62,16 @@ void pcpu_freelist_populate(struct pcpu_
- 			    u32 nr_elems)
- {
- 	struct pcpu_freelist_head *head;
--	unsigned long flags;
- 	int i, cpu, pcpu_entries;
- 
- 	pcpu_entries = nr_elems / num_possible_cpus() + 1;
- 	i = 0;
- 
--	/* disable irq to workaround lockdep false positive
--	 * in bpf usage pcpu_freelist_populate() will never race
--	 * with pcpu_freelist_push()
--	 */
--	local_irq_save(flags);
- 	for_each_possible_cpu(cpu) {
- again:
- 		head = per_cpu_ptr(s->freelist, cpu);
--		___pcpu_freelist_push(head, buf);
-+		/* No locking required as this is not visible yet. */
-+		pcpu_freelist_push_node(head, buf);
- 		i++;
- 		buf += elem_size;
- 		if (i == nr_elems)
-@@ -78,7 +79,6 @@ void pcpu_freelist_populate(struct pcpu_
- 		if (i % pcpu_entries)
- 			goto again;
- 	}
--	local_irq_restore(flags);
- }
- 
- struct pcpu_freelist_node *__pcpu_freelist_pop(struct pcpu_freelist *s)
 
