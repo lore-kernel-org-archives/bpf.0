@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2C24C11D25
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:58:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6388C11D26
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:58:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9D67820679
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:58:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7D36208CD
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:58:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729203AbgBTU4j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Feb 2020 15:56:39 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:44151 "EHLO
+        id S1729181AbgBTU6W (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Feb 2020 15:58:22 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:44154 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729163AbgBTU4h (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Feb 2020 15:56:37 -0500
+        with ESMTP id S1729169AbgBTU4i (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Feb 2020 15:56:38 -0500
 Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1j4srd-0007TJ-6h; Thu, 20 Feb 2020 21:56:05 +0100
+        id 1j4srl-0007at-AL; Thu, 20 Feb 2020 21:56:13 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id 8C7D410408C;
-        Thu, 20 Feb 2020 21:56:03 +0100 (CET)
-Message-Id: <20200220204618.042936672@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id 72815104094;
+        Thu, 20 Feb 2020 21:56:05 +0100 (CET)
+Message-Id: <20200220204618.815084606@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Thu, 20 Feb 2020 21:45:24 +0100
+Date:   Thu, 20 Feb 2020 21:45:32 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
@@ -43,7 +43,7 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Vinicius Costa Gomes <vinicius.gomes@intel.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [patch V2 07/20] bpf: Provide bpf_prog_run_pin_on_cpu() helper
+Subject: [patch V2 15/20] bpf: Provide recursion prevention helpers
 References: <20200220204517.863202864@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,63 +55,65 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF programs require to run on one CPU to completion as they use per CPU
-storage, but according to Alexei they don't need reentrancy protection as
-obviously BPF programs running in thread context can always be 'preempted'
-by hard and soft interrupts and instrumentation and the same program can
-run concurrently on a different CPU.
+The places which need to prevent the execution of trace type BPF programs
+to prevent deadlocks on the hash bucket lock do this open coded.
 
-The currently used mechanism to ensure CPUness is to wrap the invocation
-into a preempt_disable/enable() pair. Disabling preemption is also
-disabling migration for a task.
+Provide two inline functions, bpf_disable/enable_instrumentation() to
+replace these open coded protection constructs.
 
-preempt_disable/enable() is used because there is no explicit way to
-reliably disable only migration.
+Use migrate_disable/enable() instead of preempt_disable/enable() right away
+so this works on RT enabled kernels. On a !RT kernel migrate_disable /
+enable() are mapped to preempt_disable/enable().
 
-Provide a separate macro to invoke a BPF program which can be used in
-migrateable task context.
-
-It wraps BPF_PROG_RUN() in a migrate_disable/enable() pair which maps on
-non RT enabled kernels to preempt_disable/enable(). On RT enabled kernels
-this merely disables migration. Both methods ensure that the invoked BPF
-program runs on one CPU to completion.
+These helpers use this_cpu_inc/dec() instead of __this_cpu_inc/dec() on an
+RT enabled kernel because migrate disabled regions are preemptible and
+preemption might hit in the middle of a RMW operation which can lead to
+inconsistent state.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
-V2: Use an inline function (Mathieu)
+V2: New patch. Use this_cpu_inc/dec() as pointed out by Mathieu.
 ---
- include/linux/filter.h |   22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ include/linux/bpf.h |   30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -579,6 +579,28 @@ DECLARE_STATIC_KEY_FALSE(bpf_stats_enabl
- #define BPF_PROG_RUN(prog, ctx) __BPF_PROG_RUN(prog, ctx,		\
- 					       bpf_dispatcher_nopfunc)
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -961,6 +961,36 @@ int bpf_prog_array_copy(struct bpf_prog_
+ #ifdef CONFIG_BPF_SYSCALL
+ DECLARE_PER_CPU(int, bpf_prog_active);
  
 +/*
-+ * Use in preemptible and therefore migratable context to make sure that
-+ * the execution of the BPF program runs on one CPU.
++ * Block execution of BPF programs attached to instrumentation (perf,
++ * kprobes, tracepoints) to prevent deadlocks on map operations as any of
++ * these events can happen inside a region which holds a map bucket lock
++ * and can deadlock on it.
 + *
-+ * This uses migrate_disable/enable() explicitly to document that the
-+ * invocation of a BPF program does not require reentrancy protection
-+ * against a BPF program which is invoked from a preempting task.
-+ *
-+ * For non RT enabled kernels migrate_disable/enable() maps to
-+ * preempt_disable/enable(), i.e. it disables also preemption.
++ * Use the preemption safe inc/dec variants on RT because migrate disable
++ * is preemptible on RT and preemption in the middle of the RMW operation
++ * might lead to inconsistent state. Use the raw variants for non RT
++ * kernels as migrate_disable() maps to preempt_disable() so the slightly
++ * more expensive save operation can be avoided.
 + */
-+static inline u32 bpf_prog_run_pin_on_cpu(const struct bpf_prog *prog,
-+					  void *ctx)
++static inline void bpf_disable_instrumentation(void)
 +{
-+	u32 ret;
-+
 +	migrate_disable();
-+	ret = __BPF_PROG_RUN(prog, ctx, bpf_dispatcher_nopfunc);
-+	migrate_enable();
-+	return ret;
++	if (IS_ENABLED(CONFIG_PREEMPT_RT))
++		this_cpu_inc(bpf_prog_active);
++	else
++		__this_cpu_inc(bpf_prog_active);
 +}
 +
- #define BPF_SKB_CB_LEN QDISC_CB_PRIV_LEN
++static inline void bpf_enable_instrumentation(void)
++{
++	if (IS_ENABLED(CONFIG_PREEMPT_RT))
++		this_cpu_dec(bpf_prog_active);
++	else
++		__this_cpu_dec(bpf_prog_active);
++	migrate_enable();
++}
++
+ extern const struct file_operations bpf_map_fops;
+ extern const struct file_operations bpf_prog_fops;
  
- struct bpf_skb_data_end {
 
