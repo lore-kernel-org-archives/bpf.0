@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97BA8C11D20
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3B9EC11D25
 	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:58:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 77AF520679
+	by mail.kernel.org (Postfix) with ESMTP id 96F9124656
 	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:58:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729534AbgBTU6X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1729530AbgBTU6X (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 20 Feb 2020 15:58:23 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:44149 "EHLO
+Received: from Galois.linutronix.de ([193.142.43.55]:44152 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729141AbgBTU4i (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1729166AbgBTU4i (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 20 Feb 2020 15:56:38 -0500
 Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1j4srj-0007dT-Kz; Thu, 20 Feb 2020 21:56:11 +0100
+        id 1j4srb-0007T4-0y; Thu, 20 Feb 2020 21:56:03 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id 6A4B7104098;
-        Thu, 20 Feb 2020 21:56:06 +0100 (CET)
-Message-Id: <20200220204619.234597434@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id 5E63810408B;
+        Thu, 20 Feb 2020 21:56:02 +0100 (CET)
+Message-Id: <20200220204617.532391069@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Thu, 20 Feb 2020 21:45:36 +0100
+Date:   Thu, 20 Feb 2020 21:45:19 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
@@ -43,7 +43,7 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Vinicius Costa Gomes <vinicius.gomes@intel.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [patch V2 19/20] bpf, lpm: Make locking RT friendly
+Subject: [patch V2 02/20] bpf: Update locking comment in hashtab code
 References: <20200220204517.863202864@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,81 +55,81 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The LPM trie map cannot be used in contexts like perf, kprobes and tracing
-as this map type dynamically allocates memory.
+The comment where the bucket lock is acquired says:
 
-The memory allocation happens with a raw spinlock held which is a truly
-spinning lock on a PREEMPT RT enabled kernel which disables preemption and
-interrupts.
+  /* bpf_map_update_elem() can be called in_irq() */
 
-As RT does not allow memory allocation from such a section for various
-reasons, convert the raw spinlock to a regular spinlock.
+which is not really helpful and aside of that it does not explain the
+subtle details of the hash bucket locks expecially in the context of BPF
+and perf, kprobes and tracing.
 
-On a RT enabled kernel these locks are substituted by 'sleeping' spinlocks
-which provide the proper protection but keep the code preemptible.
-
-On a non-RT kernel regular spinlocks map to raw spinlocks, i.e. this does
-not cause any functional change.
+Add a comment at the top of the file which explains the protection scopes
+and the details how potential deadlocks are prevented.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- kernel/bpf/lpm_trie.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ kernel/bpf/hashtab.c |   24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -34,7 +34,7 @@ struct lpm_trie {
- 	size_t				n_entries;
- 	size_t				max_prefixlen;
- 	size_t				data_size;
--	raw_spinlock_t			lock;
-+	spinlock_t			lock;
- };
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -27,6 +27,26 @@
+ 	.map_delete_batch =			\
+ 	generic_map_delete_batch
  
- /* This trie implements a longest prefix match algorithm that can be used to
-@@ -315,7 +315,7 @@ static int trie_update_elem(struct bpf_m
- 	if (key->prefixlen > trie->max_prefixlen)
- 		return -EINVAL;
- 
--	raw_spin_lock_irqsave(&trie->lock, irq_flags);
-+	spin_lock_irqsave(&trie->lock, irq_flags);
- 
- 	/* Allocate and fill a new node */
- 
-@@ -422,7 +422,7 @@ static int trie_update_elem(struct bpf_m
- 		kfree(im_node);
++/*
++ * The bucket lock has two protection scopes:
++ *
++ * 1) Serializing concurrent operations from BPF programs on differrent
++ *    CPUs
++ *
++ * 2) Serializing concurrent operations from BPF programs and sys_bpf()
++ *
++ * BPF programs can execute in any context including perf, kprobes and
++ * tracing. As there are almost no limits where perf, kprobes and tracing
++ * can be invoked from the lock operations need to be protected against
++ * deadlocks. Deadlocks can be caused by recursion and by an invocation in
++ * the lock held section when functions which acquire this lock are invoked
++ * from sys_bpf(). BPF recursion is prevented by incrementing the per CPU
++ * variable bpf_prog_active, which prevents BPF programs attached to perf
++ * events, kprobes and tracing to be invoked before the prior invocation
++ * from one of these contexts completed. sys_bpf() uses the same mechanism
++ * by pinning the task to the current CPU and incrementing the recursion
++ * protection accross the map operation.
++ */
+ struct bucket {
+ 	struct hlist_nulls_head head;
+ 	raw_spinlock_t lock;
+@@ -872,7 +892,6 @@ static int htab_map_update_elem(struct b
+ 		 */
  	}
  
--	raw_spin_unlock_irqrestore(&trie->lock, irq_flags);
-+	spin_unlock_irqrestore(&trie->lock, irq_flags);
+-	/* bpf_map_update_elem() can be called in_irq() */
+ 	raw_spin_lock_irqsave(&b->lock, flags);
  
- 	return ret;
- }
-@@ -442,7 +442,7 @@ static int trie_delete_elem(struct bpf_m
- 	if (key->prefixlen > trie->max_prefixlen)
- 		return -EINVAL;
+ 	l_old = lookup_elem_raw(head, hash, key, key_size);
+@@ -952,7 +971,6 @@ static int htab_lru_map_update_elem(stru
+ 		return -ENOMEM;
+ 	memcpy(l_new->key + round_up(map->key_size, 8), value, map->value_size);
  
--	raw_spin_lock_irqsave(&trie->lock, irq_flags);
-+	spin_lock_irqsave(&trie->lock, irq_flags);
+-	/* bpf_map_update_elem() can be called in_irq() */
+ 	raw_spin_lock_irqsave(&b->lock, flags);
  
- 	/* Walk the tree looking for an exact key/length match and keeping
- 	 * track of the path we traverse.  We will need to know the node
-@@ -518,7 +518,7 @@ static int trie_delete_elem(struct bpf_m
- 	kfree_rcu(node, rcu);
+ 	l_old = lookup_elem_raw(head, hash, key, key_size);
+@@ -1007,7 +1025,6 @@ static int __htab_percpu_map_update_elem
+ 	b = __select_bucket(htab, hash);
+ 	head = &b->head;
  
- out:
--	raw_spin_unlock_irqrestore(&trie->lock, irq_flags);
-+	spin_unlock_irqrestore(&trie->lock, irq_flags);
+-	/* bpf_map_update_elem() can be called in_irq() */
+ 	raw_spin_lock_irqsave(&b->lock, flags);
  
- 	return ret;
- }
-@@ -575,7 +575,7 @@ static struct bpf_map *trie_alloc(union
- 	if (ret)
- 		goto out_err;
+ 	l_old = lookup_elem_raw(head, hash, key, key_size);
+@@ -1071,7 +1088,6 @@ static int __htab_lru_percpu_map_update_
+ 			return -ENOMEM;
+ 	}
  
--	raw_spin_lock_init(&trie->lock);
-+	spin_lock_init(&trie->lock);
+-	/* bpf_map_update_elem() can be called in_irq() */
+ 	raw_spin_lock_irqsave(&b->lock, flags);
  
- 	return &trie->map;
- out_err:
+ 	l_old = lookup_elem_raw(head, hash, key, key_size);
 
