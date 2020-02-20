@@ -2,231 +2,220 @@ Return-Path: <SRS0=tRXP=4I=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 552D4C11D0C
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 17:41:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9824C11D14
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 17:53:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2497F20722
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 17:41:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 87E6A2467A
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 17:53:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=Sony.onmicrosoft.com header.i=@Sony.onmicrosoft.com header.b="vKP8zmdO"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HebykKvI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728295AbgBTRly (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Feb 2020 12:41:54 -0500
-Received: from mail-mw2nam10on2109.outbound.protection.outlook.com ([40.107.94.109]:62177
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726959AbgBTRly (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Feb 2020 12:41:54 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TVhsMTHP53kCMzYTuu6juT7KLkm87wqZ8hnUQvDg2xdMNuOpUdG7isDNFmF1/3A5KwsTlRd7+BazSZdhJRm0mam6NxgsClc3qYnvad//LYynJPT33XUSv18vmgD1Ja/0y1VqF1o2+U4kU8JdS0uHdeqVTkQ6bVQpADFhrXrJ0qFcSI3KUC2b7nvp79NANcqmFiA/48YF15EBhMcNBWpAr9+aE8pjjLBpmWoMpE+ovqaF+ksDpAw30vFu+T9nI3K2ZQ4W1uKiWlrQuVWDObjJ8N2ECjJO3vvRZShnMne0Qlo8uXysIOM27vnrbHa77IUwa21O1HvWr642Nt1/v3WZ8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l9aAM5Wjiu948eTSW5mCmAEJGLgZgUNWfuOH3OeHZFA=;
- b=eW8oJ8+q8LbyMaaUzrbEr9STt0jQAiJDPNKXfITEc4w5acW3lew/xjGByLHZkP17QjRoeGkLWHzgpbMFOzCYau94iU4pVx5zuCX9Kg7qO2gvAvfu1B0uNPFHpqFNi8MsPauGkYsx+YHBfBwnqP6KLpflBfzCZi9C8ESAkFfe+/3HoXXxSeaowfNldjtXt7tptK67NByMibXh+O8kCqIUdB7u4N9Jk/CDJqa13heIAKsc8QrzavQX3VOShrTh5Z+jb0iRjlrkr0otwXZrI18nb3clgoNbsQdWMLxTsvkwa5rQJttC8ubkOoIXBoroF1Urqf6snA1vM3IS/AshIrUCxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
- s=selector2-Sony-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l9aAM5Wjiu948eTSW5mCmAEJGLgZgUNWfuOH3OeHZFA=;
- b=vKP8zmdOhPzY6K3UeI54CtFlS1BTeMAIDFc7OXvZv0G1CWbZq20w86mSyaQPWmUcnrSETFEBc2KVBbufD7jfoZnb+Pekfo9KcU+PX+yhyw9RjYpEFvJN4Geni9VxcLaw9ntM1tZSyv7Zx0r5TebyUbX0UZgBlzY4abIl4u11PQM=
-Received: from MWHPR13MB0895.namprd13.prod.outlook.com (2603:10b6:300:2::27)
- by MWHPR13MB1871.namprd13.prod.outlook.com (2603:10b6:300:132::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2750.6; Thu, 20 Feb
- 2020 17:41:51 +0000
-Received: from MWHPR13MB0895.namprd13.prod.outlook.com
- ([fe80::7544:fc2:b078:5dcd]) by MWHPR13MB0895.namprd13.prod.outlook.com
- ([fe80::7544:fc2:b078:5dcd%3]) with mapi id 15.20.2750.016; Thu, 20 Feb 2020
- 17:41:51 +0000
-From:   "Bird, Tim" <Tim.Bird@sony.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        shuah <shuah@kernel.org>,
-        =?iso-8859-1?Q?Daniel_D=EDaz?= <daniel.diaz@linaro.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        BPF-dev-list <bpf@vger.kernel.org>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>,
+        id S1728517AbgBTRxA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Feb 2020 12:53:00 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:55343 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728119AbgBTRw7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Feb 2020 12:52:59 -0500
+Received: by mail-wm1-f66.google.com with SMTP id q9so2965964wmj.5
+        for <bpf@vger.kernel.org>; Thu, 20 Feb 2020 09:52:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=vQw2DgUHyFsv/uFvbbGRrtN6ETqPZ9VjN5jx2X9sBgU=;
+        b=HebykKvIKM5PZBkfLT5pCg4RIu6HnbBOEdy3+q3FsjO2oWApigJ78PqksZx6/3EZYc
+         9DjpGuAVVRgNXvKMXKti6vuT6WZrU0JBiCGOA+Oo5lL072xka032SsballAS566SRGgj
+         BdUUee2PA2YgC7U96fabPMYN5WlrgRTHl5k0w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=vQw2DgUHyFsv/uFvbbGRrtN6ETqPZ9VjN5jx2X9sBgU=;
+        b=YVeg2WtSuwsqqb4kQy+HzE6JdCJlB89AAi9BzffUzYOGu/vMzr222MyMbVPa2SjLtC
+         ta7oF+6ujXYss4HH6mFhENakSZ0oEyMRIJiqREr5ebEJQep7KBhBKopKkWABTxPMuNMn
+         qwY838wX2UHG3lbtEIG6LG0a0Tf7beNmKture0JeqBHN1c6cd087Q1BFvq+14Pi9o6vj
+         JL/sBduKkA7ZG/ILavX8FhGPRybmKigSCrDUNEerojHgKEN42Od5AFTIZejmLl+Qd83P
+         tMBAsbZJE0GxvtKILQZiKkvmbeaGlkoFLY0AlydP2gi6Okk/8jEfbtJRWqTDMAwZAOuu
+         11fg==
+X-Gm-Message-State: APjAAAWgcwI/vzvUwiZLNNb03L15gQ0Ij13AFK+T0hmfG8qYj6UDPJUe
+        K3EUU6VvWqYAW4TXGIwSvySAhg==
+X-Google-Smtp-Source: APXvYqyrfCxoZ+bs+y1C/Ol8/1xIHHXPZjDT3tv6J1XnPzCayZgQWx/JyE/a4db+w5DAnaRL5jF07g==
+X-Received: by 2002:a05:600c:34d:: with SMTP id u13mr5840606wmd.77.1582221177369;
+        Thu, 20 Feb 2020 09:52:57 -0800 (PST)
+Received: from kpsingh-kernel.localdomain ([2620:0:105f:fd00:d960:542a:a1d:648a])
+        by smtp.gmail.com with ESMTPSA id r5sm363059wrt.43.2020.02.20.09.52.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Feb 2020 09:52:56 -0800 (PST)
+From:   KP Singh <kpsingh@chromium.org>
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        James Morris <jmorris@namei.org>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Garnier <thgarnie@chromium.org>,
+        Michael Halcrow <mhalcrow@google.com>,
+        Paul Turner <pjt@google.com>,
+        Brendan Gregg <brendan.d.gregg@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Christian Brauner <christian@brauner.io>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        =?iso-8859-1?Q?Toke_H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: RE: Kernel 5.5.4 build fail for BPF-selftests with latest LLVM
-Thread-Topic: Kernel 5.5.4 build fail for BPF-selftests with latest LLVM
-Thread-Index: AQHV54eZmWZeYpO93EedYy5TfrJieagkSRIAgAAEQ8CAAAlOgIAAAVRg
-Date:   Thu, 20 Feb 2020 17:41:51 +0000
-Message-ID: <MWHPR13MB0895B185BC36759121D6F26AFD130@MWHPR13MB0895.namprd13.prod.outlook.com>
-References: <20200219180348.40393e28@carbon>
- <CAEf4Bza9imKymHfv_LpSFE=kNB5=ZapTS3SCdeZsDdtrUrUGcg@mail.gmail.com>
- <20200219192854.6b05b807@carbon>
- <CAEf4BzaRAK6-7aCCVOA6hjTevKuxgvZZnHeVgdj_ZWNn8wibYQ@mail.gmail.com>
- <20200219210609.20a097fb@carbon>
- <CAEUSe79Vn8wr=BOh0RzccYij_snZDY=2XGmHmR494wsQBBoo5Q@mail.gmail.com>
- <20200220002748.kpwvlz5xfmjm5fd5@ast-mbp>
- <4a26e6c6-500e-7b92-1e26-16e1e0233889@kernel.org>
- <20200220173740.7a3f9ad7@carbon>
- <MWHPR13MB0895649219625C5F7380314FFD130@MWHPR13MB0895.namprd13.prod.outlook.com>
- <20200220172612.7aqmiwrnizgsukvm@ast-mbp>
-In-Reply-To: <20200220172612.7aqmiwrnizgsukvm@ast-mbp>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Tim.Bird@sony.com; 
-x-originating-ip: [160.33.195.21]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 250fdeae-19d6-44ff-e55a-08d7b62c2b02
-x-ms-traffictypediagnostic: MWHPR13MB1871:
-x-microsoft-antispam-prvs: <MWHPR13MB18712F2774B073EA40BD4D1BFD130@MWHPR13MB1871.namprd13.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 031996B7EF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(39860400002)(396003)(366004)(346002)(376002)(136003)(189003)(199004)(52536014)(66476007)(66556008)(64756008)(66446008)(76116006)(9686003)(8676002)(5660300002)(33656002)(8936002)(7416002)(55016002)(66946007)(81166006)(2906002)(6916009)(81156014)(478600001)(7696005)(4326008)(54906003)(186003)(6506007)(53546011)(316002)(71200400001)(86362001)(66574012)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR13MB1871;H:MWHPR13MB0895.namprd13.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: sony.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Lwk2a4tVtCT9iGQac40Ekk6QshPCdkVvIPJAgWdy4h9DBoExAXErkKs5cnP2QWO+WDAwIe02eXdrrx/js/TJfZNfsQUcU3GACDje2bn3hok2UskGU4HIbJbYc5bf9wKOjdd6Kzlj0nfvhK8tNDuIPfqj5k6fhywnvBcB+C/KXdWU0NWZBE7Ca5Jfuk+lAokn9PSdhCilw/tmuCDs2egFCmnF28AmTmNlpi3mW0cKeNtTFvGReTGyP2/0ABzMn9FqUHW1M2uoayHWtIsAXtNex/cQjnUVL+ctnM/nBvP3PoYkKOsZ2rV5md1hfpOR6sB8rNre8Ge6ivZtagmhQwpM/RFCtB6QajohPc1gyDfhTprl7YJU9OIS4avyM2PiJFF65H5E4QJyihL1Mz1xNtBjQCVPDNlpP3axRr9quiBljkHcczeL9rUSThlhVQGtb61C
-x-ms-exchange-antispam-messagedata: v9j/ZEcDQLdOveLVsf1ZVcFEitswXiCmZq25bJocG0GnYfSH/25BhaBA07KilepTU0rMKOa8CrtQfDpRoy0Au7spn2/7VUJ5st9vouJZVGfWYSXzcJyulKszRpxhfxuBEwcpvjlnFTQuwp4jAJwreg==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Quentin Monnet <quentin.monnet@netronome.com>,
+        Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
+Subject: [PATCH bpf-next v4 3/8] bpf: lsm: provide attachment points for BPF LSM programs
+Date:   Thu, 20 Feb 2020 18:52:45 +0100
+Message-Id: <20200220175250.10795-4-kpsingh@chromium.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200220175250.10795-1-kpsingh@chromium.org>
+References: <20200220175250.10795-1-kpsingh@chromium.org>
 MIME-Version: 1.0
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 250fdeae-19d6-44ff-e55a-08d7b62c2b02
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Feb 2020 17:41:51.1531
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GMveCYqBc2CYF9c7QnaMDYG4YZPqDfmpFqbC/GY8lbUycuGbQU4avzO74Lb5yspdCse9nt4CceGt8tGS9b/ntA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR13MB1871
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> -----Original Message-----
-> From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
->=20
-> On Thu, Feb 20, 2020 at 05:02:25PM +0000, Bird, Tim wrote:
-> >
-> > > -----Original Message-----
-> > > From:  Jesper Dangaard Brouer
-> > >
-> > > On Wed, 19 Feb 2020 17:47:23 -0700
-> > > shuah <shuah@kernel.org> wrote:
-> > >
-> > > > On 2/19/20 5:27 PM, Alexei Starovoitov wrote:
-> > > > > On Wed, Feb 19, 2020 at 03:59:41PM -0600, Daniel D=EDaz wrote:
-> > > > >>>
-> > > > >>> When I download a specific kernel release, how can I know what =
-LLVM
-> > > > >>> git-hash or version I need (to use BPF-selftests)?
-> > > > >
-> > > > > as discussed we're going to add documentation-like file that will
-> > > > > list required commits in tools.
-> > > > > This will be enforced for future llvm/pahole commits.
-> > > > >
-> > > > >>> Do you think it is reasonable to require end-users to compile t=
-heir own
-> > > > >>> bleeding edge version of LLVM, to use BPF-selftests?
-> > > > >
-> > > > > absolutely.
-> >
-> > Is it just the BPF-selftests that require the bleeding edge version of =
-LLVM,
-> > or do BPF features themselves need the latest LLVM.  If the latter, the=
-n this
-> > is quite worrisome, and I fear the BPF developers are getting ahead of =
-themselves.
-> > We don't usually have a kernel dependency on the latest compiler versio=
-n (some
-> > recent security fixes are an anomaly).  In fact deprecating support for=
- older compiler
-> > versions has been quite slow and methodical over the years.
-> >
-> > It's quite dangerous to be baking stuff into the kernel that depends on=
- features
-> > from compilers that haven't even made it to release yet.
-> >
-> > I'm sorry, but I'm coming into the middle of this thread.  Can you plea=
-se explain
-> > what the features are in the latest LLVM that are required for BPF-self=
-tests?
->=20
-> Above is correct. bpf kernel features do depend on the latest pahole and =
-llvm
-> features that did not make it into a release. That was the case for many =
-years
-> now and still the case. The first commit 8 years ago relied on something =
-that
-> can generate those instructions. For many years llvm was the only compile=
-r that
-> could generate them. Right now there is GCC backend as well. New features=
- (like
-> new instructions) depend on the compiler.
->=20
-> selftests/bpf are not testing kernel's bpf features. They are testing the=
- whole
-> bpf ecosystem. They test llvm, pahole, libbpf, bpftool, and kernel togeth=
-er.
-> Hence it's a requirement to install the latest pahole and llvm.
->=20
-> When I'm talking about selftests/bpf I'm talking about all the tests in t=
-hat
-> directory combined. There are several unit tests scattered across repos. =
-The
-> unit tests for llvm bpf backend are inside llvm repo.
-> selftests/bpf/test_verifier and test_maps are unit tests for the verifier=
- and
-> for maps. They are llvm independent. They test a combination of kernel an=
-d
-> libbpf only. But majority of the selftests/bpf are done via test_progs wh=
-ich
-> are the whole ecosystem tests.
+From: KP Singh <kpsingh@google.com>
 
-Alexei,
+The BPF LSM programs are implemented as fexit trampolines to avoid the
+overhead of retpolines. These programs cannot be attached to security_*
+wrappers as there are quite a few security_* functions that do more than
+just calling the LSM callbacks.
 
-Thank you very much for this explanation.  It is very helpful.  I apologize=
- for my
-ignorance of this, but can I ask a few questions just to check my understan=
-ding?
-Please forgive me if I use the wrong terminology below.
+This was discussed on the lists in:
 
-So - do the BPF developers add new instructions to the virtual machine, tha=
-t then
-have to be added to both the compiler and the executor (VM implementation)?
-It sounds like the compiler support and executor support is done in concert=
-, and
-that patches are at least accepted upstream (but possibly are not yet avail=
-able in
-a compiler release) for the compiler side.  What about the Linux kernel sid=
-e?  Is the
-support for a new instruction only in non-released kernels (say, in the BPF=
- development
-tree), or could it potentially be included in a released kernel, before the=
- compiler
-with matching support is released?  What would happen if a bug was found, a=
-nd
-compiler support for the instruction was delayed?  I suppose that this woul=
-d only
-mean that the executor supported an instruction that never appeared in a co=
-mpiled
-BPF program? Is that right?
+  https://lore.kernel.org/bpf/20200123152440.28956-1-kpsingh@chromium.org/T/#m068becce588a0cdf01913f368a97aea4c62d8266
 
-Thanks,
- -- Tim
+Adding a NOP callback after all the static LSM callbacks are called has
+the following benefits:
+
+- The BPF programs run at the right stage of the security_* wrappers.
+- They run after all the static LSM hooks allowed the operation,
+  therefore cannot allow an action that was already denied.
+
+There are some hooks which do not call call_int_hooks or
+call_void_hooks. It's not possible to call the bpf_lsm_* functions
+without checking if there is BPF LSM program attached to these hooks.
+This is added further in a subsequent patch. For now, these hooks are
+marked as NO_BPF (i.e. attachment of BPF programs is not possible).
+
+Signed-off-by: KP Singh <kpsingh@google.com>
+---
+ include/linux/bpf_lsm.h | 34 ++++++++++++++++++++++++++++++++++
+ kernel/bpf/bpf_lsm.c    | 16 ++++++++++++++++
+ security/security.c     |  3 +++
+ 3 files changed, 53 insertions(+)
+ create mode 100644 include/linux/bpf_lsm.h
+
+diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+new file mode 100644
+index 000000000000..f867f72f6aa9
+--- /dev/null
++++ b/include/linux/bpf_lsm.h
+@@ -0,0 +1,34 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++/*
++ * Copyright 2019 Google LLC.
++ */
++
++#ifndef _LINUX_BPF_LSM_H
++#define _LINUX_BPF_LSM_H
++
++#include <linux/bpf.h>
++
++#ifdef CONFIG_BPF_LSM
++
++#define LSM_HOOK(RET, NAME, ...) RET bpf_lsm_##NAME(__VA_ARGS__);
++#include <linux/lsm_hook_names.h>
++#undef LSM_HOOK
++
++#define RUN_BPF_LSM_VOID_PROGS(FUNC, ...) bpf_lsm_##FUNC(__VA_ARGS__)
++#define RUN_BPF_LSM_INT_PROGS(RC, FUNC, ...) ({				\
++	do {								\
++		if (RC == 0)						\
++			RC = bpf_lsm_##FUNC(__VA_ARGS__);		\
++	} while (0);							\
++	RC;								\
++})
++
++#else /* !CONFIG_BPF_LSM */
++
++#define RUN_BPF_LSM_INT_PROGS(RC, FUNC, ...) (RC)
++#define RUN_BPF_LSM_VOID_PROGS(FUNC, ...)
++
++#endif /* CONFIG_BPF_LSM */
++
++#endif /* _LINUX_BPF_LSM_H */
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index affb6941622e..abc847c9b9a1 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -7,6 +7,22 @@
+ #include <linux/filter.h>
+ #include <linux/bpf.h>
+ #include <linux/btf.h>
++#include <linux/bpf_lsm.h>
++
++/* For every LSM hook  that allows attachment of BPF programs, declare a NOP
++ * function where a BPF program can be attached as an fexit trampoline.
++ */
++#define LSM_HOOK(RET, NAME, ...) LSM_HOOK_##RET(NAME, __VA_ARGS__)
++#define LSM_HOOK_int(NAME, ...) noinline int bpf_lsm_##NAME(__VA_ARGS__)  \
++{									  \
++	return 0;							  \
++}
++
++#define LSM_HOOK_void(NAME, ...) \
++	noinline void bpf_lsm_##NAME(__VA_ARGS__) {}
++
++#include <linux/lsm_hook_names.h>
++#undef LSM_HOOK
+ 
+ const struct bpf_prog_ops lsm_prog_ops = {
+ };
+diff --git a/security/security.c b/security/security.c
+index 565bc9b67276..aa111392a700 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -28,6 +28,7 @@
+ #include <linux/string.h>
+ #include <linux/msg.h>
+ #include <net/flow.h>
++#include <linux/bpf_lsm.h>
+ 
+ #define MAX_LSM_EVM_XATTR	2
+ 
+@@ -684,6 +685,7 @@ static void __init lsm_early_task(struct task_struct *task)
+ 								\
+ 		hlist_for_each_entry(P, &security_hook_heads.FUNC, list) \
+ 			P->hook.FUNC(__VA_ARGS__);		\
++		RUN_BPF_LSM_VOID_PROGS(FUNC, __VA_ARGS__);	\
+ 	} while (0)
+ 
+ #define call_int_hook(FUNC, IRC, ...) ({			\
+@@ -696,6 +698,7 @@ static void __init lsm_early_task(struct task_struct *task)
+ 			if (RC != 0)				\
+ 				break;				\
+ 		}						\
++		RC = RUN_BPF_LSM_INT_PROGS(RC, FUNC, __VA_ARGS__); \
+ 	} while (0);						\
+ 	RC;							\
+ })
+-- 
+2.20.1
 
