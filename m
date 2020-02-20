@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6C7FC11D24
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2C24C11D25
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:58:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A71E42465D
-	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:58:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D67820679
+	for <bpf@archiver.kernel.org>; Thu, 20 Feb 2020 20:58:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729210AbgBTU4j (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1729203AbgBTU4j (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 20 Feb 2020 15:56:39 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:44147 "EHLO
+Received: from Galois.linutronix.de ([193.142.43.55]:44151 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729128AbgBTU4h (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1729163AbgBTU4h (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 20 Feb 2020 15:56:37 -0500
 Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1j4srb-0007T7-5m; Thu, 20 Feb 2020 21:56:03 +0100
+        id 1j4srd-0007TJ-6h; Thu, 20 Feb 2020 21:56:05 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id 97E9410408C;
-        Thu, 20 Feb 2020 21:56:02 +0100 (CET)
-Message-Id: <20200220204617.637603528@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id 8C7D410408C;
+        Thu, 20 Feb 2020 21:56:03 +0100 (CET)
+Message-Id: <20200220204618.042936672@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Thu, 20 Feb 2020 21:45:20 +0100
+Date:   Thu, 20 Feb 2020 21:45:24 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
@@ -43,7 +43,7 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Vinicius Costa Gomes <vinicius.gomes@intel.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [patch V2 03/20] bpf/tracing: Remove redundant preempt_disable() in __bpf_trace_run()
+Subject: [patch V2 07/20] bpf: Provide bpf_prog_run_pin_on_cpu() helper
 References: <20200220204517.863202864@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,29 +55,63 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-__bpf_trace_run() disables preemption around the BPF_PROG_RUN() invocation.
+BPF programs require to run on one CPU to completion as they use per CPU
+storage, but according to Alexei they don't need reentrancy protection as
+obviously BPF programs running in thread context can always be 'preempted'
+by hard and soft interrupts and instrumentation and the same program can
+run concurrently on a different CPU.
 
-This is redundant because __bpf_trace_run() is invoked from a trace point
-via __DO_TRACE() which already disables preemption _before_ invoking any of
-the functions which are attached to a trace point.
+The currently used mechanism to ensure CPUness is to wrap the invocation
+into a preempt_disable/enable() pair. Disabling preemption is also
+disabling migration for a task.
 
-Remove it.
+preempt_disable/enable() is used because there is no explicit way to
+reliably disable only migration.
+
+Provide a separate macro to invoke a BPF program which can be used in
+migrateable task context.
+
+It wraps BPF_PROG_RUN() in a migrate_disable/enable() pair which maps on
+non RT enabled kernels to preempt_disable/enable(). On RT enabled kernels
+this merely disables migration. Both methods ensure that the invoked BPF
+program runs on one CPU to completion.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- kernel/trace/bpf_trace.c |    2 --
- 1 file changed, 2 deletions(-)
+V2: Use an inline function (Mathieu)
+---
+ include/linux/filter.h |   22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1476,9 +1476,7 @@ static __always_inline
- void __bpf_trace_run(struct bpf_prog *prog, u64 *args)
- {
- 	rcu_read_lock();
--	preempt_disable();
- 	(void) BPF_PROG_RUN(prog, args);
--	preempt_enable();
- 	rcu_read_unlock();
- }
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -579,6 +579,28 @@ DECLARE_STATIC_KEY_FALSE(bpf_stats_enabl
+ #define BPF_PROG_RUN(prog, ctx) __BPF_PROG_RUN(prog, ctx,		\
+ 					       bpf_dispatcher_nopfunc)
  
++/*
++ * Use in preemptible and therefore migratable context to make sure that
++ * the execution of the BPF program runs on one CPU.
++ *
++ * This uses migrate_disable/enable() explicitly to document that the
++ * invocation of a BPF program does not require reentrancy protection
++ * against a BPF program which is invoked from a preempting task.
++ *
++ * For non RT enabled kernels migrate_disable/enable() maps to
++ * preempt_disable/enable(), i.e. it disables also preemption.
++ */
++static inline u32 bpf_prog_run_pin_on_cpu(const struct bpf_prog *prog,
++					  void *ctx)
++{
++	u32 ret;
++
++	migrate_disable();
++	ret = __BPF_PROG_RUN(prog, ctx, bpf_dispatcher_nopfunc);
++	migrate_enable();
++	return ret;
++}
++
+ #define BPF_SKB_CB_LEN QDISC_CB_PRIV_LEN
+ 
+ struct bpf_skb_data_end {
 
