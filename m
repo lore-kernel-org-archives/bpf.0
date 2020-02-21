@@ -2,134 +2,151 @@ Return-Path: <SRS0=DBDY=4J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DD14C35640
-	for <bpf@archiver.kernel.org>; Fri, 21 Feb 2020 08:44:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63B60C35647
+	for <bpf@archiver.kernel.org>; Fri, 21 Feb 2020 10:21:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1449C206DB
-	for <bpf@archiver.kernel.org>; Fri, 21 Feb 2020 08:44:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582274674;
-	bh=6tbLCWnpf1qdG/ZfEExJsIDCvHtX8M011tK0lJqgro0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=MX9louAcZLuDu4pNfsPVoImDqi+HYnXfW3OUUbOloP2vhrRIY4tuFBeifrcQviG5h
-	 IetlXI9LX+L0Xr6dJxAHIX2Ylsh+BRI7YerUxCafybNhssDlMg48md0OFTKqUO4Via
-	 m2NrvM1MPHpmctEGHRAYFWIDp0Uu+F2UHOH81MU8=
+	by mail.kernel.org (Postfix) with ESMTP id 3513424653
+	for <bpf@archiver.kernel.org>; Fri, 21 Feb 2020 10:21:56 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="o+89ohl6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730681AbgBUIo0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Feb 2020 03:44:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50220 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729267AbgBUHwY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Feb 2020 02:52:24 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1E6B120578;
-        Fri, 21 Feb 2020 07:52:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582271543;
-        bh=6tbLCWnpf1qdG/ZfEExJsIDCvHtX8M011tK0lJqgro0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TADtCVr4qZ5qCSaQyEQjkVnVu/W6+KP3EIFA5QnEU8D3LeXRP0tpPeDRpUETtJnR3
-         vxd7X1+VO3j4w91wl/m6+ULJ4xqPpc36djBKBPH+kNOEiM6RZNUKAlCjVfTdKpMUcc
-         E/0n+BJq7nnkOTXpN13sM6IgrBwigSxzA6oxz52k=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Petr Mladek <pmladek@suse.com>, Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.5 207/399] tools lib api fs: Fix gcc9 stringop-truncation compilation error
-Date:   Fri, 21 Feb 2020 08:38:52 +0100
-Message-Id: <20200221072423.010626148@linuxfoundation.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200221072402.315346745@linuxfoundation.org>
-References: <20200221072402.315346745@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1728663AbgBUKVz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Feb 2020 05:21:55 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:46382 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728278AbgBUKVy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Feb 2020 05:21:54 -0500
+Received: by mail-wr1-f67.google.com with SMTP id z7so1341098wrl.13
+        for <bpf@vger.kernel.org>; Fri, 21 Feb 2020 02:21:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=TmLwkk/guKqTf/mHwOqxZQJ3jMcnhln4oOrXZAv8WVI=;
+        b=o+89ohl6SOF3YcWZpZYxBAZTtjPO+VGOXRLEbKwnFyvA8ZhNG6EBiWz6phPo7v19rB
+         LafL/6TPnNh0Nmd2o4NKYNC1MoPm6fctpwoRxpu8eoREwNbwj9UzDLFI+e8shO1drJge
+         VIKDrlQE8+rQAhiaktSeSWw+miKBFZIDpe1kw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=TmLwkk/guKqTf/mHwOqxZQJ3jMcnhln4oOrXZAv8WVI=;
+        b=P8kIEEJWToQxpEKg8H4dDDGVT+rxBn/RsaQ4mqSx0tm5tmn5WbQ0e52iRim4QYZN+z
+         bmn0n8t9wcsvBdkALHhlttTm/VeHE5rpZsufYEa9QZM2EPNOzsC40I9LgRfHzavACgnO
+         dnfrEQrGzyavrFZH/1QxA4hYTe9zUM2k3THixsmpb76+GI10nU5LNE5nO/4MIOSThJOi
+         lf0YelgSd6HrKv/l8uLslvZT0bQOUiCseO/h7kg5AeNYFrX0r/ZnIQh2XO8/0rXs8rx3
+         i3DC48AYvPBpDGGuHd/E9c/cgt19jnm4GE/XEeXA12Gd1N1azveIB/4SXxG7wt4iR+QQ
+         yCDQ==
+X-Gm-Message-State: APjAAAU3hAm5foTg1QxpK0T1X6tkiBcZ/O6zHT6aC9mOn07bJqxh/yr2
+        paMcJzQLijLXX+8Lt7H9gqegpg==
+X-Google-Smtp-Source: APXvYqwPAOXXpm6RrCPNTkSjuPOPXHMR1kjljwMWXeVQ6ovvtkEWsTihXAvM9mZhJC0/hkgj18gEYw==
+X-Received: by 2002:a5d:6151:: with SMTP id y17mr47108565wrt.110.1582280512481;
+        Fri, 21 Feb 2020 02:21:52 -0800 (PST)
+Received: from cloudflare.com ([88.157.168.82])
+        by smtp.gmail.com with ESMTPSA id c9sm3172427wmc.47.2020.02.21.02.21.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Feb 2020 02:21:52 -0800 (PST)
+References: <20200220230546.769250-1-andriin@fb.com>
+User-agent: mu4e 1.1.0; emacs 26.3
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
+        daniel@iogearbox.net, andrii.nakryiko@gmail.com,
+        kernel-team@fb.com, Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH bpf-next] selftests/bpf: fix trampoline_count clean up logic
+In-reply-to: <20200220230546.769250-1-andriin@fb.com>
+Date:   Fri, 21 Feb 2020 10:21:51 +0000
+Message-ID: <87eeuo5jgg.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrey Zhizhikin <andrey.z@gmail.com>
+On Thu, Feb 20, 2020 at 11:05 PM GMT, Andrii Nakryiko wrote:
+> Libbpf's Travis CI tests caught this issue. Ensure bpf_link and bpf_object
+> clean up is performed correctly.
+>
+> Fixes: d633d57902a5 ("selftest/bpf: Add test for allowed trampolines count")
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> ---
+>  .../bpf/prog_tests/trampoline_count.c         | 25 +++++++++++++------
+>  1 file changed, 18 insertions(+), 7 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+> index 1f6ccdaed1ac..781c8d11604b 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+> @@ -55,31 +55,40 @@ void test_trampoline_count(void)
+>  	/* attach 'allowed' 40 trampoline programs */
+>  	for (i = 0; i < MAX_TRAMP_PROGS; i++) {
+>  		obj = bpf_object__open_file(object, NULL);
+> -		if (CHECK(IS_ERR(obj), "obj_open_file", "err %ld\n", PTR_ERR(obj)))
+> +		if (CHECK(IS_ERR(obj), "obj_open_file", "err %ld\n", PTR_ERR(obj))) {
+> +			obj = NULL;
+>  			goto cleanup;
+> +		}
+>
+>  		err = bpf_object__load(obj);
+>  		if (CHECK(err, "obj_load", "err %d\n", err))
+>  			goto cleanup;
+>  		inst[i].obj = obj;
+> +		obj = NULL;
+>
+>  		if (rand() % 2) {
+> -			link = load(obj, fentry_name);
+> -			if (CHECK(IS_ERR(link), "attach prog", "err %ld\n", PTR_ERR(link)))
+> +			link = load(inst[i].obj, fentry_name);
+> +			if (CHECK(IS_ERR(link), "attach prog", "err %ld\n", PTR_ERR(link))) {
+> +				link = NULL;
+>  				goto cleanup;
+> +			}
+>  			inst[i].link_fentry = link;
+>  		} else {
+> -			link = load(obj, fexit_name);
+> -			if (CHECK(IS_ERR(link), "attach prog", "err %ld\n", PTR_ERR(link)))
+> +			link = load(inst[i].obj, fexit_name);
+> +			if (CHECK(IS_ERR(link), "attach prog", "err %ld\n", PTR_ERR(link))) {
+> +				link = NULL;
+>  				goto cleanup;
+> +			}
+>  			inst[i].link_fexit = link;
+>  		}
+>  	}
+>
+>  	/* and try 1 extra.. */
+>  	obj = bpf_object__open_file(object, NULL);
+> -	if (CHECK(IS_ERR(obj), "obj_open_file", "err %ld\n", PTR_ERR(obj)))
+> +	if (CHECK(IS_ERR(obj), "obj_open_file", "err %ld\n", PTR_ERR(obj))) {
+> +		obj = NULL;
+>  		goto cleanup;
+> +	}
+>
+>  	err = bpf_object__load(obj);
+>  	if (CHECK(err, "obj_load", "err %d\n", err))
+> @@ -104,7 +113,9 @@ void test_trampoline_count(void)
+>  cleanup_extra:
+>  	bpf_object__close(obj);
+>  cleanup:
+> -	while (--i) {
+> +	if (i >= MAX_TRAMP_PROGS)
+> +		i = MAX_TRAMP_PROGS - 1;
+> +	for (; i >= 0; i--) {
+>  		bpf_link__destroy(inst[i].link_fentry);
+>  		bpf_link__destroy(inst[i].link_fexit);
+>  		bpf_object__close(inst[i].obj);
 
-[ Upstream commit 6794200fa3c9c3e6759dae099145f23e4310f4f7 ]
+I'm not sure I'm grasping what the fix is about.
 
-GCC9 introduced string hardening mechanisms, which exhibits the error
-during fs api compilation:
+We don't access obj or link from cleanup, so what is the point of
+setting them to NULL before jumping there?
 
-error: '__builtin_strncpy' specified bound 4096 equals destination size
-[-Werror=stringop-truncation]
-
-This comes when the length of copy passed to strncpy is is equal to
-destination size, which could potentially lead to buffer overflow.
-
-There is a need to mitigate this potential issue by limiting the size of
-destination by 1 and explicitly terminate the destination with NULL.
-
-Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andriin@fb.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Link: http://lore.kernel.org/lkml/20191211080109.18765-1-andrey.zhizhikin@leica-geosystems.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/lib/api/fs/fs.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/lib/api/fs/fs.c b/tools/lib/api/fs/fs.c
-index 11b3885e833ed..027b18f7ed8cf 100644
---- a/tools/lib/api/fs/fs.c
-+++ b/tools/lib/api/fs/fs.c
-@@ -210,6 +210,7 @@ static bool fs__env_override(struct fs *fs)
- 	size_t name_len = strlen(fs->name);
- 	/* name + "_PATH" + '\0' */
- 	char upper_name[name_len + 5 + 1];
-+
- 	memcpy(upper_name, fs->name, name_len);
- 	mem_toupper(upper_name, name_len);
- 	strcpy(&upper_name[name_len], "_PATH");
-@@ -219,7 +220,8 @@ static bool fs__env_override(struct fs *fs)
- 		return false;
- 
- 	fs->found = true;
--	strncpy(fs->path, override_path, sizeof(fs->path));
-+	strncpy(fs->path, override_path, sizeof(fs->path) - 1);
-+	fs->path[sizeof(fs->path) - 1] = '\0';
- 	return true;
- }
- 
--- 
-2.20.1
-
-
-
+Or is it all just an ancillary change to clamping the loop index
+variable to (MAX_TRAMP_PROGS - 1)?
