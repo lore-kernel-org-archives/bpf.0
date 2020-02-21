@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E483C35642
-	for <bpf@archiver.kernel.org>; Fri, 21 Feb 2020 08:28:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B5DEC35642
+	for <bpf@archiver.kernel.org>; Fri, 21 Feb 2020 08:33:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4488020637
-	for <bpf@archiver.kernel.org>; Fri, 21 Feb 2020 08:28:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8B2A2067D
+	for <bpf@archiver.kernel.org>; Fri, 21 Feb 2020 08:33:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582273691;
+	s=default; t=1582274009;
 	bh=+PkrT4iG1T7Rl6JWmdEM27E+WQtpZRSY2P7dpNAA9Wc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=DzxgxKUHu2d8mwC40lPSctgWQJTYDqE/J3Znq7CqhglbRziyGahqOBWkXz0Fw/uX4
-	 NrQgSobETQrv/A7W7Lh8/eO1395+ERrhDX3R5w9+LMmAK/2hTe0Z4KenOUEkfHbI4Z
-	 1HWiYkGOSTTz+VlwL1Azw6UGTjJCBO+kBLuFv/FQ=
+	b=wVz3Ddor7ShSXQyLC6r5WOlTH9NFgA662sQdlxxPgr/OF6LGkqa11hcsUp75CIRby
+	 0WCqXGA6u68vx5LGDY2/6tVadZZhJ3S+rMApsYF3MDcGgZhXqpSddh3JOfQDCifynf
+	 SJyBPchGqHDzjIZo0B/sglcm5WZdNGCha8Gubtlc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388174AbgBUIUl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Feb 2020 03:20:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59838 "EHLO mail.kernel.org"
+        id S1730747AbgBUIdU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Feb 2020 03:33:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46300 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388171AbgBUIUk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Feb 2020 03:20:40 -0500
+        id S1732609AbgBUIK5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Feb 2020 03:10:57 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 60B3224697;
-        Fri, 21 Feb 2020 08:20:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1065B24670;
+        Fri, 21 Feb 2020 08:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582273239;
+        s=default; t=1582272656;
         bh=+PkrT4iG1T7Rl6JWmdEM27E+WQtpZRSY2P7dpNAA9Wc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vdErMCkWx6jd9nwhNWY4pG0Bkr4GJtSTye19seYd0BlJ44CHGDDvlCytzMR27onLz
-         oAKXjllKGLsjPqDDWZgk2LEKWEnKx1d5Q0V/ziWPbwWmJdWSMiBEODBtdVBQbRDvXd
-         59xk3t3wvPsnRp5d2SMLWaOFXgloZT0ZbcerDr4I=
+        b=h9NY6pwJsWssOo7ZL2obh4z6lzfcGxZxiKfoCMKRal5doga/49MaoIU4823gD4e1A
+         bVR7WeM+b0Ke39RSQRlUFl8UWRv9gzVCOZ3WRpFpTe6wb5U+9iX0WofIWsD+W2n2U0
+         GB8cMlMLPWdxQ0vg2XmdpYaSGSp79zc+8vozjRi0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -54,12 +54,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         bpf@vger.kernel.org, netdev@vger.kernel.org,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 098/191] tools lib api fs: Fix gcc9 stringop-truncation compilation error
-Date:   Fri, 21 Feb 2020 08:41:11 +0100
-Message-Id: <20200221072302.916269809@linuxfoundation.org>
+Subject: [PATCH 5.4 180/344] tools lib api fs: Fix gcc9 stringop-truncation compilation error
+Date:   Fri, 21 Feb 2020 08:39:39 +0100
+Message-Id: <20200221072405.326779624@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200221072250.732482588@linuxfoundation.org>
-References: <20200221072250.732482588@linuxfoundation.org>
+In-Reply-To: <20200221072349.335551332@linuxfoundation.org>
+References: <20200221072349.335551332@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
