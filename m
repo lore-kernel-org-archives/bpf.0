@@ -2,152 +2,120 @@ Return-Path: <SRS0=8toY=4K=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55B3BC35666
-	for <bpf@archiver.kernel.org>; Sat, 22 Feb 2020 13:50:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45BB1C35671
+	for <bpf@archiver.kernel.org>; Sat, 22 Feb 2020 15:08:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2291A20702
-	for <bpf@archiver.kernel.org>; Sat, 22 Feb 2020 13:50:00 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="FvYszws9"
+	by mail.kernel.org (Postfix) with ESMTP id 1BC72206EF
+	for <bpf@archiver.kernel.org>; Sat, 22 Feb 2020 15:08:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727297AbgBVNt7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 22 Feb 2020 08:49:59 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:39591 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727115AbgBVNt7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 22 Feb 2020 08:49:59 -0500
-Received: by mail-lj1-f194.google.com with SMTP id o15so5214450ljg.6
-        for <bpf@vger.kernel.org>; Sat, 22 Feb 2020 05:49:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=0+clKuYh7KPvWqzrnI6AakWzmOHJogBn0b1gTuFVo7o=;
-        b=FvYszws9VA4gn8vxUjwgHHZiNH5agadj/BOL0SFYiK7f1ixMQMJQA7MchGJwkLDG0Q
-         xClcRoOIoAROktIFwqQvhvwI/ChoVWu3jwE9GvMyhA02qZMTnJk7WGS3zqBqwZOOnsn7
-         ++bHoFvvSJFFQ17KV2drIZA3Ky9NHw5cwXxrc=
+        id S1727733AbgBVPIM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 22 Feb 2020 10:08:12 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:48016 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727445AbgBVPIM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 22 Feb 2020 10:08:12 -0500
+Received: by mail-il1-f200.google.com with SMTP id x69so5934195ill.14
+        for <bpf@vger.kernel.org>; Sat, 22 Feb 2020 07:08:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=0+clKuYh7KPvWqzrnI6AakWzmOHJogBn0b1gTuFVo7o=;
-        b=VHSaRFYAItZ4fMXSJL+5PwKKg1zk8nf0Tus8MMQ1Ynp+1aDDgKSpZfsLga/+yhcozJ
-         EkyeWeMuPAdHD0HiQ1kN++Lgb50vPaJOFNP7nmKf43pMNSTV3N31pr4Hw1s5J73g03MX
-         E5ktXI42PG0gEMbVNJ69SJRenBLJ72kKY0OGoSvoqZaIPFe8q16EtCTyiHW9lkFmdezW
-         K4en39DaPKXkpTwmUkzKD5NLYloF6/VxokxSNyyM87S+FNgpW8miEHGOE1ITzFe5AjLc
-         1761maRcRPr7j487tZFcT3RW0eTFp6nRJt6VqwZvlwmO44cY+Ynuux8sZd988yVm/n5+
-         0C1w==
-X-Gm-Message-State: APjAAAVNsYv6fO/6mKJ1MrDOu8HanSRoWVkhgx/H/HJQ4TSO0HPBvUyh
-        yAkjeyyVOgRxSePnd/mjd8K7Fg==
-X-Google-Smtp-Source: APXvYqy09JWNZOnCO5lbS6bNZy01zOlQiTyFsElMSYd8XaJeRQWhmARC+4HQ62uci8x7lNZnk52Dow==
-X-Received: by 2002:a2e:9110:: with SMTP id m16mr24874270ljg.140.1582379397071;
-        Sat, 22 Feb 2020 05:49:57 -0800 (PST)
-Received: from cloudflare.com (user-5-173-1-230.play-internet.pl. [5.173.1.230])
-        by smtp.gmail.com with ESMTPSA id g25sm3265934ljn.107.2020.02.22.05.49.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Feb 2020 05:49:56 -0800 (PST)
-References: <20200218171023.844439-1-jakub@cloudflare.com> <c86784f5-ef2c-cfd6-cb75-a67af7e11c3c@iogearbox.net> <CAADnVQJrsfpsT47SqyCTM6=MSkeMESZACZR12Kx+0kRGBnRbvg@mail.gmail.com>
-User-agent: mu4e 1.1.0; emacs 26.3
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>, Martin Lau <kafai@fb.com>
-Subject: Re: [PATCH bpf-next v7 00/11] Extend SOCKMAP/SOCKHASH to store listening sockets
-In-reply-to: <CAADnVQJrsfpsT47SqyCTM6=MSkeMESZACZR12Kx+0kRGBnRbvg@mail.gmail.com>
-Date:   Sat, 22 Feb 2020 13:49:52 +0000
-Message-ID: <87d0a668an.fsf@cloudflare.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=mgUjHs4g9bSaFC5XPvo9JG4ciHdYePxlQqjSBI/frtc=;
+        b=oowQ1QTyc7chNJx38t553SZoDGlji9ggY2mxl60jI2Jzv9+6/erbH3rBFUP1YLpD74
+         q2nPnu8teNJgHq5i8kSTxoE0V6J7Q0Kd2sM/1/bvSLkJS6Hw8zwuwmss9PXfmdjOzSIO
+         pii100O6v8aWaMA4rJxalfyszJ1tNj5VNNlgBgCztpOjUyQpR0lRTaKscGTVX4867boW
+         KntCauDG9l1GEW6KoZQsGDU1+ElQFZbYeDgMaaOt+6uzPeXn05DmWCrlKxh7ffcrxzO8
+         I4muxT50dIqLpDydLEVP5phFKD6WZ6Sry9pqxWxSkfSHGyLoS083fXhlpzffxKXVbShr
+         bgow==
+X-Gm-Message-State: APjAAAUhdhtT5MtqceE8kNXL2D5vVXJo4r5LgW9J2XFaUdEusYCXMEbS
+        8UK5X4rfJ1TBrPI/j+Vt8kAUQbpOMptUveL+Y0/ZnwQX8W5X
+X-Google-Smtp-Source: APXvYqzQ9v3Jv/j+mdzsfcplavver9uu7MnultdBhWVRk1X95/5PxqZRz8vbVu8k7B0bZB7tDzEqLuXzaQLP6vbQFAXORhVQIVhm
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Received: by 2002:a92:af4b:: with SMTP id n72mr45268383ili.288.1582384091534;
+ Sat, 22 Feb 2020 07:08:11 -0800 (PST)
+Date:   Sat, 22 Feb 2020 07:08:11 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000acd115059f2b8188@google.com>
+Subject: BUG: sleeping function called from invalid context in
+ lock_sock_nested (2)
+From:   syzbot <syzbot+a5df189917e79d5e59c9@syzkaller.appspotmail.com>
+To:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, daniel@zonque.org, davem@davemloft.net,
+        devicetree@vger.kernel.org, jdelvare@suse.com,
+        john.fastabend@gmail.com, kafai@fb.com, kuba@kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@roeck-us.net, mark.rutland@arm.com, netdev@vger.kernel.org,
+        robh+dt@kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Alexei,
+Hello,
 
-On Sat, Feb 22, 2020 at 12:47 AM GMT, Alexei Starovoitov wrote:
-> On Fri, Feb 21, 2020 at 1:41 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->>
->> On 2/18/20 6:10 PM, Jakub Sitnicki wrote:
->> > This patch set turns SOCK{MAP,HASH} into generic collections for TCP
->> > sockets, both listening and established. Adding support for listening
->> > sockets enables us to use these BPF map types with reuseport BPF programs.
->> >
->> > Why? SOCKMAP and SOCKHASH, in comparison to REUSEPORT_SOCKARRAY, allow the
->> > socket to be in more than one map at the same time.
->> >
->> > Having a BPF map type that can hold listening sockets, and gracefully
->> > co-exist with reuseport BPF is important if, in the future, we want
->> > BPF programs that run at socket lookup time [0]. Cover letter for v1 of
->> > this series tells the full story of how we got here [1].
->> >
->> > Although SOCK{MAP,HASH} are not a drop-in replacement for SOCKARRAY just
->> > yet, because UDP support is lacking, it's a step in this direction. We're
->> > working with Lorenz on extending SOCK{MAP,HASH} to hold UDP sockets, and
->> > expect to post RFC series for sockmap + UDP in the near future.
->> >
->> > I've dropped Acks from all patches that have been touched since v6.
->> >
->> > The audit for missing READ_ONCE annotations for access to sk_prot is
->> > ongoing. Thus far I've found one location specific to TCP listening sockets
->> > that needed annotating. This got fixed it in this iteration. I wonder if
->> > sparse checker could be put to work to identify places where we have
->> > sk_prot access while not holding sk_lock...
->> >
->> > The patch series depends on another one, posted earlier [2], that has been
->> > split out of it.
->> >
->> > Thanks,
->> > jkbs
->> >
->> > [0] https://lore.kernel.org/bpf/20190828072250.29828-1-jakub@cloudflare.com/
->> > [1] https://lore.kernel.org/bpf/20191123110751.6729-1-jakub@cloudflare.com/
->> > [2] https://lore.kernel.org/bpf/20200217121530.754315-1-jakub@cloudflare.com/
->> >
->> > v6 -> v7:
->> >
->> > - Extended the series to cover SOCKHASH. (patches 4-8, 10-11) (John)
->> >
->> > - Rebased onto recent bpf-next. Resolved conflicts in recent fixes to
->> >    sk_state checks on sockmap/sockhash update path. (patch 4)
->> >
->> > - Added missing READ_ONCE annotation in sock_copy. (patch 1)
->> >
->> > - Split out patches that simplify sk_psock_restore_proto [2].
->>
->> Applied, thanks!
->
-> Jakub,
->
-> what is going on here?
-> # test_progs -n 40
-> #40 select_reuseport:OK
-> Summary: 1/126 PASSED, 30 SKIPPED, 0 FAILED
->
-> Does it mean nothing was actually tested?
-> I really don't like to see 30 skipped tests.
-> Is it my environment?
-> If so please make them hard failures.
-> I will fix whatever I need to fix in my setup.
+syzbot found the following crash on:
 
-The UDP tests for sock{map,hash} are marked as skipped, because UDP
-support is not implemented yet. Sorry for the confusion.
+HEAD commit:    0a44cac8 Merge tag 'dma-mapping-5.6' of git://git.infradea..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=152eba29e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a61f2164c515c07f
+dashboard link: https://syzkaller.appspot.com/bug?extid=a5df189917e79d5e59c9
+compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=117a0931e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17d8c109e00000
 
-Having read the recent thread about BPF selftests [0] I now realize that
-this is not the best idea. It sends the wrong signal to the developer.
+The bug was bisected to:
 
-I propose to exclude the UDP tests w/ sock{map,hash} by not registering
-them with test__start_subtest at all. Failing them would indicate a
-regression, which is not true. While skipping them points to a potential
-problem with the test environment, which isn't true, either.
+commit 5ac6badc5aa057ceb1d50c93326a81db6e89ad2f
+Author: Daniel Mack <daniel@zonque.org>
+Date:   Thu Jul 11 12:45:03 2019 +0000
 
-I'll follow up with a patch for this, if that sounds good to you.
+    device-tree: bindinds: add NXP PCT2075 as compatible device to LM75
 
-[0] https://lore.kernel.org/bpf/20200220191845.u62nhohgzngbrpib@ast-mbp/T/#t
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15924629e00000
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=17924629e00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13924629e00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+a5df189917e79d5e59c9@syzkaller.appspotmail.com
+Fixes: 5ac6badc5aa0 ("device-tree: bindinds: add NXP PCT2075 as compatible device to LM75")
+
+BUG: sleeping function called from invalid context at net/core/sock.c:2935
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 2687, name: kworker/1:3
+INFO: lockdep is turned off.
+Preemption disabled at:
+[<ffffffff867b39c7>] sock_hash_free+0xd7/0x460 net/core/sock_map.c:869
+CPU: 1 PID: 2687 Comm: kworker/1:3 Not tainted 5.6.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events bpf_map_free_deferred
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x1fb/0x318 lib/dump_stack.c:118
+ ___might_sleep+0x449/0x5e0 kernel/sched/core.c:6798
+ __might_sleep+0x8f/0x100 kernel/sched/core.c:6751
+ lock_sock_nested+0x36/0x120 net/core/sock.c:2935
+ lock_sock include/net/sock.h:1516 [inline]
+ sock_hash_free+0x200/0x460 net/core/sock_map.c:872
+ bpf_map_free_deferred+0xb2/0x110 kernel/bpf/syscall.c:474
+ process_one_work+0x7f5/0x10f0 kernel/workqueue.c:2264
+ worker_thread+0xbbc/0x1630 kernel/workqueue.c:2410
+ kthread+0x332/0x350 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
