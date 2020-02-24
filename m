@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A762C11D35
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:03:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89A4BC11D2F
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:03:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3EAB52072D
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:03:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C0B52072D
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:03:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgBXPDX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Feb 2020 10:03:23 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:50210 "EHLO
+        id S1728086AbgBXPDg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Feb 2020 10:03:36 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:50219 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727901AbgBXPDX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Feb 2020 10:03:23 -0500
+        with ESMTP id S1727973AbgBXPDZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Feb 2020 10:03:25 -0500
 Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1j6FFp-0004sE-F5; Mon, 24 Feb 2020 16:02:41 +0100
+        id 1j6FFw-00051R-NK; Mon, 24 Feb 2020 16:02:48 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id 2F32710408E;
-        Mon, 24 Feb 2020 16:02:41 +0100 (CET)
-Message-Id: <20200224145642.847220186@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id 451AB10409A;
+        Mon, 24 Feb 2020 16:02:44 +0100 (CET)
+Message-Id: <20200224145644.317843926@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Mon, 24 Feb 2020 15:01:35 +0100
+Date:   Mon, 24 Feb 2020 15:01:49 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
@@ -43,7 +43,7 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Vinicius Costa Gomes <vinicius.gomes@intel.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [patch V3 04/22] bpf/tracing: Remove redundant preempt_disable() in __bpf_trace_run()
+Subject: [patch V3 18/22] bpf: Replace open coded recursion prevention in sys_bpf()
 References: <20200224140131.461979697@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,33 +52,100 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-__bpf_trace_run() disables preemption around the BPF_PROG_RUN() invocation.
+The required protection is that the caller cannot be migrated to a
+different CPU as these functions end up in places which take either a hash
+bucket lock or might trigger a kprobe inside the memory allocator. Both
+scenarios can lead to deadlocks. The deadlock prevention is per CPU by
+incrementing a per CPU variable which temporarily blocks the invocation of
+BPF programs from perf and kprobes.
 
-This is redundant because __bpf_trace_run() is invoked from a trace point
-via __DO_TRACE() which already disables preemption _before_ invoking any of
-the functions which are attached to a trace point.
-
-Remove it and add a cant_sleep() check.
+Replace the open coded preempt_[dis|en]able and __this_cpu_[inc|dec] pairs
+with the new helper functions. These functions are already prepared to make
+BPF work on PREEMPT_RT enabled kernels. No functional change for !RT
+kernels.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
-V3: Add a cant_sleep() check. 
+V3: Restrict it to sys_bpf(). Hashtab code is already handled.
 ---
- kernel/trace/bpf_trace.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ kernel/bpf/syscall.c |   27 ++++++++-------------------
+ 1 file changed, 8 insertions(+), 19 deletions(-)
 
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1516,10 +1516,9 @@ void bpf_put_raw_tracepoint(struct bpf_r
- static __always_inline
- void __bpf_trace_run(struct bpf_prog *prog, u64 *args)
- {
-+	cant_sleep();
- 	rcu_read_lock();
--	preempt_disable();
- 	(void) BPF_PROG_RUN(prog, args);
--	preempt_enable();
- 	rcu_read_unlock();
- }
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -171,11 +171,7 @@ static int bpf_map_update_value(struct b
+ 						    flags);
+ 	}
  
+-	/* must increment bpf_prog_active to avoid kprobe+bpf triggering from
+-	 * inside bpf map update or delete otherwise deadlocks are possible
+-	 */
+-	preempt_disable();
+-	__this_cpu_inc(bpf_prog_active);
++	bpf_disable_instrumentation();
+ 	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
+ 	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
+ 		err = bpf_percpu_hash_update(map, key, value, flags);
+@@ -206,8 +202,7 @@ static int bpf_map_update_value(struct b
+ 		err = map->ops->map_update_elem(map, key, value, flags);
+ 		rcu_read_unlock();
+ 	}
+-	__this_cpu_dec(bpf_prog_active);
+-	preempt_enable();
++	bpf_enable_instrumentation();
+ 	maybe_wait_bpf_programs(map);
+ 
+ 	return err;
+@@ -222,8 +217,7 @@ static int bpf_map_copy_value(struct bpf
+ 	if (bpf_map_is_dev_bound(map))
+ 		return bpf_map_offload_lookup_elem(map, key, value);
+ 
+-	preempt_disable();
+-	this_cpu_inc(bpf_prog_active);
++	bpf_disable_instrumentation();
+ 	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
+ 	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
+ 		err = bpf_percpu_hash_copy(map, key, value);
+@@ -268,8 +262,7 @@ static int bpf_map_copy_value(struct bpf
+ 		rcu_read_unlock();
+ 	}
+ 
+-	this_cpu_dec(bpf_prog_active);
+-	preempt_enable();
++	bpf_enable_instrumentation();
+ 	maybe_wait_bpf_programs(map);
+ 
+ 	return err;
+@@ -1136,13 +1129,11 @@ static int map_delete_elem(union bpf_att
+ 		goto out;
+ 	}
+ 
+-	preempt_disable();
+-	__this_cpu_inc(bpf_prog_active);
++	bpf_disable_instrumentation();
+ 	rcu_read_lock();
+ 	err = map->ops->map_delete_elem(map, key);
+ 	rcu_read_unlock();
+-	__this_cpu_dec(bpf_prog_active);
+-	preempt_enable();
++	bpf_enable_instrumentation();
+ 	maybe_wait_bpf_programs(map);
+ out:
+ 	kfree(key);
+@@ -1254,13 +1245,11 @@ int generic_map_delete_batch(struct bpf_
+ 			break;
+ 		}
+ 
+-		preempt_disable();
+-		__this_cpu_inc(bpf_prog_active);
++		bpf_disable_instrumentation();
+ 		rcu_read_lock();
+ 		err = map->ops->map_delete_elem(map, key);
+ 		rcu_read_unlock();
+-		__this_cpu_dec(bpf_prog_active);
+-		preempt_enable();
++		bpf_enable_instrumentation();
+ 		maybe_wait_bpf_programs(map);
+ 		if (err)
+ 			break;
 
