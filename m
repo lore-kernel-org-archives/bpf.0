@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3232EC11D30
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:04:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 216C6C11D36
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:04:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1249320836
+	by mail.kernel.org (Postfix) with ESMTP id E6A532082F
 	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:04:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727902AbgBXPEu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Feb 2020 10:04:50 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:50207 "EHLO
+        id S1728059AbgBXPE5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Feb 2020 10:04:57 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:50203 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726762AbgBXPDX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1727882AbgBXPDX (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 24 Feb 2020 10:03:23 -0500
 Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1j6FFp-0004sK-Tv; Mon, 24 Feb 2020 16:02:42 +0100
+        id 1j6FFv-0004x0-0k; Mon, 24 Feb 2020 16:02:47 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id 9B151FFB71;
-        Mon, 24 Feb 2020 16:02:41 +0100 (CET)
-Message-Id: <20200224145643.059995527@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id 5E1C4104096;
+        Mon, 24 Feb 2020 16:02:43 +0100 (CET)
+Message-Id: <20200224145643.891428873@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Mon, 24 Feb 2020 15:01:37 +0100
+Date:   Mon, 24 Feb 2020 15:01:45 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
@@ -43,7 +43,7 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Vinicius Costa Gomes <vinicius.gomes@intel.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [patch V3 06/22] bpf/trace: Remove redundant preempt_disable from trace_call_bpf()
+Subject: [patch V3 14/22] bpf: Use migrate_disable/enabe() in trampoline code.
 References: <20200224140131.461979697@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,37 +52,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Similar to __bpf_trace_run this is redundant because __bpf_trace_run() is
-invoked from a trace point via __DO_TRACE() which already disables
-preemption _before_ invoking any of the functions which are attached to a
-trace point.
+From: David Miller <davem@davemloft.net>
 
-Remove it and add a cant_sleep() check.
+Instead of preemption disable/enable to reflect the purpose. This allows
+PREEMPT_RT to substitute it with an actual migration disable
+implementation. On non RT kernels this is still mapped to
+preempt_disable/enable().
 
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
-V3: New patch. Replaces the previous one which converted this to migrate_disable() 
----
- kernel/trace/bpf_trace.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -83,7 +83,7 @@ unsigned int trace_call_bpf(struct trace
- 	if (in_nmi()) /* not supported yet */
- 		return 1;
- 
--	preempt_disable();
-+	cant_sleep();
- 
- 	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
- 		/*
-@@ -115,7 +115,6 @@ unsigned int trace_call_bpf(struct trace
- 
-  out:
- 	__this_cpu_dec(bpf_prog_active);
--	preempt_enable();
- 
- 	return ret;
+---
+ kernel/bpf/trampoline.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -367,8 +367,9 @@ void bpf_trampoline_put(struct bpf_tramp
+ 	mutex_unlock(&trampoline_mutex);
  }
+ 
+-/* The logic is similar to BPF_PROG_RUN, but with explicit rcu and preempt that
+- * are needed for trampoline. The macro is split into
++/* The logic is similar to BPF_PROG_RUN, but with an explicit
++ * rcu_read_lock() and migrate_disable() which are required
++ * for the trampoline. The macro is split into
+  * call _bpf_prog_enter
+  * call prog->bpf_func
+  * call __bpf_prog_exit
+@@ -378,7 +379,7 @@ u64 notrace __bpf_prog_enter(void)
+ 	u64 start = 0;
+ 
+ 	rcu_read_lock();
+-	preempt_disable();
++	migrate_disable();
+ 	if (static_branch_unlikely(&bpf_stats_enabled_key))
+ 		start = sched_clock();
+ 	return start;
+@@ -401,7 +402,7 @@ void notrace __bpf_prog_exit(struct bpf_
+ 		stats->nsecs += sched_clock() - start;
+ 		u64_stats_update_end(&stats->syncp);
+ 	}
+-	preempt_enable();
++	migrate_enable();
+ 	rcu_read_unlock();
+ }
+ 
 
