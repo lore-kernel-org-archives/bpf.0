@@ -2,32 +2,63 @@ Return-Path: <SRS0=zUS/=4M=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B173FC11D2F
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 18:14:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C3C7C11D2F
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 18:17:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 915F32084E
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 18:14:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0145F20732
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 18:17:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hxUsAPPG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727744AbgBXSOu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Feb 2020 13:14:50 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:50803 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726208AbgBXSOu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Feb 2020 13:14:50 -0500
-Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1j6IFA-0001yV-FE; Mon, 24 Feb 2020 19:14:12 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id A0404104088; Mon, 24 Feb 2020 19:14:11 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
+        id S1727438AbgBXSRE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Feb 2020 13:17:04 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:34574 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726208AbgBXSRE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Feb 2020 13:17:04 -0500
+Received: by mail-pl1-f195.google.com with SMTP id j7so4382636plt.1;
+        Mon, 24 Feb 2020 10:17:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=fpxGh78lri+FF2jGJPwT3ROkxj1dx52IpBbpwJRlISM=;
+        b=hxUsAPPGZfuohNO9aKjobjWrDuyWd9hhWCIqdJ6bukofPpfOrnRfiY6tljv+cPE1bc
+         MXUDGwhLCe/ZSEU2vUKlauVgol4jfkhwxeUZRN78R4zHAoM0OdqJadlLPwbn56bOtp8L
+         ahZDiVMf+2sO4s6QkjK6NrXx+34AdtUvqdMeEDit0IJeP+N/H1G0kC4rPeH1kqTqaImn
+         wgHXw3hzRWf3fFHU5BrdZJV9Qtbw6bOhirujA8XTMIJrSGuCe1aOsQsPsWl8srQzDX5K
+         pUx9Ag6X35ChLEl9A+vqLmBz9hYBkQV8HNMfXCXa0mqDapY1QeFfci0KS1lAQVwrhEcD
+         rhSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=fpxGh78lri+FF2jGJPwT3ROkxj1dx52IpBbpwJRlISM=;
+        b=giCLQMpln8v5/FcJr1UYV8sDm6SibazjOXHxecEF1FTg4Y7eaYa3YWNPCVL/WN5ifm
+         KaerdLr7zhtppBSYpf1YbvGGi6ocXIBZHbI6t4cWtNgm/kQasKlt51Fj8aNBkwlcNnvH
+         soRjaN/9jNRhqTNIWfGrheAxWLOyAeTjdd4CjufXI28ab7jaM0h88nv0RcBZ+AWyw0B9
+         3xJxKaPfNQctB4gTnxfW+h7alW+lPWVWrc0LpXPLwH+Lzmxz95DMT2ygaX8gKDhSuPku
+         DMIbLYq0DeiDOxy6Gj8HBDfFw5Hv+WroDRc8KzyfGya5oJ3coGSIdNx/L6n4PSFMrX/k
+         376Q==
+X-Gm-Message-State: APjAAAVJ/dI/6mo1xJZRDBWpmXZ3VHSWud1QBEIH5KDwF0W4awfiZPjd
+        WGVjlywBeen+NglPCBT6pao=
+X-Google-Smtp-Source: APXvYqysaQpDCQSEdFlZ2E82ILbvhKOsJAvGz4FeCn4Y1Tpz3wfedxfkwQeYuwsAfOUSRGimH/rP6Q==
+X-Received: by 2002:a17:902:7797:: with SMTP id o23mr47821945pll.298.1582568223676;
+        Mon, 24 Feb 2020 10:17:03 -0800 (PST)
+Received: from ast-mbp ([2620:10d:c090:500::6:2457])
+        by smtp.gmail.com with ESMTPSA id g24sm13545782pfk.92.2020.02.24.10.17.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Feb 2020 10:17:02 -0800 (PST)
+Date:   Mon, 24 Feb 2020 10:16:59 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sebastian Sewior <bigeasy@linutronix.de>,
@@ -39,37 +70,41 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Vinicius Costa Gomes <vinicius.gomes@intel.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [patch V3 10/22] bpf: Provide bpf_prog_run_pin_on_cpu() helper
-In-Reply-To: <20200224145643.474592620@linutronix.de>
-References: <20200224140131.461979697@linutronix.de> <20200224145643.474592620@linutronix.de>
-Date:   Mon, 24 Feb 2020 19:14:11 +0100
-Message-ID: <87v9nvn98s.fsf@nanos.tec.linutronix.de>
+Subject: Re: [patch V3 05/22] bpf/trace: Remove EXPORT from trace_call_bpf()
+Message-ID: <20200224181657.ndgtotm3abigaqs5@ast-mbp>
+References: <20200224140131.461979697@linutronix.de>
+ <20200224145642.953923067@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200224145642.953923067@linutronix.de>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Thomas Gleixner <tglx@linutronix.de> writes:
-> + * preempt_disable/enable(), i.e. it disables also preemption.
-> + */
-> +static inline u32 bpf_prog_run_pin_on_cpu(const struct bpf_prog *prog,
-> +					  void *ctx)
-
-I'm a moron. Let me resend this one.
-
-> +{
-> +	u32 ret;
-> +
-> +	migrate_disable();
-> +	ret = __BPF_PROG_RUN(prog, ctx, bpf_dispatcher_nopfunc);
-> +	migrate_enable();
-> +	return ret;
-> +}
+On Mon, Feb 24, 2020 at 03:01:36PM +0100, Thomas Gleixner wrote:
+> All callers are built in. No point to export this.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+> V3: New patch 
+> ---
+>  kernel/trace/bpf_trace.c |    1 -
+>  1 file changed, 1 deletion(-)
+> 
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -119,7 +119,6 @@ unsigned int trace_call_bpf(struct trace
 >  
->  #define BPF_SKB_CB_LEN QDISC_CB_PRIV_LEN
->  
+>  	return ret;
+>  }
+> -EXPORT_SYMBOL_GPL(trace_call_bpf);
+
+Thanks for catching this.
+Looking at my old commit 2541517c32be ("tracing, perf: Implement BPF programs attached to kprobes")
+where I added this line I cannot figure out why I did so five years ago.
+I'm guessing some earlier versions of the patches were calling it from
+tracepoint macro and since tracepoints can be in modules I exported it.
+Definitely shouldn't be an export symbol.
