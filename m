@@ -2,208 +2,134 @@ Return-Path: <SRS0=zUS/=4M=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A478C11D25
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 07:40:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 217A4C11D30
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 13:53:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1E05320714
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 07:40:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA23F20866
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 13:53:32 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="vb8eMTfQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727183AbgBXHkO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Feb 2020 02:40:14 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:51465 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727115AbgBXHkO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Feb 2020 02:40:14 -0500
-Received: by mail-io1-f69.google.com with SMTP id c7so14048464ioq.18
-        for <bpf@vger.kernel.org>; Sun, 23 Feb 2020 23:40:13 -0800 (PST)
+        id S1727359AbgBXNxc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Feb 2020 08:53:32 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:38276 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727421AbgBXNxb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Feb 2020 08:53:31 -0500
+Received: by mail-wr1-f67.google.com with SMTP id e8so10481046wrm.5
+        for <bpf@vger.kernel.org>; Mon, 24 Feb 2020 05:53:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mZSTwWAn3t7JMXjmqAY0yMV0jtle3ljPKptSRmgEMBQ=;
+        b=vb8eMTfQd/zoi8WrDi71FZ2v6JZkFmV3Sc538G8bxxFQlaRoPjFfEIRq8nXAwetMSG
+         +VyLAfQF4LfhnF3R5Ga/v/enjri7SyAos417Jv3iLSlpBtQkmMkexZG60HP6IfIVLd4C
+         RGcZOSDen7mpl0lwtqVhu6G0psS0JH5xjs4Do=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=787IVEtTAp4pm7jHKW0atIbdisWqmLyVEo9pOI1dOQI=;
-        b=KafeSJPnKBWBHXuwKlBcmGHotz7oUqpk87WZjiJ13zeFbxole9H2E7eZ+pnyysE7UD
-         yYwd0IH32w4Ep2DwrVsfHCDbe8NCPytokskgdg8ntwRTyYpl/oGcdwyfyzaSLrMuk70n
-         pba9qMnnKBUlXeBgIsRvnCMiJkAqFJH2tb634e5rvNyzVDE+n2xktwHL++Heq99BioKi
-         RD8VLdjSS0hDPnh2U69aAbtoBHHYiF7klrDlsjY5ivK90iePNe+Nx7L7wQc71bSAUccg
-         cjz2KBVrFZiZF35iKag5xJJ2BYPSL2GYoHsPnGzjHbwL1axZKrVt62oOvhZJoNmmwS6t
-         5UCg==
-X-Gm-Message-State: APjAAAWe82fFljgxCAtaj+6RYBbdKS0ufAakew+aCYxGx2fJim0XyoJC
-        W5GwjtaTbWiLsgXousWPoEJxuaahfbhuiuwwdlbUlRce9ny8
-X-Google-Smtp-Source: APXvYqzJh3mHUMyngPpafir7PkO10lHNmm+YWTAev44v4xWmcR/3wA+00HcZ0KZGFfSTw+SOGPDCV0sVulyssalTAFNQp3RgJDEj
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mZSTwWAn3t7JMXjmqAY0yMV0jtle3ljPKptSRmgEMBQ=;
+        b=Yp53eta3V7ohfQoJXcpjYMgxuMwM+y0Cyp3FdsrlYoAZ7190IQkzx1q8vi62wOip4k
+         euHSTyZAc2tXfgqHUd3j79/l82KVWz6VaE3ztX42FyY0LxG8ggaAIsubdXeEsrggSlGZ
+         H22dxniJX9fZHussHF16DZUi9BI5UGjMjwnebLpD/R4z4hKoK7Q1PhYGnVqVUUnV2Raz
+         Wm+JsG7b7Y6f5xPHMSlcbr+kuIiVkdzUhyEHjZnoucxj3UM6wwHx4wqlQtACfG9VEQFt
+         6nd3n4FVLM4SvBOZoq73eTLXevvNxwinWvZyFJ+IWzDCu63SQ1kSyje8BAAgHI3o0fIw
+         JR+Q==
+X-Gm-Message-State: APjAAAV3CM6AIqFBZzkZXOivDA9NVcXa/YVqLSCL5PvlZ4NGwAsGomuZ
+        oqqRnOTWaDJLic5IeU9pzVtcesmqSerOlw==
+X-Google-Smtp-Source: APXvYqxtkoKYrvf8qfuBJvz5l/Dmdxrh1+KyJUu5NMZEsGHY4OKX+7kMzmzEiUXhBXt/6mP5aFWmmw==
+X-Received: by 2002:adf:fa87:: with SMTP id h7mr70545877wrr.172.1582552409148;
+        Mon, 24 Feb 2020 05:53:29 -0800 (PST)
+Received: from cloudflare.com ([176.221.114.230])
+        by smtp.gmail.com with ESMTPSA id k16sm19139203wru.0.2020.02.24.05.53.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2020 05:53:28 -0800 (PST)
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        Martin Lau <kafai@fb.com>, Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH bpf-next 1/2] selftests/bpf: Run reuseport tests only with supported socket types
+Date:   Mon, 24 Feb 2020 14:53:26 +0100
+Message-Id: <20200224135327.121542-1-jakub@cloudflare.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:a415:: with SMTP id c21mr48112323jal.45.1582530013025;
- Sun, 23 Feb 2020 23:40:13 -0800 (PST)
-Date:   Sun, 23 Feb 2020 23:40:13 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000045dc96059f4d7b02@google.com>
-Subject: KASAN: use-after-free Read in tcp_retransmit_timer (5)
-From:   syzbot <syzbot+694120e1002c117747ed@syzkaller.appspotmail.com>
-To:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
-        kafai@fb.com, kuba@kernel.org, kuznet@ms2.inr.ac.ru,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com,
-        yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+SOCKMAP and SOCKHASH map types can be used with reuseport BPF programs but
+don't support yet storing UDP sockets. Instead of marking UDP tests with
+SOCK{MAP,HASH} as skipped, don't run them at all.
 
-syzbot found the following crash on:
+Skipped test might signal that the test environment is not suitable for
+running the test, while in reality the functionality is not implemented in
+the kernel yet.
 
-HEAD commit:    41f57cfd Merge git://git.kernel.org/pub/scm/linux/kernel/g..
-git tree:       bpf
-console output: https://syzkaller.appspot.com/x/log.txt?x=1460da7ee00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=768cc3d3e277cc16
-dashboard link: https://syzkaller.appspot.com/bug?extid=694120e1002c117747ed
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+Before:
 
-Unfortunately, I don't have any reproducer for this crash yet.
+  sh# ./test_progs -t select_reuseport
+  …
+  #40 select_reuseport:OK
+  Summary: 1/126 PASSED, 30 SKIPPED, 0 FAILED
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+694120e1002c117747ed@syzkaller.appspotmail.com
+After:
 
-==================================================================
-BUG: KASAN: use-after-free in tcp_retransmit_timer+0x2c51/0x30e0 net/ipv4/tcp_timer.c:500
-Read of size 8 at addr ffff888062cc0338 by task syz-executor.0/18199
+  sh# ./test_progs  -t select_reuseport
+  …
+  #40 select_reuseport:OK
+  Summary: 1/98 PASSED, 2 SKIPPED, 0 FAILED
 
-CPU: 0 PID: 18199 Comm: syz-executor.0 Not tainted 5.6.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x197/0x210 lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xd4/0x30b mm/kasan/report.c:374
- __kasan_report.cold+0x1b/0x32 mm/kasan/report.c:506
- kasan_report+0x12/0x20 mm/kasan/common.c:641
- __asan_report_load8_noabort+0x14/0x20 mm/kasan/generic_report.c:135
- tcp_retransmit_timer+0x2c51/0x30e0 net/ipv4/tcp_timer.c:500
- tcp_write_timer_handler+0x6be/0x8d0 net/ipv4/tcp_timer.c:611
- tcp_write_timer+0xac/0x2e0 net/ipv4/tcp_timer.c:631
- call_timer_fn+0x1ac/0x780 kernel/time/timer.c:1404
- expire_timers kernel/time/timer.c:1449 [inline]
- __run_timers kernel/time/timer.c:1773 [inline]
- __run_timers kernel/time/timer.c:1740 [inline]
- run_timer_softirq+0x6c3/0x1790 kernel/time/timer.c:1786
- __do_softirq+0x262/0x98c kernel/softirq.c:292
- invoke_softirq kernel/softirq.c:373 [inline]
- irq_exit+0x19b/0x1e0 kernel/softirq.c:413
- exiting_irq arch/x86/include/asm/apic.h:546 [inline]
- smp_apic_timer_interrupt+0x1a3/0x610 arch/x86/kernel/apic/apic.c:1146
- apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
- </IRQ>
-RIP: 0010:arch_local_irq_restore arch/x86/include/asm/paravirt.h:752 [inline]
-RIP: 0010:slab_alloc mm/slab.c:3313 [inline]
-RIP: 0010:__do_kmalloc mm/slab.c:3654 [inline]
-RIP: 0010:__kmalloc+0x2b8/0x770 mm/slab.c:3665
-Code: 7e 0f 85 d6 fe ff ff e8 a7 af 4c ff e9 cc fe ff ff e8 4c 6d c7 ff 48 83 3d dc f5 ff 07 00 0f 84 4f 03 00 00 48 8b 7d c0 57 9d <0f> 1f 44 00 00 e9 5e fe ff ff 31 d2 be 35 02 00 00 48 c7 c7 de dd
-RSP: 0018:ffffc900019675a8 EFLAGS: 00000282 ORIG_RAX: ffffffffffffff13
-RAX: 0000000000000007 RBX: 0000000000000c40 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffff8880569e29d8 RDI: 0000000000000282
-RBP: ffffc90001967620 R08: ffff8880569e2140 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000001000
-R13: 0000000000000c40 R14: ffff8880aa402000 R15: ffff8880962fa000
- kmalloc include/linux/slab.h:560 [inline]
- tomoyo_realpath_from_path+0xc5/0x660 security/tomoyo/realpath.c:252
- tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
- tomoyo_check_open_permission+0x2a3/0x3e0 security/tomoyo/file.c:771
- tomoyo_file_open security/tomoyo/tomoyo.c:319 [inline]
- tomoyo_file_open+0xa9/0xd0 security/tomoyo/tomoyo.c:314
- security_file_open+0x71/0x300 security/security.c:1529
- do_dentry_open+0x37a/0x1380 fs/open.c:784
- vfs_open+0xa0/0xd0 fs/open.c:914
- do_last fs/namei.c:3490 [inline]
- path_openat+0x12ee/0x3490 fs/namei.c:3607
- do_filp_open+0x192/0x260 fs/namei.c:3637
- do_sys_openat2+0x5eb/0x7e0 fs/open.c:1149
- do_sys_open+0xf2/0x180 fs/open.c:1165
- ksys_open include/linux/syscalls.h:1386 [inline]
- __do_sys_open fs/open.c:1171 [inline]
- __se_sys_open fs/open.c:1169 [inline]
- __x64_sys_open+0x7e/0xc0 fs/open.c:1169
- do_syscall_64+0xfa/0x790 arch/x86/entry/common.c:294
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x4161c0
-Code: 05 48 3d 01 f0 ff ff 0f 83 2d 19 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 83 3d ad 22 87 00 00 75 14 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff ff 0f 83 04 19 00 00 c3 48 83 ec 08 e8 0a fa ff ff
-RSP: 002b:00007ffd846aa178 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007ffd846aa1a4 RCX: 00000000004161c0
-RDX: 00007ffd846aa1aa RSI: 0000000000080001 RDI: 00000000004c1fef
-RBP: 00007ffd846aa1a0 R08: 0000000000008040 R09: 0000000000000004
-R10: 0000000000000075 R11: 0000000000000246 R12: 00000000004c1fef
-R13: 00007ffd846aa6c0 R14: 0000000000000000 R15: 00007ffd846aa6d0
+The remaining two skipped tests are SYN cookies tests, which will be
+addressed in the subsequent patch.
 
-Allocated by task 2861:
- save_stack+0x23/0x90 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- __kasan_kmalloc mm/kasan/common.c:515 [inline]
- __kasan_kmalloc.constprop.0+0xcf/0xe0 mm/kasan/common.c:488
- kasan_kmalloc+0x9/0x10 mm/kasan/common.c:529
- __do_kmalloc_node mm/slab.c:3616 [inline]
- __kmalloc_node_track_caller+0x4e/0x70 mm/slab.c:3630
- __kmalloc_reserve.isra.0+0x40/0xf0 net/core/skbuff.c:142
- __alloc_skb+0x10b/0x5e0 net/core/skbuff.c:210
- alloc_skb include/linux/skbuff.h:1081 [inline]
- nsim_dev_trap_skb_build drivers/net/netdevsim/dev.c:324 [inline]
- nsim_dev_trap_report drivers/net/netdevsim/dev.c:376 [inline]
- nsim_dev_trap_report_work+0x25c/0xaf0 drivers/net/netdevsim/dev.c:415
- process_one_work+0xa05/0x17a0 kernel/workqueue.c:2264
- worker_thread+0x98/0xe40 kernel/workqueue.c:2410
- kthread+0x361/0x430 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Freed by task 2861:
- save_stack+0x23/0x90 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- kasan_set_free_info mm/kasan/common.c:337 [inline]
- __kasan_slab_free+0x102/0x150 mm/kasan/common.c:476
- kasan_slab_free+0xe/0x10 mm/kasan/common.c:485
- __cache_free mm/slab.c:3426 [inline]
- kfree+0x10a/0x2c0 mm/slab.c:3757
- skb_free_head+0x93/0xb0 net/core/skbuff.c:590
- skb_release_data+0x43c/0x8b0 net/core/skbuff.c:610
- skb_release_all+0x4d/0x60 net/core/skbuff.c:664
- __kfree_skb net/core/skbuff.c:678 [inline]
- consume_skb net/core/skbuff.c:837 [inline]
- consume_skb+0xfb/0x410 net/core/skbuff.c:831
- nsim_dev_trap_report drivers/net/netdevsim/dev.c:390 [inline]
- nsim_dev_trap_report_work+0x7cb/0xaf0 drivers/net/netdevsim/dev.c:415
- process_one_work+0xa05/0x17a0 kernel/workqueue.c:2264
- worker_thread+0x98/0xe40 kernel/workqueue.c:2410
- kthread+0x361/0x430 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff888062cc0000
- which belongs to the cache kmalloc-4k of size 4096
-The buggy address is located 824 bytes inside of
- 4096-byte region [ffff888062cc0000, ffff888062cc1000)
-The buggy address belongs to the page:
-page:ffffea00018b3000 refcount:1 mapcount:0 mapping:ffff8880aa402000 index:0x0 compound_mapcount: 0
-flags: 0xfffe0000010200(slab|head)
-raw: 00fffe0000010200 ffffea00024ce208 ffffea00029a7b08 ffff8880aa402000
-raw: 0000000000000000 ffff888062cc0000 0000000100000001 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff888062cc0200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888062cc0280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff888062cc0300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                        ^
- ffff888062cc0380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888062cc0400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
+Fixes: 11318ba8cafd ("selftests/bpf: Extend SK_REUSEPORT tests to cover SOCKMAP/SOCKHASH")
+Reported-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ .../selftests/bpf/prog_tests/select_reuseport.c     | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+index 68d452bb9fd9..8c41d6d63fcf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+@@ -807,6 +807,12 @@ static void test_config(int sotype, sa_family_t family, bool inany)
+ 	char s[MAX_TEST_NAME];
+ 	const struct test *t;
+ 
++	/* SOCKMAP/SOCKHASH don't support UDP yet */
++	if (sotype == SOCK_DGRAM &&
++	    (inner_map_type == BPF_MAP_TYPE_SOCKMAP ||
++	     inner_map_type == BPF_MAP_TYPE_SOCKHASH))
++		return;
++
+ 	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
+ 		snprintf(s, sizeof(s), "%s %s/%s %s %s",
+ 			 maptype_str(inner_map_type),
+@@ -816,13 +822,6 @@ static void test_config(int sotype, sa_family_t family, bool inany)
+ 		if (!test__start_subtest(s))
+ 			continue;
+ 
+-		if (sotype == SOCK_DGRAM &&
+-		    inner_map_type != BPF_MAP_TYPE_REUSEPORT_SOCKARRAY) {
+-			/* SOCKMAP/SOCKHASH don't support UDP yet */
+-			test__skip();
+-			continue;
+-		}
+-
+ 		setup_per_test(sotype, family, inany, t->no_inner_map);
+ 		t->fn(sotype, family);
+ 		cleanup_per_test(t->no_inner_map);
+-- 
+2.24.1
+
