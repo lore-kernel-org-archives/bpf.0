@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3016C11D30
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:04:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F18CCC11D32
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:04:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B3CC12072D
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:04:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D17AB2072D
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:04:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727693AbgBXPDz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Feb 2020 10:03:55 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:50221 "EHLO
+        id S1728225AbgBXPEH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Feb 2020 10:04:07 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:50214 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727888AbgBXPDY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1727930AbgBXPDY (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 24 Feb 2020 10:03:24 -0500
 Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1j6FFz-00054v-Ti; Mon, 24 Feb 2020 16:02:52 +0100
+        id 1j6FFw-0004yv-0M; Mon, 24 Feb 2020 16:02:48 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id 28C3F10409E;
-        Mon, 24 Feb 2020 16:02:45 +0100 (CET)
-Message-Id: <20200224145644.708960317@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id CC5C2104098;
+        Mon, 24 Feb 2020 16:02:43 +0100 (CET)
+Message-Id: <20200224145644.103910133@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Mon, 24 Feb 2020 15:01:53 +0100
+Date:   Mon, 24 Feb 2020 15:01:47 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
@@ -43,7 +43,7 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Vinicius Costa Gomes <vinicius.gomes@intel.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [patch V3 22/22] bpf/stackmap: Dont trylock mmap_sem with PREEMPT_RT and interrupts disabled
+Subject: [patch V3 16/22] bpf: Provide recursion prevention helpers
 References: <20200224140131.461979697@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,61 +52,65 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: David Miller <davem@davemloft.net>
+The places which need to prevent the execution of trace type BPF programs
+to prevent deadlocks on the hash bucket lock do this open coded.
 
-In a RT kernel down_read_trylock() cannot be used from NMI context and
-up_read_non_owner() is another problematic issue.
+Provide two inline functions, bpf_disable/enable_instrumentation() to
+replace these open coded protection constructs.
 
-So in such a configuration, simply elide the annotated stackmap and
-just report the raw IPs.
+Use migrate_disable/enable() instead of preempt_disable/enable() right away
+so this works on RT enabled kernels. On a !RT kernel migrate_disable /
+enable() are mapped to preempt_disable/enable().
 
-In the longer term, it might be possible to provide a atomic friendly
-versions of the page cache traversal which will at least provide the info
-if the pages are resident and don't need to be paged in.
+These helpers use this_cpu_inc/dec() instead of __this_cpu_inc/dec() on an
+RT enabled kernel because migrate disabled regions are preemptible and
+preemption might hit in the middle of a RMW operation which can lead to
+inconsistent state.
 
-[ tglx: Use IS_ENABLED() to avoid the #ifdeffery, fixup the irq work
-  	callback and add a comment ]
-
-Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-
 ---
- kernel/bpf/stackmap.c |   18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+V2: New patch. Use this_cpu_inc/dec() as pointed out by Mathieu.
+---
+ include/linux/bpf.h |   30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -40,6 +40,9 @@ static void do_up_read(struct irq_work *
- {
- 	struct stack_map_irq_work *work;
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -961,6 +961,36 @@ int bpf_prog_array_copy(struct bpf_prog_
+ #ifdef CONFIG_BPF_SYSCALL
+ DECLARE_PER_CPU(int, bpf_prog_active);
  
-+	if (WARN_ON_ONCE(IS_ENABLED(CONFIG_PREEMPT_RT)))
-+		return;
++/*
++ * Block execution of BPF programs attached to instrumentation (perf,
++ * kprobes, tracepoints) to prevent deadlocks on map operations as any of
++ * these events can happen inside a region which holds a map bucket lock
++ * and can deadlock on it.
++ *
++ * Use the preemption safe inc/dec variants on RT because migrate disable
++ * is preemptible on RT and preemption in the middle of the RMW operation
++ * might lead to inconsistent state. Use the raw variants for non RT
++ * kernels as migrate_disable() maps to preempt_disable() so the slightly
++ * more expensive save operation can be avoided.
++ */
++static inline void bpf_disable_instrumentation(void)
++{
++	migrate_disable();
++	if (IS_ENABLED(CONFIG_PREEMPT_RT))
++		this_cpu_inc(bpf_prog_active);
++	else
++		__this_cpu_inc(bpf_prog_active);
++}
 +
- 	work = container_of(entry, struct stack_map_irq_work, irq_work);
- 	up_read_non_owner(work->sem);
- 	work->sem = NULL;
-@@ -288,10 +291,19 @@ static void stack_map_get_build_id_offse
- 	struct stack_map_irq_work *work = NULL;
++static inline void bpf_enable_instrumentation(void)
++{
++	if (IS_ENABLED(CONFIG_PREEMPT_RT))
++		this_cpu_dec(bpf_prog_active);
++	else
++		__this_cpu_dec(bpf_prog_active);
++	migrate_enable();
++}
++
+ extern const struct file_operations bpf_map_fops;
+ extern const struct file_operations bpf_prog_fops;
  
- 	if (irqs_disabled()) {
--		work = this_cpu_ptr(&up_read_work);
--		if (atomic_read(&work->irq_work.flags) & IRQ_WORK_BUSY)
--			/* cannot queue more up_read, fallback */
-+		if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
-+			work = this_cpu_ptr(&up_read_work);
-+			if (atomic_read(&work->irq_work.flags) & IRQ_WORK_BUSY) {
-+				/* cannot queue more up_read, fallback */
-+				irq_work_busy = true;
-+			}
-+		} else {
-+			/*
-+			 * PREEMPT_RT does not allow to trylock mmap sem in
-+			 * interrupt disabled context. Force the fallback code.
-+			 */
- 			irq_work_busy = true;
-+		}
- 	}
- 
- 	/*
 
