@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F18CCC11D32
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5886EC11D34
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:04:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D17AB2072D
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:04:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A77E2072D
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:04:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbgBXPEH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1728229AbgBXPEH (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 24 Feb 2020 10:04:07 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:50214 "EHLO
+Received: from Galois.linutronix.de ([193.142.43.55]:50220 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727930AbgBXPDY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1727978AbgBXPDY (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 24 Feb 2020 10:03:24 -0500
 Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1j6FFw-0004yv-0M; Mon, 24 Feb 2020 16:02:48 +0100
+        id 1j6FG1-000547-JW; Mon, 24 Feb 2020 16:02:53 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id CC5C2104098;
-        Mon, 24 Feb 2020 16:02:43 +0100 (CET)
-Message-Id: <20200224145644.103910133@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id E769610409D;
+        Mon, 24 Feb 2020 16:02:44 +0100 (CET)
+Message-Id: <20200224145644.602129531@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Mon, 24 Feb 2020 15:01:47 +0100
+Date:   Mon, 24 Feb 2020 15:01:52 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
@@ -43,7 +43,7 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Vinicius Costa Gomes <vinicius.gomes@intel.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [patch V3 16/22] bpf: Provide recursion prevention helpers
+Subject: [patch V3 21/22] bpf, lpm: Make locking RT friendly
 References: <20200224140131.461979697@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,65 +52,81 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The places which need to prevent the execution of trace type BPF programs
-to prevent deadlocks on the hash bucket lock do this open coded.
+The LPM trie map cannot be used in contexts like perf, kprobes and tracing
+as this map type dynamically allocates memory.
 
-Provide two inline functions, bpf_disable/enable_instrumentation() to
-replace these open coded protection constructs.
+The memory allocation happens with a raw spinlock held which is a truly
+spinning lock on a PREEMPT RT enabled kernel which disables preemption and
+interrupts.
 
-Use migrate_disable/enable() instead of preempt_disable/enable() right away
-so this works on RT enabled kernels. On a !RT kernel migrate_disable /
-enable() are mapped to preempt_disable/enable().
+As RT does not allow memory allocation from such a section for various
+reasons, convert the raw spinlock to a regular spinlock.
 
-These helpers use this_cpu_inc/dec() instead of __this_cpu_inc/dec() on an
-RT enabled kernel because migrate disabled regions are preemptible and
-preemption might hit in the middle of a RMW operation which can lead to
-inconsistent state.
+On a RT enabled kernel these locks are substituted by 'sleeping' spinlocks
+which provide the proper protection but keep the code preemptible.
+
+On a non-RT kernel regular spinlocks map to raw spinlocks, i.e. this does
+not cause any functional change.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
-V2: New patch. Use this_cpu_inc/dec() as pointed out by Mathieu.
----
- include/linux/bpf.h |   30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ kernel/bpf/lpm_trie.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -961,6 +961,36 @@ int bpf_prog_array_copy(struct bpf_prog_
- #ifdef CONFIG_BPF_SYSCALL
- DECLARE_PER_CPU(int, bpf_prog_active);
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -34,7 +34,7 @@ struct lpm_trie {
+ 	size_t				n_entries;
+ 	size_t				max_prefixlen;
+ 	size_t				data_size;
+-	raw_spinlock_t			lock;
++	spinlock_t			lock;
+ };
  
-+/*
-+ * Block execution of BPF programs attached to instrumentation (perf,
-+ * kprobes, tracepoints) to prevent deadlocks on map operations as any of
-+ * these events can happen inside a region which holds a map bucket lock
-+ * and can deadlock on it.
-+ *
-+ * Use the preemption safe inc/dec variants on RT because migrate disable
-+ * is preemptible on RT and preemption in the middle of the RMW operation
-+ * might lead to inconsistent state. Use the raw variants for non RT
-+ * kernels as migrate_disable() maps to preempt_disable() so the slightly
-+ * more expensive save operation can be avoided.
-+ */
-+static inline void bpf_disable_instrumentation(void)
-+{
-+	migrate_disable();
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		this_cpu_inc(bpf_prog_active);
-+	else
-+		__this_cpu_inc(bpf_prog_active);
-+}
-+
-+static inline void bpf_enable_instrumentation(void)
-+{
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		this_cpu_dec(bpf_prog_active);
-+	else
-+		__this_cpu_dec(bpf_prog_active);
-+	migrate_enable();
-+}
-+
- extern const struct file_operations bpf_map_fops;
- extern const struct file_operations bpf_prog_fops;
+ /* This trie implements a longest prefix match algorithm that can be used to
+@@ -315,7 +315,7 @@ static int trie_update_elem(struct bpf_m
+ 	if (key->prefixlen > trie->max_prefixlen)
+ 		return -EINVAL;
  
+-	raw_spin_lock_irqsave(&trie->lock, irq_flags);
++	spin_lock_irqsave(&trie->lock, irq_flags);
+ 
+ 	/* Allocate and fill a new node */
+ 
+@@ -422,7 +422,7 @@ static int trie_update_elem(struct bpf_m
+ 		kfree(im_node);
+ 	}
+ 
+-	raw_spin_unlock_irqrestore(&trie->lock, irq_flags);
++	spin_unlock_irqrestore(&trie->lock, irq_flags);
+ 
+ 	return ret;
+ }
+@@ -442,7 +442,7 @@ static int trie_delete_elem(struct bpf_m
+ 	if (key->prefixlen > trie->max_prefixlen)
+ 		return -EINVAL;
+ 
+-	raw_spin_lock_irqsave(&trie->lock, irq_flags);
++	spin_lock_irqsave(&trie->lock, irq_flags);
+ 
+ 	/* Walk the tree looking for an exact key/length match and keeping
+ 	 * track of the path we traverse.  We will need to know the node
+@@ -518,7 +518,7 @@ static int trie_delete_elem(struct bpf_m
+ 	kfree_rcu(node, rcu);
+ 
+ out:
+-	raw_spin_unlock_irqrestore(&trie->lock, irq_flags);
++	spin_unlock_irqrestore(&trie->lock, irq_flags);
+ 
+ 	return ret;
+ }
+@@ -575,7 +575,7 @@ static struct bpf_map *trie_alloc(union
+ 	if (ret)
+ 		goto out_err;
+ 
+-	raw_spin_lock_init(&trie->lock);
++	spin_lock_init(&trie->lock);
+ 
+ 	return &trie->map;
+ out_err:
 
