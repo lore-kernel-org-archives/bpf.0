@@ -2,160 +2,80 @@ Return-Path: <SRS0=zUS/=4M=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77E81C11D30
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 13:59:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4EC6C11D2F
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:03:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4EEB120836
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 13:59:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ltBuCrF4"
+	by mail.kernel.org (Postfix) with ESMTP id BB1DA2072D
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:03:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727644AbgBXN7e (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Feb 2020 08:59:34 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:37284 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727339AbgBXN7d (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Feb 2020 08:59:33 -0500
-Received: by mail-wr1-f67.google.com with SMTP id l5so6244782wrx.4
-        for <bpf@vger.kernel.org>; Mon, 24 Feb 2020 05:59:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=HsNww3eoGF597P4AbuzJSPTd6DaevE09nhmftcgasMo=;
-        b=ltBuCrF4FNh5l3PCkUMpAYISca6TS4xx1L529XkEj9hw31ZkZQJk8KkRU1AhLVJ3Vk
-         fEBEVdM/yC6+hMzm7796DoZEkn3bsQSh45bRS/inI5uGdDZMKXPnqkm8iJY5fzDY1v69
-         5MzejOvrNfkvcGQkPUBz99Ecp0CT0ESKlATO0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=HsNww3eoGF597P4AbuzJSPTd6DaevE09nhmftcgasMo=;
-        b=UUMKa27U5tu56CidLL3enhVH1YZzi6CQk/r+4mGg0AX9eG+5z5d+g+BMuFSeCm47lp
-         S7LhjiCsJFuB3pv4NGfQJwqQtFhACU5pasB7jcrAsaaoeVQUoo9/m1vNOuZvYPGjMQX9
-         lGat86Y/nXy2m6SzIOleYRd+QWY0QtqI+yyHh6NF4TNjykDQ+cj3ejHBB1hGvKtvlTXj
-         hhdPxwcp4XSZCY6lM7AP3V035itWSrwuZL4yzTPw7cqcPOOB882LIEBSdOaARq5rqWKo
-         2AP+S+SvYylmFuwsHQjAWcmc+xCfZZ9kZElhQJSohtAYqvepkTzRcfimFFzu2LDjGB9x
-         rXuw==
-X-Gm-Message-State: APjAAAXI9p9ovpJwx89CDk8dnar/ax4AFbA+P63UEy/XZRCnUGepPOIV
-        IB7zp8tlfMxz+mQn/rBDfATjLw==
-X-Google-Smtp-Source: APXvYqwrwDrg4IYw+IWldpEdEG8zpipOCRzr3q8Z9sxRRdsSGp801SlRA8j64EekvCxqlhbNP8wVtw==
-X-Received: by 2002:a5d:56ca:: with SMTP id m10mr69483615wrw.313.1582552769884;
-        Mon, 24 Feb 2020 05:59:29 -0800 (PST)
-Received: from cloudflare.com ([176.221.114.230])
-        by smtp.gmail.com with ESMTPSA id n13sm18776323wmd.21.2020.02.24.05.59.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2020 05:59:29 -0800 (PST)
-References: <20200218171023.844439-1-jakub@cloudflare.com> <c86784f5-ef2c-cfd6-cb75-a67af7e11c3c@iogearbox.net> <CAADnVQJrsfpsT47SqyCTM6=MSkeMESZACZR12Kx+0kRGBnRbvg@mail.gmail.com> <87d0a668an.fsf@cloudflare.com> <20200223214329.2djcyztfze3d34g5@ast-mbp>
-User-agent: mu4e 1.1.0; emacs 26.3
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>, Martin Lau <kafai@fb.com>
-Subject: Re: [PATCH bpf-next v7 00/11] Extend SOCKMAP/SOCKHASH to store listening sockets
-In-reply-to: <20200223214329.2djcyztfze3d34g5@ast-mbp>
-Date:   Mon, 24 Feb 2020 14:59:28 +0100
-Message-ID: <87ftf0cchr.fsf@cloudflare.com>
+        id S1727954AbgBXPDX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Feb 2020 10:03:23 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:50205 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727885AbgBXPDW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Feb 2020 10:03:22 -0500
+Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1j6FFs-0004sW-6V; Mon, 24 Feb 2020 16:02:44 +0100
+Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id B2A2E104092;
+        Mon, 24 Feb 2020 16:02:42 +0100 (CET)
+Message-Id: <20200224145643.583038889@linutronix.de>
+User-Agent: quilt/0.65
+Date:   Mon, 24 Feb 2020 15:01:42 +0100
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sebastian Sewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Clark Williams <williams@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [patch V3 11/22] bpf: Replace cant_sleep() with cant_migrate()
+References: <20200224140131.461979697@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Feb 23, 2020 at 10:43 PM CET, Alexei Starovoitov wrote:
-> On Sat, Feb 22, 2020 at 01:49:52PM +0000, Jakub Sitnicki wrote:
->> Hi Alexei,
->> 
->> On Sat, Feb 22, 2020 at 12:47 AM GMT, Alexei Starovoitov wrote:
->> > On Fri, Feb 21, 2020 at 1:41 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->> >>
->> >> On 2/18/20 6:10 PM, Jakub Sitnicki wrote:
->> >> > This patch set turns SOCK{MAP,HASH} into generic collections for TCP
->> >> > sockets, both listening and established. Adding support for listening
->> >> > sockets enables us to use these BPF map types with reuseport BPF programs.
->> >> >
->> >> > Why? SOCKMAP and SOCKHASH, in comparison to REUSEPORT_SOCKARRAY, allow the
->> >> > socket to be in more than one map at the same time.
->> >> >
->> >> > Having a BPF map type that can hold listening sockets, and gracefully
->> >> > co-exist with reuseport BPF is important if, in the future, we want
->> >> > BPF programs that run at socket lookup time [0]. Cover letter for v1 of
->> >> > this series tells the full story of how we got here [1].
->> >> >
->> >> > Although SOCK{MAP,HASH} are not a drop-in replacement for SOCKARRAY just
->> >> > yet, because UDP support is lacking, it's a step in this direction. We're
->> >> > working with Lorenz on extending SOCK{MAP,HASH} to hold UDP sockets, and
->> >> > expect to post RFC series for sockmap + UDP in the near future.
->> >> >
->> >> > I've dropped Acks from all patches that have been touched since v6.
->> >> >
->> >> > The audit for missing READ_ONCE annotations for access to sk_prot is
->> >> > ongoing. Thus far I've found one location specific to TCP listening sockets
->> >> > that needed annotating. This got fixed it in this iteration. I wonder if
->> >> > sparse checker could be put to work to identify places where we have
->> >> > sk_prot access while not holding sk_lock...
->> >> >
->> >> > The patch series depends on another one, posted earlier [2], that has been
->> >> > split out of it.
->> >> >
->> >> > Thanks,
->> >> > jkbs
->> >> >
->> >> > [0] https://lore.kernel.org/bpf/20190828072250.29828-1-jakub@cloudflare.com/
->> >> > [1] https://lore.kernel.org/bpf/20191123110751.6729-1-jakub@cloudflare.com/
->> >> > [2] https://lore.kernel.org/bpf/20200217121530.754315-1-jakub@cloudflare.com/
->> >> >
->> >> > v6 -> v7:
->> >> >
->> >> > - Extended the series to cover SOCKHASH. (patches 4-8, 10-11) (John)
->> >> >
->> >> > - Rebased onto recent bpf-next. Resolved conflicts in recent fixes to
->> >> >    sk_state checks on sockmap/sockhash update path. (patch 4)
->> >> >
->> >> > - Added missing READ_ONCE annotation in sock_copy. (patch 1)
->> >> >
->> >> > - Split out patches that simplify sk_psock_restore_proto [2].
->> >>
->> >> Applied, thanks!
->> >
->> > Jakub,
->> >
->> > what is going on here?
->> > # test_progs -n 40
->> > #40 select_reuseport:OK
->> > Summary: 1/126 PASSED, 30 SKIPPED, 0 FAILED
->> >
->> > Does it mean nothing was actually tested?
->> > I really don't like to see 30 skipped tests.
->> > Is it my environment?
->> > If so please make them hard failures.
->> > I will fix whatever I need to fix in my setup.
->> 
->> The UDP tests for sock{map,hash} are marked as skipped, because UDP
->> support is not implemented yet. Sorry for the confusion.
->> 
->> Having read the recent thread about BPF selftests [0] I now realize that
->> this is not the best idea. It sends the wrong signal to the developer.
->> 
->> I propose to exclude the UDP tests w/ sock{map,hash} by not registering
->> them with test__start_subtest at all. Failing them would indicate a
->> regression, which is not true. While skipping them points to a potential
->> problem with the test environment, which isn't true, either.
->
-> So the tests are ready, but kernel support is missing?
+As already discussed in the previous change which introduced
+BPF_RUN_PROG_PIN_ON_CPU() BPF only requires to disable migration to
+guarantee per CPUness.
 
-Yes, correct.
+If RT substitutes the preempt disable based migration protection then the
+cant_sleep() check will obviously trigger as preemption is not disabled.
 
-> Please don't run those tests then since they're guaranteed to fail atm.
+Replace it by cant_migrate() which maps to cant_sleep() on a non RT kernel
+and will verify that migration is disabled on a full RT kernel.
 
-Just posted [0] to rectify this situation.
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ include/linux/filter.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[0] https://lore.kernel.org/bpf/20200224135327.121542-1-jakub@cloudflare.com/T/#t
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -561,7 +561,7 @@ DECLARE_STATIC_KEY_FALSE(bpf_stats_enabl
+ 
+ #define __BPF_PROG_RUN(prog, ctx, dfunc)	({			\
+ 	u32 ret;							\
+-	cant_sleep();							\
++	cant_migrate();							\
+ 	if (static_branch_unlikely(&bpf_stats_enabled_key)) {		\
+ 		struct bpf_prog_stats *stats;				\
+ 		u64 start = sched_clock();				\
+
