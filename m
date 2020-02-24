@@ -2,33 +2,33 @@ Return-Path: <SRS0=zUS/=4M=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C203FC11D34
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:05:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8A5AC11D2F
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:05:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 99F5920838
-	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:05:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B857E20838
+	for <bpf@archiver.kernel.org>; Mon, 24 Feb 2020 15:05:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727895AbgBXPDW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Feb 2020 10:03:22 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:50196 "EHLO
+        id S1727832AbgBXPDU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Feb 2020 10:03:20 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:50176 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727498AbgBXPDV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Feb 2020 10:03:21 -0500
+        with ESMTP id S1726762AbgBXPDU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Feb 2020 10:03:20 -0500
 Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1j6FFu-0004v8-Iz; Mon, 24 Feb 2020 16:02:46 +0100
+        id 1j6FFo-0004s1-Lj; Mon, 24 Feb 2020 16:02:40 +0100
 Received: from nanos.tec.linutronix.de (localhost [IPv6:::1])
-        by nanos.tec.linutronix.de (Postfix) with ESMTP id 28A4B104090;
-        Mon, 24 Feb 2020 16:02:43 +0100 (CET)
-Message-Id: <20200224145643.785306549@linutronix.de>
+        by nanos.tec.linutronix.de (Postfix) with ESMTP id 4EDAFFFB71;
+        Mon, 24 Feb 2020 16:02:40 +0100 (CET)
+Message-Id: <20200224140131.461979697@linutronix.de>
 User-Agent: quilt/0.65
-Date:   Mon, 24 Feb 2020 15:01:44 +0100
+Date:   Mon, 24 Feb 2020 15:01:31 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
@@ -43,82 +43,72 @@ Cc:     David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Vinicius Costa Gomes <vinicius.gomes@intel.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [patch V3 13/22] bpf/tests: Use migrate disable instead of preempt disable
-References: <20200224140131.461979697@linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Subject: [patch V3 00/22] bpf: Make BPF and PREEMPT_RT co-exist
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: David Miller <davem@davemloft.net>
+Hi!
 
-Replace the preemption disable/enable with migrate_disable/enable() to
-reflect the actual requirement and to allow PREEMPT_RT to substitute it
-with an actual migration disable mechanism which does not disable
-preemption.
+This is the third version of the BPF/RT patch set which makes both coexist
+nicely. The long explanation can be found in the cover letter of the V1
+submission:
 
-[ tglx: Switched it over to migrate disable ]
+  https://lore.kernel.org/r/20200214133917.304937432@linutronix.de
 
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+V2 is here:
 
+  https://lore.kernel.org/r/20200220204517.863202864@linutronix.de
+
+The following changes vs. V2 have been made:
+
+  - Rebased to bpf-next, adjusted to the lock changes in the hashmap code.
+
+  - Split the preallocation enforcement patch for instrumentation type BPF
+    programs into two pieces:
+
+    1) Emit a one-time warning on !RT kernels when any instrumentation type
+       BPF program uses run-time allocation. Emit also a corresponding
+       warning in the verifier log. But allow the program to run for
+       backward compatibility sake. After a grace period this should be
+       enforced.
+
+    2) On RT reject such programs because on RT the memory allocator cannot
+       be called from truly atomic contexts.
+       
+  - Fixed the fallout from V2 as reported by Alexei and 0-day
+
+  - Removed the redundant preempt_disable() from trace_call_bpf()
+
+  - Removed the unused export of trace_call_bpf()
+
+The series applies on top of:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+
+Selftest result:
+  # Summary: 1580 PASSED, 0 SKIPPED, 0 FAILED
+
+Thanks,
+
+	tglx
 ---
- lib/test_bpf.c     |    4 ++--
- net/bpf/test_run.c |    8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -6660,14 +6660,14 @@ static int __run_one(const struct bpf_pr
- 	u64 start, finish;
- 	int ret = 0, i;
- 
--	preempt_disable();
-+	migrate_disable();
- 	start = ktime_get_ns();
- 
- 	for (i = 0; i < runs; i++)
- 		ret = BPF_PROG_RUN(fp, data);
- 
- 	finish = ktime_get_ns();
--	preempt_enable();
-+	migrate_enable();
- 
- 	*duration = finish - start;
- 	do_div(*duration, runs);
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -37,7 +37,7 @@ static int bpf_test_run(struct bpf_prog
- 		repeat = 1;
- 
- 	rcu_read_lock();
--	preempt_disable();
-+	migrate_disable();
- 	time_start = ktime_get_ns();
- 	for (i = 0; i < repeat; i++) {
- 		bpf_cgroup_storage_set(storage);
-@@ -54,18 +54,18 @@ static int bpf_test_run(struct bpf_prog
- 
- 		if (need_resched()) {
- 			time_spent += ktime_get_ns() - time_start;
--			preempt_enable();
-+			migrate_enable();
- 			rcu_read_unlock();
- 
- 			cond_resched();
- 
- 			rcu_read_lock();
--			preempt_disable();
-+			migrate_disable();
- 			time_start = ktime_get_ns();
- 		}
- 	}
- 	time_spent += ktime_get_ns() - time_start;
--	preempt_enable();
-+	migrate_enable();
- 	rcu_read_unlock();
- 
- 	do_div(time_spent, repeat);
-
+ include/linux/bpf.h          |   38 ++++++++-
+ include/linux/filter.h       |   37 +++++++--
+ kernel/bpf/hashtab.c         |  172 ++++++++++++++++++++++++++++++-------------
+ kernel/bpf/lpm_trie.c        |   12 +--
+ kernel/bpf/percpu_freelist.c |   20 ++---
+ kernel/bpf/stackmap.c        |   18 +++-
+ kernel/bpf/syscall.c         |   27 ++----
+ kernel/bpf/trampoline.c      |    9 +-
+ kernel/bpf/verifier.c        |   40 +++++++---
+ kernel/events/core.c         |    2 
+ kernel/seccomp.c             |    4 -
+ kernel/trace/bpf_trace.c     |    7 -
+ lib/test_bpf.c               |    4 -
+ net/bpf/test_run.c           |    8 +-
+ net/core/flow_dissector.c    |    4 -
+ net/core/skmsg.c             |    8 --
+ net/kcm/kcmsock.c            |    4 -
+ 17 files changed, 274 insertions(+), 140 deletions(-)
