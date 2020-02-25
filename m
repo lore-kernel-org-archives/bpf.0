@@ -2,198 +2,89 @@ Return-Path: <SRS0=/C52=4N=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BDD8C35E01
-	for <bpf@archiver.kernel.org>; Tue, 25 Feb 2020 19:45:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E12B0C35E15
+	for <bpf@archiver.kernel.org>; Tue, 25 Feb 2020 20:54:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3CC0221927
-	for <bpf@archiver.kernel.org>; Tue, 25 Feb 2020 19:45:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A684C222C2
+	for <bpf@archiver.kernel.org>; Tue, 25 Feb 2020 20:54:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="UoHTD/6+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730968AbgBYTo7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Feb 2020 14:44:59 -0500
-Received: from mx2.suse.de ([195.135.220.15]:55608 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728051AbgBYTo6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Feb 2020 14:44:58 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 4B623AFCD;
-        Tue, 25 Feb 2020 19:44:56 +0000 (UTC)
-From:   Michal Rostecki <mrostecki@opensuse.org>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v3 2/5] bpftool: Make probes which emit dmesg warnings optional
-Date:   Tue, 25 Feb 2020 20:44:40 +0100
-Message-Id: <20200225194446.20651-3-mrostecki@opensuse.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200225194446.20651-1-mrostecki@opensuse.org>
-References: <20200225194446.20651-1-mrostecki@opensuse.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1729382AbgBYUyp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Feb 2020 15:54:45 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:42791 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728654AbgBYUyp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Feb 2020 15:54:45 -0500
+Received: by mail-wr1-f67.google.com with SMTP id p18so300672wre.9
+        for <bpf@vger.kernel.org>; Tue, 25 Feb 2020 12:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=28TDunclJ0ED67dbx8CkZqbh/7wdN9qJRWSOtwdsi1s=;
+        b=UoHTD/6+hk2QYtP059qZLw3RRZ16mc3CjCh2ZZwsu0a7xHxNMua3zoubg3FnJlMpfT
+         h9ft7NT72oICgPc9WavKnXNoQg4dLsDOs92lfQDDJOEaG24d44X339XfYqFwcRKl1+hz
+         FaPA+pFgOHmZtoFQij9N6yoY6Gloe1pEwStUk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=28TDunclJ0ED67dbx8CkZqbh/7wdN9qJRWSOtwdsi1s=;
+        b=fO5R5omWRNjHOHQk/W56G6vGxnRH8BfSKderaJuulfbF7fW6uvPNszxZop9K7cVGf/
+         qp0WgsNRz9AS8y/cuCtxZ0mrX7UZ16sSwQf8W59DP/VC3bE5hR+LAEdpCTXmTE0gv7ve
+         oQKTdnWQ2939AEbAZnDuSL0+gHjSji9PsVV2ix9IF0yTA7817jrgVrV6P6rfQf/2NUEm
+         4RrkQTvsRbvbR7NDpjUGid+4Sh4FZj2oz2To1RaoPFxCMOri7PIr6RSzfgdBEwUvxwds
+         VjeDijH33cU2XRNyD5Axu8JbQCXJfXibTONyexgkKd4FAHuj8pMSse82JE8SzcM4U0kF
+         weiQ==
+X-Gm-Message-State: APjAAAXrpMaRgOE26YnqPuIJVvSHoNGyY1O7lN/js3+UqYXVq56UX1Zx
+        9ZqipRumWjB/RB3bBFD/IQPwPlRnOsEFUonV
+X-Google-Smtp-Source: APXvYqxs5Dht7wCnHgNaDyHKMXo95ql8ZEwhG4lxizSll22ZJBzPc0J3TZ9jyuOGIAHL1lrfaQwGNg==
+X-Received: by 2002:adf:de0b:: with SMTP id b11mr932096wrm.89.1582664082855;
+        Tue, 25 Feb 2020 12:54:42 -0800 (PST)
+Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id t13sm104852wrw.19.2020.02.25.12.54.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Feb 2020 12:54:42 -0800 (PST)
+From:   Scott Branden <scott.branden@broadcom.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Scott Branden <scott.branden@broadcom.com>
+Subject: [PATCH] scripts/bpf: switch to more portable python3 shebang
+Date:   Tue, 25 Feb 2020 12:54:26 -0800
+Message-Id: <20200225205426.6975-1-scott.branden@broadcom.com>
+X-Mailer: git-send-email 2.17.1
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Probes related to bpf_probe_write_user and bpf_trace_printk helpers emit
-dmesg warnings which might be confusing for people running bpftool on
-production environments. This change filters them out by default and
-introduces the new positional argument "full" which enables all
-available probes.
+Change "/usr/bin/python3" to "/usr/bin/env python3" for
+more portable solution in bpf_helpers_doc.py.
 
-Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
+Signed-off-by: Scott Branden <scott.branden@broadcom.com>
 ---
- tools/bpf/bpftool/feature.c | 70 ++++++++++++++++++++++++++-----------
- 1 file changed, 49 insertions(+), 21 deletions(-)
+ scripts/bpf_helpers_doc.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-index 345e4a2b4f53..ada3e1502b45 100644
---- a/tools/bpf/bpftool/feature.c
-+++ b/tools/bpf/bpftool/feature.c
-@@ -513,14 +513,39 @@ probe_map_type(enum bpf_map_type map_type, const char *define_prefix,
- 			   define_prefix);
- }
- 
-+static void
-+probe_helper_for_progtype(enum bpf_prog_type prog_type, bool supported_type,
-+			  const char *define_prefix, unsigned int id,
-+			  const char *ptype_name, __u32 ifindex)
-+{
-+	bool res;
-+
-+	if (!supported_type)
-+		res = false;
-+	else
-+		res = bpf_probe_helper(id, prog_type, ifindex);
-+
-+	if (json_output) {
-+		if (res)
-+			jsonw_string(json_wtr, helper_name[id]);
-+	} else if (define_prefix) {
-+		printf("#define %sBPF__PROG_TYPE_%s__HELPER_%s %s\n",
-+		       define_prefix, ptype_name, helper_name[id],
-+		       res ? "1" : "0");
-+	} else {
-+		if (res)
-+			printf("\n\t- %s", helper_name[id]);
-+	}
-+}
-+
- static void
- probe_helpers_for_progtype(enum bpf_prog_type prog_type, bool supported_type,
--			   const char *define_prefix, __u32 ifindex)
-+			   const char *define_prefix, bool full_mode,
-+			   __u32 ifindex)
- {
- 	const char *ptype_name = prog_type_name[prog_type];
- 	char feat_name[128];
- 	unsigned int id;
--	bool res;
- 
- 	if (ifindex)
- 		/* Only test helpers for offload-able program types */
-@@ -542,21 +567,19 @@ probe_helpers_for_progtype(enum bpf_prog_type prog_type, bool supported_type,
- 	}
- 
- 	for (id = 1; id < ARRAY_SIZE(helper_name); id++) {
--		if (!supported_type)
--			res = false;
--		else
--			res = bpf_probe_helper(id, prog_type, ifindex);
--
--		if (json_output) {
--			if (res)
--				jsonw_string(json_wtr, helper_name[id]);
--		} else if (define_prefix) {
--			printf("#define %sBPF__PROG_TYPE_%s__HELPER_%s %s\n",
--			       define_prefix, ptype_name, helper_name[id],
--			       res ? "1" : "0");
--		} else {
--			if (res)
--				printf("\n\t- %s", helper_name[id]);
-+		/* Skip helper functions which emit dmesg messages when not in
-+		 * the full mode.
-+		 */
-+		switch (id) {
-+		case 6: /* trace_printk */
-+		case 36: /* probe_write_user */
-+			if (!full_mode)
-+				continue;
-+			/* fallthrough */
-+		default:
-+			probe_helper_for_progtype(prog_type, supported_type,
-+						  define_prefix, id, ptype_name,
-+						  ifindex);
- 		}
- 	}
- 
-@@ -655,7 +678,8 @@ static void section_map_types(const char *define_prefix, __u32 ifindex)
- }
- 
- static void
--section_helpers(bool *supported_types, const char *define_prefix, __u32 ifindex)
-+section_helpers(bool *supported_types, const char *define_prefix,
-+		bool full_mode, __u32 ifindex)
- {
- 	unsigned int i;
- 
-@@ -681,7 +705,7 @@ section_helpers(bool *supported_types, const char *define_prefix, __u32 ifindex)
- 		       define_prefix);
- 	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
- 		probe_helpers_for_progtype(i, supported_types[i],
--					   define_prefix, ifindex);
-+					   define_prefix, full_mode, ifindex);
- 
- 	print_end_section();
- }
-@@ -701,6 +725,7 @@ static int do_probe(int argc, char **argv)
- 	enum probe_component target = COMPONENT_UNSPEC;
- 	const char *define_prefix = NULL;
- 	bool supported_types[128] = {};
-+	bool full_mode = false;
- 	__u32 ifindex = 0;
- 	char *ifname;
- 
-@@ -740,6 +765,9 @@ static int do_probe(int argc, char **argv)
- 				      strerror(errno));
- 				return -1;
- 			}
-+		} else if (is_prefix(*argv, "full")) {
-+			full_mode = true;
-+			NEXT_ARG();
- 		} else if (is_prefix(*argv, "macros") && !define_prefix) {
- 			define_prefix = "";
- 			NEXT_ARG();
-@@ -775,7 +803,7 @@ static int do_probe(int argc, char **argv)
- 		goto exit_close_json;
- 	section_program_types(supported_types, define_prefix, ifindex);
- 	section_map_types(define_prefix, ifindex);
--	section_helpers(supported_types, define_prefix, ifindex);
-+	section_helpers(supported_types, define_prefix, full_mode, ifindex);
- 	section_misc(define_prefix, ifindex);
- 
- exit_close_json:
-@@ -794,7 +822,7 @@ static int do_help(int argc, char **argv)
- 	}
- 
- 	fprintf(stderr,
--		"Usage: %s %s probe [COMPONENT] [macros [prefix PREFIX]]\n"
-+		"Usage: %s %s probe [COMPONENT] [full] [macros [prefix PREFIX]]\n"
- 		"       %s %s help\n"
- 		"\n"
- 		"       COMPONENT := { kernel | dev NAME }\n"
+diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
+index 90baf7d70911..cebed6fb5bbb 100755
+--- a/scripts/bpf_helpers_doc.py
++++ b/scripts/bpf_helpers_doc.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python3
++#!/usr/bin/env python3
+ # SPDX-License-Identifier: GPL-2.0-only
+ #
+ # Copyright (C) 2018-2019 Netronome Systems, Inc.
 -- 
-2.25.1
+2.17.1
 
