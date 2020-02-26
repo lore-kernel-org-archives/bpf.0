@@ -1,564 +1,227 @@
-Return-Path: <SRS0=/C52=4N=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=7UPC=4O=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2250DC4BA06
-	for <bpf@archiver.kernel.org>; Tue, 25 Feb 2020 23:04:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16D39C4BA09
+	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 00:30:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D7BC020838
-	for <bpf@archiver.kernel.org>; Tue, 25 Feb 2020 23:04:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D4BD021D7E
+	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 00:30:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fXql2irz"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="soZ1hb4B"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729382AbgBYXEi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Feb 2020 18:04:38 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18004 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729169AbgBYXEh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 25 Feb 2020 18:04:37 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01PMt83W000646
-        for <bpf@vger.kernel.org>; Tue, 25 Feb 2020 15:04:34 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=77qdx8kZlVArBTIp25wJ3IVHE6t0XHkIF0fCbhfXlRg=;
- b=fXql2irzSiedDCuGiq3aAI63v+ECeY/yXI6oVne7KE1lXAQIwUqwLEpM/s+x97ViE8Ov
- MiC1qaRsJqcMqbilz8uXJIi0cKGCbZdh/sjCSb2E8gDFZPZtxmrNpil+tYISg1evb8Vl
- 0fmrxs/Kroo++HG4Q5jlzeTBDjA7VKvWSpI= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2ydcj0r3gf-14
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 25 Feb 2020 15:04:34 -0800
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Tue, 25 Feb 2020 15:04:24 -0800
-Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id B41BB2940827; Tue, 25 Feb 2020 15:04:21 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Martin KaFai Lau <kafai@fb.com>
-Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 3/4] bpf: INET_DIAG support in bpf_sk_storage
-Date:   Tue, 25 Feb 2020 15:04:21 -0800
-Message-ID: <20200225230421.1975729-1-kafai@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200225230402.1974723-1-kafai@fb.com>
-References: <20200225230402.1974723-1-kafai@fb.com>
-X-FB-Internal: Safe
+        id S1729065AbgBZAay (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Feb 2020 19:30:54 -0500
+Received: from sonic315-27.consmr.mail.ne1.yahoo.com ([66.163.190.153]:45996
+        "EHLO sonic315-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729376AbgBZAap (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 25 Feb 2020 19:30:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1582677043; bh=8RRtcuYum8ovdHNN06sxqW2J5odMVOW8xNFE4vMX4DA=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=soZ1hb4Br6OuS3IoJXPXQY76/nU8NjxFJoHjojsUeiM/1WOKxK4uR6/K07f3Q2smwitJ3B8YqhugKA4DVaYF4RGDF7bQRv3dLRmmW6IN/o882Hhn8EM11fioBLkuAvbW0PZh6ZaXElhE/QK9OpHawzOwwXRVGFATozb/0zAUBMJGWnSWeL5V5p4mYfP7vwUOdX15N8/MWYXqsm5UiV2iE599FcfhVMMTpnECg2GKRxMizYA0nERzfVi9MUGWJr/F+d53/btsafJNajOomZz+0Ez3dKwpdzSkvHAasKltLmOUO1xYyQoP/mjWkLAGuwWGKVWk7eHP1KGfMhv9yhGlvg==
+X-YMail-OSG: eZDYETgVM1kY8ZOHZprUzvTnIHDKLBO86FGQjgcrXb8KeSSxxhuCAyTMqrNmhtf
+ DxKxxC9wfxjClsyAxumzJaYYsBhooCwtNiibcg6oSlKknuizXRb.LGmyucLbG_bXndK2gl8JAVco
+ X8HO0_wNNtTrLs_ipvT8Q9TlZ0V59IalXsR353MwBiswIrdyM.oRuX2k5a20eA6MFtxIB3FCIIb7
+ 7YyKTql06AwsaQjx2M1OrfPP5XUlMpSXiW_NocIeyu.Qe89lbrCo6oJCF6fz4FttFmVFGlT5jbkt
+ 0Y_HpNqSopkzvGGMfcCTJA.ueEu_HaYbdMTWKqtxQqcmtPy2nFBj4k1t8gzarPMMkTvStEeF.z7.
+ fZskD9PT5FtUXOzcLLp7MBWe5O5tfKivhgNZPN6stzgsEZBVtWrf_r4h3.CcJZGIOq2ZrrI90xo5
+ 2plwjfYgTnhkilLd5vpMH6NVqD8Vaqpsd7Fa3nC3plm6PMcUA_q.XB8otnFdcoRsRFlWnPYSgfzq
+ tDLhw_ZJWU8iNDFIxE6Q8nkysCxc1sxflOGNbIbf.Nm7uVtLVn0roteDC4O__vBlTD_jD1CUS2zf
+ 7_M4lP3BwgH6riDMIrdMiN7ZmLGas4a.hAhcGbVH33kfmL6ZA7WlAIMbGI8HVB.CAdrmdgshuZRY
+ c4js066k1zkTMyH2_fIF2n_nTFCG4Y4su8n83Ir538f1oX32P4WJiq4rVoLFaKw5WBdgCwc1ygWD
+ PnEW1taX9akdGMZyQDetcXnkfxE9OEF4KbnBUl7U6ZD8albEukd7x7wj39fWMa8DRoUvbUoNU8e7
+ ujqaV4GrFHnrVGx9ZbufZITTt1KrBMyT7OMgeJhryPB8XxdIy0KNdwJIi65J9JRQfI.C6DcvQCRj
+ FLYNS1quSM8a.C4HEYUw0KhHqxQJnSULw5VRfjE3Q_DsGs5hVcr5kTz7WfuWGiMrI1KZtXXhVswS
+ EpUUr7wFJLnYoULWI0zsAo6OjzBzm5F0LC7pomCBv4Pv_vUvHevYUbBbuqJcuyyh28OT0yMaRC16
+ CvY_CX2QfetyFtwMKq26xADxGMLqnaWfnm0cU9njp1QbarB6Njjkm8zTwwVvZ.9KOmdPzjCt5bLH
+ zq3.rf9drLCAGt.Aiz52ZITyR30t.3bOt6O.PWs3ZOXQ4VjcrX7NQwM.eyUpPtvzYAV4TkyylFtb
+ CNyTdtXnSbVF9QfZpBL6vvPkrWCH2GxEn3CdkbyfHUTcGRIycimW.iEHZbw0zz9dfQJ0m.jAcExQ
+ MBgBgYUu_.Vq6G6iExqPAA1aUlnvg7Kzrfb.Ie4n9dFdlQm60uYViY6ZDjraFoiUVvGuM_475HGA
+ opF3iOododssDi4xi0aooaQUZvYWYEUwshz0EwaUHgnmm8o5suwN1ZX7elsHYo5_ZVOGVAemZdOa
+ ryvQrck62PxrO5cPpgsfIGwHzw5oauK5xINB0Et1nAWiJReV684Gkws_ObH7UnxvgfcbkRADnUK7
+ 1dJ73DpFre.6_lH5TAKyiY7GjXiMzaSdIll9lAk_sPVODaOU77blQRzPCDys-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Wed, 26 Feb 2020 00:30:43 +0000
+Received: by smtp404.mail.ne1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID bf027b62544540883a33b875121270dc;
+          Wed, 26 Feb 2020 00:30:42 +0000 (UTC)
+Subject: Re: [PATCH bpf-next v4 3/8] bpf: lsm: provide attachment points for
+ BPF LSM programs
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     KP Singh <kpsingh@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        James Morris <jmorris@namei.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
+References: <20200220175250.10795-1-kpsingh@chromium.org>
+ <20200220175250.10795-4-kpsingh@chromium.org>
+ <0ef26943-9619-3736-4452-fec536a8d169@schaufler-ca.com>
+ <202002211946.A23A987@keescook> <20200223220833.wdhonzvven7payaw@ast-mbp>
+ <c5c67ece-e5c1-9e8f-3a2b-60d8d002c894@schaufler-ca.com>
+ <20200224171305.GA21886@chromium.org>
+ <00c216e1-bcfd-b7b1-5444-2a2dfa69190b@schaufler-ca.com>
+ <202002241136.C4F9F7DFF@keescook> <20200225054125.dttrc3fvllzu4mx5@ast-mbp>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Autocrypt: addr=casey@schaufler-ca.com; keydata=
+ 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
+ abzjfg==
+Message-ID: <4b56177f-8148-177b-e1e5-c98da86b3b01@schaufler-ca.com>
+Date:   Tue, 25 Feb 2020 16:30:42 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-25_09:2020-02-25,2020-02-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 spamscore=0
- bulkscore=0 lowpriorityscore=0 suspectscore=43 phishscore=0 clxscore=1015
- impostorscore=0 priorityscore=1501 malwarescore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002250161
-X-FB-Internal: deliver
+In-Reply-To: <20200225054125.dttrc3fvllzu4mx5@ast-mbp>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Mailer: WebService/1.1.15302 hermes Apache-HttpAsyncClient/4.1.4 (Java/1.8.0_241)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds INET_DIAG support to bpf_sk_storage.
+On 2/24/2020 9:41 PM, Alexei Starovoitov wrote:
+> On Mon, Feb 24, 2020 at 01:41:19PM -0800, Kees Cook wrote:
+>> But the LSM subsystem doesn't want special cases (Casey has worked ver=
+y
+>> hard to generalize everything there for stacking). It is really hard t=
+o
+>> accept adding a new special case when there are still special cases ye=
+t
+>> to be worked out even in the LSM code itself[2].
+>> [2] Casey's work to generalize the LSM interfaces continues and it qui=
+te
+>> complex:
+>> https://lore.kernel.org/linux-security-module/20200214234203.7086-1-ca=
+sey@schaufler-ca.com/
+> I think the key mistake we made is that we classified KRSI as LSM.
+> LSM stacking, lsmblobs that the above set is trying to do are not neces=
+sary for KRSI.
+> I don't see anything in LSM infra that KRSI can reuse.
+> The only thing BPF needs is a function to attach to.
+> It can be a nop function or any other.
+> security_*() functions are interesting from that angle only.
+> Hence I propose to reconsider what I was suggesting earlier.
+> No changes to secruity/ directory.
+> Attach to security_*() funcs via bpf trampoline.
+> The key observation vs what I was saying earlier is KRSI and LSM are wr=
+ong names.
+> I think "security" is also loaded word that should be avoided.
 
-1. Although this series adds bpf_sk_storage diag capability to inet sk,
-   bpf_sk_storage is in general applicable to all fullsock.  Hence, the
-   bpf_sk_storage logic will operate on SK_DIAG_* nlattr.  The caller
-   will pass in its specific nesting nlattr (e.g. INET_DIAG_*) as
-   the argument.
+No argument there.
 
-2. The request will be like:
-	INET_DIAG_REQ_SK_BPF_STORAGES (nla_nest) (defined in latter patch)
-		SK_DIAG_BPF_STORAGE_REQ_MAP_FD (nla_put_u32)
-		SK_DIAG_BPF_STORAGE_REQ_MAP_FD (nla_put_u32)
-		......
+> I'm proposing to rename BPF_PROG_TYPE_LSM into BPF_PROG_TYPE_OVERRIDE_R=
+ETURN.
+>
+>> So, unless James is going to take this over Casey's objections, the pa=
+th
+>> forward I see here is:
+>>
+>> - land a "slow" KRSI (i.e. one that hooks every hook with a stub).
+>> - optimize calling for all LSMs
+> I'm very much surprised how 'slow' KRSI is an option at all.
+> 'slow' KRSI means that CONFIG_SECURITY_KRSI=3Dy adds indirect calls to =
+nop
+> functions for every place in the kernel that calls security_*().
+> This is not an acceptable overhead. Even w/o retpoline
+> this is not something datacenter servers can use.
 
-   Considering there could have multiple bpf_sk_storages in a sk,
-   instead of reusing INET_DIAG_INFO ("ss -i"),  the user can select
-   some specific bpf_sk_storage to dump by specifying an array of
-   SK_DIAG_BPF_STORAGE_REQ_MAP_FD.
+In the universe I live in data centers will disable hyper-threading,
+reducing performance substantially, in the face of hypothetical security
+exploits. That's a massively greater performance impact than the handful
+of instructions required to do indirect calls. Not to mention the impact
+of the BPF programs that have been included. Have you ever looked at what=
 
-   If no SK_DIAG_BPF_STORAGE_REQ_MAP_FD is specified (i.e. an empty
-   INET_DIAG_REQ_SK_BPF_STORAGES), it will dump all bpf_sk_storages
-   of a sk.
+happens to system performance when polkitd is enabled?
 
-3. The reply will be like:
-	INET_DIAG_BPF_SK_STORAGES (nla_nest) (defined in latter patch)
-		SK_DIAG_BPF_STORAGE (nla_nest)
-			SK_DIAG_BPF_STORAGE_MAP_ID (nla_put_u32)
-			SK_DIAG_BPF_STORAGE_MAP_VALUE (nla_reserve_64bit)
-		SK_DIAG_BPF_STORAGE (nla_nest)
-			SK_DIAG_BPF_STORAGE_MAP_ID (nla_put_u32)
-			SK_DIAG_BPF_STORAGE_MAP_VALUE (nla_reserve_64bit)
-		......
 
-4. Unlike other INET_DIAG info of a sk which is pretty static, the size
-   required to dump the bpf_sk_storage(s) of a sk is dynamic as the
-   system adding more bpf_sk_storage_map.  It is hard to set a static
-   min_dump_alloc size.
+>
+> Another option is to do this:
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 64b19f050343..7887ce636fb1 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -240,7 +240,7 @@ static inline const char *kernel_load_data_id_str(e=
+num kernel_load_data_id id)
+>         return kernel_load_data_str[id];
+>  }
+>
+> -#ifdef CONFIG_SECURITY
+> +#if defined(CONFIG_SECURITY) || defined(CONFIG_BPF_OVERRIDE_RETURN)
+>
+> Single line change to security.h and new file kernel/bpf/override_secur=
+ity.c
+> that will look like:
+> int security_binder_set_context_mgr(struct task_struct *mgr)
+> {
+>         return 0;
+> }
+>
+> int security_binder_transaction(struct task_struct *from,
+>                                 struct task_struct *to)
+> {
+>         return 0;
+> }
+> Essentially it will provide BPF side with a set of nop functions.
+> CONFIG_SECURITY is off. It may seem as a downside that it will force a =
+choice
+> on kernel users. Either they build the kernel with CONFIG_SECURITY and =
+their
+> choice of LSMs or build the kernel with CONFIG_BPF_OVERRIDE_RETURN and =
+use
+> BPF_PROG_TYPE_OVERRIDE_RETURN programs to enforce any kind of policy. I=
+ think
+> it's a pro not a con.
 
-   Hence, this series learns it at the runtime and adjust the
-   cb->min_dump_alloc as it iterates all sk(s) of a system.  The
-   "unsigned int *res_diag_size" in bpf_sk_storage_diag_put()
-   is for this purpose.
+Err, no. All distros use an LSM or two. Unless you can re-implement SELin=
+ux
+in BPF (good luck with state transitions) you've built a warp drive witho=
+ut
+ever having mined dilithium crystals.
 
-   The next patch will update the cb->min_dump_alloc as it
-   iterates the sk(s).
-
-Acked-by: Song Liu <songliubraving@fb.com>
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
----
- include/linux/bpf.h            |   1 +
- include/net/bpf_sk_storage.h   |  27 ++++
- include/uapi/linux/sock_diag.h |  26 +++
- kernel/bpf/syscall.c           |  15 ++
- net/core/bpf_sk_storage.c      | 283 ++++++++++++++++++++++++++++++++-
- 5 files changed, 346 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 1acd5bf70350..3b6973d4d6d5 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1023,6 +1023,7 @@ void __bpf_free_used_maps(struct bpf_prog_aux *aux,
- void bpf_prog_free_id(struct bpf_prog *prog, bool do_idr_lock);
- void bpf_map_free_id(struct bpf_map *map, bool do_idr_lock);
- 
-+struct bpf_map *bpf_map_get(u32 ufd);
- struct bpf_map *bpf_map_get_with_uref(u32 ufd);
- struct bpf_map *__bpf_map_get(struct fd f);
- void bpf_map_inc(struct bpf_map *map);
-diff --git a/include/net/bpf_sk_storage.h b/include/net/bpf_sk_storage.h
-index 8e4f831d2e52..5036c94c0503 100644
---- a/include/net/bpf_sk_storage.h
-+++ b/include/net/bpf_sk_storage.h
-@@ -10,14 +10,41 @@ void bpf_sk_storage_free(struct sock *sk);
- extern const struct bpf_func_proto bpf_sk_storage_get_proto;
- extern const struct bpf_func_proto bpf_sk_storage_delete_proto;
- 
-+struct bpf_sk_storage_diag;
-+struct sk_buff;
-+struct nlattr;
-+struct sock;
-+
- #ifdef CONFIG_BPF_SYSCALL
- int bpf_sk_storage_clone(const struct sock *sk, struct sock *newsk);
-+struct bpf_sk_storage_diag *
-+bpf_sk_storage_diag_alloc(const struct nlattr *nla_stgs);
-+void bpf_sk_storage_diag_free(struct bpf_sk_storage_diag *diag);
-+int bpf_sk_storage_diag_put(struct bpf_sk_storage_diag *diag,
-+			    struct sock *sk, struct sk_buff *skb,
-+			    int stg_array_type,
-+			    unsigned int *res_diag_size);
- #else
- static inline int bpf_sk_storage_clone(const struct sock *sk,
- 				       struct sock *newsk)
- {
- 	return 0;
- }
-+static inline struct bpf_sk_storage_diag *
-+bpf_sk_storage_diag_alloc(const struct nlattr *nla)
-+{
-+	return NULL;
-+}
-+static inline void bpf_sk_storage_diag_free(struct bpf_sk_storage_diag *diag)
-+{
-+}
-+static inline int bpf_sk_storage_diag_put(struct bpf_sk_storage_diag *diag,
-+					  struct sock *sk, struct sk_buff *skb,
-+					  int stg_array_type,
-+					  unsigned int *res_diag_size)
-+{
-+	return 0;
-+}
- #endif
- 
- #endif /* _BPF_SK_STORAGE_H */
-diff --git a/include/uapi/linux/sock_diag.h b/include/uapi/linux/sock_diag.h
-index e5925009a652..5f74a5f6091d 100644
---- a/include/uapi/linux/sock_diag.h
-+++ b/include/uapi/linux/sock_diag.h
-@@ -36,4 +36,30 @@ enum sknetlink_groups {
- };
- #define SKNLGRP_MAX	(__SKNLGRP_MAX - 1)
- 
-+enum {
-+	SK_DIAG_BPF_STORAGE_REQ_NONE,
-+	SK_DIAG_BPF_STORAGE_REQ_MAP_FD,
-+	__SK_DIAG_BPF_STORAGE_REQ_MAX,
-+};
-+
-+#define SK_DIAG_BPF_STORAGE_REQ_MAX	(__SK_DIAG_BPF_STORAGE_REQ_MAX - 1)
-+
-+enum {
-+	SK_DIAG_BPF_STORAGE_REP_NONE,
-+	SK_DIAG_BPF_STORAGE,
-+	__SK_DIAG_BPF_STORAGE_REP_MAX,
-+};
-+
-+#define SK_DIAB_BPF_STORAGE_REP_MAX	(__SK_DIAG_BPF_STORAGE_REP_MAX - 1)
-+
-+enum {
-+	SK_DIAG_BPF_STORAGE_NONE,
-+	SK_DIAG_BPF_STORAGE_PAD,
-+	SK_DIAG_BPF_STORAGE_MAP_ID,
-+	SK_DIAG_BPF_STORAGE_MAP_VALUE,
-+	__SK_DIAG_BPF_STORAGE_MAX,
-+};
-+
-+#define SK_DIAG_BPF_STORAGE_MAX        (__SK_DIAG_BPF_STORAGE_MAX - 1)
-+
- #endif /* _UAPI__SOCK_DIAG_H__ */
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index a79743a89815..c536c65256ad 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -902,6 +902,21 @@ void bpf_map_inc_with_uref(struct bpf_map *map)
- }
- EXPORT_SYMBOL_GPL(bpf_map_inc_with_uref);
- 
-+struct bpf_map *bpf_map_get(u32 ufd)
-+{
-+	struct fd f = fdget(ufd);
-+	struct bpf_map *map;
-+
-+	map = __bpf_map_get(f);
-+	if (IS_ERR(map))
-+		return map;
-+
-+	bpf_map_inc(map);
-+	fdput(f);
-+
-+	return map;
-+}
-+
- struct bpf_map *bpf_map_get_with_uref(u32 ufd)
- {
- 	struct fd f = fdget(ufd);
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index 3ab23f698221..3415a4896c59 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -8,6 +8,7 @@
- #include <linux/bpf.h>
- #include <net/bpf_sk_storage.h>
- #include <net/sock.h>
-+#include <uapi/linux/sock_diag.h>
- #include <uapi/linux/btf.h>
- 
- static atomic_t cache_idx;
-@@ -606,6 +607,14 @@ static void bpf_sk_storage_map_free(struct bpf_map *map)
- 	kfree(map);
- }
- 
-+/* U16_MAX is much more than enough for sk local storage
-+ * considering a tcp_sock is ~2k.
-+ */
-+#define MAX_VALUE_SIZE							\
-+	min_t(u32,							\
-+	      (KMALLOC_MAX_SIZE - MAX_BPF_STACK - sizeof(struct bpf_sk_storage_elem)), \
-+	      (U16_MAX - sizeof(struct bpf_sk_storage_elem)))
-+
- static int bpf_sk_storage_map_alloc_check(union bpf_attr *attr)
- {
- 	if (attr->map_flags & ~SK_STORAGE_CREATE_FLAG_MASK ||
-@@ -619,12 +628,7 @@ static int bpf_sk_storage_map_alloc_check(union bpf_attr *attr)
- 	if (!capable(CAP_SYS_ADMIN))
- 		return -EPERM;
- 
--	if (attr->value_size >= KMALLOC_MAX_SIZE -
--	    MAX_BPF_STACK - sizeof(struct bpf_sk_storage_elem) ||
--	    /* U16_MAX is much more than enough for sk local storage
--	     * considering a tcp_sock is ~2k.
--	     */
--	    attr->value_size > U16_MAX - sizeof(struct bpf_sk_storage_elem))
-+	if (attr->value_size > MAX_VALUE_SIZE)
- 		return -E2BIG;
- 
- 	return 0;
-@@ -910,3 +914,270 @@ const struct bpf_func_proto bpf_sk_storage_delete_proto = {
- 	.arg1_type	= ARG_CONST_MAP_PTR,
- 	.arg2_type	= ARG_PTR_TO_SOCKET,
- };
-+
-+struct bpf_sk_storage_diag {
-+	u32 nr_maps;
-+	struct bpf_map *maps[];
-+};
-+
-+/* The reply will be like:
-+ * INET_DIAG_BPF_SK_STORAGES (nla_nest)
-+ *	SK_DIAG_BPF_STORAGE (nla_nest)
-+ *		SK_DIAG_BPF_STORAGE_MAP_ID (nla_put_u32)
-+ *		SK_DIAG_BPF_STORAGE_MAP_VALUE (nla_reserve_64bit)
-+ *	SK_DIAG_BPF_STORAGE (nla_nest)
-+ *		SK_DIAG_BPF_STORAGE_MAP_ID (nla_put_u32)
-+ *		SK_DIAG_BPF_STORAGE_MAP_VALUE (nla_reserve_64bit)
-+ *	....
-+ */
-+static int nla_value_size(u32 value_size)
-+{
-+	/* SK_DIAG_BPF_STORAGE (nla_nest)
-+	 *	SK_DIAG_BPF_STORAGE_MAP_ID (nla_put_u32)
-+	 *	SK_DIAG_BPF_STORAGE_MAP_VALUE (nla_reserve_64bit)
-+	 */
-+	return nla_total_size(0) + nla_total_size(sizeof(u32)) +
-+		nla_total_size_64bit(value_size);
-+}
-+
-+void bpf_sk_storage_diag_free(struct bpf_sk_storage_diag *diag)
-+{
-+	u32 i;
-+
-+	if (!diag)
-+		return;
-+
-+	for (i = 0; i < diag->nr_maps; i++)
-+		bpf_map_put(diag->maps[i]);
-+
-+	kfree(diag);
-+}
-+EXPORT_SYMBOL_GPL(bpf_sk_storage_diag_free);
-+
-+static bool diag_check_dup(const struct bpf_sk_storage_diag *diag,
-+			   const struct bpf_map *map)
-+{
-+	u32 i;
-+
-+	for (i = 0; i < diag->nr_maps; i++) {
-+		if (diag->maps[i] == map)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+struct bpf_sk_storage_diag *
-+bpf_sk_storage_diag_alloc(const struct nlattr *nla_stgs)
-+{
-+	struct bpf_sk_storage_diag *diag;
-+	struct nlattr *nla;
-+	u32 nr_maps = 0;
-+	int rem, err;
-+
-+	/* bpf_sk_storage_map is currently limited to CAP_SYS_ADMIN as
-+	 * the map_alloc_check() side also does.
-+	 */
-+	if (!capable(CAP_SYS_ADMIN))
-+		return ERR_PTR(-EPERM);
-+
-+	nla_for_each_nested(nla, nla_stgs, rem) {
-+		if (nla_type(nla) == SK_DIAG_BPF_STORAGE_REQ_MAP_FD)
-+			nr_maps++;
-+	}
-+
-+	diag = kzalloc(sizeof(*diag) + sizeof(diag->maps[0]) * nr_maps,
-+		       GFP_KERNEL);
-+	if (!diag)
-+		return ERR_PTR(-ENOMEM);
-+
-+	nla_for_each_nested(nla, nla_stgs, rem) {
-+		struct bpf_map *map;
-+		int map_fd;
-+
-+		if (nla_type(nla) != SK_DIAG_BPF_STORAGE_REQ_MAP_FD)
-+			continue;
-+
-+		map_fd = nla_get_u32(nla);
-+		map = bpf_map_get(map_fd);
-+		if (IS_ERR(map)) {
-+			err = PTR_ERR(map);
-+			goto err_free;
-+		}
-+		if (map->map_type != BPF_MAP_TYPE_SK_STORAGE) {
-+			bpf_map_put(map);
-+			err = -EINVAL;
-+			goto err_free;
-+		}
-+		if (diag_check_dup(diag, map)) {
-+			bpf_map_put(map);
-+			err = -EEXIST;
-+			goto err_free;
-+		}
-+		diag->maps[diag->nr_maps++] = map;
-+	}
-+
-+	return diag;
-+
-+err_free:
-+	bpf_sk_storage_diag_free(diag);
-+	return ERR_PTR(err);
-+}
-+EXPORT_SYMBOL_GPL(bpf_sk_storage_diag_alloc);
-+
-+static int diag_get(struct bpf_sk_storage_data *sdata, struct sk_buff *skb)
-+{
-+	struct nlattr *nla_stg, *nla_value;
-+	struct bpf_sk_storage_map *smap;
-+
-+	/* It cannot exceed max nlattr's payload */
-+	BUILD_BUG_ON(U16_MAX - NLA_HDRLEN < MAX_VALUE_SIZE);
-+
-+	nla_stg = nla_nest_start(skb, SK_DIAG_BPF_STORAGE);
-+	if (!nla_stg)
-+		return -EMSGSIZE;
-+
-+	smap = rcu_dereference(sdata->smap);
-+	if (nla_put_u32(skb, SK_DIAG_BPF_STORAGE_MAP_ID, smap->map.id))
-+		goto errout;
-+
-+	nla_value = nla_reserve_64bit(skb, SK_DIAG_BPF_STORAGE_MAP_VALUE,
-+				      smap->map.value_size,
-+				      SK_DIAG_BPF_STORAGE_PAD);
-+	if (!nla_value)
-+		goto errout;
-+
-+	if (map_value_has_spin_lock(&smap->map))
-+		copy_map_value_locked(&smap->map, nla_data(nla_value),
-+				      sdata->data, true);
-+	else
-+		copy_map_value(&smap->map, nla_data(nla_value), sdata->data);
-+
-+	nla_nest_end(skb, nla_stg);
-+	return 0;
-+
-+errout:
-+	nla_nest_cancel(skb, nla_stg);
-+	return -EMSGSIZE;
-+}
-+
-+static int bpf_sk_storage_diag_put_all(struct sock *sk, struct sk_buff *skb,
-+				       int stg_array_type,
-+				       unsigned int *res_diag_size)
-+{
-+	/* stg_array_type (e.g. INET_DIAG_BPF_SK_STORAGES) */
-+	unsigned int diag_size = nla_total_size(0);
-+	struct bpf_sk_storage *sk_storage;
-+	struct bpf_sk_storage_elem *selem;
-+	struct bpf_sk_storage_map *smap;
-+	struct nlattr *nla_stgs;
-+	unsigned int saved_len;
-+	int err = 0;
-+
-+	rcu_read_lock();
-+
-+	sk_storage = rcu_dereference(sk->sk_bpf_storage);
-+	if (!sk_storage || hlist_empty(&sk_storage->list)) {
-+		rcu_read_unlock();
-+		return 0;
-+	}
-+
-+	nla_stgs = nla_nest_start(skb, stg_array_type);
-+	if (!nla_stgs)
-+		/* Continue to learn diag_size */
-+		err = -EMSGSIZE;
-+
-+	saved_len = skb->len;
-+	hlist_for_each_entry_rcu(selem, &sk_storage->list, snode) {
-+		smap = rcu_dereference(SDATA(selem)->smap);
-+		diag_size += nla_value_size(smap->map.value_size);
-+
-+		if (nla_stgs && diag_get(SDATA(selem), skb))
-+			/* Continue to learn diag_size */
-+			err = -EMSGSIZE;
-+	}
-+
-+	rcu_read_unlock();
-+
-+	if (nla_stgs) {
-+		if (saved_len == skb->len)
-+			nla_nest_cancel(skb, nla_stgs);
-+		else
-+			nla_nest_end(skb, nla_stgs);
-+	}
-+
-+	if (diag_size == nla_total_size(0)) {
-+		*res_diag_size = 0;
-+		return 0;
-+	}
-+
-+	*res_diag_size = diag_size;
-+	return err;
-+}
-+
-+int bpf_sk_storage_diag_put(struct bpf_sk_storage_diag *diag,
-+			    struct sock *sk, struct sk_buff *skb,
-+			    int stg_array_type,
-+			    unsigned int *res_diag_size)
-+{
-+	/* stg_array_type (e.g. INET_DIAG_BPF_SK_STORAGES) */
-+	unsigned int diag_size = nla_total_size(0);
-+	struct bpf_sk_storage *sk_storage;
-+	struct bpf_sk_storage_data *sdata;
-+	struct nlattr *nla_stgs;
-+	unsigned int saved_len;
-+	int err = 0;
-+	u32 i;
-+
-+	*res_diag_size = 0;
-+
-+	/* No map has been specified.  Dump all. */
-+	if (!diag->nr_maps)
-+		return bpf_sk_storage_diag_put_all(sk, skb, stg_array_type,
-+						   res_diag_size);
-+
-+	rcu_read_lock();
-+	sk_storage = rcu_dereference(sk->sk_bpf_storage);
-+	if (!sk_storage || hlist_empty(&sk_storage->list)) {
-+		rcu_read_unlock();
-+		return 0;
-+	}
-+
-+	nla_stgs = nla_nest_start(skb, stg_array_type);
-+	if (!nla_stgs)
-+		/* Continue to learn diag_size */
-+		err = -EMSGSIZE;
-+
-+	saved_len = skb->len;
-+	for (i = 0; i < diag->nr_maps; i++) {
-+		sdata = __sk_storage_lookup(sk_storage,
-+				(struct bpf_sk_storage_map *)diag->maps[i],
-+				false);
-+
-+		if (!sdata)
-+			continue;
-+
-+		diag_size += nla_value_size(diag->maps[i]->value_size);
-+
-+		if (nla_stgs && diag_get(sdata, skb))
-+			/* Continue to learn diag_size */
-+			err = -EMSGSIZE;
-+	}
-+	rcu_read_unlock();
-+
-+	if (nla_stgs) {
-+		if (saved_len == skb->len)
-+			nla_nest_cancel(skb, nla_stgs);
-+		else
-+			nla_nest_end(skb, nla_stgs);
-+	}
-+
-+	if (diag_size == nla_total_size(0)) {
-+		*res_diag_size = 0;
-+		return 0;
-+	}
-+
-+	*res_diag_size = diag_size;
-+	return err;
-+}
-+EXPORT_SYMBOL_GPL(bpf_sk_storage_diag_put);
--- 
-2.17.1
 
