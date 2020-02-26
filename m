@@ -2,45 +2,67 @@ Return-Path: <SRS0=7UPC=4O=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7D7CC4BA1C
-	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 17:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C7B1C4BA13
+	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 17:14:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CB8DF21556
-	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 17:00:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E787B206E6
+	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 17:14:14 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="Fvd0znyF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727972AbgBZQ7v (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Feb 2020 11:59:51 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36214 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727141AbgBZQ7v (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Feb 2020 11:59:51 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id DDAFAAE44;
-        Wed, 26 Feb 2020 16:59:47 +0000 (UTC)
-From:   Michal Rostecki <mrostecki@opensuse.org>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v4 1/5] bpftool: Move out sections to separate functions
-Date:   Wed, 26 Feb 2020 17:59:35 +0100
-Message-Id: <20200226165941.6379-2-mrostecki@opensuse.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200226165941.6379-1-mrostecki@opensuse.org>
-References: <20200226165941.6379-1-mrostecki@opensuse.org>
+        id S1726148AbgBZRON (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Feb 2020 12:14:13 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:40101 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726561AbgBZRON (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Feb 2020 12:14:13 -0500
+Received: by mail-wm1-f68.google.com with SMTP id t14so25855wmi.5
+        for <bpf@vger.kernel.org>; Wed, 26 Feb 2020 09:14:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hs1Dnv8OkUX4sAKXU675PNsCaAiph3nxzHoSQ2tz4mY=;
+        b=Fvd0znyFAvs/Z+RQe56DZVCoHHGI0mH5KwABX5dKxqnpfPB7pd+27P572tMfDmx2j3
+         7EF0B55OLQsWoPY1hL5SbRUynxBS/H+uH1GznO+Atf27r7N5lH/asoNTIdVEaSotqztW
+         RmKHurYYiqYble4Xz7rs7l3LBe0IpJ6FEF7+YWLWIxRH+tKdBV+lm2oYFiHn+HL7HQ4w
+         w8BtJiFBtWziNs1/rxN2+YwTbBwcBlfNJBI42jIYoZCpjKtTGO/In6/LOS5w2zYI4XOZ
+         QrTxhoYpWQbdW3UTUOWIVk5tb/ny+k/yxes6JSYrmoI8XoaE8X5R8aVUFMU2h8VB/Fn9
+         3CeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hs1Dnv8OkUX4sAKXU675PNsCaAiph3nxzHoSQ2tz4mY=;
+        b=hTeqZJIMLk5DKBUgIDzzZSnR7VJazi1p1FTlaq0VqE6ZaEsJl5gcdyoDtiuK44iDve
+         ZIHtsurwPxSmqLatPfd82MLfqPFzaILt815VYdAH1pY9Y8Izwx2sGvoScQTpZh98bacB
+         zOzFmt96fDmw3Z2KgAJW18qdnlDhmEnPTpWf5p2/sPY4DkMQazInYJ4reQ+9MI0VcqHR
+         rR5AD5kCnboB38UFi9hNKY8WNY0HQkwgsDNvRW7VWG2xtst6kGGyyjCUAd+lUFzWS891
+         bpY21aR7NCRgghJ9MsODPD4V8xAn5s4hfXY5a29iKRrh/WE/fgXQKMTAWLZMCcRUigAO
+         F1Cw==
+X-Gm-Message-State: APjAAAV6TDCT+ka9H/66/sOl+4Zo2GF2v6B7YYNKuCSCv+thz1hKpKgN
+        K4NuK/W5ldSLnDyCCTEdfGVg/A==
+X-Google-Smtp-Source: APXvYqxVisx0WWuxbZMRqmE/joqQNU3c6aUjq7FmETJiXmXkhS0yvH+WurdWR1QhvsZ+k3KlpLyI2Q==
+X-Received: by 2002:a7b:c8d7:: with SMTP id f23mr6436992wml.173.1582737250916;
+        Wed, 26 Feb 2020 09:14:10 -0800 (PST)
+Received: from localhost.localdomain ([194.35.116.65])
+        by smtp.gmail.com with ESMTPSA id b10sm3962802wrw.61.2020.02.26.09.14.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Feb 2020 09:14:10 -0800 (PST)
+From:   Quentin Monnet <quentin@isovalent.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCH bpf] mailmap: update email address
+Date:   Wed, 26 Feb 2020 17:13:53 +0000
+Message-Id: <20200226171353.18982-1-quentin@isovalent.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -48,277 +70,27 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Remove all calls of print_end_then_start_section function and for loops
-out from the do_probe function. Instead, provide separate functions for
-each section (like i.e. section_helpers) which are called in do_probe.
-This change is motivated by better readability.
+My Netronome address is no longer active. I am no maintainer, but
+get_maintainer.pl sometimes returns my name for a small number of files
+(BPF-related). Add an entry to .mailmap for good measure.
 
-Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
+Signed-off-by: Quentin Monnet <quentin@isovalent.com>
 ---
- tools/bpf/bpftool/feature.c | 219 +++++++++++++++++++++---------------
- 1 file changed, 126 insertions(+), 93 deletions(-)
+ .mailmap | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-index 941873d778d8..345e4a2b4f53 100644
---- a/tools/bpf/bpftool/feature.c
-+++ b/tools/bpf/bpftool/feature.c
-@@ -112,18 +112,12 @@ print_start_section(const char *json_title, const char *plain_title,
- 	}
- }
- 
--static void
--print_end_then_start_section(const char *json_title, const char *plain_title,
--			     const char *define_comment,
--			     const char *define_prefix)
-+static void print_end_section(void)
- {
- 	if (json_output)
- 		jsonw_end_object(json_wtr);
- 	else
- 		printf("\n");
--
--	print_start_section(json_title, plain_title, define_comment,
--			    define_prefix);
- }
- 
- /* Probing functions */
-@@ -584,13 +578,130 @@ probe_large_insn_limit(const char *define_prefix, __u32 ifindex)
- 			   res, define_prefix);
- }
- 
-+static void
-+section_system_config(enum probe_component target, const char *define_prefix)
-+{
-+	switch (target) {
-+	case COMPONENT_KERNEL:
-+	case COMPONENT_UNSPEC:
-+		if (define_prefix)
-+			break;
-+
-+		print_start_section("system_config",
-+				    "Scanning system configuration...",
-+				    NULL, /* define_comment never used here */
-+				    NULL); /* define_prefix always NULL here */
-+		if (check_procfs()) {
-+			probe_unprivileged_disabled();
-+			probe_jit_enable();
-+			probe_jit_harden();
-+			probe_jit_kallsyms();
-+			probe_jit_limit();
-+		} else {
-+			p_info("/* procfs not mounted, skipping related probes */");
-+		}
-+		probe_kernel_image_config();
-+		print_end_section();
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static bool section_syscall_config(const char *define_prefix)
-+{
-+	bool res;
-+
-+	print_start_section("syscall_config",
-+			    "Scanning system call availability...",
-+			    "/*** System call availability ***/",
-+			    define_prefix);
-+	res = probe_bpf_syscall(define_prefix);
-+	print_end_section();
-+
-+	return res;
-+}
-+
-+static void
-+section_program_types(bool *supported_types, const char *define_prefix,
-+		      __u32 ifindex)
-+{
-+	unsigned int i;
-+
-+	print_start_section("program_types",
-+			    "Scanning eBPF program types...",
-+			    "/*** eBPF program types ***/",
-+			    define_prefix);
-+
-+	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
-+		probe_prog_type(i, supported_types, define_prefix, ifindex);
-+
-+	print_end_section();
-+}
-+
-+static void section_map_types(const char *define_prefix, __u32 ifindex)
-+{
-+	unsigned int i;
-+
-+	print_start_section("map_types",
-+			    "Scanning eBPF map types...",
-+			    "/*** eBPF map types ***/",
-+			    define_prefix);
-+
-+	for (i = BPF_MAP_TYPE_UNSPEC + 1; i < map_type_name_size; i++)
-+		probe_map_type(i, define_prefix, ifindex);
-+
-+	print_end_section();
-+}
-+
-+static void
-+section_helpers(bool *supported_types, const char *define_prefix, __u32 ifindex)
-+{
-+	unsigned int i;
-+
-+	print_start_section("helpers",
-+			    "Scanning eBPF helper functions...",
-+			    "/*** eBPF helper functions ***/",
-+			    define_prefix);
-+
-+	if (define_prefix)
-+		printf("/*\n"
-+		       " * Use %sHAVE_PROG_TYPE_HELPER(prog_type_name, helper_name)\n"
-+		       " * to determine if <helper_name> is available for <prog_type_name>,\n"
-+		       " * e.g.\n"
-+		       " *	#if %sHAVE_PROG_TYPE_HELPER(xdp, bpf_redirect)\n"
-+		       " *		// do stuff with this helper\n"
-+		       " *	#elif\n"
-+		       " *		// use a workaround\n"
-+		       " *	#endif\n"
-+		       " */\n"
-+		       "#define %sHAVE_PROG_TYPE_HELPER(prog_type, helper)	\\\n"
-+		       "	%sBPF__PROG_TYPE_ ## prog_type ## __HELPER_ ## helper\n",
-+		       define_prefix, define_prefix, define_prefix,
-+		       define_prefix);
-+	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
-+		probe_helpers_for_progtype(i, supported_types[i],
-+					   define_prefix, ifindex);
-+
-+	print_end_section();
-+}
-+
-+static void section_misc(const char *define_prefix, __u32 ifindex)
-+{
-+	print_start_section("misc",
-+			    "Scanning miscellaneous eBPF features...",
-+			    "/*** eBPF misc features ***/",
-+			    define_prefix);
-+	probe_large_insn_limit(define_prefix, ifindex);
-+	print_end_section();
-+}
-+
- static int do_probe(int argc, char **argv)
- {
- 	enum probe_component target = COMPONENT_UNSPEC;
- 	const char *define_prefix = NULL;
- 	bool supported_types[128] = {};
- 	__u32 ifindex = 0;
--	unsigned int i;
- 	char *ifname;
- 
- 	/* Detection assumes user has sufficient privileges (CAP_SYS_ADMIN).
-@@ -658,97 +769,19 @@ static int do_probe(int argc, char **argv)
- 		jsonw_start_object(json_wtr);
- 	}
- 
--	switch (target) {
--	case COMPONENT_KERNEL:
--	case COMPONENT_UNSPEC:
--		if (define_prefix)
--			break;
--
--		print_start_section("system_config",
--				    "Scanning system configuration...",
--				    NULL, /* define_comment never used here */
--				    NULL); /* define_prefix always NULL here */
--		if (check_procfs()) {
--			probe_unprivileged_disabled();
--			probe_jit_enable();
--			probe_jit_harden();
--			probe_jit_kallsyms();
--			probe_jit_limit();
--		} else {
--			p_info("/* procfs not mounted, skipping related probes */");
--		}
--		probe_kernel_image_config();
--		if (json_output)
--			jsonw_end_object(json_wtr);
--		else
--			printf("\n");
--		break;
--	default:
--		break;
--	}
--
--	print_start_section("syscall_config",
--			    "Scanning system call availability...",
--			    "/*** System call availability ***/",
--			    define_prefix);
--
--	if (!probe_bpf_syscall(define_prefix))
-+	section_system_config(target, define_prefix);
-+	if (!section_syscall_config(define_prefix))
- 		/* bpf() syscall unavailable, don't probe other BPF features */
- 		goto exit_close_json;
--
--	print_end_then_start_section("program_types",
--				     "Scanning eBPF program types...",
--				     "/*** eBPF program types ***/",
--				     define_prefix);
--
--	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
--		probe_prog_type(i, supported_types, define_prefix, ifindex);
--
--	print_end_then_start_section("map_types",
--				     "Scanning eBPF map types...",
--				     "/*** eBPF map types ***/",
--				     define_prefix);
--
--	for (i = BPF_MAP_TYPE_UNSPEC + 1; i < map_type_name_size; i++)
--		probe_map_type(i, define_prefix, ifindex);
--
--	print_end_then_start_section("helpers",
--				     "Scanning eBPF helper functions...",
--				     "/*** eBPF helper functions ***/",
--				     define_prefix);
--
--	if (define_prefix)
--		printf("/*\n"
--		       " * Use %sHAVE_PROG_TYPE_HELPER(prog_type_name, helper_name)\n"
--		       " * to determine if <helper_name> is available for <prog_type_name>,\n"
--		       " * e.g.\n"
--		       " *	#if %sHAVE_PROG_TYPE_HELPER(xdp, bpf_redirect)\n"
--		       " *		// do stuff with this helper\n"
--		       " *	#elif\n"
--		       " *		// use a workaround\n"
--		       " *	#endif\n"
--		       " */\n"
--		       "#define %sHAVE_PROG_TYPE_HELPER(prog_type, helper)	\\\n"
--		       "	%sBPF__PROG_TYPE_ ## prog_type ## __HELPER_ ## helper\n",
--		       define_prefix, define_prefix, define_prefix,
--		       define_prefix);
--	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
--		probe_helpers_for_progtype(i, supported_types[i],
--					   define_prefix, ifindex);
--
--	print_end_then_start_section("misc",
--				     "Scanning miscellaneous eBPF features...",
--				     "/*** eBPF misc features ***/",
--				     define_prefix);
--	probe_large_insn_limit(define_prefix, ifindex);
-+	section_program_types(supported_types, define_prefix, ifindex);
-+	section_map_types(define_prefix, ifindex);
-+	section_helpers(supported_types, define_prefix, ifindex);
-+	section_misc(define_prefix, ifindex);
- 
- exit_close_json:
--	if (json_output) {
--		/* End current "section" of probes */
--		jsonw_end_object(json_wtr);
-+	if (json_output)
- 		/* End root object */
- 		jsonw_end_object(json_wtr);
--	}
- 
- 	return 0;
- }
+diff --git a/.mailmap b/.mailmap
+index ffb8f28290c7..a0dfce8de1ba 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -225,6 +225,7 @@ Pratyush Anand <pratyush.anand@gmail.com> <pratyush.anand@st.com>
+ Praveen BP <praveenbp@ti.com>
+ Punit Agrawal <punitagrawal@gmail.com> <punit.agrawal@arm.com>
+ Qais Yousef <qsyousef@gmail.com> <qais.yousef@imgtec.com>
++Quentin Monnet <quentin@isovalent.com> <quentin.monnet@netronome.com>
+ Quentin Perret <qperret@qperret.net> <quentin.perret@arm.com>
+ Rafael J. Wysocki <rjw@rjwysocki.net> <rjw@sisk.pl>
+ Rajesh Shah <rajesh.shah@intel.com>
 -- 
-2.25.1
+2.20.1
 
