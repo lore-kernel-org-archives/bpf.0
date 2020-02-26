@@ -6,58 +6,58 @@ X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
 	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ABC0C4BA24
-	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 23:36:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F22CC4BA2D
+	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 23:45:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5278824679
-	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 23:36:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 582BD20801
+	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 23:45:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582760194;
-	bh=vXpyWwhUGUQiX5wgoNX1FisqdYdJy20No/deVFYlJkU=;
+	s=default; t=1582760716;
+	bh=Sv+LmLJtw+PBAxjhRmaZRrLPXGFfvBAi2CgXi8EIkhE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=ZEHQdckfGO7CsaHSeD0XXx9E9+USQSTSSpkA9wRhkUSfzAG8lWHwTHTMOJ4SZHOfp
-	 O3mzBWAYvbPRMkLRgX4e3z6BxB5LpIx2PFraz0sSpY1n1LKxOgct8llDLR+QrJeCgJ
-	 eCZdUGbP8n9y+oylF27T1NEzy0+vpeatsOZxg91A=
+	b=NbFx18HOyO/3rAnM7vdd9YF7JlrfBR+gp2nQEovuFYKHCQyaEES3mGf9bg0HhxcXi
+	 qa23NaxMLjyLLVyBu6ZkVGb/2PEmdPUuqQJTylb+aCQ/rzJ8aGs4WGRghbSoF/W247
+	 SwCQtdZWetaFQwunWYhgArYCNaOHWnH5OB1nD7Oo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727935AbgBZXge (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Feb 2020 18:36:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56354 "EHLO mail.kernel.org"
+        id S1727935AbgBZXpQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Feb 2020 18:45:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57864 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727930AbgBZXgd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Feb 2020 18:36:33 -0500
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+        id S1726413AbgBZXpP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Feb 2020 18:45:15 -0500
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 17A2B2467D;
-        Wed, 26 Feb 2020 23:36:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AB1762467B;
+        Wed, 26 Feb 2020 23:45:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582760193;
-        bh=vXpyWwhUGUQiX5wgoNX1FisqdYdJy20No/deVFYlJkU=;
+        s=default; t=1582760715;
+        bh=Sv+LmLJtw+PBAxjhRmaZRrLPXGFfvBAi2CgXi8EIkhE=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dJwxw/RfS7DkTN3k0AP1N+HpEWoJbxSsE0e6+DYSovGR46ynSqqFv9D754Y/Q1Ikw
-         xYTx0ARYUqQ5u90E+Z8Cf3dVP53FUC/r9Bbf7hAB2p/FHST7R7TKXq4czeBgvu4L4N
-         B41SyCeQdkgtkebcaqeYPgyuXftjAsTUsmxZPGN0=
-Received: by mail-lf1-f45.google.com with SMTP id r14so631613lfm.5;
-        Wed, 26 Feb 2020 15:36:33 -0800 (PST)
-X-Gm-Message-State: ANhLgQ3wjuUJoTpmx04/hGGTP6x41Pc2TGDklTWUPED1S8dhk254HIEN
-        CUML3JFo9hN1RapqbrK6scRTpwQiFiG/qv1m68I=
-X-Google-Smtp-Source: ADFU+vsNWFvucc6bvsLVTB4fTBz+IMK7M5fkkSPO8WUB3Nxr327qnEK3G2xJo9hTTPGa/Xvx5Ux01f4AIiPq/lcYA70=
-X-Received: by 2002:a19:840d:: with SMTP id g13mr527766lfd.162.1582760191201;
- Wed, 26 Feb 2020 15:36:31 -0800 (PST)
+        b=LhLR3nyCFJPUqCWm27k6u/t7P/ouI5yXypGlZRx8JDk40Ojit3zZOsqLcjCeuLN44
+         xzsPR/cQ9wPm5zDOV66e6u4oUMD19zoFxSf8pjJAiAB3+BYB3vGoyalZUEW8zA3k1g
+         dpStVoa3HJuxrDvK7NsanrMQuPexEBSlh3d3qWAs=
+Received: by mail-lj1-f178.google.com with SMTP id 143so1023869ljj.7;
+        Wed, 26 Feb 2020 15:45:14 -0800 (PST)
+X-Gm-Message-State: ANhLgQ1t4Zd7WD9OFUr+8ICQMfjFozunsbL723H1mJ06KAEJ3rk3knBb
+        D/PKlgJnVc753eYeglQCzAzsTr3nPszZb0tuN8U=
+X-Google-Smtp-Source: ADFU+vt+cYR78F23kjHsAxI9s3HpA5qDtmQc8/nLWmP85Kjr6zM6tPxZlbmM/bJrcoG4VWZb1YTnKGfzuerRRoea5gM=
+X-Received: by 2002:a05:651c:239:: with SMTP id z25mr862592ljn.48.1582760712812;
+ Wed, 26 Feb 2020 15:45:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20200226130345.209469-1-jolsa@kernel.org> <20200226130345.209469-13-jolsa@kernel.org>
-In-Reply-To: <20200226130345.209469-13-jolsa@kernel.org>
+References: <20200226130345.209469-1-jolsa@kernel.org> <20200226130345.209469-14-jolsa@kernel.org>
+In-Reply-To: <20200226130345.209469-14-jolsa@kernel.org>
 From:   Song Liu <song@kernel.org>
-Date:   Wed, 26 Feb 2020 15:36:19 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5mb=3VNnyvy4k5FHRh9-OdKDE5cz6vW=0qVqfP7-x7yg@mail.gmail.com>
-Message-ID: <CAPhsuW5mb=3VNnyvy4k5FHRh9-OdKDE5cz6vW=0qVqfP7-x7yg@mail.gmail.com>
-Subject: Re: [PATCH 12/18] bpf: Add trampolines to kallsyms
+Date:   Wed, 26 Feb 2020 15:45:01 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4LABLRwdtOFZrw3O2quLcaiqZYWwp4x85W43Bdx-ojpQ@mail.gmail.com>
+Message-ID: <CAPhsuW4LABLRwdtOFZrw3O2quLcaiqZYWwp4x85W43Bdx-ojpQ@mail.gmail.com>
+Subject: Re: [PATCH 13/18] bpf: Return error value in bpf_dispatcher_update
 To:     Jiri Olsa <jolsa@kernel.org>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
         Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Jakub Kicinski <kuba@kernel.org>,
         David Miller <davem@redhat.com>,
@@ -73,11 +73,13 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Wed, Feb 26, 2020 at 5:07 AM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> Adding trampolines to kallsyms. It's displayed as
->   bpf_trampoline_<ID> [bpf]
+> We don't currently propagate error value from
+> bpf_dispatcher_update function. This will be
+> needed in following patch, that needs to update
+> kallsyms based on the success of dispatcher
+> update.
 >
-> where ID is the BTF id of the trampoline function.
->
+> Suggested-by: Andrii Nakryiko <andriin@fb.com>
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
 Acked-by: Song Liu <songliubraving@fb.com>
