@@ -4,39 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D35D3C4BA12
-	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 13:05:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FCACC4BA12
+	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 13:05:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9FE4224687
-	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 13:05:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76BE824684
+	for <bpf@archiver.kernel.org>; Wed, 26 Feb 2020 13:05:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582722312;
-	bh=FCtuSKuO8tBPMGuuiX1HaGM1sD/jjbPcgF/2xXaLsiE=;
+	s=default; t=1582722319;
+	bh=1v0VN78/AoszyB1rtxNyYtjnY/cWXfBilkWzogeT6Tk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=YwKHMb54BhRDUC7xqohd8kJIhrqTydlmAaPASVMJtHl91kCBraYsQKq0hQoUMs5zE
-	 aVoLs9pZ3IoX3gglyyESkzqnkOG77z00RCGQ80+AhsBUiorx0/GPJM7OXSv8zL6xWJ
-	 E65zo+WXy/uYTm6djbMRCRc/9o0KcbTJ82eDDyDQ=
+	b=ue0xASiGIQUcQkPrVJjyU7DOV/+16VxJvq2k0oaoRfoFw3NAt/8TvippGeHhFQBKv
+	 eH7PKBhxU2QiwiKcoB670n1r9GhxIItDYLKKPxG3blvUjuL3UoGH82Nnqii9lsEL3I
+	 +VG03Ee5RKA48DaC4ozoYDNbsigFkl/00bEIe9cc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727387AbgBZNFM convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 26 Feb 2020 08:05:12 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:29542 "EHLO
+        id S1727429AbgBZNFR convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 26 Feb 2020 08:05:17 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:44813 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727350AbgBZNFM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Feb 2020 08:05:12 -0500
+        with ESMTP id S1727421AbgBZNFR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Feb 2020 08:05:17 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-151-oZh2qoNmNhiYJo5PwjCyLA-1; Wed, 26 Feb 2020 08:05:07 -0500
-X-MC-Unique: oZh2qoNmNhiYJo5PwjCyLA-1
+ us-mta-87-I5WOP5vPOgGfMipg1zaLhA-1; Wed, 26 Feb 2020 08:05:12 -0500
+X-MC-Unique: I5WOP5vPOgGfMipg1zaLhA-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5BEB9800D53;
-        Wed, 26 Feb 2020 13:05:05 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C85B81085927;
+        Wed, 26 Feb 2020 13:05:10 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.43.17.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9A0D119C7F;
-        Wed, 26 Feb 2020 13:05:01 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A341919C7F;
+        Wed, 26 Feb 2020 13:05:05 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
@@ -50,9 +50,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 16/18] perf tools: Synthesize bpf_trampoline/dispatcher ksymbol event
-Date:   Wed, 26 Feb 2020 14:03:43 +0100
-Message-Id: <20200226130345.209469-17-jolsa@kernel.org>
+Subject: [PATCH 17/18] perf tools: Set ksymbol dso as loaded on arrival
+Date:   Wed, 26 Feb 2020 14:03:44 +0100
+Message-Id: <20200226130345.209469-18-jolsa@kernel.org>
 In-Reply-To: <20200226130345.209469-1-jolsa@kernel.org>
 References: <20200226130345.209469-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -66,165 +66,31 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Synthesize bpf images (trampolines/dispatchers) on start,
-as ksymbol events from /proc/kallsyms. Having this perf
-can recognize samples from those images and perf report
-and top shows them correctly.
+There's no special load action for ksymbol data on
+map__load/dso__load action, where the kernel is getting
+loaded. It only gets confused with kernel kallsyms/vmlinux
+load for bpf object, which fails and could mess up with
+the map.
 
-The rest of the ksymbol handling is already in place from
-for the bpf programs monitoring, so only the initial state
-was needed.
-
-perf report output:
-
-  # Overhead  Command     Shared Object                  Symbol
-
-    12.37%  test_progs  [kernel.vmlinux]                 [k] entry_SYSCALL_64
-    11.80%  test_progs  [kernel.vmlinux]                 [k] syscall_return_via_sysret
-     9.63%  test_progs  bpf_prog_bcf7977d3b93787c_prog2  [k] bpf_prog_bcf7977d3b93787c_prog2
-     6.90%  test_progs  bpf_trampoline_24456             [k] bpf_trampoline_24456
-     6.36%  test_progs  [kernel.vmlinux]                 [k] memcpy_erms
+Disabling any further load of the map for ksymbol related dso/map.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/perf/util/bpf-event.c | 98 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 98 insertions(+)
+ tools/perf/util/machine.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
-index a3207d900339..120ec547ae75 100644
---- a/tools/perf/util/bpf-event.c
-+++ b/tools/perf/util/bpf-event.c
-@@ -6,6 +6,9 @@
- #include <bpf/libbpf.h>
- #include <linux/btf.h>
- #include <linux/err.h>
-+#include <linux/string.h>
-+#include <internal/lib.h>
-+#include <symbol/kallsyms.h>
- #include "bpf-event.h"
- #include "debug.h"
- #include "dso.h"
-@@ -290,11 +293,87 @@ static int perf_event__synthesize_one_bpf_prog(struct perf_session *session,
- 	return err ? -1 : 0;
- }
- 
-+struct kallsyms_parse {
-+	union perf_event	*event;
-+	perf_event__handler_t	 process;
-+	struct machine		*machine;
-+	struct perf_tool	*tool;
-+};
-+
-+static int
-+process_bpf_image(char *name, u64 addr, struct kallsyms_parse *data)
-+{
-+	struct machine *machine = data->machine;
-+	union perf_event *event = data->event;
-+	struct perf_record_ksymbol *ksymbol;
-+	u32 size;
-+
-+	ksymbol = &event->ksymbol;
-+
-+	/*
-+	 * The bpf image (trampoline/dispatcher) size is aligned to
-+	 * page, while it starts little bit after the page boundary.
-+	 */
-+	size = page_size - (addr - PERF_ALIGN(addr, page_size));
-+
-+	*ksymbol = (struct perf_record_ksymbol) {
-+		.header = {
-+			.type = PERF_RECORD_KSYMBOL,
-+			.size = offsetof(struct perf_record_ksymbol, name),
-+		},
-+		.addr      = addr,
-+		.len       = size,
-+		.ksym_type = PERF_RECORD_KSYMBOL_TYPE_BPF,
-+		.flags     = 0,
-+	};
-+
-+	strncpy(ksymbol->name, name, KSYM_NAME_LEN);
-+	ksymbol->header.size += PERF_ALIGN(strlen(name) + 1, sizeof(u64));
-+	memset((void *) event + event->header.size, 0, machine->id_hdr_size);
-+	event->header.size += machine->id_hdr_size;
-+
-+	return perf_tool__process_synth_event(data->tool, event, machine,
-+					      data->process);
-+}
-+
-+static int
-+kallsyms_process_symbol(void *data, const char *_name,
-+			char type __maybe_unused, u64 start)
-+{
-+	char *module, *name;
-+	unsigned long id;
-+	int err = 0;
-+
-+	module = strchr(_name, '\t');
-+	if (!module)
-+		return 0;
-+
-+	/* We are going after [bpf] module ... */
-+	if (strcmp(module + 1, "[bpf]"))
-+		return 0;
-+
-+	name = memdup(_name, (module - _name) + 1);
-+	if (!name)
-+		return -ENOMEM;
-+
-+	name[module - _name] = 0;
-+
-+	/* .. and only for trampolines and dispatchers */
-+	if ((sscanf(name, "bpf_trampoline_%lu", &id) == 1) ||
-+	    (sscanf(name, "bpf_dispatcher_%lu", &id) == 1))
-+		err = process_bpf_image(name, start, data);
-+
-+	free(name);
-+	return err;
-+}
-+
- int perf_event__synthesize_bpf_events(struct perf_session *session,
- 				      perf_event__handler_t process,
- 				      struct machine *machine,
- 				      struct record_opts *opts)
- {
-+	const char *kallsyms_filename = "/proc/kallsyms";
-+	struct kallsyms_parse arg;
- 	union perf_event *event;
- 	__u32 id = 0;
- 	int err;
-@@ -303,6 +382,8 @@ int perf_event__synthesize_bpf_events(struct perf_session *session,
- 	event = malloc(sizeof(event->bpf) + KSYM_NAME_LEN + machine->id_hdr_size);
- 	if (!event)
- 		return -1;
-+
-+	/* Synthesize all the bpf programs in system. */
- 	while (true) {
- 		err = bpf_prog_get_next_id(id, &id);
- 		if (err) {
-@@ -335,6 +416,23 @@ int perf_event__synthesize_bpf_events(struct perf_session *session,
- 			break;
- 		}
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index fb5c2cd44d30..463ada5117f8 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -742,6 +742,7 @@ static int machine__process_ksymbol_register(struct machine *machine,
+ 		map->start = event->ksymbol.addr;
+ 		map->end = map->start + event->ksymbol.len;
+ 		maps__insert(&machine->kmaps, map);
++		dso__set_loaded(dso);
  	}
-+
-+	/* Synthesize all the bpf images - trampolines/dispatchers. */
-+	if (symbol_conf.kallsyms_name != NULL)
-+		kallsyms_filename = symbol_conf.kallsyms_name;
-+
-+	arg = (struct kallsyms_parse) {
-+		.event   = event,
-+		.process = process,
-+		.machine = machine,
-+		.tool    = session->tool,
-+	};
-+
-+	if (kallsyms__parse(kallsyms_filename, &arg, kallsyms_process_symbol)) {
-+		pr_err("%s: failed to synthesize bpf images: %s\n",
-+		       __func__, strerror(errno));
-+	}
-+
- 	free(event);
- 	return err;
- }
+ 
+ 	sym = symbol__new(map->map_ip(map, map->start),
 -- 
 2.24.1
 
