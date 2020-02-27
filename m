@@ -6,53 +6,52 @@ X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
 	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 375D8C4BA24
-	for <bpf@archiver.kernel.org>; Thu, 27 Feb 2020 05:50:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2902C4BA24
+	for <bpf@archiver.kernel.org>; Thu, 27 Feb 2020 05:52:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F31B624679
-	for <bpf@archiver.kernel.org>; Thu, 27 Feb 2020 05:50:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7778F2467D
+	for <bpf@archiver.kernel.org>; Thu, 27 Feb 2020 05:52:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582782645;
-	bh=7+AymGkpgCvTVed8pXjGExj3prYwnBhgL/+sRv0lwx0=;
+	s=default; t=1582782776;
+	bh=ZVaYG2q3mWiMXyHqafBEBn+Nfh7u032ddY3cVMj1SoQ=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=YlwkdRqBdqXEdPyjwqyO6n0Qpj2hVbFUp9lL8lwL2t8Twh8i29kctPR5F+Sj7NJfc
-	 eZATGh08bZPhht9Jr6QQUIGtSRuUcEUouThDIEkk4vxq01F4NBw2Z5BSwnlHn+0GJa
-	 5wxzmo56wLt2qfksdV0nfvJ5Nb1Lmau1aaaQ/+SE=
+	b=S+LZ7QrtYo4YnEzNKqC2+URAL4vGcYqvhorps1Kj352PjK5CoIsRO7NKfqIg+/w0u
+	 OPrEesLSYjdu3WDZwdfogCz7NEYXxXB5i8l8U9BVYRCaQ/2fcAskZQ9lXmK0WVSwb/
+	 oMJ16S7P0E0mBp2ZBnrNPZ21KUzMcGwqO56iFG9s=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725877AbgB0Fuo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Feb 2020 00:50:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53606 "EHLO mail.kernel.org"
+        id S1725790AbgB0Fw4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Feb 2020 00:52:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54108 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725870AbgB0Fuo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Feb 2020 00:50:44 -0500
+        id S1725730AbgB0Fwz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Feb 2020 00:52:55 -0500
 Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A805024680;
-        Thu, 27 Feb 2020 05:50:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 25E1024680;
+        Thu, 27 Feb 2020 05:52:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582782644;
-        bh=7+AymGkpgCvTVed8pXjGExj3prYwnBhgL/+sRv0lwx0=;
+        s=default; t=1582782775;
+        bh=ZVaYG2q3mWiMXyHqafBEBn+Nfh7u032ddY3cVMj1SoQ=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=k4Hl+bujJWPDMuKBnwFaE2Mf2Y25igI/gcmPm53ZzJxkiirmX6TZpVx0zjhYEyVWG
-         hzbeln/3tpbqdGSZ08dABwL/hOtx+jKHfc/M1e7GMqreas5D3XiAEwd8ZzXhSWckGF
-         dd+tFmfJ5pqgjz/ENKHInp5km8isJ2vIAsF73AkU=
-Received: by mail-lf1-f45.google.com with SMTP id y17so1105593lfe.8;
-        Wed, 26 Feb 2020 21:50:43 -0800 (PST)
-X-Gm-Message-State: ANhLgQ3rO5KwRTvN4AVPaRVjo+MztKH4qsLmK4RRxzlVZ6R8A75wuZrL
-        tQFzRGkZ61yxcn0tadPZ/b9npt50ZUX7l/E2vbQ=
-X-Google-Smtp-Source: ADFU+vuw0MYnlKbnUhFFuXrFa1ekwqxq5TT8UqPXLURZOWtSogZrGUuOOMpXZ0iE4LoeYjbCwoFTJbH7rZhrBhQm56A=
-X-Received: by 2002:ac2:52a2:: with SMTP id r2mr1136598lfm.33.1582782641730;
- Wed, 26 Feb 2020 21:50:41 -0800 (PST)
+        b=EIHisrC6nf+cjUy3v3HyET8XgVQIvPDzBvg+k6D/ebCz57LKok12icKKG0f/36pcO
+         m2H1N7TrWCx8+wVC8E67xOGYjGBw6CyE96ZI2r93tFCJI9+p+fvyOnVI2o2WIulCnL
+         4QK77oP8Y9D8c3+VYJV+q6nNu2ZVwHKyRbXd7EdU=
+Received: by mail-lf1-f45.google.com with SMTP id y17so1108555lfe.8;
+        Wed, 26 Feb 2020 21:52:55 -0800 (PST)
+X-Gm-Message-State: ANhLgQ1nURr/oIxLgM6Mmac72/bI6yTmHN0s4afBvDuCpmHsOUjlOtxq
+        sEkDRmZQdjt47zKK0XVzZ0okd2FuVL9Ow2td80I=
+X-Google-Smtp-Source: ADFU+vu/i9jT0l4BRuWXkjmpgwcQrGkD2CQcAWPJVF/FPUWxIUa9xbVYmTlTu++sT9NqD64cwrniv6iadZobW1of5nA=
+X-Received: by 2002:a19:9155:: with SMTP id y21mr1189938lfj.28.1582782773280;
+ Wed, 26 Feb 2020 21:52:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20200226130345.209469-1-jolsa@kernel.org> <20200226130345.209469-17-jolsa@kernel.org>
-In-Reply-To: <20200226130345.209469-17-jolsa@kernel.org>
+References: <20200226130345.209469-1-jolsa@kernel.org> <20200226130345.209469-18-jolsa@kernel.org>
+In-Reply-To: <20200226130345.209469-18-jolsa@kernel.org>
 From:   Song Liu <song@kernel.org>
-Date:   Wed, 26 Feb 2020 21:50:30 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4cupgimwMHYzHXuTynxgs6oWuw46Z6DW2oyyAuszExmQ@mail.gmail.com>
-Message-ID: <CAPhsuW4cupgimwMHYzHXuTynxgs6oWuw46Z6DW2oyyAuszExmQ@mail.gmail.com>
-Subject: Re: [PATCH 16/18] perf tools: Synthesize bpf_trampoline/dispatcher
- ksymbol event
+Date:   Wed, 26 Feb 2020 21:52:42 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW7GkNuiWjAdoAEKEa1=3wgV=jUfc144U=OiTXHn3aY=Gw@mail.gmail.com>
+Message-ID: <CAPhsuW7GkNuiWjAdoAEKEa1=3wgV=jUfc144U=OiTXHn3aY=Gw@mail.gmail.com>
+Subject: Re: [PATCH 17/18] perf tools: Set ksymbol dso as loaded on arrival
 To:     Jiri Olsa <jolsa@kernel.org>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -74,24 +73,13 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Wed, Feb 26, 2020 at 5:06 AM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> Synthesize bpf images (trampolines/dispatchers) on start,
-> as ksymbol events from /proc/kallsyms. Having this perf
-> can recognize samples from those images and perf report
-> and top shows them correctly.
+> There's no special load action for ksymbol data on
+> map__load/dso__load action, where the kernel is getting
+> loaded. It only gets confused with kernel kallsyms/vmlinux
+> load for bpf object, which fails and could mess up with
+> the map.
 >
-> The rest of the ksymbol handling is already in place from
-> for the bpf programs monitoring, so only the initial state
-> was needed.
->
-> perf report output:
->
->   # Overhead  Command     Shared Object                  Symbol
->
->     12.37%  test_progs  [kernel.vmlinux]                 [k] entry_SYSCALL_64
->     11.80%  test_progs  [kernel.vmlinux]                 [k] syscall_return_via_sysret
->      9.63%  test_progs  bpf_prog_bcf7977d3b93787c_prog2  [k] bpf_prog_bcf7977d3b93787c_prog2
->      6.90%  test_progs  bpf_trampoline_24456             [k] bpf_trampoline_24456
->      6.36%  test_progs  [kernel.vmlinux]                 [k] memcpy_erms
+> Disabling any further load of the map for ksymbol related dso/map.
 >
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
