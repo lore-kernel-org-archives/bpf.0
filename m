@@ -2,97 +2,134 @@ Return-Path: <SRS0=DkpX=4P=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FFF4C4BA3B
-	for <bpf@archiver.kernel.org>; Thu, 27 Feb 2020 12:02:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C66AC76566
+	for <bpf@archiver.kernel.org>; Thu, 27 Feb 2020 14:38:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EAA9E24692
-	for <bpf@archiver.kernel.org>; Thu, 27 Feb 2020 12:02:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="R7ucxzv9"
+	by mail.kernel.org (Postfix) with ESMTP id 050C82469C
+	for <bpf@archiver.kernel.org>; Thu, 27 Feb 2020 14:38:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1582814307;
+	bh=z24xMhAOAsv3RMvG0Q89BdGt7Cz+HJ5sGckhBahJMxk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=QvuaLi9RhiXNXD6XAIdgYP+NObHzLMn2L9jem8eXXTuXcsOvlUPtFUaMz7L7fc/bl
+	 f5yVa/VfpYJlbJS9T7GZuS5yCF+HsChHMNHwGu8lB6z0l7gRZcDMT59I1ZDDakUcl/
+	 FliYwtouDRltOqq/U9yTtYSIfDbYlx8ajGWjK+8A=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728986AbgB0MCk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Feb 2020 07:02:40 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:40487 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728882AbgB0MCk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Feb 2020 07:02:40 -0500
-Received: by mail-oi1-f195.google.com with SMTP id a142so3014475oii.7
-        for <bpf@vger.kernel.org>; Thu, 27 Feb 2020 04:02:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BrW5LZwrgusNW5R7fWdBcyZoH5Id25Lj621CnfewVCc=;
-        b=R7ucxzv9WX65DnqA/knWAtXzG4aPD3M+Asthh3S1KCrJkFmamDtuptP8MO97MSHPba
-         e34rpQIqPzJrIS5t+m2Tbc5VplqIasAxwwwWAF/g02+wjLvXAycRrcQgceZ/5e3sPx6V
-         FEQqshY/WSxH/1/V4meq2t1Hh1fEGRnWWai7w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BrW5LZwrgusNW5R7fWdBcyZoH5Id25Lj621CnfewVCc=;
-        b=F8b58pfoAvYjJnSrPEGIXdv6Ja0GzWFnbcCMaICCLB4uBtwazMj8B/Oc5oNVS/ShG3
-         k92WV2Vtw6r23AF6Wq6pXjIvH8SbqIqvcDwLjflxlHgG7wVFW6qtGXNZ+2WFd0hvpohJ
-         dQ+hewaKflN2fGb6SeJUh+jfTYSuZ4L6BiW4NdbZJIZeqZ3nBnImhK/8DyhxT/z7iqhp
-         55xBVI8f5cMwCVrMvrD3f8M2EnD0O3msNYsVxIyQsc9LC3RGrS+8uZZseA2eqD9ZWOKg
-         QPGlMQlIJTU/5AeQhE6L5UzB2Id/Z1f5Cak55kI/FvBQMU2rIhKDCyOVNZqNjdKvPHOU
-         eO4w==
-X-Gm-Message-State: APjAAAWJD2dhfSxb8bmMHbS2o4XFot5KxS856mPsyP/JuuS4wdm3yJw6
-        2PhtU+ox/HzfspIbycWd/+99ndYe9bz+sDiZeDGkBg==
-X-Google-Smtp-Source: APXvYqxGGnZ2YlIzPYcumkmeZ2az1g8ikQk+YksINp58lf1d1j35iK2m2bjoEozqq7jJAU097AlwLPvODXTA3KcrXgY=
-X-Received: by 2002:aca:d4c1:: with SMTP id l184mr3007527oig.172.1582804959343;
- Thu, 27 Feb 2020 04:02:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20200225135636.5768-1-lmb@cloudflare.com> <20200225135636.5768-7-lmb@cloudflare.com>
- <877e08cksq.fsf@cloudflare.com>
-In-Reply-To: <877e08cksq.fsf@cloudflare.com>
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Thu, 27 Feb 2020 12:02:28 +0000
-Message-ID: <CACAyw9832Q+uLfYgzs5oAmYZDF+3U5pPGYKViMKovqb_hKY0gw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 6/7] selftests: bpf: add tests for UDP sockets in sockmap
-To:     Jakub Sitnicki <jakub@cloudflare.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        id S1732129AbgB0N41 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Feb 2020 08:56:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56886 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729484AbgB0N40 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Feb 2020 08:56:26 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2E1032073D;
+        Thu, 27 Feb 2020 13:56:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582811785;
+        bh=z24xMhAOAsv3RMvG0Q89BdGt7Cz+HJ5sGckhBahJMxk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QCX+byewPuPA7ebUTpZK7pwoZVU2nCwLW7/Kd4KmAsRZxAmypcsWALH9LiN0UKj37
+         kJOyPmCKbB5+UE43vkls8PEVNUrm36rFzGgqa5MwMR6S4b40E5a2alK08PZRLm8YwQ
+         Nhgh9GrKuDiRl1h+8itdQt8nsefbs0GWoQdV6+mo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Petr Mladek <pmladek@suse.com>, Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 100/237] tools lib api fs: Fix gcc9 stringop-truncation compilation error
+Date:   Thu, 27 Feb 2020 14:35:14 +0100
+Message-Id: <20200227132304.313971786@linuxfoundation.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200227132255.285644406@linuxfoundation.org>
+References: <20200227132255.285644406@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 27 Feb 2020 at 11:49, Jakub Sitnicki <jakub@cloudflare.com> wrote:
-> > +#define TEST(fn) TEST_SOTYPE(fn, 0)
-> > +#define TEST_STREAM(fn) TEST_SOTYPE(fn, SOCK_STREAM)
-> > +#define TEST_DGRAM(fn) TEST_SOTYPE(fn, SOCK_DGRAM)
-> > +
->
-> An alternative would be to use __VA_ARGS__ and designated intializers,
-> as I did recently in e0360423d020 ("selftests/bpf: Run SYN cookies with
-> reuseport BPF test only for TCP"). TEST_DGRAM is unused at the moment,
-> so that's something to consider.
+From: Andrey Zhizhikin <andrey.z@gmail.com>
 
-Good idea, I'll pick it up!
+[ Upstream commit 6794200fa3c9c3e6759dae099145f23e4310f4f7 ]
 
-> test_redir() doesn't get called with SOCK_DGRAM, because redirection
-> with sockmap and UDP is not supported yet, so perhaps no need to touch
-> this function.
+GCC9 introduced string hardening mechanisms, which exhibits the error
+during fs api compilation:
 
-I did this to avoid needing another macro, it should be possible to skip this
-with your VA_ARGS idea.
+error: '__builtin_strncpy' specified bound 4096 equals destination size
+[-Werror=stringop-truncation]
 
-> Looks like we can enable reuseport tests with not too much effort.
-> I managed to get them working with the changes below.
+This comes when the length of copy passed to strncpy is is equal to
+destination size, which could potentially lead to buffer overflow.
 
-Thanks, I'll add this to the next revision!
+There is a need to mitigate this potential issue by limiting the size of
+destination by 1 and explicitly terminate the destination with NULL.
 
+Signed-off-by: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andriin@fb.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20191211080109.18765-1-andrey.zhizhikin@leica-geosystems.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/lib/api/fs/fs.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/lib/api/fs/fs.c b/tools/lib/api/fs/fs.c
+index b24afc0e6e81c..45b50b89009aa 100644
+--- a/tools/lib/api/fs/fs.c
++++ b/tools/lib/api/fs/fs.c
+@@ -210,6 +210,7 @@ static bool fs__env_override(struct fs *fs)
+ 	size_t name_len = strlen(fs->name);
+ 	/* name + "_PATH" + '\0' */
+ 	char upper_name[name_len + 5 + 1];
++
+ 	memcpy(upper_name, fs->name, name_len);
+ 	mem_toupper(upper_name, name_len);
+ 	strcpy(&upper_name[name_len], "_PATH");
+@@ -219,7 +220,8 @@ static bool fs__env_override(struct fs *fs)
+ 		return false;
+ 
+ 	fs->found = true;
+-	strncpy(fs->path, override_path, sizeof(fs->path));
++	strncpy(fs->path, override_path, sizeof(fs->path) - 1);
++	fs->path[sizeof(fs->path) - 1] = '\0';
+ 	return true;
+ }
+ 
 -- 
-Lorenz Bauer  |  Systems Engineer
-6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+2.20.1
 
-www.cloudflare.com
+
+
