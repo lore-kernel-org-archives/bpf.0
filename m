@@ -2,378 +2,230 @@ Return-Path: <SRS0=xYxf=4Q=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B927CC3F2D2
-	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 22:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE867C3F2CD
+	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 23:14:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 86C0A2469F
-	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 22:40:18 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="O9pB8Nss"
+	by mail.kernel.org (Postfix) with ESMTP id 919C3246B0
+	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 23:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1582931681;
+	bh=T8LnZzZnIuj2IK/GeySKiZ8iOS+/XSmTnkcIXujgIlw=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=0ekzNRubm/VD5A1siBH8D/jO2asnlJqClWeGxl9ps5yRTpRfgMXFOX7LHQGbt/Exb
+	 FzK2E58cosm52oKAuRhhVvuXdeEdvSTgOJYj6Eu6UFIQvHjs+PLyTiuh2TKSQTdlaC
+	 uGhKjRdYGslCMZWlMPASwVRxa99FWkIVnU8MkqcE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725957AbgB1WkS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Feb 2020 17:40:18 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32814 "EHLO
+        id S1726954AbgB1XOi convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 28 Feb 2020 18:14:38 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21986 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726589AbgB1WkR (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 28 Feb 2020 17:40:17 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01SMeGso018819
-        for <bpf@vger.kernel.org>; Fri, 28 Feb 2020 14:40:16 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=2IzERmdmX0Z8RNCsXkr/P7ZJ2EbkHQ0gftdu0lz7UJI=;
- b=O9pB8NssaZUXkWYC+FlnmuHh/HDVI4VGM+GUwpAdlJsBaeF7R5390V8kcjkmouHhhAUN
- X79OkPBM3n8uCAn+oiHNXjgNN5v9hzUjy2NFt5cWd5DdQbAqN9UtTc/lDH6ewSWLwfag
- StkosAnVX18HdgP8T89jv+KzuRgTCahXXOE= 
+        by vger.kernel.org with ESMTP id S1726950AbgB1XOh (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 28 Feb 2020 18:14:37 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01SN95jL011765
+        for <bpf@vger.kernel.org>; Fri, 28 Feb 2020 15:14:36 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 2yepu8wykb-2
+        by mx0a-00082601.pphosted.com with ESMTP id 2yepvp63ja-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 28 Feb 2020 14:40:16 -0800
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 28 Feb 2020 15:14:35 -0800
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Fri, 28 Feb 2020 14:39:59 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 4E3612EC2D20; Fri, 28 Feb 2020 14:39:55 -0800 (PST)
+ 15.1.1779.2; Fri, 28 Feb 2020 15:13:59 -0800
+Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
+        id 17734760FD8; Fri, 28 Feb 2020 15:13:54 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
+From:   Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
+To:     <davem@davemloft.net>
+CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/3] libbpf: add bpf_link pinning/unpinning
-Date:   Fri, 28 Feb 2020 14:39:47 -0800
-Message-ID: <20200228223948.360936-3-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200228223948.360936-1-andriin@fb.com>
-References: <20200228223948.360936-1-andriin@fb.com>
-X-FB-Internal: Safe
+Subject: pull-request: bpf-next 2020-02-28
+Date:   Fri, 28 Feb 2020 15:13:54 -0800
+Message-ID: <20200228231354.3226583-1-ast@kernel.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-02-28_08:2020-02-28,2020-02-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=25
- bulkscore=0 phishscore=0 malwarescore=0 adultscore=0 impostorscore=0
- priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 clxscore=1015
- mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002280163
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ adultscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 suspectscore=4 spamscore=0 mlxlogscore=776
+ mlxscore=0 clxscore=1034 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002280166
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With bpf_link abstraction supported by kernel explicitly, add
-pinning/unpinning API for links. Also allow to create (open) bpf_link from BPF
-FS file.
+Hi David,
 
-This API allows to have an "ephemeral" FD-based BPF links (like raw tracepoint
-or fexit/freplace attachments) surviving user process exit, by pinning them in
-a BPF FS, which is an important use case for long-running BPF programs.
+The following pull-request contains BPF updates for your *net-next* tree.
 
-As part of this, expose underlying FD for bpf_link. While legacy bpf_link's
-might not have a FD associated with them (which will be expressed as
-a bpf_link with fd=-1), kernel's abstraction is based around FD-based usage,
-so match it closely. This, subsequently, allows to have a generic
-pinning/unpinning API for generalized bpf_link. For some types of bpf_links
-kernel might not support pinning, in which case bpf_link__pin() will return
-error.
+We've added 41 non-merge commits during the last 7 day(s) which contain
+a total of 49 files changed, 1383 insertions(+), 499 deletions(-).
 
-With FD being part of generic bpf_link, also get rid of bpf_link_fd in favor
-of using vanialla bpf_link.
+The main changes are:
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/libbpf.c   | 131 +++++++++++++++++++++++++++++++--------
- tools/lib/bpf/libbpf.h   |   5 ++
- tools/lib/bpf/libbpf.map |   5 ++
- 3 files changed, 114 insertions(+), 27 deletions(-)
+1) BPF and Real-Time nicely co-exist.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 996162801f7a..f8c4042e5855 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -6931,6 +6931,8 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
- struct bpf_link {
- 	int (*detach)(struct bpf_link *link);
- 	int (*destroy)(struct bpf_link *link);
-+	char *pin_path;		/* NULL, if not pinned */
-+	int fd;			/* hook FD, -1 if not applicable */
- 	bool disconnected;
- };
- 
-@@ -6960,26 +6962,109 @@ int bpf_link__destroy(struct bpf_link *link)
- 		err = link->detach(link);
- 	if (link->destroy)
- 		link->destroy(link);
-+	if (link->pin_path)
-+		free(link->pin_path);
- 	free(link);
- 
- 	return err;
- }
- 
--struct bpf_link_fd {
--	struct bpf_link link; /* has to be at the top of struct */
--	int fd; /* hook FD */
--};
-+int bpf_link__fd(const struct bpf_link *link)
-+{
-+	return link->fd;
-+}
-+
-+const char *bpf_link__pin_path(const struct bpf_link *link)
-+{
-+	return link->pin_path;
-+}
-+
-+static int bpf_link__detach_fd(struct bpf_link *link)
-+{
-+	return close(link->fd);
-+}
-+
-+struct bpf_link *bpf_link__open(const char *path)
-+{
-+	struct bpf_link *link;
-+	int fd;
-+
-+	fd = bpf_obj_get(path);
-+	if (fd < 0) {
-+		fd = -errno;
-+		pr_warn("failed to open link at %s: %d\n", path, fd);
-+		return ERR_PTR(fd);
-+	}
-+
-+	link = calloc(1, sizeof(*link));
-+	if (!link) {
-+		close(fd);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+	link->detach = &bpf_link__detach_fd;
-+	link->fd = fd;
-+
-+	link->pin_path = strdup(path);
-+	if (!link->pin_path) {
-+		bpf_link__destroy(link);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
-+	return link;
-+}
-+
-+int bpf_link__pin(struct bpf_link *link, const char *path)
-+{
-+	int err;
-+
-+	if (link->pin_path)
-+		return -EBUSY;
-+	err = make_parent_dir(path);
-+	if (err)
-+		return err;
-+	err = check_path(path);
-+	if (err)
-+		return err;
-+
-+	link->pin_path = strdup(path);
-+	if (!link->pin_path)
-+		return -ENOMEM;
-+
-+	if (bpf_obj_pin(link->fd, link->pin_path)) {
-+		err = -errno;
-+		zfree(&link->pin_path);
-+		return err;
-+	}
-+
-+	pr_debug("link fd=%d: pinned at %s\n", link->fd, link->pin_path);
-+	return 0;
-+}
-+
-+int bpf_link__unpin(struct bpf_link *link)
-+{
-+	int err;
-+
-+	if (!link->pin_path)
-+		return -EINVAL;
-+
-+	err = unlink(link->pin_path);
-+	if (err != 0)
-+		return -errno;
-+
-+	pr_debug("link fd=%d: unpinned from %s\n", link->fd, link->pin_path);
-+	zfree(&link->pin_path);
-+	return 0;
-+}
- 
- static int bpf_link__detach_perf_event(struct bpf_link *link)
- {
--	struct bpf_link_fd *l = (void *)link;
- 	int err;
- 
--	err = ioctl(l->fd, PERF_EVENT_IOC_DISABLE, 0);
-+	err = ioctl(link->fd, PERF_EVENT_IOC_DISABLE, 0);
- 	if (err)
- 		err = -errno;
- 
--	close(l->fd);
-+	close(link->fd);
- 	return err;
- }
- 
-@@ -6987,7 +7072,7 @@ struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog,
- 						int pfd)
- {
- 	char errmsg[STRERR_BUFSIZE];
--	struct bpf_link_fd *link;
-+	struct bpf_link *link;
- 	int prog_fd, err;
- 
- 	if (pfd < 0) {
-@@ -7005,7 +7090,7 @@ struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog,
- 	link = calloc(1, sizeof(*link));
- 	if (!link)
- 		return ERR_PTR(-ENOMEM);
--	link->link.detach = &bpf_link__detach_perf_event;
-+	link->detach = &bpf_link__detach_perf_event;
- 	link->fd = pfd;
- 
- 	if (ioctl(pfd, PERF_EVENT_IOC_SET_BPF, prog_fd) < 0) {
-@@ -7024,7 +7109,7 @@ struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog,
- 			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
- 		return ERR_PTR(err);
- 	}
--	return (struct bpf_link *)link;
-+	return link;
- }
- 
- /*
-@@ -7312,18 +7397,11 @@ static struct bpf_link *attach_tp(const struct bpf_sec_def *sec,
- 	return link;
- }
- 
--static int bpf_link__detach_fd(struct bpf_link *link)
--{
--	struct bpf_link_fd *l = (void *)link;
--
--	return close(l->fd);
--}
--
- struct bpf_link *bpf_program__attach_raw_tracepoint(struct bpf_program *prog,
- 						    const char *tp_name)
- {
- 	char errmsg[STRERR_BUFSIZE];
--	struct bpf_link_fd *link;
-+	struct bpf_link *link;
- 	int prog_fd, pfd;
- 
- 	prog_fd = bpf_program__fd(prog);
-@@ -7336,7 +7414,7 @@ struct bpf_link *bpf_program__attach_raw_tracepoint(struct bpf_program *prog,
- 	link = calloc(1, sizeof(*link));
- 	if (!link)
- 		return ERR_PTR(-ENOMEM);
--	link->link.detach = &bpf_link__detach_fd;
-+	link->detach = &bpf_link__detach_fd;
- 
- 	pfd = bpf_raw_tracepoint_open(tp_name, prog_fd);
- 	if (pfd < 0) {
-@@ -7348,7 +7426,7 @@ struct bpf_link *bpf_program__attach_raw_tracepoint(struct bpf_program *prog,
- 		return ERR_PTR(pfd);
- 	}
- 	link->fd = pfd;
--	return (struct bpf_link *)link;
-+	return link;
- }
- 
- static struct bpf_link *attach_raw_tp(const struct bpf_sec_def *sec,
-@@ -7362,7 +7440,7 @@ static struct bpf_link *attach_raw_tp(const struct bpf_sec_def *sec,
- struct bpf_link *bpf_program__attach_trace(struct bpf_program *prog)
- {
- 	char errmsg[STRERR_BUFSIZE];
--	struct bpf_link_fd *link;
-+	struct bpf_link *link;
- 	int prog_fd, pfd;
- 
- 	prog_fd = bpf_program__fd(prog);
-@@ -7375,7 +7453,7 @@ struct bpf_link *bpf_program__attach_trace(struct bpf_program *prog)
- 	link = calloc(1, sizeof(*link));
- 	if (!link)
- 		return ERR_PTR(-ENOMEM);
--	link->link.detach = &bpf_link__detach_fd;
-+	link->detach = &bpf_link__detach_fd;
- 
- 	pfd = bpf_raw_tracepoint_open(NULL, prog_fd);
- 	if (pfd < 0) {
-@@ -7409,10 +7487,9 @@ struct bpf_link *bpf_program__attach(struct bpf_program *prog)
- 
- static int bpf_link__detach_struct_ops(struct bpf_link *link)
- {
--	struct bpf_link_fd *l = (void *)link;
- 	__u32 zero = 0;
- 
--	if (bpf_map_delete_elem(l->fd, &zero))
-+	if (bpf_map_delete_elem(link->fd, &zero))
- 		return -errno;
- 
- 	return 0;
-@@ -7421,7 +7498,7 @@ static int bpf_link__detach_struct_ops(struct bpf_link *link)
- struct bpf_link *bpf_map__attach_struct_ops(struct bpf_map *map)
- {
- 	struct bpf_struct_ops *st_ops;
--	struct bpf_link_fd *link;
-+	struct bpf_link *link;
- 	__u32 i, zero = 0;
- 	int err;
- 
-@@ -7453,10 +7530,10 @@ struct bpf_link *bpf_map__attach_struct_ops(struct bpf_map *map)
- 		return ERR_PTR(err);
- 	}
- 
--	link->link.detach = bpf_link__detach_struct_ops;
-+	link->detach = bpf_link__detach_struct_ops;
- 	link->fd = map->fd;
- 
--	return (struct bpf_link *)link;
-+	return link;
- }
- 
- enum bpf_perf_event_ret
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 02fc58a21a7f..d38d7a629417 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -219,6 +219,11 @@ LIBBPF_API void bpf_program__unload(struct bpf_program *prog);
- 
- struct bpf_link;
- 
-+LIBBPF_API struct bpf_link *bpf_link__open(const char *path);
-+LIBBPF_API int bpf_link__fd(const struct bpf_link *link);
-+LIBBPF_API const char *bpf_link__pin_path(const struct bpf_link *link);
-+LIBBPF_API int bpf_link__pin(struct bpf_link *link, const char *path);
-+LIBBPF_API int bpf_link__unpin(struct bpf_link *link);
- LIBBPF_API void bpf_link__disconnect(struct bpf_link *link);
- LIBBPF_API int bpf_link__destroy(struct bpf_link *link);
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 7b014c8cdece..5129283c0284 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -238,5 +238,10 @@ LIBBPF_0.0.7 {
- 
- LIBBPF_0.0.8 {
- 	global:
-+		bpf_link__fd;
-+		bpf_link__open;
-+		bpf_link__pin;
-+		bpf_link__pin_path;
-+		bpf_link__unpin;
- 		bpf_program__set_attach_target;
- } LIBBPF_0.0.7;
--- 
-2.17.1
+2) bpftool feature improvements.
 
+3) retrieve bpf_sk_storage via INET_DIAG.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+
+Thanks a lot!
+
+Also thanks to reporters, reviewers and testers of commits in this pull-request:
+
+Alexei Starovoitov, Jason Wang, Martin KaFai Lau, Michael S. Tsirkin, 
+Quentin Monnet, Song Liu, Thomas Gleixner
+
+----------------------------------------------------------------
+
+The following changes since commit 732a0dee501f9a693c9a711730838129f4587041:
+
+  Merge branch 'mlxfw-Improve-error-reporting-and-FW-reactivate-support' (2020-02-21 15:41:10 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git 
+
+for you to fetch changes up to 812285fa5ab129e3a55682314bf235f701564310:
+
+  Merge branch 'bpf_sk_storage_via_inet_diag' (2020-02-27 18:53:37 -0800)
+
+----------------------------------------------------------------
+Alexei Starovoitov (4):
+      Merge tag 'sched-for-bpf-2020-02-20' of git://git.kernel.org/.../tip/tip into bpf-next
+      bpf: disable preemption for bpf progs attached to uprobe
+      Merge branch 'BPF_and_RT'
+      Merge branch 'bpf_sk_storage_via_inet_diag'
+
+Andrey Ignatov (1):
+      bpftool: Support struct_ops, tracing, ext prog types
+
+Andrii Nakryiko (1):
+      selftests/bpf: Print backtrace on SIGSEGV in test_progs
+
+Daniel Borkmann (1):
+      Merge branch 'bpf-bpftool-probes'
+
+David Miller (5):
+      bpf: Use bpf_prog_run_pin_on_cpu() at simple call sites.
+      bpf/tests: Use migrate disable instead of preempt disable
+      bpf: Use migrate_disable/enabe() in trampoline code.
+      bpf: Use migrate_disable/enable in array macros and cgroup/lirc code.
+      bpf/stackmap: Dont trylock mmap_sem with PREEMPT_RT and interrupts disabled
+
+Gustavo A. R. Silva (1):
+      bpf: Replace zero-length array with flexible-array member
+
+Jakub Sitnicki (2):
+      selftests/bpf: Run reuseport tests only with supported socket types
+      selftests/bpf: Run SYN cookies with reuseport BPF test only for TCP
+
+Martin KaFai Lau (4):
+      inet_diag: Refactor inet_sk_diag_fill(), dump(), and dump_one()
+      inet_diag: Move the INET_DIAG_REQ_BYTECODE nlattr to cb->data
+      bpf: INET_DIAG support in bpf_sk_storage
+      bpf: inet_diag: Dump bpf_sk_storages in inet_diag_dump()
+
+Michal Rostecki (5):
+      bpftool: Move out sections to separate functions
+      bpftool: Make probes which emit dmesg warnings optional
+      bpftool: Update documentation of "bpftool feature" command
+      bpftool: Update bash completion for "bpftool feature" command
+      selftests/bpf: Add test for "bpftool feature" command
+
+Scott Branden (1):
+      scripts/bpf: Switch to more portable python3 shebang
+
+Thomas Gleixner (18):
+      sched: Provide cant_migrate()
+      bpf: Tighten the requirements for preallocated hash maps
+      bpf: Enforce preallocation for instrumentation programs on RT
+      bpf: Update locking comment in hashtab code
+      bpf/tracing: Remove redundant preempt_disable() in __bpf_trace_run()
+      bpf/trace: Remove EXPORT from trace_call_bpf()
+      bpf/trace: Remove redundant preempt_disable from trace_call_bpf()
+      perf/bpf: Remove preempt disable around BPF invocation
+      bpf: Remove recursion prevention from rcu free callback
+      bpf: Dont iterate over possible CPUs with interrupts disabled
+      bpf: Provide bpf_prog_run_pin_on_cpu() helper
+      bpf: Replace cant_sleep() with cant_migrate()
+      bpf: Provide recursion prevention helpers
+      bpf: Use recursion prevention helpers in hashtab code
+      bpf: Replace open coded recursion prevention in sys_bpf()
+      bpf: Factor out hashtab bucket lock operations
+      bpf: Prepare hashtab locking for PREEMPT_RT
+      bpf, lpm: Make locking RT friendly
+
+Yuya Kusakabe (2):
+      virtio_net: Keep vnet header zeroed if XDP is loaded for small buffer
+      virtio_net: Add XDP meta data support
+
+ drivers/net/virtio_net.c                           |  56 ++--
+ include/linux/bpf-cgroup.h                         |   2 +-
+ include/linux/bpf.h                                |  41 ++-
+ include/linux/filter.h                             |  37 ++-
+ include/linux/inet_diag.h                          |  27 +-
+ include/linux/kernel.h                             |   7 +
+ include/linux/netlink.h                            |   4 +-
+ include/linux/preempt.h                            |  30 ++
+ include/net/bpf_sk_storage.h                       |  27 ++
+ include/uapi/linux/bpf.h                           |   2 +-
+ include/uapi/linux/inet_diag.h                     |   5 +-
+ include/uapi/linux/sock_diag.h                     |  26 ++
+ kernel/bpf/bpf_struct_ops.c                        |   2 +-
+ kernel/bpf/hashtab.c                               | 174 ++++++++----
+ kernel/bpf/lpm_trie.c                              |  14 +-
+ kernel/bpf/percpu_freelist.c                       |  20 +-
+ kernel/bpf/stackmap.c                              |  18 +-
+ kernel/bpf/syscall.c                               |  42 +--
+ kernel/bpf/trampoline.c                            |   9 +-
+ kernel/bpf/verifier.c                              |  40 ++-
+ kernel/events/core.c                               |   2 -
+ kernel/seccomp.c                                   |   4 +-
+ kernel/trace/bpf_trace.c                           |   7 +-
+ kernel/trace/trace_uprobe.c                        |  11 +-
+ lib/test_bpf.c                                     |   4 +-
+ net/bpf/test_run.c                                 |   8 +-
+ net/core/bpf_sk_storage.c                          | 283 ++++++++++++++++++-
+ net/core/flow_dissector.c                          |   4 +-
+ net/core/skmsg.c                                   |   8 +-
+ net/dccp/diag.c                                    |   9 +-
+ net/ipv4/inet_diag.c                               | 307 +++++++++++++--------
+ net/ipv4/raw_diag.c                                |  24 +-
+ net/ipv4/tcp_diag.c                                |   8 +-
+ net/ipv4/udp_diag.c                                |  41 ++-
+ net/kcm/kcmsock.c                                  |   4 +-
+ net/sctp/diag.c                                    |   7 +-
+ scripts/bpf_helpers_doc.py                         |   2 +-
+ .../bpf/bpftool/Documentation/bpftool-feature.rst  |  19 +-
+ tools/bpf/bpftool/Documentation/bpftool-prog.rst   |   3 +-
+ tools/bpf/bpftool/bash-completion/bpftool          |   6 +-
+ tools/bpf/bpftool/feature.c                        | 283 +++++++++++--------
+ tools/bpf/bpftool/main.h                           |   3 +
+ tools/bpf/bpftool/prog.c                           |   4 +-
+ tools/testing/selftests/.gitignore                 |   5 +-
+ tools/testing/selftests/bpf/Makefile               |   5 +-
+ .../selftests/bpf/prog_tests/select_reuseport.c    |  30 +-
+ tools/testing/selftests/bpf/test_bpftool.py        | 178 ++++++++++++
+ tools/testing/selftests/bpf/test_bpftool.sh        |   5 +
+ tools/testing/selftests/bpf/test_progs.c           |  25 ++
+ 49 files changed, 1383 insertions(+), 499 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/test_bpftool.py
+ create mode 100755 tools/testing/selftests/bpf/test_bpftool.sh
