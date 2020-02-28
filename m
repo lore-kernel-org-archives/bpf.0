@@ -2,112 +2,83 @@ Return-Path: <SRS0=xYxf=4Q=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43136C3F2D1
-	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 11:55:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10BF7C3F2D2
+	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 11:57:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 169362084E
-	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 11:55:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CDDCB246AE
+	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 11:57:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="nRHbeQgB"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="sXAaF8iK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726525AbgB1LzR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Feb 2020 06:55:17 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:38837 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726063AbgB1Lyg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 28 Feb 2020 06:54:36 -0500
-Received: by mail-wr1-f66.google.com with SMTP id e8so2642047wrm.5
-        for <bpf@vger.kernel.org>; Fri, 28 Feb 2020 03:54:35 -0800 (PST)
+        id S1725856AbgB1L5m (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 Feb 2020 06:57:42 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:37164 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgB1L5m (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 28 Feb 2020 06:57:42 -0500
+Received: by mail-oi1-f195.google.com with SMTP id q84so2602443oic.4
+        for <bpf@vger.kernel.org>; Fri, 28 Feb 2020 03:57:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kkEx/G8eTytwDA2xVv10ojrFCAdFuXVuGczKEDlanmk=;
-        b=nRHbeQgBoCC9FHlZT6ZsAN7GvP0j8s57g9+KlGBZwPDQqJZ3i5PoXvaA0GjY5CZpbS
-         AioUXAB5a0PkTF6uS+TcLk0rI/fILna02Lp07mec29YR9laNBuKwaJ4KZpHnJ+ZY6bwu
-         aF8i7C3vO5lTIACuzcScyyqfAF7VVNSeQ3cjQ=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1O4obvVvKLAwYYBZM+AQ18LdV1elI7eXt7o1/gJyneQ=;
+        b=sXAaF8iKjzcVlEHN6GDIFYKh23PMrguoxvSdGx6Lujp018XxheYcYLL7rsZM4Csk+w
+         Om4Aa8PXO8quh0pWVWktNd/82+HGeq7Nk8b8m8ANvhvZ2S/8grnDlVpcw1mgS+YgTj7Q
+         B8uInsbu6ihoXH6bS+ZQzWxxRCWfCgB+O7D2A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kkEx/G8eTytwDA2xVv10ojrFCAdFuXVuGczKEDlanmk=;
-        b=SDMRukgixIY1Y27LE1B+j3a2kCWbhhizoqTYpzfaBnPMtljbjyCZdRPE2QIhouUypd
-         xDKQ+axye39Hk5t+ggynrDv+d5RqCT1JkGqrvcaCdJaVsOOaAfBhiObPr7kH/G4w4Uu6
-         t6ienD2Fnbw8OPAT0SIFjdLEnMs6bFBfZmYZbQsl3QLgFLiB0y1wlwIEYSEj2cN1LgMu
-         sq4P8nrZILV/8KB6E0akBugVNXAuFl14pS7NSiZb0bPLfLNNMhtRFOmU11XQcfWX+kNr
-         Qhs7og8U4J/sn960SGA+wWJqwuEx4WnS4n5fGxrbJoQBbJkEvPH7l4cn0w4g6utxuhGl
-         h0Wg==
-X-Gm-Message-State: APjAAAWJPSY2wZeQmJcoKu0TtP31Abg+rx2TI+UZOZq8Z7r0uvIijhep
-        j46JxYSPXz/rxBZPbCcowULJdg==
-X-Google-Smtp-Source: APXvYqxS15rS27QJPaHUorY/EiMzfq9bdMkp7hbe1foDlgNo69dHobfArrDcXbCCKQea3JYPjT7hlQ==
-X-Received: by 2002:adf:ee85:: with SMTP id b5mr4566530wro.34.1582890874869;
-        Fri, 28 Feb 2020 03:54:34 -0800 (PST)
-Received: from antares.lan (b.2.d.a.1.b.1.b.2.c.5.e.0.3.d.4.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:4d30:e5c2:b1b1:ad2b])
-        by smtp.gmail.com with ESMTPSA id q125sm2044284wme.19.2020.02.28.03.54.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2020 03:54:34 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1O4obvVvKLAwYYBZM+AQ18LdV1elI7eXt7o1/gJyneQ=;
+        b=Olc/YdFOr7HeyBi0tbxlgRySQERh7fy3SWAbwPfM+wYcWUmWD43vrH+OSAlXHvkWCD
+         lcOmQUIYNq78KD9bi3Hq/QgnEHgIhwilLRtwOptpQX889vxqe322XUN8OINTVYLgpFuf
+         K80u0WaaEKRHvqjR4NbVnMKXYA5pIYPPX4xjyutlH2YC7NJoRwUiD0rJiUDH/FSlBczE
+         BtBsKoLihu6IVIkx1IcSI0TI2SlUdK1RHLmo3TyIxQ0+RBrrN/pXc+8WRsPftgsHes/2
+         BuhcipggYCAwsf3rwto/YrMnGjvgfJ0aCOx832Mc6GqY9Moxi877auU3YcyABsXLj23i
+         LrEA==
+X-Gm-Message-State: APjAAAXRgbJUZqFuW1d71XsU6eL/NYPPEVEz+mxlT6EkXT3JlEAbAdZx
+        VYN8KtIN+h90znTwnh2KP6Fcn/EOlmIcTulAHi8Reg==
+X-Google-Smtp-Source: APXvYqxeftFzsjngny/QmHkgG9u1BgJecAi1sQEe5ZTVX1cMxK5TGRlqNi+LjOyAtoq5c61t9HYu79xVQLUtmbxEqEQ=
+X-Received: by 2002:aca:d4c1:: with SMTP id l184mr2883630oig.172.1582891060661;
+ Fri, 28 Feb 2020 03:57:40 -0800 (PST)
+MIME-Version: 1.0
+References: <20200228115344.17742-1-lmb@cloudflare.com>
+In-Reply-To: <20200228115344.17742-1-lmb@cloudflare.com>
 From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     john.fastabend@gmail.com, Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+Date:   Fri, 28 Feb 2020 11:57:29 +0000
+Message-ID: <CACAyw9-vUxeyVq-yktXwuTKX6NoEFiX-y88U_751umVviqOSvQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/9] bpf: sockmap, sockhash: support storing
+ UDP sockets
+To:     John Fastabend <john.fastabend@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/9] bpf: tcp: guard declarations with CONFIG_NET_SOCK_MSG
-Date:   Fri, 28 Feb 2020 11:53:37 +0000
-Message-Id: <20200228115344.17742-3-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200228115344.17742-1-lmb@cloudflare.com>
-References: <20200228115344.17742-1-lmb@cloudflare.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Cc:     kernel-team <kernel-team@cloudflare.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-tcp_bpf.c is only included in the build if CONFIG_NET_SOCK_MSG is
-selected. The declaration should therefore be guarded as such.
+On Fri, 28 Feb 2020 at 11:54, Lorenz Bauer <lmb@cloudflare.com> wrote:
+>
+> Thanks for all the reviews so far! I've fixed the identified bug and addressed
+> feedback as much as possible.
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- include/net/tcp.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This should've been a reply to
+https://lore.kernel.org/bpf/20200225135636.5768-1-lmb@cloudflare.com/
+"[PATCH bpf-next 0/7] bpf: sockmap, sockhash: support storing UDP sockets"
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 07f947cc80e6..a30022482dbc 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2195,6 +2195,7 @@ void tcp_update_ulp(struct sock *sk, struct proto *p,
- struct sk_msg;
- struct sk_psock;
- 
-+#ifdef CONFIG_NET_SOCK_MSG
- int tcp_bpf_init(struct sock *sk);
- void tcp_bpf_reinit(struct sock *sk);
- int tcp_bpf_sendmsg_redir(struct sock *sk, struct sk_msg *msg, u32 bytes,
-@@ -2203,13 +2204,12 @@ int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
- 		    int nonblock, int flags, int *addr_len);
- int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
- 		      struct msghdr *msg, int len, int flags);
--#ifdef CONFIG_NET_SOCK_MSG
- void tcp_bpf_clone(const struct sock *sk, struct sock *newsk);
- #else
- static inline void tcp_bpf_clone(const struct sock *sk, struct sock *newsk)
- {
- }
--#endif
-+#endif /* CONFIG_NET_SOCK_MSG */
- 
- /* Call BPF_SOCK_OPS program that returns an int. If the return value
-  * is < 0, then the BPF op failed (for example if the loaded BPF
+Sorry!
+
 -- 
-2.20.1
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
 
+www.cloudflare.com
