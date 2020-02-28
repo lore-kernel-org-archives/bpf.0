@@ -2,161 +2,130 @@ Return-Path: <SRS0=xYxf=4Q=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5DC6C3F2D2
-	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 23:21:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65966C3F2D2
+	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 23:41:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B92002469C
-	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 23:21:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D8C6246AC
+	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 23:41:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vTYUSomi"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Al7MtMtk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726277AbgB1XVl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Feb 2020 18:21:41 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:34246 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725957AbgB1XVl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 28 Feb 2020 18:21:41 -0500
-Received: by mail-qt1-f193.google.com with SMTP id l16so3382584qtq.1;
-        Fri, 28 Feb 2020 15:21:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=irfR243etnowtrBaZTxlqkSN/p6uwkEixC/FhFjbiBA=;
-        b=vTYUSomiDcqQLb9RWmLAPHrVWnwGu44FmvFb0qyvJEChBSSF1gkvJ6Y91juxUtVmLv
-         yW4APRnbDAI6bWzlfOgzWv9fY+IbXAqVYDH8LZ036bNkX9+8Y3T+rYY/uFoBkkoE0CBF
-         TTyURT3zcx0igwUgXZl6cH+tXf303SRrAwWitybgD6Gb61XVwAsB5jrIpjjqxLjbk711
-         sHYWO75/c2RRWswuVIpAwZ/xuXRs5+IwKoOL7n7++pMt03nhVg5sNblggTId2C4TAR16
-         6oFC+/M51KqlZQr62mTqEx0bLCJZnobv4YqtNAPQm/NufjEiIIYFaCdM5mkmX4tSzgqk
-         XEjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=irfR243etnowtrBaZTxlqkSN/p6uwkEixC/FhFjbiBA=;
-        b=HG1be9O7TgbKfX7AdmYBrIAycxUexikvrWNlc4rDo5bpf9U1pUtOYgs1FyrBYldjaw
-         9r8wakuL0bPZoukBuz+VW0ATgYPebwyyXP1Wmtd5qMfT+vGeiSO/PTyqUWUoJO4KLSNu
-         LjqmqgGBnwTy4gvDW5eh+2PrFkPxYkgGZcTmOyJejDSB4p4ypzh0766rU6n7HW3ZiSy3
-         OHnG3F595//krPzjEYSDbVfLw31O4lNHdwBDBlfe6K2JGyfrbXIlVoz0FBKNpqO0Ana0
-         4fNpMSIjZVoUeNV35lCMP4qW78EFlKxShlloG0/b7wFijnTmJbaBF2a2+9rtBZASLs22
-         TWlQ==
-X-Gm-Message-State: APjAAAWLDjCvZ3FA05RRUyZTPyIzeL8JIST7MBS+ORlBs4IKVHGdLcWS
-        hPtGxglGDAsKjN3kcUk2lwse32YzSZy8GuPPV7M=
-X-Google-Smtp-Source: APXvYqzJlz0qwxh4W38T6U8XtVqTY0BWG+pFj5Sz4URWaB4eX8OA+EPMVt9qD3TD5XsXVoBMhTlHVZIAJd5e1BzfHmY=
-X-Received: by 2002:ac8:4581:: with SMTP id l1mr3577770qtn.59.1582932099922;
- Fri, 28 Feb 2020 15:21:39 -0800 (PST)
+        id S1726796AbgB1XlK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 Feb 2020 18:41:10 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39144 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726744AbgB1XlK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 28 Feb 2020 18:41:10 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01SNcOqs010896
+        for <bpf@vger.kernel.org>; Fri, 28 Feb 2020 15:41:08 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=j/6SXOvCctfR5eluAvXtIqLImVqnk3gXRJKCdN6HMh8=;
+ b=Al7MtMtk4rc4VIIw2XYLxA/qaCPLo+IfepRZ7ep/lP9JzHkcPoaj8SSdzfivuz4lFDbR
+ hXOzcY7TwKnWajq61qKnaYPQWwaBW+kLCEHVJ21GfE7gnAAqvBDYPQmXzBI/fPz6+i/q
+ OyTymlf/qlIRAVEXhyCmW4azK4PJFlz7BUo= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2yepu8x7ke-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 28 Feb 2020 15:41:08 -0800
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Fri, 28 Feb 2020 15:41:05 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 3600B62E0BA7; Fri, 28 Feb 2020 15:41:05 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Song Liu <songliubraving@fb.com>
+Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <arnaldo.melo@gmail.com>, <jolsa@kernel.org>,
+        Song Liu <songliubraving@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v2 bpf-next 2/2] bpftool: Documentation for bpftool prog profile
+Date:   Fri, 28 Feb 2020 15:40:58 -0800
+Message-ID: <20200228234058.634044-3-songliubraving@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200228234058.634044-1-songliubraving@fb.com>
+References: <20200228234058.634044-1-songliubraving@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <158289973977.337029.3637846294079508848.stgit@toke.dk>
-In-Reply-To: <158289973977.337029.3637846294079508848.stgit@toke.dk>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 28 Feb 2020 15:21:28 -0800
-Message-ID: <CAEf4Bzaqr2uZca2iZvRpz54C-ohLsNK1sdN8daBr1qkRQ+NhWg@mail.gmail.com>
-Subject: Re: [PATCH RFC] Userspace library for handling multiple XDP programs
- on an interface
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Andrey Ignatov <rdna@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-28_09:2020-02-28,2020-02-28 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ bulkscore=0 phishscore=0 malwarescore=0 adultscore=0 impostorscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 clxscore=1015
+ mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002280172
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 6:22 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
-at.com> wrote:
->
-> Hi everyone
->
-> As most of you are no doubt aware, we've had various discussions on how
-> to handle multiple XDP programs on a single interface. With the freplace
-> functionality, the kernel infrastructure is now there to handle this
-> (almost, see "missing pieces" below).
->
-> While the freplace mechanism offers userspace a lot of flexibility in
-> how to handle dispatching of multiple XDP programs, userspace also has
-> to do quite a bit of work to implement this (compared to just issuing
-> load+attach). The goal of this email is to get some feedback on a
-> library to implement this, in the hope that we can converge on something
-> that will be widely applicable, ensuring that both (a) everyone doesn't
-> have to reinvent the wheel, and (b) we don't end up with a proliferation
-> of subtly incompatible dispatcher models that makes it hard or
-> impossible to mix and match XDP programs from multiple sources.
->
+Add documentation for the new bpftool prog profile command.
 
-[...]
+Signed-off-by: Song Liu <songliubraving@fb.com>
+---
+ .../bpf/bpftool/Documentation/bpftool-prog.rst  | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
->
-> **** Missing pieces
-> While the libxdp code can assemble a basic dispatcher and load it into th=
-e
-> kernel, there are a couple of missing pieces on the kernel side; I will p=
-ropose
-> patches to fix these, but figured there was no reason to hold back postin=
-g of
-> the library for comments because of this. These missing pieces are:
->
-> - There is currently no way to persist the freplace after the program exi=
-ts; the
->   file descriptor returned by bpf_raw_tracepoint_open() will release the =
-program
->   when it is closed, and it cannot be pinned.
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+index 46862e85fed2..1e2549dcd926 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -30,6 +30,7 @@ PROG COMMANDS
+ |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
+ |	**bpftool** **prog tracelog**
+ |	**bpftool** **prog run** *PROG* **data_in** *FILE* [**data_out** *FILE* [**data_size_out** *L*]] [**ctx_in** *FILE* [**ctx_out** *FILE* [**ctx_size_out** *M*]]] [**repeat** *N*]
++|	**bpftool** **prog profile** [*DURATION*] *PROG* *METRICs*
+ |	**bpftool** **prog help**
+ |
+ |	*MAP* := { **id** *MAP_ID* | **pinned** *FILE* }
+@@ -48,6 +49,9 @@ PROG COMMANDS
+ |       *ATTACH_TYPE* := {
+ |		**msg_verdict** | **stream_verdict** | **stream_parser** | **flow_dissector**
+ |	}
++|	*METRIC* := {
++|		**cycles** | **instructions** | **l1d_loads** | **llc_misses**
++|	}
+ 
+ 
+ DESCRIPTION
+@@ -189,6 +193,10 @@ DESCRIPTION
+ 		  not all of them can take the **ctx_in**/**ctx_out**
+ 		  arguments. bpftool does not perform checks on program types.
+ 
++	**bpftool prog profile** *DURATION* *PROG* *METRICs*
++		  Profile *METRICs* for bpf program *PROG* for *DURATION*
++		  seconds.
++
+ 	**bpftool prog help**
+ 		  Print short help message.
+ 
+@@ -311,6 +319,15 @@ EXAMPLES
+ 
+ **# rm /sys/fs/bpf/xdp1**
+ 
++|
++| **# bpftool prog profile 10 id 337 cycles instructions llc_misses**
++
++::
++         51397 run_cnt
++      40176203 cycles                                                 (83.05%)
++      42518139 instructions    #   1.06 insn per cycle                (83.39%)
++           123 llc_misses      #   2.89 LLC misses per million isns   (83.15%)
++
+ SEE ALSO
+ ========
+ 	**bpf**\ (2),
+-- 
+2.17.1
 
-This is completely addressed by patch set [0] I just posted. It will
-allow you to pin freplace BPF link in BPF FS. Feel free to review and
-comment there, if anything is missing.
-
-  [0] https://patchwork.ozlabs.org/project/netdev/list/?series=3D161582&sta=
-te=3D*
-
->
-> - There is no way to re-attach an already loaded program to another funct=
-ion;
->   this is needed for updating the call sequence: When a new program is lo=
-aded,
->   libxdp should get the existing list of component programs on the interf=
-ace and
->   insert the new one into the chain in the appropriate place. To do this =
-it
->   needs to build a new dispatcher and reattach all the old programs to it=
-.
->   Ideally, this should be doable without detaching them from the old disp=
-atcher;
->   that way, we can build the new dispatcher completely, and atomically re=
-place
->   it on the interface by the usual XDP attach mechanism.
->
-> ---
->
-> Toke H=C3=B8iland-J=C3=B8rgensen (1):
->       libxdp: Add libxdp (FOR COMMENT ONLY)
->
->
->  tools/lib/xdp/libxdp.c          |  856 +++++++++++++++++++++++++++++++++=
-++++++
->  tools/lib/xdp/libxdp.h          |   38 ++
->  tools/lib/xdp/prog_dispatcher.h |   17 +
->  tools/lib/xdp/xdp-dispatcher.c  |  178 ++++++++
->  tools/lib/xdp/xdp_helpers.h     |   12 +
->  5 files changed, 1101 insertions(+)
->  create mode 100644 tools/lib/xdp/libxdp.c
->  create mode 100644 tools/lib/xdp/libxdp.h
->  create mode 100644 tools/lib/xdp/prog_dispatcher.h
->  create mode 100644 tools/lib/xdp/xdp-dispatcher.c
->  create mode 100644 tools/lib/xdp/xdp_helpers.h
->
