@@ -2,44 +2,44 @@ Return-Path: <SRS0=xYxf=4Q=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65966C3F2D2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E16B5C3F2CD
 	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 23:41:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3D8C6246AC
+	by mail.kernel.org (Postfix) with ESMTP id B8124246AC
 	for <bpf@archiver.kernel.org>; Fri, 28 Feb 2020 23:41:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Al7MtMtk"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ffX2P3Tk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726796AbgB1XlK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726744AbgB1XlK (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 28 Feb 2020 18:41:10 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39144 "EHLO
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11802 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726744AbgB1XlK (ORCPT
+        by vger.kernel.org with ESMTP id S1726783AbgB1XlK (ORCPT
         <rfc822;bpf@vger.kernel.org>); Fri, 28 Feb 2020 18:41:10 -0500
 Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01SNcOqs010896
-        for <bpf@vger.kernel.org>; Fri, 28 Feb 2020 15:41:08 -0800
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01SNcOqu010896
+        for <bpf@vger.kernel.org>; Fri, 28 Feb 2020 15:41:10 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=j/6SXOvCctfR5eluAvXtIqLImVqnk3gXRJKCdN6HMh8=;
- b=Al7MtMtk4rc4VIIw2XYLxA/qaCPLo+IfepRZ7ep/lP9JzHkcPoaj8SSdzfivuz4lFDbR
- hXOzcY7TwKnWajq61qKnaYPQWwaBW+kLCEHVJ21GfE7gnAAqvBDYPQmXzBI/fPz6+i/q
- OyTymlf/qlIRAVEXhyCmW4azK4PJFlz7BUo= 
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=vS0nFAaoNCrCgkpI/DjwKxxa9hp82tLxsT4hzC4fGV4=;
+ b=ffX2P3TkicESsG8fo4MmbvaEiLU8ddDogixr+WXvddhR/te+h+kl7F5gv+YzZTzy3ZfX
+ sAv9gTu+yFi+mvX47qJRH3Y5qDtsBOaziONzHzNHS5rWVy68ux/nweMIwoZCqbtjEGvu
+ vNruVCmmYG5uxpHq/cMa7mfgVGp7c2Bx9FI= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2yepu8x7ke-5
+        by mx0a-00082601.pphosted.com with ESMTP id 2yepu8x7mq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 28 Feb 2020 15:41:08 -0800
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 28 Feb 2020 15:41:09 -0800
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Fri, 28 Feb 2020 15:41:05 -0800
+ 15.1.1779.2; Fri, 28 Feb 2020 15:41:08 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 3600B62E0BA7; Fri, 28 Feb 2020 15:41:05 -0800 (PST)
+        id 0792962E0BA7; Fri, 28 Feb 2020 15:41:01 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -48,12 +48,10 @@ CC:     <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <arnaldo.melo@gmail.com>, <jolsa@kernel.org>,
         Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 2/2] bpftool: Documentation for bpftool prog profile
-Date:   Fri, 28 Feb 2020 15:40:58 -0800
-Message-ID: <20200228234058.634044-3-songliubraving@fb.com>
+Subject: [PATCH v2 bpf-next 0/2] bpftool: introduce prog profile
+Date:   Fri, 28 Feb 2020 15:40:56 -0800
+Message-ID: <20200228234058.634044-1-songliubraving@fb.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200228234058.634044-1-songliubraving@fb.com>
-References: <20200228234058.634044-1-songliubraving@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -61,7 +59,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-02-28_09:2020-02-28,2020-02-28 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
  bulkscore=0 phishscore=0 malwarescore=0 adultscore=0 impostorscore=0
- priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=786 clxscore=1015
  mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2001150001 definitions=main-2002280172
 X-FB-Internal: deliver
@@ -70,62 +68,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add documentation for the new bpftool prog profile command.
+This set introduces bpftool prog profile command, which uses hardware
+counters to profile BPF programs.
 
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- .../bpf/bpftool/Documentation/bpftool-prog.rst  | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+This command attaches fentry/fexit programs to a target program. These two
+programs read hardware counters before and after the target program and
+calculate the difference.
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 46862e85fed2..1e2549dcd926 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -30,6 +30,7 @@ PROG COMMANDS
- |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
- |	**bpftool** **prog tracelog**
- |	**bpftool** **prog run** *PROG* **data_in** *FILE* [**data_out** *FILE* [**data_size_out** *L*]] [**ctx_in** *FILE* [**ctx_out** *FILE* [**ctx_size_out** *M*]]] [**repeat** *N*]
-+|	**bpftool** **prog profile** [*DURATION*] *PROG* *METRICs*
- |	**bpftool** **prog help**
- |
- |	*MAP* := { **id** *MAP_ID* | **pinned** *FILE* }
-@@ -48,6 +49,9 @@ PROG COMMANDS
- |       *ATTACH_TYPE* := {
- |		**msg_verdict** | **stream_verdict** | **stream_parser** | **flow_dissector**
- |	}
-+|	*METRIC* := {
-+|		**cycles** | **instructions** | **l1d_loads** | **llc_misses**
-+|	}
- 
- 
- DESCRIPTION
-@@ -189,6 +193,10 @@ DESCRIPTION
- 		  not all of them can take the **ctx_in**/**ctx_out**
- 		  arguments. bpftool does not perform checks on program types.
- 
-+	**bpftool prog profile** *DURATION* *PROG* *METRICs*
-+		  Profile *METRICs* for bpf program *PROG* for *DURATION*
-+		  seconds.
-+
- 	**bpftool prog help**
- 		  Print short help message.
- 
-@@ -311,6 +319,15 @@ EXAMPLES
- 
- **# rm /sys/fs/bpf/xdp1**
- 
-+|
-+| **# bpftool prog profile 10 id 337 cycles instructions llc_misses**
-+
-+::
-+         51397 run_cnt
-+      40176203 cycles                                                 (83.05%)
-+      42518139 instructions    #   1.06 insn per cycle                (83.39%)
-+           123 llc_misses      #   2.89 LLC misses per million isns   (83.15%)
-+
- SEE ALSO
- ========
- 	**bpf**\ (2),
--- 
+Changes RFC => v2:
+1. Use new bpf_program__set_attach_target() API;
+2. Update output format to be perf-stat like (Alexei);
+3. Incorporate skeleton generation into Makefile;
+4. Make DURATION optional and Allow Ctrl-C (Alexei);
+5. Add calcated values "insn per cycle" and "LLC misses per million isns".
+
+Song Liu (2):
+  bpftool: introduce "prog profile" command
+  bpftool: Documentation for bpftool prog profile
+
+ .../bpftool/Documentation/bpftool-prog.rst    |  17 +
+ tools/bpf/bpftool/Makefile                    |  18 +
+ tools/bpf/bpftool/prog.c                      | 428 +++++++++++++++++-
+ tools/bpf/bpftool/skeleton/profiler.bpf.c     | 171 +++++++
+ tools/bpf/bpftool/skeleton/profiler.h         |  47 ++
+ tools/scripts/Makefile.include                |   1 +
+ 6 files changed, 681 insertions(+), 1 deletion(-)
+ create mode 100644 tools/bpf/bpftool/skeleton/profiler.bpf.c
+ create mode 100644 tools/bpf/bpftool/skeleton/profiler.h
+
+--
 2.17.1
-
