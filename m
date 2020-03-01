@@ -2,44 +2,44 @@ Return-Path: <SRS0=de3i=4S=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F2C1C3F2D1
-	for <bpf@archiver.kernel.org>; Sun,  1 Mar 2020 06:24:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 265B1C3F2D4
+	for <bpf@archiver.kernel.org>; Sun,  1 Mar 2020 06:24:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 645E021D56
+	by mail.kernel.org (Postfix) with ESMTP id F2F4D21556
 	for <bpf@archiver.kernel.org>; Sun,  1 Mar 2020 06:24:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="FC2nnoFk"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IgXbBlJW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726103AbgCAGYw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 1 Mar 2020 01:24:52 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:12424 "EHLO
+        id S1725768AbgCAGYx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 1 Mar 2020 01:24:53 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:50782 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725768AbgCAGYw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 1 Mar 2020 01:24:52 -0500
+        by vger.kernel.org with ESMTP id S1725970AbgCAGYx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 1 Mar 2020 01:24:53 -0500
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0216OouX005073
-        for <bpf@vger.kernel.org>; Sat, 29 Feb 2020 22:24:51 -0800
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0216OpLT005104
+        for <bpf@vger.kernel.org>; Sat, 29 Feb 2020 22:24:52 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=3TaeMEBsZ1JRAiUBnEbuhLf/lXH9uZY8cvlN5Q2xO0I=;
- b=FC2nnoFk25B2sQ7qyzwyeW5i/RIB1tCu++ivE2QG8ZfVoJGtl1Vym3/wXAxNy/g8mcrC
- fQRbUp3CrvzqTmFZlYaSe86phCo6UzCxayZQi2sxDD9pfSscYaTLrKFnghYERxS25GTF
- aV+bzMtc/b702a3fK5fvWHNabI8p6XYKNQk= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=c/QX5W/r2mwr9/SDP1vw/TZfdqkWHOQPMXu2BQAiUy8=;
+ b=IgXbBlJWF/1ULeJyms8SlntDxSUnzbHsKadG7SmfwHbba7Y1LcdEp7UH+rfXvOssrfXT
+ HOdip+YvYSGHp3wiUe+YILOMyQUvpFoUzyW/cbzxJMsPWxYwlhqk0ZGcrZIGEjuMx8fH
+ wkKXP/LzsQ4GAgOEnk48Ce4wa4oKyboV/OE= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 2yfmguk7vn-1
+        by m0001303.ppops.net with ESMTP id 2yfmguk7un-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 29 Feb 2020 22:24:51 -0800
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+        for <bpf@vger.kernel.org>; Sat, 29 Feb 2020 22:24:52 -0800
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Sat, 29 Feb 2020 22:24:14 -0800
+ 15.1.1779.2; Sat, 29 Feb 2020 22:24:16 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 89C222EC2CFD; Sat, 29 Feb 2020 22:24:08 -0800 (PST)
+        id 153CC2EC2CFD; Sat, 29 Feb 2020 22:24:15 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,10 +48,12 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 0/3] Convert BPF UAPI constants into enum values
-Date:   Sat, 29 Feb 2020 22:24:02 -0800
-Message-ID: <20200301062405.2850114-1-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 3/3] tools/runqslower: drop copy/pasted BPF_F_CURRENT_CPU definiton
+Date:   Sat, 29 Feb 2020 22:24:05 -0800
+Message-ID: <20200301062405.2850114-4-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200301062405.2850114-1-andriin@fb.com>
+References: <20200301062405.2850114-1-andriin@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -59,7 +61,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-03-01_01:2020-02-28,2020-03-01 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  clxscore=1015 malwarescore=0 suspectscore=8 impostorscore=0
- mlxlogscore=284 mlxscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
+ mlxlogscore=775 mlxscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
  phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2001150001 definitions=main-2003010050
 X-FB-Internal: deliver
@@ -68,43 +70,29 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert BPF-related UAPI constants, currently defined as #define macro, into
-anonymous enums. This has no difference in terms of usage of such constants in
-C code (they are still could be used in all the compile-time contexts that
-`#define`s can), but they are recorded as part of DWARF type info, and
-subsequently get recorded as part of kernel's BTF type info. This allows those
-constants to be emitted as part of vmlinux.h auto-generated header file and be
-used from BPF programs. Which is especially convenient for all kinds of BPF
-helper flags and makes CO-RE BPF programs nicer to write.
+With BPF_F_CURRENT_CPU being an enum, it is now captured in vmlinux.h and is
+readily usable by runqslower. So drop local copy/pasted definition in favor of
+the one coming from vmlinux.h.
 
-libbpf's btf_dump logic currently assumes enum values are signed 32-bit
-values, but that doesn't match a typical case, so switch it to emit unsigned
-values. Once BTF encoding of BTF_KIND_ENUM is extended to capture signedness
-properly, this will be made more flexible.
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/bpf/runqslower/runqslower.bpf.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-As an immediate validation of the approach, runqslower's copy of
-BPF_F_CURRENT_CPU #define is dropped in favor of its enum variant from
-vmlinux.h.
-
-v1->v2:
-- fix up btf_dump test to use max 32-bit unsigned value instead of negative one.
-
-Andrii Nakryiko (3):
-  bpf: switch BPF UAPI #define constants to enums
-  libbpf: assume unsigned values for BTF_KIND_ENUM
-  tools/runqslower: drop copy/pasted BPF_F_CURRENT_CPU definiton
-
- include/uapi/linux/bpf.h                      | 272 ++++++++++-------
- include/uapi/linux/bpf_common.h               |  86 +++---
- include/uapi/linux/btf.h                      |  60 ++--
- tools/bpf/runqslower/runqslower.bpf.c         |   3 -
- tools/include/uapi/linux/bpf.h                | 274 +++++++++++-------
- tools/include/uapi/linux/bpf_common.h         |  86 +++---
- tools/include/uapi/linux/btf.h                |  60 ++--
- tools/lib/bpf/btf_dump.c                      |   8 +-
- .../bpf/progs/btf_dump_test_case_syntax.c     |   2 +-
- 9 files changed, 502 insertions(+), 349 deletions(-)
-
+diff --git a/tools/bpf/runqslower/runqslower.bpf.c b/tools/bpf/runqslower/runqslower.bpf.c
+index 48a39f72fadf..0ba501305bad 100644
+--- a/tools/bpf/runqslower/runqslower.bpf.c
++++ b/tools/bpf/runqslower/runqslower.bpf.c
+@@ -6,9 +6,6 @@
+ 
+ #define TASK_RUNNING 0
+ 
+-#define BPF_F_INDEX_MASK		0xffffffffULL
+-#define BPF_F_CURRENT_CPU		BPF_F_INDEX_MASK
+-
+ const volatile __u64 min_us = 0;
+ const volatile pid_t targ_pid = 0;
+ 
 -- 
 2.17.1
 
