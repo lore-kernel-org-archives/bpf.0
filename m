@@ -2,132 +2,94 @@ Return-Path: <SRS0=fWzt=4U=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F13EEC3F2D1
-	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 19:56:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A18DC3F2C6
+	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 20:05:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BEEA92073B
-	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 19:56:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB4482073B
+	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 20:05:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="VoQUlxtB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tgU0aql0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731497AbgCCT41 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Mar 2020 14:56:27 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44374 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728731AbgCCT41 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 3 Mar 2020 14:56:27 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 023JtLfh009658
-        for <bpf@vger.kernel.org>; Tue, 3 Mar 2020 11:56:25 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=LSP9KZp4y+FEU+X6L9m1UOHIz4DvrCOcupIP5Pcl5W8=;
- b=VoQUlxtBHm+hOjZINM4dDmMnKApGwSJo1ozV0oMyC5I9NK7aPqxtJPgK7g+nVaZ5LB5m
- E//BZJFnp3BEFwNRxEBpS3dV1h0gawL6RkqMzk4qAiHCLrLs1B4a5yNJBUq3M4eWfk43
- //SbGw5hFHENc4tNRUVmaZ9g9kGxAZ2p4H0= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2yhugwrw75-13
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2020 11:56:25 -0800
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Tue, 3 Mar 2020 11:56:06 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 207C962E3363; Tue,  3 Mar 2020 11:56:03 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Song Liu <songliubraving@fb.com>
-Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <quentin@isovalent.com>, <kernel-team@fb.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <arnaldo.melo@gmail.com>,
-        <jolsa@kernel.org>, Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 2/3] bpftool: Documentation for bpftool prog profile
-Date:   Tue, 3 Mar 2020 11:55:54 -0800
-Message-ID: <20200303195555.1309028-3-songliubraving@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200303195555.1309028-1-songliubraving@fb.com>
-References: <20200303195555.1309028-1-songliubraving@fb.com>
-X-FB-Internal: Safe
+        id S1731091AbgCCUFK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Mar 2020 15:05:10 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:38883 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728787AbgCCUFJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 3 Mar 2020 15:05:09 -0500
+Received: by mail-qk1-f193.google.com with SMTP id h22so4731006qke.5;
+        Tue, 03 Mar 2020 12:05:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c2K6BAwGj3FC5N5znWE5+GD6Ye83Rz4tnyHf9aqTUl8=;
+        b=tgU0aql004PTeTTbF6pSvwuD2O8vinGL33sbkqU2otxXvjK1VeIP/tc3LWLM+6hi3C
+         MVZ6mZil+KWym7pVVqyLqD+liZVZxZUj4ICKTP7C1NjwONnJOYWiJmybGheH8xMxoysR
+         F31xnJ0t4jhU6Vde5O/39yCneFpzg63gD+bN8CRA555HOT9B47vDcrTysZMYGmpxuQX6
+         AERGQrDMv6ZVA8L8wAtiMrvEJFMky2T+oo+K4pScD0Exd2xtyeYA6jCom0WIqVrZyayd
+         ZrnM4u9KpiByj7Jqjd2igZ+9ZkaYvChsLdd4f0eIkJBBkNSlTuDBYzuIJmLjW+GvyVqj
+         Mg7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c2K6BAwGj3FC5N5znWE5+GD6Ye83Rz4tnyHf9aqTUl8=;
+        b=cUD0R3lhXbib/ZujB8pVWWSVVUxhIovFhGRSt2tgYxKwj+fMjY5weFFBg/nngPDYik
+         7NhBhEiG+54IxbRJHbrZp0j4es9zdYJDjp/7YaHZQOoa5Vjx8D4gse/ZEvNcfmEZhqKb
+         DiywZE9iwTnfxWY/ajlfJ/5hz9j25ASrWDZ0rYh55i0fh0DB5ciyu6uJ3xojppo7VZck
+         ZivhKRgkr96AXVFmR1GjyHcGjEru0RTk3zzwOfkqHyt8GGicwtJ2uCV8Bz8MrBRJJvGr
+         VaeKxVOwztVObgZmnJhxyK6JlNrczKk6bToPGJnTsHWET0KzqXU4mVvQRIcdqkoyjQOB
+         unbw==
+X-Gm-Message-State: ANhLgQ13Vkz5AqG4cZaD74Ue/eUCce5eaKbqpvS8vDmgRrekoFXOadm1
+        uN7Oz7Nlln1hmHHl7CmF9v1gPp3l
+X-Google-Smtp-Source: ADFU+vuRuUUnfuIK2U0RZ3AMJJLlK8GM7piA4IPqD81BaS7i7+wPEfGdy9q11Wlz/YfZr1brfMaNZA==
+X-Received: by 2002:a37:349:: with SMTP id 70mr5691931qkd.91.1583265906819;
+        Tue, 03 Mar 2020 12:05:06 -0800 (PST)
+Received: from willemb.nyc.corp.google.com ([2620:0:1003:312:37b5:dd03:b905:30ea])
+        by smtp.gmail.com with ESMTPSA id d7sm9846281qkg.62.2020.03.03.12.05.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2020 12:05:06 -0800 (PST)
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
+        Willem de Bruijn <willemb@google.com>
+Subject: [PATCH bpf-next 0/3] add gso_size to __sk_buff
+Date:   Tue,  3 Mar 2020 15:05:00 -0500
+Message-Id: <20200303200503.226217-1-willemdebruijn.kernel@gmail.com>
+X-Mailer: git-send-email 2.25.0.265.gbab2e86ba0-goog
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-03_06:2020-03-03,2020-03-03 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- malwarescore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=0 bulkscore=0 phishscore=0 spamscore=0
- clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2003030127
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add documentation for the new bpftool prog profile command.
+From: Willem de Bruijn <willemb@google.com>
 
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- .../bpftool/Documentation/bpftool-prog.rst    | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+See first patch for details.
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 46862e85fed2..9f19404f470e 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -30,6 +30,7 @@ PROG COMMANDS
- |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
- |	**bpftool** **prog tracelog**
- |	**bpftool** **prog run** *PROG* **data_in** *FILE* [**data_out** *FILE* [**data_size_out** *L*]] [**ctx_in** *FILE* [**ctx_out** *FILE* [**ctx_size_out** *M*]]] [**repeat** *N*]
-+|	**bpftool** **prog profile** *PROG* [**duration** *DURATION*] *METRICs*
- |	**bpftool** **prog help**
- |
- |	*MAP* := { **id** *MAP_ID* | **pinned** *FILE* }
-@@ -48,6 +49,9 @@ PROG COMMANDS
- |       *ATTACH_TYPE* := {
- |		**msg_verdict** | **stream_verdict** | **stream_parser** | **flow_dissector**
- |	}
-+|	*METRIC* := {
-+|		**cycles** | **instructions** | **l1d_loads** | **llc_misses**
-+|	}
- 
- 
- DESCRIPTION
-@@ -189,6 +193,12 @@ DESCRIPTION
- 		  not all of them can take the **ctx_in**/**ctx_out**
- 		  arguments. bpftool does not perform checks on program types.
- 
-+	**bpftool prog profile** *PROG* [**duration** *DURATION*] *METRICs*
-+		  Profile *METRICs* for bpf program *PROG* for *DURATION*
-+		  seconds or until user hits Ctrl-C. *DURATION* is optional.
-+		  If *DURATION* is not specified, the profiling will run up to
-+		  UINT_MAX seconds.
-+
- 	**bpftool prog help**
- 		  Print short help message.
- 
-@@ -311,6 +321,15 @@ EXAMPLES
- 
- **# rm /sys/fs/bpf/xdp1**
- 
-+|
-+| **# bpftool prog profile id 337 duration 10 cycles instructions llc_misses**
-+
-+::
-+         51397 run_cnt
-+      40176203 cycles                                                 (83.05%)
-+      42518139 instructions    #   1.06 insns per cycle               (83.39%)
-+           123 llc_misses      #   2.89 LLC misses per million insns  (83.15%)
-+
- SEE ALSO
- ========
- 	**bpf**\ (2),
+Patch split across three parts { kernel feature, uapi header, tools }
+following the custom for such __sk_buff changes.
+
+Willem de Bruijn (3):
+  bpf: add gso_size to __sk_buff
+  bpf: Sync uapi bpf.h to tools/
+  selftests/bpf: test new __sk_buff field gso_size
+
+ include/uapi/linux/bpf.h                      |  1 +
+ net/bpf/test_run.c                            |  7 +++
+ net/core/filter.c                             | 44 +++++++++++------
+ tools/include/uapi/linux/bpf.h                |  1 +
+ .../selftests/bpf/prog_tests/skb_ctx.c        |  1 +
+ .../selftests/bpf/progs/test_skb_ctx.c        |  2 +
+ .../testing/selftests/bpf/verifier/ctx_skb.c  | 47 +++++++++++++++++++
+ 7 files changed, 89 insertions(+), 14 deletions(-)
+
 -- 
-2.17.1
+2.25.0.265.gbab2e86ba0-goog
 
