@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B6CDC3F2CD
-	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 02:55:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6E7DC3F2D7
+	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 02:59:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1F9A12166E
-	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 02:55:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E990217F4
+	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 02:59:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583204155;
-	bh=Z1Ra69l+JL05IrHtlckZmc9Nq7FcPpzWhfMM48d5uK0=;
+	s=default; t=1583204365;
+	bh=IL3/wicU8vS8fr/u2xEEigJhcMcCof++SwVTStaXe0s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vj185D5cRGizb3tna0r6az/kCBKuqGUnGT7rOKgHHjW8xmT/YMSrzNZ8uB8opaz+x
-	 FkF6ct8y/S8yqJVQcHlUVEUyjj5ow4kL/zpOokJZfLBJusPn0oXlEbW5xgcB5008u+
-	 KOEUQq+l8QpEe2B24AsjqA+VgZoi05bwV4A62BN8=
+	b=WVTHrx1/fwue9YwzZQInMfYjX6Zm5BrdCmm488hXqFeOMIDWLiBElQKXNNU20CWez
+	 ZfqjvKc33jbdS77GtstklaHrtSTmBXRfJcPDCIiNP2D+R7xvzftICkHYtYSuifl2GD
+	 u5V7DDevxLhT3smckPdNsmvzWOWlNE6+mqQzUdfM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728606AbgCCCzp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 2 Mar 2020 21:55:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44868 "EHLO mail.kernel.org"
+        id S1728172AbgCCCrr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 2 Mar 2020 21:47:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42860 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728620AbgCCCs6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 2 Mar 2020 21:48:58 -0500
+        id S1728156AbgCCCrr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 2 Mar 2020 21:47:47 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2F203246D6;
-        Tue,  3 Mar 2020 02:48:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CDDDC24684;
+        Tue,  3 Mar 2020 02:47:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583203737;
-        bh=Z1Ra69l+JL05IrHtlckZmc9Nq7FcPpzWhfMM48d5uK0=;
+        s=default; t=1583203665;
+        bh=IL3/wicU8vS8fr/u2xEEigJhcMcCof++SwVTStaXe0s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EI7ZRhyf5HUg9aImBNWR0Gv3Ioml+JfbEZe1YXrEk5MOt3vh1yXZFu9FuQkHP9/1B
-         Y8fW0y6xJJCl7HPcnB0AfTq9y6+FPXwHwaJP9D9N9vGOd8hiUYaQE88PLvNsdff2mE
-         yeai+WLqWqKG/OFzkO4MSAIERNyW3ZOIOXS/OxtU=
+        b=G6CLgnM3riqY+rbISUHOG5Qsrvs7p0YvUXjDomqSN31p5iPYe0ONrzAaO5MBHwqe7
+         uc5n1WERrUXnY3FpmJGG/XIaiORXhrL1O0GfBbmBGiFZAvOymfjtLCx5FerjRZA0aV
+         pLaGRGK7Z/EFhZjOkNEHH/stU0KnDhcqS/AijLe8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jiri Benc <jbenc@redhat.com>,
@@ -46,12 +46,12 @@ Cc:     Jiri Benc <jbenc@redhat.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 04/32] selftests: fix too long argument
-Date:   Mon,  2 Mar 2020 21:48:23 -0500
-Message-Id: <20200303024851.10054-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 04/58] selftests: fix too long argument
+Date:   Mon,  2 Mar 2020 21:46:46 -0500
+Message-Id: <20200303024740.9511-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200303024851.10054-1-sashal@kernel.org>
-References: <20200303024851.10054-1-sashal@kernel.org>
+In-Reply-To: <20200303024740.9511-1-sashal@kernel.org>
+References: <20200303024740.9511-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -94,10 +94,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 13 insertions(+), 10 deletions(-)
 
 diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 8b0f16409ed7e..0ef203ec59fdc 100644
+index 1c8a1963d03f8..3ed0134a764d4 100644
 --- a/tools/testing/selftests/lib.mk
 +++ b/tools/testing/selftests/lib.mk
-@@ -85,17 +85,20 @@ else
+@@ -83,17 +83,20 @@ else
  	$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS))
  endif
  
