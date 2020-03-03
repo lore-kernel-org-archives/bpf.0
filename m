@@ -2,102 +2,125 @@ Return-Path: <SRS0=fWzt=4U=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23F53C3F2D1
-	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 17:52:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48521C3F2D7
+	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 18:03:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F301C214D8
-	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 17:52:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 207A5206D5
+	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 18:03:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jILafzsq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oyYwHdCW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731605AbgCCRwn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Mar 2020 12:52:43 -0500
-Received: from mail-pf1-f176.google.com ([209.85.210.176]:44886 "EHLO
-        mail-pf1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730142AbgCCRwn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 3 Mar 2020 12:52:43 -0500
-Received: by mail-pf1-f176.google.com with SMTP id y26so441250pfn.11;
-        Tue, 03 Mar 2020 09:52:42 -0800 (PST)
+        id S1733252AbgCCSDY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Mar 2020 13:03:24 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:35776 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731209AbgCCSDX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 3 Mar 2020 13:03:23 -0500
+Received: by mail-pj1-f66.google.com with SMTP id s8so1694463pjq.0;
+        Tue, 03 Mar 2020 10:03:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=MzE0w5ZgUnQDQhue+zqO2Bzi6fljQ8hIr+fH2PP/wGc=;
-        b=jILafzsqC/V0g5dtcuf/Xa3kbLY2FofgS0c1DikXbePcEH+wKUNX3/GqSm2OzpmW/3
-         yh2QzkFaYFMU7OEBQYl7X19vRhCln4h5DPpG9cTTfCz+1ZEhwieERjOhrVe7GXlxXqrd
-         wvUOGnnG8QknzsNp7nrwbr8Pvjf1G+AVEb4MnM8N0XGObTL9JpQZok1IrSofAu8P/gVI
-         U7TPp/D2OUa1X0z0GDNLgEsWb6N7JIW2m7bLWHGiQdMxc20fsiQEC6sd/3/i4kflzwyC
-         jdpH3JlhilGWNepAUWzpU7u2pl5N6aaflSBULT2bebA2rpvlA3WacmUnTm3Jt8tA2bco
-         vSww==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=B2tO/wgwTAbnKTMa9LXV6z5RfQ9U8qBcZe2mtEefEd8=;
+        b=oyYwHdCWUZM9dSQP5KlhU2UTUoti7X2xuoY4bHIdm6RJKAjTqEkJub1A5PjXgJPfm6
+         bKmeD0FERtQiPQ8YmL29UMwWpJr0uVBtscS7QGhU6Wv12eb6utpD2WK3dpapZAajRQNe
+         pHUdXiOel7GfvDEVfNdAEJ/Ag7D4LcseUgAVUV7cg6oYGBtAQ4q1kv/0EWt9QiuFI8fu
+         7gZme/SyqvK/a2fc+jjKRrzEf02eR5cF1DzqCq8yrvx+qsl5XqbqbJWpZNfrYWf23x/w
+         NZnvKHszf4JGO6eC1UZcxgSbGDjgGxEF2z1+loWr1gUo1BfW8r79CPGsQbbHm6dt6q2K
+         IjRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=MzE0w5ZgUnQDQhue+zqO2Bzi6fljQ8hIr+fH2PP/wGc=;
-        b=HYazkNgY2h+spM5diuvG6qPQimeLIu8VMkruzeWzaMrJSbt2rESVbPdGfClh3Py2rf
-         ZqDCzk2zhXBrEdIRAjTir7iYJoEFyiXXUrcbV5Xuk9S2/tTCLg73e/nIynrvv59698K9
-         MErUb4tLf2d9B89fUCFMg3aLbybTm9IAdY1+eA8nmn1aDDBNRc887ywDiJN9za0x5VOO
-         Lp06BiCRkTFrGvg5PUE9DxtCRAMeAEU/CUjShdx2vwZLfa40gv1ulQzyGcK970tomlEN
-         T0Sdbtfqb5+FIdFWpykDmLLGyDgoq6Hxionhon8mvZSKs0AgPl0LJrtpkOh/tTSWCgSm
-         BF/w==
-X-Gm-Message-State: ANhLgQ3aJEa4792BjYeM1WHZxYCm3AYTlxJMTSeoeTbbIeunSqZvPR9v
-        8iED9egaFL7bi+nqmF7omqQ=
-X-Google-Smtp-Source: ADFU+vvVYIy44uw6ULK2C86UEzoSOMhwJqP9jcOslCjVbnNrE6OfgP2cPFR7+L2P1rMmLxfjkNLpiA==
-X-Received: by 2002:aa7:8b17:: with SMTP id f23mr5288473pfd.197.1583257962058;
-        Tue, 03 Mar 2020 09:52:42 -0800 (PST)
-Received: from localhost ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id m20sm3315891pff.172.2020.03.03.09.52.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 09:52:41 -0800 (PST)
-Date:   Tue, 03 Mar 2020 09:52:34 -0800
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Lorenz Bauer <lmb@cloudflare.com>, john.fastabend@gmail.com,
-        Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=B2tO/wgwTAbnKTMa9LXV6z5RfQ9U8qBcZe2mtEefEd8=;
+        b=tDyTCjJKT3igyD+cDnOZ+IoznHnSTIJtzxyUL0tNtJRm4jpw2dSdqgRumQY0CydHtN
+         DCcyTQpHZrwCByBTsWO0AzrI9OCOGvJYGUKQDkStiTF1PUo8d7XkGk31kkqgBKQeg3v+
+         WBjdDiuFqUGT4VsXGn/EKSCslIN/7HkwwfiGh78iTr6qqRzihBgaKawmnttO/KNQ8q3p
+         JIMApm9qLdhZ//0ZI6++7bNY/Q9+ezbBIitFZq5Yteao8owUhJLRzmrYGahQjbChE7IF
+         5eB4IEDJ2+SEd1VLRhukoT+HAcTfY2H6p42CvTz9XonGCdbFLwjSLDEZYPLygfAY2/eU
+         jxaQ==
+X-Gm-Message-State: ANhLgQ2qCTAEGh4SZ+WVJxmpz2tG8tuL6jkdIIfuG/AjlE9cpXXcuTnS
+        7t2JBN8yS9HkFFKjlxxfBYimYTCr
+X-Google-Smtp-Source: ADFU+vsC8+NCCJYXxI6hJi5y/Ir0r3L87i0ScL7C3YQCLkS4zxRONRWlqXTc0kh+Op9b9zCLTbM/Nw==
+X-Received: by 2002:a17:90a:2a0c:: with SMTP id i12mr5173066pjd.149.1583258602673;
+        Tue, 03 Mar 2020 10:03:22 -0800 (PST)
+Received: from ast-mbp ([2620:10d:c090:500::4:a0de])
+        by smtp.gmail.com with ESMTPSA id b4sm26257540pfd.18.2020.03.03.10.03.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 03 Mar 2020 10:03:21 -0800 (PST)
+Date:   Tue, 3 Mar 2020 10:03:19 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Song Liu <songliubraving@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Andrii Nakryiko <andriin@fb.com>,
+        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-Cc:     kernel-team@cloudflare.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <5e5e996236c01_60e72b06ba14c5bccf@john-XPS-13-9370.notmuch>
-In-Reply-To: <20200228115344.17742-4-lmb@cloudflare.com>
-References: <20200228115344.17742-1-lmb@cloudflare.com>
- <20200228115344.17742-4-lmb@cloudflare.com>
-Subject: RE: [PATCH bpf-next v2 3/9] bpf: sockmap: move generic sockmap hooks
- from BPF TCP
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        David Miller <davem@redhat.com>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Song Liu <song@kernel.org>
+Subject: Re: [PATCH 06/15] bpf: Add bpf_ksym_tree tree
+Message-ID: <20200303180318.vblj7izq2miken6e@ast-mbp>
+References: <20200302143154.258569-1-jolsa@kernel.org>
+ <20200302143154.258569-7-jolsa@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200302143154.258569-7-jolsa@kernel.org>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Lorenz Bauer wrote:
-> The close, unhash and clone handlers from TCP sockmap are actually generic,
-> and can be reused by UDP sockmap. Move the helpers into the sockmap code
-> base and expose them. This requires tcp_bpf_(re)init and tcp_bpf_clone to
-> be conditional on BPF_STREAM_PARSER.
+On Mon, Mar 02, 2020 at 03:31:45PM +0100, Jiri Olsa wrote:
+> The bpf_tree is used both for kallsyms iterations and searching
+> for exception tables of bpf programs, which is needed only for
+> bpf programs.
 > 
-> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-> ---
->  include/linux/bpf.h   |  4 ++-
->  include/linux/skmsg.h | 28 ----------------
->  include/net/tcp.h     | 15 +++++----
->  net/core/sock_map.c   | 77 +++++++++++++++++++++++++++++++++++++++++--
->  net/ipv4/tcp_bpf.c    | 59 ++++-----------------------------
->  5 files changed, 92 insertions(+), 91 deletions(-)
+> Adding bpf_ksym_tree that will hold symbols for all bpf_prog
+> bpf_trampoline and bpf_dispatcher objects and keeping bpf_tree
+> only for bpf_prog objects to keep it fast.
 
-No changes just moving code around it seems.
+...
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+>  static void bpf_prog_ksym_node_add(struct bpf_prog_aux *aux)
+> @@ -616,6 +650,7 @@ static void bpf_prog_ksym_node_add(struct bpf_prog_aux *aux)
+>  	WARN_ON_ONCE(!list_empty(&aux->ksym.lnode));
+>  	list_add_tail_rcu(&aux->ksym.lnode, &bpf_kallsyms);
+>  	latch_tree_insert(&aux->ksym_tnode, &bpf_tree, &bpf_tree_ops);
+> +	latch_tree_insert(&aux->ksym.tnode, &bpf_ksym_tree, &bpf_ksym_tree_ops);
+>  }
+>  
+>  static void bpf_prog_ksym_node_del(struct bpf_prog_aux *aux)
+> @@ -624,6 +659,7 @@ static void bpf_prog_ksym_node_del(struct bpf_prog_aux *aux)
+>  		return;
+>  
+>  	latch_tree_erase(&aux->ksym_tnode, &bpf_tree, &bpf_tree_ops);
+> +	latch_tree_erase(&aux->ksym.tnode, &bpf_ksym_tree, &bpf_ksym_tree_ops);
+
+I have to agree with Daniel here.
+Having bpf prog in two latch trees is unnecessary.
+Especially looking at the patch 7 that moves update to the other tree.
+The whole thing becomes assymetrical and harder to follow.
+Consider that walking extable is slow anyway. It's a page fault.
+Having trampoline and dispatch in the same tree will not be measurable
+on the speed of search_bpf_extables->bpf_prog_kallsyms_find.
+So please consolidate.
+
+Also I don't see a hunk that deletes tnode from 'struct bpf_image'.
+These patches suppose to generalize it too, no?
+And at the end kernel_text_address() suppose to call
+is_bpf_text_address() only, right?
+Instead of is_bpf_text_address() || is_bpf_image_address() ?
+That _will_ actually speed up backtrace collection.
