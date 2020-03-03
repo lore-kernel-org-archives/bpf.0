@@ -2,92 +2,215 @@ Return-Path: <SRS0=fWzt=4U=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0530C3F2D1
-	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 00:30:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30A6CC3F2D7
+	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 00:50:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8AB982467B
-	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 00:30:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06CDD24677
+	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 00:50:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="juCEpYp1"
+	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="PpAHUPt4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726773AbgCCAa5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 2 Mar 2020 19:30:57 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45619 "EHLO
+        id S1726843AbgCCAum (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 2 Mar 2020 19:50:42 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:42013 "EHLO
         mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726758AbgCCAa4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 2 Mar 2020 19:30:56 -0500
-Received: by mail-pf1-f194.google.com with SMTP id 2so523034pfg.12;
-        Mon, 02 Mar 2020 16:30:56 -0800 (PST)
+        with ESMTP id S1726859AbgCCAul (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 2 Mar 2020 19:50:41 -0500
+Received: by mail-pf1-f194.google.com with SMTP id f5so551254pfk.9
+        for <bpf@vger.kernel.org>; Mon, 02 Mar 2020 16:50:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FKDXHGbgSUybJbBcy0shbv2BnyaxWG/IpfDFLqlZAkk=;
-        b=juCEpYp1FFjRWpzSfr9RIloY9IMSP8gTwFWUd01MRDiOqXrKc6N/k5GzLaLmppz2Zd
-         nFXyl8xanSTjbPqG0nR6WkL76Hc6oVDSK9S8oQNSOiNS3LlMuednPQ6cx9iLYVN2SJV/
-         8YyBUBZmr5hvUlGWTpPY/XVVV2d4bo+Grrc8OvDY3iWrNtFko9QA/BUR56eSQ5FeIYYZ
-         RPW4vGu20oVoBErZO1cby779krz5g6o5XCFXI69mYLOIDFHfdKVCytu3RlhCv65LsIMj
-         AAM9rbTMM+KW6CUXl2lUK1WALVkzWPnPAbVXpOCRUCPRPpBUp7KoviVsLBbSO3T3cQUb
-         N0Ig==
+        d=cs.washington.edu; s=goo201206;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3D53AC+mvbtFOvWhCdqdKfZxPLHDl2gFgUFn+w2hIMI=;
+        b=PpAHUPt4FCpGWNJvv2H+zWoZ/LA1u2BGY9BD6oYuRZ082FfiQItrhfnvk6zxQw5bV0
+         S1SqJIvNF4X08qwdo9WXxJfSPlA+HpuXz9dDX83mfanb7Cea9/VK1Osaqx3OT2+cBMrb
+         DKheoeY/V9en1FOiSSqFrlw3IyYNvxiMbJMyc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FKDXHGbgSUybJbBcy0shbv2BnyaxWG/IpfDFLqlZAkk=;
-        b=KIg2W5NcHU3jnoEaKmnapZfAX46PVrCn5yRXnG5SUyUzJIWinLh9ffxHAQibdOuZWy
-         UmeJvsqZWBVQlvK3a/dkzHZssdLNDTAkJybGhYtPW3MGonbJYeZjY69+r20x6fZcRBiP
-         X2OMMvTXgg+af/vcTXzBT4brkA5T8ixl3/qY2G6fIUR4ABhP/gXdZfuhPCQ3pPmOm9VA
-         Pu0x3YK+elaYKtVROOW/S+yuXd62YnTTUOebBgRxMQTe/s9I93P8s5FYFkxjBXQ1rMlL
-         ojr2HtvRSRuZqlCaSC+PIKHRBGVN4sKxrUHErocorBjrmFINm6odpCkaQ7B+3tpQON6N
-         aGaA==
-X-Gm-Message-State: ANhLgQ0nnZu1JcIulI2x7tWiRgHv2nT0ms97I2/OBsD+GZPYvTOjR09R
-        c/8LjDH8vvnkOuMdbwuR3uI=
-X-Google-Smtp-Source: ADFU+vsza0MZwcoRcQzx95HlZtZN37c0OD2X1kA+ve4sxE0FrSztX3lrT/UDzbvhhKKL8jWdzNEZ9Q==
-X-Received: by 2002:a63:82c2:: with SMTP id w185mr1505709pgd.382.1583195455513;
-        Mon, 02 Mar 2020 16:30:55 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:500::7:1db6])
-        by smtp.gmail.com with ESMTPSA id u7sm21833469pfh.128.2020.03.02.16.30.53
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 02 Mar 2020 16:30:54 -0800 (PST)
-Date:   Mon, 2 Mar 2020 16:30:52 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Andrii Nakryiko <andriin@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
-        daniel@iogearbox.net, andrii.nakryiko@gmail.com, kernel-team@fb.com
-Subject: Re: [PATCH bpf-next 0/4] Move BPF_PROG, BPF_KPROBE, and
- BPF_KRETPROBE to libbpf
-Message-ID: <20200303003051.skfwue32z6y4kvyu@ast-mbp>
-References: <20200229231112.1240137-1-andriin@fb.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3D53AC+mvbtFOvWhCdqdKfZxPLHDl2gFgUFn+w2hIMI=;
+        b=X4T2rRXZ0CK7SmzA0OiAfD9+hTPrL/c1OtzJLT71FgF55hZ3JQ+eiuR7yYJSsIVmTH
+         Kdg3jBuG+oiCes6hfxm1CnvINkrENqk8QI8PESSSDiTyM6KjqMoNQQJTOB2pkDljZSM3
+         f1s84l8MtLelLsOhbe4iOxQlR0Xp+vrcPf7JQ5if8bmCSo1sly97gcrfUV36BhKwqc3C
+         +0/lW9ZC6zHvqwwXwGCBEMt2KyLUeq4Y86qxQIrYQB4/7ucX3H3Y4m0CBfu+fi+GeqUa
+         Nrt6utUY4lnGfggY/4a0NP9IKdy3cNmwdVr7lfZB3eCYzWfzBS/7T16QoOEQoGSz3Cw4
+         9jdQ==
+X-Gm-Message-State: ANhLgQ1G1N/7Opy7eg4R9ifIsDgqM7LuR06dmWkWl3nbJEg9wvgvvRK7
+        jQiBdOt7lu7awo6bJSHkFkHha5Fd3MxbWQ==
+X-Google-Smtp-Source: ADFU+vu5i1xpepiSeDF6CXGaG9tUWLD/lfAtDAgCi5AnBUm0RKEt53xDaBdP3NJys5zaFri5Xz/k4g==
+X-Received: by 2002:a63:131f:: with SMTP id i31mr1588034pgl.101.1583196639743;
+        Mon, 02 Mar 2020 16:50:39 -0800 (PST)
+Received: from ryzen.cs.washington.edu ([2607:4000:200:11:b5cd:49c6:f4f6:8295])
+        by smtp.gmail.com with ESMTPSA id c15sm357529pja.30.2020.03.02.16.50.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2020 16:50:38 -0800 (PST)
+From:   Luke Nelson <lukenels@cs.washington.edu>
+X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Luke Nelson <luke.r.nels@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH bpf-next v4 0/4] eBPF JIT for RV32G
+Date:   Mon,  2 Mar 2020 16:50:31 -0800
+Message-Id: <20200303005035.13814-1-luke.r.nels@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200229231112.1240137-1-andriin@fb.com>
-User-Agent: NeoMutt/20180223
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Feb 29, 2020 at 03:11:08PM -0800, Andrii Nakryiko wrote:
-> Move BPF_PROG, BPF_KPROBE, and BPF_KRETPROBE helper macros from private
-> selftests helpers to public libbpf ones. These helpers are extremely helpful
-> for writing tracing BPF applications and have been requested to be exposed for
-> easy use (e.g., [0]).
-> 
-> As part of this move, fix up BPF_KRETPROBE to not allow for capturing input
-> arguments (as it's unreliable and they will be often clobbered). Also, add
-> vmlinux.h header guard to allow multi-time inclusion, if necessary; but also
-> to let PT_REGS_PARM do proper detection of struct pt_regs field names on x86
-> arch. See relevant patches for more details.
-> 
->   [0] https://github.com/iovisor/bcc/pull/2778#issue-381642907
+This series adds an eBPF JIT for 32-bit RISC-V (RV32G) to the kernel,
+adapted from the RV64 JIT and the 32-bit ARM JIT.
 
-Looks like folks started to copy paste this macro into different places.
-So definitely makes sense to move it.
-Applied. Thanks
+There are two main changes required for this to work compared to
+the RV64 JIT.
+
+First, eBPF registers are 64-bit, while RV32G registers are 32-bit.
+BPF registers either map directly to 2 RISC-V registers, or reside
+in stack scratch space and are saved and restored when used.
+
+Second, many 64-bit ALU operations do not trivially map to 32-bit
+operations. Operations that move bits between high and low words,
+such as ADD, LSH, MUL, and others must emulate the 64-bit behavior
+in terms of 32-bit instructions.
+
+Supported features:
+
+The RV32 JIT supports the same features and instructions as the
+RV64 JIT, with the following exceptions:
+
+- ALU64 DIV/MOD: Requires loops to implement on 32-bit hardware.
+
+- BPF_XADD | BPF_DW: There's no 8-byte atomic instruction in RV32.
+
+These features are also unsupported on other BPF JITs for 32-bit
+architectures.
+
+Testing:
+
+- lib/test_bpf.c
+test_bpf: Summary: 378 PASSED, 0 FAILED, [349/366 JIT'ed]
+test_bpf: test_skb_segment: Summary: 2 PASSED, 0 FAILED
+
+- tools/testing/selftests/bpf/test_verifier.c
+Summary: 1415 PASSED, 122 SKIPPED, 43 FAILED
+
+Tested both with and without BPF JIT hardening.
+
+This is the same set of tests that pass using the BPF interpreter
+with the JIT disabled.
+
+Running the BPF kernel tests / selftests on riscv32 is non-trivial,
+to help others reproduce the test results I made a guide here:
+https://github.com/lukenels/meta-linux-utils/tree/master/rv32-linux
+
+Verification and synthesis:
+
+We developed the RV32 JIT using our automated verification tool,
+Serval. We have used Serval in the past to verify patches to the
+RV64 JIT. We also used Serval to superoptimize the resulting code
+through program synthesis.
+
+You can find the tool and a guide to the approach and results here:
+https://github.com/uw-unsat/serval-bpf/tree/rv32-jit-v4
+
+Thanks again for all the comments!
+
+Changelog:
+
+v3 -> v4:
+  * Added more comments and cleaned up style nits (Björn Töpel).
+  * Factored common code in RV64 and RV32 JITs into a separate header
+    (Song Liu, Björn Töpel).
+  * Added an optimization in the BPF_ALU64 BPF_ADD BPF_X case.
+  * Updated MAINTAINERS and kernel documentation (Björn Töpel).
+
+v2 -> v3:
+  * Added support for far jumps / branches similar to RV64 JIT.
+  * Added support for tail calls.
+  * Cleaned up code with more optimizations and comments.
+  * Removed special zero-extension instruction from BPF_ALU64
+    case (Jiong Wang).
+
+v1 -> v2:
+  * Added support for far conditional branches.
+  * Added the zero-extension optimization (Jiong Wang).
+  * Added more optimizations for operations with an immediate operand.
+
+Luke Nelson (4):
+  riscv, bpf: move common riscv JIT code to header
+  riscv, bpf: add RV32G eBPF JIT
+  bpf, doc: add BPF JIT for RV32G to BPF documentation
+  MAINTAINERS: Add entry for RV32G BPF JIT
+
+ Documentation/admin-guide/sysctl/net.rst |    3 +-
+ Documentation/networking/filter.txt      |    2 +-
+ MAINTAINERS                              |   13 +-
+ arch/riscv/Kconfig                       |    2 +-
+ arch/riscv/net/Makefile                  |    7 +-
+ arch/riscv/net/bpf_jit.h                 |  504 ++++++++
+ arch/riscv/net/bpf_jit_comp.c            |  443 +------
+ arch/riscv/net/bpf_jit_comp32.c          | 1466 ++++++++++++++++++++++
+ 8 files changed, 1992 insertions(+), 448 deletions(-)
+ create mode 100644 arch/riscv/net/bpf_jit.h
+ create mode 100644 arch/riscv/net/bpf_jit_comp32.c
+
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Andrii Nakryiko <andriin@fb.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: "Björn Töpel" <bjorn.topel@gmail.com>
+Cc: Luke Nelson <luke.r.nels@gmail.com>
+Cc: Xi Wang <xi.wang@gmail.com>
+Cc: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc: Stephen Hemminger <stephen@networkplumber.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+
+-- 
+2.20.1
+
