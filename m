@@ -2,216 +2,213 @@ Return-Path: <SRS0=fWzt=4U=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4144EC3F2D1
-	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 18:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27D8EC3F2D7
+	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 18:06:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 149AC20870
-	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 18:04:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01F122073B
+	for <bpf@archiver.kernel.org>; Tue,  3 Mar 2020 18:06:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="efHA5ATw"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qODBHaWX";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="ZwB5dPuj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733254AbgCCSAQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Mar 2020 13:00:16 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:39075 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733249AbgCCSAQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 3 Mar 2020 13:00:16 -0500
-Received: by mail-qk1-f193.google.com with SMTP id e16so4296139qkl.6;
-        Tue, 03 Mar 2020 10:00:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lhQvd1T146KkjohFRaXEevnYThNA7CvsdsB9dL6DCfc=;
-        b=efHA5ATwoWEKr9agC/gjw8iAo22w6qV5ne2qun3QGreq3DA1M+8aIQCMTPOChlLVMq
-         9341Tbn9nEunnPMfogCqmZLN8/FhzEPj1r21hqlKtOE21De9//mmyQb8731hWrg5tzBw
-         sNrW/nPnP+VYMAqHNri0PtEVQgimUii85k3bt70oULP5NMPh5uLWXFXZZVfMofnloiLm
-         Q53JmXbGh2f71LLQ42rK6iU+B19CEAt+O6wXFW6Hk8/udqYmY++yJUGAWgNyIEtK8RLQ
-         paVxSKhNmwfEjDeSCeoeJ3wQOG6CPrqQp4sXTVAYyIc6kW717bMMIdsqLLIjjr2qTiSR
-         VIXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lhQvd1T146KkjohFRaXEevnYThNA7CvsdsB9dL6DCfc=;
-        b=nSpmARNHSZVK+EbWxAVuTSZjVnUznBFsgpHsDLm62AHuA95NIhY3+8+tiBXHWSWVDB
-         uLdZIyEnyXNxEcf6Vfk2kmdgi7ytsjoukqQu5oXprS+Pn8VlRwmDYJmfS4d5gN45S211
-         jHJjURDDjKCEheGtfjKgiSkwzMXrmEUi5ntDuJ2Zot+dDMN7mT0RQgsB4y1suXwEvkLO
-         QEJVOaOHcnSlRQu8f3EXs7SYhWIqHOEXsxPCBZot7rVek4lRkgGQ0eLmvtjGDEJ7kc1w
-         NQAdy+p+ffUI7iBN+hbLHfxpV+T9dXkwTM7eIg9Uu7uSdjN+VPQoqFRG4kK3B79q+2zL
-         aMAg==
-X-Gm-Message-State: ANhLgQ1Qf0ptzBeKcPnmNviIkDOfwObzLAM09xeZ/zU7x3uh8wGTTnHJ
-        bv+Zn9533Jur2c/e2US7yCnMIr6pmOOMhbAfuEk=
-X-Google-Smtp-Source: ADFU+vvw+Qmt+XQABhVzsUM2Hu2ShOQTqx/ZqBjFt+cq9iAh9G82uJi8/Sw4Owi7lGeGpr/olZ4hBLfKEBneM3WR+vA=
-X-Received: by 2002:a37:6716:: with SMTP id b22mr5417929qkc.437.1583258413678;
- Tue, 03 Mar 2020 10:00:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20200303140837.90056-1-jolsa@kernel.org> <CAEf4BzY8_=wcL3N96eS-jcSPBL=ueMgQg+m=Fxiw+o0Tc7F23Q@mail.gmail.com>
- <20200303173314.GA74093@krava>
-In-Reply-To: <20200303173314.GA74093@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 3 Mar 2020 10:00:02 -0800
-Message-ID: <CAEf4BzYQYJJwLUNhDoKcdgKsMijf9R5vG-vbOBYA-nUAgNs1qA@mail.gmail.com>
-Subject: Re: [RFC] libbpf,selftests: Question on btf_dump__emit_type_decl for BTF_KIND_FUNC
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
+        id S1733056AbgCCR5U (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Mar 2020 12:57:20 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36712 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732669AbgCCR5T (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 3 Mar 2020 12:57:19 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 023Htw16030158;
+        Tue, 3 Mar 2020 09:56:37 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=9bp7RWMVIQdfU16tB3pSaS8tTHGoDMjnBHgxQZp6fRI=;
+ b=qODBHaWX/3pNoVHQQuYwjb3R3EapnIaFqIDs0f0lqGPWeCzNGCBMThEe8jN385BOJC1q
+ rlXjfQXUbn95tzlgjl6pRFgzUsO+kdz/gzlaDlftjkuflOx3cqfOrg5wASE7XmPmg/9k
+ TJXeg16JOktINe+7uP7YcTOeDRTriKslfq0= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2yht640qcj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 03 Mar 2020 09:56:37 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.175) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Tue, 3 Mar 2020 09:56:36 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RrBGbcne6l7m6dTnUf/yX/Mr1RgNPjsrf5gJjWFnf5hGiLTMel1Mp/5wSuBu+/7uuurQW3QYL18eZIL+yCcMVlJsR/+5OnsSeadsLoIx+Wj1JBxDStSignmJjJ00cuoJJHknSOSL4HlTE/QWvvn6n5rQ+/5vIjU8KhUnXCCt/6g53B8ye05Kh8+uh9pZgO7ncBPr8vWb5fnn5yJ1fJSwRX2eZwnG+sau6PtZYTP4bQMV51Ran/+uCzeliDFGWu7IVX9UGnV1a2lm20aAzu+WHgo9zyGc7UarI/efehm3iqB4irwpJG6ZsnuAq/mV0/G4iOzp88UUV9v/gtth6AYXjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9bp7RWMVIQdfU16tB3pSaS8tTHGoDMjnBHgxQZp6fRI=;
+ b=n1XT+urycnwTtidEavg+q7YAZorxSlRdLepAQz8lAYFU+CzfsaQhbVSRi37N92JzWk0ZJTjQ15BYtJNLSniCbpgw36cj6ivCFesLrj0AViXBEesNp+CvmKtPwRMekrYCuXsEIAKUr1oPsmqfn4XXEl9xVV/Q/P7eEGhfoX3P7BiiGNUigIEcTauUB15MhC5cTlrZMrkTvpQetEvf6OclA1ESWvRRdl8toJeLG+Ru9ZnV/qPn7+SdzOZVgLLWQ1FOAKkfCIk1MRraDBj40gbeGNrPAax966R2JfNvSUKpDvlDjJuadqXgMs94cY1fsxWADUlbUUtIbGNU70hbHeSGYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9bp7RWMVIQdfU16tB3pSaS8tTHGoDMjnBHgxQZp6fRI=;
+ b=ZwB5dPujgRhT7K5NeSTKi1ZSCAQgUzNkkt5/nQJEse4RDQqPOQaGrSaKoXGsYqKLWya028AKTi/3KyFpGV8PlwvzSjLdjRJ93Lw6jxAEXA48meyyLJ2RxRkdASb5fUBTxYhMmhUALT9pee+TIgQkktUiZAXAQ8Lsy0mKmGGcz40=
+Received: from BYAPR15MB2278.namprd15.prod.outlook.com (2603:10b6:a02:8e::17)
+ by BYAPR15MB2792.namprd15.prod.outlook.com (2603:10b6:a03:15c::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2772.19; Tue, 3 Mar
+ 2020 17:56:35 +0000
+Received: from BYAPR15MB2278.namprd15.prod.outlook.com
+ ([fe80::4d5a:6517:802b:5f47]) by BYAPR15MB2278.namprd15.prod.outlook.com
+ ([fe80::4d5a:6517:802b:5f47%4]) with mapi id 15.20.2772.019; Tue, 3 Mar 2020
+ 17:56:35 +0000
+Date:   Tue, 3 Mar 2020 09:56:32 -0800
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+CC:     <john.fastabend@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        <kernel-team@cloudflare.com>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 5/9] bpf: sockmap: allow UDP sockets
+Message-ID: <20200303175632.l6fjsbl4oa2csnco@kafai-mbp>
+References: <20200228115344.17742-1-lmb@cloudflare.com>
+ <20200228115344.17742-6-lmb@cloudflare.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200228115344.17742-6-lmb@cloudflare.com>
+User-Agent: NeoMutt/20180716
+X-ClientProxiedBy: MWHPR10CA0010.namprd10.prod.outlook.com (2603:10b6:301::20)
+ To BYAPR15MB2278.namprd15.prod.outlook.com (2603:10b6:a02:8e::17)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp (2620:10d:c090:500::7:521b) by MWHPR10CA0010.namprd10.prod.outlook.com (2603:10b6:301::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2772.16 via Frontend Transport; Tue, 3 Mar 2020 17:56:33 +0000
+X-Originating-IP: [2620:10d:c090:500::7:521b]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ad1b8e3b-6a51-4653-ed9b-08d7bf9c36bb
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2792:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2792C0CDA3D2A04346E23D0CD5E40@BYAPR15MB2792.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Forefront-PRVS: 03319F6FEF
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10019020)(376002)(39860400002)(346002)(136003)(396003)(366004)(189003)(199004)(4326008)(316002)(52116002)(54906003)(478600001)(9686003)(7416002)(6496006)(1076003)(55016002)(66946007)(8676002)(81156014)(66556008)(66476007)(81166006)(5660300002)(86362001)(8936002)(6916009)(16526019)(33716001)(2906002)(186003);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2792;H:BYAPR15MB2278.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+Received-SPF: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JuO+1IH/kOFHh1meJE2z6PAkPt6HoITTOFTiB4MwgghyewOyigR6zgcLosI0N4VFDhyNBJfaZt0cXFXoGecQmjLISi5UVQ3vFeBHrJUJzvSOS0ktXgVDEunf1YLabigqZGKHUWip/rsMqca2Te6QVMAXD7ftziXy55nuTjGAwNKOocqx4r6wQiokoITLx+Sf8oRo7f5mHOpDZBOuFtP7rw4O+rgSkXbYIjbYy/6t8Q8TLuMV0wsSgFqnCH2beoZBUP8WuQJnF67pCpkbNkpB+xOFb0li7gy7RGXR25o6ISPMdfee79+/QhOhh19aQQXmTZAc3eEvqV264mBEydfLaJ0LoJTf4hpsVayqnwJxIIwBl0sh0gmYr5CPkvGGAWt8zmEOyjR2h3VCAFhgFKuKDRU/ketHgx9GN9uwqPXzzMLPyzgqswWA7JO5xOES9wzf
+X-MS-Exchange-AntiSpam-MessageData: 5w1kviZo6Us8eUCCEk4CatPO96kZ1QUnxI4wy6qvBk0R/tqRVnQHLaDTMNXVJPg0+ELMy+d4MW/e7isz/kgpWIlArNR6xIJxKSiavOOvhpcxuQUajA4LpJ95p9n3adr5wOJlaf6wizJjObCBnRaXr07FLfrMmiCNDXA6OFc6GR4iPX8tNIp7qzuH5L01ax5G
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad1b8e3b-6a51-4653-ed9b-08d7bf9c36bb
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2020 17:56:35.3551
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: g1xpLAny78m7F/1BSQzvUV47GSenICp6GLpl5i/U7JVcODniFk8T4yi80ErPYgUT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2792
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-03_06:2020-03-03,2020-03-03 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ bulkscore=0 clxscore=1015 malwarescore=0 phishscore=0 adultscore=0
+ mlxscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=999 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003030121
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 3, 2020 at 9:33 AM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Tue, Mar 03, 2020 at 09:09:38AM -0800, Andrii Nakryiko wrote:
-> > On Tue, Mar 3, 2020 at 6:12 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> > >
-> > > hi,
-> > > for bpftrace I'd like to print BTF functions (BTF_KIND_FUNC)
-> > > declarations together with their names.
-> > >
-> > > I saw we have btf_dump__emit_type_decl and added BTF_KIND_FUNC,
-> > > where it seemed to be missing, so it prints out something now
-> > > (not sure it's the right fix though).
-> > >
-> > > Anyway, would you be ok with adding some flag/bool to struct
-> > > btf_dump_emit_type_decl_opts, so I could get output like:
-> > >
-> > >   kfunc:ksys_readahead(int fd, long long int offset, long unsigned int count) = ssize_t
-> > >   kfunc:ksys_read(unsigned int fd, char buf, long unsigned int count) = size_t
-> > >
-> > > ... to be able to the arguments and return type separated,
-> > > so I could easily get to something like above?
-> > >
-> > > Current interface is just vfprintf callback and I'm not sure
-> > > I can rely that it will allywas be called with same arguments,
-> > > like having separated calls for parsed atoms like 'return type',
-> > > '(', ')', '(', 'arg type', 'arg name', ...
-> > >
-> > > I'm open to any suggestion ;-)
-> >
-> > Hey Jiri!
-> >
-> > Can you please elaborate on the use case and problem you are trying to solve?
-> >
-> > I think we can (and probably even should) add such option and support
-> > to dump functions, but whatever we do it should be a valid C syntax
-> > and should be compilable.
-> > Example above:
-> >
-> > kfunc:ksys_read(unsigned int fd, char buf, long unsigned int count) = size_t
-> >
-> > Is this really the syntax you need to get? I think btf_dump, when
-> > (optionally) emitting function declaration, will have to emit that
-> > particular one as:
-> >
-> > size_t ksys_read(unsigned int fd, char buf, long unsigned int count);
-> >
-> > But I'd like to hear the use case before we add this. Thanks!
->
-> the use case is just for the 'bpftrace -l' output, which displays
-> the probe names that could be used.. for kernel BTF kernel functions
-> it's 'kfunc:function(args)'
->
->         software:task-clock:
->         hardware:backend-stalls:
->         hardware:branch-instructions:
->         ...
->         tracepoint:kvmmmu:kvm_mmu_pagetable_walk
->         tracepoint:kvmmmu:kvm_mmu_paging_element
->         ...
->         kprobe:console_on_rootfs
->         kprobe:trace_initcall_start_cb
->         kprobe:run_init_process
->         kprobe:try_to_run_init_process
->         ...
->         kfunc:x86_reserve_hardware
->         kfunc:hw_perf_lbr_event_destroy
->         kfunc:x86_perf_event_update
->
-> I dont want to print the return type as is in C, because it would
-> mess up the whole output, hence the '= <return type>'
->
->         kfunc:ksys_readahead(int fd, long long int offset, long unsigned int count) = ssize_t
->         kfunc:ksys_read(unsigned int fd, char buf, long unsigned int count) = size_t
->
-> also possible only in verbose mode ;-)
->
-> the final shape of the format will be decided in a bpftrace review,
-> but in any case I think I'll need some way to get these bits:
->   <args> <return type>
->
+On Fri, Feb 28, 2020 at 11:53:40AM +0000, Lorenz Bauer wrote:
+> Add basic psock hooks for UDP sockets. This allows adding and
+> removing sockets, as well as automatic removal on unhash and close.
+> 
+> sock_map_sk_state_allowed is called from the syscall path, and
+> ensures that only established or listening sockets are added.
+> No such check exists for the BPF path: we rely on sockets being
+> in particular states when a BPF sock ops hook is executed.
+> For the passive open hook this means that sockets are actually in
+> TCP_SYN_RECV state (and unhashed) when they are added to the
+> sock map.
+> 
+> UDP sockets are not saddled with this inconsistency, and so the
+> checks for both syscall and BPF path should be identical. Rather
+> than duplicating the logic into sock_map_sk_state_allowed merge
+> it with sock_map_sk_is_suitable.
+> 
+> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> ---
+>  MAINTAINERS         |  1 +
+>  include/linux/udp.h |  4 ++++
+>  net/core/sock_map.c | 52 ++++++++++++++++++++++++++------------------
+>  net/ipv4/Makefile   |  1 +
+>  net/ipv4/udp_bpf.c  | 53 +++++++++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 90 insertions(+), 21 deletions(-)
+>  create mode 100644 net/ipv4/udp_bpf.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 2af5fa73155e..495ba52038ad 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9358,6 +9358,7 @@ F:	include/linux/skmsg.h
+>  F:	net/core/skmsg.c
+>  F:	net/core/sock_map.c
+>  F:	net/ipv4/tcp_bpf.c
+> +F:	net/ipv4/udp_bpf.c
+>  
+>  LANTIQ / INTEL Ethernet drivers
+>  M:	Hauke Mehrtens <hauke@hauke-m.de>
+> diff --git a/include/linux/udp.h b/include/linux/udp.h
+> index aa84597bdc33..2485a35d113c 100644
+> --- a/include/linux/udp.h
+> +++ b/include/linux/udp.h
+> @@ -143,4 +143,8 @@ static inline bool udp_unexpected_gso(struct sock *sk, struct sk_buff *skb)
+>  
+>  #define IS_UDPLITE(__sk) (__sk->sk_protocol == IPPROTO_UDPLITE)
+>  
+> +#ifdef CONFIG_BPF_STREAM_PARSER
+> +int udp_bpf_init(struct sock *sk);
+> +#endif
+> +
+>  #endif	/* _LINUX_UDP_H */
+> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> index c84cc9fc7f6b..d742e1538ae9 100644
+> --- a/net/core/sock_map.c
+> +++ b/net/core/sock_map.c
 
-Ok, I think for your use case it's better for you to implement it
-customly, I don't think this fits btf_dump() C output as is. But you
-have all the right high-level APIs anyways. There is nothing irregular
-about function declarations, thankfully. Pointers to functions are way
-more involved, syntactically, which is already abstracted from you in
-btf_dump__emit_type_decl(). Here's the code:
+[ ... ]
 
-static int dump_funcs(const struct btf *btf, struct btf_dump *d)
-{
-        int err = 0, i, j, cnt = btf__get_nr_types(btf);
-        const struct btf_type *t;
-        const struct btf_param *p;
-        const char *name;
+> @@ -466,15 +479,20 @@ static bool sock_map_op_okay(const struct bpf_sock_ops_kern *ops)
+>  	       ops->op == BPF_SOCK_OPS_TCP_LISTEN_CB;
+>  }
+>  
+> -static bool sock_map_sk_is_suitable(const struct sock *sk)
+> +static bool sock_map_sk_is_udp(const struct sock *sk)
+>  {
+> -	return sk->sk_type == SOCK_STREAM &&
+> -	       sk->sk_protocol == IPPROTO_TCP;
+> +	return sk->sk_type == SOCK_DGRAM && sk->sk_protocol == IPPROTO_UDP;
+>  }
+>  
+> -static bool sock_map_sk_state_allowed(const struct sock *sk)
+> +static bool sock_map_sk_is_suitable(const struct sock *sk, bool from_bpf)
+"from_bpf" seems unnecessary.
 
-        for (i = 1; i <= cnt; i++) {
-                t = btf__type_by_id(btf, i);
-                if (!btf_is_func(t))
-                        continue;
-
-                name = btf__name_by_offset(btf, t->name_off);
-                t = btf__type_by_id(btf, t->type);
-                if (!btf_is_func_proto(t))
-                        return -EINVAL;
-
-                printf("kfunc:%s(", name);
-                for (j = 0, p = btf_params(t); j < btf_vlen(t); j++, p++) {
-                        err = btf_dump__emit_type_decl(d, p->type, NULL);
-                        if (err)
-                                return err;
-                }
-                printf(") = ");
-
-                err = btf_dump__emit_type_decl(d, t->type, NULL);
-                if (err)
-                        return err;
-
-                printf(";\n");
-        }
-        return 0;
-}
-
-Beware, this will crash right now due to NULL field_name, but I'm
-fixing that with a tiny patch in just a second.
-
-Also beware, there are no argument names captures for func_protos...
-
-So with the above (and btf_dump__emit_type_decl() fix for NULL
-field_name), this will produce output:
-
-kfunc:num_digits(int) = int;
-kfunc:copy_from_user_nmi(void *const void *long unsigned int) = long
-unsigned int;
-kfunc:arch_wb_cache_pmem(void *size_t) = void;
-kfunc:__clear_user(void *long unsigned int) = long unsigned int;
-
-
->
-> thanks,
-> jirka
->
+>  {
+> -	return (1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_LISTEN);
+> +	int tcp_flags = TCPF_ESTABLISHED | TCPF_LISTEN;
+> +
+> +	if (from_bpf)
+> +		tcp_flags |= TCPF_SYN_RECV;
+> +
+> +	return (sock_map_sk_is_udp(sk) && sk_hashed(sk)) ||
+> +	       (sock_map_sk_is_tcp(sk) && (1 << sk->sk_state) & tcp_flags);
+>  }
+>  
+>  static int sock_map_update_elem(struct bpf_map *map, void *key,
