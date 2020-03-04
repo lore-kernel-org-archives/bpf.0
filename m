@@ -2,158 +2,81 @@ Return-Path: <SRS0=QYSm=4V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5072CC3F2D1
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 15:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A643EC3F2CE
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 15:50:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 29133215A4
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 15:48:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 784A3215A4
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 15:50:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YErib6GT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qBANVzxV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729797AbgCDPsA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Mar 2020 10:48:00 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:43337 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729675AbgCDPr6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Mar 2020 10:47:58 -0500
-Received: by mail-wr1-f65.google.com with SMTP id h9so2970137wrr.10
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 07:47:55 -0800 (PST)
+        id S1727835AbgCDPue (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Mar 2020 10:50:34 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:33769 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727084AbgCDPud (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Mar 2020 10:50:33 -0500
+Received: by mail-lf1-f67.google.com with SMTP id c20so1932649lfb.0;
+        Wed, 04 Mar 2020 07:50:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z+5Ez1qQKbcq42hwIwx4yVFRxKG7D39lDDrIw5grt88=;
-        b=YErib6GT5VIIjobJDwl9AXipjtvMVlEa8r6u9Hly9IMNXd5MmxEqhrwhRkpAFBpTw5
-         kELU0rxnmH6iBy+gIjs3ppyM9Qh/D1EadCQo0x9uAjwco/bcEDII91nFtCg7XTJJCrok
-         kqEGCzYCiJ4puupd27CxK+S1bxke5gCb3OtAc=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OBYCuoBLY5+NeCQ8btRKM4ahbrPedZvSO1tq9tM4tMI=;
+        b=qBANVzxV7w+ympSCrE8ndF4HV/U+X6xoOtxtX5Kpp2S3iVFZ8gdCTz09djhgwTPsrP
+         zQXdfX3wfTor5S/4bMPHCh1yedh/f8mTd0Lyeb22b8g24KPgOJrLTny66PaCvAagPe4F
+         dzYQmnwK9x6S3cIkoYCnEZm6WQOU75Ptk+1wij3ioRy0Xnj7jTnzu729OlOXv+c6idwM
+         goWLigmMhLUHiKl0Shjs4zS+BxMdeOYFMrZ0uaBRfkpn2GBvoiVrb5DWIPOJsyVOnctP
+         0EIXMb5rnM7c9r60UzSXarkuysEZhJnsSzshja3FHEeSgk8ibMf+cjJ4yfbM7V0sBiGz
+         1ySw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z+5Ez1qQKbcq42hwIwx4yVFRxKG7D39lDDrIw5grt88=;
-        b=OC4BEslNJTolv0euTxXV2CYdgNzg/zU3fA+UFXv7DcT5bmaLcgj4vtpOPXuJnhbSJ0
-         22DGk1xQCg6K/349RNywJRpUBiJ3t2xVS86uhyQq8ONwYr5kOIqWt2gMyCIhdxwQnltt
-         8CQLUYiaU66L53DhXSvWjF8ctI/QajSYm42W4nifjXy74eoveTQyqmNDFN3ZYIMgBfBz
-         U0p+liFhS2T0PR5mr6kWh5Q6h+RAXI2qL8tKxUCKRbJWKy4ZfRicOrG+/rqDRsQzTPxC
-         pt5LCKlJH8FVK35PWgfMrgnHHo55UA2tdZ/fT5s/4R2uBjRSwM93guXwhfOd4snCWV0s
-         Td+Q==
-X-Gm-Message-State: ANhLgQ3iCLKE+d20xC5wVdBsUJxtEf4evBIgChSupGC5EX9gWqqgkzKC
-        VjOOFD+Sf4u0mxXebDgawdRlFw==
-X-Google-Smtp-Source: ADFU+vsUxjzbIEX9R914KDjsI/HzBW8ale8XFSqRRCX4A8/y6Mft3ya7FgdMIWOlY+OErYCIPhFEPQ==
-X-Received: by 2002:a5d:4692:: with SMTP id u18mr4722577wrq.206.1583336874872;
-        Wed, 04 Mar 2020 07:47:54 -0800 (PST)
-Received: from kpsingh-kernel.localdomain ([2a00:79e1:abc:308:8ca0:6f80:af01:b24])
-        by smtp.gmail.com with ESMTPSA id u25sm4816091wml.17.2020.03.04.07.47.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 07:47:54 -0800 (PST)
-From:   KP Singh <kpsingh@chromium.org>
-To:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>
-Subject: [PATCH bpf-next v3 0/7] Introduce BPF_MODIFY_RET tracing progs
-Date:   Wed,  4 Mar 2020 16:47:40 +0100
-Message-Id: <20200304154747.23506-1-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OBYCuoBLY5+NeCQ8btRKM4ahbrPedZvSO1tq9tM4tMI=;
+        b=F71K6bQJjSDjLG3Zj2/l7B7IEI0ybobNCHkKIyP+xn014K4fJ6vKJGP9Iz9CUJ4yp+
+         r9TwNGDQvsj655AYIfHUWwKpXEGLeCz0LIMCbLI855oWNzejptD11MHNDwELZ21tgNGd
+         REYcKDJlxS4cfGTE6qXowYtRjU2tUeJE2AIPZ8QjabXHMk3McC2pLL0iUeP0K1f33g26
+         68K9xuWQBmDB73bQV8R8el63m+MDmc2ptRiVhAURsTIdeSdBffPF08s2o+KmXZBU4xaL
+         PhP/eFCCe85xJyhMx5IgwJ+UNpmnL3ZtmY1D/rKdiI3cx/+Hcx6cJRjSDz44K1oLXDhi
+         i2NA==
+X-Gm-Message-State: ANhLgQ0AiXdGa7UMECLkkDEFeH/un26+IpG+K2hYdI1uTXR8yzAe30IE
+        gwM2warB1GDqSRVDI6Gq129rxuvi9mAOlqCI7GI=
+X-Google-Smtp-Source: ADFU+vu/zmV33R5WG1qsWW282XglHRgxL9NLwFAJHp8D1eeHKQ6QQUMuGtgILE/tGz3x9BIqA70TXAYRp4aPNbDlK4U=
+X-Received: by 2002:ac2:4211:: with SMTP id y17mr2340642lfh.157.1583337031447;
+ Wed, 04 Mar 2020 07:50:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200303003233.3496043-1-andriin@fb.com> <20200303003233.3496043-2-andriin@fb.com>
+ <fb80ddac-d104-d0b7-8bed-694d20b62d61@iogearbox.net> <CAEf4BzZWXRX_TrFSPb=ORcfun8B+GdGOAF6C29B-3xB=NaJO7A@mail.gmail.com>
+ <87blpc4g14.fsf@toke.dk> <945cf1c4-78bb-8d3c-10e3-273d100ce41c@iogearbox.net>
+In-Reply-To: <945cf1c4-78bb-8d3c-10e3-273d100ce41c@iogearbox.net>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 4 Mar 2020 07:50:20 -0800
+Message-ID: <CAADnVQK4uJRNQzPChvQ==sL02nXHEELFJL_ehqYssuD_xeQx+A@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 1/3] bpf: switch BPF UAPI #define constants
+ used from BPF program side to enums
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Kernel Team <kernel-team@fb.com>, Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: KP Singh <kpsingh@google.com>
+On Wed, Mar 4, 2020 at 7:39 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> I was about to push the series out, but agree that there may be a risk for #ifndefs
+> in the BPF C code. If we want to be on safe side, #define FOO FOO would be needed.
 
-v2 -> v3:
-
-* bpf_trampoline_update_progs -> bpf_trampoline_get_progs + const
-  qualification.
-* Typos in commit messages.
-* Added Andrii's Acks.
-
-v1 -> v2:
-
-* Adressed Andrii's feedback.
-* Fixed a bug that Alexei noticed about nop generation.
-* Rebase.
-
-This was brought up in the KRSI v4 discussion and found to be useful
-both for security and tracing programs.
-
-  https://lore.kernel.org/bpf/20200225193108.GB22391@chromium.org/
-
-The modify_return programs are allowed for security hooks (with an
-extra CAP_MAC_ADMIN check) and functions whitelisted for error
-injection (ALLOW_ERROR_INJECTION).
-
-The "security_" check is expected to be cleaned up with the KRSI patch
-series.
-
-Here is an example of how a fmod_ret program behaves:
-
-int func_to_be_attached(int a, int b)
-{  <--- do_fentry
-
-do_fmod_ret:
-   <update ret by calling fmod_ret>
-   if (ret != 0)
-        goto do_fexit;
-
-original_function:
-
-    <side_effects_happen_here>
-
-}  <--- do_fexit
-
-ALLOW_ERROR_INJECTION(func_to_be_attached, ERRNO)
-
-The fmod_ret program attached to this function can be defined as:
-
-SEC("fmod_ret/func_to_be_attached")
-int BPF_PROG(func_name, int a, int b, int ret)
-{
-        // This will skip the original function logic.
-        return -1;
-}
-
-KP Singh (7):
-  bpf: Refactor trampoline update code
-  bpf: JIT helpers for fmod_ret progs
-  bpf: Introduce BPF_MODIFY_RETURN
-  bpf: Attachment verification for BPF_MODIFY_RETURN
-  tools/libbpf: Add support for BPF_MODIFY_RETURN
-  bpf: Add test ops for BPF_PROG_TYPE_TRACING
-  bpf: Add selftests for BPF_MODIFY_RETURN
-
- arch/x86/net/bpf_jit_comp.c                   | 279 +++++++++++++-----
- include/linux/bpf.h                           |  24 +-
- include/uapi/linux/bpf.h                      |   1 +
- kernel/bpf/bpf_struct_ops.c                   |  12 +-
- kernel/bpf/btf.c                              |  27 +-
- kernel/bpf/syscall.c                          |   1 +
- kernel/bpf/trampoline.c                       |  65 ++--
- kernel/bpf/verifier.c                         |  32 ++
- kernel/trace/bpf_trace.c                      |   1 +
- net/bpf/test_run.c                            |  57 +++-
- tools/include/uapi/linux/bpf.h                |   1 +
- tools/lib/bpf/libbpf.c                        |   4 +
- .../selftests/bpf/prog_tests/fentry_fexit.c   |  12 +-
- .../selftests/bpf/prog_tests/fentry_test.c    |  14 +-
- .../selftests/bpf/prog_tests/fexit_test.c     |  69 ++---
- .../selftests/bpf/prog_tests/modify_return.c  |  65 ++++
- .../selftests/bpf/progs/modify_return.c       |  49 +++
- 17 files changed, 526 insertions(+), 187 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/modify_return.c
- create mode 100644 tools/testing/selftests/bpf/progs/modify_return.c
-
--- 
-2.20.1
-
+There is really no risk.
+Let's not be paranoid about it and uglify bpf.h for no reason.
