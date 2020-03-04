@@ -2,60 +2,60 @@ Return-Path: <SRS0=QYSm=4V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CE93C3F2CE
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 22:14:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C651AC3F2D7
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 22:14:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5CF1C20848
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 22:14:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E19620848
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 22:14:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583360045;
-	bh=L+PmTnojJEfdHrn+v1Qfp4HJ6oT+DETDCMkAqiA6GDo=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=qpR7LbrjjSxdudGntCBVQ8WT8qcnep/4EG60AxSgT48w3z8TBub9shtaxJOUrSBK5
-	 iaFwtx4KKpTjerZUEIeSNO9z7W7PuzdC838mwCrjQx/QerC19p/Wwbc34lqSzV4nQk
-	 s2sLFjzOArsdLGyWF9VYGOyeyYHGsyupk0rCtbHQ=
+	s=default; t=1583360070;
+	bh=9xkWWaunI0gSEGO5Cx/X+dLsjBfzYO7QN/sVfu/HjV4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=WFlFWF5w9DcMY6YZr7fTesuMbxDPMxjQ8hFWkmN+pEna9Fb3w3cxCgQ7LQYy//lPR
+	 X+1MBGWY+UaD3NlVB7B+tpmcLznznVMLFC8VLtKVKbPHfNu9RhYyUodBUGoIvN7PgX
+	 qtSxduELafm5+YbUUFTD7o2TrjVCpx+4ssUe1rZw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388338AbgCDWOF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Mar 2020 17:14:05 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:40978 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387931AbgCDWOE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Mar 2020 17:14:04 -0500
-Received: by mail-io1-f66.google.com with SMTP id m25so4196454ioo.8
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 14:14:04 -0800 (PST)
+        id S2388513AbgCDWOX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Mar 2020 17:14:23 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:42655 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388483AbgCDWOW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Mar 2020 17:14:22 -0500
+Received: by mail-io1-f68.google.com with SMTP id q128so4192358iof.9
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 14:14:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5RZnySPr2P+YN4LWk4hB1TPPuvNEvChvRV3l/kgeEwU=;
-        b=PD9GxB+apE6cVObJRfsp5PWD0Cc8EUWjgheljvrVaHsQrwpzXyquxRPPow9txiSNwW
-         sKESrBfxYVCgiMdliBnJdX7ycHA7Bs4M1W0hgJpzP+3N2FYRTi2nw2trTR8PSflwYOiG
-         Oa7Fa3aBsGMCYqI9o2PM7ISkI5DyqA3CEme2c=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=0yZwBZUwL8PIwAcU8o7bWc8CP5XNPRFSTvCyJ7jQ5mQ=;
+        b=I4UUtFHvX08Sx91UacVsT5PS2tj7qzVvr6l/ln4WrvjZxc/i8jv/oFJQOcNxDSmPBd
+         ybh5nq8cpARJYCIJvgXwLurW1TEnq2g9Nv81GdPBn4liETzXdczFoTIvy6Zw3R1y+sam
+         aa2bFrPARsOlrcGFyug0jM1U6XwTvVb4XBbbs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5RZnySPr2P+YN4LWk4hB1TPPuvNEvChvRV3l/kgeEwU=;
-        b=JZqgI+6dOBQvbicEAjAwbZ6JsokI2hmakliNygNvkt6VINyciXAlDktk8TCtwyJQUG
-         7ySKXIEk+xESH716s5X6AbUTceXGA/UivPVVoysRCSAo5O3NJd8+MRx9s2W1G1fRdWvH
-         ohgKNLuPy7c+Mmsn8E5AOYKLpmBviOOOxGV1zqqm4BIHqRMhYSUzzY8VxSt/VyFe/xFs
-         NXaFpTDYe5JDF4Z6RiUypR7FKxbVFRgs0AJSZIbSq/iS7Hb2wWyU6+KHKGFdvtjvystT
-         trKexJLcQTmNGIu5M+ih+vVTBs397pBYYR5mj6jFPEbU+IwiC9FjYzq28fnN2Ju0cz6O
-         VbWw==
-X-Gm-Message-State: ANhLgQ2BUf8dZh8z5u1dS7Hh1ECWh1W6lLuonctdPeFL2eRZuSVA0nQa
-        NRo4WeSSMEcsCA7y4sbKbBM6nw==
-X-Google-Smtp-Source: ADFU+vvbVUBntaUuM+BR9AtlDvcRMDW37o/tSJ1CxI9aA+ZUljxG1XOijk2DoUbaKr8ANC+GyheLRQ==
-X-Received: by 2002:a6b:6007:: with SMTP id r7mr4147160iog.223.1583360042621;
-        Wed, 04 Mar 2020 14:14:02 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=0yZwBZUwL8PIwAcU8o7bWc8CP5XNPRFSTvCyJ7jQ5mQ=;
+        b=hVZcnkATYfrqFvoJTfY4IncwQwbhyzmKbZ+A6c2vCB0gP+h5dN+NK5HBSe7JPJ9C+9
+         DOUCchihCpSCKvfDGo0ZSgop6bK2LgwXhO60tBS2/aqxCQENEuvmbvvyzlqPIsgVxfq0
+         1RyJ/MIwyRmIvVFxqVx57Ob1dBnYfVq/utxmvwTqdOuOPW5uidUJL0VPSUHRjlSIUTYS
+         4Rf8AaEujy1CPSJucs5wHzoUu/60HN3x0NhWNw9+Oty8G2zZCuIFxfixYPgm8pXVqARi
+         eCAhBJ1Vkih7iedUs4D94InV4wX6pI7k1YywFK+/VuZQexNWovK7o+pjvA/wG0NCLimR
+         eeUw==
+X-Gm-Message-State: ANhLgQ3+JdaH8lgbeSiN/qt3G0VY58zx8KOjS77X4SXJt3nVlqLyPoXa
+        clF0Yg7TCqP2O/eCZ8XArZJjBg==
+X-Google-Smtp-Source: ADFU+vu9yfqsq5F9oa+zo3RCZeuK0hGfEJ8oFClTaKU0IJAaGmFuBoMBmSAKAqtJ7WlWRbKZ5R7jew==
+X-Received: by 2002:a5d:9697:: with SMTP id m23mr4104634ion.45.1583360060224;
+        Wed, 04 Mar 2020 14:14:20 -0800 (PST)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id g12sm6850409iom.5.2020.03.04.14.14.01
+        by smtp.gmail.com with ESMTPSA id g12sm6850409iom.5.2020.03.04.14.14.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 14:14:01 -0800 (PST)
+        Wed, 04 Mar 2020 14:14:19 -0800 (PST)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     shuah@kernel.org, keescook@chromium.org, luto@amacapital.net,
         wad@chromium.org, daniel@iogearbox.net, kafai@fb.com, yhs@fb.com,
@@ -64,10 +64,12 @@ Cc:     Shuah Khan <skhan@linuxfoundation.org>, khilman@baylibre.com,
         mpe@ellerman.id.au, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH 0/4] Kselftest integration into Kernel CI - Part 1
-Date:   Wed,  4 Mar 2020 15:13:31 -0700
-Message-Id: <cover.1583358715.git.skhan@linuxfoundation.org>
+Subject: [PATCH 2/4] selftests: Fix seccomp to support relocatable build (O=objdir)
+Date:   Wed,  4 Mar 2020 15:13:33 -0700
+Message-Id: <11967e5f164f0cd717921bd382ff9c13ef740146.1583358715.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <cover.1583358715.git.skhan@linuxfoundation.org>
+References: <cover.1583358715.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -75,42 +77,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch series consists of first round of fixes to integrate
-Kselftest into Kernel CI.
+Fix seccomp relocatable builds. This is a simple fix to use the
+right lib.mk variable TEST_GEN_PROGS for objects to leverage
+lib.mk common framework for relocatable builds.
 
-You can find full list of problems in my announcement I sent out
-last week:
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/testing/selftests/seccomp/Makefile | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
 
-https://lkml.org/lkml/2020/2/27/2221
-
-These fixes to android and seccomp tests address relocatable support.
-However, they will still leave the source directory dirty.
-
-android test does headers_install in source directory. This is an easier
-problem to fix. seccomp on the other hand builds fixdep scripts under
-scripts/basic and installs headers in the source directory. It is linked
-to solving bpf relocatable build issue which I haven't given it a lot of
-thought for now.
-
-There is no dependency on source directory for run-time which is what
-we want.
-
-I will apply these kernelci topic branch for testing 
-git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
-
-Shuah Khan (4):
-  selftests: Fix kselftest O=objdir build from cluttering top level
-    objdir
-  selftests: Fix seccomp to support relocatable build (O=objdir)
-  selftests: android: ion: Fix ionmap_test compile error
-  selftests: android: Fix custom install from skipping test progs
-
- tools/testing/selftests/Makefile             |  4 ++--
- tools/testing/selftests/android/Makefile     |  2 +-
- tools/testing/selftests/android/ion/Makefile |  2 +-
- tools/testing/selftests/seccomp/Makefile     | 16 +++-------------
- 4 files changed, 7 insertions(+), 17 deletions(-)
-
+diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
+index 1760b3e39730..a8a9717fc1be 100644
+--- a/tools/testing/selftests/seccomp/Makefile
++++ b/tools/testing/selftests/seccomp/Makefile
+@@ -1,17 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+-all:
+-
+-include ../lib.mk
+-
+-.PHONY: all clean
+-
+-BINARIES := seccomp_bpf seccomp_benchmark
+ CFLAGS += -Wl,-no-as-needed -Wall
++LDFLAGS += -lpthread
+ 
+-seccomp_bpf: seccomp_bpf.c ../kselftest_harness.h
+-	$(CC) $(CFLAGS) $(LDFLAGS) $< -lpthread -o $@
+-
+-TEST_PROGS += $(BINARIES)
+-EXTRA_CLEAN := $(BINARIES)
++TEST_GEN_PROGS := seccomp_bpf seccomp_benchmark
+ 
+-all: $(BINARIES)
++include ../lib.mk
 -- 
 2.20.1
 
