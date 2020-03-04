@@ -2,164 +2,121 @@ Return-Path: <SRS0=QYSm=4V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CFFFC3F2CE
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 19:09:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B511C3F2CE
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 19:11:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D513F2146E
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 19:08:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5FBA824658
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 19:11:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="g1F21Jna"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="asBcJohH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728926AbgCDTI7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Mar 2020 14:08:59 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:42160 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727835AbgCDTI7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Mar 2020 14:08:59 -0500
-Received: by mail-wr1-f65.google.com with SMTP id v11so1882252wrm.9
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 11:08:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=3SS4fekyQGzGk+bEcZn0ToSHy9OyXafStxdmWHS/l5c=;
-        b=g1F21JnaXgZ/b+fqRbHrmibZXuy6uq7quiVcj8o9bY3mtdTjKW3DwnytkGBBhsYcBz
-         uurPUDZheKBecYlKZ3hwqF8Cb18i0zHW+C8J92SS+gHJqjOdtmI/z5qi78VIzgn5ovdf
-         OctW/J68R2IVHrpLo6q3sEsBevRAWmSywJ3Vw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=3SS4fekyQGzGk+bEcZn0ToSHy9OyXafStxdmWHS/l5c=;
-        b=L4dfMyETnEuF+HlZTJWDqzcbHgu/fQnR9vaGiS+9Hw62JemJVqmJfO7M18HAkAktCZ
-         3FRTHqVGDZPMvj+M85xZeHVEA3WUCBz0B2BX8OBt6TgJdNx1lzkzKbHtQ/Z0rGWfLZsV
-         0J+LBHsdHYFcf7LYh9avMmqiOhf3mvf40J5o8fGKhh7GbrbpSWme0loz2VZzFmceD3kT
-         WWENuaiXw9w7EvrN/XdRI6pkWU1IedJxNlQLeJAmWff84/Ole+itnidcwDLAZHmOBrXX
-         OjwUitRHPzw1BVBUzVWOPNdLtlTgMaLpvhkEtSyXNiqVwGyNYdF7/WzQyibh5M4kHlJ0
-         1bDg==
-X-Gm-Message-State: ANhLgQ0+2xF0qR2QbA2hZBo6XXsvtPFJ8CyQGDnHzKmX79CkJgEBv5//
-        ds/Tq8Px3ylxOpsOOi4lDuaw4Q==
-X-Google-Smtp-Source: ADFU+vvQX/rymjiQTTfmrRp8pXMzu+YTmiwg5naE9OKjaOSx1gH5F4Y92Cp+WVSUK0MJ9+BB0OphxQ==
-X-Received: by 2002:adf:b189:: with SMTP id q9mr4679569wra.169.1583348937825;
-        Wed, 04 Mar 2020 11:08:57 -0800 (PST)
-Received: from chromium.org (77-56-209-237.dclient.hispeed.ch. [77.56.209.237])
-        by smtp.gmail.com with ESMTPSA id j14sm41257638wrn.32.2020.03.04.11.08.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 11:08:57 -0800 (PST)
-From:   KP Singh <kpsingh@chromium.org>
-X-Google-Original-From: KP Singh <kpsingh>
-Date:   Wed, 4 Mar 2020 20:08:55 +0100
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        linux-security-module@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andriin@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>
-Subject: Re: [PATCH bpf-next v3 1/7] bpf: Refactor trampoline update code
-Message-ID: <20200304190855.GA31073@chromium.org>
-References: <20200304154747.23506-1-kpsingh@chromium.org>
- <20200304154747.23506-2-kpsingh@chromium.org>
- <cb54c137-6d8e-b4e5-bd17-e0a05368c3eb@iogearbox.net>
- <20200304184441.GA25392@chromium.org>
- <CAEf4Bza4y_H+Avry=OdQ=j6Ey-niTYLafKUwicVeutmQ3X5g=g@mail.gmail.com>
+        id S1728591AbgCDTLJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Mar 2020 14:11:09 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18198 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728539AbgCDTLJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Mar 2020 14:11:09 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 024ItYjS031954
+        for <bpf@vger.kernel.org>; Wed, 4 Mar 2020 11:11:08 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=KwYbFMykYMp4j2TE3tiqkpNSEdPOUhXT+KJvE9NI3mk=;
+ b=asBcJohHrXbgwGUzSVtIDaTFPcJQnfRlmUTn1CJlws+/GDw87TMHaa1dOcYgwdnPTjg6
+ TuXoqdS3wkjQkjvucyEhhokj7ZIFC0l7KrkqT9FJEMO7cUcRtse4sRxk+TSb/Xefq/DQ
+ lO4gFujDQpsAeFgEkEq11/MN8DTkDhEcEGI= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2yhugwxyj6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 11:11:08 -0800
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Wed, 4 Mar 2020 11:11:07 -0800
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 7E96B370103E; Wed,  4 Mar 2020 11:11:04 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf v3 0/2] bpf: Fix deadlock with rq_lock in bpf_send_signal()
+Date:   Wed, 4 Mar 2020 11:11:04 -0800
+Message-ID: <20200304191104.2796444-1-yhs@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4Bza4y_H+Avry=OdQ=j6Ey-niTYLafKUwicVeutmQ3X5g=g@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-04_08:2020-03-04,2020-03-04 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ malwarescore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999
+ lowpriorityscore=0 suspectscore=13 bulkscore=0 phishscore=0 spamscore=0
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003040126
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 04-Mär 10:47, Andrii Nakryiko wrote:
-> On Wed, Mar 4, 2020 at 10:44 AM KP Singh <kpsingh@chromium.org> wrote:
-> >
-> > On 04-Mär 19:37, Daniel Borkmann wrote:
-> > > On 3/4/20 4:47 PM, KP Singh wrote:
-> > > > From: KP Singh <kpsingh@google.com>
-> > > >
-> > > > As we need to introduce a third type of attachment for trampolines, the
-> > > > flattened signature of arch_prepare_bpf_trampoline gets even more
-> > > > complicated.
-> > > >
-> > > > Refactor the prog and count argument to arch_prepare_bpf_trampoline to
-> > > > use bpf_tramp_progs to simplify the addition and accounting for new
-> > > > attachment types.
-> > > >
-> > > > Signed-off-by: KP Singh <kpsingh@google.com>
-> > > > Acked-by: Andrii Nakryiko <andriin@fb.com>
-> > >
-> > > [...]
-> > > > diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> > > > index c498f0fffb40..9f7e0328a644 100644
-> > > > --- a/kernel/bpf/bpf_struct_ops.c
-> > > > +++ b/kernel/bpf/bpf_struct_ops.c
-> > > > @@ -320,6 +320,7 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
-> > > >     struct bpf_struct_ops_value *uvalue, *kvalue;
-> > > >     const struct btf_member *member;
-> > > >     const struct btf_type *t = st_ops->type;
-> > > > +   struct bpf_tramp_progs *tprogs = NULL;
-> > > >     void *udata, *kdata;
-> > > >     int prog_fd, err = 0;
-> > > >     void *image;
-> > > > @@ -425,10 +426,18 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
-> > > >                     goto reset_unlock;
-> > > >             }
-> > > > +           tprogs = kcalloc(BPF_TRAMP_MAX, sizeof(*tprogs), GFP_KERNEL);
-> > > > +           if (!tprogs) {
-> > > > +                   err = -ENOMEM;
-> > > > +                   goto reset_unlock;
-> > > > +           }
-> > > > +
-> > >
-> > > Looking over the code again, I'm quite certain that here's a memleak
-> > > since the kcalloc() is done in the for_each_member() loop in the ops
-> > > update but then going out of scope and in the exit path we only kfree
-> > > the last tprogs.
-> >
-> > You're right, nice catch. Fixing it.
-> 
-> There is probably no need to do many allocations as well, just one
-> outside of the loop and reuse?
+Commit 8b401f9ed244 ("bpf: implement bpf_send_signal() helper")
+introduced bpf_send_signal() helper and Commit 8482941f0906
+("bpf: Add bpf_send_signal_thread() helper") added bpf_send_signal_thread()
+helper. Both helpers try to send a signel to current process or thread.
 
-Yeah moved it out of the loop and before we grab the mutex, returning
-an -ENOMEM directly.
+When bpf_prog is called with scheduler rq_lock held, a deadlock
+could happen since bpf_send_signal() and bpf_send_signal_thread()
+will call group_send_sig_info() which may ultimately want to acquire
+rq_lock() again. This happens in 5.2 and 4.16 based kernels in our
+production environment with perf_sw_event.
 
-Thanks for noticing this. Sending v4 now.
+In a different scenario, the following is also possible in the last kernel:
+  cpu 1:
+     do_task_stat <- holding sighand->siglock
+     ...
+     task_sched_runtime <- trying to grab rq_lock
 
-- KP
+  cpu 2:
+     __schedule <- holding rq_lock
+     ...
+     do_send_sig_info <- trying to grab sighand->siglock
 
-> 
-> >
-> > - KP
-> >
-> > >
-> > > > +           tprogs[BPF_TRAMP_FENTRY].progs[0] = prog;
-> > > > +           tprogs[BPF_TRAMP_FENTRY].nr_progs = 1;
-> > > >             err = arch_prepare_bpf_trampoline(image,
-> > > >                                               st_map->image + PAGE_SIZE,
-> > > >                                               &st_ops->func_models[i], 0,
-> > > > -                                             &prog, 1, NULL, 0, NULL);
-> > > > +                                             tprogs, NULL);
-> > > >             if (err < 0)
-> > > >                     goto reset_unlock;
-> > > > @@ -469,6 +478,7 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
-> > > >     memset(uvalue, 0, map->value_size);
-> > > >     memset(kvalue, 0, map->value_size);
-> > > >   unlock:
-> > > > +   kfree(tprogs);
-> > > >     mutex_unlock(&st_map->lock);
-> > > >     return err;
-> > > >   }
+Commit eac9153f2b58 ("bpf/stackmap: Fix deadlock with
+rq_lock in bpf_get_stack()") has a similar issue with above
+rq_lock() deadlock. This patch set addressed the issue
+in a similar way. Patch #1 provided kernel solution and
+Patch #2 added a selftest.
+
+Changelogs:
+  v2 -> v3:
+    . simplify selftest send_signal_sched_switch().
+      The previous version has mmap/munmap inherited
+      from Song's reproducer. They are not necessary
+      in this context.
+  v1 -> v2:
+    . previous fix using task_work in nmi() is incorrect.
+      there is no nmi() involvement here. Using task_work
+      in all cases might be a solution. But decided to
+      use a similar fix as in Commit eac9153f2b58.
+
+Yonghong Song (2):
+  bpf: Fix deadlock with rq_lock in bpf_send_signal()
+  selftests/bpf: add send_signal_sched_switch test
+
+ kernel/trace/bpf_trace.c                      |  5 +-
+ .../bpf/prog_tests/send_signal_sched_switch.c | 60 +++++++++++++++++++
+ .../bpf/progs/test_send_signal_kern.c         |  6 ++
+ 3 files changed, 70 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/send_signal_sched_switch.c
+
+-- 
+2.17.1
+
