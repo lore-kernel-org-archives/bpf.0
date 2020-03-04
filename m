@@ -2,262 +2,130 @@ Return-Path: <SRS0=QYSm=4V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 258A6C3F2CE
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 19:11:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD8E4C3F2CE
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 19:13:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E60FC2146E
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 19:11:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1E6721775
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 19:13:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="PehUOtQH"
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="L8ThUlaD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727528AbgCDTL0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Mar 2020 14:11:26 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:52780 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726897AbgCDTL0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Mar 2020 14:11:26 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 024ItYxK026942
-        for <bpf@vger.kernel.org>; Wed, 4 Mar 2020 11:11:25 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=WrJUDQjD3fHRAZ+OU5lrfI2j4hrWjSgHEudpA0jF9Dw=;
- b=PehUOtQHvNENKlxzVwoElUt89mIG3Cb7IU04J21RCYrMyIkhpYRtLmxzIvKmOojAeWtk
- RZu5/OuLMqKPhfZiunoTTG/WJRDOW7hP5Umc+HUFHAFcDRChpiIeYLWqgADabZR6tJqJ
- Bc/EGToTfuOfeisMsOiJ6Nke2SulFk0s8oQ= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 2yhv7vpt06-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 11:11:25 -0800
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Wed, 4 Mar 2020 11:11:08 -0800
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id AFC6137010C5; Wed,  4 Mar 2020 11:11:04 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf v3 1/2] bpf: Fix deadlock with rq_lock in bpf_send_signal()
-Date:   Wed, 4 Mar 2020 11:11:04 -0800
-Message-ID: <20200304191104.2796501-1-yhs@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200304191104.2796444-1-yhs@fb.com>
-References: <20200304191104.2796444-1-yhs@fb.com>
-X-FB-Internal: Safe
+        id S1728512AbgCDTN6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Mar 2020 14:13:58 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:51347 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726561AbgCDTN6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Mar 2020 14:13:58 -0500
+Received: by mail-wm1-f66.google.com with SMTP id a132so3453814wme.1
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 11:13:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZpiDh26r+Ch8iWHGrJTS8rzPFoZXjwfWAgWenFu6J9w=;
+        b=L8ThUlaDZX0jF8LO2oqF3/Jjs2InRUkoll3W3RPXyrUYZVLn1hemJbU8GLDacnB1Xk
+         qwq9KMsxUzw1xBNB0ktv/M7tpzc/FTdtD7ypwLkR006dfhZPvdJ+FXq2W29cmG3ZjkQX
+         LQ1WeDuQFXzqM2TJENBSMipbS8QYfdNLeAb700huHHuHFHsgF6PyZO/44/jS6SVNwD/9
+         dXzw9/IBNOsGSI8KugZl1CvcZz8Jw1C4zUtxCvM6P9au46opo7kCziJvR8BrFgQe99kF
+         Ublf0Gwsxe4cvfXOX2SsnRnLls8BH2UW1zumBw4Fdmz4B7GqHMMKi/WeCxFwdFzuKrGQ
+         R5xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZpiDh26r+Ch8iWHGrJTS8rzPFoZXjwfWAgWenFu6J9w=;
+        b=txZ2ObKZWVunHVevx102nllHPu1m4oHWcB1LBEqryT4Fu44HaSSAXWPIqf1oTT3ZMV
+         6Lbj8NHef+5VSeSRxYznpz5Ic9BaMjf0E66WjjeWL1HPIRq9yNFiOn52bCxacx2WLmhA
+         1yR6OwOVdBI5AX0if6kBrm5D9NR48vHrRf0TLjxMBV7SAEJx+/sXYHRF3UCdBFErV1L9
+         G/Bh/mshs7CgJW3DapR7ZOo9h07kBnaMrKsht7nYpMUwUPKObXdsqsPehGK5742SCL7E
+         wi640GfeyG6b/nrGufk7+Du2JygJRJy7DYAkyKgVZBshvCr62ygcEADcTXjfyUX9S/M3
+         UdLA==
+X-Gm-Message-State: ANhLgQ0tZo35xUMertOG5JrfBPfKOiqR88F00hzjhhmveYD4XbwvEBnB
+        gHbP9A3FjANDB/+6oQenyYJ/Hg==
+X-Google-Smtp-Source: ADFU+vs2uLVlKgGfAPldPd8Z2YwCYW1lZpvNQUXbPqqWtqZZ9Mho67phCSI/fQ5wDpmw5hIc1gRjkg==
+X-Received: by 2002:a7b:cd11:: with SMTP id f17mr5104788wmj.6.1583349236118;
+        Wed, 04 Mar 2020 11:13:56 -0800 (PST)
+Received: from [192.168.1.10] ([194.35.118.106])
+        by smtp.gmail.com with ESMTPSA id t3sm40813652wrx.38.2020.03.04.11.13.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Mar 2020 11:13:55 -0800 (PST)
+Subject: Re: [PATCH v4 bpf-next 0/4] bpftool: introduce prog profile
+To:     Song Liu <songliubraving@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     kernel-team@fb.com, ast@kernel.org, daniel@iogearbox.net,
+        arnaldo.melo@gmail.com, jolsa@kernel.org
+References: <20200304180710.2677695-1-songliubraving@fb.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+Message-ID: <6d824118-7223-12eb-a58b-46368c33b782@isovalent.com>
+Date:   Wed, 4 Mar 2020 19:13:54 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-04_08:2020-03-04,2020-03-04 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 adultscore=0
- mlxlogscore=999 mlxscore=0 lowpriorityscore=0 spamscore=0 suspectscore=43
- clxscore=1015 bulkscore=0 impostorscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2003040126
-X-FB-Internal: deliver
+In-Reply-To: <20200304180710.2677695-1-songliubraving@fb.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When experimenting with bpf_send_signal() helper in our production
-environment (5.2 based), we experienced a deadlock in NMI mode:
-   #5 [ffffc9002219f770] queued_spin_lock_slowpath at ffffffff8110be24
-   #6 [ffffc9002219f770] _raw_spin_lock_irqsave at ffffffff81a43012
-   #7 [ffffc9002219f780] try_to_wake_up at ffffffff810e7ecd
-   #8 [ffffc9002219f7e0] signal_wake_up_state at ffffffff810c7b55
-   #9 [ffffc9002219f7f0] __send_signal at ffffffff810c8602
-  #10 [ffffc9002219f830] do_send_sig_info at ffffffff810ca31a
-  #11 [ffffc9002219f868] bpf_send_signal at ffffffff8119d227
-  #12 [ffffc9002219f988] bpf_overflow_handler at ffffffff811d4140
-  #13 [ffffc9002219f9e0] __perf_event_overflow at ffffffff811d68cf
-  #14 [ffffc9002219fa10] perf_swevent_overflow at ffffffff811d6a09
-  #15 [ffffc9002219fa38] ___perf_sw_event at ffffffff811e0f47
-  #16 [ffffc9002219fc30] __schedule at ffffffff81a3e04d
-  #17 [ffffc9002219fc90] schedule at ffffffff81a3e219
-  #18 [ffffc9002219fca0] futex_wait_queue_me at ffffffff8113d1b9
-  #19 [ffffc9002219fcd8] futex_wait at ffffffff8113e529
-  #20 [ffffc9002219fdf0] do_futex at ffffffff8113ffbc
-  #21 [ffffc9002219fec0] __x64_sys_futex at ffffffff81140d1c
-  #22 [ffffc9002219ff38] do_syscall_64 at ffffffff81002602
-  #23 [ffffc9002219ff50] entry_SYSCALL_64_after_hwframe at ffffffff81c00068
+2020-03-04 10:07 UTC-0800 ~ Song Liu <songliubraving@fb.com>
+> This set introduces bpftool prog profile command, which uses hardware
+> counters to profile BPF programs.
+> 
+> This command attaches fentry/fexit programs to a target program. These two
+> programs read hardware counters before and after the target program and
+> calculate the difference.
+> 
+> Changes v3 => v4:
+> 1. Simplify err handling in profile_open_perf_events() (Quentin);
+> 2. Remove redundant p_err() (Quentin);
+> 3. Replace tab with space in bash-completion; (Quentin);
+> 4. Fix typo _bpftool_get_map_names => _bpftool_get_prog_names (Quentin).
+> 
+> Changes v2 => v3:
+> 1. Change order of arguments (Quentin), as:
+>      bpftool prog profile PROG [duration DURATION] METRICs
+> 2. Add bash-completion for bpftool prog profile (Quentin);
+> 3. Fix build of selftests (Yonghong);
+> 4. Better handling of bpf_map_lookup_elem() returns (Yonghong);
+> 5. Improve clean up logic of do_profile() (Yonghong);
+> 6. Other smaller fixes/cleanups.
+> 
+> Changes RFC => v2:
+> 1. Use new bpf_program__set_attach_target() API;
+> 2. Update output format to be perf-stat like (Alexei);
+> 3. Incorporate skeleton generation into Makefile;
+> 4. Make DURATION optional and Allow Ctrl-C (Alexei);
+> 5. Add calcated values "insn per cycle" and "LLC misses per million isns".
+> 
+> Song Liu (4):
+>   bpftool: introduce "prog profile" command
+>   bpftool: Documentation for bpftool prog profile
+>   bpftool: bash completion for "bpftool prog profile"
+>   bpftool: fix typo in bash-completion
+> 
+>  .../bpftool/Documentation/bpftool-prog.rst    |  19 +
+>  tools/bpf/bpftool/Makefile                    |  18 +
+>  tools/bpf/bpftool/bash-completion/bpftool     |  47 +-
+>  tools/bpf/bpftool/prog.c                      | 425 +++++++++++++++++-
+>  tools/bpf/bpftool/skeleton/profiler.bpf.c     | 171 +++++++
+>  tools/bpf/bpftool/skeleton/profiler.h         |  47 ++
+>  tools/scripts/Makefile.include                |   1 +
+>  7 files changed, 725 insertions(+), 3 deletions(-)
+>  create mode 100644 tools/bpf/bpftool/skeleton/profiler.bpf.c
+>  create mode 100644 tools/bpf/bpftool/skeleton/profiler.h
+> 
+> --
 
-The above call stack is actually very similar to an issue
-reported by Commit eac9153f2b58 ("bpf/stackmap: Fix deadlock with
-rq_lock in bpf_get_stack()") by Song Liu. The only difference is
-bpf_send_signal() helper instead of bpf_get_stack() helper.
+Thanks again! This version looks good to me, although I've not tested
+the patchset, so there's still the error met by Jiri to figure out. For
+the rest of the series:
 
-The above deadlock is triggered with a perf_sw_event.
-Similar to Commit eac9153f2b58, the below almost identical reproducer
-used tracepoint point sched/sched_switch so the issue can be easily caught.
-  /* stress_test.c */
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <sys/mman.h>
-  #include <pthread.h>
-  #include <sys/types.h>
-  #include <sys/stat.h>
-  #include <fcntl.h>
-
-  #define THREAD_COUNT 1000
-  char *filename;
-  void *worker(void *p)
-  {
-        void *ptr;
-        int fd;
-        char *pptr;
-
-        fd = open(filename, O_RDONLY);
-        if (fd < 0)
-                return NULL;
-        while (1) {
-                struct timespec ts = {0, 1000 + rand() % 2000};
-
-                ptr = mmap(NULL, 4096 * 64, PROT_READ, MAP_PRIVATE, fd, 0);
-                usleep(1);
-                if (ptr == MAP_FAILED) {
-                        printf("failed to mmap\n");
-                        break;
-                }
-                munmap(ptr, 4096 * 64);
-                usleep(1);
-                pptr = malloc(1);
-                usleep(1);
-                pptr[0] = 1;
-                usleep(1);
-                free(pptr);
-                usleep(1);
-                nanosleep(&ts, NULL);
-        }
-        close(fd);
-        return NULL;
-  }
-
-  int main(int argc, char *argv[])
-  {
-        void *ptr;
-        int i;
-        pthread_t threads[THREAD_COUNT];
-
-        if (argc < 2)
-                return 0;
-
-        filename = argv[1];
-
-        for (i = 0; i < THREAD_COUNT; i++) {
-                if (pthread_create(threads + i, NULL, worker, NULL)) {
-                        fprintf(stderr, "Error creating thread\n");
-                        return 0;
-                }
-        }
-
-        for (i = 0; i < THREAD_COUNT; i++)
-                pthread_join(threads[i], NULL);
-        return 0;
-  }
-and the following command:
-  1. run `stress_test /bin/ls` in one windown
-  2. hack bcc trace.py with the following change:
-     --- a/tools/trace.py
-     +++ b/tools/trace.py
-     @@ -513,6 +513,7 @@ BPF_PERF_OUTPUT(%s);
-              __data.tgid = __tgid;
-              __data.pid = __pid;
-              bpf_get_current_comm(&__data.comm, sizeof(__data.comm));
-     +        bpf_send_signal(10);
-      %s
-      %s
-              %s.perf_submit(%s, &__data, sizeof(__data));
-  3. in a different window run
-     ./trace.py -p $(pidof stress_test) t:sched:sched_switch
-
-The deadlock can be reproduced in our production system.
-
-Similar to Song's fix, the fix is to delay sending signal if
-irqs is disabled to avoid deadlocks involving with rq_lock.
-With this change, my above stress-test in our production system
-won't cause deadlock any more.
-
-I also implemented a scale-down version of reproducer in the
-selftest (a subsequent commit). With latest bpf-next,
-it complains for the following potential deadlock.
-  [   32.832450] -> #1 (&p->pi_lock){-.-.}:
-  [   32.833100]        _raw_spin_lock_irqsave+0x44/0x80
-  [   32.833696]        task_rq_lock+0x2c/0xa0
-  [   32.834182]        task_sched_runtime+0x59/0xd0
-  [   32.834721]        thread_group_cputime+0x250/0x270
-  [   32.835304]        thread_group_cputime_adjusted+0x2e/0x70
-  [   32.835959]        do_task_stat+0x8a7/0xb80
-  [   32.836461]        proc_single_show+0x51/0xb0
-  ...
-  [   32.839512] -> #0 (&(&sighand->siglock)->rlock){....}:
-  [   32.840275]        __lock_acquire+0x1358/0x1a20
-  [   32.840826]        lock_acquire+0xc7/0x1d0
-  [   32.841309]        _raw_spin_lock_irqsave+0x44/0x80
-  [   32.841916]        __lock_task_sighand+0x79/0x160
-  [   32.842465]        do_send_sig_info+0x35/0x90
-  [   32.842977]        bpf_send_signal+0xa/0x10
-  [   32.843464]        bpf_prog_bc13ed9e4d3163e3_send_signal_tp_sched+0x465/0x1000
-  [   32.844301]        trace_call_bpf+0x115/0x270
-  [   32.844809]        perf_trace_run_bpf_submit+0x4a/0xc0
-  [   32.845411]        perf_trace_sched_switch+0x10f/0x180
-  [   32.846014]        __schedule+0x45d/0x880
-  [   32.846483]        schedule+0x5f/0xd0
-  ...
-
-  [   32.853148] Chain exists of:
-  [   32.853148]   &(&sighand->siglock)->rlock --> &p->pi_lock --> &rq->lock
-  [   32.853148]
-  [   32.854451]  Possible unsafe locking scenario:
-  [   32.854451]
-  [   32.855173]        CPU0                    CPU1
-  [   32.855745]        ----                    ----
-  [   32.856278]   lock(&rq->lock);
-  [   32.856671]                                lock(&p->pi_lock);
-  [   32.857332]                                lock(&rq->lock);
-  [   32.857999]   lock(&(&sighand->siglock)->rlock);
-
-  Deadlock happens on CPU0 when it tries to acquire &sighand->siglock
-  but it has been held by CPU1 and CPU1 tries to grab &rq->lock
-  and cannot get it.
-
-  This is not exactly the callstack in our production environment,
-  but sympotom is similar and both locks are using spin_lock_irqsave()
-  to acquire the lock, and both involves rq_lock. The fix to delay
-  sending signal when irq is disabled also fixed this issue.
-
-Cc: Song Liu <songliubraving@fb.com>
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- kernel/trace/bpf_trace.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 19e793aa441a..55a69b53054e 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -732,7 +732,10 @@ static int bpf_send_signal_common(u32 sig, enum pid_type type)
- 	if (unlikely(!nmi_uaccess_okay()))
- 		return -EPERM;
- 
--	if (in_nmi()) {
-+	/* Delay sending signal if irq is disabled. Otherwise,
-+	 * we risk deadlock with rq_lock.
-+	 */
-+	if (irqs_disabled()) {
- 		/* Do an early check on signal validity. Otherwise,
- 		 * the error is lost in deferred irq_work.
- 		 */
--- 
-2.17.1
-
+Reviewed-by: Quentin Monnet <quentin@isovalent.com>
