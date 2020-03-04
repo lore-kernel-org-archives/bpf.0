@@ -2,276 +2,203 @@ Return-Path: <SRS0=QYSm=4V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B295CC3F2C6
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 01:56:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBBF8C3F2C6
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 02:18:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DC3220CC7
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 01:56:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 985F12073D
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 02:18:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="diuQQZmq"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="T8AlxQB0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727854AbgCDB4A (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Mar 2020 20:56:00 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:38349 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387553AbgCDBzj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 3 Mar 2020 20:55:39 -0500
-Received: by mail-wr1-f65.google.com with SMTP id t11so373659wrw.5
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2020 17:55:38 -0800 (PST)
+        id S2387469AbgCDCSi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Mar 2020 21:18:38 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:44088 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387457AbgCDCSh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 3 Mar 2020 21:18:37 -0500
+Received: by mail-pg1-f194.google.com with SMTP id a14so218337pgb.11
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2020 18:18:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=K9JrqM5JMzXTlFc3C0mZ4CTndNQP6FjfUaUaduiowfI=;
-        b=diuQQZmqGutFF9yhxCtKf9QTJWaOTI1F5SANhhOYMxFXY28OvkPb4PCQLSPthgE2gX
-         XmiiOEDzYlelGdMj+nMk/GD0J1Im/w50pZLAjE4Q+QI6IgfgFaxh3fd4fwX/romsAYTY
-         BFPWtRwdkzGtE7fOdCdR76N4fmSUyDtArxC5U=
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=QV949Rj3SIT5hQv6NYpR6RXzDT9qy+AIzP4ZAVBgOIY=;
+        b=T8AlxQB0grraQTN3SYX821Hs2NAC4rtmjN4f+u6itDMX3gg4QoWZHItd6ExweAu7e8
+         Oh2aO0XTOZQjg2yHjm12YMHdUq9oTJHwnhvNdxXnyfu6V+Q5ajjNosTYsdMa7QyrHpFx
+         j09Q0Md55ADFcq4cfHMj3QjhK6Kws6tlgIeHY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=K9JrqM5JMzXTlFc3C0mZ4CTndNQP6FjfUaUaduiowfI=;
-        b=PsgNN6JGrZFnuQRUfLO0bhYnHARGESvQRqijsBDtkPCPIZzr1z8sSI93WAzVIAWBrd
-         ZNCDUii4HDOQEtdj+AK0BCM9XbgZ81L+41yIMCVD2W+s8XvhNx2RkQOUEBHGe+yJUlez
-         z0EuNN0U68iHKopNWVlB6OUI472Eo7lDByav/GaweJqdiw+wFf931bv1tHWp4G4nDAFc
-         VY3Wt+kz3+aZvn1B6OS8gAjKjEJ4dBvxgxx68pu0JvJ08JzyhNKJMXCsx5WAlDXU4bcW
-         aLEbzSx5Otd2NiEe2gGwRi7/rGvpGQaSjjfjMNiILEP+oNGG906iPwe+ZM0N/GO8rR4/
-         pmJQ==
-X-Gm-Message-State: ANhLgQ2QwSaxMaFI4GRI5Ozx9VqCRMDBYIsHSR5LEQU4ubRw/gdpcY9S
-        xl6qkRW2JkUJ/z+wABgHEFw4rg==
-X-Google-Smtp-Source: ADFU+vvvaV3INdHEpxq1XBYwebg2D0dWz8iv8e0zS2eb69xEAEF5Lyq/lRSSUL98fhGoBIbi6C1NWw==
-X-Received: by 2002:adf:a512:: with SMTP id i18mr1026875wrb.61.1583286937985;
-        Tue, 03 Mar 2020 17:55:37 -0800 (PST)
-Received: from kpsingh-kernel.localdomain (77-56-209-237.dclient.hispeed.ch. [77.56.209.237])
-        by smtp.gmail.com with ESMTPSA id a184sm1475444wmf.29.2020.03.03.17.55.37
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=QV949Rj3SIT5hQv6NYpR6RXzDT9qy+AIzP4ZAVBgOIY=;
+        b=iB7FWqSKmt8OqPpCSHyX8zEF+123dxHqLTHzNom2aI/0V1yfPltVfxNN0EnDrUnNbj
+         /SCqoenoBSfvYgOuw7bLAB5jK25stTUpvXagHoCzKNzesEWE5FaT5RNBpSF/o2te10OY
+         RdiDvH/jDFW/SDIEe7ocUaHUE1pWj7qIseyBv/tf39SR9GFTG6+m24khToHYVAQ/9488
+         ekl7uEiPeJcXM3kWSKkzctIXsxnDQVNPFkM8dEBu2enQz34Hz8G6nswYt5mJWmIM/UVI
+         gT3oqCMTLKh6T3aTfJagk5Pan2YT23067dbIJnjlTOOct32O0ktqBW/f/gnBfNRffduD
+         uOpA==
+X-Gm-Message-State: ANhLgQ2ek0EPlHWp6ENaskUsa2PbvmbCYalA4L5AnMbjfy8Wz5vkUgkq
+        hpP193JfKYCbetYnR5gakMhG1w==
+X-Google-Smtp-Source: ADFU+vuECxjtA8O7vuZBduDwuodZBCiamgB2PThSyYeI44skV+ytDpW6OfrCvkGtgqWWycYS9PBowg==
+X-Received: by 2002:a63:af53:: with SMTP id s19mr408689pgo.175.1583288316825;
+        Tue, 03 Mar 2020 18:18:36 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k1sm23809343pgt.70.2020.03.03.18.18.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 17:55:37 -0800 (PST)
-From:   KP Singh <kpsingh@chromium.org>
-To:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>
-Subject: [PATCH bpf-next v2 2/7] bpf: JIT helpers for fmod_ret progs
-Date:   Wed,  4 Mar 2020 02:55:23 +0100
-Message-Id: <20200304015528.29661-3-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200304015528.29661-1-kpsingh@chromium.org>
-References: <20200304015528.29661-1-kpsingh@chromium.org>
+        Tue, 03 Mar 2020 18:18:35 -0800 (PST)
+Date:   Tue, 3 Mar 2020 18:18:34 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     bpf@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        linux-kbuild@vger.kernel.org
+Subject: [PATCH bpf-next v2] kbuild: Remove debug info from kallsyms linking
+Message-ID: <202003031814.4AEA3351@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: KP Singh <kpsingh@google.com>
+When CONFIG_DEBUG_INFO is enabled, the two kallsyms linking steps spend
+time collecting and writing the dwarf sections to the temporary output
+files. kallsyms does not need this information, and leaving it off
+halves their linking time. This is especially noticeable without
+CONFIG_DEBUG_INFO_REDUCED. The BTF linking stage, however, does still
+need those details.
 
-* Split the invoke_bpf program to prepare for special handling of
-  fmod_ret programs introduced in a subsequent patch.
-* Move the definition of emit_cond_near_jump and emit_nops as they are
-  needed for fmod_ret.
-* Refactor branch target alignment into its own function
-  align16_branch_target.
+Refactor the BTF and kallsyms generation stages slightly for more
+regularized temporary names. Skip debug during kallsyms links.
+Additionally move "info BTF" to the correct place since commit
+8959e39272d6 ("kbuild: Parameterize kallsyms generation and correct
+reporting"), which added "info LD ..." to vmlinux_link calls.
 
-Signed-off-by: KP Singh <kpsingh@google.com>
+For a full debug info build with BTF, my link time goes from 1m06s to
+0m54s, saving about 12 seconds, or 18%.
+
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 148 +++++++++++++++++++++---------------
- 1 file changed, 85 insertions(+), 63 deletions(-)
+v2: add Ack, clarify "info BTF" relocation
+---
+ scripts/link-vmlinux.sh | 28 +++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 15c7d28bc05c..d6349e930b06 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1361,35 +1361,95 @@ static void restore_regs(const struct btf_func_model *m, u8 **prog, int nr_args,
- 			 -(stack_size - i * 8));
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index dd484e92752e..ac569e197bfa 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -63,12 +63,18 @@ vmlinux_link()
+ 	local lds="${objtree}/${KBUILD_LDS}"
+ 	local output=${1}
+ 	local objects
++	local strip_debug
+ 
+ 	info LD ${output}
+ 
+ 	# skip output file argument
+ 	shift
+ 
++	# The kallsyms linking does not need debug symbols included.
++	if [ "$output" != "${output#.tmp_vmlinux.kallsyms}" ] ; then
++		strip_debug=-Wl,--strip-debug
++	fi
++
+ 	if [ "${SRCARCH}" != "um" ]; then
+ 		objects="--whole-archive			\
+ 			${KBUILD_VMLINUX_OBJS}			\
+@@ -79,6 +85,7 @@ vmlinux_link()
+ 			${@}"
+ 
+ 		${LD} ${KBUILD_LDFLAGS} ${LDFLAGS_vmlinux}	\
++			${strip_debug#-Wl,}			\
+ 			-o ${output}				\
+ 			-T ${lds} ${objects}
+ 	else
+@@ -91,6 +98,7 @@ vmlinux_link()
+ 			${@}"
+ 
+ 		${CC} ${CFLAGS_vmlinux}				\
++			${strip_debug}				\
+ 			-o ${output}				\
+ 			-Wl,-T,${lds}				\
+ 			${objects}				\
+@@ -106,6 +114,8 @@ gen_btf()
+ {
+ 	local pahole_ver
+ 	local bin_arch
++	local bin_format
++	local bin_file
+ 
+ 	if ! [ -x "$(command -v ${PAHOLE})" ]; then
+ 		echo >&2 "BTF: ${1}: pahole (${PAHOLE}) is not available"
+@@ -118,8 +128,9 @@ gen_btf()
+ 		return 1
+ 	fi
+ 
+-	info "BTF" ${2}
+ 	vmlinux_link ${1}
++
++	info "BTF" ${2}
+ 	LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}
+ 
+ 	# dump .BTF section into raw binary file to link with final vmlinux
+@@ -127,11 +138,12 @@ gen_btf()
+ 		cut -d, -f1 | cut -d' ' -f2)
+ 	bin_format=$(LANG=C ${OBJDUMP} -f ${1} | grep 'file format' | \
+ 		awk '{print $4}')
++	bin_file=.btf.vmlinux.bin
+ 	${OBJCOPY} --change-section-address .BTF=0 \
+ 		--set-section-flags .BTF=alloc -O binary \
+-		--only-section=.BTF ${1} .btf.vmlinux.bin
++		--only-section=.BTF ${1} $bin_file
+ 	${OBJCOPY} -I binary -O ${bin_format} -B ${bin_arch} \
+-		--rename-section .data=.BTF .btf.vmlinux.bin ${2}
++		--rename-section .data=.BTF $bin_file ${2}
  }
  
-+static int invoke_bpf_prog(const struct btf_func_model *m, u8 **pprog,
-+			   struct bpf_prog *p, int stack_size)
-+{
-+	u8 *prog = *pprog;
-+	int cnt = 0;
-+
-+	if (emit_call(&prog, __bpf_prog_enter, prog))
-+		return -EINVAL;
-+	/* remember prog start time returned by __bpf_prog_enter */
-+	emit_mov_reg(&prog, true, BPF_REG_6, BPF_REG_0);
-+
-+	/* arg1: lea rdi, [rbp - stack_size] */
-+	EMIT4(0x48, 0x8D, 0x7D, -stack_size);
-+	/* arg2: progs[i]->insnsi for interpreter */
-+	if (!p->jited)
-+		emit_mov_imm64(&prog, BPF_REG_2,
-+			       (long) p->insnsi >> 32,
-+			       (u32) (long) p->insnsi);
-+	/* call JITed bpf program or interpreter */
-+	if (emit_call(&prog, p->bpf_func, prog))
-+		return -EINVAL;
-+
-+	/* arg1: mov rdi, progs[i] */
-+	emit_mov_imm64(&prog, BPF_REG_1, (long) p >> 32,
-+		       (u32) (long) p);
-+	/* arg2: mov rsi, rbx <- start time in nsec */
-+	emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_6);
-+	if (emit_call(&prog, __bpf_prog_exit, prog))
-+		return -EINVAL;
-+
-+	*pprog = prog;
-+	return 0;
-+}
-+
-+static void emit_nops(u8 **pprog, unsigned int len)
-+{
-+	unsigned int i, noplen;
-+	u8 *prog = *pprog;
-+	int cnt = 0;
-+
-+	while (len > 0) {
-+		noplen = len;
-+
-+		if (noplen > ASM_NOP_MAX)
-+			noplen = ASM_NOP_MAX;
-+
-+		for (i = 0; i < noplen; i++)
-+			EMIT1(ideal_nops[noplen][i]);
-+		len -= noplen;
-+	}
-+
-+	*pprog = prog;
-+}
-+
-+static void emit_align(u8 **pprog, u32 align)
-+{
-+	u8 *target, *prog = *pprog;
-+
-+	target = PTR_ALIGN(prog, align);
-+	if (target != prog)
-+		emit_nops(&prog, target - prog);
-+
-+	*pprog = prog;
-+}
-+
-+static int emit_cond_near_jump(u8 **pprog, void *func, void *ip, u8 jmp_cond)
-+{
-+	u8 *prog = *pprog;
-+	int cnt = 0;
-+	s64 offset;
-+
-+	offset = func - (ip + 2 + 4);
-+	if (!is_simm32(offset)) {
-+		pr_err("Target %p is out of range\n", func);
-+		return -EINVAL;
-+	}
-+	EMIT2_off32(0x0F, jmp_cond + 0x10, offset);
-+	*pprog = prog;
-+	return 0;
-+}
-+
- static int invoke_bpf(const struct btf_func_model *m, u8 **pprog,
- 		      struct bpf_tramp_progs *tp, int stack_size)
+ # Create ${2} .o file with all symbols from the ${1} object file
+@@ -166,8 +178,8 @@ kallsyms()
+ kallsyms_step()
  {
-+	int i;
- 	u8 *prog = *pprog;
--	int cnt = 0, i;
+ 	kallsymso_prev=${kallsymso}
+-	kallsymso=.tmp_kallsyms${1}.o
+-	kallsyms_vmlinux=.tmp_vmlinux${1}
++	kallsyms_vmlinux=.tmp_vmlinux.kallsyms${1}
++	kallsymso=${kallsyms_vmlinux}.o
  
- 	for (i = 0; i < tp->nr_progs; i++) {
--		if (emit_call(&prog, __bpf_prog_enter, prog))
--			return -EINVAL;
--		/* remember prog start time returned by __bpf_prog_enter */
--		emit_mov_reg(&prog, true, BPF_REG_6, BPF_REG_0);
--
--		/* arg1: lea rdi, [rbp - stack_size] */
--		EMIT4(0x48, 0x8D, 0x7D, -stack_size);
--		/* arg2: progs[i]->insnsi for interpreter */
--		if (!tp->progs[i]->jited)
--			emit_mov_imm64(&prog, BPF_REG_2,
--				       (long) tp->progs[i]->insnsi >> 32,
--				       (u32) (long) tp->progs[i]->insnsi);
--		/* call JITed bpf program or interpreter */
--		if (emit_call(&prog, tp->progs[i]->bpf_func, prog))
--			return -EINVAL;
--
--		/* arg1: mov rdi, progs[i] */
--		emit_mov_imm64(&prog, BPF_REG_1, (long) tp->progs[i] >> 32,
--			       (u32) (long) tp->progs[i]);
--		/* arg2: mov rsi, rbx <- start time in nsec */
--		emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_6);
--		if (emit_call(&prog, __bpf_prog_exit, prog))
-+		if (invoke_bpf_prog(m, &prog, tp->progs[i], stack_size))
- 			return -EINVAL;
- 	}
- 	*pprog = prog;
-@@ -1531,42 +1591,6 @@ int arch_prepare_bpf_trampoline(void *image, void *image_end,
- 	return prog - (u8 *)image;
- }
- 
--static int emit_cond_near_jump(u8 **pprog, void *func, void *ip, u8 jmp_cond)
--{
--	u8 *prog = *pprog;
--	int cnt = 0;
--	s64 offset;
--
--	offset = func - (ip + 2 + 4);
--	if (!is_simm32(offset)) {
--		pr_err("Target %p is out of range\n", func);
--		return -EINVAL;
--	}
--	EMIT2_off32(0x0F, jmp_cond + 0x10, offset);
--	*pprog = prog;
--	return 0;
--}
--
--static void emit_nops(u8 **pprog, unsigned int len)
--{
--	unsigned int i, noplen;
--	u8 *prog = *pprog;
--	int cnt = 0;
--
--	while (len > 0) {
--		noplen = len;
--
--		if (noplen > ASM_NOP_MAX)
--			noplen = ASM_NOP_MAX;
--
--		for (i = 0; i < noplen; i++)
--			EMIT1(ideal_nops[noplen][i]);
--		len -= noplen;
--	}
--
--	*pprog = prog;
--}
--
- static int emit_fallback_jump(u8 **pprog)
+ 	vmlinux_link ${kallsyms_vmlinux} "${kallsymso_prev}" ${btf_vmlinux_bin_o}
+ 	kallsyms ${kallsyms_vmlinux} ${kallsymso}
+@@ -190,7 +202,6 @@ cleanup()
  {
- 	u8 *prog = *pprog;
-@@ -1589,7 +1613,7 @@ static int emit_fallback_jump(u8 **pprog)
+ 	rm -f .btf.*
+ 	rm -f .tmp_System.map
+-	rm -f .tmp_kallsyms*
+ 	rm -f .tmp_vmlinux*
+ 	rm -f System.map
+ 	rm -f vmlinux
+@@ -257,9 +268,8 @@ tr '\0' '\n' < modules.builtin.modinfo | sed -n 's/^[[:alnum:]:_]*\.file=//p' |
  
- static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs)
- {
--	u8 *jg_reloc, *jg_target, *prog = *pprog;
-+	u8 *jg_reloc, *prog = *pprog;
- 	int pivot, err, jg_bytes = 1, cnt = 0;
- 	s64 jg_offset;
- 
-@@ -1644,9 +1668,7 @@ static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs)
- 	 * Coding Rule 11: All branch targets should be 16-byte
- 	 * aligned.
- 	 */
--	jg_target = PTR_ALIGN(prog, 16);
--	if (jg_target != prog)
--		emit_nops(&prog, jg_target - prog);
-+	emit_align(&prog, 16);
- 	jg_offset = prog - jg_reloc;
- 	emit_code(jg_reloc - jg_bytes, jg_offset, jg_bytes);
- 
+ btf_vmlinux_bin_o=""
+ if [ -n "${CONFIG_DEBUG_INFO_BTF}" ]; then
+-	if gen_btf .tmp_vmlinux.btf .btf.vmlinux.bin.o ; then
+-		btf_vmlinux_bin_o=.btf.vmlinux.bin.o
+-	else
++	btf_vmlinux_bin_o=.btf.vmlinux.bin.o
++	if ! gen_btf .tmp_vmlinux.btf $btf_vmlinux_bin_o ; then
+ 		echo >&2 "Failed to generate BTF for vmlinux"
+ 		echo >&2 "Try to disable CONFIG_DEBUG_INFO_BTF"
+ 		exit 1
 -- 
 2.20.1
 
+
+-- 
+Kees Cook
