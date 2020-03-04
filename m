@@ -2,102 +2,87 @@ Return-Path: <SRS0=QYSm=4V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91F1BC3F2D1
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 00:03:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43221C3F2D1
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 00:31:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6446C206D5
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 00:03:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 04CDA20870
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 00:31:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wtdw/bpD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pdxgwp2q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727823AbgCDADc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Mar 2020 19:03:32 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:42590 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727604AbgCDADb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 3 Mar 2020 19:03:31 -0500
-Received: by mail-pg1-f196.google.com with SMTP id h8so72285pgs.9;
-        Tue, 03 Mar 2020 16:03:31 -0800 (PST)
+        id S1727854AbgCDAbx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Mar 2020 19:31:53 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:40498 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727429AbgCDAbx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 3 Mar 2020 19:31:53 -0500
+Received: by mail-lf1-f66.google.com with SMTP id p5so4355562lfc.7;
+        Tue, 03 Mar 2020 16:31:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Cg+Bk6p3ng/oCqeB9jAP5HpcQ6wBIVVyIyzT0MMNq0k=;
-        b=Wtdw/bpDAHegTWVPqPiInwTRdc+XxDNKZV5OyxUdLlV7JnWYcKCYo5WwcOqZBwoZgR
-         lCMRDanCykEaZjdNDLpO9T5CqO7BcZg7jnRfbK4HKgL0nmUTQbR2CSv9dU3LQrWdftHN
-         Ok2JGkqTvgMzihWyEv4rDsCvtgunV7D2BpPu2+FdHSA61Fo2ozHR7we/hDStKntnGNU3
-         yTaKQw5sIuR7Mb+sPgJue9DY26rhlMPuqGcVxhT3opQ9hKRVyjtmJ3Za+jzdRN06xyaY
-         5raGwMxS83abexPR9tjLNaRRvARn3H7mJcJfNYoQCe0IT9YYvseds7bNeO9X1HksqvWl
-         hFLw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0535QGjciwSzjRFczO8hMlo3JpfPidZ1FORuAyueRYY=;
+        b=Pdxgwp2q8OaHvBozqu4AbhMdVXPLkLhWYzqxroyWFYmwUIYQcgZzOyP1+TXB0oxqGO
+         Sux2ChcPrb7y8Ys71fi4OuTIynL4EwNbYS98em9pvH9+dpjLrMQQ7CArXxt2FabMjyve
+         KDO25Gf7c2Tk/MApcFTcPuRTjRRXkHn5ZZPxEhVPvTN7h28RGfd1c9wExlYcXUP6j0yC
+         Tle4IoHI3BOTd8QoqLXae7pnOFPx317lca7b9eVvx2a0TG0oP4ybTLFcoptsIlmzdNq8
+         U0ovUOrxgIIBOmbKsq/m+5b6fz1QEJSaFkOGFz1MH3aQmXkKUl9Yvo/1DWVgqcWuPtbN
+         NtlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Cg+Bk6p3ng/oCqeB9jAP5HpcQ6wBIVVyIyzT0MMNq0k=;
-        b=pkHhtqN1ljR9QQrxQUrQDLnvnDZyfQtO0gCdy1JpjHjVOdKsNhvpuMeAWpg05ImXAS
-         hOHFdB2HTfn1lLI6wGkgAiciYAXpFizqhQ+Z+koarU1Wl3FpDR86/Ae6n4q/49i46JWf
-         VPeDweelFt59hQmtoTF0QPC15+CKPW0hdjS7L+/RxGpjP+FhqwIvICEo0lThUQPgfqNm
-         fh7Awy8vicFbfvvk/W7pyxGkYrcdBO0kL5DmaaznaB522UcBZ/d9Y6bDJg2oi09FT7FG
-         lGNS9PNaqTCFYinPFTR5yKSCdYFFENMuMGZF95WA2Oh5Xx6vBETdgABeC3zzp+xVtciZ
-         or2A==
-X-Gm-Message-State: ANhLgQ0LINO0jpmCgd+kWaHnkPF9YRnx4AisherIovrOSXhodLW1o7XR
-        ceKpHKi4y50cw6JYu4LfllA=
-X-Google-Smtp-Source: ADFU+vvLke/PQpWmYNEZBsbhWp2sSTWm813w2K3TO0HseVYhvp+AY3D8KiClhK8qArj0CeTWoS6W/g==
-X-Received: by 2002:a63:4103:: with SMTP id o3mr5683444pga.199.1583280210838;
-        Tue, 03 Mar 2020 16:03:30 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:500::4:a0de])
-        by smtp.gmail.com with ESMTPSA id z22sm4937779pgn.19.2020.03.03.16.03.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Mar 2020 16:03:29 -0800 (PST)
-Date:   Tue, 3 Mar 2020 16:03:27 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     KP Singh <kpsingh@chromium.org>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Paul Turner <pjt@google.com>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>
-Subject: Re: [PATCH bpf-next 4/7] bpf: Attachment verification for
- BPF_MODIFY_RETURN
-Message-ID: <20200304000326.nk7jmkgxazl3umbh@ast-mbp>
-References: <20200303140950.6355-1-kpsingh@chromium.org>
- <20200303140950.6355-5-kpsingh@chromium.org>
- <CAEf4BzaviDB+WGUsg1+aO5GAtkJuQ6aYSiB8VaKL0CoQRPs8Xw@mail.gmail.com>
- <20200303232151.GB17103@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0535QGjciwSzjRFczO8hMlo3JpfPidZ1FORuAyueRYY=;
+        b=f7oTpEM1TjZ40boOczaIOrUKCbVCJ9vq2TWduuSBE3NB/FNe2HM7jRnCXfnRJ62dmv
+         fzl9LpUsdXhpGAJs/xgDz2Mdj3mK8a/59FM1enia1RHC+bJOUTZlYKJ7XuDYZqo8/lB5
+         6AFxtjNZeSJVkXyCbIvxZr9m3JQR3HFQfQ2f9vCsV53cXncFg8JwNUysMh/csFBYzpru
+         Ngo8XBn8g/JqHhQBOc1SZHOXNbCJxkAc6kWPOxB5+WJWTBMPNb3Ebtv+LMRy6jiPjp9X
+         0A14I9vyME2SgwMzx070JgmuQsO8uxV39d1Gt26L0xrOGfgm07GtRgbVwXNnkwe88gXe
+         1OAA==
+X-Gm-Message-State: ANhLgQ1u6lJGEAF9kJ7WsSoAvQS4Z/LWfNE3Uhq+V13fUlMVPFysZkll
+        gYIlikM3FJjug5MiltDx3LdawV9pVhz9QZffbGYQog==
+X-Google-Smtp-Source: ADFU+vs9VE5TLCPK+qRWVrvaL2BnKsZ59PC3uMzG6DbCGWVhNAMhkXsyVdnc/of2HgQpAyOzG7Ncy6Pt/r4Ft/Oruoo=
+X-Received: by 2002:ac2:5df9:: with SMTP id z25mr315643lfq.8.1583281911470;
+ Tue, 03 Mar 2020 16:31:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200303232151.GB17103@chromium.org>
-User-Agent: NeoMutt/20180223
+References: <20200303200503.226217-1-willemdebruijn.kernel@gmail.com> <CAGdtWsSd8sDoxTfW_Jcwc9u4sfHECKMzxt_GNjMTkWCbvKBr0A@mail.gmail.com>
+In-Reply-To: <CAGdtWsSd8sDoxTfW_Jcwc9u4sfHECKMzxt_GNjMTkWCbvKBr0A@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 3 Mar 2020 16:31:39 -0800
+Message-ID: <CAADnVQ+zbBuM1TYQ93CaGA3nKqVCS0ESKuo8M5NrXEQPPOEWvg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/3] add gso_size to __sk_buff
+To:     Petar Penkov <ppenkov.kernel@gmail.com>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Willem de Bruijn <willemb@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 04, 2020 at 12:21:51AM +0100, KP Singh wrote:
-> 
-> > > +                       t = btf_type_skip_modifiers(btf, t->type, NULL);
-> > > +                       if (!btf_type_is_int(t)) {
-> > 
-> > Should the size of int be verified here? E.g., if some function
-> > returns u8, is that ok for BPF program to return, say, (1<<30) ?
-> 
-> Would this work?
-> 
->        if (size != t->size) {
->                bpf_log(log,
->                        "size accessed = %d should be %d\n",
->                        size, t->size);
->                return false;
->        }
+On Tue, Mar 3, 2020 at 2:56 PM Petar Penkov <ppenkov.kernel@gmail.com> wrote:
+>
+> For the series: Acked-by: Petar Penkov <ppenkov@google.com>
 
-It will cause spurious failures later when llvm optimizes
-if (ret & 0xff) into u8 load.
-I think btf_type_is_int() is enough as-is.
+please don't top post.
+
+> On Tue, Mar 3, 2020 at 1:46 PM Willem de Bruijn
+> <willemdebruijn.kernel@gmail.com> wrote:
+> >
+> > From: Willem de Bruijn <willemb@google.com>
+> >
+> > See first patch for details.
+> >
+> > Patch split across three parts { kernel feature, uapi header, tools }
+> > following the custom for such __sk_buff changes.
+
+Applied. Thanks
