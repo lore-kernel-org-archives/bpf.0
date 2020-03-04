@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EC45C3F2C6
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 01:55:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04914C3F2D7
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 01:55:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D28DA217F4
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 01:55:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D112B208C3
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 01:55:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gLpaXKZf"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Qj2MnbGG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387406AbgCDBzi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Mar 2020 20:55:38 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:52559 "EHLO
+        id S2387575AbgCDBzo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Mar 2020 20:55:44 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:35631 "EHLO
         mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387542AbgCDBzi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 3 Mar 2020 20:55:38 -0500
-Received: by mail-wm1-f66.google.com with SMTP id p9so151959wmc.2
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2020 17:55:37 -0800 (PST)
+        with ESMTP id S2387584AbgCDBzn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 3 Mar 2020 20:55:43 -0500
+Received: by mail-wm1-f66.google.com with SMTP id m3so159939wmi.0
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2020 17:55:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NnWU9Tr02IfIRV60dHV1CddQWPx7YIK+rDCKqkdA7Tk=;
-        b=gLpaXKZfYcqKEfMRdOqm0JHQgx6Jjv2j4k7F0xNcNexckgRYBXPd+cVfwBnwHyaOjn
-         U7ZjewjIG1F/OEHiQwnV+HXxeb92k1/MrKKADIZ7nfop4i57jvmkiiCzbNuN9JCt7+ld
-         rfdYMyK5+uSUNdZRlwaVUOKQR7NzacXU9uWZ8=
+        bh=LFwEDFxwFXmUVLWHUZGmwB/3Av3jfmxGtvvX+N4FdrI=;
+        b=Qj2MnbGGaVof30dTj27lh/GZBYLE3PIXTsAxY968A4WBF2LCnLGMHNx5w536mCOBWJ
+         kWzWp+sIQJ0HY2sfzs6Gv0oivqxnZ48PvtYlJSfAqI0rLyefi4arTvONE9v+n/Wmrnzl
+         54vExE7YOctQs++jGd+knO1HDUin25BmGNJWI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NnWU9Tr02IfIRV60dHV1CddQWPx7YIK+rDCKqkdA7Tk=;
-        b=iAOrllIipgraaucIsvlcCrw93VkAxzBUsSqp3ICrskERR5nce11yjuCD8r97xiCRuI
-         ky0Xhb+Ck4+vFtOsKC+iVDwIzu1JGN3G+p8a8HODXY7aaH7pBNFW4L4XMWEbGpAsVzKh
-         m9z8jAKjnKaRFPAk0/EHaBCWAXgALXLdlbfs+x1efH//dQQJ/PLnAkM9XF2omr8TSQSJ
-         H9MGLI4L41HRiFmkK4GpSMvOLK291ID1n9DMSWliRFURB/MJ2wGlv6GxZLTXfs3xNqYW
-         VbSGM4KBIhT6jsxn+HJBOQvds0nbgtQRbRo81wgZrZy1dlu6zFe+3Xh/qTRiuSLPlqAi
-         +g3w==
-X-Gm-Message-State: ANhLgQ3RU7wOkHrxCJC+WPveporMX/8TdmSdEGcc+TskJpJ7mYuoHA9x
-        P5NNMR7Hg5SQKBD/wtcRsmsWKg==
-X-Google-Smtp-Source: ADFU+vuwyw1DZ8/XzM4fVH+cNXnzxYpewtFg4q+E8OBTBu1rgXP9sU1d9dn/Sb/I3qRpoeX7EU1d5w==
-X-Received: by 2002:a7b:cb90:: with SMTP id m16mr557153wmi.105.1583286936292;
-        Tue, 03 Mar 2020 17:55:36 -0800 (PST)
+        bh=LFwEDFxwFXmUVLWHUZGmwB/3Av3jfmxGtvvX+N4FdrI=;
+        b=NLnP0ncQJ94NpZ+R7Ufhxgq4U2oqF+5wL1FulIc2HDUCM5R9FosDO5j44EGPagev8U
+         TUIw5+fJkF1JOgiTQeVyByJbeTNpX6WRJKYMLNUQVN15XqGCVZFIbMEdDOZ9urZAx/D1
+         4UF962Q057JwMSd9OJwrrbOopZEUIeS/4c1fk+XAZ167D+ZtwXE9DjROolTiEuSRCp46
+         297X0Kx2cWd+V7YmigZBVO5bJ9eQkMXVU7c+nM27ie/79BHzXb0PcZ66F2HKZG9tvGJ1
+         DZVcGkAabNClwTj/Sg4kLwpOk0IHOCwv1upoqU6Mt7/R9PTFmpP8VgoYh0II8oi3W8Rd
+         Px7w==
+X-Gm-Message-State: ANhLgQ1QtDqRNTNqVnZ4UMCBTlXe/ulhWymyjGLYExX9ojzStzANP7aE
+        DDzV+x+Brr1UBe307xFlLCj3qw==
+X-Google-Smtp-Source: ADFU+vtP1w+hxhEvIU1HHqb6T0eu+C852+A3z482LZmcNH4X4lYJTf3fu9OeA25zRoU99Q/fgMWESQ==
+X-Received: by 2002:a1c:9dcb:: with SMTP id g194mr623325wme.114.1583286940417;
+        Tue, 03 Mar 2020 17:55:40 -0800 (PST)
 Received: from kpsingh-kernel.localdomain (77-56-209-237.dclient.hispeed.ch. [77.56.209.237])
-        by smtp.gmail.com with ESMTPSA id a184sm1475444wmf.29.2020.03.03.17.55.35
+        by smtp.gmail.com with ESMTPSA id a184sm1475444wmf.29.2020.03.03.17.55.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 17:55:35 -0800 (PST)
+        Tue, 03 Mar 2020 17:55:39 -0800 (PST)
 From:   KP Singh <kpsingh@chromium.org>
 To:     linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, bpf@vger.kernel.org
@@ -59,9 +59,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
         Florent Revest <revest@chromium.org>,
         Brendan Jackman <jackmanb@chromium.org>
-Subject: [PATCH bpf-next v2 1/7] bpf: Refactor trampoline update code
-Date:   Wed,  4 Mar 2020 02:55:22 +0100
-Message-Id: <20200304015528.29661-2-kpsingh@chromium.org>
+Subject: [PATCH bpf-next v2 4/7] bpf: Attachment verification for BPF_MODIFY_RETURN
+Date:   Wed,  4 Mar 2020 02:55:25 +0100
+Message-Id: <20200304015528.29661-5-kpsingh@chromium.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200304015528.29661-1-kpsingh@chromium.org>
 References: <20200304015528.29661-1-kpsingh@chromium.org>
@@ -74,288 +74,121 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: KP Singh <kpsingh@google.com>
 
-As we need to introduce a third type of attachment for trampolines, the
-flattened signature of arch_prepare_bpf_trampoline gets even more
-complicated.
+- Allow BPF_MODIFY_RETURN attachment only to functions that are:
 
-Refactor the prog and count argument to arch_prepare_bpf_trampoline to
-use bpf_tramp_progs to simplify the addition and accounting for new
-attachment types.
+    * Whitelisted by for error injection i.e. by checking
+      within_error_injection_list. Similar disucssions happened for the
+      bpf_overrie_return helper.
+
+    * security hooks, this is expected to be cleaned up with the LSM
+      changes after the KRSI patches introduce the LSM_HOOK macro:
+
+        https://lore.kernel.org/bpf/20200220175250.10795-1-kpsingh@chromium.org/
+
+- The attachment is currently limited to functions that return an int.
+  This can be extended later other types (e.g. PTR).
 
 Signed-off-by: KP Singh <kpsingh@google.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 31 ++++++++++---------
- include/linux/bpf.h         | 13 ++++++--
- kernel/bpf/bpf_struct_ops.c | 12 ++++++-
- kernel/bpf/trampoline.c     | 62 +++++++++++++++++++++----------------
- 4 files changed, 73 insertions(+), 45 deletions(-)
+ kernel/bpf/btf.c      | 28 ++++++++++++++++++++--------
+ kernel/bpf/verifier.c | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 9ba08e9abc09..15c7d28bc05c 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1362,12 +1362,12 @@ static void restore_regs(const struct btf_func_model *m, u8 **prog, int nr_args,
- }
- 
- static int invoke_bpf(const struct btf_func_model *m, u8 **pprog,
--		      struct bpf_prog **progs, int prog_cnt, int stack_size)
-+		      struct bpf_tramp_progs *tp, int stack_size)
- {
- 	u8 *prog = *pprog;
- 	int cnt = 0, i;
- 
--	for (i = 0; i < prog_cnt; i++) {
-+	for (i = 0; i < tp->nr_progs; i++) {
- 		if (emit_call(&prog, __bpf_prog_enter, prog))
- 			return -EINVAL;
- 		/* remember prog start time returned by __bpf_prog_enter */
-@@ -1376,17 +1376,17 @@ static int invoke_bpf(const struct btf_func_model *m, u8 **pprog,
- 		/* arg1: lea rdi, [rbp - stack_size] */
- 		EMIT4(0x48, 0x8D, 0x7D, -stack_size);
- 		/* arg2: progs[i]->insnsi for interpreter */
--		if (!progs[i]->jited)
-+		if (!tp->progs[i]->jited)
- 			emit_mov_imm64(&prog, BPF_REG_2,
--				       (long) progs[i]->insnsi >> 32,
--				       (u32) (long) progs[i]->insnsi);
-+				       (long) tp->progs[i]->insnsi >> 32,
-+				       (u32) (long) tp->progs[i]->insnsi);
- 		/* call JITed bpf program or interpreter */
--		if (emit_call(&prog, progs[i]->bpf_func, prog))
-+		if (emit_call(&prog, tp->progs[i]->bpf_func, prog))
- 			return -EINVAL;
- 
- 		/* arg1: mov rdi, progs[i] */
--		emit_mov_imm64(&prog, BPF_REG_1, (long) progs[i] >> 32,
--			       (u32) (long) progs[i]);
-+		emit_mov_imm64(&prog, BPF_REG_1, (long) tp->progs[i] >> 32,
-+			       (u32) (long) tp->progs[i]);
- 		/* arg2: mov rsi, rbx <- start time in nsec */
- 		emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_6);
- 		if (emit_call(&prog, __bpf_prog_exit, prog))
-@@ -1458,12 +1458,13 @@ static int invoke_bpf(const struct btf_func_model *m, u8 **pprog,
-  */
- int arch_prepare_bpf_trampoline(void *image, void *image_end,
- 				const struct btf_func_model *m, u32 flags,
--				struct bpf_prog **fentry_progs, int fentry_cnt,
--				struct bpf_prog **fexit_progs, int fexit_cnt,
-+				struct bpf_tramp_progs *tprogs,
- 				void *orig_call)
- {
- 	int cnt = 0, nr_args = m->nr_args;
- 	int stack_size = nr_args * 8;
-+	struct bpf_tramp_progs *fentry = &tprogs[BPF_TRAMP_FENTRY];
-+	struct bpf_tramp_progs *fexit = &tprogs[BPF_TRAMP_FEXIT];
- 	u8 *prog;
- 
- 	/* x86-64 supports up to 6 arguments. 7+ can be added in the future */
-@@ -1492,12 +1493,12 @@ int arch_prepare_bpf_trampoline(void *image, void *image_end,
- 
- 	save_regs(m, &prog, nr_args, stack_size);
- 
--	if (fentry_cnt)
--		if (invoke_bpf(m, &prog, fentry_progs, fentry_cnt, stack_size))
-+	if (fentry->nr_progs)
-+		if (invoke_bpf(m, &prog, fentry, stack_size))
- 			return -EINVAL;
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--		if (fentry_cnt)
-+		if (fentry->nr_progs)
- 			restore_regs(m, &prog, nr_args, stack_size);
- 
- 		/* call original function */
-@@ -1507,8 +1508,8 @@ int arch_prepare_bpf_trampoline(void *image, void *image_end,
- 		emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -8);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 30841fb8b3c0..50080add2ab9 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3710,14 +3710,26 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 		nr_args--;
  	}
  
--	if (fexit_cnt)
--		if (invoke_bpf(m, &prog, fexit_progs, fexit_cnt, stack_size))
-+	if (fexit->nr_progs)
-+		if (invoke_bpf(m, &prog, fexit, stack_size))
- 			return -EINVAL;
- 
- 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f13c78c6f29d..98ec10b23dbb 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -433,6 +433,16 @@ struct btf_func_model {
-  */
- #define BPF_TRAMP_F_SKIP_FRAME		BIT(2)
- 
-+/* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
-+ * bytes on x86.  Pick a number to fit into BPF_IMAGE_SIZE / 2
-+ */
-+#define BPF_MAX_TRAMP_PROGS 40
+-	if ((prog->expected_attach_type == BPF_TRACE_FEXIT ||
+-	     prog->expected_attach_type == BPF_MODIFY_RETURN) &&
+-	    arg == nr_args) {
+-		if (!t)
+-			/* Default prog with 5 args. 6th arg is retval. */
+-			return true;
+-		/* function return type */
+-		t = btf_type_by_id(btf, t->type);
++	if (arg == nr_args) {
++		if (prog->expected_attach_type == BPF_TRACE_FEXIT) {
++			if (!t)
++				return true;
++			t = btf_type_by_id(btf, t->type);
++		} else if (prog->expected_attach_type == BPF_MODIFY_RETURN) {
++			/* For now the BPF_MODIFY_RETURN can only be attached to
++			 * functions that return an int.
++			 */
++			if (!t)
++				return false;
 +
-+struct bpf_tramp_progs {
-+	struct bpf_prog *progs[BPF_MAX_TRAMP_PROGS];
-+	int nr_progs;
-+};
-+
- /* Different use cases for BPF trampoline:
-  * 1. replace nop at the function entry (kprobe equivalent)
-  *    flags = BPF_TRAMP_F_RESTORE_REGS
-@@ -455,8 +465,7 @@ struct btf_func_model {
-  */
- int arch_prepare_bpf_trampoline(void *image, void *image_end,
- 				const struct btf_func_model *m, u32 flags,
--				struct bpf_prog **fentry_progs, int fentry_cnt,
--				struct bpf_prog **fexit_progs, int fexit_cnt,
-+				struct bpf_tramp_progs *tprogs,
- 				void *orig_call);
- /* these two functions are called from generated trampoline */
- u64 notrace __bpf_prog_enter(void);
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index c498f0fffb40..9f7e0328a644 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -320,6 +320,7 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 	struct bpf_struct_ops_value *uvalue, *kvalue;
- 	const struct btf_member *member;
- 	const struct btf_type *t = st_ops->type;
-+	struct bpf_tramp_progs *tprogs = NULL;
- 	void *udata, *kdata;
- 	int prog_fd, err = 0;
- 	void *image;
-@@ -425,10 +426,18 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 			goto reset_unlock;
- 		}
- 
-+		tprogs = kcalloc(BPF_TRAMP_MAX, sizeof(*tprogs), GFP_KERNEL);
-+		if (!tprogs) {
-+			err = -ENOMEM;
-+			goto reset_unlock;
++			t = btf_type_skip_modifiers(btf, t->type, NULL);
++			if (!btf_type_is_int(t)) {
++				bpf_log(log,
++					"ret type %s not allowed for fmod_ret\n",
++					btf_kind_str[BTF_INFO_KIND(t->info)]);
++				return false;
++			}
 +		}
+ 	} else if (arg >= nr_args) {
+ 		bpf_log(log, "func '%s' doesn't have %d-th argument\n",
+ 			tname, arg + 1);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2460c8e6b5be..ae32517d4ccd 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19,6 +19,7 @@
+ #include <linux/sort.h>
+ #include <linux/perf_event.h>
+ #include <linux/ctype.h>
++#include <linux/error-injection.h>
+ 
+ #include "disasm.h"
+ 
+@@ -9800,6 +9801,33 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
+ 
+ 	return 0;
+ }
++#define SECURITY_PREFIX "security_"
 +
-+		tprogs[BPF_TRAMP_FENTRY].progs[0] = prog;
-+		tprogs[BPF_TRAMP_FENTRY].nr_progs = 1;
- 		err = arch_prepare_bpf_trampoline(image,
- 						  st_map->image + PAGE_SIZE,
- 						  &st_ops->func_models[i], 0,
--						  &prog, 1, NULL, 0, NULL);
-+						  tprogs, NULL);
- 		if (err < 0)
- 			goto reset_unlock;
- 
-@@ -469,6 +478,7 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 	memset(uvalue, 0, map->value_size);
- 	memset(kvalue, 0, map->value_size);
- unlock:
-+	kfree(tprogs);
- 	mutex_unlock(&st_map->lock);
- 	return err;
- }
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 704fa787fec0..cfe96d4cd89f 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -190,40 +190,49 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
- 	return ret;
- }
- 
--/* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
-- * bytes on x86.  Pick a number to fit into BPF_IMAGE_SIZE / 2
-- */
--#define BPF_MAX_TRAMP_PROGS 40
-+static struct bpf_tramp_progs *
-+bpf_trampoline_update_progs(struct bpf_trampoline *tr, int *total)
++static int check_attach_modify_return(struct bpf_verifier_env *env)
 +{
-+	struct bpf_tramp_progs *tprogs;
-+	struct bpf_prog **progs;
-+	struct bpf_prog_aux *aux;
-+	int kind;
++	struct bpf_prog *prog = env->prog;
++	unsigned long addr = (unsigned long) prog->aux->trampoline->func.addr;
 +
-+	*total = 0;
-+	tprogs = kcalloc(BPF_TRAMP_MAX, sizeof(*tprogs), GFP_KERNEL);
-+	if (!tprogs)
-+		return ERR_PTR(-ENOMEM);
++	if (within_error_injection_list(addr))
++		return 0;
 +
-+	for (kind = 0; kind < BPF_TRAMP_MAX; kind++) {
-+		tprogs[kind].nr_progs = tr->progs_cnt[kind];
-+		*total += tr->progs_cnt[kind];
-+		progs = tprogs[kind].progs;
++	/* This is expected to be cleaned up in the future with the KRSI effort
++	 * introducing the LSM_HOOK macro for cleaning up lsm_hooks.h.
++	 */
++	if (!strncmp(SECURITY_PREFIX, prog->aux->attach_func_name,
++		     sizeof(SECURITY_PREFIX) - 1)) {
 +
-+		hlist_for_each_entry(aux, &tr->progs_hlist[kind], tramp_hlist)
-+			*progs++ = aux->prog;
++		if (!capable(CAP_MAC_ADMIN))
++			return -EPERM;
++
++		return 0;
 +	}
-+	return tprogs;
++
++	verbose(env, "fmod_ret attach_btf_id %u (%s) is not modifiable\n",
++		prog->aux->attach_btf_id, prog->aux->attach_func_name);
++
++	return -EINVAL;
 +}
  
- static int bpf_trampoline_update(struct bpf_trampoline *tr)
+ static int check_attach_btf_id(struct bpf_verifier_env *env)
  {
- 	void *old_image = tr->image + ((tr->selector + 1) & 1) * BPF_IMAGE_SIZE/2;
- 	void *new_image = tr->image + (tr->selector & 1) * BPF_IMAGE_SIZE/2;
--	struct bpf_prog *progs_to_run[BPF_MAX_TRAMP_PROGS];
--	int fentry_cnt = tr->progs_cnt[BPF_TRAMP_FENTRY];
--	int fexit_cnt = tr->progs_cnt[BPF_TRAMP_FEXIT];
--	struct bpf_prog **progs, **fentry, **fexit;
-+	struct bpf_tramp_progs *tprogs;
- 	u32 flags = BPF_TRAMP_F_RESTORE_REGS;
--	struct bpf_prog_aux *aux;
--	int err;
-+	int err, total;
+@@ -10000,6 +10028,9 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 		}
+ 		tr->func.addr = (void *)addr;
+ 		prog->aux->trampoline = tr;
 +
-+	tprogs = bpf_trampoline_update_progs(tr, &total);
-+	if (IS_ERR(tprogs))
-+		return PTR_ERR(tprogs);
- 
--	if (fentry_cnt + fexit_cnt == 0) {
-+	if (total == 0) {
- 		err = unregister_fentry(tr, old_image);
- 		tr->selector = 0;
- 		goto out;
- 	}
- 
--	/* populate fentry progs */
--	fentry = progs = progs_to_run;
--	hlist_for_each_entry(aux, &tr->progs_hlist[BPF_TRAMP_FENTRY], tramp_hlist)
--		*progs++ = aux->prog;
--
--	/* populate fexit progs */
--	fexit = progs;
--	hlist_for_each_entry(aux, &tr->progs_hlist[BPF_TRAMP_FEXIT], tramp_hlist)
--		*progs++ = aux->prog;
--
--	if (fexit_cnt)
-+	if (tprogs[BPF_TRAMP_FEXIT].nr_progs)
- 		flags = BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_SKIP_FRAME;
- 
- 	/* Though the second half of trampoline page is unused a task could be
-@@ -232,12 +241,11 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
- 	 * preempted task. Hence wait for tasks to voluntarily schedule or go
- 	 * to userspace.
- 	 */
-+
- 	synchronize_rcu_tasks();
- 
- 	err = arch_prepare_bpf_trampoline(new_image, new_image + BPF_IMAGE_SIZE / 2,
--					  &tr->func.model, flags,
--					  fentry, fentry_cnt,
--					  fexit, fexit_cnt,
-+					  &tr->func.model, flags, tprogs,
- 					  tr->func.addr);
- 	if (err < 0)
- 		goto out;
-@@ -252,6 +260,7 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
- 		goto out;
- 	tr->selector++;
++		if (prog->expected_attach_type == BPF_MODIFY_RETURN)
++			ret = check_attach_modify_return(env);
  out:
-+	kfree(tprogs);
- 	return err;
- }
- 
-@@ -409,8 +418,7 @@ void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start)
- int __weak
- arch_prepare_bpf_trampoline(void *image, void *image_end,
- 			    const struct btf_func_model *m, u32 flags,
--			    struct bpf_prog **fentry_progs, int fentry_cnt,
--			    struct bpf_prog **fexit_progs, int fexit_cnt,
-+			    struct bpf_tramp_progs *tprogs,
- 			    void *orig_call)
- {
- 	return -ENOTSUPP;
+ 		mutex_unlock(&tr->mutex);
+ 		if (ret)
 -- 
 2.20.1
 
