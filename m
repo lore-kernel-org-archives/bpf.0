@@ -2,118 +2,115 @@ Return-Path: <SRS0=QYSm=4V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEE67C3F2D7
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 20:42:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27B77C3F2D1
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 20:42:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C7629207FD
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 20:42:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F0C7A207FD
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 20:42:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IXqAt5dG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ut3gRuqd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727528AbgCDUmK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Mar 2020 15:42:10 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:57180 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728482AbgCDUmJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Mar 2020 15:42:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1583354528;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lO6YwEWJ1+PdcNBCFPWiw7ne9ikW1eavQmFGsQqPZJY=;
-        b=IXqAt5dGPX7TDPMOObADHxeJ40qKJKSl/+8ow5dZtLfhzetwULJMv5/2VFKmGlKEoFNQ0o
-        fVdOGyqlRr1f54njaju+fpSUMdrIxPwnqd8zsOnUghB9v13tGXEYHZugpuAItCGIbk8pDz
-        EJyKiaxdT99Q4j++yS72QRtFUwsKi9Y=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-381-e8bJvTE6MN6QZy0CbgRoZw-1; Wed, 04 Mar 2020 15:42:05 -0500
-X-MC-Unique: e8bJvTE6MN6QZy0CbgRoZw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1B04D10CE781;
-        Wed,  4 Mar 2020 20:42:03 +0000 (UTC)
-Received: from krava (ovpn-205-10.brq.redhat.com [10.40.205.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EC1F010013A1;
-        Wed,  4 Mar 2020 20:42:00 +0000 (UTC)
-Date:   Wed, 4 Mar 2020 21:41:58 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, quentin@isovalent.com,
-        kernel-team@fb.com, ast@kernel.org, daniel@iogearbox.net,
-        arnaldo.melo@gmail.com, jolsa@kernel.org
-Subject: Re: [PATCH v4 bpf-next 0/4] bpftool: introduce prog profile
-Message-ID: <20200304204158.GD168640@krava>
-References: <20200304180710.2677695-1-songliubraving@fb.com>
- <20200304190807.GA168640@krava>
+        id S1728599AbgCDUmt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Mar 2020 15:42:49 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:34771 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727528AbgCDUmt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Mar 2020 15:42:49 -0500
+Received: by mail-qk1-f194.google.com with SMTP id f3so3071938qkh.1;
+        Wed, 04 Mar 2020 12:42:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9ecW3xZbekPnjtIaMnbSXTNbQAWf8HFfzOkMqz2Jfc8=;
+        b=Ut3gRuqdS2JCJNE1E6UuYGi4lqyLPcoNot2zl0CnrykHE9NCbCFxhjlFPrMkNAllHu
+         pmcC5bZC20sUzTm2z/We4d0Yx/rfWk3pY+IkGEZjEimaCCqb9L5z5xPjzNCTUaH/f03D
+         AahxR3EAD5bAN+waKZNCVM71L33mmX3+iZektNkvwMJKmz740uaIuGXGYuAo/HpkhXu7
+         hH33Jgxptgtr/0OJt2mW4tl3WIIk5jdambJofp/ore/g71z0dLgoSGRihKUdhnejcquS
+         pS1jaxnaOlp8Bd24dWnmn9YM0DE05n0LP5B+05dUgdpmO7J13afoLSVNuFCjpVpDPtgB
+         X+qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9ecW3xZbekPnjtIaMnbSXTNbQAWf8HFfzOkMqz2Jfc8=;
+        b=fE3f/X87/KLyLHYfgeRarWuLn3dvUIKwXJuTsD8LogavNSqmyaHH2u89pEOP3+Orqo
+         dCx1jYSdAGF+O40f32F4+mA1IhXUTeA1e7xFc4TXtkg4zimPhtCXeQ/ag0/QfBZcAtie
+         n7Gl+raw2GP13KPBDlfFQpyH//DI+zQIEm4OOt0XwtQz018/c5d93TnB0gQSky7sxlJP
+         mAOU/ioisahjJ4HjYZ0GWvMLgoqZDdr6spSwtBPVJaCQ/HFFyIisP+u+k637KHZe60Gg
+         4ev4z1QK9wT/637YMXX/EmIU1CcxK6XsK2gFvQDG1fGvWf1lOoAcbpoZdcEAQvneVr8A
+         Zd3g==
+X-Gm-Message-State: ANhLgQ1+vq5auS/j4QsMrlqzIakLOUtynURMet92Pd1O0qeHNG/wM/I0
+        uZS1gg7sQcYs23OTG6GgdlVqDVGdYhU=
+X-Google-Smtp-Source: ADFU+vseeKIhPVAcGEBtFVkoEdoH5O3m5lVPm+D2zwuiZSODnGI9tozAsAw6ivt7nVdF7Dklumrczw==
+X-Received: by 2002:a05:620a:136b:: with SMTP id d11mr4910875qkl.11.1583354566618;
+        Wed, 04 Mar 2020 12:42:46 -0800 (PST)
+Received: from localhost.localdomain (pc-184-104-160-190.cm.vtr.net. [190.160.104.184])
+        by smtp.googlemail.com with ESMTPSA id 82sm1750232qko.91.2020.03.04.12.42.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2020 12:42:45 -0800 (PST)
+From:   Carlos Neira <cneirabustos@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     yhs@fb.com, ebiederm@xmission.com, brouer@redhat.com,
+        bpf@vger.kernel.org, cneirabustos@gmail.com
+Subject: [PATCH v17 0/3] BPF: New helper to obtain namespace data from current task
+Date:   Wed,  4 Mar 2020 17:41:54 -0300
+Message-Id: <20200304204157.58695-1-cneirabustos@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200304190807.GA168640@krava>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 04, 2020 at 08:08:07PM +0100, Jiri Olsa wrote:
-> On Wed, Mar 04, 2020 at 10:07:06AM -0800, Song Liu wrote:
-> > This set introduces bpftool prog profile command, which uses hardware
-> > counters to profile BPF programs.
-> >=20
-> > This command attaches fentry/fexit programs to a target program. Thes=
-e two
-> > programs read hardware counters before and after the target program a=
-nd
-> > calculate the difference.
-> >=20
-> > Changes v3 =3D> v4:
-> > 1. Simplify err handling in profile_open_perf_events() (Quentin);
-> > 2. Remove redundant p_err() (Quentin);
-> > 3. Replace tab with space in bash-completion; (Quentin);
-> > 4. Fix typo _bpftool_get_map_names =3D> _bpftool_get_prog_names (Quen=
-tin).
->=20
-> hum, I'm getting:
->=20
-> 	[jolsa@dell-r440-01 bpftool]$ pwd
-> 	/home/jolsa/linux-perf/tools/bpf/bpftool
-> 	[jolsa@dell-r440-01 bpftool]$ make
-> 	...
-> 	make[1]: Leaving directory '/home/jolsa/linux-perf/tools/lib/bpf'
-> 	  LINK     _bpftool
-> 	make: *** No rule to make target 'skeleton/profiler.bpf.c', needed by =
-'skeleton/profiler.bpf.o'.  Stop.
+Currently bpf_get_current_pid_tgid(), is used to do pid filtering in bcc's
+scripts but this helper returns the pid as seen by the root namespace which is
+fine when a bcc script is not executed inside a container.
+When the process of interest is inside a container, pid filtering will not work
+if bpf_get_current_pid_tgid() is used.
+This helper addresses this limitation returning the pid as it's seen by the current
+namespace where the script is executing.
 
-ok, I had to apply your patches by hand, because 'git am' refused to
-due to fuzz.. so some of you new files did not make it to my tree ;-)
+In the future different pid_ns files may belong to different devices, according to the
+discussion between Eric Biederman and Yonghong in 2017 Linux plumbers conference.
+To address that situation the helper requires inum and dev_t from /proc/self/ns/pid.
+This helper has the same use cases as bpf_get_current_pid_tgid() as it can be
+used to do pid filtering even inside a container.
 
-anyway I hit another error now:
+Signed-off-by: Carlos Neira <cneirabustos@gmail.com>
 
-	  CC       prog.o
-	In file included from prog.c:1553:
-	profiler.skel.h: In function =E2=80=98profiler_bpf__create_skeleton=E2=80=
-=99:
-	profiler.skel.h:136:35: error: =E2=80=98struct profiler_bpf=E2=80=99 has=
- no member named =E2=80=98rodata=E2=80=99
-	  136 |  s->maps[4].mmaped =3D (void **)&obj->rodata;
-	      |                                   ^~
-	prog.c: In function =E2=80=98profile_read_values=E2=80=99:
-	prog.c:1650:29: error: =E2=80=98struct profiler_bpf=E2=80=99 has no memb=
-er named =E2=80=98rodata=E2=80=99
-	 1650 |  __u32 m, cpu, num_cpu =3D obj->rodata->num_cpu;
 
-I'll try to figure it out.. might be error on my end
 
-do you have git repo with these changes?
+Carlos Neira (3):
+  fs/nsfs.c: added ns_match
+  bpf: added new helper bpf_get_ns_current_pid_tgid
+  tools/testing/selftests/bpf: Add self-tests for new helper
+    bpf_get_ns_current_pid_tgid.
 
-thanks,
-jirka
+ fs/nsfs.c                                     |  14 ++
+ include/linux/bpf.h                           |   1 +
+ include/linux/proc_ns.h                       |   2 +
+ include/uapi/linux/bpf.h                      |  20 ++-
+ kernel/bpf/core.c                             |   1 +
+ kernel/bpf/helpers.c                          |  45 +++++
+ kernel/trace/bpf_trace.c                      |   2 +
+ scripts/bpf_helpers_doc.py                    |   1 +
+ tools/include/uapi/linux/bpf.h                |  20 ++-
+ tools/testing/selftests/bpf/Makefile          |   3 +-
+ .../bpf/prog_tests/ns_current_pid_tgid.c      |  88 ++++++++++
+ .../bpf/progs/test_ns_current_pid_tgid.c      |  37 ++++
+ .../bpf/test_current_pid_tgid_new_ns.c        | 159 ++++++++++++++++++
+ 13 files changed, 390 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
+ create mode 100644 tools/testing/selftests/bpf/test_current_pid_tgid_new_ns.c
+
+-- 
+2.20.1
 
