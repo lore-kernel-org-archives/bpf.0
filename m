@@ -6,91 +6,114 @@ X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
 	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EDB1C3F2D7
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 20:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEE67C3F2D7
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 20:42:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F326D2146E
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 20:38:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7629207FD
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 20:42:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YGO9GSoi"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IXqAt5dG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727137AbgCDUih (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Mar 2020 15:38:37 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:32756 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388003AbgCDUih (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Mar 2020 15:38:37 -0500
+        id S1727528AbgCDUmK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Mar 2020 15:42:10 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:57180 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728482AbgCDUmJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Mar 2020 15:42:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1583354316;
+        s=mimecast20190719; t=1583354528;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TXehQk5BC1JPWLk1F3kamN0LZh08bGn+YqIvNCPT8v8=;
-        b=YGO9GSoif0ug9y59ZHWTrx7pNCSPXhrlnW88aj1uNObG+lC2UmEgho4hzNbDMeneiV+OaS
-        +GaTRmoAngiPmPFzsdwgINJ9QH+7cWcUkXZbeJnPlXqGfPgMu3M5iCm7GZNrXX/Mhhg7ei
-        ktg8jiAm2E/Ax0MWeDNNk/+3ASZUzVM=
+        bh=lO6YwEWJ1+PdcNBCFPWiw7ne9ikW1eavQmFGsQqPZJY=;
+        b=IXqAt5dGPX7TDPMOObADHxeJ40qKJKSl/+8ow5dZtLfhzetwULJMv5/2VFKmGlKEoFNQ0o
+        fVdOGyqlRr1f54njaju+fpSUMdrIxPwnqd8zsOnUghB9v13tGXEYHZugpuAItCGIbk8pDz
+        EJyKiaxdT99Q4j++yS72QRtFUwsKi9Y=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-236-itE91iRUPX-tQ23vYp71Hw-1; Wed, 04 Mar 2020 15:38:32 -0500
-X-MC-Unique: itE91iRUPX-tQ23vYp71Hw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+ us-mta-381-e8bJvTE6MN6QZy0CbgRoZw-1; Wed, 04 Mar 2020 15:42:05 -0500
+X-MC-Unique: e8bJvTE6MN6QZy0CbgRoZw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C43EE107ACC9;
-        Wed,  4 Mar 2020 20:38:30 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1B04D10CE781;
+        Wed,  4 Mar 2020 20:42:03 +0000 (UTC)
 Received: from krava (ovpn-205-10.brq.redhat.com [10.40.205.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 77D9991D84;
-        Wed,  4 Mar 2020 20:38:28 +0000 (UTC)
-Date:   Wed, 4 Mar 2020 21:38:25 +0100
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EC1F010013A1;
+        Wed,  4 Mar 2020 20:42:00 +0000 (UTC)
+Date:   Wed, 4 Mar 2020 21:41:58 +0100
 From:   Jiri Olsa <jolsa@redhat.com>
 To:     Song Liu <songliubraving@fb.com>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, quentin@isovalent.com,
         kernel-team@fb.com, ast@kernel.org, daniel@iogearbox.net,
         arnaldo.melo@gmail.com, jolsa@kernel.org
-Subject: Re: [PATCH v4 bpf-next 1/4] bpftool: introduce "prog profile" command
-Message-ID: <20200304203825.GC168640@krava>
+Subject: Re: [PATCH v4 bpf-next 0/4] bpftool: introduce prog profile
+Message-ID: <20200304204158.GD168640@krava>
 References: <20200304180710.2677695-1-songliubraving@fb.com>
- <20200304180710.2677695-2-songliubraving@fb.com>
+ <20200304190807.GA168640@krava>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200304180710.2677695-2-songliubraving@fb.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <20200304190807.GA168640@krava>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 04, 2020 at 10:07:07AM -0800, Song Liu wrote:
+On Wed, Mar 04, 2020 at 08:08:07PM +0100, Jiri Olsa wrote:
+> On Wed, Mar 04, 2020 at 10:07:06AM -0800, Song Liu wrote:
+> > This set introduces bpftool prog profile command, which uses hardware
+> > counters to profile BPF programs.
+> >=20
+> > This command attaches fentry/fexit programs to a target program. Thes=
+e two
+> > programs read hardware counters before and after the target program a=
+nd
+> > calculate the difference.
+> >=20
+> > Changes v3 =3D> v4:
+> > 1. Simplify err handling in profile_open_perf_events() (Quentin);
+> > 2. Remove redundant p_err() (Quentin);
+> > 3. Replace tab with space in bash-completion; (Quentin);
+> > 4. Fix typo _bpftool_get_map_names =3D> _bpftool_get_prog_names (Quen=
+tin).
+>=20
+> hum, I'm getting:
+>=20
+> 	[jolsa@dell-r440-01 bpftool]$ pwd
+> 	/home/jolsa/linux-perf/tools/bpf/bpftool
+> 	[jolsa@dell-r440-01 bpftool]$ make
+> 	...
+> 	make[1]: Leaving directory '/home/jolsa/linux-perf/tools/lib/bpf'
+> 	  LINK     _bpftool
+> 	make: *** No rule to make target 'skeleton/profiler.bpf.c', needed by =
+'skeleton/profiler.bpf.o'.  Stop.
 
-SNIP
+ok, I had to apply your patches by hand, because 'git am' refused to
+due to fuzz.. so some of you new files did not make it to my tree ;-)
 
-> +
-> +#include "profiler.skel.h"
-> +
-> +#define SAMPLE_PERIOD  0x7fffffffffffffffULL
-> +struct profile_metric {
-> +	const char *name;
-> +	struct bpf_perf_event_value val;
-> +	struct perf_event_attr attr;
-> +	bool selected;
-> +
-> +	/* calculate ratios like instructions per cycle */
-> +	const int ratio_metric; /* 0 for N/A, 1 for index 0 (cycles) */
-> +	const char *ratio_desc;
-> +	const float ratio_mul;
-> +} metrics[] = {
-> +	{
-> +		.name = "cycles",
-> +		.attr = {
-> +			.sample_period = SAMPLE_PERIOD,
+anyway I hit another error now:
 
-I don't think you need to set sample_period for counting.. why?
+	  CC       prog.o
+	In file included from prog.c:1553:
+	profiler.skel.h: In function =E2=80=98profiler_bpf__create_skeleton=E2=80=
+=99:
+	profiler.skel.h:136:35: error: =E2=80=98struct profiler_bpf=E2=80=99 has=
+ no member named =E2=80=98rodata=E2=80=99
+	  136 |  s->maps[4].mmaped =3D (void **)&obj->rodata;
+	      |                                   ^~
+	prog.c: In function =E2=80=98profile_read_values=E2=80=99:
+	prog.c:1650:29: error: =E2=80=98struct profiler_bpf=E2=80=99 has no memb=
+er named =E2=80=98rodata=E2=80=99
+	 1650 |  __u32 m, cpu, num_cpu =3D obj->rodata->num_cpu;
 
-> +			.type = PERF_TYPE_HARDWARE,
-> +			.config = PERF_COUNT_HW_CPU_CYCLES,
+I'll try to figure it out.. might be error on my end
 
-you could also add .exclude_user = 1
+do you have git repo with these changes?
 
+thanks,
 jirka
 
