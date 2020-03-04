@@ -2,44 +2,44 @@ Return-Path: <SRS0=QYSm=4V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB7AC3F2D1
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 18:07:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FE45C3F2D1
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 18:07:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 43E8E21556
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 18:07:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6547121556
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 18:07:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Hi3hxCjT"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="dIkUM5bU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727804AbgCDSHV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Mar 2020 13:07:21 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:24872 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728537AbgCDSHT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Mar 2020 13:07:19 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 024I4dIa009715
-        for <bpf@vger.kernel.org>; Wed, 4 Mar 2020 10:07:17 -0800
+        id S1728537AbgCDSHb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Mar 2020 13:07:31 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:27996 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728361AbgCDSHb (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Mar 2020 13:07:31 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 024I6DOU019973
+        for <bpf@vger.kernel.org>; Wed, 4 Mar 2020 10:07:30 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=182sOQoDKa1rVxoKOEyU+KhF+rEC3jpLhoxoKxo4lgg=;
- b=Hi3hxCjTj0KS0J5hZbFELKGVPD5SDCYRm4Vkmvr8Fqv81Zata7ZFuz2ZydSyeob27H81
- bbLQNqYnq+EWv3fE4ZdDqk8hMXpLKnB1mTkzwGMIHlaURZPdRW0gFPwHdUh6s1JpqBMr
- 2a0kBR1RkLJ1samkaxF579eNINGpIpd9rnI= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 2yhugwxmv3-2
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=gnq7nbnlzRdUF6YimxbfWOJSkM9VWd+cGawYa+GpOGw=;
+ b=dIkUM5bUs/VvijWICEcQ+dn5Kod16uHlsR0+HiC2BMsZVmyn+3yipuJIelqbIpZvKzt0
+ SPYLyvCdB+QiNHRQmyvqDv32ChufjNtqULfPzrH6+wugGlSbHq9YqxUSDdF7sWA4Y4Vy
+ ZOM6BGoO1lQzpS235kGPNv5KHhHybmoMr6w= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2yj2gj44bf-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 10:07:17 -0800
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 10:07:29 -0800
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Wed, 4 Mar 2020 10:07:15 -0800
+ 15.1.1779.2; Wed, 4 Mar 2020 10:07:25 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id B64CE62E3375; Wed,  4 Mar 2020 10:07:13 -0800 (PST)
+        id D810F62E3375; Wed,  4 Mar 2020 10:07:20 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -48,71 +48,105 @@ CC:     <quentin@isovalent.com>, <kernel-team@fb.com>, <ast@kernel.org>,
         <daniel@iogearbox.net>, <arnaldo.melo@gmail.com>,
         <jolsa@kernel.org>, Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 0/4] bpftool: introduce prog profile
-Date:   Wed, 4 Mar 2020 10:07:06 -0800
-Message-ID: <20200304180710.2677695-1-songliubraving@fb.com>
+Subject: [PATCH v4 bpf-next 3/4] bpftool: bash completion for "bpftool prog profile"
+Date:   Wed, 4 Mar 2020 10:07:09 -0800
+Message-ID: <20200304180710.2677695-4-songliubraving@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200304180710.2677695-1-songliubraving@fb.com>
+References: <20200304180710.2677695-1-songliubraving@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-03-04_07:2020-03-04,2020-03-04 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- malwarescore=0 priorityscore=1501 mlxscore=0 mlxlogscore=847
- lowpriorityscore=0 suspectscore=0 bulkscore=0 phishscore=0 spamscore=0
- clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2003040123
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
+ adultscore=0 bulkscore=0 phishscore=0 spamscore=0 clxscore=1015 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003040124
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set introduces bpftool prog profile command, which uses hardware
-counters to profile BPF programs.
+Add bash completion for "bpftool prog profile" command.
 
-This command attaches fentry/fexit programs to a target program. These two
-programs read hardware counters before and after the target program and
-calculate the difference.
+Signed-off-by: Song Liu <songliubraving@fb.com>
+---
+ tools/bpf/bpftool/bash-completion/bpftool | 45 ++++++++++++++++++++++-
+ 1 file changed, 44 insertions(+), 1 deletion(-)
 
-Changes v3 => v4:
-1. Simplify err handling in profile_open_perf_events() (Quentin);
-2. Remove redundant p_err() (Quentin);
-3. Replace tab with space in bash-completion; (Quentin);
-4. Fix typo _bpftool_get_map_names => _bpftool_get_prog_names (Quentin).
-
-Changes v2 => v3:
-1. Change order of arguments (Quentin), as:
-     bpftool prog profile PROG [duration DURATION] METRICs
-2. Add bash-completion for bpftool prog profile (Quentin);
-3. Fix build of selftests (Yonghong);
-4. Better handling of bpf_map_lookup_elem() returns (Yonghong);
-5. Improve clean up logic of do_profile() (Yonghong);
-6. Other smaller fixes/cleanups.
-
-Changes RFC => v2:
-1. Use new bpf_program__set_attach_target() API;
-2. Update output format to be perf-stat like (Alexei);
-3. Incorporate skeleton generation into Makefile;
-4. Make DURATION optional and Allow Ctrl-C (Alexei);
-5. Add calcated values "insn per cycle" and "LLC misses per million isns".
-
-Song Liu (4):
-  bpftool: introduce "prog profile" command
-  bpftool: Documentation for bpftool prog profile
-  bpftool: bash completion for "bpftool prog profile"
-  bpftool: fix typo in bash-completion
-
- .../bpftool/Documentation/bpftool-prog.rst    |  19 +
- tools/bpf/bpftool/Makefile                    |  18 +
- tools/bpf/bpftool/bash-completion/bpftool     |  47 +-
- tools/bpf/bpftool/prog.c                      | 425 +++++++++++++++++-
- tools/bpf/bpftool/skeleton/profiler.bpf.c     | 171 +++++++
- tools/bpf/bpftool/skeleton/profiler.h         |  47 ++
- tools/scripts/Makefile.include                |   1 +
- 7 files changed, 725 insertions(+), 3 deletions(-)
- create mode 100644 tools/bpf/bpftool/skeleton/profiler.bpf.c
- create mode 100644 tools/bpf/bpftool/skeleton/profiler.h
-
---
+diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
+index f2838a658339..49f4ab2f67e3 100644
+--- a/tools/bpf/bpftool/bash-completion/bpftool
++++ b/tools/bpf/bpftool/bash-completion/bpftool
+@@ -337,6 +337,7 @@ _bpftool()
+ 
+             local PROG_TYPE='id pinned tag name'
+             local MAP_TYPE='id pinned name'
++            local METRIC_TYPE='cycles instructions l1d_loads llc_misses'
+             case $command in
+                 show|list)
+                     [[ $prev != "$command" ]] && return 0
+@@ -498,6 +499,48 @@ _bpftool()
+                 tracelog)
+                     return 0
+                     ;;
++                profile)
++                    case $cword in
++                        3)
++                            COMPREPLY=( $( compgen -W "$PROG_TYPE" -- "$cur" ) )
++                            return 0
++                            ;;
++                        4)
++                            case $prev in
++                                id)
++                                    _bpftool_get_prog_ids
++                                    ;;
++                                name)
++                                    _bpftool_get_prog_names
++                                    ;;
++                                pinned)
++                                    _filedir
++                                    ;;
++                            esac
++                            return 0
++                            ;;
++                        5)
++                            COMPREPLY=( $( compgen -W "$METRIC_TYPE duration" -- "$cur" ) )
++                            return 0
++                            ;;
++                        6)
++                            case $prev in
++                                duration)
++                                    return 0
++                                    ;;
++                                *)
++                                    COMPREPLY=( $( compgen -W "$METRIC_TYPE" -- "$cur" ) )
++                                    return 0
++                                    ;;
++                            esac
++                            return 0
++                            ;;
++                        *)
++                            COMPREPLY=( $( compgen -W "$METRIC_TYPE" -- "$cur" ) )
++                            return 0
++                            ;;
++                    esac
++                    ;;
+                 run)
+                     if [[ ${#words[@]} -lt 5 ]]; then
+                         _filedir
+@@ -525,7 +568,7 @@ _bpftool()
+                 *)
+                     [[ $prev == $object ]] && \
+                         COMPREPLY=( $( compgen -W 'dump help pin attach detach \
+-                            load loadall show list tracelog run' -- "$cur" ) )
++                            load loadall show list tracelog run profile' -- "$cur" ) )
+                     ;;
+             esac
+             ;;
+-- 
 2.17.1
+
