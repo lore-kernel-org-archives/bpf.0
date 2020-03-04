@@ -2,405 +2,157 @@ Return-Path: <SRS0=QYSm=4V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DCFBC3F2CE
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 20:42:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3142C3F2CE
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 20:45:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 27BF320828
-	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 20:42:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 730CE207FD
+	for <bpf@archiver.kernel.org>; Wed,  4 Mar 2020 20:45:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gvnIrR+F"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hVstzxWy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388309AbgCDUmy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Mar 2020 15:42:54 -0500
-Received: from mail-qk1-f178.google.com ([209.85.222.178]:33655 "EHLO
-        mail-qk1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388230AbgCDUmy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Mar 2020 15:42:54 -0500
-Received: by mail-qk1-f178.google.com with SMTP id p62so3088086qkb.0;
-        Wed, 04 Mar 2020 12:42:53 -0800 (PST)
+        id S1728955AbgCDUpM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Mar 2020 15:45:12 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:33308 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728539AbgCDUpL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Mar 2020 15:45:11 -0500
+Received: by mail-pg1-f196.google.com with SMTP id m5so1566558pgg.0;
+        Wed, 04 Mar 2020 12:45:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HQgb+cG4NkJXbnS+nj0Rdtq6SmKME6zMCxCGCB6CvAY=;
-        b=gvnIrR+Fo17aHtz6sgCzGEJbMkWl5bKEWAXpa1xKU1XXDrOGm/OiMIAlxolImZQftc
-         E+Kw/OzRo9FRlKmldQwpVpfzkxuRnPemQRkGmjOVd9GNjWsD5rOl1GvDKysjqJm/aMC7
-         +tnfEGGvkRdYq32n/dpA5Uh6HWwa07X+kjW6Pdvl2psSX+tMjKHUA4o/xysLTv/9T3+w
-         HEGsgUQJjvzZQmCkKyo7qrihNo4ewsTR78MxR4b8ONU5+BZND+pC1DbA0kUlXMVwMIBm
-         cFbsFg+ev14fbtTheuryBCRx3fN2ZvSbypr2HpU85kxKCkrjGFtLJEggJa0KZvy/0P2Z
-         CSzw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=D+6bADF9Hs3thiy/zF3dJiw+mXIemuhVfQAZ47vOfdw=;
+        b=hVstzxWyybGWz3WDoicEzPPMPrCa+mGEjhaYpFktChUieQ45zs4wFGJ7rQ9IleJhcj
+         aFYMxc1K26Uj7uNazViF+0rwxn+rw9kNBzQ0joxM1HqGxIbj0MG+Jp5OyZ9mAS5+WUDc
+         6siW9Nv8QpV/UzHZc3VIJqZdO2YJ2N6mPxJxNIh9Xg9MsXA3dZyLsaNBCQhy2mhfnzkN
+         2GkyWSuVUAxf8MzeYRvNf1aIhQRQ9g9nJlJHveZOeNniFuqe/TM7wA82LGfdopWpyPUb
+         kVjqn4d2Ep6svuDDDJlfK1IJ0ug3k0umTdjWXzwfluKCdJKzcYKL1j+6yIdwfzp/F8X8
+         ljlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HQgb+cG4NkJXbnS+nj0Rdtq6SmKME6zMCxCGCB6CvAY=;
-        b=XwGWMqbV3Pz7YVaWf1ov1GvGwIRfxHFhTEc48u4mz+2SpbjW/oL/vQnJZZ6opheMWn
-         iVlhWN/5v9AYKE/YgdICmMWTKT7jXi0Fj0FdgBrnEM2nv+HmyoUHew9vpHEjeAzKSWMX
-         uC5Mc8tdNSdOAhucVbDK4NHBHCjIBAlVmrExLu99cKr1T0mRZuzkIpm4hhLuCys23r6C
-         iFyvYM4F1/6UVUhDfbtLFQ0vIzgNvoK7w6rnuvO0GEonUMzTxHYaWvmzkIk8X3dA3FGf
-         Sg1YectW4itoSqdruyibf5+vrKGZSBgN1IGGvHcOrrX1WJGwwhAmc+oKsWrPxV6/nZC6
-         DIMg==
-X-Gm-Message-State: ANhLgQ3ma/Rb+bn/3Tw5KEAo6hqxy2/muvPbc2ZtKvRiEZa6mWHLWWqM
-        gRuFvDY1A81IYKPZW2pdKltGRzqqqnA=
-X-Google-Smtp-Source: ADFU+vvf4fC5BLknlP1Of1MfY9/b3dGqUj1faYZIH7gpgJjiE18Y7hA4ncnSsZrPTd7aPIOxUlDS6A==
-X-Received: by 2002:a05:620a:228f:: with SMTP id o15mr344854qkh.197.1583354572768;
-        Wed, 04 Mar 2020 12:42:52 -0800 (PST)
-Received: from localhost.localdomain (pc-184-104-160-190.cm.vtr.net. [190.160.104.184])
-        by smtp.googlemail.com with ESMTPSA id 82sm1750232qko.91.2020.03.04.12.42.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 12:42:52 -0800 (PST)
-From:   Carlos Neira <cneirabustos@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     yhs@fb.com, ebiederm@xmission.com, brouer@redhat.com,
-        bpf@vger.kernel.org, cneirabustos@gmail.com
-Subject: [PATCH v17 3/3] tools/testing/selftests/bpf: Add self-tests for new helper bpf_get_ns_current_pid_tgid.
-Date:   Wed,  4 Mar 2020 17:41:57 -0300
-Message-Id: <20200304204157.58695-4-cneirabustos@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200304204157.58695-1-cneirabustos@gmail.com>
-References: <20200304204157.58695-1-cneirabustos@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=D+6bADF9Hs3thiy/zF3dJiw+mXIemuhVfQAZ47vOfdw=;
+        b=Bnl7/cK+Tuzti7cb+o3E4SRwjvEFTe940RWmEFUJiQ8wwxMal0SCT8++21gmoSuU4R
+         2CmZHJb/gtzi0tatXaVB+Kv+YwchTEwMvUnXnG3tfHBvUA7ooDCXIgtd2aIpdDKQJ76Y
+         LfHU1cM6ODToqaLUfMLrdEjsYBTiMZwFD1Sa/bfCtC/++FXgMemx89a0+rlqwfFPUuhB
+         je6KOn7dsEZuWi/0YC9f7YbcYh3Ocs5xOAr6BCmtUoG7JCNPScFCfKQSwrzFebKTyYSN
+         vvYI/GvdRZUhgG5DgjWqKyBJWoJtQbhskiw3EzRzOipmUwANlWc1U4qKs6n3NdrJhWK0
+         yqZg==
+X-Gm-Message-State: ANhLgQ3FbQS9RgvxitEJmdLiVvmcNxmhP6ouqwT2arQqH4J2i2OukSak
+        Eq/ylLpxK3o8OmgMNQQjGwA=
+X-Google-Smtp-Source: ADFU+vtTZWcPvzYtIL3k1XY/66/vyaU4dGoiQ6+JuXEayICU35mEp5m11MwwCi/z571xyToObmGyww==
+X-Received: by 2002:aa7:87d4:: with SMTP id i20mr4658708pfo.22.1583354710419;
+        Wed, 04 Mar 2020 12:45:10 -0800 (PST)
+Received: from ast-mbp ([2620:10d:c090:500::4:c694])
+        by smtp.gmail.com with ESMTPSA id m18sm19981017pff.7.2020.03.04.12.45.08
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 04 Mar 2020 12:45:09 -0800 (PST)
+Date:   Wed, 4 Mar 2020 12:45:07 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next 0/3] Introduce pinnable bpf_link kernel
+ abstraction
+Message-ID: <20200304204506.wli3enu5w25b35h7@ast-mbp>
+References: <094a8c0f-d781-d2a2-d4cd-721b20d75edd@iogearbox.net>
+ <e9a4351a-4cf9-120a-1ae1-94a707a6217f@fb.com>
+ <8083c916-ac2c-8ce0-2286-4ea40578c47f@iogearbox.net>
+ <CAEf4BzbokCJN33Nw_kg82sO=xppXnKWEncGTWCTB9vGCmLB6pw@mail.gmail.com>
+ <87pndt4268.fsf@toke.dk>
+ <ab2f98f6-c712-d8a2-1fd3-b39abbaa9f64@iogearbox.net>
+ <ccbc1e49-45c1-858b-1ad5-ee503e0497f2@fb.com>
+ <87k1413whq.fsf@toke.dk>
+ <20200304043643.nqd2kzvabkrzlolh@ast-mbp>
+ <20200304114000.56888dac@kicinski-fedora-PC1C0HJN>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200304114000.56888dac@kicinski-fedora-PC1C0HJN>
+User-Agent: NeoMutt/20180223
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Self tests added for new helper bpf_get_ns_current_pid_tgid
+On Wed, Mar 04, 2020 at 11:41:58AM -0800, Jakub Kicinski wrote:
+> On Tue, 3 Mar 2020 20:36:45 -0800 Alexei Starovoitov wrote:
+> > > > libxdp can choose to pin it in some libxdp specific location, so other
+> > > > libxdp-enabled applications can find it in the same location, detach,
+> > > > replace, modify, but random app that wants to hack an xdp prog won't
+> > > > be able to mess with it.  
+> > > 
+> > > What if that "random app" comes first, and keeps holding on to the link
+> > > fd? Then the admin essentially has to start killing processes until they
+> > > find the one that has the device locked, no?  
+> > 
+> > Of course not. We have to provide an api to make it easy to discover
+> > what process holds that link and where it's pinned.
+> 
+> That API to discover ownership would be useful but it's on the BPF side.
 
-Signed-off-by: Carlos Neira <cneirabustos@gmail.com>
----
- tools/testing/selftests/bpf/Makefile          |   3 +-
- .../bpf/prog_tests/ns_current_pid_tgid.c      |  88 ++++++++++
- .../bpf/progs/test_ns_current_pid_tgid.c      |  37 ++++
- .../bpf/test_current_pid_tgid_new_ns.c        | 159 ++++++++++++++++++
- 4 files changed, 286 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
- create mode 100644 tools/testing/selftests/bpf/test_current_pid_tgid_new_ns.c
+it's on bpf side because it's bpf specific.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 2d7f5df33f04..ea77239095a1 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -32,7 +32,8 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
- 	test_sock test_btf test_sockmap get_cgroup_id_user test_socket_cookie \
- 	test_cgroup_storage \
- 	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl test_hashmap \
--	test_progs-no_alu32
-+	test_progs-no_alu32 \
-+	test_current_pid_tgid_new_ns
- 
- # Also test bpf-gcc, if present
- ifneq ($(BPF_GCC),)
-diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-new file mode 100644
-index 000000000000..542240e16564
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-@@ -0,0 +1,88 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Carlos Neira cneirabustos@gmail.com */
-+#include <test_progs.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+#include <sys/syscall.h>
-+
-+struct bss {
-+	__u64 dev;
-+	__u64 ino;
-+	__u64 pid_tgid;
-+	__u64 user_pid_tgid;
-+};
-+
-+void test_ns_current_pid_tgid(void)
-+{
-+	const char *probe_name = "raw_tracepoint/sys_enter";
-+	const char *file = "test_ns_current_pid_tgid.o";
-+	int err, key = 0, duration = 0;
-+	struct bpf_link *link = NULL;
-+	struct bpf_program *prog;
-+	struct bpf_map *bss_map;
-+	struct bpf_object *obj;
-+	struct bss bss;
-+	struct stat st;
-+	__u64 id;
-+
-+	obj = bpf_object__open_file(file, NULL);
-+	if (CHECK(IS_ERR(obj), "obj_open", "err %ld\n", PTR_ERR(obj)))
-+		return;
-+
-+	err = bpf_object__load(obj);
-+	if (CHECK(err, "obj_load", "err %d errno %d\n", err, errno))
-+		goto cleanup;
-+
-+	bss_map = bpf_object__find_map_by_name(obj, "test_ns_.bss");
-+	if (CHECK(!bss_map, "find_bss_map", "failed\n"))
-+		goto cleanup;
-+
-+	prog = bpf_object__find_program_by_title(obj, probe_name);
-+	if (CHECK(!prog, "find_prog", "prog '%s' not found\n",
-+		  probe_name))
-+		goto cleanup;
-+
-+	memset(&bss, 0, sizeof(bss));
-+	pid_t tid = syscall(SYS_gettid);
-+	pid_t pid = getpid();
-+
-+	id = (__u64) tid << 32 | pid;
-+	bss.user_pid_tgid = id;
-+
-+	if (CHECK_FAIL(stat("/proc/self/ns/pid", &st))) {
-+		perror("Failed to stat /proc/self/ns/pid");
-+		goto cleanup;
-+	}
-+
-+	bss.dev = st.st_dev;
-+	bss.ino = st.st_ino;
-+
-+	err = bpf_map_update_elem(bpf_map__fd(bss_map), &key, &bss, 0);
-+	if (CHECK(err, "setting_bss", "failed to set bss : %d\n", err))
-+		goto cleanup;
-+
-+	link = bpf_program__attach_raw_tracepoint(prog, "sys_enter");
-+	if (CHECK(IS_ERR(link), "attach_raw_tp", "err %ld\n",
-+		  PTR_ERR(link))) {
-+		link = NULL;
-+		goto cleanup;
-+	}
-+
-+	/* trigger some syscalls */
-+	usleep(1);
-+
-+	err = bpf_map_lookup_elem(bpf_map__fd(bss_map), &key, &bss);
-+	if (CHECK(err, "set_bss", "failed to get bss : %d\n", err))
-+		goto cleanup;
-+
-+	if (CHECK(id != bss.pid_tgid, "Compare user pid/tgid vs. bpf pid/tgid",
-+		  "User pid/tgid %llu BPF pid/tgid %llu\n", id, bss.pid_tgid))
-+		goto cleanup;
-+cleanup:
-+	if (!link) {
-+		bpf_link__destroy(link);
-+		link = NULL;
-+	}
-+	bpf_object__close(obj);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-new file mode 100644
-index 000000000000..1dca70a6de2f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2019 Carlos Neira cneirabustos@gmail.com */
-+
-+#include <linux/bpf.h>
-+#include <stdint.h>
-+#include <bpf/bpf_helpers.h>
-+
-+static volatile struct {
-+	__u64 dev;
-+	__u64 ino;
-+	__u64 pid_tgid;
-+	__u64 user_pid_tgid;
-+} res;
-+
-+SEC("raw_tracepoint/sys_enter")
-+int trace(void *ctx)
-+{
-+	__u64  ns_pid_tgid, expected_pid;
-+	struct bpf_pidns_info nsdata;
-+	__u32 key = 0;
-+
-+	if (bpf_get_ns_current_pid_tgid(res.dev, res.ino, &nsdata,
-+		   sizeof(struct bpf_pidns_info)))
-+		return 0;
-+
-+	ns_pid_tgid = (__u64)nsdata.tgid << 32 | nsdata.pid;
-+	expected_pid = res.user_pid_tgid;
-+
-+	if (expected_pid != ns_pid_tgid)
-+		return 0;
-+
-+	res.pid_tgid = ns_pid_tgid;
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_current_pid_tgid_new_ns.c b/tools/testing/selftests/bpf/test_current_pid_tgid_new_ns.c
-new file mode 100644
-index 000000000000..16e94effa5f5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_current_pid_tgid_new_ns.c
-@@ -0,0 +1,159 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Carlos Neira cneirabustos@gmail.com */
-+#define _GNU_SOURCE
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+#include <sys/syscall.h>
-+#include <sched.h>
-+#include <sys/wait.h>
-+#include <sys/mount.h>
-+#include "test_progs.h"
-+
-+#define CHECK_NEWNS(condition, tag, format...) ({		\
-+	int __ret = !!(condition);			\
-+	if (__ret) {					\
-+		printf("%s:FAIL:%s ", __func__, tag);	\
-+		printf(format);				\
-+	} else {					\
-+		printf("%s:PASS:%s\n", __func__, tag);	\
-+	}						\
-+	__ret;						\
-+})
-+
-+struct bss {
-+	__u64 dev;
-+	__u64 ino;
-+	__u64 pid_tgid;
-+	__u64 user_pid_tgid;
-+};
-+
-+int main(int argc, char **argv)
-+{
-+	pid_t pid;
-+	int exit_code = 1;
-+	struct stat st;
-+
-+	printf("Testing bpf_get_ns_current_pid_tgid helper in new ns\n"); 
-+
-+	if (stat("/proc/self/ns/pid", &st)) {
-+		perror("stat failed on /proc/self/ns/pid ns\n");
-+		printf("%s:FAILED\n", argv[0]);
-+		return exit_code;
-+	}
-+
-+	if (CHECK_NEWNS(unshare(CLONE_NEWPID | CLONE_NEWNS),
-+			"unshare CLONE_NEWPID | CLONE_NEWNS", "error errno=%d\n", errno))
-+		return exit_code;
-+
-+	pid = fork();
-+	if (pid == -1) {
-+		perror("Fork() failed\n");
-+		printf("%s:FAILED\n", argv[0]);
-+		return exit_code;
-+	}
-+
-+	if (pid > 0) {
-+		int status;
-+
-+		usleep(5);
-+		waitpid(pid, &status, 0);
-+		return 0;
-+	} else {
-+
-+		pid = fork();
-+		if (pid == -1) {
-+			perror("Fork() failed\n");
-+			printf("%s:FAILED\n", argv[0]);
-+			return exit_code;
-+		}
-+
-+		if (pid > 0) {
-+			int status;
-+			waitpid(pid, &status, 0);
-+			return 0;
-+		} else {
-+			if (CHECK_NEWNS(mount("none", "/proc", NULL, MS_PRIVATE|MS_REC, NULL),
-+				"Unmounting proc", "Cannot umount proc! errno=%d\n", errno))
-+				return exit_code;
-+
-+			if (CHECK_NEWNS(mount("proc", "/proc", "proc", MS_NOSUID|MS_NOEXEC|MS_NODEV, NULL),
-+				"Mounting proc", "Cannot mount proc! errno=%d\n", errno))
-+				return exit_code;
-+
-+			const char *probe_name = "raw_tracepoint/sys_enter";
-+			const char *file = "test_ns_current_pid_tgid.o";
-+			struct bpf_link *link = NULL;
-+			struct bpf_program *prog;
-+			struct bpf_map *bss_map;
-+			struct bpf_object *obj;
-+			int exit_code = 1;
-+			int err, key = 0;
-+			struct bss bss;
-+			struct stat st;
-+			__u64 id;
-+
-+			obj = bpf_object__open_file(file, NULL);
-+			if (CHECK_NEWNS(IS_ERR(obj), "obj_open", "err %ld\n", PTR_ERR(obj)))
-+				return exit_code;
-+
-+			err = bpf_object__load(obj);
-+			if (CHECK_NEWNS(err, "obj_load", "err %d errno %d\n", err, errno))
-+				goto cleanup;
-+
-+			bss_map = bpf_object__find_map_by_name(obj, "test_ns_.bss");
-+			if (CHECK_NEWNS(!bss_map, "find_bss_map", "failed\n"))
-+				goto cleanup;
-+
-+			prog = bpf_object__find_program_by_title(obj, probe_name);
-+			if (CHECK_NEWNS(!prog, "find_prog", "prog '%s' not found\n",
-+						probe_name))
-+				goto cleanup;
-+
-+			memset(&bss, 0, sizeof(bss));
-+			pid_t tid = syscall(SYS_gettid);
-+			pid_t pid = getpid();
-+
-+			id = (__u64) tid << 32 | pid;
-+			bss.user_pid_tgid = id;
-+
-+			if (CHECK_NEWNS(stat("/proc/self/ns/pid", &st),
-+				"stat new ns", "Failed to stat /proc/self/ns/pid errno=%d\n", errno))
-+				goto cleanup;
-+
-+			bss.dev = st.st_dev;
-+			bss.ino = st.st_ino;
-+
-+			err = bpf_map_update_elem(bpf_map__fd(bss_map), &key, &bss, 0);
-+			if (CHECK_NEWNS(err, "setting_bss", "failed to set bss : %d\n", err))
-+				goto cleanup;
-+
-+			link = bpf_program__attach_raw_tracepoint(prog, "sys_enter");
-+			if (CHECK_NEWNS(IS_ERR(link), "attach_raw_tp", "err %ld\n",
-+						PTR_ERR(link))) {
-+				link = NULL;
-+				goto cleanup;
-+			}
-+
-+			/* trigger some syscalls */
-+			usleep(1);
-+
-+			err = bpf_map_lookup_elem(bpf_map__fd(bss_map), &key, &bss);
-+			if (CHECK_NEWNS(err, "set_bss", "failed to get bss : %d\n", err))
-+				goto cleanup;
-+
-+			if (CHECK_NEWNS(id != bss.pid_tgid, "Compare user pid/tgid vs. bpf pid/tgid",
-+						"User pid/tgid %llu BPF pid/tgid %llu\n", id, bss.pid_tgid))
-+				goto cleanup;
-+
-+			exit_code = 0;
-+			printf("%s:PASS\n", argv[0]);
-+cleanup:
-+			if (!link) {
-+				bpf_link__destroy(link);
-+				link = NULL;
-+			}
-+			bpf_object__close(obj);
-+		}
-+	}
-+}
--- 
-2.20.1
+> We have netlink notifications in networking world. The application
+> which doesn't want its program replaced should simply listen to the
+> netlink notifications and act if something goes wrong.
 
+instead of locking the bike let's setup a camera and monitor the bike
+when somebody steals it.
+and then what? chase the thief and bring the bike back?
+
+> > But if we go with notifier approach none of it is an issue.
+> 
+> Sorry, what's the notifier approach? You mean netdev notifier chain 
+> or something new?
+
+that's tbd.
+
+> > Whether target obj is held or notifier is used everything I said before still
+> > stands. "random app" that uses netlink after libdispatcher got its link FD will
+> > not be able to mess with carefully orchestrated setup done by libdispatcher.
+> > 
+> > Also either approach will guarantee that infamous message:
+> > "unregister_netdevice: waiting for %s to become free. Usage count"
+> > users will never see.
+> >
+> > > And what about the case where the link fd is pinned on a bpffs that is
+> > > no longer available? I.e., if a netdevice with an XDP program moves
+> > > namespaces and no longer has access to the original bpffs, that XDP
+> > > program would essentially become immutable?  
+> > 
+> > 'immutable' will not be possible.
+> > I'm not clear to me how bpffs is going to disappear. What do you mean
+> > exactly?
+> > 
+> > > > We didn't come up with these design choices overnight. It came from
+> > > > hard lessons learned while deploying xdp, tc and cgroup in production.
+> > > > Legacy apis will not be deprecated, of course.  
+> 
+> This sounds like a version of devm_* helpers for configuration.
+> Why are current user space APIs insufficient? 
+
+current xdp, tc, cgroup apis don't have the concept of the link
+and owner of that link.
+
+> Surely all of this can 
+> be done from user space.
+
+with a camera for theft monitoring. that will work well.
+
+> And we will need a centralized daemon for XDP
+> dispatch, so why is it not a part of a daemon?
+
+current design of libdispatcher doesn't need the deamon.
