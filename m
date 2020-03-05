@@ -2,44 +2,44 @@ Return-Path: <SRS0=ocPE=4W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9403C3F2D7
-	for <bpf@archiver.kernel.org>; Thu,  5 Mar 2020 01:34:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B800DC3F2D8
+	for <bpf@archiver.kernel.org>; Thu,  5 Mar 2020 01:35:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C20D220866
-	for <bpf@archiver.kernel.org>; Thu,  5 Mar 2020 01:34:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86A06214D8
+	for <bpf@archiver.kernel.org>; Thu,  5 Mar 2020 01:35:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="OmAVEeuR"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ABWVGJZA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726131AbgCEBen (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Mar 2020 20:34:43 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39198 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725975AbgCEBem (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Mar 2020 20:34:42 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0251WFRp014366
-        for <bpf@vger.kernel.org>; Wed, 4 Mar 2020 17:34:41 -0800
+        id S1726101AbgCEBfJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Mar 2020 20:35:09 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:27102 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726090AbgCEBfJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Mar 2020 20:35:09 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0251Y7Lu009321
+        for <bpf@vger.kernel.org>; Wed, 4 Mar 2020 17:35:08 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=rMqHvAVvVCxmhWbyIbItg4rlY6eKi1SaBYJeBRGvhFM=;
- b=OmAVEeuROtkcww2mw65KwGRdCfnvmp5T7kPwS/WIXG9GPWYV/Wd0MlUPHao1FeVWUp+I
- AVKEj0Sc9HPxSUWf0Sw2miVoBlPQLTkrY3uc7CGu41/z/Wde7zqchvldISon0d1gxFsa
- absiOa+SLWYQvMe1l+VNAM2WgbhQ0xtt+DA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 2yjqu5r0dy-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=T+DSF+hfrUFKJ+8RB8qdYBDF6tn6sMbshl/NeaZhpgw=;
+ b=ABWVGJZA+2Oa0WKtHKUHjCtir/EQ3AJIZPHOfuX6N/aXSe+9shI5w/XackjP+gTVVoJw
+ SOsqD10jR+s8u/AVjDTlbUrvQmXrpOwKk+0LucruCXl92VpKu4/RE2JsOAOj8uJE+T0X
+ E0jht5RDdSFcwR8fbe9EagadVKHgAOi8ztI= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2yht6495gr-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 17:34:41 -0800
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 17:35:08 -0800
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 4 Mar 2020 17:34:40 -0800
+ 15.1.1779.2; Wed, 4 Mar 2020 17:35:07 -0800
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id CE79429425EB; Wed,  4 Mar 2020 17:34:37 -0800 (PST)
+        id 5FE4829425EB; Wed,  4 Mar 2020 17:34:54 -0800 (PST)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -49,37 +49,53 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf 0/2] bpf: A few struct_ops fixes
-Date:   Wed, 4 Mar 2020 17:34:37 -0800
-Message-ID: <20200305013437.534961-1-kafai@fb.com>
+Subject: [PATCH bpf 2/2] bpf: Do not allow map_freeze in struct_ops map
+Date:   Wed, 4 Mar 2020 17:34:54 -0800
+Message-ID: <20200305013454.535397-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200305013437.534961-1-kafai@fb.com>
+References: <20200305013437.534961-1-kafai@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-03-04_10:2020-03-04,2020-03-04 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 bulkscore=0
- clxscore=1015 lowpriorityscore=0 impostorscore=0 adultscore=0
- priorityscore=1501 spamscore=0 mlxlogscore=432 malwarescore=0
- suspectscore=13 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2001150001 definitions=main-2003050006
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ bulkscore=0 clxscore=1015 malwarescore=0 phishscore=0 adultscore=0
+ mlxscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=858 spamscore=0
+ suspectscore=13 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003050006
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set addresses a few struct_ops issues.
-Please see individual patch for details.
+struct_ops map cannot support map_freeze.  Otherwise, a struct_ops
+cannot be unregistered from the subsystem.
 
-Martin KaFai Lau (2):
-  bpf: Return better error value in delete_elem for struct_ops map
-  bpf: Do not allow map_freeze in struct_ops map
+Fixes: 85d33df357b6 ("bpf: Introduce BPF_MAP_TYPE_STRUCT_OPS")
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ kernel/bpf/syscall.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- kernel/bpf/bpf_struct_ops.c | 14 +++++++++++---
- kernel/bpf/syscall.c        |  5 +++++
- 2 files changed, 16 insertions(+), 3 deletions(-)
-
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a91ad518c050..0c7fb0d4836d 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1510,6 +1510,11 @@ static int map_freeze(const union bpf_attr *attr)
+ 	if (IS_ERR(map))
+ 		return PTR_ERR(map);
+ 
++	if (map->map_type == BPF_MAP_TYPE_STRUCT_OPS) {
++		fdput(f);
++		return -ENOTSUPP;
++	}
++
+ 	mutex_lock(&map->freeze_mutex);
+ 
+ 	if (map->writecnt) {
 -- 
 2.17.1
 
