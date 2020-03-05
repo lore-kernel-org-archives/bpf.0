@@ -2,121 +2,176 @@ Return-Path: <SRS0=ocPE=4W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B2F8C3F2D7
-	for <bpf@archiver.kernel.org>; Thu,  5 Mar 2020 01:35:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89F81C3F2CE
+	for <bpf@archiver.kernel.org>; Thu,  5 Mar 2020 02:20:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5C8AC20870
-	for <bpf@archiver.kernel.org>; Thu,  5 Mar 2020 01:35:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E4142084E
+	for <bpf@archiver.kernel.org>; Thu,  5 Mar 2020 02:20:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="piDLHCTi"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ymv11zso"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbgCEBfb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Mar 2020 20:35:31 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:20120 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727052AbgCEBf3 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Mar 2020 20:35:29 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0251XegP005310
-        for <bpf@vger.kernel.org>; Wed, 4 Mar 2020 17:35:28 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=/OcLgUDfVCjhMlPip7eEcYSu0MtNsit6nT8dHqk9X9g=;
- b=piDLHCTikVfkBn4gMVpW3bsBllsvDq64JV1lTi+BEcXaZwB1KZQEPnlVorlPlUCJ9dod
- SLU80fAkkR9uzrNc65lV1cl8WwxqL9dfaTi7MfnRzKCWKEKTwtpVIrlQHcCw9wSUsQ3F
- 1s7XelUd7BPNLizXlxqQiAvj1vn9yXUGt/8= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 2yhwxxqufc-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 17:35:28 -0800
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 4 Mar 2020 17:34:54 -0800
-Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 14CB329425EB; Wed,  4 Mar 2020 17:34:47 -0800 (PST)
-Smtp-Origin-Hostprefix: devbig
-From:   Martin KaFai Lau <kafai@fb.com>
-Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf 1/2] bpf: Return better error value in delete_elem for struct_ops map
-Date:   Wed, 4 Mar 2020 17:34:47 -0800
-Message-ID: <20200305013447.535326-1-kafai@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200305013437.534961-1-kafai@fb.com>
-References: <20200305013437.534961-1-kafai@fb.com>
-X-FB-Internal: Safe
+        id S1725903AbgCECUt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Mar 2020 21:20:49 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:52555 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725776AbgCECUs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Mar 2020 21:20:48 -0500
+Received: by mail-pj1-f68.google.com with SMTP id lt1so1799872pjb.2
+        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 18:20:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=o7EoAC0uRM8GPyBvo7DIt0uzNdUVYvkGswKAIdWl07g=;
+        b=Ymv11zsoqj+1jPfTSuqq1+O5QZKNyI1Zpv3lSfH5TkQPlk9VjfVJ75WHgXD3D9eWaZ
+         pALGV+GU0/1woinJclUpH+wq+coH/o67/15kiSpuFGUy0GTYVaE7xSUYZo0M0lGjMlBM
+         ysd1WVAvhITtOUGS5hQB3UnogP+VoFec4vz64=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=o7EoAC0uRM8GPyBvo7DIt0uzNdUVYvkGswKAIdWl07g=;
+        b=UV7Joti2PFluwcXNAAb1oncwkuytNaVsPFWxpn2ragQVFs0gVBfW2WbhQABylZTKIG
+         WmvvnMQPcWOyk375HUe14NU6Wu2Wyoj3n/D+uDpnoNvZ/G0PKibPQjR4drIDhX2hoCix
+         Oewut3UQYJ02S1dGJN6JrmJRI4RBjaI1zcM90mHxtUSmHSqjs1v6eXAw4Rz1TV1prwnF
+         NtZ2HZKxywEm7OAGaNE/I2hkylGjX+nQNncPVY4CF/0pvxmdj8rHHj+XcY2JsHmfSiwF
+         XjG/5/GQ6ZheiVh5FHVDmgVChDIEoEmANP5uktnme5/bWpf9qaLYH0yEL+VdUz8kgxZa
+         ZvVw==
+X-Gm-Message-State: ANhLgQ2YVXECOXJoNAGCoXleycURLBlHgSGQArWlr1j0UbA5Qy2SzVTp
+        KiiA68bXERG7vJ7nJT8JSqw53A==
+X-Google-Smtp-Source: ADFU+vsYvHRJ7Or2bcedq/UlSMlYWHcozxCBOy/f+j+Ny96xn3FvobNbqYF1wBvt1WxXN7QWfnNysA==
+X-Received: by 2002:a17:90a:8a09:: with SMTP id w9mr6257968pjn.0.1583374847828;
+        Wed, 04 Mar 2020 18:20:47 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a9sm4006971pjk.1.2020.03.04.18.20.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2020 18:20:46 -0800 (PST)
+Date:   Wed, 4 Mar 2020 18:20:45 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     shuah@kernel.org, luto@amacapital.net, wad@chromium.org,
+        daniel@iogearbox.net, kafai@fb.com, yhs@fb.com, andriin@fb.com,
+        gregkh@linuxfoundation.org, tglx@linutronix.de,
+        khilman@baylibre.com, mpe@ellerman.id.au,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] selftests: Fix seccomp to support relocatable
+ build (O=objdir)
+Message-ID: <202003041815.B8C73DEC@keescook>
+References: <20200305003627.31900-1-skhan@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-04_10:2020-03-04,2020-03-04 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 clxscore=1015
- malwarescore=0 mlxlogscore=980 impostorscore=0 lowpriorityscore=0
- adultscore=0 phishscore=0 bulkscore=0 spamscore=0 priorityscore=1501
- suspectscore=15 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2003050006
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200305003627.31900-1-skhan@linuxfoundation.org>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The current always succeed behavior in bpf_struct_ops_map_delete_elem()
-is not ideal for userspace tool.  It can be improved to return proper
-error value.
+On Wed, Mar 04, 2020 at 05:36:27PM -0700, Shuah Khan wrote:
+> Fix seccomp relocatable builds. This is a simple fix to use the
+> right lib.mk variable TEST_CUSTOM_PROGS to continue to do custom
+> build to preserve dependency on kselftest_harness.h local header.
+> This change applies cutom rule to seccomp_bpf seccomp_benchmark
+> for a simpler logic. 
+> 
+> Uses $(OUTPUT) defined in lib.mk to handle build relocation.
+> 
+> The following use-cases work with this change:
+> 
+> In seccomp directory:
+> make all and make clean
 
-If it is in TOBEFREE, it means unregistration has been already done
-before but it is in progress and waiting for the subsystem to clear
-the refcnt to zero, so -EINPROGRESS.
+This works.
 
-If it is INIT, it means the struct_ops has not been registered yet,
-so -ENOENT.
+> 
+> From top level from main Makefile:
+> make kselftest-install O=objdir ARCH=arm64 HOSTCC=gcc \
+>  CROSS_COMPILE=aarch64-linux-gnu- TARGETS=seccomp
 
-Fixes: 85d33df357b6 ("bpf: Introduce BPF_MAP_TYPE_STRUCT_OPS")
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
----
- kernel/bpf/bpf_struct_ops.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+This fails for me:
 
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index 042f95534f86..68a89a9f7ccd 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -482,13 +482,21 @@ static int bpf_struct_ops_map_delete_elem(struct bpf_map *map, void *key)
- 	prev_state = cmpxchg(&st_map->kvalue.state,
- 			     BPF_STRUCT_OPS_STATE_INUSE,
- 			     BPF_STRUCT_OPS_STATE_TOBEFREE);
--	if (prev_state == BPF_STRUCT_OPS_STATE_INUSE) {
-+	switch (prev_state) {
-+	case BPF_STRUCT_OPS_STATE_INUSE:
- 		st_map->st_ops->unreg(&st_map->kvalue.data);
- 		if (refcount_dec_and_test(&st_map->kvalue.refcnt))
- 			bpf_map_put(map);
-+		return 0;
-+	case BPF_STRUCT_OPS_STATE_TOBEFREE:
-+		return -EINPROGRESS;
-+	case BPF_STRUCT_OPS_STATE_INIT:
-+		return -ENOENT;
-+	default:
-+		WARN_ON_ONCE(1);
-+		/* Should never happen.  Treat it as not found. */
-+		return -ENOENT;
- 	}
--
--	return 0;
- }
- 
- static void bpf_struct_ops_map_seq_show_elem(struct bpf_map *map, void *key,
+$ make kselftest-install O=objdir ARCH=arm64 HOSTCC=gcc CROSS_COMPILE=aarch64-linux-gnu- TARGETS=seccomp
+make[1]: Entering directory '/home/kees/src/linux/objdir'
+make --no-builtin-rules INSTALL_HDR_PATH=$BUILD/usr \
+        ARCH=arm64 -C ../../.. headers_install
+make[4]: ../scripts/Makefile.build: No such file or directory
+make[4]: *** No rule to make target '../scripts/Makefile.build'.  Stop.
+make[3]: *** [Makefile:501: scripts_basic] Error 2
+make[2]: *** [Makefile:151: khdr] Error 2
+make[1]: *** [/home/kees/src/linux/Makefile:1221: kselftest-install] Error 2
+make[1]: Leaving directory '/home/kees/src/linux/objdir'
+make: *** [Makefile:180: sub-make] Error 2
+
+(My "objdir" is empty)
+
+If I remove O=objdir everything is fine. And see below...
+
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
+>  tools/testing/selftests/seccomp/Makefile | 19 +++++++++----------
+>  1 file changed, 9 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
+> index 1760b3e39730..355bcbc0394a 100644
+> --- a/tools/testing/selftests/seccomp/Makefile
+> +++ b/tools/testing/selftests/seccomp/Makefile
+> @@ -1,17 +1,16 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -all:
+> -
+> -include ../lib.mk
+> +CFLAGS += -Wl,-no-as-needed -Wall
+> +LDFLAGS += -lpthread
+>  
+>  .PHONY: all clean
+>  
+> -BINARIES := seccomp_bpf seccomp_benchmark
+> -CFLAGS += -Wl,-no-as-needed -Wall
+> +include ../lib.mk
+> +
+> +# OUTPUT set by lib.mk
+> +TEST_CUSTOM_PROGS := $(OUTPUT)/seccomp_bpf $(OUTPUT)/seccomp_benchmark
+>  
+> -seccomp_bpf: seccomp_bpf.c ../kselftest_harness.h
+> -	$(CC) $(CFLAGS) $(LDFLAGS) $< -lpthread -o $@
+> +$(TEST_CUSTOM_PROGS): ../kselftest_harness.h
+>  
+> -TEST_PROGS += $(BINARIES)
+> -EXTRA_CLEAN := $(BINARIES)
+> +all: $(TEST_CUSTOM_PROGS)
+>  
+> -all: $(BINARIES)
+> +EXTRA_CLEAN := $(TEST_CUSTOM_PROGS)
+> -- 
+> 2.20.1
+> 
+
+Instead of the TEST_CUSTOM_PROGS+all dance, you can just add an explicit
+dependency, with the final seccomp/Makefile looking like this:
+
+
+# SPDX-License-Identifier: GPL-2.0
+CFLAGS += -Wl,-no-as-needed -Wall
+LDFLAGS += -lpthread
+
+TEST_GEN_PROGS := seccomp_bpf seccomp_benchmark
+
+include ../lib.mk
+
+# Additional dependencies
+$(OUTPUT)/seccomp_bpf: ../kselftest_harness.h
+
+
+(Though this fails in the same way as above when run from the top-level
+directory.)
+
+-Kees
+
 -- 
-2.17.1
-
+Kees Cook
