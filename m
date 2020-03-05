@@ -2,59 +2,63 @@ Return-Path: <SRS0=ocPE=4W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4B51C3F2D1
-	for <bpf@archiver.kernel.org>; Thu,  5 Mar 2020 05:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7489C3F2CD
+	for <bpf@archiver.kernel.org>; Thu,  5 Mar 2020 05:40:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 99A7F2146E
-	for <bpf@archiver.kernel.org>; Thu,  5 Mar 2020 05:02:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94647208C3
+	for <bpf@archiver.kernel.org>; Thu,  5 Mar 2020 05:40:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="BAwLygGc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EZZv6hqD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725990AbgCEFCc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Mar 2020 00:02:32 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:39217 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbgCEFCW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 5 Mar 2020 00:02:22 -0500
-Received: by mail-pg1-f194.google.com with SMTP id s2so2135310pgv.6
-        for <bpf@vger.kernel.org>; Wed, 04 Mar 2020 21:02:22 -0800 (PST)
+        id S1725838AbgCEFko (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Mar 2020 00:40:44 -0500
+Received: from mail-qv1-f68.google.com ([209.85.219.68]:45554 "EHLO
+        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725818AbgCEFko (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 5 Mar 2020 00:40:44 -0500
+Received: by mail-qv1-f68.google.com with SMTP id r8so1911337qvs.12;
+        Wed, 04 Mar 2020 21:40:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs.washington.edu; s=goo201206;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=R4y1bjuDihHx2oTrIgnH3W8hlU6GthTh0USQXogLFnA=;
-        b=BAwLygGc+cbMJxseyd+EFVvY8q7V30mqYzVTTSkxSv6SEDlPP17rNHZjoHl0VR6psd
-         UjgL8sjesWeib2YlBcV2uLrZdJaV/cOZh2X4xhbs5JlKkp6XmFt+N88DnDe106GJX2zp
-         l+MTCHbtbt8onH+AZd0ufLRY/z2vOKBZswpck=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=THBYMEY1yGfalLtbzYiKSYkmAX5Lj+jvZpr5bKLPTp0=;
+        b=EZZv6hqD7ymuE6lbhHNuFocVxoT/8FJaP+Xdqv6NKFkH2BKU/X52VI7p/f0086Cvex
+         A1xR+vIZOTlfJFozjl7vvRT12YHemz/A6ZbTZe9FB5ikmBiBbxI9W/q4qBGKIMHmWz9n
+         tPAQnLeUfE67fU17daLSM8SxDrAaIJBF5vsbTbLMf87QcxItNe9GtxLwZFUBT1Ov/yDQ
+         p4VkR/YCQzHiq7P42dX/faOLX8Rg3fb8D1jgQZ1QWXDM8BrfdVVCRui5QMvSAD9jyQCb
+         xe9VDdDqfkk8qtrS/XaXQajELx7JA1AomSuxIJrZv+L+cYhrzmFyUyP3gmWH5B2Y8mko
+         qbRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=R4y1bjuDihHx2oTrIgnH3W8hlU6GthTh0USQXogLFnA=;
-        b=oFzMvDg8FQXvMo05uAT2IUKdxMhwF1BQjPLvRu7LWvrqDslcFePie/HkduFDpPPbmf
-         3mDkSbWcLB7n2hhA/k5zkGHm1S18d7T64zNcAYfpBDN9zmMxhjjChHxkXlOsQDIMbAh8
-         QiCHqzdUzCx3bhDlLHm+ubrJF6w5zOfYXc1AfKzGF+9tnjV3nhgzXLmautbISW3B0YW5
-         AQBuoJAvojARBURw7c8CeTQPojz9ZXMKlG84ClKiFjgDo4EDhRW+lJIWitV5OjQYWOnL
-         rwMah7aFdsBr5yEQ5o8ZH2iLQh/CXuOWyw0I/2sGCFYx8H8Dbki2nELARzd6+uTI2j06
-         UXow==
-X-Gm-Message-State: ANhLgQ1cmquczyfFjHP6Llc0qaEDtkoXRt4SZUAMKChUFgpoPSyyha5E
-        JfAJz/LcTY8DiNXG0JjlHTo7fw2ctCw/MA==
-X-Google-Smtp-Source: ADFU+vvWx25e9jYZqzCSqaGAkmRaphEj/PgjffJq3MCSsLDQMbV5G1+yLhiRLui6IqbawgQdywROtw==
-X-Received: by 2002:a63:441e:: with SMTP id r30mr5741154pga.51.1583384541389;
-        Wed, 04 Mar 2020 21:02:21 -0800 (PST)
-Received: from ryzen.cs.washington.edu ([2607:4000:200:11:e9fe:faad:3d84:58ea])
-        by smtp.gmail.com with ESMTPSA id y7sm17820466pfq.15.2020.03.04.21.02.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 21:02:20 -0800 (PST)
-From:   Luke Nelson <lukenels@cs.washington.edu>
-X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Luke Nelson <luke.r.nels@gmail.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=THBYMEY1yGfalLtbzYiKSYkmAX5Lj+jvZpr5bKLPTp0=;
+        b=Bqr6jnkWOuh93IqQwI8pmzyIyvbhjMFazHdJLt3U9uAZNGmuouklLQlWG/XQXg8o8X
+         17J76YM5cJy5J3T5cbvdd4ai957f1zEvh4++K6SEgmloplgvPyvHDwQwZRp54U3+Aw1C
+         WFeLR0Cr9DWsE5Y6EEUo4QrvXkrdz40VbuteKk4yDW50CPQ9GEhsKs2KSGyQf9eiN2EM
+         2MuWZJFWLcDT/Ga7BrPhuubxlLaGW8q7Gd8w+FIz3cNFXqtwYEBx5pMinW4mIJCVsX4i
+         XkwSy8Ga6bJ5J+7SYH9Ew+u3AUIEgY4PKu/yMUiw+09/1uJzVjLxDl+KUMrx7jvljeAf
+         U4QA==
+X-Gm-Message-State: ANhLgQ1Eoo6mHb3Vd/iH/tWEJx0gvGDx5lNYxPPz8I6Wxvd+o+BjXL1b
+        CpXixewA8xf7oV11COcp3bNo8P3HcwTdyyH30CM=
+X-Google-Smtp-Source: ADFU+vtfOIyH1BW9riEZRACvPgvUTdUP01Lk72U0ekfmC8baXSmHIuWMubjgSVFDnAmUEs9i1uAgEiXwdE9VRISclzc=
+X-Received: by 2002:ad4:4f87:: with SMTP id em7mr4923418qvb.97.1583386840011;
+ Wed, 04 Mar 2020 21:40:40 -0800 (PST)
+MIME-Version: 1.0
+References: <20200305050207.4159-1-luke.r.nels@gmail.com>
+In-Reply-To: <20200305050207.4159-1-luke.r.nels@gmail.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Date:   Thu, 5 Mar 2020 06:40:28 +0100
+Message-ID: <CAJ+HfNjrUxVqpBgC-WLHbZX7_7Gd-Lk7ghrmASTmaNySuXVUfg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 0/4] eBPF JIT for RV32G
+To:     Luke Nelson <lukenels@cs.washington.edu>
+Cc:     bpf <bpf@vger.kernel.org>, Luke Nelson <luke.r.nels@gmail.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -65,67 +69,31 @@ Cc:     Luke Nelson <luke.r.nels@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Xi Wang <xi.wang@gmail.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Stephen Hemminger <stephen@networkplumber.org>,
         Rob Herring <robh@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH bpf-next v5 3/4] bpf, doc: add BPF JIT for RV32G to BPF documentation
-Date:   Wed,  4 Mar 2020 21:02:06 -0800
-Message-Id: <20200305050207.4159-4-luke.r.nels@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200305050207.4159-1-luke.r.nels@gmail.com>
-References: <20200305050207.4159-1-luke.r.nels@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Update filter.txt and admin-guide to mention the BPF JIT for RV32G.
+On Thu, 5 Mar 2020 at 06:02, Luke Nelson <lukenels@cs.washington.edu> wrote=
+:
+>
+> This series adds an eBPF JIT for 32-bit RISC-V (RV32G) to the kernel,
+> adapted from the RV64 JIT and the 32-bit ARM JIT.
+>
 
-Co-developed-by: Xi Wang <xi.wang@gmail.com>
-Signed-off-by: Xi Wang <xi.wang@gmail.com>
-Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
----
- Documentation/admin-guide/sysctl/net.rst | 3 ++-
- Documentation/networking/filter.txt      | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Nice work! Thanks for hanging in there!
 
-diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/admin-guide/sysctl/net.rst
-index 287b98708a40..e043c9213388 100644
---- a/Documentation/admin-guide/sysctl/net.rst
-+++ b/Documentation/admin-guide/sysctl/net.rst
-@@ -67,7 +67,8 @@ two flavors of JITs, the newer eBPF JIT currently supported on:
-   - sparc64
-   - mips64
-   - s390x
--  - riscv
-+  - riscv64
-+  - riscv32
- 
- And the older cBPF JIT supported on the following archs:
- 
-diff --git a/Documentation/networking/filter.txt b/Documentation/networking/filter.txt
-index c4a328f2d57a..2f0f8b17dade 100644
---- a/Documentation/networking/filter.txt
-+++ b/Documentation/networking/filter.txt
-@@ -606,7 +606,7 @@ before a conversion to the new layout is being done behind the scenes!
- 
- Currently, the classic BPF format is being used for JITing on most
- 32-bit architectures, whereas x86-64, aarch64, s390x, powerpc64,
--sparc64, arm32, riscv (RV64G) perform JIT compilation from eBPF
-+sparc64, arm32, riscv64, riscv32 perform JIT compilation from eBPF
- instruction set.
- 
- Some core changes of the new internal format:
--- 
-2.20.1
-
+For the series,
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com>
+Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com>
