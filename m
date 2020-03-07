@@ -2,175 +2,133 @@ Return-Path: <SRS0=NlDT=4Y=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE4C6C10DCE
-	for <bpf@archiver.kernel.org>; Sat,  7 Mar 2020 00:12:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5DD1C3F2C6
+	for <bpf@archiver.kernel.org>; Sat,  7 Mar 2020 00:17:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9601C206D7
-	for <bpf@archiver.kernel.org>; Sat,  7 Mar 2020 00:12:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A503206D7
+	for <bpf@archiver.kernel.org>; Sat,  7 Mar 2020 00:17:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wiehj06H"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="n0i/0cYb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbgCGAMB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 6 Mar 2020 19:12:01 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:38789 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726245AbgCGAMB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 6 Mar 2020 19:12:01 -0500
-Received: by mail-pg1-f196.google.com with SMTP id x7so1813577pgh.5;
-        Fri, 06 Mar 2020 16:11:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:date:message-id:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=n3RywOP4ff5lmexdYb6TsPS53fayoT+oyuwrnNu93q8=;
-        b=Wiehj06HsmckkYDvaOJVZIwKWPHw/GA8d8eyz+sMK5GCTnt4uXFiaqdA0ZsElul+ST
-         4rFMVJjw/l9Rx8I5nnpPA8D+6nA3HmFTzxn8Vu/PsEs8TgtlZsAnF8nE3mzhARP1tl9m
-         cAegmFppmSBGEcvcug7CGSqlVkU2dao1v7f8vGJ+X3CQodoOQpO0AOIcP/wcShTcP6Hv
-         my5JzAY2FlzHpLmiwZNj1QMcfzmzwdzxP0UtmK/xF8KjsuPYqh8KtlVcnTwxEAlxXOld
-         YeHvYLTGwWv954mp+67hKiJWsK+cbIxbVMmD1EV5vwCnT3NufEbZJ/YFRo7dLBk4oJfY
-         48mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=n3RywOP4ff5lmexdYb6TsPS53fayoT+oyuwrnNu93q8=;
-        b=stImd/9SJrorCKKGqFAo5q39PH0OUO1Tgv118z4aioOw/lJplXq3089wuHtC68k9dj
-         GOV3/9Esqno4NZYifyVJrnPND3s3ruVYdU9V31tRnJjcKNp/ddopW9edfzZrAC6yVkHE
-         YNzk7x6rdIhDsZb9iD25oXjPedY0MD3P1XsSImBRqOOeMGrFaNEIytTDpj/GWxyOERCx
-         ssOrzRfOpoQmhjuHSDRh3CPaotdQloDRG2b7l9iJpH/87BhryqkgjB2BePXHO8Otovq7
-         RMDt9pv8PreYS07rjHbuJagnVSHnESNOO/jCQqyFom+w0uViyeU5IQ4/53jzy61Cn8lY
-         q+Dg==
-X-Gm-Message-State: ANhLgQ2r0/jJlSxQjVrQ+eSCWCx5hhWwg8yocYbB0thDU819g86P7bzc
-        KpNLHLz6EWi7B0HTIbvTQAA=
-X-Google-Smtp-Source: ADFU+vutfgzfnnKVmXOi81wLEi3DvCV4EhegPLRU0z9Ukb8GxLHKLWdDBcainmJBe9s0tPKQ/gC7Sg==
-X-Received: by 2002:aa7:8805:: with SMTP id c5mr6443365pfo.142.1583539919451;
-        Fri, 06 Mar 2020 16:11:59 -0800 (PST)
-Received: from [127.0.1.1] ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id l1sm10591326pjb.15.2020.03.06.16.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2020 16:11:59 -0800 (PST)
-Subject: [RFC PATCH 4/4] bpf: selftests, bpf_get_stack return value add <0
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     yhs@fb.com, alexei.starovoitov@gmail.com, daniel@iogearbox.net
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        john.fastabend@gmail.com
-Date:   Sat, 07 Mar 2020 00:11:46 +0000
-Message-ID: <158353990628.3451.13145705520880946721.stgit@ubuntu3-kvm2>
-In-Reply-To: <158353965971.3451.14666851223845760316.stgit@ubuntu3-kvm2>
-References: <158353965971.3451.14666851223845760316.stgit@ubuntu3-kvm2>
-User-Agent: StGit/0.17.1-dirty
+        id S1726307AbgCGARa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 6 Mar 2020 19:17:30 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:65226 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726314AbgCGAR3 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 6 Mar 2020 19:17:29 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0270EdhX022913
+        for <bpf@vger.kernel.org>; Fri, 6 Mar 2020 16:17:28 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=2Hju96B+BmrqNX7ssIxx9VlnARZah3csAK7Ni9krg30=;
+ b=n0i/0cYb/YgBgGEF2cX402++N+6NLkrx886jft1M3RKcjEJWaooo6Z+K20aDo2dgb645
+ pzaRz/8dy/uETfk5dbUStfbnO0CE0JFpb0LSE5HVbeaiKQ0J+ekQ54ELzHw6z0wjuOQy
+ GUBvMYm7lSR2c0h6nUe4HX5Y0I/qWdpsHeA= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 2yknm8kaqm-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 06 Mar 2020 16:17:28 -0800
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Fri, 6 Mar 2020 16:17:26 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id C55F262E2880; Fri,  6 Mar 2020 16:17:24 -0800 (PST)
+Smtp-Origin-Hostprefix: devbig
+From:   Song Liu <songliubraving@fb.com>
+Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <quentin@isovalent.com>, <kernel-team@fb.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <arnaldo.melo@gmail.com>,
+        <jolsa@kernel.org>, Song Liu <songliubraving@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v5 bpf-next 2/4] bpftool: Documentation for bpftool prog profile
+Date:   Fri, 6 Mar 2020 16:17:11 -0800
+Message-ID: <20200307001713.3559880-3-songliubraving@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200307001713.3559880-1-songliubraving@fb.com>
+References: <20200307001713.3559880-1-songliubraving@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-06_09:2020-03-06,2020-03-06 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ bulkscore=0 phishscore=0 adultscore=0 malwarescore=0 priorityscore=1501
+ spamscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003070000
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With current ALU32 subreg handling and retval refine fix from last
-patches we see an expected failure in test_verifier. With verbose
-verifier state being printed at each step for clarity we have the
-following relavent lines [I omit register states that are not
-necessarily useful to see failure cause],
+Add documentation for the new bpftool prog profile command.
 
-#101/p bpf_get_stack return R0 within range FAIL
-Failed to load prog 'Success'!
-[..]
-14: (85) call bpf_get_stack#67
- R0_w=map_value(id=0,off=0,ks=8,vs=48,imm=0)
- R3_w=inv48
-15:
- R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
-15: (b7) r1 = 0
-16:
- R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
- R1_w=inv0
-16: (bf) r8 = r0
-17:
- R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
- R1_w=inv0
- R8_w=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
-17: (67) r8 <<= 32
-18:
- R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
- R1_w=inv0
- R8_w=inv(id=0,smax_value=9223372032559808512,
-               umax_value=18446744069414584320,
-               var_off=(0x0; 0xffffffff00000000),
-               s32_min_value=0,
-               s32_max_value=0,
-               u32_max_value=0,
-               var32_off=(0x0; 0x0))
-18: (c7) r8 s>>= 32
-19
- R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
- R1_w=inv0
- R8_w=inv(id=0,smin_value=-2147483648,
-               smax_value=2147483647,
-               var32_off=(0x0; 0xffffffff))
-19: (cd) if r1 s< r8 goto pc+16
- R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
- R1_w=inv0
- R8_w=inv(id=0,smin_value=-2147483648,
-               smax_value=0,
-               var32_off=(0x0; 0xffffffff))
-20:
- R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
- R1_w=inv0
- R8_w=inv(id=0,smin_value=-2147483648,
-               smax_value=0,
- R9=inv48
-20: (1f) r9 -= r8
-21: (bf) r2 = r7
-22:
- R2_w=map_value(id=0,off=0,ks=8,vs=48,imm=0)
-22: (0f) r2 += r8
-value -2147483648 makes map_value pointer be out of bounds
-
-After call bpf_get_stack() on line 14 and some moves we have at line 16
-an r8 bound with max_value 48 but an unknown min value. This is to be
-expected bpf_get_stack call can only return a max of the input size but
-is free to return any error in the u64 bit register space.
-
-Lines 17 and 18 clear the top 32 bits with a left/right shift but use
-ARSH so we still have work case min bound before line 19 of -2147483648.
-At this point the signed check 'r1 s< r8' meant to protect the addition
-on line 22 where dst reg is a map_value pointer may very well return
-true with a large negative number. Then the final line 22 will detect
-this as an invalid operatoin and fail the program.
-
-To fix add a signed less than check to ensure r8 is greater than 0 at
-line 19 so the bounds check works as expected.
-
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- .../testing/selftests/bpf/verifier/bpf_get_stack.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../bpftool/Documentation/bpftool-prog.rst    | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/verifier/bpf_get_stack.c b/tools/testing/selftests/bpf/verifier/bpf_get_stack.c
-index f24d50f09dbe..55a7c9a20dff 100644
---- a/tools/testing/selftests/bpf/verifier/bpf_get_stack.c
-+++ b/tools/testing/selftests/bpf/verifier/bpf_get_stack.c
-@@ -7,7 +7,7 @@
- 	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
- 	BPF_LD_MAP_FD(BPF_REG_1, 0),
- 	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 28),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 29),
- 	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
- 	BPF_MOV64_IMM(BPF_REG_9, sizeof(struct test_val)),
- 	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
-@@ -16,6 +16,7 @@
- 	BPF_MOV64_IMM(BPF_REG_4, 256),
- 	BPF_EMIT_CALL(BPF_FUNC_get_stack),
- 	BPF_MOV64_IMM(BPF_REG_1, 0),
-+	BPF_JMP_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, 20),
- 	BPF_MOV64_REG(BPF_REG_8, BPF_REG_0),
- 	BPF_ALU64_IMM(BPF_LSH, BPF_REG_8, 32),
- 	BPF_ALU64_IMM(BPF_ARSH, BPF_REG_8, 32),
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+index 46862e85fed2..9f19404f470e 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -30,6 +30,7 @@ PROG COMMANDS
+ |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
+ |	**bpftool** **prog tracelog**
+ |	**bpftool** **prog run** *PROG* **data_in** *FILE* [**data_out** *FILE* [**data_size_out** *L*]] [**ctx_in** *FILE* [**ctx_out** *FILE* [**ctx_size_out** *M*]]] [**repeat** *N*]
++|	**bpftool** **prog profile** *PROG* [**duration** *DURATION*] *METRICs*
+ |	**bpftool** **prog help**
+ |
+ |	*MAP* := { **id** *MAP_ID* | **pinned** *FILE* }
+@@ -48,6 +49,9 @@ PROG COMMANDS
+ |       *ATTACH_TYPE* := {
+ |		**msg_verdict** | **stream_verdict** | **stream_parser** | **flow_dissector**
+ |	}
++|	*METRIC* := {
++|		**cycles** | **instructions** | **l1d_loads** | **llc_misses**
++|	}
+ 
+ 
+ DESCRIPTION
+@@ -189,6 +193,12 @@ DESCRIPTION
+ 		  not all of them can take the **ctx_in**/**ctx_out**
+ 		  arguments. bpftool does not perform checks on program types.
+ 
++	**bpftool prog profile** *PROG* [**duration** *DURATION*] *METRICs*
++		  Profile *METRICs* for bpf program *PROG* for *DURATION*
++		  seconds or until user hits Ctrl-C. *DURATION* is optional.
++		  If *DURATION* is not specified, the profiling will run up to
++		  UINT_MAX seconds.
++
+ 	**bpftool prog help**
+ 		  Print short help message.
+ 
+@@ -311,6 +321,15 @@ EXAMPLES
+ 
+ **# rm /sys/fs/bpf/xdp1**
+ 
++|
++| **# bpftool prog profile id 337 duration 10 cycles instructions llc_misses**
++
++::
++         51397 run_cnt
++      40176203 cycles                                                 (83.05%)
++      42518139 instructions    #   1.06 insns per cycle               (83.39%)
++           123 llc_misses      #   2.89 LLC misses per million insns  (83.15%)
++
+ SEE ALSO
+ ========
+ 	**bpf**\ (2),
+-- 
+2.17.1
 
