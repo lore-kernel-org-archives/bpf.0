@@ -2,71 +2,71 @@ Return-Path: <SRS0=BaJ4=42=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4A53C18E5A
-	for <bpf@archiver.kernel.org>; Mon,  9 Mar 2020 11:13:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 776B0C10F27
+	for <bpf@archiver.kernel.org>; Mon,  9 Mar 2020 11:13:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B9A7820866
-	for <bpf@archiver.kernel.org>; Mon,  9 Mar 2020 11:13:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4398F2051A
+	for <bpf@archiver.kernel.org>; Mon,  9 Mar 2020 11:13:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="uimwTk5Q"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="GxBeNiBm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbgCILNN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Mar 2020 07:13:13 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:38113 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726521AbgCILNM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 9 Mar 2020 07:13:12 -0400
-Received: by mail-wr1-f66.google.com with SMTP id t11so10532681wrw.5
-        for <bpf@vger.kernel.org>; Mon, 09 Mar 2020 04:13:11 -0700 (PDT)
+        id S1726891AbgCILNZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Mar 2020 07:13:25 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:34244 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726874AbgCILNX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 9 Mar 2020 07:13:23 -0400
+Received: by mail-wr1-f68.google.com with SMTP id z15so10550126wrl.1
+        for <bpf@vger.kernel.org>; Mon, 09 Mar 2020 04:13:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WMyg7pCfXdHMLCKOerV6zy+N1MUm0AZkVXPfqbhW8o0=;
-        b=uimwTk5QPDyKXZilqAMz/htCRgOuuWvkJUXn07r1/thbm7VJkAMFdm//mlax4vhQNy
-         U9433wikxYHD0s5RZMzFksEGq+hvP3PHnjNVP9zpZ5FSMp8VQDR1ixL26ASxWo6InHGA
-         zl+0uh109hyvlGmnw3teDVmRYdl/HAYRTQCPk=
+        bh=QNC/yhj9eA7H5WupK4I1s6LtyzXa8KAaxTwNXTgRG+w=;
+        b=GxBeNiBm2mw9UI6mhddkvq45q7UbHjkdwFsx/G6K5dHtl2OypwWM2kampZowcxoGyO
+         UtKAhLWsBrfT8UnX39SdHN/iLM5lL1ckz3uyjYB99EHXapWIfysp5TlQXwK9HGsz7Vkd
+         xrGTS8hNKVVie+Tbyrlk/8lsFj6lZKn5N5qrU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WMyg7pCfXdHMLCKOerV6zy+N1MUm0AZkVXPfqbhW8o0=;
-        b=EYKELlwUp+5TFPJU0Jx8JZyBS4mldgrbpxmzT9P3XTVSI/WBdToKpBMtUN5eRT3jbU
-         xn7wIDkKH1AG4ysrKx0xK7xVkdJgtDhhWHS3U8gVlsArwdzqx3tsViElCd5LoiDWwJzx
-         ZTqH98YjzvAuywB2OwblxPl53U3D9xCfrofUmbGPMVJ1n4pkPMw9Pe/p4QlLtlRw9poW
-         v2lFlgokpYbms2zzxnGpYlLRsiMT4StXhlxpAw7ovyzgN/BEgezzcnTLswLzEaSXdK/M
-         9DXPn+8NIvdJ5SykEj/HSmSvr4RWYea1FipYiw4FLLn86adcckDVtk7y24XHRN2xPp8F
-         7oVQ==
-X-Gm-Message-State: ANhLgQ0J8dz0V+Pk8krhprb2vJyrVvVK/uPFkH60o5XK7oOEQsZk849i
-        vTCeEu566kw6sqxv+KaEzTfarw==
-X-Google-Smtp-Source: ADFU+vuOokH6uFgKito0/8n00AM/5sTsRGnEBFjhTXEJ1oKGQwzc/Tpb6b4BZ2riU+yVxuPNyeHsoA==
-X-Received: by 2002:a5d:6a8d:: with SMTP id s13mr17553709wru.260.1583752390276;
-        Mon, 09 Mar 2020 04:13:10 -0700 (PDT)
+        bh=QNC/yhj9eA7H5WupK4I1s6LtyzXa8KAaxTwNXTgRG+w=;
+        b=SYmRwQCCttFxWO2loJRC3I+4bdJGQ7Z1d+mMoy+/kyquCJlZwDgK8XEAr0CYY3bKhR
+         vkAouQ99zf++exo4+VnSonPPGFXuRoC2oApZTF6X7MBetnCdbvVNsz/WJWmvqtgLhbI7
+         erKJaALV2blvsQar+Sed3rcZoQx67SU22M3aVpOnxawDp7IQ1VW/4fj5WLuSHdsY34x1
+         Yvk2j5o9Z6n1LjZW1Q0kG+oh/CCunBYp2QXERnwq1mVcKU4xdqWfrdI/6FwAQrKLUyXR
+         5XplEEeY47P/HkN8sgT9Rs5wDFER697boPvbVRRs685lUcC2lUsffpzyYczB01fOHL4D
+         SHHQ==
+X-Gm-Message-State: ANhLgQ3OX/ydrfEy0RQOUAeulZSi7wl7n/6+6jBrh9tag4t0d3iHxF1R
+        JiAl6lxJ1KxEUkSLX6idmYT3zw==
+X-Google-Smtp-Source: ADFU+vvAMeq2nRoM6YsXxONyyZ6j5Q6m9ww8bHHSCZpNHNFCMi/9yJbzsoo4bEpH6kYjYcusvK9+8g==
+X-Received: by 2002:a5d:4206:: with SMTP id n6mr19844910wrq.119.1583752401537;
+        Mon, 09 Mar 2020 04:13:21 -0700 (PDT)
 Received: from localhost.localdomain ([2a06:98c0:1000:8250:3dcc:c1d:7f05:4873])
-        by smtp.gmail.com with ESMTPSA id a5sm25732846wmb.37.2020.03.09.04.13.08
+        by smtp.gmail.com with ESMTPSA id a5sm25732846wmb.37.2020.03.09.04.13.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2020 04:13:09 -0700 (PDT)
+        Mon, 09 Mar 2020 04:13:20 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     John Fastabend <john.fastabend@gmail.com>,
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        John Fastabend <john.fastabend@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         Alexei Starovoitov <ast@kernel.org>
-Cc:     kernel-team@cloudflare.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 01/12] bpf: sockmap: only check ULP for TCP sockets
-Date:   Mon,  9 Mar 2020 11:12:32 +0000
-Message-Id: <20200309111243.6982-2-lmb@cloudflare.com>
+Cc:     kernel-team@cloudflare.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next v4 07/12] bpf: add sockmap hooks for UDP sockets
+Date:   Mon,  9 Mar 2020 11:12:38 +0000
+Message-Id: <20200309111243.6982-8-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200309111243.6982-1-lmb@cloudflare.com>
 References: <20200309111243.6982-1-lmb@cloudflare.com>
@@ -77,112 +77,117 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The sock map code checks that a socket does not have an active upper
-layer protocol before inserting it into the map. This requires casting
-via inet_csk, which isn't valid for UDP sockets.
-
-Guard checks for ULP by checking inet_sk(sk)->is_icsk first.
+Add basic psock hooks for UDP sockets. This allows adding and
+removing sockets, as well as automatic removal on unhash and close.
 
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 Acked-by: John Fastabend <john.fastabend@gmail.com>
 ---
- include/linux/skmsg.h              | 8 +++++++-
- include/net/inet_connection_sock.h | 6 ++++++
- net/core/sock_map.c                | 6 ++----
- net/ipv4/tcp_ulp.c                 | 7 -------
- 4 files changed, 15 insertions(+), 12 deletions(-)
+ MAINTAINERS        |  1 +
+ include/net/udp.h  |  5 +++++
+ net/ipv4/Makefile  |  1 +
+ net/ipv4/udp_bpf.c | 53 ++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 60 insertions(+)
+ create mode 100644 net/ipv4/udp_bpf.c
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index 112765bd146d..4d3d75d63066 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -360,7 +360,13 @@ static inline void sk_psock_restore_proto(struct sock *sk,
- 					  struct sk_psock *psock)
- {
- 	sk->sk_prot->unhash = psock->saved_unhash;
--	tcp_update_ulp(sk, psock->sk_proto, psock->saved_write_space);
-+	if (inet_csk_has_ulp(sk)) {
-+		tcp_update_ulp(sk, psock->sk_proto, psock->saved_write_space);
-+	} else {
-+		sk->sk_write_space = psock->saved_write_space;
-+		/* Pairs with lockless read in sk_clone_lock() */
-+		WRITE_ONCE(sk->sk_prot, psock->sk_proto);
-+	}
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c23884e084be..14554bde1c06 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9370,6 +9370,7 @@ F:	include/linux/skmsg.h
+ F:	net/core/skmsg.c
+ F:	net/core/sock_map.c
+ F:	net/ipv4/tcp_bpf.c
++F:	net/ipv4/udp_bpf.c
+ 
+ LANTIQ / INTEL Ethernet drivers
+ M:	Hauke Mehrtens <hauke@hauke-m.de>
+diff --git a/include/net/udp.h b/include/net/udp.h
+index e55d5f765807..a8fa6c0c6ded 100644
+--- a/include/net/udp.h
++++ b/include/net/udp.h
+@@ -503,4 +503,9 @@ static inline struct sk_buff *udp_rcv_segment(struct sock *sk,
+ 	return segs;
  }
  
- static inline void sk_psock_set_state(struct sk_psock *psock,
-diff --git a/include/net/inet_connection_sock.h b/include/net/inet_connection_sock.h
-index 895546058a20..a3f076befa4f 100644
---- a/include/net/inet_connection_sock.h
-+++ b/include/net/inet_connection_sock.h
-@@ -335,4 +335,10 @@ static inline void inet_csk_inc_pingpong_cnt(struct sock *sk)
- 	if (icsk->icsk_ack.pingpong < U8_MAX)
- 		icsk->icsk_ack.pingpong++;
- }
++#ifdef CONFIG_BPF_STREAM_PARSER
++struct sk_psock;
++struct proto *udp_bpf_get_proto(struct sock *sk, struct sk_psock *psock);
++#endif /* BPF_STREAM_PARSER */
 +
-+static inline bool inet_csk_has_ulp(struct sock *sk)
+ #endif	/* _UDP_H */
+diff --git a/net/ipv4/Makefile b/net/ipv4/Makefile
+index 9d97bace13c8..9e1a186a3671 100644
+--- a/net/ipv4/Makefile
++++ b/net/ipv4/Makefile
+@@ -61,6 +61,7 @@ obj-$(CONFIG_TCP_CONG_LP) += tcp_lp.o
+ obj-$(CONFIG_TCP_CONG_YEAH) += tcp_yeah.o
+ obj-$(CONFIG_TCP_CONG_ILLINOIS) += tcp_illinois.o
+ obj-$(CONFIG_NET_SOCK_MSG) += tcp_bpf.o
++obj-$(CONFIG_BPF_STREAM_PARSER) += udp_bpf.o
+ obj-$(CONFIG_NETLABEL) += cipso_ipv4.o
+ 
+ obj-$(CONFIG_XFRM) += xfrm4_policy.o xfrm4_state.o xfrm4_input.o \
+diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
+new file mode 100644
+index 000000000000..eddd973e6575
+--- /dev/null
++++ b/net/ipv4/udp_bpf.c
+@@ -0,0 +1,53 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Cloudflare Ltd https://cloudflare.com */
++
++#include <linux/skmsg.h>
++#include <net/sock.h>
++#include <net/udp.h>
++
++enum {
++	UDP_BPF_IPV4,
++	UDP_BPF_IPV6,
++	UDP_BPF_NUM_PROTS,
++};
++
++static struct proto *udpv6_prot_saved __read_mostly;
++static DEFINE_SPINLOCK(udpv6_prot_lock);
++static struct proto udp_bpf_prots[UDP_BPF_NUM_PROTS];
++
++static void udp_bpf_rebuild_protos(struct proto *prot, const struct proto *base)
 +{
-+	return inet_sk(sk)->is_icsk && !!inet_csk(sk)->icsk_ulp_ops;
++	*prot        = *base;
++	prot->unhash = sock_map_unhash;
++	prot->close  = sock_map_close;
 +}
 +
- #endif /* _INET_CONNECTION_SOCK_H */
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 2e0f465295c3..cb8f740f7949 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -384,7 +384,6 @@ static int sock_map_update_common(struct bpf_map *map, u32 idx,
- 				  struct sock *sk, u64 flags)
- {
- 	struct bpf_stab *stab = container_of(map, struct bpf_stab, map);
--	struct inet_connection_sock *icsk = inet_csk(sk);
- 	struct sk_psock_link *link;
- 	struct sk_psock *psock;
- 	struct sock *osk;
-@@ -395,7 +394,7 @@ static int sock_map_update_common(struct bpf_map *map, u32 idx,
- 		return -EINVAL;
- 	if (unlikely(idx >= map->max_entries))
- 		return -E2BIG;
--	if (unlikely(rcu_access_pointer(icsk->icsk_ulp_data)))
-+	if (inet_csk_has_ulp(sk))
- 		return -EINVAL;
- 
- 	link = sk_psock_init_link();
-@@ -738,7 +737,6 @@ static int sock_hash_update_common(struct bpf_map *map, void *key,
- 				   struct sock *sk, u64 flags)
- {
- 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
--	struct inet_connection_sock *icsk = inet_csk(sk);
- 	u32 key_size = map->key_size, hash;
- 	struct bpf_htab_elem *elem, *elem_new;
- 	struct bpf_htab_bucket *bucket;
-@@ -749,7 +747,7 @@ static int sock_hash_update_common(struct bpf_map *map, void *key,
- 	WARN_ON_ONCE(!rcu_read_lock_held());
- 	if (unlikely(flags > BPF_EXIST))
- 		return -EINVAL;
--	if (unlikely(icsk->icsk_ulp_data))
-+	if (inet_csk_has_ulp(sk))
- 		return -EINVAL;
- 
- 	link = sk_psock_init_link();
-diff --git a/net/ipv4/tcp_ulp.c b/net/ipv4/tcp_ulp.c
-index 2703f24c5d1a..7c27aa629af1 100644
---- a/net/ipv4/tcp_ulp.c
-+++ b/net/ipv4/tcp_ulp.c
-@@ -105,13 +105,6 @@ void tcp_update_ulp(struct sock *sk, struct proto *proto,
- {
- 	struct inet_connection_sock *icsk = inet_csk(sk);
- 
--	if (!icsk->icsk_ulp_ops) {
--		sk->sk_write_space = write_space;
--		/* Pairs with lockless read in sk_clone_lock() */
--		WRITE_ONCE(sk->sk_prot, proto);
--		return;
--	}
--
- 	if (icsk->icsk_ulp_ops->update)
- 		icsk->icsk_ulp_ops->update(sk, proto, write_space);
- }
++static void udp_bpf_check_v6_needs_rebuild(struct sock *sk, struct proto *ops)
++{
++	if (sk->sk_family == AF_INET6 &&
++	    unlikely(ops != smp_load_acquire(&udpv6_prot_saved))) {
++		spin_lock_bh(&udpv6_prot_lock);
++		if (likely(ops != udpv6_prot_saved)) {
++			udp_bpf_rebuild_protos(&udp_bpf_prots[UDP_BPF_IPV6], ops);
++			smp_store_release(&udpv6_prot_saved, ops);
++		}
++		spin_unlock_bh(&udpv6_prot_lock);
++	}
++}
++
++static int __init udp_bpf_v4_build_proto(void)
++{
++	udp_bpf_rebuild_protos(&udp_bpf_prots[UDP_BPF_IPV4], &udp_prot);
++	return 0;
++}
++core_initcall(udp_bpf_v4_build_proto);
++
++struct proto *udp_bpf_get_proto(struct sock *sk, struct sk_psock *psock)
++{
++	int family = sk->sk_family == AF_INET ? UDP_BPF_IPV4 : UDP_BPF_IPV6;
++
++	if (!psock->sk_proto)
++		udp_bpf_check_v6_needs_rebuild(sk, READ_ONCE(sk->sk_prot));
++
++	return &udp_bpf_prots[family];
++}
 -- 
 2.20.1
 
