@@ -1,115 +1,148 @@
-Return-Path: <SRS0=NlDT=4Y=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=BaJ4=42=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1483EC10F00
-	for <bpf@archiver.kernel.org>; Sat,  7 Mar 2020 19:12:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4141CC10F25
+	for <bpf@archiver.kernel.org>; Mon,  9 Mar 2020 05:40:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C09C92064A
-	for <bpf@archiver.kernel.org>; Sat,  7 Mar 2020 19:12:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E319A20665
+	for <bpf@archiver.kernel.org>; Mon,  9 Mar 2020 05:40:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="lILO1w8M";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="lILO1w8M"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="DO2rLUnY";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="LKMmhw53"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726138AbgCGTMW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 7 Mar 2020 14:12:22 -0500
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:48764 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726116AbgCGTMV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 7 Mar 2020 14:12:21 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D37C58EE0FD;
-        Sat,  7 Mar 2020 11:12:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1583608340;
-        bh=OTExqST3EIQqKYzie7fnIaR9F29Rbki864Xhub7443Q=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=lILO1w8M5X5MwVyf0UEV37EwwviKKsvMyy4/5iphxqtCwYMOHDpAIjCX1N3HBcACW
-         paVYE2nnpzAA6emW6A2rS2m1Ngr4nuk0SD5mL3oP0zYojh+pQUZsbn82C/A2ycnNej
-         EUvA3YXNlXdt1T6udIPdWAR2Rz05afODy1IufW54=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jvVAu3loizWQ; Sat,  7 Mar 2020 11:12:20 -0800 (PST)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id E099B8EE0D7;
-        Sat,  7 Mar 2020 11:12:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1583608340;
-        bh=OTExqST3EIQqKYzie7fnIaR9F29Rbki864Xhub7443Q=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=lILO1w8M5X5MwVyf0UEV37EwwviKKsvMyy4/5iphxqtCwYMOHDpAIjCX1N3HBcACW
-         paVYE2nnpzAA6emW6A2rS2m1Ngr4nuk0SD5mL3oP0zYojh+pQUZsbn82C/A2ycnNej
-         EUvA3YXNlXdt1T6udIPdWAR2Rz05afODy1IufW54=
-Message-ID: <1583608338.20291.28.camel@HansenPartnership.com>
-Subject: Re: [LSFMMBPF TOPIC] LSFMMBPF 2020 COVID-19 status update
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>
-Cc:     Josef Bacik <josef@toxicpanda.com>,
-        lsf-pc <lsf-pc@lists.linuxfoundation.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        Btrfs BTRFS <linux-btrfs@vger.kernel.org>, bpf@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-block@vger.kernel.org
-Date:   Sat, 07 Mar 2020 11:12:18 -0800
-In-Reply-To: <20200307185420.GG2236@42.do-not-panic.com>
-References: <b506a373-c127-b92e-9824-16e8267fc910@toxicpanda.com>
-         <20200306155611.GA167883@mit.edu>
-         <20200307185420.GG2236@42.do-not-panic.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1726027AbgCIFk0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Mar 2020 01:40:26 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:19558 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725796AbgCIFk0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 9 Mar 2020 01:40:26 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0295cPOg018314;
+        Sun, 8 Mar 2020 22:40:13 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=7odBgJEWYHhb23/W06RPMyXn+wvOeMceUwyTJ7WBQRY=;
+ b=DO2rLUnYn1ODXaZLcRQmI6j/QF+O3sMdsXquL5xqySTdvtmK0FXcOa2Jp55kxQDth8GF
+ oyqQH3n/d5z25BGG7I9gitDfQtrMS6HcHkVyc54Yt4Vp5nSehhZDkBrEW+Pm/yjQGejg
+ 4FfjiZAJIPrvwx1aEiO1ikdDxYO65xUBMyc= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 2yme3vcu7y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Sun, 08 Mar 2020 22:40:13 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Sun, 8 Mar 2020 22:40:11 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dWjDD2ushLagPi5t1PTrIFJ0tFpYY4PFKKTjL+6tTG2TlfaWcYmOXGWXDYg5rLNEj+Ym3+nlW6p2i+x29IWm3/FUuPQ8PB4lTeFWlfMv+YS7qWwlX5xg+ZILX72kJd+ruQ+zrMXrSZw9EK0Eq1zd0HWgqtlCIIbzrHQlWdiVmTt2AwZ8Y8GC+6hJYEIgwqH4z595OMMSz0k6FeyjqrrT6E9gZAy6HqSordQwipFg8tXZvDq6ZUJpuuRBmsjhwS1gtWbZiry2kINBb1EJu6cKS68XE52jsq3EPyzVdRiQdIoTUMy2yjsEvcxmZKKCxhmvM2dNMDkSXue6lium222hXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7odBgJEWYHhb23/W06RPMyXn+wvOeMceUwyTJ7WBQRY=;
+ b=W0AC3VIbvsu9xUatrC4mKIlwOG+cy1T+VnuO4yT1qxUekkH5ooqtqXA4/UoTMIllqUriD48W50yyOA9EtV2jPJiux0eGQ9aw9sgTyb9DYMXV4egnWNjRT7CKBhpltJJZEasZ0SVnqBV6StYNtIBJplpCr30gmkLhvmaClP+KnB8smiiIC5d0C1djqPSRwTPPNdy9dGXWxVYFhl6pIzP/JwXdQy8WhQ48d1AkgthM+Wb7Oiee2/0JSWl4atRZur5CemNV3asHu35vOs/g1Pvw2o46hJNVdWwQgJRS+zi1Eu5I81XLmIqVDAYhLHuURAO/7Li7ksJD9XqOTH82e+YI6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7odBgJEWYHhb23/W06RPMyXn+wvOeMceUwyTJ7WBQRY=;
+ b=LKMmhw53CwUn6p0UUMe7UNkpsJ1PmEu0mfCa4uuFv+lA5QRTyrNA6ed2ZL2QTLypeB1GDLukI1+CQGoGzRJSkCxWKNoKVTbCmdWsAT2pVeNyuzTy/BSUsM5TWwnKqHaz8zHAjpEhQqYCihEzFsSvH73vy8qoyeisFjfa119MI70=
+Received: from DM6PR15MB3001.namprd15.prod.outlook.com (2603:10b6:5:13c::16)
+ by DM6PR15MB3799.namprd15.prod.outlook.com (2603:10b6:5:2b0::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2793.17; Mon, 9 Mar
+ 2020 05:39:56 +0000
+Received: from DM6PR15MB3001.namprd15.prod.outlook.com
+ ([fe80::294e:884:76fd:743c]) by DM6PR15MB3001.namprd15.prod.outlook.com
+ ([fe80::294e:884:76fd:743c%4]) with mapi id 15.20.2793.013; Mon, 9 Mar 2020
+ 05:39:56 +0000
+Subject: Re: [RFC PATCH 2/4] bpf: verifier, do explicit u32 bounds tracking
+To:     John Fastabend <john.fastabend@gmail.com>,
+        <alexei.starovoitov@gmail.com>, <daniel@iogearbox.net>
+CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+References: <158353965971.3451.14666851223845760316.stgit@ubuntu3-kvm2>
+ <158353986285.3451.6986018098665897886.stgit@ubuntu3-kvm2>
+ <5e62e95b61bdf_5f672ade5903a5b83c@john-XPS-13-9370.notmuch>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <a756c2f3-daaf-be08-48c8-6b92c24c48c9@fb.com>
+Date:   Sun, 8 Mar 2020 22:39:52 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
+ Gecko/20100101 Thunderbird/68.5.0
+In-Reply-To: <5e62e95b61bdf_5f672ade5903a5b83c@john-XPS-13-9370.notmuch>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MWHPR2201CA0055.namprd22.prod.outlook.com
+ (2603:10b6:301:16::29) To DM6PR15MB3001.namprd15.prod.outlook.com
+ (2603:10b6:5:13c::16)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from MacBook-Pro-52.local (2620:10d:c090:400::5:23) by MWHPR2201CA0055.namprd22.prod.outlook.com (2603:10b6:301:16::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2793.17 via Frontend Transport; Mon, 9 Mar 2020 05:39:54 +0000
+X-Originating-IP: [2620:10d:c090:400::5:23]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 30ee1f78-b49b-4e96-0d65-08d7c3ec4c3f
+X-MS-TrafficTypeDiagnostic: DM6PR15MB3799:
+X-Microsoft-Antispam-PRVS: <DM6PR15MB3799008A96CE405891D9219CD3FE0@DM6PR15MB3799.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Forefront-PRVS: 0337AFFE9A
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10019020)(366004)(396003)(39850400004)(136003)(346002)(376002)(199004)(189003)(6512007)(6486002)(4326008)(2906002)(52116002)(53546011)(6506007)(2616005)(16526019)(316002)(66476007)(66946007)(31686004)(66556008)(5660300002)(478600001)(81156014)(36756003)(81166006)(8676002)(31696002)(86362001)(8936002)(186003);DIR:OUT;SFP:1102;SCL:1;SRVR:DM6PR15MB3799;H:DM6PR15MB3001.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+Received-SPF: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HJWSIkc6hMH7aIFHo4NWykLhsfZk6jtWrcJr8artVZUdMXvTNlCm7BRFNEz6cGLJpw+6OdUFwrO2TNTYHM9ZmhnSvHwRaobB6QfOCb6Yx9cW9r+Gdfmuf1dyMpQOZcumMRLlMuaS+jNBWUyswnU32IpjO0PN6zPDPsVfX3XBqLIfgvfXD6TibrHXeRm2t7zzrWhxVlbO1OOLLhTPc0mX2wRnsVDOFNY1g0eaFMFmzh6Wrx4BnJ0TJVQEcTOsvAP88sQVAl+XOWUeUiXQGDfRN3R9Zm5T4Q6PaMywM3hlhBmg1imuaxFiyQmYJ0ENyIlSefDNbiAS7qjxe1UxryfIrb3fFfZUvEi7FllpPWKe/woiG9glp1+djOxr1xUtozScMAa0Fg11yhsykl597VvSwqGXPj5UYE1e/6BGu5qXoCrZH+aQNPP8UEKEfrHegOzn
+X-MS-Exchange-AntiSpam-MessageData: ByxrvEQplcxfQYRmQJ7h63qWixmrddpVzZKhMDuX4/UCkIB3RaYI3Uj70bYmcRJX2RP73GvIsyg6J++oGeoMql7NzO33dSZcpEG3Q+5SQf24RPlirYMUVhN1xcu9kTNMoaZ38QHTGZ/2a09IH2reD1EtJ90Ozu3/t1pCbj7AWEk=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30ee1f78-b49b-4e96-0d65-08d7c3ec4c3f
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2020 05:39:56.5107
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jZ+vmYoYfM8M9trwdIHG9w2SvYeapPAc3Oo0TISU4T3gZU5/dq2pjacwag3D+3w0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB3799
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-09_01:2020-03-06,2020-03-09 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ malwarescore=0 impostorscore=0 phishscore=0 mlxlogscore=999 suspectscore=0
+ priorityscore=1501 mlxscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003090041
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, 2020-03-07 at 18:54 +0000, Luis Chamberlain wrote:
-> On Fri, Mar 06, 2020 at 10:56:11AM -0500, Theodore Y. Ts'o wrote:
-> > Should we have LSF/MM/BPF in 2020 and COVID-19?
-[...]
-> If we have to learn from efforts required to continue on with the in
-> light of the risks, we can look at what SCALE 18 is doing, taking
-> place right now in Pasadena [1], their page lists a list of proactive
-> measures required on their part to help alleviate fears and just good
-> best practices at this point in time.
 
-I agree Scale18x is the poster child for following WHO advice to the
-letter, but there are crucial differences:
 
-   1. Scale18x has a lot of local attendees, so the conference can go
-      ahead somewhat easily with local content and local attendees.  We
-      have no-one for LSF/MM/BPF in Palm Springs.
-   2. Scale18x did have some issues with non-local content because of
-      corporate travel bans.  The whole of LSF/MM/BPF is non-local content
-      and would thus be significantly disrupted.
+On 3/6/20 4:22 PM, John Fastabend wrote:
+> John Fastabend wrote:
+>> It is not possible for the current verifier to track u32 alu ops and jmps
+>> correctly. This can result in the verifier aborting with errors even though
+>> the program should be verifiable. Cilium code base has hit this but worked
+>> around it by changing int variables to u64 variables and marking a few
+>> things volatile. It would be better to avoid these tricks.
+> 
+> Quick bit of clarification, originally I tried to just track u32 hence
+> the title and above u32 reference. After runnning some programs I realized
+> this wasn't really enough to handle all cases so I added the signed 32-bit
+> bounds tracker. If I missed some spots in the descriptions that was just
+> because I missed it in the proof reading here. u32 above should be 32-bit
+> subreg.
+> 
+> I also forgot to give Yonhong credit. Sorry Yonghong! The original alu ops
+> tracking patch came from him.
 
-The big problem with 2. is that a lot of corporate policies at the
-moment are unconsidered blanket bans.  Even corporations who do
-consider better might still be stricter than the WHO advice.  So my
-company, IBM, is saying events >1000 cancel and events <1000 use your
-own discretion provided they're promising to obey all the health
-guidelines.  If I'd been presenting at Scale18x I'd have had to cancel,
-even though under our guidelines I can still go to LSF/MM/BPF
-
-> The landscape seems positive, if we want, to move forward in Palm
-> Springs then.
-
-For a counter example, just look at the LF Member summit which was due
-to happen just after Scale18x:
-
-https://events.linuxfoundation.org/lf-member-summit/
-
-and that's a smaller event than Scale18x.  Remember too that the LF
-runs LSF/MM so if they decide to cancel, there's not much the
-organizing committee can do about it.
-
-James
-
+John, thanks for working on this! Hopefully this will resolve tricky 
+32bit subreg tracking issues. I will look at the RFC in the next couple 
+of days!
