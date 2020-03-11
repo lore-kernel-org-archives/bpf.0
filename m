@@ -2,93 +2,108 @@ Return-Path: <SRS0=y2jO=44=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45CD6C0044D
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 22:19:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6C09C0044D
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 22:24:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 316FB2074D
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 22:19:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9288620575
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 22:24:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="c5inGZEn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mjViEJFG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729848AbgCKWTV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Mar 2020 18:19:21 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10148 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729991AbgCKWTV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 11 Mar 2020 18:19:21 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 02BMJD3g005871
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 15:19:19 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=voGMUPiM6dI/NAH5P1Z0ewWY24B56X13JJDunnFmec0=;
- b=c5inGZEnJbuVQz/B9p5EQDxhGjawWxoCbWNHD2wRVhQ1eSS2FmuKaLNu/FgdjmPcoyul
- LZn8KBzgdSqMj6M8ULkXh+YnLDme03yhO4uu1EXoQ05x51mtfl4SKbLkDJccu9HtLOj0
- Cm526YqzOFPtaUlob1Fg7ns13/2eE+bROKc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 2ypkv9dhup-15
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 15:19:19 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 11 Mar 2020 15:18:50 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id C206E62E2936; Wed, 11 Mar 2020 15:18:46 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Song Liu <songliubraving@fb.com>
-Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <john.fastabend@gmail.com>, <quentin@isovalent.com>,
-        <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <arnaldo.melo@gmail.com>, <jolsa@kernel.org>,
-        Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 0/3] Fixes for bpftool-prog-profile
-Date:   Wed, 11 Mar 2020 15:18:41 -0700
-Message-ID: <20200311221844.3089820-1-songliubraving@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
+        id S1729739AbgCKWYW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Mar 2020 18:24:22 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:36037 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729506AbgCKWYV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 11 Mar 2020 18:24:21 -0400
+Received: by mail-qt1-f196.google.com with SMTP id m33so2879522qtb.3;
+        Wed, 11 Mar 2020 15:24:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bX2IVROdPZk+Lpen2b1LMA6hCikzQ/+KSNMeEM/lemU=;
+        b=mjViEJFGfgqzw2ET4ZjoC3GUK5vU9lPehFAEPTK4bGaxgWcYn1kBeUtXxH7ShTFbKa
+         VQHUM+KScwjH3T6mTdI3UvSz/FKpsxxCiiHHigMKGGt0gJcfrwkrzE1/6Q25PWDuKYNd
+         xNBHiy93uLjZvcUWMK6Fz6hIjYYnBigsChgl9OY5WA0O8QySgeGFu3cYgWOE62r89RlN
+         8vgMMnBa6XGqjThoByFGyX/n8mgHAWSRY9OefKgRn0DAY2VQWCiGVwwewdD7yhj4BRTN
+         hl2uUSNdo95XucRp4xtnLdoh41YueUt5hXeSZ7tnoKNq5C4OOB8J/aHJ+6R+/kByD8hy
+         SpZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bX2IVROdPZk+Lpen2b1LMA6hCikzQ/+KSNMeEM/lemU=;
+        b=n8xRDoOZ8XSCz/DrzS/AQjaMUO6tGr6kg7LhtZhpULCT1ZAS7WxJe9F+evuVfj1g+B
+         Cepu1Hzhivifuq7ErmrVbnCGpJDmzMpi+VBZW8b+novwvvcwdWrPThW2B6I2uUEw1Z9x
+         IqMvqm8+HcvVSyPm06ktT5GbUWNOmVjTwFKnPNPcjw42kLQzaLSUV563TqfkeezBplt4
+         kwsZdYdeDvfeXzLh7YQRqr7H5Uix1yxfWlDRJlxhpbyAZ/kpVcqfQQZppWL7b/dG0bCs
+         qGvEA5pqa4mslYEzlirr0RASpN9KNvNJMhYlW/049oLPirDnykXWK1U7xY4DhxQD4A6A
+         RFfQ==
+X-Gm-Message-State: ANhLgQ0ZH8151TNULlyGnilhhC17KMTzfUiNlg0PC6/CWDw6RuViInhR
+        8AKrmpb9+JxI31pWqum0KvuqzQdhO+m/RkCOTzU=
+X-Google-Smtp-Source: ADFU+vu3ISkN7+C3jkjPbaNNxvSE8GVRyX8L0IJ7Q7VkYTDfRiHcYaWwCcFw/lFdwzaYf7UFy/YQ+5uIylxnNslAs04=
+X-Received: by 2002:ac8:1865:: with SMTP id n34mr4488618qtk.93.1583965460396;
+ Wed, 11 Mar 2020 15:24:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-11_11:2020-03-11,2020-03-11 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- priorityscore=1501 malwarescore=0 bulkscore=0 suspectscore=0 mlxscore=0
- adultscore=0 clxscore=1015 phishscore=0 spamscore=0 mlxlogscore=754
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2003110125
-X-FB-Internal: deliver
+References: <20200311191513.3954203-1-andriin@fb.com> <20200311204106.GA2125642@mini-arch.hsd1.ca.comcast.net>
+ <CAEf4BzZpL83aAhDWTyNoXtJp5W8S4Q_=+2_0UNeY=eb14hS8aQ@mail.gmail.com> <20200311221424.GB2125642@mini-arch.hsd1.ca.comcast.net>
+In-Reply-To: <20200311221424.GB2125642@mini-arch.hsd1.ca.comcast.net>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 11 Mar 2020 15:24:09 -0700
+Message-ID: <CAEf4BzbniQyBw2W=SR9gVh+7KHb9p6f6=45GUDBUXoP=59kxLw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: make tcp_rtt test more robust to failures
+To:     Stanislav Fomichev <sdf@fomichev.me>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Stanislav Fomichev <sdf@google.com>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-1. Fix build for older clang;
-2. Fix skeleton's dependency on libbpf;
-3. Add files to .gitignore.
+On Wed, Mar 11, 2020 at 3:14 PM Stanislav Fomichev <sdf@fomichev.me> wrote:
+>
+> On 03/11, Andrii Nakryiko wrote:
+> > On Wed, Mar 11, 2020 at 1:41 PM Stanislav Fomichev <sdf@fomichev.me> wrote:
+> > >
+> > > On 03/11, Andrii Nakryiko wrote:
+> > > [..]
+> > > > +     pthread_join(tid, &server_res);
+> > > > +     CHECK_FAIL(IS_ERR(server_res));
+> > >
+> > > I wonder if we add (move) close(server_fd) before pthread_join(), can we
+> > > fix this issue without using non-blocking socket? The accept() should
+> > > return as soon as server_fd is closed so it's essentially your
+> > > 'server_done'.
+> >
+> > That was my first attempt. Amazingly, closing listening socket FD
+> > doesn't unblock accept()...
+> Ugh :-(
+>
+> In this case, feel free to slap:
+> Reviewed-by: Stanislav Fomichev <sdf@google.com>
+>
+> My only other (minor) suggestion was to add a small delay in the first
+> loop:
+>
+>         while (!server_done) {
+>                 accept()
+>                 if (!err) {
+>                         udelay(50) <--
+>                         continue
+>                 }
+>         }
+>
+> But I suppose that shouldn't be that big of a deal..
 
-Changes v1 => v2:
-1. Rewrite patch 1 with real feature detection (Quentin, Alexei).
-2. Add files to .gitignore (Andrii).
-
-Song Liu (3):
-  bpftool: only build bpftool-prog-profile if supported by clang
-  bpftool: skeleton should depend on libbpf
-  bpftool: add _bpftool and profiler.skel.h to .gitignore
-
- tools/bpf/bpftool/.gitignore                    |  2 ++
- tools/bpf/bpftool/Makefile                      | 17 ++++++++++++-----
- tools/bpf/bpftool/prog.c                        |  2 ++
- tools/build/feature/Makefile                    |  9 ++++++++-
- tools/build/feature/test-clang-bpf-global-var.c |  4 ++++
- 5 files changed, 28 insertions(+), 6 deletions(-)
- create mode 100644 tools/build/feature/test-clang-bpf-global-var.c
-
---
-2.17.1
+It's actually bad, I'll fix it. Not sure how I missed that one... Thanks!
