@@ -7,98 +7,153 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4396C2BAEE
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 18:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA148C0044D
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 19:15:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 76CCD206BE
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 18:54:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D0A0520578
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 19:15:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="iv/VNX7y"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="biYf21h7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730967AbgCKSx7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Mar 2020 14:53:59 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:31402 "EHLO
+        id S1731279AbgCKTPV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Mar 2020 15:15:21 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:31540 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730927AbgCKSx6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 11 Mar 2020 14:53:58 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02BIheYO001529
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 11:53:57 -0700
+        by vger.kernel.org with ESMTP id S1731030AbgCKTPU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 11 Mar 2020 15:15:20 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02BJAakP030683
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 12:15:19 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : mime-version : content-type; s=facebook;
- bh=agaD1L6x13VFkiieNxYQs4HHP2Frm3fHVTIhAYCNKC8=;
- b=iv/VNX7yc7oEp5rE1tStjfyKA1LtPr0AiBZYcKZ1Dnroh8S9SANpQuRPfKJ9MVn+dLp5
- k3CvoxNxaycFRKXju6AT6Bax07hh4xV7I92yuh0HvVzG9fTqMMZ71Cd9/C9b6wDAz/qZ
- NJj7kzGbTd0bAAxXTLJhSdaBSQketpt5cSE= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 2yp7t2rkdy-3
+ bh=32dYBsbl45icJAcX80thj3Nctm0A1BOQtbVtD6yyyCw=;
+ b=biYf21h7Ul5H4mY8JHeIXdu9hXlLKU/zGzbd0//bgZKT/mcOpNMgFk+LDwBsdMIcxBCY
+ Ej6tmnkdJX0hsvrc2s3YfpSIsjeJnniLzItAJ/XjOA2V242LSvA9OV7QTQYlmNarCPiE
+ h0QlS1Og5twoQbymEwxU+UBxz9WgfRmwx8M= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2ypn9g4bg7-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 11:53:57 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 12:15:19 -0700
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 11 Mar 2020 11:53:55 -0700
+ 15.1.1847.3; Wed, 11 Mar 2020 12:15:18 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 1C66E2EC2DD2; Wed, 11 Mar 2020 11:53:46 -0700 (PDT)
+        id 9E6D82EC2EE5; Wed, 11 Mar 2020 12:15:16 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
+        <daniel@iogearbox.net>, <sdf@google.com>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>, Julia Kartseva <hex@fb.com>
+        Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next] selftests/bpf: guarantee that useep() calls nanosleep() syscall
-Date:   Wed, 11 Mar 2020 11:53:45 -0700
-Message-ID: <20200311185345.3874602-1-andriin@fb.com>
+Subject: [PATCH bpf-next] selftests/bpf: make tcp_rtt test more robust to failures
+Date:   Wed, 11 Mar 2020 12:15:13 -0700
+Message-ID: <20200311191513.3954203-1-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-03-11_09:2020-03-11,2020-03-11 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- malwarescore=0 mlxscore=0 adultscore=0 clxscore=1015 suspectscore=8
- impostorscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2003110106
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 clxscore=1015
+ bulkscore=0 phishscore=0 adultscore=0 suspectscore=8 spamscore=0
+ lowpriorityscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2001150001 definitions=main-2003110107
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some implementations of C runtime library won't call nanosleep() syscall from
-usleep(). But a bunch of kprobe/tracepoint selftests rely on nanosleep being
-called to trigger them. To make this more reliable, "override" usleep
-implementation and call nanosleep explicitly.
+Switch to non-blocking accept and wait for server thread to exit before
+proceeding. I noticed that sometimes tcp_rtt server thread failure would
+"spill over" into other tests (that would run after tcp_rtt), probably just
+because server thread exits much later and tcp_rtt doesn't wait for it.
 
-Cc: Julia Kartseva <hex@fb.com>
+Fixes: 8a03222f508b ("selftests/bpf: test_progs: fix client/server race in tcp_rtt")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/test_progs.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../selftests/bpf/prog_tests/tcp_rtt.c        | 30 +++++++++++--------
+ 1 file changed, 18 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index a969c77e9456..2b0bc1171c9c 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -29,6 +29,15 @@ struct prog_test_def {
- 	int old_error_cnt;
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_rtt.c b/tools/testing/selftests/bpf/prog_tests/tcp_rtt.c
+index f4cd60d6fba2..d235eea0de27 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tcp_rtt.c
++++ b/tools/testing/selftests/bpf/prog_tests/tcp_rtt.c
+@@ -188,7 +188,7 @@ static int start_server(void)
+ 	};
+ 	int fd;
  
-+/* Override C runtime library's usleep() implementation to ensure nanosleep()
-+ * is always called. Usleep is frequently used in selftests as a way to
-+ * trigger kprobe and tracepoints.
-+ */
-+int usleep(useconds_t usec)
-+{
-+	return syscall(__NR_nanosleep, usec * 1000UL);
-+}
-+
- static bool should_run(struct test_selector *sel, int num, const char *name)
+-	fd = socket(AF_INET, SOCK_STREAM, 0);
++	fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+ 	if (fd < 0) {
+ 		log_err("Failed to create server socket");
+ 		return -1;
+@@ -205,6 +205,7 @@ static int start_server(void)
+ 
+ static pthread_mutex_t server_started_mtx = PTHREAD_MUTEX_INITIALIZER;
+ static pthread_cond_t server_started = PTHREAD_COND_INITIALIZER;
++static volatile bool server_done = false;
+ 
+ static void *server_thread(void *arg)
  {
- 	int i;
+@@ -222,23 +223,22 @@ static void *server_thread(void *arg)
+ 
+ 	if (CHECK_FAIL(err < 0)) {
+ 		perror("Failed to listed on socket");
+-		return NULL;
++		return ERR_PTR(err);
+ 	}
+ 
+-	client_fd = accept(fd, (struct sockaddr *)&addr, &len);
++	while (!server_done) {
++		client_fd = accept(fd, (struct sockaddr *)&addr, &len);
++		if (client_fd == -1 && errno == EAGAIN)
++			continue;
++		break;
++	}
+ 	if (CHECK_FAIL(client_fd < 0)) {
+ 		perror("Failed to accept client");
+-		return NULL;
++		return ERR_PTR(err);
+ 	}
+ 
+-	/* Wait for the next connection (that never arrives)
+-	 * to keep this thread alive to prevent calling
+-	 * close() on client_fd.
+-	 */
+-	if (CHECK_FAIL(accept(fd, (struct sockaddr *)&addr, &len) >= 0)) {
+-		perror("Unexpected success in second accept");
+-		return NULL;
+-	}
++	while (!server_done)
++		usleep(50);
+ 
+ 	close(client_fd);
+ 
+@@ -249,6 +249,7 @@ void test_tcp_rtt(void)
+ {
+ 	int server_fd, cgroup_fd;
+ 	pthread_t tid;
++	void *server_res;
+ 
+ 	cgroup_fd = test__join_cgroup("/tcp_rtt");
+ 	if (CHECK_FAIL(cgroup_fd < 0))
+@@ -267,6 +268,11 @@ void test_tcp_rtt(void)
+ 	pthread_mutex_unlock(&server_started_mtx);
+ 
+ 	CHECK_FAIL(run_test(cgroup_fd, server_fd));
++
++	server_done = true;
++	pthread_join(tid, &server_res);
++	CHECK_FAIL(IS_ERR(server_res));
++
+ close_server_fd:
+ 	close(server_fd);
+ close_cgroup_fd:
 -- 
 2.17.1
 
