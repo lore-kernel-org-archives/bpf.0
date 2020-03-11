@@ -2,139 +2,101 @@ Return-Path: <SRS0=y2jO=44=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02E53C10F25
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 03:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5EF8C3F2D0
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 04:30:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CDA1C20674
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 03:27:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C2DC2146E
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 04:30:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b="TrxEz737";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CsgbMFq0"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="XtiT4P3j"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728039AbgCKD0y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Mar 2020 23:26:54 -0400
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:52289 "EHLO
-        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727648AbgCKD0x (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 10 Mar 2020 23:26:53 -0400
-X-Greylist: delayed 471 seconds by postgrey-1.27 at vger.kernel.org; Tue, 10 Mar 2020 23:26:53 EDT
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailnew.west.internal (Postfix) with ESMTP id C6EC46BE;
-        Tue, 10 Mar 2020 23:19:00 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 10 Mar 2020 23:19:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=n7m72Tx+CWEa02zHghdkj9AV/pW
-        oZotPpODUQGq39GM=; b=TrxEz737tfc4toeTcWR6JE6dB+EN4l1X7zs9bym9ZW3
-        6HcmOb6wtTuWJRtDKH8N6LWA6iVwY6S1lvkdLnp8DJRFN4yE/LlCXVS9Czh7M+Zr
-        WJCwXjQnSM0NuK4fmv4wjXJYZ5a1U26aBPHKl+MIGlHh53Yyu5o8CxEzNtsDlo+s
-        nsnb7nw0sNQV95CBjm9uwt8DsHoBsYCeqZxZyWHFoz/ydz6oZLvV9tSmY4OElaO2
-        scjr9g8LRd+CpR292Oj1p5qHrpchE9KxnZbA+hkNMxsVrsilWRZkAMdX4xAtBGqO
-        6SZ3rgaoNt8BRmB32jYRExf+5bMu9Fq/5F2aiWtpsBA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=n7m72T
-        x+CWEa02zHghdkj9AV/pWoZotPpODUQGq39GM=; b=CsgbMFq0GBoJbAzszr8IH5
-        /25ZkX1Z3ZP6p9bO86zYssPEZCBQ6NPhk1yj1WI5YSEKe+IxdVnObvWw7xCM1rJg
-        cysDqa8PwmcLR1au8LKZxNDpkzEQ3iGz730i59Fu9CaOrwrzN72erFKw+NN312B3
-        6S1JGk6LnGQXuPqKwnOkgrJ52tK8x5dbsgBo+5Sq5upCD5fvBKPHaArzO3ng1+db
-        pdiDJ/TomXx3EA03ZXpoiZXESNmKpqOt7Ss9MZz5bNr67FtX0Yq1Sv50KZrVvyHv
-        1OExx+A0fZkSrVLoF13nKioeCyvsfBRmiWH8+RtdpqWtuF4Vv7WwGLZwDc7Jwy2A
-        ==
-X-ME-Sender: <xms:o1hoXiE9F8d63W5FJwaI-hRTaAe0E3KcYFl4fj5Bb0eJ5jyLm_putg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedruddvuddgheekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepvfgrkhgr
-    shhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhird
-    hjpheqnecukfhppedugedrfedrjeegrdduieeknecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthh
-    hirdhjph
-X-ME-Proxy: <xmx:o1hoXpyvpK075-EuV3DK9-cOJwJdQNqwHsLwAtPjM8IeJlo0jnvfzA>
-    <xmx:o1hoXk8k5N5gJTt-jqWBtt8oEPd9rAMHIUfdRsIvW7jMV9nE7x8Hrw>
-    <xmx:o1hoXrVjRku8AwyWmYO0iMwZ51L9dICuSIv63yN3yZQSPxOSyWBYxg>
-    <xmx:pFhoXrIdJdSGK1Dh7-0w7wkFolMYiM2ibdevR8DbGPFC5QjW7P7na5qWUJU>
-Received: from workstation (ae074168.dynamic.ppp.asahi-net.or.jp [14.3.74.168])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 7370B328005A;
-        Tue, 10 Mar 2020 23:18:56 -0400 (EDT)
-Date:   Wed, 11 Mar 2020 12:18:54 +0900
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     Jules Irenge <jbi.octave@gmail.com>
-Cc:     boqun.feng@gmail.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Clemens Ladisch <clemens@ladisch.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Allison Randal <allison@lohutok.net>,
-        "moderated list:FIREWIRE AUDIO DRIVERS and IEC 61883-1/6 PACKET..." 
-        <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH 8/8] ALSA: firewire-tascam: Add missing annotation for
- tscm_hwdep_read_locked()
-Message-ID: <20200311031853.GA8197@workstation>
-Mail-Followup-To: Jules Irenge <jbi.octave@gmail.com>, boqun.feng@gmail.com,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Clemens Ladisch <clemens@ladisch.de>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Allison Randal <allison@lohutok.net>,
-        "moderated list:FIREWIRE AUDIO DRIVERS and IEC 61883-1/6 PACKET..." <alsa-devel@alsa-project.org>
-References: <0/8>
- <20200311010908.42366-1-jbi.octave@gmail.com>
- <20200311010908.42366-9-jbi.octave@gmail.com>
+        id S1725834AbgCKEaQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Mar 2020 00:30:16 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:12823 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725958AbgCKEaP (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 11 Mar 2020 00:30:15 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02B4Qwbq016844
+        for <bpf@vger.kernel.org>; Tue, 10 Mar 2020 21:30:14 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=fyk35ybbUTbck/D89Ebng22+US4V3HKC8iBhknLnk/M=;
+ b=XtiT4P3j88vfS1JEx5+nEOMT4FuKBQeKw6rgxnXVBckcPZB+v5RfNuRv+klzkRidZ4g7
+ +GVhFsw4FfipyxKufYHG0cholt/IHL4wSQhr4gNaB+Ja0uN4UqL9FcsTjwfUYu3pqSkp
+ x7sM0w/XeHWhPUJw9osjUXlVyf28na+X5Bo= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2ypn9g0rhp-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 10 Mar 2020 21:30:14 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Tue, 10 Mar 2020 21:30:13 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id D9C472EC1A61; Tue, 10 Mar 2020 21:30:11 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next] tools/runqslower: add BPF_F_CURRENT_CPU for running selftest on older kernels
+Date:   Tue, 10 Mar 2020 21:30:10 -0700
+Message-ID: <20200311043010.530620-1-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200311010908.42366-9-jbi.octave@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-10_17:2020-03-10,2020-03-10 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 clxscore=1015
+ bulkscore=0 phishscore=0 adultscore=0 suspectscore=0 spamscore=0
+ lowpriorityscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2001150001 definitions=main-2003110027
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+Libbpf compiles and runs subset of selftests on each PR in its Github mirror
+repository. To allow still building up-to-date selftests against outdated
+kernel images, add back BPF_F_CURRENT_CPU definitions back.
 
-On Wed, Mar 11, 2020 at 01:09:08AM +0000, Jules Irenge wrote:
-> Sparse reports a warning at tscm_hwdep_read_locked()
-> 
-> warning: context imbalance in tscm_hwdep_read_locked() - unexpected unlock
-> 
-> The root cause is the missing annotation at tscm_hwdep_read_locked()
-> Add the missing __releases(&tscm->lock) annotation
-> 
-> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
-> ---
->  sound/firewire/tascam/tascam-hwdep.c | 1 +
->  1 file changed, 1 insertion(+)
+N.B. BCC's runqslower version ([0]) doesn't need BPF_F_CURRENT_CPU due to use of
+locally checked in vmlinux.h, generated against kernel with 1aae4bdd7879 ("bpf:
+Switch BPF UAPI #define constants used from BPF program side to enums")
+applied.
 
-Thanks for your care of the warning. Although I have found it, I had
-no idea to suppress it.
+  [0] https://github.com/iovisor/bcc/pull/2809
 
-Acked-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Fixes: 367d82f17eff (" tools/runqslower: Drop copy/pasted BPF_F_CURRENT_CPU definiton")
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/bpf/runqslower/runqslower.bpf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> diff --git a/sound/firewire/tascam/tascam-hwdep.c b/sound/firewire/tascam/tascam-hwdep.c
-> index 9801e33e7f2a..6f38335fe10b 100644
-> --- a/sound/firewire/tascam/tascam-hwdep.c
-> +++ b/sound/firewire/tascam/tascam-hwdep.c
-> @@ -17,6 +17,7 @@
->  
->  static long tscm_hwdep_read_locked(struct snd_tscm *tscm, char __user *buf,
->  				   long count, loff_t *offset)
-> +	__releases(&tscm->lock)
->  {
->  	struct snd_firewire_event_lock_status event = {
->  		.type = SNDRV_FIREWIRE_EVENT_LOCK_STATUS,
-> -- 
-> 2.24.1
-> 
+diff --git a/tools/bpf/runqslower/runqslower.bpf.c b/tools/bpf/runqslower/runqslower.bpf.c
+index 0ba501305bad..1f18a409f044 100644
+--- a/tools/bpf/runqslower/runqslower.bpf.c
++++ b/tools/bpf/runqslower/runqslower.bpf.c
+@@ -5,6 +5,7 @@
+ #include "runqslower.h"
+ 
+ #define TASK_RUNNING 0
++#define BPF_F_CURRENT_CPU 0xffffffffULL
+ 
+ const volatile __u64 min_us = 0;
+ const volatile pid_t targ_pid = 0;
+-- 
+2.17.1
+
