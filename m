@@ -5,69 +5,72 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45DC4C3F2C6
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 01:09:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 380FAC10DCE
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 01:09:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 08E8F2253D
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 01:09:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F3EB421927
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 01:09:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qvULlz99"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rXZlxFI9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727876AbgCKBJf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Mar 2020 21:09:35 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:51036 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727958AbgCKBJf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Mar 2020 21:09:35 -0400
-Received: by mail-wm1-f67.google.com with SMTP id a5so298749wmb.0;
-        Tue, 10 Mar 2020 18:09:32 -0700 (PDT)
+        id S1727942AbgCKBJq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Mar 2020 21:09:46 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:45182 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726463AbgCKBJq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Mar 2020 21:09:46 -0400
+Received: by mail-wr1-f65.google.com with SMTP id m9so396106wro.12;
+        Tue, 10 Mar 2020 18:09:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vVRR4OgupYaiYbHKhmSicBHQ95FN9+SKT9CQzo7pJnM=;
-        b=qvULlz99rWRiLqex5Lnn1QU1NhB/rQU7Wu8/SvYwZHZSifBTXvmU8WAGQIj8+/k9mT
-         aOVd9vPoRvUPnFcecDzQZJE/MygViKIMPSuwXoeS/2yWxorCxdJ46MTFNPSZTs1uI7QI
-         w9FvmdwQHbfNUuGOToq0xasCIJPmi6NZSf3ctusJjmrxW+GR938JEwGd5F0JFzDPivOO
-         szaaDIuuKlTSOVORMmp5nEd/i6JMrX/UdDYo/lAEO7Nyl/St7iCJdbRVgsBFcaQhCd/r
-         4SpKYdnrvHW9Qb3RxC9tj92GCqz2Q8MuSJ6BWtEmTsTRSfNyT9COuXCLgLD+Fawc7mun
-         n6wg==
+        bh=00GSpkojnx3B4GB0fFMAKFnU+tANLaiUGZgbkObBjO4=;
+        b=rXZlxFI9JSzCtp81Ib7ST1kaLR/Xl1OrJ2z46XZY4sBTtm3lREyA9akpIS9lcjwiML
+         VYoYR8hLGI5Z+wOOBt7p7W2aTJ/5M/pBoYe0rKUn5gWv3HYP1PSqQSypbszvwaNvmdCz
+         kjTqHgsAfKVBgXFea9cHKcd2aURr8Atn5b94jRSfR4IeSgt6yHXxFVCPCcZVmw1K9fz9
+         6PLIlVupVklKgjKMLnCPRmPcB5j/UPiF1BKPcq66GPMWM3UkRkJzNucYPExpORpw+xwM
+         miIaPGjeP93ijikHj9Hs7ilF5w2j99rKV3ps+Lp+KmYG9JJjxyFyOcYRjXFKw24fYfoH
+         XE3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vVRR4OgupYaiYbHKhmSicBHQ95FN9+SKT9CQzo7pJnM=;
-        b=UMmhJvxprM8hWggW5kjm/b3a+mfr9iQ0Nq0O41qahfl/oRAzROigefpOQosq1FWMsG
-         FiMjwgKIWRV0BvcDBmcRNADVhAEF97eo4ATzx+XAdz+GzHRptRfh2hzwiP+dn/mp1555
-         C/PqIduFrpmSrhNONQ/vCjeyMi/PY7tQqb5RQ2TJ9I458bdLpaTMYGLYIvWGg9TzBcwY
-         haD269S+Lw8Zjr2ktgbuT2XfrGft35NlMa0s+Gtpy6jmObdur3vVAjeRqksc4WLpTe6r
-         8DK9kuKORxc1V1ByxASNdZuoth/drsa62PDK99mHC04evH1zL7s5KcwInGLn5ZrIMqGp
-         B64w==
-X-Gm-Message-State: ANhLgQ3sbGhpFtwMXoG+sihjrdXkODJ0TDEOojpc5ZZmUAfqGZmcsCyN
-        zY4/PjbuuJWBycxVlpYCi+6IAIt0sLsZ
-X-Google-Smtp-Source: ADFU+vtXpCSp5JFuiBAC9PWH1R2+yQ8jDwpK5A9aOUQnqqdqMGMCmmBBcK5PstShOSvBnZVXdm1TtQ==
-X-Received: by 2002:a7b:c4cc:: with SMTP id g12mr379000wmk.104.1583888971399;
-        Tue, 10 Mar 2020 18:09:31 -0700 (PDT)
+        bh=00GSpkojnx3B4GB0fFMAKFnU+tANLaiUGZgbkObBjO4=;
+        b=TkSe/WYdYPHl/TTg5BL+7F0Hk4FXh1Qr3ledJqM6WLLzBVmZ0NKmcY76nn89i9Hr41
+         zcQLa8OhTqvQ/beZ68PBwX9w0Ju8fkjnNHkC9kTUrv5qCxLXSKYSRlOFBKvCNVHBrf+9
+         k1/OyzqKXhdrCuplFYFilONjKNPwSc0hGxNeuhHyyRaiunohjlwGoMgRJtjDVaukovbL
+         s4dcq06CyqRavYfb9cUvStnMF37xhv57nJWfbSVbzz28ynzDTEkOW7L74Ip62Gf113Z2
+         6sMi6bQmKUv1KQmsxgmld5hlT46BMmPJEPoK9vOUckZ7gdIOV8vFRcmkgreVFZ6Dj4G1
+         XGDA==
+X-Gm-Message-State: ANhLgQ0AMnJ+XXiy6KvgREU1Q06Er8XdrUYST4wGKqa5/OkKM7ox6LnC
+        p1AEF7OAW74tvZ8EC5ghSA==
+X-Google-Smtp-Source: ADFU+vuPZB+qEvJlgMjAKNaONJg23VSoTdeJapUHrDxw8mfccmCzR4CYmGDU2ygM1wMZnnyCmheYRQ==
+X-Received: by 2002:a5d:6902:: with SMTP id t2mr720116wru.135.1583888983726;
+        Tue, 10 Mar 2020 18:09:43 -0700 (PDT)
 Received: from ninjahost.lan (host-2-102-15-144.as13285.net. [2.102.15.144])
-        by smtp.googlemail.com with ESMTPSA id i6sm36658097wra.42.2020.03.10.18.09.30
+        by smtp.googlemail.com with ESMTPSA id i6sm36658097wra.42.2020.03.10.18.09.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 18:09:31 -0700 (PDT)
+        Tue, 10 Mar 2020 18:09:43 -0700 (PDT)
 From:   Jules Irenge <jbi.octave@gmail.com>
 To:     boqun.feng@gmail.com
 Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netfilter-devel@vger.kernel.org (open list:NETFILTER),
-        coreteam@netfilter.org (open list:NETFILTER)
-Subject: [PATCH 5/8] netfilter: conntrack: Add missing annotations for nf_conntrack_all_lock() and nf_conntrack_all_unlock()
-Date:   Wed, 11 Mar 2020 01:09:05 +0000
-Message-Id: <20200311010908.42366-6-jbi.octave@gmail.com>
+        netdev@vger.kernel.org, Clemens Ladisch <clemens@ladisch.de>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        alsa-devel@alsa-project.org (moderated list:FIREWIRE AUDIO DRIVERS and
+        IEC 61883-1/6 PACKET...)
+Subject: [PATCH 8/8] ALSA: firewire-tascam: Add missing annotation for tscm_hwdep_read_locked()
+Date:   Wed, 11 Mar 2020 01:09:08 +0000
+Message-Id: <20200311010908.42366-9-jbi.octave@gmail.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200311010908.42366-1-jbi.octave@gmail.com>
 References: <0/8>
@@ -79,42 +82,30 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sparse reports warnings at nf_conntrack_all_lock()
-	and nf_conntrack_all_unlock()
+Sparse reports a warning at tscm_hwdep_read_locked()
 
-warning: context imbalance in nf_conntrack_all_lock()
-	- wrong count at exit
-warning: context imbalance in nf_conntrack_all_unlock()
-	- unexpected unlock
+warning: context imbalance in tscm_hwdep_read_locked() - unexpected unlock
 
-Add the missing __acquires(&nf_conntrack_locks_all_lock)
-Add missing __releases(&nf_conntrack_locks_all_lock)
+The root cause is the missing annotation at tscm_hwdep_read_locked()
+Add the missing __releases(&tscm->lock) annotation
 
 Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
 ---
- net/netfilter/nf_conntrack_core.c | 2 ++
- 1 file changed, 2 insertions(+)
+ sound/firewire/tascam/tascam-hwdep.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
-index d1305423640f..a0bc122d5df1 100644
---- a/net/netfilter/nf_conntrack_core.c
-+++ b/net/netfilter/nf_conntrack_core.c
-@@ -143,6 +143,7 @@ static bool nf_conntrack_double_lock(struct net *net, unsigned int h1,
- }
+diff --git a/sound/firewire/tascam/tascam-hwdep.c b/sound/firewire/tascam/tascam-hwdep.c
+index 9801e33e7f2a..6f38335fe10b 100644
+--- a/sound/firewire/tascam/tascam-hwdep.c
++++ b/sound/firewire/tascam/tascam-hwdep.c
+@@ -17,6 +17,7 @@
  
- static void nf_conntrack_all_lock(void)
-+	__acquires(&nf_conntrack_locks_all_lock)
+ static long tscm_hwdep_read_locked(struct snd_tscm *tscm, char __user *buf,
+ 				   long count, loff_t *offset)
++	__releases(&tscm->lock)
  {
- 	int i;
- 
-@@ -162,6 +163,7 @@ static void nf_conntrack_all_lock(void)
- }
- 
- static void nf_conntrack_all_unlock(void)
-+	__releases(&nf_conntrack_locks_all_lock)
- {
- 	/* All prior stores must be complete before we clear
- 	 * 'nf_conntrack_locks_all'. Otherwise nf_conntrack_lock()
+ 	struct snd_firewire_event_lock_status event = {
+ 		.type = SNDRV_FIREWIRE_EVENT_LOCK_STATUS,
 -- 
 2.24.1
 
