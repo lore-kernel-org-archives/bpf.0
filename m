@@ -2,170 +2,165 @@ Return-Path: <SRS0=y2jO=44=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D661C4CEC2
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 15:22:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FC66C0044D
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 17:25:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D82D220739
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 15:22:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DAD5920736
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 17:25:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vcRq3Ync"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="f4NPjv9K"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729650AbgCKPWL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Mar 2020 11:22:11 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:43941 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729408AbgCKPWK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 11 Mar 2020 11:22:10 -0400
-Received: by mail-qt1-f195.google.com with SMTP id l13so1812144qtv.10;
-        Wed, 11 Mar 2020 08:22:08 -0700 (PDT)
+        id S1730468AbgCKRZL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Mar 2020 13:25:11 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:41557 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730364AbgCKRZL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 11 Mar 2020 13:25:11 -0400
+Received: by mail-ot1-f66.google.com with SMTP id s15so2852148otq.8
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 10:25:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=cloudflare.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+XuEC6YpsVyHyILAIOZV81/k0zuEtXi/W/9shV+FDZY=;
-        b=vcRq3YncvaNTTHaCYdaeDDF6B21k5AKx6Wpud88znCXg9psVExItvQwg03Stw0APZ9
-         e5ZrYywvWM1N91b7Nb8oULMndqhBMBNTBAqFYFGg4OYJXa6ykFuKsvfnF7tTwgBjrsAO
-         RUTnsNuuGCfJtj9Oco376etvq6vhCcPtaX5q11CJWX3g6AfkWO5i355ub5Ty9S5bolIm
-         mjpQzus9eurc6HIqJxmNHmAKnje2muhP7w7KG61+FJv3YZG+vZZNp/VfJojc1p1Ls9wv
-         KEwHq3WfJINq2QCn/OgYl28QzbBAYee6zF2kYSNTHOaaqIB6wf02d7oKdztbX2ka8lOu
-         lPWQ==
+        bh=A72FMDEMFI/PWSo7NEjukyYc/xIp+ZKKEp1Vw5reguA=;
+        b=f4NPjv9Kh5RQg8A2ZphMM8k4y/Wqzy++zz4Smc4ns7kb4mTZY5b0MquVoo0oaexG8m
+         KrG4IP7LWnuJLt4DT5ftocqv4S8NUxnJs1n6VKk/nJFqtEd9LZkJ3dRhryovuziWOfjC
+         J1fsmPTGQdVTY4YnZS9hRrCrVnSql9Ru/Y1sw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+XuEC6YpsVyHyILAIOZV81/k0zuEtXi/W/9shV+FDZY=;
-        b=F9G3GSdpVLE3NtAuEqmtxFXEvaYGk7D9OwmsBWj6jXuWatSrBeD5aRiobTw9OrouwM
-         d6eIiYuygkp0Rq6e9J50NBgJyy9C6M8Er48AtEsjZlJnu5T9X0eeFoZkzl+MhFPMxFc9
-         EAn+d4+EbBomvdKPtWYxVWE9ZY0J5hUE/N3Q3Nh0AGgu4hkKU0y/y8nlqXkEoMxG19MF
-         08V9JC2XrHguyqycjSDdRME+ZtHtLzmMmBj1066184GFV7eaNTjr1xiUTWQJnfc+BxFX
-         RK4CKyoVPyzEXAdHiTrhv+gXxzPsvLzIZ10RQWvkSsbgdVPYrrb4G0m1EYFw7DF2r6S7
-         +lIA==
-X-Gm-Message-State: ANhLgQ2hLtOxc7XfKUGlxItge19mSAS49bTxY4mpDIqzvAlqQQYV4KXo
-        z32ZJV0Q+z+OjQNecajpSBUBskEQbtlynsZ49w0=
-X-Google-Smtp-Source: ADFU+vu5PjyZshowGTeFR0/IH2JAKGr6iZLxo5cTaZMf7pWDqBLv3ZhuaDcIVYbDW3g9u1AJFaLwc6ChU1vH8VZTzqk=
-X-Received: by 2002:ac8:1865:: with SMTP id n34mr2982890qtk.93.1583940127817;
- Wed, 11 Mar 2020 08:22:07 -0700 (PDT)
+        bh=A72FMDEMFI/PWSo7NEjukyYc/xIp+ZKKEp1Vw5reguA=;
+        b=dkr39M3x2y+NE2Ew2sbfDLgArtH0U5NGFhUSe7eyJUKT+/cUW9/1lm7wKJq4YU21OS
+         jb1iRgUKb1HBEoN6YqoWxQlq042MB7dSrfCFJ/pFTyWZEPvreTdB+q44Gz7bwg3HHUWL
+         s+hvDAYDv7djVcvKCpcj2y6m1Y3fdLzK9yNImZqAt666WZWlQwIT6gKkLvLaOXG5n78C
+         mAbtJTFFPpoZauxURMTeoaK37sOj4VYAzT6QMWIj3RKBKhdrO+r6Q05rBcbib6bN4EFE
+         tprUyc/HoLmBgrevhf1KwehzLIAejTf5mPu9ydaPYBnRHX6XLgl3OQ5yBMmZB7hRcZYs
+         C0oA==
+X-Gm-Message-State: ANhLgQ0abJF83c88U7j8it1Dg2fK19NARQJgigpPKoDSiroMs98aLZt3
+        NuhkRxu7YeGcZ41tO1JwaHj7Ddv5awqvZDwXNG1K1sxM
+X-Google-Smtp-Source: ADFU+vtnHEnOBiDu3qXi9GBfF3N93KhAg6bGngtzbVZAuuxAr+3h2KDdAnDf5Jg5otnqUiCg3Co0ZRiZ+uCff88sbto=
+X-Received: by 2002:a05:6820:128:: with SMTP id i8mr1024041ood.45.1583947510588;
+ Wed, 11 Mar 2020 10:25:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200309231051.1270337-1-andriin@fb.com> <7467529c-b712-5314-ebbe-13f73ac01bdb@iogearbox.net>
-In-Reply-To: <7467529c-b712-5314-ebbe-13f73ac01bdb@iogearbox.net>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 11 Mar 2020 08:21:56 -0700
-Message-ID: <CAEf4BzaKF17LeV8jaFJ74vS4v4vJ3ri1Pv_d48Umvr3bXN+vew@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: add bpf_link_new_file that doesn't install FD
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Kernel Team <kernel-team@fb.com>
+References: <20200310174711.7490-1-lmb@cloudflare.com> <20200310174711.7490-6-lmb@cloudflare.com>
+ <87wo7rxal4.fsf@cloudflare.com>
+In-Reply-To: <87wo7rxal4.fsf@cloudflare.com>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Wed, 11 Mar 2020 17:24:59 +0000
+Message-ID: <CACAyw9_DC5ewgLX=Qrvmbs3i3YvtuLBFbe1Hr6SJtbE+L1P2eQ@mail.gmail.com>
+Subject: Re: [PATCH 5/5] bpf: sockmap, sockhash: test looking up fds
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        kernel-team <kernel-team@cloudflare.com>,
+        linux-kselftest@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 11, 2020 at 6:22 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+On Wed, 11 Mar 2020 at 13:52, Jakub Sitnicki <jakub@cloudflare.com> wrote:
 >
-> On 3/10/20 12:10 AM, Andrii Nakryiko wrote:
-> > Add bpf_link_new_file() API for cases when we need to ensure anon_inode is
-> > successfully created before we proceed with expensive BPF program attachment
-> > procedure, which will require equally (if not more so) expensive and
-> > potentially failing compensation detachment procedure just because anon_inode
-> > creation failed. This API allows to simplify code by ensuring first that
-> > anon_inode is created and after BPF program is attached proceed with
-> > fd_install() that can't fail.
+> On Tue, Mar 10, 2020 at 06:47 PM CET, Lorenz Bauer wrote:
+> > Make sure that looking up an element from the map succeeds,
+> > and that the fd is valid by using it an fcntl call.
 > >
-> > After anon_inode file is created, link can't be just kfree()'d anymore,
-> > because its destruction will be performed by deferred file_operations->release
-> > call. For this, bpf_link API required specifying two separate operations:
-> > release() and dealloc(), former performing detachment only, while the latter
-> > frees memory used by bpf_link itself. dealloc() needs to be specified, because
-> > struct bpf_link is frequently embedded into link type-specific container
-> > struct (e.g., struct bpf_raw_tp_link), so bpf_link itself doesn't know how to
-> > properly free the memory. In case when anon_inode file was successfully
-> > created, but subsequent BPF attachment failed, bpf_link needs to be marked as
-> > "defunct", so that file's release() callback will perform only memory
-> > deallocation, but no detachment.
+> > Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> > ---
+> >  .../selftests/bpf/prog_tests/sockmap_listen.c | 26 ++++++++++++++-----
+> >  1 file changed, 20 insertions(+), 6 deletions(-)
 > >
-> > Convert raw tracepoint and tracing attachment to new API and eliminate
-> > detachment from error handling path.
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> > index 52aa468bdccd..929e1e77ecc6 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> > @@ -453,7 +453,7 @@ static void test_lookup_after_delete(int family, int sotype, int mapfd)
+> >       xclose(s);
+> >  }
 > >
-> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
->
-> Applied, but ...
->
-> [...]
-> > @@ -2337,20 +2374,24 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog)
+> > -static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
+> > +static void test_lookup_fd(int family, int sotype, int mapfd)
+> >  {
+> >       u32 key, value32;
+> >       int err, s;
+> > @@ -466,7 +466,7 @@ static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
+> >                              sizeof(value32), 1, 0);
+> >       if (mapfd < 0) {
+> >               FAIL_ERRNO("map_create");
+> > -             goto close;
+> > +             goto close_sock;
 > >       }
-> >       bpf_link_init(&link->link, &bpf_tracing_link_lops, prog);
 > >
-> > -     err = bpf_trampoline_link_prog(prog);
-> > -     if (err)
-> > -             goto out_free_link;
-> > +     link_file = bpf_link_new_file(&link->link, &link_fd);
-> > +     if (IS_ERR(link_file)) {
-> > +             kfree(link);
-> > +             err = PTR_ERR(link_file);
-> > +             goto out_put_prog;
+> >       key = 0;
+> > @@ -475,11 +475,25 @@ static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
+> >
+> >       errno = 0;
+> >       err = bpf_map_lookup_elem(mapfd, &key, &value32);
+> > -     if (!err || errno != ENOSPC)
+> > -             FAIL_ERRNO("map_lookup: expected ENOSPC");
+> > +     if (err) {
+> > +             FAIL_ERRNO("map_lookup");
+> > +             goto close_map;
 > > +     }
 > >
-> > -     link_fd = bpf_link_new_fd(&link->link);
-> > -     if (link_fd < 0) {
-> > -             WARN_ON_ONCE(bpf_trampoline_unlink_prog(prog));
-> > -             err = link_fd;
-> > -             goto out_free_link;
-> > +     err = bpf_trampoline_link_prog(prog);
-> > +     if (err) {
-> > +             bpf_link_defunct(&link->link);
-> > +             fput(link_file);
-> > +             put_unused_fd(link_fd);
->
-> Given the tear-down in error case requires 3 manual steps here, I think this begs
-> for a small helper.
-
-Sounds good, will follow up. Thanks for applying!
-
->
-> > +             goto out_put_prog;
-> >       }
+> > +     if ((int)value32 == s) {
+> > +             FAIL("return value is identical");
+> > +             goto close;
+> > +     }
 > > +
-> > +     fd_install(link_fd, link_file);
-> >       return link_fd;
-> >
-> [...]
-> > @@ -2431,28 +2481,32 @@ static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
-> >               goto out_put_prog;
-> >       }
-> >
-> [...]
-> >
-> > -     link_fd = bpf_link_new_fd(&raw_tp->link);
-> > -     if (link_fd < 0) {
-> > -             bpf_probe_unregister(raw_tp->btp, prog);
-> > -             err = link_fd;
-> > -             goto out_free_tp;
-> > +     err = bpf_probe_register(link->btp, prog);
-> > +     if (err) {
-> > +             bpf_link_defunct(&link->link);
-> > +             fput(link_file);
-> > +             put_unused_fd(link_fd);
+> > +     err = fcntl(value32, F_GETFD);
+> > +     if (err == -1)
+> > +             FAIL_ERRNO("fcntl");
 >
-> Especially since you need it in multiple places; please follow-up.
+> I would call getsockopt()/getsockname() to assert that the FD lookup
+> succeeded.  We want to know not only that it's an FD (-EBADFD case), but
+> also that it's associated with a socket (-ENOTSOCK).
 >
-> > +             goto out_put_btp;
-> >       }
+> We can go even further, and compare socket cookies to ensure we got an
+> FD for the expected socket.
+
+Good idea, thanks!
+
+> Also, I'm wondering if we could keep the -ENOSPC case test-covered by
+> temporarily dropping NET_ADMIN capability.
+
+You mean EPERM? ENOSPC isn't reachable, since the map can only be created
+with a map_value of 4 or 8.
+
+>
 > > +
-> > +     fd_install(link_fd, link_file);
-> >       return link_fd;
+> > +close:
+> > +     xclose(value32);
+> > +close_map:
+> >       xclose(mapfd);
+> > -close:
+> > +close_sock:
+> >       xclose(s);
+> >  }
 > >
-> > -out_free_tp:
-> > -     kfree(raw_tp);
-> >   out_put_btp:
-> >       bpf_put_raw_tracepoint(btp);
-> >   out_put_prog:
-> >
->
+> > @@ -1456,7 +1470,7 @@ static void test_ops(struct test_sockmap_listen *skel, struct bpf_map *map,
+> >               /* lookup */
+> >               TEST(test_lookup_after_insert),
+> >               TEST(test_lookup_after_delete),
+> > -             TEST(test_lookup_32_bit_value),
+> > +             TEST(test_lookup_fd),
+> >               /* update */
+> >               TEST(test_update_existing),
+> >               /* races with insert/delete */
+
+
+
+-- 
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+
+www.cloudflare.com
