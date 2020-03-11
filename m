@@ -2,107 +2,101 @@ Return-Path: <SRS0=y2jO=44=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3974EC10DCE
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 01:10:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1435BC18E5B
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 01:14:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F048C21927
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 01:10:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CAD3E22522
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 01:14:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jVoyTxH3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FY7/W01w"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727925AbgCKBJ3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Mar 2020 21:09:29 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:36711 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727744AbgCKBJ2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Mar 2020 21:09:28 -0400
-Received: by mail-wm1-f65.google.com with SMTP id g62so300195wme.1;
-        Tue, 10 Mar 2020 18:09:25 -0700 (PDT)
+        id S1727833AbgCKBOP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Mar 2020 21:14:15 -0400
+Received: from mail-yw1-f68.google.com ([209.85.161.68]:45627 "EHLO
+        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726463AbgCKBOO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Mar 2020 21:14:14 -0400
+Received: by mail-yw1-f68.google.com with SMTP id d206so456068ywa.12
+        for <bpf@vger.kernel.org>; Tue, 10 Mar 2020 18:14:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2UKmRBSgazdDi1hm3bxfhfrJmnu09DZG7aqXlMNZ2a8=;
-        b=jVoyTxH3UgKlEEgoxTyCCbkQuroNHW97dqNIiknHIhSVI4+VKRZa4j8qwTfELv41um
-         IIxVXqAk4gh41QLt5dLIhboWS5zztWFLesYDGvkuXx+n8WE9R8HjU1JBOfY3ggjJqZHL
-         cJviBTFPHv8yNa4DRiDz88VS9lkSvgOSOC41VLfW/Jwn3H5IChbQrVltrY98ZKazrce5
-         KAZJ5w4YmFtSIeDH2ZKZebKYkFcpkghEzBd19nZHlK/nW82aQpxdzyaaxOU9aiyl+vuO
-         WiusbOk2y2sl5TbSKRHYIJhXOPFlylpaSy6zZRna6PXvWVgk5Lmsz4oHHnYIsG1TvfKN
-         VmUA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X9RdD7dG4OSnH/ITM7CpyzLcUBxqAje79nHZ8XeIV6g=;
+        b=FY7/W01wzvgaIOdYQmMKo/yPAcX5tUr8fyE9PXSm5dg0lBfJjqqut+QRmbH6fe8sDo
+         aCsNgyAJXvIs87SGiKHBGxPe0yoCGIjRZ9Z12r5bTKc+q2KRl6a/g3QW3TGXh48i8JBH
+         VFdU1bEVxp5m4XEXuxBNsaem5cxDyuVEzaxpJ/F00Q/3fbqOEIRtuuk0Kh5Gevldzk3Y
+         a04u9tzfasIpXemR3KyUivgq8HCj4lF9GQkPCCTrh4TpSEPkWBUoOQ96UtqGCU81SJOS
+         p3bzk+ugjtyM0uaaWFkwForh3BEqmXWA42Z086x6RTMO1ChvbkKWSXcRGT+K5gw3ZGHR
+         Y4gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2UKmRBSgazdDi1hm3bxfhfrJmnu09DZG7aqXlMNZ2a8=;
-        b=kfvEw7TGMjkQSEVUraG8CKXgfd5YUwGhazuQBTJ6c3vslv1DWjf3Mv4irnhs7w7pZa
-         lFBc/VTjWl0tE7+/QXzcmalp8Kr/rUeubV+M4evPLbO3ehHiNxHaGTC4AOQeE7s9N0e8
-         TfE3M2MlAy1avF7OduqtSK7ekzXs5ohEKnGPHaYSOqosU2d1RtDKqFs9YEzS/J+Wsvjk
-         vf9/ngRgaXdlwrWptnLvgHoA4haCyiQZL1NJg0CwyuCeLx9nd64UBLDSzd14xY6BkLA4
-         IbsJFllC55ik4yvyiu4IM8XtsaF2IO3ijwh6vK2hsDUt8wCCVPoT22VwMl8dXTieoMLn
-         1SvQ==
-X-Gm-Message-State: ANhLgQ2UWKg1JRJDSvIgVVo9MYX1ndTHP99yiVRkZoS6iLRN8sIimHrd
-        m8JilC8PTTXyj/yb8etY2Q==
-X-Google-Smtp-Source: ADFU+vtMuxpL34oQe2WNFQIHS3VeWNKnBzGrKjivGzUGfU6xgHtqcmlXExpKohyjCDQwuEzhQrEhvQ==
-X-Received: by 2002:a1c:e109:: with SMTP id y9mr433205wmg.62.1583888964431;
-        Tue, 10 Mar 2020 18:09:24 -0700 (PDT)
-Received: from ninjahost.lan (host-2-102-15-144.as13285.net. [2.102.15.144])
-        by smtp.googlemail.com with ESMTPSA id i6sm36658097wra.42.2020.03.10.18.09.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 18:09:24 -0700 (PDT)
-From:   Jules Irenge <jbi.octave@gmail.com>
-To:     boqun.feng@gmail.com
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH 0/8] Lock warning cleanups
-Date:   Wed, 11 Mar 2020 01:09:00 +0000
-Message-Id: <20200311010908.42366-1-jbi.octave@gmail.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <0/8>
-References: <0/8>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X9RdD7dG4OSnH/ITM7CpyzLcUBxqAje79nHZ8XeIV6g=;
+        b=QnCwM9Ye82j1M9JZYFYN/wfGd/w6wYgRXutQQJH/vqt2o3gyTSzhmKZOAWDM22iZxR
+         3wOwf3FTb/wQgG3F3g86SrGapKtR+kVlSrBrrLnzMg+iBZjdWLLFllzjQZwWAAMojbT6
+         eIuB/FooeGqxM1HWnq4egm5ysU0Pp5Fk2rwDZGSM30JAm2tISWm3cjD5+Zhw3QhuJmKO
+         QtWNEYoeVP3YYL+Ro8phl6+5CYxrj/nahDiydITp1spgDO5MnJIlY59D4FJsLVMjBmIp
+         E3jq1RbjNYUfIUDpYK4spVbxTb5qFT7W6Y+iefq6IhL1QjPepshzLN+ucEVG5kjjNjN9
+         niQQ==
+X-Gm-Message-State: ANhLgQ0yC9v1+PTUXpwH7a4S5rFEbzQrv7aXh/URlJxzmvUx7ZgiYkBv
+        kmijOuhLtEWdRV1sHfA3GuFRerLHZlTeR3Zgioezq1nOKHY=
+X-Google-Smtp-Source: ADFU+vvorRI9Lt+4KrjNb6NV3EAfKk8c6LXgbMK5EVVCsuMdZYDpBAx98uZ8ZL0CtLeEszNLo+LdzSzOGYj+SmY7B34=
+X-Received: by 2002:a25:2688:: with SMTP id m130mr524689ybm.408.1583889251315;
+ Tue, 10 Mar 2020 18:14:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200311010908.42366-1-jbi.octave@gmail.com> <20200311010908.42366-4-jbi.octave@gmail.com>
+In-Reply-To: <20200311010908.42366-4-jbi.octave@gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 10 Mar 2020 18:14:00 -0700
+Message-ID: <CANn89iJc9e5fQEWerHgDM1g2vp_1EEj0EntbCvccCzAyusHtdg@mail.gmail.com>
+Subject: Re: [PATCH 3/8] tcp: Add missing annotation for tcp_child_process()
+To:     Jules Irenge <jbi.octave@gmail.com>
+Cc:     boqun.feng@gmail.com, LKML <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch series adds missing annotations to various functions,
-that register warnings of context imbalance when built with Sparse tool.
-The adds fix the warnings, improve on readability odf the code
-and give better insight or directive on what the functions are actually doing.
+On Tue, Mar 10, 2020 at 6:09 PM Jules Irenge <jbi.octave@gmail.com> wrote:
+>
+> Sparse reports warning at tcp_child_process()
+> warning: context imbalance in tcp_child_process() - unexpected unlock
+> The root cause is the missing annotation at tcp_child_process()
+>
+> Add the missing __releases(&((child)->sk_lock.slock)) annotation
+>
+> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+> ---
+>  net/ipv4/tcp_minisocks.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
+> index ad3b56d9fa71..0e8a5b6e477c 100644
+> --- a/net/ipv4/tcp_minisocks.c
+> +++ b/net/ipv4/tcp_minisocks.c
+> @@ -817,6 +817,7 @@ EXPORT_SYMBOL(tcp_check_req);
+>
+>  int tcp_child_process(struct sock *parent, struct sock *child,
+>                       struct sk_buff *skb)
+> +       __releases(&((child)->sk_lock.slock))
+>  {
+>         int ret = 0;
+>         int state = child->sk_state;
 
-Jules Irenge (8):
-  bpf: Add missing annotations for __bpf_prog_enter() and 
-    __bpf_prog_exit()
-  raw: Add missing annotations to raw_seq_start() and raw_seq_stop()
-  tcp: Add missing annotation for tcp_child_process()
-  netfilter: Add missing annotation for ctnetlink_parse_nat_setup()
-  netfilter: conntrack: Add missing annotations for
-    nf_conntrack_all_lock() and nf_conntrack_all_unlock()
-  net: Add missing annotation for *netlink_seq_start()
-  ALSA: firewire-tascam: Add missing annotation for
-    tscm_hwdep_read_queue()
-  ALSA: firewire-tascam: Add missing annotation for
-    tscm_hwdep_read_locked()
 
- kernel/bpf/trampoline.c              | 2 ++
- net/ipv4/raw.c                       | 2 ++
- net/ipv4/tcp_minisocks.c             | 1 +
- net/netfilter/nf_conntrack_core.c    | 2 ++
- net/netfilter/nf_conntrack_netlink.c | 1 +
- net/netlink/af_netlink.c             | 1 +
- sound/firewire/tascam/tascam-hwdep.c | 2 ++
- 7 files changed, 11 insertions(+)
+Yeah, although we prefer to use lockdep these days ;)
 
--- 
-2.24.1
-
+Reviewed-by: Eric Dumazet <edumazet@google.com>
