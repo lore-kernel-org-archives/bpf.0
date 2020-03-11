@@ -2,73 +2,72 @@ Return-Path: <SRS0=y2jO=44=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29892C18E5C
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 01:10:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3974EC10DCE
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 01:10:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DF05521927
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 01:10:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F048C21927
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 01:10:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rgwYt8hQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jVoyTxH3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727744AbgCKBJb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Mar 2020 21:09:31 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:53151 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726463AbgCKBJb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Mar 2020 21:09:31 -0400
-Received: by mail-wm1-f67.google.com with SMTP id 11so290509wmo.2;
-        Tue, 10 Mar 2020 18:09:27 -0700 (PDT)
+        id S1727925AbgCKBJ3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Mar 2020 21:09:29 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:36711 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727744AbgCKBJ2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Mar 2020 21:09:28 -0400
+Received: by mail-wm1-f65.google.com with SMTP id g62so300195wme.1;
+        Tue, 10 Mar 2020 18:09:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qNOlzK/j2ABuDiTQyPDlyVcS7soeVQMuTQgrAWWcf9I=;
-        b=rgwYt8hQrRtJDhPqL6acSbVwj/ifctSn0OpICmzrNnRH811aS44QXkIK0YtQwU7F5L
-         V771hlOItZjHjl77Kw1rboEs1OxQEIH7/6KCMqUaqzeyAkHMox3zNhiQbBQfMs6Bg1Bn
-         paqYACEq4IdQ1pCsXEsK/pnJGvzCyidgzQl1AkzPSt36fj3wl231L636qb4RDEtHgFyG
-         56qYR2bST/BXbOV0+THwtrfBnS64s9rNpql8Nr04Rsa6NEJa6lBdhmKibjg/oNFH787L
-         A3iDpPqrVCzsEjTH/19w3Y30JcTgee1BKiy4AOJwm1Cpbx4NRvUdu+U4CYazW6B6dvkd
-         KKtw==
+        bh=2UKmRBSgazdDi1hm3bxfhfrJmnu09DZG7aqXlMNZ2a8=;
+        b=jVoyTxH3UgKlEEgoxTyCCbkQuroNHW97dqNIiknHIhSVI4+VKRZa4j8qwTfELv41um
+         IIxVXqAk4gh41QLt5dLIhboWS5zztWFLesYDGvkuXx+n8WE9R8HjU1JBOfY3ggjJqZHL
+         cJviBTFPHv8yNa4DRiDz88VS9lkSvgOSOC41VLfW/Jwn3H5IChbQrVltrY98ZKazrce5
+         KAZJ5w4YmFtSIeDH2ZKZebKYkFcpkghEzBd19nZHlK/nW82aQpxdzyaaxOU9aiyl+vuO
+         WiusbOk2y2sl5TbSKRHYIJhXOPFlylpaSy6zZRna6PXvWVgk5Lmsz4oHHnYIsG1TvfKN
+         VmUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qNOlzK/j2ABuDiTQyPDlyVcS7soeVQMuTQgrAWWcf9I=;
-        b=gkd1RL2TxXg+TQgwG/GWg9l/W7tcBxV360BnPYrTfi78ri6OWEiUvRZE25PYMxX1P1
-         gX1LrFFo/wLD4ueS+9wRQpsB0QRiqWa+LipO/ydPL1zFKVPsXRGha87uW01j5rmKhPM0
-         voBPt24kLSPWwUd8uBAEPGBxNxBwbnXHFwZgwX292aOcGhPCDFQLIQA1t7afNyi1iVDJ
-         Mj4KhdwKrEbgXFT8Q6XP5c03Q9/B1jTQvvNXnBcrZhdJe69p2hRyjz4OabpQK0XzPLGf
-         00khDMGRyUVGPpC3x3L+lCn87O9l8IRI28Ddu5JerNS2iOynZd6NxAKraKfMA6YRwMnW
-         riTA==
-X-Gm-Message-State: ANhLgQ1E5iMWz+TKVUEYXyYkmQ6lU/HDhtFMHK4PnYOUu9E/Tf7k7I+5
-        JnpzwfoAZP4nwYedqdz7YA==
-X-Google-Smtp-Source: ADFU+vvS7Pttdevps9gifoKLvKQrBzQS8bWMSeCk2h0Mkhu5EINl/B1G/nGvhGQtr5gketgYUTQ7qw==
-X-Received: by 2002:a05:600c:280b:: with SMTP id m11mr415679wmb.93.1583888967050;
-        Tue, 10 Mar 2020 18:09:27 -0700 (PDT)
+        bh=2UKmRBSgazdDi1hm3bxfhfrJmnu09DZG7aqXlMNZ2a8=;
+        b=kfvEw7TGMjkQSEVUraG8CKXgfd5YUwGhazuQBTJ6c3vslv1DWjf3Mv4irnhs7w7pZa
+         lFBc/VTjWl0tE7+/QXzcmalp8Kr/rUeubV+M4evPLbO3ehHiNxHaGTC4AOQeE7s9N0e8
+         TfE3M2MlAy1avF7OduqtSK7ekzXs5ohEKnGPHaYSOqosU2d1RtDKqFs9YEzS/J+Wsvjk
+         vf9/ngRgaXdlwrWptnLvgHoA4haCyiQZL1NJg0CwyuCeLx9nd64UBLDSzd14xY6BkLA4
+         IbsJFllC55ik4yvyiu4IM8XtsaF2IO3ijwh6vK2hsDUt8wCCVPoT22VwMl8dXTieoMLn
+         1SvQ==
+X-Gm-Message-State: ANhLgQ2UWKg1JRJDSvIgVVo9MYX1ndTHP99yiVRkZoS6iLRN8sIimHrd
+        m8JilC8PTTXyj/yb8etY2Q==
+X-Google-Smtp-Source: ADFU+vtMuxpL34oQe2WNFQIHS3VeWNKnBzGrKjivGzUGfU6xgHtqcmlXExpKohyjCDQwuEzhQrEhvQ==
+X-Received: by 2002:a1c:e109:: with SMTP id y9mr433205wmg.62.1583888964431;
+        Tue, 10 Mar 2020 18:09:24 -0700 (PDT)
 Received: from ninjahost.lan (host-2-102-15-144.as13285.net. [2.102.15.144])
-        by smtp.googlemail.com with ESMTPSA id i6sm36658097wra.42.2020.03.10.18.09.26
+        by smtp.googlemail.com with ESMTPSA id i6sm36658097wra.42.2020.03.10.18.09.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 18:09:26 -0700 (PDT)
+        Tue, 10 Mar 2020 18:09:24 -0700 (PDT)
 From:   Jules Irenge <jbi.octave@gmail.com>
 To:     boqun.feng@gmail.com
 Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 2/8] raw: Add missing annotations to raw_seq_start() and raw_seq_stop()
-Date:   Wed, 11 Mar 2020 01:09:02 +0000
-Message-Id: <20200311010908.42366-3-jbi.octave@gmail.com>
+        netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH 0/8] Lock warning cleanups
+Date:   Wed, 11 Mar 2020 01:09:00 +0000
+Message-Id: <20200311010908.42366-1-jbi.octave@gmail.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200311010908.42366-1-jbi.octave@gmail.com>
+In-Reply-To: <0/8>
 References: <0/8>
- <20200311010908.42366-1-jbi.octave@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -76,41 +75,34 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sparse reports warnings at raw_seq_start() and raw_seq_stop()
+This patch series adds missing annotations to various functions,
+that register warnings of context imbalance when built with Sparse tool.
+The adds fix the warnings, improve on readability odf the code
+and give better insight or directive on what the functions are actually doing.
 
-warning: context imbalance in raw_seq_start() - wrong count at exit
-warning: context imbalance in raw_seq_stop() - unexpected unlock
+Jules Irenge (8):
+  bpf: Add missing annotations for __bpf_prog_enter() and 
+    __bpf_prog_exit()
+  raw: Add missing annotations to raw_seq_start() and raw_seq_stop()
+  tcp: Add missing annotation for tcp_child_process()
+  netfilter: Add missing annotation for ctnetlink_parse_nat_setup()
+  netfilter: conntrack: Add missing annotations for
+    nf_conntrack_all_lock() and nf_conntrack_all_unlock()
+  net: Add missing annotation for *netlink_seq_start()
+  ALSA: firewire-tascam: Add missing annotation for
+    tscm_hwdep_read_queue()
+  ALSA: firewire-tascam: Add missing annotation for
+    tscm_hwdep_read_locked()
 
-The root cause is the missing annotations at raw_seq_start()
-	and raw_seq_stop()
-Add the missing __acquires(&h->lock) annotation
-Add the missing __releases(&h->lock) annotation
+ kernel/bpf/trampoline.c              | 2 ++
+ net/ipv4/raw.c                       | 2 ++
+ net/ipv4/tcp_minisocks.c             | 1 +
+ net/netfilter/nf_conntrack_core.c    | 2 ++
+ net/netfilter/nf_conntrack_netlink.c | 1 +
+ net/netlink/af_netlink.c             | 1 +
+ sound/firewire/tascam/tascam-hwdep.c | 2 ++
+ 7 files changed, 11 insertions(+)
 
-Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
----
- net/ipv4/raw.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/ipv4/raw.c b/net/ipv4/raw.c
-index 3183413ebc6c..47665919048f 100644
---- a/net/ipv4/raw.c
-+++ b/net/ipv4/raw.c
-@@ -1034,6 +1034,7 @@ static struct sock *raw_get_idx(struct seq_file *seq, loff_t pos)
- }
- 
- void *raw_seq_start(struct seq_file *seq, loff_t *pos)
-+	__acquires(&h->lock)
- {
- 	struct raw_hashinfo *h = PDE_DATA(file_inode(seq->file));
- 
-@@ -1056,6 +1057,7 @@ void *raw_seq_next(struct seq_file *seq, void *v, loff_t *pos)
- EXPORT_SYMBOL_GPL(raw_seq_next);
- 
- void raw_seq_stop(struct seq_file *seq, void *v)
-+	__releases(&h->lock)
- {
- 	struct raw_hashinfo *h = PDE_DATA(file_inode(seq->file));
- 
 -- 
 2.24.1
 
