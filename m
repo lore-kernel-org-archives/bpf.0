@@ -2,95 +2,103 @@ Return-Path: <SRS0=y2jO=44=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54FA9C2BB1D
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 18:48:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4396C2BAEE
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 18:53:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B95E206BE
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 18:48:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76CCD206BE
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 18:54:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="spqbp/1s"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="iv/VNX7y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730784AbgCKSsP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Mar 2020 14:48:15 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:42745 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730780AbgCKSsP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 11 Mar 2020 14:48:15 -0400
-Received: by mail-qt1-f194.google.com with SMTP id g16so2365590qtp.9;
-        Wed, 11 Mar 2020 11:48:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VL0/QIgFV/TQJg/uDW5O01TQ4UTQA+jR1k5TpH13mB0=;
-        b=spqbp/1sEC2oBHy+lxErElsVMiMB1MEJW/sZH41FyLEwHwLqYp/8pfkrsApXXeOp6v
-         Kds0GfHS0uESruvqWyf49XQI+D9xVr/MD1bVWXKFYaYHX0HeI4/s3EB5jKRKfrpdFGGW
-         eDpcFhNMtlLyIaWXlzotdGQ/GOhWVib2OmzvqWWC7W7SzurXf9Z/tJbf+hmEipieJVOS
-         X+9qZN4ouv3H7OAgmqdlCBRu3A1jpgzjRVnJK2xgYKrBY+71QlvGtAVML/lMCe4rAf4h
-         07Qpk4rQlnjnDAisA/O4KkglIR9XlaxwWSC4o+KBWfZIZZgY7JDkRTKGwitY4ED81Brh
-         DHyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VL0/QIgFV/TQJg/uDW5O01TQ4UTQA+jR1k5TpH13mB0=;
-        b=PrK/D9bFuHtHsreQjhG86Bg8PkLZ/qSSfJFL7Qf3rWCA9OEvA2Ooer/ToKEYx+WyLz
-         RD3IdGH7UPAafkZz0fthjwrzpxVmy9dhyVzOsRnGRogPhdkvwOhTfe6qL8bzPYUvYfu8
-         Ei3F13YA2tWXOjcmIxKJr+DhA2JhC5RTpZN0CLBBtfyD8f+mqzMylo8rO8kVLGaybfLw
-         UmCTL7FH/ZDR0TRLr6mHcFbA/rgWEHqQto3h/1T5q1ZQKa6zsiwKsbMbSWKrzEgDps52
-         YnrakS62TBjkWooXsoQYy/xWY5PtsCAuKqbHZfe1fm9k8ITXdDwSG+yakHAR6FJ6xC81
-         fNXg==
-X-Gm-Message-State: ANhLgQ2rIoy7nDWMAsB9fiLIEfzMr2vG8JUb5snhqxGeBOh+AElLM33i
-        hDinZtNEmuRtteW7RKhwUyjrFOqoAdbGY3lv/VzFgsCu4jU=
-X-Google-Smtp-Source: ADFU+vv6HXIO1TBJYRYhd8up2V+wemkxMPiHwO7VlmKCb5zStnPkot/ror23Bb44iD+lFLaxWNPk47BW6qRuO+xTyS4=
-X-Received: by 2002:ac8:3f62:: with SMTP id w31mr3926845qtk.171.1583952494276;
- Wed, 11 Mar 2020 11:48:14 -0700 (PDT)
+        id S1730967AbgCKSx7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Mar 2020 14:53:59 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:31402 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730927AbgCKSx6 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 11 Mar 2020 14:53:58 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02BIheYO001529
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 11:53:57 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=facebook;
+ bh=agaD1L6x13VFkiieNxYQs4HHP2Frm3fHVTIhAYCNKC8=;
+ b=iv/VNX7yc7oEp5rE1tStjfyKA1LtPr0AiBZYcKZ1Dnroh8S9SANpQuRPfKJ9MVn+dLp5
+ k3CvoxNxaycFRKXju6AT6Bax07hh4xV7I92yuh0HvVzG9fTqMMZ71Cd9/C9b6wDAz/qZ
+ NJj7kzGbTd0bAAxXTLJhSdaBSQketpt5cSE= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 2yp7t2rkdy-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 11:53:57 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Wed, 11 Mar 2020 11:53:55 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 1C66E2EC2DD2; Wed, 11 Mar 2020 11:53:46 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>, Julia Kartseva <hex@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next] selftests/bpf: guarantee that useep() calls nanosleep() syscall
+Date:   Wed, 11 Mar 2020 11:53:45 -0700
+Message-ID: <20200311185345.3874602-1-andriin@fb.com>
+X-Mailer: git-send-email 2.17.1
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20200127125534.137492-1-jakub@cloudflare.com> <20200127125534.137492-13-jakub@cloudflare.com>
-In-Reply-To: <20200127125534.137492-13-jakub@cloudflare.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 11 Mar 2020 11:48:02 -0700
-Message-ID: <CAEf4Bzadh2T43bYbLO0EuKceUKr3SkfXK8Tj_fXFNj8BWtot1Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 12/12] selftests/bpf: Tests for SOCKMAP
- holding listening sockets
-To:     Jakub Sitnicki <jakub@cloudflare.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        kernel-team@cloudflare.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-11_09:2020-03-11,2020-03-11 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 clxscore=1015 suspectscore=8
+ impostorscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003110106
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 27, 2020 at 4:58 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
->
-> Now that SOCKMAP can store listening sockets, user-space and BPF API is
-> open to a new set of potential pitfalls. Exercise the map operations (with
-> extra attention to code paths susceptible to races between map ops and
-> socket cloning), and BPF helpers that work with SOCKMAP to gain confidence
-> that all works as expected.
->
-> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-> ---
->  .../selftests/bpf/prog_tests/sockmap_listen.c | 1455 +++++++++++++++++
->  .../selftests/bpf/progs/test_sockmap_listen.c |   77 +
->  2 files changed, 1532 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_listen.c
->
+Some implementations of C runtime library won't call nanosleep() syscall from
+usleep(). But a bunch of kprobe/tracepoint selftests rely on nanosleep being
+called to trigger them. To make this more reliable, "override" usleep
+implementation and call nanosleep explicitly.
 
-Hey Jakub!
+Cc: Julia Kartseva <hex@fb.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/testing/selftests/bpf/test_progs.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-I'm frequently getting spurious failures for sockmap_listen selftest.
-We also see that in libbpf's Github CI testing as well. Do you mind
-taking a look? Usually it's the following kinds of error:
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index a969c77e9456..2b0bc1171c9c 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -29,6 +29,15 @@ struct prog_test_def {
+ 	int old_error_cnt;
+ };
+ 
++/* Override C runtime library's usleep() implementation to ensure nanosleep()
++ * is always called. Usleep is frequently used in selftests as a way to
++ * trigger kprobe and tracepoints.
++ */
++int usleep(useconds_t usec)
++{
++	return syscall(__NR_nanosleep, usec * 1000UL);
++}
++
+ static bool should_run(struct test_selector *sel, int num, const char *name)
+ {
+ 	int i;
+-- 
+2.17.1
 
-./test_progs:connect_accept_thread:733: accept: Resource temporarily unavailable
-connect_accept_thread:FAIL:733
-
-Thanks!
