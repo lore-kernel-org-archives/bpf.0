@@ -1,165 +1,90 @@
-Return-Path: <SRS0=y2jO=44=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <bpf-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84A30C2BB1D
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 19:15:50 +0000 (UTC)
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_NONE,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 697A820575
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 19:15:51 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="XUd0E2O7"
+	by archive.lwn.net (Postfix) with ESMTP id D11397D910
+	for <lwn-bpf@archive.lwn.net>; Wed, 11 Mar 2020 16:06:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731262AbgCKTPI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Mar 2020 15:15:08 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7350 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731253AbgCKTPH (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 11 Mar 2020 15:15:07 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02BJ8ehf019966
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 12:15:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=hq5XLtSBAj7PIxZeRdBKDVJKbSYOVb0sWd+nAKfLqp4=;
- b=XUd0E2O7c5DKAUySK9aEpnvAEruBVBe5P/J6gSC9v/B8rZep1K/NuzFQ3i6Z9TlcZqzD
- 9g7DR/Onb5frvIW1qlVNa9t1AS0W9GWSgoV+LxcwqZvLgk+udjYUFT4kphZxS0SdjfDN
- eTOCFMnu+XPpqXIlsWsu1DPcJ+D0w8mguWE= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2ypfsqe3c6-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 12:15:06 -0700
-Received: from intmgw003.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 11 Mar 2020 12:15:01 -0700
-Received: by dev082.prn2.facebook.com (Postfix, from userid 572249)
-        id 6E57137007D8; Wed, 11 Mar 2020 12:14:57 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrey Ignatov <rdna@fb.com>
-Smtp-Origin-Hostname: dev082.prn2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Andrey Ignatov <rdna@fb.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <osandov@fb.com>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf-next] bpf: Document bpf_inspect drgn tool
-Date:   Wed, 11 Mar 2020 12:14:40 -0700
-Message-ID: <20200311191440.3988361-1-rdna@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
+        id S1729989AbgCKQGv (ORCPT <rfc822;lwn-bpf@archive.lwn.net>);
+        Wed, 11 Mar 2020 12:06:51 -0400
+Received: from sym2.noone.org ([178.63.92.236]:32886 "EHLO sym2.noone.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729921AbgCKQGv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 11 Mar 2020 12:06:51 -0400
+Received: by sym2.noone.org (Postfix, from userid 1002)
+        id 48cxfc5lPBzvjdW; Wed, 11 Mar 2020 17:06:48 +0100 (CET)
+Date:   Wed, 11 Mar 2020 17:06:48 +0100
+From:   Tobias Klauser <tklauser@distanz.ch>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: Re: [PATCH] bpftool: fix iprofiler build on systems without
+ /usr/include/asm symlink
+Message-ID: <20200311160647.bb57zyick37t5pck@distanz.ch>
+References: <20200311123421.3634-1-tklauser@distanz.ch>
+ <D8E0C5BC-E724-4788-86DA-EF8110237B6E@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-11_09:2020-03-11,2020-03-11 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- mlxscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=634 spamscore=0
- bulkscore=0 adultscore=0 clxscore=1015 suspectscore=1 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2003110107
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <D8E0C5BC-E724-4788-86DA-EF8110237B6E@fb.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
+Archived-At: <http://archive.lwn.net:8080/bpf/20200311160647.bb57zyick37t5pck@distanz.ch/>
+List-Archive: <http://archive.lwn.net:8080/bpf/>
+List-Post: <mailto:bpf@vger.kernel.org>
 
-It's a follow-up for discussion in [1].
+On 2020-03-11 at 16:55:38 +0100, Song Liu <songliubraving@fb.com> wrote:
+> 
+> 
+> > On Mar 11, 2020, at 5:34 AM, Tobias Klauser <tklauser@distanz.ch> wrote:
+> > 
+> > When compiling bpftool on a system where the /usr/include/asm symlink
+> > doesn't exist (e.g. on an Ubuntu system without gcc-multilib installed),
+> > the build fails with:
+> > 
+> >    CLANG    skeleton/profiler.bpf.o
+> >  In file included from skeleton/profiler.bpf.c:4:
+> >  In file included from /usr/include/linux/bpf.h:11:
+> >  /usr/include/linux/types.h:5:10: fatal error: 'asm/types.h' file not found
+> >  #include <asm/types.h>
+> >           ^~~~~~~~~~~~~
+> >  1 error generated.
+> >  make: *** [Makefile:123: skeleton/profiler.bpf.o] Error 1
+> > 
+> > To fix this, add /usr/include/$(uname -m)-linux-gnu to the clang search
+> > path so <asm/types.h> can be found.
+> > 
+> > Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+> 
+> Looks good, with a nit below. 
+> 
+> Acked-by: Song Liu <songliubraving@fb.com>
+> 
+> > ---
+> > tools/bpf/bpftool/Makefile | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> > index 20a90d8450f8..3cc0644fd91e 100644
+> > --- a/tools/bpf/bpftool/Makefile
+> > +++ b/tools/bpf/bpftool/Makefile
+> > @@ -120,7 +120,7 @@ $(OUTPUT)_bpftool: $(_OBJS) $(LIBBPF)
+> > 	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(_OBJS) $(LIBS)
+> > 
+> > skeleton/profiler.bpf.o: skeleton/profiler.bpf.c
+> > -	$(QUIET_CLANG)$(CLANG) -I$(srctree)/tools/lib -g -O2 -target bpf -c $< -o $@
+> > +	$(QUIET_CLANG)$(CLANG) -I/usr/include/$(shell uname -m)-linux-gnu -I$(srctree)/tools/lib -g -O2 -target bpf -c $< -o $@
+> 
+> Nit: this line is too long. It is better to break it into two lines. 
 
-drgn tool bpf_inspect.py was merged to drgn repo in [2]. Document it in
-kernel tree to make BPF developers aware that the tool exists and can
-help with getting BPF state unavailable via UAPI.
-
-For now it's just one tool but the doc is written in a way that allows
-to cover more tools in the future if needed.
-
-Please refer to the doc itself for more details.
-
-The patch was tested by `make htmldocs` and sanity-checking that
-resulting html looks good.
-
-[1]
-https://lore.kernel.org/bpf/20200228201514.GB51456@rdna-mbp/T/#mefed65e8a98116bd5d07d09a570a3eac46724951
-[2] https://github.com/osandov/drgn/pull/49
-
-Signed-off-by: Andrey Ignatov <rdna@fb.com>
----
- Documentation/bpf/drgn.rst  | 42 +++++++++++++++++++++++++++++++++++++
- Documentation/bpf/index.rst |  5 +++--
- 2 files changed, 45 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/bpf/drgn.rst
-
-diff --git a/Documentation/bpf/drgn.rst b/Documentation/bpf/drgn.rst
-new file mode 100644
-index 000000000000..9a9ad75ab066
---- /dev/null
-+++ b/Documentation/bpf/drgn.rst
-@@ -0,0 +1,42 @@
-+.. SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+
-+==============
-+BPF drgn tools
-+==============
-+
-+drgn scripts are great to debug kernel internals including BPF and get
-+information unavailable via conventional kernel UAPI.
-+
-+If there is a piece of kernel state useful for a small number of users, e.g.
-+only for BPF developers, or too expensive to expose to user space, drgn script
-+can be a good option to still have access to that state but without extending
-+UAPI.
-+
-+This document describes BPF related drgn tools.
-+
-+See `drgn/tools`_ for all tools available at the moment and `drgn/doc`_ for
-+more details on drgn itself.
-+
-+bpf_inspect.py
-+**************
-+
-+`bpf_inspect.py`_ is a tool intended to inspect BPF programs and maps. It can
-+iterate over all programs and maps in the system and print basic information
-+about these objects, including id, type and name.
-+
-+The main use-case `bpf_inspect.py`_ covers is to show BPF programs of types
-+``BPF_PROG_TYPE_EXT`` and ``BPF_PROG_TYPE_TRACING`` attached to other BPF
-+programs via ``freplace``/``fentry``/``fexit`` mechanisms, since there is no
-+user-space API to get this information.
-+
-+But developer can edit the tool and get any piece of ``struct bpf_prog`` or
-+``struct bpf_map`` they're interested in, e.g. the whole ``struct
-+bpf_prog_aux``.
-+
-+See ``--help`` for more details.
-+
-+.. Links
-+.. _drgn/doc: https://drgn.readthedocs.io/en/latest/
-+.. _drgn/tools: https://github.com/osandov/drgn/tree/master/tools
-+.. _bpf_inspect.py:
-+   https://github.com/osandov/drgn/blob/master/tools/bpf_inspect.py
-diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
-index 4f5410b61441..7be43c5f2dcf 100644
---- a/Documentation/bpf/index.rst
-+++ b/Documentation/bpf/index.rst
-@@ -47,12 +47,13 @@ Program types
-    prog_flow_dissector
- 
- 
--Testing BPF
--===========
-+Testing and debugging BPF
-+=========================
- 
- .. toctree::
-    :maxdepth: 1
- 
-+   drgn
-    s390
- 
- 
--- 
-2.17.1
-
+Thanks. Will send a v2, also with Toke's feedback regarding commit
+message included.
