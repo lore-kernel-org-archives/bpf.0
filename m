@@ -2,484 +2,853 @@ Return-Path: <SRS0=y2jO=44=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4E20C10F25
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 04:55:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6138C10F25
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 05:12:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 64DA12071B
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 04:55:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 89A982146E
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 05:12:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PFXNa2R6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vnrs5Dw/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725958AbgCKEz2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Mar 2020 00:55:28 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:36886 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725813AbgCKEz1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 11 Mar 2020 00:55:27 -0400
-Received: by mail-qt1-f194.google.com with SMTP id l20so674454qtp.4;
-        Tue, 10 Mar 2020 21:55:26 -0700 (PDT)
+        id S1726160AbgCKFMI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Mar 2020 01:12:08 -0400
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:49731 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725976AbgCKFMI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 11 Mar 2020 01:12:08 -0400
+Received: by mail-pf1-f201.google.com with SMTP id y17so565423pfp.16
+        for <bpf@vger.kernel.org>; Tue, 10 Mar 2020 22:12:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lgHrafZYj/SSQe12AYM4PlF+p30liMALyJVFP+rJBGA=;
-        b=PFXNa2R6GikjQcg+Yij0kZMic0LoL7a6VGKtJ/Vjm4Nenm2JmKjIIGgKX2KuyqeyI2
-         39HSRZ5xSvlgMg9w6ei13O0cLl/YiIH3KxnIGWybcgwez6WQJ7pNSMjH9TswPAqvr4ps
-         Io3reX9fMrjUMT/sN4KfrlxhHjYeRyZte6EmWUpJHLSCy34sV4ytMb1ldYnIJ/Zx2qnk
-         dyuzSvkp3EU562qBOOsjpmhCCBnDAT4zLFOXieef2AGeuFzlaG8cJvUUaErF8KVXowDc
-         kdQfCKsFoNe9zc1xLVcS4JJ4c3VdOY4RqS1QX/dMgkr0NvUM6e8hM9KzJAi2/uahVb2M
-         x18w==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=R/JW286UHovYzDQPmc0qE0wFqXaOOcYBrzQGxd4vrWE=;
+        b=vnrs5Dw/cpHTOs89HqACjyON9nWygTdS17MoLpVj9JgH9Qz3ltm3cMQxhCWFSJ85bw
+         VGZrDor0ju8/Q6HnpUYQIpVI4yQsHBa58+Fd95JhFiBhGlTA+Y3VdKJDLN1x5Ke9w/dT
+         tsyyqA/Ri9ldINinRVe8LMief6idxaVb6jvif5EX+q/OAPDC5npz0GMi1Xl6IGqtyzxl
+         BkohlV+XDGfo3OsEiuzsSGiZ88o43uej4PgOSlYXmbRJ906w+5HoshhRt2d5LIBvW2eP
+         0KWE+hOtH0BrT+qPguXMV13K9Syox/lvWLgEEee6u4EnyRRfCFjtoySrE9Lf+qwcPLa+
+         vOCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lgHrafZYj/SSQe12AYM4PlF+p30liMALyJVFP+rJBGA=;
-        b=pr572EiQKiLxfXbsi4e+/AIG+/EQUNxy8Xgzy660K69aEFJ8kDjrzVqsbg9yRoYYQt
-         1Heec/pdvu7v/q8nHjBpSChzHk2KP78iU3hJw7QyXOcCMV2V7GgxPiiJHqn1Ggc5n4DQ
-         9rbg+f40yXaZbX2z4YH6Ii5A6DTNtO9SmsrIlbrQ0xfBBblatdxG+KlwNTnv7agFw4KL
-         dltP+m31NFlZzdKnAmWC7il+mXaVxdnvRn90/IbRhKwoYDeRxurScs9gw1KWa3mpjlL0
-         wggwRUGDTrQc2X9WU1e3VTLw8HbMk8w7gqHhNw01b3upgCz50mNtpEisCL+S0X+Mr5Jj
-         o7Vg==
-X-Gm-Message-State: ANhLgQ01JqeciF30MOCUa3NZHVSNM7dB8hqDsRd8JU7FB7G88+kyTid3
-        Xtbqac6JtyMwtRXDuDSEwA52i223n0j3kqbLtQ8=
-X-Google-Smtp-Source: ADFU+vuc2DWcyPrjFNxW5lUHmIHbFV0zG6T8QbO9HKEc/LMEhGM4J2OH2Vrd0IVuwbaIPjhbORURURAYR6Wx3MFA2XI=
-X-Received: by 2002:ac8:3f62:: with SMTP id w31mr1048052qtk.171.1583902525786;
- Tue, 10 Mar 2020 21:55:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200310232647.27777-1-danieltimlee@gmail.com> <20200310232647.27777-3-danieltimlee@gmail.com>
-In-Reply-To: <20200310232647.27777-3-danieltimlee@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 10 Mar 2020 21:55:14 -0700
-Message-ID: <CAEf4BzYG5f70jYfTWdDdAS_ok4Bj8xJYz-x=zM1ppfRcer3=rQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] samples: bpf: refactor perf_event user
- program with libbpf bpf_link
-To:     "Daniel T. Lee" <danieltimlee@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=R/JW286UHovYzDQPmc0qE0wFqXaOOcYBrzQGxd4vrWE=;
+        b=FbcmnsxIab2U0lKZDLJCBG/hYP5SANibRDCbREcjkyg9+CKOGhkZ7fWZDBQXxA6YJG
+         B6328RZKbYxIEr7LdHOFLYj0lFkMJGjSi1cvl5tmXuPfO78fTd+0eW7ysx0ihWK3D4Qo
+         wCwysN5mIjxp9qtnYhx+I62cn7AXAHOHhbSeNEVNXjt1XB3swO36dpwtp8yN/DNNGvEf
+         r0/zKCHbML0lj/6HzyigbI8M3lyZVlQ16zsV5ZJHfvyXvSnvtjJkviclvwdiqC2urf8d
+         RoBQN8LRcBW4cZEHUL9hQCTpdB0tJgkYOZN5KA52PNRf1uFz3d/O5e/IpYlMW+C/4XDh
+         BzeQ==
+X-Gm-Message-State: ANhLgQ07It9ZfkEnHzBphyo0lnvNsSMDwEcMzC+1IataZq4VEV6sTpqO
+        94S64kNB+V+B2QQwuC6pXaACPiR0iP9p
+X-Google-Smtp-Source: ADFU+vve0vs6kZ5JMuX64qE1hOC7e3nNqFbLicHQXSliiqIdd23Oo6sZ1PxGOjv63Yp2CkuXAUHEAh+Xf25Q
+X-Received: by 2002:a17:90a:191:: with SMTP id 17mr1512773pjc.88.1583903526005;
+ Tue, 10 Mar 2020 22:12:06 -0700 (PDT)
+Date:   Tue, 10 Mar 2020 22:12:02 -0700
+Message-Id: <20200311051202.16945-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
+Subject: [PATCH v2] perf tools: add support for lipfm4
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Igor Lubashev <ilubashe@akamai.com>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Jiwei Sun <jiwei.sun@windriver.com>,
+        yuzhoujian <yuzhoujian@didichuxing.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 10, 2020 at 4:27 PM Daniel T. Lee <danieltimlee@gmail.com> wrote:
->
-> The bpf_program__attach of libbpf(using bpf_link) is much more intuitive
-> than the previous method using ioctl.
->
-> bpf_program__attach_perf_event manages the enable of perf_event and
-> attach of BPF programs to it, so there's no neeed to do this
-> directly with ioctl.
->
-> In addition, bpf_link provides consistency in the use of API because it
-> allows disable (detach, destroy) for multiple events to be treated as
-> one bpf_link__destroy.
->
-> This commit refactors samples that attach the bpf program to perf_event
-> by using libbbpf instead of ioctl. Also the bpf_load in the samples were
-> removed and migrated to use libbbpf API.
->
-> Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
-> ---
+This patch links perf with the libpfm4 library if it is available and
+NO_LIBPFM4 isn't passed to the build. The libpfm4 library contains hardware
+event tables for all processors supported by perf_events. It is a helper
+library that helps convert from a symbolic event name to the event
+encoding required by the underlying kernel interface. This
+library is open-source and available from: http://perfmon2.sf.net.
 
-Daniel, thanks for this clean up! It's good to see samples be
-modernized a bit :)
+With this patch, it is possible to specify full hardware events
+by name. Hardware filters are also supported. Events must be
+specified via the --pfm-events and not -e option. Both options
+are active at the same time and it is possible to mix and match:
 
-> Changes in v2:
->  - check memory allocation is successful
->  - clean up allocated memory on error
->
->  samples/bpf/Makefile           |  4 +-
->  samples/bpf/sampleip_user.c    | 76 ++++++++++++++++++++++------------
->  samples/bpf/trace_event_user.c | 63 ++++++++++++++++++++--------
->  3 files changed, 97 insertions(+), 46 deletions(-)
->
-> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-> index ff0061467dd3..424f6fe7ce38 100644
-> --- a/samples/bpf/Makefile
-> +++ b/samples/bpf/Makefile
-> @@ -88,8 +88,8 @@ xdp2-objs := xdp1_user.o
->  xdp_router_ipv4-objs := xdp_router_ipv4_user.o
->  test_current_task_under_cgroup-objs := bpf_load.o $(CGROUP_HELPERS) \
->                                        test_current_task_under_cgroup_user.o
-> -trace_event-objs := bpf_load.o trace_event_user.o $(TRACE_HELPERS)
-> -sampleip-objs := bpf_load.o sampleip_user.o $(TRACE_HELPERS)
-> +trace_event-objs := trace_event_user.o $(TRACE_HELPERS)
-> +sampleip-objs := sampleip_user.o $(TRACE_HELPERS)
->  tc_l2_redirect-objs := bpf_load.o tc_l2_redirect_user.o
->  lwt_len_hist-objs := bpf_load.o lwt_len_hist_user.o
->  xdp_tx_iptunnel-objs := xdp_tx_iptunnel_user.o
-> diff --git a/samples/bpf/sampleip_user.c b/samples/bpf/sampleip_user.c
-> index b0f115f938bc..fd763a49c913 100644
-> --- a/samples/bpf/sampleip_user.c
-> +++ b/samples/bpf/sampleip_user.c
-> @@ -10,13 +10,11 @@
->  #include <errno.h>
->  #include <signal.h>
->  #include <string.h>
-> -#include <assert.h>
->  #include <linux/perf_event.h>
->  #include <linux/ptrace.h>
->  #include <linux/bpf.h>
-> -#include <sys/ioctl.h>
-> +#include <bpf/bpf.h>
->  #include <bpf/libbpf.h>
-> -#include "bpf_load.h"
->  #include "perf-sys.h"
->  #include "trace_helpers.h"
->
-> @@ -25,6 +23,7 @@
->  #define MAX_IPS                8192
->  #define PAGE_OFFSET    0xffff880000000000
->
-> +static int map_fd;
->  static int nr_cpus;
->
->  static void usage(void)
-> @@ -34,7 +33,8 @@ static void usage(void)
->         printf("       duration   # sampling duration (seconds), default 5\n");
->  }
->
-> -static int sampling_start(int *pmu_fd, int freq)
-> +static int sampling_start(int *pmu_fd, int freq, struct bpf_program *prog,
-> +                         struct bpf_link **link)
+$ perf stat --pfm-events inst_retired:any_p:c=1:i -e cycles ....
 
-It's not apparent from looking at struct bpf_link **link whether it's
-an output parameter (so sampling_start is supposed to assign *single*
-link to return it to calling function) or it's an array of pointers.
-Seems like it's the latter, so I'd prefer this written as
+v2 of this patch makes the --pfm-events man page documentation
+conditional on libpfm4 behing configured. It tidies some of the
+documentation and adds the feature test missed in the v1 patch.
 
-struct bpf_link *links[] (notice also plural name).
+Author: Stephane Eranian <eranian@google.com>
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/build/Makefile.feature             |   6 +-
+ tools/build/feature/Makefile             |   7 +-
+ tools/build/feature/test-libpfm4.c       |   8 +
+ tools/perf/Documentation/Makefile        |   4 +-
+ tools/perf/Documentation/perf-record.txt |  11 +
+ tools/perf/Documentation/perf-stat.txt   |  10 +
+ tools/perf/Documentation/perf-top.txt    |  11 +
+ tools/perf/Makefile.config               |  13 ++
+ tools/perf/Makefile.perf                 |   6 +-
+ tools/perf/builtin-list.c                |  16 ++
+ tools/perf/builtin-record.c              |  20 ++
+ tools/perf/builtin-stat.c                |  21 ++
+ tools/perf/builtin-top.c                 |  20 ++
+ tools/perf/util/evsel.c                  |   2 +-
+ tools/perf/util/evsel.h                  |   1 +
+ tools/perf/util/parse-events.c           | 246 +++++++++++++++++++++++
+ tools/perf/util/parse-events.h           |   5 +
+ tools/perf/util/pmu.c                    |  11 +
+ tools/perf/util/pmu.h                    |   1 +
+ 19 files changed, 411 insertions(+), 8 deletions(-)
+ create mode 100644 tools/build/feature/test-libpfm4.c
 
-Please consider this.
+diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+index 574c2e0b9d20..08c6fe5aee2d 100644
+--- a/tools/build/Makefile.feature
++++ b/tools/build/Makefile.feature
+@@ -72,7 +72,8 @@ FEATURE_TESTS_BASIC :=                  \
+         setns				\
+         libaio				\
+         libzstd				\
+-        disassembler-four-args
++        disassembler-four-args		\
++        libpfm4
+ 
+ # FEATURE_TESTS_BASIC + FEATURE_TESTS_EXTRA is the complete list
+ # of all feature tests
+@@ -127,7 +128,8 @@ FEATURE_DISPLAY ?=              \
+          bpf			\
+          libaio			\
+          libzstd		\
+-         disassembler-four-args
++         disassembler-four-args	\
++         libpfm4
+ 
+ # Set FEATURE_CHECK_(C|LD)FLAGS-all for all FEATURE_TESTS features.
+ # If in the future we need per-feature checks/flags for features not
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index 7ac0d8088565..573072d32545 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -67,7 +67,9 @@ FILES=                                          \
+          test-llvm.bin				\
+          test-llvm-version.bin			\
+          test-libaio.bin			\
+-         test-libzstd.bin
++         test-libzstd.bin			\
++         test-libpfm4.bin
++
+ 
+ FILES := $(addprefix $(OUTPUT),$(FILES))
+ 
+@@ -321,6 +323,9 @@ $(OUTPUT)test-libaio.bin:
+ $(OUTPUT)test-libzstd.bin:
+ 	$(BUILD) -lzstd
+ 
++$(OUTPUT)test-libpfm4.bin:
++	$(BUILD) -lpfm
++
+ ###############################
+ 
+ clean:
+diff --git a/tools/build/feature/test-libpfm4.c b/tools/build/feature/test-libpfm4.c
+new file mode 100644
+index 000000000000..7f24df86cf09
+--- /dev/null
++++ b/tools/build/feature/test-libpfm4.c
+@@ -0,0 +1,8 @@
++#include <sys/types.h>
++#include <perfmon/pfmlib.h>
++
++int main(void)
++{
++        pfm_initialize();
++        return 0;
++}
+diff --git a/tools/perf/Documentation/Makefile b/tools/perf/Documentation/Makefile
+index adc5a7e44b98..02cf2efeeee2 100644
+--- a/tools/perf/Documentation/Makefile
++++ b/tools/perf/Documentation/Makefile
+@@ -48,7 +48,7 @@ man5dir=$(mandir)/man5
+ man7dir=$(mandir)/man7
+ 
+ ASCIIDOC=asciidoc
+-ASCIIDOC_EXTRA = --unsafe -f asciidoc.conf
++ASCIIDOC_EXTRA += --unsafe -f asciidoc.conf
+ ASCIIDOC_HTML = xhtml11
+ MANPAGE_XSL = manpage-normal.xsl
+ XMLTO_EXTRA =
+@@ -59,7 +59,7 @@ HTML_REF = origin/html
+ 
+ ifdef USE_ASCIIDOCTOR
+ ASCIIDOC = asciidoctor
+-ASCIIDOC_EXTRA = -a compat-mode
++ASCIIDOC_EXTRA += -a compat-mode
+ ASCIIDOC_EXTRA += -I. -rasciidoctor-extensions
+ ASCIIDOC_EXTRA += -a mansource="perf" -a manmanual="perf Manual"
+ ASCIIDOC_HTML = xhtml5
+diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+index b23a4012a606..bb617528e3d1 100644
+--- a/tools/perf/Documentation/perf-record.txt
++++ b/tools/perf/Documentation/perf-record.txt
+@@ -587,6 +587,17 @@ Make a copy of /proc/kcore and place it into a directory with the perf data file
+ Limit the sample data max size, <size> is expected to be a number with
+ appended unit character - B/K/M/G
+ 
++ifdef::HAVE_LIBPFM[]
++--pfm-events events::
++Select a PMU event using libpfm4 syntax (see http://perfmon2.sf.net)
++including support for event filters. For example '--pfm-events
++inst_retired:any_p:u:c=1:i'. More than one event can be passed to the
++option using the comma separator. Hardware events and generic hardware
++events cannot be mixed together. The latter must be used with the -e
++option. The -e option and this one can be mixed and matched.  Events
++can be grouped using the {} notation.
++endif::HAVE_LIBPFM[]
++
+ SEE ALSO
+ --------
+ linkperf:perf-stat[1], linkperf:perf-list[1]
+diff --git a/tools/perf/Documentation/perf-stat.txt b/tools/perf/Documentation/perf-stat.txt
+index 9431b8066fb4..4171f28dc6b7 100644
+--- a/tools/perf/Documentation/perf-stat.txt
++++ b/tools/perf/Documentation/perf-stat.txt
+@@ -71,6 +71,16 @@ report::
+ --tid=<tid>::
+         stat events on existing thread id (comma separated list)
+ 
++ifdef::HAVE_LIBPFM[]
++--pfm-events events::
++Select a PMU event using libpfm4 syntax (see http://perfmon2.sf.net)
++including support for event filters. For example '--pfm-events
++inst_retired:any_p:u:c=1:i'. More than one event can be passed to the
++option using the comma separator. Hardware events and generic hardware
++events cannot be mixed together. The latter must be used with the -e
++option. The -e option and this one can be mixed and matched.  Events
++can be grouped using the {} notation.
++endif::HAVE_LIBPFM[]
+ 
+ -a::
+ --all-cpus::
+diff --git a/tools/perf/Documentation/perf-top.txt b/tools/perf/Documentation/perf-top.txt
+index 324b6b53c86b..ee81ba153dea 100644
+--- a/tools/perf/Documentation/perf-top.txt
++++ b/tools/perf/Documentation/perf-top.txt
+@@ -310,6 +310,17 @@ Default is to monitor all CPUS.
+ 	go straight to the histogram browser, just like 'perf top' with no events
+ 	explicitely specified does.
+ 
++ifdef::HAVE_LIBPFM[]
++--pfm-events events::
++Select a PMU event using libpfm4 syntax (see http://perfmon2.sf.net)
++including support for event filters. For example '--pfm-events
++inst_retired:any_p:u:c=1:i'. More than one event can be passed to the
++option using the comma separator. Hardware events and generic hardware
++events cannot be mixed together. The latter must be used with the -e
++option. The -e option and this one can be mixed and matched.  Events
++can be grouped using the {} notation.
++endif::HAVE_LIBPFM[]
++
+ 
+ INTERACTIVE PROMPTING KEYS
+ --------------------------
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 80e55e796be9..23fb81741164 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -999,6 +999,19 @@ ifdef LIBCLANGLLVM
+   endif
+ endif
+ 
++ifndef NO_LIBPFM4
++  ifeq ($(feature-libpfm4), 1)
++    CFLAGS += -DHAVE_LIBPFM
++    EXTLIBS += -lpfm
++    ASCIIDOC_EXTRA = -aHAVE_LIBPFM=1
++    msg := $(warning ASCIIDOC_EXTRA=$(ASCIIDOC_EXTRA))
++    $(call detected,CONFIG_LIBPFM4)
++  else
++    msg := $(warning libpfm4 not found, disables libpfm4 support. Please install libpfm4-dev);
++    NO_LIBPFM4 := 1
++  endif
++endif
++
+ # Among the variables below, these:
+ #   perfexecdir
+ #   perf_include_dir
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index 3eda9d4b88e7..1515c7af4e47 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -118,6 +118,8 @@ include ../scripts/utilities.mak
+ #
+ # Define LIBBPF_DYNAMIC to enable libbpf dynamic linking.
+ #
++# Define NO_LIBPFM4 to disable libpfm4 extension.
++#
+ 
+ # As per kernel Makefile, avoid funny character set dependencies
+ unexport LC_ALL
+@@ -188,7 +190,7 @@ AWK     = awk
+ # non-config cases
+ config := 1
+ 
+-NON_CONFIG_TARGETS := clean python-clean TAGS tags cscope help install-doc install-man install-html install-info install-pdf doc man html info pdf
++NON_CONFIG_TARGETS := clean python-clean TAGS tags cscope help
+ 
+ ifdef MAKECMDGOALS
+ ifeq ($(filter-out $(NON_CONFIG_TARGETS),$(MAKECMDGOALS)),)
+@@ -832,7 +834,7 @@ INSTALL_DOC_TARGETS += quick-install-doc quick-install-man quick-install-html
+ 
+ # 'make doc' should call 'make -C Documentation all'
+ $(DOC_TARGETS):
+-	$(QUIET_SUBDIR0)Documentation $(QUIET_SUBDIR1) $(@:doc=all)
++	$(QUIET_SUBDIR0)Documentation $(QUIET_SUBDIR1) $(@:doc=all) ASCIIDOC_EXTRA=$(ASCIIDOC_EXTRA)
+ 
+ TAG_FOLDERS= . ../lib ../include
+ TAG_FILES= ../../include/uapi/linux/perf_event.h
+diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
+index 965ef017496f..5edeb428168a 100644
+--- a/tools/perf/builtin-list.c
++++ b/tools/perf/builtin-list.c
+@@ -18,6 +18,10 @@
+ #include <subcmd/parse-options.h>
+ #include <stdio.h>
+ 
++#ifdef HAVE_LIBPFM
++#include <perfmon/pfmlib.h>
++#endif
++
+ static bool desc_flag = true;
+ static bool details_flag;
+ 
+@@ -56,6 +60,18 @@ int cmd_list(int argc, const char **argv)
+ 	if (!raw_dump && pager_in_use())
+ 		printf("\nList of pre-defined events (to be used in -e):\n\n");
+ 
++#ifdef HAVE_LIBPFM
++	{
++		int ret;
++		ret = pfm_initialize();
++		if (ret != PFM_SUCCESS) {
++			fprintf(stderr,
++				"warning libpfm failed to initialize: %s\n",
++				pfm_strerror(ret));
++		}
++	}
++#endif
++
+ 	if (argc == 0) {
+ 		print_events(NULL, raw_dump, !desc_flag, long_desc_flag,
+ 				details_flag, deprecated);
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 4c301466101b..10b31f5f5fc1 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -64,6 +64,10 @@
+ #include <linux/zalloc.h>
+ #include <linux/bitmap.h>
+ 
++#ifdef HAVE_LIBPFM
++#include <perfmon/pfmlib.h>
++#endif
++
+ struct switch_output {
+ 	bool		 enabled;
+ 	bool		 signal;
+@@ -2405,6 +2409,11 @@ static struct option __record_options[] = {
+ #endif
+ 	OPT_CALLBACK(0, "max-size", &record.output_max_size,
+ 		     "size", "Limit the maximum size of the output file", parse_output_max_size),
++#ifdef HAVE_LIBPFM
++	OPT_CALLBACK(0, "pfm-events", &record.evlist, "event",
++		"libpfm4 event selector. use 'perf list' to list available events",
++		parse_libpfm_events_option),
++#endif
+ 	OPT_END()
+ };
+ 
+@@ -2445,6 +2454,17 @@ int cmd_record(int argc, const char **argv)
+ 	if (rec->evlist == NULL)
+ 		return -ENOMEM;
+ 
++#ifdef HAVE_LIBPFM
++	{
++		int ret;
++		ret = pfm_initialize();
++		if (ret != PFM_SUCCESS) {
++			ui__warning("warning libpfm failed to initialize: %s\n",
++				pfm_strerror(ret));
++		}
++	}
++#endif
++
+ 	err = perf_config(perf_record_config, rec);
+ 	if (err)
+ 		return err;
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index a098c2ebf4ea..08ed4eaddd4a 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -89,6 +89,10 @@
+ #include <linux/ctype.h>
+ #include <perf/evlist.h>
+ 
++#ifdef HAVE_LIBPFM
++#include <perfmon/pfmlib.h>
++#endif
++
+ #define DEFAULT_SEPARATOR	" "
+ #define FREEZE_ON_SMI_PATH	"devices/cpu/freeze_on_smi"
+ 
+@@ -929,6 +933,11 @@ static struct option stat_options[] = {
+ 	OPT_BOOLEAN_FLAG(0, "all-user", &stat_config.all_user,
+ 			 "Configure all used events to run in user space.",
+ 			 PARSE_OPT_EXCLUSIVE),
++#ifdef HAVE_LIBPFM
++	OPT_CALLBACK(0, "pfm-events", &evsel_list, "event",
++		"libpfm4 event selector. use 'perf list' to list available events",
++		parse_libpfm_events_option),
++#endif
+ 	OPT_END()
+ };
+ 
+@@ -1867,6 +1876,18 @@ int cmd_stat(int argc, const char **argv)
+ 	unsigned int interval, timeout;
+ 	const char * const stat_subcommands[] = { "record", "report" };
+ 
++#ifdef HAVE_LIBPFM
++	{
++		int ret;
++		ret = pfm_initialize();
++		if (ret != PFM_SUCCESS) {
++			fprintf(stderr,
++				"warning libpfm failed to initialize: %s\n",
++				pfm_strerror(ret));
++		}
++	}
++#endif
++
+ 	setlocale(LC_ALL, "");
+ 
+ 	evsel_list = evlist__new();
+diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+index d2539b793f9d..db6da472499b 100644
+--- a/tools/perf/builtin-top.c
++++ b/tools/perf/builtin-top.c
+@@ -84,6 +84,10 @@
+ #include <linux/ctype.h>
+ #include <perf/mmap.h>
+ 
++#ifdef HAVE_LIBPFM
++#include <perfmon/pfmlib.h>
++#endif
++
+ static volatile int done;
+ static volatile int resize;
+ 
+@@ -1545,6 +1549,11 @@ int cmd_top(int argc, const char **argv)
+ 			"number of thread to run event synthesize"),
+ 	OPT_BOOLEAN(0, "namespaces", &opts->record_namespaces,
+ 		    "Record namespaces events"),
++#ifdef HAVE_LIBPFM
++	OPT_CALLBACK(0, "pfm-events", &top.evlist, "event",
++		"libpfm4 event selector. use 'perf list' to list available events",
++		parse_libpfm_events_option),
++#endif
+ 	OPTS_EVSWITCH(&top.evswitch),
+ 	OPT_END()
+ 	};
+@@ -1558,6 +1567,17 @@ int cmd_top(int argc, const char **argv)
+ 	if (status < 0)
+ 		return status;
+ 
++#ifdef HAVE_LIBPFM
++	{
++		int ret;
++		ret = pfm_initialize();
++		if (ret != PFM_SUCCESS) {
++			ui__warning("warning libpfm failed to initialize: %s\n",
++				pfm_strerror(ret));
++		}
++	}
++#endif
++
+ 	top.annotation_opts.min_pcnt = 5;
+ 	top.annotation_opts.context  = 4;
+ 
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index c8dc4450884c..fea7bbf0682c 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -2418,7 +2418,7 @@ bool perf_evsel__fallback(struct evsel *evsel, int err,
+ 
+ 		/* Is there already the separator in the name. */
+ 		if (strchr(name, '/') ||
+-		    strchr(name, ':'))
++		    (strchr(name, ':') && !evsel->is_libpfm_event))
+ 			sep = "";
+ 
+ 		if (asprintf(&new_name, "%s%su", name, sep) < 0)
+diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+index dc14f4a823cd..8dcbe34e9442 100644
+--- a/tools/perf/util/evsel.h
++++ b/tools/perf/util/evsel.h
+@@ -76,6 +76,7 @@ struct evsel {
+ 	bool			ignore_missing_thread;
+ 	bool			forced_leader;
+ 	bool			use_uncore_alias;
++	bool			is_libpfm_event;
+ 	/* parse modifier helper */
+ 	int			exclude_GH;
+ 	int			sample_read;
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index a14995835d85..266453445c5c 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -37,6 +37,11 @@
+ #include "util/evsel_config.h"
+ #include "util/event.h"
+ 
++#ifdef HAVE_LIBPFM
++#include <perfmon/pfmlib_perf_event.h>
++static void print_libpfm_events(bool name_only);
++#endif
++
+ #define MAX_NAME_LEN 100
+ 
+ #ifdef PARSER_DEBUG
+@@ -2794,6 +2799,10 @@ void print_events(const char *event_glob, bool name_only, bool quiet_flag,
+ 	print_sdt_events(NULL, NULL, name_only);
+ 
+ 	metricgroup__print(true, true, NULL, name_only, details_flag);
++
++#ifdef HAVE_LIBPFM
++	print_libpfm_events(name_only);
++#endif
+ }
+ 
+ int parse_events__is_hardcoded_term(struct parse_events_term *term)
+@@ -3042,3 +3051,240 @@ char *parse_events_formats_error_string(char *additional_terms)
+ fail:
+ 	return NULL;
+ }
++
++#ifdef HAVE_LIBPFM
++static int
++parse_libpfm_event(char *strp, struct perf_event_attr *attr)
++{
++	int ret;
++
++	ret = pfm_get_perf_event_encoding(strp, PFM_PLM0|PFM_PLM3,
++					attr, NULL, NULL);
++	return ret;
++}
++
++int parse_libpfm_events_option(const struct option *opt, const char *str,
++			int unset __maybe_unused)
++{
++	struct evlist *evlist = *(struct evlist **)opt->value;
++	struct perf_event_attr attr;
++	struct perf_pmu *pmu;
++	struct evsel *evsel, *grp_leader = NULL;
++	char *p, *q, *p_orig;
++	const char *sep;
++	int grp_evt = -1;
++	int ret;
++
++	p_orig = p = strdup(str);
++	if (!p)
++		return -1;
++	/*
++	 * force loading of the PMU list
++	 */
++	perf_pmu__scan(NULL);
++
++	for (q = p; strsep(&p, ",{}"); q = p) {
++		sep = p ? str + (p - p_orig - 1) : "";
++		if (*sep == '{') {
++			if (grp_evt > -1) {
++				fprintf(stderr, "nested event groups not supported\n");
++				goto error;
++			}
++			grp_evt++;
++		}
++
++		/* no event */
++		if (*q == '\0')
++			continue;
++
++		memset(&attr, 0, sizeof(attr));
++		event_attr_init(&attr);
++
++		ret = parse_libpfm_event(q, &attr);
++		if (ret != PFM_SUCCESS) {
++			fprintf(stderr, "failed to parse event %s : %s\n", str, pfm_strerror(ret));
++			goto error;
++		}
++
++		evsel = perf_evsel__new_idx(&attr, evlist->core.nr_entries);
++		if (evsel == NULL)
++			goto error;
++
++		evsel->name = strdup(q);
++		if (!evsel->name) {
++			evsel__delete(evsel);
++			goto error;
++		}
++		evsel->is_libpfm_event = true;
++
++		pmu = perf_pmu__find_by_type((unsigned)attr.type);
++		if (pmu)
++			evsel->core.own_cpus = perf_cpu_map__get(pmu->cpus);
++
++		evlist__add(evlist, evsel);
++
++		if (grp_evt == 0)
++			grp_leader = evsel;
++
++		if (grp_evt > -1) {
++			evsel->leader = grp_leader;
++			grp_leader->core.nr_members++;
++			grp_evt++;
++		}
++
++		if (*sep == '}') {
++			if (grp_evt < 0) {
++				fprintf(stderr, "cannot close a non-existing event group\n");
++				goto error;
++			}
++			evlist->nr_groups++;
++			grp_leader = NULL;
++			grp_evt = -1;
++		}
++	}
++	return 0;
++error:
++	free(p_orig);
++	return -1;
++}
++
++static const char *srcs[PFM_ATTR_CTRL_MAX]={
++	[PFM_ATTR_CTRL_UNKNOWN] = "???",
++	[PFM_ATTR_CTRL_PMU] = "PMU",
++	[PFM_ATTR_CTRL_PERF_EVENT] = "perf_event",
++};
++
++static void
++print_attr_flags(pfm_event_attr_info_t *info)
++{
++	int n = 0;
++
++	if (info->is_dfl) {
++		printf("[default] ");
++		n++;
++	}
++
++	if (info->is_precise) {
++		printf("[precise] ");
++		n++;
++	}
++
++	if (!n)
++		printf("- ");
++}
++
++static void
++print_libpfm_detailed_events(pfm_pmu_info_t *pinfo, pfm_event_info_t *info)
++{
++	pfm_event_attr_info_t ainfo;
++	const char *src;
++	int j, ret;
++
++	ainfo.size = sizeof(ainfo);
++
++	printf("\nName  : %s\n", info->name);
++	printf("PMU   : %s\n", pinfo->name);
++	printf("Desc  : %s\n", info->desc);
++	printf("Equiv : %s\n", info->equiv ? info->equiv : "None");
++	printf("Code  : 0x%"PRIx64"\n", info->code);
++
++	pfm_for_each_event_attr(j, info) {
++		ret = pfm_get_event_attr_info(info->idx, j, PFM_OS_PERF_EVENT_EXT, &ainfo);
++		if (ret != PFM_SUCCESS)
++			continue;
++
++		if (ainfo.ctrl >= PFM_ATTR_CTRL_MAX)
++			ainfo.ctrl = PFM_ATTR_CTRL_UNKNOWN;
++
++		src = srcs[ainfo.ctrl];
++		switch(ainfo.type) {
++		case PFM_ATTR_UMASK:
++			printf("Umask : 0x%02"PRIx64" : %s: [%s] : ", ainfo.code, src, ainfo.name);
++			print_attr_flags(&ainfo);
++			printf(": %s\n", ainfo.desc);
++			break;
++		case PFM_ATTR_MOD_BOOL:
++			printf("Modif : %s: [%s] : %s (boolean)\n", src, ainfo.name, ainfo.desc);
++			break;
++		case PFM_ATTR_MOD_INTEGER:
++			printf("Modif : %s: [%s] : %s (integer)\n", src, ainfo.name, ainfo.desc);
++			break;
++		case PFM_ATTR_NONE:
++		case PFM_ATTR_RAW_UMASK:
++		case PFM_ATTR_MAX:
++		default:
++			printf("Attr  : %s: [%s] : %s\n", src, ainfo.name, ainfo.desc);
++		}
++	}
++}
++
++/*
++ * list all pmu::event:umask, pmu::event
++ * printed events may not be all valid combinations of umask for an event
++ */
++static void
++print_libpfm_simplified_events(pfm_pmu_info_t *pinfo, pfm_event_info_t *info)
++{
++	pfm_event_attr_info_t ainfo;
++	int j, ret;
++	int um = 0;
++
++	ainfo.size = sizeof(ainfo);
++
++	pfm_for_each_event_attr(j, info) {
++		ret = pfm_get_event_attr_info(info->idx, j, PFM_OS_PERF_EVENT_EXT, &ainfo);
++		if (ret != PFM_SUCCESS)
++			continue;
++
++		if (ainfo.type != PFM_ATTR_UMASK)
++			continue;
++
++		printf("%s::%s:%s\n", pinfo->name, info->name, ainfo.name);
++		um++;
++	}
++	if (um == 0)
++		printf("%s::%s\n", pinfo->name, info->name);
++}
++
++static void
++print_libpfm_events(bool name_only)
++{
++	pfm_event_info_t info;
++	pfm_pmu_info_t pinfo;
++	pfm_event_attr_info_t ainfo;
++	int i, p, ret;
++
++	/* initialize to zero to indicate ABI version */
++	info.size  = sizeof(info);
++	pinfo.size = sizeof(pinfo);
++	ainfo.size = sizeof(ainfo);
++
++	putchar('\n');
++
++	pfm_for_all_pmus(p) {
++		ret = pfm_get_pmu_info(p, &pinfo);
++		if (ret != PFM_SUCCESS)
++			continue;
++
++		/* ony print events that are supported by host HW */
++		if (!pinfo.is_present)
++			continue;
++
++		/* handled by perf directly */
++		if (pinfo.pmu == PFM_PMU_PERF_EVENT)
++			continue;
++
++		for (i = pinfo.first_event; i != -1; i = pfm_get_event_next(i)) {
++
++			ret = pfm_get_event_info(i, PFM_OS_PERF_EVENT_EXT, &info);
++			if (ret != PFM_SUCCESS)
++				continue;
++
++			if (!name_only)
++				print_libpfm_detailed_events(&pinfo, &info);
++			else
++				print_libpfm_simplified_events(&pinfo, &info);
++		}
++	}
++}
++#endif
+diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
+index 27596cbd0ba0..84d4799c9a31 100644
+--- a/tools/perf/util/parse-events.h
++++ b/tools/perf/util/parse-events.h
+@@ -37,6 +37,11 @@ int parse_events_terms(struct list_head *terms, const char *str);
+ int parse_filter(const struct option *opt, const char *str, int unset);
+ int exclude_perf(const struct option *opt, const char *arg, int unset);
+ 
++#ifdef HAVE_LIBPFM
++extern int parse_libpfm_events_option(const struct option *opt, const char *str,
++				int unset);
++#endif
++
+ #define EVENTS_HELP_MAX (128*1024)
+ 
+ enum perf_pmu_event_symbol_type {
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 8b99fd312aae..9e4a70c7204a 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -864,6 +864,17 @@ static struct perf_pmu *pmu_find(const char *name)
+ 	return NULL;
+ }
+ 
++struct perf_pmu *perf_pmu__find_by_type(unsigned int type)
++{
++	struct perf_pmu *pmu;
++
++	list_for_each_entry(pmu, &pmus, list)
++		if (pmu->type == type)
++			return pmu;
++
++	return NULL;
++}
++
+ struct perf_pmu *perf_pmu__scan(struct perf_pmu *pmu)
+ {
+ 	/*
+diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+index 6737e3d5d568..15a3253f1719 100644
+--- a/tools/perf/util/pmu.h
++++ b/tools/perf/util/pmu.h
+@@ -64,6 +64,7 @@ struct perf_pmu_alias {
+ };
+ 
+ struct perf_pmu *perf_pmu__find(const char *name);
++struct perf_pmu *perf_pmu__find_by_type(unsigned int type);
+ int perf_pmu__config(struct perf_pmu *pmu, struct perf_event_attr *attr,
+ 		     struct list_head *head_terms,
+ 		     struct parse_events_error *error);
+-- 
+2.25.1.481.gfbce0eb801-goog
 
->  {
->         int i;
->
-> @@ -53,20 +53,22 @@ static int sampling_start(int *pmu_fd, int freq)
->                         fprintf(stderr, "ERROR: Initializing perf sampling\n");
->                         return 1;
->                 }
-> -               assert(ioctl(pmu_fd[i], PERF_EVENT_IOC_SET_BPF,
-> -                            prog_fd[0]) == 0);
-> -               assert(ioctl(pmu_fd[i], PERF_EVENT_IOC_ENABLE, 0) == 0);
-> +               link[i] = bpf_program__attach_perf_event(prog, pmu_fd[i]);
-> +               if (link[i] < 0) {
-
-link is a pointer, < 0 doesn't make sense and is always going to be
-false on x86. Use IS_ERR(link[i]). It's also a good idea to set it to
-NULL, if link creation failed to prevent accidental
-bpf_link__destroy(link[i]) later on, trying to free bogus pointer.
-
-> +                       fprintf(stderr, "ERROR: Attach perf event\n");
-> +                       return 1;
-> +               }
->         }
->
->         return 0;
->  }
->
-> -static void sampling_end(int *pmu_fd)
-> +static void sampling_end(struct bpf_link **link)
-
-same as above, struct bpf_link *links[] would be much better here, IMO.
-
->  {
->         int i;
->
->         for (i = 0; i < nr_cpus; i++)
-> -               close(pmu_fd[i]);
-> +               bpf_link__destroy(link[i]);
->  }
->
->  struct ipcount {
-> @@ -128,14 +130,18 @@ static void print_ip_map(int fd)
->  static void int_exit(int sig)
->  {
->         printf("\n");
-> -       print_ip_map(map_fd[0]);
-> +       print_ip_map(map_fd);
->         exit(0);
->  }
->
->  int main(int argc, char **argv)
->  {
-> +       int prog_fd, *pmu_fd, opt, freq = DEFAULT_FREQ, secs = DEFAULT_SECS;
-> +       struct bpf_program *prog;
-> +       struct bpf_object *obj;
-> +       struct bpf_link **link;
->         char filename[256];
-> -       int *pmu_fd, opt, freq = DEFAULT_FREQ, secs = DEFAULT_SECS;
-> +       int error = 0;
->
->         /* process arguments */
->         while ((opt = getopt(argc, argv, "F:h")) != -1) {
-> @@ -165,36 +171,54 @@ int main(int argc, char **argv)
->         /* create perf FDs for each CPU */
->         nr_cpus = sysconf(_SC_NPROCESSORS_CONF);
-
-While neither approach is ideal, using number of online CPUs
-(_SC_NPROCESSORS_ONLN) will probably work in slightly more cases
-(there are machines configured with, say, 256 possible CPUs, but only
-32 available, for instance).
-
-
->         pmu_fd = malloc(nr_cpus * sizeof(int));
-
-similar naming nit: pmu_fds?
-
-> -       if (pmu_fd == NULL) {
-> -               fprintf(stderr, "ERROR: malloc of pmu_fd\n");
-> -               return 1;
-> +       link = malloc(nr_cpus * sizeof(struct bpf_link *));
-
-Use calloc() to have those links initialized to NULL automatically.
-Makes clean up so much easier.
-
-> +       if (pmu_fd == NULL || link == NULL) {
-> +               fprintf(stderr, "ERROR: malloc of pmu_fd/link\n");
-> +               error = 1;
-> +               goto cleanup;
->         }
->
->         /* load BPF program */
->         snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
-> -       if (load_bpf_file(filename)) {
-> +       if (bpf_prog_load(filename, BPF_PROG_TYPE_PERF_EVENT, &obj, &prog_fd)) {
-
-Using skeleton would be best, but it's probably more appropriate for
-another patch to integrate skeleton generation with samples/bpf. So
-the next one would be bpf_object__open_file(), instead of legacy
-bpf_prog_load().
-
->                 fprintf(stderr, "ERROR: loading BPF program (errno %d):\n",
->                         errno);
-> -               if (strcmp(bpf_log_buf, "") == 0)
-> -                       fprintf(stderr, "Try: ulimit -l unlimited\n");
-> -               else
-> -                       fprintf(stderr, "%s", bpf_log_buf);
-> -               return 1;
-> +               error = 1;
-> +               goto cleanup;
-> +       }
-> +
-> +       prog = bpf_program__next(NULL, obj);
-
-I'm a bit lazy here, sorry, but isn't the name of the program known?
-bpf_object__find_program_by_title() is preferable.
-
-> +       if (!prog) {
-> +               fprintf(stderr, "ERROR: finding a prog in obj file failed\n");
-> +               error = 1;
-> +               goto cleanup;
-> +       }
-> +
-> +       map_fd = bpf_object__find_map_fd_by_name(obj, "ip_map");
-> +       if (map_fd < 0) {
-> +               fprintf(stderr, "ERROR: finding a map in obj file failed\n");
-> +               error = 1;
-> +               goto cleanup;
->         }
-> +
->         signal(SIGINT, int_exit);
->         signal(SIGTERM, int_exit);
->
->         /* do sampling */
->         printf("Sampling at %d Hertz for %d seconds. Ctrl-C also ends.\n",
->                freq, secs);
-> -       if (sampling_start(pmu_fd, freq) != 0)
-> -               return 1;
-> +       if (sampling_start(pmu_fd, freq, prog, link) != 0) {
-> +               error = 1;
-> +               goto cleanup;
-> +       }
->         sleep(secs);
-> -       sampling_end(pmu_fd);
-> -       free(pmu_fd);
-> +       sampling_end(link);
->
->         /* output sample counts */
-> -       print_ip_map(map_fd[0]);
-> +       print_ip_map(map_fd);
->
-> -       return 0;
-> +cleanup:
-> +       free(pmu_fd);
-> +       free(link);
-
-
-Uhm... you are freeing this only on clean up. Also, you need to
-bpf_link__destroy() first. And close all pmu_fds. Surely process exit
-will ensure all this is cleaned up, but it's a good tone to clean up
-all resources explicitly.
-
-> +       return error;
->  }
-> diff --git a/samples/bpf/trace_event_user.c b/samples/bpf/trace_event_user.c
-> index 356171bc392b..30c25ef99fc5 100644
-> --- a/samples/bpf/trace_event_user.c
-> +++ b/samples/bpf/trace_event_user.c
-> @@ -6,22 +6,21 @@
->  #include <stdlib.h>
->  #include <stdbool.h>
->  #include <string.h>
-> -#include <fcntl.h>
-> -#include <poll.h>
-> -#include <sys/ioctl.h>
->  #include <linux/perf_event.h>
->  #include <linux/bpf.h>
->  #include <signal.h>
-> -#include <assert.h>
->  #include <errno.h>
->  #include <sys/resource.h>
-> +#include <bpf/bpf.h>
->  #include <bpf/libbpf.h>
-> -#include "bpf_load.h"
->  #include "perf-sys.h"
->  #include "trace_helpers.h"
->
->  #define SAMPLE_FREQ 50
->
-> +/* counts, stackmap */
-> +static int map_fd[2];
-> +struct bpf_program *prog;
->  static bool sys_read_seen, sys_write_seen;
->
->  static void print_ksym(__u64 addr)
-> @@ -137,9 +136,16 @@ static inline int generate_load(void)
->  static void test_perf_event_all_cpu(struct perf_event_attr *attr)
->  {
->         int nr_cpus = sysconf(_SC_NPROCESSORS_CONF);
-> +       struct bpf_link **link = malloc(nr_cpus * sizeof(struct bpf_link *));
-
-same as above, calloc() is better choice here
-
->         int *pmu_fd = malloc(nr_cpus * sizeof(int));
->         int i, error = 0;
->
-> +       if (pmu_fd == NULL || link == NULL) {
-> +               printf("malloc of pmu_fd/link failed\n");
-> +               error = 1;
-> +               goto err;
-> +       }
-> +
->         /* system wide perf event, no need to inherit */
->         attr->inherit = 0;
->
-> @@ -151,8 +157,12 @@ static void test_perf_event_all_cpu(struct perf_event_attr *attr)
->                         error = 1;
->                         goto all_cpu_err;
->                 }
-> -               assert(ioctl(pmu_fd[i], PERF_EVENT_IOC_SET_BPF, prog_fd[0]) == 0);
-> -               assert(ioctl(pmu_fd[i], PERF_EVENT_IOC_ENABLE) == 0);
-> +               link[i] = bpf_program__attach_perf_event(prog, pmu_fd[i]);
-> +               if (link[i] < 0) {
-> +                       printf("bpf_program__attach_perf_event failed\n");
-> +                       error = 1;
-> +                       goto all_cpu_err;
-> +               }
->         }
->
->         if (generate_load() < 0) {
-> @@ -161,11 +171,11 @@ static void test_perf_event_all_cpu(struct perf_event_attr *attr)
->         }
->         print_stacks();
->  all_cpu_err:
-> -       for (i--; i >= 0; i--) {
-> -               ioctl(pmu_fd[i], PERF_EVENT_IOC_DISABLE);
-> -               close(pmu_fd[i]);
-> -       }
-> +       for (i--; i >= 0; i--)
-> +               bpf_link__destroy(link[i]);
-
-still need close(pmu_fd[i]);
-
-> +err:
->         free(pmu_fd);
-> +       free(link);
->         if (error)
->                 int_exit(0);
-
-
->  }
-> @@ -173,6 +183,7 @@ static void test_perf_event_all_cpu(struct perf_event_attr *attr)
->  static void test_perf_event_task(struct perf_event_attr *attr)
->  {
->         int pmu_fd, error = 0;
-> +       struct bpf_link *link;
->
->         /* per task perf event, enable inherit so the "dd ..." command can be traced properly.
->          * Enabling inherit will cause bpf_perf_prog_read_time helper failure.
-> @@ -185,8 +196,12 @@ static void test_perf_event_task(struct perf_event_attr *attr)
->                 printf("sys_perf_event_open failed\n");
->                 int_exit(0);
->         }
-> -       assert(ioctl(pmu_fd, PERF_EVENT_IOC_SET_BPF, prog_fd[0]) == 0);
-> -       assert(ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE) == 0);
-> +       link = bpf_program__attach_perf_event(prog, pmu_fd);
-> +       if (link < 0) {
-> +               printf("bpf_program__attach_perf_event failed\n");
-> +               close(pmu_fd);
-> +               int_exit(0);
-> +       }
->
->         if (generate_load() < 0) {
->                 error = 1;
-> @@ -194,8 +209,7 @@ static void test_perf_event_task(struct perf_event_attr *attr)
->         }
->         print_stacks();
->  err:
-> -       ioctl(pmu_fd, PERF_EVENT_IOC_DISABLE);
-> -       close(pmu_fd);
-> +       bpf_link__destroy(link);
->         if (error)
->                 int_exit(0);
-
-This will exit with 0 error code and won't notify about error... Pass
-through err?
-
->  }
-> @@ -282,7 +296,9 @@ static void test_bpf_perf_event(void)
->  int main(int argc, char **argv)
->  {
->         struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
-> +       struct bpf_object *obj;
->         char filename[256];
-> +       int prog_fd;
->
->         snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
->         setrlimit(RLIMIT_MEMLOCK, &r);
-> @@ -295,9 +311,20 @@ int main(int argc, char **argv)
->                 return 1;
->         }
->
-> -       if (load_bpf_file(filename)) {
-> -               printf("%s", bpf_log_buf);
-> -               return 2;
-> +       if (bpf_prog_load(filename, BPF_PROG_TYPE_PERF_EVENT, &obj, &prog_fd))
-> +               return 1;
-> +
-> +       prog = bpf_program__next(NULL, obj);
-> +       if (!prog) {
-> +               printf("finding a prog in obj file failed\n");
-> +               return 1;
-> +       }
-> +
-> +       map_fd[0] = bpf_object__find_map_fd_by_name(obj, "counts");
-> +       map_fd[1] = bpf_object__find_map_fd_by_name(obj, "stackmap");
-> +       if (map_fd[0] < 0 || map_fd[1] < 0) {
-> +               printf("finding a counts/stackmap map in obj file failed\n");
-> +               return 1;
->         }
->
->         if (fork() == 0) {
-> --
-> 2.25.1
->
