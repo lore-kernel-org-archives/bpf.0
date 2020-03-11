@@ -2,247 +2,139 @@ Return-Path: <SRS0=y2jO=44=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87E84C10DCE
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 02:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5DCEC10F25
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 03:26:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4A244222C3
-	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 02:12:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 770C620674
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 03:26:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="Zyai6Ale"
+	dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b="ECHIVNCT";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rr04A5h7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727528AbgCKCMj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Mar 2020 22:12:39 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:52662 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727506AbgCKCMj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Mar 2020 22:12:39 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 11so393037wmo.2
-        for <bpf@vger.kernel.org>; Tue, 10 Mar 2020 19:12:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u3fV4GJZtcSb2sQMglSsUz56vJfyXq9KJXAU1tEwCic=;
-        b=Zyai6AlecnZcpv78v2Dneo+BXmEfCkV7MhMbUZjlMoLY/NJfApbSamSSxrIlk/C2I4
-         OJmTNApd7zSsjM/HK6E03TJS78j4o6f9HNwXFM9K5vgZD+uwEJmch+4XRu4TLLA98U3l
-         //0ilB9ZteSjV4zrqaokylhIUI1SM5LcOkQ73SMyx9kwJq55DlUJCBslU65Iyq/IH6g8
-         tYQrFMik3gryb7CERKD7xjnzs7xV7bEG+5+KJRlB/MzHk6d0mTRFzG0a3u8Z718C96F4
-         j3usKN5aWudZcmjkpHt3ulQSR2Jf/6mx1O1L65r5RKXRZJyyNLmu6I1V/I6Pe7w/3V8U
-         xQVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u3fV4GJZtcSb2sQMglSsUz56vJfyXq9KJXAU1tEwCic=;
-        b=NrZJTuFf3DLhrflxYXYNOn1bfkLiNOmvAIY57jDNZWkDfl4aiXHuH4L7Rpd7JEbX3d
-         tsbScruimS4/FcJlpFmSYFxypgrlS5G4PyInPKWnOnmeettOTPCVGr7hugMq6y8axSpi
-         jqGArtQjZygerkY7d5nxZ4J9EgQY7Bu6AEXHYyw0JH5PRENyOaAp7rgGkZo5ovaPvAJU
-         tawpH3zDumYppcvI6nerT8siucfAEi7ZEFEjISwv7MkbL5T7B1hQkXQJ1nLYelSD1ZTK
-         NPi+wI/g487wB9EFXW4VnwELXa/51Ors+JmxbgFhHo48PsIJVNIxCVyoh8Xf37TKP/lV
-         Z2TQ==
-X-Gm-Message-State: ANhLgQ0WZo7W6GWiJlaS4qSStrai7eMweR/osDnsE8LxZJLDjeSZYr1h
-        MjjetdGXyfWRGa5Xuxg4+eyqOw==
-X-Google-Smtp-Source: ADFU+vu/OnD5YoOF/g98giyycp/IGgcQDSW2aISBYcRiNG6GNLNLakMxsUyl05P6Mg7F94QQ35Hrag==
-X-Received: by 2002:a1c:a750:: with SMTP id q77mr722420wme.120.1583892757537;
-        Tue, 10 Mar 2020 19:12:37 -0700 (PDT)
-Received: from localhost.localdomain ([194.35.118.214])
-        by smtp.gmail.com with ESMTPSA id x17sm6120635wmi.28.2020.03.10.19.12.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 19:12:37 -0700 (PDT)
-From:   Quentin Monnet <quentin@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Quentin Monnet <quentin@isovalent.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH bpf-next] tools: bpftool: restore message on failure to guess program type
-Date:   Wed, 11 Mar 2020 02:12:05 +0000
-Message-Id: <20200311021205.9755-1-quentin@isovalent.com>
-X-Mailer: git-send-email 2.20.1
+        id S1727685AbgCKD0y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Mar 2020 23:26:54 -0400
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:35191 "EHLO
+        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727506AbgCKD0x (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 10 Mar 2020 23:26:53 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.west.internal (Postfix) with ESMTP id C08D56C5;
+        Tue, 10 Mar 2020 23:19:43 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 10 Mar 2020 23:19:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=b+Ma1H6/IShcWZqpJAo1sroDdFj
+        4Te1+J3eJjPIM5JU=; b=ECHIVNCT6Daf9QX6h78auESsTvlreFKUsOl7YL/deIR
+        DSKjlSxqc0pUdQDeWk9m8j0x/fp9VJlYhyjt0nByJumbzTGfu/0Wj3vplgfdTi6M
+        4uRr9S1kVxp4FZSRI95dmyGMUbp1QFYVdaEUBasiPg9Hjd3X91tGEvRBxpfKcvtB
+        oe8HGZePb7sitte8q9RvjRHSIe5FEbb6QlhOejhRNbDXZRNDPgRw9g53IoPnJC0t
+        vs//S60QIOOJyXid7kyy4QOkQdBCg8bYTkzImzN7XLz3wbz3VWP3F54jLS0iekb6
+        0O7rV8hwBawPi/wuvfQ8VXHedcSIy1a7Mo9gyfzBhqw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=b+Ma1H
+        6/IShcWZqpJAo1sroDdFj4Te1+J3eJjPIM5JU=; b=rr04A5h7BMT9Yj65iF6YDE
+        ECW6/MTrQ27G7qS9nzLXGSzUhxsev/OnnstAVSVWRkGBZkzJTUNJMhGCMiIbFPa1
+        t8oLSlqv9MT5IV1+qyfPZdniPIWxc6DGovX/mRPCIXQbyUySOHfmA9bcItA64CNu
+        ZglX+MDj09GgJhS2qTfgmtc6WJY4QCEUrdNSahqFmD2NIujb4iWAUI19B2aiMF4b
+        weI+pancvkoiZGslUBJEjf2spiHkfEw2skOlfYswPD6hZq4yCalNey0R31ecO8Pr
+        oBZk5Tkj+ZeA/WK+3NRYkNepwOIn1J90G+kr3W3mglvmI/XJpENb6rb6x3mdlxJA
+        ==
+X-ME-Sender: <xms:z1hoXmytAzEOi46fVw3GFhW_14BvvQR1Y1vWrMnMPUK4DGjvBo2RSA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedruddvuddgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepvfgrkhgr
+    shhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhird
+    hjpheqnecukfhppedugedrfedrjeegrdduieeknecuvehluhhsthgvrhfuihiivgepuden
+    ucfrrghrrghmpehmrghilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthh
+    hirdhjph
+X-ME-Proxy: <xmx:z1hoXiiUkX573jKbV_tcMGplJyH-eTvnmffAW08TYCowKgGJZ43ZvQ>
+    <xmx:z1hoXhO4Jm58TYxyrN5zn6entPRWUgacm00qBpgIiP8xHiW2q59qiQ>
+    <xmx:z1hoXgZXzw0UOQ9ISWNUI8F-0ZTWyBlm3ZZ489HaxtrKPs-w7c4QMQ>
+    <xmx:z1hoXjgGQP4vx36n0nQxZ9hGyM4-mPXoxwDnyYiOPkxeFxAyk-yhQQOwuNw>
+Received: from workstation (ae074168.dynamic.ppp.asahi-net.or.jp [14.3.74.168])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 8B70A3060F09;
+        Tue, 10 Mar 2020 23:19:40 -0400 (EDT)
+Date:   Wed, 11 Mar 2020 12:19:38 +0900
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     Jules Irenge <jbi.octave@gmail.com>
+Cc:     boqun.feng@gmail.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "moderated list:FIREWIRE AUDIO DRIVERS and IEC 61883-1/6 PACKET..." 
+        <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH 7/8] ALSA: firewire-tascam: Add missing annotation for
+ tscm_hwdep_read_queue()
+Message-ID: <20200311031937.GB8197@workstation>
+Mail-Followup-To: Jules Irenge <jbi.octave@gmail.com>, boqun.feng@gmail.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Clemens Ladisch <clemens@ladisch.de>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "moderated list:FIREWIRE AUDIO DRIVERS and IEC 61883-1/6 PACKET..." <alsa-devel@alsa-project.org>
+References: <0/8>
+ <20200311010908.42366-1-jbi.octave@gmail.com>
+ <20200311010908.42366-8-jbi.octave@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200311010908.42366-8-jbi.octave@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In commit 4a3d6c6a6e4d ("libbpf: Reduce log level for custom section
-names"), log level for messages for libbpf_attach_type_by_name() and
-libbpf_prog_type_by_name() was downgraded from "info" to "debug". The
-latter function, in particular, is used by bpftool when attempting to
-load programs, and this change caused bpftool to exit with no hint or
-error message when it fails to detect the type of the program to load
-(unless "-d" option was provided).
-
-To help users understand why bpftool fails to load the program, let's do
-a second run of the function with log level in "debug" mode in case of
-failure.
-
-Before:
-
-    # bpftool prog load sample_ret0.o /sys/fs/bpf/sample_ret0
-    # echo $?
-    255
-
-Or really verbose with -d flag:
-
-    # bpftool -d prog load sample_ret0.o /sys/fs/bpf/sample_ret0
-    libbpf: loading sample_ret0.o
-    libbpf: section(1) .strtab, size 134, link 0, flags 0, type=3
-    libbpf: skip section(1) .strtab
-    libbpf: section(2) .text, size 16, link 0, flags 6, type=1
-    libbpf: found program .text
-    libbpf: section(3) .debug_abbrev, size 55, link 0, flags 0, type=1
-    libbpf: skip section(3) .debug_abbrev
-    libbpf: section(4) .debug_info, size 75, link 0, flags 0, type=1
-    libbpf: skip section(4) .debug_info
-    libbpf: section(5) .rel.debug_info, size 32, link 14, flags 0, type=9
-    libbpf: skip relo .rel.debug_info(5) for section(4)
-    libbpf: section(6) .debug_str, size 150, link 0, flags 30, type=1
-    libbpf: skip section(6) .debug_str
-    libbpf: section(7) .BTF, size 155, link 0, flags 0, type=1
-    libbpf: section(8) .BTF.ext, size 80, link 0, flags 0, type=1
-    libbpf: section(9) .rel.BTF.ext, size 32, link 14, flags 0, type=9
-    libbpf: skip relo .rel.BTF.ext(9) for section(8)
-    libbpf: section(10) .debug_frame, size 40, link 0, flags 0, type=1
-    libbpf: skip section(10) .debug_frame
-    libbpf: section(11) .rel.debug_frame, size 16, link 14, flags 0, type=9
-    libbpf: skip relo .rel.debug_frame(11) for section(10)
-    libbpf: section(12) .debug_line, size 74, link 0, flags 0, type=1
-    libbpf: skip section(12) .debug_line
-    libbpf: section(13) .rel.debug_line, size 16, link 14, flags 0, type=9
-    libbpf: skip relo .rel.debug_line(13) for section(12)
-    libbpf: section(14) .symtab, size 96, link 1, flags 0, type=2
-    libbpf: looking for externs among 4 symbols...
-    libbpf: collected 0 externs total
-    libbpf: failed to guess program type from ELF section '.text'
-    libbpf: supported section(type) names are: socket sk_reuseport kprobe/ [...]
-
-After:
-
-    # bpftool prog load sample_ret0.o /sys/fs/bpf/sample_ret0
-    libbpf: failed to guess program type from ELF section '.text'
-    libbpf: supported section(type) names are: socket sk_reuseport kprobe/ [...]
-
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
----
- tools/bpf/bpftool/common.c |  7 +++++++
- tools/bpf/bpftool/main.c   |  7 -------
- tools/bpf/bpftool/main.h   |  5 +++++
- tools/bpf/bpftool/prog.c   | 27 +++++++++++++++++++++++----
- 4 files changed, 35 insertions(+), 11 deletions(-)
-
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index b75b8ec5469c..4512f7fb9adb 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -597,3 +597,10 @@ int parse_u32_arg(int *argc, char ***argv, __u32 *val, const char *what)
+On Wed, Mar 11, 2020 at 01:09:07AM +0000, Jules Irenge wrote:
+> Sparse reports a warning at tscm_hwdep_read_queue()
+> 
+> warning: context imbalance in tscm_hwdep_read_queue() - unexpected unlock
+> 
+> The root cause is the missing annotation at tscm_hwdep_read_queue()
+> Add the missing __releases(&tscm->lock) annotation
+> 
+> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+> ---
+>  sound/firewire/tascam/tascam-hwdep.c | 1 +
+>  1 file changed, 1 insertion(+)
  
- 	return 0;
- }
-+
-+int __printf(2, 0)
-+print_all_levels(__maybe_unused enum libbpf_print_level level,
-+		 const char *format, va_list args)
-+{
-+	return vfprintf(stderr, format, args);
-+}
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index 6d41bbfc6459..06449e846e4b 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -79,13 +79,6 @@ static int do_version(int argc, char **argv)
- 	return 0;
- }
- 
--static int __printf(2, 0)
--print_all_levels(__maybe_unused enum libbpf_print_level level,
--		 const char *format, va_list args)
--{
--	return vfprintf(stderr, format, args);
--}
--
- int cmd_select(const struct cmd *cmds, int argc, char **argv,
- 	       int (*help)(int argc, char **argv))
- {
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 724ef9d941d3..555e822203c5 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -14,6 +14,8 @@
- #include <linux/hashtable.h>
- #include <tools/libc_compat.h>
- 
-+#include <bpf/libbpf.h>
-+
- #include "json_writer.h"
- 
- #define ptr_to_u64(ptr)	((__u64)(unsigned long)(ptr))
-@@ -229,4 +231,7 @@ struct tcmsg;
- int do_xdp_dump(struct ifinfomsg *ifinfo, struct nlattr **tb);
- int do_filter_dump(struct tcmsg *ifinfo, struct nlattr **tb, const char *kind,
- 		   const char *devname, int ifindex);
-+
-+int print_all_levels(__maybe_unused enum libbpf_print_level level,
-+		     const char *format, va_list args);
- #endif
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 576ddd82bc96..9faf4efd36d4 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1247,6 +1247,25 @@ static int do_run(int argc, char **argv)
- 	return err;
- }
- 
-+static int
-+get_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
-+		      enum bpf_attach_type *expected_attach_type)
-+{
-+	libbpf_print_fn_t print_backup;
-+	int ret;
-+
-+	ret = libbpf_prog_type_by_name(name, prog_type, expected_attach_type);
-+	if (!ret)
-+		return ret;
-+
-+	/* libbpf_prog_type_by_name() failed, let's re-run with debug level */
-+	print_backup = libbpf_set_print(print_all_levels);
-+	ret = libbpf_prog_type_by_name(name, prog_type, expected_attach_type);
-+	libbpf_set_print(print_backup);
-+
-+	return ret;
-+}
-+
- static int load_with_options(int argc, char **argv, bool first_prog_only)
- {
- 	enum bpf_prog_type common_prog_type = BPF_PROG_TYPE_UNSPEC;
-@@ -1296,8 +1315,8 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
- 			strcat(type, *argv);
- 			strcat(type, "/");
- 
--			err = libbpf_prog_type_by_name(type, &common_prog_type,
--						       &expected_attach_type);
-+			err = get_prog_type_by_name(type, &common_prog_type,
-+						    &expected_attach_type);
- 			free(type);
- 			if (err < 0)
- 				goto err_free_reuse_maps;
-@@ -1396,8 +1415,8 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
- 		if (prog_type == BPF_PROG_TYPE_UNSPEC) {
- 			const char *sec_name = bpf_program__title(pos, false);
- 
--			err = libbpf_prog_type_by_name(sec_name, &prog_type,
--						       &expected_attach_type);
-+			err = get_prog_type_by_name(sec_name, &prog_type,
-+						    &expected_attach_type);
- 			if (err < 0)
- 				goto err_close_obj;
- 		}
--- 
-2.25.1
+This looks good.
 
+Acked-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+
+> diff --git a/sound/firewire/tascam/tascam-hwdep.c b/sound/firewire/tascam/tascam-hwdep.c
+> index c29a97f6f638..9801e33e7f2a 100644
+> --- a/sound/firewire/tascam/tascam-hwdep.c
+> +++ b/sound/firewire/tascam/tascam-hwdep.c
+> @@ -36,6 +36,7 @@ static long tscm_hwdep_read_locked(struct snd_tscm *tscm, char __user *buf,
+>  
+>  static long tscm_hwdep_read_queue(struct snd_tscm *tscm, char __user *buf,
+>  				  long remained, loff_t *offset)
+> +	__releases(&tscm->lock)
+>  {
+>  	char __user *pos = buf;
+>  	unsigned int type = SNDRV_FIREWIRE_EVENT_TASCAM_CONTROL;
+> -- 
+> 2.24.1
+
+
+Regards
+
+Takashi Sakamoto
