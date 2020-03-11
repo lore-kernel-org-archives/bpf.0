@@ -1,156 +1,146 @@
-Return-Path: <bpf-owner@vger.kernel.org>
+Return-Path: <SRS0=y2jO=44=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_NONE autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F129C4CECE
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 19:32:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by archive.lwn.net (Postfix) with ESMTP id E84727D910
-	for <lwn-bpf@archive.lwn.net>; Wed, 11 Mar 2020 15:58:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F39420736
+	for <bpf@archiver.kernel.org>; Wed, 11 Mar 2020 19:32:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZRa0WWvz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730026AbgCKP6g convert rfc822-to-8bit (ORCPT
-        <rfc822;lwn-bpf@archive.lwn.net>); Wed, 11 Mar 2020 11:58:36 -0400
-Received: from postout1.mail.lrz.de ([129.187.255.137]:37065 "EHLO
-        postout1.mail.lrz.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729841AbgCKP6g (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 11 Mar 2020 11:58:36 -0400
-Received: from lxmhs51.srv.lrz.de (localhost [127.0.0.1])
-        by postout1.mail.lrz.de (Postfix) with ESMTP id 48cxT57048zyS6
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 16:58:33 +0100 (CET)
-X-Virus-Scanned: by amavisd-new at lrz.de in lxmhs51.srv.lrz.de
-Received: from postout1.mail.lrz.de ([127.0.0.1])
-        by lxmhs51.srv.lrz.de (lxmhs51.srv.lrz.de [127.0.0.1]) (amavisd-new, port 20024)
-        with LMTP id fL8_aa3vDtXp for <bpf@vger.kernel.org>;
-        Wed, 11 Mar 2020 16:58:33 +0100 (CET)
-Received: from BADWLRZ-SWMBX03.ads.mwn.de (BADWLRZ-SWMBX03.ads.mwn.de [IPv6:2001:4ca0:0:108::159])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (Client CN "BADWLRZ-SWMBX03", Issuer "BADWLRZ-SWMBX03" (not verified))
-        by postout1.mail.lrz.de (Postfix) with ESMTPS id 48cxT55195zyZl
-        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 16:58:33 +0100 (CET)
-Received: from BADWLRZ-SWMBX03.ads.mwn.de (2001:4ca0:0:108::159) by
- BADWLRZ-SWMBX03.ads.mwn.de (2001:4ca0:0:108::159) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Wed, 11 Mar 2020 16:58:33 +0100
-Received: from BADWLRZ-SWMBX03.ads.mwn.de ([fe80::b83a:fd44:92bb:7e5e]) by
- BADWLRZ-SWMBX03.ads.mwn.de ([fe80::b83a:fd44:92bb:7e5e%13]) with mapi id
- 15.01.1913.007; Wed, 11 Mar 2020 16:58:33 +0100
-From:   "Gaul, Maximilian" <maximilian.gaul@hm.edu>
-To:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Shared Umem between processes
-Thread-Topic: Shared Umem between processes
-Thread-Index: AQHV973HYXLoSjdqpUaKyJTfUanHqA==
-Date:   Wed, 11 Mar 2020 15:58:33 +0000
-Message-ID: <fd5e40efd5c1426cb4a5942682407ea2@hm.edu>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Exchange-Organization-AuthAs: Internal
-X-MS-Exchange-Organization-AuthMechanism: 04
-X-MS-Exchange-Organization-AuthSource: BADWLRZ-SWMBX03.ads.mwn.de
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [80.246.32.33]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S1731218AbgCKTck (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Mar 2020 15:32:40 -0400
+Received: from mail-yw1-f67.google.com ([209.85.161.67]:40498 "EHLO
+        mail-yw1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731200AbgCKTcj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 11 Mar 2020 15:32:39 -0400
+Received: by mail-yw1-f67.google.com with SMTP id c15so3166974ywn.7
+        for <bpf@vger.kernel.org>; Wed, 11 Mar 2020 12:32:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LKraGJ30l6Da9gHXvZPSp4wo2q6s17TXGOTZwSnizRM=;
+        b=ZRa0WWvzWQ7vbhoCUSCiE+Xpnyn0r9X4j+VOZY5z0moAgoqNi7XrIrbvdOGZLoPStZ
+         t73/+8vK2zz/7Sh+YYuj8fHZZ3FvfEkXr6S9rYt7Ocx5uwZ/jttu0ZmY6lDF4hBC0sXu
+         RTFy9i9geyhj4B0j0J1TMco4guXl0g6ScFtbUdddNz65nOwp+Tj4KuGah5rZn7yD5Rip
+         nEJhat4np3znLve8DajoGUAaFw8E/zVSfQ8ONil21IEam4PVvzEjr7iYRP+6KxiOUnLs
+         Khqge9cA25XyxZdxn421HLHv3XL3BJR/eI7EJ1GdIvQIWL5pL6/nNTdMvucoFOejfkzH
+         yvNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LKraGJ30l6Da9gHXvZPSp4wo2q6s17TXGOTZwSnizRM=;
+        b=D+RPBThXgh+J5du0/6xdydkdLuEi55ALjCQc0WKPsXcgMnaGFElovE5auzGty89ZX0
+         uPcRPIQca3F71TTr7IFX244ZwkVugFE9XXF9HSnwW1Vs6k8hQIH6TD4xo9VtOvbXKoi6
+         tkJaWxZE3X/+aISspgV8wgSshrQyuPOhOvuwbqiQfbbDbDkvUIEGGuMyd641PewYzIfz
+         Z1fqyISgbzhu68cypITcUSxD1XnMvvQrp+8HyNOAIkSiJZWhymWFl5wceIV8pzQiR3Ux
+         YNyWLHBuuyiToOSf87haqvwx0yV8WKRFQjiUD21VcVXjcDt3Mn/l73tlgA+WrGYYCXw0
+         dOPw==
+X-Gm-Message-State: ANhLgQ1q9FZOm0QKRsHKwpFW8a6BYMmZYTpTxbnXk7taMYhQ0ArSwEYy
+        I6R81MtYlRHhBFR/482qUdGHVWgRlw7ezJF1gWbQfg==
+X-Google-Smtp-Source: ADFU+vuV0D3QIjqPpw7rA21p5bLAVNUkr3pTXiahSyMXLJ3IuwPm7ousgUlGjlBoJJ8eQPNDhN9e5l4QTnhzSuuZwbw=
+X-Received: by 2002:a25:c482:: with SMTP id u124mr4859412ybf.286.1583955157918;
+ Wed, 11 Mar 2020 12:32:37 -0700 (PDT)
 MIME-Version: 1.0
+References: <20200310185003.57344-1-irogers@google.com> <20200310195915.GA1676879@tassilo.jf.intel.com>
+ <CABPqkBRQo=bEOiCFGFjwcM8TZaXMFyaL7o1hcFd6Bc3w+LhJQA@mail.gmail.com> <20200311161320.GA254105@krava>
+In-Reply-To: <20200311161320.GA254105@krava>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 11 Mar 2020 12:32:26 -0700
+Message-ID: <CAP-5=fXYMTT7-iiaacO1VF0rRSO6t9W0a5edkiEwdZMYBcrtpQ@mail.gmail.com>
+Subject: Re: [PATCH] perf tools: add support for lipfm4
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Igor Lubashev <ilubashe@akamai.com>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiwei Sun <jiwei.sun@windriver.com>,
+        yuzhoujian <yuzhoujian@didichuxing.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
-Archived-At: <http://archive.lwn.net:8080/bpf/fd5e40efd5c1426cb4a5942682407ea2@hm.edu/>
-List-Archive: <http://archive.lwn.net:8080/bpf/>
-List-Post: <mailto:bpf@vger.kernel.org>
 
-Hello everyone,
+On Wed, Mar 11, 2020 at 9:13 AM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Tue, Mar 10, 2020 at 02:39:23PM -0700, Stephane Eranian wrote:
+> > On Tue, Mar 10, 2020 at 12:59 PM Andi Kleen <ak@linux.intel.com> wrote:
+> > >
+> > > On Tue, Mar 10, 2020 at 11:50:03AM -0700, Ian Rogers wrote:
+> > > > This patch links perf with the libpfm4 library.
+> > > > This library contains all the hardware event tables for all
+> > > > processors supported by perf_events. This is a helper library
+> > > > that help convert from a symbolic event name to the event
+> > > > encoding required by the underlying kernel interface. This
+> > > > library is open-source and available from: http://perfmon2.sf.net.
+> > >
+> > > For most CPUs the builtin perf JSON event support should make
+> > > this redundant.
+> > >
+> > We decided to post this patch to propose an alternative to the JSON
+> > file approach. It could be an option during the build.
+> > The libpfm4 library has been around for 15 years now. Therefore, it
+> > supports a lot of processors core and uncore and it  is very portable.
+> > The key value add I see is that this is a library that can be, and has
+> > been, used by tool developers directly in their apps. It can
+> > work with more than Linux perf_events interface. It is not tied to the
+> > interface. It has well defined and documented entry points.
+> > We do use libpfm4 extensively at Google in both the perf tool and
+> > applications. The PAPI toolkit also relies on this library.
+> >
+> > I don't see this as competing with the JSON approach. It is just an
+> > option I'd like to offer to users especially those familiar
+> > with it in their apps.
+>
+> I dont mind having it, in fact I found really old email where I'm
+> asking Peter about that ;-) and he wasn't very keen about that:
+>   https://lore.kernel.org/lkml/1312806326.10488.30.camel@twins/
+>
+> not sure what was the actual reason at that time and if anything
+> changed since.. Peter?
+>
+> btw I can't apply even that v2 on latest Arnaldo's branch
+>
+> jirka
 
+Thanks Jiri,
 
-I am not sure if this is the correct address for my question / problem but I was forwarded to this e-mail from the libbpf github-issue section, so this is my excuse.
+the patches were done on tip.git/master, perhaps there is a conflict
+with the Documents Makefile due to adding better man page dates? I'll
+try to repro building on
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/ on the
+perf/core branch unless you  have a different suggestion? I also
+noticed a warning crept into the Makefile.config in the v2 patch set
+that should be removed.
 
-
-Just a few information at the start of this e-mail: My program is largely based on: https://github.com/xdp-project/xdp-tutorial/tree/master/advanced03-AF_XDP and I am using libbpf: https://github.com/libbpf/libbpf
-
-
-I am currently trying to build an application that enables me to process multiple udp-multicast streams at once in parallel (each with up to several ten-thousands of packets per second).
-
-
-My first solution was to steer each multicast-stream on a separate RX-Queue on my NIC via `ethtool -N <if> flow-type udp4 ...` and to spawn as much user-space processes (each with a separate AF-XDP socket connected to one of the RX-Queues) as there are streams to process.
-
-
-But because this solution is limited to the amount of RX-Queues the NIC has and I wanted to build something hardware-independent, I looked around a bit and found a feature called `XDP_SHARED_UMEM`.
-
-
-
-As far as I understand (please correct me if I am wrong), at the moment libbpf only supports shared umem between threads of a process but not between processes - right?
-
-I ran unto the problem, that `struct xsk_umem` is hidden in `xsk.c`. This prevents me from copying the content from the original socket / umem into shared memory. I am not sure, what information the sub-process (the one which is using the umem from another process) needs so I figured the simplest solution would be to just copy the whole umem struct.
-
-
-
-So I went with the "quick-fix" to just move the definition of `struct xsk_umem` into `xsk.h` and to copy the umem-information from the original process into a shared memory. This process then calls `fork()` thus spawning a sub-process. This sub-process then reads the previously written umem-information from shared memory and passes it into `xsk_configure_socket` (af_xdp_user.c) which then eventually calls `xsk_socket__create` in `xsk.c`. This function then checks for `umem->refcount` and sets the flags for shared umem accordingly.
-
-
-
-After returning from `xsk_socket__create` (we are still in `xsk_configure_socket` in af_xdp_user.c), `bpf_get_link_xdp_id` is called (I don't know if that's necessary). But after that call I exit the function `xsk_socket__create` in the sub-process because I figured it is probably bad to configure the umem a second time by calling `xsk_ring_prod__reserve` after that:
-
-
-
-
-static struct xsk_socket_info *xsk_configure_socket(struct config *cfg, struct xsk_umem_info *umem) {
-
-struct xsk_socket_config xsk_cfg;
-struct xsk_socket_info *xsk_info;
-uint32_t idx;
-uint32_t prog_id = 0;
-int i;
-int ret;
-
-xsk_info = calloc(1, sizeof(*xsk_info));
-if (!xsk_info)
-return NULL;
-
-xsk_info->umem = umem;
-xsk_cfg.rx_size = XSK_RING_CONS__DEFAULT_NUM_DESCS;
-xsk_cfg.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS;
-xsk_cfg.libbpf_flags = 0;
-xsk_cfg.xdp_flags = cfg->xdp_flags;
-xsk_cfg.bind_flags = cfg->xsk_bind_flags;
-ret = xsk_socket__create(&xsk_info->xsk, cfg->ifname, cfg->xsk_if_queue, umem->umem, &xsk_info->rx, &xsk_info->tx, &xsk_cfg);
-
-if (ret) {
-fprintf(stderr, "FAIL 1\n");
-goto error_exit;
-}
-
-ret = bpf_get_link_xdp_id(cfg->ifindex, &prog_id, cfg->xdp_flags);
-if (ret) {
-fprintf(stderr, "FAIL 2\n");
-goto error_exit;
-}
-
-/* Initialize umem frame allocation */
-for (i = 0; i < NUM_FRAMES; i++)
-xsk_info->umem_frame_addr[i] = i * FRAME_SIZE;
-
-xsk_info->umem_frame_free = NUM_FRAMES;
-
-if(cfg->use_shrd_umem) {
-return xsk_info;
-}
-        ...
-}
-
-Somehow what I am doing doesn't work because my sub-process dies in `xsk_configure_socket`. I am not able to debug it properly with GDB though. Another point I don't understand is the statement:
-
-However, note that you need to supply the XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD libbpf_flag with the xsk_socket__create calls and load your own XDP program as there is no built in one in libbpf that will route the traffic for you.
-
-from https://www.kernel.org/doc/html/latest/networking/af_xdp.html#xdp-shared-umem-bind-flag
-
-I didn't know that libbpf loads a XDP-program? Why would it do that? I am using my own af-xdp program which filters for udp-packets. If I set `xsk_cfg.libbpf_flags = XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD;` in `xsk_configure_socket`, the af-xdp-socket fd is not put into the kernel `xsks-map` which basically means that I don't receive any packets.
-
-As you probably already noticed, I am overstrained with the concept of Shared Umem and I have to say, there is no documentation about it besides the two sentences in https://www.kernel.org/doc/html/latest/networking/af_xdp.html#xdp-shared-umem-bind-flag and a mail in a linux mailbox from Nov. 2019 stating that this feature is now implemented.
-
-Can you please help?
-
-Best regards
-
-Max
+Ian
