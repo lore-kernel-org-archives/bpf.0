@@ -2,74 +2,74 @@ Return-Path: <SRS0=5rgj=45=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67D66C10DCE
-	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 11:47:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0EC9C10DCE
+	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 12:34:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 33B3C20738
-	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 11:47:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 98FA920724
+	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 12:34:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="maKSHf6Q"
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="sLkiTauD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726385AbgCLLrI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Mar 2020 07:47:08 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:55169 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726558AbgCLLrI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Mar 2020 07:47:08 -0400
-Received: by mail-wm1-f68.google.com with SMTP id n8so5743908wmc.4
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 04:47:05 -0700 (PDT)
+        id S1727069AbgCLMep (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Mar 2020 08:34:45 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:46570 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726299AbgCLMeo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Mar 2020 08:34:44 -0400
+Received: by mail-wr1-f66.google.com with SMTP id n15so7187122wrw.13
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 05:34:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
+        h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Xcb1whEx/M7l8V4RY5VY7erWSpV6ZvtwmpcEaLu64g0=;
-        b=maKSHf6Q4gWs6xZTm9GF/adE/CXeZL92JER0q0FwvuQUQRGfyBGTzpyCk0GYdVh1M9
-         6ihCBWG421zER0obAv0QsrM93VmVgtIRAID4LMxx5Xxcc6i5kGkkwUOBqCS1mmHGW4tN
-         pjD1OwhJMUF3cxMtbFi5/IukCI//+o8MueQseOYE/ouDWt8rcBF7QMVJyu4pB/VtanJv
-         UDEW80aoBPQbWjtNph5MiBcOI5Dd8U4RZcq06XF/CYkOPNPkJz+Bvi6gqPB3pAqYYKc1
-         b65NsHXFJIcBVMa+koxkI7LMAiSEbSKnlTZwf0eUBigs+OXbf+n7P7tiLlLyZdAyo9sq
-         0NsQ==
+        bh=d1+fOi0017/unlEfRky84Fb8uQzuaoKlQ5ncEoyZLNg=;
+        b=sLkiTauDY8nkqBHDiAH0IFppuclSVlt6BhSU/ydxOesxm5uJ6fXZJQ+M3nh0MJf47E
+         byYChFloxzoF7eVuSgVIxYoXIzPV9kfL6uwTuodCQwe0xQeyXlPcVhPk2qlsrBxmDON+
+         tlj9eML/KXo9qs8885i7kE7AfOgEQnwvkFik46TcosxGB6Bf/TFjqPIobfq0RTVqvt0I
+         xtfWc8oejgDkv9Di6Etb9iQjx5pGdf0GnlvWnh5XVLwBwB71OjHCJTi1cthyOziIARzu
+         lsxjizue4QQIeF6Q7KjtEHauI2JGY0mIH+o2dHd9DU1Z0/Ioh3Lw0u+vCwDGzNe1uBlX
+         ZKOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Xcb1whEx/M7l8V4RY5VY7erWSpV6ZvtwmpcEaLu64g0=;
-        b=imtCnQKjlXqZHbEypKppBp1/deINKWa1vBJXy5b58gqKLhPkocchpSm+utxqiAT3jJ
-         s2i41BZY+PJPUh6+sRbjjEUoevuDk0Ckxv4nO+bcf6K0cnT2VbFhVxm6zYgPLoLgVN3u
-         xkynrk1lVwEYi2ZPxPrjD6WyX3KcQfXakbYSP9OSpeWGmsuAmJBaotitlavYyrmegfFW
-         qwBuoLkrQOoF6Ac5qBU1aLm2VDIFSrNcnvhHAt9wo//ZUsglpkkHUSP4DR2QqzPtoI7N
-         i/pkGQC4mSYYNvgnvfoNWTODTqGoUB2wJRBKtYiQbgRoJ9XByOYVc7tj/CCo9pXBzTr/
-         RAPA==
-X-Gm-Message-State: ANhLgQ2R2vfvpP2q+i2Qti+Wjt3CDoMFFZN2TVqL8W2F5LJZL+zjPVG0
-        Edz66aS2MorQOWXR4U/ybfXL1w==
-X-Google-Smtp-Source: ADFU+vugDeW0GjkoY8ZMLo2RqQcsW8eatBEEiR9uf5turd+5k6XRbw8qTPAq4F+YYjT3ABU5bG4eDg==
-X-Received: by 2002:a1c:4c16:: with SMTP id z22mr4668964wmf.50.1584013625332;
-        Thu, 12 Mar 2020 04:47:05 -0700 (PDT)
+        bh=d1+fOi0017/unlEfRky84Fb8uQzuaoKlQ5ncEoyZLNg=;
+        b=YyCfL/QHL4E0z9f1Og9i2KWOeFxg80seqB0yKjcd13n/b6NScJeRSuz7kn6qEsZc3h
+         +5vZk7ts7QAPcV/TMNn1XZsJ/SM7hie5klKo7HTTORxsyAz3eQ6egdjgg/tGU7JBfmSy
+         GQkRAQRJoWRQD/LX9zlT45jGHXfsgofEJLAB1RXa3fP4oj14QmxtBOdhQAlrmRtA/rVB
+         v+fIjtuRIuIzLtLUcYb+T+WgSZVxebQrG/VqVLluyRD41tEJxX+L8CqvEbnYea1YDwSz
+         xJjRCwt78sRrQz6MK1jb6DTba1T2uOCdkoUD95QkKBz8lQ///fjdMIRA6C166XKoqMK0
+         Ahqw==
+X-Gm-Message-State: ANhLgQ15oSMtFNmPgwZsoVztEeXGoIuBIXR1O9BWl+gaew/Br7fFXQsj
+        yI0xhiyStbXafkg/mtV2nVVv/g==
+X-Google-Smtp-Source: ADFU+vtnj692mseVBwTQCA8hk2Sx6w1iWysC9Ys6Uoh6BVV+6avC2a+FWmlB+k3RKcH9X2kJ150Rfw==
+X-Received: by 2002:a5d:5584:: with SMTP id i4mr10415126wrv.378.1584016482318;
+        Thu, 12 Mar 2020 05:34:42 -0700 (PDT)
 Received: from [192.168.1.10] ([194.35.118.177])
-        by smtp.gmail.com with ESMTPSA id f17sm67015171wrj.28.2020.03.12.04.47.04
+        by smtp.gmail.com with ESMTPSA id w9sm37710557wrn.35.2020.03.12.05.34.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2020 04:47:04 -0700 (PDT)
-Subject: Re: [PATCH v2 bpf-next 3/3] bpftool: add _bpftool and profiler.skel.h
- to .gitignore
+        Thu, 12 Mar 2020 05:34:41 -0700 (PDT)
+Subject: Re: [PATCH v2 bpf-next 2/3] bpftool: skeleton should depend on libbpf
+From:   Quentin Monnet <quentin@isovalent.com>
 To:     Song Liu <songliubraving@fb.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
 Cc:     john.fastabend@gmail.com, kernel-team@fb.com, ast@kernel.org,
         daniel@iogearbox.net, arnaldo.melo@gmail.com, jolsa@kernel.org
 References: <20200311221844.3089820-1-songliubraving@fb.com>
- <20200311221844.3089820-4-songliubraving@fb.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-Message-ID: <d3172674-c1b9-0be9-5d2a-6259db647aad@isovalent.com>
-Date:   Thu, 12 Mar 2020 11:47:04 +0000
+ <20200311221844.3089820-3-songliubraving@fb.com>
+ <bf7fdd9c-f43d-1ef5-dad3-961a4534463c@isovalent.com>
+Message-ID: <bed6c51c-9a96-5957-7cd2-38f541e1dd6e@isovalent.com>
+Date:   Thu, 12 Mar 2020 12:34:40 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200311221844.3089820-4-songliubraving@fb.com>
+In-Reply-To: <bf7fdd9c-f43d-1ef5-dad3-961a4534463c@isovalent.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
@@ -78,9 +78,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-2020-03-11 15:18 UTC-0700 ~ Song Liu <songliubraving@fb.com>
-> These files are generated, so ignore them.
+2020-03-12 11:46 UTC+0000 ~ Quentin Monnet <quentin@isovalent.com>
+> 2020-03-11 15:18 UTC-0700 ~ Song Liu <songliubraving@fb.com>
+>> Add the dependency to libbpf, to fix build errors like:
+>>
+>>   In file included from skeleton/profiler.bpf.c:5:
+>>   .../bpf_helpers.h:5:10: fatal error: 'bpf_helper_defs.h' file not found
+>>   #include "bpf_helper_defs.h"
+>>            ^~~~~~~~~~~~~~~~~~~
+>>   1 error generated.
+>>   make: *** [skeleton/profiler.bpf.o] Error 1
+>>   make: *** Waiting for unfinished jobs....
+>>
+>> Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
+>> Acked-by: John Fastabend <john.fastabend@gmail.com>
+>> Signed-off-by: Song Liu <songliubraving@fb.com>
 > 
-> Signed-off-by: Song Liu <songliubraving@fb.com>
+> Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+> 
 
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+Sorry, I gave the tag too fast. This one is not solved on my machine,
+I still observe the same error when building out of tree, e.g. if I
+compile with e.g. "make O=/tmp/foo". This is because make does not
+know where to find bpf_helper_defs.h in that case.
+
+I could solve it with the additional diff:
+
+----
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 45a37e2fb6e6..8b765993598b 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -127,7 +127,7 @@ $(OUTPUT)_bpftool: $(_OBJS) $(LIBBPF)
+        $(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(_OBJS) $(LIBS)
+ 
+ skeleton/profiler.bpf.o: skeleton/profiler.bpf.c $(LIBBPF)
+-       $(QUIET_CLANG)$(CLANG) -I$(srctree)/tools/lib -g -O2 -target bpf -c $< -o $@
++       $(QUIET_CLANG)$(CLANG) -I$(srctree)/tools/lib -I$(LIBBPF_PATH) -g -O2 -target bpf -c $< -o $@
+ 
+ profiler.skel.h: $(OUTPUT)_bpftool skeleton/profiler.bpf.o
+        $(QUIET_GEN)$(OUTPUT)./_bpftool gen skeleton skeleton/profiler.bpf.o > $@
+----
+
+tools/testing/selftests/bpf/test_bpftool_build.sh seems happy on my
+setup with the above.
+
+Best regards,
+Quentin
