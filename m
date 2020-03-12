@@ -2,97 +2,184 @@ Return-Path: <SRS0=5rgj=45=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24DB7C2BB1D
-	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 18:21:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E70C4C10DCE
+	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 18:24:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 07827206EB
-	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 18:21:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BFFB220716
+	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 18:24:03 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qwZ4QNeS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726650AbgCLSVO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Mar 2020 14:21:14 -0400
-Received: from www62.your-server.de ([213.133.104.62]:44030 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726647AbgCLSVO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Mar 2020 14:21:14 -0400
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jCSSF-0006GZ-A8; Thu, 12 Mar 2020 19:21:11 +0100
-Received: from [85.7.42.192] (helo=pc-9.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jCSSE-000JOa-UF; Thu, 12 Mar 2020 19:21:11 +0100
-Subject: Re: [PATCH bpf] libbpf: add null pointer check in
- bpf_object__init_user_btf_maps()
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Michal Rostecki <mrostecki@opensuse.org>
-References: <20200312140357.20174-1-quentin@isovalent.com>
- <1fff03e7-e52b-edcc-d427-f912bf0a4af2@iogearbox.net>
- <CAEf4BzaQdv8s4cGp=ouitxczzWV1E1WeuxktDTp5JFkXXkRU=w@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <4a17add0-6756-a60c-7c5b-9ffe45ff4060@iogearbox.net>
-Date:   Thu, 12 Mar 2020 19:21:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726328AbgCLSYD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Mar 2020 14:24:03 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:19592 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726706AbgCLSYC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 12 Mar 2020 14:24:02 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02CIGYeF020495
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 11:24:01 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=/tBS5KiO8m1SQYSknSY7CYG5S+7N9Ztm7wo3NK861uw=;
+ b=qwZ4QNeS+nVqe2YjY5LAFDTHZobLOWCoNCdGpONHpvb7ntu+vaMh98vS4vAjtV5EtPY7
+ 9aOdzwppSgpTbFyEFJWJICLfe/5BpUBkdGm1njz1BxWtTBT5Bpxwv+TrbZjhEje8Baxu
+ HjZVS2M9rByrDrTqi6YnV1jYtXaV+k2efgc= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 2yqt7fg190-8
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 11:24:01 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Thu, 12 Mar 2020 11:23:44 -0700
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 51EA662E0874; Thu, 12 Mar 2020 11:23:41 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Song Liu <songliubraving@fb.com>
+Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <john.fastabend@gmail.com>, <quentin@isovalent.com>,
+        <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <arnaldo.melo@gmail.com>, <jolsa@kernel.org>,
+        Song Liu <songliubraving@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v3 bpf-next 1/3] bpftool: only build bpftool-prog-profile if supported by clang
+Date:   Thu, 12 Mar 2020 11:23:30 -0700
+Message-ID: <20200312182332.3953408-2-songliubraving@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200312182332.3953408-1-songliubraving@fb.com>
+References: <20200312182332.3953408-1-songliubraving@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzaQdv8s4cGp=ouitxczzWV1E1WeuxktDTp5JFkXXkRU=w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.2/25749/Thu Mar 12 14:09:06 2020)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-12_12:2020-03-11,2020-03-12 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ clxscore=1015 malwarescore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0 spamscore=0
+ mlxscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2003120093
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 3/12/20 6:54 PM, Andrii Nakryiko wrote:
-> On Thu, Mar 12, 2020 at 8:38 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->> On 3/12/20 3:03 PM, Quentin Monnet wrote:
->>> When compiling bpftool with clang 7, after the addition of its recent
->>> "bpftool prog profile" feature, Michal reported a segfault. This
->>> occurred while the build process was attempting to generate the
->>> skeleton needed for the profiling program, with the following command:
->>>
->>>       ./_bpftool gen skeleton skeleton/profiler.bpf.o > profiler.skel.h
->>>
->>> Tracing the error showed that bpf_object__init_user_btf_maps() does no
->>> verification on obj->btf before passing it to btf__get_nr_types(), where
->>> btf is dereferenced. Libbpf considers BTF information should be here
->>> because of the presence of a ".maps" section in the object file (hence
->>> the check on "obj->efile.btf_maps_shndx < 0" fails and we do not exit
->>> from the function early), but it was unable to load BTF info as there is
->>> no .BTF section.
->>>
->>> Add a null pointer check and error out if the pointer is null. The final
->>> bpftool executable still fails to build, but at least we have a proper
->>> error and no more segfault.
->>>
->>> Fixes: abd29c931459 ("libbpf: allow specifying map definitions using BTF")
->>> Cc: Andrii Nakryiko <andriin@fb.com>
->>> Reported-by: Michal Rostecki <mrostecki@opensuse.org>
->>> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
->>
->> Applied to bpf-next, thanks! Note ...
-> 
-> I don't think this is the right fix. The problem was in my
-> 5327644614a1 ("libbpf: Relax check whether BTF is mandatory") commit.
-> I've removed "mandatory" status of BTF if .maps is present. But that's
-> not right. We have the need for BTF at two levels: for libbpf itself
-> and for kernel, those are overlapping, but not exactly the same. BTF
-> is needed for libbpf when .maps, .struct_ops and externs are present.
-> But kernel needs it only for when .struct_ops are present. Right now
-> those checks are conflated together. Proper fix would be to separate
-> them. Can we please undo this patch? I'll post a proper fix shortly.
+bpftool-prog-profile requires clang to generate BTF for global variables.
+When compared with older clang, skip this command. This is achieved by
+adding a new feature, clang-bpf-global-var, to tools/build/feature.
 
-Ok, please send a proper fix for 5327644614a1 then. Tossed off the tree.
+Signed-off-by: Song Liu <songliubraving@fb.com>
+---
+ tools/bpf/bpftool/Makefile                      | 15 +++++++++++----
+ tools/bpf/bpftool/prog.c                        |  1 +
+ tools/build/feature/Makefile                    |  9 ++++++++-
+ tools/build/feature/test-clang-bpf-global-var.c |  4 ++++
+ 4 files changed, 24 insertions(+), 5 deletions(-)
+ create mode 100644 tools/build/feature/test-clang-bpf-global-var.c
+
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index f294f6c1e795..b0574751f231 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -62,8 +62,9 @@ RM ?= rm -f
+ CLANG ?= clang
+ 
+ FEATURE_USER = .bpftool
+-FEATURE_TESTS = libbfd disassembler-four-args reallocarray zlib
+-FEATURE_DISPLAY = libbfd disassembler-four-args zlib
++FEATURE_TESTS = libbfd disassembler-four-args reallocarray zlib \
++	clang-bpf-global-var
++FEATURE_DISPLAY = libbfd disassembler-four-args zlib clang-bpf-global-var
+ 
+ check_feat := 1
+ NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
+@@ -113,6 +114,12 @@ endif
+ OBJS = $(patsubst %.c,$(OUTPUT)%.o,$(SRCS)) $(OUTPUT)disasm.o
+ _OBJS = $(filter-out $(OUTPUT)prog.o,$(OBJS)) $(OUTPUT)_prog.o
+ 
++ifeq ($(feature-clang-bpf-global-var),1)
++	__OBJS = $(OBJS)
++else
++	__OBJS = $(_OBJS)
++endif
++
+ $(OUTPUT)_prog.o: prog.c
+ 	$(QUIET_CC)$(COMPILE.c) -MMD -DBPFTOOL_WITHOUT_SKELETONS -o $@ $<
+ 
+@@ -136,8 +143,8 @@ $(OUTPUT)disasm.o: $(srctree)/kernel/bpf/disasm.c
+ 
+ $(OUTPUT)feature.o: | zdep
+ 
+-$(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
+-	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
++$(OUTPUT)bpftool: $(__OBJS) $(LIBBPF)
++	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(__OBJS) $(LIBS)
+ 
+ $(OUTPUT)%.o: %.c
+ 	$(QUIET_CC)$(COMPILE.c) -MMD -o $@ $<
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 576ddd82bc96..925c6c66aad7 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1545,6 +1545,7 @@ static int do_loadall(int argc, char **argv)
+ 
+ static int do_profile(int argc, char **argv)
+ {
++	p_err("bpftool prog profile command is not supported. Please build bpftool with clang >= 10.0.0");
+ 	return 0;
+ }
+ 
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index 7ac0d8088565..ab8e89a7009c 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -67,7 +67,8 @@ FILES=                                          \
+          test-llvm.bin				\
+          test-llvm-version.bin			\
+          test-libaio.bin			\
+-         test-libzstd.bin
++         test-libzstd.bin			\
++         test-clang-bpf-global-var.bin
+ 
+ FILES := $(addprefix $(OUTPUT),$(FILES))
+ 
+@@ -75,6 +76,7 @@ CC ?= $(CROSS_COMPILE)gcc
+ CXX ?= $(CROSS_COMPILE)g++
+ PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
+ LLVM_CONFIG ?= llvm-config
++CLANG ?= clang
+ 
+ all: $(FILES)
+ 
+@@ -321,6 +323,11 @@ $(OUTPUT)test-libaio.bin:
+ $(OUTPUT)test-libzstd.bin:
+ 	$(BUILD) -lzstd
+ 
++$(OUTPUT)test-clang-bpf-global-var.bin:
++	$(CLANG) -S -g -target bpf -o - $(patsubst %.bin,%.c,$(@F)) |	\
++		grep BTF_KIND_VAR
++
++
+ ###############################
+ 
+ clean:
+diff --git a/tools/build/feature/test-clang-bpf-global-var.c b/tools/build/feature/test-clang-bpf-global-var.c
+new file mode 100644
+index 000000000000..221f1481d52e
+--- /dev/null
++++ b/tools/build/feature/test-clang-bpf-global-var.c
+@@ -0,0 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Facebook
++
++volatile int global_value_for_test = 1;
+-- 
+2.17.1
+
