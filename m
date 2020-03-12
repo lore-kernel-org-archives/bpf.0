@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE839C4CECE
-	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 18:24:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E00AC1975A
+	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 18:25:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C42F5206EB
-	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 18:24:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBA3620736
+	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 18:25:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="CeN5CWnV"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="caL/3VYl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbgCLSYn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Mar 2020 14:24:43 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32832 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726680AbgCLSYn (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 12 Mar 2020 14:24:43 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02CIHgT1020284
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 11:24:42 -0700
+        id S1726695AbgCLSZQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Mar 2020 14:25:16 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:28878 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726682AbgCLSZQ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 12 Mar 2020 14:25:16 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 02CIIImj032677
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 11:25:15 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=gcGaEU8fagjhbFrsiNJilfSh/p+dJinqNDLvnER0gS8=;
- b=CeN5CWnVIz0JIGhA32qMa5LIM9Vres1ElrwrhmRhcl7bgaNtaKcGoNjnB4T03P4JEmeK
- LIl6dLgMzHtOEB+ayt++vBo4P4mwGvoKGC7mJfyq4DRpkJpGGmFkj8EZhY86sJ99iYIr
- WHPkoLZ++2h0F5cGRYP3GkSgtEqrLAxpwCw= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 2yqt80r15d-17
+ content-type; s=facebook; bh=tuZ3CYBcGvSeudq4eLBh5hI2lTmTRPm9F7X7RabcwLY=;
+ b=caL/3VYlYEMafl2J49LBIdLGln3LjY3RtFxNVwhT5DYBD4TFM8FFUYoBwSIDubQrLo+m
+ NQDi4R8afB/jfVFXMUDpDoiKc43rsfysd+8rfG0vhD7OTdiQXBKBxxU3kujgFybZmoip
+ J3TZ2CVtUdGNjuyTF7eskLV45agbpqCjiLc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 2yqt89817j-20
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 11:24:42 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 11:25:15 -0700
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Thu, 12 Mar 2020 11:23:45 -0700
+ 15.1.1847.3; Thu, 12 Mar 2020 11:23:47 -0700
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 5018662E0874; Thu, 12 Mar 2020 11:23:44 -0700 (PDT)
+        id ACCAB62E0874; Thu, 12 Mar 2020 11:23:42 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -49,9 +49,9 @@ CC:     <john.fastabend@gmail.com>, <quentin@isovalent.com>,
         <arnaldo.melo@gmail.com>, <jolsa@kernel.org>,
         Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 3/3] bpftool: add _bpftool and profiler.skel.h to .gitignore
-Date:   Thu, 12 Mar 2020 11:23:32 -0700
-Message-ID: <20200312182332.3953408-4-songliubraving@fb.com>
+Subject: [PATCH v3 bpf-next 2/3] bpftool: skeleton should depend on libbpf
+Date:   Thu, 12 Mar 2020 11:23:31 -0700
+Message-ID: <20200312182332.3953408-3-songliubraving@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200312182332.3953408-1-songliubraving@fb.com>
 References: <20200312182332.3953408-1-songliubraving@fb.com>
@@ -60,10 +60,10 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-03-12_12:2020-03-11,2020-03-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- malwarescore=0 clxscore=1015 adultscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 phishscore=0 mlxlogscore=659 mlxscore=0
- bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ clxscore=1015 malwarescore=0 bulkscore=0 impostorscore=0 mlxscore=0
+ suspectscore=0 priorityscore=1501 spamscore=0 adultscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2003120093
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -71,28 +71,43 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-These files are generated, so ignore them.
+Add the dependency to libbpf, to fix build errors like:
 
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+  In file included from skeleton/profiler.bpf.c:5:
+  .../bpf_helpers.h:5:10: fatal error: 'bpf_helper_defs.h' file not found
+  #include "bpf_helper_defs.h"
+           ^~~~~~~~~~~~~~~~~~~
+  1 error generated.
+  make: *** [skeleton/profiler.bpf.o] Error 1
+  make: *** Waiting for unfinished jobs....
+
+Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
+Suggested-by: Quentin Monnet <quentin@isovalent.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- tools/bpf/bpftool/.gitignore | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/bpf/bpftool/Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/bpf/bpftool/.gitignore b/tools/bpf/bpftool/.gitignore
-index b13926432b84..8d6e8901ed2b 100644
---- a/tools/bpf/bpftool/.gitignore
-+++ b/tools/bpf/bpftool/.gitignore
-@@ -1,7 +1,9 @@
- *.d
-+/_bpftool
- /bpftool
- bpftool*.8
- bpf-helpers.*
- FEATURE-DUMP.bpftool
- feature
- libbpf
-+profiler.skel.h
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index b0574751f231..9ca3bfbb9ac4 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -126,11 +126,12 @@ $(OUTPUT)_prog.o: prog.c
+ $(OUTPUT)_bpftool: $(_OBJS) $(LIBBPF)
+ 	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(_OBJS) $(LIBS)
+ 
+-skeleton/profiler.bpf.o: skeleton/profiler.bpf.c
++skeleton/profiler.bpf.o: skeleton/profiler.bpf.c $(LIBBPF)
+ 	$(QUIET_CLANG)$(CLANG) \
+ 		-I$(srctree)/tools/include/uapi/ \
+ 		-I$(srctree)/tools/testing/selftests/bpf/include/uapi \
+-		-I$(srctree)/tools/lib -g -O2 -target bpf -c $< -o $@
++		-I$(LIBBPF_PATH) -I$(srctree)/tools/lib \
++		-g -O2 -target bpf -c $< -o $@
+ 
+ profiler.skel.h: $(OUTPUT)_bpftool skeleton/profiler.bpf.o
+ 	$(QUIET_GEN)$(OUTPUT)./_bpftool gen skeleton skeleton/profiler.bpf.o > $@
 -- 
 2.17.1
 
