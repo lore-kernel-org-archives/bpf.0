@@ -7,60 +7,60 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 107E1C10DCE
-	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 23:36:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD1E7C10DCE
+	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 23:37:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DAA2E2071C
-	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 23:36:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E560206FA
+	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 23:37:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vfF+aq3Y"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V4zxHVBU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726883AbgCLXg5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Mar 2020 19:36:57 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43387 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726863AbgCLXg4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Mar 2020 19:36:56 -0400
-Received: by mail-pf1-f193.google.com with SMTP id c144so4045467pfb.10;
-        Thu, 12 Mar 2020 16:36:55 -0700 (PDT)
+        id S1726988AbgCLXhA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Mar 2020 19:37:00 -0400
+Received: from mail-pf1-f180.google.com ([209.85.210.180]:33979 "EHLO
+        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726949AbgCLXg7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Mar 2020 19:36:59 -0400
+Received: by mail-pf1-f180.google.com with SMTP id 23so4067232pfj.1;
+        Thu, 12 Mar 2020 16:36:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Hds0QIRYrjA+X6+fdepz7VEu7G+vCOmFvm8ev69haCo=;
-        b=vfF+aq3Y+mkdxZ2orCJFoKEj1caclB4WV0Z5Xk2fNteIfQ9oX8epsTiBUq13veZc+V
-         5074v0Jk3iuStsnhGbtBidAmlKEmWCHBo6pHXYsyuibB54Z0HB5nKVXoLprydpeC6TQm
-         Ly/Qcvo4PMOhDsLNvCkoof/awnxOFokxNRbfnUSN5qKWKwmqja8u+5zqKtEuW+eIkEDl
-         RCYI9mLkPHt3ZIwJp/Y1XR+S2mKtL6kbfFBTC4G5mxN2KGefTJcWywXeBi4iu+9PF3Q1
-         T0ACEr2PiR0soOGIxORsXXZeH42A6qh9p6BHrZGEvJirDpATrJuq4+O2PMmZp9jbmWyL
-         EhNA==
+        bh=4SVXg9kxbC2Fg+hUIeLmO2FkLEfBDSulEoa9VNOcUUM=;
+        b=V4zxHVBUbC3CX2AHrHwD3moMDgg1UXxwWMeh5p5iy4i1NTAb2MfGzkbf2JjBs4MFHZ
+         j1fefkHDI/l4EfoR672OJ1YgT1DgyYbQC3BQUY4dxkWnjW6sk7KER4ZHGCsrccFTdjvP
+         Lsr07/V0KXLvSFcsjSxn87HsjHovYR389sAhpzDlWTXZ1W5NtG7auvdutYkNO0LonoxS
+         yM/nbqInqCHwDuBAmounpaai/PdnTHLJTNnT1jbBkfy56tF9270XawXCHxNdzI6gT9oN
+         SWwU5UFOI3OWJvr2Ij2EkavEGI484LHeQf372gb6ahx1hPTMjsyGPxXt9kP4+3zpD84s
+         7JtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=Hds0QIRYrjA+X6+fdepz7VEu7G+vCOmFvm8ev69haCo=;
-        b=JwRPtTc39dxGPKHsz8dJPwjaiXAqP6SZPtjaAlInMt5fDpPUDdM/niCx7fTEBVMf+G
-         FouGD/2XvrhDlQ+hMID2ip9s8r+x611Ep+x4gmmzxnL1VJfD84hA2/IxhDtEkPOLHslW
-         tx5C043ElZ+VQKYsR2nbfsj2wqXkBAOJYFIQ1mNODBhoo9mUnjXK1jTjqk4UoB5XzTvR
-         yUjNVTz9X/mZnGeCiB3avhT2htP7EwZkczIC9d0ig67WKnfRbsuCpJ3JWVgeUK1zbqHG
-         u2JU+mWUsPpvgnHMRL/AoVI+oopqjCdbWHt9GZBy+6emDv4iY/ollv1z8Ho6CrimIudM
-         Luwg==
-X-Gm-Message-State: ANhLgQ3KER+fA9zGO34vH9s6qu5QEQ327b7cSah5sy5yKGesA/8ahH02
-        yPNUoCB/ju8UV92iDMokUwADzlyv
-X-Google-Smtp-Source: ADFU+vtUksjdXHb6C7u2B8nK4GDSwhgJDoX+ZFLxxMoB1tXyzzPi+X/FFstfSV9sDF+MYFhBHBpzyg==
-X-Received: by 2002:a05:6a00:c8:: with SMTP id e8mr7906362pfj.131.1584056214648;
-        Thu, 12 Mar 2020 16:36:54 -0700 (PDT)
+        bh=4SVXg9kxbC2Fg+hUIeLmO2FkLEfBDSulEoa9VNOcUUM=;
+        b=Q51oTDzOm1bgK+6FZ3x2awDeuArAEyIZuMZBXbBELAge+YBwVFXdirxQuQpJ+PDaBH
+         IAdM5q7ppvedP9o4p/JXGz1BQ0I42ykzT+6iLcFgD9Fmm4LqbX4yxdp2mGq4BvPr2Du1
+         EAnqxsxGVgRTeC3WhQig25A3Xpa3J9yK9iEV0f6WKl4pG6txXJGYxi0yBABGucNZYOgd
+         njKbWP6ArMqvI9gmZa2VlKIMCmnwvFtw5c92ytD3v+pFyLWy4jAAwdzkzxSo1iO5qJSS
+         x4QrdJ3bY4s4cqfMdFb6zW8sjCRZmsCqtTFDqESMWf+nbm2x5moOQWU6p4jkACHFOojP
+         CxEw==
+X-Gm-Message-State: ANhLgQ2Ibc/7YLO3ZtmTF3PRdMXbISVlTotymAxvFVoW7EnLxhgTopH6
+        XhKS5EOFLanQaYA2SpvdTKlVBfcW
+X-Google-Smtp-Source: ADFU+vt0lm69YdgTi88z5Pu6HCemDOMeMdGF16ntw0Tid3JAskuSEOEAViTee1P2PwG2a5hbvM6eZg==
+X-Received: by 2002:a62:2ca:: with SMTP id 193mr10581862pfc.95.1584056217346;
+        Thu, 12 Mar 2020 16:36:57 -0700 (PDT)
 Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
-        by smtp.gmail.com with ESMTPSA id d6sm5075225pfn.214.2020.03.12.16.36.53
+        by smtp.gmail.com with ESMTPSA id d6sm5075225pfn.214.2020.03.12.16.36.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 16:36:54 -0700 (PDT)
+        Thu, 12 Mar 2020 16:36:56 -0700 (PDT)
 From:   Joe Stringer <joe@wand.net.nz>
 To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        eric.dumazet@gmail.com, lmb@cloudflare.com
-Subject: [PATCH bpf-next 3/7] bpf: Add socket assign support
-Date:   Thu, 12 Mar 2020 16:36:44 -0700
-Message-Id: <20200312233648.1767-4-joe@wand.net.nz>
+Cc:     Lorenz Bauer <lmb@cloudflare.com>, netdev@vger.kernel.org,
+        daniel@iogearbox.net, ast@kernel.org, eric.dumazet@gmail.com
+Subject: [PATCH bpf-next 5/7] selftests: bpf: add test for sk_assign
+Date:   Thu, 12 Mar 2020 16:36:46 -0700
+Message-Id: <20200312233648.1767-6-joe@wand.net.nz>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200312233648.1767-1-joe@wand.net.nz>
 References: <20200312233648.1767-1-joe@wand.net.nz>
@@ -71,249 +71,401 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for TPROXY via a new bpf helper, bpf_sk_assign().
+From: Lorenz Bauer <lmb@cloudflare.com>
 
-This helper requires the BPF program to discover the socket via a call
-to bpf_sk*_lookup_*(), then pass this socket to the new helper. The
-helper takes its own reference to the socket in addition to any existing
-reference that may or may not currently be obtained for the duration of
-BPF processing. For the destination socket to receive the traffic, the
-traffic must be routed towards that socket via local route, the socket
-must have the transparent option enabled out-of-band, and the socket
-must not be closing. If all of these conditions hold, the socket will be
-assigned to the skb to allow delivery to the socket.
+Attach a tc direct-action classifier to lo in a fresh network
+namespace, and rewrite all connection attempts to localhost:4321
+to localhost:1234.
 
-The recently introduced dst_sk_prefetch is used to communicate from the
-TC layer to the IP receive layer that the socket should be retained
-across the receive. The dst_sk_prefetch destination wraps any existing
-destination (if available) and stores it temporarily in a per-cpu var.
+Keep in mind that both client to server and server to client traffic
+passes the classifier.
 
-To ensure that no dst references held by the skb prior to sk_assign()
-are lost, they are stored in the per-cpu variable associated with
-dst_sk_prefetch. When the BPF program invocation from the TC action
-completes, we check the return code against TC_ACT_OK and if any other
-return code is used, we restore the dst to avoid unintentionally leaking
-the reference held in the per-CPU variable. If the packet is cloned or
-dropped before reaching ip{,6}_rcv_core(), the original dst will also be
-restored from the per-cpu variable to avoid the leak; if the packet makes
-its way to the receive function for the protocol, then the destination
-(if any) will be restored to the packet at that point.
-
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Joe Stringer <joe@wand.net.nz>
 ---
- include/uapi/linux/bpf.h       | 23 ++++++++++++++++++++++-
- net/core/filter.c              | 28 ++++++++++++++++++++++++++++
- net/core/skbuff.c              |  3 +++
- net/ipv4/ip_input.c            |  5 ++++-
- net/ipv6/ip6_input.c           |  5 ++++-
- net/sched/act_bpf.c            |  3 +++
- tools/include/uapi/linux/bpf.h | 18 +++++++++++++++++-
- 7 files changed, 81 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/.gitignore        |   1 +
+ tools/testing/selftests/bpf/Makefile          |   3 +-
+ .../selftests/bpf/progs/test_sk_assign.c      | 127 +++++++++++++
+ tools/testing/selftests/bpf/test_sk_assign.c  | 176 ++++++++++++++++++
+ tools/testing/selftests/bpf/test_sk_assign.sh |  19 ++
+ 5 files changed, 325 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sk_assign.c
+ create mode 100644 tools/testing/selftests/bpf/test_sk_assign.c
+ create mode 100755 tools/testing/selftests/bpf/test_sk_assign.sh
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 40b2d9476268..35f282cc745e 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -2914,6 +2914,26 @@ union bpf_attr {
-  *		of sizeof(struct perf_branch_entry).
-  *
-  *		**-ENOENT** if architecture does not support branch records.
-+ *
-+ * int bpf_sk_assign(struct sk_buff *skb, struct bpf_sock *sk, u64 flags)
-+ *	Description
-+ *		Assign the *sk* to the *skb*. When combined with appropriate
-+ *		routing configuration to receive the packet towards the socket,
-+ *		will cause *skb* to be delivered to the specified socket.
-+ *		Subsequent redirection of *skb* via  **bpf_redirect**\ (),
-+ *		**bpf_clone_redirect**\ () or other methods outside of BPF may
-+ *		interfere with successful delivery to the socket.
-+ *
-+ *		This operation is only valid from TC ingress path.
-+ *
-+ *		The *flags* argument must be zero.
-+ *	Return
-+ *		0 on success, or a negative errno in case of failure.
-+ *
-+ *		* **-EINVAL**		Unsupported flags specified.
-+ *		* **-EOPNOTSUPP**:	Unsupported operation, for example a
-+ *					call from outside of TC ingress.
-+ *		* **-ENOENT**		The socket cannot be assigned.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3035,7 +3055,8 @@ union bpf_attr {
- 	FN(tcp_send_ack),		\
- 	FN(send_signal_thread),		\
- 	FN(jiffies64),			\
--	FN(read_branch_records),
-+	FN(read_branch_records),	\
-+	FN(sk_assign),
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index ec464859c6b6..e9c185899def 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -28,6 +28,7 @@ test_netcnt
+ test_tcpnotify_user
+ test_libbpf
+ test_tcp_check_syncookie_user
++test_sk_assign
+ test_sysctl
+ test_hashmap
+ test_btf_dump
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index ee4ad34adb4a..503fd9dc8cf6 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -58,6 +58,7 @@ TEST_PROGS := test_kmod.sh \
+ 	test_xdp_vlan_mode_generic.sh \
+ 	test_xdp_vlan_mode_native.sh \
+ 	test_lwt_ip_encap.sh \
++	test_sk_assign.sh \
+ 	test_tcp_check_syncookie.sh \
+ 	test_tc_tunnel.sh \
+ 	test_tc_edt.sh \
+@@ -74,7 +75,7 @@ TEST_PROGS_EXTENDED := with_addr.sh \
+ # Compile but not part of 'make run_tests'
+ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
+ 	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
+-	test_lirc_mode2_user xdping test_cpp runqslower
++	test_lirc_mode2_user xdping test_cpp runqslower test_sk_assign
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
-diff --git a/net/core/filter.c b/net/core/filter.c
-index cd0a532db4e7..bae0874289d8 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5846,6 +5846,32 @@ static const struct bpf_func_proto bpf_tcp_gen_syncookie_proto = {
- 	.arg5_type	= ARG_CONST_SIZE,
- };
+ TEST_CUSTOM_PROGS = urandom_read
  
-+BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_assign.c b/tools/testing/selftests/bpf/progs/test_sk_assign.c
+new file mode 100644
+index 000000000000..7de30ad3f594
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sk_assign.c
+@@ -0,0 +1,127 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2019 Cloudflare Ltd.
++
++#include <stddef.h>
++#include <stdbool.h>
++#include <string.h>
++#include <linux/bpf.h>
++#include <linux/if_ether.h>
++#include <linux/in.h>
++#include <linux/ip.h>
++#include <linux/ipv6.h>
++#include <linux/pkt_cls.h>
++#include <linux/tcp.h>
++#include <sys/socket.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++
++int _version SEC("version") = 1;
++char _license[] SEC("license") = "GPL";
++
++/* Fill 'tuple' with L3 info, and attempt to find L4. On fail, return NULL. */
++static struct bpf_sock_tuple *get_tuple(void *data, __u64 nh_off,
++					void *data_end, __u16 eth_proto,
++					bool *ipv4)
 +{
-+	if (flags != 0)
-+		return -EINVAL;
-+	if (!skb_at_tc_ingress(skb))
-+		return -EOPNOTSUPP;
-+	if (unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
-+		return -ENOENT;
++	struct bpf_sock_tuple *result;
++	__u8 proto = 0;
++	__u64 ihl_len;
 +
-+	skb_orphan(skb);
-+	skb->sk = sk;
-+	skb->destructor = sock_edemux;
-+	dst_sk_prefetch_store(skb);
++	if (eth_proto == bpf_htons(ETH_P_IP)) {
++		struct iphdr *iph = (struct iphdr *)(data + nh_off);
 +
-+	return 0;
++		if (iph + 1 > data_end)
++			return NULL;
++		if (iph->ihl != 5)
++			/* Options are not supported */
++			return NULL;
++		ihl_len = iph->ihl * 4;
++		proto = iph->protocol;
++		*ipv4 = true;
++		result = (struct bpf_sock_tuple *)&iph->saddr;
++	} else if (eth_proto == bpf_htons(ETH_P_IPV6)) {
++		struct ipv6hdr *ip6h = (struct ipv6hdr *)(data + nh_off);
++
++		if (ip6h + 1 > data_end)
++			return NULL;
++		ihl_len = sizeof(*ip6h);
++		proto = ip6h->nexthdr;
++		*ipv4 = false;
++		result = (struct bpf_sock_tuple *)&ip6h->saddr;
++	} else {
++		return NULL;
++	}
++
++	if (result + 1 > data_end || proto != IPPROTO_TCP)
++		return NULL;
++
++	return result;
 +}
 +
-+static const struct bpf_func_proto bpf_sk_assign_proto = {
-+	.func		= bpf_sk_assign,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type      = ARG_PTR_TO_CTX,
-+	.arg2_type      = ARG_PTR_TO_SOCK_COMMON,
-+	.arg3_type	= ARG_ANYTHING,
-+};
++SEC("sk_assign_test")
++int bpf_sk_assign_test(struct __sk_buff *skb)
++{
++	void *data_end = (void *)(long)skb->data_end;
++	void *data = (void *)(long)skb->data;
++	struct ethhdr *eth = (struct ethhdr *)(data);
++	struct bpf_sock_tuple *tuple, ln = {0};
++	struct bpf_sock *sk;
++	int tuple_len;
++	bool ipv4;
++	int ret;
 +
- #endif /* CONFIG_INET */
- 
- bool bpf_helper_changes_pkt_data(void *func)
-@@ -6139,6 +6165,8 @@ tc_cls_act_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_skb_ecn_set_ce_proto;
- 	case BPF_FUNC_tcp_gen_syncookie:
- 		return &bpf_tcp_gen_syncookie_proto;
-+	case BPF_FUNC_sk_assign:
-+		return &bpf_sk_assign_proto;
- #endif
- 	default:
- 		return bpf_base_func_proto(func_id);
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 6b2798450fd4..80ee8f7b6a19 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -63,6 +63,7 @@
- 
- #include <net/protocol.h>
- #include <net/dst.h>
-+#include <net/dst_metadata.h>
- #include <net/sock.h>
- #include <net/checksum.h>
- #include <net/ip6_checksum.h>
-@@ -1042,6 +1043,7 @@ EXPORT_SYMBOL_GPL(alloc_skb_for_msg);
-  */
- void skb_dst_drop(struct sk_buff *skb)
- {
-+	dst_sk_prefetch_reset(skb);
- 	if (skb->_skb_refdst) {
- 		refdst_drop(skb->_skb_refdst);
- 		skb->_skb_refdst = 0UL;
-@@ -1466,6 +1468,7 @@ struct sk_buff *skb_clone(struct sk_buff *skb, gfp_t gfp_mask)
- 		n->fclone = SKB_FCLONE_UNAVAILABLE;
- 	}
- 
-+	dst_sk_prefetch_reset(skb);
- 	return __skb_clone(n, skb);
- }
- EXPORT_SYMBOL(skb_clone);
-diff --git a/net/ipv4/ip_input.c b/net/ipv4/ip_input.c
-index aa438c6758a7..9bd4858d20fc 100644
---- a/net/ipv4/ip_input.c
-+++ b/net/ipv4/ip_input.c
-@@ -509,7 +509,10 @@ static struct sk_buff *ip_rcv_core(struct sk_buff *skb, struct net *net)
- 	IPCB(skb)->iif = skb->skb_iif;
- 
- 	/* Must drop socket now because of tproxy. */
--	skb_orphan(skb);
-+	if (skb_dst_is_sk_prefetch(skb))
-+		dst_sk_prefetch_fetch(skb);
-+	else
-+		skb_orphan(skb);
- 
- 	return skb;
- 
-diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
-index 7b089d0ac8cd..f7b42adca9d0 100644
---- a/net/ipv6/ip6_input.c
-+++ b/net/ipv6/ip6_input.c
-@@ -285,7 +285,10 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
- 	rcu_read_unlock();
- 
- 	/* Must drop socket now because of tproxy. */
--	skb_orphan(skb);
-+	if (skb_dst_is_sk_prefetch(skb))
-+		dst_sk_prefetch_fetch(skb);
-+	else
-+		skb_orphan(skb);
- 
- 	return skb;
- err:
-diff --git a/net/sched/act_bpf.c b/net/sched/act_bpf.c
-index 46f47e58b3be..b4c557e6158d 100644
---- a/net/sched/act_bpf.c
-+++ b/net/sched/act_bpf.c
-@@ -11,6 +11,7 @@
- #include <linux/filter.h>
- #include <linux/bpf.h>
- 
-+#include <net/dst_metadata.h>
- #include <net/netlink.h>
- #include <net/pkt_sched.h>
- #include <net/pkt_cls.h>
-@@ -53,6 +54,8 @@ static int tcf_bpf_act(struct sk_buff *skb, const struct tc_action *act,
- 		bpf_compute_data_pointers(skb);
- 		filter_res = BPF_PROG_RUN(filter, skb);
- 	}
-+	if (filter_res != TC_ACT_OK)
-+		dst_sk_prefetch_reset(skb);
- 	rcu_read_unlock();
- 
- 	/* A BPF program may overwrite the default action opcode.
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 40b2d9476268..546e9e1368ff 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2914,6 +2914,21 @@ union bpf_attr {
-  *		of sizeof(struct perf_branch_entry).
-  *
-  *		**-ENOENT** if architecture does not support branch records.
-+ *
-+ * int bpf_sk_assign(struct sk_buff *skb, struct bpf_sock *sk, u64 flags)
-+ *	Description
-+ *		Assign the *sk* to the *skb*.
-+ *
-+ *		This operation is only valid from TC ingress path.
-+ *
-+ *		The *flags* argument must be zero.
-+ *	Return
-+ *		0 on success, or a negative errno in case of failure.
-+ *
-+ *		* **-EINVAL**		Unsupported flags specified.
-+ *		* **-EOPNOTSUPP**:	Unsupported operation, for example a
-+ *					call from outside of TC ingress.
-+ *		* **-ENOENT**		The socket cannot be assigned.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3035,7 +3050,8 @@ union bpf_attr {
- 	FN(tcp_send_ack),		\
- 	FN(send_signal_thread),		\
- 	FN(jiffies64),			\
--	FN(read_branch_records),
-+	FN(read_branch_records),	\
-+	FN(sk_assign),
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-  * function eBPF program intends to call
++	if (eth + 1 > data_end)
++		return TC_ACT_SHOT;
++
++	tuple = get_tuple(data, sizeof(*eth), data_end, eth->h_proto, &ipv4);
++	if (!tuple)
++		return TC_ACT_SHOT;
++
++	tuple_len = ipv4 ? sizeof(tuple->ipv4) : sizeof(tuple->ipv6);
++	sk = bpf_skc_lookup_tcp(skb, tuple, tuple_len, BPF_F_CURRENT_NETNS, 0);
++	if (sk) {
++		if (sk->state != BPF_TCP_LISTEN)
++			goto assign;
++
++		bpf_sk_release(sk);
++	}
++
++	if (ipv4) {
++		if (tuple->ipv4.dport != bpf_htons(4321))
++			return TC_ACT_OK;
++
++		ln.ipv4.daddr = bpf_htonl(0x7f000001);
++		ln.ipv4.dport = bpf_htons(1234);
++
++		sk = bpf_skc_lookup_tcp(skb, &ln, sizeof(ln.ipv4),
++					BPF_F_CURRENT_NETNS, 0);
++	} else {
++		if (tuple->ipv6.dport != bpf_htons(4321))
++			return TC_ACT_OK;
++
++		/* Upper parts of daddr are already zero. */
++		ln.ipv6.daddr[3] = bpf_htonl(0x1);
++		ln.ipv6.dport = bpf_htons(1234);
++
++		sk = bpf_skc_lookup_tcp(skb, &ln, sizeof(ln.ipv6),
++					BPF_F_CURRENT_NETNS, 0);
++	}
++
++	/* We can't do a single skc_lookup_tcp here, because then the compiler
++	 * will likely spill tuple_len to the stack. This makes it lose all
++	 * bounds information in the verifier, which then rejects the call as
++	 * unsafe.
++	 */
++	if (!sk)
++		return TC_ACT_SHOT;
++
++	if (sk->state != BPF_TCP_LISTEN) {
++		bpf_sk_release(sk);
++		return TC_ACT_SHOT;
++	}
++
++assign:
++	ret = bpf_sk_assign(skb, sk, 0);
++	bpf_sk_release(sk);
++	return ret == 0 ? TC_ACT_OK : TC_ACT_SHOT;
++}
+diff --git a/tools/testing/selftests/bpf/test_sk_assign.c b/tools/testing/selftests/bpf/test_sk_assign.c
+new file mode 100644
+index 000000000000..cba5f8b2b7fd
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_sk_assign.c
+@@ -0,0 +1,176 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2018 Facebook
++// Copyright (c) 2019 Cloudflare
++
++#include <string.h>
++#include <stdlib.h>
++#include <unistd.h>
++
++#include <arpa/inet.h>
++#include <netinet/in.h>
++#include <sys/types.h>
++#include <sys/socket.h>
++
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
++
++#include "bpf_rlimit.h"
++#include "cgroup_helpers.h"
++
++static int start_server(const struct sockaddr *addr, socklen_t len)
++{
++	int fd;
++
++	fd = socket(addr->sa_family, SOCK_STREAM, 0);
++	if (fd == -1) {
++		log_err("Failed to create server socket");
++		goto out;
++	}
++
++	if (bind(fd, addr, len) == -1) {
++		log_err("Failed to bind server socket");
++		goto close_out;
++	}
++
++	if (listen(fd, 128) == -1) {
++		log_err("Failed to listen on server socket");
++		goto close_out;
++	}
++
++	goto out;
++
++close_out:
++	close(fd);
++	fd = -1;
++out:
++	return fd;
++}
++
++static int connect_to_server(const struct sockaddr *addr, socklen_t len)
++{
++	int fd = -1;
++
++	fd = socket(addr->sa_family, SOCK_STREAM, 0);
++	if (fd == -1) {
++		log_err("Failed to create client socket");
++		goto out;
++	}
++
++	if (connect(fd, addr, len) == -1) {
++		log_err("Fail to connect to server");
++		goto close_out;
++	}
++
++	goto out;
++
++close_out:
++	close(fd);
++	fd = -1;
++out:
++	return fd;
++}
++
++static int run_test(int server_fd, const struct sockaddr *addr, socklen_t len)
++{
++	int client = -1, srv_client = -1;
++	struct sockaddr_storage name;
++	char buf[] = "testing";
++	in_port_t port;
++	int ret = 1;
++
++	client = connect_to_server(addr, len);
++	if (client == -1)
++		goto out;
++
++	srv_client = accept(server_fd, NULL, NULL);
++	if (srv_client == -1) {
++		log_err("Can't accept connection");
++		goto out;
++	}
++
++	if (write(client, buf, sizeof(buf)) != sizeof(buf)) {
++		log_err("Can't write on client");
++		goto out;
++	}
++
++	if (read(srv_client, buf, sizeof(buf)) != sizeof(buf)) {
++		log_err("Can't read on server");
++		goto out;
++	}
++
++	len = sizeof(name);
++	if (getsockname(srv_client, (struct sockaddr *)&name, &len)) {
++		log_err("Can't getsockname");
++		goto out;
++	}
++
++	switch (name.ss_family) {
++	case AF_INET:
++		port = ((struct sockaddr_in *)&name)->sin_port;
++		break;
++
++	case AF_INET6:
++		port = ((struct sockaddr_in6 *)&name)->sin6_port;
++		break;
++
++	default:
++		log_err("Invalid address family");
++		goto out;
++	}
++
++	if (port != htons(4321)) {
++		log_err("Expected port 4321, got %u", ntohs(port));
++		goto out;
++	}
++
++	ret = 0;
++out:
++	close(client);
++	close(srv_client);
++	return ret;
++}
++
++int main(int argc, char **argv)
++{
++	struct sockaddr_in addr4;
++	struct sockaddr_in6 addr6;
++	int server = -1;
++	int server_v6 = -1;
++	int err = 1;
++
++	memset(&addr4, 0, sizeof(addr4));
++	addr4.sin_family = AF_INET;
++	addr4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
++	addr4.sin_port = htons(1234);
++
++	memset(&addr6, 0, sizeof(addr6));
++	addr6.sin6_family = AF_INET6;
++	addr6.sin6_addr = in6addr_loopback;
++	addr6.sin6_port = htons(1234);
++
++	server = start_server((const struct sockaddr *)&addr4, sizeof(addr4));
++	if (server == -1)
++		goto out;
++
++	server_v6 = start_server((const struct sockaddr *)&addr6,
++				 sizeof(addr6));
++	if (server_v6 == -1)
++		goto out;
++
++	/* Connect to unbound ports */
++	addr4.sin_port = htons(4321);
++	addr6.sin6_port = htons(4321);
++
++	if (run_test(server, (const struct sockaddr *)&addr4, sizeof(addr4)))
++		goto out;
++
++	if (run_test(server_v6, (const struct sockaddr *)&addr6, sizeof(addr6)))
++		goto out;
++
++	printf("ok\n");
++	err = 0;
++out:
++	close(server);
++	close(server_v6);
++	return err;
++}
+diff --git a/tools/testing/selftests/bpf/test_sk_assign.sh b/tools/testing/selftests/bpf/test_sk_assign.sh
+new file mode 100755
+index 000000000000..62eae9255491
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_sk_assign.sh
+@@ -0,0 +1,19 @@
++#!/bin/bash -e
++# SPDX-License-Identifier: GPL-2.0
++
++if [[ $EUID -ne 0 ]]; then
++        echo "This script must be run as root"
++        echo "FAIL"
++        exit 1
++fi
++
++# Run the script in a dedicated network namespace.
++if [[ -z $(ip netns identify $$) ]]; then
++        exec ../net/in_netns.sh "$0" "$@"
++fi
++
++tc qdisc add dev lo clsact
++tc filter add dev lo ingress bpf direct-action object-file ./test_sk_assign.o \
++	section "sk_assign_test"
++
++exec ./test_sk_assign
 -- 
 2.20.1
 
