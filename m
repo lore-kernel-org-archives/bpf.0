@@ -2,112 +2,91 @@ Return-Path: <SRS0=5rgj=45=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E00AC1975A
-	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 18:25:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABC2CC10DCE
+	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 18:26:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CBA3620736
-	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 18:25:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 756982072F
+	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 18:26:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="caL/3VYl"
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="U9BZtr5P"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726695AbgCLSZQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Mar 2020 14:25:16 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:28878 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726682AbgCLSZQ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 12 Mar 2020 14:25:16 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 02CIIImj032677
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 11:25:15 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=tuZ3CYBcGvSeudq4eLBh5hI2lTmTRPm9F7X7RabcwLY=;
- b=caL/3VYlYEMafl2J49LBIdLGln3LjY3RtFxNVwhT5DYBD4TFM8FFUYoBwSIDubQrLo+m
- NQDi4R8afB/jfVFXMUDpDoiKc43rsfysd+8rfG0vhD7OTdiQXBKBxxU3kujgFybZmoip
- J3TZ2CVtUdGNjuyTF7eskLV45agbpqCjiLc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 2yqt89817j-20
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 11:25:15 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Thu, 12 Mar 2020 11:23:47 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id ACCAB62E0874; Thu, 12 Mar 2020 11:23:42 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Song Liu <songliubraving@fb.com>
-Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <john.fastabend@gmail.com>, <quentin@isovalent.com>,
-        <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <arnaldo.melo@gmail.com>, <jolsa@kernel.org>,
-        Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 2/3] bpftool: skeleton should depend on libbpf
-Date:   Thu, 12 Mar 2020 11:23:31 -0700
-Message-ID: <20200312182332.3953408-3-songliubraving@fb.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200312182332.3953408-1-songliubraving@fb.com>
-References: <20200312182332.3953408-1-songliubraving@fb.com>
-X-FB-Internal: Safe
+        id S1726569AbgCLS0F (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Mar 2020 14:26:05 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:38213 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726526AbgCLS0F (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Mar 2020 14:26:05 -0400
+Received: by mail-wr1-f66.google.com with SMTP id x11so4010178wrv.5
+        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 11:26:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0+2JNX2PMgxL+ZJjbpbgEiZboTmHGFEEqRtv5RnrKFQ=;
+        b=U9BZtr5POstMx41yri864snud2+aOVK/kwpeJM2hj8WQe8EW7yvj+gl5A355PwyKC0
+         RDw6GIuFuxY50wQ8BeoDf/fMJRuudsbnjXKNDEoATh40fit+ja5kWOJ6txzaHLjG7PPx
+         qssTxqJRtapmEICbqBaOGCcq7Bra1dVjp9Pl9kShBHXUFtaWa2ybc9jerfMYi9kaCkHf
+         mNXbIl0mAtK3V7/7xRniqrVK4HOWn937I5VbYhXVaPVQOltQsKb8JJMx8TX/ef+OhyKA
+         5UsWnOJe85z15l3O0ezTfkDuKrDHoiAor5KHF9JvHToudUgcqFn+1+p9W7EXe7JdfwQj
+         VvRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0+2JNX2PMgxL+ZJjbpbgEiZboTmHGFEEqRtv5RnrKFQ=;
+        b=eaAYkETsbsFgxTyp3QIc01tOZ6C5vC+EK30t1Y/2Euh0597mo0galxzzveTqDQ4c/o
+         XbVmLqgnkK+n2ZkNM/XVXyO0VXzIM7I3qhupKI+P3uEG/sAwuscEyzURjw5Np5xN3YFe
+         1di8CUIS5HYTFSssYuoPnakhvGNogx70Z9btxUr8UtKipTglw+TUmjJ7kpKxiNDGyjed
+         0P9fGnwfa5vd3mRbWxeZL7ms+NqDN0uTzxTJBT38t918PbNe1meqo/eivLaU75sQm/Ul
+         Lqp31yOFaSbx51gF0tCK/O4cP2QP/WlESLeEYwWl6zNbZLJwGyeFNMyFglQYiYzrWBlv
+         qZVA==
+X-Gm-Message-State: ANhLgQ0ZAAzO7qU6wg7NHUXyeWO2s5C9dYzRWz/wARIHbYsZI+I5OQnY
+        D05GGd3RjLadzl2DSlBnuu1gV8XJoUU=
+X-Google-Smtp-Source: ADFU+vs7ip4XWHMcAzBmnbyORO4L6XndADmhbyl79Eid1tgkiXb9h4FssA+GefCpMJ5SgRCO8zB4Pw==
+X-Received: by 2002:adf:f505:: with SMTP id q5mr12145705wro.348.1584037563875;
+        Thu, 12 Mar 2020 11:26:03 -0700 (PDT)
+Received: from localhost.localdomain ([194.35.118.177])
+        by smtp.gmail.com with ESMTPSA id r9sm6379134wma.47.2020.03.12.11.26.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2020 11:26:02 -0700 (PDT)
+From:   Quentin Monnet <quentin@isovalent.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCH bpf-next 0/2] tools: bpftool: fix object pinning and bash
+Date:   Thu, 12 Mar 2020 18:25:53 +0000
+Message-Id: <20200312182555.945-1-quentin@isovalent.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-12_12:2020-03-11,2020-03-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- clxscore=1015 malwarescore=0 bulkscore=0 impostorscore=0 mlxscore=0
- suspectscore=0 priorityscore=1501 spamscore=0 adultscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2003120093
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add the dependency to libbpf, to fix build errors like:
+The first patch of this series improves user experience by allowing to pass
+all kinds of handles for programs and maps (id, tag, name, pinned path)
+instead of simply ids when pinning them with "bpftool (prog|map) pin".
 
-  In file included from skeleton/profiler.bpf.c:5:
-  .../bpf_helpers.h:5:10: fatal error: 'bpf_helper_defs.h' file not found
-  #include "bpf_helper_defs.h"
-           ^~~~~~~~~~~~~~~~~~~
-  1 error generated.
-  make: *** [skeleton/profiler.bpf.o] Error 1
-  make: *** Waiting for unfinished jobs....
+The second patch improves or fix bash completion, including for object
+pinning.
 
-Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
-Suggested-by: Quentin Monnet <quentin@isovalent.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- tools/bpf/bpftool/Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Quentin Monnet (2):
+  tools: bpftool: allow all prog/map handles for pinning objects
+  tools: bpftool: fix minor bash completion mistakes
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index b0574751f231..9ca3bfbb9ac4 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -126,11 +126,12 @@ $(OUTPUT)_prog.o: prog.c
- $(OUTPUT)_bpftool: $(_OBJS) $(LIBBPF)
- 	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(_OBJS) $(LIBS)
- 
--skeleton/profiler.bpf.o: skeleton/profiler.bpf.c
-+skeleton/profiler.bpf.o: skeleton/profiler.bpf.c $(LIBBPF)
- 	$(QUIET_CLANG)$(CLANG) \
- 		-I$(srctree)/tools/include/uapi/ \
- 		-I$(srctree)/tools/testing/selftests/bpf/include/uapi \
--		-I$(srctree)/tools/lib -g -O2 -target bpf -c $< -o $@
-+		-I$(LIBBPF_PATH) -I$(srctree)/tools/lib \
-+		-g -O2 -target bpf -c $< -o $@
- 
- profiler.skel.h: $(OUTPUT)_bpftool skeleton/profiler.bpf.o
- 	$(QUIET_GEN)$(OUTPUT)./_bpftool gen skeleton skeleton/profiler.bpf.o > $@
+ tools/bpf/bpftool/bash-completion/bpftool | 29 ++++++++++++-----
+ tools/bpf/bpftool/common.c                | 39 +++--------------------
+ tools/bpf/bpftool/main.h                  |  2 +-
+ tools/bpf/bpftool/map.c                   |  2 +-
+ tools/bpf/bpftool/prog.c                  |  2 +-
+ 5 files changed, 29 insertions(+), 45 deletions(-)
+
 -- 
-2.17.1
+2.20.1
 
