@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A375BC2BB1D
-	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 23:37:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD91BC5ACBF
+	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 23:37:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7E186206FA
-	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 23:37:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A46E8206B1
+	for <bpf@archiver.kernel.org>; Thu, 12 Mar 2020 23:37:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gim6Q3WP"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KkQpsqI0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbgCLXg5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Mar 2020 19:36:57 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:39277 "EHLO
+        id S1726986AbgCLXhG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Mar 2020 19:37:06 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:42051 "EHLO
         mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726871AbgCLXg5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Mar 2020 19:36:57 -0400
-Received: by mail-pf1-f193.google.com with SMTP id w65so4046384pfb.6;
-        Thu, 12 Mar 2020 16:36:56 -0700 (PDT)
+        with ESMTP id S1726949AbgCLXhB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Mar 2020 19:37:01 -0400
+Received: by mail-pf1-f193.google.com with SMTP id x2so3683882pfn.9;
+        Thu, 12 Mar 2020 16:37:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lw6QEzzBw1Lxh2UgelEeAfoq5kTaJOU7nxuWI23gcZU=;
-        b=Gim6Q3WPTPVvvNjQ0sV6c9bIcpY3YCUknK23F523ey6ZRlcyWh6IOI+Zlr7Tsgxzv1
-         YQvgK7eqoglePB+4wI9LxCj0p6ONu1lXyuhYkSNgY01zG3DdsFWa2LhXky2+X/4I8hvi
-         IJ4ZGCa20T9wPp+KmLZqU5VwxQmrUS70yN/BRxx5b9CksenFfdXc3oSIZd3wtsMs4CgR
-         i6jY7edUh52etSUVxaO2aC9LqMDbF7Hgs7r+RZ5lrvpxvJPDngBM0pSX//Pk+doEBE4r
-         BdFT8WmP6uxk+5Eb4ChmCfB5jl+wL5nlv2aBgsW4ng72ls2bmkCogXOEfW47+TSVibbT
-         qfyw==
+        bh=ZqvU3iR8LseT5SJn9pOSnOH26FC08L++zPQlCj0mZhE=;
+        b=KkQpsqI0ByNlzedPjWpqlbvlKpXCMI+p9Ya8LD7CrXWFWTQ+sYKB2lv3toEc3HCWV7
+         NLHUUExT62YgAEeWJYEMFGnTr52O1zTSolM03c4lNDMZ0VnCQdyq+523XgiqAWiLTb5h
+         XOTIlGTOkahdAXFk8z8iULslIs4ErrNgjIt2zTLevOglfVnHlPiOeive2Jdrm4Wn540K
+         SfLXi1OpHy3RmxvobpepMfQA4FIJoSA+kSHqBdt5uM69P89yJkbhu2EnoWiGLJjEZ/TF
+         BCtpjFNCvf8bHVV2AHHDt1CjpUTrukobkie+iEmoitTWy0qTALAKIpE8r7By1cZWFtbz
+         iu7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=lw6QEzzBw1Lxh2UgelEeAfoq5kTaJOU7nxuWI23gcZU=;
-        b=aysXn7nDP6xxUx+egBoCEelpUuVMnl1LcNB/FHSc78lboEsfUIUkvMkiMo0TUX10cY
-         anyIbw+fBAmZBvGgZFbfIFamaY0KQKnpbgVRTQMMgs/AMtxHk2rYCO9mF8Co3/reLc/b
-         WANd8EFFTH8VaZb7zdeWth6Q+9zy81TRGcxssifrBkkOFDq8Xog6W9Tbiw1l97MonRGw
-         kHUsrx/zd6tm5geBFAXDCm3jF/pu0wQKne9mlHADdMC6EioSAztE5KK+cKYw/VIRLmkz
-         psaWcpLGIDAv14zPZJQN1cpngA6r4EUlSAewvWs++YG+syuLHudtjm2HSgfPIPwiDB4w
-         Yr2A==
-X-Gm-Message-State: ANhLgQ0Wp6VLiIU6hoi7rnltl5zTDIFeh7DRMowYP7Qu+p/RHWMmhOJB
-        rk/usb3Swf+Aj525s9t/LwnO/073
-X-Google-Smtp-Source: ADFU+vvns2HupLinY0b8i2y3/LsxGFp7z67Afr1v4F8hURxZeu0k0F2ZEa1rWLAU7xDv3aZjTB68Eg==
-X-Received: by 2002:aa7:991c:: with SMTP id z28mr8508136pff.294.1584056215980;
-        Thu, 12 Mar 2020 16:36:55 -0700 (PDT)
+        bh=ZqvU3iR8LseT5SJn9pOSnOH26FC08L++zPQlCj0mZhE=;
+        b=pmvQwGv7rw20bf7pUN98GKpUzCBHiPrFvaGv2Lu/4jmxXl+Y6sY8xjEHKzMjlgLNRK
+         nXGWdeB4OItevC+cKp2Kc7anRBikak/TvYZxWPY7b+b3UOcsU7PfOyB15umZJ0B3RZx/
+         A+m9hCwngluzBfwsjFhKaXcAqUjge0Iz7Xlye5e0+TTwC7/aWpBQr1mFyev5xQxZuWi9
+         83eNAxKz4BHy1BI1ou+JZy8mgdJAOuA7WvHstM5Qx1GxrBrIt/wO3drGxhGwSuvSiXvk
+         KYVYDOkWRp2YkQMhh3Ap9Qd9eNSw5v7/XAfw6MVX9HwjS/36WaIQbb80oDHHx3BZouo4
+         SFww==
+X-Gm-Message-State: ANhLgQ2bkRUGn5JVJ6EzgSrvVMj5mEhii3/VWpkE3/GLdL6xTef6foa/
+        gZM3xzSZAVCUyd2yLPMfZ0xDvVWo
+X-Google-Smtp-Source: ADFU+vtyVhzFNrqzRpKPYuG9qDnpkjaysGRu1LlD6QE3W5NfQeW2bRX6TCaNWgNtBf5v2elgDm7dxA==
+X-Received: by 2002:a63:9c4:: with SMTP id 187mr9905794pgj.389.1584056219920;
+        Thu, 12 Mar 2020 16:36:59 -0700 (PDT)
 Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
-        by smtp.gmail.com with ESMTPSA id d6sm5075225pfn.214.2020.03.12.16.36.54
+        by smtp.gmail.com with ESMTPSA id d6sm5075225pfn.214.2020.03.12.16.36.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 16:36:55 -0700 (PDT)
+        Thu, 12 Mar 2020 16:36:59 -0700 (PDT)
 From:   Joe Stringer <joe@wand.net.nz>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
         eric.dumazet@gmail.com, lmb@cloudflare.com
-Subject: [PATCH bpf-next 4/7] dst: Prefetch established socket destinations
-Date:   Thu, 12 Mar 2020 16:36:45 -0700
-Message-Id: <20200312233648.1767-5-joe@wand.net.nz>
+Subject: [PATCH bpf-next 7/7] selftests: bpf: Improve debuggability of sk_assign
+Date:   Thu, 12 Mar 2020 16:36:48 -0700
+Message-Id: <20200312233648.1767-8-joe@wand.net.nz>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200312233648.1767-1-joe@wand.net.nz>
 References: <20200312233648.1767-1-joe@wand.net.nz>
@@ -71,77 +71,126 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Enhance the dst_sk_prefetch logic to temporarily store the socket
-receive destination, to save the route lookup later on. The dst
-reference is kept alive by the caller's socket reference.
+This test was a bit obtuse before, add a shorter timeout when
+connectivity doesn't work and a '-d' debug flag for extra output.
 
-Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Joe Stringer <joe@wand.net.nz>
 ---
- include/net/dst_metadata.h |  2 +-
- net/core/dst.c             | 20 +++++++++++++++++---
- net/core/filter.c          |  2 +-
- 3 files changed, 19 insertions(+), 5 deletions(-)
+ tools/testing/selftests/bpf/test_sk_assign.c  | 42 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_sk_assign.sh |  2 +-
+ 2 files changed, 43 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
-index 31574c553a07..4f16322b08d5 100644
---- a/include/net/dst_metadata.h
-+++ b/include/net/dst_metadata.h
-@@ -230,7 +230,7 @@ static inline bool skb_dst_is_sk_prefetch(const struct sk_buff *skb)
- 	return dst_is_sk_prefetch(skb_dst(skb));
- }
+diff --git a/tools/testing/selftests/bpf/test_sk_assign.c b/tools/testing/selftests/bpf/test_sk_assign.c
+index 4b7b9bbe7859..51d3d01d5476 100644
+--- a/tools/testing/selftests/bpf/test_sk_assign.c
++++ b/tools/testing/selftests/bpf/test_sk_assign.c
+@@ -3,6 +3,8 @@
+ // Copyright (c) 2019 Cloudflare
+ // Copyright (c) 2020 Isovalent. Inc.
  
--void dst_sk_prefetch_store(struct sk_buff *skb);
-+void dst_sk_prefetch_store(struct sk_buff *skb, struct sock *sk);
- void dst_sk_prefetch_fetch(struct sk_buff *skb);
++#include <fcntl.h>
++#include <signal.h>
+ #include <string.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+@@ -20,6 +22,14 @@
  
- /**
-diff --git a/net/core/dst.c b/net/core/dst.c
-index cf1a1d5b6b0a..5068d127d9c2 100644
---- a/net/core/dst.c
-+++ b/net/core/dst.c
-@@ -346,11 +346,25 @@ EXPORT_SYMBOL(dst_sk_prefetch);
+ #define TEST_DADDR (0xC0A80203)
  
- DEFINE_PER_CPU(unsigned long, dst_sk_prefetch_dst);
- 
--void dst_sk_prefetch_store(struct sk_buff *skb)
-+void dst_sk_prefetch_store(struct sk_buff *skb, struct sock *sk)
++static bool debug;
++
++#define debugf(format, ...)				\
++do {							\
++	if (debug)					\
++		printf(format, ##__VA_ARGS__);		\
++} while (0)
++
+ static int start_server(const struct sockaddr *addr, socklen_t len)
  {
--	unsigned long refdst;
-+	unsigned long refdst = 0L;
+ 	int fd;
+@@ -49,6 +59,17 @@ static int start_server(const struct sockaddr *addr, socklen_t len)
+ 	return fd;
+ }
+ 
++static void handle_timeout(int signum)
++{
++	if (signum == SIGALRM)
++		log_err("Timed out while connecting to server");
++	kill(0, SIGKILL);
++}
 +
-+	WARN_ON(!rcu_read_lock_held() &&
-+		!rcu_read_lock_bh_held());
-+	if (sk_fullsock(sk)) {
-+		struct dst_entry *dst = READ_ONCE(sk->sk_rx_dst);
++static struct sigaction timeout_action = {
++	.sa_handler = handle_timeout,
++};
 +
-+		if (dst)
-+			dst = dst_check(dst, 0);
-+		if (dst)
-+			refdst = (unsigned long)dst | SKB_DST_NOREF;
+ static int connect_to_server(const struct sockaddr *addr, socklen_t len)
+ {
+ 	int fd = -1;
+@@ -59,6 +80,12 @@ static int connect_to_server(const struct sockaddr *addr, socklen_t len)
+ 		goto out;
+ 	}
+ 
++	if (sigaction(SIGALRM, &timeout_action, NULL)) {
++		log_err("Failed to configure timeout signal");
++		goto out;
 +	}
-+	if (!refdst)
-+		refdst = skb->_skb_refdst;
-+	if (skb->_skb_refdst != refdst)
-+		skb_dst_drop(skb);
++
++	alarm(3);
+ 	if (connect(fd, addr, len) == -1) {
+ 		log_err("Fail to connect to server");
+ 		goto close_out;
+@@ -141,6 +168,17 @@ int main(int argc, char **argv)
+ 	int server_v6 = -1;
+ 	int err = 1;
  
--	refdst = skb->_skb_refdst;
- 	__this_cpu_write(dst_sk_prefetch_dst, refdst);
- 	skb_dst_set_noref(skb, (struct dst_entry *)&dst_sk_prefetch.dst);
- }
-diff --git a/net/core/filter.c b/net/core/filter.c
-index bae0874289d8..db9b7b8b4a04 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5858,7 +5858,7 @@ BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
- 	skb_orphan(skb);
- 	skb->sk = sk;
- 	skb->destructor = sock_edemux;
--	dst_sk_prefetch_store(skb);
-+	dst_sk_prefetch_store(skb, sk);
++	if (argc > 1) {
++		if (!memcmp(argv[1], "-h", 2)) {
++			printf("usage: %s.sh [FLAGS]\n", argv[0]);
++			printf("  -d\tEnable debug logs\n");
++			printf("  -h\tPrint help message\n");
++			exit(1);
++		}
++		if (!memcmp(argv[1], "-d", 2))
++			debug = true;
++	}
++
+ 	memset(&addr4, 0, sizeof(addr4));
+ 	addr4.sin_family = AF_INET;
+ 	addr4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+@@ -166,9 +204,11 @@ int main(int argc, char **argv)
  
- 	return 0;
- }
+ 	if (run_test(server, (const struct sockaddr *)&addr4, sizeof(addr4)))
+ 		goto out;
++	debugf("ipv4 port: ok\n");
+ 
+ 	if (run_test(server_v6, (const struct sockaddr *)&addr6, sizeof(addr6)))
+ 		goto out;
++	debugf("ipv6 port: ok\n");
+ 
+ 	/* Connect to unbound addresses */
+ 	addr4.sin_addr.s_addr = htonl(TEST_DADDR);
+@@ -176,9 +216,11 @@ int main(int argc, char **argv)
+ 
+ 	if (run_test(server, (const struct sockaddr *)&addr4, sizeof(addr4)))
+ 		goto out;
++	debugf("ipv4 addr: ok\n");
+ 
+ 	if (run_test(server_v6, (const struct sockaddr *)&addr6, sizeof(addr6)))
+ 		goto out;
++	debugf("ipv6 addr: ok\n");
+ 
+ 	printf("ok\n");
+ 	err = 0;
+diff --git a/tools/testing/selftests/bpf/test_sk_assign.sh b/tools/testing/selftests/bpf/test_sk_assign.sh
+index de1df4e438de..5a84ad18f85a 100755
+--- a/tools/testing/selftests/bpf/test_sk_assign.sh
++++ b/tools/testing/selftests/bpf/test_sk_assign.sh
+@@ -19,4 +19,4 @@ tc qdisc add dev lo clsact
+ tc filter add dev lo ingress bpf direct-action object-file ./test_sk_assign.o \
+ 	section "sk_assign_test"
+ 
+-exec ./test_sk_assign
++exec ./test_sk_assign "$@"
 -- 
 2.20.1
 
