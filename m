@@ -2,44 +2,45 @@ Return-Path: <SRS0=iznb=46=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D84CC2BB1D
-	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 17:23:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88BE0C10DCE
+	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 17:24:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 36B66206B1
-	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 17:23:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5ABCD206B1
+	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 17:24:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Pfg/iiPf"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="dNiK4n9T"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726917AbgCMRX5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Mar 2020 13:23:57 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46230 "EHLO
+        id S1727036AbgCMRYC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Mar 2020 13:24:02 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:25326 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726824AbgCMRX5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 13 Mar 2020 13:23:57 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02DHEhbL020202
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2020 10:23:56 -0700
+        by vger.kernel.org with ESMTP id S1726873AbgCMRYC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 13 Mar 2020 13:24:02 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02DHB9Jp017165
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2020 10:24:01 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=JMHnkq0o3wRDAm6a/domM9KBfqI16YAUmg9gBu8Twgw=;
- b=Pfg/iiPfbV8ToiOd7V9+MyDpCPcXwVtgWcmgiZfxkEbKp2cZrR/66FeCazsdSdT89951
- EkvKJXs81mDqxVgPRf9jDt/Pv+Xtlxfh2V/3EkuUn4gH3CiA0aD2Uc72LJdZ2JeqTWdk
- AhsGC5ukMZXK8Cy8eJa2xLa9E5wpZ3XgZUE= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2yqt8jw9ga-2
+ content-type; s=facebook; bh=lmUyisaVt1J1rWbzpuTRIk5temsg1R2Pmq5bSV4gb3c=;
+ b=dNiK4n9TrmL5jCUMdBL7DR89/vIcTPp7pGvXv/uQGh87OElsOAY4MLEJvyM+tL8mTGs2
+ MWyL6gjVUEEogBT2XrQDXsHjaexXB2w77bE8TGrUK9vnHZv3z9ou51TiIfnHm4Fh4knY
+ J0nACBekc11QVUQc+53TAHm+96QwcHZ1pZ8= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 2yqt7t59vw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 13 Mar 2020 10:23:56 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2020 10:24:01 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Fri, 13 Mar 2020 10:23:55 -0700
+ 15.1.1847.3; Fri, 13 Mar 2020 10:24:00 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id BD5F12EC2DE4; Fri, 13 Mar 2020 10:23:51 -0700 (PDT)
+        id 2CBCA2EC2DE4; Fri, 13 Mar 2020 10:23:56 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +49,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 1/4] selftests/bpf: ensure consistent test failure output
-Date:   Fri, 13 Mar 2020 10:23:33 -0700
-Message-ID: <20200313172336.1879637-2-andriin@fb.com>
+Subject: [PATCH bpf-next 3/4] libbpf: provide CO-RE variants of PT_REGS macros
+Date:   Fri, 13 Mar 2020 10:23:35 -0700
+Message-ID: <20200313172336.1879637-4-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200313172336.1879637-1-andriin@fb.com>
 References: <20200313172336.1879637-1-andriin@fb.com>
@@ -59,10 +60,10 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-03-13_06:2020-03-12,2020-03-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- impostorscore=0 bulkscore=0 malwarescore=0 suspectscore=25 adultscore=0
- clxscore=1015 spamscore=0 priorityscore=1501 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 suspectscore=8 priorityscore=1501
+ phishscore=0 malwarescore=0 adultscore=0 spamscore=0 mlxlogscore=484
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2003130085
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -70,85 +71,202 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-printf() doesn't seem to honor using overwritten stdout/stderr (as part of
-stdio hijacking), so ensure all "standard" invocations of printf() do
-fprintf(stdout, ...) instead.
+Syscall raw tracepoints have struct pt_regs pointer as tracepoint's first
+argument. After that, reading any of pt_regs fields requires bpf_probe_read(),
+even for tp_btf programs. Due to that, PT_REGS_PARMx macros are not usable as
+is. This patch adds CO-RE variants of those macros that use BPF_CORE_READ() to
+read necessary fields. This provides relocatable architecture-agnostic pt_regs
+field accesses.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/test_progs.c | 10 +++++-----
- tools/testing/selftests/bpf/test_progs.h |  8 ++++----
- 2 files changed, 9 insertions(+), 9 deletions(-)
+ tools/lib/bpf/bpf_tracing.h | 103 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 103 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index b6201dd82edf..f85a06512541 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -216,7 +216,7 @@ int bpf_find_map(const char *test, struct bpf_object *obj, const char *name)
+diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+index 379d03b211ea..b0c9ae5c73b5 100644
+--- a/tools/lib/bpf/bpf_tracing.h
++++ b/tools/lib/bpf/bpf_tracing.h
+@@ -50,6 +50,7 @@
+ #if defined(bpf_target_x86)
  
- 	map = bpf_object__find_map_by_name(obj, name);
- 	if (!map) {
--		printf("%s:FAIL:map '%s' not found\n", test, name);
-+		fprintf(stdout, "%s:FAIL:map '%s' not found\n", test, name);
- 		test__fail();
- 		return -1;
- 	}
-@@ -387,7 +387,7 @@ static int libbpf_print_fn(enum libbpf_print_level level,
- {
- 	if (env.verbosity < VERBOSE_VERY && level == LIBBPF_DEBUG)
- 		return 0;
--	vprintf(format, args);
-+	vfprintf(stdout, format, args);
- 	return 0;
- }
+ #if defined(__KERNEL__) || defined(__VMLINUX_H__)
++
+ #define PT_REGS_PARM1(x) ((x)->di)
+ #define PT_REGS_PARM2(x) ((x)->si)
+ #define PT_REGS_PARM3(x) ((x)->dx)
+@@ -60,7 +61,20 @@
+ #define PT_REGS_RC(x) ((x)->ax)
+ #define PT_REGS_SP(x) ((x)->sp)
+ #define PT_REGS_IP(x) ((x)->ip)
++
++#define PT_REGS_PARM1_CORE(x) BPF_CORE_READ((x), di)
++#define PT_REGS_PARM2_CORE(x) BPF_CORE_READ((x), si)
++#define PT_REGS_PARM3_CORE(x) BPF_CORE_READ((x), dx)
++#define PT_REGS_PARM4_CORE(x) BPF_CORE_READ((x), cx)
++#define PT_REGS_PARM5_CORE(x) BPF_CORE_READ((x), r8)
++#define PT_REGS_RET_CORE(x) BPF_CORE_READ((x), sp)
++#define PT_REGS_FP_CORE(x) BPF_CORE_READ((x), bp)
++#define PT_REGS_RC_CORE(x) BPF_CORE_READ((x), ax)
++#define PT_REGS_SP_CORE(x) BPF_CORE_READ((x), sp)
++#define PT_REGS_IP_CORE(x) BPF_CORE_READ((x), ip)
++
+ #else
++
+ #ifdef __i386__
+ /* i386 kernel is built with -mregparm=3 */
+ #define PT_REGS_PARM1(x) ((x)->eax)
+@@ -73,7 +87,20 @@
+ #define PT_REGS_RC(x) ((x)->eax)
+ #define PT_REGS_SP(x) ((x)->esp)
+ #define PT_REGS_IP(x) ((x)->eip)
++
++#define PT_REGS_PARM1_CORE(x) BPF_CORE_READ((x), eax)
++#define PT_REGS_PARM2_CORE(x) BPF_CORE_READ((x), edx)
++#define PT_REGS_PARM3_CORE(x) BPF_CORE_READ((x), ecx)
++#define PT_REGS_PARM4_CORE(x) 0
++#define PT_REGS_PARM5_CORE(x) 0
++#define PT_REGS_RET_CORE(x) BPF_CORE_READ((x), esp)
++#define PT_REGS_FP_CORE(x) BPF_CORE_READ((x), ebp)
++#define PT_REGS_RC_CORE(x) BPF_CORE_READ((x), eax)
++#define PT_REGS_SP_CORE(x) BPF_CORE_READ((x), esp)
++#define PT_REGS_IP_CORE(x) BPF_CORE_READ((x), eip)
++
+ #else
++
+ #define PT_REGS_PARM1(x) ((x)->rdi)
+ #define PT_REGS_PARM2(x) ((x)->rsi)
+ #define PT_REGS_PARM3(x) ((x)->rdx)
+@@ -84,6 +111,18 @@
+ #define PT_REGS_RC(x) ((x)->rax)
+ #define PT_REGS_SP(x) ((x)->rsp)
+ #define PT_REGS_IP(x) ((x)->rip)
++
++#define PT_REGS_PARM1_CORE(x) BPF_CORE_READ((x), rdi)
++#define PT_REGS_PARM2_CORE(x) BPF_CORE_READ((x), rsi)
++#define PT_REGS_PARM3_CORE(x) BPF_CORE_READ((x), rdx)
++#define PT_REGS_PARM4_CORE(x) BPF_CORE_READ((x), rcx)
++#define PT_REGS_PARM5_CORE(x) BPF_CORE_READ((x), r8)
++#define PT_REGS_RET_CORE(x) BPF_CORE_READ((x), rsp)
++#define PT_REGS_FP_CORE(x) BPF_CORE_READ((x), rbp)
++#define PT_REGS_RC_CORE(x) BPF_CORE_READ((x), rax)
++#define PT_REGS_SP_CORE(x) BPF_CORE_READ((x), rsp)
++#define PT_REGS_IP_CORE(x) BPF_CORE_READ((x), rip)
++
+ #endif
+ #endif
  
-@@ -633,7 +633,7 @@ int cd_flavor_subdir(const char *exec_name)
- 	if (!flavor)
- 		return 0;
- 	flavor++;
--	printf("Switching to flavor '%s' subdirectory...\n", flavor);
-+	fprintf(stdout, "Switching to flavor '%s' subdirectory...\n", flavor);
- 	return chdir(flavor);
- }
+@@ -104,6 +143,17 @@ struct pt_regs;
+ #define PT_REGS_SP(x) (((PT_REGS_S390 *)(x))->gprs[15])
+ #define PT_REGS_IP(x) (((PT_REGS_S390 *)(x))->psw.addr)
  
-@@ -716,8 +716,8 @@ int main(int argc, char **argv)
- 			cleanup_cgroup_environment();
- 	}
- 	stdio_restore();
--	printf("Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
--	       env.succ_cnt, env.sub_succ_cnt, env.skip_cnt, env.fail_cnt);
-+	fprintf(stdout, "Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
-+		env.succ_cnt, env.sub_succ_cnt, env.skip_cnt, env.fail_cnt);
++#define PT_REGS_PARM1_CORE(x) BPF_CORE_READ((PT_REGS_S390 *)(x), gprs[2])
++#define PT_REGS_PARM2_CORE(x) BPF_CORE_READ((PT_REGS_S390 *)(x), gprs[3])
++#define PT_REGS_PARM3_CORE(x) BPF_CORE_READ((PT_REGS_S390 *)(x), gprs[4])
++#define PT_REGS_PARM4_CORE(x) BPF_CORE_READ((PT_REGS_S390 *)(x), gprs[5])
++#define PT_REGS_PARM5_CORE(x) BPF_CORE_READ((PT_REGS_S390 *)(x), gprs[6])
++#define PT_REGS_RET_CORE(x) BPF_CORE_READ((PT_REGS_S390 *)(x), grps[14])
++#define PT_REGS_FP_CORE(x) BPF_CORE_READ((PT_REGS_S390 *)(x), gprs[11])
++#define PT_REGS_RC_CORE(x) BPF_CORE_READ((PT_REGS_S390 *)(x), gprs[2])
++#define PT_REGS_SP_CORE(x) BPF_CORE_READ((PT_REGS_S390 *)(x), gprs[15])
++#define PT_REGS_IP_CORE(x) BPF_CORE_READ((PT_REGS_S390 *)(x), pdw.addr)
++
+ #elif defined(bpf_target_arm)
  
- 	free(env.test_selector.blacklist.strs);
- 	free(env.test_selector.whitelist.strs);
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index bcfa9ef23fda..fd85fa61dbf7 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -109,10 +109,10 @@ extern struct ipv6_packet pkt_v6;
- 	int __save_errno = errno;					\
- 	if (__ret) {							\
- 		test__fail();						\
--		printf("%s:FAIL:%s ", __func__, tag);			\
--		printf(format);						\
-+		fprintf(stdout, "%s:FAIL:%s ", __func__, tag);		\
-+		fprintf(stdout, ##format);				\
- 	} else {							\
--		printf("%s:PASS:%s %d nsec\n",				\
-+		fprintf(stdout, "%s:PASS:%s %d nsec\n",			\
- 		       __func__, tag, duration);			\
- 	}								\
- 	errno = __save_errno;						\
-@@ -124,7 +124,7 @@ extern struct ipv6_packet pkt_v6;
- 	int __save_errno = errno;					\
- 	if (__ret) {							\
- 		test__fail();						\
--		printf("%s:FAIL:%d\n", __func__, __LINE__);		\
-+		fprintf(stdout, "%s:FAIL:%d\n", __func__, __LINE__);	\
- 	}								\
- 	errno = __save_errno;						\
- 	__ret;								\
+ #define PT_REGS_PARM1(x) ((x)->uregs[0])
+@@ -117,6 +167,17 @@ struct pt_regs;
+ #define PT_REGS_SP(x) ((x)->uregs[13])
+ #define PT_REGS_IP(x) ((x)->uregs[12])
+ 
++#define PT_REGS_PARM1_CORE(x) BPF_CORE_READ((x), uregs[0])
++#define PT_REGS_PARM2_CORE(x) BPF_CORE_READ((x), uregs[1])
++#define PT_REGS_PARM3_CORE(x) BPF_CORE_READ((x), uregs[2])
++#define PT_REGS_PARM4_CORE(x) BPF_CORE_READ((x), uregs[3])
++#define PT_REGS_PARM5_CORE(x) BPF_CORE_READ((x), uregs[4])
++#define PT_REGS_RET_CORE(x) BPF_CORE_READ((x), uregs[14])
++#define PT_REGS_FP_CORE(x) BPF_CORE_READ((x), uregs[11])
++#define PT_REGS_RC_CORE(x) BPF_CORE_READ((x), uregs[0])
++#define PT_REGS_SP_CORE(x) BPF_CORE_READ((x), uregs[13])
++#define PT_REGS_IP_CORE(x) BPF_CORE_READ((x), uregs[12])
++
+ #elif defined(bpf_target_arm64)
+ 
+ /* arm64 provides struct user_pt_regs instead of struct pt_regs to userspace */
+@@ -134,6 +195,17 @@ struct pt_regs;
+ #define PT_REGS_SP(x) (((PT_REGS_ARM64 *)(x))->sp)
+ #define PT_REGS_IP(x) (((PT_REGS_ARM64 *)(x))->pc)
+ 
++#define PT_REGS_PARM1_CORE(x) BPF_CORE_READ((PT_REGS_ARM64 *)(x), regs[0])
++#define PT_REGS_PARM2_CORE(x) BPF_CORE_READ((PT_REGS_ARM64 *)(x), regs[1])
++#define PT_REGS_PARM3_CORE(x) BPF_CORE_READ((PT_REGS_ARM64 *)(x), regs[2])
++#define PT_REGS_PARM4_CORE(x) BPF_CORE_READ((PT_REGS_ARM64 *)(x), regs[3])
++#define PT_REGS_PARM5_CORE(x) BPF_CORE_READ((PT_REGS_ARM64 *)(x), regs[4])
++#define PT_REGS_RET_CORE(x) BPF_CORE_READ((PT_REGS_ARM64 *)(x), regs[30])
++#define PT_REGS_FP_CORE(x) BPF_CORE_READ((PT_REGS_ARM64 *)(x), regs[29])
++#define PT_REGS_RC_CORE(x) BPF_CORE_READ((PT_REGS_ARM64 *)(x), regs[0])
++#define PT_REGS_SP_CORE(x) BPF_CORE_READ((PT_REGS_ARM64 *)(x), sp)
++#define PT_REGS_IP_CORE(x) BPF_CORE_READ((PT_REGS_ARM64 *)(x), pc)
++
+ #elif defined(bpf_target_mips)
+ 
+ #define PT_REGS_PARM1(x) ((x)->regs[4])
+@@ -147,6 +219,17 @@ struct pt_regs;
+ #define PT_REGS_SP(x) ((x)->regs[29])
+ #define PT_REGS_IP(x) ((x)->cp0_epc)
+ 
++#define PT_REGS_PARM1_CORE(x) BPF_CORE_READ((x), regs[4])
++#define PT_REGS_PARM2_CORE(x) BPF_CORE_READ((x), regs[5])
++#define PT_REGS_PARM3_CORE(x) BPF_CORE_READ((x), regs[6])
++#define PT_REGS_PARM4_CORE(x) BPF_CORE_READ((x), regs[7])
++#define PT_REGS_PARM5_CORE(x) BPF_CORE_READ((x), regs[8])
++#define PT_REGS_RET_CORE(x) BPF_CORE_READ((x), regs[31])
++#define PT_REGS_FP_CORE(x) BPF_CORE_READ((x), regs[30])
++#define PT_REGS_RC_CORE(x) BPF_CORE_READ((x), regs[1])
++#define PT_REGS_SP_CORE(x) BPF_CORE_READ((x), regs[29])
++#define PT_REGS_IP_CORE(x) BPF_CORE_READ((x), cp0_epc)
++
+ #elif defined(bpf_target_powerpc)
+ 
+ #define PT_REGS_PARM1(x) ((x)->gpr[3])
+@@ -158,6 +241,15 @@ struct pt_regs;
+ #define PT_REGS_SP(x) ((x)->sp)
+ #define PT_REGS_IP(x) ((x)->nip)
+ 
++#define PT_REGS_PARM1_CORE(x) BPF_CORE_READ((x), gpr[3])
++#define PT_REGS_PARM2_CORE(x) BPF_CORE_READ((x), gpr[4])
++#define PT_REGS_PARM3_CORE(x) BPF_CORE_READ((x), gpr[5])
++#define PT_REGS_PARM4_CORE(x) BPF_CORE_READ((x), gpr[6])
++#define PT_REGS_PARM5_CORE(x) BPF_CORE_READ((x), gpr[7])
++#define PT_REGS_RC_CORE(x) BPF_CORE_READ((x), gpr[3])
++#define PT_REGS_SP_CORE(x) BPF_CORE_READ((x), sp)
++#define PT_REGS_IP_CORE(x) BPF_CORE_READ((x), nip)
++
+ #elif defined(bpf_target_sparc)
+ 
+ #define PT_REGS_PARM1(x) ((x)->u_regs[UREG_I0])
+@@ -169,11 +261,22 @@ struct pt_regs;
+ #define PT_REGS_RC(x) ((x)->u_regs[UREG_I0])
+ #define PT_REGS_SP(x) ((x)->u_regs[UREG_FP])
+ 
++#define PT_REGS_PARM1_CORE(x) BPF_CORE_READ((x), u_regs[UREG_I0])
++#define PT_REGS_PARM2_CORE(x) BPF_CORE_READ((x), u_regs[UREG_I1])
++#define PT_REGS_PARM3_CORE(x) BPF_CORE_READ((x), u_regs[UREG_I2])
++#define PT_REGS_PARM4_CORE(x) BPF_CORE_READ((x), u_regs[UREG_I3])
++#define PT_REGS_PARM5_CORE(x) BPF_CORE_READ((x), u_regs[UREG_I4])
++#define PT_REGS_RET_CORE(x) BPF_CORE_READ((x), u_regs[UREG_I7])
++#define PT_REGS_RC_CORE(x) BPF_CORE_READ((x), u_regs[UREG_I0])
++#define PT_REGS_SP_CORE(x) BPF_CORE_READ((x), u_regs[UREG_FP])
++
+ /* Should this also be a bpf_target check for the sparc case? */
+ #if defined(__arch64__)
+ #define PT_REGS_IP(x) ((x)->tpc)
++#define PT_REGS_IP_CORE(x) BPF_CORE_READ((x), tpc)
+ #else
+ #define PT_REGS_IP(x) ((x)->pc)
++#define PT_REGS_IP_CORE(x) BPF_CORE_READ((x), pc)
+ #endif
+ 
+ #endif
 -- 
 2.17.1
 
