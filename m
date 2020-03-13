@@ -2,125 +2,158 @@ Return-Path: <SRS0=iznb=46=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 319B8C10DCE
-	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 12:48:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C60AC4CECE
+	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 13:15:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 04E4A206FA
-	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 12:48:10 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hP3abGFm"
+	by mail.kernel.org (Postfix) with ESMTP id 24948206BE
+	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 13:15:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1584105358;
+	bh=sUQtVbR713nW2hCOEb10QN2fc51RmtkYJUZ4nMMbKck=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=SjrBPJ/G0fJvFMAqvyzeptrkZIEl8FAntQ1tO7g9afsB/FFKKSe1zrFWHwmn6bnjh
+	 FqvjmVc/byTYO8obsi0tOalzU9VT+vZj3o3o6NIsOd4E/msyxQDg7Mr4tN1i+qLJP3
+	 8QI/3Lv7Um3uAsV5yNej30/LaXOrSw9mk6cGwKtk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbgCMMsJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Mar 2020 08:48:09 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:38360 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726216AbgCMMsJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 13 Mar 2020 08:48:09 -0400
-Received: by mail-qt1-f196.google.com with SMTP id e20so7323260qto.5;
-        Fri, 13 Mar 2020 05:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4Wtym2YpAZl93It7kAZtFwQHk1xaqjgeb6Ayg9t19Y8=;
-        b=hP3abGFm6IO3Gax7hTipVqI4ommOPDEojXy+lJDXZtoOYohtpeZI5zKln5lKv4Gr+J
-         vHJEdpfBF92MaOInJoUSvxhMaJmhFeYfJNVgxwQoKKtsNKPF8rYYs7s8eBtdOulXJ/5n
-         6LgDn1NPaQ5IRDEoGcAh7DhgpKcuHjGIHVaBSem/I7M3RbLdyqJlDNMZlMx5FQpUgRrx
-         8EbGFD9IRDCqIbdbMmomh9BScdHrWEtnCZYS+HYRhEnYRnbglrnidI1E/WBt+8xPmCpG
-         WtroHqURvBzbTSrbUF5r3F7gqNm4ZQnyIiJRr1qOazlrkxgO5gNFDw+jwCWVNyUE9Bhb
-         9tlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4Wtym2YpAZl93It7kAZtFwQHk1xaqjgeb6Ayg9t19Y8=;
-        b=ZfprLtTpC2aBj/TyryzC4ic2y8so2B/1kiCuNG4WuKxd3aBBz4l6AUUkBSgQc+1BVo
-         esd0UMiM6v2xYeQ7fncLC8PHBjPqmO3XP7lK7x9/CFpaa3FV03Te+1TM4SxYiJAGHjIh
-         J1EatheI+2rJnuVBBKfjZ0ZmxwWRHfH9ZDbeQ5ZWpFf6FFHil3oeDhb4TNQPZ+Xdb2ZP
-         vGdShQkioKz8gYulbS5gLgoOvFvjv+0tXSO3Furr0rvTfYFcVj9f5Nm2ppNvPEHEZTLm
-         B42lFy1mpNOdtSbClmTlWpsoIzIjfXDgaX9QrV2mJGtb6v8E2AfxKzo3AzYxZ3PI2sH5
-         dXfw==
-X-Gm-Message-State: ANhLgQ1QiJhZ6Q2XqQwD0f5Dyxan9eU/miSmWtA2pX6Z4oyejG2dtMFZ
-        8Cy7NipI86SQI0utVDoCims=
-X-Google-Smtp-Source: ADFU+vsmR6tgaz/whYXSoJ6nLmlZTE1LKH95FJdyBqxQMM81A8OiPpLua9lXuIbQeXcCnqUnBThEqg==
-X-Received: by 2002:ac8:1114:: with SMTP id c20mr11913640qtj.126.1584103687781;
-        Fri, 13 Mar 2020 05:48:07 -0700 (PDT)
-Received: from bpf-dev (pc-184-104-160-190.cm.vtr.net. [190.160.104.184])
-        by smtp.gmail.com with ESMTPSA id h25sm8721532qkg.87.2020.03.13.05.48.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2020 05:48:07 -0700 (PDT)
-Date:   Fri, 13 Mar 2020 09:48:03 -0300
-From:   Carlos Antonio Neira Bustos <cneirabustos@gmail.com>
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Network Development <netdev@vger.kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH v17 0/3] BPF: New helper to obtain namespace data from
- current task
-Message-ID: <20200313124802.GB1309@bpf-dev>
-References: <20200304204157.58695-1-cneirabustos@gmail.com>
- <CAADnVQL4GR2kOoiLE0aTorvYzTPWrOCV4yKMh1BasYTVHkKxcg@mail.gmail.com>
- <33447490-7fa2-f56d-3622-d61c9c2046e5@isovalent.com>
+        id S1726534AbgCMNP4 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 13 Mar 2020 09:15:56 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:54322 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726622AbgCMNP4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 13 Mar 2020 09:15:56 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 02DD7kLs022485
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2020 06:15:55 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 2yqt89c0ja-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 13 Mar 2020 06:15:55 -0700
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Fri, 13 Mar 2020 06:15:53 -0700
+Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
+        id BE8D57600DE; Thu, 12 Mar 2020 19:06:50 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
+To:     <davem@davemloft.net>
+CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: pull-request: bpf 2020-03-12
+Date:   Thu, 12 Mar 2020 19:06:49 -0700
+Message-ID: <20200313020649.1133477-1-ast@kernel.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33447490-7fa2-f56d-3622-d61c9c2046e5@isovalent.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-13_04:2020-03-12,2020-03-13 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ clxscore=1015 malwarescore=0 bulkscore=0 impostorscore=0 mlxscore=0
+ suspectscore=4 priorityscore=1501 spamscore=0 adultscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003130070
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Mar 13, 2020 at 10:39:41AM +0000, Quentin Monnet wrote:
-> 2020-03-12 17:45 UTC-0700 ~ Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> > On Wed, Mar 4, 2020 at 12:42 PM Carlos Neira <cneirabustos@gmail.com> wrote:
-> >>
-> >> Currently bpf_get_current_pid_tgid(), is used to do pid filtering in bcc's
-> >> scripts but this helper returns the pid as seen by the root namespace which is
-> >> fine when a bcc script is not executed inside a container.
-> >> When the process of interest is inside a container, pid filtering will not work
-> >> if bpf_get_current_pid_tgid() is used.
-> >> This helper addresses this limitation returning the pid as it's seen by the current
-> >> namespace where the script is executing.
-> >>
-> >> In the future different pid_ns files may belong to different devices, according to the
-> >> discussion between Eric Biederman and Yonghong in 2017 Linux plumbers conference.
-> >> To address that situation the helper requires inum and dev_t from /proc/self/ns/pid.
-> >> This helper has the same use cases as bpf_get_current_pid_tgid() as it can be
-> >> used to do pid filtering even inside a container.
-> > 
-> > Applied. Thanks.
-> > There was one spurious trailing whitespace that I fixed in patch 3
-> > and missing .gitignore update for test_current_pid_tgid_new_ns.
-> > Could you please follow up with another patch to fold
-> > test_current_pid_tgid_new_ns into test_progs.
-> > I'd really like to consolidate all tests into single binary.
-> > 
-> 
-> Compiling bpftool (with libbpf now relying on bpf_helper_defs.h
-> generated from helpers documentation), I observe the following
-> warning:
-> 
->     .output/bpf_helper_defs.h:2834:72: warning: declaration of 'struct bpf_pidns_info' will not be visible outside of this function [-Wvisibility]
->     static int (*bpf_get_ns_current_pid_tgid)(__u64 dev, __u64 ino, struct bpf_pidns_info *nsdata, __u32 size) = (void *) 120;
-> 
-> Would it be possible to address this as part of the follow-up too,
-> please? I think the fix would be to add "struct bpf_pidns_info"
-> to type_fds (I see it was added to known_types already) in
-> scripts/bpf_helpers_doc.py.
-> 
-> Thanks,
-> Quentin
+Hi David,
 
-Thanks for checking this out Quentin,
-I'm sorry I'll start working on this follow-up patch to fix this.
+The following pull-request contains BPF updates for your *net* tree.
 
-Bests
+We've added 12 non-merge commits during the last 8 day(s) which contain
+a total of 12 files changed, 161 insertions(+), 15 deletions(-).
+
+The main changes are:
+
+1) Andrii fixed two bugs in cgroup-bpf.
+
+2) John fixed sockmap.
+
+3) Luke fixed x32 jit.
+
+4) Martin fixed two issues in struct_ops.
+
+5) Yonghong fixed bpf_send_signal.
+
+6) Yoshiki fixed BTF enum.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+Thanks a lot!
+
+Also thanks to reporters, reviewers and testers of commits in this pull-request:
+
+Andrii Nakryiko, Jakub Sitnicki, Roman Gushchin
+
+----------------------------------------------------------------
+
+The following changes since commit 209c65b61d94344522c41a83cd6ce51aac5fd0a4:
+
+  drivers/of/of_mdio.c:fix of_mdiobus_register() (2020-03-03 19:01:51 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
+
+for you to fetch changes up to 90db6d772f749e38171d04619a5e3cd8804a6d02:
+
+  bpf, sockmap: Remove bucket->lock from sock_{hash|map}_free (2020-03-11 14:08:52 +0100)
+
+----------------------------------------------------------------
+Alexei Starovoitov (2):
+      Merge branch 'fix_bpf_send_signal'
+      Merge branch 'fix-BTF-enum'
+
+Andrii Nakryiko (2):
+      bpf: Initialize storage pointers to NULL to prevent freeing garbage pointer
+      bpf: Fix cgroup ref leak in cgroup_bpf_inherit on out-of-memory
+
+John Fastabend (1):
+      bpf, sockmap: Remove bucket->lock from sock_{hash|map}_free
+
+Luke Nelson (2):
+      bpf, x32: Fix bug with JMP32 JSET BPF_X checking upper bits
+      selftests: bpf: Add test for JMP32 JSET BPF_X with upper bits set
+
+Martin KaFai Lau (2):
+      bpf: Return better error value in delete_elem for struct_ops map
+      bpf: Do not allow map_freeze in struct_ops map
+
+Quentin Monnet (1):
+      mailmap: Update email address
+
+Yonghong Song (2):
+      bpf: Fix deadlock with rq_lock in bpf_send_signal()
+      selftests/bpf: Add send_signal_sched_switch test
+
+Yoshiki Komachi (2):
+      bpf/btf: Fix BTF verification of enum members in struct/union
+      selftests/bpf: Add test for the packed enum member in struct/union
+
+ .mailmap                                           |  1 +
+ arch/x86/net/bpf_jit_comp32.c                      | 10 ++--
+ kernel/bpf/bpf_struct_ops.c                        | 14 +++--
+ kernel/bpf/btf.c                                   |  2 +-
+ kernel/bpf/cgroup.c                                |  7 ++-
+ kernel/bpf/syscall.c                               |  5 ++
+ kernel/trace/bpf_trace.c                           |  2 +-
+ net/core/sock_map.c                                | 12 +++--
+ .../bpf/prog_tests/send_signal_sched_switch.c      | 60 ++++++++++++++++++++++
+ .../selftests/bpf/progs/test_send_signal_kern.c    |  6 +++
+ tools/testing/selftests/bpf/test_btf.c             | 42 +++++++++++++++
+ tools/testing/selftests/bpf/verifier/jmp32.c       | 15 ++++++
+ 12 files changed, 161 insertions(+), 15 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/send_signal_sched_switch.c
