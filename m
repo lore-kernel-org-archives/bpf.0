@@ -2,105 +2,120 @@ Return-Path: <SRS0=iznb=46=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98FC2C10DCE
-	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 06:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EDAAC4CECE
+	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 06:45:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 633BB20691
-	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 06:18:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA43C20749
+	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 06:45:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="dcMQcEKU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mjEKyd/s"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726310AbgCMGSm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Mar 2020 02:18:42 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:34150 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726236AbgCMGSl (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 13 Mar 2020 02:18:41 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02D6Aj1q013049
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 23:18:41 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=wpUtVqAQJbpIzB+P5uZAyP2Oh+c7swHcHj/HJQEwnm4=;
- b=dcMQcEKU0Yy6yaeNTUaLnrkUng5V726BoVo4tB4JwSqlHdHUP63GQn4RWNJU5kbMAGKg
- ra4xvXMbUtWOUBJR+BzpAv3FfzhJbbL4/8RRYbOmQjZ2WjnTr3yV3yp/KIU6La/pj1ta
- alFZHkLYUh+Nxf/ooIhrhXsaO+ixhSTUv4I= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2yqt7t2n5y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 12 Mar 2020 23:18:41 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Thu, 12 Mar 2020 23:18:40 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id A86002EC2EB3; Thu, 12 Mar 2020 23:18:38 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next] selftests/bpf: fix usleep() implementation
-Date:   Thu, 12 Mar 2020 23:18:37 -0700
-Message-ID: <20200313061837.3685572-1-andriin@fb.com>
-X-Mailer: git-send-email 2.17.1
-X-FB-Internal: Safe
+        id S1726001AbgCMGp1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Mar 2020 02:45:27 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:42315 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726314AbgCMGp1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 13 Mar 2020 02:45:27 -0400
+Received: by mail-pg1-f194.google.com with SMTP id h8so4405133pgs.9;
+        Thu, 12 Mar 2020 23:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WPL3gUJrRKM2cbWWfIBmuWTyQv5A63MVH3jx8qJd4P8=;
+        b=mjEKyd/sdH949lL+MIiRiMVBQxWxwK5iyMcdEk8tyUd40X0Dzh0iKBUB8lxuWsqaTc
+         0l0ozuIUIt8XnD6zfnFR2aRiIRV9Ko3/K6pRIrSe+j8omma9FM/xGvhEFMcefI8m854W
+         9BkHwHyVVenQwEeYw34EiGyW4DZbk82R1iSmdWmimkqaCoShmredoIVnAqld35dKWmJY
+         sDSuGoiK0K+ABHPMn6rmwP/HDLddIm8rR1m3wKtIIjkBwZU0e/1qvlnhs7CpOnEG3foo
+         hUExpzHgMTQszVJHHCiz1w0i4BkrdlCvy4TG72uZkBNBJYUnU6PZhfQcTxQ2ur4hN5tR
+         Rtcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WPL3gUJrRKM2cbWWfIBmuWTyQv5A63MVH3jx8qJd4P8=;
+        b=J1YA1/TUsHrS9UhN3rNDnfXEWS/ds6AENbHpSwhqdLJoCiMVBixTdGIgf1Rk7byNb4
+         TBOGVUnmmEEl/7GqmZ3o0DhgjpiGZFDYnIGyMwGQbZXhQaowVwmdCCoEQs6RMdckB6Td
+         wQkMUOa9gsDRxyjangVhQjlJ4q/Sh3ovqg7E873Q6h7wHtVjt86W7vlYUK+RPxuh1LQn
+         s5nwCoE29kwMQloZFM5+NMsnTD0X7qESbKHBXdu0FrJFXI0ofzj8sDGfQwwwFY4XvfNL
+         Be8UXeIJ/O1kCaO3I1/wmRnUaJUH++qfmF1E/OLyJ65xRXwsFljStYkihGn1JPLSJ/UC
+         3N/Q==
+X-Gm-Message-State: ANhLgQ3G/8MyNmZ7f1z7IvL7339moGhR8gEoiz70YzMSO5+5v541o56Y
+        71zvpkTCTgvULF2OEIdyJYc=
+X-Google-Smtp-Source: ADFU+vtdwSnIwGDkvJIX39nEet2iV8W2aSU5f/YqKOuadfd8aCC6VJ2S5ob98QKACgVeNVTms1f3MQ==
+X-Received: by 2002:aa7:8bd1:: with SMTP id s17mr12079026pfd.225.1584081924569;
+        Thu, 12 Mar 2020 23:45:24 -0700 (PDT)
+Received: from ast-mbp ([2620:10d:c090:400::5:d19a])
+        by smtp.gmail.com with ESMTPSA id o129sm3851681pfb.61.2020.03.12.23.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2020 23:45:23 -0700 (PDT)
+Date:   Thu, 12 Mar 2020 23:45:21 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
+        daniel@iogearbox.net, andrii.nakryiko@gmail.com, kernel-team@fb.com
+Subject: Re: [PATCH bpf-next] selftests/bpf: fix usleep() implementation
+Message-ID: <20200313064521.se2sqpgkpd5ekmfo@ast-mbp>
+References: <20200313061837.3685572-1-andriin@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-13_02:2020-03-11,2020-03-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015 mlxscore=0
- lowpriorityscore=0 bulkscore=0 suspectscore=8 priorityscore=1501
- phishscore=0 malwarescore=0 adultscore=0 spamscore=0 mlxlogscore=729
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2003130035
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200313061837.3685572-1-andriin@fb.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-nanosleep syscall expects pointer to struct timespec, not nanoseconds
-directly. Current implementation fulfills its purpose of invoking nanosleep
-syscall, but doesn't really provide sleeping capabilities, which can cause
-flakiness for tests relying on usleep() to wait for something.
+On Thu, Mar 12, 2020 at 11:18:37PM -0700, Andrii Nakryiko wrote:
+> nanosleep syscall expects pointer to struct timespec, not nanoseconds
+> directly. Current implementation fulfills its purpose of invoking nanosleep
+> syscall, but doesn't really provide sleeping capabilities, which can cause
+> flakiness for tests relying on usleep() to wait for something.
+> 
+> Fixes: ec12a57b822c ("selftests/bpf: Guarantee that useep() calls nanosleep() syscall")
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> ---
+>  tools/testing/selftests/bpf/test_progs.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+> index 2b0bc1171c9c..b6201dd82edf 100644
+> --- a/tools/testing/selftests/bpf/test_progs.c
+> +++ b/tools/testing/selftests/bpf/test_progs.c
+> @@ -35,7 +35,16 @@ struct prog_test_def {
+>   */
+>  int usleep(useconds_t usec)
+>  {
+> -	return syscall(__NR_nanosleep, usec * 1000UL);
+> +	struct timespec ts;
+> +
+> +	if (usec > 999999) {
+> +		ts.tv_sec = usec / 1000000;
+> +		ts.tv_nsec = usec % 1000000;
+> +	} else {
+> +		ts.tv_sec = 0;
+> +		ts.tv_nsec = usec;
+> +	}
+> +	return nanosleep(&ts, NULL);
+>  }
 
-Fixes: ec12a57b822c ("selftests/bpf: Guarantee that useep() calls nanosleep() syscall")
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/testing/selftests/bpf/test_progs.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Is this a copy-paste from somewhere?
+Above 'if' looks like premature optimization.
+I applied it anyway, since it fixes flakiness in test_progs -n 24.
+Now pin*tp* tests are stable.
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 2b0bc1171c9c..b6201dd82edf 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -35,7 +35,16 @@ struct prog_test_def {
-  */
- int usleep(useconds_t usec)
- {
--	return syscall(__NR_nanosleep, usec * 1000UL);
-+	struct timespec ts;
-+
-+	if (usec > 999999) {
-+		ts.tv_sec = usec / 1000000;
-+		ts.tv_nsec = usec % 1000000;
-+	} else {
-+		ts.tv_sec = 0;
-+		ts.tv_nsec = usec;
-+	}
-+	return nanosleep(&ts, NULL);
- }
- 
- static bool should_run(struct test_selector *sel, int num, const char *name)
--- 
-2.17.1
-
+But the other one is still flaky:
+server_thread:FAIL:237
+Failed to accept client: Resource temporarily unavailable
+#64 tcp_rtt:FAIL
+Note that if I run the test alone (test_progs -n 64) it is stable.
+It fails only when run as part of bigger test_progs.
+test_progs -n 30-64 sporadically fails (most of the time)
+test_progs -n 40-64 consistently passes
+Haven't bisected further.
