@@ -2,122 +2,102 @@ Return-Path: <SRS0=iznb=46=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9432AC1975A
-	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 01:50:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1080C10DCE
+	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 02:39:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6CE0F206EB
-	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 01:50:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8EF30206F1
+	for <bpf@archiver.kernel.org>; Fri, 13 Mar 2020 02:39:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="prVgVe2z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fTihegLm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbgCMBuR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Mar 2020 21:50:17 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:33717 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726114AbgCMBuQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Mar 2020 21:50:16 -0400
-Received: by mail-pf1-f195.google.com with SMTP id n7so4237062pfn.0;
-        Thu, 12 Mar 2020 18:50:16 -0700 (PDT)
+        id S1726371AbgCMCjd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Mar 2020 22:39:33 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40006 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726246AbgCMCjc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Mar 2020 22:39:32 -0400
+Received: by mail-pl1-f196.google.com with SMTP id h11so3489227plk.7;
+        Thu, 12 Mar 2020 19:39:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=on6YR81tppI3WeAL+gwJSsYOHfdaX/jkaYhx4fntqxc=;
-        b=prVgVe2zjLvgq0rpJg/H5NvmtXlt7fJEOBLfiApHdHpb/1SxxaUM1HOl6Gw2aqyDiI
-         iVCFg/jXAWW+Mppm28VXYp1b/bVs6yItpXdH6NR4O3pcIKiDbIqCY74iRGxsueEcfaHS
-         qyKaW55O/XWeGIv7IP0zXJk7DVVxxDxtQmfheJx24BlkEF+gpPYO2penw1U0xgV29ydj
-         BkqK95ovK1nEiocno0URah0JmNxPVYzTLcaB5fEY4TxVB8p/ZdeIlogm5Khqu4tRdOYo
-         PgwgTumnAqgwI4bthuR6IgbQb4mKZOfSVUp2rrsWqv5jbyfWkgXArVE2JARf0hCSGTUv
-         g+PQ==
+        bh=Rs1oqWipH70EqXQPZoCyLHHvdHZcK5yX7KipafNzHgo=;
+        b=fTihegLmnOtNBXny+Jn9Qu7R+3y3R1QNpb0QRLf4CwbwNTK8BGA3OtJLKMtEbQGZ2u
+         MUZ56T++lciXe6odpK+LWItTj42+GZxM2dRa+LEnSr3Tk6D1Oj+H2p2gMgnSTlbyXHQj
+         NLIsDFTlsrjyt8sM9MRN8NyGrO566G+kOdAkkqKEqrVMXMMoJQzC72ul2b8jJntKDzJb
+         Ha3n3Ar0FuJoIy32b+bsyFUviu3OWz7LFdGe12KbNtA+IKMAUXPLss5d24QNHdvdvv4Q
+         VVnpRT9w1rFHG3+RkCE6EEBAu1q/81Q5onKd4GaKh6mVPfa1llv03VRqg5c6jh+R8lSS
+         ke0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=on6YR81tppI3WeAL+gwJSsYOHfdaX/jkaYhx4fntqxc=;
-        b=bd7ivd0apOu1ZTKUj8Hi5zkAaa1oPh4sJues9TbD8jkFpGILNxpe1ZCPRrA1si/CDM
-         0Aow2EKOi/8ah4b3wA0HEHSOQgFaUVk5xxDQbxUTA2DiJaUamM1NrxN1Tml04fp86mZV
-         kGpxyQR/LnyLbyIJjElM/oY0xCZ3YwfNFg6MDLrAcheYo0taEKV3AuietUAXdKZ3f9La
-         XipBbH7QKJYZPcmY2CddCrrcc0s29stiOw7ZDCm883zg7yVw5IlsafiyDQrdQYy6HVUQ
-         eKPwQzGejCULaiuNEtX/KNbYCM3aiumRhJhEHTBjUS/M2EYAf3FcNJMLSpmId5yzbB1l
-         A5hQ==
-X-Gm-Message-State: ANhLgQ3n0Rro0OtVtfl5npFPdY4hwi6olFzhN2TMgLSkVV10DU914Er1
-        KJ37Ifl7eO5KYQzLgxHuBce7a4c3
-X-Google-Smtp-Source: ADFU+vuQiWqJlKCB4qTEShyW5NHfTFkTQV3NVAXp5QUpfZSpj+DAy1b/FI5gjWJQtSxsJSNQ5j/UHw==
-X-Received: by 2002:a63:2cce:: with SMTP id s197mr11007470pgs.184.1584064215566;
-        Thu, 12 Mar 2020 18:50:15 -0700 (PDT)
+        bh=Rs1oqWipH70EqXQPZoCyLHHvdHZcK5yX7KipafNzHgo=;
+        b=n5pvriatbKrzaM4K5F1DehISWCcfiT1SL6OQN9wGzg+MpE4kPwiHsqgVWPyPM4XGMo
+         Cc9BolSm/FF6G5ulQhdkx7yoJKPOP00jze03/1V6KhPIZsS7EhWBAtSn6LLyiNnlmfj7
+         x1IgzNaAUG0Ttf/iaI0/9CUBUDsQZQmGSuyapJ6/jr/wQZ5eDkI1WRmvW/WZj4wRzZ0j
+         /TgZzKjv4HsNLWXGDPm6y5nrH+UbMJyDHgnzeFthee2XVhmzIQs9qI3/pBeqDRzzCQL7
+         5nZa7jc1EVN57bkfmmD/dhC0uSx7ZE5rKSfXJqYqjiwggyB8i2BxlA1/wGUQkSOSxwuv
+         Plzw==
+X-Gm-Message-State: ANhLgQ3PbiCX4ZfDf4R0KRyIIIp0XSNoyKNccQQ+buUYwY1oPtpwNJZn
+        CHOGameH7e78c0O4QooLAC4=
+X-Google-Smtp-Source: ADFU+vtN4yL9qUHvbzyq1p40z4iEFHQlcLn80n6s/5i495YXE7lv6/J6aTYMCfxZ/XdpuzZm1zEv8w==
+X-Received: by 2002:a17:90a:a48b:: with SMTP id z11mr7487175pjp.1.1584067171717;
+        Thu, 12 Mar 2020 19:39:31 -0700 (PDT)
 Received: from ast-mbp ([2620:10d:c090:400::5:df27])
-        by smtp.gmail.com with ESMTPSA id j12sm39654399pga.78.2020.03.12.18.50.13
+        by smtp.gmail.com with ESMTPSA id f4sm20951554pfn.116.2020.03.12.19.39.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 18:50:14 -0700 (PDT)
-Date:   Thu, 12 Mar 2020 18:50:12 -0700
+        Thu, 12 Mar 2020 19:39:30 -0700 (PDT)
+Date:   Thu, 12 Mar 2020 19:39:27 -0700
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Andrii Nakryiko <andriin@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
-        daniel@iogearbox.net, andrii.nakryiko@gmail.com, kernel-team@fb.com
-Subject: Re: [PATCH v2 bpf-next] bpf: abstract away entire bpf_link clean up
- procedure
-Message-ID: <20200313015012.nejdagphpe44k27i@ast-mbp>
-References: <20200313002128.2028680-1-andriin@fb.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Andrii Nakryiko <andriin@fb.com>,
+        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@redhat.com>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Song Liu <song@kernel.org>
+Subject: Re: [PATCHv5 00/15] bpf: Add trampoline and dispatcher to
+ /proc/kallsyms
+Message-ID: <20200313023927.ejv6aubwzjht55cf@ast-mbp>
+References: <20200312195610.346362-1-jolsa@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200313002128.2028680-1-andriin@fb.com>
+In-Reply-To: <20200312195610.346362-1-jolsa@kernel.org>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 05:21:28PM -0700, Andrii Nakryiko wrote:
-> Instead of requiring users to do three steps for cleaning up bpf_link, its
-> anon_inode file, and unused fd, abstract that away into bpf_link_cleanup()
-> helper. bpf_link_defunct() is removed, as it shouldn't be needed as an
-> individual operation anymore.
+On Thu, Mar 12, 2020 at 08:55:55PM +0100, Jiri Olsa wrote:
+> hi,
+> this patchset adds trampoline and dispatcher objects
+> to be visible in /proc/kallsyms. The last patch also
+> adds sorting for all bpf objects in /proc/kallsyms.
+
+I removed second sentence from the cover letter and
+applied the first 12 patches.
+Thanks a lot!
+
+> For perf tool to properly display trampoline/dispatcher you need
+> also Arnaldo's perf/urgent branch changes. I merged everything
+> into following branch:
 > 
-> v1->v2:
-> - keep bpf_link_cleanup() static for now (Daniel).
-> 
-> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/kallsyms
 
-Applied.
-
-But noticed that the test is now sporadically failing:
-./test_progs -n 24
-test_link_pinning:PASS:skel_open 0 nsec
-test_link_pinning_subtest:PASS:link_attach 0 nsec
-test_link_pinning_subtest:PASS:res_check1 0 nsec
-test_link_pinning_subtest:PASS:link_pin 0 nsec
-test_link_pinning_subtest:PASS:pin_path1 0 nsec
-test_link_pinning_subtest:PASS:stat_link 0 nsec
-test_link_pinning_subtest:PASS:res_check2 0 nsec
-test_link_pinning_subtest:PASS:res_check3 0 nsec
-test_link_pinning_subtest:PASS:link_open 0 nsec
-test_link_pinning_subtest:PASS:pin_path2 0 nsec
-test_link_pinning_subtest:PASS:link_unpin 0 nsec
-test_link_pinning_subtest:PASS:res_check4 0 nsec
-test_link_pinning_subtest:FAIL:link_attached got to iteration #10000
-#24/1 pin_raw_tp:FAIL
-test_link_pinning_subtest:PASS:link_attach 0 nsec
-test_link_pinning_subtest:PASS:res_check1 0 nsec
-test_link_pinning_subtest:PASS:link_pin 0 nsec
-test_link_pinning_subtest:PASS:pin_path1 0 nsec
-test_link_pinning_subtest:PASS:stat_link 0 nsec
-test_link_pinning_subtest:PASS:res_check2 0 nsec
-test_link_pinning_subtest:PASS:res_check3 0 nsec
-test_link_pinning_subtest:PASS:link_open 0 nsec
-test_link_pinning_subtest:PASS:pin_path2 0 nsec
-test_link_pinning_subtest:PASS:link_unpin 0 nsec
-test_link_pinning_subtest:PASS:res_check4 0 nsec
-test_link_pinning_subtest:FAIL:link_attached got to iteration #10000
-#24/2 pin_tp_btf:FAIL
-#24 link_pinning:FAIL
-Summary: 0/0 PASSED, 0 SKIPPED, 3 FAILED
-
-it's failing more often than passing, actually.
-
-The #64 tcp_rtt also started to fail sporadically.
-But I wonder whether it's leftover from 24. shrug.
+It sounds that you folks want to land the last three patches via Arnaldo's tree
+to avoid conflicts?
+Right?
