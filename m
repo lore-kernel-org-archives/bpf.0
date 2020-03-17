@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0048DC2BB1D
-	for <bpf@archiver.kernel.org>; Tue, 17 Mar 2020 17:30:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12378C5ACD7
+	for <bpf@archiver.kernel.org>; Tue, 17 Mar 2020 17:30:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CD2932073E
-	for <bpf@archiver.kernel.org>; Tue, 17 Mar 2020 17:30:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D81F120724
+	for <bpf@archiver.kernel.org>; Tue, 17 Mar 2020 17:30:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ep+gni+6"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A3Xw53z7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726859AbgCQRal (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Mar 2020 13:30:41 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:27854 "EHLO
+        id S1726973AbgCQRat (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Mar 2020 13:30:49 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:27842 "EHLO
         us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726875AbgCQRal (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 17 Mar 2020 13:30:41 -0400
+        by vger.kernel.org with ESMTP id S1726970AbgCQRas (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 17 Mar 2020 13:30:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584466240;
+        s=mimecast20190719; t=1584466247;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OnyziK/rkPqgFggKR4X2W+5Dbj83i3diWutR0/2f97A=;
-        b=Ep+gni+6PfWORv5b+T5nPB0aZpAx31BcrBVyBKMhsu+ZIK+5IoXf1xnrIIfOFFrgs2g6sD
-        01QtYDOoNLHh3oK0vszY1w5nRptsDZtFcgOX6WY022dbOCq0t55BvtcNoXczXgsGNXTGgv
-        XE1f6dpxWQjM9EE6AqRQkMMhVTUVbAg=
+        bh=hRA3mLxIRW8RlSqNs1JzRim2qfbZVa1Otm7sdJNcWjU=;
+        b=A3Xw53z7qwpjEwzmsltxqWc+OxqC8c4ziYUrTA5g8vjO9ptHEBjA7QkOVwadOIc6EUUSjx
+        b/T6Sk3PCR72Hee3boYYwGmOCLHqURQNX5sVUI+tubPHerQ2cnZuzV7auYGcrN5q4DLU4v
+        k41cmcmHwy1OfoEAJX6Tznp0jqUBvNQ=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-422-mMTm4NwqPNmxHkts4GpkeQ-1; Tue, 17 Mar 2020 13:30:35 -0400
-X-MC-Unique: mMTm4NwqPNmxHkts4GpkeQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+ us-mta-180-nkwSaraWPOS9d6OYjGG8vg-1; Tue, 17 Mar 2020 13:30:43 -0400
+X-MC-Unique: nkwSaraWPOS9d6OYjGG8vg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3E83690A07B;
-        Tue, 17 Mar 2020 17:30:15 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6480B1085988;
+        Tue, 17 Mar 2020 17:30:25 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CF2F61001DC0;
-        Tue, 17 Mar 2020 17:30:14 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 06CD960BEE;
+        Tue, 17 Mar 2020 17:30:25 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id D1F2C30721A66;
-        Tue, 17 Mar 2020 18:30:13 +0100 (CET)
-Subject: [PATCH RFC v1 13/15] tun: add XDP frame size
+        by firesoul.localdomain (Postfix) with ESMTP id 0722930721A66;
+        Tue, 17 Mar 2020 18:30:24 +0100 (CET)
+Subject: [PATCH RFC v1 15/15] dpaa2-eth: add XDP frame size
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -62,47 +62,39 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Lorenzo Bianconi <lorenzo@kernel.org>
-Date:   Tue, 17 Mar 2020 18:30:13 +0100
-Message-ID: <158446621378.702578.2512691726801096724.stgit@firesoul>
+Date:   Tue, 17 Mar 2020 18:30:24 +0100
+Message-ID: <158446622395.702578.14405139445906785865.stgit@firesoul>
 In-Reply-To: <158446612466.702578.2795159620575737080.stgit@firesoul>
 References: <158446612466.702578.2795159620575737080.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The tun driver have two code paths for running XDP (bpf_prog_run_xdp).
-In both cases 'buflen' contains enough tailroom for skb_shared_info.
+This is the full page size:
+ #define DPAA2_ETH_RX_BUF_RAW_SIZE	PAGE_SIZE
 
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- drivers/net/tun.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 79f248cb282d..c540ff2f5774 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -1706,6 +1706,7 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
- 		xdp_set_data_meta_invalid(&xdp);
- 		xdp.data_end = xdp.data + len;
- 		xdp.rxq = &tfile->xdp_rxq;
-+		xdp.frame_sz = buflen;
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+index 7ff147e89426..8b03b38b33c9 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+@@ -301,6 +301,7 @@ static u32 run_xdp(struct dpaa2_eth_priv *priv,
+ 	xdp.data_hard_start = xdp.data - XDP_PACKET_HEADROOM;
+ 	xdp_set_data_meta_invalid(&xdp);
+ 	xdp.rxq = &ch->xdp_rxq;
++	xdp.frame_sz = DPAA2_ETH_RX_BUF_RAW_SIZE;
  
- 		act = bpf_prog_run_xdp(xdp_prog, &xdp);
- 		if (act == XDP_REDIRECT || act == XDP_TX) {
-@@ -2445,6 +2446,7 @@ static int tun_xdp_one(struct tun_struct *tun,
- 		}
- 		xdp_set_data_meta_invalid(xdp);
- 		xdp->rxq = &tfile->xdp_rxq;
-+		xdp->frame_sz = buflen;
+ 	xdp_act = bpf_prog_run_xdp(xdp_prog, &xdp);
  
- 		act = bpf_prog_run_xdp(xdp_prog, xdp);
- 		err = tun_xdp_act(tun, xdp_prog, xdp, act);
 
 
