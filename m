@@ -2,121 +2,278 @@ Return-Path: <SRS0=qP+h=5D=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFC75C1975A
-	for <bpf@archiver.kernel.org>; Wed, 18 Mar 2020 02:03:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A63AC2BB1D
+	for <bpf@archiver.kernel.org>; Wed, 18 Mar 2020 03:14:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BD06620724
-	for <bpf@archiver.kernel.org>; Wed, 18 Mar 2020 02:03:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0823B20752
+	for <bpf@archiver.kernel.org>; Wed, 18 Mar 2020 03:14:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LoRic2zh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727069AbgCRCD7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Mar 2020 22:03:59 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:37970 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726871AbgCRCD7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Mar 2020 22:03:59 -0400
-Received: by mail-wm1-f68.google.com with SMTP id t13so1506940wmi.3;
-        Tue, 17 Mar 2020 19:03:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FABasMwMskF7foIZI74WnbbUanagtErXSwxfbZA1fzE=;
-        b=ug4fGgOg5X8gtg6iHr63X5hKzVmpphbqE+gf7qUbPloiEreLQE/cIy64WDkNT5OdyM
-         kt8W/Swfnq8S60xkLuJWfdPoOEjfOZ/TBWtos3ZS423a3A3lkXFGXuiynHVKFd9wtqGA
-         RCZZPJDjln7okgrleBJuG8Ex79qEq+OFAXrWYt5FaWf3JY5ms4duqQ9qfK685vnYu6rG
-         puAvxbUsZjFrqSWLWb6sXMrcACDdkRXQozoNhwOWLJ1EPYdmDbDYmlnqBoPIpPFxvhnj
-         FoyAFebEQYtPktOuPeZEEjrIxnaCcb/Nw+PkkSqBcQQmmP9miGoFQynUxyI4vL6XZ5GF
-         Vi6Q==
-X-Gm-Message-State: ANhLgQ3AmQcZGZ9EWlT95s3Ha20t+AUS6wTeWHyikid7oHM8zLTXs2dJ
-        PKDiMQ92hKtcB/49EPIBqYXfgESN3VSAHuaKl00=
-X-Google-Smtp-Source: ADFU+vsw82WXRu0BqjkZhF7t+00pdye6vztVtWOdcHEdze2KolKLSoWmR0SfOIvjUW7sIp/JtISdahlGzpzoDpiaQOs=
-X-Received: by 2002:a7b:cb50:: with SMTP id v16mr2074239wmj.74.1584497037073;
- Tue, 17 Mar 2020 19:03:57 -0700 (PDT)
+        id S1726596AbgCRDO5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Mar 2020 23:14:57 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45378 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726478AbgCRDO4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 17 Mar 2020 23:14:56 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 02I3Dp0o024184
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2020 20:14:55 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=YinHzWkN5kvrfccQMrx+wWIDKtu4btKedzrLz4slACs=;
+ b=LoRic2zhAzORSB/UBp5+SrtKlimzbCULS+jz+SMdrsHhrIRu8pUn5/VWQsBaggEPbVNp
+ /j7MLBANKW6YitrOaBWnaojrbN/G0lgAa6aia+DTTvs6omKf+GBKPODVO31dNwGsmQGi
+ qrZbIgmfFIJKEp06+QgXKFHObLIX9eK7oHs= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 2yu7yngssy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 17 Mar 2020 20:14:55 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Tue, 17 Mar 2020 20:14:53 -0700
+Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
+        id 24C0C294307C; Tue, 17 Mar 2020 20:14:50 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Martin KaFai Lau <kafai@fb.com>
+Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        <netdev@vger.kernel.org>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v3 bpf-next 3/4] bpftool: Translate prog_id to its bpf prog_name
+Date:   Tue, 17 Mar 2020 20:14:50 -0700
+Message-ID: <20200318031450.1256819-1-kafai@fb.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200318031431.1256036-1-kafai@fb.com>
+References: <20200318031431.1256036-1-kafai@fb.com>
+X-FB-Internal: Safe
 MIME-Version: 1.0
-References: <20200312233648.1767-1-joe@wand.net.nz> <20200312233648.1767-4-joe@wand.net.nz>
- <20200316225729.kd4hmz3oco5l7vn4@kafai-mbp> <CAOftzPgsVOqCLZatjytBXdQxH-DqJxiycXWN2d4C_-BjR5v1Kw@mail.gmail.com>
- <CACAyw9_zt-wetBiFWXtpQOOv79QCFR12dA9jx1UDEya=0_poyQ@mail.gmail.com> <CAOftzPjeO4QJJnOBHjhzDmJRwqRztYaHLuKEOB_7a4KwDxgAHw@mail.gmail.com>
-In-Reply-To: <CAOftzPjeO4QJJnOBHjhzDmJRwqRztYaHLuKEOB_7a4KwDxgAHw@mail.gmail.com>
-From:   Joe Stringer <joe@wand.net.nz>
-Date:   Tue, 17 Mar 2020 19:03:45 -0700
-Message-ID: <CAOftzPj+H1fep3D2E=zZr_ys=cdwT9Ci7=evHQirzc8C6toqfA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/7] bpf: Add socket assign support
-To:     Joe Stringer <joe@wand.net.nz>
-Cc:     Lorenz Bauer <lmb@cloudflare.com>, Martin KaFai Lau <kafai@fb.com>,
-        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-17_10:2020-03-17,2020-03-17 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ suspectscore=38 bulkscore=0 impostorscore=0 adultscore=0 mlxlogscore=909
+ clxscore=1015 mlxscore=0 spamscore=0 malwarescore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003180016
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 6:10 PM Joe Stringer <joe@wand.net.nz> wrote:
->
-> On Tue, Mar 17, 2020 at 3:10 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
-> >
-> > On Tue, 17 Mar 2020 at 03:06, Joe Stringer <joe@wand.net.nz> wrote:
-> > >
-> > > On Mon, Mar 16, 2020 at 3:58 PM Martin KaFai Lau <kafai@fb.com> wrote:
-> > > >
-> > > > On Thu, Mar 12, 2020 at 04:36:44PM -0700, Joe Stringer wrote:
-> > > > > Add support for TPROXY via a new bpf helper, bpf_sk_assign().
-> > > > >
-> > > > > This helper requires the BPF program to discover the socket via a call
-> > > > > to bpf_sk*_lookup_*(), then pass this socket to the new helper. The
-> > > > > helper takes its own reference to the socket in addition to any existing
-> > > > > reference that may or may not currently be obtained for the duration of
-> > > > > BPF processing. For the destination socket to receive the traffic, the
-> > > > > traffic must be routed towards that socket via local route, the socket
-> > > > I also missed where is the local route check in the patch.
-> > > > Is it implied by a sk can be found in bpf_sk*_lookup_*()?
-> > >
-> > > This is a requirement for traffic redirection, it's not enforced by
-> > > the patch. If the operator does not configure routing for the relevant
-> > > traffic to ensure that the traffic is delivered locally, then after
-> > > the eBPF program terminates, it will pass up through ip_rcv() and
-> > > friends and be subject to the whims of the routing table. (or
-> > > alternatively if the BPF program redirects somewhere else then this
-> > > reference will be dropped).
-> >
-> > Can you elaborate what "an appropriate routing configuration" would be?
-> > I'm not well versed with how routing works, sorry.
->
-> [...]
->
-> > Do you think being subject to the routing table is desirable, or is it an
-> > implementation trade-off?
->
-> I think it's an implementation trade-off.
+The kernel struct_ops obj has kernel's func ptrs implemented by bpf_progs.
+The bpf prog_id is stored as the value of the func ptr for introspection
+purpose.  In the latter patch, a struct_ops dump subcmd will be added
+to introspect these func ptrs.  It is desired to print the actual bpf
+prog_name instead of only printing the prog_id.
 
-Perhaps it's worth expanding on this a bit more. There's always the
-tradeoff of solving your specific problem vs. introducing
-functionality that will integrate with the rest of the stack. In some
-sense, I would like a notion here of "shortcut this traffic directly
-to the socket", it will solve my problem but it's quite specific to
-that so there's not much room for sharing the usage. It could still be
-very useful to some use cases, but alternatives may support use cases
-you hadn't thought of in the first place. Maybe there's a more
-incremental path to achieving my goal through an implementation like
-this.
+Since struct_ops is the only usecase storing prog_id in the func ptr,
+this patch adds a prog_id_as_func_ptr bool (default is false) to
+"struct btf_dumper" in order not to mis-interpret the ptr value
+for the other existing use-cases.
 
-The current design of bpf_sk_assign() in this series defers to the
-stack a bit more than alternatives may do (thinking eg a socket
-redirect function "bpf_sk_redirect()"). It says "this is best-effort";
-if you wanted to, you could still override this functionality with
-iptables tproxy rules. You could choose to route the traffic
-differently (although through the exploration with Martin above for
-now this will have fairly limited options unless we make additional
-changes..). Glancing through the existing eBPF API, you could assign
-the socket to the skb then subsequently use things like
-bpf_get_socket_cookie() to fetch the cookie out. For all I know,
-someone will come up with some nifty future idea that makes use of the
-idea "we associate the socket with the skb" to solve a use case I
-haven't thought of, and that could exist either within the bpf@tc hook
-or after.
+While printing a func_ptr as a bpf prog_name,
+this patch also prefix the bpf prog_name with the ptr's func_proto.
+[ Note that it is the ptr's func_proto instead of the bpf prog's
+  func_proto ]
+It reuses the current btf_dump_func() to obtain the ptr's func_proto
+string.
+
+Here is an example from the bpf_cubic.c:
+"void (struct sock *, u32, u32) bictcp_cong_avoid/prog_id:140"
+
+Acked-by: Quentin Monnet <quentin@isovalent.com>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ tools/bpf/bpftool/btf_dumper.c | 118 +++++++++++++++++++++++++++++----
+ tools/bpf/bpftool/main.h       |   1 +
+ 2 files changed, 107 insertions(+), 12 deletions(-)
+
+diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
+index 3a9dc8bc97a8..76a807b963e0 100644
+--- a/tools/bpf/bpftool/btf_dumper.c
++++ b/tools/bpf/bpftool/btf_dumper.c
+@@ -4,11 +4,13 @@
+ #include <ctype.h>
+ #include <stdio.h> /* for (FILE *) used by json_writer */
+ #include <string.h>
++#include <unistd.h>
+ #include <asm/byteorder.h>
+ #include <linux/bitops.h>
+ #include <linux/btf.h>
+ #include <linux/err.h>
+ #include <bpf/btf.h>
++#include <bpf/bpf.h>
+ 
+ #include "json_writer.h"
+ #include "main.h"
+@@ -22,13 +24,102 @@
+ static int btf_dumper_do_type(const struct btf_dumper *d, __u32 type_id,
+ 			      __u8 bit_offset, const void *data);
+ 
+-static void btf_dumper_ptr(const void *data, json_writer_t *jw,
+-			   bool is_plain_text)
++static int btf_dump_func(const struct btf *btf, char *func_sig,
++			 const struct btf_type *func_proto,
++			 const struct btf_type *func, int pos, int size);
++
++static int dump_prog_id_as_func_ptr(const struct btf_dumper *d,
++				    const struct btf_type *func_proto,
++				    __u32 prog_id)
+ {
+-	if (is_plain_text)
+-		jsonw_printf(jw, "%p", *(void **)data);
++	struct bpf_prog_info_linear *prog_info = NULL;
++	const struct btf_type *func_type;
++	const char *prog_name = NULL;
++	struct bpf_func_info *finfo;
++	struct btf *prog_btf = NULL;
++	struct bpf_prog_info *info;
++	int prog_fd, func_sig_len;
++	char prog_str[1024];
++
++	/* Get the ptr's func_proto */
++	func_sig_len = btf_dump_func(d->btf, prog_str, func_proto, NULL, 0,
++				     sizeof(prog_str));
++	if (func_sig_len == -1)
++		return -1;
++
++	if (!prog_id)
++		goto print;
++
++	/* Get the bpf_prog's name.  Obtain from func_info. */
++	prog_fd = bpf_prog_get_fd_by_id(prog_id);
++	if (prog_fd == -1)
++		goto print;
++
++	prog_info = bpf_program__get_prog_info_linear(prog_fd,
++						1UL << BPF_PROG_INFO_FUNC_INFO);
++	close(prog_fd);
++	if (IS_ERR(prog_info)) {
++		prog_info = NULL;
++		goto print;
++	}
++	info = &prog_info->info;
++
++	if (!info->btf_id || !info->nr_func_info ||
++	    btf__get_from_id(info->btf_id, &prog_btf))
++		goto print;
++	finfo = (struct bpf_func_info *)info->func_info;
++	func_type = btf__type_by_id(prog_btf, finfo->type_id);
++	if (!func_type || !btf_is_func(func_type))
++		goto print;
++
++	prog_name = btf__name_by_offset(prog_btf, func_type->name_off);
++
++print:
++	if (!prog_id)
++		snprintf(&prog_str[func_sig_len],
++			 sizeof(prog_str) - func_sig_len, " 0");
++	else if (prog_name)
++		snprintf(&prog_str[func_sig_len],
++			 sizeof(prog_str) - func_sig_len,
++			 " %s/prog_id:%u", prog_name, prog_id);
+ 	else
+-		jsonw_printf(jw, "%lu", *(unsigned long *)data);
++		snprintf(&prog_str[func_sig_len],
++			 sizeof(prog_str) - func_sig_len,
++			 " <unknown_prog_name>/prog_id:%u", prog_id);
++
++	prog_str[sizeof(prog_str) - 1] = '\0';
++	jsonw_string(d->jw, prog_str);
++	btf__free(prog_btf);
++	free(prog_info);
++	return 0;
++}
++
++static void btf_dumper_ptr(const struct btf_dumper *d,
++			   const struct btf_type *t,
++			   const void *data)
++{
++	unsigned long value = *(unsigned long *)data;
++	const struct btf_type *ptr_type;
++	__s32 ptr_type_id;
++
++	if (!d->prog_id_as_func_ptr || value > UINT32_MAX)
++		goto print_ptr_value;
++
++	ptr_type_id = btf__resolve_type(d->btf, t->type);
++	if (ptr_type_id < 0)
++		goto print_ptr_value;
++	ptr_type = btf__type_by_id(d->btf, ptr_type_id);
++	if (!ptr_type || !btf_is_func_proto(ptr_type))
++		goto print_ptr_value;
++
++	if (!dump_prog_id_as_func_ptr(d, ptr_type, value))
++		return;
++
++print_ptr_value:
++	if (d->is_plain_text)
++		jsonw_printf(d->jw, "%p", (void *)value);
++	else
++		jsonw_printf(d->jw, "%lu", value);
+ }
+ 
+ static int btf_dumper_modifier(const struct btf_dumper *d, __u32 type_id,
+@@ -443,7 +534,7 @@ static int btf_dumper_do_type(const struct btf_dumper *d, __u32 type_id,
+ 		btf_dumper_enum(d, t, data);
+ 		return 0;
+ 	case BTF_KIND_PTR:
+-		btf_dumper_ptr(data, d->jw, d->is_plain_text);
++		btf_dumper_ptr(d, t, data);
+ 		return 0;
+ 	case BTF_KIND_UNKN:
+ 		jsonw_printf(d->jw, "(unknown)");
+@@ -488,10 +579,6 @@ int btf_dumper_type(const struct btf_dumper *d, __u32 type_id,
+ 			return -1;					\
+ 	} while (0)
+ 
+-static int btf_dump_func(const struct btf *btf, char *func_sig,
+-			 const struct btf_type *func_proto,
+-			 const struct btf_type *func, int pos, int size);
+-
+ static int __btf_dumper_type_only(const struct btf *btf, __u32 type_id,
+ 				  char *func_sig, int pos, int size)
+ {
+@@ -600,8 +687,15 @@ static int btf_dump_func(const struct btf *btf, char *func_sig,
+ 			BTF_PRINT_ARG(", ");
+ 		if (arg->type) {
+ 			BTF_PRINT_TYPE(arg->type);
+-			BTF_PRINT_ARG("%s",
+-				      btf__name_by_offset(btf, arg->name_off));
++			if (arg->name_off)
++				BTF_PRINT_ARG("%s",
++					      btf__name_by_offset(btf, arg->name_off));
++			else if (pos && func_sig[pos - 1] == ' ')
++				/* Remove unnecessary space for
++				 * FUNC_PROTO that does not have
++				 * arg->name_off
++				 */
++				func_sig[--pos] = '\0';
+ 		} else {
+ 			BTF_PRINT_ARG("...");
+ 		}
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index 5f6dccd43622..6db2398ae7e9 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -205,6 +205,7 @@ struct btf_dumper {
+ 	const struct btf *btf;
+ 	json_writer_t *jw;
+ 	bool is_plain_text;
++	bool prog_id_as_func_ptr;
+ };
+ 
+ /* btf_dumper_type - print data along with type information
+-- 
+2.17.1
+
