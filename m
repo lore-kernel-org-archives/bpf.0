@@ -2,115 +2,128 @@ Return-Path: <SRS0=cKI0=5E=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E8FDC4332B
-	for <bpf@archiver.kernel.org>; Thu, 19 Mar 2020 12:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7745CC4332D
+	for <bpf@archiver.kernel.org>; Thu, 19 Mar 2020 13:13:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3F6E220722
-	for <bpf@archiver.kernel.org>; Thu, 19 Mar 2020 12:47:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A69D215A4
+	for <bpf@archiver.kernel.org>; Thu, 19 Mar 2020 13:13:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YE4a3W58"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726934AbgCSMrE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Mar 2020 08:47:04 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:12102 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726589AbgCSMrE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Mar 2020 08:47:04 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 9810353EC2277E87DC44;
-        Thu, 19 Mar 2020 20:46:57 +0800 (CST)
-Received: from localhost (10.173.223.234) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.487.0; Thu, 19 Mar 2020
- 20:46:51 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <lmb@cloudflare.com>, <daniel@iogearbox.net>,
-        <jakub@cloudflare.com>, <john.fastabend@gmail.com>
-CC:     <davem@davemloft.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH bpf-next] bpf: tcp: Fix unused function warnings
-Date:   Thu, 19 Mar 2020 20:46:31 +0800
-Message-ID: <20200319124631.58432-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1729142AbgCSNNV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Mar 2020 09:13:21 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:48527 "EHLO
+        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729134AbgCSNNU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 19 Mar 2020 09:13:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1584623599;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uWJEiu/Z2FQlJcrWSPoV5kXif2wXXa5HAsBAGFtr6yE=;
+        b=YE4a3W58KTnWwulu6K7NJZc0Q9av+ENxcGJxQgkmEBs1JRAZTlAL2EeHYS3NGp7j2/RhXp
+        +XRuTHVUgNdqUDk8w2iOa8bqscp8jnh/PXUV7e6MDuwdskQqcE2ekPv3YrSP3BuhNFCOLz
+        ug68m5Qw3u1H6vcVirvNf2Zpw8he/j8=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-48-QbE37opIPEu5xhvp8Yse1A-1; Thu, 19 Mar 2020 09:13:17 -0400
+X-MC-Unique: QbE37opIPEu5xhvp8Yse1A-1
+Received: by mail-wm1-f72.google.com with SMTP id m4so945197wme.0
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2020 06:13:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=uWJEiu/Z2FQlJcrWSPoV5kXif2wXXa5HAsBAGFtr6yE=;
+        b=E7iNEAxukYoLgPby9CipJUULVHSSV7GIec9p4dU9uFYw5jr+w+ZnSc6FD1EY0/OgjQ
+         wh8dYYx1Jnf/yOnTGFej5htPHJ/QYDIAMbNBAhjHZuCj5yUXtc62zubN0+Y9ORII5UI2
+         n/sX64E71C/XaCoxL8PQ7L9ooOV5IKCH6ciGERXdbtteHk4o8C+C3cQeoGR4piSxuOS5
+         WCcdbQ0QCFIy7K4Y8pc2HN4JWElypP+QXT/0E23uQV1uPD4MCxHxWt3LTcQh9xWMOCXV
+         hcW3tnyb1Pda7O+t8oBeVEQ6ySc1SqY6zuU5x9GdNqUHKoCA5od0Kp2sUfcnys51j4o2
+         lAoA==
+X-Gm-Message-State: ANhLgQ0r1E2qE9eWZMPjuSySQGM29SMjdkfulsXgXXRQQJiss5qjGtGT
+        SZxeoR95HuAwzTai2cfMqi8WaWWgRtxfjBovSVuODbmePYuDkTDVgRnt1Bg1Ds0DuYeJiEXtOPG
+        TcE58HPoYrnLJ
+X-Received: by 2002:a1c:6385:: with SMTP id x127mr3647785wmb.141.1584623596258;
+        Thu, 19 Mar 2020 06:13:16 -0700 (PDT)
+X-Google-Smtp-Source: ADFU+vt+Z7JUM/KQLOWds3rAEs1ALcIo+ruqq8ub+P9UEsTFzaY1gCY2UKTJFwmi0Sx1Eeh22JidQg==
+X-Received: by 2002:a1c:6385:: with SMTP id x127mr3647765wmb.141.1584623596070;
+        Thu, 19 Mar 2020 06:13:16 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id p10sm3563491wrx.81.2020.03.19.06.13.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Mar 2020 06:13:14 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 493B9180371; Thu, 19 Mar 2020 14:13:14 +0100 (CET)
+Subject: [PATCH bpf-next 2/4] tools: Add EXPECTED_FD-related definitions in
+ if_link.h
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Andrey Ignatov <rdna@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Date:   Thu, 19 Mar 2020 14:13:14 +0100
+Message-ID: <158462359425.164779.4804283164480162318.stgit@toke.dk>
+In-Reply-To: <158462359206.164779.15902346296781033076.stgit@toke.dk>
+References: <158462359206.164779.15902346296781033076.stgit@toke.dk>
+User-Agent: StGit/0.22
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.173.223.234]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If BPF_STREAM_PARSER is not set, gcc warns:
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-net/ipv4/tcp_bpf.c:483:12: warning: 'tcp_bpf_sendpage' defined but not used [-Wunused-function]
-net/ipv4/tcp_bpf.c:395:12: warning: 'tcp_bpf_sendmsg' defined but not used [-Wunused-function]
-net/ipv4/tcp_bpf.c:13:13: warning: 'tcp_bpf_stream_read' defined but not used [-Wunused-function]
+This adds the IFLA_XDP_EXPECTED_FD netlink attribute definition and the
+XDP_FLAGS_EXPECT_FD flag to if_link.h in tools/include.
 
-Moves the unused functions into the #ifdef
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- net/ipv4/tcp_bpf.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ tools/include/uapi/linux/if_link.h |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index fe7b4fbc31c1..37c91f25cae3 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -10,19 +10,6 @@
- #include <net/inet_common.h>
- #include <net/tls.h>
+diff --git a/tools/include/uapi/linux/if_link.h b/tools/include/uapi/linux/if_link.h
+index 024af2d1d0af..e5eced1c28f4 100644
+--- a/tools/include/uapi/linux/if_link.h
++++ b/tools/include/uapi/linux/if_link.h
+@@ -960,11 +960,12 @@ enum {
+ #define XDP_FLAGS_SKB_MODE		(1U << 1)
+ #define XDP_FLAGS_DRV_MODE		(1U << 2)
+ #define XDP_FLAGS_HW_MODE		(1U << 3)
++#define XDP_FLAGS_EXPECT_FD		(1U << 4)
+ #define XDP_FLAGS_MODES			(XDP_FLAGS_SKB_MODE | \
+ 					 XDP_FLAGS_DRV_MODE | \
+ 					 XDP_FLAGS_HW_MODE)
+ #define XDP_FLAGS_MASK			(XDP_FLAGS_UPDATE_IF_NOEXIST | \
+-					 XDP_FLAGS_MODES)
++					 XDP_FLAGS_MODES | XDP_FLAGS_EXPECT_FD)
  
--static bool tcp_bpf_stream_read(const struct sock *sk)
--{
--	struct sk_psock *psock;
--	bool empty = true;
--
--	rcu_read_lock();
--	psock = sk_psock(sk);
--	if (likely(psock))
--		empty = list_empty(&psock->ingress_msg);
--	rcu_read_unlock();
--	return !empty;
--}
--
- static int tcp_bpf_wait_data(struct sock *sk, struct sk_psock *psock,
- 			     int flags, long timeo, int *err)
- {
-@@ -298,6 +285,20 @@ int tcp_bpf_sendmsg_redir(struct sock *sk, struct sk_msg *msg,
- }
- EXPORT_SYMBOL_GPL(tcp_bpf_sendmsg_redir);
- 
-+#ifdef CONFIG_BPF_STREAM_PARSER
-+static bool tcp_bpf_stream_read(const struct sock *sk)
-+{
-+	struct sk_psock *psock;
-+	bool empty = true;
-+
-+	rcu_read_lock();
-+	psock = sk_psock(sk);
-+	if (likely(psock))
-+		empty = list_empty(&psock->ingress_msg);
-+	rcu_read_unlock();
-+	return !empty;
-+}
-+
- static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
- 				struct sk_msg *msg, int *copied, int flags)
- {
-@@ -528,7 +529,6 @@ static int tcp_bpf_sendpage(struct sock *sk, struct page *page, int offset,
- 	return copied ? copied : err;
- }
- 
--#ifdef CONFIG_BPF_STREAM_PARSER
+ /* These are stored into IFLA_XDP_ATTACHED on dump. */
  enum {
- 	TCP_BPF_IPV4,
- 	TCP_BPF_IPV6,
--- 
-2.17.1
-
+@@ -984,6 +985,7 @@ enum {
+ 	IFLA_XDP_DRV_PROG_ID,
+ 	IFLA_XDP_SKB_PROG_ID,
+ 	IFLA_XDP_HW_PROG_ID,
++	IFLA_XDP_EXPECTED_FD,
+ 	__IFLA_XDP_MAX,
+ };
+ 
 
