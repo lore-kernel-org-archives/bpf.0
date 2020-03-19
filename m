@@ -2,92 +2,149 @@ Return-Path: <SRS0=cKI0=5E=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DD4BC4332B
-	for <bpf@archiver.kernel.org>; Thu, 19 Mar 2020 22:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D50A2C4332D
+	for <bpf@archiver.kernel.org>; Thu, 19 Mar 2020 23:25:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 727832076C
-	for <bpf@archiver.kernel.org>; Thu, 19 Mar 2020 22:52:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1584658360;
-	bh=1seDosREJOhhN/DIT3MtMv9WxoMSuvD5X19yJopAGLk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=Aa2ScxUSLBHYj49JNWWB1ds9jvmGHnaog8DdaC/4iU1kFNzRzuTShRmr8xhfGMwsZ
-	 wSNzl2QfevwqpXJcICOdbW4voRPyA7o04AcBM1Ma8fskxJIYokXfBtq3321T56HP5e
-	 KXtjGX5CoZaTxMWkctGHXI40IVD1IQCntEHcO1N0=
+	by mail.kernel.org (Postfix) with ESMTP id 9CFD920767
+	for <bpf@archiver.kernel.org>; Thu, 19 Mar 2020 23:25:08 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lk0dT8vP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727103AbgCSWwk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Mar 2020 18:52:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59452 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726856AbgCSWwj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Mar 2020 18:52:39 -0400
-Received: from kicinski-fedora-PC1C0HJN (unknown [163.114.132.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A82E1206D7;
-        Thu, 19 Mar 2020 22:52:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584658359;
-        bh=1seDosREJOhhN/DIT3MtMv9WxoMSuvD5X19yJopAGLk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GSd6QMyVqyzSahoPBTsvMeslgFHTFWRa/2cncDr2DOf7qdwk7HZ0AoEdkmz594Byx
-         4q1QicgxUPiZvtLumZ/wmasZotOS1aXYoeYzcBp6qvXb0AjlZOlMMgr85o/R2OcR7j
-         THumiyWvrTZ9LDnn+2KeLRtD1/u2lxD4KpN3gNiA=
-Date:   Thu, 19 Mar 2020 15:52:36 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Andrey Ignatov <rdna@fb.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/4] xdp: Support specifying expected existing
- program when attaching XDP
-Message-ID: <20200319155236.3d8537c5@kicinski-fedora-PC1C0HJN>
-In-Reply-To: <158462359315.164779.13931660750493121404.stgit@toke.dk>
-References: <158462359206.164779.15902346296781033076.stgit@toke.dk>
-        <158462359315.164779.13931660750493121404.stgit@toke.dk>
+        id S1727258AbgCSXZI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Mar 2020 19:25:08 -0400
+Received: from mail-qv1-f65.google.com ([209.85.219.65]:33308 "EHLO
+        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727103AbgCSXZI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Mar 2020 19:25:08 -0400
+Received: by mail-qv1-f65.google.com with SMTP id cz10so2056493qvb.0
+        for <bpf@vger.kernel.org>; Thu, 19 Mar 2020 16:25:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=xDCuhuLfm9YoYWOlfeyY36sXFmH/iwUgla7d8KHfDF0=;
+        b=lk0dT8vPheiEYjwtqv3cryTQjCnAu4RwiLhFB54sK+9oIkHL5iVTzew0To8ukyRdFS
+         iDWHIgJaNPQYEO8lekxKRPq+9XKOTh6xl9TZrj0JadmxAZe6k3m23K/u443UK8WwK/SU
+         12sI4yHvdAGu8ShYu9oVe5siUFf5ihGeAJBmSGIMMm3ZhNrY+22H3Oz/Tq/M6oMtsrxC
+         p4vs854eXRLHqzdHIbAbGLPBs+PbyZHb9CCev0OhLB/GbWAabMCeVpHTHDmIrqnSc9ir
+         W6I52DU1uyABiNrmR3/hSO/PDadv+X8ubnm42ao4eFyH+RHpQeHwR+pUU0uGYH25UNH+
+         jWTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=xDCuhuLfm9YoYWOlfeyY36sXFmH/iwUgla7d8KHfDF0=;
+        b=XwBhAn2shUkS/d4TIdiO7WgKSNpXXBIYcDQavR4aka7V4RAmkUnK0Ox9t7fdPkabKQ
+         L1O7l93k3WjSdCxiry2mGIGUy4eOJ6y0ktfUfAeNIdWJLfqFQy4P+AwuIhlIKHtDpjEf
+         ZHFRL+1gapxasjCJQwacTE9XAyn8zksqhTRd0jIEqSBvaUn0PfvWgXBJzFPnkMNzqCj0
+         xu+azvW3wwpYpqXbeioO3EFqFLHVGMAcws2BZEJYehDgtyfFIKU/9aGCEiX0BwU157JU
+         X/CarlIoq0vQrCUEi7QiNoGe9FWPvQlTHhbRmz/WBBgeo9Q7GcKl0WEGU/DvLTjT1jga
+         WrUA==
+X-Gm-Message-State: ANhLgQ2zwmzou7mEfmmbEErbvMowmdwXUvaEFUhtA/2dzVFIIgjbAaHo
+        Iv98A9BM2Ul1QVSoHZ+qPHm0pj1I6CP49t0PuGf5WLesk9I=
+X-Google-Smtp-Source: ADFU+vuc3hHY9f7sxaJL1+74EamkUSwTwU7Z/Rx3QGVOjJQiQbo0B5XE8NTQDBRyAPUtYoVSyRJkutMKYJr8rq62wfQ=
+X-Received: by 2002:a0c:bd2a:: with SMTP id m42mr5691250qvg.163.1584660306598;
+ Thu, 19 Mar 2020 16:25:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 19 Mar 2020 16:24:55 -0700
+Message-ID: <CAEf4BzZX76w6Dhkgi6HkQzgvLjoNDsSJ8zg9HQ5yirKj_PDgAw@mail.gmail.com>
+Subject: [ANNOUNCEMENT] Automated multi-kernel libbpf testing
+To:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Julia Kartseva <hex@fb.com>, osandov@fb.com,
+        Kernel Team <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 19 Mar 2020 14:13:13 +0100 Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->=20
-> While it is currently possible for userspace to specify that an existing
-> XDP program should not be replaced when attaching to an interface, there =
-is
-> no mechanism to safely replace a specific XDP program with another.
->=20
-> This patch adds a new netlink attribute, IFLA_XDP_EXPECTED_FD, which can =
-be
-> set along with IFLA_XDP_FD. If set, the kernel will check that the program
-> currently loaded on the interface matches the expected one, and fail the
-> operation if it does not. This corresponds to a 'cmpxchg' memory operatio=
-n.
->=20
-> A new companion flag, XDP_FLAGS_EXPECT_FD, is also added to explicitly
-> request checking of the EXPECTED_FD attribute. This is needed for userspa=
-ce
-> to discover whether the kernel supports the new attribute.
->=20
-> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+Libbpf is the important part of the BPF ecosystem and it defines
+modern ways to build and run BPF applications. As such, it=E2=80=99s crucia=
+l
+that it is well-tested, reliable, and seamlessly works across multiple
+kernels. Until recently, the only testing that was performed were BPF
+selftests, run manually by BPF maintainers against the bleeding edge
+versions of kernel. As diligent as maintainers are, this setup is not
+perfect, requiring a lot of manual work, and could still miss
+regressions and bugs due to kernel and environment differences.
+Catching regressions on old kernels was especially ominous leading to
+real problems in production at Facebook.
 
-I didn't know we wanted to go ahead with this...
+This seemed like a problem that needed automation. We took the idea of
+our internal VMTEST framework, which allows to run application
+integration tests against a range of kernels to catch problems, and
+applied it to open-source Github mirror [0] of libbpf. We built upon
+Omar Sandoval=E2=80=99s <osandov@fb.com> initial implementation for his drg=
+n
+tool [1] and adapted it to libbpf needs. It saved many hours of
+tinkering with generic qemu/Linux image setup! Julia Kartseva <hex@fb.com>
+spent lots of time and efforts on bringing this workflow to libbpf
+and making process robust and maintainable.
 
-If we do please run this thru checkpatch, set .strict_start_type, and
-make the expected fd unsigned. A negative expected fd makes no sense.
+Now, with each change to libbpf, we=E2=80=99ll pull and compile the latest
+kernel and the latest BPF selftests using libbpf with patches to be
+tested. Next, a VM with that kernel will start and will run a battery
+of tests (test_progs, test_verifier, and test_maps), verifying that
+both libbpf and the kernel are still working as expected. Further, to
+verify libbpf didn=E2=80=99t regress on older kernels, we=E2=80=99ll downlo=
+ad a set of
+older kernels and will perform a supported subset of tests against
+each of those kernels. This gives us confidence that no matter how
+bleeding-edge libbpf library you use, it will still work fine across
+all kernels. Check out a typical Travis CI test run [2] to get a
+better idea. You can also see an annotated list [3] of blacklisted
+tests for older kernel.
+
+# Why does this matter?
+
+- It=E2=80=99s all about confidence when making BPF changes and about
+maintaining user trust. Automated, repeatable testing on **every**
+change to libbpf is crucial for allowing BPF developers to move fast
+and iterate quickly, while ensuring there is no inadvertent breakage
+of BPF applications. The more libbpf is integrated into critical
+applications (systemd, iproute2, bpftool, BCC tools, as well as
+multitude of internal apps across private companies), the more
+important this becomes.
+
+- Well-tested and maintained libbpf Github mirror (as opposed to
+building from kernel sources) as a single source of truth is important
+for package maintainers to ensure consistent libbpf versioning across
+different Linux distributions. This results in better user experience
+overall and everyone wins from this consistency.
+
+- This is also a good base for a more general kernel testing, given
+that this test setup exercises not just libbpf, but the kernel itself
+as well. With a bit more automation, it is possible to proactively
+apply upstream patches and test kernel changes, saving tons of BPF
+maintainers time and speeding up the patch review process.
+
+In a short time we=E2=80=99ve had this running, this setup already caught
+kernel, libbpf, and selftests bugs (and undoubtedly will catch more):
+- BPF trampoline assembly bug [4];
+- Kprobe tests triggering bug [5];
+- Test cleanup crashes [6];
+- Tests flakiness [7];
+- Quite a few libbpf-specific problems we=E2=80=99ve never got to track exp=
+licitly...
+
+  [0] https://github.com/libbpf/libbpf
+  [1] https://github.com/osandov/drgn
+  [2] https://travis-ci.org/github/libbpf/libbpf/builds/663674948
+  [3] https://github.com/libbpf/libbpf/blob/master/travis-ci/vmtest/configs=
+/blacklist/BLACKLIST-5.5.0
+  [4] https://lore.kernel.org/netdev/20200311003906.3643037-1-ast@kernel.or=
+g/
+  [5] https://patchwork.ozlabs.org/patch/1254743/
+  [6] https://lore.kernel.org/netdev/20200220230546.769250-1-andriin@fb.com=
+/
+  [7] https://lore.kernel.org/bpf/20200314024855.ugbvrmqkfq7kao75@ast-mbp.d=
+hcp.thefacebook.com/T/#ma733d8e9840d9f91ce20d1143a429aa0d6650959
