@@ -6,33 +6,33 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA898C43332
-	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 02:38:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91BDBC4332D
+	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 02:38:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D9FC2051A
-	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 02:38:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 730D92051A
+	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 02:38:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbgCTCil (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Mar 2020 22:38:41 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:39086 "EHLO huawei.com"
+        id S1727035AbgCTCir (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Mar 2020 22:38:47 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:40522 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725856AbgCTCik (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Mar 2020 22:38:40 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 41D6693372D32ECF8ABA;
-        Fri, 20 Mar 2020 10:38:37 +0800 (CST)
-Received: from localhost (10.173.223.234) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Fri, 20 Mar 2020
- 10:38:29 +0800
+        id S1726867AbgCTCiq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Mar 2020 22:38:46 -0400
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 0B8B4BE8674E10677D2D;
+        Fri, 20 Mar 2020 10:38:39 +0800 (CST)
+Received: from localhost (10.173.223.234) by DGGEMS409-HUB.china.huawei.com
+ (10.3.19.209) with Microsoft SMTP Server id 14.3.487.0; Fri, 20 Mar 2020
+ 10:38:28 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
 To:     <lmb@cloudflare.com>, <daniel@iogearbox.net>,
         <jakub@cloudflare.com>, <john.fastabend@gmail.com>
 CC:     <davem@davemloft.net>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <andrii.nakryiko@gmail.com>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH bpf-next 2/2] bpf: tcp: Make tcp_bpf_recvmsg static
-Date:   Fri, 20 Mar 2020 10:34:26 +0800
-Message-ID: <20200320023426.60684-3-yuehaibing@huawei.com>
+Subject: [PATCH bpf-next 1/2] bpf: tcp: Fix unused function warnings
+Date:   Fri, 20 Mar 2020 10:34:25 +0800
+Message-ID: <20200320023426.60684-2-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
 In-Reply-To: <20200320023426.60684-1-yuehaibing@huawei.com>
 References: <20200319124631.58432-1-yuehaibing@huawei.com>
@@ -46,179 +46,76 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-After commit f747632b608f ("bpf: sockmap: Move generic sockmap
-hooks from BPF TCP"), tcp_bpf_recvmsg() is not used out of
-tcp_bpf.c, so make it static and remove it from tcp.h. Also move
-it to BPF_STREAM_PARSER #ifdef to fix unused function warnings.
+If BPF_STREAM_PARSER is not set, gcc warns:
 
+net/ipv4/tcp_bpf.c:483:12: warning: 'tcp_bpf_sendpage' defined but not used [-Wunused-function]
+net/ipv4/tcp_bpf.c:395:12: warning: 'tcp_bpf_sendmsg' defined but not used [-Wunused-function]
+net/ipv4/tcp_bpf.c:13:13: warning: 'tcp_bpf_stream_read' defined but not used [-Wunused-function]
+
+Moves the unused functions into the #ifdef
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: f747632b608f ("bpf: sockmap: Move generic sockmap hooks from BPF TCP")
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Reviewed-by: Lorenz Bauer <lmb@cloudflare.com>
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- include/net/tcp.h  |   2 -
- net/ipv4/tcp_bpf.c | 124 ++++++++++++++++++++++-----------------------
- 2 files changed, 62 insertions(+), 64 deletions(-)
+ net/ipv4/tcp_bpf.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 43fa07a36fa6..5fa9eacd965a 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2207,8 +2207,6 @@ static inline void tcp_bpf_clone(const struct sock *sk, struct sock *newsk)
- #ifdef CONFIG_NET_SOCK_MSG
- int tcp_bpf_sendmsg_redir(struct sock *sk, struct sk_msg *msg, u32 bytes,
- 			  int flags);
--int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
--		    int nonblock, int flags, int *addr_len);
- int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
- 		      struct msghdr *msg, int len, int flags);
- #endif /* CONFIG_NET_SOCK_MSG */
 diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 37c91f25cae3..5a05327f97c1 100644
+index fe7b4fbc31c1..37c91f25cae3 100644
 --- a/net/ipv4/tcp_bpf.c
 +++ b/net/ipv4/tcp_bpf.c
-@@ -10,25 +10,6 @@
+@@ -10,19 +10,6 @@
  #include <net/inet_common.h>
  #include <net/tls.h>
  
--static int tcp_bpf_wait_data(struct sock *sk, struct sk_psock *psock,
--			     int flags, long timeo, int *err)
--{
--	DEFINE_WAIT_FUNC(wait, woken_wake_function);
--	int ret = 0;
--
--	if (!timeo)
--		return ret;
--
--	add_wait_queue(sk_sleep(sk), &wait);
--	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
--	ret = sk_wait_event(sk, &timeo,
--			    !list_empty(&psock->ingress_msg) ||
--			    !skb_queue_empty(&sk->sk_receive_queue), &wait);
--	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
--	remove_wait_queue(sk_sleep(sk), &wait);
--	return ret;
--}
--
- int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
- 		      struct msghdr *msg, int len, int flags)
- {
-@@ -102,49 +83,6 @@ int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
- }
- EXPORT_SYMBOL_GPL(__tcp_bpf_recvmsg);
- 
--int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
--		    int nonblock, int flags, int *addr_len)
+-static bool tcp_bpf_stream_read(const struct sock *sk)
 -{
 -	struct sk_psock *psock;
--	int copied, ret;
+-	bool empty = true;
 -
--	psock = sk_psock_get(sk);
--	if (unlikely(!psock))
--		return tcp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
--	if (unlikely(flags & MSG_ERRQUEUE))
--		return inet_recv_error(sk, msg, len, addr_len);
--	if (!skb_queue_empty(&sk->sk_receive_queue) &&
--	    sk_psock_queue_empty(psock))
--		return tcp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
--	lock_sock(sk);
--msg_bytes_ready:
--	copied = __tcp_bpf_recvmsg(sk, psock, msg, len, flags);
--	if (!copied) {
--		int data, err = 0;
--		long timeo;
--
--		timeo = sock_rcvtimeo(sk, nonblock);
--		data = tcp_bpf_wait_data(sk, psock, flags, timeo, &err);
--		if (data) {
--			if (!sk_psock_queue_empty(psock))
--				goto msg_bytes_ready;
--			release_sock(sk);
--			sk_psock_put(sk, psock);
--			return tcp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
--		}
--		if (err) {
--			ret = err;
--			goto out;
--		}
--		copied = -EAGAIN;
--	}
--	ret = copied;
--out:
--	release_sock(sk);
--	sk_psock_put(sk, psock);
--	return ret;
+-	rcu_read_lock();
+-	psock = sk_psock(sk);
+-	if (likely(psock))
+-		empty = list_empty(&psock->ingress_msg);
+-	rcu_read_unlock();
+-	return !empty;
 -}
 -
- static int bpf_tcp_ingress(struct sock *sk, struct sk_psock *psock,
- 			   struct sk_msg *msg, u32 apply_bytes, int flags)
+ static int tcp_bpf_wait_data(struct sock *sk, struct sk_psock *psock,
+ 			     int flags, long timeo, int *err)
  {
-@@ -299,6 +237,68 @@ static bool tcp_bpf_stream_read(const struct sock *sk)
- 	return !empty;
+@@ -298,6 +285,20 @@ int tcp_bpf_sendmsg_redir(struct sock *sk, struct sk_msg *msg,
  }
+ EXPORT_SYMBOL_GPL(tcp_bpf_sendmsg_redir);
  
-+static int tcp_bpf_wait_data(struct sock *sk, struct sk_psock *psock,
-+			     int flags, long timeo, int *err)
-+{
-+	DEFINE_WAIT_FUNC(wait, woken_wake_function);
-+	int ret = 0;
-+
-+	if (!timeo)
-+		return ret;
-+
-+	add_wait_queue(sk_sleep(sk), &wait);
-+	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
-+	ret = sk_wait_event(sk, &timeo,
-+			    !list_empty(&psock->ingress_msg) ||
-+			    !skb_queue_empty(&sk->sk_receive_queue), &wait);
-+	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
-+	remove_wait_queue(sk_sleep(sk), &wait);
-+	return ret;
-+}
-+
-+static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
-+		    int nonblock, int flags, int *addr_len)
++#ifdef CONFIG_BPF_STREAM_PARSER
++static bool tcp_bpf_stream_read(const struct sock *sk)
 +{
 +	struct sk_psock *psock;
-+	int copied, ret;
++	bool empty = true;
 +
-+	psock = sk_psock_get(sk);
-+	if (unlikely(!psock))
-+		return tcp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
-+	if (unlikely(flags & MSG_ERRQUEUE))
-+		return inet_recv_error(sk, msg, len, addr_len);
-+	if (!skb_queue_empty(&sk->sk_receive_queue) &&
-+	    sk_psock_queue_empty(psock))
-+		return tcp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
-+	lock_sock(sk);
-+msg_bytes_ready:
-+	copied = __tcp_bpf_recvmsg(sk, psock, msg, len, flags);
-+	if (!copied) {
-+		int data, err = 0;
-+		long timeo;
-+
-+		timeo = sock_rcvtimeo(sk, nonblock);
-+		data = tcp_bpf_wait_data(sk, psock, flags, timeo, &err);
-+		if (data) {
-+			if (!sk_psock_queue_empty(psock))
-+				goto msg_bytes_ready;
-+			release_sock(sk);
-+			sk_psock_put(sk, psock);
-+			return tcp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
-+		}
-+		if (err) {
-+			ret = err;
-+			goto out;
-+		}
-+		copied = -EAGAIN;
-+	}
-+	ret = copied;
-+out:
-+	release_sock(sk);
-+	sk_psock_put(sk, psock);
-+	return ret;
++	rcu_read_lock();
++	psock = sk_psock(sk);
++	if (likely(psock))
++		empty = list_empty(&psock->ingress_msg);
++	rcu_read_unlock();
++	return !empty;
 +}
 +
  static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
  				struct sk_msg *msg, int *copied, int flags)
  {
+@@ -528,7 +529,6 @@ static int tcp_bpf_sendpage(struct sock *sk, struct page *page, int offset,
+ 	return copied ? copied : err;
+ }
+ 
+-#ifdef CONFIG_BPF_STREAM_PARSER
+ enum {
+ 	TCP_BPF_IPV4,
+ 	TCP_BPF_IPV6,
 -- 
 2.17.1
 
