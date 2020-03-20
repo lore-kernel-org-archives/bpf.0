@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7605EC4332D
-	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 16:56:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11F16C43333
+	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 16:56:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 43C5720739
-	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 16:56:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DDAF720739
+	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 16:56:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WHRC4s/w"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VFLm7aer"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727640AbgCTQ4Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Mar 2020 12:56:16 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:39929 "EHLO
+        id S1727564AbgCTQ4W (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Mar 2020 12:56:22 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:54915 "EHLO
         us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727358AbgCTQ4P (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 20 Mar 2020 12:56:15 -0400
+        by vger.kernel.org with ESMTP id S1727684AbgCTQ4S (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 20 Mar 2020 12:56:18 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584723374;
+        s=mimecast20190719; t=1584723376;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=S9dQQJfPBhUeIWFV8KV9YVZfHde/FPEePPpdR7SsJHY=;
-        b=WHRC4s/wq6fs3B9n4kcni9q/8csp7m2UPXWtelxCLgyumaM0Ra1uKMbAYpj9ZmR8Ks2SC9
-        y5UesL6HKV/SoYqON5DAd0xvCl8pA4sMluz6/uBhZy3GLn8pBwwEfC0V2eQtLr6/FED7go
-        KLpRyjIhwqON3TDU6S3k8n5oLOkgSj0=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-5-A0cOgPQWMc2C9lWXit1wlg-1; Fri, 20 Mar 2020 12:56:12 -0400
-X-MC-Unique: A0cOgPQWMc2C9lWXit1wlg-1
-Received: by mail-wr1-f69.google.com with SMTP id h17so2904456wru.16
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2020 09:56:12 -0700 (PDT)
+        bh=/kUFoLbkDwJxBHQR60+eXJpgtbwabFaqSxr61HTPqBQ=;
+        b=VFLm7aerJ4k5TZQNTGrMPDx1dpPR3Q9MJbKtTDm2XBIj2wdvAO/7qybANihkqj9oodPAMy
+        ycNfLkP8Y09OGHDphhRq3fUOVowDT0WeZreqi6i1lNxPC5nzJfZ2f3mhHwZBcu6STOEMZK
+        s8zO0bFMewX19+riBHK9lR7+zTPOuvQ=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-120-IOOGtcyZOO6d9IJvmH8ZoQ-1; Fri, 20 Mar 2020 12:56:14 -0400
+X-MC-Unique: IOOGtcyZOO6d9IJvmH8ZoQ-1
+Received: by mail-wr1-f72.google.com with SMTP id o9so2906642wrw.14
+        for <bpf@vger.kernel.org>; Fri, 20 Mar 2020 09:56:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=S9dQQJfPBhUeIWFV8KV9YVZfHde/FPEePPpdR7SsJHY=;
-        b=ffL1ZdEDy+HcttWwSFXR2ySrXesXTjK9tXv0KqTxWpWHdx6Lw5gQAXPWS2UU36MOMv
-         pn/IyKPtxgZp2V0qLF8iewFcwu1AYHAdM8qi9/BOAxBKNanyCBFz3yHQyVrE7ExuEiSV
-         TWuItKurtDjsOpypG4Xvc5be1YsnEdNL+vdAG65Pu/ru21y5BDBD+THNSZVoCnAim5Gy
-         maKYp0UXksBJ2QSwZF3Z0HV8kjKVBzntxSDt/2IjkkC7kLns7OJNIwj97E35h32tlaTw
-         S2WVUAmktPJosy/3mxpeHqzM8MJRN2xEnHsAAAAUXZg0BnbxyjPWmCcY1sIcFSctWh8i
-         ERvw==
-X-Gm-Message-State: ANhLgQ13PVF/AqKb0p24yhKdkP+a8+8Csm7DefHRF+9jit9HMDkkVkoD
-        8U318ZS29PfHKFdNuBTStP2f85WI5oiMtwomJYFUa0/Br5zQgBucPORrikUYC90fp5ymJFdsMuF
-        hXYIM8YdmeYW7
-X-Received: by 2002:a7b:ce85:: with SMTP id q5mr11942793wmj.83.1584723370944;
-        Fri, 20 Mar 2020 09:56:10 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vu4yZTJwQ3mAKlGvVZRRcb4h5OLyMWcLt9+g5qVaoU+Xl4+Zdd4Suh/3fd4cvULYvMO62uG7A==
-X-Received: by 2002:a7b:ce85:: with SMTP id q5mr11942758wmj.83.1584723370688;
-        Fri, 20 Mar 2020 09:56:10 -0700 (PDT)
+        bh=/kUFoLbkDwJxBHQR60+eXJpgtbwabFaqSxr61HTPqBQ=;
+        b=FjdUTWUBsZ+EjVwGM5iRDd/uLbN3Nl0CuBK/XdJcLmeC3K33IkpKwssPX9mEzbdHko
+         NPo4uWxWB5hS4SGyiBPGCRK6TnZW/aypZ25IOx9XnuUO61kQba1A5qC5P1XHCxb7lHhD
+         Wu3bThTEVJfAbEUNfkbkvtFpivy/1g/+EE7dVx+awHdO5gNKaCbx/6cm8xDYQzEciTQN
+         KOAAPFVUJEpp6iTUrWu8V00rTyBAmyXLSNPHrxe/24sb8D1TmUWCEZQrcaYVkxPHCEkZ
+         C6EfH/rfMY3BpGPkHW29UHM5xcicJnvuHAX5OyS+PDaZ0G8qGSvt3lbfqUBMTKAzijeT
+         j2RQ==
+X-Gm-Message-State: ANhLgQ1dwx5rx2zc7FdWPcB0jdmbEt9qAeoqXa21V7oqaVNRqqaU5gUt
+        KuAQNZMIEopfggtB8iDACJKKab13B7keeRbM1HGkKVLJkN2npVWtmB200rU+Ljtym0/OfmFu4pe
+        sJ2LOCg7srN3g
+X-Received: by 2002:a1c:a950:: with SMTP id s77mr11146312wme.176.1584723373328;
+        Fri, 20 Mar 2020 09:56:13 -0700 (PDT)
+X-Google-Smtp-Source: ADFU+vvMik0iRmwMBQj7DF+lo8d9S6Cpw8oix9vIJUrN9OJKTqhA7yQP5oBoFaedtovYEOzOwWkxaw==
+X-Received: by 2002:a1c:a950:: with SMTP id s77mr11146273wme.176.1584723373070;
+        Fri, 20 Mar 2020 09:56:13 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id l8sm8330730wmj.2.2020.03.20.09.56.08
+        by smtp.gmail.com with ESMTPSA id x24sm8328196wmc.36.2020.03.20.09.56.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2020 09:56:09 -0700 (PDT)
+        Fri, 20 Mar 2020 09:56:11 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id A597918038E; Fri, 20 Mar 2020 17:56:08 +0100 (CET)
-Subject: [PATCH bpf-next v2 1/4] xdp: Support specifying expected existing
- program when attaching XDP
+        id D3A0218038E; Fri, 20 Mar 2020 17:56:10 +0100 (CET)
+Subject: [PATCH bpf-next v2 3/4] libbpf: Add function to set link XDP fd while
+ specifying old fd
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -77,8 +77,8 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Lorenz Bauer <lmb@cloudflare.com>,
         Andrey Ignatov <rdna@fb.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Fri, 20 Mar 2020 17:56:08 +0100
-Message-ID: <158472336858.296548.9181798318254282268.stgit@toke.dk>
+Date:   Fri, 20 Mar 2020 17:56:10 +0100
+Message-ID: <158472337077.296548.4666186362987360141.stgit@toke.dk>
 In-Reply-To: <158472336748.296548.5028326196275429565.stgit@toke.dk>
 References: <158472336748.296548.5028326196275429565.stgit@toke.dk>
 User-Agent: StGit/0.22
@@ -92,166 +92,84 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-While it is currently possible for userspace to specify that an existing
-XDP program should not be replaced when attaching to an interface, there is
-no mechanism to safely replace a specific XDP program with another.
-
-This patch adds a new netlink attribute, IFLA_XDP_EXPECTED_FD, which can be
-set along with IFLA_XDP_FD. If set, the kernel will check that the program
-currently loaded on the interface matches the expected one, and fail the
-operation if it does not. This corresponds to a 'cmpxchg' memory operation.
-Setting the new attribute with a negative value means that no program is
-expected to be attached, which corresponds to setting the UPDATE_IF_NOEXIST
-flag.
-
-A new companion flag, XDP_FLAGS_EXPECT_FD, is also added to explicitly
-request checking of the EXPECTED_FD attribute. This is needed for userspace
-to discover whether the kernel supports the new attribute.
+This adds a new function to set the XDP fd while specifying the old fd to
+replace, using the newly added IFLA_XDP_EXPECTED_FD netlink parameter.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/linux/netdevice.h    |    2 +-
- include/uapi/linux/if_link.h |    4 +++-
- net/core/dev.c               |   26 +++++++++++++++++++++-----
- net/core/rtnetlink.c         |   13 +++++++++++++
- 4 files changed, 38 insertions(+), 7 deletions(-)
+ tools/lib/bpf/libbpf.h   |    2 ++
+ tools/lib/bpf/libbpf.map |    1 +
+ tools/lib/bpf/netlink.c  |   22 +++++++++++++++++++++-
+ 3 files changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 654808bfad83..b503d468f0df 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3768,7 +3768,7 @@ struct sk_buff *dev_hard_start_xmit(struct sk_buff *skb, struct net_device *dev,
- 
- typedef int (*bpf_op_t)(struct net_device *dev, struct netdev_bpf *bpf);
- int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
--		      int fd, u32 flags);
-+		      int fd, int expected_fd, u32 flags);
- u32 __dev_xdp_query(struct net_device *dev, bpf_op_t xdp_op,
- 		    enum bpf_netdev_command cmd);
- int xdp_umem_query(struct net_device *dev, u16 queue_id);
-diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
-index 61e0801c82df..314173f8079e 100644
---- a/include/uapi/linux/if_link.h
-+++ b/include/uapi/linux/if_link.h
-@@ -972,11 +972,12 @@ enum {
- #define XDP_FLAGS_SKB_MODE		(1U << 1)
- #define XDP_FLAGS_DRV_MODE		(1U << 2)
- #define XDP_FLAGS_HW_MODE		(1U << 3)
-+#define XDP_FLAGS_EXPECT_FD		(1U << 4)
- #define XDP_FLAGS_MODES			(XDP_FLAGS_SKB_MODE | \
- 					 XDP_FLAGS_DRV_MODE | \
- 					 XDP_FLAGS_HW_MODE)
- #define XDP_FLAGS_MASK			(XDP_FLAGS_UPDATE_IF_NOEXIST | \
--					 XDP_FLAGS_MODES)
-+					 XDP_FLAGS_MODES | XDP_FLAGS_EXPECT_FD)
- 
- /* These are stored into IFLA_XDP_ATTACHED on dump. */
- enum {
-@@ -996,6 +997,7 @@ enum {
- 	IFLA_XDP_DRV_PROG_ID,
- 	IFLA_XDP_SKB_PROG_ID,
- 	IFLA_XDP_HW_PROG_ID,
-+	IFLA_XDP_EXPECTED_FD,
- 	__IFLA_XDP_MAX,
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index d38d7a629417..b5ca4f741e28 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -445,6 +445,8 @@ struct xdp_link_info {
  };
  
-diff --git a/net/core/dev.c b/net/core/dev.c
-index d84541c24446..370122ed2d83 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -8655,15 +8655,17 @@ static void dev_xdp_uninstall(struct net_device *dev)
-  *	@dev: device
-  *	@extack: netlink extended ack
-  *	@fd: new program fd or negative value to clear
-+ *	@expected_fd: old program fd that userspace expects to replace or clear
-  *	@flags: xdp-related flags
-  *
-  *	Set or clear a bpf program for a device
-  */
- int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
--		      int fd, u32 flags)
-+		      int fd, int expected_fd, u32 flags)
+ LIBBPF_API int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags);
++LIBBPF_API int bpf_set_link_xdp_fd_replace(int ifindex, int fd, int old_fd,
++					   __u32 flags);
+ LIBBPF_API int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags);
+ LIBBPF_API int bpf_get_link_xdp_info(int ifindex, struct xdp_link_info *info,
+ 				     size_t info_size, __u32 flags);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 5129283c0284..154f1d94fa63 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -244,4 +244,5 @@ LIBBPF_0.0.8 {
+ 		bpf_link__pin_path;
+ 		bpf_link__unpin;
+ 		bpf_program__set_attach_target;
++		bpf_set_link_xdp_fd_replace;
+ } LIBBPF_0.0.7;
+diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
+index 431bd25c6cdb..39bd0ead1546 100644
+--- a/tools/lib/bpf/netlink.c
++++ b/tools/lib/bpf/netlink.c
+@@ -132,7 +132,8 @@ static int bpf_netlink_recv(int sock, __u32 nl_pid, int seq,
+ 	return ret;
+ }
+ 
+-int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags)
++static int __bpf_set_link_xdp_fd_replace(int ifindex, int fd, int old_fd,
++					 __u32 flags)
  {
- 	const struct net_device_ops *ops = dev->netdev_ops;
- 	enum bpf_netdev_command query;
-+	u32 prog_id, expected_id = 0;
- 	struct bpf_prog *prog = NULL;
- 	bpf_op_t bpf_op, bpf_chk;
- 	bool offload;
-@@ -8684,15 +8686,29 @@ int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
- 	if (bpf_op == bpf_chk)
- 		bpf_chk = generic_xdp_install;
- 
--	if (fd >= 0) {
--		u32 prog_id;
-+	prog_id = __dev_xdp_query(dev, bpf_op, query);
-+	if (expected_fd >= 0 || (flags & XDP_FLAGS_EXPECT_FD)) {
-+		if (expected_fd >= 0) {
-+			prog = bpf_prog_get_type_dev(expected_fd,
-+						     BPF_PROG_TYPE_XDP,
-+						     bpf_op == ops->ndo_bpf);
-+			if (IS_ERR(prog))
-+				return PTR_ERR(prog);
-+			expected_id = prog->aux->id;
-+			bpf_prog_put(prog);
-+		}
- 
-+		if (prog_id != expected_id) {
-+			NL_SET_ERR_MSG(extack, "Active program does not match expected");
-+			return -EEXIST;
-+		}
-+	}
-+	if (fd >= 0) {
- 		if (!offload && __dev_xdp_query(dev, bpf_chk, XDP_QUERY_PROG)) {
- 			NL_SET_ERR_MSG(extack, "native and generic XDP can't be active at the same time");
- 			return -EEXIST;
- 		}
- 
--		prog_id = __dev_xdp_query(dev, bpf_op, query);
- 		if ((flags & XDP_FLAGS_UPDATE_IF_NOEXIST) && prog_id) {
- 			NL_SET_ERR_MSG(extack, "XDP program already attached");
- 			return -EBUSY;
-@@ -8715,7 +8731,7 @@ int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
- 			return 0;
- 		}
- 	} else {
--		if (!__dev_xdp_query(dev, bpf_op, query))
-+		if (!prog_id)
- 			return 0;
+ 	int sock, seq = 0, ret;
+ 	struct nlattr *nla, *nla_xdp;
+@@ -178,6 +179,14 @@ int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags)
+ 		nla->nla_len += nla_xdp->nla_len;
  	}
  
-diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index 14e6ea21c378..d78e6463b67e 100644
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -1872,7 +1872,9 @@ static const struct nla_policy ifla_port_policy[IFLA_PORT_MAX+1] = {
- };
- 
- static const struct nla_policy ifla_xdp_policy[IFLA_XDP_MAX + 1] = {
-+	[IFLA_XDP_UNSPEC]	= { .strict_start_type = IFLA_XDP_EXPECTED_FD },
- 	[IFLA_XDP_FD]		= { .type = NLA_S32 },
-+	[IFLA_XDP_EXPECTED_FD]	= { .type = NLA_S32 },
- 	[IFLA_XDP_ATTACHED]	= { .type = NLA_U8 },
- 	[IFLA_XDP_FLAGS]	= { .type = NLA_U32 },
- 	[IFLA_XDP_PROG_ID]	= { .type = NLA_U32 },
-@@ -2799,8 +2801,19 @@ static int do_setlink(const struct sk_buff *skb,
- 		}
- 
- 		if (xdp[IFLA_XDP_FD]) {
-+			int expected_fd = -1;
++	if (flags & XDP_FLAGS_EXPECT_FD) {
++		nla_xdp = (struct nlattr *)((char *)nla + nla->nla_len);
++		nla_xdp->nla_type = IFLA_XDP_EXPECTED_FD;
++		nla_xdp->nla_len = NLA_HDRLEN + sizeof(int);
++		memcpy((char *)nla_xdp + NLA_HDRLEN, &old_fd, sizeof(old_fd));
++		nla->nla_len += nla_xdp->nla_len;
++	}
 +
-+			if (xdp[IFLA_XDP_EXPECTED_FD]) {
-+				expected_fd =
-+					nla_get_s32(xdp[IFLA_XDP_EXPECTED_FD]);
-+			} else if (xdp_flags & XDP_FLAGS_EXPECT_FD) {
-+				err = -EINVAL;
-+				goto errout;
-+			}
+ 	req.nh.nlmsg_len += NLA_ALIGN(nla->nla_len);
+ 
+ 	if (send(sock, &req, req.nh.nlmsg_len, 0) < 0) {
+@@ -191,6 +200,17 @@ int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags)
+ 	return ret;
+ }
+ 
++int bpf_set_link_xdp_fd_replace(int ifindex, int fd, int old_fd, __u32 flags)
++{
++	return __bpf_set_link_xdp_fd_replace(ifindex, fd, old_fd,
++					     flags | XDP_FLAGS_EXPECT_FD);
++}
 +
- 			err = dev_change_xdp_fd(dev, extack,
- 						nla_get_s32(xdp[IFLA_XDP_FD]),
-+						expected_fd,
- 						xdp_flags);
- 			if (err)
- 				goto errout;
++int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags)
++{
++	return __bpf_set_link_xdp_fd_replace(ifindex, fd, -1, flags);
++}
++
+ static int __dump_link_nlmsg(struct nlmsghdr *nlh,
+ 			     libbpf_dump_nlmsg_t dump_link_nlmsg, void *cookie)
+ {
 
