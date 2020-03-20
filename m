@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E54BC4332B
-	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 20:36:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F14A8C43332
+	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 20:36:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D934620739
-	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 20:36:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B910220739
+	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 20:36:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="dz8wz+vC"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="EO4xqcfz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727431AbgCTUgp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Mar 2020 16:36:45 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:34346 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727330AbgCTUgp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 20 Mar 2020 16:36:45 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02KKaX0U020965
+        id S1727141AbgCTUgr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Mar 2020 16:36:47 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44984 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727425AbgCTUgq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 20 Mar 2020 16:36:46 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 02KKSSPW010928
         for <bpf@vger.kernel.org>; Fri, 20 Mar 2020 13:36:44 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=Z3SY+JmABAHgg0NODEo2+2c0yyWwsRBYA2ipAg5I3iE=;
- b=dz8wz+vCNrFXEO8Vd+va7N6rUdvIhBtBdamHoHjNW6MVpP4cUzurG1EniCiHL9cvQDGs
- iH629Nq0OA0mDuYyc0CdX3GDHIeN23fGrYMZyFczWehO1cKrAa/wwKScIPA0Nf9RmSpl
- yJBBmXWBq/3PoAhnRE7SyjFWNS8LufGLfeA= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2yu7qarc3n-18
+ content-type; s=facebook; bh=xb2zNQQ9s+9OAa5gQk3OMr9/2hfZTnETJ+AePiA2oeU=;
+ b=EO4xqcfzoPfJAPa5hb74qsBtETfo3xQaXLHY7/7hcjuqn5FHmjBw0BNh+bUVz2VUUR+H
+ Pd8BmfkBRJvTNCeJLc/UNDDQV7VwzIk9lbe/4NKxzB4I1nUDbsvy47lquqqm4VNvV630
+ lEZ8/W9s4sfA20u6OIqpVEvgcfSzPZcAITQ= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 2yu7yp0b5u-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Fri, 20 Mar 2020 13:36:44 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Fri, 20 Mar 2020 13:36:25 -0700
+ 15.1.1847.3; Fri, 20 Mar 2020 13:36:43 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id C69302EC2E57; Fri, 20 Mar 2020 13:36:23 -0700 (PDT)
+        id A541E2EC2E57; Fri, 20 Mar 2020 13:36:32 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/6] bpf: factor out attach_type to prog_type mapping for attach/detach
-Date:   Fri, 20 Mar 2020 13:36:10 -0700
-Message-ID: <20200320203615.1519013-3-andriin@fb.com>
+Subject: [PATCH bpf-next 6/6] selftests/bpf: test FD-based cgroup attachment
+Date:   Fri, 20 Mar 2020 13:36:14 -0700
+Message-ID: <20200320203615.1519013-7-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200320203615.1519013-1-andriin@fb.com>
 References: <20200320203615.1519013-1-andriin@fb.com>
@@ -59,252 +59,307 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
  definitions=2020-03-20_07:2020-03-20,2020-03-20 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- impostorscore=0 spamscore=0 clxscore=1015 suspectscore=8 adultscore=0
- mlxscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 mlxlogscore=978 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2003020000 definitions=main-2003200082
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ suspectscore=8 bulkscore=0 impostorscore=0 adultscore=0 mlxlogscore=869
+ clxscore=1015 mlxscore=0 spamscore=0 malwarescore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003200081
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Factor out logic mapping expected program attach type to program type and
-subsequent handling of program attach/detach. Also list out all supported
-cgroup BPF program types explicitly to prevent accidental bugs once more
-program types are added to a mapping. Do the same for prog_query API.
+Add selftests to exercise FD-based cgroup BPF program attachments and their
+intermixing with legacy stateful cgroup BPF attachments. Auto-detachment and
+program replacement (both unconditional and cmpxchng-like) are tested as well.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- kernel/bpf/syscall.c | 153 +++++++++++++++++++------------------------
- 1 file changed, 66 insertions(+), 87 deletions(-)
+ .../selftests/bpf/prog_tests/cgroup_link.c    | 242 ++++++++++++++++++
+ .../selftests/bpf/progs/test_cgroup_link.c    |  24 ++
+ 2 files changed, 266 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_link.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_cgroup_link.c
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 85567a6ea5f9..fd4181939064 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2535,36 +2535,18 @@ static int bpf_prog_attach_check_attach_type(const struct bpf_prog *prog,
- 	}
- }
- 
--#define BPF_PROG_ATTACH_LAST_FIELD replace_bpf_fd
--
--#define BPF_F_ATTACH_MASK \
--	(BPF_F_ALLOW_OVERRIDE | BPF_F_ALLOW_MULTI | BPF_F_REPLACE)
--
--static int bpf_prog_attach(const union bpf_attr *attr)
-+static enum bpf_prog_type
-+attach_type_to_prog_type(enum bpf_attach_type attach_type)
- {
--	enum bpf_prog_type ptype;
--	struct bpf_prog *prog;
--	int ret;
--
--	if (!capable(CAP_NET_ADMIN))
--		return -EPERM;
--
--	if (CHECK_ATTR(BPF_PROG_ATTACH))
--		return -EINVAL;
--
--	if (attr->attach_flags & ~BPF_F_ATTACH_MASK)
--		return -EINVAL;
--
--	switch (attr->attach_type) {
-+	switch (attach_type) {
- 	case BPF_CGROUP_INET_INGRESS:
- 	case BPF_CGROUP_INET_EGRESS:
--		ptype = BPF_PROG_TYPE_CGROUP_SKB;
-+		return BPF_PROG_TYPE_CGROUP_SKB;
- 		break;
- 	case BPF_CGROUP_INET_SOCK_CREATE:
- 	case BPF_CGROUP_INET4_POST_BIND:
- 	case BPF_CGROUP_INET6_POST_BIND:
--		ptype = BPF_PROG_TYPE_CGROUP_SOCK;
--		break;
-+		return BPF_PROG_TYPE_CGROUP_SOCK;
- 	case BPF_CGROUP_INET4_BIND:
- 	case BPF_CGROUP_INET6_BIND:
- 	case BPF_CGROUP_INET4_CONNECT:
-@@ -2573,37 +2555,53 @@ static int bpf_prog_attach(const union bpf_attr *attr)
- 	case BPF_CGROUP_UDP6_SENDMSG:
- 	case BPF_CGROUP_UDP4_RECVMSG:
- 	case BPF_CGROUP_UDP6_RECVMSG:
--		ptype = BPF_PROG_TYPE_CGROUP_SOCK_ADDR;
--		break;
-+		return BPF_PROG_TYPE_CGROUP_SOCK_ADDR;
- 	case BPF_CGROUP_SOCK_OPS:
--		ptype = BPF_PROG_TYPE_SOCK_OPS;
--		break;
-+		return BPF_PROG_TYPE_SOCK_OPS;
- 	case BPF_CGROUP_DEVICE:
--		ptype = BPF_PROG_TYPE_CGROUP_DEVICE;
--		break;
-+		return BPF_PROG_TYPE_CGROUP_DEVICE;
- 	case BPF_SK_MSG_VERDICT:
--		ptype = BPF_PROG_TYPE_SK_MSG;
--		break;
-+		return BPF_PROG_TYPE_SK_MSG;
- 	case BPF_SK_SKB_STREAM_PARSER:
- 	case BPF_SK_SKB_STREAM_VERDICT:
--		ptype = BPF_PROG_TYPE_SK_SKB;
--		break;
-+		return BPF_PROG_TYPE_SK_SKB;
- 	case BPF_LIRC_MODE2:
--		ptype = BPF_PROG_TYPE_LIRC_MODE2;
--		break;
-+		return BPF_PROG_TYPE_LIRC_MODE2;
- 	case BPF_FLOW_DISSECTOR:
--		ptype = BPF_PROG_TYPE_FLOW_DISSECTOR;
--		break;
-+		return BPF_PROG_TYPE_FLOW_DISSECTOR;
- 	case BPF_CGROUP_SYSCTL:
--		ptype = BPF_PROG_TYPE_CGROUP_SYSCTL;
--		break;
-+		return BPF_PROG_TYPE_CGROUP_SYSCTL;
- 	case BPF_CGROUP_GETSOCKOPT:
- 	case BPF_CGROUP_SETSOCKOPT:
--		ptype = BPF_PROG_TYPE_CGROUP_SOCKOPT;
--		break;
-+		return BPF_PROG_TYPE_CGROUP_SOCKOPT;
- 	default:
--		return -EINVAL;
-+		return BPF_PROG_TYPE_UNSPEC;
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
+new file mode 100644
+index 000000000000..9596aa5f2c07
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
+@@ -0,0 +1,242 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include "cgroup_helpers.h"
++#include "test_cgroup_link.skel.h"
++
++static __u32 duration = 0;
++#define PING_CMD	"ping -q -c1 -w1 127.0.0.1 > /dev/null"
++
++void test_cgroup_link(void)
++{
++	struct test_cgroup_link *skel;
++	struct {
++		const char *path;
++		int fd;
++	} cgs[] = {
++		{ "/cg1" },
++		{ "/cg1/cg2" },
++		{ "/cg1/cg2/cg3" },
++	};
++	int last_cg = ARRAY_SIZE(cgs) - 1, cg_nr = ARRAY_SIZE(cgs);
++	DECLARE_LIBBPF_OPTS(bpf_link_update_opts, link_upd_opts);
++	struct bpf_link *links[ARRAY_SIZE(cgs)] = {};
++	__u32 prog_ids[5], prog_cnt = 0, attach_flags;
++	int i = 0, err, prog_fd;
++	bool detach_legacy = false;
++
++	skel = test_cgroup_link__open_and_load();
++	if (CHECK(!skel, "skel_open_load", "failed to open/load skeleton\n"))
++		return;
++	prog_fd = bpf_program__fd(skel->progs.egress);
++
++	err = setup_cgroup_environment();
++	if (CHECK(err, "cg_init", "failed: %d\n", err))
++		goto cleanup;
++
++	for (i = 0; i < cg_nr; i++) {
++		cgs[i].fd = create_and_get_cgroup(cgs[i].path);
++		if (CHECK(cgs[i].fd < 0, "cg_create", "fail: %d\n", cgs[i].fd))
++			goto cleanup;
++	}
++
++	err = join_cgroup(cgs[last_cg].path);
++	if (CHECK(err, "cg_join", "fail: %d\n", err))
++		goto cleanup;
++
++	for (i = 0; i < cg_nr; i++) {
++		links[i] = bpf_program__attach_cgroup(skel->progs.egress,
++						      cgs[i].fd);
++		if (CHECK(IS_ERR(links[i]), "cg_attach", "i: %d, err: %ld\n",
++				 i, PTR_ERR(links[i])))
++			goto cleanup;
++	}
++
++	CHECK_FAIL(system(PING_CMD));
++	if (CHECK(skel->bss->calls != cg_nr, "call_cnt", "exp %d, got %d\n",
++		  cg_nr, skel->bss->calls))
++		goto cleanup;
++
++	/* query the number of effective progs in last cg */
++	CHECK_FAIL(bpf_prog_query(cgs[last_cg].fd, BPF_CGROUP_INET_EGRESS,
++				  BPF_F_QUERY_EFFECTIVE, NULL, NULL,
++				  &prog_cnt));
++	if (CHECK(prog_cnt != cg_nr, "effect_cnt", "exp %d, got %d\n",
++		  cg_nr, prog_cnt))
++		goto cleanup;
++	/* query the effective prog IDs in last cg */
++	CHECK_FAIL(bpf_prog_query(cgs[last_cg].fd, BPF_CGROUP_INET_EGRESS,
++				  BPF_F_QUERY_EFFECTIVE, &attach_flags,
++				  prog_ids, &prog_cnt));
++	if (CHECK(prog_cnt != cg_nr, "effect_cnt", "exp %d, got %d\n",
++		  cg_nr, prog_cnt))
++		goto cleanup;
++	CHECK_FAIL(attach_flags != BPF_F_ALLOW_MULTI);
++	for (i = 1; i < prog_cnt; i++)
++		CHECK(prog_ids[i - 1] != prog_ids[i], "prod_id_check",
++		      "idx %d, prev id %d, cur id %d\n",
++		      i, prog_ids[i - 1], prog_ids[i]);
++
++	/* detach bottom program and ping again */
++	bpf_link__destroy(links[last_cg]);
++	links[last_cg] = NULL;
++
++	skel->bss->calls = 0;
++	CHECK_FAIL(system(PING_CMD));
++	if (CHECK(skel->bss->calls != cg_nr - 1, "call_cnt", "exp %d, got %d\n",
++		  cg_nr - 1, skel->bss->calls))
++		goto cleanup;
++
++	/* mix in with non link-based multi-attachments */
++	err = bpf_prog_attach(prog_fd, cgs[last_cg].fd,
++			      BPF_CGROUP_INET_EGRESS, BPF_F_ALLOW_MULTI);
++	if (CHECK(err, "cg_attach_legacy", "errno=%d\n", errno))
++		goto cleanup;
++	detach_legacy = true;
++
++	links[last_cg] = bpf_program__attach_cgroup(skel->progs.egress,
++						    cgs[last_cg].fd);
++	if (CHECK(IS_ERR(links[last_cg]), "cg_attach", "err: %ld\n",
++		  PTR_ERR(links[last_cg])))
++		goto cleanup;
++
++	skel->bss->calls = 0;
++	CHECK_FAIL(system(PING_CMD));
++	CHECK(skel->bss->calls != cg_nr + 1, "call_cnt", "exp %d, got %d\n",
++	      cg_nr + 1, skel->bss->calls);
++
++	bpf_link__destroy(links[last_cg]);
++	links[last_cg] = NULL;
++
++	if (CHECK(bpf_prog_detach2(prog_fd, cgs[last_cg].fd,
++		  BPF_CGROUP_INET_EGRESS), "cg_detach_legacy",
++		  "errno=%d\n", errno))
++		goto cleanup;
++	detach_legacy = false;
++
++	/* attempt to mix in with legacy exclusive prog attachment */
++	err = bpf_prog_attach(prog_fd, cgs[last_cg].fd,
++			      BPF_CGROUP_INET_EGRESS, 0);
++	if (CHECK(err, "cg_attach_exclusive", "errno=%d\n", errno))
++		goto cleanup;
++	detach_legacy = true;
++
++	links[last_cg] = bpf_program__attach_cgroup(skel->progs.egress,
++						    cgs[last_cg].fd);
++	if (CHECK(!IS_ERR(links[last_cg]), "cg_attach_fail", "unexpected success\n"))
++		goto cleanup;
++
++	skel->bss->calls = 0;
++	CHECK_FAIL(system(PING_CMD));
++	CHECK(skel->bss->calls != cg_nr, "call_cnt", "exp %d, got %d\n",
++	      cg_nr, skel->bss->calls);
++
++	if (CHECK(bpf_prog_detach2(prog_fd, cgs[last_cg].fd, BPF_CGROUP_INET_EGRESS),
++		  "cg_detach_exclusive", "errno=%d\n", errno))
++		goto cleanup;
++	detach_legacy = false;
++
++	/* re-attach last bpf_link to finish off test */
++	links[last_cg] = bpf_program__attach_cgroup(skel->progs.egress,
++						    cgs[last_cg].fd);
++	if (CHECK(IS_ERR(links[last_cg]), "cg_attach", "err: %ld\n",
++		  PTR_ERR(links[last_cg])))
++		goto cleanup;
++
++	skel->bss->calls = 0;
++	CHECK_FAIL(system(PING_CMD));
++	if (CHECK(skel->bss->calls != cg_nr, "call_cnt", "exp %d, got %d\n",
++		  cg_nr, skel->bss->calls))
++		goto cleanup;
++	if (CHECK(skel->bss->alt_calls != 0, "alt_call_cnt", "exp %d, got %d\n",
++		  0, skel->bss->alt_calls))
++		goto cleanup;
++
++	/* replace BPF programs inside their links for all but first link */
++	for (i = 1; i < cg_nr; i++) {
++		err = bpf_link__update_program(links[i], skel->progs.egress_alt);
++		if (CHECK(err, "prog_upd", "link #%d\n", i))
++			goto cleanup;
++	}
++
++	skel->bss->calls = 0;
++	skel->bss->alt_calls = 0;
++	CHECK_FAIL(system(PING_CMD));
++	if (CHECK(skel->bss->calls != 1, "call_cnt",
++		  "exp %d, got %d\n", 1, skel->bss->calls))
++		goto cleanup;
++	if (CHECK(skel->bss->alt_calls != cg_nr - 1, "alt_call_cnt",
++		  "exp %d, got %d\n", cg_nr - 1, skel->bss->alt_calls))
++		goto cleanup;
++
++	/* Attempt program update with wrong expected BPF program */
++	link_upd_opts.old_prog_fd = bpf_program__fd(skel->progs.egress_alt);
++	link_upd_opts.flags = BPF_F_REPLACE;
++	err = bpf_link_update(bpf_link__fd(links[0]),
++			      bpf_program__fd(skel->progs.egress_alt),
++			      &link_upd_opts);
++	if (CHECK(err == 0 || errno != EPERM, "prog_cmpxchg1",
++		  "unexpectedly succeeded, err %d, errno %d\n", err, -errno))
++		goto cleanup;
++
++	/* Compare-exchange single link program from egress to egress_alt */
++	link_upd_opts.old_prog_fd = bpf_program__fd(skel->progs.egress);
++	link_upd_opts.flags = BPF_F_REPLACE;
++	err = bpf_link_update(bpf_link__fd(links[0]),
++			      bpf_program__fd(skel->progs.egress_alt),
++			      &link_upd_opts);
++	if (CHECK(err, "prog_cmpxchg2", "errno %d\n", -errno))
++		goto cleanup;
++
++	skel->bss->calls = 0;
++	skel->bss->alt_calls = 0;
++	CHECK_FAIL(system(PING_CMD));
++	if (CHECK(skel->bss->calls != 0, "call_cnt",
++		  "exp %d, got %d\n", 0, skel->bss->calls))
++		goto cleanup;
++	if (CHECK(skel->bss->alt_calls != cg_nr, "alt_call_cnt",
++		  "exp %d, got %d\n", cg_nr, skel->bss->alt_calls))
++		goto cleanup;
++
++	/* close cgroup FDs before detaching links */
++	for (i = 0; i < cg_nr; i++) {
++		if (cgs[i].fd > 0) {
++			close(cgs[i].fd);
++			cgs[i].fd = -1;
++		}
++	}
++
++	/* BPF programs should still get called */
++	skel->bss->alt_calls = 0;
++	CHECK_FAIL(system(PING_CMD));
++	if (CHECK(skel->bss->alt_calls != cg_nr, "alt_all_cnt",
++		  "exp %d, got %d\n", cg_nr, skel->bss->alt_calls))
++		goto cleanup;
++
++	/* leave cgroup and remove them, don't detach programs */
++	cleanup_cgroup_environment();
++
++	/* BPF programs should have been auto-detached */
++	skel->bss->alt_calls = 0;
++	CHECK_FAIL(system(PING_CMD));
++	if (CHECK(skel->bss->alt_calls, "alt_call_cnt", "exp %d, got %d\n",
++		  cg_nr, skel->bss->alt_calls))
++		goto cleanup;
++
++cleanup:
++	if (detach_legacy)
++		bpf_prog_detach2(prog_fd, cgs[last_cg].fd,
++				 BPF_CGROUP_INET_EGRESS);
++
++	for (i = 0; i < cg_nr; i++) {
++		if (!IS_ERR(links[i]))
++			bpf_link__destroy(links[i]);
++	}
++	test_cgroup_link__destroy(skel);
++
++	for (i = 0; i < cg_nr; i++) {
++		if (cgs[i].fd > 0)
++			close(cgs[i].fd);
++	}
++	cleanup_cgroup_environment();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_cgroup_link.c b/tools/testing/selftests/bpf/progs/test_cgroup_link.c
+new file mode 100644
+index 000000000000..77e47b9e4446
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_cgroup_link.c
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Facebook
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++int calls = 0;
++int alt_calls = 0;
++
++SEC("cgroup_skb/egress1")
++int egress(struct __sk_buff *skb)
++{
++	__sync_fetch_and_add(&calls, 1);
++	return 1;
 +}
 +
-+#define BPF_PROG_ATTACH_LAST_FIELD replace_bpf_fd
-+
-+#define BPF_F_ATTACH_MASK \
-+	(BPF_F_ALLOW_OVERRIDE | BPF_F_ALLOW_MULTI | BPF_F_REPLACE)
-+
-+static int bpf_prog_attach(const union bpf_attr *attr)
++SEC("cgroup_skb/egress2")
++int egress_alt(struct __sk_buff *skb)
 +{
-+	enum bpf_prog_type ptype;
-+	struct bpf_prog *prog;
-+	int ret;
++	__sync_fetch_and_add(&alt_calls, 1);
++	return 1;
++}
 +
-+	if (!capable(CAP_NET_ADMIN))
-+		return -EPERM;
++char _license[] SEC("license") = "GPL";
 +
-+	if (CHECK_ATTR(BPF_PROG_ATTACH))
-+		return -EINVAL;
-+
-+	if (attr->attach_flags & ~BPF_F_ATTACH_MASK)
-+		return -EINVAL;
-+
-+	ptype = attach_type_to_prog_type(attr->attach_type);
-+	if (ptype == BPF_PROG_TYPE_UNSPEC)
-+		return -EINVAL;
- 
- 	prog = bpf_prog_get_type(attr->attach_bpf_fd, ptype);
- 	if (IS_ERR(prog))
-@@ -2625,8 +2623,17 @@ static int bpf_prog_attach(const union bpf_attr *attr)
- 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
- 		ret = skb_flow_dissector_bpf_prog_attach(attr, prog);
- 		break;
--	default:
-+	case BPF_PROG_TYPE_CGROUP_DEVICE:
-+	case BPF_PROG_TYPE_CGROUP_SKB:
-+	case BPF_PROG_TYPE_CGROUP_SOCK:
-+	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
-+	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
-+	case BPF_PROG_TYPE_CGROUP_SYSCTL:
-+	case BPF_PROG_TYPE_SOCK_OPS:
- 		ret = cgroup_bpf_prog_attach(attr, ptype, prog);
-+		break;
-+	default:
-+		ret = -EINVAL;
- 	}
- 
- 	if (ret)
-@@ -2646,53 +2653,27 @@ static int bpf_prog_detach(const union bpf_attr *attr)
- 	if (CHECK_ATTR(BPF_PROG_DETACH))
- 		return -EINVAL;
- 
--	switch (attr->attach_type) {
--	case BPF_CGROUP_INET_INGRESS:
--	case BPF_CGROUP_INET_EGRESS:
--		ptype = BPF_PROG_TYPE_CGROUP_SKB;
--		break;
--	case BPF_CGROUP_INET_SOCK_CREATE:
--	case BPF_CGROUP_INET4_POST_BIND:
--	case BPF_CGROUP_INET6_POST_BIND:
--		ptype = BPF_PROG_TYPE_CGROUP_SOCK;
--		break;
--	case BPF_CGROUP_INET4_BIND:
--	case BPF_CGROUP_INET6_BIND:
--	case BPF_CGROUP_INET4_CONNECT:
--	case BPF_CGROUP_INET6_CONNECT:
--	case BPF_CGROUP_UDP4_SENDMSG:
--	case BPF_CGROUP_UDP6_SENDMSG:
--	case BPF_CGROUP_UDP4_RECVMSG:
--	case BPF_CGROUP_UDP6_RECVMSG:
--		ptype = BPF_PROG_TYPE_CGROUP_SOCK_ADDR;
--		break;
--	case BPF_CGROUP_SOCK_OPS:
--		ptype = BPF_PROG_TYPE_SOCK_OPS;
--		break;
--	case BPF_CGROUP_DEVICE:
--		ptype = BPF_PROG_TYPE_CGROUP_DEVICE;
--		break;
--	case BPF_SK_MSG_VERDICT:
--		return sock_map_get_from_fd(attr, NULL);
--	case BPF_SK_SKB_STREAM_PARSER:
--	case BPF_SK_SKB_STREAM_VERDICT:
-+	ptype = attach_type_to_prog_type(attr->attach_type);
-+
-+	switch (ptype) {
-+	case BPF_PROG_TYPE_SK_MSG:
-+	case BPF_PROG_TYPE_SK_SKB:
- 		return sock_map_get_from_fd(attr, NULL);
--	case BPF_LIRC_MODE2:
-+	case BPF_PROG_TYPE_LIRC_MODE2:
- 		return lirc_prog_detach(attr);
--	case BPF_FLOW_DISSECTOR:
-+	case BPF_PROG_TYPE_FLOW_DISSECTOR:
- 		return skb_flow_dissector_bpf_prog_detach(attr);
--	case BPF_CGROUP_SYSCTL:
--		ptype = BPF_PROG_TYPE_CGROUP_SYSCTL;
--		break;
--	case BPF_CGROUP_GETSOCKOPT:
--	case BPF_CGROUP_SETSOCKOPT:
--		ptype = BPF_PROG_TYPE_CGROUP_SOCKOPT;
--		break;
-+	case BPF_PROG_TYPE_CGROUP_DEVICE:
-+	case BPF_PROG_TYPE_CGROUP_SKB:
-+	case BPF_PROG_TYPE_CGROUP_SOCK:
-+	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
-+	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
-+	case BPF_PROG_TYPE_CGROUP_SYSCTL:
-+	case BPF_PROG_TYPE_SOCK_OPS:
-+		return cgroup_bpf_prog_detach(attr, ptype);
- 	default:
- 		return -EINVAL;
- 	}
--
--	return cgroup_bpf_prog_detach(attr, ptype);
- }
- 
- #define BPF_PROG_QUERY_LAST_FIELD query.prog_cnt
-@@ -2726,7 +2707,7 @@ static int bpf_prog_query(const union bpf_attr *attr,
- 	case BPF_CGROUP_SYSCTL:
- 	case BPF_CGROUP_GETSOCKOPT:
- 	case BPF_CGROUP_SETSOCKOPT:
--		break;
-+		return cgroup_bpf_prog_query(attr, uattr);
- 	case BPF_LIRC_MODE2:
- 		return lirc_prog_query(attr, uattr);
- 	case BPF_FLOW_DISSECTOR:
-@@ -2734,8 +2715,6 @@ static int bpf_prog_query(const union bpf_attr *attr,
- 	default:
- 		return -EINVAL;
- 	}
--
--	return cgroup_bpf_prog_query(attr, uattr);
- }
- 
- #define BPF_PROG_TEST_RUN_LAST_FIELD test.ctx_out
 -- 
 2.17.1
 
