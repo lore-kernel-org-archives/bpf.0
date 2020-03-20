@@ -2,44 +2,44 @@ Return-Path: <SRS0=BwRu=5F=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69E69C4332D
-	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 15:21:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F87DC4332E
+	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 15:21:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3A97820777
-	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 15:21:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6D0020781
+	for <bpf@archiver.kernel.org>; Fri, 20 Mar 2020 15:21:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NjB+/AK5"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fVZ2xmVK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726816AbgCTPVF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Mar 2020 11:21:05 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:43548 "EHLO
+        id S1727002AbgCTPVK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Mar 2020 11:21:10 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:5090 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725446AbgCTPVF (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 20 Mar 2020 11:21:05 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02KFKKMM016785
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2020 08:21:04 -0700
+        by vger.kernel.org with ESMTP id S1726801AbgCTPVK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 20 Mar 2020 11:21:10 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02KFIcjR021714
+        for <bpf@vger.kernel.org>; Fri, 20 Mar 2020 08:21:09 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=facebook;
- bh=GpaR7DMqdUzSGid6Gim9t4E+vLQW/LJT2WtXWUBIxJ0=;
- b=NjB+/AK57iNwNJtVuMyEX/LjKPEUVLe24RzYckcqq5YWv2dNZRHzerD4UV1UpTHtuvTu
- UJZTTQuurJaaGW2Opiv3hvWGqkEAoAn5qxt/dOiBf3kDLYBjUMzTDbqkSrJBYI4/3m66
- 4fS3S7vvtcGCNvb6dhCNM882OV1WaYtp9U8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2yvu8ysg94-10
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=facebook; bh=w95A8NxbQncObxS03SaKBCXTdfmmCtNQ1q3j/lMOr0o=;
+ b=fVZ2xmVK69YXDDcCH4k3cHhzP4clY4sRu1XxuW25v4PxEbQ4JA6Wu+MAi6Vyj+6qh66K
+ d6/tA1eESIl181WU23N0G3DC/xgYnqg8YhpXD0EU2+t2wESvyb17lQYHNEGgTxUnv1nG
+ L+IrwOBe1/02c1VyRFUYJlKF21tcN/VvL40= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 2yu9avxfyv-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 20 Mar 2020 08:21:04 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 20 Mar 2020 08:21:09 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Fri, 20 Mar 2020 08:20:57 -0700
+ 15.1.1847.3; Fri, 20 Mar 2020 08:21:08 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 46E8F29410F6; Fri, 20 Mar 2020 08:20:55 -0700 (PDT)
+        id B338629410F6; Fri, 20 Mar 2020 08:21:07 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -48,44 +48,180 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 0/2] bpf: Add bpf_sk_storage support to bpf_tcp_ca
-Date:   Fri, 20 Mar 2020 08:20:55 -0700
-Message-ID: <20200320152055.2169341-1-kafai@fb.com>
+Subject: [PATCH v2 bpf-next 2/2] bpf: Add tests for bpf_sk_storage to bpf_tcp_ca
+Date:   Fri, 20 Mar 2020 08:21:07 -0700
+Message-ID: <20200320152107.2169904-1-kafai@fb.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200320152055.2169341-1-kafai@fb.com>
+References: <20200320152055.2169341-1-kafai@fb.com>
 X-FB-Internal: Safe
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
  definitions=2020-03-20_05:2020-03-20,2020-03-20 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 phishscore=0
- clxscore=1015 spamscore=0 malwarescore=0 priorityscore=1501 mlxscore=0
- adultscore=0 impostorscore=0 mlxlogscore=876 suspectscore=13
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2003200064
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ bulkscore=0 mlxscore=0 malwarescore=0 clxscore=1015 adultscore=0
+ suspectscore=13 impostorscore=0 spamscore=0 priorityscore=1501
+ mlxlogscore=949 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2003200064
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set adds bpf_sk_storage support to bpf_tcp_ca.
-That will allow bpf-tcp-cc to share sk's private data with other
-bpf_progs and also allow bpf-tcp-cc to use extra private
-storage if the existing icsk_ca_priv is not enough.
+This patch adds test to exercise the bpf_sk_storage_get()
+and bpf_sk_storage_delete() helper from the bpf_dctcp.c.
 
-v2:
-- Move the sk_stg_map test immediately after connect() (Yonghong)
-- Use global linkage var in bpf_dctcp.c (Yonghong)
+The setup and check on the sk_storage is done immediately
+before and after the connect().
 
-Martin KaFai Lau (2):
-  bpf: Add bpf_sk_storage support to bpf_tcp_ca
-  bpf: Add tests for bpf_sk_storage to bpf_tcp_ca
+This patch also takes this chance to move the pthread_create()
+after the connect() has been done.  That will remove the need of
+the "wait_thread" label.
 
- net/ipv4/bpf_tcp_ca.c                         | 33 ++++++++++++++++
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
  .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 39 +++++++++++++++----
  tools/testing/selftests/bpf/progs/bpf_dctcp.c | 16 ++++++++
- 3 files changed, 80 insertions(+), 8 deletions(-)
+ 2 files changed, 47 insertions(+), 8 deletions(-)
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+index 8482bbc67eec..9a8f47fc0b91 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+@@ -11,6 +11,7 @@
+ static const unsigned int total_bytes = 10 * 1024 * 1024;
+ static const struct timeval timeo_sec = { .tv_sec = 10 };
+ static const size_t timeo_optlen = sizeof(timeo_sec);
++static int expected_stg = 0xeB9F;
+ static int stop, duration;
+ 
+ static int settimeo(int fd)
+@@ -88,7 +89,7 @@ static void *server(void *arg)
+ 	return NULL;
+ }
+ 
+-static void do_test(const char *tcp_ca)
++static void do_test(const char *tcp_ca, const struct bpf_map *sk_stg_map)
+ {
+ 	struct sockaddr_in6 sa6 = {};
+ 	ssize_t nr_recv = 0, bytes = 0;
+@@ -126,14 +127,34 @@ static void do_test(const char *tcp_ca)
+ 	err = listen(lfd, 1);
+ 	if (CHECK(err == -1, "listen", "errno:%d\n", errno))
+ 		goto done;
+-	err = pthread_create(&srv_thread, NULL, server, (void *)(long)lfd);
+-	if (CHECK(err != 0, "pthread_create", "err:%d\n", err))
+-		goto done;
++
++	if (sk_stg_map) {
++		err = bpf_map_update_elem(bpf_map__fd(sk_stg_map), &fd,
++					  &expected_stg, BPF_NOEXIST);
++		if (CHECK(err, "bpf_map_update_elem(sk_stg_map)",
++			  "err:%d errno:%d\n", err, errno))
++			goto done;
++	}
+ 
+ 	/* connect to server */
+ 	err = connect(fd, (struct sockaddr *)&sa6, addrlen);
+ 	if (CHECK(err == -1, "connect", "errno:%d\n", errno))
+-		goto wait_thread;
++		goto done;
++
++	if (sk_stg_map) {
++		int tmp_stg;
++
++		err = bpf_map_lookup_elem(bpf_map__fd(sk_stg_map), &fd,
++					  &tmp_stg);
++		if (CHECK(!err || errno != ENOENT,
++			  "bpf_map_lookup_elem(sk_stg_map)",
++			  "err:%d errno:%d\n", err, errno))
++			goto done;
++	}
++
++	err = pthread_create(&srv_thread, NULL, server, (void *)(long)lfd);
++	if (CHECK(err != 0, "pthread_create", "err:%d errno:%d\n", err, errno))
++		goto done;
+ 
+ 	/* recv total_bytes */
+ 	while (bytes < total_bytes && !READ_ONCE(stop)) {
+@@ -149,7 +170,6 @@ static void do_test(const char *tcp_ca)
+ 	CHECK(bytes != total_bytes, "recv", "%zd != %u nr_recv:%zd errno:%d\n",
+ 	      bytes, total_bytes, nr_recv, errno);
+ 
+-wait_thread:
+ 	WRITE_ONCE(stop, 1);
+ 	pthread_join(srv_thread, &thread_ret);
+ 	CHECK(IS_ERR(thread_ret), "pthread_join", "thread_ret:%ld",
+@@ -175,7 +195,7 @@ static void test_cubic(void)
+ 		return;
+ 	}
+ 
+-	do_test("bpf_cubic");
++	do_test("bpf_cubic", NULL);
+ 
+ 	bpf_link__destroy(link);
+ 	bpf_cubic__destroy(cubic_skel);
+@@ -197,7 +217,10 @@ static void test_dctcp(void)
+ 		return;
+ 	}
+ 
+-	do_test("bpf_dctcp");
++	do_test("bpf_dctcp", dctcp_skel->maps.sk_stg_map);
++	CHECK(dctcp_skel->bss->stg_result != expected_stg,
++	      "Unexpected stg_result", "stg_result (%x) != expected_stg (%x)\n",
++	      dctcp_skel->bss->stg_result, expected_stg);
+ 
+ 	bpf_link__destroy(link);
+ 	bpf_dctcp__destroy(dctcp_skel);
+diff --git a/tools/testing/selftests/bpf/progs/bpf_dctcp.c b/tools/testing/selftests/bpf/progs/bpf_dctcp.c
+index 127ea762a062..3fb4260570b1 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_dctcp.c
++++ b/tools/testing/selftests/bpf/progs/bpf_dctcp.c
+@@ -6,6 +6,7 @@
+  * the kernel BPF logic.
+  */
+ 
++#include <stddef.h>
+ #include <linux/bpf.h>
+ #include <linux/types.h>
+ #include <bpf/bpf_helpers.h>
+@@ -14,6 +15,15 @@
+ 
+ char _license[] SEC("license") = "GPL";
+ 
++int stg_result = 0;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, int);
++	__type(value, int);
++} sk_stg_map SEC(".maps");
++
+ #define DCTCP_MAX_ALPHA	1024U
+ 
+ struct dctcp {
+@@ -43,12 +53,18 @@ void BPF_PROG(dctcp_init, struct sock *sk)
+ {
+ 	const struct tcp_sock *tp = tcp_sk(sk);
+ 	struct dctcp *ca = inet_csk_ca(sk);
++	int *stg;
+ 
+ 	ca->prior_rcv_nxt = tp->rcv_nxt;
+ 	ca->dctcp_alpha = min(dctcp_alpha_on_init, DCTCP_MAX_ALPHA);
+ 	ca->loss_cwnd = 0;
+ 	ca->ce_state = 0;
+ 
++	stg = bpf_sk_storage_get(&sk_stg_map, (void *)tp, NULL, 0);
++	if (stg) {
++		stg_result = *stg;
++		bpf_sk_storage_delete(&sk_stg_map, (void *)tp);
++	}
+ 	dctcp_reset(tp, ca);
+ }
+ 
 -- 
 2.17.1
 
