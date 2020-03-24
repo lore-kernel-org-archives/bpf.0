@@ -2,66 +2,68 @@ Return-Path: <SRS0=N94o=5J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5417C43331
-	for <bpf@archiver.kernel.org>; Tue, 24 Mar 2020 18:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E759C2BAEE
+	for <bpf@archiver.kernel.org>; Tue, 24 Mar 2020 18:13:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7AFB52076E
-	for <bpf@archiver.kernel.org>; Tue, 24 Mar 2020 18:12:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D34120775
+	for <bpf@archiver.kernel.org>; Tue, 24 Mar 2020 18:13:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Nxjrg0CF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WczF8mfM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727347AbgCXSM6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Mar 2020 14:12:58 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:28856 "EHLO
+        id S1727334AbgCXSNA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Mar 2020 14:13:00 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:37404 "EHLO
         us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727034AbgCXSM5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 24 Mar 2020 14:12:57 -0400
+        by vger.kernel.org with ESMTP id S1727611AbgCXSNA (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 24 Mar 2020 14:13:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585073576;
+        s=mimecast20190719; t=1585073578;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4mczQwa1X+bZj8aJ0jWpRNwTlrYNKYVpc82GHMIPVFQ=;
-        b=Nxjrg0CFJAH6tU7VbefJhW1cjBOWWzUQWYOdsTMRvUChc3C8ArSdprmfhWd9p3BLA/EDOg
-        F7Y8q9juWLcOejQ2hXm51BoYqYkhYdUNGPd80ledJDrmfAf1qbvqvOb8ZhJFf6v3JdqJWP
-        k3hj60K3e7DGhVIGIZ/OfaVjZVJ91R0=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tSq0g3BWcscqwecq9OzTA1nIWwl388abRfl7XMKFSlI=;
+        b=WczF8mfMJvFs4IxXJwssO/34NHR4Fo5+9mOrpvHQgt5XLBcLbVxqah9plUKabmdg4TiYju
+        wDC9Tld9PhnVlrwhRjFDFXg2cWvsSpQ3YUErRKU1B7n54zp0IAHb0JR1ObUh96krUbnp65
+        4JDpVQF2V1YCUYosHhXVJgIancgRtk4=
 Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
  [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-66-csXKA5Y4NkO6_QCApSeiKA-1; Tue, 24 Mar 2020 14:12:55 -0400
-X-MC-Unique: csXKA5Y4NkO6_QCApSeiKA-1
-Received: by mail-wr1-f70.google.com with SMTP id d17so9616826wrw.19
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2020 11:12:55 -0700 (PDT)
+ us-mta-376-P0SZjNf2OV6ZN2cEVa0rFw-1; Tue, 24 Mar 2020 14:12:57 -0400
+X-MC-Unique: P0SZjNf2OV6ZN2cEVa0rFw-1
+Received: by mail-wr1-f70.google.com with SMTP id h17so9614244wru.16
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2020 11:12:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=4mczQwa1X+bZj8aJ0jWpRNwTlrYNKYVpc82GHMIPVFQ=;
-        b=Gkh7XNXYqzawU21GQuZdgyvRGYGjEt5oCqefHUbKDrrD8NQ96EDshlgwFhWCQV4Ug/
-         Jy7Yh156UUOUeu/DQdIKwSYM1/UUK9Q8pPDWMofkNIjGYlCiskVs5m+Tz4wuBQaxfNDr
-         CmvWdcWIYInlVCpTYz5Oxns9f0cfk+9p6k7DVJZgadpWu5I4zLxQ1xVXDpPZQNmahu1V
-         lkf5oRRyAZfDXV/A6pCIPZsANKPEWOuChpc0E10l9WOlY0eAAmC1qQ/bk/tf1YcQU93i
-         lQrsMBYx6orUhZXJFaLFwMqrMCVy0N+4qg4bV/pR+bAKMZV5JLpiaR1Lo3kDd8J6wX0H
-         lg8w==
-X-Gm-Message-State: ANhLgQ3Nwh7p5kjYA/ggZetES5n31kpIbQ9awCuJX+yPGdocp4NVwK32
-        0+tiD4mmYDyZ2RD9GJLmH/1VDoEuWw84TAmh4VoMjMhPWOqJO8NLcBW+jOuRxOIk4/otYBH0UI9
-        hvVzlcX0+h+Xj
-X-Received: by 2002:adf:9796:: with SMTP id s22mr37311441wrb.31.1585073574076;
-        Tue, 24 Mar 2020 11:12:54 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vvbHgGSgZlwukSSqY1srvKdIOLLHUPuYtLWfIoqPtcygq7nnaHqztsiQjQcA8zv0M5lMc2ayA==
-X-Received: by 2002:adf:9796:: with SMTP id s22mr37311407wrb.31.1585073573735;
-        Tue, 24 Mar 2020 11:12:53 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=tSq0g3BWcscqwecq9OzTA1nIWwl388abRfl7XMKFSlI=;
+        b=c8HtBdWzJJcrtGpcgG6q+BP2PSeISvMqMvmO3f2pZQg+7CbdRkfySA/kXLD2SQoonc
+         CxtCc4t4wKVTVeuG8anO3TI/u9p4Z02M8AxZdJ/GbnmG9av6czhej40KNN1VRpv8wjHS
+         43km6AzCPupl8VUYgtGGENBnl2LVBRovNTyhYJtputIGQmLM6mwP3IpXQDrauEHzyYNW
+         pee4Wnxdf5p1wLCHTUblnjyFCXI9J/Dp8mPO9vGODMe2aC9pjvENuxcDh6M2TOGGtXoQ
+         EB4CFftYYPZMslnS/hfxrooE9RWLm62HGGpUKGQffpMm6wz/vVmm09YyLYkj10qiOH46
+         R6pQ==
+X-Gm-Message-State: ANhLgQ2kHX8kZbII0MPBAeKzPscPGjfmT6xYjtZTNWtcxjDfR05WiDJI
+        uDKfYKNTbAdON0qKqijvzBE7fFFqM3qaRx6SRvW+3WNUaNpwyBUw23u/4MWyQUzMUB7oz299bWx
+        MvgPoc/INDdAx
+X-Received: by 2002:a05:600c:da:: with SMTP id u26mr7434908wmm.117.1585073575829;
+        Tue, 24 Mar 2020 11:12:55 -0700 (PDT)
+X-Google-Smtp-Source: ADFU+vtE2snWQd3U9Jm0nj2e7Xx4XiNovziigWM+YrFQhUJ7b6xuztOVXe52JbbBukTeNQtkOKfgkA==
+X-Received: by 2002:a05:600c:da:: with SMTP id u26mr7434876wmm.117.1585073575644;
+        Tue, 24 Mar 2020 11:12:55 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id t126sm5604773wmb.27.2020.03.24.11.12.52
+        by smtp.gmail.com with ESMTPSA id p22sm5281840wmg.37.2020.03.24.11.12.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 11:12:52 -0700 (PDT)
+        Tue, 24 Mar 2020 11:12:54 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 2135C18158B; Tue, 24 Mar 2020 19:12:52 +0100 (CET)
-Subject: [PATCH bpf-next v3 0/4] XDP: Support atomic replacement of XDP
- interface attachments
+        id 4002018158B; Tue, 24 Mar 2020 19:12:54 +0100 (CET)
+Subject: [PATCH bpf-next v3 2/4] tools: Add EXPECTED_ID-related definitions in
+ if_link.h
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
@@ -74,8 +76,10 @@ Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         John Fastabend <john.fastabend@gmail.com>,
         Lorenz Bauer <lmb@cloudflare.com>, Andrey Ignatov <rdna@fb.com>
-Date:   Tue, 24 Mar 2020 19:12:52 +0100
-Message-ID: <158507357205.6925.17804771242752938867.stgit@toke.dk>
+Date:   Tue, 24 Mar 2020 19:12:54 +0100
+Message-ID: <158507357420.6925.493303763242155249.stgit@toke.dk>
+In-Reply-To: <158507357205.6925.17804771242752938867.stgit@toke.dk>
+References: <158507357205.6925.17804771242752938867.stgit@toke.dk>
 User-Agent: StGit/0.22
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -85,42 +89,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series adds support for atomically replacing the XDP program loaded on an
-interface. This is achieved by means of a new netlink attribute that can specify
-the expected previous program to replace on the interface. If set, the kernel
-will compare this "expected id" attribute with the program currently loaded on
-the interface, and reject the operation if it does not match.
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-With this primitive, userspace applications can avoid stepping on each other's
-toes when simultaneously updating the loaded XDP program.
+This adds the IFLA_XDP_EXPECTED_ID netlink attribute definition and the
+XDP_FLAGS_EXPECT_ID flag to if_link.h in tools/include.
 
-Changelog:
-
-v3:
-- Pass existing ID instead of FD (Jakub)
-- Use opts struct for new libbpf function (Andrii)
-
-v2:
-- Fix checkpatch nits and add .strict_start_type to netlink policy (Jakub)
-
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
+ tools/include/uapi/linux/if_link.h |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Toke Høiland-Jørgensen (4):
-      xdp: Support specifying expected existing program when attaching XDP
-      tools: Add EXPECTED_ID-related definitions in if_link.h
-      libbpf: Add function to set link XDP fd while specifying old program
-      selftests/bpf: Add tests for attaching XDP programs
-
-
- include/linux/netdevice.h                          |  2 +-
- include/uapi/linux/if_link.h                       |  4 +-
- net/core/dev.c                                     | 14 ++--
- net/core/rtnetlink.c                               | 13 ++++
- tools/include/uapi/linux/if_link.h                 |  4 +-
- tools/lib/bpf/libbpf.h                             |  8 +++
- tools/lib/bpf/libbpf.map                           |  1 +
- tools/lib/bpf/netlink.c                            | 34 +++++++++-
- .../testing/selftests/bpf/prog_tests/xdp_attach.c  | 74 ++++++++++++++++++++++
- 9 files changed, 145 insertions(+), 9 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_attach.c
+diff --git a/tools/include/uapi/linux/if_link.h b/tools/include/uapi/linux/if_link.h
+index 024af2d1d0af..a6c14ae083e3 100644
+--- a/tools/include/uapi/linux/if_link.h
++++ b/tools/include/uapi/linux/if_link.h
+@@ -960,11 +960,12 @@ enum {
+ #define XDP_FLAGS_SKB_MODE		(1U << 1)
+ #define XDP_FLAGS_DRV_MODE		(1U << 2)
+ #define XDP_FLAGS_HW_MODE		(1U << 3)
++#define XDP_FLAGS_EXPECT_ID		(1U << 4)
+ #define XDP_FLAGS_MODES			(XDP_FLAGS_SKB_MODE | \
+ 					 XDP_FLAGS_DRV_MODE | \
+ 					 XDP_FLAGS_HW_MODE)
+ #define XDP_FLAGS_MASK			(XDP_FLAGS_UPDATE_IF_NOEXIST | \
+-					 XDP_FLAGS_MODES)
++					 XDP_FLAGS_MODES | XDP_FLAGS_EXPECT_ID)
+ 
+ /* These are stored into IFLA_XDP_ATTACHED on dump. */
+ enum {
+@@ -984,6 +985,7 @@ enum {
+ 	IFLA_XDP_DRV_PROG_ID,
+ 	IFLA_XDP_SKB_PROG_ID,
+ 	IFLA_XDP_HW_PROG_ID,
++	IFLA_XDP_EXPECTED_ID,
+ 	__IFLA_XDP_MAX,
+ };
+ 
 
