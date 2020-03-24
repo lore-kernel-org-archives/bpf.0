@@ -2,147 +2,64 @@ Return-Path: <SRS0=N94o=5J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A33C6C10DCE
-	for <bpf@archiver.kernel.org>; Tue, 24 Mar 2020 04:53:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72FF1C10DCE
+	for <bpf@archiver.kernel.org>; Tue, 24 Mar 2020 04:54:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6617120663
-	for <bpf@archiver.kernel.org>; Tue, 24 Mar 2020 04:53:42 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YSofh0ix"
+	by mail.kernel.org (Postfix) with ESMTP id 533C720663
+	for <bpf@archiver.kernel.org>; Tue, 24 Mar 2020 04:54:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725922AbgCXExm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Mar 2020 00:53:42 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:43126 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725827AbgCXExl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Mar 2020 00:53:41 -0400
-Received: by mail-qk1-f193.google.com with SMTP id o10so12306995qki.10;
-        Mon, 23 Mar 2020 21:53:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=IvaYJ1XnXGHPe27WQZkUuZhxihBKOs9VY8C07B9yEtc=;
-        b=YSofh0ixcItzY1hCTU95+xJJbgvWPrCfXUamGcZffe9LcFlkcNsA3XbO/dOOF+U5X1
-         rW6Qv/H3BS3UGsDB9VmQoCdhD/2looREHK/bqvBxsMrrAnheGUQhrGDVx7w36Ij40Jkb
-         UO0FpVFiIDsQnZohprjFaM0XzyFA2b7hvX1FJUrRvbg2ga7G3EE2mih3VBZx42gHF0pz
-         /Hh/5po0Kz4dNEe3murKclutm1CVkJAHkdvUPSLkZhPO6Bt3jqHbW1VpmV7zV/+p117O
-         GyzcUnCA+esI0KByuHVf40W55fyNUr5pDFdgQFvXsNlr/4Y5yRw/7DhcQuXWGwJ/ZvNp
-         BRJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IvaYJ1XnXGHPe27WQZkUuZhxihBKOs9VY8C07B9yEtc=;
-        b=Y7jxq9+62h+neuFSwtxRRNpZsTAZtr1IVdQtHg2uD2P1WbfGgk+0HoiVsXPJzNSMrl
-         2q/8xopiqOXlJxlslRID/LPCb4NhYWBmYmqnQv7avpz/bKuMoThwRIYsxZ7IgjNopBld
-         BvQghhy9uAGBostEHdIv147SAUZuO1vwQm8G8r4S/USVjodAvqJkkk32QPgyM0vEzYGx
-         yrri1D85DE5cuJNylAFSqiLGppWqgvOegyj/r2Kphrp5pzK7tl23+CNB30LXVrRbzQko
-         JpnWfQp+3SrESC5Xgon8aKoQNbMUyZVhUcKBKfliy5fINIeS1MHK2ibokrfALj7Px6HJ
-         eRag==
-X-Gm-Message-State: ANhLgQ0MKejmsoLFDO26t8u/upxNbwSjAOzo9jsARqExeOCgDQFroL6K
-        2qKl4bBNuxm44LIiA4jVUVYwckXeVxLDTQLo4+Q=
-X-Google-Smtp-Source: ADFU+vtBtT+xud4VWucJrhJxHSb+2W+H0mZLbatGMPMjGuGByp1/zz1tkSu7QMyBfkeG7ZbBNOxst2yEkz18EiAe+z8=
-X-Received: by 2002:a37:e40d:: with SMTP id y13mr24084004qkf.39.1585025620414;
- Mon, 23 Mar 2020 21:53:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <158462359206.164779.15902346296781033076.stgit@toke.dk>
- <158462359315.164779.13931660750493121404.stgit@toke.dk> <20200319155236.3d8537c5@kicinski-fedora-PC1C0HJN>
- <875zez76ph.fsf@toke.dk> <20200320103530.2853c573@kicinski-fedora-PC1C0HJN>
- <5e750bd4ebf8d_233f2ab4c81425c4ce@john-XPS-13-9370.notmuch>
- <CAEf4BzbWa8vdyLuzr_nxFM3BtT+hhzjCe9UQF8Y5cN+sVqa72g@mail.gmail.com>
- <87tv2f48lp.fsf@toke.dk> <CAEf4BzYutqP0yAy-KyToUNHM6Z-6C-XaEwK25pK123gejG0s9Q@mail.gmail.com>
- <87h7ye3mf3.fsf@toke.dk> <1dfae7b8-4f80-13b8-c67c-82fe0a34f42a@gmail.com>
-In-Reply-To: <1dfae7b8-4f80-13b8-c67c-82fe0a34f42a@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 23 Mar 2020 21:53:29 -0700
-Message-ID: <CAEf4BzbT=vC8OF8cwFX8H5vphn8-dyWRjRSPq50t0Cg8onmYhA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/4] xdp: Support specifying expected existing
- program when attaching XDP
-To:     David Ahern <dsahern@gmail.com>
-Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Andrey Ignatov <rdna@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1725922AbgCXEyY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Mar 2020 00:54:24 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:56398 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725827AbgCXEyX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 Mar 2020 00:54:23 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 233D3157A5EBC;
+        Mon, 23 Mar 2020 21:54:23 -0700 (PDT)
+Date:   Mon, 23 Mar 2020 21:54:22 -0700 (PDT)
+Message-Id: <20200323.215422.456286022120023020.davem@davemloft.net>
+To:     zhengzengkai@huawei.com
+Cc:     sgoutham@marvell.com, rrichter@marvell.com, ast@kernel.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next] net: thunderx: remove set but not used
+ variable 'tail'
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200323065116.45399-1-zhengzengkai@huawei.com>
+References: <20200323065116.45399-1-zhengzengkai@huawei.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 23 Mar 2020 21:54:23 -0700 (PDT)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 23, 2020 at 6:01 PM David Ahern <dsahern@gmail.com> wrote:
->
-> On 3/23/20 1:23 PM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> >>>> I agree here. And yes, I've been working on extending bpf_link into
-> >>>> cgroup and then to XDP. We are still discussing some cgroup-specific
-> >>>> details, but the patch is ready. I'm going to post it as an RFC to g=
-et
-> >>>> the discussion started, before we do this for XDP.
-> >>>
-> >>> Well, my reason for being skeptic about bpf_link and proposing the
-> >>> netlink-based API is actually exactly this, but in reverse: With
-> >>> bpf_link we will be in the situation that everything related to a net=
-dev
-> >>> is configured over netlink *except* XDP.
->
-> +1
+From: Zheng Zengkai <zhengzengkai@huawei.com>
+Date: Mon, 23 Mar 2020 14:51:16 +0800
 
-Hm... so using **libbpf**'s bpf_set_link_xdp_fd() API (notice "bpf" in
-the name of the library and function, and notice no "netlink"), which
-exposes absolutely nothing about netlink (it's just an internal
-implementation detail and can easily change), is ok. But actually
-switching to libbpf's bpf_link would be out of ordinary? Especially
-considering that to use freplace programs (for libxdp and chaining)
-with libbpf you will use bpf_program and bpf_link abstractions
-anyways.
+> From: Zheng zengkai <zhengzengkai@huawei.com>
+> 
+> Fixes gcc '-Wunused-but-set-variable' warning:
+> 
+> drivers/net/ethernet/cavium/thunder/nicvf_queues.c: In function nicvf_sq_free_used_descs:
+> drivers/net/ethernet/cavium/thunder/nicvf_queues.c:1182:12: warning:
+>  variable tail set but not used [-Wunused-but-set-variable]
+> 
+> It's not used since commit 4863dea3fab01("net: Adding support for Cavium ThunderX network controller"),
+> so remove it.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Zheng zengkai <zhengzengkai@huawei.com>
 
->
-> >>
-> >> One can argue that everything related to use of BPF is going to be
-> >> uniform and done through BPF syscall? Given variety of possible BPF
-> >> hooks/targets, using custom ways to attach for all those many cases is
-> >> really bad as well, so having a unifying concept and single entry to
-> >> do this is good, no?
-> >
-> > Well, it depends on how you view the BPF subsystem's relation to the
-> > rest of the kernel, I suppose. I tend to view it as a subsystem that
-> > provides a bunch of functionality, which you can setup (using "internal=
-"
-> > BPF APIs), and then attach that object to a different subsystem
-> > (networking) using that subsystem's configuration APIs.
-> >
->
-> again, +1.
->
-> bpf syscall is used for program related manipulations like load and
-
-bpf syscall is used for way more than that, actually...
-
-> unload. Attaching that program to an object has a type unique solution -
-> e.g., netlink for XDP and ioctl for perf_events.
-
-That's not true and hasn't been true for at least a while now. cgroup
-programs, flow_dissector, lirc_mode2 (whatever that is, I have no
-idea) are attached with BPF_PROG_ATTACH. raw_tracepoint and all the
-fentry/fexit/fmod_ret/freplace attachments are done also through bpf
-syscall. For perf_event related stuff it's done through ioctls right
-now, but with bpf_link unification I wouldn't be surprised if it will
-be done through the same LINK_CREATE command soon, as is done for
-cgroup and *other* tracing bpf_links. Because consistent API and
-semantics is good, rather than having to do it N different ways for N
-different subsystems.
+Applied, thank you.
