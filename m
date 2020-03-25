@@ -2,191 +2,204 @@ Return-Path: <SRS0=PZ9s=5K=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 206B5C2D0E5
-	for <bpf@archiver.kernel.org>; Wed, 25 Mar 2020 19:48:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3D6FC2D0E7
+	for <bpf@archiver.kernel.org>; Wed, 25 Mar 2020 19:48:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EBCB320658
-	for <bpf@archiver.kernel.org>; Wed, 25 Mar 2020 19:48:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B8EC20773
+	for <bpf@archiver.kernel.org>; Wed, 25 Mar 2020 19:48:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="J8VeokEi"
+	dkim=pass (2048-bit key) header.d=fomichev-me.20150623.gappssmtp.com header.i=@fomichev-me.20150623.gappssmtp.com header.b="idXhkfkR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727391AbgCYTsB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Mar 2020 15:48:01 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:44490 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727259AbgCYTsB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 25 Mar 2020 15:48:01 -0400
-Received: by mail-lf1-f67.google.com with SMTP id j188so2844576lfj.11
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2020 12:47:59 -0700 (PDT)
+        id S1727259AbgCYTsM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Mar 2020 15:48:12 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:41327 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727281AbgCYTsL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 25 Mar 2020 15:48:11 -0400
+Received: by mail-pl1-f194.google.com with SMTP id t16so1207763plr.8
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2020 12:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=m+sWsfawp9IPajoIZdacO9dJYYta78Pw+YueeYzFlxY=;
-        b=J8VeokEiP3c6G7lK6+ho/hDzU0xo/hYsK36WzY+oz0mWQJu2vTWmP6XnvsA9cYT9N5
-         nqqsbWG/RFwkjbsq94/N10fjA5usQGnqs9lg09zavJDcntFYWRLBPaoUVe3g4k89jqC8
-         /N0wZsvGA1SxxoqBJ9OF2PAQHcqCZ6GlCZdsg=
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=gNRk+AqHgbXI95es83rWVUIu+SAdUK4LqSHgrKC0U/A=;
+        b=idXhkfkRTzW/YU35N2RHQoAWbNQ8TgDGenwD6d35Bu+J11tN77O5UX0CtlkVCR1fvz
+         gpUg36VydnIvN8mAYpMkKhQ9UyFD+6WD5rC2+uw7rbhXBoN4tg/d1XHoU+LsTXQ3+7Iy
+         /WHvPiV/0E9wZ1Jangg9K223n8joWGB8x3XNXh8Jtc/7+dvZ3xwjCFZzZvt4GAw7thMU
+         Q4oHI0DWXIRamR0fm+eOH6zqOtMnqN45h8R9ETVWJYg3p1Mu6G5x6012U6jNysrEdNwn
+         y5xui2FzK9jkteISc9IvagqYRiOmIM+IKDNmwMxRcMJJe8sdOKEqL65afXxgk0EARmmM
+         UFPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=m+sWsfawp9IPajoIZdacO9dJYYta78Pw+YueeYzFlxY=;
-        b=TaYx1Nh1cjEHiSQiZXyXg5bRGGNmenOKpCYa/wGlOpljZVzIaPoQnNsyTuh70i0Dek
-         FjgeEwzkCgP1yctWoyyIBQeMt8hzDJUAsBpHrC/2ztodjcZY+8NhOH2krNieNU8YIY7U
-         mkyi6n5bhLutVFX/ivZfk/ujHjrX/EzGmg2dLb041J3fKg0vdfjNO4/4OtskApkiPvuL
-         O9HJT5e9f0o8DGbQKhM+5GTi4hARsmgbjht1Dd8QuTz1qRlGQ8tSs13TKiq8GlHDUdVM
-         TGG3eoCM7qw8W56yZMnvxfPY+MyNEqhpT/jwV5HF+y3mUvQXM5moKJbsJytP0/6z5jUP
-         RmWA==
-X-Gm-Message-State: ANhLgQ2f7weOMnKSgdpWWxlh0xasrbTbmg+rSHufS1RIEeyyeDsBN912
-        DuDpKLTKVKkGKFeC5Rq25VsBw9lw9iU=
-X-Google-Smtp-Source: ADFU+vsXC2+G4dAEdq3BT0kzbpG7W1L+TlJ6Q9f3rfe8/j2ql4POnBClUnujbpyTjYOq/YSFp3UcGg==
-X-Received: by 2002:adf:b3d4:: with SMTP id x20mr4822089wrd.269.1585165199246;
-        Wed, 25 Mar 2020 12:39:59 -0700 (PDT)
-Received: from chromium.org (77-56-209-237.dclient.hispeed.ch. [77.56.209.237])
-        by smtp.gmail.com with ESMTPSA id o67sm135582wmo.5.2020.03.25.12.39.58
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gNRk+AqHgbXI95es83rWVUIu+SAdUK4LqSHgrKC0U/A=;
+        b=JWl1lYEr3xG+MmwC+0SeKlA5/+hv+g/o284qHJakGi8D2NW8h1rc2dseZXn6nuTH94
+         FiLWUlWF1Zr8XbXe95RwKHEk15TY+QMUGAgRQUEipKZUe9xi9JgDeuYHTIChvIhNfdZC
+         MHw55I1HK4BZZq30GLLSvER5+cQUvlQyxFncJcYGgSk2BZRvm3ug0etqLklpcY9PjKcX
+         jf3x3Z09TTkj2M91u3LU4VbdCMGaVTjQUayjhFDm1c12PM5D9Hiq+Dr91a3+oTsuz50K
+         eDrkR2HuXj1e0xbUQu2HFMHJfe3houIOk6To6HbxbOdgYVbbALCLMDb3eNhDYwUxeF2K
+         /ptQ==
+X-Gm-Message-State: ANhLgQ3cB4WOsqAMWM4j8iEoxE+G9VrKitm78GmPMPHsUyjD3azHONzA
+        0vlnevXF1YLtXnZ9qg5myv4Xdg==
+X-Google-Smtp-Source: ADFU+vsZjYZXQ0igbU1mabKTgvelhgYxrvogp20XzVi/eoGE0KTKsg5vF2H1Y8KqZlhurIYEC0I6oA==
+X-Received: by 2002:a17:90a:36e5:: with SMTP id t92mr5644174pjb.51.1585165688666;
+        Wed, 25 Mar 2020 12:48:08 -0700 (PDT)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id g16sm18274201pgb.54.2020.03.25.12.48.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2020 12:39:58 -0700 (PDT)
-From:   KP Singh <kpsingh@chromium.org>
-X-Google-Original-From: KP Singh <kpsingh>
-Date:   Wed, 25 Mar 2020 20:39:56 +0100
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Brendan Jackman <jackmanb@google.com>,
-        Florent Revest <revest@google.com>, Yonghong Song <yhs@fb.com>,
+        Wed, 25 Mar 2020 12:48:08 -0700 (PDT)
+Date:   Wed, 25 Mar 2020 12:48:07 -0700
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>, Paul Turner <pjt@google.com>,
-        Jann Horn <jannh@google.com>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH bpf-next v6 3/8] bpf: lsm: provide attachment points for
- BPF LSM programs
-Message-ID: <20200325193956.GA22898@chromium.org>
-References: <20200325152629.6904-1-kpsingh@chromium.org>
- <20200325152629.6904-4-kpsingh@chromium.org>
- <202003251225.923FF1DD7@keescook>
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next v2] libbpf: don't allocate 16M for log buffer by
+ default
+Message-ID: <20200325194807.GB2805006@mini-arch.hsd1.ca.comcast.net>
+References: <20200325162026.254799-1-sdf@google.com>
+ <CAEf4BzbEuWdb-77nm=o5doGfYbpWxbTe+U2mM+KH1hw6CnYuww@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202003251225.923FF1DD7@keescook>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAEf4BzbEuWdb-77nm=o5doGfYbpWxbTe+U2mM+KH1hw6CnYuww@mail.gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 25-Mär 12:28, Kees Cook wrote:
-> On Wed, Mar 25, 2020 at 04:26:24PM +0100, KP Singh wrote:
-> > From: KP Singh <kpsingh@google.com>
-> > 
-> > When CONFIG_BPF_LSM is enabled, nop functions, bpf_lsm_<hook_name>, are
-> > generated for each LSM hook. These functions are initialized as LSM
-> > hooks in a subsequent patch.
-> > 
-> > Signed-off-by: KP Singh <kpsingh@google.com>
-> > Reviewed-by: Brendan Jackman <jackmanb@google.com>
-> > Reviewed-by: Florent Revest <revest@google.com>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > Acked-by: Yonghong Song <yhs@fb.com>
+On 03/25, Andrii Nakryiko wrote:
+> On Wed, Mar 25, 2020 at 9:20 AM Stanislav Fomichev <sdf@google.com> wrote:
+> >
+> > For each prog/btf load we allocate and free 16 megs of verifier buffer.
+> > On production systems it doesn't really make sense because the
+> > programs/btf have gone through extensive testing and (mostly) guaranteed
+> > to successfully load.
+> >
+> > Let's assume successful case by default and skip buffer allocation
+> > on the first try. If there is an error, start with BPF_LOG_BUF_SIZE
+> > and double it on each ENOSPC iteration.
+> >
+> > v2:
+> > * Don't allocate the buffer at all on the first try (Andrii Nakryiko)
+> >
+> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
 > > ---
-> >  include/linux/bpf_lsm.h | 22 ++++++++++++++++++++++
-> >  kernel/bpf/bpf_lsm.c    | 14 ++++++++++++++
-> >  2 files changed, 36 insertions(+)
-> >  create mode 100644 include/linux/bpf_lsm.h
-> > 
-> > diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-> > new file mode 100644
-> > index 000000000000..83b96895829f
-> > --- /dev/null
-> > +++ b/include/linux/bpf_lsm.h
-> > @@ -0,0 +1,22 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
+> >  tools/lib/bpf/btf.c    | 20 +++++++++++++++-----
+> >  tools/lib/bpf/libbpf.c | 22 ++++++++++++++--------
+> >  2 files changed, 29 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> > index 3d1c25fc97ae..bfef3d606b54 100644
+> > --- a/tools/lib/bpf/btf.c
+> > +++ b/tools/lib/bpf/btf.c
+> > @@ -657,22 +657,32 @@ int btf__finalize_data(struct bpf_object *obj, struct btf *btf)
+> >
+> >  int btf__load(struct btf *btf)
+> >  {
+> > -       __u32 log_buf_size = BPF_LOG_BUF_SIZE;
+> > +       __u32 log_buf_size = 0;
+> >         char *log_buf = NULL;
+> >         int err = 0;
+> >
+> >         if (btf->fd >= 0)
+> >                 return -EEXIST;
+> >
+> > -       log_buf = malloc(log_buf_size);
+> > -       if (!log_buf)
+> > -               return -ENOMEM;
+> > +retry_load:
+> > +       if (log_buf_size) {
+> > +               log_buf = malloc(log_buf_size);
+> > +               if (!log_buf)
+> > +                       return -ENOMEM;
+> >
+> > -       *log_buf = 0;
+> > +               *log_buf = 0;
+> > +       }
+> >
+> >         btf->fd = bpf_load_btf(btf->data, btf->data_size,
+> >                                log_buf, log_buf_size, false);
+> >         if (btf->fd < 0) {
+> > +               if (!log_buf || errno == ENOSPC) {
+> > +                       log_buf_size = max((__u32)BPF_LOG_BUF_SIZE,
+> > +                                          log_buf_size << 1);
+> > +                       free(log_buf);
+> > +                       goto retry_load;
+> > +               }
 > > +
-> > +/*
-> > + * Copyright (C) 2020 Google LLC.
-> > + */
+> >                 err = -errno;
+> >                 pr_warn("Error loading BTF: %s(%d)\n", strerror(errno), errno);
+> >                 if (*log_buf)
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 085e41f9b68e..b2fd43a03708 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -4855,8 +4855,8 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+> >  {
+> >         struct bpf_load_program_attr load_attr;
+> >         char *cp, errmsg[STRERR_BUFSIZE];
+> > -       int log_buf_size = BPF_LOG_BUF_SIZE;
+> > -       char *log_buf;
+> > +       size_t log_buf_size = 0;
+> > +       char *log_buf = NULL;
+> >         int btf_fd, ret;
+> >
+> >         if (!insns || !insns_cnt)
+> > @@ -4896,22 +4896,28 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+> >         load_attr.prog_flags = prog->prog_flags;
+> >
+> >  retry_load:
+> > -       log_buf = malloc(log_buf_size);
+> > -       if (!log_buf)
+> > -               pr_warn("Alloc log buffer for bpf loader error, continue without log\n");
+> > +       if (log_buf_size) {
+> > +               log_buf = malloc(log_buf_size);
+> > +               if (!log_buf)
+> > +                       pr_warn("Alloc log buffer for bpf loader error, continue without log\n");
 > > +
-> > +#ifndef _LINUX_BPF_LSM_H
-> > +#define _LINUX_BPF_LSM_H
-> > +
-> > +#include <linux/bpf.h>
-> > +#include <linux/lsm_hooks.h>
-> > +
-> > +#ifdef CONFIG_BPF_LSM
-> > +
-> > +#define LSM_HOOK(RET, DEFAULT, NAME, ...) \
-> > +	RET bpf_lsm_##NAME(__VA_ARGS__);
-> > +#include <linux/lsm_hook_defs.h>
-> > +#undef LSM_HOOK
-> > +
-> > +#endif /* CONFIG_BPF_LSM */
-> > +
-> > +#endif /* _LINUX_BPF_LSM_H */
-> > diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> > index 82875039ca90..1210a819ca52 100644
-> > --- a/kernel/bpf/bpf_lsm.c
-> > +++ b/kernel/bpf/bpf_lsm.c
-> > @@ -7,6 +7,20 @@
-> >  #include <linux/filter.h>
-> >  #include <linux/bpf.h>
-> >  #include <linux/btf.h>
-> > +#include <linux/lsm_hooks.h>
-> > +#include <linux/bpf_lsm.h>
-> > +
-> > +/* For every LSM hook that allows attachment of BPF programs, declare a nop
-> > + * function where a BPF program can be attached.
-> > + */
-> > +#define LSM_HOOK(RET, DEFAULT, NAME, ...) 	\
-> > +noinline __weak RET bpf_lsm_##NAME(__VA_ARGS__)	\
 > 
-> I don't think the __weak is needed any more here?
-
-This was suggested in:
-
- https://lore.kernel.org/bpf/20200221022537.wbmhdfkdbfvw2pww@ast-mbp/
-
-"I think I saw cases when gcc ignored 'noinline' when function is
-defined in the same file and still performed inlining while keeping
-the function body.  To be safe I think __weak is necessary. That will
-guarantee noinline."
-
-It happened to work nicely with the previous approach for the special
-hooks but the actual reason for adding the __weak was to guarrantee
-that these functions don't get inlined.
-
+> considering that log_buf is not allocated first time, if it fails to
+> allocate on retry then it should be an error, no?
 > 
-> > +{						\
-> > +	return DEFAULT;				\
+> Otherwise looks good, please add my ack after fixing this:
 > 
-> I'm impressed that LSM_RET_VOID actually works. :)
+> Acked-by: Andrii Nakryiko <andriin@fb.com>
+Thx, will respin a v3. Returning -ENOMEM also makes it more consistent with
+btf retry logic.
 
-All the credit goes to Andrii :)
-
-- KP
-
-> 
-> -Kees
-> 
-> > +}
+> > +               *log_buf = 0;
+> > +       }
+> >
+> >         ret = bpf_load_program_xattr(&load_attr, log_buf, log_buf_size);
+> >
+> >         if (ret >= 0) {
+> > -               if (load_attr.log_level)
+> > +               if (log_buf && load_attr.log_level)
+> >                         pr_debug("verifier log:\n%s", log_buf);
+> >                 *pfd = ret;
+> >                 ret = 0;
+> >                 goto out;
+> >         }
+> >
+> > -       if (errno == ENOSPC) {
+> > -               log_buf_size <<= 1;
+> > +       if (!log_buf || errno == ENOSPC) {
+> > +               log_buf_size = max((size_t)BPF_LOG_BUF_SIZE,
+> > +                                  log_buf_size << 1);
 > > +
-> > +#include <linux/lsm_hook_defs.h>
-> > +#undef LSM_HOOK
-> >  
-> >  const struct bpf_prog_ops lsm_prog_ops = {
-> >  };
-> > -- 
-> > 2.20.1
-> > 
-> 
-> -- 
-> Kees Cook
+> >                 free(log_buf);
+> >                 goto retry_load;
+> >         }
+> > --
+> > 2.25.1.696.g5e7596f4ac-goog
+> >
