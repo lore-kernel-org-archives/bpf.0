@@ -5,41 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAD44C1975A
-	for <bpf@archiver.kernel.org>; Wed, 25 Mar 2020 06:59:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FBBEC1975A
+	for <bpf@archiver.kernel.org>; Wed, 25 Mar 2020 06:59:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 96EFE20772
-	for <bpf@archiver.kernel.org>; Wed, 25 Mar 2020 06:59:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7AAB20772
+	for <bpf@archiver.kernel.org>; Wed, 25 Mar 2020 06:59:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="N9Jrnszv"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="eo37ebo6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726104AbgCYG7p (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Mar 2020 02:59:45 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36688 "EHLO
+        id S1726017AbgCYG76 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Mar 2020 02:59:58 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:7030 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725907AbgCYG7o (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 25 Mar 2020 02:59:44 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02P6oTai007430
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2020 23:59:43 -0700
+        by vger.kernel.org with ESMTP id S1725907AbgCYG76 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 25 Mar 2020 02:59:58 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02P6xupC021220
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2020 23:59:56 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type; s=facebook; bh=jqSb1wk77OH6WwEaem0EVwhlB7otAbSHi3a2I+4sJ7U=;
- b=N9JrnszvtllyKSr6OaNwtwXZNfRO7vlnd8I8eMEdHmqZzF+HGA4ceyqgYyjT+pgGYvVi
- u1VvR0SKvvGrrkQyyXz5Ih0sPS9A4rs78dmkcNlgidSsPYDpb6t24apKXorfQB74xbBz
- TS8ol8DgAw9Xl5igE2c/lEehujcSg0sYBc0= 
+ content-type; s=facebook; bh=TIP5YKzDJ8AN2ByqCGv0FhNrLUtimv+i+/tXVxcy3Dc=;
+ b=eo37ebo6y6/Vqdb6YuQe8heIDGaFbzCV2M1srLLym8LwssgKX9B39HNqpXDLPm9Yeejf
+ vgDyn9rZbbfQl2BleyYvbbxk1UXQvGEpHEHnHH38/xYCSFn2s9LsCeeDKdI2nDM2m5c8
+ 3O35HCIc2XRTZMmqI3tUdByWmCCCVDwVUa0= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 2ywgem1k7g-1
+        by mx0a-00082601.pphosted.com with ESMTP id 2yy3gy7t82-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 24 Mar 2020 23:59:43 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 24 Mar 2020 23:59:56 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Tue, 24 Mar 2020 23:59:41 -0700
+ 15.1.1847.3; Tue, 24 Mar 2020 23:59:36 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 5B4812EC34F3; Tue, 24 Mar 2020 23:59:38 -0700 (PDT)
+        id C93A82EC34F3; Tue, 24 Mar 2020 23:59:31 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 4/6] bpf: implement bpf_prog replacement for an active bpf_cgroup_link
-Date:   Tue, 24 Mar 2020 23:57:44 -0700
-Message-ID: <20200325065746.640559-5-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 1/6] bpf: factor out cgroup storages operations
+Date:   Tue, 24 Mar 2020 23:57:41 -0700
+Message-ID: <20200325065746.640559-2-andriin@fb.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200325065746.640559-1-andriin@fb.com>
 References: <20200325065746.640559-1-andriin@fb.com>
@@ -59,308 +59,240 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
  definitions=2020-03-25_01:2020-03-23,2020-03-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- bulkscore=0 lowpriorityscore=0 suspectscore=8 phishscore=0
- priorityscore=1501 mlxscore=0 adultscore=0 spamscore=0 mlxlogscore=999
- malwarescore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2003020000 definitions=main-2003250056
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ bulkscore=0 adultscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
+ clxscore=1015 malwarescore=0 mlxlogscore=820 spamscore=0 suspectscore=25
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003250058
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add new operation (LINK_UPDATE), which allows to replace active bpf_prog from
-under given bpf_link. Currently this is only supported for bpf_cgroup_link,
-but will be extended to other kinds of bpf_links in follow-up patches.
-
-For bpf_cgroup_link, implemented functionality matches existing semantics for
-direct bpf_prog attachment (including BPF_F_REPLACE flag). User can either
-unconditionally set new bpf_prog regardless of which bpf_prog is currently
-active under given bpf_link, or, optionally, can specify expected active
-bpf_prog. If active bpf_prog doesn't match expected one, no changes are
-performed, old bpf_link stays intact and attached, operation returns
-a failure.
-
-cgroup_bpf_replace() operation is resolving race between auto-detachment and
-bpf_prog update in the same fashion as it's done for bpf_link detachment,
-except in this case update has no way of succeeding because of target cgroup
-marked as dying. So in this case error is returned.
+Refactor cgroup attach/detach code to abstract away common operations
+performed on all types of cgroup storages. This makes high-level logic more
+apparent, plus allows to reuse more code across multiple functions.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- include/linux/bpf-cgroup.h | 11 ++++++
- include/uapi/linux/bpf.h   | 12 ++++++
- kernel/bpf/cgroup.c        | 80 ++++++++++++++++++++++++++++++++++++++
- kernel/bpf/syscall.c       | 52 +++++++++++++++++++++++++
- kernel/cgroup/cgroup.c     | 27 +++++++++++++
- 5 files changed, 182 insertions(+)
+ kernel/bpf/cgroup.c | 118 +++++++++++++++++++++++++++-----------------
+ 1 file changed, 72 insertions(+), 46 deletions(-)
 
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index d2d969669564..a8d78efd3cea 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -100,6 +100,8 @@ int __cgroup_bpf_attach(struct cgroup *cgrp,
- int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
- 			struct bpf_cgroup_link *link,
- 			enum bpf_attach_type type);
-+int __cgroup_bpf_replace(struct cgroup *cgrp, struct bpf_cgroup_link *link,
-+			 struct bpf_prog *new_prog);
- int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
- 		       union bpf_attr __user *uattr);
- 
-@@ -110,6 +112,8 @@ int cgroup_bpf_attach(struct cgroup *cgrp,
- 		      u32 flags);
- int cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
- 		      enum bpf_attach_type type);
-+int cgroup_bpf_replace(struct bpf_link *link, struct bpf_prog *old_prog,
-+		       struct bpf_prog *new_prog);
- int cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
- 		     union bpf_attr __user *uattr);
- 
-@@ -373,6 +377,13 @@ static inline int cgroup_bpf_link_attach(const union bpf_attr *attr,
- 	return -EINVAL;
- }
- 
-+static inline int cgroup_bpf_replace(struct bpf_link *link,
-+				     struct bpf_prog *old_prog,
-+				     struct bpf_prog *new_prog)
-+{
-+	return -EINVAL;
-+}
-+
- static inline int cgroup_bpf_prog_query(const union bpf_attr *attr,
- 					union bpf_attr __user *uattr)
- {
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 948ebbfd401b..d7583483fca5 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -112,6 +112,7 @@ enum bpf_cmd {
- 	BPF_MAP_UPDATE_BATCH,
- 	BPF_MAP_DELETE_BATCH,
- 	BPF_LINK_CREATE,
-+	BPF_LINK_UPDATE,
- };
- 
- enum bpf_map_type {
-@@ -575,6 +576,17 @@ union bpf_attr {
- 		__u32		attach_type;	/* attach type */
- 		__u32		flags;		/* extra flags */
- 	} link_create;
-+
-+	struct { /* struct used by BPF_LINK_UPDATE command */
-+		__u32		link_fd;	/* link fd */
-+		/* new program fd to update link with */
-+		__u32		new_prog_fd;
-+		__u32		flags;		/* extra flags */
-+		/* expected link's program fd; is specified only if
-+		 * BPF_F_REPLACE flag is set in flags */
-+		__u32		old_prog_fd;
-+	} link_update;
-+
- } __attribute__((aligned(8)));
- 
- /* The description below is an attempt at providing documentation to eBPF
 diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index c5cedc8c3428..2c70e2c95cb7 100644
+index 9a500fadbef5..9c8472823a7f 100644
 --- a/kernel/bpf/cgroup.c
 +++ b/kernel/bpf/cgroup.c
-@@ -506,6 +506,86 @@ int __cgroup_bpf_attach(struct cgroup *cgrp,
- 	return err;
+@@ -28,6 +28,58 @@ void cgroup_bpf_offline(struct cgroup *cgrp)
+ 	percpu_ref_kill(&cgrp->bpf.refcnt);
  }
  
-+/* Swap updated BPF program for given link in effective program arrays across
-+ * all descendant cgroups. This function is guaranteed to succeed.
-+ */
-+static void replace_effective_prog(struct cgroup *cgrp,
-+				   enum bpf_attach_type type,
-+				   struct bpf_cgroup_link *link)
++static void bpf_cgroup_storages_free(struct bpf_cgroup_storage *storages[])
 +{
-+	struct bpf_prog_array_item *item;
-+	struct cgroup_subsys_state *css;
-+	struct bpf_prog_array *progs;
-+	struct bpf_prog_list *pl;
-+	struct list_head *head;
-+	struct cgroup *cg;
-+	int pos;
++	enum bpf_cgroup_storage_type stype;
 +
-+	css_for_each_descendant_pre(css, &cgrp->self) {
-+		struct cgroup *desc = container_of(css, struct cgroup, self);
-+
-+		if (percpu_ref_is_zero(&desc->bpf.refcnt))
-+			continue;
-+
-+		/* found position of link in effective progs array */
-+		for (pos = 0, cg = desc; cg; cg = cgroup_parent(cg)) {
-+			if (pos && !(cg->bpf.flags[type] & BPF_F_ALLOW_MULTI))
-+				continue;
-+
-+			head = &cg->bpf.progs[type];
-+			list_for_each_entry(pl, head, node) {
-+				if (!prog_list_prog(pl))
-+					continue;
-+				if (pl->link == link)
-+					goto found;
-+				pos++;
-+			}
-+		}
-+found:
-+		BUG_ON(!cg);
-+		progs = rcu_dereference_protected(
-+				desc->bpf.effective[type],
-+				lockdep_is_held(&cgroup_mutex));
-+		item = &progs->items[pos];
-+		WRITE_ONCE(item->prog, link->link.prog);
-+	}
++	for_each_cgroup_storage_type(stype)
++		bpf_cgroup_storage_free(storages[stype]);
 +}
 +
-+/**
-+ * __cgroup_bpf_replace() - Replace link's program and propagate the change
-+ *                          to descendants
-+ * @cgrp: The cgroup which descendants to traverse
-+ * @link: A link for which to replace BPF program
-+ * @type: Type of attach operation
-+ *
-+ * Must be called with cgroup_mutex held.
-+ */
-+int __cgroup_bpf_replace(struct cgroup *cgrp, struct bpf_cgroup_link *link,
-+			 struct bpf_prog *new_prog)
++static int bpf_cgroup_storages_alloc(struct bpf_cgroup_storage *storages[],
++				     struct bpf_prog *prog)
 +{
-+	struct list_head *progs = &cgrp->bpf.progs[link->type];
-+	struct bpf_prog *old_prog;
-+	struct bpf_prog_list *pl;
-+	bool found = false;
++	enum bpf_cgroup_storage_type stype;
 +
-+	if (link->link.prog->type != new_prog->type)
-+		return -EINVAL;
-+
-+	list_for_each_entry(pl, progs, node) {
-+		if (pl->link == link) {
-+			found = true;
-+			break;
++	for_each_cgroup_storage_type(stype) {
++		storages[stype] = bpf_cgroup_storage_alloc(prog, stype);
++		if (IS_ERR(storages[stype])) {
++			storages[stype] = NULL;
++			bpf_cgroup_storages_free(storages);
++			return -ENOMEM;
 +		}
 +	}
-+	if (!found)
-+		return -ENOENT;
 +
-+	old_prog = xchg(&link->link.prog, new_prog);
-+	replace_effective_prog(cgrp, link->type, link);
-+	bpf_prog_put(old_prog);
 +	return 0;
 +}
 +
- static struct bpf_prog_list *find_detach_entry(struct list_head *progs,
- 					       struct bpf_prog *prog,
- 					       struct bpf_cgroup_link *link,
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 638ec8b54741..a52426e1e0df 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3572,6 +3572,55 @@ static int link_create(union bpf_attr *attr)
- 	return ret;
- }
- 
-+#define BPF_LINK_UPDATE_LAST_FIELD link_update.old_prog_fd
-+
-+static int link_update(union bpf_attr *attr)
++static void bpf_cgroup_storages_assign(struct bpf_cgroup_storage *dst[],
++				       struct bpf_cgroup_storage *src[])
 +{
-+	struct bpf_prog *old_prog = NULL, *new_prog;
-+	struct bpf_link *link;
-+	u32 flags;
-+	int ret;
++	enum bpf_cgroup_storage_type stype;
 +
-+	if (CHECK_ATTR(BPF_LINK_UPDATE))
-+		return -EINVAL;
-+
-+	flags = attr->link_update.flags;
-+	if (flags & ~BPF_F_REPLACE)
-+		return -EINVAL;
-+
-+	link = bpf_link_get_from_fd(attr->link_update.link_fd);
-+	if (IS_ERR(link))
-+		return PTR_ERR(link);
-+
-+	new_prog = bpf_prog_get(attr->link_update.new_prog_fd);
-+	if (IS_ERR(new_prog))
-+		return PTR_ERR(new_prog);
-+
-+	if (flags & BPF_F_REPLACE) {
-+		old_prog = bpf_prog_get(attr->link_update.old_prog_fd);
-+		if (IS_ERR(old_prog)) {
-+			ret = PTR_ERR(old_prog);
-+			old_prog = NULL;
-+			goto out_put_progs;
-+		}
-+	}
-+
-+#ifdef CONFIG_CGROUP_BPF
-+	if (link->ops == &bpf_cgroup_link_lops) {
-+		ret = cgroup_bpf_replace(link, old_prog, new_prog);
-+		goto out_put_progs;
-+	}
-+#endif
-+	ret = -EINVAL;
-+
-+out_put_progs:
-+	if (old_prog)
-+		bpf_prog_put(old_prog);
-+	if (ret)
-+		bpf_prog_put(new_prog);
-+	return ret;
++	for_each_cgroup_storage_type(stype)
++		dst[stype] = src[stype];
 +}
 +
- SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size)
- {
- 	union bpf_attr attr = {};
-@@ -3685,6 +3734,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
- 	case BPF_LINK_CREATE:
- 		err = link_create(&attr);
- 		break;
-+	case BPF_LINK_UPDATE:
-+		err = link_update(&attr);
-+		break;
- 	default:
- 		err = -EINVAL;
- 		break;
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 219624fba9ba..915dda3f7f19 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -6317,6 +6317,33 @@ int cgroup_bpf_attach(struct cgroup *cgrp,
- 	return ret;
- }
- 
-+int cgroup_bpf_replace(struct bpf_link *link, struct bpf_prog *old_prog,
-+		       struct bpf_prog *new_prog)
++static void bpf_cgroup_storages_link(struct bpf_cgroup_storage *storages[],
++				     struct cgroup* cgrp,
++				     enum bpf_attach_type attach_type)
 +{
-+	struct bpf_cgroup_link *cg_link;
-+	int ret;
++	enum bpf_cgroup_storage_type stype;
 +
-+	if (link->ops != &bpf_cgroup_link_lops)
-+		return -EINVAL;
-+
-+	cg_link = container_of(link, struct bpf_cgroup_link, link);
-+
-+	mutex_lock(&cgroup_mutex);
-+	/* link might have been auto-released by dying cgroup, so fail */
-+	if (!cg_link->cgroup) {
-+		ret = -EINVAL;
-+		goto out_unlock;
-+	}
-+	if (old_prog && link->prog != old_prog) {
-+		ret = -EPERM;
-+		goto out_unlock;
-+	}
-+	ret = __cgroup_bpf_replace(cg_link->cgroup, cg_link, new_prog);
-+out_unlock:
-+	mutex_unlock(&cgroup_mutex);
-+	return ret;
++	for_each_cgroup_storage_type(stype)
++		bpf_cgroup_storage_link(storages[stype], cgrp, attach_type);
 +}
 +
- int cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
- 		      enum bpf_attach_type type)
++static void bpf_cgroup_storages_unlink(struct bpf_cgroup_storage *storages[])
++{
++	enum bpf_cgroup_storage_type stype;
++
++	for_each_cgroup_storage_type(stype)
++		bpf_cgroup_storage_unlink(storages[stype]);
++}
++
+ /**
+  * cgroup_bpf_release() - put references of all bpf programs and
+  *                        release all cgroup bpf data
+@@ -37,7 +89,6 @@ static void cgroup_bpf_release(struct work_struct *work)
  {
+ 	struct cgroup *p, *cgrp = container_of(work, struct cgroup,
+ 					       bpf.release_work);
+-	enum bpf_cgroup_storage_type stype;
+ 	struct bpf_prog_array *old_array;
+ 	unsigned int type;
+ 
+@@ -50,10 +101,8 @@ static void cgroup_bpf_release(struct work_struct *work)
+ 		list_for_each_entry_safe(pl, tmp, progs, node) {
+ 			list_del(&pl->node);
+ 			bpf_prog_put(pl->prog);
+-			for_each_cgroup_storage_type(stype) {
+-				bpf_cgroup_storage_unlink(pl->storage[stype]);
+-				bpf_cgroup_storage_free(pl->storage[stype]);
+-			}
++			bpf_cgroup_storages_unlink(pl->storage);
++			bpf_cgroup_storages_free(pl->storage);
+ 			kfree(pl);
+ 			static_branch_dec(&cgroup_bpf_enabled_key);
+ 		}
+@@ -138,7 +187,7 @@ static int compute_effective_progs(struct cgroup *cgrp,
+ 				   enum bpf_attach_type type,
+ 				   struct bpf_prog_array **array)
+ {
+-	enum bpf_cgroup_storage_type stype;
++	struct bpf_prog_array_item *item;
+ 	struct bpf_prog_array *progs;
+ 	struct bpf_prog_list *pl;
+ 	struct cgroup *p = cgrp;
+@@ -166,10 +215,10 @@ static int compute_effective_progs(struct cgroup *cgrp,
+ 			if (!pl->prog)
+ 				continue;
+ 
+-			progs->items[cnt].prog = pl->prog;
+-			for_each_cgroup_storage_type(stype)
+-				progs->items[cnt].cgroup_storage[stype] =
+-					pl->storage[stype];
++			item = &progs->items[cnt];
++			item->prog = pl->prog;
++			bpf_cgroup_storages_assign(item->cgroup_storage,
++						   pl->storage);
+ 			cnt++;
+ 		}
+ 	} while ((p = cgroup_parent(p)));
+@@ -305,7 +354,6 @@ int __cgroup_bpf_attach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE],
+ 		*old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {NULL};
+ 	struct bpf_prog_list *pl, *replace_pl = NULL;
+-	enum bpf_cgroup_storage_type stype;
+ 	int err;
+ 
+ 	if (((flags & BPF_F_ALLOW_OVERRIDE) && (flags & BPF_F_ALLOW_MULTI)) ||
+@@ -341,37 +389,25 @@ int __cgroup_bpf_attach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 		replace_pl = list_first_entry(progs, typeof(*pl), node);
+ 	}
+ 
+-	for_each_cgroup_storage_type(stype) {
+-		storage[stype] = bpf_cgroup_storage_alloc(prog, stype);
+-		if (IS_ERR(storage[stype])) {
+-			storage[stype] = NULL;
+-			for_each_cgroup_storage_type(stype)
+-				bpf_cgroup_storage_free(storage[stype]);
+-			return -ENOMEM;
+-		}
+-	}
++	if (bpf_cgroup_storages_alloc(storage, prog))
++		return -ENOMEM;
+ 
+ 	if (replace_pl) {
+ 		pl = replace_pl;
+ 		old_prog = pl->prog;
+-		for_each_cgroup_storage_type(stype) {
+-			old_storage[stype] = pl->storage[stype];
+-			bpf_cgroup_storage_unlink(old_storage[stype]);
+-		}
++		bpf_cgroup_storages_unlink(pl->storage);
++		bpf_cgroup_storages_assign(old_storage, pl->storage);
+ 	} else {
+ 		pl = kmalloc(sizeof(*pl), GFP_KERNEL);
+ 		if (!pl) {
+-			for_each_cgroup_storage_type(stype)
+-				bpf_cgroup_storage_free(storage[stype]);
++			bpf_cgroup_storages_free(storage);
+ 			return -ENOMEM;
+ 		}
+ 		list_add_tail(&pl->node, progs);
+ 	}
+ 
+ 	pl->prog = prog;
+-	for_each_cgroup_storage_type(stype)
+-		pl->storage[stype] = storage[stype];
+-
++	bpf_cgroup_storages_assign(pl->storage, storage);
+ 	cgrp->bpf.flags[type] = saved_flags;
+ 
+ 	err = update_effective_progs(cgrp, type);
+@@ -379,27 +415,20 @@ int __cgroup_bpf_attach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 		goto cleanup;
+ 
+ 	static_branch_inc(&cgroup_bpf_enabled_key);
+-	for_each_cgroup_storage_type(stype) {
+-		if (!old_storage[stype])
+-			continue;
+-		bpf_cgroup_storage_free(old_storage[stype]);
+-	}
++	bpf_cgroup_storages_free(old_storage);
+ 	if (old_prog) {
+ 		bpf_prog_put(old_prog);
+ 		static_branch_dec(&cgroup_bpf_enabled_key);
+ 	}
+-	for_each_cgroup_storage_type(stype)
+-		bpf_cgroup_storage_link(storage[stype], cgrp, type);
++	bpf_cgroup_storages_link(storage, cgrp, type);
+ 	return 0;
+ 
+ cleanup:
+ 	/* and cleanup the prog list */
+ 	pl->prog = old_prog;
+-	for_each_cgroup_storage_type(stype) {
+-		bpf_cgroup_storage_free(pl->storage[stype]);
+-		pl->storage[stype] = old_storage[stype];
+-		bpf_cgroup_storage_link(old_storage[stype], cgrp, type);
+-	}
++	bpf_cgroup_storages_free(pl->storage);
++	bpf_cgroup_storages_assign(pl->storage, old_storage);
++	bpf_cgroup_storages_link(pl->storage, cgrp, type);
+ 	if (!replace_pl) {
+ 		list_del(&pl->node);
+ 		kfree(pl);
+@@ -420,7 +449,6 @@ int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 			enum bpf_attach_type type)
+ {
+ 	struct list_head *progs = &cgrp->bpf.progs[type];
+-	enum bpf_cgroup_storage_type stype;
+ 	u32 flags = cgrp->bpf.flags[type];
+ 	struct bpf_prog *old_prog = NULL;
+ 	struct bpf_prog_list *pl;
+@@ -467,10 +495,8 @@ int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 
+ 	/* now can actually delete it from this cgroup list */
+ 	list_del(&pl->node);
+-	for_each_cgroup_storage_type(stype) {
+-		bpf_cgroup_storage_unlink(pl->storage[stype]);
+-		bpf_cgroup_storage_free(pl->storage[stype]);
+-	}
++	bpf_cgroup_storages_unlink(pl->storage);
++	bpf_cgroup_storages_free(pl->storage);
+ 	kfree(pl);
+ 	if (list_empty(progs))
+ 		/* last program was detached, reset flags to zero */
 -- 
 2.17.1
 
