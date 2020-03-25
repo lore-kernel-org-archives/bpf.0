@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC118C54FD3
-	for <bpf@archiver.kernel.org>; Wed, 25 Mar 2020 17:23:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20ABBC54FD0
+	for <bpf@archiver.kernel.org>; Wed, 25 Mar 2020 17:23:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9A0032077D
-	for <bpf@archiver.kernel.org>; Wed, 25 Mar 2020 17:23:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F28D620772
+	for <bpf@archiver.kernel.org>; Wed, 25 Mar 2020 17:23:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F3sKMeOx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G+VVA3UO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727752AbgCYRXf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Mar 2020 13:23:35 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:46541 "EHLO
+        id S1727763AbgCYRXg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Mar 2020 13:23:36 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:33463 "EHLO
         us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727402AbgCYRXf (ORCPT
+        by vger.kernel.org with ESMTP id S1727749AbgCYRXf (ORCPT
         <rfc822;bpf@vger.kernel.org>); Wed, 25 Mar 2020 13:23:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1585157014;
@@ -27,43 +27,43 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sYbu9ArKUYiZYJ7/mh+zIxZoPNWoNLkztPFMuDHvDWc=;
-        b=F3sKMeOxMo6T5u3eDxFoXUGVPrmSuZcqEwanwJtjrwLVxuxqUuiW20/JRIOlOO/AAWw9cM
-        klPylbKnzce7xisKYW/w1k3dOvvqYudPshuNv0HSm1gNPeG+dGKaIo6WW8CBj/1T4dsUFu
-        aO2E744iddkSLV/zC2H9vl97uL1SQ0M=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-6-TozU3gexPJqBlofe_RQoKg-1; Wed, 25 Mar 2020 13:23:32 -0400
-X-MC-Unique: TozU3gexPJqBlofe_RQoKg-1
-Received: by mail-lf1-f71.google.com with SMTP id 144so1116928lfj.1
-        for <bpf@vger.kernel.org>; Wed, 25 Mar 2020 10:23:32 -0700 (PDT)
+        bh=TlIK1duIZ7CYV2AfLDt7G96gJTgpzGhibeBunBKnLEI=;
+        b=G+VVA3UO1mfaxO6Hgpdy2ufbG1ZOi2UQuYseK6qEpvwQzZHXnyB/Q26tVCOBhJ/NL78vfx
+        qkCuOYv2x54y/ddfkk1JhQBs1g6WiwmGasIrpUPuG7w0ZjQy1+uG9mMTIcRODJiUjNLyT/
+        ZgXAwllovFOoC3JkicsVKfJt5kM1Vto=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-261-jYyLmRevO1a-rsc33WVQ4w-1; Wed, 25 Mar 2020 13:23:30 -0400
+X-MC-Unique: jYyLmRevO1a-rsc33WVQ4w-1
+Received: by mail-lf1-f69.google.com with SMTP id q4so1104916lff.4
+        for <bpf@vger.kernel.org>; Wed, 25 Mar 2020 10:23:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=sYbu9ArKUYiZYJ7/mh+zIxZoPNWoNLkztPFMuDHvDWc=;
-        b=gMGVGU7aCCZ3nc+YLMPBqId42cZpJLhz2WSQqqloMquGcdAUSDJnUa6IHn7mmBuSUa
-         YHq+94ex6D5N87QKPfOKn9gI0KljgScmqtnxmdEG2LRGUq340XiQp54JfacCI0F9+swo
-         MdWcii15GfFkQnaqtMZ5/snQkyY7sfEFTTyZjq/CVm5H1JaoaTSWzs9B2QnLPhOLodWj
-         Sj31SGAY30Xzn2GyD0fYfc0NlQHE+RjPr05RX0GT3RHiX1CHvfuv7kapXi0/MgXWF0ae
-         nSiR5QeJnEvi1Vy+L/lmgzasf1YOY7ytZST/uTBnlNC6SMl0pqALTgtV2uecJILelM/8
-         HRTQ==
-X-Gm-Message-State: AGi0PuZYKob8CkIDb6ipyycZ6EeGaN+SCKTIJIB0TubYdLGMshagD3D9
-        URmjjf1BTV1phybY4TVpPudf2I+mXjJRlAo7xyw87P/KfCE0xebT8pzc38Ltqp2oHpqk63umwv1
-        ODxl7sNL0fZKH
-X-Received: by 2002:a2e:b521:: with SMTP id z1mr2698825ljm.19.1585157011200;
-        Wed, 25 Mar 2020 10:23:31 -0700 (PDT)
-X-Google-Smtp-Source: APiQypIZUF0t5NXTTUZDr3I2FqJitHTR0+clgh7Avsu79NvNFB36sTuhhdFGQvRHW4WpR+am3tROkA==
-X-Received: by 2002:a2e:b521:: with SMTP id z1mr2698804ljm.19.1585157010967;
-        Wed, 25 Mar 2020 10:23:30 -0700 (PDT)
+        bh=TlIK1duIZ7CYV2AfLDt7G96gJTgpzGhibeBunBKnLEI=;
+        b=ar6LqCmUFVs892XLqFRheLrJtHDWBPdKH2cb32A+Yk5p2v0B+ED9eB79G0wENfHPjJ
+         9mefsNKP8XpjTGc+ETPe9FO5yeoen9uDNd1of4C7rfSKl9HoxgKlCXR87WVfexzsbJe4
+         1GZq2GFiAo4mEGHyEpW2HtIieraUvslL86drS8+sVmR3nyN3Futg9SnEYS2IKIwtqVWT
+         rofASMCOY5pb+JJces49oyqVDIdF0jUA2wYLhg/zlmXP183cRtc1JP/VhdIBNBoSeKug
+         HkmT3lQx0WzmR12FLoBSsBFd+j9a7q5X5wDuzH9GIbm/E8W1vW3DRTU7+2r2LPcPsWDy
+         mLNg==
+X-Gm-Message-State: ANhLgQ3WqNCIZunQi6erhkH4kxdCCsBSc5bLklpmDDNZIARDZzLoh93b
+        WmWs5QV7B1EuxwNk5zzd3/JYkXxkNfqtK7rsi/eH6SSNon81l0cyualBlBicpjcIR558oNkjcN4
+        Op0b7KPsCF3Z+
+X-Received: by 2002:ac2:4191:: with SMTP id z17mr2949498lfh.73.1585157008962;
+        Wed, 25 Mar 2020 10:23:28 -0700 (PDT)
+X-Google-Smtp-Source: ADFU+vtU/I5xdrBBmAGhgc7MLv/GeIi0iKmzDAYbK+bUgcCbZzQoZ5CS8YyG/sPMh+D1mu96844NTg==
+X-Received: by 2002:ac2:4191:: with SMTP id z17mr2949479lfh.73.1585157008760;
+        Wed, 25 Mar 2020 10:23:28 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id j14sm1277899lfc.32.2020.03.25.10.23.30
+        by smtp.gmail.com with ESMTPSA id f26sm6601752lja.102.2020.03.25.10.23.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2020 10:23:30 -0700 (PDT)
+        Wed, 25 Mar 2020 10:23:28 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id BEA6418158B; Wed, 25 Mar 2020 18:23:29 +0100 (CET)
-Subject: [PATCH bpf-next v4 4/4] selftests/bpf: Add tests for attaching XDP
- programs
+        id 8AEC818158B; Wed, 25 Mar 2020 18:23:27 +0100 (CET)
+Subject: [PATCH bpf-next v4 2/4] tools: Add EXPECTED_FD-related definitions in
+ if_link.h
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
@@ -76,8 +76,8 @@ Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         John Fastabend <john.fastabend@gmail.com>,
         Lorenz Bauer <lmb@cloudflare.com>, Andrey Ignatov <rdna@fb.com>
-Date:   Wed, 25 Mar 2020 18:23:29 +0100
-Message-ID: <158515700967.92963.15098921624731968356.stgit@toke.dk>
+Date:   Wed, 25 Mar 2020 18:23:27 +0100
+Message-ID: <158515700747.92963.8615391897417388586.stgit@toke.dk>
 In-Reply-To: <158515700529.92963.17609642163080084530.stgit@toke.dk>
 References: <158515700529.92963.17609642163080084530.stgit@toke.dk>
 User-Agent: StGit/0.22
@@ -91,81 +91,38 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-This adds tests for the various replacement operations using
-IFLA_XDP_EXPECTED_FD.
+This adds the IFLA_XDP_EXPECTED_FD netlink attribute definition and the
+XDP_FLAGS_REPLACE flag to if_link.h in tools/include.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- .../testing/selftests/bpf/prog_tests/xdp_attach.c  |   62 ++++++++++++++++++++
- 1 file changed, 62 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_attach.c
+ tools/include/uapi/linux/if_link.h |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
-new file mode 100644
-index 000000000000..05b294d6b923
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
-@@ -0,0 +1,62 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+
-+#define IFINDEX_LO 1
+diff --git a/tools/include/uapi/linux/if_link.h b/tools/include/uapi/linux/if_link.h
+index 024af2d1d0af..b1ec7c949e6a 100644
+--- a/tools/include/uapi/linux/if_link.h
++++ b/tools/include/uapi/linux/if_link.h
+@@ -960,11 +960,12 @@ enum {
+ #define XDP_FLAGS_SKB_MODE		(1U << 1)
+ #define XDP_FLAGS_DRV_MODE		(1U << 2)
+ #define XDP_FLAGS_HW_MODE		(1U << 3)
 +#define XDP_FLAGS_REPLACE		(1U << 4)
-+
-+void test_xdp_attach(void)
-+{
-+	struct bpf_object *obj1, *obj2, *obj3;
-+	const char *file = "./test_xdp.o";
-+	int err, fd1, fd2, fd3;
-+	__u32 duration = 0;
-+	DECLARE_LIBBPF_OPTS(bpf_xdp_set_link_opts, opts,
-+			    .old_fd = -1);
-+
-+	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj1, &fd1);
-+	if (CHECK_FAIL(err))
-+		return;
-+	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj2, &fd2);
-+	if (CHECK_FAIL(err))
-+		goto out_1;
-+	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj3, &fd3);
-+	if (CHECK_FAIL(err))
-+		goto out_2;
-+
-+	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, fd1, XDP_FLAGS_REPLACE,
-+				       &opts);
-+	if (CHECK(err, "load_ok", "initial load failed"))
-+		goto out_close;
-+
-+	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, fd2, XDP_FLAGS_REPLACE,
-+				       &opts);
-+	if (CHECK(!err, "load_fail", "load with expected id didn't fail"))
-+		goto out;
-+
-+	opts.old_fd = fd1;
-+	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, fd2, 0, &opts);
-+	if (CHECK(err, "replace_ok", "replace valid old_fd failed"))
-+		goto out;
-+
-+	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, fd3, 0, &opts);
-+	if (CHECK(!err, "replace_fail", "replace invalid old_fd didn't fail"))
-+		goto out;
-+
-+	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, -1, 0, &opts);
-+	if (CHECK(!err, "remove_fail", "remove invalid old_fd didn't fail"))
-+		goto out;
-+
-+	opts.old_fd = fd2;
-+	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, -1, 0, &opts);
-+	if (CHECK(err, "remove_ok", "remove valid old_fd failed"))
-+		goto out;
-+
-+out:
-+	bpf_set_link_xdp_fd(IFINDEX_LO, -1, 0);
-+out_close:
-+	bpf_object__close(obj3);
-+out_2:
-+	bpf_object__close(obj2);
-+out_1:
-+	bpf_object__close(obj1);
-+}
+ #define XDP_FLAGS_MODES			(XDP_FLAGS_SKB_MODE | \
+ 					 XDP_FLAGS_DRV_MODE | \
+ 					 XDP_FLAGS_HW_MODE)
+ #define XDP_FLAGS_MASK			(XDP_FLAGS_UPDATE_IF_NOEXIST | \
+-					 XDP_FLAGS_MODES)
++					 XDP_FLAGS_MODES | XDP_FLAGS_REPLACE)
+ 
+ /* These are stored into IFLA_XDP_ATTACHED on dump. */
+ enum {
+@@ -984,6 +985,7 @@ enum {
+ 	IFLA_XDP_DRV_PROG_ID,
+ 	IFLA_XDP_SKB_PROG_ID,
+ 	IFLA_XDP_HW_PROG_ID,
++	IFLA_XDP_EXPECTED_FD,
+ 	__IFLA_XDP_MAX,
+ };
+ 
 
