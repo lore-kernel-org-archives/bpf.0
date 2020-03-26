@@ -2,72 +2,72 @@ Return-Path: <SRS0=2zQm=5L=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-14.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33C2DC2D0E5
-	for <bpf@archiver.kernel.org>; Thu, 26 Mar 2020 14:28:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61233C2D0E8
+	for <bpf@archiver.kernel.org>; Thu, 26 Mar 2020 14:28:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0D6C120775
-	for <bpf@archiver.kernel.org>; Thu, 26 Mar 2020 14:28:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31FC620775
+	for <bpf@archiver.kernel.org>; Thu, 26 Mar 2020 14:28:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nGEs+UUm"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="jUN78QlK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbgCZO2p (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 Mar 2020 10:28:45 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:37604 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728100AbgCZO2m (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 26 Mar 2020 10:28:42 -0400
-Received: by mail-wm1-f67.google.com with SMTP id d1so7242723wmb.2
-        for <bpf@vger.kernel.org>; Thu, 26 Mar 2020 07:28:40 -0700 (PDT)
+        id S1728151AbgCZO2s (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 Mar 2020 10:28:48 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:51649 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728203AbgCZO2r (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 Mar 2020 10:28:47 -0400
+Received: by mail-wm1-f65.google.com with SMTP id c187so6705765wme.1
+        for <bpf@vger.kernel.org>; Thu, 26 Mar 2020 07:28:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/3kFl5COAYKa66U/jHq8uPw/HaoWHyV8EfIjqjqU5r4=;
-        b=nGEs+UUmb27XB7ctAgMBSWIEPmuFPP/4QTlXyuJYnjRZvfg/RcuruvPbWwWiiNQK6S
-         J32oaYJ9+N0XM6BbRz8PKq5ZO6XRYyTK9wwqb8V9Ep8zbwwZS0Sj8ozIxEP7NFU5Ilq8
-         VZm+d3InK21nVx9gCzPkEJ48djXG7m49ZNL9c=
+        bh=W5Ff7Fn5bZi7i9uBczexSq34+wj8TN4wlXIgFvQuXvM=;
+        b=jUN78QlK1G4YyVDyrmrvjDleFBmsR6d6nESaJYDRYFSLHcDfq/imq26Gaqgao6QV8q
+         l9gC9uAsQvY68rUOoR7xf81WyogRP2hg2qA2D/xV9rDsRSpRHRe7CKcqqIob5dV/ENJM
+         ogmbBIKmkvBn4MsaQ/UE0igYWjby2rKWlf2bI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/3kFl5COAYKa66U/jHq8uPw/HaoWHyV8EfIjqjqU5r4=;
-        b=JevLdp3SnXJkuv7FhyOHyAq2xLDTW/sZAKeQOTUCkyFcVUOk4Hg4GHf2gPoxk2hsqj
-         GM/AXYk7+sojrpcg/5mtzkXK40p4hnha9VDJVN940m0ue0R1Xv0T/N0A6U7wVyvfVuGq
-         1zXzEaYV+yIf2OKiAC4G2DCCGc0ac0kJpowG/pnkg70DOfqYZ27XgWXmEnFgydmC3na5
-         qGy1YWOl35UdV5SUysTDJHjKq7d2JVYf2TjtsSHY9xH04Mo4WJIQb+lg8nHeJ3VDYgbK
-         l2ZxSQR81L1D2pmhLPK9qiXRJnOay1iklPAzMdVeItO68MhEaKjPRmue83ypGOlUpGeS
-         9reg==
-X-Gm-Message-State: ANhLgQ12QXlqGjkDgXfe0IG0+gYXpUOr6CdpgU6UsgfI6HHXRzDltuUK
-        Rw6srLm9oaCUtFMK0kjmKJkDYQ==
-X-Google-Smtp-Source: ADFU+vuZUCLPD7UKKLWVw6qw4EgktHQWbMliuYjs6Gn4WRyyJSSgQrB8M3Ljr+BggxOn9YzwkDWCow==
-X-Received: by 2002:a1c:208c:: with SMTP id g134mr228422wmg.96.1585232919526;
-        Thu, 26 Mar 2020 07:28:39 -0700 (PDT)
+        bh=W5Ff7Fn5bZi7i9uBczexSq34+wj8TN4wlXIgFvQuXvM=;
+        b=LEzJhMRwU5tmsvvNmY/bv2PaTxICbkyfKoSqX/CXJcrkh8837m0CxvrPjcnYH8Ig5C
+         tKI+/qBQT8tn4NOZiDNHvQPm+1rWUzDp7EHvCyXNGZMyxPOLZuhPn+kN9yRxmNnIjHFX
+         MhwoOjFN7cze/sWZ8OKlYsthbvk2fB2NwKYnSfFcTbVFW7E+ZpnozDobChl0/2b+YcIK
+         tG5uShWnD9XAyko5pTn26hGuY4QiY1tdHfyg1p2GNQKJ76GcR2XPDQ4jy/t7UeNJEnEF
+         3v80HyeN7jut2cf15PDhm7sY8OmFZ5VEIWOq4PHV0GrL9AtYL4HWpF6qeNp0XLykCkCg
+         QTpQ==
+X-Gm-Message-State: ANhLgQ0kjoCOo9cVQ+umFRHhJ+dyqMH4zWyzS/eFZ+8bD3LmifWHt/Vb
+        jnK5NQq5f8sYz54PmcX4OFHgLw==
+X-Google-Smtp-Source: ADFU+vvt623pdVGLa4tSnvVuUBz4uO2AQOo0BPKA3e1gQU7O41ZRqUIPW5OQRA+Lo9JpGl1YnooR/Q==
+X-Received: by 2002:a1c:9e97:: with SMTP id h145mr205280wme.61.1585232924119;
+        Thu, 26 Mar 2020 07:28:44 -0700 (PDT)
 Received: from kpsingh-kernel.localdomain (77-56-209-237.dclient.hispeed.ch. [77.56.209.237])
-        by smtp.gmail.com with ESMTPSA id q3sm3643971wru.87.2020.03.26.07.28.38
+        by smtp.gmail.com with ESMTPSA id q3sm3643971wru.87.2020.03.26.07.28.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2020 07:28:39 -0700 (PDT)
+        Thu, 26 Mar 2020 07:28:43 -0700 (PDT)
 From:   KP Singh <kpsingh@chromium.org>
 To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Brendan Jackman <jackmanb@google.com>,
+Cc:     Brendan Jackman <jackmanb@google.com>,
         Florent Revest <revest@google.com>,
+        Thomas Garnier <thgarnie@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>, Paul Turner <pjt@google.com>,
-        Jann Horn <jannh@google.com>,
+        James Morris <jmorris@namei.org>,
+        Kees Cook <keescook@chromium.org>,
+        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
         Florent Revest <revest@chromium.org>,
         Brendan Jackman <jackmanb@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH bpf-next v7 5/8] bpf: lsm: Initialize the BPF LSM hooks
-Date:   Thu, 26 Mar 2020 15:28:20 +0100
-Message-Id: <20200326142823.26277-6-kpsingh@chromium.org>
+Subject: [PATCH bpf-next v7 8/8] bpf: lsm: Add Documentation
+Date:   Thu, 26 Mar 2020 15:28:23 +0100
+Message-Id: <20200326142823.26277-9-kpsingh@chromium.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200326142823.26277-1-kpsingh@chromium.org>
 References: <20200326142823.26277-1-kpsingh@chromium.org>
@@ -80,107 +80,187 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: KP Singh <kpsingh@google.com>
 
-* The hooks are initialized using the definitions in
-  include/linux/lsm_hook_defs.h.
-* The LSM can be enabled / disabled with CONFIG_BPF_LSM.
+Document how eBPF programs (BPF_PROG_TYPE_LSM) can be loaded and
+attached (BPF_LSM_MAC) to the LSM hooks.
 
 Signed-off-by: KP Singh <kpsingh@google.com>
-Acked-by: Kees Cook <keescook@chromium.org>
 Reviewed-by: Brendan Jackman <jackmanb@google.com>
 Reviewed-by: Florent Revest <revest@google.com>
+Reviewed-by: Thomas Garnier <thgarnie@google.com>
 ---
- security/Kconfig      | 10 +++++-----
- security/Makefile     |  2 ++
- security/bpf/Makefile |  5 +++++
- security/bpf/hooks.c  | 26 ++++++++++++++++++++++++++
- 4 files changed, 38 insertions(+), 5 deletions(-)
- create mode 100644 security/bpf/Makefile
- create mode 100644 security/bpf/hooks.c
+ Documentation/bpf/bpf_lsm.rst | 150 ++++++++++++++++++++++++++++++++++
+ Documentation/bpf/index.rst   |   1 +
+ 2 files changed, 151 insertions(+)
+ create mode 100644 Documentation/bpf/bpf_lsm.rst
 
-diff --git a/security/Kconfig b/security/Kconfig
-index 2a1a2d396228..cd3cc7da3a55 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -277,11 +277,11 @@ endchoice
- 
- config LSM
- 	string "Ordered list of enabled LSMs"
--	default "lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor" if DEFAULT_SECURITY_SMACK
--	default "lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo" if DEFAULT_SECURITY_APPARMOR
--	default "lockdown,yama,loadpin,safesetid,integrity,tomoyo" if DEFAULT_SECURITY_TOMOYO
--	default "lockdown,yama,loadpin,safesetid,integrity" if DEFAULT_SECURITY_DAC
--	default "lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
-+	default "lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
-+	default "lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
-+	default "lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
-+	default "lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
-+	default "lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
- 	help
- 	  A comma-separated list of LSMs, in initialization order.
- 	  Any LSMs left off this list will be ignored. This can be
-diff --git a/security/Makefile b/security/Makefile
-index 746438499029..22e73a3482bd 100644
---- a/security/Makefile
-+++ b/security/Makefile
-@@ -12,6 +12,7 @@ subdir-$(CONFIG_SECURITY_YAMA)		+= yama
- subdir-$(CONFIG_SECURITY_LOADPIN)	+= loadpin
- subdir-$(CONFIG_SECURITY_SAFESETID)    += safesetid
- subdir-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown
-+subdir-$(CONFIG_BPF_LSM)		+= bpf
- 
- # always enable default capabilities
- obj-y					+= commoncap.o
-@@ -30,6 +31,7 @@ obj-$(CONFIG_SECURITY_LOADPIN)		+= loadpin/
- obj-$(CONFIG_SECURITY_SAFESETID)       += safesetid/
- obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
- obj-$(CONFIG_CGROUP_DEVICE)		+= device_cgroup.o
-+obj-$(CONFIG_BPF_LSM)			+= bpf/
- 
- # Object integrity file lists
- subdir-$(CONFIG_INTEGRITY)		+= integrity
-diff --git a/security/bpf/Makefile b/security/bpf/Makefile
+diff --git a/Documentation/bpf/bpf_lsm.rst b/Documentation/bpf/bpf_lsm.rst
 new file mode 100644
-index 000000000000..c7a89a962084
+index 000000000000..2a2c3b4a74d4
 --- /dev/null
-+++ b/security/bpf/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (C) 2020 Google LLC.
++++ b/Documentation/bpf/bpf_lsm.rst
+@@ -0,0 +1,150 @@
++.. SPDX-License-Identifier: GPL-2.0+
++.. Copyright (C) 2020 Google LLC.
 +
-+obj-$(CONFIG_BPF_LSM) := hooks.o
-diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
-new file mode 100644
-index 000000000000..32d32d485451
---- /dev/null
-+++ b/security/bpf/hooks.c
-@@ -0,0 +1,26 @@
-+// SPDX-License-Identifier: GPL-2.0
++================
++LSM BPF Programs
++================
 +
-+/*
-+ * Copyright (C) 2020 Google LLC.
-+ */
-+#include <linux/lsm_hooks.h>
-+#include <linux/bpf_lsm.h>
++These BPF programs allow runtime instrumentation of the LSM hooks by privileged
++users to implement system-wide MAC (Mandatory Access Control) and Audit
++policies using eBPF. Since these program end up modifying the MAC policies of
++the system, they require both ``CAP_MAC_ADMIN`` and also require
++``CAP_SYS_ADMIN`` for the loading of BPF programs.
 +
-+static struct security_hook_list bpf_lsm_hooks[] __lsm_ro_after_init = {
-+	#define LSM_HOOK(RET, DEFAULT, NAME, ...) \
-+	LSM_HOOK_INIT(NAME, bpf_lsm_##NAME),
-+	#include <linux/lsm_hook_defs.h>
-+	#undef LSM_HOOK
-+};
++Structure
++---------
 +
-+static int __init bpf_lsm_init(void)
-+{
-+	security_add_hooks(bpf_lsm_hooks, ARRAY_SIZE(bpf_lsm_hooks), "bpf");
-+	pr_info("LSM support for eBPF active\n");
-+	return 0;
-+}
++The example shows an eBPF program that can be attached to the ``file_mprotect``
++LSM hook:
 +
-+DEFINE_LSM(bpf) = {
-+	.name = "bpf",
-+	.init = bpf_lsm_init,
-+};
++.. c:function:: int file_mprotect(struct vm_area_struct *vma, unsigned long reqprot, unsigned long prot);
++
++Other LSM hooks which can be instrumented can be found in
++``include/linux/lsm_hooks.h``.
++
++eBPF programs that use :doc:`/bpf/btf` do not need to include kernel headers
++for accessing information from the attached eBPF program's context. They can
++simply declare the structures in the eBPF program and only specify the fields
++that need to be accessed.
++
++.. code-block:: c
++
++	struct mm_struct {
++		unsigned long start_brk, brk, start_stack;
++	} __attribute__((preserve_access_index));
++
++	struct vm_area_struct {
++		unsigned long start_brk, brk, start_stack;
++		unsigned long vm_start, vm_end;
++		struct mm_struct *vm_mm;
++	} __attribute__((preserve_access_index));
++
++
++.. note:: Only the size and the names of the fields must match the type in the
++	  kernel and the order of the fields is irrelevant.
++
++This can be further simplified (if one has access to the BTF information at
++build time) by generating the ``vmlinux.h`` with:
++
++.. code-block:: console
++
++        # bpftool dump file <path-to-btf-vmlinux> format c > vmlinux.h
++
++.. note:: ``path-to-btf-vmlinux`` can be ``/sys/kernel/btf/vmlinux`` if the
++	  build environment matches the environment the BPF programs are
++	  deployed in.
++
++The ``vmlinux.h`` can then simply be included in the BPF programs without
++requiring the definition of the types.
++
++The eBPF programs can be declared using the``BPF_PROG``
++macros defined in `tools/lib/bpf/bpf_tracing.h`_. In this
++example:
++
++	* ``"lsm/file_mprotect"`` indicates the LSM hook that the program must
++	  be attached to
++	* ``mprotect_audit`` is the name of the eBPF program
++
++.. code-block:: c
++
++        SEC("lsm/file_mprotect")
++        int BPF_PROG(mprotect_audit, struct vm_area_struct *vma,
++                     unsigned long reqprot, unsigned long prot, int ret)
++	{
++                /* Ret is the return value from the previous BPF program
++                 * or 0 if it's the first hook.
++                 */
++                if (ret != 0)
++                        return ret;
++
++		int is_heap;
++
++		is_heap = (vma->vm_start >= vma->vm_mm->start_brk &&
++			   vma->vm_end <= vma->vm_mm->brk);
++
++		/* Return an -EPERM or write information to the perf events buffer
++		 * for auditing
++		 */
++	}
++
++The ``__attribute__((preserve_access_index))`` is a clang feature that allows
++the BPF verifier to update the offsets for the access at runtime using the
++:doc:`/bpf/btf` information. Since the BPF verifier is aware of the types, it
++also validates all the accesses made to the various types in the eBPF program.
++
++Loading
++-------
++
++eBPF programs can be loaded with the :manpage:`bpf(2)` syscall's
++``BPF_PROG_LOAD`` operation or more simply by using the the libbpf helper
++``bpf_prog_load_xattr``:
++
++
++.. code-block:: c
++
++	struct bpf_prog_load_attr attr = {
++		.file = "./prog.o",
++	};
++	struct bpf_object *prog_obj;
++	struct bpf_program *prog;
++	int prog_fd;
++
++	bpf_prog_load_xattr(&attr, &prog_obj, &prog_fd);
++
++Attachment to LSM Hooks
++-----------------------
++
++The LSM allows attachment of eBPF programs as LSM hooks using :manpage:`bpf(2)`
++syscall's ``BPF_PROG_ATTACH`` operation or more simply by
++using the libbpf helper ``bpf_program__attach_lsm``. In the code shown below
++``prog`` is the eBPF program loaded using ``BPF_PROG_LOAD``:
++
++.. code-block:: c
++
++	struct bpf_link *link;
++
++	link = bpf_program__attach_lsm(prog);
++
++The program can be detached from the LSM hook by *destroying* the ``link``
++link returned by ``bpf_program__attach_lsm``:
++
++.. code-block:: c
++
++	link->destroy();
++
++Examples
++--------
++
++An example eBPF programs can be found in
++`tools/testing/selftests/bpf/progs/lsm.c`_ and the corresponding
++userspace code in `tools/testing/selftests/bpf/prog_tests/test_lsm.c`_
++
++.. Links
++.. _tools/lib/bpf/bpf_tracing.h:
++   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/lib/bpf/bpf_tracing.h
++.. _tools/testing/selftests/bpf/progs/lsm.c:
++   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/progs/lsm.c
++.. _tools/testing/selftests/bpf/progs/lsm_void_hook.c:
++   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/progs/lsm_void_hook.c
++.. _tools/testing/selftests/bpf/prog_tests/test_lsm.c:
++   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/prog_tests/test_lsm.c
+diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
+index 7be43c5f2dcf..f99677f3572f 100644
+--- a/Documentation/bpf/index.rst
++++ b/Documentation/bpf/index.rst
+@@ -45,6 +45,7 @@ Program types
+    prog_cgroup_sockopt
+    prog_cgroup_sysctl
+    prog_flow_dissector
++   bpf_lsm
+ 
+ 
+ Testing and debugging BPF
 -- 
 2.20.1
 
