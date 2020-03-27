@@ -2,34 +2,35 @@ Return-Path: <SRS0=B1s+=5M=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 582A7C2D0EC
-	for <bpf@archiver.kernel.org>; Fri, 27 Mar 2020 15:59:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77F88C43331
+	for <bpf@archiver.kernel.org>; Fri, 27 Mar 2020 15:59:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 278AC2072F
-	for <bpf@archiver.kernel.org>; Fri, 27 Mar 2020 15:59:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54C0720774
+	for <bpf@archiver.kernel.org>; Fri, 27 Mar 2020 15:59:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727549AbgC0P7Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Mar 2020 11:59:16 -0400
-Received: from www62.your-server.de ([213.133.104.62]:50946 "EHLO
+        id S1727666AbgC0P7P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Mar 2020 11:59:15 -0400
+Received: from www62.your-server.de ([213.133.104.62]:50928 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727575AbgC0P7Q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Mar 2020 11:59:16 -0400
+        with ESMTP id S1726900AbgC0P7P (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Mar 2020 11:59:15 -0400
 Received: from 98.186.195.178.dynamic.wline.res.cust.swisscom.ch ([178.195.186.98] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1jHrO6-0007nf-M2; Fri, 27 Mar 2020 16:59:14 +0100
+        id 1jHrO3-0007my-V1; Fri, 27 Mar 2020 16:59:12 +0100
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     alexei.starovoitov@gmail.com
 Cc:     m@lambda.lt, joe@wand.net.nz, bpf@vger.kernel.org,
         netdev@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next 6/7] bpf: enable retrival of pid/tgid/comm from bpf cgroup hooks
-Date:   Fri, 27 Mar 2020 16:58:55 +0100
-Message-Id: <18744744ed93c06343be8b41edcfd858706f39d7.1585323121.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next 1/7] bpf: enable retrieval of socket cookie for bind/post-bind hook
+Date:   Fri, 27 Mar 2020 16:58:50 +0100
+Message-Id: <e9d71f310715332f12d238cc650c1edc5be55119.1585323121.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1585323121.git.daniel@iogearbox.net>
 References: <cover.1585323121.git.daniel@iogearbox.net>
@@ -42,43 +43,49 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We already have the bpf_get_current_uid_gid() helper enabled, and
-given we now have perf event RB output available for connect(),
-sendmsg(), recvmsg() and bind-related hooks, add a trivial change
-to enable bpf_get_current_pid_tgid() and bpf_get_current_comm()
-as well.
+We currently make heavy use of the socket cookie in BPF's connect(),
+sendmsg() and recvmsg() hooks for load-balancing decisions. However,
+it is currently not enabled/implemented in BPF {post-}bind hooks
+where it can later be used in combination for correlation in the tc
+egress path, for example.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- net/core/filter.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ net/core/filter.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
 diff --git a/net/core/filter.c b/net/core/filter.c
-index 5cec3ac9e3dd..bb4a196c8809 100644
+index 96350a743539..0b6682517d45 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -6018,6 +6018,10 @@ sock_filter_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_get_netns_cookie_sock_proto;
- 	case BPF_FUNC_perf_event_output:
- 		return &bpf_event_output_data_proto;
-+	case BPF_FUNC_get_current_pid_tgid:
-+		return &bpf_get_current_pid_tgid_proto;
-+	case BPF_FUNC_get_current_comm:
-+		return &bpf_get_current_comm_proto;
- #ifdef CONFIG_CGROUPS
- 	case BPF_FUNC_get_current_cgroup_id:
- 		return &bpf_get_current_cgroup_id_proto;
-@@ -6058,6 +6062,10 @@ sock_addr_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+@@ -4117,6 +4117,18 @@ static const struct bpf_func_proto bpf_get_socket_cookie_sock_addr_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ };
+ 
++BPF_CALL_1(bpf_get_socket_cookie_sock, struct sock *, ctx)
++{
++	return sock_gen_cookie(ctx);
++}
++
++static const struct bpf_func_proto bpf_get_socket_cookie_sock_proto = {
++	.func		= bpf_get_socket_cookie_sock,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++};
++
+ BPF_CALL_1(bpf_get_socket_cookie_sock_ops, struct bpf_sock_ops_kern *, ctx)
+ {
+ 	return sock_gen_cookie(ctx->sk);
+@@ -5954,6 +5966,8 @@ sock_filter_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_get_current_uid_gid_proto;
+ 	case BPF_FUNC_get_local_storage:
  		return &bpf_get_local_storage_proto;
- 	case BPF_FUNC_perf_event_output:
- 		return &bpf_event_output_data_proto;
-+	case BPF_FUNC_get_current_pid_tgid:
-+		return &bpf_get_current_pid_tgid_proto;
-+	case BPF_FUNC_get_current_comm:
-+		return &bpf_get_current_comm_proto;
- #ifdef CONFIG_CGROUPS
- 	case BPF_FUNC_get_current_cgroup_id:
- 		return &bpf_get_current_cgroup_id_proto;
++	case BPF_FUNC_get_socket_cookie:
++		return &bpf_get_socket_cookie_sock_proto;
+ 	default:
+ 		return bpf_base_func_proto(func_id);
+ 	}
 -- 
 2.21.0
 
