@@ -7,60 +7,61 @@ X-Spam-Status: No, score=-9.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BD27C2D0F0
-	for <bpf@archiver.kernel.org>; Fri, 27 Mar 2020 04:26:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CBE9C43331
+	for <bpf@archiver.kernel.org>; Fri, 27 Mar 2020 04:26:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 707FA20578
-	for <bpf@archiver.kernel.org>; Fri, 27 Mar 2020 04:26:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5068520578
+	for <bpf@archiver.kernel.org>; Fri, 27 Mar 2020 04:26:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="t2G2V4r7"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jwCU7eWg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726071AbgC0E0D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Mar 2020 00:26:03 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35113 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725942AbgC0E0D (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Mar 2020 00:26:03 -0400
-Received: by mail-pg1-f195.google.com with SMTP id k5so1788452pga.2;
-        Thu, 26 Mar 2020 21:26:02 -0700 (PDT)
+        id S1726400AbgC0E0H (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Mar 2020 00:26:07 -0400
+Received: from mail-pj1-f49.google.com ([209.85.216.49]:54603 "EHLO
+        mail-pj1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725942AbgC0E0H (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Mar 2020 00:26:07 -0400
+Received: by mail-pj1-f49.google.com with SMTP id np9so3349207pjb.4;
+        Thu, 26 Mar 2020 21:26:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hE7UlM3ZtEnNpeciPaaHTgLJRlCO3pbOUpwcsVBcWZ8=;
-        b=t2G2V4r7HffD+c4ILowSI7JAOui6fyu/ae/UuasROnB+k27wJfhMzT5226WTjVVOpl
-         jzNJEBl41+S8e64a4Sl1d3tvnPuTM88ClM0nGRuZGBGTEVwqZEZM43oroDB2OiC5Yw+b
-         7HTtNTychVjoICmMuKnXRPjjBwn2xyIcPoEBW2N/bIZ8fTlJIHtzJ+zARgLw/whTKzyv
-         P+Hojkg2MUxTfDm1obZBNcZuMKDOvCxkzn54NmnHP42w1vI/yWXrGZxIjMCqKdKiAvf8
-         xj4WmpNqrjscUZYpF+RlRjWYdGi9w/Dgzs2N5Um+x+u9Zbq+TXwyOW39ExDcKeFnaJoB
-         j9cw==
+        bh=TvefD6m0E61GGILlMI+lkCFdbIRj6bwbtOVWpi4WKYU=;
+        b=jwCU7eWgIl0a/GjJtTa114EdjWcNjA8hsTTeVYyNhRa5N2xAW986KQGKiwLukXKzlj
+         dtAGMQAIU5QhVQpNsqFh5U+nUKnhti1EF0R9kKHtvOqWWL2NRaTKmi72vo+/tOHc+AsK
+         3ARUSzF5xaX0aKsbTigffqi1eWEJ4yXgkYA2nRByMTDNSzHqDeTjuDS2xNUHEVg9/c1X
+         +wGbgUipwcVh5GcR9t1O7j1oGvKcwLce7qEJtyV34Ru+6AjluxKLq5gIPKH6L2j4mZuA
+         0xuqNbfJ7y8p9dIRrWdrC6gjz7RiRAyTxCJ7322acAW3t6Aw+xMo6aACWxVOVZ3cVLCR
+         G4BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=hE7UlM3ZtEnNpeciPaaHTgLJRlCO3pbOUpwcsVBcWZ8=;
-        b=Z1cS3LizYPaqCp6lU/l2gJULmnaQlq9EYXX28b6OLmISbt3BU7RV5WrgEVzZgIG9FO
-         9Cyg0FZuPlot4rNpXEskKMsl27DLK21ARy3dJZ3dkuY8dwVbZfpTEdsiUBRikFvxBxzW
-         ErwmbnSl7SmmfyWNWWOvQZGBP87KzVW+i74F6LGfRtexs6fwvHypSj3zB/tBc+mpLAU9
-         xlyqv56vZBmd0lsCkkNGR+WQ1t4AAgns1zwOCcAHR8ZvFRok+FObIjp9P/HZWMsBDrHt
-         iXgUujlSUXrVeCKsHs15leR1jTLzUNH1NIhI+6j3TdIl2HgEZBdSEo1IBrjU9BF8Vtat
-         U3yQ==
-X-Gm-Message-State: ANhLgQ2im4zQG2T8TsUCo6b85PWdEpy4aYunG837r/Kl2K/qXeHRquLt
-        FPHP5KKtesWYRi0H6rpUvv2Mf4iy
-X-Google-Smtp-Source: ADFU+vvxq0zeJRbduAB1srsyLn7O5JlGNW/Gqh8DQScr6Mi7gcP7pnQ7/9H0te68rgs33o777HEy8g==
-X-Received: by 2002:a63:8b42:: with SMTP id j63mr11503672pge.27.1585283161593;
-        Thu, 26 Mar 2020 21:26:01 -0700 (PDT)
+        bh=TvefD6m0E61GGILlMI+lkCFdbIRj6bwbtOVWpi4WKYU=;
+        b=Y6Moq1rZUTi4uCghWty6O05176Nw68qsZc1lC0EfOhlAF7d2izMJ+0LMagQeAo25dS
+         J0Neku4EIctpRZTrdAzPzhpjXc9OuqqnTHG+FW7lYMgt2lu0VubAsU4xHPmcXRrSCFDq
+         HJjseYJQRmFB9omPVuCY+X2cCUfq5RLAsDEk9+5ghuOLum6sRfGRpKubNY1NttczFvMz
+         oRoxz9LxvayK7gHQLiPwhh3ydgYUQvn4GRVDs5zckHjA3kzW196SeQqpSD2116F76R5Y
+         jogVlAD+/JA3D2qku4A3cJRsslwp/D03bz6UnnVQqO769ihnUI5Yarev2TDUvles7wez
+         U3FQ==
+X-Gm-Message-State: ANhLgQ2jjj74cRfGvmJF4u6nEfC158Z9iYv5kfhmcAtXLzKVd+Wgpy8j
+        hMvE7WdC9ui0WBKXX6+p3rdHdMsu
+X-Google-Smtp-Source: ADFU+vuVi4sy8vO9KfM9pmkq5OxpCfApTgW4nGDVrd7W8stAUtUd233/CUDe3Aii+VujMNNmsQgxJw==
+X-Received: by 2002:a17:90a:c207:: with SMTP id e7mr3712394pjt.117.1585283164405;
+        Thu, 26 Mar 2020 21:26:04 -0700 (PDT)
 Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
-        by smtp.gmail.com with ESMTPSA id y17sm3004647pfl.104.2020.03.26.21.26.00
+        by smtp.gmail.com with ESMTPSA id y17sm3004647pfl.104.2020.03.26.21.26.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2020 21:26:00 -0700 (PDT)
+        Thu, 26 Mar 2020 21:26:03 -0700 (PDT)
 From:   Joe Stringer <joe@wand.net.nz>
 To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        eric.dumazet@gmail.com, lmb@cloudflare.com, kafai@fb.com
-Subject: [PATCHv3 bpf-next 2/5] net: Track socket refcounts in skb_steal_sock()
-Date:   Thu, 26 Mar 2020 21:25:53 -0700
-Message-Id: <20200327042556.11560-3-joe@wand.net.nz>
+Cc:     Lorenz Bauer <lmb@cloudflare.com>, netdev@vger.kernel.org,
+        daniel@iogearbox.net, ast@kernel.org, eric.dumazet@gmail.com,
+        kafai@fb.com
+Subject: [PATCHv3 bpf-next 4/5] selftests: bpf: add test for sk_assign
+Date:   Thu, 26 Mar 2020 21:25:55 -0700
+Message-Id: <20200327042556.11560-5-joe@wand.net.nz>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200327042556.11560-1-joe@wand.net.nz>
 References: <20200327042556.11560-1-joe@wand.net.nz>
@@ -71,152 +72,465 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Refactor the UDP/TCP handlers slightly to allow skb_steal_sock() to make
-the determination of whether the socket is reference counted in the case
-where it is prefetched by earlier logic such as early_demux or
-dst_sk_prefetch.
+From: Lorenz Bauer <lmb@cloudflare.com>
 
+Attach a tc direct-action classifier to lo in a fresh network
+namespace, and rewrite all connection attempts to localhost:4321
+to localhost:1234 (for port tests) and connections to unreachable
+IPv4/IPv6 IPs to the local socket (for address tests). Includes
+implementations for both TCP and UDP.
+
+Keep in mind that both client to server and server to client traffic
+passes the classifier.
+
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Co-authored-by: Joe Stringer <joe@wand.net.nz>
 Signed-off-by: Joe Stringer <joe@wand.net.nz>
 ---
-v3: No changes
-v2: Initial version
+v3: Add tests for UDP socket assign
+    Fix switching back to original netns after test
+    Avoid using signals to timeout connections
+    Refactor to iterate through test cases
+v2: Rebase onto test_progs infrastructure
+v1: Initial version
 ---
- include/net/inet6_hashtables.h |  3 +--
- include/net/inet_hashtables.h  |  3 +--
- include/net/sock.h             | 10 +++++++++-
- net/ipv4/udp.c                 |  6 ++++--
- net/ipv6/udp.c                 |  9 ++++++---
- 5 files changed, 21 insertions(+), 10 deletions(-)
+ .../selftests/bpf/prog_tests/sk_assign.c      | 276 ++++++++++++++++++
+ .../selftests/bpf/progs/test_sk_assign.c      | 143 +++++++++
+ 2 files changed, 419 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/sk_assign.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sk_assign.c
 
-diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-index fe96bf247aac..81b965953036 100644
---- a/include/net/inet6_hashtables.h
-+++ b/include/net/inet6_hashtables.h
-@@ -85,9 +85,8 @@ static inline struct sock *__inet6_lookup_skb(struct inet_hashinfo *hashinfo,
- 					      int iif, int sdif,
- 					      bool *refcounted)
- {
--	struct sock *sk = skb_steal_sock(skb);
-+	struct sock *sk = skb_steal_sock(skb, refcounted);
- 
--	*refcounted = true;
- 	if (sk)
- 		return sk;
- 
-diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
-index d0019d3395cf..ad64ba6a057f 100644
---- a/include/net/inet_hashtables.h
-+++ b/include/net/inet_hashtables.h
-@@ -379,10 +379,9 @@ static inline struct sock *__inet_lookup_skb(struct inet_hashinfo *hashinfo,
- 					     const int sdif,
- 					     bool *refcounted)
- {
--	struct sock *sk = skb_steal_sock(skb);
-+	struct sock *sk = skb_steal_sock(skb, refcounted);
- 	const struct iphdr *iph = ip_hdr(skb);
- 
--	*refcounted = true;
- 	if (sk)
- 		return sk;
- 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 2613d21a667a..1ca2e808cb8e 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -2533,15 +2533,23 @@ skb_sk_is_prefetched(struct sk_buff *skb)
- 	return skb->destructor == sock_pfree;
- }
- 
--static inline struct sock *skb_steal_sock(struct sk_buff *skb)
-+/**
-+ * skb_steal_sock
-+ * @skb to steal the socket from
-+ * @refcounted is set to true if the socket is reference-counted
+diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+new file mode 100644
+index 000000000000..25f17fe7d678
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+@@ -0,0 +1,276 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2018 Facebook
++// Copyright (c) 2019 Cloudflare
++// Copyright (c) 2020 Isovalent, Inc.
++/*
++ * Test that the socket assign program is able to redirect traffic towards a
++ * socket, regardless of whether the port or address destination of the traffic
++ * matches the port.
 + */
-+static inline struct sock *
-+skb_steal_sock(struct sk_buff *skb, bool *refcounted)
- {
- 	if (skb->sk) {
- 		struct sock *sk = skb->sk;
- 
-+		*refcounted = true;
- 		skb->destructor = NULL;
- 		skb->sk = NULL;
- 		return sk;
- 	}
-+	*refcounted = false;
- 	return NULL;
- }
- 
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 2633fc231593..b4035021bbd3 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -2288,6 +2288,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 	struct rtable *rt = skb_rtable(skb);
- 	__be32 saddr, daddr;
- 	struct net *net = dev_net(skb->dev);
-+	bool refcounted;
- 
- 	/*
- 	 *  Validate the packet.
-@@ -2313,7 +2314,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 	if (udp4_csum_init(skb, uh, proto))
- 		goto csum_error;
- 
--	sk = skb_steal_sock(skb);
-+	sk = skb_steal_sock(skb, &refcounted);
- 	if (sk) {
- 		struct dst_entry *dst = skb_dst(skb);
- 		int ret;
-@@ -2322,7 +2323,8 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 			udp_sk_rx_dst_set(sk, dst);
- 
- 		ret = udp_unicast_rcv_skb(sk, skb, uh);
--		sock_put(sk);
-+		if (refcounted)
-+			sock_put(sk);
- 		return ret;
- 	}
- 
-diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index 5dc439a391fe..7d4151747340 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -843,6 +843,7 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 	struct net *net = dev_net(skb->dev);
- 	struct udphdr *uh;
- 	struct sock *sk;
-+	bool refcounted;
- 	u32 ulen = 0;
- 
- 	if (!pskb_may_pull(skb, sizeof(struct udphdr)))
-@@ -879,7 +880,7 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 		goto csum_error;
- 
- 	/* Check if the socket is already available, e.g. due to early demux */
--	sk = skb_steal_sock(skb);
-+	sk = skb_steal_sock(skb, &refcounted);
- 	if (sk) {
- 		struct dst_entry *dst = skb_dst(skb);
- 		int ret;
-@@ -888,12 +889,14 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 			udp6_sk_rx_dst_set(sk, dst);
- 
- 		if (!uh->check && !udp_sk(sk)->no_check6_rx) {
--			sock_put(sk);
-+			if (refcounted)
-+				sock_put(sk);
- 			goto report_csum_error;
- 		}
- 
- 		ret = udp6_unicast_rcv_skb(sk, skb, uh);
--		sock_put(sk);
-+		if (refcounted)
-+			sock_put(sk);
- 		return ret;
- 	}
- 
++
++#define _GNU_SOURCE
++#include <fcntl.h>
++#include <signal.h>
++#include <stdlib.h>
++#include <unistd.h>
++
++#include "test_progs.h"
++
++#define BIND_PORT 1234
++#define CONNECT_PORT 4321
++#define TEST_DADDR (0xC0A80203)
++#define NS_SELF "/proc/self/ns/net"
++
++static const struct timeval timeo_sec = { .tv_sec = 3 };
++static const size_t timeo_optlen = sizeof(timeo_sec);
++static int stop, duration;
++
++static bool
++configure_stack(void)
++{
++	char tc_cmd[BUFSIZ];
++
++	/* Move to a new networking namespace */
++	if (CHECK_FAIL(unshare(CLONE_NEWNET)))
++		return false;
++
++	/* Configure necessary links, routes */
++	if (CHECK_FAIL(system("ip link set dev lo up")))
++		return false;
++	if (CHECK_FAIL(system("ip route add local default dev lo")))
++		return false;
++	if (CHECK_FAIL(system("ip -6 route add local default dev lo")))
++		return false;
++
++	/* Load qdisc, BPF program */
++	if (CHECK_FAIL(system("tc qdisc add dev lo clsact")))
++		return false;
++	sprintf(tc_cmd, "%s %s %s %s", "tc filter add dev lo ingress bpf",
++		       "direct-action object-file ./test_sk_assign.o",
++		       "section classifier/sk_assign_test",
++		       (env.verbosity < VERBOSE_VERY) ? " 2>/dev/null" : "");
++	if (CHECK(system(tc_cmd), "BPF load failed;",
++		  "run with -vv for more info\n"))
++		return false;
++
++	return true;
++}
++
++static int
++start_server(const struct sockaddr *addr, socklen_t len, int type)
++{
++	int fd;
++
++	fd = socket(addr->sa_family, type, 0);
++	if (CHECK_FAIL(fd == -1))
++		goto out;
++	if (CHECK_FAIL(setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo_sec,
++				  timeo_optlen)))
++		goto close_out;
++	if (CHECK_FAIL(bind(fd, addr, len) == -1))
++		goto close_out;
++	if (CHECK_FAIL(listen(fd, 128) == -1))
++		goto close_out;
++
++	goto out;
++close_out:
++	close(fd);
++	fd = -1;
++out:
++	return fd;
++}
++
++static int
++connect_to_server(const struct sockaddr *addr, socklen_t len, int type)
++{
++	int fd = -1;
++
++	fd = socket(addr->sa_family, type, 0);
++	if (CHECK_FAIL(fd == -1))
++		goto out;
++	if (CHECK_FAIL(setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timeo_sec,
++				  timeo_optlen)))
++		goto close_out;
++	if (CHECK_FAIL(connect(fd, addr, len)))
++		goto close_out;
++
++	goto out;
++close_out:
++	close(fd);
++	fd = -1;
++out:
++	return fd;
++}
++
++static in_port_t
++get_port(int fd)
++{
++	struct sockaddr_storage ss;
++	socklen_t slen = sizeof(ss);
++	in_port_t port = 0;
++
++	if (CHECK_FAIL(getsockname(fd, (struct sockaddr *)&ss, &slen)))
++		return port;
++
++	switch (ss.ss_family) {
++	case AF_INET:
++		port = ((struct sockaddr_in *)&ss)->sin_port;
++		break;
++	case AF_INET6:
++		port = ((struct sockaddr_in6 *)&ss)->sin6_port;
++		break;
++	default:
++		CHECK(1, "Invalid address family", "%d\n", ss.ss_family);
++	}
++	return port;
++}
++
++static int
++run_test(int server_fd, const struct sockaddr *addr, socklen_t len, int type)
++{
++	int client = -1, srv_client = -1;
++	char buf[] = "testing";
++	in_port_t port;
++	int ret = 1;
++
++	client = connect_to_server(addr, len, type);
++	if (client == -1) {
++		perror("Cannot connect to server");
++		goto out;
++	}
++
++	srv_client = accept(server_fd, NULL, NULL);
++	if (CHECK_FAIL(srv_client == -1)) {
++		perror("Can't accept connection");
++		goto out;
++	}
++	if (CHECK_FAIL(write(client, buf, sizeof(buf)) != sizeof(buf))) {
++		perror("Can't write on client");
++		goto out;
++	}
++	if (CHECK_FAIL(read(srv_client, &buf, sizeof(buf)) != sizeof(buf))) {
++		perror("Can't read on server");
++		goto out;
++	}
++
++	port = get_port(srv_client);
++	if (CHECK_FAIL(!port))
++		goto out;
++	if (CHECK(port != htons(CONNECT_PORT), "Expected", "port %u but got %u",
++		  CONNECT_PORT, ntohs(port)))
++		goto out;
++
++	ret = 0;
++out:
++	close(client);
++	if (srv_client != server_fd)
++		close(srv_client);
++	if (ret)
++		WRITE_ONCE(stop, 1);
++	return ret;
++}
++
++static void
++prepare_addr(struct sockaddr *addr, int family, __u16 port, bool rewrite_addr)
++{
++	struct sockaddr_in *addr4;
++	struct sockaddr_in6 *addr6;
++
++	switch (family) {
++	case AF_INET:
++		addr4 = (struct sockaddr_in *)addr;
++		memset(addr4, 0, sizeof(*addr4));
++		addr4->sin_family = family;
++		addr4->sin_port = htons(port);
++		if (rewrite_addr)
++			addr4->sin_addr.s_addr = htonl(TEST_DADDR);
++		else
++			addr4->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
++		break;
++	case AF_INET6:
++		addr6 = (struct sockaddr_in6 *)addr;
++		memset(addr6, 0, sizeof(*addr6));
++		addr6->sin6_family = family;
++		addr6->sin6_port = htons(port);
++		addr6->sin6_addr = in6addr_loopback;
++		if (rewrite_addr)
++			addr6->sin6_addr.s6_addr32[3] = htonl(TEST_DADDR);
++		break;
++	default:
++		fprintf(stderr, "Invalid family %d", family);
++	}
++}
++
++struct test_sk_cfg {
++	const char *name;
++	int family;
++	struct sockaddr *addr;
++	socklen_t len;
++	int type;
++	bool rewrite_addr;
++};
++
++#define TEST(NAME, FAMILY, TYPE, REWRITE)				\
++{									\
++	.name = NAME,							\
++	.family = FAMILY,						\
++	.addr = (FAMILY == AF_INET) ? (struct sockaddr *)&addr4		\
++				    : (struct sockaddr *)&addr6,	\
++	.len = (FAMILY == AF_INET) ? sizeof(addr4) : sizeof(addr6),	\
++	.type = TYPE,							\
++	.rewrite_addr = REWRITE,					\
++}
++
++void test_sk_assign(void)
++{
++	struct sockaddr_in addr4;
++	struct sockaddr_in6 addr6;
++	struct test_sk_cfg tests[] = {
++		TEST("ipv4 tcp port redir", AF_INET, SOCK_STREAM, false),
++		TEST("ipv4 tcp addr redir", AF_INET, SOCK_STREAM, true),
++		TEST("ipv6 tcp port redir", AF_INET6, SOCK_STREAM, false),
++		TEST("ipv6 tcp addr redir", AF_INET6, SOCK_STREAM, true),
++	};
++	int server = -1;
++	int self_net;
++
++	self_net = open(NS_SELF, O_RDONLY);
++	if (CHECK_FAIL(self_net < 0)) {
++		perror("Unable to open "NS_SELF);
++		return;
++	}
++
++	if (!configure_stack()) {
++		perror("configure_stack");
++		goto cleanup;
++	}
++
++	for (int i = 0; i < ARRAY_SIZE(tests) && !READ_ONCE(stop); i++) {
++		struct test_sk_cfg *test = &tests[i];
++		const struct sockaddr *addr;
++
++		if (!test__start_subtest(test->name))
++			continue;
++		prepare_addr(test->addr, test->family, BIND_PORT, false);
++		addr = (const struct sockaddr *)test->addr;
++		server = start_server(addr, test->len, test->type);
++		if (server == -1)
++			goto cleanup;
++
++		/* connect to unbound ports */
++		prepare_addr(test->addr, test->family, CONNECT_PORT,
++			     test->rewrite_addr);
++		if (run_test(server, addr, test->len, test->type))
++			goto close;
++
++		close(server);
++		server = -1;
++	}
++
++close:
++	close(server);
++cleanup:
++	if (CHECK_FAIL(setns(self_net, CLONE_NEWNET)))
++		perror("Failed to setns("NS_SELF")");
++	close(self_net);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_assign.c b/tools/testing/selftests/bpf/progs/test_sk_assign.c
+new file mode 100644
+index 000000000000..bde8748799eb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sk_assign.c
+@@ -0,0 +1,143 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2019 Cloudflare Ltd.
++// Copyright (c) 2020 Isovalent, Inc.
++
++#include <stddef.h>
++#include <stdbool.h>
++#include <string.h>
++#include <linux/bpf.h>
++#include <linux/if_ether.h>
++#include <linux/in.h>
++#include <linux/ip.h>
++#include <linux/ipv6.h>
++#include <linux/pkt_cls.h>
++#include <linux/tcp.h>
++#include <sys/socket.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++
++int _version SEC("version") = 1;
++char _license[] SEC("license") = "GPL";
++
++/* Fill 'tuple' with L3 info, and attempt to find L4. On fail, return NULL. */
++static inline struct bpf_sock_tuple *
++get_tuple(struct __sk_buff *skb, bool *ipv4)
++{
++	void *data_end = (void *)(long)skb->data_end;
++	void *data = (void *)(long)skb->data;
++	struct bpf_sock_tuple *result;
++	struct ethhdr *eth;
++	__u64 tuple_len;
++	__u8 proto = 0;
++	__u64 ihl_len;
++
++	eth = (struct ethhdr *)(data);
++	if (eth + 1 > data_end)
++		return NULL;
++
++	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
++		struct iphdr *iph = (struct iphdr *)(data + sizeof(*eth));
++
++		if (iph + 1 > data_end)
++			return NULL;
++		if (iph->ihl != 5)
++			/* Options are not supported */
++			return NULL;
++		ihl_len = iph->ihl * 4;
++		proto = iph->protocol;
++		*ipv4 = true;
++		result = (struct bpf_sock_tuple *)&iph->saddr;
++	} else if (eth->h_proto == bpf_htons(ETH_P_IPV6)) {
++		struct ipv6hdr *ip6h = (struct ipv6hdr *)(data + sizeof(*eth));
++
++		if (ip6h + 1 > data_end)
++			return NULL;
++		ihl_len = sizeof(*ip6h);
++		proto = ip6h->nexthdr;
++		*ipv4 = false;
++		result = (struct bpf_sock_tuple *)&ip6h->saddr;
++	} else {
++		return (struct bpf_sock_tuple *)data;
++	}
++
++	if (result + 1 > data_end || proto != IPPROTO_TCP)
++		return NULL;
++
++	return result;
++}
++
++static inline int
++handle_tcp(struct __sk_buff *skb, struct bpf_sock_tuple *tuple, bool ipv4)
++{
++	struct bpf_sock_tuple ln = {0};
++	struct bpf_sock *sk;
++	size_t tuple_len;
++	int ret;
++
++	tuple_len = ipv4 ? sizeof(tuple->ipv4) : sizeof(tuple->ipv6);
++	if ((void *)tuple + tuple_len > skb->data_end)
++		return TC_ACT_SHOT;
++
++	sk = bpf_skc_lookup_tcp(skb, tuple, tuple_len, BPF_F_CURRENT_NETNS, 0);
++	if (sk) {
++		if (sk->state != BPF_TCP_LISTEN)
++			goto assign;
++		bpf_sk_release(sk);
++	}
++
++	if (ipv4) {
++		if (tuple->ipv4.dport != bpf_htons(4321))
++			return TC_ACT_OK;
++
++		ln.ipv4.daddr = bpf_htonl(0x7f000001);
++		ln.ipv4.dport = bpf_htons(1234);
++
++		sk = bpf_skc_lookup_tcp(skb, &ln, sizeof(ln.ipv4),
++					BPF_F_CURRENT_NETNS, 0);
++	} else {
++		if (tuple->ipv6.dport != bpf_htons(4321))
++			return TC_ACT_OK;
++
++		/* Upper parts of daddr are already zero. */
++		ln.ipv6.daddr[3] = bpf_htonl(0x1);
++		ln.ipv6.dport = bpf_htons(1234);
++
++		sk = bpf_skc_lookup_tcp(skb, &ln, sizeof(ln.ipv6),
++					BPF_F_CURRENT_NETNS, 0);
++	}
++
++	/* workaround: We can't do a single socket lookup here, because then
++	 * the compiler will likely spill tuple_len to the stack. This makes it
++	 * lose all bounds information in the verifier, which then rejects the
++	 * call as unsafe.
++	 */
++	if (!sk)
++		return TC_ACT_SHOT;
++
++	if (sk->state != BPF_TCP_LISTEN) {
++		bpf_sk_release(sk);
++		return TC_ACT_SHOT;
++	}
++
++assign:
++	ret = bpf_sk_assign(skb, sk, 0);
++	bpf_sk_release(sk);
++	return ret;
++}
++
++SEC("classifier/sk_assign_test")
++int bpf_sk_assign_test(struct __sk_buff *skb)
++{
++	struct bpf_sock_tuple *tuple, ln = {0};
++	bool ipv4 = false;
++	int tuple_len;
++	int ret = 0;
++
++	tuple = get_tuple(skb, &ipv4);
++	if (!tuple)
++		return TC_ACT_SHOT;
++
++	ret = handle_tcp(skb, tuple, ipv4);
++
++	return ret == 0 ? TC_ACT_OK : TC_ACT_SHOT;
++}
 -- 
 2.20.1
 
