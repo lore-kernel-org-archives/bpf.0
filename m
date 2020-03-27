@@ -2,163 +2,154 @@ Return-Path: <SRS0=B1s+=5M=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43B71C2D0E5
-	for <bpf@archiver.kernel.org>; Fri, 27 Mar 2020 19:18:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 476FFC2D0E8
+	for <bpf@archiver.kernel.org>; Fri, 27 Mar 2020 19:29:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 203DB206E6
-	for <bpf@archiver.kernel.org>; Fri, 27 Mar 2020 19:18:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 22A612074A
+	for <bpf@archiver.kernel.org>; Fri, 27 Mar 2020 19:29:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="idvSSnan"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Z7zva+1H"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727143AbgC0TSJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Mar 2020 15:18:09 -0400
-Received: from mail-qv1-f67.google.com ([209.85.219.67]:37550 "EHLO
-        mail-qv1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726959AbgC0TSJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 27 Mar 2020 15:18:09 -0400
-Received: by mail-qv1-f67.google.com with SMTP id n1so5493387qvz.4;
-        Fri, 27 Mar 2020 12:18:07 -0700 (PDT)
+        id S1727771AbgC0T3C (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Mar 2020 15:29:02 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:52249 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727781AbgC0T3C (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Mar 2020 15:29:02 -0400
+Received: by mail-wm1-f67.google.com with SMTP id z18so12659263wmk.2
+        for <bpf@vger.kernel.org>; Fri, 27 Mar 2020 12:29:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VwCdC8pByNVHAX48x87PIRqfh9CGcN030y6wF8AKKEY=;
-        b=idvSSnanBbaoWYK4bFRkKb3OA3h+26oo9paWJgbbz1z1GDnYXXmDz7c84+c3LqnBDG
-         CyTiarQmxK0ASWiHKtk2PYO/pmHp7I3EP56J46eL1QtPp6xsiJmZ/OkZMeh4g+yXt3rn
-         aOAlLC7j+fe+3MI1PX+Oy24jbUvKlCAsLwU5MCccLBS8KpQCeDCoNEtS3xz7+xb/dbuM
-         +xmbTdzUPiIAZOHBVgCTqR9OB7sEJ7fydpl2zwJW+/7D+aAgOUQs6sVW7xZCdF7O3xcf
-         DilZtktAYR6NwV+rJ+IZb3RK/ZG7InzdKYz4Qjr43ptD777/IdTmZHtgDGnDiKVXDDfT
-         9jgw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=R06x0mive4StEspSChp8nXo8gNb0lFU1htQmKzctqw8=;
+        b=Z7zva+1H9Ng1imInyY27caOwyw10M/swWEMpQ8Mt/HV3BUB/lM080e5kqPFcP/eaHG
+         QYVhrR6LeZ3TSB9Ndst735+/YfMRd7ZHauPWZHM14E6UDuQIcCh2+zP2d87Y0vh0xexN
+         IUXiTfsOMwkFhwexpe/Nxa8FuGodE/f95Vd34=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VwCdC8pByNVHAX48x87PIRqfh9CGcN030y6wF8AKKEY=;
-        b=A6eyUmjVfcCg0MrDuz3AnCkb0WiS5lVDb9ENmkixLTaXVpAT3sIBKErNGbPp8GSL/m
-         WZUO6eA3tkuMKecPDjEMUiVbBJY+rlZWF1VK28QHudA8f1nmkpLL1mPEwDiAWlxvS1al
-         Iac3gexqjQAuHCKlLOndpmPy9E5S80Rqi+G3OiHp35K2CMVhTydzx7p8Ycb7Sdx4PzYA
-         83qmbhyuXpM7ndHmF8rnNA9i4DMDupRTS2hRBY9Kk3rcDhtjpwuRbYqx46Dtnk0HG29b
-         0+4qYjPMt/9K19faKPT8vIEBgQ0u7UBJyGBePWkDsi0YpAk88uyfLqqylmFX0jkeiud7
-         DlgA==
-X-Gm-Message-State: ANhLgQ1C5BIbrMwVpLgrpqAiQ9zsTlPtJwV6cEG/5WTRcSBW7ywPXnH7
-        WTYDU60w9vktKmeUBIIsWEsVosCoqnx/vce3688=
-X-Google-Smtp-Source: ADFU+vtiy2P2DXmmmtuqoeWJz2V5ww0YBj0CCPa9zN84HdGJ8O3WhEwcSXiLjvhLvSYv3lYhoGldN40Ebbm31GJPmNU=
-X-Received: by 2002:a0c:8525:: with SMTP id n34mr789046qva.224.1585336686901;
- Fri, 27 Mar 2020 12:18:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=R06x0mive4StEspSChp8nXo8gNb0lFU1htQmKzctqw8=;
+        b=RJrKBW/JqYOMfmRCmN6rPWIAVBxkf0mIJJRpxJOjcl9sjZTKMKrXCUDS1vmfey1nH3
+         OrZ9kQ9wPdnJjX33fe2x7jm1t621Pq+cxebbGrCa/4MJXthIz9is74Pf/2z+Lt4bXfZ/
+         ZuARQNZZnro3ue2v4Xshwsv9a9fPyhV1gHuxEbgZW/e1OCIq4WLWrL3cLvro/bhoFPCM
+         GCHkbPh01MNiFj++pNDPK+XhI3c2C4GDynL0i8zYQTjelG01kOCxKybpkkG+7CyFn9Uy
+         k85fiq4i+PoMEKuZAAcHojmA/uJkPLQ+nkLbKZw+k1qy+mZIioDIyewsiiKBVVQzXX/d
+         kkmw==
+X-Gm-Message-State: ANhLgQ0bC57GgcPGJ07q+IMh9c9+20VPS+69gUwlf6hytWsLbQeVBMXX
+        uq/gHaBcgflwoWcZQY7lzquj7Q==
+X-Google-Smtp-Source: ADFU+vsURyzyLHsYKVKSarKoYYkz4RkDde+olmwWaEXzivFrIaIwr/kh4Yuwm/+7Oys2J37oKItZtw==
+X-Received: by 2002:a1c:1dcf:: with SMTP id d198mr255524wmd.121.1585337341148;
+        Fri, 27 Mar 2020 12:29:01 -0700 (PDT)
+Received: from kpsingh-kernel.localdomain (77-56-209-237.dclient.hispeed.ch. [77.56.209.237])
+        by smtp.gmail.com with ESMTPSA id h132sm9828537wmf.18.2020.03.27.12.28.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2020 12:29:00 -0700 (PDT)
+From:   KP Singh <kpsingh@chromium.org>
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     Yonghong Song <yhs@fb.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        Brendan Jackman <jackmanb@google.com>,
+        Florent Revest <revest@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        James Morris <jmorris@namei.org>, Paul Turner <pjt@google.com>,
+        Jann Horn <jannh@google.com>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH bpf-next v8 3/8] bpf: lsm: provide attachment points for BPF LSM programs
+Date:   Fri, 27 Mar 2020 20:28:49 +0100
+Message-Id: <20200327192854.31150-4-kpsingh@chromium.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200327192854.31150-1-kpsingh@chromium.org>
+References: <20200327192854.31150-1-kpsingh@chromium.org>
 MIME-Version: 1.0
-References: <20200326151741.125427-1-toke@redhat.com> <20200327125818.155522-1-toke@redhat.com>
-In-Reply-To: <20200327125818.155522-1-toke@redhat.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 27 Mar 2020 12:17:56 -0700
-Message-ID: <CAEf4BzbEyYQeLEsw0tzYYHeKi+q7a+vxavya9O3jykwsH3ki9g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] libbpf: Add getter for pointer to data area
- for internal maps
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 5:58 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
-at.com> wrote:
->
-> For internal maps (most notably the maps backing global variables), libbp=
-f
-> uses an internal mmaped area to store the data after opening the object.
-> This data is subsequently copied into the kernel map when the object is
-> loaded.
->
-> This adds a getter for the pointer to that internal data store. This can =
-be
-> used to modify the data before it is loaded into the kernel, which is
-> especially relevant for RODATA, which is frozen on load. This same pointe=
-r
-> is already exposed to the auto-generated skeletons, so access to it is
-> already API; this just adds a way to get at it without pulling in the ful=
-l
-> skeleton infrastructure.
->
-> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> ---
-> v2:
->   - Add per-map getter for data area instead of a global rodata getter fo=
-r bpf_obj
->
-> tools/lib/bpf/libbpf.c   | 9 +++++++++
->  tools/lib/bpf/libbpf.h   | 1 +
->  tools/lib/bpf/libbpf.map | 1 +
->  3 files changed, 11 insertions(+)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 085e41f9b68e..a0055f8908fd 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -6756,6 +6756,15 @@ void *bpf_map__priv(const struct bpf_map *map)
->         return map ? map->priv : ERR_PTR(-EINVAL);
->  }
->
-> +void *bpf_map__data_area(const struct bpf_map *map, size_t *size)
+From: KP Singh <kpsingh@google.com>
 
-I'm not entirely thrilled about "data_area" name. This is entirely for
-providing initial value for maps, so maybe something like
-bpf_map__init_value() or something along those lines?
+When CONFIG_BPF_LSM is enabled, nop functions, bpf_lsm_<hook_name>, are
+generated for each LSM hook. These functions are initialized as LSM
+hooks in a subsequent patch.
 
-Actually, how about a different API altogether:
+Signed-off-by: KP Singh <kpsingh@google.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Acked-by: James Morris <jamorris@linux.microsoft.com>
+Reviewed-by: Brendan Jackman <jackmanb@google.com>
+Reviewed-by: Florent Revest <revest@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/bpf_lsm.h | 22 ++++++++++++++++++++++
+ kernel/bpf/bpf_lsm.c    | 14 ++++++++++++++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 include/linux/bpf_lsm.h
 
-bpf_map__set_init_value(struct bpf_map *map, void *data, size_t size)?
+diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+new file mode 100644
+index 000000000000..83b96895829f
+--- /dev/null
++++ b/include/linux/bpf_lsm.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++/*
++ * Copyright (C) 2020 Google LLC.
++ */
++
++#ifndef _LINUX_BPF_LSM_H
++#define _LINUX_BPF_LSM_H
++
++#include <linux/bpf.h>
++#include <linux/lsm_hooks.h>
++
++#ifdef CONFIG_BPF_LSM
++
++#define LSM_HOOK(RET, DEFAULT, NAME, ...) \
++	RET bpf_lsm_##NAME(__VA_ARGS__);
++#include <linux/lsm_hook_defs.h>
++#undef LSM_HOOK
++
++#endif /* CONFIG_BPF_LSM */
++
++#endif /* _LINUX_BPF_LSM_H */
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 82875039ca90..3b3bbb28603e 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -7,6 +7,20 @@
+ #include <linux/filter.h>
+ #include <linux/bpf.h>
+ #include <linux/btf.h>
++#include <linux/lsm_hooks.h>
++#include <linux/bpf_lsm.h>
++
++/* For every LSM hook that allows attachment of BPF programs, declare a nop
++ * function where a BPF program can be attached.
++ */
++#define LSM_HOOK(RET, DEFAULT, NAME, ...)	\
++noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
++{						\
++	return DEFAULT;				\
++}
++
++#include <linux/lsm_hook_defs.h>
++#undef LSM_HOOK
+ 
+ const struct bpf_prog_ops lsm_prog_ops = {
+ };
+-- 
+2.20.1
 
-Application will have to prepare data of correct size, which will be
-copied to libbpf's internal storage. It also doesn't expose any of
-internal pointer. I don't think extra memcopy is a big deal here.
-Thoughts?
-
-
-> +{
-> +       if (map->mmaped && map->libbpf_type !=3D LIBBPF_MAP_KCONFIG) {
-> +               *size =3D map->def.value_size;
-> +               return map->mmaped;
-> +       }
-> +       return NULL;
-> +}
-> +
->  bool bpf_map__is_offload_neutral(const struct bpf_map *map)
->  {
->         return map->def.type =3D=3D BPF_MAP_TYPE_PERF_EVENT_ARRAY;
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index d38d7a629417..baef0d2f3205 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -407,6 +407,7 @@ typedef void (*bpf_map_clear_priv_t)(struct bpf_map *=
-, void *);
->  LIBBPF_API int bpf_map__set_priv(struct bpf_map *map, void *priv,
->                                  bpf_map_clear_priv_t clear_priv);
->  LIBBPF_API void *bpf_map__priv(const struct bpf_map *map);
-> +LIBBPF_API void *bpf_map__data_area(const struct bpf_map *map, size_t *s=
-ize);
->  LIBBPF_API int bpf_map__reuse_fd(struct bpf_map *map, int fd);
->  LIBBPF_API int bpf_map__resize(struct bpf_map *map, __u32 max_entries);
->  LIBBPF_API bool bpf_map__is_offload_neutral(const struct bpf_map *map);
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 5129283c0284..258528045a85 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -243,5 +243,6 @@ LIBBPF_0.0.8 {
->                 bpf_link__pin;
->                 bpf_link__pin_path;
->                 bpf_link__unpin;
-> +               bpf_map__data_area;
->                 bpf_program__set_attach_target;
->  } LIBBPF_0.0.7;
-> --
-> 2.26.0
->
