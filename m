@@ -2,73 +2,74 @@ Return-Path: <SRS0=S+qh=5O=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-14.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A183C2D0EE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05E71C2D0EF
 	for <bpf@archiver.kernel.org>; Sun, 29 Mar 2020 00:44:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5D6A020732
-	for <bpf@archiver.kernel.org>; Sun, 29 Mar 2020 00:44:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD11E20732
+	for <bpf@archiver.kernel.org>; Sun, 29 Mar 2020 00:44:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PMY8KHel"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AjJRdfkQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727806AbgC2AoF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727781AbgC2AoF (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sat, 28 Mar 2020 20:44:05 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:33857 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727770AbgC2AoF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 28 Mar 2020 20:44:05 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 26so13039409wmk.1
-        for <bpf@vger.kernel.org>; Sat, 28 Mar 2020 17:44:04 -0700 (PDT)
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:51801 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727729AbgC2AoE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 28 Mar 2020 20:44:04 -0400
+Received: by mail-wm1-f67.google.com with SMTP id c187so15870349wme.1
+        for <bpf@vger.kernel.org>; Sat, 28 Mar 2020 17:44:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=R06x0mive4StEspSChp8nXo8gNb0lFU1htQmKzctqw8=;
-        b=PMY8KHelbwaNa5xYBYDcWyEk94/0a2gh2tMn0Q3NqQjOr84u0kOMBhjAZJvXfucvnD
-         7kq5k5vcsQrc/xL4Ugpec9xTSjW+xkYonCBlU3FutlOy50av8YXw+YRL6J3j+SjfPaGL
-         +CZeRoYm+WJGtT7lztYXA5+rfTbl+Tb7evYVI=
+        bh=7blgUyFIIrVXU7X0EuWXVRLnZG5tDffRat1rkTfOq9s=;
+        b=AjJRdfkQK8V4rv3MT1CVxj4JrgZcIhoGpKGyfWFmCWrjLPX/2nygmTAyrJentmQgwl
+         wOVz5/ddR+u5hODxWWjJvvqNinCFomAtxS0qnh083h29aQVL2b6LJZD6hYslnqEcFODf
+         AmWI/Vf8nLLSjwP5QAzxfjFhuADPBlOo+ZOQU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=R06x0mive4StEspSChp8nXo8gNb0lFU1htQmKzctqw8=;
-        b=VzEPuByd6iinurUJO8my38aiGQVdX3vx9zV+FSiq4uMaYN61nwS3r0tI7s2tCwWShH
-         tnesxwuZ8KlSOfsvWxpLJ4qh7kD6dJknHJecLJWzyfwGa1hkMDg40xyOVjqSO+vje6nj
-         qPcE3He+JTWJih+RgUlo9hbxZxv8hhCwimJ/8xWuDMyOnTJVClAjwm55/VDSkheWkKFd
-         h4iN0XyIuw80+p24PN28mRSJweUojT9WpiAkSb8JaKkFCYjenGLE6RMCr6kBwtABHEo0
-         V98Pm6FIeE4UOfWigK0tah6qlN6DF+ZA6ggdgutuSO2hJLQkDONhC8Aw8TAWhCUZ9Epa
-         iXjA==
-X-Gm-Message-State: ANhLgQ2cP5rp79ZyAwaHKLesp95nc42F5/KsbGYGCGgcWHjMIZCobVca
-        N9vT6PvjTtQ51zSypXTG4JD9nw==
-X-Google-Smtp-Source: ADFU+vsyGkhX3SOTyLgCNzb2toTt7FNMiXNaSN34rKBoCi4LpY6Cqns9hhN73YF/13ZQuL/6iRJ14g==
-X-Received: by 2002:a7b:c3cd:: with SMTP id t13mr5831470wmj.15.1585442643969;
-        Sat, 28 Mar 2020 17:44:03 -0700 (PDT)
+        bh=7blgUyFIIrVXU7X0EuWXVRLnZG5tDffRat1rkTfOq9s=;
+        b=WG0rfkg+0Zru27P6nUrfFF+zsT6nEqqfclbljPxB8Rm2i+8vyf9hCcGmdDvy29Mbhy
+         KjvuOCRaFEBj0f17DYBmVRqtcrUBeGWCiXIHKDomu0PL56AbkluFlx1jcaslen150dHP
+         bsdf6+JcC0Os1kKPPfHaKIIm9u03Si/vIxgehp75PxR5DMG7szGqUx7II1yjZFeMFDo+
+         13k0kLj2kuwYOYFk1SEmj18XpCGl/aOA2oxG4XhFMF8d8z656S4MIrhFX4RqgHYloFkU
+         gyrnPkkX+rwHLdS6PqcaJhYlMdsGvGOyeWjMd9aou21KkfW4CEGp3uJ9xHoADxNqY+3C
+         GDuQ==
+X-Gm-Message-State: ANhLgQ3N1o1PC/9tQRzc7MzIfnoP8olymUb06UGBq3HlNU2Zonn/9xam
+        kV2774ubDWJrRsY68wWZ4q2htA==
+X-Google-Smtp-Source: ADFU+vsL+qLjVbG8SMz9ihKx6LI3nR88tJEyib4a8xe5jE1xDVwCLBnUeZwN6Bnvnv/Sq15klHmMYA==
+X-Received: by 2002:a05:600c:224d:: with SMTP id a13mr5897964wmm.53.1585442641569;
+        Sat, 28 Mar 2020 17:44:01 -0700 (PDT)
 Received: from kpsingh-kernel.localdomain (77-56-209-237.dclient.hispeed.ch. [77.56.209.237])
-        by smtp.gmail.com with ESMTPSA id e5sm14577647wru.92.2020.03.28.17.44.02
+        by smtp.gmail.com with ESMTPSA id e5sm14577647wru.92.2020.03.28.17.44.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Mar 2020 17:44:03 -0700 (PDT)
+        Sat, 28 Mar 2020 17:44:01 -0700 (PDT)
 From:   KP Singh <kpsingh@chromium.org>
 To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Cc:     Yonghong Song <yhs@fb.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        Brendan Jackman <jackmanb@google.com>,
+Cc:     Brendan Jackman <jackmanb@google.com>,
         Florent Revest <revest@google.com>,
-        Kees Cook <keescook@chromium.org>,
+        Thomas Garnier <thgarnie@google.com>,
+        Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>,
+        James Morris <jamorris@linux.microsoft.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>, Paul Turner <pjt@google.com>,
-        Jann Horn <jannh@google.com>,
+        James Morris <jmorris@namei.org>,
+        Kees Cook <keescook@chromium.org>,
+        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
         Florent Revest <revest@chromium.org>,
         Brendan Jackman <jackmanb@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH bpf-next v9 3/8] bpf: lsm: provide attachment points for BPF LSM programs
-Date:   Sun, 29 Mar 2020 01:43:51 +0100
-Message-Id: <20200329004356.27286-4-kpsingh@chromium.org>
+Subject: [PATCH bpf-next v9 1/8] bpf: Introduce BPF_PROG_TYPE_LSM
+Date:   Sun, 29 Mar 2020 01:43:49 +0100
+Message-Id: <20200329004356.27286-2-kpsingh@chromium.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200329004356.27286-1-kpsingh@chromium.org>
 References: <20200329004356.27286-1-kpsingh@chromium.org>
@@ -81,75 +82,231 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: KP Singh <kpsingh@google.com>
 
-When CONFIG_BPF_LSM is enabled, nop functions, bpf_lsm_<hook_name>, are
-generated for each LSM hook. These functions are initialized as LSM
-hooks in a subsequent patch.
+Introduce types and configs for bpf programs that can be attached to
+LSM hooks. The programs can be enabled by the config option
+CONFIG_BPF_LSM.
 
 Signed-off-by: KP Singh <kpsingh@google.com>
-Acked-by: Yonghong Song <yhs@fb.com>
-Acked-by: James Morris <jamorris@linux.microsoft.com>
 Reviewed-by: Brendan Jackman <jackmanb@google.com>
 Reviewed-by: Florent Revest <revest@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Thomas Garnier <thgarnie@google.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Acked-by: James Morris <jamorris@linux.microsoft.com>
 ---
- include/linux/bpf_lsm.h | 22 ++++++++++++++++++++++
- kernel/bpf/bpf_lsm.c    | 14 ++++++++++++++
- 2 files changed, 36 insertions(+)
- create mode 100644 include/linux/bpf_lsm.h
+ MAINTAINERS                    |  1 +
+ include/linux/bpf.h            |  3 +++
+ include/linux/bpf_types.h      |  4 ++++
+ include/uapi/linux/bpf.h       |  2 ++
+ init/Kconfig                   | 12 ++++++++++++
+ kernel/bpf/Makefile            |  1 +
+ kernel/bpf/bpf_lsm.c           | 17 +++++++++++++++++
+ kernel/trace/bpf_trace.c       | 12 ++++++------
+ tools/include/uapi/linux/bpf.h |  2 ++
+ tools/lib/bpf/libbpf_probes.c  |  1 +
+ 10 files changed, 49 insertions(+), 6 deletions(-)
+ create mode 100644 kernel/bpf/bpf_lsm.c
 
-diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5dbee41045bc..3197fe9256b2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3147,6 +3147,7 @@ R:	Martin KaFai Lau <kafai@fb.com>
+ R:	Song Liu <songliubraving@fb.com>
+ R:	Yonghong Song <yhs@fb.com>
+ R:	Andrii Nakryiko <andriin@fb.com>
++R:	KP Singh <kpsingh@chromium.org>
+ L:	netdev@vger.kernel.org
+ L:	bpf@vger.kernel.org
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 372708eeaecd..3bde59a8453b 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1515,6 +1515,9 @@ extern const struct bpf_func_proto bpf_tcp_sock_proto;
+ extern const struct bpf_func_proto bpf_jiffies64_proto;
+ extern const struct bpf_func_proto bpf_get_ns_current_pid_tgid_proto;
+ 
++const struct bpf_func_proto *bpf_tracing_func_proto(
++	enum bpf_func_id func_id, const struct bpf_prog *prog);
++
+ /* Shared helpers among cBPF and eBPF. */
+ void bpf_user_rnd_init_once(void);
+ u64 bpf_user_rnd_u32(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
+index c81d4ece79a4..ba0c2d56f8a3 100644
+--- a/include/linux/bpf_types.h
++++ b/include/linux/bpf_types.h
+@@ -70,6 +70,10 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_STRUCT_OPS, bpf_struct_ops,
+ 	      void *, void *)
+ BPF_PROG_TYPE(BPF_PROG_TYPE_EXT, bpf_extension,
+ 	      void *, void *)
++#ifdef CONFIG_BPF_LSM
++BPF_PROG_TYPE(BPF_PROG_TYPE_LSM, lsm,
++	       void *, void *)
++#endif /* CONFIG_BPF_LSM */
+ #endif
+ 
+ BPF_MAP_TYPE(BPF_MAP_TYPE_ARRAY, array_map_ops)
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 222ba11966e3..f1fbc36f58d3 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -181,6 +181,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_TRACING,
+ 	BPF_PROG_TYPE_STRUCT_OPS,
+ 	BPF_PROG_TYPE_EXT,
++	BPF_PROG_TYPE_LSM,
+ };
+ 
+ enum bpf_attach_type {
+@@ -211,6 +212,7 @@ enum bpf_attach_type {
+ 	BPF_TRACE_FENTRY,
+ 	BPF_TRACE_FEXIT,
+ 	BPF_MODIFY_RETURN,
++	BPF_LSM_MAC,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+diff --git a/init/Kconfig b/init/Kconfig
+index 20a6ac33761c..deae572d1927 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1616,6 +1616,18 @@ config KALLSYMS_BASE_RELATIVE
+ # end of the "standard kernel features (expert users)" menu
+ 
+ # syscall, maps, verifier
++
++config BPF_LSM
++	bool "LSM Instrumentation with BPF"
++	depends on BPF_SYSCALL
++	depends on SECURITY
++	depends on BPF_JIT
++	help
++	  Enables instrumentation of the security hooks with eBPF programs for
++	  implementing dynamic MAC and Audit Policies.
++
++	  If you are unsure how to answer this question, answer N.
++
+ config BPF_SYSCALL
+ 	bool "Enable bpf() system call"
+ 	select BPF
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 046ce5d98033..f2d7be596966 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -29,4 +29,5 @@ obj-$(CONFIG_DEBUG_INFO_BTF) += sysfs_btf.o
+ endif
+ ifeq ($(CONFIG_BPF_JIT),y)
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_struct_ops.o
++obj-${CONFIG_BPF_LSM} += bpf_lsm.o
+ endif
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
 new file mode 100644
-index 000000000000..83b96895829f
+index 000000000000..82875039ca90
 --- /dev/null
-+++ b/include/linux/bpf_lsm.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++++ b/kernel/bpf/bpf_lsm.c
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: GPL-2.0
 +
 +/*
 + * Copyright (C) 2020 Google LLC.
 + */
 +
-+#ifndef _LINUX_BPF_LSM_H
-+#define _LINUX_BPF_LSM_H
-+
++#include <linux/filter.h>
 +#include <linux/bpf.h>
-+#include <linux/lsm_hooks.h>
++#include <linux/btf.h>
 +
-+#ifdef CONFIG_BPF_LSM
++const struct bpf_prog_ops lsm_prog_ops = {
++};
 +
-+#define LSM_HOOK(RET, DEFAULT, NAME, ...) \
-+	RET bpf_lsm_##NAME(__VA_ARGS__);
-+#include <linux/lsm_hook_defs.h>
-+#undef LSM_HOOK
-+
-+#endif /* CONFIG_BPF_LSM */
-+
-+#endif /* _LINUX_BPF_LSM_H */
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index 82875039ca90..3b3bbb28603e 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -7,6 +7,20 @@
- #include <linux/filter.h>
- #include <linux/bpf.h>
- #include <linux/btf.h>
-+#include <linux/lsm_hooks.h>
-+#include <linux/bpf_lsm.h>
-+
-+/* For every LSM hook that allows attachment of BPF programs, declare a nop
-+ * function where a BPF program can be attached.
-+ */
-+#define LSM_HOOK(RET, DEFAULT, NAME, ...)	\
-+noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
-+{						\
-+	return DEFAULT;				\
-+}
-+
-+#include <linux/lsm_hook_defs.h>
-+#undef LSM_HOOK
- 
- const struct bpf_prog_ops lsm_prog_ops = {
++const struct bpf_verifier_ops lsm_verifier_ops = {
++	.get_func_proto = bpf_tracing_func_proto,
++	.is_valid_access = btf_ctx_access,
++};
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index e619eedb5919..37ffceab608f 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -779,8 +779,8 @@ static const struct bpf_func_proto bpf_send_signal_thread_proto = {
+ 	.arg1_type	= ARG_ANYTHING,
  };
+ 
+-static const struct bpf_func_proto *
+-tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
++const struct bpf_func_proto *
++bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+ 	switch (func_id) {
+ 	case BPF_FUNC_map_lookup_elem:
+@@ -865,7 +865,7 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_override_return_proto;
+ #endif
+ 	default:
+-		return tracing_func_proto(func_id, prog);
++		return bpf_tracing_func_proto(func_id, prog);
+ 	}
+ }
+ 
+@@ -975,7 +975,7 @@ tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_get_stack:
+ 		return &bpf_get_stack_proto_tp;
+ 	default:
+-		return tracing_func_proto(func_id, prog);
++		return bpf_tracing_func_proto(func_id, prog);
+ 	}
+ }
+ 
+@@ -1082,7 +1082,7 @@ pe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_read_branch_records:
+ 		return &bpf_read_branch_records_proto;
+ 	default:
+-		return tracing_func_proto(func_id, prog);
++		return bpf_tracing_func_proto(func_id, prog);
+ 	}
+ }
+ 
+@@ -1210,7 +1210,7 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_get_stack:
+ 		return &bpf_get_stack_proto_raw_tp;
+ 	default:
+-		return tracing_func_proto(func_id, prog);
++		return bpf_tracing_func_proto(func_id, prog);
+ 	}
+ }
+ 
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 222ba11966e3..f1fbc36f58d3 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -181,6 +181,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_TRACING,
+ 	BPF_PROG_TYPE_STRUCT_OPS,
+ 	BPF_PROG_TYPE_EXT,
++	BPF_PROG_TYPE_LSM,
+ };
+ 
+ enum bpf_attach_type {
+@@ -211,6 +212,7 @@ enum bpf_attach_type {
+ 	BPF_TRACE_FENTRY,
+ 	BPF_TRACE_FEXIT,
+ 	BPF_MODIFY_RETURN,
++	BPF_LSM_MAC,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+index b782ebef6ac9..2c92059c0c90 100644
+--- a/tools/lib/bpf/libbpf_probes.c
++++ b/tools/lib/bpf/libbpf_probes.c
+@@ -108,6 +108,7 @@ probe_load(enum bpf_prog_type prog_type, const struct bpf_insn *insns,
+ 	case BPF_PROG_TYPE_TRACING:
+ 	case BPF_PROG_TYPE_STRUCT_OPS:
+ 	case BPF_PROG_TYPE_EXT:
++	case BPF_PROG_TYPE_LSM:
+ 	default:
+ 		break;
+ 	}
 -- 
 2.20.1
 
