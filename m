@@ -2,228 +2,118 @@ Return-Path: <SRS0=wk2/=5P=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6DE4C43331
-	for <bpf@archiver.kernel.org>; Mon, 30 Mar 2020 16:03:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39931C43331
+	for <bpf@archiver.kernel.org>; Mon, 30 Mar 2020 16:12:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BAAB420732
-	for <bpf@archiver.kernel.org>; Mon, 30 Mar 2020 16:03:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DBA32073B
+	for <bpf@archiver.kernel.org>; Mon, 30 Mar 2020 16:12:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1585584762;
+	bh=aGvwRHVGkfCwUwyFQ1NwD3TIR1jMPKBWli5lctMi03A=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=VkAjVjWc8Sa+ya4Pu52JnA4n2en+x9wtPUBADfn9PyPxBAjucRyW1KlASZujvJBeX
+	 9asGTHSVfBEhfQTePrpwr8igpiU+O72lV5ZZNRTgROVWXXvhdoZoHWT7cbbQdtyavZ
+	 TEFjJxI9aC2tAMjjjU5mXZ0Ay1BrZDXJu2ST04YM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729976AbgC3QDo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 Mar 2020 12:03:44 -0400
-Received: from www62.your-server.de ([213.133.104.62]:56126 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729994AbgC3QDl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 Mar 2020 12:03:41 -0400
-Received: from 98.186.195.178.dynamic.wline.res.cust.swisscom.ch ([178.195.186.98] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jIwt0-00074I-H5; Mon, 30 Mar 2020 18:03:38 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     alexei.starovoitov@gmail.com
-Cc:     jannh@google.com, yhs@fb.com, john.fastabend@gmail.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next 2/3] bpf: Fix tnum constraints for 32-bit comparisons
-Date:   Mon, 30 Mar 2020 18:03:23 +0200
-Message-Id: <20200330160324.15259-3-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20200330160324.15259-1-daniel@iogearbox.net>
-References: <20200330160324.15259-1-daniel@iogearbox.net>
+        id S1726981AbgC3QMl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 Mar 2020 12:12:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50206 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726017AbgC3QMl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 Mar 2020 12:12:41 -0400
+Received: from localhost.localdomain (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 41FDD2072E;
+        Mon, 30 Mar 2020 16:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585584761;
+        bh=aGvwRHVGkfCwUwyFQ1NwD3TIR1jMPKBWli5lctMi03A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cOyl4qF1nqSnhTT458HYnCkYRTGr0Y0u/itgXt8V2OwSLH82KbyfSX6NAYexbwDrw
+         +IjVNh+I0R5+Gd50deJgpMKJA9R9q27UZu7uWsrTpOtFNXyxXS55fA8cGyb7DaQMaz
+         AziioY8InHhg5w6clw0hKSIYvjiuAmlMrwIpKrt8=
+From:   Will Deacon <will@kernel.org>
+To:     netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@android.com, Will Deacon <will@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jason Wang <jasowang@redhat.com>,
+        Eric Dumazet <edumazet@google.com>
+Subject: [RFC PATCH] tun: Don't put_page() for all negative return values from XDP program
+Date:   Mon, 30 Mar 2020 17:12:34 +0100
+Message-Id: <20200330161234.12777-1-will@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.2/25767/Mon Mar 30 15:08:30 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+When an XDP program is installed, tun_build_skb() grabs a reference to
+the current page fragment page if the program returns XDP_REDIRECT or
+XDP_TX. However, since tun_xdp_act() passes through negative return
+values from the XDP program, it is possible to trigger the error path by
+mistake and accidentally drop a reference to the fragments page without
+taking one, leading to a spurious free. This is believed to be the cause
+of some KASAN use-after-free reports from syzbot [1], although without a
+reproducer it is not possible to confirm whether this patch fixes the
+problem.
 
-The BPF verifier tried to track values based on 32-bit comparisons by
-(ab)using the tnum state via 581738a681b6 ("bpf: Provide better register
-bounds after jmp32 instructions"). The idea is that after a check like
-this:
+Ensure that we only drop a reference to the fragments page if the XDP
+transmit or redirect operations actually fail.
 
-    if ((u32)r0 > 3)
-      exit
+[1] https://syzkaller.appspot.com/bug?id=e76a6af1be4acd727ff6bbca669833f98cbf5d95
 
-We can't meaningfully constrain the arithmetic-range-based tracking, but
-we can update the tnum state to (value=0,mask=0xffff'ffff'0000'0003).
-However, the implementation from 581738a681b6 didn't compute the tnum
-constraint based on the fixed operand, but instead derives it from the
-arithmetic-range-based tracking. This means that after the following
-sequence of operations:
-
-    if (r0 >= 0x1'0000'0001)
-      exit
-    if ((u32)r0 > 7)
-      exit
-
-The verifier assumed that the lower half of r0 is in the range (0, 0)
-and apply the tnum constraint (value=0,mask=0xffff'ffff'0000'0000) thus
-causing the overall tnum to be (value=0,mask=0x1'0000'0000), which was
-incorrect. Provide a fixed implementation.
-
-Fixes: 581738a681b6 ("bpf: Provide better register bounds after jmp32 instructions")
-Signed-off-by: Jann Horn <jannh@google.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jason Wang <jasowang@redhat.com>
+CC: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Will Deacon <will@kernel.org>
 ---
- kernel/bpf/verifier.c | 108 ++++++++++++++++++++++++++++--------------
- 1 file changed, 72 insertions(+), 36 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2a84f73a93a1..6fce6f096c16 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5678,6 +5678,70 @@ static bool cmp_val_with_extended_s64(s64 sval, struct bpf_reg_state *reg)
- 		reg->smax_value <= 0 && reg->smin_value >= S32_MIN);
- }
+Sending as RFC because I've not been able to confirm that this fixes anything.
+
+ drivers/net/tun.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 650c937ed56b..9de9b7d8aedd 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1715,8 +1715,12 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
+ 			alloc_frag->offset += buflen;
+ 		}
+ 		err = tun_xdp_act(tun, xdp_prog, &xdp, act);
+-		if (err < 0)
+-			goto err_xdp;
++		if (err < 0) {
++			if (act == XDP_REDIRECT || act == XDP_TX)
++				put_page(alloc_frag->page);
++			goto out;
++		}
++
+ 		if (err == XDP_REDIRECT)
+ 			xdp_do_flush();
+ 		if (err != XDP_PASS)
+@@ -1730,8 +1734,6 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
  
-+/* Constrain the possible values of @reg with unsigned upper bound @bound.
-+ * If @is_exclusive, @bound is an exclusive limit, otherwise it is inclusive.
-+ * If @is_jmp32, @bound is a 32-bit value that only constrains the low 32 bits
-+ * of @reg.
-+ */
-+static void set_upper_bound(struct bpf_reg_state *reg, u64 bound, bool is_jmp32,
-+			    bool is_exclusive)
-+{
-+	if (is_exclusive) {
-+		/* There are no values for `reg` that make `reg<0` true. */
-+		if (bound == 0)
-+			return;
-+		bound--;
-+	}
-+	if (is_jmp32) {
-+		/* Constrain the register's value in the tnum representation.
-+		 * For 64-bit comparisons this happens later in
-+		 * __reg_bound_offset(), but for 32-bit comparisons, we can be
-+		 * more precise than what can be derived from the updated
-+		 * numeric bounds.
-+		 */
-+		struct tnum t = tnum_range(0, bound);
-+
-+		t.mask |= ~0xffffffffULL; /* upper half is unknown */
-+		reg->var_off = tnum_intersect(reg->var_off, t);
-+
-+		/* Compute the 64-bit bound from the 32-bit bound. */
-+		bound += gen_hi_max(reg->var_off);
-+	}
-+	reg->umax_value = min(reg->umax_value, bound);
-+}
-+
-+/* Constrain the possible values of @reg with unsigned lower bound @bound.
-+ * If @is_exclusive, @bound is an exclusive limit, otherwise it is inclusive.
-+ * If @is_jmp32, @bound is a 32-bit value that only constrains the low 32 bits
-+ * of @reg.
-+ */
-+static void set_lower_bound(struct bpf_reg_state *reg, u64 bound, bool is_jmp32,
-+			    bool is_exclusive)
-+{
-+	if (is_exclusive) {
-+		/* There are no values for `reg` that make `reg>MAX` true. */
-+		if (bound == (is_jmp32 ? U32_MAX : U64_MAX))
-+			return;
-+		bound++;
-+	}
-+	if (is_jmp32) {
-+		/* Constrain the register's value in the tnum representation.
-+		 * For 64-bit comparisons this happens later in
-+		 * __reg_bound_offset(), but for 32-bit comparisons, we can be
-+		 * more precise than what can be derived from the updated
-+		 * numeric bounds.
-+		 */
-+		struct tnum t = tnum_range(bound, U32_MAX);
-+
-+		t.mask |= ~0xffffffffULL; /* upper half is unknown */
-+		reg->var_off = tnum_intersect(reg->var_off, t);
-+
-+		/* Compute the 64-bit bound from the 32-bit bound. */
-+		bound += gen_hi_min(reg->var_off);
-+	}
-+	reg->umin_value = max(reg->umin_value, bound);
-+}
-+
- /* Adjusts the register min/max values in the case that the dst_reg is the
-  * variable register that we are working on, and src_reg is a constant or we're
-  * simply doing a BPF_K check.
-@@ -5733,15 +5797,8 @@ static void reg_set_min_max(struct bpf_reg_state *true_reg,
- 	case BPF_JGE:
- 	case BPF_JGT:
- 	{
--		u64 false_umax = opcode == BPF_JGT ? val    : val - 1;
--		u64 true_umin = opcode == BPF_JGT ? val + 1 : val;
--
--		if (is_jmp32) {
--			false_umax += gen_hi_max(false_reg->var_off);
--			true_umin += gen_hi_min(true_reg->var_off);
--		}
--		false_reg->umax_value = min(false_reg->umax_value, false_umax);
--		true_reg->umin_value = max(true_reg->umin_value, true_umin);
-+		set_upper_bound(false_reg, val, is_jmp32, opcode == BPF_JGE);
-+		set_lower_bound(true_reg, val, is_jmp32, opcode == BPF_JGT);
- 		break;
- 	}
- 	case BPF_JSGE:
-@@ -5762,15 +5819,8 @@ static void reg_set_min_max(struct bpf_reg_state *true_reg,
- 	case BPF_JLE:
- 	case BPF_JLT:
- 	{
--		u64 false_umin = opcode == BPF_JLT ? val    : val + 1;
--		u64 true_umax = opcode == BPF_JLT ? val - 1 : val;
--
--		if (is_jmp32) {
--			false_umin += gen_hi_min(false_reg->var_off);
--			true_umax += gen_hi_max(true_reg->var_off);
--		}
--		false_reg->umin_value = max(false_reg->umin_value, false_umin);
--		true_reg->umax_value = min(true_reg->umax_value, true_umax);
-+		set_lower_bound(false_reg, val, is_jmp32, opcode == BPF_JLE);
-+		set_upper_bound(true_reg, val, is_jmp32, opcode == BPF_JLT);
- 		break;
- 	}
- 	case BPF_JSLE:
-@@ -5845,15 +5895,8 @@ static void reg_set_min_max_inv(struct bpf_reg_state *true_reg,
- 	case BPF_JGE:
- 	case BPF_JGT:
- 	{
--		u64 false_umin = opcode == BPF_JGT ? val    : val + 1;
--		u64 true_umax = opcode == BPF_JGT ? val - 1 : val;
--
--		if (is_jmp32) {
--			false_umin += gen_hi_min(false_reg->var_off);
--			true_umax += gen_hi_max(true_reg->var_off);
--		}
--		false_reg->umin_value = max(false_reg->umin_value, false_umin);
--		true_reg->umax_value = min(true_reg->umax_value, true_umax);
-+		set_lower_bound(false_reg, val, is_jmp32, opcode == BPF_JGE);
-+		set_upper_bound(true_reg, val, is_jmp32, opcode == BPF_JGT);
- 		break;
- 	}
- 	case BPF_JSGE:
-@@ -5871,15 +5914,8 @@ static void reg_set_min_max_inv(struct bpf_reg_state *true_reg,
- 	case BPF_JLE:
- 	case BPF_JLT:
- 	{
--		u64 false_umax = opcode == BPF_JLT ? val    : val - 1;
--		u64 true_umin = opcode == BPF_JLT ? val + 1 : val;
--
--		if (is_jmp32) {
--			false_umax += gen_hi_max(false_reg->var_off);
--			true_umin += gen_hi_min(true_reg->var_off);
--		}
--		false_reg->umax_value = min(false_reg->umax_value, false_umax);
--		true_reg->umin_value = max(true_reg->umin_value, true_umin);
-+		set_upper_bound(false_reg, val, is_jmp32, opcode == BPF_JLE);
-+		set_lower_bound(true_reg, val, is_jmp32, opcode == BPF_JLT);
- 		break;
- 	}
- 	case BPF_JSLE:
+ 	return __tun_build_skb(tfile, alloc_frag, buf, buflen, len, pad);
+ 
+-err_xdp:
+-	put_page(alloc_frag->page);
+ out:
+ 	rcu_read_unlock();
+ 	local_bh_enable();
 -- 
-2.20.1
+2.26.0.rc2.310.g2932bb562d-goog
 
