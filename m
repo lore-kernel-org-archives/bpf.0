@@ -2,70 +2,96 @@ Return-Path: <SRS0=bJqj=5Q=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDE88C43331
-	for <bpf@archiver.kernel.org>; Tue, 31 Mar 2020 16:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32350C43331
+	for <bpf@archiver.kernel.org>; Tue, 31 Mar 2020 16:54:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AFB4F20786
-	for <bpf@archiver.kernel.org>; Tue, 31 Mar 2020 16:17:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 04C13206CC
+	for <bpf@archiver.kernel.org>; Tue, 31 Mar 2020 16:54:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IBPI6C03"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="t8duoPKa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730149AbgCaQRH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 31 Mar 2020 12:17:07 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:34882 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726194AbgCaQRH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 31 Mar 2020 12:17:07 -0400
-Received: by mail-ed1-f66.google.com with SMTP id a20so25871579edj.2
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2020 09:17:06 -0700 (PDT)
+        id S1731113AbgCaQyf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 31 Mar 2020 12:54:35 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:36636 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730099AbgCaQyf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 31 Mar 2020 12:54:35 -0400
+Received: by mail-qk1-f194.google.com with SMTP id d11so23779426qko.3;
+        Tue, 31 Mar 2020 09:54:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=gX2hE+HplrSkjQMDyoGhUaYt4zWQ23hFC2B0NDhOvdU=;
-        b=IBPI6C030cTlbHelR/XZYCDNafNBIleAyBMfz3XM84QvRLqCT1af5qo2fZtQupL1om
-         JPhd9S1xt9P9xZGjPrU+z6PTsfP704fD+ejPhGG+KgEjqAYXTB0tRyjln/P6k9RSORJ3
-         eFkSgj1/VRnz/HABtwVep55D5AzfktHOSZtqvG/UyT2d1YuiTaSgwQqpIVfgo/i2Czs+
-         JWgH2UhMJo/aYV95S6GXI1e9EAmPrQUyRSoIs+Brya93lnRHXQo1jRgTD4yjMe5BQowa
-         ImJhGvWdUnakAMwkuveXRdRI292XhlK5Zejc3YZLMlDI+eh38/DhkbAUYo6yQ9pOa8rC
-         690g==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fGqnUle+bB9YfVwf/LtyArvnVwGMi0GuY/yURFfS7rY=;
+        b=t8duoPKaGxmF3ZDe48jWFj4Zl2zHHavaIXSgrKaErFN2Buek4vzdUPMcgqcHVWnlQy
+         1EnSTQ/Q4dS0jRyT6gJIEsr29tN6carNiNElvbJRBKYZMwLO6De499PBQWjLoD5ivf7J
+         NRQF77ym00y7XInX30WOTN7SiLzR+rYTRfXYEq4uZfebYOFTp4LY4/Co9yBwDMTMkG8V
+         Xo1fjFpn/zp/8SrMPQZBu5ma48Z9RgLHi8vtzC5jjwMmYPnrivB7/VkggBrsx1zEap0f
+         /mmMNKAAfCp/WfqzybYj1+91GHcE3w/gJtKMvmztniicMIXbYvtxlsqtzHOolyKnhZYJ
+         6Geg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=gX2hE+HplrSkjQMDyoGhUaYt4zWQ23hFC2B0NDhOvdU=;
-        b=gwDZHjH7yai1ym24RxurrHD/vpN48cR4nD8/y3tU4dANGP6De3xEjWcweZqBHAbXv2
-         CfzO07ljObeMXqNXtLPEfmgWY/v0l8w5CvHPYDBbCJM/UJ3V+gwDP8GBlX4f0v5oj3hW
-         gbctknCI1YGkDfTKbcIjZffZjMg1HO1OVwsfHvJS10xMKVmfMmWF73Qmeo7Rue718QYP
-         YviatykKsHBcqJJiBVa/f3r+bzvjIxJ1irTtvlP7gD0WDUPcVyzA67v4M8+qWmvG3QnK
-         njlFWEHlXJRpsz8VyvM70njykr9dmECurOzrh04jm/NDWdA0wSWtouKDILZ6EBY89vn8
-         yL8w==
-X-Gm-Message-State: ANhLgQ0jlyLMR72Ao+QUBOZajvAXcXY+9lhzBy/do2pWh+cT0z5+4eue
-        7XYikgCdJf8fD6rkHGrupuJstT+EAVS1sNC74rquBffNr+o=
-X-Google-Smtp-Source: ADFU+vuYMSaSDaKrkDsjggDgWgtURpyHPz0pHuStfoZ+07sdPSCzavR0IO/HHm5jQtcVlioknisoH4nPJSQh+geIQeI=
-X-Received: by 2002:a17:906:7383:: with SMTP id f3mr15713743ejl.197.1585671424950;
- Tue, 31 Mar 2020 09:17:04 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fGqnUle+bB9YfVwf/LtyArvnVwGMi0GuY/yURFfS7rY=;
+        b=YxTqUY11X+vNlusMbFfDPA33Cmu6IJyCIeLEx8d2Hqdgt9vDggLhFE2j2EYRrRJUWY
+         CE7cQl/KwZ1kKhbCdvINzifIkE1I9VwdNo/dpNsQcMQ+Fzt2PFsL0G7zBvLm6a0LsKMo
+         M0tbWbI2S0HsEsFfzOxYlsNBKWq7abhUY4m8ZKu4qtktUC3hpXEWWqx+LmWGymLA+ryx
+         G5jW1gMRgT6aqysozx+50lGDEkDnuGVTizO45Eg+v/aJy79fEFmWO5NH/qRM80Fp0r/S
+         SIdrM0VS0wyoi4QYhXYkGYmlp7mb2fxUFta/SuQjEgFzzSQOT1+g4HjZQVhKuA8cLbEq
+         3hPw==
+X-Gm-Message-State: ANhLgQ1P0xxxlWHm/HHxtsdlJYcjrNnNHC7/E1wDbP6X+bOqQaAOWi31
+        MLMblvhmY/h9sjm7PcObgsw=
+X-Google-Smtp-Source: ADFU+vs6v1X7Cy9Hfz+/QJwpFvuz90vxhKtgfheilxQY16rDfltj1b+2SN3QnOlIj/et6yBtBX5gjQ==
+X-Received: by 2002:a37:4785:: with SMTP id u127mr5731182qka.135.1585673674388;
+        Tue, 31 Mar 2020 09:54:34 -0700 (PDT)
+Received: from ?IPv6:2601:282:803:7700:5839:62ce:f27e:6d56? ([2601:282:803:7700:5839:62ce:f27e:6d56])
+        by smtp.googlemail.com with ESMTPSA id g201sm12945627qke.99.2020.03.31.09.54.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Mar 2020 09:54:33 -0700 (PDT)
+Subject: Re: [PATCH v3 bpf-next 0/4] Add support for cgroup bpf_link
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrey Ignatov <rdna@fb.com>, Kernel Team <kernel-team@fb.com>
+References: <20200330030001.2312810-1-andriin@fb.com>
+ <c9f52288-5ea8-a117-8a67-84ba48374d3a@gmail.com>
+ <CAEf4BzZpCOCi1QfL0peBRjAOkXRwGEi_DAW4z34Mf3Tv_sbRFw@mail.gmail.com>
+ <662788f9-0a53-72d4-2675-daec893b5b81@gmail.com>
+ <CAADnVQK8oMZehQVt34=5zgN12VBc2940AWJJK2Ft0cbOi1jDhQ@mail.gmail.com>
+ <cdd576be-8075-13a7-98ee-9bc9355a2437@gmail.com>
+ <20200331003222.gdc2qb5rmopphdxl@ast-mbp>
+ <58cea4c7-e832-2632-7f69-5502b06310b2@gmail.com>
+ <CAEf4BzZSCdtSRw9mj2W5Vv3C-G6iZdMJsZ8WGon11mN3oBiguQ@mail.gmail.com>
+From:   David Ahern <dsahern@gmail.com>
+Message-ID: <61442da0-6162-b786-7917-67e6fcb74ce8@gmail.com>
+Date:   Tue, 31 Mar 2020 10:54:31 -0600
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.6.0
 MIME-Version: 1.0
-From:   Gilad Reti <gilad.reti@gmail.com>
-Date:   Tue, 31 Mar 2020 19:16:28 +0300
-Message-ID: <CANaYP3GNm-siPt49Z5SSvgcF9YT4oN_enznMkaEFgbBBC9qrDQ@mail.gmail.com>
-Subject: probe_write_common_error
-To:     bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAEf4BzZSCdtSRw9mj2W5Vv3C-G6iZdMJsZ8WGon11mN3oBiguQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When I try to probe_write_common into a writable location (e.g a
-memory address on a usermode stack) which is not yet mapped or mapped
-as read only to the memory, the function sometimes return a EFAULT
-(bad address) error. This is happening since the pagefault handler was
-disabled and thus this memory location won't be mapped when the
-function tries to write into it, an error will be returned and no data
-will be written.
-Is that behavior intended? Did you want those functions to have as
-less side-effects are possible?
+On 3/30/20 9:54 PM, Andrii Nakryiko wrote:
+> 
+>    [0] https://gist.github.com/anakryiko/562dff8e39c619a5ee247bb55aa057c7
+
+#!/usr/bin/env drgn
+
+where do I find drgn? Google search is not turning up anything relevant.
