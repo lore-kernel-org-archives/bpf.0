@@ -2,87 +2,206 @@ Return-Path: <SRS0=2TgV=5X=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF354C2BA16
-	for <bpf@archiver.kernel.org>; Tue,  7 Apr 2020 05:11:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2256CC2BA16
+	for <bpf@archiver.kernel.org>; Tue,  7 Apr 2020 05:28:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8DA2A206F7
-	for <bpf@archiver.kernel.org>; Tue,  7 Apr 2020 05:11:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD7EF206BE
+	for <bpf@archiver.kernel.org>; Tue,  7 Apr 2020 05:28:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="bAL7XlSk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ecWsFgYx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726796AbgDGFLd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Apr 2020 01:11:33 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:16546 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726399AbgDGFLd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 7 Apr 2020 01:11:33 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0375BS5k026492
-        for <bpf@vger.kernel.org>; Mon, 6 Apr 2020 22:11:32 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=3YibdS0UKx5l9l22WTyH//kMHLuX69iCuzoNpcxmDww=;
- b=bAL7XlSkKAgVZUdf+FdvfKlxHwVobqYmOE1cbR36b+60vdPGCjczkWTfKzDK8VWledhF
- mXnXPuEJTGSKT9j88WJYVxJenfWTTF5KtYUb3ya4VeD3JcgpQ0B2fPgoMaX93mPRQ5yV
- hq43SB+SHMHQhx8n7kuHZBGBY9StLQjlNaI= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 307a266ydt-9
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 06 Apr 2020 22:11:32 -0700
-Received: from intmgw001.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Mon, 6 Apr 2020 22:11:14 -0700
-Received: by dev082.prn2.facebook.com (Postfix, from userid 572249)
-        id A9C4A3700D26; Mon,  6 Apr 2020 22:11:08 -0700 (PDT)
-Smtp-Origin-Hostprefix: dev
-From:   Andrey Ignatov <rdna@fb.com>
-Smtp-Origin-Hostname: dev082.prn2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Andrey Ignatov <rdna@fb.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <kernel-team@fb.com>, <toke@redhat.com>
-Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH bpf 0/2] libbpf: Fix bpf_get_link_xdp_id flags handling
-Date:   Mon, 6 Apr 2020 22:09:44 -0700
-Message-ID: <cover.1586236080.git.rdna@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1726808AbgDGF23 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Apr 2020 01:28:29 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:37063 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726448AbgDGF23 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Apr 2020 01:28:29 -0400
+Received: by mail-vs1-f67.google.com with SMTP id o3so1447348vsd.4;
+        Mon, 06 Apr 2020 22:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WrrS0Lhv15zxlqz1Gg8dhCo/1YDYxqP75f329M6pi8g=;
+        b=ecWsFgYxhiIQvqETzF0YU62LFUUJpET9TBMlx/sk0c/jmfFnFtkHFuLXoVMQp+seqm
+         tZY9UvlZV2xPSiTnbMjOIKzecJoipBK3eq+WrxAqCuKugzMrywczIyV873todT6OwFTB
+         ZmYRz+/xWizAbFXs6k4ygl5JIz/MZVUsdpXt+6t4c1Mp7xWqBLV2smPPAlh+tleZpumK
+         CNXkCgYtlkHYKrckeC+MywD0XH9ALgIQfiZUEHPUF133dLOhEXYfr4ISPgK0w9d1bfTg
+         yqvFxzq+HoEfqpICa2k4OwxaxX1GVetOHFZmTJXlx826yeBuQ93SkA6N7TVVG38FSU+c
+         PJXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WrrS0Lhv15zxlqz1Gg8dhCo/1YDYxqP75f329M6pi8g=;
+        b=N268/RZ1MAP4EJM+hdjXfS2/iInM2HyWeb0DCf5kveGaooGVHb0iOCcWwGl0bnYOXR
+         ZOQRPgR0tvARyqH4NB7Ljn60gGxbbXA76MBNkHAfhlPgLvPR3lPouXHS586dVCl2cAZN
+         YvQiveV7pCthSKrLDy2M1Dad2YroflKLJh/dqgFqTZ395PMraUYxH/0gwJAJiNI+s7EN
+         EmnLRlDCEHt4qokR5uIHzDUKkoHDiXHcp8wUX0n5H7zCjXo+y2DHqmGaDpXMGmq7fmQ7
+         L1t62BS3Pi6QHoVx9axNT3+1p/CjUVLH/KStMrSTFrTVjpXpi8UHZhLwgfhsE3gZX7Mx
+         plCg==
+X-Gm-Message-State: AGi0PuYjCzoZqx1JgrUYhZtLQ6EJG2oXYgLtpNd+nvHPAKcC/4FOVOAI
+        M8fOtA/F0LDsamkyBnZb6YELwPYwFswzd6LwYvk=
+X-Google-Smtp-Source: APiQypIby2UXjuX8vOzjjgILvfC+AKaKfIeOVqPZMgfFRa7+1YoghBkUDH/75MUxC3ZBPdUOACQWBqcCuCYnrY88pSE=
+X-Received: by 2002:a67:fd6f:: with SMTP id h15mr503854vsa.96.1586237306008;
+ Mon, 06 Apr 2020 22:28:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-07_01:2020-04-07,2020-04-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=309
- malwarescore=0 suspectscore=13 priorityscore=1501 lowpriorityscore=0
- phishscore=0 spamscore=0 adultscore=0 impostorscore=0 clxscore=1015
- mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004070042
-X-FB-Internal: deliver
+References: <20200118000128.15746-1-matthew.cover@stackpath.com>
+ <20200121202038.26490-1-matthew.cover@stackpath.com> <CAGyo_hpVm7q3ghW+je23xs3ja_COP_BMZoE_=phwGRzjSTih8w@mail.gmail.com>
+ <CAOftzPi74gg=g8VK-43KmA7qqpiSYnJVoYUFDtPDwum10KHc2Q@mail.gmail.com>
+ <CAGyo_hprQRLLUUnt9G4SJnbgLSdN=HTDDGFBsPYMDC5bGmTPYA@mail.gmail.com>
+ <20200130215330.f3unziderf5rlipf@ast-mbp> <CAGyo_hrYhwzVRcyN22j_4pBAcVGaazSu2xQFHT_DYpFeHdUjyA@mail.gmail.com>
+ <20200220044505.bpfvdrcmc27ik2jp@ast-mbp> <CAGyo_hrcibFyz=b=+y=yO_yapw=TbtbO8d1vGPSLpTU0Y2gzBw@mail.gmail.com>
+ <20200407030303.ffs7xxruuktss5fs@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20200407030303.ffs7xxruuktss5fs@ast-mbp.dhcp.thefacebook.com>
+From:   Matt Cover <werekraken@gmail.com>
+Date:   Mon, 6 Apr 2020 22:28:13 -0700
+Message-ID: <CAGyo_hrYYYN6EXnbocauMo52pF52fAQwiJbDVZwH4NG3UC5anQ@mail.gmail.com>
+Subject: Re: unstable bpf helpers proposal. Was: [PATCH bpf-next v2 1/2] bpf:
+ add bpf_ct_lookup_{tcp,udp}() helpers
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Matthew Cover <matthew.cover@stackpath.com>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set fixes bpf_get_link_xdp_id() behavior for non-zero flags an=
-d
-adds selftest that verifies the fix and can be used to reproduce the
-problem.
+On Mon, Apr 6, 2020 at 8:03 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Apr 03, 2020 at 04:56:01PM -0700, Matt Cover wrote:
+> > > I think doing BTF annotation for EXPORT_SYMBOL_BPF(bpf_icmp_send); is trivial.
+> >
+> > I've been looking into this more; here is what I'm thinking.
+> >
+> > 1. Export symbols for bpf the same as modules, but into one or more
+> >    special namespaces.
+> >
+> >    Exported symbols recently gained namespaces.
+> >      https://lore.kernel.org/linux-usb/20190906103235.197072-1-maennich@google.com/
+> >      Documentation/kbuild/namespaces.rst
+> >
+> >    This makes the in-kernel changes needed for export super simple.
+> >
+> >      #define EXPORT_SYMBOL_BPF(sym)     EXPORT_SYMBOL_NS(sym, BPF_PROG)
+> >      #define EXPORT_SYMBOL_BPF_GPL(sym) EXPORT_SYMBOL_NS_GPL(sym, BPF_PROG)
+> >
+> >    BPF_PROG is our special namespace above. We can easily add
+> >    BPF_PROG_ACQUIRES and BPF_PROG_RELEASES for those types of
+> >    unstable helpers.
+> >
+> >    Exports for bpf progs are then as simple as for modules.
+> >
+> >      EXPORT_SYMBOL_BPF(bpf_icmp_send);
+> >
+> >    Documenting these namespaces as not for use by modules should be
+> >    enough; an explicit import statement to use namespaced symbols is
+> >    already required. Explicitly preventing module use in
+> >    MODULE_IMPORT_NS or modpost are also options if we feel more is
+> >    needed.
+> >
+> > 2. Teach pahole's (dwarves') dwarf loader to parse __ksymtab*.
+> >
+> >    I've got a functional wip which retrieves the namespace from the
+> >    __kstrtab ELF section. Working to differentiate between __ksymtab
+> >    and __ksymtab_gpl symbols next. Good news is this info is readily
+> >    available in vmlinux and module .o files. The interface here will
+> >    probably end up similar to dwarves' elf_symtab__*, but with an
+> >    struct elf_ksymtab per __ksymtab* section (all pointing to the
+> >    same __kstrtab section though).
+> >
+> > 3. Teach pahole's btf encoder to encode the following bools: export,
+> >    gpl_only, acquires, releases.
+> >
+> >    I'm envisioning this info will end up in a new struct
+> >    btf_func_proto in btf.h. Perhaps like this.
+> >
+> >      struct btf_func_proto {
+> >          /* "info" bits arrangement
+> >           * bit     0: exported (callable by bpf prog)
+> >           * bit     1: gpl_only (only callable from GPL licensed bpf prog)
+> >           * bit     2: acquires (acquires and returns a refcounted pointer)
+> >           * bit     3: releases (first argument, a refcounted pointer,
+> > is released)
+> >           * bits 4-31: unused
+> >           */
+> >          __u32    info;
+> >      };
+> >
+> >    Currently, a "struct btf_type" of type BTF_KIND_FUNC_PROTO is
+> >    directly followed by vlen struct btf_param/s. I'm hoping we can
+> >    insert btf_func_proto before the first btf_param or after the
+> >    last. If that's not workable, adding a new type,
+> >    BTF_KIND_FUNC_EXPORT, is another idea.
+>
+> I don't see why 1 and 2 are necessary.
+> What is the value of true export_symbol here?
 
+Hmm... I was under the impression that these functions had to be
+exported to be eligible for BTF. Perhaps I'm misunderstanding this
+dwaves commit:
 
-Andrey Ignatov (2):
-  libbpf: Fix bpf_get_link_xdp_id flags handling
-  selftests/bpf: Add test for bpf_get_link_xdp_id
+  3c5f2a224aa1 ("btf_encoder: Preserve and encode exported functions
+as BTF_KIND_FUNC")
 
- tools/lib/bpf/netlink.c                       |  2 +-
- .../selftests/bpf/prog_tests/xdp_info.c       | 68 +++++++++++++++++++
- 2 files changed, 69 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_info.c
+Looking briefly I can see that the functions in symvers and BTF are
+not an exact match. Does "exported functions" in the above commit
+message not mean "exported symbols"?
 
---=20
-2.24.1
+It looks like BTF FUNCs line up perfectly with symbols marked 'T' and
+'W' in kallsyms. I'll look into what adds a [TW] marked symbol to
+kallsyms and see how this differs from symvers.
 
+> What is the value of namespaced true export_symbol?
+
+This simply seemed like a clean way to group the symbols under the
+premise these functions already needed to be exported via
+EXPORT_SYMBOL*.
+
+> Imo it only adds memory overhead to vmlinux.
+> The same information is available in BTF as a _name_.
+> What is the point to replicate it into kcrc?
+
+See below.
+
+> Imo kcrc is a poor protection mechanism that is already worse
+> that BTF. I really don't see a value going that route.
+>
+
+See below
+
+> I think just encoding the intent to export into BTF is enough.
+> Option 3 above looks like overkill too. Just name convention would do.
+> We already use different prefixes to encode certain BTFs
+> (see struct_ops and btf_trace).
+> Just say when BTF func_proto starts with "export_" it means it's exported.
+> It would be trivial for users to grep as well:
+> bpftool btf dump file ./vmlinux |grep export_
+
+Ok, cool. A naming convention could work (even if it turns out we do
+have to EXPORT_SYMBOL).
+
+>
+> >
+> > The crcs could be used to improve the developer experience when
+> > using unstable helpers.
+>
+> crc don't add any additional value on top of BTF. BTF types has to match exactly.
+> It's like C compiler checking that you can call a function with correct proto.
+
+I can see that for the verifier BTF is much superior to crc. The
+safety of the program is not improved by the crc. I was simply
+thinking the crc could be used in struct variant selection instead
+of kernel version. In some environments this could be useful since
+distros often backport patches while leaving version old (often
+meaning a second distro-specific version must also be considered).
