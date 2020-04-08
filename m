@@ -7,49 +7,51 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF43DC2BA2B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DB56C2D0EA
 	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:52:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9AD6E20780
+	by mail.kernel.org (Postfix) with ESMTP id 5C71620780
 	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:52:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ou1EiCjY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qm9QVovL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726964AbgDHLw1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Apr 2020 07:52:27 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:31937 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728703AbgDHLw1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Apr 2020 07:52:27 -0400
+        id S1728724AbgDHLw0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Apr 2020 07:52:26 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:37512 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726964AbgDHLw0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Apr 2020 07:52:26 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1586346745;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7m0VP+3GoaqcZnjFpTelhpLeFTK9dkctJ3woHM9xJjk=;
-        b=Ou1EiCjYqc8/3/P/qA+CeyOKxnmuwzH/Ld0k3YvIknqeq9aKv8VcYoPSGqcBtR2jY6F9TC
-        gZfWXbZ2BmGwh9ZhzPQN7evQ6w6SzJofAEc7pm1TjSzlh3FtXUGBnd7/CZRZ1Em6NgUvvu
-        TwbTE0anNfSJhuGnJSLzLNWOnQhoGrw=
+        bh=xQy1KLOJ+GIW9rEJSPzyrntrKyatkPT1L3vjqCCiqHY=;
+        b=Qm9QVovLrbtKxMCcNO2gqqT0ITPfBQdUjh1WgRRkaodigyvqbOahPS0xWGJqlBqPKpliq9
+        fu+whNmq2qMU/dTMedXO9X3+88gWNKmzpyvgZ/fSdcyqrf3Kn4YShYY8HsqV2bmG7fN27u
+        pgmZFUL3hi7fwFuMjfGMN9KkpOMNCq0=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-37-gVcylBFoNd-0Uy2vFIKmlQ-1; Wed, 08 Apr 2020 07:52:24 -0400
-X-MC-Unique: gVcylBFoNd-0Uy2vFIKmlQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+ us-mta-160-fQ38NDaINq-UywoF9HsQnQ-1; Wed, 08 Apr 2020 07:52:09 -0400
+X-MC-Unique: fQ38NDaINq-UywoF9HsQnQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4FFF38017CE;
-        Wed,  8 Apr 2020 11:52:22 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 293388017CE;
+        Wed,  8 Apr 2020 11:52:07 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D1CC17E303;
-        Wed,  8 Apr 2020 11:52:16 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9513E5D9CA;
+        Wed,  8 Apr 2020 11:52:01 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 036C1300020FB;
-        Wed,  8 Apr 2020 13:52:16 +0200 (CEST)
-Subject: [PATCH RFC v2 20/33] tun: add XDP frame size
+        by firesoul.localdomain (Postfix) with ESMTP id BBED9300020FA;
+        Wed,  8 Apr 2020 13:52:00 +0200 (CEST)
+Subject: [PATCH RFC v2 17/33] mlx5: rx queue setup time determine frame_sz for
+ XDP
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
-Cc:     Jason Wang <jasowang@redhat.com>,
+Cc:     Tariq Toukan <tariqt@mellanox.com>,
+        Saeed Mahameed <saeedm@mellanox.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org, zorik@amazon.com,
         akiyano@amazon.com, gtzalik@amazon.com,
@@ -64,48 +66,93 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>
-Date:   Wed, 08 Apr 2020 13:52:15 +0200
-Message-ID: <158634673594.707275.17901094732951523850.stgit@firesoul>
+Date:   Wed, 08 Apr 2020 13:52:00 +0200
+Message-ID: <158634672069.707275.13343795980982759611.stgit@firesoul>
 In-Reply-To: <158634658714.707275.7903484085370879864.stgit@firesoul>
 References: <158634658714.707275.7903484085370879864.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The tun driver have two code paths for running XDP (bpf_prog_run_xdp).
-In both cases 'buflen' contains enough tailroom for skb_shared_info.
+The mlx5 driver have multiple memory models, which are also changed
+according to whether a XDP bpf_prog is attached.
 
-Cc: Jason Wang <jasowang@redhat.com>
+The 'rx_striding_rq' setting is adjusted via ethtool priv-flags e.g.:
+ # ethtool --set-priv-flags mlx5p2 rx_striding_rq off
+
+On the general case with 4K page_size and regular MTU packet, then
+the frame_sz is 2048 and 4096 when XDP is enabled, in both modes.
+
+The info on the given frame size is stored differently depending on the
+RQ-mode and encoded in a union in struct mlx5e_rq union wqe/mpwqe.
+In rx striding mode rq->mpwqe.log_stride_sz is either 11 or 12, which
+corresponds to 2048 or 4096 (MLX5_WQ_TYPE_LINKED_LIST_STRIDING_RQ).
+In non-striding mode (MLX5_WQ_TYPE_CYCLIC) the frag_stride is stored
+in rq->wqe.info.arr[0].frag_stride.
+
+To reduce effect on fast-path, this patch determine the frame_sz at
+setup time, to avoid determining the memory model runtime.
+
+Cc: Tariq Toukan <tariqt@mellanox.com>
+Cc: Saeed Mahameed <saeedm@mellanox.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- drivers/net/tun.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/en.h      |    1 +
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c  |    1 +
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c |    4 ++++
+ 3 files changed, 6 insertions(+)
 
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 228fe449dc6d..8351bb287a05 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -1671,6 +1671,7 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
- 		xdp_set_data_meta_invalid(&xdp);
- 		xdp.data_end = xdp.data + len;
- 		xdp.rxq = &tfile->xdp_rxq;
-+		xdp.frame_sz = buflen;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+index 12a61bf82c14..1f280fc142ca 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+@@ -651,6 +651,7 @@ struct mlx5e_rq {
+ 	struct {
+ 		u16            umem_headroom;
+ 		u16            headroom;
++		u32            frame_sz;
+ 		u8             map_dir;   /* dma map direction */
+ 	} buff;
  
- 		act = bpf_prog_run_xdp(xdp_prog, &xdp);
- 		if (act == XDP_REDIRECT || act == XDP_TX) {
-@@ -2408,6 +2409,7 @@ static int tun_xdp_one(struct tun_struct *tun,
- 		}
- 		xdp_set_data_meta_invalid(xdp);
- 		xdp->rxq = &tfile->xdp_rxq;
-+		xdp->frame_sz = buflen;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+index f049e0ac308a..de4ad2c9f49a 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+@@ -137,6 +137,7 @@ bool mlx5e_xdp_handle(struct mlx5e_rq *rq, struct mlx5e_dma_info *di,
+ 	if (xsk)
+ 		xdp.handle = di->xsk.handle;
+ 	xdp.rxq = &rq->xdp_rxq;
++	xdp.frame_sz = rq->buff.frame_sz;
  
- 		act = bpf_prog_run_xdp(xdp_prog, xdp);
- 		err = tun_xdp_act(tun, xdp_prog, xdp, act);
+ 	act = bpf_prog_run_xdp(prog, &xdp);
+ 	if (xsk) {
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index dd7f338425eb..b9595315c45b 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -462,6 +462,8 @@ static int mlx5e_alloc_rq(struct mlx5e_channel *c,
+ 		rq->mpwqe.num_strides =
+ 			BIT(mlx5e_mpwqe_get_log_num_strides(mdev, params, xsk));
+ 
++		rq->buff.frame_sz = (1 << rq->mpwqe.log_stride_sz);
++
+ 		err = mlx5e_create_rq_umr_mkey(mdev, rq);
+ 		if (err)
+ 			goto err_rq_wq_destroy;
+@@ -485,6 +487,8 @@ static int mlx5e_alloc_rq(struct mlx5e_channel *c,
+ 			num_xsk_frames = wq_sz << rq->wqe.info.log_num_frags;
+ 
+ 		rq->wqe.info = rqp->frags_info;
++		rq->buff.frame_sz = rq->wqe.info.arr[0].frag_stride;
++
+ 		rq->wqe.frags =
+ 			kvzalloc_node(array_size(sizeof(*rq->wqe.frags),
+ 					(wq_sz << rq->wqe.info.log_num_frags)),
 
 
