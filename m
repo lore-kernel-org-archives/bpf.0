@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B88B6C2BA80
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:30:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9487C2BA2B
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:35:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5258820757
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:30:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9574B20757
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:35:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gflclan.com header.i=@gflclan.com header.b="TSJNwSI3"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gflclan.com header.i=@gflclan.com header.b="eUZkNeCU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgDHXaK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Apr 2020 19:30:10 -0400
-Received: from relay0253.mxlogin.com ([199.181.239.253]:37905 "EHLO
-        relay0253.mxlogin.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726469AbgDHXaK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Apr 2020 19:30:10 -0400
-X-Greylist: delayed 301 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Apr 2020 19:30:08 EDT
+        id S1726508AbgDHXfy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Apr 2020 19:35:54 -0400
+Received: from chi02-173.mxroute.com ([64.137.75.173]:34701 "EHLO
+        chi02-173.mxroute.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726504AbgDHXfy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Apr 2020 19:35:54 -0400
+X-Greylist: delayed 303 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Apr 2020 19:35:50 EDT
 Received: from filter004.mxroute.com ([149.28.56.236] 149.28.56.236.vultr.com)
  (Authenticated sender: mN4UYu2MZsgR)
- by relay0253.mxlogin.com (ZoneMTA) with ESMTPSA id 1715c1c7fdc0000766.001
+ by chi02-173.mxroute.com (ZoneMTA) with ESMTPSA id 1715c21ad7e0001c89.001
  for <bpf@vger.kernel.org>
  (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256);
- Wed, 08 Apr 2020 23:25:03 +0000
-X-Zone-Loop: 8fe11938fc5c2c0ebd4409030ec4ed53ab73edac8825
+ Wed, 08 Apr 2020 23:30:43 +0000
+X-Zone-Loop: c3cbdf52a56a5946640193c78bef1e5e3327c4d274e1
 X-Originating-IP: [149.28.56.236]
 Received: from ocean.mxroute.com (ocean.mxroute.com [195.201.59.214])
-        by filter004.mxroute.com (Postfix) with ESMTPS id 17A053ED9D
-        for <bpf@vger.kernel.org>; Wed,  8 Apr 2020 23:25:02 +0000 (UTC)
+        by filter004.mxroute.com (Postfix) with ESMTPS id 01ED63EDA3
+        for <bpf@vger.kernel.org>; Wed,  8 Apr 2020 23:30:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gflclan.com
         ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
         MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=CgAijy+zvbvwNGp5/dE5VOW298T0LjiDFp52YqIVTIo=; b=TSJNwSI38Y180vJAXZBb7l5ctI
-        LEh+iq/CQsIyzmPz93dBh1r5WZogX2mhjdLjluycNPf4gNENBrpSP65O58tSdzUCLEhPR1w7OwgXS
-        jPlKvJCnZvb3Hu3WEMhTGIZDGwY2lO5V6iK2o42pD2weIyICVRSvatzqkgveRq+0+E85pkuKwuWmc
-        b/v58jBl1hjAx5/LhNLE0t9kx7Dgehab89G8e+GHcRBeVVYNcGn2euujy6cw9EbBrw6GyR6d8Z1N3
-        J93GgjRD+xnZj1AIvw8y8aT3nkD9eHOOK2D3P28juyBfUUXr4vljGguZRi2eAKpiAxU68kgAx7j5o
-        rteYx1ZQ==;
+        bh=CgAijy+zvbvwNGp5/dE5VOW298T0LjiDFp52YqIVTIo=; b=eUZkNeCUq64irNJuTbfZQV5pmP
+        b1NtFd46Lr1Kv6FQOCw2ND/le+eWO6TqZchOBCAcYarhB6TZnUDnqcOoj49Zfc/8wFzHAdett8C8N
+        oUOV2FTshwxeziZFftTkx1jtmvnh4Qlesr7XjDjPwB1AykF4nOJGXBykjziI0sOS4zzAM6Tc/XgTc
+        LzF0VeEpG4VQ+x9gKDO7abCT1FyLx6KeKdiMDdKRuxNb64jE6xTnsMy/a3mNIRr4Zz4YChJsAElKm
+        XL65SD2gP0nidn8NuTC7q3R0E20v5ISt8MNpINeLBywsqkE9QQVLSMQHUH1QcGYcZrSh7n1KeUAPj
+        MVaf6uow==;
 Subject: Re: TC BPF Program Crashing With Bnx2x Drivers
 To:     Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
 Cc:     aelior@marvell.com, skalluru@marvell.com
 References: <853f67f9-6713-a354-07f7-513d654ede91@gflclan.com>
  <c3c44050-132e-44f7-1611-95d30b0b4b47@iogearbox.net>
 From:   Christian Deacon <gamemann@gflclan.com>
-Message-ID: <5c746019-2b3b-3761-ad55-2225a843c34b@gflclan.com>
-Date:   Wed, 8 Apr 2020 18:24:56 -0500
+Message-ID: <0a96d4ee-e875-e89c-e6bb-e6b62061abdd@gflclan.com>
+Date:   Wed, 8 Apr 2020 18:30:33 -0500
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.6.0
 MIME-Version: 1.0
