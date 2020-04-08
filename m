@@ -4,57 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD294C2BA80
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:53:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 733EBC2D0EA
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:53:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A06222082D
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:53:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4573220780
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:53:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GdgxAUJY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LA5Ds+GJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727865AbgDHLw7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Apr 2020 07:52:59 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:37880 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728766AbgDHLw7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Apr 2020 07:52:59 -0400
+        id S1727975AbgDHLxN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Apr 2020 07:53:13 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:27744 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727946AbgDHLxM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Apr 2020 07:53:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586346777;
+        s=mimecast20190719; t=1586346792;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MCv8fhfDJ9MisBpERalYAZGMbZ3E/f/f6YpVxnzKLGM=;
-        b=GdgxAUJYBKrFXmhBFw8/pQou93/ucDWP0twBpPTg2hDOvxSNKnqZeIvx3qFm3+OyZFcXxY
-        a2t9e2qfhS+cU3Gax/d7ko7Leslq8XjoyWH3cWcJygzmkNq0N8Q8Zhv72naVH7cPq+bo23
-        NqKiGKC4EIczOzspJ2tWEo+ps3+SyTI=
+        bh=pLYh8CDH6AbapdheYhFYc9Jj3Il0ATNizIrBmyTLMXM=;
+        b=LA5Ds+GJbP+Xb0f2o0vORcdIgvWpGzOu8SWBBWzVx4aIq2nhsRFio6kEw/Mr/aAdiI0b3l
+        W0CN+tjdsJII1EbxMK5qaoG2lJzlN1k8gvjoNZjJgGdsq1sDdm8hShxGjBGfhTpUGcrFLW
+        QC1ko+b+xkovOBqb6CDd0csaWbbIorQ=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-250-4ukuvbKPNdqFRMKct9HgGA-1; Wed, 08 Apr 2020 07:52:55 -0400
-X-MC-Unique: 4ukuvbKPNdqFRMKct9HgGA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+ us-mta-151-UK65GvVkOkO2fsyJmpUhtg-1; Wed, 08 Apr 2020 07:53:10 -0400
+X-MC-Unique: UK65GvVkOkO2fsyJmpUhtg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 253DD800D50;
-        Wed,  8 Apr 2020 11:52:53 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2E61B107ACC4;
+        Wed,  8 Apr 2020 11:53:08 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 798171001938;
-        Wed,  8 Apr 2020 11:52:52 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id ADD105D9CA;
+        Wed,  8 Apr 2020 11:53:02 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 93C37300020FB;
-        Wed,  8 Apr 2020 13:52:51 +0200 (CEST)
-Subject: [PATCH RFC v2 27/33] ice: add XDP frame size to driver
+        by firesoul.localdomain (Postfix) with ESMTP id BEA28300020FB;
+        Wed,  8 Apr 2020 13:53:01 +0200 (CEST)
+Subject: [PATCH RFC v2 29/33] xdp: allow bpf_xdp_adjust_tail() to grow packet
+ size
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
-Cc:     intel-wired-lan@lists.osuosl.org,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, zorik@amazon.com,
-        akiyano@amazon.com, gtzalik@amazon.com,
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, zorik@amazon.com, akiyano@amazon.com,
+        gtzalik@amazon.com,
         =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Daniel Borkmann <borkmann@iogearbox.net>,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>,
@@ -66,120 +64,80 @@ Cc:     intel-wired-lan@lists.osuosl.org,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>
-Date:   Wed, 08 Apr 2020 13:52:51 +0200
-Message-ID: <158634677153.707275.15058521423175287393.stgit@firesoul>
+Date:   Wed, 08 Apr 2020 13:53:01 +0200
+Message-ID: <158634678170.707275.10720666808605360076.stgit@firesoul>
 In-Reply-To: <158634658714.707275.7903484085370879864.stgit@firesoul>
 References: <158634658714.707275.7903484085370879864.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This driver uses different memory models depending on PAGE_SIZE at
-compile time. For PAGE_SIZE 4K it uses page splitting, meaning for
-normal MTU frame size is 2048 bytes (and headroom 192 bytes). For
-larger MTUs the driver still use page splitting, by allocating
-order-1 pages (8192 bytes) for RX frames. For PAGE_SIZE larger than
-4K, driver instead advance its rx_buffer->page_offset with the frame
-size "truesize".
+Finally, after all drivers have a frame size, allow BPF-helper
+bpf_xdp_adjust_tail() to grow or extend packet size at frame tail.
 
-For XDP frame size calculations, this mean that in PAGE_SIZE larger
-than 4K mode the frame_sz change on a per packet basis. For the page
-split 4K PAGE_SIZE mode, xdp.frame_sz is more constant and can be
-updated once outside the main NAPI loop.
+Remember that helper/macro xdp_data_hard_end have reserved some
+tailroom.  Thus, this helper makes sure that the BPF-prog don't have
+access to this tailroom area.
 
-The default setting in the driver uses build_skb(), which provides
-the necessary headroom and tailroom for XDP-redirect in RX-frame
-(in both modes).
-
-There is one complication, which is legacy-rx mode (configurable via
-ethtool priv-flags). There are zero headroom in this mode, which is a
-requirement for XDP-redirect to work. The conversion to xdp_frame
-(convert_to_xdp_frame) will detect this insufficient space, and
-xdp_do_redirect() call will fail. This is deemed acceptable, as it
-allows other XDP actions to still work in legacy-mode. In
-legacy-mode + larger PAGE_SIZE due to lacking tailroom, we also
-accept that xdp_adjust_tail shrink doesn't work.
-
-Cc: intel-wired-lan@lists.osuosl.org
-Cc: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-Cc: Alexander Duyck <alexander.duyck@gmail.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- drivers/net/ethernet/intel/ice/ice_txrx.c |   34 +++++++++++++++++++++--------
- 1 file changed, 25 insertions(+), 9 deletions(-)
+ include/uapi/linux/bpf.h |    4 ++--
+ net/core/filter.c        |   18 ++++++++++++++++--
+ 2 files changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
-index f67e8362958c..695f86694224 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
-@@ -423,6 +423,22 @@ static unsigned int ice_rx_offset(struct ice_ring *rx_ring)
- 	return 0;
- }
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 2e29a671d67e..0e5abe991ca3 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1969,8 +1969,8 @@ union bpf_attr {
+  * int bpf_xdp_adjust_tail(struct xdp_buff *xdp_md, int delta)
+  * 	Description
+  * 		Adjust (move) *xdp_md*\ **->data_end** by *delta* bytes. It is
+- * 		only possible to shrink the packet as of this writing,
+- * 		therefore *delta* must be a negative integer.
++ * 		possible to both shrink and grow the packet tail.
++ * 		Shrink done via *delta* being a negative integer.
+  *
+  * 		A call to this helper is susceptible to change the underlying
+  * 		packet buffer. Therefore, at load time, all checks on pointers
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 7628b947dbc3..4d58a147eed0 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3422,12 +3422,26 @@ static const struct bpf_func_proto bpf_xdp_adjust_head_proto = {
  
-+static unsigned int ice_rx_frame_truesize(struct ice_ring *rx_ring,
-+					  unsigned int size)
-+{
-+	unsigned int truesize;
+ BPF_CALL_2(bpf_xdp_adjust_tail, struct xdp_buff *, xdp, int, offset)
+ {
++	void *data_hard_end = xdp_data_hard_end(xdp);
+ 	void *data_end = xdp->data_end + offset;
+ 
+-	/* only shrinking is allowed for now. */
+-	if (unlikely(offset >= 0))
++	/* Notice that xdp_data_hard_end have reserved some tailroom */
++	if (unlikely(data_end > data_hard_end))
+ 		return -EINVAL;
+ 
++	/* DANGER: ALL drivers MUST be converted to init xdp->frame_sz
++	 * - Adding some chicken checks below
++	 * - Will (likely) not be for upstream
++	 */
++	if (unlikely(xdp->frame_sz < (xdp->data_end - xdp->data_hard_start))) {
++		WARN(1, "Too small xdp->frame_sz = %d\n", xdp->frame_sz);
++		return -EINVAL;
++	}
++	if (unlikely(xdp->frame_sz > PAGE_SIZE)) {
++		WARN(1, "Too BIG xdp->frame_sz = %d\n", xdp->frame_sz);
++		return -EINVAL;
++	}
 +
-+#if (PAGE_SIZE < 8192)
-+	truesize = ice_rx_pg_size(rx_ring) / 2; /* Must be power-of-2 */
-+#else
-+	truesize = ice_rx_offset(rx_ring) ?
-+		SKB_DATA_ALIGN(ice_rx_offset(rx_ring) + size) +
-+		SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) :
-+		SKB_DATA_ALIGN(size)
-+#endif
-+	return truesize;
-+}
-+
- /**
-  * ice_run_xdp - Executes an XDP program on initialized xdp_buff
-  * @rx_ring: Rx ring
-@@ -991,6 +1007,10 @@ static int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
- 	bool failure;
+ 	if (unlikely(data_end < xdp->data + ETH_HLEN))
+ 		return -EINVAL;
  
- 	xdp.rxq = &rx_ring->xdp_rxq;
-+	/* Frame size depend on rx_ring setup when PAGE_SIZE=4K */
-+#if (PAGE_SIZE < 8192)
-+	xdp.frame_sz = ice_rx_frame_truesize(rx_ring, 0);
-+#endif
- 
- 	/* start the loop to process Rx packets bounded by 'budget' */
- 	while (likely(total_rx_pkts < (unsigned int)budget)) {
-@@ -1038,6 +1058,10 @@ static int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
- 		xdp.data_hard_start = xdp.data - ice_rx_offset(rx_ring);
- 		xdp.data_meta = xdp.data;
- 		xdp.data_end = xdp.data + size;
-+#if (PAGE_SIZE > 4096)
-+		/* At larger PAGE_SIZE, frame_sz depend on len size */
-+		xdp.frame_sz = ice_rx_frame_truesize(rx_ring, size);
-+#endif
- 
- 		rcu_read_lock();
- 		xdp_prog = READ_ONCE(rx_ring->xdp_prog);
-@@ -1051,16 +1075,8 @@ static int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
- 		if (!xdp_res)
- 			goto construct_skb;
- 		if (xdp_res & (ICE_XDP_TX | ICE_XDP_REDIR)) {
--			unsigned int truesize;
--
--#if (PAGE_SIZE < 8192)
--			truesize = ice_rx_pg_size(rx_ring) / 2;
--#else
--			truesize = SKB_DATA_ALIGN(ice_rx_offset(rx_ring) +
--						  size);
--#endif
- 			xdp_xmit |= xdp_res;
--			ice_rx_buf_adjust_pg_offset(rx_buf, truesize);
-+			ice_rx_buf_adjust_pg_offset(rx_buf, xdp.frame_sz);
- 		} else {
- 			rx_buf->pagecnt_bias++;
- 		}
 
 
