@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E8CCC2D0EA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD294C2BA80
 	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:53:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0295320780
+	by mail.kernel.org (Postfix) with ESMTP id A06222082D
 	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:53:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FoNSqYKs"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GdgxAUJY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728756AbgDHLw7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727865AbgDHLw7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 8 Apr 2020 07:52:59 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:20820 "EHLO
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:37880 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727865AbgDHLw7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1728766AbgDHLw7 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 8 Apr 2020 07:52:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1586346777;
@@ -27,26 +27,26 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BcJO2PQZQoTdxh1ktsCU9M3+07NWPu/ha/1VIUeextI=;
-        b=FoNSqYKsCfLLRI1RqSHlfD6qpy3hsNMNz+SUOHYtfvYcLcGlBOGKH+Ln83oSbney16guLJ
-        FLBmdWEk/bfb0IFjgDs3iMC0ZijyI1wzFHe+1A9gvc6yAj3E9r4Br6azFXfKStjSHCUP33
-        Fntbq1OiFqU8+0tdQGgUe/2oPYiEqmo=
+        bh=MCv8fhfDJ9MisBpERalYAZGMbZ3E/f/f6YpVxnzKLGM=;
+        b=GdgxAUJYBKrFXmhBFw8/pQou93/ucDWP0twBpPTg2hDOvxSNKnqZeIvx3qFm3+OyZFcXxY
+        a2t9e2qfhS+cU3Gax/d7ko7Leslq8XjoyWH3cWcJygzmkNq0N8Q8Zhv72naVH7cPq+bo23
+        NqKiGKC4EIczOzspJ2tWEo+ps3+SyTI=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-40-fWTj1sQ-Mnmm7YMTHvjhIQ-1; Wed, 08 Apr 2020 07:52:55 -0400
-X-MC-Unique: fWTj1sQ-Mnmm7YMTHvjhIQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+ us-mta-250-4ukuvbKPNdqFRMKct9HgGA-1; Wed, 08 Apr 2020 07:52:55 -0400
+X-MC-Unique: 4ukuvbKPNdqFRMKct9HgGA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EEAB119067E1;
-        Wed,  8 Apr 2020 11:52:52 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 253DD800D50;
+        Wed,  8 Apr 2020 11:52:53 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6225E99E03;
-        Wed,  8 Apr 2020 11:52:47 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 798171001938;
+        Wed,  8 Apr 2020 11:52:52 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 7F9EA300020FA;
-        Wed,  8 Apr 2020 13:52:46 +0200 (CEST)
-Subject: [PATCH RFC v2 26/33] i40e: add XDP frame size to driver
+        by firesoul.localdomain (Postfix) with ESMTP id 93C37300020FB;
+        Wed,  8 Apr 2020 13:52:51 +0200 (CEST)
+Subject: [PATCH RFC v2 27/33] ice: add XDP frame size to driver
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     intel-wired-lan@lists.osuosl.org,
@@ -66,15 +66,15 @@ Cc:     intel-wired-lan@lists.osuosl.org,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>
-Date:   Wed, 08 Apr 2020 13:52:46 +0200
-Message-ID: <158634676645.707275.7536684877295305696.stgit@firesoul>
+Date:   Wed, 08 Apr 2020 13:52:51 +0200
+Message-ID: <158634677153.707275.15058521423175287393.stgit@firesoul>
 In-Reply-To: <158634658714.707275.7903484085370879864.stgit@firesoul>
 References: <158634658714.707275.7903484085370879864.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -111,74 +111,75 @@ Cc: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
 Cc: Alexander Duyck <alexander.duyck@gmail.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_txrx.c |   31 +++++++++++++++++++++++----
- 1 file changed, 26 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_txrx.c |   34 +++++++++++++++++++++--------
+ 1 file changed, 25 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-index b8496037ef7f..1fb6b1004dcb 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-@@ -1507,6 +1507,23 @@ static inline unsigned int i40e_rx_offset(struct i40e_ring *rx_ring)
- 	return ring_uses_build_skb(rx_ring) ? I40E_SKB_PAD : 0;
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
+index f67e8362958c..695f86694224 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
+@@ -423,6 +423,22 @@ static unsigned int ice_rx_offset(struct ice_ring *rx_ring)
+ 	return 0;
  }
  
-+static inline unsigned int i40e_rx_frame_truesize(struct i40e_ring *rx_ring,
-+						  unsigned int size)
++static unsigned int ice_rx_frame_truesize(struct ice_ring *rx_ring,
++					  unsigned int size)
 +{
 +	unsigned int truesize;
 +
 +#if (PAGE_SIZE < 8192)
-+	truesize = i40e_rx_pg_size(rx_ring) / 2; /* Must be power-of-2 */
++	truesize = ice_rx_pg_size(rx_ring) / 2; /* Must be power-of-2 */
 +#else
-+	truesize = i40e_rx_offset(rx_ring) ?
-+		SKB_DATA_ALIGN(size + i40e_rx_offset(rx_ring)) +
++	truesize = ice_rx_offset(rx_ring) ?
++		SKB_DATA_ALIGN(ice_rx_offset(rx_ring) + size) +
 +		SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) :
-+		SKB_DATA_ALIGN(size);
++		SKB_DATA_ALIGN(size)
 +#endif
 +	return truesize;
 +}
 +
-+
  /**
-  * i40e_alloc_mapped_page - recycle or make a new page
-  * @rx_ring: ring to use
-@@ -2246,13 +2263,11 @@ static void i40e_rx_buffer_flip(struct i40e_ring *rx_ring,
- 				struct i40e_rx_buffer *rx_buffer,
- 				unsigned int size)
- {
--#if (PAGE_SIZE < 8192)
--	unsigned int truesize = i40e_rx_pg_size(rx_ring) / 2;
-+	unsigned int truesize = i40e_rx_frame_truesize(rx_ring, size);
+  * ice_run_xdp - Executes an XDP program on initialized xdp_buff
+  * @rx_ring: Rx ring
+@@ -991,6 +1007,10 @@ static int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
+ 	bool failure;
  
-+#if (PAGE_SIZE < 8192)
- 	rx_buffer->page_offset ^= truesize;
- #else
--	unsigned int truesize = SKB_DATA_ALIGN(i40e_rx_offset(rx_ring) + size);
--
- 	rx_buffer->page_offset += truesize;
- #endif
- }
-@@ -2335,6 +2350,9 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget)
- 	bool failure = false;
- 	struct xdp_buff xdp;
- 
-+#if (PAGE_SIZE < 8192)
-+	xdp.frame_sz = i40e_rx_frame_truesize(rx_ring, 0);
-+#endif
  	xdp.rxq = &rx_ring->xdp_rxq;
- 
- 	while (likely(total_rx_packets < (unsigned int)budget)) {
-@@ -2389,7 +2407,10 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget)
- 			xdp.data_hard_start = xdp.data -
- 					      i40e_rx_offset(rx_ring);
- 			xdp.data_end = xdp.data + size;
--
-+#if (PAGE_SIZE > 4096)
-+			/* At larger PAGE_SIZE, frame_sz depend on len size */
-+			xdp.frame_sz = i40e_rx_frame_truesize(rx_ring, size);
++	/* Frame size depend on rx_ring setup when PAGE_SIZE=4K */
++#if (PAGE_SIZE < 8192)
++	xdp.frame_sz = ice_rx_frame_truesize(rx_ring, 0);
 +#endif
- 			skb = i40e_run_xdp(rx_ring, &xdp);
- 		}
  
+ 	/* start the loop to process Rx packets bounded by 'budget' */
+ 	while (likely(total_rx_pkts < (unsigned int)budget)) {
+@@ -1038,6 +1058,10 @@ static int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
+ 		xdp.data_hard_start = xdp.data - ice_rx_offset(rx_ring);
+ 		xdp.data_meta = xdp.data;
+ 		xdp.data_end = xdp.data + size;
++#if (PAGE_SIZE > 4096)
++		/* At larger PAGE_SIZE, frame_sz depend on len size */
++		xdp.frame_sz = ice_rx_frame_truesize(rx_ring, size);
++#endif
+ 
+ 		rcu_read_lock();
+ 		xdp_prog = READ_ONCE(rx_ring->xdp_prog);
+@@ -1051,16 +1075,8 @@ static int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
+ 		if (!xdp_res)
+ 			goto construct_skb;
+ 		if (xdp_res & (ICE_XDP_TX | ICE_XDP_REDIR)) {
+-			unsigned int truesize;
+-
+-#if (PAGE_SIZE < 8192)
+-			truesize = ice_rx_pg_size(rx_ring) / 2;
+-#else
+-			truesize = SKB_DATA_ALIGN(ice_rx_offset(rx_ring) +
+-						  size);
+-#endif
+ 			xdp_xmit |= xdp_res;
+-			ice_rx_buf_adjust_pg_offset(rx_buf, truesize);
++			ice_rx_buf_adjust_pg_offset(rx_buf, xdp.frame_sz);
+ 		} else {
+ 			rx_buf->pagecnt_bias++;
+ 		}
 
 
