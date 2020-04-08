@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34340C2BA2B
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:25:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB943C2BA2B
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:25:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0C22620857
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:25:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 88D8120857
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:25:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="BQItS+UJ"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IuEy3TQV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726527AbgDHXZ2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Apr 2020 19:25:28 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:54282 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726508AbgDHXZ2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 8 Apr 2020 19:25:28 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 038NNEqb032603
-        for <bpf@vger.kernel.org>; Wed, 8 Apr 2020 16:25:26 -0700
+        id S1726504AbgDHXZh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Apr 2020 19:25:37 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:34930 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726591AbgDHXZg (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Apr 2020 19:25:36 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 038NJf2b022975
+        for <bpf@vger.kernel.org>; Wed, 8 Apr 2020 16:25:36 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=ZbsCGaCv9Gsm85mgP5XUnKAzAoNTMbL2upv04wMKm5c=;
- b=BQItS+UJuaCEHJiKi1ww+dTuT4Y+A+uoAigfvcrFim0PBWvCbZhThjYrBCOFjK4lv1Sv
- Q3v9jG9tCJilg86WkQNR7zbACOPUG1EGHFynzTkGC3NflCBVHVlKAzT+XdpFyFAsFgkn
- HX4MqK8fsV78P7/4srFD3Dlf5aviJuqfblI= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 3091mvy6x2-2
+ bh=llWU84pQOOcFmGzSZOkQo3IKl60pkdXc8PkCSGbDJRk=;
+ b=IuEy3TQVFsVw8efU1zSbqImoDUUjdAMFL/jiRZ8kEplGm7RC0/HMkHZOKlt/v3sgVOWm
+ CIl7thLxgv0OymWJgD8hBqQdfil1NwdXKrCZlsErttVyasf+NH6+eyHYpfQzU7+EKaRm
+ 37VflsYZxLZCVMUiISEnXYWuJFlu7ZZhbZI= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3091tmy095-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2020 16:25:26 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2020 16:25:36 -0700
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 8 Apr 2020 16:25:25 -0700
+ 15.1.1847.3; Wed, 8 Apr 2020 16:25:35 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 8B5A33700D98; Wed,  8 Apr 2020 16:25:22 -0700 (PDT)
+        id A4CAF3700D98; Wed,  8 Apr 2020 16:25:33 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next 02/16] bpf: create /sys/kernel/bpfdump mount file system
-Date:   Wed, 8 Apr 2020 16:25:22 -0700
-Message-ID: <20200408232522.2675492-1-yhs@fb.com>
+Subject: [RFC PATCH bpf-next 11/16] bpf: implement query for target_proto and file dumper prog_id
+Date:   Wed, 8 Apr 2020 16:25:33 -0700
+Message-ID: <20200408232533.2676305-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200408232520.2675265-1-yhs@fb.com>
 References: <20200408232520.2675265-1-yhs@fb.com>
@@ -61,142 +61,211 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-08_09:2020-04-07,2020-04-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- spamscore=0 mlxscore=0 suspectscore=2 clxscore=1015 bulkscore=0
- phishscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
- malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2003020000 definitions=main-2004080163
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ spamscore=0 bulkscore=0 malwarescore=0 mlxscore=0 suspectscore=0
+ clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004080163
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch creates a mount point "bpfdump" under
-/sys/kernel. The file system has a single user
-mode, i.e., all mount points will be identical.
+Given a fd representing a bpfdump target, user
+can retrieve the target_proto name which represents
+the bpf program prototype.
 
-The magic number I picked for the new file system
-is "dump".
+Given a fd representing a file dumper, user can
+retrieve the bpf_prog id associated with that dumper.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/uapi/linux/magic.h |  1 +
- kernel/bpf/Makefile        |  1 +
- kernel/bpf/dump.c          | 79 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 81 insertions(+)
- create mode 100644 kernel/bpf/dump.c
+ include/linux/bpf.h            |  1 +
+ include/uapi/linux/bpf.h       | 13 +++++++++
+ kernel/bpf/dump.c              | 51 ++++++++++++++++++++++++++++++++++
+ kernel/bpf/syscall.c           | 14 ++++++++++
+ tools/include/uapi/linux/bpf.h | 13 +++++++++
+ 5 files changed, 92 insertions(+)
 
-diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
-index d78064007b17..4ce3d8882315 100644
---- a/include/uapi/linux/magic.h
-+++ b/include/uapi/linux/magic.h
-@@ -88,6 +88,7 @@
- #define BPF_FS_MAGIC		0xcafe4a11
- #define AAFS_MAGIC		0x5a3c69f0
- #define ZONEFS_MAGIC		0x5a4f4653
-+#define DUMPFS_MAGIC		0x64756d70
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f7d4269d77b8..c9aec3b02dfa 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1120,6 +1120,7 @@ int bpf_dump_create(u32 prog_fd, const char __user =
+*dumper_name);
+ struct bpf_prog *bpf_dump_get_prog(struct seq_file *seq, u32 priv_data_s=
+ize,
+ 				   u64 *seq_num);
+ int bpf_dump_run_prog(struct bpf_prog *prog, void *ctx);
++int bpf_dump_query(const union bpf_attr *attr, union bpf_attr __user *ua=
+ttr);
 =20
- /* Since UDF 2.01 is ISO 13346 based... */
- #define UDF_SUPER_MAGIC		0x15013346
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index f2d7be596966..4a1376ab2bea 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -26,6 +26,7 @@ obj-$(CONFIG_BPF_SYSCALL) +=3D reuseport_array.o
- endif
- ifeq ($(CONFIG_SYSFS),y)
- obj-$(CONFIG_DEBUG_INFO_BTF) +=3D sysfs_btf.o
-+obj-$(CONFIG_BPF_SYSCALL) +=3D dump.o
- endif
- ifeq ($(CONFIG_BPF_JIT),y)
- obj-$(CONFIG_BPF_SYSCALL) +=3D bpf_struct_ops.o
+ int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
+ int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index a245f0df53c4..fc2157e319f1 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -113,6 +113,7 @@ enum bpf_cmd {
+ 	BPF_MAP_DELETE_BATCH,
+ 	BPF_LINK_CREATE,
+ 	BPF_LINK_UPDATE,
++	BPF_DUMP_QUERY,
+ };
+=20
+ enum bpf_map_type {
+@@ -594,6 +595,18 @@ union bpf_attr {
+ 		__u32		old_prog_fd;
+ 	} link_update;
+=20
++	struct {
++		__u32		query_fd;
++		__u32		flags;
++		union {
++			struct {
++				__aligned_u64	target_proto;
++				__u32		proto_buf_len;
++			};
++			__u32			prog_id;
++		};
++	} dump_query;
++
+ } __attribute__((aligned(8)));
+=20
+ /* The description below is an attempt at providing documentation to eBP=
+F
 diff --git a/kernel/bpf/dump.c b/kernel/bpf/dump.c
-new file mode 100644
-index 000000000000..e0c33486e0e7
---- /dev/null
+index 4e009b2612c2..f3041b362057 100644
+--- a/kernel/bpf/dump.c
 +++ b/kernel/bpf/dump.c
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2020 Facebook */
-+
-+#include <linux/init.h>
-+#include <linux/magic.h>
-+#include <linux/mount.h>
-+#include <linux/anon_inodes.h>
-+#include <linux/namei.h>
-+#include <linux/fs.h>
-+#include <linux/fs_context.h>
-+#include <linux/fs_parser.h>
-+#include <linux/filter.h>
-+#include <linux/bpf.h>
-+
-+static void bpfdump_free_inode(struct inode *inode)
+@@ -86,6 +86,57 @@ static void *get_extra_priv_dptr(void *old_ptr, u32 ol=
+d_size)
+ 	return old_ptr + roundup(old_size, 8);
+ }
+=20
++int bpf_dump_query(const union bpf_attr *attr, union bpf_attr __user *ua=
+ttr)
 +{
-+	kfree(inode->i_private);
-+	free_inode_nonrcu(inode);
++	struct bpfdump_target_info *tinfo;
++	struct dumper_inode_info *i_info;
++	const char *target_proto;
++	void * __user proto_buf;
++	struct file *filp;
++	u32 proto_len;
++	struct fd qfd;
++	int err =3D 0;
++
++	if (attr->dump_query.flags !=3D 0)
++		return -EINVAL;
++
++	qfd =3D fdget(attr->dump_query.query_fd);
++	filp =3D qfd.file;
++	if (!filp)
++		return -EBADF;
++
++	if (filp->f_op !=3D &bpf_dumper_ops &&
++	    filp->f_inode->i_op !=3D &bpf_dir_iops) {
++		err =3D -EINVAL;
++		goto done;
++	}
++
++	if (filp->f_op =3D=3D &bpf_dumper_ops) {
++		i_info =3D filp->f_inode->i_private;
++		if (put_user(i_info->prog->aux->id, &uattr->dump_query.prog_id))
++			err =3D -EFAULT;
++
++		goto done;
++	}
++
++	tinfo =3D filp->f_inode->i_private;
++	target_proto =3D tinfo->target_proto;
++
++	proto_len =3D strlen(target_proto) + 1;
++	if (attr->dump_query.proto_buf_len < proto_len) {
++		err =3D -ENOSPC;
++		goto done;
++	}
++
++	proto_buf =3D u64_to_user_ptr(attr->dump_query.target_proto);
++	if (copy_to_user(proto_buf, target_proto, proto_len))
++		err =3D -EFAULT;
++
++done:
++	fdput(qfd);
++	return err;
 +}
 +
-+static const struct super_operations bpfdump_super_operations =3D {
-+	.statfs		=3D simple_statfs,
-+	.free_inode	=3D bpfdump_free_inode,
-+};
+ #ifdef CONFIG_PROC_FS
+ static void dumper_show_fdinfo(struct seq_file *m, struct file *filp)
+ {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 62a872a406ca..46b58f1f2d75 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3673,6 +3673,17 @@ static int link_update(union bpf_attr *attr)
+ 	return ret;
+ }
+=20
++#define BPF_DUMP_QUERY_LAST_FIELD dump_query.proto_buf_len
 +
-+static int bpfdump_fill_super(struct super_block *sb, struct fs_context =
-*fc)
++static int bpf_dump_do_query(const union bpf_attr *attr,
++			     union bpf_attr __user *uattr)
 +{
-+	static const struct tree_descr files[] =3D { { "" } };
-+	int err;
++	if (CHECK_ATTR(BPF_DUMP_QUERY))
++		return -EINVAL;
 +
-+	err =3D simple_fill_super(sb, DUMPFS_MAGIC, files);
-+	if (err)
-+		return err;
-+
-+	sb->s_op =3D &bpfdump_super_operations;
-+	return 0;
++	return bpf_dump_query(attr, uattr);
 +}
 +
-+static int bpfdump_get_tree(struct fs_context *fc)
-+{
-+	return get_tree_single(fc, bpfdump_fill_super);
-+}
+ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned =
+int, size)
+ {
+ 	union bpf_attr attr;
+@@ -3790,6 +3801,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __use=
+r *, uattr, unsigned int, siz
+ 	case BPF_LINK_UPDATE:
+ 		err =3D link_update(&attr);
+ 		break;
++	case BPF_DUMP_QUERY:
++		err =3D bpf_dump_do_query(&attr, uattr);
++		break;
+ 	default:
+ 		err =3D -EINVAL;
+ 		break;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index a245f0df53c4..fc2157e319f1 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -113,6 +113,7 @@ enum bpf_cmd {
+ 	BPF_MAP_DELETE_BATCH,
+ 	BPF_LINK_CREATE,
+ 	BPF_LINK_UPDATE,
++	BPF_DUMP_QUERY,
+ };
+=20
+ enum bpf_map_type {
+@@ -594,6 +595,18 @@ union bpf_attr {
+ 		__u32		old_prog_fd;
+ 	} link_update;
+=20
++	struct {
++		__u32		query_fd;
++		__u32		flags;
++		union {
++			struct {
++				__aligned_u64	target_proto;
++				__u32		proto_buf_len;
++			};
++			__u32			prog_id;
++		};
++	} dump_query;
 +
-+static const struct fs_context_operations bpfdump_context_ops =3D {
-+	.get_tree	=3D bpfdump_get_tree,
-+};
-+
-+static int bpfdump_init_fs_context(struct fs_context *fc)
-+{
-+	fc->ops =3D &bpfdump_context_ops;
-+	return 0;
-+}
-+
-+static struct file_system_type fs_type =3D {
-+	.owner			=3D THIS_MODULE,
-+	.name			=3D "bpfdump",
-+	.init_fs_context	=3D bpfdump_init_fs_context,
-+	.kill_sb		=3D kill_litter_super,
-+};
-+
-+static int __init bpfdump_init(void)
-+{
-+	int ret;
-+
-+	ret =3D sysfs_create_mount_point(kernel_kobj, "bpfdump");
-+	if (ret)
-+		return ret;
-+
-+	ret =3D register_filesystem(&fs_type);
-+	if (ret)
-+		goto remove_mount;
-+
-+	return 0;
-+
-+remove_mount:
-+	sysfs_remove_mount_point(kernel_kobj, "bpfdump");
-+	return ret;
-+}
-+core_initcall(bpfdump_init);
+ } __attribute__((aligned(8)));
+=20
+ /* The description below is an attempt at providing documentation to eBP=
+F
 --=20
 2.24.1
 
