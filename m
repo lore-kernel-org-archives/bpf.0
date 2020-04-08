@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB943C2BA2B
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80266C2BB55
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:25:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 88D8120857
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:25:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5488D20857
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:25:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IuEy3TQV"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ExFYxBkI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726504AbgDHXZh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Apr 2020 19:25:37 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:34930 "EHLO
+        id S1726591AbgDHXZi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Apr 2020 19:25:38 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:53092 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726591AbgDHXZg (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 8 Apr 2020 19:25:36 -0400
+        by vger.kernel.org with ESMTP id S1726594AbgDHXZh (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Apr 2020 19:25:37 -0400
 Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 038NJf2b022975
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 038NJe7Q022939
         for <bpf@vger.kernel.org>; Wed, 8 Apr 2020 16:25:36 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=llWU84pQOOcFmGzSZOkQo3IKl60pkdXc8PkCSGbDJRk=;
- b=IuEy3TQVFsVw8efU1zSbqImoDUUjdAMFL/jiRZ8kEplGm7RC0/HMkHZOKlt/v3sgVOWm
- CIl7thLxgv0OymWJgD8hBqQdfil1NwdXKrCZlsErttVyasf+NH6+eyHYpfQzU7+EKaRm
- 37VflsYZxLZCVMUiISEnXYWuJFlu7ZZhbZI= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3091tmy095-3
+ bh=xAQDZIfES9Gj1GnCxGUljbWcEITqX2/G8lxVxqvIGH8=;
+ b=ExFYxBkIHTRDQ0EgYxP39sZ67maaUwWXPMYab0hJN0pkL5o48+RI3nNI9Qczk/tIc9Pv
+ TB9nYXvknKDxB+0R+NXvhwdE4R39rZ3Bu8hY+R5btDuiLNm1a3bAYORD8O4a44oQzll3
+ sV2/HY1p3BRYzv8f9nY5BMDhgn+5wwgGyzo= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3091tmy096-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Wed, 08 Apr 2020 16:25:36 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1847.3; Wed, 8 Apr 2020 16:25:35 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id A4CAF3700D98; Wed,  8 Apr 2020 16:25:33 -0700 (PDT)
+        id 06ABF3700D98; Wed,  8 Apr 2020 16:25:25 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next 11/16] bpf: implement query for target_proto and file dumper prog_id
-Date:   Wed, 8 Apr 2020 16:25:33 -0700
-Message-ID: <20200408232533.2676305-1-yhs@fb.com>
+Subject: [RFC PATCH bpf-next 04/16] bpf: allow loading of a dumper program
+Date:   Wed, 8 Apr 2020 16:25:24 -0700
+Message-ID: <20200408232524.2675603-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200408232520.2675265-1-yhs@fb.com>
 References: <20200408232520.2675265-1-yhs@fb.com>
@@ -63,7 +63,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-08_09:2020-04-07,2020-04-08 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
  impostorscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
- spamscore=0 bulkscore=0 malwarescore=0 mlxscore=0 suspectscore=0
+ spamscore=0 bulkscore=0 malwarescore=0 mlxscore=0 suspectscore=2
  clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2004080163
 X-FB-Internal: deliver
@@ -72,200 +72,195 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Given a fd representing a bpfdump target, user
-can retrieve the target_proto name which represents
-the bpf program prototype.
+A dumper bpf program is a tracing program with attach type
+BPF_TRACE_DUMP. During bpf program load, the load attribute
+   attach_prog_fd
+carries the target directory fd. The program will be
+verified against btf_id of the target_proto.
 
-Given a fd representing a file dumper, user can
-retrieve the bpf_prog id associated with that dumper.
+If the program is loaded successfully, the dump target, as
+represented as a relative path to /sys/kernel/bpfdump,
+will be remembered in prog->aux->dump_target, which will
+be used later to create dumpers.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/linux/bpf.h            |  1 +
- include/uapi/linux/bpf.h       | 13 +++++++++
- kernel/bpf/dump.c              | 51 ++++++++++++++++++++++++++++++++++
- kernel/bpf/syscall.c           | 14 ++++++++++
- tools/include/uapi/linux/bpf.h | 13 +++++++++
- 5 files changed, 92 insertions(+)
+ include/linux/bpf.h            |  2 ++
+ include/uapi/linux/bpf.h       |  1 +
+ kernel/bpf/dump.c              | 40 ++++++++++++++++++++++++++++++++++
+ kernel/bpf/syscall.c           |  8 ++++++-
+ kernel/bpf/verifier.c          | 15 +++++++++++++
+ tools/include/uapi/linux/bpf.h |  1 +
+ 6 files changed, 66 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f7d4269d77b8..c9aec3b02dfa 100644
+index 53914bec7590..44268d36d901 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -1120,6 +1120,7 @@ int bpf_dump_create(u32 prog_fd, const char __user =
-*dumper_name);
- struct bpf_prog *bpf_dump_get_prog(struct seq_file *seq, u32 priv_data_s=
-ize,
- 				   u64 *seq_num);
- int bpf_dump_run_prog(struct bpf_prog *prog, void *ctx);
-+int bpf_dump_query(const union bpf_attr *attr, union bpf_attr __user *ua=
-ttr);
+@@ -673,6 +673,7 @@ struct bpf_prog_aux {
+ 	struct bpf_map **used_maps;
+ 	struct bpf_prog *prog;
+ 	struct user_struct *user;
++	const char *dump_target;
+ 	u64 load_time; /* ns since boottime */
+ 	struct bpf_map *cgroup_storage[MAX_BPF_CGROUP_STORAGE_TYPE];
+ 	char name[BPF_OBJ_NAME_LEN];
+@@ -1112,6 +1113,7 @@ int bpf_obj_get_user(const char __user *pathname, i=
+nt flags);
+ int bpf_dump_reg_target(const char *target, const char *target_proto,
+ 			const struct seq_operations *seq_ops,
+ 			u32 seq_priv_size, u32 target_feature);
++int bpf_dump_set_target_info(u32 target_fd, struct bpf_prog *prog);
 =20
  int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
  int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
 diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index a245f0df53c4..fc2157e319f1 100644
+index 2e29a671d67e..0f1cbed446c1 100644
 --- a/include/uapi/linux/bpf.h
 +++ b/include/uapi/linux/bpf.h
-@@ -113,6 +113,7 @@ enum bpf_cmd {
- 	BPF_MAP_DELETE_BATCH,
- 	BPF_LINK_CREATE,
- 	BPF_LINK_UPDATE,
-+	BPF_DUMP_QUERY,
+@@ -215,6 +215,7 @@ enum bpf_attach_type {
+ 	BPF_TRACE_FEXIT,
+ 	BPF_MODIFY_RETURN,
+ 	BPF_LSM_MAC,
++	BPF_TRACE_DUMP,
+ 	__MAX_BPF_ATTACH_TYPE
  };
 =20
- enum bpf_map_type {
-@@ -594,6 +595,18 @@ union bpf_attr {
- 		__u32		old_prog_fd;
- 	} link_update;
-=20
-+	struct {
-+		__u32		query_fd;
-+		__u32		flags;
-+		union {
-+			struct {
-+				__aligned_u64	target_proto;
-+				__u32		proto_buf_len;
-+			};
-+			__u32			prog_id;
-+		};
-+	} dump_query;
-+
- } __attribute__((aligned(8)));
-=20
- /* The description below is an attempt at providing documentation to eBP=
-F
 diff --git a/kernel/bpf/dump.c b/kernel/bpf/dump.c
-index 4e009b2612c2..f3041b362057 100644
+index 45528846557f..1091affe8b3f 100644
 --- a/kernel/bpf/dump.c
 +++ b/kernel/bpf/dump.c
-@@ -86,6 +86,57 @@ static void *get_extra_priv_dptr(void *old_ptr, u32 ol=
-d_size)
- 	return old_ptr + roundup(old_size, 8);
- }
+@@ -11,6 +11,9 @@
+ #include <linux/fs_parser.h>
+ #include <linux/filter.h>
+ #include <linux/bpf.h>
++#include <linux/btf.h>
++
++extern struct btf *btf_vmlinux;
 =20
-+int bpf_dump_query(const union bpf_attr *attr, union bpf_attr __user *ua=
-ttr)
+ struct bpfdump_target_info {
+ 	struct list_head list;
+@@ -48,6 +51,43 @@ static const struct inode_operations bpf_dir_iops =3D =
+{
+ 	.unlink		=3D dumper_unlink,
+ };
+=20
++int bpf_dump_set_target_info(u32 target_fd, struct bpf_prog *prog)
 +{
 +	struct bpfdump_target_info *tinfo;
-+	struct dumper_inode_info *i_info;
 +	const char *target_proto;
-+	void * __user proto_buf;
-+	struct file *filp;
-+	u32 proto_len;
-+	struct fd qfd;
-+	int err =3D 0;
++	struct file *target_file;
++	struct fd tfd;
++	int err =3D 0, btf_id;
 +
-+	if (attr->dump_query.flags !=3D 0)
++	if (!btf_vmlinux)
 +		return -EINVAL;
 +
-+	qfd =3D fdget(attr->dump_query.query_fd);
-+	filp =3D qfd.file;
-+	if (!filp)
++	tfd =3D fdget(target_fd);
++	target_file =3D tfd.file;
++	if (!target_file)
 +		return -EBADF;
 +
-+	if (filp->f_op !=3D &bpf_dumper_ops &&
-+	    filp->f_inode->i_op !=3D &bpf_dir_iops) {
++	if (target_file->f_inode->i_op !=3D &bpf_dir_iops) {
 +		err =3D -EINVAL;
 +		goto done;
 +	}
 +
-+	if (filp->f_op =3D=3D &bpf_dumper_ops) {
-+		i_info =3D filp->f_inode->i_private;
-+		if (put_user(i_info->prog->aux->id, &uattr->dump_query.prog_id))
-+			err =3D -EFAULT;
-+
-+		goto done;
-+	}
-+
-+	tinfo =3D filp->f_inode->i_private;
++	tinfo =3D target_file->f_inode->i_private;
 +	target_proto =3D tinfo->target_proto;
++	btf_id =3D btf_find_by_name_kind(btf_vmlinux, target_proto,
++				       BTF_KIND_FUNC);
 +
-+	proto_len =3D strlen(target_proto) + 1;
-+	if (attr->dump_query.proto_buf_len < proto_len) {
-+		err =3D -ENOSPC;
-+		goto done;
++	if (btf_id > 0) {
++		prog->aux->dump_target =3D tinfo->target;
++		prog->aux->attach_btf_id =3D btf_id;
 +	}
 +
-+	proto_buf =3D u64_to_user_ptr(attr->dump_query.target_proto);
-+	if (copy_to_user(proto_buf, target_proto, proto_len))
-+		err =3D -EFAULT;
-+
++	err =3D min(btf_id, 0);
 +done:
-+	fdput(qfd);
++	fdput(tfd);
 +	return err;
 +}
 +
- #ifdef CONFIG_PROC_FS
- static void dumper_show_fdinfo(struct seq_file *m, struct file *filp)
- {
+ int bpf_dump_reg_target(const char *target,
+ 			const char *target_proto,
+ 			const struct seq_operations *seq_ops,
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 62a872a406ca..46b58f1f2d75 100644
+index 64783da34202..41005dee8957 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -3673,6 +3673,17 @@ static int link_update(union bpf_attr *attr)
- 	return ret;
- }
+@@ -2060,7 +2060,12 @@ static int bpf_prog_load(union bpf_attr *attr, uni=
+on bpf_attr __user *uattr)
 =20
-+#define BPF_DUMP_QUERY_LAST_FIELD dump_query.proto_buf_len
+ 	prog->expected_attach_type =3D attr->expected_attach_type;
+ 	prog->aux->attach_btf_id =3D attr->attach_btf_id;
+-	if (attr->attach_prog_fd) {
++	if (type =3D=3D BPF_PROG_TYPE_TRACING &&
++	    attr->expected_attach_type =3D=3D BPF_TRACE_DUMP) {
++		err =3D bpf_dump_set_target_info(attr->attach_prog_fd, prog);
++		if (err)
++			goto free_prog_nouncharge;
++	} else if (attr->attach_prog_fd) {
+ 		struct bpf_prog *tgt_prog;
+=20
+ 		tgt_prog =3D bpf_prog_get(attr->attach_prog_fd);
+@@ -2145,6 +2150,7 @@ static int bpf_prog_load(union bpf_attr *attr, unio=
+n bpf_attr __user *uattr)
+ 	err =3D bpf_prog_new_fd(prog);
+ 	if (err < 0)
+ 		bpf_prog_put(prog);
 +
-+static int bpf_dump_do_query(const union bpf_attr *attr,
-+			     union bpf_attr __user *uattr)
-+{
-+	if (CHECK_ATTR(BPF_DUMP_QUERY))
-+		return -EINVAL;
-+
-+	return bpf_dump_query(attr, uattr);
-+}
-+
- SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned =
-int, size)
- {
- 	union bpf_attr attr;
-@@ -3790,6 +3801,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __use=
-r *, uattr, unsigned int, siz
- 	case BPF_LINK_UPDATE:
- 		err =3D link_update(&attr);
- 		break;
-+	case BPF_DUMP_QUERY:
-+		err =3D bpf_dump_do_query(&attr, uattr);
-+		break;
+ 	return err;
+=20
+ free_used_maps:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 04c6630cc18f..f531cee24fc5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10426,6 +10426,7 @@ static int check_attach_btf_id(struct bpf_verifie=
+r_env *env)
+ 	struct bpf_prog *tgt_prog =3D prog->aux->linked_prog;
+ 	u32 btf_id =3D prog->aux->attach_btf_id;
+ 	const char prefix[] =3D "btf_trace_";
++	struct btf_func_model fmodel;
+ 	int ret =3D 0, subprog =3D -1, i;
+ 	struct bpf_trampoline *tr;
+ 	const struct btf_type *t;
+@@ -10566,6 +10567,20 @@ static int check_attach_btf_id(struct bpf_verifi=
+er_env *env)
+ 		prog->aux->attach_func_proto =3D t;
+ 		prog->aux->attach_btf_trace =3D true;
+ 		return 0;
++	case BPF_TRACE_DUMP:
++		if (!btf_type_is_func(t)) {
++			verbose(env, "attach_btf_id %u is not a function\n",
++				btf_id);
++			return -EINVAL;
++		}
++		t =3D btf_type_by_id(btf, t->type);
++		if (!btf_type_is_func_proto(t))
++			return -EINVAL;
++		prog->aux->attach_func_name =3D tname;
++		prog->aux->attach_func_proto =3D t;
++		ret =3D btf_distill_func_proto(&env->log, btf, t,
++					     tname, &fmodel);
++		return ret;
  	default:
- 		err =3D -EINVAL;
- 		break;
+ 		if (!prog_extension)
+ 			return -EINVAL;
 diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
 f.h
-index a245f0df53c4..fc2157e319f1 100644
+index 2e29a671d67e..0f1cbed446c1 100644
 --- a/tools/include/uapi/linux/bpf.h
 +++ b/tools/include/uapi/linux/bpf.h
-@@ -113,6 +113,7 @@ enum bpf_cmd {
- 	BPF_MAP_DELETE_BATCH,
- 	BPF_LINK_CREATE,
- 	BPF_LINK_UPDATE,
-+	BPF_DUMP_QUERY,
+@@ -215,6 +215,7 @@ enum bpf_attach_type {
+ 	BPF_TRACE_FEXIT,
+ 	BPF_MODIFY_RETURN,
+ 	BPF_LSM_MAC,
++	BPF_TRACE_DUMP,
+ 	__MAX_BPF_ATTACH_TYPE
  };
 =20
- enum bpf_map_type {
-@@ -594,6 +595,18 @@ union bpf_attr {
- 		__u32		old_prog_fd;
- 	} link_update;
-=20
-+	struct {
-+		__u32		query_fd;
-+		__u32		flags;
-+		union {
-+			struct {
-+				__aligned_u64	target_proto;
-+				__u32		proto_buf_len;
-+			};
-+			__u32			prog_id;
-+		};
-+	} dump_query;
-+
- } __attribute__((aligned(8)));
-=20
- /* The description below is an attempt at providing documentation to eBP=
-F
 --=20
 2.24.1
 
