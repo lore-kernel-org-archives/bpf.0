@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B111C2BB55
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9D05C2BB85
 	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:26:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 35BAD20857
+	by mail.kernel.org (Postfix) with ESMTP id 78A2720857
 	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:26:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="AUoUwDbE"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ILlysoym"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726708AbgDHXZ7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Apr 2020 19:25:59 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:1918 "EHLO
+        id S1726671AbgDHXZu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Apr 2020 19:25:50 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:41044 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726626AbgDHXZx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 8 Apr 2020 19:25:53 -0400
+        by vger.kernel.org with ESMTP id S1726638AbgDHXZt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Apr 2020 19:25:49 -0400
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 038NPktu019388
-        for <bpf@vger.kernel.org>; Wed, 8 Apr 2020 16:25:52 -0700
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 038NPkLc019411
+        for <bpf@vger.kernel.org>; Wed, 8 Apr 2020 16:25:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=dY/NeSOpVMoudjVBkE2Cn3QVaRS9a4VZMoVhguU6aPs=;
- b=AUoUwDbECwDxbfnlPzejeC1KbSmsLlDV33EP36RG3U8559J8HrL3qeS5Mx+QPEvwljTY
- atWUrDBllplIyNx602C0OsUZJwa2mz9N+5FCchWS4eZNY0EvwE8hhdSwbs48TZxkHZfa
- xf311mF6J/SsEpO5f/0kFbNv0JvKYSa1RC4= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 3091m37bpw-11
+ bh=reV9zRE9CsGSG6Liq8/GjBGN0gKMKdSlI/v0Wk7iIyE=;
+ b=ILlysoymQgmitZppLBlSeQ+RI7dXbl/SZzeizUKMFkJmuQCYtRJAo7eTzp5rlq/z065V
+ hD0Q+jHk2FVX6eX+uXPFw74ywUV7r0OCp22ZIxlVdp3uaEaGOXH399sxNG8OvOsSUgX0
+ b6HLJ1rvVTgNqN6DizhjOJaMdKnGx/d3Vyo= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 3091m37bp9-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2020 16:25:51 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2020 16:25:47 -0700
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 8 Apr 2020 16:25:31 -0700
+ 15.1.1847.3; Wed, 8 Apr 2020 16:25:29 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 37CC03700D98; Wed,  8 Apr 2020 16:25:31 -0700 (PDT)
+        id 4212C3700D98; Wed,  8 Apr 2020 16:25:26 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next 09/16] bpf: add bpf_seq_printf and bpf_seq_write helpers
-Date:   Wed, 8 Apr 2020 16:25:31 -0700
-Message-ID: <20200408232531.2676134-1-yhs@fb.com>
+Subject: [RFC PATCH bpf-next 05/16] bpf: create file or anonymous dumpers
+Date:   Wed, 8 Apr 2020 16:25:26 -0700
+Message-ID: <20200408232526.2675664-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200408232520.2675265-1-yhs@fb.com>
 References: <20200408232520.2675265-1-yhs@fb.com>
@@ -62,7 +62,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-08_09:2020-04-07,2020-04-08 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 spamscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0
+ suspectscore=2 mlxscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0
  malwarescore=0 impostorscore=0 priorityscore=1501 clxscore=1015
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2004080164
@@ -72,323 +72,560 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Two helpers bpf_seq_printf and bpf_seq_write, are added for
-writing data to the seq_file buffer.
+Given a loaded dumper bpf program, which already
+knows which target it should bind to, there
+two ways to create a dumper:
+  - a file based dumper under hierarchy of
+    /sys/kernel/bpfdump/ which uses can
+    "cat" to print out the output.
+  - an anonymous dumper which user application
+    can "read" the dumping output.
 
-bpf_seq_printf supports common format string flag/width/type
-fields so at least I can get identical results for
-netlink and ipv6_route targets.
+For file based dumper, BPF_OBJ_PIN syscall interface
+is used. For anonymous dumper, BPF_PROG_ATTACH
+syscall interface is used.
 
-For bpf_seq_printf, return value 1 specifically indicates
-a write failure due to overflow in order to differentiate
-the failure from format strings.
+To facilitate target seq_ops->show() to get the
+bpf program easily, dumper creation increased
+the target-provided seq_file private data size
+so bpf program pointer is also stored in seq_file
+private data.
 
-For seq_file show, since the same object may be called
-twice, some bpf_prog might be sensitive to this. With return
-value indicating overflow happens the bpf program can
-react differently.
+Further, a seq_num which represents how many
+bpf_dump_get_prog() has been called is also
+available to the target seq_ops->show().
+Such information can be used to e.g., print
+banner before printing out actual data.
+
+Note the seq_num does not represent the num
+of unique kernel objects the bpf program has
+seen. But it should be a good approximate.
+
+A target feature BPF_DUMP_SEQ_NET_PRIVATE
+is implemented specifically useful for
+net based dumpers. It sets net namespace
+as the current process net namespace.
+This avoids changing existing net seq_ops
+in order to retrieve net namespace from
+the seq_file pointer.
+
+For open dumper files, anonymous or not, the
+fdinfo will show the target and prog_id associated
+with that file descriptor. For dumper file itself,
+a kernel interface will be provided to retrieve the
+prog_id in one of the later patches.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/uapi/linux/bpf.h       |  18 +++-
- kernel/trace/bpf_trace.c       | 172 +++++++++++++++++++++++++++++++++
- scripts/bpf_helpers_doc.py     |   2 +
- tools/include/uapi/linux/bpf.h |  18 +++-
- 4 files changed, 208 insertions(+), 2 deletions(-)
+ include/linux/bpf.h            |   5 +
+ include/uapi/linux/bpf.h       |   6 +-
+ kernel/bpf/dump.c              | 338 ++++++++++++++++++++++++++++++++-
+ kernel/bpf/syscall.c           |  11 +-
+ tools/include/uapi/linux/bpf.h |   6 +-
+ 5 files changed, 362 insertions(+), 4 deletions(-)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 44268d36d901..8171e01ff4be 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1110,10 +1110,15 @@ struct bpf_link *bpf_link_get_from_fd(u32 ufd);
+ int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
+ int bpf_obj_get_user(const char __user *pathname, int flags);
+=20
++#define BPF_DUMP_SEQ_NET_PRIVATE	BIT(0)
++
+ int bpf_dump_reg_target(const char *target, const char *target_proto,
+ 			const struct seq_operations *seq_ops,
+ 			u32 seq_priv_size, u32 target_feature);
+ int bpf_dump_set_target_info(u32 target_fd, struct bpf_prog *prog);
++int bpf_dump_create(u32 prog_fd, const char __user *dumper_name);
++struct bpf_prog *bpf_dump_get_prog(struct seq_file *seq, u32 priv_data_s=
+ize,
++				   u64 *seq_num);
+=20
+ int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
+ int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
 diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index b51d56fc77f9..a245f0df53c4 100644
+index 0f1cbed446c1..b51d56fc77f9 100644
 --- a/include/uapi/linux/bpf.h
 +++ b/include/uapi/linux/bpf.h
-@@ -3030,6 +3030,20 @@ union bpf_attr {
-  *		* **-EOPNOTSUPP**	Unsupported operation, for example a
-  *					call from outside of TC ingress.
-  *		* **-ESOCKTNOSUPPORT**	Socket type not supported (reuseport).
-+ *
-+ * int bpf_seq_printf(struct seq_file *m, const char *fmt, u32 fmt_size,=
- ...)
-+ * 	Description
-+ * 		seq_printf
-+ * 	Return
-+ * 		0 if successful, or
-+ * 		1 if failure due to buffer overflow, or
-+ * 		a negative value for format string related failures.
-+ *
-+ * int bpf_seq_write(struct seq_file *m, const void *data, u32 len)
-+ * 	Description
-+ * 		seq_write
-+ * 	Return
-+ * 		0 if successful, non-zero otherwise.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3156,7 +3170,9 @@ union bpf_attr {
- 	FN(xdp_output),			\
- 	FN(get_netns_cookie),		\
- 	FN(get_current_ancestor_cgroup_id),	\
--	FN(sk_assign),
-+	FN(sk_assign),			\
-+	FN(seq_printf),			\
-+	FN(seq_write),
+@@ -354,6 +354,7 @@ enum {
+ /* Flags for accessing BPF object from syscall side. */
+ 	BPF_F_RDONLY		=3D (1U << 3),
+ 	BPF_F_WRONLY		=3D (1U << 4),
++	BPF_F_DUMP		=3D (1U << 5),
 =20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-  * function eBPF program intends to call
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index ca1796747a77..e7d6ba7c9c51 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -457,6 +457,174 @@ const struct bpf_func_proto *bpf_get_trace_printk_p=
-roto(void)
- 	return &bpf_trace_printk_proto;
+ /* Flag for stack_map, store build_id+offset instead of pointer */
+ 	BPF_F_STACK_BUILD_ID	=3D (1U << 5),
+@@ -481,7 +482,10 @@ union bpf_attr {
+ 	};
+=20
+ 	struct { /* anonymous struct used by BPF_OBJ_* commands */
+-		__aligned_u64	pathname;
++		union {
++			__aligned_u64	pathname;
++			__aligned_u64	dumper_name;
++		};
+ 		__u32		bpf_fd;
+ 		__u32		file_flags;
+ 	};
+diff --git a/kernel/bpf/dump.c b/kernel/bpf/dump.c
+index 1091affe8b3f..ac6856abb711 100644
+--- a/kernel/bpf/dump.c
++++ b/kernel/bpf/dump.c
+@@ -30,22 +30,173 @@ struct bpfdump_targets {
+ 	struct mutex dumper_mutex;
+ };
+=20
++struct dumper_inode_info {
++	struct bpfdump_target_info *tinfo;
++	struct bpf_prog *prog;
++};
++
++struct dumper_info {
++	struct list_head list;
++	/* file to identify an anon dumper,
++	 * dentry to identify a file dumper.
++	 */
++	union {
++		struct file *file;
++		struct dentry *dentry;
++	};
++	struct bpfdump_target_info *tinfo;
++	struct bpf_prog *prog;
++};
++
++struct dumpers {
++	struct list_head dumpers;
++	struct mutex dumper_mutex;
++};
++
++struct extra_priv_data {
++	struct bpf_prog *prog;
++	u64 seq_num;
++};
++
+ /* registered dump targets */
+ static struct bpfdump_targets dump_targets;
+=20
+ static struct dentry *bpfdump_dentry;
+=20
++static struct dumpers anon_dumpers, file_dumpers;
++
++static const struct file_operations bpf_dumper_ops;
++static const struct inode_operations bpf_dir_iops;
++
++static struct dentry *bpfdump_add_file(const char *name, struct dentry *=
+parent,
++				       const struct file_operations *f_ops,
++				       void *data);
+ static struct dentry *bpfdump_add_dir(const char *name, struct dentry *p=
+arent,
+ 				      const struct inode_operations *i_ops,
+ 				      void *data);
+ static int __bpfdump_init(void);
+=20
++static u32 get_total_priv_dsize(u32 old_size)
++{
++	return roundup(old_size, 8) + sizeof(struct extra_priv_data);
++}
++
++static void *get_extra_priv_dptr(void *old_ptr, u32 old_size)
++{
++	return old_ptr + roundup(old_size, 8);
++}
++
++#ifdef CONFIG_PROC_FS
++static void dumper_show_fdinfo(struct seq_file *m, struct file *filp)
++{
++	struct dumper_inode_info *i_info =3D filp->f_inode->i_private;
++
++	seq_printf(m, "target:\t%s\n"
++		      "prog_id:\t%u\n",
++		   i_info->tinfo->target,
++		   i_info->prog->aux->id);
++}
++
++static void anon_dumper_show_fdinfo(struct seq_file *m, struct file *fil=
+p)
++{
++	struct dumper_info *dinfo;
++
++	mutex_lock(&anon_dumpers.dumper_mutex);
++	list_for_each_entry(dinfo, &anon_dumpers.dumpers, list) {
++		if (dinfo->file =3D=3D filp) {
++			seq_printf(m, "target:\t%s\n"
++				      "prog_id:\t%u\n",
++				   dinfo->tinfo->target,
++				   dinfo->prog->aux->id);
++			break;
++		}
++	}
++	mutex_unlock(&anon_dumpers.dumper_mutex);
++}
++
++#endif
++
++static void process_target_feature(u32 feature, void *priv_data)
++{
++	/* use the current net namespace */
++	if (feature & BPF_DUMP_SEQ_NET_PRIVATE)
++		set_seq_net_private((struct seq_net_private *)priv_data,
++				    current->nsproxy->net_ns);
++}
++
++static int dumper_open(struct inode *inode, struct file *file)
++{
++	struct dumper_inode_info *i_info =3D inode->i_private;
++	struct extra_priv_data *extra_data;
++	u32 old_priv_size, total_priv_size;
++	void *priv_data;
++
++	old_priv_size =3D i_info->tinfo->seq_priv_size;
++	total_priv_size =3D get_total_priv_dsize(old_priv_size);
++	priv_data =3D __seq_open_private(file, i_info->tinfo->seq_ops,
++				       total_priv_size);
++	if (!priv_data)
++		return -ENOMEM;
++
++	process_target_feature(i_info->tinfo->target_feature, priv_data);
++
++	extra_data =3D get_extra_priv_dptr(priv_data, old_priv_size);
++	extra_data->prog =3D i_info->prog;
++	extra_data->seq_num =3D 0;
++
++	return 0;
++}
++
++static int anon_dumper_release(struct inode *inode, struct file *file)
++{
++	struct dumper_info *dinfo;
++
++	/* release the bpf program */
++	mutex_lock(&anon_dumpers.dumper_mutex);
++	list_for_each_entry(dinfo, &anon_dumpers.dumpers, list) {
++		if (dinfo->file =3D=3D file) {
++			bpf_prog_put(dinfo->prog);
++			list_del(&dinfo->list);
++			break;
++		}
++	}
++	mutex_unlock(&anon_dumpers.dumper_mutex);
++
++	return seq_release_private(inode, file);
++}
++
++static int dumper_release(struct inode *inode, struct file *file)
++{
++	return seq_release_private(inode, file);
++}
++
+ static int dumper_unlink(struct inode *dir, struct dentry *dentry)
+ {
+-	kfree(d_inode(dentry)->i_private);
++	struct dumper_inode_info *i_info =3D d_inode(dentry)->i_private;
++
++	bpf_prog_put(i_info->prog);
++	kfree(i_info);
++
+ 	return simple_unlink(dir, dentry);
  }
 =20
-+BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char *, fmt, u32, fmt_s=
-ize, u64, arg1,
-+	   u64, arg2)
++static const struct file_operations bpf_dumper_ops =3D {
++#ifdef CONFIG_PROC_FS
++	.show_fdinfo	=3D dumper_show_fdinfo,
++#endif
++	.open		=3D dumper_open,
++	.read		=3D seq_read,
++	.release	=3D dumper_release,
++};
++
++static const struct file_operations anon_bpf_dumper_ops =3D {
++#ifdef CONFIG_PROC_FS
++	.show_fdinfo	=3D anon_dumper_show_fdinfo,
++#endif
++	.read		=3D seq_read,
++	.release	=3D anon_dumper_release,
++};
++
+ static const struct inode_operations bpf_dir_iops =3D {
+ 	.lookup		=3D simple_lookup,
+ 	.unlink		=3D dumper_unlink,
+@@ -88,6 +239,179 @@ int bpf_dump_set_target_info(u32 target_fd, struct b=
+pf_prog *prog)
+ 	return err;
+ }
+=20
++static int create_anon_dumper(struct bpfdump_target_info *tinfo,
++			      struct bpf_prog *prog)
 +{
-+	bool buf_used =3D false;
-+	int i, copy_size;
-+	int mod[2] =3D {};
-+	int fmt_cnt =3D 0;
-+	u64 unsafe_addr;
-+	char buf[64];
++	struct extra_priv_data *extra_data;
++	u32 old_priv_size, total_priv_size;
++	struct dumper_info *dinfo;
++	struct file *file;
++	int err, anon_fd;
++	void *priv_data;
++	struct fd fd;
 +
-+	/*
-+	 * bpf_check()->check_func_arg()->check_stack_boundary()
-+	 * guarantees that fmt points to bpf program stack,
-+	 * fmt_size bytes of it were initialized and fmt_size > 0
-+	 */
-+	if (fmt[--fmt_size] !=3D 0)
-+		return -EINVAL;
++	anon_fd =3D anon_inode_getfd("bpf-dumper", &anon_bpf_dumper_ops,
++				   NULL, O_CLOEXEC);
++	if (anon_fd < 0)
++		return anon_fd;
 +
-+	/* check format string for allowed specifiers */
-+	for (i =3D 0; i < fmt_size; i++) {
-+		if ((!isprint(fmt[i]) && !isspace(fmt[i])) || !isascii(fmt[i]))
-+			return -EINVAL;
++	/* setup seq_file for anon dumper */
++	fd =3D fdget(anon_fd);
++	file =3D fd.file;
 +
-+		if (fmt[i] !=3D '%')
-+			continue;
-+
-+		if (fmt_cnt >=3D 2)
-+			return -EINVAL;
-+
-+		/* fmt[i] !=3D 0 && fmt[last] =3D=3D 0, so we can access fmt[i + 1] */
-+		i++;
-+
-+		/* skip optional "[0+-][num]" width formating field */
-+		while (fmt[i] =3D=3D '0' || fmt[i] =3D=3D '+'  || fmt[i] =3D=3D '-')
-+			i++;
-+		if (fmt[i] >=3D '1' && fmt[i] <=3D '9') {
-+			i++;
-+			while (fmt[i] >=3D '0' && fmt[i] <=3D '9')
-+				i++;
-+		}
-+
-+		if (fmt[i] =3D=3D 'l') {
-+			mod[fmt_cnt]++;
-+			i++;
-+		} else if (fmt[i] =3D=3D 's') {
-+			mod[fmt_cnt]++;
-+			fmt_cnt++;
-+			/* disallow any further format extensions */
-+			if (fmt[i + 1] !=3D 0 &&
-+			    !isspace(fmt[i + 1]) &&
-+			    !ispunct(fmt[i + 1]))
-+				return -EINVAL;
-+
-+			if (buf_used)
-+				/* allow only one '%s'/'%p' per fmt string */
-+				return -EINVAL;
-+			buf_used =3D true;
-+
-+			if (fmt_cnt =3D=3D 1) {
-+				unsafe_addr =3D arg1;
-+				arg1 =3D (long) buf;
-+			} else {
-+				unsafe_addr =3D arg2;
-+				arg2 =3D (long) buf;
-+			}
-+			buf[0] =3D 0;
-+			strncpy_from_unsafe(buf,
-+					    (void *) (long) unsafe_addr,
-+					    sizeof(buf));
-+			continue;
-+		} else if (fmt[i] =3D=3D 'p') {
-+			mod[fmt_cnt]++;
-+			fmt_cnt++;
-+			if (fmt[i + 1] =3D=3D 0 ||
-+			    fmt[i + 1] =3D=3D 'K' ||
-+			    fmt[i + 1] =3D=3D 'x') {
-+				/* just kernel pointers */
-+				continue;
-+			}
-+
-+			if (buf_used)
-+				return -EINVAL;
-+			buf_used =3D true;
-+
-+			/* only support "%pI4", "%pi4", "%pI6" and "pi6". */
-+			if (fmt[i + 1] !=3D 'i' && fmt[i + 1] !=3D 'I')
-+				return -EINVAL;
-+			if (fmt[i + 2] !=3D '4' && fmt[i + 2] !=3D '6')
-+				return -EINVAL;
-+
-+			copy_size =3D (fmt[i + 2] =3D=3D '4') ? 4 : 16;
-+
-+			if (fmt_cnt =3D=3D 1) {
-+				unsafe_addr =3D arg1;
-+				arg1 =3D (long) buf;
-+			} else {
-+				unsafe_addr =3D arg2;
-+				arg2 =3D (long) buf;
-+			}
-+			probe_kernel_read(buf, (void *) (long) unsafe_addr, copy_size);
-+
-+			i +=3D 2;
-+			continue;
-+		}
-+
-+		if (fmt[i] =3D=3D 'l') {
-+			mod[fmt_cnt]++;
-+			i++;
-+		}
-+
-+		if (fmt[i] !=3D 'i' && fmt[i] !=3D 'd' &&
-+		    fmt[i] !=3D 'u' && fmt[i] !=3D 'x')
-+			return -EINVAL;
-+		fmt_cnt++;
++	dinfo =3D kmalloc(sizeof(*dinfo), GFP_KERNEL);
++	if (!dinfo) {
++		err =3D -ENOMEM;
++		goto free_fd;
 +	}
 +
-+/* Horrid workaround for getting va_list handling working with different
-+ * argument type combinations generically for 32 and 64 bit archs.
-+ */
-+#define __BPF_SP_EMIT()	__BPF_ARG2_SP()
-+#define __BPF_SP(...)							\
-+	seq_printf(m, fmt, ##__VA_ARGS__)
++	old_priv_size =3D tinfo->seq_priv_size;
++	total_priv_size =3D get_total_priv_dsize(old_priv_size);
 +
-+#define __BPF_ARG1_SP(...)						\
-+	((mod[0] =3D=3D 2 || (mod[0] =3D=3D 1 && __BITS_PER_LONG =3D=3D 64))	\
-+	  ? __BPF_SP(arg1, ##__VA_ARGS__)				\
-+	  : ((mod[0] =3D=3D 1 || (mod[0] =3D=3D 0 && __BITS_PER_LONG =3D=3D 32)=
-)	\
-+	      ? __BPF_SP((long)arg1, ##__VA_ARGS__)			\
-+	      : __BPF_SP((u32)arg1, ##__VA_ARGS__)))
++	priv_data =3D __seq_open_private(file, tinfo->seq_ops,
++				       total_priv_size);
++	if (!priv_data) {
++		err =3D -ENOMEM;
++		goto free_dinfo;
++	}
 +
-+#define __BPF_ARG2_SP(...)						\
-+	((mod[1] =3D=3D 2 || (mod[1] =3D=3D 1 && __BITS_PER_LONG =3D=3D 64))	\
-+	  ? __BPF_ARG1_SP(arg2, ##__VA_ARGS__)				\
-+	  : ((mod[1] =3D=3D 1 || (mod[1] =3D=3D 0 && __BITS_PER_LONG =3D=3D 32)=
-)	\
-+	      ? __BPF_ARG1_SP((long)arg2, ##__VA_ARGS__)		\
-+	      : __BPF_ARG1_SP((u32)arg2, ##__VA_ARGS__)))
++	dinfo->file =3D file;
++	dinfo->tinfo =3D tinfo;
++	dinfo->prog =3D prog;
 +
-+	__BPF_SP_EMIT();
-+	return seq_has_overflowed(m);
++	mutex_lock(&anon_dumpers.dumper_mutex);
++	list_add(&dinfo->list, &anon_dumpers.dumpers);
++	mutex_unlock(&anon_dumpers.dumper_mutex);
++
++	process_target_feature(tinfo->target_feature, priv_data);
++
++	extra_data =3D get_extra_priv_dptr(priv_data, old_priv_size);
++	extra_data->prog =3D prog;
++	extra_data->seq_num =3D 0;
++
++	fdput(fd);
++	return anon_fd;
++
++free_dinfo:
++	kfree(dinfo);
++free_fd:
++	fdput(fd);
++	return err;
 +}
 +
-+static int bpf_seq_printf_btf_ids[5];
-+static const struct bpf_func_proto bpf_seq_printf_proto =3D {
-+	.func		=3D bpf_seq_printf,
-+	.gpl_only	=3D true,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
-+	.arg2_type	=3D ARG_PTR_TO_MEM,
-+	.arg3_type	=3D ARG_CONST_SIZE,
-+	.btf_id		=3D bpf_seq_printf_btf_ids,
-+};
-+
-+BPF_CALL_3(bpf_seq_write, struct seq_file *, m, const char *, data, u32,=
- len)
++static int create_dumper(struct bpfdump_target_info *tinfo,
++			 const char __user *dumper_name,
++			 struct bpf_prog *prog)
 +{
-+	return seq_write(m, data, len);
++	struct dumper_inode_info *i_info;
++	struct dumper_info *dinfo;
++	struct dentry *dentry;
++	const char *dname;
++	int err =3D 0;
++
++	i_info =3D kmalloc(sizeof(*i_info), GFP_KERNEL);
++	if (!i_info)
++		return -ENOMEM;
++
++	i_info->tinfo =3D tinfo;
++	i_info->prog =3D prog;
++
++	dinfo =3D kmalloc(sizeof(*dinfo), GFP_KERNEL);
++	if (!dinfo) {
++		err =3D -ENOMEM;
++		goto free_i_info;
++	}
++
++	dname =3D strndup_user(dumper_name, PATH_MAX);
++	if (!dname) {
++		err =3D -ENOMEM;
++		goto free_dinfo;
++	}
++
++	dentry =3D bpfdump_add_file(dname, tinfo->dir_dentry,
++				  &bpf_dumper_ops, i_info);
++	kfree(dname);
++	if (IS_ERR(dentry)) {
++		err =3D PTR_ERR(dentry);
++		goto free_dinfo;
++	}
++
++	dinfo->dentry =3D dentry;
++	dinfo->tinfo =3D tinfo;
++	dinfo->prog =3D prog;
++
++	mutex_lock(&file_dumpers.dumper_mutex);
++	list_add(&dinfo->list, &file_dumpers.dumpers);
++	mutex_unlock(&file_dumpers.dumper_mutex);
++
++	return 0;
++
++free_dinfo:
++	kfree(dinfo);
++free_i_info:
++	kfree(i_info);
++	return err;
 +}
 +
-+static int bpf_seq_write_btf_ids[5];
-+static const struct bpf_func_proto bpf_seq_write_proto =3D {
-+	.func		=3D bpf_seq_write,
-+	.gpl_only	=3D true,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
-+	.arg2_type	=3D ARG_PTR_TO_MEM,
-+	.arg3_type	=3D ARG_CONST_SIZE,
-+	.btf_id		=3D bpf_seq_write_btf_ids,
-+};
++int bpf_dump_create(u32 prog_fd, const char __user *dumper_name)
++{
++	struct bpfdump_target_info *tinfo;
++	const char *target;
++	struct bpf_prog *prog;
++	bool existed =3D false;
++	int err =3D 0;
 +
- static __always_inline int
- get_map_perf_counter(struct bpf_map *map, u64 flags,
- 		     u64 *value, u64 *enabled, u64 *running)
-@@ -1224,6 +1392,10 @@ tracing_prog_func_proto(enum bpf_func_id func_id, =
-const struct bpf_prog *prog)
- 	case BPF_FUNC_xdp_output:
- 		return &bpf_xdp_output_proto;
- #endif
-+	case BPF_FUNC_seq_printf:
-+		return &bpf_seq_printf_proto;
-+	case BPF_FUNC_seq_write:
-+		return &bpf_seq_write_proto;
- 	default:
- 		return raw_tp_prog_func_proto(func_id, prog);
- 	}
-diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
-index f43d193aff3a..ded304c96a05 100755
---- a/scripts/bpf_helpers_doc.py
-+++ b/scripts/bpf_helpers_doc.py
-@@ -414,6 +414,7 @@ class PrinterHelpers(Printer):
-             'struct sk_reuseport_md',
-             'struct sockaddr',
-             'struct tcphdr',
-+            'struct seq_file',
++	prog =3D bpf_prog_get(prog_fd);
++	if (IS_ERR(prog))
++		return PTR_ERR(prog);
++
++	target =3D prog->aux->dump_target;
++	if (!target) {
++		err =3D -EINVAL;
++		goto free_prog;
++	}
++
++	mutex_lock(&dump_targets.dumper_mutex);
++	list_for_each_entry(tinfo, &dump_targets.dumpers, list) {
++		if (strcmp(tinfo->target, target) =3D=3D 0) {
++			existed =3D true;
++			break;
++		}
++	}
++	mutex_unlock(&dump_targets.dumper_mutex);
++
++	if (!existed) {
++		err =3D -EINVAL;
++		goto free_prog;
++	}
++
++	err =3D dumper_name ? create_dumper(tinfo, dumper_name, prog)
++			  : create_anon_dumper(tinfo, prog);
++	if (err < 0)
++		goto free_prog;
++
++	return err;
++
++free_prog:
++	bpf_prog_put(prog);
++	return err;
++}
++
++struct bpf_prog *bpf_dump_get_prog(struct seq_file *seq, u32 priv_data_s=
+ize,
++	u64 *seq_num)
++{
++	struct extra_priv_data *extra_data;
++
++	if (seq->file->f_op !=3D &bpf_dumper_ops &&
++	    seq->file->f_op !=3D &anon_bpf_dumper_ops)
++		return NULL;
++
++	extra_data =3D get_extra_priv_dptr(seq->private, priv_data_size);
++	*seq_num =3D extra_data->seq_num++;
++
++	return extra_data->prog;
++}
++
+ int bpf_dump_reg_target(const char *target,
+ 			const char *target_proto,
+ 			const struct seq_operations *seq_ops,
+@@ -211,6 +535,14 @@ bpfdump_create_dentry(const char *name, umode_t mode=
+, struct dentry *parent,
+ 	return dentry;
+ }
 =20
-             'struct __sk_buff',
-             'struct sk_msg_md',
-@@ -450,6 +451,7 @@ class PrinterHelpers(Printer):
-             'struct sk_reuseport_md',
-             'struct sockaddr',
-             'struct tcphdr',
-+            'struct seq_file',
-     }
-     mapped_types =3D {
-             'u8': '__u8',
++static struct dentry *
++bpfdump_add_file(const char *name, struct dentry *parent,
++		 const struct file_operations *f_ops, void *data)
++{
++	return bpfdump_create_dentry(name, S_IFREG | 0444, parent,
++				     data, NULL, f_ops);
++}
++
+ static struct dentry *
+ bpfdump_add_dir(const char *name, struct dentry *parent,
+ 		const struct inode_operations *i_ops, void *data)
+@@ -290,6 +622,10 @@ static int __bpfdump_init(void)
+=20
+ 	INIT_LIST_HEAD(&dump_targets.dumpers);
+ 	mutex_init(&dump_targets.dumper_mutex);
++	INIT_LIST_HEAD(&anon_dumpers.dumpers);
++	mutex_init(&anon_dumpers.dumper_mutex);
++	INIT_LIST_HEAD(&file_dumpers.dumpers);
++	mutex_init(&file_dumpers.dumper_mutex);
+ 	return 0;
+=20
+ remove_mount:
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 41005dee8957..b5e4f18cc633 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2173,9 +2173,13 @@ static int bpf_prog_load(union bpf_attr *attr, uni=
+on bpf_attr __user *uattr)
+=20
+ static int bpf_obj_pin(const union bpf_attr *attr)
+ {
+-	if (CHECK_ATTR(BPF_OBJ) || attr->file_flags !=3D 0)
++	if (CHECK_ATTR(BPF_OBJ) || attr->file_flags & ~BPF_F_DUMP)
+ 		return -EINVAL;
+=20
++	if (attr->file_flags =3D=3D BPF_F_DUMP)
++		return bpf_dump_create(attr->bpf_fd,
++				       u64_to_user_ptr(attr->dumper_name));
++
+ 	return bpf_obj_pin_user(attr->bpf_fd, u64_to_user_ptr(attr->pathname));
+ }
+=20
+@@ -2605,6 +2609,8 @@ attach_type_to_prog_type(enum bpf_attach_type attac=
+h_type)
+ 	case BPF_CGROUP_GETSOCKOPT:
+ 	case BPF_CGROUP_SETSOCKOPT:
+ 		return BPF_PROG_TYPE_CGROUP_SOCKOPT;
++	case BPF_TRACE_DUMP:
++		return BPF_PROG_TYPE_TRACING;
+ 	default:
+ 		return BPF_PROG_TYPE_UNSPEC;
+ 	}
+@@ -2663,6 +2669,9 @@ static int bpf_prog_attach(const union bpf_attr *at=
+tr)
+ 	case BPF_PROG_TYPE_SOCK_OPS:
+ 		ret =3D cgroup_bpf_prog_attach(attr, ptype, prog);
+ 		break;
++	case BPF_PROG_TYPE_TRACING:
++		ret =3D bpf_dump_create(attr->attach_bpf_fd, (void __user *)NULL);
++		break;
+ 	default:
+ 		ret =3D -EINVAL;
+ 	}
 diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
 f.h
-index b51d56fc77f9..a245f0df53c4 100644
+index 0f1cbed446c1..b51d56fc77f9 100644
 --- a/tools/include/uapi/linux/bpf.h
 +++ b/tools/include/uapi/linux/bpf.h
-@@ -3030,6 +3030,20 @@ union bpf_attr {
-  *		* **-EOPNOTSUPP**	Unsupported operation, for example a
-  *					call from outside of TC ingress.
-  *		* **-ESOCKTNOSUPPORT**	Socket type not supported (reuseport).
-+ *
-+ * int bpf_seq_printf(struct seq_file *m, const char *fmt, u32 fmt_size,=
- ...)
-+ * 	Description
-+ * 		seq_printf
-+ * 	Return
-+ * 		0 if successful, or
-+ * 		1 if failure due to buffer overflow, or
-+ * 		a negative value for format string related failures.
-+ *
-+ * int bpf_seq_write(struct seq_file *m, const void *data, u32 len)
-+ * 	Description
-+ * 		seq_write
-+ * 	Return
-+ * 		0 if successful, non-zero otherwise.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3156,7 +3170,9 @@ union bpf_attr {
- 	FN(xdp_output),			\
- 	FN(get_netns_cookie),		\
- 	FN(get_current_ancestor_cgroup_id),	\
--	FN(sk_assign),
-+	FN(sk_assign),			\
-+	FN(seq_printf),			\
-+	FN(seq_write),
+@@ -354,6 +354,7 @@ enum {
+ /* Flags for accessing BPF object from syscall side. */
+ 	BPF_F_RDONLY		=3D (1U << 3),
+ 	BPF_F_WRONLY		=3D (1U << 4),
++	BPF_F_DUMP		=3D (1U << 5),
 =20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-  * function eBPF program intends to call
+ /* Flag for stack_map, store build_id+offset instead of pointer */
+ 	BPF_F_STACK_BUILD_ID	=3D (1U << 5),
+@@ -481,7 +482,10 @@ union bpf_attr {
+ 	};
+=20
+ 	struct { /* anonymous struct used by BPF_OBJ_* commands */
+-		__aligned_u64	pathname;
++		union {
++			__aligned_u64	pathname;
++			__aligned_u64	dumper_name;
++		};
+ 		__u32		bpf_fd;
+ 		__u32		file_flags;
+ 	};
 --=20
 2.24.1
 
