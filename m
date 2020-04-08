@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C72A8C2BA80
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:51:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B29CC2BA2B
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:51:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 999FA20780
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:51:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E333720780
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:51:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q9zneNOH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I6+lJ1+n"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728648AbgDHLvU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Apr 2020 07:51:20 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:52121 "EHLO
+        id S1727049AbgDHLv3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Apr 2020 07:51:29 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:49955 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728647AbgDHLvT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 8 Apr 2020 07:51:19 -0400
+        by vger.kernel.org with ESMTP id S1728655AbgDHLv2 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Apr 2020 07:51:28 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586346678;
+        s=mimecast20190719; t=1586346687;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jXba+XtT9T2e7WXxZq/751Lokp2fv24Zljt1exxIEiA=;
-        b=Q9zneNOHpP/DZd7QmjSWPNsEB0+2Wbrm3UkmK+800wHAKTJWfvYzueVfOm6ppUXnQ6OXD7
-        iQjKAZVzX24N6O3Hsq7X9FEx9hSIROdR3YBDp7yplGtbskXG2sCo61d1xCs50Hjuw6xwSJ
-        6Hbl9FAwW/FiW5mIkAXhM9d3qbGzOBM=
+        bh=ZzzjCBq9WyI3Bb6b0nAFkEUdPjhrJ6l3Fs8nfiWFreM=;
+        b=I6+lJ1+nQAg6nstNB9f5wZmUIbSW9+7rwpVNTQ5D69FUHBKz3tpAABAr3aP2MXqCGFwYpd
+        SiSqg1yZBoE+pEp2V+GDsqoHyLZvEj0OdlCd3nQhxvHuvl1ciiaE3rU1ogT4zdTh/Q1hbK
+        MmkqsDJ0K2B0GeFkkQKSgZKXRrAN0lM=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-459-M3zlFnoCOwiOG7UGCw3A4A-1; Wed, 08 Apr 2020 07:51:15 -0400
-X-MC-Unique: M3zlFnoCOwiOG7UGCw3A4A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+ us-mta-143-JOYrA7RuNwaJH_HAQn4jvA-1; Wed, 08 Apr 2020 07:51:23 -0400
+X-MC-Unique: JOYrA7RuNwaJH_HAQn4jvA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 87855801F8A;
-        Wed,  8 Apr 2020 11:51:12 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 57DAE149C8;
+        Wed,  8 Apr 2020 11:51:21 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C04AF60BFB;
-        Wed,  8 Apr 2020 11:51:05 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DEBC919C70;
+        Wed,  8 Apr 2020 11:51:15 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id D04CE300020FB;
-        Wed,  8 Apr 2020 13:51:04 +0200 (CEST)
-Subject: [PATCH RFC v2 06/33] net: XDP-generic determining XDP frame size
+        by firesoul.localdomain (Postfix) with ESMTP id 047BB300020FA;
+        Wed,  8 Apr 2020 13:51:15 +0200 (CEST)
+Subject: [PATCH RFC v2 08/33] xdp: cpumap redirect use frame_sz and increase
+ skb_tailroom
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -63,68 +64,67 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>
-Date:   Wed, 08 Apr 2020 13:51:04 +0200
-Message-ID: <158634666478.707275.4768222424893157119.stgit@firesoul>
+Date:   Wed, 08 Apr 2020 13:51:14 +0200
+Message-ID: <158634667495.707275.15723527380427805843.stgit@firesoul>
 In-Reply-To: <158634658714.707275.7903484085370879864.stgit@firesoul>
 References: <158634658714.707275.7903484085370879864.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The SKB "head" pointer points to the data area that contains
-skb_shared_info, that can be found via skb_end_pointer(). Given
-xdp->data_hard_start have been established (basically pointing to
-skb->head), frame size is between skb_end_pointer() and data_hard_start,
-plus the size reserved to skb_shared_info.
+Knowing the memory size backing the packet/xdp_frame data area, and
+knowing it already have reserved room for skb_shared_info, simplifies
+using build_skb significantly.
 
-Change the bpf_xdp_adjust_tail offset adjust of skb->len, to be a positive
-offset number on grow, and negative number on shrink.  As this seems more
-natural when reading the code.
+With this change we no-longer lie about the SKB truesize, but more
+importantly a significant larger skb_tailroom is now provided, e.g. when
+drivers uses a full PAGE_SIZE. This extra tailroom (in linear area) can be
+used by the network stack when coalescing SKBs (e.g. in skb_try_coalesce,
+see TCP cases where tcp_queue_rcv() can 'eat' skb).
 
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- net/core/dev.c |   14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ kernel/bpf/cpumap.c |   21 +++------------------
+ 1 file changed, 3 insertions(+), 18 deletions(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 9c9e763bfe0e..899920c3a78f 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4548,6 +4548,11 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
- 	xdp->data_meta = xdp->data;
- 	xdp->data_end = xdp->data + hlen;
- 	xdp->data_hard_start = skb->data - skb_headroom(skb);
-+
-+	/* SKB "head" area always have tailroom for skb_shared_info */
-+	xdp->frame_sz  = (void *)skb_end_pointer(skb) - xdp->data_hard_start;
-+	xdp->frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-+
- 	orig_data_end = xdp->data_end;
- 	orig_data = xdp->data;
- 	eth = (struct ethhdr *)xdp->data;
-@@ -4571,14 +4576,11 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
- 		skb_reset_network_header(skb);
- 	}
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 70f71b154fa5..9c777ac4d4bd 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -162,25 +162,10 @@ static struct sk_buff *cpu_map_build_skb(struct bpf_cpu_map_entry *rcpu,
+ 	/* Part of headroom was reserved to xdpf */
+ 	hard_start_headroom = sizeof(struct xdp_frame) +  xdpf->headroom;
  
--	/* check if bpf_xdp_adjust_tail was used. it can only "shrink"
--	 * pckt.
--	 */
--	off = orig_data_end - xdp->data_end;
-+	/* check if bpf_xdp_adjust_tail was used */
-+	off = xdp->data_end - orig_data_end;
- 	if (off != 0) {
- 		skb_set_tail_pointer(skb, xdp->data_end - xdp->data);
--		skb->len -= off;
--
-+		skb->len += off; /* positive on grow, negative on shrink */
- 	}
+-	/* build_skb need to place skb_shared_info after SKB end, and
+-	 * also want to know the memory "truesize".  Thus, need to
+-	 * know the memory frame size backing xdp_buff.
+-	 *
+-	 * XDP was designed to have PAGE_SIZE frames, but this
+-	 * assumption is not longer true with ixgbe and i40e.  It
+-	 * would be preferred to set frame_size to 2048 or 4096
+-	 * depending on the driver.
+-	 *   frame_size = 2048;
+-	 *   frame_len  = frame_size - sizeof(*xdp_frame);
+-	 *
+-	 * Instead, with info avail, skb_shared_info in placed after
+-	 * packet len.  This, unfortunately fakes the truesize.
+-	 * Another disadvantage of this approach, the skb_shared_info
+-	 * is not at a fixed memory location, with mixed length
+-	 * packets, which is bad for cache-line hotness.
++	/* Memory size backing xdp_frame data already have reserved
++	 * room for build_skb to place skb_shared_info in tailroom.
+ 	 */
+-	frame_size = SKB_DATA_ALIGN(xdpf->len + hard_start_headroom) +
+-		SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
++	frame_size = xdpf->frame_sz;
  
- 	/* check if XDP changed eth hdr such SKB needs update */
+ 	pkt_data_start = xdpf->data - hard_start_headroom;
+ 	skb = build_skb_around(skb, pkt_data_start, frame_size);
 
 
