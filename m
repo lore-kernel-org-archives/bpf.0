@@ -7,49 +7,50 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5607FC2BA1A
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:52:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9E53C2BA1A
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:52:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2774B20780
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:52:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7DFB92082D
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:52:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E9Hr8ajN"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UYI8Ua/M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728734AbgDHLwc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Apr 2020 07:52:32 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:43387 "EHLO
+        id S1728454AbgDHLwi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Apr 2020 07:52:38 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:35123 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728733AbgDHLwc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Apr 2020 07:52:32 -0400
+        with ESMTP id S1727612AbgDHLwh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Apr 2020 07:52:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586346751;
+        s=mimecast20190719; t=1586346756;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Wf4KK1glfn0j7wEoqm5slw5+RRseFskZ8T5RVpqxLiY=;
-        b=E9Hr8ajNTY/TCK7lv32A1zYNSIDYjiAjFCrN905UU7nThaGRLqEmLxM+o489z9J2cLo4jT
-        GDDbZHRc9xRtsGhQbTGf2GLneb/jcBMpiG29MlTzutk0qhPLUysSbSfmMZD9arUdXuwPRx
-        P39Zw+XC8GnaRVXrJDGmL5uAUMUcwjw=
+        bh=3AsaCSGIzYZvw4mOnWKfUdq3Y1S7ifGzwLeXDOIt/dU=;
+        b=UYI8Ua/M4hOPwTWG4HWMP7aqACFVWLReWZPMZmuOqv6EmPpY9J73WImFnAibfOXYLDW5Qn
+        FveH6CTXoKVLV+NqN786AdUt9Pp9dbkeUhMCzN9jh48N5YKqTRNSIW8SrEYduKU5DBYGuz
+        jAyNJeSqk4JqMdBEH+klLI3jiga36Jk=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-482-JDIV8boRP-uxnRwB0bWs2A-1; Wed, 08 Apr 2020 07:52:29 -0400
-X-MC-Unique: JDIV8boRP-uxnRwB0bWs2A-1
+ us-mta-390-jiQQhIH7O1e_210osReL_Q-1; Wed, 08 Apr 2020 07:52:34 -0400
+X-MC-Unique: jiQQhIH7O1e_210osReL_Q-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9F29D8024DB;
-        Wed,  8 Apr 2020 11:52:27 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9120F800D5C;
+        Wed,  8 Apr 2020 11:52:32 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E74691001F43;
-        Wed,  8 Apr 2020 11:52:21 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2FA7B1001F43;
+        Wed,  8 Apr 2020 11:52:32 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 17696300020FA;
-        Wed,  8 Apr 2020 13:52:21 +0200 (CEST)
-Subject: [PATCH RFC v2 21/33] vhost_net: also populate XDP frame size
+        by firesoul.localdomain (Postfix) with ESMTP id 41424300020FA;
+        Wed,  8 Apr 2020 13:52:31 +0200 (CEST)
+Subject: [PATCH RFC v2 23/33] ixgbe: fix XDP redirect on archs with PAGE_SIZE
+ above 4K
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
-Cc:     Jason Wang <jasowang@redhat.com>,
+Cc:     Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org, zorik@amazon.com,
         akiyano@amazon.com, gtzalik@amazon.com,
@@ -64,8 +65,8 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>
-Date:   Wed, 08 Apr 2020 13:52:21 +0200
-Message-ID: <158634674102.707275.8538224465361298932.stgit@firesoul>
+Date:   Wed, 08 Apr 2020 13:52:31 +0200
+Message-ID: <158634675119.707275.11255025996295308217.stgit@firesoul>
 In-Reply-To: <158634658714.707275.7903484085370879864.stgit@firesoul>
 References: <158634658714.707275.7903484085370879864.stgit@firesoul>
 User-Agent: StGit/0.19
@@ -78,30 +79,38 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In vhost_net_build_xdp() the 'buf' that gets queued via an xdp_buff
-have embedded a struct tun_xdp_hdr (located at xdp->data_hard_start)
-which contains the buffer length 'buflen' (with tailroom for
-skb_shared_info). Also storing this buflen in xdp->frame_sz, does not
-obsolete struct tun_xdp_hdr, as it also contains a struct
-virtio_net_hdr with other information.
+The ixgbe driver have another memory model when compiled on archs with
+PAGE_SIZE above 4096 bytes. In this mode it doesn't split the page in
+two halves, but instead increment rx_buffer->page_offset by truesize of
+packet (which include headroom and tailroom for skb_shared_info).
 
-Cc: Jason Wang <jasowang@redhat.com>
+This is done correctly in ixgbe_build_skb(), but in ixgbe_rx_buffer_flip
+which is currently only called on XDP_TX and XDP_REDIRECT, it forgets
+to add the tailroom for skb_shared_info. This breaks XDP_REDIRECT, for
+veth and cpumap.  Fix by adding size of skb_shared_info tailroom.
+
+Maintainers notice: This fix have been queued to Jeff.
+
+Fixes: 6453073987ba ("ixgbe: add initial support for xdp redirect")
+Cc: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- drivers/vhost/net.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index 18e205eeb9af..5bf608766fc2 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -745,6 +745,7 @@ static int vhost_net_build_xdp(struct vhost_net_virtqueue *nvq,
- 	xdp->data = buf + pad;
- 	xdp->data_end = xdp->data + len;
- 	hdr->buflen = buflen;
-+	xdp->frame_sz = buflen;
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+index 718931d951bc..ea6834bae04c 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+@@ -2254,7 +2254,8 @@ static void ixgbe_rx_buffer_flip(struct ixgbe_ring *rx_ring,
+ 	rx_buffer->page_offset ^= truesize;
+ #else
+ 	unsigned int truesize = ring_uses_build_skb(rx_ring) ?
+-				SKB_DATA_ALIGN(IXGBE_SKB_PAD + size) :
++				SKB_DATA_ALIGN(IXGBE_SKB_PAD + size) +
++				SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) :
+ 				SKB_DATA_ALIGN(size);
  
- 	--net->refcnt_bias;
- 	alloc_frag->offset += buflen;
+ 	rx_buffer->page_offset += truesize;
 
 
