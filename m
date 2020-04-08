@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30F05C2D0EA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0311C2BA1A
 	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:51:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EF7742082D
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:51:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A38D420780
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 11:51:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HxHWxI2l"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EN51ivSC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728635AbgDHLvS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1728654AbgDHLvS (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 8 Apr 2020 07:51:18 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:38627 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727801AbgDHLvS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Apr 2020 07:51:18 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:45805 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728647AbgDHLvS (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Apr 2020 07:51:18 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586346676;
+        s=mimecast20190719; t=1586346677;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AryrqyZ3mlTrDFeOWBQ1XUsJPbT6sIwVfGT3fNb6aI0=;
-        b=HxHWxI2l0pzUQbcX8WR6TgzeKJ44pqBl1Q/d9jzHLvm9TDJTnOg+5iSyfwbvt7EVVBcf8L
-        T2g9cHtXR8ws+w93fwrV8sdeU4mDoxxpw2e/wL0fvSu/CZE7dpiOl0h+d2dUH0QSY5/P+E
-        9wexUQlUEvJhFY+skoHiGkINRyK42VM=
+        bh=NDjKx6IwnF/NmrEYCxfuH2dwTT6/S8zsEJsWIeaXprg=;
+        b=EN51ivSCtI5EW4wxF5ss9MrvHvtzkSHddbV7kLlfwL0SmGqu+f4kb6nhBznOEppks2h2MB
+        yzaGikmA0PrlRk1SNAduBdCwCtO2R8MqwQ1CKZcnhAJ5LysECcP68hN7B4CoWnHR81cjx5
+        OAu/HrEKZpDYOlUZWIaBiQ8b8qj/wdM=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-162-STAdAJbSNZSdXMpFFMPJMA-1; Wed, 08 Apr 2020 07:51:14 -0400
-X-MC-Unique: STAdAJbSNZSdXMpFFMPJMA-1
+ us-mta-246-abD4zobdP5eA8qu5LJhn0Q-1; Wed, 08 Apr 2020 07:51:13 -0400
+X-MC-Unique: abD4zobdP5eA8qu5LJhn0Q-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E303019067F0;
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 396AE100DFC9;
         Wed,  8 Apr 2020 11:51:11 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A9F585C1BB;
-        Wed,  8 Apr 2020 11:51:00 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D88E85C28F;
+        Wed,  8 Apr 2020 11:51:10 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id BCC15300020FA;
-        Wed,  8 Apr 2020 13:50:59 +0200 (CEST)
-Subject: [PATCH RFC v2 05/33] net: netsec: Add support for XDP frame size
+        by firesoul.localdomain (Postfix) with ESMTP id E5283300020FC;
+        Wed,  8 Apr 2020 13:51:09 +0200 (CEST)
+Subject: [PATCH RFC v2 07/33] xdp: xdp_frame add member frame_sz and handle in
+ convert_to_xdp_frame
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
-Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, zorik@amazon.com,
-        akiyano@amazon.com, gtzalik@amazon.com,
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, zorik@amazon.com, akiyano@amazon.com,
+        gtzalik@amazon.com,
         =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Daniel Borkmann <borkmann@iogearbox.net>,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>,
@@ -64,8 +64,8 @@ Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>
-Date:   Wed, 08 Apr 2020 13:50:59 +0200
-Message-ID: <158634665970.707275.15490233569929847990.stgit@firesoul>
+Date:   Wed, 08 Apr 2020 13:51:09 +0200
+Message-ID: <158634666986.707275.3125872827455406207.stgit@firesoul>
 In-Reply-To: <158634658714.707275.7903484085370879864.stgit@firesoul>
 References: <158634658714.707275.7903484085370879864.stgit@firesoul>
 User-Agent: StGit/0.19
@@ -78,111 +78,101 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Use hole in struct xdp_frame, when adding member frame_sz, which keeps
+same sizeof struct (32 bytes)
 
-This driver takes advantage of page_pool PP_FLAG_DMA_SYNC_DEV that
-can help reduce the number of cache-lines that need to be flushed
-when doing DMA sync for_device. Due to xdp_adjust_tail can grow the
-area accessible to the by the CPU (can possibly write into), then max
-sync length *after* bpf_prog_run_xdp() needs to be taken into account.
+Drivers ixgbe and sfc had bug cases where the necessary/expected
+tailroom was not reserved. This can lead to some hard to catch memory
+corruption issues. Having the drivers frame_sz this can be detected when
+packet length/end via xdp->data_end exceed the xdp_data_hard_end
+pointer, which accounts for the reserved the tailroom.
 
-Signed-off-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+When detecting this driver issue, simply fail the conversion with NULL,
+which results in feedback to driver (failing xdp_do_redirect()) causing
+driver to drop packet. Given the lack of consistent XDP stats, this can
+be hard to troubleshoot. And given this is a driver bug, we want to
+generate some more noise in form of a WARN stack dump (to ID the driver
+code that inlined convert_to_xdp_frame).
+
+Inlining the WARN macro is problematic, because it adds an asm
+instruction (on Intel CPUs ud2) what influence instruction cache
+prefetching. Thus, introduce xdp_warn and macro XDP_WARN, to avoid this
+and at the same time make identifying the function and line of this
+inlined function easier.
+
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- drivers/net/ethernet/socionext/netsec.c |   30 ++++++++++++++++++------------
- 1 file changed, 18 insertions(+), 12 deletions(-)
+ include/net/xdp.h |   14 +++++++++++++-
+ net/core/xdp.c    |    7 +++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/socionext/netsec.c b/drivers/net/ethernet/socionext/netsec.c
-index a5a0fb60193a..e1f4be4b3d69 100644
---- a/drivers/net/ethernet/socionext/netsec.c
-+++ b/drivers/net/ethernet/socionext/netsec.c
-@@ -884,23 +884,28 @@ static u32 netsec_run_xdp(struct netsec_priv *priv, struct bpf_prog *prog,
- 			  struct xdp_buff *xdp)
- {
- 	struct netsec_desc_ring *dring = &priv->desc_ring[NETSEC_RING_RX];
--	unsigned int len = xdp->data_end - xdp->data;
-+	unsigned int sync, len = xdp->data_end - xdp->data;
- 	u32 ret = NETSEC_XDP_PASS;
-+	struct page *page;
- 	int err;
- 	u32 act;
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 99f4374f6214..55a885aa4e53 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -93,7 +93,8 @@ struct xdp_frame {
+ 	void *data;
+ 	u16 len;
+ 	u16 headroom;
+-	u16 metasize;
++	u32 metasize:8;
++	u32 frame_sz:24;
+ 	/* Lifetime of xdp_rxq_info is limited to NAPI/enqueue time,
+ 	 * while mem info is valid on remote CPU.
+ 	 */
+@@ -108,6 +109,10 @@ static inline void xdp_scrub_frame(struct xdp_frame *frame)
+ 	frame->dev_rx = NULL;
+ }
  
- 	act = bpf_prog_run_xdp(prog, xdp);
- 
-+	/* Due xdp_adjust_tail: DMA sync for_device cover max len CPU touch */
-+	sync = xdp->data_end - xdp->data_hard_start - NETSEC_RXBUF_HEADROOM;
-+	sync = max(sync, len);
++/* Avoids inlining WARN macro in fast-path */
++void xdp_warn(const char* msg, const char* func, const int line);
++#define XDP_WARN(msg) xdp_warn(msg, __func__, __LINE__)
 +
- 	switch (act) {
- 	case XDP_PASS:
- 		ret = NETSEC_XDP_PASS;
- 		break;
- 	case XDP_TX:
- 		ret = netsec_xdp_xmit_back(priv, xdp);
--		if (ret != NETSEC_XDP_TX)
--			page_pool_put_page(dring->page_pool,
--					   virt_to_head_page(xdp->data), len,
--					   true);
-+		if (ret != NETSEC_XDP_TX) {
-+			page = virt_to_head_page(xdp->data);
-+			page_pool_put_page(dring->page_pool, page, sync, true);
-+		}
- 		break;
- 	case XDP_REDIRECT:
- 		err = xdp_do_redirect(priv->ndev, xdp, prog);
-@@ -908,9 +913,8 @@ static u32 netsec_run_xdp(struct netsec_priv *priv, struct bpf_prog *prog,
- 			ret = NETSEC_XDP_REDIR;
- 		} else {
- 			ret = NETSEC_XDP_CONSUMED;
--			page_pool_put_page(dring->page_pool,
--					   virt_to_head_page(xdp->data), len,
--					   true);
-+			page = virt_to_head_page(xdp->data);
-+			page_pool_put_page(dring->page_pool, page, sync, true);
- 		}
- 		break;
- 	default:
-@@ -921,8 +925,8 @@ static u32 netsec_run_xdp(struct netsec_priv *priv, struct bpf_prog *prog,
- 		/* fall through -- handle aborts by dropping packet */
- 	case XDP_DROP:
- 		ret = NETSEC_XDP_CONSUMED;
--		page_pool_put_page(dring->page_pool,
--				   virt_to_head_page(xdp->data), len, true);
-+		page = virt_to_head_page(xdp->data);
-+		page_pool_put_page(dring->page_pool, page, sync, true);
- 		break;
- 	}
+ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp);
  
-@@ -936,10 +940,14 @@ static int netsec_process_rx(struct netsec_priv *priv, int budget)
- 	struct netsec_rx_pkt_info rx_info;
- 	enum dma_data_direction dma_dir;
- 	struct bpf_prog *xdp_prog;
-+	struct xdp_buff xdp;
- 	u16 xdp_xmit = 0;
- 	u32 xdp_act = 0;
- 	int done = 0;
+ /* Convert xdp_buff to xdp_frame */
+@@ -128,6 +133,12 @@ struct xdp_frame *convert_to_xdp_frame(struct xdp_buff *xdp)
+ 	if (unlikely((headroom - metasize) < sizeof(*xdp_frame)))
+ 		return NULL;
  
-+	xdp.rxq = &dring->xdp_rxq;
-+	xdp.frame_sz = PAGE_SIZE;
++	/* Catch if driver didn't reserve tailroom for skb_shared_info */
++	if (unlikely(xdp->data_end > xdp_data_hard_end(xdp))) {
++		XDP_WARN("Driver BUG: missing reserved tailroom");
++		return NULL;
++	}
 +
- 	rcu_read_lock();
- 	xdp_prog = READ_ONCE(priv->xdp_prog);
- 	dma_dir = page_pool_get_dma_dir(dring->page_pool);
-@@ -953,7 +961,6 @@ static int netsec_process_rx(struct netsec_priv *priv, int budget)
- 		struct sk_buff *skb = NULL;
- 		u16 pkt_len, desc_len;
- 		dma_addr_t dma_handle;
--		struct xdp_buff xdp;
- 		void *buf_addr;
+ 	/* Store info in top of packet */
+ 	xdp_frame = xdp->data_hard_start;
  
- 		if (de->attr & (1U << NETSEC_RX_PKT_OWN_FIELD)) {
-@@ -1002,7 +1009,6 @@ static int netsec_process_rx(struct netsec_priv *priv, int budget)
- 		xdp.data = desc->addr + NETSEC_RXBUF_HEADROOM;
- 		xdp_set_data_meta_invalid(&xdp);
- 		xdp.data_end = xdp.data + pkt_len;
--		xdp.rxq = &dring->xdp_rxq;
+@@ -135,6 +146,7 @@ struct xdp_frame *convert_to_xdp_frame(struct xdp_buff *xdp)
+ 	xdp_frame->len  = xdp->data_end - xdp->data;
+ 	xdp_frame->headroom = headroom - sizeof(*xdp_frame);
+ 	xdp_frame->metasize = metasize;
++	xdp_frame->frame_sz = xdp->frame_sz;
  
- 		if (xdp_prog) {
- 			xdp_result = netsec_run_xdp(priv, xdp_prog, &xdp);
+ 	/* rxq only valid until napi_schedule ends, convert to xdp_mem_info */
+ 	xdp_frame->mem = xdp->rxq->mem;
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 4c7ea85486af..4bc3026ae218 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -11,6 +11,7 @@
+ #include <linux/slab.h>
+ #include <linux/idr.h>
+ #include <linux/rhashtable.h>
++#include <linux/bug.h>
+ #include <net/page_pool.h>
+ 
+ #include <net/xdp.h>
+@@ -496,3 +497,9 @@ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
+ 	return xdpf;
+ }
+ EXPORT_SYMBOL_GPL(xdp_convert_zc_to_xdp_frame);
++
++/* Used by XDP_WARN macro, to avoid inlining WARN() in fast-path */
++void xdp_warn(const char* msg, const char* func, const int line) {
++	WARN(1, "XDP_WARN: %s(line:%d): %s\n", func, line, msg);
++};
++EXPORT_SYMBOL_GPL(xdp_warn);
 
 
