@@ -2,83 +2,121 @@ Return-Path: <SRS0=saG7=5Y=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82158C2BA80
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1586C2BA2B
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:25:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 62EF52078E
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:17:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B254120857
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 23:25:26 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Iqvj3zVj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726521AbgDHXRQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Apr 2020 19:17:16 -0400
-Received: from www62.your-server.de ([213.133.104.62]:52962 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726508AbgDHXRQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Apr 2020 19:17:16 -0400
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jMJwM-0006LK-Qf; Thu, 09 Apr 2020 01:17:02 +0200
-Received: from [178.195.186.98] (helo=pc-9.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jMJwM-000JK4-93; Thu, 09 Apr 2020 01:17:02 +0200
-Subject: Re: [PATCH bpf] arm: bpf: Fix bugs with ALU64 {RSH, ARSH} BPF_K shift
- by 0
-To:     Luke Nelson <lukenels@cs.washington.edu>, bpf@vger.kernel.org
-Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20200408181229.10909-1-luke.r.nels@gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <65cdd042-c037-d7c8-e6e7-bcfb6e8b00cb@iogearbox.net>
-Date:   Thu, 9 Apr 2020 01:17:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726510AbgDHXZ0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Apr 2020 19:25:26 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:26726 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726508AbgDHXZZ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Apr 2020 19:25:25 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 038NP72k026834
+        for <bpf@vger.kernel.org>; Wed, 8 Apr 2020 16:25:25 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=aV4IlLZ1Pn8nevkUO0Q4IsIL0wp9STZRdrqXvAfOdJ8=;
+ b=Iqvj3zVjv7GyLA6lVIV3K/A8lOj9iWx50uFtWQ6KYmfkHw9VaOsIRMpg2T+nL4lyJlz0
+ 07UdKFFC/PFSbQ4wkIh1bDvp3Wie7BOEZ5fySTAM5VF0lxV0LZ9lPwahCGnckzhgsdjh
+ 9NirXns/6LW3W3BEKIaNKgi+5sR9HEtdR9c= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3091kvqjee-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2020 16:25:25 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Wed, 8 Apr 2020 16:25:24 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 525D23700FD5; Wed,  8 Apr 2020 16:25:21 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [RFC PATCH bpf-next 01/16] net: refactor net assignment for seq_net_private structure
+Date:   Wed, 8 Apr 2020 16:25:21 -0700
+Message-ID: <20200408232521.2675409-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200408232520.2675265-1-yhs@fb.com>
+References: <20200408232520.2675265-1-yhs@fb.com>
 MIME-Version: 1.0
-In-Reply-To: <20200408181229.10909-1-luke.r.nels@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.2/25776/Wed Apr  8 14:56:40 2020)
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-08_09:2020-04-07,2020-04-08 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=902
+ malwarescore=0 priorityscore=1501 phishscore=0 suspectscore=0 adultscore=0
+ spamscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004080164
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 4/8/20 8:12 PM, Luke Nelson wrote:
-> The current arm BPF JIT does not correctly compile RSH or ARSH when the
-> immediate shift amount is 0. This causes the "rsh64 by 0 imm" and "arsh64
-> by 0 imm" BPF selftests to hang the kernel by reaching an instruction
-> the verifier determines to be unreachable.
-> 
-> The root cause is in how immediate right shifts are encoded on arm.
-> For LSR and ASR (logical and arithmetic right shift), a bit-pattern
-> of 00000 in the immediate encodes a shift amount of 32. When the BPF
-> immediate is 0, the generated code shifts by 32 instead of the expected
-> behavior (a no-op).
-> 
-> This patch fixes the bugs by adding an additional check if the BPF
-> immediate is 0. After the change, the above mentioned BPF selftests pass.
-> 
-> Fixes: 39c13c204bb11 ("arm: eBPF JIT compiler")
-> Co-developed-by: Xi Wang <xi.wang@gmail.com>
-> Signed-off-by: Xi Wang <xi.wang@gmail.com>
-> Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
+Refactor assignment of "net" in seq_net_private structure
+in proc_net.c to a helper function. The helper later will
+be used by bpfdump.
 
-Yikes, thanks for fixing, applied. Looks like noone was running BPF kselftests
-on arm32 for quite a while. :(
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ fs/proc/proc_net.c           | 5 ++---
+ include/linux/seq_file_net.h | 8 ++++++++
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/fs/proc/proc_net.c b/fs/proc/proc_net.c
+index 4888c5224442..aee07c19cf8b 100644
+--- a/fs/proc/proc_net.c
++++ b/fs/proc/proc_net.c
+@@ -75,9 +75,8 @@ static int seq_open_net(struct inode *inode, struct fil=
+e *file)
+ 		put_net(net);
+ 		return -ENOMEM;
+ 	}
+-#ifdef CONFIG_NET_NS
+-	p->net =3D net;
+-#endif
++
++	set_seq_net_private(p, net);
+ 	return 0;
+ }
+=20
+diff --git a/include/linux/seq_file_net.h b/include/linux/seq_file_net.h
+index 0fdbe1ddd8d1..0ec4a18b9aca 100644
+--- a/include/linux/seq_file_net.h
++++ b/include/linux/seq_file_net.h
+@@ -35,4 +35,12 @@ static inline struct net *seq_file_single_net(struct s=
+eq_file *seq)
+ #endif
+ }
+=20
++static inline void set_seq_net_private(struct seq_net_private *p,
++				       struct net *net)
++{
++#ifdef CONFIG_NET_NS
++	p->net =3D net;
++#endif
++}
++
+ #endif
+--=20
+2.24.1
+
