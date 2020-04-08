@@ -2,40 +2,32 @@ Return-Path: <SRS0=saG7=5Y=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF1F5C2BA1A
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 12:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B4B8C2BA2B
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 12:18:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 82A5B20753
-	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 12:02:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jqMwtXWT"
+	by mail.kernel.org (Postfix) with ESMTP id 3EB342082F
+	for <bpf@archiver.kernel.org>; Wed,  8 Apr 2020 12:18:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728903AbgDHMAf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Apr 2020 08:00:35 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:48600 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728331AbgDHMAe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Apr 2020 08:00:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=qHYG2lKPWxAtj2y97LKGlEeBAYw/IleMtn8t2h2BNUI=; b=jqMwtXWTTkA0/3hvzI1s4BK9R4
-        g7Gd0qqoRMNid+NeBaCpqsh7OXiuT9v8NNYqNEFMjWvIWct/K/5KwGw7o51P5KqRKw7cx4du3n9H3
-        eEN2r19YLkITmGNOU6HbM3/g8QzUEtK51Gzkev/J0hob2diZCeUKsHd2jypkMAbsaa1RgBTc1if8v
-        U4+hXPasDyScvvMXbtUfFz/7DZrkGjZP4BzcbfPggK6Epmawkj97nJfmwbhmx5pVDiJblL11Pp7nM
-        T4BleYvqiLY/IDxTSupMu1FoRTvyouNNa868QLvJobXoF4ihunbOfFiOU8KlgleD3J5Xx07Wwm4UV
-        +kH8ZMQg==;
-Received: from [2001:4bb8:180:5765:65b6:f11e:f109:b151] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jM9N9-000292-L0; Wed, 08 Apr 2020 12:00:00 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Andrew Morton <akpm@linux-foundation.org>,
+        id S1726977AbgDHMSP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Apr 2020 08:18:15 -0400
+Received: from foss.arm.com ([217.140.110.172]:38012 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726924AbgDHMSP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Apr 2020 08:18:15 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94ADC31B;
+        Wed,  8 Apr 2020 05:18:12 -0700 (PDT)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3217A3F73D;
+        Wed,  8 Apr 2020 05:18:09 -0700 (PDT)
+Date:   Wed, 8 Apr 2020 13:18:02 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         "K. Y. Srinivasan" <kys@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
         Stephen Hemminger <sthemmin@microsoft.com>,
@@ -46,8 +38,8 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
         Sumit Semwal <sumit.semwal@linaro.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Robin Murphy <robin.murphy@arm.com>,
         Christophe Leroy <christophe.leroy@c-s.fr>,
         Peter Zijlstra <peterz@infradead.org>,
         linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
@@ -55,110 +47,52 @@ Cc:     Robin Murphy <robin.murphy@arm.com>,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
         iommu@lists.linux-foundation.org,
         linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 09/28] mm: rename CONFIG_PGTABLE_MAPPING to CONFIG_ZSMALLOC_PGTABLE_MAPPING
-Date:   Wed,  8 Apr 2020 13:59:07 +0200
-Message-Id: <20200408115926.1467567-10-hch@lst.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200408115926.1467567-1-hch@lst.de>
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        james.morse@arm.com
+Subject: Re: [PATCH 26/28] arm64: use __vmalloc_node in arch_alloc_vmap_stack
+Message-ID: <20200408121802.GA36478@lakrids.cambridge.arm.com>
 References: <20200408115926.1467567-1-hch@lst.de>
+ <20200408115926.1467567-27-hch@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200408115926.1467567-27-hch@lst.de>
+User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Rename the Kconfig variable to clarify the scope.
+On Wed, Apr 08, 2020 at 01:59:24PM +0200, Christoph Hellwig wrote:
+> arch_alloc_vmap_stack can use a slightly higher level vmalloc function.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- arch/arm/configs/omap2plus_defconfig | 2 +-
- include/linux/zsmalloc.h             | 2 +-
- mm/Kconfig                           | 2 +-
- mm/zsmalloc.c                        | 8 ++++----
- 4 files changed, 7 insertions(+), 7 deletions(-)
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
-index 3cc3ca5fa027..583d8abd80a4 100644
---- a/arch/arm/configs/omap2plus_defconfig
-+++ b/arch/arm/configs/omap2plus_defconfig
-@@ -81,7 +81,7 @@ CONFIG_PARTITION_ADVANCED=y
- CONFIG_BINFMT_MISC=y
- CONFIG_CMA=y
- CONFIG_ZSMALLOC=m
--CONFIG_PGTABLE_MAPPING=y
-+CONFIG_ZSMALLOC_PGTABLE_MAPPING=y
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
-diff --git a/include/linux/zsmalloc.h b/include/linux/zsmalloc.h
-index 2219cce81ca4..0fdbf653b173 100644
---- a/include/linux/zsmalloc.h
-+++ b/include/linux/zsmalloc.h
-@@ -20,7 +20,7 @@
-  * zsmalloc mapping modes
-  *
-  * NOTE: These only make a difference when a mapped object spans pages.
-- * They also have no effect when PGTABLE_MAPPING is selected.
-+ * They also have no effect when ZSMALLOC_PGTABLE_MAPPING is selected.
-  */
- enum zs_mapmode {
- 	ZS_MM_RW, /* normal read-write mapping */
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 691021492e78..36949a9425b8 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -700,7 +700,7 @@ config ZSMALLOC
- 	  returned by an alloc().  This handle must be mapped in order to
- 	  access the allocated space.
- 
--config PGTABLE_MAPPING
-+config ZSMALLOC_PGTABLE_MAPPING
- 	bool "Use page table mapping to access object in zsmalloc"
- 	depends on ZSMALLOC
- 	help
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index 2f836a2b993f..ac0524330b9b 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -293,7 +293,7 @@ struct zspage {
- };
- 
- struct mapping_area {
--#ifdef CONFIG_PGTABLE_MAPPING
-+#ifdef CONFIG_ZSMALLOC_PGTABLE_MAPPING
- 	struct vm_struct *vm; /* vm area for mapping object that span pages */
- #else
- 	char *vm_buf; /* copy buffer for objects that span pages */
-@@ -1113,7 +1113,7 @@ static struct zspage *find_get_zspage(struct size_class *class)
- 	return zspage;
- }
- 
--#ifdef CONFIG_PGTABLE_MAPPING
-+#ifdef CONFIG_ZSMALLOC_PGTABLE_MAPPING
- static inline int __zs_cpu_up(struct mapping_area *area)
- {
- 	/*
-@@ -1151,7 +1151,7 @@ static inline void __zs_unmap_object(struct mapping_area *area,
- 	unmap_kernel_range(addr, PAGE_SIZE * 2);
- }
- 
--#else /* CONFIG_PGTABLE_MAPPING */
-+#else /* CONFIG_ZSMALLOC_PGTABLE_MAPPING */
- 
- static inline int __zs_cpu_up(struct mapping_area *area)
- {
-@@ -1233,7 +1233,7 @@ static void __zs_unmap_object(struct mapping_area *area,
- 	pagefault_enable();
- }
- 
--#endif /* CONFIG_PGTABLE_MAPPING */
-+#endif /* CONFIG_ZSMALLOC_PGTABLE_MAPPING */
- 
- static int zs_cpu_prepare(unsigned int cpu)
- {
--- 
-2.25.1
+Mark.
 
+> ---
+>  arch/arm64/include/asm/vmap_stack.h | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/vmap_stack.h b/arch/arm64/include/asm/vmap_stack.h
+> index 0a12115d9638..0cc6636e3f15 100644
+> --- a/arch/arm64/include/asm/vmap_stack.h
+> +++ b/arch/arm64/include/asm/vmap_stack.h
+> @@ -19,10 +19,8 @@ static inline unsigned long *arch_alloc_vmap_stack(size_t stack_size, int node)
+>  {
+>  	BUILD_BUG_ON(!IS_ENABLED(CONFIG_VMAP_STACK));
+>  
+> -	return __vmalloc_node_range(stack_size, THREAD_ALIGN,
+> -				    VMALLOC_START, VMALLOC_END,
+> -				    THREADINFO_GFP, PAGE_KERNEL, 0, node,
+> -				    __builtin_return_address(0));
+> +	return __vmalloc_node(stack_size, THREAD_ALIGN, THREADINFO_GFP, node,
+> +			__builtin_return_address(0));
+>  }
+>  
+>  #endif /* __ASM_VMAP_STACK_H */
+> -- 
+> 2.25.1
+> 
