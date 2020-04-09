@@ -2,176 +2,174 @@ Return-Path: <SRS0=73LO=5Z=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6280C2BB86
-	for <bpf@archiver.kernel.org>; Thu,  9 Apr 2020 19:36:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1042C2BB86
+	for <bpf@archiver.kernel.org>; Thu,  9 Apr 2020 22:18:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BC3ED20757
-	for <bpf@archiver.kernel.org>; Thu,  9 Apr 2020 19:36:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 77725206F7
+	for <bpf@archiver.kernel.org>; Thu,  9 Apr 2020 22:18:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="pk+C+CXW"
+	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="W9vJOxKo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726973AbgDITgQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Apr 2020 15:36:16 -0400
-Received: from mail.efficios.com ([167.114.26.124]:47154 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726869AbgDITgA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Apr 2020 15:36:00 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 7E427280DF6;
-        Thu,  9 Apr 2020 15:35:59 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id oSUiqoosXzqf; Thu,  9 Apr 2020 15:35:59 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id CBD6628097C;
-        Thu,  9 Apr 2020 15:35:58 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com CBD6628097C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1586460958;
-        bh=JJbEnSZlH0Z9aiz9kDpqohqZyqDrYygmMxJ1DfOirdE=;
-        h=From:To:Date:Message-Id;
-        b=pk+C+CXWM6T13Lu8JpfhgTZ2/uQJ1ODQqPNghvfwd8cgfNu1GpjzwScEcsnnlJUgd
-         PlYAlMxdL+dOXutnV9eOGDoyHM7vePm458oy8fO/I/axcXuQglUgqvwb+lwAGN2RX/
-         AyOacGceUBfnpc5vX2bKZkXmYuBQUK+nNWrAQSgTbs3v0yvtM7JlELm4QbD5dj8Nig
-         xwOXHJOC7VJ3gJ1ytPkW7L0w4xAhCbBtM3AmlmGAgBEB9NvzNhQ7oipEdPffg98Ge3
-         MGvGIdwo73aRaXOF+29+xnn3ZrrqjcgL0d31+HGNYo9U0etIlKE2nmqwBZDCOfjth9
-         xiZBXl6IHYjUA==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 4f2umtxwPemD; Thu,  9 Apr 2020 15:35:58 -0400 (EDT)
-Received: from localhost.localdomain (192-222-181-218.qc.cable.ebox.net [192.222.181.218])
-        by mail.efficios.com (Postfix) with ESMTPSA id CE5B3280F54;
-        Thu,  9 Apr 2020 15:35:57 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, akpm@linux-foundation.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "K . Prasad" <prasad@linux.vnet.ibm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>, rostedt@goodmis.org,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        id S1726689AbgDIWSE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Apr 2020 18:18:04 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:50388 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726701AbgDIWSE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Apr 2020 18:18:04 -0400
+Received: by mail-pj1-f65.google.com with SMTP id b7so66951pju.0
+        for <bpf@vger.kernel.org>; Thu, 09 Apr 2020 15:18:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cs.washington.edu; s=goo201206;
+        h=from:to:cc:subject:date:message-id;
+        bh=d7I79Px6oW+xidqJy+si2tmnAYd369ZVNNbYLDl32gU=;
+        b=W9vJOxKo91GTrNMNOMDe+CcYIVgw/SOaLir7ekED0M2QDlKPHJMg0FkVS8aK5M4xUT
+         wKcgwDjPlpAbpIDBkQwzvxwo3aVhwKRbg73R/ocWLnP1YHT83chblwRCKlYUk3f3QcHv
+         X6rglaZaHPq7Yu0iL3vU0s8SY7n3uOxzM0y4Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=d7I79Px6oW+xidqJy+si2tmnAYd369ZVNNbYLDl32gU=;
+        b=fEgduDvRICyU3GG3Qx0x5A5TolOkFE5lt2ZmMR9KIwXrLI0BGRS0SwYSMwQhJMBP1F
+         NPBCGsAMd3ijcdy1xsrqznvCY05/+/e30ABWmN/gNs/u7oEGIP1eV2LN0mMdqCfXRcKg
+         RahNFrgHvZiilfqssKa65bRLxR5i/2sv5h5YcsVYAi1HoJNahNiNWViNLiKU0DcmBdKO
+         DvAqSdunOK10BFbgxfJL/yRG5rgi5Rx6lBKNGWMG6yl3ppQFVtM1DtcegwVl8BpMZaff
+         iO2vlLHAm7D2tjEOYL/kCaqywPsNoU0FIAQI24NfFemG57HPIQfyVu2vfvi1NibcU0mE
+         Eklg==
+X-Gm-Message-State: AGi0PubsnUMvgRVq23ipfPrTJOcFwMTyaEGQSVRH74lf591+7aSgQGgN
+        PSik5oKklViJyhcCMxuBX9IN2rcMzH2s7A==
+X-Google-Smtp-Source: APiQypLfv8Wd0dMcbnojJcRFpZ7fPcaUoNxEFntuU+I+4oPJFPCqFySEK9Ta/6QO6xIo+tI8+FNSxA==
+X-Received: by 2002:a17:90a:94c8:: with SMTP id j8mr1817350pjw.155.1586470682925;
+        Thu, 09 Apr 2020 15:18:02 -0700 (PDT)
+Received: from localhost.localdomain (c-73-53-94-119.hsd1.wa.comcast.net. [73.53.94.119])
+        by smtp.gmail.com with ESMTPSA id w29sm111547pge.25.2020.04.09.15.18.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Apr 2020 15:18:02 -0700 (PDT)
+From:   Luke Nelson <lukenels@cs.washington.edu>
+X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Ingo Molnar <mingo@redhat.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [RFC PATCH 2/9] bpf: allow up to 13 arguments for tracepoints
-Date:   Thu,  9 Apr 2020 15:35:36 -0400
-Message-Id: <20200409193543.18115-3-mathieu.desnoyers@efficios.com>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf] arm, bpf: Fix offset overflow for BPF_MEM BPF_DW
+Date:   Thu,  9 Apr 2020 15:17:52 -0700
+Message-Id: <20200409221752.28448-1-luke.r.nels@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200409193543.18115-1-mathieu.desnoyers@efficios.com>
-References: <20200409193543.18115-1-mathieu.desnoyers@efficios.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding an argument to the writeback balance_dirty_pages event requires
-to bump the bpf argument count limit from 12 to 13.
+This patch fixes an incorrect check in how immediate memory offsets are
+computed for BPF_DW on arm.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org
+For BPF_LDX/ST/STX + BPF_DW, the 32-bit arm JIT breaks down an 8-byte
+access into two separate 4-byte accesses using off+0 and off+4. If off
+fits in imm12, the JIT emits a ldr/str instruction with the immediate
+and avoids the use of a temporary register. While the current check off
+<= 0xfff ensures that the first immediate off+0 doesn't overflow imm12,
+it's not sufficient for the second immediate off+4, which may cause the
+second access of BPF_DW to read/write the wrong address.
+
+This patch fixes the problem by changing the check to
+off <= 0xfff - 4 for BPF_DW, ensuring off+4 will never overflow.
+
+A side effect of simplifying the check is that it now allows using
+negative immediate offsets in ldr/str. This means that small negative
+offsets can also avoid the use of a temporary register.
+
+This patch introduces no new failures in test_verifier or test_bpf.c.
+
+Fixes: c5eae692571d6 ("ARM: net: bpf: improve 64-bit store implementation")
+Fixes: ec19e02b343db ("ARM: net: bpf: fix LDX instructions")
+Co-developed-by: Xi Wang <xi.wang@gmail.com>
+Signed-off-by: Xi Wang <xi.wang@gmail.com>
+Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
 ---
- include/linux/kernel.h       | 6 +++---
- include/linux/trace_events.h | 3 +++
- include/trace/bpf_probe.h    | 3 ++-
- kernel/trace/bpf_trace.c     | 8 +++++---
- 4 files changed, 13 insertions(+), 7 deletions(-)
+ arch/arm/net/bpf_jit_32.c | 40 +++++++++++++++++++++++----------------
+ 1 file changed, 24 insertions(+), 16 deletions(-)
 
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index 9b7a8d74a9d6..20203f762410 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -975,9 +975,9 @@ static inline void ftrace_dump(enum ftrace_dump_mode oops_dump_mode) { }
- #define swap(a, b) \
- 	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
+diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
+index d124f78e20ac..bf85d6db4931 100644
+--- a/arch/arm/net/bpf_jit_32.c
++++ b/arch/arm/net/bpf_jit_32.c
+@@ -1000,21 +1000,35 @@ static inline void emit_a32_mul_r64(const s8 dst[], const s8 src[],
+ 	arm_bpf_put_reg32(dst_hi, rd[0], ctx);
+ }
  
--/* This counts to 12. Any more, it will return 13th argument. */
--#define __COUNT_ARGS(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _n, X...) _n
--#define COUNT_ARGS(X...) __COUNT_ARGS(, ##X, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
-+/* This counts to 13. Any more, it will return 14th argument. */
-+#define __COUNT_ARGS(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _n, X...) _n
-+#define COUNT_ARGS(X...) __COUNT_ARGS(, ##X, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
++static bool is_ldst_imm(s16 off, const u8 size)
++{
++	s16 off_max = 0;
++
++	switch (size) {
++	case BPF_B:
++	case BPF_W:
++		off_max = 0xfff;
++		break;
++	case BPF_H:
++		off_max = 0xff;
++		break;
++	case BPF_DW:
++		/* Need to make sure off+4 does not overflow. */
++		off_max = 0xfff - 4;
++		break;
++	}
++	return -off_max <= off && off <= off_max;
++}
++
+ /* *(size *)(dst + off) = src */
+ static inline void emit_str_r(const s8 dst, const s8 src[],
+-			      s32 off, struct jit_ctx *ctx, const u8 sz){
++			      s16 off, struct jit_ctx *ctx, const u8 sz){
+ 	const s8 *tmp = bpf2a32[TMP_REG_1];
+-	s32 off_max;
+ 	s8 rd;
  
- #define __CONCAT(a, b) a ## b
- #define CONCATENATE(a, b) __CONCAT(a, b)
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index 5c6943354049..1e3f4782d32f 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -776,6 +776,9 @@ void bpf_trace_run11(struct bpf_prog *prog, u64 arg1, u64 arg2,
- void bpf_trace_run12(struct bpf_prog *prog, u64 arg1, u64 arg2,
- 		     u64 arg3, u64 arg4, u64 arg5, u64 arg6, u64 arg7,
- 		     u64 arg8, u64 arg9, u64 arg10, u64 arg11, u64 arg12);
-+void bpf_trace_run13(struct bpf_prog *prog, u64 arg1, u64 arg2,
-+		     u64 arg3, u64 arg4, u64 arg5, u64 arg6, u64 arg7,
-+		     u64 arg8, u64 arg9, u64 arg10, u64 arg11, u64 arg12, u64 arg13);
- void perf_trace_run_bpf_submit(void *raw_data, int size, int rctx,
- 			       struct trace_event_call *call, u64 count,
- 			       struct pt_regs *regs, struct hlist_head *head,
-diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-index 1ce3be63add1..1ca87b7a8230 100644
---- a/include/trace/bpf_probe.h
-+++ b/include/trace/bpf_probe.h
-@@ -52,7 +52,8 @@
- #define __CAST10(a,...) __CAST_TO_U64(a), __CAST9(__VA_ARGS__)
- #define __CAST11(a,...) __CAST_TO_U64(a), __CAST10(__VA_ARGS__)
- #define __CAST12(a,...) __CAST_TO_U64(a), __CAST11(__VA_ARGS__)
--/* tracepoints with more than 12 arguments will hit build error */
-+#define __CAST13(a,...) __CAST_TO_U64(a), __CAST12(__VA_ARGS__)
-+/* tracepoints with more than 13 arguments will hit build error */
- #define CAST_TO_U64(...) CONCATENATE(__CAST, COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__)
+ 	rd = arm_bpf_get_reg32(dst, tmp[1], ctx);
  
- #undef DECLARE_EVENT_CLASS
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index ca1796747a77..67354218b97f 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1546,6 +1546,7 @@ void __bpf_trace_run(struct bpf_prog *prog, u64 *args)
- #define REPEAT_10(FN, DL, X, ...)	FN(X) UNPACK DL REPEAT_9(FN, DL, __VA_ARGS__)
- #define REPEAT_11(FN, DL, X, ...)	FN(X) UNPACK DL REPEAT_10(FN, DL, __VA_ARGS__)
- #define REPEAT_12(FN, DL, X, ...)	FN(X) UNPACK DL REPEAT_11(FN, DL, __VA_ARGS__)
-+#define REPEAT_13(FN, DL, X, ...)	FN(X) UNPACK DL REPEAT_12(FN, DL, __VA_ARGS__)
- #define REPEAT(X, FN, DL, ...)		REPEAT_##X(FN, DL, __VA_ARGS__)
+-	if (sz == BPF_H)
+-		off_max = 0xff;
+-	else
+-		off_max = 0xfff;
+-
+-	if (off < 0 || off > off_max) {
++	if (!is_ldst_imm(off, sz)) {
+ 		emit_a32_mov_i(tmp[0], off, ctx);
+ 		emit(ARM_ADD_R(tmp[0], tmp[0], rd), ctx);
+ 		rd = tmp[0];
+@@ -1043,18 +1057,12 @@ static inline void emit_str_r(const s8 dst, const s8 src[],
  
- #define SARG(X)		u64 arg##X
-@@ -1554,14 +1555,14 @@ void __bpf_trace_run(struct bpf_prog *prog, u64 *args)
- #define __DL_COM	(,)
- #define __DL_SEM	(;)
+ /* dst = *(size*)(src + off) */
+ static inline void emit_ldx_r(const s8 dst[], const s8 src,
+-			      s32 off, struct jit_ctx *ctx, const u8 sz){
++			      s16 off, struct jit_ctx *ctx, const u8 sz){
+ 	const s8 *tmp = bpf2a32[TMP_REG_1];
+ 	const s8 *rd = is_stacked(dst_lo) ? tmp : dst;
+ 	s8 rm = src;
+-	s32 off_max;
+-
+-	if (sz == BPF_H)
+-		off_max = 0xff;
+-	else
+-		off_max = 0xfff;
  
--#define __SEQ_0_11	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
-+#define __SEQ_0_12	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
- 
- #define BPF_TRACE_DEFN_x(x)						\
- 	void bpf_trace_run##x(struct bpf_prog *prog,			\
--			      REPEAT(x, SARG, __DL_COM, __SEQ_0_11))	\
-+			      REPEAT(x, SARG, __DL_COM, __SEQ_0_12))	\
- 	{								\
- 		u64 args[x];						\
--		REPEAT(x, COPY, __DL_SEM, __SEQ_0_11);			\
-+		REPEAT(x, COPY, __DL_SEM, __SEQ_0_12);			\
- 		__bpf_trace_run(prog, args);				\
- 	}								\
- 	EXPORT_SYMBOL_GPL(bpf_trace_run##x)
-@@ -1577,6 +1578,7 @@ BPF_TRACE_DEFN_x(9);
- BPF_TRACE_DEFN_x(10);
- BPF_TRACE_DEFN_x(11);
- BPF_TRACE_DEFN_x(12);
-+BPF_TRACE_DEFN_x(13);
- 
- static int __bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *prog)
- {
+-	if (off < 0 || off > off_max) {
++	if (!is_ldst_imm(off, sz)) {
+ 		emit_a32_mov_i(tmp[0], off, ctx);
+ 		emit(ARM_ADD_R(tmp[0], tmp[0], src), ctx);
+ 		rm = tmp[0];
 -- 
 2.17.1
 
