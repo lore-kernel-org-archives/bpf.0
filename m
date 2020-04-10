@@ -2,107 +2,99 @@ Return-Path: <SRS0=/MlC=52=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAD65C2BA19
-	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 03:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2173BC2D0EC
+	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 03:22:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BFABD20936
-	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 03:10:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E23E020769
+	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 03:22:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tZs81gU0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kXKCsV/K"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726594AbgDJDKs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Apr 2020 23:10:48 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:43684 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726659AbgDJDKs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Apr 2020 23:10:48 -0400
-Received: by mail-pf1-f196.google.com with SMTP id l1so488532pff.10;
-        Thu, 09 Apr 2020 20:10:46 -0700 (PDT)
+        id S1726626AbgDJDW1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Apr 2020 23:22:27 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:54641 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726595AbgDJDW1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Apr 2020 23:22:27 -0400
+Received: by mail-pj1-f66.google.com with SMTP id np9so309356pjb.4;
+        Thu, 09 Apr 2020 20:22:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=SzsIRh2Ih0SubamthzDAukhFWqHrEwEyqn9glQHC50A=;
-        b=tZs81gU0CTqjopHYAp+UbmmLkkCVU7lmJrZd/+m2ag2wMV8QeVcDXQ30UnUyehUz+W
-         D25zQk1L5yWI3PpjPg5Ltd/qbCKqonDS33ZxSFWXONPTlpmKdE1cCVdxdulHbU9EScSz
-         +IemD7iF5chbsXMqRHRDquUq9PkwaSZyAj+Qf32/VXapGVT1Ye+TrwVRExHfJHC/sIp7
-         EC2NZ3uushqH0pMbuYQKTG26IDKd2Le29kbI43/r6ccU7QAZ+lwclaXPR9ubuyroEkRG
-         2isb9YvVEqJXLBJ3ZL945eWZ0CU5tWHVdrKYQh5shnZ1UPPcUu6THo9fpgfluxUCmUFT
-         NwpA==
+        bh=5ty9j/7j67mGeEuCmuzKcLoIOQCULKdAJ/5lUIX2qjs=;
+        b=kXKCsV/Kc+2q5+UAsM2dqNzq/4VlceCfswGQjxhYcfZ6XSbVE8NpT6wIymvAFr1t39
+         ZYbtWpLdJxenihytJaxAdygV1raleyBvcYrQDwhX/qQiRSAmGs/yN2TsICtWMYXqnOe/
+         i+XoAKPzSbwMXv2DBxrpib4yJHguD3afjcSgGy47OtNfUXLY81xEtFOwJB+e0B+9Hx+P
+         0amOPRURbGEC3kse+FOHFgsP45KnWq/mb5KCrEmUUuJhCb5Fu+qyYYnQmdccXpefyAfG
+         OK3srPvyIn9pzbW4vjeNKFJijmk5edRs4tVcBCG8gWCrdVsOn4jlOWSg6gpwwTmG777/
+         lYYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=SzsIRh2Ih0SubamthzDAukhFWqHrEwEyqn9glQHC50A=;
-        b=MDvE6TObc4nxLLnLyFcwWs6S+ySx/Gws8HTad0POZ9FxhogCriKTOegImmluzLeH9j
-         cimClFua3S7sKDq6W+ZuSs322UoSe7WSvzdPU/3/2/w1r9azBCqLnp8oXJvwLVdBRUl3
-         nvZA6/KBb/pHmrxrGd39Au3rk7FBUPhUiV3tRB2z0xw/MjIi1b+viyE1yYfUGM9Gu6P0
-         +EWc6HPr4eOQSO4WFPmVXWPpT/98Ft/FMv6WteBIU+dq7uDtYImAvnFVHdJkTG3rDtzT
-         ul9FIVdX1RQNhXNnWdh0IHw536WG49dXZlODGjYiMJnouodwdj+fVC9Scqe6RoslUOV7
-         b0IQ==
-X-Gm-Message-State: AGi0Puber1dj6rdAr//KLxuYyrKSlFlz8XGmH0b8vLAi0MYuvmDOUm5S
-        l9fYRucIoVGzWFQQKzs7er4=
-X-Google-Smtp-Source: APiQypLKPQCs6FbPhQXJLu42je+iLWEh7x16G3QKvQOTNJr0T6ORbpK8X19+XmH6415WGeTPJoN3QQ==
-X-Received: by 2002:a63:1154:: with SMTP id 20mr2490448pgr.114.1586488246364;
-        Thu, 09 Apr 2020 20:10:46 -0700 (PDT)
+        bh=5ty9j/7j67mGeEuCmuzKcLoIOQCULKdAJ/5lUIX2qjs=;
+        b=f/CJwQbDTiycX4GJl1HDawyvtIedOkPvIuK30hr0sImZ4rWpyvygPq/C3+c7EL85s3
+         pdtU+QDVrzo6ddhIcvwOLh9V8FNj/aIq0RDWha0wow5QrgCgDZcGa+YS30N3BlknwTmi
+         EtTxa5eOmFRJWlRkINDBZZD7CXZsZVrxRAvVzN9PIbb+RMWndCzSrdH92QSMTYdm7X/u
+         LqGmYm9YXWKwG+B5Mn1xFt35LPF9os3v23Uv+a83M3F11XAmP5m6hGwQAcBYcZKt3+pM
+         27HuBJntRoCi6UigW4xFnHcTx+J8oAPWrI4xy+7Y2PHdatBwrtkbVBIgNX7izAxBVAc+
+         QFQQ==
+X-Gm-Message-State: AGi0PuY3I0kMqhFjecoytS8+vYPGBpnzaGB48JV666I4dVQITEfUcVGA
+        BgJfgrus5tTXkPLyJnNZ4J0=
+X-Google-Smtp-Source: APiQypKh3wCowcgVC9+b3wPsd+mLptdY5azy4Py2Fk6KiuoFp3poWv2lrVcGMHKnbUM4WzPckGoWfw==
+X-Received: by 2002:a17:902:d20d:: with SMTP id t13mr2729358ply.85.1586488947003;
+        Thu, 09 Apr 2020 20:22:27 -0700 (PDT)
 Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:f219])
-        by smtp.gmail.com with ESMTPSA id i14sm454448pgh.47.2020.04.09.20.10.44
+        by smtp.gmail.com with ESMTPSA id 75sm497702pfw.145.2020.04.09.20.22.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Apr 2020 20:10:45 -0700 (PDT)
-Date:   Thu, 9 Apr 2020 20:10:43 -0700
+        Thu, 09 Apr 2020 20:22:26 -0700 (PDT)
+Date:   Thu, 9 Apr 2020 20:22:23 -0700
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     Yonghong Song <yhs@fb.com>
 Cc:     Andrii Nakryiko <andriin@fb.com>, bpf@vger.kernel.org,
         Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
         Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
-Subject: Re: [RFC PATCH bpf-next 11/16] bpf: implement query for target_proto
- and file dumper prog_id
-Message-ID: <20200410031043.lza5p6rzi6vajy7h@ast-mbp.dhcp.thefacebook.com>
+Subject: Re: [RFC PATCH bpf-next 08/16] bpf: add task and task/file targets
+Message-ID: <20200410032223.esp46oxtpegextxn@ast-mbp.dhcp.thefacebook.com>
 References: <20200408232520.2675265-1-yhs@fb.com>
- <20200408232533.2676305-1-yhs@fb.com>
+ <20200408232529.2676060-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200408232533.2676305-1-yhs@fb.com>
+In-Reply-To: <20200408232529.2676060-1-yhs@fb.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 08, 2020 at 04:25:33PM -0700, Yonghong Song wrote:
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-> index a245f0df53c4..fc2157e319f1 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -113,6 +113,7 @@ enum bpf_cmd {
->  	BPF_MAP_DELETE_BATCH,
->  	BPF_LINK_CREATE,
->  	BPF_LINK_UPDATE,
-> +	BPF_DUMP_QUERY,
->  };
->  
->  enum bpf_map_type {
-> @@ -594,6 +595,18 @@ union bpf_attr {
->  		__u32		old_prog_fd;
->  	} link_update;
->  
-> +	struct {
-> +		__u32		query_fd;
-> +		__u32		flags;
-> +		union {
-> +			struct {
-> +				__aligned_u64	target_proto;
-> +				__u32		proto_buf_len;
-> +			};
-> +			__u32			prog_id;
-> +		};
-> +	} dump_query;
+On Wed, Apr 08, 2020 at 04:25:29PM -0700, Yonghong Song wrote:
+> +
+> +	spin_lock(&files->file_lock);
+> +	for (; sfd < files_fdtable(files)->max_fds; sfd++) {
+> +		struct file *f;
+> +
+> +		f = fcheck_files(files, sfd);
+> +		if (!f)
+> +			continue;
+> +
+> +		*fd = sfd;
+> +		get_file(f);
+> +		spin_unlock(&files->file_lock);
+> +		return f;
+> +	}
+> +
+> +	/* the current task is done, go to the next task */
+> +	spin_unlock(&files->file_lock);
+> +	put_files_struct(files);
 
-I think it would be cleaner to use BPF_OBJ_GET_INFO_BY_FD instead of
-introducing new command.
+I think spin_lock is unnecessary.
+It's similarly unnecessary in bpf_task_fd_query().
+Take a look at proc_readfd_common() in fs/proc/fd.c.
+It only needs rcu_read_lock() to iterate fd array.
