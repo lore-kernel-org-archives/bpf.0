@@ -2,136 +2,152 @@ Return-Path: <SRS0=/MlC=52=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FSL_HELO_FAKE,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A533EC2D0EC
-	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 23:11:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15162C2BB85
+	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 23:13:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7946C218AC
-	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 23:11:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586560305;
-	bh=FfeNCoXmIijEfyR1pkNRajhg9ViX3TUxB3mbIz62Sms=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=zx2uAbisvc/2L9pRoE2mriXVIxMNlI+Ii5HvExkEm290CnOYw8FwB5M8Wd8H9vg/L
-	 veQG3zqJE8JbB1UzkK9BPEek2M1RXtvF9BD/0eRuuv4elcjlKRJfbNf8iz95zGknek
-	 4C7LigvFLR4iTrpJl8R4HiIeaHdcCl9wMU/8NSuM=
+	by mail.kernel.org (Postfix) with ESMTP id E05CC20801
+	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 23:13:51 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JXB+kbDt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726676AbgDJXLm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Apr 2020 19:11:42 -0400
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:53525 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726582AbgDJXLm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Apr 2020 19:11:42 -0400
-Received: by mail-pj1-f66.google.com with SMTP id cl8so109435pjb.3;
-        Fri, 10 Apr 2020 16:11:41 -0700 (PDT)
+        id S1726648AbgDJXNt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Apr 2020 19:13:49 -0400
+Received: from mail-qv1-f65.google.com ([209.85.219.65]:44592 "EHLO
+        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726594AbgDJXNt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Apr 2020 19:13:49 -0400
+Received: by mail-qv1-f65.google.com with SMTP id ef12so1669686qvb.11;
+        Fri, 10 Apr 2020 16:13:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bQcdpto7s/yGk2w0OzvQ6UptVyKViN3oMFbbBVW84wQ=;
-        b=q7YTOEbnyV60h/2JZUSD3yvsv3FfYyTmAHedS5dXvC6eEJqoWdAqQM8fRMbYNEb/DL
-         TWa8f1bEPIXO2DpHtzWmZ1hQdADUheduicV44X6NhmrZnsTNDIZa9VTHkg2rqK9WXs9O
-         CtfQg7RxKV1aU+9PajTKBmDFHloR88hUsjTCxairuAofrjSvkiIjlmrksHhAsr4eSull
-         P/eN5aSURPoT5uOWbLvn9TO2HAsL3MlV2FT0WDF8H+ov5BHzMNCa3A04caDPl50c1Iqw
-         Q60AlHo9v7XVZ5xht9Dtvdi6fj0cEQuu9XG4/VxucECmylB5pc3N/jO1PdzV7ryJfNk2
-         odzQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SJHuZ/WcwcoaB0mu9da2/kaWS2bJruYQ3O4lQYvvXc4=;
+        b=JXB+kbDt25CrVFs+DAS1Kmbk4dzpZf0tLTKOgwk0o7Lm36EpxGEvXruXCdZQYleZt3
+         suLWQlopEZHUtjxjs1/7rV9owk0CSF0OVCCR51G7bejesfIfnHddqPt7KjkHhD3XQUih
+         LsLEXptSf2mTLSC3j+JzC01VBKc6ZmfXyOJhfPPnbjJDdxxrUbgVIqRTh8EYioJtiCnn
+         9BTYWE5juIoKa2yJb3PzleSoHIu6lt/1ua6/s5uwsUycm2IFr1AtCfHch7kmB/gBZlzU
+         Mtuy5h+YHV0+Cupj3DugT3/FULtF35uscaPRxyV8yDlL8eOz19tiX0gljy6L1RuTDlvT
+         Wk8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=bQcdpto7s/yGk2w0OzvQ6UptVyKViN3oMFbbBVW84wQ=;
-        b=jFjuvyzg8iHEn0BzyXsyOcuMX+9/ulPTf8RuLKDgxteAeIWT3kPyc6Vvt8lhhKq4EM
-         5H22CXcPxBL5U5vXSljQ+6okr3V4GTlyg88ZPLWhTJKh/N3uLtJOrd8fd2Fs0wXy7l2a
-         14XQHNKslSG003xjm4riGXvGyoboJCUOplKBF1SYU3GBhw/tUb8I53U7R1lN5hyTS6sn
-         vx39QM2Vi4+onOHVWFq7B7QG/eeksxGzne3KkQo/CwJgwHvnXbHyBhBNDct/qrhjWOhP
-         f2psHDCGqcCdUU4OiTqtnGEmRUzFBcvBKAn5rO63gM0c2qM52nbhrps1ZfzAwQKHnMRU
-         DjBw==
-X-Gm-Message-State: AGi0PubCEw3nWKBkKxeofpAlyUv341TQbMzuDHi9gRHEhFOwnwP9ERWb
-        9E5LgX7ZErVLKrbyhrn2Aj0=
-X-Google-Smtp-Source: APiQypIEPforRWpT0WXypxL4A3ey15BGc+kDge0iIn1cftbyny3ESjfu/Br0BZMCFGD2PtWlRrOKew==
-X-Received: by 2002:a17:902:b409:: with SMTP id x9mr6968379plr.125.1586560301031;
-        Fri, 10 Apr 2020 16:11:41 -0700 (PDT)
-Received: from google.com ([2601:647:4001:3000::50e3])
-        by smtp.gmail.com with ESMTPSA id 15sm2629073pfu.186.2020.04.10.16.11.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Apr 2020 16:11:39 -0700 (PDT)
-Date:   Fri, 10 Apr 2020 16:11:36 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, x86@kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laura Abbott <labbott@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/28] mm: only allow page table mappings for built-in
- zsmalloc
-Message-ID: <20200410231136.GA101325@google.com>
-References: <20200408115926.1467567-1-hch@lst.de>
- <20200408115926.1467567-11-hch@lst.de>
- <20200409160826.GC247701@google.com>
- <20200409165030.GG20713@hirez.programming.kicks-ass.net>
- <20200409170813.GD247701@google.com>
- <20200410023845.GA2354@jagdpanzerIV.localdomain>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SJHuZ/WcwcoaB0mu9da2/kaWS2bJruYQ3O4lQYvvXc4=;
+        b=tvhGbZWqYOYfKY1Tp2kA1VBaz1+Onw6ppuVcJmj8m3Z5QXnvOYVuzY/E11rSkE1TYd
+         nqNMWxem/pB9Ky8peJC8LVmyyL8SLk28/I+K7NDuXrXYrymsn65y6bQVwvXw9PotygCI
+         ZGL/WcgO0jiMd/3JHven2n4hXv7jFJCJfDKF+knR2Qr0RPm7ZxfOu2G3m30iXsXOrFmp
+         8QXSww0ItZsyosC0HBuER3vT5WfhLI7nSfNcq6azoba3r8N697teCitzsAlWn11WpYK5
+         JMBdwhhCgTKqi1uaTpvjAXnDNMmXjdYDRxXWJ3dYF1CabRwuG77MjO2O5h2H//xFRjoz
+         R6aw==
+X-Gm-Message-State: AGi0PuZvF7UITS20h/brDe1OtuDdyssEBACBVJO8crp6thePExI2k8jU
+        CwfLMk98GkUXQZnwIB7Ae0R/Wl7GkX0dkg8TXzBHkoV0huM5yA==
+X-Google-Smtp-Source: APiQypKdWQ3JnrkC8sdyWo99Q9Il2FZQnyo2/hO4NRsVQcabOwFcow3Z8hrbbjXHr7Igc9I2H7Dm9NgiAOQuB5cUFaE=
+X-Received: by 2002:a0c:ec10:: with SMTP id y16mr7479630qvo.163.1586560427035;
+ Fri, 10 Apr 2020 16:13:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200410023845.GA2354@jagdpanzerIV.localdomain>
+References: <20200408232520.2675265-1-yhs@fb.com> <20200408232527.2675717-1-yhs@fb.com>
+In-Reply-To: <20200408232527.2675717-1-yhs@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 10 Apr 2020 16:13:36 -0700
+Message-ID: <CAEf4BzaGrL0h1CC8XCngNnMBAAECSGPNbP6hVshByppVa2wbsg@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 06/16] bpf: add netlink and ipv6_route targets
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Sergey,
+On Wed, Apr 8, 2020 at 4:25 PM Yonghong Song <yhs@fb.com> wrote:
+>
+> This patch added netlink and ipv6_route targets, using
+> the same seq_ops (except show()) for /proc/net/{netlink,ipv6_route}.
+>
+> Since module is not supported for now, ipv6_route is
+> supported only if the IPV6 is built-in, i.e., not compiled
+> as a module. The restriction can be lifted once module
+> is properly supported for bpfdump.
+>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
+>  include/linux/bpf.h      |  1 +
+>  kernel/bpf/dump.c        | 13 ++++++++++
+>  net/ipv6/ip6_fib.c       | 41 +++++++++++++++++++++++++++++-
+>  net/ipv6/route.c         | 22 ++++++++++++++++
+>  net/netlink/af_netlink.c | 54 +++++++++++++++++++++++++++++++++++++++-
+>  5 files changed, 129 insertions(+), 2 deletions(-)
+>
 
-On Fri, Apr 10, 2020 at 11:38:45AM +0900, Sergey Senozhatsky wrote:
-> On (20/04/09 10:08), Minchan Kim wrote:
-> > > > Even though I don't know how many usecase we have using zsmalloc as
-> > > > module(I heard only once by dumb reason), it could affect existing
-> > > > users. Thus, please include concrete explanation in the patch to
-> > > > justify when the complain occurs.
-> > > 
-> > > The justification is 'we can unexport functions that have no sane reason
-> > > of being exported in the first place'.
-> > > 
-> > > The Changelog pretty much says that.
-> > 
-> > Okay, I hope there is no affected user since this patch.
-> > If there are someone, they need to provide sane reason why they want
-> > to have zsmalloc as module.
-> 
-> I'm one of those who use zsmalloc as a module - mainly because I use zram
-> as a compressing general purpose block device, not as a swap device.
-> I create zram0, mkfs, mount, checkout and compile code, once done -
-> umount, rmmod. This reduces the number of writes to SSD. Some people use
-> tmpfs, but zram device(-s) can be much larger in size. That's a niche use
-> case and I'm not against the patch.
+[...]
 
-It doesn't mean we couldn't use zsmalloc as module any longer. It means
-we couldn't use zsmalloc as module with pgtable mapping whcih was little
-bit faster on microbenchmark in some architecutre(However, I usually temped
-to remove it since it had several problems). However, we could still use
-zsmalloc as module as copy way instead of pgtable mapping. Thus, if someone
-really want to rollback the feature, they should provide reasonable reason
-why it doesn't work for them. "A little fast" wouldn't be enough to exports
-deep internal to the module.
+>
+> +#if IS_BUILTIN(CONFIG_IPV6)
+> +static int ipv6_route_prog_seq_show(struct bpf_prog *prog, struct seq_file *seq,
+> +                                   u64 seq_num, void *v)
+> +{
+> +       struct ipv6_route_iter *iter = seq->private;
+> +       struct {
+> +               struct fib6_info *rt;
+> +               struct seq_file *seq;
+> +               u64 seq_num;
+> +       } ctx = {
 
-Thanks.
+So this anonymous struct definition has to match bpfdump__ipv6_route
+function prototype, if I understand correctly. So this means that BTF
+will have a very useful struct, that can be used directly in BPF
+program, but it won't have a canonical name. This is very sad... Would
+it be possible to instead use a struct as a prototype for these
+dumpers? Here's why it matters. Instead of currently requiring BPF
+users to declare their dumpers as (just copy-pasted):
+
+int BPF_PROG(some_name, struct fib6_info *rt, struct seq_file *seq,
+u64 seq_num) {
+   ...
+}
+
+if bpfdump__ipv6_route was actually a struct definition:
+
+
+struct bpfdump__ipv6_route {
+    struct fib6_info *rt;
+    struct seq_file *seq;
+    u64 seq_num;
+};
+
+Then with vmlinux.h, such program would be very nicely declared and used as:
+
+int some_name(struct bpfdump__ipv6_route *ctx) {
+  /* here use ctx->rt, ctx->seq, ctx->seqnum */
+}
+
+This is would would be nice to have for raw_tp and tp_btf as well.
+
+
+Of course we can also code-generate such types from func_protos in
+bpftool, and that's a plan B for this, IMO. But seem like in this case
+you already have two keep two separate entities in sync: func proto
+and struct for context, so I thought I'd bring it up.
+
+> +               .rt = v,
+> +               .seq = seq,
+> +               .seq_num = seq_num,
+> +       };
+> +       int ret;
+> +
+> +       ret = bpf_dump_run_prog(prog, &ctx);
+> +       iter->w.leaf = NULL;
+> +       return ret == 0 ? 0 : -EINVAL;
+> +}
+> +
