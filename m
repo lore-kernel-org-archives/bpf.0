@@ -2,131 +2,153 @@ Return-Path: <SRS0=/MlC=52=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3C71C2D0EC
-	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 20:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55094C2D0EC
+	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 20:39:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C11D620732
-	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 20:29:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29E3D20936
+	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 20:39:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="m9o4HrWY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UYsf00eX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726671AbgDJU3J (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Apr 2020 16:29:09 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:33946 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726594AbgDJU3H (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Apr 2020 16:29:07 -0400
-Received: by mail-pl1-f194.google.com with SMTP id a23so1015044plm.1
-        for <bpf@vger.kernel.org>; Fri, 10 Apr 2020 13:29:05 -0700 (PDT)
+        id S1726594AbgDJUjR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Apr 2020 16:39:17 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:44823 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726177AbgDJUjQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Apr 2020 16:39:16 -0400
+Received: by mail-qt1-f193.google.com with SMTP id w24so2419117qts.11
+        for <bpf@vger.kernel.org>; Fri, 10 Apr 2020 13:39:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HODoK6E8L/CuOaFGCg2iAC1rPoU/icSNRuY7o7sO8Ws=;
-        b=m9o4HrWYGaPjCrKKUVeHWee1Rn5fs9FN8wu6WoU+bDI6noVqb5hinEVQokCBtuQJfT
-         fLUO9wsv1VCMDI85blYzteeMqCT3bnQlg7kLwecAI+coZAI0xGeYB+rFd43a65241FI8
-         E9vNhsauJMCTPS6vDrZki02VIpPoRwqpUc+7o=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GRpjFZPOBc6KuAJIYD1VHcTVqEQxUtyQoTLidiorb2w=;
+        b=UYsf00eXkVhQi931nHiotVQsLonNty1MkvjGrvLYpBC3k07WhT2uYFyx94q/ODJ64X
+         /0SIvTreN93ehnoLKCh2EtYcUdQa8vzzKc1h20a7wygEHck/p3OvNh04YGHcXryrcIGq
+         yhGAn0iOtq7Fy4k73zD0zfsbqVOTZAyFyisEroCmNxEOhIRmuzZHcHllshYMQLrpeFNt
+         y7XRtXNDLWV8PCPqjW+euSlh0KZioKQiADmFaiFdT1Ykus1H+jvxHzy7lav1ztih1UOs
+         0lsMu/xqreEq67NE0zhIoKcdc1cONvnrItUjkOuRBcPLRENzPV+yuTUWg8lTAb8Awq8M
+         whlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HODoK6E8L/CuOaFGCg2iAC1rPoU/icSNRuY7o7sO8Ws=;
-        b=CfDAsdhkXcn0+9S8TIJPhXVQcQjGEfhRZgEyE91kPK5Xb2j6uzShnl4bxpGcZHchTu
-         VAUEGj7MOa7+p1A6trIXUSD30Y9HWWYWARRZYx/7MdXUJCAEsyltyPXvR/gCGBc4rcll
-         pdeDxkj6hlmEll+9Lh0W35E7TuUnS5T/wru6Kf3quf4XEg6MKCWMUGDudYw3VY2j/WNn
-         8qBGaYAoL31Ili+anQHtZt82PpvGNGMmWYSqijeo0d4ZLELbdpOBxQ4V1Xe32K+1T7sR
-         HuDsM3RZ/CVjWVjGrZKvpspNIzKdpfCNhacj593E8VpO+6IMjU8ORbFR3yzEtSLblfpH
-         Q7ig==
-X-Gm-Message-State: AGi0PuZCA0V9/WUkQL/Cb4BOyFBahvHAp471l/WDeHn01o3aQQ8BAsHo
-        SqHaLuQgHgG8KTIn90HozreVfw==
-X-Google-Smtp-Source: APiQypKD8wYXfs/7EzdxX7L5G4cmdiNC+Ks7MIPw8kTtJLh6/UJnCEZ3fylDcudFSFjvfjyqm97q8A==
-X-Received: by 2002:a17:902:bd45:: with SMTP id b5mr6008293plx.185.1586550545406;
-        Fri, 10 Apr 2020 13:29:05 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u26sm2240496pga.3.2020.04.10.13.29.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Apr 2020 13:29:04 -0700 (PDT)
-Date:   Fri, 10 Apr 2020 13:29:03 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luto@amacapital.net, wad@chromium.org, shuah@kernel.org
-Subject: Re: [PATCH] selftests/seccomp: allow clock_nanosleep instead of
- nanosleep
-Message-ID: <202004101328.075568852D@keescook>
-References: <20200408235753.8566-1-cascardo@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GRpjFZPOBc6KuAJIYD1VHcTVqEQxUtyQoTLidiorb2w=;
+        b=Y7qiZZRMlHEJa6XWlccSygAZzliLyNOx7PUbFuT28KA340IzI5tY6pbqOnew6QeAmy
+         fexQt4l0Q9a+8tz+/JCVICsNSrgC7D2Fmx0P+/Sh4aOVJkrQPWIloYmAuU2CqoEs26g8
+         653Qke3knnFTFOPk4vKtfbv53a65KwA1GktHHIrDSMDNa04SiND+EJp2VjS6jvnO45JX
+         A5xJhajtzmQYW3qSrExLnjy0Ekwb4BIolgStwmaQ96gB6YpnnkOsI/hhEbuogidhCpBU
+         zMe+PKLdCkPbGyyfQ77L+Uoic1Ah0UQ77j/78eEXdbisFto3okf38CSlPD2wsjAaHF1/
+         bM+w==
+X-Gm-Message-State: AGi0PuYmL7bpblk7o+UddSavOypMeNbEAazbglPepsoW0HbuticEc7bh
+        avJImQebhO7FcE2gjoiIYDJD420VeQwjJYZp9to=
+X-Google-Smtp-Source: APiQypItl/3152xL3Z/qVYCu88w269EYUS8UfRNFFHvwdZ5F9yHP0zTIG4MqcsfjFNHunuR7hIpjIMWyz/gYiz1Ono8=
+X-Received: by 2002:aed:3169:: with SMTP id 96mr960335qtg.141.1586551154619;
+ Fri, 10 Apr 2020 13:39:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200408235753.8566-1-cascardo@canonical.com>
+References: <cover.1586547735.git.rdna@fb.com> <daa546903aa74cf844452b7f80788d67c15b42ea.1586547735.git.rdna@fb.com>
+In-Reply-To: <daa546903aa74cf844452b7f80788d67c15b42ea.1586547735.git.rdna@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 10 Apr 2020 13:39:03 -0700
+Message-ID: <CAEf4BzYvPawqgdP+cU94+US=hKGaD8qCBFtnu_JZae3eJ0+SUw@mail.gmail.com>
+Subject: Re: [PATCH bpf 1/2] libbpf: Fix loading cgroup_skb/egress with ret in
+ [2, 3]
+To:     Andrey Ignatov <rdna@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 08, 2020 at 08:57:53PM -0300, Thadeu Lima de Souza Cascardo wrote:
-> glibc 2.31 calls clock_nanosleep when its nanosleep function is used. So
-> the restart_syscall fails after that. In order to deal with it, we trace
-> clock_nanosleep and nanosleep. Then we check for either.
-> 
-> This works just fine on systems with both glibc 2.30 and glibc 2.31,
-> whereas it failed before on a system with glibc 2.31.
-> 
-> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+On Fri, Apr 10, 2020 at 12:54 PM Andrey Ignatov <rdna@fb.com> wrote:
+>
+> Initially BPF_CGROUP_INET_EGRESS hook didn't require specifying
+> expected_attach_type at loading time, but commit
+>
+>   5cf1e9145630 ("bpf: cgroup inet skb programs can return 0 to 3")
+>
+> changed it so that expected_attach_type must be specified if program can
+> return either 2 or 3 (before it was either 0 or 1) to communicate
+> congestion notification to caller.
+>
+> At the same time loading w/o expected_attach_type is still supported for
+> backward compatibility if program retval is in tnum_range(0, 1).
+>
+> Though libbpf currently supports guessing prog/attach/expected_attach
+> types only for "old" mode (retval in [0; 1]). And if cgroup_skb egress
+> program stars returning e.g. 2 (corresponds to NET_XMIT_CN), then
+> guessing breaks and, e.g. bpftool can't load an object with such a
+> program anymore:
+>
+>   # bpftool prog loadall tools/testing/selftests/bpf/test_skb.o /sys/fs/bpf/test_skb
+>   libbpf: load bpf program failed: Invalid argument
+>   libbpf: -- BEGIN DUMP LOG ---
+>   libbpf:
+>   ; return tc_prog(skb) == TC_ACT_OK ? 1 : 2 /* NET_XMIT_CN */;
+>   0: (85) call pc+5
+>
+>    ... skip ...
+>
+>   from 87 to 1: R0_w=invP2 R10=fp0
+>   ; return tc_prog(skb) == TC_ACT_OK ? 1 : 2 /* NET_XMIT_CN */;
+>   1: (bc) w1 = w0
+>   2: (b4) w0 = 1
+>   3: (16) if w1 == 0x0 goto pc+1
+>   4: (b4) w0 = 2
+>   ; return tc_prog(skb) == TC_ACT_OK ? 1 : 2 /* NET_XMIT_CN */;
+>   5: (95) exit
+>   At program exit the register R0 has value (0x2; 0x0) should have been in (0x0; 0x1)
+>   processed 96 insns (limit 1000000) max_states_per_insn 1 total_states 10 peak_states 10 mark_read 2
+>
+>   libbpf: -- END LOG --
+>   libbpf: failed to load program 'cgroup_skb/egress'
+>   libbpf: failed to load object 'tools/testing/selftests/bpf/test_skb.o'
+>   Error: failed to load object file
+>
+> Fix it by introducing another entry in libbpf section_defs that makes the load
+> happens with expected_attach_type: cgroup_skb/egress/expected
+>
+> That name may not be ideal, but I don't have a better option.
 
-Actually, sorry, this should go via Shuah's tree. :) Shuah, do you have
-anything going Linus's way already for -rc2?
+That's a really bad name :) But maybe instead of having another
+section_def, turn existing section def into the one that does specify
+expected_attach_type? Seems like kernels accept expected_attach_type
+for a while now, so it might be ok backwards compatibility-wise?
+Otherwise, we can teach libbpf to retry program load without expected
+attach type for cgroup_skb/egress?
 
-Acked-by: Kees Cook <keescook@chromium.org>
-
--Kees
-
+>
+> Strictly speaking this is not a fix but rather a missing feature, that's
+> why there is no Fixes tag. But it still seems to be a good idea to merge
+> it to stable tree to fix loading programs that use a feature available
+> for almost a year.
+>
+> Signed-off-by: Andrey Ignatov <rdna@fb.com>
 > ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 89fb3e0b552e..c0aa46ce14f6 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -2803,12 +2803,13 @@ TEST(syscall_restart)
->  			 offsetof(struct seccomp_data, nr)),
->  
->  #ifdef __NR_sigreturn
-> -		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_sigreturn, 6, 0),
-> +		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_sigreturn, 7, 0),
->  #endif
-> -		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_read, 5, 0),
-> -		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_exit, 4, 0),
-> -		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_rt_sigreturn, 3, 0),
-> -		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_nanosleep, 4, 0),
-> +		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_read, 6, 0),
-> +		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_exit, 5, 0),
-> +		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_rt_sigreturn, 4, 0),
-> +		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_nanosleep, 5, 0),
-> +		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_clock_nanosleep, 4, 0),
->  		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_restart_syscall, 4, 0),
->  
->  		/* Allow __NR_write for easy logging. */
-> @@ -2895,7 +2896,8 @@ TEST(syscall_restart)
->  	ASSERT_EQ(PTRACE_EVENT_SECCOMP, (status >> 16));
->  	ASSERT_EQ(0, ptrace(PTRACE_GETEVENTMSG, child_pid, NULL, &msg));
->  	ASSERT_EQ(0x100, msg);
-> -	EXPECT_EQ(__NR_nanosleep, get_syscall(_metadata, child_pid));
-> +	ret = get_syscall(_metadata, child_pid);
-> +	EXPECT_TRUE(ret == __NR_nanosleep || ret == __NR_clock_nanosleep);
->  
->  	/* Might as well check siginfo for sanity while we're here. */
->  	ASSERT_EQ(0, ptrace(PTRACE_GETSIGINFO, child_pid, NULL, &info));
-> -- 
-> 2.20.1
-> 
-
--- 
-Kees Cook
+>  tools/lib/bpf/libbpf.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index ff9174282a8c..c909352f894d 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -6330,6 +6330,8 @@ static const struct bpf_sec_def section_defs[] = {
+>         BPF_PROG_SEC("lwt_seg6local",           BPF_PROG_TYPE_LWT_SEG6LOCAL),
+>         BPF_APROG_SEC("cgroup_skb/ingress",     BPF_PROG_TYPE_CGROUP_SKB,
+>                                                 BPF_CGROUP_INET_INGRESS),
+> +       BPF_EAPROG_SEC("cgroup_skb/egress/expected", BPF_PROG_TYPE_CGROUP_SKB,
+> +                                               BPF_CGROUP_INET_EGRESS),
+>         BPF_APROG_SEC("cgroup_skb/egress",      BPF_PROG_TYPE_CGROUP_SKB,
+>                                                 BPF_CGROUP_INET_EGRESS),
+>         BPF_APROG_COMPAT("cgroup/skb",          BPF_PROG_TYPE_CGROUP_SKB),
+> --
+> 2.24.1
+>
