@@ -2,162 +2,151 @@ Return-Path: <SRS0=/MlC=52=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CB2AC2D0EC
-	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 19:00:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 738F1C2D0EC
+	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 19:54:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4E0F82083E
-	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 19:00:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4DD6A20801
+	for <bpf@archiver.kernel.org>; Fri, 10 Apr 2020 19:54:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n5dCfyhp"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ggP8rJ25"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726203AbgDJTAX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Apr 2020 15:00:23 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:44763 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726626AbgDJTAX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Apr 2020 15:00:23 -0400
-Received: by mail-qk1-f196.google.com with SMTP id j4so3100824qkc.11;
-        Fri, 10 Apr 2020 12:00:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mwBe7xi5mOInJFY4in1s3aWzNNuKPkpzEvwQ4F8Kvjc=;
-        b=n5dCfyhpKk0P/D9Zaiw+CntSa6UxfBV10HE7qxCYPKpHh9t2c4/cxNt6Tlc9Agpqr0
-         Ga8F579NiEu89XHBvRETDqO8ycDnpkMXjhGKrQ5Goq6zyPCxtUJ99dKlmWZq3AxuRV/Y
-         kSBpxTAPv7iqxXKqPznhFP/p3i9A01kSk/iZlQNALVZxoX+L67S66D4+w+KqiLUkl7Qw
-         QpRYZXXwPsI2Ff8bDpU1qrSf5vl+rD9MQNLUyFAroiYIZJL2mZW2pXvKFSLHUAJBMqJ6
-         G49rKtDpZt4Ck/p3yoUT97NiiVkJ3vkwu0nj/1x5fYoGUkTfotyAAkpjuyMUJsRl+o2h
-         gdJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mwBe7xi5mOInJFY4in1s3aWzNNuKPkpzEvwQ4F8Kvjc=;
-        b=M+tzVFkGbpDXH7UUW0O0cDyNM8F7WU4hLEfJUHagqYPUoBkasUm72Ann7tJRdm2TAq
-         4HJNOklpE+XAzVXLIb1E+9HgvCmiDqzYC5Y2tn9el3UMNvtxW2S3PfUMI8458tN9aQQI
-         LpOqk85FNARuGVTvhnrf96UHN23H742H8Gdl8mQJP5l2Z4gwwPUC17LzSC0yg1k9QVzm
-         B+soH2qt2IAwLCENTBFW7PRzF2TA30nbMaRr/Md9J3w5WeGz0o9Gm2sTbraWBAn9nLcJ
-         HFWsJmsJU+V4xNZxjq0sUOSlJg2/rTr1X8Ens44J8ohDeTidZJunZhWRuwK3Q7kmjnq+
-         ee4w==
-X-Gm-Message-State: AGi0PuaTr2fYSDAkTMXSKncf/rNUZGPoyWCJuPhVk4fdEGKXfs5GR06L
-        8ns/uaIXP1I+y3DNZfZ3rVG4LP/YEUQf9ww+/Yk=
-X-Google-Smtp-Source: APiQypLLpQ1go2x3CZKQMLdXhXL51CJijVhUn2ynZwQqGXXbwWVBtB3g/qsaeXbF2BzOS6Xz+qhM2hMbcW0+peAcStU=
-X-Received: by 2002:a05:620a:88e:: with SMTP id b14mr5734565qka.449.1586545222282;
- Fri, 10 Apr 2020 12:00:22 -0700 (PDT)
+        id S1726646AbgDJTyX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Apr 2020 15:54:23 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:21934 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726263AbgDJTyX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 10 Apr 2020 15:54:23 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03AJkPa8017037
+        for <bpf@vger.kernel.org>; Fri, 10 Apr 2020 12:54:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=uwp71Ob9R0r0n9NMW7YFhybfU3k19sFM++vLav3a/Ag=;
+ b=ggP8rJ25U8vmUQmL8sSalkO8BL2CvX2MagBiVyf5bN1D+/QWc6ipMGQd0klvXFpSpGhT
+ ddZnj532bFeh0G+Yu79oAVfgMvMNTfLMcUhCrtCowR7Ine4dwLTAzs83PPjsuTEkkRr7
+ NzrQSYM76Dk/RU7SPVzgvEBBpAtizfik7Fs= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3091n49egt-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 10 Apr 2020 12:54:22 -0700
+Received: from intmgw001.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Fri, 10 Apr 2020 12:54:21 -0700
+Received: by dev082.prn2.facebook.com (Postfix, from userid 572249)
+        id D568E37007ED; Fri, 10 Apr 2020 12:54:20 -0700 (PDT)
+Smtp-Origin-Hostprefix: dev
+From:   Andrey Ignatov <rdna@fb.com>
+Smtp-Origin-Hostname: dev082.prn2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Andrey Ignatov <rdna@fb.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH bpf 1/2] libbpf: Fix loading cgroup_skb/egress with ret in [2, 3]
+Date:   Fri, 10 Apr 2020 12:54:00 -0700
+Message-ID: <daa546903aa74cf844452b7f80788d67c15b42ea.1586547735.git.rdna@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <cover.1586547735.git.rdna@fb.com>
+References: <cover.1586547735.git.rdna@fb.com>
 MIME-Version: 1.0
-References: <20200410000425.2597887-1-andriin@fb.com> <CAG48ez1U70e8rU1NdTZ5ECS9kqSnQbpU5LBbk=iXmre+hGjuOQ@mail.gmail.com>
-In-Reply-To: <CAG48ez1U70e8rU1NdTZ5ECS9kqSnQbpU5LBbk=iXmre+hGjuOQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 10 Apr 2020 12:00:11 -0700
-Message-ID: <CAEf4BzZk8SzGQ4srkf1dApEqt84_ktpVQG9sVBBkK3GZ=xQzEA@mail.gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: prevent re-mmap()'ing BPF map as writable
- for initially r/o mapping
-To:     Jann Horn <jannh@google.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-10_08:2020-04-09,2020-04-10 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 mlxscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=13 adultscore=0
+ lowpriorityscore=0 spamscore=0 bulkscore=0 clxscore=1015 mlxlogscore=999
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004100146
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 10, 2020 at 1:51 AM Jann Horn <jannh@google.com> wrote:
->
-> On Fri, Apr 10, 2020 at 2:04 AM Andrii Nakryiko <andriin@fb.com> wrote:
-> > VM_MAYWRITE flag during initial memory mapping determines if already mmap()'ed
-> > pages can be later remapped as writable ones through mprotect() call. To
-> > prevent user application to rewrite contents of memory-mapped as read-only and
-> > subsequently frozen BPF map, remove VM_MAYWRITE flag completely on initially
-> > read-only mapping.
-> >
-> > Alternatively, we could treat any memory-mapping on unfrozen map as writable
-> > and bump writecnt instead. But there is little legitimate reason to map
-> > BPF map as read-only and then re-mmap() it as writable through mprotect(),
-> > instead of just mmap()'ing it as read/write from the very beginning.
-> >
-> > Fixes: fc9702273e2e ("bpf: Add mmap() support for BPF_MAP_TYPE_ARRAY")
-> > Reported-by: Jann Horn <jannh@google.com>
-> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> > ---
-> >  kernel/bpf/syscall.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > index 64783da34202..f7f6db50a085 100644
-> > --- a/kernel/bpf/syscall.c
-> > +++ b/kernel/bpf/syscall.c
-> > @@ -635,6 +635,10 @@ static int bpf_map_mmap(struct file *filp, struct vm_area_struct *vma)
-> >         /* set default open/close callbacks */
-> >         vma->vm_ops = &bpf_map_default_vmops;
-> >         vma->vm_private_data = map;
-> > +       vma->vm_flags &= ~VM_MAYEXEC;
-> > +       if (!(vma->vm_flags & VM_WRITE))
-> > +               /* disallow re-mapping with PROT_WRITE */
-> > +               vma->vm_flags &= ~VM_MAYWRITE;
->
-> The .open and .close handlers for the VMA are also wrong:
+Initially BPF_CGROUP_INET_EGRESS hook didn't require specifying
+expected_attach_type at loading time, but commit
 
-Yes, it has to check VM_MAYWRITE now, my bad, thanks for catching
-this! Extended selftest to validate that scenario as well.
+  5cf1e9145630 ("bpf: cgroup inet skb programs can return 0 to 3")
 
->
-> /* called for any extra memory-mapped regions (except initial) */
-> static void bpf_map_mmap_open(struct vm_area_struct *vma)
-> {
->         struct bpf_map *map = vma->vm_file->private_data;
->
->         bpf_map_inc_with_uref(map);
->
->         if (vma->vm_flags & VM_WRITE) {
->                 mutex_lock(&map->freeze_mutex);
->                 map->writecnt++;
->                 mutex_unlock(&map->freeze_mutex);
->         }
-> }
->
-> /* called for all unmapped memory region (including initial) */
-> static void bpf_map_mmap_close(struct vm_area_struct *vma)
-> {
->         struct bpf_map *map = vma->vm_file->private_data;
->
->         if (vma->vm_flags & VM_WRITE) {
->                 mutex_lock(&map->freeze_mutex);
->                 map->writecnt--;
->                 mutex_unlock(&map->freeze_mutex);
->         }
->
->         bpf_map_put_with_uref(map);
-> }
->
-> static const struct vm_operations_struct bpf_map_default_vmops = {
->         .open           = bpf_map_mmap_open,
->         .close          = bpf_map_mmap_close,
-> };
->
-> You can use mprotect() to flip VM_WRITE off while a VMA exists, and
-> then the writecnt won't go down when you close it. Or you could even
-> get the writecnt to go negative if you map as writable, then
-> mprotect() to readonly, then split the VMA a few times, mprotect the
-> split VMAs to writable, and then unmap them.
->
-> I think you'll want to also check for MAYWRITE here.
->
-> Also, the bpf_map_inc_with_uref/bpf_map_put_with_uref here look
-> superfluous - the VMA holds a reference to the file, and the file
-> holds a reference to the map.
+changed it so that expected_attach_type must be specified if program can
+return either 2 or 3 (before it was either 0 or 1) to communicate
+congestion notification to caller.
 
-Hm.. So the file from which memory-mapping was created originally will
-stay referenced by VMA subsystem until the last VMA segment is
-unmmaped (and bpf_map_mmap_close is called for it), even if file
-itself is closed from user-space? It makes sense, though I didn't
-realize it at the time I was implementing this. I'll drop refcounting
-then.
+At the same time loading w/o expected_attach_type is still supported for
+backward compatibility if program retval is in tnum_range(0, 1).
+
+Though libbpf currently supports guessing prog/attach/expected_attach
+types only for "old" mode (retval in [0; 1]). And if cgroup_skb egress
+program stars returning e.g. 2 (corresponds to NET_XMIT_CN), then
+guessing breaks and, e.g. bpftool can't load an object with such a
+program anymore:
+
+  # bpftool prog loadall tools/testing/selftests/bpf/test_skb.o /sys/fs/b=
+pf/test_skb
+  libbpf: load bpf program failed: Invalid argument
+  libbpf: -- BEGIN DUMP LOG ---
+  libbpf:
+  ; return tc_prog(skb) =3D=3D TC_ACT_OK ? 1 : 2 /* NET_XMIT_CN */;
+  0: (85) call pc+5
+
+   ... skip ...
+
+  from 87 to 1: R0_w=3DinvP2 R10=3Dfp0
+  ; return tc_prog(skb) =3D=3D TC_ACT_OK ? 1 : 2 /* NET_XMIT_CN */;
+  1: (bc) w1 =3D w0
+  2: (b4) w0 =3D 1
+  3: (16) if w1 =3D=3D 0x0 goto pc+1
+  4: (b4) w0 =3D 2
+  ; return tc_prog(skb) =3D=3D TC_ACT_OK ? 1 : 2 /* NET_XMIT_CN */;
+  5: (95) exit
+  At program exit the register R0 has value (0x2; 0x0) should have been i=
+n (0x0; 0x1)
+  processed 96 insns (limit 1000000) max_states_per_insn 1 total_states 1=
+0 peak_states 10 mark_read 2
+
+  libbpf: -- END LOG --
+  libbpf: failed to load program 'cgroup_skb/egress'
+  libbpf: failed to load object 'tools/testing/selftests/bpf/test_skb.o'
+  Error: failed to load object file
+
+Fix it by introducing another entry in libbpf section_defs that makes the=
+ load
+happens with expected_attach_type: cgroup_skb/egress/expected
+
+That name may not be ideal, but I don't have a better option.
+
+Strictly speaking this is not a fix but rather a missing feature, that's
+why there is no Fixes tag. But it still seems to be a good idea to merge
+it to stable tree to fix loading programs that use a feature available
+for almost a year.
+
+Signed-off-by: Andrey Ignatov <rdna@fb.com>
+---
+ tools/lib/bpf/libbpf.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index ff9174282a8c..c909352f894d 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -6330,6 +6330,8 @@ static const struct bpf_sec_def section_defs[] =3D =
+{
+ 	BPF_PROG_SEC("lwt_seg6local",		BPF_PROG_TYPE_LWT_SEG6LOCAL),
+ 	BPF_APROG_SEC("cgroup_skb/ingress",	BPF_PROG_TYPE_CGROUP_SKB,
+ 						BPF_CGROUP_INET_INGRESS),
++	BPF_EAPROG_SEC("cgroup_skb/egress/expected", BPF_PROG_TYPE_CGROUP_SKB,
++						BPF_CGROUP_INET_EGRESS),
+ 	BPF_APROG_SEC("cgroup_skb/egress",	BPF_PROG_TYPE_CGROUP_SKB,
+ 						BPF_CGROUP_INET_EGRESS),
+ 	BPF_APROG_COMPAT("cgroup/skb",		BPF_PROG_TYPE_CGROUP_SKB),
+--=20
+2.24.1
+
