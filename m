@@ -2,51 +2,53 @@ Return-Path: <SRS0=7UNm=53=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5819C2BBC7
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:48:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67140C2BB86
+	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:49:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A74CD20787
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:48:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3843420787
+	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:49:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586648913;
-	bh=trlwDwThN8VpndS+Dosau8+WGoHbHcbywweE9WxjASU=;
+	s=default; t=1586648996;
+	bh=CUt+1MvioeiDPiQK9Zh7ckRIYPWV0LcGrYNTJZ3Hvws=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=pJbG5g1RQaNR6uOtfxbAM7h282iNYsGQLD11BiEmA/SLdVI+oVZKH9DYQDdOXM08K
-	 przbKbjcwmDxY1TfB9sFQUL+/SSbKNbrCKl7QtjyR3QdS3gZsjF6cURLqtJvSn6kdO
-	 UucEmKgqhwyxXa1Awr50Os098JwFYC1euvYGUeog=
+	b=vCoM6WZHui5ZCt6nMx7p+gKvZ3CnjrlkKtCD2sM0yLlNoKgElvoNOuuYnAG581wnH
+	 b016jMdCCz6Q2BgBspyZenbqHjmRd01LQ7CURHMaZbQHPV8XZ3LLe/MeDZHYnUheaG
+	 bVzZJaYkCt5b+CHnFSIOC8kieSduEo0DMVZHNIxY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727327AbgDKXEl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Apr 2020 19:04:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38208 "EHLO mail.kernel.org"
+        id S1727083AbgDKXET (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Apr 2020 19:04:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37684 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727269AbgDKXEj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:04:39 -0400
+        id S1727077AbgDKXET (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:04:19 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1E5A7215A4;
-        Sat, 11 Apr 2020 23:04:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6A40720708;
+        Sat, 11 Apr 2020 23:04:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646279;
-        bh=trlwDwThN8VpndS+Dosau8+WGoHbHcbywweE9WxjASU=;
+        s=default; t=1586646259;
+        bh=CUt+1MvioeiDPiQK9Zh7ckRIYPWV0LcGrYNTJZ3Hvws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WATsBN2IA4yLD5aPmOkGZ0YlZgyoEivtEjnSTloxHGpSqzBQSgeJOiLIN11pr/e4V
-         6qnxhLlK9Aa1TDzUKYLOQ+9Wxq6i5hS/Q6f/DsvJJo//TjVeFTFRGY+jcRgdbSI1ZQ
-         4sMQFAcZEI17+9r4fDYjo9spzuLq8IVfHQC86QW4=
+        b=Q2NECbj4tTI4vcmoam3QW1DFC6VDMLI2uTLopGtXGvjU3cQlQDgF0QZGyHhhH7jmf
+         74PDB1OpqX97LfhEOlrcra4fG3Bb9kHQALB2qhlXaxiP4x0pKFe7pJZyAwMRs8Duzf
+         FK7HV4aBHq74ZQAxtXPenghJpwoKI/jL+yEPMomw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrii Nakryiko <andriin@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Wenbo Zhang <ethercflow@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 042/149] libbpf: Fix handling of optional field_name in btf_dump__emit_type_decl
-Date:   Sat, 11 Apr 2020 19:01:59 -0400
-Message-Id: <20200411230347.22371-42-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 025/149] libbpf: Ignore incompatible types with matching name during CO-RE relocation
+Date:   Sat, 11 Apr 2020 19:01:42 -0400
+Message-Id: <20200411230347.22371-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200411230347.22371-1-sashal@kernel.org>
 References: <20200411230347.22371-1-sashal@kernel.org>
@@ -61,33 +63,41 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit 320a36063e1441210106aa33997ad3770d4c86b4 ]
+[ Upstream commit d121e1d34b72c4975ff0340901d926c0aaf98174 ]
 
-Internal functions, used by btf_dump__emit_type_decl(), assume field_name is
-never going to be NULL. Ensure it's always the case.
+When finding target type candidates, ignore forward declarations, functions,
+and other named types of incompatible kind. Not doing this can cause false
+errors.  See [0] for one such case (due to struct pt_regs forward
+declaration).
 
-Fixes: 9f81654eebe8 ("libbpf: Expose BTF-to-C type declaration emitting API")
+  [0] https://github.com/iovisor/bcc/pull/2806#issuecomment-598543645
+
+Fixes: ddc7c3042614 ("libbpf: implement BPF CO-RE offset relocation algorithm")
+Reported-by: Wenbo Zhang <ethercflow@gmail.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20200303180800.3303471-1-andriin@fb.com
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Link: https://lore.kernel.org/bpf/20200313172336.1879637-3-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/btf_dump.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index bd09ed1710f12..dc451e4de5ad4 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -1030,7 +1030,7 @@ int btf_dump__emit_type_decl(struct btf_dump *d, __u32 id,
- 	if (!OPTS_VALID(opts, btf_dump_emit_type_decl_opts))
- 		return -EINVAL;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 7469c7dcc15e7..80ab0acc9dcdd 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -3868,6 +3868,10 @@ static struct ids_vec *bpf_core_find_cands(const struct btf *local_btf,
+ 		if (str_is_empty(targ_name))
+ 			continue;
  
--	fname = OPTS_GET(opts, field_name, NULL);
-+	fname = OPTS_GET(opts, field_name, "");
- 	lvl = OPTS_GET(opts, indent_level, 0);
- 	btf_dump_emit_type_decl(d, id, fname, lvl);
- 	return 0;
++		t = skip_mods_and_typedefs(targ_btf, i, NULL);
++		if (!btf_is_composite(t) && !btf_is_array(t))
++			continue;
++
+ 		targ_essent_len = bpf_core_essential_name_len(targ_name);
+ 		if (targ_essent_len != local_essent_len)
+ 			continue;
 -- 
 2.20.1
 
