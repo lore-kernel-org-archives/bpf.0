@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16AF5C2BA19
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:32:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7325C2BA19
+	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:40:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D9244206E9
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:32:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0F21206E9
+	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:40:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586647962;
-	bh=SgzdHlPA0YNVJ4tnWzeOsi3XQodzjcdy9mwjJz+LEZ0=;
+	s=default; t=1586648404;
+	bh=aTLNkP4zHRU3FL6en2irtAzjfe1lGeTvTobACzJD3yg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=zqh2SOEsDL8cngpxQPHNFFxlG/k9BvLv3viAWw3KMNhFGoK49ceV2UFo1MDBQEFRa
-	 ZnlLZQ5hNNRG8K2cSucTMjRjyXBHcAyfOJ4i0Ni1MZkPhMIPT+tvVAD7eSDkSenS5D
-	 Pig+jBrfcwQiC6Zkc0ZD72G5hCBdyUQtUz908mlQ=
+	b=jdUXlvTYLqLjEKk3Zq9uh7IIdDON6H3t+uOUgG3Bv/46BAii2ikFh1q8sNTZ4U+Uz
+	 nStVRekcbA8Y8ZmLUqck5HxfBDW0ikb9LsmW0I21p1fIcAV2O6u4xDDfTmxqSFhfVT
+	 ip7otem+n28enej168IK9GufYjGbkYTs/DLxR5qM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727664AbgDKXKE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Apr 2020 19:10:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48110 "EHLO mail.kernel.org"
+        id S1726921AbgDKXHa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Apr 2020 19:07:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728435AbgDKXKD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:10:03 -0400
+        id S1727118AbgDKXHa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:07:30 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D0D05217D8;
-        Sat, 11 Apr 2020 23:10:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 77FA520CC7;
+        Sat, 11 Apr 2020 23:07:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646603;
-        bh=SgzdHlPA0YNVJ4tnWzeOsi3XQodzjcdy9mwjJz+LEZ0=;
+        s=default; t=1586646450;
+        bh=aTLNkP4zHRU3FL6en2irtAzjfe1lGeTvTobACzJD3yg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1rXGf1sMGHSo7VVu7rogBCpR3KSMPaeUbCRqFwcYPvWYQRjgvzw7ZqPZd5CwMrORK
-         J26/z6g0s2gV5ezPfVl1FebLh2vEicNor01+l3JBIx9zNgt7cjFV3Zt7MmxBrUIfiR
-         GA9I96Nmq8O5G//iNLtbX0TuZkKY+tt+Zxfo+Z2Y=
+        b=GEDvm6SyyXfcS2jZAzjkRJAso0YOq/1BGX2Itl9gyiPy4Z9JA2WHaV8dSv2vkTE5Z
+         WDSX5eIkEVRrphbTs8APnSd2wpf2hFgLapEiJ6ic2GxMOxSeDKRBl5CiKFGbEhuu42
+         RGgKN0dtYR0qE/RwX667PqRHLPwa8E+6ZQDLgvo0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrii Nakryiko <andriin@fb.com>,
@@ -46,12 +46,12 @@ Cc:     Andrii Nakryiko <andriin@fb.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 016/108] libbpf: Ignore incompatible types with matching name during CO-RE relocation
-Date:   Sat, 11 Apr 2020 19:08:11 -0400
-Message-Id: <20200411230943.24951-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 020/121] libbpf: Ignore incompatible types with matching name during CO-RE relocation
+Date:   Sat, 11 Apr 2020 19:05:25 -0400
+Message-Id: <20200411230706.23855-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200411230943.24951-1-sashal@kernel.org>
-References: <20200411230943.24951-1-sashal@kernel.org>
+In-Reply-To: <20200411230706.23855-1-sashal@kernel.org>
+References: <20200411230706.23855-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -84,10 +84,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index b6403712c2f4c..5f3a8b3a54ad7 100644
+index 6d1bb761a544c..cff248e1f1434 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -2534,6 +2534,10 @@ static struct ids_vec *bpf_core_find_cands(const struct btf *local_btf,
+@@ -2737,6 +2737,10 @@ static struct ids_vec *bpf_core_find_cands(const struct btf *local_btf,
  		if (str_is_empty(targ_name))
  			continue;
  
