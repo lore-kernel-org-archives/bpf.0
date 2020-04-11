@@ -7,101 +7,105 @@ X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5D1CC2BA19
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 22:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F120C2BA19
+	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:17:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A564720769
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 22:42:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 62FDF20757
+	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:17:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gq1Kb6We"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ANRd4eU/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726182AbgDKWmT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Apr 2020 18:42:19 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:44414 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726108AbgDKWmT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 11 Apr 2020 18:42:19 -0400
-Received: by mail-pg1-f195.google.com with SMTP id n13so2684352pgp.11
-        for <bpf@vger.kernel.org>; Sat, 11 Apr 2020 15:42:17 -0700 (PDT)
+        id S1729020AbgDKXRY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Apr 2020 19:17:24 -0400
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:36349 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728998AbgDKXRY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:17:24 -0400
+Received: by mail-pj1-f68.google.com with SMTP id nu11so2261380pjb.1;
+        Sat, 11 Apr 2020 16:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Ztl26xUGlKd6MFW++izFLO+4DwtPEbVAJx37Xe1HyAY=;
-        b=Gq1Kb6Wem25hMC+uv1fmWlbkoF2Qw42bl9WyxJeuZePGRgR2bQ73XWr2j7hnMAcSRn
-         mHSDvVFmfsro6ieoXLcnno+8vrLpmEpdlH7kOW9HGEyYHcEq2zkp3x95XhoIvEONh3DD
-         Si1mNucyuV2DFqfEM3VewsKymtTF7kGFA6XGCbKr+gpW9wInQXAZteZjKVtUYbreKHC2
-         URBEfOi81FEPtG/q2LTFKcRSXFZ/ISoKgVmpM2N0l/x2ejOxW5QdJLT+D/V1rxxpVrc3
-         CYchGHM1GT0FCgTzbpQPFGuggmFkWGCF+hPZSblts4k01IGro3httLDIFn6IKcTd/R0u
-         Fk5A==
+        bh=qpPTz4h01PybJ/ueRBwH9cE11K5rgvJCwJGJJ5phT3w=;
+        b=ANRd4eU/qzz1x/Irdd8z7efz0Nd2R8JfCwrV0MHxCgrWsw3N+MtJQLKoqUcgbQbptI
+         r9y5U7GDCf4e+tLEUbW8quTo+Wnp4cl3OMeNz2wHC8A6MelNf7GZqDGsnhqFxRdbFPly
+         sya70Lo7riwC8DDFIpNH0pIIWHpwO7pN3K7a6uOFIJ32RIKHFFiD2LxQK0rLY5SEyWOc
+         7QQeD0MtjdI2rl42sfKR22P01bx+bO4XBcXLQhm0ZxjQvF0de14x730LfqDhcTWPcAiD
+         xAvoIaPNj8SAnjsCeDJP/CkGfpa31R7ul5sewI6ON/Aw4j+qiZ3a5i//wlg+nj3mEI2z
+         YvjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Ztl26xUGlKd6MFW++izFLO+4DwtPEbVAJx37Xe1HyAY=;
-        b=SNMgjRftgPjhFdErZ+G7U3e/kWLGzPWz8wh5yOu3Ctj/Ahqql3xQqiEV3PYLX9f1EI
-         KUHiG/O0065mp/2lheXewRXiEzJE7d5q3JBUIHs8UlnpxHUPbPQ7tN8+e7/jXCg7VtUE
-         qlD/PwYsGfrBEt1wCRzj+WTu7kLghDuR8U/ttwV3ZEqrwL/p/nB8Su8WhEky8danzL6d
-         zpStdUJXE+LKoLOMHaeS2jl4h9QQyrUoQneHiQFdwYq7NJkR1ZNMVB68W9KojmqgqsQV
-         7IJHq2HZnXie2VUZWApN4IoS68samlOGvfQdLVZjlcXUMLqQ5VVUO3fSmSqweYNWQTKu
-         eXGQ==
-X-Gm-Message-State: AGi0PubSxCnHJwwraHd1vXzyzRS9idkT3id0CWF5yNn1AV5w13EoImc0
-        agwt+yqUM7M+S7M+wKaQ6bk=
-X-Google-Smtp-Source: APiQypLsUDu9CZ4jiXXSfVwvHwJ61g1gxNI1ZpFx72OykPZ5MJGpm/gN7r5x70OpA05NKv0gVax0Vg==
-X-Received: by 2002:a63:df01:: with SMTP id u1mr10768815pgg.166.1586644937261;
-        Sat, 11 Apr 2020 15:42:17 -0700 (PDT)
+        bh=qpPTz4h01PybJ/ueRBwH9cE11K5rgvJCwJGJJ5phT3w=;
+        b=nBX1V5Nvsz3I1iQp5as6sR1g1k50QFW3iVXsNzwELjHSMRMivEPnuK7eKUCyz7Jl2G
+         lj24jaLyWsiC+tp93ge2pnc8IYs1fnArnNByjbogah3ggqiEHQADqCR0NpsZQCOo5y6+
+         nshYZOaPvkOTKh6YyZqNvXQQJ9KnKrVgD5ZZjocWl4LZhfC22diV0NHxWz8nrngFxzqR
+         hqA7WLwfNQwOO+kjhQMOb+P+BW/R8JvXQmQQGAe5LBdm1bgjLObH87+tI29N5FVoYUVY
+         xHrjcCdu/vbyUEtDCq835T4lV9xwq1q3mfB8Mh+SnnP/MGWwNqY0U8HQkohJxvVBT46p
+         NXfQ==
+X-Gm-Message-State: AGi0PubeJk4MB2UpxyPUNkMcPJOQQ7spDPAQrUw5BOuj+C5AHN1SSSP8
+        nQgdV+JFeOGRdbERDi5+TJqDXeaj
+X-Google-Smtp-Source: APiQypKXIrpRI/ANL+FAQvbIW21VaebCgrEzE2vjI+pRerScQS68X1NiabZv7KgCGhiegl0qVjrVOA==
+X-Received: by 2002:a17:90a:1f0b:: with SMTP id u11mr13319998pja.18.1586647042482;
+        Sat, 11 Apr 2020 16:17:22 -0700 (PDT)
 Received: from ast-mbp ([2620:10d:c090:400::5:507f])
-        by smtp.gmail.com with ESMTPSA id p12sm5112259pfq.153.2020.04.11.15.42.15
+        by smtp.gmail.com with ESMTPSA id k12sm4945809pfk.46.2020.04.11.16.17.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Apr 2020 15:42:16 -0700 (PDT)
-Date:   Sat, 11 Apr 2020 15:42:14 -0700
+        Sat, 11 Apr 2020 16:17:21 -0700 (PDT)
+Date:   Sat, 11 Apr 2020 16:17:19 -0700
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Andrey Ignatov <rdna@fb.com>
+To:     Yonghong Song <yhs@fb.com>
 Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH bpf 1/2] libbpf: Fix loading cgroup_skb/egress with ret
- in [2, 3]
-Message-ID: <20200411224214.32hiebejlsl2rc2k@ast-mbp>
-References: <cover.1586547735.git.rdna@fb.com>
- <daa546903aa74cf844452b7f80788d67c15b42ea.1586547735.git.rdna@fb.com>
- <CAEf4BzYvPawqgdP+cU94+US=hKGaD8qCBFtnu_JZae3eJ0+SUw@mail.gmail.com>
- <20200410225739.GA95636@rdna-mbp.dhcp.thefacebook.com>
+Subject: Re: [RFC PATCH bpf-next 05/16] bpf: create file or anonymous dumpers
+Message-ID: <20200411231719.4nybod6ku524eawv@ast-mbp>
+References: <20200408232520.2675265-1-yhs@fb.com>
+ <20200408232526.2675664-1-yhs@fb.com>
+ <CAEf4Bza8w9ypepeu6eoJkiXqKqEXtWAOONDpZ9LShivKUCOJbg@mail.gmail.com>
+ <334a91d2-1567-bf3d-4ae6-305646738132@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200410225739.GA95636@rdna-mbp.dhcp.thefacebook.com>
+In-Reply-To: <334a91d2-1567-bf3d-4ae6-305646738132@fb.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 10, 2020 at 03:57:39PM -0700, Andrey Ignatov wrote:
+On Fri, Apr 10, 2020 at 05:23:30PM -0700, Yonghong Song wrote:
+> > 
+> > So it seems like few things would be useful:
+> > 
+> > 1. end flag for post-aggregation and/or footer printing (seq_num == 0
+> > is providing similar means for start flag).
 > 
-> > Seems like kernels accept expected_attach_type
-> > for a while now, so it might be ok backwards compatibility-wise?
-> 
-> Sure, that commit is from 2018, but I guess backward compatibility
-> should still be maintained in this case? That's a question to
-> maintainers though. If simply changing BPF_APROG_SEC to BPF_EAPROG_SEC
-> is an option that works for me.
-> 
-> 
-> > Otherwise, we can teach libbpf to retry program load without expected
-> > attach type for cgroup_skb/egress?
-> 
-> Looks like a lot of work compared to simply adding a new section name
-> (or changing existing section if backward compatibility is not a concern
-> here).
+> the end flag is a problem. We could say hijack next or stop so we
+> can detect the end, but passing a NULL pointer as the object
+> to the bpf program may be problematic without verifier enforcement
+> as it may cause a lot of exceptions... Although all these exception
+> will be silenced by bpf infra, but still not sure whether this
+> is acceptable or not.
 
-I still don't understand that backward compatiblity concern.
-Fixing libbpf to do BPF_EAPROG_SEC("cgroup_skb/egress"
-will make egress progs to fail at load time if they use > 1 return value on old
-kernels and fail at load time for > 3 return value on new kernels. Without
-libbpf fix such progs would rely on old and new kernels internal implementation
-details. Since on the latest kernel with current libbpf behavior the egress
-prog will get loaded as ingress type with return value 4 and then gets attached
-at egress. Argh. One really need to deep dive into kernel sources to figure out
-what kernel will do with such return value. Such behavior is undefined and broken.
-Did I misunderstand the whole issue?
+I don't like passing NULL there just to indicate something to a program.
+It's not too horrible to support from verifier side, but NULL is only
+one such flag. What does it suppose to indicate? That dumper prog
+is just starting? or ending? Let's pass (void*)1, and (void *)2 ?
+I'm not a fan of such inband signaling.
+imo it's cleaner and simpler when that object pointer is always valid.
+
+> > 2. Some sort of "session id", so that bpfdumper can maintain
+> > per-session intermediate state. Plus with this it would be possible to
+> > detect restarts (if there is some state for the same session and
+> > seq_num == 0, this is restart).
+> 
+> I guess we can do this.
+
+beyond seq_num passing session_id is a good idea. Though I don't quite see
+the use case where you'd need bpfdumper prog to be stateful, but doesn't hurt.
