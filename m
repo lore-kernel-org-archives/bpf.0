@@ -2,68 +2,68 @@ Return-Path: <SRS0=7UNm=53=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C0ABC352BE
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 07:47:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E169C2BB85
+	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 07:48:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5E11620857
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 07:47:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F05B21775
+	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 07:48:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pya11oqH"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WnPrTZr4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726596AbgDKHqo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Apr 2020 03:46:44 -0400
-Received: from mail-pj1-f73.google.com ([209.85.216.73]:39934 "EHLO
-        mail-pj1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726129AbgDKHqk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 11 Apr 2020 03:46:40 -0400
-Received: by mail-pj1-f73.google.com with SMTP id q19so4021078pjp.4
-        for <bpf@vger.kernel.org>; Sat, 11 Apr 2020 00:46:38 -0700 (PDT)
+        id S1725927AbgDKHsn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Apr 2020 03:48:43 -0400
+Received: from mail-yb1-f195.google.com ([209.85.219.195]:38713 "EHLO
+        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725945AbgDKHsn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 11 Apr 2020 03:48:43 -0400
+Received: by mail-yb1-f195.google.com with SMTP id 204so2371840ybw.5
+        for <bpf@vger.kernel.org>; Sat, 11 Apr 2020 00:48:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=BlvWvGdkN2WeiBN4fqdYccjrgT9VbdrAfRUdSyUXBZE=;
-        b=pya11oqHarWpTYxwODdIqynYlkaLXmV1d2hppdiQFs9jE6GP9TqhqSgm/lEo2W6DHM
-         knMfT1/EgHvAaF1emcvZmVo1YPOqMSDuOV7qy0oT+DN0TcJVCZYBTH1yr0wrCMhsOEWE
-         5ViRQrvG4OCyuFCcjLQVS3pPdIbIutnpF85lGMhdwdf/qPDyZBp770gFEhgDQFQgbj9/
-         p4L9mrt6DkABIuHUKgpbobu+UvR+gi1cQ8Hks6yT6qbu4sSQqWn84+UNHwr5rX1gs82h
-         fg5+rSn5kv2QTvw7F7AbVlAdqHTJKSVwWqX9KO5VpgImc4OOqL8KtHqK2RrVVXl/TAHJ
-         0YWQ==
+        bh=G8GPvFi7lFIoD5ol+jzlnBX/spU1So+9ApIXttQKDmY=;
+        b=WnPrTZr4eRY50oaP6lpML/FERExXMgAy3Rr3VAq8lzECh80UHW0hm46QEPdVUIERiM
+         mL6O5Um4lBhZPmVzMXLq5RVU+FsClIGaytR7gqgTwvpmYHwaHfmD+EfXfRSEMidAbUnK
+         osj4czJURJbxl56nqTqyRevpPNYB2IttS58uL4NQn2QYIZXJ0zO1LoIrjIR1ehJx68Wi
+         2s7sNgHxEXpl+94pAAX0pEHtz3AQw6/4LgMKjjdS4JuE/PY7By6ql+NAzXwqCuBm38oC
+         xDKuZwDued4UivyZnOQLu9naiJtrjQMeYJzJe/JEfMvrQ8evYdRaHgT36galla+2OZ3y
+         7SmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=BlvWvGdkN2WeiBN4fqdYccjrgT9VbdrAfRUdSyUXBZE=;
-        b=hZd3jnuxcRXiEezKk19GI6oQlQGkh6rxJZz0bn87nIOqOiwwVxSV19ZggRtv/tpwkM
-         xazGG71kOq5tBOLvKtp6CGGA+wu4cBQ2y5vYI/L7UhxUE7BotV96+5yBeU2c4bGHlvV+
-         Y2BJgRaP5ejlByAlJd0KeVWvRFUjz2fdBx3v0gx2nfw7fXiDpToi6eLxpyec6jPhB4we
-         C9C0Qb6JUxXy2LYk1Tw3QNX/jdzmGcBXwXlNILFtJCHwxTP003tZi/dQ3aNBRTEEsLlR
-         d8DeRad3CmKbinx0Eufo2ignpCHZHqplky7mW6qWPH09PFq0vkFAmNJZg/4/hBzQn4gS
-         wUVg==
-X-Gm-Message-State: AGi0PuYB/iEvgBmStREHUfoSRrV39V3wl1wlMRYvL7wxQaUZ6faZRTjz
-        ftYKuSwXbAhcdqcIk8ikf8t7XEnGaigi
-X-Google-Smtp-Source: APiQypI2tVneneaPlqGAZNeLD+mCjhAGq9/MeUYtcKI6K3wWh2sJQjynMkhC31Mp5LE7kIZGknMpCbu7ffPK
-X-Received: by 2002:a17:90a:fd90:: with SMTP id cx16mr9878027pjb.41.1586591198310;
- Sat, 11 Apr 2020 00:46:38 -0700 (PDT)
-Date:   Sat, 11 Apr 2020 00:46:28 -0700
-In-Reply-To: <20200411074631.9486-1-irogers@google.com>
-Message-Id: <20200411074631.9486-2-irogers@google.com>
-Mime-Version: 1.0
-References: <20200411074631.9486-1-irogers@google.com>
-X-Mailer: git-send-email 2.26.0.110.g2183baf09c-goog
-Subject: [PATCH v8 1/4] perf doc: allow ASCIIDOC_EXTRA to be an argument
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=G8GPvFi7lFIoD5ol+jzlnBX/spU1So+9ApIXttQKDmY=;
+        b=INLfHGw0V94k37skjGMTmRKkGVNF0REpzf8Lf6NR8Ad7VnZkV0VB7a/zchrRb0EqoE
+         rKgG1Q1jY03R7y/DHNxm90W+kwZHPfsdIJCEvzHmGvhuYgNoRKBKsRJTpd0CDbZGeveB
+         H5SXciBkSqRcXcturP7USwETboS2Tr96drnl+Ky89FDXMUpXDyyTDeY4WqZbVuPMA6dY
+         qZML0mR2Mm11X95jN87w1gkwaEgtfafNewbpjH12A98BnLRHSL9XJgr74U4QOUECC4yj
+         eD3aYqk82bnI+P9QRrUljJEgO2U5uiS/AkfQKbdYrmd+YVq5gnhG7QN7GUcTt9OzIDsj
+         +i5Q==
+X-Gm-Message-State: AGi0Pua2mnT7/ovsGiA7JDr3fSw16JxJQxiQCNzrP+qbflUXyrHo/pMH
+        xwQYj9FU9SsdbQ8flw5lINwJLjpzoSQowJP5uh9CJg==
+X-Google-Smtp-Source: APiQypJoANYPoMMfDUJ1war3eL3RAToX/v/fNHiECFMk7VIOpuyp64iLBN2966YbqWFSCHTu63g+Yr5rlZYeEAIbERY=
+X-Received: by 2002:a05:6902:505:: with SMTP id x5mr13011592ybs.286.1586591321840;
+ Sat, 11 Apr 2020 00:48:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200407064018.158555-1-irogers@google.com> <20200407202508.GA3210726@krava>
+ <CAP-5=fUQBDUKL3AXXzERfFLSRtK=P6waA+bv68Lp526aBLWo4g@mail.gmail.com>
+In-Reply-To: <CAP-5=fUQBDUKL3AXXzERfFLSRtK=P6waA+bv68Lp526aBLWo4g@mail.gmail.com>
 From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
+Date:   Sat, 11 Apr 2020 00:48:30 -0700
+Message-ID: <CAP-5=fUZK1MkKNeJXJY3+ua8U7cfqbMhZtiGB0JyeiNt5=gh2Q@mail.gmail.com>
+Subject: Re: [PATCH v7] perf tools: add support for libpfm4
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -82,45 +82,74 @@ To:     Peter Zijlstra <peterz@infradead.org>,
         Jin Yao <yao.jin@linux.intel.com>,
         Leo Yan <leo.yan@linaro.org>,
         John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This will allow parent makefiles to pass values to asciidoc.
+On Tue, Apr 7, 2020 at 2:07 PM Ian Rogers <irogers@google.com> wrote:
+>
+> On Tue, Apr 7, 2020 at 1:25 PM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > On Mon, Apr 06, 2020 at 11:40:18PM -0700, Ian Rogers wrote:
+> > > From: Stephane Eranian <eranian@google.com>
+> > >
+> > > This patch links perf with the libpfm4 library if it is available and
+> > > NO_LIBPFM4 isn't passed to the build. The libpfm4 library contains hardware
+> > > event tables for all processors supported by perf_events. It is a helper
+> > > library that helps convert from a symbolic event name to the event
+> > > encoding required by the underlying kernel interface. This
+> > > library is open-source and available from: http://perfmon2.sf.net.
+> > >
+> > > With this patch, it is possible to specify full hardware events
+> > > by name. Hardware filters are also supported. Events must be
+> > > specified via the --pfm-events and not -e option. Both options
+> > > are active at the same time and it is possible to mix and match:
+> > >
+> > > $ perf stat --pfm-events inst_retired:any_p:c=1:i -e cycles ....
+> > >
+> > > v7 rebases and adds fallback code for libpfm4 events.
+> > >    The fallback code is to force user only priv level in case the
+> > >    perf_event_open() syscall failed for permissions reason.
+> > >    the fallback forces a user privilege level restriction on the event string,
+> > >    so depending on the syntax either u or :u is needed.
+> > >
+> > >    But libpfm4 can use a : or . as the separator, so simply searching
+> > >    for ':' vs. '/' is not good enough to determine the syntax needed.
+> > >    Therefore, this patch introduces a new evsel boolean field to mark events
+> > >    coming from  libpfm4. The field is then used to adjust the fallback string.
+> >
+> > heya,
+> > I made bunch of comments for v5, not sure you saw them:
+> >   https://lore.kernel.org/lkml/20200323235846.104937-1-irogers@google.com/
+> >
+> > jirka
+>
+> Sorry for missing this, I will work on fixing these and thanks!
+>
+> Ian
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Documentation/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v8 is available now:
+https://lore.kernel.org/lkml/20200411074631.9486-1-irogers@google.com/T/#t
 
-diff --git a/tools/perf/Documentation/Makefile b/tools/perf/Documentation/Makefile
-index 31824d5269cc..6e54979c2124 100644
---- a/tools/perf/Documentation/Makefile
-+++ b/tools/perf/Documentation/Makefile
-@@ -48,7 +48,7 @@ man5dir=$(mandir)/man5
- man7dir=$(mandir)/man7
- 
- ASCIIDOC=asciidoc
--ASCIIDOC_EXTRA = --unsafe -f asciidoc.conf
-+ASCIIDOC_EXTRA += --unsafe -f asciidoc.conf
- ASCIIDOC_HTML = xhtml11
- MANPAGE_XSL = manpage-normal.xsl
- XMLTO_EXTRA =
-@@ -59,7 +59,7 @@ HTML_REF = origin/html
- 
- ifdef USE_ASCIIDOCTOR
- ASCIIDOC = asciidoctor
--ASCIIDOC_EXTRA = -a compat-mode
-+ASCIIDOC_EXTRA += -a compat-mode
- ASCIIDOC_EXTRA += -I. -rasciidoctor-extensions
- ASCIIDOC_EXTRA += -a mansource="perf" -a manmanual="perf Manual"
- ASCIIDOC_HTML = xhtml5
--- 
-2.26.0.110.g2183baf09c-goog
+Thanks,
+Ian
 
+> > > v6 is a rebase.
+> > > v5 is a rebase.
+> > > v4 is a rebase on git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
+> > >    branch perf/core and re-adds the tools/build/feature/test-libpfm4.c
+> > >    missed in v3.
+> > > v3 is against acme/perf/core and removes a diagnostic warning.
+> > > v2 of this patch makes the --pfm-events man page documentation
+> > > conditional on libpfm4 behing configured. It tidies some of the
+> > > documentation and adds the feature test missed in the v1 patch.
+> > >
+> >
+> > SNIP
+> >
