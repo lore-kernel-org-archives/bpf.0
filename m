@@ -2,53 +2,53 @@ Return-Path: <SRS0=7UNm=53=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92BAAC2BA19
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:32:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16AF5C2BA19
+	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:32:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 64431206E9
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:32:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9244206E9
+	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:32:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586647957;
-	bh=V8BCmqsWcg9DM/6hQQ/v3RBg1t9vH6T1JIenRWlxN1c=;
+	s=default; t=1586647962;
+	bh=SgzdHlPA0YNVJ4tnWzeOsi3XQodzjcdy9mwjJz+LEZ0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=J8WD4HJtK06JqIx/tgfX6roYzpIjwWaCCajZQWUw5Rm2Mp2Ds0hw2V2joIWKwboNs
-	 wpULRnEYZUjx8vE1ea8I6SXHvJfCedirRhaYliz25Fym7PS/IaiZJiVTdXQ2V2vtgg
-	 2uAUcOLLOxbPqoy3SLao0iIhOu6lVBlPc3KN2ZZ0=
+	b=zqh2SOEsDL8cngpxQPHNFFxlG/k9BvLv3viAWw3KMNhFGoK49ceV2UFo1MDBQEFRa
+	 ZnlLZQ5hNNRG8K2cSucTMjRjyXBHcAyfOJ4i0Ni1MZkPhMIPT+tvVAD7eSDkSenS5D
+	 Pig+jBrfcwQiC6Zkc0ZD72G5hCBdyUQtUz908mlQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729399AbgDKXKE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727664AbgDKXKE (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sat, 11 Apr 2020 19:10:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48070 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:48110 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727620AbgDKXKC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:10:02 -0400
+        id S1728435AbgDKXKD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:10:03 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 800EA2173E;
-        Sat, 11 Apr 2020 23:10:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D0D05217D8;
+        Sat, 11 Apr 2020 23:10:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646602;
-        bh=V8BCmqsWcg9DM/6hQQ/v3RBg1t9vH6T1JIenRWlxN1c=;
+        s=default; t=1586646603;
+        bh=SgzdHlPA0YNVJ4tnWzeOsi3XQodzjcdy9mwjJz+LEZ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Je/EHCC/ZVgNvTzDPIWhOWyUnvNfjOXCid3VrNESgYXBEVK2lzrNkps8vtnjM12Dj
-         RD7VUHeR7zVOORTpjW1S024LzumFV2zCRYwvLpSQxl+diLBUGhQQWRvmZhJ/C3tfEQ
-         vUmP+vl4NPURUKg/e7z+wfnTtAj1HcsBiGzaZCLI=
+        b=1rXGf1sMGHSo7VVu7rogBCpR3KSMPaeUbCRqFwcYPvWYQRjgvzw7ZqPZd5CwMrORK
+         J26/z6g0s2gV5ezPfVl1FebLh2vEicNor01+l3JBIx9zNgt7cjFV3Zt7MmxBrUIfiR
+         GA9I96Nmq8O5G//iNLtbX0TuZkKY+tt+Zxfo+Z2Y=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrii Nakryiko <andriin@fb.com>,
+        Wenbo Zhang <ethercflow@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 015/108] selftests/bpf: Fix test_progs's parsing of test numbers
-Date:   Sat, 11 Apr 2020 19:08:10 -0400
-Message-Id: <20200411230943.24951-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 016/108] libbpf: Ignore incompatible types with matching name during CO-RE relocation
+Date:   Sat, 11 Apr 2020 19:08:11 -0400
+Message-Id: <20200411230943.24951-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200411230943.24951-1-sashal@kernel.org>
 References: <20200411230943.24951-1-sashal@kernel.org>
@@ -63,60 +63,41 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit fc32490bff855a539d253c8a52c5a1ba51d1325a ]
+[ Upstream commit d121e1d34b72c4975ff0340901d926c0aaf98174 ]
 
-When specifying disjoint set of tests, test_progs doesn't set skipped test's
-array elements to false. This leads to spurious execution of tests that should
-have been skipped. Fix it by explicitly initializing them to false.
+When finding target type candidates, ignore forward declarations, functions,
+and other named types of incompatible kind. Not doing this can cause false
+errors.  See [0] for one such case (due to struct pt_regs forward
+declaration).
 
-Fixes: 3a516a0a3a7b ("selftests/bpf: add sub-tests support for test_progs")
+  [0] https://github.com/iovisor/bcc/pull/2806#issuecomment-598543645
+
+Fixes: ddc7c3042614 ("libbpf: implement BPF CO-RE offset relocation algorithm")
+Reported-by: Wenbo Zhang <ethercflow@gmail.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Acked-by: Martin KaFai Lau <kafai@fb.com>
-Link: https://lore.kernel.org/bpf/20200314013932.4035712-2-andriin@fb.com
+Link: https://lore.kernel.org/bpf/20200313172336.1879637-3-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/test_progs.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ tools/lib/bpf/libbpf.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 3bf18364c67c9..751be17980a91 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -361,7 +361,7 @@ static int libbpf_print_fn(enum libbpf_print_level level,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index b6403712c2f4c..5f3a8b3a54ad7 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -2534,6 +2534,10 @@ static struct ids_vec *bpf_core_find_cands(const struct btf *local_btf,
+ 		if (str_is_empty(targ_name))
+ 			continue;
  
- int parse_num_list(const char *s, struct test_selector *sel)
- {
--	int i, set_len = 0, num, start = 0, end = -1;
-+	int i, set_len = 0, new_len, num, start = 0, end = -1;
- 	bool *set = NULL, *tmp, parsing_end = false;
- 	char *next;
- 
-@@ -396,18 +396,19 @@ int parse_num_list(const char *s, struct test_selector *sel)
- 			return -EINVAL;
- 
- 		if (end + 1 > set_len) {
--			set_len = end + 1;
--			tmp = realloc(set, set_len);
-+			new_len = end + 1;
-+			tmp = realloc(set, new_len);
- 			if (!tmp) {
- 				free(set);
- 				return -ENOMEM;
- 			}
-+			for (i = set_len; i < start; i++)
-+				tmp[i] = false;
- 			set = tmp;
-+			set_len = new_len;
- 		}
--		for (i = start; i <= end; i++) {
-+		for (i = start; i <= end; i++)
- 			set[i] = true;
--		}
--
- 	}
- 
- 	if (!set)
++		t = skip_mods_and_typedefs(targ_btf, i, NULL);
++		if (!btf_is_composite(t) && !btf_is_array(t))
++			continue;
++
+ 		targ_essent_len = bpf_core_essential_name_len(targ_name);
+ 		if (targ_essent_len != local_essent_len)
+ 			continue;
 -- 
 2.20.1
 
