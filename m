@@ -2,125 +2,121 @@ Return-Path: <SRS0=7UNm=53=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FEBDC2BA19
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:28:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92BAAC2BA19
+	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:32:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 00C5B20787
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:28:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gsNGDRum"
+	by mail.kernel.org (Postfix) with ESMTP id 64431206E9
+	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:32:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1586647957;
+	bh=V8BCmqsWcg9DM/6hQQ/v3RBg1t9vH6T1JIenRWlxN1c=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=J8WD4HJtK06JqIx/tgfX6roYzpIjwWaCCajZQWUw5Rm2Mp2Ds0hw2V2joIWKwboNs
+	 wpULRnEYZUjx8vE1ea8I6SXHvJfCedirRhaYliz25Fym7PS/IaiZJiVTdXQ2V2vtgg
+	 2uAUcOLLOxbPqoy3SLao0iIhOu6lVBlPc3KN2ZZ0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730057AbgDKX2D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Apr 2020 19:28:03 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:34511 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729913AbgDKXL3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:11:29 -0400
-Received: by mail-pg1-f193.google.com with SMTP id l19so760846pgk.1;
-        Sat, 11 Apr 2020 16:11:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xJ+7dDZAFaYEm6wjcx+hXMYxHQMLiS9kCbf4M2RfWXA=;
-        b=gsNGDRum/nRnJzPOfEkOGGbfPtBBQa8jla/nY2E2JFPh/C2cNx0epf19r1xuvASvfi
-         CctbqG1IqWUfuiggnBcWm5MC/7WKu8boEo5Ok9gcSeF71n3rC0P9L1Cm3slmP+VL9PzB
-         +ZYAkbQUnQNjwmKNQGGFAvY9X/q5myrFj6Jw0oljj0Ao8CioH9n8kUCYaizkpiGYJQtd
-         Nijokd3UFCP/+vP9x0hbBw1MqUt6XTpdrVcpxuPBWaUBFKNZBp3jcWwaci0x1OxfvEeh
-         5kN1++O+8ACQ8lQXoaLOO29+vQxRrOWwKunaxTWoI9uEBybQcHZt/bVhDDZJmKE3gdZ8
-         Mm7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xJ+7dDZAFaYEm6wjcx+hXMYxHQMLiS9kCbf4M2RfWXA=;
-        b=FFH8S4v2wvRyysutYwJJdZIkIBlXw2T9dz4m8ta3w8Ude6SQ50lZjzCuXNDJJgd/0H
-         hjiTbiqxgWAYKV2lB/Wz/T88TowES27QqWvJJ2CnFNRTe5vT7sXqTUO+UTWW97gnsztr
-         I12rv8N8axjrgh+jm9YZrqCqJNsa0ruHLj/rjphZiQ4sOb4s3MtezQcMqfqNMr6i1KGI
-         k/CYD/yRbQJtmp2uFRLI3ZErEM09HnbL+MEyGKX4e/Svxx3G/Oa2LhSLE1N9j2zk4xJ8
-         Dli1bme/niU4gVO1XXo2phwCndb4VTt2g7VhZahG4GCOLPXnkSyydwcI7c9QwGEHIHR9
-         F8bw==
-X-Gm-Message-State: AGi0PuZNkUFIL++fpJrwuyY26ILgVipgqki13rq+K52BVFTard3R8jYY
-        BZQMl7QQndoO4SE38eKIlQU=
-X-Google-Smtp-Source: APiQypKzH8Yp2XY3FPt3HOBMNzZYoPOZNixJUZNOdWHf2eI8my1iKzbqJcOEiuWUj2jM4oI/kuq1Vg==
-X-Received: by 2002:aa7:9711:: with SMTP id a17mr12219121pfg.143.1586646688670;
-        Sat, 11 Apr 2020 16:11:28 -0700 (PDT)
-Received: from ast-mbp ([2620:10d:c090:400::5:507f])
-        by smtp.gmail.com with ESMTPSA id e10sm4937837pfm.121.2020.04.11.16.11.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Apr 2020 16:11:27 -0700 (PDT)
-Date:   Sat, 11 Apr 2020 16:11:25 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
+        id S1729399AbgDKXKE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Apr 2020 19:10:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48070 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727620AbgDKXKC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:10:02 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 800EA2173E;
+        Sat, 11 Apr 2020 23:10:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586646602;
+        bh=V8BCmqsWcg9DM/6hQQ/v3RBg1t9vH6T1JIenRWlxN1c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Je/EHCC/ZVgNvTzDPIWhOWyUnvNfjOXCid3VrNESgYXBEVK2lzrNkps8vtnjM12Dj
+         RD7VUHeR7zVOORTpjW1S024LzumFV2zCRYwvLpSQxl+diLBUGhQQWRvmZhJ/C3tfEQ
+         vUmP+vl4NPURUKg/e7z+wfnTtAj1HcsBiGzaZCLI=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Andrii Nakryiko <andriin@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: [RFC PATCH bpf-next 05/16] bpf: create file or anonymous dumpers
-Message-ID: <20200411231125.haqk5by4p34wudn7@ast-mbp>
-References: <20200408232520.2675265-1-yhs@fb.com>
- <20200408232526.2675664-1-yhs@fb.com>
- <20200410030017.errh35srmbmd7uk5@ast-mbp.dhcp.thefacebook.com>
- <c34e8f08-c727-1006-e389-633f762106ab@fb.com>
- <CAEf4BzYM3fPUGVmRJOArbxgDg-xMpLxyKPxyiH5RQUbKVMPFvA@mail.gmail.com>
- <2d941e43-72de-b641-22b8-b9ec970ccf52@fb.com>
+        Martin KaFai Lau <kafai@fb.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 015/108] selftests/bpf: Fix test_progs's parsing of test numbers
+Date:   Sat, 11 Apr 2020 19:08:10 -0400
+Message-Id: <20200411230943.24951-15-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200411230943.24951-1-sashal@kernel.org>
+References: <20200411230943.24951-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2d941e43-72de-b641-22b8-b9ec970ccf52@fb.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 10, 2020 at 04:47:36PM -0700, Yonghong Song wrote:
-> > 
-> > Instead of special-casing dumper_name, can we require specifying full
-> > path, and then check whether it is in BPF FS vs BPFDUMP FS? If the
-> > latter, additionally check that it is in the right sub-directory
-> > matching its intended target type.
-> 
-> We could. I just think specifying full path for bpfdump is not necessary
-> since it is a single user mount...
-> 
-> > 
-> > But honestly, just doing everything within BPF FS starts to seem
-> > cleaner at this point...
-> 
-> bpffs is multi mount, which is not a perfect fit for bpfdump,
-> considering mounting inside namespace, etc, all dumpers are gone.
+From: Andrii Nakryiko <andriin@fb.com>
 
-As Yonghong pointed out reusing bpffs for dumpers doesn't look possible
-from implementation perspective.
-Even if it was possible the files in such mix-and-match file system
-would be of different kinds with different semantics. I think that
-will lead to mediocre user experience when file 'foo' is cat-able
-with nice human output, but file 'bar' isn't cat-able at all because
-it's just a pinned map. imo having all dumpers in one fixed location
-in /sys/kernel/bpfdump makes it easy to discover for folks who might
-not even know what bpf is.
-For example when I'm trying to learn some new area of the kernel I might go
-poke around /proc and /sys directory looking for a file name that could be
-interesting to 'cat'. This is how I discovered /sys/kernel/slab/ :)
-I think keeping all dumpers in /sys/kernel/bpfdump/ will make them
-similarly discoverable.
+[ Upstream commit fc32490bff855a539d253c8a52c5a1ba51d1325a ]
 
-re: f_dump flag...
-May be it's a sign that pinning is not the right name for such operation?
-If kernel cannot distinguish pinning dumper prog into bpffs as a vanilla
-pinning operation vs pinning into bpfdumpfs to make it cat-able then something
-isn't right about api. Either it needs to be a new bpf syscall command (like
-install_dumper_in_dumpfs) or reuse pinning command, but make libbpf specify the
-full path. From bpf prog point of view it may still specify only the final
-name, but libbpf can prepend the /sys/kernel/bpfdump/.../. May be there is a
-third option. Extra flag for pinning just doesn't look right. What if we do
-another specialized file system later? It would need yet another flag to pin
-there?
+When specifying disjoint set of tests, test_progs doesn't set skipped test's
+array elements to false. This leads to spurious execution of tests that should
+have been skipped. Fix it by explicitly initializing them to false.
+
+Fixes: 3a516a0a3a7b ("selftests/bpf: add sub-tests support for test_progs")
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Link: https://lore.kernel.org/bpf/20200314013932.4035712-2-andriin@fb.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/bpf/test_progs.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 3bf18364c67c9..751be17980a91 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -361,7 +361,7 @@ static int libbpf_print_fn(enum libbpf_print_level level,
+ 
+ int parse_num_list(const char *s, struct test_selector *sel)
+ {
+-	int i, set_len = 0, num, start = 0, end = -1;
++	int i, set_len = 0, new_len, num, start = 0, end = -1;
+ 	bool *set = NULL, *tmp, parsing_end = false;
+ 	char *next;
+ 
+@@ -396,18 +396,19 @@ int parse_num_list(const char *s, struct test_selector *sel)
+ 			return -EINVAL;
+ 
+ 		if (end + 1 > set_len) {
+-			set_len = end + 1;
+-			tmp = realloc(set, set_len);
++			new_len = end + 1;
++			tmp = realloc(set, new_len);
+ 			if (!tmp) {
+ 				free(set);
+ 				return -ENOMEM;
+ 			}
++			for (i = set_len; i < start; i++)
++				tmp[i] = false;
+ 			set = tmp;
++			set_len = new_len;
+ 		}
+-		for (i = start; i <= end; i++) {
++		for (i = start; i <= end; i++)
+ 			set[i] = true;
+-		}
+-
+ 	}
+ 
+ 	if (!set)
+-- 
+2.20.1
+
