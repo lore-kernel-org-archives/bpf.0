@@ -1,171 +1,262 @@
-Return-Path: <SRS0=7UNm=53=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=sXbr=54=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A254C2BBC7
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:51:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB9CDC2BA19
+	for <bpf@archiver.kernel.org>; Sun, 12 Apr 2020 00:36:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EA43820787
-	for <bpf@archiver.kernel.org>; Sat, 11 Apr 2020 23:51:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586649070;
-	bh=ruELdCIwIsG51HM10SRoF+WDAbU0xuAVNAScsbo5bxc=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=JJj/F+zAni+sWqEbx1XFY1sagSbOw9KZML8StairEWlE3wD8vZk0+WqEoQy6BvDSg
-	 YeusfwM8gxADCB3xirGn13XYdKs9OlOy6TwSheyz+T95W4WGw4Dpot75qOyBiP5Rg2
-	 Ym7iTU3HNv6cWm0SwuaRWoZ64huuTKyF4gxx0X/w=
+	by mail.kernel.org (Postfix) with ESMTP id 7B9AC20CC7
+	for <bpf@archiver.kernel.org>; Sun, 12 Apr 2020 00:36:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="RuNn9IsS";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="WO4L/q68"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726708AbgDKXDu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Apr 2020 19:03:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36674 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726155AbgDKXDt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:03:49 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A97F320787;
-        Sat, 11 Apr 2020 23:03:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646229;
-        bh=ruELdCIwIsG51HM10SRoF+WDAbU0xuAVNAScsbo5bxc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=O0zU2ODGELY6aXDAUBMEERTwwk6D8jRgeswk1h6VqSP6Z2YOSDk8GE/S/1swu05s0
-         XX7XTvpdF9P/3pvX7v8N9k0BjWdhuCZwhAKwG/deZkaKLK6ihaFhlXVWn+IpsdQj86
-         sNBxfgsGqlNAaPx+GKd1x1GpqAPUuzEzlc2WFht4=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yunsheng Lin <linyunsheng@huawei.com>,
-        Huazhong Tan <tanhuazhong@huawei.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 001/149] net: hns3: drop the WQ_MEM_RECLAIM flag when allocating WQ
-Date:   Sat, 11 Apr 2020 19:01:18 -0400
-Message-Id: <20200411230347.22371-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        id S1726794AbgDLAgn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Apr 2020 20:36:43 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:51942 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726708AbgDLAgn (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 11 Apr 2020 20:36:43 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03C0ZXP8003315;
+        Sat, 11 Apr 2020 17:36:28 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=MVBLNR1ddoXo7RNV8M8mG0c0BkDG3UkMNe39ohn0qr4=;
+ b=RuNn9IsSZAxHAe4mhKgwLATGqdgVe/WPutlwc8CDJNNY9OEsQtkFSE9L3QR783RCvJcI
+ FIp3m02+eVAYvjaKwgwx2Y1E9wyuJL8nXm0m9haKFMR1nwRvVOFNqcM5sUyy4kFOZFKR
+ k6d1Y1crTIlnUs1mHZspE4rGCAf1Bv5lwBQ= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 30b9xdjn1v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Sat, 11 Apr 2020 17:36:27 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Sat, 11 Apr 2020 17:36:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oelJAbHtJCAKwkybBjnbfsduA5d0XDJSAf5bfhogHP1k1WVZJqAvUnJJXdjr+IZEaYHaGdr817kknwnDBdmRvDe4UOesaROEpo7BlBKO4hXPIDfF6BHlyN5VAsP0eGxV3OsU48FbVFdW+ohNPEwme+vVd0Z0SNxSQtIXYoYAFH3zGL+uucolo59lkiBSt/bAnC0vaFlrrem9SwQHrroxyVt8mycw85zp8VDQQrrzSyQ1s7/ftxFRYpiaXC5lrpO8T/Qwt0s+X4xPMbIH0f+/QXoVaLRvGJP4aP9wLn+0XMQdtbkxGycVr2aq7qe9Hz7sKaeoNSGc9MFKUJenNzkNCw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MVBLNR1ddoXo7RNV8M8mG0c0BkDG3UkMNe39ohn0qr4=;
+ b=QhIztKuofXh+H+fpTS/HUX+ARCXMNK0lGlBRdLwr6Afih08w48PfufysBcTMAxPU3p16WeLdBdOoy92/1k3Gu/fEVKbjgHt/3osC/i8lbHtwTStbVuxYrmWy+RJZZClQZIWqIDSoc9hZ28BFxi/dsKMXqkiU6UUGE7EYjJvAJrYXE41ixgxJeswxsO66ExNQnm0EHn8otAT6JJLCvVDG7aQEGl97eZzWV6URMxy9pIy0hLa9oTPPuaCOG9lHj8Po3EQQ1mTv5nkDikNl6CNwyUdCnz7pbC4v7mJ+kpi0LoNeOMep+byWKpfgtz3lTsVedoUT7/1/3gDcz0s5eQE45w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MVBLNR1ddoXo7RNV8M8mG0c0BkDG3UkMNe39ohn0qr4=;
+ b=WO4L/q68qXHDHa+Er99yVY3yKqwp/SvGKQlo3fj2C2VE/rCpTaZVW+lr3jAkKlFj8tW4nLTkVnE4GpX0TJ1eqHViuAOA9Wh3CpJo1GEjqzJQ3BaICqDXZh6Kh4UGDgBCKPXoVEBqvkCIFTrmojJqKHiJoZZGFuyMcBanVP1vXX4=
+Received: from BYAPR15MB4119.namprd15.prod.outlook.com (2603:10b6:a02:cd::20)
+ by BYAPR15MB3159.namprd15.prod.outlook.com (2603:10b6:a03:101::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2878.21; Sun, 12 Apr
+ 2020 00:36:14 +0000
+Received: from BYAPR15MB4119.namprd15.prod.outlook.com
+ ([fe80::90d6:ec75:fde:e992]) by BYAPR15MB4119.namprd15.prod.outlook.com
+ ([fe80::90d6:ec75:fde:e992%7]) with mapi id 15.20.2900.026; Sun, 12 Apr 2020
+ 00:36:07 +0000
+Date:   Sat, 11 Apr 2020 17:36:04 -0700
+From:   Andrey Ignatov <rdna@fb.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Subject: Re: [PATCH bpf 1/2] libbpf: Fix loading cgroup_skb/egress with ret
+ in [2, 3]
+Message-ID: <20200412003604.GA15986@rdna-mbp.dhcp.thefacebook.com>
+References: <cover.1586547735.git.rdna@fb.com>
+ <daa546903aa74cf844452b7f80788d67c15b42ea.1586547735.git.rdna@fb.com>
+ <CAEf4BzYvPawqgdP+cU94+US=hKGaD8qCBFtnu_JZae3eJ0+SUw@mail.gmail.com>
+ <20200410225739.GA95636@rdna-mbp.dhcp.thefacebook.com>
+ <20200411224214.32hiebejlsl2rc2k@ast-mbp>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200411224214.32hiebejlsl2rc2k@ast-mbp>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-ClientProxiedBy: MWHPR11CA0004.namprd11.prod.outlook.com
+ (2603:10b6:301:1::14) To BYAPR15MB4119.namprd15.prod.outlook.com
+ (2603:10b6:a02:cd::20)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost (2620:10d:c090:400::5:53d7) by MWHPR11CA0004.namprd11.prod.outlook.com (2603:10b6:301:1::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2900.17 via Frontend Transport; Sun, 12 Apr 2020 00:36:06 +0000
+X-Originating-IP: [2620:10d:c090:400::5:53d7]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ff10660f-1150-4504-de04-08d7de797d56
+X-MS-TrafficTypeDiagnostic: BYAPR15MB3159:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB3159484C18C1647045227C42A8DC0@BYAPR15MB3159.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Forefront-PRVS: 0371762FE7
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4119.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(366004)(396003)(136003)(346002)(376002)(39860400002)(54906003)(5660300002)(16526019)(66476007)(6486002)(186003)(6496006)(66946007)(52116002)(66556008)(9686003)(4326008)(33656002)(6916009)(2906002)(316002)(478600001)(8936002)(8676002)(81156014)(86362001)(1076003);DIR:OUT;SFP:1102;
+Received-SPF: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mDThVmljQa3/ylpW6J337vaPgMUBAJm267nXY84nWPCe96KY5CkW9Yyfv57hsWYA0+eEAtRiitRvvBqEIkhgJArp27e0SwDxb/Su4VbgRKwtE/DXBRNOKn+qt0OtsckS0I9h/yP876j+pPnQY1IuSZzcvfHa62HM3MtsZBY/EvbYd7hIfU9J+JeGxBW+yIRQS3usd8S9z+cdi8LhnA5ZGouvOakN1S3WezPbNcZhZA/dnCrNJRKv81j4KsyfZsb2p0748DoT+f+iTd6p6RJMwF9FHtvi3EtU4QmhlVcocg5kNR0HA0oPywaNu/y2wQ0LUFnktLKSJT1KAcJERqoTIk1PGYlAiVJrdgOeEf3hpV+Y+IXJOAIlTER5iMmLe8gf2GBvtCD8bBpCgr5y66x/3b/9YWrzXxG4U7gaXm7x5Omgg/MEyfxpoV/WnP/E/paQ
+X-MS-Exchange-AntiSpam-MessageData: qnyk0G8Z0nbCpS8+zycnargAqu92kO3xp81v0A+IHySgqc8qjXE13LnBvz0l1V7EIeZox8fghH5BL48n4sw/r5pgY5qk/3o+q0NpRfERff6hdWjzGI3ZcG/CpeTGt2FQmvIJiABwKZtFXHuU02la7tUZo0DU0kXWFqN8okMyK7ZlsLKHBCQ3h9xPi3FBcskw
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff10660f-1150-4504-de04-08d7de797d56
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2020 00:36:07.5246
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HrI9mt4THLZweZXGpxzZ0axy2SRg8QusCIdz/DiURJmarExGcitV5DEKBD30wmfk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3159
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-11_06:2020-04-11,2020-04-11 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ spamscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0 clxscore=1015
+ phishscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=999 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004120004
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Yunsheng Lin <linyunsheng@huawei.com>
+Alexei Starovoitov <alexei.starovoitov@gmail.com> [Sat, 2020-04-11 15:42 -0700]:
+> On Fri, Apr 10, 2020 at 03:57:39PM -0700, Andrey Ignatov wrote:
+> > 
+> > > Seems like kernels accept expected_attach_type
+> > > for a while now, so it might be ok backwards compatibility-wise?
+> > 
+> > Sure, that commit is from 2018, but I guess backward compatibility
+> > should still be maintained in this case? That's a question to
+> > maintainers though. If simply changing BPF_APROG_SEC to BPF_EAPROG_SEC
+> > is an option that works for me.
+> > 
+> > 
+> > > Otherwise, we can teach libbpf to retry program load without expected
+> > > attach type for cgroup_skb/egress?
+> > 
+> > Looks like a lot of work compared to simply adding a new section name
+> > (or changing existing section if backward compatibility is not a concern
+> > here).
+> 
+> I still don't understand that backward compatiblity concern.
+> Fixing libbpf to do BPF_EAPROG_SEC("cgroup_skb/egress"
+> will make egress progs to fail at load time if they use > 1 return value on old
+> kernels
 
-[ Upstream commit 16deaef205b6da832f88a98770c55c8b85aaadfa ]
+No. Changing BPF_APROG_SEC to BPF_EAPROG_SEC will fail loading programs
+on old kernels with any return value, incl. 0 and 1.  That's the point.
 
-The WQ in hns3 driver is allocated with WQ_MEM_RECLAIM flag
-in order to guarantee forward progress, which may cause hns3'
-WQ_MEM_RECLAIM WQ flushing infiniband' !WQ_MEM_RECLAIM WQ
-warning:
+> and fail at load time for > 3 return value on new kernels. Without
+> libbpf fix such progs would rely on old and new kernels internal implementation
+> details. Since on the latest kernel with current libbpf behavior the egress
+> prog will get loaded as ingress type with return value 4 and then gets attached
+> at egress. Argh. One really need to deep dive into kernel sources to figure out
+> what kernel will do with such return value. Such behavior is undefined and broken.
+> Did I misunderstand the whole issue?
 
-[11246.200168] hns3 0000:bd:00.1: Reset done, hclge driver initialization finished.
-[11246.209979] hns3 0000:bd:00.1 eth7: net open
-[11246.227608] ------------[ cut here ]------------
-[11246.237370] workqueue: WQ_MEM_RECLAIM hclge:hclge_service_task [hclge] is flushing !WQ_MEM_RECLAIM infiniband:0x0
-[11246.237391] WARNING: CPU: 50 PID: 2279 at ./kernel/workqueue.c:2605 check_flush_dependency+0xcc/0x140
-[11246.260412] Modules linked in: hclgevf hns_roce_hw_v2 rdma_test(O) hns3 xt_CHECKSUM iptable_mangle xt_conntrack ipt_REJECT nf_reject_ipv4 ebtable_filter ebtables ip6table_filter ip6_tables iptable_filter bpfilter vfio_iommu_type1 vfio_pci vfio_virqfd vfio ib_isert iscsi_target_mod ib_ipoib ib_umad rpcrdma ib_iser libiscsi scsi_transport_iscsi aes_ce_blk crypto_simd cryptd aes_ce_cipher sunrpc nls_iso8859_1 crct10dif_ce ghash_ce sha2_ce sha256_arm64 sha1_ce joydev input_leds hid_generic usbkbd usbmouse sbsa_gwdt usbhid usb_storage hid ses hclge hisi_zip hisi_hpre hisi_sec2 hnae3 hisi_qm ahci hisi_trng_v2 evbug uacce rng_core gpio_dwapb autofs4 hisi_sas_v3_hw megaraid_sas hisi_sas_main libsas scsi_transport_sas [last unloaded: hns_roce_hw_v2]
-[11246.325742] CPU: 50 PID: 2279 Comm: kworker/50:0 Kdump: loaded Tainted: G           O      5.4.0-rc4+ #1
-[11246.335181] Hardware name: Huawei TaiShan 200 (Model 2280)/BC82AMDD, BIOS 2280-V2 CS V3.B140.01 12/18/2019
-[11246.344802] Workqueue: hclge hclge_service_task [hclge]
-[11246.350007] pstate: 60c00009 (nZCv daif +PAN +UAO)
-[11246.354779] pc : check_flush_dependency+0xcc/0x140
-[11246.359549] lr : check_flush_dependency+0xcc/0x140
-[11246.364317] sp : ffff800268a73990
-[11246.367618] x29: ffff800268a73990 x28: 0000000000000001
-[11246.372907] x27: ffffcbe4f5868000 x26: ffffcbe4f5541000
-[11246.378196] x25: 00000000000000b8 x24: ffff002fdd0ff868
-[11246.383483] x23: ffff002fdd0ff800 x22: ffff2027401ba600
-[11246.388770] x21: 0000000000000000 x20: ffff002fdd0ff800
-[11246.394059] x19: ffff202719293b00 x18: ffffcbe4f5541948
-[11246.399347] x17: 000000006f8ad8dd x16: 0000000000000002
-[11246.404634] x15: ffff8002e8a734f7 x14: 6c66207369205d65
-[11246.409922] x13: 676c63685b206b73 x12: 61745f6563697672
-[11246.415208] x11: 65735f65676c6368 x10: 3a65676c6368204d
-[11246.420494] x9 : 49414c4345525f4d x8 : 6e6162696e69666e
-[11246.425782] x7 : 69204d49414c4345 x6 : ffffcbe4f5765145
-[11246.431068] x5 : 0000000000000000 x4 : 0000000000000000
-[11246.436355] x3 : 0000000000000030 x2 : 00000000ffffffff
-[11246.441642] x1 : 3349eb1ac5310100 x0 : 0000000000000000
-[11246.446928] Call trace:
-[11246.449363]  check_flush_dependency+0xcc/0x140
-[11246.453785]  flush_workqueue+0x110/0x410
-[11246.457691]  ib_cache_cleanup_one+0x54/0x468
-[11246.461943]  __ib_unregister_device+0x70/0xa8
-[11246.466279]  ib_unregister_device+0x2c/0x40
-[11246.470455]  hns_roce_exit+0x34/0x198 [hns_roce_hw_v2]
-[11246.475571]  __hns_roce_hw_v2_uninit_instance.isra.56+0x3c/0x58 [hns_roce_hw_v2]
-[11246.482934]  hns_roce_hw_v2_reset_notify+0xd8/0x210 [hns_roce_hw_v2]
-[11246.489261]  hclge_notify_roce_client+0x84/0xe0 [hclge]
-[11246.494464]  hclge_reset_rebuild+0x60/0x730 [hclge]
-[11246.499320]  hclge_reset_service_task+0x400/0x5a0 [hclge]
-[11246.504695]  hclge_service_task+0x54/0x698 [hclge]
-[11246.509464]  process_one_work+0x15c/0x458
-[11246.513454]  worker_thread+0x144/0x520
-[11246.517186]  kthread+0xfc/0x128
-[11246.520314]  ret_from_fork+0x10/0x18
-[11246.523873] ---[ end trace eb980723699c2585 ]---
-[11246.528710] hns3 0000:bd:00.2: Func clear success after reset.
-[11246.528747] hns3 0000:bd:00.0: Func clear success after reset.
-[11246.907710] hns3 0000:bd:00.1 eth7: link up
+Let me try to explain with an example.
 
-According to [1] and [2]:
+I patched libbpf and built bpftool with this patch:
 
-There seems to be no specific guidance about how to handling the
-forward progress guarantee of network device's WQ yet, and other
-network device's WQ seem to be marked with WQ_MEM_RECLAIM without
-a clear reason.
+  17:00:43 0 rdna@dev082.prn2:~/bpf-next$>git di tools/lib/bpf/
+  diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+  index ff9174282a8c..cc4d5b74e64a 100644
+  --- a/tools/lib/bpf/libbpf.c
+  +++ b/tools/lib/bpf/libbpf.c
+  @@ -6330,7 +6330,7 @@ static const struct bpf_sec_def section_defs[] = {
+          BPF_PROG_SEC("lwt_seg6local",           BPF_PROG_TYPE_LWT_SEG6LOCAL),
+          BPF_APROG_SEC("cgroup_skb/ingress",     BPF_PROG_TYPE_CGROUP_SKB,
+                                                  BPF_CGROUP_INET_INGRESS),
+  -       BPF_APROG_SEC("cgroup_skb/egress",      BPF_PROG_TYPE_CGROUP_SKB,
+  +       BPF_EAPROG_SEC("cgroup_skb/egress",     BPF_PROG_TYPE_CGROUP_SKB,
+                                                  BPF_CGROUP_INET_EGRESS),
+          BPF_APROG_COMPAT("cgroup/skb",          BPF_PROG_TYPE_CGROUP_SKB),
+          BPF_APROG_SEC("cgroup/sock",            BPF_PROG_TYPE_CGROUP_SOCK,
 
-So this patch removes the WQ_MEM_RECLAIM flag when allocating WQ
-to aviod the above warning.
+Wrote a simple cgroup_skb/egress program that returns 1 and built it:
 
-1. https://www.spinics.net/lists/netdev/msg631646.html
-2. https://www.spinics.net/lists/netdev/msg632097.html
+  17:00:59 0 rdna@dev082.prn2:~/bpf-next$>cat tools/testing/selftests/bpf/progs/skb_ret1.c
+  #include <linux/bpf.h>
+  #include <bpf/bpf_helpers.h>
+  
+  int _version SEC("version") = 1;
+  char _license[] SEC("license") = "GPL";
+  
+  SEC("cgroup_skb/egress")
+  int skb_ret1(struct __sk_buff *skb)
+  {
+          return 1;
+  }
 
-Fixes: 0ea68902256e ("net: hns3: allocate WQ with WQ_MEM_RECLAIM flag")
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-Signed-off-by: Huazhong Tan <tanhuazhong@huawei.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c   | 2 +-
- drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Made sure that it can be loaded on new kernel:
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-index d3b0cd74ecd23..b3518070306b1 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -10666,7 +10666,7 @@ static int hclge_init(void)
- {
- 	pr_info("%s is initializing\n", HCLGE_NAME);
- 
--	hclge_wq = alloc_workqueue("%s", WQ_MEM_RECLAIM, 0, HCLGE_NAME);
-+	hclge_wq = alloc_workqueue("%s", 0, 0, HCLGE_NAME);
- 	if (!hclge_wq) {
- 		pr_err("%s: failed to create workqueue\n", HCLGE_NAME);
- 		return -ENOMEM;
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
-index 0510d85a7f6ae..3c58f0bbaebff 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
-@@ -3188,7 +3188,7 @@ static int hclgevf_init(void)
- {
- 	pr_info("%s is initializing\n", HCLGEVF_NAME);
- 
--	hclgevf_wq = alloc_workqueue("%s", WQ_MEM_RECLAIM, 0, HCLGEVF_NAME);
-+	hclgevf_wq = alloc_workqueue("%s", 0, 0, HCLGEVF_NAME);
- 	if (!hclgevf_wq) {
- 		pr_err("%s: failed to create workqueue\n", HCLGEVF_NAME);
- 		return -ENOMEM;
+  17:00:39 0 rdna@dev082.prn2:~/bpf-next$>uname -srm
+  Linux 5.2.9-93_fbk11_rc1_3610_g6a108f4f4a2b x86_64
+  17:01:10 0 rdna@dev082.prn2:~/bpf-next$>sudo ./tools/bpf/bpftool/bpftool p load tools/testing/selftests/bpf/skb_ret1.o /sys/fs/bpf/skb_ret1
+  17:01:25 0 rdna@dev082.prn2:~/bpf-next$>sudo ./tools/bpf/bpftool/bpftool p l pinned /sys/fs/bpf/skb_ret1
+  87347: cgroup_skb  name skb_ret1  tag 9bf8e2a8bee581f5  gpl
+          loaded_at 2020-04-11T17:01:25-0700  uid 0
+          xlated 16B  jited 40B  memlock 4096B
+          btf_id 4952
+
+Then copied both bpftool and the program to a server with old kernel
+(that doesn't have 5e43f899b03a ("bpf: Check attach type at prog load
+time")) and tried same thing (note "./bpftool"):
+
+  [root@<some_host> ~]# uname -srm
+  Linux 4.11.3-45_fbk11_3602_gd67c71c x86_64
+  [root@<some_host> ~]# ./bpftool p load ./skb_ret1.o /sys/fs/bpf/skb_ret1
+  libbpf: Error loading BTF: Invalid argument(22)
+  libbpf: Error loading .BTF into kernel: -22.
+  libbpf: load bpf program failed: Invalid argument
+  libbpf: failed to load program 'cgroup_skb/egress'
+  libbpf: failed to load object './skb_ret1.o'
+  Error: failed to load object file
+  [root@<some_host> ~]# echo $?
+  255
+  [root@<some_host> ~]# ./bpftool p l pinned /sys/fs/bpf/skb_ret1
+  Error: bpf obj get (/sys/fs/bpf/skb_ret1): No such file or directory
+
+As you can see it fails to load (BTF errors are not relevant).
+
+Then I tried to load same program on same old kernel but with prod
+bpftool (w/o my patch) just to make sure BTF is not a problem and it
+loads fine:
+
+  [root@<some_host> ~]# bpftool p load ./skb_ret1.o /sys/fs/bpf/skb_ret1
+  libbpf: Error loading BTF: Invalid argument(22)
+  libbpf: Error loading .BTF into kernel: -22.
+  [root@<some_host> ~]# echo $?
+  0
+  [root@<some_host> ~]# bpftool p l pinned /sys/fs/bpf/skb_ret1
+  23944: cgroup_skb  name skb_ret1  tag 9bf8e2a8bee581f5
+          loaded_at 2020-04-11T17:12:07-0700  uid 0
+          xlated 16B  jited 64B  memlock 4096B
+  [root@<some_host> ~]#
+
+That's expected becase the error at loading time happens long before
+running verifier and doesn't have anything to do with what program
+returns. It fails on `if (CHECK_ATTR(BPF_PROG_LOAD))` in kernel's
+bpf_prog_load() -- the very first check that happens in that function.
+
+Old kernel checks that passed by user-space bpf_attr has all bytes after
+bpf_attr.prog_ifindex (the BPF_PROG_LOAD_LAST_FIELD known to that
+kernel) zero, but finds that there is non-zero unknown field, that is
+expected_attach_type, and fails.
+
+So changing BPF_APROG_SEC to BPF_EAPROG_SEC will break loading cgroup
+skb egress progs on any kernel before 5e43f899b03a ("bpf: Check attach
+type at prog load time"), no matter what those programs do. That's why I
+think it's not a good idea.
+
+Does it clarify?
+
 -- 
-2.20.1
-
+Andrey Ignatov
