@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31FA4C3815B
-	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 13:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB487C2BA19
+	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 13:38:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0EC682063A
-	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 13:37:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9766A20768
+	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 13:38:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="My66LnNv"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cj4V6cQ2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502797AbgDNNPZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Apr 2020 09:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55032 "EHLO
+        id S2502786AbgDNNPW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Apr 2020 09:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729812AbgDNNPY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Apr 2020 09:15:24 -0400
+        with ESMTP id S2502772AbgDNNPM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Apr 2020 09:15:12 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2CBC061A0F;
-        Tue, 14 Apr 2020 06:15:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD3BC061A0C;
+        Tue, 14 Apr 2020 06:15:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=Kl69HLWQOnE04wC+uxhqbtds0xCIlpZipVtGnO7U4c0=; b=My66LnNvAAIlKiTBNDHFh9YpkC
-        z7lHK2mjnFfvdbpsnhzIplc0igKBHlccUmet+rWTnvHlHq/9jq22ujoAVkc1POdRaH8nAnI1fIf2D
-        iJyGHO+afJtdahjeo02n82UU9FZkVAIG06owOap0CGyAZyLRsI+ffP4OAob2AaVSIv5f9QETNgA+d
-        K0e+2WRQCZGCLar8kb3mgM70BVYScJ+P3YRBXFWyAGGZLEAGHUId6KaJ/FK2SkT4C1OKWx6UN6vlF
-        DZCyomhhIG5he2qHvfEI4S6kujIjTND1odx3bgNjkRIvmtofxAGY9CpJyFJJavsvWxyvTPznzFkjI
-        PnarSU2w==;
+        bh=CeYU93x0GwCbUcwjI6UQfFwVa4odbv8WB2/4pp3kRF0=; b=cj4V6cQ2cn2B0bGNO34laPyhk/
+        bB+SrXbEz+WXB80WlM6J2fACfVK3M+jr5QtITfBcoFCSkHpFHsCzxPEBkb8ksDgNQ6Um8xq1YCwnS
+        1qX83Z5/ehIa01qGbTrB0PIdNLz1tss+IeQXGCjZCmSBLbHRLetDRdmMuW72yW8u1n4gm7NMdL21S
+        OZ7HsHpMerg4Csd7I42InoO6EujWldOtJlMCrS9Do6GLcYI/9IIrsHHODJvV3D3L4YPFozmwipScO
+        s8oRm3l6sTGOZ5xwYAka9z+xmUGj1bJq67YGLv+vIv1YOJYdkkaYQikmuDnEzoQeneQzmH2NQI/7m
+        SmLcsqnQ==;
 Received: from [2001:4bb8:180:384b:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jOLOy-0007Ax-40; Tue, 14 Apr 2020 13:14:56 +0000
+        id 1jOLOs-000753-7t; Tue, 14 Apr 2020 13:14:50 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         "K. Y. Srinivasan" <kys@microsoft.com>,
@@ -59,9 +59,9 @@ Cc:     Robin Murphy <robin.murphy@arm.com>,
         iommu@lists.linux-foundation.org,
         linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 19/29] mm: enforce that vmap can't map pages executable
-Date:   Tue, 14 Apr 2020 15:13:38 +0200
-Message-Id: <20200414131348.444715-20-hch@lst.de>
+Subject: [PATCH 17/29] mm: remove unmap_vmap_area
+Date:   Tue, 14 Apr 2020 15:13:36 +0200
+Message-Id: <20200414131348.444715-18-hch@lst.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200414131348.444715-1-hch@lst.de>
 References: <20200414131348.444715-1-hch@lst.de>
@@ -73,80 +73,42 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To help enforcing the W^X protection don't allow remapping existing
-pages as executable.
-
-x86 bits from Peter Zijlstra <peterz@infradead.org>,
-arm64 bits from Mark Rutland <mark.rutland@arm.com>.
+This function just has a single caller, open code it there.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/arm64/include/asm/pgtable.h     | 3 +++
- arch/x86/include/asm/pgtable_types.h | 6 ++++++
- include/asm-generic/pgtable.h        | 4 ++++
- mm/vmalloc.c                         | 2 +-
- 4 files changed, 14 insertions(+), 1 deletion(-)
+ mm/vmalloc.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 538c85e62f86..47095216d6a8 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -407,6 +407,9 @@ static inline pmd_t pmd_mkdevmap(pmd_t pmd)
- #define __pgprot_modify(prot,mask,bits) \
- 	__pgprot((pgprot_val(prot) & ~(mask)) | (bits))
- 
-+#define pgprot_nx(prot) \
-+	__pgprot_modify(prot, 0, PTE_PXN)
-+
- /*
-  * Mark the prot value as uncacheable and unbufferable.
-  */
-diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-index 947867f112ea..2e7c442cc618 100644
---- a/arch/x86/include/asm/pgtable_types.h
-+++ b/arch/x86/include/asm/pgtable_types.h
-@@ -282,6 +282,12 @@ typedef struct pgprot { pgprotval_t pgprot; } pgprot_t;
- 
- typedef struct { pgdval_t pgd; } pgd_t;
- 
-+static inline pgprot_t pgprot_nx(pgprot_t prot)
-+{
-+	return __pgprot(pgprot_val(prot) | _PAGE_NX);
-+}
-+#define pgprot_nx pgprot_nx
-+
- #ifdef CONFIG_X86_PAE
- 
- /*
-diff --git a/include/asm-generic/pgtable.h b/include/asm-generic/pgtable.h
-index 329b8c8ca703..8c5f9c29698b 100644
---- a/include/asm-generic/pgtable.h
-+++ b/include/asm-generic/pgtable.h
-@@ -491,6 +491,10 @@ static inline int arch_unmap_one(struct mm_struct *mm,
- #define flush_tlb_fix_spurious_fault(vma, address) flush_tlb_page(vma, address)
- #endif
- 
-+#ifndef pgprot_nx
-+#define pgprot_nx(prot)	(prot)
-+#endif
-+
- #ifndef pgprot_noncached
- #define pgprot_noncached(prot)	(prot)
- #endif
 diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 7356b3f07bd8..334c75251ddb 100644
+index b0c7cdc8701a..258220b203f1 100644
 --- a/mm/vmalloc.c
 +++ b/mm/vmalloc.c
-@@ -2390,7 +2390,7 @@ void *vmap(struct page **pages, unsigned int count,
- 	if (!area)
- 		return NULL;
+@@ -1247,14 +1247,6 @@ int unregister_vmap_purge_notifier(struct notifier_block *nb)
+ }
+ EXPORT_SYMBOL_GPL(unregister_vmap_purge_notifier);
  
--	if (map_kernel_range((unsigned long)area->addr, size, prot,
-+	if (map_kernel_range((unsigned long)area->addr, size, pgprot_nx(prot),
- 			pages) < 0) {
- 		vunmap(area->addr);
- 		return NULL;
+-/*
+- * Clear the pagetable entries of a given vmap_area
+- */
+-static void unmap_vmap_area(struct vmap_area *va)
+-{
+-	unmap_kernel_range_noflush(va->va_start, va->va_end - va->va_start);
+-}
+-
+ /*
+  * lazy_max_pages is the maximum amount of virtual address space we gather up
+  * before attempting to purge with a TLB flush.
+@@ -1416,7 +1408,7 @@ static void free_vmap_area_noflush(struct vmap_area *va)
+ static void free_unmap_vmap_area(struct vmap_area *va)
+ {
+ 	flush_cache_vunmap(va->va_start, va->va_end);
+-	unmap_vmap_area(va);
++	unmap_kernel_range_noflush(va->va_start, va->va_end - va->va_start);
+ 	if (debug_pagealloc_enabled_static())
+ 		flush_tlb_kernel_range(va->va_start, va->va_end);
+ 
 -- 
 2.25.1
 
