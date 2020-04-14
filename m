@@ -2,202 +2,140 @@ Return-Path: <SRS0=O1Al=56=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8889CC2BB1D
-	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 20:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59384C2BB1D
+	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 22:06:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B3852074D
-	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 20:24:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E7222076A
+	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 22:06:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mo8XlNjb"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Buj43EDE";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="S4Rj+ZY5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633078AbgDNUYr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Apr 2020 16:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2633074AbgDNUYp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 14 Apr 2020 16:24:45 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A62C061A0E
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2020 12:46:32 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id j4so14659852qkc.11
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2020 12:46:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CgGq5FiEKZmQAaQgAQGhZKkpfBAzulsYGoB6mb/dhBA=;
-        b=mo8XlNjbEx5FVSkOI9c/RwKo5QCgb2N77IM2hLMbg5Ca9uau0R56rG89qlMM3+GD1r
-         tkD/xw5I8h1fsi6jyNgwxXYJscu9Zj/ZLJBgQgfIK8Of3tt384wKCYe58D1CpcG6ZvO3
-         Dlv1q/gC/5zt320a/4Q5OMRuUBtrrJafXGJYrV7tIT64iGBxEPBZ0Pk1mtDHsJ4j2kEs
-         N6KyuJgMqMFHpxCs4ZiEbjvd/z37q+Uu58cTF86aZOkbmqdgiETf4U9+XXik2jXAmXz1
-         z/uPT1OnYHtM3VcvsERmKRuzeHOZMvSlfzzPt2S+liNBrGy5jxTnS3rhE+/NPhxY9zoy
-         sEQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CgGq5FiEKZmQAaQgAQGhZKkpfBAzulsYGoB6mb/dhBA=;
-        b=TwHwCn/QMUao7yzEeqWGuQeDuzrxi18iBP35KLTdtK/KwgjeM15cozuF1clCZ1/u0P
-         MeCNlz5NraFlvYNsxwLVtSSGJziqvSE7dfeYBxQxC6Q0ud7oWXzKkmt7gRgcXFMmz28E
-         eo5aoBnGNd3N5B5JXbprjKw7f2VIsHpN/sldDrjn6c4wDwcbjSyfWhd9kFXrjDSz5eun
-         Hw2/xMCDby0Tlsn0jqV5hEvho+TN7BQRJ6KUKnxKm3tw6T2g9f9Nt0vGzsnkHoHMohlb
-         KxOMyUp9kD4FSoF6bicV+x/h+TX5+Ihyx3gkvPmdO5RmXTJICdNwh/XprcjrSWB2cYSv
-         vm1w==
-X-Gm-Message-State: AGi0PuZd8siOdJGpx7/q7WERSUgGd9DUvrD7j5P/b+YVf74pZSS69Z0g
-        phLQsC7Z7GdQXPQ1FpmaIalREuLzCyLnXt11fdw=
-X-Google-Smtp-Source: APiQypJvOajLjGB8zaQ5mBNRActEXeTOeRb7Mks8o79bulsFZt710GnNHRn2xiVAlEXt93y/VzchF351j0EsiYjthVE=
-X-Received: by 2002:a05:620a:88e:: with SMTP id b14mr24111039qka.449.1586893591584;
- Tue, 14 Apr 2020 12:46:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAG48ez2R5nZA91j7cf2Z5o3dOEz0QNZK7cxecjmw0B-ZQ7AjmA@mail.gmail.com>
- <CAEf4Bzb2zcfJt6ujAN8zY_=x7-dFO92mPzkbCE+UMHVDGL7J+Q@mail.gmail.com>
- <CAG48ez20KjiYjcYzWnnVCyNTMjNFf+YgnwbbF9BUovZxDzsuEw@mail.gmail.com>
- <CAEf4BzbEcbgAmXSzKx70rEhzmWcZ_8ECuX98_wsfvRkprKQgbQ@mail.gmail.com> <CAG48ez15gsNtjiwFtLR_eBGAZnfXAt4O+ykuaopVf+jW5KTeRQ@mail.gmail.com>
-In-Reply-To: <CAG48ez15gsNtjiwFtLR_eBGAZnfXAt4O+ykuaopVf+jW5KTeRQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 14 Apr 2020 12:46:20 -0700
-Message-ID: <CAEf4Bzak3FnhD3kUZ4Dn9ZRz=yWSfZ+nkYa1Gz1WeZO7PC7Wkw@mail.gmail.com>
-Subject: Re: BPF map freezing is unreliable; can we instead just inline constants?
-To:     Jann Horn <jannh@google.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        id S1730941AbgDNWGW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Apr 2020 18:06:22 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:64474 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729934AbgDNWGT (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 14 Apr 2020 18:06:19 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03ELslYS020084;
+        Tue, 14 Apr 2020 15:05:15 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=V4R40Mll6F/xkP093C622+wH/QC3+c3rpIumWhtrvSE=;
+ b=Buj43EDE6OBJtN6W279FPtjG2+JQfeIJEUw+GrB/eoeQnCLPtwSQWOrkkbxZlWQ6TH5s
+ Jc7LaqBW2cJBe//a5mqpefBVkX08BkPYxnczzZJR5n55VwrjdFAlG53B6wYz1LdJywzq
+ AlgIWdW7AEdzyC8TdK9hFHyjVVGaFMGkgts= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 30dn7q86bu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 14 Apr 2020 15:05:15 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Tue, 14 Apr 2020 15:05:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jkqd5nbYqmGDH1kHQprLzlEjKF5CFe46lgfM5g3p+rb7HA2ZJhDvz72ZCXCxyHHLy3o4dEcpSdhBKFKueeh+BzHr4ULoZikW3wUhITP7p5N1iDv3n0oURSVFo9Brj8Yg5Q3jhrDMQd+0jy6JFqM4cjFFrEsAA9f1+c747boRyOnnTIUyI6nH5BjGYmXnhdYgYvQUOEkEccBzm5HBAfchvJWLk2+SAYjILUQKGaOSOVbYOWZxmSCzrCyzv1Bq0yZ9CYo9qU0XDHf98QwyXY4DDejsfTkhOx/7T/nkuRSF1tncqi5ihjDRIoT5yLUfa9YwLVTJi1gQOSXPSVgPlMmsLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V4R40Mll6F/xkP093C622+wH/QC3+c3rpIumWhtrvSE=;
+ b=AnQTlr2p3AS5F3F8pP+c0WmuaVqb/gBJPIA2OpA+KMRkTFtfA3IMaT4WPPziZcZZwy5eL7G4jD4aUzI8ILFbl8+uZehilIVkjKt41Ylvatm8FO0ESR85X8PlrAhHjgyyOezo8aJkU/vu8s2qwhFkYgnwUo7DYmtnXasaTQW/xDw0AHpzrH+H4WR5uXlac15hakb5hBfYeO8Da+Z+SG69/Lz6ZBSxPEs5mw+SlD8flj4rmnKt5vQxKTgpJcT0oOQuwMFeD1xu39i4QGzcPKGfwljg6WZMcGKrlBDo7+LTGJqe8Jcz+KPwdC3hW5I8DIjWb/qi31H8Dtzb3rbxVfkIbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V4R40Mll6F/xkP093C622+wH/QC3+c3rpIumWhtrvSE=;
+ b=S4Rj+ZY5gdst/QQoPuRNnoW6SO53Txqd7NKm5aKGwfEnKPZCj+3ltvWM33q9uMmx8E4vYJ8XSFOJXyeUhdzqX+GIhYuVWUi/c+f+xAq7c0pooCJ11j0mSbO99spCe6mcLIxziLs2H5BKQQ1NPQgmrqunskH4NIHONB+KsX+kunQ=
+Received: from BYAPR15MB2999.namprd15.prod.outlook.com (2603:10b6:a03:fa::12)
+ by BYAPR15MB2455.namprd15.prod.outlook.com (2603:10b6:a02:90::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2900.26; Tue, 14 Apr
+ 2020 22:05:12 +0000
+Received: from BYAPR15MB2999.namprd15.prod.outlook.com
+ ([fe80::bdf1:da56:867d:f8a2]) by BYAPR15MB2999.namprd15.prod.outlook.com
+ ([fe80::bdf1:da56:867d:f8a2%7]) with mapi id 15.20.2900.028; Tue, 14 Apr 2020
+ 22:05:12 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Mao Wenan <maowenan@huawei.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Matthew Garrett <mjg59@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Martin Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@chromium.org" <kpsingh@chromium.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
+Subject: Re: [PATCH -next] bpf: remove set but not used variable 'dst_known'
+Thread-Topic: [PATCH -next] bpf: remove set but not used variable 'dst_known'
+Thread-Index: AQHWEYedD4qyQaRcJ0KQTxqzapbMNqh5LnoA
+Date:   Tue, 14 Apr 2020 22:05:12 +0000
+Message-ID: <C75FACD4-8549-4AD1-BDE6-1F5B47095E4C@fb.com>
+References: <20200413113703.194287-1-maowenan@huawei.com>
+In-Reply-To: <20200413113703.194287-1-maowenan@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3608.60.0.2.5)
+x-originating-ip: [2620:10d:c090:400::5:ba33]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 03948f60-e2b6-4b6f-2202-08d7e0bfe7bd
+x-ms-traffictypediagnostic: BYAPR15MB2455:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR15MB24559EDD5BEE2CB2781EE7A4B3DA0@BYAPR15MB2455.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-oob-tlc-oobclassifiers: OLM:117;
+x-forefront-prvs: 0373D94D15
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB2999.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(376002)(346002)(366004)(136003)(396003)(39860400002)(86362001)(2906002)(66476007)(66556008)(64756008)(66446008)(478600001)(316002)(71200400001)(36756003)(4744005)(76116006)(5660300002)(8676002)(8936002)(6512007)(66946007)(186003)(6486002)(6506007)(53546011)(81156014)(2616005)(4326008)(33656002)(6916009)(91956017)(54906003);DIR:OUT;SFP:1102;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YGz+7FhgwD3SpCOFWrhOaroUMM3mgzqpBCzgPw2ygMNMspQtkC0Eba0src+0zCCTLKuuxRFkd9A/olhB6UBkZFLgS9YUdEeoRQ1aYVBOWoVO4jJkVNF5FiI1GihNeA1nC66rAYazEOaKIbwru0Tjfb+79POvVufCApdsQhWgmuv/t8NlipmTiX8qiWiKK31Ka9jItB466lRnrqednPwePzTAOomznuUnDQWGHfrbONtx7xJOwMqQfFNtnNvjOO57sbdSge/sj49QB/5/3t9Wb0aeatpX1bwXoOj/i9kiv+Udh/hiVlBD4WfjLHmRhPGA3jfP1qYIhRn03vZIwyFDiatQwXHAlB/Zx89Z61AlTydZGumpcW4bcnBGRssJrsvwVm0Rw8Gj6em4LMafltY3KLszRqE+8HwDCd40Ss1hlpnF4bJiHxbpHUARxN+k4JjR
+x-ms-exchange-antispam-messagedata: tE/zIW2qgYAKL880XiVWvLNfkQ7CV/0PEhVCCtZnmMpavM01bXqBGuvh1yKaNw0TfHaxeRylfTs3GI87o+Z+iVrJz4FUq1JShxLTQvJLUVfH5txyeEvfFrmsRmICG1XyGv7gfmtN4PnmbhpL27xHfnN2m++hpagRDbp41PQQq0q0hIdPHWhPg1q8JSxc0wWc
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C499F44E3CC90F48BEA227A1FA9B2CF7@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03948f60-e2b6-4b6f-2202-08d7e0bfe7bd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2020 22:05:12.5702
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yMb3J5CrKs38Y9NKbGsc5uNaqDd1J8xU/YoFJc2b+9R1tGagAbLM2FlWo3VpcrqfWr9ChSK9RXzKNJ8gellTfg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2455
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-14_11:2020-04-14,2020-04-14 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ priorityscore=1501 spamscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1011 adultscore=0 malwarescore=0 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004140156
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 9:07 AM Jann Horn <jannh@google.com> wrote:
->
-> On Fri, Apr 10, 2020 at 10:48 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> > On Fri, Apr 10, 2020 at 1:47 AM Jann Horn <jannh@google.com> wrote:
-> > > On Fri, Apr 10, 2020 at 1:33 AM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > > On Wed, Apr 8, 2020 at 12:42 PM Jann Horn <jannh@google.com> wrote:
-> > > > >
-> > > > > Hi!
-> > > > >
-> > > > > I saw that BPF allows root to create frozen maps, for which the
-> > > > > verifier then assumes that they contain constant values. However, map
-> > > > > freezing is pretty wobbly:
-> > > > >
-> > > > > 1. The syscalls for updating maps from userspace don't seem to lock
-> > > > > the map at all.
-> > > >
-> > > > True, there is a tiny race between freezing and map updates, but I
-> > > > don't think it's possible to solve it without taking locks all around
-> > > > the place in map update operations.
-> > >
-> > > Yeah. So I think BPF should do exactly that. Or change the userspace
-> > > API so that userspace has to say at map creation time "I'll freeze
-> > > this map later", and then you only have to do the locking if that flag
-> > > is set.
-> >
-> > I'd love to be able to create frozen maps from the get go (and specify
-> > initial values for the map), but freezing is done the way it's done
-> > already, unfortunately :(
-> > Regarding locking, maps could be updated from BPF program side as
-> > well. I'd be curious to hear what others think about this issue.
->
-> Map freezing only has an effect on the verifier if the map was created
-> with BPF_F_RDONLY_PROG, which prevents the BPF program from updating
-> the map, right?
-
-Yes, good point.
-
->
-> > > > > 3. It is assumed that a memory mapping can't be used to write to a
-> > > > > page anymore after the mapping has been removed; but actually,
-> > > > > userspace can grab references to pages in a VMA and use those
-> > > > > references to write to the VMA's pages after the VMA has already been
-> > > > > closed. (crasher attached as bpf-constant-data-uffd.c, compile with
-> > > > > "gcc -pthread ...")
-> > > >
-> > > > Please help me understand how that works (assuming we drop
-> > > > VM_MAYWRITE, of course). You mmap() as R/W, then munmap(), then
-> > > > freeze(). After munmap() refcount of writable pages should drop to
-> > > > zero. And mmap'ed address should be invalid and unmapped. I'm missing
-> > > > how after munmap() parallel thread still can write to that memory
-> > > > page?
-> > >
-> > > The mmap()/munmap() syscalls place references to the pages the kernel
-> > > is using in the page tables of the process. Some other syscalls (such
-> > > as process_vm_writev()) can read these page table entries, take their
-> > > own references on those backing pages, and then continue to access
-> > > those pages even after they've been removed from the task's page
-> > > tables by munmap(). This works as long as the page table entries don't
-> > > have magic marker bits on them that prohibit this, which you get if
-> > > you use something like remap_pfn_range() in a loop instead of
-> > > remap_vmalloc_range() - but the memory mappings created by that
-> > > syscall are weird, and e.g. some syscalls like read() and write()
-> > > might sometimes fail if the buffer argument points into such a memory
-> > > region.
-> >
-> > So mmap() subsystem won't event know about those extra references and
-> > thus we can't really account that in our code, right? That's sad, but
-> > hopefully those APIs are root-only?
->
-> Nope, those APIs are reachable by normal users. These extra references
-> are counted on the page refcount - since they have to be tracked
-> somehow - but as far as I know, that refcount can also be elevated
-> spuriously, so triggering hard errors based on it is probably not a
-> good idea.
->
-
-Just trying to educate myself and you seem to know a lot about this.
-If we think about regular file memory-mapping with mmap(). According
-to this, it seems like it would be possible to mmap() file as writable
-first, do some changes and then munmap. At this point some application
-would assume that file can't be modified anymore and can be treated as
-read-only, yet, it's possible that some other process/thread can just
-go and still modify file contents. Do I understand correctly?
-
->
-> > > > > Is there a reason why the verifier doesn't replace loads from frozen
-> > > > > maps with the values stored in those maps? That seems like it would be
-> > > > > not only easier to secure, but additionally more performant.
-> > > >
-> > > > Verifier doesn't always know exact offset at which program is going to
-> > > > read read-only map contents. So something like this works:
-> > > >
-> > > > const volatile long arr[256];
-> > > >
-> > > > int x = rand() % 256;
-> > > > int y = arr[x];
-> > > >
-> > > > In this case verifier doesn't really know the value of y, so it can't
-> > > > be inlined. Then you can have code in which in one branch register is
-> > > > loaded with known value, but in another branch same register gets some
-> > > > value at random offset. Constant tracking is code path-sensitive,
-> > > > while instructions are shared between different code paths. Unless I'm
-> > > > missing what you are proposing :)
-> > >
-> > > Ah, I missed that possibility. But is that actually something that
-> > > people do in practice? Or would it be okay for the verifier to just
-> > > assume an unknown value in these cases?
-> >
-> > Verifier will assume unknown value for the branch that has variable
-> > offset. It can't do the same for another branch (with constant offset)
-> > because it might not yet have encountered branch with variable offset.
-> > But either way, you were proposing to rewrite instruction and inline
-> > read constant, and I don't think it's possible because of this.
->
-> Ah, I see what you mean. That sucks. I guess that means that to fix
-> this up properly in such edgecases, we'd have to, for each memory
-> read, keep track of all the values that we want to hardcode for it,
-> and then generate branches in the unlikely case that the instruction
-> was reached on paths that expect different values?
-
-I guess, though that sounds extreme and extremely unlikely. I'd say
-the better way would be to implement immutable BPF maps from the time
-they are created. E.g., at the time of creating map, you specify extra
-flag BPF_F_IMMUTABLE and specify pointer to a blob of memory with
-key/value pairs in it.
+DQoNCj4gT24gQXByIDEzLCAyMDIwLCBhdCA0OjM3IEFNLCBNYW8gV2VuYW4gPG1hb3dlbmFuQGh1
+YXdlaS5jb20+IHdyb3RlOg0KPiANCj4gRml4ZXMgZ2NjICctV3VudXNlZC1idXQtc2V0LXZhcmlh
+YmxlJyB3YXJuaW5nOg0KPiANCj4ga2VybmVsL2JwZi92ZXJpZmllci5jOjU2MDM6MTg6IHdhcm5p
+bmc6IHZhcmlhYmxlIOKAmGRzdF9rbm93buKAmQ0KPiBzZXQgYnV0IG5vdCB1c2VkIFstV3VudXNl
+ZC1idXQtc2V0LXZhcmlhYmxlXQ0KPiANCj4gSXQgaXMgbm90IHVzZWQgc2luY2UgY29tbWl0IGYx
+MTc0Zjc3YjUwYyAoImJwZi92ZXJpZmllcjoNCj4gcmV3b3JrIHZhbHVlIHRyYWNraW5nIikNCg0K
+VGhlIGZpeCBtYWtlcyBzZW5zZS4gQnV0IEkgdGhpbmsgZjExNzRmNzdiNTBjIGludHJvZHVjZWQg
+ZHN0X2tub3duLCANCnNvIHRoaXMgc3RhdGVtZW50IGlzIG5vdCBhY2N1cmF0ZS4gDQoNCj4gDQo+
+IFNpZ25lZC1vZmYtYnk6IE1hbyBXZW5hbiA8bWFvd2VuYW5AaHVhd2VpLmNvbT4NCg0K
