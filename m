@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3871DC2BA19
-	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 13:40:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71D7AC2BA19
+	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 13:41:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 14DDD20768
-	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 13:40:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 487932075E
+	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 13:41:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DXVhLSJ6"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Gr3oT3Mb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387919AbgDNNkp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Apr 2020 09:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
+        id S2502697AbgDNNOi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Apr 2020 09:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729734AbgDNNOp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Apr 2020 09:14:45 -0400
+        with ESMTP id S2502691AbgDNNOg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Apr 2020 09:14:36 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC00C061A10;
-        Tue, 14 Apr 2020 06:14:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B77EC061A0C;
+        Tue, 14 Apr 2020 06:14:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=9LYT0s+uCT16Udgsgm3pFZUB5s9nQzeYExkOU7Ag18I=; b=DXVhLSJ6E54B6z+h+8xabPx259
-        dIN13y0QqxYO84/WTqYhQmc7w7sYmVJ+cwDfVsrGBuTe+xKKwq/CQhannG45c37ganVpd1rQmTO56
-        M4PgtrgoyOg7zSUfMJxd80CtbskMyNPoCkbavP82M6ewZPN+ZXiI+Qp6GSXQ+iSIWbZs+fpAZPlux
-        6aLInyd946XJmvEXADsuWXzF/A2QKTw+/HS8DyDQr28gp1BAshg0NVnyvWf2R/OR8ztnoGkbywUI4
-        SZPXplpg9Tg+4xdLzHzz9Hq2o4Sjlq4JhqKajaXFdDK8idJZngwA7sMjFZQMS0OZkahjfuVPoP6tc
-        AgJz2Gzw==;
+        bh=ShK5Me996gVFjNoA46gSO+1ycU7xfG9bvtmEJ4mSn6s=; b=Gr3oT3MbHE1JOk/VPGzX5p9T2C
+        pTRrcuDzDM0N9/oba/OZkbq5svnWZVBlH/6k5PMc0AqFZzCkj/PMuazbQoCsdggoTOPpPMTN+Jdw2
+        1vmgS5AmZsgc6NwRBlVqa4RUyo3fHcLRPDbEtgEsdcEkc3l2NwGMcLHeME4MekGImgf7hBX8yy4Ew
+        Oe95oE5TymCplZ9T3ksxsI0AVAMkqZkZV0r2tIOfpkOySKtGKKkdx++daKuS2Vo9G7jTv6BgK5hJ5
+        Mk4L0fksjwF4nsmuYh+vyOfrO+Rb8kVGGsUGg7IByh/BRa5VeZFFEMAjQ3y4O828yMhlGVVEbn/0g
+        n++3f03w==;
 Received: from [2001:4bb8:180:384b:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jOLON-0006Yn-Hv; Tue, 14 Apr 2020 13:14:20 +0000
+        id 1jOLOC-0006Q5-O2; Tue, 14 Apr 2020 13:14:09 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         "K. Y. Srinivasan" <kys@microsoft.com>,
@@ -59,9 +59,9 @@ Cc:     Robin Murphy <robin.murphy@arm.com>,
         iommu@lists.linux-foundation.org,
         linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 08/29] mm: remove __get_vm_area
-Date:   Tue, 14 Apr 2020 15:13:27 +0200
-Message-Id: <20200414131348.444715-9-hch@lst.de>
+Subject: [PATCH 05/29] dma-mapping: use vmap insted of reimplementing it
+Date:   Tue, 14 Apr 2020 15:13:24 +0200
+Message-Id: <20200414131348.444715-6-hch@lst.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200414131348.444715-1-hch@lst.de>
 References: <20200414131348.444715-1-hch@lst.de>
@@ -73,77 +73,98 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Switch the two remaining callers to use __get_vm_area_caller instead.
+Replace the open coded instance of vmap with the actual function.  In
+the non-contiguous (IOMMU) case this requires an extra find_vm_area,
+but given that this isn't a fast path function that is a small price
+to pay.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/powerpc/kernel/pci_64.c | 3 ++-
- arch/sh/kernel/cpu/sh4/sq.c  | 3 ++-
- include/linux/vmalloc.h      | 2 --
- mm/vmalloc.c                 | 8 --------
- 4 files changed, 4 insertions(+), 12 deletions(-)
+ kernel/dma/remap.c | 48 ++++++++++++----------------------------------
+ 1 file changed, 12 insertions(+), 36 deletions(-)
 
-diff --git a/arch/powerpc/kernel/pci_64.c b/arch/powerpc/kernel/pci_64.c
-index 2a976314f169..d9ac980c398c 100644
---- a/arch/powerpc/kernel/pci_64.c
-+++ b/arch/powerpc/kernel/pci_64.c
-@@ -132,7 +132,8 @@ void __iomem *ioremap_phb(phys_addr_t paddr, unsigned long size)
- 	 * address decoding but I'd rather not deal with those outside of the
- 	 * reserved 64K legacy region.
- 	 */
--	area = __get_vm_area(size, 0, PHB_IO_BASE, PHB_IO_END);
-+	area = __get_vm_area_caller(size, 0, PHB_IO_BASE, PHB_IO_END,
-+				    __builtin_return_address(0));
- 	if (!area)
- 		return NULL;
- 
-diff --git a/arch/sh/kernel/cpu/sh4/sq.c b/arch/sh/kernel/cpu/sh4/sq.c
-index 934ff84844fa..d432164b23b7 100644
---- a/arch/sh/kernel/cpu/sh4/sq.c
-+++ b/arch/sh/kernel/cpu/sh4/sq.c
-@@ -103,7 +103,8 @@ static int __sq_remap(struct sq_mapping *map, pgprot_t prot)
- #if defined(CONFIG_MMU)
- 	struct vm_struct *vma;
- 
--	vma = __get_vm_area(map->size, VM_ALLOC, map->sq_addr, SQ_ADDRMAX);
-+	vma = __get_vm_area_caller(map->size, VM_ALLOC, map->sq_addr,
-+			SQ_ADDRMAX, __builtin_return_address(0));
- 	if (!vma)
- 		return -ENOMEM;
- 
-diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-index 0507a162ccd0..3070b4dbc2d9 100644
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -161,8 +161,6 @@ static inline size_t get_vm_area_size(const struct vm_struct *area)
- extern struct vm_struct *get_vm_area(unsigned long size, unsigned long flags);
- extern struct vm_struct *get_vm_area_caller(unsigned long size,
- 					unsigned long flags, const void *caller);
--extern struct vm_struct *__get_vm_area(unsigned long size, unsigned long flags,
--					unsigned long start, unsigned long end);
- extern struct vm_struct *__get_vm_area_caller(unsigned long size,
- 					unsigned long flags,
- 					unsigned long start, unsigned long end,
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 399f219544f7..d1534d610b48 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -2127,14 +2127,6 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
- 	return area;
+diff --git a/kernel/dma/remap.c b/kernel/dma/remap.c
+index d14cbc83986a..914ff5a58dd5 100644
+--- a/kernel/dma/remap.c
++++ b/kernel/dma/remap.c
+@@ -20,23 +20,6 @@ struct page **dma_common_find_pages(void *cpu_addr)
+ 	return area->pages;
  }
  
--struct vm_struct *__get_vm_area(unsigned long size, unsigned long flags,
--				unsigned long start, unsigned long end)
+-static struct vm_struct *__dma_common_pages_remap(struct page **pages,
+-			size_t size, pgprot_t prot, const void *caller)
 -{
--	return __get_vm_area_node(size, 1, flags, start, end, NUMA_NO_NODE,
--				  GFP_KERNEL, __builtin_return_address(0));
--}
--EXPORT_SYMBOL_GPL(__get_vm_area);
+-	struct vm_struct *area;
 -
- struct vm_struct *__get_vm_area_caller(unsigned long size, unsigned long flags,
- 				       unsigned long start, unsigned long end,
- 				       const void *caller)
+-	area = get_vm_area_caller(size, VM_DMA_COHERENT, caller);
+-	if (!area)
+-		return NULL;
+-
+-	if (map_vm_area(area, prot, pages)) {
+-		vunmap(area->addr);
+-		return NULL;
+-	}
+-
+-	return area;
+-}
+-
+ /*
+  * Remaps an array of PAGE_SIZE pages into another vm_area.
+  * Cannot be used in non-sleeping contexts
+@@ -44,15 +27,12 @@ static struct vm_struct *__dma_common_pages_remap(struct page **pages,
+ void *dma_common_pages_remap(struct page **pages, size_t size,
+ 			 pgprot_t prot, const void *caller)
+ {
+-	struct vm_struct *area;
++	void *vaddr;
+ 
+-	area = __dma_common_pages_remap(pages, size, prot, caller);
+-	if (!area)
+-		return NULL;
+-
+-	area->pages = pages;
+-
+-	return area->addr;
++	vaddr = vmap(pages, size >> PAGE_SHIFT, VM_DMA_COHERENT, prot);
++	if (vaddr)
++		find_vm_area(vaddr)->pages = pages;
++	return vaddr;
+ }
+ 
+ /*
+@@ -62,24 +42,20 @@ void *dma_common_pages_remap(struct page **pages, size_t size,
+ void *dma_common_contiguous_remap(struct page *page, size_t size,
+ 			pgprot_t prot, const void *caller)
+ {
+-	int i;
++	int count = size >> PAGE_SHIFT;
+ 	struct page **pages;
+-	struct vm_struct *area;
++	void *vaddr;
++	int i;
+ 
+-	pages = kmalloc(sizeof(struct page *) << get_order(size), GFP_KERNEL);
++	pages = kmalloc_array(count, sizeof(struct page *), GFP_KERNEL);
+ 	if (!pages)
+ 		return NULL;
+-
+-	for (i = 0; i < (size >> PAGE_SHIFT); i++)
++	for (i = 0; i < count; i++)
+ 		pages[i] = nth_page(page, i);
+-
+-	area = __dma_common_pages_remap(pages, size, prot, caller);
+-
++	vaddr = vmap(pages, count, VM_DMA_COHERENT, prot);
+ 	kfree(pages);
+ 
+-	if (!area)
+-		return NULL;
+-	return area->addr;
++	return vaddr;
+ }
+ 
+ /*
 -- 
 2.25.1
 
