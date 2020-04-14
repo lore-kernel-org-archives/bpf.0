@@ -2,60 +2,64 @@ Return-Path: <SRS0=O1Al=56=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD5DFC2BA19
-	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 18:04:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CD4FC352BE
+	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 18:04:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F9B220767
-	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 18:04:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CFBB20767
+	for <bpf@archiver.kernel.org>; Tue, 14 Apr 2020 18:04:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FruRcezD"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HfKnbKOL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407794AbgDNSEf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Apr 2020 14:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
+        id S2407802AbgDNSEj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Apr 2020 14:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2407781AbgDNSE1 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 14 Apr 2020 14:04:27 -0400
+        by vger.kernel.org with ESMTP id S2407793AbgDNSEf (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 14 Apr 2020 14:04:35 -0400
 Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAB2C061A0E
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2020 11:04:26 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id x6so5765959pjg.5
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2020 11:04:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9558C061A0E
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2020 11:04:33 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id l40so12871227pjb.8
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2020 11:04:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=xt0FQ7OhM8EukqmyFFBnqkbyoPvDMRZ1tj92oHDfRac=;
-        b=FruRcezDdGBE2yc3uGdSqvQbTBPH7dJBw+BNrrHmgsza8BAj1QgpFz409fLZv+HXAA
-         VKDuLaIE/Qj3UHm2WKto080KiEyhDHsBKCOp7HOX6UKEUzg/D2wyH2BlSfOqRmMzbI58
-         vdnvI9myVJ0oG9tBBS7Sg+VSQ9woHO3Vj0cHdqeohQXFSMymEUcVdq5/s+siWUwQmmL+
-         GImhpjFyLx+CfGdwg+/a79mH5BcmHpe+OmDAKzwaK7G0VOp05x+Zf79BUA2iarnGHwn2
-         /9Z9OBw0ul+ZOxNImDVM+foYXd1lD4e1rejB7jZXZWChUx6ov1B49zaYHtuE4OAsHVx0
-         pK0g==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=zcExPUIjugAT8xV6VI04RQsiRvISnNIvuUHEvy30OPQ=;
+        b=HfKnbKOLaWKtekBBcx+Z+GtVfjaSYTroUWjlxilDWDzfmYPSZk59O8SE+IJciqKHVf
+         fufD5nAwSCHuU3+8Nxxg/s/6pKui4wWczDXrggZqPcNPcTWtxmoPrw3jhN4ahrroxlXy
+         MrjSt7V+nOlvluQhJmfCkWXnsBMT/D0kCvsO5GNndfz3NkrXp0ZuDUN0DJMXqFqmTvwN
+         43yX3BZUrkb1FHQ6vAk7WPFfshwyUKDyf8up4vIhhY+hDOqwxiyZaSF7i+ixxPzLJh8x
+         1H2GIL6TGwewddo7seRKJLQxyFZqHbj3GzXBxBBM6M9Ik4cIpZGuWrT2jr6sZyYlFSuP
+         kJCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=xt0FQ7OhM8EukqmyFFBnqkbyoPvDMRZ1tj92oHDfRac=;
-        b=oCSPS7X6wYHFYR0p33lzkM2GADEPWMInTQD3REOUxlL7FlbVMHy3IosMP/ErX7M8aK
-         of/gf+2wrYYsXsXNxatBlzJnpdyMyzHX3x5j+8WmdFrqIO1j3AbQR32pwDnuHXMU0RFd
-         rYx4XfBFhDhERs2YWpztsLr2tUvg0OuaT3ocdYZqIvB3hYdAxsqFMP1N1rZSg3G4uYpn
-         4HHlxmp3b2BHs2TOe5ADZyAp+ISIb0rwbuGxmTxuYvBd8nxrZ3RmG/oI1QV2w5mGRIcu
-         TvMnk8rM17CkX8ezVZYFlMK/e55F7mcVSXKkmjv8p5sUoyzPvAybtQTi9qvtFDESTDMX
-         GAAQ==
-X-Gm-Message-State: AGi0PuYTfvShkRcEp/TP9WH2nQKhFdHkqcPBqXJ3r3JQqxvjB6eotPjb
-        D8q2Zmgo0RmGNmBPjth8lPcNs0dwVS5a
-X-Google-Smtp-Source: APiQypKImV5BWclq+ttSqKLJU4qGTH8GqF+kFT3bIgkjAgJGt6c6FVnIqNq0nXYwwd3fzzj2Wy+S27v5TVAM
-X-Received: by 2002:a17:90a:9b17:: with SMTP id f23mr1499060pjp.118.1586887465705;
- Tue, 14 Apr 2020 11:04:25 -0700 (PDT)
-Date:   Tue, 14 Apr 2020 11:04:15 -0700
-Message-Id: <20200414180419.14398-1-irogers@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=zcExPUIjugAT8xV6VI04RQsiRvISnNIvuUHEvy30OPQ=;
+        b=OdXp7pu9KwKCdZ3xHEyv0j09HeYPjAks0CX+bVcoG7jmAhVPkVoY/TKyI041S9Ya3b
+         wIcG9RS6BosLDg9VZAtjTgg2DB0TRDg5syZaRpt9kh5zeimK4VVTJagWOoWWvfGjGDZ2
+         bBlCKPP9YJZgy9XymY2No8YkpVi83Jlp0MtTTE4DPFdf5g2KsNKBvvFOEvpXNvZKIuyu
+         yYjXxL+/1aejgAF2rqAg7rWG2Js4/JwE04VFZ6pzeyb76S5BFFunxxVw0KDXQ0VzXZOi
+         WcIvMB+DnXrEph4og1bH7HQ6iy/+e9zs48Ps8QOjiS5hwQxBMuHtF7SFod3IvDlbQIqH
+         nFsA==
+X-Gm-Message-State: AGi0Pubre8rpPgXXcdzvH6kNDErJNwx3VehEYWW4/fvHJBs3gF3QAqtO
+        O5vFPTcR8a1v+G9PkjLQ76d56oOhul7P
+X-Google-Smtp-Source: APiQypIwBsvHhx3R02hzQNaxE1lGw3YgC65YuUTUFdJUC1RhOyxqGP5d1zmwW3NbANczU7EPD8Gh+ukdK6eH
+X-Received: by 2002:a17:90a:d596:: with SMTP id v22mr1410766pju.169.1586887473287;
+ Tue, 14 Apr 2020 11:04:33 -0700 (PDT)
+Date:   Tue, 14 Apr 2020 11:04:18 -0700
+In-Reply-To: <20200414180419.14398-1-irogers@google.com>
+Message-Id: <20200414180419.14398-4-irogers@google.com>
 Mime-Version: 1.0
+References: <20200414180419.14398-1-irogers@google.com>
 X-Mailer: git-send-email 2.26.0.110.g2183baf09c-goog
-Subject: [PATCH v9 0/4] perf tools: add support for libpfm4
+Subject: [PATCH v9 3/4] perf pmu: add perf_pmu__find_by_type helper
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -91,141 +95,52 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch links perf with the libpfm4 library if it is available
-and NO_LIBPFM4 isn't passed to the build. The libpfm4 library
-contains hardware event tables for all processors supported by
-perf_events. It is a helper library that helps convert from a
-symbolic event name to the event encoding required by the
-underlying kernel interface. This library is open-source and
-available from: http://perfmon2.sf.net.
-    
-With this patch, it is possible to specify full hardware events
-by name. Hardware filters are also supported. Events must be
-specified via the --pfm-events and not -e option. Both options
-are active at the same time and it is possible to mix and match:
-    
-$ perf stat --pfm-events inst_retired:any_p:c=1:i -e cycles ....
+From: Stephane Eranian <eranian@google.com>
 
-v9 addresses review comments from jolsa@redhat.com in particular to reduce the
-   number of ifdefs and to make the feature extra rather than basic.
-v8 addresses review comments from jolsa@redhat.com.
-   Breaks the patch into 4, adds a test and moves the libpfm code into its
-   own file. perf list encoding tries to be closer to existing:
-...
-skx pfm-events
-  UNHALTED_CORE_CYCLES
-    [Count core clock cycles whenever the clock signal on the specific ...
-  UNHALTED_REFERENCE_CYCLES
-    [Unhalted reference cycles]
-  INSTRUCTION_RETIRED
-    [Number of instructions at retirement]
-  INSTRUCTIONS_RETIRED
-    [This is an alias for INSTRUCTION_RETIRED]
-  BRANCH_INSTRUCTIONS_RETIRED
-    [Count branch instructions at retirement. Specifically, this event ...
-  MISPREDICTED_BRANCH_RETIRED
-    [Count mispredicted branch instructions at retirement. ...
-  BACLEARS
-    [Branch re-steered]
-      BACLEARS:ANY
-        [Number of front-end re-steers due to BPU misprediction]
-  BR_INST_RETIRED
-    [Branch instructions retired (Precise Event)]
-      BR_INST_RETIRED:CONDITIONAL
-        [Counts all taken and not taken macro conditional branch ...
-...
-  and supports --long-desc/-v:
-...
-  BACLEARS
-    [Branch re-steered]
-      Code  : 0xe6
-      BACLEARS:ANY
-        [Number of front-end re-steers due to BPU misprediction]
-        Umask : 0x01 : PMU: [default] 
-      Modif : PMU: [e] : edge level (may require counter-mask >= 1) ...
-      Modif : PMU: [i] : invert (boolean)
-      Modif : PMU: [c] : counter-mask in range [0-255] (integer)
-      Modif : PMU: [t] : measure any thread (boolean)
-      Modif : PMU: [intx] : monitor only inside transactional memory ...
-      Modif : PMU: [intxcp] : do not count occurrences inside aborted ...
-      Modif : perf_event: [u] : monitor at user level (boolean)
-      Modif : perf_event: [k] : monitor at kernel level (boolean)
-      Modif : perf_event: [period] : sampling period (integer)
-      Modif : perf_event: [freq] : sampling frequency (Hz) (integer)
-      Modif : perf_event: [excl] : exclusive access (boolean)
-      Modif : perf_event: [mg] : monitor guest execution (boolean)
-      Modif : perf_event: [mh] : monitor host execution (boolean)
-      Modif : perf_event: [cpu] : CPU to program (integer)
-      Modif : perf_event: [pinned] : pin event to counters (boolean)
-  BR_INST_RETIRED
-    [Branch instructions retired (Precise Event)]
-      Code  : 0xc4
-      BR_INST_RETIRED:CONDITIONAL
-        [Counts all taken and not taken macro conditional branch ...
-        Umask : 0x01 : PMU: [precise]
+This is used by libpfm4 during event parsing to locate the pmu for an
+event.
 
-v7 rebases and adds fallback code for libpfm4 events.
-   The fallback code is to force user only priv level in case the
-   perf_event_open() syscall failed for permissions reason.
-   the fallback forces a user privilege level restriction on the event
-   string, so depending on the syntax either u or :u is needed.
-    
-   But libpfm4 can use a : or . as the separator, so simply searching
-   for ':' vs. '/' is not good enough to determine the syntax needed.
-   Therefore, this patch introduces a new evsel boolean field to mark
-   events coming from  libpfm4. The field is then used to adjust the
-   fallback string.
-v6 was a rebase.
-v5 was a rebase.
-v4 was a rebase on
-   git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
-   branch perf/core and re-adds the tools/build/feature/test-libpfm4.c
-   missed in v3.
-v3 is against acme/perf/core and removes a diagnostic warning.
-v2 of this patch makes the --pfm-events man page documentation
-   conditional on libpfm4 behing configured. It tidies some of the
-   documentation and adds the feature test missed in the v1 patch.
+Signed-off-by: Stephane Eranian <eranian@google.com>
+Reviewed-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/pmu.c | 11 +++++++++++
+ tools/perf/util/pmu.h |  1 +
+ 2 files changed, 12 insertions(+)
 
-Ian Rogers (1):
-  perf doc: allow ASCIIDOC_EXTRA to be an argument
-
-Stephane Eranian (3):
-  tools feature: add support for detecting libpfm4
-  perf pmu: add perf_pmu__find_by_type helper
-  perf tools: add support for libpfm4
-
- tools/build/Makefile.feature             |   3 +-
- tools/build/feature/Makefile             |   6 +-
- tools/build/feature/test-libpfm4.c       |   9 +
- tools/perf/Documentation/Makefile        |   4 +-
- tools/perf/Documentation/perf-record.txt |  11 +
- tools/perf/Documentation/perf-stat.txt   |  10 +
- tools/perf/Documentation/perf-top.txt    |  11 +
- tools/perf/Makefile.config               |  12 +
- tools/perf/Makefile.perf                 |   6 +-
- tools/perf/builtin-list.c                |  12 +-
- tools/perf/builtin-record.c              |  11 +
- tools/perf/builtin-stat.c                |  13 ++
- tools/perf/builtin-top.c                 |   8 +
- tools/perf/tests/Build                   |   1 +
- tools/perf/tests/builtin-test.c          |   9 +
- tools/perf/tests/pfm.c                   | 207 +++++++++++++++++
- tools/perf/tests/tests.h                 |   3 +
- tools/perf/util/Build                    |   2 +
- tools/perf/util/evsel.c                  |   2 +-
- tools/perf/util/evsel.h                  |   1 +
- tools/perf/util/parse-events.c           |  30 ++-
- tools/perf/util/parse-events.h           |   4 +
- tools/perf/util/pfm.c                    | 278 +++++++++++++++++++++++
- tools/perf/util/pfm.h                    |  43 ++++
- tools/perf/util/pmu.c                    |  11 +
- tools/perf/util/pmu.h                    |   1 +
- 26 files changed, 693 insertions(+), 15 deletions(-)
- create mode 100644 tools/build/feature/test-libpfm4.c
- create mode 100644 tools/perf/tests/pfm.c
- create mode 100644 tools/perf/util/pfm.c
- create mode 100644 tools/perf/util/pfm.h
-
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index ef6a63f3d386..5e918ca740c6 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -869,6 +869,17 @@ static struct perf_pmu *pmu_find(const char *name)
+ 	return NULL;
+ }
+ 
++struct perf_pmu *perf_pmu__find_by_type(unsigned int type)
++{
++	struct perf_pmu *pmu;
++
++	list_for_each_entry(pmu, &pmus, list)
++		if (pmu->type == type)
++			return pmu;
++
++	return NULL;
++}
++
+ struct perf_pmu *perf_pmu__scan(struct perf_pmu *pmu)
+ {
+ 	/*
+diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+index 5fb3f16828df..de3b868d912c 100644
+--- a/tools/perf/util/pmu.h
++++ b/tools/perf/util/pmu.h
+@@ -65,6 +65,7 @@ struct perf_pmu_alias {
+ };
+ 
+ struct perf_pmu *perf_pmu__find(const char *name);
++struct perf_pmu *perf_pmu__find_by_type(unsigned int type);
+ int perf_pmu__config(struct perf_pmu *pmu, struct perf_event_attr *attr,
+ 		     struct list_head *head_terms,
+ 		     struct parse_events_error *error);
 -- 
 2.26.0.110.g2183baf09c-goog
 
