@@ -2,44 +2,45 @@ Return-Path: <SRS0=iiTG=57=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9282C2BA19
-	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 19:28:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5665DC2BA19
+	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 19:28:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7202B206F9
-	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 19:28:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 255AC206F9
+	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 19:28:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZcUoHHWV"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="RKkulOCw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406294AbgDOT17 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Apr 2020 15:27:59 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22212 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2406454AbgDOT1w (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 15 Apr 2020 15:27:52 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03FJMv6O023373
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2020 12:27:42 -0700
+        id S2411865AbgDOT22 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Apr 2020 15:28:28 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33820 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2406960AbgDOT2H (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 15 Apr 2020 15:28:07 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03FJPWtw012507
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2020 12:28:06 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=oRmAVUg8Zmx3cJ8APXSJS+ZOGAKmKuZ/RaZRK5JeVwM=;
- b=ZcUoHHWVWCPEUg3T9iOa7dOUjINS7ouCejO0SSVf3SBt7WFfjtxzLKvuADjw8q49OHOl
- LCEB1F0oTUFj6QAdIchqrYP12/x8tMQ3YW2csLPRREDVByXs926EqXTgNmn5FBGFn828
- 3OSlPwSSzIGw3JwqyT+mVNRnM+58UbB9t+k= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=RBprwb+UMJBDIW8xX3D2oQbC5+mlm0Pkg8v4GXg8aT8=;
+ b=RKkulOCwRKILXM7BKNkmWCxgoAbM2W8v8xFKAzF3ODOMOYXX15roO4QFsABlMCQlUrrk
+ Dde7hCvKRNLAxh1OlUsdI0mXpudXosQoFE53ADsopUMNS5Vv6dVQplusAA7iIZnVxJX0
+ oPp48VK6l8429zsGHVFe8hWzXMRxEufcbCw= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 30dn7qfkgr-1
+        by mx0a-00082601.pphosted.com with ESMTP id 30dn82qtc1-20
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2020 12:27:42 -0700
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2020 12:28:06 -0700
 Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 15 Apr 2020 12:27:41 -0700
+ 15.1.1847.3; Wed, 15 Apr 2020 12:27:57 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 9111E3700AF5; Wed, 15 Apr 2020 12:27:40 -0700 (PDT)
+        id A638E3700AF5; Wed, 15 Apr 2020 12:27:50 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -48,210 +49,389 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next v2 00/17] bpf: implement bpf based dumping of kernel data structures
-Date:   Wed, 15 Apr 2020 12:27:40 -0700
-Message-ID: <20200415192740.4082659-1-yhs@fb.com>
+Subject: [RFC PATCH bpf-next v2 09/17] bpf: add task and task/file targets
+Date:   Wed, 15 Apr 2020 12:27:50 -0700
+Message-ID: <20200415192750.4083488-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200415192740.4082659-1-yhs@fb.com>
+References: <20200415192740.4082659-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-15_06:2020-04-14,2020-04-15 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- priorityscore=1501 spamscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
- suspectscore=0 clxscore=1015 adultscore=0 malwarescore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004150143
+ definitions=2020-04-15_07:2020-04-14,2020-04-15 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ mlxscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015 impostorscore=0
+ phishscore=0 bulkscore=0 suspectscore=0 spamscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004150144
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The v1 version is here:
-  https://lore.kernel.org/bpf/20200408232520.2675265-1-yhs@fb.com/T/#m058=
-a6817dc3ded9d2db0192ca08486b4a3f4daf0
-Compared to v1, I have made changes:
-  . use BPF_RAW_TRACEPOINT_OPEN to create an anonymous dumper
-  . use BPF_OBJ_PIN with pathname instead dumper name to
-    create a file dumper
-  . support PTR_TO_BTF_ID_OR_NULL so bpf program will be called when
-    the dumping session ends. This gives bpf program an opportunity
-    to print footer or accumulate and send summaries for anonymous
-    dumper.
-  . use BPF_OBJ_GET_INFO_BY_FD to get bpfdump target/dumper info.
-Still missing:
-  . bpf_seq_printf()/bpf_seq_write() related changes
-  . double check seq_ops implementation for bpf_map/task/task_file.
-  . libbpf/bpftool implementation
-  . tests for new features
-  . ...
+Only the tasks belonging to "current" pid namespace
+are enumerated.
 
-As there are some discussions regarding to the kernel interface/steps to
-create file/anonymous dumpers, I think it will be beneficial for
-discussion with this work in progress.
+For task/file target, the bpf program will have access to
+  struct task_struct *task
+  u32 fd
+  struct file *file
+where fd/file is an open file for the task.
 
-Motivation:
-  The current way to dump kernel data structures mostly:
-    1. /proc system
-    2. various specific tools like "ss" which requires kernel support.
-    3. drgn
-  The dropback for the first two is that whenever you want to dump more, =
-you
-  need change the kernel. For example, Martin wants to dump socket local
-  storage with "ss". Kernel change is needed for it to work ([1]).
-  This is also the direct motivation for this work.
-
-  drgn ([2]) solves this proble nicely and no kernel change is not needed=
-.
-  But since drgn is not able to verify the validity of a particular point=
-er value,
-  it might present the wrong results in rare cases.
-
-  In this patch set, we introduce bpf based dumping. Initial kernel chang=
-es are
-  still needed, but a data structure change will not require kernel chang=
-es
-  any more. bpf program itself is used to adapt to new data structure
-  changes. This will give certain flexibility with guaranteed correctness=
-.
-
-  Here, kernel seq_ops is used to facilitate dumping, similar to current
-  /proc and many other lossless kernel dumping facilities.
-
-User Interfaces:
-  1. A new mount file system, bpfdump at /sys/kernel/bpfdump is introduce=
-d.
-     Different from /sys/fs/bpf, this is a single user mount. Mount comma=
-nd
-     can be:
-        mount -t bpfdump bpfdump /sys/kernel/bpfdump
-  2. Kernel bpf dumpable data structures are represented as directories
-     under /sys/kernel/bpfdump, e.g.,
-       /sys/kernel/bpfdump/ipv6_route/
-       /sys/kernel/bpfdump/netlink/
-       /sys/kernel/bpfdump/bpf_map/
-       /sys/kernel/bpfdump/task/
-       /sys/kernel/bpfdump/task/file/
-     In this patch set, we use "target" to represent a particular bpf
-     supported data structure, for example, targets "ipv6_route",
-     "netlink", "bpf_map", "task", "task/file", which are actual
-     directory hierarchy relative to /sys/kernel/bpfdump/.
-
-     Note that nested structures are supported for sub fields in a major
-     data structure. For example, target "task/file" is to examine all op=
-en
-     files for all tasks (task_struct->files) as reference count and
-     locks are needed to access task_struct->files safely.
-  3. The bpftool command can be used to create a dumper:
-       bpftool dumper pin <bpf_prog.o> <dumper_name>
-     where the bpf_prog.o encodes the target information. For example, th=
-e
-     following dumpers can be created:
-       /sys/kernel/bpfdump/ipv6_route/{my1, my2}
-       /sys/kernel/bpfdump/task/file/{f1, f2}
-  4. Use "cat <dumper>" to dump the contents.
-     Use "rm -f <dumper>" to delete the dumper.
-  5. An anonymous dumper can be created without pinning to a
-     physical file. The fd will return to the application and
-     the application can then "read" the contents.
-
-Please see patch #15 and #16 for bpf programs and
-bpf dumper output examples.
-
-Two new helpers bpf_seq_printf() and bpf_seq_write() are introduced.
-bpf_seq_printf() mostly for file based dumpers and bpf_seq_write()
-mostly for anonymous dumpers.
-
-Note that certain dumpers are namespace aware. For example,
-task and task/... targets only iterate through current pid namespace.
-ipv6_route and netlink will iterate through current net namespace.
-
-For introspection, see patch #14,
-  bpftool dumper show {target|dumper}
-can show all targets and their context structure type name (for writing b=
-pf
-programs), or all dumpers with their associated bpf prog_id.
-For any open file descriptors (anonymous or from dumper file),
-  cat /proc/<pid>/fdinfo/<fd>
-will show target and its associated prog_id as well.
-
-Although the initial motivation is from Martin's sk_local_storage,
-this patch didn't implement tcp6 sockets and sk_local_storage.
-The /proc/net/tcp6 involves three types of sockets, timewait,
-request and tcp6 sockets. Some kind of type casting is needed
-to convert socket_common to these three types of sockets based
-on socket state. This will be addressed in future work.
-
-References:
-  [1]: https://lore.kernel.org/bpf/20200225230427.1976129-1-kafai@fb.com
-  [2]: https://github.com/osandov/drgn
-
-Yonghong Song (17):
-  net: refactor net assignment for seq_net_private structure
-  bpf: create /sys/kernel/bpfdump mount file system
-  bpf: provide a way for targets to register themselves
-  bpf: allow loading of a dumper program
-  bpf: create file or anonymous dumpers
-  bpf: add PTR_TO_BTF_ID_OR_NULL support
-  bpf: add netlink and ipv6_route targets
-  bpf: add bpf_map target
-  bpf: add task and task/file targets
-  bpf: add bpf_seq_printf and bpf_seq_write helpers
-  bpf: support variable length array in tracing programs
-  bpf: implement query for target_proto and file dumper prog_id
-  tools/libbpf: libbpf support for bpfdump
-  tools/bpftool: add bpf dumper support
-  tools/bpf: selftests: add dumper programs for ipv6_route and netlink
-  tools/bpf: selftests: add dumper progs for bpf_map/task/task_file
-  tools/bpf: selftests: add a selftest for anonymous dumper
-
- fs/proc/proc_net.c                            |   5 +-
- include/linux/bpf.h                           |  31 +
- include/linux/seq_file_net.h                  |   8 +
- include/uapi/linux/bpf.h                      |  35 +-
- include/uapi/linux/magic.h                    |   1 +
- kernel/bpf/Makefile                           |   1 +
- kernel/bpf/btf.c                              |  30 +-
- kernel/bpf/dump.c                             | 806 ++++++++++++++++++
- kernel/bpf/dump_task.c                        | 320 +++++++
- kernel/bpf/syscall.c                          | 146 +++-
- kernel/bpf/verifier.c                         |  33 +-
- kernel/trace/bpf_trace.c                      | 172 ++++
- net/ipv6/ip6_fib.c                            |  71 +-
- net/ipv6/route.c                              |  29 +
- net/netlink/af_netlink.c                      |  94 +-
- scripts/bpf_helpers_doc.py                    |   2 +
- tools/bpf/bpftool/dumper.c                    | 135 +++
- tools/bpf/bpftool/main.c                      |   3 +-
- tools/bpf/bpftool/main.h                      |   1 +
- tools/include/uapi/linux/bpf.h                |  35 +-
- tools/lib/bpf/bpf.c                           |   9 +-
- tools/lib/bpf/bpf.h                           |   1 +
- tools/lib/bpf/libbpf.c                        |  88 +-
- tools/lib/bpf/libbpf.h                        |   3 +
- tools/lib/bpf/libbpf.map                      |   2 +
- .../selftests/bpf/prog_tests/bpfdump_test.c   |  42 +
- .../selftests/bpf/progs/bpfdump_bpf_map.c     |  33 +
- .../selftests/bpf/progs/bpfdump_ipv6_route.c  |  71 ++
- .../selftests/bpf/progs/bpfdump_netlink.c     |  80 ++
- .../selftests/bpf/progs/bpfdump_task.c        |  29 +
- .../selftests/bpf/progs/bpfdump_task_file.c   |  30 +
- .../selftests/bpf/progs/bpfdump_test_kern.c   |  31 +
- 32 files changed, 2343 insertions(+), 34 deletions(-)
- create mode 100644 kernel/bpf/dump.c
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ kernel/bpf/Makefile    |   2 +-
+ kernel/bpf/dump_task.c | 320 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 321 insertions(+), 1 deletion(-)
  create mode 100644 kernel/bpf/dump_task.c
- create mode 100644 tools/bpf/bpftool/dumper.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpfdump_test.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpfdump_bpf_map.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpfdump_ipv6_route.=
-c
- create mode 100644 tools/testing/selftests/bpf/progs/bpfdump_netlink.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpfdump_task.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpfdump_task_file.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpfdump_test_kern.c
 
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 4a1376ab2bea..7e2c73deabab 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -26,7 +26,7 @@ obj-$(CONFIG_BPF_SYSCALL) +=3D reuseport_array.o
+ endif
+ ifeq ($(CONFIG_SYSFS),y)
+ obj-$(CONFIG_DEBUG_INFO_BTF) +=3D sysfs_btf.o
+-obj-$(CONFIG_BPF_SYSCALL) +=3D dump.o
++obj-$(CONFIG_BPF_SYSCALL) +=3D dump.o dump_task.o
+ endif
+ ifeq ($(CONFIG_BPF_JIT),y)
+ obj-$(CONFIG_BPF_SYSCALL) +=3D bpf_struct_ops.o
+diff --git a/kernel/bpf/dump_task.c b/kernel/bpf/dump_task.c
+new file mode 100644
+index 000000000000..cb0767f4d962
+--- /dev/null
++++ b/kernel/bpf/dump_task.c
+@@ -0,0 +1,320 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2020 Facebook */
++
++#include <linux/init.h>
++#include <linux/namei.h>
++#include <linux/pid_namespace.h>
++#include <linux/fs.h>
++#include <linux/fdtable.h>
++#include <linux/filter.h>
++
++struct bpfdump_seq_task_info {
++	struct pid_namespace *ns;
++	struct task_struct *task;
++	u32 id;
++};
++
++static struct task_struct *task_seq_get_next(struct pid_namespace *ns, u=
+32 *id)
++{
++	struct task_struct *task;
++	struct pid *pid;
++
++	rcu_read_lock();
++	pid =3D idr_get_next(&ns->idr, id);
++	task =3D get_pid_task(pid, PIDTYPE_PID);
++	if (task)
++		get_task_struct(task);
++	rcu_read_unlock();
++
++	return task;
++}
++
++static void *task_seq_start(struct seq_file *seq, loff_t *pos)
++{
++	struct bpfdump_seq_task_info *info =3D seq->private;
++	struct task_struct *task;
++	u32 id =3D info->id + 1;
++
++	if (*pos =3D=3D 0)
++		info->ns =3D task_active_pid_ns(current);
++
++	task =3D task_seq_get_next(info->ns, &id);
++	if (!task)
++		return NULL;
++
++	++*pos;
++	info->task =3D task;
++	info->id =3D id;
++
++	return task;
++}
++
++static void *task_seq_next(struct seq_file *seq, void *v, loff_t *pos)
++{
++	struct bpfdump_seq_task_info *info =3D seq->private;
++	struct task_struct *task;
++	u32 id =3D info->id + 1;
++
++	++*pos;
++	task =3D task_seq_get_next(info->ns, &id);
++	if (!task)
++		return NULL;
++
++	put_task_struct(info->task);
++	info->task =3D task;
++	info->id =3D id;
++	return task;
++}
++
++struct bpfdump__task {
++	struct bpf_dump_meta *meta;
++	struct task_struct *task;
++};
++
++int __init __bpfdump__task(struct bpf_dump_meta *meta, struct task_struc=
+t *task)
++{
++	return 0;
++}
++
++static int task_seq_show(struct seq_file *seq, void *v)
++{
++	struct bpf_dump_meta meta;
++	struct bpfdump__task ctx;
++	struct bpf_prog *prog;
++	int ret =3D 0;
++
++	prog =3D bpf_dump_get_prog(seq, sizeof(struct bpfdump_seq_task_info),
++				 &meta.session_id, &meta.seq_num,
++				 v =3D=3D (void *)0);
++	if (prog) {
++		meta.seq =3D seq;
++		ctx.meta =3D &meta;
++		ctx.task =3D v;
++		ret =3D bpf_dump_run_prog(prog, &ctx);
++	}
++
++	return ret =3D=3D 0 ? 0 : -EINVAL;
++}
++
++static void task_seq_stop(struct seq_file *seq, void *v)
++{
++	struct bpfdump_seq_task_info *info =3D seq->private;
++
++	if (!v)
++		task_seq_show(seq, v);
++
++	if (info->task) {
++		put_task_struct(info->task);
++		info->task =3D NULL;
++	}
++}
++
++static const struct seq_operations task_seq_ops =3D {
++        .start  =3D task_seq_start,
++        .next   =3D task_seq_next,
++        .stop   =3D task_seq_stop,
++        .show   =3D task_seq_show,
++};
++
++struct bpfdump_seq_task_file_info {
++	struct pid_namespace *ns;
++	struct task_struct *task;
++	struct files_struct *files;
++	u32 id;
++	u32 fd;
++};
++
++static struct file *task_file_seq_get_next(struct pid_namespace *ns, u32=
+ *id,
++					   int *fd, struct task_struct **task,
++					   struct files_struct **fstruct)
++{
++	struct files_struct *files;
++	struct task_struct *tk;
++	u32 sid =3D *id;
++	int sfd;
++
++	/* If this function returns a non-NULL file object,
++	 * it held a reference to the files_struct and file.
++	 * Otherwise, it does not hold any reference.
++	 */
++again:
++	if (*fstruct) {
++		files =3D *fstruct;
++		sfd =3D *fd;
++	} else {
++		tk =3D task_seq_get_next(ns, &sid);
++		if (!tk)
++			return NULL;
++		files =3D get_files_struct(tk);
++		put_task_struct(tk);
++		if (!files)
++			return NULL;
++		*fstruct =3D files;
++		*task =3D tk;
++		if (sid =3D=3D *id) {
++			sfd =3D *fd;
++		} else {
++			*id =3D sid;
++			sfd =3D 0;
++		}
++	}
++
++	rcu_read_lock();
++	for (; sfd < files_fdtable(files)->max_fds; sfd++) {
++		struct file *f;
++
++		f =3D fcheck_files(files, sfd);
++		if (!f)
++			continue;
++
++		*fd =3D sfd;
++		get_file(f);
++		rcu_read_unlock();
++		return f;
++	}
++
++	/* the current task is done, go to the next task */
++	rcu_read_unlock();
++	put_files_struct(files);
++	*fstruct =3D NULL;
++	sid =3D ++(*id);
++	goto again;
++}
++
++static void *task_file_seq_start(struct seq_file *seq, loff_t *pos)
++{
++	struct bpfdump_seq_task_file_info *info =3D seq->private;
++	struct files_struct *files =3D NULL;
++	struct task_struct *task =3D NULL;
++	struct file *file;
++	u32 id =3D info->id;
++	int fd =3D info->fd + 1;
++
++	if (*pos =3D=3D 0)
++		info->ns =3D task_active_pid_ns(current);
++
++	file =3D task_file_seq_get_next(info->ns, &id, &fd, &task, &files);
++	if (!file) {
++		info->files =3D NULL;
++		return NULL;
++	}
++
++	++*pos;
++	info->id =3D id;
++	info->fd =3D fd;
++	info->task =3D task;
++	info->files =3D files;
++
++	return file;
++}
++
++static void *task_file_seq_next(struct seq_file *seq, void *v, loff_t *p=
+os)
++{
++	struct bpfdump_seq_task_file_info *info =3D seq->private;
++	struct files_struct *files =3D info->files;
++	struct task_struct *task =3D info->task;
++	int fd =3D info->fd + 1;
++	struct file *file;
++	u32 id =3D info->id;
++
++	++*pos;
++	fput((struct file *)v);
++	file =3D task_file_seq_get_next(info->ns, &id, &fd, &task, &files);
++	if (!file) {
++		info->files =3D NULL;
++		return NULL;
++	}
++
++	info->id =3D id;
++	info->fd =3D fd;
++	info->task =3D task;
++	info->files =3D files;
++
++	return file;
++}
++
++struct bpfdump__task_file {
++	struct bpf_dump_meta *meta;
++	struct task_struct *task;
++	u32 fd;
++	struct file *file;
++};
++
++int __init __bpfdump__task_file(struct bpf_dump_meta *meta,
++			      struct task_struct *task, u32 fd,
++			      struct file *file)
++{
++	return 0;
++}
++
++static int task_file_seq_show(struct seq_file *seq, void *v)
++{
++	struct bpfdump_seq_task_file_info *info =3D seq->private;
++	struct bpfdump__task_file ctx;
++	struct bpf_dump_meta meta;
++	struct bpf_prog *prog;
++	int ret =3D 0;
++
++	prog =3D bpf_dump_get_prog(seq, sizeof(struct bpfdump_seq_task_file_inf=
+o),
++				 &meta.session_id, &meta.seq_num, v =3D=3D (void *)0);
++	if (prog) {
++		meta.seq =3D seq;
++		ctx.meta =3D &meta;
++		ctx.task =3D info->task;
++		ctx.fd =3D info->fd;
++		ctx.file =3D v;
++		ret =3D bpf_dump_run_prog(prog, &ctx);
++	}
++
++	return ret =3D=3D 0 ? 0 : -EINVAL;
++}
++
++static void task_file_seq_stop(struct seq_file *seq, void *v)
++{
++	struct bpfdump_seq_task_file_info *info =3D seq->private;
++
++	if (v)
++		fput((struct file *)v);
++	else
++		task_file_seq_show(seq, v);
++
++	if (info->files) {
++		put_files_struct(info->files);
++		info->files =3D NULL;
++	}
++}
++
++static const struct seq_operations task_file_seq_ops =3D {
++        .start  =3D task_file_seq_start,
++        .next   =3D task_file_seq_next,
++        .stop   =3D task_file_seq_stop,
++        .show   =3D task_file_seq_show,
++};
++
++static int __init task_dump_init(void)
++{
++	struct bpf_dump_reg task_file_reg_info =3D {
++		.target			=3D "task/file",
++		.target_proto		=3D "__bpfdump__task_file",
++		.prog_ctx_type_name	=3D "bpfdump__task_file",
++		.seq_ops		=3D &task_file_seq_ops,
++		.seq_priv_size		=3D sizeof(struct bpfdump_seq_task_file_info),
++		.target_feature		=3D 0,
++	};
++	struct bpf_dump_reg task_reg_info =3D {
++		.target			=3D "task",
++		.target_proto		=3D "__bpfdump__task",
++		.prog_ctx_type_name	=3D "bpfdump__task",
++		.seq_ops		=3D &task_seq_ops,
++		.seq_priv_size		=3D sizeof(struct bpfdump_seq_task_info),
++		.target_feature		=3D 0,
++	};
++	int ret;
++
++	ret =3D bpf_dump_reg_target(&task_reg_info);
++	if (ret)
++		return ret;
++
++	return bpf_dump_reg_target(&task_file_reg_info);
++}
++late_initcall(task_dump_init);
 --=20
 2.24.1
 
