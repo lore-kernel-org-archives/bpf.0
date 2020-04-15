@@ -2,123 +2,131 @@ Return-Path: <SRS0=iiTG=57=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DBE3C2BA19
-	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 12:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34F50C2BA19
+	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 12:59:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD6DF206D5
-	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 12:52:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586955140;
-	bh=xfxEHbO2CYxxBaJ6smtcDNMkhdPl2Aa+kTgvxGBP8Uw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=P7j0AZoKHiYUlYpMj4v0rqf9ok8Xs9ssWjyx3WrLz/0EhC/VavFeWIu5O1VsG230p
-	 VImpSxDjkFJeSSVerU5QaOts8wQwQi48Ku2siafpfDavL9MQyW42ayT+eDub49W7a/
-	 bdXIWw4NUn96+5uGUMj8UTObFiyq4jbA31u7y1gI=
+	by mail.kernel.org (Postfix) with ESMTP id 15AAE20737
+	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 12:59:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2897489AbgDOLmj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Apr 2020 07:42:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34006 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2897483AbgDOLmi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:42:38 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0EACB206A2;
-        Wed, 15 Apr 2020 11:42:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586950958;
-        bh=xfxEHbO2CYxxBaJ6smtcDNMkhdPl2Aa+kTgvxGBP8Uw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nrhVDEh1SkwzUfjtuL8dQeWYfiso4TfAUWijpH7AdA1RLylt/MQLlptUi2aTiCRvq
-         cMeRpcdKMhau8YUDWVn5PKNInLHbdIxClpDrj+3laZQXnVcyN+BVJNcpW4VoQZhRxf
-         WvB0uqfDmSJhWbptsvt5P5dB6cWKW+Wy4z4BHkDo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andriin@fb.com>,
-        Wenbo Zhang <ethercflow@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.5 009/106] bpf: Reliably preserve btf_trace_xxx types
-Date:   Wed, 15 Apr 2020 07:40:49 -0400
-Message-Id: <20200415114226.13103-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200415114226.13103-1-sashal@kernel.org>
-References: <20200415114226.13103-1-sashal@kernel.org>
+        id S2505678AbgDOM7u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Apr 2020 08:59:50 -0400
+Received: from www62.your-server.de ([213.133.104.62]:47350 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2505660AbgDOM7W (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Apr 2020 08:59:22 -0400
+Received: from 98.186.195.178.dynamic.wline.res.cust.swisscom.ch ([178.195.186.98] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jOhdB-00037I-7N; Wed, 15 Apr 2020 14:59:05 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     davem@davemloft.net
+Cc:     kuba@kernel.org, daniel@iogearbox.net, ast@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: pull-request: bpf 2020-04-15
+Date:   Wed, 15 Apr 2020 14:59:04 +0200
+Message-Id: <20200415125904.22480-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.2/25783/Wed Apr 15 14:03:13 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+Hi David,
 
-[ Upstream commit 441420a1f0b3031f228453697406c86f110e59d4 ]
+The following pull-request contains BPF updates for your *net* tree.
 
-btf_trace_xxx types, crucial for tp_btf BPF programs (raw tracepoint with
-verifier-checked direct memory access), have to be preserved in kernel BTF to
-allow verifier do its job and enforce type/memory safety. It was reported
-([0]) that for kernels built with Clang current type-casting approach doesn't
-preserve these types.
+We've added 10 non-merge commits during the last 3 day(s) which contain
+a total of 11 files changed, 238 insertions(+), 95 deletions(-).
 
-This patch fixes it by declaring an anonymous union for each registered
-tracepoint, capturing both struct bpf_raw_event_map information, as well as
-recording btf_trace_##call type reliably. Structurally, it's still the same
-content as for a plain struct bpf_raw_event_map, so no other changes are
-necessary.
+The main changes are:
 
-  [0] https://github.com/iovisor/bcc/issues/2770#issuecomment-591007692
+1) Fix offset overflow for BPF_MEM BPF_DW insn mapping on arm32 JIT,
+   from Luke Nelson and Xi Wang.
 
-Fixes: e8c423fb31fa ("bpf: Add typecast to raw_tracepoints to help BTF generation")
-Reported-by: Wenbo Zhang <ethercflow@gmail.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20200301081045.3491005-2-andriin@fb.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/trace/bpf_probe.h | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+2) Prevent mprotect() to make frozen & mmap()'ed BPF map writeable
+   again, from Andrii Nakryiko and Jann Horn.
 
-diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-index b04c292709730..1ce3be63add1f 100644
---- a/include/trace/bpf_probe.h
-+++ b/include/trace/bpf_probe.h
-@@ -75,13 +75,17 @@ static inline void bpf_test_probe_##call(void)				\
- 	check_trace_callback_type_##call(__bpf_trace_##template);	\
- }									\
- typedef void (*btf_trace_##call)(void *__data, proto);			\
--static struct bpf_raw_event_map	__used					\
--	__attribute__((section("__bpf_raw_tp_map")))			\
--__bpf_trace_tp_map_##call = {						\
--	.tp		= &__tracepoint_##call,				\
--	.bpf_func	= (void *)(btf_trace_##call)__bpf_trace_##template,	\
--	.num_args	= COUNT_ARGS(args),				\
--	.writable_size	= size,						\
-+static union {								\
-+	struct bpf_raw_event_map event;					\
-+	btf_trace_##call handler;					\
-+} __bpf_trace_tp_map_##call __used					\
-+__attribute__((section("__bpf_raw_tp_map"))) = {			\
-+	.event = {							\
-+		.tp		= &__tracepoint_##call,			\
-+		.bpf_func	= __bpf_trace_##template,		\
-+		.num_args	= COUNT_ARGS(args),			\
-+		.writable_size	= size,					\
-+	},								\
- };
- 
- #define FIRST(x, ...) x
--- 
-2.20.1
+3) Fix type of old_fd in bpf_xdp_set_link_opts to int in libbpf and add
+   selftests, from Toke Høiland-Jørgensen.
 
+4) Fix AF_XDP to check that headroom cannot be larger than the available
+   space in the chunk, from Magnus Karlsson.
+
+5) Fix reset of XDP prog when expected_fd is set, from David Ahern.
+
+6) Fix a segfault in bpftool's struct_ops command when BTF is not
+   available, from Daniel T. Lee.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+Thanks a lot!
+
+Also thanks to reporters, reviewers and testers of commits in this pull-request:
+
+Andrey Ignatov, Bui Quang Minh, David Ahern, Hulk Robot, Jakub Kicinski, 
+Jann Horn, Martin KaFai Lau, Song Liu, Toke Høiland-Jørgensen
+
+----------------------------------------------------------------
+
+The following changes since commit e154659ba39a1c2be576aaa0a5bda8088d707950:
+
+  mptcp: fix double-unlock in mptcp_poll (2020-04-12 21:04:08 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
+
+for you to fetch changes up to c6c111523d9e697bfb463870759825be5d6caff6:
+
+  selftests/bpf: Check for correct program attach/detach in xdp_attach test (2020-04-15 13:26:08 +0200)
+
+----------------------------------------------------------------
+Andrii Nakryiko (3):
+      bpf: Prevent re-mmap()'ing BPF map as writable for initially r/o mapping
+      selftests/bpf: Validate frozen map contents stays frozen
+      libbpf: Always specify expected_attach_type on program load if supported
+
+Daniel T. Lee (1):
+      tools, bpftool: Fix struct_ops command invalid pointer free
+
+David Ahern (1):
+      xdp: Reset prog in dev_change_xdp_fd when fd is negative
+
+Luke Nelson (1):
+      arm, bpf: Fix offset overflow for BPF_MEM BPF_DW
+
+Magnus Karlsson (1):
+      xsk: Add missing check on user supplied headroom size
+
+Toke Høiland-Jørgensen (2):
+      libbpf: Fix type of old_fd in bpf_xdp_set_link_opts
+      selftests/bpf: Check for correct program attach/detach in xdp_attach test
+
+Zou Wei (1):
+      bpf: remove unneeded conversion to bool in __mark_reg_unknown
+
+ arch/arm/net/bpf_jit_32.c                          |  40 ++++---
+ kernel/bpf/syscall.c                               |  16 ++-
+ kernel/bpf/verifier.c                              |   3 +-
+ net/core/dev.c                                     |   3 +-
+ net/xdp/xdp_umem.c                                 |   5 +-
+ tools/bpf/bpftool/struct_ops.c                     |   4 +-
+ tools/lib/bpf/libbpf.c                             | 126 ++++++++++++++-------
+ tools/lib/bpf/libbpf.h                             |   2 +-
+ tools/testing/selftests/bpf/prog_tests/mmap.c      |  62 +++++++++-
+ .../selftests/bpf/prog_tests/section_names.c       |  42 ++++---
+ .../testing/selftests/bpf/prog_tests/xdp_attach.c  |  30 ++++-
+ 11 files changed, 238 insertions(+), 95 deletions(-)
