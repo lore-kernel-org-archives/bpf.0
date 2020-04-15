@@ -2,45 +2,46 @@ Return-Path: <SRS0=iiTG=57=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 588E1C2BA19
-	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 19:29:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79F39C2BB85
+	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 19:29:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2418C206F9
-	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 19:29:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 53632206F9
+	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 19:29:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jYAcn1DS"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="eYiGyKmD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2411881AbgDOT2z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Apr 2020 15:28:55 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:28042 "EHLO
+        id S2411828AbgDOT26 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Apr 2020 15:28:58 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22644 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2411830AbgDOT23 (ORCPT
+        by vger.kernel.org with ESMTP id S1729383AbgDOT23 (ORCPT
         <rfc822;bpf@vger.kernel.org>); Wed, 15 Apr 2020 15:28:29 -0400
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03FJPM7o008538
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2020 12:28:26 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03FJPM7r008538
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2020 12:28:27 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=yKfP/7ju0dRYFRdfnVBsgmpyxRc4+rvgre4fkivzezM=;
- b=jYAcn1DSA/Te2FpBsHgtLKog50HZhxOShumbcFIWqh5quOJUW1yeKrRgdG5Q9Si0+TGB
- 9oHC2alooBMqgkE5tAH5Ws1qtOmU/dr9hW4rT7FVm8ziiAfm+2oj1y2L8jdfTT6W40sM
- ZfS8Dlf4Hqul/UA4KPa2ePhV3U/i93hliTs= 
+ bh=I1YS1gEyALHVuQVFkEuG1LVeNLe7wTQz2x7vQOmKeck=;
+ b=eYiGyKmD/ronn/VUqlb2QZIDY5OXKBmOWzHWfYZ7hya0enmWjD2UWofmjYqxi+XZKbnH
+ s3wh95VlZDUeKkZOsa7Ae3uE7BsCakj2ZshVKBZ9CKStrSWebtjuv6eJT0la3pCqL/kd
+ vRIj4UODV3g0vhyZzaptUeMzG1Bv9tiZaMk= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 30dn7t7m78-4
+        by mx0a-00082601.pphosted.com with ESMTP id 30dn7t7m78-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2020 12:28:25 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:108::4) by
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2020 12:28:27 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
  mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 15 Apr 2020 12:27:56 -0700
+ 15.1.1847.3; Wed, 15 Apr 2020 12:28:02 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 98E1C3700AF5; Wed, 15 Apr 2020 12:27:55 -0700 (PDT)
+        id 533CA3700AF5; Wed, 15 Apr 2020 12:27:59 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +50,9 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next v2 13/17] tools/libbpf: libbpf support for bpfdump
-Date:   Wed, 15 Apr 2020 12:27:55 -0700
-Message-ID: <20200415192755.4083842-1-yhs@fb.com>
+Subject: [RFC PATCH bpf-next v2 16/17] tools/bpf: selftests: add dumper progs for bpf_map/task/task_file
+Date:   Wed, 15 Apr 2020 12:27:59 -0700
+Message-ID: <20200415192759.4084166-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200415192740.4082659-1-yhs@fb.com>
 References: <20200415192740.4082659-1-yhs@fb.com>
@@ -63,7 +64,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-15_07:2020-04-14,2020-04-15 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
  adultscore=0 phishscore=0 malwarescore=0 impostorscore=0 mlxlogscore=999
- bulkscore=0 spamscore=0 priorityscore=1501 suspectscore=2
+ bulkscore=0 spamscore=0 priorityscore=1501 suspectscore=0
  lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2003020000 definitions=main-2004150143
 X-FB-Internal: deliver
@@ -72,254 +73,179 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a few libbpf APIs for bpfdump pin.
+The implementation is arbitrary, just to show how the bpf programs
+can be written for bpf_map/task/task_file. They can be costomized
+for specific needs.
 
-Also, parse the dump program section name,
-retrieve the dump target path and open the path
-to get a fd and assignment to prog->attach_target_fd.
-The implementation is absolutely minimum and hacky now.
+For example, for bpf_map, the dumper prints out:
+  $ cat /sys/kernel/bpfdump/bpf_map/my1
+      id   refcnt  usercnt  locked_vm
+       3        2        0         20
+       6        2        0         20
+       9        2        0         20
+      12        2        0         20
+      13        2        0         20
+      16        2        0         20
+      19        2        0         20
+      =3D=3D=3D END =3D=3D=3D
+
+For task, the dumper prints out:
+  $ cat /sys/kernel/bpfdump/task/my1
+    tgid      gid
+       1        1
+       2        2
+    ....
+    1944     1944
+    1948     1948
+    1949     1949
+    1953     1953
+    =3D=3D=3D END =3D=3D=3D
+
+For task/file, the dumper prints out:
+  $ cat /sys/kernel/bpfdump/task/file/my1
+    tgid      gid       fd      file
+       1        1        0 ffffffff95c97600
+       1        1        1 ffffffff95c97600
+       1        1        2 ffffffff95c97600
+    ....
+    1895     1895      255 ffffffff95c8fe00
+    1932     1932        0 ffffffff95c8fe00
+    1932     1932        1 ffffffff95c8fe00
+    1932     1932        2 ffffffff95c8fe00
+    1932     1932        3 ffffffff95c185c0
+
+This is able to print out all open files (fd and file->f_op), so user can=
+ compare
+f_op against a particular kernel file operations to find what it is.
+For example, from /proc/kallsyms, we can find
+  ffffffff95c185c0 r eventfd_fops
+so we will know tgid 1932 fd 3 is an eventfd file descriptor.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/lib/bpf/bpf.c      |  9 +++-
- tools/lib/bpf/bpf.h      |  1 +
- tools/lib/bpf/libbpf.c   | 88 +++++++++++++++++++++++++++++++++++++---
- tools/lib/bpf/libbpf.h   |  3 ++
- tools/lib/bpf/libbpf.map |  2 +
- 5 files changed, 95 insertions(+), 8 deletions(-)
+ .../selftests/bpf/progs/bpfdump_bpf_map.c     | 33 +++++++++++++++++++
+ .../selftests/bpf/progs/bpfdump_task.c        | 29 ++++++++++++++++
+ .../selftests/bpf/progs/bpfdump_task_file.c   | 30 +++++++++++++++++
+ 3 files changed, 92 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/bpfdump_bpf_map.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpfdump_task.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpfdump_task_file.c
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 5cc1b0785d18..b23f11c53109 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -238,10 +238,15 @@ int bpf_load_program_xattr(const struct bpf_load_pr=
-ogram_attr *load_attr,
- 	if (attr.prog_type =3D=3D BPF_PROG_TYPE_STRUCT_OPS ||
- 	    attr.prog_type =3D=3D BPF_PROG_TYPE_LSM) {
- 		attr.attach_btf_id =3D load_attr->attach_btf_id;
--	} else if (attr.prog_type =3D=3D BPF_PROG_TYPE_TRACING ||
--		   attr.prog_type =3D=3D BPF_PROG_TYPE_EXT) {
-+	} else if (attr.prog_type =3D=3D BPF_PROG_TYPE_EXT) {
- 		attr.attach_btf_id =3D load_attr->attach_btf_id;
- 		attr.attach_prog_fd =3D load_attr->attach_prog_fd;
-+	} else if (attr.prog_type =3D=3D BPF_PROG_TYPE_TRACING) {
-+		attr.attach_btf_id =3D load_attr->attach_btf_id;
-+		if (attr.expected_attach_type =3D=3D BPF_TRACE_DUMP)
-+			attr.attach_target_fd =3D load_attr->attach_target_fd;
-+		else
-+			attr.attach_prog_fd =3D load_attr->attach_prog_fd;
- 	} else {
- 		attr.prog_ifindex =3D load_attr->prog_ifindex;
- 		attr.kern_version =3D load_attr->kern_version;
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 46d47afdd887..7f8d740afde9 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -81,6 +81,7 @@ struct bpf_load_program_attr {
- 	union {
- 		__u32 kern_version;
- 		__u32 attach_prog_fd;
-+		__u32 attach_target_fd;
- 	};
- 	union {
- 		__u32 prog_ifindex;
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index ff9174282a8c..ad7726c0c1dc 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -79,6 +79,7 @@ static struct bpf_program *bpf_object__find_prog_by_idx=
-(struct bpf_object *obj,
- 							int idx);
- static const struct btf_type *
- skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id);
-+static int fill_dumper_info(struct bpf_program *prog);
-=20
- static int __base_pr(enum libbpf_print_level level, const char *format,
- 		     va_list args)
-@@ -229,6 +230,7 @@ struct bpf_program {
- 	enum bpf_attach_type expected_attach_type;
- 	__u32 attach_btf_id;
- 	__u32 attach_prog_fd;
-+	__u32 attach_target_fd;
- 	void *func_info;
- 	__u32 func_info_rec_size;
- 	__u32 func_info_cnt;
-@@ -2365,8 +2367,12 @@ static inline bool libbpf_prog_needs_vmlinux_btf(s=
-truct bpf_program *prog)
- 	/* BPF_PROG_TYPE_TRACING programs which do not attach to other programs
- 	 * also need vmlinux BTF
- 	 */
--	if (prog->type =3D=3D BPF_PROG_TYPE_TRACING && !prog->attach_prog_fd)
--		return true;
-+	if (prog->type =3D=3D BPF_PROG_TYPE_TRACING) {
-+		if (prog->expected_attach_type =3D=3D BPF_TRACE_DUMP)
-+			return false;
-+		if (!prog->attach_prog_fd)
-+			return true;
-+	}
-=20
- 	return false;
- }
-@@ -4870,10 +4876,15 @@ load_program(struct bpf_program *prog, struct bpf=
-_insn *insns, int insns_cnt,
- 	if (prog->type =3D=3D BPF_PROG_TYPE_STRUCT_OPS ||
- 	    prog->type =3D=3D BPF_PROG_TYPE_LSM) {
- 		load_attr.attach_btf_id =3D prog->attach_btf_id;
--	} else if (prog->type =3D=3D BPF_PROG_TYPE_TRACING ||
--		   prog->type =3D=3D BPF_PROG_TYPE_EXT) {
-+	} else if (prog->type =3D=3D BPF_PROG_TYPE_EXT) {
- 		load_attr.attach_prog_fd =3D prog->attach_prog_fd;
- 		load_attr.attach_btf_id =3D prog->attach_btf_id;
-+	} else if (prog->type =3D=3D BPF_PROG_TYPE_TRACING) {
-+		load_attr.attach_btf_id =3D prog->attach_btf_id;
-+		if (load_attr.expected_attach_type =3D=3D BPF_TRACE_DUMP)
-+			load_attr.attach_target_fd =3D prog->attach_target_fd;
-+		else
-+			load_attr.attach_prog_fd =3D prog->attach_prog_fd;
- 	} else {
- 		load_attr.kern_version =3D kern_version;
- 		load_attr.prog_ifindex =3D prog->prog_ifindex;
-@@ -4958,7 +4969,7 @@ int bpf_program__load(struct bpf_program *prog, cha=
-r *license, __u32 kern_ver)
- {
- 	int err =3D 0, fd, i, btf_id;
-=20
--	if ((prog->type =3D=3D BPF_PROG_TYPE_TRACING ||
-+	if (((prog->type =3D=3D BPF_PROG_TYPE_TRACING && prog->expected_attach_=
-type !=3D BPF_TRACE_DUMP) ||
- 	     prog->type =3D=3D BPF_PROG_TYPE_LSM ||
- 	     prog->type =3D=3D BPF_PROG_TYPE_EXT) && !prog->attach_btf_id) {
- 		btf_id =3D libbpf_find_attach_btf_id(prog);
-@@ -5319,6 +5330,7 @@ static int bpf_object__resolve_externs(struct bpf_o=
-bject *obj,
-=20
- int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
- {
-+	struct bpf_program *prog;
- 	struct bpf_object *obj;
- 	int err, i;
-=20
-@@ -5335,7 +5347,17 @@ int bpf_object__load_xattr(struct bpf_object_load_=
-attr *attr)
-=20
- 	obj->loaded =3D true;
-=20
--	err =3D bpf_object__probe_caps(obj);
-+	err =3D 0;
-+	bpf_object__for_each_program(prog, obj) {
-+		if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
-+		    prog->expected_attach_type =3D=3D BPF_TRACE_DUMP) {
-+			err =3D fill_dumper_info(prog);
-+			if (err)
-+				break;
-+		}
-+	}
+diff --git a/tools/testing/selftests/bpf/progs/bpfdump_bpf_map.c b/tools/=
+testing/selftests/bpf/progs/bpfdump_bpf_map.c
+new file mode 100644
+index 000000000000..94e97a5358e9
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpfdump_bpf_map.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_endian.h>
 +
-+	err =3D err ? : bpf_object__probe_caps(obj);
- 	err =3D err ? : bpf_object__resolve_externs(obj, obj->kconfig);
- 	err =3D err ? : bpf_object__sanitize_and_load_btf(obj);
- 	err =3D err ? : bpf_object__sanitize_maps(obj);
-@@ -6322,6 +6344,8 @@ static const struct bpf_sec_def section_defs[] =3D =
-{
- 		.is_attach_btf =3D true,
- 		.expected_attach_type =3D BPF_LSM_MAC,
- 		.attach_fn =3D attach_lsm),
-+	SEC_DEF("dump/", TRACING,
-+		.expected_attach_type =3D BPF_TRACE_DUMP),
- 	BPF_PROG_SEC("xdp",			BPF_PROG_TYPE_XDP),
- 	BPF_PROG_SEC("perf_event",		BPF_PROG_TYPE_PERF_EVENT),
- 	BPF_PROG_SEC("lwt_in",			BPF_PROG_TYPE_LWT_IN),
-@@ -6401,6 +6425,58 @@ static const struct bpf_sec_def *find_sec_def(cons=
-t char *sec_name)
- 	return NULL;
- }
-=20
-+static int fill_dumper_info(struct bpf_program *prog)
++char _license[] SEC("license") =3D "GPL";
++
++SEC("dump//sys/kernel/bpfdump/bpf_map")
++int dump_bpf_map(struct bpfdump__bpf_map *ctx)
 +{
-+	const struct bpf_sec_def *sec;
-+	const char *dump_target;
-+	int fd;
++	static const char banner[] =3D "      id   refcnt  usercnt  locked_vm\n=
+";
++	static const char footer[] =3D "      =3D=3D=3D END =3D=3D=3D\n";
++	static const char fmt1[] =3D "%8u %8ld ";
++	static const char fmt2[] =3D "%8ld %10lu\n";
++	struct seq_file *seq =3D ctx->meta->seq;
++	__u64 seq_num =3D ctx->meta->seq_num;
++	struct bpf_map *map =3D ctx->map;
 +
-+	sec =3D find_sec_def(bpf_program__title(prog, false));
-+	if (sec) {
-+		dump_target =3D bpf_program__title(prog, false) + sec->len;
-+		fd =3D open(dump_target, O_RDONLY);
-+		if (fd < 0)
-+			return fd;
-+		prog->attach_target_fd =3D fd;
++	if (map =3D=3D (void *)0) {
++		bpf_seq_printf(seq, footer, sizeof(footer));
++		return 0;
 +	}
++
++	if (seq_num =3D=3D 0)
++		bpf_seq_printf(seq, banner, sizeof(banner));
++
++	bpf_seq_printf(seq, fmt1, sizeof(fmt1), map->id, map->refcnt.counter);
++	bpf_seq_printf(seq, fmt2, sizeof(fmt2), map->usercnt.counter,
++		       map->memory.user->locked_vm.counter);
 +	return 0;
 +}
+diff --git a/tools/testing/selftests/bpf/progs/bpfdump_task.c b/tools/tes=
+ting/selftests/bpf/progs/bpfdump_task.c
+new file mode 100644
+index 000000000000..70c5b14934a2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpfdump_task.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_endian.h>
 +
-+int bpf_dump__pin(struct bpf_program *prog, const char *dname)
++char _license[] SEC("license") =3D "GPL";
++
++SEC("dump//sys/kernel/bpfdump/task")
++int dump_tasks(struct bpfdump__task *ctx)
 +{
-+	int len, prog_fd =3D bpf_program__fd(prog);
-+	const struct bpf_sec_def *sec;
-+	const char *dump_target;
-+	char *name_buf;
-+	int err;
++	static char const banner[] =3D "    tgid      gid\n";
++	static char const footer[] =3D "=3D=3D=3D END =3D=3D=3D\n";
++	static char const fmt[] =3D "%8d %8d\n";
++	struct seq_file *seq =3D ctx->meta->seq;
++	struct task_struct *task =3D ctx->task;
 +
-+	if (dname[0] =3D=3D '/')
-+		return bpf_obj_pin(prog_fd, dname);
++	if (task =3D=3D (void *)0) {
++		bpf_seq_printf(seq, footer, sizeof(footer));
++		return 0;
++	}
 +
-+	sec =3D find_sec_def(bpf_program__title(prog, false));
-+	if (!sec)
-+		return bpf_obj_pin(prog_fd, dname);
++	if (ctx->meta->seq_num =3D=3D 0)
++		bpf_seq_printf(seq, banner, sizeof(banner));
 +
-+	dump_target =3D bpf_program__title(prog, false) + sec->len;
-+	len =3D strlen(dump_target) + strlen(dname) + 2;
-+	name_buf =3D malloc(len);
-+	if (!name_buf)
-+		return -ENOMEM;
-+
-+	strcpy(name_buf, dump_target);
-+	strcat(name_buf, "/");
-+	strcat(name_buf, dname);
-+
-+	err =3D bpf_obj_pin(prog_fd, name_buf);
-+	free(name_buf);
-+	return err;
++	bpf_seq_printf(seq, fmt, sizeof(fmt), task->tgid, task->pid);
++	return 0;
 +}
+diff --git a/tools/testing/selftests/bpf/progs/bpfdump_task_file.c b/tool=
+s/testing/selftests/bpf/progs/bpfdump_task_file.c
+new file mode 100644
+index 000000000000..95e3ff6f8a06
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpfdump_task_file.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_endian.h>
 +
-+int bpf_dump__unpin(struct bpf_program *prog, const char *dname)
++char _license[] SEC("license") =3D "GPL";
++
++SEC("dump//sys/kernel/bpfdump/task/file")
++int dump_tasks(struct bpfdump__task_file *ctx)
 +{
-+	return -EINVAL;
++	static char const banner[] =3D "    tgid      gid       fd      file\n"=
+;
++	static char const fmt1[] =3D "%8d %8d";
++	static char const fmt2[] =3D " %8d %lx\n";
++	struct seq_file *seq =3D ctx->meta->seq;
++	struct task_struct *task =3D ctx->task;
++	__u32 fd =3D ctx->fd;
++	struct file *file =3D ctx->file;
++
++	if (task =3D=3D (void *)0 || file =3D=3D (void *)0)
++		return 0;
++
++	if (ctx->meta->seq_num =3D=3D 0)
++		bpf_seq_printf(seq, banner, sizeof(banner));
++
++	bpf_seq_printf(seq, fmt1, sizeof(fmt1), task->tgid, task->pid);
++	bpf_seq_printf(seq, fmt2, sizeof(fmt2), fd, (long)file->f_op);
++	return 0;
 +}
-+
- static char *libbpf_get_type_names(bool attach_type)
- {
- 	int i, len =3D ARRAY_SIZE(section_defs) * MAX_TYPE_NAME_SIZE;
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 44df1d3e7287..e0d31e93d21c 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -217,6 +217,9 @@ LIBBPF_API int bpf_program__pin(struct bpf_program *p=
-rog, const char *path);
- LIBBPF_API int bpf_program__unpin(struct bpf_program *prog, const char *=
-path);
- LIBBPF_API void bpf_program__unload(struct bpf_program *prog);
-=20
-+LIBBPF_API int bpf_dump__pin(struct bpf_program *prog, const char *dname=
-);
-+LIBBPF_API int bpf_dump__unpin(struct bpf_program *prog, const char *dna=
-me);
-+
- struct bpf_link;
-=20
- LIBBPF_API struct bpf_link *bpf_link__open(const char *path);
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index bb8831605b25..0beb70bfe65a 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -238,6 +238,8 @@ LIBBPF_0.0.7 {
-=20
- LIBBPF_0.0.8 {
- 	global:
-+		bpf_dump__pin;
-+		bpf_dump__unpin;
- 		bpf_link__fd;
- 		bpf_link__open;
- 		bpf_link__pin;
 --=20
 2.24.1
 
