@@ -2,131 +2,127 @@ Return-Path: <SRS0=iiTG=57=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34F50C2BA19
-	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 12:59:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E788EC3815B
+	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 13:06:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 15AAE20737
-	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 12:59:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7B0320737
+	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 13:06:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1586955983;
+	bh=6t3+3qwmRGygDhPMOTO2+3DXzG3LvWH6rdYFk0VGngU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=ki5YkWRzuOS0/JkQc2weBqf8ZSxyxRkR6wOLHoU4tqh7Xb8q5YgBtcMMkJvLRnvRi
+	 VK2nhl/s6C4OAGeLPfMTt/vdN2TUybfr19HJ0RvbIv/mE460OG+T8KDpiuPMnuyMaw
+	 xn09we70iV1M5KhLEAPzajOBfnyOFBFt7d92hKUA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505678AbgDOM7u (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Apr 2020 08:59:50 -0400
-Received: from www62.your-server.de ([213.133.104.62]:47350 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2505660AbgDOM7W (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Apr 2020 08:59:22 -0400
-Received: from 98.186.195.178.dynamic.wline.res.cust.swisscom.ch ([178.195.186.98] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jOhdB-00037I-7N; Wed, 15 Apr 2020 14:59:05 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     davem@davemloft.net
-Cc:     kuba@kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: pull-request: bpf 2020-04-15
-Date:   Wed, 15 Apr 2020 14:59:04 +0200
-Message-Id: <20200415125904.22480-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+        id S2503923AbgDONGW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Apr 2020 09:06:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55960 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2897123AbgDOLgM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:36:12 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D7CFA20768;
+        Wed, 15 Apr 2020 11:36:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586950571;
+        bh=6t3+3qwmRGygDhPMOTO2+3DXzG3LvWH6rdYFk0VGngU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MBSmdsGx7a8VXkEZYXqJZMqdjm8m0JEaaJliZc1ldpB9zXeFtq4D8sk/f6nfp3/F4
+         H4Q2+TR6ald0wCEsbUq5/6O5faAENdZV+8KTjc3ggKQPAg1KR/Qnk7QiEmhaOKYLHT
+         F7+8K4Fan5J/BTnb/YJHRGDe7L7bKCKH8tleVmiI=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Will Deacon <will@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 073/129] tun: Don't put_page() for all negative return values from XDP program
+Date:   Wed, 15 Apr 2020 07:33:48 -0400
+Message-Id: <20200415113445.11881-73-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200415113445.11881-1-sashal@kernel.org>
+References: <20200415113445.11881-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.2/25783/Wed Apr 15 14:03:13 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi David,
+From: Will Deacon <will@kernel.org>
 
-The following pull-request contains BPF updates for your *net* tree.
+[ Upstream commit bee348907d19d654e8524d3a946dcd25b693aa7e ]
 
-We've added 10 non-merge commits during the last 3 day(s) which contain
-a total of 11 files changed, 238 insertions(+), 95 deletions(-).
+When an XDP program is installed, tun_build_skb() grabs a reference to
+the current page fragment page if the program returns XDP_REDIRECT or
+XDP_TX. However, since tun_xdp_act() passes through negative return
+values from the XDP program, it is possible to trigger the error path by
+mistake and accidentally drop a reference to the fragments page without
+taking one, leading to a spurious free. This is believed to be the cause
+of some KASAN use-after-free reports from syzbot [1], although without a
+reproducer it is not possible to confirm whether this patch fixes the
+problem.
 
-The main changes are:
+Ensure that we only drop a reference to the fragments page if the XDP
+transmit or redirect operations actually fail.
 
-1) Fix offset overflow for BPF_MEM BPF_DW insn mapping on arm32 JIT,
-   from Luke Nelson and Xi Wang.
+[1] https://syzkaller.appspot.com/bug?id=e76a6af1be4acd727ff6bbca669833f98cbf5d95
 
-2) Prevent mprotect() to make frozen & mmap()'ed BPF map writeable
-   again, from Andrii Nakryiko and Jann Horn.
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+CC: Eric Dumazet <edumazet@google.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Fixes: 8ae1aff0b331 ("tuntap: split out XDP logic")
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/tun.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-3) Fix type of old_fd in bpf_xdp_set_link_opts to int in libbpf and add
-   selftests, from Toke Høiland-Jørgensen.
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 650c937ed56bb..9de9b7d8aedd3 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1715,8 +1715,12 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
+ 			alloc_frag->offset += buflen;
+ 		}
+ 		err = tun_xdp_act(tun, xdp_prog, &xdp, act);
+-		if (err < 0)
+-			goto err_xdp;
++		if (err < 0) {
++			if (act == XDP_REDIRECT || act == XDP_TX)
++				put_page(alloc_frag->page);
++			goto out;
++		}
++
+ 		if (err == XDP_REDIRECT)
+ 			xdp_do_flush();
+ 		if (err != XDP_PASS)
+@@ -1730,8 +1734,6 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
+ 
+ 	return __tun_build_skb(tfile, alloc_frag, buf, buflen, len, pad);
+ 
+-err_xdp:
+-	put_page(alloc_frag->page);
+ out:
+ 	rcu_read_unlock();
+ 	local_bh_enable();
+-- 
+2.20.1
 
-4) Fix AF_XDP to check that headroom cannot be larger than the available
-   space in the chunk, from Magnus Karlsson.
-
-5) Fix reset of XDP prog when expected_fd is set, from David Ahern.
-
-6) Fix a segfault in bpftool's struct_ops command when BTF is not
-   available, from Daniel T. Lee.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-Thanks a lot!
-
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
-
-Andrey Ignatov, Bui Quang Minh, David Ahern, Hulk Robot, Jakub Kicinski, 
-Jann Horn, Martin KaFai Lau, Song Liu, Toke Høiland-Jørgensen
-
-----------------------------------------------------------------
-
-The following changes since commit e154659ba39a1c2be576aaa0a5bda8088d707950:
-
-  mptcp: fix double-unlock in mptcp_poll (2020-04-12 21:04:08 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
-
-for you to fetch changes up to c6c111523d9e697bfb463870759825be5d6caff6:
-
-  selftests/bpf: Check for correct program attach/detach in xdp_attach test (2020-04-15 13:26:08 +0200)
-
-----------------------------------------------------------------
-Andrii Nakryiko (3):
-      bpf: Prevent re-mmap()'ing BPF map as writable for initially r/o mapping
-      selftests/bpf: Validate frozen map contents stays frozen
-      libbpf: Always specify expected_attach_type on program load if supported
-
-Daniel T. Lee (1):
-      tools, bpftool: Fix struct_ops command invalid pointer free
-
-David Ahern (1):
-      xdp: Reset prog in dev_change_xdp_fd when fd is negative
-
-Luke Nelson (1):
-      arm, bpf: Fix offset overflow for BPF_MEM BPF_DW
-
-Magnus Karlsson (1):
-      xsk: Add missing check on user supplied headroom size
-
-Toke Høiland-Jørgensen (2):
-      libbpf: Fix type of old_fd in bpf_xdp_set_link_opts
-      selftests/bpf: Check for correct program attach/detach in xdp_attach test
-
-Zou Wei (1):
-      bpf: remove unneeded conversion to bool in __mark_reg_unknown
-
- arch/arm/net/bpf_jit_32.c                          |  40 ++++---
- kernel/bpf/syscall.c                               |  16 ++-
- kernel/bpf/verifier.c                              |   3 +-
- net/core/dev.c                                     |   3 +-
- net/xdp/xdp_umem.c                                 |   5 +-
- tools/bpf/bpftool/struct_ops.c                     |   4 +-
- tools/lib/bpf/libbpf.c                             | 126 ++++++++++++++-------
- tools/lib/bpf/libbpf.h                             |   2 +-
- tools/testing/selftests/bpf/prog_tests/mmap.c      |  62 +++++++++-
- .../selftests/bpf/prog_tests/section_names.c       |  42 ++++---
- .../testing/selftests/bpf/prog_tests/xdp_attach.c  |  30 ++++-
- 11 files changed, 238 insertions(+), 95 deletions(-)
