@@ -2,123 +2,115 @@ Return-Path: <SRS0=iiTG=57=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1314FC2BB55
-	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 13:22:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ACF5C2BA19
+	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 14:02:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E4D0320936
-	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 13:22:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586956955;
-	bh=xfxEHbO2CYxxBaJ6smtcDNMkhdPl2Aa+kTgvxGBP8Uw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WPBqERN/MI2eAA2WyiU55mmV7uLtShfz/ElyUcwLooVHclLZpr4S05Wc4Z3gQ8C2d
-	 U2I5Qh1Dz44XeQfvHMp5CUZ1IbLN/1h9mXEQHP8U/JH8XHwmp4EU2cssPYMbAAQMND
-	 gmNsZtiqi0qgMkm8vd6vR6OI1pmlgj1sROXBHlYo=
+	by mail.kernel.org (Postfix) with ESMTP id 0ED1A20775
+	for <bpf@archiver.kernel.org>; Wed, 15 Apr 2020 14:02:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="htvGLJbG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408887AbgDOLfC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Apr 2020 07:35:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54384 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408878AbgDOLe7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:34:59 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 280372137B;
-        Wed, 15 Apr 2020 11:34:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586950499;
-        bh=xfxEHbO2CYxxBaJ6smtcDNMkhdPl2Aa+kTgvxGBP8Uw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bzXuahgXyS0yHKFgur/XfGTqNgJ2KnbRVvzPMk1FletGdvVoaTJdQckXIcPvyNcNi
-         P78koRRGVCcAWIzlRF7Ui0zux3dU8HBUmfdJIHX0B1Z4xfpa+czO3xw5e6xJhBr3CQ
-         0HuRme/iFCDelnoN7XbuS9IqlCBFXJgOqN6O84yY=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andriin@fb.com>,
-        Wenbo Zhang <ethercflow@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.6 011/129] bpf: Reliably preserve btf_trace_xxx types
-Date:   Wed, 15 Apr 2020 07:32:46 -0400
-Message-Id: <20200415113445.11881-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200415113445.11881-1-sashal@kernel.org>
-References: <20200415113445.11881-1-sashal@kernel.org>
+        id S2633818AbgDOOCK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Apr 2020 10:02:10 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:21307 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729062AbgDOOCH (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 15 Apr 2020 10:02:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586959323;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DIieFSIFXcNK3bF2pki6xVm8oWsV0b5ZkJCX9uZyw50=;
+        b=htvGLJbGuKfXs67/ulj0QKKO+d27Kcoo4/lrsvlT8xE+Op/HVYlD0EE/T10RS6TkaJvaRU
+        4l/3pc20Jy3FIyHGfT24usQh5NezJUnSt+OBKzqewn6Z3vja8sdHhFBwgnZFE57921NJCS
+        f4yjt2rGpLQts7W/8wAX/hNRZCbz9Bg=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-347-Rl2o2wU-OBOwb1-WaO0z4A-1; Wed, 15 Apr 2020 10:02:02 -0400
+X-MC-Unique: Rl2o2wU-OBOwb1-WaO0z4A-1
+Received: by mail-lj1-f197.google.com with SMTP id e6so631491ljj.5
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2020 07:02:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DIieFSIFXcNK3bF2pki6xVm8oWsV0b5ZkJCX9uZyw50=;
+        b=VDDvLVhvLdsJmH5YCsNYMPw7dFvaSOpbW2Ak4R0OeMUHhwGiv4HarVB1yR/H3A1qBy
+         HZuuKYcem8zxSOEAAFs5e5Rw768jZFvMZK79Asa3LtWuXk2jk7fNH3KcXxvKdzsw6tbB
+         x3CXF5z0o1VvH4c2VVU7sP2wTKSobuUoETj0x6IylyYijQsBlj2mqMau6KrJuOtCEjTw
+         fwT6FJywXx6mpOm0Wj50t6gj7k1Lhtq/UmrN2cqT76q+W9JspAumfn73yz0t5ZIuP3xy
+         Imjc7Y234yjsoiUuGRL+uX7KD56niYnD/5vtH/K5o+MToFNW755BR3M8eIjXqnfk5Dw2
+         ZaCQ==
+X-Gm-Message-State: AGi0PuZo5dD1rGRZH7HZYv8zCMWNWDlVPkuLfnJZYunIzShYlVmLcUP/
+        ySLqXh0qvp8RFwvTMQsFoz1gLzvU0ljdCPUZBXJbaghwk6Bgy1/Lo4mA22biFZCzJxlbOmzCpXo
+        bV7btXj/OmgAv
+X-Received: by 2002:ac2:43c6:: with SMTP id u6mr3294392lfl.170.1586959320659;
+        Wed, 15 Apr 2020 07:02:00 -0700 (PDT)
+X-Google-Smtp-Source: APiQypKQVrVF1keziwDymILwDFZQB1YR2QERfd2wejuW+1DEDbm2plwNgF7XGhJrMenNXH6bM9yzZQ==
+X-Received: by 2002:ac2:43c6:: with SMTP id u6mr3294372lfl.170.1586959320382;
+        Wed, 15 Apr 2020 07:02:00 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id u3sm13345180lff.26.2020.04.15.07.01.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2020 07:01:59 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 9171B181586; Wed, 15 Apr 2020 16:01:58 +0200 (CEST)
+From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     daniel@iogearbox.net, ast@fb.com
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Xiumei Mu <xmu@redhat.com>
+Subject: [PATCH bpf] cpumap: Avoid warning when CONFIG_DEBUG_PER_CPU_MAPS is enabled
+Date:   Wed, 15 Apr 2020 16:01:51 +0200
+Message-Id: <20200415140151.439943-1-toke@redhat.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+When the kernel is built with CONFIG_DEBUG_PER_CPU_MAPS, the cpumap code
+can trigger a spurious warning if CONFIG_CPUMASK_OFFSTACK is also set. This
+happens because in this configuration, NR_CPUS can be larger than
+nr_cpumask_bits, so the initial check in cpu_map_alloc() is not sufficient
+to guard against hitting the warning in cpumask_check().
 
-[ Upstream commit 441420a1f0b3031f228453697406c86f110e59d4 ]
+Fix this by using the nr_cpumask_bits variable in the map creation code
+instead of the NR_CPUS constant.
 
-btf_trace_xxx types, crucial for tp_btf BPF programs (raw tracepoint with
-verifier-checked direct memory access), have to be preserved in kernel BTF to
-allow verifier do its job and enforce type/memory safety. It was reported
-([0]) that for kernels built with Clang current type-casting approach doesn't
-preserve these types.
-
-This patch fixes it by declaring an anonymous union for each registered
-tracepoint, capturing both struct bpf_raw_event_map information, as well as
-recording btf_trace_##call type reliably. Structurally, it's still the same
-content as for a plain struct bpf_raw_event_map, so no other changes are
-necessary.
-
-  [0] https://github.com/iovisor/bcc/issues/2770#issuecomment-591007692
-
-Fixes: e8c423fb31fa ("bpf: Add typecast to raw_tracepoints to help BTF generation")
-Reported-by: Wenbo Zhang <ethercflow@gmail.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20200301081045.3491005-2-andriin@fb.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 6710e1126934 ("bpf: introduce new bpf cpu map type BPF_MAP_TYPE_CPUMAP")
+Cc: Jesper Dangaard Brouer <brouer@redhat.com>
+Reported-by: Xiumei Mu <xmu@redhat.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/trace/bpf_probe.h | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+ kernel/bpf/cpumap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-index b04c292709730..1ce3be63add1f 100644
---- a/include/trace/bpf_probe.h
-+++ b/include/trace/bpf_probe.h
-@@ -75,13 +75,17 @@ static inline void bpf_test_probe_##call(void)				\
- 	check_trace_callback_type_##call(__bpf_trace_##template);	\
- }									\
- typedef void (*btf_trace_##call)(void *__data, proto);			\
--static struct bpf_raw_event_map	__used					\
--	__attribute__((section("__bpf_raw_tp_map")))			\
--__bpf_trace_tp_map_##call = {						\
--	.tp		= &__tracepoint_##call,				\
--	.bpf_func	= (void *)(btf_trace_##call)__bpf_trace_##template,	\
--	.num_args	= COUNT_ARGS(args),				\
--	.writable_size	= size,						\
-+static union {								\
-+	struct bpf_raw_event_map event;					\
-+	btf_trace_##call handler;					\
-+} __bpf_trace_tp_map_##call __used					\
-+__attribute__((section("__bpf_raw_tp_map"))) = {			\
-+	.event = {							\
-+		.tp		= &__tracepoint_##call,			\
-+		.bpf_func	= __bpf_trace_##template,		\
-+		.num_args	= COUNT_ARGS(args),			\
-+		.writable_size	= size,					\
-+	},								\
- };
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 70f71b154fa5..23902afb3bba 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -99,8 +99,8 @@ static struct bpf_map *cpu_map_alloc(union bpf_attr *attr)
  
- #define FIRST(x, ...) x
+ 	bpf_map_init_from_attr(&cmap->map, attr);
+ 
+-	/* Pre-limit array size based on NR_CPUS, not final CPU check */
+-	if (cmap->map.max_entries > NR_CPUS) {
++	/* Pre-limit array size based on nr_cpumask_bits, not final CPU check */
++	if (cmap->map.max_entries > nr_cpumask_bits) {
+ 		err = -E2BIG;
+ 		goto free_cmap;
+ 	}
 -- 
-2.20.1
+2.26.0
 
