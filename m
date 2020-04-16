@@ -2,95 +2,165 @@ Return-Path: <SRS0=p1q1=6A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B48BC2BA2B
-	for <bpf@archiver.kernel.org>; Thu, 16 Apr 2020 21:45:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23C0EC2BA2B
+	for <bpf@archiver.kernel.org>; Thu, 16 Apr 2020 22:15:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 125C7221F4
-	for <bpf@archiver.kernel.org>; Thu, 16 Apr 2020 21:45:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587073539;
-	bh=P7wZo1p241YIkVWUglCQI/DNZgi7LsWHvliQUsJOCiQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=hWuZDdVwM+vccL/I0GWkHHuSIKNOpna4Y4j9rCdbeV/M3NoQ6crvln/hg8se8MNXo
-	 lQMJs+NxiONrXfaev/yLWK58t6mAzqbYCYjYPlWEGoAHzclwO2WPkzFX24NYtyKMtP
-	 BxyLrhbhph1vOF9Eqb7eDClQEUVKWObyG1aVXo5U=
+	by mail.kernel.org (Postfix) with ESMTP id F2385221F9
+	for <bpf@archiver.kernel.org>; Thu, 16 Apr 2020 22:15:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SrGxGy8s"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728112AbgDPVpi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Apr 2020 17:45:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58818 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727829AbgDPVpi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Apr 2020 17:45:38 -0400
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 65E43221F4;
-        Thu, 16 Apr 2020 21:45:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587073537;
-        bh=P7wZo1p241YIkVWUglCQI/DNZgi7LsWHvliQUsJOCiQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ueN6cjSBZw8hrgqxJA3wRCKDOs/jOxFe0+8GbHuFbv9TPj9TAbHnl04EV95ffev2F
-         TDAJ0ZPP/4TIqJSXpYg8+EuoyU+qQYetzBieYTx5VVcZB8WNZKjIrBSc0eWCgiJ4I5
-         dGn8ZdTS6nWrwZn4maz1IAAWG9xzD4pcwBSLifCE=
-Received: by mail-lf1-f42.google.com with SMTP id w145so61974lff.3;
-        Thu, 16 Apr 2020 14:45:37 -0700 (PDT)
-X-Gm-Message-State: AGi0PuZYMdiuyl/yRXwrY3aawl1Vrx0L5adPad/gHjofQxmRNV75s3sP
-        zIORpsg8adIv9EKKk+/BYW8u1DAQ+KCJ0qopLws=
-X-Google-Smtp-Source: APiQypId2J5XS004aACbFEMKESBsNYQOqsdEX8+LBnY6ZexYneL1r1mJjQCZGJTzGg481xeGI2tDi9ruAXTg+pNKQN8=
-X-Received: by 2002:a05:6512:1c5:: with SMTP id f5mr7110378lfp.138.1587073535576;
- Thu, 16 Apr 2020 14:45:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200416083120.453718-1-toke@redhat.com> <20200416104339.3a8b85c4@carbon>
-In-Reply-To: <20200416104339.3a8b85c4@carbon>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 16 Apr 2020 14:45:24 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW76RGkXBDPdWWFsN6xc6_0rUGBEGgwq-xAEtUU4O9y9ow@mail.gmail.com>
-Message-ID: <CAPhsuW76RGkXBDPdWWFsN6xc6_0rUGBEGgwq-xAEtUU4O9y9ow@mail.gmail.com>
-Subject: Re: [PATCH bpf v2] cpumap: Avoid warning when CONFIG_DEBUG_PER_CPU_MAPS
- is enabled
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        id S1729262AbgDPWPM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Apr 2020 18:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729205AbgDPWPL (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 16 Apr 2020 18:15:11 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9AEC061A41
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2020 15:15:11 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id z8so107255qki.13
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2020 15:15:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=i6zi1rxo51fT0gF/9bIKSou9eRtAcSwwYlA8EKV06Zo=;
+        b=SrGxGy8s4ytPw4timT44/yvzlyEckdI3kUPwh456UpVj+LH7jd6GHSbiMnnJ0MMkCK
+         x3Gakjw88HjZMraj2upA2jKbx/ISFXBxkkeB27X00Y1lETyNKLH8mYCC6R47lGkLqK8H
+         vaGoRx5tBFnwy99b1MwAMkT6YLcectvICoCWacgNsja+p9ctvAjpwOAAesNLUmJX7taD
+         WcQY7D6bc60UFTOr8KFamArKB2FJCWlZnpwhXlNAYWuT7NCCSIw1ggP+LNTKo1sMV/eV
+         NpbDezVvXmlEYFQuDLR6W3vLBIcb10wxLruXG5CwXfAYZUs+8GwYN5flnTWlTfh0/pkS
+         Okvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=i6zi1rxo51fT0gF/9bIKSou9eRtAcSwwYlA8EKV06Zo=;
+        b=duCUofNtd4DinV+9r7T7fOWNnZSV60YcJU+UbD8XgirD86dXKWI4mjeba73IsruwIy
+         dc3hYaEpuDbN7r+n23lxp/G9YbN/HTzoZMhMMLTrxTTA3pFvJ2t+XNLllwf4ioGpovwO
+         zPYYesgsntqrj/5Ps5L2QFrmiueg/ugW5P67FW+cljVMnGuzsLgNRjIDFfOL2KINqbY5
+         sCI7fg5zcG0lXX3PaRkcIVGqUWL32VitAoilv5W9S7KAsf3hBLjw8zgesT70ym6LO1H7
+         gnyna8xsUOsbjvcZFn5cnHZy5k9wuwVb8fHKidMqUCfUMQ5xVZg/q2HPCksZnQmuPx1l
+         Wipw==
+X-Gm-Message-State: AGi0PuZLPgu68VF/hXyS8qteCATkUjVmJRpf3BRbUw+5pQttkqlCdhLE
+        lu11ImBtH26EFSJ7bIvSRAHcemdfZgQ5
+X-Google-Smtp-Source: APiQypLk4PUpjzE7K8jVUtavsUcybhrkLlxmuvUCKxRqtRx63IfICXBx4LOCUTvKNzrUFxmZzcER8r+wwzh6
+X-Received: by 2002:a05:6214:1248:: with SMTP id q8mr12436429qvv.66.1587075309771;
+ Thu, 16 Apr 2020 15:15:09 -0700 (PDT)
+Date:   Thu, 16 Apr 2020 15:14:55 -0700
+In-Reply-To: <20200416221457.46710-1-irogers@google.com>
+Message-Id: <20200416221457.46710-3-irogers@google.com>
+Mime-Version: 1.0
+References: <20200416221457.46710-1-irogers@google.com>
+X-Mailer: git-send-email 2.26.1.301.g55bc3eb7cb9-goog
+Subject: [PATCH v11 2/4] tools feature: add support for detecting libpfm4
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, Xiumei Mu <xmu@redhat.com>
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Igor Lubashev <ilubashe@akamai.com>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Jiwei Sun <jiwei.sun@windriver.com>,
+        yuzhoujian <yuzhoujian@didichuxing.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 16, 2020 at 2:11 AM Jesper Dangaard Brouer
-<brouer@redhat.com> wrote:
->
-> On Thu, 16 Apr 2020 10:31:20 +0200
-> Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> wrote:
->
-> > When the kernel is built with CONFIG_DEBUG_PER_CPU_MAPS, the cpumap cod=
-e
-> > can trigger a spurious warning if CONFIG_CPUMASK_OFFSTACK is also set. =
-This
-> > happens because in this configuration, NR_CPUS can be larger than
-> > nr_cpumask_bits, so the initial check in cpu_map_alloc() is not suffici=
-ent
-> > to guard against hitting the warning in cpumask_check().
-> >
-> > Fix this by explicitly checking the supplied key against the
-> > nr_cpumask_bits variable before calling cpu_possible().
-> >
-> > Fixes: 6710e1126934 ("bpf: introduce new bpf cpu map type BPF_MAP_TYPE_=
-CPUMAP")
-> > Cc: Jesper Dangaard Brouer <brouer@redhat.com>
-> > Reported-by: Xiumei Mu <xmu@redhat.com>
-> > Tested-by: Xiumei Mu <xmu@redhat.com>
-> > Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> > ---
->
-> Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+From: Stephane Eranian <eranian@google.com>
 
-Acked-by: Song Liu <songliubraving@fb.com>
+libpfm4 provides an alternate command line encoding of perf events.
+
+Signed-off-by: Stephane Eranian <eranian@google.com>
+Reviewed-by: Ian Rogers <irogers@google.com>
+---
+ tools/build/Makefile.feature       | 3 ++-
+ tools/build/feature/Makefile       | 6 +++++-
+ tools/build/feature/test-libpfm4.c | 9 +++++++++
+ 3 files changed, 16 insertions(+), 2 deletions(-)
+ create mode 100644 tools/build/feature/test-libpfm4.c
+
+diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+index 3e0c019ef297..3abd4316cd4f 100644
+--- a/tools/build/Makefile.feature
++++ b/tools/build/Makefile.feature
+@@ -98,7 +98,8 @@ FEATURE_TESTS_EXTRA :=                  \
+          llvm                           \
+          llvm-version                   \
+          clang                          \
+-         libbpf
++         libbpf                         \
++         libpfm4
+ 
+ FEATURE_TESTS ?= $(FEATURE_TESTS_BASIC)
+ 
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index 621f528f7822..a6eded94a36b 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -68,7 +68,8 @@ FILES=                                          \
+          test-llvm-version.bin			\
+          test-libaio.bin			\
+          test-libzstd.bin			\
+-         test-file-handle.bin
++         test-file-handle.bin			\
++         test-libpfm4.bin
+ 
+ FILES := $(addprefix $(OUTPUT),$(FILES))
+ 
+@@ -325,6 +326,9 @@ $(OUTPUT)test-libzstd.bin:
+ $(OUTPUT)test-file-handle.bin:
+ 	$(BUILD)
+ 
++$(OUTPUT)test-libpfm4.bin:
++	$(BUILD) -lpfm
++
+ ###############################
+ 
+ clean:
+diff --git a/tools/build/feature/test-libpfm4.c b/tools/build/feature/test-libpfm4.c
+new file mode 100644
+index 000000000000..af49b259459e
+--- /dev/null
++++ b/tools/build/feature/test-libpfm4.c
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <sys/types.h>
++#include <perfmon/pfmlib.h>
++
++int main(void)
++{
++	pfm_initialize();
++	return 0;
++}
+-- 
+2.26.1.301.g55bc3eb7cb9-goog
+
