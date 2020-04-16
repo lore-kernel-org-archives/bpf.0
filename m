@@ -2,111 +2,114 @@ Return-Path: <SRS0=p1q1=6A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB7D1C2BB85
-	for <bpf@archiver.kernel.org>; Thu, 16 Apr 2020 08:38:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86713C2BB85
+	for <bpf@archiver.kernel.org>; Thu, 16 Apr 2020 09:10:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 868C82063A
-	for <bpf@archiver.kernel.org>; Thu, 16 Apr 2020 08:38:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58DF020771
+	for <bpf@archiver.kernel.org>; Thu, 16 Apr 2020 09:10:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Kmyaf9Kj"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HYqmSqpy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502572AbgDPIiv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Apr 2020 04:38:51 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:24620 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2501892AbgDPIdC (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 16 Apr 2020 04:33:02 -0400
+        id S2502799AbgDPJKt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Apr 2020 05:10:49 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:49994 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2502780AbgDPIok (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Apr 2020 04:44:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587025981;
+        s=mimecast20190719; t=1587026633;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4C+zGeC2uaepA7YGuXsNsDUyW6GG/C37GwZVj2NCs8M=;
-        b=Kmyaf9KjxztuNJhfl9rhh+MR9z91o5ZN6CSR00smsifMGlGmIXNHtWJNU5goBCvBtgdJYL
-        GpDiXzB5366xcANXRwqUaING21lhQBV44I3aK3U6KFV7UqWAJpI1Sbk4KS6GjpWBm1WIT3
-        VNdYiYzI8XCMkPpZuoJwvNwACLN1OBk=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-255-HH0lHl1ROQOTs03GcFG7AQ-1; Thu, 16 Apr 2020 04:23:33 -0400
-X-MC-Unique: HH0lHl1ROQOTs03GcFG7AQ-1
-Received: by mail-lj1-f199.google.com with SMTP id o13so1355075ljj.3
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2020 01:23:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=4C+zGeC2uaepA7YGuXsNsDUyW6GG/C37GwZVj2NCs8M=;
-        b=G2Bz7RXH44K2MHXtcW2V76pb08kQZFi5gn3XG8GFDQ40gGjWeQOfCgnFalHQ8p4zWp
-         Po5i4aS/uAPyxOKCrCvQloIxu66p7iLDflfOxQMkm53dQqP+UdcFQfKJA81VXnX7Uofr
-         xAoFK0qXxJqGjgNxtxiCe1EJrUirlljvi+nGqE21DdbzHmU1/jAbD5Dum17ic4R6lO2h
-         ys3xrpQ2q/KkwM3r4/keZ25CRNA6G7tSpSEFCxwi5fl1Vc39XM6XtgTio2o6q0yx/7h7
-         QiFAZgFfV2qN/XQIT8Dk6LEvs+k15N9NETYVWa3u842AGg2qP0/JGKbHay6cP2SIPE8y
-         HvPA==
-X-Gm-Message-State: AGi0PubZ+m3XsBFT4WEbn/8M+kJFa1kLIT5op2VLnvCszfXNjsDX4AYH
-        DAlHPtE3NxSlVmhHF/O6IGmCreI+1+6am4/F045FeN/Jd5fEx+3KiQFHRvB99u63BpwxGm+MG7Y
-        AsEdbtuVeAnvt
-X-Received: by 2002:ac2:5559:: with SMTP id l25mr5465308lfk.55.1587025411714;
-        Thu, 16 Apr 2020 01:23:31 -0700 (PDT)
-X-Google-Smtp-Source: APiQypJUxS2MrVwPdgFhPczv6ujV5NRc5E55/X8RHd0otAj5dsbnq589pXigr4Vq7wN9Pjdythnn1Q==
-X-Received: by 2002:ac2:5559:: with SMTP id l25mr5465292lfk.55.1587025411426;
-        Thu, 16 Apr 2020 01:23:31 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id c2sm15281083lfb.43.2020.04.16.01.23.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2020 01:23:30 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id CE153181586; Thu, 16 Apr 2020 10:23:29 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
+        bh=4yfqMRGU6yHVFX9cCKgS+CRJdfA4wWPecTL3stc+FBg=;
+        b=HYqmSqpykk/ZVS9dl3As4mJwm/78jUEvWMg8E4+cQEdkmEj5CVVcVTMEPQSiUSrt7mEY4J
+        o4L7kBBvTzKv2XKzXUXKbe/OHH9Z1VafRYEvzbx2HWQ2a6O+XykLzx/UV81NSj0ZfyCBo6
+        qVlROyZM7z5BarwEHgZphBUs/uhVa7U=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-481-LE1fw699Mvqmw4O02XVxAA-1; Thu, 16 Apr 2020 04:43:49 -0400
+X-MC-Unique: LE1fw699Mvqmw4O02XVxAA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1EC5C192D786;
+        Thu, 16 Apr 2020 08:43:48 +0000 (UTC)
+Received: from carbon (unknown [10.40.208.6])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 383C494B40;
+        Thu, 16 Apr 2020 08:43:40 +0000 (UTC)
+Date:   Thu, 16 Apr 2020 10:43:39 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>
 Cc:     daniel@iogearbox.net, ast@fb.com, bpf@vger.kernel.org,
         netdev@vger.kernel.org, Xiumei Mu <xmu@redhat.com>,
         brouer@redhat.com
-Subject: Re: [PATCH bpf] cpumap: Avoid warning when CONFIG_DEBUG_PER_CPU_MAPS is enabled
-In-Reply-To: <20200416085537.65dde42e@carbon>
-References: <20200415140151.439943-1-toke@redhat.com> <20200416085537.65dde42e@carbon>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 16 Apr 2020 10:23:29 +0200
-Message-ID: <87h7xjn8ji.fsf@toke.dk>
+Subject: Re: [PATCH bpf v2] cpumap: Avoid warning when
+ CONFIG_DEBUG_PER_CPU_MAPS is enabled
+Message-ID: <20200416104339.3a8b85c4@carbon>
+In-Reply-To: <20200416083120.453718-1-toke@redhat.com>
+References: <20200416083120.453718-1-toke@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jesper Dangaard Brouer <brouer@redhat.com> writes:
+On Thu, 16 Apr 2020 10:31:20 +0200
+Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> wrote:
 
-> On Wed, 15 Apr 2020 16:01:51 +0200
-> Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> wrote:
->
->> When the kernel is built with CONFIG_DEBUG_PER_CPU_MAPS, the cpumap code
->> can trigger a spurious warning if CONFIG_CPUMASK_OFFSTACK is also set. T=
-his
->> happens because in this configuration, NR_CPUS can be larger than
->> nr_cpumask_bits, so the initial check in cpu_map_alloc() is not sufficie=
-nt
->> to guard against hitting the warning in cpumask_check().
->>=20
->> Fix this by using the nr_cpumask_bits variable in the map creation code
->> instead of the NR_CPUS constant.
->
-> Shouldn't you use 'nr_cpu_ids' instead of 'nr_cpumask_bits' ?
->
-> Else this will still fail on systems with CONFIG_CPUMASK_OFFSTACK=3Dn.
+> When the kernel is built with CONFIG_DEBUG_PER_CPU_MAPS, the cpumap code
+> can trigger a spurious warning if CONFIG_CPUMASK_OFFSTACK is also set. Th=
+is
+> happens because in this configuration, NR_CPUS can be larger than
+> nr_cpumask_bits, so the initial check in cpu_map_alloc() is not sufficient
+> to guard against hitting the warning in cpumask_check().
+>=20
+> Fix this by explicitly checking the supplied key against the
+> nr_cpumask_bits variable before calling cpu_possible().
+>=20
+> Fixes: 6710e1126934 ("bpf: introduce new bpf cpu map type BPF_MAP_TYPE_CP=
+UMAP")
+> Cc: Jesper Dangaard Brouer <brouer@redhat.com>
+> Reported-by: Xiumei Mu <xmu@redhat.com>
+> Tested-by: Xiumei Mu <xmu@redhat.com>
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> ---
 
-Jesper and I had an offlist discussion about this, and decided that it's
-actually better to keep the check in cpu_map_alloc as-is, and instead
-just check against nr_cpumask_bits in cpu_map_update_elem(). Otherwise,
-the max-size of the map can vary between machines which can affect BPF
-program portability.
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
 
-I'll send a v2.
+> v2:
+>   - Move check to cpu_map_update_elem() to not affect max size of map
+>=20
+>  kernel/bpf/cpumap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+> index 70f71b154fa5..3fe0b006d2d2 100644
+> --- a/kernel/bpf/cpumap.c
+> +++ b/kernel/bpf/cpumap.c
+> @@ -469,7 +469,7 @@ static int cpu_map_update_elem(struct bpf_map *map, v=
+oid *key, void *value,
+>  		return -EOVERFLOW;
+> =20
+>  	/* Make sure CPU is a valid possible cpu */
+> -	if (!cpu_possible(key_cpu))
+> +	if (key_cpu >=3D nr_cpumask_bits || !cpu_possible(key_cpu))
 
--Toke
+Toke use 'nr_cpumask_bits' here, because cpumask_check() also uses it,
+which is the warning we are trying to avoid.
+
+--=20
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
