@@ -2,130 +2,120 @@ Return-Path: <SRS0=FAFN=6B=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACBBCC352BE
-	for <bpf@archiver.kernel.org>; Fri, 17 Apr 2020 09:09:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81843C352BE
+	for <bpf@archiver.kernel.org>; Fri, 17 Apr 2020 10:43:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 870B1221E9
-	for <bpf@archiver.kernel.org>; Fri, 17 Apr 2020 09:09:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B2A2221EA
+	for <bpf@archiver.kernel.org>; Fri, 17 Apr 2020 10:43:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i+qpCyA1"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HkFdGJH+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730178AbgDQJJR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Apr 2020 05:09:17 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:32183 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730168AbgDQJJQ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 17 Apr 2020 05:09:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587114556;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2cCOf6XJLp8oVY3ARJuZvdamGJsDNMFwpwD+jmxrCyc=;
-        b=i+qpCyA1wuhio4PheKZiow/KpwSdGwSzeRdUSknjf+g6shwm4c1MChNNAFwvPJwnhaeFpU
-        Vb4VdvftfH8vypCjN0ycfzD/+VyD6gCtFjiKhKMsEZXxgPnqoUSwpYbJ9CpW0TOfdvwmQ+
-        YtfqdRjTcB2WoUitqMi0ARDhs8eBVa0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-271-H6wdLbRDNBil-5rkjGT0_Q-1; Fri, 17 Apr 2020 05:09:11 -0400
-X-MC-Unique: H6wdLbRDNBil-5rkjGT0_Q-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E6B5A107ACC4;
-        Fri, 17 Apr 2020 09:09:07 +0000 (UTC)
-Received: from krava (unknown [10.40.195.134])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C7C8E100EBA4;
-        Fri, 17 Apr 2020 09:08:12 +0000 (UTC)
-Date:   Fri, 17 Apr 2020 11:08:10 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Igor Lubashev <ilubashe@akamai.com>,
-        Alexey Budankov <alexey.budankov@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Jiwei Sun <jiwei.sun@windriver.com>,
-        yuzhoujian <yuzhoujian@didichuxing.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
+        id S1729417AbgDQKnP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Apr 2020 06:43:15 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:50038 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728868AbgDQKnO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Apr 2020 06:43:14 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03HAfpfA009360;
+        Fri, 17 Apr 2020 10:42:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=YIWoAje0qyhjK/2S/YVkAhxEbVPEDjaDZZ11p5pY6GU=;
+ b=HkFdGJH+/AZVhHlv/JLptPFLKdNcdq6cte+H53h/7Ha2m0W8BoZIKGy3BA2QIoVtORaY
+ TWVgyo0PznY3lu4dYyhznj0YDn3LOkaTwaB5ziXWjh/NRLFjHwXXAwp/hg+CH6O6gbfJ
+ TvULyc/4ISDCV7QpnuktZaYeinkixQPTFlLeDw1YXsWjGft5Yh82j92SRCEe2D1T9XRU
+ K0yPrh0v8EojQiU78xxLQVn4LEDCYGlLXq3ZR+uTa2iwbAnxcqqmzHIh/Q1b3j6l9YhB
+ vr+KvGKB36kf9QxSZxo1OWTGy12o17gFy3be6sYBKEGn8036FRaZboMJn/fwbXlnVj4e Nw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 30e0aaby11-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Apr 2020 10:42:58 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03HAc4Wp018976;
+        Fri, 17 Apr 2020 10:42:58 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 30dyp28b89-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Apr 2020 10:42:58 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 03HAgu6a015831;
+        Fri, 17 Apr 2020 10:42:57 GMT
+Received: from localhost.uk.oracle.com (/10.175.205.33)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 17 Apr 2020 03:42:56 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com
+Cc:     kafai@fb.com, songliubraving@fb.com, andriin@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v11 0/4] perf tools: add support for libpfm4
-Message-ID: <20200417090810.GA468827@krava>
-References: <20200416221457.46710-1-irogers@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200416221457.46710-1-irogers@google.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+        bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
+Subject: [RFC PATCH bpf-next 2/6] bpf: btf->resolved_[ids,sizes] should not be used for vmlinux BTF
+Date:   Fri, 17 Apr 2020 11:42:36 +0100
+Message-Id: <1587120160-3030-3-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1587120160-3030-1-git-send-email-alan.maguire@oracle.com>
+References: <1587120160-3030-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9593 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 phishscore=0 spamscore=0 adultscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004170084
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9593 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1011
+ impostorscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 adultscore=0 spamscore=0 malwarescore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004170084
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 16, 2020 at 03:14:53PM -0700, Ian Rogers wrote:
-> This patch links perf with the libpfm4 library if it is available
-> and NO_LIBPFM4 isn't passed to the build. The libpfm4 library
-> contains hardware event tables for all processors supported by
-> perf_events. It is a helper library that helps convert from a
-> symbolic event name to the event encoding required by the
-> underlying kernel interface. This library is open-source and
-> available from: http://perfmon2.sf.net.
->     
-> With this patch, it is possible to specify full hardware events
-> by name. Hardware filters are also supported. Events must be
-> specified via the --pfm-events and not -e option. Both options
-> are active at the same time and it is possible to mix and match:
->     
-> $ perf stat --pfm-events inst_retired:any_p:c=1:i -e cycles ....
-> 
-> v11 reformats the perf list output to be:
-> List of pre-defined events (to be used in -e):
-> 
->   branch-instructions OR branches                    [Hardware event]
->   branch-misses                                      [Hardware event]
-> ...
-> 
-> List of pre-defined events (to be used in --pfm-events):
-> 
-> ix86arch:
->   UNHALTED_CORE_CYCLES
->     [count core clock cycles whenever the clock signal on the specific core is running (not halted)]
->   INSTRUCTION_RETIRED
->     [count the number of instructions at retirement. For instructions that consists of multiple mic>
-> ...
-> skx:
->   UNHALTED_CORE_CYCLES
->     [Count core clock cycles whenever the clock signal on the specific core is running (not halted)]
-> ...
->   BACLEARS
->     [Branch re-steered]
->       BACLEARS:ANY
->         [Number of front-end re-steers due to BPU misprediction]
-> ...
+When testing support for print data structures using patches
+later in this series, I hit NULL pointer dereference bugs when
+printing "struct sk_buff". The problem seems to revolve around
+that structure's use of a zero-length array in the middle of
+the data structure - headers_start[0].
 
-Acked-by: Jiri Olsa <jolsa@redhat.com>
+We see in btf_type_id_size() we consult btf->resolved_ids and
+btf->resolved_sizes; both of which are not used in kernel
+vmlinux BTF so should not be used when handling vmlinux
+BTF data.
 
-thanks,
-jirka
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ kernel/bpf/btf.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 50080ad..a474839 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1170,7 +1170,7 @@ const struct btf_type *btf_type_id_size(const struct btf *btf,
+ 
+ 	if (btf_type_has_size(size_type)) {
+ 		size = size_type->size;
+-	} else if (btf_type_is_array(size_type)) {
++	} else if (btf_type_is_array(size_type) && btf->resolved_sizes) {
+ 		size = btf->resolved_sizes[size_type_id];
+ 	} else if (btf_type_is_ptr(size_type)) {
+ 		size = sizeof(void *);
+@@ -1179,6 +1179,9 @@ const struct btf_type *btf_type_id_size(const struct btf *btf,
+ 				 !btf_type_is_var(size_type)))
+ 			return NULL;
+ 
++		if (!btf->resolved_ids)
++			return NULL;
++
+ 		size_type_id = btf->resolved_ids[size_type_id];
+ 		size_type = btf_type_by_id(btf, size_type_id);
+ 		if (btf_type_nosize_or_null(size_type))
+-- 
+1.8.3.1
 
