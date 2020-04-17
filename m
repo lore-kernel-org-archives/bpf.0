@@ -2,70 +2,68 @@ Return-Path: <SRS0=FAFN=6B=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C6EBC3815B
-	for <bpf@archiver.kernel.org>; Fri, 17 Apr 2020 10:43:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40278C352BE
+	for <bpf@archiver.kernel.org>; Fri, 17 Apr 2020 10:45:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6632B2078E
-	for <bpf@archiver.kernel.org>; Fri, 17 Apr 2020 10:43:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1337621D91
+	for <bpf@archiver.kernel.org>; Fri, 17 Apr 2020 10:45:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="oRfgUHfI"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="RZJ0Qp5g"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729648AbgDQKn3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Apr 2020 06:43:29 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:48058 "EHLO
+        id S1729431AbgDQKpK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Apr 2020 06:45:10 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:49406 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729602AbgDQKn2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Apr 2020 06:43:28 -0400
+        with ESMTP id S1728997AbgDQKpK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Apr 2020 06:45:10 -0400
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03HAfUjO012411;
-        Fri, 17 Apr 2020 10:43:12 GMT
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03HAfTYp012408;
+        Fri, 17 Apr 2020 10:44:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=Cq4VT437BLaGdbgVvFtN8qE/htncl1Vwmg+lam7F+GA=;
- b=oRfgUHfI6hw8I0E5nZ+WJqd7EEPRUr+s2v4cWQ0q48PjZ+n8mvXplvpj0rXG0hX9A4f6
- PwNciujcHR0uonzIecc4ITJYFPeiAPWTOPtBJxyZFCvSkeBbg0Kz5DLR1sqsbBRSCSa/
- v1Yw1+3yRrVZPL7eRs7wSu256ew1hWL4hWoepsOTzeOMMhK54UMbu6UrfVATu6hdMCqf
- wc5CFo+q3uPuWURXaXXo9r5RKiTOFSlUAK1+Ye+RAOz51fXBqATwpLQmHwAm7Xp8wVpG
- z2scl3gqAux9Zh/Pmz0kwwMCc5Ot2a1s9YZOqzRj5kZCc7+1q99AuZ7oY8sd8zgbndmF 6w== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 30emejp7e8-1
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=TQ7i1aS5JprkOJb0WP9E3mfYaTgskW5/egV3j83ibvs=;
+ b=RZJ0Qp5gG8btMgS8hIcTaJTJbbtggZkfcsBbJoO6I5tI7XrsFdPPVW+Ptv3HzWb3vRix
+ L71T993OHV89oioCF7aJc/n6qzh1LJoytLpMeMt9qK8nabuggQn54eEcNVYJaf8HGAD3
+ +cUYKGIQoRZnVRva4rJXEwKtHu3ykaS8gn5RuWMMfvDe2rCF58LDckLrIN4ktPphiNE6
+ /uvnPGWglj5qVHlTXHe2eaSjHlOg7gfvw9N74qefSGgIfgx1sAm1N5Zmu3t6JdGr54Mt
+ 2sRTOtNLKDGnZVwAFwa7Ow6vuKJMCsPtTiqKIQ0vxycsmp/32BXJoTBiJaPESqc1sNIL Aw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 30emejp7jx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Apr 2020 10:43:12 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03HAbQFV037635;
-        Fri, 17 Apr 2020 10:43:11 GMT
+        Fri, 17 Apr 2020 10:44:54 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03HAcIwH002498;
+        Fri, 17 Apr 2020 10:42:52 GMT
 Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 30dn91afag-1
+        by aserp3020.oracle.com with ESMTP id 30dn9jkyn5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Apr 2020 10:43:11 +0000
+        Fri, 17 Apr 2020 10:42:52 +0000
 Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 03HAh9CJ019441;
-        Fri, 17 Apr 2020 10:43:10 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 03HAgnsf019273;
+        Fri, 17 Apr 2020 10:42:49 GMT
 Received: from localhost.uk.oracle.com (/10.175.205.33)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 17 Apr 2020 03:43:09 -0700
+        with ESMTP ; Fri, 17 Apr 2020 03:42:49 -0700
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com
 Cc:     kafai@fb.com, songliubraving@fb.com, andriin@fb.com,
         john.fastabend@gmail.com, kpsingh@chromium.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC PATCH bpf-next 6/6] printk: extend test_printf to test %pT BTF-based format specifier
-Date:   Fri, 17 Apr 2020 11:42:40 +0100
-Message-Id: <1587120160-3030-7-git-send-email-alan.maguire@oracle.com>
+Subject: [RFC PATCH bpf-next 0/6] bpf, printk: add BTF-based type printing
+Date:   Fri, 17 Apr 2020 11:42:34 +0100
+Message-Id: <1587120160-3030-1-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1587120160-3030-1-git-send-email-alan.maguire@oracle.com>
-References: <1587120160-3030-1-git-send-email-alan.maguire@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9593 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
- suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004170084
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 adultscore=0
+ spamscore=0 phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004170084
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9593 signatures=668686
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 impostorscore=0
  mlxscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0 mlxlogscore=999
@@ -77,227 +75,107 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add tests to verify basic types and to iterate through all
-enums, structs, unions and typedefs ensuring expected behaviour
-occurs.  Since test_printf can be built as a module we need to
-export a BTF kind iterator function to allow us to iterate over
-all names of a particular BTF kind.
+The printk family of functions support printing specific pointer types
+using %p format specifiers (MAC addresses, IP addresses, etc).  For
+full details see Documentation/core-api/printk-formats.rst.
 
-These changes add up to approximately 10,000 new tests covering
-all enum, struct, union and typedefs in vmlinux BTF.
+This RFC patchset proposes introducing a "print typed pointer" format
+specifier "%pT<type>"; the type specified is then looked up in the BPF
+Type Format (BTF) information provided for vmlinux to support display.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- include/linux/btf.h |  10 +++++
- kernel/bpf/btf.c    |  35 ++++++++++++++++
- lib/test_printf.c   | 118 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 163 insertions(+)
+There is already support in kernel/bpf/btf.c for "show" functionality;
+the changes here generalize that support from seq-file specific
+verifier display to the more generic case and add another specific
+use case; snprintf()-style rendering of type information to a
+provided buffer.  This support is then used to support printk
+rendering of types, but the intent is to provide a function
+that might be useful in other in-kernel scenarios; for example:
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 456bd8f..ef66d2e 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -177,4 +177,14 @@ static inline const char *btf_name_by_offset(const struct btf *btf,
- }
- #endif
- 
-+/* Following function used for testing BTF-based printk-family support */
-+#ifdef CONFIG_BTF_PRINTF
-+const char *btf_vmlinux_next_type_name(u8 kind, s32 *id);
-+#else
-+static inline const char *btf_vmlinux_next_type_name(u8 kind, s32 *id)
-+{
-+	return NULL;
-+}
-+#endif /* CONFIG_BTF_PRINTF */
-+
- #endif
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index ae453f0..0703d1d 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4867,3 +4867,38 @@ u32 btf_id(const struct btf *btf)
- {
- 	return btf->id;
- }
-+
-+#ifdef CONFIG_BTF_PRINTF
-+/*
-+ * btf_vmlinux_next_type_name():  used in test_printf.c to
-+ * iterate over types for testing.
-+ * Exported as test_printf can be built as a module.
-+ *
-+ * @kind: BTF_KIND_* value
-+ * @id: pointer to last id; value/result argument. When next
-+ *      type name is found, we set *id to associated id.
-+ * Returns:
-+ *	Next type name, sets *id to associated id.
-+ */
-+const char *btf_vmlinux_next_type_name(u8 kind, s32 *id)
-+{
-+	const struct btf *btf = bpf_get_btf_vmlinux();
-+	const struct btf_type *t;
-+	const char *name;
-+
-+	if (!btf || !id)
-+		return NULL;
-+
-+	for ((*id)++; *id <= btf->nr_types; (*id)++) {
-+		t = btf->types[*id];
-+		if (BTF_INFO_KIND(t->info) != kind)
-+			continue;
-+		name = btf_name_by_offset(btf, t->name_off);
-+		if (name && strlen(name) > 0)
-+			return name;
-+	}
-+
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(btf_vmlinux_next_type_name);
-+#endif /* CONFIG_BTF_PRINTF */
-diff --git a/lib/test_printf.c b/lib/test_printf.c
-index 2d9f520..9743e96 100644
---- a/lib/test_printf.c
-+++ b/lib/test_printf.c
-@@ -23,6 +23,9 @@
- #include <linux/mm.h>
- 
- #include <linux/property.h>
-+#include <linux/bpf.h>
-+#include <linux/btf.h>
-+#include <linux/skbuff.h>
- 
- #include "../tools/testing/selftests/kselftest_module.h"
- 
-@@ -644,6 +647,120 @@ static void __init fwnode_pointer(void)
- #endif
- }
- 
-+#define	__TEST_BTF(type, var, expected)	test(expected, "%pT<"#type">", &var)
-+
-+#define TEST_BTF(type, var, ...)					\
-+	do {								\
-+		type var = __VA_ARGS__;					\
-+		pr_debug("type %s: %pT<" #type ">", #type, &var);	\
-+		__TEST_BTF(type, var, #__VA_ARGS__);			\
-+	} while (0)
-+
-+#define	BTF_MAX_DATA_SIZE	8192
-+#define	BTF_MAX_BUF_SIZE	(BTF_MAX_DATA_SIZE * 8)
-+
-+static void __init
-+btf_print_kind(u8 kind, const char *kind_name)
-+{
-+	char fmt1[256], fmt2[256];
-+	int res1, res2, res3;
-+	const char *name;
-+	u64 *dummy_data;
-+	s32 id = 0;
-+	char *buf;
-+
-+	dummy_data = kzalloc(BTF_MAX_DATA_SIZE, GFP_KERNEL);
-+	buf = kzalloc(BTF_MAX_BUF_SIZE, GFP_KERNEL);
-+	for (;;) {
-+		name = btf_vmlinux_next_type_name(kind, &id);
-+		if (!name)
-+			break;
-+
-+		total_tests++;
-+
-+		strncpy(fmt1, "%pT<", sizeof(fmt1));
-+		strncat(fmt1, kind_name, sizeof(fmt1));
-+		strncat(fmt1, name, sizeof(fmt1));
-+		strncat(fmt1, ">", sizeof(fmt1));
-+
-+		strncpy(fmt2, "%pTN<", sizeof(fmt2));
-+		strncat(fmt2, kind_name, sizeof(fmt2));
-+		strncat(fmt2, name, sizeof(fmt2));
-+		strncat(fmt2, ">", sizeof(fmt2));
-+
-+		res1 = snprintf(buf, BTF_MAX_BUF_SIZE, fmt1, dummy_data);
-+		res2 = snprintf(buf, 0, fmt1, dummy_data);
-+		res3 = snprintf(buf, BTF_MAX_BUF_SIZE, fmt2, dummy_data);
-+
-+		/*
-+		 * Ensure return value is > 0 and identical irrespective
-+		 * of whether we pass in a big enough buffer;
-+		 * also ensure that printing names always results in as
-+		 * long/longer buffer length.
-+		 */
-+		if (res1 <= 0 || res2 <= 0 || res3 <= 0) {
-+			pr_warn("snprintf(%s%s); %d <= 0",
-+				kind_name, name,
-+				res1 <= 0 ? res1 : res2 <= 0 ? res2 : res3);
-+			failed_tests++;
-+		} else if (res1 != res2) {
-+			pr_warn("snprintf(%s%s): %d != %d",
-+				kind_name, name, res1, res2);
-+			failed_tests++;
-+		} else if (res3 < res2) {
-+			pr_warn("snprintf(%s%s); %d < %d",
-+				kind_name, name, res3, res2);
-+			failed_tests++;
-+		} else {
-+			pr_debug("Printed %s%s (%d bytes, %d bytes with names)",
-+				 kind_name, name, res1, res3);
-+		}
-+	}
-+	kfree(dummy_data);
-+	kfree(buf);
-+}
-+
-+static void __init
-+btf_pointer(void)
-+{
-+	struct sk_buff *skb = alloc_skb(64, GFP_KERNEL);
-+#ifdef CONFIG_BTF_PRINTF
-+	TEST_BTF(int, testint, 0);
-+	TEST_BTF(int, testint, 1234);
-+	TEST_BTF(int, testint, -4567);
-+	TEST_BTF(bool, testbool, 0);
-+	TEST_BTF(bool, testbool, 1);
-+	TEST_BTF(int64_t, testint64, 0);
-+	TEST_BTF(int64_t, testint64, 1234);
-+	TEST_BTF(int64_t, testint64, -4567);
-+	TEST_BTF(char, testchar, 100);
-+	TEST_BTF(enum bpf_arg_type, testenum, ARG_CONST_MAP_PTR);
-+#endif /* CONFIG_BTF_PRINTF */
-+
-+	/*
-+	 * Iterate every instance of each kind, printing each associated type.
-+	 * This constitutes around 10k tests.
-+	 */
-+	btf_print_kind(BTF_KIND_STRUCT, "struct ");
-+	btf_print_kind(BTF_KIND_UNION, "union ");
-+	btf_print_kind(BTF_KIND_ENUM, "enum ");
-+	btf_print_kind(BTF_KIND_TYPEDEF, "");
-+
-+	/* verify unknown type falls back to hashed pointer display */
-+	test_hashed("%pT<unknown_type>", NULL);
-+	test_hashed("%pT<unknown_type>", skb);
-+
-+	/* verify use of unknown modifier X returns error string */
-+	test("(%pT?)<unknown_type>", "%pTX<unknown_type>", skb);
-+
-+	/* No space separation is allowed other than for struct|enum|union */
-+	test("(%pT?)", "%pT<invalid format>", skb);
-+	/* Missing ">" format error */
-+	test("(%pT?)", "%pT<struct sk_buff", skb);
-+
-+	kfree_skb(skb);
-+}
-+
- static void __init
- test_pointer(void)
- {
-@@ -668,6 +785,7 @@ static void __init fwnode_pointer(void)
- 	flags();
- 	errptr();
- 	fwnode_pointer();
-+	btf_pointer();
- }
- 
- static void __init selftest(void)
+- ftrace could possibly utilize the function to support typed
+  display of function arguments by cross-referencing BTF function
+  information to derive the types of arguments
+- oops/panic messaging could extend the information displayed to
+  dig into data structures associated with failing functions
+
+The above potential use cases hint at a potential reply to
+a reasonable objection that such typed display should be
+solved by tracing programs, where the in kernel tracing records
+data and the userspace program prints it out.  While this
+is certainly the recommended approach for most cases, I
+believe having an in-kernel mechanism would be valuable
+also.
+
+The function the printk() family of functions rely on
+could potentially be used directly for other use cases
+like ftrace where we might have the BTF ids of the
+pointers we wish to display; its signature is as follows:
+
+int btf_type_snprintf_show(const struct btf *btf, u32 type_id, void *obj,
+                           char *buf, int len, u64 flags);
+
+So if ftrace say had the BTF ids of the types of arguments,
+we see that the above would allow us to convert the
+pointer data into displayable form.
+
+To give a flavour for what the printed-out data looks like,
+here we use pr_info() to display a struct sk_buff *.  Note
+we specify the 'N' modifier to show type field names:
+
+  struct sk_buff *skb = alloc_skb(64, GFP_KERNEL);
+
+  pr_info("%pTN<struct sk_buff>", skb);
+
+...gives us:
+
+{{{.next=00000000c7916e9c,.prev=00000000c7916e9c,{.dev=00000000c7916e9c|.dev_scratch=0}}|.rbnode={.__rb_parent_color=0,.rb_right=00000000c7916e9c,.rb_left=00000000c7916e9c}|.list={.next=00000000c7916e9c,.prev=00000000c7916e9c}},{.sk=00000000c7916e9c|.ip_defrag_offset=0},{.tstamp=0|.skb_mstamp_ns=0},.cb=['\0'],{{._skb_refdst=0,.destructor=00000000c7916e9c}|.tcp_tsorted_anchor={.next=00000000c7916e9c,.prev=00000000c7916e9c}},._nfct=0,.len=0,.data_len=0,.mac_len=0,.hdr_len=0,.queue_mapping=0,.__cloned_offset=[],.cloned=0x0,.nohdr=0x0,.fclone=0x0,.peeked=0x0,.head_frag=0x0,.pfmemalloc=0x0,.active_extensions=0,.headers_start=[],.__pkt_type_offset=[],.pkt_type=0x0,.ignore_df=0x0,.nf_trace=0x0,.ip_summed=0x0,.ooo_okay=0x0,.l4_hash=0x0,.sw_hash=0x0,.wifi_acked_valid=0x0,.wifi_acked=0x0,.no_fcs=0x0,.encapsulation=0x0,.encap_hdr_csum=0x0,.csum_valid=0x0,.__pkt_vlan_present_offset=[],.vlan_present=0x0,.csum_complete_sw=0x0,.csum_level=0x0,.csum_not_inet=0x0,.dst_pending_co
+
+printk output is truncated at 1024 bytes.  For such cases, the compact
+display mode (minus the field info 'N') may be used at the expense of
+readability. "|" differentiates between different union members, but
+aside from that the format is intended to minic a valid C initiailizer
+for the given type.
+
+The hope is that this functionality will be useful for debugging,
+and possibly help facilitate the cases mentioned above in the future.
+
+The patches are marked RFC for several reasons
+
+- There's already an RFC patchset in flight dealing with BTF dumping;
+
+https://www.spinics.net/lists/netdev/msg644412.html
+
+  The reason I'm posting this is the approach is a bit different 
+  and there may be ways of synthesizing the approaches.
+- The mechanism of vmlinux BTF initialization is not fit for purpose
+  in a printk() setting as I understand it (it uses mutex locking
+  to prevent multiple initializations of the BTF info).  A simple
+  approach to support printk might be to simply initialize the
+  BTF vmlinux case early in boot; it only needs to happen once.
+  Any suggestions here would be great.
+- BTF-based rendering is more complex than other printk() format
+  specifier-driven methods; that said, because of its generality it
+  does provide significant value I think
+- More tests are needed.
+
+Alan Maguire (6):
+  bpf: provide function to get vmlinux BTF information
+  bpf: btf->resolved_[ids,sizes] should not be used for vmlinux BTF
+  bpf: move to generic BTF show support, apply it to seq files/strings
+  checkpatch: add new BTF pointer format specifier
+  printk: add type-printing %pT<type> format specifier which uses BTF
+  printk: extend test_printf to test %pT BTF-based format specifier
+
+ Documentation/core-api/printk-formats.rst |   8 +
+ include/linux/bpf.h                       |   2 +
+ include/linux/btf.h                       |  35 ++-
+ kernel/bpf/btf.c                          | 466 ++++++++++++++++++++++++------
+ kernel/bpf/verifier.c                     |  18 +-
+ lib/Kconfig                               |  16 +
+ lib/test_printf.c                         | 118 ++++++++
+ lib/vsprintf.c                            | 145 +++++++++-
+ scripts/checkpatch.pl                     |   2 +-
+ 9 files changed, 704 insertions(+), 106 deletions(-)
+
 -- 
 1.8.3.1
 
