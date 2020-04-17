@@ -2,41 +2,40 @@ Return-Path: <SRS0=FAFN=6B=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B062C38A2F
-	for <bpf@archiver.kernel.org>; Fri, 17 Apr 2020 06:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60CB2C2BB1D
+	for <bpf@archiver.kernel.org>; Fri, 17 Apr 2020 06:42:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E2F320771
-	for <bpf@archiver.kernel.org>; Fri, 17 Apr 2020 06:42:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3740A20771
+	for <bpf@archiver.kernel.org>; Fri, 17 Apr 2020 06:42:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="eDcyIdMI"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="T5mEIVUt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728078AbgDQGmA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Apr 2020 02:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S1728122AbgDQGl5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Apr 2020 02:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728158AbgDQGl6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 17 Apr 2020 02:41:58 -0400
+        by vger.kernel.org with ESMTP id S1728078AbgDQGl4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 17 Apr 2020 02:41:56 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7EDC061A0C;
-        Thu, 16 Apr 2020 23:41:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7D8C061A0C;
+        Thu, 16 Apr 2020 23:41:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=Q1X56wwvXyEiLB1Ou7FCQcBPEZmOKPYROLn8C9j/eXo=; b=eDcyIdMIuzkRZdnw25wrMRa1yW
-        ggLc1WAIHqRTXTMmIawh+ud4RXkZCFuLjHwFevctyw8SDh0KRWejytc5ejSh3DLQOD3WBda4ce9Iw
-        FhV8AEe8+PxPJx9Y5EE8RJSpUqWQYodELk5qcF8UekPODUr4khgh7a2v7rMES401vYjOegmvmrDeC
-        GdLjz6bLmE00yV1Kr44mjhjZ3E2of4aRjSTZIqi2kMSrsRCRoBNXhC9vRop1LR0/D9LaDLXHvhGWp
-        106jnwiwaX2rMIeEsuAPBjgLjsOkoQaAFfHAhZYbWr8y3B6zOSn8cWiL+lYPEhnk9/BXPwl7VLNZ1
-        ck/7WHtA==;
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=LUNyqPWJqquUKD2oqL+iraXTObA9TCNzymZP74tcC+Y=; b=T5mEIVUteHeakVWU7MEeYp5dB8
+        S4bgAaEsDIdp427v1Kdf66UwpOSrdxE10r1rc3hpXeePr/wzRYvTQIPMtrKnA1zkp6tj74PheHfKC
+        ID680hG/ATLsq4Bb+xCqqwPQOa+uc6MMr4dJ4qfyVizbtL5pCwDHnnsI7Dq4iQ9equ80LnWRLcJf7
+        1i4Eag26ZCL9m556PgAlJ2MP87NGlTAiu3DH/Jnw2tH8t2jDKCNQswgDiD8dUhGQTBLGCiPeLQdCA
+        ARIcJK3Qlfg5esx3VbpTk8wazj2SqXy14kQ1l5AZddvtZKIGMGx+h9Uwv5sBrJqZNVJV4YNxj0xN5
+        0in7FM2Q==;
 Received: from [2001:4bb8:184:4aa1:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jPKhH-0002hh-17; Fri, 17 Apr 2020 06:41:55 +0000
+        id 1jPKhA-0002hC-Vx; Fri, 17 Apr 2020 06:41:49 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Kees Cook <keescook@chromium.org>,
         Iurii Zaikin <yzaikin@google.com>
@@ -48,12 +47,10 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH 2/6] firmware_loader: remove unused exports
-Date:   Fri, 17 Apr 2020 08:41:42 +0200
-Message-Id: <20200417064146.1086644-3-hch@lst.de>
+Subject: pass kernel pointers to the sysctl ->proc_handler method
+Date:   Fri, 17 Apr 2020 08:41:40 +0200
+Message-Id: <20200417064146.1086644-1-hch@lst.de>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200417064146.1086644-1-hch@lst.de>
-References: <20200417064146.1086644-1-hch@lst.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
@@ -62,31 +59,9 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Neither fw_fallback_config nor firmware_config_table are used by modules.
+Hi all,
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/base/firmware_loader/fallback_table.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/base/firmware_loader/fallback_table.c b/drivers/base/firmware_loader/fallback_table.c
-index ba9d30b28edc..0a737349f78f 100644
---- a/drivers/base/firmware_loader/fallback_table.c
-+++ b/drivers/base/firmware_loader/fallback_table.c
-@@ -21,7 +21,6 @@ struct firmware_fallback_config fw_fallback_config = {
- 	.loading_timeout = 60,
- 	.old_timeout = 60,
- };
--EXPORT_SYMBOL_GPL(fw_fallback_config);
- 
- #ifdef CONFIG_SYSCTL
- struct ctl_table firmware_config_table[] = {
-@@ -45,5 +44,4 @@ struct ctl_table firmware_config_table[] = {
- 	},
- 	{ }
- };
--EXPORT_SYMBOL_GPL(firmware_config_table);
- #endif
--- 
-2.25.1
-
+this series changes the sysctl ->proc_handler methods to take kernel
+pointers.  This simplifies some of the pointer handling in the methods
+(which could probably be further simplified now), and gets rid of the
+set_fs address space overrides used by bpf.
