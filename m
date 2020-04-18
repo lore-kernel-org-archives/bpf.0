@@ -2,203 +2,149 @@ Return-Path: <SRS0=qpZE=6C=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.3 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62B15C352BE
-	for <bpf@archiver.kernel.org>; Sat, 18 Apr 2020 20:31:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CE42C352BE
+	for <bpf@archiver.kernel.org>; Sat, 18 Apr 2020 23:27:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C73D21D6C
-	for <bpf@archiver.kernel.org>; Sat, 18 Apr 2020 20:31:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 676D621927
+	for <bpf@archiver.kernel.org>; Sat, 18 Apr 2020 23:27:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MxtpfIa4"
+	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="SHBqs5Tv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726807AbgDRUbv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 18 Apr 2020 16:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726014AbgDRUbu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 18 Apr 2020 16:31:50 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFBAC061A0C;
-        Sat, 18 Apr 2020 13:31:50 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id t3so6466834qkg.1;
-        Sat, 18 Apr 2020 13:31:50 -0700 (PDT)
+        id S1726006AbgDRX1F (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 18 Apr 2020 19:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725983AbgDRX1E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 18 Apr 2020 19:27:04 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCFDC061A41
+        for <bpf@vger.kernel.org>; Sat, 18 Apr 2020 16:27:04 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id t40so2792484pjb.3
+        for <bpf@vger.kernel.org>; Sat, 18 Apr 2020 16:27:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:user-agent:in-reply-to:references:mime-version
-         :content-transfer-encoding:subject:to:cc:from:message-id;
-        bh=OTuUPzfRxANqtVwZOWyquS2L31/1qsaERPb/xgNgxL4=;
-        b=MxtpfIa4SQHzMunTmjNSh0oH6zgMIlKO2Dw7ekeMFUzP8HCzRi0cdgkymLKt+Joc8F
-         H4xGEVzEIzA40YOwoIP7BRscg5P0LKBu6rk+XZUXnJjblddKMujZGciSt/ym1cI7rOAb
-         sGLPbvHPVvje5A9WKufJ2ouuWIIn7bIdX2Oxfy8CNAtZTk7H11Qaj0l2J17DV9MTexeP
-         Mo7HtkQEtLeo4FzmQuG09hUZMUM/ZX6dDyQ6dtD4vbltw1+5vrlKwD8GT0TOcJrf1RUQ
-         5eEBaqm2vD584hB2kogzFow0lxu1hQoPZqfvptJdGkn/0I2xSwuL8g9OSefGFpdZrVIa
-         yDkQ==
+        d=cs.washington.edu; s=goo201206;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=cUB7vdca0MZaJN7908SrqMzaWtQshCgrQGTimt6WXAg=;
+        b=SHBqs5TvQq09m2V0itEAb9laKJVkdszNqUOMrH3jL2JPNyTiR2palwCZTYkoAhmx7D
+         21HzuuAMqYhvz44uZleZWuYu+EpMZDZSRCl5UJnqfDLrESBxndlSJJNaCDXcHwLhXYTD
+         i0HCoVM1GorPe52KBFFHPYNewpeJR9fRfWzy8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:user-agent:in-reply-to:references
-         :mime-version:content-transfer-encoding:subject:to:cc:from
-         :message-id;
-        bh=OTuUPzfRxANqtVwZOWyquS2L31/1qsaERPb/xgNgxL4=;
-        b=LcBkXGQ0zEs9LBtRY0Oivb7lMbrBFreP8PO/N1m+eCvI7WFiC+ZCbHsHDe2aOq/4Y2
-         wcVOTxfBBdPd+JU2wYJc/sN5aV9LG0AzkDzSxZu/DV0FSXf1Ku2rbCKnj3rInvxI2TTj
-         FQWVNrbNtNImvkviksMvJfpoPL4JXiFSS1mYLZTN9xRd7WjJHVNLe8gLqceFvi3/i8xc
-         x2pMIzrgiSXXrhkH2jB2XieJs1Kj5w8FfZoD/lcM1wLcAnKDFRHpbIuONP3IeRBIcX5Q
-         1u/MBITtDm6u5D+2nCy/nPzHd/S8e/TGk9gd8pfqBpi0Li1fe7uriQU1cfMoQBDNQaqL
-         YEnw==
-X-Gm-Message-State: AGi0PubadxANbpYd47krqp2fuEyn0Z62l0VvLcIVhtQNYvfSgIIXtkFL
-        k040OmajB9oicmCPKxBO25k=
-X-Google-Smtp-Source: APiQypJXTlgGriW9burkWTwuYBMHnxZDsm+/kkrfoMk7IcZX4wVAbzkMW62LwNZntT5b/4Z5dBYrUg==
-X-Received: by 2002:ae9:ef92:: with SMTP id d140mr8588033qkg.363.1587241909528;
-        Sat, 18 Apr 2020 13:31:49 -0700 (PDT)
-Received: from [10.103.140.49] (179-240-131-49.3g.claro.net.br. [179.240.131.49])
-        by smtp.gmail.com with ESMTPSA id r128sm19605251qke.95.2020.04.18.13.31.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 18 Apr 2020 13:31:48 -0700 (PDT)
-Date:   Sat, 18 Apr 2020 17:31:38 -0300
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20200418160536.4mrvqh2lasqbyk77@ast-mbp>
-References: <1587120160-3030-1-git-send-email-alan.maguire@oracle.com> <20200418160536.4mrvqh2lasqbyk77@ast-mbp>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [RFC PATCH bpf-next 0/6] bpf, printk: add BTF-based type printing
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>
-CC:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com, kafai@fb.com,
-        songliubraving@fb.com, andriin@fb.com, john.fastabend@gmail.com,
-        kpsingh@chromium.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-From:   Arnaldo Melo <arnaldo.melo@gmail.com>
-Message-ID: <B7DDCAA4-4431-414F-B494-77FF742F68E5@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=cUB7vdca0MZaJN7908SrqMzaWtQshCgrQGTimt6WXAg=;
+        b=JMjfBPdOl4rS9Ijw7yMiWTMCvYpTIa1/nVWioh5zvh2OH4kEP9oQtmDgabLrHGHtk5
+         xCMBdsT7A3SH+AtTujUho4jMajQWEB7GpvMsjsn/gZj++HJTQBVnuU34KqdJVpQrBCFO
+         1k0IaeiB25N3F72E9g5zczJzmfZMonv1rdgBEts2dqda3MnbyZ8QxWb1zXLX87C7BLy2
+         kXgCBrxWQM0yAHgDADkwzFdXj5rPLHVUCxvfPvur7Rx2gDjJBSQNMs32+5RgP3/1aVoN
+         m0dldZpRQQl6wGm+JrFcLdU63PyncAGXLo3jf+C75qx7pfZVztIVbd8pBQd6AAT8h8BS
+         dvLQ==
+X-Gm-Message-State: AGi0PubtQhFZmO5y8K3LPAh1S82U9J2pLogLHGfTdWr/fH91if3NPq11
+        DoQHrqt5hDPcm+tINwepqe5yH6cH9afwjg==
+X-Google-Smtp-Source: APiQypJCCGQF4cugES6slU2mpdEx2GHrEHuPITzBVyuTaVJ/RHTBYfuNwArajpvWKLf808CbnsWMow==
+X-Received: by 2002:a17:90a:fc89:: with SMTP id ci9mr5854418pjb.140.1587252423701;
+        Sat, 18 Apr 2020 16:27:03 -0700 (PDT)
+Received: from localhost.localdomain (c-73-53-94-119.hsd1.wa.comcast.net. [73.53.94.119])
+        by smtp.gmail.com with ESMTPSA id u7sm21429323pfu.90.2020.04.18.16.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Apr 2020 16:27:03 -0700 (PDT)
+From:   Luke Nelson <lukenels@cs.washington.edu>
+X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf 2/2] bpf, selftests: Add test for BPF_STX BPF_B storing R10
+Date:   Sat, 18 Apr 2020 16:26:54 -0700
+Message-Id: <20200418232655.23870-2-luke.r.nels@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200418232655.23870-1-luke.r.nels@gmail.com>
+References: <20200418232655.23870-1-luke.r.nels@gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+This patch adds a test to test_verifier that writes the lower 8 bits of
+R10 (aka FP) using BPF_B to an array map and reads the result back. The
+expected behavior is that the result should be the same as first copying
+R10 to R9, and then storing / loading the lower 8 bits of R9.
 
+This test catches a bug that was present in the x86-64 JIT that caused
+an incorrect encoding for BPF_STX BPF_B when the source operand is R10.
 
-On April 18, 2020 1:05:36 PM GMT-03:00, Alexei Starovoitov <alexei=2Estaro=
-voitov@gmail=2Ecom> wrote:
->On Fri, Apr 17, 2020 at 11:42:34AM +0100, Alan Maguire wrote:
->> The printk family of functions support printing specific pointer
->types
->> using %p format specifiers (MAC addresses, IP addresses, etc)=2E  For
->> full details see Documentation/core-api/printk-formats=2Erst=2E
->>=20
->> This RFC patchset proposes introducing a "print typed pointer" format
->> specifier "%pT<type>"; the type specified is then looked up in the
->BPF
->> Type Format (BTF) information provided for vmlinux to support
->display=2E
->
->This is great idea! Love it=2E
+Signed-off-by: Xi Wang <xi.wang@gmail.com>
+Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
+---
+ .../selftests/bpf/verifier/stack_ptr.c        | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-21st century finally! 8-)
+diff --git a/tools/testing/selftests/bpf/verifier/stack_ptr.c b/tools/testing/selftests/bpf/verifier/stack_ptr.c
+index 7276620ef242..8bfeb77c60bd 100644
+--- a/tools/testing/selftests/bpf/verifier/stack_ptr.c
++++ b/tools/testing/selftests/bpf/verifier/stack_ptr.c
+@@ -315,3 +315,43 @@
+ 	},
+ 	.result = ACCEPT,
+ },
++{
++	"store PTR_TO_STACK in R10 to array map using BPF_B",
++	.insns = {
++	/* Load pointer to map. */
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 2),
++	BPF_MOV64_IMM(BPF_REG_0, 2),
++	BPF_EXIT_INSN(),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	/* Copy R10 to R9. */
++	BPF_MOV64_REG(BPF_REG_9, BPF_REG_10),
++	/* Pollute other registers with unaligned values. */
++	BPF_MOV64_IMM(BPF_REG_2, -1),
++	BPF_MOV64_IMM(BPF_REG_3, -1),
++	BPF_MOV64_IMM(BPF_REG_4, -1),
++	BPF_MOV64_IMM(BPF_REG_5, -1),
++	BPF_MOV64_IMM(BPF_REG_6, -1),
++	BPF_MOV64_IMM(BPF_REG_7, -1),
++	BPF_MOV64_IMM(BPF_REG_8, -1),
++	/* Store both R9 and R10 with BPF_B and read back. */
++	BPF_STX_MEM(BPF_B, BPF_REG_1, BPF_REG_10, 0),
++	BPF_LDX_MEM(BPF_B, BPF_REG_2, BPF_REG_1, 0),
++	BPF_STX_MEM(BPF_B, BPF_REG_1, BPF_REG_9, 0),
++	BPF_LDX_MEM(BPF_B, BPF_REG_3, BPF_REG_1, 0),
++	/* Should read back as same value. */
++	BPF_JMP_REG(BPF_JEQ, BPF_REG_2, BPF_REG_3, 2),
++	BPF_MOV64_IMM(BPF_REG_0, 1),
++	BPF_EXIT_INSN(),
++	BPF_MOV64_IMM(BPF_REG_0, 42),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_array_48b = { 3 },
++	.result = ACCEPT,
++	.retval = 42,
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++},
+-- 
+2.17.1
 
->> The above potential use cases hint at a potential reply to
->> a reasonable objection that such typed display should be
->> solved by tracing programs, where the in kernel tracing records
->> data and the userspace program prints it out=2E  While this
->> is certainly the recommended approach for most cases, I
->> believe having an in-kernel mechanism would be valuable
->> also=2E
->
->yep=2E This is useful for general purpose printk=2E
->The only piece that must be highlighted in the printk documentation
->that unlike the rest of BPF there are zero safety guarantees here=2E
->The programmer can pass wrong pointer to printk() and the kernel _will_
->crash=2E
->
->>   struct sk_buff *skb =3D alloc_skb(64, GFP_KERNEL);
->>=20
->>   pr_info("%pTN<struct sk_buff>", skb);
->
->why follow "TN" convention?
->I think "%p<struct sk_buff>" is much more obvious, unambiguous, and
->equally easy to parse=2E
->
->> =2E=2E=2Egives us:
->>=20
->>
->{{{=2Enext=3D00000000c7916e9c,=2Eprev=3D00000000c7916e9c,{=2Edev=3D000000=
-00c7916e9c|=2Edev_scratch=3D0}}|=2Erbnode=3D{=2E__rb_parent_color=3D0,
->
->This is unreadable=2E
->I like the choice of C style output, but please format it similar to
->drgn=2E Like:
->*(struct task_struct *)0xffff889ff8a08000 =3D {
->	=2Ethread_info =3D (struct thread_info){
->		=2Eflags =3D (unsigned long)0,
->		=2Estatus =3D (u32)0,
->	},
->	=2Estate =3D (volatile long)1,
->	=2Estack =3D (void *)0xffffc9000c4dc000,
->	=2Eusage =3D (refcount_t){
->		=2Erefs =3D (atomic_t){
->			=2Ecounter =3D (int)2,
->		},
->	},
->	=2Eflags =3D (unsigned int)4194560,
->	=2Eptrace =3D (unsigned int)0,
->
->I like Arnaldo's idea as well, but I prefer zeros to be dropped by
->default=2E
-
-That's my preference as well, it's just I feel ashamed of not participatin=
-g in this party as much as I feel I should, so I was just being overly caut=
-ious in my suggestions=2E
-
-'perf trace'  zaps any zero syscall arg out of the way by default, so that=
-'s my preference, sure=2E
-
- - Arnaldo
-
->Just like %d doesn't print leading zeros by default=2E
->"%p0<struct sk_buff>" would print them=2E
->
->> The patches are marked RFC for several reasons
->>=20
->> - There's already an RFC patchset in flight dealing with BTF dumping;
->>=20
->> https://www=2Espinics=2Enet/lists/netdev/msg644412=2Ehtml
->>=20
->>   The reason I'm posting this is the approach is a bit different=20
->>   and there may be ways of synthesizing the approaches=2E
->
->I see no overlap between patch sets whatsoever=2E
->Why do you think there is?
->
->> - The mechanism of vmlinux BTF initialization is not fit for purpose
->>   in a printk() setting as I understand it (it uses mutex locking
->>   to prevent multiple initializations of the BTF info)=2E  A simple
->>   approach to support printk might be to simply initialize the
->>   BTF vmlinux case early in boot; it only needs to happen once=2E
->>   Any suggestions here would be great=2E
->> - BTF-based rendering is more complex than other printk() format
->>   specifier-driven methods; that said, because of its generality it
->>   does provide significant value I think
->> - More tests are needed=2E
->
->yep=2E Please make sure to add one to selftest/bpf as well=2E
->bpf maintainers don't run printk tests as part of workflow, so
->future BTF changes will surely break it if there are no selftests/bpf=2E
->
->Patch 2 isn't quite correct=2E Early parse of vmlinux BTF does not
->compute
->resolved_ids to save kernel memory=2E The trade off is execution time vs
->kernel
->memory=2E I believe that saving memory is more important here, since
->execution is
->not in critical path=2E There is __get_type_size()=2E It should be used i=
-n
->later
->patches instead of btf_type_id_size() that relies on pre-computed
->resolved_sizes and resolved_ids=2E
-
---=20
-Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
