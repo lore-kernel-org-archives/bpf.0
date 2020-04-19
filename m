@@ -1,149 +1,180 @@
-Return-Path: <SRS0=qpZE=6C=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=0yJW=6D=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 097BAC38A30
-	for <bpf@archiver.kernel.org>; Sat, 18 Apr 2020 23:27:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABFD6C2BA2B
+	for <bpf@archiver.kernel.org>; Sun, 19 Apr 2020 05:30:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB4C921974
-	for <bpf@archiver.kernel.org>; Sat, 18 Apr 2020 23:27:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57DE320753
+	for <bpf@archiver.kernel.org>; Sun, 19 Apr 2020 05:30:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="E94FC9Je"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Kf2ysipW";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="MKHX8rnk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725877AbgDRX1M (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 18 Apr 2020 19:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725827AbgDRX1C (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 18 Apr 2020 19:27:02 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA5BC061A41
-        for <bpf@vger.kernel.org>; Sat, 18 Apr 2020 16:27:02 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id t40so2792466pjb.3
-        for <bpf@vger.kernel.org>; Sat, 18 Apr 2020 16:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs.washington.edu; s=goo201206;
-        h=from:to:cc:subject:date:message-id;
-        bh=V1iSNi3FjSbFymrjsWR16L5sHfocV0iKd0ObfqLdCDE=;
-        b=E94FC9JeOPlEtesZY7pnic5oqXC1UEm6VlEGtC1YgAScMnSkB2LJY+O5H4diMpuWHL
-         d/no2M6eNI/dQY9j/v6SSyhcGs+aK1ScSuDvksCyuVmfHcNTBZoPi8j55p0j3j3YBUoZ
-         Dp5qeYnqs74jXMUqZHwc0BsGZWmWM+mqnvNTg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=V1iSNi3FjSbFymrjsWR16L5sHfocV0iKd0ObfqLdCDE=;
-        b=a3jSYQVm6svxpwcLBy4j5inQ3nKT0+o/6mMOpMbMeX+wgobvBo44u9ZIj7kkR2sJYS
-         SpYZUjbap0/aXEASCuXVpCbyClB+K3WF2plPo5Vj/s+6/VoxLlPdTLztkMQ0jJ2n43mb
-         BUKheK1/eGORNWTd+I1jyOF0BJECpGCHV3Xvkr54U17LWKamVgH5Bb5Tv840zCqa+mcU
-         KxP5y6LdIJr6d91e73doMJvUOeJ0JxbPZMaiuWXc5pJQsYX0OaZQdAniF531BQ3VE8Rv
-         rS4Rym2z5+jFDt637PnXlcJFbH1xCG0KlADwyvskKBMuekFWTCfgHM6LhEAXzMgkyY6P
-         U95A==
-X-Gm-Message-State: AGi0PuakjnMDAWDyDq50T1D2o2QD/dBvc9ib8qL2uX2kfAWpTKRedxZv
-        TrYA6flFzIzy5/B1WSNvs5sFsM9eAJLk0Q==
-X-Google-Smtp-Source: APiQypJUg540AgQ0gfERSdqKG3/UO/88BFVywKnBq0ADggzskh4vKGlmvKwDR8ejYqwi3brMfHgq9Q==
-X-Received: by 2002:a17:902:a511:: with SMTP id s17mr10176108plq.33.1587252420747;
-        Sat, 18 Apr 2020 16:27:00 -0700 (PDT)
-Received: from localhost.localdomain (c-73-53-94-119.hsd1.wa.comcast.net. [73.53.94.119])
-        by smtp.gmail.com with ESMTPSA id u7sm21429323pfu.90.2020.04.18.16.26.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Apr 2020 16:27:00 -0700 (PDT)
-From:   Luke Nelson <lukenels@cs.washington.edu>
-X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 1/2] bpf, x86: Fix encoding for lower 8-bit registers in BPF_STX BPF_B
-Date:   Sat, 18 Apr 2020 16:26:53 -0700
-Message-Id: <20200418232655.23870-1-luke.r.nels@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1725914AbgDSFaq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 19 Apr 2020 01:30:46 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:31846 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725446AbgDSFaq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 19 Apr 2020 01:30:46 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03J5OkfH027816;
+        Sat, 18 Apr 2020 22:30:30 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=WBm2tDGxLaLul3ZrIPa0MbysJdoLVIAbCTCkCTuEFQo=;
+ b=Kf2ysipW8XuUrfKlRWu51q5J5zWy/bd0dzQux8QWOOLbwpCKZBNJPomFZeln0Esizs3e
+ R6Vq7mVrPvnuaYlAvY6q9dlt8KpmLE9kHmz3jBsM2h8IQXEmInPMo4qqFSnWq/6lCh92
+ nLdz+Atg1U7k2KLMSzKY4SmeakJnwaoBeq0= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 30fxng3j3y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Sat, 18 Apr 2020 22:30:30 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.198) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Sat, 18 Apr 2020 22:30:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V3h64uN0/eN81aKE6yDDA948LYoGCyJJBUYQvnFct1EjkAbgy4gUuLLRr1rkDg67X5OeSxYSr2qllLgr1yYJkHOKzwkpXaRC4WUYha5MpZPW3zBvslHJPGcKpUSISBYui3yyY5pYLHX/YzF+QRetRs0iZYJaUSmN4FGdTiDYLo39aH5TRKY0AjdOWRdkk2RjhxsGqRelC+3gkf6FqZpb4N+EOIJrQ135aaMKWYXhWA1DDf7H2NJzXUr+TCtR1YHs7zRAT+5viP6PItDI3BsJXyBz6GqD6r8e9y/HZ+eC6PUTVCnLtbijDWINBp24M8BnPevCh+ZeFyirRHHny282Yg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WBm2tDGxLaLul3ZrIPa0MbysJdoLVIAbCTCkCTuEFQo=;
+ b=Yf+3lJ0Nr9v8cfygyIeR13/t0e0OQgdHtI+Dpj96VlNKr2ErOz9A1s9p7WKKo6izVnqfdy+uKtnoXC0gvp1msKyLDG8O/M7TZN0lHpPjLHV6HNGLGUUaV8WrK5xPLjDYVfcIRbv/x+7r9d8ie25EOsolAU51Wtnmc1blvk/wIavTnWiKJpEtOIwZwDi7aU5NCRKijTKwH+cRCboJk2WXUvhQjffdPmgL5qmFdpX71Y7Buv4rVyBu1JlxjZTuNILe4NUuZq1By1yL6EKLvGDeWQdiv2zhAv67Ma0UL34hbB/5m2L9Yc/iYiJwnVt9djC63aV89QrvOl8mWXIZ353U1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WBm2tDGxLaLul3ZrIPa0MbysJdoLVIAbCTCkCTuEFQo=;
+ b=MKHX8rnkHiEejjz3bA5zQJhqD0YoBZLgLmf7Q7TT5sdaFbsHRMVW8SAmkvaNzjGdZGAQoaTOrFBNoe74RCyB6PyTqJho18BX52aCFk8T2Lz5T5zBd0b/21zJlhC/HSldWWBMBwqbi4+tHNgvB5TnKQRLP/1/pJvqmVGqXiJ9KTE=
+Received: from MW3PR15MB3883.namprd15.prod.outlook.com (2603:10b6:303:51::22)
+ by MW3PR15MB3929.namprd15.prod.outlook.com (2603:10b6:303:4a::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.29; Sun, 19 Apr
+ 2020 05:30:27 +0000
+Received: from MW3PR15MB3883.namprd15.prod.outlook.com
+ ([fe80::7d15:e3c5:d815:a075]) by MW3PR15MB3883.namprd15.prod.outlook.com
+ ([fe80::7d15:e3c5:d815:a075%7]) with mapi id 15.20.2921.027; Sun, 19 Apr 2020
+ 05:30:27 +0000
+Subject: Re: [RFC PATCH bpf-next v2 00/17] bpf: implement bpf based dumping of
+ kernel data structures
+To:     Alan Maguire <alan.maguire@oracle.com>,
+        David Ahern <dsahern@gmail.com>
+CC:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+References: <20200415192740.4082659-1-yhs@fb.com>
+ <40e427e2-5b15-e9aa-e2cb-42dc1b53d047@gmail.com>
+ <alpine.LRH.2.21.2004171106580.32559@localhost>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <08d95e5f-9b14-4e61-8b71-f7be3b5cc30f@fb.com>
+Date:   Sat, 18 Apr 2020 22:30:24 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
+ Gecko/20100101 Thunderbird/68.7.0
+In-Reply-To: <alpine.LRH.2.21.2004171106580.32559@localhost>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CO2PR04CA0170.namprd04.prod.outlook.com
+ (2603:10b6:104:4::24) To MW3PR15MB3883.namprd15.prod.outlook.com
+ (2603:10b6:303:51::22)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from wongal-imac.dhcp.thefacebook.com (2620:10d:c090:400::5:7ab3) by CO2PR04CA0170.namprd04.prod.outlook.com (2603:10b6:104:4::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.27 via Frontend Transport; Sun, 19 Apr 2020 05:30:26 +0000
+X-Originating-IP: [2620:10d:c090:400::5:7ab3]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5c2c7ad3-b11d-4319-dc07-08d7e422c462
+X-MS-TrafficTypeDiagnostic: MW3PR15MB3929:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MW3PR15MB3929F8F90A53B4B61B2F981CD3D70@MW3PR15MB3929.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-Forefront-PRVS: 0378F1E47A
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR15MB3883.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(136003)(346002)(366004)(39860400002)(376002)(396003)(31696002)(4326008)(54906003)(52116002)(31686004)(316002)(2616005)(110136005)(186003)(6486002)(53546011)(6506007)(6512007)(16526019)(86362001)(8676002)(478600001)(66476007)(8936002)(36756003)(66556008)(5660300002)(66946007)(81156014)(966005)(2906002);DIR:OUT;SFP:1102;
+Received-SPF: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SwAqUTqGbDeA8XcgnGRmfqPFQpMoyA+FsYNx8HxfKspIujCEUxHOvvN7cYWYM5ZdZl5ihrW7sPThOlG9sRftAYBCvZXFNS6TIlWVUFLudC63fg1QDMFmoZWOPwyyePbqn4h3T8vGaHyf+VNdxai/hAKqJEvRMPb22OPDJE9GiozTDPByk4D8aenrpuja/HoKoWfkxoY6JBdg6RhIWFcxbo0VvXB0XLmpqsZTyCHStXQvLCKef4p2DFF7c+12Iw/IC9UQO4UU+h2lf9QEmDypmeFPReyvLXpFsEX2YA6Lw5+ixFK5UrNL2heozf56vxGO0Si4zS/h4NV3slki5oh8raAoFh1fkXCyuE40t30Sby/MBL5g5fraCR85RU5isDcj2zZDPruGANhlB8cNWBslmFJEqZBU0q0IlnUo3vETUfydyJ785J0kssOmPuAL43z+cC2u+nLXxB5/aKl5eAgiyiQqh5D2LVtFuSrJpRFmPKQX+hvHl4bkivWBSBSp+YHs0DQaKNN0mj80YMZwcwKFHQ==
+X-MS-Exchange-AntiSpam-MessageData: L4gjs/4oPkIMyBuQY5NH0PuDX5pVJ/q0ck3FqyTKjW2weTyedI82ci7aiz6r5gR2vpg5iFdnc/dgGQqW0lSOtAYqtEO8To4nuBW/lPhiNr5z1BAHlte/KUumvnMRiocp1Ddd745AoQ8sU3AGuhG/0D0V8cipCLdOHGRw31C2MQfi8Ngp0dSVbhF10UmoTWRKZE3rKNJeKXFUNqAK8ErJdBzplyi6UpvNa4t1IrVRmxLxuWMLJkv1gO1LxQ/LE+YkKEgpNo2iTXypTEXD/G7qSZ+t34EaxB7p3oXzBooqXth2ZGQtVMTFYQUu+SBAYN7Xf4EjPp3mo5yw/+SVvFw7rwq1FfcgHFOLGpMunLYgVTpRIFLmKCUAytoVqfEUEmd22yo9AMGOXxfRCXQYyKSodYM+ePWLN7k9xTJUB7rpvBZjYFOpOz/YEF6zfALteYpllyH8yvuEDRKBqqlSjugkb4Tfboq6J3UC+LHlIzExdiFZz+0hN3G07M8LVePlgoUblPyeuECOEfBiGWB28JpxYyly9Gb4qq4FBbEiVoEDgR4HsL7LlnpDnVSdMB3rgKxtrQ4cYvhCGX2eqf/DLDUA6ml2QZD0DQyUEfSDJOjeWQVDIzyAXIKC8spEqhoEDkxbl6SG+wznmDE+MhVD1brvsgrskcBJnNvsiq+N8NSxjpDU8ZYxP3Jj6F/F95Ky/8+vRh/5iXhow15b5Lm7DaqJEyX+gB+UPtosD3v3IE1PBDdUZh9q6pmG2B4QGc/yFFTmEXt0NyG1ChLH2vaEMdORaoPVTqjkiE8t7E5548cbvO8v7k6JLI3QFd8u9jV9+Y43kiANFKxmBct5iRFbRbJ2ZA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c2c7ad3-b11d-4319-dc07-08d7e422c462
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2020 05:30:27.3139
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nLdPIrMp0+cCn2o45pUDuq3hDw9+u8pItsyMxllOuahnUAMoAk7FmIsJkGdiR+KS
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR15MB3929
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-18_10:2020-04-17,2020-04-18 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ impostorscore=0 clxscore=1011 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 mlxlogscore=999 bulkscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004190048
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch fixes an encoding bug in emit_stx for BPF_B when the source
-register is BPF_REG_FP.
 
-The current implementation for BPF_STX BPF_B in emit_stx saves one REX
-byte when the operands can be encoded using Mod-R/M alone. The lower 8
-bits of registers %rax, %rbx, %rcx, and %rdx can be accessed without using
-a REX prefix via %al, %bl, %cl, and %dl, respectively. Other registers,
-(e.g., %rsi, %rdi, %rbp, %rsp) require a REX prefix to use their 8-bit
-equivalents (%sil, %dil, %bpl, %spl).
 
-The current code checks if the source for BPF_STX BPF_B is BPF_REG_1
-or BPF_REG_2 (which map to %rdi and %rsi), in which case it emits the
-required REX prefix. However, it misses the case when the source is
-BPF_REG_FP (mapped to %rbp).
+On 4/17/20 3:54 AM, Alan Maguire wrote:
+> On Wed, 15 Apr 2020, David Ahern wrote:
+> 
+>> On 4/15/20 1:27 PM, Yonghong Song wrote:
+>>>
+>>> As there are some discussions regarding to the kernel interface/steps to
+>>> create file/anonymous dumpers, I think it will be beneficial for
+>>> discussion with this work in progress.
+>>>
+>>> Motivation:
+>>>    The current way to dump kernel data structures mostly:
+>>>      1. /proc system
+>>>      2. various specific tools like "ss" which requires kernel support.
+>>>      3. drgn
+>>>    The dropback for the first two is that whenever you want to dump more, you
+>>>    need change the kernel. For example, Martin wants to dump socket local
+>>
+>> If kernel support is needed for bpfdump of kernel data structures, you
+>> are not really solving the kernel support problem. i.e., to dump
+>> ipv4_route's you need to modify the relevant proc show function.
+>>
+> 
+> I need to dig into this patchset a bit more, but if there is
+> a need for in-kernel BTF-based structure dumping I've got a
+> work-in-progress patchset that does this by generalizing the code
+> that  deals with seq output in the verifier. I've posted it
+> as an RFC in case it has anything useful to offer here:
+> 
+> https://lore.kernel.org/bpf/1587120160-3030-1-git-send-email-alan.maguire@oracle.com/T/#t
+> 
+> The idea is that by using different callback function we can achieve
+> seq, snprintf or other output in-kernel using the kernel BTF data.
+> I created one consumer as a proof-of-concept; it's a printk pointer
+> format specifier.  Since the dump format is determined in kernel
+> it's a bit constrained format-wise, but may be good enough for
+> some cases.
 
-The result is that BPF_STX BPF_B with BPF_REG_FP as the source operand
-will read from register %ch instead of the correct %bpl. This patch fixes
-the problem by fixing and refactoring the check on which registers need
-the extra REX byte. Since no BPF registers map to %rsp, there is no need
-to handle %spl.
+The bpfdump work and here in-kernel btf dumping are different.
+The bpfdump BPF programs are triggered with a user syscall, e.g.,
+    cat /sys/kernel/bpfdump/task/my_dumper (also calling open())
+or when user open() an anonymous dumper.
 
-Fixes: 622582786c9e0 ("net: filter: x86: internal BPF JIT")
-Signed-off-by: Xi Wang <xi.wang@gmail.com>
-Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
----
- arch/x86/net/bpf_jit_comp.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+The BPF program can "print" some data through bpf_seq_printf()
+helper. These printed data will be received by user space
+through read() syscall.
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 5ea7c2cf7ab4..42b6709e6dc7 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -158,6 +158,19 @@ static bool is_ereg(u32 reg)
- 			     BIT(BPF_REG_AX));
- }
- 
-+/*
-+ * is_ereg_8l() == true if BPF register 'reg' is mapped to access x86-64
-+ * lower 8-bit registers dil,sil,bpl,spl,r8b..r15b, which need extra byte
-+ * of encoding. al,cl,dl,bl have simpler encoding.
-+ */
-+static bool is_ereg_8l(u32 reg)
-+{
-+	return is_ereg(reg) ||
-+	    (1 << reg) & (BIT(BPF_REG_1) |
-+			  BIT(BPF_REG_2) |
-+			  BIT(BPF_REG_FP));
-+}
-+
- static bool is_axreg(u32 reg)
- {
- 	return reg == BPF_REG_0;
-@@ -598,9 +611,8 @@ static void emit_stx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
- 	switch (size) {
- 	case BPF_B:
- 		/* Emit 'mov byte ptr [rax + off], al' */
--		if (is_ereg(dst_reg) || is_ereg(src_reg) ||
--		    /* We have to add extra byte for x86 SIL, DIL regs */
--		    src_reg == BPF_REG_1 || src_reg == BPF_REG_2)
-+		if (is_ereg(dst_reg) || is_ereg_8l(src_reg))
-+			/* Add extra byte for eregs or SIL,DIL,BPL in src_reg */
- 			EMIT2(add_2mod(0x40, dst_reg, src_reg), 0x88);
- 		else
- 			EMIT1(0x88);
--- 
-2.17.1
-
+Your work is greater as it makes kernel print more readable.
+There is no overlap between your work and bpfdump.
