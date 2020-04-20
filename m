@@ -2,141 +2,198 @@ Return-Path: <SRS0=PZfo=6E=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A55C1C3815B
-	for <bpf@archiver.kernel.org>; Mon, 20 Apr 2020 16:41:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4050BC3815B
+	for <bpf@archiver.kernel.org>; Mon, 20 Apr 2020 17:46:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8350B20857
-	for <bpf@archiver.kernel.org>; Mon, 20 Apr 2020 16:41:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D27B20857
+	for <bpf@archiver.kernel.org>; Mon, 20 Apr 2020 17:46:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B6W1ZkQ9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726102AbgDTQlz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Apr 2020 12:41:55 -0400
-Received: from smtprelay0085.hostedemail.com ([216.40.44.85]:55262 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726067AbgDTQlz (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 20 Apr 2020 12:41:55 -0400
-X-Greylist: delayed 398 seconds by postgrey-1.27 at vger.kernel.org; Mon, 20 Apr 2020 12:41:54 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave04.hostedemail.com (Postfix) with ESMTP id B91241801B74C
-        for <bpf@vger.kernel.org>; Mon, 20 Apr 2020 16:35:17 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id C26278384364;
-        Mon, 20 Apr 2020 16:35:15 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: lock50_4abfde65a5055
-X-Filterd-Recvd-Size: 4328
-Received: from XPS-9350.home (unknown [47.151.136.130])
-        (Authenticated sender: joe@perches.com)
-        by omf02.hostedemail.com (Postfix) with ESMTPA;
-        Mon, 20 Apr 2020 16:35:13 +0000 (UTC)
-Message-ID: <7d6019da19d52c851d884731b1f16328fdbe2e3d.camel@perches.com>
-Subject: Re: [RFC PATCH bpf-next 0/6] bpf, printk: add BTF-based type
- printing
-From:   Joe Perches <joe@perches.com>
-To:     Alan Maguire <alan.maguire@oracle.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com, kafai@fb.com,
-        songliubraving@fb.com, andriin@fb.com, john.fastabend@gmail.com,
-        kpsingh@chromium.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Date:   Mon, 20 Apr 2020 09:32:57 -0700
-In-Reply-To: <alpine.LRH.2.21.2004201623390.12711@localhost>
-References: <1587120160-3030-1-git-send-email-alan.maguire@oracle.com>
-         <20200418160536.4mrvqh2lasqbyk77@ast-mbp>
-         <alpine.LRH.2.21.2004201623390.12711@localhost>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726067AbgDTRqP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Apr 2020 13:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726013AbgDTRqP (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 20 Apr 2020 13:46:15 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6907C061A0C
+        for <bpf@vger.kernel.org>; Mon, 20 Apr 2020 10:46:13 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id j16so10409903pgg.3
+        for <bpf@vger.kernel.org>; Mon, 20 Apr 2020 10:46:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=3iXQxKcuXaH8vzSpbGGcKpQZHWkV+5aV8X0i1N4Bpxk=;
+        b=B6W1ZkQ9tWFz7CTJtZRpZ1kDQ+Ot2Nwvx39cPSbTt4Q6iafsvUXna2HfYYp2DFLaVM
+         87sz6sjlUTMACC0ojyCtRsLjqNm1yZKQs7nH78xehNSZPhihvfN0PD7B85scIkEYU+Tg
+         2pXoyDNzuzEFOTu83wNgBoC70N8Gqj8l5YF1qNEiN1H2l7BnZamTLBgKiq9uzPGCmQGB
+         2mfLxL1PxLor7ufpXBgdHcIxXiVijW/kVHQHPKkh3MV0A1i9vNooWyw7y49uAvVbfje6
+         t7SXbRH0CRinxRDcvmUTQzbnEkB78FyMVNn6fu+pCIe0Af9COJVSvBQknPkjrcZAtOlW
+         ytzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=3iXQxKcuXaH8vzSpbGGcKpQZHWkV+5aV8X0i1N4Bpxk=;
+        b=WHtq8seVNBNocCbpDUisMWsTnRA7K/IXgpW2DTQNzOE1uZXu+eZfOS/wtQJS9kGeFU
+         K5TZ6ZORBzkKpcK1UqdTSI7gPdehHgstk4mi/Xqwn2zpJstNz6vvWjvf5hVTmjXIPJhU
+         NGSv8/tBEg8R0bgYqik08Gca72RgcXM2oWbj2xWd5Y5XimUCxQ2upxUl/ORXDA/tNNcc
+         VHRvXLFbF9G+/uXeW/RhzFPkSlcrC6HQHPat3NiVthu92Ovs2CcYSrlFNhMUwORzrNrj
+         4fQSFW0rINTQzx7otpDKz6JTVy0XAKxXKbSklLxCw5efKywUPYI1tyyeXHhfpxhMWOIp
+         9xzA==
+X-Gm-Message-State: AGi0PubGB3vZPXX98IrNwX5TZTFYGyWnWjBkmHQBT19eSQYlvhnUUrYs
+        1lsazBHrmTu3mh2xqLmjt0Vgi7I=
+X-Google-Smtp-Source: APiQypJZPGdilOYNFpUob02zkWIVVcrQoPOcD71XeBNOpymxoDCLA+wFgJWr7K1tYMXQZzq8J3zO6Dw=
+X-Received: by 2002:a63:4f0a:: with SMTP id d10mr12344458pgb.146.1587404773093;
+ Mon, 20 Apr 2020 10:46:13 -0700 (PDT)
+Date:   Mon, 20 Apr 2020 10:46:10 -0700
+Message-Id: <20200420174610.77494-1-sdf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.26.1.301.g55bc3eb7cb9-goog
+Subject: [PATCH bpf-next] bpf: enable more helpers for BPF_PROG_TYPE_CGROUP_{DEVICE,SYSCTL,SOCKOPT}
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 2020-04-20 at 16:29 +0100, Alan Maguire wrote:
-> On Sat, 18 Apr 2020, Alexei Starovoitov wrote:
-> 
-> > On Fri, Apr 17, 2020 at 11:42:34AM +0100, Alan Maguire wrote:
-> > > The printk family of functions support printing specific pointer types
-> > > using %p format specifiers (MAC addresses, IP addresses, etc).  For
-> > > full details see Documentation/core-api/printk-formats.rst.
-> > > 
-> > > This RFC patchset proposes introducing a "print typed pointer" format
-> > > specifier "%pT<type>"; the type specified is then looked up in the BPF
-> > > Type Format (BTF) information provided for vmlinux to support display.
-> > 
-> > This is great idea! Love it.
-> > 
-> 
-> Thanks for taking a look!
->  
-> > > The above potential use cases hint at a potential reply to
-> > > a reasonable objection that such typed display should be
-> > > solved by tracing programs, where the in kernel tracing records
-> > > data and the userspace program prints it out.  While this
-> > > is certainly the recommended approach for most cases, I
-> > > believe having an in-kernel mechanism would be valuable
-> > > also.
-> > 
-> > yep. This is useful for general purpose printk.
-> > The only piece that must be highlighted in the printk documentation
-> > that unlike the rest of BPF there are zero safety guarantees here.
-> > The programmer can pass wrong pointer to printk() and the kernel _will_ crash.
-> > 
-> 
-> Good point; I'll highlight the fact that we aren't
-> executing in BPF context, no verifier etc.
-> 
-> > >   struct sk_buff *skb = alloc_skb(64, GFP_KERNEL);
-> > > 
-> > >   pr_info("%pTN<struct sk_buff>", skb);
-> > 
-> > why follow "TN" convention?
-> > I think "%p<struct sk_buff>" is much more obvious, unambiguous, and
-> > equally easy to parse.
-> > 
-> 
-> That was my first choice, but the first character
-> after the 'p' in the '%p' specifier signifies the
-> pointer format specifier. If we use '<', and have
-> '%p<', where do we put the modifiers? '%p<xYz struct foo>'
-> seems clunky to me.
+Currently the following prog types don't fall back to bpf_base_func_proto()
+(instead they have cgroup_base_func_proto which has a limited set of
+helpers from bpf_base_func_proto):
+* BPF_PROG_TYPE_CGROUP_DEVICE
+* BPF_PROG_TYPE_CGROUP_SYSCTL
+* BPF_PROG_TYPE_CGROUP_SOCKOPT
 
-While I don't really like the %p<struct type> block,
-it's at least obvious what's being attempted.
+I don't see any specific reason why we shouldn't use bpf_base_func_proto(),
+every other type of program (except bpf-lirc and, understandably, tracing)
+use it, so let's fall back to bpf_base_func_proto for those prog types
+as well.
 
-Modifiers could easily go after the <struct type> block.
+This basically boils down to adding access to the following helpers:
+* BPF_FUNC_get_prandom_u32
+* BPF_FUNC_get_smp_processor_id
+* BPF_FUNC_get_numa_node_id
+* BPF_FUNC_tail_call
+* BPF_FUNC_ktime_get_ns
+* BPF_FUNC_spin_lock (CAP_SYS_ADMIN)
+* BPF_FUNC_spin_unlock (CAP_SYS_ADMIN)
+* BPF_FUNC_jiffies64 (CAP_SYS_ADMIN)
 
-It appears a %p<struct type> output might be a lot of
-total characters so another potential issue might be
-the maximum length of each individual printk.
+I've also added bpf_perf_event_output() because it's really handy for
+logging and debugging.
 
-> > I like the choice of C style output, but please format it similar to drgn. Like:
-> > *(struct task_struct *)0xffff889ff8a08000 = {
-> > 	.thread_info = (struct thread_info){
-> > 		.flags = (unsigned long)0,
-> > 		.status = (u32)0,
-> > 	},
-> > 	.state = (volatile long)1,
-> > 	.stack = (void *)0xffffc9000c4dc000,
-> > 	.usage = (refcount_t){
-> > 		.refs = (atomic_t){
-> > 			.counter = (int)2,
-> > 		},
-> > 	},
-> > 	.flags = (unsigned int)4194560,
-> > 	.ptrace = (unsigned int)0,
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ include/linux/bpf.h                           |  1 +
+ kernel/bpf/cgroup.c                           | 20 +++-------------
+ net/core/filter.c                             |  2 +-
+ .../selftests/bpf/verifier/event_output.c     | 24 +++++++++++++++++++
+ 4 files changed, 29 insertions(+), 18 deletions(-)
 
-And here, the issue might be duplicating the log level
-for each line of output and/or prefixing each line with
-whatever struct type is being dumped as interleaving
-with other concurrent logging is possible.
-
-Here as well the individual field types don't contain
-enough information to determine if a field should be
-output as %x or %u.
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index fd2b2322412d..25da6ff2a880 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1523,6 +1523,7 @@ extern const struct bpf_func_proto bpf_strtoul_proto;
+ extern const struct bpf_func_proto bpf_tcp_sock_proto;
+ extern const struct bpf_func_proto bpf_jiffies64_proto;
+ extern const struct bpf_func_proto bpf_get_ns_current_pid_tgid_proto;
++extern const struct bpf_func_proto bpf_event_output_data_proto;
+ 
+ const struct bpf_func_proto *bpf_tracing_func_proto(
+ 	enum bpf_func_id func_id, const struct bpf_prog *prog);
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index cb305e71e7de..4d748c5785bc 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1060,30 +1060,16 @@ static const struct bpf_func_proto *
+ cgroup_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+ 	switch (func_id) {
+-	case BPF_FUNC_map_lookup_elem:
+-		return &bpf_map_lookup_elem_proto;
+-	case BPF_FUNC_map_update_elem:
+-		return &bpf_map_update_elem_proto;
+-	case BPF_FUNC_map_delete_elem:
+-		return &bpf_map_delete_elem_proto;
+-	case BPF_FUNC_map_push_elem:
+-		return &bpf_map_push_elem_proto;
+-	case BPF_FUNC_map_pop_elem:
+-		return &bpf_map_pop_elem_proto;
+-	case BPF_FUNC_map_peek_elem:
+-		return &bpf_map_peek_elem_proto;
+ 	case BPF_FUNC_get_current_uid_gid:
+ 		return &bpf_get_current_uid_gid_proto;
+ 	case BPF_FUNC_get_local_storage:
+ 		return &bpf_get_local_storage_proto;
+ 	case BPF_FUNC_get_current_cgroup_id:
+ 		return &bpf_get_current_cgroup_id_proto;
+-	case BPF_FUNC_trace_printk:
+-		if (capable(CAP_SYS_ADMIN))
+-			return bpf_get_trace_printk_proto();
+-		/* fall through */
++	case BPF_FUNC_perf_event_output:
++		return &bpf_event_output_data_proto;
+ 	default:
+-		return NULL;
++		return bpf_base_func_proto(func_id);
+ 	}
+ }
+ 
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 7d6ceaa54d21..a943df3ad8b0 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4214,7 +4214,7 @@ BPF_CALL_5(bpf_event_output_data, void *, ctx, struct bpf_map *, map, u64, flags
+ 	return bpf_event_output(map, flags, data, size, NULL, 0, NULL);
+ }
+ 
+-static const struct bpf_func_proto bpf_event_output_data_proto =  {
++const struct bpf_func_proto bpf_event_output_data_proto =  {
+ 	.func		= bpf_event_output_data,
+ 	.gpl_only       = true,
+ 	.ret_type       = RET_INTEGER,
+diff --git a/tools/testing/selftests/bpf/verifier/event_output.c b/tools/testing/selftests/bpf/verifier/event_output.c
+index 130553e19eca..99f8f582c02b 100644
+--- a/tools/testing/selftests/bpf/verifier/event_output.c
++++ b/tools/testing/selftests/bpf/verifier/event_output.c
+@@ -92,3 +92,27 @@
+ 	.result = ACCEPT,
+ 	.retval = 1,
+ },
++{
++	"perfevent for cgroup dev",
++	.insns =  { __PERF_EVENT_INSNS__ },
++	.prog_type = BPF_PROG_TYPE_CGROUP_DEVICE,
++	.fixup_map_event_output = { 4 },
++	.result = ACCEPT,
++	.retval = 1,
++},
++{
++	"perfevent for cgroup sysctl",
++	.insns =  { __PERF_EVENT_INSNS__ },
++	.prog_type = BPF_PROG_TYPE_CGROUP_SYSCTL,
++	.fixup_map_event_output = { 4 },
++	.result = ACCEPT,
++	.retval = 1,
++},
++{
++	"perfevent for cgroup sockopt",
++	.insns =  { __PERF_EVENT_INSNS__ },
++	.prog_type = BPF_PROG_TYPE_CGROUP_SOCKOPT,
++	.fixup_map_event_output = { 4 },
++	.result = ACCEPT,
++	.retval = 1,
++},
+-- 
+2.26.1.301.g55bc3eb7cb9-goog
 
