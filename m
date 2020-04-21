@@ -2,40 +2,41 @@ Return-Path: <SRS0=GPe9=6F=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91A92C54FCC
-	for <bpf@archiver.kernel.org>; Tue, 21 Apr 2020 17:15:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3691C54FCC
+	for <bpf@archiver.kernel.org>; Tue, 21 Apr 2020 17:15:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6EFB6206D5
-	for <bpf@archiver.kernel.org>; Tue, 21 Apr 2020 17:15:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B6A8B2070B
+	for <bpf@archiver.kernel.org>; Tue, 21 Apr 2020 17:15:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="X9i2yk4C"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="V7OZEPxW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729130AbgDURPp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Apr 2020 13:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S1725990AbgDURPu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Apr 2020 13:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725990AbgDURPo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 21 Apr 2020 13:15:44 -0400
+        by vger.kernel.org with ESMTP id S1729249AbgDURPt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 21 Apr 2020 13:15:49 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2056C061A41;
-        Tue, 21 Apr 2020 10:15:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18270C061A41;
+        Tue, 21 Apr 2020 10:15:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=W8axj1eYgRYYRX2IQ40eJJVIFVT2v4KgmokU8bsvFAY=; b=X9i2yk4C0hVTSdB1gn4yaNizE5
-        0wS91equLcghgOBIh0bXpLvdn99Ku7W68bTpV5ABMV+2Z0ZbgoAZhZjwZLwNIozlVzaypdnCYBijD
-        mB8SAmUHf20zWC1DsZMKeaNH3yxKkyN5DbvrJvLshbzhNS4RcYozf3h/R9K7I3kYmoO3St7GDFgAv
-        Rl/ZiuLTng2AEJWW/fkauc+uLnEZWnKeRf9nfgc3bIGDxgAZfoMXJo76pz+hm5wDagEnYBMTn4j1V
-        yB8emZ/Ts2sX3h6l7jmbr1ffaRwGpGtq4m9V9pDCOFPTNGPLZhv7ksynot0BRpHmrRNLMuPJRXgUk
-        rgr7P6nw==;
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
+        :Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=JQXbXAp9ulEWyhayBjCAHaJMTw8Jdhk9KH5wDvZocJU=; b=V7OZEPxWriIOq3sqWj8JVcXKkK
+        GJ4IttwVrL8VDkeBCEKuvtwKKzhQ0V6J+pz6Tk9vBb78jt4QVM7zzQ2v9KtcITi90aXKr2Eu/r+qf
+        tEdZNqhRemqmn3t05R0praYu/52YuxOi3olitJ05C1fPGWhkQRjW3FBKvgg8eu67mTOovaiiR0rZ8
+        /e7Y6yAyLyAW5Umvg4QUuS6WqkwYBuWHYhNz7Dvj9QD03tTVPCu5gYw25my+2xqyvdWWQzs68nJop
+        HF3AVfWrQ9Ix/qqR2tu0xn+8cCex1En1cRpXT2I/bI4rfuXjSFSdpjlstpuY9XS/smlhF0bX+JWFd
+        5iwOA1bw==;
 Received: from [2001:4bb8:191:e12c:c70:4a89:bc61:3] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jQwUn-0006Zf-1w; Tue, 21 Apr 2020 17:15:41 +0000
+        id 1jQwUr-0006bW-RK; Tue, 21 Apr 2020 17:15:46 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Kees Cook <keescook@chromium.org>,
         Iurii Zaikin <yzaikin@google.com>
@@ -44,10 +45,12 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: pass kernel pointers to the sysctl ->proc_handler method v2
-Date:   Tue, 21 Apr 2020 19:15:34 +0200
-Message-Id: <20200421171539.288622-1-hch@lst.de>
+Subject: [PATCH 2/5] mm: remove watermark_boost_factor_sysctl_handler
+Date:   Tue, 21 Apr 2020 19:15:36 +0200
+Message-Id: <20200421171539.288622-3-hch@lst.de>
 X-Mailer: git-send-email 2.26.1
+In-Reply-To: <20200421171539.288622-1-hch@lst.de>
+References: <20200421171539.288622-1-hch@lst.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
@@ -56,14 +59,66 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi all,
+watermark_boost_factor_sysctl_handler is just a pointless wrapper for
+proc_dointvec_minmax, so remove it and use proc_dointvec_minmax
+directly.
 
-this series changes the sysctl ->proc_handler methods to take kernel
-pointers.  This simplifies some of the pointer handling in the methods
-(which could probably be further simplified now), and gets rid of the
-set_fs address space overrides used by bpf.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ include/linux/mmzone.h |  2 --
+ kernel/sysctl.c        |  2 +-
+ mm/page_alloc.c        | 12 ------------
+ 3 files changed, 1 insertion(+), 15 deletions(-)
 
-Changes since v1:
- - drop a patch merged by Greg
- - don't copy data out on a write
- - fix buffer allocation in bpf
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 1b9de7d220fb..f37bb8f187fc 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -911,8 +911,6 @@ static inline int is_highmem(struct zone *zone)
+ struct ctl_table;
+ int min_free_kbytes_sysctl_handler(struct ctl_table *, int,
+ 					void __user *, size_t *, loff_t *);
+-int watermark_boost_factor_sysctl_handler(struct ctl_table *, int,
+-					void __user *, size_t *, loff_t *);
+ int watermark_scale_factor_sysctl_handler(struct ctl_table *, int,
+ 					void __user *, size_t *, loff_t *);
+ extern int sysctl_lowmem_reserve_ratio[MAX_NR_ZONES];
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 8a176d8727a3..99d27acf4646 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1491,7 +1491,7 @@ static struct ctl_table vm_table[] = {
+ 		.data		= &watermark_boost_factor,
+ 		.maxlen		= sizeof(watermark_boost_factor),
+ 		.mode		= 0644,
+-		.proc_handler	= watermark_boost_factor_sysctl_handler,
++		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= SYSCTL_ZERO,
+ 	},
+ 	{
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 69827d4fa052..62c1550cd43e 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -7978,18 +7978,6 @@ int min_free_kbytes_sysctl_handler(struct ctl_table *table, int write,
+ 	return 0;
+ }
+ 
+-int watermark_boost_factor_sysctl_handler(struct ctl_table *table, int write,
+-	void __user *buffer, size_t *length, loff_t *ppos)
+-{
+-	int rc;
+-
+-	rc = proc_dointvec_minmax(table, write, buffer, length, ppos);
+-	if (rc)
+-		return rc;
+-
+-	return 0;
+-}
+-
+ int watermark_scale_factor_sysctl_handler(struct ctl_table *table, int write,
+ 	void __user *buffer, size_t *length, loff_t *ppos)
+ {
+-- 
+2.26.1
+
