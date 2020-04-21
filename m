@@ -2,62 +2,66 @@ Return-Path: <SRS0=GPe9=6F=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1FB1C55189
-	for <bpf@archiver.kernel.org>; Tue, 21 Apr 2020 22:46:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 229ACC2BA19
+	for <bpf@archiver.kernel.org>; Tue, 21 Apr 2020 23:29:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA1B9206E9
-	for <bpf@archiver.kernel.org>; Tue, 21 Apr 2020 22:46:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CEA9A20679
+	for <bpf@archiver.kernel.org>; Tue, 21 Apr 2020 23:29:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbgDUWp6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Apr 2020 18:45:58 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:55840 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725850AbgDUWp6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Apr 2020 18:45:58 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 93CE3128E9282;
-        Tue, 21 Apr 2020 15:45:56 -0700 (PDT)
-Date:   Tue, 21 Apr 2020 15:45:55 -0700 (PDT)
-Message-Id: <20200421.154555.572490249375777103.davem@davemloft.net>
-To:     yanaijie@huawei.com
-Cc:     jeffrey.t.kirsher@intel.com, ast@kernel.org, daniel@iogearbox.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
-        kpsingh@chromium.org, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH] i40e: Remove unneeded conversion to bool
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200420123448.7382-1-yanaijie@huawei.com>
-References: <20200420123448.7382-1-yanaijie@huawei.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 21 Apr 2020 15:45:57 -0700 (PDT)
+        id S1726115AbgDUX3c (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Apr 2020 19:29:32 -0400
+Received: from sym2.noone.org ([178.63.92.236]:48870 "EHLO sym2.noone.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725850AbgDUX3c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Apr 2020 19:29:32 -0400
+Received: by sym2.noone.org (Postfix, from userid 1002)
+        id 496KXR40w9zvjc1; Wed, 22 Apr 2020 01:29:27 +0200 (CEST)
+From:   Tobias Klauser <tklauser@distanz.ch>
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH] xsk: Fix typo in xsk_umem_consume_tx and xsk_generic_xmit comments
+Date:   Wed, 22 Apr 2020 01:29:27 +0200
+Message-Id: <20200421232927.21082-1-tklauser@distanz.ch>
+X-Mailer: git-send-email 2.11.0
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jason Yan <yanaijie@huawei.com>
-Date: Mon, 20 Apr 2020 20:34:48 +0800
+s/backpreassure/backpressure/
 
-> The '==' expression itself is bool, no need to convert it to bool again.
-> This fixes the following coccicheck warning:
-> 
-> drivers/net/ethernet/intel/i40e/i40e_main.c:1614:52-57: WARNING:
-> conversion to bool not needed here
-> drivers/net/ethernet/intel/i40e/i40e_main.c:11439:52-57: WARNING:
-> conversion to bool not needed here
-> 
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+---
+ net/xdp/xsk.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied to net-next.
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index c350108aa38d..f6e6609f70a3 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -322,7 +322,7 @@ bool xsk_umem_consume_tx(struct xdp_umem *umem, struct xdp_desc *desc)
+ 		if (!xskq_cons_peek_desc(xs->tx, desc, umem))
+ 			continue;
+ 
+-		/* This is the backpreassure mechanism for the Tx path.
++		/* This is the backpressure mechanism for the Tx path.
+ 		 * Reserve space in the completion queue and only proceed
+ 		 * if there is space in it. This avoids having to implement
+ 		 * any buffering in the Tx path.
+@@ -406,7 +406,7 @@ static int xsk_generic_xmit(struct sock *sk)
+ 		addr = desc.addr;
+ 		buffer = xdp_umem_get_data(xs->umem, addr);
+ 		err = skb_store_bits(skb, 0, buffer, len);
+-		/* This is the backpreassure mechanism for the Tx path.
++		/* This is the backpressure mechanism for the Tx path.
+ 		 * Reserve space in the completion queue and only proceed
+ 		 * if there is space in it. This avoids having to implement
+ 		 * any buffering in the Tx path.
+-- 
+2.26.1
+
