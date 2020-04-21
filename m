@@ -2,123 +2,161 @@ Return-Path: <SRS0=GPe9=6F=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3691C54FCC
-	for <bpf@archiver.kernel.org>; Tue, 21 Apr 2020 17:15:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAF69C54FCC
+	for <bpf@archiver.kernel.org>; Tue, 21 Apr 2020 17:16:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6A8B2070B
-	for <bpf@archiver.kernel.org>; Tue, 21 Apr 2020 17:15:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A98892070B
+	for <bpf@archiver.kernel.org>; Tue, 21 Apr 2020 17:16:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="V7OZEPxW"
+	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="FXIQhFby"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725990AbgDURPu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Apr 2020 13:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
+        id S1729417AbgDURQK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Apr 2020 13:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729249AbgDURPt (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 21 Apr 2020 13:15:49 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18270C061A41;
-        Tue, 21 Apr 2020 10:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=JQXbXAp9ulEWyhayBjCAHaJMTw8Jdhk9KH5wDvZocJU=; b=V7OZEPxWriIOq3sqWj8JVcXKkK
-        GJ4IttwVrL8VDkeBCEKuvtwKKzhQ0V6J+pz6Tk9vBb78jt4QVM7zzQ2v9KtcITi90aXKr2Eu/r+qf
-        tEdZNqhRemqmn3t05R0praYu/52YuxOi3olitJ05C1fPGWhkQRjW3FBKvgg8eu67mTOovaiiR0rZ8
-        /e7Y6yAyLyAW5Umvg4QUuS6WqkwYBuWHYhNz7Dvj9QD03tTVPCu5gYw25my+2xqyvdWWQzs68nJop
-        HF3AVfWrQ9Ix/qqR2tu0xn+8cCex1En1cRpXT2I/bI4rfuXjSFSdpjlstpuY9XS/smlhF0bX+JWFd
-        5iwOA1bw==;
-Received: from [2001:4bb8:191:e12c:c70:4a89:bc61:3] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jQwUr-0006bW-RK; Tue, 21 Apr 2020 17:15:46 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        by vger.kernel.org with ESMTP id S1729406AbgDURQJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 21 Apr 2020 13:16:09 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2B5C061A41
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2020 10:16:09 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id g30so6876145pfr.3
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2020 10:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cs.washington.edu; s=goo201206;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=JLSvbU4rb+oShXf3/xaOIk/8iC3V7cv0pXPIaRB7gas=;
+        b=FXIQhFbyFxDd0yfZDoveFyAYihbUpl0AsbLQrJYGlMwBXwAiFuFrmwg33A6vQn9BxY
+         0hEWwUtLK3H2dHb5eKlhTwcqQlbUJRC/m041/yaerXwlJ+oEz1DO1rViNnSaOP0nh/tm
+         3iYPRWmJY3YmVlhE1BeKRDTOjICFezTU+5Ld4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=JLSvbU4rb+oShXf3/xaOIk/8iC3V7cv0pXPIaRB7gas=;
+        b=AGWolQijjFd6bfWqyEwWpSrIOI52nKGj3UcABDZWq4C0wDzFafE1PmvpEyT5bKx9EJ
+         PoRXlS35V6MdOzH0zp4+KG5ynPX7Q/f1WAzFIJc6+fLnMyFcJijC37K+7zZchwiL13Ba
+         S4THjuvI1VO+p9/G9LXEtH5CyiSJ2zmIyxPy6oC+nBdwtQTB3MZ6LMDvnoerlSzxAoNq
+         zYgOnYjFgu4mvbFqOmufG87VVCARJJ7V+oNRtoT2FuMiywUlV7cQ2/yd5qnU11HuTXy6
+         /QA3v73+9sNBNTcFXaHqYu3SSWaq384zLm72Ok00EpYu9+FSpW5y9dMJtKOzVdG43pp+
+         4Veg==
+X-Gm-Message-State: AGi0PuaDriQDr8DHySOuCVdNVd9nBp+y9fN7K2v++WtqpAL/l+R318AR
+        TMtBLkFuTWpN8cIwKuFPtSZBSxtA3Y4cPw==
+X-Google-Smtp-Source: APiQypJPoDAmSxZXe01yomlBdjPcOGDJGtKwAq2V7OtTrQuozGcBYLfIfUYNkfTKOSgfuq3DcKg29A==
+X-Received: by 2002:a63:b23:: with SMTP id 35mr10303567pgl.170.1587489368378;
+        Tue, 21 Apr 2020 10:16:08 -0700 (PDT)
+Received: from localhost.localdomain (c-73-53-94-119.hsd1.wa.comcast.net. [73.53.94.119])
+        by smtp.gmail.com with ESMTPSA id mn1sm2911459pjb.24.2020.04.21.10.16.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2020 10:16:07 -0700 (PDT)
+From:   Luke Nelson <lukenels@cs.washington.edu>
+X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Wang YanQing <udknight@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH 2/5] mm: remove watermark_boost_factor_sysctl_handler
-Date:   Tue, 21 Apr 2020 19:15:36 +0200
-Message-Id: <20200421171539.288622-3-hch@lst.de>
-X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20200421171539.288622-1-hch@lst.de>
-References: <20200421171539.288622-1-hch@lst.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf 2/2] bpf, x32: Fix clobbering of dst for BPF_JSET
+Date:   Tue, 21 Apr 2020 10:15:52 -0700
+Message-Id: <20200421171552.28393-2-luke.r.nels@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200421171552.28393-1-luke.r.nels@gmail.com>
+References: <20200421171552.28393-1-luke.r.nels@gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-watermark_boost_factor_sysctl_handler is just a pointless wrapper for
-proc_dointvec_minmax, so remove it and use proc_dointvec_minmax
-directly.
+The current JIT clobbers the destination register for BPF_JSET BPF_X
+and BPF_K by using "and" and "or" instructions. This is fine when the
+destination register is a temporary loaded from a register stored on
+the stack but not otherwise.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+This patch fixes the problem (for both BPF_K and BPF_X) by always loading
+the destination register into temporaries since BPF_JSET should not
+modify the destination register.
+
+This bug may not be currently triggerable as BPF_REG_AX is the only
+register not stored on the stack and the verifier uses it in a limited
+way.
+
+Fixes: 03f5781be2c7b ("bpf, x86_32: add eBPF JIT compiler for ia32")
+Signed-off-by: Xi Wang <xi.wang@gmail.com>
+Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
 ---
- include/linux/mmzone.h |  2 --
- kernel/sysctl.c        |  2 +-
- mm/page_alloc.c        | 12 ------------
- 3 files changed, 1 insertion(+), 15 deletions(-)
+ arch/x86/net/bpf_jit_comp32.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 1b9de7d220fb..f37bb8f187fc 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -911,8 +911,6 @@ static inline int is_highmem(struct zone *zone)
- struct ctl_table;
- int min_free_kbytes_sysctl_handler(struct ctl_table *, int,
- 					void __user *, size_t *, loff_t *);
--int watermark_boost_factor_sysctl_handler(struct ctl_table *, int,
--					void __user *, size_t *, loff_t *);
- int watermark_scale_factor_sysctl_handler(struct ctl_table *, int,
- 					void __user *, size_t *, loff_t *);
- extern int sysctl_lowmem_reserve_ratio[MAX_NR_ZONES];
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 8a176d8727a3..99d27acf4646 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1491,7 +1491,7 @@ static struct ctl_table vm_table[] = {
- 		.data		= &watermark_boost_factor,
- 		.maxlen		= sizeof(watermark_boost_factor),
- 		.mode		= 0644,
--		.proc_handler	= watermark_boost_factor_sysctl_handler,
-+		.proc_handler	= proc_dointvec_minmax,
- 		.extra1		= SYSCTL_ZERO,
- 	},
- 	{
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 69827d4fa052..62c1550cd43e 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -7978,18 +7978,6 @@ int min_free_kbytes_sysctl_handler(struct ctl_table *table, int write,
- 	return 0;
- }
+diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
+index cc9ad3892ea6..ba7d9ccfc662 100644
+--- a/arch/x86/net/bpf_jit_comp32.c
++++ b/arch/x86/net/bpf_jit_comp32.c
+@@ -2015,8 +2015,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 		case BPF_JMP | BPF_JSET | BPF_X:
+ 		case BPF_JMP32 | BPF_JSET | BPF_X: {
+ 			bool is_jmp64 = BPF_CLASS(insn->code) == BPF_JMP;
+-			u8 dreg_lo = dstk ? IA32_EAX : dst_lo;
+-			u8 dreg_hi = dstk ? IA32_EDX : dst_hi;
++			u8 dreg_lo = IA32_EAX;
++			u8 dreg_hi = IA32_EDX;
+ 			u8 sreg_lo = sstk ? IA32_ECX : src_lo;
+ 			u8 sreg_hi = sstk ? IA32_EBX : src_hi;
  
--int watermark_boost_factor_sysctl_handler(struct ctl_table *table, int write,
--	void __user *buffer, size_t *length, loff_t *ppos)
--{
--	int rc;
--
--	rc = proc_dointvec_minmax(table, write, buffer, length, ppos);
--	if (rc)
--		return rc;
--
--	return 0;
--}
--
- int watermark_scale_factor_sysctl_handler(struct ctl_table *table, int write,
- 	void __user *buffer, size_t *length, loff_t *ppos)
- {
+@@ -2028,6 +2028,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 					      add_2reg(0x40, IA32_EBP,
+ 						       IA32_EDX),
+ 					      STACK_VAR(dst_hi));
++			} else {
++				/* mov dreg_lo,dst_lo */
++				EMIT2(0x89, add_2reg(0xC0, dreg_lo, dst_lo));
++				if (is_jmp64)
++					/* mov dreg_hi,dst_hi */
++					EMIT2(0x89,
++					      add_2reg(0xC0, dreg_hi, dst_hi));
+ 			}
+ 
+ 			if (sstk) {
+@@ -2052,8 +2059,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 		case BPF_JMP | BPF_JSET | BPF_K:
+ 		case BPF_JMP32 | BPF_JSET | BPF_K: {
+ 			bool is_jmp64 = BPF_CLASS(insn->code) == BPF_JMP;
+-			u8 dreg_lo = dstk ? IA32_EAX : dst_lo;
+-			u8 dreg_hi = dstk ? IA32_EDX : dst_hi;
++			u8 dreg_lo = IA32_EAX;
++			u8 dreg_hi = IA32_EDX;
+ 			u8 sreg_lo = IA32_ECX;
+ 			u8 sreg_hi = IA32_EBX;
+ 			u32 hi;
+@@ -2066,6 +2073,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 					      add_2reg(0x40, IA32_EBP,
+ 						       IA32_EDX),
+ 					      STACK_VAR(dst_hi));
++			} else {
++				/* mov dreg_lo,dst_lo */
++				EMIT2(0x89, add_2reg(0xC0, dreg_lo, dst_lo));
++				if (is_jmp64)
++					/* mov dreg_hi,dst_hi */
++					EMIT2(0x89,
++					      add_2reg(0xC0, dreg_hi, dst_hi));
+ 			}
+ 
+ 			/* mov ecx,imm32 */
 -- 
-2.26.1
+2.17.1
 
