@@ -4,55 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19AACC5518E
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:08:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29F56C55185
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:08:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC2AA20774
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:08:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A77B20774
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:08:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BPwETf3W"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OBEyshW2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726939AbgDVQI2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Apr 2020 12:08:28 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:38443 "EHLO
+        id S1726830AbgDVQIk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Apr 2020 12:08:40 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:37249 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726006AbgDVQI1 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Apr 2020 12:08:27 -0400
+        by vger.kernel.org with ESMTP id S1726124AbgDVQIk (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Apr 2020 12:08:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587571705;
+        s=mimecast20190719; t=1587571718;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=R35aCgtTp2T6zHwz/j/qjTydyXlhLxZnyI5/178mz/E=;
-        b=BPwETf3Wyhn5hv0EqqZjFnqt2gi5AcL89Q0nuiUoInv5oWKDX0UT3kReGFS/LpfDo5QKoa
-        bUqC94/ByfItUYNoaSj42qX8ZqlCw8OPY0xZ5i6uDF2/DwhoqJQACj6lSju5FFqfMXHyQT
-        OwL0gujDhurncDdiaCzj/JGbSDW+Jqs=
+        bh=kzYXaoPpPmWzZSp9Ai+CWn0TFU1orYZwW5qWCMekECU=;
+        b=OBEyshW2Ss+ds4KydYjYNN7HqAtT7a/8TJEjlcZYtK4mDWqqg0zVKaqU3hK4GhqMu4FgdV
+        AtTzDNArqJbWUOSqS0pfaqfoYJt8qWIZT9xaxD+VC554Gcd7MNfcqrF8ZL/8hXI55CCgN1
+        l2siBVxUfrTScQzp9gtt7zMRuxNsbt4=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-239-BE0LcpEmMcKl3jU2kXppag-1; Wed, 22 Apr 2020 12:08:22 -0400
-X-MC-Unique: BE0LcpEmMcKl3jU2kXppag-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+ us-mta-175-V1LXFK65Ma-cqbtOzPoEgg-1; Wed, 22 Apr 2020 12:08:34 -0400
+X-MC-Unique: V1LXFK65Ma-cqbtOzPoEgg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5C8E418C8C01;
-        Wed, 22 Apr 2020 16:08:19 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F25BD1085947;
+        Wed, 22 Apr 2020 16:08:31 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A63C110190D6;
-        Wed, 22 Apr 2020 16:08:07 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D10755C3FA;
+        Wed, 22 Apr 2020 16:08:17 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id CB82830000272;
-        Wed, 22 Apr 2020 18:08:06 +0200 (CEST)
-Subject: [PATCH net-next 09/33] veth: adjust hard_start offset on redirect XDP
- frames
+        by firesoul.localdomain (Postfix) with ESMTP id F283330631A9B;
+        Wed, 22 Apr 2020 18:08:16 +0200 (CEST)
+Subject: [PATCH net-next 11/33] dpaa2-eth: add XDP frame size
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
-Cc:     Toshiaki Makita <toshiaki.makita1@gmail.com>,
-        Mao Wenan <maowenan@huawei.com>,
-        Toshiaki Makita <toshiaki.makita1@gmail.com>,
+Cc:     Ioana Radulescu <ruxandra.radulescu@nxp.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org, zorik@amazon.com,
         akiyano@amazon.com, gtzalik@amazon.com,
@@ -68,90 +65,72 @@ Cc:     Toshiaki Makita <toshiaki.makita1@gmail.com>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         steffen.klassert@secunet.com
-Date:   Wed, 22 Apr 2020 18:08:06 +0200
-Message-ID: <158757168676.1370371.9335548837047528670.stgit@firesoul>
+Date:   Wed, 22 Apr 2020 18:08:16 +0200
+Message-ID: <158757169692.1370371.4639613056496511957.stgit@firesoul>
 In-Reply-To: <158757160439.1370371.13213378122947426220.stgit@firesoul>
 References: <158757160439.1370371.13213378122947426220.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When native XDP redirect into a veth device, the frame arrives in the
-xdp_frame structure. It is then processed in veth_xdp_rcv_one(),
-which can run a new XDP bpf_prog on the packet. Doing so requires
-converting xdp_frame to xdp_buff, but the tricky part is that
-xdp_frame memory area is located in the top (data_hard_start) memory
-area that xdp_buff will point into.
+The dpaa2-eth driver reserve some headroom used for hardware and
+software annotation area in RX/TX buffers. Thus, xdp.data_hard_start
+doesn't start at page boundary.
 
-The current code tried to protect the xdp_frame area, by assigning
-xdp_buff.data_hard_start past this memory. This results in 32 bytes
-less headroom to expand into via BPF-helper bpf_xdp_adjust_head().
+When XDP is configured the area reserved via dpaa2_fd_get_offset(fd) is
+448 bytes of which XDP have reserved 256 bytes. As frame_sz is
+calculated as an offset from xdp_buff.data_hard_start, an adjust from
+the full PAGE_SIZE == DPAA2_ETH_RX_BUF_RAW_SIZE.
 
-This protect step is actually not needed, because BPF-helper
-bpf_xdp_adjust_head() already reserve this area, and don't allow
-BPF-prog to expand into it. Thus, it is safe to point data_hard_start
-directly at xdp_frame memory area.
+When doing XDP_REDIRECT, the driver doesn't need this reserved headroom
+any-longer and allows xdp_do_redirect() to use it. This is an advantage
+for the drivers own ndo-xdp_xmit, as it uses part of this headroom for
+itself.  Patch also adjust frame_sz in this case.
 
-Cc: Toshiaki Makita <toshiaki.makita1@gmail.com>
-Fixes: 9fc8d518d9d5 ("veth: Handle xdp_frames in xdp napi ring")
-Reported-by: Mao Wenan <maowenan@huawei.com>
+The driver cannot support XDP data_meta, because it uses the headroom
+just before xdp.data for struct dpaa2_eth_swa (DPAA2_ETH_SWA_SIZE=64),
+when transmitting the packet. When transmitting a xdp_frame in
+dpaa2_eth_xdp_xmit_frame (call via ndo_xdp_xmit) is uses this area to
+store a pointer to xdp_frame and dma_size, which is used in TX
+completion (free_tx_fd) to return frame via xdp_return_frame().
+
+Cc: Ioana Radulescu <ruxandra.radulescu@nxp.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Acked-by: Toshiaki Makita <toshiaki.makita1@gmail.com>
 ---
- drivers/net/veth.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index aece0e5eec8c..d5691bb84448 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -564,13 +564,15 @@ static struct sk_buff *veth_xdp_rcv_one(struct veth_rq *rq,
- 					struct veth_stats *stats)
- {
- 	void *hard_start = frame->data - frame->headroom;
--	void *head = hard_start - sizeof(struct xdp_frame);
- 	int len = frame->len, delta = 0;
- 	struct xdp_frame orig_frame;
- 	struct bpf_prog *xdp_prog;
- 	unsigned int headroom;
- 	struct sk_buff *skb;
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+index b6c46639aa4c..b5c0225942b5 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+@@ -302,6 +302,9 @@ static u32 run_xdp(struct dpaa2_eth_priv *priv,
+ 	xdp_set_data_meta_invalid(&xdp);
+ 	xdp.rxq = &ch->xdp_rxq;
  
-+	/* bpf_xdp_adjust_head() assures BPF cannot access xdp_frame area */
-+	hard_start -= sizeof(struct xdp_frame);
++	xdp.frame_sz = DPAA2_ETH_RX_BUF_RAW_SIZE -
++		(dpaa2_fd_get_offset(fd) - XDP_PACKET_HEADROOM);
 +
- 	rcu_read_lock();
- 	xdp_prog = rcu_dereference(rq->xdp_prog);
- 	if (likely(xdp_prog)) {
-@@ -592,7 +594,6 @@ static struct sk_buff *veth_xdp_rcv_one(struct veth_rq *rq,
- 			break;
- 		case XDP_TX:
- 			orig_frame = *frame;
--			xdp.data_hard_start = head;
- 			xdp.rxq->mem = frame->mem;
- 			if (unlikely(veth_xdp_tx(rq, &xdp, bq) < 0)) {
- 				trace_xdp_exception(rq->dev, xdp_prog, act);
-@@ -605,7 +606,6 @@ static struct sk_buff *veth_xdp_rcv_one(struct veth_rq *rq,
- 			goto xdp_xmit;
- 		case XDP_REDIRECT:
- 			orig_frame = *frame;
--			xdp.data_hard_start = head;
- 			xdp.rxq->mem = frame->mem;
- 			if (xdp_do_redirect(rq->dev, &xdp, xdp_prog)) {
- 				frame = &orig_frame;
-@@ -629,7 +629,7 @@ static struct sk_buff *veth_xdp_rcv_one(struct veth_rq *rq,
- 	rcu_read_unlock();
+ 	xdp_act = bpf_prog_run_xdp(xdp_prog, &xdp);
  
- 	headroom = sizeof(struct xdp_frame) + frame->headroom - delta;
--	skb = veth_build_skb(head, headroom, len, 0);
-+	skb = veth_build_skb(hard_start, headroom, len, 0);
- 	if (!skb) {
- 		xdp_return_frame(frame);
- 		stats->rx_drops++;
+ 	/* xdp.data pointer may have changed */
+@@ -337,7 +340,11 @@ static u32 run_xdp(struct dpaa2_eth_priv *priv,
+ 		dma_unmap_page(priv->net_dev->dev.parent, addr,
+ 			       DPAA2_ETH_RX_BUF_SIZE, DMA_BIDIRECTIONAL);
+ 		ch->buf_count--;
++
++		/* Allow redirect use of full headroom */
+ 		xdp.data_hard_start = vaddr;
++		xdp.frame_sz = DPAA2_ETH_RX_BUF_RAW_SIZE;
++
+ 		err = xdp_do_redirect(priv->net_dev, &xdp, xdp_prog);
+ 		if (unlikely(err))
+ 			ch->stats.xdp_drop++;
 
 
