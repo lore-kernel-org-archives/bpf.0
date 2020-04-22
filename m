@@ -2,130 +2,82 @@ Return-Path: <SRS0=w90l=6G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFA6CC54FCB
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 17:37:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7025DC55185
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 18:45:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD8522073A
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 17:37:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4ED442077D
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 18:45:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="Wuka4V05"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="hYv6h7G1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726550AbgDVRgx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Apr 2020 13:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726402AbgDVRgx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Apr 2020 13:36:53 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCAFC03C1AB
-        for <bpf@vger.kernel.org>; Wed, 22 Apr 2020 10:36:53 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id n24so1201677plp.13
-        for <bpf@vger.kernel.org>; Wed, 22 Apr 2020 10:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs.washington.edu; s=goo201206;
-        h=from:to:cc:subject:date:message-id;
-        bh=pKJyhXiuj2Ugps4yZFwXPuLBd6CO2XHLk23yr11XPUU=;
-        b=Wuka4V05WpA33NOcmcV0RQM00BdjsKcI5C+v7II9CcXxeP5oTz0fUXRvK2hWnStDuu
-         B+edBNqq5jKuoLBSsqY1Pn9fsX4nweAnbBF6UDJ12raphayaz3bglemue6WYhqD0h0y3
-         3XsrUI1ME6gxllaG/ZuBxLXkSNvdepQMAF3MA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=pKJyhXiuj2Ugps4yZFwXPuLBd6CO2XHLk23yr11XPUU=;
-        b=dK9gD0IWO2VB41Ab7/j/JXRPbx5zR6RbAR/cG0mKqWtWu3piHRx91L0uBGN1zhcNsA
-         kBuAe0oGiZ+Or4ROgFZ9ntKCE1Ruqy6oyUSHHfObXL9qBphhiPPlQUOJTxakOHINHeK/
-         Oey3joPb84qlzLcVbGfl1DEfi6yoa0wAlP5Yu4PtRgQ7Xio33IcMxiogxZYu5eq+Bim3
-         mNRevswWEqIxyWnzr+s6NVruwjzoyxYEkjYguFyFzqIt9FgzVAxn+4oQryTb1ud16T4T
-         xqTHaZO5dLkAZ8dmLw+Rk1ZUsbhrDrWfVkcRbgry+98hK7mVLg4eRg124cxOEMlvNowZ
-         n/OA==
-X-Gm-Message-State: AGi0Puam3CUsABdlqLkpuX6UKh5Q0N9nHjaNKWPKznDWL6d77LtchDgt
-        oBQpQYEesxACpv8LQvx3e4N8VEp8i48lMQ==
-X-Google-Smtp-Source: APiQypLrcgjFGa1gJskocnU6csUZlxRb1FTlBXblSlEAwl5l99pthecQNlgX1AdQ79pDzCy2Jf4H2g==
-X-Received: by 2002:a17:90a:db46:: with SMTP id u6mr13131918pjx.15.1587577012060;
-        Wed, 22 Apr 2020 10:36:52 -0700 (PDT)
-Received: from localhost.localdomain (c-73-53-94-119.hsd1.wa.comcast.net. [73.53.94.119])
-        by smtp.gmail.com with ESMTPSA id 1sm59514pff.151.2020.04.22.10.36.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2020 10:36:51 -0700 (PDT)
-From:   Luke Nelson <lukenels@cs.washington.edu>
-X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Brian Gerst <brgerst@gmail.com>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>, Wang YanQing <udknight@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2 1/2] bpf, x86_32: Fix incorrect encoding in BPF_LDX zero-extension
-Date:   Wed, 22 Apr 2020 10:36:29 -0700
-Message-Id: <20200422173630.8351-1-luke.r.nels@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726454AbgDVSp0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Apr 2020 14:45:26 -0400
+Received: from terminus.zytor.com ([198.137.202.136]:42279 "EHLO
+        mail.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725810AbgDVSp0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Apr 2020 14:45:26 -0400
+Received: from hanvin-mobl2.amr.corp.intel.com ([134.134.139.76])
+        (authenticated bits=0)
+        by mail.zytor.com (8.15.2/8.15.2) with ESMTPSA id 03MIi1bp1756663
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Wed, 22 Apr 2020 11:44:02 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 03MIi1bp1756663
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2020032201; t=1587581047;
+        bh=dIQ0s7CSMK1UKyQ0AWlyM0gbBVakPmljyV3eEPda8bM=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=hYv6h7G1OIqP2oGYDKFgihUJ7y1uBmklu81bwutsUBYb5uLTqvrf9EdHSior/oD0i
+         DVy/dJw6Pf1/mu6noDD+0raFOhCGDpUZLNx3DiB2urI3khadAf120qbLu9iGwHpT6w
+         bRXeNpyQOuyk5F3yT41bDsH9/KBdYPSSlF9dP1iSx/u/iS/awSQ0tT5fTIev1SR1KB
+         pRtgLXoBB5nMFyjr1OyFzZl/Ay2YRjjSdZ5Z99HM86hAwGAtFMTp8iGn0TXCqyeX6L
+         DMHF+8t7dtHCgdHwKlcb9/YXGAxG3Z1xL0OqFbrP4jz0R7A7OAPsFLBmJF1M+84i9M
+         5qbMVq9zVwufQ==
+Subject: Re: [PATCH] bpf, x32: remove unneeded conversion to bool
+To:     Jason Yan <yanaijie@huawei.com>, udknight@gmail.com,
+        davem@davemloft.net, kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
+        lukenels@cs.washington.edu, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200420123727.3616-1-yanaijie@huawei.com>
+From:   "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <dff9a49b-0d00-54b0-0375-cc908289e65a@zytor.com>
+Date:   Wed, 22 Apr 2020 11:43:58 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <20200420123727.3616-1-yanaijie@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The current JIT uses the following sequence to zero-extend into the
-upper 32 bits of the destination register for BPF_LDX BPF_{B,H,W},
-when the destination register is not on the stack:
+On 2020-04-20 05:37, Jason Yan wrote:
+> The '==' expression itself is bool, no need to convert it to bool again.
+> This fixes the following coccicheck warning:
+> 
+> arch/x86/net/bpf_jit_comp32.c:1478:50-55: WARNING: conversion to bool
+> not needed here
+> arch/x86/net/bpf_jit_comp32.c:1479:50-55: WARNING: conversion to bool
+> not needed here
+> 
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> ---
+>  arch/x86/net/bpf_jit_comp32.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
 
-  EMIT3(0xC7, add_1reg(0xC0, dst_hi), 0);
+x32 is not i386.
 
-The problem is that C7 /0 encodes a MOV instruction that requires a 4-byte
-immediate; the current code emits only 1 byte of the immediate. This
-means that the first 3 bytes of the next instruction will be treated as
-the rest of the immediate, breaking the stream of instructions.
-
-This patch fixes the problem by instead emitting "xor dst_hi,dst_hi"
-to clear the upper 32 bits. This fixes the problem and is more efficient
-than using MOV to load a zero immediate.
-
-This bug may not be currently triggerable as BPF_REG_AX is the only
-register not stored on the stack and the verifier uses it in a limited
-way, and the verifier implements a zero-extension optimization. But the
-JIT should avoid emitting incorrect encodings regardless.
-
-Fixes: 03f5781be2c7b ("bpf, x86_32: add eBPF JIT compiler for ia32")
-Signed-off-by: Xi Wang <xi.wang@gmail.com>
-Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
----
-v1 -> v2: Updated commit message to better reflect the bug.
-          (H. Peter Anvin and Brian Gerst)
----
- arch/x86/net/bpf_jit_comp32.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-index 4d2a7a764602..cc9ad3892ea6 100644
---- a/arch/x86/net/bpf_jit_comp32.c
-+++ b/arch/x86/net/bpf_jit_comp32.c
-@@ -1854,7 +1854,9 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 					      STACK_VAR(dst_hi));
- 					EMIT(0x0, 4);
- 				} else {
--					EMIT3(0xC7, add_1reg(0xC0, dst_hi), 0);
-+					/* xor dst_hi,dst_hi */
-+					EMIT2(0x33,
-+					      add_2reg(0xC0, dst_hi, dst_hi));
- 				}
- 				break;
- 			case BPF_DW:
--- 
-2.17.1
+	-hpa
 
