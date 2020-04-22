@@ -7,49 +7,52 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B7CCC54FCB
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 739DCC55185
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:08:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DA90420774
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:08:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 544BC20774
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:08:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eBVdu4Ky"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Oy/nGTw8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbgDVQIq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Apr 2020 12:08:46 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:21511 "EHLO
+        id S1725980AbgDVQI6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Apr 2020 12:08:58 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:49895 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726648AbgDVQIq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Apr 2020 12:08:46 -0400
+        with ESMTP id S1726494AbgDVQI5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Apr 2020 12:08:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587571724;
+        s=mimecast20190719; t=1587571736;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yRqN+gELrp0mp/Yr3xq5AZrE7awCyU/+MaKt8WSzAHI=;
-        b=eBVdu4KydV41YnR/mY/rAi4n4PewCSAgkJYnj3bfEzbKJPVQSbrQE07SUJQfE7v9pE/m71
-        Qvvjj3TFgFN1zdrwlvIDqy8EjP2pfQKF9GLn/Ldl/n3oIfnHLhVCmRy7zkDQX0m4GTk4GM
-        opQSIht4uOIJdFCNQsBwFYYf5nRX2QQ=
+        bh=Y64HUdYoCarj58fkcaitOQ3dtKZD+rqR2sTqjPA43rs=;
+        b=Oy/nGTw80s9mULPy7jAOaA7lfjyI41mSoq2RxEz/0gfoBTUVsLJC86uz3trKSgB1dnKfM4
+        0oMY9jaQuEkKRi2ckV6KN992/4zA65RnCAVOf0ioIYJrkCMlSgcR8Esw/r521xLHLTflc8
+        RKcecTz26O/BEo4h82uNdXihJU2AJeI=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-232-UxjveIhbPs2wv9I9NO5_lA-1; Wed, 22 Apr 2020 12:08:40 -0400
-X-MC-Unique: UxjveIhbPs2wv9I9NO5_lA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-303-4xHNZdxhPmWmyTS5KIsrwg-1; Wed, 22 Apr 2020 12:08:54 -0400
+X-MC-Unique: 4xHNZdxhPmWmyTS5KIsrwg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 561FB80BE32;
-        Wed, 22 Apr 2020 16:08:38 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4ADB618CA260;
+        Wed, 22 Apr 2020 16:08:52 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 029C45D781;
-        Wed, 22 Apr 2020 16:08:28 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 43BA74FA50;
+        Wed, 22 Apr 2020 16:08:43 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 281AF30000E43;
-        Wed, 22 Apr 2020 18:08:27 +0200 (CEST)
-Subject: [PATCH net-next 13/33] qlogic/qede: add XDP frame size to driver
+        by firesoul.localdomain (Postfix) with ESMTP id 651A530000E43;
+        Wed, 22 Apr 2020 18:08:42 +0200 (CEST)
+Subject: [PATCH net-next 16/33] mlx4: add XDP frame size and adjust max XDP
+ MTU
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
-Cc:     Ariel Elior <aelior@marvell.com>, GR-everest-linux-l2@marvell.com,
+Cc:     Tariq Toukan <tariqt@mellanox.com>,
+        Saeed Mahameed <saeedm@mellanox.com>,
+        Tariq Toukan <tariqt@mellanox.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org, zorik@amazon.com,
         akiyano@amazon.com, gtzalik@amazon.com,
@@ -65,56 +68,60 @@ Cc:     Ariel Elior <aelior@marvell.com>, GR-everest-linux-l2@marvell.com,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         steffen.klassert@secunet.com
-Date:   Wed, 22 Apr 2020 18:08:27 +0200
-Message-ID: <158757170709.1370371.9020241473809217303.stgit@firesoul>
+Date:   Wed, 22 Apr 2020 18:08:42 +0200
+Message-ID: <158757172234.1370371.3244906743966141248.stgit@firesoul>
 In-Reply-To: <158757160439.1370371.13213378122947426220.stgit@firesoul>
 References: <158757160439.1370371.13213378122947426220.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The driver qede uses a full page, when XDP is enabled. The drivers value
-in rx_buf_seg_size (struct qede_rx_queue) will be PAGE_SIZE when an
-XDP bpf_prog is attached.
+The mlx4 drivers size of memory backing the RX packet is stored in
+frag_stride. For XDP mode this will be PAGE_SIZE (normally 4096).
+For normal mode frag_stride is 2048.
 
-Cc: Ariel Elior <aelior@marvell.com>
-Cc: GR-everest-linux-l2@marvell.com
+Also adjust MLX4_EN_MAX_XDP_MTU to take tailroom into account.
+
+Cc: Tariq Toukan <tariqt@mellanox.com>
+Cc: Saeed Mahameed <saeedm@mellanox.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Reviewed-by: Tariq Toukan <tariqt@mellanox.com>
 ---
- drivers/net/ethernet/qlogic/qede/qede_fp.c   |    1 +
- drivers/net/ethernet/qlogic/qede/qede_main.c |    2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx4/en_netdev.c |    3 ++-
+ drivers/net/ethernet/mellanox/mlx4/en_rx.c     |    1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qede/qede_fp.c b/drivers/net/ethernet/qlogic/qede/qede_fp.c
-index c6c20776b474..7598ebe0962a 100644
---- a/drivers/net/ethernet/qlogic/qede/qede_fp.c
-+++ b/drivers/net/ethernet/qlogic/qede/qede_fp.c
-@@ -1066,6 +1066,7 @@ static bool qede_rx_xdp(struct qede_dev *edev,
- 	xdp_set_data_meta_invalid(&xdp);
- 	xdp.data_end = xdp.data + *len;
- 	xdp.rxq = &rxq->xdp_rxq;
-+	xdp.frame_sz = rxq->rx_buf_seg_size; /* PAGE_SIZE when XDP enabled */
+diff --git a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
+index 43dcbd8214c6..5bd3cd37d50f 100644
+--- a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
++++ b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
+@@ -51,7 +51,8 @@
+ #include "en_port.h"
  
- 	/* Queues always have a full reset currently, so for the time
- 	 * being until there's atomic program replace just mark read
-diff --git a/drivers/net/ethernet/qlogic/qede/qede_main.c b/drivers/net/ethernet/qlogic/qede/qede_main.c
-index 34fa3917eb33..39b404e8088f 100644
---- a/drivers/net/ethernet/qlogic/qede/qede_main.c
-+++ b/drivers/net/ethernet/qlogic/qede/qede_main.c
-@@ -1398,7 +1398,7 @@ static int qede_alloc_mem_rxq(struct qede_dev *edev, struct qede_rx_queue *rxq)
- 	if (rxq->rx_buf_size + size > PAGE_SIZE)
- 		rxq->rx_buf_size = PAGE_SIZE - size;
+ #define MLX4_EN_MAX_XDP_MTU ((int)(PAGE_SIZE - ETH_HLEN - (2 * VLAN_HLEN) - \
+-				   XDP_PACKET_HEADROOM))
++				XDP_PACKET_HEADROOM -			    \
++				SKB_DATA_ALIGN(sizeof(struct skb_shared_info))))
  
--	/* Segment size to spilt a page in multiple equal parts ,
-+	/* Segment size to split a page in multiple equal parts,
- 	 * unless XDP is used in which case we'd use the entire page.
- 	 */
- 	if (!edev->xdp_prog) {
+ int mlx4_en_setup_tc(struct net_device *dev, u8 up)
+ {
+diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
+index db3552f2d087..231f08c0276c 100644
+--- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
+@@ -683,6 +683,7 @@ int mlx4_en_process_rx_cq(struct net_device *dev, struct mlx4_en_cq *cq, int bud
+ 	rcu_read_lock();
+ 	xdp_prog = rcu_dereference(ring->xdp_prog);
+ 	xdp.rxq = &ring->xdp_rxq;
++	xdp.frame_sz = priv->frag_info[0].frag_stride;
+ 	doorbell_pending = 0;
+ 
+ 	/* We assume a 1:1 mapping between CQEs and Rx descriptors, so Rx
 
 
