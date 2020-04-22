@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6A9CC5518B
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:09:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9587C55185
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:09:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8832320776
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:09:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A95DE214AF
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:09:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JCJ3LMfs"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Kwimjh8h"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726904AbgDVQJC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Apr 2020 12:09:02 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:40654 "EHLO
+        id S1726863AbgDVQJG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Apr 2020 12:09:06 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:51177 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726667AbgDVQJC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Apr 2020 12:09:02 -0400
+        with ESMTP id S1726667AbgDVQJF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Apr 2020 12:09:05 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587571740;
+        s=mimecast20190719; t=1587571744;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rxKDu59GaKcbqW1rdsawLoW5gd39PghNDONxbU4543Q=;
-        b=JCJ3LMfsT+LkH0h0n0Lq1ag0MAS55Qf0imD7tU/+FXxUyj8HI13WuybcM2MM2KAfLzUXGm
-        lpnKoUQI/k+nc/zg6vZtnJiOU4s+1vnceT7LTbahNYgGg2vgvyubPZwv2hx0khXlknFFxn
-        wzmJirSIOjHo9Hq887hH9l0PM3botHg=
+        bh=oK11vN94RCqKHK+FzFMoMbos3SJFxBnpTqbvu3/vYSE=;
+        b=Kwimjh8hnSgQsbKXPRWp4hsXAAoua/5Jdc5YjZbK4QZzbNT/Hwbz/j2hRzEwlkt5pmfeoW
+        UkLqejrrrWoAWDOxNbbRgTwWNbsh+Xd15wWzsF5NgU+cujEInH20W4MMukOTof0Ve+MZlu
+        7GyjdY3d6ae3wNj8PMoSkMHn4i7nsjI=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-240-vUSryjy2PAKjSYNxR-pxDw-1; Wed, 22 Apr 2020 12:08:56 -0400
-X-MC-Unique: vUSryjy2PAKjSYNxR-pxDw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+ us-mta-41-QJr8EHldPECk_MLaCVFteA-1; Wed, 22 Apr 2020 12:09:00 -0400
+X-MC-Unique: QJr8EHldPECk_MLaCVFteA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4A1DE83DB3A;
-        Wed, 22 Apr 2020 16:08:53 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 83452108C279;
+        Wed, 22 Apr 2020 16:08:55 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E344F5E24B;
-        Wed, 22 Apr 2020 16:08:52 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2F93360FC5;
+        Wed, 22 Apr 2020 16:08:38 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 8CAEB30000E43;
-        Wed, 22 Apr 2020 18:08:52 +0200 (CEST)
-Subject: [PATCH net-next 18/33] nfp: add XDP frame size to netronome driver
+        by firesoul.localdomain (Postfix) with ESMTP id 5084430000272;
+        Wed, 22 Apr 2020 18:08:37 +0200 (CEST)
+Subject: [PATCH net-next 15/33] ena: add XDP frame size to amazon NIC driver
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
-Cc:     Jakub Kicinski <kuba@kernel.org>,
+Cc:     Arthur Kiyanovski <akiyano@amazon.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org, zorik@amazon.com,
         akiyano@amazon.com, gtzalik@amazon.com,
@@ -65,63 +65,59 @@ Cc:     Jakub Kicinski <kuba@kernel.org>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         steffen.klassert@secunet.com
-Date:   Wed, 22 Apr 2020 18:08:52 +0200
-Message-ID: <158757173250.1370371.6764469856666288155.stgit@firesoul>
+Date:   Wed, 22 Apr 2020 18:08:37 +0200
+Message-ID: <158757171725.1370371.10346839312664903909.stgit@firesoul>
 In-Reply-To: <158757160439.1370371.13213378122947426220.stgit@firesoul>
 References: <158757160439.1370371.13213378122947426220.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The netronome nfp driver use PAGE_SIZE when xdp_prog is set, but
-xdp.data_hard_start begins at offset NFP_NET_RX_BUF_HEADROOM.
-Thus, adjust for this when setting xdp.frame_sz, as it counts
-from data_hard_start.
+Frame size ENA_PAGE_SIZE is limited to 16K on systems with larger
+PAGE_SIZE than 16K. Change ENA_XDP_MAX_MTU to also take into account
+the reserved tailroom.
 
-When doing XDP_TX this driver is smart and instead of a full DMA-map
-does a DMA-sync on with packet length. As xdp_adjust_tail can now
-grow packet length, add checks to make sure that grow size is within
-the DMA-mapped size.
-
-Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Arthur Kiyanovski <akiyano@amazon.com>
+Acked-by: Sameeh Jubran <sameehj@amazon.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- .../net/ethernet/netronome/nfp/nfp_net_common.c    |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/ethernet/amazon/ena/ena_netdev.c |    1 +
+ drivers/net/ethernet/amazon/ena/ena_netdev.h |    5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-index 9bfb3b077bc1..0e0cc3d58bdc 100644
---- a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-+++ b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-@@ -1741,10 +1741,15 @@ nfp_net_tx_xdp_buf(struct nfp_net_dp *dp, struct nfp_net_rx_ring *rx_ring,
- 		   struct nfp_net_rx_buf *rxbuf, unsigned int dma_off,
- 		   unsigned int pkt_len, bool *completed)
- {
-+	unsigned int dma_map_sz = dp->fl_bufsz - NFP_NET_RX_BUF_NON_DATA;
- 	struct nfp_net_tx_buf *txbuf;
- 	struct nfp_net_tx_desc *txd;
- 	int wr_idx;
- 
-+	/* Reject if xdp_adjust_tail grow packet beyond DMA area */
-+	if (pkt_len + dma_off > dma_map_sz)
-+		return false;
-+
- 	if (unlikely(nfp_net_tx_full(tx_ring, 1))) {
- 		if (!*completed) {
- 			nfp_net_xdp_complete(tx_ring);
-@@ -1817,6 +1822,7 @@ static int nfp_net_rx(struct nfp_net_rx_ring *rx_ring, int budget)
- 	rcu_read_lock();
- 	xdp_prog = READ_ONCE(dp->xdp_prog);
- 	true_bufsz = xdp_prog ? PAGE_SIZE : dp->fl_bufsz;
-+	xdp.frame_sz = PAGE_SIZE - NFP_NET_RX_BUF_HEADROOM;
+diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+index 2cc765df8da3..0fd7db1769f8 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@ -1606,6 +1606,7 @@ static int ena_clean_rx_irq(struct ena_ring *rx_ring, struct napi_struct *napi,
+ 		  "%s qid %d\n", __func__, rx_ring->qid);
+ 	res_budget = budget;
  	xdp.rxq = &rx_ring->xdp_rxq;
- 	tx_ring = r_vec->xdp_ring;
++	xdp.frame_sz = ENA_PAGE_SIZE;
  
+ 	do {
+ 		xdp_verdict = XDP_PASS;
+diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.h b/drivers/net/ethernet/amazon/ena/ena_netdev.h
+index 97dfd0c67e84..dd00127dfe9f 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.h
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.h
+@@ -151,8 +151,9 @@
+  * The buffer size we share with the device is defined to be ENA_PAGE_SIZE
+  */
+ 
+-#define ENA_XDP_MAX_MTU (ENA_PAGE_SIZE - ETH_HLEN - ETH_FCS_LEN - \
+-				VLAN_HLEN - XDP_PACKET_HEADROOM)
++#define ENA_XDP_MAX_MTU (ENA_PAGE_SIZE - ETH_HLEN - ETH_FCS_LEN -	\
++			 VLAN_HLEN - XDP_PACKET_HEADROOM -		\
++			 SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
+ 
+ #define ENA_IS_XDP_INDEX(adapter, index) (((index) >= (adapter)->xdp_first_ring) && \
+ 	((index) < (adapter)->xdp_first_ring + (adapter)->xdp_num_queues))
 
 
