@@ -2,56 +2,56 @@ Return-Path: <SRS0=w90l=6G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CB8EC5518C
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:09:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32B8FC5518E
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:09:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 398652098B
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:09:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 05EB120774
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:09:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g866Rp3x"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P3VkVt3f"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727015AbgDVQJg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Apr 2020 12:09:36 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:44500 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727038AbgDVQJg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1727049AbgDVQJh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Apr 2020 12:09:37 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:41921 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727030AbgDVQJg (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 22 Apr 2020 12:09:36 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587571775;
+        s=mimecast20190719; t=1587571774;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7dTeFcQvmgHvPXRpxDawO1wGRsJikECgYeQpNLBP5vo=;
-        b=g866Rp3xuzg4ehda5SYXdVHdLjv4dy9YZd4BMev34RTWjwKYYUrTnQi12KGvtzVLzLJZrS
-        8hL8bMiTjCTASkegG3JAZnYVljvuEatFXJKBygfQHJEXOmM4tmx2kHYfpbb/xpTPHu/zfz
-        B0m0JiUmtDlBCj2KQS6NiBH80q4pycM=
+        bh=mTm9LpAZ7snKHFNRZ/z9XyHcPgtqNvVYIH3mJr9DpAM=;
+        b=P3VkVt3fnP2PtUi+Afc3Ca2NlGBbC5KLf+TN60xuTFadV/xFniS3ZkQa2BtovHmISZaBTK
+        ZRHf2FT1fUXpC/d2s6fpunZiAremRZs95ZaOSL8CGu8qZKdJpdiFBg7+jPyQIddy21tYa4
+        94bjK2URqmka1QOZFgaop6hzC76Le+4=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-13-CRR41_jJMN6IayhXjhL35A-1; Wed, 22 Apr 2020 12:09:31 -0400
-X-MC-Unique: CRR41_jJMN6IayhXjhL35A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+ us-mta-432-mEnBKcpZN867W2pJRLqffA-1; Wed, 22 Apr 2020 12:09:30 -0400
+X-MC-Unique: mEnBKcpZN867W2pJRLqffA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 87133DBF3;
-        Wed, 22 Apr 2020 16:09:23 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AF2049270D;
+        Wed, 22 Apr 2020 16:09:18 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 663B461073;
-        Wed, 22 Apr 2020 16:08:33 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 522B66084A;
+        Wed, 22 Apr 2020 16:09:18 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 3AF9D30631A9B;
-        Wed, 22 Apr 2020 18:08:32 +0200 (CEST)
-Subject: [PATCH net-next 14/33] net: ethernet: ti: add XDP frame size to
- driver cpsw
+        by firesoul.localdomain (Postfix) with ESMTP id EED6530000272;
+        Wed, 22 Apr 2020 18:09:17 +0200 (CEST)
+Subject: [PATCH net-next 23/33] ixgbe: add XDP frame size to driver
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
-Cc:     Grygorii Strashko <grygorii.strashko@ti.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+Cc:     intel-wired-lan@lists.osuosl.org,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org, zorik@amazon.com,
         akiyano@amazon.com, gtzalik@amazon.com,
@@ -67,54 +67,119 @@ Cc:     Grygorii Strashko <grygorii.strashko@ti.com>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         steffen.klassert@secunet.com
-Date:   Wed, 22 Apr 2020 18:08:32 +0200
-Message-ID: <158757171217.1370371.5128677508831971161.stgit@firesoul>
+Date:   Wed, 22 Apr 2020 18:09:17 +0200
+Message-ID: <158757175790.1370371.16071055208561239272.stgit@firesoul>
 In-Reply-To: <158757160439.1370371.13213378122947426220.stgit@firesoul>
 References: <158757160439.1370371.13213378122947426220.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The driver code cpsw.c and cpsw_new.c both use page_pool
-with default order-0 pages or their RX-pages.
+This driver uses different memory models depending on PAGE_SIZE at
+compile time. For PAGE_SIZE 4K it uses page splitting, meaning for
+normal MTU frame size is 2048 bytes (and headroom 192 bytes). For
+larger MTUs the driver still use page splitting, by allocating
+order-1 pages (8192 bytes) for RX frames. For PAGE_SIZE larger than
+4K, driver instead advance its rx_buffer->page_offset with the frame
+size "truesize".
 
-Cc: Grygorii Strashko <grygorii.strashko@ti.com>
-Cc: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+For XDP frame size calculations, this mean that in PAGE_SIZE larger
+than 4K mode the frame_sz change on a per packet basis. For the page
+split 4K PAGE_SIZE mode, xdp.frame_sz is more constant and can be
+updated once outside the main NAPI loop.
+
+The default setting in the driver uses build_skb(), which provides
+the necessary headroom and tailroom for XDP-redirect in RX-frame
+(in both modes).
+
+There is one complication, which is legacy-rx mode (configurable via
+ethtool priv-flags). There are zero headroom in this mode, which is a
+requirement for XDP-redirect to work. The conversion to xdp_frame
+(convert_to_xdp_frame) will detect this insufficient space, and
+xdp_do_redirect() call will fail. This is deemed acceptable, as it
+allows other XDP actions to still work in legacy-mode. In
+legacy-mode + larger PAGE_SIZE due to lacking tailroom, we also
+accept that xdp_adjust_tail shrink doesn't work.
+
+Cc: intel-wired-lan@lists.osuosl.org
+Cc: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
+Cc: Alexander Duyck <alexander.duyck@gmail.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- drivers/net/ethernet/ti/cpsw.c     |    1 +
- drivers/net/ethernet/ti/cpsw_new.c |    1 +
- 2 files changed, 2 insertions(+)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |   34 +++++++++++++++++++------
+ 1 file changed, 26 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/ti/cpsw.c b/drivers/net/ethernet/ti/cpsw.c
-index c2c5bf87da01..58e346ea9898 100644
---- a/drivers/net/ethernet/ti/cpsw.c
-+++ b/drivers/net/ethernet/ti/cpsw.c
-@@ -406,6 +406,7 @@ static void cpsw_rx_handler(void *token, int len, int status)
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+index ea6834bae04c..eab5934b04f5 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+@@ -2244,20 +2244,30 @@ static struct sk_buff *ixgbe_run_xdp(struct ixgbe_adapter *adapter,
+ 	return ERR_PTR(-result);
+ }
  
- 		xdp.data_hard_start = pa;
- 		xdp.rxq = &priv->xdp_rxq[ch];
-+		xdp.frame_sz = PAGE_SIZE;
++static unsigned int ixgbe_rx_frame_truesize(struct ixgbe_ring *rx_ring,
++					    unsigned int size)
++{
++	unsigned int truesize;
++
++#if (PAGE_SIZE < 8192)
++	truesize = ixgbe_rx_pg_size(rx_ring) / 2; /* Must be power-of-2 */
++#else
++	truesize = ring_uses_build_skb(rx_ring) ?
++		SKB_DATA_ALIGN(IXGBE_SKB_PAD + size) +
++		SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) :
++		SKB_DATA_ALIGN(size);
++#endif
++	return truesize;
++}
++
+ static void ixgbe_rx_buffer_flip(struct ixgbe_ring *rx_ring,
+ 				 struct ixgbe_rx_buffer *rx_buffer,
+ 				 unsigned int size)
+ {
++	unsigned int truesize = ixgbe_rx_frame_truesize(rx_ring, size);
+ #if (PAGE_SIZE < 8192)
+-	unsigned int truesize = ixgbe_rx_pg_size(rx_ring) / 2;
+-
+ 	rx_buffer->page_offset ^= truesize;
+ #else
+-	unsigned int truesize = ring_uses_build_skb(rx_ring) ?
+-				SKB_DATA_ALIGN(IXGBE_SKB_PAD + size) +
+-				SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) :
+-				SKB_DATA_ALIGN(size);
+-
+ 	rx_buffer->page_offset += truesize;
+ #endif
+ }
+@@ -2291,6 +2301,11 @@ static int ixgbe_clean_rx_irq(struct ixgbe_q_vector *q_vector,
  
- 		port = priv->emac_port + cpsw->data.dual_emac;
- 		ret = cpsw_run_xdp(priv, ch, &xdp, page, port);
-diff --git a/drivers/net/ethernet/ti/cpsw_new.c b/drivers/net/ethernet/ti/cpsw_new.c
-index 9209e613257d..08e1c5b8f00e 100644
---- a/drivers/net/ethernet/ti/cpsw_new.c
-+++ b/drivers/net/ethernet/ti/cpsw_new.c
-@@ -348,6 +348,7 @@ static void cpsw_rx_handler(void *token, int len, int status)
+ 	xdp.rxq = &rx_ring->xdp_rxq;
  
- 		xdp.data_hard_start = pa;
- 		xdp.rxq = &priv->xdp_rxq[ch];
-+		xdp.frame_sz = PAGE_SIZE;
++	/* Frame size depend on rx_ring setup when PAGE_SIZE=4K */
++#if (PAGE_SIZE < 8192)
++	xdp.frame_sz = ixgbe_rx_frame_truesize(rx_ring, 0);
++#endif
++
+ 	while (likely(total_rx_packets < budget)) {
+ 		union ixgbe_adv_rx_desc *rx_desc;
+ 		struct ixgbe_rx_buffer *rx_buffer;
+@@ -2324,7 +2339,10 @@ static int ixgbe_clean_rx_irq(struct ixgbe_q_vector *q_vector,
+ 			xdp.data_hard_start = xdp.data -
+ 					      ixgbe_rx_offset(rx_ring);
+ 			xdp.data_end = xdp.data + size;
+-
++#if (PAGE_SIZE > 4096)
++			/* At larger PAGE_SIZE, frame_sz depend on len size */
++			xdp.frame_sz = ixgbe_rx_frame_truesize(rx_ring, size);
++#endif
+ 			skb = ixgbe_run_xdp(adapter, rx_ring, &xdp);
+ 		}
  
- 		ret = cpsw_run_xdp(priv, ch, &xdp, page, priv->emac_port);
- 		if (ret != CPSW_XDP_PASS)
 
 
