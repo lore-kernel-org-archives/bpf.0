@@ -2,38 +2,40 @@ Return-Path: <SRS0=w90l=6G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67C0FC55189
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 08:28:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77BBDC55186
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 08:29:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4BDB32071E
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 08:28:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5ADE12070B
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 08:29:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725899AbgDVI2n (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Apr 2020 04:28:43 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:2833 "EHLO huawei.com"
+        id S1726466AbgDVI2y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Apr 2020 04:28:54 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:57568 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725811AbgDVI2n (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Apr 2020 04:28:43 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id F0402F77B6BB4EF88F18;
-        Wed, 22 Apr 2020 16:28:40 +0800 (CST)
+        id S1726396AbgDVI2t (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Apr 2020 04:28:49 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 05290F7D3C5C81FB0C00;
+        Wed, 22 Apr 2020 16:28:46 +0800 (CST)
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.487.0; Wed, 22 Apr 2020 16:28:39 +0800
+ 14.3.487.0; Wed, 22 Apr 2020 16:28:41 +0800
 From:   Mao Wenan <maowenan@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>, <kafai@fb.com>,
         <songliubraving@fb.com>, <yhs@fb.com>, <andriin@fb.com>,
         <john.fastabend@gmail.com>, <kpsingh@chromium.org>
 CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
-Subject: [PATCH bpf-next 0/2] Change return code if failed to load object
-Date:   Wed, 22 Apr 2020 16:30:08 +0800
-Message-ID: <20200422083010.28000-1-maowenan@huawei.com>
+Subject: [PATCH bpf-next 2/2] libbpf: Return err if bpf_object__load failed
+Date:   Wed, 22 Apr 2020 16:30:10 +0800
+Message-ID: <20200422083010.28000-3-maowenan@huawei.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200422083010.28000-1-maowenan@huawei.com>
+References: <20200422083010.28000-1-maowenan@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -44,17 +46,28 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The first patch change return code from -EINVAL to -EOPNOTSUPP, 
-the second patch quote the err value returned by bpf_object__load().  
+bpf_object__load() has various return code, when
+it failed to load object, it must return err instead
+of return -EINVAL.
 
-Mao Wenan (2):
-  bpf: Change error code when ops is NULL
-  libbpf: Return err if bpf_object__load failed
-
- kernel/bpf/syscall.c   | 8 +++++---
+Signed-off-by: Mao Wenan <maowenan@huawei.com>
+---
  tools/lib/bpf/libbpf.c | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8f480e29a6b0..8e1dc6980fac 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -7006,7 +7006,7 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
+ 	err = bpf_object__load(obj);
+ 	if (err) {
+ 		bpf_object__close(obj);
+-		return -EINVAL;
++		return err;
+ 	}
+ 
+ 	*pobj = obj;
 -- 
 2.20.1
 
