@@ -6,79 +6,93 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0035CC55189
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 08:29:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC776C55186
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 08:29:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C58332070B
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 08:29:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82FA12074F
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 08:29:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726470AbgDVI2t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Apr 2020 04:28:49 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:57570 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726466AbgDVI2t (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Apr 2020 04:28:49 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 0CC4F9E052D804296E37;
-        Wed, 22 Apr 2020 16:28:46 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.487.0; Wed, 22 Apr 2020 16:28:40 +0800
-From:   Mao Wenan <maowenan@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <kafai@fb.com>,
-        <songliubraving@fb.com>, <yhs@fb.com>, <andriin@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@chromium.org>
-CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
-Subject: [PATCH bpf-next 1/2] bpf: Change error code when ops is NULL
-Date:   Wed, 22 Apr 2020 16:30:09 +0800
-Message-ID: <20200422083010.28000-2-maowenan@huawei.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200422083010.28000-1-maowenan@huawei.com>
-References: <20200422083010.28000-1-maowenan@huawei.com>
+        id S1726090AbgDVI3W (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Apr 2020 04:29:22 -0400
+Received: from smtpout1.mo804.mail-out.ovh.net ([79.137.123.220]:33031 "EHLO
+        smtpout1.mo804.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725899AbgDVI3W (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Apr 2020 04:29:22 -0400
+X-Greylist: delayed 351 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Apr 2020 04:29:21 EDT
+Received: from mxplan6.mail.ovh.net (unknown [10.109.156.244])
+        by mo804.mail-out.ovh.net (Postfix) with ESMTPS id C994E3765BFA;
+        Wed, 22 Apr 2020 10:23:28 +0200 (CEST)
+Received: from jwilk.net (37.59.142.97) by DAG4EX2.mxp6.local (172.16.2.32)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Wed, 22 Apr
+ 2020 10:23:27 +0200
+From:   Jakub Wilk <jwilk@jwilk.net>
+To:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+CC:     <linux-man@vger.kernel.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Subject: [PATCH v2] bpf: Fix reStructuredText markup
+Date:   Wed, 22 Apr 2020 10:23:24 +0200
+Message-ID: <20200422082324.2030-1-jwilk@jwilk.net>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200420144753.3718-1-jwilk@jwilk.net>
+References: <20200420144753.3718-1-jwilk@jwilk.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+X-Originating-IP: [37.59.142.97]
+X-ClientProxiedBy: DAG7EX2.mxp6.local (172.16.2.62) To DAG4EX2.mxp6.local
+ (172.16.2.32)
+X-Ovh-Tracer-GUID: 22f6e39c-ead6-478b-ba0e-78f47e12fb86
+X-Ovh-Tracer-Id: 18374686482964535078
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduhedrgeejgddtudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkofgjfhgggfgtihesthekredtredttdenucfhrhhomheplfgrkhhusgcuhghilhhkuceojhifihhlkhesjhifihhlkhdrnhgvtheqnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrdeljeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehmgihplhgrnheirdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhifihhlkhesjhifihhlkhdrnhgvthdprhgtphhtthhopehmthhkrdhmrghnphgrghgvshesghhmrghilhdrtghomh
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There is one error printed when use type
-BPF_MAP_TYPE_SOCKMAP to create map:
-libbpf: failed to create map (name: 'sock_map'): Invalid argument(-22)
+Fixes:
 
-This is because CONFIG_BPF_STREAM_PARSER is not set, and
-bpf_map_types[type] return invalid ops. It is not clear
-to show the cause of config missing with return code -EINVAL,
-so add pr_warn() and change error code to describe the reason.
+    $ scripts/bpf_helpers_doc.py > bpf-helpers.rst
+    $ rst2man bpf-helpers.rst > bpf-helpers.7
+    bpf-helpers.rst:1105: (WARNING/2) Inline strong start-string without end-string.
 
-Signed-off-by: Mao Wenan <maowenan@huawei.com>
+Signed-off-by: Jakub Wilk <jwilk@jwilk.net>
 ---
- kernel/bpf/syscall.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+v2: "flags" should be italic, not bold
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index d85f37239540..f67bc063bf75 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -112,9 +112,11 @@ static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
- 		return ERR_PTR(-EINVAL);
- 	type = array_index_nospec(type, ARRAY_SIZE(bpf_map_types));
- 	ops = bpf_map_types[type];
--	if (!ops)
--		return ERR_PTR(-EINVAL);
--
-+	if (!ops) {
-+		pr_warn("map type %d not supported or
-+			 kernel config not opened\n", type);
-+		return ERR_PTR(-EOPNOTSUPP);
-+	}
- 	if (ops->map_alloc_check) {
- 		err = ops->map_alloc_check(attr);
- 		if (err)
+ include/uapi/linux/bpf.h       | 2 +-
+ tools/include/uapi/linux/bpf.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 2e29a671d67e..7bbf1b65be10 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1642,7 +1642,7 @@ union bpf_attr {
+  * 		ifindex, but doesn't require a map to do so.
+  * 	Return
+  * 		**XDP_REDIRECT** on success, or the value of the two lower bits
+- * 		of the **flags* argument on error.
++ * 		of the *flags* argument on error.
+  *
+  * int bpf_sk_redirect_map(struct sk_buff *skb, struct bpf_map *map, u32 key, u64 flags)
+  * 	Description
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 2e29a671d67e..7bbf1b65be10 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1642,7 +1642,7 @@ union bpf_attr {
+  * 		ifindex, but doesn't require a map to do so.
+  * 	Return
+  * 		**XDP_REDIRECT** on success, or the value of the two lower bits
+- * 		of the **flags* argument on error.
++ * 		of the *flags* argument on error.
+  *
+  * int bpf_sk_redirect_map(struct sk_buff *skb, struct bpf_map *map, u32 key, u64 flags)
+  * 	Description
 -- 
-2.20.1
+2.26.2
 
