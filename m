@@ -2,140 +2,134 @@ Return-Path: <SRS0=w90l=6G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06826C54FCB
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 15:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C96EDC54FCB
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:07:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D7F8A2074B
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 15:22:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A309421569
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:07:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gflclan.com header.i=@gflclan.com header.b="QzKjDQqF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CAUUzF+2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726335AbgDVPWE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Apr 2020 11:22:04 -0400
-Received: from q2relay63.mxroute.com ([160.202.107.63]:41571 "EHLO
-        q2relay63.mxroute.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726240AbgDVPWE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Apr 2020 11:22:04 -0400
-X-Greylist: delayed 305 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Apr 2020 11:22:04 EDT
-Received: from qps ([162.219.26.146] 162-219-26-146.quickpacket.com)
- (Authenticated sender: mN4UYu2MZsgR)
- by q2relay63.mxroute.com (ZoneMTA) with ESMTPSA id 171a276a1ca000f364.001
- for <bpf@vger.kernel.org>
- (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256);
- Wed, 22 Apr 2020 15:16:56 +0000
-X-Zone-Loop: d97ce3f8b061c7292832c4a69511e61f49938811023f
-Received: from filter003.mxroute.com ([168.235.111.26] 168-235-111-26.cloud.ramnode.com)
- (Authenticated sender: mN4UYu2MZsgR)
- by qps (ZoneMTA) with ESMTPA id 171a26b7f010000d83.001
- for <bpf@vger.kernel.org>;
- Wed, 22 Apr 2020 15:04:46 +0000
-X-Zone-Loop: a9ecf06f14bce0d7570ba393f5d538e8ce45c57b4612
-X-Originating-IP: [162.219.26.146]
-Received: from ocean.mxroute.com (ocean.mxroute.com [195.201.59.214])
-        by filter003.mxroute.com (Postfix) with ESMTPS id E7FA060056
-        for <bpf@vger.kernel.org>; Wed, 22 Apr 2020 15:04:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gflclan.com
-        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:Reply-To:Cc:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QEmsNWsQEOReXThiqJmQr5amzJ2bOuI7TffzrW1M+fU=; b=QzKjDQqFE38X7myOiRZL/FUC/D
-        jateKciydQDolT5fQ3CBvMuqLe9edvXO161rg9lviXlRGEWhNuG/cGOE6nuCczOOsqhVS2694+zHf
-        XfeluhtCbtSlrBfIpmibWdxoHLED92Kcnn3vO8QXRLS4AQHajGmpgCCIdjEoKifH5e9aRsR4psNFs
-        ZF/pe5HM8LNzh9+fP1aQeRaJ+H9VgwlXntlyXT3ppbaLFtvVq0gFbuVlIehrU2pQPOBkWjqIoyrSl
-        H7UUm33Ohc67LZWjLXoNpW489bIViH6gXWAX1uNL2+h3cbeeMIiNAvrCeG2yXtCJ/1hHbn6+O82Wc
-        kLlah8iw==;
-Subject: Re: Bpfilter Development
-To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-References: <ac739c9c-f377-129f-1d4b-6c4c7e15f83d@gflclan.com>
- <871roh9jsu.fsf@toke.dk>
-From:   Christian Deacon <gamemann@gflclan.com>
-Message-ID: <abc35979-c44e-da12-e891-5409f587cee9@gflclan.com>
-Date:   Wed, 22 Apr 2020 10:04:39 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726381AbgDVQHm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Apr 2020 12:07:42 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45498 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726154AbgDVQHl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Apr 2020 12:07:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1587571659;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qVN5D4k6CPXm/CsTfZRedU5FchFYXq2H0A5tWQjBfY8=;
+        b=CAUUzF+2NiBUwm+GxEOgTnzInJLud6v0msD1649xk0u23eT+PYsZuex7KKqTFaPhi3bsZA
+        Khtk+XpMHb5wUDziPOFgcMhOJd7eR1JjLtQ392wCTxNqLS0FK0PSKLecfmVq4kJCkjyW49
+        gajOnE/zMlE7gf/oStuR55bZK61smew=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-206-YV49HgVKNa-_S5jl1L2EyQ-1; Wed, 22 Apr 2020 12:07:35 -0400
+X-MC-Unique: YV49HgVKNa-_S5jl1L2EyQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7F09D107ACC7;
+        Wed, 22 Apr 2020 16:07:33 +0000 (UTC)
+Received: from firesoul.localdomain (unknown [10.40.208.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0EBBF5C541;
+        Wed, 22 Apr 2020 16:07:27 +0000 (UTC)
+Received: from [192.168.42.3] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id 2FE9930000E43;
+        Wed, 22 Apr 2020 18:07:26 +0200 (CEST)
+Subject: [PATCH net-next 01/33] xdp: add frame size to xdp_buff
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     sameehj@amazon.com
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, zorik@amazon.com, akiyano@amazon.com,
+        gtzalik@amazon.com,
+        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        David Ahern <dsahern@gmail.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Saeed Mahameed <saeedm@mellanox.com>,
+        steffen.klassert@secunet.com
+Date:   Wed, 22 Apr 2020 18:07:26 +0200
+Message-ID: <158757164613.1370371.2655437650342381672.stgit@firesoul>
+In-Reply-To: <158757160439.1370371.13213378122947426220.stgit@firesoul>
+References: <158757160439.1370371.13213378122947426220.stgit@firesoul>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-In-Reply-To: <871roh9jsu.fsf@toke.dk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-OutGoing-Spam-Status: No, score=-10.0
-X-AuthUser: gamemann@gflclan.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hey Toke,
+XDP have evolved to support several frame sizes, but xdp_buff was not
+updated with this information. The frame size (frame_sz) member of
+xdp_buff is introduced to know the real size of the memory the frame is
+delivered in.
+
+When introducing this also make it clear that some tailroom is
+reserved/required when creating SKBs using build_skb().
+
+It would also have been an option to introduce a pointer to
+data_hard_end (with reserved offset). The advantage with frame_sz is
+that (like rxq) drivers only need to setup/assign this value once per
+NAPI cycle. Due to XDP-generic (and some drivers) it's not possible to
+store frame_sz inside xdp_rxq_info, because it's varies per packet as it
+can be based/depend on packet length.
+
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+---
+ include/net/xdp.h |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 40c6d3398458..1ccf7df98bee 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -6,6 +6,8 @@
+ #ifndef __LINUX_NET_XDP_H__
+ #define __LINUX_NET_XDP_H__
+ 
++#include <linux/skbuff.h> /* skb_shared_info */
++
+ /**
+  * DOC: XDP RX-queue information
+  *
+@@ -70,8 +72,19 @@ struct xdp_buff {
+ 	void *data_hard_start;
+ 	unsigned long handle;
+ 	struct xdp_rxq_info *rxq;
++	u32 frame_sz; /* frame size to deduct data_hard_end/reserved tailroom*/
+ };
+ 
++/* Reserve memory area at end-of data area.
++ *
++ * This macro reserves tailroom in the XDP buffer by limiting the
++ * XDP/BPF data access to data_hard_end.  Notice same area (and size)
++ * is used for XDP_PASS, when constructing the SKB via build_skb().
++ */
++#define xdp_data_hard_end(xdp)				\
++	((xdp)->data_hard_start + (xdp)->frame_sz -	\
++	 SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
++
+ struct xdp_frame {
+ 	void *data;
+ 	u16 len;
 
 
-Thank you for your response!
-
-
-Regarding the ETA rule, I will keep that noted in the future.
-
-
-Thank you for the information regarding Bpfilter as well. It appears the 
-development towards this has stopped at least temporarily. We will be 
-looking into using XDP-native in this case! I will also take a look at 
-the XDP-filter project you linked to see how everything is done, etc.
-
-
-Thanks again!
-
-
-On 4/21/2020 6:09 AM, Toke Høiland-Jørgensen wrote:
-> Christian Deacon <gamemann@gflclan.com> writes:
->
->> Hey everyone,
->>
->>
->> I apologize if this is the incorrect place to address this. I couldn't
->> find any mailing list for Bpfilter specifically. If there is a better
->> place to address this, suggestions are welcomed and appreciated!
->>
->>
->> I was wondering if Bpfilter is still under development or if the project
->> development is at a halt. I am planning out my next major project that
->> will be responsible for forwarding traffic and blocking (D)DoS attacks
->> based off of filtering rules. As of right now, I'm trying to decide
->> whether to use Bpfilter or XDP-native for blocking malicious traffic.
->> With the project's current layout, I feel it would be easier using
->> something like Bpfilter for this. However, I'm not sure when this will
->> be completely developed to the point it'd be usable with my application.
->> If this project is under development, is there any ETA on when it will
->> be officially supported and in a usable state for most applications
->> (specifically for dropping malicious traffic)?
-> As a general rule I think you will find that there are very few upstream
-> developers who will commit to any ETA other than "when it's done". As
-> for bpfilter specifically, I am not aware of anyone actively working on
-> it at all...
->
->> One last question I had is if there were any estimates on how fast
->> Bpfilter would be compared to XDP-native when dropping malicious
->> packets. I'd assume they would see similar performance, but I'm not
->> entirely sure.
-> I would expect that XDP would be significantly faster (as long as you
-> are using hardware with native XDP support in the driver). For DDOS
-> filtering specifically, I think it would be a no-brainer to just go with
-> XDP.
->
-> Feel free to use xdp-filter as a starting point:
->
-> https://github.com/xdp-project/xdp-tools/tree/master/xdp-filter
->
-> It's pretty dumb as far as expressing the filtering rules themselves are
-> concerned, but it does demonstrate how you might structure such a
-> program, including how to only load the BPF code needed to support the
-> active filtering rules. Pull requests always welcome to improve it as
-> well, of course :)
->
-> -Toke
->
