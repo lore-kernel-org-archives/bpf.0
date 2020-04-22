@@ -2,56 +2,55 @@ Return-Path: <SRS0=w90l=6G=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32B8FC5518E
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:09:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD09AC54FCB
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:09:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 05EB120774
-	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:09:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD33720774
+	for <bpf@archiver.kernel.org>; Wed, 22 Apr 2020 16:09:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P3VkVt3f"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Pk3ngr3G"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727049AbgDVQJh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Apr 2020 12:09:37 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:41921 "EHLO
+        id S1726503AbgDVQJk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Apr 2020 12:09:40 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:42719 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727030AbgDVQJg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Apr 2020 12:09:36 -0400
+        with ESMTP id S1727046AbgDVQJi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Apr 2020 12:09:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587571774;
+        s=mimecast20190719; t=1587571776;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mTm9LpAZ7snKHFNRZ/z9XyHcPgtqNvVYIH3mJr9DpAM=;
-        b=P3VkVt3fnP2PtUi+Afc3Ca2NlGBbC5KLf+TN60xuTFadV/xFniS3ZkQa2BtovHmISZaBTK
-        ZRHf2FT1fUXpC/d2s6fpunZiAremRZs95ZaOSL8CGu8qZKdJpdiFBg7+jPyQIddy21tYa4
-        94bjK2URqmka1QOZFgaop6hzC76Le+4=
+        bh=OPOu3xqwQqyfpl6KXPjwSLkgQ1r4/m6u5lOgd9ZIdyM=;
+        b=Pk3ngr3GstnHeqiUfahHkCqoeZkp9y16VgFv0lR4zMa8673PrMtZ4f2VWzO99wDFOYAEOW
+        a+qylXarOrWAyCxXPN9jXIfo5ETJgPMyO7ZdVppNJsZIqiOGLK1Cw+oxG9Dim69asO1lxs
+        PryPe/MxF5Cc4G7QYJI4AihL5p4KxFE=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-432-mEnBKcpZN867W2pJRLqffA-1; Wed, 22 Apr 2020 12:09:30 -0400
-X-MC-Unique: mEnBKcpZN867W2pJRLqffA-1
+ us-mta-287-WOJBeEJVNoucM9gRSFvA2w-1; Wed, 22 Apr 2020 12:09:34 -0400
+X-MC-Unique: WOJBeEJVNoucM9gRSFvA2w-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AF2049270D;
-        Wed, 22 Apr 2020 16:09:18 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5E744190B2CA;
+        Wed, 22 Apr 2020 16:09:29 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 522B66084A;
-        Wed, 22 Apr 2020 16:09:18 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A113660619;
+        Wed, 22 Apr 2020 16:09:08 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id EED6530000272;
-        Wed, 22 Apr 2020 18:09:17 +0200 (CEST)
-Subject: [PATCH net-next 23/33] ixgbe: add XDP frame size to driver
+        by firesoul.localdomain (Postfix) with ESMTP id C654130000E43;
+        Wed, 22 Apr 2020 18:09:07 +0200 (CEST)
+Subject: [PATCH net-next 21/33] virtio_net: add XDP frame size in two code
+ paths
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
-Cc:     intel-wired-lan@lists.osuosl.org,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
+Cc:     Jason Wang <jasowang@redhat.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org, zorik@amazon.com,
         akiyano@amazon.com, gtzalik@amazon.com,
@@ -67,8 +66,8 @@ Cc:     intel-wired-lan@lists.osuosl.org,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         steffen.klassert@secunet.com
-Date:   Wed, 22 Apr 2020 18:09:17 +0200
-Message-ID: <158757175790.1370371.16071055208561239272.stgit@firesoul>
+Date:   Wed, 22 Apr 2020 18:09:07 +0200
+Message-ID: <158757174774.1370371.14395462229209766397.stgit@firesoul>
 In-Reply-To: <158757160439.1370371.13213378122947426220.stgit@firesoul>
 References: <158757160439.1370371.13213378122947426220.stgit@firesoul>
 User-Agent: StGit/0.19
@@ -81,105 +80,94 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This driver uses different memory models depending on PAGE_SIZE at
-compile time. For PAGE_SIZE 4K it uses page splitting, meaning for
-normal MTU frame size is 2048 bytes (and headroom 192 bytes). For
-larger MTUs the driver still use page splitting, by allocating
-order-1 pages (8192 bytes) for RX frames. For PAGE_SIZE larger than
-4K, driver instead advance its rx_buffer->page_offset with the frame
-size "truesize".
+The virtio_net driver is running inside the guest-OS. There are two
+XDP receive code-paths in virtio_net, namely receive_small() and
+receive_mergeable(). The receive_big() function does not support XDP.
 
-For XDP frame size calculations, this mean that in PAGE_SIZE larger
-than 4K mode the frame_sz change on a per packet basis. For the page
-split 4K PAGE_SIZE mode, xdp.frame_sz is more constant and can be
-updated once outside the main NAPI loop.
+In receive_small() the frame size is available in buflen. The buffer
+backing these frames are allocated in add_recvbuf_small() with same
+size, except for the headroom, but tailroom have reserved room for
+skb_shared_info. The headroom is encoded in ctx pointer as a value.
 
-The default setting in the driver uses build_skb(), which provides
-the necessary headroom and tailroom for XDP-redirect in RX-frame
-(in both modes).
+In receive_mergeable() the frame size is more dynamic. There are two
+basic cases: (1) buffer size is based on a exponentially weighted
+moving average (see DECLARE_EWMA) of packet length. Or (2) in case
+virtnet_get_headroom() have any headroom then buffer size is
+PAGE_SIZE. The ctx pointer is this time used for encoding two values;
+the buffer len "truesize" and headroom. In case (1) if the rx buffer
+size is underestimated, the packet will have been split over more
+buffers (num_buf info in virtio_net_hdr_mrg_rxbuf placed in top of
+buffer area). If that happens the XDP path does a xdp_linearize_page
+operation.
 
-There is one complication, which is legacy-rx mode (configurable via
-ethtool priv-flags). There are zero headroom in this mode, which is a
-requirement for XDP-redirect to work. The conversion to xdp_frame
-(convert_to_xdp_frame) will detect this insufficient space, and
-xdp_do_redirect() call will fail. This is deemed acceptable, as it
-allows other XDP actions to still work in legacy-mode. In
-legacy-mode + larger PAGE_SIZE due to lacking tailroom, we also
-accept that xdp_adjust_tail shrink doesn't work.
-
-Cc: intel-wired-lan@lists.osuosl.org
-Cc: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-Cc: Alexander Duyck <alexander.duyck@gmail.com>
+Cc: Jason Wang <jasowang@redhat.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |   34 +++++++++++++++++++------
- 1 file changed, 26 insertions(+), 8 deletions(-)
+ drivers/net/virtio_net.c |   15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index ea6834bae04c..eab5934b04f5 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -2244,20 +2244,30 @@ static struct sk_buff *ixgbe_run_xdp(struct ixgbe_adapter *adapter,
- 	return ERR_PTR(-result);
- }
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 11f722460513..1df3676da185 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -689,6 +689,7 @@ static struct sk_buff *receive_small(struct net_device *dev,
+ 		xdp.data_end = xdp.data + len;
+ 		xdp.data_meta = xdp.data;
+ 		xdp.rxq = &rq->xdp_rxq;
++		xdp.frame_sz = buflen;
+ 		orig_data = xdp.data;
+ 		act = bpf_prog_run_xdp(xdp_prog, &xdp);
+ 		stats->xdp_packets++;
+@@ -797,10 +798,11 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 	int offset = buf - page_address(page);
+ 	struct sk_buff *head_skb, *curr_skb;
+ 	struct bpf_prog *xdp_prog;
+-	unsigned int truesize;
++	unsigned int truesize = mergeable_ctx_to_truesize(ctx);
+ 	unsigned int headroom = mergeable_ctx_to_headroom(ctx);
+-	int err;
+ 	unsigned int metasize = 0;
++	unsigned int frame_sz;
++	int err;
  
-+static unsigned int ixgbe_rx_frame_truesize(struct ixgbe_ring *rx_ring,
-+					    unsigned int size)
-+{
-+	unsigned int truesize;
+ 	head_skb = NULL;
+ 	stats->bytes += len - vi->hdr_len;
+@@ -821,6 +823,11 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 		if (unlikely(hdr->hdr.gso_type))
+ 			goto err_xdp;
+ 
++		/* Buffers with headroom use PAGE_SIZE as alloc size,
++		 * see add_recvbuf_mergeable() + get_mergeable_buf_len()
++		 */
++		frame_sz = headroom ? PAGE_SIZE : truesize;
 +
-+#if (PAGE_SIZE < 8192)
-+	truesize = ixgbe_rx_pg_size(rx_ring) / 2; /* Must be power-of-2 */
-+#else
-+	truesize = ring_uses_build_skb(rx_ring) ?
-+		SKB_DATA_ALIGN(IXGBE_SKB_PAD + size) +
-+		SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) :
-+		SKB_DATA_ALIGN(size);
-+#endif
-+	return truesize;
-+}
+ 		/* This happens when rx buffer size is underestimated
+ 		 * or headroom is not enough because of the buffer
+ 		 * was refilled before XDP is set. This should only
+@@ -834,6 +841,8 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 						      page, offset,
+ 						      VIRTIO_XDP_HEADROOM,
+ 						      &len);
++			frame_sz = PAGE_SIZE;
 +
- static void ixgbe_rx_buffer_flip(struct ixgbe_ring *rx_ring,
- 				 struct ixgbe_rx_buffer *rx_buffer,
- 				 unsigned int size)
- {
-+	unsigned int truesize = ixgbe_rx_frame_truesize(rx_ring, size);
- #if (PAGE_SIZE < 8192)
--	unsigned int truesize = ixgbe_rx_pg_size(rx_ring) / 2;
--
- 	rx_buffer->page_offset ^= truesize;
- #else
--	unsigned int truesize = ring_uses_build_skb(rx_ring) ?
--				SKB_DATA_ALIGN(IXGBE_SKB_PAD + size) +
--				SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) :
--				SKB_DATA_ALIGN(size);
--
- 	rx_buffer->page_offset += truesize;
- #endif
- }
-@@ -2291,6 +2301,11 @@ static int ixgbe_clean_rx_irq(struct ixgbe_q_vector *q_vector,
+ 			if (!xdp_page)
+ 				goto err_xdp;
+ 			offset = VIRTIO_XDP_HEADROOM;
+@@ -850,6 +859,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 		xdp.data_end = xdp.data + (len - vi->hdr_len);
+ 		xdp.data_meta = xdp.data;
+ 		xdp.rxq = &rq->xdp_rxq;
++		xdp.frame_sz = frame_sz;
  
- 	xdp.rxq = &rx_ring->xdp_rxq;
+ 		act = bpf_prog_run_xdp(xdp_prog, &xdp);
+ 		stats->xdp_packets++;
+@@ -924,7 +934,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 	}
+ 	rcu_read_unlock();
  
-+	/* Frame size depend on rx_ring setup when PAGE_SIZE=4K */
-+#if (PAGE_SIZE < 8192)
-+	xdp.frame_sz = ixgbe_rx_frame_truesize(rx_ring, 0);
-+#endif
-+
- 	while (likely(total_rx_packets < budget)) {
- 		union ixgbe_adv_rx_desc *rx_desc;
- 		struct ixgbe_rx_buffer *rx_buffer;
-@@ -2324,7 +2339,10 @@ static int ixgbe_clean_rx_irq(struct ixgbe_q_vector *q_vector,
- 			xdp.data_hard_start = xdp.data -
- 					      ixgbe_rx_offset(rx_ring);
- 			xdp.data_end = xdp.data + size;
--
-+#if (PAGE_SIZE > 4096)
-+			/* At larger PAGE_SIZE, frame_sz depend on len size */
-+			xdp.frame_sz = ixgbe_rx_frame_truesize(rx_ring, size);
-+#endif
- 			skb = ixgbe_run_xdp(adapter, rx_ring, &xdp);
- 		}
- 
+-	truesize = mergeable_ctx_to_truesize(ctx);
+ 	if (unlikely(len > truesize)) {
+ 		pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
+ 			 dev->name, len, (unsigned long)ctx);
 
 
