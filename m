@@ -7,51 +7,59 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7881C54FD0
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:52:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A37B8C54FD0
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:52:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 950A821569
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:52:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 754CB21569
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:52:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587628325;
-	bh=Hc+cR7zFIF8KR0kcTIamuv9uat6Jpl54qFc4xFE91+U=;
+	s=default; t=1587628334;
+	bh=Zwe8ywmgwukJ9SoiIbrMmRvto7RWfgYb+g4VjG1HyaQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=v4T97AxSoWCdSI1DE29WNvkaKHZqkxDUW3XjPuI1X/pXBjULIhFr76cmXpJw6wrsU
-	 FCsoOs72JFU1Qqc7Ewih+vqKoNrLHshInFdJbJD+Wf7DOEe1xD7dnAba/Iemo7BZ+U
-	 4J9u19KkhO9B7XLbZClvWyRz9BVaDlfq+IUXMq7k=
+	b=NJ8YEwzIXJfz3HRuB8tblAmtZlzpt62M6DAC5UJklP0HVdA9L2H0pwJiefmUfuMjO
+	 a3RT2LLfHMjKxhpxjORblD/J/v/ZMfhrUyRID3za+2/DNm+Iy9aLTzj4MDnR8M75SP
+	 7/LjKnPJmlaYaw9Qj72MubRqaxA1Q7oagKOxbVhc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726027AbgDWHwF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Apr 2020 03:52:05 -0400
-Received: from condef-03.nifty.com ([202.248.20.68]:27019 "EHLO
-        condef-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726101AbgDWHwE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Apr 2020 03:52:04 -0400
-Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-03.nifty.com with ESMTP id 03N7eXqn016162
-        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 16:40:34 +0900
+        id S1726420AbgDWHwO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Apr 2020 03:52:14 -0400
+Received: from condef-05.nifty.com ([202.248.20.70]:27678 "EHLO
+        condef-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726101AbgDWHwN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Apr 2020 03:52:13 -0400
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-05.nifty.com with ESMTP id 03N7fcBI026967
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 16:41:38 +0900
 Received: from oscar.flets-west.jp (softbank126090202047.bbtec.net [126.90.202.47]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 03N7dV9Y000368;
-        Thu, 23 Apr 2020 16:39:45 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 03N7dV9Y000368
+        by conuserg-10.nifty.com with ESMTP id 03N7dV9P000368;
+        Thu, 23 Apr 2020 16:39:36 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 03N7dV9P000368
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1587627585;
-        bh=hZ8+fwVp7+ov3O6upNJo7VpVTfDPY/IvaiBo3lVHLJ4=;
+        s=dec2015msa; t=1587627577;
+        bh=mNS7qQakks7vv7rluiZ6sy2TT3u/Yp/y0uXOfjW+ff0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hqz14zUC1I7SppGewxhPGdV5Rk7+84OzsClwJY3RdIQQyRnlMJt30rTut/FN2RlCw
-         hQtc3eJg9rYrgq2sPR49eaXYxvpFcFghjJZHdmhwDJ0ZzFw5x4yR+IPBHm0nUFkmSr
-         Uaez3b6d1KOI1OK/5qIvoAgIeFaxWe6KXc1WRQS6DcpiTEKxVkiUlGOKbAbgxEJR8o
-         XQVebwL2iIfKzw8eaIbxNVuuq3osVUo6DxBBVE9Qlf0uoIyZCYFs6tOrHUlpiS5azZ
-         4qMG6K7kuyI8PH+wuerB9lkXzMJVvHDneNys7zjK6BIrX1ph0uO+ADx1lLCN7esx+R
-         3lEivQ7AxCc5A==
+        b=vgX24GzV3a5gSzU8pqBzK0uUPmBoq73gXEZoV5t08/+yMcChrq6uP7MLHhdRwGGPc
+         UWKvR0/hvVQCXVFtYvZMmDoPZQ/cwJ9mDXpvEU300Nv0iI9sU5civP4dV2/hkMVLAd
+         FK3BuYRHjhBFQa1B+oUmnNtjb8ARPuZe15DK2bHR9pfUVqUOIyrDpfQwSS0YaEk3Us
+         q6/fi3DlDwocFmaIOowfh119DbojAG/bzBarEoAk6yIvb/41VnjUiic1yir+KsK4p0
+         yG0QRj3cc7yMSM3LycQICnWyH8UcXZJq1ixs6BeZA2jNqtJYewteyupK7yviIoCJZc
+         GujOc7Bj6SMyA==
 X-Nifty-SrcIP: [126.90.202.47]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     bpf@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 13/16] samples: mei: build sample program for target architecture
-Date:   Thu, 23 Apr 2020 16:39:26 +0900
-Message-Id: <20200423073929.127521-14-masahiroy@kernel.org>
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH 04/16] net: bpfilter: use 'userprogs' syntax to build bpfilter_umh
+Date:   Thu, 23 Apr 2020 16:39:17 +0900
+Message-Id: <20200423073929.127521-5-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200423073929.127521-1-masahiroy@kernel.org>
 References: <20200423073929.127521-1-masahiroy@kernel.org>
@@ -62,52 +70,46 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This userspace program includes UAPI headers exported to usr/include/.
-'make headers' always works for the target architecture (i.e. the same
-architecture as the kernel), so the sample program must be built for
-the target as well. Kbuild now supports the 'userprogs' syntax to
-describe it cleanly.
+The user mode helper should be compiled for the same architecture as
+the kernel.
 
-I also guarded the CONFIG option by 'depends on CC_CAN_LINK' because
-$(CC) may not necessarily provide libc.
+This Makefile reuses the 'hostprogs' syntax by overriding HOSTCC with CC.
+
+Now that Kbuild provides the syntax 'userprogs', use it to fix the
+Makefile mess.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- samples/Kconfig      | 1 +
- samples/mei/Makefile | 9 +++------
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ net/bpfilter/Makefile | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/samples/Kconfig b/samples/Kconfig
-index b8113555aa6c..b9dafee5d3af 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -193,6 +193,7 @@ config SAMPLE_VFS
- config SAMPLE_INTEL_MEI
- 	bool "Build example program working with intel mei driver"
- 	depends on INTEL_MEI
-+	depends on CC_CAN_LINK && HEADERS_INSTALL
- 	help
- 	  Build a sample program to work with mei device.
+diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
+index 36580301da70..6ee650c6badb 100644
+--- a/net/bpfilter/Makefile
++++ b/net/bpfilter/Makefile
+@@ -3,17 +3,14 @@
+ # Makefile for the Linux BPFILTER layer.
+ #
  
-diff --git a/samples/mei/Makefile b/samples/mei/Makefile
-index f5b9d02be2cd..ced5532cbbee 100644
---- a/samples/mei/Makefile
-+++ b/samples/mei/Makefile
-@@ -1,10 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- # Copyright (c) 2012-2019, Intel Corporation. All rights reserved.
+-hostprogs := bpfilter_umh
++userprogs := bpfilter_umh
+ bpfilter_umh-objs := main.o
+-KBUILD_HOSTCFLAGS += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
+-HOSTCC := $(CC)
++user-ccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
  
--hostprogs := mei-amt-version
-+userprogs := mei-amt-version
-+always-y := $(userprogs)
+-ifeq ($(CONFIG_BPFILTER_UMH), y)
+-# builtin bpfilter_umh should be compiled with -static
++# builtin bpfilter_umh should be linked with -static
+ # since rootfs isn't mounted at the time of __init
+ # function is called and do_execv won't find elf interpreter
+-KBUILD_HOSTLDFLAGS += -static
+-endif
++bpfilter_umh-ldflags += -static
  
--HOSTCFLAGS_mei-amt-version.o += -I$(objtree)/usr/include
--
--always-y := $(hostprogs)
--
--all: mei-amt-version
-+user-ccflags += -I usr/include
+ $(obj)/bpfilter_umh_blob.o: $(obj)/bpfilter_umh
+ 
 -- 
 2.25.1
 
