@@ -4,53 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35E4DC2BA19
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:49:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE8FFC54FD0
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:50:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 083F920781
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:49:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 87F3E21D7D
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:50:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587628152;
-	bh=V3iPccgK+vl/32LMP8x53D6ueRG0X7Rmd/LXz306oiA=;
+	s=default; t=1587628246;
+	bh=/JWvupmEMySxDqYIYZIYncvR2Q8mmZsljXsYjNOnvIg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=E1cxQogbn1kFmai2kQTFW/S+rMtWTOze2tz9XNCkTMKadVDabsLBSlVX9cn/IHxz0
-	 +Ie0paSQQd3nWcRoiN0c3zwnOtDv361JOnslqv5NsP/IKMgNY82wGTMGL3u+ZB6lb0
-	 WBaQi0fkUPE84wOUAxxIcvB13s/9oeDxrKDfcqNw=
+	b=gJUNcXtRTvY0mGG9G695L0sSwM88g/TxZ+pgJy+AytLReWISug4nJW7e6sj1xu2Ef
+	 KbkOcyBylyKJilhzxU24Szf0ehG7ypW17yw/bA6ql09RuIrJxJOLtFdQ8lZ/mdplYq
+	 JvyeZIrf8E1UTo6YDKPy/iHVklzE+RPwyzMPF0n0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726829AbgDWHtL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Apr 2020 03:49:11 -0400
-Received: from condef-07.nifty.com ([202.248.20.72]:24251 "EHLO
-        condef-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726692AbgDWHtL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Apr 2020 03:49:11 -0400
-Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-07.nifty.com with ESMTP id 03N7eVeK004486
-        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 16:40:32 +0900
+        id S1726122AbgDWHul (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Apr 2020 03:50:41 -0400
+Received: from condef-08.nifty.com ([202.248.20.73]:31203 "EHLO
+        condef-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726499AbgDWHuc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Apr 2020 03:50:32 -0400
+X-Greylist: delayed 345 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Apr 2020 03:50:31 EDT
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-08.nifty.com with ESMTP id 03N7easT027027
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 16:40:36 +0900
 Received: from oscar.flets-west.jp (softbank126090202047.bbtec.net [126.90.202.47]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 03N7dV9S000368;
-        Thu, 23 Apr 2020 16:39:41 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 03N7dV9S000368
+        by conuserg-10.nifty.com with ESMTP id 03N7dV9N000368;
+        Thu, 23 Apr 2020 16:39:34 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 03N7dV9N000368
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1587627581;
-        bh=YToMVALGZ0JNA1/v+fELxUiPiJLJ9MUFCjYJs4uH7Do=;
+        s=dec2015msa; t=1587627574;
+        bh=LAmTf3avyguNhJLnR/j7TVLMdgz9CQZK990PrBeMhx4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G/pln6ZqRmDgm/Bssq1alNkuc3Z6L+0VRdRpDBSRfM6rnylBKkpq4N0FhnZAHaBKQ
-         09d4dGS1RK79D/dxytzaPXHkugwYmcLh0hfnxdlEMCRtGa0CW+r71QZodx9ox2jEGd
-         B/QE/aSCu3/paRvfEhFpPYcJClh8DomUcQgr+0futox9bKYhrpUwpUlQi+BtXI+PTs
-         InMpNzc7xM+x36FYrtaQRwJ4N4i7ESf5cQbZFRxr27525RtaDOwQm4ooWQR0EYsHI0
-         gLhz3pin+fwgPhwIGuvcIfLLWiUC9iFQLYZ5tpCbhf3MKrJnRgeoaUFpWBhsseUilu
-         01mlRhbtRxh6g==
+        b=MSs+1vgXqBRAkGhPA8eINQND3Yn3h3DtPWIMZsni9ragUGcGyzFInzKyQzOgPwj++
+         t/6Zn74uvLNxz0xoKXv9ZLiRXjPGrpwwJhlHI5R370DTaF/8peZy7BlJt488ShbDKJ
+         2iGcIVC943qxlVMRtCZJZX8d2u9Y400/LFJDuj6riX+Pgepq5jThP/0jS+LvL/htcS
+         3rBViAksHx4UOAcJhURudlp2ncwDiysmcG6lWfX1ZxPHfU0j88pgC5JZ0hVjpqnIYw
+         VsARbonJsLwaja8ArPmH08KXCpu8OiiI0zZyIg1PzYPZGUW6NBioyaVqT3B/Gl/4WX
+         wcJns61R/pDpw==
 X-Nifty-SrcIP: [126.90.202.47]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     bpf@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 07/16] samples: uhid: fix warnings in uhid-example
-Date:   Thu, 23 Apr 2020 16:39:20 +0900
-Message-Id: <20200423073929.127521-8-masahiroy@kernel.org>
+Subject: [PATCH 02/16] Revert "objtool: Skip samples subdirectory"
+Date:   Thu, 23 Apr 2020 16:39:15 +0900
+Message-Id: <20200423073929.127521-3-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200423073929.127521-1-masahiroy@kernel.org>
 References: <20200423073929.127521-1-masahiroy@kernel.org>
@@ -61,45 +63,28 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Sam Ravnborg <sam@ravnborg.org>
+This reverts commit 8728497895794d1f207a836e02dae762ad175d56.
 
-Fix warnings seen when building for 32-bit architecture.
+This directory contains no object.
 
-Use "%xd" for arguments of type size_t to fix the warnings.
-
-Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
-This is the same as Sam's patch in 2014.
-https://lkml.org/lkml/2014/7/13/152
+ samples/Makefile | 1 -
+ 1 file changed, 1 deletion(-)
 
-
- samples/uhid/uhid-example.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/samples/uhid/uhid-example.c b/samples/uhid/uhid-example.c
-index b72d645ce828..015cb06a241e 100644
---- a/samples/uhid/uhid-example.c
-+++ b/samples/uhid/uhid-example.c
-@@ -165,7 +165,7 @@ static int uhid_write(int fd, const struct uhid_event *ev)
- 		fprintf(stderr, "Cannot write to uhid: %m\n");
- 		return -errno;
- 	} else if (ret != sizeof(*ev)) {
--		fprintf(stderr, "Wrong size written to uhid: %ld != %lu\n",
-+		fprintf(stderr, "Wrong size written to uhid: %zd != %zu\n",
- 			ret, sizeof(ev));
- 		return -EFAULT;
- 	} else {
-@@ -236,7 +236,7 @@ static int event(int fd)
- 		fprintf(stderr, "Cannot read uhid-cdev: %m\n");
- 		return -errno;
- 	} else if (ret != sizeof(ev)) {
--		fprintf(stderr, "Invalid size read from uhid-dev: %ld != %lu\n",
-+		fprintf(stderr, "Invalid size read from uhid-dev: %zd != %zu\n",
- 			ret, sizeof(ev));
- 		return -EFAULT;
- 	}
+diff --git a/samples/Makefile b/samples/Makefile
+index f8f847b4f61f..5ce50ef0f2b2 100644
+--- a/samples/Makefile
++++ b/samples/Makefile
+@@ -1,6 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for Linux samples code
+-OBJECT_FILES_NON_STANDARD := y
+ 
+ obj-$(CONFIG_SAMPLE_ANDROID_BINDERFS)	+= binderfs/
+ obj-$(CONFIG_SAMPLE_CONFIGFS)		+= configfs/
 -- 
 2.25.1
 
