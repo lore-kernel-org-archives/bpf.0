@@ -2,83 +2,94 @@ Return-Path: <SRS0=ey3N=6H=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2C88C2BA19
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 10:32:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22A85C55192
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 11:50:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A0162076C
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 10:32:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E994C20787
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 11:50:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dCQSm3f+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbgDWKcQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Apr 2020 06:32:16 -0400
-Received: from mga05.intel.com ([192.55.52.43]:4641 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725863AbgDWKcP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Apr 2020 06:32:15 -0400
-IronPort-SDR: XoMvfqoXksFUn2hasl/uqQQGlt+7qs015ZYwg0/ihw5Kx6hK7QVu3jaQMBwSHdXp5O5w30y+sT
- McyKaIJMdzGQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2020 03:32:15 -0700
-IronPort-SDR: Tbx4AP8Zju7uVt+bsFFBuorEKEDp+DufEyq0utUZQmn5wkfXhsC5SmipnzOBUDHfLSF+NGOyYH
- O/V5r9IH1k5g==
-X-IronPort-AV: E=Sophos;i="5.73,307,1583222400"; 
-   d="scan'208";a="247718369"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2020 03:32:10 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 158F7204C6; Thu, 23 Apr 2020 13:32:08 +0300 (EEST)
-Date:   Thu, 23 Apr 2020 13:32:08 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, x86@kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laura Abbott <labbott@redhat.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/29] staging: media: ipu3: use vmap instead of
- reimplementing it
-Message-ID: <20200423103207.GO5381@paasikivi.fi.intel.com>
-References: <20200414131348.444715-1-hch@lst.de>
- <20200414131348.444715-5-hch@lst.de>
+        id S1728017AbgDWLuP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Apr 2020 07:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727081AbgDWLuP (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 23 Apr 2020 07:50:15 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB81DC035494;
+        Thu, 23 Apr 2020 04:50:14 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id t11so4497254lfe.4;
+        Thu, 23 Apr 2020 04:50:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0myt66h+KuJjxp6VJJBImdgi/+DrnmI1vWbnrvx6uF4=;
+        b=dCQSm3f+PEwrnEUww5FJRA78dUepbt+uKSQgCnAfHxF+0xIsM4szquq+IjXS6UBZg5
+         PlQpdIjw8h+9OBx1D3c1D9aWz8UGX/Muwp1Hoh7BRmW9BpKs80ZD8FsCDv2LI+tLy0cb
+         cRYGtEvn/5/9X6uH1vU1G/PmcCGlQnJ0rq24qrdiHLgJF2d5YjK4lVR0EyBwK9u/T7An
+         ZhXU9KsSYTGc5Bhdd6KJP6Nncux4r0o+hmUKdC96wTE43Mhan4hC5aLjSjqrsVJV9s0S
+         coxAdaCARKmjLV83b9tw8hMzOLJfQSnsGCUGnaNQZ1U3J9CSoxDk0RnE2YhJU6Hi56VW
+         SqwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0myt66h+KuJjxp6VJJBImdgi/+DrnmI1vWbnrvx6uF4=;
+        b=BWxTNrX2Ll/C3Am6OEx+FR6UqOhqmB3BxClUGb/SyWni0EMWAnByLTq1xHXqbpS616
+         Uy+zE0GudWS73IKCACDdlk+NFsSdgdoV8FnQcRp8gN5x7AxybELGDU+dOxLFA3UMFlNq
+         7tLluJM31d6C1admoeubBCzSjWwEIBUFJYhPtuZHFVjoWMzz1RlPwvihDvtiqokytYh/
+         cYodhaQyhkWZ6E6DM7JzgAKV+xVDWUbU6l+kS/iRRQVxYBW7v40o1YsOKqsasHTZP0jP
+         LkyMex2m34OMSfy+cr8TlnGYBJelr0wpLYdpmryNezhp0Hz8jJWYduDrxMweKfToFF+L
+         FdXg==
+X-Gm-Message-State: AGi0PuZjxgVAv/OqH4qspafPUr7WfIbFejjQGNeiRdMsPD/pZhkx+vB1
+        0ucbRKaabV2yD21LGHbVlyEv3X2/Ge+l/VA0/tG6WA==
+X-Google-Smtp-Source: APiQypKZRn0ziiHFKI4kHuz8qP+crx/uaqkj2hKD1Sp7uDRG9p/ViyTblhjFD3/iLMGplyddPzqJIvHP5UWaYZY7DtI=
+X-Received: by 2002:a19:9109:: with SMTP id t9mr2271272lfd.10.1587642613050;
+ Thu, 23 Apr 2020 04:50:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200414131348.444715-5-hch@lst.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200423073929.127521-1-masahiroy@kernel.org> <20200423073929.127521-15-masahiroy@kernel.org>
+In-Reply-To: <20200423073929.127521-15-masahiroy@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 23 Apr 2020 13:50:02 +0200
+Message-ID: <CANiq72nUa8uoXtSThqq7t9oAmZnGSE9a1_d+ZoRAagpKDo4DRg@mail.gmail.com>
+Subject: Re: [PATCH 14/16] samples: auxdisplay: use 'userprogs' syntax
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        bpf@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 03:13:23PM +0200, Christoph Hellwig wrote:
-> Just use vmap instead of messing with vmalloc internals.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Hi Masahiro,
 
-Thanks!
+On Thu, Apr 23, 2020 at 9:41 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Kbuild now supports the 'userprogs' syntax to describe the build rules
+> of userspace programs for the target architecture (i.e. the same
+> architecture as the kernel).
+>
+> Add the entry to samples/Makefile to put this into the build bot
+> coverage.
+>
+> I also added the CONFIG option guarded by 'depends on CC_CAN_LINK'
+> because $(CC) may not necessarily provide libc.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Thanks for this! Looks nice. I guess you take all patches for the
+samples/ changes through your tree?
 
--- 
-Sakari Ailus
+Acked-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+
+Cheers,
+Miguel
