@@ -7,50 +7,52 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C01DC2BA19
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A7CEC2BA19
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:44:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 501BC21569
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:42:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E091820781
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:44:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587627772;
-	bh=dCfWx9IcV1rn6JkY7Cg5tKoCV7sIP3ZTz12hKT761zw=;
+	s=default; t=1587627878;
+	bh=RCj0gKu3XvIpSQCzLyiZJ8nln5p+yJ+rZXqi6Ggqjyc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=xfEGfcYuQaDaCoa/kRdJ+wjfrbztKPQin6krknPNoORemUOBydBtH2bkGlVkcbenS
-	 /Ds68swGj/p9ePGAPut9uYFgwEq1H9pCyYME0h+ARSqhhPp9b9pIUvVADQh1p91HEE
-	 GaAzYQAxRYMyCvD6n8KhDWznNTNnaMCfkEiH1r3c=
+	b=VJqztA7HC4yVa/Pao3yl8rXUNDr/EzzRqRUqR9SrZNcA0Y2E9kMpeqKyjI/pUMaEq
+	 ErOBJb94TVHXouE4tjtnqWM1z2Khn6fmW9zWUUDh9XnldyEX4H/QSN9O75nQ1RYJVM
+	 Vkbn7YGMhC8ji7cUFHAUjBPrFAUYC8TxDDg2VIhU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726806AbgDWHmw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Apr 2020 03:42:52 -0400
-Received: from condef-06.nifty.com ([202.248.20.71]:41939 "EHLO
-        condef-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726032AbgDWHmv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Apr 2020 03:42:51 -0400
-Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-06.nifty.com with ESMTP id 03N7eVoa021027
-        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 16:40:31 +0900
+        id S1726849AbgDWHoh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Apr 2020 03:44:37 -0400
+Received: from condef-07.nifty.com ([202.248.20.72]:21497 "EHLO
+        condef-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726271AbgDWHoh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Apr 2020 03:44:37 -0400
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-07.nifty.com with ESMTP id 03N7eoE2004502
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 16:40:50 +0900
 Received: from oscar.flets-west.jp (softbank126090202047.bbtec.net [126.90.202.47]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 03N7dV9V000368;
-        Thu, 23 Apr 2020 16:39:43 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 03N7dV9V000368
+        by conuserg-10.nifty.com with ESMTP id 03N7dV9M000368;
+        Thu, 23 Apr 2020 16:39:33 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 03N7dV9M000368
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1587627583;
-        bh=+ykdUqghvT+SxkLRSA1PptHJ5c/3PxPl83bqUUzuoq0=;
+        s=dec2015msa; t=1587627574;
+        bh=etjXsdFQORx4gLL7yHfpFDxgLm5eIEPJc35auHNsBS8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zzsEkYnnSUhsgkWWdxup+egmkkGXuChgkFvnbo28nh6movAmh0a19vX9RLudHudGN
-         RXhNPGbL9tmDct4ww3g70B1dbJd+NhnHTbazIsk83A0Bqjg5Ah8kiEdWqig4OiQuL5
-         pF+BipcYVCnn7fBNxEppBQB6f4xE6BRYip/cmVaR3TUOIra7CUklxCOpl/iS6cFN5A
-         /lpRBxwwnICmYOnVgha/8fki2DRIT2Cj9OffQvw6WavRfwo+LE7+sWHIwzyUNyN9Ih
-         t065FmDSqhVrxbFKPUf0hG/jSd1QcLgn7e3SR5aFP6ji5GvXH/48gzhfzdT7NbU/66
-         NdhihN6OBRUQg==
+        b=OdG1U0mvDU6Qg+Q8reUgMxjQsLczKGy3gDu4zS7XBoirXDmmxluhW75bZldtxGt7k
+         /syvDaNTqoK9lFdDISe7PNckoqZgaxz7VY+HZzXULU/lWOtp0o83sKPtIkRJqEf1et
+         /YgAye82oOT2JJeqVBoApqqB4JB7SleqV8rjo2QBl8xy5q3f2ht+J/vPYx7irwD1Xp
+         4wHrQTkcYKTN9P1Jcmj7eMWYpMs4kGuA3AVP26rMjAx1GLeAH8IvsMXN+7njpFEGLg
+         6zx4FM+MTczpSfBw9pJGfuVj7rreHECcgqYPk+8pM3CWPvdR285WM5uCZUWlF1CrYM
+         dWo7XwdI0iNIw==
 X-Nifty-SrcIP: [126.90.202.47]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     bpf@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 10/16] samples: connector: build sample program for target architecture
-Date:   Thu, 23 Apr 2020 16:39:23 +0900
-Message-Id: <20200423073929.127521-11-masahiroy@kernel.org>
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 01/16] Documentation: kbuild: fix the section title format
+Date:   Thu, 23 Apr 2020 16:39:14 +0900
+Message-Id: <20200423073929.127521-2-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200423073929.127521-1-masahiroy@kernel.org>
 References: <20200423073929.127521-1-masahiroy@kernel.org>
@@ -61,46 +63,28 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This userspace program includes UAPI headers exported to usr/include/.
-'make headers' always works for the target architecture (i.e. the same
-architecture as the kernel), so the sample program must be built for
-the target as well. Kbuild now supports the 'userprogs' syntax to
-describe it cleanly.
-
-$(CC) can always compile cn_text.o since it is the kenrel-space code,
-but building ucon requires libc.
-
-I guarded it by:
-
-  always-$(CONFIG_CC_CAN_LINK) := $(userprogs)
+Make it consistent with the other sections.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- samples/connector/Makefile | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ Documentation/kbuild/makefiles.rst | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/samples/connector/Makefile b/samples/connector/Makefile
-index b785cbde5ffa..7b5117e96fd0 100644
---- a/samples/connector/Makefile
-+++ b/samples/connector/Makefile
-@@ -1,13 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_SAMPLE_CONNECTOR) += cn_test.o
+diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
+index 04d5c01a2e99..b80257a03830 100644
+--- a/Documentation/kbuild/makefiles.rst
++++ b/Documentation/kbuild/makefiles.rst
+@@ -1241,7 +1241,8 @@ When kbuild executes, the following steps are followed (roughly):
+ 	will be displayed with "make KBUILD_VERBOSE=0".
  
--# List of programs to build
--hostprogs := ucon
--always-y := $(hostprogs)
-+userprogs := ucon
-+always-$(CONFIG_CC_CAN_LINK) := $(userprogs)
  
--HOSTCFLAGS_ucon.o += -I$(objtree)/usr/include
--
--all: modules
--
--modules clean:
--	$(MAKE) -C ../.. M=$(CURDIR) $@
-+user-ccflags += -I usr/include
+---- 6.9 Preprocessing linker scripts
++6.9 Preprocessing linker scripts
++--------------------------------
+ 
+ 	When the vmlinux image is built, the linker script
+ 	arch/$(ARCH)/kernel/vmlinux.lds is used.
 -- 
 2.25.1
 
