@@ -4,53 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B7A0C2BA19
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:53:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD06EC2BA19
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:53:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6744821569
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:53:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86C3320656
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 07:53:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587628394;
-	bh=GZvXPXsvlgytFszt3PLwFlNEypRX6C3ezBC1mCEnu88=;
+	s=default; t=1587628415;
+	bh=PyWVeFPMVi92BVlRHITfj6DAJSS4R4BXs7p+cnGs0Nc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=R/KzSiNmnWVoKlF8oRUiQhNxwpVbQo8CHXvDopwsje1qHAyEGrxlpQCXsRLeZhdZ4
-	 7BY6ofhjdFD829OLhOpqJgYQzMY+xuywqTXQcFwZK7jpaRymTyuppCo0/5BkeYRefU
-	 TALPzujbCslRD+FZipDwdpgLl44Xbu4+/pO9xx/4=
+	b=WDrsvwU+yEzdrg1VApLZU94x2KG32gJe2fu5WOcX/HMqrOlS4g/cCiVtgxSDeKbcN
+	 lhfKKHsDnLq9/Q0pjdjrf1JMxEXZ2spyJB51gYv8h6//IitbKFBexZ9btbuGrfLIZz
+	 Y4Qf9aWom7ywu4eyfhx7GtOC/686xfWyuDamv41k=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726070AbgDWHxO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Apr 2020 03:53:14 -0400
-Received: from condef-05.nifty.com ([202.248.20.70]:28337 "EHLO
-        condef-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725562AbgDWHxO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Apr 2020 03:53:14 -0400
-Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-05.nifty.com with ESMTP id 03N7eahl026905
-        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 16:40:36 +0900
+        id S1725913AbgDWHxf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Apr 2020 03:53:35 -0400
+Received: from condef-08.nifty.com ([202.248.20.73]:33203 "EHLO
+        condef-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725562AbgDWHxf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Apr 2020 03:53:35 -0400
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-08.nifty.com with ESMTP id 03N7feKo027091
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 16:41:40 +0900
 Received: from oscar.flets-west.jp (softbank126090202047.bbtec.net [126.90.202.47]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 03N7dV9T000368;
-        Thu, 23 Apr 2020 16:39:41 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 03N7dV9T000368
+        by conuserg-10.nifty.com with ESMTP id 03N7dV9R000368;
+        Thu, 23 Apr 2020 16:39:39 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 03N7dV9R000368
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1587627582;
-        bh=o9sBp4j0KqjJcbGaUiGsj+dJQnRhbxdTQjnG5XWSjQM=;
+        s=dec2015msa; t=1587627580;
+        bh=2uL21BIwaVwy5ZlKAP5x8RgRo+VUSnEZH7H0mEqmtro=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SvqVj8FDE575F/ryTgEiKX+nZWGnHNljoUL3kVlWrpvi591++s5VTcqS5QC7HxeZM
-         Que0i8ndSrFgwENSqr0IUw3ua5t3FLTbGDsJMnlVNza96GAdoqL0oixhagL6N6pjns
-         fhtHu1gjQ97jo9weF7sEgvVi81bBIHZG726tesgF8N33IzoDGzwyGNsgz6eymtqvmS
-         Ylolfeurn6JNG5lhE7ctrxhGRATP2XdkYU0oReEYWaTeGg8/JhKPU+zMoOEE8onNfo
-         /ly885V39uu74d1Z0p0oPo0roEJJ7zES6PRk6Qca/W6Rc/nkzUEiOig5g8jqBwwunx
-         irBA3rubBhGwQ==
+        b=hO1hmCLwP3+43OS/YL2BlKOMgoLKsvHErD+6fZ9YIH5ORyNtfojkuf9yzkE98gMLe
+         WUwSDtd+9JJsfOewpjuZ3oGGjUnhRlXqrSM9Vfz0Rlfr/0r9ds0RCioSwqpXp7auU4
+         GvrIJfBmbKZx/ED43ZC+Z3257cstL5ZtOaN+WIf22CLY4JdYEkGabC5VdOfVJcZo8f
+         9V7C2NgOWOqhAhxgGhZ0ncanBbCYde09PghhM4peHQqbOACHDTXQicQncLqmyawpx5
+         dn0Kl4hW2cWQpOctVKIeXd9nbpZ0gLpDoOmvEul29BIzyY6I0GNuQGfVS8jouPnnCE
+         Zu/BtPRYW2KUQ==
 X-Nifty-SrcIP: [126.90.202.47]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     bpf@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 08/16] samples: uhid: build sample program for target architecture
-Date:   Thu, 23 Apr 2020 16:39:21 +0900
-Message-Id: <20200423073929.127521-9-masahiroy@kernel.org>
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        KP Singh <kpsingh@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 06/16] kbuild: doc: document the new syntax 'userprogs'
+Date:   Thu, 23 Apr 2020 16:39:19 +0900
+Message-Id: <20200423073929.127521-7-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200423073929.127521-1-masahiroy@kernel.org>
 References: <20200423073929.127521-1-masahiroy@kernel.org>
@@ -61,81 +71,367 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This userspace program includes UAPI headers exported to usr/include/.
-'make headers' always works for the target architecture (i.e. the same
-architecture as the kernel), so the sample program must be built for
-the target as well. Kbuild now supports the 'userprogs' syntax to
-describe it cleanly.
+Kbuild now supports the syntax 'userprogs' to compile userspace
+programs for the same architecture as the kernel.
 
-Add the entry to samples/Makefile to put this into the build bot
-coverage.
+Insert the section '5 Userspace Program support' to explain it.
 
-I also added the CONFIG option guarded by 'depends on CC_CAN_LINK'
-because $(CC) may not necessarily provide libc.
+I copy-pasted '4 Host Program support' and fixed it up.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- samples/Kconfig         | 6 ++++++
- samples/Makefile        | 1 +
- samples/uhid/.gitignore | 2 ++
- samples/uhid/Makefile   | 9 +++------
- 4 files changed, 12 insertions(+), 6 deletions(-)
- create mode 100644 samples/uhid/.gitignore
+ Documentation/kbuild/makefiles.rst | 184 +++++++++++++++++++++--------
+ 1 file changed, 136 insertions(+), 48 deletions(-)
 
-diff --git a/samples/Kconfig b/samples/Kconfig
-index 8949e9646125..ff9126ef1c79 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -131,6 +131,12 @@ config SAMPLE_SECCOMP
- 	  Build samples of seccomp filters using various methods of
- 	  BPF filter construction.
+diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
+index b80257a03830..251e5431276e 100644
+--- a/Documentation/kbuild/makefiles.rst
++++ b/Documentation/kbuild/makefiles.rst
+@@ -29,31 +29,37 @@ This document describes the Linux kernel Makefiles.
+ 	   --- 4.4 Controlling compiler options for host programs
+ 	   --- 4.5 When host programs are actually built
  
-+config SAMPLE_UHID
-+	bool "Build UHID sample code"
-+	depends on CC_CAN_LINK && HEADERS_INSTALL
-+	help
-+	  Build UHID sample program.
-+
- config SAMPLE_VFIO_MDEV_MTTY
- 	tristate "Build VFIO mtty example mediated device sample code -- loadable modules only"
- 	depends on VFIO_MDEV_DEVICE && m
-diff --git a/samples/Makefile b/samples/Makefile
-index 5ce50ef0f2b2..bdc168405452 100644
---- a/samples/Makefile
-+++ b/samples/Makefile
-@@ -19,6 +19,7 @@ obj-$(CONFIG_SAMPLE_TRACE_EVENTS)	+= trace_events/
- obj-$(CONFIG_SAMPLE_TRACE_PRINTK)	+= trace_printk/
- obj-$(CONFIG_SAMPLE_FTRACE_DIRECT)	+= ftrace/
- obj-$(CONFIG_SAMPLE_TRACE_ARRAY)	+= ftrace/
-+subdir-$(CONFIG_SAMPLE_UHID)		+= uhid
- obj-$(CONFIG_VIDEO_PCI_SKELETON)	+= v4l/
- obj-y					+= vfio-mdev/
- subdir-$(CONFIG_SAMPLE_VFS)		+= vfs
-diff --git a/samples/uhid/.gitignore b/samples/uhid/.gitignore
-new file mode 100644
-index 000000000000..0e0a5a929f5d
---- /dev/null
-+++ b/samples/uhid/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+/uhid-example
-diff --git a/samples/uhid/Makefile b/samples/uhid/Makefile
-index 5f44ea40d6d5..1dc58c40298c 100644
---- a/samples/uhid/Makefile
-+++ b/samples/uhid/Makefile
-@@ -1,8 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
--# List of programs to build
--hostprogs := uhid-example
-+userprogs := uhid-example
-+always-y := $(userprogs)
- 
--# Tell kbuild to always build the programs
--always-y := $(hostprogs)
+-	=== 5 Kbuild clean infrastructure
 -
--HOSTCFLAGS_uhid-example.o += -I$(objtree)/usr/include
-+user-ccflags += -I usr/include
+-	=== 6 Architecture Makefiles
+-	   --- 6.1 Set variables to tweak the build to the architecture
+-	   --- 6.2 Add prerequisites to archheaders:
+-	   --- 6.3 Add prerequisites to archprepare:
+-	   --- 6.4 List directories to visit when descending
+-	   --- 6.5 Architecture-specific boot images
+-	   --- 6.6 Building non-kbuild targets
+-	   --- 6.7 Commands useful for building a boot image
+-	   --- 6.8 Custom kbuild commands
+-	   --- 6.9 Preprocessing linker scripts
+-	   --- 6.10 Generic header files
+-	   --- 6.11 Post-link pass
+-
+-	=== 7 Kbuild syntax for exported headers
+-		--- 7.1 no-export-headers
+-		--- 7.2 generic-y
+-		--- 7.3 generated-y
+-		--- 7.4 mandatory-y
+-
+-	=== 8 Kbuild Variables
+-	=== 9 Makefile language
+-	=== 10 Credits
+-	=== 11 TODO
++	=== 5 Userspace Program support
++	   --- 5.1 Simple Userspace Program
++	   --- 5.2 Composite Userspace Programs
++	   --- 5.3 Controlling compiler options for userspace programs
++	   --- 5.4 When userspace programs are actually built
++
++	=== 6 Kbuild clean infrastructure
++
++	=== 7 Architecture Makefiles
++	   --- 7.1 Set variables to tweak the build to the architecture
++	   --- 7.2 Add prerequisites to archheaders:
++	   --- 7.3 Add prerequisites to archprepare:
++	   --- 7.4 List directories to visit when descending
++	   --- 7.5 Architecture-specific boot images
++	   --- 7.6 Building non-kbuild targets
++	   --- 7.7 Commands useful for building a boot image
++	   --- 7.8 Custom kbuild commands
++	   --- 7.9 Preprocessing linker scripts
++	   --- 7.10 Generic header files
++	   --- 7.11 Post-link pass
++
++	=== 8 Kbuild syntax for exported headers
++		--- 8.1 no-export-headers
++		--- 8.2 generic-y
++		--- 8.3 generated-y
++		--- 8.4 mandatory-y
++
++	=== 9 Kbuild Variables
++	=== 10 Makefile language
++	=== 11 Credits
++	=== 12 TODO
+ 
+ 1 Overview
+ ==========
+@@ -732,7 +738,89 @@ Both possibilities are described in the following.
+ 	This will tell kbuild to build lxdialog even if not referenced in
+ 	any rule.
+ 
+-5 Kbuild clean infrastructure
++5 Userspace Program support
++===========================
++
++Just like host programs, Kbuild also supports building userspace executables
++for the target architecture (i.e. the same architecture as you are building
++the kernel for).
++
++The syntax is quite similar. The difference is to use "userprogs" instead of
++"hostprogs".
++
++5.1 Simple Userspace Program
++----------------------------
++
++	The following line tells kbuild that the program bpf-direct shall be
++	built for the target architecture.
++
++	Example::
++
++		userprogs := bpf-direct
++
++	Kbuild assumes in the above example that bpf-direct is made from a
++	single C source file named bpf-direct.c located in the same directory
++	as the Makefile.
++
++5.2 Composite Userspace Programs
++--------------------------------
++
++	Userspace programs can be made up based on composite objects.
++	The syntax used to define composite objects for userspace programs is
++	similar to the syntax used for kernel objects.
++	$(<executable>-objs) lists all objects used to link the final
++	executable.
++
++	Example::
++
++		#samples/seccomp/Makefile
++		userprogs      := bpf-fancy
++		bpf-fancy-objs := bpf-fancy.o bpf-helper.o
++
++	Objects with extension .o are compiled from the corresponding .c
++	files. In the above example, bpf-fancy.c is compiled to bpf-fancy.o
++	and bpf-helper.c is compiled to bpf-helper.o.
++
++	Finally, the two .o files are linked to the executable, bpf-fancy.
++	Note: The syntax <executable>-y is not permitted for userspace programs.
++
++5.3 Controlling compiler options for userspace programs
++-------------------------------------------------------
++
++	When compiling userspace programs, it is possible to set specific flags.
++	The programs will always be compiled utilising $(CC) passed
++	the options specified in $(KBUILD_USERCFLAGS).
++	To set flags that will take effect for all userspace programs created
++	in that Makefile, use the variable user-ccflags.
++
++	Example::
++
++		# samples/seccomp/Makefile
++		user-ccflags += -I usr/include
++
++	To set specific flags for a single file the following construction
++	is used:
++
++	Example::
++
++		bpf-helper-ccflags += -I user/include
++
++	It is also possible to specify additional options to the linker.
++
++	Example::
++
++		# net/bpfilter/Makefile
++		bpfilter_umh-ldflags += -static
++
++	When linking bpfilter_umh-ldflags, it will be passed the extra option
++	-static.
++
++5.4 When userspace programs are actually built
++----------------------------------------------
++
++	Same as "When host programs are actually built".
++
++6 Kbuild clean infrastructure
+ =============================
+ 
+ "make clean" deletes most generated files in the obj tree where the kernel
+@@ -790,7 +878,7 @@ is not operational at that point.
+ Note 2: All directories listed in core-y, libs-y, drivers-y and net-y will
+ be visited during "make clean".
+ 
+-6 Architecture Makefiles
++7 Architecture Makefiles
+ ========================
+ 
+ The top level Makefile sets up the environment and does the preparation,
+@@ -820,7 +908,7 @@ When kbuild executes, the following steps are followed (roughly):
+    - Preparing initrd images and the like
+ 
+ 
+-6.1 Set variables to tweak the build to the architecture
++7.1 Set variables to tweak the build to the architecture
+ --------------------------------------------------------
+ 
+     LDFLAGS
+@@ -967,7 +1055,7 @@ When kbuild executes, the following steps are followed (roughly):
+ 	KBUILD_VMLINUX_LIBS together specify all the object files used to
+ 	link vmlinux.
+ 
+-6.2 Add prerequisites to archheaders
++7.2 Add prerequisites to archheaders
+ ------------------------------------
+ 
+ 	The archheaders: rule is used to generate header files that
+@@ -977,7 +1065,7 @@ When kbuild executes, the following steps are followed (roughly):
+ 	architecture itself.
+ 
+ 
+-6.3 Add prerequisites to archprepare
++7.3 Add prerequisites to archprepare
+ ------------------------------------
+ 
+ 	The archprepare: rule is used to list prerequisites that need to be
+@@ -995,7 +1083,7 @@ When kbuild executes, the following steps are followed (roughly):
+ 	generating offset header files.
+ 
+ 
+-6.4 List directories to visit when descending
++7.4 List directories to visit when descending
+ ---------------------------------------------
+ 
+ 	An arch Makefile cooperates with the top Makefile to define variables
+@@ -1030,7 +1118,7 @@ When kbuild executes, the following steps are followed (roughly):
+ 		drivers-$(CONFIG_OPROFILE)  += arch/sparc64/oprofile/
+ 
+ 
+-6.5 Architecture-specific boot images
++7.5 Architecture-specific boot images
+ -------------------------------------
+ 
+ 	An arch Makefile specifies goals that take the vmlinux file, compress
+@@ -1085,7 +1173,7 @@ When kbuild executes, the following steps are followed (roughly):
+ 
+ 	When "make" is executed without arguments, bzImage will be built.
+ 
+-6.6 Building non-kbuild targets
++7.6 Building non-kbuild targets
+ -------------------------------
+ 
+     extra-y
+@@ -1108,7 +1196,7 @@ When kbuild executes, the following steps are followed (roughly):
+ 	In this example, extra-y is used to list object files that
+ 	shall be built, but shall not be linked as part of built-in.a.
+ 
+-6.7 Commands useful for building a boot image
++7.7 Commands useful for building a boot image
+ ---------------------------------------------
+ 
+     Kbuild provides a few macros that are useful when building a
+@@ -1211,7 +1299,7 @@ When kbuild executes, the following steps are followed (roughly):
+ 		targets += $(dtb-y)
+ 		DTC_FLAGS ?= -p 1024
+ 
+-6.8 Custom kbuild commands
++7.8 Custom kbuild commands
+ --------------------------
+ 
+ 	When kbuild is executing with KBUILD_VERBOSE=0, then only a shorthand
+@@ -1241,7 +1329,7 @@ When kbuild executes, the following steps are followed (roughly):
+ 	will be displayed with "make KBUILD_VERBOSE=0".
+ 
+ 
+-6.9 Preprocessing linker scripts
++7.9 Preprocessing linker scripts
+ --------------------------------
+ 
+ 	When the vmlinux image is built, the linker script
+@@ -1274,7 +1362,7 @@ When kbuild executes, the following steps are followed (roughly):
+ 	The kbuild infrastructure for `*lds` files is used in several
+ 	architecture-specific files.
+ 
+-6.10 Generic header files
++7.10 Generic header files
+ -------------------------
+ 
+ 	The directory include/asm-generic contains the header files
+@@ -1283,7 +1371,7 @@ When kbuild executes, the following steps are followed (roughly):
+ 	to list the file in the Kbuild file.
+ 	See "7.2 generic-y" for further info on syntax etc.
+ 
+-6.11 Post-link pass
++7.11 Post-link pass
+ -------------------
+ 
+ 	If the file arch/xxx/Makefile.postlink exists, this makefile
+@@ -1299,7 +1387,7 @@ When kbuild executes, the following steps are followed (roughly):
+ 	For example, powerpc uses this to check relocation sanity of
+ 	the linked vmlinux file.
+ 
+-7 Kbuild syntax for exported headers
++8 Kbuild syntax for exported headers
+ ------------------------------------
+ 
+ The kernel includes a set of headers that is exported to userspace.
+@@ -1319,14 +1407,14 @@ A Kbuild file may be defined under arch/<arch>/include/uapi/asm/ and
+ arch/<arch>/include/asm/ to list asm files coming from asm-generic.
+ See subsequent chapter for the syntax of the Kbuild file.
+ 
+-7.1 no-export-headers
++8.1 no-export-headers
+ ---------------------
+ 
+ 	no-export-headers is essentially used by include/uapi/linux/Kbuild to
+ 	avoid exporting specific headers (e.g. kvm.h) on architectures that do
+ 	not support it. It should be avoided as much as possible.
+ 
+-7.2 generic-y
++8.2 generic-y
+ -------------
+ 
+ 	If an architecture uses a verbatim copy of a header from
+@@ -1356,7 +1444,7 @@ See subsequent chapter for the syntax of the Kbuild file.
+ 
+ 			#include <asm-generic/termios.h>
+ 
+-7.3 generated-y
++8.3 generated-y
+ ---------------
+ 
+ 	If an architecture generates other header files alongside generic-y
+@@ -1370,7 +1458,7 @@ See subsequent chapter for the syntax of the Kbuild file.
+ 			#arch/x86/include/asm/Kbuild
+ 			generated-y += syscalls_32.h
+ 
+-7.4 mandatory-y
++8.4 mandatory-y
+ ---------------
+ 
+ 	mandatory-y is essentially used by include/(uapi/)asm-generic/Kbuild
+@@ -1380,7 +1468,7 @@ See subsequent chapter for the syntax of the Kbuild file.
+ 	in arch/$(ARCH)/include/(uapi/)/asm, Kbuild will automatically generate
+ 	a wrapper of the asm-generic one.
+ 
+-8 Kbuild Variables
++9 Kbuild Variables
+ ==================
+ 
+ The top Makefile exports the following variables:
+@@ -1438,8 +1526,8 @@ The top Makefile exports the following variables:
+ 	command.
+ 
+ 
+-9 Makefile language
+-===================
++10 Makefile language
++====================
+ 
+ The kernel Makefiles are designed to be run with GNU Make.  The Makefiles
+ use only the documented features of GNU Make, but they do use many
+@@ -1458,7 +1546,7 @@ time the left-hand side is used.
+ There are some cases where "=" is appropriate.  Usually, though, ":="
+ is the right choice.
+ 
+-10 Credits
++11 Credits
+ ==========
+ 
+ - Original version made by Michael Elizabeth Chastain, <mailto:mec@shout.net>
+@@ -1466,7 +1554,7 @@ is the right choice.
+ - Updates by Sam Ravnborg <sam@ravnborg.org>
+ - Language QA by Jan Engelhardt <jengelh@gmx.de>
+ 
+-11 TODO
++12 TODO
+ =======
+ 
+ - Describe how kbuild supports shipped files with _shipped.
 -- 
 2.25.1
 
