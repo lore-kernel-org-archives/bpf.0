@@ -8,64 +8,64 @@ X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80FBCC54FD0
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 05:18:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B743C2BA19
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 05:18:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E0E72087E
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 05:18:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 557DF2074F
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 05:18:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZnsO8fVk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lLzF5Kkb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726454AbgDWFSN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Apr 2020 01:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42558 "EHLO
+        id S1726703AbgDWFSK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Apr 2020 01:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725867AbgDWFSM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 Apr 2020 01:18:12 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928EEC03C1AB;
-        Wed, 22 Apr 2020 22:18:11 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id o15so2334590pgi.1;
-        Wed, 22 Apr 2020 22:18:11 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726691AbgDWFSJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 23 Apr 2020 01:18:09 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336DCC03C1AB;
+        Wed, 22 Apr 2020 22:18:09 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id mq3so1952089pjb.1;
+        Wed, 22 Apr 2020 22:18:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:mail-followup-to:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qCBsa1pJlvt7zkIr/3FJFH5RgTV4mszszMc7Yftm9j8=;
-        b=ZnsO8fVk0++VtXCgCcGrNVzqJZq0AoklIMWuOpbYiwXhATkktI9CbfqB4yRA0SItP7
-         azBW1r6Jb5iyoAiziDIDLIuEYdQ4M97hJ/Sf/rfI92FjaZZ2S/q9tzL2QhP2j7J2egpf
-         CbxWrli3xBhkp6H20ZA2qRN7J2jVYTeh4GVyoJ11H2yCZtvohehqoD1QwPvpFLH7Ka4J
-         oqowfGJg4MNNxmHVCxWKhClqlf4InXXnWLzk4c3jbHm0H4RQyGW1999uONr1HVCP9F1M
-         bnjQ02lVGrC2IUMkYYiiJebH93C7ygcXHo1kP3G/fFgNFcLyRgVNSB52JQ5Qq2oxpqX7
-         4hxw==
+        bh=X/bdaJ5V5H1KJbsw0eGlJwkvK434Nt04DtUI1ZecYLM=;
+        b=lLzF5KkbfSTw9RNjqMYjexHclyBEVb2kpqk3pAlhJfOhkGFuL8B9H0LP+BdPU1z75z
+         2d10ysdqeCrSYXQKDVBciRh2uJyOchU8KwXL7eJkBaYqtnYeosCUnIXRPflLWCuTcJM5
+         rbsUTg6binJc1RpZtwfe04db8Cpsw9Yqdw5f1zB36AqxPeai14pwF+GHBO9dJcXODF0z
+         t+2jvOpVF0swL2AUFoET/5H/EvlrkSFyseYJPhehGf2PTUq0PkdlYyLmjlfausxf865x
+         UmuRMK90lsp7cuhIsBDZdcOMMSL4JUDjbeFoONMI0mcHlZ0RxvTDw1KBLQ8+sLCWrfdn
+         9JjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id
          :mail-followup-to:references:mime-version:content-disposition
          :in-reply-to:user-agent;
-        bh=qCBsa1pJlvt7zkIr/3FJFH5RgTV4mszszMc7Yftm9j8=;
-        b=QF4pwUbLkNhVu+vKs2wqZr9JmqCAYpvfgzViUj5yNNONJtIDaTdP6WaHhgwy7Ixn+X
-         T0vPLa5D4Wwz79atWE/WIgvLld4SYjgXTBYlh2h3TLFZteianxkF6DDGejYs5jg7ACSX
-         qTXj2k+nQ5kLEDlFIDL3tstwpLLFZzLGZZVi2PJsPeIQyA1Jk8Ax21kHOGW4/kXwpmpJ
-         WNCHuQmbrK2foG7R2JFD/oX+onGlQEJ4WIdSwOxop1QeFG80lpjCOR4J9b3L6Rg82D6S
-         q4/cQ2twMP5UMclUbatr6uPnlpyjzaCOmYqs/7n1BJFmYFfA2S4thrzSCd375z0lV+Vv
-         ntKQ==
-X-Gm-Message-State: AGi0Pub1qdT7OAE3l/dwKVH47lXSALGTqpS/ZdVg8nTzSzK+wW5VMbHc
-        UusTehVnzXPCeU0K0KkEbv8=
-X-Google-Smtp-Source: APiQypLKYZo7sa83+KriCNF74gBjCVlbbw0qbHAGVoV3iMxICiijUV8rmcy6yRTFdCDjoeefv36pdQ==
-X-Received: by 2002:a63:2166:: with SMTP id s38mr2306743pgm.369.1587619091150;
-        Wed, 22 Apr 2020 22:18:11 -0700 (PDT)
+        bh=X/bdaJ5V5H1KJbsw0eGlJwkvK434Nt04DtUI1ZecYLM=;
+        b=W/CPWGinDKkRj8u6ZTGjaMzBYctu9EXAkB+Jtumt5TAYqEmKXq4Z9az54Q7kp85Uey
+         vyWJl1tytDK8j2S8xuBtzdXa3uMyWzvO99js/VKZV9I67z78Ue3pgL0qfudKcCQSZbFl
+         8DUtl8SiTvYDqOJekRd6okbIw5mW+M+lnRrQZiDwU5mYCxsRg5Cw/HHC21FCEbAUMilL
+         6b+YT4ZQy2vKjBl2Cq4cQJcRuZZpRsVW2IAQqi0KklpAqSFJ6uKTgn4SBTl9eBKN8eSe
+         IGGVW71p7qAIlL7wYfSQhoy45wbeZehlHqyG1OSmo5GkFi6J5IBRZ1cLW6iQpA2gAUvp
+         wd6Q==
+X-Gm-Message-State: AGi0PuY+YEVdsKugEOAHikf+n2HMgQJGl+y113NH6PofcXcFiy5Wcj6P
+        SHBhmw7UTJOmDBWo+04jDWY=
+X-Google-Smtp-Source: APiQypJLLbaBcyZazQopL3aDYB6VLEH3ua/ifLN3oi85y/63+awgT+NPWSeukqaJAAkn1CF8R2cXOw==
+X-Received: by 2002:a17:90a:de8d:: with SMTP id n13mr2283164pjv.173.1587619088742;
+        Wed, 22 Apr 2020 22:18:08 -0700 (PDT)
 Received: from udknight.localhost ([183.250.89.86])
-        by smtp.gmail.com with ESMTPSA id k10sm1300719pfa.163.2020.04.22.22.18.09
+        by smtp.gmail.com with ESMTPSA id k10sm1300719pfa.163.2020.04.22.22.18.06
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 Apr 2020 22:18:10 -0700 (PDT)
+        Wed, 22 Apr 2020 22:18:07 -0700 (PDT)
 Received: from udknight.localhost (localhost [127.0.0.1])
-        by udknight.localhost (8.14.9/8.14.4) with ESMTP id 03N4AMGY001222;
-        Thu, 23 Apr 2020 12:10:22 +0800
+        by udknight.localhost (8.14.9/8.14.4) with ESMTP id 03N4rwl5003504;
+        Thu, 23 Apr 2020 12:53:58 +0800
 Received: (from root@localhost)
-        by udknight.localhost (8.14.9/8.14.9/Submit) id 03N4AGAg001218;
-        Thu, 23 Apr 2020 12:10:16 +0800
-Date:   Thu, 23 Apr 2020 12:10:16 +0800
+        by udknight.localhost (8.14.9/8.14.9/Submit) id 03N4rvmP003503;
+        Thu, 23 Apr 2020 12:53:57 +0800
+Date:   Thu, 23 Apr 2020 12:53:56 +0800
 From:   Wang YanQing <udknight@gmail.com>
 To:     Luke Nelson <lukenels@cs.washington.edu>
 Cc:     bpf@vger.kernel.org, Brian Gerst <brgerst@gmail.com>,
@@ -85,9 +85,9 @@ Cc:     bpf@vger.kernel.org, Brian Gerst <brgerst@gmail.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf v2 2/2] bpf, x86_32: Fix clobbering of dst for
- BPF_JSET
-Message-ID: <20200423041016.GA1153@udknight>
+Subject: Re: [PATCH bpf v2 1/2] bpf, x86_32: Fix incorrect encoding in
+ BPF_LDX zero-extension
+Message-ID: <20200423045356.GB1153@udknight>
 Mail-Followup-To: Wang YanQing <udknight@gmail.com>,
         Luke Nelson <lukenels@cs.washington.edu>, bpf@vger.kernel.org,
         Brian Gerst <brgerst@gmail.com>,
@@ -106,30 +106,36 @@ Mail-Followup-To: Wang YanQing <udknight@gmail.com>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20200422173630.8351-1-luke.r.nels@gmail.com>
- <20200422173630.8351-2-luke.r.nels@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200422173630.8351-2-luke.r.nels@gmail.com>
+In-Reply-To: <20200422173630.8351-1-luke.r.nels@gmail.com>
 User-Agent: Mutt/1.7.1 (2016-10-04)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 22, 2020 at 10:36:30AM -0700, Luke Nelson wrote:
-> The current JIT clobbers the destination register for BPF_JSET BPF_X
-> and BPF_K by using "and" and "or" instructions. This is fine when the
-> destination register is a temporary loaded from a register stored on
-> the stack but not otherwise.
+On Wed, Apr 22, 2020 at 10:36:29AM -0700, Luke Nelson wrote:
+> The current JIT uses the following sequence to zero-extend into the
+> upper 32 bits of the destination register for BPF_LDX BPF_{B,H,W},
+> when the destination register is not on the stack:
 > 
-> This patch fixes the problem (for both BPF_K and BPF_X) by always loading
-> the destination register into temporaries since BPF_JSET should not
-> modify the destination register.
+>   EMIT3(0xC7, add_1reg(0xC0, dst_hi), 0);
+> 
+> The problem is that C7 /0 encodes a MOV instruction that requires a 4-byte
+> immediate; the current code emits only 1 byte of the immediate. This
+> means that the first 3 bytes of the next instruction will be treated as
+> the rest of the immediate, breaking the stream of instructions.
+> 
+> This patch fixes the problem by instead emitting "xor dst_hi,dst_hi"
+> to clear the upper 32 bits. This fixes the problem and is more efficient
+> than using MOV to load a zero immediate.
 > 
 > This bug may not be currently triggerable as BPF_REG_AX is the only
 > register not stored on the stack and the verifier uses it in a limited
-> way.
+> way, and the verifier implements a zero-extension optimization. But the
+> JIT should avoid emitting incorrect encodings regardless.
 > 
 > Fixes: 03f5781be2c7b ("bpf, x86_32: add eBPF JIT compiler for ia32")
 > Signed-off-by: Xi Wang <xi.wang@gmail.com>
