@@ -2,28 +2,29 @@ Return-Path: <SRS0=ey3N=6H=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C429C54FD0
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 03:31:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA92CC2BA19
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 03:31:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 379B92075A
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 03:31:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D3F0D2075A
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 03:31:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726643AbgDWDbw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Apr 2020 23:31:52 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:37984 "EHLO huawei.com"
+        id S1726581AbgDWDb4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Apr 2020 23:31:56 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:40018 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726581AbgDWDbw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Apr 2020 23:31:52 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 34F44B96E9C6D696D198;
-        Thu, 23 Apr 2020 11:31:49 +0800 (CST)
+        id S1726448AbgDWDb4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Apr 2020 23:31:56 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 3344C51D76AC73D432C4;
+        Thu, 23 Apr 2020 11:31:54 +0800 (CST)
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 23 Apr 2020 11:31:47 +0800
+ 14.3.487.0; Thu, 23 Apr 2020 11:31:49 +0800
 From:   Mao Wenan <maowenan@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>, <kafai@fb.com>,
         <songliubraving@fb.com>, <yhs@fb.com>, <andriin@fb.com>,
@@ -31,12 +32,13 @@ To:     <ast@kernel.org>, <daniel@iogearbox.net>, <kafai@fb.com>,
 CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
         <kernel-janitors@vger.kernel.org>, <dan.carpenter@oracle.com>,
         <andrii.nakryiko@gmail.com>
-Subject: [PATCH bpf-next v2 0/2] Change return code if failed to load object
-Date:   Thu, 23 Apr 2020 11:33:12 +0800
-Message-ID: <20200423033314.49205-1-maowenan@huawei.com>
+Subject: [PATCH bpf-next v2 2/2] libbpf: Return err if bpf_object__load failed
+Date:   Thu, 23 Apr 2020 11:33:14 +0800
+Message-ID: <20200423033314.49205-3-maowenan@huawei.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200422093329.GI2659@kadam>
+In-Reply-To: <20200423033314.49205-1-maowenan@huawei.com>
 References: <20200422093329.GI2659@kadam>
+ <20200423033314.49205-1-maowenan@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -47,19 +49,28 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The first patch change return code from -EINVAL to -EOPNOTSUPP,
-the second patch quote the err value returned by bpf_object__load().
+bpf_object__load() has various return code, when it failed to load
+object, it must return err instead of -EINVAL.
 
-v2: Adjust line breaks at 72 characters for commit log, and pr_warn alignment as suggested by dan carpenter. For second patch, add Acked-by tag as well.
-
-Mao Wenan (2):
-  bpf: Change error code when ops is NULL
-  libbpf: Return err if bpf_object__load failed
-
- kernel/bpf/syscall.c   | 7 ++++---
+Signed-off-by: Mao Wenan <maowenan@huawei.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+---
  tools/lib/bpf/libbpf.c | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8f480e29a6b0..8e1dc6980fac 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -7006,7 +7006,7 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
+ 	err = bpf_object__load(obj);
+ 	if (err) {
+ 		bpf_object__close(obj);
+-		return -EINVAL;
++		return err;
+ 	}
+ 
+ 	*pobj = obj;
 -- 
 2.20.1
 
