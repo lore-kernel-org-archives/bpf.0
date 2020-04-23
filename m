@@ -2,112 +2,136 @@ Return-Path: <SRS0=ey3N=6H=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62B3AC2BA19
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 05:18:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80FBCC54FD0
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 05:18:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3A3A32074F
-	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 05:18:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E0E72087E
+	for <bpf@archiver.kernel.org>; Thu, 23 Apr 2020 05:18:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H5EWF0lY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZnsO8fVk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726002AbgDWFSH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Apr 2020 01:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
+        id S1726454AbgDWFSN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Apr 2020 01:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725562AbgDWFSG (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 Apr 2020 01:18:06 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8992BC03C1AB;
-        Wed, 22 Apr 2020 22:18:06 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id r14so2371548pfg.2;
-        Wed, 22 Apr 2020 22:18:06 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1725867AbgDWFSM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 23 Apr 2020 01:18:12 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928EEC03C1AB;
+        Wed, 22 Apr 2020 22:18:11 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id o15so2334590pgi.1;
+        Wed, 22 Apr 2020 22:18:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:mime-version
-         :content-disposition:user-agent;
-        bh=l8LWkxvey9Hd79SGqrSqUJiOWTNMAJRbACX2qSq2ln4=;
-        b=H5EWF0lYUrxxpaKuojPYYefKw8mE/5+f8ios6XJ+oAFyJBdxwEXDXfWUbYl4CI+rXb
-         NJdax4IcjJo9P2sfaDXtP6xg2bKG5+AaoiQ3gFRDMaRLPN0VGf5iTu1A9Zj9P9NZ79bE
-         Xaxa2DoKhfEtcoVUPXbGUIFAfbJfblXZSXJEsNbc8p+YyL4qMUNtbH5F32Ricoh3fWhT
-         RVbtDyVLavSSwFSEHj1iUX68ZpvHiTl35I/34mOMD5vE35DPNwTSVUiDcP7t4kKcViAt
-         l5WQFiu9ep2uZtwcIWNmOBB3HUzxxW9O8k+Tzc1/sYlbVuT57Qw0ol4VZmYg1pDKKyks
-         +Tbw==
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qCBsa1pJlvt7zkIr/3FJFH5RgTV4mszszMc7Yftm9j8=;
+        b=ZnsO8fVk0++VtXCgCcGrNVzqJZq0AoklIMWuOpbYiwXhATkktI9CbfqB4yRA0SItP7
+         azBW1r6Jb5iyoAiziDIDLIuEYdQ4M97hJ/Sf/rfI92FjaZZ2S/q9tzL2QhP2j7J2egpf
+         CbxWrli3xBhkp6H20ZA2qRN7J2jVYTeh4GVyoJ11H2yCZtvohehqoD1QwPvpFLH7Ka4J
+         oqowfGJg4MNNxmHVCxWKhClqlf4InXXnWLzk4c3jbHm0H4RQyGW1999uONr1HVCP9F1M
+         bnjQ02lVGrC2IUMkYYiiJebH93C7ygcXHo1kP3G/fFgNFcLyRgVNSB52JQ5Qq2oxpqX7
+         4hxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:mime-version:content-disposition:user-agent;
-        bh=l8LWkxvey9Hd79SGqrSqUJiOWTNMAJRbACX2qSq2ln4=;
-        b=hMASv2vCp7tCJSopBuND2bDYv97FnodBH/dnw0YUkEjykhgL0nvcLfMIdBpfOEMujm
-         K21/Kj3x2Ll4iosgElfPiiAb0s1UOGFoAsdc8IKDjBYc1WDwkX31/BqKBpn2YbOse0at
-         hKNHygoXg+idM1yrDTlVCqvlmwuB/KjT0D5XQMPOV2oV2fxZDY1HMfEJUQBi0wk7Yw4Y
-         uZ7qv1sUyIX8ZrbwY6zkAnV/b88u2CzJWLcAD4Lzh/3XA80+alnzkbsBRLUt/3bNPad2
-         SzgMnCcS2vd2Kf753N7mQF6045oHXM78todkrQPnYsd76eFKIq8c/Q9hmQla0K8UgDuv
-         dBjg==
-X-Gm-Message-State: AGi0PuY13n4uP7qod/yRD45elnKLIrTUEJxrT1zz7h+KJ/dyCUFqdu3p
-        xex+FWIX6erCumh96ByWFmHnq2m6
-X-Google-Smtp-Source: APiQypJfZ5VCVKkn5GQPwGkKVeCYzBIgX76ZJWzKuUz+EalyeEVAuHevhKjsSi9VKBO1o/awjueKww==
-X-Received: by 2002:a62:4e88:: with SMTP id c130mr2191578pfb.122.1587619086049;
-        Wed, 22 Apr 2020 22:18:06 -0700 (PDT)
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=qCBsa1pJlvt7zkIr/3FJFH5RgTV4mszszMc7Yftm9j8=;
+        b=QF4pwUbLkNhVu+vKs2wqZr9JmqCAYpvfgzViUj5yNNONJtIDaTdP6WaHhgwy7Ixn+X
+         T0vPLa5D4Wwz79atWE/WIgvLld4SYjgXTBYlh2h3TLFZteianxkF6DDGejYs5jg7ACSX
+         qTXj2k+nQ5kLEDlFIDL3tstwpLLFZzLGZZVi2PJsPeIQyA1Jk8Ax21kHOGW4/kXwpmpJ
+         WNCHuQmbrK2foG7R2JFD/oX+onGlQEJ4WIdSwOxop1QeFG80lpjCOR4J9b3L6Rg82D6S
+         q4/cQ2twMP5UMclUbatr6uPnlpyjzaCOmYqs/7n1BJFmYFfA2S4thrzSCd375z0lV+Vv
+         ntKQ==
+X-Gm-Message-State: AGi0Pub1qdT7OAE3l/dwKVH47lXSALGTqpS/ZdVg8nTzSzK+wW5VMbHc
+        UusTehVnzXPCeU0K0KkEbv8=
+X-Google-Smtp-Source: APiQypLKYZo7sa83+KriCNF74gBjCVlbbw0qbHAGVoV3iMxICiijUV8rmcy6yRTFdCDjoeefv36pdQ==
+X-Received: by 2002:a63:2166:: with SMTP id s38mr2306743pgm.369.1587619091150;
+        Wed, 22 Apr 2020 22:18:11 -0700 (PDT)
 Received: from udknight.localhost ([183.250.89.86])
-        by smtp.gmail.com with ESMTPSA id k10sm1300719pfa.163.2020.04.22.22.18.04
+        by smtp.gmail.com with ESMTPSA id k10sm1300719pfa.163.2020.04.22.22.18.09
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 Apr 2020 22:18:05 -0700 (PDT)
+        Wed, 22 Apr 2020 22:18:10 -0700 (PDT)
 Received: from udknight.localhost (localhost [127.0.0.1])
-        by udknight.localhost (8.14.9/8.14.4) with ESMTP id 03N56cTC004174;
-        Thu, 23 Apr 2020 13:06:38 +0800
+        by udknight.localhost (8.14.9/8.14.4) with ESMTP id 03N4AMGY001222;
+        Thu, 23 Apr 2020 12:10:22 +0800
 Received: (from root@localhost)
-        by udknight.localhost (8.14.9/8.14.9/Submit) id 03N56bZS004173;
-        Thu, 23 Apr 2020 13:06:37 +0800
-Date:   Thu, 23 Apr 2020 13:06:37 +0800
+        by udknight.localhost (8.14.9/8.14.9/Submit) id 03N4AGAg001218;
+        Thu, 23 Apr 2020 12:10:16 +0800
+Date:   Thu, 23 Apr 2020 12:10:16 +0800
 From:   Wang YanQing <udknight@gmail.com>
-To:     daniel@iogearbox.net
-Cc:     ast@kernel.org, davem@davemloft.net, jiong.wang@netronome.com,
-        kuznet@ms2.inr.ac.ru, tglx@linutronix.de, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] bpf, x86_32: Fix logic error in BPF_LDX zero-extension
-Message-ID: <20200423050637.GA4029@udknight>
-Mail-Followup-To: Wang YanQing <udknight@gmail.com>, daniel@iogearbox.net,
-        ast@kernel.org, davem@davemloft.net, jiong.wang@netronome.com,
-        kuznet@ms2.inr.ac.ru, tglx@linutronix.de, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Luke Nelson <lukenels@cs.washington.edu>
+Cc:     bpf@vger.kernel.org, Brian Gerst <brgerst@gmail.com>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf v2 2/2] bpf, x86_32: Fix clobbering of dst for
+ BPF_JSET
+Message-ID: <20200423041016.GA1153@udknight>
+Mail-Followup-To: Wang YanQing <udknight@gmail.com>,
+        Luke Nelson <lukenels@cs.washington.edu>, bpf@vger.kernel.org,
+        Brian Gerst <brgerst@gmail.com>,
+        Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200422173630.8351-1-luke.r.nels@gmail.com>
+ <20200422173630.8351-2-luke.r.nels@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20200422173630.8351-2-luke.r.nels@gmail.com>
 User-Agent: Mutt/1.7.1 (2016-10-04)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When verifier_zext is true, we don't need to emit code
-for zero-extension.
-
-Fixes: 836256bf ("x32: bpf: eliminate zero extension code-gen")
-
-Signed-off-by: Wang YanQing <udknight@gmail.com>
----
- arch/x86/net/bpf_jit_comp32.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-index 4d2a7a764602..ed34dd16ebc5 100644
---- a/arch/x86/net/bpf_jit_comp32.c
-+++ b/arch/x86/net/bpf_jit_comp32.c
-@@ -1847,7 +1847,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 			case BPF_B:
- 			case BPF_H:
- 			case BPF_W:
--				if (!bpf_prog->aux->verifier_zext)
-+				if (bpf_prog->aux->verifier_zext)
- 					break;
- 				if (dstk) {
- 					EMIT3(0xC7, add_1reg(0x40, IA32_EBP),
--- 
-2.17.1
-
+On Wed, Apr 22, 2020 at 10:36:30AM -0700, Luke Nelson wrote:
+> The current JIT clobbers the destination register for BPF_JSET BPF_X
+> and BPF_K by using "and" and "or" instructions. This is fine when the
+> destination register is a temporary loaded from a register stored on
+> the stack but not otherwise.
+> 
+> This patch fixes the problem (for both BPF_K and BPF_X) by always loading
+> the destination register into temporaries since BPF_JSET should not
+> modify the destination register.
+> 
+> This bug may not be currently triggerable as BPF_REG_AX is the only
+> register not stored on the stack and the verifier uses it in a limited
+> way.
+> 
+> Fixes: 03f5781be2c7b ("bpf, x86_32: add eBPF JIT compiler for ia32")
+> Signed-off-by: Xi Wang <xi.wang@gmail.com>
+> Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
+Acked-by: Wang YanQing <udknight@gmail.com>
