@@ -2,44 +2,45 @@ Return-Path: <SRS0=ACkJ=6I=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79D1AC2BA1A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B567EC5518A
 	for <bpf@archiver.kernel.org>; Fri, 24 Apr 2020 06:18:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5740820700
+	by mail.kernel.org (Postfix) with ESMTP id 978E220700
 	for <bpf@archiver.kernel.org>; Fri, 24 Apr 2020 06:18:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="krMzX67u"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LH8lp5U6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbgDXGSQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Apr 2020 02:18:16 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:42454 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726522AbgDXGSI (ORCPT
+        id S1726522AbgDXGSR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Apr 2020 02:18:17 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:48200 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726515AbgDXGSI (ORCPT
         <rfc822;bpf@vger.kernel.org>); Fri, 24 Apr 2020 02:18:08 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 03O6HOkP022773
-        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 23:18:07 -0700
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03O6ECFE025311
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 23:18:08 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=VyYdBfiwCX0VPO/zOgcEcfabNB0ZdFdwwcbM8FN/USI=;
- b=krMzX67uXFUDBCd0h59EFlcblp72ubJSfz4AC2lL0nACQuUnA22vXyb4bT9a2JtQtLAG
- II8vl0LwB7K+5gg7g8fTov1fcwOU+kMsrlzawk0XBEAK/dRveVyLqOoRd21vnz5S0RHt
- Yh7azJhtxrOjTFTGlSHuxmc70GaR6/jIPrY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 30k6gcq967-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=TUKBWJf/jG9LPRV1hQjqfOa4hgECIEQI5aegDKaPdu4=;
+ b=LH8lp5U6kZZGXH9ENuJg5tTswA7/zhdG57ix2a+PczMX5u9x7hCr+gNfojuSqYKxSsk6
+ 37+TDJnbLVh6Hw/Vx/6V7rtQ34GCHWcT1rQvKeKVcxsc8/L2dqJUeuNa2YHLdWt380/c
+ h1AWhPUsB3nWEQKM3peQHfLuH0yIvPP67xc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 30jwf0ss1b-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 23:18:07 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 23:18:08 -0700
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1847.3; Thu, 23 Apr 2020 23:18:06 -0700
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id BFF9062E4C20; Thu, 23 Apr 2020 23:17:58 -0700 (PDT)
+        id A6E0A62E4C20; Thu, 23 Apr 2020 23:18:02 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -47,10 +48,12 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 0/3] bpf: sharing bpf runtime stats with
-Date:   Thu, 23 Apr 2020 23:17:52 -0700
-Message-ID: <20200424061755.436559-1-songliubraving@fb.com>
+Subject: [PATCH v4 bpf-next 2/3] libbpf: add support for command BPF_ENABLE_STATS
+Date:   Thu, 23 Apr 2020 23:17:54 -0700
+Message-ID: <20200424061755.436559-3-songliubraving@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200424061755.436559-1-songliubraving@fb.com>
+References: <20200424061755.436559-1-songliubraving@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
@@ -58,55 +61,71 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-24_01:2020-04-23,2020-04-24 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- spamscore=0 phishscore=0 clxscore=1015 suspectscore=8 impostorscore=0
- mlxscore=0 bulkscore=0 adultscore=0 malwarescore=0 mlxlogscore=982
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004240047
+ bulkscore=0 spamscore=0 clxscore=1015 adultscore=0 phishscore=0
+ mlxlogscore=838 malwarescore=0 lowpriorityscore=0 mlxscore=0
+ impostorscore=0 suspectscore=8 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2004240047
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-run_time_ns is a useful stats for BPF programs. However, it is gated by
-sysctl kernel.bpf_stats_enabled. When multiple user space tools are
-toggling kernl.bpf_stats_enabled at the same time, they may confuse each
-other.
+bpf_enable_stats() is added to enable given stats.
 
-Solve this problem with a new BPF command BPF_ENABLE_STATS.
+Signed-off-by: Song Liu <songliubraving@fb.com>
+---
+ tools/lib/bpf/bpf.c      | 9 +++++++++
+ tools/lib/bpf/bpf.h      | 1 +
+ tools/lib/bpf/libbpf.map | 5 +++++
+ 3 files changed, 15 insertions(+)
 
-Changes v3 =3D> v4:
-  1. Add libbpf support and selftest;
-  2. Avoid cleaning trailing space.
-
-Changes v2 =3D> v3:
-  1. Rename the command to BPF_ENABLE_STATS, and make it extendible.
-  2. fix commit log;
-  3. remove unnecessary headers.
-
-Changes RFC =3D> v2:
-  1. Add a new bpf command instead of /dev/bpf_stats;
-  2. Remove the jump_label patch, which is no longer needed;
-  3. Add a static variable to save previous value of the sysctl.
-
-Song Liu (3):
-  bpf: sharing bpf runtime stats with BPF_ENABLE_STATS
-  libbpf: add support for command BPF_ENABLE_STATS
-  bpf: add selftest for BPF_ENABLE_STATS
-
- include/linux/bpf.h                           |  1 +
- include/uapi/linux/bpf.h                      | 11 ++++
- kernel/bpf/syscall.c                          | 50 +++++++++++++++++++
- kernel/sysctl.c                               | 36 ++++++++++++-
- tools/include/uapi/linux/bpf.h                | 11 ++++
- tools/lib/bpf/bpf.c                           |  9 ++++
- tools/lib/bpf/bpf.h                           |  1 +
- tools/lib/bpf/libbpf.map                      |  5 ++
- .../selftests/bpf/prog_tests/enable_stats.c   | 45 +++++++++++++++++
- .../selftests/bpf/progs/test_enable_stats.c   | 28 +++++++++++
- 10 files changed, 196 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/enable_stats.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_enable_stats.c
-
---
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 5cc1b0785d18..c06c25293ab7 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -826,3 +826,12 @@ int bpf_task_fd_query(int pid, int fd, __u32 flags, =
+char *buf, __u32 *buf_len,
+=20
+ 	return err;
+ }
++
++int bpf_enable_stats(enum bpf_stats_type type)
++{
++	union bpf_attr attr =3D {};
++
++	attr.enable_stats.type =3D type;
++
++	return sys_bpf(BPF_ENABLE_STATS, &attr, sizeof(attr));
++}
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 46d47afdd887..5996e64d324c 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -229,6 +229,7 @@ LIBBPF_API int bpf_load_btf(void *btf, __u32 btf_size=
+, char *log_buf,
+ LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf=
+,
+ 				 __u32 *buf_len, __u32 *prog_id, __u32 *fd_type,
+ 				 __u64 *probe_offset, __u64 *probe_addr);
++LIBBPF_API int bpf_enable_stats(enum bpf_stats_type type);
+=20
+ #ifdef __cplusplus
+ } /* extern "C" */
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index bb8831605b25..ebd946faada5 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -254,3 +254,8 @@ LIBBPF_0.0.8 {
+ 		bpf_program__set_lsm;
+ 		bpf_set_link_xdp_fd_opts;
+ } LIBBPF_0.0.7;
++
++LIBBPF_0.0.9 {
++	global:
++		bpf_enable_stats;
++} LIBBPF_0.0.8;
+\ No newline at end of file
+--=20
 2.24.1
+
