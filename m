@@ -2,108 +2,133 @@ Return-Path: <SRS0=ACkJ=6I=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AA05C55191
-	for <bpf@archiver.kernel.org>; Fri, 24 Apr 2020 12:31:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7314FC54FD0
+	for <bpf@archiver.kernel.org>; Fri, 24 Apr 2020 13:34:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 35D0120700
-	for <bpf@archiver.kernel.org>; Fri, 24 Apr 2020 12:31:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587731469;
-	bh=JEfPVeCIXS2ihp4wiKoaxqcfVeN9Aopia2uXZyuMbzs=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=TEpYfiSmObQwcVlJNEsjDuGelSdUZ/DmDMig1AYuokR2EmqRQQkJL3TT78IjufA0/
-	 1O5IzENtmMzltnnItjBM7S66WXDIG1yzP4xg+wLVAq7wepOp+5NaGBjtwCTVCOx6AR
-	 vXYFoJ4TOa/hSJFzmbnz9EP20uZp9nJDaTWzQ9EE=
+	by mail.kernel.org (Postfix) with ESMTP id 4CBEE20767
+	for <bpf@archiver.kernel.org>; Fri, 24 Apr 2020 13:34:37 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZeKNtttu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727979AbgDXMX0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Apr 2020 08:23:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53246 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727972AbgDXMX0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 Apr 2020 08:23:26 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E508A20776;
-        Fri, 24 Apr 2020 12:23:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587731005;
-        bh=JEfPVeCIXS2ihp4wiKoaxqcfVeN9Aopia2uXZyuMbzs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=1qHOqCMSq1ywoYVvbwMuKBB/Bc/buIYS9oC344cyI8+ZzwH8qFxgEeHq13GZijqw2
-         VD2zfZjIChMjsMghVFiRAfh3B3LTPy1sxKSkRD5vlt++uOiHNN8hN2jywa47CkKCA5
-         TMnzJLAtN6Zu8JBtyXNqNr/YMeQKYk3ynfO4KIfo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jeremy Cline <jcline@redhat.com>,
+        id S1726806AbgDXNeh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Apr 2020 09:34:37 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:26454 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726301AbgDXNeg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Apr 2020 09:34:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1587735275;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sfWX9k4RpGMfjYkdXBp2fwU91Q/pjg1D/U3CLDJOezE=;
+        b=ZeKNtttuM9xK2X2yPy52gjUSYk9uprVUVR8iEdu+ndxjTedNfrLHzYaD5pcKwbe+pJ580O
+        XALIgtS1Sn4HtqreTw0Im8QsW1hUFh//E+7R1FA/7QouY67k1s8VkvmRXhRkmZUMwbs+FP
+        WQmhoGVwccNsKOcqjMCBEDsmRp+vczE=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-46-AtiwBg44OyOyiBePVx5hbQ-1; Fri, 24 Apr 2020 09:34:33 -0400
+X-MC-Unique: AtiwBg44OyOyiBePVx5hbQ-1
+Received: by mail-lf1-f69.google.com with SMTP id g5so3903433lfh.9
+        for <bpf@vger.kernel.org>; Fri, 24 Apr 2020 06:34:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=sfWX9k4RpGMfjYkdXBp2fwU91Q/pjg1D/U3CLDJOezE=;
+        b=PTeHwNGPVDN4XnTD+aEAfGo2XVYejfQ142412eNCeLMrW/y1U7FB7Q7LhYRBNNH5Wn
+         2Vh83a9w/xuQ5tGQuDR5QQAw7uf6qF3D06NhE2gS3ergx4X/R8flStOVwe06z4aCPYWd
+         xkFCNUUJIbjjqrzxx2ds9FAgInrrGrDF2E+H0GyO151nCeLq9ZEC/TloasrGT+FNSkAa
+         JrYo8/uwZQDdQb/YHtwdujylWGPmkUCNXl5inRar3/9oCZQvqyk47xVthPCqkO3qHtH2
+         5c3QOthqiB9tuD6JUp06soB81h9jkvgIqSnkX2RWKIzrUy8A83HRTKgrJBsMsvSgqUz6
+         8QOw==
+X-Gm-Message-State: AGi0PuYZ2aZrBl5tcFJwBt2ffyAIgYXuNMoPuzn4OEdoJNJPUlBcPzJv
+        FHkH/fDucSdMnDg2lJLR2BdxjhV4PkfvHzmG8By25dD+vO0LSmSJOZViigTIWMuECzHL6SjRYaM
+        hMO4Q7ffghQEm
+X-Received: by 2002:a2e:b4d5:: with SMTP id r21mr5891285ljm.49.1587735271456;
+        Fri, 24 Apr 2020 06:34:31 -0700 (PDT)
+X-Google-Smtp-Source: APiQypIHtihKJx5Vyo3DlTmw9BOorXzeh8ffl2Fss/lbUMw5BwicF+pW9YzBkYQ5UzVUWieyRPPqTA==
+X-Received: by 2002:a2e:b4d5:: with SMTP id r21mr5891273ljm.49.1587735271157;
+        Fri, 24 Apr 2020 06:34:31 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id x29sm4433680lfn.64.2020.04.24.06.34.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Apr 2020 06:34:30 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 520461814FF; Fri, 24 Apr 2020 15:34:27 +0200 (CEST)
+Subject: [PATCH bpf 1/2] bpf: Propagate expected_attach_type when verifying
+ freplace programs
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 01/26] libbpf: Initialize *nl_pid so gcc 10 is happy
-Date:   Fri, 24 Apr 2020 08:22:58 -0400
-Message-Id: <20200424122323.10194-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        David Ahern <dsahern@kernel.org>
+Date:   Fri, 24 Apr 2020 15:34:27 +0200
+Message-ID: <158773526726.293902.13257293296560360508.stgit@toke.dk>
+User-Agent: StGit/0.22
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jeremy Cline <jcline@redhat.com>
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-[ Upstream commit 4734b0fefbbf98f8c119eb8344efa19dac82cd2c ]
+For some program types, the verifier relies on the expected_attach_type of
+the program being verified in the verification process. However, for
+freplace programs, the attach type was not propagated along with the
+verifier ops, so the expected_attach_type would always be zero for freplace
+programs.
 
-Builds of Fedora's kernel-tools package started to fail with "may be
-used uninitialized" warnings for nl_pid in bpf_set_link_xdp_fd() and
-bpf_get_link_xdp_info() on the s390 architecture.
+This in turn caused the verifier to sometimes make the wrong call for
+freplace programs. For all existing uses of expected_attach_type for this
+purpose, the result of this was only false negatives (i.e., freplace
+functions would be rejected by the verifier even though they were valid
+programs for the target they were replacing). However, should a false
+positive be introduced, this can lead to out-of-bounds accesses and/or
+crashes.
 
-Although libbpf_netlink_open() always returns a negative number when it
-does not set *nl_pid, the compiler does not determine this and thus
-believes the variable might be used uninitialized. Assuage gcc's fears
-by explicitly initializing nl_pid.
+The fix introduced in this patch is to propagate the expected_attach_type
+to the freplace program during verification, and reset it after that is
+done.
 
-Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=1807781
-
-Signed-off-by: Jeremy Cline <jcline@redhat.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Link: https://lore.kernel.org/bpf/20200404051430.698058-1-jcline@redhat.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: be8704ff07d2 ("bpf: Introduce dynamic program extensions")
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/lib/bpf/netlink.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index ce3ec81b71c01..88416be2bf994 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -137,7 +137,7 @@ int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags)
- 		struct ifinfomsg ifinfo;
- 		char             attrbuf[64];
- 	} req;
--	__u32 nl_pid;
-+	__u32 nl_pid = 0;
- 
- 	sock = libbpf_netlink_open(&nl_pid);
- 	if (sock < 0)
-@@ -254,7 +254,7 @@ int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags)
- {
- 	struct xdp_id_md xdp_id = {};
- 	int sock, ret;
--	__u32 nl_pid;
-+	__u32 nl_pid = 0;
- 	__u32 mask;
- 
- 	if (flags & ~XDP_FLAGS_MASK)
--- 
-2.20.1
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9382609147f5..fa1d8245b925 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10497,6 +10497,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 				return -EINVAL;
+ 			}
+ 			env->ops = bpf_verifier_ops[tgt_prog->type];
++			prog->expected_attach_type = tgt_prog->expected_attach_type;
+ 		}
+ 		if (!tgt_prog->jited) {
+ 			verbose(env, "Can attach to only JITed progs\n");
+@@ -10841,6 +10842,13 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 		 * them now. Otherwise free_used_maps() will release them.
+ 		 */
+ 		release_maps(env);
++
++	/* extension progs temporarily inherit the attach_type of their targets
++	   for verification purposes, so set it back to zero before returning
++	 */
++	if (env->prog->type == BPF_PROG_TYPE_EXT)
++		env->prog->expected_attach_type = 0;
++
+ 	*prog = env->prog;
+ err_unlock:
+ 	if (!is_priv)
 
