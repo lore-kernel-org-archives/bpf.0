@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CF29C2BA1A
-	for <bpf@archiver.kernel.org>; Fri, 24 Apr 2020 05:35:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AF65C2BA1A
+	for <bpf@archiver.kernel.org>; Fri, 24 Apr 2020 05:35:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3DE9B2075A
-	for <bpf@archiver.kernel.org>; Fri, 24 Apr 2020 05:35:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A0DD2075A
+	for <bpf@archiver.kernel.org>; Fri, 24 Apr 2020 05:35:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="WsfHoDq0"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="WdBARoo6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726337AbgDXFfS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Apr 2020 01:35:18 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:60180 "EHLO
+        id S1726481AbgDXFf1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Apr 2020 01:35:27 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:53662 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726239AbgDXFfS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 24 Apr 2020 01:35:18 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03O5UVL8031127
-        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 22:35:17 -0700
+        by vger.kernel.org with ESMTP id S1726386AbgDXFf1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 24 Apr 2020 01:35:27 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03O5XPm3005983
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 22:35:25 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=tKRZ60PDHKdD4/vCYyu+2VqA4t9zHt7ighwjSxZF9dg=;
- b=WsfHoDq0RsX5vtrORFUwegAJ0nOLBH+SuKtRRzfGlIR0GJP8RcBPaMrroUO9yzTTOzqk
- vPgIwx0S4jf+4SoVD4NGzCtwXe53PIZoYHyMjL5a+aSdlpuf1NrYFv8mFjrvgT2l+Lhe
- 3vtZ3w4os+mhiJM8jEgujLaVMwPkMjMCgvY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 30keb14dxq-1
+ bh=zg4782RjRCXCMSsfUaY+SQ1IXwBiz+KNIciA+1xHMW0=;
+ b=WdBARoo6fMNW39K5MpYv27gspz3XZOpwSZy9fEFQwjKZmKU1KYYCFl4DuIrNEMjJ7Og2
+ c+6ixPmAaPMmFvLE4JWaALwePJ6HQAgT+bQtSdCMdfB3RLEXT1x/W3jZzjR0YOloxp7M
+ DgBhGsm7q8trxS/62jbXZLc9Pkoj2pCqWy4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 30kknkt6sv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 22:35:17 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2020 22:35:24 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Thu, 23 Apr 2020 22:35:16 -0700
+ 15.1.1847.3; Thu, 23 Apr 2020 22:35:23 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id E420E2EC31CF; Thu, 23 Apr 2020 22:35:12 -0700 (PDT)
+        id 574D72EC31CF; Thu, 23 Apr 2020 22:35:17 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 02/10] bpf: allocate ID for bpf_link
-Date:   Thu, 23 Apr 2020 22:34:57 -0700
-Message-ID: <20200424053505.4111226-3-andriin@fb.com>
+Subject: [PATCH bpf-next 04/10] bpf: add support for BPF_OBJ_GET_INFO_BY_FD for bpf_link
+Date:   Thu, 23 Apr 2020 22:34:59 -0700
+Message-ID: <20200424053505.4111226-5-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200424053505.4111226-1-andriin@fb.com>
 References: <20200424053505.4111226-1-andriin@fb.com>
@@ -61,84 +61,580 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-24_01:2020-04-23,2020-04-24 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 bulkscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 clxscore=1015
- impostorscore=0 lowpriorityscore=0 mlxlogscore=999 phishscore=0
- adultscore=0 suspectscore=25 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2003020000 definitions=main-2004240040
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ lowpriorityscore=0 phishscore=0 suspectscore=43 adultscore=0 bulkscore=0
+ mlxlogscore=999 impostorscore=0 malwarescore=0 clxscore=1015 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004240040
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Generate ID for each bpf_link using IDR, similarly to bpf_map and bpf_pro=
-g.
-bpf_link creation, initialization, attachment, and exposing to user-space
-through FD and ID is a complicated multi-step process, abstract it away
-through bpf_link_primer and bpf_link_prime(), bpf_link_settle(), and
-bpf_link_cleanup() internal API. They guarantee that until bpf_link is
-properly attached, user-space won't be able to access partially-initializ=
-ed
-bpf_link either from FD or ID. All this allows to simplify bpf_link attac=
-hment
-and error handling code.
+Add ability to fetch bpf_link details through BPF_OBJ_GET_INFO_BY_FD comm=
+and.
+Also enhance show_fdinfo to potentially include bpf_link type-specific
+information (similarly to obj_info).
+
+Also introduce enum bpf_link_type stored in bpf_link itself and expose it=
+ in
+UAPI. bpf_link_tracing also now will store and return bpf_attach_type.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- include/linux/bpf.h      |  17 +++--
- include/uapi/linux/bpf.h |   1 +
- kernel/bpf/cgroup.c      |  14 ++--
- kernel/bpf/syscall.c     | 143 +++++++++++++++++++++++++++------------
- 4 files changed, 118 insertions(+), 57 deletions(-)
+ include/linux/bpf-cgroup.h     |   2 -
+ include/linux/bpf.h            |  10 +-
+ include/linux/bpf_types.h      |   6 ++
+ include/uapi/linux/bpf.h       |  28 ++++++
+ kernel/bpf/btf.c               |   2 +
+ kernel/bpf/cgroup.c            |  45 ++++++++-
+ kernel/bpf/syscall.c           | 164 +++++++++++++++++++++++++++++----
+ kernel/bpf/verifier.c          |   2 +
+ tools/include/uapi/linux/bpf.h |  31 +++++++
+ 9 files changed, 266 insertions(+), 24 deletions(-)
 
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index d2d969669564..ab95824a1d99 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -57,8 +57,6 @@ struct bpf_cgroup_link {
+ 	enum bpf_attach_type type;
+ };
+=20
+-extern const struct bpf_link_ops bpf_cgroup_link_lops;
+-
+ struct bpf_prog_list {
+ 	struct list_head node;
+ 	struct bpf_prog *prog;
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 20bcac258d1f..caea78cadc73 100644
+index caea78cadc73..5ff97ee64065 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -1085,11 +1085,19 @@ int bpf_prog_new_fd(struct bpf_prog *prog);
+@@ -1026,9 +1026,11 @@ extern const struct file_operations bpf_prog_fops;
+ 	extern const struct bpf_verifier_ops _name ## _verifier_ops;
+ #define BPF_MAP_TYPE(_id, _ops) \
+ 	extern const struct bpf_map_ops _ops;
++#define BPF_LINK_TYPE(_id, _name)
+ #include <linux/bpf_types.h>
+ #undef BPF_PROG_TYPE
+ #undef BPF_MAP_TYPE
++#undef BPF_LINK_TYPE
 =20
+ extern const struct bpf_prog_ops bpf_offload_prog_ops;
+ extern const struct bpf_verifier_ops tc_cls_act_analyzer_ops;
+@@ -1086,6 +1088,7 @@ int bpf_prog_new_fd(struct bpf_prog *prog);
  struct bpf_link {
  	atomic64_t refcnt;
-+	u32 id;
+ 	u32 id;
++	enum bpf_link_type type;
  	const struct bpf_link_ops *ops;
  	struct bpf_prog *prog;
  	struct work_struct work;
- };
-=20
-+struct bpf_link_primer {
-+	struct bpf_link *link;
-+	struct file *file;
-+	int fd;
-+	u32 id;
-+};
-+
- struct bpf_link_ops {
- 	void (*release)(struct bpf_link *link);
+@@ -1103,9 +1106,14 @@ struct bpf_link_ops {
  	void (*dealloc)(struct bpf_link *link);
-@@ -1097,10 +1105,11 @@ struct bpf_link_ops {
+ 	int (*update_prog)(struct bpf_link *link, struct bpf_prog *new_prog,
  			   struct bpf_prog *old_prog);
++	void (*show_fdinfo)(const struct bpf_link *link, struct seq_file *seq);
++	int (*fill_link_info)(const struct bpf_link *link,
++			      struct bpf_link_info *info,
++			      const struct bpf_link_info *uinfo,
++			      u32 info_len);
  };
 =20
--void bpf_link_init(struct bpf_link *link, const struct bpf_link_ops *ops=
-,
--		   struct bpf_prog *prog);
--void bpf_link_cleanup(struct bpf_link *link, struct file *link_file,
--		      int link_fd);
-+void bpf_link_init(struct bpf_link *link,
-+		   const struct bpf_link_ops *ops, struct bpf_prog *prog);
-+int bpf_link_prime(struct bpf_link *link, struct bpf_link_primer *primer=
+-void bpf_link_init(struct bpf_link *link,
++void bpf_link_init(struct bpf_link *link, enum bpf_link_type type,
+ 		   const struct bpf_link_ops *ops, struct bpf_prog *prog);
+ int bpf_link_prime(struct bpf_link *link, struct bpf_link_primer *primer=
 );
-+int bpf_link_settle(struct bpf_link_primer *primer);
-+void bpf_link_cleanup(struct bpf_link_primer *primer);
- void bpf_link_inc(struct bpf_link *link);
- void bpf_link_put(struct bpf_link *link);
- int bpf_link_new_fd(struct bpf_link *link);
+ int bpf_link_settle(struct bpf_link_primer *primer);
+diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
+index ba0c2d56f8a3..8345cdf553b8 100644
+--- a/include/linux/bpf_types.h
++++ b/include/linux/bpf_types.h
+@@ -118,3 +118,9 @@ BPF_MAP_TYPE(BPF_MAP_TYPE_STACK, stack_map_ops)
+ #if defined(CONFIG_BPF_JIT)
+ BPF_MAP_TYPE(BPF_MAP_TYPE_STRUCT_OPS, bpf_struct_ops_map_ops)
+ #endif
++
++BPF_LINK_TYPE(BPF_LINK_TYPE_RAW_TRACEPOINT, raw_tracepoint)
++BPF_LINK_TYPE(BPF_LINK_TYPE_TRACING, tracing)
++#ifdef CONFIG_CGROUP_BPF
++BPF_LINK_TYPE(BPF_LINK_TYPE_CGROUP, cgroup)
++#endif
 diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 2e29a671d67e..eccfd1dea951 100644
+index 407c086bc9e4..d2f269082a33 100644
 --- a/include/uapi/linux/bpf.h
 +++ b/include/uapi/linux/bpf.h
-@@ -523,6 +523,7 @@ union bpf_attr {
+@@ -222,6 +222,15 @@ enum bpf_attach_type {
+=20
+ #define MAX_BPF_ATTACH_TYPE __MAX_BPF_ATTACH_TYPE
+=20
++enum bpf_link_type {
++	BPF_LINK_TYPE_UNSPEC =3D 0,
++	BPF_LINK_TYPE_RAW_TRACEPOINT =3D 1,
++	BPF_LINK_TYPE_TRACING =3D 2,
++	BPF_LINK_TYPE_CGROUP =3D 3,
++
++	MAX_BPF_LINK_TYPE,
++};
++
+ /* cgroup-bpf attach flags used in BPF_PROG_ATTACH command
+  *
+  * NONE(default): No further bpf programs allowed in the subtree.
+@@ -3601,6 +3610,25 @@ struct bpf_btf_info {
+ 	__u32 id;
+ } __attribute__((aligned(8)));
+=20
++struct bpf_link_info {
++	__u32 type;
++	__u32 id;
++	__u32 prog_id;
++	union {
++		struct {
++			__aligned_u64 tp_name; /* in/out: tp_name buffer ptr */
++			__u32 tp_name_len;     /* in/out: tp_name buffer len */
++		} raw_tracepoint;
++		struct {
++			__u32 attach_type;
++		} tracing;
++		struct {
++			__u64 cgroup_id;
++			__u32 attach_type;
++		} cgroup;
++	};
++} __attribute__((aligned(8)));
++
+ /* User bpf_sock_addr struct to access socket fields and sockaddr struct=
+ passed
+  * by user and intended to be used by socket (e.g. to bind to, depends o=
+n
+  * attach attach type).
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index d65c6912bdaf..a2cfba89a8e1 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3482,6 +3482,7 @@ extern char __weak __stop_BTF[];
+ extern struct btf *btf_vmlinux;
+=20
+ #define BPF_MAP_TYPE(_id, _ops)
++#define BPF_LINK_TYPE(_id, _name)
+ static union {
+ 	struct bpf_ctx_convert {
+ #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type) \
+@@ -3508,6 +3509,7 @@ static u8 bpf_ctx_convert_map[] =3D {
+ 	0, /* avoid empty array */
+ };
+ #undef BPF_MAP_TYPE
++#undef BPF_LINK_TYPE
+=20
+ static const struct btf_member *
+ btf_get_prog_ctx_type(struct bpf_verifier_log *log, struct btf *btf,
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 41a03bb84eb8..b8392db7b901 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -833,10 +833,50 @@ static void bpf_cgroup_link_dealloc(struct bpf_link=
+ *link)
+ 	kfree(cg_link);
+ }
+=20
+-const struct bpf_link_ops bpf_cgroup_link_lops =3D {
++static void bpf_cgroup_link_show_fdinfo(const struct bpf_link *link,
++					struct seq_file *seq)
++{
++	struct bpf_cgroup_link *cg_link =3D
++		container_of(link, struct bpf_cgroup_link, link);
++	u64 cg_id =3D 0;
++
++	mutex_lock(&cgroup_mutex);
++	if (cg_link->cgroup)
++		cg_id =3D cgroup_id(cg_link->cgroup);
++	mutex_unlock(&cgroup_mutex);
++
++	seq_printf(seq,
++		   "cgroup_id:\t%llu\n"
++		   "attach_type:\t%d\n",
++		   cg_id,
++		   cg_link->type);
++}
++
++static int bpf_cgroup_link_fill_link_info(const struct bpf_link *link,
++					  struct bpf_link_info *info,
++					  const struct bpf_link_info *uinfo,
++					  u32 info_len)
++{
++	struct bpf_cgroup_link *cg_link =3D
++		container_of(link, struct bpf_cgroup_link, link);
++	u64 cg_id =3D 0;
++
++	mutex_lock(&cgroup_mutex);
++	if (cg_link->cgroup)
++		cg_id =3D cgroup_id(cg_link->cgroup);
++	mutex_unlock(&cgroup_mutex);
++
++	info->cgroup.cgroup_id =3D cg_id;
++	info->cgroup.attach_type =3D cg_link->type;
++	return 0;
++}
++
++static const struct bpf_link_ops bpf_cgroup_link_lops =3D {
+ 	.release =3D bpf_cgroup_link_release,
+ 	.dealloc =3D bpf_cgroup_link_dealloc,
+ 	.update_prog =3D cgroup_bpf_replace,
++	.show_fdinfo =3D bpf_cgroup_link_show_fdinfo,
++	.fill_link_info =3D bpf_cgroup_link_fill_link_info,
+ };
+=20
+ int cgroup_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *=
+prog)
+@@ -858,7 +898,8 @@ int cgroup_bpf_link_attach(const union bpf_attr *attr=
+, struct bpf_prog *prog)
+ 		err =3D -ENOMEM;
+ 		goto out_put_cgroup;
+ 	}
+-	bpf_link_init(&link->link, &bpf_cgroup_link_lops, prog);
++	bpf_link_init(&link->link, BPF_LINK_TYPE_CGROUP, &bpf_cgroup_link_lops,
++		      prog);
+ 	link->cgroup =3D cgrp;
+ 	link->type =3D attr->link_create.attach_type;
+=20
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index ac352e7fd37e..0d1975c58153 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -51,9 +51,11 @@ static const struct bpf_map_ops * const bpf_map_types[=
+] =3D {
+ #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type)
+ #define BPF_MAP_TYPE(_id, _ops) \
+ 	[_id] =3D &_ops,
++#define BPF_LINK_TYPE(_id, _name)
+ #include <linux/bpf_types.h>
+ #undef BPF_PROG_TYPE
+ #undef BPF_MAP_TYPE
++#undef BPF_LINK_TYPE
+ };
+=20
+ /*
+@@ -1548,9 +1550,11 @@ static const struct bpf_prog_ops * const bpf_prog_=
+types[] =3D {
+ #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type) \
+ 	[_id] =3D & _name ## _prog_ops,
+ #define BPF_MAP_TYPE(_id, _ops)
++#define BPF_LINK_TYPE(_id, _name)
+ #include <linux/bpf_types.h>
+ #undef BPF_PROG_TYPE
+ #undef BPF_MAP_TYPE
++#undef BPF_LINK_TYPE
+ };
+=20
+ static int find_prog_type(enum bpf_prog_type type, struct bpf_prog *prog=
+)
+@@ -2183,10 +2187,11 @@ static int bpf_obj_get(const union bpf_attr *attr=
+)
+ 				attr->file_flags);
+ }
+=20
+-void bpf_link_init(struct bpf_link *link,
++void bpf_link_init(struct bpf_link *link, enum bpf_link_type type,
+ 		   const struct bpf_link_ops *ops, struct bpf_prog *prog)
+ {
+ 	atomic64_set(&link->refcnt, 1);
++	link->type =3D type;
+ 	link->id =3D 0;
+ 	link->ops =3D ops;
+ 	link->prog =3D prog;
+@@ -2268,27 +2273,23 @@ static int bpf_link_release(struct inode *inode, =
+struct file *filp)
+ 	return 0;
+ }
+=20
+-#ifdef CONFIG_PROC_FS
+-static const struct bpf_link_ops bpf_raw_tp_lops;
+-static const struct bpf_link_ops bpf_tracing_link_lops;
++#define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type)
++#define BPF_MAP_TYPE(_id, _ops)
++#define BPF_LINK_TYPE(_id, _name) [_id] =3D #_name,
++static const char *bpf_link_type_strs[] =3D {
++	[BPF_LINK_TYPE_UNSPEC] =3D "<invalid>",
++#include <linux/bpf_types.h>
++};
++#undef BPF_PROG_TYPE
++#undef BPF_MAP_TYPE
++#undef BPF_LINK_TYPE
+=20
++#ifdef CONFIG_PROC_FS
+ static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
+ {
+ 	const struct bpf_link *link =3D filp->private_data;
+ 	const struct bpf_prog *prog =3D link->prog;
+ 	char prog_tag[sizeof(prog->tag) * 2 + 1] =3D { };
+-	const char *link_type;
+-
+-	if (link->ops =3D=3D &bpf_raw_tp_lops)
+-		link_type =3D "raw_tracepoint";
+-	else if (link->ops =3D=3D &bpf_tracing_link_lops)
+-		link_type =3D "tracing";
+-#ifdef CONFIG_CGROUP_BPF
+-	else if (link->ops =3D=3D &bpf_cgroup_link_lops)
+-		link_type =3D "cgroup";
+-#endif
+-	else
+-		link_type =3D "unknown";
+=20
+ 	bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
+ 	seq_printf(m,
+@@ -2296,10 +2297,12 @@ static void bpf_link_show_fdinfo(struct seq_file =
+*m, struct file *filp)
+ 		   "link_id:\t%u\n"
+ 		   "prog_tag:\t%s\n"
+ 		   "prog_id:\t%u\n",
+-		   link_type,
++		   bpf_link_type_strs[link->type],
+ 		   link->id,
+ 		   prog_tag,
+ 		   prog->aux->id);
++	if (link->ops->show_fdinfo)
++		link->ops->show_fdinfo(link, m);
+ }
+ #endif
+=20
+@@ -2403,6 +2406,7 @@ struct bpf_link *bpf_link_get_from_fd(u32 ufd)
+=20
+ struct bpf_tracing_link {
+ 	struct bpf_link link;
++	enum bpf_attach_type attach_type;
+ };
+=20
+ static void bpf_tracing_link_release(struct bpf_link *link)
+@@ -2418,9 +2422,35 @@ static void bpf_tracing_link_dealloc(struct bpf_li=
+nk *link)
+ 	kfree(tr_link);
+ }
+=20
++static void bpf_tracing_link_show_fdinfo(const struct bpf_link *link,
++					 struct seq_file *seq)
++{
++	struct bpf_tracing_link *tr_link =3D
++		container_of(link, struct bpf_tracing_link, link);
++
++	seq_printf(seq,
++		   "attach_type:\t%d\n",
++		   tr_link->attach_type);
++}
++
++static int bpf_tracing_link_fill_link_info(const struct bpf_link *link,
++					   struct bpf_link_info *info,
++					   const struct bpf_link_info *uinfo,
++					   u32 info_len)
++{
++	struct bpf_tracing_link *tr_link =3D
++		container_of(link, struct bpf_tracing_link, link);
++
++	info->tracing.attach_type =3D tr_link->attach_type;
++
++	return 0;
++}
++
+ static const struct bpf_link_ops bpf_tracing_link_lops =3D {
+ 	.release =3D bpf_tracing_link_release,
+ 	.dealloc =3D bpf_tracing_link_dealloc,
++	.show_fdinfo =3D bpf_tracing_link_show_fdinfo,
++	.fill_link_info =3D bpf_tracing_link_fill_link_info,
+ };
+=20
+ static int bpf_tracing_prog_attach(struct bpf_prog *prog)
+@@ -2460,7 +2490,9 @@ static int bpf_tracing_prog_attach(struct bpf_prog =
+*prog)
+ 		err =3D -ENOMEM;
+ 		goto out_put_prog;
+ 	}
+-	bpf_link_init(&link->link, &bpf_tracing_link_lops, prog);
++	bpf_link_init(&link->link, BPF_LINK_TYPE_TRACING,
++		      &bpf_tracing_link_lops, prog);
++	link->attach_type =3D prog->expected_attach_type;
+=20
+ 	err =3D bpf_link_prime(&link->link, &link_primer);
+ 	if (err) {
+@@ -2502,9 +2534,66 @@ static void bpf_raw_tp_link_dealloc(struct bpf_lin=
+k *link)
+ 	kfree(raw_tp);
+ }
+=20
++static void bpf_raw_tp_link_show_fdinfo(const struct bpf_link *link,
++					struct seq_file *seq)
++{
++	struct bpf_raw_tp_link *raw_tp_link =3D
++		container_of(link, struct bpf_raw_tp_link, link);
++
++	seq_printf(seq,
++		   "tp_name:\t%s\n",
++		   raw_tp_link->btp->tp->name);
++}
++
++static int bpf_raw_tp_link_fill_link_info(const struct bpf_link *link,
++					  struct bpf_link_info *info,
++					  const struct bpf_link_info *uinfo,
++					  u32 info_len)
++{
++	struct bpf_raw_tp_link *raw_tp_link =3D
++		container_of(link, struct bpf_raw_tp_link, link);
++	u64 ubuf_ptr;
++	char __user *ubuf =3D u64_to_user_ptr(uinfo->raw_tracepoint.tp_name);
++	const char *tp_name =3D raw_tp_link->btp->tp->name;
++	size_t tp_len;
++	u32 ulen;
++
++	if (get_user(ulen, &uinfo->raw_tracepoint.tp_name_len))
++		return -EFAULT;
++	if (get_user(ubuf_ptr, &uinfo->raw_tracepoint.tp_name))
++		return -EFAULT;
++	ubuf =3D u64_to_user_ptr(ubuf_ptr);
++
++	if (ulen && !ubuf)
++		return -EINVAL;
++	if (!ubuf)
++		return 0;
++
++	tp_len =3D strlen(raw_tp_link->btp->tp->name);
++	info->raw_tracepoint.tp_name_len =3D tp_len + 1;
++	info->raw_tracepoint.tp_name =3D (u64)(unsigned long)ubuf;
++
++	if (ulen >=3D tp_len + 1) {
++		if (copy_to_user(ubuf, tp_name, tp_len + 1))
++			return -EFAULT;
++	} else {
++		char zero =3D '\0';
++
++		if (copy_to_user(ubuf, tp_name, ulen - 1))
++			return -EFAULT;
++		if (put_user(zero, ubuf + ulen - 1))
++			return -EFAULT;
++		return -ENOSPC;
++	}
++
++	return 0;
++}
++
+ static const struct bpf_link_ops bpf_raw_tp_link_lops =3D {
+ 	.release =3D bpf_raw_tp_link_release,
+ 	.dealloc =3D bpf_raw_tp_link_dealloc,
++	.show_fdinfo =3D bpf_raw_tp_link_show_fdinfo,
++	.fill_link_info =3D bpf_raw_tp_link_fill_link_info,
+ };
+=20
+ #define BPF_RAW_TRACEPOINT_OPEN_LAST_FIELD raw_tracepoint.prog_fd
+@@ -2570,7 +2659,8 @@ static int bpf_raw_tracepoint_open(const union bpf_=
+attr *attr)
+ 		err =3D -ENOMEM;
+ 		goto out_put_btp;
+ 	}
+-	bpf_link_init(&link->link, &bpf_raw_tp_link_lops, prog);
++	bpf_link_init(&link->link, BPF_LINK_TYPE_RAW_TRACEPOINT,
++		      &bpf_raw_tp_link_lops, prog);
+ 	link->btp =3D btp;
+=20
+ 	err =3D bpf_link_prime(&link->link, &link_primer);
+@@ -3366,6 +3456,39 @@ static int bpf_btf_get_info_by_fd(struct btf *btf,
+ 	return btf_get_info_by_fd(btf, attr, uattr);
+ }
+=20
++static int bpf_link_get_info_by_fd(struct bpf_link *link,
++				  const union bpf_attr *attr,
++				  union bpf_attr __user *uattr)
++{
++	struct bpf_link_info __user *uinfo =3D u64_to_user_ptr(attr->info.info)=
+;
++	struct bpf_link_info info;
++	u32 info_len =3D attr->info.info_len;
++	int err;
++
++	err =3D bpf_check_uarg_tail_zero(uinfo, sizeof(info), info_len);
++	if (err)
++		return err;
++	info_len =3D min_t(u32, sizeof(info), info_len);
++
++	memset(&info, 0, sizeof(info));
++	info.type =3D link->type;
++	info.id =3D link->id;
++	info.prog_id =3D link->prog->aux->id;
++
++	if (link->ops->fill_link_info) {
++		err =3D link->ops->fill_link_info(link, &info, uinfo, info_len);
++		if (err)
++			return err;
++	}
++
++	if (copy_to_user(uinfo, &info, info_len) ||
++	    put_user(info_len, &uattr->info.info_len))
++		return -EFAULT;
++
++	return 0;
++}
++
++
+ #define BPF_OBJ_GET_INFO_BY_FD_LAST_FIELD info.info
+=20
+ static int bpf_obj_get_info_by_fd(const union bpf_attr *attr,
+@@ -3390,6 +3513,9 @@ static int bpf_obj_get_info_by_fd(const union bpf_a=
+ttr *attr,
+ 					     uattr);
+ 	else if (f.file->f_op =3D=3D &btf_fops)
+ 		err =3D bpf_btf_get_info_by_fd(f.file->private_data, attr, uattr);
++	else if (f.file->f_op =3D=3D &bpf_link_fops)
++		err =3D bpf_link_get_info_by_fd(f.file->private_data,
++					      attr, uattr);
+ 	else
+ 		err =3D -EINVAL;
+=20
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 513d9c545176..04fec8809fa0 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -28,9 +28,11 @@ static const struct bpf_verifier_ops * const bpf_verif=
+ier_ops[] =3D {
+ #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type) \
+ 	[_id] =3D & _name ## _verifier_ops,
+ #define BPF_MAP_TYPE(_id, _ops)
++#define BPF_LINK_TYPE(_id, _name)
+ #include <linux/bpf_types.h>
+ #undef BPF_PROG_TYPE
+ #undef BPF_MAP_TYPE
++#undef BPF_LINK_TYPE
+ };
+=20
+ /* bpf_check() is a static code analyzer that walks eBPF program
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index 2e29a671d67e..d2f269082a33 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -113,6 +113,8 @@ enum bpf_cmd {
+ 	BPF_MAP_DELETE_BATCH,
+ 	BPF_LINK_CREATE,
+ 	BPF_LINK_UPDATE,
++	BPF_LINK_GET_FD_BY_ID,
++	BPF_LINK_GET_NEXT_ID,
+ };
+=20
+ enum bpf_map_type {
+@@ -220,6 +222,15 @@ enum bpf_attach_type {
+=20
+ #define MAX_BPF_ATTACH_TYPE __MAX_BPF_ATTACH_TYPE
+=20
++enum bpf_link_type {
++	BPF_LINK_TYPE_UNSPEC =3D 0,
++	BPF_LINK_TYPE_RAW_TRACEPOINT =3D 1,
++	BPF_LINK_TYPE_TRACING =3D 2,
++	BPF_LINK_TYPE_CGROUP =3D 3,
++
++	MAX_BPF_LINK_TYPE,
++};
++
+ /* cgroup-bpf attach flags used in BPF_PROG_ATTACH command
+  *
+  * NONE(default): No further bpf programs allowed in the subtree.
+@@ -523,6 +534,7 @@ union bpf_attr {
  			__u32		prog_id;
  			__u32		map_id;
  			__u32		btf_id;
@@ -146,353 +642,34 @@ index 2e29a671d67e..eccfd1dea951 100644
  		};
  		__u32		next_id;
  		__u32		open_flags;
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 27a223bcc44c..41a03bb84eb8 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -841,10 +841,10 @@ const struct bpf_link_ops bpf_cgroup_link_lops =3D =
-{
+@@ -3598,6 +3610,25 @@ struct bpf_btf_info {
+ 	__u32 id;
+ } __attribute__((aligned(8)));
 =20
- int cgroup_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *=
-prog)
- {
-+	struct bpf_link_primer link_primer;
- 	struct bpf_cgroup_link *link;
--	struct file *link_file;
- 	struct cgroup *cgrp;
--	int err, link_fd;
-+	int err;
-=20
- 	if (attr->link_create.flags)
- 		return -EINVAL;
-@@ -862,22 +862,20 @@ int cgroup_bpf_link_attach(const union bpf_attr *at=
-tr, struct bpf_prog *prog)
- 	link->cgroup =3D cgrp;
- 	link->type =3D attr->link_create.attach_type;
-=20
--	link_file =3D bpf_link_new_file(&link->link, &link_fd);
--	if (IS_ERR(link_file)) {
-+	err  =3D bpf_link_prime(&link->link, &link_primer);
-+	if (err) {
- 		kfree(link);
--		err =3D PTR_ERR(link_file);
- 		goto out_put_cgroup;
- 	}
-=20
- 	err =3D cgroup_bpf_attach(cgrp, NULL, NULL, link, link->type,
- 				BPF_F_ALLOW_MULTI);
- 	if (err) {
--		bpf_link_cleanup(&link->link, link_file, link_fd);
-+		bpf_link_cleanup(&link_primer);
- 		goto out_put_cgroup;
- 	}
-=20
--	fd_install(link_fd, link_file);
--	return link_fd;
-+	return bpf_link_settle(&link_primer);
-=20
- out_put_cgroup:
- 	cgroup_put(cgrp);
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 84518853648a..66781b3cac59 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -42,6 +42,8 @@ static DEFINE_IDR(prog_idr);
- static DEFINE_SPINLOCK(prog_idr_lock);
- static DEFINE_IDR(map_idr);
- static DEFINE_SPINLOCK(map_idr_lock);
-+static DEFINE_IDR(link_idr);
-+static DEFINE_SPINLOCK(link_idr_lock);
-=20
- int sysctl_unprivileged_bpf_disabled __read_mostly;
-=20
-@@ -2181,25 +2183,40 @@ static int bpf_obj_get(const union bpf_attr *attr=
-)
- 				attr->file_flags);
- }
-=20
--void bpf_link_init(struct bpf_link *link, const struct bpf_link_ops *ops=
-,
--		   struct bpf_prog *prog)
-+void bpf_link_init(struct bpf_link *link,
-+		   const struct bpf_link_ops *ops, struct bpf_prog *prog)
- {
- 	atomic64_set(&link->refcnt, 1);
-+	link->id =3D 0;
- 	link->ops =3D ops;
- 	link->prog =3D prog;
- }
-=20
-+static void bpf_link_free_id(int id)
-+{
-+	unsigned long flags;
++struct bpf_link_info {
++	__u32 type;
++	__u32 id;
++	__u32 prog_id;
++	union {
++		struct {
++			__aligned_u64 tp_name; /* in/out: tp_name buffer ptr */
++			__u32 tp_name_len;     /* in/out: tp_name buffer len */
++		} raw_tracepoint;
++		struct {
++			__u32 attach_type;
++		} tracing;
++		struct {
++			__u64 cgroup_id;
++			__u32 attach_type;
++		} cgroup;
++	};
++} __attribute__((aligned(8)));
 +
-+	if (!id)
-+		return;
-+
-+	spin_lock_irqsave(&link_idr_lock, flags);
-+	idr_remove(&link_idr, id);
-+	spin_unlock_irqrestore(&link_idr_lock, flags);
-+}
-+
- /* Clean up bpf_link and corresponding anon_inode file and FD. After
-  * anon_inode is created, bpf_link can't be just kfree()'d due to deferr=
-ed
-- * anon_inode's release() call. This helper manages marking bpf_link as
-- * defunct, releases anon_inode file and puts reserved FD.
-+ * anon_inode's release() call. This helper marksbpf_link as
-+ * defunct, releases anon_inode file and puts reserved FD. bpf_prog's re=
-fcnt
-+ * is not decremented, it's the responsibility of a calling code that fa=
-iled
-+ * to complete bpf_link initialization.
-  */
--void bpf_link_cleanup(struct bpf_link *link, struct file *link_file,
--		      int link_fd)
-+void bpf_link_cleanup(struct bpf_link_primer *primer)
- {
--	link->prog =3D NULL;
--	fput(link_file);
--	put_unused_fd(link_fd);
-+	primer->link->prog =3D NULL;
-+	bpf_link_free_id(primer->id);
-+	fput(primer->file);
-+	put_unused_fd(primer->fd);
- }
-=20
- void bpf_link_inc(struct bpf_link *link)
-@@ -2210,6 +2227,7 @@ void bpf_link_inc(struct bpf_link *link)
- /* bpf_link_free is guaranteed to be called from process context */
- static void bpf_link_free(struct bpf_link *link)
- {
-+	bpf_link_free_id(link->id);
- 	if (link->prog) {
- 		/* detach BPF program, clean up used resources */
- 		link->ops->release(link);
-@@ -2275,9 +2293,11 @@ static void bpf_link_show_fdinfo(struct seq_file *=
-m, struct file *filp)
- 	bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
- 	seq_printf(m,
- 		   "link_type:\t%s\n"
-+		   "link_id:\t%u\n"
- 		   "prog_tag:\t%s\n"
- 		   "prog_id:\t%u\n",
- 		   link_type,
-+		   link->id,
- 		   prog_tag,
- 		   prog->aux->id);
- }
-@@ -2292,36 +2312,74 @@ const struct file_operations bpf_link_fops =3D {
- 	.write		=3D bpf_dummy_write,
- };
-=20
--int bpf_link_new_fd(struct bpf_link *link)
-+static int bpf_link_alloc_id(struct bpf_link *link)
- {
--	return anon_inode_getfd("bpf-link", &bpf_link_fops, link, O_CLOEXEC);
--}
-+	int id;
-+
-+	idr_preload(GFP_KERNEL);
-+	spin_lock_bh(&link_idr_lock);
-+	id =3D idr_alloc_cyclic(&link_idr, link, 1, INT_MAX, GFP_ATOMIC);
-+	spin_unlock_bh(&link_idr_lock);
-+	idr_preload_end();
-=20
--/* Similar to bpf_link_new_fd, create anon_inode for given bpf_link, but
-- * instead of immediately installing fd in fdtable, just reserve it and
-- * return. Caller then need to either install it with fd_install(fd, fil=
-e) or
-- * release with put_unused_fd(fd).
-- * This is useful for cases when bpf_link attachment/detachment are
-- * complicated and expensive operations and should be delayed until all =
-the fd
-- * reservation and anon_inode creation succeeds.
-+	return id;
-+}
-+
-+/* Prepare bpf_link to be exposed to user-space by allocating anon_inode=
- file,
-+ * reserving unused FD and allocating ID from link_idr. This is to be pa=
-ired
-+ * with bpf_link_settle() to install FD and ID and expose bpf_link to
-+ * user-space, if bpf_link is successfully attached. If not, bpf_link an=
-d
-+ * pre-allocated resources are to be freed with bpf_cleanup() call. All =
-the
-+ * transient state is passed around in struct bpf_link_primer.
-+ * This is preferred way to create and initialize bpf_link, especially w=
-hen
-+ * there are complicated and expensive operations inbetween creating bpf=
-_link
-+ * itself and attaching it to BPF hook. By using bpf_link_prime() and
-+ * bpf_link_settle() kernel code using bpf_link doesn't have to perform
-+ * expensive (and potentially failing) roll back operations in a rare ca=
-se
-+ * that file, FD, or ID can't be allocated.
-  */
--struct file *bpf_link_new_file(struct bpf_link *link, int *reserved_fd)
-+int bpf_link_prime(struct bpf_link *link, struct bpf_link_primer *primer=
-)
- {
- 	struct file *file;
--	int fd;
-+	int fd, id;
-=20
- 	fd =3D get_unused_fd_flags(O_CLOEXEC);
- 	if (fd < 0)
--		return ERR_PTR(fd);
-+		return fd;
-=20
- 	file =3D anon_inode_getfile("bpf_link", &bpf_link_fops, link, O_CLOEXEC=
-);
- 	if (IS_ERR(file)) {
- 		put_unused_fd(fd);
--		return file;
-+		return PTR_ERR(file);
- 	}
-=20
--	*reserved_fd =3D fd;
--	return file;
-+	id =3D bpf_link_alloc_id(link);
-+	if (id < 0) {
-+		put_unused_fd(fd);
-+		fput(file);
-+		return id;
-+	}
-+
-+	primer->link =3D link;
-+	primer->file =3D file;
-+	primer->fd =3D fd;
-+	primer->id =3D id;
-+	return 0;
-+}
-+
-+int bpf_link_settle(struct bpf_link_primer *primer)
-+{
-+	/* make bpf_link fetchable by ID */
-+	WRITE_ONCE(primer->link->id, primer->id);
-+	/* make bpf_link fetchable by FD */
-+	fd_install(primer->fd, primer->file);
-+	/* pass through installed FD */
-+	return primer->fd;
-+}
-+
-+int bpf_link_new_fd(struct bpf_link *link)
-+{
-+	return anon_inode_getfd("bpf-link", &bpf_link_fops, link, O_CLOEXEC);
- }
-=20
- struct bpf_link *bpf_link_get_from_fd(u32 ufd)
-@@ -2367,9 +2425,9 @@ static const struct bpf_link_ops bpf_tracing_link_l=
-ops =3D {
-=20
- static int bpf_tracing_prog_attach(struct bpf_prog *prog)
- {
-+	struct bpf_link_primer link_primer;
- 	struct bpf_tracing_link *link;
--	struct file *link_file;
--	int link_fd, err;
-+	int err;
-=20
- 	switch (prog->type) {
- 	case BPF_PROG_TYPE_TRACING:
-@@ -2404,22 +2462,19 @@ static int bpf_tracing_prog_attach(struct bpf_pro=
-g *prog)
- 	}
- 	bpf_link_init(&link->link, &bpf_tracing_link_lops, prog);
-=20
--	link_file =3D bpf_link_new_file(&link->link, &link_fd);
--	if (IS_ERR(link_file)) {
-+	err =3D bpf_link_prime(&link->link, &link_primer);
-+	if (err) {
- 		kfree(link);
--		err =3D PTR_ERR(link_file);
- 		goto out_put_prog;
- 	}
-=20
- 	err =3D bpf_trampoline_link_prog(prog);
- 	if (err) {
--		bpf_link_cleanup(&link->link, link_file, link_fd);
-+		bpf_link_cleanup(&link_primer);
- 		goto out_put_prog;
- 	}
-=20
--	fd_install(link_fd, link_file);
--	return link_fd;
--
-+	return bpf_link_settle(&link_primer);
- out_put_prog:
- 	bpf_prog_put(prog);
- 	return err;
-@@ -2447,7 +2502,7 @@ static void bpf_raw_tp_link_dealloc(struct bpf_link=
- *link)
- 	kfree(raw_tp);
- }
-=20
--static const struct bpf_link_ops bpf_raw_tp_lops =3D {
-+static const struct bpf_link_ops bpf_raw_tp_link_lops =3D {
- 	.release =3D bpf_raw_tp_link_release,
- 	.dealloc =3D bpf_raw_tp_link_dealloc,
- };
-@@ -2456,13 +2511,13 @@ static const struct bpf_link_ops bpf_raw_tp_lops =
-=3D {
-=20
- static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
- {
-+	struct bpf_link_primer link_primer;
- 	struct bpf_raw_tp_link *link;
- 	struct bpf_raw_event_map *btp;
--	struct file *link_file;
- 	struct bpf_prog *prog;
- 	const char *tp_name;
- 	char buf[128];
--	int link_fd, err;
-+	int err;
-=20
- 	if (CHECK_ATTR(BPF_RAW_TRACEPOINT_OPEN))
- 		return -EINVAL;
-@@ -2515,24 +2570,22 @@ static int bpf_raw_tracepoint_open(const union bp=
-f_attr *attr)
- 		err =3D -ENOMEM;
- 		goto out_put_btp;
- 	}
--	bpf_link_init(&link->link, &bpf_raw_tp_lops, prog);
-+	bpf_link_init(&link->link, &bpf_raw_tp_link_lops, prog);
- 	link->btp =3D btp;
-=20
--	link_file =3D bpf_link_new_file(&link->link, &link_fd);
--	if (IS_ERR(link_file)) {
-+	err =3D bpf_link_prime(&link->link, &link_primer);
-+	if (err) {
- 		kfree(link);
--		err =3D PTR_ERR(link_file);
- 		goto out_put_btp;
- 	}
-=20
- 	err =3D bpf_probe_register(link->btp, prog);
- 	if (err) {
--		bpf_link_cleanup(&link->link, link_file, link_fd);
-+		bpf_link_cleanup(&link_primer);
- 		goto out_put_btp;
- 	}
-=20
--	fd_install(link_fd, link_file);
--	return link_fd;
-+	return bpf_link_settle(&link_primer);
-=20
- out_put_btp:
- 	bpf_put_raw_tracepoint(btp);
-@@ -3464,7 +3517,7 @@ static int bpf_task_fd_query(const union bpf_attr *=
-attr,
- 	if (file->f_op =3D=3D &bpf_link_fops) {
- 		struct bpf_link *link =3D file->private_data;
-=20
--		if (link->ops =3D=3D &bpf_raw_tp_lops) {
-+		if (link->ops =3D=3D &bpf_raw_tp_link_lops) {
- 			struct bpf_raw_tp_link *raw_tp =3D
- 				container_of(link, struct bpf_raw_tp_link, link);
- 			struct bpf_raw_event_map *btp =3D raw_tp->btp;
+ /* User bpf_sock_addr struct to access socket fields and sockaddr struct=
+ passed
+  * by user and intended to be used by socket (e.g. to bind to, depends o=
+n
+  * attach attach type).
 --=20
 2.24.1
 
