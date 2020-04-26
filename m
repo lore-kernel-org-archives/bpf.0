@@ -2,131 +2,76 @@ Return-Path: <SRS0=vf2x=6K=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92576C55186
-	for <bpf@archiver.kernel.org>; Sun, 26 Apr 2020 03:36:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E20FC2BA1A
+	for <bpf@archiver.kernel.org>; Sun, 26 Apr 2020 06:35:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D0582071E
-	for <bpf@archiver.kernel.org>; Sun, 26 Apr 2020 03:36:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fudan.edu.cn header.i=@fudan.edu.cn header.b="GvoIkko8"
+	by mail.kernel.org (Postfix) with ESMTP id 5AB23206BF
+	for <bpf@archiver.kernel.org>; Sun, 26 Apr 2020 06:35:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726135AbgDZDg5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 25 Apr 2020 23:36:57 -0400
-Received: from mail.fudan.edu.cn ([202.120.224.73]:42553 "EHLO fudan.edu.cn"
+        id S1726119AbgDZGf0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 26 Apr 2020 02:35:26 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:2905 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726100AbgDZDg4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 25 Apr 2020 23:36:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=cj5cv4jNx8jyM4cS8bEE5q0CelqTOx1baSzDTYeEatY=; b=G
-        voIkko8LVAyfrekmjpFAf9/7U3wIYCb4Ad/k9oNWJvyLPiXU5/9eKa/TG67V9bCy
-        nOLPDL2k/+MS6b2/kK/AyOJaobXc9ctePo8Kv5XEVSMqeBpSNixuIYWh7dWWS8nG
-        ycli1sOLVs9hLk117hOe7nfpMf2SyTsWqUACRQaZ6k=
-Received: from localhost.localdomain (unknown [120.229.255.83])
-        by app2 (Coremail) with SMTP id XQUFCgCXagiUAaVe6j+3AA--.21353S3;
-        Sun, 26 Apr 2020 11:35:51 +0800 (CST)
-From:   Xiyu Yang <xiyuyang19@fudan.edu.cn>
-To:     John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Lingpeng Chen <forrest0579@gmail.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     yuanxzhang@fudan.edu.cn, kjlu@umn.edu,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>
-Subject: [PATCH v2] bpf: Fix sk_psock refcnt leak when receiving message
-Date:   Sun, 26 Apr 2020 11:35:15 +0800
-Message-Id: <1587872115-42805-1-git-send-email-xiyuyang19@fudan.edu.cn>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: XQUFCgCXagiUAaVe6j+3AA--.21353S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyktF4rAF1fCw4xXF48Xrb_yoW8ZrW5pa
-        y7C3sYvF1jyFWUZws3JFW8Jr1fu3yDG348uryrAa1fX3W5uw13JF1Fgr1Y9F40yr40kr45
-        Xr4UKF4FkFnxu37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
-        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-        rcIFxwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUby8BUUUUUU==
-X-CM-SenderInfo: irzsiiysuqikmy6i3vldqovvfxof0/
+        id S1726108AbgDZGf0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 26 Apr 2020 02:35:26 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 0291ADC130B618297987;
+        Sun, 26 Apr 2020 14:35:19 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
+ 14.3.487.0; Sun, 26 Apr 2020 14:35:17 +0800
+From:   Mao Wenan <maowenan@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <kafai@fb.com>,
+        <songliubraving@fb.com>, <yhs@fb.com>, <andriin@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
+        <andrii.nakryiko@gmail.com>, <dan.carpenter@oracle.com>
+CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>
+Subject: [PATCH bpf-next v3 1/2] bpf: Change error code when ops is NULL
+Date:   Sun, 26 Apr 2020 14:36:34 +0800
+Message-ID: <20200426063635.130680-2-maowenan@huawei.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200426063635.130680-1-maowenan@huawei.com>
+References: <20200426063635.130680-1-maowenan@huawei.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-tcp_bpf_recvmsg() invokes sk_psock_get(), which returns a reference of
-the specified sk_psock object to "psock" with increased refcnt.
+There is one error printed when use BPF_MAP_TYPE_SOCKMAP to create map:
+libbpf: failed to create map (name: 'sock_map'): Invalid argument(-22)
 
-When tcp_bpf_recvmsg() returns, local variable "psock" becomes invalid,
-so the refcount should be decreased to keep refcount balanced.
+This is because CONFIG_BPF_STREAM_PARSER is not set, and
+bpf_map_types[type] return invalid ops. It is not clear to show the
+cause of config missing with return code -EINVAL.
 
-The reference counting issue happens in several exception handling paths
-of tcp_bpf_recvmsg(). When those error scenarios occur such as "flags"
-includes MSG_ERRQUEUE, the function forgets to decrease the refcnt
-increased by sk_psock_get(), causing a refcnt leak.
-
-Fix this issue by calling sk_psock_put() or pulling up the error queue
-read handling when those error scenarios occur.
-
-Fixes: e7a5f1f1cd000 ("bpf/sockmap: Read psock ingress_msg before sk_receive_queue")
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+Signed-off-by: Mao Wenan <maowenan@huawei.com>
 ---
-Changes in v2:
-- Add Fixes tag
-- Pull up the error queue read handling
----
- net/ipv4/tcp_bpf.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ kernel/bpf/syscall.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 5a05327f97c1..ff96466ea6da 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -262,14 +262,17 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
- 	struct sk_psock *psock;
- 	int copied, ret;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index d85f37239540..8ae78c98d91e 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -113,7 +113,7 @@ static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
+ 	type = array_index_nospec(type, ARRAY_SIZE(bpf_map_types));
+ 	ops = bpf_map_types[type];
+ 	if (!ops)
+-		return ERR_PTR(-EINVAL);
++		return ERR_PTR(-EOPNOTSUPP);
  
-+	if (unlikely(flags & MSG_ERRQUEUE))
-+		return inet_recv_error(sk, msg, len, addr_len);
-+
- 	psock = sk_psock_get(sk);
- 	if (unlikely(!psock))
- 		return tcp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
--	if (unlikely(flags & MSG_ERRQUEUE))
--		return inet_recv_error(sk, msg, len, addr_len);
- 	if (!skb_queue_empty(&sk->sk_receive_queue) &&
--	    sk_psock_queue_empty(psock))
-+	    sk_psock_queue_empty(psock)) {
-+		sk_psock_put(sk, psock);
- 		return tcp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
-+	}
- 	lock_sock(sk);
- msg_bytes_ready:
- 	copied = __tcp_bpf_recvmsg(sk, psock, msg, len, flags);
+ 	if (ops->map_alloc_check) {
+ 		err = ops->map_alloc_check(attr);
 -- 
-2.7.4
+2.20.1
 
