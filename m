@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D317C4CECC
-	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:13:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A76C0C4CECD
+	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:13:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 462782070B
-	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:13:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8706920728
+	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:13:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hbdzrCyq"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="XsViMWyw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726881AbgD0UNP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Apr 2020 16:13:15 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:19594 "EHLO
+        id S1726863AbgD0UMy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Apr 2020 16:12:54 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:60062 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726918AbgD0UNP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 27 Apr 2020 16:13:15 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03RKBcKB003423
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:13:14 -0700
+        by vger.kernel.org with ESMTP id S1726691AbgD0UMt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 27 Apr 2020 16:12:49 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03RK8GO7022620
+        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:12:48 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Zt20xQdlfJLBte//mGUFbKnydXAnAYSLNsjyfy0EltE=;
- b=hbdzrCyq5Qao/aA+WwEGqQyNgzolLi7+K2WmvJyK+ZXl7+rg1XbyZSaTm3IQoIsySk70
- af9ME65aYII07goiqlFTU9qdBazjRbGTRmfQaLsxE8DQsND/fr673836w6V76bg90psr
- +HqvPJmzZGA7aLd2/rnmX580Q80FMJ2gcW8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30n5bx246a-6
+ bh=v5rDzfVwyX/wHdACp0TUPo4JIpTt3i9uf8jqBRhyrYE=;
+ b=XsViMWywFNMP0q3xK4QSaeYjIxFJiVrl/UCTd5g6kHGYXJleLc1taUoRCBIjvflk33tT
+ KhTb4yVzie5Zg1LFHHQueL3mkNSLD+nBoIxn9CXYIawrXDKbyWCgE83xNWtXmfOL1xTb
+ fuq+kOkrt0FmdvoxAwyBnxVgPgh/9BGOFAE= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 30n54ea3ng-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:13:14 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:12:48 -0700
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Mon, 27 Apr 2020 13:12:41 -0700
+ 15.1.1847.3; Mon, 27 Apr 2020 13:12:48 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id E79243700871; Mon, 27 Apr 2020 13:12:37 -0700 (PDT)
+        id 9157E3700871; Mon, 27 Apr 2020 13:12:46 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v1 03/19] bpf: add bpf_map iterator
-Date:   Mon, 27 Apr 2020 13:12:37 -0700
-Message-ID: <20200427201237.2994794-1-yhs@fb.com>
+Subject: [PATCH bpf-next v1 10/19] bpf: add netlink and ipv6_route targets
+Date:   Mon, 27 Apr 2020 13:12:46 -0700
+Message-ID: <20200427201246.2995471-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200427201235.2994549-1-yhs@fb.com>
 References: <20200427201235.2994549-1-yhs@fb.com>
@@ -61,272 +61,331 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-27_15:2020-04-27,2020-04-27 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
- mlxlogscore=999 suspectscore=0 bulkscore=0 clxscore=1015 impostorscore=0
- adultscore=0 priorityscore=1501 spamscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004270164
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ priorityscore=1501 suspectscore=0 spamscore=0 impostorscore=0
+ mlxlogscore=999 bulkscore=0 mlxscore=0 adultscore=0 malwarescore=0
+ clxscore=1015 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2004270164
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf_map iterator is implemented.
-The bpf program is called at seq_ops show() and stop() functions.
-bpf_iter_get_prog() will retrieve bpf program and other
-parameters during seq_file object traversal. In show() function,
-bpf program will traverse every valid object, and in stop()
-function, bpf program will be called one more time after all
-objects are traversed.
+This patch added netlink and ipv6_route targets, using
+the same seq_ops (except show() and minor changes for stop())
+for /proc/net/{netlink,ipv6_route}.
 
-The first member of the bpf context contains the meta data, namely,
-the seq_file, session_id and seq_num. Here, the session_id is
-a unique id for one specific seq_file session. The seq_num is
-the number of bpf prog invocations in the current session.
-The bpf_iter_get_prog(), which will be implemented in subsequent
-patches, will have more information on how meta data are computed.
+Note that both ipv6_route and netlink have target_feature
+set as BPF_DUMP_SEQ_NET_PRIVATE. This is to notify
+bpf_iter infrastructure to set net namespace properly
+in seq_file private data area.
 
-The second member of the bpf context is a struct bpf_map pointer,
-which bpf program can examine.
-
-The target implementation also provided the structure definition
-for bpf program and the function definition for verifier to
-verify the bpf program. Specifically for bpf_map iterator,
-the structure is "bpf_iter__bpf_map" andd the function is
-"__bpf_iter__bpf_map".
-
-More targets will be implemented later, all of which will include
-the following, similar to bpf_map iterator:
-  - seq_ops() implementation
-  - function definition for verifier to verify the bpf program
-  - seq_file private data size
-  - additional target feature
+Since module is not supported for now, ipv6_route is
+supported only if the IPV6 is built-in, i.e., not compiled
+as a module. The restriction can be lifted once module
+is properly supported for bpf_iter.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/linux/bpf.h   |  10 ++++
- kernel/bpf/Makefile   |   2 +-
- kernel/bpf/bpf_iter.c |  19 ++++++++
- kernel/bpf/map_iter.c | 107 ++++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/syscall.c  |  13 +++++
- 5 files changed, 150 insertions(+), 1 deletion(-)
- create mode 100644 kernel/bpf/map_iter.c
+ net/ipv6/ip6_fib.c       | 71 +++++++++++++++++++++++++++-
+ net/ipv6/route.c         | 30 ++++++++++++
+ net/netlink/af_netlink.c | 99 +++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 196 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 5e56abc1e2f1..4ac8d61f7c3e 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1078,6 +1078,7 @@ int  generic_map_update_batch(struct bpf_map *map,
- int  generic_map_delete_batch(struct bpf_map *map,
- 			      const union bpf_attr *attr,
- 			      union bpf_attr __user *uattr);
-+struct bpf_map *bpf_map_get_curr_or_next(u32 *id);
+diff --git a/net/ipv6/ip6_fib.c b/net/ipv6/ip6_fib.c
+index 46ed56719476..588b5f508b18 100644
+--- a/net/ipv6/ip6_fib.c
++++ b/net/ipv6/ip6_fib.c
+@@ -2467,7 +2467,7 @@ void fib6_gc_cleanup(void)
+ }
 =20
- extern int sysctl_unprivileged_bpf_disabled;
+ #ifdef CONFIG_PROC_FS
+-static int ipv6_route_seq_show(struct seq_file *seq, void *v)
++static int ipv6_route_native_seq_show(struct seq_file *seq, void *v)
+ {
+ 	struct fib6_info *rt =3D v;
+ 	struct ipv6_route_iter *iter =3D seq->private;
+@@ -2625,7 +2625,7 @@ static bool ipv6_route_iter_active(struct ipv6_rout=
+e_iter *iter)
+ 	return w->node && !(w->state =3D=3D FWS_U && w->node =3D=3D w->root);
+ }
 =20
-@@ -1118,7 +1119,16 @@ struct bpf_iter_reg {
- 	u32 target_feature;
- };
+-static void ipv6_route_seq_stop(struct seq_file *seq, void *v)
++static void ipv6_route_native_seq_stop(struct seq_file *seq, void *v)
+ 	__releases(RCU_BH)
+ {
+ 	struct net *net =3D seq_file_net(seq);
+@@ -2637,6 +2637,73 @@ static void ipv6_route_seq_stop(struct seq_file *s=
+eq, void *v)
+ 	rcu_read_unlock_bh();
+ }
 =20
-+struct bpf_iter_meta {
-+	__bpf_md_ptr(struct seq_file *, seq);
-+	u64 session_id;
-+	u64 seq_num;
++#if IS_BUILTIN(CONFIG_IPV6) && defined(CONFIG_BPF_SYSCALL)
++struct bpf_iter__ipv6_route {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct fib6_info *, rt);
 +};
 +
- int bpf_iter_reg_target(struct bpf_iter_reg *reg_info);
-+struct bpf_prog *bpf_iter_get_prog(struct seq_file *seq, u32 priv_data_s=
-ize,
-+				   u64 *session_id, u64 *seq_num, bool is_last);
-+int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx);
-=20
- int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
- int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 6a8b0febd3f6..b2b5eefc5254 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -2,7 +2,7 @@
- obj-y :=3D core.o
- CFLAGS_core.o +=3D $(call cc-disable-warning, override-init)
-=20
--obj-$(CONFIG_BPF_SYSCALL) +=3D syscall.o verifier.o inode.o helpers.o tn=
-um.o bpf_iter.o
-+obj-$(CONFIG_BPF_SYSCALL) +=3D syscall.o verifier.o inode.o helpers.o tn=
-um.o bpf_iter.o map_iter.o
- obj-$(CONFIG_BPF_SYSCALL) +=3D hashtab.o arraymap.o percpu_freelist.o bp=
-f_lru_list.o lpm_trie.o map_in_map.o
- obj-$(CONFIG_BPF_SYSCALL) +=3D local_storage.o queue_stack_maps.o
- obj-$(CONFIG_BPF_SYSCALL) +=3D disasm.o
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index 1115b978607a..284c95587803 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -48,3 +48,22 @@ int bpf_iter_reg_target(struct bpf_iter_reg *reg_info)
-=20
- 	return 0;
- }
-+
-+struct bpf_prog *bpf_iter_get_prog(struct seq_file *seq, u32 priv_data_s=
-ize,
-+				   u64 *session_id, u64 *seq_num, bool is_last)
++static int ipv6_route_prog_seq_show(struct bpf_prog *prog, struct seq_fi=
+le *seq,
++				    u64 session_id, u64 seq_num, void *v)
 +{
-+	return NULL;
-+}
-+
-+int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx)
-+{
++	struct bpf_iter__ipv6_route ctx;
++	struct bpf_iter_meta meta;
 +	int ret;
 +
-+	migrate_disable();
-+	rcu_read_lock();
-+	ret =3D BPF_PROG_RUN(prog, ctx);
-+	rcu_read_unlock();
-+	migrate_enable();
++	meta.seq =3D seq;
++	meta.session_id =3D session_id;
++	meta.seq_num =3D seq_num;
++	ctx.meta =3D &meta;
++	ctx.rt =3D v;
++	ret =3D bpf_iter_run_prog(prog, &ctx);
++	return ret =3D=3D 0 ? 0 : -EINVAL;
++}
++
++static int ipv6_route_seq_show(struct seq_file *seq, void *v)
++{
++	struct ipv6_route_iter *iter =3D seq->private;
++	u64 session_id, seq_num;
++	struct bpf_prog *prog;
++	int ret;
++
++	prog =3D bpf_iter_get_prog(seq, sizeof(struct ipv6_route_iter),
++				 &session_id, &seq_num, false);
++	if (!prog)
++		return ipv6_route_native_seq_show(seq, v);
++
++	ret =3D ipv6_route_prog_seq_show(prog, seq, session_id, seq_num, v);
++	iter->w.leaf =3D NULL;
 +
 +	return ret;
 +}
-diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-new file mode 100644
-index 000000000000..bb3ad4c3bde5
---- /dev/null
-+++ b/kernel/bpf/map_iter.c
-@@ -0,0 +1,107 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2020 Facebook */
-+#include <linux/bpf.h>
-+#include <linux/fs.h>
-+#include <linux/filter.h>
-+#include <linux/kernel.h>
 +
-+struct bpf_iter_seq_map_info {
-+	struct bpf_map *map;
-+	u32 id;
-+};
-+
-+static void *bpf_map_seq_start(struct seq_file *seq, loff_t *pos)
++static void ipv6_route_seq_stop(struct seq_file *seq, void *v)
 +{
-+	struct bpf_iter_seq_map_info *info =3D seq->private;
-+	struct bpf_map *map;
-+	u32 id =3D info->id;
++	u64 session_id, seq_num;
++	struct bpf_prog *prog;
 +
-+	map =3D bpf_map_get_curr_or_next(&id);
-+	if (IS_ERR_OR_NULL(map))
-+		return NULL;
++	if (!v) {
++		prog =3D bpf_iter_get_prog(seq, sizeof(struct ipv6_route_iter),
++					 &session_id, &seq_num, true);
++		if (prog)
++			ipv6_route_prog_seq_show(prog, seq, session_id,
++						 seq_num, v);
++	}
 +
-+	++*pos;
-+	info->map =3D map;
-+	info->id =3D id;
-+	return map;
++	ipv6_route_native_seq_stop(seq, v);
++}
++#else
++static int ipv6_route_seq_show(struct seq_file *seq, void *v)
++{
++	return ipv6_route_native_seq_show(seq, v);
 +}
 +
-+static void *bpf_map_seq_next(struct seq_file *seq, void *v, loff_t *pos=
-)
++static void ipv6_route_seq_stop(struct seq_file *seq, void *v)
 +{
-+	struct bpf_iter_seq_map_info *info =3D seq->private;
-+	struct bpf_map *map;
-+
-+	++*pos;
-+	++info->id;
-+	map =3D bpf_map_get_curr_or_next(&info->id);
-+	if (IS_ERR_OR_NULL(map))
-+		return NULL;
-+
-+	bpf_map_put(info->map);
-+	info->map =3D map;
-+	return map;
++	ipv6_route_native_seq_stop(seq, v);
 +}
++#endif
 +
-+struct bpf_iter__bpf_map {
-+	__bpf_md_ptr(struct bpf_iter_meta *, meta);
-+	__bpf_md_ptr(struct bpf_map *, map);
-+};
-+
-+int __init __bpf_iter__bpf_map(struct bpf_iter_meta *meta, struct bpf_ma=
-p *map)
+ const struct seq_operations ipv6_route_seq_ops =3D {
+ 	.start	=3D ipv6_route_seq_start,
+ 	.next	=3D ipv6_route_seq_next,
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index 310cbddaa533..f275a13e2aea 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -6390,6 +6390,28 @@ void __init ip6_route_init_special_entries(void)
+   #endif
+ }
+=20
++#if IS_BUILTIN(CONFIG_IPV6)
++#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
++int __init __bpf_iter__ipv6_route(struct bpf_iter_meta *meta, struct fib=
+6_info *rt)
 +{
 +	return 0;
 +}
 +
-+static int bpf_map_seq_show(struct seq_file *seq, void *v)
-+{
-+	struct bpf_iter_meta meta;
-+	struct bpf_iter__bpf_map ctx;
-+	struct bpf_prog *prog;
-+	int ret =3D 0;
-+
-+	ctx.meta =3D &meta;
-+	ctx.map =3D v;
-+	meta.seq =3D seq;
-+	prog =3D bpf_iter_get_prog(seq, sizeof(struct bpf_iter_seq_map_info),
-+				 &meta.session_id, &meta.seq_num,
-+				 v =3D=3D (void *)0);
-+	if (prog)
-+		ret =3D bpf_iter_run_prog(prog, &ctx);
-+
-+	return ret =3D=3D 0 ? 0 : -EINVAL;
-+}
-+
-+static void bpf_map_seq_stop(struct seq_file *seq, void *v)
-+{
-+	struct bpf_iter_seq_map_info *info =3D seq->private;
-+
-+	if (!v)
-+		bpf_map_seq_show(seq, v);
-+
-+	if (info->map) {
-+		bpf_map_put(info->map);
-+		info->map =3D NULL;
-+	}
-+}
-+
-+static const struct seq_operations bpf_map_seq_ops =3D {
-+	.start	=3D bpf_map_seq_start,
-+	.next	=3D bpf_map_seq_next,
-+	.stop	=3D bpf_map_seq_stop,
-+	.show	=3D bpf_map_seq_show,
-+};
-+
-+static int __init bpf_map_iter_init(void)
++static int __init bpf_iter_register(void)
 +{
 +	struct bpf_iter_reg reg_info =3D {
-+		.target			=3D "bpf_map",
-+		.target_func_name	=3D "__bpf_iter__bpf_map",
-+		.seq_ops		=3D &bpf_map_seq_ops,
-+		.seq_priv_size		=3D sizeof(struct bpf_iter_seq_map_info),
-+		.target_feature		=3D 0,
++		.target			=3D "ipv6_route",
++		.target_func_name	=3D "__bpf_iter__ipv6_route",
++		.seq_ops		=3D &ipv6_route_seq_ops,
++		.seq_priv_size		=3D sizeof(struct ipv6_route_iter),
++		.target_feature		=3D BPF_DUMP_SEQ_NET_PRIVATE,
 +	};
 +
 +	return bpf_iter_reg_target(&reg_info);
 +}
++#endif
++#endif
 +
-+late_initcall(bpf_map_iter_init);
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 7626b8024471..022187640943 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2800,6 +2800,19 @@ static int bpf_obj_get_next_id(const union bpf_att=
-r *attr,
- 	return err;
+ int __init ip6_route_init(void)
+ {
+ 	int ret;
+@@ -6452,6 +6474,14 @@ int __init ip6_route_init(void)
+ 	if (ret)
+ 		goto out_register_late_subsys;
+=20
++#if IS_BUILTIN(CONFIG_IPV6)
++#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
++	ret =3D bpf_iter_register();
++	if (ret)
++		goto out_register_late_subsys;
++#endif
++#endif
++
+ 	for_each_possible_cpu(cpu) {
+ 		struct uncached_list *ul =3D per_cpu_ptr(&rt6_uncached_list, cpu);
+=20
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index 5ded01ca8b20..b6192cd66801 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -2596,7 +2596,7 @@ static void *netlink_seq_next(struct seq_file *seq,=
+ void *v, loff_t *pos)
+ 	return __netlink_seq_next(seq);
  }
 =20
-+struct bpf_map *bpf_map_get_curr_or_next(u32 *id)
+-static void netlink_seq_stop(struct seq_file *seq, void *v)
++static void netlink_native_seq_stop(struct seq_file *seq, void *v)
+ {
+ 	struct nl_seq_iter *iter =3D seq->private;
+=20
+@@ -2607,7 +2607,7 @@ static void netlink_seq_stop(struct seq_file *seq, =
+void *v)
+ }
+=20
+=20
+-static int netlink_seq_show(struct seq_file *seq, void *v)
++static int netlink_native_seq_show(struct seq_file *seq, void *v)
+ {
+ 	if (v =3D=3D SEQ_START_TOKEN) {
+ 		seq_puts(seq,
+@@ -2634,6 +2634,80 @@ static int netlink_seq_show(struct seq_file *seq, =
+void *v)
+ 	return 0;
+ }
+=20
++#ifdef CONFIG_BPF_SYSCALL
++struct bpf_iter__netlink {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct netlink_sock *, sk);
++};
++
++int __init __bpf_iter__netlink(struct bpf_iter_meta *meta, struct netlin=
+k_sock *sk)
 +{
-+	struct bpf_map *map;
-+
-+	spin_lock_bh(&map_idr_lock);
-+	map =3D idr_get_next(&map_idr, id);
-+	if (map)
-+		map =3D __bpf_map_inc_not_zero(map, false);
-+	spin_unlock_bh(&map_idr_lock);
-+
-+	return map;
++	return 0;
 +}
 +
- #define BPF_PROG_GET_FD_BY_ID_LAST_FIELD prog_id
++static int netlink_prog_seq_show(struct bpf_prog *prog, struct seq_file =
+*seq,
++				 u64 session_id, u64 seq_num, void *v)
++{
++	struct bpf_iter__netlink ctx;
++	struct bpf_iter_meta meta;
++	int ret =3D 0;
++
++	meta.seq =3D seq;
++	meta.session_id =3D session_id;
++	meta.seq_num =3D seq_num;
++	ctx.meta =3D &meta;
++	ctx.sk =3D nlk_sk((struct sock *)v);
++	ret =3D bpf_iter_run_prog(prog, &ctx);
++	return ret =3D=3D 0 ? 0 : -EINVAL;
++}
++
++static int netlink_seq_show(struct seq_file *seq, void *v)
++{
++	u64 session_id, seq_num;
++	struct bpf_prog *prog;
++
++	prog =3D bpf_iter_get_prog(seq, sizeof(struct nl_seq_iter),
++				 &session_id, &seq_num, false);
++	if (!prog)
++		return netlink_native_seq_show(seq, v);
++
++	if (v =3D=3D SEQ_START_TOKEN)
++		return 0;
++
++	return netlink_prog_seq_show(prog, seq, session_id,
++				     seq_num - 1, v);
++}
++
++static void netlink_seq_stop(struct seq_file *seq, void *v)
++{
++	u64 session_id, seq_num;
++	struct bpf_prog *prog;
++
++	if (!v) {
++		prog =3D bpf_iter_get_prog(seq, sizeof(struct nl_seq_iter),
++					 &session_id, &seq_num, true);
++		if (prog) {
++			if (seq_num)
++				seq_num =3D seq_num - 1;
++			netlink_prog_seq_show(prog, seq, session_id,
++					      seq_num, v);
++		}
++	}
++
++	netlink_native_seq_stop(seq, v);
++}
++#else
++static int netlink_seq_show(struct seq_file *seq, void *v)
++{
++	return netlink_native_seq_show(seq, v);
++}
++
++static void netlink_seq_stop(struct seq_file *seq, void *v)
++{
++	netlink_native_seq_stop(seq, v);
++}
++#endif
++
+ static const struct seq_operations netlink_seq_ops =3D {
+ 	.start  =3D netlink_seq_start,
+ 	.next   =3D netlink_seq_next,
+@@ -2740,6 +2814,21 @@ static const struct rhashtable_params netlink_rhas=
+htable_params =3D {
+ 	.automatic_shrinking =3D true,
+ };
 =20
- struct bpf_prog *bpf_prog_by_id(u32 id)
++#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
++static int __init bpf_iter_register(void)
++{
++	struct bpf_iter_reg reg_info =3D {
++		.target			=3D "netlink",
++		.target_func_name	=3D "__bpf_iter__netlink",
++		.seq_ops		=3D &netlink_seq_ops,
++		.seq_priv_size		=3D sizeof(struct nl_seq_iter),
++		.target_feature		=3D BPF_DUMP_SEQ_NET_PRIVATE,
++	};
++
++	return bpf_iter_reg_target(&reg_info);
++}
++#endif
++
+ static int __init netlink_proto_init(void)
+ {
+ 	int i;
+@@ -2748,6 +2837,12 @@ static int __init netlink_proto_init(void)
+ 	if (err !=3D 0)
+ 		goto out;
+=20
++#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
++	err =3D bpf_iter_register();
++	if (err)
++		goto out;
++#endif
++
+ 	BUILD_BUG_ON(sizeof(struct netlink_skb_parms) > sizeof_field(struct sk_=
+buff, cb));
+=20
+ 	nl_table =3D kcalloc(MAX_LINKS, sizeof(*nl_table), GFP_KERNEL);
 --=20
 2.24.1
 
