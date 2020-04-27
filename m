@@ -2,175 +2,128 @@ Return-Path: <SRS0=GL4p=6L=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CCA7C4CECC
-	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:14:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16001C4CECC
+	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:18:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2EC32072D
-	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:14:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB649206D9
+	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:18:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="eUUBi/NP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EhVvTDlq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbgD0UOX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Apr 2020 16:14:23 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:39498 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726285AbgD0UMp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 27 Apr 2020 16:12:45 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03RK1qCk010992
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:12:44 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=Da6UDGt3lG2iJVQ0cQ3wR/0fwkL13a9PMcM4yHMVWog=;
- b=eUUBi/NPNr09GAcpKGrLP3XD31+rr6w1IatSyM/gbbk9d4M4BwRPN4p45+mLnQdqo6WF
- bvUsXK1tEOYUvozuMHWKitPfwj+NKCrNd7woXoR5BL3F2XQkc91KFARUW1eO1nxfar3N
- qJ9Vwz4IPRDAOJD5I3iP0M3WpWlpzQJ/5wY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 30mk1gdye0-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:12:44 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Mon, 27 Apr 2020 13:12:43 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 9FA583700871; Mon, 27 Apr 2020 13:12:41 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v1 06/19] bpf: support bpf tracing/iter programs for BPF_LINK_UPDATE
-Date:   Mon, 27 Apr 2020 13:12:41 -0700
-Message-ID: <20200427201241.2995075-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200427201235.2994549-1-yhs@fb.com>
-References: <20200427201235.2994549-1-yhs@fb.com>
+        id S1726508AbgD0USt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Apr 2020 16:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726233AbgD0USt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 27 Apr 2020 16:18:49 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8BFC0A3BF5
+        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:18:49 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id b1so11816454qtt.1
+        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=z4cawZpukBw1+Q25BdOqsQHK1urediqAEbyuaY1Hefs=;
+        b=EhVvTDlqn1lqTJhu6OX8igYAMA2XjCri6Ee1wZc1NbwzcIF908bfuL2zQNBqzFuxeW
+         7+ykw2T21AQ5bC9FA8Tcmx5iJBuGFY8M9sNlKug+YqDPoQxaJGQpiOmD9aOvX98kuw1e
+         IvtKJhb/9pIC4u+9VxUaUnKG7Kl6M2/Zz/M4duzJ4mzwSDGYqIJ/+ZOVL5lqOdgzOdhc
+         fgfQJxB4L6WwhUc7kQU6DVyAuQhXQsP5M/JNZkvms+0wXuuGByGmCjnt/ADILgHvtIy5
+         PF1PyseG+YNK/LOZheOVTFjq6RL82o7jv2xOxnOVfwekzslvvIz+2JxmtwSJFMte/aWk
+         A7Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z4cawZpukBw1+Q25BdOqsQHK1urediqAEbyuaY1Hefs=;
+        b=jBsMgvwtN5j2UXb8wQo7ISRw74l4GWj6AxmA9/fPOteNB4bk96MHabCwYu7QB08GNq
+         gSP1OhJlOrhwD5SI2xeaN5BPcks+izeCgyITjl5fEvcP6JYoooCng5vI2D7El6CxmoqS
+         pZPBm0RPU0FLJ6Rs9050E4OdjzKR0RsgulQHD+GtXfutY2NZzeuNbSjs8nhEBzhfyumY
+         BZT9chtYAk1fnIws9UGvzHJHsebGTBvDc7wP+gjTxu7PplYqAM+U6Ps7+bhtEUMGzzXz
+         1lrrJDYLOH9gDD1VcjcSyhmY28Ynv/D7vWhA+qHPg90brfChBM/Ekk3AjGE3N56DFZaM
+         rEDQ==
+X-Gm-Message-State: AGi0PuZZ4DErc75qcC6CcDr6WQpkh668oxC+UfsL6/6PyYk3qlmLdr6G
+        BtCgRsE84dx1/x3emM/o7Pki4Xfva/vpoN1m0J+EyOtE
+X-Google-Smtp-Source: APiQypLnEN1TkH/F3a3i1dQGZpV5Uje4BHr76hZ2KKwTthYpbrzFscpTJa6nx6jUbtOa2INXBYpGqVymZPC+tBgZi7Y=
+X-Received: by 2002:ac8:468d:: with SMTP id g13mr24206957qto.59.1588018728270;
+ Mon, 27 Apr 2020 13:18:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-27_15:2020-04-27,2020-04-27 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- suspectscore=0 mlxlogscore=999 priorityscore=1501 lowpriorityscore=0
- mlxscore=0 malwarescore=0 bulkscore=0 spamscore=0 adultscore=0
- clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004270161
-X-FB-Internal: deliver
+References: <20200427132940.2857289-1-vkabatov@redhat.com> <20200427160240.5e66a954@carbon>
+In-Reply-To: <20200427160240.5e66a954@carbon>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 27 Apr 2020 13:18:37 -0700
+Message-ID: <CAEf4BzbZPHyR5cqqM73QbppHMDuaRXCf9z08VZFcohdsQE2DGw@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Copy runqslower to OUTPUT directory
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     Veronika Kabatova <vkabatov@redhat.com>, bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Added BPF_LINK_UPDATE support for tracing/iter programs.
-This way, a file based bpf iterator, which holds a reference
-to the link, can have its bpf program updated without
-creating new files.
+On Mon, Apr 27, 2020 at 7:03 AM Jesper Dangaard Brouer
+<brouer@redhat.com> wrote:
+>
+> On Mon, 27 Apr 2020 15:29:40 +0200
+> Veronika Kabatova <vkabatov@redhat.com> wrote:
+>
+> > $(OUTPUT)/runqslower makefile target doesn't actually create runqslower
+> > binary in the $(OUTPUT) directory. As lib.mk expects all
+> > TEST_GEN_PROGS_EXTENDED (which runqslower is a part of) to be present in
+> > the OUTPUT directory, this results in an error when running e.g. `make
+> > install`:
+> >
+> > rsync: link_stat "tools/testing/selftests/bpf/runqslower" failed: No
+> >        such file or directory (2)
+> >
+> > Copy the binary into the OUTPUT directory after building it to fix the
+> > error.
+> >
+> > Signed-off-by: Veronika Kabatova <vkabatov@redhat.com>
+> > ---
+>
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- include/linux/bpf.h   |  2 ++
- kernel/bpf/bpf_iter.c | 29 +++++++++++++++++++++++++++++
- kernel/bpf/syscall.c  |  5 +++++
- 3 files changed, 36 insertions(+)
+Did I miss original patch somewhere on bpf@vger mailing list?..
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 60ecb73d8f6d..4fc39d9b5cd0 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1131,6 +1131,8 @@ struct bpf_prog *bpf_iter_get_prog(struct seq_file =
-*seq, u32 priv_data_size,
- 				   u64 *session_id, u64 *seq_num, bool is_last);
- int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx);
- int bpf_iter_link_attach(const union bpf_attr *attr, struct bpf_prog *pr=
-og);
-+int bpf_iter_link_replace(struct bpf_link *link, struct bpf_prog *old_pr=
-og,
-+			  struct bpf_prog *new_prog);
-=20
- int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
- int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index 9532e7bcb8e1..fc1ce5ee5c3f 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -23,6 +23,9 @@ static struct list_head targets;
- static struct mutex targets_mutex;
- static bool bpf_iter_inited =3D false;
-=20
-+/* protect bpf_iter_link.link->prog upddate */
-+static struct mutex bpf_iter_mutex;
-+
- int bpf_iter_reg_target(struct bpf_iter_reg *reg_info)
- {
- 	struct bpf_iter_target_info *tinfo;
-@@ -33,6 +36,7 @@ int bpf_iter_reg_target(struct bpf_iter_reg *reg_info)
- 	if (!bpf_iter_inited) {
- 		INIT_LIST_HEAD(&targets);
- 		mutex_init(&targets_mutex);
-+		mutex_init(&bpf_iter_mutex);
- 		bpf_iter_inited =3D true;
- 	}
-=20
-@@ -121,3 +125,28 @@ int bpf_iter_link_attach(const union bpf_attr *attr,=
- struct bpf_prog *prog)
- 		kfree(link);
- 	return err;
- }
-+
-+int bpf_iter_link_replace(struct bpf_link *link, struct bpf_prog *old_pr=
-og,
-+			  struct bpf_prog *new_prog)
-+{
-+	int ret =3D 0;
-+
-+	mutex_lock(&bpf_iter_mutex);
-+	if (old_prog && link->prog !=3D old_prog) {
-+		ret =3D -EPERM;
-+		goto out_unlock;
-+	}
-+
-+	if (link->prog->type !=3D new_prog->type ||
-+	    link->prog->expected_attach_type !=3D new_prog->expected_attach_typ=
-e ||
-+	    strcmp(link->prog->aux->attach_func_name, new_prog->aux->attach_fun=
-c_name)) {
-+		ret =3D -EINVAL;
-+		goto out_unlock;
-+	}
-+
-+	link->prog =3D new_prog;
-+
-+out_unlock:
-+	mutex_unlock(&bpf_iter_mutex);
-+	return ret;
-+}
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 8741b5e11c85..b7af4f006f2e 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3679,6 +3679,11 @@ static int link_update(union bpf_attr *attr)
- 		goto out_put_progs;
- 	}
- #endif
-+
-+	if (link->ops =3D=3D &bpf_iter_link_lops) {
-+		ret =3D bpf_iter_link_replace(link, old_prog, new_prog);
-+		goto out_put_progs;
-+	}
- 	ret =3D -EINVAL;
-=20
- out_put_progs:
---=20
-2.24.1
+> Looks good to me
+>
+> Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+>
+> >  tools/testing/selftests/bpf/Makefile | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> > index 7729892e0b04..cb8e7e5b2307 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -142,6 +142,7 @@ $(OUTPUT)/runqslower: $(BPFOBJ)
+> >       $(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower     \
+> >                   OUTPUT=$(SCRATCH_DIR)/ VMLINUX_BTF=$(VMLINUX_BTF)   \
+> >                   BPFOBJ=$(BPFOBJ) BPF_INCLUDE=$(INCLUDE_DIR)
+> > +     @cp $(SCRATCH_DIR)/runqslower $(OUTPUT)/runqslower
 
+This should be AND'ed (&&) with $(MAKE) to not attempt copy on failed
+make run. Also in general @cp should be $(Q)cp, but if you use $$ you
+shouldn't need $(Q).
+
+Also, just use $@ instead of $(OUTPUT)/runqslower:
+
+cp $(SCRATCH_DIR)/runqslower $@
+
+> >
+> >  $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(OUTPUT)/test_stub.o $(BPFOBJ)
+>
+> --
+> Best regards,
+>   Jesper Dangaard Brouer
+>   MSc.CS, Principal Kernel Engineer at Red Hat
+>   LinkedIn: http://www.linkedin.com/in/brouer
+>
