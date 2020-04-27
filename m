@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39A0AC4CECC
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B351C54FD0
 	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:13:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D4132070B
+	by mail.kernel.org (Postfix) with ESMTP id 7DC662070B
 	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:13:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="MjI8PPEa"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="KnHOEaT6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbgD0UNE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Apr 2020 16:13:04 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11340 "EHLO
+        id S1726877AbgD0UNF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Apr 2020 16:13:05 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:28250 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726877AbgD0UM4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 27 Apr 2020 16:12:56 -0400
+        by vger.kernel.org with ESMTP id S1726845AbgD0UMy (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 27 Apr 2020 16:12:54 -0400
 Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03RK1sOv011056
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:12:55 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03RK1sOj011056
+        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:12:52 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=e6sUKVJE4TRn+OgxVb/za2wlkWSbdOe4ULxFFsDU+0w=;
- b=MjI8PPEaCRGxJHuZp4PRnmiLpKg588K0StKgpbcXUq4lsb8xdRy2Ioj1h+hnrnxG02nj
- NfbZsTAH5kCMeGewF5NjLtLCsy88rAeRvZQuto9QG3dwKfiSu1Sg4ps9LvOzAH64CRzC
- zSHwFMSz9yx26Lrr9TjsvjrbIoXQVP+1sY4= 
+ bh=HqSdaGb829zK+zJhBFX9+xDvXanr5rLzppBntb0/dCo=;
+ b=KnHOEaT6AYX1LbHTOc+cpfEyGkvlB4WxxUgkC2o9L3UrKBVsHnzftCyyOvo3VA9zL1yX
+ 2MfxiFiDSLL30UbTCAXMDb5MFSaIVbWWjIkFAYCV7YGCT38zkA3dA0bclgREPmfGcLPg
+ DUbK23YcibuJR88PQ6FqZq+UvcdDMm+t+RM= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30mk1gdyeq-13
+        by mx0a-00082601.pphosted.com with ESMTP id 30mk1gdyeq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:12:55 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:12:52 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Mon, 27 Apr 2020 13:12:53 -0700
+ 15.1.1847.3; Mon, 27 Apr 2020 13:12:51 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id B8AC73700871; Mon, 27 Apr 2020 13:12:52 -0700 (PDT)
+        id C96BB3700871; Mon, 27 Apr 2020 13:12:47 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v1 15/19] tools/libbpf: add bpf_iter support
-Date:   Mon, 27 Apr 2020 13:12:52 -0700
-Message-ID: <20200427201252.2996037-1-yhs@fb.com>
+Subject: [PATCH bpf-next v1 11/19] bpf: add task and task/file targets
+Date:   Mon, 27 Apr 2020 13:12:47 -0700
+Message-ID: <20200427201247.2995622-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200427201235.2994549-1-yhs@fb.com>
 References: <20200427201235.2994549-1-yhs@fb.com>
@@ -62,7 +62,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-27_15:2020-04-27,2020-04-27 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- suspectscore=2 mlxlogscore=999 priorityscore=1501 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 priorityscore=1501 lowpriorityscore=0
  mlxscore=0 malwarescore=0 bulkscore=0 spamscore=0 adultscore=0
  clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2004270161
@@ -72,234 +72,369 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Three new libbpf APIs are added to support bpf_iter:
-  - bpf_program__attach_iter
-    Given a bpf program and additional parameters, which is
-    none now, returns a bpf_link.
-  - bpf_link__create_iter
-    Given a bpf_link, create a bpf_iter and return a fd
-    so user can then do read() to get seq_file output data.
-  - bpf_iter_create
-    syscall level API to create a bpf iterator.
+Only the tasks belonging to "current" pid namespace
+are enumerated.
 
-Two macros, BPF_SEQ_PRINTF0 and BPF_SEQ_PRINTF, are also introduced.
-These two macros can help bpf program writers with
-nicer bpf_seq_printf syntax similar to the kernel one.
+For task/file target, the bpf program will have access to
+  struct task_struct *task
+  u32 fd
+  struct file *file
+where fd/file is an open file for the task.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/lib/bpf/bpf.c         | 11 +++++++
- tools/lib/bpf/bpf.h         |  2 ++
- tools/lib/bpf/bpf_tracing.h | 23 ++++++++++++++
- tools/lib/bpf/libbpf.c      | 60 +++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h      | 11 +++++++
- tools/lib/bpf/libbpf.map    |  7 +++++
- 6 files changed, 114 insertions(+)
+ kernel/bpf/Makefile    |   2 +-
+ kernel/bpf/task_iter.c | 319 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 320 insertions(+), 1 deletion(-)
+ create mode 100644 kernel/bpf/task_iter.c
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 5cc1b0785d18..7ffd6c0ad95f 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -619,6 +619,17 @@ int bpf_link_update(int link_fd, int new_prog_fd,
- 	return sys_bpf(BPF_LINK_UPDATE, &attr, sizeof(attr));
- }
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index b2b5eefc5254..37b2d8620153 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -2,7 +2,7 @@
+ obj-y :=3D core.o
+ CFLAGS_core.o +=3D $(call cc-disable-warning, override-init)
 =20
-+int bpf_iter_create(int link_fd, unsigned int flags)
-+{
-+	union bpf_attr attr;
+-obj-$(CONFIG_BPF_SYSCALL) +=3D syscall.o verifier.o inode.o helpers.o tn=
+um.o bpf_iter.o map_iter.o
++obj-$(CONFIG_BPF_SYSCALL) +=3D syscall.o verifier.o inode.o helpers.o tn=
+um.o bpf_iter.o map_iter.o task_iter.o
+ obj-$(CONFIG_BPF_SYSCALL) +=3D hashtab.o arraymap.o percpu_freelist.o bp=
+f_lru_list.o lpm_trie.o map_in_map.o
+ obj-$(CONFIG_BPF_SYSCALL) +=3D local_storage.o queue_stack_maps.o
+ obj-$(CONFIG_BPF_SYSCALL) +=3D disasm.o
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+new file mode 100644
+index 000000000000..ee29574e427d
+--- /dev/null
++++ b/kernel/bpf/task_iter.c
+@@ -0,0 +1,319 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2020 Facebook */
 +
-+	memset(&attr, 0, sizeof(attr));
-+	attr.iter_create.link_fd =3D link_fd;
-+	attr.iter_create.flags =3D flags;
++#include <linux/init.h>
++#include <linux/namei.h>
++#include <linux/pid_namespace.h>
++#include <linux/fs.h>
++#include <linux/fdtable.h>
++#include <linux/filter.h>
 +
-+	return sys_bpf(BPF_ITER_CREATE, &attr, sizeof(attr));
-+}
-+
- int bpf_prog_query(int target_fd, enum bpf_attach_type type, __u32 query=
-_flags,
- 		   __u32 *attach_flags, __u32 *prog_ids, __u32 *prog_cnt)
- {
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 46d47afdd887..db9df303090e 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -187,6 +187,8 @@ struct bpf_link_update_opts {
- LIBBPF_API int bpf_link_update(int link_fd, int new_prog_fd,
- 			       const struct bpf_link_update_opts *opts);
-=20
-+LIBBPF_API int bpf_iter_create(int link_fd, unsigned int flags);
-+
- struct bpf_prog_test_run_attr {
- 	int prog_fd;
- 	int repeat;
-diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-index f3f3c3fb98cb..4a6dffaa7e57 100644
---- a/tools/lib/bpf/bpf_tracing.h
-+++ b/tools/lib/bpf/bpf_tracing.h
-@@ -413,4 +413,27 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
- }									    \
- static __always_inline typeof(name(0)) ____##name(struct pt_regs *ctx, #=
-#args)
-=20
-+/*
-+ * BPF_SEQ_PRINTF to wrap bpf_seq_printf to-be-printed values
-+ * in a structure. BPF_SEQ_PRINTF0 is a simple wrapper for
-+ * bpf_seq_printf().
-+ */
-+#define BPF_SEQ_PRINTF0(seq, fmt)					\
-+	({								\
-+		int ret =3D bpf_seq_printf(seq, fmt, sizeof(fmt),		\
-+					 (void *)0, 0);			\
-+		ret;							\
-+	})
-+
-+#define BPF_SEQ_PRINTF(seq, fmt, args...)				\
-+	({								\
-+		_Pragma("GCC diagnostic push")				\
-+		_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")	\
-+		__u64 param[___bpf_narg(args)] =3D { args };		\
-+		_Pragma("GCC diagnostic pop")				\
-+		int ret =3D bpf_seq_printf(seq, fmt, sizeof(fmt),		\
-+					 param, sizeof(param));		\
-+		ret;							\
-+	})
-+
- #endif
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 8e1dc6980fac..ffdc4d8e0cc0 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -6366,6 +6366,9 @@ static const struct bpf_sec_def section_defs[] =3D =
-{
- 		.is_attach_btf =3D true,
- 		.expected_attach_type =3D BPF_LSM_MAC,
- 		.attach_fn =3D attach_lsm),
-+	SEC_DEF("iter/", TRACING,
-+		.expected_attach_type =3D BPF_TRACE_ITER,
-+		.is_attach_btf =3D true),
- 	BPF_PROG_SEC("xdp",			BPF_PROG_TYPE_XDP),
- 	BPF_PROG_SEC("perf_event",		BPF_PROG_TYPE_PERF_EVENT),
- 	BPF_PROG_SEC("lwt_in",			BPF_PROG_TYPE_LWT_IN),
-@@ -6629,6 +6632,7 @@ static int bpf_object__collect_struct_ops_map_reloc=
-(struct bpf_object *obj,
-=20
- #define BTF_TRACE_PREFIX "btf_trace_"
- #define BTF_LSM_PREFIX "bpf_lsm_"
-+#define BTF_ITER_PREFIX "__bpf_iter__"
- #define BTF_MAX_NAME_SIZE 128
-=20
- static int find_btf_by_prefix_kind(const struct btf *btf, const char *pr=
-efix,
-@@ -6659,6 +6663,9 @@ static inline int __find_vmlinux_btf_id(struct btf =
-*btf, const char *name,
- 	else if (attach_type =3D=3D BPF_LSM_MAC)
- 		err =3D find_btf_by_prefix_kind(btf, BTF_LSM_PREFIX, name,
- 					      BTF_KIND_FUNC);
-+	else if (attach_type =3D=3D BPF_TRACE_ITER)
-+		err =3D find_btf_by_prefix_kind(btf, BTF_ITER_PREFIX, name,
-+					      BTF_KIND_FUNC);
- 	else
- 		err =3D btf__find_by_name_kind(btf, name, BTF_KIND_FUNC);
-=20
-@@ -7617,6 +7624,59 @@ bpf_program__attach_cgroup(struct bpf_program *pro=
-g, int cgroup_fd)
- 	return link;
- }
-=20
-+struct bpf_link *
-+bpf_program__attach_iter(struct bpf_program *prog,
-+			 const struct bpf_iter_attach_opts *opts)
-+{
-+	enum bpf_attach_type attach_type;
-+	char errmsg[STRERR_BUFSIZE];
-+	struct bpf_link *link;
-+	int prog_fd, link_fd;
-+
-+	if (!OPTS_VALID(opts, bpf_iter_attach_opts))
-+		return ERR_PTR(-EINVAL);
-+
-+	prog_fd =3D bpf_program__fd(prog);
-+	if (prog_fd < 0) {
-+		pr_warn("program '%s': can't attach before loaded\n",
-+			bpf_program__title(prog, false));
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	link =3D calloc(1, sizeof(*link));
-+	if (!link)
-+		return ERR_PTR(-ENOMEM);
-+	link->detach =3D &bpf_link__detach_fd;
-+
-+	attach_type =3D bpf_program__get_expected_attach_type(prog);
-+	link_fd =3D bpf_link_create(prog_fd, 0, attach_type, NULL);
-+	if (link_fd < 0) {
-+		link_fd =3D -errno;
-+		free(link);
-+		pr_warn("program '%s': failed to attach to iterator: %s\n",
-+			bpf_program__title(prog, false),
-+			libbpf_strerror_r(link_fd, errmsg, sizeof(errmsg)));
-+		return ERR_PTR(link_fd);
-+	}
-+	link->fd =3D link_fd;
-+	return link;
-+}
-+
-+int bpf_link__create_iter(struct bpf_link *link, unsigned int flags)
-+{
-+	char errmsg[STRERR_BUFSIZE];
-+	int iter_fd;
-+
-+	iter_fd =3D bpf_iter_create(bpf_link__fd(link), flags);
-+	if (iter_fd < 0) {
-+		iter_fd =3D -errno;
-+		pr_warn("failed to create an iterator: %s\n",
-+			libbpf_strerror_r(iter_fd, errmsg, sizeof(errmsg)));
-+	}
-+
-+	return iter_fd;
-+}
-+
- struct bpf_link *bpf_program__attach(struct bpf_program *prog)
- {
- 	const struct bpf_sec_def *sec_def;
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index f1dacecb1619..abe5786fcab3 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -258,6 +258,17 @@ struct bpf_map;
-=20
- LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(struct bpf_map *m=
-ap);
-=20
-+struct bpf_iter_attach_opts {
-+	size_t sz; /* size of this struct for forward/backward compatibility */
++struct bpf_iter_seq_task_info {
++	struct pid_namespace *ns;
++	struct task_struct *task;
++	u32 id;
 +};
-+#define bpf_iter_attach_opts__last_field sz
 +
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_iter(struct bpf_program *prog,
-+			 const struct bpf_iter_attach_opts *opts);
-+LIBBPF_API int
-+bpf_link__create_iter(struct bpf_link *link, unsigned int flags);
++static struct task_struct *task_seq_get_next(struct pid_namespace *ns, u=
+32 *id)
++{
++	struct task_struct *task =3D NULL;
++	struct pid *pid;
 +
- struct bpf_insn;
-=20
- /*
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index bb8831605b25..1cea36f9f2e2 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -254,3 +254,10 @@ LIBBPF_0.0.8 {
- 		bpf_program__set_lsm;
- 		bpf_set_link_xdp_fd_opts;
- } LIBBPF_0.0.7;
++	rcu_read_lock();
++	pid =3D idr_get_next(&ns->idr, id);
++	if (pid)
++		task =3D get_pid_task(pid, PIDTYPE_PID);
++	rcu_read_unlock();
 +
-+LIBBPF_0.0.9 {
-+	global:
-+		bpf_link__create_iter;
-+		bpf_program__attach_iter;
-+		bpf_iter_create;
-+} LIBBPF_0.0.8;
++	return task;
++}
++
++static void *task_seq_start(struct seq_file *seq, loff_t *pos)
++{
++	struct bpf_iter_seq_task_info *info =3D seq->private;
++	struct task_struct *task;
++	u32 id =3D info->id;
++
++	if (*pos =3D=3D 0)
++		info->ns =3D task_active_pid_ns(current);
++
++	task =3D task_seq_get_next(info->ns, &id);
++	if (!task)
++		return NULL;
++
++	++*pos;
++	info->task =3D task;
++	info->id =3D id;
++
++	return task;
++}
++
++static void *task_seq_next(struct seq_file *seq, void *v, loff_t *pos)
++{
++	struct bpf_iter_seq_task_info *info =3D seq->private;
++	struct task_struct *task;
++
++	++*pos;
++	++info->id;
++	task =3D task_seq_get_next(info->ns, &info->id);
++	if (!task)
++		return NULL;
++
++	put_task_struct(info->task);
++	info->task =3D task;
++	return task;
++}
++
++struct bpf_iter__task {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct task_struct *, task);
++};
++
++int __init __bpf_iter__task(struct bpf_iter_meta *meta, struct task_stru=
+ct *task)
++{
++	return 0;
++}
++
++static int task_seq_show(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_meta meta;
++	struct bpf_iter__task ctx;
++	struct bpf_prog *prog;
++	int ret =3D 0;
++
++	prog =3D bpf_iter_get_prog(seq, sizeof(struct bpf_iter_seq_task_info),
++				 &meta.session_id, &meta.seq_num,
++				 v =3D=3D (void *)0);
++	if (prog) {
++		meta.seq =3D seq;
++		ctx.meta =3D &meta;
++		ctx.task =3D v;
++		ret =3D bpf_iter_run_prog(prog, &ctx);
++	}
++
++	return ret =3D=3D 0 ? 0 : -EINVAL;
++}
++
++static void task_seq_stop(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_seq_task_info *info =3D seq->private;
++
++	if (!v)
++		task_seq_show(seq, v);
++
++	if (info->task) {
++		put_task_struct(info->task);
++		info->task =3D NULL;
++	}
++}
++
++static const struct seq_operations task_seq_ops =3D {
++	.start	=3D task_seq_start,
++	.next	=3D task_seq_next,
++	.stop	=3D task_seq_stop,
++	.show	=3D task_seq_show,
++};
++
++struct bpf_iter_seq_task_file_info {
++	struct pid_namespace *ns;
++	struct task_struct *task;
++	struct files_struct *files;
++	u32 id;
++	u32 fd;
++};
++
++static struct file *task_file_seq_get_next(struct pid_namespace *ns, u32=
+ *id,
++					   int *fd, struct task_struct **task,
++					   struct files_struct **fstruct)
++{
++	struct files_struct *files;
++	struct task_struct *tk;
++	u32 sid =3D *id;
++	int sfd;
++
++	/* If this function returns a non-NULL file object,
++	 * it held a reference to the files_struct and file.
++	 * Otherwise, it does not hold any reference.
++	 */
++again:
++	if (*fstruct) {
++		files =3D *fstruct;
++		sfd =3D *fd;
++	} else {
++		tk =3D task_seq_get_next(ns, &sid);
++		if (!tk)
++			return NULL;
++
++		files =3D get_files_struct(tk);
++		put_task_struct(tk);
++		if (!files) {
++			sid =3D ++(*id);
++			*fd =3D 0;
++			goto again;
++		}
++		*fstruct =3D files;
++		*task =3D tk;
++		if (sid =3D=3D *id) {
++			sfd =3D *fd;
++		} else {
++			*id =3D sid;
++			sfd =3D 0;
++		}
++	}
++
++	rcu_read_lock();
++	for (; sfd < files_fdtable(files)->max_fds; sfd++) {
++		struct file *f;
++
++		f =3D fcheck_files(files, sfd);
++		if (!f)
++			continue;
++		*fd =3D sfd;
++		get_file(f);
++		rcu_read_unlock();
++		return f;
++	}
++
++	/* the current task is done, go to the next task */
++	rcu_read_unlock();
++	put_files_struct(files);
++	*fstruct =3D NULL;
++	sid =3D ++(*id);
++	*fd =3D 0;
++	goto again;
++}
++
++static void *task_file_seq_start(struct seq_file *seq, loff_t *pos)
++{
++	struct bpf_iter_seq_task_file_info *info =3D seq->private;
++	struct files_struct *files =3D NULL;
++	struct task_struct *task =3D NULL;
++	struct file *file;
++	u32 id =3D info->id;
++	int fd =3D info->fd;
++
++	if (*pos =3D=3D 0)
++		info->ns =3D task_active_pid_ns(current);
++
++	file =3D task_file_seq_get_next(info->ns, &id, &fd, &task, &files);
++	if (!file) {
++		info->files =3D NULL;
++		return NULL;
++	}
++
++	++*pos;
++	info->id =3D id;
++	info->fd =3D fd;
++	info->task =3D task;
++	info->files =3D files;
++
++	return file;
++}
++
++static void *task_file_seq_next(struct seq_file *seq, void *v, loff_t *p=
+os)
++{
++	struct bpf_iter_seq_task_file_info *info =3D seq->private;
++	struct files_struct *files =3D info->files;
++	struct task_struct *task =3D info->task;
++	struct file *file;
++	u32 id =3D info->id;
++
++	++*pos;
++	++info->fd;
++	fput((struct file *)v);
++	file =3D task_file_seq_get_next(info->ns, &id, &info->fd, &task, &files=
+);
++	if (!file) {
++		info->files =3D NULL;
++		return NULL;
++	}
++
++	info->id =3D id;
++	info->task =3D task;
++	info->files =3D files;
++
++	return file;
++}
++
++struct bpf_iter__task_file {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct task_struct *, task);
++	u32 fd;
++	__bpf_md_ptr(struct file *, file);
++};
++
++int __init __bpf_iter__task_file(struct bpf_iter_meta *meta,
++			      struct task_struct *task, u32 fd,
++			      struct file *file)
++{
++	return 0;
++}
++
++static int task_file_seq_show(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_seq_task_file_info *info =3D seq->private;
++	struct bpf_iter__task_file ctx;
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++	int ret =3D 0;
++
++	prog =3D bpf_iter_get_prog(seq, sizeof(struct bpf_iter_seq_task_file_in=
+fo),
++				 &meta.session_id, &meta.seq_num, v =3D=3D (void *)0);
++	if (prog) {
++		meta.seq =3D seq;
++		ctx.meta =3D &meta;
++		ctx.task =3D info->task;
++		ctx.fd =3D info->fd;
++		ctx.file =3D v;
++		ret =3D bpf_iter_run_prog(prog, &ctx);
++	}
++
++	return ret =3D=3D 0 ? 0 : -EINVAL;
++}
++
++static void task_file_seq_stop(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_seq_task_file_info *info =3D seq->private;
++
++	if (v)
++		fput((struct file *)v);
++	else
++		task_file_seq_show(seq, v);
++
++	if (info->files) {
++		put_files_struct(info->files);
++		info->files =3D NULL;
++	}
++}
++
++static const struct seq_operations task_file_seq_ops =3D {
++	.start	=3D task_file_seq_start,
++	.next	=3D task_file_seq_next,
++	.stop	=3D task_file_seq_stop,
++	.show	=3D task_file_seq_show,
++};
++
++static int __init task_iter_init(void)
++{
++	struct bpf_iter_reg task_file_reg_info =3D {
++		.target			=3D "task_file",
++		.target_func_name	=3D "__bpf_iter__task_file",
++		.seq_ops		=3D &task_file_seq_ops,
++		.seq_priv_size		=3D sizeof(struct bpf_iter_seq_task_file_info),
++		.target_feature		=3D 0,
++	};
++	struct bpf_iter_reg task_reg_info =3D {
++		.target			=3D "task",
++		.target_func_name	=3D "__bpf_iter__task",
++		.seq_ops		=3D &task_seq_ops,
++		.seq_priv_size		=3D sizeof(struct bpf_iter_seq_task_info),
++		.target_feature		=3D 0,
++	};
++	int ret;
++
++	ret =3D bpf_iter_reg_target(&task_reg_info);
++	if (ret)
++		return ret;
++
++	return bpf_iter_reg_target(&task_file_reg_info);
++}
++late_initcall(task_iter_init);
 --=20
 2.24.1
 
