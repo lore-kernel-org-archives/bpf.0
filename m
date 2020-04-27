@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41782C4CECC
-	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:12:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DB47C54FCB
+	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:13:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 15FCD2070B
-	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:12:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E31B62070B
+	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 20:13:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="i3tp1E4I"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="by9HRGgf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726883AbgD0UM5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Apr 2020 16:12:57 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:27544 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726858AbgD0UM4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 27 Apr 2020 16:12:56 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03RK1sOr011056
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:12:54 -0700
+        id S1726800AbgD0UNC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Apr 2020 16:13:02 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:23448 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726892AbgD0UNC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 27 Apr 2020 16:13:02 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03RKAks0025724
+        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:13:00 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Z5WzyvU6Bl8evAcaKXqHCQvCbQ9llNqfDDDZxr8FaQY=;
- b=i3tp1E4IRNYbXRLHTRVbl6tgqsB1tnDU8SXfNovpSTDgCG4WGP2c+8d75ASr9W65g8Is
- MSer/uSCw9FpZuxWLgAhASINUoVFayqUI2GAM7s4p4HObBKW5trtnlpZLPBu0HQL7nIB
- J86O2qKCTdshotSUI5nKNjvH9ZQs+jfvLgY= 
+ bh=FlaReR0raZ/pSO9HQObeqtt2GbudfAFX3a/mdhc5RMk=;
+ b=by9HRGgfZllLfSClYl+G5vFrmE6/+UM881/yaivxe3TBBQvsocV9t8XzIjAhJNwpa6kX
+ uljFVEWcpKRFQHMaQc97e0RTDqDooPxmDRihdpLAI1SZJ4JoIaYpzF64TRny08Sy/P8d
+ nMWYA8KPeKAZZtvFe3h04QhO3Y25MCOjV30= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30mk1gdyeq-9
+        by mx0a-00082601.pphosted.com with ESMTP id 30n515t701-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:12:54 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 13:13:00 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Mon, 27 Apr 2020 13:12:53 -0700
+ 15.1.1847.3; Mon, 27 Apr 2020 13:12:58 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 0D89E3700871; Mon, 27 Apr 2020 13:12:49 -0700 (PDT)
+        id 381673700871; Mon, 27 Apr 2020 13:12:55 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v1 12/19] bpf: add bpf_seq_printf and bpf_seq_write helpers
-Date:   Mon, 27 Apr 2020 13:12:49 -0700
-Message-ID: <20200427201249.2995688-1-yhs@fb.com>
+Subject: [PATCH bpf-next v1 17/19] tools/bpf: selftests: add iterator programs for ipv6_route and netlink
+Date:   Mon, 27 Apr 2020 13:12:55 -0700
+Message-ID: <20200427201255.2996209-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200427201235.2994549-1-yhs@fb.com>
 References: <20200427201235.2994549-1-yhs@fb.com>
@@ -61,358 +61,270 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-27_15:2020-04-27,2020-04-27 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- suspectscore=0 mlxlogscore=999 priorityscore=1501 lowpriorityscore=0
- mlxscore=0 malwarescore=0 bulkscore=0 spamscore=0 adultscore=0
- clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004270161
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
+ malwarescore=0 impostorscore=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004270164
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Two helpers bpf_seq_printf and bpf_seq_write, are added for
-writing data to the seq_file buffer.
+Two bpf programs are added in this patch for netlink and ipv6_route
+target. On my VM, I am able to achieve identical
+results compared to /proc/net/netlink and /proc/net/ipv6_route.
 
-bpf_seq_printf supports common format string flag/width/type
-fields so at least I can get identical results for
-netlink and ipv6_route targets.
+  $ cat /proc/net/netlink
+  sk               Eth Pid        Groups   Rmem     Wmem     Dump  Locks =
+   Drops    Inode
+  000000002c42d58b 0   0          00000000 0        0        0     2     =
+   0        7
+  00000000a4e8b5e1 0   1          00000551 0        0        0     2     =
+   0        18719
+  00000000e1b1c195 4   0          00000000 0        0        0     2     =
+   0        16422
+  000000007e6b29f9 6   0          00000000 0        0        0     2     =
+   0        16424
+  ....
+  00000000159a170d 15  1862       00000002 0        0        0     2     =
+   0        1886
+  000000009aca4bc9 15  3918224839 00000002 0        0        0     2     =
+   0        19076
+  00000000d0ab31d2 15  1          00000002 0        0        0     2     =
+   0        18683
+  000000008398fb08 16  0          00000000 0        0        0     2     =
+   0        27
+  $ cat /sys/fs/bpf/my_netlink
+  sk               Eth Pid        Groups   Rmem     Wmem     Dump  Locks =
+   Drops    Inode
+  000000002c42d58b 0   0          00000000 0        0        0     2     =
+   0        7
+  00000000a4e8b5e1 0   1          00000551 0        0        0     2     =
+   0        18719
+  00000000e1b1c195 4   0          00000000 0        0        0     2     =
+   0        16422
+  000000007e6b29f9 6   0          00000000 0        0        0     2     =
+   0        16424
+  ....
+  00000000159a170d 15  1862       00000002 0        0        0     2     =
+   0        1886
+  000000009aca4bc9 15  3918224839 00000002 0        0        0     2     =
+   0        19076
+  00000000d0ab31d2 15  1          00000002 0        0        0     2     =
+   0        18683
+  000000008398fb08 16  0          00000000 0        0        0     2     =
+   0        27
 
-For bpf_seq_printf and bpf_seq_write, return value -EOVERFLOW
-specifically indicates a write failure due to overflow, which
-means the object will be repeated in the next bpf invocation
-if object collection stays the same. Note that if the object
-collection is changed, depending how collection traversal is
-done, even if the object still in the collection, it may not
-be visited.
+  $ cat /proc/net/ipv6_route
+  fe800000000000000000000000000000 40 00000000000000000000000000000000 00=
+ 00000000000000000000000000000000 00000100 00000001 00000000 00000001    =
+ eth0
+  00000000000000000000000000000000 00 00000000000000000000000000000000 00=
+ 00000000000000000000000000000000 ffffffff 00000001 00000000 00200200    =
+   lo
+  00000000000000000000000000000001 80 00000000000000000000000000000000 00=
+ 00000000000000000000000000000000 00000000 00000003 00000000 80200001    =
+   lo
+  fe80000000000000c04b03fffe7827ce 80 00000000000000000000000000000000 00=
+ 00000000000000000000000000000000 00000000 00000002 00000000 80200001    =
+ eth0
+  ff000000000000000000000000000000 08 00000000000000000000000000000000 00=
+ 00000000000000000000000000000000 00000100 00000003 00000000 00000001    =
+ eth0
+  00000000000000000000000000000000 00 00000000000000000000000000000000 00=
+ 00000000000000000000000000000000 ffffffff 00000001 00000000 00200200    =
+   lo
+  $ cat /sys/fs/bpf/my_ipv6_route
+  fe800000000000000000000000000000 40 00000000000000000000000000000000 00=
+ 00000000000000000000000000000000 00000100 00000001 00000000 00000001    =
+ eth0
+  00000000000000000000000000000000 00 00000000000000000000000000000000 00=
+ 00000000000000000000000000000000 ffffffff 00000001 00000000 00200200    =
+   lo
+  00000000000000000000000000000001 80 00000000000000000000000000000000 00=
+ 00000000000000000000000000000000 00000000 00000003 00000000 80200001    =
+   lo
+  fe80000000000000c04b03fffe7827ce 80 00000000000000000000000000000000 00=
+ 00000000000000000000000000000000 00000000 00000002 00000000 80200001    =
+ eth0
+  ff000000000000000000000000000000 08 00000000000000000000000000000000 00=
+ 00000000000000000000000000000000 00000100 00000003 00000000 00000001    =
+ eth0
+  00000000000000000000000000000000 00 00000000000000000000000000000000 00=
+ 00000000000000000000000000000000 ffffffff 00000001 00000000 00200200    =
+   lo
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/uapi/linux/bpf.h       |  31 ++++++-
- kernel/trace/bpf_trace.c       | 159 +++++++++++++++++++++++++++++++++
- scripts/bpf_helpers_doc.py     |   2 +
- tools/include/uapi/linux/bpf.h |  31 ++++++-
- 4 files changed, 221 insertions(+), 2 deletions(-)
+ .../selftests/bpf/progs/bpf_iter_ipv6_route.c | 69 +++++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_netlink.c    | 77 +++++++++++++++++++
+ 2 files changed, 146 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 576651110d16..f0ab17d8fb73 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3042,6 +3042,33 @@ union bpf_attr {
-  * 		See: clock_gettime(CLOCK_BOOTTIME)
-  * 	Return
-  * 		Current *ktime*.
-+ *
-+ * int bpf_seq_printf(struct seq_file *m, const char *fmt, u32 fmt_size,=
- const void *data, u32 data_len)
-+ * 	Description
-+ * 		seq_printf uses seq_file seq_printf() to print out the format strin=
-g.
-+ * 		The *m* represents the seq_file. The *fmt* and *fmt_size* are for
-+ * 		the format string itself. The *data* and *data_len* are format stri=
-ng
-+ * 		arguments. The *data* are a u64 array and corresponding format stri=
-ng
-+ * 		values are stored in the array. For strings and pointers where poin=
-tees
-+ * 		are accessed, only the pointer values are stored in the *data* arra=
-y.
-+ * 		The *data_len* is the *data* size in term of bytes.
-+ * 	Return
-+ * 		0 on success, or a negative errno in case of failure.
-+ *
-+ *		* **-EINVAL**		Invalid arguments, or invalid/unsupported formats.
-+ *		* **-E2BIG**		Too many format specifiers.
-+ *		* **-ENOMEM**		No enough memory to copy pointees or strings.
-+ *		* **-EOVERFLOW**	Overflow happens, the same object will be tried aga=
-in.
-+ *
-+ * int bpf_seq_write(struct seq_file *m, const void *data, u32 len)
-+ * 	Description
-+ * 		seq_write uses seq_file seq_write() to write the data.
-+ * 		The *m* represents the seq_file. The *data* and *len* represent the
-+ *		data to write in bytes.
-+ * 	Return
-+ * 		0 on success, or a negative errno in case of failure.
-+ *
-+ *		* **-EOVERFLOW**	Overflow happens, the same object will be tried aga=
-in.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3169,7 +3196,9 @@ union bpf_attr {
- 	FN(get_netns_cookie),		\
- 	FN(get_current_ancestor_cgroup_id),	\
- 	FN(sk_assign),			\
--	FN(ktime_get_boot_ns),
-+	FN(ktime_get_boot_ns),		\
-+	FN(seq_printf),			\
-+	FN(seq_write),
-=20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-  * function eBPF program intends to call
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index e875c95d3ced..f7c5587b5d2e 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -457,6 +457,161 @@ const struct bpf_func_proto *bpf_get_trace_printk_p=
-roto(void)
- 	return &bpf_trace_printk_proto;
- }
-=20
-+#define MAX_SEQ_PRINTF_VARARGS	12
-+#define MAX_SEQ_PRINTF_STR_LEN	128
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c b/to=
+ols/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c
+new file mode 100644
+index 000000000000..bed34521f997
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c
+@@ -0,0 +1,69 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_endian.h>
 +
-+BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char *, fmt, u32, fmt_s=
-ize,
-+	   const void *, data, u32, data_len)
++char _license[] SEC("license") =3D "GPL";
++
++extern bool CONFIG_IPV6_SUBTREES __kconfig __weak;
++
++#define	RTF_GATEWAY		0x0002
++#define IFNAMSIZ		16
++#define fib_nh_gw_family        nh_common.nhc_gw_family
++#define fib_nh_gw6              nh_common.nhc_gw.ipv6
++#define fib_nh_dev              nh_common.nhc_dev
++
++SEC("iter/ipv6_route")
++int dump_ipv6_route(struct bpf_iter__ipv6_route *ctx)
 +{
-+	char bufs[MAX_SEQ_PRINTF_VARARGS][MAX_SEQ_PRINTF_STR_LEN];
-+	u64 params[MAX_SEQ_PRINTF_VARARGS];
-+	int i, copy_size, num_args;
-+	const u64 *args =3D data;
-+	int fmt_cnt =3D 0;
++	static const char fmt1[] =3D "%pi6 %02x ";
++	static const char fmt2[] =3D "%pi6 ";
++	static const char fmt3[] =3D "00000000000000000000000000000000 ";
++	static const char fmt4[] =3D "%08x %08x %08x %08x %8s\n";
++	static const char fmt5[] =3D "%08x %08x %08x %08x\n";
++	static const char fmt7[] =3D "00000000000000000000000000000000 00 ";
++	struct seq_file *seq =3D ctx->meta->seq;
++	struct fib6_info *rt =3D ctx->rt;
++	const struct net_device *dev;
++	struct fib6_nh *fib6_nh;
++	unsigned int flags;
++	struct nexthop *nh;
 +
-+	/*
-+	 * bpf_check()->check_func_arg()->check_stack_boundary()
-+	 * guarantees that fmt points to bpf program stack,
-+	 * fmt_size bytes of it were initialized and fmt_size > 0
-+	 */
-+	if (fmt[--fmt_size] !=3D 0)
-+		return -EINVAL;
++	if (rt =3D=3D (void *)0)
++		return 0;
 +
-+	if (data_len & 7)
-+		return -EINVAL;
++	fib6_nh =3D &rt->fib6_nh[0];
++	flags =3D rt->fib6_flags;
 +
-+	for (i =3D 0; i < fmt_size; i++) {
-+		if (fmt[i] =3D=3D '%' && (!data || !data_len))
-+			return -EINVAL;
++	/* FIXME: nexthop_is_multipath is not handled here. */
++	nh =3D rt->nh;
++	if (rt->nh)
++		fib6_nh =3D &nh->nh_info->fib6_nh;
++
++	BPF_SEQ_PRINTF(seq, fmt1, &rt->fib6_dst.addr, rt->fib6_dst.plen);
++
++	if (CONFIG_IPV6_SUBTREES)
++		BPF_SEQ_PRINTF(seq, fmt1, &rt->fib6_src.addr,
++			       rt->fib6_src.plen);
++	else
++		BPF_SEQ_PRINTF0(seq, fmt7);
++
++	if (fib6_nh->fib_nh_gw_family) {
++		flags |=3D RTF_GATEWAY;
++		BPF_SEQ_PRINTF(seq, fmt2, &fib6_nh->fib_nh_gw6);
++	} else {
++		BPF_SEQ_PRINTF0(seq, fmt3);
 +	}
 +
-+	num_args =3D data_len / 8;
++	dev =3D fib6_nh->fib_nh_dev;
++	if (dev)
++		BPF_SEQ_PRINTF(seq, fmt4, rt->fib6_metric,
++			       rt->fib6_ref.refs.counter, 0, flags, dev->name);
++	else
++		BPF_SEQ_PRINTF(seq, fmt4, rt->fib6_metric,
++			       rt->fib6_ref.refs.counter, 0, flags);
 +
-+	/* check format string for allowed specifiers */
-+	for (i =3D 0; i < fmt_size; i++) {
-+		if ((!isprint(fmt[i]) && !isspace(fmt[i])) || !isascii(fmt[i]))
-+			return -EINVAL;
-+
-+		if (fmt[i] !=3D '%')
-+			continue;
-+
-+		if (fmt_cnt >=3D MAX_SEQ_PRINTF_VARARGS)
-+			return -E2BIG;
-+
-+		if (fmt_cnt >=3D num_args)
-+			return -EINVAL;
-+
-+		/* fmt[i] !=3D 0 && fmt[last] =3D=3D 0, so we can access fmt[i + 1] */
-+		i++;
-+
-+		/* skip optional "[0+-][num]" width formating field */
-+		while (fmt[i] =3D=3D '0' || fmt[i] =3D=3D '+'  || fmt[i] =3D=3D '-')
-+			i++;
-+		if (fmt[i] >=3D '1' && fmt[i] <=3D '9') {
-+			i++;
-+			while (fmt[i] >=3D '0' && fmt[i] <=3D '9')
-+				i++;
-+		}
-+
-+		if (fmt[i] =3D=3D 's') {
-+			/* disallow any further format extensions */
-+			if (fmt[i + 1] !=3D 0 &&
-+			    !isspace(fmt[i + 1]) &&
-+			    !ispunct(fmt[i + 1]))
-+				return -EINVAL;
-+
-+			/* try our best to copy */
-+			bufs[fmt_cnt][0] =3D 0;
-+			strncpy_from_unsafe(bufs[fmt_cnt],
-+					    (void *) (long) args[fmt_cnt],
-+					    MAX_SEQ_PRINTF_STR_LEN);
-+			params[fmt_cnt] =3D (u64)(long)bufs[fmt_cnt];
-+
-+			fmt_cnt++;
-+			continue;
-+		}
-+
-+		if (fmt[i] =3D=3D 'p') {
-+			if (fmt[i + 1] =3D=3D 0 ||
-+			    fmt[i + 1] =3D=3D 'K' ||
-+			    fmt[i + 1] =3D=3D 'x') {
-+				/* just kernel pointers */
-+				params[fmt_cnt] =3D args[fmt_cnt];
-+				fmt_cnt++;
-+				continue;
-+			}
-+
-+			/* only support "%pI4", "%pi4", "%pI6" and "pi6". */
-+			if (fmt[i + 1] !=3D 'i' && fmt[i + 1] !=3D 'I')
-+				return -EINVAL;
-+			if (fmt[i + 2] !=3D '4' && fmt[i + 2] !=3D '6')
-+				return -EINVAL;
-+
-+			copy_size =3D (fmt[i + 2] =3D=3D '4') ? 4 : 16;
-+
-+			/* try our best to copy */
-+			probe_kernel_read(bufs[fmt_cnt],
-+					  (void *) (long) args[fmt_cnt], copy_size);
-+			params[fmt_cnt] =3D (u64)(long)bufs[fmt_cnt];
-+
-+			i +=3D 2;
-+			fmt_cnt++;
-+			continue;
-+		}
-+
-+		if (fmt[i] =3D=3D 'l') {
-+			i++;
-+			if (fmt[i] =3D=3D 'l')
-+				i++;
-+		}
-+
-+		if (fmt[i] !=3D 'i' && fmt[i] !=3D 'd' &&
-+		    fmt[i] !=3D 'u' && fmt[i] !=3D 'x')
-+			return -EINVAL;
-+
-+		params[fmt_cnt] =3D args[fmt_cnt];
-+		fmt_cnt++;
-+	}
-+
-+	/* Maximumly we can have MAX_SEQ_PRINTF_VARARGS parameter, just give
-+	 * all of them to seq_printf().
-+	 */
-+	seq_printf(m, fmt, params[0], params[1], params[2], params[3],
-+		   params[4], params[5], params[6], params[7], params[8],
-+		   params[9], params[10], params[11]);
-+
-+	return seq_has_overflowed(m) ? -EOVERFLOW : 0;
++	return 0;
 +}
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/tools=
+/testing/selftests/bpf/progs/bpf_iter_netlink.c
+new file mode 100644
+index 000000000000..54f93863c34c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+@@ -0,0 +1,77 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_endian.h>
 +
-+static int bpf_seq_printf_btf_ids[5];
-+static const struct bpf_func_proto bpf_seq_printf_proto =3D {
-+	.func		=3D bpf_seq_printf,
-+	.gpl_only	=3D true,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
-+	.arg2_type	=3D ARG_PTR_TO_MEM,
-+	.arg3_type	=3D ARG_CONST_SIZE,
-+	.arg4_type      =3D ARG_PTR_TO_MEM_OR_NULL,
-+	.arg5_type      =3D ARG_CONST_SIZE_OR_ZERO,
-+	.btf_id		=3D bpf_seq_printf_btf_ids,
-+};
++char _license[] SEC("license") =3D "GPL";
 +
-+BPF_CALL_3(bpf_seq_write, struct seq_file *, m, const void *, data, u32,=
- len)
++#define sk_rmem_alloc	sk_backlog.rmem_alloc
++#define sk_refcnt	__sk_common.skc_refcnt
++
++#define offsetof(TYPE, MEMBER)  ((size_t)&((TYPE *)0)->MEMBER)
++#define container_of(ptr, type, member)				\
++	({							\
++		void *__mptr =3D (void *)(ptr);			\
++		((type *)(__mptr - offsetof(type, member)));	\
++	})
++
++static inline struct inode *SOCK_INODE(struct socket *socket)
 +{
-+	return seq_write(m, data, len) ? -EOVERFLOW : 0;
++	return &container_of(socket, struct socket_alloc, socket)->vfs_inode;
 +}
 +
-+static int bpf_seq_write_btf_ids[5];
-+static const struct bpf_func_proto bpf_seq_write_proto =3D {
-+	.func		=3D bpf_seq_write,
-+	.gpl_only	=3D true,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
-+	.arg2_type	=3D ARG_PTR_TO_MEM,
-+	.arg3_type	=3D ARG_CONST_SIZE,
-+	.btf_id		=3D bpf_seq_write_btf_ids,
-+};
++SEC("iter/netlink")
++int dump_netlink(struct bpf_iter__netlink *ctx)
++{
++	static const char banner[] =3D
++		"sk               Eth Pid        Groups   "
++		"Rmem     Wmem     Dump  Locks    Drops    Inode\n";
++	static const char fmt1[] =3D "%pK %-3d ";
++	static const char fmt2[] =3D "%-10u %08x %-8d %-8d %-5d %-8d ";
++	static const char fmt5[] =3D "%-8u %-8lu\n";
++	struct seq_file *seq =3D ctx->meta->seq;
++	struct netlink_sock *nlk =3D ctx->sk;
++	unsigned long group, ino;
++	struct inode *inode;
++	struct socket *sk;
++	struct sock *s;
 +
- static __always_inline int
- get_map_perf_counter(struct bpf_map *map, u64 flags,
- 		     u64 *value, u64 *enabled, u64 *running)
-@@ -1226,6 +1381,10 @@ tracing_prog_func_proto(enum bpf_func_id func_id, =
-const struct bpf_prog *prog)
- 	case BPF_FUNC_xdp_output:
- 		return &bpf_xdp_output_proto;
- #endif
-+	case BPF_FUNC_seq_printf:
-+		return &bpf_seq_printf_proto;
-+	case BPF_FUNC_seq_write:
-+		return &bpf_seq_write_proto;
- 	default:
- 		return raw_tp_prog_func_proto(func_id, prog);
- 	}
-diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
-index f43d193aff3a..ded304c96a05 100755
---- a/scripts/bpf_helpers_doc.py
-+++ b/scripts/bpf_helpers_doc.py
-@@ -414,6 +414,7 @@ class PrinterHelpers(Printer):
-             'struct sk_reuseport_md',
-             'struct sockaddr',
-             'struct tcphdr',
-+            'struct seq_file',
-=20
-             'struct __sk_buff',
-             'struct sk_msg_md',
-@@ -450,6 +451,7 @@ class PrinterHelpers(Printer):
-             'struct sk_reuseport_md',
-             'struct sockaddr',
-             'struct tcphdr',
-+            'struct seq_file',
-     }
-     mapped_types =3D {
-             'u8': '__u8',
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 576651110d16..f0ab17d8fb73 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3042,6 +3042,33 @@ union bpf_attr {
-  * 		See: clock_gettime(CLOCK_BOOTTIME)
-  * 	Return
-  * 		Current *ktime*.
-+ *
-+ * int bpf_seq_printf(struct seq_file *m, const char *fmt, u32 fmt_size,=
- const void *data, u32 data_len)
-+ * 	Description
-+ * 		seq_printf uses seq_file seq_printf() to print out the format strin=
-g.
-+ * 		The *m* represents the seq_file. The *fmt* and *fmt_size* are for
-+ * 		the format string itself. The *data* and *data_len* are format stri=
-ng
-+ * 		arguments. The *data* are a u64 array and corresponding format stri=
-ng
-+ * 		values are stored in the array. For strings and pointers where poin=
-tees
-+ * 		are accessed, only the pointer values are stored in the *data* arra=
-y.
-+ * 		The *data_len* is the *data* size in term of bytes.
-+ * 	Return
-+ * 		0 on success, or a negative errno in case of failure.
-+ *
-+ *		* **-EINVAL**		Invalid arguments, or invalid/unsupported formats.
-+ *		* **-E2BIG**		Too many format specifiers.
-+ *		* **-ENOMEM**		No enough memory to copy pointees or strings.
-+ *		* **-EOVERFLOW**	Overflow happens, the same object will be tried aga=
-in.
-+ *
-+ * int bpf_seq_write(struct seq_file *m, const void *data, u32 len)
-+ * 	Description
-+ * 		seq_write uses seq_file seq_write() to write the data.
-+ * 		The *m* represents the seq_file. The *data* and *len* represent the
-+ *		data to write in bytes.
-+ * 	Return
-+ * 		0 on success, or a negative errno in case of failure.
-+ *
-+ *		* **-EOVERFLOW**	Overflow happens, the same object will be tried aga=
-in.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3169,7 +3196,9 @@ union bpf_attr {
- 	FN(get_netns_cookie),		\
- 	FN(get_current_ancestor_cgroup_id),	\
- 	FN(sk_assign),			\
--	FN(ktime_get_boot_ns),
-+	FN(ktime_get_boot_ns),		\
-+	FN(seq_printf),			\
-+	FN(seq_write),
-=20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-  * function eBPF program intends to call
++	if (nlk =3D=3D (void *)0)
++		return 0;
++
++	if (ctx->meta->seq_num =3D=3D 0)
++		BPF_SEQ_PRINTF0(seq, banner);
++
++	s =3D &nlk->sk;
++	BPF_SEQ_PRINTF(seq, fmt1, s, s->sk_protocol);
++
++	if (!nlk->groups)  {
++		group =3D 0;
++	} else {
++		/* FIXME: temporary use bpf_probe_read here, needs
++		 * verifier support to do direct access.
++		 */
++		bpf_probe_read(&group, sizeof(group), &nlk->groups[0]);
++	}
++	BPF_SEQ_PRINTF(seq, fmt2, nlk->portid, (u32)group,
++		       s->sk_rmem_alloc.counter,
++		       s->sk_wmem_alloc.refs.counter - 1,
++		       nlk->cb_running, s->sk_refcnt.refs.counter);
++
++	sk =3D s->sk_socket;
++	if (!sk) {
++		ino =3D 0;
++	} else {
++		/* FIXME: container_of inside SOCK_INODE has a forced
++		 * type conversion, and direct access cannot be used
++		 * with current verifier.
++		 */
++		inode =3D SOCK_INODE(sk);
++		bpf_probe_read(&ino, sizeof(ino), &inode->i_ino);
++	}
++	BPF_SEQ_PRINTF(seq, fmt5, s->sk_drops.counter, ino);
++
++	return 0;
++}
 --=20
 2.24.1
 
