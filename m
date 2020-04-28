@@ -1,323 +1,113 @@
-Return-Path: <SRS0=GL4p=6L=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=8xVa=6M=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1773EC83001
-	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 23:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FF0FC83002
+	for <bpf@archiver.kernel.org>; Tue, 28 Apr 2020 01:40:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF4382072D
-	for <bpf@archiver.kernel.org>; Mon, 27 Apr 2020 23:44:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1AAEC206D9
+	for <bpf@archiver.kernel.org>; Tue, 28 Apr 2020 01:40:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="V4Tl3/ow"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OuxLdLyV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726345AbgD0Xon (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Apr 2020 19:44:43 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:45832 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726328AbgD0Xon (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 27 Apr 2020 19:44:43 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03RNenN6028989
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 16:44:42 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=4Nr5kW5zN85Qw9/O6WloYn6CKqpyiv9fLB56zEQr2XU=;
- b=V4Tl3/owd3CqBrEvUe4KBvZksWClJZl6MKkLPJF87MJQ+9tYaZW3JFsbPPnAsDkiOYaL
- y3QPMTPeGYxosD3K0gm99fpxlytbtY/gTgj+g1gweGBDbBU/vqYC75FJ5F6rgci90i/+
- pJeU7oCpLYlp13k67Opuws0rrgEWMZhlzGI= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 30n515ua8k-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 16:44:42 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Mon, 27 Apr 2020 16:44:36 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 0A70162E3380; Mon, 27 Apr 2020 16:44:32 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Song Liu <songliubraving@fb.com>
-Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v5 bpf-next 1/3] bpf: sharing bpf runtime stats with BPF_ENABLE_STATS
-Date:   Mon, 27 Apr 2020 16:44:21 -0700
-Message-ID: <20200427234423.998085-2-songliubraving@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200427234423.998085-1-songliubraving@fb.com>
-References: <20200427234423.998085-1-songliubraving@fb.com>
+        id S1726261AbgD1BkQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Apr 2020 21:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726251AbgD1BkQ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 27 Apr 2020 21:40:16 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B21AC03C1A8;
+        Mon, 27 Apr 2020 18:40:16 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id s30so16118055qth.2;
+        Mon, 27 Apr 2020 18:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oQ1PRq8YJ6rFSjaWjcwv39nmTX0ZhCPh6qqqxXUPIzw=;
+        b=OuxLdLyVX+0Qd/oYDB3qe4xREmNNbbHI6nepjMKIalwe3gT4SmR4e+Aqfq9UVhiuEp
+         D5Iyzj2CyQPBugBKuZJGtuk6sGXTwZ1QS6BBnajLGMPjluTJDLr7ylOun3mWi7+iHrn+
+         U14k3RvRZBUiaZap+hHE/qqs8jlFdpDQw1A1Z618yNqiv/aDdZXB+az/5Zi2n3Oyhgd3
+         90j5xW46w+aSSrfCP4La3FJ/GwwQdCVio9QkfmyExoWuxDaHSRRuXQDofnpne3bTS789
+         JkbZP0not8ovBH/Nr3yB70AzSpm60+yOj08fmERoo48oaVwZtcO+U8YzsJRlO4jL/+R5
+         R5Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oQ1PRq8YJ6rFSjaWjcwv39nmTX0ZhCPh6qqqxXUPIzw=;
+        b=XLvaAXJ+3cL2WOhX2p8K4mkuHYa+304fP8oLZ9PAuWuMpl2XDGIl897GvNYVmKpBfU
+         036aQ021OtVBFcQ/t8NSzb1P/vRdGUxrmreqnWrfnhLB3tZAu9zmZ6GO4CkXqa9dm720
+         joCwGAIBjzqTL4TgTILo6IbNT72PP/WZWaPzs2AgPyHc8YFAHfLy84T/vZwbgvGIevUR
+         f6F45mU1euwqwFZdF6kWXSj/uv3N8yfaNG34FZ64rUUoLZfIe+OpGyIUxRuscRV9C9ga
+         p6j0ExtZrEX4LEdhe3sax8CY0QJCrX735J7eKiIe/al/qhNXPa5Qi4wc++T38DAxRqYn
+         CRkg==
+X-Gm-Message-State: AGi0Pub+7Nr9MxNxRQ/7j4cheEVFfg8TlDZC9cjNK5knuRPsgNQyytQS
+        Z4nx+rtTRmc4BMI1pUBXrEF6US4xTfBSWYqvhuw=
+X-Google-Smtp-Source: APiQypIOyf7y10cok83a/w9m2tXPvicgVwQo01KfjmFle3WZRK1dv6qRmH4KWuPpXYPjIMsBn/akJZrYpFgxj1sPuXo=
+X-Received: by 2002:ac8:3f6d:: with SMTP id w42mr25564296qtk.171.1588038015385;
+ Mon, 27 Apr 2020 18:40:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-27_17:2020-04-27,2020-04-27 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
- malwarescore=0 impostorscore=0 clxscore=1015 spamscore=0
- lowpriorityscore=0 bulkscore=0 suspectscore=8 mlxlogscore=999 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004270193
-X-FB-Internal: deliver
+References: <20200304204157.58695-1-cneirabustos@gmail.com>
+ <CAADnVQL4GR2kOoiLE0aTorvYzTPWrOCV4yKMh1BasYTVHkKxcg@mail.gmail.com> <20200313124642.GA1309@bpf-dev>
+In-Reply-To: <20200313124642.GA1309@bpf-dev>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 27 Apr 2020 18:40:04 -0700
+Message-ID: <CAEf4BzbzOqBew+kySpqNTgzXpa009KjoXOLpjZ8FvNr5Jo7gXg@mail.gmail.com>
+Subject: Re: [PATCH v17 0/3] BPF: New helper to obtain namespace data from
+ current task
+To:     Carlos Antonio Neira Bustos <cneirabustos@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Network Development <netdev@vger.kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, sysctl kernel.bpf_stats_enabled controls BPF runtime stats.
-Typical userspace tools use kernel.bpf_stats_enabled as follows:
+On Fri, Mar 13, 2020 at 5:48 AM Carlos Antonio Neira Bustos
+<cneirabustos@gmail.com> wrote:
+>
+> On Thu, Mar 12, 2020 at 05:45:09PM -0700, Alexei Starovoitov wrote:
+> > On Wed, Mar 4, 2020 at 12:42 PM Carlos Neira <cneirabustos@gmail.com> wrote:
+> > >
+> > > Currently bpf_get_current_pid_tgid(), is used to do pid filtering in bcc's
+> > > scripts but this helper returns the pid as seen by the root namespace which is
+> > > fine when a bcc script is not executed inside a container.
+> > > When the process of interest is inside a container, pid filtering will not work
+> > > if bpf_get_current_pid_tgid() is used.
+> > > This helper addresses this limitation returning the pid as it's seen by the current
+> > > namespace where the script is executing.
+> > >
+> > > In the future different pid_ns files may belong to different devices, according to the
+> > > discussion between Eric Biederman and Yonghong in 2017 Linux plumbers conference.
+> > > To address that situation the helper requires inum and dev_t from /proc/self/ns/pid.
+> > > This helper has the same use cases as bpf_get_current_pid_tgid() as it can be
+> > > used to do pid filtering even inside a container.
+> >
+> > Applied. Thanks.
+> > There was one spurious trailing whitespace that I fixed in patch 3
+> > and missing .gitignore update for test_current_pid_tgid_new_ns.
+> > Could you please follow up with another patch to fold
+> > test_current_pid_tgid_new_ns into test_progs.
+> > I'd really like to consolidate all tests into single binary.
+>
+> Thank you very much Alexei,
+> I'll start working on the follow up patch to add test_current_pid_tgid_new_ns into test_progs.
+>
 
-  1. Enable kernel.bpf_stats_enabled;
-  2. Check program run_time_ns;
-  3. Sleep for the monitoring period;
-  4. Check program run_time_ns again, calculate the difference;
-  5. Disable kernel.bpf_stats_enabled.
+Hey Carlos,
 
-The problem with this approach is that only one userspace tool can toggle
-this sysctl. If multiple tools toggle the sysctl at the same time, the
-measurement may be inaccurate.
+Do you still plan to fold test_current_pid_tgid_new_ns into test_progs?
 
-To fix this problem while keep backward compatibility, introduce a new
-bpf command BPF_ENABLE_STATS. On success, this command enables stats and
-returns a valid fd. BPF_ENABLE_STATS takes argument "type". Currently,
-only one type, BPF_STATS_RUNTIME_CNT, is supported. We can extend the
-command to support other types of stats in the future.
-
-With BPF_ENABLE_STATS, user space tool would have the following flow:
-
-  1. Get a fd with BPF_ENABLE_STATS, and make sure it is valid;
-  2. Check program run_time_ns;
-  3. Sleep for the monitoring period;
-  4. Check program run_time_ns again, calculate the difference;
-  5. Close the fd.
-
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- include/linux/bpf.h            |  1 +
- include/uapi/linux/bpf.h       | 11 ++++++++
- kernel/bpf/syscall.c           | 50 ++++++++++++++++++++++++++++++++++
- kernel/sysctl.c                | 36 +++++++++++++++++++++++-
- tools/include/uapi/linux/bpf.h | 11 ++++++++
- 5 files changed, 108 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 10960cfabea4..09ba490a0500 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -987,6 +987,7 @@ _out:							\
-=20
- #ifdef CONFIG_BPF_SYSCALL
- DECLARE_PER_CPU(int, bpf_prog_active);
-+extern struct mutex bpf_stats_enabled_mutex;
-=20
- /*
-  * Block execution of BPF programs attached to instrumentation (perf,
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 4a6c47f3febe..fd7c64139f21 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -113,6 +113,7 @@ enum bpf_cmd {
- 	BPF_MAP_DELETE_BATCH,
- 	BPF_LINK_CREATE,
- 	BPF_LINK_UPDATE,
-+	BPF_ENABLE_STATS,
- };
-=20
- enum bpf_map_type {
-@@ -379,6 +380,12 @@ enum {
-  */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
-=20
-+/* type for BPF_ENABLE_STATS */
-+enum bpf_stats_type {
-+	/* enabled run_time_ns and run_cnt */
-+	BPF_STATS_RUNTIME_CNT =3D 0,
-+};
-+
- enum bpf_stack_build_id_status {
- 	/* user space need an empty entry to identify end of a trace */
- 	BPF_STACK_BUILD_ID_EMPTY =3D 0,
-@@ -589,6 +596,10 @@ union bpf_attr {
- 		__u32		old_prog_fd;
- 	} link_update;
-=20
-+	struct { /* struct used by BPF_ENABLE_STATS command */
-+		__u32		type;
-+	} enable_stats;
-+
- } __attribute__((aligned(8)));
-=20
- /* The description below is an attempt at providing documentation to eBP=
-F
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 7626b8024471..1740a87b99f3 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3663,6 +3663,53 @@ static int link_update(union bpf_attr *attr)
- 	return ret;
- }
-=20
-+DEFINE_MUTEX(bpf_stats_enabled_mutex);
-+
-+static int bpf_stats_release(struct inode *inode, struct file *file)
-+{
-+	mutex_lock(&bpf_stats_enabled_mutex);
-+	static_key_slow_dec(&bpf_stats_enabled_key.key);
-+	mutex_unlock(&bpf_stats_enabled_mutex);
-+	return 0;
-+}
-+
-+static const struct file_operations bpf_stats_fops =3D {
-+	.release =3D bpf_stats_release,
-+};
-+
-+static int bpf_enable_runtime_stats(void)
-+{
-+	int fd;
-+
-+	if (!capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	mutex_lock(&bpf_stats_enabled_mutex);
-+	/* Set a very high limit to avoid overflow */
-+	if (static_key_count(&bpf_stats_enabled_key.key) > INT_MAX / 2) {
-+		mutex_unlock(&bpf_stats_enabled_mutex);
-+		return -EBUSY;
-+	}
-+
-+	fd =3D anon_inode_getfd("bpf-stats", &bpf_stats_fops, NULL, 0);
-+	if (fd >=3D 0)
-+		static_key_slow_inc(&bpf_stats_enabled_key.key);
-+
-+	mutex_unlock(&bpf_stats_enabled_mutex);
-+	return fd;
-+}
-+
-+static int bpf_enable_stats(union bpf_attr *attr)
-+{
-+	switch (attr->enable_stats.type) {
-+	case BPF_STATS_RUNTIME_CNT:
-+		return bpf_enable_runtime_stats();
-+	default:
-+		break;
-+	}
-+	return -EINVAL;
-+}
-+
- SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned =
-int, size)
- {
- 	union bpf_attr attr;
-@@ -3780,6 +3827,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __use=
-r *, uattr, unsigned int, siz
- 	case BPF_LINK_UPDATE:
- 		err =3D link_update(&attr);
- 		break;
-+	case BPF_ENABLE_STATS:
-+		err =3D bpf_enable_stats(&attr);
-+		break;
- 	default:
- 		err =3D -EINVAL;
- 		break;
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 8a176d8727a3..2d72f4ad3063 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -304,6 +304,40 @@ static int min_extfrag_threshold;
- static int max_extfrag_threshold =3D 1000;
- #endif
-=20
-+#ifdef CONFIG_BPF_SYSCALL
-+static int bpf_stats_handler(struct ctl_table *table, int write,
-+			     void __user *buffer, size_t *lenp,
-+			     loff_t *ppos)
-+{
-+	struct static_key *key =3D (struct static_key *)table->data;
-+	static int saved_val;
-+	int val, ret;
-+	struct ctl_table tmp =3D {
-+		.data   =3D &val,
-+		.maxlen =3D sizeof(val),
-+		.mode   =3D table->mode,
-+		.extra1 =3D SYSCTL_ZERO,
-+		.extra2 =3D SYSCTL_ONE,
-+	};
-+
-+	if (write && !capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	mutex_lock(&bpf_stats_enabled_mutex);
-+	val =3D saved_val;
-+	ret =3D proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
-+	if (write && !ret && val !=3D saved_val) {
-+		if (val)
-+			static_key_slow_inc(key);
-+		else
-+			static_key_slow_dec(key);
-+		saved_val =3D val;
-+	}
-+	mutex_unlock(&bpf_stats_enabled_mutex);
-+	return ret;
-+}
-+#endif
-+
- static struct ctl_table kern_table[] =3D {
- 	{
- 		.procname	=3D "sched_child_runs_first",
-@@ -1244,7 +1278,7 @@ static struct ctl_table kern_table[] =3D {
- 		.data		=3D &bpf_stats_enabled_key.key,
- 		.maxlen		=3D sizeof(bpf_stats_enabled_key),
- 		.mode		=3D 0644,
--		.proc_handler	=3D proc_do_static_key,
-+		.proc_handler	=3D bpf_stats_handler,
- 	},
- #endif
- #if defined(CONFIG_TREE_RCU)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 4a6c47f3febe..fd7c64139f21 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -113,6 +113,7 @@ enum bpf_cmd {
- 	BPF_MAP_DELETE_BATCH,
- 	BPF_LINK_CREATE,
- 	BPF_LINK_UPDATE,
-+	BPF_ENABLE_STATS,
- };
-=20
- enum bpf_map_type {
-@@ -379,6 +380,12 @@ enum {
-  */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
-=20
-+/* type for BPF_ENABLE_STATS */
-+enum bpf_stats_type {
-+	/* enabled run_time_ns and run_cnt */
-+	BPF_STATS_RUNTIME_CNT =3D 0,
-+};
-+
- enum bpf_stack_build_id_status {
- 	/* user space need an empty entry to identify end of a trace */
- 	BPF_STACK_BUILD_ID_EMPTY =3D 0,
-@@ -589,6 +596,10 @@ union bpf_attr {
- 		__u32		old_prog_fd;
- 	} link_update;
-=20
-+	struct { /* struct used by BPF_ENABLE_STATS command */
-+		__u32		type;
-+	} enable_stats;
-+
- } __attribute__((aligned(8)));
-=20
- /* The description below is an attempt at providing documentation to eBP=
-F
---=20
-2.24.1
-
+> Bests
