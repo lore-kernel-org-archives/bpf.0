@@ -2,617 +2,103 @@ Return-Path: <SRS0=8xVa=6M=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBCC8C83004
-	for <bpf@archiver.kernel.org>; Tue, 28 Apr 2020 04:51:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ACD2C83007
+	for <bpf@archiver.kernel.org>; Tue, 28 Apr 2020 04:55:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ACC4C20661
-	for <bpf@archiver.kernel.org>; Tue, 28 Apr 2020 04:51:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 241F420661
+	for <bpf@archiver.kernel.org>; Tue, 28 Apr 2020 04:55:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="msJ+wkr5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cNMnOd4b"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbgD1Evm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Apr 2020 00:51:42 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:38246 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726285AbgD1Evm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 28 Apr 2020 00:51:42 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03S4peN8003798
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 21:51:40 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=S3J7HIV40dvmulFTHUsGYu+YJFLhRZj9psh9hcHgzzE=;
- b=msJ+wkr5egQlM8N3VTS02NFYL0oK8Mvkn74SQSVIVUmevi0r12WvVGF4AZ/3t+qeP5vh
- T11mbQ8XJd64D1RJKzkbPcK5+psLRJlLpAEIdnEkTiplg10VHQYZ6uKnOM9YMvU4Gb//
- c9VVU/lXnBgfa8v2CjOntNnmntylhH03XMc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30n5bx4k50-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2020 21:51:39 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Mon, 27 Apr 2020 21:51:06 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 3D55C2EC30DC; Mon, 27 Apr 2020 21:51:03 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 3/6] selftests/bpf: convert test_hashmap into test_progs test
-Date:   Mon, 27 Apr 2020 21:46:25 -0700
-Message-ID: <20200428044628.3772114-4-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200428044628.3772114-1-andriin@fb.com>
-References: <20200428044628.3772114-1-andriin@fb.com>
+        id S1726343AbgD1EzY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Apr 2020 00:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725792AbgD1EzY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Apr 2020 00:55:24 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51443C03C1A9;
+        Mon, 27 Apr 2020 21:55:24 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id n143so20622885qkn.8;
+        Mon, 27 Apr 2020 21:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4tCQO54SlLM1o9n1nq2fn809Y4EFPxFBGGfaoqn/rHc=;
+        b=cNMnOd4bs5AwwmUH5mfRkuQi9yB7ER6EA69TA/amVZG1EBOw10w43QwDoltZzhly7l
+         pPxXBp/vB4xnjT0sGrEj6PR8xJtvtVvP/aFXp5gMPlTeJeUmLlvsde9A42eOCkkN2bY/
+         ixGSiXXbhliEB4f1PY3GGSuZuS7WJ2ZeKaI/WWmC+Z/d5yZ3rsbqfL7mrhhnFYzMnkeD
+         +dmdZqWFB/6gdBTrZJ57g93at8JdVuWtwaBpe/bgbpAtphzYElSGLZPXh6/AY9TaY/f5
+         g+hZ9hyPgkUcvI3dKqxc7huLU/sFvNDXMy3zdESLlOI/EGhYq1mZquuEtkAzkZ7eS/0M
+         x31g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4tCQO54SlLM1o9n1nq2fn809Y4EFPxFBGGfaoqn/rHc=;
+        b=BfsbiEdWxZr7NAIghGekLARGYR7B0sgkwQhUc9bB3JUyIBRiwsb/QKW1N/b1YJ0VZa
+         hOiNJ5g30HV54UTNdTApB2XOCteDwu6sELsiXx6gq9GC0+Itf58iK/fOVQ4ssGM2vjug
+         MDXtzQmfo5RG895HRNX2rpgs58uYPUYfO6WVWe2mjJPklwytKKv0hqwEiSP7abJ8mKWx
+         mUSjLZvjeCf/YrWVSaO25lvYWz8JU5v+2EvrleipsuV7MQoPQhIVZS68vWVhMNXojeVf
+         ErdtFBWYH8oYkENyXhrDEcCpi41ds+qLj2C2SezzYfrtzv0oDLXvtfq0Wh5S1OEO3pRs
+         8PoA==
+X-Gm-Message-State: AGi0PuZxscIEBanzg+98+XNGdS7mnyTWwvM0RHQ4droO7WPgk0xZSOf1
+        tzAu5i1tli+/trKwS4AQUezcyQZDVFYT6uIc64c=
+X-Google-Smtp-Source: APiQypJAAZqgSespFwh0SeEdRfHfS2Jqc0qu32IzYjkTfu7wpOXksiB08IU6jpSEhFGzIhUC7hg8KD8MRnCxwrBWGmE=
+X-Received: by 2002:a37:6587:: with SMTP id z129mr26953366qkb.437.1588049723463;
+ Mon, 27 Apr 2020 21:55:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-28_02:2020-04-27,2020-04-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
- mlxlogscore=999 suspectscore=25 bulkscore=0 clxscore=1015 impostorscore=0
- adultscore=0 priorityscore=1501 spamscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004280040
-X-FB-Internal: deliver
+References: <20200423195850.1259827-1-andriin@fb.com> <CAADnVQL4koqLqxxVgMSk42XYNTAzdauRa0PwEzHb0L+fXoE_rQ@mail.gmail.com>
+In-Reply-To: <CAADnVQL4koqLqxxVgMSk42XYNTAzdauRa0PwEzHb0L+fXoE_rQ@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 27 Apr 2020 21:55:12 -0700
+Message-ID: <CAEf4BzaWuGnbduumDA1k=5Cm5nt0wfJtxb0yeyNZ+=PxFCP61Q@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next] bpf: make verifier log more relevant by default
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fold stand-alone test_hashmap test into test_progs.
+On Sun, Apr 26, 2020 at 9:58 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, Apr 23, 2020 at 1:04 PM Andrii Nakryiko <andriin@fb.com> wrote:
+> >
+> > To make BPF verifier verbose log more releavant and easier to use to debug
+> > verification failures, "pop" parts of log that were successfully verified.
+> > This has effect of leaving only verifier logs that correspond to code branches
+> > that lead to verification failure, which in practice should result in much
+> > shorter and more relevant verifier log dumps. This behavior is made the
+> > default behavior and can be overriden to do exhaustive logging by specifying
+> > BPF_LOG_LEVEL2 log level.
+> ...
+> > On success, verbose log will only have a summary of number of processed
+> > instructions, etc, but no branch tracing log. Having just a last succesful
+> > branch tracing seemed weird and confusing. Having small and clean summary log
+> > in success case seems quite logical and nice, though.
+> >
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+>
+> I think the behavior described in the last paragraph could be
+> surprising to some folks who expected to see the verifier log for
+> successfully loaded progs.
+> May be worth mentioning this in Documentation/networking/filter.txt ?
+> That doc needs some cleanup too.
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/testing/selftests/bpf/.gitignore        |   2 -
- tools/testing/selftests/bpf/Makefile          |   2 +-
- .../{test_hashmap.c =3D> prog_tests/hashmap.c}  | 280 +++++++++---------
- 3 files changed, 140 insertions(+), 144 deletions(-)
- rename tools/testing/selftests/bpf/{test_hashmap.c =3D> prog_tests/hashm=
-ap.c} (53%)
+Sure, I'll do a follow-up patch to mention this.
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selft=
-ests/bpf/.gitignore
-index 69b545ca51b8..db2e142c7635 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -30,8 +30,6 @@ test_tcpnotify_user
- test_libbpf
- test_tcp_check_syncookie_user
- test_sysctl
--test_hashmap
--test_btf_dump
- test_current_pid_tgid_new_ns
- xdping
- test_cpp
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-index e54d069b27a6..d20405e2fc77 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -32,7 +32,7 @@ TEST_GEN_PROGS =3D test_verifier test_tag test_maps tes=
-t_lru_map test_lpm_map test
- 	test_align test_verifier_log test_dev_cgroup test_tcpbpf_user \
- 	test_sock test_btf test_sockmap get_cgroup_id_user test_socket_cookie \
- 	test_cgroup_storage \
--	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl test_hashm=
-ap \
-+	test_netcnt test_tcpnotify_user test_sock_fields test_sysctl \
- 	test_progs-no_alu32 test_progs-asan \
- 	test_current_pid_tgid_new_ns
-=20
-diff --git a/tools/testing/selftests/bpf/test_hashmap.c b/tools/testing/s=
-elftests/bpf/prog_tests/hashmap.c
-similarity index 53%
-rename from tools/testing/selftests/bpf/test_hashmap.c
-rename to tools/testing/selftests/bpf/prog_tests/hashmap.c
-index c490e012c23f..428d488830c6 100644
---- a/tools/testing/selftests/bpf/test_hashmap.c
-+++ b/tools/testing/selftests/bpf/prog_tests/hashmap.c
-@@ -5,26 +5,17 @@
-  *
-  * Copyright (c) 2019 Facebook
-  */
--#include <stdio.h>
--#include <errno.h>
--#include <linux/err.h>
-+#include "test_progs.h"
- #include "bpf/hashmap.h"
-=20
--#define CHECK(condition, format...) ({					\
--	int __ret =3D !!(condition);					\
--	if (__ret) {							\
--		fprintf(stderr, "%s:%d:FAIL ", __func__, __LINE__);	\
--		fprintf(stderr, format);				\
--	}								\
--	__ret;								\
--})
-+static int duration =3D 0;
-=20
--size_t hash_fn(const void *k, void *ctx)
-+static size_t hash_fn(const void *k, void *ctx)
- {
- 	return (long)k;
- }
-=20
--bool equal_fn(const void *a, const void *b, void *ctx)
-+static bool equal_fn(const void *a, const void *b, void *ctx)
- {
- 	return (long)a =3D=3D (long)b;
- }
-@@ -49,53 +40,55 @@ static inline size_t exp_cap(size_t sz)
-=20
- #define ELEM_CNT 62
-=20
--int test_hashmap_generic(void)
-+static void test_hashmap_generic(void)
- {
- 	struct hashmap_entry *entry, *tmp;
- 	int err, bkt, found_cnt, i;
- 	long long found_msk;
- 	struct hashmap *map;
-=20
--	fprintf(stderr, "%s: ", __func__);
--
- 	map =3D hashmap__new(hash_fn, equal_fn, NULL);
--	if (CHECK(IS_ERR(map), "failed to create map: %ld\n", PTR_ERR(map)))
--		return 1;
-+	if (CHECK(IS_ERR(map), "hashmap__new",
-+		  "failed to create map: %ld\n", PTR_ERR(map)))
-+		return;
-=20
- 	for (i =3D 0; i < ELEM_CNT; i++) {
- 		const void *oldk, *k =3D (const void *)(long)i;
- 		void *oldv, *v =3D (void *)(long)(1024 + i);
-=20
- 		err =3D hashmap__update(map, k, v, &oldk, &oldv);
--		if (CHECK(err !=3D -ENOENT, "unexpected result: %d\n", err))
--			return 1;
-+		if (CHECK(err !=3D -ENOENT, "hashmap__update",
-+			  "unexpected result: %d\n", err))
-+			goto cleanup;
-=20
- 		if (i % 2) {
- 			err =3D hashmap__add(map, k, v);
- 		} else {
- 			err =3D hashmap__set(map, k, v, &oldk, &oldv);
--			if (CHECK(oldk !=3D NULL || oldv !=3D NULL,
-+			if (CHECK(oldk !=3D NULL || oldv !=3D NULL, "check_kv",
- 				  "unexpected k/v: %p=3D%p\n", oldk, oldv))
--				return 1;
-+				goto cleanup;
- 		}
-=20
--		if (CHECK(err, "failed to add k/v %ld =3D %ld: %d\n",
-+		if (CHECK(err, "elem_add", "failed to add k/v %ld =3D %ld: %d\n",
- 			       (long)k, (long)v, err))
--			return 1;
-+			goto cleanup;
-=20
--		if (CHECK(!hashmap__find(map, k, &oldv),
-+		if (CHECK(!hashmap__find(map, k, &oldv), "elem_find",
- 			  "failed to find key %ld\n", (long)k))
--			return 1;
--		if (CHECK(oldv !=3D v, "found value is wrong: %ld\n", (long)oldv))
--			return 1;
-+			goto cleanup;
-+		if (CHECK(oldv !=3D v, "elem_val",
-+			  "found value is wrong: %ld\n", (long)oldv))
-+			goto cleanup;
- 	}
-=20
--	if (CHECK(hashmap__size(map) !=3D ELEM_CNT,
-+	if (CHECK(hashmap__size(map) !=3D ELEM_CNT, "hashmap__size",
- 		  "invalid map size: %zu\n", hashmap__size(map)))
--		return 1;
-+		goto cleanup;
- 	if (CHECK(hashmap__capacity(map) !=3D exp_cap(hashmap__size(map)),
-+		  "hashmap_cap",
- 		  "unexpected map capacity: %zu\n", hashmap__capacity(map)))
--		return 1;
-+		goto cleanup;
-=20
- 	found_msk =3D 0;
- 	hashmap__for_each_entry(map, entry, bkt) {
-@@ -103,42 +96,47 @@ int test_hashmap_generic(void)
- 		long v =3D (long)entry->value;
-=20
- 		found_msk |=3D 1ULL << k;
--		if (CHECK(v - k !=3D 1024, "invalid k/v pair: %ld =3D %ld\n", k, v))
--			return 1;
-+		if (CHECK(v - k !=3D 1024, "check_kv",
-+			  "invalid k/v pair: %ld =3D %ld\n", k, v))
-+			goto cleanup;
- 	}
--	if (CHECK(found_msk !=3D (1ULL << ELEM_CNT) - 1,
-+	if (CHECK(found_msk !=3D (1ULL << ELEM_CNT) - 1, "elem_cnt",
- 		  "not all keys iterated: %llx\n", found_msk))
--		return 1;
-+		goto cleanup;
-=20
- 	for (i =3D 0; i < ELEM_CNT; i++) {
- 		const void *oldk, *k =3D (const void *)(long)i;
- 		void *oldv, *v =3D (void *)(long)(256 + i);
-=20
- 		err =3D hashmap__add(map, k, v);
--		if (CHECK(err !=3D -EEXIST, "unexpected add result: %d\n", err))
--			return 1;
-+		if (CHECK(err !=3D -EEXIST, "hashmap__add",
-+			  "unexpected add result: %d\n", err))
-+			goto cleanup;
-=20
- 		if (i % 2)
- 			err =3D hashmap__update(map, k, v, &oldk, &oldv);
- 		else
- 			err =3D hashmap__set(map, k, v, &oldk, &oldv);
-=20
--		if (CHECK(err, "failed to update k/v %ld =3D %ld: %d\n",
--			       (long)k, (long)v, err))
--			return 1;
--		if (CHECK(!hashmap__find(map, k, &oldv),
-+		if (CHECK(err, "elem_upd",
-+			  "failed to update k/v %ld =3D %ld: %d\n",
-+			  (long)k, (long)v, err))
-+			goto cleanup;
-+		if (CHECK(!hashmap__find(map, k, &oldv), "elem_find",
- 			  "failed to find key %ld\n", (long)k))
--			return 1;
--		if (CHECK(oldv !=3D v, "found value is wrong: %ld\n", (long)oldv))
--			return 1;
-+			goto cleanup;
-+		if (CHECK(oldv !=3D v, "elem_val",
-+			  "found value is wrong: %ld\n", (long)oldv))
-+			goto cleanup;
- 	}
-=20
--	if (CHECK(hashmap__size(map) !=3D ELEM_CNT,
-+	if (CHECK(hashmap__size(map) !=3D ELEM_CNT, "hashmap__size",
- 		  "invalid updated map size: %zu\n", hashmap__size(map)))
--		return 1;
-+		goto cleanup;
- 	if (CHECK(hashmap__capacity(map) !=3D exp_cap(hashmap__size(map)),
-+		  "hashmap__capacity",
- 		  "unexpected map capacity: %zu\n", hashmap__capacity(map)))
--		return 1;
-+		goto cleanup;
-=20
- 	found_msk =3D 0;
- 	hashmap__for_each_entry_safe(map, entry, tmp, bkt) {
-@@ -146,20 +144,21 @@ int test_hashmap_generic(void)
- 		long v =3D (long)entry->value;
-=20
- 		found_msk |=3D 1ULL << k;
--		if (CHECK(v - k !=3D 256,
-+		if (CHECK(v - k !=3D 256, "elem_check",
- 			  "invalid updated k/v pair: %ld =3D %ld\n", k, v))
--			return 1;
-+			goto cleanup;
- 	}
--	if (CHECK(found_msk !=3D (1ULL << ELEM_CNT) - 1,
-+	if (CHECK(found_msk !=3D (1ULL << ELEM_CNT) - 1, "elem_cnt",
- 		  "not all keys iterated after update: %llx\n", found_msk))
--		return 1;
-+		goto cleanup;
-=20
- 	found_cnt =3D 0;
- 	hashmap__for_each_key_entry(map, entry, (void *)0) {
- 		found_cnt++;
- 	}
--	if (CHECK(!found_cnt, "didn't find any entries for key 0\n"))
--		return 1;
-+	if (CHECK(!found_cnt, "found_cnt",
-+		  "didn't find any entries for key 0\n"))
-+		goto cleanup;
-=20
- 	found_msk =3D 0;
- 	found_cnt =3D 0;
-@@ -173,30 +172,31 @@ int test_hashmap_generic(void)
- 		found_cnt++;
- 		found_msk |=3D 1ULL << (long)k;
-=20
--		if (CHECK(!hashmap__delete(map, k, &oldk, &oldv),
-+		if (CHECK(!hashmap__delete(map, k, &oldk, &oldv), "elem_del",
- 			  "failed to delete k/v %ld =3D %ld\n",
- 			  (long)k, (long)v))
--			return 1;
--		if (CHECK(oldk !=3D k || oldv !=3D v,
-+			goto cleanup;
-+		if (CHECK(oldk !=3D k || oldv !=3D v, "check_old",
- 			  "invalid deleted k/v: expected %ld =3D %ld, got %ld =3D %ld\n",
- 			  (long)k, (long)v, (long)oldk, (long)oldv))
--			return 1;
--		if (CHECK(hashmap__delete(map, k, &oldk, &oldv),
-+			goto cleanup;
-+		if (CHECK(hashmap__delete(map, k, &oldk, &oldv), "elem_del",
- 			  "unexpectedly deleted k/v %ld =3D %ld\n",
- 			  (long)oldk, (long)oldv))
--			return 1;
-+			goto cleanup;
- 	}
-=20
--	if (CHECK(!found_cnt || !found_msk,
-+	if (CHECK(!found_cnt || !found_msk, "found_entries",
- 		  "didn't delete any key entries\n"))
--		return 1;
--	if (CHECK(hashmap__size(map) !=3D ELEM_CNT - found_cnt,
-+		goto cleanup;
-+	if (CHECK(hashmap__size(map) !=3D ELEM_CNT - found_cnt, "elem_cnt",
- 		  "invalid updated map size (already deleted: %d): %zu\n",
- 		  found_cnt, hashmap__size(map)))
--		return 1;
-+		goto cleanup;
- 	if (CHECK(hashmap__capacity(map) !=3D exp_cap(hashmap__size(map)),
-+		  "hashmap__capacity",
- 		  "unexpected map capacity: %zu\n", hashmap__capacity(map)))
--		return 1;
-+		goto cleanup;
-=20
- 	hashmap__for_each_entry_safe(map, entry, tmp, bkt) {
- 		const void *oldk, *k;
-@@ -208,53 +208,56 @@ int test_hashmap_generic(void)
- 		found_cnt++;
- 		found_msk |=3D 1ULL << (long)k;
-=20
--		if (CHECK(!hashmap__delete(map, k, &oldk, &oldv),
-+		if (CHECK(!hashmap__delete(map, k, &oldk, &oldv), "elem_del",
- 			  "failed to delete k/v %ld =3D %ld\n",
- 			  (long)k, (long)v))
--			return 1;
--		if (CHECK(oldk !=3D k || oldv !=3D v,
-+			goto cleanup;
-+		if (CHECK(oldk !=3D k || oldv !=3D v, "elem_check",
- 			  "invalid old k/v: expect %ld =3D %ld, got %ld =3D %ld\n",
- 			  (long)k, (long)v, (long)oldk, (long)oldv))
--			return 1;
--		if (CHECK(hashmap__delete(map, k, &oldk, &oldv),
-+			goto cleanup;
-+		if (CHECK(hashmap__delete(map, k, &oldk, &oldv), "elem_del",
- 			  "unexpectedly deleted k/v %ld =3D %ld\n",
- 			  (long)k, (long)v))
--			return 1;
-+			goto cleanup;
- 	}
-=20
- 	if (CHECK(found_cnt !=3D ELEM_CNT || found_msk !=3D (1ULL << ELEM_CNT) =
-- 1,
-+		  "found_cnt",
- 		  "not all keys were deleted: found_cnt:%d, found_msk:%llx\n",
- 		  found_cnt, found_msk))
--		return 1;
--	if (CHECK(hashmap__size(map) !=3D 0,
-+		goto cleanup;
-+	if (CHECK(hashmap__size(map) !=3D 0, "hashmap__size",
- 		  "invalid updated map size (already deleted: %d): %zu\n",
- 		  found_cnt, hashmap__size(map)))
--		return 1;
-+		goto cleanup;
-=20
- 	found_cnt =3D 0;
- 	hashmap__for_each_entry(map, entry, bkt) {
--		CHECK(false, "unexpected map entries left: %ld =3D %ld\n",
--			     (long)entry->key, (long)entry->value);
--		return 1;
-+		CHECK(false, "elem_exists",
-+		      "unexpected map entries left: %ld =3D %ld\n",
-+		      (long)entry->key, (long)entry->value);
-+		goto cleanup;
- 	}
-=20
--	hashmap__free(map);
-+	hashmap__clear(map);
- 	hashmap__for_each_entry(map, entry, bkt) {
--		CHECK(false, "unexpected map entries left: %ld =3D %ld\n",
--			     (long)entry->key, (long)entry->value);
--		return 1;
-+		CHECK(false, "elem_exists",
-+		      "unexpected map entries left: %ld =3D %ld\n",
-+		      (long)entry->key, (long)entry->value);
-+		goto cleanup;
- 	}
-=20
--	fprintf(stderr, "OK\n");
--	return 0;
-+cleanup:
-+	hashmap__free(map);
- }
-=20
--size_t collision_hash_fn(const void *k, void *ctx)
-+static size_t collision_hash_fn(const void *k, void *ctx)
- {
- 	return 0;
- }
-=20
--int test_hashmap_multimap(void)
-+static void test_hashmap_multimap(void)
- {
- 	void *k1 =3D (void *)0, *k2 =3D (void *)1;
- 	struct hashmap_entry *entry;
-@@ -262,121 +265,116 @@ int test_hashmap_multimap(void)
- 	long found_msk;
- 	int err, bkt;
-=20
--	fprintf(stderr, "%s: ", __func__);
--
- 	/* force collisions */
- 	map =3D hashmap__new(collision_hash_fn, equal_fn, NULL);
--	if (CHECK(IS_ERR(map), "failed to create map: %ld\n", PTR_ERR(map)))
--		return 1;
--
-+	if (CHECK(IS_ERR(map), "hashmap__new",
-+		  "failed to create map: %ld\n", PTR_ERR(map)))
-+		return;
-=20
- 	/* set up multimap:
- 	 * [0] -> 1, 2, 4;
- 	 * [1] -> 8, 16, 32;
- 	 */
- 	err =3D hashmap__append(map, k1, (void *)1);
--	if (CHECK(err, "failed to add k/v: %d\n", err))
--		return 1;
-+	if (CHECK(err, "elem_add", "failed to add k/v: %d\n", err))
-+		goto cleanup;
- 	err =3D hashmap__append(map, k1, (void *)2);
--	if (CHECK(err, "failed to add k/v: %d\n", err))
--		return 1;
-+	if (CHECK(err, "elem_add", "failed to add k/v: %d\n", err))
-+		goto cleanup;
- 	err =3D hashmap__append(map, k1, (void *)4);
--	if (CHECK(err, "failed to add k/v: %d\n", err))
--		return 1;
-+	if (CHECK(err, "elem_add", "failed to add k/v: %d\n", err))
-+		goto cleanup;
-=20
- 	err =3D hashmap__append(map, k2, (void *)8);
--	if (CHECK(err, "failed to add k/v: %d\n", err))
--		return 1;
-+	if (CHECK(err, "elem_add", "failed to add k/v: %d\n", err))
-+		goto cleanup;
- 	err =3D hashmap__append(map, k2, (void *)16);
--	if (CHECK(err, "failed to add k/v: %d\n", err))
--		return 1;
-+	if (CHECK(err, "elem_add", "failed to add k/v: %d\n", err))
-+		goto cleanup;
- 	err =3D hashmap__append(map, k2, (void *)32);
--	if (CHECK(err, "failed to add k/v: %d\n", err))
--		return 1;
-+	if (CHECK(err, "elem_add", "failed to add k/v: %d\n", err))
-+		goto cleanup;
-=20
--	if (CHECK(hashmap__size(map) !=3D 6,
-+	if (CHECK(hashmap__size(map) !=3D 6, "hashmap_size",
- 		  "invalid map size: %zu\n", hashmap__size(map)))
--		return 1;
-+		goto cleanup;
-=20
- 	/* verify global iteration still works and sees all values */
- 	found_msk =3D 0;
- 	hashmap__for_each_entry(map, entry, bkt) {
- 		found_msk |=3D (long)entry->value;
- 	}
--	if (CHECK(found_msk !=3D (1 << 6) - 1,
-+	if (CHECK(found_msk !=3D (1 << 6) - 1, "found_msk",
- 		  "not all keys iterated: %lx\n", found_msk))
--		return 1;
-+		goto cleanup;
-=20
- 	/* iterate values for key 1 */
- 	found_msk =3D 0;
- 	hashmap__for_each_key_entry(map, entry, k1) {
- 		found_msk |=3D (long)entry->value;
- 	}
--	if (CHECK(found_msk !=3D (1 | 2 | 4),
-+	if (CHECK(found_msk !=3D (1 | 2 | 4), "found_msk",
- 		  "invalid k1 values: %lx\n", found_msk))
--		return 1;
-+		goto cleanup;
-=20
- 	/* iterate values for key 2 */
- 	found_msk =3D 0;
- 	hashmap__for_each_key_entry(map, entry, k2) {
- 		found_msk |=3D (long)entry->value;
- 	}
--	if (CHECK(found_msk !=3D (8 | 16 | 32),
-+	if (CHECK(found_msk !=3D (8 | 16 | 32), "found_msk",
- 		  "invalid k2 values: %lx\n", found_msk))
--		return 1;
-+		goto cleanup;
-=20
--	fprintf(stderr, "OK\n");
--	return 0;
-+cleanup:
-+	hashmap__free(map);
- }
-=20
--int test_hashmap_empty()
-+static void test_hashmap_empty()
- {
- 	struct hashmap_entry *entry;
- 	int bkt;
- 	struct hashmap *map;
- 	void *k =3D (void *)0;
-=20
--	fprintf(stderr, "%s: ", __func__);
--
- 	/* force collisions */
- 	map =3D hashmap__new(hash_fn, equal_fn, NULL);
--	if (CHECK(IS_ERR(map), "failed to create map: %ld\n", PTR_ERR(map)))
--		return 1;
-+	if (CHECK(IS_ERR(map), "hashmap__new",
-+		  "failed to create map: %ld\n", PTR_ERR(map)))
-+		goto cleanup;
-=20
--	if (CHECK(hashmap__size(map) !=3D 0,
-+	if (CHECK(hashmap__size(map) !=3D 0, "hashmap__size",
- 		  "invalid map size: %zu\n", hashmap__size(map)))
--		return 1;
--	if (CHECK(hashmap__capacity(map) !=3D 0,
-+		goto cleanup;
-+	if (CHECK(hashmap__capacity(map) !=3D 0, "hashmap__capacity",
- 		  "invalid map capacity: %zu\n", hashmap__capacity(map)))
--		return 1;
--	if (CHECK(hashmap__find(map, k, NULL), "unexpected find\n"))
--		return 1;
--	if (CHECK(hashmap__delete(map, k, NULL, NULL), "unexpected delete\n"))
--		return 1;
-+		goto cleanup;
-+	if (CHECK(hashmap__find(map, k, NULL), "elem_find",
-+		  "unexpected find\n"))
-+		goto cleanup;
-+	if (CHECK(hashmap__delete(map, k, NULL, NULL), "elem_del",
-+		  "unexpected delete\n"))
-+		goto cleanup;
-=20
- 	hashmap__for_each_entry(map, entry, bkt) {
--		CHECK(false, "unexpected iterated entry\n");
--		return 1;
-+		CHECK(false, "elem_found", "unexpected iterated entry\n");
-+		goto cleanup;
- 	}
- 	hashmap__for_each_key_entry(map, entry, k) {
--		CHECK(false, "unexpected key entry\n");
--		return 1;
-+		CHECK(false, "key_found", "unexpected key entry\n");
-+		goto cleanup;
- 	}
-=20
--	fprintf(stderr, "OK\n");
--	return 0;
-+cleanup:
-+	hashmap__free(map);
- }
-=20
--int main(int argc, char **argv)
-+void test_hashmap()
- {
--	bool failed =3D false;
--
--	if (test_hashmap_generic())
--		failed =3D true;
--	if (test_hashmap_multimap())
--		failed =3D true;
--	if (test_hashmap_empty())
--		failed =3D true;
--
--	return failed;
-+	if (test__start_subtest("generic"))
-+		test_hashmap_generic();
-+	if (test__start_subtest("multimap"))
-+		test_hashmap_multimap();
-+	if (test__start_subtest("empty"))
-+		test_hashmap_empty();
- }
---=20
-2.24.1
-
+>
+> Applied. Thanks
