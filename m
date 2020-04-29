@@ -2,180 +2,66 @@ Return-Path: <SRS0=PQF5=6N=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64D3DC83000
-	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 23:15:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2233EC83000
+	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 23:15:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 43333208E0
-	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 23:15:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nGcTerxx"
+	by mail.kernel.org (Postfix) with ESMTP id 0773A2082E
+	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 23:15:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727792AbgD2XOt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 29 Apr 2020 19:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727108AbgD2XOs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 29 Apr 2020 19:14:48 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C50BC08E859
-        for <bpf@vger.kernel.org>; Wed, 29 Apr 2020 16:14:48 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id n205so5526978ybf.14
-        for <bpf@vger.kernel.org>; Wed, 29 Apr 2020 16:14:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=CJJxf0pq8zlcf44QOwhYtFTCq73pqyejf08/z19Qj6s=;
-        b=nGcTerxxzkNeOTa+QP/PodF+fNjcK6F6fECoxFkjdxwzsmPJbfsP88jkwQ977e5PiY
-         SSssk6+yMvt/6WyB1bk3A622xU2OfqnbxOsyeu7/VTChAMe6cKHQJVuo7Rjl0n4JcIaE
-         CYqO3rFynBBG5UzJ+Qpkh4TfLEJ0AP2ixk9oNEDLqKlpj7VdwUFT+6zZ3AKYzsRrWOGN
-         +SAYKz+Ht3HWdbufcJpPA/JpHDNB0qTAu7dR3z3AEWPekXNAk5xEYskKh0pDXuUlKQxW
-         3/3Ti34mkWO8uh/q0gW+p9CzxLC2Mr4Al86X+rmYbvaf50QDj086COwXWO7TH0AlzwOy
-         CzQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=CJJxf0pq8zlcf44QOwhYtFTCq73pqyejf08/z19Qj6s=;
-        b=o7VPKKp/NVOAYAJ9BAJNaUppz7z856EKaLYx7yyqhL0ZsfSIRbs+9dHp56wepf+HIS
-         qABHdsw2wonDSVZH8PGVti+7UYWM6UbVO5gmFwQrv74mnys8eiNd5ayLiPEWUsEXSBsn
-         JpdqpphfgLmSSSn39VZRbIOncORPL8MeizI5T9LJb7kUQRP2dZwiGPDGBkDVq/Ive/oP
-         e6BuvBPd58XIfLysTVH6AV56kI56AsAnIGI9DS8jOx0DytOIxWcvAdNnCqQEejporZL7
-         Y7VLMlNDAPoxEb2s5ZB5chqV4mhHj6CZBr4cOIICQIW7ncsfdNZAHb9jc+GIKbX7HfA4
-         MKEA==
-X-Gm-Message-State: AGi0PuYuauXcVacAqngTR7twLd+uOYn/3Q44B3f/05KHj7t14CzzFumf
-        hWqr9J1W+JIz0n9Shl98NDF6a/yA1LJI
-X-Google-Smtp-Source: APiQypLYTz2BSjcXe/ll6kzvWKmu019RsTaRmGB2Qd0YbSN5hrXg39C7thEWmm2SdkZbb1gvVACcY5jXWoKo
-X-Received: by 2002:a25:b8c9:: with SMTP id g9mr1091568ybm.3.1588202087316;
- Wed, 29 Apr 2020 16:14:47 -0700 (PDT)
-Date:   Wed, 29 Apr 2020 16:14:39 -0700
-Message-Id: <20200429231443.207201-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.26.2.303.gf8c07b1a785-goog
-Subject: [PATCH v12 0/4] perf tools: add support for libpfm4
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Igor Lubashev <ilubashe@akamai.com>,
-        Alexey Budankov <alexey.budankov@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Jiwei Sun <jiwei.sun@windriver.com>,
-        yuzhoujian <yuzhoujian@didichuxing.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727103AbgD2XPd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 29 Apr 2020 19:15:33 -0400
+Received: from www62.your-server.de ([213.133.104.62]:59412 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726961AbgD2XPd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 29 Apr 2020 19:15:33 -0400
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jTvvM-0006vC-J2; Thu, 30 Apr 2020 01:15:28 +0200
+Received: from [178.195.186.98] (helo=pc-9.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jTvvM-0002IE-7A; Thu, 30 Apr 2020 01:15:28 +0200
+Subject: Re: [PATCH] bpf: fix unused variable warning
+To:     Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200429132217.1294289-1-arnd@arndb.de>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <8fc6fb64-8858-bbda-8381-3341167cd004@iogearbox.net>
+Date:   Thu, 30 Apr 2020 01:15:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <20200429132217.1294289-1-arnd@arndb.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.2/25797/Wed Apr 29 14:06:14 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch links perf with the libpfm4 library if it is available and
-LIBPFM4 is passed to the build. The libpfm4 library contains hardware
-event tables for all processors supported by perf_events. It is a
-helper library that helps convert from a symbolic event name to the
-event encoding required by the underlying kernel interface. This
-library is open-source and available from: http://perfmon2.sf.net.
-    
-With this patch, it is possible to specify full hardware events
-by name. Hardware filters are also supported. Events must be
-specified via the --pfm-events and not -e option. Both options
-are active at the same time and it is possible to mix and match:
-    
-$ perf stat --pfm-events inst_retired:any_p:c=1:i -e cycles ....
+On 4/29/20 3:21 PM, Arnd Bergmann wrote:
+> Hiding the only using of bpf_link_type_strs[] in an #ifdef causes
+> an unused-variable warning:
+> 
+> kernel/bpf/syscall.c:2280:20: error: 'bpf_link_type_strs' defined but not used [-Werror=unused-variable]
+>   2280 | static const char *bpf_link_type_strs[] = {
+> 
+> Move the definition into the same #ifdef.
+> 
+> Fixes: f2e10bff16a0 ("bpf: Add support for BPF_OBJ_GET_INFO_BY_FD for bpf_link")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-v12 changes NO_LIBPFM4 as a make option to LIBPFM4, ie opt-in rather
-    than opt-out of feature detection and build support. Suggested by
-    acme@kernel.org. It also moves passing the ASCIIDOC_EXTRA argument
-    into its own commit.
-v11 reformats the perf list output.
-v10 addresses review comments from jolsa@redhat.com.
-v9 removes some unnecessary #ifs.
-v8 addresses review comments from jolsa@redhat.com.
-   Breaks the patch into 4, adds a test and moves the libpfm code into its
-   own file. perf list encoding tries to be closer to existing.
-v7 rebases and adds fallback code for libpfm4 events.
-   The fallback code is to force user only priv level in case the
-   perf_event_open() syscall failed for permissions reason.
-   the fallback forces a user privilege level restriction on the event
-   string, so depending on the syntax either u or :u is needed.
-    
-   But libpfm4 can use a : or . as the separator, so simply searching
-   for ':' vs. '/' is not good enough to determine the syntax needed.
-   Therefore, this patch introduces a new evsel boolean field to mark
-   events coming from  libpfm4. The field is then used to adjust the
-   fallback string.
-v6 was a rebase.
-v5 was a rebase.
-v4 was a rebase on
-   git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
-   branch perf/core and re-adds the tools/build/feature/test-libpfm4.c
-   missed in v3.
-v3 is against acme/perf/core and removes a diagnostic warning.
-v2 of this patch makes the --pfm-events man page documentation
-   conditional on libpfm4 behing configured. It tidies some of the
-   documentation and adds the feature test missed in the v1 patch.
-
-Ian Rogers (1):
-  perf doc: pass ASCIIDOC_EXTRA as an argument
-
-Stephane Eranian (3):
-  tools feature: add support for detecting libpfm4
-  perf pmu: add perf_pmu__find_by_type helper
-  perf tools: add support for libpfm4
-
- tools/build/Makefile.feature             |   3 +-
- tools/build/feature/Makefile             |   6 +-
- tools/build/feature/test-libpfm4.c       |   9 +
- tools/perf/Documentation/perf-record.txt |  11 +
- tools/perf/Documentation/perf-stat.txt   |  10 +
- tools/perf/Documentation/perf-top.txt    |  11 +
- tools/perf/Makefile.config               |  13 ++
- tools/perf/Makefile.perf                 |   8 +-
- tools/perf/builtin-list.c                |   3 +
- tools/perf/builtin-record.c              |   8 +
- tools/perf/builtin-stat.c                |   8 +
- tools/perf/builtin-top.c                 |   8 +
- tools/perf/tests/Build                   |   1 +
- tools/perf/tests/builtin-test.c          |   9 +
- tools/perf/tests/pfm.c                   | 207 +++++++++++++++++
- tools/perf/tests/tests.h                 |   3 +
- tools/perf/util/Build                    |   2 +
- tools/perf/util/evsel.c                  |   2 +-
- tools/perf/util/evsel.h                  |   1 +
- tools/perf/util/parse-events.c           |  30 ++-
- tools/perf/util/parse-events.h           |   4 +
- tools/perf/util/pfm.c                    | 277 +++++++++++++++++++++++
- tools/perf/util/pfm.h                    |  43 ++++
- tools/perf/util/pmu.c                    |  11 +
- tools/perf/util/pmu.h                    |   1 +
- 25 files changed, 676 insertions(+), 13 deletions(-)
- create mode 100644 tools/build/feature/test-libpfm4.c
- create mode 100644 tools/perf/tests/pfm.c
- create mode 100644 tools/perf/util/pfm.c
- create mode 100644 tools/perf/util/pfm.h
-
--- 
-2.26.2.303.gf8c07b1a785-goog
-
+Applied, thanks!
