@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F45EC83007
-	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 03:46:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77541C8300B
+	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 03:46:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6AC3A208FE
-	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 03:46:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5587C2076A
+	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 03:46:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1588131990;
-	bh=az2wVbvSRPzcMe7mIhTmxAeObSuDGpCaz4Hx8e7Y0pE=;
+	s=default; t=1588131991;
+	bh=tLJXYb3DP+NFaGZ12BrTDQFNme8j82/mANf74a1uVyQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ah/P1G8YA1zneFO99qUXbPPBjRWZVAlvdTvqOrk/QmJwvWxVZGFJaHvj13Q/bdYb6
-	 +9+0R3nPLRkF2M0oLcg+UN1Orb0My+s7qP12n1HklmUvENPsXUHDxyUjHQL4iHxbTF
-	 7J3TFJNydctXAN1AYHdYikASB52ACd1NVYEiH5PE=
+	b=vqREKaMV4vUniqELm8zLtxGmvmjW+REu6YFH3ue5HZIaVodgB+VSCF67GSmPOH6ys
+	 voOTLTrHCQO2/3lFqp/nw3wzmSwmWM+0gW6v2Q5EQmb0Ftc9flVoimIpHsoc5SHbkx
+	 Qq7iECFfSsJI+kxpCZAdD8/jvnX90sWC9VqOt5y8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbgD2Dq3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Apr 2020 23:46:29 -0400
-Received: from conuserg-12.nifty.com ([210.131.2.79]:30763 "EHLO
+        id S1726699AbgD2Dqa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Apr 2020 23:46:30 -0400
+Received: from conuserg-12.nifty.com ([210.131.2.79]:30766 "EHLO
         conuserg-12.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726530AbgD2Dq2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Apr 2020 23:46:28 -0400
+        with ESMTP id S1726620AbgD2Dq3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Apr 2020 23:46:29 -0400
 Received: from oscar.flets-west.jp (softbank126090202047.bbtec.net [126.90.202.47]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 03T3jXli020748;
-        Wed, 29 Apr 2020 12:45:39 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 03T3jXli020748
+        by conuserg-12.nifty.com with ESMTP id 03T3jXle020748;
+        Wed, 29 Apr 2020 12:45:36 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 03T3jXle020748
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1588131939;
-        bh=/uCEadxNK92jCzF6r8Ms1SjECd/NnWflpdES5lPj8ng=;
+        s=dec2015msa; t=1588131936;
+        bh=zkicMK33vrZ+2mcVDCQ4bNubmTaMglTOCSUSPXTsbGc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e8y/rtn7q/UuXhFyssQ1z+aGJwEDik/s6i/MovKMuj2mnaSzDZcQ29I1Us79HvY61
-         pjzkO0G374/1hdJvwOhUDD1xcjJejvRFyjiI0R8yB0piGI2nJvPB4+OTtXpIDCnsSI
-         9HTCBcuhl7JpF1NRyy1lmVzl6K0RtHVRTyXIUdr/c0rHS2XN0+AOb+V5TJ15uHxrGi
-         z8GFRmOO32VEN5N+P19b/QwHZ8XHmObWzVxZCiu1M0pG8rNtqUFVXWOVaphlaZtRvC
-         nsgfp5HwdGxS0qlSKS3pK3NJ8dNnYECOCjKePALhnv8d2YI+bQWqPOTEom4BXj9xdc
-         /WB46ncPH86Hg==
+        b=PXxMZGnBEBMRh5cBuiELkk0avNmZSVsJrJ8iOmV0n7omfIMnkQWNVefaMm/yBc8iq
+         w6uiunEbIwWOofw+zNeWiCENo/XOWO2hAd2uT/BwnyU1djmV3oj+dP26Y/Bvlhm8k+
+         syTtkIojWQwvD6t/v6lqmV72S0NPVtwa+0mTYp5yaXAPp2banFV3jRu3g8WL/XRKiM
+         s80VpmXHz0a9XEQcO4aXPPvGXu+Cm5BEAXR0XpM8EPcIeHN0OBIDGSZpZI0xmNJXDO
+         WktoSX55+c2zymk0LOBrcsseoTvq16puUj950Idxv4awCGWi/vsvhQ1bB9MU8iWpeg
+         yI0pOhZJd6L2A==
 X-Nifty-SrcIP: [126.90.202.47]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     bpf <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v2 07/15] samples: uhid: build sample program for target architecture
-Date:   Wed, 29 Apr 2020 12:45:19 +0900
-Message-Id: <20200429034527.590520-8-masahiroy@kernel.org>
+Subject: [PATCH v2 03/15] bpfilter: use 'userprogs' syntax to build bpfilter_umh
+Date:   Wed, 29 Apr 2020 12:45:15 +0900
+Message-Id: <20200429034527.590520-4-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200429034527.590520-1-masahiroy@kernel.org>
 References: <20200429034527.590520-1-masahiroy@kernel.org>
@@ -59,16 +59,11 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This userspace program includes UAPI headers exported to usr/include/.
-'make headers' always works for the target architecture (i.e. the same
-architecture as the kernel), so the sample program should be built for
-the target as well. Kbuild now supports 'userprogs' for that.
+The user mode helper should be compiled for the same architecture as
+the kernel.
 
-Add the entry to samples/Makefile to put this into the build bot
-coverage.
-
-I also added the CONFIG option guarded by 'depends on CC_CAN_LINK'
-because $(CC) may not provide libc.
+This Makefile reused the 'hostprogs' syntax by overriding HOSTCC with CC.
+Use the new syntax 'userprogs' to fix the Makefile mess.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Acked-by: Sam Ravnborg <sam@ravnborg.org>
@@ -76,66 +71,36 @@ Acked-by: Sam Ravnborg <sam@ravnborg.org>
 
 Changes in v2: None
 
- samples/Kconfig         | 6 ++++++
- samples/Makefile        | 1 +
- samples/uhid/.gitignore | 2 ++
- samples/uhid/Makefile   | 9 +++------
- 4 files changed, 12 insertions(+), 6 deletions(-)
- create mode 100644 samples/uhid/.gitignore
+ net/bpfilter/Makefile | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/samples/Kconfig b/samples/Kconfig
-index 8949e9646125..2560e87c9cae 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -131,6 +131,12 @@ config SAMPLE_SECCOMP
- 	  Build samples of seccomp filters using various methods of
- 	  BPF filter construction.
+diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
+index f6209e4827b9..f23b53294fba 100644
+--- a/net/bpfilter/Makefile
++++ b/net/bpfilter/Makefile
+@@ -3,18 +3,14 @@
+ # Makefile for the Linux BPFILTER layer.
+ #
  
-+config SAMPLE_UHID
-+	bool "UHID sample"
-+	depends on CC_CAN_LINK && HEADERS_INSTALL
-+	help
-+	  Build UHID sample program.
-+
- config SAMPLE_VFIO_MDEV_MTTY
- 	tristate "Build VFIO mtty example mediated device sample code -- loadable modules only"
- 	depends on VFIO_MDEV_DEVICE && m
-diff --git a/samples/Makefile b/samples/Makefile
-index 5ce50ef0f2b2..bdc168405452 100644
---- a/samples/Makefile
-+++ b/samples/Makefile
-@@ -19,6 +19,7 @@ obj-$(CONFIG_SAMPLE_TRACE_EVENTS)	+= trace_events/
- obj-$(CONFIG_SAMPLE_TRACE_PRINTK)	+= trace_printk/
- obj-$(CONFIG_SAMPLE_FTRACE_DIRECT)	+= ftrace/
- obj-$(CONFIG_SAMPLE_TRACE_ARRAY)	+= ftrace/
-+subdir-$(CONFIG_SAMPLE_UHID)		+= uhid
- obj-$(CONFIG_VIDEO_PCI_SKELETON)	+= v4l/
- obj-y					+= vfio-mdev/
- subdir-$(CONFIG_SAMPLE_VFS)		+= vfs
-diff --git a/samples/uhid/.gitignore b/samples/uhid/.gitignore
-new file mode 100644
-index 000000000000..0e0a5a929f5d
---- /dev/null
-+++ b/samples/uhid/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+/uhid-example
-diff --git a/samples/uhid/Makefile b/samples/uhid/Makefile
-index 5f44ea40d6d5..9e652fc34103 100644
---- a/samples/uhid/Makefile
-+++ b/samples/uhid/Makefile
-@@ -1,8 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
--# List of programs to build
--hostprogs := uhid-example
-+userprogs := uhid-example
-+always-y := $(userprogs)
+-hostprogs := bpfilter_umh
++userprogs := bpfilter_umh
+ bpfilter_umh-objs := main.o
+-KBUILD_HOSTCFLAGS += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi \
+-			$(filter -m32 -m64, $(KBUILD_CFLAGS))
+-HOSTCC := $(CC)
++userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
  
--# Tell kbuild to always build the programs
--always-y := $(hostprogs)
--
--HOSTCFLAGS_uhid-example.o += -I$(objtree)/usr/include
-+userccflags += -I usr/include
+-ifeq ($(CONFIG_BPFILTER_UMH), y)
+-# builtin bpfilter_umh should be compiled with -static
++# builtin bpfilter_umh should be linked with -static
+ # since rootfs isn't mounted at the time of __init
+ # function is called and do_execv won't find elf interpreter
+-KBUILD_HOSTLDFLAGS += -static $(filter -m32 -m64, $(KBUILD_CFLAGS))
+-endif
++userldflags += -static
+ 
+ $(obj)/bpfilter_umh_blob.o: $(obj)/bpfilter_umh
+ 
 -- 
 2.25.1
 
