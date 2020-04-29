@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24731C83000
-	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 00:16:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6661BC83004
+	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 00:16:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0455120737
-	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 00:16:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45F7E20737
+	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 00:16:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Fv8FAbTk"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Q+V+xYvr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbgD2AQl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Apr 2020 20:16:41 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:48308 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726430AbgD2AQk (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 28 Apr 2020 20:16:40 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03T0EuZ6000360
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 17:16:39 -0700
+        id S1726548AbgD2AQo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Apr 2020 20:16:44 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:12558 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726457AbgD2AQm (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 28 Apr 2020 20:16:42 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 03T0Fgc1013762
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 17:16:42 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=r+VV1Mk9/2YeefFbi4bvvZ8k8PkcDYNeA5gOAZf714k=;
- b=Fv8FAbTkjIKLtt6n1vUJrIVjRV+bDkyAoxEHhy5Qm4dWY3OOo3Q04ZaY3NwFTVzbcM3g
- 6WKgBYy9GV6Ywr5eLZyoidVEDeTw2PGj9T+EeRd+0adFyI0YcXjx1kVZVLM4B2Od5TNk
- co7r3mH1hv8vZeV1YoAzNv59GOtkcvO7RY0= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30nq53ww04-4
+ bh=O4ZSB0p+qm1WHRmMVxlfbid3Oj0hCHmvibMuU8xoX5Q=;
+ b=Q+V+xYvryS33VcBypZR8VexZH90Ln4gEdUgcZjPF9KlYGwlRSJtlljXSokkwyeCNpnLS
+ UIQHcSVUcDylwFkjNcPdVtDZUXFFoK7ZpNAEXPfyVBy+EngEA5UgFnV9/OvKf0zSH3lU
+ g7bo31Y3kewGFmwTKo8aulOcEeq1cPa4DGM= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net with ESMTP id 30ntjvvx5a-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 17:16:38 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 17:16:41 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Tue, 28 Apr 2020 17:16:38 -0700
+ 15.1.1847.3; Tue, 28 Apr 2020 17:16:40 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 9023E2EC309B; Tue, 28 Apr 2020 17:16:33 -0700 (PDT)
+        id EB7D12EC309B; Tue, 28 Apr 2020 17:16:37 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -50,9 +50,9 @@ CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         Quentin Monnet <quentin@isovalent.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 07/10] bpftool: expose attach_type-to-string array to non-cgroup code
-Date:   Tue, 28 Apr 2020 17:16:11 -0700
-Message-ID: <20200429001614.1544-8-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 09/10] bpftool: add bpftool-link manpage
+Date:   Tue, 28 Apr 2020 17:16:13 -0700
+Message-ID: <20200429001614.1544-10-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200429001614.1544-1-andriin@fb.com>
 References: <20200429001614.1544-1-andriin@fb.com>
@@ -62,164 +62,155 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-28_15:2020-04-28,2020-04-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- spamscore=0 lowpriorityscore=0 suspectscore=9 impostorscore=0
- priorityscore=1501 phishscore=0 bulkscore=0 malwarescore=0 adultscore=0
- mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004290000
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 mlxscore=0
+ suspectscore=8 phishscore=0 mlxlogscore=999 lowpriorityscore=0
+ adultscore=0 spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2004290000
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move attach_type_strings into main.h for access in non-cgroup code.
-bpf_attach_type is used for non-cgroup attach types quite widely now. So =
-also
-complete missing string translations for non-cgroup attach types.
+Add bpftool-link manpage with information and examples of link-related
+commands.
 
-Cc: Quentin Monnet <quentin@isovalent.com>
 Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/bpf/bpftool/cgroup.c | 48 ++++++++++++--------------------------
- tools/bpf/bpftool/main.h   | 32 +++++++++++++++++++++++++
- 2 files changed, 47 insertions(+), 33 deletions(-)
+ .../bpftool/Documentation/bpftool-link.rst    | 118 ++++++++++++++++++
+ 1 file changed, 118 insertions(+)
+ create mode 100644 tools/bpf/bpftool/Documentation/bpftool-link.rst
 
-diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-index 62c6a1d7cd18..1693c802bb20 100644
---- a/tools/bpf/bpftool/cgroup.c
-+++ b/tools/bpf/bpftool/cgroup.c
-@@ -31,42 +31,20 @@
-=20
- static unsigned int query_flags;
-=20
--static const char * const attach_type_strings[] =3D {
--	[BPF_CGROUP_INET_INGRESS] =3D "ingress",
--	[BPF_CGROUP_INET_EGRESS] =3D "egress",
--	[BPF_CGROUP_INET_SOCK_CREATE] =3D "sock_create",
--	[BPF_CGROUP_SOCK_OPS] =3D "sock_ops",
--	[BPF_CGROUP_DEVICE] =3D "device",
--	[BPF_CGROUP_INET4_BIND] =3D "bind4",
--	[BPF_CGROUP_INET6_BIND] =3D "bind6",
--	[BPF_CGROUP_INET4_CONNECT] =3D "connect4",
--	[BPF_CGROUP_INET6_CONNECT] =3D "connect6",
--	[BPF_CGROUP_INET4_POST_BIND] =3D "post_bind4",
--	[BPF_CGROUP_INET6_POST_BIND] =3D "post_bind6",
--	[BPF_CGROUP_UDP4_SENDMSG] =3D "sendmsg4",
--	[BPF_CGROUP_UDP6_SENDMSG] =3D "sendmsg6",
--	[BPF_CGROUP_SYSCTL] =3D "sysctl",
--	[BPF_CGROUP_UDP4_RECVMSG] =3D "recvmsg4",
--	[BPF_CGROUP_UDP6_RECVMSG] =3D "recvmsg6",
--	[BPF_CGROUP_GETSOCKOPT] =3D "getsockopt",
--	[BPF_CGROUP_SETSOCKOPT] =3D "setsockopt",
--	[__MAX_BPF_ATTACH_TYPE] =3D NULL,
--};
--
- static enum bpf_attach_type parse_attach_type(const char *str)
- {
- 	enum bpf_attach_type type;
-=20
- 	for (type =3D 0; type < __MAX_BPF_ATTACH_TYPE; type++) {
--		if (attach_type_strings[type] &&
--		    is_prefix(str, attach_type_strings[type]))
-+		if (attach_type_name[type] &&
-+		    is_prefix(str, attach_type_name[type]))
- 			return type;
- 	}
-=20
- 	return __MAX_BPF_ATTACH_TYPE;
- }
-=20
--static int show_bpf_prog(int id, const char *attach_type_str,
-+static int show_bpf_prog(int id, enum bpf_attach_type attach_type,
- 			 const char *attach_flags_str,
- 			 int level)
- {
-@@ -86,18 +64,22 @@ static int show_bpf_prog(int id, const char *attach_t=
-ype_str,
- 	if (json_output) {
- 		jsonw_start_object(json_wtr);
- 		jsonw_uint_field(json_wtr, "id", info.id);
--		jsonw_string_field(json_wtr, "attach_type",
--				   attach_type_str);
-+		if (attach_type < ARRAY_SIZE(attach_type_name))
-+			jsonw_string_field(json_wtr, "attach_type",
-+					   attach_type_name[attach_type]);
-+		else
-+			jsonw_uint_field(json_wtr, "attach_type", attach_type);
- 		jsonw_string_field(json_wtr, "attach_flags",
- 				   attach_flags_str);
- 		jsonw_string_field(json_wtr, "name", info.name);
- 		jsonw_end_object(json_wtr);
- 	} else {
--		printf("%s%-8u %-15s %-15s %-15s\n", level ? "    " : "",
--		       info.id,
--		       attach_type_str,
--		       attach_flags_str,
--		       info.name);
-+		printf("%s%-8u ", level ? "    " : "", info.id);
-+		if (attach_type < ARRAY_SIZE(attach_type_name))
-+			printf("%-15s", attach_type_name[attach_type]);
-+		else
-+			printf("type %-10u", attach_type);
-+		printf(" %-15s %-15s\n", attach_flags_str, info.name);
- 	}
-=20
- 	close(prog_fd);
-@@ -171,7 +153,7 @@ static int show_attached_bpf_progs(int cgroup_fd, enu=
-m bpf_attach_type type,
- 	}
-=20
- 	for (iter =3D 0; iter < prog_cnt; iter++)
--		show_bpf_prog(prog_ids[iter], attach_type_strings[type],
-+		show_bpf_prog(prog_ids[iter], type,
- 			      attach_flags_str, level);
-=20
- 	return 0;
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 86f14ce26fd7..99d84bd1d5b2 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -83,6 +83,38 @@ static const char * const prog_type_name[] =3D {
- 	[BPF_PROG_TYPE_EXT]			=3D "ext",
- };
-=20
-+static const char * const attach_type_name[__MAX_BPF_ATTACH_TYPE] =3D {
-+	[BPF_CGROUP_INET_INGRESS] =3D "ingress",
-+	[BPF_CGROUP_INET_EGRESS] =3D "egress",
-+	[BPF_CGROUP_INET_SOCK_CREATE] =3D "sock_create",
-+	[BPF_CGROUP_SOCK_OPS] =3D "sock_ops",
-+	[BPF_CGROUP_DEVICE] =3D "device",
-+	[BPF_CGROUP_INET4_BIND] =3D "bind4",
-+	[BPF_CGROUP_INET6_BIND] =3D "bind6",
-+	[BPF_CGROUP_INET4_CONNECT] =3D "connect4",
-+	[BPF_CGROUP_INET6_CONNECT] =3D "connect6",
-+	[BPF_CGROUP_INET4_POST_BIND] =3D "post_bind4",
-+	[BPF_CGROUP_INET6_POST_BIND] =3D "post_bind6",
-+	[BPF_CGROUP_UDP4_SENDMSG] =3D "sendmsg4",
-+	[BPF_CGROUP_UDP6_SENDMSG] =3D "sendmsg6",
-+	[BPF_CGROUP_SYSCTL] =3D "sysctl",
-+	[BPF_CGROUP_UDP4_RECVMSG] =3D "recvmsg4",
-+	[BPF_CGROUP_UDP6_RECVMSG] =3D "recvmsg6",
-+	[BPF_CGROUP_GETSOCKOPT] =3D "getsockopt",
-+	[BPF_CGROUP_SETSOCKOPT] =3D "setsockopt",
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-link.rst b/tools/bpf=
+/bpftool/Documentation/bpftool-link.rst
+new file mode 100644
+index 000000000000..ee6500d6e6e4
+--- /dev/null
++++ b/tools/bpf/bpftool/Documentation/bpftool-link.rst
+@@ -0,0 +1,118 @@
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++bpftool-link
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++------------------------------------------------------------------------=
+-------
++tool for inspection and simple manipulation of eBPF links
++------------------------------------------------------------------------=
+-------
 +
-+	[BPF_SK_SKB_STREAM_PARSER] =3D "sk_skb_stream_parser",
-+	[BPF_SK_SKB_STREAM_VERDICT] =3D "sk_skb_stream_verdict",
-+	[BPF_SK_MSG_VERDICT] =3D "sk_msg_verdict",
-+	[BPF_LIRC_MODE2] =3D "lirc_mode2",
-+	[BPF_FLOW_DISSECTOR] =3D "flow_dissector",
-+	[BPF_TRACE_RAW_TP] =3D "raw_tp",
-+	[BPF_TRACE_FENTRY] =3D "fentry",
-+	[BPF_TRACE_FEXIT] =3D "fexit",
-+	[BPF_MODIFY_RETURN] =3D "mod_ret",
-+	[BPF_LSM_MAC] =3D "lsm_mac",
-+};
++:Manual section: 8
 +
- extern const char * const map_type_name[];
- extern const size_t map_type_name_size;
-=20
++SYNOPSIS
++=3D=3D=3D=3D=3D=3D=3D=3D
++
++	**bpftool** [*OPTIONS*] **link** *COMMAND*
++
++	*OPTIONS* :=3D { { **-j** | **--json** } [{ **-p** | **--pretty** }] | =
+{ **-f** | **--bpffs** } }
++
++	*COMMANDS* :=3D { **show** | **list** | **pin** | **help** }
++
++LINK COMMANDS
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++|	**bpftool** **link { show | list }** [*LINK*]
++|	**bpftool** **link pin** *LINK* *FILE*
++|	**bpftool** **link help**
++|
++|	*LINK* :=3D { **id** *LINK_ID* | **pinned** *FILE* }
++
++
++DESCRIPTION
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++	**bpftool link { show | list }** [*LINK*]
++		  Show information about active links. If *LINK* is
++		  specified show information only about given link,
++		  otherwise list all links currently active on the system.
++
++		  Output will start with link ID followed by link type and
++		  zero or more named attributes, some of which depend on type
++		  of link.
++
++	**bpftool link pin** *LINK* *FILE*
++		  Pin link *LINK* as *FILE*.
++
++		  Note: *FILE* must be located in *bpffs* mount. It must not
++		  contain a dot character ('.'), which is reserved for future
++		  extensions of *bpffs*.
++
++	**bpftool link help**
++		  Print short help message.
++
++OPTIONS
++=3D=3D=3D=3D=3D=3D=3D
++	-h, --help
++		  Print short generic help message (similar to **bpftool help**).
++
++	-V, --version
++		  Print version number (similar to **bpftool version**).
++
++	-j, --json
++		  Generate JSON output. For commands that cannot produce JSON, this
++		  option has no effect.
++
++	-p, --pretty
++		  Generate human-readable JSON output. Implies **-j**.
++
++	-f, --bpffs
++		  When showing BPF links, show file names of pinned
++		  links.
++
++	-n, --nomount
++		  Do not automatically attempt to mount any virtual file system
++		  (such as tracefs or BPF virtual file system) when necessary.
++
++	-d, --debug
++		  Print all logs available, even debug-level information. This
++		  includes logs from libbpf.
++
++EXAMPLES
++=3D=3D=3D=3D=3D=3D=3D=3D
++**# bpftool link show**
++
++::
++
++    10: cgroup  prog 25
++            cgroup_id 614  attach_type egress
++
++**# bpftool --json --pretty link show**
++
++::
++
++    [{
++            "type": "cgroup",
++            "prog_id": 25,
++            "cgroup_id": 614,
++            "attach_type": "egress"
++        }
++    ]
++
++|
++| **# bpftool link pin id 10 /sys/fs/bpf/link**
++| **# ls -l /sys/fs/bpf/**
++
++::
++
++    -rw------- 1 root root 0 Apr 23 21:39 link
++
++
++SEE ALSO
++=3D=3D=3D=3D=3D=3D=3D=3D
++	**bpf**\ (2),
++	**bpf-helpers**\ (7),
++	**bpftool**\ (8),
++	**bpftool-prog\ (8),
++	**bpftool-map**\ (8),
++	**bpftool-cgroup**\ (8),
++	**bpftool-feature**\ (8),
++	**bpftool-net**\ (8),
++	**bpftool-perf**\ (8),
++	**bpftool-btf**\ (8)
 --=20
 2.24.1
 
