@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20A8AC83001
-	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 01:21:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 225F4C83000
+	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 01:21:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F303220731
-	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 01:21:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 009B420731
+	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 01:21:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="GR0yj0fU"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="lI4u7d73"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726580AbgD2BVx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Apr 2020 21:21:53 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46564 "EHLO
+        id S1726595AbgD2BVz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Apr 2020 21:21:55 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:57572 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726551AbgD2BVw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 28 Apr 2020 21:21:52 -0400
+        by vger.kernel.org with ESMTP id S1726551AbgD2BVz (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 28 Apr 2020 21:21:55 -0400
 Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03T1Lp9j022125
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 18:21:52 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03T1LotF022109
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 18:21:54 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=s1S0Ac9l2PA+bzzDp+yHLz1ibq1Xbf4IeFbnQQHjsZY=;
- b=GR0yj0fUQEWVvvJAqDlDaDv+B4RHjlfrc2TrsazVwIRFM7MCjgZBxxfjRbUM0gC6xcv8
- G7UMGBfpC48sEDXUaTSDlz60cvUSUq9EFfhZCUzxqqsqTFYZRq/tSDh0Zp6CyY6kO8ek
- LmboMnJWp8AbpK8A2JFxIVhnZ2IQDQE73i0= 
+ bh=O7oe9qY/VuM9IT4PFCy6MtNL3wEAsmXbiqUvjEatFG4=;
+ b=lI4u7d73MIt86z5kX6VYb0NyxxWOmZJRFpF2abhT3UVD617l9X7ZbIqoIuf7tjBMRVm/
+ WNmf5/s9wOLfZ08Adrvmj1rg6FgNYmH9Z7s4Yr9zfUwzQlhQEJwrL9D/4X4lq2NOy6N5
+ XekgHNPn1g/RWF4T9drWEvbn4gwykr8sZ5k= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30n5bxb873-4
+        by mx0a-00082601.pphosted.com with ESMTP id 30n5bxb87c-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 18:21:52 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 18:21:54 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Tue, 28 Apr 2020 18:21:36 -0700
+ 15.1.1847.3; Tue, 28 Apr 2020 18:21:22 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id A83762EC30E4; Tue, 28 Apr 2020 18:21:32 -0700 (PDT)
+        id EA3122EC30E4; Tue, 28 Apr 2020 18:21:14 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 09/11] selftests/bpf: disable ASAN instrumentation for mmap()'ed memory read
-Date:   Tue, 28 Apr 2020 18:21:09 -0700
-Message-ID: <20200429012111.277390-10-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 01/11] selftests/bpf: ensure test flavors use correct skeletons
+Date:   Tue, 28 Apr 2020 18:21:01 -0700
+Message-ID: <20200429012111.277390-2-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200429012111.277390-1-andriin@fb.com>
 References: <20200429012111.277390-1-andriin@fb.com>
@@ -62,7 +62,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-28_15:2020-04-28,2020-04-28 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
- mlxlogscore=498 suspectscore=25 bulkscore=0 clxscore=1015 impostorscore=0
+ mlxlogscore=936 suspectscore=8 bulkscore=0 clxscore=1015 impostorscore=0
  adultscore=0 priorityscore=1501 spamscore=0 phishscore=0
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2004290008
@@ -72,37 +72,39 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-AddressSanitizer assumes that all memory dereferences are done against me=
-mory
-allocated by sanitizer's malloc()/free() code and not touched by anyone e=
-lse.
-Seems like this doesn't hold for perf buffer memory. Disable instrumentat=
-ion
-on perf buffer callback function.
+Ensure that test runner flavors include their own skeletons from <flavor>=
+/
+directory. Previously, skeletons generated for no-flavor test_progs were =
+used.
+Apart from fixing correctness, this also makes it possible to compile onl=
+y
+flavors individually:
 
+  $ make clean && make test_progs-no_alu32
+  ... now succeeds ...
+
+Fixes: 74b5a5968fe8 ("selftests/bpf: Replace test_progs and test_maps w/ =
+general rule")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/prog_tests/perf_buffer.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/perf_buffer.c b/tools=
-/testing/selftests/bpf/prog_tests/perf_buffer.c
-index 1450ea2dd4cc..a122ce3b360e 100644
---- a/tools/testing/selftests/bpf/prog_tests/perf_buffer.c
-+++ b/tools/testing/selftests/bpf/prog_tests/perf_buffer.c
-@@ -6,6 +6,11 @@
- #include <test_progs.h>
- #include "bpf/libbpf_internal.h"
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+index 4e654d41c7af..01c95f8278c7 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -324,7 +324,7 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
+ 		      $(TRUNNER_BPF_SKELS)				\
+ 		      $$(BPFOBJ) | $(TRUNNER_OUTPUT)
+ 	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
+-	cd $$(@D) && $$(CC) $$(CFLAGS) -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F)
++	cd $$(@D) && $$(CC) -I. $$(CFLAGS) -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F=
+)
 =20
-+/* AddressSanitizer sometimes crashes due to data dereference below, due=
- to
-+ * this being mmap()'ed memory. Disable instrumentation with
-+ * no_sanitize_address attribute
-+ */
-+__attribute__((no_sanitize_address))
- static void on_sample(void *ctx, int cpu, void *data, __u32 size)
- {
- 	int cpu_data =3D *(int *)data, duration =3D 0;
+ $(TRUNNER_EXTRA_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
+ 		       %.c						\
 --=20
 2.24.1
 
