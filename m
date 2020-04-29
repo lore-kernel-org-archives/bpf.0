@@ -2,109 +2,107 @@ Return-Path: <SRS0=PQF5=6N=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 225F4C83000
-	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 01:21:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF6F1C83000
+	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 01:26:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 009B420731
-	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 01:21:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 940E120731
+	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 01:26:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="lI4u7d73"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cU+NWLgG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726595AbgD2BVz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Apr 2020 21:21:55 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:57572 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726551AbgD2BVz (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 28 Apr 2020 21:21:55 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03T1LotF022109
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 18:21:54 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=O7oe9qY/VuM9IT4PFCy6MtNL3wEAsmXbiqUvjEatFG4=;
- b=lI4u7d73MIt86z5kX6VYb0NyxxWOmZJRFpF2abhT3UVD617l9X7ZbIqoIuf7tjBMRVm/
- WNmf5/s9wOLfZ08Adrvmj1rg6FgNYmH9Z7s4Yr9zfUwzQlhQEJwrL9D/4X4lq2NOy6N5
- XekgHNPn1g/RWF4T9drWEvbn4gwykr8sZ5k= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30n5bxb87c-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 18:21:54 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Tue, 28 Apr 2020 18:21:22 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id EA3122EC30E4; Tue, 28 Apr 2020 18:21:14 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 01/11] selftests/bpf: ensure test flavors use correct skeletons
-Date:   Tue, 28 Apr 2020 18:21:01 -0700
-Message-ID: <20200429012111.277390-2-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200429012111.277390-1-andriin@fb.com>
-References: <20200429012111.277390-1-andriin@fb.com>
+        id S1726345AbgD2B0I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Apr 2020 21:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726181AbgD2B0H (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 28 Apr 2020 21:26:07 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B38C03C1AC
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 18:26:07 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id n143so443700qkn.8
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 18:26:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oMvvjeMwFuGeW5e1qmnM2HHkm8XA5BfOCtWQq+g+GI8=;
+        b=cU+NWLgGX7zzV4rDtTmtWv2Ak2xR7bhznQWMMMF6tPflt27sSO0f8mDLVn/YxA/XTL
+         fsoJWt69yDgZqKSShu4q+ng1USPGXbw4wm/XKiUmjYkk6Kn/Lgb0qzEjY3UA7hy6RlnT
+         XcUY8lB/ZRQwz8VlxjLYbtp5/PmperHCIIiuA4XRWfauwzHhHBTc4BHr3aDG97obsnlL
+         KIzoBrRX3djxJerXPLuE0I9oc2KWQI3vrb6oC6tSkQylpo3GmWL0QdogttBNxujaOblw
+         fcZptoqGDQtoQfsYupYERnvuIGoQJyNfTbMniQ6yULsY5tSnfeI8uJBu3UJsyBFWhPJg
+         ykyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oMvvjeMwFuGeW5e1qmnM2HHkm8XA5BfOCtWQq+g+GI8=;
+        b=GsgUfq5adLvngfRkQQbKPN2gjNGVCeiUNW3VoCVqreVpWaJDEryREHPSish53iKSyK
+         28/irpr0K3j49YJHzrNInym69VIF21HtwDSPmfj1/qlmU9qhHdLJLOdZ52Y5djyfqFkv
+         H7hiNlnh7xAZqwrxOJaMRngsxW57pzE3YF1z3slV1777Aoyi6LBCPQoza4FLbND4qf1V
+         emNQke+vU2vNTDfDR2ZDMc3QvtHG0heieaNLY00/UtIIkQaEjrhSxuaqInwQ76ydBcxB
+         Mxp/fDu7wOSMA8pfZOQuIHS3qlBp4dG17gyj1/Hbbyq2H3PXpehmJELt317WdgLMroHq
+         JmiA==
+X-Gm-Message-State: AGi0PuYZrg9gj9yB3ttI+2v97Fw4r/MOCewM/h3rAEaxRlEXl6G3k40a
+        W9QShUctn9n7FULC5+YGN022fQvqCKzWqdDw4dfHRr98
+X-Google-Smtp-Source: APiQypIlpG2aIKAK7SPr+1yJLaPzK17sEcKk+3jQf2uLb/CeY7kBJZPwUEu9T1oJ9fwNJgDOZajBVirsfgY5U1UN8G4=
+X-Received: by 2002:ae9:eb8c:: with SMTP id b134mr30911878qkg.39.1588123566840;
+ Tue, 28 Apr 2020 18:26:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-28_15:2020-04-28,2020-04-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
- mlxlogscore=936 suspectscore=8 bulkscore=0 clxscore=1015 impostorscore=0
- adultscore=0 priorityscore=1501 spamscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004290008
-X-FB-Internal: deliver
+References: <20200428173742.2988395-1-vkabatov@redhat.com> <CAEf4Bzbp44pnj-yNP61enxh8-ZvFn56fSF4uDHLz0ZcY-H2yAA@mail.gmail.com>
+ <8e07a2db-a258-f1b3-d1f4-74f131cbcb6d@iogearbox.net> <CAEf4BzactULF+w-0yWt83T1thv3G+KoQ9ciqZF+PrnGBATc2Sw@mail.gmail.com>
+In-Reply-To: <CAEf4BzactULF+w-0yWt83T1thv3G+KoQ9ciqZF+PrnGBATc2Sw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 28 Apr 2020 18:25:56 -0700
+Message-ID: <CAEf4BzYrXZs1vX6_XzEu2WZgRsgAdRoh-zrWx5A=rtuW+Fnq1Q@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/bpf: Copy runqslower to OUTPUT directory
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Veronika Kabatova <vkabatov@redhat.com>, bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Ensure that test runner flavors include their own skeletons from <flavor>=
-/
-directory. Previously, skeletons generated for no-flavor test_progs were =
-used.
-Apart from fixing correctness, this also makes it possible to compile onl=
-y
-flavors individually:
+On Tue, Apr 28, 2020 at 5:15 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Tue, Apr 28, 2020 at 12:40 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> >
+> > On 4/28/20 8:57 PM, Andrii Nakryiko wrote:
+> > > On Tue, Apr 28, 2020 at 10:38 AM Veronika Kabatova <vkabatov@redhat.com> wrote:
+> > >>
+> > >> $(OUTPUT)/runqslower makefile target doesn't actually create runqslower
+> > >> binary in the $(OUTPUT) directory. As lib.mk expects all
+> > >> TEST_GEN_PROGS_EXTENDED (which runqslower is a part of) to be present in
+> > >> the OUTPUT directory, this results in an error when running e.g. `make
+> > >> install`:
+> > >>
+> > >> rsync: link_stat "tools/testing/selftests/bpf/runqslower" failed: No
+> > >>         such file or directory (2)
+> > >>
+> > >> Copy the binary into the OUTPUT directory after building it to fix the
+> > >> error.
+> > >>
+> > >> Fixes: 3a0d3092a4ed ("selftests/bpf: Build runqslower from selftests")
+> > >> Signed-off-by: Veronika Kabatova <vkabatov@redhat.com>
+> > >> ---
+> > >
+> > > Acked-by: Andrii Nakryiko <andriin@fb.com>
+> >
+> > Applied, thanks!
+>
+> Veronika,
+>
+> This change leaves runqslower laying around in selftests/bpf directory
+> and available to be committed into git. Can you please follow up with
+> adding runqslower to .gitignore? Thanks!
 
-  $ make clean && make test_progs-no_alu32
-  ... now succeeds ...
-
-Fixes: 74b5a5968fe8 ("selftests/bpf: Replace test_progs and test_maps w/ =
-general rule")
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/testing/selftests/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-index 4e654d41c7af..01c95f8278c7 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -324,7 +324,7 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
- 		      $(TRUNNER_BPF_SKELS)				\
- 		      $$(BPFOBJ) | $(TRUNNER_OUTPUT)
- 	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
--	cd $$(@D) && $$(CC) $$(CFLAGS) -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F)
-+	cd $$(@D) && $$(CC) -I. $$(CFLAGS) -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F=
-)
-=20
- $(TRUNNER_EXTRA_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
- 		       %.c						\
---=20
-2.24.1
-
+Never mind anymore, sent fix as part of ASAN fixes patch set.
