@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D6EBC83000
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7689C83001
 	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 01:21:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7BCF620731
+	by mail.kernel.org (Postfix) with ESMTP id C5B2020731
 	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 01:21:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="e63zK44K"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="o4LhDh0K"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726399AbgD2BV3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726490AbgD2BV3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 28 Apr 2020 21:21:29 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:60066 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726493AbgD2BV2 (ORCPT
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21038 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726498AbgD2BV2 (ORCPT
         <rfc822;bpf@vger.kernel.org>); Tue, 28 Apr 2020 21:21:28 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 03T1CBQT024838
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03T1KtxI025134
         for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 18:21:27 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=TQm9sfr0QqP19BhTi5hPo9qErEKDPKF43rRjVqH3TYA=;
- b=e63zK44KfygVscO1Yx3qPpOlI0oJtJeQjQ7cSFWWAnrmlEEhHdxJbdyXRCPqFCbVsFL5
- 0QpqKe7AmkgDKrKpDfW4C2I4qK2GmDoUIEklCMR5RMkag+YzUbiI2HfCeriBJEoW+LYC
- /zo29KkXgHsT+5v6i5DXWNFVPglGtFG5UCA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 30mgvnqqjp-3
+ bh=2wjHdsFA1VpS0UZc8mVL6131J0ce6JfymBqRzhfDSrY=;
+ b=o4LhDh0K8ROouw8hlGQ6Sad5N/3q1/FuwyEYsvx3QSse2thx4V+30ZIi0SleAGn5lefB
+ UbQ+FTXwEEdiMXGxLo+NZD3tcpIMT6YT5VK6ClYhJRJHGW0WUA6m8KGzbeWpIDZCsJb9
+ WiFVn5vI0H7NqMg9opgWfPLrLqf5PkjbHzA= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 30n57qbbp2-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Tue, 28 Apr 2020 18:21:27 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Tue, 28 Apr 2020 18:21:24 -0700
+ 15.1.1847.3; Tue, 28 Apr 2020 18:21:25 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 22BC72EC30E4; Tue, 28 Apr 2020 18:21:17 -0700 (PDT)
+        id B99FD2EC30E4; Tue, 28 Apr 2020 18:21:23 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>, Julia Kartseva <hex@fb.com>
+        Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 02/11] selftests/bpf: add SAN_CFLAGS param to selftests build to allow sanitizers
-Date:   Tue, 28 Apr 2020 18:21:02 -0700
-Message-ID: <20200429012111.277390-3-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 05/11] selftests/bpf: fix memory leak in test selector
+Date:   Tue, 28 Apr 2020 18:21:05 -0700
+Message-ID: <20200429012111.277390-6-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200429012111.277390-1-andriin@fb.com>
 References: <20200429012111.277390-1-andriin@fb.com>
@@ -61,77 +61,67 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-28_15:2020-04-28,2020-04-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 bulkscore=0
- malwarescore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
- priorityscore=1501 impostorscore=0 mlxlogscore=999 clxscore=1015
- suspectscore=8 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2003020000 definitions=main-2004290007
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=25
+ lowpriorityscore=0 mlxscore=0 spamscore=0 phishscore=0 adultscore=0
+ clxscore=1015 impostorscore=0 malwarescore=0 mlxlogscore=999
+ priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2004290008
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add ability to specify extra compiler flags with SAN_CFLAGS for compilati=
-on of
-all user-space C files.  This allows to build all of selftest programs wi=
-th,
-e.g., custom sanitizer flags, without requiring support for such sanitize=
-rs
-from anyone compiling selftest/bpf.
+Free test selector substrings, which were strdup()'ed.
 
-As an example, to compile everything with AddressSanitizer, one would do:
-
-  $ make clean && make SAN_CFLAGS=3D"-fsanitize=3Daddress"
-
-For AddressSanitizer to work, one needs appropriate libasan shared librar=
-y
-installed in the system, with version of libasan matching what GCC links
-against. E.g., GCC8 needs libasan5, while GCC7 uses libasan4.
-
-For CentOS 7, to build everything successfully one would need to:
-  $ sudo yum install devtoolset-8-gcc devtoolset-libasan-devel
-  $ scl enable devtoolset-8 bash # set up environment
-
-For Arch Linux to run selftests, one would need to install gcc-libs packa=
-ge to
-get libasan.so.5:
-  $ sudo pacman -S gcc-libs
-
-N.B. EXTRA_CFLAGS name wasn't used, because it's also used by libbpf's
-Makefile and this causes few issues:
-1. default "-g -Wall" flags are overriden;
-2. compiling shared library with AddressSanitizer generates a bunch of sy=
-mbols
-   like: "_GLOBAL__sub_D_00099_0_btf_dump.c", "_GLOBAL__sub_D_00099_0_bpf=
-.c",
-   etc, which screws up versioned symbols check.
-
-Cc: Julia Kartseva <hex@fb.com>
+Fixes: b65053cd94f4 ("selftests/bpf: Add whitelist/blacklist of test name=
+s to test_progs")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/Makefile | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/test_progs.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-index 01c95f8278c7..887f06a514ee 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -20,9 +20,10 @@ CLANG		?=3D clang
- LLC		?=3D llc
- LLVM_OBJCOPY	?=3D llvm-objcopy
- BPF_GCC		?=3D $(shell command -v bpf-gcc;)
--CFLAGS +=3D -g -rdynamic -Wall -O2 $(GENFLAGS) -I$(CURDIR)		\
--	  -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR) -I$(TOOLSINCDIR)	\
--	  -I$(APIDIR)							\
-+SAN_CFLAGS	?=3D
-+CFLAGS +=3D -g -rdynamic -Wall -O2 $(GENFLAGS) $(SAN_CFLAGS)		\
-+	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
-+	  -I$(TOOLSINCDIR) -I$(APIDIR)					\
- 	  -Dbpf_prog_load=3Dbpf_prog_test_load				\
- 	  -Dbpf_load_program=3Dbpf_test_load_program
- LDLIBS +=3D -lcap -lelf -lz -lrt -lpthread
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
+ftests/bpf/test_progs.c
+index b521e0a512b6..86d0020c9eec 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -420,6 +420,18 @@ static int libbpf_print_fn(enum libbpf_print_level l=
+evel,
+ 	return 0;
+ }
+=20
++static void free_str_set(const struct str_set *set)
++{
++	int i;
++
++	if (!set)
++		return;
++
++	for (i =3D 0; i < set->cnt; i++)
++		free((void *)set->strs[i]);
++	free(set->strs);
++}
++
+ static int parse_str_list(const char *s, struct str_set *set)
+ {
+ 	char *input, *state =3D NULL, *next, **tmp, **strs =3D NULL;
+@@ -756,11 +768,11 @@ int main(int argc, char **argv)
+ 	fprintf(stdout, "Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
+ 		env.succ_cnt, env.sub_succ_cnt, env.skip_cnt, env.fail_cnt);
+=20
+-	free(env.test_selector.blacklist.strs);
+-	free(env.test_selector.whitelist.strs);
++	free_str_set(&env.test_selector.blacklist);
++	free_str_set(&env.test_selector.whitelist);
+ 	free(env.test_selector.num_set);
+-	free(env.subtest_selector.blacklist.strs);
+-	free(env.subtest_selector.whitelist.strs);
++	free_str_set(&env.subtest_selector.blacklist);
++	free_str_set(&env.subtest_selector.whitelist);
+ 	free(env.subtest_selector.num_set);
+=20
+ 	return env.fail_cnt ? EXIT_FAILURE : EXIT_SUCCESS;
 --=20
 2.24.1
 
