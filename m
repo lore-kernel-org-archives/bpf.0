@@ -2,96 +2,140 @@ Return-Path: <SRS0=PQF5=6N=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F8F9C83003
-	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 03:32:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F45EC83007
+	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 03:46:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 060132076B
-	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 03:32:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DEzkn1Q2"
+	by mail.kernel.org (Postfix) with ESMTP id 6AC3A208FE
+	for <bpf@archiver.kernel.org>; Wed, 29 Apr 2020 03:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588131990;
+	bh=az2wVbvSRPzcMe7mIhTmxAeObSuDGpCaz4Hx8e7Y0pE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=ah/P1G8YA1zneFO99qUXbPPBjRWZVAlvdTvqOrk/QmJwvWxVZGFJaHvj13Q/bdYb6
+	 +9+0R3nPLRkF2M0oLcg+UN1Orb0My+s7qP12n1HklmUvENPsXUHDxyUjHQL4iHxbTF
+	 7J3TFJNydctXAN1AYHdYikASB52ACd1NVYEiH5PE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726560AbgD2Dcd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Apr 2020 23:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726551AbgD2Dcd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 28 Apr 2020 23:32:33 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9BBC03C1AC;
-        Tue, 28 Apr 2020 20:32:33 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id r4so377346pgg.4;
-        Tue, 28 Apr 2020 20:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oHg4Ih2xVy73JUSYzpNHihoFqPKep8Y6MUVusqxfGHo=;
-        b=DEzkn1Q2sV8YnzuyZMmp49TnNti9jXTPEoRtXMeZh7nSEiBYone93vuWY71UrPoR21
-         DPPV2r+SF2HtVON5l9Sr9ywBMPCo+U5N2Qh3uqO6ufGK4vPsIPlbNE19E3IgAHBmY8fE
-         DuBGiaprTw/aBDsbHxv/zmRu+rHWJ0n0Fr60za8AjHQTFLdBDf4bMAegs41LgcCvjCtL
-         dLkDTxrS0uiMl99Y2e4u3kr4DxOnnXXYrbF90o/Of6k8Z9qXw6Ch5cXnuHyqAD+HBQeX
-         dTniC4FxGvhndzgn1bRWnkguugaeIvQKq1dnUoR6DNK5JGMxSExBGfRJlgFJJuDuFkXi
-         7ACg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oHg4Ih2xVy73JUSYzpNHihoFqPKep8Y6MUVusqxfGHo=;
-        b=WM/PeUI23kDNFX7aeftrVbUGwX2T3BQYx/vZiH2KnyQP88tMM4d4gBfzlH1qNB1yDw
-         fO0tSWMQUN2+VcrfmhHKO4UkAwXFaY8CKn2PQCbAwzARV8aik4y/kABWhby9pmw9MLXf
-         9MeK5lt+z16NX2GzpgCF9UXJIIWbCq6yDNQe55j8CbG9Y+zONoC+z+iRjyJSkI+w700K
-         IlOMGnLUVKMolfVX0wiUhbydqATJL+HMIyMTzIj6pliBNr3qbFJd0/COLh7hXGNiBBhM
-         luqQs2dGcG1ZGom7MWKVumba0rNiM6zt9HoYomzXR0iZEZhpOWlPO1QdpjoMF81iKZ/8
-         QcMg==
-X-Gm-Message-State: AGi0PubVWSvllbsL6kj0Q30qFH9tOpgFY5Z3ewHf9FDGUmxaW9MsAdju
-        puMuXRiU9fFY7zVEZaExFc4=
-X-Google-Smtp-Source: APiQypJG70HpsOK6hrOP3VAywbncJqho0L31EVeVgjGpNQWCzfcr0gBT3U8gtbDDSqflGvDyeHYSrQ==
-X-Received: by 2002:a63:cc01:: with SMTP id x1mr21995994pgf.428.1588131152845;
-        Tue, 28 Apr 2020 20:32:32 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:3700])
-        by smtp.gmail.com with ESMTPSA id c12sm9234847pgk.11.2020.04.28.20.32.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 20:32:32 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 20:32:29 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
-        ast@kernel.org, daniel@iogearbox.net, kafai@fb.com
-Subject: Re: [PATCH bpf-next] bpf: bpf_{g,s}etsockopt for struct bpf_sock
-Message-ID: <20200429033229.hd243khhh6q5mwrd@ast-mbp.dhcp.thefacebook.com>
-References: <20200428185719.46815-1-sdf@google.com>
+        id S1726548AbgD2Dq3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Apr 2020 23:46:29 -0400
+Received: from conuserg-12.nifty.com ([210.131.2.79]:30763 "EHLO
+        conuserg-12.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726530AbgD2Dq2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Apr 2020 23:46:28 -0400
+Received: from oscar.flets-west.jp (softbank126090202047.bbtec.net [126.90.202.47]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id 03T3jXli020748;
+        Wed, 29 Apr 2020 12:45:39 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 03T3jXli020748
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1588131939;
+        bh=/uCEadxNK92jCzF6r8Ms1SjECd/NnWflpdES5lPj8ng=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=e8y/rtn7q/UuXhFyssQ1z+aGJwEDik/s6i/MovKMuj2mnaSzDZcQ29I1Us79HvY61
+         pjzkO0G374/1hdJvwOhUDD1xcjJejvRFyjiI0R8yB0piGI2nJvPB4+OTtXpIDCnsSI
+         9HTCBcuhl7JpF1NRyy1lmVzl6K0RtHVRTyXIUdr/c0rHS2XN0+AOb+V5TJ15uHxrGi
+         z8GFRmOO32VEN5N+P19b/QwHZ8XHmObWzVxZCiu1M0pG8rNtqUFVXWOVaphlaZtRvC
+         nsgfp5HwdGxS0qlSKS3pK3NJ8dNnYECOCjKePALhnv8d2YI+bQWqPOTEom4BXj9xdc
+         /WB46ncPH86Hg==
+X-Nifty-SrcIP: [126.90.202.47]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     bpf <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v2 07/15] samples: uhid: build sample program for target architecture
+Date:   Wed, 29 Apr 2020 12:45:19 +0900
+Message-Id: <20200429034527.590520-8-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200429034527.590520-1-masahiroy@kernel.org>
+References: <20200429034527.590520-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200428185719.46815-1-sdf@google.com>
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 11:57:19AM -0700, Stanislav Fomichev wrote:
-> Currently, bpf_getsocktop and bpf_setsockopt helpers operate on the
-> 'struct bpf_sock_ops' context in BPF_PROG_TYPE_CGROUP_SOCKOPT program.
-> Let's generalize them and make the first argument be 'struct bpf_sock'.
-> That way, in the future, we can allow those helpers in more places.
-> 
-> BPF_PROG_TYPE_CGROUP_SOCKOPT still has the existing helpers that operate
-> on 'struct bpf_sock_ops', but we add new bpf_{g,s}etsockopt that work
-> on 'struct bpf_sock'. [Alternatively, for BPF_PROG_TYPE_CGROUP_SOCKOPT,
-> we can enable them both and teach verifier to pick the right one
-> based on the context (bpf_sock_ops vs bpf_sock).]
-> 
-> As an example, let's allow those 'struct bpf_sock' based helpers to
-> be called from the BPF_CGROUP_INET{4,6}_CONNECT hooks. That way
-> we can override CC before the connection is made.
-> 
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+This userspace program includes UAPI headers exported to usr/include/.
+'make headers' always works for the target architecture (i.e. the same
+architecture as the kernel), so the sample program should be built for
+the target as well. Kbuild now supports 'userprogs' for that.
 
-Looks good to me and safety checks seem to be correct.
-Martin,
-could you please help review as well?
+Add the entry to samples/Makefile to put this into the build bot
+coverage.
+
+I also added the CONFIG option guarded by 'depends on CC_CAN_LINK'
+because $(CC) may not provide libc.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
+---
+
+Changes in v2: None
+
+ samples/Kconfig         | 6 ++++++
+ samples/Makefile        | 1 +
+ samples/uhid/.gitignore | 2 ++
+ samples/uhid/Makefile   | 9 +++------
+ 4 files changed, 12 insertions(+), 6 deletions(-)
+ create mode 100644 samples/uhid/.gitignore
+
+diff --git a/samples/Kconfig b/samples/Kconfig
+index 8949e9646125..2560e87c9cae 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -131,6 +131,12 @@ config SAMPLE_SECCOMP
+ 	  Build samples of seccomp filters using various methods of
+ 	  BPF filter construction.
+ 
++config SAMPLE_UHID
++	bool "UHID sample"
++	depends on CC_CAN_LINK && HEADERS_INSTALL
++	help
++	  Build UHID sample program.
++
+ config SAMPLE_VFIO_MDEV_MTTY
+ 	tristate "Build VFIO mtty example mediated device sample code -- loadable modules only"
+ 	depends on VFIO_MDEV_DEVICE && m
+diff --git a/samples/Makefile b/samples/Makefile
+index 5ce50ef0f2b2..bdc168405452 100644
+--- a/samples/Makefile
++++ b/samples/Makefile
+@@ -19,6 +19,7 @@ obj-$(CONFIG_SAMPLE_TRACE_EVENTS)	+= trace_events/
+ obj-$(CONFIG_SAMPLE_TRACE_PRINTK)	+= trace_printk/
+ obj-$(CONFIG_SAMPLE_FTRACE_DIRECT)	+= ftrace/
+ obj-$(CONFIG_SAMPLE_TRACE_ARRAY)	+= ftrace/
++subdir-$(CONFIG_SAMPLE_UHID)		+= uhid
+ obj-$(CONFIG_VIDEO_PCI_SKELETON)	+= v4l/
+ obj-y					+= vfio-mdev/
+ subdir-$(CONFIG_SAMPLE_VFS)		+= vfs
+diff --git a/samples/uhid/.gitignore b/samples/uhid/.gitignore
+new file mode 100644
+index 000000000000..0e0a5a929f5d
+--- /dev/null
++++ b/samples/uhid/.gitignore
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++/uhid-example
+diff --git a/samples/uhid/Makefile b/samples/uhid/Makefile
+index 5f44ea40d6d5..9e652fc34103 100644
+--- a/samples/uhid/Makefile
++++ b/samples/uhid/Makefile
+@@ -1,8 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-# List of programs to build
+-hostprogs := uhid-example
++userprogs := uhid-example
++always-y := $(userprogs)
+ 
+-# Tell kbuild to always build the programs
+-always-y := $(hostprogs)
+-
+-HOSTCFLAGS_uhid-example.o += -I$(objtree)/usr/include
++userccflags += -I usr/include
+-- 
+2.25.1
+
