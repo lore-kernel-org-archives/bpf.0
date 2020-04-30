@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48FE3C83002
-	for <bpf@archiver.kernel.org>; Thu, 30 Apr 2020 07:15:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA16FC83001
+	for <bpf@archiver.kernel.org>; Thu, 30 Apr 2020 07:15:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2130F20784
-	for <bpf@archiver.kernel.org>; Thu, 30 Apr 2020 07:15:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94C3720784
+	for <bpf@archiver.kernel.org>; Thu, 30 Apr 2020 07:15:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="DgGzIxaP"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Mcx3HchU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726508AbgD3HPa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Apr 2020 03:15:30 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:23014 "EHLO
+        id S1726560AbgD3HPo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Apr 2020 03:15:44 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46192 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726505AbgD3HPa (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 30 Apr 2020 03:15:30 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03U7Aum4012078
-        for <bpf@vger.kernel.org>; Thu, 30 Apr 2020 00:15:29 -0700
+        by vger.kernel.org with ESMTP id S1726558AbgD3HPo (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 30 Apr 2020 03:15:44 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03U7EJJP022024
+        for <bpf@vger.kernel.org>; Thu, 30 Apr 2020 00:15:43 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=EEFzJY95UH29SAE4vi5Cf/YWPNReM6RYRv2WipewEGw=;
- b=DgGzIxaPr4Ju51Zfr8uaibzBdClbyUGRI3CFy2vS/ithAWZikMjs0FEFUgEOYAtEP4QG
- pProzftaSYg8zJxiqkDRJm6rHKrY8pjeiKVk1y0AYPmaY4ToK1zB1hKh1uQR+S/Lb1Oc
- 4C3lBM42OX/jc4kogJIT9aMQeb9qQFsoIYQ= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30qf81b8tb-1
+ bh=JtWVZWZrv3Csyx60dNZghEym8BOKwRH5DB3B7tQ2ws4=;
+ b=Mcx3HchUpLB0uo+YTMrnGVx7Q1yHsRLwHEUqgckqIl/B7e3dKLYyD24E/j7kYZTRonqY
+ 6nnVF6oQehRzhgGk48QkkpXGawWWiXdkogjxyRuInIRAf3WmvuGrdif4RS/vqN17S+Ne
+ m4JlXYkYlDAfjwHiTDir47pOu2S5H5Mm8lk= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 30q6y0xb01-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 30 Apr 2020 00:15:29 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 30 Apr 2020 00:15:43 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Thu, 30 Apr 2020 00:15:28 -0700
+ 15.1.1847.3; Thu, 30 Apr 2020 00:15:42 -0700
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id A55CA62E4E4F; Thu, 30 Apr 2020 00:15:16 -0700 (PDT)
+        id D881962E4E4F; Thu, 30 Apr 2020 00:15:39 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v9 bpf-next 1/3] bpf: sharing bpf runtime stats with BPF_ENABLE_STATS
-Date:   Thu, 30 Apr 2020 00:15:04 -0700
-Message-ID: <20200430071506.1408910-2-songliubraving@fb.com>
+Subject: [PATCH v9 bpf-next 3/3] bpf: add selftest for BPF_ENABLE_STATS
+Date:   Thu, 30 Apr 2020 00:15:06 -0700
+Message-ID: <20200430071506.1408910-4-songliubraving@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200430071506.1408910-1-songliubraving@fb.com>
 References: <20200430071506.1408910-1-songliubraving@fb.com>
@@ -60,10 +60,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-30_02:2020-04-30,2020-04-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- malwarescore=0 spamscore=0 bulkscore=0 adultscore=0 clxscore=1015
- suspectscore=8 mlxscore=0 impostorscore=0 mlxlogscore=999 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 phishscore=0
+ malwarescore=0 impostorscore=0 mlxlogscore=999 suspectscore=8
+ lowpriorityscore=0 bulkscore=0 mlxscore=0 clxscore=1015 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2004300058
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -71,261 +71,102 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, sysctl kernel.bpf_stats_enabled controls BPF runtime stats.
-Typical userspace tools use kernel.bpf_stats_enabled as follows:
+Add test for BPF_ENABLE_STATS, which should enable run_time_ns stats.
 
-  1. Enable kernel.bpf_stats_enabled;
-  2. Check program run_time_ns;
-  3. Sleep for the monitoring period;
-  4. Check program run_time_ns again, calculate the difference;
-  5. Disable kernel.bpf_stats_enabled.
-
-The problem with this approach is that only one userspace tool can toggle
-this sysctl. If multiple tools toggle the sysctl at the same time, the
-measurement may be inaccurate.
-
-To fix this problem while keep backward compatibility, introduce a new
-bpf command BPF_ENABLE_STATS. On success, this command enables stats and
-returns a valid fd. BPF_ENABLE_STATS takes argument "type". Currently,
-only one type, BPF_STATS_RUN_TIME, is supported. We can extend the
-command to support other types of stats in the future.
-
-With BPF_ENABLE_STATS, user space tool would have the following flow:
-
-  1. Get a fd with BPF_ENABLE_STATS, and make sure it is valid;
-  2. Check program run_time_ns;
-  3. Sleep for the monitoring period;
-  4. Check program run_time_ns again, calculate the difference;
-  5. Close the fd.
+~/selftests/bpf# ./test_progs -t enable_stats  -v
+test_enable_stats:PASS:skel_open_and_load 0 nsec
+test_enable_stats:PASS:get_stats_fd 0 nsec
+test_enable_stats:PASS:attach_raw_tp 0 nsec
+test_enable_stats:PASS:get_prog_info 0 nsec
+test_enable_stats:PASS:check_stats_enabled 0 nsec
+test_enable_stats:PASS:check_run_cnt_valid 0 nsec
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
 
 Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- include/linux/bpf.h            |  1 +
- include/uapi/linux/bpf.h       | 11 +++++++
- kernel/bpf/syscall.c           | 57 ++++++++++++++++++++++++++++++++++
- kernel/sysctl.c                | 36 ++++++++++++++++++++-
- tools/include/uapi/linux/bpf.h | 11 +++++++
- 5 files changed, 115 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/enable_stats.c   | 45 +++++++++++++++++++
+ .../selftests/bpf/progs/test_enable_stats.c   | 18 ++++++++
+ 2 files changed, 63 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/enable_stats.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_enable_stats.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c07b1d2f3824..1262ec460ab3 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -987,6 +987,7 @@ _out:							\
-=20
- #ifdef CONFIG_BPF_SYSCALL
- DECLARE_PER_CPU(int, bpf_prog_active);
-+extern struct mutex bpf_stats_enabled_mutex;
-=20
- /*
-  * Block execution of BPF programs attached to instrumentation (perf,
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 0eccafae55bb..7d6024554f57 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -115,6 +115,7 @@ enum bpf_cmd {
- 	BPF_LINK_UPDATE,
- 	BPF_LINK_GET_FD_BY_ID,
- 	BPF_LINK_GET_NEXT_ID,
-+	BPF_ENABLE_STATS,
- };
-=20
- enum bpf_map_type {
-@@ -390,6 +391,12 @@ enum {
-  */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
-=20
-+/* type for BPF_ENABLE_STATS */
-+enum bpf_stats_type {
-+	/* enabled run_time_ns and run_cnt */
-+	BPF_STATS_RUN_TIME =3D 0,
-+};
+diff --git a/tools/testing/selftests/bpf/prog_tests/enable_stats.c b/tool=
+s/testing/selftests/bpf/prog_tests/enable_stats.c
+new file mode 100644
+index 000000000000..2cb2085917e7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/enable_stats.c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "test_enable_stats.skel.h"
 +
- enum bpf_stack_build_id_status {
- 	/* user space need an empty entry to identify end of a trace */
- 	BPF_STACK_BUILD_ID_EMPTY =3D 0,
-@@ -601,6 +608,10 @@ union bpf_attr {
- 		__u32		old_prog_fd;
- 	} link_update;
-=20
-+	struct { /* struct used by BPF_ENABLE_STATS command */
-+		__u32		type;
-+	} enable_stats;
-+
- } __attribute__((aligned(8)));
-=20
- /* The description below is an attempt at providing documentation to eBP=
-F
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index d23c04cbe14f..beecce126036 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3872,6 +3872,60 @@ static int bpf_link_get_fd_by_id(const union bpf_a=
-ttr *attr)
- 	return fd;
- }
-=20
-+DEFINE_MUTEX(bpf_stats_enabled_mutex);
-+
-+static int bpf_stats_release(struct inode *inode, struct file *file)
++void test_enable_stats(void)
 +{
-+	mutex_lock(&bpf_stats_enabled_mutex);
-+	static_key_slow_dec(&bpf_stats_enabled_key.key);
-+	mutex_unlock(&bpf_stats_enabled_mutex);
++	struct test_enable_stats *skel;
++	int stats_fd, err, prog_fd;
++	struct bpf_prog_info info;
++	__u32 info_len =3D sizeof(info);
++	int duration =3D 0;
++
++	skel =3D test_enable_stats__open_and_load();
++	if (CHECK(!skel, "skel_open_and_load", "skeleton open/load failed\n"))
++		return;
++
++	stats_fd =3D bpf_enable_stats(BPF_STATS_RUN_TIME);
++	if (CHECK(stats_fd < 0, "get_stats_fd", "failed %d\n", errno)) {
++		test_enable_stats__destroy(skel);
++		return;
++	}
++
++	err =3D test_enable_stats__attach(skel);
++	if (CHECK(err, "attach_raw_tp", "err %d\n", err))
++		goto cleanup;
++
++	test_enable_stats__detach(skel);
++
++	prog_fd =3D bpf_program__fd(skel->progs.test_enable_stats);
++	memset(&info, 0, info_len);
++	err =3D bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
++	if (CHECK(err, "get_prog_info",
++		  "failed to get bpf_prog_info for fd %d\n", prog_fd))
++		goto cleanup;
++	if (CHECK(info.run_time_ns =3D=3D 0, "check_stats_enabled",
++		  "failed to enable run_time_ns stats\n"))
++		goto cleanup;
++
++	CHECK(info.run_cnt !=3D skel->bss->count, "check_run_cnt_valid",
++	      "invalid run_cnt stats\n");
++
++cleanup:
++	test_enable_stats__destroy(skel);
++	close(stats_fd);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_enable_stats.c b/tool=
+s/testing/selftests/bpf/progs/test_enable_stats.c
+new file mode 100644
+index 000000000000..01a002ade529
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_enable_stats.c
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Facebook
++
++#include <linux/bpf.h>
++#include <stdint.h>
++#include <linux/types.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++__u64 count =3D 0;
++
++SEC("raw_tracepoint/sys_enter")
++int test_enable_stats(void *ctx)
++{
++	count +=3D 1;
 +	return 0;
 +}
-+
-+static const struct file_operations bpf_stats_fops =3D {
-+	.release =3D bpf_stats_release,
-+};
-+
-+static int bpf_enable_runtime_stats(void)
-+{
-+	int fd;
-+
-+	mutex_lock(&bpf_stats_enabled_mutex);
-+
-+	/* Set a very high limit to avoid overflow */
-+	if (static_key_count(&bpf_stats_enabled_key.key) > INT_MAX / 2) {
-+		mutex_unlock(&bpf_stats_enabled_mutex);
-+		return -EBUSY;
-+	}
-+
-+	fd =3D anon_inode_getfd("bpf-stats", &bpf_stats_fops, NULL, O_CLOEXEC);
-+	if (fd >=3D 0)
-+		static_key_slow_inc(&bpf_stats_enabled_key.key);
-+
-+	mutex_unlock(&bpf_stats_enabled_mutex);
-+	return fd;
-+}
-+
-+#define BPF_ENABLE_STATS_LAST_FIELD enable_stats.type
-+
-+static int bpf_enable_stats(union bpf_attr *attr)
-+{
-+
-+	if (CHECK_ATTR(BPF_ENABLE_STATS))
-+		return -EINVAL;
-+
-+	if (!capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	switch (attr->enable_stats.type) {
-+	case BPF_STATS_RUN_TIME:
-+		return bpf_enable_runtime_stats();
-+	default:
-+		break;
-+	}
-+	return -EINVAL;
-+}
-+
- SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned =
-int, size)
- {
- 	union bpf_attr attr;
-@@ -3996,6 +4050,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __use=
-r *, uattr, unsigned int, siz
- 		err =3D bpf_obj_get_next_id(&attr, uattr,
- 					  &link_idr, &link_idr_lock);
- 		break;
-+	case BPF_ENABLE_STATS:
-+		err =3D bpf_enable_stats(&attr);
-+		break;
- 	default:
- 		err =3D -EINVAL;
- 		break;
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index e961286d0e14..af08ef0690cb 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -201,6 +201,40 @@ static int max_extfrag_threshold =3D 1000;
-=20
- #endif /* CONFIG_SYSCTL */
-=20
-+#ifdef CONFIG_BPF_SYSCALL
-+static int bpf_stats_handler(struct ctl_table *table, int write,
-+			     void __user *buffer, size_t *lenp,
-+			     loff_t *ppos)
-+{
-+	struct static_key *key =3D (struct static_key *)table->data;
-+	static int saved_val;
-+	int val, ret;
-+	struct ctl_table tmp =3D {
-+		.data   =3D &val,
-+		.maxlen =3D sizeof(val),
-+		.mode   =3D table->mode,
-+		.extra1 =3D SYSCTL_ZERO,
-+		.extra2 =3D SYSCTL_ONE,
-+	};
-+
-+	if (write && !capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	mutex_lock(&bpf_stats_enabled_mutex);
-+	val =3D saved_val;
-+	ret =3D proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
-+	if (write && !ret && val !=3D saved_val) {
-+		if (val)
-+			static_key_slow_inc(key);
-+		else
-+			static_key_slow_dec(key);
-+		saved_val =3D val;
-+	}
-+	mutex_unlock(&bpf_stats_enabled_mutex);
-+	return ret;
-+}
-+#endif
-+
- /*
-  * /proc/sys support
-  */
-@@ -2549,7 +2583,7 @@ static struct ctl_table kern_table[] =3D {
- 		.data		=3D &bpf_stats_enabled_key.key,
- 		.maxlen		=3D sizeof(bpf_stats_enabled_key),
- 		.mode		=3D 0644,
--		.proc_handler	=3D proc_do_static_key,
-+		.proc_handler	=3D bpf_stats_handler,
- 	},
- #endif
- #if defined(CONFIG_TREE_RCU)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 0eccafae55bb..7d6024554f57 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -115,6 +115,7 @@ enum bpf_cmd {
- 	BPF_LINK_UPDATE,
- 	BPF_LINK_GET_FD_BY_ID,
- 	BPF_LINK_GET_NEXT_ID,
-+	BPF_ENABLE_STATS,
- };
-=20
- enum bpf_map_type {
-@@ -390,6 +391,12 @@ enum {
-  */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
-=20
-+/* type for BPF_ENABLE_STATS */
-+enum bpf_stats_type {
-+	/* enabled run_time_ns and run_cnt */
-+	BPF_STATS_RUN_TIME =3D 0,
-+};
-+
- enum bpf_stack_build_id_status {
- 	/* user space need an empty entry to identify end of a trace */
- 	BPF_STACK_BUILD_ID_EMPTY =3D 0,
-@@ -601,6 +608,10 @@ union bpf_attr {
- 		__u32		old_prog_fd;
- 	} link_update;
-=20
-+	struct { /* struct used by BPF_ENABLE_STATS command */
-+		__u32		type;
-+	} enable_stats;
-+
- } __attribute__((aligned(8)));
-=20
- /* The description below is an attempt at providing documentation to eBP=
-F
 --=20
 2.24.1
 
