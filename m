@@ -2,177 +2,455 @@ Return-Path: <SRS0=Oi1G=6O=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20422C47247
-	for <bpf@archiver.kernel.org>; Thu, 30 Apr 2020 21:33:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DDA7C47247
+	for <bpf@archiver.kernel.org>; Thu, 30 Apr 2020 23:31:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07DD02076D
-	for <bpf@archiver.kernel.org>; Thu, 30 Apr 2020 21:33:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E967A20774
+	for <bpf@archiver.kernel.org>; Thu, 30 Apr 2020 23:31:56 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hTeDcqou"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727977AbgD3Vda (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Apr 2020 17:33:30 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:45197 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726909AbgD3Vd3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Apr 2020 17:33:29 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MmlCY-1imznH36yU-00jrwf; Thu, 30 Apr 2020 23:31:17 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        James Smart <james.smart@broadcom.com>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
-        Bob Copeland <me@bobcopeland.com>, Jan Kara <jack@suse.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        linux-crypto@vger.kernel.org, linux-media@vger.kernel.org,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org,
-        linux-karma-devel@lists.sourceforge.net, bpf@vger.kernel.org,
-        linux-usb@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org
-Subject: [PATCH 00/15] gcc-10 warning fixes
-Date:   Thu, 30 Apr 2020 23:30:42 +0200
-Message-Id: <20200430213101.135134-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.26.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:d0r1T0atJ0fP6VC0lsoU2Nb50uVHm7+C7HFBKxo5Oh9FT7cjF4F
- 56LFacsuF89qNSNIhAKt16YSLWAlWssvN8MtPe8NN45LaPwc/cCelzxDkHr4+0tFL6+Sa9G
- a57V34rwqixwafD6sE/njElSMiK55+3n3WBVw4f5PpMdpEy2CNFI8yBkDaQox92MxOq478P
- ATheht8WQuHpTQRLL5ZEQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qtjOffXScL0=:Yde/YTTIyDLV71HcVFV/g8
- 5aCgJ4X4xNzxI3sDnVHzb+4x1iuaUyj/FDU6axm1cC5dNjOHg+8xAyvhGoryNPJJFdXCQ9E8u
- /vBjaVgpQi6NvTWJp+z0wFIoWkqjlRGR2wCLBCvG5ImhRZo6H4jl5uiqg/TUea1BRC5KOAUug
- NLH3+1SoQ96QZaVVmYPbql6nsHgFb4uZYdjCp8JTVI2L30Rp4+0Uw3uwnSsZJuLBGqAnsFaeh
- k7gAnZ02jIaJcsH2V+TwomCcLBG4OX9P3yetdeZWPtDSychl7RC+/gMGRpPt2beTcJXb7Sr4/
- wgqf3CYR6/N2vUz2MhXS9Sl+HtdkF3gKvKsNTp2mw9draDW6IVxA+E16ianBs3s2/Jj86Cp4d
- ehuoj5P2KJYrz+9tZ+et7SchBa5i/iGqThgNGHpUmVXaAI8nZHkjO7rEce0Ctm42WVr0HLTd4
- o1jt4fwG8tpZvziYdVKKK9x4WQWsYAq2xx0LoedsVxg8abX+ql1c1UVSezkM6FJvLsBYSOqLC
- Wl2wmpwXK3rQEhxxX4Sh0+p7vR68f1MiX8v4GGJjHzQvAfDgNp//3vXmnFa9OfQMY1+J5Oamt
- RKC21TWUo81CDfLbGJUutjWh36LNJfa+N4p4bSAvqbx+J8urAAoBgP4lL7BwvnjawPWVT3bQ7
- nx782MGIljH805ldEh/1deDsyPsEUVqES3Wx9pJakt2RNm+5lKUyzj8TLjsuKM9bM+MwiaVGP
- y3sVYv2Jji3wkCZuDo3KR4124HQta8GSeSFOnIEeWuWxcaFbOJf9loaB0IyqLaH/bv1s0C1At
- ctEvneGxLk11FkM6cOL//qiBQ4ws+UB1hR0Fmjp4sHdhGtlvK4=
+        id S1726478AbgD3Xb4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Apr 2020 19:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726384AbgD3Xb4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 30 Apr 2020 19:31:56 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C25C035494
+        for <bpf@vger.kernel.org>; Thu, 30 Apr 2020 16:31:54 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id e17so3511611ybr.21
+        for <bpf@vger.kernel.org>; Thu, 30 Apr 2020 16:31:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=P/ZkVzy8srGzpdc1wH5VQEZkZ6K0ju1bsjqWwmQKNss=;
+        b=hTeDcqouG+d0dbaPopxWRL9v5H+pDW896PfOfBdGYdbNP9Hi+DVaN/xECgJXq2UzDK
+         y5TLjKliiu/s7JhzrAmXuMJ8uiRIaQVgKvdr+W087d/8N73VSVwIuGCyfPfu35jis87k
+         bMrHKNhOjE0AB1tbRXOGBWKqdWhGoflMQWCLvUUnud2qu16ziDXNolkVAvdZhvEEnZgS
+         wcg5IL6M3puCOSgqAHuBXoe4B7/HRc1UuI+U/itG4M18mUV7HiAXJbXS0Y3zFVb5mc/9
+         D18TsyTGU7TXcJ8IVU6rYOxsAQHy1TNWpCmnf42JgCb+X5eOl07XOc34VjcZRHDZsMm1
+         f6NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=P/ZkVzy8srGzpdc1wH5VQEZkZ6K0ju1bsjqWwmQKNss=;
+        b=fs6fqZAPM1fcqq+Ey67vjHpjgF1gxk95TsHmm/f0kWDzDw2zS9QLZreIf3EfYUdF/O
+         vO79iy/sNqF5WP/2LdfLNBWht6kr/VOcaEHASsRO681WJj/bbdTtbbuTBkkHSzyVjN5I
+         AYLFgmc83IEgc+UvMMKmbdaIsGCkXx9L4GzXGIUiPCrJ1b7JzW6cz7/m672vuQzdvh3B
+         5odEm1IdqkNwsm4ZGMQF8q+9F2aQeG/f4eIaeWskwlkrEW1w9N6JS9ZXxJpvv+pHtSxW
+         Xm0L3O31n38/NimoF+j/v7aMcF56iT0WPRb9hwO3/EvBOip6I7n5yUa+Qn8fMdBD1FSG
+         7Ssw==
+X-Gm-Message-State: AGi0PuZzXAzUG9HG/VyoSOElfY+6vFwoITykNWmr93h1R/sjiWXOHOwq
+        9iSLEwfWssfROfRErjf9F2IQgJk=
+X-Google-Smtp-Source: APiQypJDNBJ855fNpoNoY05VbLvgyoLzn31gX6fJ9xeOZgattsasn8f/HoyVf1dnFhAofOhu+j24ppo=
+X-Received: by 2002:a25:448:: with SMTP id 69mr2151763ybe.187.1588289513703;
+ Thu, 30 Apr 2020 16:31:53 -0700 (PDT)
+Date:   Thu, 30 Apr 2020 16:31:52 -0700
+Message-Id: <20200430233152.199403-1-sdf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
+Subject: [PATCH bpf-next v3] bpf: bpf_{g,s}etsockopt for struct bpf_sock_addr
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        Stanislav Fomichev <sdf@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Here are a couple of fixes for warnings introduced with gcc-10.
-If you wish to reproduce these, you can find the compiler I used
-at [1].
+Currently, bpf_getsockopt and bpf_setsockopt helpers operate on the
+'struct bpf_sock_ops' context in BPF_PROG_TYPE_SOCK_OPS program.
+Let's generalize them and make them available for 'struct bpf_sock_addr'.
+That way, in the future, we can allow those helpers in more places.
 
-If you like the fixes, please apply them directly into maintainer
-trees. I expect that we will also need them to be backported
-into stable kernels later.
+As an example, let's expose those 'struct bpf_sock_addr' based helpers to
+BPF_CGROUP_INET{4,6}_CONNECT hooks. That way we can override CC before the
+connection is made.
 
-I disabled -Wrestrict on gcc in my local test tree, but with
-the patches from this series and the ones I have already sent,
-I see no gcc-10 specific warnings in linux-next when doing
-many randconfig builds for arm/arm64/x86.
+v3:
+* Expose custom helpers for bpf_sock_addr context instead of doing
+  generic bpf_sock argument (as suggested by Daniel). Even with
+  try_socket_lock that doesn't sleep we have a problem where context sk
+  is already locked and socket lock is non-nestable.
 
-      Arnd
+v2:
+* s/BPF_PROG_TYPE_CGROUP_SOCKOPT/BPF_PROG_TYPE_SOCK_OPS/
 
-Arnd Bergmann (15):
-  crypto - Avoid free() namespace collision
-  iwlwifi: mvm: fix gcc-10 zero-length-bounds warning
-  mwifiex: avoid -Wstringop-overflow warning
-  ath10k: fix gcc-10 zero-length-bounds warnings
-  bpf: avoid gcc-10 stringop-overflow warning
-  netfilter: conntrack: avoid gcc-10 zero-length-bounds warning
-  drop_monitor: work around gcc-10 stringop-overflow warning
-  usb: ehci: avoid gcc-10 zero-length-bounds warning
-  udf: avoid gcc-10 zero-length-bounds warnings
-  hpfs: avoid gcc-10 zero-length-bounds warning
-  omfs: avoid gcc-10 stringop-overflow warning
-  media: s5k5baf: avoid gcc-10 zero-length-bounds warning
-  scsi: sas: avoid gcc-10 zero-length-bounds warning
-  isci: avoid gcc-10 zero-length-bounds warning
-  nvme: avoid gcc-10 zero-length-bounds warning
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ include/uapi/linux/bpf.h                      |  14 ++-
+ net/core/filter.c                             | 118 ++++++++++++++----
+ tools/include/uapi/linux/bpf.h                |  14 ++-
+ tools/testing/selftests/bpf/config            |   1 +
+ .../selftests/bpf/progs/connect4_prog.c       |  46 +++++++
+ 5 files changed, 166 insertions(+), 27 deletions(-)
 
- crypto/lrw.c                                  |  6 +--
- crypto/xts.c                                  |  6 +--
- drivers/media/i2c/s5k5baf.c                   |  4 +-
- drivers/net/wireless/ath/ath10k/htt.h         |  4 +-
- .../net/wireless/intel/iwlwifi/fw/api/tx.h    | 14 +++----
- .../net/wireless/marvell/mwifiex/sta_cmd.c    | 39 ++++++++-----------
- drivers/nvme/host/fc.c                        |  2 +-
- drivers/scsi/aic94xx/aic94xx_tmf.c            |  4 +-
- drivers/scsi/isci/task.h                      |  7 ++--
- drivers/scsi/libsas/sas_task.c                |  3 +-
- fs/hpfs/anode.c                               |  7 +++-
- fs/omfs/file.c                                | 12 +++---
- fs/omfs/omfs_fs.h                             |  2 +-
- fs/udf/ecma_167.h                             |  2 +-
- fs/udf/super.c                                |  2 +-
- include/linux/filter.h                        |  6 +--
- include/linux/usb/ehci_def.h                  | 12 ++++--
- include/net/netfilter/nf_conntrack.h          |  2 +-
- net/core/drop_monitor.c                       | 11 ++++--
- net/netfilter/nf_conntrack_core.c             |  4 +-
- 20 files changed, 76 insertions(+), 73 deletions(-)
-
-[1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/10.0.20200413/
-
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Kalle Valo <kvalo@codeaurora.org>
-Cc: Johannes Berg <johannes.berg@intel.com>
-Cc: Intel Linux Wireless <linuxwifi@intel.com>
-Cc: Amitkumar Karwar <amitkarwar@gmail.com>
-Cc: James Smart <james.smart@broadcom.com>
-Cc: Jens Axboe <axboe@fb.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
-Cc: Bob Copeland <me@bobcopeland.com>
-Cc: Jan Kara <jack@suse.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Florian Westphal <fw@strlen.de>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Neil Horman <nhorman@tuxdriver.com>
-Cc: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: ath10k@lists.infradead.org
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-nvme@lists.infradead.org
-Cc: linux-scsi@vger.kernel.org
-Cc: linux-karma-devel@lists.sourceforge.net
-Cc: bpf@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
-Cc: netfilter-devel@vger.kernel.org
-Cc: coreteam@netfilter.org
-
-
-
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 4a6c47f3febe..761db1aed891 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1564,7 +1564,7 @@ union bpf_attr {
+  * 	Return
+  * 		0
+  *
+- * int bpf_setsockopt(struct bpf_sock_ops *bpf_socket, int level, int optname, void *optval, int optlen)
++ * int bpf_setsockopt(void *bpf_socket, int level, int optname, void *optval, int optlen)
+  * 	Description
+  * 		Emulate a call to **setsockopt()** on the socket associated to
+  * 		*bpf_socket*, which must be a full socket. The *level* at
+@@ -1572,6 +1572,11 @@ union bpf_attr {
+  * 		must be specified, see **setsockopt(2)** for more information.
+  * 		The option value of length *optlen* is pointed by *optval*.
+  *
++ * 		*bpf_socket* should be one of the following:
++ * 		* **struct bpf_sock_ops** for **BPF_PROG_TYPE_SOCK_OPS**.
++ * 		* **struct bpf_sock_addr** for **BPF_CGROUP_INET4_CONNECT**
++ * 		  and **BPF_CGROUP_INET6_CONNECT**.
++ *
+  * 		This helper actually implements a subset of **setsockopt()**.
+  * 		It supports the following *level*\ s:
+  *
+@@ -1766,7 +1771,7 @@ union bpf_attr {
+  * 	Return
+  * 		0 on success, or a negative error in case of failure.
+  *
+- * int bpf_getsockopt(struct bpf_sock_ops *bpf_socket, int level, int optname, void *optval, int optlen)
++ * int bpf_getsockopt(void *bpf_socket, int level, int optname, void *optval, int optlen)
+  * 	Description
+  * 		Emulate a call to **getsockopt()** on the socket associated to
+  * 		*bpf_socket*, which must be a full socket. The *level* at
+@@ -1775,6 +1780,11 @@ union bpf_attr {
+  * 		The retrieved value is stored in the structure pointed by
+  * 		*opval* and of length *optlen*.
+  *
++ * 		*bpf_socket* should be one of the following:
++ * 		* **struct bpf_sock_ops** for **BPF_PROG_TYPE_SOCK_OPS**.
++ * 		* **struct bpf_sock_addr** for **BPF_CGROUP_INET4_CONNECT**
++ * 		  and **BPF_CGROUP_INET6_CONNECT**.
++ *
+  * 		This helper actually implements a subset of **getsockopt()**.
+  * 		It supports the following *level*\ s:
+  *
+diff --git a/net/core/filter.c b/net/core/filter.c
+index da3b7a72c37c..437bb74dd9a9 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4194,16 +4194,19 @@ static const struct bpf_func_proto bpf_get_socket_uid_proto = {
+ 	.arg1_type      = ARG_PTR_TO_CTX,
+ };
+ 
+-BPF_CALL_5(bpf_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
+-	   int, level, int, optname, char *, optval, int, optlen)
++#define SOCKOPT_CC_REINIT (1 << 0)
++
++static int _bpf_setsockopt(struct sock *sk, int level, int optname,
++			   char *optval, int optlen, u32 flags)
+ {
+-	struct sock *sk = bpf_sock->sk;
+ 	int ret = 0;
+ 	int val;
+ 
+ 	if (!sk_fullsock(sk))
+ 		return -EINVAL;
+ 
++	sock_owned_by_me(sk);
++
+ 	if (level == SOL_SOCKET) {
+ 		if (optlen != sizeof(int))
+ 			return -EINVAL;
+@@ -4298,7 +4301,7 @@ BPF_CALL_5(bpf_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
+ 		   sk->sk_prot->setsockopt == tcp_setsockopt) {
+ 		if (optname == TCP_CONGESTION) {
+ 			char name[TCP_CA_NAME_MAX];
+-			bool reinit = bpf_sock->op > BPF_SOCK_OPS_NEEDS_ECN;
++			bool reinit = flags & SOCKOPT_CC_REINIT;
+ 
+ 			strncpy(name, optval, min_t(long, optlen,
+ 						    TCP_CA_NAME_MAX-1));
+@@ -4345,24 +4348,14 @@ BPF_CALL_5(bpf_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
+ 	return ret;
+ }
+ 
+-static const struct bpf_func_proto bpf_setsockopt_proto = {
+-	.func		= bpf_setsockopt,
+-	.gpl_only	= false,
+-	.ret_type	= RET_INTEGER,
+-	.arg1_type	= ARG_PTR_TO_CTX,
+-	.arg2_type	= ARG_ANYTHING,
+-	.arg3_type	= ARG_ANYTHING,
+-	.arg4_type	= ARG_PTR_TO_MEM,
+-	.arg5_type	= ARG_CONST_SIZE,
+-};
+-
+-BPF_CALL_5(bpf_getsockopt, struct bpf_sock_ops_kern *, bpf_sock,
+-	   int, level, int, optname, char *, optval, int, optlen)
++static int _bpf_getsockopt(struct sock *sk, int level, int optname,
++			   char *optval, int optlen)
+ {
+-	struct sock *sk = bpf_sock->sk;
+-
+ 	if (!sk_fullsock(sk))
+ 		goto err_clear;
++
++	sock_owned_by_me(sk);
++
+ #ifdef CONFIG_INET
+ 	if (level == SOL_TCP && sk->sk_prot->getsockopt == tcp_getsockopt) {
+ 		struct inet_connection_sock *icsk;
+@@ -4428,8 +4421,71 @@ BPF_CALL_5(bpf_getsockopt, struct bpf_sock_ops_kern *, bpf_sock,
+ 	return -EINVAL;
+ }
+ 
+-static const struct bpf_func_proto bpf_getsockopt_proto = {
+-	.func		= bpf_getsockopt,
++BPF_CALL_5(bpf_sock_addr_setsockopt, struct bpf_sock_addr_kern *, ctx,
++	   int, level, int, optname, char *, optval, int, optlen)
++{
++	u32 flags = 0;
++	return _bpf_setsockopt(ctx->sk, level, optname, optval, optlen,
++			       flags);
++}
++
++static const struct bpf_func_proto bpf_sock_addr_setsockopt_proto = {
++	.func		= bpf_sock_addr_setsockopt,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++	.arg2_type	= ARG_ANYTHING,
++	.arg3_type	= ARG_ANYTHING,
++	.arg4_type	= ARG_PTR_TO_MEM,
++	.arg5_type	= ARG_CONST_SIZE,
++};
++
++BPF_CALL_5(bpf_sock_addr_getsockopt, struct bpf_sock_addr_kern *, ctx,
++	   int, level, int, optname, char *, optval, int, optlen)
++{
++	return _bpf_getsockopt(ctx->sk, level, optname, optval, optlen);
++}
++
++static const struct bpf_func_proto bpf_sock_addr_getsockopt_proto = {
++	.func		= bpf_sock_addr_getsockopt,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++	.arg2_type	= ARG_ANYTHING,
++	.arg3_type	= ARG_ANYTHING,
++	.arg4_type	= ARG_PTR_TO_UNINIT_MEM,
++	.arg5_type	= ARG_CONST_SIZE,
++};
++
++BPF_CALL_5(bpf_sock_ops_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
++	   int, level, int, optname, char *, optval, int, optlen)
++{
++	u32 flags = 0;
++	if (bpf_sock->op > BPF_SOCK_OPS_NEEDS_ECN)
++		flags |= SOCKOPT_CC_REINIT;
++	return _bpf_setsockopt(bpf_sock->sk, level, optname, optval, optlen,
++			       flags);
++}
++
++static const struct bpf_func_proto bpf_sock_ops_setsockopt_proto = {
++	.func		= bpf_sock_ops_setsockopt,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++	.arg2_type	= ARG_ANYTHING,
++	.arg3_type	= ARG_ANYTHING,
++	.arg4_type	= ARG_PTR_TO_MEM,
++	.arg5_type	= ARG_CONST_SIZE,
++};
++
++BPF_CALL_5(bpf_sock_ops_getsockopt, struct bpf_sock_ops_kern *, bpf_sock,
++	   int, level, int, optname, char *, optval, int, optlen)
++{
++	return _bpf_getsockopt(bpf_sock->sk, level, optname, optval, optlen);
++}
++
++static const struct bpf_func_proto bpf_sock_ops_getsockopt_proto = {
++	.func		= bpf_sock_ops_getsockopt,
+ 	.gpl_only	= false,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+@@ -6043,6 +6099,22 @@ sock_addr_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_sk_storage_get_proto;
+ 	case BPF_FUNC_sk_storage_delete:
+ 		return &bpf_sk_storage_delete_proto;
++	case BPF_FUNC_setsockopt:
++		switch (prog->expected_attach_type) {
++		case BPF_CGROUP_INET4_CONNECT:
++		case BPF_CGROUP_INET6_CONNECT:
++			return &bpf_sock_addr_setsockopt_proto;
++		default:
++			return NULL;
++		}
++	case BPF_FUNC_getsockopt:
++		switch (prog->expected_attach_type) {
++		case BPF_CGROUP_INET4_CONNECT:
++		case BPF_CGROUP_INET6_CONNECT:
++			return &bpf_sock_addr_getsockopt_proto;
++		default:
++			return NULL;
++		}
+ 	default:
+ 		return bpf_base_func_proto(func_id);
+ 	}
+@@ -6261,9 +6333,9 @@ sock_ops_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+ 	switch (func_id) {
+ 	case BPF_FUNC_setsockopt:
+-		return &bpf_setsockopt_proto;
++		return &bpf_sock_ops_setsockopt_proto;
+ 	case BPF_FUNC_getsockopt:
+-		return &bpf_getsockopt_proto;
++		return &bpf_sock_ops_getsockopt_proto;
+ 	case BPF_FUNC_sock_ops_cb_flags_set:
+ 		return &bpf_sock_ops_cb_flags_set_proto;
+ 	case BPF_FUNC_sock_map_update:
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 4a6c47f3febe..761db1aed891 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1564,7 +1564,7 @@ union bpf_attr {
+  * 	Return
+  * 		0
+  *
+- * int bpf_setsockopt(struct bpf_sock_ops *bpf_socket, int level, int optname, void *optval, int optlen)
++ * int bpf_setsockopt(void *bpf_socket, int level, int optname, void *optval, int optlen)
+  * 	Description
+  * 		Emulate a call to **setsockopt()** on the socket associated to
+  * 		*bpf_socket*, which must be a full socket. The *level* at
+@@ -1572,6 +1572,11 @@ union bpf_attr {
+  * 		must be specified, see **setsockopt(2)** for more information.
+  * 		The option value of length *optlen* is pointed by *optval*.
+  *
++ * 		*bpf_socket* should be one of the following:
++ * 		* **struct bpf_sock_ops** for **BPF_PROG_TYPE_SOCK_OPS**.
++ * 		* **struct bpf_sock_addr** for **BPF_CGROUP_INET4_CONNECT**
++ * 		  and **BPF_CGROUP_INET6_CONNECT**.
++ *
+  * 		This helper actually implements a subset of **setsockopt()**.
+  * 		It supports the following *level*\ s:
+  *
+@@ -1766,7 +1771,7 @@ union bpf_attr {
+  * 	Return
+  * 		0 on success, or a negative error in case of failure.
+  *
+- * int bpf_getsockopt(struct bpf_sock_ops *bpf_socket, int level, int optname, void *optval, int optlen)
++ * int bpf_getsockopt(void *bpf_socket, int level, int optname, void *optval, int optlen)
+  * 	Description
+  * 		Emulate a call to **getsockopt()** on the socket associated to
+  * 		*bpf_socket*, which must be a full socket. The *level* at
+@@ -1775,6 +1780,11 @@ union bpf_attr {
+  * 		The retrieved value is stored in the structure pointed by
+  * 		*opval* and of length *optlen*.
+  *
++ * 		*bpf_socket* should be one of the following:
++ * 		* **struct bpf_sock_ops** for **BPF_PROG_TYPE_SOCK_OPS**.
++ * 		* **struct bpf_sock_addr** for **BPF_CGROUP_INET4_CONNECT**
++ * 		  and **BPF_CGROUP_INET6_CONNECT**.
++ *
+  * 		This helper actually implements a subset of **getsockopt()**.
+  * 		It supports the following *level*\ s:
+  *
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 60e3ae5d4e48..6e5b94c036ca 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -37,3 +37,4 @@ CONFIG_IPV6_SIT=m
+ CONFIG_BPF_JIT=y
+ CONFIG_BPF_LSM=y
+ CONFIG_SECURITY=y
++CONFIG_TCP_CONG_DCTCP=y
+diff --git a/tools/testing/selftests/bpf/progs/connect4_prog.c b/tools/testing/selftests/bpf/progs/connect4_prog.c
+index ad3c498a8150..972918cd2d7f 100644
+--- a/tools/testing/selftests/bpf/progs/connect4_prog.c
++++ b/tools/testing/selftests/bpf/progs/connect4_prog.c
+@@ -8,6 +8,7 @@
+ #include <linux/in.h>
+ #include <linux/in6.h>
+ #include <sys/socket.h>
++#include <netinet/tcp.h>
+ 
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
+@@ -16,6 +17,10 @@
+ #define DST_REWRITE_IP4		0x7f000001U
+ #define DST_REWRITE_PORT4	4444
+ 
++#ifndef TCP_CA_NAME_MAX
++#define TCP_CA_NAME_MAX 16
++#endif
++
+ int _version SEC("version") = 1;
+ 
+ __attribute__ ((noinline))
+@@ -33,6 +38,43 @@ int do_bind(struct bpf_sock_addr *ctx)
+ 	return 1;
+ }
+ 
++static __inline int verify_cc(struct bpf_sock_addr *ctx,
++			      char expected[TCP_CA_NAME_MAX])
++{
++	char buf[TCP_CA_NAME_MAX];
++	int i;
++
++	if (bpf_getsockopt(ctx, SOL_TCP, TCP_CONGESTION, &buf, sizeof(buf)))
++		return 1;
++
++	for (i = 0; i < TCP_CA_NAME_MAX; i++) {
++		if (buf[i] != expected[i])
++			return 1;
++		if (buf[i] == 0)
++			break;
++	}
++
++	return 0;
++}
++
++static __inline int set_cc(struct bpf_sock_addr *ctx)
++{
++	char dctcp[TCP_CA_NAME_MAX] = "dctcp";
++	char cubic[TCP_CA_NAME_MAX] = "cubic";
++
++	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &dctcp, sizeof(dctcp)))
++		return 1;
++	if (verify_cc(ctx, dctcp))
++		return 1;
++
++	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &cubic, sizeof(cubic)))
++		return 1;
++	if (verify_cc(ctx, cubic))
++		return 1;
++
++	return 0;
++}
++
+ SEC("cgroup/connect4")
+ int connect_v4_prog(struct bpf_sock_addr *ctx)
+ {
+@@ -66,6 +108,10 @@ int connect_v4_prog(struct bpf_sock_addr *ctx)
+ 
+ 	bpf_sk_release(sk);
+ 
++	/* Rewrite congestion control. */
++	if (ctx->type == SOCK_STREAM && set_cc(ctx))
++		return 0;
++
+ 	/* Rewrite destination. */
+ 	ctx->user_ip4 = bpf_htonl(DST_REWRITE_IP4);
+ 	ctx->user_port = bpf_htons(DST_REWRITE_PORT4);
 -- 
-2.26.0
+2.26.2.526.g744177e7f7-goog
 
