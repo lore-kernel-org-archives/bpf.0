@@ -2,54 +2,55 @@ Return-Path: <SRS0=Oi1G=6O=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42DBBC8300A
-	for <bpf@archiver.kernel.org>; Thu, 30 Apr 2020 11:22:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6907BC8300A
+	for <bpf@archiver.kernel.org>; Thu, 30 Apr 2020 11:22:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A5FB2076D
-	for <bpf@archiver.kernel.org>; Thu, 30 Apr 2020 11:22:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 43F9F20774
+	for <bpf@archiver.kernel.org>; Thu, 30 Apr 2020 11:22:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PebKi8iO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I1i5aAqu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727855AbgD3LWP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Apr 2020 07:22:15 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:24513 "EHLO
+        id S1726906AbgD3LWV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Apr 2020 07:22:21 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:48492 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726127AbgD3LWP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 30 Apr 2020 07:22:15 -0400
+        by vger.kernel.org with ESMTP id S1726127AbgD3LWV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 30 Apr 2020 07:22:21 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588245734;
+        s=mimecast20190719; t=1588245740;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fyXj64W9iXvtE0nTB1aqjNrwMULziy0GGmOR3N9mZoY=;
-        b=PebKi8iOr2AuGnrNpTJBgHs004WHcKQbQLNU15E5Y0nRBO42MbRSMtQ6n5r8mWzYcIfAca
-        1uzPbIVQ4yU330JmNR0eNfaPnQbWqxJcRNHGPbXRpP6D+/YSCdPFj1kz7may+uIDc/z3cN
-        QX1c4V2S4ZTMLSZ1sO/V3RuablQfes8=
+        bh=3AsaCSGIzYZvw4mOnWKfUdq3Y1S7ifGzwLeXDOIt/dU=;
+        b=I1i5aAquGwktqBfgAp1M3knlcSvyPBu5Yo1bvlbfjKsGnjwPYm2Jmo4zqpKsvx3hpDsiGt
+        Ayo44Uy34s8N31BEmyHqH/16A67qxMfemxUAKlfypwtQS2aQXRfD69ls3ifV8r8OFhH611
+        dAKMEl2DisXkvVKiLYe+fZ3ePxBxIWQ=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-493-6pQlfhy5M2WVMfqU8V_6ow-1; Thu, 30 Apr 2020 07:22:12 -0400
-X-MC-Unique: 6pQlfhy5M2WVMfqU8V_6ow-1
+ us-mta-179-fpp1F9KoNtCRe5QtkG95wg-1; Thu, 30 Apr 2020 07:22:17 -0400
+X-MC-Unique: fpp1F9KoNtCRe5QtkG95wg-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 174FB8015CB;
-        Thu, 30 Apr 2020 11:22:10 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A938C462;
+        Thu, 30 Apr 2020 11:22:14 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2AA115C1B0;
-        Thu, 30 Apr 2020 11:22:04 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 530795C1B0;
+        Thu, 30 Apr 2020 11:22:14 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 25447324DB2C0;
-        Thu, 30 Apr 2020 13:22:03 +0200 (CEST)
-Subject: [PATCH net-next v2 20/33] vhost_net: also populate XDP frame size
+        by firesoul.localdomain (Postfix) with ESMTP id 5104C324DB2C0;
+        Thu, 30 Apr 2020 13:22:13 +0200 (CEST)
+Subject: [PATCH net-next v2 22/33] ixgbe: fix XDP redirect on archs with
+ PAGE_SIZE above 4K
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
-Cc:     Jason Wang <jasowang@redhat.com>,
+Cc:     Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org, zorik@amazon.com,
         akiyano@amazon.com, gtzalik@amazon.com,
@@ -65,8 +66,8 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         steffen.klassert@secunet.com
-Date:   Thu, 30 Apr 2020 13:22:03 +0200
-Message-ID: <158824572308.2172139.1144470511173466125.stgit@firesoul>
+Date:   Thu, 30 Apr 2020 13:22:13 +0200
+Message-ID: <158824573325.2172139.17374499388744224315.stgit@firesoul>
 In-Reply-To: <158824557985.2172139.4173570969543904434.stgit@firesoul>
 References: <158824557985.2172139.4173570969543904434.stgit@firesoul>
 User-Agent: StGit/0.19
@@ -79,30 +80,38 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In vhost_net_build_xdp() the 'buf' that gets queued via an xdp_buff
-have embedded a struct tun_xdp_hdr (located at xdp->data_hard_start)
-which contains the buffer length 'buflen' (with tailroom for
-skb_shared_info). Also storing this buflen in xdp->frame_sz, does not
-obsolete struct tun_xdp_hdr, as it also contains a struct
-virtio_net_hdr with other information.
+The ixgbe driver have another memory model when compiled on archs with
+PAGE_SIZE above 4096 bytes. In this mode it doesn't split the page in
+two halves, but instead increment rx_buffer->page_offset by truesize of
+packet (which include headroom and tailroom for skb_shared_info).
 
-Cc: Jason Wang <jasowang@redhat.com>
+This is done correctly in ixgbe_build_skb(), but in ixgbe_rx_buffer_flip
+which is currently only called on XDP_TX and XDP_REDIRECT, it forgets
+to add the tailroom for skb_shared_info. This breaks XDP_REDIRECT, for
+veth and cpumap.  Fix by adding size of skb_shared_info tailroom.
+
+Maintainers notice: This fix have been queued to Jeff.
+
+Fixes: 6453073987ba ("ixgbe: add initial support for xdp redirect")
+Cc: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- drivers/vhost/net.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index 2927f02cc7e1..516519dcc8ff 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -747,6 +747,7 @@ static int vhost_net_build_xdp(struct vhost_net_virtqueue *nvq,
- 	xdp->data = buf + pad;
- 	xdp->data_end = xdp->data + len;
- 	hdr->buflen = buflen;
-+	xdp->frame_sz = buflen;
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+index 718931d951bc..ea6834bae04c 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+@@ -2254,7 +2254,8 @@ static void ixgbe_rx_buffer_flip(struct ixgbe_ring *rx_ring,
+ 	rx_buffer->page_offset ^= truesize;
+ #else
+ 	unsigned int truesize = ring_uses_build_skb(rx_ring) ?
+-				SKB_DATA_ALIGN(IXGBE_SKB_PAD + size) :
++				SKB_DATA_ALIGN(IXGBE_SKB_PAD + size) +
++				SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) :
+ 				SKB_DATA_ALIGN(size);
  
- 	--net->refcnt_bias;
- 	alloc_frag->offset += buflen;
+ 	rx_buffer->page_offset += truesize;
 
 
