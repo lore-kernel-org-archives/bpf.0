@@ -2,112 +2,94 @@ Return-Path: <SRS0=KuSb=6P=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04A6BC47254
-	for <bpf@archiver.kernel.org>; Fri,  1 May 2020 22:43:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B3B5C47254
+	for <bpf@archiver.kernel.org>; Fri,  1 May 2020 22:53:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D55ED2166E
-	for <bpf@archiver.kernel.org>; Fri,  1 May 2020 22:43:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 575BF216FD
+	for <bpf@archiver.kernel.org>; Fri,  1 May 2020 22:53:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="osNjIOxD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EC0PL+me"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726455AbgEAWnX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 May 2020 18:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
+        id S1726905AbgEAWxJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 May 2020 18:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726344AbgEAWnW (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 1 May 2020 18:43:22 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C92C061A0C
-        for <bpf@vger.kernel.org>; Fri,  1 May 2020 15:43:22 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id h186so11683220qkc.22
-        for <bpf@vger.kernel.org>; Fri, 01 May 2020 15:43:22 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726827AbgEAWxI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 1 May 2020 18:53:08 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E14CC061A0C;
+        Fri,  1 May 2020 15:53:08 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id f18so3943584lja.13;
+        Fri, 01 May 2020 15:53:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=hPopuAbrlmDsANSXoPS/PnMAqzIuG9U4bFV/yQD4WPs=;
-        b=osNjIOxDjuzqW8qj8TELt/+bUWdiy5cmqDEc1FO9Vn4B37Mv6y1qrrgvJgr2aP4ATF
-         +FsPWJ3c0RbiWpkCFLCucJLJchpN83IK2kBvcIRqVG7fwwjluABt2vyFrIjgIt1HLZhG
-         M0kFfAzxIe4l1FPf57Y4YAZpmkvKis/LLS63trRUGGIfGsux8fcp5ZynPfU+eZRifqX0
-         iHFaQQQ7LOIuisqcuoCqShPmCHzK0uTJ+Rg9SmIWHvjR1BSD+F/8zLz8XPDRamI4c4zx
-         he7CV/UFxDoUeFbvamO7PeRCyIURtLQvJVbF/I7bjlefvjEv6k1WZPa2C+gV4w8Ov+3j
-         tfXw==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lC79aPZW6AjC9pf7KF8UTKymwTC6u0lyxph48s2QozU=;
+        b=EC0PL+meS4hS3Mzrl5h9s5GzvdQ7CxHT0K9CC4ygBhbvNuxg6XnxPEQidGMkuAFF06
+         ZKrAPoZSXAq8iRmnsYsePO2J8EEPvRbzzrgwI4ZxT3VIm7vOXs9/Jx+E21rmtl7lyAMW
+         KI+hVtsxhO3NcEdN3I4oaKJ/nQyB15/67DqxB/2/IadsoG6YTVRpbPbBYCkQtsDM/PWl
+         fTbP98DaAJzzV8QsnfWcMqR6ZRoNwWcErdSAeW7mmJVcfLzCzUu5EkVRM9V3NFKzFISi
+         bXTbb9OarriNXBUClMO3a9Bk33DE8VBni2CpMc33hx4jR7Di39Q+IEARCzvyEwvUDB8Y
+         W5+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=hPopuAbrlmDsANSXoPS/PnMAqzIuG9U4bFV/yQD4WPs=;
-        b=AErRTpTHMfSxLwxB/3MSJUh8WmglvnJMT3OePCerNGIgB07+pJZpYI+2VgJbpi8l19
-         S5GiQnWTVXf2W5OCKTUzy0AffSKcRsK84haipoov9ARDrlq0AO/EDLzVon1Zng6n54zV
-         a5KjgiKqmxfNMzaYtu6Ul8iKxECiL1mgi4HSppRRp8ENUCtxUzVIxyPpNlA1jbDBCdhh
-         VSazQPbPYjPfByMlGvsra5t7c7ccFkpVEI6cXFncWSR6otxBPc9H6r4CtLLko/nPAlbz
-         K1WEGvEmvNRofk67lYTo5bL4pmoTkL31n6KoKOaXe7Zh3QWx3HfLrqsInQ9LxIGB5E1T
-         4VmQ==
-X-Gm-Message-State: AGi0PuZxrczXz9XhUAJ5azLWBstxnmN3syYsGR2aEqt5/m9mZSjI4Z86
-        MPU4ZJxyHlN21moU0XfqyfASpNI=
-X-Google-Smtp-Source: APiQypKoYKEOuZ8b1jDi8uTsR6ZTp/BZEofSFZyymt+b6pnE4/6ia65lDN/XDXJS7h/+OO2vpqaLtd0=
-X-Received: by 2002:a05:6214:1262:: with SMTP id r2mr6284830qvv.126.1588373001796;
- Fri, 01 May 2020 15:43:21 -0700 (PDT)
-Date:   Fri,  1 May 2020 15:43:20 -0700
-Message-Id: <20200501224320.28441-1-sdf@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
-Subject: [PATCH bpf-next] selftests/bpf: use reno instead of dctcp
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>,
-        Andrey Ignatov <rdna@fb.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lC79aPZW6AjC9pf7KF8UTKymwTC6u0lyxph48s2QozU=;
+        b=GubtPvjX7eMIBRuH9h3GvPfElK0pyZRSl4gq2nFh8aKHS+zOLSvzat7tQoT9c0r+dn
+         4yr/wI6l5KU87uMInAquyisyGpeg0JbrsmXucmoyQDWmOIypmSuDthYrzo+UT9QpoYNj
+         zibdkbEoboSif6Vv8ntwUcunpUgCpE3kv6A78FWmqzb4d71xnA8hPzNc4qM15oGpKZ1q
+         AElLAXVCZTUWlM9mQ8uHsZyJOLwEeaIeFtGZGMkMt2vSgpkGAR5S2WCJyDAvhGMi8P+w
+         J1ikfmy+spPDaJaatr6vosqFRmdwSQ0iRZWBMFCEnBV8OPVo6fz2ErcWZAObCPfSED/r
+         k5ZQ==
+X-Gm-Message-State: AGi0PuauCmG5wjE5pS+zaNMfcyYQE8d851QJHZawNdMJZocT1yvZjClc
+        3PBw6mFrFX8mSiZap75KtCQkhJ19chHZAWXWehw=
+X-Google-Smtp-Source: APiQypL+fpYSX9qKqj7U2vjZ4YXtK3zGMlam/cJc3ck7NPVl1pfwUAoSjyJ4yzloVNbz+lUYs/UcktlF3is5ipZeRkc=
+X-Received: by 2002:a2e:b80b:: with SMTP id u11mr3673872ljo.212.1588373586809;
+ Fri, 01 May 2020 15:53:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200501185622.3088964-1-andriin@fb.com> <20200501195929.4s6y7wee3u5usk4n@kafai-mbp>
+In-Reply-To: <20200501195929.4s6y7wee3u5usk4n@kafai-mbp>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 1 May 2020 15:52:55 -0700
+Message-ID: <CAADnVQLpT4b9CC1bwVrqLiFKLG5mAoDbo1ae0jJCwVq8A0eSRw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next] bpf: fix use-after-free of bpf_link when
+ priming half-fails
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Kernel Team <kernel-team@fb.com>,
+        syzbot+39b64425f91b5aab714d@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrey pointed out that we can use reno instead of dctcp for CC
-tests and drop CONFIG_TCP_CONG_DCTCP=y requirement.
+On Fri, May 1, 2020 at 1:00 PM Martin KaFai Lau <kafai@fb.com> wrote:
+>
+> On Fri, May 01, 2020 at 11:56:22AM -0700, Andrii Nakryiko wrote:
+> > If bpf_link_prime() succeeds to allocate new anon file, but then fails to
+> > allocate ID for it, link priming is considered to be failed and user is
+> > supposed ot be able to directly kfree() bpf_link, because it was never exposed
+> > to user-space.
+> >
+> > But at that point file already keeps a pointer to bpf_link and will eventually
+> > call bpf_link_release(), so if bpf_link was kfree()'d by caller, that would
+> > lead to use-after-free.
+> >
+> > Fix this by first allocating ID and only then allocating file. Adding ID to
+> > link_idr is ok, because link at that point still doesn't have its ID set, so
+> > no user-space process can create a new FD for it.
+> Acked-by: Martin KaFai Lau <kafai@fb.com>
 
-Fixes: beecf11bc218 ("bpf: Bpf_{g,s}etsockopt for struct bpf_sock_addr")
-Suggested-by: Andrey Ignatov <rdna@fb.com>
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- tools/testing/selftests/bpf/config                | 1 -
- tools/testing/selftests/bpf/progs/connect4_prog.c | 6 +++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 6e5b94c036ca..60e3ae5d4e48 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -37,4 +37,3 @@ CONFIG_IPV6_SIT=m
- CONFIG_BPF_JIT=y
- CONFIG_BPF_LSM=y
- CONFIG_SECURITY=y
--CONFIG_TCP_CONG_DCTCP=y
-diff --git a/tools/testing/selftests/bpf/progs/connect4_prog.c b/tools/testing/selftests/bpf/progs/connect4_prog.c
-index 972918cd2d7f..c2c85c31cffd 100644
---- a/tools/testing/selftests/bpf/progs/connect4_prog.c
-+++ b/tools/testing/selftests/bpf/progs/connect4_prog.c
-@@ -59,12 +59,12 @@ static __inline int verify_cc(struct bpf_sock_addr *ctx,
- 
- static __inline int set_cc(struct bpf_sock_addr *ctx)
- {
--	char dctcp[TCP_CA_NAME_MAX] = "dctcp";
-+	char reno[TCP_CA_NAME_MAX] = "reno";
- 	char cubic[TCP_CA_NAME_MAX] = "cubic";
- 
--	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &dctcp, sizeof(dctcp)))
-+	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &reno, sizeof(reno)))
- 		return 1;
--	if (verify_cc(ctx, dctcp))
-+	if (verify_cc(ctx, reno))
- 		return 1;
- 
- 	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &cubic, sizeof(cubic)))
--- 
-2.26.2.526.g744177e7f7-goog
-
+Applied. Thanks
