@@ -2,140 +2,396 @@ Return-Path: <SRS0=BfNB=6Q=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.4 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.3 required=3.0 tests=DATE_IN_PAST_12_24,
+	DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57678C3A5A9
-	for <bpf@archiver.kernel.org>; Sat,  2 May 2020 08:59:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50EBCC3A5A9
+	for <bpf@archiver.kernel.org>; Sat,  2 May 2020 10:51:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3A33B20787
-	for <bpf@archiver.kernel.org>; Sat,  2 May 2020 08:59:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1665420787
+	for <bpf@archiver.kernel.org>; Sat,  2 May 2020 10:51:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588416681;
+	bh=oY1XDx13nvpoAFMzklDNw6tkrmRYWc+Dn9o5TeYCYzM=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=It1a0ULsm5SIJ+5EW5upnyJf7NWK4GUKA61j1FUBRIhtRPePOi/XZZG2HQgpV35TU
+	 AQOh2urUxEgfYc4MH257bRVF9LM9MjTWqvY+Vf237WNEkN2/DNydA8gej+NJOy+Pez
+	 RtfyPidKgL/FYHQmpu0tPaqR/TJcLp2wZXbvHzcw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbgEBI7U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 2 May 2020 04:59:20 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:46354 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726752AbgEBI7U (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 2 May 2020 04:59:20 -0400
-Received: by mail-io1-f69.google.com with SMTP id a11so958657ioq.13
-        for <bpf@vger.kernel.org>; Sat, 02 May 2020 01:59:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Ywzji6QDZvXk0ZcBde6pSZ6jql6pppVQlFIwSdzVTS4=;
-        b=K71epUujmkafY7/CPXA77uiGCWaJyTTbU69Y3yAh5VeRz8fHGRLdU180hsfNDqIRLA
-         lEuxVZVZTO1qe2T45/ToMmiusrHtO9p9aBtXaziY1rBxIqaSVOnLK6Res2zxOjzNkxTR
-         Fx8ltN+TzynCig3MipR+Zw7c4eddn+zwUgvkbbkxiQWZZRmFFoE1yb23RvUEsAAVPvWd
-         TcTzxYMJ6bvnBLGg2hciyBZSW62JwVVgdl75eTq/jbciOG0TRxw67vRBeg23qZt6ZVz5
-         BHhKxHzm9vsW4rdhpnWFc0kEznxWM/7fzYhWEmzblpudZRapYHLFnFDwnSiW40WmfYH+
-         bHDg==
-X-Gm-Message-State: AGi0PuZ5qyGViKbvL2aAJjCV/1oplWfv6nbpUwG5RECCeS7ZtSmnGq21
-        FCF76knzI1/VngJY/Hy+ZlkbTv4ocU67FCgeSZUw2Tr3axZn
-X-Google-Smtp-Source: APiQypJwe/QtiAdOMw0gg7Juii1+8c/8AdO98fvxzwSQCgaqOMbSqCF+kNPf6lF5yJ9UeT1YoICCgRp5DDiXxJnxxf/u5miIWFK9
+        id S1726745AbgEBKvU convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sat, 2 May 2020 06:51:20 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33574 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726741AbgEBKvU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 2 May 2020 06:51:20 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 042ApJ2n016239
+        for <bpf@vger.kernel.org>; Sat, 2 May 2020 03:51:19 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 30s46b8j4w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sat, 02 May 2020 03:51:19 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Sat, 2 May 2020 03:51:18 -0700
+Received: by devbig007.ftw2.facebook.com (Postfix, from userid 572438)
+        id 6673C760751; Fri,  1 May 2020 15:44:07 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Alexei Starovoitov <ast@kernel.org>
+Smtp-Origin-Hostname: devbig007.ftw2.facebook.com
+To:     <davem@davemloft.net>
+CC:     <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: pull-request: bpf-next 2020-05-01
+Date:   Fri, 1 May 2020 15:44:07 -0700
+Message-ID: <20200501224407.3903683-1-ast@kernel.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:d8ca:: with SMTP id l10mr7408148ilo.118.1588409959328;
- Sat, 02 May 2020 01:59:19 -0700 (PDT)
-Date:   Sat, 02 May 2020 01:59:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000622fdd05a4a6831d@google.com>
-Subject: KASAN: global-out-of-bounds Read in inet_diag_bc_sk
-From:   syzbot <syzbot+3f4c9f04a6740870299e@syzkaller.appspotmail.com>
-To:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@chromium.org,
-        kuba@kernel.org, kuznet@ms2.inr.ac.ru,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com,
-        yoshfuji@linux-ipv6.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-05-02_06:2020-05-01,2020-05-02 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ lowpriorityscore=0 adultscore=0 mlxscore=0 malwarescore=0 clxscore=1034
+ spamscore=0 priorityscore=1501 impostorscore=0 bulkscore=0 phishscore=0
+ suspectscore=4 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005020098
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+Hi David,
 
-syzbot found the following crash on:
+The following pull-request contains BPF updates for your *net-next* tree.
 
-HEAD commit:    4b4976a6 Merge branch 'net-ReST-part-three'
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13e3824c100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b1494ce3fbc02154
-dashboard link: https://syzkaller.appspot.com/bug?extid=3f4c9f04a6740870299e
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+We've added 60 non-merge commits during the last 6 day(s) which contain
+a total of 154 files changed, 6740 insertions(+), 3367 deletions(-).
 
-Unfortunately, I don't have any reproducer for this crash yet.
+The main changes are:
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+3f4c9f04a6740870299e@syzkaller.appspotmail.com
+1) pulled work.sysctl from vfs tree with sysctl bpf changes.
 
-==================================================================
-BUG: KASAN: global-out-of-bounds in cgroup_id include/linux/cgroup.h:312 [inline]
-BUG: KASAN: global-out-of-bounds in inet_diag_bc_sk+0xb6e/0xc70 net/ipv4/inet_diag.c:749
-Read of size 8 at addr ffffffff8d22eed0 by task syz-executor.2/16922
+2) bpf_link observability, from Andrii.
 
-CPU: 1 PID: 16922 Comm: syz-executor.2 Not tainted 5.7.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x188/0x20d lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0x5/0x315 mm/kasan/report.c:382
- __kasan_report.cold+0x35/0x4d mm/kasan/report.c:511
- kasan_report+0x33/0x50 mm/kasan/common.c:625
- cgroup_id include/linux/cgroup.h:312 [inline]
- inet_diag_bc_sk+0xb6e/0xc70 net/ipv4/inet_diag.c:749
- inet_diag_dump_icsk+0xbe4/0x1306 net/ipv4/inet_diag.c:1061
- __inet_diag_dump+0x8d/0x240 net/ipv4/inet_diag.c:1113
- netlink_dump+0x50b/0xf50 net/netlink/af_netlink.c:2245
- __netlink_dump_start+0x63f/0x910 net/netlink/af_netlink.c:2353
- netlink_dump_start include/linux/netlink.h:246 [inline]
- inet_diag_handler_cmd+0x263/0x2c0 net/ipv4/inet_diag.c:1278
- __sock_diag_cmd net/core/sock_diag.c:233 [inline]
- sock_diag_rcv_msg+0x2fe/0x3e0 net/core/sock_diag.c:264
- netlink_rcv_skb+0x15a/0x410 net/netlink/af_netlink.c:2469
- sock_diag_rcv+0x26/0x40 net/core/sock_diag.c:275
- netlink_unicast_kernel net/netlink/af_netlink.c:1303 [inline]
- netlink_unicast+0x537/0x740 net/netlink/af_netlink.c:1329
- netlink_sendmsg+0x882/0xe10 net/netlink/af_netlink.c:1918
- sock_sendmsg_nosec net/socket.c:652 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:672
- sock_write_iter+0x289/0x3c0 net/socket.c:1004
- call_write_iter include/linux/fs.h:1907 [inline]
- do_iter_readv_writev+0x5a8/0x850 fs/read_write.c:694
- do_iter_write fs/read_write.c:999 [inline]
- do_iter_write+0x18b/0x600 fs/read_write.c:980
- vfs_writev+0x1b3/0x2f0 fs/read_write.c:1072
- do_writev+0x27f/0x300 fs/read_write.c:1115
- do_syscall_64+0xf6/0x7d0 arch/x86/entry/common.c:295
- entry_SYSCALL_64_after_hwframe+0x49/0xb3
-RIP: 0033:0x45c829
-Code: 0d b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 db b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007f6839177c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000014
-RAX: ffffffffffffffda RBX: 000000000050d140 RCX: 000000000045c829
-RDX: 0000000000000001 RSI: 00000000200000c0 RDI: 0000000000000007
-RBP: 000000000078bf00 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000ffffffff
-R13: 0000000000000d18 R14: 00000000004cb1f4 R15: 00007f68391786d4
+3) BTF-defined map in map, from Andrii.
 
-The buggy address belongs to the variable:
- __key.82892+0x30/0x40
+4) asan fixes for selftests, from Andrii.
 
-Memory state around the buggy address:
- ffffffff8d22ed80: fa fa fa fa 00 00 fa fa fa fa fa fa 00 00 fa fa
- ffffffff8d22ee00: fa fa fa fa 00 fa fa fa fa fa fa fa 00 00 fa fa
->ffffffff8d22ee80: fa fa fa fa 00 00 fa fa fa fa fa fa 00 00 fa fa
-                                                 ^
- ffffffff8d22ef00: fa fa fa fa 00 00 fa fa fa fa fa fa 00 00 fa fa
- ffffffff8d22ef80: fa fa fa fa 00 00 fa fa fa fa fa fa 00 00 fa fa
-==================================================================
+5) Allow bpf_map_lookup_elem for SOCKMAP and SOCKHASH, from Jakub.
 
+6) production cloudflare classifier as a selftes, from Lorenz.
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+7) bpf_ktime_get_*_ns() helper improvements, from Maciej.
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+8) unprivileged bpftool feature probe, from Quentin.
+
+9) BPF_ENABLE_STATS command, from Song.
+
+10) enable bpf_[gs]etsockopt() helpers for sock_ops progs, from Stanislav.
+
+11) enable a bunch of common helpers for cg-device, sysctl, sockopt progs,
+ from Stanislav.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+
+Thanks a lot!
+
+Also thanks to reporters, reviewers and testers of commits in this pull-request:
+
+Alston Tang, Andrey Ignatov, Andrii Nakryiko, David Rientjes, Hulk 
+Robot, John Fastabend, Magnus Karlsson, Martin KaFai Lau, Quentin 
+Monnet, Song Liu, Toke Høiland-Jørgensen, Xi Wang
+
+----------------------------------------------------------------
+
+The following changes since commit 3fd8dc269ff0647819589c21b2ce60af6fc0a455:
+
+  net: hns3: remove an unnecessary check in hclge_set_umv_space() (2020-04-25 20:56:45 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git 
+
+for you to fetch changes up to 138c67677ff5ac0bce7131033c39d52a81e87a60:
+
+  bpf: Fix use-after-free of bpf_link when priming half-fails (2020-05-01 15:13:05 -0700)
+
+----------------------------------------------------------------
+Alexei Starovoitov (6):
+      Merge branch 'cloudflare-prog'
+      selftests/bpf: fix test_sysctl_prog with alu32
+      Merge branch 'bpf_link-observability'
+      Merge branch 'BTF-map-in-map'
+      Merge branch 'test_progs-asan'
+      Merge branch 'bpf_enable_stats'
+
+Andrii Nakryiko (27):
+      bpf: Make verifier log more relevant by default
+      bpf: Refactor bpf_link update handling
+      bpf: Allocate ID for bpf_link
+      bpf: Support GET_FD_BY_ID and GET_NEXT_ID for bpf_link
+      bpf: Add support for BPF_OBJ_GET_INFO_BY_FD for bpf_link
+      libbpf: Add low-level APIs for new bpf_link commands
+      selftests/bpf: Test bpf_link's get_next_id, get_fd_by_id, and get_obj_info
+      bpftool: Expose attach_type-to-string array to non-cgroup code
+      bpftool: Add bpf_link show and pin support
+      bpftool: Add bpftool-link manpage
+      bpftool: Add link bash completions
+      libbpf: Refactor BTF-defined map definition parsing logic
+      libbpf: Refactor map creation logic and fix cleanup leak
+      libbpf: Add BTF-defined map-in-map support
+      selftests/bpf: Ensure test flavors use correct skeletons
+      selftests/bpf: Add SAN_CFLAGS param to selftests build to allow sanitizers
+      selftests/bpf: Convert test_hashmap into test_progs test
+      libbpf: Fix memory leak and possible double-free in hashmap__clear
+      selftests/bpf: Fix memory leak in test selector
+      selftests/bpf: Fix memory leak in extract_build_id()
+      selftests/bpf: Fix invalid memory reads in core_relo selftest
+      libbpf: Fix huge memory leak in libbpf_find_vmlinux_btf_id()
+      selftests/bpf: Disable ASAN instrumentation for mmap()'ed memory read
+      selftests/bpf: Fix bpf_link leak in ns_current_pid_tgid selftest
+      selftests/bpf: Add runqslower binary to .gitignore
+      libbpf: Fix false uninitialized variable warning
+      bpf: Fix use-after-free of bpf_link when priming half-fails
+
+Arnd Bergmann (1):
+      bpf: Fix unused variable warning
+
+Christoph Hellwig (5):
+      mm: remove watermark_boost_factor_sysctl_handler
+      sysctl: remove all extern declaration from sysctl.c
+      sysctl: avoid forward declarations
+      sysctl: pass kernel pointers to ->proc_handler
+      bpf, cgroup: Remove unused exports
+
+Daniel Borkmann (1):
+      Merge branch 'work.sysctl' of ssh://gitolite.kernel.org/.../viro/vfs
+
+Jagadeesh Pagadala (1):
+      tools/bpf/bpftool: Remove duplicate headers
+
+Jakub Sitnicki (4):
+      bpf: Allow bpf_map_lookup_elem for SOCKMAP and SOCKHASH
+      selftests/bpf: Test that lookup on SOCKMAP/SOCKHASH is allowed
+      selftests/bpf: Use SOCKMAP for server sockets in bpf_sk_assign test
+      selftests/bpf: Test allowed maps for bpf_sk_select_reuseport
+
+Lorenz Bauer (1):
+      selftests/bpf: Add cls_redirect classifier
+
+Lorenzo Colitti (1):
+      net: bpf: Allow TC programs to call BPF_FUNC_skb_change_head
+
+Luke Nelson (2):
+      bpf, riscv: Fix tail call count off by one in RV32 BPF JIT
+      bpf, riscv: Fix stack layout of JITed code on RV32
+
+Maciej Żenczykowski (2):
+      net: bpf: Make bpf_ktime_get_ns() available to non GPL programs
+      bpf: add bpf_ktime_get_boot_ns()
+
+Mao Wenan (2):
+      bpf: Remove set but not used variable 'dst_known'
+      libbpf: Return err if bpf_object__load failed
+
+Quentin Monnet (3):
+      tools: bpftool: For "feature probe" define "full_mode" bool as global
+      tools: bpftool: Allow unprivileged users to probe features
+      tools: bpftool: Make libcap dependency optional
+
+Song Liu (3):
+      bpf: Sharing bpf runtime stats with BPF_ENABLE_STATS
+      libbpf: Add support for command BPF_ENABLE_STATS
+      bpf: Add selftest for BPF_ENABLE_STATS
+
+Stanislav Fomichev (3):
+      bpf: Enable more helpers for BPF_PROG_TYPE_CGROUP_{DEVICE,SYSCTL,SOCKOPT}
+      bpf: Fix missing bpf_base_func_proto in cgroup_base_func_proto for CGROUP_NET=n
+      bpf: Bpf_{g,s}etsockopt for struct bpf_sock_addr
+
+Tobias Klauser (1):
+      xsk: Fix typo in xsk_umem_consume_tx and xsk_generic_xmit comments
+
+Veronika Kabatova (1):
+      selftests/bpf: Copy runqslower to OUTPUT directory
+
+Yoshiki Komachi (1):
+      bpf_helpers.h: Add note for building with vmlinux.h or linux/types.h
+
+Zou Wei (1):
+      libbpf: Remove unneeded semicolon in btf_dump_emit_type
+
+ arch/arm64/kernel/armv8_deprecated.c               |    2 +-
+ arch/arm64/kernel/fpsimd.c                         |    3 +-
+ arch/mips/lasat/sysctl.c                           |   13 +-
+ arch/riscv/net/bpf_jit_comp32.c                    |  103 +-
+ arch/s390/appldata/appldata_base.c                 |   11 +-
+ arch/s390/kernel/debug.c                           |    2 +-
+ arch/s390/kernel/topology.c                        |    2 +-
+ arch/s390/mm/cmm.c                                 |   12 +-
+ arch/x86/kernel/itmt.c                             |    3 +-
+ drivers/cdrom/cdrom.c                              |    2 +-
+ drivers/char/random.c                              |    2 +-
+ drivers/macintosh/mac_hid.c                        |    3 +-
+ drivers/media/rc/bpf-lirc.c                        |    2 +
+ drivers/parport/procfs.c                           |   39 +-
+ fs/dcache.c                                        |    2 +-
+ fs/drop_caches.c                                   |    2 +-
+ fs/file_table.c                                    |    4 +-
+ fs/fscache/main.c                                  |    3 +-
+ fs/inode.c                                         |    2 +-
+ fs/proc/proc_sysctl.c                              |   47 +-
+ fs/quota/dquot.c                                   |    2 +-
+ fs/xfs/xfs_sysctl.c                                |    4 +-
+ include/linux/bpf-cgroup.h                         |   23 +-
+ include/linux/bpf.h                                |   37 +-
+ include/linux/bpf_types.h                          |    6 +
+ include/linux/compaction.h                         |    2 +-
+ include/linux/coredump.h                           |    4 +
+ include/linux/file.h                               |    2 +
+ include/linux/filter.h                             |    2 -
+ include/linux/fs.h                                 |    6 +-
+ include/linux/ftrace.h                             |    3 +-
+ include/linux/hugetlb.h                            |   15 +-
+ include/linux/kprobes.h                            |    2 +-
+ include/linux/latencytop.h                         |    4 +-
+ include/linux/mm.h                                 |   14 +-
+ include/linux/mmzone.h                             |   27 +-
+ include/linux/nmi.h                                |   15 +-
+ include/linux/perf_event.h                         |   13 +-
+ include/linux/pid.h                                |    3 +
+ include/linux/printk.h                             |    2 +-
+ include/linux/sched/sysctl.h                       |   44 +-
+ include/linux/security.h                           |    2 +-
+ include/linux/sysctl.h                             |   61 +-
+ include/linux/timer.h                              |    3 +-
+ include/linux/vmstat.h                             |    8 +-
+ include/linux/writeback.h                          |   28 +-
+ include/uapi/linux/bpf.h                           |   69 +-
+ ipc/ipc_sysctl.c                                   |   10 +-
+ ipc/mq_sysctl.c                                    |    4 +-
+ kernel/bpf/btf.c                                   |    2 +
+ kernel/bpf/cgroup.c                                |  146 +-
+ kernel/bpf/core.c                                  |    6 +
+ kernel/bpf/helpers.c                               |   89 +-
+ kernel/bpf/syscall.c                               |  410 ++-
+ kernel/bpf/verifier.c                              |   80 +-
+ kernel/cgroup/cgroup.c                             |   27 -
+ kernel/events/callchain.c                          |    2 +-
+ kernel/events/core.c                               |    6 +-
+ kernel/kprobes.c                                   |    2 +-
+ kernel/latencytop.c                                |    4 +-
+ kernel/pid_namespace.c                             |    2 +-
+ kernel/printk/printk.c                             |    2 +-
+ kernel/sched/core.c                                |    9 +-
+ kernel/sched/fair.c                                |    3 +-
+ kernel/sched/rt.c                                  |   10 +-
+ kernel/sched/topology.c                            |    2 +-
+ kernel/seccomp.c                                   |    2 +-
+ kernel/sysctl.c                                    | 3871 ++++++++++----------
+ kernel/time/timer.c                                |    3 +-
+ kernel/trace/bpf_trace.c                           |    2 +
+ kernel/trace/trace.c                               |    2 +-
+ kernel/umh.c                                       |    2 +-
+ kernel/utsname_sysctl.c                            |    2 +-
+ kernel/watchdog.c                                  |   12 +-
+ mm/compaction.c                                    |    2 +-
+ mm/hugetlb.c                                       |    9 +-
+ mm/page-writeback.c                                |   16 +-
+ mm/page_alloc.c                                    |   42 +-
+ mm/util.c                                          |   10 +-
+ mm/vmstat.c                                        |    4 +-
+ net/bridge/br_netfilter_hooks.c                    |    2 +-
+ net/core/filter.c                                  |  200 +-
+ net/core/neighbour.c                               |   28 +-
+ net/core/sock_map.c                                |   18 +-
+ net/core/sysctl_net_core.c                         |   27 +-
+ net/decnet/dn_dev.c                                |    7 +-
+ net/decnet/sysctl_net_decnet.c                     |   27 +-
+ net/ipv4/devinet.c                                 |    9 +-
+ net/ipv4/route.c                                   |    3 +-
+ net/ipv4/sysctl_net_ipv4.c                         |   38 +-
+ net/ipv6/addrconf.c                                |   33 +-
+ net/ipv6/ndisc.c                                   |    3 +-
+ net/ipv6/route.c                                   |    5 +-
+ net/ipv6/sysctl_net_ipv6.c                         |    3 +-
+ net/mpls/af_mpls.c                                 |    5 +-
+ net/netfilter/ipvs/ip_vs_ctl.c                     |    6 +-
+ net/netfilter/nf_conntrack_standalone.c            |    2 +-
+ net/netfilter/nf_log.c                             |    2 +-
+ net/phonet/sysctl.c                                |    3 +-
+ net/rds/tcp.c                                      |    6 +-
+ net/sctp/sysctl.c                                  |   32 +-
+ net/sunrpc/sysctl.c                                |   29 +-
+ net/sunrpc/xprtrdma/svc_rdma.c                     |    7 +-
+ net/xdp/xsk.c                                      |    4 +-
+ security/apparmor/lsm.c                            |    2 +-
+ security/min_addr.c                                |    2 +-
+ security/yama/yama_lsm.c                           |    2 +-
+ .../bpf/bpftool/Documentation/bpftool-feature.rst  |   12 +-
+ tools/bpf/bpftool/Documentation/bpftool-link.rst   |  118 +
+ tools/bpf/bpftool/Makefile                         |   13 +-
+ tools/bpf/bpftool/bash-completion/bpftool          |   41 +-
+ tools/bpf/bpftool/btf.c                            |    1 -
+ tools/bpf/bpftool/cgroup.c                         |   48 +-
+ tools/bpf/bpftool/common.c                         |    2 +
+ tools/bpf/bpftool/feature.c                        |  143 +-
+ tools/bpf/bpftool/gen.c                            |    1 -
+ tools/bpf/bpftool/jit_disasm.c                     |    1 -
+ tools/bpf/bpftool/link.c                           |  333 ++
+ tools/bpf/bpftool/main.c                           |    6 +-
+ tools/bpf/bpftool/main.h                           |   37 +
+ tools/include/uapi/linux/bpf.h                     |   69 +-
+ tools/lib/bpf/bpf.c                                |   29 +-
+ tools/lib/bpf/bpf.h                                |    5 +-
+ tools/lib/bpf/bpf_helpers.h                        |    7 +
+ tools/lib/bpf/btf_dump.c                           |    2 +-
+ tools/lib/bpf/hashmap.c                            |    7 +
+ tools/lib/bpf/libbpf.c                             |  705 ++--
+ tools/lib/bpf/libbpf.map                           |    7 +
+ tools/testing/selftests/bpf/.gitignore             |    4 +-
+ tools/testing/selftests/bpf/Makefile               |   16 +-
+ tools/testing/selftests/bpf/config                 |    1 +
+ .../testing/selftests/bpf/prog_tests/bpf_obj_id.c  |  110 +-
+ .../selftests/bpf/prog_tests/btf_map_in_map.c      |   49 +
+ .../selftests/bpf/prog_tests/cls_redirect.c        |  456 +++
+ .../testing/selftests/bpf/prog_tests/core_reloc.c  |    2 +-
+ .../selftests/bpf/prog_tests/enable_stats.c        |   45 +
+ .../bpf/{test_hashmap.c => prog_tests/hashmap.c}   |  280 +-
+ .../selftests/bpf/prog_tests/ns_current_pid_tgid.c |    5 +-
+ .../testing/selftests/bpf/prog_tests/perf_buffer.c |    5 +
+ tools/testing/selftests/bpf/prog_tests/sk_assign.c |   21 +-
+ tools/testing/selftests/bpf/progs/connect4_prog.c  |   46 +
+ .../selftests/bpf/progs/test_btf_map_in_map.c      |   76 +
+ .../selftests/bpf/progs/test_cls_redirect.c        | 1058 ++++++
+ .../selftests/bpf/progs/test_cls_redirect.h        |   54 +
+ .../selftests/bpf/progs/test_enable_stats.c        |   18 +
+ tools/testing/selftests/bpf/progs/test_obj_id.c    |   14 +-
+ tools/testing/selftests/bpf/progs/test_sk_assign.c |   82 +-
+ .../testing/selftests/bpf/progs/test_sysctl_prog.c |    2 +-
+ tools/testing/selftests/bpf/test_progs.c           |   21 +-
+ tools/testing/selftests/bpf/test_progs.h           |    7 +
+ tools/testing/selftests/bpf/test_verifier.c        |   19 +-
+ .../testing/selftests/bpf/verifier/event_output.c  |   24 +
+ .../selftests/bpf/verifier/prevent_map_lookup.c    |   30 -
+ tools/testing/selftests/bpf/verifier/sock.c        |  115 +
+ 154 files changed, 6740 insertions(+), 3367 deletions(-)
+ create mode 100644 tools/bpf/bpftool/Documentation/bpftool-link.rst
+ create mode 100644 tools/bpf/bpftool/link.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cls_redirect.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/enable_stats.c
+ rename tools/testing/selftests/bpf/{test_hashmap.c => prog_tests/hashmap.c} (53%)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_cls_redirect.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_cls_redirect.h
+ create mode 100644 tools/testing/selftests/bpf/progs/test_enable_stats.c
