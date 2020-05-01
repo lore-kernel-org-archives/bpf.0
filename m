@@ -2,137 +2,113 @@ Return-Path: <SRS0=KuSb=6P=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0439CC47247
-	for <bpf@archiver.kernel.org>; Fri,  1 May 2020 02:02:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 647BFC28CBC
+	for <bpf@archiver.kernel.org>; Fri,  1 May 2020 02:38:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9B06208CA
-	for <bpf@archiver.kernel.org>; Fri,  1 May 2020 02:02:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 413EE2137B
+	for <bpf@archiver.kernel.org>; Fri,  1 May 2020 02:38:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="Lbm9BFkD"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X+kNky8F"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728098AbgEACCW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Apr 2020 22:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728097AbgEACCV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 30 Apr 2020 22:02:21 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82BDC08E859
-        for <bpf@vger.kernel.org>; Thu, 30 Apr 2020 19:02:21 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id d184so965167pfd.4
-        for <bpf@vger.kernel.org>; Thu, 30 Apr 2020 19:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs.washington.edu; s=goo201206;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=tvELNqxAjbVBxzf7Gp8Es5Dk4+hyrWQ5hnmsAjacAVU=;
-        b=Lbm9BFkDtR3zwyIVc/ySdZUYZHeNhbKhjemSORm2CSkVwtDvAaLi2nmQLu4HdG8HAP
-         xyTzFSKkUYaWO+GOCMXPAaw/qbYZ5JpiK306mVqmmsll4hg+J+DUUV0v5f7cOdinzuNj
-         0HERqZdp+4w/0uX8Fl/ETX9miRiHoTqHVJeZE=
+        id S1728008AbgEACiZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Apr 2020 22:38:25 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:53150 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728024AbgEACiZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 30 Apr 2020 22:38:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588300703;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=P8k2aTeCbIA0Pe5nqRNlnguJBbZob6iEKj+wNv40n6s=;
+        b=X+kNky8FxvVt4czptIdJNzpjOTygN2raEEp0wFsi0Athju4aulnSJQuVY0TkeQo0wAZEA0
+        c3IVN06HAPUKUtEBtE6r1BTTxEhh21viVgRmRrXLqEW2rc12ce1p/vc9t5//pffmjcrOk/
+        kmfDbQXXw1XSR/oS8EwhSnLZbykGyj0=
+Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
+ [209.85.222.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-441-O4kmHAwuPQ-quxnvhwYaxQ-1; Thu, 30 Apr 2020 22:38:22 -0400
+X-MC-Unique: O4kmHAwuPQ-quxnvhwYaxQ-1
+Received: by mail-ua1-f72.google.com with SMTP id a19so3652431uah.20
+        for <bpf@vger.kernel.org>; Thu, 30 Apr 2020 19:38:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=tvELNqxAjbVBxzf7Gp8Es5Dk4+hyrWQ5hnmsAjacAVU=;
-        b=eKGafCKz3bgzphx8S7R/owUFVu0waWZTvAtzX5Pz7oZi/yzHCFPpxsUe869Qzh07kX
-         PRwEZXUfOR7SCKF7+9zG5sIZBz7j2rrOTOMKuwwXDYomP2cfO72rYAKFim9BhQnRe6G6
-         AKA8wJ1mtRIEOCuLzMllvTOdEux790hdAhgGp2iBnq3Eu4o9zTf1jP2lxuhODZBoc7rV
-         epgsKb61UvFuOGb+ckRaLjdZyzAGe5Lh/M3H5V1vEitCRvduTuOGBxXpAru6cJDUDOjf
-         qeoxByItmqNgsSHSeL5fTmNnQb73jYU2KloE+GG4RBXxARLyFf6B3OhTiH26w9eVml5z
-         DVxw==
-X-Gm-Message-State: AGi0PuYdoMniiXSPhhTjWNq5RwZYDnB7614ZQKrPySgVUxhpkO62IGqd
-        1LYW8Jbk9P7PVruIhXIU3SCTDL7rofUJAQ==
-X-Google-Smtp-Source: APiQypJQTsqMdFZLcemxJPj2JqzPwYcmFse4CYahCcdsJKdasZVpwItAmZsTocEKxZjdGIBnXdUizg==
-X-Received: by 2002:a63:6d83:: with SMTP id i125mr1999548pgc.365.1588298540989;
-        Thu, 30 Apr 2020 19:02:20 -0700 (PDT)
-Received: from localhost.localdomain (c-73-53-94-119.hsd1.wa.comcast.net. [73.53.94.119])
-        by smtp.gmail.com with ESMTPSA id fy21sm802915pjb.25.2020.04.30.19.02.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2020 19:02:20 -0700 (PDT)
-From:   Luke Nelson <lukenels@cs.washington.edu>
-X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 1/2] bpf, arm: Optimize ALU64 ARSH X using orrpl conditional instruction
-Date:   Thu, 30 Apr 2020 19:02:09 -0700
-Message-Id: <20200501020210.32294-2-luke.r.nels@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200501020210.32294-1-luke.r.nels@gmail.com>
-References: <20200501020210.32294-1-luke.r.nels@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P8k2aTeCbIA0Pe5nqRNlnguJBbZob6iEKj+wNv40n6s=;
+        b=C24amob+dL2288oJFs+wRlNo8NruL7yPoP8EvMIHzCIEY9d2qzuvsfHm3QQPRZy3As
+         oQ1r6+GREfB1a3+cFRKY5bZcbJKYqGePi5eX5kgQJfft6bDeyALPMZ3WyRpCWBg/t20w
+         J0eaitChtLHLoTfDfzER7em8qBbN3b5+WimYZfNotFIatirMvEXBqtOo8uATrVeNh+O6
+         PbcXp71xWyn+egLfWbzcN5KsDg1coby5xAadDmUF2oyhHDTCRXCLQM3yBv1fykoBrCIn
+         w2YJurC1pFs/z4cREcoGWS7MzedaVJciQzSo3XWJpLvDkYAXOy+JknjcJYark1SvzHTD
+         j1Nw==
+X-Gm-Message-State: AGi0Pua3HshwMXLIiuVvNroehu8kKLtWQqaZjJUkeFuC5Cqor/WNa+PA
+        1e77VqGfXrBlZ5fT7hmxQ2qfJzjBS6VM3sFTtAyBli23XOQRIGSHPVZCBaX4OCNwJ3iXYvc1xY9
+        5wTeGKpAuG3ykcPJk/W/uhKPiHizf
+X-Received: by 2002:a05:6102:4d:: with SMTP id k13mr1848872vsp.198.1588300701703;
+        Thu, 30 Apr 2020 19:38:21 -0700 (PDT)
+X-Google-Smtp-Source: APiQypKu6ClZ61atP80MD4lQJkn2FtP3gZkiC+YuTXU2rwKV21SshkG1nW93zQxISm3Y7jRVOl6JpuyIYF8Yu55j3FA=
+X-Received: by 2002:a05:6102:4d:: with SMTP id k13mr1848869vsp.198.1588300701546;
+ Thu, 30 Apr 2020 19:38:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200414131348.444715-1-hch@lst.de> <20200414131348.444715-22-hch@lst.de>
+ <20200414151344.zgt2pnq7cjq2bgv6@debian> <CAMeeMh8Q3Od76WaTasw+BpYVF58P-HQMaiFKHxXbZ_Q3tQPZ=A@mail.gmail.com>
+In-Reply-To: <CAMeeMh8Q3Od76WaTasw+BpYVF58P-HQMaiFKHxXbZ_Q3tQPZ=A@mail.gmail.com>
+From:   John Dorminy <jdorminy@redhat.com>
+Date:   Thu, 30 Apr 2020 22:38:10 -0400
+Message-ID: <CAMeeMh_9N0ORhPM8EmkGeeuiDoQY3+QoAPX5QBuK7=gsC5ONng@mail.gmail.com>
+Subject: Re: [PATCH 21/29] mm: remove the pgprot argument to __vmalloc
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>, x86@kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laura Abbott <labbott@redhat.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
+        bpf@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Gao Xiang <xiang@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch optimizes the code generated by emit_a32_arsh_r64, which
-handles the BPF_ALU64 BPF_ARSH BPF_X instruction.
+>> On Tue, Apr 14, 2020 at 03:13:40PM +0200, Christoph Hellwig wrote:
+>> > The pgprot argument to __vmalloc is always PROT_KERNEL now, so remove
+>> > it.
 
-The original code uses a conditional B followed by an unconditional ORR.
-The optimization saves one instruction by removing the B instruction
-and using a conditional ORR (with an inverted condition).
+Greetings;
 
-Example of the code generated for BPF_ALU64_REG(BPF_ARSH, BPF_REG_0,
-BPF_REG_1), before optimization:
+I recently noticed this change via the linux-next tree.
 
-  34:  rsb    ip, r2, #32
-  38:  subs   r9, r2, #32
-  3c:  lsr    lr, r0, r2
-  40:  orr    lr, lr, r1, lsl ip
-  44:  bmi    0x4c
-  48:  orr    lr, lr, r1, asr r9
-  4c:  asr    ip, r1, r2
-  50:  mov    r0, lr
-  54:  mov    r1, ip
+It may not be possible to edit at this late date, but the change
+description refers to PROT_KERNEL, which is a symbol which does not
+appear to exist; perhaps PAGE_KERNEL was meant? The mismatch caused me
+and a couple other folks some confusion briefly until we decided it
+was supposed to be PAGE_KERNEL; if it's not too late, editing the
+description to clarify so would be nice.
 
-and after optimization:
+Many thanks.
 
-  34:  rsb    ip, r2, #32
-  38:  subs   r9, r2, #32
-  3c:  lsr    lr, r0, r2
-  40:  orr    lr, lr, r1, lsl ip
-  44:  orrpl  lr, lr, r1, asr r9
-  48:  asr    ip, r1, r2
-  4c:  mov    r0, lr
-  50:  mov    r1, ip
-
-Tested on QEMU using lib/test_bpf and test_verifier.
-
-Co-developed-by: Xi Wang <xi.wang@gmail.com>
-Signed-off-by: Xi Wang <xi.wang@gmail.com>
-Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
----
- arch/arm/net/bpf_jit_32.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index bf85d6db4931..48b89211ee5c 100644
---- a/arch/arm/net/bpf_jit_32.c
-+++ b/arch/arm/net/bpf_jit_32.c
-@@ -860,8 +860,8 @@ static inline void emit_a32_arsh_r64(const s8 dst[], const s8 src[],
- 	emit(ARM_SUBS_I(tmp2[0], rt, 32), ctx);
- 	emit(ARM_MOV_SR(ARM_LR, rd[1], SRTYPE_LSR, rt), ctx);
- 	emit(ARM_ORR_SR(ARM_LR, ARM_LR, rd[0], SRTYPE_ASL, ARM_IP), ctx);
--	_emit(ARM_COND_MI, ARM_B(0), ctx);
--	emit(ARM_ORR_SR(ARM_LR, ARM_LR, rd[0], SRTYPE_ASR, tmp2[0]), ctx);
-+	_emit(ARM_COND_PL,
-+	      ARM_ORR_SR(ARM_LR, ARM_LR, rd[0], SRTYPE_ASR, tmp2[0]), ctx);
- 	emit(ARM_MOV_SR(ARM_IP, rd[0], SRTYPE_ASR, rt), ctx);
- 
- 	arm_bpf_put_reg32(dst_lo, ARM_LR, ctx);
--- 
-2.17.1
+John Dorminy
 
