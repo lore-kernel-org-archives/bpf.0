@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82CEFC4724C
-	for <bpf@archiver.kernel.org>; Mon,  4 May 2020 06:26:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C537C3A5A9
+	for <bpf@archiver.kernel.org>; Mon,  4 May 2020 06:26:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5D9EC206EB
-	for <bpf@archiver.kernel.org>; Mon,  4 May 2020 06:26:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4728E206EB
+	for <bpf@archiver.kernel.org>; Mon,  4 May 2020 06:26:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="W6GnqLsN"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="c4F2SdyF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727915AbgEDG0H (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 May 2020 02:26:07 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:38236 "EHLO
+        id S1727866AbgEDG0J (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 May 2020 02:26:09 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:43044 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727866AbgEDG0E (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 4 May 2020 02:26:04 -0400
+        by vger.kernel.org with ESMTP id S1727882AbgEDG0F (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 4 May 2020 02:26:05 -0400
 Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 044698gV020341
-        for <bpf@vger.kernel.org>; Sun, 3 May 2020 23:26:03 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04469Boh020395
+        for <bpf@vger.kernel.org>; Sun, 3 May 2020 23:26:04 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=pnECV1onSzGvqbj2jhP8wdBCWNcFoGp+Q70rpJ7Jc/g=;
- b=W6GnqLsNZxZ02XIWqWM8ojhvbbyS1IOFHYJdts2SRYdaA/6Veh5FokWf8jd90ZEJkbre
- beJmz6w9O8XxG5ZP03FtNf7WFrRMm4zWhfdV419uQeFWmMDho7kyCqwFwbHEhayR5HmM
- QHzghq7r92hNwm68o7aUvYX/se4WdHDz/3Y= 
+ bh=dM44xxbnDg44QtvygTjYFTDK7RkJFsr03QMcoPILM5U=;
+ b=c4F2SdyFfMHVsHLVxk6JRB1G9lrCVoVi9xlwbc//sGtDIWZqC6cRS7UtMLQxtIh9PKNq
+ 9Mx9ltibuZ0vLw9azunE/awlZt4+Qr78tRsgY8ZFG8cJgnm3ata9IHfxbfQYaOX2m8ex
+ gJ1A8VjHs/nftZJalvY7G9XFmSlZJv8lnM8= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30s6cmeqw6-3
+        by mx0a-00082601.pphosted.com with ESMTP id 30s6cmeqw8-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 03 May 2020 23:26:03 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sun, 03 May 2020 23:26:04 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Sun, 3 May 2020 23:26:02 -0700
+ 15.1.1847.3; Sun, 3 May 2020 23:25:58 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id F129B3702037; Sun,  3 May 2020 23:26:00 -0700 (PDT)
+        id 060B03702037; Sun,  3 May 2020 23:25:55 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 12/20] bpf: add PTR_TO_BTF_ID_OR_NULL support
-Date:   Sun, 3 May 2020 23:26:00 -0700
-Message-ID: <20200504062600.2048291-1-yhs@fb.com>
+Subject: [PATCH bpf-next v2 08/20] bpf: implement common macros/helpers for target iterators
+Date:   Sun, 3 May 2020 23:25:55 -0700
+Message-ID: <20200504062555.2048028-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200504062547.2047304-1-yhs@fb.com>
 References: <20200504062547.2047304-1-yhs@fb.com>
@@ -62,7 +62,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-05-04_02:2020-05-01,2020-05-04 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- mlxlogscore=999 spamscore=0 suspectscore=0 clxscore=1015
+ mlxlogscore=937 spamscore=0 suspectscore=0 clxscore=1015
  priorityscore=1501 impostorscore=0 lowpriorityscore=0 phishscore=0
  mlxscore=0 bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2003020000 definitions=main-2005040054
@@ -72,161 +72,216 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bpf_reg_type PTR_TO_BTF_ID_OR_NULL support.
-For tracing/iter program, the bpf program context
-definition, e.g., for previous bpf_map target, looks like
-  struct bpf_iter__bpf_map {
-    struct bpf_iter_meta *meta;
-    struct bpf_map *map;
-  };
+Macro DEFINE_BPF_ITER_FUNC is implemented so target
+can define an init function to capture the BTF type
+which represents the target.
 
-The kernel guarantees that meta is not NULL, but
-map pointer maybe NULL. The NULL map indicates that all
-objects have been traversed, so bpf program can take
-proper action, e.g., do final aggregation and/or send
-final report to user space.
+The bpf_iter_meta is a structure holding meta data, common
+to all targets in the bpf program.
 
-Add btf_id_or_null_non0_off to prog->aux structure, to
-indicate that if the context access offset is not 0,
-set to PTR_TO_BTF_ID_OR_NULL instead of PTR_TO_BTF_ID.
-This bit is set for tracing/iter program.
+Additional marker functions are called before/after
+bpf_seq_read() show() and stop() callback functions
+to help calculate precise seq_num and whether call bpf_prog
+inside stop().
+
+Two functions, bpf_iter_get_info() and bpf_iter_run_prog(),
+are implemented so target can get needed information from
+bpf_iter infrastructure and can run the program.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/linux/bpf.h   |  2 ++
- kernel/bpf/btf.c      |  5 ++++-
- kernel/bpf/verifier.c | 16 ++++++++++++----
- 3 files changed, 18 insertions(+), 5 deletions(-)
+ include/linux/bpf.h   | 11 +++++
+ kernel/bpf/bpf_iter.c | 94 ++++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 100 insertions(+), 5 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 56b2ded9c2a6..e8906199755a 100644
+index 26daf85cba10..70c71c3cd9e8 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -320,6 +320,7 @@ enum bpf_reg_type {
- 	PTR_TO_TP_BUFFER,	 /* reg points to a writable raw tp's buffer */
- 	PTR_TO_XDP_SOCK,	 /* reg points to struct xdp_sock */
- 	PTR_TO_BTF_ID,		 /* reg points to kernel struct */
-+	PTR_TO_BTF_ID_OR_NULL,	 /* reg points to kernel struct or NULL */
+@@ -1129,6 +1129,9 @@ int bpf_obj_pin_user(u32 ufd, const char __user *pa=
+thname);
+ int bpf_obj_get_user(const char __user *pathname, int flags);
+=20
+ #define BPF_ITER_FUNC_PREFIX "__bpf_iter__"
++#define DEFINE_BPF_ITER_FUNC(target, args...)			\
++	extern int __bpf_iter__ ## target(args);		\
++	int __init __bpf_iter__ ## target(args) { return 0; }
+=20
+ typedef int (*bpf_iter_init_seq_priv_t)(void *private_data);
+ typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
+@@ -1141,11 +1144,19 @@ struct bpf_iter_reg {
+ 	u32 seq_priv_size;
  };
 =20
- /* The information passed from prog-specific *_is_valid_access
-@@ -658,6 +659,7 @@ struct bpf_prog_aux {
- 	bool offload_requested;
- 	bool attach_btf_trace; /* true if attaching to BTF-enabled raw tp */
- 	bool func_proto_unreliable;
-+	bool btf_id_or_null_non0_off;
- 	enum bpf_tramp_prog_type trampoline_prog_type;
- 	struct bpf_trampoline *trampoline;
- 	struct hlist_node tramp_hlist;
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index a2cfba89a8e1..c490fbde22d4 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3790,7 +3790,10 @@ bool btf_ctx_access(int off, int size, enum bpf_ac=
-cess_type type,
- 		return true;
++struct bpf_iter_meta {
++	__bpf_md_ptr(struct seq_file *, seq);
++	u64 session_id;
++	u64 seq_num;
++};
++
+ int bpf_iter_reg_target(struct bpf_iter_reg *reg_info);
+ bool bpf_iter_prog_supported(struct bpf_prog *prog);
+ int bpf_iter_link_attach(const union bpf_attr *attr, struct bpf_prog *pr=
+og);
+ int bpf_iter_new_fd(struct bpf_link *link);
+ bool bpf_link_is_iter(struct bpf_link *link);
++struct bpf_prog *bpf_iter_get_info(struct bpf_iter_meta *meta, bool in_s=
+top);
++int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx);
 =20
- 	/* this is a pointer to another type */
--	info->reg_type =3D PTR_TO_BTF_ID;
-+	if (off !=3D 0 && prog->aux->btf_id_or_null_non0_off)
-+		info->reg_type =3D PTR_TO_BTF_ID_OR_NULL;
-+	else
-+		info->reg_type =3D PTR_TO_BTF_ID;
+ int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
+ int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index 8bd787f3db6f..90d58c589816 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -43,6 +43,42 @@ static atomic64_t session_id;
 =20
- 	if (tgt_prog) {
- 		ret =3D btf_translate_to_vmlinux(log, btf, t, tgt_prog->type, arg);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d725ff7d11db..36b2a38a06fe 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -398,7 +398,8 @@ static bool reg_type_may_be_null(enum bpf_reg_type ty=
-pe)
- 	return type =3D=3D PTR_TO_MAP_VALUE_OR_NULL ||
- 	       type =3D=3D PTR_TO_SOCKET_OR_NULL ||
- 	       type =3D=3D PTR_TO_SOCK_COMMON_OR_NULL ||
--	       type =3D=3D PTR_TO_TCP_SOCK_OR_NULL;
-+	       type =3D=3D PTR_TO_TCP_SOCK_OR_NULL ||
-+	       type =3D=3D PTR_TO_BTF_ID_OR_NULL;
+ static int prepare_seq_file(struct file *file, struct bpf_iter_link *lin=
+k);
+=20
++static void bpf_iter_inc_seq_num(struct seq_file *seq)
++{
++	struct bpf_iter_priv_data *iter_priv;
++
++	iter_priv =3D container_of(seq->private, struct bpf_iter_priv_data,
++				 target_private);
++	iter_priv->seq_num++;
++}
++
++static void bpf_iter_dec_seq_num(struct seq_file *seq)
++{
++	struct bpf_iter_priv_data *iter_priv;
++
++	iter_priv =3D container_of(seq->private, struct bpf_iter_priv_data,
++				 target_private);
++	iter_priv->seq_num--;
++}
++
++static void bpf_iter_set_stop(struct seq_file *seq)
++{
++	struct bpf_iter_priv_data *iter_priv;
++
++	iter_priv =3D container_of(seq->private, struct bpf_iter_priv_data,
++				 target_private);
++	iter_priv->do_stop++;
++}
++
++static void bpf_iter_unset_stop(struct seq_file *seq)
++{
++	struct bpf_iter_priv_data *iter_priv;
++
++	iter_priv =3D container_of(seq->private, struct bpf_iter_priv_data,
++				 target_private);
++	iter_priv->do_stop--;
++}
++
+ /* bpf_seq_read, a customized and simpler version for bpf iterator.
+  * no_llseek is assumed for this file.
+  * The following are differences from seq_read():
+@@ -83,12 +119,15 @@ static ssize_t bpf_seq_read(struct file *file, char =
+__user *buf, size_t size,
+ 	if (!p || IS_ERR(p))
+ 		goto Stop;
+=20
++	bpf_iter_inc_seq_num(seq);
+ 	err =3D seq->op->show(seq, p);
+ 	if (seq_has_overflowed(seq)) {
++		bpf_iter_dec_seq_num(seq);
+ 		err =3D -E2BIG;
+ 		goto Error_show;
+ 	} else if (err) {
+ 		/* < 0: go out, > 0: skip */
++		bpf_iter_dec_seq_num(seq);
+ 		if (likely(err < 0))
+ 			goto Error_show;
+ 		seq->count =3D 0;
+@@ -113,8 +152,10 @@ static ssize_t bpf_seq_read(struct file *file, char =
+__user *buf, size_t size,
+ 		if (seq->count >=3D size)
+ 			break;
+=20
++		bpf_iter_inc_seq_num(seq);
+ 		err =3D seq->op->show(seq, p);
+ 		if (seq_has_overflowed(seq)) {
++			bpf_iter_dec_seq_num(seq);
+ 			if (offs =3D=3D 0) {
+ 				err =3D -E2BIG;
+ 				goto Error_show;
+@@ -122,6 +163,7 @@ static ssize_t bpf_seq_read(struct file *file, char _=
+_user *buf, size_t size,
+ 			seq->count =3D offs;
+ 			break;
+ 		} else if (err) {
++			bpf_iter_dec_seq_num(seq);
+ 			/* < 0: go out, > 0: skip */
+ 			seq->count =3D offs;
+ 			if (likely(err < 0)) {
+@@ -134,11 +176,17 @@ static ssize_t bpf_seq_read(struct file *file, char=
+ __user *buf, size_t size,
+ Stop:
+ 	offs =3D seq->count;
+ 	/* may call bpf program */
+-	seq->op->stop(seq, p);
+-	if (seq_has_overflowed(seq)) {
+-		if (offs =3D=3D 0)
+-			goto Error_stop;
+-		seq->count =3D offs;
++	if (!p) {
++		bpf_iter_set_stop(seq);
++		seq->op->stop(seq, p);
++		if (seq_has_overflowed(seq)) {
++			bpf_iter_unset_stop(seq);
++			if (offs =3D=3D 0)
++				goto Error_stop;
++			seq->count =3D offs;
++		}
++	} else {
++		seq->op->stop(seq, p);
+ 	}
+=20
+ 	n =3D min(seq->count, size);
+@@ -432,3 +480,39 @@ int bpf_iter_new_fd(struct bpf_link *link)
+ 	put_unused_fd(fd);
+ 	return err;
  }
-=20
- static bool reg_may_point_to_spin_lock(const struct bpf_reg_state *reg)
-@@ -483,6 +484,7 @@ static const char * const reg_type_str[] =3D {
- 	[PTR_TO_TP_BUFFER]	=3D "tp_buffer",
- 	[PTR_TO_XDP_SOCK]	=3D "xdp_sock",
- 	[PTR_TO_BTF_ID]		=3D "ptr_",
-+	[PTR_TO_BTF_ID_OR_NULL]	=3D "ptr_or_null_",
- };
-=20
- static char slot_type_char[] =3D {
-@@ -543,7 +545,7 @@ static void print_verifier_state(struct bpf_verifier_=
-env *env,
- 			/* reg->off should be 0 for SCALAR_VALUE */
- 			verbose(env, "%lld", reg->var_off.value + reg->off);
- 		} else {
--			if (t =3D=3D PTR_TO_BTF_ID)
-+			if (t =3D=3D PTR_TO_BTF_ID || t =3D=3D PTR_TO_BTF_ID_OR_NULL)
- 				verbose(env, "%s", kernel_type_name(reg->btf_id));
- 			verbose(env, "(id=3D%d", reg->id);
- 			if (reg_type_may_be_refcounted_or_null(t))
-@@ -2139,6 +2141,7 @@ static bool is_spillable_regtype(enum bpf_reg_type =
-type)
- 	case PTR_TO_TCP_SOCK_OR_NULL:
- 	case PTR_TO_XDP_SOCK:
- 	case PTR_TO_BTF_ID:
-+	case PTR_TO_BTF_ID_OR_NULL:
- 		return true;
- 	default:
- 		return false;
-@@ -2659,7 +2662,7 @@ static int check_ctx_access(struct bpf_verifier_env=
- *env, int insn_idx, int off,
- 		 */
- 		*reg_type =3D info.reg_type;
-=20
--		if (*reg_type =3D=3D PTR_TO_BTF_ID)
-+		if (*reg_type =3D=3D PTR_TO_BTF_ID || *reg_type =3D=3D PTR_TO_BTF_ID_O=
-R_NULL)
- 			*btf_id =3D info.btf_id;
- 		else
- 			env->insn_aux_data[insn_idx].ctx_field_size =3D info.ctx_field_size;
-@@ -3243,7 +3246,8 @@ static int check_mem_access(struct bpf_verifier_env=
- *env, int insn_idx, u32 regn
- 				 * a sub-register.
- 				 */
- 				regs[value_regno].subreg_def =3D DEF_NOT_SUBREG;
--				if (reg_type =3D=3D PTR_TO_BTF_ID)
-+				if (reg_type =3D=3D PTR_TO_BTF_ID ||
-+				    reg_type =3D=3D PTR_TO_BTF_ID_OR_NULL)
- 					regs[value_regno].btf_id =3D btf_id;
- 			}
- 			regs[value_regno].type =3D reg_type;
-@@ -6572,6 +6576,8 @@ static void mark_ptr_or_null_reg(struct bpf_func_st=
-ate *state,
- 			reg->type =3D PTR_TO_SOCK_COMMON;
- 		} else if (reg->type =3D=3D PTR_TO_TCP_SOCK_OR_NULL) {
- 			reg->type =3D PTR_TO_TCP_SOCK;
-+		} else if (reg->type =3D=3D PTR_TO_BTF_ID_OR_NULL) {
-+			reg->type =3D PTR_TO_BTF_ID;
- 		}
- 		if (is_null) {
- 			/* We don't need id and ref_obj_id from this point
-@@ -8429,6 +8435,7 @@ static bool reg_type_mismatch_ok(enum bpf_reg_type =
-type)
- 	case PTR_TO_TCP_SOCK_OR_NULL:
- 	case PTR_TO_XDP_SOCK:
- 	case PTR_TO_BTF_ID:
-+	case PTR_TO_BTF_ID_OR_NULL:
- 		return false;
- 	default:
- 		return true;
-@@ -10640,6 +10647,7 @@ static int check_attach_btf_id(struct bpf_verifie=
-r_env *env)
- 		prog->aux->attach_func_proto =3D t;
- 		if (!bpf_iter_prog_supported(prog))
- 			return -EINVAL;
-+		prog->aux->btf_id_or_null_non0_off =3D true;
- 		ret =3D btf_distill_func_proto(&env->log, btf, t,
- 					     tname, &fmodel);
- 		return ret;
++
++struct bpf_prog *bpf_iter_get_info(struct bpf_iter_meta *meta, bool in_s=
+top)
++{
++	struct bpf_iter_priv_data *iter_priv;
++	struct seq_file *seq;
++	void *seq_priv;
++
++	seq =3D meta->seq;
++	if (seq->file->f_op !=3D &bpf_iter_fops)
++		return NULL;
++
++	seq_priv =3D seq->private;
++	iter_priv =3D container_of(seq_priv, struct bpf_iter_priv_data,
++				 target_private);
++
++	if (in_stop && iter_priv->do_stop !=3D 1)
++		return NULL;
++
++	meta->session_id =3D iter_priv->session_id;
++	meta->seq_num =3D iter_priv->seq_num;
++
++	return iter_priv->prog;
++}
++
++int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx)
++{
++	int ret;
++
++	rcu_read_lock();
++	migrate_disable();
++	ret =3D BPF_PROG_RUN(prog, ctx);
++	migrate_enable();
++	rcu_read_unlock();
++
++	return ret =3D=3D 0 ? 0 : -EAGAIN;
++}
 --=20
 2.24.1
 
