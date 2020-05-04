@@ -2,45 +2,44 @@ Return-Path: <SRS0=pWkb=6S=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7575AC47257
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49FC6C47259
 	for <bpf@archiver.kernel.org>; Mon,  4 May 2020 06:26:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 53D6620746
+	by mail.kernel.org (Postfix) with ESMTP id 20FC220746
 	for <bpf@archiver.kernel.org>; Mon,  4 May 2020 06:26:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Y7JrDcCF"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cXm1/cmt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726330AbgEDG0A (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 May 2020 02:26:00 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:56544 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727819AbgEDGZ6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 4 May 2020 02:25:58 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0446ORVN015653
-        for <bpf@vger.kernel.org>; Sun, 3 May 2020 23:25:56 -0700
+        id S1727813AbgEDGZ5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 May 2020 02:25:57 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63332 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726963AbgEDGZz (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 4 May 2020 02:25:55 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0446982r020315
+        for <bpf@vger.kernel.org>; Sun, 3 May 2020 23:25:53 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=yekViGAMl9ig5D/9YjXrMssEWo+VghpxRRZ4nA9+Xv8=;
- b=Y7JrDcCFYOyj7NB+ROOi++ZqtPS6jNpjMUay3N02ZH4tkUsMrI0q90GX7g9pA5xsgTwR
- 2D/K0cbtVJY7FXygwNjQtqHuKpKrSlMXl+Bd8V7xi5LLcDX2Yei4QiH7QMIOfoUNlajt
- KRHisN5k3RAb3IBiWCVuFaNawq9Nq10M3e4= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 30s4byf1p2-1
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=Aj3wA1zK/sHaB8iLDE0VRgk22JrUWx3aP6vwzbYIkjQ=;
+ b=cXm1/cmtOuXV21UNTAVFKEaHhcatxenHh2uPqDbzE+urR2VOi8LvPVX+04VOzxQEzYM3
+ WqXxHsbDEVuOVfusqvV0GgCl5VA6otoL0AGdMEFhlY3TShiip816TmZyhJdSwWra/aoX
+ QEmXwvQBlqb/XIQUn9ACn5uC+i6P23mP2ww= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 30s6cmeqvg-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 03 May 2020 23:25:56 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sun, 03 May 2020 23:25:53 -0700
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Sun, 3 May 2020 23:25:56 -0700
+ 15.1.1847.3; Sun, 3 May 2020 23:25:51 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id C01C63702037; Sun,  3 May 2020 23:25:54 -0700 (PDT)
+        id 2F3BF3702037; Sun,  3 May 2020 23:25:47 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,135 +48,225 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 07/20] bpf: create file bpf iterator
-Date:   Sun, 3 May 2020 23:25:54 -0700
-Message-ID: <20200504062554.2047969-1-yhs@fb.com>
+Subject: [PATCH bpf-next v2 00/20] bpf: implement bpf iterator for kernel data
+Date:   Sun, 3 May 2020 23:25:47 -0700
+Message-ID: <20200504062547.2047304-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200504062547.2047304-1-yhs@fb.com>
-References: <20200504062547.2047304-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-05-04_02:2020-05-01,2020-05-04 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 adultscore=0
- phishscore=0 priorityscore=1501 mlxscore=0 spamscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=945 clxscore=1015 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005040054
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ mlxlogscore=999 spamscore=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 phishscore=0
+ mlxscore=0 bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2005040054
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To produce a file bpf iterator, the fd must be
-corresponding to a link_fd assocciated with a
-trace/iter program. When the pinned file is
-opened, a seq_file will be generated.
+Motivation:
+  The current way to dump kernel data structures mostly:
+    1. /proc system
+    2. various specific tools like "ss" which requires kernel support.
+    3. drgn
+  The dropback for the first two is that whenever you want to dump more, =
+you
+  need change the kernel. For example, Martin wants to dump socket local
+  storage with "ss". Kernel change is needed for it to work ([1]).
+  This is also the direct motivation for this work.
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- include/linux/bpf.h   |  2 ++
- kernel/bpf/bpf_iter.c | 17 ++++++++++++++++-
- kernel/bpf/inode.c    |  5 ++++-
- 3 files changed, 22 insertions(+), 2 deletions(-)
+  drgn ([2]) solves this proble nicely and no kernel change is not needed=
+.
+  But since drgn is not able to verify the validity of a particular point=
+er value,
+  it might present the wrong results in rare cases.
+ =20
+  In this patch set, we introduce bpf iterator. Initial kernel changes ar=
+e
+  still needed for interested kernel data, but a later data structure cha=
+nge
+  will not require kernel changes any more. bpf program itself can adapt
+  to new data structure changes. This will give certain flexibility with
+  guaranteed correctness.
+ =20
+  In this patch set, kernel seq_ops is used to facilitate iterating throu=
+gh
+  kernel data, similar to current /proc and many other lossless kernel
+  dumping facilities. In the future, different iterators can be
+  implemented to trade off losslessness for other criteria e.g. no
+  repeated object visits, etc.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 9108d1a9b934..26daf85cba10 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1022,6 +1022,7 @@ static inline void bpf_enable_instrumentation(void)
-=20
- extern const struct file_operations bpf_map_fops;
- extern const struct file_operations bpf_prog_fops;
-+extern const struct file_operations bpf_iter_fops;
-=20
- #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type) \
- 	extern const struct bpf_prog_ops _name ## _prog_ops; \
-@@ -1144,6 +1145,7 @@ int bpf_iter_reg_target(struct bpf_iter_reg *reg_in=
-fo);
- bool bpf_iter_prog_supported(struct bpf_prog *prog);
- int bpf_iter_link_attach(const union bpf_attr *attr, struct bpf_prog *pr=
-og);
- int bpf_iter_new_fd(struct bpf_link *link);
-+bool bpf_link_is_iter(struct bpf_link *link);
-=20
- int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
- int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index 2a9f939be6e6..8bd787f3db6f 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -41,6 +41,8 @@ static DEFINE_MUTEX(link_mutex);
- /* incremented on every opened seq_file */
- static atomic64_t session_id;
-=20
-+static int prepare_seq_file(struct file *file, struct bpf_iter_link *lin=
-k);
-+
- /* bpf_seq_read, a customized and simpler version for bpf iterator.
-  * no_llseek is assumed for this file.
-  * The following are differences from seq_read():
-@@ -169,6 +171,13 @@ static ssize_t bpf_seq_read(struct file *file, char =
-__user *buf, size_t size,
- 	goto Done;
- }
-=20
-+static int iter_open(struct inode *inode, struct file *file)
-+{
-+	struct bpf_iter_link *link =3D inode->i_private;
-+
-+	return prepare_seq_file(file, link);
-+}
-+
- static int iter_release(struct inode *inode, struct file *file)
- {
- 	struct bpf_iter_priv_data *iter_priv;
-@@ -188,7 +197,8 @@ static int iter_release(struct inode *inode, struct f=
-ile *file)
- 	return seq_release_private(inode, file);
- }
-=20
--static const struct file_operations bpf_iter_fops =3D {
-+const struct file_operations bpf_iter_fops =3D {
-+	.open		=3D iter_open,
- 	.llseek		=3D no_llseek,
- 	.read		=3D bpf_seq_read,
- 	.release	=3D iter_release,
-@@ -290,6 +300,11 @@ static const struct bpf_link_ops bpf_iter_link_lops =
-=3D {
- 	.update_prog =3D bpf_iter_link_replace,
- };
-=20
-+bool bpf_link_is_iter(struct bpf_link *link)
-+{
-+	return link->ops =3D=3D &bpf_iter_link_lops;
-+}
-+
- int bpf_iter_link_attach(const union bpf_attr *attr, struct bpf_prog *pr=
-og)
- {
- 	struct bpf_link_primer link_primer;
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 95087d9f4ed3..fb878ba3f22f 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -358,8 +358,11 @@ static int bpf_mkmap(struct dentry *dentry, umode_t =
-mode, void *arg)
-=20
- static int bpf_mklink(struct dentry *dentry, umode_t mode, void *arg)
- {
-+	struct bpf_link *link =3D arg;
-+
- 	return bpf_mkobj_ops(dentry, mode, arg, &bpf_link_iops,
--			     &bpffs_obj_fops);
-+			     bpf_link_is_iter(link) ?
-+			     &bpf_iter_fops : &bpffs_obj_fops);
- }
-=20
- static struct dentry *
+User Interface:
+  1. Similar to prog/map/link, the iterator can be pinned into a
+     path within a bpffs mount point.
+  2. The bpftool command can pin an iterator to a file
+         bpftool iter pin <bpf_prog.o> <path>
+  3. Use `cat <path>` to dump the contents.
+     Use `rm -f <path>` to remove the pinned iterator.
+  4. The anonymous iterator can be created as well.
+
+  Please see patch #18 andd #19 for bpf programs and bpf iterator
+  output examples.
+
+  Note that certain iterators are namespace aware. For example,
+  task and task_file targets only iterate through current pid namespace.
+  ipv6_route and netlink will iterate through current net namespace.
+
+  Please see individual patches for implementation details.
+
+Performance:
+  The bpf iterator provides in-kernel aggregation abilities
+  for kernel data. This can greatly improve performance
+  compared to e.g., iterating all process directories under /proc.
+  For example, I did an experiment on my VM with an application forking
+  different number of tasks and each forked process opening various numbe=
+r
+  of files. The following is the result with the latency with unit of mic=
+roseconds:
+
+    # of forked tasks   # of open files    # of bpf_prog calls  # latency=
+ (us)
+    100                 100                11503                7586
+    1000                1000               1013203              709513
+    10000               100                1130203              764519
+
+  The number of bpf_prog calls may be more than forked tasks multipled by
+  open files since there are other tasks running on the system.
+  The bpf program is a do-nothing program. One millions of bpf calls take=
+s
+  less than one second.
+
+Future Work:
+  Although the initial motivation is from Martin's sk_local_storage,
+  this patch didn't implement tcp6 sockets and sk_local_storage.
+  The /proc/net/tcp6 involves three types of sockets, timewait,
+  request and tcp6 sockets. Some kind of type casting or other
+  mechanism is needed to handle all these socket types in one
+  bpf program. This will be addressed in future work.
+
+  Currently, we do not support kernel data generated under module.
+  This requires some BTF work.
+
+  More work for more iterators, e.g., bpf_progs, cgroups, bpf_map element=
+s, etc.
+
+Changelog:
+  v1 -> v2:
+    - removed target_feature, using callback functions instead
+    - checking target to ensure program specified btf_id supported (Marti=
+n)
+    - link_create change with new changes from Andrii
+    - better handling of btf_iter vs. seq_file private data (Martin, Andr=
+ii)
+    - implemented bpf_seq_read() (Andrii, Alexei)
+    - percpu buffer for bpf_seq_printf() (Andrii)
+    - better syntax for BPF_SEQ_PRINTF macro (Andrii)
+    - bpftool fixes (Quentin)
+    - a lot of other fixes
+  RFC v2 -> v1:
+    - rename bpfdump to bpf_iter
+    - use bpffs instead of a new file system
+    - use bpf_link to streamline and simplify iterator creation.
+
+References:
+  [1]: https://lore.kernel.org/bpf/20200225230427.1976129-1-kafai@fb.com
+  [2]: https://github.com/osandov/drgn
+
+Yonghong Song (20):
+  bpf: implement an interface to register bpf_iter targets
+  bpf: allow loading of a bpf_iter program
+  bpf: support bpf tracing/iter programs for BPF_LINK_CREATE
+  bpf: support bpf tracing/iter programs for BPF_LINK_UPDATE
+  bpf: implement bpf_seq_read() for bpf iterator
+  bpf: create anonymous bpf iterator
+  bpf: create file bpf iterator
+  bpf: implement common macros/helpers for target iterators
+  bpf: add bpf_map iterator
+  net: bpf: add netlink and ipv6_route bpf_iter targets
+  bpf: add task and task/file iterator targets
+  bpf: add PTR_TO_BTF_ID_OR_NULL support
+  bpf: add bpf_seq_printf and bpf_seq_write helpers
+  bpf: handle spilled PTR_TO_BTF_ID properly when checking
+    stack_boundary
+  bpf: support variable length array in tracing programs
+  tools/libbpf: add bpf_iter support
+  tools/bpftool: add bpf_iter support for bptool
+  tools/bpf: selftests: add iterator programs for ipv6_route and netlink
+  tools/bpf: selftests: add iter progs for bpf_map/task/task_file
+  tools/bpf: selftests: add bpf_iter selftests
+
+ fs/proc/proc_net.c                            |  19 +
+ include/linux/bpf.h                           |  35 ++
+ include/linux/bpf_types.h                     |   1 +
+ include/linux/proc_fs.h                       |   3 +
+ include/uapi/linux/bpf.h                      |  40 +-
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/bpf_iter.c                         | 518 ++++++++++++++++++
+ kernel/bpf/btf.c                              |  42 +-
+ kernel/bpf/inode.c                            |   5 +-
+ kernel/bpf/map_iter.c                         | 107 ++++
+ kernel/bpf/syscall.c                          |  59 ++
+ kernel/bpf/task_iter.c                        | 336 ++++++++++++
+ kernel/bpf/verifier.c                         |  45 +-
+ kernel/trace/bpf_trace.c                      | 195 +++++++
+ net/ipv6/ip6_fib.c                            |  65 ++-
+ net/ipv6/route.c                              |  27 +
+ net/netlink/af_netlink.c                      |  87 ++-
+ scripts/bpf_helpers_doc.py                    |   2 +
+ .../bpftool/Documentation/bpftool-iter.rst    |  83 +++
+ tools/bpf/bpftool/bash-completion/bpftool     |  13 +
+ tools/bpf/bpftool/iter.c                      |  84 +++
+ tools/bpf/bpftool/link.c                      |   1 +
+ tools/bpf/bpftool/main.c                      |   3 +-
+ tools/bpf/bpftool/main.h                      |   1 +
+ tools/include/uapi/linux/bpf.h                |  40 +-
+ tools/lib/bpf/bpf.c                           |  11 +
+ tools/lib/bpf/bpf.h                           |   2 +
+ tools/lib/bpf/bpf_tracing.h                   |  16 +
+ tools/lib/bpf/libbpf.c                        |  45 ++
+ tools/lib/bpf/libbpf.h                        |   9 +
+ tools/lib/bpf/libbpf.map                      |   2 +
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 390 +++++++++++++
+ .../selftests/bpf/progs/bpf_iter_bpf_map.c    |  29 +
+ .../selftests/bpf/progs/bpf_iter_ipv6_route.c |  63 +++
+ .../selftests/bpf/progs/bpf_iter_netlink.c    |  74 +++
+ .../selftests/bpf/progs/bpf_iter_task.c       |  26 +
+ .../selftests/bpf/progs/bpf_iter_task_file.c  |  27 +
+ .../selftests/bpf/progs/bpf_iter_test_kern1.c |   4 +
+ .../selftests/bpf/progs/bpf_iter_test_kern2.c |   4 +
+ .../selftests/bpf/progs/bpf_iter_test_kern3.c |  18 +
+ .../selftests/bpf/progs/bpf_iter_test_kern4.c |  48 ++
+ .../bpf/progs/bpf_iter_test_kern_common.h     |  22 +
+ 42 files changed, 2589 insertions(+), 14 deletions(-)
+ create mode 100644 kernel/bpf/bpf_iter.c
+ create mode 100644 kernel/bpf/map_iter.c
+ create mode 100644 kernel/bpf/task_iter.c
+ create mode 100644 tools/bpf/bpftool/Documentation/bpftool-iter.rst
+ create mode 100644 tools/bpf/bpftool/iter.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_file.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_test_kern1=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_test_kern2=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_test_kern3=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_test_kern4=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_test_kern_=
+common.h
+
 --=20
 2.24.1
 
