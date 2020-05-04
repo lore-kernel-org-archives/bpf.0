@@ -2,138 +2,89 @@ Return-Path: <SRS0=pWkb=6S=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D57EC3A5A9
-	for <bpf@archiver.kernel.org>; Mon,  4 May 2020 06:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A440C3A5A9
+	for <bpf@archiver.kernel.org>; Mon,  4 May 2020 08:57:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 79FFB206EB
-	for <bpf@archiver.kernel.org>; Mon,  4 May 2020 06:26:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 081A120746
+	for <bpf@archiver.kernel.org>; Mon,  4 May 2020 08:57:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="PmXlHzfB"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cvnt3iod"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727915AbgEDG0o (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 May 2020 02:26:44 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:61986 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727886AbgEDG0n (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 4 May 2020 02:26:43 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0446BaRu016836
-        for <bpf@vger.kernel.org>; Sun, 3 May 2020 23:26:43 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=9jzijvCQ/jRsHEHQ6w8THkhgDe6Z8MJtscb5bpU9eQM=;
- b=PmXlHzfBZ8g9jTq69UrqNJn1dlCUxvXSqBAqkyudL+OczQeVBj9HNxTT6+GZ/pfVq3x8
- FAUoRC3TfEHVy0ybmP3gEqKDU90FFtn2a7Fychs5xkkQicVsrplgnhxTsI7w6lMWHr3j
- DIWDV1ziaRaOJ67g1KDRpmH0eJryLPDl5SM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30srp5uccw-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 03 May 2020 23:26:42 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Sun, 3 May 2020 23:26:08 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 6D5803702037; Sun,  3 May 2020 23:26:03 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 14/20] bpf: handle spilled PTR_TO_BTF_ID properly when checking stack_boundary
-Date:   Sun, 3 May 2020 23:26:03 -0700
-Message-ID: <20200504062603.2048735-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200504062547.2047304-1-yhs@fb.com>
-References: <20200504062547.2047304-1-yhs@fb.com>
+        id S1728166AbgEDI5T (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 May 2020 04:57:19 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:46085 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727951AbgEDI5T (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 4 May 2020 04:57:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588582638;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2pT6P62tfr+l7qGJkPdDkRAwCMWh+RIvavExV9R+IBM=;
+        b=cvnt3iodoiw5intJyxiZXYAHtM0DHnMXVCnJONeTXcdpkv2XYcTS9duAUzUZslYhj5lueL
+        6QSO6qsyy0O8HVTPevtKCfuxvIpQdkj2KfHw6bdoVm2Px0CHiqbWXKvgZAM5dyq26txzmj
+        WRfzchN6J5RaVnGfNB7xhvA/iXTj3VU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-300-pYvvuqa5PaKmDXmyOedVhA-1; Mon, 04 May 2020 04:57:15 -0400
+X-MC-Unique: pYvvuqa5PaKmDXmyOedVhA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 16B6E800687;
+        Mon,  4 May 2020 08:57:13 +0000 (UTC)
+Received: from [10.36.113.160] (ovpn-113-160.ams2.redhat.com [10.36.113.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4DCA360CCC;
+        Mon,  4 May 2020 08:57:08 +0000 (UTC)
+From:   "Eelco Chaudron" <echaudro@redhat.com>
+To:     "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        "Martin Lau" <kafai@fb.com>, "Song Liu" <songliubraving@fb.com>,
+        "Yonghong Song" <yhs@fb.com>, "Andrii Nakryiko" <andriin@fb.com>,
+        "Toke =?utf-8?b?SMO4aWxhbmQtSsO4cmdlbnNlbg==?=" <toke@redhat.com>
+Subject: Re: [PATCH bpf-next] libbpf: fix probe code to return EPERM if
+ encountered
+Date:   Mon, 04 May 2020 10:57:06 +0200
+Message-ID: <6E5513F5-0ACC-42C1-B6B2-0F73D3675859@redhat.com>
+In-Reply-To: <CAEf4BzZScS-vRtiy2H6KgOHiq_xbhrNYVMtsD2Tn7Q4y1ssg4w@mail.gmail.com>
+References: <158824221003.2338.9700507405752328930.stgit@ebuild>
+ <CAEf4BzYeJxGuPC8rbsY5yvED8KNaq=7NULFPnwPdeEs==Srd1w@mail.gmail.com>
+ <5E1C3675-7D77-4A58-B2FD-CE92806DA363@redhat.com>
+ <CAEf4BzZScS-vRtiy2H6KgOHiq_xbhrNYVMtsD2Tn7Q4y1ssg4w@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-05-04_02:2020-05-01,2020-05-04 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 adultscore=0
- mlxscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0 lowpriorityscore=0
- priorityscore=1501 clxscore=1015 impostorscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005040054
-X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This specifically to handle the case like below:
-   // ptr below is a socket ptr identified by PTR_TO_BTF_ID
-   u64 param[2] =3D { ptr, val };
-   bpf_seq_printf(seq, fmt, sizeof(fmt), param, sizeof(param));
 
-In this case, the 16 bytes stack for "param" contains:
-   8 bytes for ptr with spilled PTR_TO_BTF_ID
-   8 bytes for val as STACK_MISC
 
-The current verifier will complain the ptr should not be visible
-to the helper.
-   ...
-   16: (7b) *(u64 *)(r10 -64) =3D r2
-   18: (7b) *(u64 *)(r10 -56) =3D r1
-   19: (bf) r4 =3D r10
-   ;
-   20: (07) r4 +=3D -64
-   ; BPF_SEQ_PRINTF(seq, fmt1, (long)s, s->sk_protocol);
-   21: (bf) r1 =3D r6
-   22: (18) r2 =3D 0xffffa8d00018605a
-   24: (b4) w3 =3D 10
-   25: (b4) w5 =3D 16
-   26: (85) call bpf_seq_printf#125
-    R0=3Dinv(id=3D0) R1_w=3Dptr_seq_file(id=3D0,off=3D0,imm=3D0)
-    R2_w=3Dmap_value(id=3D0,off=3D90,ks=3D4,vs=3D144,imm=3D0) R3_w=3Dinv1=
-0
-    R4_w=3Dfp-64 R5_w=3Dinv16 R6=3Dptr_seq_file(id=3D0,off=3D0,imm=3D0)
-    R7=3Dptr_netlink_sock(id=3D0,off=3D0,imm=3D0) R10=3Dfp0 fp-56_w=3Dmmm=
-mmmmm
-    fp-64_w=3Dptr_
-   last_idx 26 first_idx 13
-   regs=3D8 stack=3D0 before 25: (b4) w5 =3D 16
-   regs=3D8 stack=3D0 before 24: (b4) w3 =3D 10
-   invalid indirect read from stack off -64+0 size 16
+On 1 May 2020, at 21:16, Andrii Nakryiko wrote:
 
-Let us permit this if the program is a tracing/iter program.
+> On Fri, May 1, 2020 at 2:56 AM Eelco Chaudron <echaudro@redhat.com> wro=
+te:
+<SNIP>
+>>
+>> Let me know, and I sent out a v2.
+>
+> Yes, that's the split I had in mind, but I'd move
+> bpf_object__probe_loading() call directly into bpf_object__load() to
+> be the first thing to check. probe_caps() should still be non-failing
+> if any feature is missing. Does it make sense?
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- kernel/bpf/verifier.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+I think I got it :) I=E2=80=99ll send out a v2 soon=E2=80=A6
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 36b2a38a06fe..4884b6fd7bad 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3494,6 +3494,14 @@ static int check_stack_boundary(struct bpf_verifie=
-r_env *env, int regno,
- 			*stype =3D STACK_MISC;
- 			goto mark;
- 		}
-+
-+		/* pointer value can be visible to tracing/iter program */
-+		if (env->prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
-+		    env->prog->expected_attach_type =3D=3D BPF_TRACE_ITER &&
-+		    state->stack[spi].slot_type[0] =3D=3D STACK_SPILL &&
-+		    state->stack[spi].spilled_ptr.type =3D=3D PTR_TO_BTF_ID)
-+			goto mark;
-+
- 		if (state->stack[spi].slot_type[0] =3D=3D STACK_SPILL &&
- 		    state->stack[spi].spilled_ptr.type =3D=3D SCALAR_VALUE) {
- 			__mark_reg_unknown(env, &state->stack[spi].spilled_ptr);
---=20
-2.24.1
+//Eelco
 
