@@ -8,60 +8,59 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04371C47254
-	for <bpf@archiver.kernel.org>; Tue,  5 May 2020 20:27:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C3D7C47247
+	for <bpf@archiver.kernel.org>; Tue,  5 May 2020 20:27:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D2C9C24987
-	for <bpf@archiver.kernel.org>; Tue,  5 May 2020 20:27:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DCCB2498A
+	for <bpf@archiver.kernel.org>; Tue,  5 May 2020 20:27:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pg20+Huj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r0UVuiyu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729031AbgEEU1g (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 May 2020 16:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        id S1729146AbgEEU1j (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 May 2020 16:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728737AbgEEU1f (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 5 May 2020 16:27:35 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425FDC061A0F
-        for <bpf@vger.kernel.org>; Tue,  5 May 2020 13:27:35 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id z11so16506ybk.2
-        for <bpf@vger.kernel.org>; Tue, 05 May 2020 13:27:35 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1728892AbgEEU1i (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 5 May 2020 16:27:38 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4536C061A0F
+        for <bpf@vger.kernel.org>; Tue,  5 May 2020 13:27:38 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id g14so103887qts.7
+        for <bpf@vger.kernel.org>; Tue, 05 May 2020 13:27:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=PF2UNwaBV4cS3yGntc/6WHndMyzkDDK2J0DXhFZJR38=;
-        b=pg20+Huj1tjaFXy41mXHOk3I8JYZphKaknoLb2DiA1l1srUBnLq/vlvoimTJhWd1x8
-         rk2299sFt1U987UoB/wze27xOrzmbvTtebsZFNY5vRHVtHlAMWzIvV2W12xGtI/CrdO4
-         4nd5YZ3rxbx/gwfnHev3o2rB92o0f8ljDc5Cau4vTykdy0cn+hZfxfmuX7Rtwr52w4Kj
-         bc/xkW5faZl/kte3WyXC23g/Wbfsw5iZ5CP601YPBC4ft3gtux8v/eZ0+0HCIdGn1T6A
-         kwqz3K7f71kMsGep2iw70/qk3FV4LoJFawkf8Kfrp02D2JyvjqbfhhisHBiB1ZxqkXP8
-         6V+Q==
+        bh=gYaWEKkZQkKb5uQx3SxM8fjVaqeV07VOdxfJw1QzBxM=;
+        b=r0UVuiyu95rzput2cIKwtRJ8gOF9GXwk/QFDaOiUTve76z4asiQkBwDublBWWUBYOc
+         0PFZyHXtJ1JklBqZyrlS/zGXCSrt/8SOixh9jQiolox/S1UY+s6CzU2pHMXwUggxg82Z
+         dZEJNOxYxy403DFmgzYBHgyaghYuyHywdhxwkc+/F+qVK4wBJPxAaiSuZ6+2DpJYB/kv
+         lN1XGKm37JHaZXNPxKoEn1TBm4584BHCTFvgTcZq3xs3DWGt59GqsEQK+dcR4LPsAgGQ
+         Xab61bqq2P8QtUWacqcWX3bbK53R40fJJxNeAflhWDI76VTME59ZGDVWUmR6bbbT2tWT
+         j2xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=PF2UNwaBV4cS3yGntc/6WHndMyzkDDK2J0DXhFZJR38=;
-        b=JlV/ZRo8g8sYeeaukN86ZCkBb28+dfrRdZctGW4bddvCUFlnoMH0AVWqEMtWi/qZNw
-         GsRdO41YLLMssNpprSRBfE4isLV3slcTt4qVlP1ZQssAqz7c2nEbn2t3qpzl0+8oDRqC
-         ZFtVjOlrWRbMKrxOkp4y+WcsOt7Qe/FSCzEX2ZTC7QNY6uo3tuXb2a22sZTRwv6VHyNz
-         dvBy90EF01vIGWAhMINbKFRq9OmYpa4wtdX46hhHju77Ud3uDZS9u0SLA4Re/Fuq2Gf2
-         xQtipdQXyUuvYwdNXq2pWMP/C/XbMg0hHD33u+xcUQBt88PQQTJ2erOIh/lhOJp5m6p5
-         1rtg==
-X-Gm-Message-State: AGi0PuZNKjIUE1NJ2vXteDFJqx4enK4KCNM3mgt3Q09WTw9aHFnxnu+M
-        T9aFpntqdT53VBFu4vrcp8O0j9k=
-X-Google-Smtp-Source: APiQypKDU30H0Ue+HRU31j7Aev+F450p9N+4LmuRYpELcOrcNEDgXRazIcgvELL17+MjyRFYcRTgX5g=
-X-Received: by 2002:a25:b0c:: with SMTP id 12mr7528258ybl.247.1588710454486;
- Tue, 05 May 2020 13:27:34 -0700 (PDT)
-Date:   Tue,  5 May 2020 13:27:26 -0700
+        bh=gYaWEKkZQkKb5uQx3SxM8fjVaqeV07VOdxfJw1QzBxM=;
+        b=J9TOCpTIJdLyS7mAQRS6XbNVJ1LfteS9d5+zsJvNNxc5flxfBxlwE525K1e2tbVGpE
+         e4LRzocUUSEYISlvp/wHZFdchmBUmeBXTkxj6y8rtKW3MXEwB1DQqoyuU9bzc2l7fT+c
+         dNaZqe7EGifjx8GSlmxADzGuwTLa9f8+kFh0fYdOH9sANu/jjWlkiW5oNbSRMMboXfjY
+         ZabhdOlY0zPDCFUsA1/RjtddBjJFOp58gpKknVSGnXTVcFpxn8QqjHL7BBpTxSDXjXh7
+         RtdjqBenpQqyqaT+GJ7a/vwT7edyIM2fikg6zNyMJQcAd5lJmuL+Yw+gmsNQA4RVCAoZ
+         n7EA==
+X-Gm-Message-State: AGi0PuZtTzuERKYtmQOYsbri38G6Aa+zLbSiuqhnhkqe0XIZb8eRdmWB
+        PTuu/8sOEnuUsOIxlbeeNE8aqJE=
+X-Google-Smtp-Source: APiQypI8CmpNvNRETiJ5iwGrXS2AyoIzeu1Cek1sClJ4mORzfDTifmUCFNOeSYJyKFql5hY9Z5DNYYQ=
+X-Received: by 2002:a05:6214:572:: with SMTP id cj18mr4510702qvb.209.1588710457906;
+ Tue, 05 May 2020 13:27:37 -0700 (PDT)
+Date:   Tue,  5 May 2020 13:27:28 -0700
 In-Reply-To: <20200505202730.70489-1-sdf@google.com>
-Message-Id: <20200505202730.70489-2-sdf@google.com>
+Message-Id: <20200505202730.70489-4-sdf@google.com>
 Mime-Version: 1.0
 References: <20200505202730.70489-1-sdf@google.com>
 X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
-Subject: [PATCH bpf-next v2 1/5] selftests/bpf: generalize helpers to control
- background listener
+Subject: [PATCH bpf-next v2 3/5] net: refactor arguments of inet{,6}_bind
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -73,393 +72,172 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move the following routines that let us start a background listener
-thread and connect to a server by fd to the test_prog:
-* start_server_thread - start background INADDR_ANY thread
-* stop_server_thread - stop the thread
-* connect_to_fd - connect to the server identified by fd
+The intent is to add an additional bind parameter in the next commit.
+Instead of adding another argument, let's convert all existing
+flag arguments into an extendable bit field.
 
-These will be used in the next commit.
-
-Also, extend these helpers to support AF_INET6 and accept the family
-as an argument.
-
-v2:
-* put helpers into network_helpers.c (Andrii Nakryiko)
+No functional changes.
 
 Cc: Andrey Ignatov <rdna@fb.com>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/testing/selftests/bpf/Makefile          |   2 +-
- tools/testing/selftests/bpf/network_helpers.c | 164 ++++++++++++++++++
- tools/testing/selftests/bpf/network_helpers.h |  11 ++
- .../selftests/bpf/prog_tests/tcp_rtt.c        | 116 +------------
- 4 files changed, 180 insertions(+), 113 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/network_helpers.c
- create mode 100644 tools/testing/selftests/bpf/network_helpers.h
+ include/net/inet_common.h |  6 +++++-
+ include/net/ipv6_stubs.h  |  2 +-
+ net/core/filter.c         |  6 ++++--
+ net/ipv4/af_inet.c        | 10 +++++-----
+ net/ipv6/af_inet6.c       | 10 +++++-----
+ 5 files changed, 20 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 3d942be23d09..8f25966b500b 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -354,7 +354,7 @@ endef
- TRUNNER_TESTS_DIR := prog_tests
- TRUNNER_BPF_PROGS_DIR := progs
- TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c	\
--			 flow_dissector_load.h
-+			 network_helpers.c flow_dissector_load.h
- TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
- 		       $(wildcard progs/btf_dump_test_case_*.c)
- TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-new file mode 100644
-index 000000000000..ee9386b033ed
---- /dev/null
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -0,0 +1,164 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <errno.h>
-+#include <pthread.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <linux/err.h>
-+#include <linux/in.h>
-+#include <linux/in6.h>
-+
-+#include "network_helpers.h"
-+
-+#define CHECK_FAIL(condition) ({					\
-+	int __ret = !!(condition);					\
-+	int __save_errno = errno;					\
-+	if (__ret) {							\
-+		fprintf(stdout, "%s:FAIL:%d\n", __func__, __LINE__);	\
-+	}								\
-+	errno = __save_errno;						\
-+	__ret;								\
-+})
-+
-+#define clean_errno() (errno == 0 ? "None" : strerror(errno))
-+#define log_err(MSG, ...) fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", \
-+	__FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
-+
-+static int start_server(int family)
-+{
-+	struct sockaddr_storage addr = {};
-+	socklen_t len;
-+	int fd;
-+
-+	if (family == AF_INET) {
-+		struct sockaddr_in *sin = (void *)&addr;
-+
-+		sin->sin_family = AF_INET;
-+		len = sizeof(*sin);
-+	} else {
-+		struct sockaddr_in6 *sin6 = (void *)&addr;
-+
-+		sin6->sin6_family = AF_INET6;
-+		len = sizeof(*sin6);
-+	}
-+
-+	fd = socket(family, SOCK_STREAM | SOCK_NONBLOCK, 0);
-+	if (fd < 0) {
-+		log_err("Failed to create server socket");
-+		return -1;
-+	}
-+
-+	if (bind(fd, (const struct sockaddr *)&addr, len) < 0) {
-+		log_err("Failed to bind socket");
-+		close(fd);
-+		return -1;
-+	}
-+
-+	return fd;
-+}
-+
-+static pthread_mutex_t server_started_mtx = PTHREAD_MUTEX_INITIALIZER;
-+static pthread_cond_t server_started = PTHREAD_COND_INITIALIZER;
-+static volatile bool server_done;
-+pthread_t server_tid;
-+
-+static void *server_thread(void *arg)
-+{
-+	struct sockaddr_storage addr;
-+	socklen_t len = sizeof(addr);
-+	int fd = *(int *)arg;
-+	int client_fd;
-+	int err;
-+
-+	err = listen(fd, 1);
-+
-+	pthread_mutex_lock(&server_started_mtx);
-+	pthread_cond_signal(&server_started);
-+	pthread_mutex_unlock(&server_started_mtx);
-+
-+	if (CHECK_FAIL(err < 0)) {
-+		perror("Failed to listed on socket");
-+		return ERR_PTR(err);
-+	}
-+
-+	while (true) {
-+		client_fd = accept(fd, (struct sockaddr *)&addr, &len);
-+		if (client_fd == -1 && errno == EAGAIN) {
-+			usleep(50);
-+			continue;
-+		}
-+		break;
-+	}
-+	if (CHECK_FAIL(client_fd < 0)) {
-+		perror("Failed to accept client");
-+		return ERR_PTR(err);
-+	}
-+
-+	while (!server_done)
-+		usleep(50);
-+
-+	close(client_fd);
-+
-+	return NULL;
-+}
-+
-+int start_server_thread(int family)
-+{
-+	int fd = start_server(family);
-+
-+	if (fd < 0)
-+		return -1;
-+
-+	if (CHECK_FAIL(pthread_create(&server_tid, NULL, server_thread,
-+				      (void *)&fd)))
-+		goto err;
-+
-+	pthread_mutex_lock(&server_started_mtx);
-+	pthread_cond_wait(&server_started, &server_started_mtx);
-+	pthread_mutex_unlock(&server_started_mtx);
-+
-+	return fd;
-+err:
-+	close(fd);
-+	return -1;
-+}
-+
-+void stop_server_thread(int fd)
-+{
-+	void *server_res;
-+
-+	server_done = true;
-+	CHECK_FAIL(pthread_join(server_tid, &server_res));
-+	CHECK_FAIL(IS_ERR(server_res));
-+	close(fd);
-+}
-+
-+int connect_to_fd(int family, int server_fd)
-+{
-+	struct sockaddr_storage addr;
-+	socklen_t len = sizeof(addr);
-+	int fd;
-+
-+	fd = socket(family, SOCK_STREAM, 0);
-+	if (fd < 0) {
-+		log_err("Failed to create client socket");
-+		return -1;
-+	}
-+
-+	if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
-+		log_err("Failed to get server addr");
-+		goto out;
-+	}
-+
-+	if (connect(fd, (const struct sockaddr *)&addr, len) < 0) {
-+		log_err("Fail to connect to server with family %d", family);
-+		goto out;
-+	}
-+
-+	return fd;
-+
-+out:
-+	close(fd);
-+	return -1;
-+}
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-new file mode 100644
-index 000000000000..1f3942160287
---- /dev/null
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __NETWORK_HELPERS_H
-+#define __NETWORK_HELPERS_H
-+#include <sys/socket.h>
-+#include <sys/types.h>
-+
-+int start_server_thread(int family);
-+void stop_server_thread(int fd);
-+int connect_to_fd(int family, int server_fd);
-+
-+#endif
-diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_rtt.c b/tools/testing/selftests/bpf/prog_tests/tcp_rtt.c
-index e56b52ab41da..14bc0f3dc5c1 100644
---- a/tools/testing/selftests/bpf/prog_tests/tcp_rtt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tcp_rtt.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
- #include "cgroup_helpers.h"
-+#include "network_helpers.h"
- 
- struct tcp_rtt_storage {
- 	__u32 invoked;
-@@ -87,34 +88,6 @@ static int verify_sk(int map_fd, int client_fd, const char *msg, __u32 invoked,
- 	return err;
- }
- 
--static int connect_to_server(int server_fd)
--{
--	struct sockaddr_storage addr;
--	socklen_t len = sizeof(addr);
--	int fd;
--
--	fd = socket(AF_INET, SOCK_STREAM, 0);
--	if (fd < 0) {
--		log_err("Failed to create client socket");
--		return -1;
--	}
--
--	if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
--		log_err("Failed to get server addr");
--		goto out;
--	}
--
--	if (connect(fd, (const struct sockaddr *)&addr, len) < 0) {
--		log_err("Fail to connect to server");
--		goto out;
--	}
--
--	return fd;
--
--out:
--	close(fd);
--	return -1;
--}
- 
- static int run_test(int cgroup_fd, int server_fd)
- {
-@@ -145,7 +118,7 @@ static int run_test(int cgroup_fd, int server_fd)
- 		goto close_bpf_object;
+diff --git a/include/net/inet_common.h b/include/net/inet_common.h
+index ae2ba897675c..c38f4f7d660a 100644
+--- a/include/net/inet_common.h
++++ b/include/net/inet_common.h
+@@ -35,8 +35,12 @@ int inet_shutdown(struct socket *sock, int how);
+ int inet_listen(struct socket *sock, int backlog);
+ void inet_sock_destruct(struct sock *sk);
+ int inet_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len);
++/* Don't allocate port at this moment, defer to connect. */
++#define BIND_FORCE_ADDRESS_NO_PORT	(1 << 0)
++/* Grab and release socket lock. */
++#define BIND_WITH_LOCK			(1 << 1)
+ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+-		bool force_bind_address_no_port, bool with_lock);
++		u32 flags);
+ int inet_getname(struct socket *sock, struct sockaddr *uaddr,
+ 		 int peer);
+ int inet_ioctl(struct socket *sock, unsigned int cmd, unsigned long arg);
+diff --git a/include/net/ipv6_stubs.h b/include/net/ipv6_stubs.h
+index a5f7c12c326a..6e622dd3122e 100644
+--- a/include/net/ipv6_stubs.h
++++ b/include/net/ipv6_stubs.h
+@@ -63,7 +63,7 @@ extern const struct ipv6_stub *ipv6_stub __read_mostly;
+ /* A stub used by bpf helpers. Similarly ugly as ipv6_stub */
+ struct ipv6_bpf_stub {
+ 	int (*inet6_bind)(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+-			  bool force_bind_address_no_port, bool with_lock);
++			  u32 flags);
+ 	struct sock *(*udp6_lib_lookup)(struct net *net,
+ 				     const struct in6_addr *saddr, __be16 sport,
+ 				     const struct in6_addr *daddr, __be16 dport,
+diff --git a/net/core/filter.c b/net/core/filter.c
+index dfaf5df13722..fa9ddab5dd1f 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4538,7 +4538,8 @@ BPF_CALL_3(bpf_bind, struct bpf_sock_addr_kern *, ctx, struct sockaddr *, addr,
+ 			return err;
+ 		if (((struct sockaddr_in *)addr)->sin_port != htons(0))
+ 			return err;
+-		return __inet_bind(sk, addr, addr_len, true, false);
++		return __inet_bind(sk, addr, addr_len,
++				   BIND_FORCE_ADDRESS_NO_PORT);
+ #if IS_ENABLED(CONFIG_IPV6)
+ 	} else if (addr->sa_family == AF_INET6) {
+ 		if (addr_len < SIN6_LEN_RFC2133)
+@@ -4548,7 +4549,8 @@ BPF_CALL_3(bpf_bind, struct bpf_sock_addr_kern *, ctx, struct sockaddr *, addr,
+ 		/* ipv6_bpf_stub cannot be NULL, since it's called from
+ 		 * bpf_cgroup_inet6_connect hook and ipv6 is already loaded
+ 		 */
+-		return ipv6_bpf_stub->inet6_bind(sk, addr, addr_len, true, false);
++		return ipv6_bpf_stub->inet6_bind(sk, addr, addr_len,
++						 BIND_FORCE_ADDRESS_NO_PORT);
+ #endif /* CONFIG_IPV6 */
  	}
+ #endif /* CONFIG_INET */
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index 6177c4ba0037..68e74b1b0f26 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -450,12 +450,12 @@ int inet_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len)
+ 	if (err)
+ 		return err;
  
--	client_fd = connect_to_server(server_fd);
-+	client_fd = connect_to_fd(AF_INET, server_fd);
- 	if (client_fd < 0) {
- 		err = -1;
- 		goto close_bpf_object;
-@@ -180,103 +153,22 @@ static int run_test(int cgroup_fd, int server_fd)
- 	return err;
+-	return __inet_bind(sk, uaddr, addr_len, false, true);
++	return __inet_bind(sk, uaddr, addr_len, BIND_WITH_LOCK);
  }
+ EXPORT_SYMBOL(inet_bind);
  
--static int start_server(void)
--{
--	struct sockaddr_in addr = {
--		.sin_family = AF_INET,
--		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
--	};
--	int fd;
--
--	fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
--	if (fd < 0) {
--		log_err("Failed to create server socket");
--		return -1;
--	}
--
--	if (bind(fd, (const struct sockaddr *)&addr, sizeof(addr)) < 0) {
--		log_err("Failed to bind socket");
--		close(fd);
--		return -1;
--	}
--
--	return fd;
--}
--
--static pthread_mutex_t server_started_mtx = PTHREAD_MUTEX_INITIALIZER;
--static pthread_cond_t server_started = PTHREAD_COND_INITIALIZER;
--static volatile bool server_done = false;
--
--static void *server_thread(void *arg)
--{
--	struct sockaddr_storage addr;
--	socklen_t len = sizeof(addr);
--	int fd = *(int *)arg;
--	int client_fd;
--	int err;
--
--	err = listen(fd, 1);
--
--	pthread_mutex_lock(&server_started_mtx);
--	pthread_cond_signal(&server_started);
--	pthread_mutex_unlock(&server_started_mtx);
--
--	if (CHECK_FAIL(err < 0)) {
--		perror("Failed to listed on socket");
--		return ERR_PTR(err);
--	}
--
--	while (true) {
--		client_fd = accept(fd, (struct sockaddr *)&addr, &len);
--		if (client_fd == -1 && errno == EAGAIN) {
--			usleep(50);
--			continue;
--		}
--		break;
--	}
--	if (CHECK_FAIL(client_fd < 0)) {
--		perror("Failed to accept client");
--		return ERR_PTR(err);
--	}
--
--	while (!server_done)
--		usleep(50);
--
--	close(client_fd);
--
--	return NULL;
--}
--
- void test_tcp_rtt(void)
+ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+-		bool force_bind_address_no_port, bool with_lock)
++		u32 flags)
  {
- 	int server_fd, cgroup_fd;
--	pthread_t tid;
--	void *server_res;
+ 	struct sockaddr_in *addr = (struct sockaddr_in *)uaddr;
+ 	struct inet_sock *inet = inet_sk(sk);
+@@ -506,7 +506,7 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+ 	 *      would be illegal to use them (multicast/broadcast) in
+ 	 *      which case the sending device address is used.
+ 	 */
+-	if (with_lock)
++	if (flags & BIND_WITH_LOCK)
+ 		lock_sock(sk);
  
- 	cgroup_fd = test__join_cgroup("/tcp_rtt");
- 	if (CHECK_FAIL(cgroup_fd < 0))
- 		return;
+ 	/* Check these errors (active socket, double bind). */
+@@ -520,7 +520,7 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
  
--	server_fd = start_server();
-+	server_fd = start_server_thread(AF_INET);
- 	if (CHECK_FAIL(server_fd < 0))
- 		goto close_cgroup_fd;
- 
--	if (CHECK_FAIL(pthread_create(&tid, NULL, server_thread,
--				      (void *)&server_fd)))
--		goto close_server_fd;
--
--	pthread_mutex_lock(&server_started_mtx);
--	pthread_cond_wait(&server_started, &server_started_mtx);
--	pthread_mutex_unlock(&server_started_mtx);
--
- 	CHECK_FAIL(run_test(cgroup_fd, server_fd));
- 
--	server_done = true;
--	CHECK_FAIL(pthread_join(tid, &server_res));
--	CHECK_FAIL(IS_ERR(server_res));
-+	stop_server_thread(server_fd);
- 
--close_server_fd:
--	close(server_fd);
- close_cgroup_fd:
- 	close(cgroup_fd);
+ 	/* Make sure we are allowed to bind here. */
+ 	if (snum || !(inet->bind_address_no_port ||
+-		      force_bind_address_no_port)) {
++		      (flags & BIND_FORCE_ADDRESS_NO_PORT))) {
+ 		if (sk->sk_prot->get_port(sk, snum)) {
+ 			inet->inet_saddr = inet->inet_rcv_saddr = 0;
+ 			err = -EADDRINUSE;
+@@ -543,7 +543,7 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+ 	sk_dst_reset(sk);
+ 	err = 0;
+ out_release_sock:
+-	if (with_lock)
++	if (flags & BIND_WITH_LOCK)
+ 		release_sock(sk);
+ out:
+ 	return err;
+diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+index 345baa0a754f..552c2592b81c 100644
+--- a/net/ipv6/af_inet6.c
++++ b/net/ipv6/af_inet6.c
+@@ -273,7 +273,7 @@ static int inet6_create(struct net *net, struct socket *sock, int protocol,
  }
+ 
+ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+-			bool force_bind_address_no_port, bool with_lock)
++			u32 flags)
+ {
+ 	struct sockaddr_in6 *addr = (struct sockaddr_in6 *)uaddr;
+ 	struct inet_sock *inet = inet_sk(sk);
+@@ -297,7 +297,7 @@ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+ 	    !ns_capable(net->user_ns, CAP_NET_BIND_SERVICE))
+ 		return -EACCES;
+ 
+-	if (with_lock)
++	if (flags & BIND_WITH_LOCK)
+ 		lock_sock(sk);
+ 
+ 	/* Check these errors (active socket, double bind). */
+@@ -400,7 +400,7 @@ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+ 
+ 	/* Make sure we are allowed to bind here. */
+ 	if (snum || !(inet->bind_address_no_port ||
+-		      force_bind_address_no_port)) {
++		      (flags & BIND_FORCE_ADDRESS_NO_PORT))) {
+ 		if (sk->sk_prot->get_port(sk, snum)) {
+ 			sk->sk_ipv6only = saved_ipv6only;
+ 			inet_reset_saddr(sk);
+@@ -423,7 +423,7 @@ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+ 	inet->inet_dport = 0;
+ 	inet->inet_daddr = 0;
+ out:
+-	if (with_lock)
++	if (flags & BIND_WITH_LOCK)
+ 		release_sock(sk);
+ 	return err;
+ out_unlock:
+@@ -451,7 +451,7 @@ int inet6_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len)
+ 	if (err)
+ 		return err;
+ 
+-	return __inet6_bind(sk, uaddr, addr_len, false, true);
++	return __inet6_bind(sk, uaddr, addr_len, BIND_WITH_LOCK);
+ }
+ EXPORT_SYMBOL(inet6_bind);
+ 
 -- 
 2.26.2.526.g744177e7f7-goog
 
