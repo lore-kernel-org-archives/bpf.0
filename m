@@ -2,493 +2,178 @@ Return-Path: <SRS0=Qn19=6T=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6510FC47247
-	for <bpf@archiver.kernel.org>; Tue,  5 May 2020 20:27:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CE78C47259
+	for <bpf@archiver.kernel.org>; Tue,  5 May 2020 20:28:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CEB724976
-	for <bpf@archiver.kernel.org>; Tue,  5 May 2020 20:27:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B30C24971
+	for <bpf@archiver.kernel.org>; Tue,  5 May 2020 20:28:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T6iFtIik"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LvPkxzo1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729213AbgEEU1q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 May 2020 16:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729037AbgEEU1o (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 5 May 2020 16:27:44 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8F7C061A0F
-        for <bpf@vger.kernel.org>; Tue,  5 May 2020 13:27:42 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id fe18so3430064qvb.11
-        for <bpf@vger.kernel.org>; Tue, 05 May 2020 13:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=4tyugyVAAYd9pLHhzPA6LyrLOrFWWfrUrNoaTQVy348=;
-        b=T6iFtIik86xhqn09RhVTekWP6onReLV0IvSxqXVtRjTvfxBwO8v3y5fmRuZQRIXTor
-         JDhpKmto/5ZtC1Hfo7om0hrYbAE1wYeC5qhvZORelOvWSRvGDeL14wcIf+6OKPr3AS2W
-         UX/h0UeTqlLipfHfpdCbRXlmaLAF8n+cROtUyDt/j90OHOGta/E59vM8CQj6niWD2NBJ
-         LkHokahqd6tJtB67xWxIJFDHdZSPUvNxouD7Z0wRdopdo7ZjPElf/n0SBxbZrsKaACqu
-         2qXNk0qMumJDTQ48ckNjFP8C/h/raG4Odwk7YCnKIY8TX6AdxCh2Yh73qKwfQH/2vHpZ
-         Hdfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=4tyugyVAAYd9pLHhzPA6LyrLOrFWWfrUrNoaTQVy348=;
-        b=MgMQDeWp6EkGKiletjnGiP94Cu7U3iVnsr3jsjfSz7Mjcqe5pUM0Mj6MURrjQr+rvw
-         Y1bBQyvZoXR0oL03uBu4AacsMZAuHIfosyEoQg2RnVeHmxQGeTJlFl/b3hzfaq90aMtp
-         TEkc8BJ5FyFG+yw3pxWM9LGVgGTYz4kovPjYL7NbA714f02Ko5QaJTG17abWw17DwdJq
-         REEV/A90IKS0zp98/kLRFMUilP+YYU4EsP7UkZpwvkjgpRFQ/amqvV1vBXjm6yZTKK2A
-         3lIjdQ8YggnhYFoBSy08CSNY5dsyS/sZacwTmrhyCY1EL/7sVwEkeYTD8oHlv+kKSHdb
-         LQMw==
-X-Gm-Message-State: AGi0Pub1r15ppZomGPmadixVGF5VkRQVzNoyDQvHnCXTlz2tbdhqDQUr
-        GUraJNeHwXkFsOCICmO6VMRbs1Q=
-X-Google-Smtp-Source: APiQypJvXmuPzJYpMvT6NvTN5Toznq2+h7E/GGKYv8xQPA7ndnqtbKBE3jDcVB8fywMEMJRu09mgz/I=
-X-Received: by 2002:a0c:f54e:: with SMTP id p14mr4799131qvm.200.1588710461706;
- Tue, 05 May 2020 13:27:41 -0700 (PDT)
-Date:   Tue,  5 May 2020 13:27:30 -0700
-In-Reply-To: <20200505202730.70489-1-sdf@google.com>
-Message-Id: <20200505202730.70489-6-sdf@google.com>
-Mime-Version: 1.0
-References: <20200505202730.70489-1-sdf@google.com>
-X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
-Subject: [PATCH bpf-next v2 5/5] selftests/bpf: move existing common
- networking parts into network_helpers
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729282AbgEEU2g (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 May 2020 16:28:36 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:29643 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729213AbgEEU2f (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 5 May 2020 16:28:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588710513;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lsuCFXl/9WOx+SBnmB7pmiseEGcoxnWbSyyl0YYGeOg=;
+        b=LvPkxzo1mOIlFajscp9hsiYJy2vUnoBZG05TysqaAkFdLOfAcac4fCGk+b1adseX3i8jYT
+        kN5DzaGcmyhkf8Kkx0mNkQdG+nEHnwWXN+oIhw1ycr5pj7xfUIofqb7ILdyNHnCepYNqbX
+        Z+2t9PimrvJJeZIrpQF8maFDTDbd5sw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-119-P4G-wqi_OwKaMgqGSpAdZg-1; Tue, 05 May 2020 16:28:29 -0400
+X-MC-Unique: P4G-wqi_OwKaMgqGSpAdZg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0BC56100CCC2;
+        Tue,  5 May 2020 20:28:28 +0000 (UTC)
+Received: from treble (ovpn-119-47.rdu2.redhat.com [10.10.119.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6F06319C58;
+        Tue,  5 May 2020 20:28:25 +0000 (UTC)
+Date:   Tue, 5 May 2020 15:28:23 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH] bpf: Tweak BPF jump table optimizations for objtool
+ compatibility
+Message-ID: <20200505202823.zkmq6t55fxspqazk@treble>
+References: <b581438a16e78559b4cea28cf8bc74158791a9b3.1588273491.git.jpoimboe@redhat.com>
+ <20200501190930.ptxyml5o4rviyo26@ast-mbp.dhcp.thefacebook.com>
+ <20200501192204.cepwymj3fln2ngpi@treble>
+ <20200501194053.xyahhknjjdu3gqix@ast-mbp.dhcp.thefacebook.com>
+ <20200501195617.czrnfqqcxfnliz3k@treble>
+ <20200502030622.yrszsm54r6s6k6gq@ast-mbp.dhcp.thefacebook.com>
+ <20200502192105.xp2osi5z354rh4sm@treble>
+ <20200505174300.gech3wr5v6kkho35@ast-mbp.dhcp.thefacebook.com>
+ <20200505181108.hwcqanvw3qf5qyxk@treble>
+ <20200505195320.lyphpnprn3sjijf6@ast-mbp.dhcp.thefacebook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200505195320.lyphpnprn3sjijf6@ast-mbp.dhcp.thefacebook.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-1. Move pkt_v4 and pkt_v6 into network_helpers and adjust the users.
-2. Copy-paste spin_lock_thread into two tests that use it.
+On Tue, May 05, 2020 at 12:53:20PM -0700, Alexei Starovoitov wrote:
+> On Tue, May 05, 2020 at 01:11:08PM -0500, Josh Poimboeuf wrote:
+> > On Tue, May 05, 2020 at 10:43:00AM -0700, Alexei Starovoitov wrote:
+> > > > Or, if you want to minimize the patch's impact on other arches, and keep
+> > > > the current patch the way it is (with bug fixed and changed patch
+> > > > description), that's fine too.  I can change the patch description
+> > > > accordingly.
+> > > > 
+> > > > Or if you want me to measure the performance impact of the +40% code
+> > > > growth, and *then* decide what to do, that's also fine.  But you'd need
+> > > > to tell me what tests to run.
+> > > 
+> > > I'd like to minimize the risk and avoid code churn,
+> > > so how about we step back and debug it first?
+> > > Which version of gcc are you using and what .config?
+> > > I've tried:
+> > > Linux version 5.7.0-rc2 (gcc version 10.0.1 20200505 (prerelease) (GCC)
+> > > CONFIG_UNWINDER_ORC=y
+> > > # CONFIG_RETPOLINE is not set
+> > > 
+> > > and objtool didn't complain.
+> > > I would like to reproduce it first before making any changes.
+> > 
+> > Revert
+> > 
+> >   3193c0836f20 ("bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()")
+> > 
+> > and compile with retpolines off (and either ORC or FP, doesn't matter).
+> > 
+> > I'm using GCC 9.3.1:
+> > 
+> >   kernel/bpf/core.o: warning: objtool: ___bpf_prog_run()+0x8dc: sibling call from callable instruction with modified stack frame
+> > 
+> > That's the original issue described in that commit.
+> 
+> I see something different.
+> With gcc 8, 9, and 10 and CCONFIG_UNWINDER_FRAME_POINTER=y
+> I see:
+> kernel/bpf/core.o: warning: objtool: ___bpf_prog_run()+0x4837: call without frame pointer save/setup
+> and sure enough assembly code for ___bpf_prog_run does not countain frame setup
+> though -fno-omit-frame-pointer flag was passed at command line.
+> Then I did:
+> static u64 /*__no_fgcse*/ ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
+> and the assembly had proper frame, but objtool wasn't happy:
+> kernel/bpf/core.o: warning: objtool: ___bpf_prog_run()+0x480a: sibling call from callable instruction with modified stack frame
+> 
+> gcc 6.3 doesn't have objtool warning with and without -fno-gcse.
+> 
+> Looks like we have two issues here.
+> First gcc 8, 9 and 10 have a severe bug with __attribute__((optimize("")))
+> In this particular case passing -fno-gcse somehow overruled -fno-omit-frame-pointer
+> which is serious issue. powerpc is using __nostackprotector. I don't understand
+> how it can keep working with newer gcc-s. May be got lucky.
+> Plenty of other projects use various __attribute__((optimize("")))
+> they all have to double check that their vesion of GCC produces correct code.
+> Can somebody reach out to gcc folks for explanation?
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- tools/testing/selftests/bpf/network_helpers.c | 17 +++++++++++
- tools/testing/selftests/bpf/network_helpers.h | 29 ++++++++++++++++++
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  |  1 +
- .../selftests/bpf/prog_tests/flow_dissector.c |  1 +
- .../prog_tests/flow_dissector_load_bytes.c    |  1 +
- .../selftests/bpf/prog_tests/global_data.c    |  1 +
- .../selftests/bpf/prog_tests/kfree_skb.c      |  1 +
- .../selftests/bpf/prog_tests/l4lb_all.c       |  1 +
- .../selftests/bpf/prog_tests/map_lock.c       | 14 +++++++++
- .../selftests/bpf/prog_tests/pkt_access.c     |  1 +
- .../selftests/bpf/prog_tests/pkt_md_access.c  |  1 +
- .../selftests/bpf/prog_tests/prog_run_xattr.c |  1 +
- .../bpf/prog_tests/queue_stack_map.c          |  1 +
- .../selftests/bpf/prog_tests/signal_pending.c |  1 +
- .../selftests/bpf/prog_tests/skb_ctx.c        |  1 +
- .../selftests/bpf/prog_tests/spinlock.c       | 14 +++++++++
- tools/testing/selftests/bpf/prog_tests/xdp.c  |  1 +
- .../bpf/prog_tests/xdp_adjust_tail.c          |  1 +
- .../selftests/bpf/prog_tests/xdp_bpf2bpf.c    |  1 +
- .../selftests/bpf/prog_tests/xdp_noinline.c   |  1 +
- tools/testing/selftests/bpf/test_progs.c      | 30 -------------------
- tools/testing/selftests/bpf/test_progs.h      | 23 --------------
- 22 files changed, 90 insertions(+), 53 deletions(-)
+Right.  I've mentioned this several times now.  That's why my patch
+reverts 3193c0836f20.  I don't see any other way around it.  The GCC
+manual even says this attribute should not be used in production code.
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 30ef0c7edebf..159ca9225596 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -25,6 +25,23 @@
- #define log_err(MSG, ...) fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", \
- 	__FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
- 
-+struct ipv4_packet pkt_v4 = {
-+	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
-+	.iph.ihl = 5,
-+	.iph.protocol = IPPROTO_TCP,
-+	.iph.tot_len = __bpf_constant_htons(MAGIC_BYTES),
-+	.tcp.urg_ptr = 123,
-+	.tcp.doff = 5,
-+};
-+
-+struct ipv6_packet pkt_v6 = {
-+	.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
-+	.iph.nexthdr = IPPROTO_TCP,
-+	.iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
-+	.tcp.urg_ptr = 123,
-+	.tcp.doff = 5,
-+};
-+
- static int start_server(int family)
- {
- 	struct sockaddr_storage addr = {};
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 74e2c40667a2..205123b53a23 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -3,6 +3,35 @@
- #define __NETWORK_HELPERS_H
- #include <sys/socket.h>
- #include <sys/types.h>
-+#include <linux/types.h>
-+typedef __u16 __sum16;
-+#include <linux/if_ether.h>
-+#include <linux/if_packet.h>
-+#include <linux/ip.h>
-+#include <linux/ipv6.h>
-+#include <netinet/tcp.h>
-+#include <bpf/bpf_endian.h>
-+
-+#define MAGIC_VAL 0x1234
-+#define NUM_ITER 100000
-+#define VIP_NUM 5
-+#define MAGIC_BYTES 123
-+
-+/* ipv4 test vector */
-+struct ipv4_packet {
-+	struct ethhdr eth;
-+	struct iphdr iph;
-+	struct tcphdr tcp;
-+} __packed;
-+extern struct ipv4_packet pkt_v4;
-+
-+/* ipv6 test vector */
-+struct ipv6_packet {
-+	struct ethhdr eth;
-+	struct ipv6hdr iph;
-+	struct tcphdr tcp;
-+} __packed;
-+extern struct ipv6_packet pkt_v6;
- 
- int start_server_thread(int family);
- void stop_server_thread(int fd);
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-index c2642517e1d8..a895bfed55db 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2019 Facebook */
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- static void test_fexit_bpf2bpf_common(const char *obj_file,
- 				      const char *target_obj_file,
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index 92563898867c..2301c4d3ecec 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- #include <error.h>
- #include <linux/if.h>
- #include <linux/if_tun.h>
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
-index dc5ef155ec28..0e8a4d2f023d 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_flow_dissector_load_bytes(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data.c b/tools/testing/selftests/bpf/prog_tests/global_data.c
-index c680926fce73..e3cb62b0a110 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- static void test_global_data_number(struct bpf_object *obj, __u32 duration)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-index 7507c8f689bc..42c3a3103c26 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- struct meta {
- 	int ifindex;
-diff --git a/tools/testing/selftests/bpf/prog_tests/l4lb_all.c b/tools/testing/selftests/bpf/prog_tests/l4lb_all.c
-index eaf64595be88..c2d373e294bb 100644
---- a/tools/testing/selftests/bpf/prog_tests/l4lb_all.c
-+++ b/tools/testing/selftests/bpf/prog_tests/l4lb_all.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- static void test_l4lb(const char *file)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_lock.c b/tools/testing/selftests/bpf/prog_tests/map_lock.c
-index 8f91f1881d11..ce17b1ed8709 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_lock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_lock.c
-@@ -1,5 +1,19 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
-+
-+static void *spin_lock_thread(void *arg)
-+{
-+	__u32 duration, retval;
-+	int err, prog_fd = *(u32 *) arg;
-+
-+	err = bpf_prog_test_run(prog_fd, 10000, &pkt_v4, sizeof(pkt_v4),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "",
-+	      "err %d errno %d retval %d duration %d\n",
-+	      err, errno, retval, duration);
-+	pthread_exit(arg);
-+}
- 
- static void *parallel_map_access(void *arg)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/pkt_access.c b/tools/testing/selftests/bpf/prog_tests/pkt_access.c
-index a2537dfa899c..44b514fabccd 100644
---- a/tools/testing/selftests/bpf/prog_tests/pkt_access.c
-+++ b/tools/testing/selftests/bpf/prog_tests/pkt_access.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_pkt_access(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c b/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
-index 5f7aea605019..939015cd6dba 100644
---- a/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
-+++ b/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_pkt_md_access(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c b/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
-index 5dd89b941f53..dde2b7ae7bc9 100644
---- a/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_prog_run_xattr(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-index faccc66f4e39..f47e7b1cb32c 100644
---- a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- enum {
- 	QUEUE,
-diff --git a/tools/testing/selftests/bpf/prog_tests/signal_pending.c b/tools/testing/selftests/bpf/prog_tests/signal_pending.c
-index 996e808f43a2..dfcbddcbe4d3 100644
---- a/tools/testing/selftests/bpf/prog_tests/signal_pending.c
-+++ b/tools/testing/selftests/bpf/prog_tests/signal_pending.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- static void sigalrm_handler(int s) {}
- static struct sigaction sigalrm_action = {
-diff --git a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-index 4538bd08203f..7021b92af313 100644
---- a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-+++ b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_skb_ctx(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/spinlock.c b/tools/testing/selftests/bpf/prog_tests/spinlock.c
-index 1ae00cd3174e..7577a77a4c4c 100644
---- a/tools/testing/selftests/bpf/prog_tests/spinlock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/spinlock.c
-@@ -1,5 +1,19 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
-+
-+static void *spin_lock_thread(void *arg)
-+{
-+	__u32 duration, retval;
-+	int err, prog_fd = *(u32 *) arg;
-+
-+	err = bpf_prog_test_run(prog_fd, 10000, &pkt_v4, sizeof(pkt_v4),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "",
-+	      "err %d errno %d retval %d duration %d\n",
-+	      err, errno, retval, duration);
-+	pthread_exit(arg);
-+}
- 
- void test_spinlock(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp.c b/tools/testing/selftests/bpf/prog_tests/xdp.c
-index dcb5ecac778e..48921ff74850 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_xdp(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-index 3744196d7cba..6c8ca1c93f9b 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_xdp_adjust_tail(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
-index a0f688c37023..2c6c570b21f8 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- #include <net/if.h>
- #include "test_xdp.skel.h"
- #include "test_xdp_bpf2bpf.skel.h"
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_noinline.c b/tools/testing/selftests/bpf/prog_tests/xdp_noinline.c
-index c9404e6b226e..f284f72158ef 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_noinline.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_noinline.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_xdp_noinline(void)
- {
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 93970ec1c9e9..0f411fdc4f6d 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -222,23 +222,6 @@ int test__join_cgroup(const char *path)
- 	return fd;
- }
- 
--struct ipv4_packet pkt_v4 = {
--	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
--	.iph.ihl = 5,
--	.iph.protocol = IPPROTO_TCP,
--	.iph.tot_len = __bpf_constant_htons(MAGIC_BYTES),
--	.tcp.urg_ptr = 123,
--	.tcp.doff = 5,
--};
--
--struct ipv6_packet pkt_v6 = {
--	.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
--	.iph.nexthdr = IPPROTO_TCP,
--	.iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
--	.tcp.urg_ptr = 123,
--	.tcp.doff = 5,
--};
--
- int bpf_find_map(const char *test, struct bpf_object *obj, const char *name)
- {
- 	struct bpf_map *map;
-@@ -358,19 +341,6 @@ int extract_build_id(char *build_id, size_t size)
- 	return -1;
- }
- 
--void *spin_lock_thread(void *arg)
--{
--	__u32 duration, retval;
--	int err, prog_fd = *(u32 *) arg;
--
--	err = bpf_prog_test_run(prog_fd, 10000, &pkt_v4, sizeof(pkt_v4),
--				NULL, NULL, &retval, &duration);
--	CHECK(err || retval, "",
--	      "err %d errno %d retval %d duration %d\n",
--	      err, errno, retval, duration);
--	pthread_exit(arg);
--}
--
- /* extern declarations for test funcs */
- #define DEFINE_TEST(name) extern void test_##name(void);
- #include <prog_tests/tests.h>
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index 10188cc8e9e0..83287c76332b 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -87,24 +87,6 @@ extern void test__skip(void);
- extern void test__fail(void);
- extern int test__join_cgroup(const char *path);
- 
--#define MAGIC_BYTES 123
--
--/* ipv4 test vector */
--struct ipv4_packet {
--	struct ethhdr eth;
--	struct iphdr iph;
--	struct tcphdr tcp;
--} __packed;
--extern struct ipv4_packet pkt_v4;
--
--/* ipv6 test vector */
--struct ipv6_packet {
--	struct ethhdr eth;
--	struct ipv6hdr iph;
--	struct tcphdr tcp;
--} __packed;
--extern struct ipv6_packet pkt_v6;
--
- #define PRINT_FAIL(format...)                                                  \
- 	({                                                                     \
- 		test__fail();                                                  \
-@@ -143,10 +125,6 @@ extern struct ipv6_packet pkt_v6;
- #define CHECK_ATTR(condition, tag, format...) \
- 	_CHECK(condition, tag, tattr.duration, format)
- 
--#define MAGIC_VAL 0x1234
--#define NUM_ITER 100000
--#define VIP_NUM 5
--
- static inline __u64 ptr_to_u64(const void *ptr)
- {
- 	return (__u64) (unsigned long) ptr;
-@@ -156,7 +134,6 @@ int bpf_find_map(const char *test, struct bpf_object *obj, const char *name);
- int compare_map_keys(int map1_fd, int map2_fd);
- int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len);
- int extract_build_id(char *build_id, size_t size);
--void *spin_lock_thread(void *arg);
- 
- #ifdef __x86_64__
- #define SYS_NANOSLEEP_KPROBE_NAME "__x64_sys_nanosleep"
+> The second objtool issue is imo minor one. It can be worked around for now
+> and fixed for real later.
+
+Ok, so keep the patch like v1 (but with the bug fixed)?  Or did you want
+to get rid of 'goto select_insn' altogether?
+
+> > > Also since objtool cannot follow the optimizations compiler is doing
+> > > how about admit the design failure and teach objtool to build ORC
+> > > (and whatever else it needs to build) based on dwarf for the functions where
+> > > it cannot understand the assembly code ?
+> > > Otherwise objtool will forever be playing whackamole with compilers.
+> > 
+> > I agree it's not a good long term approach.  But DWARF has its own
+> > issues and we can't rely on it for live patching.
+> 
+> Curious what is the issue with dwarf and live patching ?
+> I'm sure dwarf is enough to build ORC tables.
+
+DWARF is a best-effort thing, but for live patching, unwinding has to be
+100% accurate.
+
+For assembly code it was impossible to keep all the DWARF CFI
+annotations always up to date and to ensure they were correct.
+
+Even for C code there were DWARF problems with inline asm, alternatives
+patching, jump labels, etc.
+
+> > As I mentioned we have a plan to use a compiler plugin to annotate jump
+> > tables (including GCC switch tables).  But the approach taken by this
+> > patch should be good enough for now.
+> 
+> I don't have gcc 7 around. Could you please test the workaround with gcc 7,8,9,10
+> and several clang versions? With ORC and with FP ? and retpoline on/off ?
+> I don't see any issues with ORC=y. objtool complains with FP=y only for my configs.
+> I want to make sure the workaround is actually effective.
+
+Again, if you revert 3193c0836f20, you will see the issue...
+
+I can certainly test on the matrix of compilers/configs you suggested.
+
 -- 
-2.26.2.526.g744177e7f7-goog
+Josh
 
