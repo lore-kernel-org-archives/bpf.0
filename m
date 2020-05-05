@@ -2,64 +2,66 @@ Return-Path: <SRS0=Qn19=6T=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51230C47247
-	for <bpf@archiver.kernel.org>; Tue,  5 May 2020 20:16:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAC60C47247
+	for <bpf@archiver.kernel.org>; Tue,  5 May 2020 20:25:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 28E4B2068E
-	for <bpf@archiver.kernel.org>; Tue,  5 May 2020 20:16:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 96D142068E
+	for <bpf@archiver.kernel.org>; Tue,  5 May 2020 20:25:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LmxoHCyt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="knFnGONG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728569AbgEEUQD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 May 2020 16:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
+        id S1728135AbgEEUZi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 May 2020 16:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727785AbgEEUQD (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 5 May 2020 16:16:03 -0400
+        by vger.kernel.org with ESMTP id S1726350AbgEEUZh (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 5 May 2020 16:25:37 -0400
 Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDBEC061A0F;
-        Tue,  5 May 2020 13:16:03 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id b188so3744512qkd.9;
-        Tue, 05 May 2020 13:16:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24D0C061A0F;
+        Tue,  5 May 2020 13:25:37 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id s9so3797949qkm.6;
+        Tue, 05 May 2020 13:25:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=TqRbVHLIMt67JTCk+jjBMibZD2NP6+r1URSVPlpIb6c=;
-        b=LmxoHCytX9SU4Ya2lIHtO+3d7XsiXVF4x+Jcdi+7PTa2CySfIHKyI7EBLc8lfWlI1+
-         FW1IXwWBXjqQobqcp1p7z8S9rtBgeDDjO4NWFpgpFKZ757gNThDgDp6gHVYR2pwWapLJ
-         PpsUY+nvcyi961L5NWs32eABLwaYMhEpOfcD0aPRU5RsqywDIiYZWoAvpmpz0aAT/f9j
-         K3HFHpEzlB2imar35W/REjwxjxiSnPHhUI+6+SK6SBlLuUxN2HmCXeyAzmjIZnmxcM2K
-         1ZZ+nYLsbCR/oSyVsZef1d4pH5lbuwB6+nj+a/iMTIfdt2Ea15p6TjCUC3hqcejZ6H7M
-         UjNg==
+        bh=31quMcEe+xzAma9ThSUMOHC1dZ8mo7IqQp3gHntaaWE=;
+        b=knFnGONGR9cy6HQzfwvysX837qMuCzYoUNoTkhR3UlkerBlgOL81mhisLn4ESXVROO
+         yKys/zNRz8vm1WsfvY0gnKW0cFxHxfu/rV25EUYxuoEsB4sRox04ZlG0K4M2FJnzSSBd
+         USeXfUeu0oXrYvhwrUQlT9DpziS5SyJvGKRZ9/H7MX+hT3QNTwGcxq68H3lrRabYMJo2
+         hbngezUVVxqjpQWzpmu4zYjMAfizmoTx7C5mY9UrXFq8X/8ijrIflQYqIx0j9egE7HHP
+         yN/8bjxhRe7GDuc0kl71z5S5CxGQ5iGk3JsHQPhRGReX8LCVZ+Bmm8aDjOsu58cY7Udx
+         G6lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TqRbVHLIMt67JTCk+jjBMibZD2NP6+r1URSVPlpIb6c=;
-        b=h53/N1kVeI5jGzWpMYUEvTdSlB3UTGcIZhepLxdyCe5CQPs1/41Lb0egTWexpSXiUH
-         +1DV6G5Aj7C9UNMM2SZqL6E+imSWV+QHnBueNDGH/EcE/vJmz/Wu9FBEPupungFMQPlH
-         X9Olog5kU+64BRpzI12HmIwsB6rC60Q5FU43+RMa+izzNjNA/xitnm55c3OvXnHUsHEA
-         4I6YksxlFDmxCV4Ldtbxrh1zyitqFPR7PCnHK3xfWuN/xLZTOxjwiyol3mCk9Ul3W9I0
-         mD0ALCcSiCMoiWakFVFKTCLzbcI6ZA/14R6wHS2CQjxaXgzbGtKC3tVDPL5vV2z7/EPW
-         o0Mw==
-X-Gm-Message-State: AGi0PuYcPB3sFG6m8g775k23yJKa4y2hj9LtVKAaR2tsdHhwwxNTCqUu
-        zlxHqYuVjrnsxekihJdRrZpDtnrow05tykmEN68=
-X-Google-Smtp-Source: APiQypLL/41T5XJ5f77N1Y9DqxAnKNB9tmD/hcokoaqiolvAmxnaLOtNbbLqbbNPnCNXwO40g9yCXxMFfwRexkoNMoM=
-X-Received: by 2002:a37:68f:: with SMTP id 137mr5493096qkg.36.1588709762191;
- Tue, 05 May 2020 13:16:02 -0700 (PDT)
+        bh=31quMcEe+xzAma9ThSUMOHC1dZ8mo7IqQp3gHntaaWE=;
+        b=M775OpJ8EPYUMmJeOzEUwyLcHDPO9BACrHSGmAifIgJEy4P/X2LvosVzah0A4LmH4O
+         RCZT1m/0xzoeyrvhCKfY4Wj2QUv5eXl+cPY7hgDf910pU03dvUl5D9GkCIS+73c/Cmfj
+         beAprhdAsYeRuPkLOYB/9VDk9IUhY+w25Hy4Cis2SSh2vCiBDVDu/7YU1kQNbZvsE5cv
+         5xk1LFmi9rm0BAuZz7BzZJTDMzEMW6nFrc+p1+S7PdpBZzx0yPdxHQ54E1FFzM1snRUv
+         rrY3/KnVcOOtuDNdqI2UcYAIIMILGIAp9+AcRALNxfQzzdC21NTEuATObtqT/YOTgbAS
+         tscw==
+X-Gm-Message-State: AGi0PuYfsiON01I62NIiOnHgMJrWy/XFhZmz2rnVVT5R8Y5WFkz3y1Z+
+        zZsjas33ydasrj22i92SYgolGvNfEeNyyWSSPqrndA==
+X-Google-Smtp-Source: APiQypK0K9lHXQaunJT8xUuY3/xAByv3/y+rPLG6IKETIukm8oiJg7MtOyLfwe8PrSyOwUH0A1NAHcq0xeE+RQugcYM=
+X-Received: by 2002:ae9:e713:: with SMTP id m19mr5427278qka.39.1588710336853;
+ Tue, 05 May 2020 13:25:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200504062547.2047304-1-yhs@fb.com> <20200504062554.2047969-1-yhs@fb.com>
-In-Reply-To: <20200504062554.2047969-1-yhs@fb.com>
+References: <20200504062547.2047304-1-yhs@fb.com> <20200504062555.2048028-1-yhs@fb.com>
+In-Reply-To: <20200504062555.2048028-1-yhs@fb.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 5 May 2020 13:15:51 -0700
-Message-ID: <CAEf4Bzbrjq86rtfxvbfmNRbgtOnZ5LCe9PoCDSxtyUXOxFzFrA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 07/20] bpf: create file bpf iterator
+Date:   Tue, 5 May 2020 13:25:25 -0700
+Message-ID: <CAEf4BzZnzKrTX4sN+PJC8fhdv=+gXMTAan=OUfgRFtvusfnaWQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 08/20] bpf: implement common macros/helpers
+ for target iterators
 To:     Yonghong Song <yhs@fb.com>
 Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
@@ -73,24 +75,84 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, May 3, 2020 at 11:26 PM Yonghong Song <yhs@fb.com> wrote:
+On Sun, May 3, 2020 at 11:28 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> To produce a file bpf iterator, the fd must be
-> corresponding to a link_fd assocciated with a
-> trace/iter program. When the pinned file is
-> opened, a seq_file will be generated.
+> Macro DEFINE_BPF_ITER_FUNC is implemented so target
+> can define an init function to capture the BTF type
+> which represents the target.
+>
+> The bpf_iter_meta is a structure holding meta data, common
+> to all targets in the bpf program.
+>
+> Additional marker functions are called before/after
+> bpf_seq_read() show() and stop() callback functions
+> to help calculate precise seq_num and whether call bpf_prog
+> inside stop().
+>
+> Two functions, bpf_iter_get_info() and bpf_iter_run_prog(),
+> are implemented so target can get needed information from
+> bpf_iter infrastructure and can run the program.
 >
 > Signed-off-by: Yonghong Song <yhs@fb.com>
 > ---
-
-LGTM.
-
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-
->  include/linux/bpf.h   |  2 ++
->  kernel/bpf/bpf_iter.c | 17 ++++++++++++++++-
->  kernel/bpf/inode.c    |  5 ++++-
->  3 files changed, 22 insertions(+), 2 deletions(-)
+>  include/linux/bpf.h   | 11 +++++
+>  kernel/bpf/bpf_iter.c | 94 ++++++++++++++++++++++++++++++++++++++++---
+>  2 files changed, 100 insertions(+), 5 deletions(-)
 >
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 26daf85cba10..70c71c3cd9e8 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1129,6 +1129,9 @@ int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
+>  int bpf_obj_get_user(const char __user *pathname, int flags);
+>
+>  #define BPF_ITER_FUNC_PREFIX "__bpf_iter__"
+> +#define DEFINE_BPF_ITER_FUNC(target, args...)                  \
+> +       extern int __bpf_iter__ ## target(args);                \
+> +       int __init __bpf_iter__ ## target(args) { return 0; }
+
+Why is extern declaration needed here? Doesn't the same macro define
+global function itself? I'm probably missing some C semantics thingy,
+sorry...
+
+>
+>  typedef int (*bpf_iter_init_seq_priv_t)(void *private_data);
+>  typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
+> @@ -1141,11 +1144,19 @@ struct bpf_iter_reg {
+>         u32 seq_priv_size;
+>  };
+>
+> +struct bpf_iter_meta {
+> +       __bpf_md_ptr(struct seq_file *, seq);
+> +       u64 session_id;
+> +       u64 seq_num;
+> +};
+> +
+
+[...]
+
+>  /* bpf_seq_read, a customized and simpler version for bpf iterator.
+>   * no_llseek is assumed for this file.
+>   * The following are differences from seq_read():
+> @@ -83,12 +119,15 @@ static ssize_t bpf_seq_read(struct file *file, char __user *buf, size_t size,
+>         if (!p || IS_ERR(p))
+>                 goto Stop;
+>
+> +       bpf_iter_inc_seq_num(seq);
+
+so seq_num is one-based, not zero-based? So on first show() call it
+will be set to 1, not 0, right?
+
+>         err = seq->op->show(seq, p);
+>         if (seq_has_overflowed(seq)) {
+> +               bpf_iter_dec_seq_num(seq);
+>                 err = -E2BIG;
+>                 goto Error_show;
+>         } else if (err) {
+>                 /* < 0: go out, > 0: skip */
+> +               bpf_iter_dec_seq_num(seq);
+>                 if (likely(err < 0))
+>                         goto Error_show;
+>                 seq->count = 0;
 
 [...]
