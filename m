@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BE59C47247
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 00:03:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 122FEC47259
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 00:03:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D5C32073B
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 00:03:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E053B20721
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 00:03:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="WWgQHX+Y"
+	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="DGRBrU5l"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729691AbgEFADf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 May 2020 20:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
+        id S1728717AbgEFADh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 May 2020 20:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729660AbgEFADc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 May 2020 20:03:32 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D135C061A41
-        for <bpf@vger.kernel.org>; Tue,  5 May 2020 17:03:32 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id t40so6072pjb.3
-        for <bpf@vger.kernel.org>; Tue, 05 May 2020 17:03:32 -0700 (PDT)
+        with ESMTP id S1729710AbgEFADg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 May 2020 20:03:36 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9958C061A41
+        for <bpf@vger.kernel.org>; Tue,  5 May 2020 17:03:35 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id t9so10872pjw.0
+        for <bpf@vger.kernel.org>; Tue, 05 May 2020 17:03:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cs.washington.edu; s=goo201206;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Id4q2WjCYOrW61i2K14Kt2NNedsMqfC6xR/4pooTMDs=;
-        b=WWgQHX+Y4p9hK1G/FEcHNTzvkaxWU0KQ8imb0c+RIKk5ZSkTMKVkHpqsV715tijoGT
-         Z80hmH950M3h4QaqBw3xqEQI7fMdRBGHEKkN82NyEi9jO1C8Z9hczLrQpMZT6/QJ6stu
-         UHfCqrxFw4PhETIA/3OdRRpCBlXcKXHPGGpyQ=
+        bh=FX6e20EgkCKDRplcbN8VIX8Q54OU7fQsuv0YDgw22to=;
+        b=DGRBrU5lGGOAfmrpZkIzPhRETbzDiQU82spA1HQTJz0PJGRxx2nnsDinlYJB08t5Gs
+         N9qJ+YxSQDx6R8jEiQy/+pinOvUHPL0UQsiyoQHMaWua1KOwacCH4h3fA7qjmKdgQx60
+         egKbXI77B4sIMlPNVqIq+HeFM8XxaWfSoTxPs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Id4q2WjCYOrW61i2K14Kt2NNedsMqfC6xR/4pooTMDs=;
-        b=nzNLSro7/Qa2/Nv8E9sAVTFbs+n8JnTTtQBKzlso1ljk6ir66Lns/uUpF1RV28NZNR
-         a3ZNv8lAN4ahieYZCS6DmlQ4d4xTqFKSfvBG3+dO5w5vCUh4/B8KODY+98oc7Px0m0pU
-         l4D/asT2Y0ke55VksRDj3TTIUK43C/Z8dcxkLirJdRgkNvXWGX6tdgENQSIqn/vuIHJ3
-         A7Xj3vTdLvMiDDlmGUSHg4odfMcgb7DwVFab3Sk9MuY523oUy3o4a6YUcUN0pVJsV2sC
-         QW1wslKxjOpqA22XjzP+uem9x/rf5dDoZU1Aol3lU+pfMZOeY6TcyapU9Wfq5ENNGJI6
-         k5kw==
-X-Gm-Message-State: AGi0PuYw3DGxu14dHQ9UT2fil+HRY2BHGjKBztvaRgPwYs0xGY3vIs7K
-        zbxrncIqg4eFdgs+L8PvoR9sxN15M08iow==
-X-Google-Smtp-Source: APiQypIGsXA7WERwt6mP7MtumZ6T6wthtsmMazY24L57aiRfQ7umVKhw5qH3l242C3V99Jnj+CTRdw==
-X-Received: by 2002:a17:90b:3751:: with SMTP id ne17mr5833508pjb.114.1588723411567;
-        Tue, 05 May 2020 17:03:31 -0700 (PDT)
+        bh=FX6e20EgkCKDRplcbN8VIX8Q54OU7fQsuv0YDgw22to=;
+        b=p48FNqSG8K8EN6Cfs5eQoL8ZSLBY6O2U8wWYA9ytQ/HkzbqyrJPoZ6e3Q0JUG/u3pM
+         9nCido1MUsi9DGwyL3pqC5bckxD2iXrqf+qPjwHDHe4aUzTwJ3Pdkai6rKm7g3CSClCn
+         WrarFXN0zV+vKB6DWAYeZXHvGYjiljvP7CQOBJD8Q1sTyVyqcqhwphwPHu16/dc8TrW9
+         mrIe76PgFalTl2adf5mcXI/I0aO5R4gV70TXBQj0lno6AoTCL2gGw2RZNLROW7o4jo29
+         eD/uBcvxAtjipEeB3bL3XmC6yaXxmFa9pPG4ARfHV2JvQRS1z9lyGlghfbuNDJU9c7gx
+         as+A==
+X-Gm-Message-State: AGi0PuawhWJrp0QYW25oxJWuPo9fvsOUg01JOv+CoxdN+UPr4lim/oJ4
+        6e6Ek6zPvfh9bVTDbDLfsMoAhAmmMv5yfw==
+X-Google-Smtp-Source: APiQypLNx/JIySQJ9tf33R7EMx5nSMIBF/Nl3MLH+ZUPJbxEIkPuPEABvWRA4nvRflSAMZlcjS6SUw==
+X-Received: by 2002:a17:90a:7065:: with SMTP id f92mr3527567pjk.160.1588723414979;
+        Tue, 05 May 2020 17:03:34 -0700 (PDT)
 Received: from localhost.localdomain (c-73-53-94-119.hsd1.wa.comcast.net. [73.53.94.119])
-        by smtp.gmail.com with ESMTPSA id u3sm133912pfn.217.2020.05.05.17.03.30
+        by smtp.gmail.com with ESMTPSA id u3sm133912pfn.217.2020.05.05.17.03.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 May 2020 17:03:31 -0700 (PDT)
+        Tue, 05 May 2020 17:03:34 -0700 (PDT)
 From:   Luke Nelson <lukenels@cs.washington.edu>
 X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
 To:     bpf@vger.kernel.org
@@ -69,9 +69,9 @@ Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>, netdev@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 1/4] bpf, riscv: Enable missing verifier_zext optimizations on RV64
-Date:   Tue,  5 May 2020 17:03:17 -0700
-Message-Id: <20200506000320.28965-2-luke.r.nels@gmail.com>
+Subject: [PATCH bpf-next 4/4] bpf, riscv: Optimize BPF_JSET BPF_K using andi on RV64
+Date:   Tue,  5 May 2020 17:03:20 -0700
+Message-Id: <20200506000320.28965-5-luke.r.nels@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200506000320.28965-1-luke.r.nels@gmail.com>
 References: <20200506000320.28965-1-luke.r.nels@gmail.com>
@@ -80,60 +80,98 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit 66d0d5a854a6 ("riscv: bpf: eliminate zero extension code-gen")
-added support for the verifier zero-extension optimization on RV64 and
-commit 46dd3d7d287b ("bpf, riscv: Enable zext optimization for more
-RV64G ALU ops") enabled it for more instruction cases.
+This patch optimizes BPF_JSET BPF_K by using a RISC-V andi instruction
+when the BPF immediate fits in 12 bits, instead of first loading the
+immediate to a temporary register.
 
-However, BPF_LSH BPF_X and BPF_{LSH,RSH,ARSH} BPF_K are still missing
-the optimization.
+Examples of generated code with and without this optimization:
 
-This patch enables the zero-extension optimization for these remaining
-cases.
+BPF_JMP_IMM(BPF_JSET, R1, 2, 1) without optimization:
+
+  20: li    t1,2
+  24: and   t1,a0,t1
+  28: bnez  t1,0x30
+
+BPF_JMP_IMM(BPF_JSET, R1, 2, 1) with optimization:
+
+  20: andi  t1,a0,2
+  24: bnez  t1,0x2c
+
+BPF_JMP32_IMM(BPF_JSET, R1, 2, 1) without optimization:
+
+  20: li    t1,2
+  24: mv    t2,a0
+  28: slli  t2,t2,0x20
+  2c: srli  t2,t2,0x20
+  30: slli  t1,t1,0x20
+  34: srli  t1,t1,0x20
+  38: and   t1,t2,t1
+  3c: bnez  t1,0x44
+
+BPF_JMP32_IMM(BPF_JSET, R1, 2, 1) with optimization:
+
+  20: andi  t1,a0,2
+  24: bnez  t1,0x2c
+
+In these examples, because the upper 32 bits of the sign-extended
+immediate are 0, BPF_JMP BPF_JSET and BPF_JMP32 BPF_JSET are equivalent
+and therefore the JIT produces identical code for them.
 
 Co-developed-by: Xi Wang <xi.wang@gmail.com>
 Signed-off-by: Xi Wang <xi.wang@gmail.com>
 Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
 ---
- arch/riscv/net/bpf_jit_comp64.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/riscv/net/bpf_jit_comp64.c | 27 +++++++++++++++++++--------
+ 1 file changed, 19 insertions(+), 8 deletions(-)
 
 diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index d208a9fd6c52..e2636902a74e 100644
+index b07cef952019..6cfd164cbe88 100644
 --- a/arch/riscv/net/bpf_jit_comp64.c
 +++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -515,7 +515,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ALU | BPF_LSH | BPF_X:
- 	case BPF_ALU64 | BPF_LSH | BPF_X:
- 		emit(is64 ? rv_sll(rd, rd, rs) : rv_sllw(rd, rd, rs), ctx);
--		if (!is64)
-+		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_RSH | BPF_X:
-@@ -692,19 +692,19 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ALU | BPF_LSH | BPF_K:
- 	case BPF_ALU64 | BPF_LSH | BPF_K:
- 		emit(is64 ? rv_slli(rd, rd, imm) : rv_slliw(rd, rd, imm), ctx);
--		if (!is64)
-+		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_RSH | BPF_K:
- 	case BPF_ALU64 | BPF_RSH | BPF_K:
- 		emit(is64 ? rv_srli(rd, rd, imm) : rv_srliw(rd, rd, imm), ctx);
--		if (!is64)
-+		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_ARSH | BPF_K:
- 	case BPF_ALU64 | BPF_ARSH | BPF_K:
- 		emit(is64 ? rv_srai(rd, rd, imm) : rv_sraiw(rd, rd, imm), ctx);
--		if (!is64)
-+		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
+@@ -792,8 +792,6 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 	case BPF_JMP32 | BPF_JSGE | BPF_K:
+ 	case BPF_JMP | BPF_JSLE | BPF_K:
+ 	case BPF_JMP32 | BPF_JSLE | BPF_K:
+-	case BPF_JMP | BPF_JSET | BPF_K:
+-	case BPF_JMP32 | BPF_JSET | BPF_K:
+ 		rvoff = rv_offset(i, off, ctx);
+ 		s = ctx->ninsns;
+ 		if (imm) {
+@@ -813,15 +811,28 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 
+ 		/* Adjust for extra insns */
+ 		rvoff -= (e - s) << 2;
++		emit_branch(BPF_OP(code), rd, rs, rvoff, ctx);
++		break;
+ 
+-		if (BPF_OP(code) == BPF_JSET) {
+-			/* Adjust for and */
+-			rvoff -= 4;
+-			emit(rv_and(rs, rd, rs), ctx);
+-			emit_branch(BPF_JNE, rs, RV_REG_ZERO, rvoff, ctx);
++	case BPF_JMP | BPF_JSET | BPF_K:
++	case BPF_JMP32 | BPF_JSET | BPF_K:
++		rvoff = rv_offset(i, off, ctx);
++		s = ctx->ninsns;
++		if (is_12b_int(imm)) {
++			emit(rv_andi(RV_REG_T1, rd, imm), ctx);
+ 		} else {
+-			emit_branch(BPF_OP(code), rd, rs, rvoff, ctx);
++			emit_imm(RV_REG_T1, imm, ctx);
++			emit(rv_and(RV_REG_T1, rd, RV_REG_T1), ctx);
+ 		}
++		/* For jset32, we should clear the upper 32 bits of t1, but
++		 * sign-extension is sufficient here and saves one instruction,
++		 * as t1 is used only in comparison against zero.
++		 */
++		if (!is64 && imm < 0)
++			emit(rv_addiw(RV_REG_T1, RV_REG_T1, 0), ctx);
++		e = ctx->ninsns;
++		rvoff -= (e - s) << 2;
++		emit_branch(BPF_JNE, RV_REG_T1, RV_REG_ZERO, rvoff, ctx);
  		break;
  
+ 	/* function call */
 -- 
 2.17.1
 
