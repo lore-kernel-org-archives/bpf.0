@@ -2,161 +2,102 @@ Return-Path: <SRS0=COpY=6U=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FF80C47256
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 06:15:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6091AC28CBC
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 06:16:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D9D9206E6
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 06:15:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3CA85206E6
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 06:16:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/HlFfPU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J5Oya5pV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727790AbgEFGPK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 May 2020 02:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726495AbgEFGPJ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 6 May 2020 02:15:09 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB101C061A0F;
-        Tue,  5 May 2020 23:15:07 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id n14so830109qke.8;
-        Tue, 05 May 2020 23:15:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IbAkNjcaFmar4aPjN7+DvzPMwhKo6sHjCis4p0bqYOY=;
-        b=T/HlFfPUdAjwdFgOBelJYC1zALFgT0/GuvvG8mePq5sVOdbsuSlNhFCX7HHZLecf9Y
-         ujxRoySYk5Hyq5Ve38uUJmEM05fAeiLrvibsnasD0jydl/oGK69FopkMhqwtaNPL8Jdm
-         RITkSYjrpNfJazsS/m56knCnm3lLp2TtfIJ1wxd591ANX9uoGYfVbPyl7azzZUqCXZD5
-         j6na4d9uUNDlPPVnLiyVmUwxSjnuj+aXK1yV0H5zgAriZ616DLw8TP8oo7gAub+gj7p7
-         saQSb64rll3gIH3fTAo9oZCNgZAJwfF8dwYepnkBvn7KKcTaqS5b87LJKQfu1ly9WuZg
-         080Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IbAkNjcaFmar4aPjN7+DvzPMwhKo6sHjCis4p0bqYOY=;
-        b=ieesnKv6C0+F7VvHA5VGA2blBt/c6ARb+J8T9Qk9ZQaQHAQKtF9DtZ98dSvsh8DiQW
-         4IhsyTLIBPacs0uRt2W21y2R75Gz1847rvaIL7ENux/Astb2uVCExPbjLN6dIlqozUh9
-         JMceQCrJ+q8NRPYCgfWbJX9OHLxBVdeasJGvocbWWgtyqxvFOv6IiitZCLW79OuAsHg/
-         nO5angRMyc6vz50t8zA+qcRtoZc5gYt1glzfRNo0qQ4Bn2arKmGiYtaDYxrLb1VqIm3p
-         LVy0ZVNIgGSK5Dr2iG6ZYCpd+MbhNfSq+6it8BWlxq9sg1EkrsgSmEG4Q8Mom9KfiF7j
-         wuGw==
-X-Gm-Message-State: AGi0Pub2QkQi4+Vq9vXcOHJoSuyITElr3bfMChfv92Ubt4CwTMMmCkMT
-        VhEYVHUHl9lJsRpH9boS0v7/fLYb2/lIoYlS+dujDg==
-X-Google-Smtp-Source: APiQypIeXDRf934Bxr5hKdZWWGztldMWyL8G2QSZ7bpigJ1mXcBoSOG1f2yLCP106B7E8HRoAqgYPvVDn9WNWQq0Thg=
-X-Received: by 2002:a05:620a:14a1:: with SMTP id x1mr7094835qkj.92.1588745707169;
- Tue, 05 May 2020 23:15:07 -0700 (PDT)
+        id S1727095AbgEFGQt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 May 2020 02:16:49 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:46489 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727067AbgEFGQt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 6 May 2020 02:16:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588745809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9cPGlRr13R9dEpHsCHTbKzUmba6essHkh9NkHk5FoYQ=;
+        b=J5Oya5pVxSWK2hu+981FBxpk9xh8YjiZ1Oh257JhQ61OPYWa7gVzevsq/977rtzO8+YgqJ
+        KbpaNvrUw2ZlEgECDyxUUiKFJZHQcZf914s9iey3G39ZQKkvSxeuQ7k8b6sb9eoVqqd4tM
+        QvD1O5EkUt3IfAQjgkpjHiz0swZ9C2Q=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-232-IzUrd-WrNhCFIgkZxw2F0w-1; Wed, 06 May 2020 02:16:44 -0400
+X-MC-Unique: IzUrd-WrNhCFIgkZxw2F0w-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A2B97EC1A0;
+        Wed,  6 May 2020 06:16:43 +0000 (UTC)
+Received: from jason-ThinkPad-X1-Carbon-6th.redhat.com (ovpn-13-165.pek2.redhat.com [10.72.13.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 70BBC5C1D4;
+        Wed,  6 May 2020 06:16:35 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+Subject: [PATCH net-next 1/2] virtio-net: don't reserve space for vnet header for XDP
+Date:   Wed,  6 May 2020 14:16:32 +0800
+Message-Id: <20200506061633.16327-1-jasowang@redhat.com>
 MIME-Version: 1.0
-References: <20200504062547.2047304-1-yhs@fb.com> <20200504062609.2049143-1-yhs@fb.com>
-In-Reply-To: <20200504062609.2049143-1-yhs@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 5 May 2020 23:14:56 -0700
-Message-ID: <CAEf4BzazZ4esM0z5ZTM9PGfODfTtQB1AskPc1g139t5emUWb1Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 19/20] tools/bpf: selftests: add iter progs
- for bpf_map/task/task_file
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, May 3, 2020 at 11:27 PM Yonghong Song <yhs@fb.com> wrote:
->
-> The implementation is arbitrary, just to show how the bpf programs
-> can be written for bpf_map/task/task_file. They can be costomized
-> for specific needs.
->
-> For example, for bpf_map, the iterator prints out:
->   $ cat /sys/fs/bpf/my_bpf_map
->       id   refcnt  usercnt  locked_vm
->        3        2        0         20
->        6        2        0         20
->        9        2        0         20
->       12        2        0         20
->       13        2        0         20
->       16        2        0         20
->       19        2        0         20
->       === END ===
->
-> For task, the iterator prints out:
->   $ cat /sys/fs/bpf/my_task
->     tgid      gid
->        1        1
->        2        2
->     ....
->     1944     1944
->     1948     1948
->     1949     1949
->     1953     1953
->     === END ===
->
-> For task/file, the iterator prints out:
->   $ cat /sys/fs/bpf/my_task_file
->     tgid      gid       fd      file
->        1        1        0 ffffffff95c97600
->        1        1        1 ffffffff95c97600
->        1        1        2 ffffffff95c97600
->     ....
->     1895     1895      255 ffffffff95c8fe00
->     1932     1932        0 ffffffff95c8fe00
->     1932     1932        1 ffffffff95c8fe00
->     1932     1932        2 ffffffff95c8fe00
->     1932     1932        3 ffffffff95c185c0
->
-> This is able to print out all open files (fd and file->f_op), so user can compare
-> f_op against a particular kernel file operations to find what it is.
-> For example, from /proc/kallsyms, we can find
->   ffffffff95c185c0 r eventfd_fops
-> so we will know tgid 1932 fd 3 is an eventfd file descriptor.
->
-> Signed-off-by: Yonghong Song <yhs@fb.com>
-> ---
+We tried to reserve space for vnet header before
+xdp.data_hard_start. But this is useless since the packet could be
+modified by XDP which may invalidate the information stored in the
+header and there's no way for XDP to know the existence of the vnet
+header currently.
 
-LGTM.
+So let's just not reserve space for vnet header in this case.
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
+Cc: Jesper Dangaard Brouer <brouer@redhat.com>
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+---
+ drivers/net/virtio_net.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
->  .../selftests/bpf/progs/bpf_iter_bpf_map.c    | 29 +++++++++++++++++++
->  .../selftests/bpf/progs/bpf_iter_task.c       | 26 +++++++++++++++++
->  .../selftests/bpf/progs/bpf_iter_task_file.c  | 27 +++++++++++++++++
->  3 files changed, 82 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
->  create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task.c
->  create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_file.c
->
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
-> new file mode 100644
-> index 000000000000..d0af0e82b74c
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
-> @@ -0,0 +1,29 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2020 Facebook */
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include <bpf/bpf_endian.h>
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 11f722460513..98dd75b665a5 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -684,8 +684,8 @@ static struct sk_buff *receive_small(struct net_devic=
+e *dev,
+ 			page =3D xdp_page;
+ 		}
+=20
+-		xdp.data_hard_start =3D buf + VIRTNET_RX_PAD + vi->hdr_len;
+-		xdp.data =3D xdp.data_hard_start + xdp_headroom;
++		xdp.data_hard_start =3D buf + VIRTNET_RX_PAD;
++		xdp.data =3D xdp.data_hard_start + xdp_headroom + vi->hdr_len;
+ 		xdp.data_end =3D xdp.data + len;
+ 		xdp.data_meta =3D xdp.data;
+ 		xdp.rxq =3D &rq->xdp_rxq;
+@@ -845,7 +845,7 @@ static struct sk_buff *receive_mergeable(struct net_d=
+evice *dev,
+ 		 * the descriptor on if we get an XDP_TX return code.
+ 		 */
+ 		data =3D page_address(xdp_page) + offset;
+-		xdp.data_hard_start =3D data - VIRTIO_XDP_HEADROOM + vi->hdr_len;
++		xdp.data_hard_start =3D data - VIRTIO_XDP_HEADROOM;
+ 		xdp.data =3D data + vi->hdr_len;
+ 		xdp.data_end =3D xdp.data + (len - vi->hdr_len);
+ 		xdp.data_meta =3D xdp.data;
+--=20
+2.20.1
 
-bpf_endian.h doesn't seem to be really used and it's actually
-incompatible with vmlinux.h, so maybe let's drop it?
-Same for previous patch, I believe.
-
-> +
-> +char _license[] SEC("license") = "GPL";
-> +
-
-[...]
