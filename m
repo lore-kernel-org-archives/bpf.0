@@ -2,101 +2,157 @@ Return-Path: <SRS0=COpY=6U=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51108C28CBC
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 14:17:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06A42C28CBC
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 15:28:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 25E90206D5
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 14:17:37 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="ETbnGxm8"
+	by mail.kernel.org (Postfix) with ESMTP id D3B5920A8B
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 15:28:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588778909;
+	bh=gpeHsbQYIMCw/XN0uo0kt3PaA/xuMHH+5/zEPC0K5Vo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=rnRuR9KGiLlpNKohE3KQAgUhiFcNvkSWC6UOAB1Fk0v7OmtDHcBK3QwRrZSLXl4PR
+	 Az8oHdypKaIJAZkgl82kKe4g3B5gPnPOJ1ZSfQ/swLqrTEHEhTqWBGlfC7xMGR0PQo
+	 wHSIOefIdnnIINuoQKLLHFUoi2DjJeqiaeihRvAY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728894AbgEFORh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 May 2020 10:17:37 -0400
-Received: from terminus.zytor.com ([198.137.202.136]:57243 "EHLO
-        mail.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728670AbgEFORh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 May 2020 10:17:37 -0400
-Received: from [IPv6:2601:646:8600:3281:d9e2:e16d:2ce4:a5c3] ([IPv6:2601:646:8600:3281:d9e2:e16d:2ce4:a5c3])
-        (authenticated bits=0)
-        by mail.zytor.com (8.15.2/8.15.2) with ESMTPSA id 046EGISp3022440
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Wed, 6 May 2020 07:16:20 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 046EGISp3022440
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2020042201; t=1588774580;
-        bh=2t81ix48+XEqIovy4/uuaiJNVpVfGfHkdc5n10MqWF4=;
-        h=Date:In-Reply-To:References:Subject:To:From:From;
-        b=ETbnGxm8J7xr65vxrUydccH3oDZPr6ssZbQrpdFDLaJeehBoK3COvrkjxemldJ7Kx
-         Sa52fbj6LykWgbqsauISnLs58GZlGFQSwp79DKsiE1odTeSOahoIzKxZbKYslRZtx0
-         leFQHs/2egU6BRZTlK0L2B6oIkbgaI2b94xuQ4hRk4PQFHIuoTwmGAvAjJP3lp8BMK
-         zUtyWynNJ6BlmrLVpoB2QgQIliA5HiCUHfX7pco+BKXdU7t7orRcmmE0/IvCMP0sE0
-         PY/U2uGwLk/0CeWvIzDjVdiuqMmSLvMaZFW9KlUXKXXlYlfF7y6ZcnDqnTxh9U/8cl
-         nnKRsNJVAHEHA==
-Date:   Wed, 06 May 2020 07:16:11 -0700
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20200506140352.37154-1-yanaijie@huawei.com>
-References: <20200506140352.37154-1-yanaijie@huawei.com>
+        id S1730192AbgEFP0g (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 May 2020 11:26:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48880 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729745AbgEFP0g (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 May 2020 11:26:36 -0400
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9ADAC21835;
+        Wed,  6 May 2020 15:26:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588778795;
+        bh=gpeHsbQYIMCw/XN0uo0kt3PaA/xuMHH+5/zEPC0K5Vo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CCHJOhFjoAakrzne+tZydiDAEoAVmGcmSCcMJmoOLTMqvLvTJhevgoKK4X9MQqmgP
+         XtUI+vOJ4jEVXTOCYvKEeVBdUjT5zxGghgiTJZT8qn1XNSljgXDAXC+tjOE31gnJBb
+         fwC5yQmHfPPHzU7R42TMSUCghuQ/MybQJ1YHR0Iw=
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@redhat.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Igor Lubashev <ilubashe@akamai.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Jiwei Sun <jiwei.sun@windriver.com>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, yuzhoujian <yuzhoujian@didichuxing.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 66/91] perf pmu: Add perf_pmu__find_by_type helper
+Date:   Wed,  6 May 2020 12:22:09 -0300
+Message-Id: <20200506152234.21977-67-acme@kernel.org>
+X-Mailer: git-send-email 2.21.1
+In-Reply-To: <20200506152234.21977-1-acme@kernel.org>
+References: <20200506152234.21977-1-acme@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] bpf, i386: remove unneeded conversion to bool
-To:     Jason Yan <yanaijie@huawei.com>, davem@davemloft.net,
-        kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org, udknight@gmail.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org,
-        lukenels@cs.washington.edu, xi.wang@gmail.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   hpa@zytor.com
-Message-ID: <D11F36F6-BF28-4DEB-8AED-4486477130F8@zytor.com>
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On May 6, 2020 7:03:52 AM PDT, Jason Yan <yanaijie@huawei=2Ecom> wrote:
->The '=3D=3D' expression itself is bool, no need to convert it to bool
->again=2E
->This fixes the following coccicheck warning:
->
->arch/x86/net/bpf_jit_comp32=2Ec:1478:50-55: WARNING: conversion to bool
->not needed here
->arch/x86/net/bpf_jit_comp32=2Ec:1479:50-55: WARNING: conversion to bool
->not needed here
->
->Signed-off-by: Jason Yan <yanaijie@huawei=2Ecom>
->---
-> v2: change the name 'x32' to 'i386'=2E
->
-> arch/x86/net/bpf_jit_comp32=2Ec | 4 ++--
-> 1 file changed, 2 insertions(+), 2 deletions(-)
->
->diff --git a/arch/x86/net/bpf_jit_comp32=2Ec
->b/arch/x86/net/bpf_jit_comp32=2Ec
->index 66cd150b7e54=2E=2E96fde03aa987 100644
->--- a/arch/x86/net/bpf_jit_comp32=2Ec
->+++ b/arch/x86/net/bpf_jit_comp32=2Ec
->@@ -1475,8 +1475,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int
->*addrs, u8 *image,
-> 	for (i =3D 0; i < insn_cnt; i++, insn++) {
-> 		const s32 imm32 =3D insn->imm;
-> 		const bool is64 =3D BPF_CLASS(insn->code) =3D=3D BPF_ALU64;
->-		const bool dstk =3D insn->dst_reg =3D=3D BPF_REG_AX ? false : true;
->-		const bool sstk =3D insn->src_reg =3D=3D BPF_REG_AX ? false : true;
->+		const bool dstk =3D insn->dst_reg !=3D BPF_REG_AX;
->+		const bool sstk =3D insn->src_reg !=3D BPF_REG_AX;
-> 		const u8 code =3D insn->code;
-> 		const u8 *dst =3D bpf2ia32[insn->dst_reg];
-> 		const u8 *src =3D bpf2ia32[insn->src_reg];
+From: Stephane Eranian <eranian@google.com>
 
-"foo ? true : false" is also far better written !!foo when it isn't totall=
-y redundant=2E
---=20
-Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
+This is used by libpfm4 during event parsing to locate the pmu for an
+event.
+
+Signed-off-by: Stephane Eranian <eranian@google.com>
+Reviewed-by: Ian Rogers <irogers@google.com>
+Acked-by: Jiri Olsa <jolsa@redhat.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Alexey Budankov <alexey.budankov@linux.intel.com>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Andrii Nakryiko <andriin@fb.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Igor Lubashev <ilubashe@akamai.com>
+Cc: Jin Yao <yao.jin@linux.intel.com>
+Cc: Jiwei Sun <jiwei.sun@windriver.com>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: yuzhoujian <yuzhoujian@didichuxing.com>
+Link: http://lore.kernel.org/lkml/20200429231443.207201-4-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/perf/util/pmu.c | 11 +++++++++++
+ tools/perf/util/pmu.h |  1 +
+ 2 files changed, 12 insertions(+)
+
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 5642de7f8be7..92bd7fafcce6 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -871,6 +871,17 @@ static struct perf_pmu *pmu_find(const char *name)
+ 	return NULL;
+ }
+ 
++struct perf_pmu *perf_pmu__find_by_type(unsigned int type)
++{
++	struct perf_pmu *pmu;
++
++	list_for_each_entry(pmu, &pmus, list)
++		if (pmu->type == type)
++			return pmu;
++
++	return NULL;
++}
++
+ struct perf_pmu *perf_pmu__scan(struct perf_pmu *pmu)
+ {
+ 	/*
+diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+index 1edd214b75a5..cb6fbec50313 100644
+--- a/tools/perf/util/pmu.h
++++ b/tools/perf/util/pmu.h
+@@ -72,6 +72,7 @@ struct perf_pmu_alias {
+ };
+ 
+ struct perf_pmu *perf_pmu__find(const char *name);
++struct perf_pmu *perf_pmu__find_by_type(unsigned int type);
+ int perf_pmu__config(struct perf_pmu *pmu, struct perf_event_attr *attr,
+ 		     struct list_head *head_terms,
+ 		     struct parse_events_error *error);
+-- 
+2.21.1
+
