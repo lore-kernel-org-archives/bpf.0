@@ -2,84 +2,224 @@ Return-Path: <SRS0=COpY=6U=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18D65C28CBC
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 17:47:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90A0DC4724C
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 17:48:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F029820CC7
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 17:47:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 700E52145D
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 17:48:31 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="UdCeeRB5";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="dM5/UYGn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728686AbgEFRrv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 May 2020 13:47:51 -0400
-Received: from verein.lst.de ([213.95.11.211]:42252 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728566AbgEFRrv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 May 2020 13:47:51 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id C3AAB68C7B; Wed,  6 May 2020 19:47:47 +0200 (CEST)
-Date:   Wed, 6 May 2020 19:47:47 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S1729755AbgEFRs3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 May 2020 13:48:29 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35234 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729681AbgEFRs2 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 6 May 2020 13:48:28 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 046HdeCE028275;
+        Wed, 6 May 2020 10:48:14 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=Itx9RP0K1sHne4XY2yO3XsazbQIQRVZ7dVaR+r62pWo=;
+ b=UdCeeRB5/OOdl+uigRd9Hl7vtwsBA7dVG0sS9Br088KZT/TX3dv+6I7wVDblKjBXWh2+
+ fQxDnB5gyQvhNbLLEze6jEId9MzcXTJZHfhrI5gwplOnQRvLcR/cL7kM4srKxnTTTVyb
+ Sqj+cz3y/2QjFGuS47qmw8IsH5iOWPKfIH8= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 30v0hp0grx-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 06 May 2020 10:48:13 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Wed, 6 May 2020 10:48:08 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c6rIb1Mm+CPHRVgAiabPcVH22Op/HeLesxZje1lHbi/hCQLSfRHe+J4Wio/+jX++e3Z29836i5PfwPEB7G1wLC0CnKHBkePpi4EGoVehI2sxXIq+RihuJ9SfzzjV6f+5UWHfr5uZ2luiXOK0g7v4Pvd4LKi3CDdQJfLPK/UZL3u4YVHWpWQ/4MKIbY+iVqt43PUqzM44ILS92ImP8CNvw8e2ku6v5s36xkjBANCh79HYli3+BbcVRUmSA8k7RnByfEpZDNQ81GF6vwgb3cnMOtF7ynVEMCNqXp88con3ZfXXY4wsS8J4lxQyVopAO/f2FOwpKEfgkTFmEGFz5U/1mA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Itx9RP0K1sHne4XY2yO3XsazbQIQRVZ7dVaR+r62pWo=;
+ b=W/dBHmvaLP2SYhOP5eNaq+mQO4h5a6ccVELC/SFPbg+wTrRexvV3Bh7BHtE0zBxC6J7tKbg1aE4+0Pp/2R8FuwYTjroV6yf+DKPlp694hyTE0mkvfEwbjzZkSC8KSYQ1Qrpl1aokGpj+dz+u2lcOQkXoVD9rlqsY/CQvnK938qWZ+C1dqidB3OruxkJ1pADZbCpPt+PntkvDRRrRhEhHR15YdYpqFLcE9/e9r3VusFHRUc7Kivj9cmDNGifqO06vGJgyXF7uliDCfPQr2AGYwskxGYvKXWQNsWC5/bR0UEaMV2wgKh5PG8LKDaxxmuWyIywpuMDJG+zCJSaWKVqRSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Itx9RP0K1sHne4XY2yO3XsazbQIQRVZ7dVaR+r62pWo=;
+ b=dM5/UYGn/0WRLQrIxcQqwo6XgKI335KonSzcWdcTxZNcfDRs8oHCuP1CNKQh6EwiIiLOmvoUTHdTvSD36un4J0MjlBatwQBItK3Vv6stZw1o3uJ1jZGHYwQhnUJgRwDSUFHPrUL9HPCCGli3UXnag5mhXJ8ei8sKhNS167aGu4A=
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB3110.namprd15.prod.outlook.com (2603:10b6:a03:fe::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.28; Wed, 6 May
+ 2020 17:32:06 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::8988:aa27:5d70:6923]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::8988:aa27:5d70:6923%5]) with mapi id 15.20.2958.030; Wed, 6 May 2020
+ 17:32:06 +0000
+Subject: Re: [PATCH bpf-next v2 10/20] net: bpf: add netlink and ipv6_route
+ bpf_iter targets
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-parisc@vger.kernel.org,
-        linux-um <linux-um@lists.infradead.org>,
-        Netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 08/15] maccess: rename strnlen_unsafe_user to
- strnlen_user_unsafe
-Message-ID: <20200506174747.GA7549@lst.de>
-References: <20200506062223.30032-1-hch@lst.de> <20200506062223.30032-9-hch@lst.de> <CAHk-=wj3T6u_kj8r9f3aGXCjuyN210_gJC=AXPFm9=wL-dGALA@mail.gmail.com>
+        Kernel Team <kernel-team@fb.com>
+References: <20200504062547.2047304-1-yhs@fb.com>
+ <20200504062558.2048168-1-yhs@fb.com>
+ <CAEf4BzbtR71iWPdNmjy0kvfQC4xQr+MFe6Vh2k6Kzu0cfsVVzg@mail.gmail.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <d1589865-b891-458b-3d24-acc4b4c4f504@fb.com>
+Date:   Wed, 6 May 2020 10:32:02 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
+ Gecko/20100101 Thunderbird/68.7.0
+In-Reply-To: <CAEf4BzbtR71iWPdNmjy0kvfQC4xQr+MFe6Vh2k6Kzu0cfsVVzg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR02CA0003.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::16) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj3T6u_kj8r9f3aGXCjuyN210_gJC=AXPFm9=wL-dGALA@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from MacBook-Pro-52.local (2620:10d:c090:400::5:f689) by BYAPR02CA0003.namprd02.prod.outlook.com (2603:10b6:a02:ee::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.26 via Frontend Transport; Wed, 6 May 2020 17:32:04 +0000
+X-Originating-IP: [2620:10d:c090:400::5:f689]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 75f47fb3-272e-46f4-a92a-08d7f1e36557
+X-MS-TrafficTypeDiagnostic: BYAPR15MB3110:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB3110D4D1BAE4D0B1E0D84BB1D3A40@BYAPR15MB3110.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Forefront-PRVS: 03950F25EC
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hnX6E8RQD2qbiysyV+QMYK7kSKKXqZU3KMVXoGykTSHWy3F36mxr4EkHuc/Im98NPJnGx9TwT10/dfqTq8C77TAUzX/78a6H8AV5oi4VLItrIU0lF5vQ6h3HDfb9fSoBdZJIhkLRiyUjOxCiUn2Zo1MXeWESKezHXWHaSr7T8MlomGRAkzWtX9RFCu/po8xeFGYBHkERs0Ch/LxIUEcSyBAuxIE0xakmHw6t4YukaiBd8t1mLKZnEX+PTP6f3aU4tWrHdteDFTya3Y/EKUsAMzvojjibJA8tE5tZDbCpIBuX3oTFuwotW335fc+0RF2psIUzH4qowB3LXqqAzJaPYqn37hNt1tZ+yw1Qn40jEcfMpyCFP5u9yxKPS2R2xgTofXKB8bAmabS1oFlWKK3LQkkrpxWHoM13JbBgyH8+E5ZHErNBR9z0sjy1WBsJTaC63XxGlB7QYYEWLBaknzxukvmJuH1O2SMUffnVeMhOTUSQ3uGdtqPknuSa/s2eXFWBCP86aDDLB+nkH9aC6w7Qdy9TOO3qJakNGi6QJ91r8SAfzXVYzx9a0uyCg+eC1MlW
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(39860400002)(366004)(396003)(136003)(376002)(346002)(33430700001)(33440700001)(66556008)(66946007)(316002)(66476007)(52116002)(5660300002)(53546011)(186003)(6506007)(16526019)(54906003)(2616005)(478600001)(31696002)(6512007)(6486002)(8676002)(31686004)(6916009)(4326008)(86362001)(2906002)(8936002)(36756003)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: OBJtIjxqjaUXtJnQn4SN9CvaAl8QytYmmkf9iufASoCQmV1RE4On3IJJTnCH8kK07WRQOwNCtktv2Uy6eFdEvKZU0k4imyjBeTrL7YHVTfHSuHQmdDn8s5D55Z91woaFMpjxXYE6olUYfeO+676luBKVLKVitqqZerkThdORPbIBi6fJJANTHYcEHudfTirwlQ68oFVd4YIjU/hdZ7/+i/Eh63Oj0NXMj0TpS6425XjkTt+lL/bCwTbsglMsGhGmZdX5pbk1v4c+tJgk76OQivEvzGafpVcwwLNevCSDWd4HG+pt3pJeGJfCFd7J0yyrTqKY0xsmXdcQJ0DVw4F6vUP6HC4BypCw6H6beM65JWX1/7GPHTG9YXfSql9AYUW41okOI0aue4vg2RWQqs82SIY9YU/7mCe2sAn7KfPa/AFz4FFhYaNtGz5wivxSNJK+FTY0C8qqu4Cjtc9BSqJu1NG2kCPzUU9FrCB3SZVATFbejiwA4RG//sCMAtTRXGIDgT/VuIs8g99ebQMx+y5yglqepOeYo1BkNIsiKreO+eV6gpvAHQgwfkUl2HycUgCc+jW/VuMe7608SC7I8RMaW/AxxF8SqYQcDQejuPrv5pbp3aJFTbQVo2+EjbN4mO78Ykmy5kVT4MY+ENULIOR/zGb8WoD85JBKomkO4u+5/hio4AR021s0AW/PR/bU9rIJ6bWkpuuOnzhsIufpkt0h5DQDXQbW3sYtjgGAlV996Xi41Lb/ViezsK/qSW7MmPHrTUTOkejIS9a3viBYZIy+WYIKx9g1ky6PEnWMw0yBrJJZGMibjYT/tl3LJYPQ/ICMwTZqSjmLlM6OM83At0TpoA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75f47fb3-272e-46f4-a92a-08d7f1e36557
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2020 17:32:06.3804
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7t2Kpn/ZWDtOs+Zaglqwch9/wPSI8UMv+wX1/QVhA6T23XivLRmG7ISN11lUCeWZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3110
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-06_09:2020-05-05,2020-05-06 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ adultscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 suspectscore=0
+ malwarescore=0 phishscore=0 spamscore=0 clxscore=1015 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005060144
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, May 06, 2020 at 10:44:15AM -0700, Linus Torvalds wrote:
-> So while I think using a consistent convention is good, and it's true
-> that there is a difference in the convention between the two cases
-> ("unsafe" at the beginning vs end), one of them is actually about the
-> safety and security of the operation (and we have automated logic
-> these days to verify it on x86), the other has nothing to do with
-> "safety", really.
+
+
+On 5/5/20 10:21 PM, Andrii Nakryiko wrote:
+> On Sun, May 3, 2020 at 11:29 PM Yonghong Song <yhs@fb.com> wrote:
+>>
+>> This patch added netlink and ipv6_route targets, using
+>> the same seq_ops (except show() and minor changes for stop())
+>> for /proc/net/{netlink,ipv6_route}.
+>>
+>> The net namespace for these targets are the current net
+>> namespace at file open stage, similar to
+>> /proc/net/{netlink,ipv6_route} reference counting
+>> the net namespace at seq_file open stage.
+>>
+>> Since module is not supported for now, ipv6_route is
+>> supported only if the IPV6 is built-in, i.e., not compiled
+>> as a module. The restriction can be lifted once module
+>> is properly supported for bpf_iter.
+>>
+>> Signed-off-by: Yonghong Song <yhs@fb.com>
+>> ---
+>>   fs/proc/proc_net.c       | 19 +++++++++
+>>   include/linux/proc_fs.h  |  3 ++
+>>   net/ipv6/ip6_fib.c       | 65 +++++++++++++++++++++++++++++-
+>>   net/ipv6/route.c         | 27 +++++++++++++
+>>   net/netlink/af_netlink.c | 87 +++++++++++++++++++++++++++++++++++++++-
+>>   5 files changed, 197 insertions(+), 4 deletions(-)
+>>
 > 
-> Would it be better to standardize around a "probe_xyz()" naming?
+> [...]
+> 
+>>   int __init ip6_route_init(void)
+>>   {
+>>          int ret;
+>> @@ -6455,6 +6474,14 @@ int __init ip6_route_init(void)
+>>          if (ret)
+>>                  goto out_register_late_subsys;
+>>
+>> +#if IS_BUILTIN(CONFIG_IPV6)
+>> +#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
+>> +       ret = bpf_iter_register();
+>> +       if (ret)
+>> +               goto out_register_late_subsys;
+> 
+> Seems like bpf_iter infra is missing unregistering API.
+> ip6_route_init(), if fails, undoes all the registrations, so probably
+> should also unregister ipv6_route target as well?
 
-So:
+Yes, it is. But not in this function. In this function, 
+bpf_iter_register() is the last one possibly causing error,
+so there is no need to unregister here.
 
-  probe_strncpy, probe_strncpy_user, probe_strnlen_user?
+But there is another cleanup funciton called outside of this
+function, I need to do proper unregister there.
 
-Sounds weird, but at least it is consistent.
+Thanks for catching this.
 
-> Or perhaps a "xyz_nofault()" naming?
+> 
+>> +#endif
+>> +#endif
+>> +
+>>          for_each_possible_cpu(cpu) {
+>>                  struct uncached_list *ul = per_cpu_ptr(&rt6_uncached_list, cpu);
+>>
+> 
+> [...]
+> 
+>> +static void netlink_seq_stop(struct seq_file *seq, void *v)
+>> +{
+>> +       struct bpf_iter_meta meta;
+>> +       struct bpf_prog *prog;
+>> +
+>> +       if (!v) {
+>> +               meta.seq = seq;
+>> +               prog = bpf_iter_get_info(&meta, true);
+>> +               if (prog)
+>> +                       netlink_prog_seq_show(prog, &meta, v);
+> 
+> nit: netlink_prog_seq_show() can return failure (from BPF program),
+> but you are not returning it. Given seq_file's stop is not supposed to
+> fail, you can explicitly cast result to (void)? I think it's done in
 
-That sounds a little better:
+Yes, we can do this. An explicit casting expressed the intention.
 
-   strncpy_nofault, strncpy_user_nofault, strnlen_user_nofault
-
-> I realize this is nit-picky, and I think the patch series as-is is
-> already an improvement, but I do think our naming in this area is
-> really quite bad.
-
-Always open for improvements :)
-
-> The fact that we have "probe_kernel_read()" but then
-> "strncpy_from_user_unsafe()" for the _same_ conceptual difference
-> really tells me how inconsistent the naming for these kinds of "we
-> can't take page faults" is. No?
-
-True.  If we wanted to do _nofaul, what would the basic read/write
-versions be?
+> few other places in BPF code, when return result is explicitly
+> ignored.
+> 
+> 
+>> +       }
+>> +
+>> +       netlink_native_seq_stop(seq, v);
+>> +}
+>> +#else
+> 
+> [...]
+> 
