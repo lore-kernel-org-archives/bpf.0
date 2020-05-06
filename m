@@ -5,55 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3D6AC47257
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 12:55:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3164C28CBC
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 12:55:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BCE832078E
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 12:55:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF0182080D
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 12:55:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="P9H43lx4"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Xd8Rqi9d"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728653AbgEFMzU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 May 2020 08:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
+        id S1728688AbgEFMzX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 May 2020 08:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728652AbgEFMzT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 6 May 2020 08:55:19 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C880C061A10
-        for <bpf@vger.kernel.org>; Wed,  6 May 2020 05:55:18 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id u16so2519505wmc.5
-        for <bpf@vger.kernel.org>; Wed, 06 May 2020 05:55:18 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1728675AbgEFMzW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 6 May 2020 08:55:22 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6549C061A10
+        for <bpf@vger.kernel.org>; Wed,  6 May 2020 05:55:21 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id y3so2099971wrt.1
+        for <bpf@vger.kernel.org>; Wed, 06 May 2020 05:55:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zTN3/BskZ+4ol3oKCkQfAC6PGLClSpQxixHtq6iy11w=;
-        b=P9H43lx47Vxc5u0F2V6Am7sedKcGD3APLPbEn0X71S4DrJtXbqOTdJy/XXScrO+jo6
-         5KHe7tbNefK1V7fdbK10HDiEgWdCVso7a9bQLSUOb0ro5A1X62B37gYEIQT202pv16c+
-         8S8HXaont4c9W61pJ8Mt1uPes6/iSeCR1FQms=
+        bh=FvXoRuhTO+OxNF0cbAiPa+Gek9SWWsXi4MoNMSh2OYs=;
+        b=Xd8Rqi9daAx3iYnyrr5t/LQBsjNXCh6OSPWaI9M/K3s+TxH5LqpakcBYtZsTyKM4uE
+         Jy2pmxpnXS4RaOha9xrU2R7MpdTkjacg9UQ9k7Iq0txMc59CSIDTA/CL2LmWwXeJjJye
+         bLmHzddGCL5J474DqbL+cG22404VPn7/ldIwU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zTN3/BskZ+4ol3oKCkQfAC6PGLClSpQxixHtq6iy11w=;
-        b=Bqa4ElGvzKB4lFoBOP7QsXaCRUZRE1N2XJXbtNTpSH4gICS+yW9+x37k/k/ysJpd2H
-         E50V3oFKi49/2iVkseqHXHQbBuNbdHc70Ts9k9HDWvd+XlxAT4XgZq4F9ULxjniM/hdl
-         0tcDu+8+dUVbIe2T9OMTIaXsj5kt0V9tIgLVgS+uWiDB9acXkW2e+N80HaW+XYdEE25f
-         uRk1TyOstDk3P7y+LQeAO4oSrAr5zpy5nkNXLPVNHw6G0UnY5CmCazC8D0/RUE/yTSXk
-         D8/zepUrUKayE8QzJVHdIGiwQ+p6OL6nUtPEJ5ejmUZ3lrsj1jZMjvUkf4PZmd+mD/+p
-         kQvQ==
-X-Gm-Message-State: AGi0PubkB677JYBcxnHcHvQ0micvMinsu16lEZGj5B/NA9rPDeO63/Nu
-        Si1uAA4CgUBPWymdHxjgmXKAFA==
-X-Google-Smtp-Source: APiQypJ4WYnTJsctfjlpcaBjR0dz4PFVQe1iFckiO5RfZGZ7VMGvnzpc6fZKFsQMcvlEuitF+elG7g==
-X-Received: by 2002:a1c:f211:: with SMTP id s17mr4793139wmc.168.1588769717257;
-        Wed, 06 May 2020 05:55:17 -0700 (PDT)
+        bh=FvXoRuhTO+OxNF0cbAiPa+Gek9SWWsXi4MoNMSh2OYs=;
+        b=jfHGSsjZAie3xmkUS3NbNat/QnZKuykDd0ruiFXjfegWxtaNWKuxJG3m03HpLWTzzz
+         zByPBCZp2lNODe5N7H6XhtgU2AJPMu2+RQyvDIcpZMhdjpQJdXsKRXPT41NjhnjMjCq5
+         YM4d+OFEsV4yEbkdXAdK5MJo8BPtKlUuIn5wmzLH/QfPJnzLMnLoSryzjaISLG7bwPn1
+         Ioj407ddtE7HTOeUfvGp4ZjfwkswomKz2o8CFFGKHmPclQtWqxNcUFy6VrCx5ktjHdD/
+         lCO/sNlEuPWlqFRDE5hPPFsWmvdaciOI41Hcf49Gd553ZauH5gWt8ojR3XbAwW3amWeQ
+         e3cg==
+X-Gm-Message-State: AGi0PuYZpR676u/nMStV+bOQCTfO4NDIn0w/r9pVExbUNYBmNPnGWid9
+        BhNF93bsoUb+iFRtfLK2WOF2Uw==
+X-Google-Smtp-Source: APiQypIw9GWmg8+jYFghcU+u+Ul8dI8H/abrLQvalKNXzcXrvflItoBKf5rx8JTbnK9RGVPl9Mggyw==
+X-Received: by 2002:a05:6000:1209:: with SMTP id e9mr8969813wrx.45.1588769720299;
+        Wed, 06 May 2020 05:55:20 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id v124sm720012wme.45.2020.05.06.05.55.16
+        by smtp.gmail.com with ESMTPSA id i1sm2647901wrx.22.2020.05.06.05.55.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2020 05:55:16 -0700 (PDT)
+        Wed, 06 May 2020 05:55:19 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     dccp@vger.kernel.org, kernel-team@cloudflare.com,
@@ -64,9 +64,9 @@ Cc:     dccp@vger.kernel.org, kernel-team@cloudflare.com,
         Gerrit Renker <gerrit@erg.abdn.ac.uk>,
         Jakub Kicinski <kuba@kernel.org>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next 01/17] flow_dissector: Extract attach/detach/query helpers
-Date:   Wed,  6 May 2020 14:54:57 +0200
-Message-Id: <20200506125514.1020829-2-jakub@cloudflare.com>
+Subject: [PATCH bpf-next 03/17] inet: Store layer 4 protocol in inet_hashinfo
+Date:   Wed,  6 May 2020 14:54:59 +0200
+Message-Id: <20200506125514.1020829-4-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.3
 In-Reply-To: <20200506125514.1020829-1-jakub@cloudflare.com>
 References: <20200506125514.1020829-1-jakub@cloudflare.com>
@@ -77,224 +77,60 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move generic parts of callbacks for querying, attaching, and detaching a
-single BPF program for reuse by other BPF program types.
+Make it possible to identify the protocol of sockets stored in hashinfo
+without looking up a socket.
 
-Subsequent patch makes use of the extracted routines.
+Subsequent patches make use the new field at the socket lookup time to
+ensure that BPF program selects only sockets with matching protocol.
 
 Reviewed-by: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- include/linux/bpf.h       |  8 +++++
- net/core/filter.c         | 68 +++++++++++++++++++++++++++++++++++++++
- net/core/flow_dissector.c | 61 +++++++----------------------------
- 3 files changed, 88 insertions(+), 49 deletions(-)
+ include/net/inet_hashtables.h | 3 +++
+ net/dccp/proto.c              | 2 +-
+ net/ipv4/tcp_ipv4.c           | 2 +-
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 1262ec460ab3..716c47ac1e75 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -31,6 +31,7 @@ struct seq_file;
- struct btf;
- struct btf_type;
- struct exception_table_entry;
-+struct mutex;
+diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+index ad64ba6a057f..6072dfbd1078 100644
+--- a/include/net/inet_hashtables.h
++++ b/include/net/inet_hashtables.h
+@@ -144,6 +144,9 @@ struct inet_hashinfo {
+ 	unsigned int			lhash2_mask;
+ 	struct inet_listen_hashbucket	*lhash2;
  
- extern struct idr btf_idr;
- extern spinlock_t btf_idr_lock;
-@@ -1660,4 +1661,11 @@ enum bpf_text_poke_type {
- int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		       void *addr1, void *addr2);
++	/* Layer 4 protocol of the stored sockets */
++	int				protocol;
++
+ 	/* All the above members are written once at bootup and
+ 	 * never written again _or_ are predominantly read-access.
+ 	 *
+diff --git a/net/dccp/proto.c b/net/dccp/proto.c
+index 4af8a98fe784..c826419e68e6 100644
+--- a/net/dccp/proto.c
++++ b/net/dccp/proto.c
+@@ -45,7 +45,7 @@ EXPORT_SYMBOL_GPL(dccp_statistics);
+ struct percpu_counter dccp_orphan_count;
+ EXPORT_SYMBOL_GPL(dccp_orphan_count);
  
-+int bpf_prog_query_one(struct bpf_prog __rcu **pprog,
-+		       const union bpf_attr *attr,
-+		       union bpf_attr __user *uattr);
-+int bpf_prog_attach_one(struct bpf_prog __rcu **pprog, struct mutex *lock,
-+			struct bpf_prog *prog, u32 flags);
-+int bpf_prog_detach_one(struct bpf_prog __rcu **pprog, struct mutex *lock);
-+
- #endif /* _LINUX_BPF_H */
-diff --git a/net/core/filter.c b/net/core/filter.c
-index dfaf5df13722..bc25bb1085b1 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8740,6 +8740,74 @@ int sk_get_filter(struct sock *sk, struct sock_filter __user *ubuf,
- 	return ret;
- }
+-struct inet_hashinfo dccp_hashinfo;
++struct inet_hashinfo dccp_hashinfo = { .protocol = IPPROTO_DCCP };
+ EXPORT_SYMBOL_GPL(dccp_hashinfo);
  
-+int bpf_prog_query_one(struct bpf_prog __rcu **pprog,
-+		       const union bpf_attr *attr,
-+		       union bpf_attr __user *uattr)
-+{
-+	__u32 __user *prog_ids = u64_to_user_ptr(attr->query.prog_ids);
-+	u32 prog_id, prog_cnt = 0, flags = 0;
-+	struct bpf_prog *attached;
-+
-+	if (attr->query.query_flags)
-+		return -EINVAL;
-+
-+	rcu_read_lock();
-+	attached = rcu_dereference(*pprog);
-+	if (attached) {
-+		prog_cnt = 1;
-+		prog_id = attached->aux->id;
-+	}
-+	rcu_read_unlock();
-+
-+	if (copy_to_user(&uattr->query.attach_flags, &flags, sizeof(flags)))
-+		return -EFAULT;
-+	if (copy_to_user(&uattr->query.prog_cnt, &prog_cnt, sizeof(prog_cnt)))
-+		return -EFAULT;
-+
-+	if (!attr->query.prog_cnt || !prog_ids || !prog_cnt)
-+		return 0;
-+
-+	if (copy_to_user(prog_ids, &prog_id, sizeof(u32)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+int bpf_prog_attach_one(struct bpf_prog __rcu **pprog, struct mutex *lock,
-+			struct bpf_prog *prog, u32 flags)
-+{
-+	struct bpf_prog *attached;
-+
-+	if (flags)
-+		return -EINVAL;
-+
-+	attached = rcu_dereference_protected(*pprog,
-+					     lockdep_is_held(lock));
-+	if (attached == prog) {
-+		/* The same program cannot be attached twice */
-+		return -EINVAL;
-+	}
-+	rcu_assign_pointer(*pprog, prog);
-+	if (attached)
-+		bpf_prog_put(attached);
-+
-+	return 0;
-+}
-+
-+int bpf_prog_detach_one(struct bpf_prog __rcu **pprog, struct mutex *lock)
-+{
-+	struct bpf_prog *attached;
-+
-+	attached = rcu_dereference_protected(*pprog,
-+					     lockdep_is_held(lock));
-+	if (!attached)
-+		return -ENOENT;
-+	RCU_INIT_POINTER(*pprog, NULL);
-+	bpf_prog_put(attached);
-+
-+	return 0;
-+}
-+
- #ifdef CONFIG_INET
- static void bpf_init_reuseport_kern(struct sk_reuseport_kern *reuse_kern,
- 				    struct sock_reuseport *reuse,
-diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-index 3eff84824c8b..5ff99ed175bd 100644
---- a/net/core/flow_dissector.c
-+++ b/net/core/flow_dissector.c
-@@ -73,46 +73,22 @@ EXPORT_SYMBOL(skb_flow_dissector_init);
- int skb_flow_dissector_prog_query(const union bpf_attr *attr,
- 				  union bpf_attr __user *uattr)
- {
--	__u32 __user *prog_ids = u64_to_user_ptr(attr->query.prog_ids);
--	u32 prog_id, prog_cnt = 0, flags = 0;
--	struct bpf_prog *attached;
- 	struct net *net;
--
--	if (attr->query.query_flags)
--		return -EINVAL;
-+	int ret;
+ /* the maximum queue length for tx in packets. 0 is no limit */
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index 6c05f1ceb538..77e4f4e4c73c 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -87,7 +87,7 @@ static int tcp_v4_md5_hash_hdr(char *md5_hash, const struct tcp_md5sig_key *key,
+ 			       __be32 daddr, __be32 saddr, const struct tcphdr *th);
+ #endif
  
- 	net = get_net_ns_by_fd(attr->query.target_fd);
- 	if (IS_ERR(net))
- 		return PTR_ERR(net);
+-struct inet_hashinfo tcp_hashinfo;
++struct inet_hashinfo tcp_hashinfo = { .protocol = IPPROTO_TCP };
+ EXPORT_SYMBOL(tcp_hashinfo);
  
--	rcu_read_lock();
--	attached = rcu_dereference(net->flow_dissector_prog);
--	if (attached) {
--		prog_cnt = 1;
--		prog_id = attached->aux->id;
--	}
--	rcu_read_unlock();
-+	ret = bpf_prog_query_one(&net->flow_dissector_prog, attr, uattr);
- 
- 	put_net(net);
--
--	if (copy_to_user(&uattr->query.attach_flags, &flags, sizeof(flags)))
--		return -EFAULT;
--	if (copy_to_user(&uattr->query.prog_cnt, &prog_cnt, sizeof(prog_cnt)))
--		return -EFAULT;
--
--	if (!attr->query.prog_cnt || !prog_ids || !prog_cnt)
--		return 0;
--
--	if (copy_to_user(prog_ids, &prog_id, sizeof(u32)))
--		return -EFAULT;
--
--	return 0;
-+	return ret;
- }
- 
- int skb_flow_dissector_bpf_prog_attach(const union bpf_attr *attr,
- 				       struct bpf_prog *prog)
- {
--	struct bpf_prog *attached;
- 	struct net *net;
- 	int ret = 0;
- 
-@@ -145,16 +121,9 @@ int skb_flow_dissector_bpf_prog_attach(const union bpf_attr *attr,
- 		}
- 	}
- 
--	attached = rcu_dereference_protected(net->flow_dissector_prog,
--					     lockdep_is_held(&flow_dissector_mutex));
--	if (attached == prog) {
--		/* The same program cannot be attached twice */
--		ret = -EINVAL;
--		goto out;
--	}
--	rcu_assign_pointer(net->flow_dissector_prog, prog);
--	if (attached)
--		bpf_prog_put(attached);
-+	ret = bpf_prog_attach_one(&net->flow_dissector_prog,
-+				  &flow_dissector_mutex, prog,
-+				  attr->attach_flags);
- out:
- 	mutex_unlock(&flow_dissector_mutex);
- 	return ret;
-@@ -162,21 +131,15 @@ int skb_flow_dissector_bpf_prog_attach(const union bpf_attr *attr,
- 
- int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
- {
--	struct bpf_prog *attached;
--	struct net *net;
-+	struct net *net = current->nsproxy->net_ns;
-+	int ret;
- 
--	net = current->nsproxy->net_ns;
- 	mutex_lock(&flow_dissector_mutex);
--	attached = rcu_dereference_protected(net->flow_dissector_prog,
--					     lockdep_is_held(&flow_dissector_mutex));
--	if (!attached) {
--		mutex_unlock(&flow_dissector_mutex);
--		return -ENOENT;
--	}
--	RCU_INIT_POINTER(net->flow_dissector_prog, NULL);
--	bpf_prog_put(attached);
-+	ret =  bpf_prog_detach_one(&net->flow_dissector_prog,
-+				   &flow_dissector_mutex);
- 	mutex_unlock(&flow_dissector_mutex);
--	return 0;
-+
-+	return ret;
- }
- 
- /**
+ static u32 tcp_v4_init_seq(const struct sk_buff *skb)
 -- 
 2.25.3
 
