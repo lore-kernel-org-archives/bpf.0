@@ -2,58 +2,59 @@ Return-Path: <SRS0=COpY=6U=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18613C47257
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 12:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D0E1C28CBC
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 12:55:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ED96A2073A
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 12:55:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5DE5A2073A
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 12:55:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="NUv7pGLR"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="VTDDjKm0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728747AbgEFMzh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 May 2020 08:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        id S1728770AbgEFMzj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 May 2020 08:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728740AbgEFMze (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 6 May 2020 08:55:34 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B90EC03C1A8
-        for <bpf@vger.kernel.org>; Wed,  6 May 2020 05:55:33 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id k1so2082517wrx.4
-        for <bpf@vger.kernel.org>; Wed, 06 May 2020 05:55:33 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1728769AbgEFMzi (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 6 May 2020 08:55:38 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB248C061A41
+        for <bpf@vger.kernel.org>; Wed,  6 May 2020 05:55:37 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id k12so2464421wmj.3
+        for <bpf@vger.kernel.org>; Wed, 06 May 2020 05:55:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0YntHSMaYWhZww4u6NbDT+gNV0qs5iMn1AmJfoZVDYM=;
-        b=NUv7pGLRx/073A2UdDBSLe1useV+sIU/rIVsNzbcEhWj1TCoJ1J6zL+c+lz2Txpro+
-         EC+eS9x+C2JBI+cX1ZfXZXFceoawAYaM+iJkZyQYjeUahvxtxlydF1pl4IXQMDnGHL/y
-         U4M5iC/awbmlcCyvXMx8b+5sC6Ht8oKDcUTx0=
+        bh=8MMXgY0TXvd+/8Bf5r+9pGjHTsnA2fHOT0fRA7c4wXg=;
+        b=VTDDjKm0TNiaYyKf9a7lvt3iTreBuPSQUKI4jsKuA2L3Pa0Z71HqJyZ0jfeBaTMAqa
+         +i9s+C7LQQe/+SzedTjjFVxxRSYIouSnwFIF2gpyVwqh9jjkG2Ks/Q+tZn6jA9dalZoz
+         gW9T4TqUhcWsYWYBDi941/KCSF7UrXVJjP8NY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0YntHSMaYWhZww4u6NbDT+gNV0qs5iMn1AmJfoZVDYM=;
-        b=hYUnTqRt04H4P7vansH6x4qUfeIv/aYQUJ7T/o2JPjT8fqVn682E354yumXr/nLADE
-         ExnaSPRJcLw5GQloYLXmHO4qENvq28X+gc0NbZrir2tL/J9bwXKKy6Oz/VqtRnPrm8ht
-         JSvBmQHycGmoe7dFZgzu92BCxQ71YBI6QRlSBOK/3vbJnSF1kCKCJqtvPshk8+nF8GhX
-         LMPnfsuvhYw7Z1eOi2tU8seH/ihKVUu9w6aYoWLLJxGgHAyS9a9efYyQ/PN8T1iLOuew
-         VCNQUVNezy7o76hAPrJCOO6eYuXLN2O1ZbFtZiKgcpjUy5msziUlDI84gnOzqTbIOOSi
-         5nJQ==
-X-Gm-Message-State: AGi0PuauSNCukr/3NJJ90b57xWQU6oUy5F50brB2vt/0ZEa/sgO7TIve
-        7xEKK7aL6A9joHUoegFn7NUhWA==
-X-Google-Smtp-Source: APiQypJRsTh056Sw4fsyQYnCKOA2Rapj3Ng0f9/oFRMv9+/SYQstnRhPyDe4WgaNyq2MRVPo4yCVCw==
-X-Received: by 2002:a5d:650b:: with SMTP id x11mr9229157wru.405.1588769732275;
-        Wed, 06 May 2020 05:55:32 -0700 (PDT)
+        bh=8MMXgY0TXvd+/8Bf5r+9pGjHTsnA2fHOT0fRA7c4wXg=;
+        b=p8IWlgdtS/WJZk10L4EJCkRKUxaTEksJ//oZ14w/YB1DYtTF+F5YUQDoKxVx8NGjZW
+         3JV+1zVX8huAK0+W+TwMwisi3uerTg0lToSBN8nkZAxL235oxPFQ7sRJBKPJ43sBI9sL
+         7u3MviqWMcHwKIENJZkdxB+1pnaxdyiLoYUanDIRnVr8v0ygodxI8rVx6x/ayBcUM9vt
+         7yKPkXYWjkfjbRGZo0zHHp546YnG4DL7R0iysm7A7G+FW+Er1zL1vfJAM04QiIlReveG
+         kPGzZIfxNC/A8XAQAexNI2c43dn5Or/d6GqnLgIw6eF3skMunZgVidGIr5gnkSbkhIPh
+         v07Q==
+X-Gm-Message-State: AGi0PuavVJVaTrRlJ+4HmzpBY6X7TAH50jOxzmAQVngJBoLQLN6kjdwa
+        uw9lT3fwiUEfvPPZlaU8eXZwvA==
+X-Google-Smtp-Source: APiQypIBZTUzwyZq0r81vrVDEDqOQr7MdwHx8+Rw0PY51qr+jvbJbKi9RyKjx6xy4f28h/W0tfEzhA==
+X-Received: by 2002:a7b:c190:: with SMTP id y16mr4694417wmi.50.1588769736672;
+        Wed, 06 May 2020 05:55:36 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id y63sm3060394wmg.21.2020.05.06.05.55.31
+        by smtp.gmail.com with ESMTPSA id a15sm2700717wrw.56.2020.05.06.05.55.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2020 05:55:31 -0700 (PDT)
+        Wed, 06 May 2020 05:55:36 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     dccp@vger.kernel.org, kernel-team@cloudflare.com,
@@ -63,9 +64,9 @@ Cc:     dccp@vger.kernel.org, kernel-team@cloudflare.com,
         Eric Dumazet <edumazet@google.com>,
         Gerrit Renker <gerrit@erg.abdn.ac.uk>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH bpf-next 11/17] udp6: Extract helper for selecting socket from reuseport group
-Date:   Wed,  6 May 2020 14:55:07 +0200
-Message-Id: <20200506125514.1020829-12-jakub@cloudflare.com>
+Subject: [PATCH bpf-next 14/17] libbpf: Add support for SK_LOOKUP program type
+Date:   Wed,  6 May 2020 14:55:10 +0200
+Message-Id: <20200506125514.1020829-15-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.3
 In-Reply-To: <20200506125514.1020829-1-jakub@cloudflare.com>
 References: <20200506125514.1020829-1-jakub@cloudflare.com>
@@ -76,75 +77,83 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Prepare for calling into reuseport from __udp6_lib_lookup as well.
+Make libbpf aware of the newly added program type, and assign it a
+section name.
 
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- net/ipv6/udp.c | 37 ++++++++++++++++++++++++++-----------
- 1 file changed, 26 insertions(+), 11 deletions(-)
+ tools/lib/bpf/libbpf.c        | 3 +++
+ tools/lib/bpf/libbpf.h        | 2 ++
+ tools/lib/bpf/libbpf.map      | 2 ++
+ tools/lib/bpf/libbpf_probes.c | 1 +
+ 4 files changed, 8 insertions(+)
 
-diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index f7866fded418..ee2073329d25 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -141,6 +141,27 @@ static int compute_score(struct sock *sk, struct net *net,
- 	return score;
- }
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 977add1b73e2..74f4a15dc19e 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -6524,6 +6524,7 @@ BPF_PROG_TYPE_FNS(perf_event, BPF_PROG_TYPE_PERF_EVENT);
+ BPF_PROG_TYPE_FNS(tracing, BPF_PROG_TYPE_TRACING);
+ BPF_PROG_TYPE_FNS(struct_ops, BPF_PROG_TYPE_STRUCT_OPS);
+ BPF_PROG_TYPE_FNS(extension, BPF_PROG_TYPE_EXT);
++BPF_PROG_TYPE_FNS(sk_lookup, BPF_PROG_TYPE_SK_LOOKUP);
  
-+static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
-+					    struct sk_buff *skb,
-+					    const struct in6_addr *saddr,
-+					    __be16 sport,
-+					    const struct in6_addr *daddr,
-+					    unsigned int hnum)
-+{
-+	struct sock *reuse_sk = NULL;
-+	u32 hash;
-+
-+	if (sk->sk_reuseport && sk->sk_state != TCP_ESTABLISHED) {
-+		hash = udp6_ehashfn(net, daddr, hnum, saddr, sport);
-+		reuse_sk = reuseport_select_sock(sk, hash, skb,
-+						 sizeof(struct udphdr));
-+		/* Fall back to scoring if group has connections */
-+		if (reuseport_has_conns(sk, false))
-+			return NULL;
-+	}
-+	return reuse_sk;
-+}
-+
- /* called with rcu_read_lock() */
- static struct sock *udp6_lib_lookup2(struct net *net,
- 		const struct in6_addr *saddr, __be16 sport,
-@@ -150,7 +171,6 @@ static struct sock *udp6_lib_lookup2(struct net *net,
- {
- 	struct sock *sk, *result;
- 	int score, badness;
--	u32 hash = 0;
+ enum bpf_attach_type
+ bpf_program__get_expected_attach_type(struct bpf_program *prog)
+@@ -6684,6 +6685,8 @@ static const struct bpf_sec_def section_defs[] = {
+ 	BPF_EAPROG_SEC("cgroup/setsockopt",	BPF_PROG_TYPE_CGROUP_SOCKOPT,
+ 						BPF_CGROUP_SETSOCKOPT),
+ 	BPF_PROG_SEC("struct_ops",		BPF_PROG_TYPE_STRUCT_OPS),
++	BPF_EAPROG_SEC("sk_lookup",		BPF_PROG_TYPE_SK_LOOKUP,
++						BPF_SK_LOOKUP),
+ };
  
- 	result = NULL;
- 	badness = -1;
-@@ -158,16 +178,11 @@ static struct sock *udp6_lib_lookup2(struct net *net,
- 		score = compute_score(sk, net, saddr, sport,
- 				      daddr, hnum, dif, sdif);
- 		if (score > badness) {
--			if (sk->sk_reuseport &&
--			    sk->sk_state != TCP_ESTABLISHED) {
--				hash = udp6_ehashfn(net, daddr, hnum,
--						    saddr, sport);
--
--				result = reuseport_select_sock(sk, hash, skb,
--							sizeof(struct udphdr));
--				if (result && !reuseport_has_conns(sk, false))
--					return result;
--			}
-+			result = lookup_reuseport(net, sk, skb,
-+						  saddr, sport, daddr, hnum);
-+			if (result)
-+				return result;
-+
- 			result = sk;
- 			badness = score;
- 		}
+ #undef BPF_PROG_SEC_IMPL
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index f1dacecb1619..8373fbacbba3 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -337,6 +337,7 @@ LIBBPF_API int bpf_program__set_perf_event(struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_tracing(struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_struct_ops(struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_extension(struct bpf_program *prog);
++LIBBPF_API int bpf_program__set_sk_lookup(struct bpf_program *prog);
+ 
+ LIBBPF_API enum bpf_prog_type bpf_program__get_type(struct bpf_program *prog);
+ LIBBPF_API void bpf_program__set_type(struct bpf_program *prog,
+@@ -364,6 +365,7 @@ LIBBPF_API bool bpf_program__is_perf_event(const struct bpf_program *prog);
+ LIBBPF_API bool bpf_program__is_tracing(const struct bpf_program *prog);
+ LIBBPF_API bool bpf_program__is_struct_ops(const struct bpf_program *prog);
+ LIBBPF_API bool bpf_program__is_extension(const struct bpf_program *prog);
++LIBBPF_API bool bpf_program__is_sk_lookup(const struct bpf_program *prog);
+ 
+ /*
+  * No need for __attribute__((packed)), all members of 'bpf_map_def'
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index e03bd4db827e..113ac0a669c2 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -253,6 +253,8 @@ LIBBPF_0.0.8 {
+ 		bpf_program__set_attach_target;
+ 		bpf_program__set_lsm;
+ 		bpf_set_link_xdp_fd_opts;
++		bpf_program__is_sk_lookup;
++		bpf_program__set_sk_lookup;
+ } LIBBPF_0.0.7;
+ 
+ LIBBPF_0.0.9 {
+diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+index 2c92059c0c90..5c6d3e49f254 100644
+--- a/tools/lib/bpf/libbpf_probes.c
++++ b/tools/lib/bpf/libbpf_probes.c
+@@ -109,6 +109,7 @@ probe_load(enum bpf_prog_type prog_type, const struct bpf_insn *insns,
+ 	case BPF_PROG_TYPE_STRUCT_OPS:
+ 	case BPF_PROG_TYPE_EXT:
+ 	case BPF_PROG_TYPE_LSM:
++	case BPF_PROG_TYPE_SK_LOOKUP:
+ 	default:
+ 		break;
+ 	}
 -- 
 2.25.3
 
