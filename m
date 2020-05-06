@@ -2,112 +2,141 @@ Return-Path: <SRS0=COpY=6U=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38817C47256
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 17:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D6B9C4724C
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 17:44:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0EFF4208DB
-	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 17:40:25 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B4QPqqQw"
+	by mail.kernel.org (Postfix) with ESMTP id 6B64D2080D
+	for <bpf@archiver.kernel.org>; Wed,  6 May 2020 17:44:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588787088;
+	bh=RafwzRMxEiqewRDjYX9jx28hV2yqim7/WefdTKS8dBY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=QDRXJ2PnsjNKZMnD9E0Yy6edOXSpsHLp6R+uF5/dbLD2KE67hu7MVVORX3UZ/OQPJ
+	 zmWCXMmrDFwHQWcqWODlugOCBRZ+uABEva0KQVwZ7BFjVpKaxucmf2iAH6r4/pRmIA
+	 CvxNiDUMLdWK4MSCYcVvAxklGlyisGxjVbvVSsiU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728796AbgEFRkZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 May 2020 13:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S1728777AbgEFRor (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 May 2020 13:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728047AbgEFRkZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 May 2020 13:40:25 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63D7C061A0F;
-        Wed,  6 May 2020 10:40:24 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id f83so2908678qke.13;
-        Wed, 06 May 2020 10:40:24 -0700 (PDT)
+        with ESMTP id S1730418AbgEFRof (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 May 2020 13:44:35 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5F1C061A41
+        for <bpf@vger.kernel.org>; Wed,  6 May 2020 10:44:35 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id u6so3310238ljl.6
+        for <bpf@vger.kernel.org>; Wed, 06 May 2020 10:44:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Vh69jvYL8rP/gJYqShJHYtuquy/MVM6OccSOU1yzpfM=;
-        b=B4QPqqQweo58nFL0vxi+WUePpvQPYG/TSlGtZ9Sd1HRjfcIFh2HQAognvkdVWUXTVm
-         oEs/W/9IhBjBLVAtPpdJTfWMjXN9xO9Iz1xkbSuX5HlGQX8ogtTRWHSvwIkkMUmFeF8m
-         Z0SIS/LbHzCZqrOFKLOqlvKkNt1EIVzJnoVVcLfDWJRWYbNbVx6repcOw/HL+TRB9/BQ
-         bdcupK1paVsDz86ZrzSHP5NoNlrzbGgilTJFC7RmzbqN/LJxU0mjiEXhhyTtRf2YvNU+
-         j+WPA2sOIrCWJ5e5AVRztyqvypsHVPzSLQPwCRIKs8x3Gi0IpLjSzmjLguNY97NqJGdy
-         W2vA==
+        bh=uNt2KHwB8PiMSyUUcvWbb3LmQf/yl99wmVRwAMCe6Sw=;
+        b=QfIhp8bnkHziXy45j6AZQvnQuPZVCBRmkYNh4Qk1yBWY/AbDih3c468GHPPi0NxUWC
+         +RsQItHsCm4TW5y+JMWQZhOFGKrkw/OMHO8k0Ff3ChO35z8KVI8vHTXhfxO6dpDN2zOT
+         R/3GLd58rAk/zgyKNOtvPikt/JEPwM8VJVw+4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Vh69jvYL8rP/gJYqShJHYtuquy/MVM6OccSOU1yzpfM=;
-        b=SMiK1eh08kEMFLP+UxYDfR/6U1JQ++nWSQftSv+aZbp7AwUT3n2np7pP66d2XkqTqi
-         XXTF0dgFEQw/ZYA88XE2dVuNE1UnbtXX5DHTnjthQy5TAG3gxJKnLD0jtUM9Flzxjzmi
-         DenDMuSBjOybMcg/itjXFsmZ5ZlIjS74EkAFPNFMYq2fKIU4RXhVFC2zU+WhqkjeG4Qb
-         aupJH5U5A9dPEDOgKJZX4Z6AOd84Su1cbWsrteApYm3ytHcsg/wdq1pqeP9xXwmOcDXu
-         ndBnUlPNiDKcoNJhW/xVya4G4d1/EKTtue5XOc/6voq9AIhRqqtndOutm6Y9OywxcHJD
-         7lEA==
-X-Gm-Message-State: AGi0PubZugQgC+PXXc0jNbLoonCTVDoyZ4Jo8OshoF31xaah3E3ttLLq
-        qwxWJGI+44jypF09bHhQ1+JqDvoB/ohRzH8mQxw=
-X-Google-Smtp-Source: APiQypLz+1zXhNr/M18qHjj5wR/+BYu7IcrllyHeCrwswONCS9cDgP8oWpTqJD+s5/0qSHdDC/0lIT1qbcS1jeoRQTw=
-X-Received: by 2002:ae9:e713:: with SMTP id m19mr10162813qka.39.1588786822693;
- Wed, 06 May 2020 10:40:22 -0700 (PDT)
+        bh=uNt2KHwB8PiMSyUUcvWbb3LmQf/yl99wmVRwAMCe6Sw=;
+        b=LaY7Y5pdOJgt4OgDgSuqBi/fymqR2BBcxntgqIzkuaccLS9e1HZKkUJN+c22hKO9fB
+         hImXBXxgEiND6xMQuYGezFEQHNpADW31VbjsHSwtXjjSHH4LrxS2m+DGZReC6xz4iIOc
+         oFjypw7UiX219gVSDvI5XTQgBeIig3pOxLYo7AejEIl64imADAkYlp31arLq1tQdyC/u
+         NVs2boX6FPsE8hsQMjADlzUyVqbTi2d4sJLxGch6ZpGUISBf/ZRIhYH3sqgbjFfZiSkh
+         6eo1yWxx+FZKSW3jLWCDbmgSsqrGbiG5c3HI/6HNeTNDxa9sHdY1l+9LfjBQPr3JZQrV
+         x2Yw==
+X-Gm-Message-State: AGi0PuaQJ1BrXMmcVhC8i7QgpFFTNVI6d7rWrMSBODNKId7+GCjgp6wy
+        Ih+a1bZhx6Z8v/vykVm3Ho69boP/Q/4=
+X-Google-Smtp-Source: APiQypKkGc502NXvxRp6NQ0zrQiaFlhZYDzA2A3SSWKImmcxLEzuzBlVFsKHsJxz/NNth2Vwma0kIA==
+X-Received: by 2002:a2e:9818:: with SMTP id a24mr5825936ljj.126.1588787072941;
+        Wed, 06 May 2020 10:44:32 -0700 (PDT)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
+        by smtp.gmail.com with ESMTPSA id o204sm2071082lff.64.2020.05.06.10.44.31
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 May 2020 10:44:32 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id x73so2088743lfa.2
+        for <bpf@vger.kernel.org>; Wed, 06 May 2020 10:44:31 -0700 (PDT)
+X-Received: by 2002:a19:6e4e:: with SMTP id q14mr5836440lfk.192.1588787071388;
+ Wed, 06 May 2020 10:44:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200504062547.2047304-1-yhs@fb.com> <20200504062604.2048804-1-yhs@fb.com>
-In-Reply-To: <20200504062604.2048804-1-yhs@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 6 May 2020 10:40:11 -0700
-Message-ID: <CAEf4BzZyuiei1SxU0snvZLuKJZpOLvDrqJEidVy=BFY9wcZJZg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 15/20] bpf: support variable length array in
- tracing programs
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
+References: <20200506062223.30032-1-hch@lst.de> <20200506062223.30032-9-hch@lst.de>
+In-Reply-To: <20200506062223.30032-9-hch@lst.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 6 May 2020 10:44:15 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj3T6u_kj8r9f3aGXCjuyN210_gJC=AXPFm9=wL-dGALA@mail.gmail.com>
+Message-ID: <CAHk-=wj3T6u_kj8r9f3aGXCjuyN210_gJC=AXPFm9=wL-dGALA@mail.gmail.com>
+Subject: Re: [PATCH 08/15] maccess: rename strnlen_unsafe_user to strnlen_user_unsafe
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-parisc@vger.kernel.org,
+        linux-um <linux-um@lists.infradead.org>,
+        Netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, May 3, 2020 at 11:27 PM Yonghong Song <yhs@fb.com> wrote:
+On Tue, May 5, 2020 at 11:22 PM Christoph Hellwig <hch@lst.de> wrote:
 >
-> In /proc/net/ipv6_route, we have
->   struct fib6_info {
->     struct fib6_table *fib6_table;
->     ...
->     struct fib6_nh fib6_nh[0];
->   }
->   struct fib6_nh {
->     struct fib_nh_common nh_common;
->     struct rt6_info **rt6i_pcpu;
->     struct rt6_exception_bucket *rt6i_exception_bucket;
->   };
->   struct fib_nh_common {
->     ...
->     u8 nhc_gw_family;
->     ...
->   }
->
-> The access:
->   struct fib6_nh *fib6_nh = &rt->fib6_nh;
->   ... fib6_nh->nh_common.nhc_gw_family ...
->
-> This patch ensures such an access is handled properly.
->
-> Signed-off-by: Yonghong Song <yhs@fb.com>
-> ---
+> This matches the convention of always having _unsafe as a suffix, as
+> well as match the naming of strncpy_from_user_unsafe.
 
-LGTM.
+Hmm. While renaming them, can we perhaps clarify what the rules are?
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
+We now have two different kinds of "unsafe". We have the
+"unsafe_get_user()" kind of unsafe: the user pointer itself is unsafe
+because it isn't checked, and you need to use a "user_access_begin()"
+to verify.
 
->  kernel/bpf/btf.c | 37 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
->
+It's the new form of "__get_user()".
 
-[...]
+And then we have the strncpy_from_user_unsafe(), which is really more
+like the "probe_kernel_read()" kind of funtion, in that it's about the
+context, and not faulting.
+
+Honestly, I don't like the "unsafe" in the second case, because
+there's nothing "unsafe" about the function. It's used in odd
+contexts. I guess to some degree those are "unsafe" contexts, but I
+think it might be better to clarify.
+
+So while I think using a consistent convention is good, and it's true
+that there is a difference in the convention between the two cases
+("unsafe" at the beginning vs end), one of them is actually about the
+safety and security of the operation (and we have automated logic
+these days to verify it on x86), the other has nothing to do with
+"safety", really.
+
+Would it be better to standardize around a "probe_xyz()" naming?
+
+Or perhaps a "xyz_nofault()" naming?
+
+I'm not a huge fan of the "probe" naming, but it sure is descriptive,
+which is a really good thing.
+
+Another option would be to make it explicitly about _what_ is
+"unsafe", ie that it's about not having a process context that can be
+faulted in. But "xyz_unsafe_context()" is much too verbose.
+"xyz_noctx()" might work.
+
+I realize this is nit-picky, and I think the patch series as-is is
+already an improvement, but I do think our naming in this area is
+really quite bad.
+
+The fact that we have "probe_kernel_read()" but then
+"strncpy_from_user_unsafe()" for the _same_ conceptual difference
+really tells me how inconsistent the naming for these kinds of "we
+can't take page faults" is. No?
+
+                   Linus
