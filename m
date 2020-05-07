@@ -2,797 +2,235 @@ Return-Path: <SRS0=eV/F=6V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9874C38A24
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 08:16:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF041C54E49
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 08:20:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BD7120753
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 08:16:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bVMuCOks"
+	by mail.kernel.org (Postfix) with ESMTP id 889C12078C
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 08:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588839605;
+	bh=3gbWMUd5CO+cTYDj/4z9OV5jX0t6dXsMaqIYbZgFlpY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=Mt0VtpDeaxitq+1LxEYOzl4hy2wbZY7CebN77gmLmT4QiGOv8Nd40MoXZsotPGs0s
+	 VJgUkjM5IDeOxRsj1XaYlq20VvBI0p+mWvu44lh1Fdm72kRnsOfDyJj8Pq+028bg8L
+	 LyJtZiXuRNFbXEt7K8eEYyf2okSattsYMT5AVLlc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726774AbgEGIOx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 May 2020 04:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726660AbgEGIOu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 7 May 2020 04:14:50 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D15BC061BD3
-        for <bpf@vger.kernel.org>; Thu,  7 May 2020 01:14:50 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id w15so6041452ybp.16
-        for <bpf@vger.kernel.org>; Thu, 07 May 2020 01:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=dPBMxmwFrR2yn2friu6HNEPQaLNnBOVs6YYMybyFANo=;
-        b=bVMuCOksAbO7MTCJ3gLBkb460Sk9t/7nA9Q2hrZDDwx1UnoLJ84oqEK93Lt1ceDOA3
-         500yOlwrgxcYdA5mboaqEEmBto9rm+vUpaFoz9P1YVFAJIyGDz7Dbe5DxWCITbmEzy1I
-         X52Lyn88BCy9+PQSA0edwlH+DDr3mkznjvY7nY3CqRRldHD1w7iaKfgdzSPAQMaiP+fN
-         pS+imWKvTNagOYXGt6+DpWg4dO7CQq38tq654cii3zLNW93tYlQ9ZBi9Lkwsadt18hTb
-         7UgFPAuYWDZ2rlktEG0aLeu+CVTICrEPgLAjpPeeWPqj1fUY5SZ3lwOPiJsFmGHw9g0j
-         7X/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=dPBMxmwFrR2yn2friu6HNEPQaLNnBOVs6YYMybyFANo=;
-        b=nluJnRM31CMWl56EzWT61drRMvMDY5iep8fUYH/z1HKTDyWCmuhxhkGouO0c0knKCH
-         dv+rLNU9/DOKuyqQrI9AtU+FpN4cxKH/qUwO6xrp4QmtEPPTlKYkoTHJuocVbCr60Wpi
-         jQZMmwzcbUFxYx6S+aw3kw/6cZ/qio0g99diba6RbGBgsGkYP/q22QETKIPToOk6jNZ0
-         BctYr9nzan07Y0i1+Pvwn+YnZMc5WLnzOR1q4a3xD7zQz4AELMGTdGe4KId09mDXsNw4
-         ZoLorNQ0YEI1XNezvcaeE/hRTT5W+xd432Vt37S8lXy4BcLDcDoF3A+3QWHbbdO6oZdu
-         o97g==
-X-Gm-Message-State: AGi0PubGqvxMycTz8CWPrxqhho9VsR9j8ZFMw36K+mgNzzOlHk+NDTVh
-        wiAB2n2kKnkimrn8J2hg+n+Le7gSXz4j
-X-Google-Smtp-Source: APiQypI0lrEs+six5c8QQW/5Y5d5ULCkrOd+4nYVm4SdjGxNEAfuOGx0X0VcIOfhDZ56ksGTeh2MreEav4ec
-X-Received: by 2002:a5b:390:: with SMTP id k16mr20726804ybp.175.1588839289381;
- Thu, 07 May 2020 01:14:49 -0700 (PDT)
-Date:   Thu,  7 May 2020 01:14:30 -0700
-In-Reply-To: <20200507081436.49071-1-irogers@google.com>
-Message-Id: <20200507081436.49071-2-irogers@google.com>
-Mime-Version: 1.0
-References: <20200507081436.49071-1-irogers@google.com>
-X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
-Subject: [RFC PATCH 1/7] perf expr: migrate expr ids table to libbpf's hashmap
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S1725845AbgEGIT7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 May 2020 04:19:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37208 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725809AbgEGIT7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 May 2020 04:19:59 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 221B820753;
+        Thu,  7 May 2020 08:19:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588839598;
+        bh=3gbWMUd5CO+cTYDj/4z9OV5jX0t6dXsMaqIYbZgFlpY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lr7yTnWBq42d7rxJ0Gg4BdkKXNv6Fg/DgGgRnd3b42jDQGDShOtmC7lD2OobaaUU8
+         RNP+Dy569psqAbJSuxu3H6OZ+NCqxM9pBPDRiOKYPimNF5oGDEUW64fdrozNhLPS6i
+         QLyB/mQc66gTJWgMbSh8urRrtf24s35UG9G+HgHA=
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1jWbl6-00ACFm-4L; Thu, 07 May 2020 09:19:56 +0100
+Date:   Thu, 7 May 2020 09:19:53 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Luke Nelson <lukenels@cs.washington.edu>
+Cc:     bpf@vger.kernel.org, Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        linux-kernel@vger.kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoffer Dall <christoffer.dall@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: Re: [RFC PATCH bpf-next 1/3] arm64: insn: Fix two bugs in encoding
+ 32-bit logical immediates
+Message-ID: <20200507091953.70505638@why>
+In-Reply-To: <20200507010504.26352-2-luke.r.nels@gmail.com>
+References: <20200507010504.26352-1-luke.r.nels@gmail.com>
+        <20200507010504.26352-2-luke.r.nels@gmail.com>
+Organization: Approximate
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: lukenels@cs.washington.edu, bpf@vger.kernel.org, luke.r.nels@gmail.com, xi.wang@gmail.com, catalin.marinas@arm.com, will@kernel.org, daniel@iogearbox.net, ast@kernel.org, zlim.lnx@gmail.com, kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com, john.fastabend@gmail.com, kpsingh@chromium.org, mark.rutland@arm.com, gregkh@linuxfoundation.org, tglx@linutronix.de, christoffer.dall@linaro.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, clang-built-linux@googlegroups.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use a hashmap between a char* string and a double* value. While bpf's
-hashmap entries are size_t in size, we can't guarantee sizeof(size_t) >=
-sizeof(double). Avoid a memory allocation when gathering ids by making 0.0
-a special value encoded as NULL.
+Hi Luke,
 
-Suggested by Andi Kleen:
-https://lore.kernel.org/lkml/20200224210308.GQ160988@tassilo.jf.intel.com/
-and seconded by Jiri Olsa:
-https://lore.kernel.org/lkml/20200423112915.GH1136647@krava/
+Thanks a lot for nailing these bugs.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/tests/expr.c       |  32 ++++-----
- tools/perf/tests/pmu-events.c |  22 +++---
- tools/perf/util/expr.c        | 125 ++++++++++++++++++----------------
- tools/perf/util/expr.h        |  22 +++---
- tools/perf/util/expr.y        |  22 +-----
- tools/perf/util/metricgroup.c |  86 +++++++++++------------
- tools/perf/util/stat-shadow.c |  46 ++++++++-----
- 7 files changed, 176 insertions(+), 179 deletions(-)
+On Wed,  6 May 2020 18:05:01 -0700
+Luke Nelson <lukenels@cs.washington.edu> wrote:
 
-diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
-index 3f742612776a..bb948226be1d 100644
---- a/tools/perf/tests/expr.c
-+++ b/tools/perf/tests/expr.c
-@@ -19,11 +19,9 @@ static int test(struct expr_parse_ctx *ctx, const char *e, double val2)
- int test__expr(struct test *t __maybe_unused, int subtest __maybe_unused)
+> This patch fixes two issues present in the current function for encoding
+> arm64 logical immediates when using the 32-bit variants of instructions.
+> 
+> First, the code does not correctly reject an all-ones 32-bit immediate
+> and returns an undefined instruction encoding, which can crash the kernel.
+
+You make it sound more dramatic than it needs to be! ;-) As you pointed
+out below, nothing in the kernel calls this code to encode a 32bit
+immediate, so triggering a crash is not possible (unless you manage to
+exploit something else to call into this code). It definitely needs
+fixing though!
+
+> The fix is to add a check for this case.
+> 
+> Second, the code incorrectly rejects some 32-bit immediates that are
+> actually encodable as logical immediates. The root cause is that the code
+> uses a default mask of 64-bit all-ones, even for 32-bit immediates. This
+> causes an issue later on when the mask is used to fill the top bits of
+> the immediate with ones, shown here:
+> 
+>   /*
+>    * Pattern: 0..01..10..01..1
+>    *
+>    * Fill the unused top bits with ones, and check if
+>    * the result is a valid immediate (all ones with a
+>    * contiguous ranges of zeroes).
+>    */
+>   imm |= ~mask;
+>   if (!range_of_ones(~imm))
+>           return AARCH64_BREAK_FAULT;
+> 
+> To see the problem, consider an immediate of the form 0..01..10..01..1,
+> where the upper 32 bits are zero, such as 0x80000001. The code checks
+> if ~(imm | ~mask) contains a range of ones: the incorrect mask yields
+> 1..10..01..10..0, which fails the check; the correct mask yields
+> 0..01..10..0, which succeeds.
+> 
+> The fix is to use a 32-bit all-ones default mask for 32-bit immediates.
+
+Paging this thing back in is really hard (I only had one coffee, more
+needed). Yes, I see what you mean. Duh! I think this only happens if
+mask hasn't been adjusted by the "pattern spotting" code the first place
+though.
+
+> 
+> Currently, the only user of this function is in
+> arch/arm64/kvm/va_layout.c, which uses 64-bit immediates and won't
+> trigger these bugs.
+> 
+> We tested the new code against llvm-mc with all 1,302 encodable 32-bit
+> logical immediates and all 5,334 encodable 64-bit logical immediates.
+
+That, on its own, is awesome information. Do you have any pointer on
+how to set this up?
+
+> 
+> Fixes: ef3935eeebff ("arm64: insn: Add encoder for bitwise operations using literals")
+> Co-developed-by: Xi Wang <xi.wang@gmail.com>
+> Signed-off-by: Xi Wang <xi.wang@gmail.com>
+> Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
+> ---
+>  arch/arm64/kernel/insn.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/insn.c b/arch/arm64/kernel/insn.c
+> index 4a9e773a177f..42fad79546bb 100644
+> --- a/arch/arm64/kernel/insn.c
+> +++ b/arch/arm64/kernel/insn.c
+> @@ -1535,7 +1535,7 @@ static u32 aarch64_encode_immediate(u64 imm,
+>  				    u32 insn)
+>  {
+>  	unsigned int immr, imms, n, ones, ror, esz, tmp;
+> -	u64 mask = ~0UL;
+> +	u64 mask;
+>  
+>  	/* Can't encode full zeroes or full ones */
+>  	if (!imm || !~imm)
+> @@ -1543,13 +1543,15 @@ static u32 aarch64_encode_immediate(u64 imm,
+>  
+>  	switch (variant) {
+>  	case AARCH64_INSN_VARIANT_32BIT:
+> -		if (upper_32_bits(imm))
+> +		if (upper_32_bits(imm) || imm == 0xffffffffUL)
+
+nit: I don't like the fact that this create a small dissymmetry in the
+way we check things (we start by checking !~imm, which is not relevant
+to 32bit constants).
+
+>  			return AARCH64_BREAK_FAULT;
+>  		esz = 32;
+> +		mask = 0xffffffffUL;
+>  		break;
+>  	case AARCH64_INSN_VARIANT_64BIT:
+>  		insn |= AARCH64_INSN_SF_BIT;
+>  		esz = 64;
+> +		mask = ~0UL;
+
+I'd rather we generate the mask in a programmatic way, which is pretty
+easy to do since we have the initial element size.
+
+>  		break;
+>  	default:
+>  		pr_err("%s: unknown variant encoding %d\n", __func__, variant);
+
+To account for the above remarks, I came up with the following patch:
+
+diff --git a/arch/arm64/kernel/insn.c b/arch/arm64/kernel/insn.c
+index 4a9e773a177f..422bf9a79ed6 100644
+--- a/arch/arm64/kernel/insn.c
++++ b/arch/arm64/kernel/insn.c
+@@ -1535,11 +1535,7 @@ static u32 aarch64_encode_immediate(u64 imm,
+ 				    u32 insn)
  {
- 	const char *p;
--	const char **other;
--	double val;
--	int i, ret;
-+	double val, *val_ptr;
-+	int ret;
- 	struct expr_parse_ctx ctx;
--	int num_other;
- 
- 	expr__ctx_init(&ctx);
- 	expr__add_id(&ctx, "FOO", 1);
-@@ -52,25 +50,23 @@ int test__expr(struct test *t __maybe_unused, int subtest __maybe_unused)
- 	ret = expr__parse(&val, &ctx, p, 1);
- 	TEST_ASSERT_VAL("missing operand", ret == -1);
- 
-+	hashmap__clear(&ctx.ids);
- 	TEST_ASSERT_VAL("find other",
--			expr__find_other("FOO + BAR + BAZ + BOZO", "FOO", &other, &num_other, 1) == 0);
--	TEST_ASSERT_VAL("find other", num_other == 3);
--	TEST_ASSERT_VAL("find other", !strcmp(other[0], "BAR"));
--	TEST_ASSERT_VAL("find other", !strcmp(other[1], "BAZ"));
--	TEST_ASSERT_VAL("find other", !strcmp(other[2], "BOZO"));
--	TEST_ASSERT_VAL("find other", other[3] == NULL);
-+			expr__find_other("FOO + BAR + BAZ + BOZO", "FOO", &ctx, 1) == 0);
-+	TEST_ASSERT_VAL("find other", hashmap__size(&ctx.ids) == 3);
-+	TEST_ASSERT_VAL("find other", hashmap__find(&ctx.ids, "BAR", (void**)&val_ptr));
-+	TEST_ASSERT_VAL("find other", hashmap__find(&ctx.ids, "BAZ", (void**)&val_ptr));
-+	TEST_ASSERT_VAL("find other", hashmap__find(&ctx.ids, "BOZO", (void**)&val_ptr));
- 
-+	hashmap__clear(&ctx.ids);
- 	TEST_ASSERT_VAL("find other",
- 			expr__find_other("EVENT1\\,param\\=?@ + EVENT2\\,param\\=?@", NULL,
--				   &other, &num_other, 3) == 0);
--	TEST_ASSERT_VAL("find other", num_other == 2);
--	TEST_ASSERT_VAL("find other", !strcmp(other[0], "EVENT1,param=3/"));
--	TEST_ASSERT_VAL("find other", !strcmp(other[1], "EVENT2,param=3/"));
--	TEST_ASSERT_VAL("find other", other[2] == NULL);
-+				   &ctx, 3) == 0);
-+	TEST_ASSERT_VAL("find other", hashmap__size(&ctx.ids) == 2);
-+	TEST_ASSERT_VAL("find other", hashmap__find(&ctx.ids, "EVENT1,param=3/", (void**)&val_ptr));
-+	TEST_ASSERT_VAL("find other", hashmap__find(&ctx.ids, "EVENT2,param=3/", (void**)&val_ptr));
- 
--	for (i = 0; i < num_other; i++)
--		zfree(&other[i]);
--	free((void *)other);
-+	expr__ctx_clear(&ctx);
- 
- 	return 0;
- }
-diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
-index c18b9ce8cace..6ce6b8a31e1f 100644
---- a/tools/perf/tests/pmu-events.c
-+++ b/tools/perf/tests/pmu-events.c
-@@ -428,8 +428,6 @@ static int test_parsing(void)
- 	struct pmu_events_map *map;
- 	struct pmu_event *pe;
- 	int i, j, k;
--	const char **ids;
--	int idnum;
- 	int ret = 0;
- 	struct expr_parse_ctx ctx;
- 	double result;
-@@ -443,13 +441,16 @@ static int test_parsing(void)
- 		}
- 		j = 0;
- 		for (;;) {
-+			struct hashmap_entry *cur;
-+			size_t bkt;
-+
- 			pe = &map->table[j++];
- 			if (!pe->name && !pe->metric_group && !pe->metric_name)
- 				break;
- 			if (!pe->metric_expr)
- 				continue;
--			if (expr__find_other(pe->metric_expr, NULL,
--						&ids, &idnum, 0) < 0) {
-+			if (expr__find_other(pe->metric_expr, NULL, &ctx, 0)
-+				  < 0) {
- 				pr_debug("Parse other failed for map %s %s %s\n",
- 					map->cpuid, map->version, map->type);
- 				pr_debug("On metric %s\n", pe->metric_name);
-@@ -464,11 +465,12 @@ static int test_parsing(void)
- 			 * trigger divide by zero when subtracted and so try to
- 			 * make them unique.
- 			 */
--			for (k = 0; k < idnum; k++)
--				expr__add_id(&ctx, ids[k], k + 1);
-+			k = 1;
-+			hashmap__for_each_entry((&ctx.ids), cur, bkt)
-+				expr__add_id(&ctx, cur->key, k++);
- 
--			for (k = 0; k < idnum; k++) {
--				if (check_parse_id(ids[k], map == cpus_map, pe))
-+			hashmap__for_each_entry((&ctx.ids), cur, bkt) {
-+				if (check_parse_id(cur->key, map == cpus_map, pe))
- 					ret++;
- 			}
- 
-@@ -479,9 +481,7 @@ static int test_parsing(void)
- 				pr_debug("On expression %s\n", pe->metric_expr);
- 				ret++;
- 			}
--			for (k = 0; k < idnum; k++)
--				zfree(&ids[k]);
--			free(ids);
-+			expr__ctx_clear(&ctx);
- 		}
- 	}
- 	return ret;
-diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
-index 8b4ce704a68d..70e4e468d7c7 100644
---- a/tools/perf/util/expr.c
-+++ b/tools/perf/util/expr.c
-@@ -4,25 +4,73 @@
- #include "expr.h"
- #include "expr-bison.h"
- #include "expr-flex.h"
-+#include <linux/kernel.h>
- 
- #ifdef PARSER_DEBUG
- extern int expr_debug;
- #endif
- 
-+static size_t double_hash(const void *key, void *ctx __maybe_unused)
-+{
-+	const char *str = (const char*)key;
-+	size_t hash = 0;
-+	while (*str != '\0') {
-+		hash <<= 31;
-+		hash += *str;
-+		str++;
-+	}
-+	return hash;
-+}
-+
-+static bool double_equal(const void *key1, const void *key2,
-+		    void *ctx __maybe_unused)
-+{
-+	return !strcmp((const char*)key1, (const char*)key2);
-+}
-+
- /* Caller must make sure id is allocated */
--void expr__add_id(struct expr_parse_ctx *ctx, const char *name, double val)
-+int expr__add_id(struct expr_parse_ctx *ctx, const char *name, double val)
- {
--	int idx;
-+	double *val_ptr = NULL, *old_val = NULL;
-+	char *old_key = NULL;
-+	int ret;
- 
--	assert(ctx->num_ids < MAX_PARSE_ID);
--	idx = ctx->num_ids++;
--	ctx->ids[idx].name = name;
--	ctx->ids[idx].val = val;
-+	if (val != 0.0) {
-+		val_ptr = malloc(sizeof(double));
-+		if (!val_ptr)
-+			return -ENOMEM;
-+		*val_ptr = val;
-+	}
-+	ret = hashmap__set(&ctx->ids, name, val_ptr, (const void**)&old_key, (void**)&old_val);
-+	free(old_key);
-+	free(old_val);
-+	return ret;
-+}
-+
-+int expr__get_id(struct expr_parse_ctx *ctx, const char *id, double *val_ptr)
-+{
-+	double *data;
-+	if (!hashmap__find(&ctx->ids, id, (void**)&data))
-+		return -1;
-+	*val_ptr = (data == NULL) ?  0.0 : *data;
-+	return 0;
- }
- 
- void expr__ctx_init(struct expr_parse_ctx *ctx)
- {
--	ctx->num_ids = 0;
-+	hashmap__init(&ctx->ids, double_hash, double_equal, NULL);
-+}
-+
-+void expr__ctx_clear(struct expr_parse_ctx *ctx)
-+{
-+	struct hashmap_entry *cur;
-+	size_t bkt;
-+
-+	hashmap__for_each_entry((&ctx->ids), cur, bkt) {
-+		free((char*)cur->key);
-+		free(cur->value);
-+	}
-+	hashmap__clear(&ctx->ids);
- }
- 
- static int
-@@ -56,61 +104,24 @@ __expr__parse(double *val, struct expr_parse_ctx *ctx, const char *expr,
- 	return ret;
- }
- 
--int expr__parse(double *final_val, struct expr_parse_ctx *ctx, const char *expr, int runtime)
-+int expr__parse(double *final_val, struct expr_parse_ctx *ctx,
-+		const char *expr, int runtime)
- {
- 	return __expr__parse(final_val, ctx, expr, EXPR_PARSE, runtime) ? -1 : 0;
- }
- 
--static bool
--already_seen(const char *val, const char *one, const char **other,
--	     int num_other)
-+int expr__find_other(const char *expr, const char *one,
-+		     struct expr_parse_ctx *ctx, int runtime)
- {
--	int i;
+ 	unsigned int immr, imms, n, ones, ror, esz, tmp;
+-	u64 mask = ~0UL;
 -
--	if (one && !strcasecmp(one, val))
--		return true;
--	for (i = 0; i < num_other; i++)
--		if (!strcasecmp(other[i], val))
--			return true;
--	return false;
--}
--
--int expr__find_other(const char *expr, const char *one, const char ***other,
--		     int *num_other, int runtime)
--{
--	int err, i = 0, j = 0;
--	struct expr_parse_ctx ctx;
--
--	expr__ctx_init(&ctx);
--	err = __expr__parse(NULL, &ctx, expr, EXPR_OTHER, runtime);
--	if (err)
--		return -1;
--
--	*other = malloc((ctx.num_ids + 1) * sizeof(char *));
--	if (!*other)
--		return -ENOMEM;
--
--	for (i = 0, j = 0; i < ctx.num_ids; i++) {
--		const char *str = ctx.ids[i].name;
--
--		if (already_seen(str, one, *other, j))
--			continue;
--
--		str = strdup(str);
--		if (!str)
--			goto out;
--		(*other)[j++] = str;
--	}
--	(*other)[j] = NULL;
--
--out:
--	if (i != ctx.num_ids) {
--		while (--j)
--			free((char *) (*other)[i]);
--		free(*other);
--		err = -1;
-+	double *old_val = NULL;
-+	char *old_key = NULL;
-+	int ret = __expr__parse(NULL, ctx, expr, EXPR_OTHER, runtime);
-+
-+	if (one) {
-+		hashmap__delete(&ctx->ids, one, (const void**)&old_key, (void**)&old_val);
-+		free(old_key);
-+		free(old_val);
+-	/* Can't encode full zeroes or full ones */
+-	if (!imm || !~imm)
+-		return AARCH64_BREAK_FAULT;
++	u64 mask;
+ 
+ 	switch (variant) {
+ 	case AARCH64_INSN_VARIANT_32BIT:
+@@ -1556,6 +1552,11 @@ static u32 aarch64_encode_immediate(u64 imm,
+ 		return AARCH64_BREAK_FAULT;
  	}
  
--	*num_other = j;
--	return err;
-+	return ret;
- }
-diff --git a/tools/perf/util/expr.h b/tools/perf/util/expr.h
-index 40fc452b0f2b..f01bd5ecb09d 100644
---- a/tools/perf/util/expr.h
-+++ b/tools/perf/util/expr.h
-@@ -2,17 +2,10 @@
- #ifndef PARSE_CTX_H
- #define PARSE_CTX_H 1
- 
--#define EXPR_MAX_OTHER 64
--#define MAX_PARSE_ID EXPR_MAX_OTHER
--
--struct expr_parse_id {
--	const char *name;
--	double val;
--};
-+#include <bpf/hashmap.h>
- 
- struct expr_parse_ctx {
--	int num_ids;
--	struct expr_parse_id ids[MAX_PARSE_ID];
-+	struct hashmap ids;
- };
- 
- struct expr_scanner_ctx {
-@@ -21,9 +14,12 @@ struct expr_scanner_ctx {
- };
- 
- void expr__ctx_init(struct expr_parse_ctx *ctx);
--void expr__add_id(struct expr_parse_ctx *ctx, const char *id, double val);
--int expr__parse(double *final_val, struct expr_parse_ctx *ctx, const char *expr, int runtime);
--int expr__find_other(const char *expr, const char *one, const char ***other,
--		int *num_other, int runtime);
-+void expr__ctx_clear(struct expr_parse_ctx *ctx);
-+int expr__add_id(struct expr_parse_ctx *ctx, const char *id, double val);
-+int expr__get_id(struct expr_parse_ctx *ctx, const char *id, double *val_ptr);
-+int expr__parse(double *final_val, struct expr_parse_ctx *ctx,
-+		const char *expr, int runtime);
-+int expr__find_other(const char *expr, const char *one,
-+		struct expr_parse_ctx *ids, int runtime);
- 
- #endif
-diff --git a/tools/perf/util/expr.y b/tools/perf/util/expr.y
-index 3b49b230b111..bf3e898e3055 100644
---- a/tools/perf/util/expr.y
-+++ b/tools/perf/util/expr.y
-@@ -47,19 +47,6 @@ static void expr_error(double *final_val __maybe_unused,
- 	pr_debug("%s\n", s);
- }
- 
--static int lookup_id(struct expr_parse_ctx *ctx, char *id, double *val)
--{
--	int i;
--
--	for (i = 0; i < ctx->num_ids; i++) {
--		if (!strcasecmp(ctx->ids[i].name, id)) {
--			*val = ctx->ids[i].val;
--			return 0;
--		}
--	}
--	return -1;
--}
--
- %}
- %%
- 
-@@ -73,12 +60,7 @@ all_other: all_other other
- 
- other: ID
- {
--	if (ctx->num_ids + 1 >= EXPR_MAX_OTHER) {
--		pr_err("failed: way too many variables");
--		YYABORT;
--	}
--
--	ctx->ids[ctx->num_ids++].name = $1;
-+	expr__add_id(ctx, $1, 0.0);
- }
- |
- MIN | MAX | IF | ELSE | SMT_ON | NUMBER | '|' | '^' | '&' | '-' | '+' | '*' | '/' | '%' | '(' | ')' | ','
-@@ -93,7 +75,7 @@ if_expr:
- 	;
- 
- expr:	  NUMBER
--	| ID			{ if (lookup_id(ctx, $1, &$$) < 0) {
-+	| ID			{ if (expr__get_id(ctx, $1, &$$)) {
- 					pr_debug("%s not found\n", $1);
- 					free($1);
- 					YYABORT;
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index b071df373f8b..2f92dbc05226 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -85,8 +85,7 @@ static void metricgroup__rblist_init(struct rblist *metric_events)
- 
- struct egroup {
- 	struct list_head nd;
--	int idnum;
--	const char **ids;
-+	struct expr_parse_ctx pctx;
- 	const char *metric_name;
- 	const char *metric_expr;
- 	const char *metric_unit;
-@@ -94,19 +93,21 @@ struct egroup {
- };
- 
- static struct evsel *find_evsel_group(struct evlist *perf_evlist,
--				      const char **ids,
--				      int idnum,
-+				      struct expr_parse_ctx *pctx,
- 				      struct evsel **metric_events,
- 				      bool *evlist_used)
- {
- 	struct evsel *ev;
--	int i = 0, j = 0;
- 	bool leader_found;
-+	const size_t idnum = hashmap__size(&pctx->ids);
-+	size_t i = 0;
-+	int j = 0;
-+	double *val_ptr;
- 
- 	evlist__for_each_entry (perf_evlist, ev) {
- 		if (evlist_used[j++])
- 			continue;
--		if (!strcmp(ev->name, ids[i])) {
-+		if (hashmap__find(&pctx->ids, ev->name, (void**)&val_ptr)) {
- 			if (!metric_events[i])
- 				metric_events[i] = ev;
- 			i++;
-@@ -118,7 +119,7 @@ static struct evsel *find_evsel_group(struct evlist *perf_evlist,
- 			memset(metric_events, 0,
- 				sizeof(struct evsel *) * idnum);
- 
--			if (!strcmp(ev->name, ids[i])) {
-+			if (hashmap__find(&pctx->ids, ev->name, (void**)&val_ptr)) {
- 				if (!metric_events[i])
- 					metric_events[i] = ev;
- 				i++;
-@@ -175,19 +176,20 @@ static int metricgroup__setup_events(struct list_head *groups,
- 	list_for_each_entry (eg, groups, nd) {
- 		struct evsel **metric_events;
- 
--		metric_events = calloc(sizeof(void *), eg->idnum + 1);
-+		metric_events = calloc(sizeof(void *),
-+				hashmap__size(&eg->pctx.ids) + 1);
- 		if (!metric_events) {
- 			ret = -ENOMEM;
- 			break;
- 		}
--		evsel = find_evsel_group(perf_evlist, eg->ids, eg->idnum,
--					 metric_events, evlist_used);
-+		evsel = find_evsel_group(perf_evlist, &eg->pctx, metric_events,
-+					evlist_used);
- 		if (!evsel) {
- 			pr_debug("Cannot resolve %s: %s\n",
- 					eg->metric_name, eg->metric_expr);
- 			continue;
- 		}
--		for (i = 0; i < eg->idnum; i++)
-+		for (i = 0; metric_events[i]; i++)
- 			metric_events[i]->collect_stat = true;
- 		me = metricgroup__lookup(metric_events_list, evsel, true);
- 		if (!me) {
-@@ -415,20 +417,20 @@ void metricgroup__print(bool metrics, bool metricgroups, char *filter,
- }
- 
- static void metricgroup__add_metric_weak_group(struct strbuf *events,
--					       const char **ids,
--					       int idnum)
-+					       struct expr_parse_ctx *ctx)
- {
-+	struct hashmap_entry *cur;
-+	size_t bkt, i = 0;
- 	bool no_group = false;
--	int i;
- 
--	for (i = 0; i < idnum; i++) {
--		pr_debug("found event %s\n", ids[i]);
-+	hashmap__for_each_entry((&ctx->ids), cur, bkt) {
-+		pr_debug("found event %s\n", (const char*)cur->key);
- 		/*
- 		 * Duration time maps to a software event and can make
- 		 * groups not count. Always use it outside a
- 		 * group.
- 		 */
--		if (!strcmp(ids[i], "duration_time")) {
-+		if (!strcmp(cur->key, "duration_time")) {
- 			if (i > 0)
- 				strbuf_addf(events, "}:W,");
- 			strbuf_addf(events, "duration_time");
-@@ -437,21 +439,22 @@ static void metricgroup__add_metric_weak_group(struct strbuf *events,
- 		}
- 		strbuf_addf(events, "%s%s",
- 			i == 0 || no_group ? "{" : ",",
--			ids[i]);
-+			(const char*)cur->key);
- 		no_group = false;
-+		i++;
- 	}
- 	if (!no_group)
- 		strbuf_addf(events, "}:W");
- }
- 
- static void metricgroup__add_metric_non_group(struct strbuf *events,
--					      const char **ids,
--					      int idnum)
-+					      struct expr_parse_ctx *ctx)
- {
--	int i;
-+	struct hashmap_entry *cur;
-+	size_t bkt;
- 
--	for (i = 0; i < idnum; i++)
--		strbuf_addf(events, ",%s", ids[i]);
-+	hashmap__for_each_entry((&ctx->ids), cur, bkt)
-+		strbuf_addf(events, ",%s", (const char*)cur->key);
- }
- 
- static void metricgroup___watchdog_constraint_hint(const char *name, bool foot)
-@@ -495,32 +498,32 @@ int __weak arch_get_runtimeparam(void)
- static int __metricgroup__add_metric(struct strbuf *events,
- 		struct list_head *group_list, struct pmu_event *pe, int runtime)
- {
--
--	const char **ids;
--	int idnum;
- 	struct egroup *eg;
- 
--	if (expr__find_other(pe->metric_expr, NULL, &ids, &idnum, runtime) < 0)
--		return -EINVAL;
--
--	if (events->len > 0)
--		strbuf_addf(events, ",");
--
--	if (metricgroup__has_constraint(pe))
--		metricgroup__add_metric_non_group(events, ids, idnum);
--	else
--		metricgroup__add_metric_weak_group(events, ids, idnum);
--
- 	eg = malloc(sizeof(*eg));
- 	if (!eg)
- 		return -ENOMEM;
- 
--	eg->ids = ids;
--	eg->idnum = idnum;
-+	expr__ctx_init(&eg->pctx);
- 	eg->metric_name = pe->metric_name;
- 	eg->metric_expr = pe->metric_expr;
- 	eg->metric_unit = pe->unit;
- 	eg->runtime = runtime;
++	/* Can't encode full zeroes or full ones */
++	mask = GENMASK_ULL(esz - 1, 0);
++	if (!imm || !(~imm & mask))
++		return AARCH64_BREAK_FAULT;
 +
-+	if (expr__find_other(pe->metric_expr, NULL, &eg->pctx, runtime) < 0) {
-+		expr__ctx_clear(&eg->pctx);
-+		free(eg);
-+		return -EINVAL;
-+	}
-+
-+	if (events->len > 0)
-+		strbuf_addf(events, ",");
-+
-+	if (metricgroup__has_constraint(pe))
-+		metricgroup__add_metric_non_group(events, &eg->pctx);
-+	else
-+		metricgroup__add_metric_weak_group(events, &eg->pctx);
-+
- 	list_add_tail(&eg->nd, group_list);
- 
- 	return 0;
-@@ -603,12 +606,9 @@ static int metricgroup__add_metric_list(const char *list, struct strbuf *events,
- static void metricgroup__free_egroups(struct list_head *group_list)
- {
- 	struct egroup *eg, *egtmp;
--	int i;
- 
- 	list_for_each_entry_safe (eg, egtmp, group_list, nd) {
--		for (i = 0; i < eg->idnum; i++)
--			zfree(&eg->ids[i]);
--		zfree(&eg->ids);
-+		expr__ctx_clear(&eg->pctx);
- 		list_del_init(&eg->nd);
- 		free(eg);
- 	}
-diff --git a/tools/perf/util/stat-shadow.c b/tools/perf/util/stat-shadow.c
-index 129b8c5f2538..f8ba66c305f5 100644
---- a/tools/perf/util/stat-shadow.c
-+++ b/tools/perf/util/stat-shadow.c
-@@ -323,35 +323,45 @@ void perf_stat__collect_metric_expr(struct evlist *evsel_list)
- {
- 	struct evsel *counter, *leader, **metric_events, *oc;
- 	bool found;
--	const char **metric_names;
-+	struct expr_parse_ctx ctx;
-+	struct hashmap_entry *cur;
-+	size_t bkt;
- 	int i;
--	int num_metric_names;
- 
-+	expr__ctx_init(&ctx);
- 	evlist__for_each_entry(evsel_list, counter) {
- 		bool invalid = false;
- 
- 		leader = counter->leader;
- 		if (!counter->metric_expr)
- 			continue;
-+
-+		expr__ctx_clear(&ctx);
- 		metric_events = counter->metric_events;
- 		if (!metric_events) {
--			if (expr__find_other(counter->metric_expr, counter->name,
--						&metric_names, &num_metric_names, 1) < 0)
-+			if (expr__find_other(counter->metric_expr,
-+					     counter->name,
-+					     &ctx, 1) < 0)
- 				continue;
- 
- 			metric_events = calloc(sizeof(struct evsel *),
--					       num_metric_names + 1);
--			if (!metric_events)
-+					       hashmap__size(&ctx.ids) + 1);
-+			if (!metric_events) {
-+				expr__ctx_clear(&ctx);
- 				return;
-+			}
- 			counter->metric_events = metric_events;
- 		}
- 
--		for (i = 0; i < num_metric_names; i++) {
-+		i = 0;
-+		hashmap__for_each_entry((&ctx.ids), cur, bkt) {
-+			const char* metric_name = (const char*)cur->key;
-+
- 			found = false;
- 			if (leader) {
- 				/* Search in group */
- 				for_each_group_member (oc, leader) {
--					if (!strcasecmp(oc->name, metric_names[i]) &&
-+					if (!strcasecmp(oc->name, metric_name) &&
- 						!oc->collect_stat) {
- 						found = true;
- 						break;
-@@ -360,7 +370,7 @@ void perf_stat__collect_metric_expr(struct evlist *evsel_list)
- 			}
- 			if (!found) {
- 				/* Search ignoring groups */
--				oc = perf_stat__find_event(evsel_list, metric_names[i]);
-+				oc = perf_stat__find_event(evsel_list, metric_name);
- 			}
- 			if (!oc) {
- 				/* Deduping one is good enough to handle duplicated PMUs. */
-@@ -373,27 +383,27 @@ void perf_stat__collect_metric_expr(struct evlist *evsel_list)
- 				 * of events. So we ask the user instead to add the missing
- 				 * events.
- 				 */
--				if (!printed || strcasecmp(printed, metric_names[i])) {
-+				if (!printed || strcasecmp(printed, metric_name)) {
- 					fprintf(stderr,
- 						"Add %s event to groups to get metric expression for %s\n",
--						metric_names[i],
-+						metric_name,
- 						counter->name);
--					printed = strdup(metric_names[i]);
-+					printed = strdup(metric_name);
- 				}
- 				invalid = true;
- 				continue;
- 			}
--			metric_events[i] = oc;
-+			metric_events[i++] = oc;
- 			oc->collect_stat = true;
- 		}
- 		metric_events[i] = NULL;
--		free(metric_names);
- 		if (invalid) {
- 			free(metric_events);
- 			counter->metric_events = NULL;
- 			counter->metric_expr = NULL;
- 		}
- 	}
-+	expr__ctx_clear(&ctx);
- }
- 
- static double runtime_stat_avg(struct runtime_stat *st,
-@@ -738,7 +748,10 @@ static void generic_metric(struct perf_stat_config *config,
- 
- 	expr__ctx_init(&pctx);
- 	/* Must be first id entry */
--	expr__add_id(&pctx, name, avg);
-+	n = strdup(name);
-+	if (!n)
-+		return;
-+	expr__add_id(&pctx, n, avg);
- 	for (i = 0; metric_events[i]; i++) {
- 		struct saved_value *v;
- 		struct stats *stats;
-@@ -814,8 +827,7 @@ static void generic_metric(struct perf_stat_config *config,
- 			     (metric_name ? metric_name : name) : "", 0);
- 	}
- 
--	for (i = 1; i < pctx.num_ids; i++)
--		zfree(&pctx.ids[i].name);
-+	expr__ctx_clear(&pctx);
- }
- 
- void perf_stat__print_shadow_stats(struct perf_stat_config *config,
+ 	/*
+ 	 * Inverse of Replicate(). Try to spot a repeating pattern
+ 	 * with a pow2 stride.
+
+which is of course completely untested (it does compile though).
+
+Thoughts?
+
+	M.
 -- 
-2.26.2.526.g744177e7f7-goog
-
+Jazz is not dead. It just smells funny...
