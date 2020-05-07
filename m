@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED260C38A24
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:39:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7676C47257
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:40:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF8F4207DD
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:39:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7FFFF207DD
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:40:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="YQdTy/zn"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="WiPBrzdI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726946AbgEGFjq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 May 2020 01:39:46 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:28768 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726843AbgEGFjq (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 7 May 2020 01:39:46 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0475dhcO004486
-        for <bpf@vger.kernel.org>; Wed, 6 May 2020 22:39:43 -0700
+        id S1727114AbgEGFjv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 May 2020 01:39:51 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:47010 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727082AbgEGFju (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 7 May 2020 01:39:50 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0475dk1H007958
+        for <bpf@vger.kernel.org>; Wed, 6 May 2020 22:39:49 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=VVrhfgvgRK1wgrolc6BD2x7FiUEE3h1LcY6fVn/ewuk=;
- b=YQdTy/znsBC9RIDYGZN8kjGEvroC7lmjLyTaIvLvwI+HF7udMWhB12+f/fMXexYaV1bt
- zkzyppu+AQWb7ICJIeTNkqg4N5tyUNS5lsynBNoI8smPZ+9vyTMuY5M4CLd/aPDOZy3S
- tUANMswm4+2hP69QiEjtplstx6qIP9VETBY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 30v9588r0c-1
+ bh=yaLG9Ih9YPJv9XlGxg+r7kgfGJErtmeLXdk1DWR6b38=;
+ b=WiPBrzdIABtoBiQKqQQCqvgFzOhNzm8pJQdX8lcHZMrWe1yXKs4xRMmFG40EB0XoP+yj
+ 6YLCaykJ+rmMZ5YDkKL77ExiDZsTzRWY3p/YO9tdZYE65F65bmSVB70smN4xsOfST/s2
+ KL+2bkXSvURUWQ8KBPUtZwESK63WZYfYVcI= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 30v0hp3gwd-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 06 May 2020 22:39:43 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 06 May 2020 22:39:49 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 6 May 2020 22:39:41 -0700
+ 15.1.1847.3; Wed, 6 May 2020 22:39:37 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 7CE533701B99; Wed,  6 May 2020 22:39:30 -0700 (PDT)
+        id B73AC3701B99; Wed,  6 May 2020 22:39:36 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v3 13/21] bpf: add bpf_seq_printf and bpf_seq_write helpers
-Date:   Wed, 6 May 2020 22:39:30 -0700
-Message-ID: <20200507053930.1544090-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 18/21] tools/bpftool: add bpf_iter support for bptool
+Date:   Wed, 6 May 2020 22:39:36 -0700
+Message-ID: <20200507053936.1545284-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200507053915.1542140-1-yhs@fb.com>
 References: <20200507053915.1542140-1-yhs@fb.com>
@@ -62,8 +62,8 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
  definitions=2020-05-07_02:2020-05-05,2020-05-07 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0
- adultscore=0 clxscore=1015 priorityscore=1501 suspectscore=0 bulkscore=0
+ adultscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 suspectscore=0
+ malwarescore=0 phishscore=0 spamscore=0 clxscore=1015 impostorscore=0
  mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2005070044
 X-FB-Internal: deliver
@@ -72,397 +72,311 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Two helpers bpf_seq_printf and bpf_seq_write, are added for
-writing data to the seq_file buffer.
+Currently, only one command is supported
+  bpftool iter pin <bpf_prog.o> <path>
 
-bpf_seq_printf supports common format string flag/width/type
-fields so at least I can get identical results for
-netlink and ipv6_route targets.
+It will pin the trace/iter bpf program in
+the object file <bpf_prog.o> to the <path>
+where <path> should be on a bpffs mount.
 
-For bpf_seq_printf and bpf_seq_write, return value -EOVERFLOW
-specifically indicates a write failure due to overflow, which
-means the object will be repeated in the next bpf invocation
-if object collection stays the same. Note that if the object
-collection is changed, depending how collection traversal is
-done, even if the object still in the collection, it may not
-be visited.
+For example,
+  $ bpftool iter pin ./bpf_iter_ipv6_route.o \
+    /sys/fs/bpf/my_route
+User can then do a `cat` to print out the results:
+  $ cat /sys/fs/bpf/my_route
+    fe800000000000000000000000000000 40 00000000000000000000000000000000 =
+...
+    00000000000000000000000000000000 00 00000000000000000000000000000000 =
+...
+    00000000000000000000000000000001 80 00000000000000000000000000000000 =
+...
+    fe800000000000008c0162fffebdfd57 80 00000000000000000000000000000000 =
+...
+    ff000000000000000000000000000000 08 00000000000000000000000000000000 =
+...
+    00000000000000000000000000000000 00 00000000000000000000000000000000 =
+...
 
-bpf_seq_printf may return -EBUSY meaning that internal percpu
-buffer for memory copy of strings or other pointees is
-not available. Bpf program can return 1 to indicate it
-wants the same object to be repeated. Right now, this should not
-happen on no-RT kernels since migrate_disable(), which guards
-bpf prog call, calls preempt_disable().
+The implementation for ipv6_route iterator is in one of subsequent
+patches.
+
+This patch also added BPF_LINK_TYPE_ITER to link query.
+
+In the future, we may add additional parameters to pin command
+by parameterizing the bpf iterator. For example, a map_id or pid
+may be added to let bpf program only traverses a single map or task,
+similar to kernel seq_file single_open().
+
+We may also add introspection command for targets/iterators by
+leveraging the bpf_iter itself.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/uapi/linux/bpf.h       |  32 +++++-
- kernel/trace/bpf_trace.c       | 200 +++++++++++++++++++++++++++++++++
- scripts/bpf_helpers_doc.py     |   2 +
- tools/include/uapi/linux/bpf.h |  32 +++++-
- 4 files changed, 264 insertions(+), 2 deletions(-)
+ .../bpftool/Documentation/bpftool-iter.rst    | 83 ++++++++++++++++++
+ tools/bpf/bpftool/bash-completion/bpftool     | 13 +++
+ tools/bpf/bpftool/iter.c                      | 84 +++++++++++++++++++
+ tools/bpf/bpftool/link.c                      |  1 +
+ tools/bpf/bpftool/main.c                      |  3 +-
+ tools/bpf/bpftool/main.h                      |  1 +
+ 6 files changed, 184 insertions(+), 1 deletion(-)
+ create mode 100644 tools/bpf/bpftool/Documentation/bpftool-iter.rst
+ create mode 100644 tools/bpf/bpftool/iter.c
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 97ceb0f2e539..e440a9d5cca2 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3076,6 +3076,34 @@ union bpf_attr {
-  * 		See: clock_gettime(CLOCK_BOOTTIME)
-  * 	Return
-  * 		Current *ktime*.
-+ *
-+ * int bpf_seq_printf(struct seq_file *m, const char *fmt, u32 fmt_size,=
- const void *data, u32 data_len)
-+ * 	Description
-+ * 		seq_printf uses seq_file seq_printf() to print out the format strin=
-g.
-+ * 		The *m* represents the seq_file. The *fmt* and *fmt_size* are for
-+ * 		the format string itself. The *data* and *data_len* are format stri=
-ng
-+ * 		arguments. The *data* are a u64 array and corresponding format stri=
-ng
-+ * 		values are stored in the array. For strings and pointers where poin=
-tees
-+ * 		are accessed, only the pointer values are stored in the *data* arra=
-y.
-+ * 		The *data_len* is the *data* size in term of bytes.
-+ * 	Return
-+ * 		0 on success, or a negative errno in case of failure.
-+ *
-+ *		* **-EBUSY**		Percpu memory copy buffer is busy, can try again
-+ *					by returning 1 from bpf program.
-+ *		* **-EINVAL**		Invalid arguments, or invalid/unsupported formats.
-+ *		* **-E2BIG**		Too many format specifiers.
-+ *		* **-EOVERFLOW**	Overflow happens, the same object will be tried aga=
-in.
-+ *
-+ * int bpf_seq_write(struct seq_file *m, const void *data, u32 len)
-+ * 	Description
-+ * 		seq_write uses seq_file seq_write() to write the data.
-+ * 		The *m* represents the seq_file. The *data* and *len* represent the
-+ *		data to write in bytes.
-+ * 	Return
-+ * 		0 on success, or a negative errno in case of failure.
-+ *
-+ *		* **-EOVERFLOW**	Overflow happens, the same object will be tried aga=
-in.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3203,7 +3231,9 @@ union bpf_attr {
- 	FN(get_netns_cookie),		\
- 	FN(get_current_ancestor_cgroup_id),	\
- 	FN(sk_assign),			\
--	FN(ktime_get_boot_ns),
-+	FN(ktime_get_boot_ns),		\
-+	FN(seq_printf),			\
-+	FN(seq_write),
-=20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-  * function eBPF program intends to call
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index e875c95d3ced..02721cbaa2f8 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -457,6 +457,198 @@ const struct bpf_func_proto *bpf_get_trace_printk_p=
-roto(void)
- 	return &bpf_trace_printk_proto;
- }
-=20
-+#define MAX_SEQ_PRINTF_VARARGS		12
-+#define MAX_SEQ_PRINTF_MAX_MEMCPY	6
-+#define MAX_SEQ_PRINTF_STR_LEN		128
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-iter.rst b/tools/bpf=
+/bpftool/Documentation/bpftool-iter.rst
+new file mode 100644
+index 000000000000..13b173d93890
+--- /dev/null
++++ b/tools/bpf/bpftool/Documentation/bpftool-iter.rst
+@@ -0,0 +1,83 @@
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++bpftool-iter
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++------------------------------------------------------------------------=
+-------
++tool to create BPF iterators
++------------------------------------------------------------------------=
+-------
 +
-+struct bpf_seq_printf_buf {
-+	char buf[MAX_SEQ_PRINTF_MAX_MEMCPY][MAX_SEQ_PRINTF_STR_LEN];
-+};
-+static DEFINE_PER_CPU(struct bpf_seq_printf_buf, bpf_seq_printf_buf);
-+static DEFINE_PER_CPU(int, bpf_seq_printf_buf_used);
++:Manual section: 8
 +
-+BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char *, fmt, u32, fmt_s=
-ize,
-+	   const void *, data, u32, data_len)
++SYNOPSIS
++=3D=3D=3D=3D=3D=3D=3D=3D
++
++	**bpftool** [*OPTIONS*] **iter** *COMMAND*
++
++	*COMMANDS* :=3D { **pin** | **help** }
++
++ITER COMMANDS
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++|	**bpftool** **iter pin** *OBJ* *PATH*
++|	**bpftool** **iter help**
++|
++|	*OBJ* :=3D /a/file/of/bpf_iter_target.o
++
++
++DESCRIPTION
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++	**bpftool iter pin** *OBJ* *PATH*
++		  A bpf iterator combines a kernel iterating of
++		  particular kernel data (e.g., tasks, bpf_maps, etc.)
++		  and a bpf program called for each kernel data object
++		  (e.g., one task, one bpf_map, etc.). User space can
++		  *read* kernel iterator output through *read()* syscall.
++
++		  The *pin* command creates a bpf iterator from *OBJ*,
++		  and pin it to *PATH*. The *PATH* should be located
++		  in *bpffs* mount. It must not contain a dot
++		  character ('.'), which is reserved for future extensions
++		  of *bpffs*.
++
++		  User can then *cat PATH* to see the bpf iterator output.
++
++	**bpftool iter help**
++		  Print short help message.
++
++OPTIONS
++=3D=3D=3D=3D=3D=3D=3D
++	-h, --help
++		  Print short generic help message (similar to **bpftool help**).
++
++	-V, --version
++		  Print version number (similar to **bpftool version**).
++
++	-d, --debug
++		  Print all logs available, even debug-level information. This
++		  includes logs from libbpf as well as from the verifier, when
++		  attempting to load programs.
++
++EXAMPLES
++=3D=3D=3D=3D=3D=3D=3D=3D
++**# bpftool iter pin bpf_iter_netlink.o /sys/fs/bpf/my_netlink**
++
++::
++
++   Create a file-based bpf iterator from bpf_iter_netlink.o and pin it
++   to /sys/fs/bpf/my_netlink
++
++
++SEE ALSO
++=3D=3D=3D=3D=3D=3D=3D=3D
++	**bpf**\ (2),
++	**bpf-helpers**\ (7),
++	**bpftool**\ (8),
++	**bpftool-prog**\ (8),
++	**bpftool-map**\ (8),
++	**bpftool-link**\ (8),
++	**bpftool-cgroup**\ (8),
++	**bpftool-feature**\ (8),
++	**bpftool-net**\ (8),
++	**bpftool-perf**\ (8),
++	**bpftool-btf**\ (8)
++	**bpftool-gen**\ (8)
++	**bpftool-struct_ops**\ (8)
+diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftoo=
+l/bash-completion/bpftool
+index fc989ead7313..9f0f20e73b87 100644
+--- a/tools/bpf/bpftool/bash-completion/bpftool
++++ b/tools/bpf/bpftool/bash-completion/bpftool
+@@ -610,6 +610,19 @@ _bpftool()
+                     ;;
+             esac
+             ;;
++        iter)
++            case $command in
++                pin)
++                    _filedir
++                    return 0
++                    ;;
++                *)
++                    [[ $prev =3D=3D $object ]] && \
++                        COMPREPLY=3D( $( compgen -W 'pin help' \
++                            -- "$cur" ) )
++                    ;;
++            esac
++            ;;
+         map)
+             local MAP_TYPE=3D'id pinned name'
+             case $command in
+diff --git a/tools/bpf/bpftool/iter.c b/tools/bpf/bpftool/iter.c
+new file mode 100644
+index 000000000000..a8fb1349c103
+--- /dev/null
++++ b/tools/bpf/bpftool/iter.c
+@@ -0,0 +1,84 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++// Copyright (C) 2020 Facebook
++
++#define _GNU_SOURCE
++#include <linux/err.h>
++#include <bpf/libbpf.h>
++
++#include "main.h"
++
++static int do_pin(int argc, char **argv)
 +{
-+	int err =3D -EINVAL, fmt_cnt =3D 0, memcpy_cnt =3D 0;
-+	int i, buf_used, copy_size, num_args;
-+	u64 params[MAX_SEQ_PRINTF_VARARGS];
-+	struct bpf_seq_printf_buf *bufs;
-+	const u64 *args =3D data;
++	const char *objfile, *path;
++	struct bpf_program *prog;
++	struct bpf_object *obj;
++	struct bpf_link *link;
++	int err;
 +
-+	buf_used =3D this_cpu_inc_return(bpf_seq_printf_buf_used);
-+	if (WARN_ON_ONCE(buf_used > 1)) {
-+		err =3D -EBUSY;
-+		goto out;
++	if (!REQ_ARGS(2))
++		usage();
++
++	objfile =3D GET_ARG();
++	path =3D GET_ARG();
++
++	obj =3D bpf_object__open(objfile);
++	if (IS_ERR_OR_NULL(obj)) {
++		p_err("can't open objfile %s", objfile);
++		return -1;
 +	}
 +
-+	bufs =3D this_cpu_ptr(&bpf_seq_printf_buf);
-+
-+	/*
-+	 * bpf_check()->check_func_arg()->check_stack_boundary()
-+	 * guarantees that fmt points to bpf program stack,
-+	 * fmt_size bytes of it were initialized and fmt_size > 0
-+	 */
-+	if (fmt[--fmt_size] !=3D 0)
-+		goto out;
-+
-+	if (data_len & 7)
-+		goto out;
-+
-+	for (i =3D 0; i < fmt_size; i++) {
-+		if (fmt[i] =3D=3D '%') {
-+			if (fmt[i + 1] =3D=3D '%')
-+				i++;
-+			else if (!data || !data_len)
-+				goto out;
-+		}
++	err =3D bpf_object__load(obj);
++	if (err) {
++		p_err("can't load objfile %s", objfile);
++		goto close_obj;
 +	}
 +
-+	num_args =3D data_len / 8;
-+
-+	/* check format string for allowed specifiers */
-+	for (i =3D 0; i < fmt_size; i++) {
-+		/* only printable ascii for now. */
-+		if ((!isprint(fmt[i]) && !isspace(fmt[i])) || !isascii(fmt[i]))
-+			goto out;
-+
-+		if (fmt[i] !=3D '%')
-+			continue;
-+
-+		if (fmt[i + 1] =3D=3D '%') {
-+			i++;
-+			continue;
-+		}
-+
-+		if (fmt_cnt >=3D MAX_SEQ_PRINTF_VARARGS) {
-+			err =3D -E2BIG;
-+			goto out;
-+		}
-+
-+		if (fmt_cnt >=3D num_args)
-+			goto out;
-+
-+		/* fmt[i] !=3D 0 && fmt[last] =3D=3D 0, so we can access fmt[i + 1] */
-+		i++;
-+
-+		/* skip optional "[0 +-][num]" width formating field */
-+		while (fmt[i] =3D=3D '0' || fmt[i] =3D=3D '+'  || fmt[i] =3D=3D '-' ||
-+		       fmt[i] =3D=3D ' ')
-+			i++;
-+		if (fmt[i] >=3D '1' && fmt[i] <=3D '9') {
-+			i++;
-+			while (fmt[i] >=3D '0' && fmt[i] <=3D '9')
-+				i++;
-+		}
-+
-+		if (fmt[i] =3D=3D 's') {
-+			/* try our best to copy */
-+			if (memcpy_cnt >=3D MAX_SEQ_PRINTF_MAX_MEMCPY) {
-+				err =3D -E2BIG;
-+				goto out;
-+			}
-+
-+			bufs->buf[memcpy_cnt][0] =3D 0;
-+			strncpy_from_unsafe(bufs->buf[memcpy_cnt],
-+					    (void *) (long) args[fmt_cnt],
-+					    MAX_SEQ_PRINTF_STR_LEN);
-+			params[fmt_cnt] =3D (u64)(long)bufs->buf[memcpy_cnt];
-+
-+			fmt_cnt++;
-+			memcpy_cnt++;
-+			continue;
-+		}
-+
-+		if (fmt[i] =3D=3D 'p') {
-+			if (fmt[i + 1] =3D=3D 0 ||
-+			    fmt[i + 1] =3D=3D 'K' ||
-+			    fmt[i + 1] =3D=3D 'x') {
-+				/* just kernel pointers */
-+				params[fmt_cnt] =3D args[fmt_cnt];
-+				fmt_cnt++;
-+				continue;
-+			}
-+
-+			/* only support "%pI4", "%pi4", "%pI6" and "pi6". */
-+			if (fmt[i + 1] !=3D 'i' && fmt[i + 1] !=3D 'I')
-+				goto out;
-+			if (fmt[i + 2] !=3D '4' && fmt[i + 2] !=3D '6')
-+				goto out;
-+
-+			if (memcpy_cnt >=3D MAX_SEQ_PRINTF_MAX_MEMCPY) {
-+				err =3D -E2BIG;
-+				goto out;
-+			}
-+
-+
-+			copy_size =3D (fmt[i + 2] =3D=3D '4') ? 4 : 16;
-+
-+			probe_kernel_read(bufs->buf[memcpy_cnt],
-+					  (void *) (long) args[fmt_cnt], copy_size);
-+			params[fmt_cnt] =3D (u64)(long)bufs->buf[memcpy_cnt];
-+
-+			i +=3D 2;
-+			fmt_cnt++;
-+			memcpy_cnt++;
-+			continue;
-+		}
-+
-+		if (fmt[i] =3D=3D 'l') {
-+			i++;
-+			if (fmt[i] =3D=3D 'l')
-+				i++;
-+		}
-+
-+		if (fmt[i] !=3D 'i' && fmt[i] !=3D 'd' &&
-+		    fmt[i] !=3D 'u' && fmt[i] !=3D 'x')
-+			goto out;
-+
-+		params[fmt_cnt] =3D args[fmt_cnt];
-+		fmt_cnt++;
++	prog =3D bpf_program__next(NULL, obj);
++	link =3D bpf_program__attach_iter(prog, NULL);
++	if (IS_ERR(link)) {
++		err =3D PTR_ERR(link);
++		p_err("attach_iter failed for program %s",
++		      bpf_program__name(prog));
++		goto close_obj;
 +	}
 +
-+	/* Maximumly we can have MAX_SEQ_PRINTF_VARARGS parameter, just give
-+	 * all of them to seq_printf().
-+	 */
-+	seq_printf(m, fmt, params[0], params[1], params[2], params[3],
-+		   params[4], params[5], params[6], params[7], params[8],
-+		   params[9], params[10], params[11]);
++	err =3D mount_bpffs_for_pin(path);
++	if (err)
++		goto close_link;
 +
-+	err =3D seq_has_overflowed(m) ? -EOVERFLOW : 0;
-+out:
-+	this_cpu_dec(bpf_seq_printf_buf_used);
++	err =3D bpf_link__pin(link, path);
++	if (err) {
++		p_err("pin_iter failed for program %s to path %s",
++		      bpf_program__name(prog), path);
++		goto close_link;
++	}
++
++close_link:
++	bpf_link__disconnect(link);
++	bpf_link__destroy(link);
++close_obj:
++	bpf_object__close(obj);
 +	return err;
 +}
 +
-+static int bpf_seq_printf_btf_ids[5];
-+static const struct bpf_func_proto bpf_seq_printf_proto =3D {
-+	.func		=3D bpf_seq_printf,
-+	.gpl_only	=3D true,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
-+	.arg2_type	=3D ARG_PTR_TO_MEM,
-+	.arg3_type	=3D ARG_CONST_SIZE,
-+	.arg4_type      =3D ARG_PTR_TO_MEM_OR_NULL,
-+	.arg5_type      =3D ARG_CONST_SIZE_OR_ZERO,
-+	.btf_id		=3D bpf_seq_printf_btf_ids,
-+};
-+
-+BPF_CALL_3(bpf_seq_write, struct seq_file *, m, const void *, data, u32,=
- len)
++static int do_help(int argc, char **argv)
 +{
-+	return seq_write(m, data, len) ? -EOVERFLOW : 0;
++	fprintf(stderr,
++		"Usage: %s %s pin OBJ PATH\n"
++		"       %s %s help\n"
++		"\n",
++		bin_name, argv[-2], bin_name, argv[-2]);
++
++	return 0;
 +}
 +
-+static int bpf_seq_write_btf_ids[5];
-+static const struct bpf_func_proto bpf_seq_write_proto =3D {
-+	.func		=3D bpf_seq_write,
-+	.gpl_only	=3D true,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
-+	.arg2_type	=3D ARG_PTR_TO_MEM,
-+	.arg3_type	=3D ARG_CONST_SIZE_OR_ZERO,
-+	.btf_id		=3D bpf_seq_write_btf_ids,
++static const struct cmd cmds[] =3D {
++	{ "help",	do_help },
++	{ "pin",	do_pin },
++	{ 0 }
 +};
 +
- static __always_inline int
- get_map_perf_counter(struct bpf_map *map, u64 flags,
- 		     u64 *value, u64 *enabled, u64 *running)
-@@ -1226,6 +1418,14 @@ tracing_prog_func_proto(enum bpf_func_id func_id, =
-const struct bpf_prog *prog)
- 	case BPF_FUNC_xdp_output:
- 		return &bpf_xdp_output_proto;
- #endif
-+	case BPF_FUNC_seq_printf:
-+		return prog->expected_attach_type =3D=3D BPF_TRACE_ITER ?
-+		       &bpf_seq_printf_proto :
-+		       NULL;
-+	case BPF_FUNC_seq_write:
-+		return prog->expected_attach_type =3D=3D BPF_TRACE_ITER ?
-+		       &bpf_seq_write_proto :
-+		       NULL;
- 	default:
- 		return raw_tp_prog_func_proto(func_id, prog);
- 	}
-diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
-index f43d193aff3a..ded304c96a05 100755
---- a/scripts/bpf_helpers_doc.py
-+++ b/scripts/bpf_helpers_doc.py
-@@ -414,6 +414,7 @@ class PrinterHelpers(Printer):
-             'struct sk_reuseport_md',
-             'struct sockaddr',
-             'struct tcphdr',
-+            'struct seq_file',
++int do_iter(int argc, char **argv)
++{
++	return cmd_select(cmds, argc, argv, do_help);
++}
+diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+index adc7dc431ed8..b6a0b35c78ae 100644
+--- a/tools/bpf/bpftool/link.c
++++ b/tools/bpf/bpftool/link.c
+@@ -16,6 +16,7 @@ static const char * const link_type_name[] =3D {
+ 	[BPF_LINK_TYPE_RAW_TRACEPOINT]		=3D "raw_tracepoint",
+ 	[BPF_LINK_TYPE_TRACING]			=3D "tracing",
+ 	[BPF_LINK_TYPE_CGROUP]			=3D "cgroup",
++	[BPF_LINK_TYPE_ITER]			=3D "iter",
+ };
 =20
-             'struct __sk_buff',
-             'struct sk_msg_md',
-@@ -450,6 +451,7 @@ class PrinterHelpers(Printer):
-             'struct sk_reuseport_md',
-             'struct sockaddr',
-             'struct tcphdr',
-+            'struct seq_file',
-     }
-     mapped_types =3D {
-             'u8': '__u8',
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 97ceb0f2e539..e440a9d5cca2 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3076,6 +3076,34 @@ union bpf_attr {
-  * 		See: clock_gettime(CLOCK_BOOTTIME)
-  * 	Return
-  * 		Current *ktime*.
-+ *
-+ * int bpf_seq_printf(struct seq_file *m, const char *fmt, u32 fmt_size,=
- const void *data, u32 data_len)
-+ * 	Description
-+ * 		seq_printf uses seq_file seq_printf() to print out the format strin=
-g.
-+ * 		The *m* represents the seq_file. The *fmt* and *fmt_size* are for
-+ * 		the format string itself. The *data* and *data_len* are format stri=
-ng
-+ * 		arguments. The *data* are a u64 array and corresponding format stri=
-ng
-+ * 		values are stored in the array. For strings and pointers where poin=
-tees
-+ * 		are accessed, only the pointer values are stored in the *data* arra=
-y.
-+ * 		The *data_len* is the *data* size in term of bytes.
-+ * 	Return
-+ * 		0 on success, or a negative errno in case of failure.
-+ *
-+ *		* **-EBUSY**		Percpu memory copy buffer is busy, can try again
-+ *					by returning 1 from bpf program.
-+ *		* **-EINVAL**		Invalid arguments, or invalid/unsupported formats.
-+ *		* **-E2BIG**		Too many format specifiers.
-+ *		* **-EOVERFLOW**	Overflow happens, the same object will be tried aga=
-in.
-+ *
-+ * int bpf_seq_write(struct seq_file *m, const void *data, u32 len)
-+ * 	Description
-+ * 		seq_write uses seq_file seq_write() to write the data.
-+ * 		The *m* represents the seq_file. The *data* and *len* represent the
-+ *		data to write in bytes.
-+ * 	Return
-+ * 		0 on success, or a negative errno in case of failure.
-+ *
-+ *		* **-EOVERFLOW**	Overflow happens, the same object will be tried aga=
-in.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3203,7 +3231,9 @@ union bpf_attr {
- 	FN(get_netns_cookie),		\
- 	FN(get_current_ancestor_cgroup_id),	\
- 	FN(sk_assign),			\
--	FN(ktime_get_boot_ns),
-+	FN(ktime_get_boot_ns),		\
-+	FN(seq_printf),			\
-+	FN(seq_write),
+ static int link_parse_fd(int *argc, char ***argv)
+diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+index 1413a154806e..46bd716a9d86 100644
+--- a/tools/bpf/bpftool/main.c
++++ b/tools/bpf/bpftool/main.c
+@@ -59,7 +59,7 @@ static int do_help(int argc, char **argv)
+ 		"       %s batch file FILE\n"
+ 		"       %s version\n"
+ 		"\n"
+-		"       OBJECT :=3D { prog | map | link | cgroup | perf | net | featur=
+e | btf | gen | struct_ops }\n"
++		"       OBJECT :=3D { prog | map | link | cgroup | perf | net | featur=
+e | btf | gen | struct_ops | iter }\n"
+ 		"       " HELP_SPEC_OPTIONS "\n"
+ 		"",
+ 		bin_name, bin_name, bin_name);
+@@ -224,6 +224,7 @@ static const struct cmd cmds[] =3D {
+ 	{ "btf",	do_btf },
+ 	{ "gen",	do_gen },
+ 	{ "struct_ops",	do_struct_ops },
++	{ "iter",	do_iter },
+ 	{ "version",	do_version },
+ 	{ 0 }
+ };
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index 9b1fb81a8331..a41cefabccaf 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -199,6 +199,7 @@ int do_feature(int argc, char **argv);
+ int do_btf(int argc, char **argv);
+ int do_gen(int argc, char **argv);
+ int do_struct_ops(int argc, char **argv);
++int do_iter(int argc, char **argv);
 =20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-  * function eBPF program intends to call
+ int parse_u32_arg(int *argc, char ***argv, __u32 *val, const char *what)=
+;
+ int prog_parse_fd(int *argc, char ***argv);
 --=20
 2.24.1
 
