@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0348C38A24
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:40:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4580EC47247
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:40:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC2CE207DD
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:40:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20D6E207DD
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:40:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jOGbudZO"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fw12bPKY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726811AbgEGFk2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 May 2020 01:40:28 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:52766 "EHLO
+        id S1726763AbgEGFk3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 May 2020 01:40:29 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:20262 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726763AbgEGFje (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 7 May 2020 01:39:34 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0475dXDC004397
-        for <bpf@vger.kernel.org>; Wed, 6 May 2020 22:39:33 -0700
+        by vger.kernel.org with ESMTP id S1726661AbgEGFj0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 7 May 2020 01:39:26 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0475dG8F027992
+        for <bpf@vger.kernel.org>; Wed, 6 May 2020 22:39:25 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=5Zfud3pmXT4IKcPQSJ8BpHsAItnLxWQ+ip8oUk9pLW4=;
- b=jOGbudZOa0G+WgbxDZUVAPqCKrKEIJlMvwdJtUK44S7AD7n86RHmBLa9goKCVNO4/QN6
- tSbIGIw5OFxFnrRkxO3PL5fPFyvLqENnqvkuZwkoKZvGXb0rlFUDyQ87uwh1gWwSwvyF
- 0SsnJ5VIUQmwGqDIShzCaplZbcxf/2v+HAA= 
+ bh=Nq3O/eiCx3ttgabYvuWzBoZVNnxLTIVDeQbXairINDg=;
+ b=fw12bPKYLgJnnsbfDyY+fPFNOfrcI5aZEr96rVI0JtevhaJHCGYm9/Awjo+AhOqhuc8V
+ 5A3mZSoFtueb8D1vtr2/gw75SZ0ZXxJ/UAbrCBiDwuWBxtF+m3fVdU7PPy9i4h+1srzc
+ BG4E2hOoKHop9RiTh9kRYaMRGH0PwE0JNGs= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30v9588qyd-1
+        by mx0a-00082601.pphosted.com with ESMTP id 30v4f022pn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 06 May 2020 22:39:33 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 06 May 2020 22:39:25 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 6 May 2020 22:39:18 -0700
+ 15.1.1847.3; Wed, 6 May 2020 22:39:24 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id DEDE13701B99; Wed,  6 May 2020 22:39:16 -0700 (PDT)
+        id 4BA6E3701B99; Wed,  6 May 2020 22:39:24 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v3 02/21] bpf: allow loading of a bpf_iter program
-Date:   Wed, 6 May 2020 22:39:16 -0700
-Message-ID: <20200507053916.1542319-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 08/21] bpf: implement common macros/helpers for target iterators
+Date:   Wed, 6 May 2020 22:39:24 -0700
+Message-ID: <20200507053924.1543103-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200507053915.1542140-1-yhs@fb.com>
 References: <20200507053915.1542140-1-yhs@fb.com>
@@ -61,187 +61,209 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
  definitions=2020-05-07_02:2020-05-05,2020-05-07 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0
- adultscore=0 clxscore=1015 priorityscore=1501 suspectscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005070044
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ lowpriorityscore=0 clxscore=1015 adultscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501 bulkscore=0
+ phishscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2005070044
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A bpf_iter program is a tracing program with attach type
-BPF_TRACE_ITER. The load attribute
-  attach_btf_id
-is used by the verifier against a particular kernel function,
-which represents a target, e.g., __bpf_iter__bpf_map
-for target bpf_map which is implemented later.
+Macro DEFINE_BPF_ITER_FUNC is implemented so target
+can define an init function to capture the BTF type
+which represents the target.
 
-The program return value must be 0 or 1 for now.
-  0 : successful, except potential seq_file buffer overflow
-      which is handled by seq_file reader.
-  1 : request to restart the same object
+The bpf_iter_meta is a structure holding meta data, common
+to all targets in the bpf program.
 
-In the future, other return values may be used for filtering or
-teminating the iterator.
+Additional marker functions are called before or after
+bpf_seq_read() show()/next()/stop() callback functions
+to help calculate precise seq_num and whether call bpf_prog
+inside stop().
+
+Two functions, bpf_iter_get_info() and bpf_iter_run_prog(),
+are implemented so target can get needed information from
+bpf_iter infrastructure and can run the program.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/linux/bpf.h            |  3 +++
- include/uapi/linux/bpf.h       |  1 +
- kernel/bpf/bpf_iter.c          | 36 ++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c          | 21 ++++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  1 +
- 5 files changed, 62 insertions(+)
+ include/linux/bpf.h   | 11 ++++++
+ kernel/bpf/bpf_iter.c | 86 ++++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 92 insertions(+), 5 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 40c78b86fe38..f28bdd714754 100644
+index b06653ab3476..ffe0b9b669bf 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -1127,6 +1127,8 @@ struct bpf_link *bpf_link_get_from_fd(u32 ufd);
- int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
+@@ -1129,6 +1129,9 @@ int bpf_obj_pin_user(u32 ufd, const char __user *pa=
+thname);
  int bpf_obj_get_user(const char __user *pathname, int flags);
 =20
-+#define BPF_ITER_FUNC_PREFIX "__bpf_iter__"
-+
+ #define BPF_ITER_FUNC_PREFIX "__bpf_iter__"
++#define DEFINE_BPF_ITER_FUNC(target, args...)			\
++	extern int __bpf_iter__ ## target(args);		\
++	int __init __bpf_iter__ ## target(args) { return 0; }
+=20
  typedef int (*bpf_iter_init_seq_priv_t)(void *private_data);
  typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
+@@ -1141,12 +1144,20 @@ struct bpf_iter_reg {
+ 	u32 seq_priv_size;
+ };
 =20
-@@ -1140,6 +1142,7 @@ struct bpf_iter_reg {
-=20
++struct bpf_iter_meta {
++	__bpf_md_ptr(struct seq_file *, seq);
++	u64 session_id;
++	u64 seq_num;
++};
++
  int bpf_iter_reg_target(struct bpf_iter_reg *reg_info);
  void bpf_iter_unreg_target(const char *target);
-+bool bpf_iter_prog_supported(struct bpf_prog *prog);
+ bool bpf_iter_prog_supported(struct bpf_prog *prog);
+ int bpf_iter_link_attach(const union bpf_attr *attr, struct bpf_prog *pr=
+og);
+ int bpf_iter_new_fd(struct bpf_link *link);
+ bool bpf_link_is_iter(struct bpf_link *link);
++struct bpf_prog *bpf_iter_get_info(struct bpf_iter_meta *meta, bool in_s=
+top);
++int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx);
 =20
  int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
  int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index b3643e27e264..047b19fe716e 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -218,6 +218,7 @@ enum bpf_attach_type {
- 	BPF_TRACE_FEXIT,
- 	BPF_MODIFY_RETURN,
- 	BPF_LSM_MAC,
-+	BPF_TRACE_ITER,
- 	__MAX_BPF_ATTACH_TYPE
- };
-=20
 diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index 5a8119d17d14..dec182d8395a 100644
+index b0b8726c08f8..bf4fb7d7267b 100644
 --- a/kernel/bpf/bpf_iter.c
 +++ b/kernel/bpf/bpf_iter.c
-@@ -12,6 +12,7 @@ struct bpf_iter_target_info {
- 	bpf_iter_init_seq_priv_t init_seq_private;
- 	bpf_iter_fini_seq_priv_t fini_seq_private;
- 	u32 seq_priv_size;
-+	u32 btf_id;	/* cached value */
- };
+@@ -41,6 +41,33 @@ static atomic64_t session_id;
 =20
- static struct list_head targets =3D LIST_HEAD_INIT(targets);
-@@ -57,3 +58,38 @@ void bpf_iter_unreg_target(const char *target)
+ static int prepare_seq_file(struct file *file, struct bpf_iter_link *lin=
+k);
 =20
- 	WARN_ON(found =3D=3D false);
++static void bpf_iter_inc_seq_num(struct seq_file *seq)
++{
++	struct bpf_iter_priv_data *iter_priv;
++
++	iter_priv =3D container_of(seq->private, struct bpf_iter_priv_data,
++				 target_private);
++	iter_priv->seq_num++;
++}
++
++static void bpf_iter_dec_seq_num(struct seq_file *seq)
++{
++	struct bpf_iter_priv_data *iter_priv;
++
++	iter_priv =3D container_of(seq->private, struct bpf_iter_priv_data,
++				 target_private);
++	iter_priv->seq_num--;
++}
++
++static void bpf_iter_done_stop(struct seq_file *seq)
++{
++	struct bpf_iter_priv_data *iter_priv;
++
++	iter_priv =3D container_of(seq->private, struct bpf_iter_priv_data,
++				 target_private);
++	iter_priv->done_stop =3D true;
++}
++
+ /* bpf_seq_read, a customized and simpler version for bpf iterator.
+  * no_llseek is assumed for this file.
+  * The following are differences from seq_read():
+@@ -87,6 +114,10 @@ static ssize_t bpf_seq_read(struct file *file, char _=
+_user *buf, size_t size,
+=20
+ 	err =3D seq->op->show(seq, p);
+ 	if (err > 0) {
++		/* object is skipped, decrease seq_num, so next
++		 * valid object can reuse the same seq_num.
++		 */
++		bpf_iter_dec_seq_num(seq);
+ 		seq->count =3D 0;
+ 	} else if (err < 0 || seq_has_overflowed(seq)) {
+ 		if (!err)
+@@ -112,11 +143,16 @@ static ssize_t bpf_seq_read(struct file *file, char=
+ __user *buf, size_t size,
+ 			err =3D PTR_ERR(p);
+ 			break;
+ 		}
++
++		/* get a valid next object, increase seq_num */
++		bpf_iter_inc_seq_num(seq);
++
+ 		if (seq->count >=3D size)
+ 			break;
+=20
+ 		err =3D seq->op->show(seq, p);
+ 		if (err > 0) {
++			bpf_iter_dec_seq_num(seq);
+ 			seq->count =3D offs;
+ 		} else if (err < 0 || seq_has_overflowed(seq)) {
+ 			seq->count =3D offs;
+@@ -133,11 +169,15 @@ static ssize_t bpf_seq_read(struct file *file, char=
+ __user *buf, size_t size,
+ 	offs =3D seq->count;
+ 	/* bpf program called if !p */
+ 	seq->op->stop(seq, p);
+-	if (!p && seq_has_overflowed(seq)) {
+-		seq->count =3D offs;
+-		if (offs =3D=3D 0) {
+-			err =3D -E2BIG;
+-			goto done;
++	if (!p) {
++		if (!seq_has_overflowed(seq)) {
++			bpf_iter_done_stop(seq);
++		} else {
++			seq->count =3D offs;
++			if (offs =3D=3D 0) {
++				err =3D -E2BIG;
++				goto done;
++			}
+ 		}
+ 	}
+=20
+@@ -448,3 +488,39 @@ int bpf_iter_new_fd(struct bpf_link *link)
+ 	put_unused_fd(fd);
+ 	return err;
  }
 +
-+static void cache_btf_id(struct bpf_iter_target_info *tinfo,
-+			 struct bpf_prog *prog)
++struct bpf_prog *bpf_iter_get_info(struct bpf_iter_meta *meta, bool in_s=
+top)
 +{
-+	tinfo->btf_id =3D prog->aux->attach_btf_id;
++	struct bpf_iter_priv_data *iter_priv;
++	struct seq_file *seq;
++	void *seq_priv;
++
++	seq =3D meta->seq;
++	if (seq->file->f_op !=3D &bpf_iter_fops)
++		return NULL;
++
++	seq_priv =3D seq->private;
++	iter_priv =3D container_of(seq_priv, struct bpf_iter_priv_data,
++				 target_private);
++
++	if (in_stop && iter_priv->done_stop)
++		return NULL;
++
++	meta->session_id =3D iter_priv->session_id;
++	meta->seq_num =3D iter_priv->seq_num;
++
++	return iter_priv->prog;
 +}
 +
-+bool bpf_iter_prog_supported(struct bpf_prog *prog)
++int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx)
 +{
-+	const char *attach_fname =3D prog->aux->attach_func_name;
-+	u32 prog_btf_id =3D prog->aux->attach_btf_id;
-+	const char *prefix =3D BPF_ITER_FUNC_PREFIX;
-+	struct bpf_iter_target_info *tinfo;
-+	int prefix_len =3D strlen(prefix);
-+	bool supported =3D false;
++	int ret;
 +
-+	if (strncmp(attach_fname, prefix, prefix_len))
-+		return false;
++	rcu_read_lock();
++	migrate_disable();
++	ret =3D BPF_PROG_RUN(prog, ctx);
++	migrate_enable();
++	rcu_read_unlock();
 +
-+	mutex_lock(&targets_mutex);
-+	list_for_each_entry(tinfo, &targets, list) {
-+		if (tinfo->btf_id && tinfo->btf_id =3D=3D prog_btf_id) {
-+			supported =3D true;
-+			break;
-+		}
-+		if (!strcmp(attach_fname + prefix_len, tinfo->target)) {
-+			cache_btf_id(tinfo, prog);
-+			supported =3D true;
-+			break;
-+		}
-+	}
-+	mutex_unlock(&targets_mutex);
-+
-+	return supported;
++	return ret =3D=3D 0 ? 0 : -EAGAIN;
 +}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 70ad009577f8..d725ff7d11db 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7101,6 +7101,10 @@ static int check_return_code(struct bpf_verifier_e=
-nv *env)
- 			return 0;
- 		range =3D tnum_const(0);
- 		break;
-+	case BPF_PROG_TYPE_TRACING:
-+		if (env->prog->expected_attach_type !=3D BPF_TRACE_ITER)
-+			return 0;
-+		break;
- 	default:
- 		return 0;
- 	}
-@@ -10481,6 +10485,7 @@ static int check_attach_btf_id(struct bpf_verifie=
-r_env *env)
- 	struct bpf_prog *tgt_prog =3D prog->aux->linked_prog;
- 	u32 btf_id =3D prog->aux->attach_btf_id;
- 	const char prefix[] =3D "btf_trace_";
-+	struct btf_func_model fmodel;
- 	int ret =3D 0, subprog =3D -1, i;
- 	struct bpf_trampoline *tr;
- 	const struct btf_type *t;
-@@ -10622,6 +10627,22 @@ static int check_attach_btf_id(struct bpf_verifi=
-er_env *env)
- 		prog->aux->attach_func_proto =3D t;
- 		prog->aux->attach_btf_trace =3D true;
- 		return 0;
-+	case BPF_TRACE_ITER:
-+		if (!btf_type_is_func(t)) {
-+			verbose(env, "attach_btf_id %u is not a function\n",
-+				btf_id);
-+			return -EINVAL;
-+		}
-+		t =3D btf_type_by_id(btf, t->type);
-+		if (!btf_type_is_func_proto(t))
-+			return -EINVAL;
-+		prog->aux->attach_func_name =3D tname;
-+		prog->aux->attach_func_proto =3D t;
-+		if (!bpf_iter_prog_supported(prog))
-+			return -EINVAL;
-+		ret =3D btf_distill_func_proto(&env->log, btf, t,
-+					     tname, &fmodel);
-+		return ret;
- 	default:
- 		if (!prog_extension)
- 			return -EINVAL;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index b3643e27e264..047b19fe716e 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -218,6 +218,7 @@ enum bpf_attach_type {
- 	BPF_TRACE_FEXIT,
- 	BPF_MODIFY_RETURN,
- 	BPF_LSM_MAC,
-+	BPF_TRACE_ITER,
- 	__MAX_BPF_ATTACH_TYPE
- };
-=20
 --=20
 2.24.1
 
