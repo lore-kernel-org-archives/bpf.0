@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EA25C38A2A
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 14:09:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 854CEC38A2A
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 14:09:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CEE620857
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 14:09:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 652BB2084D
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 14:09:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="miBj/YIZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="biQh+rIP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728440AbgEGOJt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 May 2020 10:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
+        id S1727111AbgEGOJx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 May 2020 10:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728329AbgEGOJF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 May 2020 10:09:05 -0400
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C18C05BD11
-        for <bpf@vger.kernel.org>; Thu,  7 May 2020 07:09:02 -0700 (PDT)
-Received: by mail-qt1-x84a.google.com with SMTP id n22so6870853qtp.15
-        for <bpf@vger.kernel.org>; Thu, 07 May 2020 07:09:02 -0700 (PDT)
+        with ESMTP id S1728299AbgEGOI5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 May 2020 10:08:57 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F559C05BD0F
+        for <bpf@vger.kernel.org>; Thu,  7 May 2020 07:08:56 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id z1so3337249ybm.5
+        for <bpf@vger.kernel.org>; Thu, 07 May 2020 07:08:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=laqIw2e8BtvC1AZBZIJa3w6PXohYXYOFdU6fqXlT6Ys=;
-        b=miBj/YIZb4vpsSE1/V9tBy6cLysoVgKXoFWYcyYaRWm4OIjL9K7HI/bGFFac91Tp/n
-         pplrXvFOyiiR256qko5qYm2yorUSsGtofcmxctwS0GsOuc6hoC7qytjb+wWUBdAPbUrR
-         CoEm2olP4Ok49af7mbZ9FR9vY9p97g/m7FtTv6lcp0gAhZaPpBtfhgNmhGG+gr67vhpj
-         P1xMFAmziZrCUi6Xz2paj+iNbpwoanrRzNsN4xtUCFcPiZVK7CymmbyofRAZnu86k9PI
-         SEs+g+4YnQ9u0ffwgnQVC/gvYzxXtx6xSdtexJwxu/K/U1AIAwBTJJw+Qyi6UQro/Dy8
-         3KNQ==
+        bh=WNLwvCLfBBjUXdSm9htdY2ZIrU9tK5abqhIDyW74dxc=;
+        b=biQh+rIPaJjiWmCdpodETgccn4Y8n5FVL+Mpr1MGuwevY0+0SykmjiYjnIyHYQMSBY
+         IR4+qgSztOBizqP2lGvsdWjUQzlUnfjxI9lZ8cNpebFxnizLjDTBQQ8NfHsAa93Htouv
+         mrQ8GovuR/j5bV1vGV8e9R1zTUZmDbrcjuldLL2/J3s++NkilCKmBluMxqXG2cIbRqEU
+         dAq/VoetqTDUKRgLyWw/0o6+WAtaMsG+6YWBCiJvb2V9KMeq3j6eLqL7LV45hnvhutcN
+         j1/j0E36THBQDBgTLTFMupBXqIgInb0pLME/AOQ3nEmGnsF+BJe4lZ5MxcqCuUH015zI
+         grMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=laqIw2e8BtvC1AZBZIJa3w6PXohYXYOFdU6fqXlT6Ys=;
-        b=UEi1YNmYQ3bHK+lOzsGO1NDgrM1QMqrhCI9tORJl1gw7IC5SHCZGaFzbOFUflfT0eQ
-         cTYHqTSdA+ffj4V+LEzG5iFkgesXUsIecE4Kmd0LEURzVZd/yIwYmlm5aiY0J5Q6sHNl
-         p83ByHtPTcMmod9by9GUy0FfJvFP0Wz9KZUE2C82It98UHzoRJ2nH5290jdx+VwTYAgC
-         WEOOSdrqK1c+sex/Qkt6qulk4IFf+1pZPvklyb7UuV3j6vTSZPJoWZ9eBpzMTBHrIYC4
-         fG2nGNMwbQYi18jRctMQ43GeAgygOKwBu17FSKbuYkqpzNoucKDzYiaGyzf9rm/N7z1S
-         nCww==
-X-Gm-Message-State: AGi0PuayS8dPSwzRpSBJDX+q/i31nUak5+PVIzwpU+t1KpzKPnnfmaZl
-        uwOg0JcRhdV3n6n4L70TWqtataIPHy2X
-X-Google-Smtp-Source: APiQypLmp6adcf0chrItrXAQRLlppnA7+FX/ggfFhId7fASLcB078wZgh5xIbvEFlCQCONBRm+74fwfq+Jaw
-X-Received: by 2002:a0c:da8c:: with SMTP id z12mr13470165qvj.143.1588860541291;
- Thu, 07 May 2020 07:09:01 -0700 (PDT)
-Date:   Thu,  7 May 2020 07:08:15 -0700
+        bh=WNLwvCLfBBjUXdSm9htdY2ZIrU9tK5abqhIDyW74dxc=;
+        b=mMf2WmHkcrsv5p63W5h3HgpJ73o1jQ61nXdCpMnLgOZKFv1hBFxrOoCHG7vLkzC0ph
+         +KK3T26pgYHhKwe4JzOPVKqileUqbXR8Ve2NJPanvuUz7REBVx7oXhb57Odc/kKZauNm
+         ZRA5yG73MsLEv0g+u2KoyZdMVIKPrvBav7c4Vo6UmhFCSS6OULOhi0r3ZAcbAzUPFlif
+         GbjIlay9p0deDuaWXq03jDqvGR2fCabvs3m+7kvmPUa0pn5FgnvWBoPherDFdxwxYT2p
+         4nnxz707k4KHf4CastN52jNIDQLA6BlzOemYCl1kTAmgc8sGw7ojx3vdCHJ6crw5zMMK
+         1T8Q==
+X-Gm-Message-State: AGi0PuYbtW2RGNFjFGQLSVn9LabsFs5flGAXuuRSE/8hPlVSxp72x5LX
+        6lq/5mcrYen754mwApBkPUcdqMb1MSfV
+X-Google-Smtp-Source: APiQypK7cb30cBnYwkBB+E9mLL262GSv1zCyE6oU2nAP4RqCHtNPorpKhkR4Mmq+RPtTBEFQtMYEM/rnQiQh
+X-Received: by 2002:a25:b951:: with SMTP id s17mr23122292ybm.205.1588860535288;
+ Thu, 07 May 2020 07:08:55 -0700 (PDT)
+Date:   Thu,  7 May 2020 07:08:12 -0700
 In-Reply-To: <20200507140819.126960-1-irogers@google.com>
-Message-Id: <20200507140819.126960-20-irogers@google.com>
+Message-Id: <20200507140819.126960-17-irogers@google.com>
 Mime-Version: 1.0
 References: <20200507140819.126960-1-irogers@google.com>
 X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
-Subject: [RFC PATCH v2 19/23] perf metricgroup: free metric_events on error
+Subject: [RFC PATCH v2 16/23] perf evsel: fix 2 memory leaks
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -93,39 +93,26 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Avoid a simple memory leak.
+If allocated, perf_pkg_mask and metric_events need freeing.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/metricgroup.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/perf/util/evsel.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index dcd175c05872..2356dda92a07 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -185,6 +185,7 @@ static int metricgroup__setup_events(struct list_head *groups,
- 		if (!evsel) {
- 			pr_debug("Cannot resolve %s: %s\n",
- 					eg->metric_name, eg->metric_expr);
-+			free(metric_events);
- 			continue;
- 		}
- 		for (i = 0; metric_events[i]; i++)
-@@ -192,11 +193,13 @@ static int metricgroup__setup_events(struct list_head *groups,
- 		me = metricgroup__lookup(metric_events_list, evsel, true);
- 		if (!me) {
- 			ret = -ENOMEM;
-+			free(metric_events);
- 			break;
- 		}
- 		expr = malloc(sizeof(struct metric_expr));
- 		if (!expr) {
- 			ret = -ENOMEM;
-+			free(metric_events);
- 			break;
- 		}
- 		expr->metric_expr = eg->metric_expr;
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index f3e60c45d59a..d5c28e583986 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -1268,6 +1268,8 @@ void evsel__exit(struct evsel *evsel)
+ 	zfree(&evsel->group_name);
+ 	zfree(&evsel->name);
+ 	zfree(&evsel->pmu_name);
++	zfree(&evsel->per_pkg_mask);
++	zfree(&evsel->metric_events);
+ 	perf_evsel__object.fini(evsel);
+ }
+ 
 -- 
 2.26.2.526.g744177e7f7-goog
 
