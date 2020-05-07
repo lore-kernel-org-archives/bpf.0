@@ -2,70 +2,71 @@ Return-Path: <SRS0=eV/F=6V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E94DAC47247
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 14:11:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EB70C38A24
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 14:11:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C42A72084D
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 14:11:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 465842084D
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 14:11:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nyaiilSd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HhhT+08K"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727100AbgEGOLa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 May 2020 10:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        id S1726074AbgEGOLh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 May 2020 10:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726616AbgEGOLZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 May 2020 10:11:25 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD2AC05BD43
-        for <bpf@vger.kernel.org>; Thu,  7 May 2020 07:11:25 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id c2so2406388ybi.7
-        for <bpf@vger.kernel.org>; Thu, 07 May 2020 07:11:25 -0700 (PDT)
+        with ESMTP id S1728078AbgEGOI2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 May 2020 10:08:28 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7811C05BD0B
+        for <bpf@vger.kernel.org>; Thu,  7 May 2020 07:08:26 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id i2so6727716ybg.17
+        for <bpf@vger.kernel.org>; Thu, 07 May 2020 07:08:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=HRnl8Tpss8sV+8qAbPp6PP/Ne93Fee+ZUxdVeA7Qh/8=;
-        b=nyaiilSdEzsyngYHWVOhJUOYMuLu0nyMP5cn89kuxniR67R7NBMwToctGaWrxwqqx/
-         06jAm/rREUhduGB/palaqAV2r4aLiYS7+OPMTCXCmak/8Rm/603lUe8zJ8dKDoW35Ae5
-         wmItNoEfivFGxgO9UPISQQAQd6BRTJX47paJy1SXJqGcNNmAC74/BjIOyIhQBSvMCUCV
-         GoCqG43ne3wjaqoLGRB0iA3FNBOasOssVuIJytOKKzyGwSXnxk59MSWbFuqiR+3P1iaQ
-         GD837db9O4OUEowEvz8KzYeglyvnYej3rgoCzqt4CJgNbkmSadvjcW7rrnhCUCepzPEt
-         bWtg==
+        bh=agpNpPb9ABPgrcjzE8UbvUM5oHf8Sq5TEvUJcEJ/6IE=;
+        b=HhhT+08K3dom3gSLbiMkAIr7jNEs49Fw2OajOhbnL5wIg5CUFHIYBQ9EtWdbUNEDG6
+         R0zI6+Jrakz3Qpp9wkCrm8q3A5+C+RtcOZaD0fvTcsL03G6O3B58p50n1Gxi4JkhPWZJ
+         mkEyf8DOSTA7lyGsbVcG6T2jv7m1JhdqrwuWygpbowcTaSVvPjeExQK7r0pKMdDmupcM
+         mg0QYgFfTEkih4qS7g/sTAG/KpeOTLKAO+d/doYvjC/7wOIowP9Gw52bDgBdJ0SGNPxK
+         Nx8z7l67LaHUwTNB3IQax3Aom5B6VouckVz50bQUK1b5SbJ1y7UKTgFAA3q6d6z7leO3
+         l8jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HRnl8Tpss8sV+8qAbPp6PP/Ne93Fee+ZUxdVeA7Qh/8=;
-        b=ijxzJCp98B6ZcZS1hQsrE7jE4/pbzQLxfdZE4KyNHUwrOhS+bvx5xaSLH5cu35jCYO
-         l67ppSReZi1JjHrOH0XsnKq2gvXWokDixDENLpg+0N1ISf7Hy+QQwpJE5AeoVJ/gJsOI
-         rlYRl9GVkz4Q0xfV8CFtqtjCNUHpLLoJhAe265bF/TZN5JtcrnjiQJmGM1EtfNfxDAr0
-         uT32yd1DcDHnrI8YcMGFmb4bwrzUi676Ol4MHS4j7lSXERWwd2VIAw4rbCRUnioK/9ln
-         9sH8AZmisoA+mPEoqKx9iXgZ+Q6eNlolkr+c2REETqFxODDrH2w3Nurq4R1rionJIfls
-         BUAQ==
-X-Gm-Message-State: AGi0PuaZvfoQv+e5Vu6/OauiLawsBOGkc6JuEOgU5h1f/Hq1/EUUSi3L
-        8E3hv41sQapT2tdyw8VFLHL0HJeUNbqvy0ryyoOVcg==
-X-Google-Smtp-Source: APiQypJFREC/4DF6ySewOZt6hUFNS7y74v6hNDrlmDlJKMX5CRaZo87v+FDWdm3C6SMfdy6SGnzTQ9kVeDBbR3DdEBk=
-X-Received: by 2002:a25:4446:: with SMTP id r67mr1612320yba.41.1588860684521;
- Thu, 07 May 2020 07:11:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200507081436.49071-1-irogers@google.com> <20200507134939.GA2804092@krava>
-In-Reply-To: <20200507134939.GA2804092@krava>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=agpNpPb9ABPgrcjzE8UbvUM5oHf8Sq5TEvUJcEJ/6IE=;
+        b=JXlgdBZMirjv+dMRnpQlC7QmGmx9goo2F3+055ltenbIJDhKiPzATD3y1J2WjRWDI1
+         HjEAe+DSlAOE46+mixKgHTPvmeSTOM4U4FwTnOdi6T+fN3VRM23ZacZ4O5m3dHfUauZf
+         3FEsn5Cx+uQaV5xyzT42nDf+6Vkf3t/nhwrqhyZup5j3D5jmHDys8IG5y3jBl5IcI6wA
+         +SKhCE+o/9nCgxN9PjXEfnSUgp6X57mIGyVsBvWvkEl1+Ln8iTTreOvLoRtL5xnj9T8S
+         9OTeVWWxXdxfiZfVhUlbm/v0w54LVZgCUfv5GBCEaH2Huhlj6iVYyiQovngcmhYD33XR
+         m3wA==
+X-Gm-Message-State: AGi0PubYRflLmWhENfUf7WTu1qhYq4EJbZSMHjT84NIM62S7JOVZYy9z
+        jQh8MI3551WPAZphRffY2TB+m8J5IFJy
+X-Google-Smtp-Source: APiQypLjOQdMt93cGSI2VfMH/6fdTqBneltg7x63mwDbaxdlMbnq6lIa4ij95nm/4y6+WbNHSut8TMssroOr
+X-Received: by 2002:a25:be81:: with SMTP id i1mr22413804ybk.184.1588860505757;
+ Thu, 07 May 2020 07:08:25 -0700 (PDT)
+Date:   Thu,  7 May 2020 07:07:57 -0700
+In-Reply-To: <20200507140819.126960-1-irogers@google.com>
+Message-Id: <20200507140819.126960-2-irogers@google.com>
+Mime-Version: 1.0
+References: <20200507140819.126960-1-irogers@google.com>
+X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
+Subject: [RFC PATCH v2 01/23] perf expr: unlimited escaped characters in a symbol
 From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 7 May 2020 07:11:13 -0700
-Message-ID: <CAP-5=fWyV_tcEe_zss7HE7u_3JLkkBeJ5JYLVbWWuO3Q2RpRnw@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/7] Share events between metrics
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -81,85 +82,39 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Kan Liang <kan.liang@linux.intel.com>,
         Cong Wang <xiyou.wangcong@gmail.com>,
         Kim Phillips <kim.phillips@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
+        linux-kernel@vger.kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, May 7, 2020 at 6:49 AM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Thu, May 07, 2020 at 01:14:29AM -0700, Ian Rogers wrote:
-> > Metric groups contain metrics. Metrics create groups of events to
-> > ideally be scheduled together. Often metrics refer to the same events,
-> > for example, a cache hit and cache miss rate. Using separate event
-> > groups means these metrics are multiplexed at different times and the
-> > counts don't sum to 100%. More multiplexing also decreases the
-> > accuracy of the measurement.
-> >
-> > This change orders metrics from groups or the command line, so that
-> > the ones with the most events are set up first. Later metrics see if
-> > groups already provide their events, and reuse them if
-> > possible. Unnecessary events and groups are eliminated.
-> >
-> > RFC because:
-> >  - without this change events within a metric may get scheduled
-> >    together, after they may appear as part of a larger group and be
-> >    multiplexed at different times, lowering accuracy - however, less
-> >    multiplexing may compensate for this.
-> >  - libbpf's hashmap is used, however, libbpf is an optional
-> >    requirement for building perf.
-> >  - other things I'm not thinking of.
->
-> hi,
-> I can't apply this, what branch/commit is this based on?
->
->         Applying: perf expr: migrate expr ids table to libbpf's hashmap
->         error: patch failed: tools/perf/tests/pmu-events.c:428
->         error: tools/perf/tests/pmu-events.c: patch does not apply
->         error: patch failed: tools/perf/util/expr.h:2
->         error: tools/perf/util/expr.h: patch does not apply
->         error: patch failed: tools/perf/util/expr.y:73
->         error: tools/perf/util/expr.y: patch does not apply
->         Patch failed at 0001 perf expr: migrate expr ids table to libbpf's hashmap
->
-> thanks,
-> jirka
+Current expression allows 2 escaped '-,=' characters. However, some
+metrics require more, for example Haswell DRAM_BW_Use.
 
-Thanks for trying! I have resent the entire patch series here:
-https://lore.kernel.org/lkml/20200507140819.126960-1-irogers@google.com/
-It is acme's perf/core tree + metric fix/test CLs + some minor fixes.
-Details in the cover letter.
+Fixes: 26226a97724d (perf expr: Move expr lexer to flex)
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/expr.l | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Ian
+diff --git a/tools/perf/util/expr.l b/tools/perf/util/expr.l
+index 74b9b59b1aa5..73db6a9ef97e 100644
+--- a/tools/perf/util/expr.l
++++ b/tools/perf/util/expr.l
+@@ -86,7 +86,7 @@ number		[0-9]+
+ sch		[-,=]
+ spec		\\{sch}
+ sym		[0-9a-zA-Z_\.:@?]+
+-symbol		{spec}*{sym}*{spec}*{sym}*{spec}*{sym}
++symbol		({spec}|{sym})+
+ 
+ %%
+ 	struct expr_scanner_ctx *sctx = expr_get_extra(yyscanner);
+-- 
+2.26.2.526.g744177e7f7-goog
 
-> >
-> > Thanks!
-> >
-> > Ian Rogers (7):
-> >   perf expr: migrate expr ids table to libbpf's hashmap
-> >   perf metricgroup: change evlist_used to a bitmap
-> >   perf metricgroup: free metric_events on error
-> >   perf metricgroup: always place duration_time last
-> >   perf metricgroup: delay events string creation
-> >   perf metricgroup: order event groups by size
-> >   perf metricgroup: remove duped metric group events
-> >
-> >  tools/perf/tests/expr.c       |  32 ++---
-> >  tools/perf/tests/pmu-events.c |  22 ++--
-> >  tools/perf/util/expr.c        | 125 ++++++++++--------
-> >  tools/perf/util/expr.h        |  22 ++--
-> >  tools/perf/util/expr.y        |  22 +---
-> >  tools/perf/util/metricgroup.c | 242 +++++++++++++++++++++-------------
-> >  tools/perf/util/stat-shadow.c |  46 ++++---
-> >  7 files changed, 280 insertions(+), 231 deletions(-)
-> >
-> > --
-> > 2.26.2.526.g744177e7f7-goog
-> >
->
