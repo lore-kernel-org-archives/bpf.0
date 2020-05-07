@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AFF2C38A24
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 14:10:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54C16C47247
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 14:10:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF96E2082E
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 14:10:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34E0D2082E
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 14:10:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qZAaEQ0B"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JJ5GJm9H"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728191AbgEGOIo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 May 2020 10:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
+        id S1728186AbgEGOIn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 May 2020 10:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728182AbgEGOIm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 May 2020 10:08:42 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469FBC05BD0D
-        for <bpf@vger.kernel.org>; Thu,  7 May 2020 07:08:42 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id j21so7264209qtq.8
-        for <bpf@vger.kernel.org>; Thu, 07 May 2020 07:08:42 -0700 (PDT)
+        with ESMTP id S1728179AbgEGOIl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 May 2020 10:08:41 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9F1C05BD43
+        for <bpf@vger.kernel.org>; Thu,  7 May 2020 07:08:40 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id c89so6010640qva.2
+        for <bpf@vger.kernel.org>; Thu, 07 May 2020 07:08:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=lii6SAG4KfbOzXrghsoca6pr8ezjGocIYdgnUdeujGY=;
-        b=qZAaEQ0B7ZKKRekZmPn1LciqER6cK0FdLI07SFwGKi32uXdy0GDYlLEQkvDaL6za2g
-         MVkWPwq3W93NKTe383xsJrKUy4S0SGHq4L5Taa/Kxp5eqzPZd+9NMYZzirQHfh5w1ssk
-         gY1Yv2iOqJZEwK8qSFvn+eZFX33GSIJW5oY/mdxGThuNNqqZGxDGccLYm98DgvVqpXxt
-         a20N4yddyP2j56jC/s6n4aCEjuJZwOjgmFp/5UZFf4/bDQ81J1LPNtdQ+yO3w8TJqPDo
-         Zc7Sy2v/G34o78OcydgMNYSBunwaRxUmn9dvGXa9SIj9+bn90Us5OMYSnoS3OmjtWn0b
-         RxTQ==
+        bh=Ew1Auf+JJ2L5arU3PyljE3NdvPut2GJPZ3Rkkz6XalQ=;
+        b=JJ5GJm9HqdYdzOugzSLtwI9AsSWBWZKzE0tdn+cUIqA3aCKIQZvuruHCGe3GCSg3TK
+         tZvjcBl21VXdjWAYumT34XIqMXm5v6nl2ZI+wwoAANrdsjDDO07rP7KzZXuqxVJJF0aG
+         /F8asZ5Q2yofy8kEROaHB1fRHDJ2QHdTDfFWrNQ01WMMEm7bH6p1PGxmq7UxTiC12V4b
+         dv14eZS1uWivH9QOUP30/IP+hxLeRi8ZpMi3bm90vWdkzzH3ABAws+Gsl7CNpOskAHv2
+         0MJnHPB52IfsWjUuEj4zi4PJKtT+Pvu360/5rZcrd8TvM4F9pOhUiFmNhhsvTuRnnv/d
+         l6dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=lii6SAG4KfbOzXrghsoca6pr8ezjGocIYdgnUdeujGY=;
-        b=kz7k8A7sCu9I5zgZMYyt86GWCbfCQX4prD7AOSrbby0NsFCAA7vDFSC9IGiwu3pg1L
-         RpdY83FNIJalUKsxll3zGQtHLq8POQ1f6xZPwF9vhGzsJ+XGMNv31QKOEz+ZDmaqglnV
-         4raBT5ua0v3c9NOh+GeI2U8VUVsS4qHkmNMwgx2XAk1aYCc9iZilO2BSWU59lzOkMxRX
-         pWzB991B9hHVhAFVqRyyQk5KFWvllnl3awEPH3uVQrnc/eOH979HggzI15+2PoK+9rSk
-         +Bg22K1iAu/MyyQ4YtKGGEkWPsAXQ3EXKXinVS1W+onG1SFcyvygS4lN2a4DzMugzoF8
-         1BKw==
-X-Gm-Message-State: AGi0PuZ0dPl182jppotpixB3AEI+leIR30VZl027HrEkuY1jqF2apd3K
-        ukVa35Q5++dhj1YoqRyfxjXKh9phMSDl
-X-Google-Smtp-Source: APiQypIY0kCsvfpin5LZk6xK7RrJNO7Kujz8GfhLqsOKqrxQPJpE2Djp5sf8iXMO41PJaTao6Z3BVbB1VyqE
-X-Received: by 2002:ad4:548b:: with SMTP id q11mr13389332qvy.129.1588860521331;
- Thu, 07 May 2020 07:08:41 -0700 (PDT)
-Date:   Thu,  7 May 2020 07:08:05 -0700
+        bh=Ew1Auf+JJ2L5arU3PyljE3NdvPut2GJPZ3Rkkz6XalQ=;
+        b=EtikIPrXmkmhsd9pj4iVU27DTn6sh8Zpi8KtxrkMrRD68DO1UqC+l28/4IMHjl+q0M
+         UZDB/SfrZYlRvw684U5eB4hayPKTjlGNrbyimW415T+Wf5MfJrSCSPJ7ssZqCY5SgMMt
+         5jTkbThVQOPAGrz2xzW6rPtlWhnHCRSZTmDknMIF7LsZ98gsBkteabxCo+mdINiq7oec
+         ZaD9kbYDl/s8gP5h4FQ6TSwiHCCPnmT3X/nU/tN1IEerZYXvJh0BQrWCNMitdN56LjJm
+         K62D1lfpEXoHv/4CyoCPsmKqayDpPQNDV66x2bdQJs0vYYxpeu43E6ISVYC/8heLvG89
+         i2pQ==
+X-Gm-Message-State: AGi0PuZ0dsHiY+hsyKb2COGk20texC4meR4n48qDLgtO8CySCuITuH4W
+        e6V+STmDj5Bgh52LG9Oswnba1FRLSS09
+X-Google-Smtp-Source: APiQypJvJKA9NnfhOBmsKSvoOjMdo+d1dPOHMI0HSSVAAH72zsNS1j+NeUQeK4QYwqrfA+9aozSBGliqUofk
+X-Received: by 2002:ad4:45ac:: with SMTP id y12mr13426252qvu.227.1588860519436;
+ Thu, 07 May 2020 07:08:39 -0700 (PDT)
+Date:   Thu,  7 May 2020 07:08:04 -0700
 In-Reply-To: <20200507140819.126960-1-irogers@google.com>
-Message-Id: <20200507140819.126960-10-irogers@google.com>
+Message-Id: <20200507140819.126960-9-irogers@google.com>
 Mime-Version: 1.0
 References: <20200507140819.126960-1-irogers@google.com>
 X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
-Subject: [RFC PATCH v2 09/23] perf metrics: fix parse errors in power9 metrics
+Subject: [RFC PATCH v2 08/23] perf metrics: fix parse errors in power8 metrics
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -96,25 +96,25 @@ X-Mailing-List: bpf@vger.kernel.org
 
 Mismatched parentheses.
 
-Fixes: 7f3cf5ac7743 (perf vendor events power9: Cpi_breakdown & estimated_dcache_miss_cpi metrics)
+Fixes: dd81eafacc52 (perf vendor events power8: Cpi_breakdown & estimated_dcache_miss_cpi metrics)
 Reviewed-by: Paul A. Clarke <pc@us.ibm.com>
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/arch/powerpc/power9/metrics.json | 2 +-
+ tools/perf/pmu-events/arch/powerpc/power8/metrics.json | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/pmu-events/arch/powerpc/power9/metrics.json b/tools/perf/pmu-events/arch/powerpc/power9/metrics.json
-index 811c2a8c1c9e..f427436f2c0a 100644
---- a/tools/perf/pmu-events/arch/powerpc/power9/metrics.json
-+++ b/tools/perf/pmu-events/arch/powerpc/power9/metrics.json
-@@ -362,7 +362,7 @@
+diff --git a/tools/perf/pmu-events/arch/powerpc/power8/metrics.json b/tools/perf/pmu-events/arch/powerpc/power8/metrics.json
+index bffb2d4a6420..fc4aa6c2ddc9 100644
+--- a/tools/perf/pmu-events/arch/powerpc/power8/metrics.json
++++ b/tools/perf/pmu-events/arch/powerpc/power8/metrics.json
+@@ -169,7 +169,7 @@
      },
      {
-         "BriefDescription": "Completion stall for other reasons",
--        "MetricExpr": "PM_CMPLU_STALL - PM_CMPLU_STALL_NTC_DISP_FIN - PM_CMPLU_STALL_NTC_FLUSH - PM_CMPLU_STALL_LSU - PM_CMPLU_STALL_EXEC_UNIT - PM_CMPLU_STALL_BRU)/PM_RUN_INST_CMPL",
-+        "MetricExpr": "(PM_CMPLU_STALL - PM_CMPLU_STALL_NTC_DISP_FIN - PM_CMPLU_STALL_NTC_FLUSH - PM_CMPLU_STALL_LSU - PM_CMPLU_STALL_EXEC_UNIT - PM_CMPLU_STALL_BRU)/PM_RUN_INST_CMPL",
+         "BriefDescription": "Cycles GCT empty where dispatch was held",
+-        "MetricExpr": "(PM_GCT_NOSLOT_DISP_HELD_MAP + PM_GCT_NOSLOT_DISP_HELD_SRQ + PM_GCT_NOSLOT_DISP_HELD_ISSQ + PM_GCT_NOSLOT_DISP_HELD_OTHER) / PM_RUN_INST_CMPL)",
++        "MetricExpr": "(PM_GCT_NOSLOT_DISP_HELD_MAP + PM_GCT_NOSLOT_DISP_HELD_SRQ + PM_GCT_NOSLOT_DISP_HELD_ISSQ + PM_GCT_NOSLOT_DISP_HELD_OTHER) / PM_RUN_INST_CMPL",
          "MetricGroup": "cpi_breakdown",
-         "MetricName": "other_stall_cpi"
+         "MetricName": "gct_empty_disp_held_cpi"
      },
 -- 
 2.26.2.526.g744177e7f7-goog
