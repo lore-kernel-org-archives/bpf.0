@@ -2,201 +2,221 @@ Return-Path: <SRS0=eV/F=6V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BFD5C38A24
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54867C38A24
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:39:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FE4B20838
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:20:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34012207DD
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:39:24 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="crR8Mk8u"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725947AbgEGFUY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 May 2020 01:20:24 -0400
-Received: from mga14.intel.com ([192.55.52.115]:42017 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725879AbgEGFUY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 May 2020 01:20:24 -0400
-IronPort-SDR: gyv1YDhOGHMn8I1r4LqSupOq9Iq+E/x37/PN1HuqXvgJuJs9BZouK+yrvvXA+H4C6cWsm5WdQ7
- EAfZj+sKrX4A==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2020 22:20:23 -0700
-IronPort-SDR: gdDFospjotObt+Bfvr4m9JoONfqPIonuioR93iuCDRUhDNgw0leD5kDFY4Gct5mT/6xZ6dyvHC
- bLVRg82E0rSQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,362,1583222400"; 
-   d="scan'208";a="249994158"
-Received: from yyin5-mobl1.ccr.corp.intel.com (HELO [10.255.30.83]) ([10.255.30.83])
-  by fmsmga007.fm.intel.com with ESMTP; 06 May 2020 22:20:22 -0700
-To:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-From:   Ma Xinjian <max.xinjian@intel.com>
-Subject: bprm_count and stack_mprotect error when testing BPF LSM on v5.7-rc3
-Message-ID: <3ab505db-9e04-366b-d602-6b2935739f54@intel.com>
-Date:   Thu, 7 May 2020 13:19:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+        id S1725783AbgEGFjX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 May 2020 01:39:23 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:20324 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726069AbgEGFjX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 7 May 2020 01:39:23 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0475Xbgn008862
+        for <bpf@vger.kernel.org>; Wed, 6 May 2020 22:39:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=jMS05TnHamroWReS5zG6pfxmGYRvG9ZGa+tdbZc5nno=;
+ b=crR8Mk8u37wea7DghXaXmdnOewg/1B8QmMPhHV9yba6JAYhgT+6q6qdSllUAICGj5cCS
+ +NqSE4ZXucl1/H8X2sKbfAhL3wxUs83QeSikPMbG3eSGIWVodJE/uKP+QOHSFUM+F3Ha
+ BrLJ8Zz25SYOyErs+74cyB2so5YAKWLfuXw= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 30ufak86e6-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 06 May 2020 22:39:22 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Wed, 6 May 2020 22:39:21 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id A3DEE3701BB3; Wed,  6 May 2020 22:39:15 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next v3 01/21] bpf: implement an interface to register bpf_iter targets
+Date:   Wed, 6 May 2020 22:39:15 -0700
+Message-ID: <20200507053915.1542238-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200507053915.1542140-1-yhs@fb.com>
+References: <20200507053915.1542140-1-yhs@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-07_02:2020-05-05,2020-05-07 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ mlxlogscore=999 phishscore=0 adultscore=0 impostorscore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1015 spamscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005070043
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+The target can call bpf_iter_reg_target() to register itself.
+The needed information:
+  target:           target name
+  seq_ops:          the seq_file operations for the target
+  init_seq_private  target callback to initialize seq_priv during file op=
+en
+  fini_seq_private  target callback to clean up seq_priv during file rele=
+ase
+  seq_priv_size:    the private_data size needed by the seq_file
+                    operations
 
-When I test bpf lsm with (/test_progs -vv  -t test_lsm ), failed with 
-below issue:
+The target name represents a target which provides a seq_ops
+for iterating objects.
 
-root@lkp-skl-d01 
-/usr/src/perf_selftests-x86_64-rhel-7.6-kselftests-bpf-lsm-2-6a8b55ed4056ea5559ebe4f6a4b247f627870d4c/tools/testing/selftests/bpf# 
-./test_progs -vv  -t test_lsm
+The target can provide two callback functions, init_seq_private
+and fini_seq_private, called during file open/release time.
+For example, /proc/net/{tcp6, ipv6_route, netlink, ...}, net
+name space needs to be setup properly during file open and
+released properly during file release.
 
-libbpf: loading object 'lsm' from buffer
-libbpf: section(1) .strtab, size 306, link 0, flags 0, type=3
-libbpf: skip section(1) .strtab
-libbpf: section(2) .text, size 0, link 0, flags 6, type=1
-libbpf: skip section(2) .text
-libbpf: section(3) lsm/file_mprotect, size 192, link 0, flags 6, type=1
-libbpf: found program lsm/file_mprotect
-libbpf: section(4) .rellsm/file_mprotect, size 32, link 25, flags 0, type=9
-libbpf: section(5) lsm/bprm_committed_creds, size 104, link 0, flags 6, 
-type=1
-libbpf: found program lsm/bprm_committed_creds
-libbpf: section(6) .rellsm/bprm_committed_creds, size 32, link 25, flags 
-0, type=9
-libbpf: section(7) license, size 4, link 0, flags 3, type=1
-libbpf: license of lsm is GPL
-libbpf: section(8) .bss, size 12, link 0, flags 3, type=8
-libbpf: section(9) .debug_loc, size 383, link 0, flags 0, type=1
-libbpf: skip section(9) .debug_loc
-libbpf: section(10) .rel.debug_loc, size 112, link 25, flags 0, type=9
-libbpf: skip relo .rel.debug_loc(10) for section(9)
-libbpf: section(11) .debug_abbrev, size 901, link 0, flags 0, type=1
-libbpf: skip section(11) .debug_abbrev
-libbpf: section(12) .debug_info, size 237441, link 0, flags 0, type=1
-libbpf: skip section(12) .debug_info
-libbpf: section(13) .rel.debug_info, size 112, link 25, flags 0, type=9
-libbpf: skip relo .rel.debug_info(13) for section(12)
-libbpf: section(14) .debug_ranges, size 96, link 0, flags 0, type=1
-libbpf: skip section(14) .debug_ranges
-libbpf: section(15) .rel.debug_ranges, size 128, link 25, flags 0, type=9
-libbpf: skip relo .rel.debug_ranges(15) for section(14)
-libbpf: section(16) .debug_str, size 142395, link 0, flags 30, type=1
-libbpf: skip section(16) .debug_str
-libbpf: section(17) .BTF, size 5634, link 0, flags 0, type=1
-libbpf: section(18) .rel.BTF, size 64, link 25, flags 0, type=9
-libbpf: skip relo .rel.BTF(18) for section(17)
-libbpf: section(19) .BTF.ext, size 484, link 0, flags 0, type=1
-libbpf: section(20) .rel.BTF.ext, size 416, link 25, flags 0, type=9
-libbpf: skip relo .rel.BTF.ext(20) for section(19)
-libbpf: section(21) .debug_frame, size 64, link 0, flags 0, type=1
-libbpf: skip section(21) .debug_frame
-libbpf: section(22) .rel.debug_frame, size 32, link 25, flags 0, type=9
-libbpf: skip relo .rel.debug_frame(22) for section(21)
-libbpf: section(23) .debug_line, size 227, link 0, flags 0, type=1
-libbpf: skip section(23) .debug_line
-libbpf: section(24) .rel.debug_line, size 32, link 25, flags 0, type=9
-libbpf: skip relo .rel.debug_line(24) for section(23)
-libbpf: section(25) .symtab, size 288, link 1, flags 0, type=2
-libbpf: looking for externs among 12 symbols...
-libbpf: collected 0 externs total
-libbpf: map 'lsm.bss' (global data): at sec_idx 8, offset 0, flags 400.
-libbpf: map 0 is "lsm.bss"
-libbpf: collecting relocating info for: 'lsm/file_mprotect'
-libbpf: relo for shdr 8, symb 8, value 0, type 1, bind 1, name 232 
-('monitored_pid'), insn 12
-libbpf: found data map 0 (lsm.bss, sec 8, off 0) for insn 12
-libbpf: relo for shdr 8, symb 9, value 4, type 1, bind 1, name 34 
-('mprotect_count'), insn 17
-libbpf: found data map 0 (lsm.bss, sec 8, off 0) for insn 17
-libbpf: collecting relocating info for: 'lsm/bprm_committed_creds'
-libbpf: relo for shdr 8, symb 8, value 0, type 1, bind 1, name 232 
-('monitored_pid'), insn 1
-libbpf: found data map 0 (lsm.bss, sec 8, off 0) for insn 1
-libbpf: relo for shdr 8, symb 7, value 8, type 1, bind 1, name 49 
-('bprm_count'), insn 6
-libbpf: found data map 0 (lsm.bss, sec 8, off 0) for insn 6
-libbpf: loading kernel BTF '/sys/kernel/btf/vmlinux': 0
-libbpf: created map lsm.bss: fd=4
-libbpf: loading kernel BTF '/sys/kernel/btf/vmlinux': 0
-libbpf: prog 'lsm/file_mprotect': performing 4 CO-RE offset relocs
-libbpf: prog 'lsm/file_mprotect': relo #0: kind 0, spec is [6] 
-vm_area_struct + 0:6 => 64.0 @ &x[0].vm_mm
-libbpf: [6] vm_area_struct: found candidate [329] vm_area_struct
-libbpf: prog 'lsm/file_mprotect': relo #0: matching candidate #0 
-vm_area_struct against spec [329] vm_area_struct + 0:6 => 64.0 @ 
-&x[0].vm_mm: 1
-libbpf: prog 'lsm/file_mprotect': relo #0: patched insn #5 (LDX/ST/STX) 
-off 64 -> 64
-libbpf: prog 'lsm/file_mprotect': relo #1: kind 0, spec is [32] 
-mm_struct + 0:0:35 => 304.0 @ &x[0].start_stack
-libbpf: [32] mm_struct: found candidate [308] mm_struct
-libbpf: prog 'lsm/file_mprotect': relo #1: matching candidate #0 
-mm_struct against spec [308] mm_struct + 0:0:35 => 304.0 @ 
-&x[0].start_stack: 1
-libbpf: prog 'lsm/file_mprotect': relo #1: patched insn #7 (LDX/ST/STX) 
-off 304 -> 304
-libbpf: prog 'lsm/file_mprotect': relo #2: kind 0, spec is [6] 
-vm_area_struct + 0:0 => 0.0 @ &x[0].vm_start
-libbpf: prog 'lsm/file_mprotect': relo #2: matching candidate #0 
-vm_area_struct against spec [329] vm_area_struct + 0:0 => 0.0 @ 
-&x[0].vm_start: 1
-libbpf: prog 'lsm/file_mprotect': relo #2: patched insn #8 (LDX/ST/STX) 
-off 0 -> 0
-libbpf: prog 'lsm/file_mprotect': relo #3: kind 0, spec is [6] 
-vm_area_struct + 0:1 => 8.0 @ &x[0].vm_end
-libbpf: prog 'lsm/file_mprotect': relo #3: matching candidate #0 
-vm_area_struct against spec [329] vm_area_struct + 0:1 => 8.0 @ 
-&x[0].vm_end: 1
-libbpf: prog 'lsm/file_mprotect': relo #3: patched insn #10 (LDX/ST/STX) 
-off 8 -> 8
-test_test_lsm:PASS:skel_load 0 nsec
-test_test_lsm:PASS:attach 0 nsec
-test_test_lsm:PASS:exec_cmd 0 nsec
-test_test_lsm:FAIL:bprm_count bprm_count = 0
-test_test_lsm:FAIL:stack_mprotect want err=EPERM, got 0
-#70 test_lsm:FAIL
-Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+Function bpf_iter_unreg_target() is also implemented to unregister
+a particular target.
 
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ include/linux/bpf.h   | 15 +++++++++++
+ kernel/bpf/Makefile   |  2 +-
+ kernel/bpf/bpf_iter.c | 59 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 75 insertions(+), 1 deletion(-)
+ create mode 100644 kernel/bpf/bpf_iter.c
 
-kconfig:
-
-CONFIG_BPF_LSM=y
-
-CONFIG_LSM="lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
-
-besides:
-
-when I add bpf to CONFIG_LSM, then boot failed.
-
-boot error:
-
-```
-
-Cannot determine cgroup we are running in: No data available
-Failed to allocate manager object: No data available
-[!!!!!!] Failed to allocate manager object, freezing.
-Freezing execution.
-
-```
-
-seems bpf in CONFIG_LSM and CONFIG_BPF_LSM conflict.
-
-
-clang version: v11.0.0
-
-commit: 54b35c066417d4856e9d53313f7e98b354274584
-
-# pahole --version
-v1.17
-
-
--- 
-Best Regards.
-Ma Xinjian
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 1262ec460ab3..40c78b86fe38 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -31,6 +31,7 @@ struct seq_file;
+ struct btf;
+ struct btf_type;
+ struct exception_table_entry;
++struct seq_operations;
+=20
+ extern struct idr btf_idr;
+ extern spinlock_t btf_idr_lock;
+@@ -1126,6 +1127,20 @@ struct bpf_link *bpf_link_get_from_fd(u32 ufd);
+ int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
+ int bpf_obj_get_user(const char __user *pathname, int flags);
+=20
++typedef int (*bpf_iter_init_seq_priv_t)(void *private_data);
++typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
++
++struct bpf_iter_reg {
++	const char *target;
++	const struct seq_operations *seq_ops;
++	bpf_iter_init_seq_priv_t init_seq_private;
++	bpf_iter_fini_seq_priv_t fini_seq_private;
++	u32 seq_priv_size;
++};
++
++int bpf_iter_reg_target(struct bpf_iter_reg *reg_info);
++void bpf_iter_unreg_target(const char *target);
++
+ int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
+ int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
+ int bpf_percpu_hash_update(struct bpf_map *map, void *key, void *value,
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index f2d7be596966..6a8b0febd3f6 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -2,7 +2,7 @@
+ obj-y :=3D core.o
+ CFLAGS_core.o +=3D $(call cc-disable-warning, override-init)
+=20
+-obj-$(CONFIG_BPF_SYSCALL) +=3D syscall.o verifier.o inode.o helpers.o tn=
+um.o
++obj-$(CONFIG_BPF_SYSCALL) +=3D syscall.o verifier.o inode.o helpers.o tn=
+um.o bpf_iter.o
+ obj-$(CONFIG_BPF_SYSCALL) +=3D hashtab.o arraymap.o percpu_freelist.o bp=
+f_lru_list.o lpm_trie.o map_in_map.o
+ obj-$(CONFIG_BPF_SYSCALL) +=3D local_storage.o queue_stack_maps.o
+ obj-$(CONFIG_BPF_SYSCALL) +=3D disasm.o
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+new file mode 100644
+index 000000000000..5a8119d17d14
+--- /dev/null
++++ b/kernel/bpf/bpf_iter.c
+@@ -0,0 +1,59 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2020 Facebook */
++
++#include <linux/fs.h>
++#include <linux/filter.h>
++#include <linux/bpf.h>
++
++struct bpf_iter_target_info {
++	struct list_head list;
++	const char *target;
++	const struct seq_operations *seq_ops;
++	bpf_iter_init_seq_priv_t init_seq_private;
++	bpf_iter_fini_seq_priv_t fini_seq_private;
++	u32 seq_priv_size;
++};
++
++static struct list_head targets =3D LIST_HEAD_INIT(targets);
++static DEFINE_MUTEX(targets_mutex);
++
++int bpf_iter_reg_target(struct bpf_iter_reg *reg_info)
++{
++	struct bpf_iter_target_info *tinfo;
++
++	tinfo =3D kmalloc(sizeof(*tinfo), GFP_KERNEL);
++	if (!tinfo)
++		return -ENOMEM;
++
++	tinfo->target =3D reg_info->target;
++	tinfo->seq_ops =3D reg_info->seq_ops;
++	tinfo->init_seq_private =3D reg_info->init_seq_private;
++	tinfo->fini_seq_private =3D reg_info->fini_seq_private;
++	tinfo->seq_priv_size =3D reg_info->seq_priv_size;
++	INIT_LIST_HEAD(&tinfo->list);
++
++	mutex_lock(&targets_mutex);
++	list_add(&tinfo->list, &targets);
++	mutex_unlock(&targets_mutex);
++
++	return 0;
++}
++
++void bpf_iter_unreg_target(const char *target)
++{
++	struct bpf_iter_target_info *tinfo;
++	bool found =3D false;
++
++	mutex_lock(&targets_mutex);
++	list_for_each_entry(tinfo, &targets, list) {
++		if (!strcmp(target, tinfo->target)) {
++			list_del(&tinfo->list);
++			kfree(tinfo);
++			found =3D true;
++			break;
++		}
++	}
++	mutex_unlock(&targets_mutex);
++
++	WARN_ON(found =3D=3D false);
++}
+--=20
+2.24.1
 
