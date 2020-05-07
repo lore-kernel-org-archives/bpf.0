@@ -2,142 +2,93 @@ Return-Path: <SRS0=eV/F=6V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FD4BC54E49
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E72E1C38A24
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:50:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 60F3A207DD
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:40:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C66C7208DB
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:50:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="MhtiO8G2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iAffVvEl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbgEGFk3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 May 2020 01:40:29 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:19582 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726134AbgEGFj0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 7 May 2020 01:39:26 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0475YWYh006840
-        for <bpf@vger.kernel.org>; Wed, 6 May 2020 22:39:25 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=wuGOVWNZN+b7BwsJWWJzocwxX0Kb1JsXdXMhgR12GxQ=;
- b=MhtiO8G22CHGXV0iJc01+cVSofGyXIabxXZskjkseotPJnMn/AN1dqZex9I1ve6RDG3d
- IwdtK/k5YIxkl1F2l3YZbxS0owzayKiJbhQGcR5jC6Z3Ozt+lQOYQayeE8LIRrfzVTSe
- 7tmdy02q2TNEl2CuM5RIKY1dtg46SZdfFu8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30uxuxm2qv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 06 May 2020 22:39:25 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 6 May 2020 22:39:24 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 5BE1D3701B99; Wed,  6 May 2020 22:39:19 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v3 04/21] bpf: support bpf tracing/iter programs for BPF_LINK_UPDATE
-Date:   Wed, 6 May 2020 22:39:19 -0700
-Message-ID: <20200507053919.1542666-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200507053915.1542140-1-yhs@fb.com>
-References: <20200507053915.1542140-1-yhs@fb.com>
+        id S1725900AbgEGFuy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 May 2020 01:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725857AbgEGFuy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 May 2020 01:50:54 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77EDC061A0F;
+        Wed,  6 May 2020 22:50:52 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id l19so4911890lje.10;
+        Wed, 06 May 2020 22:50:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mq6HIDH5BrDBTzENE5J2lC+OBSXHG1cl8m7LfKfKF6E=;
+        b=iAffVvElIIkM/97CnrTukgk2THSnmjXrSSfqNZZioLnNn0ITW+wSquwB5M9i5fIQAD
+         1WcrpPYaHGfL38aTq6GqE7NP04pVzQRUwe5OaYNO6GYg6eI4A1x9AXWQ0hmRd2RtnOXP
+         l9ki8ATv/d2kf2w9vsalM2DbBUy0RepJzcNE31/TMNuGRKDzvef3HSEWei1pAl7SW59U
+         A8vP3ZmLcqD55jixIJyxMuz9RNERHbPbOqoqVcf8ARHh5wvbWGUuWeajZ1/FbKgGuC1x
+         pirH6PjU/IPWMG06SmkHUfyXlogr7ZJQtLltrEQD+dCef/DAyXESz+CDP9EcDkF6/ZSr
+         60yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mq6HIDH5BrDBTzENE5J2lC+OBSXHG1cl8m7LfKfKF6E=;
+        b=X11s4cwZeKt4kgx5ypCr42YHSyw5tGw4ZD4kV0AZ7Ynh4VVNnbp3765ZOgU+7G1hRk
+         MGXaoPJq2v5ez1Hu+Ji4BQllaUjaUHs51AR+MgPFGGEc7xmvsA7O1gDCHhbQtVnisgtM
+         dgatsGLe4ucWg3Iqd3aWAGK7qFDwEzgfGUJIuGsCidLJzpSEhOsuVzRl1C+CvDdaqe5O
+         sP/2sE4+59Meian01VULGSqssRwn/IsfZVA862e2NEpxIdJ2ZqB9IYUJiH9vdgHXzg/s
+         PhsBeKeMbWPZsa5jEbxUDoqdK8fMnbNAhRZ3KMKdvDXjgb8hw0Wqi15fmvuoj7toPSS3
+         qB9g==
+X-Gm-Message-State: AGi0PuZWjTR5Y0In7TepiqJzZT5JxIPa1Ftn1TjULw/ZDnSdESn0Funf
+        Q50OOfh9zlss/bbPM2g+blhSxHAwV33ECMXdLxw=
+X-Google-Smtp-Source: APiQypKApDz/cUh129GGJeJkYPhX5zGgi6wuKgYvKSMz/d2JSVOYgHdxKUpMEIF9IhUQV7nR7nDF9wIvBpIOaPUn78Y=
+X-Received: by 2002:a2e:990f:: with SMTP id v15mr7500790lji.7.1588830651087;
+ Wed, 06 May 2020 22:50:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-07_02:2020-05-05,2020-05-07 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- adultscore=0 malwarescore=0 bulkscore=0 spamscore=0 clxscore=1015
- impostorscore=0 priorityscore=1501 mlxlogscore=999 mlxscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005070043
-X-FB-Internal: deliver
+References: <20200430155240.68748-1-kpsingh@chromium.org> <alpine.LRH.2.21.2005011345380.29679@namei.org>
+In-Reply-To: <alpine.LRH.2.21.2005011345380.29679@namei.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 6 May 2020 22:50:39 -0700
+Message-ID: <CAADnVQLN-OtyzwzNwontLK9q3w3hPET2vDJWHhPs-cKqvmHuVQ@mail.gmail.com>
+Subject: Re: [PATCH bpf] security: Fix the default value of
+ fs_context_parse_param hook
+To:     James Morris <jmorris@namei.org>
+Cc:     KP Singh <kpsingh@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Mikko Ylinen <mikko.ylinen@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Added BPF_LINK_UPDATE support for tracing/iter programs.
-This way, a file based bpf iterator, which holds a reference
-to the link, can have its bpf program updated without
-creating new files.
+On Thu, Apr 30, 2020 at 8:46 PM James Morris <jmorris@namei.org> wrote:
+>
+> On Thu, 30 Apr 2020, KP Singh wrote:
+>
+> > From: KP Singh <kpsingh@google.com>
+> >
+>
+> Applied to:
+> git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git for-v5.7
+>
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- kernel/bpf/bpf_iter.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index 03f5832909db..0542a243b78c 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -23,6 +23,9 @@ struct bpf_iter_link {
- static struct list_head targets =3D LIST_HEAD_INIT(targets);
- static DEFINE_MUTEX(targets_mutex);
-=20
-+/* protect bpf_iter_link changes */
-+static DEFINE_MUTEX(link_mutex);
-+
- int bpf_iter_reg_target(struct bpf_iter_reg *reg_info)
- {
- 	struct bpf_iter_target_info *tinfo;
-@@ -111,9 +114,37 @@ static void bpf_iter_link_dealloc(struct bpf_link *l=
-ink)
- 	kfree(iter_link);
- }
-=20
-+static int bpf_iter_link_replace(struct bpf_link *link,
-+				 struct bpf_prog *new_prog,
-+				 struct bpf_prog *old_prog)
-+{
-+	int ret =3D 0;
-+
-+	mutex_lock(&link_mutex);
-+	if (old_prog && link->prog !=3D old_prog) {
-+		ret =3D -EPERM;
-+		goto out_unlock;
-+	}
-+
-+	if (link->prog->type !=3D new_prog->type ||
-+	    link->prog->expected_attach_type !=3D new_prog->expected_attach_typ=
-e ||
-+	    link->prog->aux->attach_btf_id !=3D new_prog->aux->attach_btf_id) {
-+		ret =3D -EINVAL;
-+		goto out_unlock;
-+	}
-+
-+	old_prog =3D xchg(&link->prog, new_prog);
-+	bpf_prog_put(old_prog);
-+
-+out_unlock:
-+	mutex_unlock(&link_mutex);
-+	return ret;
-+}
-+
- static const struct bpf_link_ops bpf_iter_link_lops =3D {
- 	.release =3D bpf_iter_link_release,
- 	.dealloc =3D bpf_iter_link_dealloc,
-+	.update_prog =3D bpf_iter_link_replace,
- };
-=20
- int bpf_iter_link_attach(const union bpf_attr *attr, struct bpf_prog *pr=
-og)
---=20
-2.24.1
-
+James,
+could you please send PR to Linus this week to make sure
+the fix makes it into the next -rc ?
+Few other people reported issues that are fixed by this patch.
+Thanks!
