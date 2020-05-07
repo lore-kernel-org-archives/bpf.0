@@ -2,46 +2,45 @@ Return-Path: <SRS0=eV/F=6V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D772C47247
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A84F9C47257
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:40:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0665207DD
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:40:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 806DD207DD
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 05:40:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="i/qvQIPv"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="AZUMzGhU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726587AbgEGFkC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 May 2020 01:40:02 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:17344 "EHLO
+        id S1727072AbgEGFjt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 May 2020 01:39:49 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:65016 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727113AbgEGFjv (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 7 May 2020 01:39:51 -0400
+        by vger.kernel.org with ESMTP id S1726843AbgEGFjr (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 7 May 2020 01:39:47 -0400
 Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0475dk1L007958
-        for <bpf@vger.kernel.org>; Wed, 6 May 2020 22:39:51 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0475djFp007909
+        for <bpf@vger.kernel.org>; Wed, 6 May 2020 22:39:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=os5BdaB2LIAIWH6vrxfv8dhAkuMHvSzAdfITrOvV8Zw=;
- b=i/qvQIPvhrkGHy21uD0HRjsaHYTP4KG5lkZFBNJbA2aCH2LSl25WbrcWPDktvZzV3+0q
- EHCpUktfNl5/9f7a8EKP9QmzMyZV0+e6SvZqBjU9/O4HY447PoOnn6GxrS6dAZUHhiG8
- rg3CoNwqAayuVVm8F7/WkQhPSHxsw5Hhe5Q= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30v0hp3gwd-12
+ bh=N9vwbuBy18Cgc2aH5He7mmxPGSZIesdfelx4Lla6la0=;
+ b=AZUMzGhUdFd5DDhHuvvAjzq59MGxEc6kh9FA5SMe7lCR9vKX1JO1yFH6R2WfnLEqUW/m
+ TgXrUjwOPsBX2BZD8lSqwA36PAlS0e7/gmQFRdTQFrdfRYIQQ0ZSZ4hbhUEGPHfSiEN1
+ 8TtEZtnahqfvWUaUlQUeNu+IU/Qx0NDp/K0= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 30v0hp3gwc-9
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 06 May 2020 22:39:51 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 06 May 2020 22:39:47 -0700
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 6 May 2020 22:39:41 -0700
+ 15.1.1847.3; Wed, 6 May 2020 22:39:23 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 36C5F3701B99; Wed,  6 May 2020 22:39:39 -0700 (PDT)
+        id 1496F3701B99; Wed,  6 May 2020 22:39:23 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -50,9 +49,9 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v3 20/21] tools/bpf: selftests: add iter progs for bpf_map/task/task_file
-Date:   Wed, 6 May 2020 22:39:39 -0700
-Message-ID: <20200507053939.1545455-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 07/21] bpf: create file bpf iterator
+Date:   Wed, 6 May 2020 22:39:23 -0700
+Message-ID: <20200507053923.1543044-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200507053915.1542140-1-yhs@fb.com>
 References: <20200507053915.1542140-1-yhs@fb.com>
@@ -65,7 +64,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
  adultscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 suspectscore=0
  malwarescore=0 phishscore=0 spamscore=0 clxscore=1015 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ mlxlogscore=959 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2005070044
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -73,167 +72,112 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The implementation is arbitrary, just to show how the bpf programs
-can be written for bpf_map/task/task_file. They can be costomized
-for specific needs.
-
-For example, for bpf_map, the iterator prints out:
-  $ cat /sys/fs/bpf/my_bpf_map
-      id   refcnt  usercnt  locked_vm
-       3        2        0         20
-       6        2        0         20
-       9        2        0         20
-      12        2        0         20
-      13        2        0         20
-      16        2        0         20
-      19        2        0         20
-      %%% END %%%
-
-For task, the iterator prints out:
-  $ cat /sys/fs/bpf/my_task
-    tgid      gid
-       1        1
-       2        2
-    ....
-    1944     1944
-    1948     1948
-    1949     1949
-    1953     1953
-    =3D=3D=3D END =3D=3D=3D
-
-For task/file, the iterator prints out:
-  $ cat /sys/fs/bpf/my_task_file
-    tgid      gid       fd      file
-       1        1        0 ffffffff95c97600
-       1        1        1 ffffffff95c97600
-       1        1        2 ffffffff95c97600
-    ....
-    1895     1895      255 ffffffff95c8fe00
-    1932     1932        0 ffffffff95c8fe00
-    1932     1932        1 ffffffff95c8fe00
-    1932     1932        2 ffffffff95c8fe00
-    1932     1932        3 ffffffff95c185c0
-
-This is able to print out all open files (fd and file->f_op), so user can=
- compare
-f_op against a particular kernel file operations to find what it is.
-For example, from /proc/kallsyms, we can find
-  ffffffff95c185c0 r eventfd_fops
-so we will know tgid 1932 fd 3 is an eventfd file descriptor.
+To produce a file bpf iterator, the fd must be
+corresponding to a link_fd assocciated with a
+trace/iter program. When the pinned file is
+opened, a seq_file will be generated.
 
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- .../selftests/bpf/progs/bpf_iter_bpf_map.c    | 28 +++++++++++++++++++
- .../selftests/bpf/progs/bpf_iter_task.c       | 25 +++++++++++++++++
- .../selftests/bpf/progs/bpf_iter_task_file.c  | 26 +++++++++++++++++
- 3 files changed, 79 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_file.=
-c
+ include/linux/bpf.h   |  2 ++
+ kernel/bpf/bpf_iter.c | 17 ++++++++++++++++-
+ kernel/bpf/inode.c    |  5 ++++-
+ 3 files changed, 22 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c b/tools=
-/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
-new file mode 100644
-index 000000000000..4867cd3445c8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 80b1b9d8a638..b06653ab3476 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1022,6 +1022,7 @@ static inline void bpf_enable_instrumentation(void)
+=20
+ extern const struct file_operations bpf_map_fops;
+ extern const struct file_operations bpf_prog_fops;
++extern const struct file_operations bpf_iter_fops;
+=20
+ #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type) \
+ 	extern const struct bpf_prog_ops _name ## _prog_ops; \
+@@ -1145,6 +1146,7 @@ void bpf_iter_unreg_target(const char *target);
+ bool bpf_iter_prog_supported(struct bpf_prog *prog);
+ int bpf_iter_link_attach(const union bpf_attr *attr, struct bpf_prog *pr=
+og);
+ int bpf_iter_new_fd(struct bpf_link *link);
++bool bpf_link_is_iter(struct bpf_link *link);
+=20
+ int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
+ int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index 917df4c69966..b0b8726c08f8 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -39,6 +39,8 @@ static DEFINE_MUTEX(link_mutex);
+ /* incremented on every opened seq_file */
+ static atomic64_t session_id;
+=20
++static int prepare_seq_file(struct file *file, struct bpf_iter_link *lin=
+k);
 +
-+char _license[] SEC("license") =3D "GPL";
-+
-+SEC("iter/bpf_map")
-+int dump_bpf_map(struct bpf_iter__bpf_map *ctx)
+ /* bpf_seq_read, a customized and simpler version for bpf iterator.
+  * no_llseek is assumed for this file.
+  * The following are differences from seq_read():
+@@ -157,6 +159,13 @@ static ssize_t bpf_seq_read(struct file *file, char =
+__user *buf, size_t size,
+ 	return copied;
+ }
+=20
++static int iter_open(struct inode *inode, struct file *file)
 +{
-+	struct seq_file *seq =3D ctx->meta->seq;
-+	__u64 seq_num =3D ctx->meta->seq_num;
-+	struct bpf_map *map =3D ctx->map;
++	struct bpf_iter_link *link =3D inode->i_private;
 +
-+	if (map =3D=3D (void *)0) {
-+		BPF_SEQ_PRINTF(seq, "      %%%%%% END %%%%%%\n");
-+		return 0;
-+	}
-+
-+	if (seq_num =3D=3D 0)
-+		BPF_SEQ_PRINTF(seq, "      id   refcnt  usercnt  locked_vm\n");
-+
-+	BPF_SEQ_PRINTF(seq, "%8u %8ld %8ld %10lu\n", map->id, map->refcnt.count=
-er,
-+		       map->usercnt.counter,
-+		       map->memory.user->locked_vm.counter);
-+	return 0;
++	return prepare_seq_file(file, link);
 +}
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task.c b/tools/te=
-sting/selftests/bpf/progs/bpf_iter_task.c
-new file mode 100644
-index 000000000000..90f9011c57ca
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_task.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
 +
-+char _license[] SEC("license") =3D "GPL";
-+
-+SEC("iter/task")
-+int dump_task(struct bpf_iter__task *ctx)
+ static int iter_release(struct inode *inode, struct file *file)
+ {
+ 	struct bpf_iter_priv_data *iter_priv;
+@@ -178,7 +187,8 @@ static int iter_release(struct inode *inode, struct f=
+ile *file)
+ 	return seq_release_private(inode, file);
+ }
+=20
+-static const struct file_operations bpf_iter_fops =3D {
++const struct file_operations bpf_iter_fops =3D {
++	.open		=3D iter_open,
+ 	.llseek		=3D no_llseek,
+ 	.read		=3D bpf_seq_read,
+ 	.release	=3D iter_release,
+@@ -305,6 +315,11 @@ static const struct bpf_link_ops bpf_iter_link_lops =
+=3D {
+ 	.update_prog =3D bpf_iter_link_replace,
+ };
+=20
++bool bpf_link_is_iter(struct bpf_link *link)
 +{
-+	struct seq_file *seq =3D ctx->meta->seq;
-+	struct task_struct *task =3D ctx->task;
-+
-+	if (task =3D=3D (void *)0) {
-+		BPF_SEQ_PRINTF(seq, "    =3D=3D=3D END =3D=3D=3D\n");
-+		return 0;
-+	}
-+
-+	if (ctx->meta->seq_num =3D=3D 0)
-+		BPF_SEQ_PRINTF(seq, "    tgid      gid\n");
-+
-+	BPF_SEQ_PRINTF(seq, "%8d %8d\n", task->tgid, task->pid);
-+	return 0;
++	return link->ops =3D=3D &bpf_iter_link_lops;
 +}
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_file.c b/too=
-ls/testing/selftests/bpf/progs/bpf_iter_task_file.c
-new file mode 100644
-index 000000000000..c6ced38f0880
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_task_file.c
-@@ -0,0 +1,26 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
 +
-+char _license[] SEC("license") =3D "GPL";
+ int bpf_iter_link_attach(const union bpf_attr *attr, struct bpf_prog *pr=
+og)
+ {
+ 	struct bpf_link_primer link_primer;
+diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+index 95087d9f4ed3..fb878ba3f22f 100644
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -358,8 +358,11 @@ static int bpf_mkmap(struct dentry *dentry, umode_t =
+mode, void *arg)
+=20
+ static int bpf_mklink(struct dentry *dentry, umode_t mode, void *arg)
+ {
++	struct bpf_link *link =3D arg;
 +
-+SEC("iter/task_file")
-+int dump_task_file(struct bpf_iter__task_file *ctx)
-+{
-+	struct seq_file *seq =3D ctx->meta->seq;
-+	struct task_struct *task =3D ctx->task;
-+	__u32 fd =3D ctx->fd;
-+	struct file *file =3D ctx->file;
-+
-+	if (task =3D=3D (void *)0 || file =3D=3D (void *)0)
-+		return 0;
-+
-+	if (ctx->meta->seq_num =3D=3D 0)
-+		BPF_SEQ_PRINTF(seq, "    tgid      gid       fd      file\n");
-+
-+	BPF_SEQ_PRINTF(seq, "%8d %8d %8d %lx\n", task->tgid, task->pid, fd,
-+		       (long)file->f_op);
-+	return 0;
-+}
+ 	return bpf_mkobj_ops(dentry, mode, arg, &bpf_link_iops,
+-			     &bpffs_obj_fops);
++			     bpf_link_is_iter(link) ?
++			     &bpf_iter_fops : &bpffs_obj_fops);
+ }
+=20
+ static struct dentry *
 --=20
 2.24.1
 
