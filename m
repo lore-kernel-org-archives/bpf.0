@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5666C54E49
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 01:05:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2485C54E49
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 01:05:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81A6B2087E
-	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 01:05:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C00520747
+	for <bpf@archiver.kernel.org>; Thu,  7 May 2020 01:05:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="R/LDR7DF"
+	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="aNteDNbs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728544AbgEGBFT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 May 2020 21:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        id S1728600AbgEGBFg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 May 2020 21:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728537AbgEGBFS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 May 2020 21:05:18 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525F1C061A41
-        for <bpf@vger.kernel.org>; Wed,  6 May 2020 18:05:18 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id f15so1371651plr.3
-        for <bpf@vger.kernel.org>; Wed, 06 May 2020 18:05:18 -0700 (PDT)
+        with ESMTP id S1728455AbgEGBFN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 May 2020 21:05:13 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47F5C061A41
+        for <bpf@vger.kernel.org>; Wed,  6 May 2020 18:05:13 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id n11so1702352pgl.9
+        for <bpf@vger.kernel.org>; Wed, 06 May 2020 18:05:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cs.washington.edu; s=goo201206;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=35i1uOH32weCZseOrM7fgg14K7q1B6kLHtPYbgszlOo=;
-        b=R/LDR7DFzMXYZtRwYFLz7iACbiKbk+k+Fkge+bTZCHhLGYhkN4PhrbjMvBie2fQe2+
-         +eAjuQYI/c48Lsec6zz61Z9S5eMUUq/CRbcaT3r7NoM2/8p/Ifi8rb+EmEzXzyzm6zzs
-         P5IC8QPCu1DOeyp9e1xAwHT3aEwgIZBFbdcLA=
+        bh=d68RkE5cUlQYJi4OtfTvAYhJJDA5HOgjSHowTSdBNCQ=;
+        b=aNteDNbspIs9Glmh/mFjc8BOXg8S0Ca8B8LdGCTylILkDT1X53VNGpvY2sKmwEIt2D
+         2LQFsRPQa2s0snapgqlU4uqdx9+VG+5989Tpp+AB7M4cM+rYd529iUL1uwx2M2i4qurd
+         Bp2axaRstmpVUtZssFn9tvFE9GKV2jGGnUElY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=35i1uOH32weCZseOrM7fgg14K7q1B6kLHtPYbgszlOo=;
-        b=g+cwJ0afHAmLuVf+6M8p7oTK06jd3IWUwtCLH5WlUvF6sbfWaL6azCZxl+hd/mpdyj
-         YiE0O3ckrg0kKhSgqknxTNEZ3jpuvNMNzZT3PApA63hX3KLOTQGe1SNdsA92HOPMNXHl
-         Ktrs/vq/uXkQyU2wRgT7knIus0vjwh4YXjLKiD/wnhYTuJeCx0lW9Od3gq8AUhhlPd3r
-         6LgLyaFmut32XGZA9kjV1mjpKhiKqoZtG8sW/a1NsEj8FMTA9K4oQh4eYWx0ddG9mz5s
-         h2rer9KpSrKWIQnYMP6JzLHf3IwLw7erkrqpRwcAumZl8UewI5Tx//ffIsWykRdveAw8
-         AViQ==
-X-Gm-Message-State: AGi0PuYImx98/JzM7CE/S7/j/VncFBh9to5jqtTsRR/6OxIbrQq513Ny
-        /d5iDzTUWnzLYYq9aT/D/MiGQsJPWf43kg==
-X-Google-Smtp-Source: APiQypKFU2PaEl7A2Ov+j6vFjii0e84UEN8OWo1rfo+p71phRPmL3Wiz+FYt/QG7MmEDbct+2lejIA==
-X-Received: by 2002:a17:902:694b:: with SMTP id k11mr8267407plt.59.1588813517313;
-        Wed, 06 May 2020 18:05:17 -0700 (PDT)
+        bh=d68RkE5cUlQYJi4OtfTvAYhJJDA5HOgjSHowTSdBNCQ=;
+        b=jeW1jUFhN0aeyZHSfoFDZWh4YAx3oMq9pp+AZY+NYBAKud6b1ErO1/aAwfKOVZ93v1
+         nzRoZ9hM4DAJ++YfQQHQfYxTw6LulFK+Ct0ITaNzmFuqw9RZSqmrhN9Dd32UJG5xaId6
+         6FGid5L8QE1kqWewDgJwVqR9uiNicCiaQXdG+TwN1idzKJV0e8nz6fP6pLpEuIOh7rbE
+         S9BrbSQTXD1kLK+kSA36tZYVxpuSSUW4KN1a4cFvJ+urZnmwt/aR4v19V0sQvGMKtAb0
+         CC7cHGC/wvubuodcKnTg1tssxLcNIpVQfzvc7YkspZjGpTQKIP7vk+zHVanHNif2tvZr
+         hPDw==
+X-Gm-Message-State: AGi0PuYqs8H27xphNU9GDBE0PeG5OXSjUH5EhOnyZwQa9NFW51HpErxJ
+        6MuxdpcMchGNWG63atOyeg9O1idHHigILg==
+X-Google-Smtp-Source: APiQypIZNgVmwLRidWuxLxiLH6PVWFdqH1ydpGuO62XWtWLjxZ1wcT+PjiOw7eW2Cl7EvdNoj9f9Sg==
+X-Received: by 2002:aa7:955a:: with SMTP id w26mr11271899pfq.292.1588813512792;
+        Wed, 06 May 2020 18:05:12 -0700 (PDT)
 Received: from localhost.localdomain (c-73-53-94-119.hsd1.wa.comcast.net. [73.53.94.119])
-        by smtp.gmail.com with ESMTPSA id ev5sm6165250pjb.1.2020.05.06.18.05.16
+        by smtp.gmail.com with ESMTPSA id ev5sm6165250pjb.1.2020.05.06.18.05.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2020 18:05:16 -0700 (PDT)
+        Wed, 06 May 2020 18:05:12 -0700 (PDT)
 From:   Luke Nelson <lukenels@cs.washington.edu>
 X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
 To:     bpf@vger.kernel.org
@@ -68,16 +68,15 @@ Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Enrico Weigelt <info@metux.net>, Torsten Duwe <duwe@suse.de>,
-        Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Christoffer Dall <christoffer.dall@linaro.org>,
         Marc Zyngier <maz@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [RFC PATCH bpf-next 3/3] bpf, arm64: Optimize ADD,SUB,JMP BPF_K using arm64 add/sub immediates
-Date:   Wed,  6 May 2020 18:05:03 -0700
-Message-Id: <20200507010504.26352-4-luke.r.nels@gmail.com>
+Subject: [RFC PATCH bpf-next 1/3] arm64: insn: Fix two bugs in encoding 32-bit logical immediates
+Date:   Wed,  6 May 2020 18:05:01 -0700
+Message-Id: <20200507010504.26352-2-luke.r.nels@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200507010504.26352-1-luke.r.nels@gmail.com>
 References: <20200507010504.26352-1-luke.r.nels@gmail.com>
@@ -86,123 +85,83 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The current code for BPF_{ADD,SUB} BPF_K loads the BPF immediate to a
-temporary register before performing the addition/subtraction. Similarly,
-BPF_JMP BPF_K cases load the immediate to a temporary register before
-comparison.
+This patch fixes two issues present in the current function for encoding
+arm64 logical immediates when using the 32-bit variants of instructions.
 
-This patch introduces optimizations that use arm64 immediate add, sub,
-cmn, or cmp instructions when the BPF immediate fits. If the immediate
-does not fit, it falls back to using a temporary register.
+First, the code does not correctly reject an all-ones 32-bit immediate
+and returns an undefined instruction encoding, which can crash the kernel.
+The fix is to add a check for this case.
 
-Example of generated code for BPF_ALU64_IMM(BPF_ADD, R0, 2):
+Second, the code incorrectly rejects some 32-bit immediates that are
+actually encodable as logical immediates. The root cause is that the code
+uses a default mask of 64-bit all-ones, even for 32-bit immediates. This
+causes an issue later on when the mask is used to fill the top bits of
+the immediate with ones, shown here:
 
-without optimization:
+  /*
+   * Pattern: 0..01..10..01..1
+   *
+   * Fill the unused top bits with ones, and check if
+   * the result is a valid immediate (all ones with a
+   * contiguous ranges of zeroes).
+   */
+  imm |= ~mask;
+  if (!range_of_ones(~imm))
+          return AARCH64_BREAK_FAULT;
 
-  24: mov x10, #0x2
-  28: add x7, x7, x10
+To see the problem, consider an immediate of the form 0..01..10..01..1,
+where the upper 32 bits are zero, such as 0x80000001. The code checks
+if ~(imm | ~mask) contains a range of ones: the incorrect mask yields
+1..10..01..10..0, which fails the check; the correct mask yields
+0..01..10..0, which succeeds.
 
-with optimization:
+The fix is to use a 32-bit all-ones default mask for 32-bit immediates.
 
-  24: add x7, x7, #0x2
+Currently, the only user of this function is in
+arch/arm64/kvm/va_layout.c, which uses 64-bit immediates and won't
+trigger these bugs.
 
-The code could use A64_{ADD,SUB}_I directly and check if it returns
-AARCH64_BREAK_FAULT, similar to how logical immediates are handled.
-However, aarch64_insn_gen_add_sub_imm from insn.c prints error messages
-when the immediate does not fit, and it's simpler to check if the
-immediate fits ahead of time.
+We tested the new code against llvm-mc with all 1,302 encodable 32-bit
+logical immediates and all 5,334 encodable 64-bit logical immediates.
 
+Fixes: ef3935eeebff ("arm64: insn: Add encoder for bitwise operations using literals")
 Co-developed-by: Xi Wang <xi.wang@gmail.com>
 Signed-off-by: Xi Wang <xi.wang@gmail.com>
 Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
 ---
- arch/arm64/net/bpf_jit.h      |  8 ++++++++
- arch/arm64/net/bpf_jit_comp.c | 36 +++++++++++++++++++++++++++++------
- 2 files changed, 38 insertions(+), 6 deletions(-)
+ arch/arm64/kernel/insn.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-index f36a779949e6..923ae7ff68c8 100644
---- a/arch/arm64/net/bpf_jit.h
-+++ b/arch/arm64/net/bpf_jit.h
-@@ -100,6 +100,14 @@
- /* Rd = Rn OP imm12 */
- #define A64_ADD_I(sf, Rd, Rn, imm12) A64_ADDSUB_IMM(sf, Rd, Rn, imm12, ADD)
- #define A64_SUB_I(sf, Rd, Rn, imm12) A64_ADDSUB_IMM(sf, Rd, Rn, imm12, SUB)
-+#define A64_ADDS_I(sf, Rd, Rn, imm12) \
-+	A64_ADDSUB_IMM(sf, Rd, Rn, imm12, ADD_SETFLAGS)
-+#define A64_SUBS_I(sf, Rd, Rn, imm12) \
-+	A64_ADDSUB_IMM(sf, Rd, Rn, imm12, SUB_SETFLAGS)
-+/* Rn + imm12; set condition flags */
-+#define A64_CMN_I(sf, Rn, imm12) A64_ADDS_I(sf, A64_ZR, Rn, imm12)
-+/* Rn - imm12; set condition flags */
-+#define A64_CMP_I(sf, Rn, imm12) A64_SUBS_I(sf, A64_ZR, Rn, imm12)
- /* Rd = Rn */
- #define A64_MOV(sf, Rd, Rn) A64_ADD_I(sf, Rd, Rn, 0)
+diff --git a/arch/arm64/kernel/insn.c b/arch/arm64/kernel/insn.c
+index 4a9e773a177f..42fad79546bb 100644
+--- a/arch/arm64/kernel/insn.c
++++ b/arch/arm64/kernel/insn.c
+@@ -1535,7 +1535,7 @@ static u32 aarch64_encode_immediate(u64 imm,
+ 				    u32 insn)
+ {
+ 	unsigned int immr, imms, n, ones, ror, esz, tmp;
+-	u64 mask = ~0UL;
++	u64 mask;
  
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 083e5d8a5e2c..561a2fea9cdd 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -167,6 +167,12 @@ static inline int epilogue_offset(const struct jit_ctx *ctx)
- 	return to - from;
- }
+ 	/* Can't encode full zeroes or full ones */
+ 	if (!imm || !~imm)
+@@ -1543,13 +1543,15 @@ static u32 aarch64_encode_immediate(u64 imm,
  
-+static bool is_addsub_imm(u32 imm)
-+{
-+	/* Either imm12 or shifted imm12. */
-+	return !(imm & ~0xfff) || !(imm & ~0xfff000);
-+}
-+
- /* Stack must be multiples of 16B */
- #define STACK_ALIGN(sz) (((sz) + 15) & ~15)
- 
-@@ -479,13 +485,25 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	/* dst = dst OP imm */
- 	case BPF_ALU | BPF_ADD | BPF_K:
- 	case BPF_ALU64 | BPF_ADD | BPF_K:
--		emit_a64_mov_i(is64, tmp, imm, ctx);
--		emit(A64_ADD(is64, dst, dst, tmp), ctx);
-+		if (is_addsub_imm(imm)) {
-+			emit(A64_ADD_I(is64, dst, dst, imm), ctx);
-+		} else if (is_addsub_imm(-imm)) {
-+			emit(A64_SUB_I(is64, dst, dst, -imm), ctx);
-+		} else {
-+			emit_a64_mov_i(is64, tmp, imm, ctx);
-+			emit(A64_ADD(is64, dst, dst, tmp), ctx);
-+		}
+ 	switch (variant) {
+ 	case AARCH64_INSN_VARIANT_32BIT:
+-		if (upper_32_bits(imm))
++		if (upper_32_bits(imm) || imm == 0xffffffffUL)
+ 			return AARCH64_BREAK_FAULT;
+ 		esz = 32;
++		mask = 0xffffffffUL;
  		break;
- 	case BPF_ALU | BPF_SUB | BPF_K:
- 	case BPF_ALU64 | BPF_SUB | BPF_K:
--		emit_a64_mov_i(is64, tmp, imm, ctx);
--		emit(A64_SUB(is64, dst, dst, tmp), ctx);
-+		if (is_addsub_imm(imm)) {
-+			emit(A64_SUB_I(is64, dst, dst, imm), ctx);
-+		} else if (is_addsub_imm(-imm)) {
-+			emit(A64_ADD_I(is64, dst, dst, -imm), ctx);
-+		} else {
-+			emit_a64_mov_i(is64, tmp, imm, ctx);
-+			emit(A64_SUB(is64, dst, dst, tmp), ctx);
-+		}
+ 	case AARCH64_INSN_VARIANT_64BIT:
+ 		insn |= AARCH64_INSN_SF_BIT;
+ 		esz = 64;
++		mask = ~0UL;
  		break;
- 	case BPF_ALU | BPF_AND | BPF_K:
- 	case BPF_ALU64 | BPF_AND | BPF_K:
-@@ -639,8 +657,14 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	case BPF_JMP32 | BPF_JSLT | BPF_K:
- 	case BPF_JMP32 | BPF_JSGE | BPF_K:
- 	case BPF_JMP32 | BPF_JSLE | BPF_K:
--		emit_a64_mov_i(is64, tmp, imm, ctx);
--		emit(A64_CMP(is64, dst, tmp), ctx);
-+		if (is_addsub_imm(imm)) {
-+			emit(A64_CMP_I(is64, dst, imm), ctx);
-+		} else if (is_addsub_imm(-imm)) {
-+			emit(A64_CMN_I(is64, dst, -imm), ctx);
-+		} else {
-+			emit_a64_mov_i(is64, tmp, imm, ctx);
-+			emit(A64_CMP(is64, dst, tmp), ctx);
-+		}
- 		goto emit_cond_jmp;
- 	case BPF_JMP | BPF_JSET | BPF_K:
- 	case BPF_JMP32 | BPF_JSET | BPF_K:
+ 	default:
+ 		pr_err("%s: unknown variant encoding %d\n", __func__, variant);
 -- 
 2.17.1
 
