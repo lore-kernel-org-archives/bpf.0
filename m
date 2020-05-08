@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4538C38A2A
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 15:36:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15C89C47257
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 15:36:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 83DF321841
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 15:36:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E234424955
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 15:36:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="srCBSzZw"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="AWoCrBmc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727860AbgEHPgl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 11:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
+        id S1728227AbgEHPgx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 11:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726636AbgEHPgk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 May 2020 11:36:40 -0400
+        with ESMTP id S1726736AbgEHPgw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 May 2020 11:36:52 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5C2C061A0C;
-        Fri,  8 May 2020 08:36:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9235C061A0C;
+        Fri,  8 May 2020 08:36:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=6EYCyTrFxa9+uQHjnJOrj9adSL4387IIusv8CGn+u5c=; b=srCBSzZwpa/R8vT9FGb8MSiNzT
-        Qqn1uYSRLBeu5tyD/4XSsT0mYDn4lLbRdOf4moLFs/SGTwShV9DVJofzbIoBQmBoBJiCsWqkwHDqS
-        6ifMQM06Uy05ogqQUznA5cW2YOrFFIeJ5LsIJcSd7jpMi1tvx7P3FtVwCveS1aikMR4WbSiyK0LT7
-        /969LGJr0wCQLH7KzkFKs+MMOy8JW/daxQoggK4NgoMsrtAgwQEv7YMXtPvYU5W4jXBe7XEl/OQ1p
-        uHAT3dFwh9mYW4W9MObM6CGHUmn/fWgH3Ylz2U2jryjURgP+RE+6QKq4EsiRP1gW7DDlgIA4OYoga
-        wlnUSMRw==;
+        bh=84Q6+XvESATHkPDs3NezzlHWwc4KFGjN8N6drGU+t58=; b=AWoCrBmcbiNeSqG41R8zejRyGu
+        q9id5MMqFDnvfrZaKfLud0DzqWzP81fdQM2386RtOX+d1YUMf/xfAOiVUr699SfUMz7BTaVNStXYL
+        URpd5PGUP47QmFtYhFKrjV9Chp+yOi6JLX3053q5fnCJsoCaJC0JS55pAMk20L88eIz9rHxZgVuGV
+        yjg4TCdQyTS/tDFunEk4vcDsvmGZCUFGy9Yo0DcC3s6+nRk9Or5FqCiCQQmg/86acEJlB6AwC/r2W
+        ha+mGlYY+7L0ukMxEOgVwW3F6ckPe0jf7choEDgXl4CQfuHU79gbeHfvDNAxNZBTXBT7Mjx37VB6E
+        BcK7J1bg==;
 Received: from [2001:4bb8:180:9d3f:90d7:9df8:7cd:3504] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jX53I-00047B-4u; Fri, 08 May 2020 15:36:40 +0000
+        id 1jX53T-0004BL-6n; Fri, 08 May 2020 15:36:51 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>
 Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -44,9 +44,9 @@ Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rdma@vger.kernel.org, kvm@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 01/12] fd: add a new __anon_inode_getfd helper
-Date:   Fri,  8 May 2020 17:36:23 +0200
-Message-Id: <20200508153634.249933-2-hch@lst.de>
+Subject: [PATCH 05/12] io_uring: use __anon_inode_getfd
+Date:   Fri,  8 May 2020 17:36:27 +0200
+Message-Id: <20200508153634.249933-6-hch@lst.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200508153634.249933-1-hch@lst.de>
 References: <20200508153634.249933-1-hch@lst.de>
@@ -58,90 +58,39 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a helper that is equivalent to anon_inode_getfd minus the final
-fd_install.
+Use __anon_inode_getfd instead of opencoding the logic using
+get_unused_fd_flags + anon_inode_getfile.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- fs/anon_inodes.c            | 41 ++++++++++++++++++++++---------------
- include/linux/anon_inodes.h |  2 ++
- 2 files changed, 26 insertions(+), 17 deletions(-)
+ fs/io_uring.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/fs/anon_inodes.c b/fs/anon_inodes.c
-index 89714308c25b8..1b2acd2bbaa32 100644
---- a/fs/anon_inodes.c
-+++ b/fs/anon_inodes.c
-@@ -106,6 +106,26 @@ struct file *anon_inode_getfile(const char *name,
- }
- EXPORT_SYMBOL_GPL(anon_inode_getfile);
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 5190bfb6a6657..4104f8a45d11e 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -7709,18 +7709,11 @@ static int io_uring_get_fd(struct io_ring_ctx *ctx)
+ 		return ret;
+ #endif
  
-+int __anon_inode_getfd(const char *name, const struct file_operations *fops,
-+		     void *priv, int flags, struct file **file)
-+{
-+	int fd;
-+
-+	fd = get_unused_fd_flags(flags);
-+	if (fd < 0)
-+		return fd;
-+
-+	*file = anon_inode_getfile(name, fops, priv, flags);
-+	if (IS_ERR(*file))
-+		goto err_put_unused_fd;
-+	return fd;
-+
-+err_put_unused_fd:
-+	put_unused_fd(fd);
-+	return PTR_ERR(*file);
-+}
-+EXPORT_SYMBOL_GPL(__anon_inode_getfd);
-+
- /**
-  * anon_inode_getfd - creates a new file instance by hooking it up to an
-  *                    anonymous inode, and a dentry that describe the "class"
-@@ -125,26 +145,13 @@ EXPORT_SYMBOL_GPL(anon_inode_getfile);
- int anon_inode_getfd(const char *name, const struct file_operations *fops,
- 		     void *priv, int flags)
- {
--	int error, fd;
- 	struct file *file;
-+	int fd;
+-	ret = get_unused_fd_flags(O_RDWR | O_CLOEXEC);
++	ret = __anon_inode_getfd("[io_uring]", &io_uring_fops, ctx,
++			O_RDWR | O_CLOEXEC, &file);
+ 	if (ret < 0)
+ 		goto err;
  
--	error = get_unused_fd_flags(flags);
--	if (error < 0)
--		return error;
--	fd = error;
--
--	file = anon_inode_getfile(name, fops, priv, flags);
+-	file = anon_inode_getfile("[io_uring]", &io_uring_fops, ctx,
+-					O_RDWR | O_CLOEXEC);
 -	if (IS_ERR(file)) {
--		error = PTR_ERR(file);
--		goto err_put_unused_fd;
+-		put_unused_fd(ret);
+-		ret = PTR_ERR(file);
+-		goto err;
 -	}
--	fd_install(fd, file);
 -
-+	fd = __anon_inode_getfd(name, fops, priv, flags, &file);
-+	if (fd >= 0)
-+		fd_install(fd, file);
- 	return fd;
--
--err_put_unused_fd:
--	put_unused_fd(fd);
--	return error;
- }
- EXPORT_SYMBOL_GPL(anon_inode_getfd);
- 
-diff --git a/include/linux/anon_inodes.h b/include/linux/anon_inodes.h
-index d0d7d96261adf..338449d06b617 100644
---- a/include/linux/anon_inodes.h
-+++ b/include/linux/anon_inodes.h
-@@ -16,6 +16,8 @@ struct file *anon_inode_getfile(const char *name,
- 				void *priv, int flags);
- int anon_inode_getfd(const char *name, const struct file_operations *fops,
- 		     void *priv, int flags);
-+int __anon_inode_getfd(const char *name, const struct file_operations *fops,
-+		     void *priv, int flags, struct file **file);
- 
- #endif /* _LINUX_ANON_INODES_H */
- 
+ #if defined(CONFIG_UNIX)
+ 	ctx->ring_sock->file = file;
+ #endif
 -- 
 2.26.2
 
