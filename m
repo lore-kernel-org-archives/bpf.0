@@ -2,158 +2,149 @@ Return-Path: <SRS0=gSIr=6W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C034C38A2A
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 13:01:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23465C38A2A
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 13:08:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B671206D6
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 13:01:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0514724969
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 13:08:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=Mellanox.com header.i=@Mellanox.com header.b="VX8t7gO6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qa61Dywq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbgEHNBJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 09:01:09 -0400
-Received: from mail-eopbgr40079.outbound.protection.outlook.com ([40.107.4.79]:20366
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730140AbgEHNBE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 May 2020 09:01:04 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m4GbWXOysemfzSt3asIfq2pp2f/j9Uppw6aqSu0yzpzeWH/RC1JKqdk95D+3MDdDEUA0kCO9VahkeFEibU9kCcysgh37znyD4n1YCZWPU9FARa2e7GtgUibsuQahyd45WaYzzfmrWEJnHxFuYJloeMOtwN8+AnotMbKMQ7ghllMnwUkqeEzuZYKcV/eTPde+io7OrROdzd/nCPZIeq0zpZ/mWiNybPIL7FV/0MTCdLQOWa2LPnMXdHJo8g7J2OXGzHAOGC2m/F4MmajQgzEGVkcn0jXA8LSNrYu+R88pkeGzwiy4uiInRCRf1c3cq2sXAlwQ/U1akWnjBtvI6G43yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IJz+cE+tegfyRGjvbagmbvmB7km8HeQK8umYOKJRa0c=;
- b=LEUNmBYxg7uC01HoHVnahl9mLnEnUd6BuU4GBrcLo+cuBxeRNpQuylrjKpy8W+A3/DwCBdyvNc3Ndh9c6xRMVGQp8qG9xulWtWWpjvG1fMpGCLJt2JR4Vw7n+pDEz5JfRLRTJIRYNMl+C14xOtYrgA/3hcfP5zJ4PdUVqa6tjy2IrdOYSbL2iAtghlCQDi/xMCbqIk2I8vAIiDAm5NSpv3Tqn0PauQa+Qjm0Mx7i4+dxznXLVJ0V5/B4yUbOXsBPRxC10JUk4/SQ18rRMJdEu3dV1tny400BBoAdIuGxxkrv2td2eOB8V7bMQGSuHjZQXuW5qLQcIQtwug+oExAe0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IJz+cE+tegfyRGjvbagmbvmB7km8HeQK8umYOKJRa0c=;
- b=VX8t7gO6KW+XmZ88d/zsJ4qDLMhC+0DBApoa5nhNJUh0sWWuuO+PN7aTQT7U+KKKQaicAAxrxc+gUStRDSk+t2vRz6AqRvOGKqe/DiQRA0/2Bmolizq4OBnnJbflLT5vmAwesPs9OvRFfJq9KxKi/ZaX/cqbfiU2N0Ub5BXilJ4=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=mellanox.com;
-Received: from AM7PR05MB6632.eurprd05.prod.outlook.com (2603:10a6:20b:136::12)
- by AM7PR05MB6775.eurprd05.prod.outlook.com (2603:10a6:20b:142::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.30; Fri, 8 May
- 2020 13:00:59 +0000
-Received: from AM7PR05MB6632.eurprd05.prod.outlook.com
- ([fe80::94da:ac7a:611:781f]) by AM7PR05MB6632.eurprd05.prod.outlook.com
- ([fe80::94da:ac7a:611:781f%9]) with mapi id 15.20.2958.030; Fri, 8 May 2020
- 13:00:59 +0000
-Subject: Re: [PATCH bpf-next 10/14] mlx5, xsk: migrate to new
- MEM_TYPE_XSK_BUFF_POOL
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
-        jeffrey.t.kirsher@intel.com, maciej.fijalkowski@intel.com
-References: <20200507104252.544114-1-bjorn.topel@gmail.com>
- <20200507104252.544114-11-bjorn.topel@gmail.com>
- <40eb57c7-9c47-87dc-bda9-5a1729352c43@mellanox.com>
- <3c42954a-8bb3-85b1-8740-a096b0a76a98@intel.com>
-From:   Maxim Mikityanskiy <maximmi@mellanox.com>
-Message-ID: <cf65cc80-f16a-5b76-5577-57c55e952a52@mellanox.com>
-Date:   Fri, 8 May 2020 16:00:55 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-In-Reply-To: <3c42954a-8bb3-85b1-8740-a096b0a76a98@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM6P194CA0030.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:209:90::43) To AM7PR05MB6632.eurprd05.prod.outlook.com
- (2603:10a6:20b:136::12)
+        id S1728908AbgEHNIx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 09:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728556AbgEHNIv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 09:08:51 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45362C05BD43;
+        Fri,  8 May 2020 06:08:51 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id x17so1772640wrt.5;
+        Fri, 08 May 2020 06:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fzVBitGbGs6c9vSFlRa8yyVPwH/mTWCu5Nt0AL3hOL8=;
+        b=Qa61DywqFbLV0WLEZ8qPfW6fmbNb5o8K76MIqacgRZbUYASTn/yfK6gvzHhf6ZFgA2
+         yVfH/u/GW6+JVKo08ceC+7gzZsxJtwzcJTE1kNZtP2xOh9UcQDnjvsypJJuuJ8cYWlJ/
+         bF6UFZOM67NG/fOsIBU2u6tAgYc9VNAG1p58u7YA0KNsU/c626PSPE4D9RjZzt171OTZ
+         LiNqs2JTLPX07p+s5/padAsUvkG+AYZJ7K1n+0wW6D+1n2m47ni1rlN+K3gTMPIq+cEV
+         +PH9aXciDFdTazV99Y8fqp8Gs8IGYD0mXT3ngKt+tbc2oYM2+u5xNbLx3lTuRaw8dIsJ
+         xGKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fzVBitGbGs6c9vSFlRa8yyVPwH/mTWCu5Nt0AL3hOL8=;
+        b=HnPkoSg0IVDr9yUplHReUVPk+cMKfr+GtsdM24dwf0JhvoEoFB2EYoVBq3pxcA4Rq1
+         dqPIWGsyNFYo2KhRVAQIq7HXOHQgymE300l2hTJu6xDqcU6s1G1lVjKMZi99pciddQlO
+         H7pC2FbZiavec4KpMjAXoIrWOZElA2GCFM0aYRUsY7CFIev00cKrgM67xnn8BG7gK7ta
+         Y60bCoeP+VCsKnUJ7QORLB3Qn+Y79DuwB+W6pj5BoBoNHtfOFtxNoEAZYksJLztQ2hJ3
+         ZRc4AnL0ztAJ28kCbtJ7zNWfBpEPI3ID+7PKvMSgfbeqHAFDlnB5UmX/vqTWZd1OdgiC
+         bUpg==
+X-Gm-Message-State: AGi0Pub5a6t71m9YQrRFNiCKRZcDDfy+7K8Ggi34eydb4qK7F4M8xw3R
+        x9aWGHvV46hH2V3WPLokvE+JXm+g9f6anLRXRoI=
+X-Google-Smtp-Source: APiQypK5JWV/0lunuRXSm9bmWF8GTMrH8ZZtDEZCWSihlQms/jeatRDrLMdpIpchZGyScCDmrXjd8Js6R/z8ZjqMjjM=
+X-Received: by 2002:adf:e910:: with SMTP id f16mr2812017wrm.176.1588943329981;
+ Fri, 08 May 2020 06:08:49 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [10.57.1.235] (159.224.90.213) by AM6P194CA0030.EURP194.PROD.OUTLOOK.COM (2603:10a6:209:90::43) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.28 via Frontend Transport; Fri, 8 May 2020 13:00:58 +0000
-X-Originating-IP: [159.224.90.213]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 9864655b-a7c6-4726-34b0-08d7f34fda93
-X-MS-TrafficTypeDiagnostic: AM7PR05MB6775:
-X-Microsoft-Antispam-PRVS: <AM7PR05MB6775A3C37F028FC1F492CEBDD1A20@AM7PR05MB6775.eurprd05.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-Forefront-PRVS: 039735BC4E
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qnyAJy6jGYVpX/YyokH9PFPMoZBk9Et2VfPeZQBlKhaa/rPxQQyIWarVL1A8mLVidZimh9JjYHX43A8Jh938hRndHk9PnqIPsm0UW3vYszlYC+/gWBJYrAmt4N+TZVjgGHrUx3bJ84x+7Ovmvk4c8pK3vz/c6LOBN9YZgP9ihMrQirR8XqmdZ2MW+6V19rg7A3gLNlmC7ioFqsW9Fbb4EnuGrliMmDMBxwyaJrF8iVh9N5acGh34X06fIKGNud436nzZKjaL6twMDV2xPpNmlkjJSLVBCGNeqM/np0KM5A0IEvTchQofHLi7+lQSF9aFmQc7z4xpVYydvMEgZP9dri25937a5K9mpPxxYREJKidMzmDRUZhFT4Fjd1dggzsTgVLeciBY3bFt8Az+IiSEy4saXeNN0eH+QNObtGYbdcyQJRHyPtuz/hHYz9pTFpI7SZFxPy8vzKjbafPtsJyoWFLx4CRAp9x4YwvQ6oyKWPySvJfp7m/z+FzXI6L8IyV0vUX9nB0Iyxc7PCI00s2U040YIIplTfuzYEFEg2fVTL1y8rwsCxetWj6N8ERsgJsm
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR05MB6632.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(376002)(39860400002)(346002)(396003)(136003)(33430700001)(66946007)(66556008)(36756003)(66476007)(110136005)(31696002)(52116002)(7416002)(6666004)(956004)(2616005)(16526019)(316002)(26005)(16576012)(83300400001)(6486002)(83310400001)(4326008)(83280400001)(83320400001)(83290400001)(31686004)(53546011)(8676002)(8936002)(2906002)(86362001)(5660300002)(55236004)(186003)(478600001)(33440700001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: HPsNEFLPQOAUYkDvJahEF3lrVBvCrRVyfxdJAAjpHHhKHJpK+dH/X82m6sVSajlo9hGApShc3RQz9ewd7eyEksufV+ylaiX2/J/PpwDiAnqXGc1DFMi0ODe3zWYIkE+xWvuFH6vRKLUp+ihwZSFQ1dhtp91NPBa8LzUFqWuR3ZGEi3/Bz8rDJoXaM2jxEc9dfwF2n8wNwm6hd7L3/fTFOqUcLwu2vfeyZdAWAqty3Hh9qOkoNWNIFy1WLvij7s+9fh5PXaObGlD463Tm/FV9Rrzu0uaxfIDxNkyxAjEvLPAl/Mbtn6Ngr9udNu0VUKCmlJpta/eDfsiTe//NfomLEmzUMImZDzbjg8Pc1Y1z9IlZ4Z1SRH4JX8o3oy5gBMV9zBZ9sE1zC9vslE3BCM5q7tGyIRBTYeXkQc17GOb+VujzofznDrEQBMyJxNvCpSGEBHFuMUUV+KFbRSMZ5v+bnHOCuIQyyAh2aIUzaC9H77LqeLZEJlVlsLKjfyhUoPM9
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9864655b-a7c6-4726-34b0-08d7f34fda93
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2020 13:00:59.2455
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: meVOw9Vzp8kk1H5RKlA0q2j1sQQjguLry+nQcQzA3n6VT0TOTCi+2lz2pLbP9wXgm2wEkbZwduwZu7vKHHjswg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR05MB6775
+References: <20200507104252.544114-1-bjorn.topel@gmail.com>
+ <20200507104252.544114-11-bjorn.topel@gmail.com> <40eb57c7-9c47-87dc-bda9-5a1729352c43@mellanox.com>
+ <3c42954a-8bb3-85b1-8740-a096b0a76a98@intel.com> <cf65cc80-f16a-5b76-5577-57c55e952a52@mellanox.com>
+In-Reply-To: <cf65cc80-f16a-5b76-5577-57c55e952a52@mellanox.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Date:   Fri, 8 May 2020 15:08:38 +0200
+Message-ID: <CAJ+HfNiU8jyNMC1VMCgqGqz76Q8G1Pui09==TO8Qi73Y_2xViQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 10/14] mlx5, xsk: migrate to new MEM_TYPE_XSK_BUFF_POOL
+To:     Maxim Mikityanskiy <maximmi@mellanox.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2020-05-08 15:27, Björn Töpel wrote:
-> On 2020-05-08 13:55, Maxim Mikityanskiy wrote:
->> On 2020-05-07 13:42, Björn Töpel wrote:
->>> From: Björn Töpel <bjorn.topel@intel.com>
->>>
->>> Use the new MEM_TYPE_XSK_BUFF_POOL API in lieu of MEM_TYPE_ZERO_COPY in
->>> mlx5e. It allows to drop a lot of code from the driver (which is now
->>> common in AF_XDP core and was related to XSK RX frame allocation, DMA
->>> mapping, etc.) and slightly improve performance.
->>>
->>> rfc->v1: Put back the sanity check for XSK params, use XSK API to get
->>>           the total headroom size. (Maxim)
->>>
->>> Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
->>> Signed-off-by: Maxim Mikityanskiy <maximmi@mellanox.com>
->>
->> I did some functional and performance tests.
->>
->> Unfortunately, something is wrong with the traffic: I get zeros in 
->> XDP_TX, XDP_PASS and XSK instead of packet data. I set DEBUG_HEXDUMP 
->> in xdpsock, and it shows the packets of the correct length, but all 
->> bytes are 0 after these patches. It might be wrong xdp_buff pointers, 
->> however, I still have to investigate it. Björn, does it also affect 
->> Intel drivers, or is it Mellanox-specific?
->>
-> 
-> Are you getting zeros for TX, PASS *and* in xdpsock (REDIRECT:ed 
-> packets), or just TX and PASS?
+On Fri, 8 May 2020 at 15:01, Maxim Mikityanskiy <maximmi@mellanox.com> wrot=
+e:
+>
+> On 2020-05-08 15:27, Bj=C3=B6rn T=C3=B6pel wrote:
+> > On 2020-05-08 13:55, Maxim Mikityanskiy wrote:
+> >> On 2020-05-07 13:42, Bj=C3=B6rn T=C3=B6pel wrote:
+> >>> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+> >>>
+> >>> Use the new MEM_TYPE_XSK_BUFF_POOL API in lieu of MEM_TYPE_ZERO_COPY =
+in
+> >>> mlx5e. It allows to drop a lot of code from the driver (which is now
+> >>> common in AF_XDP core and was related to XSK RX frame allocation, DMA
+> >>> mapping, etc.) and slightly improve performance.
+> >>>
+> >>> rfc->v1: Put back the sanity check for XSK params, use XSK API to get
+> >>>           the total headroom size. (Maxim)
+> >>>
+> >>> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+> >>> Signed-off-by: Maxim Mikityanskiy <maximmi@mellanox.com>
+> >>
+> >> I did some functional and performance tests.
+> >>
+> >> Unfortunately, something is wrong with the traffic: I get zeros in
+> >> XDP_TX, XDP_PASS and XSK instead of packet data. I set DEBUG_HEXDUMP
+> >> in xdpsock, and it shows the packets of the correct length, but all
+> >> bytes are 0 after these patches. It might be wrong xdp_buff pointers,
+> >> however, I still have to investigate it. Bj=C3=B6rn, does it also affe=
+ct
+> >> Intel drivers, or is it Mellanox-specific?
+> >>
+> >
+> > Are you getting zeros for TX, PASS *and* in xdpsock (REDIRECT:ed
+> > packets), or just TX and PASS?
+>
+> Yes, in all modes: XDP_TX, XDP_PASS and XDP_REDIRECT to XSK (xdpsock).
+>
+> > No, I get correct packet data for AF_XDP zero-copy XDP_REDIRECT,
+> > XDP_PASS, and XDP_TX for Intel.
+>
+> Hmm, weird - with the new API I expected the same behavior on all
+> drivers. Thanks for the information, I'll know that I need to look in
+> mlx5 code to find the issue.
+>
 
-Yes, in all modes: XDP_TX, XDP_PASS and XDP_REDIRECT to XSK (xdpsock).
+All zeros hints that you're probably putting in the wrong DMA address somew=
+here.
 
-> No, I get correct packet data for AF_XDP zero-copy XDP_REDIRECT,
-> XDP_PASS, and XDP_TX for Intel.
+> >> For performance, I got +1.0..+1.2 Mpps on RX. TX performance got
+> >> better after Bj=C3=B6rn inlined the relevant UMEM functions, however, =
+there
+> >> is still a slight decrease compared to the old code. I'll try to find
+> >> the possible reason, but the good thing is that it's not significant
+> >> anymore.
+> >>
+> >
+> > Ok, so for Rx mlx5 it's the same as for i40e. Good! :-)
+> >
+> > How much decrease on Tx?
+>
+> ~0.8 Mpps (was 3.1 before you inlined the functions).
+>
 
-Hmm, weird - with the new API I expected the same behavior on all 
-drivers. Thanks for the information, I'll know that I need to look in 
-mlx5 code to find the issue.
+Thanks. Still a bit much. What does perf say?
 
->> For performance, I got +1.0..+1.2 Mpps on RX. TX performance got 
->> better after Björn inlined the relevant UMEM functions, however, there 
->> is still a slight decrease compared to the old code. I'll try to find 
->> the possible reason, but the good thing is that it's not significant 
->> anymore.
->>
-> 
-> Ok, so for Rx mlx5 it's the same as for i40e. Good! :-)
-> 
-> How much decrease on Tx?
 
-~0.8 Mpps (was 3.1 before you inlined the functions).
-
-> 
-> Björn
-
+Bj=C3=B6rn
