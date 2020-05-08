@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D95EFC38A2A
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:10:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75292C47247
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:10:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B935A208CA
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:10:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 563A7208DB
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:10:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XQWUPSM7"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J/5L3SQX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727834AbgEHLKV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 07:10:21 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:24277 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727831AbgEHLKV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 07:10:21 -0400
+        id S1727832AbgEHLKd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 07:10:33 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:32962 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726950AbgEHLKc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 May 2020 07:10:32 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588936219;
+        s=mimecast20190719; t=1588936231;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Lcm/SFLtz33dZ2kaMLmjswPDyn0b4V2Shn7nozNXSFM=;
-        b=XQWUPSM7nlZxF4aXy6LxwvrsTz5ejuhZ1gnbCZ1j9hQ4C4vuPmkvWWU3AEhJArbcdQhYl/
-        09GaMSyQqDH0gdzNs8CLOPz1S5HpM38u3XI3UUlbm/weAT+68zrshlx1ItUaaOA6bUMzD2
-        4ZKudr1PQ5dTB9JP5Jj9ikGKrFIahjc=
+        bh=UCdO9GIbmXvKJcfcTXYpA04NQOdCRGMOmMqqJpuzEPA=;
+        b=J/5L3SQXyyyoLcVLmG5XhH5MQ98RuFBWPemy1tilZI1CEwghFMPhjAMkbJgjd2Xz2Bd82n
+        B8r+ZYZicHTk67zzPh1uIZIGNPNEjzC3Yh8BFbSpVuER60aqzMM46fG3EoV3L4Mtsrkuuk
+        9KqVauCrJY/n4+v2NXm70VUOBZFFkx0=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-285-4F7XIMUlM_KnGhLjWH-Cdg-1; Fri, 08 May 2020 07:10:16 -0400
-X-MC-Unique: 4F7XIMUlM_KnGhLjWH-Cdg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+ us-mta-186-p0qGJHEjNOe2jmPBW_KXKw-1; Fri, 08 May 2020 07:10:26 -0400
+X-MC-Unique: p0qGJHEjNOe2jmPBW_KXKw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 24FD2BFC2;
-        Fri,  8 May 2020 11:10:14 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 56C131895A2F;
+        Fri,  8 May 2020 11:10:24 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F0142E045;
-        Fri,  8 May 2020 11:10:08 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 98BC25D9CA;
+        Fri,  8 May 2020 11:10:18 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 47B05300020FB;
-        Fri,  8 May 2020 13:10:07 +0200 (CEST)
-Subject: [PATCH net-next v3 16/33] mlx4: add XDP frame size and adjust max XDP
- MTU
+        by firesoul.localdomain (Postfix) with ESMTP id 73F1C300020FB;
+        Fri,  8 May 2020 13:10:17 +0200 (CEST)
+Subject: [PATCH net-next v3 18/33] nfp: add XDP frame size to netronome driver
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -64,60 +63,64 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Date:   Fri, 08 May 2020 13:10:07 +0200
-Message-ID: <158893620721.2321140.7755673956141524490.stgit@firesoul>
+Date:   Fri, 08 May 2020 13:10:17 +0200
+Message-ID: <158893621739.2321140.9882194149840059437.stgit@firesoul>
 In-Reply-To: <158893607924.2321140.16117992313983615627.stgit@firesoul>
 References: <158893607924.2321140.16117992313983615627.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The mlx4 drivers size of memory backing the RX packet is stored in
-frag_stride. For XDP mode this will be PAGE_SIZE (normally 4096).
-For normal mode frag_stride is 2048.
+The netronome nfp driver use PAGE_SIZE when xdp_prog is set, but
+xdp.data_hard_start begins at offset NFP_NET_RX_BUF_HEADROOM.
+Thus, adjust for this when setting xdp.frame_sz, as it counts
+from data_hard_start.
 
-Also adjust MLX4_EN_MAX_XDP_MTU to take tailroom into account.
+When doing XDP_TX this driver is smart and instead of a full DMA-map
+does a DMA-sync on with packet length. As xdp_adjust_tail can now
+grow packet length, add checks to make sure that grow size is within
+the DMA-mapped size.
 
-Cc: Tariq Toukan <tariqt@mellanox.com>
-Cc: Saeed Mahameed <saeedm@mellanox.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Reviewed-by: Tariq Toukan <tariqt@mellanox.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx4/en_netdev.c |    3 ++-
- drivers/net/ethernet/mellanox/mlx4/en_rx.c     |    1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ .../net/ethernet/netronome/nfp/nfp_net_common.c    |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-index 43dcbd8214c6..5bd3cd37d50f 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-@@ -51,7 +51,8 @@
- #include "en_port.h"
- 
- #define MLX4_EN_MAX_XDP_MTU ((int)(PAGE_SIZE - ETH_HLEN - (2 * VLAN_HLEN) - \
--				   XDP_PACKET_HEADROOM))
-+				XDP_PACKET_HEADROOM -			    \
-+				SKB_DATA_ALIGN(sizeof(struct skb_shared_info))))
- 
- int mlx4_en_setup_tc(struct net_device *dev, u8 up)
+diff --git a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
+index 9bfb3b077bc1..0e0cc3d58bdc 100644
+--- a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
++++ b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
+@@ -1741,10 +1741,15 @@ nfp_net_tx_xdp_buf(struct nfp_net_dp *dp, struct nfp_net_rx_ring *rx_ring,
+ 		   struct nfp_net_rx_buf *rxbuf, unsigned int dma_off,
+ 		   unsigned int pkt_len, bool *completed)
  {
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-index 787139219813..8a10285b0e10 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-@@ -683,6 +683,7 @@ int mlx4_en_process_rx_cq(struct net_device *dev, struct mlx4_en_cq *cq, int bud
- 	rcu_read_lock();
- 	xdp_prog = rcu_dereference(ring->xdp_prog);
- 	xdp.rxq = &ring->xdp_rxq;
-+	xdp.frame_sz = priv->frag_info[0].frag_stride;
- 	doorbell_pending = 0;
++	unsigned int dma_map_sz = dp->fl_bufsz - NFP_NET_RX_BUF_NON_DATA;
+ 	struct nfp_net_tx_buf *txbuf;
+ 	struct nfp_net_tx_desc *txd;
+ 	int wr_idx;
  
- 	/* We assume a 1:1 mapping between CQEs and Rx descriptors, so Rx
++	/* Reject if xdp_adjust_tail grow packet beyond DMA area */
++	if (pkt_len + dma_off > dma_map_sz)
++		return false;
++
+ 	if (unlikely(nfp_net_tx_full(tx_ring, 1))) {
+ 		if (!*completed) {
+ 			nfp_net_xdp_complete(tx_ring);
+@@ -1817,6 +1822,7 @@ static int nfp_net_rx(struct nfp_net_rx_ring *rx_ring, int budget)
+ 	rcu_read_lock();
+ 	xdp_prog = READ_ONCE(dp->xdp_prog);
+ 	true_bufsz = xdp_prog ? PAGE_SIZE : dp->fl_bufsz;
++	xdp.frame_sz = PAGE_SIZE - NFP_NET_RX_BUF_HEADROOM;
+ 	xdp.rxq = &rx_ring->xdp_rxq;
+ 	tx_ring = r_vec->xdp_ring;
+ 
 
 
