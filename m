@@ -2,149 +2,181 @@ Return-Path: <SRS0=gSIr=6W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23465C38A2A
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 13:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 988C1C38A2A
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 13:09:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0514724969
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 13:08:56 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qa61Dywq"
+	by mail.kernel.org (Postfix) with ESMTP id 7E49A24999
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 13:09:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728908AbgEHNIx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 09:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
+        id S1730492AbgEHNJB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 09:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728556AbgEHNIv (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 09:08:51 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45362C05BD43;
-        Fri,  8 May 2020 06:08:51 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id x17so1772640wrt.5;
-        Fri, 08 May 2020 06:08:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=fzVBitGbGs6c9vSFlRa8yyVPwH/mTWCu5Nt0AL3hOL8=;
-        b=Qa61DywqFbLV0WLEZ8qPfW6fmbNb5o8K76MIqacgRZbUYASTn/yfK6gvzHhf6ZFgA2
-         yVfH/u/GW6+JVKo08ceC+7gzZsxJtwzcJTE1kNZtP2xOh9UcQDnjvsypJJuuJ8cYWlJ/
-         bF6UFZOM67NG/fOsIBU2u6tAgYc9VNAG1p58u7YA0KNsU/c626PSPE4D9RjZzt171OTZ
-         LiNqs2JTLPX07p+s5/padAsUvkG+AYZJ7K1n+0wW6D+1n2m47ni1rlN+K3gTMPIq+cEV
-         +PH9aXciDFdTazV99Y8fqp8Gs8IGYD0mXT3ngKt+tbc2oYM2+u5xNbLx3lTuRaw8dIsJ
-         xGKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=fzVBitGbGs6c9vSFlRa8yyVPwH/mTWCu5Nt0AL3hOL8=;
-        b=HnPkoSg0IVDr9yUplHReUVPk+cMKfr+GtsdM24dwf0JhvoEoFB2EYoVBq3pxcA4Rq1
-         dqPIWGsyNFYo2KhRVAQIq7HXOHQgymE300l2hTJu6xDqcU6s1G1lVjKMZi99pciddQlO
-         H7pC2FbZiavec4KpMjAXoIrWOZElA2GCFM0aYRUsY7CFIev00cKrgM67xnn8BG7gK7ta
-         Y60bCoeP+VCsKnUJ7QORLB3Qn+Y79DuwB+W6pj5BoBoNHtfOFtxNoEAZYksJLztQ2hJ3
-         ZRc4AnL0ztAJ28kCbtJ7zNWfBpEPI3ID+7PKvMSgfbeqHAFDlnB5UmX/vqTWZd1OdgiC
-         bUpg==
-X-Gm-Message-State: AGi0Pub5a6t71m9YQrRFNiCKRZcDDfy+7K8Ggi34eydb4qK7F4M8xw3R
-        x9aWGHvV46hH2V3WPLokvE+JXm+g9f6anLRXRoI=
-X-Google-Smtp-Source: APiQypK5JWV/0lunuRXSm9bmWF8GTMrH8ZZtDEZCWSihlQms/jeatRDrLMdpIpchZGyScCDmrXjd8Js6R/z8ZjqMjjM=
-X-Received: by 2002:adf:e910:: with SMTP id f16mr2812017wrm.176.1588943329981;
- Fri, 08 May 2020 06:08:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200507104252.544114-1-bjorn.topel@gmail.com>
- <20200507104252.544114-11-bjorn.topel@gmail.com> <40eb57c7-9c47-87dc-bda9-5a1729352c43@mellanox.com>
- <3c42954a-8bb3-85b1-8740-a096b0a76a98@intel.com> <cf65cc80-f16a-5b76-5577-57c55e952a52@mellanox.com>
-In-Reply-To: <cf65cc80-f16a-5b76-5577-57c55e952a52@mellanox.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Fri, 8 May 2020 15:08:38 +0200
-Message-ID: <CAJ+HfNiU8jyNMC1VMCgqGqz76Q8G1Pui09==TO8Qi73Y_2xViQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 10/14] mlx5, xsk: migrate to new MEM_TYPE_XSK_BUFF_POOL
-To:     Maxim Mikityanskiy <maximmi@mellanox.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        by vger.kernel.org with ESMTP id S1730501AbgEHNFZ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 09:05:25 -0400
+Received: from Galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F0EC05BD43;
+        Fri,  8 May 2020 06:05:25 -0700 (PDT)
+Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tip-bot2@linutronix.de>)
+        id 1jX2gV-0007Hq-AV; Fri, 08 May 2020 15:04:59 +0200
+Received: from [127.0.1.1] (localhost [IPv6:::1])
+        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id 39D2A1C0493;
+        Fri,  8 May 2020 15:04:49 +0200 (CEST)
+Date:   Fri, 08 May 2020 13:04:49 -0000
+From:   "tip-bot2 for Stephane Eranian" <tip-bot2@linutronix.de>
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] tools feature: Add support for detecting libpfm4
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@redhat.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Alexei Starovoitov <ast@kernel.org>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrii Nakryiko <andriin@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Igor Lubashev <ilubashe@akamai.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Jiwei Sun <jiwei.sun@windriver.com>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, yuzhoujian <yuzhoujian@didichuxing.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        x86 <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+In-Reply-To: <20200429231443.207201-3-irogers@google.com>
+References: <20200429231443.207201-3-irogers@google.com>
+MIME-Version: 1.0
+Message-ID: <158894308913.8414.14143682861215689982.tip-bot2@tip-bot2>
+X-Mailer: tip-git-log-daemon
+Robot-ID: <tip-bot2.linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 8 May 2020 at 15:01, Maxim Mikityanskiy <maximmi@mellanox.com> wrot=
-e:
->
-> On 2020-05-08 15:27, Bj=C3=B6rn T=C3=B6pel wrote:
-> > On 2020-05-08 13:55, Maxim Mikityanskiy wrote:
-> >> On 2020-05-07 13:42, Bj=C3=B6rn T=C3=B6pel wrote:
-> >>> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-> >>>
-> >>> Use the new MEM_TYPE_XSK_BUFF_POOL API in lieu of MEM_TYPE_ZERO_COPY =
-in
-> >>> mlx5e. It allows to drop a lot of code from the driver (which is now
-> >>> common in AF_XDP core and was related to XSK RX frame allocation, DMA
-> >>> mapping, etc.) and slightly improve performance.
-> >>>
-> >>> rfc->v1: Put back the sanity check for XSK params, use XSK API to get
-> >>>           the total headroom size. (Maxim)
-> >>>
-> >>> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-> >>> Signed-off-by: Maxim Mikityanskiy <maximmi@mellanox.com>
-> >>
-> >> I did some functional and performance tests.
-> >>
-> >> Unfortunately, something is wrong with the traffic: I get zeros in
-> >> XDP_TX, XDP_PASS and XSK instead of packet data. I set DEBUG_HEXDUMP
-> >> in xdpsock, and it shows the packets of the correct length, but all
-> >> bytes are 0 after these patches. It might be wrong xdp_buff pointers,
-> >> however, I still have to investigate it. Bj=C3=B6rn, does it also affe=
-ct
-> >> Intel drivers, or is it Mellanox-specific?
-> >>
-> >
-> > Are you getting zeros for TX, PASS *and* in xdpsock (REDIRECT:ed
-> > packets), or just TX and PASS?
->
-> Yes, in all modes: XDP_TX, XDP_PASS and XDP_REDIRECT to XSK (xdpsock).
->
-> > No, I get correct packet data for AF_XDP zero-copy XDP_REDIRECT,
-> > XDP_PASS, and XDP_TX for Intel.
->
-> Hmm, weird - with the new API I expected the same behavior on all
-> drivers. Thanks for the information, I'll know that I need to look in
-> mlx5 code to find the issue.
->
+The following commit has been merged into the perf/core branch of tip:
 
-All zeros hints that you're probably putting in the wrong DMA address somew=
-here.
+Commit-ID:     5ef86146de941f273d669a8e018036f549bf058c
+Gitweb:        https://git.kernel.org/tip/5ef86146de941f273d669a8e018036f549bf058c
+Author:        Stephane Eranian <eranian@google.com>
+AuthorDate:    Wed, 29 Apr 2020 16:14:41 -07:00
+Committer:     Arnaldo Carvalho de Melo <acme@redhat.com>
+CommitterDate: Tue, 05 May 2020 16:35:31 -03:00
 
-> >> For performance, I got +1.0..+1.2 Mpps on RX. TX performance got
-> >> better after Bj=C3=B6rn inlined the relevant UMEM functions, however, =
-there
-> >> is still a slight decrease compared to the old code. I'll try to find
-> >> the possible reason, but the good thing is that it's not significant
-> >> anymore.
-> >>
-> >
-> > Ok, so for Rx mlx5 it's the same as for i40e. Good! :-)
-> >
-> > How much decrease on Tx?
->
-> ~0.8 Mpps (was 3.1 before you inlined the functions).
->
+tools feature: Add support for detecting libpfm4
 
-Thanks. Still a bit much. What does perf say?
+libpfm4 provides an alternate command line encoding of perf events.
 
+Signed-off-by: Stephane Eranian <eranian@google.com>
+Reviewed-by: Ian Rogers <irogers@google.com>
+Acked-by: Jiri Olsa <jolsa@redhat.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Alexey Budankov <alexey.budankov@linux.intel.com>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Andrii Nakryiko <andriin@fb.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Igor Lubashev <ilubashe@akamai.com>
+Cc: Jin Yao <yao.jin@linux.intel.com>
+Cc: Jiwei Sun <jiwei.sun@windriver.com>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: yuzhoujian <yuzhoujian@didichuxing.com>
+Link: http://lore.kernel.org/lkml/20200429231443.207201-3-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/build/Makefile.feature       |  3 ++-
+ tools/build/feature/Makefile       |  6 +++++-
+ tools/build/feature/test-libpfm4.c |  9 +++++++++
+ 3 files changed, 16 insertions(+), 2 deletions(-)
+ create mode 100644 tools/build/feature/test-libpfm4.c
 
-Bj=C3=B6rn
+diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+index 3e0c019..3abd431 100644
+--- a/tools/build/Makefile.feature
++++ b/tools/build/Makefile.feature
+@@ -98,7 +98,8 @@ FEATURE_TESTS_EXTRA :=                  \
+          llvm                           \
+          llvm-version                   \
+          clang                          \
+-         libbpf
++         libbpf                         \
++         libpfm4
+ 
+ FEATURE_TESTS ?= $(FEATURE_TESTS_BASIC)
+ 
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index 9201238..84f845b 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -69,7 +69,8 @@ FILES=                                          \
+          test-libaio.bin			\
+          test-libzstd.bin			\
+          test-clang-bpf-global-var.bin		\
+-         test-file-handle.bin
++         test-file-handle.bin			\
++         test-libpfm4.bin
+ 
+ FILES := $(addprefix $(OUTPUT),$(FILES))
+ 
+@@ -331,6 +332,9 @@ $(OUTPUT)test-clang-bpf-global-var.bin:
+ $(OUTPUT)test-file-handle.bin:
+ 	$(BUILD)
+ 
++$(OUTPUT)test-libpfm4.bin:
++	$(BUILD) -lpfm
++
+ ###############################
+ 
+ clean:
+diff --git a/tools/build/feature/test-libpfm4.c b/tools/build/feature/test-libpfm4.c
+new file mode 100644
+index 0000000..af49b25
+--- /dev/null
++++ b/tools/build/feature/test-libpfm4.c
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <sys/types.h>
++#include <perfmon/pfmlib.h>
++
++int main(void)
++{
++	pfm_initialize();
++	return 0;
++}
