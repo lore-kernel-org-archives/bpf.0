@@ -2,45 +2,45 @@ Return-Path: <SRS0=gSIr=6W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70731C38A2A
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 07:06:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6009DC47247
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 07:06:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4DB9A20735
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 07:06:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 440CA208CA
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 07:06:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="UKHw1HHY"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hjzUswQN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgEHHGE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 03:06:04 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:49566 "EHLO
+        id S1726825AbgEHHGF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 03:06:05 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:54974 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726009AbgEHHGE (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 03:06:04 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04875Z0n003845
-        for <bpf@vger.kernel.org>; Fri, 8 May 2020 00:06:04 -0700
+        by vger.kernel.org with ESMTP id S1726009AbgEHHGF (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 03:06:05 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 048762ju020938
+        for <bpf@vger.kernel.org>; Fri, 8 May 2020 00:06:05 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=facebook;
- bh=iY9cC75skSO6LHq4HQizasYqUbrZz9fFZyRwNdgLHbk=;
- b=UKHw1HHY+El57asWyvCL7ZFdHyN89ieyr86cmDDJQ1qVXCWs0gcIraqrC5YdJNMu5beM
- iSTChnKPtVl4SPqVLEFsyheZVJjdJkQxFrYe4NLmn1T0hQ5aRuphklSFLEDXmPTS+R/H
- eKApvzUOc6wLsAVpHQhSbR6/34e0g0/fXJQ= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 30vte4j4td-2
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=facebook;
+ bh=baFpFbIDHaKMImJSdN+7dpCGgUiU8qjtIMJ347QphjM=;
+ b=hjzUswQNPhbI4djz9GFbmaNGAWp550U/UPWZ/OOVA8KXVgKdbQeWtqjcZZVVkRyo+uHY
+ JiNYr0WEf5VCMAy/joeFAw6+URdIiiDOok86S8EaWJ9+TY0IJzAFLibT5ilVJoJE7uIc
+ OX/5KXygAJnfhpMlxgS7s7aRX0yzVPOitwU= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 30vtdfa52w-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Fri, 08 May 2020 00:06:04 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Fri, 8 May 2020 00:06:03 -0700
+ 15.1.1847.3; Fri, 8 May 2020 00:05:55 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 243D12EC3844; Fri,  8 May 2020 00:05:54 -0700 (PDT)
+        id B34052EC3844; Fri,  8 May 2020 00:05:49 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -49,22 +49,20 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/3] selftest/bpf: fmod_ret prog and implement test_overhead as part of bench
-Date:   Fri, 8 May 2020 00:05:47 -0700
-Message-ID: <20200508070548.2358701-3-andriin@fb.com>
+Subject: [PATCH bpf-next 0/3] Add benchmark runner and few benchmarks
+Date:   Fri, 8 May 2020 00:05:45 -0700
+Message-ID: <20200508070548.2358701-1-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200508070548.2358701-1-andriin@fb.com>
-References: <20200508070548.2358701-1-andriin@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
  definitions=2020-05-08_08:2020-05-07,2020-05-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- lowpriorityscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0
- bulkscore=0 suspectscore=8 phishscore=0 clxscore=1015 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ impostorscore=0 suspectscore=8 mlxlogscore=999 clxscore=1015 phishscore=0
+ adultscore=0 malwarescore=0 lowpriorityscore=0 mlxscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2005080061
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -72,365 +70,49 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add fmod_ret BPF program to existing test_overhead selftest. Also re-impl=
-ement
-user-space benchmarking part into benchmark runner to compare results.  R=
-esults
-with ./bench are consistently somewhat lower than test_overhead's, but re=
-lative
-performance of various types of BPF programs stay consisten (e.g., kretpr=
-obe is
-noticeably slower).
+Add generic benchmark runner framework which simplifies writing various
+performance benchmarks in a consistent fashion.  This framework will be u=
+sed
+in follow up patches to test performance of perf buffer and ring buffer a=
+s
+well.
 
-To test with ./bench, the following command was used:
+Patch #1 adds generic runner implementation and atomic counter benchmarks=
+ to
+validate benchmark runner's behavior.
 
-for i in base kprobe kretprobe rawtp fentry fexit fmodret; \
-do \
-    summary=3D$(sudo ./bench -w2 -d5 -a rename-$i | \
-              tail -n1 | cut -d'(' -f1 | cut -d' ' -f3-) && \
-    printf "%-10s: %s\n" $i "$summary"; \
-done
+Patch #2 implements test_overhead benchmark as part of bench runner. It a=
+lso
+add fmod_ret BPF program type to a set of benchmarks.
 
-This gives the following numbers:
+Patch #3 tests faster alternatives to set_task_comm() approach, tested in
+test_overhead, in search for minimal-overhead way to trigger BPF program
+execution from user-space on demand.
 
-  base      :    3.975 =C2=B1 0.065M/s
-  kprobe    :    3.268 =C2=B1 0.095M/s
-  kretprobe :    2.496 =C2=B1 0.040M/s
-  rawtp     :    3.899 =C2=B1 0.078M/s
-  fentry    :    3.836 =C2=B1 0.049M/s
-  fexit     :    3.660 =C2=B1 0.082M/s
-  fmodret   :    3.776 =C2=B1 0.033M/s
+Andrii Nakryiko (3):
+  selftests/bpf: add benchmark runner infrastructure
+  selftest/bpf: fmod_ret prog and implement test_overhead as part of
+    bench
+  selftest/bpf: add BPF triggring benchmark
 
-While running test_overhead gives:
-
-  task_rename base        4457K events per sec
-  task_rename kprobe      3849K events per sec
-  task_rename kretprobe   2729K events per sec
-  task_rename raw_tp      4506K events per sec
-  task_rename fentry      4381K events per sec
-  task_rename fexit       4349K events per sec
-  task_rename fmod_ret    4130K events per sec
-
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/testing/selftests/bpf/Makefile          |   4 +-
- tools/testing/selftests/bpf/bench.c           |  14 ++
- tools/testing/selftests/bpf/bench_rename.c    | 195 ++++++++++++++++++
+ tools/testing/selftests/bpf/.gitignore        |   1 +
+ tools/testing/selftests/bpf/Makefile          |  15 +-
+ tools/testing/selftests/bpf/bench.c           | 390 ++++++++++++++++++
+ tools/testing/selftests/bpf/bench.h           |  74 ++++
+ tools/testing/selftests/bpf/bench_count.c     |  91 ++++
+ tools/testing/selftests/bpf/bench_rename.c    | 195 +++++++++
+ tools/testing/selftests/bpf/bench_trigger.c   | 167 ++++++++
  .../selftests/bpf/prog_tests/test_overhead.c  |  14 +-
  .../selftests/bpf/progs/test_overhead.c       |   6 +
- 5 files changed, 231 insertions(+), 2 deletions(-)
+ .../selftests/bpf/progs/trigger_bench.c       |  47 +++
+ 10 files changed, 998 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/bench.c
+ create mode 100644 tools/testing/selftests/bpf/bench.h
+ create mode 100644 tools/testing/selftests/bpf/bench_count.c
  create mode 100644 tools/testing/selftests/bpf/bench_rename.c
+ create mode 100644 tools/testing/selftests/bpf/bench_trigger.c
+ create mode 100644 tools/testing/selftests/bpf/progs/trigger_bench.c
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-index ab03362d46e4..275c5873a75f 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -408,9 +408,11 @@ $(OUTPUT)/test_cpp: test_cpp.cpp $(OUTPUT)/test_core=
-_extern.skel.h $(BPFOBJ)
- # Benchmark runner
- $(OUTPUT)/bench.o:          bench.h
- $(OUTPUT)/bench_count.o:    bench.h
-+$(OUTPUT)/bench_rename.o:   bench.h $(OUTPUT)/test_overhead.skel.h
- $(OUTPUT)/bench: LDLIBS +=3D -lm
- $(OUTPUT)/bench: $(OUTPUT)/bench.o \
--		 $(OUTPUT)/bench_count.o
-+		 $(OUTPUT)/bench_count.o \
-+		 $(OUTPUT)/bench_rename.o
- 	$(call msg,BINARY,,$@)
- 	$(CC) $(LDFLAGS) -o $@ $(filter %.a %.o,$^) $(LDLIBS)
-=20
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftest=
-s/bpf/bench.c
-index a20482bb74e2..6ce4002612c8 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -246,10 +246,24 @@ const struct bench *bench =3D NULL;
-=20
- extern const struct bench bench_count_global;
- extern const struct bench bench_count_local;
-+extern const struct bench bench_rename_base;
-+extern const struct bench bench_rename_kprobe;
-+extern const struct bench bench_rename_kretprobe;
-+extern const struct bench bench_rename_rawtp;
-+extern const struct bench bench_rename_fentry;
-+extern const struct bench bench_rename_fexit;
-+extern const struct bench bench_rename_fmodret;
-=20
- static const struct bench *benchs[] =3D {
- 	&bench_count_global,
- 	&bench_count_local,
-+	&bench_rename_base,
-+	&bench_rename_kprobe,
-+	&bench_rename_kretprobe,
-+	&bench_rename_rawtp,
-+	&bench_rename_fentry,
-+	&bench_rename_fexit,
-+	&bench_rename_fmodret,
- };
-=20
- static void setup_benchmark()
-diff --git a/tools/testing/selftests/bpf/bench_rename.c b/tools/testing/s=
-elftests/bpf/bench_rename.c
-new file mode 100644
-index 000000000000..e74cff40f4fe
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bench_rename.c
-@@ -0,0 +1,195 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include <fcntl.h>
-+#include "bench.h"
-+#include "test_overhead.skel.h"
-+
-+/* BPF triggering benchmarks */
-+static struct ctx {
-+	struct test_overhead *skel;
-+	struct counter hits;
-+	int fd;
-+} ctx;
-+
-+static void validate()
-+{
-+	if (env.producer_cnt !=3D 1) {
-+		fprintf(stderr, "benchmark doesn't support multi-producer!\n");
-+		exit(1);
-+	}
-+	if (env.consumer_cnt !=3D 1) {
-+		fprintf(stderr, "benchmark doesn't support multi-consumer!\n");
-+		exit(1);
-+	}
-+}
-+
-+static void *producer(void *input)
-+{
-+	char buf[] =3D "test_overhead";
-+	int err;
-+
-+	while (true) {
-+		err =3D write(ctx.fd, buf, sizeof(buf));
-+		if (err < 0) {
-+			fprintf(stderr, "write failed\n");
-+			exit(1);
-+		}
-+		atomic_inc(&ctx.hits.value);
-+	}
-+}
-+
-+static void measure(struct bench_res *res)
-+{
-+	res->hits =3D atomic_swap(&ctx.hits.value, 0);
-+}
-+
-+static void setup_ctx()
-+{
-+	setup_libbpf();
-+
-+	ctx.skel =3D test_overhead__open_and_load();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	ctx.fd =3D open("/proc/self/comm", O_WRONLY|O_TRUNC);
-+	if (ctx.fd < 0) {
-+		fprintf(stderr, "failed to open /proc/self/comm: %d\n", -errno);
-+		exit(1);
-+	}
-+}
-+
-+static void attach_bpf(struct bpf_program *prog)
-+{
-+	struct bpf_link *link;
-+
-+	link =3D bpf_program__attach(prog);
-+	if (IS_ERR(link)) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+}
-+
-+static void setup_base()
-+{
-+	setup_ctx();
-+}
-+
-+static void setup_kprobe()
-+{
-+	setup_ctx();
-+	attach_bpf(ctx.skel->progs.prog1);
-+}
-+
-+static void setup_kretprobe()
-+{
-+	setup_ctx();
-+	attach_bpf(ctx.skel->progs.prog2);
-+}
-+
-+static void setup_rawtp()
-+{
-+	setup_ctx();
-+	attach_bpf(ctx.skel->progs.prog3);
-+}
-+
-+static void setup_fentry()
-+{
-+	setup_ctx();
-+	attach_bpf(ctx.skel->progs.prog4);
-+}
-+
-+static void setup_fexit()
-+{
-+	setup_ctx();
-+	attach_bpf(ctx.skel->progs.prog5);
-+}
-+
-+static void setup_fmodret()
-+{
-+	setup_ctx();
-+	attach_bpf(ctx.skel->progs.prog6);
-+}
-+
-+static void *consumer(void *input)
-+{
-+	return NULL;
-+}
-+
-+const struct bench bench_rename_base =3D {
-+	.name =3D "rename-base",
-+	.validate =3D validate,
-+	.setup =3D setup_base,
-+	.producer_thread =3D producer,
-+	.consumer_thread =3D consumer,
-+	.measure =3D measure,
-+	.report_progress =3D hits_drops_report_progress,
-+	.report_final =3D hits_drops_report_final,
-+};
-+
-+const struct bench bench_rename_kprobe =3D {
-+	.name =3D "rename-kprobe",
-+	.validate =3D validate,
-+	.setup =3D setup_kprobe,
-+	.producer_thread =3D producer,
-+	.consumer_thread =3D consumer,
-+	.measure =3D measure,
-+	.report_progress =3D hits_drops_report_progress,
-+	.report_final =3D hits_drops_report_final,
-+};
-+
-+const struct bench bench_rename_kretprobe =3D {
-+	.name =3D "rename-kretprobe",
-+	.validate =3D validate,
-+	.setup =3D setup_kretprobe,
-+	.producer_thread =3D producer,
-+	.consumer_thread =3D consumer,
-+	.measure =3D measure,
-+	.report_progress =3D hits_drops_report_progress,
-+	.report_final =3D hits_drops_report_final,
-+};
-+
-+const struct bench bench_rename_rawtp =3D {
-+	.name =3D "rename-rawtp",
-+	.validate =3D validate,
-+	.setup =3D setup_rawtp,
-+	.producer_thread =3D producer,
-+	.consumer_thread =3D consumer,
-+	.measure =3D measure,
-+	.report_progress =3D hits_drops_report_progress,
-+	.report_final =3D hits_drops_report_final,
-+};
-+
-+const struct bench bench_rename_fentry =3D {
-+	.name =3D "rename-fentry",
-+	.validate =3D validate,
-+	.setup =3D setup_fentry,
-+	.producer_thread =3D producer,
-+	.consumer_thread =3D consumer,
-+	.measure =3D measure,
-+	.report_progress =3D hits_drops_report_progress,
-+	.report_final =3D hits_drops_report_final,
-+};
-+
-+const struct bench bench_rename_fexit =3D {
-+	.name =3D "rename-fexit",
-+	.validate =3D validate,
-+	.setup =3D setup_fexit,
-+	.producer_thread =3D producer,
-+	.consumer_thread =3D consumer,
-+	.measure =3D measure,
-+	.report_progress =3D hits_drops_report_progress,
-+	.report_final =3D hits_drops_report_final,
-+};
-+
-+const struct bench bench_rename_fmodret =3D {
-+	.name =3D "rename-fmodret",
-+	.validate =3D validate,
-+	.setup =3D setup_fmodret,
-+	.producer_thread =3D producer,
-+	.consumer_thread =3D consumer,
-+	.measure =3D measure,
-+	.report_progress =3D hits_drops_report_progress,
-+	.report_final =3D hits_drops_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_overhead.c b/too=
-ls/testing/selftests/bpf/prog_tests/test_overhead.c
-index 465b371a561d..2702df2b2343 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_overhead.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_overhead.c
-@@ -61,9 +61,10 @@ void test_test_overhead(void)
- 	const char *raw_tp_name =3D "raw_tp/task_rename";
- 	const char *fentry_name =3D "fentry/__set_task_comm";
- 	const char *fexit_name =3D "fexit/__set_task_comm";
-+	const char *fmodret_name =3D "fmod_ret/__set_task_comm";
- 	const char *kprobe_func =3D "__set_task_comm";
- 	struct bpf_program *kprobe_prog, *kretprobe_prog, *raw_tp_prog;
--	struct bpf_program *fentry_prog, *fexit_prog;
-+	struct bpf_program *fentry_prog, *fexit_prog, *fmodret_prog;
- 	struct bpf_object *obj;
- 	struct bpf_link *link;
- 	int err, duration =3D 0;
-@@ -96,6 +97,10 @@ void test_test_overhead(void)
- 	if (CHECK(!fexit_prog, "find_probe",
- 		  "prog '%s' not found\n", fexit_name))
- 		goto cleanup;
-+	fmodret_prog =3D bpf_object__find_program_by_title(obj, fmodret_name);
-+	if (CHECK(!fmodret_prog, "find_probe",
-+		  "prog '%s' not found\n", fmodret_name))
-+		goto cleanup;
-=20
- 	err =3D bpf_object__load(obj);
- 	if (CHECK(err, "obj_load", "err %d\n", err))
-@@ -142,6 +147,13 @@ void test_test_overhead(void)
- 		goto cleanup;
- 	test_run("fexit");
- 	bpf_link__destroy(link);
-+
-+	/* attach fmod_ret */
-+	link =3D bpf_program__attach_trace(fmodret_prog);
-+	if (CHECK(IS_ERR(link), "attach fmod_ret", "err %ld\n", PTR_ERR(link)))
-+		goto cleanup;
-+	test_run("fmod_ret");
-+	bpf_link__destroy(link);
- cleanup:
- 	prctl(PR_SET_NAME, comm, 0L, 0L, 0L);
- 	bpf_object__close(obj);
-diff --git a/tools/testing/selftests/bpf/progs/test_overhead.c b/tools/te=
-sting/selftests/bpf/progs/test_overhead.c
-index 56a50b25cd33..450bf819beac 100644
---- a/tools/testing/selftests/bpf/progs/test_overhead.c
-+++ b/tools/testing/selftests/bpf/progs/test_overhead.c
-@@ -39,4 +39,10 @@ int BPF_PROG(prog5, struct task_struct *tsk, const cha=
-r *buf, bool exec)
- 	return !tsk;
- }
-=20
-+SEC("fmod_ret/__set_task_comm")
-+int BPF_PROG(prog6, struct task_struct *tsk, const char *buf, bool exec)
-+{
-+	return !tsk;
-+}
-+
- char _license[] SEC("license") =3D "GPL";
 --=20
 2.24.1
 
