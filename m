@@ -2,243 +2,95 @@ Return-Path: <SRS0=gSIr=6W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8CBCC47255
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 17:46:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E198BC38A2A
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 17:50:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD0FB2063A
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 17:46:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4048214D8
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 17:50:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HpvahuF2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GhTsm8hc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727859AbgEHRqZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 13:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+        id S1727113AbgEHRuT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 13:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727828AbgEHRqV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 13:46:21 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076BBC061A0C
-        for <bpf@vger.kernel.org>; Fri,  8 May 2020 10:46:20 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id y189so2960197ybc.14
-        for <bpf@vger.kernel.org>; Fri, 08 May 2020 10:46:19 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726767AbgEHRuT (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 13:50:19 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3163C061A0C;
+        Fri,  8 May 2020 10:50:18 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id z2so2610020iol.11;
+        Fri, 08 May 2020 10:50:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=DYH7y8eTT19ZLT5DCNlroMvihCNjU8EvgQt2N5C7Rx4=;
-        b=HpvahuF2kDACxrgWmXx8pexgnDDi4hbBha6v2TWg1xYfSUEuacRAkn+b+OHnkcLBQU
-         21GXbihRoh3ZZ3bB+QoPf4ygZ9Fx4+NwF1XnRNt9OhQ8I9BHSOdAQBGtAk5ky+uN8OpA
-         r9lPBj7AXpb+OdIs3+248O6BpraInTYZv782K1SDMA7gO5Q1I2K+gOdBVrefAO9FP+/2
-         WWBlaTgtokLUzg/AHJEmr23QVIWirNP5/fbfFljxDGM+h9W9ZrK+qrmNvCMkNoMM5V8m
-         PJqyxniWqttr5lhHF5YqEvYA6NvJmpjyfvcw2584yzpwkyoikUBBCk0rjM4chDOh0cfu
-         9Qew==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=GGWy4VZOpHsVd+xj3i6ggOaj9bm+2rEjr485bLzuqIA=;
+        b=GhTsm8hcBtjyeiAzd97yL0uHRferOcywJkejfeWkBHqm7uM0pe0WfDUcy3rkq+0N+v
+         SbX6fNBXvNUbyIfXZ2wIfxdXETBlMAt9cxf29ILYeYyJxZgPp4m84uTM9v9iUV5wJSEs
+         9Wg2wZoM/mv1Q4axoJBXes7FPK6p+SbpOCKz+PtvkiwxEahsDYOJBhdupLUgu15kS6U5
+         eBVjkOKvJSUAvLZmNvjg+QKd/wAWtrsw135WKh09oKZkUutgJ+krPA9kyVm+3q6shfOA
+         outvP2Oiaf6TC8ZvaiX3hfIs2KnVn3wROHJskH+crS34vcNKZOnU3reFndaaTm8BNvzQ
+         sF/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=DYH7y8eTT19ZLT5DCNlroMvihCNjU8EvgQt2N5C7Rx4=;
-        b=heaIGCPosMeyeMpBpAN350a5CtCWMxXDCf9w6A2fBDjHVSNGQlXW8pJHem35gGQGY7
-         iQPQq9oDVnc0fOSnWySFoLniv09NHW3hvb26Pv3E/RvkoEBod63Rb6aXqJ6PcXeIjuTH
-         eMRxSXemtFUUb2yJd4iNTOsLc3RjTTvyQoiluPsCsLbz0k5H9XflYqqFVGqwX9/htQMo
-         dKyPjKGoJgOn80guiqD//7E4pqgGY3QsnnUamtCSZfJFkdhhMMxHiiPx6cbJE0cBGdtZ
-         k9hOcWJxexjizfiUJLSsCH24THUksWNL/UixDcgX4lrW5ed/z3HwkDQfLu5wMwSBVUxg
-         G2lA==
-X-Gm-Message-State: AGi0PuZNIvPr0Q5iPsFMmsmn8lMlNJg0cjAZVCuI4djA6jr5daVuWwHF
-        BhqxVzpUTxElh4r9HQ3AgcNdNYo=
-X-Google-Smtp-Source: APiQypI8YVYg5IDv09hxsEwdY07qCiGnAlgKik6AZ8xVdxyB95Xx6HvD95jFGhA3xjm+O8GX5C6Vn1U=
-X-Received: by 2002:a25:b90a:: with SMTP id x10mr6595049ybj.355.1588959979249;
- Fri, 08 May 2020 10:46:19 -0700 (PDT)
-Date:   Fri,  8 May 2020 10:46:10 -0700
-In-Reply-To: <20200508174611.228805-1-sdf@google.com>
-Message-Id: <20200508174611.228805-4-sdf@google.com>
-Mime-Version: 1.0
-References: <20200508174611.228805-1-sdf@google.com>
-X-Mailer: git-send-email 2.26.2.645.ge9eca65c58-goog
-Subject: [PATCH bpf-next v5 3/4] net: refactor arguments of inet{,6}_bind
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>,
-        Andrey Ignatov <rdna@fb.com>, Martin KaFai Lau <kafai@fb.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=GGWy4VZOpHsVd+xj3i6ggOaj9bm+2rEjr485bLzuqIA=;
+        b=Tr2aMTcKYL9yKhV7/+DYqBzC+QGGBA/xSZtWqQXqA9U/oOi7R7HMksPHBKU9lN7vzL
+         1eIYkPm7l1iZo9lis0KbE30YRtfBVVWjVc0FovzUyTBYdZZRGnVxc6/ToOmFbQuWG3nC
+         VVlOMHzDvlMQ0T42m1ZcKWopRkQBIBlCsa3wXgGkyvTFIPFUMm4ijAMiX8mGNGDV/aLW
+         sdTKFkpQ+BCPPDVdtyVcs6n2G26YCopiMv8dhUzIW0LrtkT0jHu8GiYb6nxjarnSumG0
+         EHRzEUJvTPCdtLORcBo3D7EvrtdvI0+tuiiCNaEDckDdgPd1MADta3poII6w2euFMFiJ
+         A51g==
+X-Gm-Message-State: AGi0Pub6jdgRN5035U0frIyjJ7zRanW6ADHI9Sn3SEeWR4+bmH0btQ9S
+        TSkQAVlACNK72x8thdUgl8rusRI5hd9gD20xMqA=
+X-Google-Smtp-Source: APiQypJiA8tXoiUBWfJvBUlVnhJKrXtCritavb8vYe3ex/HKeLtrzhsNW0BxIi1yhq4rYi3RO72VgY/VGzH46Bw1eRE=
+X-Received: by 2002:a05:6638:228:: with SMTP id f8mr3875638jaq.38.1588960218280;
+ Fri, 08 May 2020 10:50:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200508070548.2358701-1-andriin@fb.com> <20200508070548.2358701-4-andriin@fb.com>
+ <35e656a9-91d1-203d-44d4-ea5f002ad232@fb.com>
+In-Reply-To: <35e656a9-91d1-203d-44d4-ea5f002ad232@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 8 May 2020 10:50:07 -0700
+Message-ID: <CAEf4BzZoMZNADA6-_4CUtV+YuBWeuNF9EqDT-SbUNhOMmw_uTQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] selftest/bpf: add BPF triggring benchmark
+To:     Alexei Starovoitov <ast@fb.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The intent is to add an additional bind parameter in the next commit.
-Instead of adding another argument, let's convert all existing
-flag arguments into an extendable bit field.
+On Fri, May 8, 2020 at 9:40 AM Alexei Starovoitov <ast@fb.com> wrote:
+>
+> On 5/8/20 12:05 AM, Andrii Nakryiko wrote:
+> >
+> > base      :    9.200 =C2=B1 0.319M/s
+> > fentry    :    8.955 =C2=B1 0.241M/s
+>
+> > +SEC("fentry/__x64_sys_getpgid")
+> > +int bench_trigger_fentry(void *ctx)
+> > +{
+> > +     __sync_add_and_fetch(&hits, 1);
+> > +     return 0;
+> > +}
+>
+> adding 'lock xadd' is not cheap.
+> I wonder how much of the delta come from it and from the rest of
+> trampoline.
 
-No functional changes.
-
-Acked-by: Andrey Ignatov <rdna@fb.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- include/net/inet_common.h |  6 +++++-
- include/net/ipv6_stubs.h  |  2 +-
- net/core/filter.c         |  6 ++++--
- net/ipv4/af_inet.c        | 10 +++++-----
- net/ipv6/af_inet6.c       | 10 +++++-----
- 5 files changed, 20 insertions(+), 14 deletions(-)
-
-diff --git a/include/net/inet_common.h b/include/net/inet_common.h
-index ae2ba897675c..c38f4f7d660a 100644
---- a/include/net/inet_common.h
-+++ b/include/net/inet_common.h
-@@ -35,8 +35,12 @@ int inet_shutdown(struct socket *sock, int how);
- int inet_listen(struct socket *sock, int backlog);
- void inet_sock_destruct(struct sock *sk);
- int inet_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len);
-+/* Don't allocate port at this moment, defer to connect. */
-+#define BIND_FORCE_ADDRESS_NO_PORT	(1 << 0)
-+/* Grab and release socket lock. */
-+#define BIND_WITH_LOCK			(1 << 1)
- int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
--		bool force_bind_address_no_port, bool with_lock);
-+		u32 flags);
- int inet_getname(struct socket *sock, struct sockaddr *uaddr,
- 		 int peer);
- int inet_ioctl(struct socket *sock, unsigned int cmd, unsigned long arg);
-diff --git a/include/net/ipv6_stubs.h b/include/net/ipv6_stubs.h
-index a5f7c12c326a..6e622dd3122e 100644
---- a/include/net/ipv6_stubs.h
-+++ b/include/net/ipv6_stubs.h
-@@ -63,7 +63,7 @@ extern const struct ipv6_stub *ipv6_stub __read_mostly;
- /* A stub used by bpf helpers. Similarly ugly as ipv6_stub */
- struct ipv6_bpf_stub {
- 	int (*inet6_bind)(struct sock *sk, struct sockaddr *uaddr, int addr_len,
--			  bool force_bind_address_no_port, bool with_lock);
-+			  u32 flags);
- 	struct sock *(*udp6_lib_lookup)(struct net *net,
- 				     const struct in6_addr *saddr, __be16 sport,
- 				     const struct in6_addr *daddr, __be16 dport,
-diff --git a/net/core/filter.c b/net/core/filter.c
-index dfaf5df13722..fa9ddab5dd1f 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4538,7 +4538,8 @@ BPF_CALL_3(bpf_bind, struct bpf_sock_addr_kern *, ctx, struct sockaddr *, addr,
- 			return err;
- 		if (((struct sockaddr_in *)addr)->sin_port != htons(0))
- 			return err;
--		return __inet_bind(sk, addr, addr_len, true, false);
-+		return __inet_bind(sk, addr, addr_len,
-+				   BIND_FORCE_ADDRESS_NO_PORT);
- #if IS_ENABLED(CONFIG_IPV6)
- 	} else if (addr->sa_family == AF_INET6) {
- 		if (addr_len < SIN6_LEN_RFC2133)
-@@ -4548,7 +4549,8 @@ BPF_CALL_3(bpf_bind, struct bpf_sock_addr_kern *, ctx, struct sockaddr *, addr,
- 		/* ipv6_bpf_stub cannot be NULL, since it's called from
- 		 * bpf_cgroup_inet6_connect hook and ipv6 is already loaded
- 		 */
--		return ipv6_bpf_stub->inet6_bind(sk, addr, addr_len, true, false);
-+		return ipv6_bpf_stub->inet6_bind(sk, addr, addr_len,
-+						 BIND_FORCE_ADDRESS_NO_PORT);
- #endif /* CONFIG_IPV6 */
- 	}
- #endif /* CONFIG_INET */
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index 6177c4ba0037..68e74b1b0f26 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -450,12 +450,12 @@ int inet_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len)
- 	if (err)
- 		return err;
- 
--	return __inet_bind(sk, uaddr, addr_len, false, true);
-+	return __inet_bind(sk, uaddr, addr_len, BIND_WITH_LOCK);
- }
- EXPORT_SYMBOL(inet_bind);
- 
- int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
--		bool force_bind_address_no_port, bool with_lock)
-+		u32 flags)
- {
- 	struct sockaddr_in *addr = (struct sockaddr_in *)uaddr;
- 	struct inet_sock *inet = inet_sk(sk);
-@@ -506,7 +506,7 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
- 	 *      would be illegal to use them (multicast/broadcast) in
- 	 *      which case the sending device address is used.
- 	 */
--	if (with_lock)
-+	if (flags & BIND_WITH_LOCK)
- 		lock_sock(sk);
- 
- 	/* Check these errors (active socket, double bind). */
-@@ -520,7 +520,7 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
- 
- 	/* Make sure we are allowed to bind here. */
- 	if (snum || !(inet->bind_address_no_port ||
--		      force_bind_address_no_port)) {
-+		      (flags & BIND_FORCE_ADDRESS_NO_PORT))) {
- 		if (sk->sk_prot->get_port(sk, snum)) {
- 			inet->inet_saddr = inet->inet_rcv_saddr = 0;
- 			err = -EADDRINUSE;
-@@ -543,7 +543,7 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
- 	sk_dst_reset(sk);
- 	err = 0;
- out_release_sock:
--	if (with_lock)
-+	if (flags & BIND_WITH_LOCK)
- 		release_sock(sk);
- out:
- 	return err;
-diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-index 345baa0a754f..552c2592b81c 100644
---- a/net/ipv6/af_inet6.c
-+++ b/net/ipv6/af_inet6.c
-@@ -273,7 +273,7 @@ static int inet6_create(struct net *net, struct socket *sock, int protocol,
- }
- 
- static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
--			bool force_bind_address_no_port, bool with_lock)
-+			u32 flags)
- {
- 	struct sockaddr_in6 *addr = (struct sockaddr_in6 *)uaddr;
- 	struct inet_sock *inet = inet_sk(sk);
-@@ -297,7 +297,7 @@ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
- 	    !ns_capable(net->user_ns, CAP_NET_BIND_SERVICE))
- 		return -EACCES;
- 
--	if (with_lock)
-+	if (flags & BIND_WITH_LOCK)
- 		lock_sock(sk);
- 
- 	/* Check these errors (active socket, double bind). */
-@@ -400,7 +400,7 @@ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
- 
- 	/* Make sure we are allowed to bind here. */
- 	if (snum || !(inet->bind_address_no_port ||
--		      force_bind_address_no_port)) {
-+		      (flags & BIND_FORCE_ADDRESS_NO_PORT))) {
- 		if (sk->sk_prot->get_port(sk, snum)) {
- 			sk->sk_ipv6only = saved_ipv6only;
- 			inet_reset_saddr(sk);
-@@ -423,7 +423,7 @@ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
- 	inet->inet_dport = 0;
- 	inet->inet_daddr = 0;
- out:
--	if (with_lock)
-+	if (flags & BIND_WITH_LOCK)
- 		release_sock(sk);
- 	return err;
- out_unlock:
-@@ -451,7 +451,7 @@ int inet6_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len)
- 	if (err)
- 		return err;
- 
--	return __inet6_bind(sk, uaddr, addr_len, false, true);
-+	return __inet6_bind(sk, uaddr, addr_len, BIND_WITH_LOCK);
- }
- EXPORT_SYMBOL(inet6_bind);
- 
--- 
-2.26.2.645.ge9eca65c58-goog
-
+Yeah, could be, though count-global/count-local benchmarks get to
+150Mops/s under no-sharing scenario, so effect shouldn't be that high.
+Well, in any case, 9Mops/s is more than enough for my cases :)
