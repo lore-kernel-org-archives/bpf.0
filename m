@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF622C38A2A
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 16:00:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E53B4C38A2A
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 16:02:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A2262184D
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 16:00:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD92A2184D
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 16:02:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1588953657;
-	bh=+zD3Jtj+Es8ilD9qppwj3Jh+4HWpyu/Df6rLL7OWGPA=;
+	s=default; t=1588953722;
+	bh=nGc+SLJxpXjap5msmJmrGbQ4enOvgC5oOrcNf+H+qw8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=mcSvupjXdpJOjwYoD0I3Zls9oZy6UzZwyM4Lewd5q/IiQ115th287Pr8Okmt69DLV
-	 OOx0bVzkH9p9CKVTnJSb8jzH3ZVaBu8sLKagYEiEuXQRXsrSDlZKzm8tsAa4MEOwHF
-	 pn0PgjKeweKOvUekhH062iPVEDhgLujO5WyW58Cg=
+	b=OIsAUXm8mreZ+R41Mra6oyZ09gdw2o9gGoYj5OafGzPUfYxwCy6sYowH0sAQXHnYZ
+	 3Hzzl7sYFdMw1DUgS/JeY5NwqsAEQiGniQEHyw6UEM8nGewCAcczkVIT40FleHFQyo
+	 EWY6L5WdaalrFWa/NrurIDd80qDzqeoPOxbVQEBA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726904AbgEHQA5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 12:00:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58606 "EHLO mail.kernel.org"
+        id S1727110AbgEHQCC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 12:02:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59660 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726817AbgEHQA4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 May 2020 12:00:56 -0400
+        id S1727067AbgEHQCC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 May 2020 12:02:02 -0400
 Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BCCC120725;
-        Fri,  8 May 2020 16:00:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 35D3620725;
+        Fri,  8 May 2020 16:02:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588953656;
-        bh=+zD3Jtj+Es8ilD9qppwj3Jh+4HWpyu/Df6rLL7OWGPA=;
+        s=default; t=1588953721;
+        bh=nGc+SLJxpXjap5msmJmrGbQ4enOvgC5oOrcNf+H+qw8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bCy53VCm5fcZHx/4PekPRcSqS9MMZXEh1kQxgN4ALNUbTBeaGSPdRy9MtU0275CPw
-         T+nBaOf7a2+4aZBBXusQUl1sjD1iEBM4RT+cXPBdEUj5txhtpbxcHb6R88C1DqloUz
-         rqxnTQjNi8Y+Cb/UOI116+LaCip5vDPXDuoB0kmA=
-Date:   Fri, 8 May 2020 09:00:54 -0700
+        b=OKyAPh2sT+mAa691UfV0EN32C1WrLZFmlr/klni0D/8/ugY513c0hbj8PI4HSYiEH
+         PmOyVmptSWIDUr+Hs/NHzZg4A2TcPKlbtcRJ6A8Zgd5uJM3iK6hnVCYC8NTJwUXWFK
+         83vWa2jCzOCfEOX4sa4YY7rtUKeer/muWhau4Gl0=
+Date:   Fri, 8 May 2020 09:01:59 -0700
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     Jesper Dangaard Brouer <brouer@redhat.com>
 Cc:     sameehj@amazon.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
@@ -53,12 +53,12 @@ Cc:     sameehj@amazon.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Subject: Re: [PATCH net-next v3 07/33] xdp: xdp_frame add member frame_sz
- and handle in convert_to_xdp_frame
-Message-ID: <20200508090054.14138b79@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <158893616140.2321140.12105192195910658974.stgit@firesoul>
+Subject: Re: [PATCH net-next v3 24/33] ixgbevf: add XDP frame size to VF
+ driver
+Message-ID: <20200508090159.4f5cd868@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <158893624794.2321140.18426998968815095643.stgit@firesoul>
 References: <158893607924.2321140.16117992313983615627.stgit@firesoul>
-        <158893616140.2321140.12105192195910658974.stgit@firesoul>
+        <158893624794.2321140.18426998968815095643.stgit@firesoul>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -67,29 +67,23 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 08 May 2020 13:09:21 +0200 Jesper Dangaard Brouer wrote:
-> +/* Used by XDP_WARN macro, to avoid inlining WARN() in fast-path */
-> +void xdp_warn(const char* msg, const char* func, const int line) {
-> +	WARN(1, "XDP_WARN: %s(line:%d): %s\n", func, line, msg);
-> +};
-> +EXPORT_SYMBOL_GPL(xdp_warn);
+On Fri, 08 May 2020 13:10:48 +0200 Jesper Dangaard Brouer wrote:
+> +static unsigned int ixgbevf_rx_frame_truesize(struct ixgbevf_ring *rx_ring,
+> +					      unsigned int size)
+> +{
+> +	unsigned int truesize;
+> +
+> +#if (PAGE_SIZE < 8192)
+> +	truesize = ixgbevf_rx_pg_size(rx_ring) / 2; /* Must be power-of-2 */
+> +#else
+> +	truesize = ring_uses_build_skb(rx_ring) ?
+> +		SKB_DATA_ALIGN(IXGBEVF_SKB_PAD + size) +
+> +		SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) :
+> +		SKB_DATA_ALIGN(size);
+> +#endif
+> +       return truesize;
+> +}
 
-ERROR: "foo* bar" should be "foo *bar"
-#59: FILE: include/net/xdp.h:109:
-+void xdp_warn(const char* msg, const char* func, const int line);
-
-ERROR: "foo* bar" should be "foo *bar"
-#59: FILE: include/net/xdp.h:109:
-+void xdp_warn(const char* msg, const char* func, const int line);
-
-ERROR: "foo* bar" should be "foo *bar"
-#104: FILE: net/core/xdp.c:502:
-+void xdp_warn(const char* msg, const char* func, const int line) {
-
-ERROR: "foo* bar" should be "foo *bar"
-#104: FILE: net/core/xdp.c:502:
-+void xdp_warn(const char* msg, const char* func, const int line) {
-
-ERROR: open brace '{' following function definitions go on the next line
-#104: FILE: net/core/xdp.c:502:
-+void xdp_warn(const char* msg, const char* func, const int line) {
+WARNING: please, no spaces at the start of a line
+#43: FILE: drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c:1111:
++       return truesize;$
