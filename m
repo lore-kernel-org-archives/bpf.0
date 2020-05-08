@@ -5,494 +5,444 @@ X-Spam-Level:
 X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98E6DC38A2A
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 17:46:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8A53C38A2A
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 17:46:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A6DE2063A
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 17:46:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0BCC2063A
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 17:46:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZkrIfxtK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XweMujkC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727820AbgEHRqV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 13:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S1727835AbgEHRqY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 13:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727801AbgEHRqS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 13:46:18 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21223C05BD43
-        for <bpf@vger.kernel.org>; Fri,  8 May 2020 10:46:18 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id i2so2839228qkl.5
-        for <bpf@vger.kernel.org>; Fri, 08 May 2020 10:46:18 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1727859AbgEHRqX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 13:46:23 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C633EC061A0C
+        for <bpf@vger.kernel.org>; Fri,  8 May 2020 10:46:21 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id e2so2906114ybm.19
+        for <bpf@vger.kernel.org>; Fri, 08 May 2020 10:46:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=q0r/u/wzz2TzJwm7oHfqtsajLbZKFNqIPtFYz2K9ta4=;
-        b=ZkrIfxtKLU1vjx2kRrfiJHYHBNw67uOHwB/8uaMFHZSHyLyo5n/hy5kc+4VcO9ggXS
-         V9ByJ6JCN9XOO7ZQmjzIIV4yFpvnX7Z6NOusMtTr9kleKDga39wpUBC9RMYXV9tMWlw1
-         UjRSrFg8seJtNw7yGc0RMQLFTQk4dgnBhG9Z6xrdQgA6/l7NkfbIP+aj1BUIPR8Gn/1+
-         e+rcv4h7yATYg12qCWhmKnGOAPRogVcpkcM327QU/Kbp/32ws1GzKP6csRjT9p61soGk
-         gNegRmFB2SqTn72s0N7GsTv7U4iLOT/WQPmmKpm2LeT1AF2XGvUZGzP4JHXJVU01Vyo9
-         j16A==
+        bh=2fjtxto67J12FTXb5mOaBLRD24qL9TShTZ2jVbmQo1k=;
+        b=XweMujkCC07i8rME8+2dz55Jnx0/csxjgr8AaGuquSnswYziLVW3arDLhQoLFDGyq/
+         DDqwxkexFztwQHDij8FEEi/DJbD/KmxOwhOzNoWeFJi5NvRJEc2dz9+dfDJehPnYJ3dD
+         ffgBfHM+Kvv9uVYftfSkc8RJMQkLC8U8mj0No/H6oxj05VUi0hRTdFJKaEcG4m8fz9Pv
+         Rgu2V0IoOGhYYRfwYnpkvfxQHP/H7g/aK8L1AFfEhXVgkx2ZEmCsIS/rEpU8ej6AeaSv
+         G0A3qLLmF1c3UZ/8NMFdjZkzqb2QwMwCcNnWd1ypLg2RumRp1ZfDO55l0KX7qMVXqLd7
+         OAhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=q0r/u/wzz2TzJwm7oHfqtsajLbZKFNqIPtFYz2K9ta4=;
-        b=RSsQDU1n+8gkYj8fsOTMA3VT2g8r+5/MisLSct9x+djsgGYiguwOA1DZJkIvS44XBV
-         3bbOhqzLGyg0k3cZsIAqwhoKPKvzQlKQCvCmBpIlCKjszxSauKGs+qodYaFds47aIUV/
-         pWnGT4bzqvEJIhXcIe0C8DUUD3uZDutI0Mtzmb8x+pnAgGjquLFCQ2CkvM2oYviQ7ZGA
-         i2DTcnxWJkYaD/pe+pog17ni1lofDmopZLHT7yJGUtfelHYzdAedW9SZCv0bqS/74p7s
-         PBM552pzLkmNoMYXjL+fKhdtsztItSaI2U4nfD6czazTTvGwroI1qgruRtMpOBTgbGBb
-         El6A==
-X-Gm-Message-State: AGi0PublmFA53NkYOEAwqXsqncZ/cm6tUiJyzh7TB2h+JMbeW0dlxnx7
-        F5xKRUh2ddUSy0cS8J6OJhnHYLQ=
-X-Google-Smtp-Source: APiQypK41pkXoMNloEI0OzSMviyW6meHsR372X8HnyGqAe7mAQW7jDx6B78HmeG7++P42LBhF9ASJqs=
-X-Received: by 2002:a0c:f791:: with SMTP id s17mr3932684qvn.36.1588959977294;
- Fri, 08 May 2020 10:46:17 -0700 (PDT)
-Date:   Fri,  8 May 2020 10:46:09 -0700
+        bh=2fjtxto67J12FTXb5mOaBLRD24qL9TShTZ2jVbmQo1k=;
+        b=cZVbPxkGr2TNerZzc+4V91X+3sYrjP4Sp9SHBo2TyH/ounPq68Gv0DM+PxVVvLygeQ
+         mToGQR/itX/+fD2FQZ0iJk1uigzwuEC0dhcAcZjvrvZBkMjMN72BxoB+qlBm0yMW9cqu
+         8Pz4UaqYL0pHcIwD6IuKKIbsQsIbyMkBh8pwPU6O5e19Rg+Tq/lXC/x2eNi+aNXOgEdI
+         m6KGBKfZJKOUB/YJirXXD66cO1T2zgi36EZUOHKHtj7z9yqgOYAS8Q/YUGs9NzvN1ux+
+         Frejg1silLQ+E3nslmvSAs9nD9AW4nf7Cy03KXQ+S6kFi5XZaJrhsCC/5hsres9zfFFv
+         yQ0g==
+X-Gm-Message-State: AGi0PuY72cvYAfnByL6iJV2YNwQAgPEpJXUI1r893IfJSPlgJF9kcU6/
+        470CcisKvTOqpnVtFpv1daDnvzI=
+X-Google-Smtp-Source: APiQypKHs05nPrG5xDS7I0N2ivMnOPhWWZOIIyeknI001yaibB083j8YfL2AYvLgMKN8RUR+6nu/p3s=
+X-Received: by 2002:a25:b7d3:: with SMTP id u19mr6451534ybj.434.1588959980999;
+ Fri, 08 May 2020 10:46:20 -0700 (PDT)
+Date:   Fri,  8 May 2020 10:46:11 -0700
 In-Reply-To: <20200508174611.228805-1-sdf@google.com>
-Message-Id: <20200508174611.228805-3-sdf@google.com>
+Message-Id: <20200508174611.228805-5-sdf@google.com>
 Mime-Version: 1.0
 References: <20200508174611.228805-1-sdf@google.com>
 X-Mailer: git-send-email 2.26.2.645.ge9eca65c58-goog
-Subject: [PATCH bpf-next v5 2/4] selftests/bpf: move existing common
- networking parts into network_helpers
+Subject: [PATCH bpf-next v5 4/4] bpf: allow any port in bpf_bind helper
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
         Stanislav Fomichev <sdf@google.com>,
-        Martin KaFai Lau <kafai@fb.com>, Andrey Ignatov <rdna@fb.com>
+        Andrey Ignatov <rdna@fb.com>, Martin KaFai Lau <kafai@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-1. Move pkt_v4 and pkt_v6 into network_helpers and adjust the users.
-2. Copy-paste spin_lock_thread into two tests that use it.
+We want to have a tighter control on what ports we bind to in
+the BPF_CGROUP_INET{4,6}_CONNECT hooks even if it means
+connect() becomes slightly more expensive. The expensive part
+comes from the fact that we now need to call inet_csk_get_port()
+that verifies that the port is not used and allocates an entry
+in the hash table for it.
 
-Acked-by: Martin KaFai Lau <kafai@fb.com>
+Since we can't rely on "snum || !bind_address_no_port" to prevent
+us from calling POST_BIND hook anymore, let's add another bind flag
+to indicate that the call site is BPF program.
+
+v5:
+* fix wrong AF_INET (should be AF_INET6) in the bpf program for v6
+
+v3:
+* More bpf_bind documentation refinements (Martin KaFai Lau)
+* Add UDP tests as well (Martin KaFai Lau)
+* Don't start the thread, just do socket+bind+listen (Martin KaFai Lau)
+
+v2:
+* Update documentation (Andrey Ignatov)
+* Pass BIND_FORCE_ADDRESS_NO_PORT conditionally (Andrey Ignatov)
+
 Acked-by: Andrey Ignatov <rdna@fb.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 17 +++++++++++
- tools/testing/selftests/bpf/network_helpers.h | 29 ++++++++++++++++++
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  |  1 +
- .../selftests/bpf/prog_tests/flow_dissector.c |  1 +
- .../prog_tests/flow_dissector_load_bytes.c    |  1 +
- .../selftests/bpf/prog_tests/global_data.c    |  1 +
- .../selftests/bpf/prog_tests/kfree_skb.c      |  1 +
- .../selftests/bpf/prog_tests/l4lb_all.c       |  1 +
- .../selftests/bpf/prog_tests/map_lock.c       | 14 +++++++++
- .../selftests/bpf/prog_tests/pkt_access.c     |  1 +
- .../selftests/bpf/prog_tests/pkt_md_access.c  |  1 +
- .../selftests/bpf/prog_tests/prog_run_xattr.c |  1 +
- .../bpf/prog_tests/queue_stack_map.c          |  1 +
- .../selftests/bpf/prog_tests/signal_pending.c |  1 +
- .../selftests/bpf/prog_tests/skb_ctx.c        |  1 +
- .../selftests/bpf/prog_tests/spinlock.c       | 14 +++++++++
- tools/testing/selftests/bpf/prog_tests/xdp.c  |  1 +
- .../bpf/prog_tests/xdp_adjust_tail.c          |  1 +
- .../selftests/bpf/prog_tests/xdp_bpf2bpf.c    |  1 +
- .../selftests/bpf/prog_tests/xdp_noinline.c   |  1 +
- tools/testing/selftests/bpf/test_progs.c      | 30 -------------------
- tools/testing/selftests/bpf/test_progs.h      | 23 --------------
- 22 files changed, 90 insertions(+), 53 deletions(-)
+ include/net/inet_common.h                     |   2 +
+ include/uapi/linux/bpf.h                      |   9 +-
+ net/core/filter.c                             |  18 ++-
+ net/ipv4/af_inet.c                            |  10 +-
+ net/ipv6/af_inet6.c                           |  12 +-
+ tools/include/uapi/linux/bpf.h                |   9 +-
+ .../bpf/prog_tests/connect_force_port.c       | 115 ++++++++++++++++++
+ .../selftests/bpf/progs/connect_force_port4.c |  28 +++++
+ .../selftests/bpf/progs/connect_force_port6.c |  28 +++++
+ 9 files changed, 203 insertions(+), 28 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/connect_force_port.c
+ create mode 100644 tools/testing/selftests/bpf/progs/connect_force_port4.c
+ create mode 100644 tools/testing/selftests/bpf/progs/connect_force_port6.c
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 0073dddb72fd..0ff64b70b746 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -14,6 +14,23 @@
- #define log_err(MSG, ...) fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", \
- 	__FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
- 
-+struct ipv4_packet pkt_v4 = {
-+	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
-+	.iph.ihl = 5,
-+	.iph.protocol = IPPROTO_TCP,
-+	.iph.tot_len = __bpf_constant_htons(MAGIC_BYTES),
-+	.tcp.urg_ptr = 123,
-+	.tcp.doff = 5,
-+};
-+
-+struct ipv6_packet pkt_v6 = {
-+	.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
-+	.iph.nexthdr = IPPROTO_TCP,
-+	.iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
-+	.tcp.urg_ptr = 123,
-+	.tcp.doff = 5,
-+};
-+
- int start_server(int family, int type)
+diff --git a/include/net/inet_common.h b/include/net/inet_common.h
+index c38f4f7d660a..cb2818862919 100644
+--- a/include/net/inet_common.h
++++ b/include/net/inet_common.h
+@@ -39,6 +39,8 @@ int inet_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len);
+ #define BIND_FORCE_ADDRESS_NO_PORT	(1 << 0)
+ /* Grab and release socket lock. */
+ #define BIND_WITH_LOCK			(1 << 1)
++/* Called from BPF program. */
++#define BIND_FROM_BPF			(1 << 2)
+ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+ 		u32 flags);
+ int inet_getname(struct socket *sock, struct sockaddr *uaddr,
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index b3643e27e264..6e5e7caa3739 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1994,10 +1994,11 @@ union bpf_attr {
+  *
+  * 		This helper works for IPv4 and IPv6, TCP and UDP sockets. The
+  * 		domain (*addr*\ **->sa_family**) must be **AF_INET** (or
+- * 		**AF_INET6**). Looking for a free port to bind to can be
+- * 		expensive, therefore binding to port is not permitted by the
+- * 		helper: *addr*\ **->sin_port** (or **sin6_port**, respectively)
+- * 		must be set to zero.
++ * 		**AF_INET6**). It's advised to pass zero port (**sin_port**
++ * 		or **sin6_port**) which triggers IP_BIND_ADDRESS_NO_PORT-like
++ * 		behavior and lets the kernel efficiently pick up an unused
++ * 		port as long as 4-tuple is unique. Passing non-zero port might
++ * 		lead to degraded performance.
+  * 	Return
+  * 		0 on success, or a negative error in case of failure.
+  *
+diff --git a/net/core/filter.c b/net/core/filter.c
+index fa9ddab5dd1f..da0634979f53 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4525,32 +4525,28 @@ BPF_CALL_3(bpf_bind, struct bpf_sock_addr_kern *, ctx, struct sockaddr *, addr,
  {
- 	struct sockaddr_storage addr = {};
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 30068eacc1a2..a0be7db4f67d 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -3,6 +3,35 @@
- #define __NETWORK_HELPERS_H
- #include <sys/socket.h>
- #include <sys/types.h>
-+#include <linux/types.h>
-+typedef __u16 __sum16;
-+#include <linux/if_ether.h>
-+#include <linux/if_packet.h>
-+#include <linux/ip.h>
-+#include <linux/ipv6.h>
-+#include <netinet/tcp.h>
+ #ifdef CONFIG_INET
+ 	struct sock *sk = ctx->sk;
++	u32 flags = BIND_FROM_BPF;
+ 	int err;
+ 
+-	/* Binding to port can be expensive so it's prohibited in the helper.
+-	 * Only binding to IP is supported.
+-	 */
+ 	err = -EINVAL;
+ 	if (addr_len < offsetofend(struct sockaddr, sa_family))
+ 		return err;
+ 	if (addr->sa_family == AF_INET) {
+ 		if (addr_len < sizeof(struct sockaddr_in))
+ 			return err;
+-		if (((struct sockaddr_in *)addr)->sin_port != htons(0))
+-			return err;
+-		return __inet_bind(sk, addr, addr_len,
+-				   BIND_FORCE_ADDRESS_NO_PORT);
++		if (((struct sockaddr_in *)addr)->sin_port == htons(0))
++			flags |= BIND_FORCE_ADDRESS_NO_PORT;
++		return __inet_bind(sk, addr, addr_len, flags);
+ #if IS_ENABLED(CONFIG_IPV6)
+ 	} else if (addr->sa_family == AF_INET6) {
+ 		if (addr_len < SIN6_LEN_RFC2133)
+ 			return err;
+-		if (((struct sockaddr_in6 *)addr)->sin6_port != htons(0))
+-			return err;
++		if (((struct sockaddr_in6 *)addr)->sin6_port == htons(0))
++			flags |= BIND_FORCE_ADDRESS_NO_PORT;
+ 		/* ipv6_bpf_stub cannot be NULL, since it's called from
+ 		 * bpf_cgroup_inet6_connect hook and ipv6 is already loaded
+ 		 */
+-		return ipv6_bpf_stub->inet6_bind(sk, addr, addr_len,
+-						 BIND_FORCE_ADDRESS_NO_PORT);
++		return ipv6_bpf_stub->inet6_bind(sk, addr, addr_len, flags);
+ #endif /* CONFIG_IPV6 */
+ 	}
+ #endif /* CONFIG_INET */
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index 68e74b1b0f26..fcf0d12a407a 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -526,10 +526,12 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+ 			err = -EADDRINUSE;
+ 			goto out_release_sock;
+ 		}
+-		err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
+-		if (err) {
+-			inet->inet_saddr = inet->inet_rcv_saddr = 0;
+-			goto out_release_sock;
++		if (!(flags & BIND_FROM_BPF)) {
++			err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
++			if (err) {
++				inet->inet_saddr = inet->inet_rcv_saddr = 0;
++				goto out_release_sock;
++			}
+ 		}
+ 	}
+ 
+diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+index 552c2592b81c..771a462a8322 100644
+--- a/net/ipv6/af_inet6.c
++++ b/net/ipv6/af_inet6.c
+@@ -407,11 +407,13 @@ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+ 			err = -EADDRINUSE;
+ 			goto out;
+ 		}
+-		err = BPF_CGROUP_RUN_PROG_INET6_POST_BIND(sk);
+-		if (err) {
+-			sk->sk_ipv6only = saved_ipv6only;
+-			inet_reset_saddr(sk);
+-			goto out;
++		if (!(flags & BIND_FROM_BPF)) {
++			err = BPF_CGROUP_RUN_PROG_INET6_POST_BIND(sk);
++			if (err) {
++				sk->sk_ipv6only = saved_ipv6only;
++				inet_reset_saddr(sk);
++				goto out;
++			}
+ 		}
+ 	}
+ 
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b3643e27e264..6e5e7caa3739 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1994,10 +1994,11 @@ union bpf_attr {
+  *
+  * 		This helper works for IPv4 and IPv6, TCP and UDP sockets. The
+  * 		domain (*addr*\ **->sa_family**) must be **AF_INET** (or
+- * 		**AF_INET6**). Looking for a free port to bind to can be
+- * 		expensive, therefore binding to port is not permitted by the
+- * 		helper: *addr*\ **->sin_port** (or **sin6_port**, respectively)
+- * 		must be set to zero.
++ * 		**AF_INET6**). It's advised to pass zero port (**sin_port**
++ * 		or **sin6_port**) which triggers IP_BIND_ADDRESS_NO_PORT-like
++ * 		behavior and lets the kernel efficiently pick up an unused
++ * 		port as long as 4-tuple is unique. Passing non-zero port might
++ * 		lead to degraded performance.
+  * 	Return
+  * 		0 on success, or a negative error in case of failure.
+  *
+diff --git a/tools/testing/selftests/bpf/prog_tests/connect_force_port.c b/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
+new file mode 100644
+index 000000000000..47fbb20cb6a6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
+@@ -0,0 +1,115 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include "cgroup_helpers.h"
++#include "network_helpers.h"
++
++static int verify_port(int family, int fd, int expected)
++{
++	struct sockaddr_storage addr;
++	socklen_t len = sizeof(addr);
++	__u16 port;
++
++	if (getsockname(fd, (struct sockaddr *)&addr, &len)) {
++		log_err("Failed to get server addr");
++		return -1;
++	}
++
++	if (family == AF_INET)
++		port = ((struct sockaddr_in *)&addr)->sin_port;
++	else
++		port = ((struct sockaddr_in6 *)&addr)->sin6_port;
++
++	if (ntohs(port) != expected) {
++		log_err("Unexpected port %d, expected %d", ntohs(port),
++			expected);
++		return -1;
++	}
++
++	return 0;
++}
++
++static int run_test(int cgroup_fd, int server_fd, int family, int type)
++{
++	struct bpf_prog_load_attr attr = {
++		.prog_type = BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
++	};
++	struct bpf_object *obj;
++	int expected_port;
++	int prog_fd;
++	int err;
++	int fd;
++
++	if (family == AF_INET) {
++		attr.file = "./connect_force_port4.o";
++		attr.expected_attach_type = BPF_CGROUP_INET4_CONNECT;
++		expected_port = 22222;
++	} else {
++		attr.file = "./connect_force_port6.o";
++		attr.expected_attach_type = BPF_CGROUP_INET6_CONNECT;
++		expected_port = 22223;
++	}
++
++	err = bpf_prog_load_xattr(&attr, &obj, &prog_fd);
++	if (err) {
++		log_err("Failed to load BPF object");
++		return -1;
++	}
++
++	err = bpf_prog_attach(prog_fd, cgroup_fd, attr.expected_attach_type,
++			      0);
++	if (err) {
++		log_err("Failed to attach BPF program");
++		goto close_bpf_object;
++	}
++
++	fd = connect_to_fd(family, type, server_fd);
++	if (fd < 0) {
++		err = -1;
++		goto close_bpf_object;
++	}
++
++	err = verify_port(family, fd, expected_port);
++
++	close(fd);
++
++close_bpf_object:
++	bpf_object__close(obj);
++	return err;
++}
++
++void test_connect_force_port(void)
++{
++	int server_fd, cgroup_fd;
++
++	cgroup_fd = test__join_cgroup("/connect_force_port");
++	if (CHECK_FAIL(cgroup_fd < 0))
++		return;
++
++	server_fd = start_server(AF_INET, SOCK_STREAM);
++	if (CHECK_FAIL(server_fd < 0))
++		goto close_cgroup_fd;
++	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET, SOCK_STREAM));
++	close(server_fd);
++
++	server_fd = start_server(AF_INET6, SOCK_STREAM);
++	if (CHECK_FAIL(server_fd < 0))
++		goto close_cgroup_fd;
++	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET6, SOCK_STREAM));
++	close(server_fd);
++
++	server_fd = start_server(AF_INET, SOCK_DGRAM);
++	if (CHECK_FAIL(server_fd < 0))
++		goto close_cgroup_fd;
++	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET, SOCK_DGRAM));
++	close(server_fd);
++
++	server_fd = start_server(AF_INET6, SOCK_DGRAM);
++	if (CHECK_FAIL(server_fd < 0))
++		goto close_cgroup_fd;
++	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET6, SOCK_DGRAM));
++	close(server_fd);
++
++close_cgroup_fd:
++	close(cgroup_fd);
++}
+diff --git a/tools/testing/selftests/bpf/progs/connect_force_port4.c b/tools/testing/selftests/bpf/progs/connect_force_port4.c
+new file mode 100644
+index 000000000000..1b8eb34b2db0
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/connect_force_port4.c
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <string.h>
++
++#include <linux/bpf.h>
++#include <linux/in.h>
++#include <linux/in6.h>
++#include <sys/socket.h>
++
++#include <bpf/bpf_helpers.h>
 +#include <bpf/bpf_endian.h>
 +
-+#define MAGIC_VAL 0x1234
-+#define NUM_ITER 100000
-+#define VIP_NUM 5
-+#define MAGIC_BYTES 123
++char _license[] SEC("license") = "GPL";
++int _version SEC("version") = 1;
 +
-+/* ipv4 test vector */
-+struct ipv4_packet {
-+	struct ethhdr eth;
-+	struct iphdr iph;
-+	struct tcphdr tcp;
-+} __packed;
-+extern struct ipv4_packet pkt_v4;
-+
-+/* ipv6 test vector */
-+struct ipv6_packet {
-+	struct ethhdr eth;
-+	struct ipv6hdr iph;
-+	struct tcphdr tcp;
-+} __packed;
-+extern struct ipv6_packet pkt_v6;
- 
- int start_server(int family, int type);
- int connect_to_fd(int family, int type, int server_fd);
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-index c2642517e1d8..a895bfed55db 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2019 Facebook */
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- static void test_fexit_bpf2bpf_common(const char *obj_file,
- 				      const char *target_obj_file,
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index 92563898867c..2301c4d3ecec 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- #include <error.h>
- #include <linux/if.h>
- #include <linux/if_tun.h>
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
-index dc5ef155ec28..0e8a4d2f023d 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_flow_dissector_load_bytes(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data.c b/tools/testing/selftests/bpf/prog_tests/global_data.c
-index c680926fce73..e3cb62b0a110 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- static void test_global_data_number(struct bpf_object *obj, __u32 duration)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-index 7507c8f689bc..42c3a3103c26 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- struct meta {
- 	int ifindex;
-diff --git a/tools/testing/selftests/bpf/prog_tests/l4lb_all.c b/tools/testing/selftests/bpf/prog_tests/l4lb_all.c
-index eaf64595be88..c2d373e294bb 100644
---- a/tools/testing/selftests/bpf/prog_tests/l4lb_all.c
-+++ b/tools/testing/selftests/bpf/prog_tests/l4lb_all.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- static void test_l4lb(const char *file)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_lock.c b/tools/testing/selftests/bpf/prog_tests/map_lock.c
-index 8f91f1881d11..ce17b1ed8709 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_lock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_lock.c
-@@ -1,5 +1,19 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
-+
-+static void *spin_lock_thread(void *arg)
++SEC("cgroup/connect4")
++int _connect4(struct bpf_sock_addr *ctx)
 +{
-+	__u32 duration, retval;
-+	int err, prog_fd = *(u32 *) arg;
++	struct sockaddr_in sa = {};
 +
-+	err = bpf_prog_test_run(prog_fd, 10000, &pkt_v4, sizeof(pkt_v4),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "",
-+	      "err %d errno %d retval %d duration %d\n",
-+	      err, errno, retval, duration);
-+	pthread_exit(arg);
++	sa.sin_family = AF_INET;
++	sa.sin_port = bpf_htons(22222);
++	sa.sin_addr.s_addr = bpf_htonl(0x7f000001); /* 127.0.0.1 */
++
++	if (bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa)) != 0)
++		return 0;
++
++	return 1;
 +}
- 
- static void *parallel_map_access(void *arg)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/pkt_access.c b/tools/testing/selftests/bpf/prog_tests/pkt_access.c
-index a2537dfa899c..44b514fabccd 100644
---- a/tools/testing/selftests/bpf/prog_tests/pkt_access.c
-+++ b/tools/testing/selftests/bpf/prog_tests/pkt_access.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_pkt_access(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c b/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
-index 5f7aea605019..939015cd6dba 100644
---- a/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
-+++ b/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_pkt_md_access(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c b/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
-index 5dd89b941f53..dde2b7ae7bc9 100644
---- a/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_prog_run_xattr(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-index faccc66f4e39..f47e7b1cb32c 100644
---- a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- enum {
- 	QUEUE,
-diff --git a/tools/testing/selftests/bpf/prog_tests/signal_pending.c b/tools/testing/selftests/bpf/prog_tests/signal_pending.c
-index 996e808f43a2..dfcbddcbe4d3 100644
---- a/tools/testing/selftests/bpf/prog_tests/signal_pending.c
-+++ b/tools/testing/selftests/bpf/prog_tests/signal_pending.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- static void sigalrm_handler(int s) {}
- static struct sigaction sigalrm_action = {
-diff --git a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-index 4538bd08203f..7021b92af313 100644
---- a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-+++ b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_skb_ctx(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/spinlock.c b/tools/testing/selftests/bpf/prog_tests/spinlock.c
-index 1ae00cd3174e..7577a77a4c4c 100644
---- a/tools/testing/selftests/bpf/prog_tests/spinlock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/spinlock.c
-@@ -1,5 +1,19 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
+diff --git a/tools/testing/selftests/bpf/progs/connect_force_port6.c b/tools/testing/selftests/bpf/progs/connect_force_port6.c
+new file mode 100644
+index 000000000000..ae6f7d750b4c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/connect_force_port6.c
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <string.h>
 +
-+static void *spin_lock_thread(void *arg)
++#include <linux/bpf.h>
++#include <linux/in.h>
++#include <linux/in6.h>
++#include <sys/socket.h>
++
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++
++char _license[] SEC("license") = "GPL";
++int _version SEC("version") = 1;
++
++SEC("cgroup/connect6")
++int _connect6(struct bpf_sock_addr *ctx)
 +{
-+	__u32 duration, retval;
-+	int err, prog_fd = *(u32 *) arg;
++	struct sockaddr_in6 sa = {};
 +
-+	err = bpf_prog_test_run(prog_fd, 10000, &pkt_v4, sizeof(pkt_v4),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "",
-+	      "err %d errno %d retval %d duration %d\n",
-+	      err, errno, retval, duration);
-+	pthread_exit(arg);
++	sa.sin6_family = AF_INET6;
++	sa.sin6_port = bpf_htons(22223);
++	sa.sin6_addr.s6_addr32[3] = bpf_htonl(1); /* ::1 */
++
++	if (bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa)) != 0)
++		return 0;
++
++	return 1;
 +}
- 
- void test_spinlock(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp.c b/tools/testing/selftests/bpf/prog_tests/xdp.c
-index dcb5ecac778e..48921ff74850 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_xdp(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-index 3744196d7cba..6c8ca1c93f9b 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_xdp_adjust_tail(void)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
-index a0f688c37023..2c6c570b21f8 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- #include <net/if.h>
- #include "test_xdp.skel.h"
- #include "test_xdp_bpf2bpf.skel.h"
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_noinline.c b/tools/testing/selftests/bpf/prog_tests/xdp_noinline.c
-index c9404e6b226e..f284f72158ef 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_noinline.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_noinline.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
- 
- void test_xdp_noinline(void)
- {
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 93970ec1c9e9..0f411fdc4f6d 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -222,23 +222,6 @@ int test__join_cgroup(const char *path)
- 	return fd;
- }
- 
--struct ipv4_packet pkt_v4 = {
--	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
--	.iph.ihl = 5,
--	.iph.protocol = IPPROTO_TCP,
--	.iph.tot_len = __bpf_constant_htons(MAGIC_BYTES),
--	.tcp.urg_ptr = 123,
--	.tcp.doff = 5,
--};
--
--struct ipv6_packet pkt_v6 = {
--	.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
--	.iph.nexthdr = IPPROTO_TCP,
--	.iph.payload_len = __bpf_constant_htons(MAGIC_BYTES),
--	.tcp.urg_ptr = 123,
--	.tcp.doff = 5,
--};
--
- int bpf_find_map(const char *test, struct bpf_object *obj, const char *name)
- {
- 	struct bpf_map *map;
-@@ -358,19 +341,6 @@ int extract_build_id(char *build_id, size_t size)
- 	return -1;
- }
- 
--void *spin_lock_thread(void *arg)
--{
--	__u32 duration, retval;
--	int err, prog_fd = *(u32 *) arg;
--
--	err = bpf_prog_test_run(prog_fd, 10000, &pkt_v4, sizeof(pkt_v4),
--				NULL, NULL, &retval, &duration);
--	CHECK(err || retval, "",
--	      "err %d errno %d retval %d duration %d\n",
--	      err, errno, retval, duration);
--	pthread_exit(arg);
--}
--
- /* extern declarations for test funcs */
- #define DEFINE_TEST(name) extern void test_##name(void);
- #include <prog_tests/tests.h>
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index 10188cc8e9e0..83287c76332b 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -87,24 +87,6 @@ extern void test__skip(void);
- extern void test__fail(void);
- extern int test__join_cgroup(const char *path);
- 
--#define MAGIC_BYTES 123
--
--/* ipv4 test vector */
--struct ipv4_packet {
--	struct ethhdr eth;
--	struct iphdr iph;
--	struct tcphdr tcp;
--} __packed;
--extern struct ipv4_packet pkt_v4;
--
--/* ipv6 test vector */
--struct ipv6_packet {
--	struct ethhdr eth;
--	struct ipv6hdr iph;
--	struct tcphdr tcp;
--} __packed;
--extern struct ipv6_packet pkt_v6;
--
- #define PRINT_FAIL(format...)                                                  \
- 	({                                                                     \
- 		test__fail();                                                  \
-@@ -143,10 +125,6 @@ extern struct ipv6_packet pkt_v6;
- #define CHECK_ATTR(condition, tag, format...) \
- 	_CHECK(condition, tag, tattr.duration, format)
- 
--#define MAGIC_VAL 0x1234
--#define NUM_ITER 100000
--#define VIP_NUM 5
--
- static inline __u64 ptr_to_u64(const void *ptr)
- {
- 	return (__u64) (unsigned long) ptr;
-@@ -156,7 +134,6 @@ int bpf_find_map(const char *test, struct bpf_object *obj, const char *name);
- int compare_map_keys(int map1_fd, int map2_fd);
- int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len);
- int extract_build_id(char *build_id, size_t size);
--void *spin_lock_thread(void *arg);
- 
- #ifdef __x86_64__
- #define SYS_NANOSLEEP_KPROBE_NAME "__x64_sys_nanosleep"
 -- 
 2.26.2.645.ge9eca65c58-goog
 
