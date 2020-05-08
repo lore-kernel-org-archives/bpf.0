@@ -2,161 +2,100 @@ Return-Path: <SRS0=gSIr=6W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC5B4C47257
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 13:09:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0785C47254
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 13:15:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9190724999
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 13:09:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BB498218AC
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 13:15:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+zQHhHp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729670AbgEHNJR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 09:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
+        id S1728557AbgEHNPT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 09:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730499AbgEHNFZ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 09:05:25 -0400
-Received: from Galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880D0C05BD0E;
-        Fri,  8 May 2020 06:05:23 -0700 (PDT)
-Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tip-bot2@linutronix.de>)
-        id 1jX2gQ-0007I7-S1; Fri, 08 May 2020 15:04:55 +0200
-Received: from [127.0.1.1] (localhost [IPv6:::1])
-        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id A275B1C0475;
-        Fri,  8 May 2020 15:04:49 +0200 (CEST)
-Date:   Fri, 08 May 2020 13:04:49 -0000
-From:   "tip-bot2 for Ian Rogers" <tip-bot2@linutronix.de>
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf doc: Pass ASCIIDOC_EXTRA as an argument
-Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@redhat.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Alexey Budankov <alexey.budankov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Igor Lubashev <ilubashe@akamai.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Jiwei Sun <jiwei.sun@windriver.com>,
-        John Garry <john.garry@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, yuzhoujian <yuzhoujian@didichuxing.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        x86 <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-In-Reply-To: <20200429231443.207201-2-irogers@google.com>
-References: <20200429231443.207201-2-irogers@google.com>
+        by vger.kernel.org with ESMTP id S1730353AbgEHNPO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 09:15:14 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45050C05BD43;
+        Fri,  8 May 2020 06:15:12 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id u16so10499365wmc.5;
+        Fri, 08 May 2020 06:15:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=8Im34sz2MzZUy2vtWd199LfDoA0OQ99AwGOktacYlCQ=;
+        b=G+zQHhHp/Lch52oBnmNwRqF+r77FYljxyGT4Bz3cj5f4cD9bC/cbCls2J5pTnInPim
+         LMw6xxY1TMY6AulvkLLIL3sXK0gRXhgLGQ+EPvqx33/+I9Ctq0DXL3yrXW0c3/sQwkR7
+         pBJxhmjoeYN6AshrcGaEqiOObIiBPMBIwWMQsh8PPvYUmfMNNc4MysEzx41kknPnge7b
+         tfjblZZ3RAg2QfmCiib3AojaNfmnsbVKZ/SIp7wak0/orcLcQlggI+2eXkguFGMd1Fnk
+         9JhirZK1LDwLXKt9BD6Ym+1NR7IPFK1hN9oTkLRdmkvjX6PTi3CPMAaf7l/1HnWO3rBg
+         eewQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8Im34sz2MzZUy2vtWd199LfDoA0OQ99AwGOktacYlCQ=;
+        b=A4lakkTTUdADUlSDyG3cZhhrSU5hFI7Nk97kZsuQNCpyD17OW0jCB4/ZVZSI5mNSLM
+         xpgtd7Md83z0Gjwdq62R8MgEK3PDYVYc6JtmMHtegXIRgg/fxy5xpjUsMkD5Jaf+J5wl
+         UyQJWtO2TqPnkLXV56tgL3rgtjwpMMaNZPGF4IvpIC2HYL3ICo1NuyeQfv0iFaZ1ciW9
+         29Xd/T2kAjalCM6rcOp2IHnJKZxbbinMl8/Pq6J6sgjwZbSK+vClc4kyb5iEOzVfKpu4
+         1gyvkTQHl0OJ70jk5MVrje5p52CpXz0ZTXgzIMTnrdMRQrKahRACQ53B/zdgAuy134iu
+         MW/A==
+X-Gm-Message-State: AGi0Puanwp6vUjlAP9gWm1e1drCN0dIHpxaRsDzwXSZyKsJptFhazO5w
+        67GjKQwO31RfyHLwDB+8PROA8zFbNAc1DGrc+ec2S1HrG4qWaoAC
+X-Google-Smtp-Source: APiQypKeqJU36Xt3HJIinO7n4tAowbPJwUpy+Xk+6KKid2/fFhckl1br871A0DkpN9EE8Yb4V73VXshPgJ7foYp8rvc=
+X-Received: by 2002:a1c:3281:: with SMTP id y123mr16145026wmy.30.1588943711064;
+ Fri, 08 May 2020 06:15:11 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <158894308957.8414.16891288926414860571.tip-bot2@tip-bot2>
-X-Mailer: tip-git-log-daemon
-Robot-ID: <tip-bot2.linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+References: <20200507104252.544114-1-bjorn.topel@gmail.com>
+ <20200507104252.544114-11-bjorn.topel@gmail.com> <40eb57c7-9c47-87dc-bda9-5a1729352c43@mellanox.com>
+ <3c42954a-8bb3-85b1-8740-a096b0a76a98@intel.com> <cf65cc80-f16a-5b76-5577-57c55e952a52@mellanox.com>
+ <CAJ+HfNiU8jyNMC1VMCgqGqz76Q8G1Pui09==TO8Qi73Y_2xViQ@mail.gmail.com>
+In-Reply-To: <CAJ+HfNiU8jyNMC1VMCgqGqz76Q8G1Pui09==TO8Qi73Y_2xViQ@mail.gmail.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Date:   Fri, 8 May 2020 15:14:59 +0200
+Message-ID: <CAJ+HfNiBuDWX77PbR4ZPR_vuUyOTLA5MOGfyQrGO3EtQC1WwJQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 10/14] mlx5, xsk: migrate to new MEM_TYPE_XSK_BUFF_POOL
+To:     Maxim Mikityanskiy <maximmi@mellanox.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
+On Fri, 8 May 2020 at 15:08, Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> =
+wrote:
+>
+> On Fri, 8 May 2020 at 15:01, Maxim Mikityanskiy <maximmi@mellanox.com> wr=
+ote:
+> >
+[]
+>
+> All zeros hints that you're probably putting in the wrong DMA address som=
+ewhere.
+>
 
-Commit-ID:     4b1984491e65c9592f9f2bfbe8fb5bf4d4e51587
-Gitweb:        https://git.kernel.org/tip/4b1984491e65c9592f9f2bfbe8fb5bf4d4e51587
-Author:        Ian Rogers <irogers@google.com>
-AuthorDate:    Wed, 29 Apr 2020 16:14:40 -07:00
-Committer:     Arnaldo Carvalho de Melo <acme@redhat.com>
-CommitterDate: Tue, 05 May 2020 16:35:31 -03:00
+Hmm, I can't see that you're using xsk_buff_xdp_get_dma() anywhere in
+the code. Probably it?
 
-perf doc: Pass ASCIIDOC_EXTRA as an argument
-
-commit e9cfa47e687d ("perf doc: allow ASCIIDOC_EXTRA to be an argument")
-allowed ASCIIDOC_EXTRA to be passed as an option to the Documentation
-Makefile. This change passes ASCIIDOC_EXTRA, set by detected features or
-command line options, prior to doing a Documentation build. This is
-necessary to allow conditional compilation, based on configuration
-variables, in asciidoc code.
-
-Signed-off-by: Ian Rogers <irogers@google.com>
-Acked-by: Jiri Olsa <jolsa@redhat.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Alexey Budankov <alexey.budankov@linux.intel.com>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Andrii Nakryiko <andriin@fb.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Igor Lubashev <ilubashe@akamai.com>
-Cc: Jin Yao <yao.jin@linux.intel.com>
-Cc: Jiwei Sun <jiwei.sun@windriver.com>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: yuzhoujian <yuzhoujian@didichuxing.com>
-Link: http://lore.kernel.org/lkml/20200429231443.207201-2-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/perf/Makefile.perf | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index d15a311..94a4955 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -188,7 +188,7 @@ AWK     = awk
- # non-config cases
- config := 1
- 
--NON_CONFIG_TARGETS := clean python-clean TAGS tags cscope help install-doc install-man install-html install-info install-pdf doc man html info pdf
-+NON_CONFIG_TARGETS := clean python-clean TAGS tags cscope help
- 
- ifdef MAKECMDGOALS
- ifeq ($(filter-out $(NON_CONFIG_TARGETS),$(MAKECMDGOALS)),)
-@@ -832,7 +832,7 @@ INSTALL_DOC_TARGETS += quick-install-doc quick-install-man quick-install-html
- 
- # 'make doc' should call 'make -C Documentation all'
- $(DOC_TARGETS):
--	$(Q)$(MAKE) -C $(DOC_DIR) O=$(OUTPUT) $(@:doc=all)
-+	$(Q)$(MAKE) -C $(DOC_DIR) O=$(OUTPUT) $(@:doc=all) ASCIIDOC_EXTRA=$(ASCIIDOC_EXTRA)
- 
- TAG_FOLDERS= . ../lib ../include
- TAG_FILES= ../../include/uapi/linux/perf_event.h
-@@ -959,7 +959,7 @@ install-python_ext:
- 
- # 'make install-doc' should call 'make -C Documentation install'
- $(INSTALL_DOC_TARGETS):
--	$(Q)$(MAKE) -C $(DOC_DIR) O=$(OUTPUT) $(@:-doc=)
-+	$(Q)$(MAKE) -C $(DOC_DIR) O=$(OUTPUT) $(@:-doc=) ASCIIDOC_EXTRA=$(ASCIIDOC_EXTRA)
- 
- ### Cleaning rules
- 
+Bj=C3=B6rn
