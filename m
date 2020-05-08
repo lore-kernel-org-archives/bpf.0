@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 960E7C38A2A
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:10:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A69EFC47247
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:10:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7653D208CA
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:10:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 872FC208CA
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:10:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d4o1exFE"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QTj2Pysm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbgEHLKJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 07:10:09 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:41556 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726618AbgEHLKI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 07:10:08 -0400
+        id S1727820AbgEHLKO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 07:10:14 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:48082 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727805AbgEHLKL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 May 2020 07:10:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588936207;
+        s=mimecast20190719; t=1588936210;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NNXZsRxwE3iTf+Qd5+Og/+s7v5TkMxd+zOjsV6Ok8DU=;
-        b=d4o1exFE9fR+nV+Z2TZzK+237PyHu1RovdLRvvrsu/8J54yoaGPMTfVDDcDiC0iWcjC/kF
-        vxR3DRjVD3IjwHsXRU1gULxDU+skZVreb4wy8UXNAFNCFt1fTXnDtuLv0ZkWlvH+nNL4Cg
-        +WTzNwBibuXttKJ7hteHZmAMd/y97bc=
+        bh=r02YC3At2N2XY+PDSF73JQ0eJDbIVrsICXPbjmggfSU=;
+        b=QTj2PysmTqpHySedBWGbpKIMbAghLENVXncV9PigRKFUSXdus+TnwaNePgY/WGhAXyjsaz
+        KvuQdlk8NWa/Mmhk4FidHWE4ram8HSYAThK/Uar2AYY1EdtCa+/5CghnDrRmiBMTqx6WkP
+        MikgI0DZWjxQ0CL8FID6hkQaoSfo1oM=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-323-_5TFvxY5P4qIS3AfnZLDWQ-1; Fri, 08 May 2020 07:10:05 -0400
-X-MC-Unique: _5TFvxY5P4qIS3AfnZLDWQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+ us-mta-350-sl0t0KQNNNul9bG4_T3wHw-1; Fri, 08 May 2020 07:10:08 -0400
+X-MC-Unique: sl0t0KQNNNul9bG4_T3wHw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A6D6A1005510;
-        Fri,  8 May 2020 11:10:03 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E36AF8015D2;
+        Fri,  8 May 2020 11:10:06 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 501B061100;
-        Fri,  8 May 2020 11:10:03 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3E70F5D9CA;
+        Fri,  8 May 2020 11:09:58 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 30BB7300020FB;
-        Fri,  8 May 2020 13:10:02 +0200 (CEST)
-Subject: [PATCH net-next v3 15/33] ena: add XDP frame size to amazon NIC
- driver
+        by firesoul.localdomain (Postfix) with ESMTP id 1C27B3063F605;
+        Fri,  8 May 2020 13:09:57 +0200 (CEST)
+Subject: [PATCH net-next v3 14/33] net: ethernet: ti: add XDP frame size to
+ driver cpsw
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -64,59 +64,55 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Date:   Fri, 08 May 2020 13:10:02 +0200
-Message-ID: <158893620212.2321140.6640473108940247107.stgit@firesoul>
+Date:   Fri, 08 May 2020 13:09:57 +0200
+Message-ID: <158893619703.2321140.12631116595774465249.stgit@firesoul>
 In-Reply-To: <158893607924.2321140.16117992313983615627.stgit@firesoul>
 References: <158893607924.2321140.16117992313983615627.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Frame size ENA_PAGE_SIZE is limited to 16K on systems with larger
-PAGE_SIZE than 16K. Change ENA_XDP_MAX_MTU to also take into account
-the reserved tailroom.
+The driver code cpsw.c and cpsw_new.c both use page_pool
+with default order-0 pages or their RX-pages.
 
-Cc: Arthur Kiyanovski <akiyano@amazon.com>
-Acked-by: Sameeh Jubran <sameehj@amazon.com>
+Cc: Grygorii Strashko <grygorii.strashko@ti.com>
+Cc: Ilias Apalodimas <ilias.apalodimas@linaro.org>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Reviewed-by: Grygorii Strashko <grygorii.strashko@ti.com>
 ---
- drivers/net/ethernet/amazon/ena/ena_netdev.c |    1 +
- drivers/net/ethernet/amazon/ena/ena_netdev.h |    5 +++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/ti/cpsw.c     |    1 +
+ drivers/net/ethernet/ti/cpsw_new.c |    1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-index 2818965427e9..85b87ed02dd5 100644
---- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-+++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-@@ -1606,6 +1606,7 @@ static int ena_clean_rx_irq(struct ena_ring *rx_ring, struct napi_struct *napi,
- 		  "%s qid %d\n", __func__, rx_ring->qid);
- 	res_budget = budget;
- 	xdp.rxq = &rx_ring->xdp_rxq;
-+	xdp.frame_sz = ENA_PAGE_SIZE;
+diff --git a/drivers/net/ethernet/ti/cpsw.c b/drivers/net/ethernet/ti/cpsw.c
+index 09f98fa2fb4e..ce0645ada6e7 100644
+--- a/drivers/net/ethernet/ti/cpsw.c
++++ b/drivers/net/ethernet/ti/cpsw.c
+@@ -406,6 +406,7 @@ static void cpsw_rx_handler(void *token, int len, int status)
  
- 	do {
- 		xdp_verdict = XDP_PASS;
-diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.h b/drivers/net/ethernet/amazon/ena/ena_netdev.h
-index 7df67bf09b93..680099afcccf 100644
---- a/drivers/net/ethernet/amazon/ena/ena_netdev.h
-+++ b/drivers/net/ethernet/amazon/ena/ena_netdev.h
-@@ -151,8 +151,9 @@
-  * The buffer size we share with the device is defined to be ENA_PAGE_SIZE
-  */
+ 		xdp.data_hard_start = pa;
+ 		xdp.rxq = &priv->xdp_rxq[ch];
++		xdp.frame_sz = PAGE_SIZE;
  
--#define ENA_XDP_MAX_MTU (ENA_PAGE_SIZE - ETH_HLEN - ETH_FCS_LEN - \
--				VLAN_HLEN - XDP_PACKET_HEADROOM)
-+#define ENA_XDP_MAX_MTU (ENA_PAGE_SIZE - ETH_HLEN - ETH_FCS_LEN -	\
-+			 VLAN_HLEN - XDP_PACKET_HEADROOM -		\
-+			 SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
+ 		port = priv->emac_port + cpsw->data.dual_emac;
+ 		ret = cpsw_run_xdp(priv, ch, &xdp, page, port);
+diff --git a/drivers/net/ethernet/ti/cpsw_new.c b/drivers/net/ethernet/ti/cpsw_new.c
+index dce49311d3d3..1247d35d42ef 100644
+--- a/drivers/net/ethernet/ti/cpsw_new.c
++++ b/drivers/net/ethernet/ti/cpsw_new.c
+@@ -348,6 +348,7 @@ static void cpsw_rx_handler(void *token, int len, int status)
  
- #define ENA_IS_XDP_INDEX(adapter, index) (((index) >= (adapter)->xdp_first_ring) && \
- 	((index) < (adapter)->xdp_first_ring + (adapter)->xdp_num_queues))
+ 		xdp.data_hard_start = pa;
+ 		xdp.rxq = &priv->xdp_rxq[ch];
++		xdp.frame_sz = PAGE_SIZE;
+ 
+ 		ret = cpsw_run_xdp(priv, ch, &xdp, page, priv->emac_port);
+ 		if (ret != CPSW_XDP_PASS)
 
 
