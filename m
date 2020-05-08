@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3437C38A2A
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:09:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5634C38A2A
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:09:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C3CA2208CA
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:09:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A586208CA
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:09:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A+gQa2ZC"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LLuH5+P5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbgEHLJh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 07:09:37 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:41835 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727108AbgEHLJf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 May 2020 07:09:35 -0400
+        id S1727122AbgEHLJq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 07:09:46 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:20815 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727107AbgEHLJp (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 07:09:45 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588936174;
+        s=mimecast20190719; t=1588936184;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UDRJfL9Kw2x0gsUCkP1cLL8jfS86V5wN1x2TKj4IbxI=;
-        b=A+gQa2ZCpSm7M/X6f0oKCj4BjJuVmfjZ+bKDWh5uErwi/6Oa811tS8LljCIOAPYUfYZZ4S
-        e/AYMnhJUvbfOJB0UQMb9Y2jY1CuDXo9y5FdzCbPu25cMblSLi0VGHFfKgO3oiNhKmlfiG
-        TPBhlkwcJiBZj4AFy3APyaYuVYgV2GY=
+        bh=njMYnPtTYiESmQ+1Btx2zDMNckN+loMypeNGPi1ZbYE=;
+        b=LLuH5+P5OxjlmKcfaGijbWu5AZl/jQKaws25BTPB7kEfQdp5eZ+IjDUGZ+oYTWk/1KFXrE
+        fJsk1hHK2l9fygiZISWk2ZOoH2FA9brv+Eoach/i/f54FXEeUNGkl9hm5sG126+uJ8A9xW
+        bP6tZne8iIoWNn2NaI7qKBGIugLzv8g=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-136-_w1RxIHTNTOXFefG0SddZw-1; Fri, 08 May 2020 07:09:30 -0400
-X-MC-Unique: _w1RxIHTNTOXFefG0SddZw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+ us-mta-510-bZhhlHicNkeWOaQGkfQO8w-1; Fri, 08 May 2020 07:09:40 -0400
+X-MC-Unique: bZhhlHicNkeWOaQGkfQO8w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3C451BFC0;
-        Fri,  8 May 2020 11:09:28 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9097C100961C;
+        Fri,  8 May 2020 11:09:38 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9018B10013BD;
-        Fri,  8 May 2020 11:09:22 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BCEE360FB9;
+        Fri,  8 May 2020 11:09:32 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 767853063F605;
-        Fri,  8 May 2020 13:09:21 +0200 (CEST)
-Subject: [PATCH net-next v3 07/33] xdp: xdp_frame add member frame_sz and
- handle in convert_to_xdp_frame
+        by firesoul.localdomain (Postfix) with ESMTP id A1321300020FB;
+        Fri,  8 May 2020 13:09:31 +0200 (CEST)
+Subject: [PATCH net-next v3 09/33] veth: adjust hard_start offset on redirect
+ XDP frames
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -64,116 +64,91 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Date:   Fri, 08 May 2020 13:09:21 +0200
-Message-ID: <158893616140.2321140.12105192195910658974.stgit@firesoul>
+Date:   Fri, 08 May 2020 13:09:31 +0200
+Message-ID: <158893617158.2321140.9547083240462402174.stgit@firesoul>
 In-Reply-To: <158893607924.2321140.16117992313983615627.stgit@firesoul>
 References: <158893607924.2321140.16117992313983615627.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use hole in struct xdp_frame, when adding member frame_sz, which keeps
-same sizeof struct (32 bytes)
+When native XDP redirect into a veth device, the frame arrives in the
+xdp_frame structure. It is then processed in veth_xdp_rcv_one(),
+which can run a new XDP bpf_prog on the packet. Doing so requires
+converting xdp_frame to xdp_buff, but the tricky part is that
+xdp_frame memory area is located in the top (data_hard_start) memory
+area that xdp_buff will point into.
 
-Drivers ixgbe and sfc had bug cases where the necessary/expected
-tailroom was not reserved. This can lead to some hard to catch memory
-corruption issues. Having the drivers frame_sz this can be detected when
-packet length/end via xdp->data_end exceed the xdp_data_hard_end
-pointer, which accounts for the reserved the tailroom.
+The current code tried to protect the xdp_frame area, by assigning
+xdp_buff.data_hard_start past this memory. This results in 32 bytes
+less headroom to expand into via BPF-helper bpf_xdp_adjust_head().
 
-When detecting this driver issue, simply fail the conversion with NULL,
-which results in feedback to driver (failing xdp_do_redirect()) causing
-driver to drop packet. Given the lack of consistent XDP stats, this can
-be hard to troubleshoot. And given this is a driver bug, we want to
-generate some more noise in form of a WARN stack dump (to ID the driver
-code that inlined convert_to_xdp_frame).
+This protect step is actually not needed, because BPF-helper
+bpf_xdp_adjust_head() already reserve this area, and don't allow
+BPF-prog to expand into it. Thus, it is safe to point data_hard_start
+directly at xdp_frame memory area.
 
-Inlining the WARN macro is problematic, because it adds an asm
-instruction (on Intel CPUs ud2) what influence instruction cache
-prefetching. Thus, introduce xdp_warn and macro XDP_WARN, to avoid this
-and at the same time make identifying the function and line of this
-inlined function easier.
-
+Cc: Toshiaki Makita <toshiaki.makita1@gmail.com>
+Fixes: 9fc8d518d9d5 ("veth: Handle xdp_frames in xdp napi ring")
+Reported-by: Mao Wenan <maowenan@huawei.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Acked-by: Toshiaki Makita <toshiaki.makita1@gmail.com>
 Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/net/xdp.h |   14 +++++++++++++-
- net/core/xdp.c    |    7 +++++++
- 2 files changed, 20 insertions(+), 1 deletion(-)
+ drivers/net/veth.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index a764af4ae0ea..1366466868e4 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -89,7 +89,8 @@ struct xdp_frame {
- 	void *data;
- 	u16 len;
- 	u16 headroom;
--	u16 metasize;
-+	u32 metasize:8;
-+	u32 frame_sz:24;
- 	/* Lifetime of xdp_rxq_info is limited to NAPI/enqueue time,
- 	 * while mem info is valid on remote CPU.
- 	 */
-@@ -104,6 +105,10 @@ static inline void xdp_scrub_frame(struct xdp_frame *frame)
- 	frame->dev_rx = NULL;
- }
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index aece0e5eec8c..d5691bb84448 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -564,13 +564,15 @@ static struct sk_buff *veth_xdp_rcv_one(struct veth_rq *rq,
+ 					struct veth_stats *stats)
+ {
+ 	void *hard_start = frame->data - frame->headroom;
+-	void *head = hard_start - sizeof(struct xdp_frame);
+ 	int len = frame->len, delta = 0;
+ 	struct xdp_frame orig_frame;
+ 	struct bpf_prog *xdp_prog;
+ 	unsigned int headroom;
+ 	struct sk_buff *skb;
  
-+/* Avoids inlining WARN macro in fast-path */
-+void xdp_warn(const char* msg, const char* func, const int line);
-+#define XDP_WARN(msg) xdp_warn(msg, __func__, __LINE__)
++	/* bpf_xdp_adjust_head() assures BPF cannot access xdp_frame area */
++	hard_start -= sizeof(struct xdp_frame);
 +
- struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp);
+ 	rcu_read_lock();
+ 	xdp_prog = rcu_dereference(rq->xdp_prog);
+ 	if (likely(xdp_prog)) {
+@@ -592,7 +594,6 @@ static struct sk_buff *veth_xdp_rcv_one(struct veth_rq *rq,
+ 			break;
+ 		case XDP_TX:
+ 			orig_frame = *frame;
+-			xdp.data_hard_start = head;
+ 			xdp.rxq->mem = frame->mem;
+ 			if (unlikely(veth_xdp_tx(rq, &xdp, bq) < 0)) {
+ 				trace_xdp_exception(rq->dev, xdp_prog, act);
+@@ -605,7 +606,6 @@ static struct sk_buff *veth_xdp_rcv_one(struct veth_rq *rq,
+ 			goto xdp_xmit;
+ 		case XDP_REDIRECT:
+ 			orig_frame = *frame;
+-			xdp.data_hard_start = head;
+ 			xdp.rxq->mem = frame->mem;
+ 			if (xdp_do_redirect(rq->dev, &xdp, xdp_prog)) {
+ 				frame = &orig_frame;
+@@ -629,7 +629,7 @@ static struct sk_buff *veth_xdp_rcv_one(struct veth_rq *rq,
+ 	rcu_read_unlock();
  
- /* Convert xdp_buff to xdp_frame */
-@@ -124,6 +129,12 @@ struct xdp_frame *convert_to_xdp_frame(struct xdp_buff *xdp)
- 	if (unlikely((headroom - metasize) < sizeof(*xdp_frame)))
- 		return NULL;
- 
-+	/* Catch if driver didn't reserve tailroom for skb_shared_info */
-+	if (unlikely(xdp->data_end > xdp_data_hard_end(xdp))) {
-+		XDP_WARN("Driver BUG: missing reserved tailroom");
-+		return NULL;
-+	}
-+
- 	/* Store info in top of packet */
- 	xdp_frame = xdp->data_hard_start;
- 
-@@ -131,6 +142,7 @@ struct xdp_frame *convert_to_xdp_frame(struct xdp_buff *xdp)
- 	xdp_frame->len  = xdp->data_end - xdp->data;
- 	xdp_frame->headroom = headroom - sizeof(*xdp_frame);
- 	xdp_frame->metasize = metasize;
-+	xdp_frame->frame_sz = xdp->frame_sz;
- 
- 	/* rxq only valid until napi_schedule ends, convert to xdp_mem_info */
- 	xdp_frame->mem = xdp->rxq->mem;
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 4c7ea85486af..4bc3026ae218 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -11,6 +11,7 @@
- #include <linux/slab.h>
- #include <linux/idr.h>
- #include <linux/rhashtable.h>
-+#include <linux/bug.h>
- #include <net/page_pool.h>
- 
- #include <net/xdp.h>
-@@ -496,3 +497,9 @@ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
- 	return xdpf;
- }
- EXPORT_SYMBOL_GPL(xdp_convert_zc_to_xdp_frame);
-+
-+/* Used by XDP_WARN macro, to avoid inlining WARN() in fast-path */
-+void xdp_warn(const char* msg, const char* func, const int line) {
-+	WARN(1, "XDP_WARN: %s(line:%d): %s\n", func, line, msg);
-+};
-+EXPORT_SYMBOL_GPL(xdp_warn);
+ 	headroom = sizeof(struct xdp_frame) + frame->headroom - delta;
+-	skb = veth_build_skb(head, headroom, len, 0);
++	skb = veth_build_skb(hard_start, headroom, len, 0);
+ 	if (!skb) {
+ 		xdp_return_frame(frame);
+ 		stats->rx_drops++;
 
 
