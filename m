@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42148C47247
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:10:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 960E7C38A2A
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:10:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 214D2208CA
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:10:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7653D208CA
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:10:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CSWu5JVk"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d4o1exFE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727802AbgEHLKG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 07:10:06 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:36710 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726618AbgEHLKG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 May 2020 07:10:06 -0400
+        id S1726885AbgEHLKJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 07:10:09 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:41556 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726618AbgEHLKI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 07:10:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588936204;
+        s=mimecast20190719; t=1588936207;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=h0aSgovkRrj1PQDkKNQ4WyUffsW4nzmLUprMxCvJetw=;
-        b=CSWu5JVkrm3DXz4YCRCyhb3bhQZwRUqAIAReFylGDWIDMhXosZCuf59rqk64A0FeiJpOhM
-        km4OlRe6ViLPedyPZaP/tx5AiBZ2kH1mEpgMsQ//WNRP1BBDZWGPbJxB8sPEmtxaDVtYBB
-        7Jii9d7T4J30wCPBZOFAQtlWx32aW78=
+        bh=NNXZsRxwE3iTf+Qd5+Og/+s7v5TkMxd+zOjsV6Ok8DU=;
+        b=d4o1exFE9fR+nV+Z2TZzK+237PyHu1RovdLRvvrsu/8J54yoaGPMTfVDDcDiC0iWcjC/kF
+        vxR3DRjVD3IjwHsXRU1gULxDU+skZVreb4wy8UXNAFNCFt1fTXnDtuLv0ZkWlvH+nNL4Cg
+        +WTzNwBibuXttKJ7hteHZmAMd/y97bc=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-425-xGjApqn3MMSMigBIS93Hcg-1; Fri, 08 May 2020 07:10:01 -0400
-X-MC-Unique: xGjApqn3MMSMigBIS93Hcg-1
+ us-mta-323-_5TFvxY5P4qIS3AfnZLDWQ-1; Fri, 08 May 2020 07:10:05 -0400
+X-MC-Unique: _5TFvxY5P4qIS3AfnZLDWQ-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 398EE8015CB;
-        Fri,  8 May 2020 11:09:59 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A6D6A1005510;
+        Fri,  8 May 2020 11:10:03 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2141C60FB9;
-        Fri,  8 May 2020 11:09:53 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 501B061100;
+        Fri,  8 May 2020 11:10:03 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 05F9F300020FB;
-        Fri,  8 May 2020 13:09:52 +0200 (CEST)
-Subject: [PATCH net-next v3 13/33] qlogic/qede: add XDP frame size to driver
+        by firesoul.localdomain (Postfix) with ESMTP id 30BB7300020FB;
+        Fri,  8 May 2020 13:10:02 +0200 (CEST)
+Subject: [PATCH net-next v3 15/33] ena: add XDP frame size to amazon NIC
+ driver
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -63,8 +64,8 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Date:   Fri, 08 May 2020 13:09:52 +0200
-Message-ID: <158893619194.2321140.1122312349338930366.stgit@firesoul>
+Date:   Fri, 08 May 2020 13:10:02 +0200
+Message-ID: <158893620212.2321140.6640473108940247107.stgit@firesoul>
 In-Reply-To: <158893607924.2321140.16117992313983615627.stgit@firesoul>
 References: <158893607924.2321140.16117992313983615627.stgit@firesoul>
 User-Agent: StGit/0.19
@@ -77,42 +78,45 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The driver qede uses a full page, when XDP is enabled. The drivers value
-in rx_buf_seg_size (struct qede_rx_queue) will be PAGE_SIZE when an
-XDP bpf_prog is attached.
+Frame size ENA_PAGE_SIZE is limited to 16K on systems with larger
+PAGE_SIZE than 16K. Change ENA_XDP_MAX_MTU to also take into account
+the reserved tailroom.
 
-Cc: Ariel Elior <aelior@marvell.com>
-Cc: GR-everest-linux-l2@marvell.com
+Cc: Arthur Kiyanovski <akiyano@amazon.com>
+Acked-by: Sameeh Jubran <sameehj@amazon.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- drivers/net/ethernet/qlogic/qede/qede_fp.c   |    1 +
- drivers/net/ethernet/qlogic/qede/qede_main.c |    2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/amazon/ena/ena_netdev.c |    1 +
+ drivers/net/ethernet/amazon/ena/ena_netdev.h |    5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qede/qede_fp.c b/drivers/net/ethernet/qlogic/qede/qede_fp.c
-index c6c20776b474..7598ebe0962a 100644
---- a/drivers/net/ethernet/qlogic/qede/qede_fp.c
-+++ b/drivers/net/ethernet/qlogic/qede/qede_fp.c
-@@ -1066,6 +1066,7 @@ static bool qede_rx_xdp(struct qede_dev *edev,
- 	xdp_set_data_meta_invalid(&xdp);
- 	xdp.data_end = xdp.data + *len;
- 	xdp.rxq = &rxq->xdp_rxq;
-+	xdp.frame_sz = rxq->rx_buf_seg_size; /* PAGE_SIZE when XDP enabled */
+diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+index 2818965427e9..85b87ed02dd5 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@ -1606,6 +1606,7 @@ static int ena_clean_rx_irq(struct ena_ring *rx_ring, struct napi_struct *napi,
+ 		  "%s qid %d\n", __func__, rx_ring->qid);
+ 	res_budget = budget;
+ 	xdp.rxq = &rx_ring->xdp_rxq;
++	xdp.frame_sz = ENA_PAGE_SIZE;
  
- 	/* Queues always have a full reset currently, so for the time
- 	 * being until there's atomic program replace just mark read
-diff --git a/drivers/net/ethernet/qlogic/qede/qede_main.c b/drivers/net/ethernet/qlogic/qede/qede_main.c
-index 256506024b88..2bc153d5ce03 100644
---- a/drivers/net/ethernet/qlogic/qede/qede_main.c
-+++ b/drivers/net/ethernet/qlogic/qede/qede_main.c
-@@ -1418,7 +1418,7 @@ static int qede_alloc_mem_rxq(struct qede_dev *edev, struct qede_rx_queue *rxq)
- 	if (rxq->rx_buf_size + size > PAGE_SIZE)
- 		rxq->rx_buf_size = PAGE_SIZE - size;
+ 	do {
+ 		xdp_verdict = XDP_PASS;
+diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.h b/drivers/net/ethernet/amazon/ena/ena_netdev.h
+index 7df67bf09b93..680099afcccf 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.h
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.h
+@@ -151,8 +151,9 @@
+  * The buffer size we share with the device is defined to be ENA_PAGE_SIZE
+  */
  
--	/* Segment size to spilt a page in multiple equal parts ,
-+	/* Segment size to split a page in multiple equal parts,
- 	 * unless XDP is used in which case we'd use the entire page.
- 	 */
- 	if (!edev->xdp_prog) {
+-#define ENA_XDP_MAX_MTU (ENA_PAGE_SIZE - ETH_HLEN - ETH_FCS_LEN - \
+-				VLAN_HLEN - XDP_PACKET_HEADROOM)
++#define ENA_XDP_MAX_MTU (ENA_PAGE_SIZE - ETH_HLEN - ETH_FCS_LEN -	\
++			 VLAN_HLEN - XDP_PACKET_HEADROOM -		\
++			 SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
+ 
+ #define ENA_IS_XDP_INDEX(adapter, index) (((index) >= (adapter)->xdp_first_ring) && \
+ 	((index) < (adapter)->xdp_first_ring + (adapter)->xdp_num_queues))
 
 
