@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A290C38A2A
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:11:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9603CC47247
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:11:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 60F3F208CA
-	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:11:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 763DC208CA
+	for <bpf@archiver.kernel.org>; Fri,  8 May 2020 11:11:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EbOd+xk7"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fjVtWBTw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727983AbgEHLLa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 07:11:30 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:24092 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726638AbgEHLL3 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 May 2020 07:11:29 -0400
+        id S1726627AbgEHLLi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 07:11:38 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:58582 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727994AbgEHLLh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 May 2020 07:11:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588936288;
+        s=mimecast20190719; t=1588936296;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QgmQQ3BdP3fG2j1xwjXam7QeuzlwY8kv6oC0rf1kJv0=;
-        b=EbOd+xk7cay3OJWXcshpnh4m/fP5XrZeeZjYF/8ToQirjVLdZ3dlxWyVzKhFIWvgS9eo/n
-        8Vjq1NpQ9RBbvafSalMaceIOCLnQPEqxRJrpj4ic75GvgEcGalrJ3YozdLx3OUVY7a+G7a
-        Xi00wDZXSQRUXPFCKENuIQZRl/AcfLE=
+        bh=bOIT+50UaskstZKzUohgylRkHvdR91qp4pnNKr6BjiM=;
+        b=fjVtWBTwn/OClE5gVbyksolb307e4yoeZj9F+80OySO7DW0r0W46qaaERRI9JmXY5xwRPg
+        +Uh4Rjr7+xE4DQ6pSSj1CPMz5/3ZKPNlFyAv4ogKaIKvQdE8+dVaFr1rUQBW5kxO/RhI9k
+        7YllEuSFA1YLrzPPclkzKsctgBofsPU=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-256-OlEnG33SOwGPiM3h-gERyQ-1; Fri, 08 May 2020 07:11:27 -0400
-X-MC-Unique: OlEnG33SOwGPiM3h-gERyQ-1
+ us-mta-261-H0Tb5uKRNWKidBY3CtbQRg-1; Fri, 08 May 2020 07:11:32 -0400
+X-MC-Unique: H0Tb5uKRNWKidBY3CtbQRg-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5F94580058A;
-        Fri,  8 May 2020 11:11:25 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 38A921005510;
+        Fri,  8 May 2020 11:11:30 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AD413649D5;
-        Fri,  8 May 2020 11:11:19 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D5F02649D5;
+        Fri,  8 May 2020 11:11:29 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 8F839300020FB;
-        Fri,  8 May 2020 13:11:18 +0200 (CEST)
-Subject: [PATCH net-next v3 30/33] xdp: clear grow memory in
- bpf_xdp_adjust_tail()
+        by firesoul.localdomain (Postfix) with ESMTP id BA54E300020FB;
+        Fri,  8 May 2020 13:11:28 +0200 (CEST)
+Subject: [PATCH net-next v3 32/33] selftests/bpf: adjust BPF selftest for
+ xdp_adjust_tail
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -64,44 +64,128 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Date:   Fri, 08 May 2020 13:11:18 +0200
-Message-ID: <158893627850.2321140.10204400330949821907.stgit@firesoul>
+Date:   Fri, 08 May 2020 13:11:28 +0200
+Message-ID: <158893628868.2321140.6908513247514543586.stgit@firesoul>
 In-Reply-To: <158893607924.2321140.16117992313983615627.stgit@firesoul>
 References: <158893607924.2321140.16117992313983615627.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Clearing memory of tail when grow happens, because it is too easy
-to write a XDP_PASS program that extend the tail, which expose
-this memory to users that can run tcpdump.
+Current selftest for BPF-helper xdp_adjust_tail only shrink tail.
+Make it more clear that this is a shrink test case.
 
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- net/core/filter.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ .../selftests/bpf/prog_tests/xdp_adjust_tail.c     |    9 +++++-
+ .../testing/selftests/bpf/progs/test_adjust_tail.c |   30 --------------------
+ .../bpf/progs/test_xdp_adjust_tail_shrink.c        |   30 ++++++++++++++++++++
+ 3 files changed, 37 insertions(+), 32 deletions(-)
+ delete mode 100644 tools/testing/selftests/bpf/progs/test_adjust_tail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index ec3ab2e2d800..691235208e0b 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3427,6 +3427,10 @@ BPF_CALL_2(bpf_xdp_adjust_tail, struct xdp_buff *, xdp, int, offset)
- 	if (unlikely(data_end < xdp->data + ETH_HLEN))
- 		return -EINVAL;
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+index 3744196d7cba..d258f979d5ef 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+@@ -1,9 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
  
-+	/* Clear memory area on grow, can contain uninit kernel memory */
-+	if (offset > 0)
-+		memset(xdp->data_end, 0, offset);
+-void test_xdp_adjust_tail(void)
++void test_xdp_adjust_tail_shrink(void)
+ {
+-	const char *file = "./test_adjust_tail.o";
++	const char *file = "./test_xdp_adjust_tail_shrink.o";
+ 	struct bpf_object *obj;
+ 	char buf[128];
+ 	__u32 duration, retval, size;
+@@ -27,3 +27,8 @@ void test_xdp_adjust_tail(void)
+ 	      err, errno, retval, size);
+ 	bpf_object__close(obj);
+ }
 +
- 	xdp->data_end = data_end;
- 
- 	return 0;
++void test_xdp_adjust_tail(void)
++{
++	test_xdp_adjust_tail_shrink();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_adjust_tail.c b/tools/testing/selftests/bpf/progs/test_adjust_tail.c
+deleted file mode 100644
+index b7fc85769bdc..000000000000
+--- a/tools/testing/selftests/bpf/progs/test_adjust_tail.c
++++ /dev/null
+@@ -1,30 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0
+- * Copyright (c) 2018 Facebook
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of version 2 of the GNU General Public
+- * License as published by the Free Software Foundation.
+- */
+-#include <linux/bpf.h>
+-#include <linux/if_ether.h>
+-#include <bpf/bpf_helpers.h>
+-
+-int _version SEC("version") = 1;
+-
+-SEC("xdp_adjust_tail")
+-int _xdp_adjust_tail(struct xdp_md *xdp)
+-{
+-	void *data_end = (void *)(long)xdp->data_end;
+-	void *data = (void *)(long)xdp->data;
+-	int offset = 0;
+-
+-	if (data_end - data == 54)
+-		offset = 256;
+-	else
+-		offset = 20;
+-	if (bpf_xdp_adjust_tail(xdp, 0 - offset))
+-		return XDP_DROP;
+-	return XDP_TX;
+-}
+-
+-char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c
+new file mode 100644
+index 000000000000..c8a7c17b54f4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c
+@@ -0,0 +1,30 @@
++/* SPDX-License-Identifier: GPL-2.0
++ * Copyright (c) 2018 Facebook
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of version 2 of the GNU General Public
++ * License as published by the Free Software Foundation.
++ */
++#include <linux/bpf.h>
++#include <linux/if_ether.h>
++#include <bpf/bpf_helpers.h>
++
++int _version SEC("version") = 1;
++
++SEC("xdp_adjust_tail_shrink")
++int _xdp_adjust_tail_shrink(struct xdp_md *xdp)
++{
++	void *data_end = (void *)(long)xdp->data_end;
++	void *data = (void *)(long)xdp->data;
++	int offset = 0;
++
++	if (data_end - data == 54) /* sizeof(pkt_v4) */
++		offset = 256; /* shrink too much */
++	else
++		offset = 20;
++	if (bpf_xdp_adjust_tail(xdp, 0 - offset))
++		return XDP_DROP;
++	return XDP_TX;
++}
++
++char _license[] SEC("license") = "GPL";
 
 
