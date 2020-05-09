@@ -2,38 +2,38 @@ Return-Path: <SRS0=3byo=6X=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0089C38A2A
-	for <bpf@archiver.kernel.org>; Sat,  9 May 2020 00:38:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA15FC38A2A
+	for <bpf@archiver.kernel.org>; Sat,  9 May 2020 00:39:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ABD6D20746
-	for <bpf@archiver.kernel.org>; Sat,  9 May 2020 00:38:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90047218AC
+	for <bpf@archiver.kernel.org>; Sat,  9 May 2020 00:39:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728194AbgEIAib (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 May 2020 20:38:31 -0400
-Received: from mga04.intel.com ([192.55.52.120]:3157 "EHLO mga04.intel.com"
+        id S1728194AbgEIAjh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 May 2020 20:39:37 -0400
+Received: from mga14.intel.com ([192.55.52.115]:33453 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727878AbgEIAib (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 May 2020 20:38:31 -0400
-IronPort-SDR: aopw/5m44GsnUnkU1UtPtopuLYOg5xUtm14EvccOz4UiwM0pFZW+oFS8saxF4FNlGpEQy55wKv
- MdQkV1M55APg==
+        id S1727984AbgEIAjg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 May 2020 20:39:36 -0400
+IronPort-SDR: DlQMED5PG9/bApDPWXnAQZii1JMGNLkksb9dutMsp9aAvxTSLhu+K938jkr+SPv/qwnT5WZbhz
+ K/fdGjAqQbHg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2020 17:38:30 -0700
-IronPort-SDR: q+sV77rbJRSonenXnHAbxIaNJcsxfDDnbUmDtOAuy5/ssIMbKCf1nWEdjdgakP2jskGvmkmC8t
- JWZnt/bd8Y3w==
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2020 17:39:36 -0700
+IronPort-SDR: 6aweANgd2jw2UYAToWycQaYabf94KOq5DMw032Ic41kd5k9VQ+8qWBslqeA2e+rQP9mkAtPpOO
+ rZTAf/sMRpTQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,369,1583222400"; 
-   d="scan'208";a="279197066"
+   d="scan'208";a="435967229"
 Received: from tassilo.jf.intel.com (HELO tassilo.localdomain) ([10.7.201.21])
-  by orsmga002.jf.intel.com with ESMTP; 08 May 2020 17:38:30 -0700
+  by orsmga005.jf.intel.com with ESMTP; 08 May 2020 17:39:36 -0700
 Received: by tassilo.localdomain (Postfix, from userid 1000)
-        id 79BCB301C4C; Fri,  8 May 2020 17:38:30 -0700 (PDT)
-Date:   Fri, 8 May 2020 17:38:30 -0700
+        id 177F9301C4C; Fri,  8 May 2020 17:39:36 -0700 (PDT)
+Date:   Fri, 8 May 2020 17:39:36 -0700
 From:   Andi Kleen <ak@linux.intel.com>
 To:     Ian Rogers <irogers@google.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -60,44 +60,48 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
         Vince Weaver <vincent.weaver@maine.edu>,
         Stephane Eranian <eranian@google.com>
-Subject: Re: [RFC PATCH v3 13/14] perf metricgroup: remove duped metric group
- events
-Message-ID: <20200509003830.GG3538@tassilo.jf.intel.com>
+Subject: Re: [RFC PATCH v3 06/14] perf evsel: fix 2 memory leaks
+Message-ID: <20200509003936.GH3538@tassilo.jf.intel.com>
 References: <20200508053629.210324-1-irogers@google.com>
- <20200508053629.210324-14-irogers@google.com>
+ <20200508053629.210324-7-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200508053629.210324-14-irogers@google.com>
+In-Reply-To: <20200508053629.210324-7-irogers@google.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
->  static struct evsel *find_evsel_group(struct evlist *perf_evlist,
->  				      struct expr_parse_ctx *pctx,
-> +				      bool has_constraint,
->  				      struct evsel **metric_events,
->  				      unsigned long *evlist_used)
->  {
-> -	struct evsel *ev;
-> -	bool leader_found;
-> -	const size_t idnum = hashmap__size(&pctx->ids);
-> -	size_t i = 0;
-> -	int j = 0;
-> +	struct evsel *ev, *current_leader = NULL;
->  	double *val_ptr;
-> +	int i = 0, matched_events = 0, events_to_match;
-> +	const int idnum = (int)hashmap__size(&pctx->ids);
+On Thu, May 07, 2020 at 10:36:21PM -0700, Ian Rogers wrote:
+> If allocated, perf_pkg_mask and metric_events need freeing.
 
-BTW standard perf data structure would be a rblist or strlist
+All these patches at the beginning look like straight forward
+bug fixes and are really independent of the new features.
 
-I think it would be really better to do the deduping in a separate
-pass than trying to add it to find_evsel_group. This leads
-to very complicated logic.
+For them
 
-This will likely make it easier to implement more sophisticated
-algorithms too.
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
 
--Andi
-
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/evsel.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index 28683b0eb738..05bb46baad6a 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -1263,6 +1263,8 @@ void evsel__exit(struct evsel *evsel)
+>  	zfree(&evsel->group_name);
+>  	zfree(&evsel->name);
+>  	zfree(&evsel->pmu_name);
+> +	zfree(&evsel->per_pkg_mask);
+> +	zfree(&evsel->metric_events);
+>  	perf_evsel__object.fini(evsel);
+>  }
+>  
+> -- 
+> 2.26.2.645.ge9eca65c58-goog
+> 
