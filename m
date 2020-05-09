@@ -2,392 +2,171 @@ Return-Path: <SRS0=3byo=6X=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 080C1C54E49
-	for <bpf@archiver.kernel.org>; Sat,  9 May 2020 18:00:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24DD3C28CBC
+	for <bpf@archiver.kernel.org>; Sat,  9 May 2020 19:17:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D9641208CA
-	for <bpf@archiver.kernel.org>; Sat,  9 May 2020 18:00:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EDD1C21582
+	for <bpf@archiver.kernel.org>; Sat,  9 May 2020 19:17:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NcjgVtHx"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="o26Hg63m";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="dVEsRVId"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728285AbgEISAG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 9 May 2020 14:00:06 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:13142 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728340AbgEIR7J (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 9 May 2020 13:59:09 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 049HsvfH007973
-        for <bpf@vger.kernel.org>; Sat, 9 May 2020 10:59:08 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=8rJOB/D3gfwpTozLG/aw2r8gH788BQ5x0aWrNBQ3QnI=;
- b=NcjgVtHxeciHhErf0PdQBru5GLYt8T4Aboy4hjywUjGdFwJiT65jrSaRA4UMirDBP0ZX
- xrdVJR1HAU40qY/bHyn/zHsj16Yckr0O54a9cz/OKjqiwJadGcJ4OLq4WaVBm7tpXOFo
- 3dZaYOSNBnK/9CLW8dZlWmXMbXSz3KG3qlg= 
+        id S1728098AbgEITRD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 9 May 2020 15:17:03 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:64468 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727938AbgEITRD (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 9 May 2020 15:17:03 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 049JDtKO003631;
+        Sat, 9 May 2020 12:16:48 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=0Wt9r2vb3Pid6PaIxRXF6CLOmKX7Qs8NEXMFh55Qsnw=;
+ b=o26Hg63mul31h0iUh03Lf9ch91acy2XFHKSWspqLRXj0mvGmQqIiH4MxwaB1ZpBw6C2e
+ +pdBS5BE/emyRri9ccWv+/lmW2USPXwU6xWMSPWhf7x/t4PipREUlE6SiCNBwB+59D66
+ hHh2Xbr+CYgZG6rHLPUsEuJgPQGDkysL2k4= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 30wsca1h87-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 09 May 2020 10:59:08 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        by mx0a-00082601.pphosted.com with ESMTP id 30wtbfsjq9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Sat, 09 May 2020 12:16:48 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.228) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Sat, 9 May 2020 10:59:08 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 7825237008E2; Sat,  9 May 2020 10:59:05 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
+ 15.1.1847.3; Sat, 9 May 2020 12:16:46 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XPGJ5zgTUtkcG3wKVuZbK5POoEb0X0jkzVBc8cwjr7XGV/kITv8pHaBI30dXNFRm0AYNy18RMY/8YbF7ChkCgnTIcsPjR0AeHPrhEJB49UgtbfxZ0uu+sLzk5FCiuGoBSph/iTsyMhaumQ3SQlskFRwwyKPcEGuEICCxVHjYId1X8TmaiS+XwVFR7xuaQ7MVQ4n6JnsWWtvqRomUyk+9R36fdVKDwL80n/18m4tAFTwEiBXC1GTsdkp+Aa0A8I/ydGqSZg15l+BbTXy7IM2DBWpM9ZmEiFR4LE4kHAUsZuzaE6h4VIziyOAHHfNJShZvp93fa6jG1nQ0764NlcJxpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0Wt9r2vb3Pid6PaIxRXF6CLOmKX7Qs8NEXMFh55Qsnw=;
+ b=JfhkFHMs9RM0Mcs2xDN7f7u1Jc9VX1fKeY+hn6Yx/r+sRbVzZtjNxfNeO6dL9PZ8XRqL8nrFZipWBhFYd3VVGl32q6CH40Dsk0muamkNwCHZ82Ie2rfzEYztcbtjZXHn4rNIPq+sCpCf8+C9XPsyGl0RFOMH5c4pkCTSf2mmRqGJfwDqb85472ziPw7nGFT7U5kYmP9pGVwTGEztCwfQ7Rnn4yI5gSLpiCI1161PG1y9Y5H9f0+FwL3/vhFa95lbuh8hpwrrJqkcpkV6VMyswffDUs+NO4QWezjCdKCCApLb1GHibtYEzDCS5pDUR4JS6YDkyuJedz67lAxoXFGIdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0Wt9r2vb3Pid6PaIxRXF6CLOmKX7Qs8NEXMFh55Qsnw=;
+ b=dVEsRVIdhcHLUWCBL2TStoGFWzhA19jXMvOEA3HOU4v0nVwO+q1WUNPSpxKQhtjlkxug94U/0tegWbXXNfA3r+Rz9de94KgpMQZRVqRHybPTCo+kVePNH6Dal5wLizs4+RLNfb+kOB2gtXJ58hIcPiQjUINY+pgHKpRmJMX2WwE=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2958.20; Sat, 9 May
+ 2020 19:16:44 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::8988:aa27:5d70:6923]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::8988:aa27:5d70:6923%5]) with mapi id 15.20.2958.035; Sat, 9 May 2020
+ 19:16:44 +0000
+Subject: Re: [PATCH] libbpf: Replace zero-length array with flexible-array
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+CC:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20200507185057.GA13981@embeddedor>
 From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v4 06/21] bpf: create anonymous bpf iterator
-Date:   Sat, 9 May 2020 10:59:05 -0700
-Message-ID: <20200509175905.2475770-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200509175859.2474608-1-yhs@fb.com>
-References: <20200509175859.2474608-1-yhs@fb.com>
+Message-ID: <0ba4c222-b1e6-c003-56f1-6f43405066f0@fb.com>
+Date:   Sat, 9 May 2020 12:16:41 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
+ Gecko/20100101 Thunderbird/68.8.0
+In-Reply-To: <20200507185057.GA13981@embeddedor>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR21CA0012.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::22) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from MacBook-Pro-52.local (2620:10d:c090:400::5:3134) by BYAPR21CA0012.namprd21.prod.outlook.com (2603:10b6:a03:114::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.2 via Frontend Transport; Sat, 9 May 2020 19:16:43 +0000
+X-Originating-IP: [2620:10d:c090:400::5:3134]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1eb30b58-b4dc-4f6c-9707-08d7f44d82c8
+X-MS-TrafficTypeDiagnostic: BYAPR15MB4088:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB408894A7ABCFF650D44E9831D3A30@BYAPR15MB4088.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:1332;
+X-Forefront-PRVS: 03982FDC1D
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uT9k4J2Qa/YTzyMSzwhhq4BZl2a89qEUJpUuQo6RVP99qcqew47PmRwH7dHgso+rr7Rvq8huiWvV2OwWDvNNQ6uALW1URydh/XW5vmRQ4OyWaRTh7DM6xBEs7n+p7BpH4WLWtrUVRcZgGH3fxQCdc7P7gfwu3mJjg05fO2DCEM2eYg1/RvKqlTvQum1sSvu4WXG++wDi0m6WsXl2fqeQSMNlhYNngkKXovRplI5DmoYGOTVERMkcNakimQfKU/cYj+PwCGmR6mbtq8OjMZ5K8BCNPEW4rWrYwQmTx4tSGSSM93FnX88k7Kg0X8sgYalKE+XOpvawwPyvuunQucDa7Sq2A2Hg0B9K9Rl3IDBMHr/5jfwhvJZc2hoKSNxLheHyjy4ErUrqEJu9go1aEUkUSsR1oiDoJL3sgkr0qI04Al2I9tWxg1Cx9MR+DCaNAcrmr0B3Ak7JKX+aIjd2UB5HU+LcqbvtRH3XRowOoDogoPKj1IADQVz0slbA7oHEcxOk3F254e2qusVSfiaHQ44egtjEiY5Bc26pvgxQXevjJNkfbvaBCLypHaoVm8jxtjLAtIXT5JmuCK1geI6w5sTUUZzgFFjQbMxvYXHm38MOBpBeBKRmEM1XX5jYyem6Sfl2JX4oQE9V2J001A3cdFxBbA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(346002)(396003)(136003)(366004)(376002)(39860400002)(33430700001)(478600001)(2906002)(6486002)(31686004)(966005)(6512007)(31696002)(66946007)(54906003)(6506007)(52116002)(66556008)(66476007)(36756003)(86362001)(2616005)(8936002)(316002)(5660300002)(33440700001)(53546011)(186003)(16526019)(8676002)(110136005)(4326008)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: a99622aa6kSXPo6zfTzqdNbgguZJx1iV/HQIiGTIFEwqIVNpLOPhpjMZEGXexp4lRGAWpoVtdiVtEzXPr0vd8dpn87ycaCALArImAwDL4ZK/eC+A3XhHvNcU1rE8s7RTnUxH5lPfXY6RAj7wEB2XFzFxwyjr0N97Wb8d5dNkbl7Q1obvORDxOePBueE0Nu8XSvqvYWBujtITQoRkCPFGIKJdRSJ5FXHcc2sq1RAFJ0mOp3KX01mhQkfwaerX26FcmLji4RNDoKxZQJsdk2yb2iA2jrdltuZzrQq37/1Hi+bSEzuiVOSqsISeMIYtlW4w93eTS+bbUFKrG3cuyOdPiqTgPo5yXctktBOiwpJ7XydufWJYpWUMO9zBFpI2a6R7ry6NW4Hn/N0UXmjnAoGnPaJvTX/6Tci70ND0aqHqSodVZgnDWel07zPCH8UGtfM9LlpW/xQj5NuDqcaRPvF9olOjT9JFjUAMvtTt08d/gvU3WTimv1RN/Mte4BIXD9wxPezNYOS1Fd246KRlC2jJeg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1eb30b58-b4dc-4f6c-9707-08d7f44d82c8
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2020 19:16:44.3335
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: P2zx9pj6ewi6QIkKKkMyPEXtNCL0ULJ+57lx0wLdt9HmSwSJ2exomTXGIRSWhqiz
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB4088
+X-OriginatorOrg: fb.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-09_06:2020-05-08,2020-05-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 adultscore=0
- priorityscore=1501 malwarescore=0 impostorscore=0 mlxscore=0 bulkscore=0
- lowpriorityscore=0 suspectscore=2 spamscore=0 mlxlogscore=999
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005090155
+ definitions=2020-05-09_07:2020-05-08,2020-05-09 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ mlxscore=0 bulkscore=0 spamscore=0 suspectscore=0 phishscore=0
+ lowpriorityscore=0 clxscore=1011 malwarescore=0 adultscore=0
+ mlxlogscore=997 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2005090168
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A new bpf command BPF_ITER_CREATE is added.
 
-The anonymous bpf iterator is seq_file based.
-The seq_file private data are referenced by targets.
-The bpf_iter infrastructure allocated additional space
-at seq_file->private before the space used by targets
-to store some meta data, e.g.,
-  prog:       prog to run
-  session_id: an unique id for each opened seq_file
-  seq_num:    how many times bpf programs are queried in this session
-  done_stop:  an internal state to decide whether bpf program
-              should be called in seq_ops->stop() or not
 
-The seq_num will start from 0 for valid objects.
-The bpf program may see the same seq_num more than once if
- - seq_file buffer overflow happens and the same object
-   is retried by bpf_seq_read(), or
- - the bpf program explicitly requests a retry of the
-   same object
+On 5/7/20 11:50 AM, Gustavo A. R. Silva wrote:
+> The current codebase makes use of the zero-length array language
+> extension to the C90 standard, but the preferred mechanism to declare
+> variable-length types such as these ones is a flexible array member[1][2],
+> introduced in C99:
+> 
+> struct foo {
+>          int stuff;
+>          struct boo array[];
+> };
+> 
+> By making use of the mechanism above, we will get a compiler warning
+> in case the flexible array does not occur last in the structure, which
+> will help us prevent some kind of undefined behavior bugs from being
+> inadvertently introduced[3] to the codebase from now on.
+> 
+> Also, notice that, dynamic memory allocations won't be affected by
+> this change:
+> 
+> "Flexible array members have incomplete type, and so the sizeof operator
+> may not be applied. As a quirk of the original implementation of
+> zero-length arrays, sizeof evaluates to zero."[1]
+> 
+> sizeof(flexible-array-member) triggers a warning because flexible array
+> members have incomplete type[1]. There are some instances of code in
+> which the sizeof operator is being incorrectly/erroneously applied to
+> zero-length arrays and the result is zero. Such instances may be hiding
+> some bugs. So, this work (flexible-array member conversions) will also
+> help to get completely rid of those sorts of issues.
+> 
+> This issue was found with the help of Coccinelle.
+> 
+> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> [2] https://github.com/KSPP/linux/issues/21
+> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Since module is not supported for bpf_iter, all target
-registeration happens at __init time, so there is no
-need to change bpf_iter_unreg_target() as it is used
-mostly in error path of the init function at which time
-no bpf iterators have been created yet.
+I think this is probably for bpf-next.
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- include/linux/bpf.h            |   1 +
- include/uapi/linux/bpf.h       |   6 ++
- kernel/bpf/bpf_iter.c          | 129 +++++++++++++++++++++++++++++++++
- kernel/bpf/syscall.c           |  26 +++++++
- tools/include/uapi/linux/bpf.h |   6 ++
- 5 files changed, 168 insertions(+)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index e93d2d33c82c..80b1b9d8a638 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1144,6 +1144,7 @@ int bpf_iter_reg_target(struct bpf_iter_reg *reg_in=
-fo);
- void bpf_iter_unreg_target(const char *target);
- bool bpf_iter_prog_supported(struct bpf_prog *prog);
- int bpf_iter_link_attach(const union bpf_attr *attr, struct bpf_prog *pr=
-og);
-+int bpf_iter_new_fd(struct bpf_link *link);
-=20
- int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
- int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 1e8dfff5d5d4..708763f702e1 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -116,6 +116,7 @@ enum bpf_cmd {
- 	BPF_LINK_GET_FD_BY_ID,
- 	BPF_LINK_GET_NEXT_ID,
- 	BPF_ENABLE_STATS,
-+	BPF_ITER_CREATE,
- };
-=20
- enum bpf_map_type {
-@@ -614,6 +615,11 @@ union bpf_attr {
- 		__u32		type;
- 	} enable_stats;
-=20
-+	struct { /* struct used by BPF_ITER_CREATE command */
-+		__u32		link_fd;
-+		__u32		flags;
-+	} iter_create;
-+
- } __attribute__((aligned(8)));
-=20
- /* The description below is an attempt at providing documentation to eBP=
-F
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index 832973ee80fa..e7129b57865f 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2020 Facebook */
-=20
- #include <linux/fs.h>
-+#include <linux/anon_inodes.h>
- #include <linux/filter.h>
- #include <linux/bpf.h>
-=20
-@@ -20,12 +21,24 @@ struct bpf_iter_link {
- 	struct bpf_iter_target_info *tinfo;
- };
-=20
-+struct bpf_iter_priv_data {
-+	struct bpf_iter_target_info *tinfo;
-+	struct bpf_prog *prog;
-+	u64 session_id;
-+	u64 seq_num;
-+	bool done_stop;
-+	u8 target_private[] __aligned(8);
-+};
-+
- static struct list_head targets =3D LIST_HEAD_INIT(targets);
- static DEFINE_MUTEX(targets_mutex);
-=20
- /* protect bpf_iter_link changes */
- static DEFINE_MUTEX(link_mutex);
-=20
-+/* incremented on every opened seq_file */
-+static atomic64_t session_id;
-+
- /* bpf_seq_read, a customized and simpler version for bpf iterator.
-  * no_llseek is assumed for this file.
-  * The following are differences from seq_read():
-@@ -149,6 +162,33 @@ static ssize_t bpf_seq_read(struct file *file, char =
-__user *buf, size_t size,
- 	return copied;
- }
-=20
-+static int iter_release(struct inode *inode, struct file *file)
-+{
-+	struct bpf_iter_priv_data *iter_priv;
-+	struct seq_file *seq;
-+
-+	seq =3D file->private_data;
-+	if (!seq)
-+		return 0;
-+
-+	iter_priv =3D container_of(seq->private, struct bpf_iter_priv_data,
-+				 target_private);
-+
-+	if (iter_priv->tinfo->fini_seq_private)
-+		iter_priv->tinfo->fini_seq_private(seq->private);
-+
-+	bpf_prog_put(iter_priv->prog);
-+	seq->private =3D iter_priv;
-+
-+	return seq_release_private(inode, file);
-+}
-+
-+static const struct file_operations bpf_iter_fops =3D {
-+	.llseek		=3D no_llseek,
-+	.read		=3D bpf_seq_read,
-+	.release	=3D iter_release,
-+};
-+
- int bpf_iter_reg_target(struct bpf_iter_reg *reg_info)
- {
- 	struct bpf_iter_target_info *tinfo;
-@@ -309,3 +349,92 @@ int bpf_iter_link_attach(const union bpf_attr *attr,=
- struct bpf_prog *prog)
-=20
- 	return bpf_link_settle(&link_primer);
- }
-+
-+static void init_seq_meta(struct bpf_iter_priv_data *priv_data,
-+			  struct bpf_iter_target_info *tinfo,
-+			  struct bpf_prog *prog)
-+{
-+	priv_data->tinfo =3D tinfo;
-+	priv_data->prog =3D prog;
-+	priv_data->session_id =3D atomic64_inc_return(&session_id);
-+	priv_data->seq_num =3D 0;
-+	priv_data->done_stop =3D false;
-+}
-+
-+static int prepare_seq_file(struct file *file, struct bpf_iter_link *lin=
-k)
-+{
-+	struct bpf_iter_priv_data *priv_data;
-+	struct bpf_iter_target_info *tinfo;
-+	struct bpf_prog *prog;
-+	u32 total_priv_dsize;
-+	struct seq_file *seq;
-+	int err =3D 0;
-+
-+	mutex_lock(&link_mutex);
-+	prog =3D link->link.prog;
-+	bpf_prog_inc(prog);
-+	mutex_unlock(&link_mutex);
-+
-+	tinfo =3D link->tinfo;
-+	total_priv_dsize =3D offsetof(struct bpf_iter_priv_data, target_private=
-) +
-+			   tinfo->seq_priv_size;
-+	priv_data =3D __seq_open_private(file, tinfo->seq_ops, total_priv_dsize=
-);
-+	if (!priv_data) {
-+		err =3D -ENOMEM;
-+		goto release_prog;
-+	}
-+
-+	if (tinfo->init_seq_private) {
-+		err =3D tinfo->init_seq_private(priv_data->target_private);
-+		if (err)
-+			goto release_seq_file;
-+	}
-+
-+	init_seq_meta(priv_data, tinfo, prog);
-+	seq =3D file->private_data;
-+	seq->private =3D priv_data->target_private;
-+
-+	return 0;
-+
-+release_seq_file:
-+	seq_release_private(file->f_inode, file);
-+	file->private_data =3D NULL;
-+release_prog:
-+	bpf_prog_put(prog);
-+	return err;
-+}
-+
-+int bpf_iter_new_fd(struct bpf_link *link)
-+{
-+	struct file *file;
-+	unsigned int flags;
-+	int err, fd;
-+
-+	if (link->ops !=3D &bpf_iter_link_lops)
-+		return -EINVAL;
-+
-+	flags =3D O_RDONLY | O_CLOEXEC;
-+	fd =3D get_unused_fd_flags(flags);
-+	if (fd < 0)
-+		return fd;
-+
-+	file =3D anon_inode_getfile("bpf_iter", &bpf_iter_fops, NULL, flags);
-+	if (IS_ERR(file)) {
-+		err =3D PTR_ERR(file);
-+		goto free_fd;
-+	}
-+
-+	err =3D prepare_seq_file(file,
-+			       container_of(link, struct bpf_iter_link, link));
-+	if (err)
-+		goto free_file;
-+
-+	fd_install(fd, file);
-+	return fd;
-+
-+free_file:
-+	fput(file);
-+free_fd:
-+	put_unused_fd(fd);
-+	return err;
-+}
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6ffe2d8fb6c7..a293e88ee01a 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3941,6 +3941,29 @@ static int bpf_enable_stats(union bpf_attr *attr)
- 	return -EINVAL;
- }
-=20
-+#define BPF_ITER_CREATE_LAST_FIELD iter_create.flags
-+
-+static int bpf_iter_create(union bpf_attr *attr)
-+{
-+	struct bpf_link *link;
-+	int err;
-+
-+	if (CHECK_ATTR(BPF_ITER_CREATE))
-+		return -EINVAL;
-+
-+	if (attr->iter_create.flags)
-+		return -EINVAL;
-+
-+	link =3D bpf_link_get_from_fd(attr->iter_create.link_fd);
-+	if (IS_ERR(link))
-+		return PTR_ERR(link);
-+
-+	err =3D bpf_iter_new_fd(link);
-+	bpf_link_put(link);
-+
-+	return err;
-+}
-+
- SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned =
-int, size)
- {
- 	union bpf_attr attr;
-@@ -4068,6 +4091,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __use=
-r *, uattr, unsigned int, siz
- 	case BPF_ENABLE_STATS:
- 		err =3D bpf_enable_stats(&attr);
- 		break;
-+	case BPF_ITER_CREATE:
-+		err =3D bpf_iter_create(&attr);
-+		break;
- 	default:
- 		err =3D -EINVAL;
- 		break;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 1e8dfff5d5d4..708763f702e1 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -116,6 +116,7 @@ enum bpf_cmd {
- 	BPF_LINK_GET_FD_BY_ID,
- 	BPF_LINK_GET_NEXT_ID,
- 	BPF_ENABLE_STATS,
-+	BPF_ITER_CREATE,
- };
-=20
- enum bpf_map_type {
-@@ -614,6 +615,11 @@ union bpf_attr {
- 		__u32		type;
- 	} enable_stats;
-=20
-+	struct { /* struct used by BPF_ITER_CREATE command */
-+		__u32		link_fd;
-+		__u32		flags;
-+	} iter_create;
-+
- } __attribute__((aligned(8)));
-=20
- /* The description below is an attempt at providing documentation to eBP=
-F
---=20
-2.24.1
-
+Acked-by: Yonghong Song <yhs@fb.com>
