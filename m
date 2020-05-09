@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18139C47257
-	for <bpf@archiver.kernel.org>; Sat,  9 May 2020 17:59:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80565C47247
+	for <bpf@archiver.kernel.org>; Sat,  9 May 2020 17:59:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0FB7208CA
-	for <bpf@archiver.kernel.org>; Sat,  9 May 2020 17:59:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57292208CA
+	for <bpf@archiver.kernel.org>; Sat,  9 May 2020 17:59:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="CslnDFg3"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="eaRVszfR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728802AbgEIR7d (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 9 May 2020 13:59:33 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21716 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728740AbgEIR7X (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 9 May 2020 13:59:23 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 049Hx7WL007721
-        for <bpf@vger.kernel.org>; Sat, 9 May 2020 10:59:22 -0700
+        id S1728718AbgEIR7i (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 9 May 2020 13:59:38 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:7026 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728775AbgEIR7f (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 9 May 2020 13:59:35 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 049HsQGx031920
+        for <bpf@vger.kernel.org>; Sat, 9 May 2020 10:59:32 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=okZAREpPDBxGX+fNKJ3E0+UyoJI29Z9iieFwApU22Rk=;
- b=CslnDFg3Q7EYQszw8d225ls2diJZStri9pB39wT3MWmTnOv3sooYi6pAB2WHIf1yY5Eq
- xX59KA0AetLDqQjsdPtEMBkE7igwvsEyBN3MfaqVVLwqw7X3DOU/k4esu6756GkbZZf+
- 2tsw4K8lZU9s3H256eb+qg1/FEju4gXHF4c= 
+ bh=NDUjoeS3CtV/+NPzida9gTAsHinZ5IZlnLjSF2Ca0vU=;
+ b=eaRVszfRJ3UdCe6cLpwE/0l35M13NOdICid/p8zXhfDxrQbFfpzHPD8ZyzvuOX4lpzj0
+ MnF0BNB4TG5M0w73Kj87sghQr77e2SU7rnpA/csSLPZbk9dMO+pF5dxeg3tk1LS0uhR4
+ xOW4U+QZH2Nd+hB0wUZGmCFR4/J8YgzaoYk= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 30wutt12rm-3
+        by mx0a-00082601.pphosted.com with ESMTP id 30wt1ksdt9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 09 May 2020 10:59:22 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sat, 09 May 2020 10:59:32 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Sat, 9 May 2020 10:59:21 -0700
+ 15.1.1847.3; Sat, 9 May 2020 10:59:31 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 94A8F37008E2; Sat,  9 May 2020 10:59:16 -0700 (PDT)
+        id F219F37008E2; Sat,  9 May 2020 10:59:23 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v4 15/21] bpf: support variable length array in tracing programs
-Date:   Sat, 9 May 2020 10:59:16 -0700
-Message-ID: <20200509175916.2476853-1-yhs@fb.com>
+Subject: [PATCH bpf-next v4 21/21] tools/bpf: selftests: add bpf_iter selftests
+Date:   Sat, 9 May 2020 10:59:23 -0700
+Message-ID: <20200509175923.2477637-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200509175859.2474608-1-yhs@fb.com>
 References: <20200509175859.2474608-1-yhs@fb.com>
@@ -61,103 +61,626 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
  definitions=2020-05-09_06:2020-05-08,2020-05-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 spamscore=0
- mlxscore=0 phishscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
- adultscore=0 malwarescore=0 mlxlogscore=719 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005090156
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ suspectscore=2 phishscore=0 impostorscore=0 adultscore=0 spamscore=0
+ malwarescore=0 mlxlogscore=999 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2005090155
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In /proc/net/ipv6_route, we have
-  struct fib6_info {
-    struct fib6_table *fib6_table;
-    ...
-    struct fib6_nh fib6_nh[0];
-  }
-  struct fib6_nh {
-    struct fib_nh_common nh_common;
-    struct rt6_info **rt6i_pcpu;
-    struct rt6_exception_bucket *rt6i_exception_bucket;
-  };
-  struct fib_nh_common {
-    ...
-    u8 nhc_gw_family;
-    ...
-  }
+The added test includes the following subtests:
+  - test verifier change for btf_id_or_null
+  - test load/create_iter/read for
+    ipv6_route/netlink/bpf_map/task/task_file
+  - test anon bpf iterator
+  - test anon bpf iterator reading one char at a time
+  - test file bpf iterator
+  - test overflow (single bpf program output not overflow)
+  - test overflow (single bpf program output overflows)
+  - test bpf prog returning 1
 
-The access:
-  struct fib6_nh *fib6_nh =3D &rt->fib6_nh;
-  ... fib6_nh->nh_common.nhc_gw_family ...
+The ipv6_route tests the following verifier change
+  - access fields in the variable length array of the structure.
 
-This patch ensures such an access is handled properly.
+The netlink load tests the following verifier change
+  - put a btf_id ptr value in a stack and accessible to
+    tracing/iter programs.
+
+The anon bpf iterator also tests link auto attach through skeleton.
+
+  $ test_progs -n 2
+  #2/1 btf_id_or_null:OK
+  #2/2 ipv6_route:OK
+  #2/3 netlink:OK
+  #2/4 bpf_map:OK
+  #2/5 task:OK
+  #2/6 task_file:OK
+  #2/7 anon:OK
+  #2/8 anon-read-one-char:OK
+  #2/9 file:OK
+  #2/10 overflow:OK
+  #2/11 overflow-e2big:OK
+  #2/12 prog-ret-1:OK
+  #2 bpf_iter:OK
+  Summary: 1/12 PASSED, 0 SKIPPED, 0 FAILED
 
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- kernel/bpf/btf.c | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 409 ++++++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_test_kern1.c |   4 +
+ .../selftests/bpf/progs/bpf_iter_test_kern2.c |   4 +
+ .../selftests/bpf/progs/bpf_iter_test_kern3.c |  18 +
+ .../selftests/bpf/progs/bpf_iter_test_kern4.c |  52 +++
+ .../bpf/progs/bpf_iter_test_kern_common.h     |  22 +
+ 6 files changed, 509 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_test_kern1=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_test_kern2=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_test_kern3=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_test_kern4=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_test_kern_=
+common.h
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index c490fbde22d4..dcd233139294 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3833,6 +3833,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 	const struct btf_type *mtype, *elem_type =3D NULL;
- 	const struct btf_member *member;
- 	const char *tname, *mname;
-+	u32 vlen;
-=20
- again:
- 	tname =3D __btf_name_by_offset(btf_vmlinux, t->name_off);
-@@ -3841,7 +3842,43 @@ int btf_struct_access(struct bpf_verifier_log *log=
-,
- 		return -EINVAL;
- 	}
-=20
-+	vlen =3D btf_type_vlen(t);
- 	if (off + size > t->size) {
-+		/* If the last element is a variable size array, we may
-+		 * need to relax the rule.
-+		 */
-+		struct btf_array *array_elem;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
+sting/selftests/bpf/prog_tests/bpf_iter.c
+new file mode 100644
+index 000000000000..87c29dde1cf9
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -0,0 +1,409 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include <test_progs.h>
++#include "bpf_iter_ipv6_route.skel.h"
++#include "bpf_iter_netlink.skel.h"
++#include "bpf_iter_bpf_map.skel.h"
++#include "bpf_iter_task.skel.h"
++#include "bpf_iter_task_file.skel.h"
++#include "bpf_iter_test_kern1.skel.h"
++#include "bpf_iter_test_kern2.skel.h"
++#include "bpf_iter_test_kern3.skel.h"
++#include "bpf_iter_test_kern4.skel.h"
 +
-+		if (vlen =3D=3D 0)
-+			goto error;
++static int duration;
 +
-+		member =3D btf_type_member(t) + vlen - 1;
-+		mtype =3D btf_type_skip_modifiers(btf_vmlinux, member->type,
-+						NULL);
-+		if (!btf_type_is_array(mtype))
-+			goto error;
++static void test_btf_id_or_null(void)
++{
++	struct bpf_iter_test_kern3 *skel;
 +
-+		array_elem =3D (struct btf_array *)(mtype + 1);
-+		if (array_elem->nelems !=3D 0)
-+			goto error;
++	skel =3D bpf_iter_test_kern3__open_and_load();
++	if (CHECK(skel, "bpf_iter_test_kern3__open_and_load",
++		  "skeleton open_and_load unexpectedly succeeded\n")) {
++		bpf_iter_test_kern3__destroy(skel);
++		return;
++	}
++}
 +
-+		moff =3D btf_member_bit_offset(t, member) / 8;
-+		if (off < moff)
-+			goto error;
++static void do_dummy_read(struct bpf_program *prog)
++{
++	struct bpf_link *link;
++	char buf[16] =3D {};
++	int iter_fd, len;
 +
-+		/* Only allow structure for now, can be relaxed for
-+		 * other types later.
-+		 */
-+		elem_type =3D btf_type_skip_modifiers(btf_vmlinux,
-+						    array_elem->type, NULL);
-+		if (!btf_type_is_struct(elem_type))
-+			goto error;
++	link =3D bpf_program__attach_iter(prog, NULL);
++	if (CHECK(IS_ERR(link), "attach_iter", "attach_iter failed\n"))
++		return;
 +
-+		off =3D (off - moff) % elem_type->size;
-+		return btf_struct_access(log, elem_type, off, size, atype,
-+					 next_btf_id);
++	iter_fd =3D bpf_iter_create(bpf_link__fd(link));
++	if (CHECK(iter_fd < 0, "create_iter", "create_iter failed\n"))
++		goto free_link;
 +
-+error:
- 		bpf_log(log, "access beyond struct %s at off %u size %u\n",
- 			tname, off, size);
- 		return -EACCES;
++	/* not check contents, but ensure read() ends without error */
++	while ((len =3D read(iter_fd, buf, sizeof(buf))) > 0)
++		;
++	CHECK(len < 0, "read", "read failed: %s\n", strerror(errno));
++
++	close(iter_fd);
++
++free_link:
++	bpf_link__destroy(link);
++}
++
++static void test_ipv6_route(void)
++{
++	struct bpf_iter_ipv6_route *skel;
++
++	skel =3D bpf_iter_ipv6_route__open_and_load();
++	if (CHECK(!skel, "bpf_iter_ipv6_route__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		return;
++
++	do_dummy_read(skel->progs.dump_ipv6_route);
++
++	bpf_iter_ipv6_route__destroy(skel);
++}
++
++static void test_netlink(void)
++{
++	struct bpf_iter_netlink *skel;
++
++	skel =3D bpf_iter_netlink__open_and_load();
++	if (CHECK(!skel, "bpf_iter_netlink__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		return;
++
++	do_dummy_read(skel->progs.dump_netlink);
++
++	bpf_iter_netlink__destroy(skel);
++}
++
++static void test_bpf_map(void)
++{
++	struct bpf_iter_bpf_map *skel;
++
++	skel =3D bpf_iter_bpf_map__open_and_load();
++	if (CHECK(!skel, "bpf_iter_bpf_map__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		return;
++
++	do_dummy_read(skel->progs.dump_bpf_map);
++
++	bpf_iter_bpf_map__destroy(skel);
++}
++
++static void test_task(void)
++{
++	struct bpf_iter_task *skel;
++
++	skel =3D bpf_iter_task__open_and_load();
++	if (CHECK(!skel, "bpf_iter_task__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		return;
++
++	do_dummy_read(skel->progs.dump_task);
++
++	bpf_iter_task__destroy(skel);
++}
++
++static void test_task_file(void)
++{
++	struct bpf_iter_task_file *skel;
++
++	skel =3D bpf_iter_task_file__open_and_load();
++	if (CHECK(!skel, "bpf_iter_task_file__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		return;
++
++	do_dummy_read(skel->progs.dump_task_file);
++
++	bpf_iter_task_file__destroy(skel);
++}
++
++/* The expected string is less than 16 bytes */
++static int do_read_with_fd(int iter_fd, const char *expected,
++			   bool read_one_char)
++{
++	int err =3D -1, len, read_buf_len, start;
++	char buf[16] =3D {};
++
++	read_buf_len =3D read_one_char ? 1 : 16;
++	start =3D 0;
++	while ((len =3D read(iter_fd, buf + start, read_buf_len)) > 0) {
++		start +=3D len;
++		if (CHECK(start >=3D 16, "read", "read len %d\n", len))
++			return -1;
++		read_buf_len =3D read_one_char ? 1 : 16 - start;
++	}
++	if (CHECK(len < 0, "read", "read failed: %s\n", strerror(errno)))
++		return -1;
++
++	err =3D strcmp(buf, expected);
++	if (CHECK(err, "read", "incorrect read result: buf %s, expected %s\n",
++		  buf, expected))
++		return -1;
++
++	return 0;
++}
++
++static void test_anon_iter(bool read_one_char)
++{
++	struct bpf_iter_test_kern1 *skel;
++	struct bpf_link *link;
++	int iter_fd, err;
++
++	skel =3D bpf_iter_test_kern1__open_and_load();
++	if (CHECK(!skel, "bpf_iter_test_kern1__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		return;
++
++	err =3D bpf_iter_test_kern1__attach(skel);
++	if (CHECK(err, "bpf_iter_test_kern1__attach",
++		  "skeleton attach failed\n")) {
++		goto out;
++	}
++
++	link =3D skel->links.dump_task;
++	iter_fd =3D bpf_iter_create(bpf_link__fd(link));
++	if (CHECK(iter_fd < 0, "create_iter", "create_iter failed\n"))
++		goto out;
++
++	do_read_with_fd(iter_fd, "abcd", read_one_char);
++	close(iter_fd);
++
++out:
++	bpf_iter_test_kern1__destroy(skel);
++}
++
++static int do_read(const char *path, const char *expected)
++{
++	int err, iter_fd;
++
++	iter_fd =3D open(path, O_RDONLY);
++	if (CHECK(iter_fd < 0, "open", "open %s failed: %s\n",
++		  path, strerror(errno)))
++		return -1;
++
++	err =3D do_read_with_fd(iter_fd, expected, false);
++	close(iter_fd);
++	return err;
++}
++
++static void test_file_iter(void)
++{
++	const char *path =3D "/sys/fs/bpf/bpf_iter_test1";
++	struct bpf_iter_test_kern1 *skel1;
++	struct bpf_iter_test_kern2 *skel2;
++	struct bpf_link *link;
++	int err;
++
++	skel1 =3D bpf_iter_test_kern1__open_and_load();
++	if (CHECK(!skel1, "bpf_iter_test_kern1__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		return;
++
++	link =3D bpf_program__attach_iter(skel1->progs.dump_task, NULL);
++	if (CHECK(IS_ERR(link), "attach_iter", "attach_iter failed\n"))
++		goto out;
++
++	/* unlink this path if it exists. */
++	unlink(path);
++
++	err =3D bpf_link__pin(link, path);
++	if (CHECK(err, "pin_iter", "pin_iter to %s failed: %d\n", path, err))
++		goto free_link;
++
++	err =3D do_read(path, "abcd");
++	if (err)
++		goto unlink_path;
++
++	/* file based iterator seems working fine. Let us a link update
++	 * of the underlying link and `cat` the iterator again, its content
++	 * should change.
++	 */
++	skel2 =3D bpf_iter_test_kern2__open_and_load();
++	if (CHECK(!skel2, "bpf_iter_test_kern2__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		goto unlink_path;
++
++	err =3D bpf_link__update_program(link, skel2->progs.dump_task);
++	if (CHECK(err, "update_prog", "update_prog failed\n"))
++		goto destroy_skel2;
++
++	do_read(path, "ABCD");
++
++destroy_skel2:
++	bpf_iter_test_kern2__destroy(skel2);
++unlink_path:
++	unlink(path);
++free_link:
++	bpf_link__destroy(link);
++out:
++	bpf_iter_test_kern1__destroy(skel1);
++}
++
++static void test_overflow(bool test_e2big_overflow, bool ret1)
++{
++	__u32 map_info_len, total_read_len, expected_read_len;
++	int err, iter_fd, map1_fd, map2_fd, len;
++	struct bpf_map_info map_info =3D {};
++	struct bpf_iter_test_kern4 *skel;
++	struct bpf_link *link;
++	__u32 page_size;
++	char *buf;
++
++	skel =3D bpf_iter_test_kern4__open();
++	if (CHECK(!skel, "bpf_iter_test_kern4__open",
++		  "skeleton open failed\n"))
++		return;
++
++	/* create two maps: bpf program will only do bpf_seq_write
++	 * for these two maps. The goal is one map output almost
++	 * fills seq_file buffer and then the other will trigger
++	 * overflow and needs restart.
++	 */
++	map1_fd =3D bpf_create_map(BPF_MAP_TYPE_ARRAY, 4, 8, 1, 0);
++	if (CHECK(map1_fd < 0, "bpf_create_map",
++		  "map_creation failed: %s\n", strerror(errno)))
++		goto out;
++	map2_fd =3D bpf_create_map(BPF_MAP_TYPE_ARRAY, 4, 8, 1, 0);
++	if (CHECK(map2_fd < 0, "bpf_create_map",
++		  "map_creation failed: %s\n", strerror(errno)))
++		goto free_map1;
++
++	/* bpf_seq_printf kernel buffer is one page, so one map
++	 * bpf_seq_write will mostly fill it, and the other map
++	 * will partially fill and then trigger overflow and need
++	 * bpf_seq_read restart.
++	 */
++	page_size =3D sysconf(_SC_PAGE_SIZE);
++
++	if (test_e2big_overflow) {
++		skel->rodata->print_len =3D (page_size + 8) / 8;
++		expected_read_len =3D 2 * (page_size + 8);
++	} else if (!ret1) {
++		skel->rodata->print_len =3D (page_size - 8) / 8;
++		expected_read_len =3D 2 * (page_size - 8);
++	} else {
++		skel->rodata->print_len =3D 1;
++		expected_read_len =3D 2 * 8;
++	}
++	skel->rodata->ret1 =3D ret1;
++
++	if (CHECK(bpf_iter_test_kern4__load(skel),
++		  "bpf_iter_test_kern4__load", "skeleton load failed\n"))
++		goto free_map2;
++
++	/* setup filtering map_id in bpf program */
++	map_info_len =3D sizeof(map_info);
++	err =3D bpf_obj_get_info_by_fd(map1_fd, &map_info, &map_info_len);
++	if (CHECK(err, "get_map_info", "get map info failed: %s\n",
++		  strerror(errno)))
++		goto free_map2;
++	skel->bss->map1_id =3D map_info.id;
++
++	err =3D bpf_obj_get_info_by_fd(map2_fd, &map_info, &map_info_len);
++	if (CHECK(err, "get_map_info", "get map info failed: %s\n",
++		  strerror(errno)))
++		goto free_map2;
++	skel->bss->map2_id =3D map_info.id;
++
++	link =3D bpf_program__attach_iter(skel->progs.dump_bpf_map, NULL);
++	if (CHECK(IS_ERR(link), "attach_iter", "attach_iter failed\n"))
++		goto free_map2;
++
++	iter_fd =3D bpf_iter_create(bpf_link__fd(link));
++	if (CHECK(iter_fd < 0, "create_iter", "create_iter failed\n"))
++		goto free_link;
++
++	buf =3D malloc(expected_read_len);
++	if (!buf)
++		goto close_iter;
++
++	/* do read */
++	total_read_len =3D 0;
++	if (test_e2big_overflow) {
++		while ((len =3D read(iter_fd, buf, expected_read_len)) > 0)
++			total_read_len +=3D len;
++
++		CHECK(len !=3D -1 || errno !=3D E2BIG, "read",
++		      "expected ret -1, errno E2BIG, but get ret %d, error %s\n",
++			  len, strerror(errno));
++		goto free_buf;
++	} else if (!ret1) {
++		while ((len =3D read(iter_fd, buf, expected_read_len)) > 0)
++			total_read_len +=3D len;
++
++		if (CHECK(len < 0, "read", "read failed: %s\n",
++			  strerror(errno)))
++			goto free_buf;
++	} else {
++		do {
++			len =3D read(iter_fd, buf, expected_read_len);
++			if (len > 0)
++				total_read_len +=3D len;
++		} while (len > 0 || len =3D=3D -EAGAIN);
++
++		if (CHECK(len < 0, "read", "read failed: %s\n",
++			  strerror(errno)))
++			goto free_buf;
++	}
++
++	if (CHECK(total_read_len !=3D expected_read_len, "read",
++		  "total len %u, expected len %u\n", total_read_len,
++		  expected_read_len))
++		goto free_buf;
++
++	if (CHECK(skel->bss->map1_accessed !=3D 1, "map1_accessed",
++		  "expected 1 actual %d\n", skel->bss->map1_accessed))
++		goto free_buf;
++
++	if (CHECK(skel->bss->map2_accessed !=3D 2, "map2_accessed",
++		  "expected 2 actual %d\n", skel->bss->map2_accessed))
++		goto free_buf;
++
++	CHECK(skel->bss->map2_seqnum1 !=3D skel->bss->map2_seqnum2,
++	      "map2_seqnum", "two different seqnum %lld %lld\n",
++	      skel->bss->map2_seqnum1, skel->bss->map2_seqnum2);
++
++free_buf:
++	free(buf);
++close_iter:
++	close(iter_fd);
++free_link:
++	bpf_link__destroy(link);
++free_map2:
++	close(map2_fd);
++free_map1:
++	close(map1_fd);
++out:
++	bpf_iter_test_kern4__destroy(skel);
++}
++
++void test_bpf_iter(void)
++{
++	if (test__start_subtest("btf_id_or_null"))
++		test_btf_id_or_null();
++	if (test__start_subtest("ipv6_route"))
++		test_ipv6_route();
++	if (test__start_subtest("netlink"))
++		test_netlink();
++	if (test__start_subtest("bpf_map"))
++		test_bpf_map();
++	if (test__start_subtest("task"))
++		test_task();
++	if (test__start_subtest("task_file"))
++		test_task_file();
++	if (test__start_subtest("anon"))
++		test_anon_iter(false);
++	if (test__start_subtest("anon-read-one-char"))
++		test_anon_iter(true);
++	if (test__start_subtest("file"))
++		test_file_iter();
++	if (test__start_subtest("overflow"))
++		test_overflow(false, false);
++	if (test__start_subtest("overflow-e2big"))
++		test_overflow(true, false);
++	if (test__start_subtest("prog-ret-1"))
++		test_overflow(false, true);
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern1.c b/to=
+ols/testing/selftests/bpf/progs/bpf_iter_test_kern1.c
+new file mode 100644
+index 000000000000..c71a7c283108
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern1.c
+@@ -0,0 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#define START_CHAR 'a'
++#include "bpf_iter_test_kern_common.h"
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern2.c b/to=
+ols/testing/selftests/bpf/progs/bpf_iter_test_kern2.c
+new file mode 100644
+index 000000000000..8bdc8dc07444
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern2.c
+@@ -0,0 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#define START_CHAR 'A'
++#include "bpf_iter_test_kern_common.h"
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern3.c b/to=
+ols/testing/selftests/bpf/progs/bpf_iter_test_kern3.c
+new file mode 100644
+index 000000000000..636a00fa074d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern3.c
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++SEC("iter/task")
++int dump_task(struct bpf_iter__task *ctx)
++{
++	struct seq_file *seq =3D ctx->meta->seq;
++	struct task_struct *task =3D ctx->task;
++	int tgid;
++
++	tgid =3D task->tgid;
++	bpf_seq_write(seq, &tgid, sizeof(tgid));
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern4.c b/to=
+ols/testing/selftests/bpf/progs/bpf_iter_test_kern4.c
+new file mode 100644
+index 000000000000..b18dc0471d07
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern4.c
+@@ -0,0 +1,52 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++__u32 map1_id =3D 0, map2_id =3D 0;
++__u32 map1_accessed =3D 0, map2_accessed =3D 0;
++__u64 map1_seqnum =3D 0, map2_seqnum1 =3D 0, map2_seqnum2 =3D 0;
++
++static volatile const __u32 print_len;
++static volatile const __u32 ret1;
++
++SEC("iter/bpf_map")
++int dump_bpf_map(struct bpf_iter__bpf_map *ctx)
++{
++	struct seq_file *seq =3D ctx->meta->seq;
++	struct bpf_map *map =3D ctx->map;
++	__u64 seq_num;
++	int i, ret =3D 0;
++
++	if (map =3D=3D (void *)0)
++		return 0;
++
++	/* only dump map1_id and map2_id */
++	if (map->id !=3D map1_id && map->id !=3D map2_id)
++		return 0;
++
++	seq_num =3D ctx->meta->seq_num;
++	if (map->id =3D=3D map1_id) {
++		map1_seqnum =3D seq_num;
++		map1_accessed++;
++	}
++
++	if (map->id =3D=3D map2_id) {
++		if (map2_accessed =3D=3D 0) {
++			map2_seqnum1 =3D seq_num;
++			if (ret1)
++				ret =3D 1;
++		} else {
++			map2_seqnum2 =3D seq_num;
++		}
++		map2_accessed++;
++	}
++
++	/* fill seq_file buffer */
++	for (i =3D 0; i < print_len; i++)
++		bpf_seq_write(seq, &seq_num, sizeof(seq_num));
++
++	return ret;
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern_common.=
+h b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern_common.h
+new file mode 100644
+index 000000000000..bdd51cf14b54
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern_common.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2020 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") =3D "GPL";
++int count =3D 0;
++
++SEC("iter/task")
++int dump_task(struct bpf_iter__task *ctx)
++{
++	struct seq_file *seq =3D ctx->meta->seq;
++	char c;
++
++	if (count < 4) {
++		c =3D START_CHAR + count;
++		bpf_seq_write(seq, &c, sizeof(c));
++		count++;
++	}
++
++	return 0;
++}
 --=20
 2.24.1
 
