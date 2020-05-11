@@ -2,59 +2,58 @@ Return-Path: <SRS0=G4Pv=6Z=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB1EBC54E8D
-	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10B93C54E8D
+	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:52:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CEBDE20720
-	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:52:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E74F120752
+	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:52:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="d2g/X9yv"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="rn9QDejR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731240AbgEKSwj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 May 2020 14:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
+        id S1731267AbgEKSwp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 May 2020 14:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731234AbgEKSwj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 11 May 2020 14:52:39 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934BBC05BD0E
-        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:37 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id s8so12303728wrt.9
-        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:37 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1731259AbgEKSwm (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 11 May 2020 14:52:42 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C7FC05BD0F
+        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:42 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id e16so12314320wra.7
+        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2ojEd/q/k+ui/tdlTtnZjdQdevINffYnK0fnxcI6+4Y=;
-        b=d2g/X9yvb3uYH8vthU94GD76YkA9Y8adNPjh1+vkkGoC8mh6S2pDUgwnUnA4tFvqTw
-         UY2yB8jQFS4wqhOOoBGD/WrwoflNslZnrpGTG2a5SOiXALgJYDI3ADfwUJtXJ76b3CAj
-         PcpGdlzfeTNHMYaczBzVbworPahN01JbMHnOo=
+        bh=iEWx9NWx+iVvT9c6guWm8v93q5pJBOFsw45aCQnsS2o=;
+        b=rn9QDejRxWjnube88IJ1I3sbEoNxPlyuucXwVnCkOZgg9RkXLuvr7TGmSgEHVKuANK
+         6Y7JHBUdhy0+RH/UGWesc5+Xrram+wNJ317SJpSKLoPWDyntoGw1QIwSMDaZis35Koyw
+         AO+/jt8kRwv4jYC/msXrrh7EZipfhyBnubOLQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2ojEd/q/k+ui/tdlTtnZjdQdevINffYnK0fnxcI6+4Y=;
-        b=m4FL2JDPWJXczkW18ycf4fRXGYWtImgMl7QB65RyQ9hWCSb7WM7zkVeQL9fjnzhES9
-         tXzFliS8We/hBs2RbtEwSjv75yv83AHd6lhoPDKSHVDYt3WNBBaqe4N/4uN5DocFimRt
-         3VeHIU602YiE6COsoj8/SN9XQ5ankr7zz8gyU51xLy92RpWu11RNciqlTQoZbrteuqBg
-         Jy1uokp9USVOKZ3Y+ODRdpN3wrZRYDNQHT0Tv6AB9s6djAn8Z3YJ2tGweIvmqPn7uCb0
-         c4yQ3Tzq/z4mrGe473SW08lmjaYeSmLmg24EJ87KKjmobTZmnJ9lZtumpl1PMaZxY43A
-         4p6A==
-X-Gm-Message-State: AGi0PuaOuC5anBzSvcB2/uQqYUq8LfpPx36LIgRMxBm6smNggFSJ3t4D
-        1q8m8yQO7dbZ2aCKb8/2UUZMSA==
-X-Google-Smtp-Source: APiQypJguhmqZWm6uwGU1Lvf+X7YeVMHhDzstvAlIJDTuvKaDfsIYwLPROaPVYOBgfXEfPfzTpb4FQ==
-X-Received: by 2002:adf:ab09:: with SMTP id q9mr19761725wrc.240.1589223156180;
-        Mon, 11 May 2020 11:52:36 -0700 (PDT)
+        bh=iEWx9NWx+iVvT9c6guWm8v93q5pJBOFsw45aCQnsS2o=;
+        b=kvnL7owHtI66G79u40dj/Ya0skBsgkbyj5ydDX6IWsiVVkQElnfYv4y760n2pq3GrL
+         arPPpGaOcilBub9hewfxqcf/v23ahlBi67V0JehPd/BAosv1QThgVATzR95nLNZCvHbo
+         x/uK8efsVAlXC0ly+4tBjCsYZndnIldKjPKM7IEypg/KAJN75Y2ubS6ciLBFXKK42iVC
+         D8vVw+7kNy4nQbN1xi6SA4lIgiXa6XAVKQVjyhLBltWnvyifwsGntTibxXulQRGpuOhr
+         F9pd1A2uTjYTERzdMpbN4Ht/0j8caitIeXw5U0s8JsJgYkbkIa6sVitZGU4+SHdavZZj
+         z1vQ==
+X-Gm-Message-State: AGi0Pub3IWhQxeVAm9dFIBoKlm2IvHyfOEQIPQhDXbj4bBXo6/5fXH7O
+        BCnA/F/5cxhgf+e4h16QiTiL6w==
+X-Google-Smtp-Source: APiQypJ73bJM6PxpUfbG6vXTcl6G+xrXXy2TvCHqmviDyjTl9bjH8b6e9lMIZDGJyzVjqqHwrXyYpg==
+X-Received: by 2002:a5d:42c9:: with SMTP id t9mr21231809wrr.246.1589223160772;
+        Mon, 11 May 2020 11:52:40 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id n7sm9896610wro.94.2020.05.11.11.52.35
+        by smtp.gmail.com with ESMTPSA id 88sm19716885wrq.77.2020.05.11.11.52.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 11:52:35 -0700 (PDT)
+        Mon, 11 May 2020 11:52:40 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     dccp@vger.kernel.org, kernel-team@cloudflare.com,
@@ -66,11 +65,10 @@ Cc:     dccp@vger.kernel.org, kernel-team@cloudflare.com,
         Jakub Kicinski <kuba@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Martin KaFai Lau <kafai@fb.com>,
-        Marek Majkowski <marek@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next v2 10/17] udp: Run SK_LOOKUP BPF program on socket lookup
-Date:   Mon, 11 May 2020 20:52:11 +0200
-Message-Id: <20200511185218.1422406-11-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v2 13/17] bpf: Sync linux/bpf.h to tools/
+Date:   Mon, 11 May 2020 20:52:14 +0200
+Message-Id: <20200511185218.1422406-14-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.3
 In-Reply-To: <20200511185218.1422406-1-jakub@cloudflare.com>
 References: <20200511185218.1422406-1-jakub@cloudflare.com>
@@ -81,80 +79,109 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Following INET/TCP socket lookup changes, modify UDP socket lookup to let
-BPF program select a receiving socket before searching for a socket by
-destination address and port as usual.
+Newly added program, context type and helper is used by tests in a
+subsequent patch. Synchronize the header file.
 
-Lookup of connected sockets that match packet 4-tuple is unaffected by this
-change. BPF program runs, and potentially overrides the lookup result, only
-if a 4-tuple match was not found.
-
-Suggested-by: Marek Majkowski <marek@cloudflare.com>
 Reviewed-by: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- net/ipv4/udp.c | 36 ++++++++++++++++++++++++++++--------
- 1 file changed, 28 insertions(+), 8 deletions(-)
 
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index d4842f29294a..18d8432f6551 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -460,7 +460,7 @@ struct sock *__udp4_lib_lookup(struct net *net, __be32 saddr,
- 		__be16 sport, __be32 daddr, __be16 dport, int dif,
- 		int sdif, struct udp_table *udptable, struct sk_buff *skb)
- {
--	struct sock *result;
-+	struct sock *result, *sk, *reuse_sk;
- 	unsigned short hnum = ntohs(dport);
- 	unsigned int hash2, slot2;
- 	struct udp_hslot *hslot2;
-@@ -469,18 +469,38 @@ struct sock *__udp4_lib_lookup(struct net *net, __be32 saddr,
- 	slot2 = hash2 & udptable->mask;
- 	hslot2 = &udptable->hash2[slot2];
+Notes:
+    v2:
+    - Update after changes to bpf.h in earlier patch.
+
+ tools/include/uapi/linux/bpf.h | 52 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 9d1932e23cec..03edf4ec7b7e 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -188,6 +188,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_STRUCT_OPS,
+ 	BPF_PROG_TYPE_EXT,
+ 	BPF_PROG_TYPE_LSM,
++	BPF_PROG_TYPE_SK_LOOKUP,
+ };
  
-+	/* Lookup connected or non-wildcard socket */
- 	result = udp4_lib_lookup2(net, saddr, sport,
- 				  daddr, hnum, dif, sdif,
- 				  hslot2, skb);
--	if (!result) {
--		hash2 = ipv4_portaddr_hash(net, htonl(INADDR_ANY), hnum);
--		slot2 = hash2 & udptable->mask;
--		hslot2 = &udptable->hash2[slot2];
-+	if (!IS_ERR_OR_NULL(result) && result->sk_state == TCP_ESTABLISHED)
-+		goto done;
+ enum bpf_attach_type {
+@@ -220,6 +221,7 @@ enum bpf_attach_type {
+ 	BPF_MODIFY_RETURN,
+ 	BPF_LSM_MAC,
+ 	BPF_TRACE_ITER,
++	BPF_SK_LOOKUP,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
  
--		result = udp4_lib_lookup2(net, saddr, sport,
--					  htonl(INADDR_ANY), hnum, dif, sdif,
--					  hslot2, skb);
-+	/* Lookup redirect from BPF */
-+	sk = inet_lookup_run_bpf(net, udptable->protocol,
-+				 saddr, sport, daddr, hnum);
-+	if (IS_ERR(sk))
-+		return NULL;
-+	if (sk) {
-+		reuse_sk = lookup_reuseport(net, sk, skb,
-+					    saddr, sport, daddr, hnum);
-+		result = reuse_sk ? : sk;
-+		goto done;
- 	}
+@@ -3050,6 +3052,10 @@ union bpf_attr {
+  *
+  * int bpf_sk_assign(struct sk_buff *skb, struct bpf_sock *sk, u64 flags)
+  *	Description
++ *		Helper is overloaded depending on BPF program type. This
++ *		description applies to **BPF_PROG_TYPE_SCHED_CLS** and
++ *		**BPF_PROG_TYPE_SCHED_ACT** programs.
++ *
+  *		Assign the *sk* to the *skb*. When combined with appropriate
+  *		routing configuration to receive the packet towards the socket,
+  *		will cause *skb* to be delivered to the specified socket.
+@@ -3070,6 +3076,38 @@ union bpf_attr {
+  *					call from outside of TC ingress.
+  *		* **-ESOCKTNOSUPPORT**	Socket type not supported (reuseport).
+  *
++ * int bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
++ *	Description
++ *		Helper is overloaded depending on BPF program type. This
++ *		description applies to **BPF_PROG_TYPE_SK_LOOKUP** programs.
++ *
++ *		Select the *sk* as a result of a socket lookup.
++ *
++ *		For the operation to succeed passed socket must be compatible
++ *		with the packet description provided by the *ctx* object.
++ *
++ *		L4 protocol (*IPPROTO_TCP* or *IPPROTO_UDP*) must be an exact
++ *		match. While IP family (*AF_INET* or *AF_INET6*) must be
++ *		compatible, that is IPv6 sockets that are not v6-only can be
++ *		selected for IPv4 packets.
++ *
++ *		Only TCP listeners and UDP sockets, that is sockets which have
++ *		*SOCK_RCU_FREE* flag set, can be selected.
++ *
++ *		The *flags* argument must be zero.
++ *	Return
++ *		0 on success, or a negative errno in case of failure.
++ *
++ *		**-EAFNOSUPPORT** is socket family (*sk->family*) is not
++ *		compatible with packet family (*ctx->family*).
++ *
++ *		**-EINVAL** if unsupported flags were specified.
++ *
++ *		**-EPROTOTYPE** if socket L4 protocol (*sk->protocol*) doesn't
++ *		match packet protocol (*ctx->protocol*).
++ *
++ *		**-ESOCKTNOSUPPORT** if socket does not use RCU freeing.
++ *
+  * u64 bpf_ktime_get_boot_ns(void)
+  * 	Description
+  * 		Return the time elapsed since system boot, in nanoseconds.
+@@ -4058,4 +4096,18 @@ struct bpf_pidns_info {
+ 	__u32 pid;
+ 	__u32 tgid;
+ };
 +
-+	/* Got non-wildcard socket or error on first lookup */
-+	if (result)
-+		goto done;
++/* User accessible data for SK_LOOKUP programs. Add new fields at the end. */
++struct bpf_sk_lookup {
++	__u32 family;		/* Protocol family (AF_INET, AF_INET6) */
++	__u32 protocol;		/* IP protocol (IPPROTO_TCP, IPPROTO_UDP) */
++	/* IP addresses allow 1,2,4-byte read and are in network byte order. */
++	__u32 remote_ip4;
++	__u32 remote_ip6[4];
++	__u32 remote_port;	/* network byte order */
++	__u32 local_ip4;
++	__u32 local_ip6[4];
++	__u32 local_port;	/* host byte order */
++};
 +
-+	/* Lookup wildcard sockets */
-+	hash2 = ipv4_portaddr_hash(net, htonl(INADDR_ANY), hnum);
-+	slot2 = hash2 & udptable->mask;
-+	hslot2 = &udptable->hash2[slot2];
-+
-+	result = udp4_lib_lookup2(net, saddr, sport,
-+				  htonl(INADDR_ANY), hnum, dif, sdif,
-+				  hslot2, skb);
-+done:
- 	if (IS_ERR(result))
- 		return NULL;
- 	return result;
+ #endif /* _UAPI__LINUX_BPF_H__ */
 -- 
 2.25.3
 
