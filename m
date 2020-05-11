@@ -2,59 +2,58 @@ Return-Path: <SRS0=G4Pv=6Z=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75267C54E8D
-	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:52:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5142C47255
+	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:53:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4525520720
-	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:52:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C4B320720
+	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:53:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="FO58hWDq"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="qNGUFYTd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731270AbgEKSwp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 May 2020 14:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
+        id S1731242AbgEKSwi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 May 2020 14:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730999AbgEKSwp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 11 May 2020 14:52:45 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79077C061A0C
-        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:43 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id 50so11773175wrc.11
-        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:43 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1731234AbgEKSwf (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 11 May 2020 14:52:35 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5961C05BD09
+        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:34 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id s8so12303556wrt.9
+        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6tCYXE51QKC2s1xmH0RFoqrpk+5/XyGhBDt5mxX5Fgg=;
-        b=FO58hWDqPYzKNjvKdhrYLp6kpxITiMwRv0UKW4YArm23gg9B5DLYcOH28W5a+n6LaO
-         L/UAKhZCqrfUOtLkp0BkjvuKtqAOKMhcyqrFyIk0dMGOhj9Q7pSlI38QDV6A32eOXwPc
-         EYLNtf5JS1IiTgIR15ilE20GDNBbFR67Msmkk=
+        bh=PJC838rCblZYwK9d/soNBjN4ZElrFcTAEZBfSJoBG5Y=;
+        b=qNGUFYTdql4aolrkJIC9ZsIglFJNx/4qqNWFgIWYu+sov/g1abKfyDJbOGXrhxRXYU
+         Kfa4U6m4jBJC792ESqPOO6fAZzq1E46WhQ2uMzvWWFs3VGo6jYGgKQf9EHo4kt0RvzSn
+         jir58MAzbFI9bs+AjGBQJYlCYumbErMQ886ao=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6tCYXE51QKC2s1xmH0RFoqrpk+5/XyGhBDt5mxX5Fgg=;
-        b=JXd4ZFQwa0e4q8f1DBTvzbVVUXzs5prf7qIY4rM9oUzaQK/cfdvLumo3xN02l2/GF5
-         GXz2SvvskuvhL4NV8UcydLimJ/WNgCXzUAM0zixG71wSEbzFpq937BniJ7MTRiMp668I
-         c/TVIZIo3CobUVtJq24MGA4VRssLCU/YoTYe5+1RI1rtSlY0kuwynxpzXpCBs8CkBcni
-         wBDfsgLswIhh2qY/7sqc2PVWRBEbh0l13t703KJ4+H8EigKnS8tzXCJnBfqgt/AQtwlJ
-         Ee/0wFa/p228+bSpCa6RRodp61hHa9aVXUBGrs9LxaiXkdetGP1o5J1bQ+xj8tncPYo7
-         cwQQ==
-X-Gm-Message-State: AGi0PuZOMNQd4u8Cy2Dj1fKUE67ZQCsWszQO7oJ7GqX6kqPZRZt/oev0
-        eZc74+hdd01xepCqh6SWpRmGow==
-X-Google-Smtp-Source: APiQypJdJjKeskJNOdvLgJIGLZkTRNunPkWLYdb/o/Zebmz/DQsWn4FJs/l4EiZPpZU7Wy+F2zTOkg==
-X-Received: by 2002:a5d:5228:: with SMTP id i8mr20905349wra.359.1589223162200;
-        Mon, 11 May 2020 11:52:42 -0700 (PDT)
+        bh=PJC838rCblZYwK9d/soNBjN4ZElrFcTAEZBfSJoBG5Y=;
+        b=INQu5dshDMd1+UL4RZWQkGiARuLI7cBW2sannkKVK8Eknmf/3GgOpTxcPvwrAfgjt9
+         /I3hh5QvyQnFfs3xsEqABc3EtPLGD8TgH1BSsyVS48Btrovh1fKNesRWT2BFjFZCWYaL
+         GZEC54Vre099YzBcSXoZCTIgQRhLUi9Du08psDcevVI5hgdWpJCUZSJFqmj702QRjNUt
+         HAEHsub+ZyjSv7Unijawzw749a5eVGPdBE4wcQ9of+P9PaHb8S++7L/ESmzsnZO2+LzY
+         8czTx+YM/T8l5Cu/vrW8ufx9YCvjf4PnklzfKljO0eosE/FY1Zpm0PGnuhJxxIcOXRNW
+         0Z2w==
+X-Gm-Message-State: AGi0PuZmatD388KiSIj3uI3VtTsmIpHvbi1lIxcNIt3i1i8fl0+hz1oW
+        psaWRqyunVL4lnk9supna3Qi2w==
+X-Google-Smtp-Source: APiQypJfxDp9v0xWUehGXJK+z2SnYMFWN7t/kXjw8HfT1v5wQgpE6fGjb6T3pXbOlpV+w6MmUQot0Q==
+X-Received: by 2002:a5d:65ce:: with SMTP id e14mr20300601wrw.314.1589223153053;
+        Mon, 11 May 2020 11:52:33 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id t6sm3543234wma.4.2020.05.11.11.52.41
+        by smtp.gmail.com with ESMTPSA id m1sm19653478wrx.44.2020.05.11.11.52.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 11:52:41 -0700 (PDT)
+        Mon, 11 May 2020 11:52:32 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     dccp@vger.kernel.org, kernel-team@cloudflare.com,
@@ -65,10 +64,11 @@ Cc:     dccp@vger.kernel.org, kernel-team@cloudflare.com,
         Gerrit Renker <gerrit@erg.abdn.ac.uk>,
         Jakub Kicinski <kuba@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>
-Subject: [PATCH bpf-next v2 14/17] libbpf: Add support for SK_LOOKUP program type
-Date:   Mon, 11 May 2020 20:52:15 +0200
-Message-Id: <20200511185218.1422406-15-jakub@cloudflare.com>
+        Martin KaFai Lau <kafai@fb.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf-next v2 08/17] udp: Store layer 4 protocol in udp_table
+Date:   Mon, 11 May 2020 20:52:09 +0200
+Message-Id: <20200511185218.1422406-9-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.3
 In-Reply-To: <20200511185218.1422406-1-jakub@cloudflare.com>
 References: <20200511185218.1422406-1-jakub@cloudflare.com>
@@ -79,86 +79,236 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make libbpf aware of the newly added program type, and assign it a
-section name.
+Because UDP and UDP-Lite share code, we pass the L4 protocol identifier
+alongside the UDP socket table to functions which need to distinguishing
+between the two protocol.
 
+Put the protocol identifier in the UDP table itself, so that the protocol
+is known to any function in the call chain that operates on socket table.
+
+Subsequent patches make use the new udp_table field at the socket lookup
+time to ensure that BPF program selects only sockets with matching
+protocol.
+
+Reviewed-by: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
+ include/net/udp.h   | 10 ++++++----
+ net/ipv4/udp.c      | 15 +++++++--------
+ net/ipv4/udp_impl.h |  2 +-
+ net/ipv4/udplite.c  |  4 ++--
+ net/ipv6/udp.c      | 12 ++++++------
+ net/ipv6/udp_impl.h |  2 +-
+ net/ipv6/udplite.c  |  2 +-
+ 7 files changed, 24 insertions(+), 23 deletions(-)
 
-Notes:
-    v2:
-     - Add new libbpf symbols to version 0.0.9. (Andrii)
-
- tools/lib/bpf/libbpf.c        | 3 +++
- tools/lib/bpf/libbpf.h        | 2 ++
- tools/lib/bpf/libbpf.map      | 2 ++
- tools/lib/bpf/libbpf_probes.c | 1 +
- 4 files changed, 8 insertions(+)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 6c2f46908f4d..ccded6cd310a 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -6524,6 +6524,7 @@ BPF_PROG_TYPE_FNS(perf_event, BPF_PROG_TYPE_PERF_EVENT);
- BPF_PROG_TYPE_FNS(tracing, BPF_PROG_TYPE_TRACING);
- BPF_PROG_TYPE_FNS(struct_ops, BPF_PROG_TYPE_STRUCT_OPS);
- BPF_PROG_TYPE_FNS(extension, BPF_PROG_TYPE_EXT);
-+BPF_PROG_TYPE_FNS(sk_lookup, BPF_PROG_TYPE_SK_LOOKUP);
- 
- enum bpf_attach_type
- bpf_program__get_expected_attach_type(struct bpf_program *prog)
-@@ -6690,6 +6691,8 @@ static const struct bpf_sec_def section_defs[] = {
- 	BPF_EAPROG_SEC("cgroup/setsockopt",	BPF_PROG_TYPE_CGROUP_SOCKOPT,
- 						BPF_CGROUP_SETSOCKOPT),
- 	BPF_PROG_SEC("struct_ops",		BPF_PROG_TYPE_STRUCT_OPS),
-+	BPF_EAPROG_SEC("sk_lookup",		BPF_PROG_TYPE_SK_LOOKUP,
-+						BPF_SK_LOOKUP),
+diff --git a/include/net/udp.h b/include/net/udp.h
+index a8fa6c0c6ded..f81c46c71fee 100644
+--- a/include/net/udp.h
++++ b/include/net/udp.h
+@@ -63,16 +63,18 @@ struct udp_hslot {
+ /**
+  *	struct udp_table - UDP table
+  *
+- *	@hash:	hash table, sockets are hashed on (local port)
+- *	@hash2:	hash table, sockets are hashed on (local port, local address)
+- *	@mask:	number of slots in hash tables, minus 1
+- *	@log:	log2(number of slots in hash table)
++ *	@hash:		hash table, sockets are hashed on (local port)
++ *	@hash2:		hash table, sockets are hashed on local (port, address)
++ *	@mask:		number of slots in hash tables, minus 1
++ *	@log:		log2(number of slots in hash table)
++ *	@protocol:	layer 4 protocol of the stored sockets
+  */
+ struct udp_table {
+ 	struct udp_hslot	*hash;
+ 	struct udp_hslot	*hash2;
+ 	unsigned int		mask;
+ 	unsigned int		log;
++	int			protocol;
  };
+ extern struct udp_table udp_table;
+ void udp_table_init(struct udp_table *, const char *);
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 32564b350823..ce96b1746ddf 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -113,7 +113,7 @@
+ #include <net/addrconf.h>
+ #include <net/udp_tunnel.h>
  
- #undef BPF_PROG_SEC_IMPL
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 8ea69558f0a8..7bb5a4f22740 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -346,6 +346,7 @@ LIBBPF_API int bpf_program__set_perf_event(struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_tracing(struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_struct_ops(struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_extension(struct bpf_program *prog);
-+LIBBPF_API int bpf_program__set_sk_lookup(struct bpf_program *prog);
+-struct udp_table udp_table __read_mostly;
++struct udp_table udp_table __read_mostly = { .protocol = IPPROTO_UDP };
+ EXPORT_SYMBOL(udp_table);
  
- LIBBPF_API enum bpf_prog_type bpf_program__get_type(struct bpf_program *prog);
- LIBBPF_API void bpf_program__set_type(struct bpf_program *prog,
-@@ -373,6 +374,7 @@ LIBBPF_API bool bpf_program__is_perf_event(const struct bpf_program *prog);
- LIBBPF_API bool bpf_program__is_tracing(const struct bpf_program *prog);
- LIBBPF_API bool bpf_program__is_struct_ops(const struct bpf_program *prog);
- LIBBPF_API bool bpf_program__is_extension(const struct bpf_program *prog);
-+LIBBPF_API bool bpf_program__is_sk_lookup(const struct bpf_program *prog);
+ long sysctl_udp_mem[3] __read_mostly;
+@@ -2145,8 +2145,7 @@ EXPORT_SYMBOL(udp_sk_rx_dst_set);
+ static int __udp4_lib_mcast_deliver(struct net *net, struct sk_buff *skb,
+ 				    struct udphdr  *uh,
+ 				    __be32 saddr, __be32 daddr,
+-				    struct udp_table *udptable,
+-				    int proto)
++				    struct udp_table *udptable)
+ {
+ 	struct sock *sk, *first = NULL;
+ 	unsigned short hnum = ntohs(uh->dest);
+@@ -2202,7 +2201,7 @@ static int __udp4_lib_mcast_deliver(struct net *net, struct sk_buff *skb,
+ 	} else {
+ 		kfree_skb(skb);
+ 		__UDP_INC_STATS(net, UDP_MIB_IGNOREDMULTI,
+-				proto == IPPROTO_UDPLITE);
++				udptable->protocol == IPPROTO_UDPLITE);
+ 	}
+ 	return 0;
+ }
+@@ -2279,8 +2278,7 @@ static int udp_unicast_rcv_skb(struct sock *sk, struct sk_buff *skb,
+  *	All we need to do is get the socket, and then do a checksum.
+  */
+ 
+-int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+-		   int proto)
++int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable)
+ {
+ 	struct sock *sk;
+ 	struct udphdr *uh;
+@@ -2288,6 +2286,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 	struct rtable *rt = skb_rtable(skb);
+ 	__be32 saddr, daddr;
+ 	struct net *net = dev_net(skb->dev);
++	int proto = udptable->protocol;
+ 	bool refcounted;
+ 
+ 	/*
+@@ -2330,7 +2329,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 
+ 	if (rt->rt_flags & (RTCF_BROADCAST|RTCF_MULTICAST))
+ 		return __udp4_lib_mcast_deliver(net, skb, uh,
+-						saddr, daddr, udptable, proto);
++						saddr, daddr, udptable);
+ 
+ 	sk = __udp4_lib_lookup_skb(skb, uh->source, uh->dest, udptable);
+ 	if (sk)
+@@ -2504,7 +2503,7 @@ int udp_v4_early_demux(struct sk_buff *skb)
+ 
+ int udp_rcv(struct sk_buff *skb)
+ {
+-	return __udp4_lib_rcv(skb, &udp_table, IPPROTO_UDP);
++	return __udp4_lib_rcv(skb, &udp_table);
+ }
+ 
+ void udp_destroy_sock(struct sock *sk)
+diff --git a/net/ipv4/udp_impl.h b/net/ipv4/udp_impl.h
+index 6b2fa77eeb1c..7013535f9084 100644
+--- a/net/ipv4/udp_impl.h
++++ b/net/ipv4/udp_impl.h
+@@ -6,7 +6,7 @@
+ #include <net/protocol.h>
+ #include <net/inet_common.h>
+ 
+-int __udp4_lib_rcv(struct sk_buff *, struct udp_table *, int);
++int __udp4_lib_rcv(struct sk_buff *, struct udp_table *);
+ int __udp4_lib_err(struct sk_buff *, u32, struct udp_table *);
+ 
+ int udp_v4_get_port(struct sock *sk, unsigned short snum);
+diff --git a/net/ipv4/udplite.c b/net/ipv4/udplite.c
+index 5936d66d1ce2..4e4e85de95b2 100644
+--- a/net/ipv4/udplite.c
++++ b/net/ipv4/udplite.c
+@@ -14,12 +14,12 @@
+ #include <linux/proc_fs.h>
+ #include "udp_impl.h"
+ 
+-struct udp_table 	udplite_table __read_mostly;
++struct udp_table udplite_table __read_mostly = { .protocol = IPPROTO_UDPLITE };
+ EXPORT_SYMBOL(udplite_table);
+ 
+ static int udplite_rcv(struct sk_buff *skb)
+ {
+-	return __udp4_lib_rcv(skb, &udplite_table, IPPROTO_UDPLITE);
++	return __udp4_lib_rcv(skb, &udplite_table);
+ }
+ 
+ static int udplite_err(struct sk_buff *skb, u32 info)
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 7d4151747340..f7866fded418 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -741,7 +741,7 @@ static void udp6_csum_zero_error(struct sk_buff *skb)
+  */
+ static int __udp6_lib_mcast_deliver(struct net *net, struct sk_buff *skb,
+ 		const struct in6_addr *saddr, const struct in6_addr *daddr,
+-		struct udp_table *udptable, int proto)
++		struct udp_table *udptable)
+ {
+ 	struct sock *sk, *first = NULL;
+ 	const struct udphdr *uh = udp_hdr(skb);
+@@ -803,7 +803,7 @@ static int __udp6_lib_mcast_deliver(struct net *net, struct sk_buff *skb,
+ 	} else {
+ 		kfree_skb(skb);
+ 		__UDP6_INC_STATS(net, UDP_MIB_IGNOREDMULTI,
+-				 proto == IPPROTO_UDPLITE);
++				 udptable->protocol == IPPROTO_UDPLITE);
+ 	}
+ 	return 0;
+ }
+@@ -836,11 +836,11 @@ static int udp6_unicast_rcv_skb(struct sock *sk, struct sk_buff *skb,
+ 	return 0;
+ }
+ 
+-int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+-		   int proto)
++int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable)
+ {
+ 	const struct in6_addr *saddr, *daddr;
+ 	struct net *net = dev_net(skb->dev);
++	int proto = udptable->protocol;
+ 	struct udphdr *uh;
+ 	struct sock *sk;
+ 	bool refcounted;
+@@ -905,7 +905,7 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 	 */
+ 	if (ipv6_addr_is_multicast(daddr))
+ 		return __udp6_lib_mcast_deliver(net, skb,
+-				saddr, daddr, udptable, proto);
++				saddr, daddr, udptable);
+ 
+ 	/* Unicast */
+ 	sk = __udp6_lib_lookup_skb(skb, uh->source, uh->dest, udptable);
+@@ -1014,7 +1014,7 @@ INDIRECT_CALLABLE_SCOPE void udp_v6_early_demux(struct sk_buff *skb)
+ 
+ INDIRECT_CALLABLE_SCOPE int udpv6_rcv(struct sk_buff *skb)
+ {
+-	return __udp6_lib_rcv(skb, &udp_table, IPPROTO_UDP);
++	return __udp6_lib_rcv(skb, &udp_table);
+ }
  
  /*
-  * No need for __attribute__((packed)), all members of 'bpf_map_def'
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 0133d469d30b..2490c5e34297 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -262,4 +262,6 @@ LIBBPF_0.0.9 {
- 		bpf_link_get_fd_by_id;
- 		bpf_link_get_next_id;
- 		bpf_program__attach_iter;
-+		bpf_program__is_sk_lookup;
-+		bpf_program__set_sk_lookup;
- } LIBBPF_0.0.8;
-diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-index 2c92059c0c90..5c6d3e49f254 100644
---- a/tools/lib/bpf/libbpf_probes.c
-+++ b/tools/lib/bpf/libbpf_probes.c
-@@ -109,6 +109,7 @@ probe_load(enum bpf_prog_type prog_type, const struct bpf_insn *insns,
- 	case BPF_PROG_TYPE_STRUCT_OPS:
- 	case BPF_PROG_TYPE_EXT:
- 	case BPF_PROG_TYPE_LSM:
-+	case BPF_PROG_TYPE_SK_LOOKUP:
- 	default:
- 		break;
- 	}
+diff --git a/net/ipv6/udp_impl.h b/net/ipv6/udp_impl.h
+index 20e324b6f358..acd5a942c633 100644
+--- a/net/ipv6/udp_impl.h
++++ b/net/ipv6/udp_impl.h
+@@ -8,7 +8,7 @@
+ #include <net/inet_common.h>
+ #include <net/transp_v6.h>
+ 
+-int __udp6_lib_rcv(struct sk_buff *, struct udp_table *, int);
++int __udp6_lib_rcv(struct sk_buff *, struct udp_table *);
+ int __udp6_lib_err(struct sk_buff *, struct inet6_skb_parm *, u8, u8, int,
+ 		   __be32, struct udp_table *);
+ 
+diff --git a/net/ipv6/udplite.c b/net/ipv6/udplite.c
+index bf7a7acd39b1..f442ed595e6f 100644
+--- a/net/ipv6/udplite.c
++++ b/net/ipv6/udplite.c
+@@ -14,7 +14,7 @@
+ 
+ static int udplitev6_rcv(struct sk_buff *skb)
+ {
+-	return __udp6_lib_rcv(skb, &udplite_table, IPPROTO_UDPLITE);
++	return __udp6_lib_rcv(skb, &udplite_table);
+ }
+ 
+ static int udplitev6_err(struct sk_buff *skb,
 -- 
 2.25.3
 
