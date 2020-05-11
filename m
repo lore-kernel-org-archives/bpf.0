@@ -2,58 +2,59 @@ Return-Path: <SRS0=G4Pv=6Z=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CF52C47255
-	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:52:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75267C54E8D
+	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:52:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00199206DB
-	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:52:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4525520720
+	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:52:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="sYU4PWUj"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="FO58hWDq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731287AbgEKSww (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 May 2020 14:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
+        id S1731270AbgEKSwp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 May 2020 14:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731284AbgEKSwt (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 11 May 2020 14:52:49 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95072C061A0C
-        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:48 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id e26so19159380wmk.5
-        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:48 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1730999AbgEKSwp (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 11 May 2020 14:52:45 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79077C061A0C
+        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:43 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id 50so11773175wrc.11
+        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ze/h/CNZ/91B28Ipr0bBfUZchvfb9nsJ7KusesHA9+8=;
-        b=sYU4PWUj/xVA9pUSitEbqXibw2TD+mMqSKc1kfkitZAnyYlZ9GChb7zJ1okvNzTrNZ
-         RUT6AK20LeyGZBqQNy4qUBbvGncNp7dCXLySELi1zY7U5TYfrr+Z0XiZqwWJKGX0NbNv
-         IPb/OqOGnvV3IXFzyz8bArdbTZaFdDFG7s3eM=
+        bh=6tCYXE51QKC2s1xmH0RFoqrpk+5/XyGhBDt5mxX5Fgg=;
+        b=FO58hWDqPYzKNjvKdhrYLp6kpxITiMwRv0UKW4YArm23gg9B5DLYcOH28W5a+n6LaO
+         L/UAKhZCqrfUOtLkp0BkjvuKtqAOKMhcyqrFyIk0dMGOhj9Q7pSlI38QDV6A32eOXwPc
+         EYLNtf5JS1IiTgIR15ilE20GDNBbFR67Msmkk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ze/h/CNZ/91B28Ipr0bBfUZchvfb9nsJ7KusesHA9+8=;
-        b=sXvie05F0cWVGCOrFihLSb/YzJ8KrsxbhASVkjd/Qws0apkRSO6URmV2BEfaz1S+wn
-         91mE3O3doJuvtQXFFP6yIMyIFjbkprEuPGBhOaqky5Km+glvaJJnQ2SbCYKBNySJJSQf
-         UucmSTK59O3pH+GvsQqdIt5R20iUJHvy9mWHx9eokQ1/wYXx0aubsAgQklJwXcwIiaUQ
-         JjhSk4583JL9cmXB7GGpawtluBxDIxQ0LchVesPGbSOCHhMnFtG0g70gQW5rHMfMaPid
-         ernNu8qp7nPTGhLlcDO/ffBOBHfia0D0XgTFFl7NddQ0XWo7ewYc4pVtKiMnDlRCxLev
-         GAMQ==
-X-Gm-Message-State: AGi0PuYBgXC3BJvi52Hn2NJaZAMDwpUGBYf7bTHX+v2m4wpOT0qOk0G9
-        UKDPLPYSldswYKHKdJbQ+wOkVA==
-X-Google-Smtp-Source: APiQypI9RoFMZOoV3cnZFuQqxWCCY8o/0MmyVLJgIyn+Wz5pmYK2zSUXVKmpjsFVNq51VcWjQuoSeg==
-X-Received: by 2002:a1c:7415:: with SMTP id p21mr32405160wmc.93.1589223166721;
-        Mon, 11 May 2020 11:52:46 -0700 (PDT)
+        bh=6tCYXE51QKC2s1xmH0RFoqrpk+5/XyGhBDt5mxX5Fgg=;
+        b=JXd4ZFQwa0e4q8f1DBTvzbVVUXzs5prf7qIY4rM9oUzaQK/cfdvLumo3xN02l2/GF5
+         GXz2SvvskuvhL4NV8UcydLimJ/WNgCXzUAM0zixG71wSEbzFpq937BniJ7MTRiMp668I
+         c/TVIZIo3CobUVtJq24MGA4VRssLCU/YoTYe5+1RI1rtSlY0kuwynxpzXpCBs8CkBcni
+         wBDfsgLswIhh2qY/7sqc2PVWRBEbh0l13t703KJ4+H8EigKnS8tzXCJnBfqgt/AQtwlJ
+         Ee/0wFa/p228+bSpCa6RRodp61hHa9aVXUBGrs9LxaiXkdetGP1o5J1bQ+xj8tncPYo7
+         cwQQ==
+X-Gm-Message-State: AGi0PuZOMNQd4u8Cy2Dj1fKUE67ZQCsWszQO7oJ7GqX6kqPZRZt/oev0
+        eZc74+hdd01xepCqh6SWpRmGow==
+X-Google-Smtp-Source: APiQypJdJjKeskJNOdvLgJIGLZkTRNunPkWLYdb/o/Zebmz/DQsWn4FJs/l4EiZPpZU7Wy+F2zTOkg==
+X-Received: by 2002:a5d:5228:: with SMTP id i8mr20905349wra.359.1589223162200;
+        Mon, 11 May 2020 11:52:42 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id n6sm16988638wrt.58.2020.05.11.11.52.45
+        by smtp.gmail.com with ESMTPSA id t6sm3543234wma.4.2020.05.11.11.52.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 11:52:46 -0700 (PDT)
+        Mon, 11 May 2020 11:52:41 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     dccp@vger.kernel.org, kernel-team@cloudflare.com,
@@ -65,9 +66,9 @@ Cc:     dccp@vger.kernel.org, kernel-team@cloudflare.com,
         Jakub Kicinski <kuba@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Martin KaFai Lau <kafai@fb.com>
-Subject: [PATCH bpf-next v2 17/17] selftests/bpf: Tests for BPF_SK_LOOKUP attach point
-Date:   Mon, 11 May 2020 20:52:18 +0200
-Message-Id: <20200511185218.1422406-18-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v2 14/17] libbpf: Add support for SK_LOOKUP program type
+Date:   Mon, 11 May 2020 20:52:15 +0200
+Message-Id: <20200511185218.1422406-15-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.3
 In-Reply-To: <20200511185218.1422406-1-jakub@cloudflare.com>
 References: <20200511185218.1422406-1-jakub@cloudflare.com>
@@ -78,1204 +79,86 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add tests to test_progs that exercise:
-
- - attaching/detaching/querying sk_lookup program,
- - overriding socket lookup result for TCP/UDP with BPF sk_lookup by
-   a) selecting a socket fetched from a SOCKMAP, or
-   b) failing the lookup with no match.
-
-Tests cover two special cases:
-
- - selecting an IPv6 socket (non v6-only) to receive an IPv4 packet,
- - using BPF sk_lookup together with BPF sk_reuseport program.
+Make libbpf aware of the newly added program type, and assign it a
+section name.
 
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
 
 Notes:
     v2:
-     - Adjust for fields renames in struct bpf_sk_lookup.
+     - Add new libbpf symbols to version 0.0.9. (Andrii)
 
- .../selftests/bpf/prog_tests/sk_lookup.c      | 999 ++++++++++++++++++
- .../selftests/bpf/progs/test_sk_lookup_kern.c | 162 +++
- 2 files changed, 1161 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sk_lookup.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
+ tools/lib/bpf/libbpf.c        | 3 +++
+ tools/lib/bpf/libbpf.h        | 2 ++
+ tools/lib/bpf/libbpf.map      | 2 ++
+ tools/lib/bpf/libbpf_probes.c | 1 +
+ 4 files changed, 8 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-new file mode 100644
-index 000000000000..96765b156f6f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-@@ -0,0 +1,999 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+// Copyright (c) 2020 Cloudflare
-+/*
-+ * Test BPF attach point for INET socket lookup (BPF_SK_LOOKUP).
-+ *
-+ * Tests exercise:
-+ *
-+ * 1. attaching/detaching/querying BPF sk_lookup program,
-+ * 2. overriding socket lookup result by:
-+ *    a) selecting a listening (TCP) or receiving (UDP) socket,
-+ *    b) failing the lookup with no match.
-+ *
-+ * Special cases covered are:
-+ * - selecting an IPv6 socket (non v6-only) to receive an IPv4 packet,
-+ * - using BPF sk_lookup together with BPF sk_reuseport program.
-+ *
-+ * Tests run in a dedicated network namespace.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <arpa/inet.h>
-+#include <assert.h>
-+#include <errno.h>
-+#include <error.h>
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <stdio.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <unistd.h>
-+
-+#include <bpf/libbpf.h>
-+#include <bpf/bpf.h>
-+
-+#include "bpf_rlimit.h"
-+#include "bpf_util.h"
-+#include "cgroup_helpers.h"
-+#include "test_sk_lookup_kern.skel.h"
-+#include "test_progs.h"
-+
-+/* External (address, port) pairs the client sends packets to. */
-+#define EXT_IP4		"127.0.0.1"
-+#define EXT_IP6		"fd00::1"
-+#define EXT_PORT	7007
-+
-+/* Internal (address, port) pairs the server listens/receives at. */
-+#define INT_IP4		"127.0.0.2"
-+#define INT_IP4_V6	"::ffff:127.0.0.2"
-+#define INT_IP6		"fd00::2"
-+#define INT_PORT	8008
-+
-+#define IO_TIMEOUT_SEC	3
-+
-+enum {
-+	SERVER_A = 0,
-+	SERVER_B = 1,
-+	MAX_SERVERS,
-+};
-+
-+struct inet_addr {
-+	const char *ip;
-+	unsigned short port;
-+};
-+
-+struct test {
-+	const char *desc;
-+	struct bpf_program *lookup_prog;
-+	struct bpf_program *reuseport_prog;
-+	struct bpf_map *sock_map;
-+	int sotype;
-+	struct inet_addr send_to;
-+	struct inet_addr recv_at;
-+};
-+
-+static bool is_ipv6(const char *ip)
-+{
-+	return !!strchr(ip, ':');
-+}
-+
-+static int make_addr(const char *ip, int port, struct sockaddr_storage *addr)
-+{
-+	struct sockaddr_in6 *addr6 = (void *)addr;
-+	struct sockaddr_in *addr4 = (void *)addr;
-+	int ret;
-+
-+	errno = 0;
-+	if (is_ipv6(ip)) {
-+		ret = inet_pton(AF_INET6, ip, &addr6->sin6_addr);
-+		if (CHECK_FAIL(ret <= 0)) {
-+			log_err("failed to convert IPv6 address '%s'", ip);
-+			return -1;
-+		}
-+		addr6->sin6_family = AF_INET6;
-+		addr6->sin6_port = htons(port);
-+	} else {
-+		ret = inet_pton(AF_INET, ip, &addr4->sin_addr);
-+		if (CHECK_FAIL(ret <= 0)) {
-+			log_err("failed to convert IPv4 address '%s'", ip);
-+			return -1;
-+		}
-+		addr4->sin_family = AF_INET;
-+		addr4->sin_port = htons(port);
-+	}
-+	return 0;
-+}
-+
-+static int setup_reuseport_prog(int sock_fd, struct bpf_program *reuseport_prog)
-+{
-+	int err, prog_fd;
-+
-+	prog_fd = bpf_program__fd(reuseport_prog);
-+	if (prog_fd < 0) {
-+		errno = -prog_fd;
-+		log_err("failed to get fd for program '%s'",
-+			bpf_program__name(reuseport_prog));
-+		return -1;
-+	}
-+
-+	err = setsockopt(sock_fd, SOL_SOCKET, SO_ATTACH_REUSEPORT_EBPF,
-+			 &prog_fd, sizeof(prog_fd));
-+	if (CHECK_FAIL(err)) {
-+		log_err("failed to ATTACH_REUSEPORT_EBPF");
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static socklen_t inetaddr_len(const struct sockaddr_storage *addr)
-+{
-+	return (addr->ss_family == AF_INET ? sizeof(struct sockaddr_in) :
-+		addr->ss_family == AF_INET6 ? sizeof(struct sockaddr_in6) : 0);
-+}
-+
-+static int make_socket_with_addr(int sotype, const char *ip, int port,
-+				 struct sockaddr_storage *addr)
-+{
-+	struct timeval timeo = { .tv_sec = IO_TIMEOUT_SEC };
-+	int err, fd;
-+
-+	err = make_addr(ip, port, addr);
-+	if (err)
-+		return -1;
-+
-+	fd = socket(addr->ss_family, sotype, 0);
-+	if (CHECK_FAIL(fd < 0)) {
-+		log_err("failed to create listen socket");
-+		return -1;
-+	}
-+
-+	err = setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timeo, sizeof(timeo));
-+	if (CHECK_FAIL(err)) {
-+		log_err("failed to set SO_SNDTIMEO");
-+		return -1;
-+	}
-+
-+	err = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo, sizeof(timeo));
-+	if (CHECK_FAIL(err)) {
-+		log_err("failed to set SO_RCVTIMEO");
-+		return -1;
-+	}
-+
-+	return fd;
-+}
-+
-+static int make_server(int sotype, const char *ip, int port,
-+		       struct bpf_program *reuseport_prog)
-+{
-+	struct sockaddr_storage addr = {0};
-+	const int one = 1;
-+	int err, fd = -1;
-+
-+	fd = make_socket_with_addr(sotype, ip, port, &addr);
-+	if (fd < 0)
-+		return -1;
-+
-+	/* Enabled for UDPv6 sockets for IPv4-mapped IPv6 to work. */
-+	if (sotype == SOCK_DGRAM) {
-+		err = setsockopt(fd, SOL_IP, IP_RECVORIGDSTADDR, &one,
-+				 sizeof(one));
-+		if (CHECK_FAIL(err)) {
-+			log_err("failed to enable IP_RECVORIGDSTADDR");
-+			goto fail;
-+		}
-+	}
-+
-+	if (sotype == SOCK_DGRAM && addr.ss_family == AF_INET6) {
-+		err = setsockopt(fd, SOL_IPV6, IPV6_RECVORIGDSTADDR, &one,
-+				 sizeof(one));
-+		if (CHECK_FAIL(err)) {
-+			log_err("failed to enable IPV6_RECVORIGDSTADDR");
-+			goto fail;
-+		}
-+	}
-+
-+	if (sotype == SOCK_STREAM) {
-+		err = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one,
-+				 sizeof(one));
-+		if (CHECK_FAIL(err)) {
-+			log_err("failed to enable SO_REUSEADDR");
-+			goto fail;
-+		}
-+	}
-+
-+	if (reuseport_prog) {
-+		err = setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &one,
-+				 sizeof(one));
-+		if (CHECK_FAIL(err)) {
-+			log_err("failed to enable SO_REUSEPORT");
-+			goto fail;
-+		}
-+	}
-+
-+	err = bind(fd, (void *)&addr, inetaddr_len(&addr));
-+	if (CHECK_FAIL(err)) {
-+		log_err("failed to bind listen socket");
-+		goto fail;
-+	}
-+
-+	if (sotype == SOCK_STREAM) {
-+		err = listen(fd, SOMAXCONN);
-+		if (CHECK_FAIL(err)) {
-+			log_err("failed to listen on port %d", port);
-+			goto fail;
-+		}
-+	}
-+
-+	/* Late attach reuseport prog so we can have one init path */
-+	if (reuseport_prog) {
-+		err = setup_reuseport_prog(fd, reuseport_prog);
-+		if (err)
-+			goto fail;
-+	}
-+
-+	return fd;
-+fail:
-+	close(fd);
-+	return -1;
-+}
-+
-+static int make_client(int sotype, const char *ip, int port)
-+{
-+	struct sockaddr_storage addr = {0};
-+	int err, fd;
-+
-+	fd = make_socket_with_addr(sotype, ip, port, &addr);
-+	if (fd < 0)
-+		return -1;
-+
-+	err = connect(fd, (void *)&addr, inetaddr_len(&addr));
-+	if (CHECK_FAIL(err)) {
-+		log_err("failed to connect client socket");
-+		goto fail;
-+	}
-+
-+	return fd;
-+fail:
-+	close(fd);
-+	return -1;
-+}
-+
-+static int send_byte(int fd)
-+{
-+	ssize_t n;
-+
-+	errno = 0;
-+	n = send(fd, "a", 1, 0);
-+	if (CHECK_FAIL(n <= 0)) {
-+		log_err("failed/partial send");
-+		return -1;
-+	}
-+	return 0;
-+}
-+
-+static int recv_byte(int fd)
-+{
-+	char buf[1];
-+	ssize_t n;
-+
-+	n = recv(fd, buf, sizeof(buf), 0);
-+	if (CHECK_FAIL(n <= 0)) {
-+		log_err("failed/partial recv");
-+		return -1;
-+	}
-+	return 0;
-+}
-+
-+static int tcp_recv_send(int server_fd)
-+{
-+	char buf[1];
-+	int ret, fd;
-+	ssize_t n;
-+
-+	fd = accept(server_fd, NULL, NULL);
-+	if (CHECK_FAIL(fd < 0)) {
-+		log_err("failed to accept");
-+		return -1;
-+	}
-+
-+	n = recv(fd, buf, sizeof(buf), 0);
-+	if (CHECK_FAIL(n <= 0)) {
-+		log_err("failed/partial recv");
-+		ret = -1;
-+		goto close;
-+	}
-+
-+	n = send(fd, buf, n, 0);
-+	if (CHECK_FAIL(n <= 0)) {
-+		log_err("failed/partial send");
-+		ret = -1;
-+		goto close;
-+	}
-+
-+	ret = 0;
-+close:
-+	close(fd);
-+	return ret;
-+}
-+
-+static void v4_to_v6(struct sockaddr_storage *ss)
-+{
-+	struct sockaddr_in6 *v6 = (struct sockaddr_in6 *)ss;
-+	struct sockaddr_in v4 = *(struct sockaddr_in *)ss;
-+
-+	v6->sin6_family = AF_INET6;
-+	v6->sin6_port = v4.sin_port;
-+	v6->sin6_addr.s6_addr[10] = 0xff;
-+	v6->sin6_addr.s6_addr[11] = 0xff;
-+	memcpy(&v6->sin6_addr.s6_addr[12], &v4.sin_addr.s_addr, 4);
-+}
-+
-+static int udp_recv_send(int server_fd)
-+{
-+	char cmsg_buf[CMSG_SPACE(sizeof(struct sockaddr_storage))];
-+	struct sockaddr_storage _src_addr = { 0 };
-+	struct sockaddr_storage *src_addr = &_src_addr;
-+	struct sockaddr_storage *dst_addr = NULL;
-+	struct msghdr msg = { 0 };
-+	struct iovec iov = { 0 };
-+	struct cmsghdr *cm;
-+	char buf[1];
-+	int ret, fd;
-+	ssize_t n;
-+
-+	iov.iov_base = buf;
-+	iov.iov_len = sizeof(buf);
-+
-+	msg.msg_name = src_addr;
-+	msg.msg_namelen = sizeof(*src_addr);
-+	msg.msg_iov = &iov;
-+	msg.msg_iovlen = 1;
-+	msg.msg_control = cmsg_buf;
-+	msg.msg_controllen = sizeof(cmsg_buf);
-+
-+	errno = 0;
-+	n = recvmsg(server_fd, &msg, 0);
-+	if (CHECK_FAIL(n <= 0)) {
-+		log_err("failed to receive");
-+		return -1;
-+	}
-+	if (CHECK_FAIL(msg.msg_flags & MSG_CTRUNC)) {
-+		log_err("truncated cmsg");
-+		return -1;
-+	}
-+
-+	for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm)) {
-+		if ((cm->cmsg_level == SOL_IP &&
-+		     cm->cmsg_type == IP_ORIGDSTADDR) ||
-+		    (cm->cmsg_level == SOL_IPV6 &&
-+		     cm->cmsg_type == IPV6_ORIGDSTADDR)) {
-+			dst_addr = (struct sockaddr_storage *)CMSG_DATA(cm);
-+			break;
-+		}
-+		log_err("warning: ignored cmsg at level %d type %d",
-+			cm->cmsg_level, cm->cmsg_type);
-+	}
-+	if (CHECK_FAIL(!dst_addr)) {
-+		log_err("failed to get destination address");
-+		return -1;
-+	}
-+
-+	/* Server socket bound to IPv4-mapped IPv6 address */
-+	if (src_addr->ss_family == AF_INET6 &&
-+	    dst_addr->ss_family == AF_INET) {
-+		v4_to_v6(dst_addr);
-+	}
-+
-+	/* Reply from original destination address. */
-+	fd = socket(dst_addr->ss_family, SOCK_DGRAM, 0);
-+	if (CHECK_FAIL(fd < 0)) {
-+		log_err("failed to create tx socket");
-+		return -1;
-+	}
-+
-+	ret = bind(fd, (struct sockaddr *)dst_addr, sizeof(*dst_addr));
-+	if (CHECK_FAIL(ret)) {
-+		log_err("failed to bind tx socket");
-+		goto out;
-+	}
-+
-+	msg.msg_control = NULL;
-+	msg.msg_controllen = 0;
-+	n = sendmsg(fd, &msg, 0);
-+	if (CHECK_FAIL(n <= 0)) {
-+		log_err("failed to send echo reply");
-+		ret = -1;
-+		goto out;
-+	}
-+
-+	ret = 0;
-+out:
-+	close(fd);
-+	return ret;
-+}
-+
-+static int tcp_echo_test(int client_fd, int server_fd)
-+{
-+	int err;
-+
-+	err = send_byte(client_fd);
-+	if (err)
-+		return -1;
-+	err = tcp_recv_send(server_fd);
-+	if (err)
-+		return -1;
-+	err = recv_byte(client_fd);
-+	if (err)
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static int udp_echo_test(int client_fd, int server_fd)
-+{
-+	int err;
-+
-+	err = send_byte(client_fd);
-+	if (err)
-+		return -1;
-+	err = udp_recv_send(server_fd);
-+	if (err)
-+		return -1;
-+	err = recv_byte(client_fd);
-+	if (err)
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static int attach_lookup_prog(struct bpf_program *prog)
-+{
-+	const char *prog_name = bpf_program__name(prog);
-+	enum bpf_attach_type attach_type;
-+	int err, prog_fd;
-+
-+	prog_fd = bpf_program__fd(prog);
-+	if (CHECK_FAIL(prog_fd < 0)) {
-+		errno = -prog_fd;
-+		log_err("failed to get fd for program '%s'", prog_name);
-+		return -1;
-+	}
-+
-+	attach_type = bpf_program__get_expected_attach_type(prog);
-+	err = bpf_prog_attach(prog_fd, -1 /* target fd */, attach_type, 0);
-+	if (CHECK_FAIL(err)) {
-+		log_err("failed to attach program '%s'", prog_name);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int detach_lookup_prog(struct bpf_program *prog)
-+{
-+	const char *prog_name = bpf_program__name(prog);
-+	enum bpf_attach_type attach_type;
-+	int err, prog_fd;
-+
-+	prog_fd = bpf_program__fd(prog);
-+	if (CHECK_FAIL(prog_fd < 0)) {
-+		errno = -prog_fd;
-+		log_err("failed to get fd for program '%s'", prog_name);
-+		return -1;
-+	}
-+
-+	attach_type = bpf_program__get_expected_attach_type(prog);
-+	err = bpf_prog_detach2(prog_fd, -1 /* attachable fd */, attach_type);
-+	if (CHECK_FAIL(err)) {
-+		log_err("failed to detach program '%s'", prog_name);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int update_lookup_map(struct bpf_map *map, int index, int sock_fd)
-+{
-+	int err, map_fd;
-+	uint64_t value;
-+
-+	map_fd = bpf_map__fd(map);
-+	if (CHECK_FAIL(map_fd < 0)) {
-+		errno = -map_fd;
-+		log_err("failed to get map FD");
-+		return -1;
-+	}
-+
-+	value = (uint64_t)sock_fd;
-+	err = bpf_map_update_elem(map_fd, &index, &value, BPF_NOEXIST);
-+	if (CHECK_FAIL(err)) {
-+		log_err("failed to update redir_map @ %d", index);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static void query_lookup_prog(struct test_sk_lookup_kern *skel)
-+{
-+	struct bpf_program *lookup_prog = skel->progs.lookup_pass;
-+	enum bpf_attach_type attach_type;
-+	__u32 attach_flags = 0;
-+	__u32 prog_ids[1] = { 0 };
-+	__u32 prog_cnt = 1;
-+	int net_fd = -1;
-+	int err;
-+
-+	net_fd = open("/proc/self/ns/net", O_RDONLY);
-+	if (CHECK_FAIL(net_fd < 0)) {
-+		log_err("failed to open /proc/self/ns/net");
-+		return;
-+	}
-+
-+	err = attach_lookup_prog(lookup_prog);
-+	if (err)
-+		goto close;
-+
-+	attach_type = bpf_program__get_expected_attach_type(lookup_prog);
-+	err = bpf_prog_query(net_fd, attach_type, 0 /* query flags */,
-+			     &attach_flags, prog_ids, &prog_cnt);
-+	if (CHECK_FAIL(err)) {
-+		log_err("failed to query lookup prog");
-+		goto detach;
-+	}
-+
-+	errno = 0;
-+	if (CHECK_FAIL(attach_flags != 0)) {
-+		log_err("wrong attach_flags on query: %u", attach_flags);
-+		goto detach;
-+	}
-+	if (CHECK_FAIL(prog_cnt != 1)) {
-+		log_err("wrong program count on query: %u", prog_cnt);
-+		goto detach;
-+	}
-+	if (CHECK_FAIL(prog_ids[0] == 0)) {
-+		log_err("invalid program id on query: %u", prog_ids[0]);
-+		goto detach;
-+	}
-+
-+detach:
-+	detach_lookup_prog(lookup_prog);
-+close:
-+	close(net_fd);
-+}
-+
-+static void run_lookup_prog(const struct test *t)
-+{
-+	int client_fd, server_fds[MAX_SERVERS] = { -1 };
-+	int i, err, server_idx;
-+
-+	err = attach_lookup_prog(t->lookup_prog);
-+	if (err)
-+		return;
-+
-+	for (i = 0; i < ARRAY_SIZE(server_fds); i++) {
-+		server_fds[i] = make_server(t->sotype, t->recv_at.ip,
-+					    t->recv_at.port, t->reuseport_prog);
-+		if (server_fds[i] < 0)
-+			goto close;
-+
-+		err = update_lookup_map(t->sock_map, i, server_fds[i]);
-+		if (err)
-+			goto detach;
-+
-+		/* want just one server for non-reuseport test */
-+		if (!t->reuseport_prog)
-+			break;
-+	}
-+
-+	client_fd = make_client(t->sotype, t->send_to.ip, t->send_to.port);
-+	if (client_fd < 0)
-+		goto close;
-+
-+	/* reuseport prog always selects server B */
-+	server_idx = t->reuseport_prog ? SERVER_B : SERVER_A;
-+
-+	if (t->sotype == SOCK_STREAM)
-+		tcp_echo_test(client_fd, server_fds[server_idx]);
-+	else
-+		udp_echo_test(client_fd, server_fds[server_idx]);
-+
-+	close(client_fd);
-+close:
-+	for (i = 0; i < ARRAY_SIZE(server_fds); i++)
-+		close(server_fds[i]);
-+detach:
-+	detach_lookup_prog(t->lookup_prog);
-+}
-+
-+static void test_override_lookup(struct test_sk_lookup_kern *skel)
-+{
-+	const struct test tests[] = {
-+		{
-+			.desc		= "TCP IPv4 redir port",
-+			.lookup_prog	= skel->progs.redir_port,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_STREAM,
-+			.send_to	= { EXT_IP4, EXT_PORT },
-+			.recv_at	= { EXT_IP4, INT_PORT },
-+		},
-+		{
-+			.desc		= "TCP IPv4 redir addr",
-+			.lookup_prog	= skel->progs.redir_ip4,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_STREAM,
-+			.send_to	= { EXT_IP4, EXT_PORT },
-+			.recv_at	= { INT_IP4, EXT_PORT },
-+		},
-+		{
-+			.desc		= "TCP IPv4 redir and reuseport",
-+			.lookup_prog	= skel->progs.select_sock_a,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_STREAM,
-+			.send_to	= { EXT_IP4, EXT_PORT },
-+			.recv_at	= { INT_IP4, INT_PORT },
-+			.reuseport_prog	= skel->progs.select_sock_b,
-+		},
-+		{
-+			.desc		= "TCP IPv6 redir port",
-+			.lookup_prog	= skel->progs.redir_port,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_STREAM,
-+			.send_to	= { EXT_IP6, EXT_PORT },
-+			.recv_at	= { EXT_IP6, INT_PORT },
-+		},
-+		{
-+			.desc		= "TCP IPv6 redir addr",
-+			.lookup_prog	= skel->progs.redir_ip6,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_STREAM,
-+			.send_to	= { EXT_IP6, EXT_PORT },
-+			.recv_at	= { INT_IP6, EXT_PORT },
-+		},
-+		{
-+			.desc		= "TCP IPv4->IPv6 redir port",
-+			.lookup_prog	= skel->progs.redir_port,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_STREAM,
-+			.recv_at	= { INT_IP4_V6, INT_PORT },
-+			.send_to	= { EXT_IP4, EXT_PORT },
-+		},
-+		{
-+			.desc		= "TCP IPv6 redir and reuseport",
-+			.lookup_prog	= skel->progs.select_sock_a,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_STREAM,
-+			.send_to	= { EXT_IP6, EXT_PORT },
-+			.recv_at	= { INT_IP6, INT_PORT },
-+			.reuseport_prog	= skel->progs.select_sock_b,
-+		},
-+		{
-+			.desc		= "UDP IPv4 redir port",
-+			.lookup_prog	= skel->progs.redir_port,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_DGRAM,
-+			.send_to	= { EXT_IP4, EXT_PORT },
-+			.recv_at	= { EXT_IP4, INT_PORT },
-+		},
-+		{
-+			.desc		= "UDP IPv4 redir addr",
-+			.lookup_prog	= skel->progs.redir_ip4,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_DGRAM,
-+			.send_to	= { EXT_IP4, EXT_PORT },
-+			.recv_at	= { INT_IP4, EXT_PORT },
-+		},
-+		{
-+			.desc		= "UDP IPv4 redir and reuseport",
-+			.lookup_prog	= skel->progs.select_sock_a,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_DGRAM,
-+			.send_to	= { EXT_IP4, EXT_PORT },
-+			.recv_at	= { INT_IP4, INT_PORT },
-+			.reuseport_prog	= skel->progs.select_sock_b,
-+		},
-+		{
-+			.desc		= "UDP IPv6 redir port",
-+			.lookup_prog	= skel->progs.redir_port,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_DGRAM,
-+			.send_to	= { EXT_IP6, EXT_PORT },
-+			.recv_at	= { EXT_IP6, INT_PORT },
-+		},
-+		{
-+			.desc		= "UDP IPv6 redir addr",
-+			.lookup_prog	= skel->progs.redir_ip6,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_DGRAM,
-+			.send_to	= { EXT_IP6, EXT_PORT },
-+			.recv_at	= { INT_IP6, EXT_PORT },
-+		},
-+		{
-+			.desc		= "UDP IPv4->IPv6 redir port",
-+			.lookup_prog	= skel->progs.redir_port,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_DGRAM,
-+			.recv_at	= { INT_IP4_V6, INT_PORT },
-+			.send_to	= { EXT_IP4, EXT_PORT },
-+		},
-+		{
-+			.desc		= "UDP IPv6 redir and reuseport",
-+			.lookup_prog	= skel->progs.select_sock_a,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_DGRAM,
-+			.send_to	= { EXT_IP6, EXT_PORT },
-+			.recv_at	= { INT_IP6, INT_PORT },
-+			.reuseport_prog	= skel->progs.select_sock_b,
-+		},
-+	};
-+	const struct test *t;
-+
-+	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
-+		if (test__start_subtest(t->desc))
-+			run_lookup_prog(t);
-+	}
-+}
-+
-+static void drop_on_lookup(const struct test *t)
-+{
-+	struct sockaddr_storage dst = { 0 };
-+	int client_fd, server_fd, err;
-+	ssize_t n;
-+
-+	if (attach_lookup_prog(t->lookup_prog))
-+		return;
-+
-+	server_fd = make_server(t->sotype, t->recv_at.ip, t->recv_at.port,
-+				t->reuseport_prog);
-+	if (server_fd < 0)
-+		goto detach;
-+
-+	client_fd = make_socket_with_addr(t->sotype, t->send_to.ip,
-+					  t->send_to.port, &dst);
-+	if (client_fd < 0)
-+		goto close_srv;
-+
-+	err = connect(client_fd, (void *)&dst, inetaddr_len(&dst));
-+	if (t->sotype == SOCK_DGRAM) {
-+		err = send_byte(client_fd);
-+		if (err)
-+			goto close_all;
-+
-+		/* Read out asynchronous error */
-+		n = recv(client_fd, NULL, 0, 0);
-+		err = n == -1;
-+	}
-+	if (CHECK_FAIL(!err || errno != ECONNREFUSED))
-+		log_err("expected ECONNREFUSED on connect");
-+
-+close_all:
-+	close(client_fd);
-+close_srv:
-+	close(server_fd);
-+detach:
-+	detach_lookup_prog(t->lookup_prog);
-+}
-+
-+static void test_drop_on_lookup(struct test_sk_lookup_kern *skel)
-+{
-+	const struct test tests[] = {
-+		{
-+			.desc		= "TCP IPv4 drop on lookup",
-+			.lookup_prog	= skel->progs.lookup_drop,
-+			.sotype		= SOCK_STREAM,
-+			.send_to	= { EXT_IP4, EXT_PORT },
-+			.recv_at	= { EXT_IP4, EXT_PORT },
-+		},
-+		{
-+			.desc		= "TCP IPv6 drop on lookup",
-+			.lookup_prog	= skel->progs.lookup_drop,
-+			.sotype		= SOCK_STREAM,
-+			.send_to	= { EXT_IP6, EXT_PORT },
-+			.recv_at	= { EXT_IP6, EXT_PORT },
-+		},
-+		{
-+			.desc		= "UDP IPv4 drop on lookup",
-+			.lookup_prog	= skel->progs.lookup_drop,
-+			.sotype		= SOCK_DGRAM,
-+			.send_to	= { EXT_IP4, EXT_PORT },
-+			.recv_at	= { EXT_IP4, EXT_PORT },
-+		},
-+		{
-+			.desc		= "UDP IPv6 drop on lookup",
-+			.lookup_prog	= skel->progs.lookup_drop,
-+			.sotype		= SOCK_DGRAM,
-+			.send_to	= { EXT_IP6, EXT_PORT },
-+			.recv_at	= { EXT_IP6, INT_PORT },
-+		},
-+	};
-+	const struct test *t;
-+
-+	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
-+		if (test__start_subtest(t->desc))
-+			drop_on_lookup(t);
-+	}
-+}
-+
-+static void drop_on_reuseport(const struct test *t)
-+{
-+	struct sockaddr_storage dst = { 0 };
-+	int client, server1, server2, err;
-+	ssize_t n;
-+
-+	if (attach_lookup_prog(t->lookup_prog))
-+		return;
-+
-+	server1 = make_server(t->sotype, t->recv_at.ip, t->recv_at.port,
-+			      t->reuseport_prog);
-+	if (server1 < 0)
-+		goto detach;
-+
-+	err = update_lookup_map(t->sock_map, SERVER_A, server1);
-+	if (err)
-+		goto detach;
-+
-+	/* second server on destination address we should never reach */
-+	server2 = make_server(t->sotype, t->send_to.ip, t->send_to.port,
-+			      NULL /* reuseport prog */);
-+	if (server2 < 0)
-+		goto close_srv1;
-+
-+	client = make_socket_with_addr(t->sotype, t->send_to.ip,
-+				       t->send_to.port, &dst);
-+	if (client < 0)
-+		goto close_srv2;
-+
-+	err = connect(client, (void *)&dst, inetaddr_len(&dst));
-+	if (t->sotype == SOCK_DGRAM) {
-+		err = send_byte(client);
-+		if (err)
-+			goto close_all;
-+
-+		/* Read out asynchronous error */
-+		n = recv(client, NULL, 0, 0);
-+		err = n == -1;
-+	}
-+	if (CHECK_FAIL(!err || errno != ECONNREFUSED))
-+		log_err("expected ECONNREFUSED on connect");
-+
-+close_all:
-+	close(client);
-+close_srv2:
-+	close(server2);
-+close_srv1:
-+	close(server1);
-+detach:
-+	detach_lookup_prog(t->lookup_prog);
-+}
-+
-+static void test_drop_on_reuseport(struct test_sk_lookup_kern *skel)
-+{
-+	const struct test tests[] = {
-+		{
-+			.desc		= "TCP IPv4 drop on reuseport",
-+			.lookup_prog	= skel->progs.select_sock_a,
-+			.reuseport_prog	= skel->progs.reuseport_drop,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_STREAM,
-+			.send_to	= { EXT_IP4, EXT_PORT },
-+			.recv_at	= { INT_IP4, INT_PORT },
-+		},
-+		{
-+			.desc		= "TCP IPv6 drop on reuseport",
-+			.lookup_prog	= skel->progs.select_sock_a,
-+			.reuseport_prog	= skel->progs.reuseport_drop,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_STREAM,
-+			.send_to	= { EXT_IP6, EXT_PORT },
-+			.recv_at	= { INT_IP6, INT_PORT },
-+		},
-+		{
-+			.desc		= "UDP IPv4 drop on reuseport",
-+			.lookup_prog	= skel->progs.select_sock_a,
-+			.reuseport_prog	= skel->progs.reuseport_drop,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_DGRAM,
-+			.send_to	= { EXT_IP4, EXT_PORT },
-+			.recv_at	= { INT_IP4, INT_PORT },
-+		},
-+		{
-+			.desc		= "TCP IPv6 drop on reuseport",
-+			.lookup_prog	= skel->progs.select_sock_a,
-+			.reuseport_prog	= skel->progs.reuseport_drop,
-+			.sock_map	= skel->maps.redir_map,
-+			.sotype		= SOCK_STREAM,
-+			.send_to	= { EXT_IP6, EXT_PORT },
-+			.recv_at	= { INT_IP6, INT_PORT },
-+		},
-+
-+	};
-+	const struct test *t;
-+
-+	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
-+		if (test__start_subtest(t->desc))
-+			drop_on_reuseport(t);
-+	}
-+}
-+
-+static void run_tests(struct test_sk_lookup_kern *skel)
-+{
-+	if (test__start_subtest("query lookup prog"))
-+		query_lookup_prog(skel);
-+	test_override_lookup(skel);
-+	test_drop_on_lookup(skel);
-+	test_drop_on_reuseport(skel);
-+}
-+
-+static int switch_netns(int *saved_net)
-+{
-+	static const char * const setup_script[] = {
-+		"ip -6 addr add dev lo " EXT_IP6 "/128 nodad",
-+		"ip -6 addr add dev lo " INT_IP6 "/128 nodad",
-+		"ip link set dev lo up",
-+		NULL,
-+	};
-+	const char * const *cmd;
-+	int net_fd, err;
-+
-+	net_fd = open("/proc/self/ns/net", O_RDONLY);
-+	if (CHECK_FAIL(net_fd < 0)) {
-+		log_err("open(/proc/self/ns/net)");
-+		return -1;
-+	}
-+
-+	err = unshare(CLONE_NEWNET);
-+	if (CHECK_FAIL(err)) {
-+		log_err("unshare(CLONE_NEWNET)");
-+		goto close;
-+	}
-+
-+	for (cmd = setup_script; *cmd; cmd++) {
-+		err = system(*cmd);
-+		if (CHECK_FAIL(err)) {
-+			log_err("system(%s)", *cmd);
-+			goto close;
-+		}
-+	}
-+
-+	*saved_net = net_fd;
-+	return 0;
-+
-+close:
-+	close(net_fd);
-+	return -1;
-+}
-+
-+static void restore_netns(int saved_net)
-+{
-+	int err;
-+
-+	err = setns(saved_net, CLONE_NEWNET);
-+	if (CHECK_FAIL(err))
-+		log_err("setns(CLONE_NEWNET)");
-+
-+	close(saved_net);
-+}
-+
-+void test_sk_lookup(void)
-+{
-+	struct test_sk_lookup_kern *skel;
-+	int err, saved_net;
-+
-+	err = switch_netns(&saved_net);
-+	if (err)
-+		return;
-+
-+	skel = test_sk_lookup_kern__open_and_load();
-+	if (CHECK_FAIL(!skel)) {
-+		errno = 0;
-+		log_err("failed to open and load BPF skeleton");
-+		goto restore_netns;
-+	}
-+
-+	run_tests(skel);
-+
-+	test_sk_lookup_kern__destroy(skel);
-+restore_netns:
-+	restore_netns(saved_net);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c b/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
-new file mode 100644
-index 000000000000..fc3ad9a69484
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
-@@ -0,0 +1,162 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+// Copyright (c) 2020 Cloudflare
-+
-+#include <linux/bpf.h>
-+#include <sys/socket.h>
-+
-+#include <bpf/bpf_endian.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#define IP4(a, b, c, d)					\
-+	bpf_htonl((((__u32)(a) & 0xffU) << 24) |	\
-+		  (((__u32)(b) & 0xffU) << 16) |	\
-+		  (((__u32)(c) & 0xffU) <<  8) |	\
-+		  (((__u32)(d) & 0xffU) <<  0))
-+#define IP6(aaaa, bbbb, cccc, dddd)			\
-+	{ bpf_htonl(aaaa), bpf_htonl(bbbb), bpf_htonl(cccc), bpf_htonl(dddd) }
-+
-+#define MAX_SOCKS 32
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, MAX_SOCKS);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} redir_map SEC(".maps");
-+
-+enum {
-+	SERVER_A = 0,
-+	SERVER_B = 1,
-+};
-+
-+enum {
-+	NO_FLAGS = 0,
-+};
-+
-+static const __u32 DST_PORT = 7007;
-+static const __u32 DST_IP4 = IP4(127, 0, 0, 1);
-+static const __u32 DST_IP6[] = IP6(0xfd000000, 0x0, 0x0, 0x00000001);
-+
-+SEC("sk_lookup/lookup_pass")
-+int lookup_pass(struct bpf_sk_lookup *ctx)
-+{
-+	return BPF_OK;
-+}
-+
-+SEC("sk_lookup/lookup_drop")
-+int lookup_drop(struct bpf_sk_lookup *ctx)
-+{
-+	return BPF_DROP;
-+}
-+
-+SEC("sk_reuseport/reuse_pass")
-+int reuseport_pass(struct sk_reuseport_md *ctx)
-+{
-+	return SK_PASS;
-+}
-+
-+SEC("sk_reuseport/reuse_drop")
-+int reuseport_drop(struct sk_reuseport_md *ctx)
-+{
-+	return SK_DROP;
-+}
-+
-+/* Redirect packets destined for port DST_PORT to socket at redir_map[0]. */
-+SEC("sk_lookup/redir_port")
-+int redir_port(struct bpf_sk_lookup *ctx)
-+{
-+	__u32 key = SERVER_A;
-+	struct bpf_sock *sk;
-+	int err;
-+
-+	if (ctx->local_port != DST_PORT)
-+		return BPF_OK;
-+
-+	sk = bpf_map_lookup_elem(&redir_map, &key);
-+	if (!sk)
-+		return BPF_OK;
-+
-+	err = bpf_sk_assign(ctx, sk, NO_FLAGS);
-+	bpf_sk_release(sk);
-+	return err ? BPF_DROP : BPF_REDIRECT;
-+}
-+
-+/* Redirect packets destined for DST_IP4 address to socket at redir_map[0]. */
-+SEC("sk_lookup/redir_ip4")
-+int redir_ip4(struct bpf_sk_lookup *ctx)
-+{
-+	__u32 key = SERVER_A;
-+	struct bpf_sock *sk;
-+	int err;
-+
-+	if (ctx->family != AF_INET)
-+		return BPF_OK;
-+	if (ctx->local_port != DST_PORT)
-+		return BPF_OK;
-+	if (ctx->local_ip4 != DST_IP4)
-+		return BPF_OK;
-+
-+	sk = bpf_map_lookup_elem(&redir_map, &key);
-+	if (!sk)
-+		return BPF_OK;
-+
-+	err = bpf_sk_assign(ctx, sk, NO_FLAGS);
-+	bpf_sk_release(sk);
-+	return err ? BPF_DROP : BPF_REDIRECT;
-+}
-+
-+/* Redirect packets destined for DST_IP6 address to socket at redir_map[0]. */
-+SEC("sk_lookup/redir_ip6")
-+int redir_ip6(struct bpf_sk_lookup *ctx)
-+{
-+	__u32 key = SERVER_A;
-+	struct bpf_sock *sk;
-+	int err;
-+
-+	if (ctx->family != AF_INET6)
-+		return BPF_OK;
-+	if (ctx->local_port != DST_PORT)
-+		return BPF_OK;
-+	if (ctx->local_ip6[0] != DST_IP6[0] ||
-+	    ctx->local_ip6[1] != DST_IP6[1] ||
-+	    ctx->local_ip6[2] != DST_IP6[2] ||
-+	    ctx->local_ip6[3] != DST_IP6[3])
-+		return BPF_OK;
-+
-+	sk = bpf_map_lookup_elem(&redir_map, &key);
-+	if (!sk)
-+		return BPF_OK;
-+
-+	err = bpf_sk_assign(ctx, sk, NO_FLAGS);
-+	bpf_sk_release(sk);
-+	return err ? BPF_DROP : BPF_REDIRECT;
-+}
-+
-+SEC("sk_lookup/select_sock_a")
-+int select_sock_a(struct bpf_sk_lookup *ctx)
-+{
-+	__u32 key = SERVER_A;
-+	struct bpf_sock *sk;
-+	int err;
-+
-+	sk = bpf_map_lookup_elem(&redir_map, &key);
-+	if (!sk)
-+		return BPF_OK;
-+
-+	err = bpf_sk_assign(ctx, sk, NO_FLAGS);
-+	bpf_sk_release(sk);
-+	return err ? BPF_DROP : BPF_REDIRECT;
-+}
-+
-+SEC("sk_reuseport/select_sock_b")
-+int select_sock_b(struct sk_reuseport_md *ctx)
-+{
-+	__u32 key = SERVER_B;
-+	int err;
-+
-+	err = bpf_sk_select_reuseport(ctx, &redir_map, &key, NO_FLAGS);
-+	return err ? SK_DROP : SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "Dual BSD/GPL";
-+__u32 _version SEC("version") = 1;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 6c2f46908f4d..ccded6cd310a 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -6524,6 +6524,7 @@ BPF_PROG_TYPE_FNS(perf_event, BPF_PROG_TYPE_PERF_EVENT);
+ BPF_PROG_TYPE_FNS(tracing, BPF_PROG_TYPE_TRACING);
+ BPF_PROG_TYPE_FNS(struct_ops, BPF_PROG_TYPE_STRUCT_OPS);
+ BPF_PROG_TYPE_FNS(extension, BPF_PROG_TYPE_EXT);
++BPF_PROG_TYPE_FNS(sk_lookup, BPF_PROG_TYPE_SK_LOOKUP);
+ 
+ enum bpf_attach_type
+ bpf_program__get_expected_attach_type(struct bpf_program *prog)
+@@ -6690,6 +6691,8 @@ static const struct bpf_sec_def section_defs[] = {
+ 	BPF_EAPROG_SEC("cgroup/setsockopt",	BPF_PROG_TYPE_CGROUP_SOCKOPT,
+ 						BPF_CGROUP_SETSOCKOPT),
+ 	BPF_PROG_SEC("struct_ops",		BPF_PROG_TYPE_STRUCT_OPS),
++	BPF_EAPROG_SEC("sk_lookup",		BPF_PROG_TYPE_SK_LOOKUP,
++						BPF_SK_LOOKUP),
+ };
+ 
+ #undef BPF_PROG_SEC_IMPL
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 8ea69558f0a8..7bb5a4f22740 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -346,6 +346,7 @@ LIBBPF_API int bpf_program__set_perf_event(struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_tracing(struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_struct_ops(struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_extension(struct bpf_program *prog);
++LIBBPF_API int bpf_program__set_sk_lookup(struct bpf_program *prog);
+ 
+ LIBBPF_API enum bpf_prog_type bpf_program__get_type(struct bpf_program *prog);
+ LIBBPF_API void bpf_program__set_type(struct bpf_program *prog,
+@@ -373,6 +374,7 @@ LIBBPF_API bool bpf_program__is_perf_event(const struct bpf_program *prog);
+ LIBBPF_API bool bpf_program__is_tracing(const struct bpf_program *prog);
+ LIBBPF_API bool bpf_program__is_struct_ops(const struct bpf_program *prog);
+ LIBBPF_API bool bpf_program__is_extension(const struct bpf_program *prog);
++LIBBPF_API bool bpf_program__is_sk_lookup(const struct bpf_program *prog);
+ 
+ /*
+  * No need for __attribute__((packed)), all members of 'bpf_map_def'
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 0133d469d30b..2490c5e34297 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -262,4 +262,6 @@ LIBBPF_0.0.9 {
+ 		bpf_link_get_fd_by_id;
+ 		bpf_link_get_next_id;
+ 		bpf_program__attach_iter;
++		bpf_program__is_sk_lookup;
++		bpf_program__set_sk_lookup;
+ } LIBBPF_0.0.8;
+diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+index 2c92059c0c90..5c6d3e49f254 100644
+--- a/tools/lib/bpf/libbpf_probes.c
++++ b/tools/lib/bpf/libbpf_probes.c
+@@ -109,6 +109,7 @@ probe_load(enum bpf_prog_type prog_type, const struct bpf_insn *insns,
+ 	case BPF_PROG_TYPE_STRUCT_OPS:
+ 	case BPF_PROG_TYPE_EXT:
+ 	case BPF_PROG_TYPE_LSM:
++	case BPF_PROG_TYPE_SK_LOOKUP:
+ 	default:
+ 		break;
+ 	}
 -- 
 2.25.3
 
