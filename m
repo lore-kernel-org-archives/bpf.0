@@ -2,617 +2,147 @@ Return-Path: <SRS0=G4Pv=6Z=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15F9CC47255
-	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 16:15:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1159C47255
+	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 17:21:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E1E08206DB
-	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 16:15:51 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="JYS4FGB6"
+	by mail.kernel.org (Postfix) with ESMTP id A790E20720
+	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 17:21:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730639AbgEKQPr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 May 2020 12:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730624AbgEKQPo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 11 May 2020 12:15:44 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331BAC05BD0B
-        for <bpf@vger.kernel.org>; Mon, 11 May 2020 09:15:43 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id s8so11710346wrt.9
-        for <bpf@vger.kernel.org>; Mon, 11 May 2020 09:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bS22eDRgHU808UGO22MolWu9Q5gNbHR9tBG8JMnHYeQ=;
-        b=JYS4FGB6tVm2669a+Biy26YFzB6R/P5Zq7D4f9hF6JtAmr2qZde+Wy1Lde20V6m/aP
-         1McUCu305R+VYJy6Fz2CCkAPYan7G1p6M3mGA6/GUTnrlk7WDSOU0TxhKD3uiYkBdqHz
-         pAkfN5nZTssXAGOALvrwa22ky0bas7iQaQY2OaUuidp6d6CNy19tkHnwwAYkbBdMFXhd
-         w+kaZj1nd5e4+0BSoD3x2YADyLpMSnhqPkkn7MNTrJcFcf601gacDVU2gk3txgGcGgom
-         0+pUxPkQVIZtHdz46ipObXrnHhxvxTpuWM0txtYPCn0LNhcfNDh6dYJlSVH1N2+bfebA
-         K2BQ==
+        id S1729658AbgEKRVP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 May 2020 13:21:15 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:43583 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728556AbgEKRVO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 May 2020 13:21:14 -0400
+Received: by mail-il1-f200.google.com with SMTP id v14so1993949ilm.10
+        for <bpf@vger.kernel.org>; Mon, 11 May 2020 10:21:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bS22eDRgHU808UGO22MolWu9Q5gNbHR9tBG8JMnHYeQ=;
-        b=Ec4HiNbQfWs9aPuRP0mqcYM+XpTqJ5S2gCgF3M3AzUmTWGMJS2mIlRO11RrD5eYPmN
-         3R3fDFcvrrYtL2So4z1ALftMX4Le8Py7fW/cZBbiNYEq1iP+KDdU21GOxmQ+7HW4QRgV
-         pGcCFhd6IZ3ANHA+k7MN89uZ+NwpGUd/V6Pz9wX9SDEXzqqQHAGHFp9Lb9KlOly9QG9y
-         Ag8/ZuVU4JnftlZp5MLZRAotmXPThsW1Vl+icXqR6rdQUqqrH2KTftffL1AtF0tQ196n
-         h0/ty8nv14l3sXEX5UxpiGR6YppS/zjVENz9GDvSS6FrKtHsn/2G42mCqhqE1LzYv38o
-         z4Pg==
-X-Gm-Message-State: AGi0PuamCwXWqrQ003eUbIcx2ZUYgi/tmswDpw7OJYckoUAA1PsIteoo
-        4CIsWEO/VrROA1gRZUkEk/dhTVA50WK4VQ==
-X-Google-Smtp-Source: APiQypJy+hEtRM4ovjtFSVi1xwqnbxYlbZh/LMCi0LMaBSL10OTCHnXbQWorLT842B6F3K12aFSLqg==
-X-Received: by 2002:adf:f7c6:: with SMTP id a6mr8804746wrq.296.1589213741583;
-        Mon, 11 May 2020 09:15:41 -0700 (PDT)
-Received: from localhost.localdomain ([194.53.185.84])
-        by smtp.gmail.com with ESMTPSA id v131sm54734wmb.27.2020.05.11.09.15.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 09:15:41 -0700 (PDT)
-From:   Quentin Monnet <quentin@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v2 2/4] tools: bpftool: minor fixes for documentation
-Date:   Mon, 11 May 2020 17:15:34 +0100
-Message-Id: <20200511161536.29853-3-quentin@isovalent.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200511161536.29853-1-quentin@isovalent.com>
-References: <20200511161536.29853-1-quentin@isovalent.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=n/Jv74xGVecUMFGbk0cscRosnzR2e3OxqcMoNdQON/Y=;
+        b=poBCTdFtntuzhWV6sHsMQH1sFoNZjEtjyct0sWzAWw6f8utf6VEgGFdBpaYhYvrxDo
+         nhIk7EHAX2AQ1letWG+tLcKkJXpsONBkYnaDKeT5t1qhjzRh6tchsOz4YSrtUrYn0m3X
+         u6P1KoWAOpgf57yvoR8fa0YmcQ/y9Z6SvqzX7FpRs9h/jwTczjQ+Z7+w2Rbk27ZHh0og
+         0LE7pBjh8muSQReyxNlpzW9r5GxdZAJASM/n0SyYPiyysgMC2+O1YXBR/AiXyflUlNUG
+         tQE4bunYM6NraXd6rpOiu74sEeibZgv5EpEH2i8kVjVDawVFo0nFzWIJ6W2wTl8jb6WD
+         GXHA==
+X-Gm-Message-State: AGi0PuZNppTbwa+jGRKI+BVP2Ab23Az1TbSZpzb+SZf0h+LYLqOD20ab
+        20KhyMXoRcno7+uHIy2ExwfFVj0MzM6cW/nCqA8wF6Cqsmqx
+X-Google-Smtp-Source: APiQypL7z32WqVtJf+HU76MSmqdvhpd5b/+cWTCe8doO6sm7iJCSjXzZWEJ2xO7z9PbqCNV4hMLSwQdu3OIPRYsm0YiBnlo2Q/Bm
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a02:3b4b:: with SMTP id i11mr16625500jaf.16.1589217673581;
+ Mon, 11 May 2020 10:21:13 -0700 (PDT)
+Date:   Mon, 11 May 2020 10:21:13 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e79ab005a56292f5@google.com>
+Subject: WARNING in cgroup_finalize_control
+From:   syzbot <syzbot+9c08aaa363ca5784c9e9@syzkaller.appspotmail.com>
+To:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, christian@brauner.io,
+        coreteam@netfilter.org, daniel@iogearbox.net, davem@davemloft.net,
+        hannes@cmpxchg.org, john.fastabend@gmail.com, kaber@trash.net,
+        kadlec@blackhole.kfki.hu, kafai@fb.com, kpsingh@chromium.org,
+        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
+        lizefan@huawei.com, marcelo.leitner@gmail.com,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        nhorman@tuxdriver.com, pablo@netfilter.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, tj@kernel.org,
+        vyasevich@gmail.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Bring minor improvements to bpftool documentation. Fix or harmonise
-formatting, update map types (including in interactive help), improve
-description for "map create", fix a build warning due to a missing line
-after the double-colon for the "bpftool prog profile" example,
-complete/harmonise/sort the list of related bpftool man pages in
-footers.
+Hello,
 
-v2:
-- Remove (instead of changing) mark-up on "value" in bpftool-map.rst,
-  when it does not refer to something passed on the command line.
-- Fix an additional typo ("hexadeximal") in the same file.
+syzbot found the following crash on:
 
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+HEAD commit:    a811c1fa Merge git://git.kernel.org/pub/scm/linux/kernel/g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16ad1d70100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=43badbd0e7e1137e
+dashboard link: https://syzkaller.appspot.com/bug?extid=9c08aaa363ca5784c9e9
+compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10d3c588100000
+
+The bug was bisected to:
+
+commit eab59075d3cd7f3535aa2dbbc19a198dfee58892
+Author: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Date:   Wed Dec 28 11:26:31 2016 +0000
+
+    sctp: reduce indent level at sctp_sf_tabort_8_4_8
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=151b6c7c100000
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=171b6c7c100000
+console output: https://syzkaller.appspot.com/x/log.txt?x=131b6c7c100000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+9c08aaa363ca5784c9e9@syzkaller.appspotmail.com
+Fixes: eab59075d3cd ("sctp: reduce indent level at sctp_sf_tabort_8_4_8")
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 7373 at kernel/cgroup/cgroup.c:3111 cgroup_apply_control_disable kernel/cgroup/cgroup.c:3111 [inline]
+WARNING: CPU: 0 PID: 7373 at kernel/cgroup/cgroup.c:3111 cgroup_finalize_control+0xb6c/0xd60 kernel/cgroup/cgroup.c:3178
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 7373 Comm: syz-executor.0 Not tainted 5.7.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x1e9/0x30e lib/dump_stack.c:118
+ panic+0x264/0x7a0 kernel/panic.c:221
+ __warn+0x209/0x210 kernel/panic.c:582
+ report_bug+0x1ac/0x2d0 lib/bug.c:195
+ fixup_bug arch/x86/kernel/traps.c:175 [inline]
+ do_error_trap+0xca/0x1c0 arch/x86/kernel/traps.c:267
+ do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+ invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:cgroup_apply_control_disable kernel/cgroup/cgroup.c:3111 [inline]
+RIP: 0010:cgroup_finalize_control+0xb6c/0xd60 kernel/cgroup/cgroup.c:3178
+Code: 89 f7 ff d3 eb 08 e8 53 fe 07 00 0f 1f 00 49 ff c4 49 83 fc 0d 0f 84 63 01 00 00 e8 3e fe 07 00 e9 a9 f8 ff ff e8 34 fe 07 00 <0f> 0b e9 88 f9 ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c cd f8 ff
+RSP: 0018:ffffc900035a7ba8 EFLAGS: 00010293
+RAX: ffffffff816b637c RBX: 0000000000000002 RCX: ffff88809e876100
+RDX: 0000000000000000 RSI: 0000000000000002 RDI: 0000000000000000
+RBP: ffffffff89307148 R08: ffffffff816b5cfc R09: ffffed1015d07074
+R10: ffffed1015d07074 R11: 0000000000000000 R12: 0000000000000008
+R13: ffff88809251c000 R14: ffff88808eef2400 R15: dffffc0000000000
+ rebind_subsystems+0x737/0xe60 kernel/cgroup/cgroup.c:1750
+ cgroup_setup_root+0x679/0xd50 kernel/cgroup/cgroup.c:1984
+ cgroup1_root_to_use kernel/cgroup/cgroup-v1.c:1190 [inline]
+ cgroup1_get_tree+0x7a2/0xae0 kernel/cgroup/cgroup-v1.c:1207
+ vfs_get_tree+0x88/0x270 fs/super.c:1547
+ do_new_mount fs/namespace.c:2816 [inline]
+ do_mount+0x17ec/0x2900 fs/namespace.c:3141
+ __do_sys_mount fs/namespace.c:3350 [inline]
+ __se_sys_mount+0xd3/0x100 fs/namespace.c:3327
+ do_syscall_64+0xf3/0x1b0 arch/x86/entry/common.c:295
+ entry_SYSCALL_64_after_hwframe+0x49/0xb3
+RIP: 0033:0x45f27a
+Code: b8 a6 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 ad 8c fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 0f 83 8a 8c fb ff c3 66 0f 1f 84 00 00 00 00 00
+RSP: 002b:00007fff4f78e3a8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007fff4f78e400 RCX: 000000000045f27a
+RDX: 00000000004cad91 RSI: 00000000004c1465 RDI: 00000000004c1428
+RBP: 0000000000000000 R08: 00000000004cf7b8 R09: 000000000000001c
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000418390
+R13: 00007fff4f78e628 R14: 0000000000000000 R15: 0000000000000000
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
 ---
- .../bpf/bpftool/Documentation/bpftool-btf.rst | 11 ++++--
- .../bpftool/Documentation/bpftool-cgroup.rst  | 12 ++++--
- .../bpftool/Documentation/bpftool-feature.rst | 12 ++++--
- .../bpf/bpftool/Documentation/bpftool-gen.rst | 21 ++++++-----
- .../bpftool/Documentation/bpftool-iter.rst    | 12 +++---
- .../bpftool/Documentation/bpftool-link.rst    |  9 +++--
- .../bpf/bpftool/Documentation/bpftool-map.rst | 37 ++++++++++++-------
- .../bpf/bpftool/Documentation/bpftool-net.rst | 12 ++++--
- .../bpftool/Documentation/bpftool-perf.rst    | 12 ++++--
- .../bpftool/Documentation/bpftool-prog.rst    | 23 +++++++-----
- .../Documentation/bpftool-struct_ops.rst      | 11 +++---
- tools/bpf/bpftool/Documentation/bpftool.rst   | 11 ++++--
- tools/bpf/bpftool/map.c                       |  3 +-
- 13 files changed, 116 insertions(+), 70 deletions(-)
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-index 39615f8e145b..ce3a724f50c1 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-@@ -230,9 +230,14 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-map**\ (8),
--	**bpftool-prog**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
--	**bpftool-perf**\ (8)
-+	**bpftool-perf**\ (8),
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-index 06a28b07787d..e4d9da654e84 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-@@ -20,7 +20,7 @@ SYNOPSIS
- CGROUP COMMANDS
- ===============
- 
--|	**bpftool** **cgroup { show | list }** *CGROUP* [**effective**]
-+|	**bpftool** **cgroup** { **show** | **list** } *CGROUP* [**effective**]
- |	**bpftool** **cgroup tree** [*CGROUP_ROOT*] [**effective**]
- |	**bpftool** **cgroup attach** *CGROUP* *ATTACH_TYPE* *PROG* [*ATTACH_FLAGS*]
- |	**bpftool** **cgroup detach** *CGROUP* *ATTACH_TYPE* *PROG*
-@@ -160,9 +160,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-index 1fa755f55e0c..8609f06e71de 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-@@ -28,7 +28,7 @@ DESCRIPTION
- ===========
- 	**bpftool feature probe** [**kernel**] [**full**] [**macros** [**prefix** *PREFIX*]]
- 		  Probe the running kernel and dump a number of eBPF-related
--		  parameters, such as availability of the **bpf()** system call,
-+		  parameters, such as availability of the **bpf**\ () system call,
- 		  JIT status, eBPF program types availability, eBPF helper
- 		  functions availability, and more.
- 
-@@ -93,9 +93,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-index 94d91322895a..df85dbd962c0 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-@@ -14,7 +14,7 @@ SYNOPSIS
- 
- 	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] }
- 
--	*COMMAND* := { **skeleton | **help** }
-+	*COMMAND* := { **skeleton** | **help** }
- 
- GEN COMMANDS
- =============
-@@ -36,12 +36,12 @@ DESCRIPTION
- 		  etc. Skeleton eliminates the need to lookup mentioned
- 		  components by name. Instead, if skeleton instantiation
- 		  succeeds, they are populated in skeleton structure as valid
--		  libbpf types (e.g., struct bpf_map pointer) and can be
-+		  libbpf types (e.g., **struct bpf_map** pointer) and can be
- 		  passed to existing generic libbpf APIs.
- 
- 		  In addition to simple and reliable access to maps and
--		  programs, skeleton provides a storage for BPF links (struct
--		  bpf_link) for each BPF program within BPF object. When
-+		  programs, skeleton provides a storage for BPF links (**struct
-+		  bpf_link**) for each BPF program within BPF object. When
- 		  requested, supported BPF programs will be automatically
- 		  attached and resulting BPF links stored for further use by
- 		  user in pre-allocated fields in skeleton struct. For BPF
-@@ -82,14 +82,14 @@ DESCRIPTION
- 
- 		  - **example__open** and **example__open_opts**.
- 		    These functions are used to instantiate skeleton. It
--		    corresponds to libbpf's **bpf_object__open()** API.
-+		    corresponds to libbpf's **bpf_object__open**\ () API.
- 		    **_opts** variants accepts extra **bpf_object_open_opts**
- 		    options.
- 
- 		  - **example__load**.
- 		    This function creates maps, loads and verifies BPF
- 		    programs, initializes global data maps. It corresponds to
--		    libppf's **bpf_object__load** API.
-+		    libppf's **bpf_object__load**\ () API.
- 
- 		  - **example__open_and_load** combines **example__open** and
- 		    **example__load** invocations in one commonly used
-@@ -296,10 +296,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-map**\ (8),
--	**bpftool-prog**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-iter.rst b/tools/bpf/bpftool/Documentation/bpftool-iter.rst
-index 13b173d93890..8dce698eab79 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-iter.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-iter.rst
-@@ -22,7 +22,6 @@ ITER COMMANDS
- |
- |	*OBJ* := /a/file/of/bpf_iter_target.o
- 
--
- DESCRIPTION
- ===========
- 	**bpftool iter pin** *OBJ* *PATH*
-@@ -65,19 +64,18 @@ EXAMPLES
-    Create a file-based bpf iterator from bpf_iter_netlink.o and pin it
-    to /sys/fs/bpf/my_netlink
- 
--
- SEE ALSO
- ========
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
--	**bpftool-link**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
--	**bpftool-gen**\ (8)
-+	**bpftool-prog**\ (8),
- 	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-link.rst b/tools/bpf/bpftool/Documentation/bpftool-link.rst
-index ee6500d6e6e4..0e43d7b06c11 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-link.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-link.rst
-@@ -109,10 +109,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-index cdeae8ae90ba..31101643e57c 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -21,7 +21,7 @@ SYNOPSIS
- MAP COMMANDS
- =============
- 
--|	**bpftool** **map { show | list }**   [*MAP*]
-+|	**bpftool** **map** { **show** | **list** }   [*MAP*]
- |	**bpftool** **map create**     *FILE* **type** *TYPE* **key** *KEY_SIZE* **value** *VALUE_SIZE* \
- |		**entries** *MAX_ENTRIES* **name** *NAME* [**flags** *FLAGS*] [**dev** *NAME*]
- |	**bpftool** **map dump**       *MAP*
-@@ -49,7 +49,7 @@ MAP COMMANDS
- |		| **lru_percpu_hash** | **lpm_trie** | **array_of_maps** | **hash_of_maps**
- |		| **devmap** | **devmap_hash** | **sockmap** | **cpumap** | **xskmap** | **sockhash**
- |		| **cgroup_storage** | **reuseport_sockarray** | **percpu_cgroup_storage**
--|		| **queue** | **stack** }
-+|		| **queue** | **stack** | **sk_storage** | **struct_ops** }
- 
- DESCRIPTION
- ===========
-@@ -66,6 +66,13 @@ DESCRIPTION
- 		  Create a new map with given parameters and pin it to *bpffs*
- 		  as *FILE*.
- 
-+		  *FLAGS* should be an integer which is the combination of
-+		  desired flags, e.g. 1024 for **BPF_F_MMAPABLE** (see bpf.h
-+		  UAPI header for existing flags).
-+
-+		  Keyword **dev** expects a network interface name, and is used
-+		  to request hardware offload for the map.
-+
- 	**bpftool map dump**    *MAP*
- 		  Dump all entries in a given *MAP*.  In case of **name**,
- 		  *MAP* may match several maps which will all be dumped.
-@@ -78,7 +85,7 @@ DESCRIPTION
- 		  exists; **noexist** update only if entry doesn't exist.
- 
- 		  If the **hex** keyword is provided in front of the bytes
--		  sequence, the bytes are parsed as hexadeximal values, even if
-+		  sequence, the bytes are parsed as hexadecimal values, even if
- 		  no "0x" prefix is added. If the keyword is not provided, then
- 		  the bytes are parsed as decimal values, unless a "0x" prefix
- 		  (for hexadecimal) or a "0" prefix (for octal) is provided.
-@@ -100,10 +107,10 @@ DESCRIPTION
- 		  extensions of *bpffs*.
- 
- 	**bpftool** **map event_pipe** *MAP* [**cpu** *N* **index** *M*]
--		  Read events from a BPF_MAP_TYPE_PERF_EVENT_ARRAY map.
-+		  Read events from a **BPF_MAP_TYPE_PERF_EVENT_ARRAY** map.
- 
- 		  Install perf rings into a perf event array map and dump
--		  output of any bpf_perf_event_output() call in the kernel.
-+		  output of any **bpf_perf_event_output**\ () call in the kernel.
- 		  By default read the number of CPUs on the system and
- 		  install perf ring for each CPU in the corresponding index
- 		  in the array.
-@@ -116,24 +123,24 @@ DESCRIPTION
- 		  receiving events if it installed its rings earlier.
- 
- 	**bpftool map peek**  *MAP*
--		  Peek next **value** in the queue or stack.
-+		  Peek next value in the queue or stack.
- 
- 	**bpftool map push**  *MAP* **value** *VALUE*
--		  Push **value** onto the stack.
-+		  Push *VALUE* onto the stack.
- 
- 	**bpftool map pop**  *MAP*
--		  Pop and print **value** from the stack.
-+		  Pop and print value from the stack.
- 
- 	**bpftool map enqueue**  *MAP* **value** *VALUE*
--		  Enqueue **value** into the queue.
-+		  Enqueue *VALUE* into the queue.
- 
- 	**bpftool map dequeue**  *MAP*
--		  Dequeue and print **value** from the queue.
-+		  Dequeue and print value from the queue.
- 
- 	**bpftool map freeze**  *MAP*
- 		  Freeze the map as read-only from user space. Entries from a
- 		  frozen map can not longer be updated or deleted with the
--		  **bpf\ ()** system call. This operation is not reversible,
-+		  **bpf**\ () system call. This operation is not reversible,
- 		  and the map remains immutable from user space until its
- 		  destruction. However, read and write permissions for BPF
- 		  programs to the map remain unchanged.
-@@ -269,9 +276,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-net.rst b/tools/bpf/bpftool/Documentation/bpftool-net.rst
-index 8651b00b81ea..aa7450736179 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-net.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-net.rst
-@@ -20,7 +20,7 @@ SYNOPSIS
- NET COMMANDS
- ============
- 
--|	**bpftool** **net { show | list }** [ **dev** *NAME* ]
-+|	**bpftool** **net** { **show** | **list** } [ **dev** *NAME* ]
- |	**bpftool** **net attach** *ATTACH_TYPE* *PROG* **dev** *NAME* [ **overwrite** ]
- |	**bpftool** **net detach** *ATTACH_TYPE* **dev** *NAME*
- |	**bpftool** **net help**
-@@ -194,9 +194,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-perf.rst b/tools/bpf/bpftool/Documentation/bpftool-perf.rst
-index e252bd0bc434..9c592b7c6775 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-perf.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-perf.rst
-@@ -20,7 +20,7 @@ SYNOPSIS
- PERF COMMANDS
- =============
- 
--|	**bpftool** **perf { show | list }**
-+|	**bpftool** **perf** { **show** | **list** }
- |	**bpftool** **perf help**
- 
- DESCRIPTION
-@@ -85,9 +85,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 9f19404f470e..5948e9d89c8d 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -21,11 +21,11 @@ SYNOPSIS
- PROG COMMANDS
- =============
- 
--|	**bpftool** **prog { show | list }** [*PROG*]
-+|	**bpftool** **prog** { **show** | **list** } [*PROG*]
- |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
- |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
- |	**bpftool** **prog pin** *PROG* *FILE*
--|	**bpftool** **prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
-+|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
- |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
- |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
- |	**bpftool** **prog tracelog**
-@@ -49,7 +49,7 @@ PROG COMMANDS
- |       *ATTACH_TYPE* := {
- |		**msg_verdict** | **stream_verdict** | **stream_parser** | **flow_dissector**
- |	}
--|	*METRIC* := {
-+|	*METRICs* := {
- |		**cycles** | **instructions** | **l1d_loads** | **llc_misses**
- |	}
- 
-@@ -155,7 +155,7 @@ DESCRIPTION
- 	**bpftool prog tracelog**
- 		  Dump the trace pipe of the system to the console (stdout).
- 		  Hit <Ctrl+C> to stop printing. BPF programs can write to this
--		  trace pipe at runtime with the **bpf_trace_printk()** helper.
-+		  trace pipe at runtime with the **bpf_trace_printk**\ () helper.
- 		  This should be used only for debugging purposes. For
- 		  streaming data from BPF programs to user space, one can use
- 		  perf events (see also **bpftool-map**\ (8)).
-@@ -195,9 +195,9 @@ DESCRIPTION
- 
- 	**bpftool prog profile** *PROG* [**duration** *DURATION*] *METRICs*
- 		  Profile *METRICs* for bpf program *PROG* for *DURATION*
--		  seconds or until user hits Ctrl-C. *DURATION* is optional.
-+		  seconds or until user hits <Ctrl+C>. *DURATION* is optional.
- 		  If *DURATION* is not specified, the profiling will run up to
--		  UINT_MAX seconds.
-+		  **UINT_MAX** seconds.
- 
- 	**bpftool prog help**
- 		  Print short help message.
-@@ -267,7 +267,7 @@ EXAMPLES
- 
- |
- | **# bpftool prog dump xlated id 10 file /tmp/t**
--| **# ls -l /tmp/t**
-+| **$ ls -l /tmp/t**
- 
- ::
- 
-@@ -325,6 +325,7 @@ EXAMPLES
- | **# bpftool prog profile id 337 duration 10 cycles instructions llc_misses**
- 
- ::
-+
-          51397 run_cnt
-       40176203 cycles                                                 (83.05%)
-       42518139 instructions    #   1.06 insns per cycle               (83.39%)
-@@ -335,9 +336,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst b/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst
-index f045cc89dd6d..d93cd1cb8b0f 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst
-@@ -105,12 +105,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
--	**bpftool-gen**\ (8)
--	
-+	**bpftool-prog**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool.rst b/tools/bpf/bpftool/Documentation/bpftool.rst
-index 34239fda69ed..420d4d5df8b6 100644
---- a/tools/bpf/bpftool/Documentation/bpftool.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool.rst
-@@ -75,11 +75,14 @@ SEE ALSO
- ========
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8),
--	**bpftool-gen**\ (8),
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 693a632f6813..85cbe9a19170 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -1589,7 +1589,8 @@ static int do_help(int argc, char **argv)
- 		"                 percpu_array | stack_trace | cgroup_array | lru_hash |\n"
- 		"                 lru_percpu_hash | lpm_trie | array_of_maps | hash_of_maps |\n"
- 		"                 devmap | devmap_hash | sockmap | cpumap | xskmap | sockhash |\n"
--		"                 cgroup_storage | reuseport_sockarray | percpu_cgroup_storage }\n"
-+		"                 cgroup_storage | reuseport_sockarray | percpu_cgroup_storage |\n"
-+		"                 queue | stack | sk_storage | struct_ops }\n"
- 		"       " HELP_SPEC_OPTIONS "\n"
- 		"",
- 		bin_name, argv[-2], bin_name, argv[-2], bin_name, argv[-2],
--- 
-2.20.1
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
