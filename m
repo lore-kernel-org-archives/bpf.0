@@ -2,144 +2,95 @@ Return-Path: <SRS0=G4Pv=6Z=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89257C54E4B
-	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:53:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1289C54E8D
+	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:53:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6CD40206DB
-	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:53:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A4D68206DB
+	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 18:53:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="vGtK6+5I"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IeZdFknt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731264AbgEKSxG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 May 2020 14:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
+        id S1731305AbgEKSxJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 May 2020 14:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731212AbgEKSwb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 11 May 2020 14:52:31 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6253FC061A0C
-        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:31 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id z72so10938651wmc.2
-        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:52:31 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1731213AbgEKSxI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 11 May 2020 14:53:08 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2E0C061A0C
+        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:53:08 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id d21so3047768ljg.9
+        for <bpf@vger.kernel.org>; Mon, 11 May 2020 11:53:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=M0vCBt1D4iC0eNJSSMfqS7W0wA2E5Kan2xeXfsA3ILU=;
-        b=vGtK6+5IMQq2lXuqJCle4VpwFMNrCzuQ45bkU70sjzrX0aB/IzvNSrCP/uyR0uEDH4
-         J++9ehUEcJy1GI6K4InFE9cWncot0Gmu9gs81y6G98x5NkCnN6Yw1PcL/9tofskOFj5k
-         k0JdFguYx9bWxDmHE9oUwr4bzh1R3moJ0A6Bg=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0TYRND/ABi7PIIhOtO24f2VytaVAkSVXBd42PIJIrHs=;
+        b=IeZdFkntoHFzlO38HPewKXBqFfn7uWOAgVHONj3EuvbJUvJcQr6XUpGjtKN8+bL+wi
+         JrBpnin6lCdwcNAhGWZtYPQiLsBeJcQJsqB3Tsh/rCErMybwRf1rTM4vFpG24kp0Atsh
+         7ywX8v+vXD1USZ8b4XPDoIej5YVwGCf53RapegfHIONymBE7ldGbPAeaGIobr6VJhBjQ
+         Ls3d+t8GJc4xhh47501B7MZB2THCZzkMBSb1bwKCoDV/orSTjpemU2sDeNA0eaV8O59t
+         vA7sSHw6HmqZrnTI8clZbnpgKN9lLw6OqfAvNHM82qJRQOds0Ru0INCofZCwlfz87Tbv
+         UbZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=M0vCBt1D4iC0eNJSSMfqS7W0wA2E5Kan2xeXfsA3ILU=;
-        b=U5Ih2+m2m9hXRKB/4xq9CIN5eh57wnPJcY51I1C8tFnm66T2gd+Gfhj8IAvyNHwDGO
-         GZNVwmSS429YDNLGOP/GIwWYA+q9RkGWvFX94c5QidOvmS41i9E7P3i0MTO2RjjrLFMt
-         sSwnZiO0LJi/xSvgcGazwI2FNNBAOxTsiHPiZVyT3GECsJDya5n0Wc3gxAKjtLQyAG7z
-         43pOTqOr2578nIkvC8CCohAoPyaVbeX+e/l5mkywSSnmaFAVO+O4QTobt7LSLG6qs+rv
-         C+E46oOwVI2CKgfK7ApweFUE4zIPaMvYehTesy+9QavqW/uMF2EXHd7QrzVXErpZAFJ5
-         3WVg==
-X-Gm-Message-State: AGi0PuYUagzmrowyXxHXr/03E90qIqAJoHVtHtFTey0toahJFAzRSBlb
-        q/ECk86iiSVzlhWsE0Ed6y89aA==
-X-Google-Smtp-Source: APiQypKw+cunp3PJFKZ9BE3HaSOt/lJ2FAuAJGIRZ2whrxILB22+1PKRkJk8LWco5pqyuzI75b1iEA==
-X-Received: by 2002:a1c:6042:: with SMTP id u63mr18978565wmb.65.1589223150101;
-        Mon, 11 May 2020 11:52:30 -0700 (PDT)
-Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id b2sm15346343wrm.30.2020.05.11.11.52.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 11:52:29 -0700 (PDT)
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     dccp@vger.kernel.org, kernel-team@cloudflare.com,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Gerrit Renker <gerrit@erg.abdn.ac.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>
-Subject: [PATCH bpf-next v2 06/17] inet6: Extract helper for selecting socket from reuseport group
-Date:   Mon, 11 May 2020 20:52:07 +0200
-Message-Id: <20200511185218.1422406-7-jakub@cloudflare.com>
-X-Mailer: git-send-email 2.25.3
-In-Reply-To: <20200511185218.1422406-1-jakub@cloudflare.com>
-References: <20200511185218.1422406-1-jakub@cloudflare.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0TYRND/ABi7PIIhOtO24f2VytaVAkSVXBd42PIJIrHs=;
+        b=EL7oxNfQjMZErb11NfKYDWZC7N2NiBJHD18RKKLCxfhvfk1ZwAiZp1wzJ3j4UdJTM0
+         ZwVfGTseRZISvP4RPX9b2ZGGC4NnliPDMza8CO+wfRIr+Lo+3GC52cyQZMDsavdLNutv
+         429jL7cSIw26SS6gvLqFw+M6ewBydhPTWP1GHbOrpUngatxj5X9/w9de0hkW7U12rh8+
+         JAR1Lew60ochOydX9zsJHlZo58jtDUevHBk8u6o1/g4Pwt6yMnaq9iYcQz2xlE9kwgS1
+         WvopiSWnueyrBcaa3Syry8Vqc7plvyxzh10sTWO3FlNnlJe/3AXq5S/qi611iKtrRZGW
+         G0Qw==
+X-Gm-Message-State: AOAM532BTJX7es+DUWYqfZUSjcz69alCOf7yZKB8fpBUwKKBPJ2ZEUqf
+        8jyulShs7sln0oDLJrGfQzjnd/0tbxQttERUXhw=
+X-Google-Smtp-Source: ABdhPJxPAsxYALV9JzkEJWc85qBOQSSQdpFS89HCHLqK4RU9f41vp6Rx9S3n70rsTZdcQt+OoTzfRNfUu9/I+BnlnD0=
+X-Received: by 2002:a2e:9611:: with SMTP id v17mr10398250ljh.212.1589223186674;
+ Mon, 11 May 2020 11:53:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <330319358.22380533.1589199587680.JavaMail.zimbra@redhat.com> <1556585430.22389743.1589200726419.JavaMail.zimbra@redhat.com>
+In-Reply-To: <1556585430.22389743.1589200726419.JavaMail.zimbra@redhat.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 11 May 2020 11:52:54 -0700
+Message-ID: <CAADnVQLjWez5CcEWnyfhkSn_4qnRWwDeYNEOnfxYG3DiXGE2vg@mail.gmail.com>
+Subject: Re: Mailing list for CI results
+To:     Veronika Kabatova <vkabatov@redhat.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Jiri Benc <jbenc@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Stanislav Kozina <skozina@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Prepare for calling into reuseport from inet6_lookup_listener as well.
+On Mon, May 11, 2020 at 5:38 AM Veronika Kabatova <vkabatov@redhat.com> wrote:
+>
+>
+> Hello,
+>
+> we've been discussing CI for bpf-next in previous meetings. One of the
+> action items from there was a creation of a separate mailing list
+> purely for CI results, to not pollute the regular development list.
+>
+> Is there already a list created? If not, can it be done? We'd be
+> interested in sending out some examples to get early feedback before
+> the testing is enabled.
 
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
----
- net/ipv6/inet6_hashtables.c | 31 ++++++++++++++++++++++---------
- 1 file changed, 22 insertions(+), 9 deletions(-)
+I think any mailing list is fine. It doesn't have to be @vger and archived.
+linux foundation can setup one.
+Or create one via google groups.
+or any other mailing list service.
 
-diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
-index fbe9d4295eac..03942eef8ab6 100644
---- a/net/ipv6/inet6_hashtables.c
-+++ b/net/ipv6/inet6_hashtables.c
-@@ -111,6 +111,23 @@ static inline int compute_score(struct sock *sk, struct net *net,
- 	return score;
- }
- 
-+static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
-+					    struct sk_buff *skb, int doff,
-+					    const struct in6_addr *saddr,
-+					    __be16 sport,
-+					    const struct in6_addr *daddr,
-+					    unsigned short hnum)
-+{
-+	struct sock *reuse_sk = NULL;
-+	u32 phash;
-+
-+	if (sk->sk_reuseport) {
-+		phash = inet6_ehashfn(net, daddr, hnum, saddr, sport);
-+		reuse_sk = reuseport_select_sock(sk, phash, skb, doff);
-+	}
-+	return reuse_sk;
-+}
-+
- /* called with rcu_read_lock() */
- static struct sock *inet6_lhash2_lookup(struct net *net,
- 		struct inet_listen_hashbucket *ilb2,
-@@ -123,21 +140,17 @@ static struct sock *inet6_lhash2_lookup(struct net *net,
- 	struct inet_connection_sock *icsk;
- 	struct sock *sk, *result = NULL;
- 	int score, hiscore = 0;
--	u32 phash = 0;
- 
- 	inet_lhash2_for_each_icsk_rcu(icsk, &ilb2->head) {
- 		sk = (struct sock *)icsk;
- 		score = compute_score(sk, net, hnum, daddr, dif, sdif,
- 				      exact_dif);
- 		if (score > hiscore) {
--			if (sk->sk_reuseport) {
--				phash = inet6_ehashfn(net, daddr, hnum,
--						      saddr, sport);
--				result = reuseport_select_sock(sk, phash,
--							       skb, doff);
--				if (result)
--					return result;
--			}
-+			result = lookup_reuseport(net, sk, skb, doff,
-+						  saddr, sport, daddr, hnum);
-+			if (result)
-+				return result;
-+
- 			result = sk;
- 			hiscore = score;
- 		}
--- 
-2.25.3
+> Please let me know if I should reach out to someone else for this.
+> I'll attend this weeks office hours to discuss other CI action items.
 
+Great
