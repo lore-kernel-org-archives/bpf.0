@@ -2,72 +2,44 @@ Return-Path: <SRS0=G4Pv=6Z=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70708C54E8D
-	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 13:38:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CA59C47255
+	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 14:42:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 473A320746
-	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 13:38:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="ovC8iK5t"
+	by mail.kernel.org (Postfix) with ESMTP id 0F6C220722
+	for <bpf@archiver.kernel.org>; Mon, 11 May 2020 14:42:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729682AbgEKNib (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 May 2020 09:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729881AbgEKNiZ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 11 May 2020 09:38:25 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F8EC05BD09
-        for <bpf@vger.kernel.org>; Mon, 11 May 2020 06:38:23 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id h17so2116069wrc.8
-        for <bpf@vger.kernel.org>; Mon, 11 May 2020 06:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=79u6MzGyKGGnMZC4QQ9o+3pXZzxlwfR+y0BnNMPOM3U=;
-        b=ovC8iK5tHRPRc6Wk6dQpWFd/5H36cvTKMYuipdXG+HkAyvO3xFN4QiComuUYrs1nFs
-         0SPSNa2xjCHMFAZZ1qTgmeKzpF1f0nH1hY4OtvcJrArJ4CpeLMXfFQXidBlnGMO8EKTa
-         Az8ottRY2Uvd5b1i+KQvXgU4vG4pTDljr2EsT+AXWydG7oKBmN49/hEGbuUpf3zdZp6O
-         /9g/jt7gpjtxdks9vK32K4oqVWEhWoXSHSTj0CsfqhzkPOvMkWTfxXKCO3IXKvME3J4U
-         XM3ei2X1ahSlfq7NCFz4NM9jXpDhBi/0no+7FwB26nuUFkvqKr1ktRgxOwsUt+JblHJ3
-         9uRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=79u6MzGyKGGnMZC4QQ9o+3pXZzxlwfR+y0BnNMPOM3U=;
-        b=T3Th287I8sS2cgkGHYQAX/LL9Ln+J3ixEu+pgbeSTzjefS5g/UinxUDkpWSxejF1WO
-         j6cRGZZAJbwJ8s5MZ6QkqVOsFRnozU8Xjn7i0wgQc9GxlgUn1reAWr9wW0aHv12lnQrQ
-         k5Jvai/nwbqJw8eHGIoxNhXyJjbp+G5gBS50gEEecNhkVG4z4cu2CH70TmSIewaOXSeT
-         sMywLy+Y4KKPrPorIA9zsHATkcTYFa/o9V8kGYJOnhciH4dtK8YRUaYBvz5CHlwY/Sjh
-         1yzN5UpUge7i5J+I0KAMMt6gx0vfdF7NB9KsuUstDOFyz9m9wTDWvSrceJ+BZ7f44OMQ
-         f2JA==
-X-Gm-Message-State: AGi0PuYMiLWpHSOfjFMQ+L4EgeQj+iSGG0AoeTXmuYAi/cO+itINxodM
-        Tw1iQ8bbe2Ekfw+foDcMHSGmbRHHPMU2aw==
-X-Google-Smtp-Source: APiQypKw2HkNUK1jqnTn7VWii0vLch+PFngRxlDWtNiwc0UDInocq9PA408sb8ogvxAfZyG1PfNGOA==
-X-Received: by 2002:a5d:4685:: with SMTP id u5mr18098813wrq.98.1589204302153;
-        Mon, 11 May 2020 06:38:22 -0700 (PDT)
-Received: from localhost.localdomain ([194.53.185.84])
-        by smtp.gmail.com with ESMTPSA id p4sm6932371wrq.31.2020.05.11.06.38.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 06:38:21 -0700 (PDT)
-From:   Quentin Monnet <quentin@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next 2/4] tools: bpftool: minor fixes for documentation
-Date:   Mon, 11 May 2020 14:38:05 +0100
-Message-Id: <20200511133807.26495-3-quentin@isovalent.com>
+        id S1728403AbgEKOm2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 May 2020 10:42:28 -0400
+Received: from mga02.intel.com ([134.134.136.20]:53756 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725993AbgEKOm2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 May 2020 10:42:28 -0400
+IronPort-SDR: cdzjbyxeLZmAgVPXN++rJzEfRjbcjD3ZxT4wRyEgxW+V/3iWGY4rd902tWe9THsJrt0cmYeLby
+ H/Pena8GtllQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2020 07:42:27 -0700
+IronPort-SDR: 3/4R6tWk5GcF1OR5bVVPayVrloBqW5lavl44TAXDnrjCmZJNuRmG3ZNHEzW2UyNBT7+2n5oBI1
+ tNu0UI5bUVkQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,380,1583222400"; 
+   d="scan'208";a="296964606"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by fmsmga002.fm.intel.com with ESMTP; 11 May 2020 07:42:25 -0700
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     ast@kernel.org, daniel@iogearbox.net
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [RFC PATCH bpf-next 0/1] bpf, x64: optimize JIT prologue/epilogue generation
+Date:   Mon, 11 May 2020 16:39:11 +0200
+Message-Id: <20200511143912.34086-1-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200511133807.26495-1-quentin@isovalent.com>
-References: <20200511133807.26495-1-quentin@isovalent.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -75,530 +47,111 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Bring minor improvements to bpftool documentation. Fix or harmonise
-formatting, update map types (including in interactive help), improve
-description for "map create", fix a build warning due to a missing line
-after the double-colon for the "bpftool prog profile" example,
-complete/harmonise/sort the list of related bpftool man pages in
-footers.
+Hi!
 
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
----
- .../bpf/bpftool/Documentation/bpftool-btf.rst | 11 ++++--
- .../bpftool/Documentation/bpftool-cgroup.rst  | 12 ++++---
- .../bpftool/Documentation/bpftool-feature.rst | 12 ++++---
- .../bpf/bpftool/Documentation/bpftool-gen.rst | 21 ++++++-----
- .../bpftool/Documentation/bpftool-iter.rst    | 12 +++----
- .../bpftool/Documentation/bpftool-link.rst    |  9 +++--
- .../bpf/bpftool/Documentation/bpftool-map.rst | 35 ++++++++++++-------
- .../bpf/bpftool/Documentation/bpftool-net.rst | 12 ++++---
- .../bpftool/Documentation/bpftool-perf.rst    | 12 ++++---
- .../bpftool/Documentation/bpftool-prog.rst    | 23 +++++++-----
- .../Documentation/bpftool-struct_ops.rst      | 11 +++---
- tools/bpf/bpftool/Documentation/bpftool.rst   | 11 +++---
- tools/bpf/bpftool/map.c                       |  3 +-
- 13 files changed, 115 insertions(+), 69 deletions(-)
+Today, BPF x86-64 JIT is preserving all of the callee-saved registers
+for each BPF program being JITed, even when none of the R6-R9 registers
+are used by the BPF program. Furthermore the tail call counter is always
+pushed/popped to/from the stack even when there is no tail call usage in
+BPF program being JITed. Optimization can be introduced that would
+detect the usage of R6-R9 and based on that push/pop to/from the stack
+only what is needed. Same goes for tail call counter.
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-index 39615f8e145b..ce3a724f50c1 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-@@ -230,9 +230,14 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-map**\ (8),
--	**bpftool-prog**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
--	**bpftool-perf**\ (8)
-+	**bpftool-perf**\ (8),
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-index 06a28b07787d..e4d9da654e84 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-@@ -20,7 +20,7 @@ SYNOPSIS
- CGROUP COMMANDS
- ===============
- 
--|	**bpftool** **cgroup { show | list }** *CGROUP* [**effective**]
-+|	**bpftool** **cgroup** { **show** | **list** } *CGROUP* [**effective**]
- |	**bpftool** **cgroup tree** [*CGROUP_ROOT*] [**effective**]
- |	**bpftool** **cgroup attach** *CGROUP* *ATTACH_TYPE* *PROG* [*ATTACH_FLAGS*]
- |	**bpftool** **cgroup detach** *CGROUP* *ATTACH_TYPE* *PROG*
-@@ -160,9 +160,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-index 1fa755f55e0c..8609f06e71de 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-@@ -28,7 +28,7 @@ DESCRIPTION
- ===========
- 	**bpftool feature probe** [**kernel**] [**full**] [**macros** [**prefix** *PREFIX*]]
- 		  Probe the running kernel and dump a number of eBPF-related
--		  parameters, such as availability of the **bpf()** system call,
-+		  parameters, such as availability of the **bpf**\ () system call,
- 		  JIT status, eBPF program types availability, eBPF helper
- 		  functions availability, and more.
- 
-@@ -93,9 +93,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-index 94d91322895a..df85dbd962c0 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-@@ -14,7 +14,7 @@ SYNOPSIS
- 
- 	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] }
- 
--	*COMMAND* := { **skeleton | **help** }
-+	*COMMAND* := { **skeleton** | **help** }
- 
- GEN COMMANDS
- =============
-@@ -36,12 +36,12 @@ DESCRIPTION
- 		  etc. Skeleton eliminates the need to lookup mentioned
- 		  components by name. Instead, if skeleton instantiation
- 		  succeeds, they are populated in skeleton structure as valid
--		  libbpf types (e.g., struct bpf_map pointer) and can be
-+		  libbpf types (e.g., **struct bpf_map** pointer) and can be
- 		  passed to existing generic libbpf APIs.
- 
- 		  In addition to simple and reliable access to maps and
--		  programs, skeleton provides a storage for BPF links (struct
--		  bpf_link) for each BPF program within BPF object. When
-+		  programs, skeleton provides a storage for BPF links (**struct
-+		  bpf_link**) for each BPF program within BPF object. When
- 		  requested, supported BPF programs will be automatically
- 		  attached and resulting BPF links stored for further use by
- 		  user in pre-allocated fields in skeleton struct. For BPF
-@@ -82,14 +82,14 @@ DESCRIPTION
- 
- 		  - **example__open** and **example__open_opts**.
- 		    These functions are used to instantiate skeleton. It
--		    corresponds to libbpf's **bpf_object__open()** API.
-+		    corresponds to libbpf's **bpf_object__open**\ () API.
- 		    **_opts** variants accepts extra **bpf_object_open_opts**
- 		    options.
- 
- 		  - **example__load**.
- 		    This function creates maps, loads and verifies BPF
- 		    programs, initializes global data maps. It corresponds to
--		    libppf's **bpf_object__load** API.
-+		    libppf's **bpf_object__load**\ () API.
- 
- 		  - **example__open_and_load** combines **example__open** and
- 		    **example__load** invocations in one commonly used
-@@ -296,10 +296,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-map**\ (8),
--	**bpftool-prog**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-iter.rst b/tools/bpf/bpftool/Documentation/bpftool-iter.rst
-index 13b173d93890..8dce698eab79 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-iter.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-iter.rst
-@@ -22,7 +22,6 @@ ITER COMMANDS
- |
- |	*OBJ* := /a/file/of/bpf_iter_target.o
- 
--
- DESCRIPTION
- ===========
- 	**bpftool iter pin** *OBJ* *PATH*
-@@ -65,19 +64,18 @@ EXAMPLES
-    Create a file-based bpf iterator from bpf_iter_netlink.o and pin it
-    to /sys/fs/bpf/my_netlink
- 
--
- SEE ALSO
- ========
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
--	**bpftool-link**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
--	**bpftool-gen**\ (8)
-+	**bpftool-prog**\ (8),
- 	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-link.rst b/tools/bpf/bpftool/Documentation/bpftool-link.rst
-index ee6500d6e6e4..0e43d7b06c11 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-link.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-link.rst
-@@ -109,10 +109,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-index cdeae8ae90ba..3177fe3fd969 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -21,7 +21,7 @@ SYNOPSIS
- MAP COMMANDS
- =============
- 
--|	**bpftool** **map { show | list }**   [*MAP*]
-+|	**bpftool** **map** { **show** | **list** }   [*MAP*]
- |	**bpftool** **map create**     *FILE* **type** *TYPE* **key** *KEY_SIZE* **value** *VALUE_SIZE* \
- |		**entries** *MAX_ENTRIES* **name** *NAME* [**flags** *FLAGS*] [**dev** *NAME*]
- |	**bpftool** **map dump**       *MAP*
-@@ -49,7 +49,7 @@ MAP COMMANDS
- |		| **lru_percpu_hash** | **lpm_trie** | **array_of_maps** | **hash_of_maps**
- |		| **devmap** | **devmap_hash** | **sockmap** | **cpumap** | **xskmap** | **sockhash**
- |		| **cgroup_storage** | **reuseport_sockarray** | **percpu_cgroup_storage**
--|		| **queue** | **stack** }
-+|		| **queue** | **stack** | **sk_storage** | **struct_ops** }
- 
- DESCRIPTION
- ===========
-@@ -66,6 +66,13 @@ DESCRIPTION
- 		  Create a new map with given parameters and pin it to *bpffs*
- 		  as *FILE*.
- 
-+		  *FLAGS* should be an integer which is the combination of
-+		  desired flags, e.g. 1024 for **BPF_F_MMAPABLE** (see bpf.h
-+		  UAPI header for existing flags).
-+
-+		  Keyword **dev** expects a network interface name, and is used
-+		  to request hardware offload for the map.
-+
- 	**bpftool map dump**    *MAP*
- 		  Dump all entries in a given *MAP*.  In case of **name**,
- 		  *MAP* may match several maps which will all be dumped.
-@@ -100,10 +107,10 @@ DESCRIPTION
- 		  extensions of *bpffs*.
- 
- 	**bpftool** **map event_pipe** *MAP* [**cpu** *N* **index** *M*]
--		  Read events from a BPF_MAP_TYPE_PERF_EVENT_ARRAY map.
-+		  Read events from a **BPF_MAP_TYPE_PERF_EVENT_ARRAY** map.
- 
- 		  Install perf rings into a perf event array map and dump
--		  output of any bpf_perf_event_output() call in the kernel.
-+		  output of any **bpf_perf_event_output**\ () call in the kernel.
- 		  By default read the number of CPUs on the system and
- 		  install perf ring for each CPU in the corresponding index
- 		  in the array.
-@@ -116,24 +123,24 @@ DESCRIPTION
- 		  receiving events if it installed its rings earlier.
- 
- 	**bpftool map peek**  *MAP*
--		  Peek next **value** in the queue or stack.
-+		  Peek next value in the queue or stack.
- 
- 	**bpftool map push**  *MAP* **value** *VALUE*
--		  Push **value** onto the stack.
-+		  Push *VALUE* onto the stack.
- 
- 	**bpftool map pop**  *MAP*
--		  Pop and print **value** from the stack.
-+		  Pop and print *VALUE* from the stack.
- 
- 	**bpftool map enqueue**  *MAP* **value** *VALUE*
--		  Enqueue **value** into the queue.
-+		  Enqueue *VALUE* into the queue.
- 
- 	**bpftool map dequeue**  *MAP*
--		  Dequeue and print **value** from the queue.
-+		  Dequeue and print *VALUE* from the queue.
- 
- 	**bpftool map freeze**  *MAP*
- 		  Freeze the map as read-only from user space. Entries from a
- 		  frozen map can not longer be updated or deleted with the
--		  **bpf\ ()** system call. This operation is not reversible,
-+		  **bpf**\ () system call. This operation is not reversible,
- 		  and the map remains immutable from user space until its
- 		  destruction. However, read and write permissions for BPF
- 		  programs to the map remain unchanged.
-@@ -269,9 +276,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-net.rst b/tools/bpf/bpftool/Documentation/bpftool-net.rst
-index 8651b00b81ea..aa7450736179 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-net.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-net.rst
-@@ -20,7 +20,7 @@ SYNOPSIS
- NET COMMANDS
- ============
- 
--|	**bpftool** **net { show | list }** [ **dev** *NAME* ]
-+|	**bpftool** **net** { **show** | **list** } [ **dev** *NAME* ]
- |	**bpftool** **net attach** *ATTACH_TYPE* *PROG* **dev** *NAME* [ **overwrite** ]
- |	**bpftool** **net detach** *ATTACH_TYPE* **dev** *NAME*
- |	**bpftool** **net help**
-@@ -194,9 +194,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-perf.rst b/tools/bpf/bpftool/Documentation/bpftool-perf.rst
-index e252bd0bc434..9c592b7c6775 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-perf.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-perf.rst
-@@ -20,7 +20,7 @@ SYNOPSIS
- PERF COMMANDS
- =============
- 
--|	**bpftool** **perf { show | list }**
-+|	**bpftool** **perf** { **show** | **list** }
- |	**bpftool** **perf help**
- 
- DESCRIPTION
-@@ -85,9 +85,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 9f19404f470e..5948e9d89c8d 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -21,11 +21,11 @@ SYNOPSIS
- PROG COMMANDS
- =============
- 
--|	**bpftool** **prog { show | list }** [*PROG*]
-+|	**bpftool** **prog** { **show** | **list** } [*PROG*]
- |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
- |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
- |	**bpftool** **prog pin** *PROG* *FILE*
--|	**bpftool** **prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
-+|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
- |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
- |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
- |	**bpftool** **prog tracelog**
-@@ -49,7 +49,7 @@ PROG COMMANDS
- |       *ATTACH_TYPE* := {
- |		**msg_verdict** | **stream_verdict** | **stream_parser** | **flow_dissector**
- |	}
--|	*METRIC* := {
-+|	*METRICs* := {
- |		**cycles** | **instructions** | **l1d_loads** | **llc_misses**
- |	}
- 
-@@ -155,7 +155,7 @@ DESCRIPTION
- 	**bpftool prog tracelog**
- 		  Dump the trace pipe of the system to the console (stdout).
- 		  Hit <Ctrl+C> to stop printing. BPF programs can write to this
--		  trace pipe at runtime with the **bpf_trace_printk()** helper.
-+		  trace pipe at runtime with the **bpf_trace_printk**\ () helper.
- 		  This should be used only for debugging purposes. For
- 		  streaming data from BPF programs to user space, one can use
- 		  perf events (see also **bpftool-map**\ (8)).
-@@ -195,9 +195,9 @@ DESCRIPTION
- 
- 	**bpftool prog profile** *PROG* [**duration** *DURATION*] *METRICs*
- 		  Profile *METRICs* for bpf program *PROG* for *DURATION*
--		  seconds or until user hits Ctrl-C. *DURATION* is optional.
-+		  seconds or until user hits <Ctrl+C>. *DURATION* is optional.
- 		  If *DURATION* is not specified, the profiling will run up to
--		  UINT_MAX seconds.
-+		  **UINT_MAX** seconds.
- 
- 	**bpftool prog help**
- 		  Print short help message.
-@@ -267,7 +267,7 @@ EXAMPLES
- 
- |
- | **# bpftool prog dump xlated id 10 file /tmp/t**
--| **# ls -l /tmp/t**
-+| **$ ls -l /tmp/t**
- 
- ::
- 
-@@ -325,6 +325,7 @@ EXAMPLES
- | **# bpftool prog profile id 337 duration 10 cycles instructions llc_misses**
- 
- ::
-+
-          51397 run_cnt
-       40176203 cycles                                                 (83.05%)
-       42518139 instructions    #   1.06 insns per cycle               (83.39%)
-@@ -335,9 +336,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst b/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst
-index f045cc89dd6d..d93cd1cb8b0f 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst
-@@ -105,12 +105,13 @@ SEE ALSO
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
- 	**bpftool**\ (8),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8)
--	**bpftool-gen**\ (8)
--	
-+	**bpftool-prog**\ (8)
-diff --git a/tools/bpf/bpftool/Documentation/bpftool.rst b/tools/bpf/bpftool/Documentation/bpftool.rst
-index 34239fda69ed..420d4d5df8b6 100644
---- a/tools/bpf/bpftool/Documentation/bpftool.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool.rst
-@@ -75,11 +75,14 @@ SEE ALSO
- ========
- 	**bpf**\ (2),
- 	**bpf-helpers**\ (7),
--	**bpftool-prog**\ (8),
--	**bpftool-map**\ (8),
-+	**bpftool-btf**\ (8),
- 	**bpftool-cgroup**\ (8),
- 	**bpftool-feature**\ (8),
-+	**bpftool-gen**\ (8),
-+	**bpftool-iter**\ (8),
-+	**bpftool-link**\ (8),
-+	**bpftool-map**\ (8),
- 	**bpftool-net**\ (8),
- 	**bpftool-perf**\ (8),
--	**bpftool-btf**\ (8),
--	**bpftool-gen**\ (8),
-+	**bpftool-prog**\ (8),
-+	**bpftool-struct_ops**\ (8)
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 693a632f6813..85cbe9a19170 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -1589,7 +1589,8 @@ static int do_help(int argc, char **argv)
- 		"                 percpu_array | stack_trace | cgroup_array | lru_hash |\n"
- 		"                 lru_percpu_hash | lpm_trie | array_of_maps | hash_of_maps |\n"
- 		"                 devmap | devmap_hash | sockmap | cpumap | xskmap | sockhash |\n"
--		"                 cgroup_storage | reuseport_sockarray | percpu_cgroup_storage }\n"
-+		"                 cgroup_storage | reuseport_sockarray | percpu_cgroup_storage |\n"
-+		"                 queue | stack | sk_storage | struct_ops }\n"
- 		"       " HELP_SPEC_OPTIONS "\n"
- 		"",
- 		bin_name, argv[-2], bin_name, argv[-2], bin_name, argv[-2],
+Results look promising for such instruction reduction. Below are the
+numbers for xdp1 sample on FVL 40G NIC receiving traffic from pktgen:
+
+* With optimization: 22.3 Mpps
+* Without:           19.0 mpps
+
+So it's around 15% of performance improvement. Note that xdp1 is not
+using any of callee saved registers, nor the tail call, hence such
+speed-up.
+
+There is one detail that needs to be handled though.
+
+Currently, x86-64 JIT tail call implementation is skipping the prologue
+of target BPF program that has constant size. With the mentioned
+optimization implemented, each particular BPF program that might be
+inserted onto the prog array map and therefore be the target of tail
+call, could have various prologue size.
+
+Let's have some pseudo-code example:
+
+func1:
+pro
+code
+epi
+
+func2:
+pro
+code'
+epi
+
+func3:
+pro
+code''
+epi
+
+Today, pro and epi are always the same (9/7) instructions. So a tail
+call from func1 to func2 is just a:
+
+jump func2 + sizeof pro in bytes (PROLOGUE_SIZE)
+
+With the optimization:
+
+func1:
+pro
+code
+epi
+
+func2:
+pro'
+code'
+epi'
+
+func3:
+pro''
+code''
+epi''
+
+For making the tail calls up and running with the mentioned optimization
+in place, x86-64 JIT should emit the pop registers instructions
+that were pushed on prologue before the actual jump. Jump offset should
+skip the instructions that are handling rbp/rsp, not the whole prologue.
+
+A tail call within func1 would then need to be:
+epi -> pop what pro pushed, but no leave/ret instructions
+jump func2 + 16 // first push insn of pro'; if no push, then this would
+                // a direct jump to code'
+
+Magic value of 16 comes from count of bytes that represent instructions
+that are skipped:
+0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)
+55                      push   %rbp
+48 89 e5                mov    %rsp,%rbp
+48 81 ec 08 00 00 00    sub    $0x8,%rsp
+
+which would in many cases add *more* instructions for tailcalls. If none
+of callee-saved registers are used, then there would be no overhead with
+such optimization in place.
+
+I'm not sure how to measure properly the impact on the BPF programs that
+are utilizing tail calls. Any suggestions?
+
+Daniel, Alexei, what is your view on this?
+
+For implementation details, see commit message of included patch.
+
+Thank you,
+Maciej
+
+
+Maciej Fijalkowski (1):
+  bpf, x64: optimize JIT prologue/epilogue generation
+
+ arch/x86/net/bpf_jit_comp.c | 190 ++++++++++++++++++++++++++++--------
+ 1 file changed, 148 insertions(+), 42 deletions(-)
+
 -- 
 2.20.1
 
