@@ -2,45 +2,44 @@ Return-Path: <SRS0=1NzR=62=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95896CA90AF
-	for <bpf@archiver.kernel.org>; Tue, 12 May 2020 15:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7C73CA90AF
+	for <bpf@archiver.kernel.org>; Tue, 12 May 2020 15:52:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E96C206DD
-	for <bpf@archiver.kernel.org>; Tue, 12 May 2020 15:52:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1B58206DD
+	for <bpf@archiver.kernel.org>; Tue, 12 May 2020 15:52:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="EsKygzf5"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="BNortQaf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730621AbgELPwh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 May 2020 11:52:37 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:4966 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726532AbgELPwg (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 12 May 2020 11:52:36 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04CFlO5w018957
-        for <bpf@vger.kernel.org>; Tue, 12 May 2020 08:52:36 -0700
+        id S1730884AbgELPwj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 May 2020 11:52:39 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:23954 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730881AbgELPwj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 12 May 2020 11:52:39 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04CFnY2X012893
+        for <bpf@vger.kernel.org>; Tue, 12 May 2020 08:52:38 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=75b04jTdRxXez0C163yMwLeDP3ZALxtqwwNGPaZL9iA=;
- b=EsKygzf5dJ1/uBqs49DrMRrHSCuWeTDjgCuOiYxFlkc0PCuDunxE+AbSIl6isThpFw68
- 0c7Cz1EDS6DcM6lflcrJ1SPAh5OnjB5DJu+3BQeEhsztmNxbQavexFlF09hcP2/djqQb
- ROxNUs6DPyg62Zbs4y5Z3yTdTbkSNKed+Ns= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 30yx7a87pa-3
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=/F8zpBv/fJ9de2fFznTBqA+iFDvktIgJNxfcrO6FY58=;
+ b=BNortQafAFhe05Y/xXOLwAZSPQaGJy/sQAFuOcl/omEh1jEtx/73AkPcXxHrioG0lYJ6
+ LZTx9gu4b1N8qUI+cFQcInbzdKgmIZ4VBq2RXdT/u6OEigj3AvIpB7+w0yt+YKlF5Mjp
+ su1OAFhNDJzR3zBIybT8hLlVMGyz8QN9B8Y= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 30xcgbn75f-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 12 May 2020 08:52:35 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 12 May 2020 08:52:38 -0700
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Tue, 12 May 2020 08:52:35 -0700
+ 15.1.1847.3; Tue, 12 May 2020 08:52:36 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id C94273700839; Tue, 12 May 2020 08:52:34 -0700 (PDT)
+        id 28C4E3700839; Tue, 12 May 2020 08:52:32 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,66 +48,64 @@ To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
 CC:     Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 3/8] bpf: add comments to interpret bpf_prog return values
-Date:   Tue, 12 May 2020 08:52:34 -0700
-Message-ID: <20200512155234.1080379-1-yhs@fb.com>
+Subject: [PATCH bpf-next 0/8] misc fixes for bpf_iter
+Date:   Tue, 12 May 2020 08:52:32 -0700
+Message-ID: <20200512155232.1080167-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200512155232.1080167-1-yhs@fb.com>
-References: <20200512155232.1080167-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
  definitions=2020-05-12_05:2020-05-11,2020-05-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- mlxlogscore=999 clxscore=1015 bulkscore=0 mlxscore=0 phishscore=0
- malwarescore=0 impostorscore=0 lowpriorityscore=0 adultscore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ clxscore=1015 spamscore=0 mlxlogscore=614 adultscore=0 phishscore=0
  suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005120119
+ engine=8.12.0-2003020000 definitions=main-2005120120
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a short comment in bpf_iter_run_prog() function to
-explain how bpf_prog return value is converted to
-seq_ops->show() return value:
-  bpf_prog return           seq_ops()->show() return
-     0                         0
-     1                         -EAGAIN
+Commit ae24345da54e ("bpf: Implement an interface to register
+bpf_iter targets") and its subsequent commits in the same patch set
+introduced bpf iterator, a way to run bpf program when iterating
+kernel data structures.
 
-When show() return value is -EAGAIN, the current
-bpf_seq_read() will end. If the current seq_file buffer
-is empty, -EAGAIN will return to user space. Otherwise,
-the buffer will be copied to user space.
-In both cases, the next bpf_seq_read() call will
-try to show the same object which returned -EAGAIN
-previously.
+This patch set addressed some followup issues. One big change
+is to allow target to pass ctx arg register types to verifier
+for verification purpose. Please see individual patch for details.
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- kernel/bpf/bpf_iter.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Yonghong Song (8):
+  tools/bpf: selftests : explain bpf_iter test failures with llvm 10.0.0
+  bpf: change btf_iter func proto prefix to "bpf_iter_"
+  bpf: add comments to interpret bpf_prog return values
+  bpf: add WARN_ONCE if bpf_seq_read show() return a positive number
+  bpf: net: refactor bpf_iter target registration
+  bpf: change func bpf_iter_unreg_target() signature
+  bpf: enable bpf_iter targets registering ctx argument types
+  samples/bpf: remove compiler warnings
 
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index 30efd15cd4a0..0a45a6cdfabd 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -526,5 +526,11 @@ int bpf_iter_run_prog(struct bpf_prog *prog, void *c=
-tx)
- 	migrate_enable();
- 	rcu_read_unlock();
-=20
-+	/* bpf program can only return 0 or 1:
-+	 *  0 : okay
-+	 *  1 : retry the same object
-+	 * The bpf_iter_run_prog() return value
-+	 * will be seq_ops->show() return value.
-+	 */
- 	return ret =3D=3D 0 ? 0 : -EAGAIN;
- }
+ include/linux/bpf.h                    | 20 +++++++++---
+ include/net/ip6_fib.h                  |  7 ++++
+ kernel/bpf/bpf_iter.c                  | 44 +++++++++++++++-----------
+ kernel/bpf/btf.c                       | 15 ++++++---
+ kernel/bpf/map_iter.c                  | 23 ++++++++------
+ kernel/bpf/task_iter.c                 | 42 ++++++++++++++++--------
+ kernel/bpf/verifier.c                  |  1 -
+ net/ipv6/ip6_fib.c                     |  5 ---
+ net/ipv6/route.c                       | 25 +++++++++------
+ net/netlink/af_netlink.c               | 23 ++++++++------
+ samples/bpf/offwaketime_kern.c         |  4 +--
+ samples/bpf/sockex2_kern.c             |  4 +--
+ samples/bpf/sockex3_kern.c             |  4 +--
+ tools/lib/bpf/libbpf.c                 |  2 +-
+ tools/testing/selftests/bpf/README.rst | 43 +++++++++++++++++++++++++
+ 15 files changed, 178 insertions(+), 84 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/README.rst
+
 --=20
 2.24.1
 
