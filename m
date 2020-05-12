@@ -2,120 +2,145 @@ Return-Path: <SRS0=1NzR=62=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE5FCCA90AF
-	for <bpf@archiver.kernel.org>; Tue, 12 May 2020 15:53:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66364CA90AF
+	for <bpf@archiver.kernel.org>; Tue, 12 May 2020 15:54:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4109206DD
-	for <bpf@archiver.kernel.org>; Tue, 12 May 2020 15:53:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 46ABD206DD
+	for <bpf@archiver.kernel.org>; Tue, 12 May 2020 15:54:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="U/dAG2fe"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pUsW/lRD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727891AbgELPxN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 May 2020 11:53:13 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:61202 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727795AbgELPxN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 12 May 2020 11:53:13 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04CFpMr1016651
-        for <bpf@vger.kernel.org>; Tue, 12 May 2020 08:53:12 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=EAZaFtu1f4mqdWfnHlV6sxdmyV5QwpLTzCD6zPOQrCo=;
- b=U/dAG2fe8MW8BQDVqRxVqDI0WZDdHIjvJ/LxZFNM77PJw8JlsMYaOWcBZmCUnjYvg8VV
- TQXO1nUuFAlcp61KOdn6/oaTpPnoX9uAT6RSmqjg2qidjuHleC9GfWBkJbcuo6wwoACr
- YJHSf3jZXIOAPwCBY/HsHzBavmCI8/ocwOY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 30xcc3w243-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 12 May 2020 08:53:12 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Tue, 12 May 2020 08:52:35 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 917F63700839; Tue, 12 May 2020 08:52:33 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/8] bpf: change btf_iter func proto prefix to "bpf_iter_"
-Date:   Tue, 12 May 2020 08:52:33 -0700
-Message-ID: <20200512155233.1080305-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200512155232.1080167-1-yhs@fb.com>
-References: <20200512155232.1080167-1-yhs@fb.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-12_05:2020-05-11,2020-05-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 clxscore=1015
- priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0 malwarescore=0
- suspectscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005120120
-X-FB-Internal: deliver
+        id S1727956AbgELPyO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 May 2020 11:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727778AbgELPyO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 May 2020 11:54:14 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC66FC05BD09
+        for <bpf@vger.kernel.org>; Tue, 12 May 2020 08:54:13 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id s8so15925011ybj.9
+        for <bpf@vger.kernel.org>; Tue, 12 May 2020 08:54:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=sBMuJHPTkDyJKfezud+eXJ27K11+ocmFDeUYKeSVeo4=;
+        b=pUsW/lRDPZPhhEMS6bzDQR18evwKWE+B/64Yg4lul9AIEoAhkU2L2u9huYqGzICg6i
+         C0qzmZtvHI5pkvrevJjOLTHNbEdzPTqZPE5pvX1pmriGhCyAr0lZXDZVKHVQHQoKlM7M
+         Stch1uwwmvW1Z4roNVWTjS0PZH1nQJbspJMZQYuIw5vUNBBArW3Hmb7vpGQ9ESlvsLe/
+         xqYT7YhXRAeEeYCxOI1lE+ptbbAorEVyoLGOKadYTMH3Q0IQOBHJhHV9qQOUg/n6DLZ1
+         lZ+9DqJ8yBsCJFCE4zYWiypKtW8VXK7Qmfbqn4Ak2czJkbo6PikzPqP5xT0E2sKhNGRs
+         UdcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=sBMuJHPTkDyJKfezud+eXJ27K11+ocmFDeUYKeSVeo4=;
+        b=T5TBuDJXf5kJRoOgRYUfa3k/hw4Tp2dp8C7sci6yzdqyFeDJYCgTuBpIRomkI31ieJ
+         tacHXbfKA1qVHWAVCfZIeJa7W3SCJpqkzP5iId5lUNexaYi+84Fe30suVna8N8lIaNH4
+         xqFAcboj8Uono+RIWFZ+pApjP21QNNJUjMdgh84XNpZQx+PbFJ812ImfE5DVs1Q/uS0q
+         Vc+q6rorVRUVxiAgdrMZimIWGjoiGLBu3HPeYEeoETGEtEdaV7LUuSKl+xPRXjaQ4YZf
+         BQ81qMsDTgSJwE8dBd1HaB+I9fh3gqO/FZ0ZFhk2+EldGR97oQPt6UezSaWyAqSbKuCH
+         gueQ==
+X-Gm-Message-State: AGi0PuYPZPmI31Betv9FYqzRjsn7vGwVRyk2DCml0bL8aXj1KPDH85GU
+        PIKkzkMIUu4TJ0Jx1JCIyxiQzmc=
+X-Google-Smtp-Source: APiQypKBhS9Rl8NMaHetgrxgWZnUs/dFCEydXDqhAdYv4NlUVRZP8uTAWQScLYQGtzC15G/0AUoQOHo=
+X-Received: by 2002:a05:6902:6a9:: with SMTP id j9mr31540016ybt.225.1589298852898;
+ Tue, 12 May 2020 08:54:12 -0700 (PDT)
+Date:   Tue, 12 May 2020 08:54:11 -0700
+In-Reply-To: <20200512023641.jupgmhpliblkli4t@ast-mbp.dhcp.thefacebook.com>
+Message-Id: <20200512155411.GB235661@google.com>
+Mime-Version: 1.0
+References: <20200508215340.41921-1-alexei.starovoitov@gmail.com>
+ <20200508215340.41921-3-alexei.starovoitov@gmail.com> <20200512001210.GA235661@google.com>
+ <20200512023641.jupgmhpliblkli4t@ast-mbp.dhcp.thefacebook.com>
+Subject: Re: [PATCH v5 bpf-next 2/3] bpf: implement CAP_BPF
+From:   sdf@google.com
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     davem@davemloft.net, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@fb.com,
+        linux-security-module@vger.kernel.org, acme@redhat.com,
+        jamorris@linux.microsoft.com, jannh@google.com, kpsingh@google.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is to be consistent with tracing and lsm programs
-which have prefix "bpf_trace_" and "bpf_lsm_" respectively.
+On 05/11, Alexei Starovoitov wrote:
+> On Mon, May 11, 2020 at 05:12:10PM -0700, sdf@google.com wrote:
+> > On 05/08, Alexei Starovoitov wrote:
+> > > From: Alexei Starovoitov <ast@kernel.org>
+> > [..]
+> > > @@ -3932,7 +3977,7 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr
+> > > __user *, uattr, unsigned int, siz
+> > >   	union bpf_attr attr;
+> > >   	int err;
+> >
+> > > -	if (sysctl_unprivileged_bpf_disabled && !capable(CAP_SYS_ADMIN))
+> > > +	if (sysctl_unprivileged_bpf_disabled && !bpf_capable())
+> > >   		return -EPERM;
+> > This is awesome, thanks for reviving the effort!
+> >
+> > One question I have about this particular snippet:
+> > Does it make sense to drop bpf_capable checks for the operations
+> > that work on a provided fd?
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- include/linux/bpf.h    | 6 +++---
- tools/lib/bpf/libbpf.c | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Above snippet is for the case when sysctl switches unpriv off.
+> It was a big hammer and stays big hammer.
+> I certainly would like to improve the situation, but I suspect
+> the folks who turn that sysctl knob on are simply paranoid about bpf
+> and no amount of reasoning would turn them around.
+Yeah, and we do use it unfortunately :-( I suppose we still would
+like to keep it that way for a while, but maybe start relaxing
+some operations a bit.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index cf4b6e44f2bc..ab94dfd8826f 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1131,10 +1131,10 @@ struct bpf_link *bpf_link_get_from_fd(u32 ufd);
- int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
- int bpf_obj_get_user(const char __user *pathname, int flags);
-=20
--#define BPF_ITER_FUNC_PREFIX "__bpf_iter__"
-+#define BPF_ITER_FUNC_PREFIX "bpf_iter_"
- #define DEFINE_BPF_ITER_FUNC(target, args...)			\
--	extern int __bpf_iter__ ## target(args);		\
--	int __init __bpf_iter__ ## target(args) { return 0; }
-+	extern int bpf_iter_ ## target(args);			\
-+	int __init bpf_iter_ ## target(args) { return 0; }
-=20
- typedef int (*bpf_iter_init_seq_priv_t)(void *private_data);
- typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 3da66540b54b..d063c247615f 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -6897,7 +6897,7 @@ static int bpf_object__collect_st_ops_relos(struct =
-bpf_object *obj,
-=20
- #define BTF_TRACE_PREFIX "btf_trace_"
- #define BTF_LSM_PREFIX "bpf_lsm_"
--#define BTF_ITER_PREFIX "__bpf_iter__"
-+#define BTF_ITER_PREFIX "bpf_iter_"
- #define BTF_MAX_NAME_SIZE 128
-=20
- static int find_btf_by_prefix_kind(const struct btf *btf, const char *pr=
-efix,
---=20
-2.24.1
+> > The use-case I have in mind is as follows:
+> > * privileged (CAP_BPF) process loads the programs/maps and pins
+> >   them at some known location
+> > * unprivileged process opens up those pins and does the following:
+> >   * prepares the maps (and will later on read them)
+> >   * does SO_ATTACH_BPF/SO_ATTACH_REUSEPORT_EBPF which afaik don't
+> >     require any capabilities
+> >
+> > This essentially pushes some of the permission checks into a fs layer.  
+> So
+> > whoever has a file descriptor (via unix sock or open) can do BPF  
+> operations
+> > on the object that represents it.
 
+> cap_bpf doesn't change things in that regard.
+> Two cases here:
+> sysctl_unprivileged_bpf_disabled==0:
+>    Unpriv can load socket_filter prog type and unpriv can attach it
+>    via SO_ATTACH_BPF/SO_ATTACH_REUSEPORT_EBPF.
+> sysctl_unprivileged_bpf_disabled==1:
+>    cap_sys_admin can load socket_filter and unpriv can attach it.
+Sorry, I wasn't clear enough, I was talking about unpriv_bpf_disabled=1
+case.
+
+> With addition of cap_bpf in the second case cap_bpf process can
+> load socket_filter too.
+> It doesn't mean that permissions are pushed into fs layer.
+> I'm not sure that relaxing of sysctl_unprivileged_bpf_disabled
+> will be well received.
+> Are you proposing to selectively allow certain bpf syscall commands
+> even when sysctl_unprivileged_bpf_disabled==1 ?
+> Like allow unpriv to do BPF_OBJ_GET to get an fd from bpffs ?
+> And allow unpriv to do map_update ?
+Yes, that's the gist of what I'm proposing. Allow the operations that
+work on fd even with unpriv_bpf_disabled=1. The assumption that
+obtaining fd requires a privileged operation on its own and
+should give enough protection.
+
+> It makes complete sense to me, but I'd like to argue about that
+> independently from this cap_bpf set.
+> We can relax that sysctl later.
+Ack, thanks, let me bring it up again later, when we get to the cap_bpf
+state.
