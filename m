@@ -2,215 +2,139 @@ Return-Path: <SRS0=1NzR=62=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F329EC54E8D
-	for <bpf@archiver.kernel.org>; Tue, 12 May 2020 04:35:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E22F8C54E4B
+	for <bpf@archiver.kernel.org>; Tue, 12 May 2020 05:57:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD8E6206D6
-	for <bpf@archiver.kernel.org>; Tue, 12 May 2020 04:35:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1589258134;
-	bh=nyf2eHMdRyalkK2l7GB2Oxn5uJ7suo5nCGPeilPaWfs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=Ze1nAo9kSzeHL2MJO41cJpA4ZtX3QczkeEIXW8sVZIpvmL371QEXtllrH8izJOGLO
-	 VjVn5C5OjyWZylB3UXhmPCMURIt784DkeW9hYZv9fTdq1a+RbH4t/4qZg2Vmcj5sdA
-	 pVR8HRWmRzO/AyB3fR/1z+B1G0sQSW9HXan+SFfU=
+	by mail.kernel.org (Postfix) with ESMTP id B6FA420733
+	for <bpf@archiver.kernel.org>; Tue, 12 May 2020 05:57:32 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="RerjZJnH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726667AbgELEfc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 May 2020 00:35:32 -0400
-Received: from conssluserg-05.nifty.com ([210.131.2.90]:51674 "EHLO
-        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726582AbgELEfb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 May 2020 00:35:31 -0400
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 04C4ZD5O021118;
-        Tue, 12 May 2020 13:35:14 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 04C4ZD5O021118
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1589258114;
-        bh=Zc/JMr1NeOPCLi6khUpFKWNc1X+NiHrIEKTM+sXYRac=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OzCtvM8GvN+ZCB9+p3csGiC6IRilbuwymmBCLGcc76Cz9/37L/J3fiKkMNf/lA1tn
-         4sxxOLBqlaN0Q4IQhWZ3ekzi1Cz7UipBjcIeUVkanSFKbO9lyX05G+/YvHWFYqiYEI
-         nAsSzQiC9Dcmy/X+0Z/qTKUXzukEWFMe67ryY/cCRQqh3MMM+/BqES6MfxcEilKSyv
-         PmBsdZHMjZEaivKIkq9Pa1kUCdTXX6ZEtEnHv6D4yvVxAidPYEK51bwzKnl+pwWQ5u
-         IFsgNrK4pEr0gCeOvhaa2pXQIrHaNcJXcVwewWqhNtyfhObovt+l3WD5BSp2g9jg6B
-         DOkjcGfdU1TIg==
-X-Nifty-SrcIP: [209.85.217.44]
-Received: by mail-vs1-f44.google.com with SMTP id x6so7089776vso.1;
-        Mon, 11 May 2020 21:35:13 -0700 (PDT)
-X-Gm-Message-State: AOAM531+2VMzlg1Mg5BeOo3JNWwuWSw1sMPrDNs2DyRUQMUqIqDn3ZAW
-        1Q2pTBKnwlG7Czl8GbDOcKqeWY8C67L5mmp55/o=
-X-Google-Smtp-Source: ABdhPJzKWYsZN47HnqDzmmUsGpoQoaAnvDbEWKFaax9wl0EddbtvC43Ot+KrnCM2s9Iw0hZhFzjDeZ37oYgKRcHZHFo=
-X-Received: by 2002:a67:d00e:: with SMTP id r14mr3327265vsi.215.1589258112774;
- Mon, 11 May 2020 21:35:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200429034527.590520-1-masahiroy@kernel.org>
-In-Reply-To: <20200429034527.590520-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 12 May 2020 13:34:36 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARgFip=ywrLdF8Z5uznQBmYTZfxn5PHR9jSnYEJDxYc_w@mail.gmail.com>
-Message-ID: <CAK7LNARgFip=ywrLdF8Z5uznQBmYTZfxn5PHR9jSnYEJDxYc_w@mail.gmail.com>
-Subject: Re: [PATCH v2 00/15] kbuild: support 'userprogs' syntax
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1728053AbgELF5c (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 May 2020 01:57:32 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:38280 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725536AbgELF5c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 May 2020 01:57:32 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C5v2fC113129;
+        Tue, 12 May 2020 05:57:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=0Hv2rO7QMmb5xH09Kczwzz1/6YNJzE7kp8cCccFMjs8=;
+ b=RerjZJnHavD1H8e6e22vHAbHGQWdXIn9mUZoutgoRHLAAfinoMnkyEcvDbGc6rjOhXqr
+ lDqIwlSJuzaTVjRQBdWO8IH3WgHQN/rRz97/nLmI6LZrLsm+SqVLgg7JF9CjODfs6z0A
+ /+k8iu7xvbqtr8uLNnyhFAIhp1LI841fR+hxZaSUrsSVXZtQkmLcJyn4q5V7MrQ4hFnA
+ qengUeMzGgb26F+4Ns0YB6k8Ktqk64kwmsBI0a1IscpprD93Zo5UQYPA7gBvx2GylrnM
+ Sq4NfDyA4Aa0QFcKOUiIgmHZF9v1+JgOOkhLL5E/XUdFB5athhDykksJuCeUHCBoMpAv zQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 30x3mbrv1y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 May 2020 05:57:08 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C5sVEW191538;
+        Tue, 12 May 2020 05:57:07 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 30xbgh7tdc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 May 2020 05:57:07 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04C5v58W028346;
+        Tue, 12 May 2020 05:57:05 GMT
+Received: from localhost.uk.oracle.com (/10.175.210.30)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 11 May 2020 22:57:05 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org
+Cc:     joe@perches.com, linux@rasmusvillemoes.dk, arnaldo.melo@gmail.com,
+        yhs@fb.com, kafai@fb.com, songliubraving@fb.com, andriin@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 1/7] bpf: provide function to get vmlinux BTF information
+Date:   Tue, 12 May 2020 06:56:39 +0100
+Message-Id: <1589263005-7887-2-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1589263005-7887-1-git-send-email-alan.maguire@oracle.com>
+References: <1589263005-7887-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
+ spamscore=0 suspectscore=0 phishscore=0 bulkscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005120052
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 impostorscore=0
+ mlxscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 lowpriorityscore=0 spamscore=0 adultscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2005120052
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 29, 2020 at 12:45 PM Masahiro Yamada <masahiroy@kernel.org> wro=
-te:
->
->
-> Several Makefiles use 'hostprogs' to build programs for the host
-> architecture where it is not appropriate to do so.
-> This is just because Kbuild lacks the support for building programs
-> for the target architecture.
->
-> This series introduce 'userprogs' syntax and use it from
-> sample and bpf Makefiles.
->
-> Sam worked on this in 2014.
-> https://lkml.org/lkml/2014/7/13/154
->
-> He used 'uapiprogs-y' but I just thought the meaning of
-> "UAPI programs" is unclear.
->
-> Naming the syntax is one of the most difficult parts.
->
-> I chose 'userprogs'. Anothor choice I had in my mind was 'targetprogs'.
->
-> You can test this series quickly by 'make allmodconfig samples/'
->
-> When building objects for userspace, [U] is displayed.
->
-> masahiro@oscar:~/workspace/linux$ make allmodconfig samples/
+It will be used later for BTF printk() support
 
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ include/linux/bpf.h   |  2 ++
+ kernel/bpf/verifier.c | 18 ++++++++++++------
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
-All applied to linux-kbuild.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index cf4b6e4..de19a35 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1203,6 +1203,8 @@ int bpf_check(struct bpf_prog **fp, union bpf_attr *attr,
+ 	      union bpf_attr __user *uattr);
+ void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
+ 
++struct btf *bpf_get_btf_vmlinux(void);
++
+ /* Map specifics */
+ struct xdp_buff;
+ struct sk_buff;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2a1826c..c6b1ba0 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10728,6 +10728,17 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 	}
+ }
+ 
++struct btf *bpf_get_btf_vmlinux(void)
++{
++	if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
++		mutex_lock(&bpf_verifier_lock);
++		if (!btf_vmlinux)
++			btf_vmlinux = btf_parse_vmlinux();
++		mutex_unlock(&bpf_verifier_lock);
++	}
++	return btf_vmlinux;
++}
++
+ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	      union bpf_attr __user *uattr)
+ {
+@@ -10761,12 +10772,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	env->ops = bpf_verifier_ops[env->prog->type];
+ 	is_priv = capable(CAP_SYS_ADMIN);
+ 
+-	if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
+-		mutex_lock(&bpf_verifier_lock);
+-		if (!btf_vmlinux)
+-			btf_vmlinux = btf_parse_vmlinux();
+-		mutex_unlock(&bpf_verifier_lock);
+-	}
++	bpf_get_btf_vmlinux();
+ 
+ 	/* grab the mutex to protect few globals used by verifier */
+ 	if (!is_priv)
+-- 
+1.8.3.1
 
-
->   [snip]
->   AR      samples/vfio-mdev/built-in.a
->   CC [M]  samples/vfio-mdev/mtty.o
->   CC [M]  samples/vfio-mdev/mdpy.o
->   CC [M]  samples/vfio-mdev/mdpy-fb.o
->   CC [M]  samples/vfio-mdev/mbochs.o
->   AR      samples/mei/built-in.a
->   CC [U]  samples/mei/mei-amt-version
->   CC [U]  samples/auxdisplay/cfag12864b-example
->   CC [M]  samples/configfs/configfs_sample.o
->   CC [M]  samples/connector/cn_test.o
->   CC [U]  samples/connector/ucon
->   CC [M]  samples/ftrace/ftrace-direct.o
->   CC [M]  samples/ftrace/ftrace-direct-too.o
->   CC [M]  samples/ftrace/ftrace-direct-modify.o
->   CC [M]  samples/ftrace/sample-trace-array.o
->   CC [U]  samples/hidraw/hid-example
->   CC [M]  samples/hw_breakpoint/data_breakpoint.o
->   CC [M]  samples/kdb/kdb_hello.o
->   CC [M]  samples/kfifo/bytestream-example.o
->   CC [M]  samples/kfifo/dma-example.o
->   CC [M]  samples/kfifo/inttype-example.o
->   CC [M]  samples/kfifo/record-example.o
->   CC [M]  samples/kobject/kobject-example.o
->   CC [M]  samples/kobject/kset-example.o
->   CC [M]  samples/kprobes/kprobe_example.o
->   CC [M]  samples/kprobes/kretprobe_example.o
->   CC [M]  samples/livepatch/livepatch-sample.o
->   CC [M]  samples/livepatch/livepatch-shadow-mod.o
->   CC [M]  samples/livepatch/livepatch-shadow-fix1.o
->   CC [M]  samples/livepatch/livepatch-shadow-fix2.o
->   CC [M]  samples/livepatch/livepatch-callbacks-demo.o
->   CC [M]  samples/livepatch/livepatch-callbacks-mod.o
->   CC [M]  samples/livepatch/livepatch-callbacks-busymod.o
->   CC [M]  samples/rpmsg/rpmsg_client_sample.o
->   CC [U]  samples/seccomp/bpf-fancy.o
->   CC [U]  samples/seccomp/bpf-helper.o
->   LD [U]  samples/seccomp/bpf-fancy
->   CC [U]  samples/seccomp/dropper
->   CC [U]  samples/seccomp/bpf-direct
->   CC [U]  samples/seccomp/user-trap
->   CC [U]  samples/timers/hpet_example
->   CC [M]  samples/trace_events/trace-events-sample.o
->   CC [M]  samples/trace_printk/trace-printk.o
->   CC [U]  samples/uhid/uhid-example
->   CC [M]  samples/v4l/v4l2-pci-skeleton.o
->   CC [U]  samples/vfs/test-fsmount
->   CC [U]  samples/vfs/test-statx
-> samples/vfs/test-statx.c:24:15: warning: =E2=80=98struct foo=E2=80=99 dec=
-lared inside parameter list will not be visible outside of this definition =
-or declaration
->    24 | #define statx foo
->       |               ^~~
->   CC [U]  samples/watchdog/watchdog-simple
->   AR      samples/built-in.a
->
-> Changes for v2:
->   - Fix ARCH=3Di386 build error for bpfilter_umh
->   - Rename 'user-ccflags' to 'userccflags'
->     because 'user-ccflags' would conflict if an object
->     called 'user.o' exists in the directory.
->   - Support 'userldflags'
->
-> Masahiro Yamada (14):
->   bpfilter: match bit size of bpfilter_umh to that of the kernel
->   kbuild: add infrastructure to build userspace programs
->   bpfilter: use 'userprogs' syntax to build bpfilter_umh
->   samples: seccomp: build sample programs for target architecture
->   kbuild: doc: document the new syntax 'userprogs'
->   samples: uhid: build sample program for target architecture
->   samples: hidraw: build sample program for target architecture
->   samples: connector: build sample program for target architecture
->   samples: vfs: build sample programs for target architecture
->   samples: pidfd: build sample program for target architecture
->   samples: mei: build sample program for target architecture
->   samples: auxdisplay: use 'userprogs' syntax
->   samples: timers: use 'userprogs' syntax
->   samples: watchdog: use 'userprogs' syntax
->
-> Sam Ravnborg (1):
->   samples: uhid: fix warnings in uhid-example
->
->  Documentation/kbuild/makefiles.rst | 183 +++++++++++++++++++++--------
->  Makefile                           |  13 +-
->  init/Kconfig                       |   4 +-
->  net/bpfilter/Makefile              |  11 +-
->  samples/Kconfig                    |  26 +++-
->  samples/Makefile                   |   4 +
->  samples/auxdisplay/Makefile        |  11 +-
->  samples/connector/Makefile         |  12 +-
->  samples/hidraw/Makefile            |   9 +-
->  samples/mei/Makefile               |   9 +-
->  samples/pidfd/Makefile             |   8 +-
->  samples/seccomp/Makefile           |  42 +------
->  samples/timers/Makefile            |  17 +--
->  samples/uhid/.gitignore            |   2 +
->  samples/uhid/Makefile              |   9 +-
->  samples/uhid/uhid-example.c        |   4 +-
->  samples/vfs/Makefile               |  11 +-
->  samples/watchdog/Makefile          |  10 +-
->  scripts/Makefile.build             |   6 +
->  scripts/Makefile.clean             |   2 +-
->  scripts/Makefile.userprogs         |  45 +++++++
->  usr/include/Makefile               |   4 +
->  22 files changed, 267 insertions(+), 175 deletions(-)
->  create mode 100644 samples/uhid/.gitignore
->  create mode 100644 scripts/Makefile.userprogs
->
-> --
-> 2.25.1
->
-
-
---=20
-Best Regards
-Masahiro Yamada
