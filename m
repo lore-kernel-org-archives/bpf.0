@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-9.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE00AC433E0
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 16:00:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB64AC433DF
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 16:01:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CA57205ED
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 16:00:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B6DF20659
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 16:01:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nRbb9ZaS"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="b04Js04+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389396AbgEMQA6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 May 2020 12:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S2389526AbgEMQBV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 May 2020 12:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389381AbgEMQAz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 May 2020 12:00:55 -0400
+        with ESMTP id S2389520AbgEMQBT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 May 2020 12:01:19 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8A2C061A0C;
-        Wed, 13 May 2020 09:00:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A889C061A0C;
+        Wed, 13 May 2020 09:01:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=8xYqhlaf56AodBMEMHzZf5wu40Wrvnh8K80Ep72Z4QE=; b=nRbb9ZaSqk76EZQCSrXCjKKyi0
-        GJgHRuj+u8CLMsmD8S/jMJWUDJc1FafDS7rGbviJ91agO2UXeMmgmZ17lHLrlOZvJ7Kz2cgw4DQnE
-        x8ZwpShjfcEdJ2PDZtqoUfhRBI28R2oM+vqAV5DFQHQc6M0ngu4lTh3ZXD4FnwWrlLOkepDbAxEA2
-        zb2i5J+6ZKsp7eesWFAgbP7Z5ifqYk52cj9M05f2G7JV66BRFFnO+IT/wdC5Ug2FsOCNO2PCSV/3K
-        np/iArRzduzUJo1a3JPAz4UU6DrAJlFUcZQJkfjAFN6px8lJsSTAVaQbYorop4VmKXHN30Gc17Boo
-        XWO6zFhg==;
+        bh=54itD+wHacd7aNts6Nyjpx2j7kEatgOa0e9ptfyypuU=; b=b04Js04+XUE26u3Sk/JwZ7fRS7
+        JL+OsYcAyDo2DKbF/qBIVl7IrCleL//CzKNMKYbjunkQ2CUesORTyKfJZP6qpKPQfLcznoEdJRkrB
+        hdFsad+3lCbhE5/y/nFllsplbPRcih1XfAYUOz2Hfa7oX6UZp0cbx7FAMUGuXVUgHW+kmWm4km89c
+        eUH7/DMGLBgz2vEnpoT5mB+Fk5kSvTh8DstX9WwfA7XNDsTZixbFKE/wO5YLB5nD7fw7TGNq/mOS+
+        tBKhX9cXSYnXhek7gprr/cCpvcVKAHEArovBuwMuRrDuiU9VbPN32SWRyK7w9xvz0QrQhvaWhqQ6Q
+        ZGwZ7PBA==;
 Received: from [2001:4bb8:180:9d3f:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jYtoT-0004kp-Mc; Wed, 13 May 2020 16:00:54 +0000
+        id 1jYtor-0004zS-Kn; Wed, 13 May 2020 16:01:18 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -46,9 +46,9 @@ To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
 Cc:     linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 05/18] maccess: update the top of file comment
-Date:   Wed, 13 May 2020 18:00:25 +0200
-Message-Id: <20200513160038.2482415-6-hch@lst.de>
+Subject: [PATCH 14/18] maccess: allow architectures to provide kernel probing directly
+Date:   Wed, 13 May 2020 18:00:34 +0200
+Message-Id: <20200513160038.2482415-15-hch@lst.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200513160038.2482415-1-hch@lst.de>
 References: <20200513160038.2482415-1-hch@lst.de>
@@ -60,25 +60,110 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This file now also contains several helpers for accessing user memory.
+Provide alternative versions of probe_kernel_read, probe_kernel_write
+and strncpy_from_kernel_unsafe that don't need set_fs magic, but instead
+use arch hooks that are modelled after unsafe_{get,put}_user to access
+kernel memory in an exception safe way.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- mm/maccess.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/maccess.c | 76 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
 
 diff --git a/mm/maccess.c b/mm/maccess.c
-index 747581ac50dc9..65880ba2ca376 100644
+index 9773e2253b495..e9efe2f98e34a 100644
 --- a/mm/maccess.c
 +++ b/mm/maccess.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Access kernel memory without faulting.
-+ * Access kernel or user memory without faulting.
-  */
- #include <linux/export.h>
- #include <linux/mm.h>
+@@ -12,6 +12,81 @@ bool __weak probe_kernel_read_allowed(void *dst, const void *unsafe_src,
+ 	return true;
+ }
+ 
++#ifdef HAVE_ARCH_PROBE_KERNEL
++
++#define probe_kernel_read_loop(dst, src, len, type, err_label)		\
++	while (len >= sizeof(type)) {					\
++		arch_kernel_read(dst, src, type, err_label);		\
++		dst += sizeof(type);					\
++		src += sizeof(type);					\
++		len -= sizeof(type);					\
++	}
++
++long probe_kernel_read(void *dst, const void *src, size_t size)
++{
++	if (!probe_kernel_read_allowed(dst, src, size))
++		return -EFAULT;
++
++	pagefault_disable();
++	probe_kernel_read_loop(dst, src, size, u64, Efault);
++	probe_kernel_read_loop(dst, src, size, u32, Efault);
++	probe_kernel_read_loop(dst, src, size, u16, Efault);
++	probe_kernel_read_loop(dst, src, size, u8, Efault);
++	pagefault_enable();
++	return 0;
++Efault:
++	pagefault_enable();
++	return -EFAULT;
++}
++EXPORT_SYMBOL_GPL(probe_kernel_read);
++
++#define probe_kernel_write_loop(dst, src, len, type, err_label)		\
++	while (len >= sizeof(type)) {					\
++		arch_kernel_write(dst, src, type, err_label);		\
++		dst += sizeof(type);					\
++		src += sizeof(type);					\
++		len -= sizeof(type);					\
++	}
++
++long probe_kernel_write(void *dst, const void *src, size_t size)
++{
++	pagefault_disable();
++	probe_kernel_write_loop(dst, src, size, u64, Efault);
++	probe_kernel_write_loop(dst, src, size, u32, Efault);
++	probe_kernel_write_loop(dst, src, size, u16, Efault);
++	probe_kernel_write_loop(dst, src, size, u8, Efault);
++	pagefault_enable();
++	return 0;
++Efault:
++	pagefault_enable();
++	return -EFAULT;
++}
++
++long strncpy_from_kernel_unsafe(char *dst, const void *unsafe_addr, long count)
++{
++	const void *src = unsafe_addr;
++
++	if (unlikely(count <= 0))
++		return 0;
++	if (!probe_kernel_read_allowed(dst, unsafe_addr, count))
++		return -EFAULT;
++
++	pagefault_disable();
++	do {
++		arch_kernel_read(dst, src, u8, Efault);
++		dst++;
++		src++;
++	} while (dst[-1] && src - unsafe_addr < count);
++	pagefault_enable();
++
++	dst[-1] = '\0';
++	return src - unsafe_addr;
++Efault:
++	pagefault_enable();
++	dst[-1] = '\0';
++	return -EFAULT;
++}
++#else /* HAVE_ARCH_PROBE_KERNEL */
+ /**
+  * probe_kernel_read(): safely attempt to read from kernel-space
+  * @dst: pointer to the buffer that shall take the data
+@@ -114,6 +189,7 @@ long strncpy_from_kernel_nofault(char *dst, const void *unsafe_addr, long count)
+ 
+ 	return ret ? -EFAULT : src - unsafe_addr;
+ }
++#endif /* HAVE_ARCH_PROBE_KERNEL */
+ 
+ /**
+  * probe_user_read(): safely attempt to read from a user-space location
 -- 
 2.26.2
 
