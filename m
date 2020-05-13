@@ -2,117 +2,84 @@ Return-Path: <SRS0=dL5Z=63=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFF19C433DF
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 22:42:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA915C433DF
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 22:48:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D8EF2204EF
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 22:42:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cn7ZesKD"
+	by mail.kernel.org (Postfix) with ESMTP id AFC0D2065C
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 22:48:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731273AbgEMWmV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 May 2020 18:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726383AbgEMWmT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 13 May 2020 18:42:19 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC5EC061A0C;
-        Wed, 13 May 2020 15:42:18 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id e25so1378296ljg.5;
-        Wed, 13 May 2020 15:42:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wA6jZuXwICsYr7vyMmHFp883bAiAKNAsoU07JSFSjQA=;
-        b=Cn7ZesKDFyD2sDfKkn/E9p01q3qP3QI2wun4qAgXtVR1WncRnSanohwVJyenAGwECz
-         nX4TIOEpdfp2iQaKs4XaXIYiXzmWaQEC3IlnwU0qxbYryR8fgqptfWbf9IzpUUKfTgfP
-         YpX2ks6zBc/ZUlSUI3rSimDRWXwdptuhrzRALzjoo6Nt+h3InGDnGGZBu/y5PEPSrrh5
-         qPYuauYzW8aZcVyyfafb8hF8ZnJ0wh4kQdJJ+WBe/6vx5Xr7q6JuHY54q0aEZNhczb1M
-         bta6acTKjLTEFAgh0jjA7mATTWn8DalkdMeAPzJ/VHxhQ2Hqs86W6j8n+3TuQhwlsWNc
-         2wJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wA6jZuXwICsYr7vyMmHFp883bAiAKNAsoU07JSFSjQA=;
-        b=klnWMdNUi0au3gqSbhuB6mJKqyGJtUmo4YPd9n7O2p0YaQ6y9CPOYizCt4ZoT/qwEb
-         GL9rSeC/RAWwBNs1SrQ4Gz0bBYkcFXbQTk01EU5hlUJ/KVDNjABRaC6h5GcSjJpLBZ6b
-         bUCfgPIJZ6WOrVwOMY0hXGx3MSlS2l/rT+YH5+tv7vEhTMr8YCGUZ+hvNwikMFP9F/LO
-         vfDJuvlZXtTrs6QGJZj1xkJcHZShTaegF5o8hYEG3KlghorZXCJPDFuhAJ9fS+0chsRd
-         J2u1JUI4dzcjYOoZ8xGCQ0F4ffKNjvADkT3AKNKHP3nvyhxHFMcQBQGNzcplA4BvAL2E
-         LZEg==
-X-Gm-Message-State: AOAM532LwYQcYCLLsiXwbqs/xnTCmZbOyEOQd14i9LWdoF6Nh90CHUR0
-        oi3pE5daDt+UD8ODAEBh0TlUhDsdPqGLA/u1LeQ=
-X-Google-Smtp-Source: ABdhPJybsgxwISFKw2am8eRhMIUvqnM7LOTqXOD0XGTOB7CfjzakjqZZzZG8YAA44vGJZEgEhKs6Cossp1UgQUJZ1so=
-X-Received: by 2002:a2e:7508:: with SMTP id q8mr814203ljc.234.1589409737339;
- Wed, 13 May 2020 15:42:17 -0700 (PDT)
+        id S1731761AbgEMWsd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 May 2020 18:48:33 -0400
+Received: from smtprelay0137.hostedemail.com ([216.40.44.137]:53570 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731649AbgEMWsd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 13 May 2020 18:48:33 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id C68353AA1;
+        Wed, 13 May 2020 22:48:31 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: jail30_fefc17eb803f
+X-Filterd-Recvd-Size: 2415
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf08.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 13 May 2020 22:48:29 +0000 (UTC)
+Message-ID: <dc6a17197c3406d877efd98de351e57d7bbe06a5.camel@perches.com>
+Subject: Re: [PATCH v2 bpf-next 0/7] bpf, printk: add BTF-based type printing
+From:   Joe Perches <joe@perches.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
+        linux@rasmusvillemoes.dk, arnaldo.melo@gmail.com, yhs@fb.com,
+        kafai@fb.com, songliubraving@fb.com, andriin@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Date:   Wed, 13 May 2020 15:48:17 -0700
+In-Reply-To: <20200513222424.4nfxgkequhdzn3u3@ast-mbp.dhcp.thefacebook.com>
+References: <1589263005-7887-1-git-send-email-alan.maguire@oracle.com>
+         <20200513222424.4nfxgkequhdzn3u3@ast-mbp.dhcp.thefacebook.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.1-2 
 MIME-Version: 1.0
-References: <20200513212057.147133-1-andriin@fb.com>
-In-Reply-To: <20200513212057.147133-1-andriin@fb.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 13 May 2020 15:42:05 -0700
-Message-ID: <CAADnVQJoU__8UrOE8Nm5R4W3qsV=YfCaWwYjNDKGaQrYPw2Wzg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: fix bpf_iter's task iterator logic
-To:     Andrii Nakryiko <andriin@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Kernel Team <kernel-team@fb.com>, Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, May 13, 2020 at 2:23 PM Andrii Nakryiko <andriin@fb.com> wrote:
->
-> task_seq_get_next might stop prematurely if get_pid_task() fails to get
-> task_struct. Failure to do so doesn't mean that there are no more tasks w=
-ith
-> higher pids. Procfs's iteration algorithm (see next_tgid in fs/proc/base.=
-c)
-> does a retry in such case. After this fix, instead of stopping prematurel=
-y
-> after about 300 tasks on my server, bpf_iter program now returns >4000, w=
-hich
-> sounds much closer to reality.
->
-> Cc: Yonghong Song <yhs@fb.com>
-> Fixes: eaaacd23910f ("bpf: Add task and task/file iterator targets")
-> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> ---
->  kernel/bpf/task_iter.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-> index a9b7264dda08..e1836def6738 100644
-> --- a/kernel/bpf/task_iter.c
-> +++ b/kernel/bpf/task_iter.c
-> @@ -27,9 +27,15 @@ static struct task_struct *task_seq_get_next(struct pi=
-d_namespace *ns,
->         struct pid *pid;
->
->         rcu_read_lock();
-> +retry:
->         pid =3D idr_get_next(&ns->idr, tid);
-> -       if (pid)
-> +       if (pid) {
->                 task =3D get_pid_task(pid, PIDTYPE_PID);
-> +               if (!task) {
-> +                       *tid++;
+On Wed, 2020-05-13 at 15:24 -0700, Alexei Starovoitov wrote:
+> On Tue, May 12, 2020 at 06:56:38AM +0100, Alan Maguire wrote:
+> > The printk family of functions support printing specific pointer types
+> > using %p format specifiers (MAC addresses, IP addresses, etc).  For
+> > full details see Documentation/core-api/printk-formats.rst.
+> > 
+> > This patchset proposes introducing a "print typed pointer" format
+> > specifier "%pT"; the argument associated with the specifier is of
+> > form "struct btf_ptr *" which consists of a .ptr value and a .type
+> > value specifying a stringified type (e.g. "struct sk_buff") or
+> > an .id value specifying a BPF Type Format (BTF) id identifying
+> > the appropriate type it points to.
+> > 
+> >   pr_info("%pT", BTF_PTR_TYPE(skb, "struct sk_buff"));
+> > 
+> > ...gives us:
+> > 
+> > (struct sk_buff){
+> >  .transport_header = (__u16)65535,
+> >  .mac_header = (__u16)65535,
+> >  .end = (sk_buff_data_t)192,
+> >  .head = (unsigned char *)000000007524fd8b,
+> >  .data = (unsigned char *)000000007524fd8b,
+> 
+> could you add "0x" prefix here to make it even more C like
+> and unambiguous ?
 
-../kernel/bpf/task_iter.c: In function =E2=80=98task_seq_get_next=E2=80=99:
-../kernel/bpf/task_iter.c:35:4: warning: value computed is not used
-[-Wunused-value]
-   35 |    *tid++;
-      |    ^~~~~~
+linux pointers are not emitted with an 0x prefix
+
+(ie: pointers do not use SPECIAL in lib/vsprintf.c)
+
+
