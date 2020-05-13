@@ -2,86 +2,118 @@ Return-Path: <SRS0=dL5Z=63=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.5 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE869C433DF
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 22:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A33DC433E0
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 23:03:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C256D20675
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 22:56:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35631206F5
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 23:03:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1589411024;
+	bh=vewls980HRuxR06tg5H4BH+YA45h9SryXksyHmYSP8A=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=Mvs8kg8bqNc7dpzSem8lfLWTI0zMy5Evy3c6mHBtUpN6fRqzdaHMg5zjafArGsv5m
+	 X4pgGMQyu8yCVkE3iEKtTNqMxpcd2k1FhkN1is+X73zU9yRXXHvxFq+qNjcnaKWoFG
+	 /iofp567EwIX5kSEFekP9JzFWoR2pk4HVZ+n35zc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732183AbgEMW4N (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 May 2020 18:56:13 -0400
-Received: from smtp3.emailarray.com ([65.39.216.17]:40686 "EHLO
-        smtp3.emailarray.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731774AbgEMW4M (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 May 2020 18:56:12 -0400
-X-Greylist: delayed 400 seconds by postgrey-1.27 at vger.kernel.org; Wed, 13 May 2020 18:56:12 EDT
-Received: (qmail 95400 invoked by uid 89); 13 May 2020 22:49:30 -0000
-Received: from unknown (HELO localhost) (amxlbW9uQGZsdWdzdmFtcC5jb21AMTYzLjExNC4xMzIuMw==) (POLARISLOCAL)  
-  by smtp3.emailarray.com with SMTP; 13 May 2020 22:49:30 -0000
-Date:   Wed, 13 May 2020 15:49:27 -0700
-From:   Jonathan Lemon <jonathan.lemon@gmail.com>
-To:     Andrii Nakryiko <andriin@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
-        daniel@iogearbox.net, andrii.nakryiko@gmail.com,
-        kernel-team@fb.com, "Paul E . McKenney" <paulmck@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: [PATCH bpf-next 0/6] BPF ring buffer
-Message-ID: <20200513224927.643hszw3q3cgx7e6@bsd-mbp.dhcp.thefacebook.com>
-References: <20200513192532.4058934-1-andriin@fb.com>
+        id S1732168AbgEMXDn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 May 2020 19:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731815AbgEMXDm (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 13 May 2020 19:03:42 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E3CC05BD09
+        for <bpf@vger.kernel.org>; Wed, 13 May 2020 16:03:40 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id e25so1421317ljg.5
+        for <bpf@vger.kernel.org>; Wed, 13 May 2020 16:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wdZg4gkYTds/C4KUVy9erLK1Ch+WqNN+RvFMTseVuAg=;
+        b=C1TcjV6OtJpa2YRiWAUnGcZZ/u09cBy851Mx94wSMSQa9VrdsWV1jVHW4P1sNrL8Bh
+         F6WpmJ1tQWre2J0ca6Wb2LX04yqV6LxMJpd1Tpa6EPb8PrEYBkkbwpuLaAdO/BjmCZ2G
+         9egVYPaqRVmuIV8Yift2HwrZ/fz1dHM99i9n0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wdZg4gkYTds/C4KUVy9erLK1Ch+WqNN+RvFMTseVuAg=;
+        b=lrWUBVbrkyiImGskRoy2UJcCWP+lTWUXdA0R/Lq0F48gmMFpAO1+AV9OA/43wxmrdr
+         q8RtAgv1B0FzKi35KkW6Kmz1l/bGXZsLumEayb/92K587Y4RH4P3H7eRWZOWSXzg4Rdq
+         gy+5vC2yOtXbDaNhXvKeqbXr95zY8Vnrvj4wnaDtFSePhGYcL1Zsv+r9PtGfhpALSkGN
+         +ZT3zrpsJHESeEDE8BgqJbGvEDgP8YlNKGk8Mc1Kbdhe7VwunpQ4wY2yjP6IhcXI49Pb
+         /f0QBT37TXq4MjDCkL9vhoawCLyVauXac6FlsEngoA1G9ULHHdtkOy5lFvzbYN/NomwK
+         hDiw==
+X-Gm-Message-State: AOAM531pWigZO6naL6cFI1oEg3oLT5WZV9gCPxS04jqRcJOscWmWocUn
+        RkrCMc6ZdxPsCMhF2YXJSi1/6JRzpkE=
+X-Google-Smtp-Source: ABdhPJwy1oQJ9Jvw9AJ7eBLzYOvVxWEYW3Txv1UbKZmIzxd+89e/dSRx3mbbVKqAmW6mLk4HbAMaDQ==
+X-Received: by 2002:a2e:2201:: with SMTP id i1mr797565lji.31.1589411018168;
+        Wed, 13 May 2020 16:03:38 -0700 (PDT)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id w9sm439450ljw.39.2020.05.13.16.03.36
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 May 2020 16:03:36 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id a4so909621lfh.12
+        for <bpf@vger.kernel.org>; Wed, 13 May 2020 16:03:36 -0700 (PDT)
+X-Received: by 2002:ac2:58c8:: with SMTP id u8mr1177915lfo.142.1589411015919;
+ Wed, 13 May 2020 16:03:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200513192532.4058934-1-andriin@fb.com>
+References: <20200513160038.2482415-1-hch@lst.de> <20200513160038.2482415-12-hch@lst.de>
+ <CAHk-=wj=u+nttmd1huNES2U=9nePtmk7WgR8cMLCYS8wc=rhdA@mail.gmail.com>
+ <20200513192804.GA30751@lst.de> <0c1a7066-b269-9695-b94a-bb5f4f20ebd8@iogearbox.net>
+In-Reply-To: <0c1a7066-b269-9695-b94a-bb5f4f20ebd8@iogearbox.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 13 May 2020 16:03:20 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiivWJ70PotzCK-j7K4Y612NJBA2d+iN6Rz-bfMxCpwjQ@mail.gmail.com>
+Message-ID: <CAHk-=wiivWJ70PotzCK-j7K4Y612NJBA2d+iN6Rz-bfMxCpwjQ@mail.gmail.com>
+Subject: Re: [PATCH 11/18] maccess: remove strncpy_from_unsafe
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-parisc@vger.kernel.org,
+        linux-um <linux-um@lists.infradead.org>,
+        Netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, May 13, 2020 at 12:25:26PM -0700, Andrii Nakryiko wrote:
-> Implement a new BPF ring buffer, as presented at BPF virtual conference ([0]).
-> It presents an alternative to perf buffer, following its semantics closely,
-> but allowing sharing same instance of ring buffer across multiple CPUs
-> efficiently.
-> 
-> Most patches have extensive commentary explaining various aspects, so I'll
-> keep cover letter short. Overall structure of the patch set:
-> - patch #1 adds BPF ring buffer implementation to kernel and necessary
->   verifier support;
-> - patch #2 adds litmus tests validating all the memory orderings and locking
->   is correct;
-> - patch #3 is an optional patch that generalizes verifier's reference tracking
->   machinery to capture type of reference;
-> - patch #4 adds libbpf consumer implementation for BPF ringbuf;
-> - path #5 adds selftest, both for single BPF ring buf use case, as well as
->   using it with array/hash of maps;
-> - patch #6 adds extensive benchmarks and provide some analysis in commit
->   message, it build upon selftests/bpf's bench runner.
-> 
->   [0] https://docs.google.com/presentation/d/18ITdg77Bj6YDOH2LghxrnFxiPWe0fAqcmJY95t_qr0w
-> 
-> Cc: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Jonathan Lemon <jonathan.lemon@gmail.com>
+On Wed, May 13, 2020 at 3:36 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> It's used for both.
 
-Looks very nice!  A few random questions:
+Daniel, BPF real;ly needs to make up its mind about that.
 
-1) Why not use a structure for the header, instead of 2 32bit ints?
+You *cannot* use ti for both.
 
-2) Would it make sense to reserve X bytes, but only commit Y?
-   the offset field could be used to write the record length.
+Yes, it happens to work on x86 and some other architectures.
 
-   E.g.:
-      reserve 512 bytes    [BUSYBIT | 512][PG OFFSET]
-      commit  400 bytes    [ 512 ] [ 400 ]
+But on other architectures, the exact same pointer value can be a
+kernel pointer or a user pointer.
 
-3) Why have 2 separate pages for producer/consumer, instead of
-   just aligning to a smp cache line (or even 1/2 page?)
+> Given this is enabled on pretty much all program types, my
+> assumption would be that usage is still more often on kernel memory than user one.
 
-4) The XOR of busybit makes me wonder if there is anything that
-   prevents the system from calling commit twice?
---
-Jonathan
+You need to pick one.
+
+If you know it is a user pointer, use strncpy_from_user() (possibly
+with disable_pagefault() aka strncpy_from_user_nofault()).
+
+And if you know it is a kernel pointer, use strncpy_from_unsafe() (aka
+strncpy_from_kernel_nofault()).
+
+You really can't pick the "randomly one or the other guess what I mean " option.
+
+                  Linus
