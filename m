@@ -2,134 +2,131 @@ Return-Path: <SRS0=dL5Z=63=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E2A1C433DF
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 23:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1E15C433DF
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 23:22:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 11DA020727
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 23:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1589412063;
-	bh=YDpY+oFCkFIHw2paw3aSACA9Hw6Wo+2HjdFDzhL6e38=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=tatrUYSPSbBvnS8tw/X8SZJxiMaL4uKMuCXIGWfOHNNDKUAAZsLjrU8HucW7uq2NW
-	 1dg8VU+jC4+Rgi8jt9/egqjf4DYURQ81+6vhySbSTbksBiz5iSucXaqSTWUQNZ9gtx
-	 VDVn6BsihTbB1DMVTsWe3Two+qsMy4uekcOkvJ2k=
+	by mail.kernel.org (Postfix) with ESMTP id E65A72065C
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 23:22:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732555AbgEMXVC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 May 2020 19:21:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42132 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732374AbgEMXVB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 May 2020 19:21:01 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E88B0205ED;
-        Wed, 13 May 2020 23:20:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589412060;
-        bh=YDpY+oFCkFIHw2paw3aSACA9Hw6Wo+2HjdFDzhL6e38=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VY6ReKk0+WrAeE5ZcMXyCwAji3tlYNb/nbD2ggy3exjFLZEjT+0+pc5M2WrrXmQH0
-         JQWCoAo25rOLn65XcG+voP2CL/K9HMF/5jLJiguZCbvKj7Ig9RkfxHptSOAPl7eg+4
-         c+G4ppBlY+/44iQvxYyUGGeiJfjGc2UNIDz5ZKPs=
-Date:   Thu, 14 May 2020 08:20:54 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
+        id S1732593AbgEMXWG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 May 2020 19:22:06 -0400
+Received: from smtprelay0213.hostedemail.com ([216.40.44.213]:57482 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732374AbgEMXWG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 13 May 2020 19:22:06 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 2289E4417;
+        Wed, 13 May 2020 23:22:05 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: hill76_11e14f6e0db02
+X-Filterd-Recvd-Size: 4046
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf10.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 13 May 2020 23:22:02 +0000 (UTC)
+Message-ID: <397fb29abb20d11003a18919ee0c44918fc1a165.camel@perches.com>
+Subject: Re: [PATCH v2 bpf-next 4/7] printk: add type-printing %pT format
+ specifier which uses BTF
+From:   Joe Perches <joe@perches.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-parisc@vger.kernel.org,
-        linux-um <linux-um@lists.infradead.org>,
-        Netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 11/18] maccess: remove strncpy_from_unsafe
-Message-Id: <20200514082054.f817721ce196f134e6820644@kernel.org>
-In-Reply-To: <0c1a7066-b269-9695-b94a-bb5f4f20ebd8@iogearbox.net>
-References: <20200513160038.2482415-1-hch@lst.de>
-        <20200513160038.2482415-12-hch@lst.de>
-        <CAHk-=wj=u+nttmd1huNES2U=9nePtmk7WgR8cMLCYS8wc=rhdA@mail.gmail.com>
-        <20200513192804.GA30751@lst.de>
-        <0c1a7066-b269-9695-b94a-bb5f4f20ebd8@iogearbox.net>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>
+Date:   Wed, 13 May 2020 16:22:01 -0700
+In-Reply-To: <CAADnVQK8osy9W8-u-K=ucqe5q-+Uik41fBw6d-SfG-m6rgVwDQ@mail.gmail.com>
+References: <1589263005-7887-1-git-send-email-alan.maguire@oracle.com>
+         <1589263005-7887-5-git-send-email-alan.maguire@oracle.com>
+         <1b63a6b193073674b6e0f9f95c62ce2af1b977cc.camel@perches.com>
+         <CAADnVQK8osy9W8-u-K=ucqe5q-+Uik41fBw6d-SfG-m6rgVwDQ@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.1-2 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 14 May 2020 00:36:28 +0200
-Daniel Borkmann <daniel@iogearbox.net> wrote:
-
-> On 5/13/20 9:28 PM, Christoph Hellwig wrote:
-> > On Wed, May 13, 2020 at 12:11:27PM -0700, Linus Torvalds wrote:
-> >> On Wed, May 13, 2020 at 9:01 AM Christoph Hellwig <hch@lst.de> wrote:
-> >>>
-> >>> +static void bpf_strncpy(char *buf, long unsafe_addr)
-> >>> +{
-> >>> +       buf[0] = 0;
-> >>> +       if (strncpy_from_kernel_nofault(buf, (void *)unsafe_addr,
-> >>> +                       BPF_STRNCPY_LEN))
-> >>> +               strncpy_from_user_nofault(buf, (void __user *)unsafe_addr,
-> >>> +                               BPF_STRNCPY_LEN);
-> >>> +}
-> >>
-> >> This seems buggy when I look at it.
-> >>
-> >> It seems to think that strncpy_from_kernel_nofault() returns an error code.
-> >>
-> >> Not so, unless I missed where you changed the rules.
+On Wed, 2020-05-13 at 16:07 -0700, Alexei Starovoitov wrote:
+> On Wed, May 13, 2020 at 4:05 PM Joe Perches <joe@perches.com> wrote:
+> > On Tue, 2020-05-12 at 06:56 +0100, Alan Maguire wrote:
+> > > printk supports multiple pointer object type specifiers (printing
+> > > netdev features etc).  Extend this support using BTF to cover
+> > > arbitrary types.  "%pT" specifies the typed format, and the pointer
+> > > argument is a "struct btf_ptr *" where struct btf_ptr is as follows:
+> > > 
+> > > struct btf_ptr {
+> > >       void *ptr;
+> > >       const char *type;
+> > >       u32 id;
+> > > };
+> > > 
+> > > Either the "type" string ("struct sk_buff") or the BTF "id" can be
+> > > used to identify the type to use in displaying the associated "ptr"
+> > > value.  A convenience function to create and point at the struct
+> > > is provided:
+> > > 
+> > >       printk(KERN_INFO "%pT", BTF_PTR_TYPE(skb, struct sk_buff));
+> > > 
+> > > When invoked, BTF information is used to traverse the sk_buff *
+> > > and display it.  Support is present for structs, unions, enums,
+> > > typedefs and core types (though in the latter case there's not
+> > > much value in using this feature of course).
+> > > 
+> > > Default output is indented, but compact output can be specified
+> > > via the 'c' option.  Type names/member values can be suppressed
+> > > using the 'N' option.  Zero values are not displayed by default
+> > > but can be using the '0' option.  Pointer values are obfuscated
+> > > unless the 'x' option is specified.  As an example:
+> > > 
+> > >   struct sk_buff *skb = alloc_skb(64, GFP_KERNEL);
+> > >   pr_info("%pT", BTF_PTR_TYPE(skb, struct sk_buff));
+> > > 
+> > > ...gives us:
+> > > 
+> > > (struct sk_buff){
+> > >  .transport_header = (__u16)65535,
+> > >        .mac_header = (__u16)65535,
+> > >  .end = (sk_buff_data_t)192,
+> > >  .head = (unsigned char *)000000006b71155a,
+> > >  .data = (unsigned char *)000000006b71155a,
+> > >  .truesize = (unsigned int)768,
+> > >  .users = (refcount_t){
+> > >   .refs = (atomic_t){
+> > >    .counter = (int)1,
 > > 
-> > I didn't change the rules, so yes, this is wrong.
+> > Given
 > > 
-> >> Also, I do wonder if we shouldn't gate this on TASK_SIZE, and do the
-> >> user trial first. On architectures where this thing is valid in the
-> >> first place (ie kernel and user addresses are separate), the test for
-> >> address size would allow us to avoid a pointless fault due to an
-> >> invalid kernel access to user space.
-> >>
-> >> So I think this function should look something like
-> >>
-> >>    static void bpf_strncpy(char *buf, long unsafe_addr)
-> >>    {
-> >>            /* Try user address */
-> >>            if (unsafe_addr < TASK_SIZE) {
-> >>                    void __user *ptr = (void __user *)unsafe_addr;
-> >>                    if (strncpy_from_user_nofault(buf, ptr, BPF_STRNCPY_LEN) >= 0)
-> >>                            return;
-> >>            }
-> >>
-> >>            /* .. fall back on trying kernel access */
-> >>            buf[0] = 0;
-> >>            strncpy_from_kernel_nofault(buf, (void *)unsafe_addr,
-> >> BPF_STRNCPY_LEN);
-> >>    }
-> >>
-> >> or similar. No?
+> >   #define BTF_INT_ENCODING(VAL)   (((VAL) & 0x0f000000) >> 24)
 > > 
-> > So on say s390 TASK_SIZE_USUALLy is (-PAGE_SIZE), which means we'd alway
-> > try the user copy first, which seems odd.
+> > Maybe
 > > 
-> > I'd really like to here from the bpf folks what the expected use case
-> > is here, and if the typical argument is kernel or user memory.
+> >   #define BTF_INT_SIGNED  (1 << 0)
+> >   #define BTF_INT_CHAR    (1 << 1)
+> >   #define BTF_INT_BOOL    (1 << 2)
+> > 
+> > could be extended to include
+> > 
+> >   #define BTF_INT_HEX     (1 << 3)
+> > 
+> > So hex values can be appropriately pretty-printed.
 > 
-> It's used for both. Given this is enabled on pretty much all program types, my
-> assumption would be that usage is still more often on kernel memory than user one.
+> Nack to that.
 
-For trace_kprobe.c current order (kernel -> user fallback) is preferred
-because it has another function dedicated for user memory.
+why?
 
-Thank you,
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
