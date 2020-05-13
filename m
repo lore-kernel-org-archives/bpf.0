@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-9.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AAEDC433DF
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 16:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47DB4C433DF
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 16:02:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AFDAB205ED
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 16:02:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 77EA220659
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 16:02:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="tKor3Cj8"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Y4ftEH/W"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389612AbgEMQB4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 May 2020 12:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S2389505AbgEMQBR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 May 2020 12:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389529AbgEMQBW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 May 2020 12:01:22 -0400
+        with ESMTP id S2389500AbgEMQBQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 May 2020 12:01:16 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F710C061A0E;
-        Wed, 13 May 2020 09:01:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2688C061A0C;
+        Wed, 13 May 2020 09:01:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=1V9FXGwvoUyADOJtECmZzXrzilRy7l0jj6styYqt0KU=; b=tKor3Cj8X0w448ldbecYKjcLcO
-        rEBZiIwDb8iBHi+e8Zj3GmAVgJ4eAPYD7OkxnNk7ExjrIO/MQHCGpj8UqyYoe3GC50VfbTOwfflHH
-        OJVv1O2Q5GBa1SMeS/mocauWeVDCuR5Zo/vBfbV4CWMeodUXAn1y4NUM0PfDY7RF/I/SxR7DgcnA2
-        HRpIzKQux8h7EOGjHQewnkQkeSiHNy/sFfYXB+svuF9eDP4FdjQbJLg1P1mZXWSkEefQlwdi5R7u2
-        k+gy4VBHXHqnD/qRwkaOMESyDqX4cFkkpZU5y3kQrjY90A/HJ7pTuAtgIcHXzqbZx9d7McA3ikcFk
-        R9jLdIuA==;
+        bh=XlPPJJrpQq58pmznznN4SUzjBc5ePsWeyH7V4s5WQP8=; b=Y4ftEH/WkgWaDFxlav2TJI4qy0
+        w7lD9AwVixaScwiOsp6m/G9shpHrZp6dxiQM9aY5f3RuPHCuVESlZupd0ZgVwiYqWNqeTvzVnJdNK
+        LYJ5uVjKONsLIkp+gIEJETIhvvOTmXetwvEZyO0COz/iWX6JbTqB1elL89c8Ay4LZuhQgiMxDk1NY
+        ALk4tqFT73sKu3jZ4T/s/eKUw/M2jyIZfY0GMBKZqfixWgwrbLXri9Q5R85pv9qwn/1HskvPt1QsJ
+        pBimZ0eoj9pynf4Hc2MMIeKr7mClgazHLBa7QHbxpz4HbM4zwS1EQJ/PWIXwMOHckcVAiqQTh2XGS
+        55yuS0cQ==;
 Received: from [2001:4bb8:180:9d3f:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jYtou-00050Z-AS; Wed, 13 May 2020 16:01:20 +0000
+        id 1jYtoo-0004xT-UQ; Wed, 13 May 2020 16:01:15 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -46,9 +46,9 @@ To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
 Cc:     linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 15/18] x86: use non-set_fs based maccess routines
-Date:   Wed, 13 May 2020 18:00:35 +0200
-Message-Id: <20200513160038.2482415-16-hch@lst.de>
+Subject: [PATCH 13/18] maccess: move user access routines together
+Date:   Wed, 13 May 2020 18:00:33 +0200
+Message-Id: <20200513160038.2482415-14-hch@lst.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200513160038.2482415-1-hch@lst.de>
 References: <20200513160038.2482415-1-hch@lst.de>
@@ -60,41 +60,149 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Provide arch_kernel_read and arch_kernel_write routines to implement the
-maccess routines without messing with set_fs and without stac/clac that
-opens up access to user space.
+Move kernel access vs user access routines together to ease upcoming
+ifdefs.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- arch/x86/include/asm/uaccess.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ mm/maccess.c | 110 +++++++++++++++++++++++++--------------------------
+ 1 file changed, 55 insertions(+), 55 deletions(-)
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index d8f283b9a569c..765e18417b3ba 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -523,5 +523,21 @@ do {									\
- 	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
- } while (0)
+diff --git a/mm/maccess.c b/mm/maccess.c
+index 05c44d490b4e3..9773e2253b495 100644
+--- a/mm/maccess.c
++++ b/mm/maccess.c
+@@ -47,34 +47,6 @@ long probe_kernel_read(void *dst, const void *src, size_t size)
+ }
+ EXPORT_SYMBOL_GPL(probe_kernel_read);
  
-+#define HAVE_ARCH_PROBE_KERNEL
-+
-+#define arch_kernel_read(dst, src, type, err_label)			\
-+do {									\
-+        int __kr_err;							\
-+									\
-+	__get_user_size(*((type *)dst), (__force type __user *)src,	\
-+			sizeof(type), __kr_err);			\
-+        if (unlikely(__kr_err))						\
-+		goto err_label;						\
-+} while (0)
-+
-+#define arch_kernel_write(dst, src, type, err_label)			\
-+	__put_user_size(*((type *)(src)), (__force type __user *)(dst),	\
-+			sizeof(type), err_label)
-+
- #endif /* _ASM_X86_UACCESS_H */
+-/**
+- * probe_user_read(): safely attempt to read from a user-space location
+- * @dst: pointer to the buffer that shall take the data
+- * @src: address to read from. This must be a user address.
+- * @size: size of the data chunk
+- *
+- * Safely read from user address @src to the buffer at @dst. If a kernel fault
+- * happens, handle that and return -EFAULT.
+- */
+-long probe_user_read(void *dst, const void __user *src, size_t size)
+-{
+-	long ret = -EFAULT;
+-	mm_segment_t old_fs = get_fs();
+-
+-	set_fs(USER_DS);
+-	if (access_ok(src, size)) {
+-		pagefault_disable();
+-		ret = __copy_from_user_inatomic(dst, src, size);
+-		pagefault_enable();
+-	}
+-	set_fs(old_fs);
+-
+-	if (ret)
+-		return -EFAULT;
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(probe_user_read);
+-
+ /**
+  * probe_kernel_write(): safely attempt to write to a location
+  * @dst: address to write to
+@@ -100,33 +72,6 @@ long probe_kernel_write(void *dst, const void *src, size_t size)
+ 	return 0;
+ }
  
+-/**
+- * probe_user_write(): safely attempt to write to a user-space location
+- * @dst: address to write to
+- * @src: pointer to the data that shall be written
+- * @size: size of the data chunk
+- *
+- * Safely write to address @dst from the buffer at @src.  If a kernel fault
+- * happens, handle that and return -EFAULT.
+- */
+-long probe_user_write(void __user *dst, const void *src, size_t size)
+-{
+-	long ret = -EFAULT;
+-	mm_segment_t old_fs = get_fs();
+-
+-	set_fs(USER_DS);
+-	if (access_ok(dst, size)) {
+-		pagefault_disable();
+-		ret = __copy_to_user_inatomic(dst, src, size);
+-		pagefault_enable();
+-	}
+-	set_fs(old_fs);
+-
+-	if (ret)
+-		return -EFAULT;
+-	return 0;
+-}
+-
+ /**
+  * strncpy_from_kernel_nofault: - Copy a NUL terminated string from unsafe
+  *				 address.
+@@ -170,6 +115,61 @@ long strncpy_from_kernel_nofault(char *dst, const void *unsafe_addr, long count)
+ 	return ret ? -EFAULT : src - unsafe_addr;
+ }
+ 
++/**
++ * probe_user_read(): safely attempt to read from a user-space location
++ * @dst: pointer to the buffer that shall take the data
++ * @src: address to read from. This must be a user address.
++ * @size: size of the data chunk
++ *
++ * Safely read from user address @src to the buffer at @dst. If a kernel fault
++ * happens, handle that and return -EFAULT.
++ */
++long probe_user_read(void *dst, const void __user *src, size_t size)
++{
++	long ret = -EFAULT;
++	mm_segment_t old_fs = get_fs();
++
++	set_fs(USER_DS);
++	if (access_ok(src, size)) {
++		pagefault_disable();
++		ret = __copy_from_user_inatomic(dst, src, size);
++		pagefault_enable();
++	}
++	set_fs(old_fs);
++
++	if (ret)
++		return -EFAULT;
++	return 0;
++}
++EXPORT_SYMBOL_GPL(probe_user_read);
++
++/**
++ * probe_user_write(): safely attempt to write to a user-space location
++ * @dst: address to write to
++ * @src: pointer to the data that shall be written
++ * @size: size of the data chunk
++ *
++ * Safely write to address @dst from the buffer at @src.  If a kernel fault
++ * happens, handle that and return -EFAULT.
++ */
++long probe_user_write(void __user *dst, const void *src, size_t size)
++{
++	long ret = -EFAULT;
++	mm_segment_t old_fs = get_fs();
++
++	set_fs(USER_DS);
++	if (access_ok(dst, size)) {
++		pagefault_disable();
++		ret = __copy_to_user_inatomic(dst, src, size);
++		pagefault_enable();
++	}
++	set_fs(old_fs);
++
++	if (ret)
++		return -EFAULT;
++	return 0;
++}
++
+ /**
+  * strncpy_from_user_nofault: - Copy a NUL terminated string from unsafe user
+  *				address.
 -- 
 2.26.2
 
