@@ -7,52 +7,51 @@ X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9508C433DF
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 18:03:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13EE1C433E0
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 18:03:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6988520659
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 18:03:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A01FC205CB
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 18:03:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Q12rjiAF"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="I5BmxvlV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390084AbgEMSDA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 May 2020 14:03:00 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:33244 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390076AbgEMSDA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 13 May 2020 14:03:00 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 04DI04O4017187
-        for <bpf@vger.kernel.org>; Wed, 13 May 2020 11:02:58 -0700
+        id S2389983AbgEMSDe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 May 2020 14:03:34 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:59646 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1733144AbgEMSDe (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 13 May 2020 14:03:34 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04DI1akF030423
+        for <bpf@vger.kernel.org>; Wed, 13 May 2020 11:03:33 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Do3Gx7n1A4pX1C7qwdUkNJz4XNMLw3vgy4c3s2GhnLc=;
- b=Q12rjiAFSekZgmffCNrrfXChpOIPKdiZtFupAXjMTjrnCqlzgZgCMNB4E4s/WmsbHj4k
- 4kTUw48a4O/EcZ5N3RAtF6TI0QpqiboaCaFdXCunibgzbugmeygk4FYGmwhxhsC+gOKn
- VBiTc53kgNy95EN14ZFkjZwpy67Gw/PRl4o= 
+ bh=zcRlDxY9k4DtmX7Fk3bj7W4/DAFDy/IMKoUTQb6GIsY=;
+ b=I5BmxvlVxFNL2AW9Lds3PZUvWSaECUwxvmgSTEvR7wabg+w3c66Rz+KGMf+w9Ykpr5Xt
+ FCyAbs7kSWtS5PiO+21EJlIemJY0ZO9F4d+Bu9KbuVGeyLtzmkFwPeBGpXHX2X/F9tSX
+ ZUzQqKoQsGGNEaihZQa2eRnPENf9IVinxMI= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 3100xh6e4s-9
+        by mx0a-00082601.pphosted.com with ESMTP id 3100xb6bvu-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 13 May 2020 11:02:58 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 13 May 2020 11:03:33 -0700
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 13 May 2020 11:02:27 -0700
+ 15.1.1847.3; Wed, 13 May 2020 11:02:24 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id E941337009B0; Wed, 13 May 2020 11:02:16 -0700 (PDT)
+        id DE9DE37009B0; Wed, 13 May 2020 11:02:21 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
 To:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
         Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 2/7] bpf: change btf_iter func proto prefix to "bpf_iter_"
-Date:   Wed, 13 May 2020 11:02:16 -0700
-Message-ID: <20200513180216.2949387-1-yhs@fb.com>
+Subject: [PATCH bpf-next v2 6/7] bpf: enable bpf_iter targets registering ctx argument types
+Date:   Wed, 13 May 2020 11:02:21 -0700
+Message-ID: <20200513180221.2949882-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200513180215.2949164-1-yhs@fb.com>
 References: <20200513180215.2949164-1-yhs@fb.com>
@@ -62,61 +61,283 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
  definitions=2020-05-13_08:2020-05-13,2020-05-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 cotscore=-2147483648
- mlxscore=0 priorityscore=1501 adultscore=0 impostorscore=0 malwarescore=0
- spamscore=0 clxscore=1015 suspectscore=0 mlxlogscore=999 phishscore=0
- bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005130153
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ cotscore=-2147483648 mlxscore=0 suspectscore=0 lowpriorityscore=0
+ impostorscore=0 bulkscore=0 spamscore=0 priorityscore=1501 clxscore=1015
+ malwarescore=0 adultscore=0 mlxlogscore=999 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2005130153
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is to be consistent with tracing and lsm programs
-which have prefix "bpf_trace_" and "bpf_lsm_" respectively.
+Commit b121b341e598 ("bpf: Add PTR_TO_BTF_ID_OR_NULL
+support") adds a field btf_id_or_null_non0_off to
+bpf_prog->aux structure to indicate that the
+first ctx argument is PTR_TO_BTF_ID reg_type and
+all others are PTR_TO_BTF_ID_OR_NULL.
+This approach does not really scale if we have
+other different reg types in the future, e.g.,
+a pointer to a buffer.
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
+This patch enables bpf_iter targets registering ctx argument
+reg types which may be different from the default one.
+For example, for pointers to structures, the default reg_type
+is PTR_TO_BTF_ID for tracing program. The target can register
+a particular pointer type as PTR_TO_BTF_ID_OR_NULL which can
+be used by the verifier to enforce accesses.
+
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/linux/bpf.h    | 6 +++---
- tools/lib/bpf/libbpf.c | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ include/linux/bpf.h      | 12 +++++++++++-
+ include/net/ip6_fib.h    |  7 +++++++
+ kernel/bpf/bpf_iter.c    |  5 +++++
+ kernel/bpf/btf.c         | 15 ++++++++++-----
+ kernel/bpf/map_iter.c    |  5 +++++
+ kernel/bpf/task_iter.c   | 12 ++++++++++++
+ kernel/bpf/verifier.c    |  1 -
+ net/ipv6/ip6_fib.c       |  5 -----
+ net/ipv6/route.c         |  5 +++++
+ net/netlink/af_netlink.c |  5 +++++
+ 10 files changed, 60 insertions(+), 12 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index cf4b6e44f2bc..ab94dfd8826f 100644
+index 534174eca86b..c45d198ac38c 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -1131,10 +1131,10 @@ struct bpf_link *bpf_link_get_from_fd(u32 ufd);
- int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
- int bpf_obj_get_user(const char __user *pathname, int flags);
+@@ -643,6 +643,12 @@ struct bpf_jit_poke_descriptor {
+ 	u16 reason;
+ };
 =20
--#define BPF_ITER_FUNC_PREFIX "__bpf_iter__"
-+#define BPF_ITER_FUNC_PREFIX "bpf_iter_"
- #define DEFINE_BPF_ITER_FUNC(target, args...)			\
--	extern int __bpf_iter__ ## target(args);		\
--	int __init __bpf_iter__ ## target(args) { return 0; }
-+	extern int bpf_iter_ ## target(args);			\
-+	int __init bpf_iter_ ## target(args) { return 0; }
-=20
++/* reg_type info for ctx arguments */
++struct bpf_ctx_arg_aux {
++	u32 offset;
++	enum bpf_reg_type reg_type;
++};
++
+ struct bpf_prog_aux {
+ 	atomic64_t refcnt;
+ 	u32 used_map_cnt;
+@@ -654,12 +660,13 @@ struct bpf_prog_aux {
+ 	u32 func_cnt; /* used by non-func prog as the number of func progs */
+ 	u32 func_idx; /* 0 for non-func prog, the index in func array for func =
+prog */
+ 	u32 attach_btf_id; /* in-kernel BTF type id to attach to */
++	u32 ctx_arg_info_size;
++	const struct bpf_ctx_arg_aux *ctx_arg_info;
+ 	struct bpf_prog *linked_prog;
+ 	bool verifier_zext; /* Zero extensions has been inserted by verifier. *=
+/
+ 	bool offload_requested;
+ 	bool attach_btf_trace; /* true if attaching to BTF-enabled raw tp */
+ 	bool func_proto_unreliable;
+-	bool btf_id_or_null_non0_off;
+ 	enum bpf_tramp_prog_type trampoline_prog_type;
+ 	struct bpf_trampoline *trampoline;
+ 	struct hlist_node tramp_hlist;
+@@ -1139,12 +1146,15 @@ int bpf_obj_get_user(const char __user *pathname,=
+ int flags);
  typedef int (*bpf_iter_init_seq_priv_t)(void *private_data);
  typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index fd882616ab52..292257995487 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -6919,7 +6919,7 @@ static int bpf_object__collect_st_ops_relos(struct =
-bpf_object *obj,
 =20
- #define BTF_TRACE_PREFIX "btf_trace_"
- #define BTF_LSM_PREFIX "bpf_lsm_"
--#define BTF_ITER_PREFIX "__bpf_iter__"
-+#define BTF_ITER_PREFIX "bpf_iter_"
- #define BTF_MAX_NAME_SIZE 128
++#define BPF_ITER_CTX_ARG_MAX 2
+ struct bpf_iter_reg {
+ 	const char *target;
+ 	const struct seq_operations *seq_ops;
+ 	bpf_iter_init_seq_priv_t init_seq_private;
+ 	bpf_iter_fini_seq_priv_t fini_seq_private;
+ 	u32 seq_priv_size;
++	u32 ctx_arg_info_size;
++	struct bpf_ctx_arg_aux ctx_arg_info[BPF_ITER_CTX_ARG_MAX];
+ };
 =20
- static int find_btf_by_prefix_kind(const struct btf *btf, const char *pr=
-efix,
+ struct bpf_iter_meta {
+diff --git a/include/net/ip6_fib.h b/include/net/ip6_fib.h
+index 80262d2980f5..870b646c5797 100644
+--- a/include/net/ip6_fib.h
++++ b/include/net/ip6_fib.h
+@@ -540,6 +540,13 @@ static inline bool fib6_metric_locked(struct fib6_in=
+fo *f6i, int metric)
+ 	return !!(f6i->fib6_metrics->metrics[RTAX_LOCK - 1] & (1 << metric));
+ }
+=20
++#if IS_BUILTIN(CONFIG_IPV6) && defined(CONFIG_BPF_SYSCALL)
++struct bpf_iter__ipv6_route {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct fib6_info *, rt);
++};
++#endif
++
+ #ifdef CONFIG_IPV6_MULTIPLE_TABLES
+ static inline bool fib6_has_custom_rules(const struct net *net)
+ {
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index 644f8626b2c0..dd612b80b9fe 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -308,6 +308,11 @@ bool bpf_iter_prog_supported(struct bpf_prog *prog)
+ 	}
+ 	mutex_unlock(&targets_mutex);
+=20
++	if (supported) {
++		prog->aux->ctx_arg_info_size =3D tinfo->reg_info->ctx_arg_info_size;
++		prog->aux->ctx_arg_info =3D tinfo->reg_info->ctx_arg_info;
++	}
++
+ 	return supported;
+ }
+=20
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index dcd233139294..58c9af1d4808 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3694,7 +3694,7 @@ bool btf_ctx_access(int off, int size, enum bpf_acc=
+ess_type type,
+ 	struct bpf_verifier_log *log =3D info->log;
+ 	const struct btf_param *args;
+ 	u32 nr_args, arg;
+-	int ret;
++	int i, ret;
+=20
+ 	if (off % 8) {
+ 		bpf_log(log, "func '%s' offset %d is not multiple of 8\n",
+@@ -3790,10 +3790,15 @@ bool btf_ctx_access(int off, int size, enum bpf_a=
+ccess_type type,
+ 		return true;
+=20
+ 	/* this is a pointer to another type */
+-	if (off !=3D 0 && prog->aux->btf_id_or_null_non0_off)
+-		info->reg_type =3D PTR_TO_BTF_ID_OR_NULL;
+-	else
+-		info->reg_type =3D PTR_TO_BTF_ID;
++	info->reg_type =3D PTR_TO_BTF_ID;
++	for (i =3D 0; i < prog->aux->ctx_arg_info_size; i++) {
++		const struct bpf_ctx_arg_aux *ctx_arg_info =3D &prog->aux->ctx_arg_inf=
+o[i];
++
++		if (ctx_arg_info->offset =3D=3D off) {
++			info->reg_type =3D ctx_arg_info->reg_type;
++			break;
++		}
++	}
+=20
+ 	if (tgt_prog) {
+ 		ret =3D btf_translate_to_vmlinux(log, btf, t, tgt_prog->type, arg);
+diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
+index c6216a5fe56e..c69071e334bf 100644
+--- a/kernel/bpf/map_iter.c
++++ b/kernel/bpf/map_iter.c
+@@ -87,6 +87,11 @@ static const struct bpf_iter_reg bpf_map_reg_info =3D =
+{
+ 	.init_seq_private	=3D NULL,
+ 	.fini_seq_private	=3D NULL,
+ 	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_map_info),
++	.ctx_arg_info_size	=3D 1,
++	.ctx_arg_info		=3D {
++		{ offsetof(struct bpf_iter__bpf_map, map),
++		  PTR_TO_BTF_ID_OR_NULL },
++	},
+ };
+=20
+ static int __init bpf_map_iter_init(void)
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index bd7bfd83d9e0..a9b7264dda08 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -312,6 +312,11 @@ static const struct bpf_iter_reg task_reg_info =3D {
+ 	.init_seq_private	=3D init_seq_pidns,
+ 	.fini_seq_private	=3D fini_seq_pidns,
+ 	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_task_info),
++	.ctx_arg_info_size	=3D 1,
++	.ctx_arg_info		=3D {
++		{ offsetof(struct bpf_iter__task, task),
++		  PTR_TO_BTF_ID_OR_NULL },
++	},
+ };
+=20
+ static const struct bpf_iter_reg task_file_reg_info =3D {
+@@ -320,6 +325,13 @@ static const struct bpf_iter_reg task_file_reg_info =
+=3D {
+ 	.init_seq_private	=3D init_seq_pidns,
+ 	.fini_seq_private	=3D fini_seq_pidns,
+ 	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_task_file_info),
++	.ctx_arg_info_size	=3D 2,
++	.ctx_arg_info		=3D {
++		{ offsetof(struct bpf_iter__task_file, task),
++		  PTR_TO_BTF_ID_OR_NULL },
++		{ offsetof(struct bpf_iter__task_file, file),
++		  PTR_TO_BTF_ID_OR_NULL },
++	},
+ };
+=20
+ static int __init task_iter_init(void)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2a1826c76bb6..a3f2af756fd6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10652,7 +10652,6 @@ static int check_attach_btf_id(struct bpf_verifie=
+r_env *env)
+ 		prog->aux->attach_func_proto =3D t;
+ 		if (!bpf_iter_prog_supported(prog))
+ 			return -EINVAL;
+-		prog->aux->btf_id_or_null_non0_off =3D true;
+ 		ret =3D btf_distill_func_proto(&env->log, btf, t,
+ 					     tname, &fmodel);
+ 		return ret;
+diff --git a/net/ipv6/ip6_fib.c b/net/ipv6/ip6_fib.c
+index a1fcc0ca21af..250ff52c674e 100644
+--- a/net/ipv6/ip6_fib.c
++++ b/net/ipv6/ip6_fib.c
+@@ -2638,11 +2638,6 @@ static void ipv6_route_native_seq_stop(struct seq_=
+file *seq, void *v)
+ }
+=20
+ #if IS_BUILTIN(CONFIG_IPV6) && defined(CONFIG_BPF_SYSCALL)
+-struct bpf_iter__ipv6_route {
+-	__bpf_md_ptr(struct bpf_iter_meta *, meta);
+-	__bpf_md_ptr(struct fib6_info *, rt);
+-};
+-
+ static int ipv6_route_prog_seq_show(struct bpf_prog *prog,
+ 				    struct bpf_iter_meta *meta,
+ 				    void *v)
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index 22bf4e36c093..22e56465f14d 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -6403,6 +6403,11 @@ static const struct bpf_iter_reg ipv6_route_reg_in=
+fo =3D {
+ 	.init_seq_private	=3D bpf_iter_init_seq_net,
+ 	.fini_seq_private	=3D bpf_iter_fini_seq_net,
+ 	.seq_priv_size		=3D sizeof(struct ipv6_route_iter),
++	.ctx_arg_info_size	=3D 1,
++	.ctx_arg_info		=3D {
++		{ offsetof(struct bpf_iter__ipv6_route, rt),
++		  PTR_TO_BTF_ID_OR_NULL },
++	},
+ };
+=20
+ static int __init bpf_iter_register(void)
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index 839827227e98..4f2c3b14ddbf 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -2809,6 +2809,11 @@ static const struct bpf_iter_reg netlink_reg_info =
+=3D {
+ 	.init_seq_private	=3D bpf_iter_init_seq_net,
+ 	.fini_seq_private	=3D bpf_iter_fini_seq_net,
+ 	.seq_priv_size		=3D sizeof(struct nl_seq_iter),
++	.ctx_arg_info_size	=3D 1,
++	.ctx_arg_info		=3D {
++		{ offsetof(struct bpf_iter__netlink, sk),
++		  PTR_TO_BTF_ID_OR_NULL },
++	},
+ };
+=20
+ static int __init bpf_iter_register(void)
 --=20
 2.24.1
 
