@@ -2,45 +2,44 @@ Return-Path: <SRS0=dL5Z=63=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 971A0C433DF
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 21:39:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 910D0C433DF
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 21:39:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8654120659
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 21:39:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E2C820693
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 21:39:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="XdPSwA94"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="FDOyOM5s"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729581AbgEMVj1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 May 2020 17:39:27 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:19876 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729258AbgEMVj0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 13 May 2020 17:39:26 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04DLdIhs030465
-        for <bpf@vger.kernel.org>; Wed, 13 May 2020 14:39:25 -0700
+        id S1729596AbgEMVjc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 May 2020 17:39:32 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:12078 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729258AbgEMVjb (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 13 May 2020 17:39:31 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04DLZVdG021529
+        for <bpf@vger.kernel.org>; Wed, 13 May 2020 14:39:31 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=HVQ3990WjpbaWCgFcvn3XTTFJfrdrTNmoKGaSUojKU0=;
- b=XdPSwA94QYF9ntC/JQvuo9vhChS/s5m2XuURuUJhAP1wV44+ZyYzw1OBtHgHr4nPfplc
- rxddcwMRd1Gy+fAVxvbG0T1/7pXZf4cG0QwWPQtXhBrW+m0b/8Ab8/ejoboqBTfOTP4B
- 7KtmJvU5iIW6M56PG+g6HVq+Zz8qGJFNi+c= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3100x5ykp5-10
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=ce8ifRzVJbCtVUM4YG2XRb3PRLql6/OXKfvZO/Hhr/k=;
+ b=FDOyOM5sOSfbIlhvc53D1rnpKtG9d2Q7/rEVZkK+dNaX+lX5vAbQ7CZ37T1fUvj/NxhN
+ LZKpolvKtJBhCEY2Am5Aeim7tcPaOn22s+Yu3ptxFPtGcfES8rvI7dVjUOqBSdmrwRj7
+ fqf3eHkmI/m7Y8OHuhzIcJpQHh4xQdRhI2k= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3100xb7hmn-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 13 May 2020 14:39:25 -0700
-Received: from intmgw004.06.prn3.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 13 May 2020 14:39:31 -0700
+Received: from intmgw001.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Wed, 13 May 2020 14:39:03 -0700
+ 15.1.1847.3; Wed, 13 May 2020 14:38:47 -0700
 Received: by dev082.prn2.facebook.com (Postfix, from userid 572249)
-        id 98BBA370094C; Wed, 13 May 2020 14:38:59 -0700 (PDT)
+        id 46FBA370094C; Wed, 13 May 2020 14:38:46 -0700 (PDT)
 Smtp-Origin-Hostprefix: dev
 From:   Andrey Ignatov <rdna@fb.com>
 Smtp-Origin-Hostname: dev082.prn2.facebook.com
@@ -48,55 +47,94 @@ To:     <bpf@vger.kernel.org>
 CC:     Andrey Ignatov <rdna@fb.com>, <ast@kernel.org>,
         <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: prn2c23
-Subject: [PATCH v2 bpf-next 2/5] bpf: Allow skb_ancestor_cgroup_id helper in cgroup skb
-Date:   Wed, 13 May 2020 14:38:37 -0700
-Message-ID: <3cb2908c5690d20e1575ed36177b5881838a9079.1589405669.git.rdna@fb.com>
+Subject: [PATCH v2 bpf-next 0/5] bpf: sk lookup, cgroup id helpers in cgroup skb
+Date:   Wed, 13 May 2020 14:38:35 -0700
+Message-ID: <cover.1589405669.git.rdna@fb.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <cover.1589405669.git.rdna@fb.com>
-References: <cover.1589405669.git.rdna@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
  definitions=2020-05-13_09:2020-05-13,2020-05-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- mlxlogscore=736 spamscore=0 clxscore=1015 cotscore=-2147483648
- malwarescore=0 impostorscore=0 bulkscore=0 adultscore=0 priorityscore=1501
- phishscore=0 mlxscore=0 suspectscore=13 classifier=spam adjust=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ cotscore=-2147483648 mlxscore=0 suspectscore=13 lowpriorityscore=0
+ impostorscore=0 bulkscore=0 spamscore=0 priorityscore=1501 clxscore=1015
+ malwarescore=0 adultscore=0 mlxlogscore=954 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005130185
+ definitions=main-2005130184
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-cgroup skb programs already can use bpf_skb_cgroup_id. Allow
-bpf_skb_ancestor_cgroup_id as well so that container policies can be
-implemented for a container that can have sub-cgroups dynamically
-created, but policies should still be implemented based on cgroup id of
-container itself not on an id of a sub-cgroup.
+v1->v2:
+- switch selftests to skeleton.
 
-Signed-off-by: Andrey Ignatov <rdna@fb.com>
----
- net/core/filter.c | 2 ++
- 1 file changed, 2 insertions(+)
+This patch set allows a bunch of existing sk lookup and skb cgroup id
+helpers, and adds two new bpf_sk_{,ancestor_}cgroup_id helpers to be used
+in cgroup skb programs.
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index ccb560c1a1db..f88df77d0ad4 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -6157,6 +6157,8 @@ cg_skb_func_proto(enum bpf_func_id func_id, const s=
-truct bpf_prog *prog)
- #ifdef CONFIG_SOCK_CGROUP_DATA
- 	case BPF_FUNC_skb_cgroup_id:
- 		return &bpf_skb_cgroup_id_proto;
-+	case BPF_FUNC_skb_ancestor_cgroup_id:
-+		return &bpf_skb_ancestor_cgroup_id_proto;
- #endif
- #ifdef CONFIG_INET
- 	case BPF_FUNC_sk_lookup_tcp:
+It fills the gap to cover a use-case to apply intra-host cgroup-bpf netwo=
+rk
+policy based on a source cgroup a packet comes from.
+
+For example, there can be multiple containers A, B, C running on a host.
+Every such container runs in its own cgroup that can have multiple
+sub-cgroups. But all these containers can share some IP addresses.
+
+At the same time container A wants to have a policy for a server S runnin=
+g
+in it so that only clients from this same container can connect to S, but
+not from other containers (such as B, C). Source IP address can't be used
+to decide whether to allow or deny a packet, but it looks reasonable to
+filter by cgroup id.
+
+The patch set allows to implement the following policy:
+* when an ingress packet comes to container's cgroup, lookup peer (client=
+)
+  socket this packet comes from;
+* having peer socket, get its cgroup id;
+* compare peer cgroup id with self cgroup id and allow packet only if the=
+y
+  match, i.e. it comes from same cgroup;
+* the "sub-cgroup" part of the story can be addressed by getting not dire=
+ct
+  cgroup id of the peer socket, but ancestor cgroup id on specified level=
+,
+  similar to existing "ancestor" flavors of cgroup id helpers.
+
+A newly introduced selftest implements such a policy in its basic form to
+provide a better idea on the use-case.
+
+Patch 1 allows existing sk lookup helpers in cgroup skb.
+Patch 2 allows skb_ancestor_cgroup_id in cgrou skb.
+Patch 3 introduces two new helpers to get cgroup id of socket.
+Patch 4 extends network helpers to use them in the next patch.
+Patch 5 adds selftest / example of use-case.
+
+
+Andrey Ignatov (5):
+  bpf: Allow sk lookup helpers in cgroup skb
+  bpf: Allow skb_ancestor_cgroup_id helper in cgroup skb
+  bpf: Introduce bpf_sk_{,ancestor_}cgroup_id helpers
+  selftests/bpf: Add connect_fd_to_fd, connect_wait net helpers
+  selftests/bpf: Test for sk helpers in cgroup skb
+
+ include/uapi/linux/bpf.h                      |  35 +++++-
+ net/core/filter.c                             |  70 ++++++++++--
+ tools/include/uapi/linux/bpf.h                |  35 +++++-
+ tools/testing/selftests/bpf/network_helpers.c |  66 +++++++++--
+ tools/testing/selftests/bpf/network_helpers.h |   2 +
+ .../bpf/prog_tests/cgroup_skb_sk_lookup.c     |  99 +++++++++++++++++
+ .../bpf/progs/cgroup_skb_sk_lookup_kern.c     | 105 ++++++++++++++++++
+ 7 files changed, 389 insertions(+), 23 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_skb_sk_=
+lookup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgroup_skb_sk_looku=
+p_kern.c
+
 --=20
 2.24.1
 
