@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-9.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F909C433DF
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 16:02:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B9C1C433DF
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 16:02:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 911522065D
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 16:02:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 66556206A5
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 16:02:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="n83Jlhlq"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="PINH5DOo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389444AbgEMQBH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 May 2020 12:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50802 "EHLO
+        id S2389430AbgEMQBE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 May 2020 12:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389421AbgEMQBG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 May 2020 12:01:06 -0400
+        with ESMTP id S2389421AbgEMQBB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 May 2020 12:01:01 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF77C061A0E;
-        Wed, 13 May 2020 09:01:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA474C061A0C;
+        Wed, 13 May 2020 09:01:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=yadtTKbWc/15+vOx4rf6FZGFQ9tpi7eEb5UkyN0sySQ=; b=n83Jlhlq7VChaqupUdqt+gBhX7
-        OcJrYjdbip8e8Zxa1Fi65f3i3XVVl95+rUzNQWgeZYF1FATnOOF2fnUiZmkDma2GCbeAqQXyp6Bls
-        ojHiyEeX38xD6PiXqorsZWC/Wb7Laq9R+8rBqiVPRyRRyFhFigNiJ2T54RdghGYRgyu/qthIVnIRk
-        oKKJSJ+qkc9jz6EOCgSRLl8EELFH31ImfPJ8wPZd11/08sZlpgwuOB7glqi99WI2DZjx2AtgmNh/c
-        Nvos/wtzUV+XExtE6W6/4LVF9/xnCdEueYvxfrk0Ia//G5lgovOmy4EHLym0ahZWBSbfW0mkm9eYW
-        d1+GD+fA==;
+        bh=0L0rTQCcUIlCTiHGYedEh7jbn2ztwQOg3YgqFDESyfw=; b=PINH5DOoKkQ8a5kk1OdBkDZQ9/
+        24WforPCoxSLUhXnmGL0M0/hdIfAQqem02tCkKGiSunieuj6e0uVjZsMOpByZH55szFvLzH3CBl8C
+        6CG3kcCTe1NKZR6/qSK12Eg3ZbfUMateSLyowO5zpr0luyd+ivhodTiZs8W/H+RHVL4T4Zs6e3RXy
+        RQbMWPZV83eWLuzlU+MO0MECxzKc2rCwRhe1w62HSZ6r7J0wo6X3lWpnxUH3+u3MwCpbrBJIs4x7U
+        bNJ+l+bBQ6yLVaD/DYLQka5+I7tZ/52I9HEVG4zlXRCDMNJ8E7SAuNLpivBOjvVziSdRebCKl8f9H
+        AuNxH4iw==;
 Received: from [2001:4bb8:180:9d3f:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jYtoe-0004rO-6Y; Wed, 13 May 2020 16:01:04 +0000
+        id 1jYtoY-0004o4-Rm; Wed, 13 May 2020 16:00:59 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -46,9 +46,9 @@ To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
 Cc:     linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 09/18] maccess: remove probe_read_common and probe_write_common
-Date:   Wed, 13 May 2020 18:00:29 +0200
-Message-Id: <20200513160038.2482415-10-hch@lst.de>
+Subject: [PATCH 07/18] maccess: rename strncpy_from_unsafe_strict to strncpy_from_kernel_nofault
+Date:   Wed, 13 May 2020 18:00:27 +0200
+Message-Id: <20200513160038.2482415-8-hch@lst.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200513160038.2482415-1-hch@lst.de>
 References: <20200513160038.2482415-1-hch@lst.de>
@@ -60,125 +60,89 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Each of the helpers has just two callers, which also different in
-dealing with kernel or userspace pointers.  Just open code the logic
-in the callers.
+This matches the naming of strncpy_from_user_nofault, and also makes it
+more clear what the function is supposed to do.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- mm/maccess.c | 63 ++++++++++++++++++++++++----------------------------
- 1 file changed, 29 insertions(+), 34 deletions(-)
+ arch/x86/mm/maccess.c    | 2 +-
+ include/linux/uaccess.h  | 4 ++--
+ kernel/trace/bpf_trace.c | 2 +-
+ mm/maccess.c             | 6 +++---
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
+diff --git a/arch/x86/mm/maccess.c b/arch/x86/mm/maccess.c
+index f5b85bdc0535c..62c4017a2473d 100644
+--- a/arch/x86/mm/maccess.c
++++ b/arch/x86/mm/maccess.c
+@@ -34,7 +34,7 @@ long probe_kernel_read_strict(void *dst, const void *src, size_t size)
+ 	return __probe_kernel_read(dst, src, size);
+ }
+ 
+-long strncpy_from_unsafe_strict(char *dst, const void *unsafe_addr, long count)
++long strncpy_from_kernel_nofault(char *dst, const void *unsafe_addr, long count)
+ {
+ 	if (unlikely(invalid_probe_range((unsigned long)unsafe_addr)))
+ 		return -EFAULT;
+diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+index b983cb1c1216a..134ff9c1c151b 100644
+--- a/include/linux/uaccess.h
++++ b/include/linux/uaccess.h
+@@ -310,8 +310,8 @@ extern long notrace probe_kernel_write(void *dst, const void *src, size_t size);
+ extern long notrace probe_user_write(void __user *dst, const void *src, size_t size);
+ 
+ extern long strncpy_from_unsafe(char *dst, const void *unsafe_addr, long count);
+-extern long strncpy_from_unsafe_strict(char *dst, const void *unsafe_addr,
+-				       long count);
++long strncpy_from_kernel_nofault(char *dst, const void *unsafe_addr,
++		long count);
+ extern long __strncpy_from_unsafe(char *dst, const void *unsafe_addr, long count);
+ long strncpy_from_user_nofault(char *dst, const void __user *unsafe_addr,
+ 		long count);
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index fcbc11040d956..3dd4763c195bb 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -240,7 +240,7 @@ bpf_probe_read_kernel_str_common(void *dst, u32 size, const void *unsafe_ptr,
+ 	 * is returned that can be used for bpf_perf_event_output() et al.
+ 	 */
+ 	ret = compat ? strncpy_from_unsafe(dst, unsafe_ptr, size) :
+-	      strncpy_from_unsafe_strict(dst, unsafe_ptr, size);
++	      strncpy_from_kernel_nofault(dst, unsafe_ptr, size);
+ 	if (unlikely(ret < 0))
+ out:
+ 		memset(dst, 0, size);
 diff --git a/mm/maccess.c b/mm/maccess.c
-index e783ebfccd542..31cf6604e7fff 100644
+index 457d8f9bf714f..c8748c2809096 100644
 --- a/mm/maccess.c
 +++ b/mm/maccess.c
-@@ -6,30 +6,6 @@
- #include <linux/mm.h>
- #include <linux/uaccess.h>
- 
--static __always_inline long
--probe_read_common(void *dst, const void __user *src, size_t size)
--{
--	long ret;
--
--	pagefault_disable();
--	ret = __copy_from_user_inatomic(dst, src, size);
--	pagefault_enable();
--
--	return ret ? -EFAULT : 0;
--}
--
--static __always_inline long
--probe_write_common(void __user *dst, const void *src, size_t size)
--{
--	long ret;
--
--	pagefault_disable();
--	ret = __copy_to_user_inatomic(dst, src, size);
--	pagefault_enable();
--
--	return ret ? -EFAULT : 0;
--}
--
- /**
-  * probe_kernel_read(): safely attempt to read from any location
-  * @dst: pointer to the buffer that shall take the data
-@@ -69,10 +45,15 @@ long __probe_kernel_read(void *dst, const void *src, size_t size)
- 	mm_segment_t old_fs = get_fs();
- 
- 	set_fs(KERNEL_DS);
--	ret = probe_read_common(dst, (__force const void __user *)src, size);
-+	pagefault_disable();
-+	ret = __copy_from_user_inatomic(dst, (__force const void __user *)src,
-+			size);
-+	pagefault_enable();
- 	set_fs(old_fs);
- 
--	return ret;
-+	if (ret)
-+		return -EFAULT;
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(probe_kernel_read);
- 
-@@ -91,11 +72,16 @@ long probe_user_read(void *dst, const void __user *src, size_t size)
- 	mm_segment_t old_fs = get_fs();
- 
- 	set_fs(USER_DS);
--	if (access_ok(src, size))
--		ret = probe_read_common(dst, src, size);
-+	if (access_ok(src, size)) {
-+		pagefault_disable();
-+		ret = __copy_from_user_inatomic(dst, src, size);
-+		pagefault_enable();
-+	}
- 	set_fs(old_fs);
- 
--	return ret;
-+	if (ret)
-+		return -EFAULT;
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(probe_user_read);
- 
-@@ -114,10 +100,14 @@ long probe_kernel_write(void *dst, const void *src, size_t size)
- 	mm_segment_t old_fs = get_fs();
- 
- 	set_fs(KERNEL_DS);
--	ret = probe_write_common((__force void __user *)dst, src, size);
-+	pagefault_disable();
-+	ret = __copy_to_user_inatomic((__force void __user *)dst, src, size);
-+	pagefault_enable();
- 	set_fs(old_fs);
- 
--	return ret;
-+	if (ret)
-+		return -EFAULT;
-+	return 0;
- }
+@@ -159,7 +159,7 @@ long probe_user_write(void __user *dst, const void *src, size_t size)
+  * If @count is smaller than the length of the string, copies @count-1 bytes,
+  * sets the last byte of @dst buffer to NUL and returns @count.
+  *
+- * Same as strncpy_from_unsafe_strict() except that for architectures with
++ * Same as strncpy_from_kernel_nofault() except that for architectures with
+  * not fully separated user and kernel address spaces this function also works
+  * for user address tanges.
+  *
+@@ -170,7 +170,7 @@ long __weak strncpy_from_unsafe(char *dst, const void *unsafe_addr, long count)
+     __attribute__((alias("__strncpy_from_unsafe")));
  
  /**
-@@ -135,11 +125,16 @@ long probe_user_write(void __user *dst, const void *src, size_t size)
- 	mm_segment_t old_fs = get_fs();
+- * strncpy_from_unsafe_strict: - Copy a NUL terminated string from unsafe
++ * strncpy_from_kernel_nofault: - Copy a NUL terminated string from unsafe
+  *				 address.
+  * @dst:   Destination address, in kernel space.  This buffer must be at
+  *         least @count bytes long.
+@@ -187,7 +187,7 @@ long __weak strncpy_from_unsafe(char *dst, const void *unsafe_addr, long count)
+  * If @count is smaller than the length of the string, copies @count-1 bytes,
+  * sets the last byte of @dst buffer to NUL and returns @count.
+  */
+-long __weak strncpy_from_unsafe_strict(char *dst, const void *unsafe_addr,
++long __weak strncpy_from_kernel_nofault(char *dst, const void *unsafe_addr,
+ 				       long count)
+     __attribute__((alias("__strncpy_from_unsafe")));
  
- 	set_fs(USER_DS);
--	if (access_ok(dst, size))
--		ret = probe_write_common(dst, src, size);
-+	if (access_ok(dst, size)) {
-+		pagefault_disable();
-+		ret = __copy_to_user_inatomic(dst, src, size);
-+		pagefault_enable();
-+	}
- 	set_fs(old_fs);
- 
--	return ret;
-+	if (ret)
-+		return -EFAULT;
-+	return 0;
- }
- 
- /**
 -- 
 2.26.2
 
