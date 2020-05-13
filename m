@@ -2,108 +2,115 @@ Return-Path: <SRS0=dL5Z=63=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BED22C433DF
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 21:23:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61D75C433E0
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 21:39:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 95034205ED
-	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 21:23:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58A6220659
+	for <bpf@archiver.kernel.org>; Wed, 13 May 2020 21:39:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AiGWdZkv"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TpBONVP1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728606AbgEMVXG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 May 2020 17:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728172AbgEMVXF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 May 2020 17:23:05 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D3FC061A0C;
-        Wed, 13 May 2020 14:23:05 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id c24so1127306qtw.7;
-        Wed, 13 May 2020 14:23:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=ubrHZSYEKKou4e53nbg3nlnbTpsWG3KUDEhqp3CKwJ8=;
-        b=AiGWdZkvOLCNvWgLAlLldXk23HjiyczO+Uu/qsfgh2QJTack2vesUlgUetN2rYmzek
-         +yAeRhsvYItbnPnE2771mTesZVYJtKZoTRMoDxUtlMr4/wFgYZquM3QpruVS5FLCPoiH
-         OV+2fSfFu+9KNqVd8zqFE+Ots78zAhlSMpSCM3Y4mR10/QPW3QU9JCqJTBoTXbxoFePM
-         /KMYKONFU3z/B6HyUNDPaA2eiu4cfeJltSUScBf+qd9CsZ6PAyLi84FhYFmWTgW8Nw2M
-         1WVMTpdxr7IH3jqfv08D+8kDa+0m7fgwhsogFYPnzfdnV5D6+dO9p61WrVMwScsmCKfV
-         2tGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ubrHZSYEKKou4e53nbg3nlnbTpsWG3KUDEhqp3CKwJ8=;
-        b=nuulfjOxTl5Ar/yxynupjWXIytvURfBNn2fzE1m8yAOeEd2yJHmZnAwZuiEndLw/ie
-         hw7d/epSd83v02VNdHFi6dZtLQy3YYkh5+6eC8U8Es6BRlkT59GFuZ2aNKC/K3/hp1xX
-         BcYbV7GXY/EoGp9p1Sh2VWPDME0pfwdZNURFtGyxbVnxuG47vFiJNekBoeybUbzKibtp
-         gcm19H0Dgqp6e15qMf6AI/Pkqt7kw7gxLfn7sB8e7cJ3NknIv6jP45vZ4oS1jengADRP
-         XHcwhMklxJvh21EOUOgnpCV9cx4ugxax3oV7/aiEmKrM7BWeja7MwLh4LgtGez/MvX2N
-         ynYA==
-X-Gm-Message-State: AOAM5319pZIz1wlV9FMKb3Z95X3BmeNKsVOOY7+OMX0iyHsJzB3mNh0H
-        yTBPwzBSWsTYpkWM/kDYxXY=
-X-Google-Smtp-Source: ABdhPJx0XygIfEwxbEwf4SdVOrnpRm0qDjT9w9ocMvT2e7ZKb+Ct5MJ9/3Eyo6/WjKxXeDE+hy1GQw==
-X-Received: by 2002:ac8:7482:: with SMTP id v2mr1155989qtq.328.1589404984485;
-        Wed, 13 May 2020 14:23:04 -0700 (PDT)
-Received: from ?IPv6:2601:282:803:7700:3140:7ba:69e7:d3b1? ([2601:282:803:7700:3140:7ba:69e7:d3b1])
-        by smtp.googlemail.com with ESMTPSA id l2sm881929qkd.57.2020.05.13.14.23.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2020 14:23:03 -0700 (PDT)
-Subject: Re: "Forwarding" from TC classifier
-To:     Lorenz Bauer <lmb@cloudflare.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Martynas Pumputis <m@lambda.lt>,
-        kernel-team <kernel-team@cloudflare.com>
-References: <CACAyw9_4Uzh0GqAR16BfEHQ0ZWHKGUKacOQwwhwsfhdCTMtsNQ@mail.gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <51358f25-72c2-278d-55aa-f80d01d682f9@gmail.com>
-Date:   Wed, 13 May 2020 15:23:02 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.8.0
+        id S1728902AbgEMVjA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 May 2020 17:39:00 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:9286 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728900AbgEMVjA (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 13 May 2020 17:39:00 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04DLZTLe010555
+        for <bpf@vger.kernel.org>; Wed, 13 May 2020 14:39:00 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=gsd1Ma9qkAk5/SoJFjtAaQwbrA4Ik1DMjK9FZITRhVM=;
+ b=TpBONVP12t0cgAV+6ic06Tby+yS1smUj2q5f61sUfouBpPHNHQY5z2qAFP3LDMjTklWC
+ 5qnPJ+H+wPURIV8FGzG6ad5bOHp59SoH2wPAjO67O3d998UoNHIcd2vnl5YMxGPq7EnX
+ 5Qom1NHG5hovENkwfb8l9f2/oeN/3h8jEkA= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3100x9yhvv-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 13 May 2020 14:39:00 -0700
+Received: from intmgw001.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Wed, 13 May 2020 14:38:58 -0700
+Received: by dev082.prn2.facebook.com (Postfix, from userid 572249)
+        id 3F138370094C; Wed, 13 May 2020 14:38:55 -0700 (PDT)
+Smtp-Origin-Hostprefix: dev
+From:   Andrey Ignatov <rdna@fb.com>
+Smtp-Origin-Hostname: dev082.prn2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Andrey Ignatov <rdna@fb.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: prn2c23
+Subject: [PATCH v2 bpf-next 1/5] bpf: Allow sk lookup helpers in cgroup skb
+Date:   Wed, 13 May 2020 14:38:36 -0700
+Message-ID: <9f01cc9fd918988613c6d34913cf52fbe7369515.1589405669.git.rdna@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <cover.1589405669.git.rdna@fb.com>
+References: <cover.1589405669.git.rdna@fb.com>
 MIME-Version: 1.0
-In-Reply-To: <CACAyw9_4Uzh0GqAR16BfEHQ0ZWHKGUKacOQwwhwsfhdCTMtsNQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-13_09:2020-05-13,2020-05-13 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
+ mlxlogscore=999 malwarescore=0 clxscore=1015 impostorscore=0
+ cotscore=-2147483648 suspectscore=13 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2005130184
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 5/13/20 10:40 AM, Lorenz Bauer wrote:
-> Really, I'd like to get rid of step 1, and instead rely on the network
-> stack to switch or route
-> the packet for me. The bpf_fib_lookup helper is very close to what I need. I've
-> hacked around a bit, and come up with the following replacement for step 1:
-> 
->     switch (bpf_fib_lookup(skb, &fib, sizeof(fib), 0)) {
->     case BPF_FIB_LKUP_RET_SUCCESS:
->         /* There is a cached neighbour, bpf_redirect without going
-> through the stack. */
->         return bpf_redirect(...);
+Currently sk lookup helpers are allowed in tc, xdp, sk skb, and cgroup
+sock_addr programs.
 
-BTW, as shown in samples/bpf/xdp_fwd_kern.c, you have a bit more work to
-do for proper L3 forwarding:
+But they would be useful in cgroup skb as well so that for example
+cgroup skb ingress program can lookup a peer socket a packet comes from
+on same host and make a decision whether to allow or deny this packet
+based on the properties of that socket, e.g. cgroup that peer socket
+belongs to.
 
-        if (rc == BPF_FIB_LKUP_RET_SUCCESS) {
-		...
-                if (h_proto == htons(ETH_P_IP))
-                        ip_decrease_ttl(iph);
-                else if (h_proto == htons(ETH_P_IPV6))
-                        ip6h->hop_limit--;
+Allow the following sk lookup helpers in cgroup skb:
+* bpf_sk_lookup_tcp;
+* bpf_sk_lookup_udp;
+* bpf_sk_release;
+* bpf_skc_lookup_tcp.
 
-                memcpy(eth->h_dest, fib_params.dmac, ETH_ALEN);
-                memcpy(eth->h_source, fib_params.smac, ETH_ALEN);
-                return bpf_redirect_map(&xdp_tx_ports,
-fib_params.ifindex, 0);
+Signed-off-by: Andrey Ignatov <rdna@fb.com>
+---
+ net/core/filter.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-The ttl / hoplimit decrements assumed you checked it earlier to be > 1
+diff --git a/net/core/filter.c b/net/core/filter.c
+index da0634979f53..ccb560c1a1db 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6159,6 +6159,14 @@ cg_skb_func_proto(enum bpf_func_id func_id, const =
+struct bpf_prog *prog)
+ 		return &bpf_skb_cgroup_id_proto;
+ #endif
+ #ifdef CONFIG_INET
++	case BPF_FUNC_sk_lookup_tcp:
++		return &bpf_sk_lookup_tcp_proto;
++	case BPF_FUNC_sk_lookup_udp:
++		return &bpf_sk_lookup_udp_proto;
++	case BPF_FUNC_sk_release:
++		return &bpf_sk_release_proto;
++	case BPF_FUNC_skc_lookup_tcp:
++		return &bpf_skc_lookup_tcp_proto;
+ 	case BPF_FUNC_tcp_sock:
+ 		return &bpf_tcp_sock_proto;
+ 	case BPF_FUNC_get_listener_sock:
+--=20
+2.24.1
+
