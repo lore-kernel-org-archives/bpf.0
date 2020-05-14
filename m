@@ -2,104 +2,79 @@ Return-Path: <SRS0=rqwV=64=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B27AC433E0
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 19:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C258C433E0
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 19:18:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4EA73206F1
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 19:11:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D3E23206D8
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 19:18:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1589483506;
-	bh=aheS6akEbjeanUntRiAqkXQZfhHzllWcZAXUkWN52tM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=phXHGjTe+/Zj9Y10pL8vKDiks0xmnAnuPr9tn/uZPe/ttm+ygznxBVXjIGhSyX3x3
-	 T6FZeWUH5xGUqdl+q/VFzwEZbVuDh03dIPeSXwGM2rdeGsaQiqxryP4TjHbrnrUg/U
-	 RViQBC+u3DxWPdJjbf1FCfm4iLrbhTILuIi3+Aqo=
+	s=default; t=1589483933;
+	bh=oVPC6nEvLFlTp15302HS05FQs6BjfouRTDsTW35v6tc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=cQy/L1kSpBJ9RsTBAyJI/34g65Fp1bNCBDzFIHLfefgK6x98L/L0vspozskpjBEgx
+	 KCp4uHLuxFFBIEphpVwjua3bVAs9Ylxt2CvtRW3euzp5prRlu5TDBtme4ROSCQfvEk
+	 XySscDF94wjVI+wqNWeIfhiJVfDxa+hOq27xzrs4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728224AbgENSwP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 May 2020 14:52:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50220 "EHLO mail.kernel.org"
+        id S1728190AbgENTSw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 May 2020 15:18:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51306 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728210AbgENSwN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 May 2020 14:52:13 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1727896AbgENTSw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 May 2020 15:18:52 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D7BB820727;
-        Thu, 14 May 2020 18:52:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5CC13206F1;
+        Thu, 14 May 2020 19:18:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589482331;
-        bh=aheS6akEbjeanUntRiAqkXQZfhHzllWcZAXUkWN52tM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WR/pZM3h7HLvyOW9O7SR4BWNb/5f9RBVzmnV6hDhmdQufzoVFpshMrF9VJJOwIX+7
-         W0ELEBBLmgE0h1Lgrbgy0vXGxKQ8IOvZWMqKU/aR+ZaQZKbwv93BvJnJ3V+j8Qb5mN
-         5G4CxOiSmKXglbT/lghu6ZI2+R9PBg8DqAXDfN2U=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Gavin Shan <gshan@redhat.com>, Shay Agroskin <shayagr@amazon.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 18/62] net/ena: Fix build warning in ena_xdp_set()
-Date:   Thu, 14 May 2020 14:51:03 -0400
-Message-Id: <20200514185147.19716-18-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200514185147.19716-1-sashal@kernel.org>
-References: <20200514185147.19716-1-sashal@kernel.org>
+        s=default; t=1589483931;
+        bh=oVPC6nEvLFlTp15302HS05FQs6BjfouRTDsTW35v6tc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=1gSf6AzBCuDsIoWrUi5ahr5F/7KfMrcjw8bxllxhe/7Ov/WITB4ZMNuBbdRXS79U/
+         BFVlClNq+xaaU9xRkiVoQhoMY9LS3tdDhcCOEtS1okKncX6d1IAhzdLAT7CpqyBfHA
+         ZLjET0AL0AA6JeE32jzTiKLZ4kxTAK9AA1wqOvIo=
+Date:   Thu, 14 May 2020 12:18:48 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andrii Nakryiko <andriin@fb.com>, linux-arch@vger.kernel.org
+Cc:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>, <andrii.nakryiko@gmail.com>,
+        <kernel-team@fb.com>, "Paul E . McKenney" <paulmck@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Subject: Re: [PATCH bpf-next 1/6] bpf: implement BPF ring buffer and
+ verifier support for it
+Message-ID: <20200514121848.052966b3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20200513192532.4058934-2-andriin@fb.com>
+References: <20200513192532.4058934-1-andriin@fb.com>
+        <20200513192532.4058934-2-andriin@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Gavin Shan <gshan@redhat.com>
+On Wed, 13 May 2020 12:25:27 -0700 Andrii Nakryiko wrote:
+> One interesting implementation bit, that significantly simplifies (and thus
+> speeds up as well) implementation of both producers and consumers is how data
+> area is mapped twice contiguously back-to-back in the virtual memory. This
+> allows to not take any special measures for samples that have to wrap around
+> at the end of the circular buffer data area, because the next page after the
+> last data page would be first data page again, and thus the sample will still
+> appear completely contiguous in virtual memory. See comment and a simple ASCII
+> diagram showing this visually in bpf_ringbuf_area_alloc().
 
-[ Upstream commit caec66198d137c26f0d234abc498866a58c64150 ]
+Out of curiosity - is this 100% okay to do in the kernel and user space
+these days? Is this bit part of the uAPI in case we need to back out of
+it? 
 
-This fixes the following build warning in ena_xdp_set(), which is
-observed on aarch64 with 64KB page size.
+In the olden days virtually mapped/tagged caches could get confused
+seeing the same physical memory have two active virtual mappings, or 
+at least that's what I've been told in school :)
 
-   In file included from ./include/net/inet_sock.h:19,
-      from ./include/net/ip.h:27,
-      from drivers/net/ethernet/amazon/ena/ena_netdev.c:46:
-   drivers/net/ethernet/amazon/ena/ena_netdev.c: In function         \
-   ‘ena_xdp_set’:                                                    \
-   drivers/net/ethernet/amazon/ena/ena_netdev.c:557:6: warning:      \
-   format ‘%lu’                                                      \
-   expects argument of type ‘long unsigned int’, but argument 4      \
-   has type ‘int’                                                    \
-   [-Wformat=] "Failed to set xdp program, the current MTU (%d) is   \
-   larger than the maximum allowed MTU (%lu) while xdp is on",
-
-Signed-off-by: Gavin Shan <gshan@redhat.com>
-Acked-by: Shay Agroskin <shayagr@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/ethernet/amazon/ena/ena_netdev.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.h b/drivers/net/ethernet/amazon/ena/ena_netdev.h
-index 8795e0b1dc3c0..8984aa2111125 100644
---- a/drivers/net/ethernet/amazon/ena/ena_netdev.h
-+++ b/drivers/net/ethernet/amazon/ena/ena_netdev.h
-@@ -69,7 +69,7 @@
-  * 16kB.
-  */
- #if PAGE_SIZE > SZ_16K
--#define ENA_PAGE_SIZE SZ_16K
-+#define ENA_PAGE_SIZE (_AC(SZ_16K, UL))
- #else
- #define ENA_PAGE_SIZE PAGE_SIZE
- #endif
--- 
-2.20.1
-
+Checking with Paul - he says that could have been the case for Itanium
+and PA-RISC CPUs.
