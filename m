@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8305C433DF
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:49:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B159C433E0
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:49:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6007206A5
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:49:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 022E8206A5
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:49:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h1c5YuwF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gkW+kJaU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726160AbgENKtd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 May 2020 06:49:33 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:30783 "EHLO
+        id S1726239AbgENKti (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 May 2020 06:49:38 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:25229 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725978AbgENKtb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 14 May 2020 06:49:31 -0400
+        by vger.kernel.org with ESMTP id S1725978AbgENKth (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 14 May 2020 06:49:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1589453370;
+        s=mimecast20190719; t=1589453376;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CHDOVjSPM///ywYV+a0GV0bCIm/WsbFSrNndedJb8xA=;
-        b=h1c5YuwF+ehgrlqIhw1QewUGH1dekFOTTK/FI+KFn086NUwIRhnbjjWQg70wahOBgwx3Wh
-        UK/sQuzYFQNBwyhutsmqawr72Bhv3PZE+ZWv/FHxL1pvyF1w7zuyWyuS06EgC1SwBzPjFz
-        Vk8yEgK43mUEy8UjmOXipKAlkCZrsFg=
+        bh=UPUt7qWo8v4gC2l9EmGH9dOhbo9QCHv4g1iCeXusygs=;
+        b=gkW+kJaUXZ+uj+KIypWRws4cuuckCWL5D+g3/v5fcCELQIcb1oNyxLZb3FbPBgYJGA+Gor
+        bLXg+I98ffYWAs54JYYBsNVPCJUe+KSb6ofLQgpmHEqFUJvMYQNQszVN6Bs7ArkPlblt0x
+        hh373F/cng6NyXWc42EueqI3NwmrD6A=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-144-Dn3xW0aDM9S464KVfluiLA-1; Thu, 14 May 2020 06:49:26 -0400
-X-MC-Unique: Dn3xW0aDM9S464KVfluiLA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+ us-mta-415-Bd8J5-ebNpaEIMHRbDP7eQ-1; Thu, 14 May 2020 06:49:34 -0400
+X-MC-Unique: Bd8J5-ebNpaEIMHRbDP7eQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7CC9C835B40;
-        Thu, 14 May 2020 10:49:24 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 60ABAEC1A0;
+        Thu, 14 May 2020 10:49:32 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D1FE82E16F;
-        Thu, 14 May 2020 10:49:18 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 270E95D9CA;
+        Thu, 14 May 2020 10:49:29 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id E6B6A300020FC;
-        Thu, 14 May 2020 12:49:17 +0200 (CEST)
-Subject: [PATCH net-next v4 04/33] mvneta: add XDP frame size to driver
+        by firesoul.localdomain (Postfix) with ESMTP id 1D869300020FC;
+        Thu, 14 May 2020 12:49:28 +0200 (CEST)
+Subject: [PATCH net-next v4 06/33] net: XDP-generic determining XDP frame size
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -63,109 +63,69 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Date:   Thu, 14 May 2020 12:49:17 +0200
-Message-ID: <158945335786.97035.12714388304493736747.stgit@firesoul>
+Date:   Thu, 14 May 2020 12:49:28 +0200
+Message-ID: <158945336804.97035.7164852191163722056.stgit@firesoul>
 In-Reply-To: <158945314698.97035.5286827951225578467.stgit@firesoul>
 References: <158945314698.97035.5286827951225578467.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This marvell driver mvneta uses PAGE_SIZE frames, which makes it
-really easy to convert.  Driver updates rxq and now frame_sz
-once per NAPI call.
+The SKB "head" pointer points to the data area that contains
+skb_shared_info, that can be found via skb_end_pointer(). Given
+xdp->data_hard_start have been established (basically pointing to
+skb->head), frame size is between skb_end_pointer() and data_hard_start,
+plus the size reserved to skb_shared_info.
 
-This driver takes advantage of page_pool PP_FLAG_DMA_SYNC_DEV that
-can help reduce the number of cache-lines that need to be flushed
-when doing DMA sync for_device. Due to xdp_adjust_tail can grow the
-area accessible to the by the CPU (can possibly write into), then max
-sync length *after* bpf_prog_run_xdp() needs to be taken into account.
+Change the bpf_xdp_adjust_tail offset adjust of skb->len, to be a positive
+offset number on grow, and negative number on shrink.  As this seems more
+natural when reading the code.
 
-For XDP_TX action the driver is smart and does DMA-sync. When growing
-tail this is still safe, because page_pool have DMA-mapped the entire
-page size.
-
-Cc: thomas.petazzoni@bootlin.com
-Acked-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- drivers/net/ethernet/marvell/mvneta.c |   25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ net/core/dev.c |   14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index 51889770958d..37947949345c 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -2148,12 +2148,17 @@ mvneta_run_xdp(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
- 	       struct bpf_prog *prog, struct xdp_buff *xdp,
- 	       struct mvneta_stats *stats)
- {
--	unsigned int len;
-+	unsigned int len, sync;
-+	struct page *page;
- 	u32 ret, act;
- 
- 	len = xdp->data_end - xdp->data_hard_start - pp->rx_offset_correction;
- 	act = bpf_prog_run_xdp(prog, xdp);
- 
-+	/* Due xdp_adjust_tail: DMA sync for_device cover max len CPU touch */
-+	sync = xdp->data_end - xdp->data_hard_start - pp->rx_offset_correction;
-+	sync = max(sync, len);
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 4c91de39890a..f937a3ff668d 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4617,6 +4617,11 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
+ 	xdp->data_meta = xdp->data;
+ 	xdp->data_end = xdp->data + hlen;
+ 	xdp->data_hard_start = skb->data - skb_headroom(skb);
 +
- 	switch (act) {
- 	case XDP_PASS:
- 		stats->xdp_pass++;
-@@ -2164,9 +2169,8 @@ mvneta_run_xdp(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
- 		err = xdp_do_redirect(pp->dev, xdp, prog);
- 		if (unlikely(err)) {
- 			ret = MVNETA_XDP_DROPPED;
--			page_pool_put_page(rxq->page_pool,
--					   virt_to_head_page(xdp->data), len,
--					   true);
-+			page = virt_to_head_page(xdp->data);
-+			page_pool_put_page(rxq->page_pool, page, sync, true);
- 		} else {
- 			ret = MVNETA_XDP_REDIR;
- 			stats->xdp_redirect++;
-@@ -2175,10 +2179,10 @@ mvneta_run_xdp(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
++	/* SKB "head" area always have tailroom for skb_shared_info */
++	xdp->frame_sz  = (void *)skb_end_pointer(skb) - xdp->data_hard_start;
++	xdp->frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
++
+ 	orig_data_end = xdp->data_end;
+ 	orig_data = xdp->data;
+ 	eth = (struct ethhdr *)xdp->data;
+@@ -4640,14 +4645,11 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
+ 		skb_reset_network_header(skb);
  	}
- 	case XDP_TX:
- 		ret = mvneta_xdp_xmit_back(pp, xdp);
--		if (ret != MVNETA_XDP_TX)
--			page_pool_put_page(rxq->page_pool,
--					   virt_to_head_page(xdp->data), len,
--					   true);
-+		if (ret != MVNETA_XDP_TX) {
-+			page = virt_to_head_page(xdp->data);
-+			page_pool_put_page(rxq->page_pool, page, sync, true);
-+		}
- 		break;
- 	default:
- 		bpf_warn_invalid_xdp_action(act);
-@@ -2187,8 +2191,8 @@ mvneta_run_xdp(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
- 		trace_xdp_exception(pp->dev, prog, act);
- 		/* fall through */
- 	case XDP_DROP:
--		page_pool_put_page(rxq->page_pool,
--				   virt_to_head_page(xdp->data), len, true);
-+		page = virt_to_head_page(xdp->data);
-+		page_pool_put_page(rxq->page_pool, page, sync, true);
- 		ret = MVNETA_XDP_DROPPED;
- 		stats->xdp_drop++;
- 		break;
-@@ -2320,6 +2324,7 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
- 	rcu_read_lock();
- 	xdp_prog = READ_ONCE(pp->xdp_prog);
- 	xdp_buf.rxq = &rxq->xdp_rxq;
-+	xdp_buf.frame_sz = PAGE_SIZE;
  
- 	/* Fairness NAPI loop */
- 	while (rx_proc < budget && rx_proc < rx_todo) {
+-	/* check if bpf_xdp_adjust_tail was used. it can only "shrink"
+-	 * pckt.
+-	 */
+-	off = orig_data_end - xdp->data_end;
++	/* check if bpf_xdp_adjust_tail was used */
++	off = xdp->data_end - orig_data_end;
+ 	if (off != 0) {
+ 		skb_set_tail_pointer(skb, xdp->data_end - xdp->data);
+-		skb->len -= off;
+-
++		skb->len += off; /* positive on grow, negative on shrink */
+ 	}
+ 
+ 	/* check if XDP changed eth hdr such SKB needs update */
 
 
