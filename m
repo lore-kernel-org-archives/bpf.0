@@ -2,140 +2,139 @@ Return-Path: <SRS0=rqwV=64=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11BBDC433DF
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 16:37:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C7E8C433DF
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 16:53:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E90DE206DC
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 16:37:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E6622065F
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 16:53:10 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="gw1aSByu";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="gz2Hnr6x"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbgENQhW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 May 2020 12:37:22 -0400
-Received: from smtp.emailarray.com ([69.28.212.198]:44573 "EHLO
-        smtp2.emailarray.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725999AbgENQhW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 May 2020 12:37:22 -0400
-Received: (qmail 73016 invoked by uid 89); 14 May 2020 16:30:40 -0000
-Received: from unknown (HELO localhost) (amxlbW9uQGZsdWdzdmFtcC5jb21AMTYzLjExNC4xMzIuMw==) (POLARISLOCAL)  
-  by smtp2.emailarray.com with SMTP; 14 May 2020 16:30:40 -0000
-Date:   Thu, 14 May 2020 09:30:37 -0700
-From:   Jonathan Lemon <bsd@fb.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH bpf-next 0/6] BPF ring buffer
-Message-ID: <20200514163037.oijxmoemkg47ujft@bsd-mbp>
-References: <20200513192532.4058934-1-andriin@fb.com>
- <20200513224927.643hszw3q3cgx7e6@bsd-mbp.dhcp.thefacebook.com>
- <CAEf4BzaSEPNyBvXBduH2Bkr64=MbzFiR9hJ9DYwXwk4D2AtcDw@mail.gmail.com>
+        id S1726341AbgENQxK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 May 2020 12:53:10 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10522 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726038AbgENQxJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 14 May 2020 12:53:09 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04EGnORt032496;
+        Thu, 14 May 2020 09:52:55 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=9DlQWW3gqIXJ1kQCMVx+KxDDKl3ESM1bzkChBTy+uzM=;
+ b=gw1aSByufYjxyekZmnur1sDQrakXuQVBRRLgXTaBGX7drZ90w64os1Ohk2gD29pvuONj
+ Ss48pBGIvKVwIbDQPBnwLKSd5nGnuKz0UG4bR6UZraOeZA1nPZWrTl8E1+PP/aqPJTKF
+ d3XNmr0SELyRmtsbKYq5e4FVUXGQitWQwVw= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3110kjtyw1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 14 May 2020 09:52:55 -0700
+Received: from NAM04-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Thu, 14 May 2020 09:52:53 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OVzuP+r7vm020Vmk/H4utV1ymh4NGikgKbwC5kHZzf1tVP4jGcXKKg8066usj6oMFjLnXeJJfbh3otqqkJH+vq3Pf4xs7IdjG/vPEj78rkKWQmPe8BhuEhzdJn8+T2k5elzviktCliSRuwxUYHiT1FCj8b3Y44L/8gFFogttQqWXXNNEY9hEgmK4EmTktZWfeIk2LRA366hEujxU0NdT6/hINdeO3dPPsaRdCDbPcFGTIKkos7qWAvp31CuTl+Rdhsjc/Ab1JJTkXp7QBjQVvRPNMKUjvNlAHVooPBo9huWxa1Vy2SFDrMSihN1M/NuJptJAdKrL5tbiC8N6ho8W4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9DlQWW3gqIXJ1kQCMVx+KxDDKl3ESM1bzkChBTy+uzM=;
+ b=LkhzzWzs+r9jzC/jMi64AdXK94Mc3SFGdmVhAHml4XTZOarOwB6WAPvz1YWwjCwjpJbAwYH9Ap/IaflHTfTI2mNnX400271djG0etcgdf2JZQWH6f/oF3Wk7ctu0TNcloP1KqhLfCjEbb/W3jYsX4gUkgzes1v91USCIwVNEGXS2/AZ4jTZeNuuGlRfuC6Dcz8vbNXd3bFDqeUPUEYgFwdnxQQS01CsUzI6IGNxqitNkvKUeZQkbsMlmrm2vxKcb1lB5OH6HWWkpcebnvzm5sqpvf0owLaa6K65RZa/MgtTm+f9MgNFbniT4NahE8ikbefmg7m+sGciIrlvBdGfoFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9DlQWW3gqIXJ1kQCMVx+KxDDKl3ESM1bzkChBTy+uzM=;
+ b=gz2Hnr6xnI/dE01YoB5aOEvwFF4vKvL/sR0tGtmAVcd5DVTms95dtwRBuNr1+cZQ+GRd6MWQLGSfIwpJhQJTZL2MRaNIqvi06fMGVJKt5oe1Ve2bnpNYKJPPw+I6/k+hz9sit2LhH6dsvr3d396kBVB8YFv7IxhaDhCy/XL/9kk=
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB2839.namprd15.prod.outlook.com (2603:10b6:a03:fd::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2958.21; Thu, 14 May
+ 2020 16:52:52 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::4922:9927:5d6c:5301]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::4922:9927:5d6c:5301%7]) with mapi id 15.20.3000.022; Thu, 14 May 2020
+ 16:52:52 +0000
+Subject: Re: [PATCH bpf-next 1/2] bpf: Support narrow loads from
+ bpf_sock_addr.user_port
+To:     Andrey Ignatov <rdna@fb.com>, <bpf@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>
+References: <cover.1589420814.git.rdna@fb.com>
+ <c1e983f4c17573032601d0b2b1f9d1274f24bc16.1589420814.git.rdna@fb.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <8cefda24-320f-41c0-b73f-78be006f31f7@fb.com>
+Date:   Thu, 14 May 2020 09:52:50 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
+ Gecko/20100101 Thunderbird/68.8.0
+In-Reply-To: <c1e983f4c17573032601d0b2b1f9d1274f24bc16.1589420814.git.rdna@fb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR07CA0053.namprd07.prod.outlook.com
+ (2603:10b6:a03:60::30) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzaSEPNyBvXBduH2Bkr64=MbzFiR9hJ9DYwXwk4D2AtcDw@mail.gmail.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from macbook-pro-52.local.dhcp.thefacebook.com (2620:10d:c090:400::5:3bff) by BYAPR07CA0053.namprd07.prod.outlook.com (2603:10b6:a03:60::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.24 via Frontend Transport; Thu, 14 May 2020 16:52:51 +0000
+X-Originating-IP: [2620:10d:c090:400::5:3bff]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 011f1e4f-8a3f-4860-609f-08d7f8273def
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2839:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2839D6042B70E9899D599113D3BC0@BYAPR15MB2839.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:1728;
+X-Forefront-PRVS: 040359335D
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IFrVylXU0jWZB+gb4BocnD+YjIBRLckNURrIlBFJBXXw7cZ7VthPCN7G7atmx7casmndmrgur6k78kHRJ4Wl4EmANNLTz6//a32BMrOUL1ySlVFJN/7sxITNDMThWxbxhIJ3eV+3ZtUk3BqufL+rvKtKMGSd8516eCjX85gWrMkdAWteo7PQvhWS6WHcieldT7tBgNtdN1DrIDgjK/FRDiTY9aMqRLJJcr490Yk0zg36HhCHOZpEum1CFUQWclrMdFXfESqEGqNN6CsOEvrrUuKseVJ3iJfgJr8h+VmMejAs19noGaSo1Dd/cXoJQBkcZisC8gTbQzE/d0+lTSOz2AaPS9gL7KWwiqyqnjPNMKNR4wLGgJrx0g1p0ntD2DnNFGZJFfMAgoYD2ydrXT3Jpn2Xp0p/WlGl5RJaybCvYlZos6aPqDJ/gWIQaMEcPAheCbgfWEPbeW33Y4YG8wtgg0rhrT7lhsCwJ1oB6oCQsVBEcRTVQwEL/3uxoVwDkCsw
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(39860400002)(396003)(136003)(376002)(366004)(346002)(316002)(16526019)(66556008)(4326008)(31686004)(31696002)(66946007)(2616005)(4744005)(186003)(8936002)(6486002)(2906002)(66476007)(478600001)(5660300002)(53546011)(8676002)(86362001)(52116002)(6512007)(36756003)(6506007)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: QHS2/27N9LESj8Stpx5IjrSBPHGYWPDBxWRTPiQjpdYDrsWmo78YSrn0AvTmMCj6kGkWndCF4DMHVnRzkFCFa6MLLDnob9PgX9LrQR8TdTHECoJrUfJT5OP4qFfewywCbpXtceVLaykB7rkPB9bconZVacR5nwpaOCx0D1DMRfn2I07rfvzCns5qnKnuPXEQaV6oFGvl5GCA+D0OXYOqBuOEIcSoCYCvd4LFUOcUhiuDBehm5KXnpxv2n7AGxeo9zf9i06GpVR1wLsqKwak8iNJa6h7hy7EOxdtxNeNM61UC+RtCjSIH2MISjczT+HTXAF/E/HUhoZENoRISg0arcqt59oPv9REiSYTt8sDaJQAsff3ahBKyhnB1x9RoKgtFpoTcPw9fPM0qC1WvqXtF/WKTdC8nNSMqXwvzeiCdQHStqxSEw8Sxpu8RwKmHOx8IGsoaj83FCcLNCd1nEhtrYsZXxrzYW/Om8dkauwA5/+DHubX6sGm7qgwlPfKeWWCX/l/Aw8zuwajrVSZoVA3Eaw==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 011f1e4f-8a3f-4860-609f-08d7f8273def
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2020 16:52:52.4304
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2DAuSeTB4u9eCkd5H6Viag2GsojmEZTAInMkKc5YhdNZjw5mmFdp53qNNvny+yg2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2839
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-14_05:2020-05-14,2020-05-14 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 adultscore=0
+ spamscore=0 mlxscore=0 clxscore=1015 phishscore=0 malwarescore=0
+ lowpriorityscore=0 suspectscore=0 priorityscore=1501 cotscore=-2147483648
+ mlxlogscore=999 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2005140149
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, May 13, 2020 at 11:08:46PM -0700, Andrii Nakryiko wrote:
-> On Wed, May 13, 2020 at 3:49 PM Jonathan Lemon <jonathan.lemon@gmail.com> wrote:
-> >
-> > On Wed, May 13, 2020 at 12:25:26PM -0700, Andrii Nakryiko wrote:
-> > > Implement a new BPF ring buffer, as presented at BPF virtual conference ([0]).
-> > > It presents an alternative to perf buffer, following its semantics closely,
-> > > but allowing sharing same instance of ring buffer across multiple CPUs
-> > > efficiently.
-> > >
-> > > Most patches have extensive commentary explaining various aspects, so I'll
-> > > keep cover letter short. Overall structure of the patch set:
-> > > - patch #1 adds BPF ring buffer implementation to kernel and necessary
-> > >   verifier support;
-> > > - patch #2 adds litmus tests validating all the memory orderings and locking
-> > >   is correct;
-> > > - patch #3 is an optional patch that generalizes verifier's reference tracking
-> > >   machinery to capture type of reference;
-> > > - patch #4 adds libbpf consumer implementation for BPF ringbuf;
-> > > - path #5 adds selftest, both for single BPF ring buf use case, as well as
-> > >   using it with array/hash of maps;
-> > > - patch #6 adds extensive benchmarks and provide some analysis in commit
-> > >   message, it build upon selftests/bpf's bench runner.
-> > >
-> > >   [0] https://docs.google.com/presentation/d/18ITdg77Bj6YDOH2LghxrnFxiPWe0fAqcmJY95t_qr0w
-> > >
-> > > Cc: Paul E. McKenney <paulmck@kernel.org>
-> > > Cc: Jonathan Lemon <jonathan.lemon@gmail.com>
-> >
-> > Looks very nice!  A few random questions:
-> >
-> > 1) Why not use a structure for the header, instead of 2 32bit ints?
+
+
+On 5/13/20 6:50 PM, Andrey Ignatov wrote:
+> bpf_sock_addr.user_port supports only 4-byte load and it leads to ugly
+> code in BPF programs, like:
 > 
-> hm... no reason, just never occurred to me it's necessary :)
-
-It might be clearer to do this.  Something like:
-
-struct ringbuf_record {
-    union {
-        struct {
-            u32 size:30;
-            bool busy:1;
-            bool discard:1;
-        };
-        u32 word1;
-    };
-    union {
-        u32 pgoff;
-        u32 word2;
-    };
-};
-
-While perhaps a bit overkill, makes it clear what is going on.
-
-
-> > 2) Would it make sense to reserve X bytes, but only commit Y?
-> >    the offset field could be used to write the record length.
-> >
-> >    E.g.:
-> >       reserve 512 bytes    [BUSYBIT | 512][PG OFFSET]
-> >       commit  400 bytes    [ 512 ] [ 400 ]
+> 	volatile __u32 user_port = ctx->user_port;
+> 	__u16 port = bpf_ntohs(user_port);
 > 
-> It could be done, though I had tentative plans to use those second 4
-> bytes for something useful eventually.
+> Since otherwise clang may optimize the load to be 2-byte and it's
+> rejected by verifier.
 > 
-> But what's the use case? From ring buffer's perspective, X bytes were
-> reserved and are gone already and subsequent writers might have
-> already advanced producer counter with the assumption that all X bytes
-> are going to be used. So there are no space savings, even if record is
-> discarded or only portion of it is submitted. I can only see a bit of
-> added convenience for an application, because it doesn't have to track
-> amount of actual data in its record. But this doesn't seem to be a
-> common case either, so not sure how it's worth supporting... Is there
-> a particular case where this is extremely useful and extra 4 bytes in
-> record payload is too much?
-
-Not off the top of my head - it was just the first thing that came to
-mind when reading about the commit/discard paradigm.  I was thinking
-about variable records, where the maximum is reserved, but less data
-is written.  But there's no particular reason for the ringbuffer to
-track this either, it could be part of the application framing.
-
-
-> > 3) Why have 2 separate pages for producer/consumer, instead of
-> >    just aligning to a smp cache line (or even 1/2 page?)
+> Add support for 1- and 2-byte loads same way as it's supported for other
+> fields in bpf_sock_addr like user_ip4, msg_src_ip4, etc.
 > 
-> Access rights restrictions. Consumer page is readable/writable,
-> producer page is read-only for user-space. If user-space had ability
-> to write producer position, it could wreck a huge havoc for the
-> ringbuf algorithm.
-
-Ah, thanks, that makes sense.  Might want to add a comment to
-that effect, as it's different from other implementations.
--- 
-Jonathan
+> Signed-off-by: Andrey Ignatov <rdna@fb.com>
+Acked-by: Yonghong Song <yhs@fb.com>
