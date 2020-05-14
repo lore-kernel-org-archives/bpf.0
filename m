@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0AFFC433E1
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:50:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5A7DC433E1
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:50:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A112420727
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:50:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C60BE20727
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:50:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HKjAM6bn"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DF6+uK9X"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726890AbgENKuY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 May 2020 06:50:24 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:23097 "EHLO
+        id S1726889AbgENKu0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 May 2020 06:50:26 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:50647 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726825AbgENKuX (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 14 May 2020 06:50:23 -0400
+        by vger.kernel.org with ESMTP id S1726825AbgENKuZ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 14 May 2020 06:50:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1589453422;
+        s=mimecast20190719; t=1589453424;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=r02YC3At2N2XY+PDSF73JQ0eJDbIVrsICXPbjmggfSU=;
-        b=HKjAM6bnZxFdG1w2sad1EDi7ZoR6Rn3qwLR6Qy49whGSSY0r5N3s1UEW6Xcs/jTUQRkZrA
-        0Lc8YjNxXbuXLdPWXPR9zK5miNJExNjT7ft9AZiVQMFQXcd1nzsSP1ufR2r1Z5RVoCs5BQ
-        V0i6Eji9STNOJkgh2bnAL2VlI/xN1oU=
+        bh=Lcm/SFLtz33dZ2kaMLmjswPDyn0b4V2Shn7nozNXSFM=;
+        b=DF6+uK9XFcHrOHYMbtzMCXdfdB7RdZ40vAoJY2DS6C75NpSaDUVvhLHn/OEJ02/yYae16V
+        HHLeLiW1S9LbRMeQYxprUrwC81dDmigmqrXqJC30EYvZXbhYajc+EJw4NdH5MnTIlWM+Sm
+        adkvdn6hEeHhCO78iqAuitYE/2xfXFA=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-489-2Ax9LinmMNmEqI3zXctKOg-1; Thu, 14 May 2020 06:50:18 -0400
-X-MC-Unique: 2Ax9LinmMNmEqI3zXctKOg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-112-Rl_kcgCWMUmbGq3aCGD0rg-1; Thu, 14 May 2020 06:50:22 -0400
+X-MC-Unique: Rl_kcgCWMUmbGq3aCGD0rg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E2476107ACF2;
-        Thu, 14 May 2020 10:50:16 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 70D601899533;
+        Thu, 14 May 2020 10:50:20 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E36BB6E710;
-        Thu, 14 May 2020 10:50:09 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1DE3B2E170;
+        Thu, 14 May 2020 10:50:20 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id CB85D325159C9;
-        Thu, 14 May 2020 12:50:08 +0200 (CEST)
-Subject: [PATCH net-next v4 14/33] net: ethernet: ti: add XDP frame size to
- driver cpsw
+        by firesoul.localdomain (Postfix) with ESMTP id 034C3300020FC;
+        Thu, 14 May 2020 12:50:19 +0200 (CEST)
+Subject: [PATCH net-next v4 16/33] mlx4: add XDP frame size and adjust max XDP
+ MTU
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -64,55 +64,60 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Date:   Thu, 14 May 2020 12:50:08 +0200
-Message-ID: <158945340875.97035.752144756428532878.stgit@firesoul>
+Date:   Thu, 14 May 2020 12:50:18 +0200
+Message-ID: <158945341893.97035.2688142527052329942.stgit@firesoul>
 In-Reply-To: <158945314698.97035.5286827951225578467.stgit@firesoul>
 References: <158945314698.97035.5286827951225578467.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The driver code cpsw.c and cpsw_new.c both use page_pool
-with default order-0 pages or their RX-pages.
+The mlx4 drivers size of memory backing the RX packet is stored in
+frag_stride. For XDP mode this will be PAGE_SIZE (normally 4096).
+For normal mode frag_stride is 2048.
 
-Cc: Grygorii Strashko <grygorii.strashko@ti.com>
-Cc: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Also adjust MLX4_EN_MAX_XDP_MTU to take tailroom into account.
+
+Cc: Tariq Toukan <tariqt@mellanox.com>
+Cc: Saeed Mahameed <saeedm@mellanox.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Reviewed-by: Grygorii Strashko <grygorii.strashko@ti.com>
+Reviewed-by: Tariq Toukan <tariqt@mellanox.com>
 ---
- drivers/net/ethernet/ti/cpsw.c     |    1 +
- drivers/net/ethernet/ti/cpsw_new.c |    1 +
- 2 files changed, 2 insertions(+)
+ drivers/net/ethernet/mellanox/mlx4/en_netdev.c |    3 ++-
+ drivers/net/ethernet/mellanox/mlx4/en_rx.c     |    1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/ti/cpsw.c b/drivers/net/ethernet/ti/cpsw.c
-index 09f98fa2fb4e..ce0645ada6e7 100644
---- a/drivers/net/ethernet/ti/cpsw.c
-+++ b/drivers/net/ethernet/ti/cpsw.c
-@@ -406,6 +406,7 @@ static void cpsw_rx_handler(void *token, int len, int status)
+diff --git a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
+index 43dcbd8214c6..5bd3cd37d50f 100644
+--- a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
++++ b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
+@@ -51,7 +51,8 @@
+ #include "en_port.h"
  
- 		xdp.data_hard_start = pa;
- 		xdp.rxq = &priv->xdp_rxq[ch];
-+		xdp.frame_sz = PAGE_SIZE;
+ #define MLX4_EN_MAX_XDP_MTU ((int)(PAGE_SIZE - ETH_HLEN - (2 * VLAN_HLEN) - \
+-				   XDP_PACKET_HEADROOM))
++				XDP_PACKET_HEADROOM -			    \
++				SKB_DATA_ALIGN(sizeof(struct skb_shared_info))))
  
- 		port = priv->emac_port + cpsw->data.dual_emac;
- 		ret = cpsw_run_xdp(priv, ch, &xdp, page, port);
-diff --git a/drivers/net/ethernet/ti/cpsw_new.c b/drivers/net/ethernet/ti/cpsw_new.c
-index dce49311d3d3..1247d35d42ef 100644
---- a/drivers/net/ethernet/ti/cpsw_new.c
-+++ b/drivers/net/ethernet/ti/cpsw_new.c
-@@ -348,6 +348,7 @@ static void cpsw_rx_handler(void *token, int len, int status)
+ int mlx4_en_setup_tc(struct net_device *dev, u8 up)
+ {
+diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
+index 787139219813..8a10285b0e10 100644
+--- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
+@@ -683,6 +683,7 @@ int mlx4_en_process_rx_cq(struct net_device *dev, struct mlx4_en_cq *cq, int bud
+ 	rcu_read_lock();
+ 	xdp_prog = rcu_dereference(ring->xdp_prog);
+ 	xdp.rxq = &ring->xdp_rxq;
++	xdp.frame_sz = priv->frag_info[0].frag_stride;
+ 	doorbell_pending = 0;
  
- 		xdp.data_hard_start = pa;
- 		xdp.rxq = &priv->xdp_rxq[ch];
-+		xdp.frame_sz = PAGE_SIZE;
- 
- 		ret = cpsw_run_xdp(priv, ch, &xdp, page, priv->emac_port);
- 		if (ret != CPSW_XDP_PASS)
+ 	/* We assume a 1:1 mapping between CQEs and Rx descriptors, so Rx
 
 
