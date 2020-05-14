@@ -2,51 +2,51 @@ Return-Path: <SRS0=rqwV=64=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA42CC433DF
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:50:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55423C433DF
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:50:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A928620575
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:50:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3255B20727
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:50:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VekNgFWm"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F3mWe7xr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbgENKum (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 May 2020 06:50:42 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:56443 "EHLO
+        id S1727099AbgENKun (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 May 2020 06:50:43 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:41562 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726610AbgENKum (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 14 May 2020 06:50:42 -0400
+        by vger.kernel.org with ESMTP id S1727030AbgENKun (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 14 May 2020 06:50:43 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1589453440;
+        s=mimecast20190719; t=1589453442;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UCdO9GIbmXvKJcfcTXYpA04NQOdCRGMOmMqqJpuzEPA=;
-        b=VekNgFWmsbiXiK/jdDT/GAaayJ4gVGUPBWvXdd7qBfyWXRI19tSZZPl5ZucPMJOc/G9hWu
-        OInHy+eY8UMJf7cCFL+so0FSsCt8Pv4KXOIWEQneBrFcDS92nzTapOHpNnhZjmIqs3U2lz
-        BmwXnKtQ4J7HsmGcilS/+YUnxN9hqNk=
+        bh=7dClE898SSO2c1QGlOHxQoQyzhVi936UcQ7MPR8OmHo=;
+        b=F3mWe7xrIIkSWHbOYWRcCuSkrYAjNRyNrxn1ffulqyzToDm8rXis7nrZT5ew4x7U+5Yi1r
+        wUjNsn9N0RQpVyKbNVXHjd5Bz5jTyFRGkt2kP6QVUxvr/qwmnxPHATkF07U5vVr0iCTp3t
+        cI4je/3qNbtmSJBDrI39j/+HvWVCSqY=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-267-f6x7UodAMuOfjuS-m-caDw-1; Thu, 14 May 2020 06:50:38 -0400
-X-MC-Unique: f6x7UodAMuOfjuS-m-caDw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+ us-mta-158-VNZAuQfMPtS0BXfAPlMRcQ-1; Thu, 14 May 2020 06:50:02 -0400
+X-MC-Unique: VNZAuQfMPtS0BXfAPlMRcQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B2B03107ACCA;
-        Thu, 14 May 2020 10:50:36 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6EE611005510;
+        Thu, 14 May 2020 10:50:00 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 46D0A7D95E;
-        Thu, 14 May 2020 10:50:30 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 937305DA7A;
+        Thu, 14 May 2020 10:49:54 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 2E139300020FC;
-        Thu, 14 May 2020 12:50:29 +0200 (CEST)
-Subject: [PATCH net-next v4 18/33] nfp: add XDP frame size to netronome driver
+        by firesoul.localdomain (Postfix) with ESMTP id 89863300020FC;
+        Thu, 14 May 2020 12:49:53 +0200 (CEST)
+Subject: [PATCH net-next v4 11/33] dpaa2-eth: add XDP frame size
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -63,64 +63,72 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Date:   Thu, 14 May 2020 12:50:29 +0200
-Message-ID: <158945342911.97035.11214251236208648808.stgit@firesoul>
+Date:   Thu, 14 May 2020 12:49:53 +0200
+Message-ID: <158945339348.97035.8562488847066908856.stgit@firesoul>
 In-Reply-To: <158945314698.97035.5286827951225578467.stgit@firesoul>
 References: <158945314698.97035.5286827951225578467.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The netronome nfp driver use PAGE_SIZE when xdp_prog is set, but
-xdp.data_hard_start begins at offset NFP_NET_RX_BUF_HEADROOM.
-Thus, adjust for this when setting xdp.frame_sz, as it counts
-from data_hard_start.
+The dpaa2-eth driver reserve some headroom used for hardware and
+software annotation area in RX/TX buffers. Thus, xdp.data_hard_start
+doesn't start at page boundary.
 
-When doing XDP_TX this driver is smart and instead of a full DMA-map
-does a DMA-sync on with packet length. As xdp_adjust_tail can now
-grow packet length, add checks to make sure that grow size is within
-the DMA-mapped size.
+When XDP is configured the area reserved via dpaa2_fd_get_offset(fd) is
+448 bytes of which XDP have reserved 256 bytes. As frame_sz is
+calculated as an offset from xdp_buff.data_hard_start, an adjust from
+the full PAGE_SIZE == DPAA2_ETH_RX_BUF_RAW_SIZE.
 
-Cc: Jakub Kicinski <kuba@kernel.org>
+When doing XDP_REDIRECT, the driver doesn't need this reserved headroom
+any-longer and allows xdp_do_redirect() to use it. This is an advantage
+for the drivers own ndo-xdp_xmit, as it uses part of this headroom for
+itself.  Patch also adjust frame_sz in this case.
+
+The driver cannot support XDP data_meta, because it uses the headroom
+just before xdp.data for struct dpaa2_eth_swa (DPAA2_ETH_SWA_SIZE=64),
+when transmitting the packet. When transmitting a xdp_frame in
+dpaa2_eth_xdp_xmit_frame (call via ndo_xdp_xmit) is uses this area to
+store a pointer to xdp_frame and dma_size, which is used in TX
+completion (free_tx_fd) to return frame via xdp_return_frame().
+
+Cc: Ioana Radulescu <ruxandra.radulescu@nxp.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
 ---
- .../net/ethernet/netronome/nfp/nfp_net_common.c    |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-index 9bfb3b077bc1..0e0cc3d58bdc 100644
---- a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-+++ b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-@@ -1741,10 +1741,15 @@ nfp_net_tx_xdp_buf(struct nfp_net_dp *dp, struct nfp_net_rx_ring *rx_ring,
- 		   struct nfp_net_rx_buf *rxbuf, unsigned int dma_off,
- 		   unsigned int pkt_len, bool *completed)
- {
-+	unsigned int dma_map_sz = dp->fl_bufsz - NFP_NET_RX_BUF_NON_DATA;
- 	struct nfp_net_tx_buf *txbuf;
- 	struct nfp_net_tx_desc *txd;
- 	int wr_idx;
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+index 0f3e842a4fd6..8c8d95aa1dfd 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+@@ -331,6 +331,9 @@ static u32 run_xdp(struct dpaa2_eth_priv *priv,
+ 	xdp_set_data_meta_invalid(&xdp);
+ 	xdp.rxq = &ch->xdp_rxq;
  
-+	/* Reject if xdp_adjust_tail grow packet beyond DMA area */
-+	if (pkt_len + dma_off > dma_map_sz)
-+		return false;
++	xdp.frame_sz = DPAA2_ETH_RX_BUF_RAW_SIZE -
++		(dpaa2_fd_get_offset(fd) - XDP_PACKET_HEADROOM);
 +
- 	if (unlikely(nfp_net_tx_full(tx_ring, 1))) {
- 		if (!*completed) {
- 			nfp_net_xdp_complete(tx_ring);
-@@ -1817,6 +1822,7 @@ static int nfp_net_rx(struct nfp_net_rx_ring *rx_ring, int budget)
- 	rcu_read_lock();
- 	xdp_prog = READ_ONCE(dp->xdp_prog);
- 	true_bufsz = xdp_prog ? PAGE_SIZE : dp->fl_bufsz;
-+	xdp.frame_sz = PAGE_SIZE - NFP_NET_RX_BUF_HEADROOM;
- 	xdp.rxq = &rx_ring->xdp_rxq;
- 	tx_ring = r_vec->xdp_ring;
+ 	xdp_act = bpf_prog_run_xdp(xdp_prog, &xdp);
  
+ 	/* xdp.data pointer may have changed */
+@@ -366,7 +369,11 @@ static u32 run_xdp(struct dpaa2_eth_priv *priv,
+ 		dma_unmap_page(priv->net_dev->dev.parent, addr,
+ 			       DPAA2_ETH_RX_BUF_SIZE, DMA_BIDIRECTIONAL);
+ 		ch->buf_count--;
++
++		/* Allow redirect use of full headroom */
+ 		xdp.data_hard_start = vaddr;
++		xdp.frame_sz = DPAA2_ETH_RX_BUF_RAW_SIZE;
++
+ 		err = xdp_do_redirect(priv->net_dev, &xdp, xdp_prog);
+ 		if (unlikely(err))
+ 			ch->stats.xdp_drop++;
 
 
