@@ -2,400 +2,202 @@ Return-Path: <SRS0=rqwV=64=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05F40C433E1
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 22:40:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8C4FC433DF
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 22:46:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CAB4520575
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 22:40:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 85F5520709
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 22:46:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BUCHb8+v"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GpfuzRvb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728694AbgENWk3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 May 2020 18:40:29 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:33314 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728313AbgENWk2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 May 2020 18:40:28 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04EMbBkD041377;
-        Thu, 14 May 2020 22:40:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=corp-2020-01-29;
- bh=7jeBYTKdJXILRFlOyJBWzzBBYkyl5qncMvx+DPb9jjE=;
- b=BUCHb8+v+/Y2usXX8qcnWYk2NWXXkf1DQVbZpkRrw9e7xi7tgLoL5DXEzUeWtxCa9+Zk
- 6PXty/Qsa9YEUkE3DeZ5PmpaApWO4N5UTa5NaRCBEjacD4GqD63G9aFFdaL6C8eUh/TV
- m9TTJXEY19X0AvJkRWl+clYcDQNdckMR7M0EGY5AlH52jI+YO2eLSMz7nH5/zYYM1Z1O
- xizc6VXZc1UAZk8lLWfGbjBr/jx0UIgHfO8x2Cgf7ydqNWtUiNQnnC78ncFdOYau3Tx4
- pT2bRjBpe43B2UADmpLli/KIBL/GwcC8KFwPsGpRFmkYTSA9KV4M5dUTkTInHO9onSjS Dg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 3100xwwgnh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 14 May 2020 22:40:09 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04EMc6ll036345;
-        Thu, 14 May 2020 22:38:08 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 3100ydh5k2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 May 2020 22:38:08 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04EMbwce010319;
-        Thu, 14 May 2020 22:37:58 GMT
-Received: from dhcp-10-175-210-26.vpn.oracle.com (/10.175.210.26)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 14 May 2020 15:37:58 -0700
-Date:   Thu, 14 May 2020 23:37:52 +0100 (BST)
-From:   Alan Maguire <alan.maguire@oracle.com>
-X-X-Sender: alan@localhost
-To:     Yonghong Song <yhs@fb.com>
-cc:     Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
-        daniel@iogearbox.net, bpf@vger.kernel.org, joe@perches.com,
-        linux@rasmusvillemoes.dk, arnaldo.melo@gmail.com, kafai@fb.com,
-        songliubraving@fb.com, andriin@fb.com, john.fastabend@gmail.com,
-        kpsingh@chromium.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v2 bpf-next 4/7] printk: add type-printing %pT format
- specifier which uses BTF
-In-Reply-To: <51ac81f5-3d74-e394-3183-5d8366e2ddcc@fb.com>
-Message-ID: <alpine.LRH.2.21.2005142330430.24127@localhost>
-References: <1589263005-7887-1-git-send-email-alan.maguire@oracle.com> <1589263005-7887-5-git-send-email-alan.maguire@oracle.com> <51ac81f5-3d74-e394-3183-5d8366e2ddcc@fb.com>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        id S1728851AbgENWqk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 May 2020 18:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728229AbgENWqj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 14 May 2020 18:46:39 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072FDC061A0C;
+        Thu, 14 May 2020 15:46:39 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id b1so376813qtt.1;
+        Thu, 14 May 2020 15:46:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aX8mUUB0M29sVmdS16KIRLkATaFZkyaasWbiWeJqlN0=;
+        b=GpfuzRvbV/mcJd/diMQgWK9bZEG8tMZUmRGGnIzJxsO4osAAlSQm2sq9j+HUbX6+XR
+         bBVPuuTQd1htcJEdRmw/oQpCR3eRc8lduf7JCLpKnynW+fvj/CAKFilfarIn6axY332Z
+         lOjrYp2cx1LZ9BS+WbB7F8CSpZ4+DaBtCJSIL9DhLhwBBb9u7vvgPy+IDyS6/TqBZoQc
+         qITGZ9M7p+gLV9mMgHo4OlXBUCBJZWR0nM/AlL9vz5unznSq3byR4XOxWRa81H+iXGtv
+         Vg/vP+H72vxiPElY1o5LbnvyPK0immEUR1szR7azHw7WnnNQvmPI0WvyLcgcvhkcNU/A
+         R1YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aX8mUUB0M29sVmdS16KIRLkATaFZkyaasWbiWeJqlN0=;
+        b=PISyu+jYZYM6ykCOSnjCu9FHHFLeegDzo8pBWh6Tav97U1c+o7eSGREAPS8g/6RxHx
+         8Kbz0l0f6NZC6PlFRUKLzXB41Q22Vip+Xoy+q/hvcFvhqVClPkPYlVV8p3E2Vt1x0q+u
+         WSWQ3Lt6f4orUQlKgjUPO7IdwNXqzGzAU50F9tWj5JnB3yU9Z3UjiKMBbpfyAG0bGtdh
+         T4ek34YWVocJKiYcAyK0Zy5y0gSEwTUnROX7th/2SvpKSDGY9/w24rvLYLzmb7Pdt+AZ
+         rx9SwyIUA4xSvjFoLUppTSV58xkQtc+Yio1H/N3shQBLE2QZEU9qbJQQceK8P0jK2QWg
+         0daA==
+X-Gm-Message-State: AOAM533eLme6hfFG6/B1VaKGY0ptTjq0gL7U7FkIbKuXHjESlFADi1Pp
+        BZ+GglnbW7RrF9UhORuOcziyotjB0SMHcb3bNnE=
+X-Google-Smtp-Source: ABdhPJyoJgvjkhsXDNr1ZuA+5/uMTeQZxWPaCYPs5/yhWQMeqojpBsRqWYosTFP1KSQ4pRSRowhqHsF+vdE8UKEBtGw=
+X-Received: by 2002:aed:24a1:: with SMTP id t30mr501787qtc.93.1589496398194;
+ Thu, 14 May 2020 15:46:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9621 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 phishscore=0
- adultscore=0 suspectscore=3 mlxscore=0 mlxlogscore=999 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005140196
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9621 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 cotscore=-2147483648 bulkscore=0
- phishscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
- impostorscore=0 spamscore=0 malwarescore=0 priorityscore=1501 mlxscore=0
- suspectscore=3 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005140196
+References: <20200506132946.2164578-1-jolsa@kernel.org> <20200506132946.2164578-8-jolsa@kernel.org>
+ <20200513182940.gil7v5vkthhwck3t@ast-mbp.dhcp.thefacebook.com> <20200514080515.GH3343750@krava>
+In-Reply-To: <20200514080515.GH3343750@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 14 May 2020 15:46:26 -0700
+Message-ID: <CAEf4BzbZ6TYxVTJx3ij1WXy5AvVQio9Ht=tePO+xQf=JLigoog@mail.gmail.com>
+Subject: Re: [PATCH 7/9] bpf: Compile the BTF id whitelist data in vmlinux
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
+        David Miller <davem@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Wenbo Zhang <ethercflow@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Brendan Gregg <bgregg@netflix.com>,
+        Florent Revest <revest@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Thu, May 14, 2020 at 1:05 AM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Wed, May 13, 2020 at 11:29:40AM -0700, Alexei Starovoitov wrote:
+>
+> SNIP
+>
+> > > diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> > > index d09ab4afbda4..dee91c6bf450 100755
+> > > --- a/scripts/link-vmlinux.sh
+> > > +++ b/scripts/link-vmlinux.sh
+> > > @@ -130,16 +130,26 @@ gen_btf()
+> > >     info "BTF" ${2}
+> > >     LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}
+> > >
+> > > -   # Create ${2} which contains just .BTF section but no symbols. Add
+> > > +   # Create object which contains just .BTF section but no symbols. Add
+> > >     # SHF_ALLOC because .BTF will be part of the vmlinux image. --strip-all
+> > >     # deletes all symbols including __start_BTF and __stop_BTF, which will
+> > >     # be redefined in the linker script. Add 2>/dev/null to suppress GNU
+> > >     # objcopy warnings: "empty loadable segment detected at ..."
+> > >     ${OBJCOPY} --only-section=.BTF --set-section-flags .BTF=alloc,readonly \
+> > > -           --strip-all ${1} ${2} 2>/dev/null
+> > > -   # Change e_type to ET_REL so that it can be used to link final vmlinux.
+> > > -   # Unlike GNU ld, lld does not allow an ET_EXEC input.
+> > > -   printf '\1' | dd of=${2} conv=notrunc bs=1 seek=16 status=none
+> > > +           --strip-all ${1} 2>/dev/null
+> > > +
+> > > +   # Create object that contains just .BTF_whitelist_* sections generated
+> > > +   # by bpfwl. Same as BTF section, BTF_whitelist_* data will be part of
+> > > +   # the vmlinux image, hence SHF_ALLOC.
+> > > +   whitelist=.btf.vmlinux.whitelist
+> > > +
+> > > +   ${BPFWL} ${1} kernel/bpf/helpers-whitelist > ${whitelist}.c
+> > > +   ${CC} -c -o ${whitelist}.o ${whitelist}.c
+> > > +   ${OBJCOPY} --only-section=.BTF_whitelist* --set-section-flags .BTF=alloc,readonly \
+> > > +                --strip-all ${whitelist}.o 2>/dev/null
+> > > +
+> > > +   # Link BTF and BTF_whitelist objects together
+> > > +   ${LD} -r -o ${2} ${1} ${whitelist}.o
+> >
+> > Thank you for working on it!
+> > Looks great to me overall. In the next rev please drop RFC tag.
+> >
+> > My only concern is this extra linking step. How many extra seconds does it add?
+>
+> I did not meassure, but I haven't noticed any noticable delay,
+> I'll add meassurements to the next post
+>
+> >
+> > Also in patch 3:
+> > +               func = func__find(str);
+> > +               if (func)
+> > +                       func->id = id;
+> > which means that if somebody mistyped the name or that kernel function
+> > got renamed there will be no warnings or errors.
+> > I think it needs to fail the build instead.
+>
+> it fails later on, when generating the array:
+>
+>      if (!func->id) {
+>              fprintf(stderr, "FAILED: '%s' function not found in BTF data\n",
+>                      func->name);
+>              return -1;
+>      }
+>
+> but it can clearly fail before that.. I'll change that
+
+I also means that whitelist can't contain functions that can be
+conditionally compiled out, right? I guess we can invent some naming
+convention to handle that, e.g: ?some_func will mean it's fine if we
+didn't find it?
+
+>
+> >
+> > If additional linking step takes another 20 seconds it could be a reason
+> > to move the search to run-time.
+> > We already have that with struct bpf_func_proto->btf_id[].
+> > Whitelist could be something similar.
+> > I think this mechanism will be reused for unstable helpers and other
+> > func->btf_id mappings, so 'bpfwl' name would change eventually.
+> > It's not white list specific. It generates a mapping of names to btf_ids.
+> > Doing it at build time vs run-time is a trade off and it doesn't have
+> > an obvious answer.
+>
+> I was thinking of putting the names in __init section and generate the BTF
+> ids on kernel start, but the build time generation seemed more convenient..
+> let's see the linking times with 'real size' whitelist and we can reconsider
+>
+
+Being able to record such places where to put BTF ID in code would be
+really nice, as Alexei mentioned. There are many potential use cases
+where it would be good to have BTF IDs just put into arbitrary
+variables/arrays. This would trigger compilation error, if someone
+screws up the name, or function is renamed, or if function can be
+compiled out under some configuration. E.g., assuming some reasonable
+implementation of the macro
+
+static const u32 d_path_whitelist[] = {
+    BTF_ID_FUNC(vfs_fallocate),
+#ifdef CONFIG_WHATEVER
+    BTF_ID_FUNC(do_truncate),
+#endif
+};
+
+Would be nice and very explicit. Given this is not going to be sorted,
+you won't be able to use binary search, but if whitelists are
+generally small, it should be fine as is. If not, hashmap could be
+built in runtime and would be, probably, faster than binary search for
+longer sets of BTF IDs.
+
+I wonder if we can do some assembly magic with generating extra
+symbols and/or relocations to achieve this? What do you think? Is it
+doable/desirable/better?
 
 
-On Wed, 13 May 2020, Yonghong Song wrote:
-
-> 
-> 
-> On 5/11/20 10:56 PM, Alan Maguire wrote:
-> > printk supports multiple pointer object type specifiers (printing
-> > netdev features etc).  Extend this support using BTF to cover
-> > arbitrary types.  "%pT" specifies the typed format, and the pointer
-> > argument is a "struct btf_ptr *" where struct btf_ptr is as follows:
-> > 
-> > struct btf_ptr {
-> >  void *ptr;
-> >  const char *type;
-> >  u32 id;
-> > };
-> > 
-> > Either the "type" string ("struct sk_buff") or the BTF "id" can be
-> > used to identify the type to use in displaying the associated "ptr"
-> > value.  A convenience function to create and point at the struct
-> > is provided:
-> > 
-> >  printk(KERN_INFO "%pT", BTF_PTR_TYPE(skb, struct sk_buff));
-> > 
-> > When invoked, BTF information is used to traverse the sk_buff *
-> > and display it.  Support is present for structs, unions, enums,
-> > typedefs and core types (though in the latter case there's not
-> > much value in using this feature of course).
-> > 
-> > Default output is indented, but compact output can be specified
-> > via the 'c' option.  Type names/member values can be suppressed
-> > using the 'N' option.  Zero values are not displayed by default
-> > but can be using the '0' option.  Pointer values are obfuscated
-> > unless the 'x' option is specified.  As an example:
-> > 
-> >    struct sk_buff *skb = alloc_skb(64, GFP_KERNEL);
-> >    pr_info("%pT", BTF_PTR_TYPE(skb, struct sk_buff));
-> > 
-> > ...gives us:
-> > 
-> > (struct sk_buff){
-> >   .transport_header = (__u16)65535,
-> >   .mac_header = (__u16)65535,
-> >   .end = (sk_buff_data_t)192,
-> >   .head = (unsigned char *)000000006b71155a,
-> >   .data = (unsigned char *)000000006b71155a,
-> >   .truesize = (unsigned int)768,
-> >   .users = (refcount_t){
-> >    .refs = (atomic_t){
-> >    .counter = (int)1,
-> >   },
-> >   },
-> >   .extensions = (struct skb_ext *)00000000f486a130,
-> > }
-> > 
-> > printk output is truncated at 1024 bytes.  For cases where overflow
-> > is likely, the compact/no type names display modes may be used.
-> > 
-> > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> > ---
-> >   Documentation/core-api/printk-formats.rst |  15 ++++
-> >   include/linux/btf.h                       |   3 +-
-> >   include/linux/printk.h                    |  16 +++++
-> >   lib/Kconfig                               |  16 +++++
-> >   lib/vsprintf.c                            | 113
-> >   ++++++++++++++++++++++++++++++
-> >   5 files changed, 162 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/core-api/printk-formats.rst
-> > b/Documentation/core-api/printk-formats.rst
-> > index 8ebe46b1..5c66097 100644
-> > --- a/Documentation/core-api/printk-formats.rst
-> > +++ b/Documentation/core-api/printk-formats.rst
-> > @@ -545,6 +545,21 @@ For printing netdev_features_t.
-> >   
-> >   Passed by reference.
-> >   
-> > +BTF-based printing of pointer data
-> > +----------------------------------
-> > +If '%pT' is specified, use the struct btf_ptr * along with kernel vmlinux
-> > +BPF Type Format (BTF) to show the typed data.  For example, specifying
-> > +
-> > +	printk(KERN_INFO "%pT", BTF_PTR_TYPE(skb, struct_sk_buff));
-> > +
-> > +will utilize BTF information to traverse the struct sk_buff * and display
-> > it.
-> > +
-> > +Supported modifers are
-> > + 'c' compact output (no indentation, newlines etc)
-> > + 'N' do not show type names
-> > + 'x' show raw pointers (no obfuscation)
-> > + '0' show zero-valued data (it is not shown by default)
-> > +
-> >   Thanks
-> >   ======
-> >   
-> > diff --git a/include/linux/btf.h b/include/linux/btf.h
-> > index d571125..7b585ab 100644
-> > --- a/include/linux/btf.h
-> > +++ b/include/linux/btf.h
-> > @@ -169,10 +169,11 @@ static inline const struct btf_member
-> > *btf_type_member(const struct btf_type *t)
-> >   	return (const struct btf_member *)(t + 1);
-> >   }
-> >   
-> > +struct btf *btf_parse_vmlinux(void);
-> > +
-> >   #ifdef CONFIG_BPF_SYSCALL
-> >   const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id);
-> >   const char *btf_name_by_offset(const struct btf *btf, u32 offset);
-> > -struct btf *btf_parse_vmlinux(void);
-> >   struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog);
-> >   #else
-> >   static inline const struct btf_type *btf_type_by_id(const struct btf *btf,
-> > diff --git a/include/linux/printk.h b/include/linux/printk.h
-> > index fcde0772..3c3ea53 100644
-> > --- a/include/linux/printk.h
-> > +++ b/include/linux/printk.h
-> > @@ -528,4 +528,20 @@ static inline void print_hex_dump_debug(const char
-> > *prefix_str, int prefix_type,
-> >   #define print_hex_dump_bytes(prefix_str, prefix_type, buf, len)	\
-> >    print_hex_dump_debug(prefix_str, prefix_type, 16, 1, buf, len, true)
-> >   +/**
-> > + * struct btf_ptr is used for %pT (typed pointer) display; the
-> > + * additional type string/BTF id are used to render the pointer
-> > + * data as the appropriate type.
-> > + */
-> > +struct btf_ptr {
-> > +	void *ptr;
-> > +	const char *type;
-> > +	u32 id;
-> > +};
-> > +
-> > +#define	BTF_PTR_TYPE(ptrval, typeval) \
-> > +	(&((struct btf_ptr){.ptr = ptrval, .type = #typeval}))
-> > +
-> > +#define BTF_PTR_ID(ptrval, idval) \
-> > +	(&((struct btf_ptr){.ptr = ptrval, .id = idval}))
-> >   #endif
-> [...]
-> > diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> > index 7c488a1..f9276f8 100644
-> > --- a/lib/vsprintf.c
-> > +++ b/lib/vsprintf.c
-> > @@ -43,6 +43,7 @@
-> >   #ifdef CONFIG_BLOCK
-> >   #include <linux/blkdev.h>
-> >   #endif
-> > +#include <linux/btf.h>
-> >   
-> >   #include "../mm/internal.h"	/* For the trace_print_flags arrays */
-> >   
-> > @@ -2059,6 +2060,103 @@ char *fwnode_string(char *buf, char *end, struct
-> > fwnode_handle *fwnode,
-> >   	return widen_string(buf, buf - buf_start, end, spec);
-> >   }
-> >   
-> > +#if IS_ENABLED(CONFIG_BTF_PRINTF)
-> > +#define btf_modifier_flag(c)	(c == 'c' ? BTF_SHOW_COMPACT :	\
-> > +				 c == 'N' ? BTF_SHOW_NONAME :	\
-> > +				 c == 'x' ? BTF_SHOW_PTR_RAW :	\
-> > +				 c == '0' ? BTF_SHOW_ZERO : 0)
-> > +
-> > +static noinline_for_stack
-> > +char *btf_string(char *buf, char *end, void *ptr, struct printf_spec spec,
-> > +		 const char *fmt)
-> > +{
-> > +	struct btf_ptr *bp = (struct btf_ptr *)ptr;
-> > +	u8 btf_kind = BTF_KIND_TYPEDEF;
-> > +	const struct btf_type *t;
-> > +	const struct btf *btf;
-> > +	char *buf_start = buf;
-> > +	const char *btf_type;
-> > +	u64 flags = 0, mod;
-> > +	s32 btf_id;
-> > +
-> > +	if (check_pointer(&buf, end, ptr, spec))
-> > +		return buf;
-> > +
-> > +	if (check_pointer(&buf, end, bp->ptr, spec))
-> > +		return buf;
-> > +
-> > +	while (isalnum(*fmt)) {
-> > +		mod = btf_modifier_flag(*fmt);
-> > +		if (!mod)
-> > +			break;
-> > +		flags |= mod;
-> > +		fmt++;
-> > +	}
-> > +
-> > +	btf = bpf_get_btf_vmlinux();
-> > +	if (IS_ERR_OR_NULL(btf))
-> > +		return ptr_to_id(buf, end, bp->ptr, spec);
-> > +
-> > +	if (bp->type != NULL) {
-> > +		btf_type = bp->type;
-> > +
-> > +		if (strncmp(bp->type, "struct ", strlen("struct ")) == 0) {
-> > +			btf_kind = BTF_KIND_STRUCT;
-> > +			btf_type += strlen("struct ");
-> > +		} else if (strncmp(btf_type, "union ", strlen("union ")) == 0)
-> > {
-> > +			btf_kind = BTF_KIND_UNION;
-> > +			btf_type += strlen("union ");
-> > +		} else if (strncmp(btf_type, "enum ", strlen("enum ")) == 0) {
-> > +			btf_kind = BTF_KIND_ENUM;
-> > +			btf_type += strlen("enum ");
-> > +		}
-> 
-> I think typedef should be supported here.
-> In kernel, we have some structure directly defined as typedef's.
-> A lot of internal int types also typedefs, like u32, atomic_t,
-> possible_net_t, etc.
-> 
-> A type name without prefix "struct", "union", "enum" can be
-> treated as a typedef first.
-> 
-
-That's how the code works today; we start with a typedef assumption.
-See the comment below starting "Assume type specified is a typedef";
-we initialize btf_kind to be a typedef above; it's only changed
-to an BTF_KIND_INT if we find a struct/enum/union prefix or if lookup
-using the typedef kind fails. I should probably make this clearer
-though (move the comment up maybe?). Thanks for taking a look!
-
-> If the type name is not a typedef, it is then compared to a limited
-> number of C basic int types like "char", "unsigned char", "short",
-> "unsigned short", ...
-> 
-> > +
-> > +		if (strlen(btf_type) == 0)
-> > +			return ptr_to_id(buf, end, bp->ptr, spec);
-> > +
-> > +		/*
-> > +		 * Assume type specified is a typedef as there's not much
-> > +		 * benefit in specifying int types other than wasting time
-> > +		 * on BTF lookups; we optimize for the most useful path.
-> > +		 *
-> > +		 * Fall back to BTF_KIND_INT if this fails.
-> > +		 */
-> > +		btf_id = btf_find_by_name_kind(btf, btf_type, btf_kind);
-> > +		if (btf_id < 0)
-> > +			btf_id = btf_find_by_name_kind(btf, btf_type,
-> > +						       BTF_KIND_INT);
-> > +	} else if (bp->id > 0)
-> > +		btf_id = bp->id;
-> > +	else
-> > +		return ptr_to_id(buf, end, bp->ptr, spec);
-> > +
-> > +	if (btf_id > 0)
-> > +		t = btf_type_by_id(btf, btf_id);
-> > +	if (btf_id <= 0 || !t)
-> > +		return ptr_to_id(buf, end, bp->ptr, spec);
-> > +
-> > +	buf += btf_type_snprintf_show(btf, btf_id, bp->ptr, buf,
-> > +				      end - buf_start, flags);
-> > +
-> > +	return widen_string(buf, buf - buf_start, end, spec);
-> > +}
-> > +#else
-> > +static noinline_for_stack
-> > +char *btf_string(char *buf, char *end, void *ptr, struct printf_spec spec,
-> > +	const char *fmt)
-> > +{
-> > +	struct btf_ptr *bp = (struct btf_ptr *)ptr;
-> > +
-> > +	if (check_pointer(&buf, end, ptr, spec))
-> > +		return buf;
-> > +
-> > +	if (check_pointer(&buf, end, bp->ptr, spec))
-> > +		return buf;
-> > +
-> > +	return ptr_to_id(buf, end, bp->ptr, spec);
-> > +}
-> > +#endif /* IS_ENABLED(CONFIG_BTF_PRINTF) */
-> > +
-> >   /*
-> >    * Show a '%p' thing.  A kernel extension is that the '%p' is followed
-> >    * by an extra set of alphanumeric characters that are extended format
-> > @@ -2169,6 +2267,19 @@ char *fwnode_string(char *buf, char *end, struct
-> > fwnode_handle *fwnode,
-> >    *		P node name, including a possible unit address
-> >    * - 'x' For printing the address. Equivalent to "%lx".
-> >    *
-> > + * - 'T[cNx0]' For printing struct btf_ptr * data using BPF Type Format
-> > (BTF).
-> > + *
-> > + *			Optional arguments are
-> > + *			c		compact (no indentation/newlines)
-> > + *			N		do not print type and member names
-> > + *			x		do not obfuscate pointers
-> > + *			0		show 0-valued data
-> > + *
-> > + *    BPF_PTR_TYPE(ptr, type) can be used to place pointer and type string
-> > + *    in the "struct btf_ptr *" expected; for example:
-> > + *
-> > + *	printk(KERN_INFO "%pT", BTF_PTR_TYPE(skb, struct sk_buff));
-> > + *
-> >    * ** When making changes please also update:
-> >    *	Documentation/core-api/printk-formats.rst
-> >    *
-> > @@ -2251,6 +2362,8 @@ char *pointer(const char *fmt, char *buf, char *end,
-> > void *ptr,
-> >     if (!IS_ERR(ptr))
-> >     	break;
-> >   		return err_ptr(buf, end, ptr, spec);
-> > +	case 'T':
-> > +		return btf_string(buf, end, ptr, spec, fmt + 1);
-> >    }
-> >   
-> >    /* default is to _not_ leak addresses, hash before printing */
-> > 
-> 
-> 
+> thanks,
+> jirka
+>
