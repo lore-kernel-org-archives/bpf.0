@@ -2,52 +2,52 @@ Return-Path: <SRS0=rqwV=64=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB9EBC433E0
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:51:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EF30C433E1
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:51:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A1FC20575
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:51:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C298206A5
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:51:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QT/ymUAs"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KhZcvY1t"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727850AbgENKvs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726192AbgENKvs (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 14 May 2020 06:51:48 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:32375 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726192AbgENKvr (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 14 May 2020 06:51:47 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:31994 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726184AbgENKvs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 May 2020 06:51:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1589453506;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EfxAyvFhtEeMjfTkBH/0AHfmW+lD5OuNv7RpEYCIYQY=;
-        b=QT/ymUAs5QuHojVMCSMD4KkMy2cR9EI76ns3fT5IDrsWWU0SeR1m6RlhTD7TKCXwDb9yA7
-        /S0rwQqcQZVVTctLaC0q6gk++x9+U28OFQCTX0XJ9ZwB0wuVFW2Nyke9pE7SmWdRDZiczy
-        1Xxy/EUuyaakuB0HMuhPsNl7181DK2k=
+        bh=vS8TgpZAjAnYWockt+e6y9uM184J2M+z8vNASOaS+Bg=;
+        b=KhZcvY1tjzvitPWnbKPt9gbnau3JLqfB+RuLAFscbCjGl9GwXLrbc469iSdOuFoS/I9Hug
+        nNWr0Zns/0JOOlqcCooV3pefsa1POGt8CdZk9XuPdXGED82rUDsSLnR0120WePjAq1pcid
+        bEI3fusviQPdI+f0KVKj+w2N0pb4h04=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-86-PntmC1mCPl6CXcTAo7U8Dg-1; Thu, 14 May 2020 06:51:45 -0400
-X-MC-Unique: PntmC1mCPl6CXcTAo7U8Dg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+ us-mta-16-u3PPRnjWMY2OnhpqD-ttpQ-1; Thu, 14 May 2020 06:51:29 -0400
+X-MC-Unique: u3PPRnjWMY2OnhpqD-ttpQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2E2CB107ACCD;
-        Thu, 14 May 2020 10:51:43 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5FA2E474;
+        Thu, 14 May 2020 10:51:27 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 948EA2BFF0;
-        Thu, 14 May 2020 10:51:36 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 60AD95D9CA;
+        Thu, 14 May 2020 10:51:21 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 8ACA9325159C9;
-        Thu, 14 May 2020 12:51:35 +0200 (CEST)
-Subject: [PATCH net-next v4 31/33] bpf: add xdp.frame_sz in
- bpf_prog_test_run_xdp().
+        by firesoul.localdomain (Postfix) with ESMTP id 4784B325159C9;
+        Thu, 14 May 2020 12:51:20 +0200 (CEST)
+Subject: [PATCH net-next v4 28/33] mlx5: rx queue setup time determine
+ frame_sz for XDP
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -64,86 +64,136 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Date:   Thu, 14 May 2020 12:51:35 +0200
-Message-ID: <158945349549.97035.15316291762482444006.stgit@firesoul>
+Date:   Thu, 14 May 2020 12:51:20 +0200
+Message-ID: <158945348021.97035.12295039384250022883.stgit@firesoul>
 In-Reply-To: <158945314698.97035.5286827951225578467.stgit@firesoul>
 References: <158945314698.97035.5286827951225578467.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Update the memory requirements, when adding xdp.frame_sz in BPF test_run
-function bpf_prog_test_run_xdp() which e.g. is used by XDP selftests.
+The mlx5 driver have multiple memory models, which are also changed
+according to whether a XDP bpf_prog is attached.
 
-Specifically add the expected reserved tailroom, but also allocated a
-larger memory area to reflect that XDP frames usually comes in this
-format. Limit the provided packet data size to 4096 minus headroom +
-tailroom, as this also reflect a common 3520 bytes MTU limit with XDP.
+The 'rx_striding_rq' setting is adjusted via ethtool priv-flags e.g.:
+ # ethtool --set-priv-flags mlx5p2 rx_striding_rq off
 
-Note that bpf_test_init already use a memory allocation method that clears
-memory.  Thus, this already guards against leaking uninit kernel memory.
+On the general case with 4K page_size and regular MTU packet, then
+the frame_sz is 2048 and 4096 when XDP is enabled, in both modes.
 
+The info on the given frame size is stored differently depending on the
+RQ-mode and encoded in a union in struct mlx5e_rq union wqe/mpwqe.
+In rx striding mode rq->mpwqe.log_stride_sz is either 11 or 12, which
+corresponds to 2048 or 4096 (MLX5_WQ_TYPE_LINKED_LIST_STRIDING_RQ).
+In non-striding mode (MLX5_WQ_TYPE_CYCLIC) the frag_stride is stored
+in rq->wqe.info.arr[0].frag_stride, for the first fragment, which is
+what the XDP case cares about.
+
+To reduce effect on fast-path, this patch determine the frame_sz at
+setup time, to avoid determining the memory model runtime. Variable
+is named frame0_sz to make it clear that this is only the frame
+size of the first fragment.
+
+This mlx5 driver does a DMA-sync on XDP_TX action, but grow is safe
+as it have done a DMA-map on the entire PAGE_SIZE. The driver also
+already does a XDP length check against sq->hw_mtu on the possible
+XDP xmit paths mlx5e_xmit_xdp_frame() + mlx5e_xmit_xdp_frame_mpwqe().
+
+V3+4: Change variable name first_frame_sz to frame0_sz
+
+V2: Fix that frag_size need to be recalc before creating SKB.
+
+Cc: Tariq Toukan <tariqt@mellanox.com>
+Cc: Saeed Mahameed <saeedm@mellanox.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Acked-by: Tariq Toukan <tariqt@mellanox.com>
 ---
- net/bpf/test_run.c |   16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en.h      |    1 +
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c  |    1 +
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c |    6 ++++++
+ drivers/net/ethernet/mellanox/mlx5/core/en_rx.c   |    2 ++
+ 4 files changed, 10 insertions(+)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 29dbdd4c29f6..30ba7d38941d 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -470,25 +470,34 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 			  union bpf_attr __user *uattr)
- {
-+	u32 tailroom = SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-+	u32 headroom = XDP_PACKET_HEADROOM;
- 	u32 size = kattr->test.data_size_in;
- 	u32 repeat = kattr->test.repeat;
- 	struct netdev_rx_queue *rxqueue;
- 	struct xdp_buff xdp = {};
- 	u32 retval, duration;
-+	u32 max_data_sz;
- 	void *data;
- 	int ret;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+index 3bd64c63865b..26911b15f8fe 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+@@ -625,6 +625,7 @@ struct mlx5e_rq {
+ 	struct {
+ 		u16            umem_headroom;
+ 		u16            headroom;
++		u32            frame0_sz;
+ 		u8             map_dir;   /* dma map direction */
+ 	} buff;
  
- 	if (kattr->test.ctx_in || kattr->test.ctx_out)
- 		return -EINVAL;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+index c4a7fb4ecd14..761c8979bd41 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+@@ -137,6 +137,7 @@ bool mlx5e_xdp_handle(struct mlx5e_rq *rq, struct mlx5e_dma_info *di,
+ 	if (xsk)
+ 		xdp.handle = di->xsk.handle;
+ 	xdp.rxq = &rq->xdp_rxq;
++	xdp.frame_sz = rq->buff.frame0_sz;
  
--	data = bpf_test_init(kattr, size, XDP_PACKET_HEADROOM + NET_IP_ALIGN, 0);
-+	/* XDP have extra tailroom as (most) drivers use full page */
-+	max_data_sz = 4096 - headroom - tailroom;
-+	if (size > max_data_sz)
-+		return -EINVAL;
+ 	act = bpf_prog_run_xdp(prog, &xdp);
+ 	if (xsk) {
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 0a9dfc31de3e..0e4ca08ddca9 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -462,6 +462,8 @@ static int mlx5e_alloc_rq(struct mlx5e_channel *c,
+ 		rq->mpwqe.num_strides =
+ 			BIT(mlx5e_mpwqe_get_log_num_strides(mdev, params, xsk));
+ 
++		rq->buff.frame0_sz = (1 << rq->mpwqe.log_stride_sz);
 +
-+	data = bpf_test_init(kattr, max_data_sz, headroom, tailroom);
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
+ 		err = mlx5e_create_rq_umr_mkey(mdev, rq);
+ 		if (err)
+ 			goto err_rq_wq_destroy;
+@@ -485,6 +487,8 @@ static int mlx5e_alloc_rq(struct mlx5e_channel *c,
+ 			num_xsk_frames = wq_sz << rq->wqe.info.log_num_frags;
  
- 	xdp.data_hard_start = data;
--	xdp.data = data + XDP_PACKET_HEADROOM + NET_IP_ALIGN;
-+	xdp.data = data + headroom;
- 	xdp.data_meta = xdp.data;
- 	xdp.data_end = xdp.data + size;
-+	xdp.frame_sz = headroom + max_data_sz + tailroom;
+ 		rq->wqe.info = rqp->frags_info;
++		rq->buff.frame0_sz = rq->wqe.info.arr[0].frag_stride;
++
+ 		rq->wqe.frags =
+ 			kvzalloc_node(array_size(sizeof(*rq->wqe.frags),
+ 					(wq_sz << rq->wqe.info.log_num_frags)),
+@@ -522,6 +526,8 @@ static int mlx5e_alloc_rq(struct mlx5e_channel *c,
+ 	}
  
- 	rxqueue = __netif_get_rx_queue(current->nsproxy->net_ns->loopback_dev, 0);
- 	xdp.rxq = &rxqueue->xdp_rxq;
-@@ -496,8 +505,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	ret = bpf_test_run(prog, &xdp, repeat, &retval, &duration, true);
- 	if (ret)
- 		goto out;
--	if (xdp.data != data + XDP_PACKET_HEADROOM + NET_IP_ALIGN ||
--	    xdp.data_end != xdp.data + size)
-+	if (xdp.data != data + headroom || xdp.data_end != xdp.data + size)
- 		size = xdp.data_end - xdp.data;
- 	ret = bpf_test_finish(kattr, uattr, xdp.data, size, retval, duration);
- out:
+ 	if (xsk) {
++		rq->buff.frame0_sz = xsk_umem_xdp_frame_sz(umem);
++
+ 		err = mlx5e_xsk_resize_reuseq(umem, num_xsk_frames);
+ 		if (unlikely(err)) {
+ 			mlx5_core_err(mdev, "Unable to allocate the Reuse Ring for %u frames\n",
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+index 779600bebcca..821f94beda7a 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+@@ -1070,6 +1070,7 @@ mlx5e_skb_from_cqe_linear(struct mlx5e_rq *rq, struct mlx5_cqe64 *cqe,
+ 	if (consumed)
+ 		return NULL; /* page/packet was consumed by XDP */
+ 
++	frag_size = MLX5_SKB_FRAG_SZ(rx_headroom + cqe_bcnt);
+ 	skb = mlx5e_build_linear_skb(rq, va, frag_size, rx_headroom, cqe_bcnt);
+ 	if (unlikely(!skb))
+ 		return NULL;
+@@ -1371,6 +1372,7 @@ mlx5e_skb_from_cqe_mpwrq_linear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *wi,
+ 		return NULL; /* page/packet was consumed by XDP */
+ 	}
+ 
++	frag_size = MLX5_SKB_FRAG_SZ(rx_headroom + cqe_bcnt32);
+ 	skb = mlx5e_build_linear_skb(rq, va, frag_size, rx_headroom, cqe_bcnt32);
+ 	if (unlikely(!skb))
+ 		return NULL;
 
 
