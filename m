@@ -7,60 +7,59 @@ X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5004AC433E0
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 22:32:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7FFBC433E0
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 22:39:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F5162065F
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 22:32:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9088020748
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 22:39:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qlK/i0A5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OtYpqw0S"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728627AbgENWcl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 May 2020 18:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
+        id S1728688AbgENWjK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 May 2020 18:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728525AbgENWcl (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 14 May 2020 18:32:41 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45197C061A0C;
-        Thu, 14 May 2020 15:32:41 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id m11so627001qka.4;
-        Thu, 14 May 2020 15:32:41 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1728313AbgENWjJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 14 May 2020 18:39:09 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944BEC061A0C;
+        Thu, 14 May 2020 15:39:09 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id f13so654302qkh.2;
+        Thu, 14 May 2020 15:39:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=TnsN39S9nBKKo+TkxtLGn4BfNS0a8Er3VZTnddGXoMk=;
-        b=qlK/i0A5Sw1AoI/gLAFuoRLkqAqsN71HkWsEyMowOcgMQiB35hUS2JkKF0BHggsfEK
-         eVOesLMbBV3C9o/7twYoEBq+qDkKYDuqGRNL0sIcggUsK6Z/S4jgg16zkmG+pni8J4Iz
-         MDasgrBTB7yGZAViIFLc6fP1tr9JmzrL/y50wALQ7s7Z09T4hFBKG9xAjAfbQWXl2FkH
-         6wcU9ppczL2fCobXgeU/bO/F7jgCTb+s/Er4NaaEYiX4T2+NH8QEBTP+84OFjN2e+UQv
-         QkWPRr/9qZ8LspcqfbjkL26d/WqXkNwBHlrmhaOsySl588OLYLYzWKSecH9YyGrAC/Fw
-         y+IQ==
+        bh=bMinuAL0on0nEeytk+i1ggyxgzF85qPQb/U8FR8LWVQ=;
+        b=OtYpqw0SaZPRpgQP54ehPSSFRBhvbbbmn7mU6PHBGKa+fjGihS8tUdxt1SYlrSXqCz
+         0X6jfeipBVIFzshe1u7BhsFxBndmkLW1TFGhnIbIl9wdpLQedMBcuSf7YLlkepFR4vDk
+         AlQ2dy8wF0aub5JKZyLUuwMV1gF2dFyo9EJzGTL1rIMsfpA3uuILxXgZOlHKOBBleCxM
+         GemDb8Y9SGXMbU0Mk9cZGUnpo54yw5ksODLqtsJ+wVUmLEwWlPCZ4qsC4AiV6hUk/IUh
+         /MaYIHS/Ja4SSix/WmgODfY33pYSqmJ9ityhzMo8GowpGlhB/EWPgtDl3l1yffPB5UtE
+         N3zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TnsN39S9nBKKo+TkxtLGn4BfNS0a8Er3VZTnddGXoMk=;
-        b=WUo1IwdqQaKWoCxp4dYtC2nPcEQuvjNyvLDm0RV4ZLkirC/wwlfN1s4I/W1KEV+FHG
-         yE8f7EVmqh6yQClH1Wbz6nliM2OBs7zWongqypW3DbrPkgNTID6lg6Y5faVUhK+/hW/Y
-         ZV88120ioqlZMJW11cuj4v+rcqwXDvGUXi6qAOHQXz4LDpXYCbYPV+QzlWUQ9ulrEYxa
-         zOz5RDZG4/96HdRUYfT8szMNLeEM2/xpI5moEyYrMB3TA78t/MRPtspaaSD4+wegGmWO
-         oLLdWuUTGA8foj3GvBXI8/Yx66ZiaNZtzlmQJevk1oEraqsd1Zgg9TnXuCY2mmVjLDn5
-         kKdw==
-X-Gm-Message-State: AOAM530kTp2mlrzO1WxmFuUzShpcamyoWZ1lwbTOYSvGfaE4LTeHtHT5
-        DR9c7eeAZFwqKEEBS4b/JITCK9ytW9zZGhQvafk=
-X-Google-Smtp-Source: ABdhPJyGchlbdOiFTzH44nrWBosZbe0MBJchGDNjknpRH/WrJkohWjcxt195BK2oHyrbVJJFEt6cxNLSeCU+12W8Aro=
-X-Received: by 2002:a05:620a:14a1:: with SMTP id x1mr656739qkj.92.1589495560390;
- Thu, 14 May 2020 15:32:40 -0700 (PDT)
+        bh=bMinuAL0on0nEeytk+i1ggyxgzF85qPQb/U8FR8LWVQ=;
+        b=kXpQv2qi7U3iEFpFZba6boJkBe0m0e3Y83QsQ0XdBxFTt7cxM3EXwHBj/JL/EwFsvv
+         F3quiUm9BHg3On0GztkCj2lVra4WbEPgQR/xa/RUv9n3wxmUqqdmBUuIrmDARWTiLNLk
+         +4Hs8yMw2yAvMgCDIKfpzNrOjhV12Cwjn7kHcyrfgowmYhez6R/hrDv1ScMy4gqEG9x2
+         a2eTwlbP1drI90h1U/s49tzTFzLGNkcmr8tfLimHhfyTJ8uZVGHa8Hm2857VS/9GvUAV
+         CizUB7NOiufu4CInST9LBQ4SAJZNBMuXnNp11rk2oIDSNWtgX+KN8XtjsShnggIKmi8r
+         RP/Q==
+X-Gm-Message-State: AOAM530zPZAO/Kx23zeuP3Nlizf1ch3IV29eJhsg3xHzn4GHRas8mDHx
+        C1dTGC5XXQetL2pVm1gxUSETdC1h7E3zFlmQPn8=
+X-Google-Smtp-Source: ABdhPJzT8OcpGZTjqDvpZ5/1Ff56Ml4TXmvp7rsHiEnfhhSIhVgSoFTQwY3GyycouLKplC8FKbIfi+EN1jy/KRMQB2M=
+X-Received: by 2002:a05:620a:2049:: with SMTP id d9mr665162qka.449.1589495948678;
+ Thu, 14 May 2020 15:39:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200506132946.2164578-1-jolsa@kernel.org> <20200506132946.2164578-5-jolsa@kernel.org>
-In-Reply-To: <20200506132946.2164578-5-jolsa@kernel.org>
+References: <20200506132946.2164578-1-jolsa@kernel.org> <20200506132946.2164578-7-jolsa@kernel.org>
+In-Reply-To: <20200506132946.2164578-7-jolsa@kernel.org>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 14 May 2020 15:32:29 -0700
-Message-ID: <CAEf4BzZXyCjjaofaOROTKCRr5fqHkdZkBHZmfiqqQiKTyOYv1Q@mail.gmail.com>
-Subject: Re: [PATCH 4/9] bpf: Allow nested BTF object to be refferenced by BTF
- object + offset
+Date:   Thu, 14 May 2020 15:38:57 -0700
+Message-ID: <CAEf4BzYQyWAGtJtv=fvS3PRXjL66L0OJdjGf1t92a65S9pJQvg@mail.gmail.com>
+Subject: Re: [PATCH 6/9] bpf: Compile bpfwl tool at kernel compilation start
 To:     Jiri Olsa <jolsa@kernel.org>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -83,139 +82,69 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Wed, May 6, 2020 at 6:31 AM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> Adding btf_struct_address function that takes 2 BTF objects
-> and offset as arguments and checks wether object A is nested
-> in object B on given offset.
->
-> This function is be used when checking the helper function
-> PTR_TO_BTF_ID arguments. If the argument has an offset value,
-> the btf_struct_address will check if the final address is
-> the expected BTF ID.
->
-> This way we can access nested BTF objects under PTR_TO_BTF_ID
-> pointer type and pass them to helpers, while they still point
-> to valid kernel BTF objects.
+> The bpfwl tool will be used during the vmlinux linking,
+> so it's necessary it's ready.
 >
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
->  include/linux/bpf.h   |  3 ++
->  kernel/bpf/btf.c      | 69 +++++++++++++++++++++++++++++++++++++++++++
->  kernel/bpf/verifier.c | 32 +++++++++++++-------
->  3 files changed, 94 insertions(+), 10 deletions(-)
+>  Makefile           | 21 +++++++++++++++++----
+>  tools/Makefile     |  3 +++
+>  tools/bpf/Makefile |  5 ++++-
+>  3 files changed, 24 insertions(+), 5 deletions(-)
 >
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 1262ec460ab3..bc589cdd8c34 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1213,6 +1213,9 @@ int btf_struct_access(struct bpf_verifier_log *log,
->                       const struct btf_type *t, int off, int size,
->                       enum bpf_access_type atype,
->                       u32 *next_btf_id);
-> +int btf_struct_address(struct bpf_verifier_log *log,
-> +                    const struct btf_type *t,
-> +                    u32 off, u32 exp_id);
->  int btf_resolve_helper_id(struct bpf_verifier_log *log,
->                           const struct bpf_func_proto *fn, int);
->
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index a2cfba89a8e1..07f22469acab 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -4004,6 +4004,75 @@ int btf_struct_access(struct bpf_verifier_log *log,
->         return -EINVAL;
->  }
->
-> +int btf_struct_address(struct bpf_verifier_log *log,
-> +                      const struct btf_type *t,
-> +                      u32 off, u32 exp_id)
-
-The logic in this function is quite tricky and overlaps heavily with
-btf_struct_access. You are already missing flexible array support that
-Yonghong added recently. Let's see if it's possible to extract all
-this "find field in a struct by offset" logic into reusable function?
-
-> +{
-> +       u32 i, moff, mtrue_end, msize = 0;
-> +       const struct btf_member *member;
-> +       const struct btf_type *mtype;
-> +       const char *tname, *mname;
-> +
-> +again:
-> +       tname = __btf_name_by_offset(btf_vmlinux, t->name_off);
-> +       if (!btf_type_is_struct(t)) {
-> +               bpf_log(log, "Type '%s' is not a struct\n", tname);
-> +               return -EINVAL;
-> +       }
-> +
-> +       if (off > t->size) {
-
->=, actually?
-
-> +               bpf_log(log, "address beyond struct %s at off %u size %u\n",
-> +                       tname, off, t->size);
-> +               return -EACCES;
-> +       }
-> +
 
 [...]
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 70ad009577f8..b988df5ada20 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3665,6 +3665,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 regno,
->  {
->         struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
->         enum bpf_reg_type expected_type, type = reg->type;
-> +       const struct btf_type *btf_type;
->         int err = 0;
 >
->         if (arg_type == ARG_DONTCARE)
-> @@ -3743,17 +3744,28 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 regno,
->                 expected_type = PTR_TO_BTF_ID;
->                 if (type != expected_type)
->                         goto err_type;
-> -               if (reg->btf_id != meta->btf_id) {
-> -                       verbose(env, "Helper has type %s got %s in R%d\n",
-> -                               kernel_type_name(meta->btf_id),
-> -                               kernel_type_name(reg->btf_id), regno);
-> +               if (reg->off) {
+> +prepare-bpfwl: $(bpfwl_target)
+> +ifeq ($(SKIP_BTF_WHITELIST_GENERATION),1)
+> +       @echo "warning: Cannot use BTF whitelist checks, please install libelf-dev, libelf-devel or elfutils-libelf-devel" >&2
+> +endif
 
-well, off==0 can still point to (arbitrarily) nested structs that are
-first member of outer struct... So I guess it would be better to
-search for inner struct if btf_id is unexpected regardless of off
-value?
+When we added BTF dedup and generation first time, we also made pahole
+unavailability or any error during deduplication process an error. It
+actually was very confusing to users and they often missed that BTF
+generation didn't happen, but they would notice it only at runtime
+(after a confusing debugging session).
 
-> +                       btf_type = btf_type_by_id(btf_vmlinux, reg->btf_id);
-> +                       if (btf_struct_address(&env->log, btf_type, reg->off, meta->btf_id)) {
-> +                               verbose(env, "Helper has type %s got %s in R%d, off %d\n",
-> +                                       kernel_type_name(meta->btf_id),
-> +                                       kernel_type_name(reg->btf_id), regno, reg->off);
+So I wonder if it's better to make this an error instead? Just guard
+whitelist generation on whether CONFIG_DEBUG_INFO_BTF is enabled or
+not?
+
+>  # Generate some files
+>  # ---------------------------------------------------------------------------
 >
-> -                       return -EACCES;
-> -               }
-> -               if (!tnum_is_const(reg->var_off) || reg->var_off.value || reg->off) {
-> -                       verbose(env, "R%d is a pointer to in-kernel struct with non-zero offset\n",
-> -                               regno);
-> -                       return -EACCES;
-> +                               return -EACCES;
-> +                       }
-> +               } else {
-> +                       if (reg->btf_id != meta->btf_id) {
-> +                               verbose(env, "Helper has type %s got %s in R%d\n",
-> +                                       kernel_type_name(meta->btf_id),
-> +                                       kernel_type_name(reg->btf_id), regno);
+> diff --git a/tools/Makefile b/tools/Makefile
+> index bd778812e915..85af6ebbce91 100644
+> --- a/tools/Makefile
+> +++ b/tools/Makefile
+> @@ -67,6 +67,9 @@ cpupower: FORCE
+>  cgroup firewire hv guest bootconfig spi usb virtio vm bpf iio gpio objtool leds wmi pci firmware debugging: FORCE
+>         $(call descend,$@)
+>
+> +bpf/%: FORCE
+> +       $(call descend,$@)
 > +
-> +                               return -EACCES;
-> +                       }
-> +                       if (!tnum_is_const(reg->var_off) || reg->var_off.value) {
-> +                               verbose(env, "R%d is a pointer to in-kernel struct with non-zero offset\n",
-> +                                       regno);
-> +                               return -EACCES;
-> +                       }
->                 }
->         } else if (arg_type == ARG_PTR_TO_SPIN_LOCK) {
->                 if (meta->func_id == BPF_FUNC_spin_lock) {
+>  liblockdep: FORCE
+>         $(call descend,lib/lockdep)
+>
+> diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
+> index f897eeeb0b4f..d4ea2b5a2e58 100644
+> --- a/tools/bpf/Makefile
+> +++ b/tools/bpf/Makefile
+> @@ -124,5 +124,8 @@ runqslower_install:
+>  runqslower_clean:
+>         $(call descend,runqslower,clean)
+>
+> +bpfwl:
+> +       $(call descend,bpfwl)
+> +
+>  .PHONY: all install clean bpftool bpftool_install bpftool_clean \
+> -       runqslower runqslower_install runqslower_clean
+> +       runqslower runqslower_install runqslower_clean bpfwl
+
+what about install/clean subcommands? At least clean seems like a good idea?
+
 > --
 > 2.25.4
 >
