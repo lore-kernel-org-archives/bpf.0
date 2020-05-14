@@ -2,52 +2,52 @@ Return-Path: <SRS0=rqwV=64=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71E83C433DF
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:51:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FB9AC433DF
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:51:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C90720575
-	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:51:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39B6020575
+	for <bpf@archiver.kernel.org>; Thu, 14 May 2020 10:51:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I45pJ7uH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T2zKQD7U"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbgENKv2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 May 2020 06:51:28 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:54507 "EHLO
+        id S1726066AbgENKvb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 May 2020 06:51:31 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:28020 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727827AbgENKv1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 May 2020 06:51:27 -0400
+        with ESMTP id S1727832AbgENKvb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 May 2020 06:51:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1589453485;
+        s=mimecast20190719; t=1589453490;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SM+muq0faROJIh9QTW3tRvU5ueKKIkVoslYk2yBNABc=;
-        b=I45pJ7uH3g8Nbw+8t4/+FXEgb+Z0/UNerIhcEjv69m5DuV9Nl98Jrgz53MaBFj1Qto0pLY
-        upMCr4svgXVFDxVtDSJFj/wLXMXQJZkSnjAd4EZzPiwn540kofuoR/bdtPuFYICP64txjj
-        9hap5qP8yxaFg6N/4+3Wgy5D5pL1FXo=
+        bh=p+Jphw3DnwwM+fOe+Li9w7kFQ7bJ7QrAXq7VUFx/ePI=;
+        b=T2zKQD7UyB/XWMtfyntpjTE418GiC8gwushkefVY3T+Fy+r+GP5/ExHWDwWg/GLsDJEkkT
+        a5mOYjOv8ofbrcOBq/nZll5WJR06pW9ryI0qEICrnnqETcW46KK0c1n0yqQ46gn2G8H255
+        SZaMUETzV8zTkoNBBtuRD+wUatMLgUE=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-455-JR2L539JM7SVgDs17y9d9Q-1; Thu, 14 May 2020 06:51:24 -0400
-X-MC-Unique: JR2L539JM7SVgDs17y9d9Q-1
+ us-mta-367-FI53kmyYN2Gr6W7lvamOlQ-1; Thu, 14 May 2020 06:51:28 -0400
+X-MC-Unique: FI53kmyYN2Gr6W7lvamOlQ-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3B1CE189952C;
-        Thu, 14 May 2020 10:51:22 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BA6391005510;
+        Thu, 14 May 2020 10:51:26 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B05260BF1;
-        Thu, 14 May 2020 10:51:16 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A11A60C05;
+        Thu, 14 May 2020 10:51:26 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 309D4300020FC;
-        Thu, 14 May 2020 12:51:15 +0200 (CEST)
-Subject: [PATCH net-next v4 27/33] xdp: for Intel AF_XDP drivers add XDP
- frame_sz
+        by firesoul.localdomain (Postfix) with ESMTP id 5EE2B300020FC;
+        Thu, 14 May 2020 12:51:25 +0200 (CEST)
+Subject: [PATCH net-next v4 29/33] xdp: allow bpf_xdp_adjust_tail() to grow
+ packet size
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     sameehj@amazon.com
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -64,124 +64,75 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>,
         Saeed Mahameed <saeedm@mellanox.com>,
         Tariq Toukan <tariqt@mellanox.com>
-Date:   Thu, 14 May 2020 12:51:15 +0200
-Message-ID: <158945347511.97035.8536753731329475655.stgit@firesoul>
+Date:   Thu, 14 May 2020 12:51:25 +0200
+Message-ID: <158945348530.97035.12577148209134239291.stgit@firesoul>
 In-Reply-To: <158945314698.97035.5286827951225578467.stgit@firesoul>
 References: <158945314698.97035.5286827951225578467.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Intel drivers implement native AF_XDP zerocopy in separate C-files,
-that have its own invocation of bpf_prog_run_xdp(). The setup of
-xdp_buff is also handled in separately from normal code path.
+Finally, after all drivers have a frame size, allow BPF-helper
+bpf_xdp_adjust_tail() to grow or extend packet size at frame tail.
 
-This patch update XDP frame_sz for AF_XDP zerocopy drivers i40e, ice
-and ixgbe, as the code changes needed are very similar.  Introduce a
-helper function xsk_umem_xdp_frame_sz() for calculating frame size.
+Remember that helper/macro xdp_data_hard_end have reserved some
+tailroom.  Thus, this helper makes sure that the BPF-prog don't have
+access to this tailroom area.
 
-Cc: intel-wired-lan@lists.osuosl.org
-Cc: Björn Töpel <bjorn.topel@intel.com>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>
+V2: Remove one chicken check and use WARN_ONCE for other
+
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Acked-by: Björn Töpel <bjorn.topel@intel.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_xsk.c   |    2 ++
- drivers/net/ethernet/intel/ice/ice_xsk.c     |    2 ++
- drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c |    2 ++
- include/net/xdp_sock.h                       |   11 +++++++++++
- 4 files changed, 17 insertions(+)
+ include/uapi/linux/bpf.h |    4 ++--
+ net/core/filter.c        |   11 +++++++++--
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index 0b7d29192b2c..2b9184aead5f 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -531,12 +531,14 @@ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 101b0c8a3784..3e44853388d8 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -2004,8 +2004,8 @@ union bpf_attr {
+  * int bpf_xdp_adjust_tail(struct xdp_buff *xdp_md, int delta)
+  * 	Description
+  * 		Adjust (move) *xdp_md*\ **->data_end** by *delta* bytes. It is
+- * 		only possible to shrink the packet as of this writing,
+- * 		therefore *delta* must be a negative integer.
++ * 		possible to both shrink and grow the packet tail.
++ * 		Shrink done via *delta* being a negative integer.
+  *
+  * 		A call to this helper is susceptible to change the underlying
+  * 		packet buffer. Therefore, at load time, all checks on pointers
+diff --git a/net/core/filter.c b/net/core/filter.c
+index dfaf5df13722..ec3ab2e2d800 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3411,12 +3411,19 @@ static const struct bpf_func_proto bpf_xdp_adjust_head_proto = {
+ 
+ BPF_CALL_2(bpf_xdp_adjust_tail, struct xdp_buff *, xdp, int, offset)
  {
- 	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
- 	u16 cleaned_count = I40E_DESC_UNUSED(rx_ring);
-+	struct xdp_umem *umem = rx_ring->xsk_umem;
- 	unsigned int xdp_res, xdp_xmit = 0;
- 	bool failure = false;
- 	struct sk_buff *skb;
- 	struct xdp_buff xdp;
++	void *data_hard_end = xdp_data_hard_end(xdp); /* use xdp->frame_sz */
+ 	void *data_end = xdp->data_end + offset;
  
- 	xdp.rxq = &rx_ring->xdp_rxq;
-+	xdp.frame_sz = xsk_umem_xdp_frame_sz(umem);
+-	/* only shrinking is allowed for now. */
+-	if (unlikely(offset >= 0))
++	/* Notice that xdp_data_hard_end have reserved some tailroom */
++	if (unlikely(data_end > data_hard_end))
+ 		return -EINVAL;
  
- 	while (likely(total_rx_packets < (unsigned int)budget)) {
- 		struct i40e_rx_buffer *bi;
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index 8279db15e870..23e5515d4527 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -840,11 +840,13 @@ int ice_clean_rx_irq_zc(struct ice_ring *rx_ring, int budget)
- {
- 	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
- 	u16 cleaned_count = ICE_DESC_UNUSED(rx_ring);
-+	struct xdp_umem *umem = rx_ring->xsk_umem;
- 	unsigned int xdp_xmit = 0;
- 	bool failure = false;
- 	struct xdp_buff xdp;
- 
- 	xdp.rxq = &rx_ring->xdp_rxq;
-+	xdp.frame_sz = xsk_umem_xdp_frame_sz(umem);
- 
- 	while (likely(total_rx_packets < (unsigned int)budget)) {
- 		union ice_32b_rx_flex_desc *rx_desc;
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-index 74b540ebb3dc..a656ee9a1fae 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-@@ -431,12 +431,14 @@ int ixgbe_clean_rx_irq_zc(struct ixgbe_q_vector *q_vector,
- 	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
- 	struct ixgbe_adapter *adapter = q_vector->adapter;
- 	u16 cleaned_count = ixgbe_desc_unused(rx_ring);
-+	struct xdp_umem *umem = rx_ring->xsk_umem;
- 	unsigned int xdp_res, xdp_xmit = 0;
- 	bool failure = false;
- 	struct sk_buff *skb;
- 	struct xdp_buff xdp;
- 
- 	xdp.rxq = &rx_ring->xdp_rxq;
-+	xdp.frame_sz = xsk_umem_xdp_frame_sz(umem);
- 
- 	while (likely(total_rx_packets < budget)) {
- 		union ixgbe_adv_rx_desc *rx_desc;
-diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index e86ec48ef627..1cd1ec3cea97 100644
---- a/include/net/xdp_sock.h
-+++ b/include/net/xdp_sock.h
-@@ -237,6 +237,12 @@ static inline u64 xsk_umem_adjust_offset(struct xdp_umem *umem, u64 address,
- 	else
- 		return address + offset;
- }
++	/* ALL drivers MUST init xdp->frame_sz, chicken check below */
++	if (unlikely(xdp->frame_sz > PAGE_SIZE)) {
++		WARN_ONCE(1, "Too BIG xdp->frame_sz = %d\n", xdp->frame_sz);
++		return -EINVAL;
++	}
 +
-+static inline u32 xsk_umem_xdp_frame_sz(struct xdp_umem *umem)
-+{
-+	return umem->chunk_size_nohr + umem->headroom;
-+}
-+
- #else
- static inline int xsk_generic_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
- {
-@@ -367,6 +373,11 @@ static inline u64 xsk_umem_adjust_offset(struct xdp_umem *umem, u64 handle,
- 	return 0;
- }
+ 	if (unlikely(data_end < xdp->data + ETH_HLEN))
+ 		return -EINVAL;
  
-+static inline u32 xsk_umem_xdp_frame_sz(struct xdp_umem *umem)
-+{
-+	return 0;
-+}
-+
- static inline int __xsk_map_redirect(struct xdp_sock *xs, struct xdp_buff *xdp)
- {
- 	return -EOPNOTSUPP;
 
 
