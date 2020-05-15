@@ -2,133 +2,342 @@ Return-Path: <SRS0=Xcm6=65=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DF45C433DF
-	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 06:57:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 501B0C433DF
+	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 08:22:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 632B4206F1
-	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 06:57:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 147E420643
+	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 08:22:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L1Pcz6gn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YEIYBUKZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbgEOG4f (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 May 2020 02:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
+        id S1726725AbgEOIWF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 May 2020 04:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726313AbgEOG4e (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 15 May 2020 02:56:34 -0400
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0E9C05BD0A
-        for <bpf@vger.kernel.org>; Thu, 14 May 2020 23:56:33 -0700 (PDT)
-Received: by mail-qk1-x74a.google.com with SMTP id r124so1273831qkf.1
-        for <bpf@vger.kernel.org>; Thu, 14 May 2020 23:56:33 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726694AbgEOIWF (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 15 May 2020 04:22:05 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954DFC061A0C;
+        Fri, 15 May 2020 01:22:03 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id o134so723196ybg.2;
+        Fri, 15 May 2020 01:22:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tvl7gLFsS/dAedcEqfrKtncclZsMityBUyr8g2OugcQ=;
-        b=L1Pcz6gnqUzZkJrzhBUQp0QUfmzqMeD11Syg0lPwtZra+G6eYVcIwSdxLHbea30lMH
-         VPEiAhP4to/UFfvAX0LAMJ1tyxOpktCcAdayUEcYBXl6F8VgXGGU/TEUYJ3y15A/3R5E
-         YU6LMqnfuUcMQBUHHdnob6YvUNLUlY7ezab93T8g6Q4fi9fcQCkBISB+hhwPcYVCeE8R
-         1CUJySRpZreY8cMtNlU8Cm6Tfuw8qoyN8n86PLRd4NRTktgnuecp7WTaCr2RQI8IQ5td
-         cCkgS+2KoQy94ltW9Gy0mZAHyMKpiXB+4bjqQRJZt7KHphQ7+zuJxxd+VRgQ0t2PZ1MJ
-         xouw==
+        bh=XyeTfqz3UGt24SeLIl2g9AW/ng3n23DMpFGeZuB/a4I=;
+        b=YEIYBUKZdtoQMH76Hn/eg25d0HtVDe0gcV96ufGesve/aUfuOPt1EZ7PgZcfuJVeTs
+         jZ3fxx8uFDJ6Us/fAoTgvH7bSnd2UbmqaYaFXxCNfk5yb+Ron2SyzrX6UP7fV7CFfC1Z
+         CbWRWyQ/wFQeJIo49bzNHGLQdNuu+g0xfXUhuh8uqWqsLyp9MUqL3RAtr/veo5Ze7bUX
+         +eqZzIy3Wp2hTv2RieFhsNmpwyfmk/wAtYEv0abfG11g8lzbpVwkI+XSiVXaQMab71Jg
+         vWGc/0rk/LQo3ybZDKKUsWZcqSUi+uuUN/ekRUFJhtgHPL40+3b+EyGhpuS2AS249QDy
+         rVIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=tvl7gLFsS/dAedcEqfrKtncclZsMityBUyr8g2OugcQ=;
-        b=FWSPE3AOa+a5aj4GDUoVcyjzsAptLIjXgOOSnlYIeJp/URhgrYr0yeRccDW7wmY8xA
-         UVyKvyJrr4fisT+65ZX8uxD1YDVGWxkD48JBkfAaZUIfgayhtJ+KDELkuyWFu1c0lHwU
-         KY30AiodtLSokbcB82qVJJEOcFMTOwuBGftgz6H99jY62gxFCHT5HB5YFkKYX7MkxW9P
-         MPLCifzEFPNawJ/zZ2Z4w7OXLpdIkrBpm/M9OTBI1/J5H90jwXcBBfolYkWW6d6JAczX
-         w5EuZ3EJLJjQdpMVd9N1JvbLfrfOh90B0XsAhjqWia2WhIrCQM0S8hwjNc1C7o7IBctI
-         +Vnw==
-X-Gm-Message-State: AOAM530nSUNAIOW3FXemnHHdEZ8gMOZN+H2H2OF8hIZiq+i25Hr1YD3+
-        xp0jfJejVueABI6kPOMmUztEOY/U3sL4
-X-Google-Smtp-Source: ABdhPJxDHoNPBj+Xy4XlruWwU/uTMdd15h3I5dMGic4z9Trd8Ynf0UfZutAZW27seEr+Fu0dO/wbEvgsqVcx
-X-Received: by 2002:a0c:ac41:: with SMTP id m1mr2102104qvb.71.1589525792231;
- Thu, 14 May 2020 23:56:32 -0700 (PDT)
-Date:   Thu, 14 May 2020 23:56:17 -0700
-In-Reply-To: <20200515065624.21658-1-irogers@google.com>
-Message-Id: <20200515065624.21658-2-irogers@google.com>
-Mime-Version: 1.0
-References: <20200515065624.21658-1-irogers@google.com>
-X-Mailer: git-send-email 2.26.2.761.g0e0b3e54be-goog
-Subject: [PATCH 1/8] libbpf: Fix memory leak and possible double-free in hashmap__clear
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XyeTfqz3UGt24SeLIl2g9AW/ng3n23DMpFGeZuB/a4I=;
+        b=E2u63S01soCCmswIrJRUwn9jN1Iut0lXhot5cAxMdgvQ75D5q3tYZlH1JeoHWpgtHn
+         zTWmshp4x40Q7aGb/vXOfjn92f3JmvTehJoSiK2SaXhnoOJKm9qTwA84d4WJC8wukNCZ
+         7nkKR/K9PcZPp9O2qlW++xq+8RvK5p9h2BSfxuPdGrzQtM10XL4N2iYkWhk1PDGnry+T
+         nc2FZMzQB1XD7X0mSoKQLN5PRlOGXUcRZ8y1CHWF/LhrDarOa8oE+fiaI5QtiBwJNxA0
+         bBo2u6Wuq5k6/p2qNcbOo7TW83KO33USKktusu4aGEKJye29FIJDOFCJUuLE7Of3yqUb
+         MEbQ==
+X-Gm-Message-State: AOAM532tjnkHFB+bWPUSXt75dMMvTHar/bKy8AkqOPzhvTfAioxkguFO
+        g1ovDkmlV40OIVWbv3EfIuA68H9ZO8wEAuLwCA==
+X-Google-Smtp-Source: ABdhPJyHnsWBDpbb05bub9sdNsZ3Gg/mOoa6Ey0zYN65Nzw/NCwva/6eExilVCQd2Hpx4UztSqz40yhVp7/R6N4U/rw=
+X-Received: by 2002:a25:b9c4:: with SMTP id y4mr3597726ybj.349.1589530922516;
+ Fri, 15 May 2020 01:22:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200512144339.1617069-1-danieltimlee@gmail.com>
+ <20200512144339.1617069-2-danieltimlee@gmail.com> <f8d524dc-245b-e8c6-3e0b-16969df76b0a@fb.com>
+ <CAEKGpziAt7gDzqzvOO4=dMODB_wajFq-HbYNyfz6xNVaGaB9rQ@mail.gmail.com> <c677db23-1680-6fcb-1629-0a93f60bf2c8@fb.com>
+In-Reply-To: <c677db23-1680-6fcb-1629-0a93f60bf2c8@fb.com>
+From:   "Daniel T. Lee" <danieltimlee@gmail.com>
+Date:   Fri, 15 May 2020 17:21:48 +0900
+Message-ID: <CAEKGpzhuTg3N20eRYjTXj74OzCiG-L0YCsBouMYP2weG6AJ2QA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] samples: bpf: refactor kprobe tracing user
+ progs with libbpf
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Alston Tang <alston64@fb.com>, Ian Rogers <irogers@google.com>
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+On Thu, May 14, 2020 at 12:29 AM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 5/12/20 11:51 PM, Daniel T. Lee wrote:
+> > On Wed, May 13, 2020 at 10:40 AM Yonghong Song <yhs@fb.com> wrote:
+> >>
+> >>
+> >>
+> >> On 5/12/20 7:43 AM, Daniel T. Lee wrote:
+> >>> Currently, the kprobe BPF program attachment method for bpf_load is
+> >>> quite old. The implementation of bpf_load "directly" controls and
+> >>> manages(create, delete) the kprobe events of DEBUGFS. On the other hand,
+> >>> using using the libbpf automatically manages the kprobe event.
+> >>> (under bpf_link interface)
+> >>>
+> >>> By calling bpf_program__attach(_kprobe) in libbpf, the corresponding
+> >>> kprobe is created and the BPF program will be attached to this kprobe.
+> >>> To remove this, by simply invoking bpf_link__destroy will clean up the
+> >>> event.
+> >>>
+> >>> This commit refactors kprobe tracing programs (tracex{1~7}_user.c) with
+> >>> libbpf using bpf_link interface and bpf_program__attach.
+> >>>
+> >>> tracex2_kern.c, which tracks system calls (sys_*), has been modified to
+> >>> append prefix depending on architecture.
+> >>>
+> >>> Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+> >>> ---
+> >>>    samples/bpf/Makefile       | 12 +++----
+> >>>    samples/bpf/tracex1_user.c | 41 ++++++++++++++++++++----
+> >>>    samples/bpf/tracex2_kern.c |  8 ++++-
+> >>>    samples/bpf/tracex2_user.c | 55 ++++++++++++++++++++++++++------
+> >>>    samples/bpf/tracex3_user.c | 65 ++++++++++++++++++++++++++++----------
+> >>>    samples/bpf/tracex4_user.c | 55 +++++++++++++++++++++++++-------
+> >>>    samples/bpf/tracex6_user.c | 53 +++++++++++++++++++++++++++----
+> >>>    samples/bpf/tracex7_user.c | 43 ++++++++++++++++++++-----
+> >>>    8 files changed, 268 insertions(+), 64 deletions(-)
+> >>>
+> >>> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> >>> index 424f6fe7ce38..4c91e5914329 100644
+> >>> --- a/samples/bpf/Makefile
+> >>> +++ b/samples/bpf/Makefile
+> >>> @@ -64,13 +64,13 @@ fds_example-objs := fds_example.o
+> >>>    sockex1-objs := sockex1_user.o
+> >>>    sockex2-objs := sockex2_user.o
+> >>>    sockex3-objs := bpf_load.o sockex3_user.o
+> >>> -tracex1-objs := bpf_load.o tracex1_user.o $(TRACE_HELPERS)
+> >>> -tracex2-objs := bpf_load.o tracex2_user.o
+> >>> -tracex3-objs := bpf_load.o tracex3_user.o
+> >>> -tracex4-objs := bpf_load.o tracex4_user.o
+> >>> +tracex1-objs := tracex1_user.o $(TRACE_HELPERS)
+> >>> +tracex2-objs := tracex2_user.o
+> >>> +tracex3-objs := tracex3_user.o
+> >>> +tracex4-objs := tracex4_user.o
+> >>>    tracex5-objs := bpf_load.o tracex5_user.o $(TRACE_HELPERS)
+> >>> -tracex6-objs := bpf_load.o tracex6_user.o
+> >>> -tracex7-objs := bpf_load.o tracex7_user.o
+> >>> +tracex6-objs := tracex6_user.o
+> >>> +tracex7-objs := tracex7_user.o
+> >>>    test_probe_write_user-objs := bpf_load.o test_probe_write_user_user.o
+> >>>    trace_output-objs := bpf_load.o trace_output_user.o $(TRACE_HELPERS)
+> >>>    lathist-objs := bpf_load.o lathist_user.o
+> >>> diff --git a/samples/bpf/tracex1_user.c b/samples/bpf/tracex1_user.c
+> >>> index 55fddbd08702..1b15ab98f7d3 100644
+> >>> --- a/samples/bpf/tracex1_user.c
+> >>> +++ b/samples/bpf/tracex1_user.c
+> >>> @@ -1,21 +1,45 @@
+> >>>    // SPDX-License-Identifier: GPL-2.0
+> >>>    #include <stdio.h>
+> >>> -#include <linux/bpf.h>
+> >>>    #include <unistd.h>
+> >>> -#include <bpf/bpf.h>
+> >>> -#include "bpf_load.h"
+> >>> +#include <bpf/libbpf.h>
+> >>>    #include "trace_helpers.h"
+> >>>
+> >>> +#define __must_check
+> >>
+> >> This is not very user friendly.
+> >> Maybe not including linux/err.h and
+> >> use libbpf API libbpf_get_error() instead?
+> >>
+> >
+> > This approach looks more apparent and can stick with the libbpf API.
+> > I'll update code using this way.
+> >
+> >>> +#include <linux/err.h>
+> >>> +
+> >>>    int main(int ac, char **argv)
+> >>>    {
+> >>> -     FILE *f;
+> >>> +     struct bpf_link *link = NULL;
+> >>> +     struct bpf_program *prog;
+> >>> +     struct bpf_object *obj;
+> >>>        char filename[256];
+> >>> +     FILE *f;
+> >>>
+> >>>        snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
+> >>> +     obj = bpf_object__open_file(filename, NULL);
+> >>> +     if (IS_ERR(obj)) {
+> >>> +             fprintf(stderr, "ERROR: opening BPF object file failed\n");
+> >>> +             obj = NULL;
+> >>> +             goto cleanup;
+> >>
+> >> You do not need to goto cleanup, directly return 0 is okay here.
+> >> The same for other files in this patch.
+> >>
+> >
+> > As you said, it would be better to return right away than to proceed
+> > any further. I'll apply the code at next patch.
+> >
+> >>> +     }
+> >>> +
+> >>> +     prog = bpf_object__find_program_by_name(obj, "bpf_prog1");
+> >>> +     if (!prog) {
+> >>> +             fprintf(stderr, "ERROR: finding a prog in obj file failed\n");
+> >>> +             goto cleanup;
+> >>> +     }
+> >>> +
+> >>> +     /* load BPF program */
+> >>> +     if (bpf_object__load(obj)) {
+> >>> +             fprintf(stderr, "ERROR: loading BPF object file failed\n");
+> >>> +             goto cleanup;
+> >>> +     }
+> >>>
+> >>> -     if (load_bpf_file(filename)) {
+> >>> -             printf("%s", bpf_log_buf);
+> >>> -             return 1;
+> >>> +     link = bpf_program__attach(prog);
+> >>> +     if (IS_ERR(link)) {
+> >>> +             fprintf(stderr, "ERROR: bpf_program__attach failed\n");
+> >>> +             link = NULL;
+> >>> +             goto cleanup;
+> >>>        }
+> >>>
+> >>>        f = popen("taskset 1 ping -c5 localhost", "r");
+> >>> @@ -23,5 +47,8 @@ int main(int ac, char **argv)
+> >>>
+> >>>        read_trace_pipe();
+> >>>
+> >>> +cleanup:
+> >>> +     bpf_link__destroy(link);
+> >>> +     bpf_object__close(obj);
+> >>
+> >> Typically in kernel, we do multiple labels for such cases
+> >> like
+> >> destroy_link:
+> >>          bpf_link__destroy(link);
+> >> close_object:
+> >>          bpf_object__close(obj);
+> >>
+> >> The error path in the main() function jumps to proper label.
+> >> This is more clean and less confusion.
+> >>
+> >> The same for other cases in this file.
+> >>
+> >
+> > I totally agree that multiple labels are much more intuitive.
+> > But It's not very common to jump to the destroy_link label.
+> >
+> > Either when on the routine is completed successfully and jumps to the
+> > destroy_link branch, or an error occurred while bpf_program__attach
+> > was called "several" times and jumps to the destroy_link branch.
+> >
+> > Single bpf_program__attach like this tracex1 sample doesn't really have
+> > to destroy link, since the link has been set to NULL on attach error and
+> > bpf_link__destroy() is designed to do nothing if passed NULL to it.
+> >
+> > So I think current approach will keep consistent between samples since
+> > most of the sample won't need to jump to destroy_link.
+>
+> Since this is the sample code, I won't enforce that. So yes, you can
+> keep your current approach.
+>
+> >
+> >>>        return 0;
+> >>>    }
+> >>> diff --git a/samples/bpf/tracex2_kern.c b/samples/bpf/tracex2_kern.c
+> >>> index d865bb309bcb..ff5d00916733 100644
+> >>> --- a/samples/bpf/tracex2_kern.c
+> >>> +++ b/samples/bpf/tracex2_kern.c
+> >>> @@ -11,6 +11,12 @@
+> >>>    #include <bpf/bpf_helpers.h>
+> >>>    #include <bpf/bpf_tracing.h>
+> >>>
+> >>> +#ifdef __x86_64__
+> >>> +#define SYSCALL "__x64_"
+> >>> +#else
+> >>> +#define SYSCALL
+> >>> +#endif
+> >>
+> >> See test_progs.h, one more case to handle:
+> >> #ifdef __x86_64__
+> >> #define SYS_NANOSLEEP_KPROBE_NAME "__x64_sys_nanosleep"
+> >> #elif defined(__s390x__)
+> >> #define SYS_NANOSLEEP_KPROBE_NAME "__s390x_sys_nanosleep"
+> >> #else
+> >> #define SYS_NANOSLEEP_KPROBE_NAME "sys_nanosleep"
+> >> #endif
+> >>
+> >
+> > That was also one of the considerations when writing patches.
+> > I'm planning to refactor most of the programs in the sample using
+> > libbpf, and found out that there are bunch of samples that tracks
+> > syscall with kprobe. Replacing all of them will take lots of macros
+> > and I thought using prefix will be better idea.
+> >
+> > Actually, my initial plan was to create macro of SYSCALL()
+> >
+> >         #ifdef __x86_64__
+> >         #define PREFIX "__x64_"
+> >         #elif defined(__s390x__)
+> >         #define PREFIX "__s390x_"
+> >         #else
+> >         #define PREFIX ""
+> >         #endif
+> >
+> >         #define SYSCALL(SYS) PREFIX ## SYS
+> >
+> > And to use this macro universally without creating additional headers,
+> > I was trying to add this to samples/bpf/syscall_nrs.c which later
+> > compiles to samples/bpf/syscall_nrs.h. But it was pretty hacky way and
+> > it won't work properly. So I ended up with just adding prefix to syscall.
+>
+> I think it is okay to create a trace_common.h to have this definition
+> defined in one place and use them in bpf programs.
+>
+> >
+> > Is it necessary to define all of the macro for each architecture?
+>
+> Yes, if we define in trace_common.h, let us do for x64/x390x/others
+> similar to the above.
+>
 
-Fix memory leak in hashmap_clear() not freeing hashmap_entry structs for each
-of the remaining entries. Also NULL-out bucket list to prevent possible
-double-free between hashmap__clear() and hashmap__free().
+Sounds great. I'll add trace_common.h and apply the syscall macro.
+I'll send a new version of the patch soon.
 
-Running test_progs-asan flavor clearly showed this problem.
+> >
+> >>> +
+> >>>    struct bpf_map_def SEC("maps") my_map = {
+> >>>        .type = BPF_MAP_TYPE_HASH,
+> >>>        .key_size = sizeof(long),
+> >>> @@ -77,7 +83,7 @@ struct bpf_map_def SEC("maps") my_hist_map = {
+> >>>        .max_entries = 1024,
+> >>>    };
+> >>>
+> >>> -SEC("kprobe/sys_write")
+> >>> +SEC("kprobe/" SYSCALL "sys_write")
+> >>>    int bpf_prog3(struct pt_regs *ctx)
+> >>>    {
+> >>>        long write_size = PT_REGS_PARM3(ctx);
+> >> [...]
+> >
+> >
+> > Thank you for your time and effort for the review :)
+> >
+> > Best,
+> > Daniel
+> >
 
-Reported-by: Alston Tang <alston64@fb.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20200429012111.277390-5-andriin@fb.com
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/lib/bpf/hashmap.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Thank you for your time and effort for the review :)
 
-diff --git a/tools/lib/bpf/hashmap.c b/tools/lib/bpf/hashmap.c
-index 54c30c802070..cffb96202e0d 100644
---- a/tools/lib/bpf/hashmap.c
-+++ b/tools/lib/bpf/hashmap.c
-@@ -59,7 +59,14 @@ struct hashmap *hashmap__new(hashmap_hash_fn hash_fn,
- 
- void hashmap__clear(struct hashmap *map)
- {
-+	struct hashmap_entry *cur, *tmp;
-+	int bkt;
-+
-+	hashmap__for_each_entry_safe(map, cur, tmp, bkt) {
-+		free(cur);
-+	}
- 	free(map->buckets);
-+	map->buckets = NULL;
- 	map->cap = map->cap_bits = map->sz = 0;
- }
- 
 -- 
-2.26.2.761.g0e0b3e54be-goog
-
+Best,
+Daniel T. Lee
