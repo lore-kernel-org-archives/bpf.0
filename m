@@ -2,67 +2,72 @@ Return-Path: <SRS0=Xcm6=65=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68846C433DF
-	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 16:51:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F165C433E1
+	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 17:00:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3DF3A206C0
-	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 16:51:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 65526206C0
+	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 17:00:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tLqu7zzM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ccbWLnUt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgEOQuN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 May 2020 12:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56924 "EHLO
+        id S1726251AbgEORAL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 May 2020 13:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726242AbgEOQuN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 15 May 2020 12:50:13 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F58C05BD09
-        for <bpf@vger.kernel.org>; Fri, 15 May 2020 09:50:13 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id y8so3244682ybn.20
-        for <bpf@vger.kernel.org>; Fri, 15 May 2020 09:50:13 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726250AbgEORAL (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 15 May 2020 13:00:11 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA83AC061A0C
+        for <bpf@vger.kernel.org>; Fri, 15 May 2020 10:00:09 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id y10so1181181ybm.12
+        for <bpf@vger.kernel.org>; Fri, 15 May 2020 10:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=9wE9+uYnPyHYBqhR+xTCODqhwbytCS+WPKk2ROqoQ0g=;
-        b=tLqu7zzMrYW+ZkntEU0ajxzoLSG5IfNMsKggx4+Y9NmSkUGT76DEavorSytFpWmXzX
-         i+6FjxP6+Tdo4Y/QszAaJXaCXpL9D8XqCk3hqsI0FUyYc+MtMRd8g9QY/RH1AzdsuaLB
-         Hf801mUExVuv/efSSwn3UJa6V75a5v5loJmIyWiL4bP36Xp12MHMGw0LM8PGMzbaQrW0
-         oHbPzIz56OeRs1BQNfpIXVClkYutWh4P04JDXbkJ9QWjVT7yiV7aB5N2YbCqhDz67y+R
-         o6X/skCdWp4wakVVam610PYnwsf4VTj3a7m+VwfXZv0kaMg8q7NbAbAese788sCPoCfd
-         pnwg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7FCtnhxXRkcL3anwH9mEdDuKXNzEgQcRUlM4mCBSwPs=;
+        b=ccbWLnUtUwiKAn842+6hU4C8edxHHnDZVhGAcXJ4MHD2aPM6Y9mOFtesaLH/exfbRt
+         V8+JUSsPRZGS6hqOjAIdFZfjzoqsQd2EFR1KpOCWVsK8DeNYUfpVPeuX+Bc1ljak+GmK
+         IXRcsBaTgrtooRn0FHSrLzePzaHbEIPHqyT7MivD7o8WNzJZAywU2+W4FDZ/61x78tN+
+         ijTVdyvNlGULn23pBqyFlg5XtYzRLEJRj2EC4Bv5rvQILYRVWMtK3yB6og4PdN3nWygU
+         YUR1czuWUDExyXOofEPeqN2USbyL9tKoOXk+6h7oEeUKlWH/11Da1+aoBE84Br767RNx
+         08XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=9wE9+uYnPyHYBqhR+xTCODqhwbytCS+WPKk2ROqoQ0g=;
-        b=J/84qQer8Quvko5j8Hlpu389wkGaXBCnCSYBRzQxEzf4QjI+6kFiiHzpVo0+P5AHb7
-         b6gV2kY5UfoZlcGXkTNIB4arUtZ9VVJxfogXbh2ynjfjdj30uz6BzspqwyAMbXp0W3x6
-         uqMHA2al/ZrFQb3WltTLHgDTH9e8UpYg6Z5mMtY9i8UgosGlPrmWWl+Z4EE+iuBUetvg
-         VnNsxj4iIo7Q1r5r29sQIDbK22mu0fO9/m/aBbQAddA9xTWmGsRvjp6+1dKJ338RcPWO
-         eHTYrfcHVUGEV65/3+s20uZxTHPZSvqTUsS2NvLnP86lRpVqaP7LyhzMN+P1ts5itRxC
-         ARZw==
-X-Gm-Message-State: AOAM532z0NpVYVn/LpceYO8O8pJxwELLEpggoImGN1qWZCajfvwL1HCa
-        0SE2ajrNES0+Y93vEodxlc/uGHS2YOik
-X-Google-Smtp-Source: ABdhPJwY7yBo/mBm0YamN0eM/SyiF9JnyivPehxA5K95j1vaxfM09wEVfXjbqZWVeDi3JrW6nK9y62RiKT7Q
-X-Received: by 2002:a25:71c6:: with SMTP id m189mr3881034ybc.187.1589561412313;
- Fri, 15 May 2020 09:50:12 -0700 (PDT)
-Date:   Fri, 15 May 2020 09:50:00 -0700
-Message-Id: <20200515165007.217120-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.26.2.761.g0e0b3e54be-goog
-Subject: [PATCH v2 0/7] Copy hashmap to tools/perf/util, use in perf expr
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7FCtnhxXRkcL3anwH9mEdDuKXNzEgQcRUlM4mCBSwPs=;
+        b=gmRaXum/5S4Wyw5BsD92oRLssJal8o8FTS+lSxk4KzHCXqkAy0SNomaHTTqkm8oQnn
+         LZKaapLEey6T3IS+YX9QYmctKGA4YD34oiZmlW3FkDWgbZiN1DPHRNtKLhKBhHABY81x
+         P2kQDKOhIbmhjFkZXthk1zJw1Z8IqN+oJYESms4zkDVVQGn9e849i+yAyWODxgkArXrN
+         KKkNQA2OoLMvjPpIYmwtKIfAsKI6j3bWpatuLgOLVGoLPRXRpekfXQYARZn8UUR2tOxn
+         mIjfKTtf1SRu8k2lO2jGn16tPeOsLeU35KVZL09I62hVRAweh8HiGpMc4O8NB6tz0pnc
+         ZUpQ==
+X-Gm-Message-State: AOAM532AmRq9M1fLn3u1KvdGkDznGbBrOslEI6nmNG00M+13Ma98TiSG
+        A1B01GoZiS/tLldMM0BPHAPOFh8HRfPVW3sixi9lqQ==
+X-Google-Smtp-Source: ABdhPJyH3+hVuoWG26jUdXOuiqO06AU3SHQ71fqWw7wtANcrcWD7kOBFVq4nqnjQ0Txo9ZKUonn51mDqXlP2DLGicIk=
+X-Received: by 2002:a25:c08b:: with SMTP id c133mr7057333ybf.286.1589562008534;
+ Fri, 15 May 2020 10:00:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200515065624.21658-1-irogers@google.com> <20200515065624.21658-5-irogers@google.com>
+ <20200515091707.GC3511648@krava> <20200515142917.GT5583@kernel.org>
+ <CAP-5=fXtXgnb4nrVtsoxQ6vj8YtzPicFsad6+jB5UUFqMzg4mw@mail.gmail.com> <20200515163146.GA9335@kernel.org>
+In-Reply-To: <20200515163146.GA9335@kernel.org>
 From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
+Date:   Fri, 15 May 2020 09:59:57 -0700
+Message-ID: <CAP-5=fWiaVXVHVu7iFw+7V21Ztf6VU7BtwhUa5gsq3f+ZryQ+w@mail.gmail.com>
+Subject: Re: [PATCH 4/8] libbpf hashmap: Localize static hashmap__* symbols
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -79,77 +84,118 @@ To:     Peter Zijlstra <peterz@infradead.org>,
         Cong Wang <xiyou.wangcong@gmail.com>,
         Kim Phillips <kim.phillips@amd.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+        Leo Yan <leo.yan@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Perf's expr code currently builds an array of strings then removes
-duplicates. The array is larger than necessary and has recently been
-increased in size. When this was done it was commented that a hashmap
-would be preferable.
+On Fri, May 15, 2020 at 9:31 AM Arnaldo Carvalho de Melo
+<arnaldo.melo@gmail.com> wrote:
+>
+> Em Fri, May 15, 2020 at 07:53:33AM -0700, Ian Rogers escreveu:
+> > On Fri, May 15, 2020 at 7:29 AM Arnaldo Carvalho de Melo
+> > <arnaldo.melo@gmail.com> wrote:
+> > >
+> > > Em Fri, May 15, 2020 at 11:17:07AM +0200, Jiri Olsa escreveu:
+> > > > On Thu, May 14, 2020 at 11:56:20PM -0700, Ian Rogers wrote:
+> > > > > Localize the hashmap__* symbols in libbpf.a. To allow for a version in
+> > > > > libapi.
+> > > > >
+> > > > > Before:
+> > > > > $ nm libbpf.a
+> > > > > ...
+> > > > > 000000000002088a t hashmap_add_entry
+> > > > > 000000000001712a t hashmap__append
+> > > > > 0000000000020aa3 T hashmap__capacity
+> > > > > 000000000002099c T hashmap__clear
+> > > > > 00000000000208b3 t hashmap_del_entry
+> > > > > 0000000000020fc1 T hashmap__delete
+> > > > > 0000000000020f29 T hashmap__find
+> > > > > 0000000000020c6c t hashmap_find_entry
+> > > > > 0000000000020a61 T hashmap__free
+> > > > > 0000000000020b08 t hashmap_grow
+> > > > > 00000000000208dd T hashmap__init
+> > > > > 0000000000020d35 T hashmap__insert
+> > > > > 0000000000020ab5 t hashmap_needs_to_grow
+> > > > > 0000000000020947 T hashmap__new
+> > > > > 0000000000000775 t hashmap__set
+> > > > > 00000000000212f8 t hashmap__set
+> > > > > 0000000000020a91 T hashmap__size
+> > > > > ...
+> > > > >
+> > > > > After:
+> > > > > $ nm libbpf.a
+> > > > > ...
+> > > > > 000000000002088a t hashmap_add_entry
+> > > > > 000000000001712a t hashmap__append
+> > > > > 0000000000020aa3 t hashmap__capacity
+> > > > > 000000000002099c t hashmap__clear
+> > > > > 00000000000208b3 t hashmap_del_entry
+> > > > > 0000000000020fc1 t hashmap__delete
+> > > > > 0000000000020f29 t hashmap__find
+> > > > > 0000000000020c6c t hashmap_find_entry
+> > > > > 0000000000020a61 t hashmap__free
+> > > > > 0000000000020b08 t hashmap_grow
+> > > > > 00000000000208dd t hashmap__init
+> > > > > 0000000000020d35 t hashmap__insert
+> > > > > 0000000000020ab5 t hashmap_needs_to_grow
+> > > > > 0000000000020947 t hashmap__new
+> > > > > 0000000000000775 t hashmap__set
+> > > > > 00000000000212f8 t hashmap__set
+> > > > > 0000000000020a91 t hashmap__size
+> > > > > ...
+> > > >
+> > > > I think this will break bpf selftests which use hashmap,
+> > > > we need to find some other way to include this
+> > > >
+> > > > either to use it from libbpf directly, or use the api version
+> > > > only if the libbpf is not compiled in perf, we could use
+> > > > following to detect that:
+> > > >
+> > > >       CFLAGS += -DHAVE_LIBBPF_SUPPORT
+> > > >       $(call detected,CONFIG_LIBBPF)
+> > >
+> > > And have it in tools/perf/util/ instead?
+>
+> > *sigh*
+>
+> > $ make -C tools/testing/selftests/bpf test_hashmap
+> > make: Entering directory
+> > '/usr/local/google/home/irogers/kernel-trees/kernel.org/tip/tools/testing/s
+> > elftests/bpf'
+> >  BINARY   test_hashmap
+> > /usr/bin/ld: /tmp/ccEGGNw5.o: in function `test_hashmap_generic':
+> > /usr/local/google/home/irogers/kernel-trees/kernel.org/tip/tools/testing/selftests/bpf/test_hashmap.
+> > c:61: undefined reference to `hashmap__new'
+> > ...
+>
+> > My preference was to make hashmap a sharable API in tools, to benefit
+>
+> That is my preference as well, I'm not defending having it in
+> tools/perf/util/, just saying that that is a possible way to make
+> progress with the current situation...
 
-libbpf has a hashmap but libbpf isn't currently required to build
-perf. To satisfy various concerns this change copies libbpf's hashmap
-into tools/perf/util, it then adds a check in perf that the two are in
-sync.
+Thanks, it'd be nice to be expedient as both Jiri and myself are
+changing code in this area. v2 is up for review here:
+https://lore.kernel.org/lkml/20200515165007.217120-8-irogers@google.com/
+An ifdef when the hashmap.h is used, and one in the build. It could be worse.
 
-Andrii's patch to hashmap from bpf-next is brought into this set to
-fix issues with hashmap__clear.
+Thanks,
+Ian
 
-Two minor changes to libbpf's hashmap are made that remove an unused
-dependency and fix a compiler warning.
-
-Two perf test changes are also brought in as they need refactoring to
-account for the expr API change and it is expected they will land
-ahead of this.
-https://lore.kernel.org/lkml/20200513062236.854-2-irogers@google.com/
-
-Tested with 'perf test' and 'make -C tools/perf build-test'.
-
-The hashmap change was originally part of an RFC:
-https://lore.kernel.org/lkml/20200508053629.210324-1-irogers@google.com/
-
-v2. moves hashmap into tools/perf/util rather than libapi, to allow
-hashmap's libbpf symbols to be visible when built statically for
-testing.
-
-Andrii Nakryiko (1):
-  libbpf: Fix memory leak and possible double-free in hashmap__clear
-
-Ian Rogers (6):
-  libbpf hashmap: Remove unused #include
-  libbpf hashmap: Fix signedness warnings
-  tools lib/api: Copy libbpf hashmap to tools/perf/util
-  perf test: Provide a subtest callback to ask for the reason for
-    skipping a subtest
-  perf test: Improve pmu event metric testing
-  perf expr: Migrate expr ids table to a hashmap
-
- tools/lib/bpf/hashmap.c         |  10 +-
- tools/lib/bpf/hashmap.h         |   1 -
- tools/perf/check-headers.sh     |   4 +
- tools/perf/tests/builtin-test.c |  18 ++-
- tools/perf/tests/expr.c         |  40 +++---
- tools/perf/tests/pmu-events.c   | 169 ++++++++++++++++++++++-
- tools/perf/tests/tests.h        |   4 +
- tools/perf/util/Build           |   4 +
- tools/perf/util/expr.c          | 129 +++++++++--------
- tools/perf/util/expr.h          |  26 ++--
- tools/perf/util/expr.y          |  22 +--
- tools/perf/util/hashmap.c       | 238 ++++++++++++++++++++++++++++++++
- tools/perf/util/hashmap.h       | 177 ++++++++++++++++++++++++
- tools/perf/util/metricgroup.c   |  87 ++++++------
- tools/perf/util/stat-shadow.c   |  49 ++++---
- 15 files changed, 798 insertions(+), 180 deletions(-)
- create mode 100644 tools/perf/util/hashmap.c
- create mode 100644 tools/perf/util/hashmap.h
-
--- 
-2.26.2.761.g0e0b3e54be-goog
-
+> > not just perf but say things like libsymbol, libperf, etc. Moving it
+> > into perf and using conditional compilation is kinda gross but having
+> > libbpf tests depend on libapi also isn't ideal I guess. It is tempting
+> > to just cut a hashmap from fresh cloth to avoid this and to share
+> > among tools/. I don't know if the bpf folks have opinions?
+> >
+> > I'll do a v2 using conditional compilation to see how bad it looks.
+>
+> Cool, lets see how it looks.
+>
+> - Arnaldo
