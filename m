@@ -2,72 +2,54 @@ Return-Path: <SRS0=Xcm6=65=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 808CCC433DF
-	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 22:18:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9283C433E1
+	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 22:41:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6089420758
-	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 22:18:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C9F83206D4
+	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 22:41:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qARBCYvg"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YG2IKlNX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727770AbgEOWSY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 May 2020 18:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727098AbgEOWRo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 May 2020 18:17:44 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A86C05BD0F
-        for <bpf@vger.kernel.org>; Fri, 15 May 2020 15:17:44 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id q11so4096049qvu.13
-        for <bpf@vger.kernel.org>; Fri, 15 May 2020 15:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=5X66uiOgYgneIaBJWnwDqqLNWHbvvwOIwUQE6JUFuvs=;
-        b=qARBCYvghEem4ji8jJ2BuAfbQmPGkVwr7DrK0FrvuDW0/fcRXW1UaNp83QHo004iT1
-         vuUgfu2YrFe+TvuMw8vjK3yr3XLqsiT1qSfht9xrfnq/N7Avk/OvbjrX4lH2kWEQcNdX
-         xSpJJrMqNf/3nLZYYqYeGPJ4H69NKUHRhxzk4HY2l24l0omIGzz0oC8j2QSYKshNkaZ6
-         c2ipmtfDZZFbNAuxFp9lVrVSs1zqEebu+FeVHSBRa3geGfjdwwGohjtOXDp9k8JGBZXl
-         2ny84viFIL8I+nKzyqA2lwAB/zIpfr8UXmS6SH4uE0kpaoByFcH8AuizCchzIwGRYqc3
-         MMiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=5X66uiOgYgneIaBJWnwDqqLNWHbvvwOIwUQE6JUFuvs=;
-        b=dxM/hoOlHaRIKm7vhcrQlZSgmukGaGMukohznv9nqn0QpUU5ze8yju71r58psPexIw
-         GRS5xGNQuePBe9txCvivTyx7sZrnOYdgLiz6qonKDsSZuirkFOvpZHvUgdU+2bDReoNY
-         cTi6i4tS+dsnEL5LYbWU4w3IrOeX1nFWI+WSDXpgtBl5hdDqaC3ynVsnkjPg+4CQj4f7
-         A1moWa7Fe85rUhBhVW5mxoI//8Xascjsr8r+H3BOLtnUdoSbjpnuF/5xKs65TG+tHWNt
-         JJxHmPH24V6qL6byEaJYosX43yJeuIwzPxdSZfZFeDCWQpjmUfzvwu9SNRK1LZ/z1tgh
-         Enjg==
-X-Gm-Message-State: AOAM531DKHAnl3sSKV04xnytUpEgYH3EwOLiAVeHHJpuNtQSSUCoh4tE
-        rBu22MXh7H7S0CV1b7MJES5cRrAUPhAZ
-X-Google-Smtp-Source: ABdhPJxKhy2kuV0TF8TWVXvm8V4MNQMdO/1/pXd8ZPwdQBwS4U2B0h4MOBFG4vjo44VnKkUnW1P/HKE9HyQv
-X-Received: by 2002:a05:6214:1427:: with SMTP id o7mr5829901qvx.104.1589581063378;
- Fri, 15 May 2020 15:17:43 -0700 (PDT)
-Date:   Fri, 15 May 2020 15:17:28 -0700
-In-Reply-To: <20200515221732.44078-1-irogers@google.com>
-Message-Id: <20200515221732.44078-4-irogers@google.com>
-Mime-Version: 1.0
-References: <20200515221732.44078-1-irogers@google.com>
-X-Mailer: git-send-email 2.26.2.761.g0e0b3e54be-goog
-Subject: [PATCH v3 3/7] libbpf hashmap: Fix signedness warnings
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
+        id S1726278AbgEOWlz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 May 2020 18:41:55 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:31780 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726231AbgEOWly (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 15 May 2020 18:41:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1589582513;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UL8fOqZTfdv9oaZOkGUT1dwItLiG3P0x4wkHssJgnAs=;
+        b=YG2IKlNXKGGESBWlpBg+YAYyaOLyKs0cjZBl7IJYFlfnMEKflGox/nifPhbihgppsoNcxO
+        VqIrUXp7TR8yjd3ekq3DTlyQGOa2rKos6PNWkFkMoFES1vLQno5NsedfQ6FkG3iqb6UT8O
+        BsYrUKcOqjHsgXyWXnHxJCosRDhNl5Q=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-466-Sv82uqk7PmSG4lAKL9NIow-1; Fri, 15 May 2020 18:41:49 -0400
+X-MC-Unique: Sv82uqk7PmSG4lAKL9NIow-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D39D7107ACCD;
+        Fri, 15 May 2020 22:41:45 +0000 (UTC)
+Received: from krava (unknown [10.40.192.69])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 35F945D9C9;
+        Fri, 15 May 2020 22:41:40 +0000 (UTC)
+Date:   Sat, 16 May 2020 00:41:39 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -85,59 +67,59 @@ To:     Peter Zijlstra <peterz@infradead.org>,
         Kim Phillips <kim.phillips@amd.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v2 7/7] perf expr: Migrate expr ids table to a hashmap
+Message-ID: <20200515224139.GB3577540@krava>
+References: <20200515165007.217120-1-irogers@google.com>
+ <20200515165007.217120-8-irogers@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200515165007.217120-8-irogers@google.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fixes the following warnings:
+On Fri, May 15, 2020 at 09:50:07AM -0700, Ian Rogers wrote:
 
-hashmap.c: In function =E2=80=98hashmap__clear=E2=80=99:
-hashmap.h:150:20: error: comparison of integer expressions of different sig=
-nedness: =E2=80=98int=E2=80=99 and =E2=80=98size_t=E2=80=99 {aka =E2=80=98l=
-ong unsigned int=E2=80=99} [-Werror=3Dsign-compare]
-  150 |  for (bkt =3D 0; bkt < map->cap; bkt++)        \
+SNIP
 
-hashmap.c: In function =E2=80=98hashmap_grow=E2=80=99:
-hashmap.h:150:20: error: comparison of integer expressions of different sig=
-nedness: =E2=80=98int=E2=80=99 and =E2=80=98size_t=E2=80=99 {aka =E2=80=98l=
-ong unsigned int=E2=80=99} [-Werror=3Dsign-compare]
-  150 |  for (bkt =3D 0; bkt < map->cap; bkt++)        \
+> diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+> index 8b4ce704a68d..f64ab91c432b 100644
+> --- a/tools/perf/util/expr.c
+> +++ b/tools/perf/util/expr.c
+> @@ -4,25 +4,76 @@
+>  #include "expr.h"
+>  #include "expr-bison.h"
+>  #include "expr-flex.h"
+> +#include <linux/kernel.h>
+>  
+>  #ifdef PARSER_DEBUG
+>  extern int expr_debug;
+>  #endif
+>  
+> +static size_t key_hash(const void *key, void *ctx __maybe_unused)
+> +{
+> +	const char *str = (const char *)key;
+> +	size_t hash = 0;
+> +
+> +	while (*str != '\0') {
+> +		hash *= 31;
+> +		hash += *str;
+> +		str++;
+> +	}
+> +	return hash;
+> +}
+> +
+> +static bool key_equal(const void *key1, const void *key2,
+> +		    void *ctx __maybe_unused)
+> +{
+> +	return !strcmp((const char *)key1, (const char *)key2);
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/lib/bpf/hashmap.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+should that be strcasecmp ? would it affect the key_hash as well?
 
-diff --git a/tools/lib/bpf/hashmap.c b/tools/lib/bpf/hashmap.c
-index cffb96202e0d..a405dad068f5 100644
---- a/tools/lib/bpf/hashmap.c
-+++ b/tools/lib/bpf/hashmap.c
-@@ -60,7 +60,7 @@ struct hashmap *hashmap__new(hashmap_hash_fn hash_fn,
- void hashmap__clear(struct hashmap *map)
- {
- 	struct hashmap_entry *cur, *tmp;
--	int bkt;
-+	size_t bkt;
-=20
- 	hashmap__for_each_entry_safe(map, cur, tmp, bkt) {
- 		free(cur);
-@@ -100,8 +100,7 @@ static int hashmap_grow(struct hashmap *map)
- 	struct hashmap_entry **new_buckets;
- 	struct hashmap_entry *cur, *tmp;
- 	size_t new_cap_bits, new_cap;
--	size_t h;
--	int bkt;
-+	size_t h, bkt;
-=20
- 	new_cap_bits =3D map->cap_bits + 1;
- 	if (new_cap_bits < HASHMAP_MIN_CAP_BITS)
---=20
-2.26.2.761.g0e0b3e54be-goog
+jirka
 
