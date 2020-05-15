@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED077C433E0
-	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 06:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DF45C433DF
+	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 06:57:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C4D90206F1
-	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 06:57:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 632B4206F1
+	for <bpf@archiver.kernel.org>; Fri, 15 May 2020 06:57:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KLdZkd7h"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L1Pcz6gn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726879AbgEOG5M (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 May 2020 02:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48374 "EHLO
+        id S1726661AbgEOG4f (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 May 2020 02:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726656AbgEOG4k (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 15 May 2020 02:56:40 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1691BC05BD0A
-        for <bpf@vger.kernel.org>; Thu, 14 May 2020 23:56:39 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id x10so1578787ybx.8
-        for <bpf@vger.kernel.org>; Thu, 14 May 2020 23:56:39 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726313AbgEOG4e (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 15 May 2020 02:56:34 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0E9C05BD0A
+        for <bpf@vger.kernel.org>; Thu, 14 May 2020 23:56:33 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id r124so1273831qkf.1
+        for <bpf@vger.kernel.org>; Thu, 14 May 2020 23:56:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=rDN5X6ee0p3DPWcQJnEO6bz3ZGrQ0VwuHJwyeJb8UjA=;
-        b=KLdZkd7htipcJURCMR14vvzpQP9A0y+OVxW6HSLzZHzFBZJHTKwz9IVBBxRF4GvUEm
-         FSMZk7uKRPn2mlBTMmDdAt4esd/0s/s2wgWy5aAXz7LuQtGXRB+iIyTXNziR2p53QKE3
-         T5PtllNVjRZJj4jCsHWttYebRTmUjfvvmRoDZtP0cJ7NI9MB3S+RPaCwNn8KeFIkYLI8
-         0cJto9KU6HcZEH+wKsu4HJgbFDpQ5jMfV2/lsGTVbKVcr1J9sClqOkTc/McfHP0SuS/F
-         XhDi9KXz9PRd5yRyXKq2SgvSHeLXQ916hTUQ41QXQgXuFNTFyzU/fLuAraZvRzw69afs
-         DX7w==
+        bh=tvl7gLFsS/dAedcEqfrKtncclZsMityBUyr8g2OugcQ=;
+        b=L1Pcz6gnqUzZkJrzhBUQp0QUfmzqMeD11Syg0lPwtZra+G6eYVcIwSdxLHbea30lMH
+         VPEiAhP4to/UFfvAX0LAMJ1tyxOpktCcAdayUEcYBXl6F8VgXGGU/TEUYJ3y15A/3R5E
+         YU6LMqnfuUcMQBUHHdnob6YvUNLUlY7ezab93T8g6Q4fi9fcQCkBISB+hhwPcYVCeE8R
+         1CUJySRpZreY8cMtNlU8Cm6Tfuw8qoyN8n86PLRd4NRTktgnuecp7WTaCr2RQI8IQ5td
+         cCkgS+2KoQy94ltW9Gy0mZAHyMKpiXB+4bjqQRJZt7KHphQ7+zuJxxd+VRgQ0t2PZ1MJ
+         xouw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=rDN5X6ee0p3DPWcQJnEO6bz3ZGrQ0VwuHJwyeJb8UjA=;
-        b=GhYUuo5uLpDYgppLaJltAo0gFrEVP2uSt27YO7cJdmR9K33qYwbvksTkwN63jspTx9
-         SfQrcEIn3dDPXGgIpcilsrPDOFrbKRcCwn3LJ1nr+v2rKO7U4HWToFpERPzwnbpyFjUd
-         uDjJDrUf+edxJ7r9hXT7nFt0WKAOd1ypA3lRnLHmAqMylIf82NPyHY9h+AQxpRTI7fpX
-         ueajRLYJDjFijdoQDy7+xkPBvFmL9AD7ZyJAoF876qSwiSsLq7WfNfdQqfz4FiouDBUE
-         sQyoWxMNThuqkmMus4TL94T5yC8Q24mTr2/2LaFQt6Vw4gkCbrrkz6Nv/aPQH4DxhGg0
-         6b7Q==
-X-Gm-Message-State: AOAM530wWNDJdGhpgufDrIeTM3Llt+iaeXJuoqYpIKR2xtL56QuIhUui
-        KFrGd5T/8ND128mKEdMEu3s6YXf1+a29
-X-Google-Smtp-Source: ABdhPJyAKrEhG9hP88436bqQfTqIsJLRSZBZRWxiUsuHq6Q11uRmf18lQUT127u8JrDy04si5qc0Uj/kFk74
-X-Received: by 2002:a25:a184:: with SMTP id a4mr3068042ybi.255.1589525797993;
- Thu, 14 May 2020 23:56:37 -0700 (PDT)
-Date:   Thu, 14 May 2020 23:56:20 -0700
+        bh=tvl7gLFsS/dAedcEqfrKtncclZsMityBUyr8g2OugcQ=;
+        b=FWSPE3AOa+a5aj4GDUoVcyjzsAptLIjXgOOSnlYIeJp/URhgrYr0yeRccDW7wmY8xA
+         UVyKvyJrr4fisT+65ZX8uxD1YDVGWxkD48JBkfAaZUIfgayhtJ+KDELkuyWFu1c0lHwU
+         KY30AiodtLSokbcB82qVJJEOcFMTOwuBGftgz6H99jY62gxFCHT5HB5YFkKYX7MkxW9P
+         MPLCifzEFPNawJ/zZ2Z4w7OXLpdIkrBpm/M9OTBI1/J5H90jwXcBBfolYkWW6d6JAczX
+         w5EuZ3EJLJjQdpMVd9N1JvbLfrfOh90B0XsAhjqWia2WhIrCQM0S8hwjNc1C7o7IBctI
+         +Vnw==
+X-Gm-Message-State: AOAM530nSUNAIOW3FXemnHHdEZ8gMOZN+H2H2OF8hIZiq+i25Hr1YD3+
+        xp0jfJejVueABI6kPOMmUztEOY/U3sL4
+X-Google-Smtp-Source: ABdhPJxDHoNPBj+Xy4XlruWwU/uTMdd15h3I5dMGic4z9Trd8Ynf0UfZutAZW27seEr+Fu0dO/wbEvgsqVcx
+X-Received: by 2002:a0c:ac41:: with SMTP id m1mr2102104qvb.71.1589525792231;
+ Thu, 14 May 2020 23:56:32 -0700 (PDT)
+Date:   Thu, 14 May 2020 23:56:17 -0700
 In-Reply-To: <20200515065624.21658-1-irogers@google.com>
-Message-Id: <20200515065624.21658-5-irogers@google.com>
+Message-Id: <20200515065624.21658-2-irogers@google.com>
 Mime-Version: 1.0
 References: <20200515065624.21658-1-irogers@google.com>
 X-Mailer: git-send-email 2.26.2.761.g0e0b3e54be-goog
-Subject: [PATCH 4/8] libbpf hashmap: Localize static hashmap__* symbols
+Subject: [PATCH 1/8] libbpf: Fix memory leak and possible double-free in hashmap__clear
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -86,85 +86,49 @@ To:     Peter Zijlstra <peterz@infradead.org>,
         Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+        Alston Tang <alston64@fb.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Localize the hashmap__* symbols in libbpf.a. To allow for a version in
-libapi.
+From: Andrii Nakryiko <andriin@fb.com>
 
-Before:
-$ nm libbpf.a
-...
-000000000002088a t hashmap_add_entry
-000000000001712a t hashmap__append
-0000000000020aa3 T hashmap__capacity
-000000000002099c T hashmap__clear
-00000000000208b3 t hashmap_del_entry
-0000000000020fc1 T hashmap__delete
-0000000000020f29 T hashmap__find
-0000000000020c6c t hashmap_find_entry
-0000000000020a61 T hashmap__free
-0000000000020b08 t hashmap_grow
-00000000000208dd T hashmap__init
-0000000000020d35 T hashmap__insert
-0000000000020ab5 t hashmap_needs_to_grow
-0000000000020947 T hashmap__new
-0000000000000775 t hashmap__set
-00000000000212f8 t hashmap__set
-0000000000020a91 T hashmap__size
-...
+Fix memory leak in hashmap_clear() not freeing hashmap_entry structs for each
+of the remaining entries. Also NULL-out bucket list to prevent possible
+double-free between hashmap__clear() and hashmap__free().
 
-After:
-$ nm libbpf.a
-...
-000000000002088a t hashmap_add_entry
-000000000001712a t hashmap__append
-0000000000020aa3 t hashmap__capacity
-000000000002099c t hashmap__clear
-00000000000208b3 t hashmap_del_entry
-0000000000020fc1 t hashmap__delete
-0000000000020f29 t hashmap__find
-0000000000020c6c t hashmap_find_entry
-0000000000020a61 t hashmap__free
-0000000000020b08 t hashmap_grow
-00000000000208dd t hashmap__init
-0000000000020d35 t hashmap__insert
-0000000000020ab5 t hashmap_needs_to_grow
-0000000000020947 t hashmap__new
-0000000000000775 t hashmap__set
-00000000000212f8 t hashmap__set
-0000000000020a91 t hashmap__size
-...
+Running test_progs-asan flavor clearly showed this problem.
 
+Reported-by: Alston Tang <alston64@fb.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20200429012111.277390-5-andriin@fb.com
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/bpf/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/lib/bpf/hashmap.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index aee7f1a83c77..4a1cdbceb04e 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -20,6 +20,7 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
+diff --git a/tools/lib/bpf/hashmap.c b/tools/lib/bpf/hashmap.c
+index 54c30c802070..cffb96202e0d 100644
+--- a/tools/lib/bpf/hashmap.c
++++ b/tools/lib/bpf/hashmap.c
+@@ -59,7 +59,14 @@ struct hashmap *hashmap__new(hashmap_hash_fn hash_fn,
  
- INSTALL = install
-+OBJCOPY ?= objcopy
+ void hashmap__clear(struct hashmap *map)
+ {
++	struct hashmap_entry *cur, *tmp;
++	int bkt;
++
++	hashmap__for_each_entry_safe(map, cur, tmp, bkt) {
++		free(cur);
++	}
+ 	free(map->buckets);
++	map->buckets = NULL;
+ 	map->cap = map->cap_bits = map->sz = 0;
+ }
  
- # Use DESTDIR for installing into a different root directory.
- # This is useful for building a package. The program will be
-@@ -181,6 +182,7 @@ $(BPF_IN_SHARED): force elfdep zdep bpfdep $(BPF_HELPER_DEFS)
- 
- $(BPF_IN_STATIC): force elfdep zdep bpfdep $(BPF_HELPER_DEFS)
- 	$(Q)$(MAKE) $(build)=libbpf OUTPUT=$(STATIC_OBJDIR)
-+	$(Q)$(OBJCOPY) -w -L hashmap__\* $@
- 
- $(BPF_HELPER_DEFS): $(srctree)/tools/include/uapi/linux/bpf.h
- 	$(QUIET_GEN)$(srctree)/scripts/bpf_helpers_doc.py --header \
 -- 
 2.26.2.761.g0e0b3e54be-goog
 
