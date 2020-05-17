@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55E57C433E1
-	for <bpf@archiver.kernel.org>; Sun, 17 May 2020 19:57:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9D75C433DF
+	for <bpf@archiver.kernel.org>; Sun, 17 May 2020 19:57:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 30DCD207D3
-	for <bpf@archiver.kernel.org>; Sun, 17 May 2020 19:57:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9066120758
+	for <bpf@archiver.kernel.org>; Sun, 17 May 2020 19:57:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZGN3upZe"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ljuVYDJK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbgEQT5r (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 17 May 2020 15:57:47 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:64316 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726372AbgEQT5r (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 17 May 2020 15:57:47 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04HJtSMT020898
-        for <bpf@vger.kernel.org>; Sun, 17 May 2020 12:57:45 -0700
+        id S1726717AbgEQT5y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 17 May 2020 15:57:54 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:19556 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726657AbgEQT5x (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 17 May 2020 15:57:53 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04HJscDF004941
+        for <bpf@vger.kernel.org>; Sun, 17 May 2020 12:57:50 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=HisIGKAv4VrnMJx7LxmQhcH6r5aSNlVCdz642a7/snU=;
- b=ZGN3upZesJEg1pHFQ2+tB1eULEOu5b7hI7sViyLuSSNuV4bRYSlDsuoxU5z3F9gqiXb2
- VjtRZObJqvUW+09v1jywK5nf1l36/0mURxw5Tar2xSmAk0ANQ6pSRkW6HUunuEjuDEmF
- S/GLVjhJAI0wRyJvITvvPx8vaBVIN4nc3+k= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3130134eyx-3
+ bh=In1dYdsF3WgnndXMLDTL1E4M0iOAz+O9fxDc5Uy4y1s=;
+ b=ljuVYDJKqa5vrkUpRWwT5L6QJCSyVmsvG9OtnSKy+S1yiSeoCJ7Dv48QodJ6TcvER1yw
+ 7RCkSkaQJgjr9Bq1fq7TKcHPG5YDsygmVBxPeuelcP3OgGpQ3SaFGyuMU7zipj18vBWr
+ GTuzFr5McskZYqv9LZ2kr0KGUWHZifD31A4= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 312dpwtxg5-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 17 May 2020 12:57:45 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sun, 17 May 2020 12:57:50 -0700
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Sun, 17 May 2020 12:57:44 -0700
+ 15.1.1847.3; Sun, 17 May 2020 12:57:48 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 7B7FB2EC32DC; Sun, 17 May 2020 12:57:39 -0700 (PDT)
+        id 1DD7C2EC32DC; Sun, 17 May 2020 12:57:46 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -51,9 +51,9 @@ CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Jonathan Lemon <jonathan.lemon@gmail.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 2/7] tools/memory-model: add BPF ringbuf MPSC litmus tests
-Date:   Sun, 17 May 2020 12:57:22 -0700
-Message-ID: <20200517195727.279322-3-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 5/7] selftests/bpf: add BPF ringbuf selftests
+Date:   Sun, 17 May 2020 12:57:25 -0700
+Message-ID: <20200517195727.279322-6-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200517195727.279322-1-andriin@fb.com>
 References: <20200517195727.279322-1-andriin@fb.com>
@@ -62,11 +62,11 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-17_07:2020-05-15,2020-05-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 phishscore=0
- priorityscore=1501 suspectscore=8 lowpriorityscore=0 spamscore=0
- adultscore=0 clxscore=1015 impostorscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=387 cotscore=-2147483648 classifier=spam adjust=0 reason=mlx
+ definitions=2020-05-17_08:2020-05-15,2020-05-17 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ malwarescore=0 clxscore=1015 impostorscore=0 spamscore=0 mlxlogscore=999
+ lowpriorityscore=0 suspectscore=25 bulkscore=0 priorityscore=1501
+ cotscore=-2147483648 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2004280000 definitions=main-2005170182
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -74,646 +74,524 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add 4 litmus tests for BPF ringbuf implementation, divided into two diffe=
-rent
-use cases.
+Both singleton BPF ringbuf and BPF ringbuf with map-in-map use cases are =
+tested.
+Also reserve+submit/discards and output variants of API are validated.
 
-First, two unbounded case, one with 1 producer and another with
-2 producers, single consumer. All reservations are supposed to succeed.
-
-Second, bounded case with only 1 record allowed in ring buffer at any giv=
-en
-time. Here failures to reserve space are expected. Again, 1- and 2- produ=
-cer
-cases, single consumer, are validated.
-
-Just for the fun of it, I also wrote a 3-producer cases, it took *16 hour=
-s* to
-validate, but came back successful as well. I'm not including it in this
-patch, because it's not practical to run it. See output for all included
-4 cases and one 3-producer one with bounded use case.
-
-Each litmust test implements producer/consumer protocol for BPF ring buff=
-er
-implementation found in kernel/bpf/ringbuf.c. Due to limitations, all rec=
-ords
-are assumed equal-sized and producer/consumer counters are incremented by=
- 1.
-This doesn't change the correctness of the algorithm, though.
-
-Verification results:
-/* 1p1c bounded case */
-$ herd7 -unroll 0 -conf linux-kernel.cfg litmus-tests/mpsc-rb+1p1c+bounde=
-d.litmus
-Test mpsc-rb+1p1c+bounded Allowed
-States 2
-0:rFail=3D0; 1:rFail=3D0; cx=3D0; dropped=3D0; len1=3D1; px=3D1;
-0:rFail=3D0; 1:rFail=3D0; cx=3D1; dropped=3D0; len1=3D1; px=3D1;
-Ok
-Witnesses
-Positive: 3 Negative: 0
-Condition exists (0:rFail=3D0 /\ 1:rFail=3D0 /\ dropped=3D0 /\ px=3D1 /\ =
-len1=3D1 /\ (cx=3D0 \/ cx=3D1))
-Observation mpsc-rb+1p1c+bounded Always 3 0
-Time mpsc-rb+1p1c+bounded 0.03
-Hash=3D5bdad0f41557a641370e7fa6b8eb2f43
-
-/* 2p1c bounded case */
-$ herd7 -unroll 0 -conf linux-kernel.cfg litmus-tests/mpsc-rb+2p1c+bounde=
-d.litmus
-Test mpsc-rb+2p1c+bounded Allowed
-States 4
-0:rFail=3D0; 1:rFail=3D0; 2:rFail=3D0; cx=3D0; dropped=3D1; len1=3D1; px=3D=
-1;
-0:rFail=3D0; 1:rFail=3D0; 2:rFail=3D0; cx=3D1; dropped=3D0; len1=3D1; px=3D=
-2;
-0:rFail=3D0; 1:rFail=3D0; 2:rFail=3D0; cx=3D1; dropped=3D1; len1=3D1; px=3D=
-1;
-0:rFail=3D0; 1:rFail=3D0; 2:rFail=3D0; cx=3D2; dropped=3D0; len1=3D1; px=3D=
-2;
-Ok
-Witnesses
-Positive: 22 Negative: 0
-Condition exists (0:rFail=3D0 /\ 1:rFail=3D0 /\ 2:rFail=3D0 /\ len1=3D1 /=
-\ (dropped=3D0 /\ px=3D2 /\ (cx=3D1 \/ cx=3D2) \/ dropped=3D1 /\ px=3D1 /=
-\ (cx=3D0 \/ cx=3D1)))
-Observation mpsc-rb+2p1c+bounded Always 22 0
-Time mpsc-rb+2p1c+bounded 119.38
-Hash=3De2f8f442a02bf7d8c2988ba82cf002d2
-
-/* 1p1c unbounded case */
-$ herd7 -unroll 0 -conf linux-kernel.cfg litmus-tests/mpsc-rb+1p1c+unboun=
-d.litmus
-Test mpsc-rb+1p1c+unbound Allowed
-States 2
-0:rFail=3D0; 1:rFail=3D0; cx=3D0; len1=3D1; px=3D1;
-0:rFail=3D0; 1:rFail=3D0; cx=3D1; len1=3D1; px=3D1;
-Ok
-Witnesses
-Positive: 3 Negative: 0
-Condition exists (0:rFail=3D0 /\ 1:rFail=3D0 /\ px=3D1 /\ len1=3D1 /\ (cx=
-=3D0 \/ cx=3D1))
-Observation mpsc-rb+1p1c+unbound Always 3 0
-Time mpsc-rb+1p1c+unbound 0.02
-Hash=3Dbe9de6487d8e27c3d37802d122e4a87c
-
-/* 2p1c unbounded case */
-$ herd7 -unroll 0 -conf linux-kernel.cfg litmus-tests/mpsc-rb+2p1c+unboun=
-d.litmus
-Test mpsc-rb+2p1c+unbound Allowed
-States 3
-0:rFail=3D0; 1:rFail=3D0; 2:rFail=3D0; cx=3D0; len1=3D1; len2=3D1; px=3D2=
-;
-0:rFail=3D0; 1:rFail=3D0; 2:rFail=3D0; cx=3D1; len1=3D1; len2=3D1; px=3D2=
-;
-0:rFail=3D0; 1:rFail=3D0; 2:rFail=3D0; cx=3D2; len1=3D1; len2=3D1; px=3D2=
-;
-Ok
-Witnesses
-Positive: 42 Negative: 0
-Condition exists (0:rFail=3D0 /\ 1:rFail=3D0 /\ 2:rFail=3D0 /\ px=3D2 /\ =
-len1=3D1 /\ len2=3D1 /\ (cx=3D0 \/ cx=3D1 \/ cx=3D2))
-Observation mpsc-rb+2p1c+unbound Always 42 0
-Time mpsc-rb+2p1c+unbound 39.19
-Hash=3Df0352aba9bdc03dd0b1def7d0c4956fa
-
-/* 3p1c bounded case */
-$ herd7 -unroll 0 -conf linux-kernel.cfg mpsc-rb+3p1c+bounded.litmus
-Test mpsc+ringbuf-spinlock Allowed
-States 5
-0:rFail=3D0; 1:rFail=3D0; 2:rFail=3D0; 3:rFail=3D0; cx=3D0; len1=3D1; len=
-2=3D1; px=3D2;
-0:rFail=3D0; 1:rFail=3D0; 2:rFail=3D0; 3:rFail=3D0; cx=3D1; len1=3D1; len=
-2=3D1; px=3D2;
-0:rFail=3D0; 1:rFail=3D0; 2:rFail=3D0; 3:rFail=3D0; cx=3D1; len1=3D1; len=
-2=3D1; px=3D3;
-0:rFail=3D0; 1:rFail=3D0; 2:rFail=3D0; 3:rFail=3D0; cx=3D2; len1=3D1; len=
-2=3D1; px=3D2;
-0:rFail=3D0; 1:rFail=3D0; 2:rFail=3D0; 3:rFail=3D0; cx=3D2; len1=3D1; len=
-2=3D1; px=3D3;
-Ok
-Witnesses
-Positive: 558 Negative: 0
-Condition exists (0:rFail=3D0 /\ 1:rFail=3D0 /\ 2:rFail=3D0 /\ 3:rFail=3D=
-0 /\ len1=3D1 /\ len2=3D1 /\ (px=3D2 /\ (cx=3D0 \/ cx=3D1 \/ cx=3D2) \/ p=
-x=3D3 /\ (cx=3D1 \/ cx=3D2)))
-Observation mpsc+ringbuf-spinlock Always 558 0
-Time mpsc+ringbuf-spinlock 57487.24
-Hash=3D133977dba930d167b4e1b4a6923d5687
-
-Cc: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../litmus-tests/mpsc-rb+1p1c+bounded.litmus  |  92 +++++++++++
- .../litmus-tests/mpsc-rb+1p1c+unbound.litmus  |  83 ++++++++++
- .../litmus-tests/mpsc-rb+2p1c+bounded.litmus  | 152 ++++++++++++++++++
- .../litmus-tests/mpsc-rb+2p1c+unbound.litmus  | 137 ++++++++++++++++
- 4 files changed, 464 insertions(+)
- create mode 100644 tools/memory-model/litmus-tests/mpsc-rb+1p1c+bounded.=
-litmus
- create mode 100644 tools/memory-model/litmus-tests/mpsc-rb+1p1c+unbound.=
-litmus
- create mode 100644 tools/memory-model/litmus-tests/mpsc-rb+2p1c+bounded.=
-litmus
- create mode 100644 tools/memory-model/litmus-tests/mpsc-rb+2p1c+unbound.=
-litmus
+ .../selftests/bpf/prog_tests/ringbuf.c        | 211 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/ringbuf_multi.c  | 102 +++++++++
+ .../selftests/bpf/progs/test_ringbuf.c        |  78 +++++++
+ .../selftests/bpf/progs/test_ringbuf_multi.c  |  77 +++++++
+ 4 files changed, 468 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/ringbuf.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/ringbuf_multi.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_multi.=
+c
 
-diff --git a/tools/memory-model/litmus-tests/mpsc-rb+1p1c+bounded.litmus =
-b/tools/memory-model/litmus-tests/mpsc-rb+1p1c+bounded.litmus
+diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/tes=
+ting/selftests/bpf/prog_tests/ringbuf.c
 new file mode 100644
-index 000000000000..cafd17afe11e
+index 000000000000..bb8541f240e2
 --- /dev/null
-+++ b/tools/memory-model/litmus-tests/mpsc-rb+1p1c+bounded.litmus
-@@ -0,0 +1,92 @@
-+C mpsc-rb+1p1c+bounded
++++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+@@ -0,0 +1,211 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <linux/compiler.h>
++#include <asm/barrier.h>
++#include <test_progs.h>
++#include <sys/mman.h>
++#include <sys/epoll.h>
++#include <time.h>
++#include <sched.h>
++#include <signal.h>
++#include <pthread.h>
++#include <sys/sysinfo.h>
++#include <linux/perf_event.h>
++#include <linux/ring_buffer.h>
++#include "test_ringbuf.skel.h"
 +
-+(*
-+ * Result: Always
-+ *
-+ * This litmus test validates BPF ring buffer implementation under the
-+ * following assumptions:
-+ * - 1 producer;
-+ * - 1 consumer;
-+ * - ring buffer has capacity for only 1 record.
-+ *
-+ * Expectations:
-+ * - 1 record pushed into ring buffer;
-+ * - 0 or 1 element is consumed.
-+ * - no failures.
-+ *)
++#define EDONE 7777
 +
++static int duration =3D 0;
++
++struct sample {
++	int pid;
++	int seq;
++	long value;
++	char comm[16];
++};
++
++static int sample_cnt;
++
++static int process_sample(void *ctx, void *data, size_t len)
 +{
-+	max_len =3D 1;
-+	len1 =3D 0;
-+	px =3D 0;
-+	cx =3D 0;
-+	dropped =3D 0;
-+}
++	struct sample *s =3D data;
 +
-+P0(int *len1, int *cx, int *px)
-+{
-+	int *rLenPtr;
-+	int rLen;
-+	int rPx;
-+	int rCx;
-+	int rFail;
++	sample_cnt++;
 +
-+	rFail =3D 0;
-+	rCx =3D smp_load_acquire(cx);
-+
-+	rPx =3D smp_load_acquire(px);
-+	if (rCx < rPx) {
-+		if (rCx =3D=3D 0)
-+			rLenPtr =3D len1;
-+		else
-+			rFail =3D 1;
-+
-+		rLen =3D smp_load_acquire(rLenPtr);
-+		if (rLen =3D=3D 0) {
-+			rFail =3D 1;
-+		} else if (rLen =3D=3D 1) {
-+			rCx =3D rCx + 1;
-+			smp_store_release(cx, rCx);
-+		}
++	switch (s->seq) {
++	case 0:
++		CHECK(s->value !=3D 333, "sample1_value", "exp %ld, got %ld\n",
++		      333L, s->value);
++		return 0;
++	case 1:
++		CHECK(s->value !=3D 777, "sample2_value", "exp %ld, got %ld\n",
++		      777L, s->value);
++		return -EDONE;
++	default:
++		/* we don't care about the rest */
++		return 0;
 +	}
 +}
 +
-+P1(int *len1, spinlock_t *rb_lock, int *px, int *cx, int *dropped, int *=
-max_len)
++static struct test_ringbuf *skel;
++static struct ring_buffer *ringbuf;
++
++static void trigger_samples()
 +{
-+	int rPx;
-+	int rCx;
-+	int rFail;
-+	int *rLenPtr;
++	skel->bss->dropped =3D 0;
++	skel->bss->total =3D 0;
++	skel->bss->discarded =3D 0;
 +
-+	rFail =3D 0;
-+	rCx =3D smp_load_acquire(cx);
++	/* trigger exactly two samples */
++	skel->bss->value =3D 333;
++	syscall(__NR_getpgid);
++	skel->bss->value =3D 777;
++	syscall(__NR_getpgid);
++}
 +
-+	spin_lock(rb_lock);
++static void *poll_thread(void *input)
++{
++	long timeout =3D (long)input;
 +
-+	rPx =3D *px;
-+	if (rPx - rCx >=3D *max_len) {
-+		atomic_inc(dropped);
-+		spin_unlock(rb_lock);
++	return (void *)(long)ring_buffer__poll(ringbuf, timeout);
++}
++
++void test_ringbuf(void)
++{
++	const size_t rec_sz =3D BPF_RINGBUF_HDR_SZ + sizeof(struct sample);
++	pthread_t thread;
++	long bg_ret =3D -1;
++	int err;
++
++	skel =3D test_ringbuf__open_and_load();
++	if (CHECK(!skel, "skel_open_load", "skeleton open&load failed\n"))
++		return;
++
++	/* only trigger BPF program for current process */
++	skel->bss->pid =3D getpid();
++
++	ringbuf =3D ring_buffer__new(bpf_map__fd(skel->maps.ringbuf),
++				   process_sample, NULL, NULL);
++	if (CHECK(!ringbuf, "ringbuf_create", "failed to create ringbuf\n"))
++		goto cleanup;
++
++	err =3D test_ringbuf__attach(skel);
++	if (CHECK(err, "skel_attach", "skeleton attachment failed: %d\n", err))
++		goto cleanup;
++
++	trigger_samples();
++
++	/* 2 submitted + 1 discarded records */
++	CHECK(skel->bss->avail_data !=3D 3 * rec_sz,
++	      "err_avail_size", "exp %ld, got %ld\n",
++	      3L * rec_sz, skel->bss->avail_data);
++	CHECK(skel->bss->ring_size !=3D 4096,
++	      "err_ring_size", "exp %ld, got %ld\n",
++	      4096L, skel->bss->ring_size);
++	CHECK(skel->bss->cons_pos !=3D 0,
++	      "err_cons_pos", "exp %ld, got %ld\n",
++	      0L, skel->bss->cons_pos);
++	CHECK(skel->bss->prod_pos !=3D 3 * rec_sz,
++	      "err_prod_pos", "exp %ld, got %ld\n",
++	      3L * rec_sz, skel->bss->prod_pos);
++
++	/* poll for samples */
++	err =3D ring_buffer__poll(ringbuf, -1);
++
++	/* -EDONE is used as an indicator that we are done */
++	if (CHECK(err !=3D -EDONE, "err_done", "done err: %d\n", err))
++		goto cleanup;
++
++	/* we expect extra polling to return nothing */
++	err =3D ring_buffer__poll(ringbuf, 0);
++	if (CHECK(err !=3D 0, "extra_samples", "poll result: %d\n", err))
++		goto cleanup;
++
++	CHECK(skel->bss->dropped !=3D 0, "err_dropped", "exp %ld, got %ld\n",
++	      0L, skel->bss->dropped);
++	CHECK(skel->bss->total !=3D 2, "err_total", "exp %ld, got %ld\n",
++	      2L, skel->bss->total);
++	CHECK(skel->bss->discarded !=3D 1, "err_discarded", "exp %ld, got %ld\n=
+",
++	      1L, skel->bss->discarded);
++
++	/* now validate consumer position is updated and returned */
++	trigger_samples();
++	CHECK(skel->bss->cons_pos !=3D 3 * rec_sz,
++	      "err_cons_pos", "exp %ld, got %ld\n",
++	      3L * rec_sz, skel->bss->cons_pos);
++	err =3D ring_buffer__poll(ringbuf, -1);
++	CHECK(err <=3D 0, "poll_err", "err %d\n", err);
++
++	/* start poll in background w/ long timeout */
++	err =3D pthread_create(&thread, NULL, poll_thread, (void *)(long)10000)=
+;
++	if (CHECK(err, "bg_poll", "pthread_create failed: %d\n", err))
++		goto cleanup;
++
++	/* turn off notifications now */
++	skel->bss->flags =3D BPF_RB_NO_WAKEUP;
++
++	/* give background thread a bit of a time */
++	usleep(50000);
++	trigger_samples();
++	/* sleeping arbitrarily is bad, but no better way to know that
++	 * epoll_wait() **DID NOT** unblock in background thread
++	 */
++	usleep(50000);
++	/* background poll should still be blocked */
++	err =3D pthread_tryjoin_np(thread, (void **)&bg_ret);
++	if (CHECK(err !=3D EBUSY, "try_join", "err %d\n", err))
++		goto cleanup;
++
++	/* BPF side did everything right */
++	CHECK(skel->bss->dropped !=3D 0, "err_dropped", "exp %ld, got %ld\n",
++	      0L, skel->bss->dropped);
++	CHECK(skel->bss->total !=3D 2, "err_total", "exp %ld, got %ld\n",
++	      2L, skel->bss->total);
++	CHECK(skel->bss->discarded !=3D 1, "err_discarded", "exp %ld, got %ld\n=
+",
++	      1L, skel->bss->discarded);
++
++	/* clear flags to return to "adaptive" notification mode */
++	skel->bss->flags =3D 0;
++
++	/* produce new samples, no notification should be triggered, because
++	 * consumer is now behind
++	 */
++	trigger_samples();
++
++	/* background poll should still be blocked */
++	err =3D pthread_tryjoin_np(thread, (void **)&bg_ret);
++	if (CHECK(err !=3D EBUSY, "try_join", "err %d\n", err))
++		goto cleanup;
++
++	/* now force notifications */
++	skel->bss->flags =3D BPF_RB_FORCE_WAKEUP;
++	sample_cnt =3D 0;
++	trigger_samples();
++
++	/* now we should get a pending notification */
++	usleep(50000);
++	err =3D pthread_tryjoin_np(thread, (void **)&bg_ret);
++	if (CHECK(err, "join_bg", "err %d\n", err))
++		goto cleanup;
++
++	if (CHECK(bg_ret !=3D 1, "bg_ret", "epoll_wait result: %ld", bg_ret))
++		goto cleanup;
++
++	/* 3 rounds, 2 samples each */
++	CHECK(sample_cnt !=3D 6, "wrong_sample_cnt",
++	      "expected to see %d samples, got %d\n", 6, sample_cnt);
++
++	/* BPF side did everything right */
++	CHECK(skel->bss->dropped !=3D 0, "err_dropped", "exp %ld, got %ld\n",
++	      0L, skel->bss->dropped);
++	CHECK(skel->bss->total !=3D 2, "err_total", "exp %ld, got %ld\n",
++	      2L, skel->bss->total);
++	CHECK(skel->bss->discarded !=3D 1, "err_discarded", "exp %ld, got %ld\n=
+",
++	      1L, skel->bss->discarded);
++
++	test_ringbuf__detach(skel);
++cleanup:
++	ring_buffer__free(ringbuf);
++	test_ringbuf__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c b/too=
+ls/testing/selftests/bpf/prog_tests/ringbuf_multi.c
+new file mode 100644
+index 000000000000..78e450609803
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c
+@@ -0,0 +1,102 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <test_progs.h>
++#include <sys/epoll.h>
++#include "test_ringbuf_multi.skel.h"
++
++static int duration =3D 0;
++
++struct sample {
++	int pid;
++	int seq;
++	long value;
++	char comm[16];
++};
++
++static int process_sample(void *ctx, void *data, size_t len)
++{
++	int ring =3D (unsigned long)ctx;
++	struct sample *s =3D data;
++
++	switch (s->seq) {
++	case 0:
++		CHECK(ring !=3D 1, "sample1_ring", "exp %d, got %d\n", 1, ring);
++		CHECK(s->value !=3D 333, "sample1_value", "exp %ld, got %ld\n",
++		      333L, s->value);
++		break;
++	case 1:
++		CHECK(ring !=3D 2, "sample2_ring", "exp %d, got %d\n", 2, ring);
++		CHECK(s->value !=3D 777, "sample2_value", "exp %ld, got %ld\n",
++		      777L, s->value);
++		break;
++	default:
++		CHECK(true, "extra_sample", "unexpected sample seq %d, val %ld\n",
++		      s->seq, s->value);
++		return -1;
++	}
++
++	return 0;
++}
++
++void test_ringbuf_multi(void)
++{
++	struct test_ringbuf_multi *skel;
++	struct ring_buffer *ringbuf;
++	int err;
++
++	skel =3D test_ringbuf_multi__open_and_load();
++	if (CHECK(!skel, "skel_open_load", "skeleton open&load failed\n"))
++		return;
++
++	/* only trigger BPF program for current process */
++	skel->bss->pid =3D getpid();
++
++	ringbuf =3D ring_buffer__new(bpf_map__fd(skel->maps.ringbuf1),
++				   process_sample, (void *)(long)1, NULL);
++	if (CHECK(!ringbuf, "ringbuf_create", "failed to create ringbuf\n"))
++		goto cleanup;
++
++	err =3D ring_buffer__add(ringbuf, bpf_map__fd(skel->maps.ringbuf2),
++			      process_sample, (void *)(long)2);
++	if (CHECK(err, "ringbuf_add", "failed to add another ring\n"))
++		goto cleanup;
++
++	err =3D test_ringbuf_multi__attach(skel);
++	if (CHECK(err, "skel_attach", "skeleton attachment failed: %d\n", err))
++		goto cleanup;
++
++	/* trigger few samples, some will be skipped */
++	skel->bss->target_ring =3D 0;
++	skel->bss->value =3D 333;
++	syscall(__NR_getpgid);
++
++	/* skipped, no ringbuf in slot 1 */
++	skel->bss->target_ring =3D 1;
++	skel->bss->value =3D 555;
++	syscall(__NR_getpgid);
++
++	skel->bss->target_ring =3D 2;
++	skel->bss->value =3D 777;
++	syscall(__NR_getpgid);
++
++	/* poll for samples, should get 2 ringbufs back */
++	err =3D ring_buffer__poll(ringbuf, -1);
++	if (CHECK(err !=3D 4, "poll_res", "expected 4 records, got %d\n", err))
++		goto cleanup;
++
++	/* expect extra polling to return nothing */
++	err =3D ring_buffer__poll(ringbuf, 0);
++	if (CHECK(err < 0, "extra_samples", "poll result: %d\n", err))
++		goto cleanup;
++
++	CHECK(skel->bss->dropped !=3D 0, "err_dropped", "exp %ld, got %ld\n",
++	      0L, skel->bss->dropped);
++	CHECK(skel->bss->skipped !=3D 1, "err_skipped", "exp %ld, got %ld\n",
++	      1L, skel->bss->skipped);
++	CHECK(skel->bss->total !=3D 2, "err_total", "exp %ld, got %ld\n",
++	      2L, skel->bss->total);
++
++cleanup:
++	ring_buffer__free(ringbuf);
++	test_ringbuf_multi__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf.c b/tools/tes=
+ting/selftests/bpf/progs/test_ringbuf.c
+new file mode 100644
+index 000000000000..79114eafd283
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_ringbuf.c
+@@ -0,0 +1,78 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2019 Facebook
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++struct sample {
++	int pid;
++	int seq;
++	long value;
++	char comm[16];
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++	__uint(max_entries, 1 << 12);
++} ringbuf SEC(".maps");
++
++/* inputs */
++int pid =3D 0;
++long value =3D 0;
++long flags =3D 0;
++
++/* outputs */
++long total =3D 0;
++long discarded =3D 0;
++long dropped =3D 0;
++
++long avail_data =3D 0;
++long ring_size =3D 0;
++long cons_pos =3D 0;
++long prod_pos =3D 0;
++
++/* inner state */
++long seq =3D 0;
++
++SEC("tp/syscalls/sys_enter_getpgid")
++int test_ringbuf(void *ctx)
++{
++	int cur_pid =3D bpf_get_current_pid_tgid() >> 32;
++	struct sample *sample;
++	int zero =3D 0;
++
++	if (cur_pid !=3D pid)
++		return 0;
++
++	sample =3D bpf_ringbuf_reserve(&ringbuf, sizeof(*sample), 0);
++	if (!sample) {
++		__sync_fetch_and_add(&dropped, 1);
++		return 1;
++	}
++
++	sample->pid =3D pid;
++	bpf_get_current_comm(sample->comm, sizeof(sample->comm));
++	sample->value =3D value;
++
++	sample->seq =3D seq++;
++	__sync_fetch_and_add(&total, 1);
++
++	if (sample->seq & 1) {
++		/* copy from reserved sample to a new one... */
++		bpf_ringbuf_output(&ringbuf, sample, sizeof(*sample), flags);
++		/* ...and then discard reserved sample */
++		bpf_ringbuf_discard(sample, flags);
++		__sync_fetch_and_add(&discarded, 1);
 +	} else {
-+		if (rPx =3D=3D 0)
-+			rLenPtr =3D len1;
-+		else
-+			rFail =3D 1;
-+
-+		*rLenPtr =3D -1;
-+		smp_wmb();
-+		smp_store_release(px, rPx + 1);
-+
-+		spin_unlock(rb_lock);
-+
-+		smp_store_release(rLenPtr, 1);
++		bpf_ringbuf_submit(sample, flags);
 +	}
-+}
 +
-+exists (
-+	0:rFail=3D0 /\ 1:rFail=3D0
-+	/\
-+	(
-+		(dropped=3D0 /\ px=3D1 /\ len1=3D1 /\ (cx=3D0 \/ cx=3D1))
-+	)
-+)
-diff --git a/tools/memory-model/litmus-tests/mpsc-rb+1p1c+unbound.litmus =
-b/tools/memory-model/litmus-tests/mpsc-rb+1p1c+unbound.litmus
++	avail_data =3D bpf_ringbuf_query(&ringbuf, BPF_RB_AVAIL_DATA);
++	ring_size =3D bpf_ringbuf_query(&ringbuf, BPF_RB_RING_SIZE);
++	cons_pos =3D bpf_ringbuf_query(&ringbuf, BPF_RB_CONS_POS);
++	prod_pos =3D bpf_ringbuf_query(&ringbuf, BPF_RB_PROD_POS);
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf_multi.c b/too=
+ls/testing/selftests/bpf/progs/test_ringbuf_multi.c
 new file mode 100644
-index 000000000000..84f660598015
+index 000000000000..7eb85dd9cd66
 --- /dev/null
-+++ b/tools/memory-model/litmus-tests/mpsc-rb+1p1c+unbound.litmus
-@@ -0,0 +1,83 @@
-+C mpsc-rb+1p1c+unbound
++++ b/tools/testing/selftests/bpf/progs/test_ringbuf_multi.c
+@@ -0,0 +1,77 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2019 Facebook
 +
-+(*
-+ * Result: Always
-+ *
-+ * This litmus test validates BPF ring buffer implementation under the
-+ * following assumptions:
-+ * - 1 producer;
-+ * - 1 consumer;
-+ * - ring buffer capacity is unbounded.
-+ *
-+ * Expectations:
-+ * - 1 record pushed into ring buffer;
-+ * - 0 or 1 element is consumed.
-+ * - no failures.
-+ *)
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
 +
++char _license[] SEC("license") =3D "GPL";
++
++struct sample {
++	int pid;
++	int seq;
++	long value;
++	char comm[16];
++};
++
++struct ringbuf_map {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++	__uint(max_entries, 1 << 12);
++} ringbuf1 SEC(".maps"),
++  ringbuf2 SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
++	__uint(max_entries, 4);
++	__type(key, int);
++	__array(values, struct ringbuf_map);
++} ringbuf_arr SEC(".maps") =3D {
++	.values =3D {
++		[0] =3D &ringbuf1,
++		[2] =3D &ringbuf2,
++	},
++};
++
++/* inputs */
++int pid =3D 0;
++int target_ring =3D 0;
++long value =3D 0;
++
++/* outputs */
++long total =3D 0;
++long dropped =3D 0;
++long skipped =3D 0;
++
++SEC("tp/syscalls/sys_enter_getpgid")
++int test_ringbuf(void *ctx)
 +{
-+	len1 =3D 0;
-+	px =3D 0;
-+	cx =3D 0;
-+}
++	int cur_pid =3D bpf_get_current_pid_tgid() >> 32;
++	struct sample *sample;
++	void *rb;
++	int zero =3D 0;
 +
-+P0(int *len1, int *cx, int *px)
-+{
-+	int *rLenPtr;
-+	int rLen;
-+	int rPx;
-+	int rCx;
-+	int rFail;
++	if (cur_pid !=3D pid)
++		return 0;
 +
-+	rFail =3D 0;
-+	rCx =3D smp_load_acquire(cx);
-+
-+	rPx =3D smp_load_acquire(px);
-+	if (rCx < rPx) {
-+		if (rCx =3D=3D 0)
-+			rLenPtr =3D len1;
-+		else
-+			rFail =3D 1;
-+
-+		rLen =3D smp_load_acquire(rLenPtr);
-+		if (rLen =3D=3D 0) {
-+			rFail =3D 1;
-+		} else if (rLen =3D=3D 1) {
-+			rCx =3D rCx + 1;
-+			smp_store_release(cx, rCx);
-+		}
-+	}
-+}
-+
-+P1(int *len1, spinlock_t *rb_lock, int *px, int *cx)
-+{
-+	int rPx;
-+	int rCx;
-+	int rFail;
-+	int *rLenPtr;
-+
-+	rFail =3D 0;
-+	rCx =3D smp_load_acquire(cx);
-+
-+	spin_lock(rb_lock);
-+
-+	rPx =3D *px;
-+	if (rPx =3D=3D 0)
-+		rLenPtr =3D len1;
-+	else
-+		rFail =3D 1;
-+
-+	*rLenPtr =3D -1;
-+	smp_wmb();
-+	smp_store_release(px, rPx + 1);
-+
-+	spin_unlock(rb_lock);
-+
-+	smp_store_release(rLenPtr, 1);
-+}
-+
-+exists (
-+	0:rFail=3D0 /\ 1:rFail=3D0
-+	/\ px=3D1 /\ len1=3D1
-+	/\ (cx=3D0 \/ cx=3D1)
-+)
-diff --git a/tools/memory-model/litmus-tests/mpsc-rb+2p1c+bounded.litmus =
-b/tools/memory-model/litmus-tests/mpsc-rb+2p1c+bounded.litmus
-new file mode 100644
-index 000000000000..900104c4933b
---- /dev/null
-+++ b/tools/memory-model/litmus-tests/mpsc-rb+2p1c+bounded.litmus
-@@ -0,0 +1,152 @@
-+C mpsc-rb+2p1c+bounded
-+
-+(*
-+ * Result: Always
-+ *
-+ * This litmus test validates BPF ring buffer implementation under the
-+ * following assumptions:
-+ * - 2 identical producers;
-+ * - 1 consumer;
-+ * - ring buffer has capacity for only 1 record.
-+ *
-+ * Expectations:
-+ * - either 1 or 2 records are pushed into ring buffer;
-+ * - 0, 1, or 2 elements are consumed by consumer;
-+ * - appropriate number of dropped records is recorded to satisfy ring b=
-uffer
-+ *   size bounds;
-+ * - no failures.
-+ *)
-+
-+{
-+	max_len =3D 1;
-+	len1 =3D 0;
-+	px =3D 0;
-+	cx =3D 0;
-+	dropped =3D 0;
-+}
-+
-+P0(int *len1, int *cx, int *px)
-+{
-+	int *rLenPtr;
-+	int rLen;
-+	int rPx;
-+	int rCx;
-+	int rFail;
-+
-+	rFail =3D 0;
-+	rCx =3D smp_load_acquire(cx);
-+
-+	rPx =3D smp_load_acquire(px);
-+	if (rCx < rPx) {
-+		if (rCx =3D=3D 0)
-+			rLenPtr =3D len1;
-+		else if (rCx =3D=3D 1)
-+			rLenPtr =3D len1;
-+		else
-+			rFail =3D 1;
-+
-+		rLen =3D smp_load_acquire(rLenPtr);
-+		if (rLen =3D=3D 0) {
-+			rFail =3D 1;
-+		} else if (rLen =3D=3D 1) {
-+			rCx =3D rCx + 1;
-+			smp_store_release(cx, rCx);
-+		}
++	rb =3D bpf_map_lookup_elem(&ringbuf_arr, &target_ring);
++	if (!rb) {
++		skipped +=3D 1;
++		return 1;
 +	}
 +
-+	rPx =3D smp_load_acquire(px);
-+	if (rCx < rPx) {
-+		if (rCx =3D=3D 0)
-+			rLenPtr =3D len1;
-+		else if (rCx =3D=3D 1)
-+			rLenPtr =3D len1;
-+		else
-+			rFail =3D 1;
-+
-+		rLen =3D smp_load_acquire(rLenPtr);
-+		if (rLen =3D=3D 0) {
-+			rFail =3D 1;
-+		} else if (rLen =3D=3D 1) {
-+			rCx =3D rCx + 1;
-+			smp_store_release(cx, rCx);
-+		}
-+	}
-+}
-+
-+P1(int *len1, spinlock_t *rb_lock, int *px, int *cx, int *dropped, int *=
-max_len)
-+{
-+	int rPx;
-+	int rCx;
-+	int rFail;
-+	int *rLenPtr;
-+
-+	rFail =3D 0;
-+	rCx =3D smp_load_acquire(cx);
-+
-+	spin_lock(rb_lock);
-+
-+	rPx =3D *px;
-+	if (rPx - rCx >=3D *max_len) {
-+		atomic_inc(dropped);
-+		spin_unlock(rb_lock);
-+	} else {
-+		if (rPx =3D=3D 0)
-+			rLenPtr =3D len1;
-+		else if (rPx =3D=3D 1)
-+			rLenPtr =3D len1;
-+		else
-+			rFail =3D 1;
-+
-+		*rLenPtr =3D -1;
-+		smp_wmb();
-+		smp_store_release(px, rPx + 1);
-+
-+		spin_unlock(rb_lock);
-+
-+		smp_store_release(rLenPtr, 1);
-+	}
-+}
-+
-+P2(int *len1, spinlock_t *rb_lock, int *px, int *cx, int *dropped, int *=
-max_len)
-+{
-+	int rPx;
-+	int rCx;
-+	int rFail;
-+	int *rLenPtr;
-+
-+	rFail =3D 0;
-+	rCx =3D smp_load_acquire(cx);
-+
-+	spin_lock(rb_lock);
-+
-+	rPx =3D *px;
-+	if (rPx - rCx >=3D *max_len) {
-+		atomic_inc(dropped);
-+		spin_unlock(rb_lock);
-+	} else {
-+		if (rPx =3D=3D 0)
-+			rLenPtr =3D len1;
-+		else if (rPx =3D=3D 1)
-+			rLenPtr =3D len1;
-+		else
-+			rFail =3D 1;
-+
-+		*rLenPtr =3D -1;
-+		smp_wmb();
-+		smp_store_release(px, rPx + 1);
-+
-+		spin_unlock(rb_lock);
-+
-+		smp_store_release(rLenPtr, 1);
-+	}
-+}
-+
-+exists (
-+	0:rFail=3D0 /\ 1:rFail=3D0 /\ 2:rFail=3D0 /\ len1=3D1
-+	/\
-+	(
-+		(dropped =3D 0 /\ px=3D2 /\ (cx=3D1 \/ cx=3D2))
-+		\/
-+		(dropped =3D 1 /\ px=3D1 /\ (cx=3D0 \/ cx=3D1))
-+	)
-+)
-diff --git a/tools/memory-model/litmus-tests/mpsc-rb+2p1c+unbound.litmus =
-b/tools/memory-model/litmus-tests/mpsc-rb+2p1c+unbound.litmus
-new file mode 100644
-index 000000000000..83372e9eb079
---- /dev/null
-+++ b/tools/memory-model/litmus-tests/mpsc-rb+2p1c+unbound.litmus
-@@ -0,0 +1,137 @@
-+C mpsc-rb+2p1c+unbound
-+
-+(*
-+ * Result: Always
-+ *
-+ * This litmus test validates BPF ring buffer implementation under the
-+ * following assumptions:
-+ * - 2 identical producers;
-+ * - 1 consumer;
-+ * - ring buffer capacity is unbounded.
-+ *
-+ * Expectations:
-+ * - 2 records pushed into ring buffer;
-+ * - 0, 1, or 2 elements are consumed.
-+ * - no failures.
-+ *)
-+
-+{
-+	len1 =3D 0;
-+	len2 =3D 0;
-+	px =3D 0;
-+	cx =3D 0;
-+}
-+
-+P0(int *len1, int *len2, int *cx, int *px)
-+{
-+	int *rLenPtr;
-+	int rLen;
-+	int rPx;
-+	int rCx;
-+	int rFail;
-+
-+	rFail =3D 0;
-+	rCx =3D smp_load_acquire(cx);
-+
-+	rPx =3D smp_load_acquire(px);
-+	if (rCx < rPx) {
-+		if (rCx =3D=3D 0)
-+			rLenPtr =3D len1;
-+		else if (rCx =3D=3D 1)
-+			rLenPtr =3D len2;
-+		else
-+			rFail =3D 1;
-+
-+		rLen =3D smp_load_acquire(rLenPtr);
-+		if (rLen =3D=3D 0) {
-+			rFail =3D 1;
-+		} else if (rLen =3D=3D 1) {
-+			rCx =3D rCx + 1;
-+			smp_store_release(cx, rCx);
-+		}
++	sample =3D bpf_ringbuf_reserve(rb, sizeof(*sample), 0);
++	if (!sample) {
++		dropped +=3D 1;
++		return 1;
 +	}
 +
-+	rPx =3D smp_load_acquire(px);
-+	if (rCx < rPx) {
-+		if (rCx =3D=3D 0)
-+			rLenPtr =3D len1;
-+		else if (rCx =3D=3D 1)
-+			rLenPtr =3D len2;
-+		else
-+			rFail =3D 1;
++	sample->pid =3D pid;
++	bpf_get_current_comm(sample->comm, sizeof(sample->comm));
++	sample->value =3D value;
 +
-+		rLen =3D smp_load_acquire(rLenPtr);
-+		if (rLen =3D=3D 0) {
-+			rFail =3D 1;
-+		} else if (rLen =3D=3D 1) {
-+			rCx =3D rCx + 1;
-+			smp_store_release(cx, rCx);
-+		}
-+	}
++	sample->seq =3D total;
++	total +=3D 1;
++
++	bpf_ringbuf_submit(sample, 0);
++
++	return 0;
 +}
-+
-+P1(int *len1, int *len2, spinlock_t *rb_lock, int *px, int *cx)
-+{
-+	int rPx;
-+	int rCx;
-+	int rFail;
-+	int *rLenPtr;
-+
-+	rFail =3D 0;
-+	rCx =3D smp_load_acquire(cx);
-+
-+	spin_lock(rb_lock);
-+
-+	rPx =3D *px;
-+	if (rPx =3D=3D 0)
-+		rLenPtr =3D len1;
-+	else if (rPx =3D=3D 1)
-+		rLenPtr =3D len2;
-+	else
-+		rFail =3D 1;
-+
-+	*rLenPtr =3D -1;
-+	smp_wmb();
-+	smp_store_release(px, rPx + 1);
-+
-+	spin_unlock(rb_lock);
-+
-+	smp_store_release(rLenPtr, 1);
-+}
-+
-+P2(int *len1, int *len2, spinlock_t *rb_lock, int *px, int *cx)
-+{
-+	int rPx;
-+	int rCx;
-+	int rFail;
-+	int *rLenPtr;
-+
-+	rFail =3D 0;
-+	rCx =3D smp_load_acquire(cx);
-+
-+	spin_lock(rb_lock);
-+
-+	rPx =3D *px;
-+	if (rPx =3D=3D 0)
-+		rLenPtr =3D len1;
-+	else if (rPx =3D=3D 1)
-+		rLenPtr =3D len2;
-+	else
-+		rFail =3D 1;
-+
-+	*rLenPtr =3D -1;
-+	smp_wmb();
-+	smp_store_release(px, rPx + 1);
-+
-+	spin_unlock(rb_lock);
-+
-+	smp_store_release(rLenPtr, 1);
-+}
-+
-+exists (
-+	0:rFail=3D0 /\ 1:rFail=3D0 /\ 2:rFail=3D0
-+	/\
-+	px=3D2 /\ len1=3D1 /\ len2=3D1
-+	/\
-+	(cx=3D0 \/ cx=3D1 \/ cx=3D2)
-+)
 --=20
 2.24.1
 
