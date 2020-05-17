@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9D75C433DF
-	for <bpf@archiver.kernel.org>; Sun, 17 May 2020 19:57:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FE91C433E1
+	for <bpf@archiver.kernel.org>; Sun, 17 May 2020 19:57:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9066120758
-	for <bpf@archiver.kernel.org>; Sun, 17 May 2020 19:57:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7DF5220758
+	for <bpf@archiver.kernel.org>; Sun, 17 May 2020 19:57:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ljuVYDJK"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="l/WFNd1J"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726717AbgEQT5y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 17 May 2020 15:57:54 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:19556 "EHLO
+        id S1726657AbgEQT5z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 17 May 2020 15:57:55 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:30184 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726657AbgEQT5x (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 17 May 2020 15:57:53 -0400
+        by vger.kernel.org with ESMTP id S1726639AbgEQT5w (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 17 May 2020 15:57:52 -0400
 Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04HJscDF004941
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04HJscDE004941
         for <bpf@vger.kernel.org>; Sun, 17 May 2020 12:57:50 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=In1dYdsF3WgnndXMLDTL1E4M0iOAz+O9fxDc5Uy4y1s=;
- b=ljuVYDJKqa5vrkUpRWwT5L6QJCSyVmsvG9OtnSKy+S1yiSeoCJ7Dv48QodJ6TcvER1yw
- 7RCkSkaQJgjr9Bq1fq7TKcHPG5YDsygmVBxPeuelcP3OgGpQ3SaFGyuMU7zipj18vBWr
- GTuzFr5McskZYqv9LZ2kr0KGUWHZifD31A4= 
+ bh=jEXE0vLclit2NksU7oBOAvCzoWIqrN+Pu/L3fEeO+Ug=;
+ b=l/WFNd1JirzQk9iK+9sTuiBTr5VOtD0SHl+J3a0FOBz1xzBVCcVjwFkMRUoLgTNRfcV1
+ 2Ol3uo+4zTwm0tPk5q2hD+72cSZIfrH5yEbuViZhnpmVjYoaOuhh7tPfHH/IuJ6jeTTT
+ jNKB68PWwN6lPuz6mncGYOHrhBBCrGa+Bwg= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 312dpwtxg5-3
+        by mx0a-00082601.pphosted.com with ESMTP id 312dpwtxg5-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Sun, 17 May 2020 12:57:50 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::11) by
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:108::4) by
  mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1847.3; Sun, 17 May 2020 12:57:48 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 1DD7C2EC32DC; Sun, 17 May 2020 12:57:46 -0700 (PDT)
+        id B5D792EC32DC; Sun, 17 May 2020 12:57:41 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -51,9 +51,9 @@ CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Jonathan Lemon <jonathan.lemon@gmail.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 5/7] selftests/bpf: add BPF ringbuf selftests
-Date:   Sun, 17 May 2020 12:57:25 -0700
-Message-ID: <20200517195727.279322-6-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 3/7] bpf: track reference type in verifier
+Date:   Sun, 17 May 2020 12:57:23 -0700
+Message-ID: <20200517195727.279322-4-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200517195727.279322-1-andriin@fb.com>
 References: <20200517195727.279322-1-andriin@fb.com>
@@ -74,524 +74,252 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Both singleton BPF ringbuf and BPF ringbuf with map-in-map use cases are =
-tested.
-Also reserve+submit/discards and output variants of API are validated.
+This patch extends verifier's reference tracking logic with tracking
+a reference type and ensuring acquire()/release() functions accept only t=
+he
+right types of references. Currently, ambiguity between socket and ringbu=
+f
+record references is resolved through use of different types of input
+arguments to bpf_sk_release() and bpf_ringbuf_commit(): ARG_PTR_TO_SOCK_C=
+OMMON
+and ARG_PTR_TO_ALLOC_MEM, respectively. It is thus impossible to pass rin=
+gbuf
+record pointer to bpf_sk_release() (and vice versa for socket).
+
+On the other hand, patch #1 added ARG_PTR_TO_ALLOC_MEM arg type, which, f=
+rom
+the point of view of verifier, is a pointer to a fixed-sized allocated me=
+mory
+region. This is generic enough concept that could be used for other BPF
+helpers (e.g., malloc/free pair, if added). once we have that, there will=
+ be
+nothing to prevent passing ringbuf record to bpf_mem_free() (or whatever)
+helper. To that end, this patch adds a capability to specify and track
+reference types, that would be validated by verifier to ensure correct ma=
+tch
+between acquire() and release() helpers.
+
+This patch can be postponed for later, so is posted separate from other
+verifier changes.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../selftests/bpf/prog_tests/ringbuf.c        | 211 ++++++++++++++++++
- .../selftests/bpf/prog_tests/ringbuf_multi.c  | 102 +++++++++
- .../selftests/bpf/progs/test_ringbuf.c        |  78 +++++++
- .../selftests/bpf/progs/test_ringbuf_multi.c  |  77 +++++++
- 4 files changed, 468 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ringbuf.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ringbuf_multi.=
-c
- create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_multi.=
-c
+ include/linux/bpf_verifier.h |  8 +++
+ kernel/bpf/verifier.c        | 96 +++++++++++++++++++++++++++++-------
+ 2 files changed, 86 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/tes=
-ting/selftests/bpf/prog_tests/ringbuf.c
-new file mode 100644
-index 000000000000..bb8541f240e2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-@@ -0,0 +1,211 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <linux/compiler.h>
-+#include <asm/barrier.h>
-+#include <test_progs.h>
-+#include <sys/mman.h>
-+#include <sys/epoll.h>
-+#include <time.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <pthread.h>
-+#include <sys/sysinfo.h>
-+#include <linux/perf_event.h>
-+#include <linux/ring_buffer.h>
-+#include "test_ringbuf.skel.h"
-+
-+#define EDONE 7777
-+
-+static int duration =3D 0;
-+
-+struct sample {
-+	int pid;
-+	int seq;
-+	long value;
-+	char comm[16];
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index ca08db4ffb5f..26b2c4730f5a 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -164,6 +164,12 @@ struct bpf_stack_state {
+ 	u8 slot_type[BPF_REG_SIZE];
+ };
+=20
++enum bpf_ref_type {
++	BPF_REF_INVALID,
++	BPF_REF_SOCKET,
++	BPF_REF_RINGBUF,
 +};
 +
-+static int sample_cnt;
-+
-+static int process_sample(void *ctx, void *data, size_t len)
+ struct bpf_reference_state {
+ 	/* Track each reference created with a unique id, even if the same
+ 	 * instruction creates the reference multiple times (eg, via CALL).
+@@ -173,6 +179,8 @@ struct bpf_reference_state {
+ 	 * is used purely to inform the user of a reference leak.
+ 	 */
+ 	int insn_idx;
++	/* Type of reference being tracked */
++	enum bpf_ref_type ref_type;
+ };
+=20
+ /* state of the program:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 4ce3e031554d..2a6a48c1e10b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -436,6 +436,19 @@ static bool is_release_function(enum bpf_func_id fun=
+c_id)
+ 	       func_id =3D=3D BPF_FUNC_ringbuf_discard;
+ }
+=20
++static enum bpf_ref_type get_release_ref_type(enum bpf_func_id func_id)
 +{
-+	struct sample *s =3D data;
-+
-+	sample_cnt++;
-+
-+	switch (s->seq) {
-+	case 0:
-+		CHECK(s->value !=3D 333, "sample1_value", "exp %ld, got %ld\n",
-+		      333L, s->value);
-+		return 0;
-+	case 1:
-+		CHECK(s->value !=3D 777, "sample2_value", "exp %ld, got %ld\n",
-+		      777L, s->value);
-+		return -EDONE;
++	switch (func_id) {
++	case BPF_FUNC_sk_release:
++		return BPF_REF_SOCKET;
++	case BPF_FUNC_ringbuf_submit:
++	case BPF_FUNC_ringbuf_discard:
++		return BPF_REF_RINGBUF;
 +	default:
-+		/* we don't care about the rest */
-+		return 0;
++		return BPF_REF_INVALID;
 +	}
 +}
 +
-+static struct test_ringbuf *skel;
-+static struct ring_buffer *ringbuf;
-+
-+static void trigger_samples()
+ static bool may_be_acquire_function(enum bpf_func_id func_id)
+ {
+ 	return func_id =3D=3D BPF_FUNC_sk_lookup_tcp ||
+@@ -464,6 +477,28 @@ static bool is_acquire_function(enum bpf_func_id fun=
+c_id,
+ 	return false;
+ }
+=20
++static enum bpf_ref_type get_acquire_ref_type(enum bpf_func_id func_id,
++					      const struct bpf_map *map)
 +{
-+	skel->bss->dropped =3D 0;
-+	skel->bss->total =3D 0;
-+	skel->bss->discarded =3D 0;
++	enum bpf_map_type map_type =3D map ? map->map_type : BPF_MAP_TYPE_UNSPE=
+C;
 +
-+	/* trigger exactly two samples */
-+	skel->bss->value =3D 333;
-+	syscall(__NR_getpgid);
-+	skel->bss->value =3D 777;
-+	syscall(__NR_getpgid);
-+}
-+
-+static void *poll_thread(void *input)
-+{
-+	long timeout =3D (long)input;
-+
-+	return (void *)(long)ring_buffer__poll(ringbuf, timeout);
-+}
-+
-+void test_ringbuf(void)
-+{
-+	const size_t rec_sz =3D BPF_RINGBUF_HDR_SZ + sizeof(struct sample);
-+	pthread_t thread;
-+	long bg_ret =3D -1;
-+	int err;
-+
-+	skel =3D test_ringbuf__open_and_load();
-+	if (CHECK(!skel, "skel_open_load", "skeleton open&load failed\n"))
-+		return;
-+
-+	/* only trigger BPF program for current process */
-+	skel->bss->pid =3D getpid();
-+
-+	ringbuf =3D ring_buffer__new(bpf_map__fd(skel->maps.ringbuf),
-+				   process_sample, NULL, NULL);
-+	if (CHECK(!ringbuf, "ringbuf_create", "failed to create ringbuf\n"))
-+		goto cleanup;
-+
-+	err =3D test_ringbuf__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attachment failed: %d\n", err))
-+		goto cleanup;
-+
-+	trigger_samples();
-+
-+	/* 2 submitted + 1 discarded records */
-+	CHECK(skel->bss->avail_data !=3D 3 * rec_sz,
-+	      "err_avail_size", "exp %ld, got %ld\n",
-+	      3L * rec_sz, skel->bss->avail_data);
-+	CHECK(skel->bss->ring_size !=3D 4096,
-+	      "err_ring_size", "exp %ld, got %ld\n",
-+	      4096L, skel->bss->ring_size);
-+	CHECK(skel->bss->cons_pos !=3D 0,
-+	      "err_cons_pos", "exp %ld, got %ld\n",
-+	      0L, skel->bss->cons_pos);
-+	CHECK(skel->bss->prod_pos !=3D 3 * rec_sz,
-+	      "err_prod_pos", "exp %ld, got %ld\n",
-+	      3L * rec_sz, skel->bss->prod_pos);
-+
-+	/* poll for samples */
-+	err =3D ring_buffer__poll(ringbuf, -1);
-+
-+	/* -EDONE is used as an indicator that we are done */
-+	if (CHECK(err !=3D -EDONE, "err_done", "done err: %d\n", err))
-+		goto cleanup;
-+
-+	/* we expect extra polling to return nothing */
-+	err =3D ring_buffer__poll(ringbuf, 0);
-+	if (CHECK(err !=3D 0, "extra_samples", "poll result: %d\n", err))
-+		goto cleanup;
-+
-+	CHECK(skel->bss->dropped !=3D 0, "err_dropped", "exp %ld, got %ld\n",
-+	      0L, skel->bss->dropped);
-+	CHECK(skel->bss->total !=3D 2, "err_total", "exp %ld, got %ld\n",
-+	      2L, skel->bss->total);
-+	CHECK(skel->bss->discarded !=3D 1, "err_discarded", "exp %ld, got %ld\n=
-",
-+	      1L, skel->bss->discarded);
-+
-+	/* now validate consumer position is updated and returned */
-+	trigger_samples();
-+	CHECK(skel->bss->cons_pos !=3D 3 * rec_sz,
-+	      "err_cons_pos", "exp %ld, got %ld\n",
-+	      3L * rec_sz, skel->bss->cons_pos);
-+	err =3D ring_buffer__poll(ringbuf, -1);
-+	CHECK(err <=3D 0, "poll_err", "err %d\n", err);
-+
-+	/* start poll in background w/ long timeout */
-+	err =3D pthread_create(&thread, NULL, poll_thread, (void *)(long)10000)=
-;
-+	if (CHECK(err, "bg_poll", "pthread_create failed: %d\n", err))
-+		goto cleanup;
-+
-+	/* turn off notifications now */
-+	skel->bss->flags =3D BPF_RB_NO_WAKEUP;
-+
-+	/* give background thread a bit of a time */
-+	usleep(50000);
-+	trigger_samples();
-+	/* sleeping arbitrarily is bad, but no better way to know that
-+	 * epoll_wait() **DID NOT** unblock in background thread
-+	 */
-+	usleep(50000);
-+	/* background poll should still be blocked */
-+	err =3D pthread_tryjoin_np(thread, (void **)&bg_ret);
-+	if (CHECK(err !=3D EBUSY, "try_join", "err %d\n", err))
-+		goto cleanup;
-+
-+	/* BPF side did everything right */
-+	CHECK(skel->bss->dropped !=3D 0, "err_dropped", "exp %ld, got %ld\n",
-+	      0L, skel->bss->dropped);
-+	CHECK(skel->bss->total !=3D 2, "err_total", "exp %ld, got %ld\n",
-+	      2L, skel->bss->total);
-+	CHECK(skel->bss->discarded !=3D 1, "err_discarded", "exp %ld, got %ld\n=
-",
-+	      1L, skel->bss->discarded);
-+
-+	/* clear flags to return to "adaptive" notification mode */
-+	skel->bss->flags =3D 0;
-+
-+	/* produce new samples, no notification should be triggered, because
-+	 * consumer is now behind
-+	 */
-+	trigger_samples();
-+
-+	/* background poll should still be blocked */
-+	err =3D pthread_tryjoin_np(thread, (void **)&bg_ret);
-+	if (CHECK(err !=3D EBUSY, "try_join", "err %d\n", err))
-+		goto cleanup;
-+
-+	/* now force notifications */
-+	skel->bss->flags =3D BPF_RB_FORCE_WAKEUP;
-+	sample_cnt =3D 0;
-+	trigger_samples();
-+
-+	/* now we should get a pending notification */
-+	usleep(50000);
-+	err =3D pthread_tryjoin_np(thread, (void **)&bg_ret);
-+	if (CHECK(err, "join_bg", "err %d\n", err))
-+		goto cleanup;
-+
-+	if (CHECK(bg_ret !=3D 1, "bg_ret", "epoll_wait result: %ld", bg_ret))
-+		goto cleanup;
-+
-+	/* 3 rounds, 2 samples each */
-+	CHECK(sample_cnt !=3D 6, "wrong_sample_cnt",
-+	      "expected to see %d samples, got %d\n", 6, sample_cnt);
-+
-+	/* BPF side did everything right */
-+	CHECK(skel->bss->dropped !=3D 0, "err_dropped", "exp %ld, got %ld\n",
-+	      0L, skel->bss->dropped);
-+	CHECK(skel->bss->total !=3D 2, "err_total", "exp %ld, got %ld\n",
-+	      2L, skel->bss->total);
-+	CHECK(skel->bss->discarded !=3D 1, "err_discarded", "exp %ld, got %ld\n=
-",
-+	      1L, skel->bss->discarded);
-+
-+	test_ringbuf__detach(skel);
-+cleanup:
-+	ring_buffer__free(ringbuf);
-+	test_ringbuf__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c b/too=
-ls/testing/selftests/bpf/prog_tests/ringbuf_multi.c
-new file mode 100644
-index 000000000000..78e450609803
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c
-@@ -0,0 +1,102 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <test_progs.h>
-+#include <sys/epoll.h>
-+#include "test_ringbuf_multi.skel.h"
-+
-+static int duration =3D 0;
-+
-+struct sample {
-+	int pid;
-+	int seq;
-+	long value;
-+	char comm[16];
-+};
-+
-+static int process_sample(void *ctx, void *data, size_t len)
-+{
-+	int ring =3D (unsigned long)ctx;
-+	struct sample *s =3D data;
-+
-+	switch (s->seq) {
-+	case 0:
-+		CHECK(ring !=3D 1, "sample1_ring", "exp %d, got %d\n", 1, ring);
-+		CHECK(s->value !=3D 333, "sample1_value", "exp %ld, got %ld\n",
-+		      333L, s->value);
-+		break;
-+	case 1:
-+		CHECK(ring !=3D 2, "sample2_ring", "exp %d, got %d\n", 2, ring);
-+		CHECK(s->value !=3D 777, "sample2_value", "exp %ld, got %ld\n",
-+		      777L, s->value);
-+		break;
++	switch (func_id) {
++	case BPF_FUNC_sk_lookup_tcp:
++	case BPF_FUNC_sk_lookup_udp:
++	case BPF_FUNC_skc_lookup_tcp:
++		return BPF_REF_SOCKET;
++	case BPF_FUNC_map_lookup_elem:
++		if (map_type =3D=3D BPF_MAP_TYPE_SOCKMAP ||
++		    map_type =3D=3D BPF_MAP_TYPE_SOCKHASH)
++			return BPF_REF_SOCKET;
++		return BPF_REF_INVALID;
++	case BPF_FUNC_ringbuf_reserve:
++		return BPF_REF_RINGBUF;
 +	default:
-+		CHECK(true, "extra_sample", "unexpected sample seq %d, val %ld\n",
-+		      s->seq, s->value);
-+		return -1;
++		return BPF_REF_INVALID;
 +	}
-+
-+	return 0;
 +}
 +
-+void test_ringbuf_multi(void)
-+{
-+	struct test_ringbuf_multi *skel;
-+	struct ring_buffer *ringbuf;
-+	int err;
+ static bool is_ptr_cast_function(enum bpf_func_id func_id)
+ {
+ 	return func_id =3D=3D BPF_FUNC_tcp_sock ||
+@@ -736,7 +771,8 @@ static int realloc_func_state(struct bpf_func_state *=
+state, int stack_size,
+  * On success, returns a valid pointer id to associate with the register
+  * On failure, returns a negative errno.
+  */
+-static int acquire_reference_state(struct bpf_verifier_env *env, int ins=
+n_idx)
++static int acquire_reference_state(struct bpf_verifier_env *env,
++				   int insn_idx, enum bpf_ref_type ref_type)
+ {
+ 	struct bpf_func_state *state =3D cur_func(env);
+ 	int new_ofs =3D state->acquired_refs;
+@@ -748,25 +784,32 @@ static int acquire_reference_state(struct bpf_verif=
+ier_env *env, int insn_idx)
+ 	id =3D ++env->id_gen;
+ 	state->refs[new_ofs].id =3D id;
+ 	state->refs[new_ofs].insn_idx =3D insn_idx;
++	state->refs[new_ofs].ref_type =3D ref_type;
+=20
+ 	return id;
+ }
+=20
+ /* release function corresponding to acquire_reference_state(). Idempote=
+nt. */
+-static int release_reference_state(struct bpf_func_state *state, int ptr=
+_id)
++static int release_reference_state(struct bpf_func_state *state, int ptr=
+_id,
++				   enum bpf_ref_type ref_type)
+ {
++	struct bpf_reference_state *ref;
+ 	int i, last_idx;
+=20
+ 	last_idx =3D state->acquired_refs - 1;
+ 	for (i =3D 0; i < state->acquired_refs; i++) {
+-		if (state->refs[i].id =3D=3D ptr_id) {
+-			if (last_idx && i !=3D last_idx)
+-				memcpy(&state->refs[i], &state->refs[last_idx],
+-				       sizeof(*state->refs));
+-			memset(&state->refs[last_idx], 0, sizeof(*state->refs));
+-			state->acquired_refs--;
+-			return 0;
+-		}
++		ref =3D &state->refs[i];
++		if (ref->id !=3D ptr_id)
++			continue;
 +
-+	skel =3D test_ringbuf_multi__open_and_load();
-+	if (CHECK(!skel, "skel_open_load", "skeleton open&load failed\n"))
-+		return;
++		if (ref_type !=3D BPF_REF_INVALID && ref->ref_type !=3D ref_type)
++			return -EINVAL;
 +
-+	/* only trigger BPF program for current process */
-+	skel->bss->pid =3D getpid();
-+
-+	ringbuf =3D ring_buffer__new(bpf_map__fd(skel->maps.ringbuf1),
-+				   process_sample, (void *)(long)1, NULL);
-+	if (CHECK(!ringbuf, "ringbuf_create", "failed to create ringbuf\n"))
-+		goto cleanup;
-+
-+	err =3D ring_buffer__add(ringbuf, bpf_map__fd(skel->maps.ringbuf2),
-+			      process_sample, (void *)(long)2);
-+	if (CHECK(err, "ringbuf_add", "failed to add another ring\n"))
-+		goto cleanup;
-+
-+	err =3D test_ringbuf_multi__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attachment failed: %d\n", err))
-+		goto cleanup;
-+
-+	/* trigger few samples, some will be skipped */
-+	skel->bss->target_ring =3D 0;
-+	skel->bss->value =3D 333;
-+	syscall(__NR_getpgid);
-+
-+	/* skipped, no ringbuf in slot 1 */
-+	skel->bss->target_ring =3D 1;
-+	skel->bss->value =3D 555;
-+	syscall(__NR_getpgid);
-+
-+	skel->bss->target_ring =3D 2;
-+	skel->bss->value =3D 777;
-+	syscall(__NR_getpgid);
-+
-+	/* poll for samples, should get 2 ringbufs back */
-+	err =3D ring_buffer__poll(ringbuf, -1);
-+	if (CHECK(err !=3D 4, "poll_res", "expected 4 records, got %d\n", err))
-+		goto cleanup;
-+
-+	/* expect extra polling to return nothing */
-+	err =3D ring_buffer__poll(ringbuf, 0);
-+	if (CHECK(err < 0, "extra_samples", "poll result: %d\n", err))
-+		goto cleanup;
-+
-+	CHECK(skel->bss->dropped !=3D 0, "err_dropped", "exp %ld, got %ld\n",
-+	      0L, skel->bss->dropped);
-+	CHECK(skel->bss->skipped !=3D 1, "err_skipped", "exp %ld, got %ld\n",
-+	      1L, skel->bss->skipped);
-+	CHECK(skel->bss->total !=3D 2, "err_total", "exp %ld, got %ld\n",
-+	      2L, skel->bss->total);
-+
-+cleanup:
-+	ring_buffer__free(ringbuf);
-+	test_ringbuf_multi__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf.c b/tools/tes=
-ting/selftests/bpf/progs/test_ringbuf.c
-new file mode 100644
-index 000000000000..79114eafd283
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_ringbuf.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+struct sample {
-+	int pid;
-+	int seq;
-+	long value;
-+	char comm[16];
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 1 << 12);
-+} ringbuf SEC(".maps");
-+
-+/* inputs */
-+int pid =3D 0;
-+long value =3D 0;
-+long flags =3D 0;
-+
-+/* outputs */
-+long total =3D 0;
-+long discarded =3D 0;
-+long dropped =3D 0;
-+
-+long avail_data =3D 0;
-+long ring_size =3D 0;
-+long cons_pos =3D 0;
-+long prod_pos =3D 0;
-+
-+/* inner state */
-+long seq =3D 0;
-+
-+SEC("tp/syscalls/sys_enter_getpgid")
-+int test_ringbuf(void *ctx)
-+{
-+	int cur_pid =3D bpf_get_current_pid_tgid() >> 32;
-+	struct sample *sample;
-+	int zero =3D 0;
-+
-+	if (cur_pid !=3D pid)
++		if (i !=3D last_idx)
++			memcpy(ref, &state->refs[last_idx], sizeof(*ref));
++		memset(&state->refs[last_idx], 0, sizeof(*ref));
++		state->acquired_refs--;
 +		return 0;
+ 	}
+ 	return -EINVAL;
+ }
+@@ -4296,14 +4339,13 @@ static void release_reg_references(struct bpf_ver=
+ifier_env *env,
+ /* The pointer with the specified id has released its reference to kerne=
+l
+  * resources. Identify all copies of the same pointer and clear the refe=
+rence.
+  */
+-static int release_reference(struct bpf_verifier_env *env,
+-			     int ref_obj_id)
++static int release_reference(struct bpf_verifier_env *env, int ref_obj_i=
+d,
++			     enum bpf_ref_type ref_type)
+ {
+ 	struct bpf_verifier_state *vstate =3D env->cur_state;
+-	int err;
+-	int i;
++	int err, i;
+=20
+-	err =3D release_reference_state(cur_func(env), ref_obj_id);
++	err =3D release_reference_state(cur_func(env), ref_obj_id, ref_type);
+ 	if (err)
+ 		return err;
+=20
+@@ -4664,7 +4706,16 @@ static int check_helper_call(struct bpf_verifier_e=
+nv *env, int func_id, int insn
+ 			return err;
+ 		}
+ 	} else if (is_release_function(func_id)) {
+-		err =3D release_reference(env, meta.ref_obj_id);
++		enum bpf_ref_type ref_type;
 +
-+	sample =3D bpf_ringbuf_reserve(&ringbuf, sizeof(*sample), 0);
-+	if (!sample) {
-+		__sync_fetch_and_add(&dropped, 1);
-+		return 1;
-+	}
++		ref_type =3D get_release_ref_type(func_id);
++		if (ref_type =3D=3D BPF_REF_INVALID) {
++			verbose(env, "unrecognized reference accepted by func %s#%d\n",
++				func_id_name(func_id), func_id);
++			return -EFAULT;
++		}
 +
-+	sample->pid =3D pid;
-+	bpf_get_current_comm(sample->comm, sizeof(sample->comm));
-+	sample->value =3D value;
++		err =3D release_reference(env, meta.ref_obj_id, ref_type);
+ 		if (err) {
+ 			verbose(env, "func %s#%d reference has not been acquired before\n",
+ 				func_id_name(func_id), func_id);
+@@ -4747,8 +4798,17 @@ static int check_helper_call(struct bpf_verifier_e=
+nv *env, int func_id, int insn
+ 		/* For release_reference() */
+ 		regs[BPF_REG_0].ref_obj_id =3D meta.ref_obj_id;
+ 	} else if (is_acquire_function(func_id, meta.map_ptr)) {
+-		int id =3D acquire_reference_state(env, insn_idx);
++		enum bpf_ref_type ref_type;
++		int id;
 +
-+	sample->seq =3D seq++;
-+	__sync_fetch_and_add(&total, 1);
-+
-+	if (sample->seq & 1) {
-+		/* copy from reserved sample to a new one... */
-+		bpf_ringbuf_output(&ringbuf, sample, sizeof(*sample), flags);
-+		/* ...and then discard reserved sample */
-+		bpf_ringbuf_discard(sample, flags);
-+		__sync_fetch_and_add(&discarded, 1);
-+	} else {
-+		bpf_ringbuf_submit(sample, flags);
-+	}
-+
-+	avail_data =3D bpf_ringbuf_query(&ringbuf, BPF_RB_AVAIL_DATA);
-+	ring_size =3D bpf_ringbuf_query(&ringbuf, BPF_RB_RING_SIZE);
-+	cons_pos =3D bpf_ringbuf_query(&ringbuf, BPF_RB_CONS_POS);
-+	prod_pos =3D bpf_ringbuf_query(&ringbuf, BPF_RB_PROD_POS);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf_multi.c b/too=
-ls/testing/selftests/bpf/progs/test_ringbuf_multi.c
-new file mode 100644
-index 000000000000..7eb85dd9cd66
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_ringbuf_multi.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+struct sample {
-+	int pid;
-+	int seq;
-+	long value;
-+	char comm[16];
-+};
-+
-+struct ringbuf_map {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 1 << 12);
-+} ringbuf1 SEC(".maps"),
-+  ringbuf2 SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 4);
-+	__type(key, int);
-+	__array(values, struct ringbuf_map);
-+} ringbuf_arr SEC(".maps") =3D {
-+	.values =3D {
-+		[0] =3D &ringbuf1,
-+		[2] =3D &ringbuf2,
-+	},
-+};
-+
-+/* inputs */
-+int pid =3D 0;
-+int target_ring =3D 0;
-+long value =3D 0;
-+
-+/* outputs */
-+long total =3D 0;
-+long dropped =3D 0;
-+long skipped =3D 0;
-+
-+SEC("tp/syscalls/sys_enter_getpgid")
-+int test_ringbuf(void *ctx)
-+{
-+	int cur_pid =3D bpf_get_current_pid_tgid() >> 32;
-+	struct sample *sample;
-+	void *rb;
-+	int zero =3D 0;
-+
-+	if (cur_pid !=3D pid)
-+		return 0;
-+
-+	rb =3D bpf_map_lookup_elem(&ringbuf_arr, &target_ring);
-+	if (!rb) {
-+		skipped +=3D 1;
-+		return 1;
-+	}
-+
-+	sample =3D bpf_ringbuf_reserve(rb, sizeof(*sample), 0);
-+	if (!sample) {
-+		dropped +=3D 1;
-+		return 1;
-+	}
-+
-+	sample->pid =3D pid;
-+	bpf_get_current_comm(sample->comm, sizeof(sample->comm));
-+	sample->value =3D value;
-+
-+	sample->seq =3D total;
-+	total +=3D 1;
-+
-+	bpf_ringbuf_submit(sample, 0);
-+
-+	return 0;
-+}
++		ref_type =3D get_acquire_ref_type(func_id, meta.map_ptr);
++		if (ref_type =3D=3D BPF_REF_INVALID) {
++			verbose(env, "unrecognized reference returned by func %s#%d\n",
++				func_id_name(func_id), func_id);
++			return -EINVAL;
++		}
+=20
++		id =3D acquire_reference_state(env, insn_idx, ref_type);
+ 		if (id < 0)
+ 			return id;
+ 		/* For mark_ptr_or_null_reg() */
+@@ -6731,7 +6791,7 @@ static void mark_ptr_or_null_regs(struct bpf_verifi=
+er_state *vstate, u32 regno,
+ 		 * No one could have freed the reference state before
+ 		 * doing the NULL check.
+ 		 */
+-		WARN_ON_ONCE(release_reference_state(state, id));
++		WARN_ON_ONCE(release_reference_state(state, id, BPF_REF_INVALID));
+=20
+ 	for (i =3D 0; i <=3D vstate->curframe; i++)
+ 		__mark_ptr_or_null_regs(vstate->frame[i], id, is_null);
 --=20
 2.24.1
 
