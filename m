@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6964DC433E3
-	for <bpf@archiver.kernel.org>; Sun, 17 May 2020 19:57:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DEEFC433E1
+	for <bpf@archiver.kernel.org>; Sun, 17 May 2020 19:58:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 473DE20758
-	for <bpf@archiver.kernel.org>; Sun, 17 May 2020 19:57:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A92620758
+	for <bpf@archiver.kernel.org>; Sun, 17 May 2020 19:58:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="lMR3XBCo"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Cix0pjvD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726726AbgEQT54 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 17 May 2020 15:57:56 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:29344 "EHLO
+        id S1726379AbgEQT6C (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 17 May 2020 15:58:02 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:35380 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726633AbgEQT5v (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 17 May 2020 15:57:51 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04HJqoGd023455
-        for <bpf@vger.kernel.org>; Sun, 17 May 2020 12:57:50 -0700
+        by vger.kernel.org with ESMTP id S1726729AbgEQT56 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 17 May 2020 15:57:58 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04HJrxQe029470
+        for <bpf@vger.kernel.org>; Sun, 17 May 2020 12:57:56 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=63Ar7aU39zy5gm+BC6P7OZLvJhUvPsb/RjKG4/qHPVQ=;
- b=lMR3XBCoEzrtJ5+l6mPt2kXN2dfW2QTHRDZ9VlC0slCVmieJncZwtSfm2zLKSvweO6qJ
- Uww0xmMVRSpD+XRZI03/68clnaNGWXkvOjGIoD3B8TvgyVfJYTR7GcskxgJ/3ZIUhaVX
- B330O7JvIENo0slXyTJtzYcTqH/cyYDKFMA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 312dwq2nkd-1
+ bh=KGd8IKZV0sXzyk1o+zFwRc06cXywfi9UewothHj879s=;
+ b=Cix0pjvDACWPU7EnWR3Q2OP1vW8lIKrbtkPZcWGaVwF+n8bF3PIGVgGSiDBWzxKAk/ue
+ vpBJw6OtdUQXV0IDNC2ZVtEQzlpRytzT2i1ma/fWMGD8kJTwaYrpl01HJrXhtwtoSAOz
+ fN+gFKDgG+ZxIa/M3/ZrYpDgpfvx6vYp0YY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 312dpwtxgt-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 17 May 2020 12:57:49 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sun, 17 May 2020 12:57:55 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Sun, 17 May 2020 12:57:48 -0700
+ 15.1.1847.3; Sun, 17 May 2020 12:57:55 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id E3A5B2EC32DC; Sun, 17 May 2020 12:57:43 -0700 (PDT)
+        id 89A122EC32DC; Sun, 17 May 2020 12:57:50 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -49,11 +49,12 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 4/7] libbpf: add BPF ring buffer support
-Date:   Sun, 17 May 2020 12:57:24 -0700
-Message-ID: <20200517195727.279322-5-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 7/7] docs/bpf: add BPF ring buffer design notes
+Date:   Sun, 17 May 2020 12:57:27 -0700
+Message-ID: <20200517195727.279322-8-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200517195727.279322-1-andriin@fb.com>
 References: <20200517195727.279322-1-andriin@fb.com>
@@ -63,450 +64,316 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
  definitions=2020-05-17_08:2020-05-15,2020-05-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=25
- spamscore=0 mlxlogscore=919 mlxscore=0 bulkscore=0 priorityscore=1501
- clxscore=1015 phishscore=0 cotscore=-2147483648 lowpriorityscore=0
- adultscore=0 malwarescore=0 impostorscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005170182
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ malwarescore=0 clxscore=1015 impostorscore=0 spamscore=0 mlxlogscore=999
+ lowpriorityscore=0 suspectscore=25 bulkscore=0 priorityscore=1501
+ cotscore=-2147483648 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2005170182
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Declaring and instantiating BPF ring buffer doesn't require any changes t=
-o
-libbpf, as it's just another type of maps. So using existing BTF-defined =
-maps
-syntax with __uint(type, BPF_MAP_TYPE_RINGBUF) and __uint(max_elements,
-<size-of-ring-buf>) is all that's necessary to create and use BPF ring bu=
-ffer.
+Add commit description from patch #1 as a stand-alone documentation under
+Documentation/bpf, as it might be more convenient format, in long term
+perspective.
 
-This patch adds BPF ring buffer consumer to libbpf. It is very similar to
-perf_buffer implementation in terms of API, but also attempts to fix some
-minor problems and inconveniences with existing perf_buffer API.
-
-ring_buffer support both single ring buffer use case (with just using
-ring_buffer__new()), as well as allows to add more ring buffers, each wit=
-h its
-own callback and context. This allows to efficiently poll and consume
-multiple, potentially completely independent, ring buffers, using single
-epoll instance.
-
-The latter is actually a problem in practice for applications
-that are using multiple sets of perf buffers. They have to create multipl=
-e
-instances for struct perf_buffer and poll them independently or in a loop=
-,
-each approach having its own problems (e.g., inability to use a common po=
-ll
-timeout). struct ring_buffer eliminates this problem by aggregating many
-independent ring buffer instances under the single "ring buffer manager".
-
-Second, perf_buffer's callback can't return error, so applications that n=
-eed
-to stop polling due to error in data or data signalling the end, have to =
-use
-extra mechanisms to signal that polling has to stop. ring_buffer's callba=
-ck
-can return error, which will be passed through back to user code and can =
-be
-acted upon appropariately.
-
-Two APIs allow to consume ring buffer data:
-  - ring_buffer__poll(), which will wait for data availability notificati=
-on
-    and will consume data only from reported ring buffer(s); this API all=
-ows
-    to efficiently use resources by reading data only when it becomes
-    available;
-  - ring_buffer__consume(), will attempt to read new records regardless o=
-f
-    data availablity notification sub-system. This API is useful for case=
-s
-    when lowest latency is required, in expense of burning CPU resources.
-
+Suggested-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/Build           |   2 +-
- tools/lib/bpf/libbpf.h        |  21 +++
- tools/lib/bpf/libbpf.map      |   5 +
- tools/lib/bpf/libbpf_probes.c |   5 +
- tools/lib/bpf/ringbuf.c       | 285 ++++++++++++++++++++++++++++++++++
- 5 files changed, 317 insertions(+), 1 deletion(-)
- create mode 100644 tools/lib/bpf/ringbuf.c
+ Documentation/bpf/ringbuf.txt | 191 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 191 insertions(+)
+ create mode 100644 Documentation/bpf/ringbuf.txt
 
-diff --git a/tools/lib/bpf/Build b/tools/lib/bpf/Build
-index e3962cfbc9a6..190366d05588 100644
---- a/tools/lib/bpf/Build
-+++ b/tools/lib/bpf/Build
-@@ -1,3 +1,3 @@
- libbpf-y :=3D libbpf.o bpf.o nlattr.o btf.o libbpf_errno.o str_error.o \
- 	    netlink.o bpf_prog_linfo.o libbpf_probes.o xsk.o hashmap.o \
--	    btf_dump.o
-+	    btf_dump.o ringbuf.o
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 8ea69558f0a8..e0ee0906202b 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -478,6 +478,27 @@ LIBBPF_API int bpf_get_link_xdp_id(int ifindex, __u3=
-2 *prog_id, __u32 flags);
- LIBBPF_API int bpf_get_link_xdp_info(int ifindex, struct xdp_link_info *=
-info,
- 				     size_t info_size, __u32 flags);
-=20
-+/* Ring buffer APIs */
-+struct ring_buffer;
-+
-+typedef int (*ring_buffer_sample_fn)(void *ctx, void *data, size_t size)=
-;
-+
-+struct ring_buffer_opts {
-+	size_t sz; /* size of this struct, for forward/backward compatiblity */
-+};
-+
-+#define ring_buffer_opts__last_field sz
-+
-+LIBBPF_API struct ring_buffer *
-+ring_buffer__new(int map_fd, ring_buffer_sample_fn sample_cb, void *ctx,
-+		 const struct ring_buffer_opts *opts);
-+LIBBPF_API void ring_buffer__free(struct ring_buffer *rb);
-+LIBBPF_API int ring_buffer__add(struct ring_buffer *rb, int map_fd,
-+				ring_buffer_sample_fn sample_cb, void *ctx);
-+LIBBPF_API int ring_buffer__poll(struct ring_buffer *rb, int timeout_ms)=
-;
-+LIBBPF_API int ring_buffer__consume(struct ring_buffer *rb);
-+
-+/* Perf buffer APIs */
- struct perf_buffer;
-=20
- typedef void (*perf_buffer_sample_fn)(void *ctx, int cpu,
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 0133d469d30b..51e58a6215de 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -262,4 +262,9 @@ LIBBPF_0.0.9 {
- 		bpf_link_get_fd_by_id;
- 		bpf_link_get_next_id;
- 		bpf_program__attach_iter;
-+		ring_buffer__add;
-+		ring_buffer__consume;
-+		ring_buffer__free;
-+		ring_buffer__new;
-+		ring_buffer__poll;
- } LIBBPF_0.0.8;
-diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.=
-c
-index 2c92059c0c90..10cd8d1891f5 100644
---- a/tools/lib/bpf/libbpf_probes.c
-+++ b/tools/lib/bpf/libbpf_probes.c
-@@ -238,6 +238,11 @@ bool bpf_probe_map_type(enum bpf_map_type map_type, =
-__u32 ifindex)
- 		if (btf_fd < 0)
- 			return false;
- 		break;
-+	case BPF_MAP_TYPE_RINGBUF:
-+		key_size =3D 0;
-+		value_size =3D 0;
-+		max_entries =3D 4096;
-+		break;
- 	case BPF_MAP_TYPE_UNSPEC:
- 	case BPF_MAP_TYPE_HASH:
- 	case BPF_MAP_TYPE_ARRAY:
-diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+diff --git a/Documentation/bpf/ringbuf.txt b/Documentation/bpf/ringbuf.tx=
+t
 new file mode 100644
-index 000000000000..dcbb0b92f5ee
+index 000000000000..72f0a2480db3
 --- /dev/null
-+++ b/tools/lib/bpf/ringbuf.c
-@@ -0,0 +1,285 @@
-+// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+/*
-+ * Ring buffer operations.
-+ *
-+ * Copyright (C) 2020 Facebook, Inc.
-+ */
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <errno.h>
-+#include <unistd.h>
-+#include <linux/err.h>
-+#include <linux/bpf.h>
-+#include <asm/barrier.h>
-+#include <sys/mman.h>
-+#include <sys/epoll.h>
-+#include <tools/libc_compat.h>
++++ b/Documentation/bpf/ringbuf.txt
+@@ -0,0 +1,191 @@
++BPF ring buffer
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 +
-+#include "libbpf.h"
-+#include "libbpf_internal.h"
-+#include "bpf.h"
-+
-+/* make sure libbpf doesn't use kernel-only integer typedefs */
-+#pragma GCC poison u8 u16 u32 u64 s8 s16 s32 s64
-+
-+struct ring {
-+	ring_buffer_sample_fn sample_cb;
-+	void *ctx;
-+	void *data;
-+	unsigned long *consumer_pos;
-+	unsigned long *producer_pos;
-+	unsigned long mask;
-+	int map_fd;
-+};
-+
-+struct ring_buffer {
-+	struct epoll_event *events;
-+	struct ring *rings;
-+	size_t page_size;
-+	int epoll_fd;
-+	int ring_cnt;
-+};
-+
-+static void ringbuf_unmap_ring(struct ring_buffer *rb, struct ring *r)
-+{
-+	if (r->consumer_pos) {
-+		munmap(r->consumer_pos, rb->page_size);
-+		r->consumer_pos =3D NULL;
-+	}
-+	if (r->producer_pos) {
-+		munmap(r->producer_pos, rb->page_size + 2 * (r->mask + 1));
-+		r->producer_pos =3D NULL;
-+	}
-+}
-+
-+/* Add extra RINGBUF maps to this ring buffer manager */
-+int ring_buffer__add(struct ring_buffer *rb, int map_fd,
-+		     ring_buffer_sample_fn sample_cb, void *ctx)
-+{
-+	struct bpf_map_info info;
-+	__u32 len =3D sizeof(info);
-+	struct epoll_event *e;
-+	struct ring *r;
-+	void *tmp;
-+	int err;
-+
-+	memset(&info, 0, sizeof(info));
-+
-+	err =3D bpf_obj_get_info_by_fd(map_fd, &info, &len);
-+	if (err) {
-+		err =3D -errno;
-+		pr_warn("ringbuf: failed to get map info for fd=3D%d: %d\n",
-+			map_fd, err);
-+		return err;
-+	}
-+
-+	if (info.type !=3D BPF_MAP_TYPE_RINGBUF) {
-+		pr_warn("ringbuf: map fd=3D%d is not BPF_MAP_TYPE_RINGBUF\n",
-+			map_fd);
-+		return -EINVAL;
-+	}
-+
-+	tmp =3D reallocarray(rb->rings, rb->ring_cnt + 1, sizeof(*rb->rings));
-+	if (!tmp)
-+		return -ENOMEM;
-+	rb->rings =3D tmp;
-+
-+	tmp =3D reallocarray(rb->events, rb->ring_cnt + 1, sizeof(*rb->events))=
++Motivation
++----------
++There are two distinctive motivators for this work, which are not satisf=
+ied by
++existing perf buffer, which prompted creation of a new ring buffer
++implementation.
++  - more efficient memory utilization by sharing ring buffer across CPUs=
 ;
-+	if (!tmp)
-+		return -ENOMEM;
-+	rb->events =3D tmp;
++  - preserving ordering of events that happen sequentially in time, even
++  across multiple CPUs (e.g., fork/exec/exit events for a task).
 +
-+	r =3D &rb->rings[rb->ring_cnt];
-+	memset(r, 0, sizeof(*r));
++These two problems are independent, but perf buffer fails to satisfy bot=
+h.
++Both are a result of a choice to have per-CPU perf ring buffer.  Both ca=
+n be
++also solved by having an MPSC implementation of ring buffer. The orderin=
+g
++problem could technically be solved for perf buffer with some in-kernel
++counting, but given the first one requires an MPSC buffer, the same solu=
+tion
++would solve the second problem automatically.
 +
-+	r->map_fd =3D map_fd;
-+	r->sample_cb =3D sample_cb;
-+	r->ctx =3D ctx;
-+	r->mask =3D info.max_entries - 1;
++Semantics and APIs
++------------------
++Single ring buffer is presented to BPF programs as an instance of BPF ma=
+p of
++type BPF_MAP_TYPE_RINGBUF. Two other alternatives considered, but ultima=
+tely
++rejected.
 +
-+	/* Map writable consumer page */
-+	tmp =3D mmap(NULL, rb->page_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-+		   map_fd, 0);
-+	if (tmp =3D=3D MAP_FAILED) {
-+		err =3D -errno;
-+		pr_warn("ringbuf: failed to mmap consumer page for map fd=3D%d: %d\n",
-+			map_fd, err);
-+		return err;
-+	}
-+	r->consumer_pos =3D tmp;
++One way would be to, similar to BPF_MAP_TYPE_PERF_EVENT_ARRAY, make
++BPF_MAP_TYPE_RINGBUF could represent an array of ring buffers, but not e=
+nforce
++"same CPU only" rule. This would be more familiar interface compatible w=
+ith
++existing perf buffer use in BPF, but would fail if application needed mo=
+re
++advanced logic to lookup ring buffer by arbitrary key. HASH_OF_MAPS addr=
+esses
++this with current approach. Additionally, given the performance of BPF
++ringbuf, many use cases would just opt into a simple single ring buffer =
+shared
++among all CPUs, for which current approach would be an overkill.
 +
-+	/* Map read-only producer page and data pages. We map twice as big
-+	 * data size to allow simple reading of samples that wrap around the
-+	 * end of a ring buffer. See kernel implementation for details.
-+	 * */
-+	tmp =3D mmap(NULL, rb->page_size + 2 * info.max_entries, PROT_READ,
-+		   MAP_SHARED, map_fd, rb->page_size);
-+	if (tmp =3D=3D MAP_FAILED) {
-+		err =3D -errno;
-+		ringbuf_unmap_ring(rb, r);
-+		pr_warn("ringbuf: failed to mmap data pages for map fd=3D%d: %d\n",
-+			map_fd, err);
-+		return err;
-+	}
-+	r->producer_pos =3D tmp;
-+	r->data =3D tmp + rb->page_size;
++Another approach could introduce a new concept, alongside BPF map, to
++represent generic "container" object, which doesn't necessarily have key=
+/value
++interface with lookup/update/delete operations. This approach would add =
+a lot
++of extra infrastructure that has to be built for observability and verif=
+ier
++support. It would also add another concept that BPF developers would hav=
+e to
++familiarize themselves with, new syntax in libbpf, etc. But then would r=
+eally
++provide no additional benefits over the approach of using a map.
++BPF_MAP_TYPE_RINGBUF doesn't support lookup/update/delete operations, bu=
+t so
++doesn't few other map types (e.g., queue and stack; array doesn't suppor=
+t
++delete, etc).
 +
-+	e =3D &rb->events[rb->ring_cnt];
-+	memset(e, 0, sizeof(*e));
++The approach chosen has an advantage of re-using existing BPF map
++infrastructure (introspection APIs in kernel, libbpf support, etc), bein=
+g
++familiar concept (no need to teach users a new type of object in BPF pro=
+gram),
++and utilizing existing tooling (bpftool). For common scenario of using
++a single ring buffer for all CPUs, it's as simple and straightforward, a=
+s
++would be with a dedicated "container" object. On the other hand, by bein=
+g
++a map, it can be combined with ARRAY_OF_MAPS and HASH_OF_MAPS map-in-map=
+s to
++implement a wide variety of topologies, from one ring buffer for each CP=
+U
++(e.g., as a replacement for perf buffer use cases), to a complicated
++application hashing/sharding of ring buffers (e.g., having a small pool =
+of
++ring buffers with hashed task's tgid being a look up key to preserve ord=
+er,
++but reduce contention).
 +
-+	e->events =3D EPOLLIN;
-+	e->data.fd =3D rb->ring_cnt;
-+	if (epoll_ctl(rb->epoll_fd, EPOLL_CTL_ADD, map_fd, e) < 0) {
-+		err =3D -errno;
-+		ringbuf_unmap_ring(rb, r);
-+		pr_warn("ringbuf: failed to epoll add map fd=3D%d: %d\n",
-+			map_fd, err);
-+		return err;
-+	}
++Key and value sizes are enforced to be zero. max_entries is used to spec=
+ify
++the size of ring buffer and has to be a power of 2 value.
 +
-+	rb->ring_cnt++;
-+	return 0;
-+}
++There are a bunch of similarities between perf buffer
++(BPF_MAP_TYPE_PERF_EVENT_ARRAY) and new BPF ring buffer semantics:
++  - variable-length records;
++  - if there is no more space left in ring buffer, reservation fails, no
++    blocking;
++  - memory-mappable data area for user-space applications for ease of
++    consumption and high performance;
++  - epoll notifications for new incoming data;
++  - but still the ability to do busy polling for new data to achieve the
++    lowest latency, if necessary.
 +
-+void ring_buffer__free(struct ring_buffer *rb)
-+{
-+	int i;
++BPF ringbuf provides two sets of APIs to BPF programs:
++  - bpf_ringbuf_output() allows to *copy* data from one place to a ring
++    buffer, similarly to bpf_perf_event_output();
++  - bpf_ringbuf_reserve()/bpf_ringbuf_commit()/bpf_ringbuf_discard() API=
+s
++    split the whole process into two steps. First, a fixed amount of spa=
+ce is
++    reserved. If successful, a pointer to a data inside ring buffer data=
+ area
++    is returned, which BPF programs can use similarly to a data inside
++    array/hash maps. Once ready, this piece of memory is either committe=
+d or
++    discarded. Discard is similar to commit, but makes consumer ignore t=
+he
++    record.
 +
-+	if (!rb)
-+		return;
++bpf_ringbuf_output() has disadvantage of incurring extra memory copy, be=
+cause
++record has to be prepared in some other place first. But it allows to su=
+bmit
++records of the length that's not known to verifier beforehand. It also c=
+losely
++matches bpf_perf_event_output(), so will simplify migration significantl=
+y.
 +
-+	for (i =3D 0; i < rb->ring_cnt; ++i)
-+		ringbuf_unmap_ring(rb, &rb->rings[i]);
-+	if (rb->epoll_fd >=3D 0)
-+		close(rb->epoll_fd);
++bpf_ringbuf_reserve() avoids the extra copy of memory by providing a mem=
+ory
++pointer directly to ring buffer memory. In a lot of cases records are la=
+rger
++than BPF stack space allows, so many programs have use extra per-CPU arr=
+ay as
++a temporary heap for preparing sample. bpf_ringbuf_reserve() avoid this =
+needs
++completely. But in exchange, it only allows a known constant size of mem=
+ory to
++be reserved, such that verifier can verify that BPF program can't access
++memory outside its reserved record space. bpf_ringbuf_output(), while sl=
+ightly
++slower due to extra memory copy, covers some use cases that are not suit=
+able
++for bpf_ringbuf_reserve().
 +
-+	free(rb->events);
-+	free(rb->rings);
-+	free(rb);
-+}
++The difference between commit and discard is very small. Discard just ma=
+rks
++a record as discarded, and such records are supposed to be ignored by co=
+nsumer
++code. Discard is useful for some advanced use-cases, such as ensuring
++all-or-nothing multi-record submission, or emulating temporary malloc()/=
+free()
++within single BPF program invocation.
 +
-+struct ring_buffer *
-+ring_buffer__new(int map_fd, ring_buffer_sample_fn sample_cb, void *ctx,
-+		 const struct ring_buffer_opts *opts)
-+{
-+	struct ring_buffer *rb;
-+	int err;
++Each reserved record is tracked by verifier through existing
++reference-tracking logic, similar to socket ref-tracking. It is thus
++impossible to reserve a record, but forget to submit (or discard) it.
 +
-+	if (!OPTS_VALID(opts, ring_buffer_opts))
-+		return NULL;
++bpf_ringbuf_query() helper allows to query various properties of ring bu=
+ffer.
++Currently 4 are supported:
++  - BPF_RB_AVAIL_DATA returns amount of unconsumed data in ring buffer;
++  - BPF_RB_RING_SIZE returns the size of ring buffer;
++  - BPF_RB_CONS_POS/BPF_RB_PROD_POS returns current logical possition of
++    consumer/producer, respectively.
++Returned values are momentarily snapshots of ring buffer state and could=
+ be
++off by the time helper returns, so this should be used only for
++debugging/reporting reasons or for implementing various heuristics, that=
+ take
++into account highly-changeable nature of some of those characteristics.
 +
-+	rb =3D calloc(1, sizeof(*rb));
-+	if (!rb)
-+		return NULL;
++One such heuristic might involve more fine-grained control over poll/epo=
+ll
++notifications about new data availability in ring buffer. Together with
++BPF_RB_NO_WAKEUP/BPF_RB_FORCE_WAKEUP flags for output/commit/discard hel=
+pers,
++it allows BPF program a high degree of control and, e.g., more efficient
++batched notifications. Default self-balancing strategy, though, should b=
+e
++adequate for most applications and will work reliable and efficiently al=
+ready.
 +
-+	rb->page_size =3D getpagesize();
++Design and implementation
++-------------------------
++This reserve/commit schema allows a natural way for multiple producers, =
+either
++on different CPUs or even on the same CPU/in the same BPF program, to re=
+serve
++independent records and work with them without blocking other producers.=
+ This
++means that if BPF program was interruped by another BPF program sharing =
+the
++same ring buffer, they will both get a record reserved (provided there i=
+s
++enough space left) and can work with it and submit it independently. Thi=
+s
++applies to NMI context as well, except that due to using a spinlock duri=
+ng
++reservation, in NMI context, bpf_ringbuf_reserve() might fail to get a l=
+ock,
++in which case reservation will fail even if ring buffer is not full.
 +
-+	rb->epoll_fd =3D epoll_create1(EPOLL_CLOEXEC);
-+	if (rb->epoll_fd < 0) {
-+		err =3D -errno;
-+		pr_warn("ringbuf: failed to create epoll instance: %d\n", err);
-+		goto err_out;
-+	}
++The ring buffer itself internally is implemented as a power-of-2 sized
++circular buffer, with two logical and ever-increasing counters (which mi=
+ght
++wrap around on 32-bit architectures, that's not a problem):
++  - consumer counter shows up to which logical position consumer consume=
+d the
++    data;
++  - producer counter denotes amount of data reserved by all producers.
 +
-+	err =3D ring_buffer__add(rb, map_fd, sample_cb, ctx);
-+	if (err)
-+		goto err_out;
++Each time a record is reserved, producer that "owns" the record will
++successfully advance producer counter. At that point, data is still not =
+yet
++ready to be consumed, though. Each record has 8 byte header, which conta=
+ins
++the length of reserved record, as well as two extra bits: busy bit to de=
+note
++that record is still being worked on, and discard bit, which might be se=
+t at
++commit time if record is discarded. In the latter case, consumer is supp=
+osed
++to skip the record and move on to the next one. Record header also encod=
+es
++record's relative offset from the beginning of ring buffer data area (in
++pages). This allows bpf_ringbuf_commit()/bpf_ringbuf_discard() to accept=
+ only
++the pointer to the record itself, without requiring also the pointer to =
+ring
++buffer itself. Ring buffer memory location will be restored from record
++metadata header. This significantly simplifies verifier, as well as impr=
+oving
++API usability.
 +
-+	return rb;
++Producer counter increments are serialized under spinlock, so there is
++a strict ordering between reservations. Commits, on the other hand, are
++completely lockless and independent. All records become available to con=
+sumer
++in the order of reservations, but only after all previous records where
++already committed. It is thus possible for slow producers to temporarily=
+ hold
++off submitted records, that were reserved later.
 +
-+err_out:
-+	ring_buffer__free(rb);
-+	return NULL;
-+}
++Reservation/commit/consumer protocol is verified by litmus tests in
++tools/memory-model/litmus-tests, see mpsc-rb*.litmus files.
 +
-+static inline int roundup_len(__u32 len)
-+{
-+	/* clear out top 2 bits */
-+	len <<=3D 2;
-+	len >>=3D 2;
-+	/* add length prefix */
-+	len +=3D BPF_RINGBUF_HDR_SZ;
-+	/* round up to 8 byte alignment */
-+	return (len + 7) / 8 * 8;
-+}
++One interesting implementation bit, that significantly simplifies (and t=
+hus
++speeds up as well) implementation of both producers and consumers is how=
+ data
++area is mapped twice contiguously back-to-back in the virtual memory. Th=
+is
++allows to not take any special measures for samples that have to wrap ar=
+ound
++at the end of the circular buffer data area, because the next page after=
+ the
++last data page would be first data page again, and thus the sample will =
+still
++appear completely contiguous in virtual memory. See comment and a simple=
+ ASCII
++diagram showing this visually in bpf_ringbuf_area_alloc().
 +
-+static int ringbuf_process_ring(struct ring* r)
-+{
-+	int *len_ptr, len, err, cnt =3D 0;
-+	unsigned long cons_pos, prod_pos;
-+	bool got_new_data;
-+	void *sample;
-+
-+	cons_pos =3D smp_load_acquire(r->consumer_pos);
-+	do {
-+		got_new_data =3D false;
-+		prod_pos =3D smp_load_acquire(r->producer_pos);
-+		while (cons_pos < prod_pos) {
-+			len_ptr =3D r->data + (cons_pos & r->mask);
-+			len =3D smp_load_acquire(len_ptr);
-+
-+			/* sample not committed yet, bail out for now */
-+			if (len & BPF_RINGBUF_BUSY_BIT)
-+				goto done;
-+
-+			got_new_data =3D true;
-+			cons_pos +=3D roundup_len(len);
-+
-+			if ((len & BPF_RINGBUF_DISCARD_BIT) =3D=3D 0) {
-+				sample =3D (void *)len_ptr + BPF_RINGBUF_HDR_SZ;
-+				err =3D r->sample_cb(r->ctx, sample, len);
-+				if (err) {
-+					/* update consumer pos and bail out */
-+					smp_store_release(r->consumer_pos,
-+							  cons_pos);
-+					return err;
-+				}
-+				cnt++;
-+			}
-+
-+			smp_store_release(r->consumer_pos, cons_pos);
-+		}
-+	} while (got_new_data);
-+done:
-+	return cnt;
-+}
-+
-+/* Consume available ring buffer(s) data without event polling.
-+ * Returns number of records consumed across all registered ring buffers=
-, or
-+ * negative number if any of the callbacks return error.
-+ */
-+int ring_buffer__consume(struct ring_buffer *rb)
-+{
-+	int i, err, res =3D 0;
-+
-+	for (i =3D 0; i < rb->ring_cnt; i++) {
-+		struct ring *ring =3D &rb->rings[i];
-+
-+		err =3D ringbuf_process_ring(ring);
-+		if (err < 0)
-+			return err;
-+		res +=3D err;
-+	}
-+	return res;
-+}
-+
-+/* Poll for available data and consume records, if any are available.
-+ * Returns number of records consumed, or negative number, if any of the
-+ * registered callbacks returned error.
-+ */
-+int ring_buffer__poll(struct ring_buffer *rb, int timeout_ms)
-+{
-+	int i, cnt, err, res =3D 0;
-+
-+	cnt =3D epoll_wait(rb->epoll_fd, rb->events, rb->ring_cnt, timeout_ms);
-+	for (i =3D 0; i < cnt; i++) {
-+		__u32 ring_id =3D rb->events[i].data.fd;
-+		struct ring *ring =3D &rb->rings[ring_id];
-+
-+		err =3D ringbuf_process_ring(ring);
-+		if (err < 0)
-+			return err;
-+		res +=3D cnt;
-+	}
-+	return cnt < 0 ? -errno : res;
-+}
++Another feature that distinguishes BPF ringbuf from perf ring buffer is
++a self-pacing notifications of new data being availability.
++bpf_ringbuf_commit() implementation will send a notification of new reco=
+rd
++being available after commit only if consumer has already caught up righ=
+t up
++to the record being committed. If not, consumer still has to catch up an=
+d thus
++will see new data anyways without needing an extra poll notification.
++Benchmarks (see tools/testing/selftests/bpf/benchs/bench_ringbuf.c) show=
+ that
++this allows to achieve a very high throughput without having to resort t=
+o
++tricks like "notify only every Nth sample", which are necessary with per=
+f
++buffer. For extreme cases, when BPF program wants more manual control of
++notifications, commit/discard/output helpers accept BPF_RB_NO_WAKEUP and
++BPF_RB_FORCE_WAKEUP flags, which give full control over notifications of=
+ data
++availability, but require extra caution and diligence in using this API.
 --=20
 2.24.1
 
