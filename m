@@ -2,35 +2,37 @@ Return-Path: <SRS0=Mla6=7A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76A50C433DF
-	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 15:35:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F738C433DF
+	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 15:35:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5CB1C205CB
-	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 15:35:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 655DE205CB
+	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 15:35:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbgERPfg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 May 2020 11:35:36 -0400
-Received: from www62.your-server.de ([213.133.104.62]:34738 "EHLO
+        id S1728369AbgERPfj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 May 2020 11:35:39 -0400
+Received: from www62.your-server.de ([213.133.104.62]:34768 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727005AbgERPfg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 May 2020 11:35:36 -0400
+        with ESMTP id S1728213AbgERPfj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 May 2020 11:35:39 -0400
 Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1jahnh-00028o-H7; Mon, 18 May 2020 17:35:33 +0200
+        id 1jahnj-00029c-2j; Mon, 18 May 2020 17:35:35 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, rdna@fb.com,
         sdf@google.com, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next 0/4] Add get{peer,sock}name cgroup attach types
-Date:   Mon, 18 May 2020 17:35:11 +0200
-Message-Id: <cover.1589813738.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next 3/4] bpf, bpftool: enable get{peer,sock}name attach types
+Date:   Mon, 18 May 2020 17:35:14 +0200
+Message-Id: <fcbc3442a53326b2131fd03708eab12d04bcc43e.1589813738.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1589813738.git.daniel@iogearbox.net>
+References: <cover.1589813738.git.daniel@iogearbox.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
@@ -40,40 +42,152 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Trivial patch to add get{peer,sock}name cgroup attach types to the BPF
-sock_addr programs in order to enable rewriting sockaddr structs from
-both calls along with libbpf and bpftool support as well as selftests.
+Make bpftool aware and add the new get{peer,sock}name attach types to its
+cli, documentation and bash completion to allow attachment/detachment of
+sock_addr programs there.
 
-Thanks!
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ .../bpf/bpftool/Documentation/bpftool-cgroup.rst  | 10 +++++++---
+ tools/bpf/bpftool/Documentation/bpftool-prog.rst  |  3 ++-
+ tools/bpf/bpftool/bash-completion/bpftool         | 15 +++++++++------
+ tools/bpf/bpftool/cgroup.c                        |  7 ++++---
+ tools/bpf/bpftool/main.h                          |  4 ++++
+ tools/bpf/bpftool/prog.c                          |  6 ++++--
+ 6 files changed, 30 insertions(+), 15 deletions(-)
 
-Daniel Borkmann (4):
-  bpf: add get{peer,sock}name attach types for sock_addr
-  bpf, libbpf: enable get{peer,sock}name attach types
-  bpf, bpftool: enable get{peer,sock}name attach types
-  bpf, testing: add get{peer,sock}name selftests to test_progs
-
- include/linux/bpf-cgroup.h                    |   1 +
- include/uapi/linux/bpf.h                      |   4 +
- kernel/bpf/syscall.c                          |  12 ++
- kernel/bpf/verifier.c                         |   6 +-
- net/core/filter.c                             |   4 +
- net/ipv4/af_inet.c                            |   8 +-
- net/ipv6/af_inet6.c                           |   9 +-
- .../bpftool/Documentation/bpftool-cgroup.rst  |  10 +-
- .../bpftool/Documentation/bpftool-prog.rst    |   3 +-
- tools/bpf/bpftool/bash-completion/bpftool     |  15 ++-
- tools/bpf/bpftool/cgroup.c                    |   7 +-
- tools/bpf/bpftool/main.h                      |   4 +
- tools/bpf/bpftool/prog.c                      |   6 +-
- tools/include/uapi/linux/bpf.h                |   4 +
- tools/lib/bpf/libbpf.c                        |   8 ++
- tools/testing/selftests/bpf/network_helpers.c |  11 +-
- tools/testing/selftests/bpf/network_helpers.h |   1 +
- .../bpf/prog_tests/connect_force_port.c       | 107 +++++++++++++-----
- .../selftests/bpf/progs/connect_force_port4.c |  59 +++++++++-
- .../selftests/bpf/progs/connect_force_port6.c |  70 +++++++++++-
- 20 files changed, 295 insertions(+), 54 deletions(-)
-
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+index e4d9da654e84..a226aee3574f 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+@@ -29,8 +29,8 @@ CGROUP COMMANDS
+ |	*PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* }
+ |	*ATTACH_TYPE* := { **ingress** | **egress** | **sock_create** | **sock_ops** | **device** |
+ |		**bind4** | **bind6** | **post_bind4** | **post_bind6** | **connect4** | **connect6** |
+-|		**sendmsg4** | **sendmsg6** | **recvmsg4** | **recvmsg6** | **sysctl** |
+-|		**getsockopt** | **setsockopt** }
++|               **getpeername4** | **getpeername6** | **getsockname4** | **getsockname6** | **sendmsg4** |
++|               **sendmsg6** | **recvmsg4** | **recvmsg6** | **sysctl** | **getsockopt** | **setsockopt** }
+ |	*ATTACH_FLAGS* := { **multi** | **override** }
+ 
+ DESCRIPTION
+@@ -101,7 +101,11 @@ DESCRIPTION
+                   an unconnected udp6 socket (since 5.2);
+ 		  **sysctl** sysctl access (since 5.2);
+ 		  **getsockopt** call to getsockopt (since 5.3);
+-		  **setsockopt** call to setsockopt (since 5.3).
++		  **setsockopt** call to setsockopt (since 5.3);
++		  **getpeername4** call to getpeername(2) for an inet4 socket (since 5.8);
++		  **getpeername6** call to getpeername(2) for an inet6 socket (since 5.8);
++		  **getsockname4** call to getsockname(2) for an inet4 socket (since 5.8);
++		  **getsockname6** call to getsockname(2) for an inet6 socket (since 5.8).
+ 
+ 	**bpftool cgroup detach** *CGROUP* *ATTACH_TYPE* *PROG*
+ 		  Detach *PROG* from the cgroup *CGROUP* and attach type
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+index 5948e9d89c8d..2b254959d488 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -41,7 +41,8 @@ PROG COMMANDS
+ |		**cgroup/sock** | **cgroup/dev** | **lwt_in** | **lwt_out** | **lwt_xmit** |
+ |		**lwt_seg6local** | **sockops** | **sk_skb** | **sk_msg** | **lirc_mode2** |
+ |		**cgroup/bind4** | **cgroup/bind6** | **cgroup/post_bind4** | **cgroup/post_bind6** |
+-|		**cgroup/connect4** | **cgroup/connect6** | **cgroup/sendmsg4** | **cgroup/sendmsg6** |
++|		**cgroup/connect4** | **cgroup/connect6** | **cgroup/getpeername4** | **cgroup/getpeername6** |
++|               **cgroup/getsockname4** | **cgroup/getsockname6** | **cgroup/sendmsg4** | **cgroup/sendmsg6** |
+ |		**cgroup/recvmsg4** | **cgroup/recvmsg6** | **cgroup/sysctl** |
+ |		**cgroup/getsockopt** | **cgroup/setsockopt** |
+ |		**struct_ops** | **fentry** | **fexit** | **freplace**
+diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
+index 9f0f20e73b87..25b25aca1112 100644
+--- a/tools/bpf/bpftool/bash-completion/bpftool
++++ b/tools/bpf/bpftool/bash-completion/bpftool
+@@ -472,6 +472,8 @@ _bpftool()
+                                 lwt_seg6local sockops sk_skb sk_msg \
+                                 lirc_mode2 cgroup/bind4 cgroup/bind6 \
+                                 cgroup/connect4 cgroup/connect6 \
++                                cgroup/getpeername4 cgroup/getpeername6 \
++                                cgroup/getsockname4 cgroup/getsockname6 \
+                                 cgroup/sendmsg4 cgroup/sendmsg6 \
+                                 cgroup/recvmsg4 cgroup/recvmsg6 \
+                                 cgroup/post_bind4 cgroup/post_bind6 \
+@@ -966,9 +968,10 @@ _bpftool()
+                     ;;
+                 attach|detach)
+                     local ATTACH_TYPES='ingress egress sock_create sock_ops \
+-                        device bind4 bind6 post_bind4 post_bind6 connect4 \
+-                        connect6 sendmsg4 sendmsg6 recvmsg4 recvmsg6 sysctl \
+-                        getsockopt setsockopt'
++                        device bind4 bind6 post_bind4 post_bind6 connect4 connect6 \
++                        getpeername4 getpeername6 getsockname4 getsockname6 \
++                        sendmsg4 sendmsg6 recvmsg4 recvmsg6 sysctl getsockopt \
++                        setsockopt'
+                     local ATTACH_FLAGS='multi override'
+                     local PROG_TYPE='id pinned tag name'
+                     case $prev in
+@@ -977,9 +980,9 @@ _bpftool()
+                             return 0
+                             ;;
+                         ingress|egress|sock_create|sock_ops|device|bind4|bind6|\
+-                        post_bind4|post_bind6|connect4|connect6|sendmsg4|\
+-                        sendmsg6|recvmsg4|recvmsg6|sysctl|getsockopt|\
+-                        setsockopt)
++                        post_bind4|post_bind6|connect4|connect6|getpeername4|\
++                        getpeername6|getsockname4|getsockname6|sendmsg4|sendmsg6|\
++                        recvmsg4|recvmsg6|sysctl|getsockopt|setsockopt)
+                             COMPREPLY=( $( compgen -W "$PROG_TYPE" -- \
+                                 "$cur" ) )
+                             return 0
+diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
+index 1693c802bb20..27931db421d8 100644
+--- a/tools/bpf/bpftool/cgroup.c
++++ b/tools/bpf/bpftool/cgroup.c
+@@ -25,9 +25,10 @@
+ 	"       ATTACH_TYPE := { ingress | egress | sock_create |\n"	       \
+ 	"                        sock_ops | device | bind4 | bind6 |\n"	       \
+ 	"                        post_bind4 | post_bind6 | connect4 |\n"       \
+-	"                        connect6 | sendmsg4 | sendmsg6 |\n"           \
+-	"                        recvmsg4 | recvmsg6 | sysctl |\n"	       \
+-	"                        getsockopt | setsockopt }"
++	"                        connect6 | getpeername4 | getpeername6 |\n"   \
++	"                        getsockname4 | getsockname6 | sendmsg4 |\n"   \
++	"                        sendmsg6 | recvmsg4 | recvmsg6 |\n"           \
++	"                        sysctl | getsockopt | setsockopt }"
+ 
+ static unsigned int query_flags;
+ 
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index f89ac70ef973..5cdf0bc049bd 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -100,6 +100,10 @@ static const char * const attach_type_name[__MAX_BPF_ATTACH_TYPE] = {
+ 	[BPF_CGROUP_INET6_CONNECT] = "connect6",
+ 	[BPF_CGROUP_INET4_POST_BIND] = "post_bind4",
+ 	[BPF_CGROUP_INET6_POST_BIND] = "post_bind6",
++	[BPF_CGROUP_INET4_GETPEERNAME] = "getpeername4",
++	[BPF_CGROUP_INET6_GETPEERNAME] = "getpeername6",
++	[BPF_CGROUP_INET4_GETSOCKNAME] = "getsockname4",
++	[BPF_CGROUP_INET6_GETSOCKNAME] = "getsockname6",
+ 	[BPF_CGROUP_UDP4_SENDMSG] = "sendmsg4",
+ 	[BPF_CGROUP_UDP6_SENDMSG] = "sendmsg6",
+ 	[BPF_CGROUP_SYSCTL] = "sysctl",
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index b6e5ba568f98..245f941fdbcf 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -2012,8 +2012,10 @@ static int do_help(int argc, char **argv)
+ 		"                 sk_reuseport | flow_dissector | cgroup/sysctl |\n"
+ 		"                 cgroup/bind4 | cgroup/bind6 | cgroup/post_bind4 |\n"
+ 		"                 cgroup/post_bind6 | cgroup/connect4 | cgroup/connect6 |\n"
+-		"                 cgroup/sendmsg4 | cgroup/sendmsg6 | cgroup/recvmsg4 |\n"
+-		"                 cgroup/recvmsg6 | cgroup/getsockopt | cgroup/setsockopt |\n"
++		"                 cgroup/getpeername4 | cgroup/getpeername6 |\n"
++		"                 cgroup/getsockname4 | cgroup/getsockname6 | cgroup/sendmsg4 |\n"
++		"                 cgroup/sendmsg6 | cgroup/recvmsg4 | cgroup/recvmsg6 |\n"
++		"                 cgroup/getsockopt | cgroup/setsockopt |\n"
+ 		"                 struct_ops | fentry | fexit | freplace }\n"
+ 		"       ATTACH_TYPE := { msg_verdict | stream_verdict | stream_parser |\n"
+ 		"                        flow_dissector }\n"
 -- 
 2.21.0
 
