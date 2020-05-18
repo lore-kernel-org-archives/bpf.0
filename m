@@ -2,196 +2,299 @@ Return-Path: <SRS0=Mla6=7A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B482EC433E2
-	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 22:46:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5D5CC433E0
+	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 23:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 91E9D20756
-	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 22:46:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C87220674
+	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 23:45:26 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="kD1dcMsE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728549AbgERWqK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 May 2020 18:46:10 -0400
-Received: from www62.your-server.de ([213.133.104.62]:57882 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728266AbgERWqD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 May 2020 18:46:03 -0400
-Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jaoWE-0000cY-Ok; Tue, 19 May 2020 00:45:58 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     ast@kernel.org
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, rdna@fb.com,
-        sdf@google.com, andrii.nakryiko@gmail.com,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH bpf-next v2 3/4] bpf, bpftool: enable get{peer,sock}name attach types
-Date:   Tue, 19 May 2020 00:45:47 +0200
-Message-Id: <9765b3d03e4c29210c4df56a9cc7e52f5f7bb5ef.1589841594.git.daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.1589841594.git.daniel@iogearbox.net>
-References: <cover.1589841594.git.daniel@iogearbox.net>
+        id S1728003AbgERXp0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 May 2020 19:45:26 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11478 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726407AbgERXp0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 18 May 2020 19:45:26 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 04INiqSW001716
+        for <bpf@vger.kernel.org>; Mon, 18 May 2020 16:45:24 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=rxDM1LiWgcvD+qiqMH2cCL9PMAEApjWmsVyyCa2bZKE=;
+ b=kD1dcMsEv6bhtGhtIe1sL03qyfQsvDAyEfSj2q6c2SyljTEm1hmBlZ7GIgm9Zl/E5QjB
+ taMoVhmLNP4lCBvnLpQIdsRDv1BQldLaJrUNkmfNRrul2kr6rBkcJ/U848nFaSVN0HaC
+ yKszmA6En+6t0mYmRkSjAZno5b95GKrHEyY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 312bp18ypr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 18 May 2020 16:45:24 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Mon, 18 May 2020 16:45:23 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 576B02EC3778; Mon, 18 May 2020 16:45:19 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Yonghong Song <yhs@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next] selftest/bpf: make bpf_iter selftest compilable against old vmlinux.h
+Date:   Mon, 18 May 2020 16:45:16 -0700
+Message-ID: <20200518234516.3915052-1-andriin@fb.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.2/25816/Mon May 18 14:17:08 2020)
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-18_06:2020-05-15,2020-05-18 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ priorityscore=1501 mlxlogscore=999 impostorscore=0 cotscore=-2147483648
+ malwarescore=0 suspectscore=8 bulkscore=0 mlxscore=0 clxscore=1015
+ spamscore=0 adultscore=0 lowpriorityscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2005180202
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make bpftool aware and add the new get{peer,sock}name attach types to its
-cli, documentation and bash completion to allow attachment/detachment of
-sock_addr programs there.
+It's good to be able to compile bpf_iter selftest even on systems that do=
+n't
+have the very latest vmlinux.h, e.g., for libbpf tests against older kern=
+els in
+Travis CI. To that extent, re-define bpf_iter_meta and corresponding bpf_=
+iter
+context structs in each selftest. To avoid type clashes with vmlinux.h, r=
+ename
+vmlinux.h's definitions to get them out of the way.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Andrey Ignatov <rdna@fb.com>
+Cc: Jesper Dangaard Brouer <brouer@redhat.com>
+Cc: Yonghong Song <yhs@fb.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../bpf/bpftool/Documentation/bpftool-cgroup.rst  | 10 +++++++---
- tools/bpf/bpftool/Documentation/bpftool-prog.rst  |  3 ++-
- tools/bpf/bpftool/bash-completion/bpftool         | 15 +++++++++------
- tools/bpf/bpftool/cgroup.c                        |  7 ++++---
- tools/bpf/bpftool/main.h                          |  4 ++++
- tools/bpf/bpftool/prog.c                          |  6 ++++--
- 6 files changed, 30 insertions(+), 15 deletions(-)
+ .../selftests/bpf/progs/bpf_iter_bpf_map.c     | 16 ++++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_ipv6_route.c  | 16 ++++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_netlink.c     | 16 ++++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_task.c        | 16 ++++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_task_file.c   | 18 ++++++++++++++++++
+ .../bpf/progs/bpf_iter_test_kern_common.h      | 16 ++++++++++++++++
+ 6 files changed, 98 insertions(+)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-index e4d9da654e84..a226aee3574f 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-@@ -29,8 +29,8 @@ CGROUP COMMANDS
- |	*PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* }
- |	*ATTACH_TYPE* := { **ingress** | **egress** | **sock_create** | **sock_ops** | **device** |
- |		**bind4** | **bind6** | **post_bind4** | **post_bind6** | **connect4** | **connect6** |
--|		**sendmsg4** | **sendmsg6** | **recvmsg4** | **recvmsg6** | **sysctl** |
--|		**getsockopt** | **setsockopt** }
-+|               **getpeername4** | **getpeername6** | **getsockname4** | **getsockname6** | **sendmsg4** |
-+|               **sendmsg6** | **recvmsg4** | **recvmsg6** | **sysctl** | **getsockopt** | **setsockopt** }
- |	*ATTACH_FLAGS* := { **multi** | **override** }
- 
- DESCRIPTION
-@@ -101,7 +101,11 @@ DESCRIPTION
-                   an unconnected udp6 socket (since 5.2);
- 		  **sysctl** sysctl access (since 5.2);
- 		  **getsockopt** call to getsockopt (since 5.3);
--		  **setsockopt** call to setsockopt (since 5.3).
-+		  **setsockopt** call to setsockopt (since 5.3);
-+		  **getpeername4** call to getpeername(2) for an inet4 socket (since 5.8);
-+		  **getpeername6** call to getpeername(2) for an inet6 socket (since 5.8);
-+		  **getsockname4** call to getsockname(2) for an inet4 socket (since 5.8);
-+		  **getsockname6** call to getsockname(2) for an inet6 socket (since 5.8).
- 
- 	**bpftool cgroup detach** *CGROUP* *ATTACH_TYPE* *PROG*
- 		  Detach *PROG* from the cgroup *CGROUP* and attach type
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 5948e9d89c8d..2b254959d488 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -41,7 +41,8 @@ PROG COMMANDS
- |		**cgroup/sock** | **cgroup/dev** | **lwt_in** | **lwt_out** | **lwt_xmit** |
- |		**lwt_seg6local** | **sockops** | **sk_skb** | **sk_msg** | **lirc_mode2** |
- |		**cgroup/bind4** | **cgroup/bind6** | **cgroup/post_bind4** | **cgroup/post_bind6** |
--|		**cgroup/connect4** | **cgroup/connect6** | **cgroup/sendmsg4** | **cgroup/sendmsg6** |
-+|		**cgroup/connect4** | **cgroup/connect6** | **cgroup/getpeername4** | **cgroup/getpeername6** |
-+|               **cgroup/getsockname4** | **cgroup/getsockname6** | **cgroup/sendmsg4** | **cgroup/sendmsg6** |
- |		**cgroup/recvmsg4** | **cgroup/recvmsg6** | **cgroup/sysctl** |
- |		**cgroup/getsockopt** | **cgroup/setsockopt** |
- |		**struct_ops** | **fentry** | **fexit** | **freplace**
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 9f0f20e73b87..25b25aca1112 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -472,6 +472,8 @@ _bpftool()
-                                 lwt_seg6local sockops sk_skb sk_msg \
-                                 lirc_mode2 cgroup/bind4 cgroup/bind6 \
-                                 cgroup/connect4 cgroup/connect6 \
-+                                cgroup/getpeername4 cgroup/getpeername6 \
-+                                cgroup/getsockname4 cgroup/getsockname6 \
-                                 cgroup/sendmsg4 cgroup/sendmsg6 \
-                                 cgroup/recvmsg4 cgroup/recvmsg6 \
-                                 cgroup/post_bind4 cgroup/post_bind6 \
-@@ -966,9 +968,10 @@ _bpftool()
-                     ;;
-                 attach|detach)
-                     local ATTACH_TYPES='ingress egress sock_create sock_ops \
--                        device bind4 bind6 post_bind4 post_bind6 connect4 \
--                        connect6 sendmsg4 sendmsg6 recvmsg4 recvmsg6 sysctl \
--                        getsockopt setsockopt'
-+                        device bind4 bind6 post_bind4 post_bind6 connect4 connect6 \
-+                        getpeername4 getpeername6 getsockname4 getsockname6 \
-+                        sendmsg4 sendmsg6 recvmsg4 recvmsg6 sysctl getsockopt \
-+                        setsockopt'
-                     local ATTACH_FLAGS='multi override'
-                     local PROG_TYPE='id pinned tag name'
-                     case $prev in
-@@ -977,9 +980,9 @@ _bpftool()
-                             return 0
-                             ;;
-                         ingress|egress|sock_create|sock_ops|device|bind4|bind6|\
--                        post_bind4|post_bind6|connect4|connect6|sendmsg4|\
--                        sendmsg6|recvmsg4|recvmsg6|sysctl|getsockopt|\
--                        setsockopt)
-+                        post_bind4|post_bind6|connect4|connect6|getpeername4|\
-+                        getpeername6|getsockname4|getsockname6|sendmsg4|sendmsg6|\
-+                        recvmsg4|recvmsg6|sysctl|getsockopt|setsockopt)
-                             COMPREPLY=( $( compgen -W "$PROG_TYPE" -- \
-                                 "$cur" ) )
-                             return 0
-diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-index 1693c802bb20..27931db421d8 100644
---- a/tools/bpf/bpftool/cgroup.c
-+++ b/tools/bpf/bpftool/cgroup.c
-@@ -25,9 +25,10 @@
- 	"       ATTACH_TYPE := { ingress | egress | sock_create |\n"	       \
- 	"                        sock_ops | device | bind4 | bind6 |\n"	       \
- 	"                        post_bind4 | post_bind6 | connect4 |\n"       \
--	"                        connect6 | sendmsg4 | sendmsg6 |\n"           \
--	"                        recvmsg4 | recvmsg6 | sysctl |\n"	       \
--	"                        getsockopt | setsockopt }"
-+	"                        connect6 | getpeername4 | getpeername6 |\n"   \
-+	"                        getsockname4 | getsockname6 | sendmsg4 |\n"   \
-+	"                        sendmsg6 | recvmsg4 | recvmsg6 |\n"           \
-+	"                        sysctl | getsockopt | setsockopt }"
- 
- static unsigned int query_flags;
- 
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index f89ac70ef973..5cdf0bc049bd 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -100,6 +100,10 @@ static const char * const attach_type_name[__MAX_BPF_ATTACH_TYPE] = {
- 	[BPF_CGROUP_INET6_CONNECT] = "connect6",
- 	[BPF_CGROUP_INET4_POST_BIND] = "post_bind4",
- 	[BPF_CGROUP_INET6_POST_BIND] = "post_bind6",
-+	[BPF_CGROUP_INET4_GETPEERNAME] = "getpeername4",
-+	[BPF_CGROUP_INET6_GETPEERNAME] = "getpeername6",
-+	[BPF_CGROUP_INET4_GETSOCKNAME] = "getsockname4",
-+	[BPF_CGROUP_INET6_GETSOCKNAME] = "getsockname6",
- 	[BPF_CGROUP_UDP4_SENDMSG] = "sendmsg4",
- 	[BPF_CGROUP_UDP6_SENDMSG] = "sendmsg6",
- 	[BPF_CGROUP_SYSCTL] = "sysctl",
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index b6e5ba568f98..245f941fdbcf 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -2012,8 +2012,10 @@ static int do_help(int argc, char **argv)
- 		"                 sk_reuseport | flow_dissector | cgroup/sysctl |\n"
- 		"                 cgroup/bind4 | cgroup/bind6 | cgroup/post_bind4 |\n"
- 		"                 cgroup/post_bind6 | cgroup/connect4 | cgroup/connect6 |\n"
--		"                 cgroup/sendmsg4 | cgroup/sendmsg6 | cgroup/recvmsg4 |\n"
--		"                 cgroup/recvmsg6 | cgroup/getsockopt | cgroup/setsockopt |\n"
-+		"                 cgroup/getpeername4 | cgroup/getpeername6 |\n"
-+		"                 cgroup/getsockname4 | cgroup/getsockname6 | cgroup/sendmsg4 |\n"
-+		"                 cgroup/sendmsg6 | cgroup/recvmsg4 | cgroup/recvmsg6 |\n"
-+		"                 cgroup/getsockopt | cgroup/setsockopt |\n"
- 		"                 struct_ops | fentry | fexit | freplace }\n"
- 		"       ATTACH_TYPE := { msg_verdict | stream_verdict | stream_parser |\n"
- 		"                        flow_dissector }\n"
--- 
-2.21.0
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c b/tools=
+/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
+index 4867cd3445c8..b57bd6fef208 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
+@@ -1,11 +1,27 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
++/* "undefine" structs in vmlinux.h, because we "override" them below */
++#define bpf_iter_meta bpf_iter_meta___not_used
++#define bpf_iter__bpf_map bpf_iter__bpf_map___not_used
+ #include "vmlinux.h"
++#undef bpf_iter_meta
++#undef bpf_iter__bpf_map
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+=20
++struct bpf_iter_meta {
++	struct seq_file *seq;
++	__u64 session_id;
++	__u64 seq_num;
++} __attribute__((preserve_access_index));
++
++struct bpf_iter__bpf_map {
++	struct bpf_iter_meta *meta;
++	struct bpf_map *map;
++} __attribute__((preserve_access_index));
++
+ SEC("iter/bpf_map")
+ int dump_bpf_map(struct bpf_iter__bpf_map *ctx)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c b/to=
+ols/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c
+index ab9e2650e021..c8e9ca74c87b 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c
+@@ -1,9 +1,25 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
++/* "undefine" structs in vmlinux.h, because we "override" them below */
++#define bpf_iter_meta bpf_iter_meta___not_used
++#define bpf_iter__ipv6_route bpf_iter__ipv6_route___not_used
+ #include "vmlinux.h"
++#undef bpf_iter_meta
++#undef bpf_iter__ipv6_route
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+=20
++struct bpf_iter_meta {
++	struct seq_file *seq;
++	__u64 session_id;
++	__u64 seq_num;
++} __attribute__((preserve_access_index));
++
++struct bpf_iter__ipv6_route {
++	struct bpf_iter_meta *meta;
++	struct fib6_info *rt;
++} __attribute__((preserve_access_index));
++
+ char _license[] SEC("license") =3D "GPL";
+=20
+ extern bool CONFIG_IPV6_SUBTREES __kconfig __weak;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/tools=
+/testing/selftests/bpf/progs/bpf_iter_netlink.c
+index 6b40a233d4e0..e7b8753eac0b 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+@@ -1,6 +1,11 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
++/* "undefine" structs in vmlinux.h, because we "override" them below */
++#define bpf_iter_meta bpf_iter_meta___not_used
++#define bpf_iter__netlink bpf_iter__netlink___not_used
+ #include "vmlinux.h"
++#undef bpf_iter_meta
++#undef bpf_iter__netlink
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+=20
+@@ -9,6 +14,17 @@ char _license[] SEC("license") =3D "GPL";
+ #define sk_rmem_alloc	sk_backlog.rmem_alloc
+ #define sk_refcnt	__sk_common.skc_refcnt
+=20
++struct bpf_iter_meta {
++	struct seq_file *seq;
++	__u64 session_id;
++	__u64 seq_num;
++} __attribute__((preserve_access_index));
++
++struct bpf_iter__netlink {
++	struct bpf_iter_meta *meta;
++	struct netlink_sock *sk;
++} __attribute__((preserve_access_index));
++
+ static inline struct inode *SOCK_INODE(struct socket *socket)
+ {
+ 	return &container_of(socket, struct socket_alloc, socket)->vfs_inode;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_task.c
+index 90f9011c57ca..ee754021f98e 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_task.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task.c
+@@ -1,11 +1,27 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
++/* "undefine" structs in vmlinux.h, because we "override" them below */
++#define bpf_iter_meta bpf_iter_meta___not_used
++#define bpf_iter__task bpf_iter__task___not_used
+ #include "vmlinux.h"
++#undef bpf_iter_meta
++#undef bpf_iter__task
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+=20
++struct bpf_iter_meta {
++	struct seq_file *seq;
++	__u64 session_id;
++	__u64 seq_num;
++} __attribute__((preserve_access_index));
++
++struct bpf_iter__task {
++	struct bpf_iter_meta *meta;
++	struct task_struct *task;
++} __attribute__((preserve_access_index));
++
+ SEC("iter/task")
+ int dump_task(struct bpf_iter__task *ctx)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_file.c b/too=
+ls/testing/selftests/bpf/progs/bpf_iter_task_file.c
+index c6ced38f0880..0f0ec3db20ba 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_task_file.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task_file.c
+@@ -1,11 +1,29 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
++/* "undefine" structs in vmlinux.h, because we "override" them below */
++#define bpf_iter_meta bpf_iter_meta___not_used
++#define bpf_iter__task_file bpf_iter__task_file___not_used
+ #include "vmlinux.h"
++#undef bpf_iter_meta
++#undef bpf_iter__task_file
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+=20
++struct bpf_iter_meta {
++	struct seq_file *seq;
++	__u64 session_id;
++	__u64 seq_num;
++} __attribute__((preserve_access_index));
++
++struct bpf_iter__task_file {
++	struct bpf_iter_meta *meta;
++	struct task_struct *task;
++	__u32 fd;
++	struct file *file;
++} __attribute__((preserve_access_index));
++
+ SEC("iter/task_file")
+ int dump_task_file(struct bpf_iter__task_file *ctx)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern_common.=
+h b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern_common.h
+index bdd51cf14b54..dee1339e6905 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern_common.h
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern_common.h
+@@ -1,11 +1,27 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /* Copyright (c) 2020 Facebook */
++/* "undefine" structs in vmlinux.h, because we "override" them below */
++#define bpf_iter_meta bpf_iter_meta___not_used
++#define bpf_iter__task bpf_iter__task___not_used
+ #include "vmlinux.h"
++#undef bpf_iter_meta
++#undef bpf_iter__task
+ #include <bpf/bpf_helpers.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+ int count =3D 0;
+=20
++struct bpf_iter_meta {
++	struct seq_file *seq;
++	__u64 session_id;
++	__u64 seq_num;
++} __attribute__((preserve_access_index));
++
++struct bpf_iter__task {
++	struct bpf_iter_meta *meta;
++	struct task_struct *task;
++} __attribute__((preserve_access_index));
++
+ SEC("iter/task")
+ int dump_task(struct bpf_iter__task *ctx)
+ {
+--=20
+2.24.1
 
