@@ -2,59 +2,78 @@ Return-Path: <SRS0=Mla6=7A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A0AEC433E0
-	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 15:09:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76A50C433DF
+	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 15:35:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F3135207C4
-	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 15:09:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CB1C205CB
+	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 15:35:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726958AbgERPJH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 May 2020 11:09:07 -0400
-Received: from verein.lst.de ([213.95.11.211]:38896 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726918AbgERPJH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 May 2020 11:09:07 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 27D5268B02; Mon, 18 May 2020 17:09:04 +0200 (CEST)
-Date:   Mon, 18 May 2020 17:09:03 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>, x86@kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/18] maccess: allow architectures to provide kernel
- probing directly
-Message-ID: <20200518150903.GD8871@lst.de>
-References: <20200513160038.2482415-1-hch@lst.de> <20200513160038.2482415-15-hch@lst.de> <20200516124259.5b68a4e1d4670efa1397a1e0@kernel.org>
+        id S1727050AbgERPfg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 May 2020 11:35:36 -0400
+Received: from www62.your-server.de ([213.133.104.62]:34738 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727005AbgERPfg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 May 2020 11:35:36 -0400
+Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jahnh-00028o-H7; Mon, 18 May 2020 17:35:33 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     ast@kernel.org
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, rdna@fb.com,
+        sdf@google.com, Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf-next 0/4] Add get{peer,sock}name cgroup attach types
+Date:   Mon, 18 May 2020 17:35:11 +0200
+Message-Id: <cover.1589813738.git.daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200516124259.5b68a4e1d4670efa1397a1e0@kernel.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.2/25816/Mon May 18 14:17:08 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, May 16, 2020 at 12:42:59PM +0900, Masami Hiramatsu wrote:
-> > Provide alternative versions of probe_kernel_read, probe_kernel_write
-> > and strncpy_from_kernel_unsafe that don't need set_fs magic, but instead
-> > use arch hooks that are modelled after unsafe_{get,put}_user to access
-> > kernel memory in an exception safe way.
-> 
-> This patch seems to introduce new implementation of probe_kernel_read/write()
-> and strncpy_from_kernel_unsafe(), but also drops copy_from/to_kernel_nofault()
-> and strncpy_from_kernel_nofault() if HAVE_ARCH_PROBE_KERNEL is defined.
-> In the result, this cause a link error with BPF and kprobe events.
+Trivial patch to add get{peer,sock}name cgroup attach types to the BPF
+sock_addr programs in order to enable rewriting sockaddr structs from
+both calls along with libbpf and bpftool support as well as selftests.
 
-That was just a bug as I didn't commit the changes to switch everything
-to _nofault and remove _unsafe entirely, sorry.
+Thanks!
+
+Daniel Borkmann (4):
+  bpf: add get{peer,sock}name attach types for sock_addr
+  bpf, libbpf: enable get{peer,sock}name attach types
+  bpf, bpftool: enable get{peer,sock}name attach types
+  bpf, testing: add get{peer,sock}name selftests to test_progs
+
+ include/linux/bpf-cgroup.h                    |   1 +
+ include/uapi/linux/bpf.h                      |   4 +
+ kernel/bpf/syscall.c                          |  12 ++
+ kernel/bpf/verifier.c                         |   6 +-
+ net/core/filter.c                             |   4 +
+ net/ipv4/af_inet.c                            |   8 +-
+ net/ipv6/af_inet6.c                           |   9 +-
+ .../bpftool/Documentation/bpftool-cgroup.rst  |  10 +-
+ .../bpftool/Documentation/bpftool-prog.rst    |   3 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |  15 ++-
+ tools/bpf/bpftool/cgroup.c                    |   7 +-
+ tools/bpf/bpftool/main.h                      |   4 +
+ tools/bpf/bpftool/prog.c                      |   6 +-
+ tools/include/uapi/linux/bpf.h                |   4 +
+ tools/lib/bpf/libbpf.c                        |   8 ++
+ tools/testing/selftests/bpf/network_helpers.c |  11 +-
+ tools/testing/selftests/bpf/network_helpers.h |   1 +
+ .../bpf/prog_tests/connect_force_port.c       | 107 +++++++++++++-----
+ .../selftests/bpf/progs/connect_force_port4.c |  59 +++++++++-
+ .../selftests/bpf/progs/connect_force_port6.c |  70 +++++++++++-
+ 20 files changed, 295 insertions(+), 54 deletions(-)
+
+-- 
+2.21.0
+
