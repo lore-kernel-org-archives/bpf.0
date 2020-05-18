@@ -2,34 +2,35 @@ Return-Path: <SRS0=Mla6=7A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.8 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D50F0C433DF
-	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 15:35:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14611C433E1
+	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 15:35:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AF28F20657
-	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 15:35:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E9FD320657
+	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 15:35:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728372AbgERPfk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 May 2020 11:35:40 -0400
-Received: from www62.your-server.de ([213.133.104.62]:34772 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728055AbgERPfj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1727040AbgERPfj (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 18 May 2020 11:35:39 -0400
+Received: from www62.your-server.de ([213.133.104.62]:34736 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727020AbgERPfi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 May 2020 11:35:38 -0400
 Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1jahnj-00029t-Ix; Mon, 18 May 2020 17:35:35 +0200
+        id 1jahni-00028x-1T; Mon, 18 May 2020 17:35:34 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, rdna@fb.com,
         sdf@google.com, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next 4/4] bpf, testing: add get{peer,sock}name selftests to test_progs
-Date:   Mon, 18 May 2020 17:35:15 +0200
-Message-Id: <1b9869b34027bc0722f4217a0b04f1cccccc5c33.1589813738.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next 1/4] bpf: add get{peer,sock}name attach types for sock_addr
+Date:   Mon, 18 May 2020 17:35:12 +0200
+Message-Id: <2cbbd1c0d1c69764eedf02507464e213ec88248c.1589813738.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1589813738.git.daniel@iogearbox.net>
 References: <cover.1589813738.git.daniel@iogearbox.net>
@@ -42,435 +43,262 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend the existing connect_force_port test to assert get{peer,sock}name programs
-as well. The workflow for e.g. IPv4 is as follows: i) server binds to concrete
-port, ii) client calls getsockname() on server fd which exposes 1.2.3.4:60000 to
-client, iii) client connects to service address 1.2.3.4:60000 binds to concrete
-local address (127.0.0.1:22222) and remaps service address to a concrete backend
-address (127.0.0.1:60123), iv) client then calls getsockname() on its own fd to
-verify local address (127.0.0.1:22222) and getpeername() on its own fd which then
-publishes service address (1.2.3.4:60000) instead of actual backend. Same workflow
-is done for IPv6 just with different address/port tuples.
+As stated in 983695fa6765 ("bpf: fix unconnected udp hooks"), the objective
+for the existing cgroup connect/sendmsg/recvmsg/bind BPF hooks is to be
+transparent to applications. In Cilium we make use of these hooks [0] in
+order to enable E-W load balancing for existing Kubernetes service types
+for all Cilium managed nodes in the cluster. Those backends can be local
+or remote. The main advantage of this approach is that it operates as close
+as possible to the socket, and therefore allows to avoid packet-based NAT
+given in connect/sendmsg/recvmsg hooks we only need to xlate sock addresses.
 
-  # ./test_progs -t connect_force_port
-  #14 connect_force_port:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+This also allows to expose NodePort services on loopback addresses in the
+host namespace, for example. As another advantage, this also efficiently
+blocks bind requests for applications in the host namespace for exposed
+ports. However, one missing item is that we also need to perform reverse
+xlation for inet{,6}_getname() hooks such that we can return the service
+IP/port tuple back to the application instead of the remote peer address.
+
+The vast majority of applications does not bother about getpeername(), but
+in a few occasions we've seen breakage when validating the peer's address
+since it returns unexpectedly the backend tuple instead of the service one.
+Therefore, this trivial patch allows to customise and adds a getpeername()
+as well as getsockname() BPF cgroup hook for both IPv4 and IPv6 in order
+to address this situation.
+
+Simple example:
+
+  # ./cilium/cilium service list
+  ID   Frontend     Service Type   Backend
+  1    1.2.3.4:80   ClusterIP      1 => 10.0.0.10:80
+
+Before; curl's verbose output example, no getpeername() reverse xlation:
+
+  # curl --verbose 1.2.3.4
+  * Rebuilt URL to: 1.2.3.4/
+  *   Trying 1.2.3.4...
+  * TCP_NODELAY set
+  * Connected to 1.2.3.4 (10.0.0.10) port 80 (#0)
+  > GET / HTTP/1.1
+  > Host: 1.2.3.4
+  > User-Agent: curl/7.58.0
+  > Accept: */*
+  [...]
+
+After; with getpeername() reverse xlation:
+
+  # curl --verbose 1.2.3.4
+  * Rebuilt URL to: 1.2.3.4/
+  *   Trying 1.2.3.4...
+  * TCP_NODELAY set
+  * Connected to 1.2.3.4 (1.2.3.4) port 80 (#0)
+  > GET / HTTP/1.1
+  >  Host: 1.2.3.4
+  > User-Agent: curl/7.58.0
+  > Accept: */*
+  [...]
+
+Originally, I had both under a BPF_CGROUP_INET{4,6}_GETNAME type and exposed
+peer to the context similar as in inet{,6}_getname() fashion, but API-wise
+this is suboptimal as it always enforces programs having to test for ctx->peer
+which can easily be missed, hence BPF_CGROUP_INET{4,6}_GET{PEER,SOCK}NAME split.
+Similarly, the checked return code is on tnum_range(1, 1), but if a use case
+comes up in future, it can easily be changed to return an error code instead.
+Helper and ctx member access is the same as with connect/sendmsg/etc hooks.
+
+  [0] https://github.com/cilium/cilium/blob/master/bpf/bpf_sock.c
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Cc: Andrey Ignatov <rdna@fb.com>
 ---
- tools/testing/selftests/bpf/network_helpers.c |  11 +-
- tools/testing/selftests/bpf/network_helpers.h |   1 +
- .../bpf/prog_tests/connect_force_port.c       | 107 +++++++++++++-----
- .../selftests/bpf/progs/connect_force_port4.c |  59 +++++++++-
- .../selftests/bpf/progs/connect_force_port6.c |  70 +++++++++++-
- 5 files changed, 215 insertions(+), 33 deletions(-)
+ include/linux/bpf-cgroup.h     |  1 +
+ include/uapi/linux/bpf.h       |  4 ++++
+ kernel/bpf/syscall.c           | 12 ++++++++++++
+ kernel/bpf/verifier.c          |  6 +++++-
+ net/core/filter.c              |  4 ++++
+ net/ipv4/af_inet.c             |  8 ++++++--
+ net/ipv6/af_inet6.c            |  9 ++++++---
+ tools/include/uapi/linux/bpf.h |  4 ++++
+ 8 files changed, 42 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 999a775484c1..5caaa59a549f 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -5,6 +5,8 @@
- #include <string.h>
- #include <unistd.h>
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 272626cc3fc9..c66c545e161a 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -396,6 +396,7 @@ static inline int bpf_percpu_cgroup_storage_update(struct bpf_map *map,
+ }
  
-+#include <arpa/inet.h>
-+
- #include <sys/epoll.h>
- 
- #include <linux/err.h>
-@@ -35,7 +37,7 @@ struct ipv6_packet pkt_v6 = {
- 	.tcp.doff = 5,
+ #define cgroup_bpf_enabled (0)
++#define BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, type, t_ctx) ({ 0; })
+ #define BPF_CGROUP_PRE_CONNECT_ENABLED(sk) (0)
+ #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk,skb) ({ 0; })
+ #define BPF_CGROUP_RUN_PROG_INET_EGRESS(sk,skb) ({ 0; })
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index b9b8a0f63b91..97e1fd19ff58 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -220,6 +220,10 @@ enum bpf_attach_type {
+ 	BPF_MODIFY_RETURN,
+ 	BPF_LSM_MAC,
+ 	BPF_TRACE_ITER,
++	BPF_CGROUP_INET4_GETPEERNAME,
++	BPF_CGROUP_INET6_GETPEERNAME,
++	BPF_CGROUP_INET4_GETSOCKNAME,
++	BPF_CGROUP_INET6_GETSOCKNAME,
+ 	__MAX_BPF_ATTACH_TYPE
  };
  
--int start_server(int family, int type)
-+int start_server_with_port(int family, int type, int port)
- {
- 	struct sockaddr_storage addr = {};
- 	socklen_t len;
-@@ -45,11 +47,13 @@ int start_server(int family, int type)
- 		struct sockaddr_in *sin = (void *)&addr;
- 
- 		sin->sin_family = AF_INET;
-+		sin->sin_port = htons(port);
- 		len = sizeof(*sin);
- 	} else {
- 		struct sockaddr_in6 *sin6 = (void *)&addr;
- 
- 		sin6->sin6_family = AF_INET6;
-+		sin6->sin6_port = htons(port);
- 		len = sizeof(*sin6);
- 	}
- 
-@@ -76,6 +80,11 @@ int start_server(int family, int type)
- 	return fd;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 57dfc98289d5..431241c74614 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1978,6 +1978,10 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
+ 		case BPF_CGROUP_INET6_BIND:
+ 		case BPF_CGROUP_INET4_CONNECT:
+ 		case BPF_CGROUP_INET6_CONNECT:
++		case BPF_CGROUP_INET4_GETPEERNAME:
++		case BPF_CGROUP_INET6_GETPEERNAME:
++		case BPF_CGROUP_INET4_GETSOCKNAME:
++		case BPF_CGROUP_INET6_GETSOCKNAME:
+ 		case BPF_CGROUP_UDP4_SENDMSG:
+ 		case BPF_CGROUP_UDP6_SENDMSG:
+ 		case BPF_CGROUP_UDP4_RECVMSG:
+@@ -2767,6 +2771,10 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
+ 	case BPF_CGROUP_INET6_BIND:
+ 	case BPF_CGROUP_INET4_CONNECT:
+ 	case BPF_CGROUP_INET6_CONNECT:
++	case BPF_CGROUP_INET4_GETPEERNAME:
++	case BPF_CGROUP_INET6_GETPEERNAME:
++	case BPF_CGROUP_INET4_GETSOCKNAME:
++	case BPF_CGROUP_INET6_GETSOCKNAME:
+ 	case BPF_CGROUP_UDP4_SENDMSG:
+ 	case BPF_CGROUP_UDP6_SENDMSG:
+ 	case BPF_CGROUP_UDP4_RECVMSG:
+@@ -2912,6 +2920,10 @@ static int bpf_prog_query(const union bpf_attr *attr,
+ 	case BPF_CGROUP_INET6_POST_BIND:
+ 	case BPF_CGROUP_INET4_CONNECT:
+ 	case BPF_CGROUP_INET6_CONNECT:
++	case BPF_CGROUP_INET4_GETPEERNAME:
++	case BPF_CGROUP_INET6_GETPEERNAME:
++	case BPF_CGROUP_INET4_GETSOCKNAME:
++	case BPF_CGROUP_INET6_GETSOCKNAME:
+ 	case BPF_CGROUP_UDP4_SENDMSG:
+ 	case BPF_CGROUP_UDP6_SENDMSG:
+ 	case BPF_CGROUP_UDP4_RECVMSG:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9c7d67d65d8c..2ed8351f47a4 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7094,7 +7094,11 @@ static int check_return_code(struct bpf_verifier_env *env)
+ 	switch (env->prog->type) {
+ 	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+ 		if (env->prog->expected_attach_type == BPF_CGROUP_UDP4_RECVMSG ||
+-		    env->prog->expected_attach_type == BPF_CGROUP_UDP6_RECVMSG)
++		    env->prog->expected_attach_type == BPF_CGROUP_UDP6_RECVMSG ||
++		    env->prog->expected_attach_type == BPF_CGROUP_INET4_GETPEERNAME ||
++		    env->prog->expected_attach_type == BPF_CGROUP_INET6_GETPEERNAME ||
++		    env->prog->expected_attach_type == BPF_CGROUP_INET4_GETSOCKNAME ||
++		    env->prog->expected_attach_type == BPF_CGROUP_INET6_GETSOCKNAME)
+ 			range = tnum_range(1, 1);
+ 		break;
+ 	case BPF_PROG_TYPE_CGROUP_SKB:
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 822d662f97ef..bd2853d23b50 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7049,6 +7049,8 @@ static bool sock_addr_is_valid_access(int off, int size,
+ 		switch (prog->expected_attach_type) {
+ 		case BPF_CGROUP_INET4_BIND:
+ 		case BPF_CGROUP_INET4_CONNECT:
++		case BPF_CGROUP_INET4_GETPEERNAME:
++		case BPF_CGROUP_INET4_GETSOCKNAME:
+ 		case BPF_CGROUP_UDP4_SENDMSG:
+ 		case BPF_CGROUP_UDP4_RECVMSG:
+ 			break;
+@@ -7060,6 +7062,8 @@ static bool sock_addr_is_valid_access(int off, int size,
+ 		switch (prog->expected_attach_type) {
+ 		case BPF_CGROUP_INET6_BIND:
+ 		case BPF_CGROUP_INET6_CONNECT:
++		case BPF_CGROUP_INET6_GETPEERNAME:
++		case BPF_CGROUP_INET6_GETSOCKNAME:
+ 		case BPF_CGROUP_UDP6_SENDMSG:
+ 		case BPF_CGROUP_UDP6_RECVMSG:
+ 			break;
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index fcf0d12a407a..8f5c8c9409d3 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -755,12 +755,11 @@ int inet_accept(struct socket *sock, struct socket *newsock, int flags,
  }
+ EXPORT_SYMBOL(inet_accept);
  
-+int start_server(int family, int type)
-+{
-+	return start_server_with_port(family, type, 0);
-+}
-+
- static const struct timeval timeo_sec = { .tv_sec = 3 };
- static const size_t timeo_optlen = sizeof(timeo_sec);
- 
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 86914e6e7b53..186fec1cfec0 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -34,6 +34,7 @@ struct ipv6_packet {
- extern struct ipv6_packet pkt_v6;
- 
- int start_server(int family, int type);
-+int start_server_with_port(int family, int type, int port);
- int connect_to_fd(int family, int type, int server_fd);
- int connect_fd_to_fd(int client_fd, int server_fd);
- int connect_wait(int client_fd);
-diff --git a/tools/testing/selftests/bpf/prog_tests/connect_force_port.c b/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
-index 47fbb20cb6a6..7a0479255db4 100644
---- a/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
-+++ b/tools/testing/selftests/bpf/prog_tests/connect_force_port.c
-@@ -4,7 +4,8 @@
- #include "cgroup_helpers.h"
- #include "network_helpers.h"
- 
--static int verify_port(int family, int fd, int expected)
-+static int verify_ports(int family, int fd,
-+			int expected_local, int expected_peer)
- {
- 	struct sockaddr_storage addr;
- 	socklen_t len = sizeof(addr);
-@@ -20,9 +21,25 @@ static int verify_port(int family, int fd, int expected)
- 	else
- 		port = ((struct sockaddr_in6 *)&addr)->sin6_port;
- 
--	if (ntohs(port) != expected) {
--		log_err("Unexpected port %d, expected %d", ntohs(port),
--			expected);
-+	if (ntohs(port) != expected_local) {
-+		log_err("Unexpected local port %d, expected %d", ntohs(port),
-+			expected_local);
-+		return -1;
-+	}
-+
-+	if (getpeername(fd, (struct sockaddr *)&addr, &len)) {
-+		log_err("Failed to get peer addr");
-+		return -1;
-+	}
-+
-+	if (family == AF_INET)
-+		port = ((struct sockaddr_in *)&addr)->sin_port;
-+	else
-+		port = ((struct sockaddr_in6 *)&addr)->sin6_port;
-+
-+	if (ntohs(port) != expected_peer) {
-+		log_err("Unexpected peer port %d, expected %d", ntohs(port),
-+			expected_peer);
- 		return -1;
- 	}
- 
-@@ -31,33 +48,67 @@ static int verify_port(int family, int fd, int expected)
- 
- static int run_test(int cgroup_fd, int server_fd, int family, int type)
- {
-+	bool v4 = family == AF_INET;
-+	int expected_local_port = v4 ? 22222 : 22223;
-+	int expected_peer_port = 60000;
- 	struct bpf_prog_load_attr attr = {
--		.prog_type = BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
-+		.file = v4 ? "./connect_force_port4.o" :
-+			     "./connect_force_port6.o",
- 	};
-+	struct bpf_program *prog;
- 	struct bpf_object *obj;
--	int expected_port;
--	int prog_fd;
--	int err;
--	int fd;
 -
--	if (family == AF_INET) {
--		attr.file = "./connect_force_port4.o";
--		attr.expected_attach_type = BPF_CGROUP_INET4_CONNECT;
--		expected_port = 22222;
--	} else {
--		attr.file = "./connect_force_port6.o";
--		attr.expected_attach_type = BPF_CGROUP_INET6_CONNECT;
--		expected_port = 22223;
--	}
-+	int xlate_fd, fd, err;
-+	__u32 duration = 0;
- 
--	err = bpf_prog_load_xattr(&attr, &obj, &prog_fd);
-+	err = bpf_prog_load_xattr(&attr, &obj, &xlate_fd);
- 	if (err) {
- 		log_err("Failed to load BPF object");
- 		return -1;
+ /*
+  *	This does both peername and sockname.
+  */
+ int inet_getname(struct socket *sock, struct sockaddr *uaddr,
+-			int peer)
++		 int peer)
+ {
+ 	struct sock *sk		= sock->sk;
+ 	struct inet_sock *inet	= inet_sk(sk);
+@@ -781,6 +780,11 @@ int inet_getname(struct socket *sock, struct sockaddr *uaddr,
+ 		sin->sin_port = inet->inet_sport;
+ 		sin->sin_addr.s_addr = addr;
  	}
- 
--	err = bpf_prog_attach(prog_fd, cgroup_fd, attr.expected_attach_type,
--			      0);
-+	prog = bpf_object__find_program_by_title(obj, v4 ?
-+						 "cgroup/connect4" :
-+						 "cgroup/connect6");
-+	if (CHECK(!prog, "find_prog", "connect prog not found\n")) {
-+		err = -EIO;
-+		goto close_bpf_object;
-+	}
-+
-+	err = bpf_prog_attach(bpf_program__fd(prog), cgroup_fd, v4 ?
-+			      BPF_CGROUP_INET4_CONNECT :
-+			      BPF_CGROUP_INET6_CONNECT, 0);
-+	if (err) {
-+		log_err("Failed to attach BPF program");
-+		goto close_bpf_object;
-+	}
-+
-+	prog = bpf_object__find_program_by_title(obj, v4 ?
-+						 "cgroup/getpeername4" :
-+						 "cgroup/getpeername6");
-+	if (CHECK(!prog, "find_prog", "getpeername prog not found\n")) {
-+		err = -EIO;
-+		goto close_bpf_object;
-+	}
-+
-+	err = bpf_prog_attach(bpf_program__fd(prog), cgroup_fd, v4 ?
-+			      BPF_CGROUP_INET4_GETPEERNAME :
-+			      BPF_CGROUP_INET6_GETPEERNAME, 0);
-+	if (err) {
-+		log_err("Failed to attach BPF program");
-+		goto close_bpf_object;
-+	}
-+
-+	prog = bpf_object__find_program_by_title(obj, v4 ?
-+						 "cgroup/getsockname4" :
-+						 "cgroup/getsockname6");
-+	if (CHECK(!prog, "find_prog", "getsockname prog not found\n")) {
-+		err = -EIO;
-+		goto close_bpf_object;
-+	}
-+
-+	err = bpf_prog_attach(bpf_program__fd(prog), cgroup_fd, v4 ?
-+			      BPF_CGROUP_INET4_GETSOCKNAME :
-+			      BPF_CGROUP_INET6_GETSOCKNAME, 0);
- 	if (err) {
- 		log_err("Failed to attach BPF program");
- 		goto close_bpf_object;
-@@ -69,8 +120,8 @@ static int run_test(int cgroup_fd, int server_fd, int family, int type)
- 		goto close_bpf_object;
- 	}
- 
--	err = verify_port(family, fd, expected_port);
++	if (cgroup_bpf_enabled)
++		BPF_CGROUP_RUN_SA_PROG_LOCK(sk, (struct sockaddr *)sin,
++					    peer ? BPF_CGROUP_INET4_GETPEERNAME :
++						   BPF_CGROUP_INET4_GETSOCKNAME,
++					    NULL);
+ 	memset(sin->sin_zero, 0, sizeof(sin->sin_zero));
+ 	return sizeof(*sin);
+ }
+diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+index 771a462a8322..3b6fcc0c321a 100644
+--- a/net/ipv6/af_inet6.c
++++ b/net/ipv6/af_inet6.c
+@@ -504,9 +504,8 @@ EXPORT_SYMBOL_GPL(inet6_destroy_sock);
+ /*
+  *	This does both peername and sockname.
+  */
 -
-+	err = verify_ports(family, fd, expected_local_port,
-+			   expected_peer_port);
- 	close(fd);
- 
- close_bpf_object:
-@@ -86,25 +137,25 @@ void test_connect_force_port(void)
- 	if (CHECK_FAIL(cgroup_fd < 0))
- 		return;
- 
--	server_fd = start_server(AF_INET, SOCK_STREAM);
-+	server_fd = start_server_with_port(AF_INET, SOCK_STREAM, 60123);
- 	if (CHECK_FAIL(server_fd < 0))
- 		goto close_cgroup_fd;
- 	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET, SOCK_STREAM));
- 	close(server_fd);
- 
--	server_fd = start_server(AF_INET6, SOCK_STREAM);
-+	server_fd = start_server_with_port(AF_INET6, SOCK_STREAM, 60124);
- 	if (CHECK_FAIL(server_fd < 0))
- 		goto close_cgroup_fd;
- 	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET6, SOCK_STREAM));
- 	close(server_fd);
- 
--	server_fd = start_server(AF_INET, SOCK_DGRAM);
-+	server_fd = start_server_with_port(AF_INET, SOCK_DGRAM, 60123);
- 	if (CHECK_FAIL(server_fd < 0))
- 		goto close_cgroup_fd;
- 	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET, SOCK_DGRAM));
- 	close(server_fd);
- 
--	server_fd = start_server(AF_INET6, SOCK_DGRAM);
-+	server_fd = start_server_with_port(AF_INET6, SOCK_DGRAM, 60124);
- 	if (CHECK_FAIL(server_fd < 0))
- 		goto close_cgroup_fd;
- 	CHECK_FAIL(run_test(cgroup_fd, server_fd, AF_INET6, SOCK_DGRAM));
-diff --git a/tools/testing/selftests/bpf/progs/connect_force_port4.c b/tools/testing/selftests/bpf/progs/connect_force_port4.c
-index 1b8eb34b2db0..7396308677a3 100644
---- a/tools/testing/selftests/bpf/progs/connect_force_port4.c
-+++ b/tools/testing/selftests/bpf/progs/connect_force_port4.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <string.h>
-+#include <stdbool.h>
- 
- #include <linux/bpf.h>
- #include <linux/in.h>
-@@ -12,17 +13,71 @@
- char _license[] SEC("license") = "GPL";
- int _version SEC("version") = 1;
- 
-+struct svc_addr {
-+	__be32 addr;
-+	__be16 port;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct svc_addr);
-+} service_mapping SEC(".maps");
-+
- SEC("cgroup/connect4")
--int _connect4(struct bpf_sock_addr *ctx)
-+int connect4(struct bpf_sock_addr *ctx)
+ int inet6_getname(struct socket *sock, struct sockaddr *uaddr,
+-		 int peer)
++		  int peer)
  {
- 	struct sockaddr_in sa = {};
-+	struct svc_addr *orig;
+ 	struct sockaddr_in6 *sin = (struct sockaddr_in6 *)uaddr;
+ 	struct sock *sk = sock->sk;
+@@ -531,9 +530,13 @@ int inet6_getname(struct socket *sock, struct sockaddr *uaddr,
+ 			sin->sin6_addr = np->saddr;
+ 		else
+ 			sin->sin6_addr = sk->sk_v6_rcv_saddr;
+-
+ 		sin->sin6_port = inet->inet_sport;
+ 	}
++	if (cgroup_bpf_enabled)
++		BPF_CGROUP_RUN_SA_PROG_LOCK(sk, (struct sockaddr *)sin,
++					    peer ? BPF_CGROUP_INET6_GETPEERNAME :
++						   BPF_CGROUP_INET6_GETSOCKNAME,
++					    NULL);
+ 	sin->sin6_scope_id = ipv6_iface_scope_id(&sin->sin6_addr,
+ 						 sk->sk_bound_dev_if);
+ 	return sizeof(*sin);
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 146c742f1d49..1cddc398404a 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -220,6 +220,10 @@ enum bpf_attach_type {
+ 	BPF_MODIFY_RETURN,
+ 	BPF_LSM_MAC,
+ 	BPF_TRACE_ITER,
++	BPF_CGROUP_INET4_GETPEERNAME,
++	BPF_CGROUP_INET6_GETPEERNAME,
++	BPF_CGROUP_INET4_GETSOCKNAME,
++	BPF_CGROUP_INET6_GETSOCKNAME,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
  
-+	/* Force local address to 127.0.0.1:22222. */
- 	sa.sin_family = AF_INET;
- 	sa.sin_port = bpf_htons(22222);
--	sa.sin_addr.s_addr = bpf_htonl(0x7f000001); /* 127.0.0.1 */
-+	sa.sin_addr.s_addr = bpf_htonl(0x7f000001);
- 
- 	if (bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa)) != 0)
- 		return 0;
- 
-+	/* Rewire service 1.2.3.4:60000 to backend 127.0.0.1:60123. */
-+	if (ctx->user_port == bpf_htons(60000)) {
-+		orig = bpf_sk_storage_get(&service_mapping, ctx->sk, 0,
-+					  BPF_SK_STORAGE_GET_F_CREATE);
-+		if (!orig)
-+			return 0;
-+
-+		orig->addr = ctx->user_ip4;
-+		orig->port = ctx->user_port;
-+
-+		ctx->user_ip4 = bpf_htonl(0x7f000001);
-+		ctx->user_port = bpf_htons(60123);
-+	}
-+	return 1;
-+}
-+
-+SEC("cgroup/getsockname4")
-+int getsockname4(struct bpf_sock_addr *ctx)
-+{
-+	/* Expose local server as 1.2.3.4:60000 to client. */
-+	if (ctx->user_port == bpf_htons(60123)) {
-+		ctx->user_ip4 = bpf_htonl(0x01020304);
-+		ctx->user_port = bpf_htons(60000);
-+	}
-+	return 1;
-+}
-+
-+SEC("cgroup/getpeername4")
-+int getpeername4(struct bpf_sock_addr *ctx)
-+{
-+	struct svc_addr *orig;
-+
-+	/* Expose service 1.2.3.4:60000 as peer instead of backend. */
-+	if (ctx->user_port == bpf_htons(60123)) {
-+		orig = bpf_sk_storage_get(&service_mapping, ctx->sk, 0, 0);
-+		if (orig) {
-+			ctx->user_ip4 = orig->addr;
-+			ctx->user_port = orig->port;
-+		}
-+	}
- 	return 1;
- }
-diff --git a/tools/testing/selftests/bpf/progs/connect_force_port6.c b/tools/testing/selftests/bpf/progs/connect_force_port6.c
-index ae6f7d750b4c..c1a2b555e9ad 100644
---- a/tools/testing/selftests/bpf/progs/connect_force_port6.c
-+++ b/tools/testing/selftests/bpf/progs/connect_force_port6.c
-@@ -12,17 +12,83 @@
- char _license[] SEC("license") = "GPL";
- int _version SEC("version") = 1;
- 
-+struct svc_addr {
-+	__be32 addr[4];
-+	__be16 port;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct svc_addr);
-+} service_mapping SEC(".maps");
-+
- SEC("cgroup/connect6")
--int _connect6(struct bpf_sock_addr *ctx)
-+int connect6(struct bpf_sock_addr *ctx)
- {
- 	struct sockaddr_in6 sa = {};
-+	struct svc_addr *orig;
- 
-+	/* Force local address to [::1]:22223. */
- 	sa.sin6_family = AF_INET6;
- 	sa.sin6_port = bpf_htons(22223);
--	sa.sin6_addr.s6_addr32[3] = bpf_htonl(1); /* ::1 */
-+	sa.sin6_addr.s6_addr32[3] = bpf_htonl(1);
- 
- 	if (bpf_bind(ctx, (struct sockaddr *)&sa, sizeof(sa)) != 0)
- 		return 0;
- 
-+	/* Rewire service [fc00::1]:60000 to backend [::1]:60124. */
-+	if (ctx->user_port == bpf_htons(60000)) {
-+		orig = bpf_sk_storage_get(&service_mapping, ctx->sk, 0,
-+					  BPF_SK_STORAGE_GET_F_CREATE);
-+		if (!orig)
-+			return 0;
-+
-+		orig->addr[0] = ctx->user_ip6[0];
-+		orig->addr[1] = ctx->user_ip6[1];
-+		orig->addr[2] = ctx->user_ip6[2];
-+		orig->addr[3] = ctx->user_ip6[3];
-+		orig->port = ctx->user_port;
-+
-+		ctx->user_ip6[0] = 0;
-+		ctx->user_ip6[1] = 0;
-+		ctx->user_ip6[2] = 0;
-+		ctx->user_ip6[3] = bpf_htonl(1);
-+		ctx->user_port = bpf_htons(60124);
-+	}
-+	return 1;
-+}
-+
-+SEC("cgroup/getsockname6")
-+int getsockname6(struct bpf_sock_addr *ctx)
-+{
-+	/* Expose local server as [fc00::1]:60000 to client. */
-+	if (ctx->user_port == bpf_htons(60124)) {
-+		ctx->user_ip6[0] = bpf_htonl(0xfc000000);
-+		ctx->user_ip6[1] = 0;
-+		ctx->user_ip6[2] = 0;
-+		ctx->user_ip6[3] = bpf_htonl(1);
-+		ctx->user_port = bpf_htons(60000);
-+	}
-+	return 1;
-+}
-+
-+SEC("cgroup/getpeername6")
-+int getpeername6(struct bpf_sock_addr *ctx)
-+{
-+	struct svc_addr *orig;
-+
-+	/* Expose service [fc00::1]:60000 as peer instead of backend. */
-+	if (ctx->user_port == bpf_htons(60124)) {
-+		orig = bpf_sk_storage_get(&service_mapping, ctx->sk, 0, 0);
-+		if (orig) {
-+			ctx->user_ip6[0] = orig->addr[0];
-+			ctx->user_ip6[1] = orig->addr[1];
-+			ctx->user_ip6[2] = orig->addr[2];
-+			ctx->user_ip6[3] = orig->addr[3];
-+			ctx->user_port = orig->port;
-+		}
-+	}
- 	return 1;
- }
 -- 
 2.21.0
 
