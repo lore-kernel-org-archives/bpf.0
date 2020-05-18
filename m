@@ -2,67 +2,69 @@ Return-Path: <SRS0=Mla6=7A=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3881CC433E2
-	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 16:04:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD5C4C433E0
+	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 16:11:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 14CB420758
-	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 16:04:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A75CB20674
+	for <bpf@archiver.kernel.org>; Mon, 18 May 2020 16:11:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BzPjM+6e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ffEpG+9J"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728216AbgERQD7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 May 2020 12:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
+        id S1728349AbgERQLl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 May 2020 12:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727987AbgERQD7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 May 2020 12:03:59 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168B5C05BD0A
-        for <bpf@vger.kernel.org>; Mon, 18 May 2020 09:03:59 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id n10so360814ybn.8
-        for <bpf@vger.kernel.org>; Mon, 18 May 2020 09:03:59 -0700 (PDT)
+        with ESMTP id S1727005AbgERQLl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 May 2020 12:11:41 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1348C061A0C;
+        Mon, 18 May 2020 09:11:40 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id i68so8534059qtb.5;
+        Mon, 18 May 2020 09:11:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wC6Al5//OLghdL5M5WT7D3yvk/6R//cCeiiqEjQaDTs=;
-        b=BzPjM+6ebMCc28zoKiEL73mEspk5sX9NbICtCmYmgQk9eJeWE9jmnaOHS4Q+duidzu
-         1E/H/4MHNP4DYOTR6Dr9xZBVFW+kUD2yG/sAByDJhVm034/xiFjJ9xNvwNnpbHF8ZHR2
-         rQsh3/bPDQ+ouNzHK9cUHH8E4WjThxy5Z2cwnZwuVUFFvi/IF10B07KQN3LF1mIOuVv6
-         42fATnMY9fhzIr+MAyNCODKrK+h1vn+1uL/tzErrF4KDRhVDmCM1Cek1qKtDPY5bEpWO
-         dGknlsXCc0MmgMPOaNxNREdMd527VDWczNlWq2kNpqDEqL9O5WFh49DRdvJqHRmX8OkR
-         33xg==
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=46lF+QtFgXZAOuFFqzwonrj3oCWIreIHncytf6FK25M=;
+        b=ffEpG+9JTnfw8b1WGGfsqpwFXJN4tcAyAH4q+a3XMDgeRA3DmiN83iP7N4mpYQldUz
+         ccWA6rVMzJlz/QEWFHwKUiuuiYJrW47OjOR7dvHEWDi50hRNsQx09UmWxqAXWmO6yo6r
+         XvsWuyBKmcL106PtwMAvH4Vf8zNO1IiQ5g6zpuNBG3fpcRuLZjqZtctpo0djXxeo/qSc
+         KWHHNZcshwWfKt9WhjrKBddLkOqn/kNlX9xeH9dqPoEhnCywifBFi37+C5uif8skBLPz
+         /kgd8dYxBs5Es6nKgwkkRVZk54fZ8p78lQbEGYkkbJM5ERe0uOTImU0vWeay9siPpXX4
+         hLog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wC6Al5//OLghdL5M5WT7D3yvk/6R//cCeiiqEjQaDTs=;
-        b=hZVsxpX7MQXux1x6uTPOtLc6HYBS9a7m1p7XpVsbwcXnfWZ+s088PfgLsR1V6DZpti
-         cJ4stWZiPOOor54pK3wJsXQcO2zCrrFgaHbTuGH/DoPTSScmVWasr2bWgNFd/rp9Asy7
-         5t8vflN49/WzBwIJVHSadx1kUOJHj4fNpliGbkSmKoqK5KuLPJnUm/L3YSdW0JdOQsX5
-         bsJUR5w21o2Ls5zUMdY2iuuObaYHu/xgDrSLaJ+pGZvDk7lVFteSLUUZ05PvkZRBm2zh
-         vxGAQIUQOcJnJNd5wHa05VLgA+iKLQdvlQYtVeGeGtyBlhis+IjFI82rUomld+6fIZHY
-         A6/w==
-X-Gm-Message-State: AOAM530Xxw1ky/1HYi8abwMB5/g2oF6/gfaKRksvJialdv1smFKqndrE
-        3w7pAC1LDZyUgWOG4ONcVRxqmFwupVSZ7zWy8hyXsg==
-X-Google-Smtp-Source: ABdhPJzFYLd/aLEk6sn35nDhblrHA7edN0rQqww9iySxXnjwYSCvGBXfkU7ecGC3j/vBijAtsHeQ1eURtfBdpWtSeCA=
-X-Received: by 2002:a25:bb42:: with SMTP id b2mr25735216ybk.383.1589817837533;
- Mon, 18 May 2020 09:03:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200515221732.44078-1-irogers@google.com> <20200515221732.44078-8-irogers@google.com>
- <20200518154505.GE24211@kernel.org>
-In-Reply-To: <20200518154505.GE24211@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 18 May 2020 09:03:45 -0700
-Message-ID: <CAP-5=fWZwuSLaFX+-pgeE_H92Mtp7+_NrwBeRFTqyfPjVRkbWg@mail.gmail.com>
-Subject: Re: [PATCH v3 7/7] perf expr: Migrate expr ids table to a hashmap
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=46lF+QtFgXZAOuFFqzwonrj3oCWIreIHncytf6FK25M=;
+        b=GnVS7xtwTalFdXA+4fwpcqBqoKr+7Rc053BvuM+3wiiBTikdXDPgnUmf1R5nKU8Mh0
+         eEZ8JSeZ2XNcvM9lhxEUxaMI5G4uzB37VY25Kk84IckrGHDiftCBT/f3bFh82AoJQ2Qu
+         2RmUJ7tBdsu1sISWyx2KsYjnrJdDsjNG61ZS2ISYTxxFsG+SScb+1S0zB/q/L34IpCLD
+         lkiFZ7Nwcl330rtC2Hp8yZ5PP7vmsT9rWjjxSTV+9scT+Rh4s1rOw2CGZl8uZhK9lGgU
+         qhmIJSsTsRAIykzNYrxOPvidgt7VmuRODTfo88mT/iParBnmGGgMdPE6zUm2ideNp4Vj
+         WSAQ==
+X-Gm-Message-State: AOAM532jj5qMjLNj/p//EHTpJUeyr0aJrPFbZ4kVlokeZPGuBUx7IUor
+        LBsb8ksAbHXAryzpZFGmXh0=
+X-Google-Smtp-Source: ABdhPJzrG3Uf8Ibj1Saop7YWQ/ppUjCeJ5PhwgcpXGpqxRcTeDq5iC0T4at7rA212r1iKNbKThbOXA==
+X-Received: by 2002:ac8:670b:: with SMTP id e11mr17679467qtp.365.1589818300012;
+        Mon, 18 May 2020 09:11:40 -0700 (PDT)
+Received: from quaco.ghostprotocols.net ([179.97.37.151])
+        by smtp.gmail.com with ESMTPSA id h188sm8510823qke.82.2020.05.18.09.11.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2020 09:11:39 -0700 (PDT)
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 61183410F5; Mon, 18 May 2020 13:11:37 -0300 (-03)
+Date:   Mon, 18 May 2020 13:11:37 -0300
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
@@ -87,109 +89,59 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v3 7/7] perf expr: Migrate expr ids table to a hashmap
+Message-ID: <20200518161137.GK24211@kernel.org>
+References: <20200515221732.44078-1-irogers@google.com>
+ <20200515221732.44078-8-irogers@google.com>
+ <20200518154505.GE24211@kernel.org>
+ <CAP-5=fWZwuSLaFX+-pgeE_H92Mtp7+_NrwBeRFTqyfPjVRkbWg@mail.gmail.com>
+ <20200518160648.GI24211@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200518160648.GI24211@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, May 18, 2020 at 8:45 AM Arnaldo Carvalho de Melo
-<arnaldo.melo@gmail.com> wrote:
->
-> Em Fri, May 15, 2020 at 03:17:32PM -0700, Ian Rogers escreveu:
-> > Use a hashmap between a char* string and a double* value. While bpf's
-> > hashmap entries are size_t in size, we can't guarantee sizeof(size_t) >=
-> > sizeof(double). Avoid a memory allocation when gathering ids by making 0.0
-> > a special value encoded as NULL.
-> >
-> > Original map suggestion by Andi Kleen:
-> > https://lore.kernel.org/lkml/20200224210308.GQ160988@tassilo.jf.intel.com/
-> > and seconded by Jiri Olsa:
-> > https://lore.kernel.org/lkml/20200423112915.GH1136647@krava/
->
-> I'm having trouble here when building it with:
->
-> make -C tools/perf O=/tmp/build/perf
->
->     CC       /tmp/build/perf/tests/expr.o
->     INSTALL  trace_plugins
->     CC       /tmp/build/perf/util/metricgroup.o
->   In file included from /home/acme/git/perf/tools/lib/bpf/hashmap.h:18,
->                    from /home/acme/git/perf/tools/perf/util/expr.h:6,
->                    from tests/expr.c:3:
->   /home/acme/git/perf/tools/lib/bpf/libbpf_internal.h:63: error: "pr_info" redefined [-Werror]
->      63 | #define pr_info(fmt, ...) __pr(LIBBPF_INFO, fmt, ##__VA_ARGS__)
->         |
->   In file included from tests/expr.c:2:
->   /home/acme/git/perf/tools/perf/util/debug.h:24: note: this is the location of the previous definition
->
-> It looks like libbpf's hashmap.h is being used instead of the one in
-> tools/perf/util/, yeah, as intended, but then since I don't have the
-> fixes you added to the BPF tree, the build fails, if I instead
-> unconditionally use
->
-> #include "util/hashmap.h"
->
-> It works. Please ack.
->
-> I.e. with the patch below, further tests:
->
-> [acme@five perf]$ perf -vv | grep -i bpf
->                    bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
-> [acme@five perf]$ nm ~/bin/perf | grep -i libbpf_ | wc -l
-> 39
-> [acme@five perf]$ nm ~/bin/perf | grep -i hashmap_ | wc -l
-> 17
-> [acme@five perf]$
->
-> Explicitely building without LIBBPF:
->
-> [acme@five perf]$ perf -vv | grep -i bpf
->                    bpf: [ OFF ]  # HAVE_LIBBPF_SUPPORT
-> [acme@five perf]$
-> [acme@five perf]$ nm ~/bin/perf | grep -i libbpf_ | wc -l
-> 0
-> [acme@five perf]$ nm ~/bin/perf | grep -i hashmap_ | wc -l
-> 9
-> [acme@five perf]$
->
-> Works,
->
-> - Arnaldo
+Em Mon, May 18, 2020 at 01:06:48PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Mon, May 18, 2020 at 09:03:45AM -0700, Ian Rogers escreveu:
+> > On Mon, May 18, 2020 at 8:45 AM Arnaldo Carvalho de Melo wrote:
+> > this build issue sounds like this patch is missing:
+> > https://lore.kernel.org/lkml/20200515221732.44078-3-irogers@google.com/
+> > The commit message there could have explicitly said having this
+> > #include causes the conflicting definitions between perf's debug.h and
+> > libbpf_internal.h's definitions of pr_info, etc.
+> 
+> yeah, understood, but I'm not processing patches for tools/lib/bpf/,
+> Daniel is, I'll only get that one later, then we can go back to the way
+> you structured it. Just an extra bit of confusion in this process ;-)
 
-Hi Arnaldo,
+So, thiis is failing on all alpine Linux containers:
 
-this build issue sounds like this patch is missing:
-https://lore.kernel.org/lkml/20200515221732.44078-3-irogers@google.com/
-The commit message there could have explicitly said having this
-#include causes the conflicting definitions between perf's debug.h and
-libbpf_internal.h's definitions of pr_info, etc.
-
-Let me know how else to help and sorry for the confusion. Thanks,
-Ian
+  CC       /tmp/build/perf/util/metricgroup.o
+  CC       /tmp/build/perf/util/header.o
+In file included from util/metricgroup.c:25:0:
+/git/linux/tools/lib/api/fs/fs.h:16:0: error: "FS" redefined [-Werror]
+ #define FS(name)    \
+ ^
+In file included from /git/linux/tools/perf/util/hashmap.h:16:0,
+                 from util/expr.h:11,
+                 from util/metricgroup.c:14:
+/usr/include/bits/reg.h:28:0: note: this is the location of the previous definition
+ #define FS     25
+ ^
+  CC       /tmp/build/perf/util/callchain.o
+  CC       /tmp/build/perf/util/values.o
+  CC       /tmp/build/perf/util/debug.o
+  CC       /tmp/build/perf/util/fncache.o
+cc1: all warnings being treated as errors
+mv: can't rename '/tmp/build/perf/util/.metricgroup.o.tmp': No such file or directory
+/git/linux/tools/build/Makefile.build:96: recipe for target '/tmp/build/perf/util/metricgroup.o' failed
 
 
-> diff --git a/tools/perf/util/expr.h b/tools/perf/util/expr.h
-> index d60a8feaf50b..8a2c1074f90f 100644
-> --- a/tools/perf/util/expr.h
-> +++ b/tools/perf/util/expr.h
-> @@ -2,11 +2,14 @@
->  #ifndef PARSE_CTX_H
->  #define PARSE_CTX_H 1
->
-> -#ifdef HAVE_LIBBPF_SUPPORT
-> -#include <bpf/hashmap.h>
-> -#else
-> -#include "hashmap.h"
-> -#endif
-> +// There are fixes that need to land upstream before we can use libbpf's headers,
-> +// for now use our copy unconditionally, since the data structures at this point
-> +// are exactly the same, no problem.
-> +//#ifdef HAVE_LIBBPF_SUPPORT
-> +//#include <bpf/hashmap.h>
-> +//#else
-> +#include "util/hashmap.h"
-> +//#endif
->
->  struct expr_parse_ctx {
->         struct hashmap ids;
+I'll check that soon,
+
+- Arnaldo
