@@ -2,147 +2,152 @@ Return-Path: <SRS0=8tVf=7B=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.6 required=3.0 tests=DKIMWL_BL,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22CFDC433E0
-	for <bpf@archiver.kernel.org>; Tue, 19 May 2020 15:00:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF0BFC433E1
+	for <bpf@archiver.kernel.org>; Tue, 19 May 2020 15:50:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ED333207D8
-	for <bpf@archiver.kernel.org>; Tue, 19 May 2020 15:00:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A7D0207D8
+	for <bpf@archiver.kernel.org>; Tue, 19 May 2020 15:50:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lca.pw header.i=@lca.pw header.b="bEyFs82H"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QnNPvhaH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728968AbgESPAo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 May 2020 11:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
+        id S1729194AbgESPu2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 May 2020 11:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728647AbgESPAo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 May 2020 11:00:44 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE200C08C5C0
-        for <bpf@vger.kernel.org>; Tue, 19 May 2020 08:00:43 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id h16so11756181eds.5
-        for <bpf@vger.kernel.org>; Tue, 19 May 2020 08:00:43 -0700 (PDT)
+        with ESMTP id S1728534AbgESPu2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 May 2020 11:50:28 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FACC08C5C0;
+        Tue, 19 May 2020 08:50:27 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id ci21so1554973pjb.3;
+        Tue, 19 May 2020 08:50:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=olWeaL9L3Th4SH3qpwoevbMzoFhixmGWtefArTEgTk4=;
-        b=bEyFs82H4jPOzYgYPlYzidt1XghxF9RQPbBVSYNlHHo+64d1MNTn8faNwlkFFp8XOf
-         gG93TwfVwkG1x1SYSw+sjMMWFJkF7MEU4WVXqVGtcdcINUqMvvJ0+cCULgJtCQLQs61K
-         vXj6dXSp1aRiCwt0AazexjVnkE4ZNAkpCDQS9XxiM0RaP1T3r5NtDEln4DdTvI5ROC75
-         IyyM7+pvwZ7/s+bKvbD/iAAfpgQHgYVyLMUKpVP+x5wk348rr8fMWFwaLt3cdSNfwjEe
-         PHIFvD/DButvkbeAQN6sl0IFWPv3XAMn/cdJYslshqL4n0Fjc65uCPcTOXm8wnzgg8Ac
-         dmKg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AHB18FnKAoqJzm0hykNiv4yZDqIuhCRDkCqTAP0Fza4=;
+        b=QnNPvhaHvPjBVI/mG9O+hAmqbMjquL9s/zmkb+9meC8rSuBDLe7FQ8nMwG+U8ZxSEi
+         F6PjYH8sX+az7OnVlmnLh9hn1LLMNXj9d2qenWkcW+/W0YDcYh+rIXZM4W913siZRXuW
+         KQKN897o5aLdFm/g8wz6Z/xwA92k2ifVjZOJn9V+2D9H/7LIyw3eX28YsA39YDdQGHJ8
+         +ww4Ae9hT+klcE06nFRFvdahB4hoi5l4j8ZcV/g/Zi0zT6OGwvqMIrOo+Ya0/DU5BdQo
+         DYH0rMRpgsLYv0T262RO87DhjL7iJRhbYvBHYuND/jI8xPNJNBt/maG7/bmhQGQrbtxa
+         I9CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=olWeaL9L3Th4SH3qpwoevbMzoFhixmGWtefArTEgTk4=;
-        b=qMPANh7v6+7cWo/GG8w9FC6JorhUB/TTQ+waaCuabex62bpwwVBYQAy0BwyaEhVnqa
-         jHSN4TCDFyyEHkAbe4eYfHFkAdcd4Q8Rdv9KDvg8DFaw1qio4cBzDV1jT2ey+zC+0ADe
-         52lQsQGNsN1TDAvfHAJazAWJKBY+qpcB6qtTpLweOAGdi2Vg/ES7FxHU7c/yYAHHtAYF
-         Z7hYP4K2LJhka6eNTIusFY2uy5bfvsEx6Z9v496DqF9kUmdJivSWefmOST/yoOBxnsqB
-         S22OOtvj4fzdq6yFJ+aG80Reeh+gMsD93eTk7FikCQojXsvBGFeWl1Pfz92sm96MYMuZ
-         vHpw==
-X-Gm-Message-State: AOAM531iBYKgTId3rLX0mJC/5PdPLJUAVTCWbFy7zbmF10XmmcUd1Y6E
-        NAEtvUSD15fBJLvkpUvmJ7NoMMHQfG1CPkL0qiU9Xg==
-X-Google-Smtp-Source: ABdhPJz+lhIpPKFIwyc4CnD865mj0YwvB2BjckQu7J/mXksfcTixa7jQ+FQ7BA5W++Bj57SzGGXmJbtqvWOZOvNVKQg=
-X-Received: by 2002:a50:ee1a:: with SMTP id g26mr17925721eds.18.1589900442359;
- Tue, 19 May 2020 08:00:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AHB18FnKAoqJzm0hykNiv4yZDqIuhCRDkCqTAP0Fza4=;
+        b=YpVXSdKVt4Sa0z6xeodaRR4y2gGy7DaD38egNGo5Z/oIfUpla+XX/XH+N2wTrWoGy4
+         zf1Abub+X4Ai4kZOldGl6SA62mNgBG410djRkxS0vpMZh/5ToFl1NZIgVaBq8bdzZHsS
+         F4Ul+2HORkhYpRntnHT20K1czaVuv3YRrayBNpX7dBKvfUCT+12/aFdNA7vcjv1SPLgA
+         BjtcgW5htjVJdQUIeAiAMCqlqpiJLoRz5spvH0cKJtGUULH9sCX5ceVuVvUsSKLAeysv
+         CQj80ko7E1Fjye7qWZPu0P3XvbYpoQND/oPrKtzyqUXcn5mPThh6/ICBqvj1RM3htMq7
+         2xiA==
+X-Gm-Message-State: AOAM5318LEkkmq+rzUfi6G92K5S+gh4ZhAm8izjGhlu6TV34CNk1BQNZ
+        tW48zWGcxAys8Eze5valYdA=
+X-Google-Smtp-Source: ABdhPJxcFDvvZRcc6B2dds0KSXBbh7Kpiwc0U5r6qb5JbXZg+WDQ8gRZfYUL49kKtBH7JSaQAfrzuA==
+X-Received: by 2002:a17:902:599b:: with SMTP id p27mr129948pli.75.1589903426596;
+        Tue, 19 May 2020 08:50:26 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:7206])
+        by smtp.gmail.com with ESMTPSA id s13sm7769280pfh.118.2020.05.19.08.50.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2020 08:50:24 -0700 (PDT)
+Date:   Tue, 19 May 2020 08:50:21 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andriin@fb.com, bpf@vger.kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: add general instructions for
+ test execution
+Message-ID: <20200519155021.6tag46i57z2hsivj@ast-mbp.dhcp.thefacebook.com>
+References: <1589800990-11209-1-git-send-email-alan.maguire@oracle.com>
 MIME-Version: 1.0
-References: <CAG=TAF6mfrwxF1-xEJJ9dL675uMUa7RZrOa_eL2mJizZJ-U7iQ@mail.gmail.com>
- <CAEf4BzazvGOoJbm+zNMqTjhTPJAnVLVv9V=rXkdXZELJ4FPtiA@mail.gmail.com>
- <CAG=TAF6aqo-sT2YE30riqp7f47KyXH_uhNJ=M9L12QU6EEEfqQ@mail.gmail.com> <CAEf4BzaBfnDL=WpRP-7rYFhocOsCQyFuZaLvM0+k9sv2t_=rVw@mail.gmail.com>
-In-Reply-To: <CAEf4BzaBfnDL=WpRP-7rYFhocOsCQyFuZaLvM0+k9sv2t_=rVw@mail.gmail.com>
-From:   Qian Cai <cai@lca.pw>
-Date:   Tue, 19 May 2020 11:00:31 -0400
-Message-ID: <CAG=TAF5rYmMXBcxno0pPxVZdcyz=ik-enh03E-V8wupjDS0K5g@mail.gmail.com>
-Subject: Re: UBSAN: array-index-out-of-bounds in kernel/bpf/arraymap.c:177
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Linux Netdev List <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1589800990-11209-1-git-send-email-alan.maguire@oracle.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, May 18, 2020 at 8:25 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, May 18, 2020 at 5:09 PM Qian Cai <cai@lca.pw> wrote:
-> >
-> > On Mon, May 18, 2020 at 7:55 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Sun, May 17, 2020 at 7:45 PM Qian Cai <cai@lca.pw> wrote:
-> > > >
-> > > > With Clang 9.0.1,
-> > > >
-> > > > return array->value + array->elem_size * (index & array->index_mask);
-> > > >
-> > > > but array->value is,
-> > > >
-> > > > char value[0] __aligned(8);
-> > >
-> > > This, and ptrs and pptrs, should be flexible arrays. But they are in a
-> > > union, and unions don't support flexible arrays. Putting each of them
-> > > into anonymous struct field also doesn't work:
-> > >
-> > > /data/users/andriin/linux/include/linux/bpf.h:820:18: error: flexible
-> > > array member in a struct with no named members
-> > >    struct { void *ptrs[] __aligned(8); };
-> > >
-> > > So it probably has to stay this way. Is there a way to silence UBSAN
-> > > for this particular case?
-> >
-> > I am not aware of any way to disable a particular function in UBSAN
-> > except for the whole file in kernel/bpf/Makefile,
-> >
-> > UBSAN_SANITIZE_arraymap.o := n
-> >
-> > If there is no better way to do it, I'll send a patch for it.
->
->
-> That's probably going to be too drastic, we still would want to
-> validate the rest of arraymap.c code, probably. Not sure, maybe
-> someone else has better ideas.
+On Mon, May 18, 2020 at 12:23:10PM +0100, Alan Maguire wrote:
+> Getting a clean BPF selftests run involves ensuring latest trunk LLVM/clang
+> are used, pahole is recent (>=1.16) and config matches the specified
+> config file as closely as possible.  Document all of this in the general
+> README.rst file.  Also note how to work around timeout failures.
+> 
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  tools/testing/selftests/bpf/README.rst | 46 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
+> index 0f67f1b..b00eebb 100644
+> --- a/tools/testing/selftests/bpf/README.rst
+> +++ b/tools/testing/selftests/bpf/README.rst
+> @@ -1,6 +1,52 @@
+>  ==================
+>  BPF Selftest Notes
+>  ==================
+> +First verify the built kernel config options match the config options
+> +specified in the config file in this directory.  Test failures for
+> +unknown helpers, inability to find BTF etc will be observed otherwise.
+> +
+> +To ensure the maximum number of tests pass, it is best to use the latest
+> +trunk LLVM/clang, i.e.
+> +
+> +git clone https://github.com/llvm/llvm-project
+> +
+> +Build/install trunk LLVM:
+> +
+> +.. code-block:: bash
+> +  git clone https://github.com/llvm/llvm-project
+> +  cd llvm-project
+> +  mkdir build/llvm
+> +  cd build/llvm
+> +  cmake ../../llvm/
+> +  make
+> +  sudo make install
+> +  cd ../../
+> +
+> +Build/install trunk clang:
+> +
+> +.. code-block:: bash
+> +  mkdir -p build/clang
+> +  cd build/clang
+> +  cmake ../../clang
+> +  make
+> +  sudo make install
+> +
 
-This works although it might makes sense to create a pair of
-ubsan_disable_current()/ubsan_enable_current() for it.
+these instructions are obsolete and partially incorrect.
+May be refer to Documentation/bpf/bpf_devel_QA.rst instead?
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 11584618e861..6415b089725e 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -170,11 +170,16 @@ static void *array_map_lookup_elem(struct
-bpf_map *map, void *key)
- {
-        struct bpf_array *array = container_of(map, struct bpf_array, map);
-        u32 index = *(u32 *)key;
-+       void *elem;
+> +When building the kernel with CONFIG_DEBUG_INFO_BTF, pahole
+> +version 16 or later is also required for BTF function
+> +support. pahole can be built from the source at
+> +
+> +https://github.com/acmel/dwarves
+> +
+> +It is often available in "dwarves/libdwarves" packages also,
+> +but be aware that versions prior to 1.16 will fail with
+> +errors that functions cannot be found in BTF.
+> +
+> +When running selftests, the default timeout of 45 seconds
+> +can be exceeded by some tests.  We can override the default
+> +timeout via a "settings" file; for example:
+> +
+> +.. code-block:: bash
+> +  echo "timeout=120" > tools/testing/selftests/bpf/settings
 
-        if (unlikely(index >= array->map.max_entries))
-                return NULL;
-
--       return array->value + array->elem_size * (index & array->index_mask);
-+       current->in_ubsan++;
-+       elem = array->value + array->elem_size * (index & array->index_mask);
-+       current->in_ubsan--;
-+
-+       return elem;
- }
+Is it really the case?
+I've never seen anything like this.
