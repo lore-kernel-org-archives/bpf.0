@@ -2,91 +2,73 @@ Return-Path: <SRS0=8tVf=7B=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9224C433E1
-	for <bpf@archiver.kernel.org>; Tue, 19 May 2020 13:47:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEE50C433DF
+	for <bpf@archiver.kernel.org>; Tue, 19 May 2020 13:59:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 986FE204EF
-	for <bpf@archiver.kernel.org>; Tue, 19 May 2020 13:47:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="X9gPMtnl"
+	by mail.kernel.org (Postfix) with ESMTP id B80F420835
+	for <bpf@archiver.kernel.org>; Tue, 19 May 2020 13:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1589896767;
+	bh=0IhArQVYM/6CbgtBJOhdd65fjzeUoMZcZUlX9Zz0pZs=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=w+2YgFjoe0r6axKF3a0s+i8hnK/zrjKl2P7cH0aEkL1G2YBJixkaNvyRbcbRvdfQ9
+	 LdcMhvqM/KnDxo/QX2MBK4Rb+jbuLJ1v3FMJ6EO4g8mFnT8alDCQw6H+KMKhUXC33b
+	 QIR7ftlkhuwIG2bpJUIbAhXicO0vvCOQ0MmaU5Rw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728935AbgESNo6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 May 2020 09:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726471AbgESNo5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 May 2020 09:44:57 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C788C08C5C1;
-        Tue, 19 May 2020 06:44:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=81hDLaNsDP1XezBBCmTYO/9RleZtnLgOrYL3Jzc5rEw=; b=X9gPMtnlkKFlb6bJLA3wqGW3go
-        ojlqzB5jzXof1DDu6G5t7Z2FWNZ4dLk5SrmovkSdY9Wzn14aRy7WrBmwpBzAPSRn7GWgHKTLfWhyr
-        eiVTD88LRJv6V7gGHPPWcyuiHwTToE3OFF7wGYmdBfJ6q95yljwJ6zlL3+4YgipDgYbW/Y/uAUc4I
-        z7nidhIhgrsNzEVKTHBZbqyyjs9u8LBjDHxL5Ndg4zSuV7ewTA2PCV5JEXoqeYuH/YZ0UtOd3wMN5
-        qEwKSb95OyviVEE1yvbHoIpPMOLtEw4OORrkAUqoMj5zHVhlOy2oPRw1ONgtc75dVzvvfK6tCu4ej
-        aSIIOJrA==;
-Received: from [2001:4bb8:188:1506:c70:4a89:bc61:2] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jb2YB-0000zu-5c; Tue, 19 May 2020 13:44:55 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 01/20] maccess: unexport probe_kernel_write and probe_user_write
-Date:   Tue, 19 May 2020 15:44:30 +0200
-Message-Id: <20200519134449.1466624-2-hch@lst.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200519134449.1466624-1-hch@lst.de>
-References: <20200519134449.1466624-1-hch@lst.de>
+        id S1728855AbgESN71 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 May 2020 09:59:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46452 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728775AbgESN71 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 May 2020 09:59:27 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C7F6F20825;
+        Tue, 19 May 2020 13:59:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589896767;
+        bh=0IhArQVYM/6CbgtBJOhdd65fjzeUoMZcZUlX9Zz0pZs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=CQ4PmYLBQ7Gqf19gvVV46Jd4yTAk4AnXbl56srpjNvvfmLGRnL1tZ6HQ6oiP5xJmy
+         m7P4DyJMdveb7ugRt4eefLoOg25kR95LBDIr+/SGo0P4umepd4f1elqAvL8Dx2jqn0
+         IE+F2GmvwVrAIdRn7u8K110zrU5+aLD3eLWxZvXE=
+Subject: Re: [PATCH v2 0/3] selftests: lib.mk improvements
+To:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>, bpf@vger.kernel.org
+Cc:     Jiri Benc <jbenc@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        shuah <shuah@kernel.org>
+References: <20200515120026.113278-1-yauheni.kaliuta@redhat.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <689fe06a-c781-e6ed-0544-8023c86fc21a@kernel.org>
+Date:   Tue, 19 May 2020 07:59:16 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20200515120026.113278-1-yauheni.kaliuta@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-These two functions are not used by any modular code.
+On 5/15/20 6:00 AM, Yauheni Kaliuta wrote:
+> 
+> Yauheni Kaliuta (3):
+>    selftests: do not use .ONESHELL
+>    selftests: fix condition in run_tests
+>    selftests: simplify run_tests
+> 
+>   tools/testing/selftests/lib.mk | 19 ++++++-------------
+>   1 file changed, 6 insertions(+), 13 deletions(-)
+> 
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- mm/maccess.c | 2 --
- 1 file changed, 2 deletions(-)
+Quick note that, I will pull these in for 5.8-rc1.
 
-diff --git a/mm/maccess.c b/mm/maccess.c
-index 3ca8d97e50106..cf21e604f78cb 100644
---- a/mm/maccess.c
-+++ b/mm/maccess.c
-@@ -121,7 +121,6 @@ long __probe_kernel_write(void *dst, const void *src, size_t size)
- 
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(probe_kernel_write);
- 
- /**
-  * probe_user_write(): safely attempt to write to a user-space location
-@@ -148,7 +147,6 @@ long __probe_user_write(void __user *dst, const void *src, size_t size)
- 
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(probe_user_write);
- 
- /**
-  * strncpy_from_unsafe: - Copy a NUL terminated string from unsafe address.
--- 
-2.26.2
-
+thanks,
+-- Shuah
