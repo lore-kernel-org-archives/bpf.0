@@ -2,160 +2,137 @@ Return-Path: <SRS0=8CIW=7C=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B865AC433E0
-	for <bpf@archiver.kernel.org>; Wed, 20 May 2020 07:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFB10C433E0
+	for <bpf@archiver.kernel.org>; Wed, 20 May 2020 07:46:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 87C91205CB
-	for <bpf@archiver.kernel.org>; Wed, 20 May 2020 07:29:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BEEBC207E8
+	for <bpf@archiver.kernel.org>; Wed, 20 May 2020 07:46:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ODyyex4R"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O44tJvlv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgETH3P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 May 2020 03:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
+        id S1726720AbgETHqj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 May 2020 03:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726544AbgETH2Y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 May 2020 03:28:24 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB11BC05BD43
-        for <bpf@vger.kernel.org>; Wed, 20 May 2020 00:28:23 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id i62so1005455ybc.11
-        for <bpf@vger.kernel.org>; Wed, 20 May 2020 00:28:23 -0700 (PDT)
+        with ESMTP id S1726403AbgETHqi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 May 2020 03:46:38 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23469C061A0F
+        for <bpf@vger.kernel.org>; Wed, 20 May 2020 00:46:37 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id o134so512330ybg.2
+        for <bpf@vger.kernel.org>; Wed, 20 May 2020 00:46:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6G0fSxI3Vcpak9tGKbEidiJoDZmPk3JM/oqyp9Fo0xo=;
-        b=ODyyex4Rzy3pxNy+CUgufAhEQhGUqPkLPQsj+k8YbHdW8NmnZ1zD58qmmgvj5jQb4D
-         KwID3DIX10cBxQJgrl306beaHMIc3OwalV9n/RVfREOycb+4Yb6lctFDjjbPsjmhUt7I
-         mo3rzAs1dzm+3wgBlc0/hFc6yeuweJSF+7JglzXqGowe3mO46jrZkojCuIptUGjmmhl5
-         QYS5TwNkO5D0rkIoShnzF0WLHTXlFAkNE3HZ7XSumGsKBps9NiUW3BoMp6lg8tKTZ2lH
-         5M5LvLPcTIsqOxeXRjkIt9UhUUGzZIMV2iPn65SjW5dcrwd1Cq5G7tTCfzFSTxGoOhC1
-         YdiQ==
+        bh=GcskknYh95Rq/Z6Azk62iLDMqUdVtj6gS2U77ZaIoIU=;
+        b=O44tJvlv/WeGAb2EUW5U1b7mccht+alKed3ccPJygFxfgOiFTPk1FratyivkGc09Lv
+         xuzcQDqx5Hgm7ZErC5Ll1kGXoT8P4VVHw2p3iW54tOUCLs9CpnclbpknkrOPV24VSlU8
+         8wM2T9eqOBFTanPK5rnk4LgPYPh3A7PxoiRB+LYZH1PxDB41pN1I8QZSzz1UT02PB29S
+         FjvcxIKv5zbe9M1/LHogO3Ebj+KEt43IIO0zhchKc2GKE3vBi+nJAUELFit5FR/l2A4Y
+         WYHNbIuCWPW8qutZwXV/iekANN7iMF5zJZu9FWhBbj+NHjs7eUbFUsYfOb/oRT3x4FVC
+         xh1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=6G0fSxI3Vcpak9tGKbEidiJoDZmPk3JM/oqyp9Fo0xo=;
-        b=Fv3ggc/ixBGFaok0Gb9Uf44f4yrE6JyEyE+MJcX8T59d2PnVBfvP+OGl1P/A1ZZeAs
-         /AIlZ6j2xnnfRZPX6OfQ9nrpeA2mtaUrpq01K8byxG+Lx/IRQn+wRmxphvDqWUBpbEg7
-         efBvji2c9elgtMcgfKn9tF8NtR4MygGoQ4a3x+LCfGYAUdw3btxw/2hH0bW3AiAIDwul
-         D/xTtQnECVfPIwG0DB1DoCOBDjoxZ8iCeTZgnjLi+KNHcPVRLfCaLSV5Zh0kwRvVVwrG
-         J8PnatXNiQcmzKaIZx8uSXhBgaK2kEh1JHLOcIuYYflvjNRuD7dHRc1j9z0W7YDTQ8q5
-         vmdg==
-X-Gm-Message-State: AOAM532c1u8CShakZDJ3SenmAiDuhqkkbQ2Cm8RIrwcTa5PANNzOF6C+
-        rpappYeA2OLqCjO5sdyWNSFqdxuDIyue
-X-Google-Smtp-Source: ABdhPJxyHsX6k6DBXml3eqEzdYIAmBQFJVnrLcCwKnVnReYtN08WnRqD+MQ/EL3eTy2jL2AqNA3PmUoVim9I
-X-Received: by 2002:a25:bd0b:: with SMTP id f11mr4819800ybk.351.1589959702996;
- Wed, 20 May 2020 00:28:22 -0700 (PDT)
-Date:   Wed, 20 May 2020 00:28:08 -0700
-In-Reply-To: <20200520072814.128267-1-irogers@google.com>
-Message-Id: <20200520072814.128267-2-irogers@google.com>
-Mime-Version: 1.0
-References: <20200520072814.128267-1-irogers@google.com>
-X-Mailer: git-send-email 2.26.2.761.g0e0b3e54be-goog
-Subject: [PATCH 1/7] perf metricgroup: Change evlist_used to a bitmap
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GcskknYh95Rq/Z6Azk62iLDMqUdVtj6gS2U77ZaIoIU=;
+        b=qlKkWI4RucF7+x/ubiF318dc0SqMCDO0EkJyy/RTciDGMnvENCL5SwqFm4QgUEYEWC
+         kEAMyVoDhDOlOnuADtaw0GRSXzYwu7vtKeGf9KIuSORzx0KpC1F7yIREwJVkS9GBNgbZ
+         AlrrmXw6JgVIDHmoBBNnQxOPo8lodcCYin7cb0ObsmztQ2JUtkKxremX5Vb/ijzdKbn+
+         JtUqOtYqgZr7/d7t5Beel2DHKrsPILY1lDS3H+cXXyy0yBOCOqtmnQTvbo6tcJv3qWjE
+         XJeE+b7IktkAgV6yuCs6zGmY+njFlQqkrIegrOlkiNgSd/RoCPN4koZSyEME9X9AIQeO
+         OeMw==
+X-Gm-Message-State: AOAM533UM58NSufCVOa+siSXap9vo+Y/hHZRkfFkU8zx1Jvac2ArGpra
+        O0Gy4pEda1QWBzHEd6oRIpjYLmiFGKAFq5yDiaNUwQ==
+X-Google-Smtp-Source: ABdhPJwGvKZvdPEjgUaNjoxgTzneBcLyd71wFjTYqOE86+SlBKa4uqcqVAnujdHK89IgJTKnEatAb+OEoATUC4Gc+x0=
+X-Received: by 2002:a25:7cc1:: with SMTP id x184mr5135676ybc.403.1589960793022;
+ Wed, 20 May 2020 00:46:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200508053629.210324-1-irogers@google.com> <20200508053629.210324-13-irogers@google.com>
+ <20200509002518.GF3538@tassilo.jf.intel.com> <CAP-5=fWYO2e9yVPuXGVKZ7TBP4PP6MjyEFiSd+20DOxYSLC--w@mail.gmail.com>
+ <20200509024019.GI3538@tassilo.jf.intel.com>
+In-Reply-To: <20200509024019.GI3538@tassilo.jf.intel.com>
 From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
+Date:   Wed, 20 May 2020 00:46:22 -0700
+Message-ID: <CAP-5=fVPh0og6CmjM4G1bDGB_S+Sp4v_4WM3r5XqwQPbk7ASdg@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 12/14] perf metricgroup: order event groups by size
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
         Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
         John Garry <john.garry@huawei.com>,
         Jin Yao <yao.jin@linux.intel.com>,
         Kan Liang <kan.liang@linux.intel.com>,
         Cong Wang <xiyou.wangcong@gmail.com>,
         Kim Phillips <kim.phillips@amd.com>,
-        Paul Clarke <pc@us.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
         Vince Weaver <vincent.weaver@maine.edu>,
-        Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use a bitmap rather than an array of bools.
+On Fri, May 8, 2020 at 7:40 PM Andi Kleen <ak@linux.intel.com> wrote:
+>
+> > > I'm not sure if size is that great an heuristic. The dedup algorithm should
+> > > work in any case even if you don't order by size, right?
+> >
+> > Consider two metrics:
+> >  - metric 1 with events {A,B}
+> >  - metric 2 with events {A,B,C,D}
+> > If the list isn't sorted then as the matching takes the first group
+> > with all the events, metric 1 will match {A,B} and metric 2 {A,B,C,D}.
+> > If the order is sorted to {A,B,C,D},{A,B} then metric 1 matches within
+> > the {A,B,C,D} group as does metric 2. The events in metric 1 aren't
+> > used and are removed.
+>
+> Ok. It's better for the longer metric if they stay together.
+>
+> >
+> > The dedup algorithm is very naive :-)
+>
+> I guess what matters is that it gives reasonable results on the current
+> metrics. I assume it does?
+>
+> How much deduping is happening if you run all metrics?
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/metricgroup.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+Hi Andi,
 
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index 6772d256dfdf..a16f60da06ab 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -95,7 +95,7 @@ struct egroup {
- static struct evsel *find_evsel_group(struct evlist *perf_evlist,
- 				      struct expr_parse_ctx *pctx,
- 				      struct evsel **metric_events,
--				      bool *evlist_used)
-+				      unsigned long *evlist_used)
- {
- 	struct evsel *ev;
- 	bool leader_found;
-@@ -105,7 +105,7 @@ static struct evsel *find_evsel_group(struct evlist *perf_evlist,
- 	double *val_ptr;
- 
- 	evlist__for_each_entry (perf_evlist, ev) {
--		if (evlist_used[j++])
-+		if (test_bit(j++, evlist_used))
- 			continue;
- 		if (hashmap__find(&pctx->ids, ev->name, (void **)&val_ptr)) {
- 			if (!metric_events[i])
-@@ -141,7 +141,7 @@ static struct evsel *find_evsel_group(struct evlist *perf_evlist,
- 			j++;
- 		}
- 		ev = metric_events[i];
--		evlist_used[ev->idx] = true;
-+		set_bit(ev->idx, evlist_used);
- 	}
- 
- 	return metric_events[0];
-@@ -157,13 +157,11 @@ static int metricgroup__setup_events(struct list_head *groups,
- 	int ret = 0;
- 	struct egroup *eg;
- 	struct evsel *evsel;
--	bool *evlist_used;
-+	unsigned long *evlist_used;
- 
--	evlist_used = calloc(perf_evlist->core.nr_entries, sizeof(bool));
--	if (!evlist_used) {
--		ret = -ENOMEM;
--		return ret;
--	}
-+	evlist_used = bitmap_alloc(perf_evlist->core.nr_entries);
-+	if (!evlist_used)
-+		return -ENOMEM;
- 
- 	list_for_each_entry (eg, groups, nd) {
- 		struct evsel **metric_events;
-@@ -201,7 +199,7 @@ static int metricgroup__setup_events(struct list_head *groups,
- 		list_add(&expr->nd, &me->head);
- 	}
- 
--	free(evlist_used);
-+	bitmap_free(evlist_used);
- 
- 	return ret;
- }
--- 
-2.26.2.761.g0e0b3e54be-goog
+I included this data in the latest cover-letter:
+https://lore.kernel.org/lkml/20200520072814.128267-1-irogers@google.com/
 
+> For toplev on my long term todo list was to compare it against
+> a hopefully better schedule generated by or-tools, but I never
+> got around to coding that up.
+>
+> -Andi
+
+Agreed, and this relates to your comments about doing the algorithm as
+a separate pass outside of find_evsel_group. For that, I don't
+disagree but would like to land what we have and then follow up with
+improvements.
+
+Thanks,
+Ian
