@@ -2,84 +2,94 @@ Return-Path: <SRS0=Vsws=7D=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C51CC433E1
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:27:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A1FAC433DF
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 16:07:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 318E8207D8
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:27:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A60620829
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 16:07:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="EEJCEnoh"
+	dkim=pass (2048-bit key) header.d=bytedance-com.20150623.gappssmtp.com header.i=@bytedance-com.20150623.gappssmtp.com header.b="pFd15NLi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729598AbgEUPXL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 May 2020 11:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35078 "EHLO
+        id S1728339AbgEUQHY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 May 2020 12:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727898AbgEUPXL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 May 2020 11:23:11 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EAEC061A0E;
-        Thu, 21 May 2020 08:23:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=YqSSwt2eEcfdPvUAJEANUMpS+LY40r0n4Vfg5+OG7wQ=; b=EEJCEnohLFlkeBK40BapbvBN8B
-        STzhDvoXDi6tKlY0y9EJyn9cirSq8jAFNVOnAudZkOqwZw1AmD7q/TODvpr9c9vXbt/wp1uyiKDrL
-        JnXNH0f/a2eGVzzMvif5JYp9g8Q2nIkTHG0J0DaB/RdnLYlUTkNMv3wfnys2TXfQoGngUeetWOBh2
-        49EjI/2ECxzLrR6L3IN6772XB/UeBe7cuoKvQGFoXmoftQ0OU4m9M+BN7p1LZLHCWYJebf2w/GMB9
-        oOZWBeR82AWRsWyIILbr0CtUMwxyV8pzt+lJchXXL6fCPVBtyGnXT7GEMCYvYogWI0/8PbRZUTy+t
-        ZFUTdkOQ==;
-Received: from [2001:4bb8:18c:5da7:c70:4a89:bc61:2] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jbn2F-0003xo-7d; Thu, 21 May 2020 15:23:03 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: clean up and streamline probe_kernel_* and friends v4
-Date:   Thu, 21 May 2020 17:22:38 +0200
-Message-Id: <20200521152301.2587579-1-hch@lst.de>
-X-Mailer: git-send-email 2.26.2
+        with ESMTP id S1726938AbgEUQHX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 May 2020 12:07:23 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B477FC05BD43
+        for <bpf@vger.kernel.org>; Thu, 21 May 2020 09:07:23 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id 79so8012383iou.2
+        for <bpf@vger.kernel.org>; Thu, 21 May 2020 09:07:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mxBFsMmx8n9R2e5C1RT8PEj0LODZtQH68Aq7zJz2Edg=;
+        b=pFd15NLinE1WqDgaOpWx2OED66tL+5EXs4pCEYPHvRKAxY5GB696t0HJGp7L+ZpUOs
+         pwODl4lmr2JTGo/96Q61JeYXp5uYC/Y+phvZNbtzO7ud5/AItIoqEZ1wA6TQQS3p9psi
+         G7TtDYPTj1HEAJn731CBVZjdhKPg3i6XfyNwwgmcdqdB7DsH+NcbimkJYYPebZrCaREp
+         TDTL3Oi1dHBZObtlezJgDgAlAbwjkqphYAA4PuAzYtV8FplmLMa1MXN4+zJ2ZOcQWtvS
+         XSXGf75kXkV17oX81DM7TA094Pv/9ONtHYpOC7FLjyBPrZYWx3idKcSkcld7U7Vpkwnx
+         4WPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mxBFsMmx8n9R2e5C1RT8PEj0LODZtQH68Aq7zJz2Edg=;
+        b=NCnMiXAAnZl4KpExIFzGJKWGuzqzDTemiPW4i/N+9Acvw7QjB57xI+5BAbt3HFpFZi
+         0cVaGhbyRFMbNG0K/VQpayJZMF4HgCS3wmgLQkXX0/NEqSMlvzLdU6HVDjh0vFDrSkRu
+         oa6c+PHAFFlrpLNWF1zl7SqNkcsLg13+5Bw8aEPIbg5a/uBZOL/WLzCZF84RYgufmlO3
+         HJV3c/ORcE1NVW3fvtkYzfZl28EfyrZU4MCQncmWYMpBtbhMiws0yN/8Bd8A6/wKJzR2
+         Qs6XjCssURUtDZ5SH4vAbg4ebDEBl06YCtYjEpyzqgTrcZ0Fc5OCTU9oX6cUvLjf3odc
+         sBkg==
+X-Gm-Message-State: AOAM530Ag0mUFRVO6Oh53dnCZChXrNPDQGMvGUcxmXWX2bGvE8Ra41sT
+        qlnHyuWyBk9H3S3KkZzUJiVuMZS5rS7pJk/g/M5K9Q==
+X-Google-Smtp-Source: ABdhPJz71t3ROrdOggBJfNzsVoKRUnZjxPfccVeuDl4zar33TlmiT0+HZBA/QYPItDFw8rBAE2EI4Vu+One/6Wu4oBQ=
+X-Received: by 2002:a5e:9807:: with SMTP id s7mr8476077ioj.27.1590077243097;
+ Thu, 21 May 2020 09:07:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20200521123835.70069-1-songmuchun@bytedance.com> <20200521152117.GC28818@bombadil.infradead.org>
+In-Reply-To: <20200521152117.GC28818@bombadil.infradead.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Fri, 22 May 2020 00:06:46 +0800
+Message-ID: <CAMZfGtVxPevhTy8LMpKUtkk1jX86doiPD0nOTRuKg25+8Vz=ag@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH] files: Use rcu lock to get the file
+ structures for better performance
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     adobriyan@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
+        ebiederm@xmission.com, bernd.edlinger@hotmail.de,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi all,
+On Thu, May 21, 2020 at 11:21 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Thu, May 21, 2020 at 08:38:35PM +0800, Muchun Song wrote:
+> > There is another safe way to get the file structure without
+> > holding the files->file_lock. That is rcu lock, and this way
+> > has better performance. So use the rcu lock instead of the
+> > files->file_lock.
+>
+> What makes you think this is safe?  Are you actually seeing contention
+> on this spinlock?
+>
 
-this series start cleaning up the safe kernel and user memory probing
-helpers in mm/maccess.c, and then allows architectures to implement
-the kernel probing without overriding the address space limit and
-temporarily allowing access to user memory.  It then switches x86
-over to this new mechanism by reusing the unsafe_* uaccess logic.
+I have read the doc which is in the Documentation/filesystems/files.txt.
+If my understanding is correct, I think it is safe to use rcu lock.
 
-This version also switches to the saner copy_{from,to}_kernel_nofault
-naming suggested by Linus.
+Thanks.
 
-I kept the x86 helpers as-is without calling unsage_{get,put}_user as
-that avoids a number of hard to trace casts, and it will still work
-with the asm-goto based version easily.
-
-Changes since v3:
- - cleanup how bpf and trace_kprobe perform the TASK_SIZE checks
- - remove the unused dst argument to probe_kernel_read_allowed
- - document the -ERANGE return value
-
-Changes since v2:
- - rebased on 5.7-rc6 with the bpf trace format string changes
- - rename arch_kernel_read to __get_kernel_nofault and arch_kernel_write
-   to __put_kernel_nofault
- - clean up the tracers to only allowd "mixed" reads when the kernel
-   has non-overlapping address spaces
+-- 
+Yours,
+Muchun
