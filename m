@@ -4,39 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15D85C433E1
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:23:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41BABC433DF
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:24:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E9A2820878
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:23:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 172C9207D8
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:24:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Rc9O/LwX"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ibuk6wti"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730109AbgEUPXo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 May 2020 11:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S1730266AbgEUPYF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 May 2020 11:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730169AbgEUPXl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 May 2020 11:23:41 -0400
+        with ESMTP id S1730252AbgEUPYC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 May 2020 11:24:02 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9938FC061A0E;
-        Thu, 21 May 2020 08:23:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E325CC061A0E;
+        Thu, 21 May 2020 08:24:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=fI4BRYe9whyI1lE6Uh0NEnF4iP7fYZaJTzPrp5Za6uo=; b=Rc9O/LwXdxzubF/e2bxMkK9d4f
-        UhDXZm1zKBeKIKj9/Jz1Y/K5qnzv0S8NKWwxSg5bKdgdANSeHGV7KRYVGMH9+l0QVqmZvSCZmnGX9
-        qYxlc+F8UryHEcpA7FKBhBekDVxkG7T+4hX9klro7vBfN6bG/qV31zyNMAv1CeRwz+w7RTdwsr/Yu
-        HmzRsi5rg7lZwATK3Hm8ID1GMejSC4+E/Ul4LxzW1cgDD7SvARSgrJrDJ+fA4s6kSVr/CwZnIhpCe
-        j3S1EHwmmy/IwapVI6M3pg0CMB8ohnyHLd0jPrsbxI8JXy8OYSnnVv4r00AznrYv4pY0YRANLFzMi
-        vZOZqSXA==;
+        bh=z84HF8MbiF+uWN8N63G2E43OTwbdeCsOdqVBGb9xrkM=; b=ibuk6wti7NITiJ/gTx9Z7H73dN
+        IbKZ5YEJu3Sj9xfwWnX8Tf7CB7gU4qD69l8Kh8KoIBwpT+D9satafsUfZjRQ+A7S0l0aZ/Fbm2bUu
+        oEyQ+m+8UNZ3Ljai+efPSL5/W3EbngROUFTf6xnk7lKHl81AiQ1VQ1a8ZLUNBfhGCgb0/6TStOedk
+        wCu4DP9YGWQdbL4A01Uchj+J/VjQgDqkKUPl0PEG54wcUecIxanMA0BtxZHBoa5tBtaujgRrH0JCM
+        Ik08u0XexCxOdvnuIGCHmpYEGxcjsGym6p1S3j5UQWQJj1fo8U8cuvxsxvj6GAwLt8rNel7x2Pccj
+        mOtgjebA==;
 Received: from [2001:4bb8:18c:5da7:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jbn2p-0004TG-H2; Thu, 21 May 2020 15:23:40 +0000
+        id 1jbn39-0004fj-OL; Thu, 21 May 2020 15:24:00 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -46,9 +46,9 @@ To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
 Cc:     linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 12/23] bpf: handle the compat string in bpf_trace_copy_string better
-Date:   Thu, 21 May 2020 17:22:50 +0200
-Message-Id: <20200521152301.2587579-13-hch@lst.de>
+Subject: [PATCH 19/23] x86: use non-set_fs based maccess routines
+Date:   Thu, 21 May 2020 17:22:57 +0200
+Message-Id: <20200521152301.2587579-20-hch@lst.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200521152301.2587579-1-hch@lst.de>
 References: <20200521152301.2587579-1-hch@lst.de>
@@ -60,32 +60,41 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-User the proper helper for kernel or userspace addresses based on
-TASK_SIZE instead of the dangerous strncpy_from_unsafe function.
+Provide arch_kernel_read and arch_kernel_write routines to implement the
+maccess routines without messing with set_fs and without stac/clac that
+opens up access to user space.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- kernel/trace/bpf_trace.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/uaccess.h | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 9d4080590f711..737d739230a6b 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -331,8 +331,11 @@ static void bpf_trace_copy_string(char *buf, void *unsafe_ptr, char fmt_ptype,
- 	switch (fmt_ptype) {
- 	case 's':
- #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
--		strncpy_from_unsafe(buf, unsafe_ptr, bufsz);
--		break;
-+		if ((unsigned long)unsafe_ptr < TASK_SIZE) {
-+			strncpy_from_user_nofault(buf, user_ptr, bufsz);
-+			break;
-+		}
-+		fallthrough;
- #endif
- 	case 'k':
- 		strncpy_from_kernel_nofault(buf, unsafe_ptr, bufsz);
+diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+index d8f283b9a569c..b3e0a56ae961a 100644
+--- a/arch/x86/include/asm/uaccess.h
++++ b/arch/x86/include/asm/uaccess.h
+@@ -523,5 +523,21 @@ do {									\
+ 	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
+ } while (0)
+ 
++#define HAVE_GET_KERNEL_NOFAULT
++
++#define __get_kernel_nofault(dst, src, type, err_label)			\
++do {									\
++        int __kr_err;							\
++									\
++	__get_user_size(*((type *)dst), (__force type __user *)src,	\
++			sizeof(type), __kr_err);			\
++        if (unlikely(__kr_err))						\
++		goto err_label;						\
++} while (0)
++
++#define __put_kernel_nofault(dst, src, type, err_label)			\
++	__put_user_size(*((type *)(src)), (__force type __user *)(dst),	\
++			sizeof(type), err_label)
++
+ #endif /* _ASM_X86_UACCESS_H */
+ 
 -- 
 2.26.2
 
