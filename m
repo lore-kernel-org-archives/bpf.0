@@ -7,59 +7,60 @@ X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15869C433E0
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 22:10:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9AF6C433E2
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 22:10:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E39C9207D3
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 22:10:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7457720814
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 22:10:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J8AydxJv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oZBWHO6M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730041AbgEUWKq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 May 2020 18:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
+        id S1730663AbgEUWKv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 May 2020 18:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728701AbgEUWKp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 May 2020 18:10:45 -0400
+        with ESMTP id S1728701AbgEUWKu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 May 2020 18:10:50 -0400
 Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22966C061A0E;
-        Thu, 21 May 2020 15:10:45 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id w3so3380544qkb.6;
-        Thu, 21 May 2020 15:10:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70688C061A0E;
+        Thu, 21 May 2020 15:10:50 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id n11so3428006qkn.8;
+        Thu, 21 May 2020 15:10:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fm4JD807X5RrjTwsFUI7w3BEzpMypViAerLd/aB5r74=;
-        b=J8AydxJvTfOLj4SnXaGjYeBAkg2KcbONigWAqFhy28XWe0yoJSm2mqXTvJxPUdz4vn
-         8csb1VJ846w+CN438dl2Kd9l3C73W6h4oKEYXoALOVTin7KbZ/YDlKFLF0AAA4nbJqFp
-         LB1X3Hn5mhIhPavMozO/KMXf6gthpTGbRdfqH9PzmVymTuezcrONofpWVb61Js8EVDpD
-         4pbUlvLX2ye6Sf9Rnhp+0IxPOYwwYikWR57bi9J2cXHzgLs31qHiq+XRCvC7s0Ay6mem
-         07lgQH3Sz3f5gduyy8vQZYJru94h9wd40ax2jSnBP3+ZJ7hlV7fwe7o5DnnsyqeeIJkb
-         nEMw==
+        bh=cY8bWJYAziC6DykutTES7fh6tr7JoLymaKn0aTQJgAA=;
+        b=oZBWHO6MlDik/xfnpMWKRcWYwij9zTcWmbH9JuSmErAy7WB07e1TiF4dmrbYGrUrqE
+         qfRPZudJxSJMEBbPTN71bDZdMWPCrJkbvu8G7XGoSbB0Kx34lsholiAsXcWwqN10JtAU
+         iOCFxhlFjbpIHLaFaQJOBJAm68LmJFbPxQgZuVSKrSYMQSv1COiw2SUduvBiHjvsxcll
+         SIQaO4hysm74vwz4ag6lDgfbljYQ6gTEO0Fln/KDw5G3EyoU4W7ba+OEbrCIfHydiwYn
+         pXBLSiowmepxk4ogSoo4Ab+GKnE6jOcIyJP+L+T59F2DnNwEODLueAcdNSCaAW5tjuuP
+         lBTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fm4JD807X5RrjTwsFUI7w3BEzpMypViAerLd/aB5r74=;
-        b=trLDoQZA3ADhbuMd/2smbQqDKd6ueP+2G3POiGSfGX2JdjCZfSuatsz9tV2Dw9B+Bk
-         b5p1YZannR2PD3UYNYgoyVEtQqCv+jEK8EPEY5ZRbru4Rbcasb158P1l4x5BulXjwP99
-         hjreG0e8S8WwJVHukC5Rlp1t+qA2jHUrVhOIehvC9D/dcmOGOldKCW6AJGP2Y7C00gyy
-         fNf97w2se4zGwSXgDJyr46+9emYWA5X1TruYKl0mypf322cbb82SGba1jnbH2IUc3pGz
-         UwLQBMqBmDXEP6q+g+EfQQXG9LezKLhakrGALpOJ/6GTVa9voJ0wlJh2exyyTYTR4ZDb
-         +t4A==
-X-Gm-Message-State: AOAM533DeMymvj67KXQkeH7FUGUoQFiXRJ+YZy717iqOTIR0UnsbDCfl
-        Qj5bqCaoKvpOaxXxoEMv0xhGy90AYwYX+14yfic=
-X-Google-Smtp-Source: ABdhPJxJhqPjBqLqBOYnkHGHiDuGjV6UrwgRBFuNPFyvTMaKJ10aWTqgfPPDhtmPKaNroLARywp1EK7gtepHBmRPz9I=
-X-Received: by 2002:a05:620a:14a1:: with SMTP id x1mr11755356qkj.92.1590099044250;
- Thu, 21 May 2020 15:10:44 -0700 (PDT)
+        bh=cY8bWJYAziC6DykutTES7fh6tr7JoLymaKn0aTQJgAA=;
+        b=Iqwnql0sBCYQt1OKGCkBTzWU9dAPGEizA1ZYNv8/EOhJKWrYc3s8FETsQmO+1m2doJ
+         ajvFEHK/IMMuNPL8j+Fyn4OkhKQDQpSdSVMSg8GdyR/o/6uZVjNizbkIbgvyNyYfaZ20
+         EeaBSEbO3zK13Y6hShEQ9LqrRRLaXxDlRwlkfdXwtB//o77OKHyUJy908AbESx2dHK1d
+         8gbCtIyzKBqWe0Bx2UvPeyaom2ACT4TpYB5kJOguFS5xc32L9HIc4wWQWWo5gavq5Lbl
+         21hGx+dA+EqbEVNsBHieTYwXDwPyonVSbmO5ZsXkMyK5bwCpj7+DrIj3OEun5+OADQ2v
+         mr7Q==
+X-Gm-Message-State: AOAM533Sx79UpA27RUtHfZKZs/fLVMcdIHdsAT0D6fA52IcY5DL+/t4P
+        BEVKaJrBgR9e1OQI4kEGoyquZU7vIXH3BxmYH4g=
+X-Google-Smtp-Source: ABdhPJzIXkJVvDhLwFX1ARUU8mtpCzq9VTmjBd6JQhlCMg9ID1AyioP6mhJJ2XBj6nVE6eoFrNsRgaLgO0TsCsULEdY=
+X-Received: by 2002:a05:620a:2049:: with SMTP id d9mr13093079qka.449.1590099049726;
+ Thu, 21 May 2020 15:10:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200521152301.2587579-1-hch@lst.de> <20200521152301.2587579-12-hch@lst.de>
-In-Reply-To: <20200521152301.2587579-12-hch@lst.de>
+References: <20200521152301.2587579-1-hch@lst.de> <20200521152301.2587579-13-hch@lst.de>
+In-Reply-To: <20200521152301.2587579-13-hch@lst.de>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 21 May 2020 15:10:33 -0700
-Message-ID: <CAEf4BzZWW_8jKWmbth6=i2+JVx9JKKa7o6vBSQwswRd2sNLEkQ@mail.gmail.com>
-Subject: Re: [PATCH 11/23] bpf: factor out a bpf_trace_copy_string helper
+Date:   Thu, 21 May 2020 15:10:38 -0700
+Message-ID: <CAEf4BzbDvJzbygB9T2_4YtCx8J+ESp9rhpB=BCQVDa0QBHrV0A@mail.gmail.com>
+Subject: Re: [PATCH 12/23] bpf: handle the compat string in
+ bpf_trace_copy_string better
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -75,20 +76,18 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, May 21, 2020 at 8:25 AM Christoph Hellwig <hch@lst.de> wrote:
+On Thu, May 21, 2020 at 8:24 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> Split out a helper to do the fault free access to the string pointer
-> to get it out of a crazy indentation level.
+> User the proper helper for kernel or userspace addresses based on
+> TASK_SIZE instead of the dangerous strncpy_from_unsafe function.
 >
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > ---
 
-LGTM.
-
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 
->  kernel/trace/bpf_trace.c | 42 +++++++++++++++++++++++-----------------
->  1 file changed, 24 insertions(+), 18 deletions(-)
+>  kernel/trace/bpf_trace.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 >
 
 [...]
