@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49163C433E0
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:27:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D099C433DF
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:27:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 274A6207D8
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:27:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52124204EA
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:27:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="IkOL/0Q5"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="RelSvCH1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730028AbgEUPXS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 May 2020 11:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
+        id S1729996AbgEUPXN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 May 2020 11:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730008AbgEUPXS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 May 2020 11:23:18 -0400
+        with ESMTP id S1727898AbgEUPXN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 May 2020 11:23:13 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01FEC061A0E;
-        Thu, 21 May 2020 08:23:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0102FC061A0E;
+        Thu, 21 May 2020 08:23:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=LNedO/lL6g8P+QsVFWLVScVEptUSGiGTZWf8H0Q1tZA=; b=IkOL/0Q5VFLdvcH4E2f1lWsujc
-        ZpGa6pBSTA/irSQfHNd3fMJ6M+PJUZ/RtayvjfqlfJMzMSbJlYlD16DbM64jpqaZKliOvVuIRemuB
-        HreLTNUfvD6xrF38OqsnvHUyJfe4k5mVpAbXt3OkxXRfOUAOBakbMYnaRZ6/1J691uiXaYDYR821c
-        XmRwRCHvyuQlPlCXq6vdfd5bHCnIeT5jABBcaRjkv4ujyJmpmHDZ5HNN3/MsXC+2N8byomzKJA1uI
-        BodYd0Acx2A7AXjcsEraLZYwwe8QkDqNP3Y+rmMZkGoha1LjpXvDCSO8d4RW9BGcUuDRf9y+tiz+s
-        TM0CRuSQ==;
+        bh=81hDLaNsDP1XezBBCmTYO/9RleZtnLgOrYL3Jzc5rEw=; b=RelSvCH17DkzALKE5okRB+Y0wg
+        KoFoeYNS38bl7gxLrLZ+lN3ApsSbTXeo1Mfx2PvWHH7REwAnx2ksix/dbD2jN3AIzpkm1Q+KYLrjb
+        VCOu49KNHxA/far0fLLFGhtG6hKhnd5pRh00XeEBXomnMrq/JCfwWdde3cmQoAJ8EmS7QWQU6wfI3
+        K6s2sps5HEy6NC9ldAe8gdJe6PHsU//hvdwAWSNJEjDzDouYLde2uR06cU4hUD29c941CcBwxKIKf
+        QAWCwq2uFV/cwPzJVDOcsOF6JEtASh79XLNDBFIdet6IcrqMA5F0kvpD8cqNyImcP1pNuG7VhnHzd
+        a7FX8gdA==;
 Received: from [2001:4bb8:18c:5da7:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jbn2N-00045c-Hu; Thu, 21 May 2020 15:23:12 +0000
+        id 1jbn2H-000403-Jc; Thu, 21 May 2020 15:23:06 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -46,9 +46,9 @@ To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
 Cc:     linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 03/23] maccess: remove duplicate kerneldoc comments
-Date:   Thu, 21 May 2020 17:22:41 +0200
-Message-Id: <20200521152301.2587579-4-hch@lst.de>
+Subject: [PATCH 01/23] maccess: unexport probe_kernel_write and probe_user_write
+Date:   Thu, 21 May 2020 17:22:39 +0200
+Message-Id: <20200521152301.2587579-2-hch@lst.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200521152301.2587579-1-hch@lst.de>
 References: <20200521152301.2587579-1-hch@lst.de>
@@ -60,70 +60,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Many of the maccess routines have a copy of the kerneldoc comment
-in the header.  Remove it as it is not useful and will get out of
-sync sooner or later.
+These two functions are not used by any modular code.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- include/linux/uaccess.h | 38 --------------------------------------
- 1 file changed, 38 deletions(-)
+ mm/maccess.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index a2c606a403745..5a36a298a85f8 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -301,50 +301,12 @@ copy_struct_from_user(void *dst, size_t ksize, const void __user *src,
- 	return 0;
+diff --git a/mm/maccess.c b/mm/maccess.c
+index 3ca8d97e50106..cf21e604f78cb 100644
+--- a/mm/maccess.c
++++ b/mm/maccess.c
+@@ -121,7 +121,6 @@ long __probe_kernel_write(void *dst, const void *src, size_t size)
+ 
+ 	return ret;
  }
+-EXPORT_SYMBOL_GPL(probe_kernel_write);
  
--/*
-- * probe_kernel_read(): safely attempt to read from a location
-- * @dst: pointer to the buffer that shall take the data
-- * @src: address to read from
-- * @size: size of the data chunk
-- *
-- * Safely read from address @src to the buffer at @dst.  If a kernel fault
-- * happens, handle that and return -EFAULT.
-- */
- extern long probe_kernel_read(void *dst, const void *src, size_t size);
- extern long probe_kernel_read_strict(void *dst, const void *src, size_t size);
- extern long __probe_kernel_read(void *dst, const void *src, size_t size);
--
--/*
-- * probe_user_read(): safely attempt to read from a location in user space
-- * @dst: pointer to the buffer that shall take the data
-- * @src: address to read from
-- * @size: size of the data chunk
-- *
-- * Safely read from address @src to the buffer at @dst.  If a kernel fault
-- * happens, handle that and return -EFAULT.
-- */
- extern long probe_user_read(void *dst, const void __user *src, size_t size);
+ /**
+  * probe_user_write(): safely attempt to write to a user-space location
+@@ -148,7 +147,6 @@ long __probe_user_write(void __user *dst, const void *src, size_t size)
  
--/*
-- * probe_kernel_write(): safely attempt to write to a location
-- * @dst: address to write to
-- * @src: pointer to the data that shall be written
-- * @size: size of the data chunk
-- *
-- * Safely write to address @dst from the buffer at @src.  If a kernel fault
-- * happens, handle that and return -EFAULT.
-- */
- extern long notrace probe_kernel_write(void *dst, const void *src, size_t size);
--
--/*
-- * probe_user_write(): safely attempt to write to a location in user space
-- * @dst: address to write to
-- * @src: pointer to the data that shall be written
-- * @size: size of the data chunk
-- *
-- * Safely write to address @dst from the buffer at @src.  If a kernel fault
-- * happens, handle that and return -EFAULT.
-- */
- extern long notrace probe_user_write(void __user *dst, const void *src, size_t size);
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(probe_user_write);
  
- extern long strncpy_from_unsafe(char *dst, const void *unsafe_addr, long count);
+ /**
+  * strncpy_from_unsafe: - Copy a NUL terminated string from unsafe address.
 -- 
 2.26.2
 
