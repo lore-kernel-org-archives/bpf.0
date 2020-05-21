@@ -2,161 +2,172 @@ Return-Path: <SRS0=Vsws=7D=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 856FEC433E0
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 04:30:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B059C433E0
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 08:34:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4D5EF207F9
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 04:30:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15FB12070A
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 08:34:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="baqv66aB"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="VtkWO+Ul"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726420AbgEUEaH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 May 2020 00:30:07 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:45945 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726394AbgEUEaH (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 21 May 2020 00:30:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590035404;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WXgoiIQBmQkuRGuRereQHuQkbFC/POS9aYRCiQc+tnw=;
-        b=baqv66aBEZI32AgDLlTA5Awb06sXQBJFs+QJTEep1A2l6JaYCla7dQL2X/7sUNmC3Ea7zG
-        huktSlj1pdKR7ag1yo1/V8DqLYKfPooyBQtBo6bsi2/Hq/GiuPs/SdUsSEfUSdSRo95vyu
-        14SENRI/YO/R2GrqEj34m3guJo106GU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-354-Oqx0dhwlMbCe71NM53_ElA-1; Thu, 21 May 2020 00:29:58 -0400
-X-MC-Unique: Oqx0dhwlMbCe71NM53_ElA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 530C8474;
-        Thu, 21 May 2020 04:29:56 +0000 (UTC)
-Received: from carbon (unknown [10.40.208.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E14D06EA2B;
-        Thu, 21 May 2020 04:29:48 +0000 (UTC)
-Date:   Thu, 21 May 2020 06:29:47 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
-        jeffrey.t.kirsher@intel.com, maximmi@mellanox.com,
-        maciej.fijalkowski@intel.com, brouer@redhat.com
-Subject: Re: [PATCH bpf-next v4 01/15] xsk: fix xsk_umem_xdp_frame_sz()
-Message-ID: <20200521062947.71d9cddd@carbon>
-In-Reply-To: <17701885-c91d-5bfc-b96d-29263a0d08ab@intel.com>
-References: <20200520094742.337678-1-bjorn.topel@gmail.com>
-        <20200520094742.337678-2-bjorn.topel@gmail.com>
-        <20200520151819.1d2254b7@carbon>
-        <17701885-c91d-5bfc-b96d-29263a0d08ab@intel.com>
+        id S1728643AbgEUIek (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 May 2020 04:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728577AbgEUIek (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 May 2020 04:34:40 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C2BC061A0F
+        for <bpf@vger.kernel.org>; Thu, 21 May 2020 01:34:39 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id d7so7808681eja.7
+        for <bpf@vger.kernel.org>; Thu, 21 May 2020 01:34:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NBjbnCOh61b7cgKVaUsbqPDW94/cGzD2MQ0ZynD04OI=;
+        b=VtkWO+UlZXR6dHQYJP28BAe/uNVGTjTU4W4MhifCI5ih7nSlP0Cxfn/QVDu7CgjjJ5
+         oaY/rFGpUpZDRwZ5Jh6hXzagrfQr+Twd84fwdKMZjm390/Hf/J0dJ5WS+tRg6QST0Os2
+         eNazPat/1t4w31HVH0E87ceKkM7BB8PtPK3Jo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NBjbnCOh61b7cgKVaUsbqPDW94/cGzD2MQ0ZynD04OI=;
+        b=AqsVRnoSewVKtPb62cZho7D5NqUwQqElZbdxtthOfyZfNTF7jxmubHqNAPslUOXE1d
+         z9qYxwrjvjG0ogEEN4pGgjN7QzquBtYb7VaQCKOCexg2xi5wTuBDoJa5KVYSPc0Os/Mv
+         P893kQov9rOYEIWrSy88deaCXVJlmBIYZK2WVUrZ+o1uSBb5UZNvcIFFnwHoOCTFkIOC
+         gwkoj+DHH6XfZ+r/9XHVtYaaKah362L5OtCmJ9lTgrvcqRmSXdia2Al+3AAxLN3uT3AE
+         EmopVfj1IzBAFLBrWOo2PzwQbS4k0YwKrHY7xgqEbrRqFgF6IWKjToEGC0v7/80VZ7Vh
+         wQqQ==
+X-Gm-Message-State: AOAM5324HUmyY79mQX0O/nIxOyt5eLUsLiRbpnTsIuaYHRISBMi795To
+        jX3Pm6YW6clNKrsfpExBxRwo9XDt3v8=
+X-Google-Smtp-Source: ABdhPJwqPcShx3HijRp3m1yW21LlqC0tmWcv7pLr0/2aUApSFyhEOXvWg/jt93rib49tzmYEZWy+xw==
+X-Received: by 2002:a17:906:82d9:: with SMTP id a25mr2442349ejy.43.1590050077182;
+        Thu, 21 May 2020 01:34:37 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id b14sm4231685edx.93.2020.05.21.01.34.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 May 2020 01:34:36 -0700 (PDT)
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        Stanislav Fomichev <sdf@google.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf v2] flow_dissector: Drop BPF flow dissector prog ref on netns cleanup
+Date:   Thu, 21 May 2020 10:34:35 +0200
+Message-Id: <20200521083435.560256-1-jakub@cloudflare.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 20 May 2020 16:34:05 +0200
-Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com> wrote:
+When attaching a flow dissector program to a network namespace with
+bpf(BPF_PROG_ATTACH, ...) we grab a reference to bpf_prog.
 
-> On 2020-05-20 15:18, Jesper Dangaard Brouer wrote:
-> > On Wed, 20 May 2020 11:47:28 +0200
-> > Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> wrote:
-> >  =20
-> >> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-> >>
-> >> Calculating the "data_hard_end" for an XDP buffer coming from AF_XDP
-> >> zero-copy mode, the return value of xsk_umem_xdp_frame_sz() is added
-> >> to "data_hard_start".
-> >>
-> >> Currently, the chunk size of the UMEM is returned by
-> >> xsk_umem_xdp_frame_sz(). This is not correct, if the fixed UMEM
-> >> headroom is non-zero. Fix this by returning the chunk_size without the
-> >> UMEM headroom.
-> >>
-> >> Fixes: 2a637c5b1aaf ("xdp: For Intel AF_XDP drivers add XDP frame_sz")
-> >> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-> >> ---
-> >>   include/net/xdp_sock.h | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-> >> index abd72de25fa4..6b1137ce1692 100644
-> >> --- a/include/net/xdp_sock.h
-> >> +++ b/include/net/xdp_sock.h
-> >> @@ -239,7 +239,7 @@ static inline u64 xsk_umem_adjust_offset(struct xd=
-p_umem *umem, u64 address,
-> >>  =20
-> >>   static inline u32 xsk_umem_xdp_frame_sz(struct xdp_umem *umem)
-> >>   {
-> >> -	return umem->chunk_size_nohr + umem->headroom;
-> >> +	return umem->chunk_size_nohr; =20
-> >=20
-> > Hmm, is this correct?
-> >=20
-> > As you write "xdp_data_hard_end" is calculated as an offset from
-> > xdp->data_hard_start pointer based on the frame_sz.  Will your
-> > xdp->data_hard_start + frame_sz point to packet end?
-> > =20
->=20
-> Yes, I believe this is correct.
->=20
-> Say that a user uses a chunk size of 2k, and a umem headroom of, say,
-> 64. This means that the kernel should (at least) leave 64B which the
-> kernel shouldn't touch.
->=20
-> umem->headroom | XDP_PACKET_HEADROOM | packet |          |
->                 ^                     ^        ^      ^   ^
->                 a                     b        c      d   e
->=20
-> a: data_hard_start
-> b: data
-> c: data_end
-> d: data_hard_end, (e - 320)
-> e: hardlimit of chunk, a + umem->chunk_size_nohr
->=20
-> Prior this fix the umem->headroom was *included* in frame_sz.
+If netns gets destroyed while a flow dissector is still attached, and there
+are no other references to the prog, we leak the reference and the program
+remains loaded.
 
-Thanks for the nice ascii art description. I can now see that you are
-right.   We should add this kind of documentation, perhaps as a comment
-in the code?
+Leak can be reproduced by running flow dissector tests from selftests/bpf:
 
+  # bpftool prog list
+  # ./test_flow_dissector.sh
+  ...
+  selftests: test_flow_dissector [PASS]
+  # bpftool prog list
+  4: flow_dissector  name _dissect  tag e314084d332a5338  gpl
+          loaded_at 2020-05-20T18:50:53+0200  uid 0
+          xlated 552B  jited 355B  memlock 4096B  map_ids 3,4
+          btf_id 4
+  #
 
-> > #define xdp_data_hard_end(xdp)                          \
-> >          ((xdp)->data_hard_start + (xdp)->frame_sz -     \
-> >           SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
-> >=20
-> > Note the macro reserves the last 320 bytes (for skb_shared_info), but
-> > for AF_XDP zero-copy mode, it will never create an SKB that use this
-> > area.   Thus, in principle we can allow XDP-progs to extend/grow tail
-> > into this area, but I don't think there is any use-case for this, as
-> > it's much easier to access packet-data in userspace application.
-> > (Thus, it might not be worth the complexity to give AF_XDP
-> > bpf_xdp_adjust_tail access to this area, by e.g. "lying" via adding 320
-> > bytes to frame_sz).
-> >  =20
->=20
-> I agree, and in the picture (well...) above that would be "d". IOW
-> data_hard_end is 320 "off" the real end.
+Fix it by detaching the flow dissector program when netns is going away.
 
-Yes, we agree.
+Fixes: d58e468b1112 ("flow_dissector: implements flow dissector BPF hook")
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
 
---=20
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+Notes:
+    v2:
+    - Share code between pre_exit and prog_detach callbacks (Stanislav)
+
+ net/core/flow_dissector.c | 30 ++++++++++++++++++++++++++----
+ 1 file changed, 26 insertions(+), 4 deletions(-)
+
+diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
+index 3eff84824c8b..3ad723b2e299 100644
+--- a/net/core/flow_dissector.c
++++ b/net/core/flow_dissector.c
+@@ -160,12 +160,10 @@ int skb_flow_dissector_bpf_prog_attach(const union bpf_attr *attr,
+ 	return ret;
+ }
+ 
+-int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
++static int flow_dissector_bpf_prog_detach(struct net *net)
+ {
+ 	struct bpf_prog *attached;
+-	struct net *net;
+ 
+-	net = current->nsproxy->net_ns;
+ 	mutex_lock(&flow_dissector_mutex);
+ 	attached = rcu_dereference_protected(net->flow_dissector_prog,
+ 					     lockdep_is_held(&flow_dissector_mutex));
+@@ -179,6 +177,24 @@ int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
+ 	return 0;
+ }
+ 
++int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
++{
++	return flow_dissector_bpf_prog_detach(current->nsproxy->net_ns);
++}
++
++static void __net_exit flow_dissector_pernet_pre_exit(struct net *net)
++{
++	/* We're not racing with attach/detach because there are no
++	 * references to netns left when pre_exit gets called.
++	 */
++	if (rcu_access_pointer(net->flow_dissector_prog))
++		flow_dissector_bpf_prog_detach(net);
++}
++
++static struct pernet_operations flow_dissector_pernet_ops __net_initdata = {
++	.pre_exit = flow_dissector_pernet_pre_exit,
++};
++
+ /**
+  * __skb_flow_get_ports - extract the upper layer ports and return them
+  * @skb: sk_buff to extract the ports from
+@@ -1827,6 +1843,8 @@ EXPORT_SYMBOL(flow_keys_basic_dissector);
+ 
+ static int __init init_default_flow_dissectors(void)
+ {
++	int err;
++
+ 	skb_flow_dissector_init(&flow_keys_dissector,
+ 				flow_keys_dissector_keys,
+ 				ARRAY_SIZE(flow_keys_dissector_keys));
+@@ -1836,7 +1854,11 @@ static int __init init_default_flow_dissectors(void)
+ 	skb_flow_dissector_init(&flow_keys_basic_dissector,
+ 				flow_keys_basic_dissector_keys,
+ 				ARRAY_SIZE(flow_keys_basic_dissector_keys));
+-	return 0;
++
++	err = register_pernet_subsys(&flow_dissector_pernet_ops);
++
++	WARN_ON(err);
++	return err;
+ }
+ 
+ core_initcall(init_default_flow_dissectors);
+-- 
+2.25.4
 
