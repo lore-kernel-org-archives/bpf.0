@@ -4,39 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41BABC433DF
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:24:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 774F0C433E2
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:24:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 172C9207D8
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:24:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 55B78207D8
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 15:24:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ibuk6wti"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="rUdy0Gqz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730266AbgEUPYF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 May 2020 11:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
+        id S1730323AbgEUPYT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 May 2020 11:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730252AbgEUPYC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 May 2020 11:24:02 -0400
+        with ESMTP id S1730311AbgEUPYM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 May 2020 11:24:12 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E325CC061A0E;
-        Thu, 21 May 2020 08:24:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17D0C061A0E;
+        Thu, 21 May 2020 08:24:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=z84HF8MbiF+uWN8N63G2E43OTwbdeCsOdqVBGb9xrkM=; b=ibuk6wti7NITiJ/gTx9Z7H73dN
-        IbKZ5YEJu3Sj9xfwWnX8Tf7CB7gU4qD69l8Kh8KoIBwpT+D9satafsUfZjRQ+A7S0l0aZ/Fbm2bUu
-        oEyQ+m+8UNZ3Ljai+efPSL5/W3EbngROUFTf6xnk7lKHl81AiQ1VQ1a8ZLUNBfhGCgb0/6TStOedk
-        wCu4DP9YGWQdbL4A01Uchj+J/VjQgDqkKUPl0PEG54wcUecIxanMA0BtxZHBoa5tBtaujgRrH0JCM
-        Ik08u0XexCxOdvnuIGCHmpYEGxcjsGym6p1S3j5UQWQJj1fo8U8cuvxsxvj6GAwLt8rNel7x2Pccj
-        mOtgjebA==;
+        bh=kv7va3JnJ1SeELpjhZcyLBCa20krrM3Xn4ju295jtGk=; b=rUdy0Gqzh3C4nJ6TIdAzKeaoif
+        wcO+pkmQg4oh+RaTJSGjuKJXdWDDJUYMIicegaPFbD3QMndGAgCdBjZh1eLyE/wqaocovxx+mGLyi
+        RlEMRo4KWxKjsECuFNapixznaS98/x20tWLfwVzyQQGMpVDlktZOHWqxxteKQyx3Eant2Ou6sVWT1
+        FDeAz0UFxKBHg0u2Qw9BwNLcec2AzoQa4PjCr/deKqjkOm7+ph3GVN0NQ+PU7PAKvqInr5q8DWlrn
+        L5OJO06mNjWLrStuLSvcAmQJVAu1CwXpApFO5RGzG1T1lSsG6M6h2aBM2rEhOzv3ekUiixNL/AXHa
+        326OosUA==;
 Received: from [2001:4bb8:18c:5da7:c70:4a89:bc61:2] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jbn39-0004fj-OL; Thu, 21 May 2020 15:24:00 +0000
+        id 1jbn3K-0004wA-Sz; Thu, 21 May 2020 15:24:11 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -46,9 +46,9 @@ To:     x86@kernel.org, Alexei Starovoitov <ast@kernel.org>,
 Cc:     linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 19/23] x86: use non-set_fs based maccess routines
-Date:   Thu, 21 May 2020 17:22:57 +0200
-Message-Id: <20200521152301.2587579-20-hch@lst.de>
+Subject: [PATCH 23/23] maccess: return -ERANGE when copy_from_kernel_nofault_allowed fails
+Date:   Thu, 21 May 2020 17:23:01 +0200
+Message-Id: <20200521152301.2587579-24-hch@lst.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200521152301.2587579-1-hch@lst.de>
 References: <20200521152301.2587579-1-hch@lst.de>
@@ -60,41 +60,78 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Provide arch_kernel_read and arch_kernel_write routines to implement the
-maccess routines without messing with set_fs and without stac/clac that
-opens up access to user space.
+Allow the callers to distinguish a real unmapped address vs a range
+that can't be probed.
 
+Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
 Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- arch/x86/include/asm/uaccess.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ mm/maccess.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index d8f283b9a569c..b3e0a56ae961a 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -523,5 +523,21 @@ do {									\
- 	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
- } while (0)
+diff --git a/mm/maccess.c b/mm/maccess.c
+index 349b6cb14426c..d317f8b8095ca 100644
+--- a/mm/maccess.c
++++ b/mm/maccess.c
+@@ -25,7 +25,7 @@ bool __weak copy_from_kernel_nofault_allowed(const void *unsafe_src,
+ long copy_from_kernel_nofault(void *dst, const void *src, size_t size)
+ {
+ 	if (!copy_from_kernel_nofault_allowed(src, size))
+-		return -EFAULT;
++		return -ERANGE;
  
-+#define HAVE_GET_KERNEL_NOFAULT
-+
-+#define __get_kernel_nofault(dst, src, type, err_label)			\
-+do {									\
-+        int __kr_err;							\
-+									\
-+	__get_user_size(*((type *)dst), (__force type __user *)src,	\
-+			sizeof(type), __kr_err);			\
-+        if (unlikely(__kr_err))						\
-+		goto err_label;						\
-+} while (0)
-+
-+#define __put_kernel_nofault(dst, src, type, err_label)			\
-+	__put_user_size(*((type *)(src)), (__force type __user *)(dst),	\
-+			sizeof(type), err_label)
-+
- #endif /* _ASM_X86_UACCESS_H */
+ 	pagefault_disable();
+ 	copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
+@@ -69,7 +69,7 @@ long strncpy_from_kernel_nofault(char *dst, const void *unsafe_addr, long count)
+ 	if (unlikely(count <= 0))
+ 		return 0;
+ 	if (!copy_from_kernel_nofault_allowed(unsafe_addr, count))
+-		return -EFAULT;
++		return -ERANGE;
  
+ 	pagefault_disable();
+ 	do {
+@@ -94,7 +94,8 @@ long strncpy_from_kernel_nofault(char *dst, const void *unsafe_addr, long count)
+  * @size: size of the data chunk
+  *
+  * Safely read from kernel address @src to the buffer at @dst.  If a kernel
+- * fault happens, handle that and return -EFAULT.
++ * fault happens, handle that and return -EFAULT.  If @src is not a valid kernel
++ * address, return -ERANGE.
+  *
+  * We ensure that the copy_from_user is executed in atomic context so that
+  * do_page_fault() doesn't attempt to take mmap_sem.  This makes
+@@ -107,7 +108,7 @@ long copy_from_kernel_nofault(void *dst, const void *src, size_t size)
+ 	mm_segment_t old_fs = get_fs();
+ 
+ 	if (!copy_from_kernel_nofault_allowed(src, size))
+-		return -EFAULT;
++		return -ERANGE;
+ 
+ 	set_fs(KERNEL_DS);
+ 	pagefault_disable();
+@@ -159,8 +160,9 @@ long copy_to_kernel_nofault(void *dst, const void *src, size_t size)
+  *
+  * On success, returns the length of the string INCLUDING the trailing NUL.
+  *
+- * If access fails, returns -EFAULT (some data may have been copied
+- * and the trailing NUL added).
++ * If access fails, returns -EFAULT (some data may have been copied and the
++ * trailing NUL added).  If @unsafe_addr is not a valid kernel address, return
++ * -ERANGE.
+  *
+  * If @count is smaller than the length of the string, copies @count-1 bytes,
+  * sets the last byte of @dst buffer to NUL and returns @count.
+@@ -174,7 +176,7 @@ long strncpy_from_kernel_nofault(char *dst, const void *unsafe_addr, long count)
+ 	if (unlikely(count <= 0))
+ 		return 0;
+ 	if (!copy_from_kernel_nofault_allowed(unsafe_addr, count))
+-		return -EFAULT;
++		return -ERANGE;
+ 
+ 	set_fs(KERNEL_DS);
+ 	pagefault_disable();
 -- 
 2.26.2
 
