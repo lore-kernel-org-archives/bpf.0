@@ -2,155 +2,112 @@ Return-Path: <SRS0=Vsws=7D=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF4B4C433E2
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 19:18:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0E43C433DF
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 20:07:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B45E220759
-	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 19:18:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7E42207D3
+	for <bpf@archiver.kernel.org>; Thu, 21 May 2020 20:07:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Q0wp3scX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M8kNnCYV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730315AbgEUTS0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 May 2020 15:18:26 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18590 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730266AbgEUTSL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 21 May 2020 15:18:11 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 04LJFKqe015913
-        for <bpf@vger.kernel.org>; Thu, 21 May 2020 12:18:10 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=aIs8lqe9zJ86Sv2FVd5dDKmfHnfLpvW8bh1/PYtmJwo=;
- b=Q0wp3scXI1MaD0VTKf7xbMFVVrxJ3vScDQUGHjMcbKegzQ5S6/W17Fx/CRSDfs7jbS49
- GmgDMN5mnPDx38IJnDfgqJ3Lw5Mdmy9H0Ytq2RF2JHd8buwKJvguKNMYf1KjOK6jNVHX
- rH7+KmxyKi8K3PRez3mY3FMqp/T3zDuBJkM= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 315qhhvbx4-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 21 May 2020 12:18:10 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 21 May 2020 12:18:08 -0700
-Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id AB4452942F51; Thu, 21 May 2020 12:18:04 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Martin KaFai Lau <kafai@fb.com>
-Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>, Andrey Ignatov <rdna@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/3] bpf: Relax the max_entries check for inner map
-Date:   Thu, 21 May 2020 12:18:04 -0700
-Message-ID: <20200521191804.3448912-1-kafai@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200521191752.3448223-1-kafai@fb.com>
-References: <20200521191752.3448223-1-kafai@fb.com>
+        id S1728368AbgEUUHV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 May 2020 16:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726814AbgEUUHV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 May 2020 16:07:21 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5B3C061A0E;
+        Thu, 21 May 2020 13:07:20 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id d10so3775751pgn.4;
+        Thu, 21 May 2020 13:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:date:message-id:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=6d13EMYazFjX1LgdWbBRghhkZbK0Ab5O1+6Rr/1em8M=;
+        b=M8kNnCYVDTx0bIrZhMD5mlR+8tMD5skL3BH+a8a49cRAQmFnbz8KJsznbBrdD8/7yo
+         MHbfdVo/sFg3TjQTAd9+H89tTnlyhVnntJ5pDXmDlICJ7sMiYStO+jBSQvxbtrmTdboc
+         ebWed0kxGm1J6k1l8iWtFQP27+1cyk7WaNPnca+hRpd1lHYp+fcixovIWzAz2Z/MYWQs
+         fThAhYXUtSm1ITAUHjCW9+IikE3pm/GQFZMntaWTaSa2jD0mYuxzzrW80JfKU/v4xCEV
+         +RkBkfIxYeB4fPAJ7W6MfRPAOVjUgCMEYGOPEfCCo3NfdCFO2aeT8I0YJk/pogvNMOdR
+         kvxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=6d13EMYazFjX1LgdWbBRghhkZbK0Ab5O1+6Rr/1em8M=;
+        b=GBSEVcCdSSGrt7Zw4vk0NMgzWLw+yl3nsY68WKRxtm8hdhePdB6LdpoIz7lEZf0260
+         CdWuSNWlGPZAM6AW1cmykWoMT+VsQlYEDFLT/HSvCtr+u/6oShXaowhPnKFxxkCjmmU4
+         eTDRzfYT5mHwSAcAkPwtAMub//hVOQl2lSdsokl5Dna8BxlcLxvyDJ4HetNIiaQssKwu
+         D0vDP3ZfhynFKMnbAPkJcSR1Tr2VXLPZGaIiAPaB3B1ZNM+KE+Q95ORSbOSkMHjH6F4p
+         5YAt0DhxTXiQMi5v85ZvaPHZx835pqbQUVN/cmgUTMIkOqXfqoHPs/HU2TZMhkGIgqHz
+         Ytmg==
+X-Gm-Message-State: AOAM531dLe2UTfb+mvGLIir2zVBugdyAPUbM2HHVc6pPaazhLuXWv7Zz
+        5ewHGnW9LZvbMnOBhOveJ8g=
+X-Google-Smtp-Source: ABdhPJy96qTwcfvIzVwaoeOHubCptt4iLp9Oz+q8rf8VJORp7xETrZdN6xnpkYtoaWFBtlgAkZHOqA==
+X-Received: by 2002:a63:de06:: with SMTP id f6mr10886470pgg.238.1590091639664;
+        Thu, 21 May 2020 13:07:19 -0700 (PDT)
+Received: from [127.0.1.1] ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id q193sm4978383pfq.158.2020.05.21.13.07.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 May 2020 13:07:18 -0700 (PDT)
+Subject: [bpf-next PATCH v2 0/4] ] verifier,
+ improve ptr is_branch_taken logic
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     yhs@fb.com, andrii.nakryiko@gmail.com, ast@kernel.org,
+        daniel@iogearbox.net
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        john.fastabend@gmail.com
+Date:   Thu, 21 May 2020 13:07:04 -0700
+Message-ID: <159009128301.6313.11384218513010252427.stgit@john-Precision-5820-Tower>
+User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-21_13:2020-05-21,2020-05-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- suspectscore=13 clxscore=1015 cotscore=-2147483648 priorityscore=1501
- mlxscore=0 spamscore=0 impostorscore=0 mlxlogscore=731 adultscore=0
- malwarescore=0 bulkscore=0 phishscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005210140
-X-FB-Internal: deliver
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch relaxes the max_entries check for most of the inner map types
-during an update to the outer map.  The max_entries of those map types
-are only used in runtime.  By doing this, an inner map with different
-size can be updated to the outer map in runtime.
+This series adds logic to the verifier to handle the case where a
+pointer is known to be non-null but then the verifier encountesr a
+instruction, such as 'if ptr == 0 goto X' or 'if ptr != 0 goto X',
+where the pointer is compared against 0. Because the verifier tracks
+if a pointer may be null in many cases we can improve the branch
+tracking by following the case known to be true.
 
-The max_entries of arraymap and xskmap are used statically
-in verification time to generate the inline code, so they
-are excluded in this patch.
+The first patch adds the verifier logic and patches 2-4 add the
+test cases.
 
-Cc: Andrey Ignatov <rdna@fb.com>
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+v1->v2: fix verifier logic to return -1 indicating both paths must 
+still be walked if value is not zero. Move mark_precision skip for
+this case into caller of mark_precision to ensure mark_precision can
+still catch other misuses. And add PTR_TYPE_BTF_ID to our list of
+supported types. Finally add one more test to catch the value not
+equal zero case. Thanks to Andrii for original review. 
+
+Also fixed up commit messages hopefully its better now.
+
 ---
- include/linux/bpf.h       | 12 ++++++++++++
- include/linux/bpf_types.h |  6 ++++--
- kernel/bpf/map_in_map.c   |  3 ++-
- 3 files changed, 18 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 1e20b9911d48..1488d2aa41f2 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -99,6 +99,18 @@ struct bpf_map_memory {
-=20
- /* Cannot be used as an inner map */
- #define BPF_MAP_CAP_NO_INNER_MAP (1 << 0)
-+/* When a prog has used map-in-map, the verifier requires
-+ * an inner-map as a template to verify the access operations
-+ * on the outer and inner map.  For some inner map-types,
-+ * the verifier uses the inner_map's max_entries statically
-+ * (e.g. to generate inline code).  If this verification
-+ * time usage on max_entries applies to an inner map-type,
-+ * during runtime, only the inner map with the same
-+ * max_entries can be updated to this outer map.
-+ *
-+ * Please see bpf_map_meta_equal() for details.
-+ */
-+#define BPF_MAP_CAP_NO_DYNAMIC_INNER_MAP_SIZE (1 << 1)
-=20
- struct bpf_map {
- 	/* The first two cachelines with read-mostly members of which some
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index 652f17d646dd..4b350f9ad486 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -76,7 +76,8 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_LSM, lsm,
- #endif /* CONFIG_BPF_LSM */
- #endif
-=20
--BPF_MAP_TYPE(BPF_MAP_TYPE_ARRAY, array_map_ops, 0)
-+BPF_MAP_TYPE(BPF_MAP_TYPE_ARRAY, array_map_ops,
-+	     BPF_MAP_CAP_NO_DYNAMIC_INNER_MAP_SIZE)
- BPF_MAP_TYPE(BPF_MAP_TYPE_PERCPU_ARRAY, percpu_array_map_ops, 0)
- /* prog_array->aux->{type,jited} is a runtime binding.
-  * Doing static check alone in the verifier is not enough,
-@@ -114,7 +115,8 @@ BPF_MAP_TYPE(BPF_MAP_TYPE_SOCKHASH, sock_hash_ops, 0)
- #endif
- BPF_MAP_TYPE(BPF_MAP_TYPE_CPUMAP, cpu_map_ops, 0)
- #if defined(CONFIG_XDP_SOCKETS)
--BPF_MAP_TYPE(BPF_MAP_TYPE_XSKMAP, xsk_map_ops, 0)
-+BPF_MAP_TYPE(BPF_MAP_TYPE_XSKMAP, xsk_map_ops,
-+	     BPF_MAP_CAP_NO_DYNAMIC_INNER_MAP_SIZE)
- #endif
- #ifdef CONFIG_INET
- BPF_MAP_TYPE(BPF_MAP_TYPE_REUSEPORT_SOCKARRAY, reuseport_array_ops, 0)
-diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
-index 6e1286ad7b76..bee1fcfd64f2 100644
---- a/kernel/bpf/map_in_map.c
-+++ b/kernel/bpf/map_in_map.c
-@@ -77,7 +77,8 @@ bool bpf_map_meta_equal(const struct bpf_map *meta0,
- 		meta0->key_size =3D=3D meta1->key_size &&
- 		meta0->value_size =3D=3D meta1->value_size &&
- 		meta0->map_flags =3D=3D meta1->map_flags &&
--		meta0->max_entries =3D=3D meta1->max_entries;
-+		(meta0->max_entries =3D=3D meta1->max_entries ||
-+		 !(meta0->capability & BPF_MAP_CAP_NO_DYNAMIC_INNER_MAP_SIZE));
- }
-=20
- void *bpf_map_fd_get_ptr(struct bpf_map *map,
---=20
-2.24.1
+John Fastabend (4):
+      bpf: verifier track null pointer branch_taken with JNE and JEQ
+      bpf: selftests, verifier case for non null pointer check branch taken
+      bpf: selftests, verifier case for non null pointer map value branch
+      bpf: selftests, add printk to test_sk_lookup_kern to encode null ptr check
 
+
+ kernel/bpf/verifier.c                              |   36 ++++++++++++++++++--
+ .../selftests/bpf/progs/test_sk_lookup_kern.c      |    1 +
+ .../testing/selftests/bpf/verifier/ref_tracking.c  |   33 ++++++++++++++++++
+ .../testing/selftests/bpf/verifier/value_or_null.c |   19 +++++++++++
+ 4 files changed, 86 insertions(+), 3 deletions(-)
+
+--
+Signature
