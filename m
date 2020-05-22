@@ -2,92 +2,100 @@ Return-Path: <SRS0=QYON=7E=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72B08C433E0
-	for <bpf@archiver.kernel.org>; Fri, 22 May 2020 11:37:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7009CC433DF
+	for <bpf@archiver.kernel.org>; Fri, 22 May 2020 11:44:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 53678206C3
-	for <bpf@archiver.kernel.org>; Fri, 22 May 2020 11:37:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C3A8206C3
+	for <bpf@archiver.kernel.org>; Fri, 22 May 2020 11:44:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="e+QcgFjw"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="P6IvguSq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729838AbgEVLhJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 May 2020 07:37:09 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:54896 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728601AbgEVLhI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 May 2020 07:37:08 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04MBVvPk102651;
-        Fri, 22 May 2020 11:36:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2020-01-29;
- bh=DmsvtQ/8SYimqUVvb41eUrdJHrvcJxY6DxjzzS+9LdY=;
- b=e+QcgFjwnov2e/6vj1x0TQ942WM3QLPxSKNt8Qh2VdbnLwHTjSBOmDKjjfT8teItv7ZN
- +oVxUJ6+JfGo9p/SwjHxMITIkfZagzwJo4tLiuGIO/3cbhGul93HrhC6awTec762PidS
- j6Fjc1V7oE9PPU0qH6C5HVD4Ut1aVgjx2DasHe0vV+tWcRhSRebo5TxVNEJjNpkwBDpU
- d8Akk0aj2KrnGZN3EcR1p/V3ZO0+tRZNCo+C3MU97B4tdyrd5lqXlRnVyjn+3R1XQ7mg
- YEz922wdALFpzD0KN0B2cowyAnjIfDpqbksUZHJ0Y0ZlS2jPqkbkez42cT82ceO9IKX9 3Q== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 31501rkt6x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 22 May 2020 11:36:41 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04MBWkU9186456;
-        Fri, 22 May 2020 11:36:40 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 313gj7b9vy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 May 2020 11:36:40 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04MBab27012862;
-        Fri, 22 May 2020 11:36:37 GMT
-Received: from localhost.uk.oracle.com (/10.175.194.37)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 22 May 2020 04:36:37 -0700
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com
-Cc:     kafai@fb.com, john.fastabend@gmail.com, kpsingh@chromium.org,
-        shuah@kernel.org, sean@mess.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH bpf 0/2] selftests/bpf: add missing CONFIG values to test config
-Date:   Fri, 22 May 2020 12:36:27 +0100
-Message-Id: <1590147389-26482-1-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9628 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 malwarescore=0
- mlxscore=0 adultscore=0 bulkscore=0 suspectscore=0 mlxlogscore=970
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005220095
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9628 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 spamscore=0
- mlxlogscore=999 clxscore=1011 priorityscore=1501 cotscore=-2147483648
- impostorscore=0 bulkscore=0 adultscore=0 malwarescore=0 phishscore=0
- mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2005220095
+        id S1729204AbgEVLoI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 May 2020 07:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728469AbgEVLoI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 May 2020 07:44:08 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C36C061A0E;
+        Fri, 22 May 2020 04:44:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qixK0Ok5LjJzLtlIqZRWTn3BuaZ1Y97zRlOZ39Oq9js=; b=P6IvguSq9Yegz1CsStKaYYtLo/
+        1Nv8m8rx8orS0RpvYeRQSaGvjP+Qq6si7kfYhVUem1FPjF81j7+k9URLKD8jKdNcgG8CjiPSeJ1MO
+        AkQmBLr/GCusJWG39W44W7lbEJK673nVztf3VxcFwq+eBaybxhsrZNCmE9GEfnapBWVFcRehO9Qbo
+        /AdEbFB4DfiU5nvnQWS6Znpc5zeiPZe9vR+T1GlUlGN1+r73inTsPTMQPFptNRhfnPSV8zfM9uRUj
+        Ecg/Yn2mEZmNqX+mlMY9x+rmuiUkVe6u8sSGGRRfDvFBHFHyrNg5VhpzKurjTi8vA0WM7UZxa/ni0
+        e0CG+Njg==;
+Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jc65d-0005yy-2M; Fri, 22 May 2020 11:43:49 +0000
+Date:   Fri, 22 May 2020 04:43:48 -0700
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     adobriyan@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
+        ebiederm@xmission.com, bernd.edlinger@hotmail.de,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [External] Re: [PATCH] files: Use rcu lock to get the file
+ structures for better performance
+Message-ID: <20200522114348.GL28818@bombadil.infradead.org>
+References: <20200521123835.70069-1-songmuchun@bytedance.com>
+ <20200521164746.GD28818@bombadil.infradead.org>
+ <CAMZfGtWn4xa-5-0rN2KJzUYioiOOUYX9BFcUDNZS85H11sYDEA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMZfGtWn4xa-5-0rN2KJzUYioiOOUYX9BFcUDNZS85H11sYDEA@mail.gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Selftests "config" file is intended to represent the config required
-to run the tests; a few values are missing for the BPF selftests
-and these can result in test failures due to missing helpers etc.
-Add the missing values as they will help document the config needed
-for a clean BPF selftests run.
+On Fri, May 22, 2020 at 03:52:39PM +0800, Muchun Song wrote:
+> On Fri, May 22, 2020 at 12:47 AM Matthew Wilcox <willy@infradead.org> wrote:
+> > > @@ -160,14 +168,23 @@ static int proc_fd_link(struct dentry *dentry, struct path *path)
+> > >               unsigned int fd = proc_fd(d_inode(dentry));
+> > >               struct file *fd_file;
+> > >
+> > > -             spin_lock(&files->file_lock);
+> > > +             rcu_read_lock();
+> > > +again:
+> > >               fd_file = fcheck_files(files, fd);
+> > >               if (fd_file) {
+> > > +                     if (!get_file_rcu(fd_file)) {
+> > > +                             /*
+> > > +                              * we loop to catch the new file
+> > > +                              * (or NULL pointer).
+> > > +                              */
+> > > +                             goto again;
+> > > +                     }
+> > >                       *path = fd_file->f_path;
+> > >                       path_get(&fd_file->f_path);
+> > > +                     fput(fd_file);
+> > >                       ret = 0;
+> > >               }
+> > > -             spin_unlock(&files->file_lock);
+> > > +             rcu_read_unlock();
+> >
+> > Why is it an improvement to increment/decrement the refcount on the
+> > struct file here, rather than take/release the spinlock?
+> >
+> 
+> lock-free vs spinlock.
 
-Alan Maguire (2):
-  selftests/bpf: CONFIG_IPV6_SEG6_BPF required for test_seg6_loop.o
-  selftests/bpf: CONFIG_LIRC required for test_lirc_mode2.sh
+bananas vs oranges.
 
- tools/testing/selftests/bpf/config | 2 ++
- 1 file changed, 2 insertions(+)
+How do you think refcounts work?  How do you think spinlocks work?
 
--- 
-1.8.3.1
+> Do you think spinlock would be better than the lock-free method?
+> Actually I prefer the rcu lock.
 
+Why?  You don't seem to understand the tradeoffs.
