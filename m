@@ -2,133 +2,95 @@ Return-Path: <SRS0=jDDX=7H=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F5BBC433E0
-	for <bpf@archiver.kernel.org>; Mon, 25 May 2020 10:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EE00C433E0
+	for <bpf@archiver.kernel.org>; Mon, 25 May 2020 12:29:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6B7772078B
-	for <bpf@archiver.kernel.org>; Mon, 25 May 2020 10:00:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1477020878
+	for <bpf@archiver.kernel.org>; Mon, 25 May 2020 12:29:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qqBUiZiA"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="wEp8gGGN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389624AbgEYKAS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 25 May 2020 06:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
+        id S2390579AbgEYM3c (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 May 2020 08:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389401AbgEYKAL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 May 2020 06:00:11 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC13C061A0E;
-        Mon, 25 May 2020 03:00:10 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id 4so16881895ilg.1;
-        Mon, 25 May 2020 03:00:10 -0700 (PDT)
+        with ESMTP id S2390492AbgEYM3c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 May 2020 08:29:32 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94099C05BD43
+        for <bpf@vger.kernel.org>; Mon, 25 May 2020 05:29:31 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id i15so16875809wrx.10
+        for <bpf@vger.kernel.org>; Mon, 25 May 2020 05:29:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/HlZX9BfLNkxmxu/peNZlTEsIIbqtBbCJJ4S/yDGP3c=;
-        b=qqBUiZiAO78fGq0DecwTUiZYY1Q/guXRaL4B2UwAtNeKi/QiWcsXPwEl7n2CxHtKJN
-         lG03iVcgDUNDyzd6Z9xhwxIMr8pdP8jdgYEXPJvXw6CAGjBNJdgTpFttrDZUhltMLhar
-         Ozmkh0EdFTryOb4G+j6kmoiONg+bRF7rZCVbiDQpZNpsNgpfF9XpPYhgOb8tzEKA+1db
-         PpbMmqe57u+MTZE33tEbIDBWSVjudosBb2alHJtozMYzqn0wFzvGW0lUbydTPyMenD+b
-         MbF4hxUkHTeTy2xSfNNB0nzOLFr3ZvHlNPDuViQT8W79A7zwYJQjeIBUWqxYqL4HY/kC
-         SMjQ==
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=okfMkOEy6BJedGaS7fNe8T5pyno8cyE3qtzAy6s5wmQ=;
+        b=wEp8gGGNEJrCAy3mYECILXNzwxfDNqxu0dS9KZMFc/s4TJV7gE5pmN4yEcNNIcNfrV
+         VmBoZ1HqFa/7bH9E5VY0MsDv+cVjXlXiID2WB6zHKNmDTrJuJUTwUVgp1ADF9gobJGwv
+         sHhgiLFDPYOMhRwl3hNs06xgCNcp5lg0t+B1I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/HlZX9BfLNkxmxu/peNZlTEsIIbqtBbCJJ4S/yDGP3c=;
-        b=hJ+zMiYgJtEvGB7boWgzrfhAqQyS8DK7OvH9EI9cF7J9WqyUWd1+HOr7Eqb5HR17fv
-         iSkoiIFkVoEPZu/Ytpu4avUuPjCykQ8eHY3uVzKnZiPGjU6Le0Tz/dEtROFvpeCIUaYn
-         J6mWnlz3g6oBtcKaVwnzD3pqGsar/ieuAvBMneyKzCkOi5fsAEXniFcNfYzpIxe4pIzD
-         2ytqrWAbjiNycQ4ivZaAXrV4if2CLOomqR9GX0e+MAmQw7kuYcWFur8LiATzYaEn0CID
-         ht1mY2kDHwyuTfhAuqa9szPqDYqpLmtKkSgJbJK42GfB7ZAVLf43BerKcUrIaoRSmteU
-         Xr9Q==
-X-Gm-Message-State: AOAM532ILCBk3S+kywf0Hrz8dI1JKTMF77pxktbu6wnLTd6FGsQqbZNr
-        +2G3E0dwm4OpuPtll5KA8LBoUF+gS5tAPvnPGf0=
-X-Google-Smtp-Source: ABdhPJyGYePvmuxuziYBNq5bY4eey/YTZ8/TMNjTJa07qL6vIS6+9Ts/v6YEt5nah+k+B5nJK7L/gY6pbC5s9sngqjk=
-X-Received: by 2002:a92:8b0a:: with SMTP id i10mr23058915ild.245.1590400810150;
- Mon, 25 May 2020 03:00:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=okfMkOEy6BJedGaS7fNe8T5pyno8cyE3qtzAy6s5wmQ=;
+        b=XlKXjfY0iT+qk7vUV+wghhmnbY1k9fkytdHc+WlQDNePO3TB3o+SLndjhmha/7CQH4
+         tQqzriyCIVjs7DN+iZYGh2Xp4SxJGkDO0rmtsdoSclyzeT3ZIzDI8TZFe7ZOfGRSZaZC
+         qsESB1Q8AvwMLkafVwo9Te4+Go30nxwEsPvsnXv1vogsKHsgPhGdPWKIODnYYnXoxGBT
+         THOeHccJuMNtoO3qK9iJYR85oDBSWzDjilHSDuBp7WubsgAkLqJwSlMHzGEMhp+yUbJd
+         QHRdwhkFbd9+URN69e/mzZi37eqodcYQvqn/3PFpbLg/iUhfbdWLQFSmc9IhNeJfz2Oj
+         ShJw==
+X-Gm-Message-State: AOAM533WKyjxgOgenT0XnWZh+Fy9AXe2VtnrvR9gDGExF+I02tEYTRup
+        qkokUm1dz2zFbI6RFnGqsMJW4DnX6G0=
+X-Google-Smtp-Source: ABdhPJyJ2iVgeJ7fBQOtbESPYe7+p6XwHcKKH8gfAS9eusHYoFX2/sTGcJKwR1BqBIYaI3hUJ738Dw==
+X-Received: by 2002:adf:ee47:: with SMTP id w7mr9504433wro.171.1590409770020;
+        Mon, 25 May 2020 05:29:30 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id h20sm18017302wma.6.2020.05.25.05.29.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 May 2020 05:29:29 -0700 (PDT)
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com
+Subject: [PATCH bpf-next] bpf: Fix returned error sign when link doesn't support updates
+Date:   Mon, 25 May 2020 14:29:28 +0200
+Message-Id: <20200525122928.1164495-1-jakub@cloudflare.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-References: <20200517195727.279322-1-andriin@fb.com> <20200517195727.279322-8-andriin@fb.com>
-In-Reply-To: <20200517195727.279322-8-andriin@fb.com>
-From:   Alban Crequy <alban.crequy@gmail.com>
-Date:   Mon, 25 May 2020 11:59:58 +0200
-Message-ID: <CAMXgnP424S5s-mrwFB_nuZNSuqLyi1K8r519WKVkyMBPtv1PMQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 7/7] docs/bpf: add BPF ring buffer design notes
-To:     Andrii Nakryiko <andriin@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        andrii.nakryiko@gmail.com, kernel-team@fb.com,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Alban Crequy <alban@kinvolk.io>, mauricio@kinvolk.io,
-        kai@kinvolk.io
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+System calls encode returned errors as negative values. Fix a typo that
+breaks this convention for bpf(LINK_UPDATE) when bpf_link doesn't support
+update operation.
 
-Thanks. Both motivators look very interesting to me:
+Fixes: f9d041271cf4 ("bpf: Refactor bpf_link update handling")
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+ kernel/bpf/syscall.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sun, 17 May 2020 at 21:58, Andrii Nakryiko <andriin@fb.com> wrote:
-[...]
-> +Motivation
-> +----------
-> +There are two distinctive motivators for this work, which are not satisfied by
-> +existing perf buffer, which prompted creation of a new ring buffer
-> +implementation.
-> +  - more efficient memory utilization by sharing ring buffer across CPUs;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 431241c74614..f9c86e0579da 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3913,7 +3913,7 @@ static int link_update(union bpf_attr *attr)
+ 	if (link->ops->update_prog)
+ 		ret = link->ops->update_prog(link, new_prog, old_prog);
+ 	else
+-		ret = EINVAL;
++		ret = -EINVAL;
+ 
+ out_put_progs:
+ 	if (old_prog)
+-- 
+2.25.4
 
-I have a use case with traceloop
-(https://github.com/kinvolk/traceloop) where I use one
-BPF_MAP_TYPE_PERF_EVENT_ARRAY per container, so when the number of
-containers times the number of CPU is high, it can use a lot of
-memory.
-
-> +  - preserving ordering of events that happen sequentially in time, even
-> +  across multiple CPUs (e.g., fork/exec/exit events for a task).
-
-I had the problem to keep track of TCP connections and when
-tcp-connect and tcp-close events can be on different CPUs, it makes it
-difficult to get the correct order.
-
-[...]
-> +There are a bunch of similarities between perf buffer
-> +(BPF_MAP_TYPE_PERF_EVENT_ARRAY) and new BPF ring buffer semantics:
-> +  - variable-length records;
-> +  - if there is no more space left in ring buffer, reservation fails, no
-> +    blocking;
-[...]
-
-BPF_MAP_TYPE_PERF_EVENT_ARRAY can be set as both 'overwriteable' and
-'backward': if there is no more space left in ring buffer, it would
-then overwrite the old events. For that, the buffer needs to be
-prepared with mmap(...PROT_READ) instead of mmap(...PROT_READ |
-PROT_WRITE), and set the write_backward flag. See details in commit
-9ecda41acb97 ("perf/core: Add ::write_backward attribute to perf
-event"):
-
-struct perf_event_attr attr = {0,};
-attr.write_backward = 1; /* backward */
-fd = perf_event_open_map(&attr, ...);
-base = mmap(fd, 0, size, PROT_READ /* overwriteable */, MAP_SHARED);
-
-I use overwriteable and backward ring buffers in traceloop: buffers
-are continuously overwritten and are usually not read, except when a
-user explicitly asks for it (e.g. to inspect the last few events of an
-application after a crash). If BPF_MAP_TYPE_RINGBUF implements the
-same features, then I would be able to switch and use less memory.
-
-Do you think it will be possible to implement that in BPF_MAP_TYPE_RINGBUF?
-
-Cheers,
-Alban
