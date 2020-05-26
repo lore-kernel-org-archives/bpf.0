@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B94E3C433E0
-	for <bpf@archiver.kernel.org>; Tue, 26 May 2020 06:33:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 728B7C433E1
+	for <bpf@archiver.kernel.org>; Tue, 26 May 2020 06:33:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9299720776
-	for <bpf@archiver.kernel.org>; Tue, 26 May 2020 06:33:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 474A820776
+	for <bpf@archiver.kernel.org>; Tue, 26 May 2020 06:33:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ds1jOPUD"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IRdit42p"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730454AbgEZGdv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1730479AbgEZGdv (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 26 May 2020 02:33:51 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:17972 "EHLO
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:1462 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726756AbgEZGdu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 26 May 2020 02:33:50 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04Q6VJcD011945
+        by vger.kernel.org with ESMTP id S1730426AbgEZGdv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 26 May 2020 02:33:51 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04Q6SmSK008498
         for <bpf@vger.kernel.org>; Mon, 25 May 2020 23:33:49 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=BGP7lyv/JOcf+JOkkaBx+8GswzzS8L5TNl47yMlZrGA=;
- b=ds1jOPUDzD9LWceq0e4AeAbqe6Ulm0KbzoR163NqaZaqdJ7tWSG5sjy1fn24Pmqf2eKG
- IHBVPzIUUFyzL3QtXeNJ5shB97yHRCgVDtrlanqZYcLJnQtz2uWBxpiKXIElJ56aDQ8V
- L+NAlMOrN9xAkCzdrbesPa2fpX5rQLoCVb0= 
+ bh=4xrG5dWkE/BxNrV3jCnpVzBfspgjdxy+oD0MB8EK3jI=;
+ b=IRdit42pWOLAwRqLWO+pH0MXM/QW0XjwA923s7W0kHROoASOwAL6flciC7XB15YCiJZo
+ sLkW24K6R1/6SxOvpr+ErBpGmS4EdMnJuQJq9vOq7WDaEe94yfF0yMh/T1cB3Janf+gA
+ n4Fc7duSlONQr8ilUihys1veibPolvsIPJg= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 317kp3fe7u-1
+        by mx0a-00082601.pphosted.com with ESMTP id 317kts7p86-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Mon, 25 May 2020 23:33:49 -0700
 Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Mon, 25 May 2020 23:33:47 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id B5BEC2EC1CBE; Mon, 25 May 2020 23:33:36 -0700 (PDT)
+        id 2E02A2EC1CBE; Mon, 25 May 2020 23:33:41 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -49,11 +49,12 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 3/5] selftests/bpf: add BPF ringbuf selftests
-Date:   Mon, 25 May 2020 23:32:53 -0700
-Message-ID: <20200526063255.1675186-4-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 5/5] docs/bpf: add BPF ring buffer design notes
+Date:   Mon, 25 May 2020 23:32:55 -0700
+Message-ID: <20200526063255.1675186-6-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200526063255.1675186-1-andriin@fb.com>
 References: <20200526063255.1675186-1-andriin@fb.com>
@@ -63,535 +64,342 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-05-25_12:2020-05-25,2020-05-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- mlxlogscore=999 suspectscore=25 priorityscore=1501 cotscore=-2147483648
- adultscore=0 malwarescore=0 phishscore=0 bulkscore=0 impostorscore=0
- mlxscore=0 clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005260049
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ cotscore=-2147483648 phishscore=0 impostorscore=0 adultscore=0
+ mlxlogscore=999 clxscore=1015 bulkscore=0 spamscore=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 suspectscore=25 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2005260049
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Both singleton BPF ringbuf and BPF ringbuf with map-in-map use cases are =
-tested.
-Also reserve+submit/discards and output variants of API are validated.
+Add commit description from patch #1 as a stand-alone documentation under
+Documentation/bpf, as it might be more convenient format, in long term
+perspective.
 
+Suggested-by: Stanislav Fomichev <sdf@google.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../selftests/bpf/prog_tests/ringbuf.c        | 211 ++++++++++++++++++
- .../selftests/bpf/prog_tests/ringbuf_multi.c  | 102 +++++++++
- .../selftests/bpf/progs/test_ringbuf.c        |  78 +++++++
- .../selftests/bpf/progs/test_ringbuf_multi.c  |  77 +++++++
- 4 files changed, 468 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ringbuf.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ringbuf_multi.=
-c
- create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_multi.=
-c
+ Documentation/bpf/ringbuf.rst | 209 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 209 insertions(+)
+ create mode 100644 Documentation/bpf/ringbuf.rst
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/tes=
-ting/selftests/bpf/prog_tests/ringbuf.c
+diff --git a/Documentation/bpf/ringbuf.rst b/Documentation/bpf/ringbuf.rs=
+t
 new file mode 100644
-index 000000000000..bb8541f240e2
+index 000000000000..75f943f0009d
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-@@ -0,0 +1,211 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <linux/compiler.h>
-+#include <asm/barrier.h>
-+#include <test_progs.h>
-+#include <sys/mman.h>
-+#include <sys/epoll.h>
-+#include <time.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <pthread.h>
-+#include <sys/sysinfo.h>
-+#include <linux/perf_event.h>
-+#include <linux/ring_buffer.h>
-+#include "test_ringbuf.skel.h"
++++ b/Documentation/bpf/ringbuf.rst
+@@ -0,0 +1,209 @@
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++BPF ring buffer
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 +
-+#define EDONE 7777
++This document describes BPF ring buffer design, API, and implementation =
+details.
 +
-+static int duration =3D 0;
++.. contents::
++    :local:
++    :depth: 2
 +
-+struct sample {
-+	int pid;
-+	int seq;
-+	long value;
-+	char comm[16];
-+};
++Motivation
++----------
 +
-+static int sample_cnt;
++There are two distinctive motivators for this work, which are not satisf=
+ied by
++existing perf buffer, which prompted creation of a new ring buffer
++implementation.
 +
-+static int process_sample(void *ctx, void *data, size_t len)
-+{
-+	struct sample *s =3D data;
++- more efficient memory utilization by sharing ring buffer across CPUs;
++- preserving ordering of events that happen sequentially in time, even a=
+cross
++  multiple CPUs (e.g., fork/exec/exit events for a task).
 +
-+	sample_cnt++;
++These two problems are independent, but perf buffer fails to satisfy bot=
+h.
++Both are a result of a choice to have per-CPU perf ring buffer.  Both ca=
+n be
++also solved by having an MPSC implementation of ring buffer. The orderin=
+g
++problem could technically be solved for perf buffer with some in-kernel
++counting, but given the first one requires an MPSC buffer, the same solu=
+tion
++would solve the second problem automatically.
 +
-+	switch (s->seq) {
-+	case 0:
-+		CHECK(s->value !=3D 333, "sample1_value", "exp %ld, got %ld\n",
-+		      333L, s->value);
-+		return 0;
-+	case 1:
-+		CHECK(s->value !=3D 777, "sample2_value", "exp %ld, got %ld\n",
-+		      777L, s->value);
-+		return -EDONE;
-+	default:
-+		/* we don't care about the rest */
-+		return 0;
-+	}
-+}
++Semantics and APIs
++------------------
 +
-+static struct test_ringbuf *skel;
-+static struct ring_buffer *ringbuf;
++Single ring buffer is presented to BPF programs as an instance of BPF ma=
+p of
++type ``BPF_MAP_TYPE_RINGBUF``. Two other alternatives considered, but
++ultimately rejected.
 +
-+static void trigger_samples()
-+{
-+	skel->bss->dropped =3D 0;
-+	skel->bss->total =3D 0;
-+	skel->bss->discarded =3D 0;
++One way would be to, similar to ``BPF_MAP_TYPE_PERF_EVENT_ARRAY``, make
++``BPF_MAP_TYPE_RINGBUF`` could represent an array of ring buffers, but n=
+ot
++enforce "same CPU only" rule. This would be more familiar interface comp=
+atible
++with existing perf buffer use in BPF, but would fail if application need=
+ed more
++advanced logic to lookup ring buffer by arbitrary key.
++``BPF_MAP_TYPE_HASH_OF_MAPS`` addresses this with current approach.
++Additionally, given the performance of BPF ringbuf, many use cases would=
+ just
++opt into a simple single ring buffer shared among all CPUs, for which cu=
+rrent
++approach would be an overkill.
 +
-+	/* trigger exactly two samples */
-+	skel->bss->value =3D 333;
-+	syscall(__NR_getpgid);
-+	skel->bss->value =3D 777;
-+	syscall(__NR_getpgid);
-+}
++Another approach could introduce a new concept, alongside BPF map, to re=
+present
++generic "container" object, which doesn't necessarily have key/value int=
+erface
++with lookup/update/delete operations. This approach would add a lot of e=
+xtra
++infrastructure that has to be built for observability and verifier suppo=
+rt. It
++would also add another concept that BPF developers would have to familia=
+rize
++themselves with, new syntax in libbpf, etc. But then would really provid=
+e no
++additional benefits over the approach of using a map.  ``BPF_MAP_TYPE_RI=
+NGBUF``
++doesn't support lookup/update/delete operations, but so doesn't few othe=
+r map
++types (e.g., queue and stack; array doesn't support delete, etc).
 +
-+static void *poll_thread(void *input)
-+{
-+	long timeout =3D (long)input;
++The approach chosen has an advantage of re-using existing BPF map
++infrastructure (introspection APIs in kernel, libbpf support, etc), bein=
+g
++familiar concept (no need to teach users a new type of object in BPF pro=
+gram),
++and utilizing existing tooling (bpftool). For common scenario of using a=
+ single
++ring buffer for all CPUs, it's as simple and straightforward, as would b=
+e with
++a dedicated "container" object. On the other hand, by being a map, it ca=
+n be
++combined with ``ARRAY_OF_MAPS`` and ``HASH_OF_MAPS`` map-in-maps to impl=
+ement
++a wide variety of topologies, from one ring buffer for each CPU (e.g., a=
+s
++a replacement for perf buffer use cases), to a complicated application
++hashing/sharding of ring buffers (e.g., having a small pool of ring buff=
+ers
++with hashed task's tgid being a look up key to preserve order, but reduc=
+e
++contention).
 +
-+	return (void *)(long)ring_buffer__poll(ringbuf, timeout);
-+}
++Key and value sizes are enforced to be zero. ``max_entries`` is used to =
+specify
++the size of ring buffer and has to be a power of 2 value.
 +
-+void test_ringbuf(void)
-+{
-+	const size_t rec_sz =3D BPF_RINGBUF_HDR_SZ + sizeof(struct sample);
-+	pthread_t thread;
-+	long bg_ret =3D -1;
-+	int err;
++There are a bunch of similarities between perf buffer
++(``BPF_MAP_TYPE_PERF_EVENT_ARRAY``) and new BPF ring buffer semantics:
 +
-+	skel =3D test_ringbuf__open_and_load();
-+	if (CHECK(!skel, "skel_open_load", "skeleton open&load failed\n"))
-+		return;
++- variable-length records;
++- if there is no more space left in ring buffer, reservation fails, no
++  blocking;
++- memory-mappable data area for user-space applications for ease of
++  consumption and high performance;
++- epoll notifications for new incoming data;
++- but still the ability to do busy polling for new data to achieve the
++  lowest latency, if necessary.
 +
-+	/* only trigger BPF program for current process */
-+	skel->bss->pid =3D getpid();
++BPF ringbuf provides two sets of APIs to BPF programs:
 +
-+	ringbuf =3D ring_buffer__new(bpf_map__fd(skel->maps.ringbuf),
-+				   process_sample, NULL, NULL);
-+	if (CHECK(!ringbuf, "ringbuf_create", "failed to create ringbuf\n"))
-+		goto cleanup;
++- ``bpf_ringbuf_output()`` allows to *copy* data from one place to a rin=
+g
++  buffer, similarly to ``bpf_perf_event_output()``;
++- ``bpf_ringbuf_reserve()``/``bpf_ringbuf_commit()``/``bpf_ringbuf_disca=
+rd()``
++  APIs split the whole process into two steps. First, a fixed amount of =
+space
++  is reserved. If successful, a pointer to a data inside ring buffer dat=
+a
++  area is returned, which BPF programs can use similarly to a data insid=
+e
++  array/hash maps. Once ready, this piece of memory is either committed =
+or
++  discarded. Discard is similar to commit, but makes consumer ignore the
++  record.
 +
-+	err =3D test_ringbuf__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attachment failed: %d\n", err))
-+		goto cleanup;
++``bpf_ringbuf_output()`` has disadvantage of incurring extra memory copy=
+,
++because record has to be prepared in some other place first. But it allo=
+ws to
++submit records of the length that's not known to verifier beforehand. It=
+ also
++closely matches ``bpf_perf_event_output()``, so will simplify migration
++significantly.
 +
-+	trigger_samples();
++``bpf_ringbuf_reserve()`` avoids the extra copy of memory by providing a=
+ memory
++pointer directly to ring buffer memory. In a lot of cases records are la=
+rger
++than BPF stack space allows, so many programs have use extra per-CPU arr=
+ay as
++a temporary heap for preparing sample. bpf_ringbuf_reserve() avoid this =
+needs
++completely. But in exchange, it only allows a known constant size of mem=
+ory to
++be reserved, such that verifier can verify that BPF program can't access=
+ memory
++outside its reserved record space. bpf_ringbuf_output(), while slightly =
+slower
++due to extra memory copy, covers some use cases that are not suitable fo=
+r
++``bpf_ringbuf_reserve()``.
 +
-+	/* 2 submitted + 1 discarded records */
-+	CHECK(skel->bss->avail_data !=3D 3 * rec_sz,
-+	      "err_avail_size", "exp %ld, got %ld\n",
-+	      3L * rec_sz, skel->bss->avail_data);
-+	CHECK(skel->bss->ring_size !=3D 4096,
-+	      "err_ring_size", "exp %ld, got %ld\n",
-+	      4096L, skel->bss->ring_size);
-+	CHECK(skel->bss->cons_pos !=3D 0,
-+	      "err_cons_pos", "exp %ld, got %ld\n",
-+	      0L, skel->bss->cons_pos);
-+	CHECK(skel->bss->prod_pos !=3D 3 * rec_sz,
-+	      "err_prod_pos", "exp %ld, got %ld\n",
-+	      3L * rec_sz, skel->bss->prod_pos);
++The difference between commit and discard is very small. Discard just ma=
+rks
++a record as discarded, and such records are supposed to be ignored by co=
+nsumer
++code. Discard is useful for some advanced use-cases, such as ensuring
++all-or-nothing multi-record submission, or emulating temporary
++``malloc()``/``free()`` within single BPF program invocation.
 +
-+	/* poll for samples */
-+	err =3D ring_buffer__poll(ringbuf, -1);
++Each reserved record is tracked by verifier through existing
++reference-tracking logic, similar to socket ref-tracking. It is thus
++impossible to reserve a record, but forget to submit (or discard) it.
 +
-+	/* -EDONE is used as an indicator that we are done */
-+	if (CHECK(err !=3D -EDONE, "err_done", "done err: %d\n", err))
-+		goto cleanup;
++``bpf_ringbuf_query()`` helper allows to query various properties of rin=
+g
++buffer.  Currently 4 are supported:
 +
-+	/* we expect extra polling to return nothing */
-+	err =3D ring_buffer__poll(ringbuf, 0);
-+	if (CHECK(err !=3D 0, "extra_samples", "poll result: %d\n", err))
-+		goto cleanup;
-+
-+	CHECK(skel->bss->dropped !=3D 0, "err_dropped", "exp %ld, got %ld\n",
-+	      0L, skel->bss->dropped);
-+	CHECK(skel->bss->total !=3D 2, "err_total", "exp %ld, got %ld\n",
-+	      2L, skel->bss->total);
-+	CHECK(skel->bss->discarded !=3D 1, "err_discarded", "exp %ld, got %ld\n=
-",
-+	      1L, skel->bss->discarded);
-+
-+	/* now validate consumer position is updated and returned */
-+	trigger_samples();
-+	CHECK(skel->bss->cons_pos !=3D 3 * rec_sz,
-+	      "err_cons_pos", "exp %ld, got %ld\n",
-+	      3L * rec_sz, skel->bss->cons_pos);
-+	err =3D ring_buffer__poll(ringbuf, -1);
-+	CHECK(err <=3D 0, "poll_err", "err %d\n", err);
-+
-+	/* start poll in background w/ long timeout */
-+	err =3D pthread_create(&thread, NULL, poll_thread, (void *)(long)10000)=
++- ``BPF_RB_AVAIL_DATA`` returns amount of unconsumed data in ring buffer=
 ;
-+	if (CHECK(err, "bg_poll", "pthread_create failed: %d\n", err))
-+		goto cleanup;
++- ``BPF_RB_RING_SIZE`` returns the size of ring buffer;
++- ``BPF_RB_CONS_POS``/``BPF_RB_PROD_POS`` returns current logical possit=
+ion
++  of consumer/producer, respectively.
 +
-+	/* turn off notifications now */
-+	skel->bss->flags =3D BPF_RB_NO_WAKEUP;
++Returned values are momentarily snapshots of ring buffer state and could=
+ be
++off by the time helper returns, so this should be used only for
++debugging/reporting reasons or for implementing various heuristics, that=
+ take
++into account highly-changeable nature of some of those characteristics.
 +
-+	/* give background thread a bit of a time */
-+	usleep(50000);
-+	trigger_samples();
-+	/* sleeping arbitrarily is bad, but no better way to know that
-+	 * epoll_wait() **DID NOT** unblock in background thread
-+	 */
-+	usleep(50000);
-+	/* background poll should still be blocked */
-+	err =3D pthread_tryjoin_np(thread, (void **)&bg_ret);
-+	if (CHECK(err !=3D EBUSY, "try_join", "err %d\n", err))
-+		goto cleanup;
++One such heuristic might involve more fine-grained control over poll/epo=
+ll
++notifications about new data availability in ring buffer. Together with
++``BPF_RB_NO_WAKEUP``/``BPF_RB_FORCE_WAKEUP`` flags for output/commit/dis=
+card
++helpers, it allows BPF program a high degree of control and, e.g., more
++efficient batched notifications. Default self-balancing strategy, though=
+,
++should be adequate for most applications and will work reliable and effi=
+ciently
++already.
 +
-+	/* BPF side did everything right */
-+	CHECK(skel->bss->dropped !=3D 0, "err_dropped", "exp %ld, got %ld\n",
-+	      0L, skel->bss->dropped);
-+	CHECK(skel->bss->total !=3D 2, "err_total", "exp %ld, got %ld\n",
-+	      2L, skel->bss->total);
-+	CHECK(skel->bss->discarded !=3D 1, "err_discarded", "exp %ld, got %ld\n=
-",
-+	      1L, skel->bss->discarded);
++Design and Implementation
++-------------------------
 +
-+	/* clear flags to return to "adaptive" notification mode */
-+	skel->bss->flags =3D 0;
++This reserve/commit schema allows a natural way for multiple producers, =
+either
++on different CPUs or even on the same CPU/in the same BPF program, to re=
+serve
++independent records and work with them without blocking other producers.=
+ This
++means that if BPF program was interruped by another BPF program sharing =
+the
++same ring buffer, they will both get a record reserved (provided there i=
+s
++enough space left) and can work with it and submit it independently. Thi=
+s
++applies to NMI context as well, except that due to using a spinlock duri=
+ng
++reservation, in NMI context, ``bpf_ringbuf_reserve()`` might fail to get
++a lock, in which case reservation will fail even if ring buffer is not f=
+ull.
 +
-+	/* produce new samples, no notification should be triggered, because
-+	 * consumer is now behind
-+	 */
-+	trigger_samples();
++The ring buffer itself internally is implemented as a power-of-2 sized
++circular buffer, with two logical and ever-increasing counters (which mi=
+ght
++wrap around on 32-bit architectures, that's not a problem):
 +
-+	/* background poll should still be blocked */
-+	err =3D pthread_tryjoin_np(thread, (void **)&bg_ret);
-+	if (CHECK(err !=3D EBUSY, "try_join", "err %d\n", err))
-+		goto cleanup;
++- consumer counter shows up to which logical position consumer consumed =
+the
++  data;
++- producer counter denotes amount of data reserved by all producers.
 +
-+	/* now force notifications */
-+	skel->bss->flags =3D BPF_RB_FORCE_WAKEUP;
-+	sample_cnt =3D 0;
-+	trigger_samples();
++Each time a record is reserved, producer that "owns" the record will
++successfully advance producer counter. At that point, data is still not =
+yet
++ready to be consumed, though. Each record has 8 byte header, which conta=
+ins the
++length of reserved record, as well as two extra bits: busy bit to denote=
+ that
++record is still being worked on, and discard bit, which might be set at =
+commit
++time if record is discarded. In the latter case, consumer is supposed to=
+ skip
++the record and move on to the next one. Record header also encodes recor=
+d's
++relative offset from the beginning of ring buffer data area (in pages). =
+This
++allows ``bpf_ringbuf_commit()``/``bpf_ringbuf_discard()`` to accept only=
+ the
++pointer to the record itself, without requiring also the pointer to ring=
+ buffer
++itself. Ring buffer memory location will be restored from record metadat=
+a
++header. This significantly simplifies verifier, as well as improving API
++usability.
 +
-+	/* now we should get a pending notification */
-+	usleep(50000);
-+	err =3D pthread_tryjoin_np(thread, (void **)&bg_ret);
-+	if (CHECK(err, "join_bg", "err %d\n", err))
-+		goto cleanup;
++Producer counter increments are serialized under spinlock, so there is
++a strict ordering between reservations. Commits, on the other hand, are
++completely lockless and independent. All records become available to con=
+sumer
++in the order of reservations, but only after all previous records where
++already committed. It is thus possible for slow producers to temporarily=
+ hold
++off submitted records, that were reserved later.
 +
-+	if (CHECK(bg_ret !=3D 1, "bg_ret", "epoll_wait result: %ld", bg_ret))
-+		goto cleanup;
++Reservation/commit/consumer protocol is verified by litmus tests in
++Documentation/litmus_tests/bpf-rb/_.
 +
-+	/* 3 rounds, 2 samples each */
-+	CHECK(sample_cnt !=3D 6, "wrong_sample_cnt",
-+	      "expected to see %d samples, got %d\n", 6, sample_cnt);
++One interesting implementation bit, that significantly simplifies (and t=
+hus
++speeds up as well) implementation of both producers and consumers is how=
+ data
++area is mapped twice contiguously back-to-back in the virtual memory. Th=
+is
++allows to not take any special measures for samples that have to wrap ar=
+ound
++at the end of the circular buffer data area, because the next page after=
+ the
++last data page would be first data page again, and thus the sample will =
+still
++appear completely contiguous in virtual memory. See comment and a simple=
+ ASCII
++diagram showing this visually in ``bpf_ringbuf_area_alloc()``.
 +
-+	/* BPF side did everything right */
-+	CHECK(skel->bss->dropped !=3D 0, "err_dropped", "exp %ld, got %ld\n",
-+	      0L, skel->bss->dropped);
-+	CHECK(skel->bss->total !=3D 2, "err_total", "exp %ld, got %ld\n",
-+	      2L, skel->bss->total);
-+	CHECK(skel->bss->discarded !=3D 1, "err_discarded", "exp %ld, got %ld\n=
-",
-+	      1L, skel->bss->discarded);
-+
-+	test_ringbuf__detach(skel);
-+cleanup:
-+	ring_buffer__free(ringbuf);
-+	test_ringbuf__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c b/too=
-ls/testing/selftests/bpf/prog_tests/ringbuf_multi.c
-new file mode 100644
-index 000000000000..78e450609803
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c
-@@ -0,0 +1,102 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <test_progs.h>
-+#include <sys/epoll.h>
-+#include "test_ringbuf_multi.skel.h"
-+
-+static int duration =3D 0;
-+
-+struct sample {
-+	int pid;
-+	int seq;
-+	long value;
-+	char comm[16];
-+};
-+
-+static int process_sample(void *ctx, void *data, size_t len)
-+{
-+	int ring =3D (unsigned long)ctx;
-+	struct sample *s =3D data;
-+
-+	switch (s->seq) {
-+	case 0:
-+		CHECK(ring !=3D 1, "sample1_ring", "exp %d, got %d\n", 1, ring);
-+		CHECK(s->value !=3D 333, "sample1_value", "exp %ld, got %ld\n",
-+		      333L, s->value);
-+		break;
-+	case 1:
-+		CHECK(ring !=3D 2, "sample2_ring", "exp %d, got %d\n", 2, ring);
-+		CHECK(s->value !=3D 777, "sample2_value", "exp %ld, got %ld\n",
-+		      777L, s->value);
-+		break;
-+	default:
-+		CHECK(true, "extra_sample", "unexpected sample seq %d, val %ld\n",
-+		      s->seq, s->value);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+void test_ringbuf_multi(void)
-+{
-+	struct test_ringbuf_multi *skel;
-+	struct ring_buffer *ringbuf;
-+	int err;
-+
-+	skel =3D test_ringbuf_multi__open_and_load();
-+	if (CHECK(!skel, "skel_open_load", "skeleton open&load failed\n"))
-+		return;
-+
-+	/* only trigger BPF program for current process */
-+	skel->bss->pid =3D getpid();
-+
-+	ringbuf =3D ring_buffer__new(bpf_map__fd(skel->maps.ringbuf1),
-+				   process_sample, (void *)(long)1, NULL);
-+	if (CHECK(!ringbuf, "ringbuf_create", "failed to create ringbuf\n"))
-+		goto cleanup;
-+
-+	err =3D ring_buffer__add(ringbuf, bpf_map__fd(skel->maps.ringbuf2),
-+			      process_sample, (void *)(long)2);
-+	if (CHECK(err, "ringbuf_add", "failed to add another ring\n"))
-+		goto cleanup;
-+
-+	err =3D test_ringbuf_multi__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attachment failed: %d\n", err))
-+		goto cleanup;
-+
-+	/* trigger few samples, some will be skipped */
-+	skel->bss->target_ring =3D 0;
-+	skel->bss->value =3D 333;
-+	syscall(__NR_getpgid);
-+
-+	/* skipped, no ringbuf in slot 1 */
-+	skel->bss->target_ring =3D 1;
-+	skel->bss->value =3D 555;
-+	syscall(__NR_getpgid);
-+
-+	skel->bss->target_ring =3D 2;
-+	skel->bss->value =3D 777;
-+	syscall(__NR_getpgid);
-+
-+	/* poll for samples, should get 2 ringbufs back */
-+	err =3D ring_buffer__poll(ringbuf, -1);
-+	if (CHECK(err !=3D 4, "poll_res", "expected 4 records, got %d\n", err))
-+		goto cleanup;
-+
-+	/* expect extra polling to return nothing */
-+	err =3D ring_buffer__poll(ringbuf, 0);
-+	if (CHECK(err < 0, "extra_samples", "poll result: %d\n", err))
-+		goto cleanup;
-+
-+	CHECK(skel->bss->dropped !=3D 0, "err_dropped", "exp %ld, got %ld\n",
-+	      0L, skel->bss->dropped);
-+	CHECK(skel->bss->skipped !=3D 1, "err_skipped", "exp %ld, got %ld\n",
-+	      1L, skel->bss->skipped);
-+	CHECK(skel->bss->total !=3D 2, "err_total", "exp %ld, got %ld\n",
-+	      2L, skel->bss->total);
-+
-+cleanup:
-+	ring_buffer__free(ringbuf);
-+	test_ringbuf_multi__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf.c b/tools/tes=
-ting/selftests/bpf/progs/test_ringbuf.c
-new file mode 100644
-index 000000000000..8ba9959b036b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_ringbuf.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Facebook
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+struct sample {
-+	int pid;
-+	int seq;
-+	long value;
-+	char comm[16];
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 1 << 12);
-+} ringbuf SEC(".maps");
-+
-+/* inputs */
-+int pid =3D 0;
-+long value =3D 0;
-+long flags =3D 0;
-+
-+/* outputs */
-+long total =3D 0;
-+long discarded =3D 0;
-+long dropped =3D 0;
-+
-+long avail_data =3D 0;
-+long ring_size =3D 0;
-+long cons_pos =3D 0;
-+long prod_pos =3D 0;
-+
-+/* inner state */
-+long seq =3D 0;
-+
-+SEC("tp/syscalls/sys_enter_getpgid")
-+int test_ringbuf(void *ctx)
-+{
-+	int cur_pid =3D bpf_get_current_pid_tgid() >> 32;
-+	struct sample *sample;
-+	int zero =3D 0;
-+
-+	if (cur_pid !=3D pid)
-+		return 0;
-+
-+	sample =3D bpf_ringbuf_reserve(&ringbuf, sizeof(*sample), 0);
-+	if (!sample) {
-+		__sync_fetch_and_add(&dropped, 1);
-+		return 1;
-+	}
-+
-+	sample->pid =3D pid;
-+	bpf_get_current_comm(sample->comm, sizeof(sample->comm));
-+	sample->value =3D value;
-+
-+	sample->seq =3D seq++;
-+	__sync_fetch_and_add(&total, 1);
-+
-+	if (sample->seq & 1) {
-+		/* copy from reserved sample to a new one... */
-+		bpf_ringbuf_output(&ringbuf, sample, sizeof(*sample), flags);
-+		/* ...and then discard reserved sample */
-+		bpf_ringbuf_discard(sample, flags);
-+		__sync_fetch_and_add(&discarded, 1);
-+	} else {
-+		bpf_ringbuf_submit(sample, flags);
-+	}
-+
-+	avail_data =3D bpf_ringbuf_query(&ringbuf, BPF_RB_AVAIL_DATA);
-+	ring_size =3D bpf_ringbuf_query(&ringbuf, BPF_RB_RING_SIZE);
-+	cons_pos =3D bpf_ringbuf_query(&ringbuf, BPF_RB_CONS_POS);
-+	prod_pos =3D bpf_ringbuf_query(&ringbuf, BPF_RB_PROD_POS);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf_multi.c b/too=
-ls/testing/selftests/bpf/progs/test_ringbuf_multi.c
-new file mode 100644
-index 000000000000..edf3b6953533
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_ringbuf_multi.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Facebook
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+struct sample {
-+	int pid;
-+	int seq;
-+	long value;
-+	char comm[16];
-+};
-+
-+struct ringbuf_map {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 1 << 12);
-+} ringbuf1 SEC(".maps"),
-+  ringbuf2 SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 4);
-+	__type(key, int);
-+	__array(values, struct ringbuf_map);
-+} ringbuf_arr SEC(".maps") =3D {
-+	.values =3D {
-+		[0] =3D &ringbuf1,
-+		[2] =3D &ringbuf2,
-+	},
-+};
-+
-+/* inputs */
-+int pid =3D 0;
-+int target_ring =3D 0;
-+long value =3D 0;
-+
-+/* outputs */
-+long total =3D 0;
-+long dropped =3D 0;
-+long skipped =3D 0;
-+
-+SEC("tp/syscalls/sys_enter_getpgid")
-+int test_ringbuf(void *ctx)
-+{
-+	int cur_pid =3D bpf_get_current_pid_tgid() >> 32;
-+	struct sample *sample;
-+	void *rb;
-+	int zero =3D 0;
-+
-+	if (cur_pid !=3D pid)
-+		return 0;
-+
-+	rb =3D bpf_map_lookup_elem(&ringbuf_arr, &target_ring);
-+	if (!rb) {
-+		skipped +=3D 1;
-+		return 1;
-+	}
-+
-+	sample =3D bpf_ringbuf_reserve(rb, sizeof(*sample), 0);
-+	if (!sample) {
-+		dropped +=3D 1;
-+		return 1;
-+	}
-+
-+	sample->pid =3D pid;
-+	bpf_get_current_comm(sample->comm, sizeof(sample->comm));
-+	sample->value =3D value;
-+
-+	sample->seq =3D total;
-+	total +=3D 1;
-+
-+	bpf_ringbuf_submit(sample, 0);
-+
-+	return 0;
-+}
++Another feature that distinguishes BPF ringbuf from perf ring buffer is
++a self-pacing notifications of new data being availability.
++``bpf_ringbuf_commit()`` implementation will send a notification of new =
+record
++being available after commit only if consumer has already caught up righ=
+t up to
++the record being committed. If not, consumer still has to catch up and t=
+hus
++will see new data anyways without needing an extra poll notification.
++Benchmarks (see tools/testing/selftests/bpf/benchs/bench_ringbuf.c_) sho=
+w that
++this allows to achieve a very high throughput without having to resort t=
+o
++tricks like "notify only every Nth sample", which are necessary with per=
+f
++buffer. For extreme cases, when BPF program wants more manual control of
++notifications, commit/discard/output helpers accept ``BPF_RB_NO_WAKEUP``=
+ and
++``BPF_RB_FORCE_WAKEUP`` flags, which give full control over notification=
+s of
++data availability, but require extra caution and diligence in using this=
+ API.
 --=20
 2.24.1
 
