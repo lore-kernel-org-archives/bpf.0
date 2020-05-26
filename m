@@ -4,51 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 857F6C433DF
-	for <bpf@archiver.kernel.org>; Tue, 26 May 2020 16:44:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 029CDC433DF
+	for <bpf@archiver.kernel.org>; Tue, 26 May 2020 17:13:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6572A20870
-	for <bpf@archiver.kernel.org>; Tue, 26 May 2020 16:44:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D691920823
+	for <bpf@archiver.kernel.org>; Tue, 26 May 2020 17:13:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1590511449;
-	bh=uF8fArU4V3d0gRDmpvRFyjvlsGovSmDM0Tikgs5AV38=;
+	s=default; t=1590513211;
+	bh=5wgDx0HRqFo+8rbopttzAsy9cScrP/BLJX94ZpGLj10=;
 	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=TAv3KNXKR4/fbaOXSBmmIBp7NgKRBzJJQZOmMkadktfy8tHJDqF6m1XYIoLJw6cEN
-	 JRWOUKMOGr7DV0Hva6hwKNlYza6GP7J8LguLYLxP+nMzNfeAPhsodwgdMQX8+xCQlZ
-	 0kyeuNweeXRA4kONnjcBLtG4a0lAdjCSQLKr92ag=
+	b=WW/9WAlIBEPCi0dpGa51j4ipf65ER9cXN7cp7Ob5qYyx07uDPFS1dQA2rnx0G02ya
+	 eGraURGM8w8RRzW/PZ+Hc83sMxhJdADdUNb4NTxl3sbdv6FAcUE8tj9x9X1FlJ4ePZ
+	 FXt5bt2EBmNrSezTZP+6fdjXmjjf9LoTTADJATBc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728570AbgEZQoJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 May 2020 12:44:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58950 "EHLO mail.kernel.org"
+        id S1728503AbgEZRNb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 May 2020 13:13:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43420 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727941AbgEZQoI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 May 2020 12:44:08 -0400
+        id S1728138AbgEZRNb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 May 2020 13:13:31 -0400
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2241A20723;
-        Tue, 26 May 2020 16:44:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 855E62073B;
+        Tue, 26 May 2020 17:13:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590511448;
-        bh=uF8fArU4V3d0gRDmpvRFyjvlsGovSmDM0Tikgs5AV38=;
+        s=default; t=1590513210;
+        bh=5wgDx0HRqFo+8rbopttzAsy9cScrP/BLJX94ZpGLj10=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=uoD034meFsUWPg/ub4LFxiQAsudQfzkCzZs8FxcyEtzwsloP+zD8WyCaY1nzXqoXP
-         4S+EhrAruBA651BrPiGTsvSknZPN3X1vX/ZGlIFbpWnmOkCtXll1ZtNyLxMXRA6pfM
-         rX8Z+Z9rqhBvAl03zvkKf2voyxYgmgXK3J6ufm+4=
-Subject: Re: OUTPUT and TEST_CUSTOM_PROGS
-To:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+        b=g3BFgzBWoWtEVfHoN7P8krCHqY9+9HcXAaJHdA+wbYi2eJq2XY/ZtAQl0iZiUxWiJ
+         knczh8g6vVQsJHXdXhuoj718ARHiRl2Fdes40dDrYHWBDpm8M1PAGv2aBX2kB9kDko
+         I8lrsrVvX/elFkWW4wZJh/rKn+NYQaLYGb0bjy/8=
+Subject: Re: kselftest OOT run_tests
+To:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
 Cc:     linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
         shuah <shuah@kernel.org>
-References: <xuny367osf2z.fsf@redhat.com>
+References: <xunyblmcqfuu.fsf@redhat.com>
 From:   shuah <shuah@kernel.org>
-Message-ID: <c049c93e-d962-ac15-e623-34df9af10a8b@kernel.org>
-Date:   Tue, 26 May 2020 10:43:57 -0600
+Message-ID: <ad5ee014-759c-d0fb-5dc1-f1f25481a453@kernel.org>
+Date:   Tue, 26 May 2020 11:13:29 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <xuny367osf2z.fsf@redhat.com>
+In-Reply-To: <xunyblmcqfuu.fsf@redhat.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -57,23 +58,24 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 5/25/20 12:28 AM, Yauheni Kaliuta wrote:
+On 5/25/20 7:55 AM, Yauheni Kaliuta wrote:
 > Hi!
 > 
-> lib.mk expects TEST_GEN_PROGS, TEST_GEN_PROGS_EXTENDED and
-> TEST_GEN_FILES to be in local directory and tries to handle out
-> of tree build adding OUTPUT to it at the beginning.
+> I'm wondering how out of tree check is supposed to work for make
+> O=dir run_tests from selftests (or make -C ...) directory?
 > 
-> commit be16a244c199 ("selftests: lib.mk: add TEST_CUSTOM_PROGS to
-> allow custom test run/install") adds TEST_CUSTOM_PROGS but it
-> handles it differently. Should it add OUTPUT as well?
+> (both with 051f278e9d81 ("kbuild: replace KBUILD_SRCTREE with
+> boolean building_out_of_srctree") and without)
 > 
+> make M= ... does not work with run_tests.
+>
 
-Individual tests apply OUTPUT to TEST_CUSTOM_PROGS. lib.mk rules
-can't build TEST_CUSTOM_PROGS and it is left up to tests to
-handle them as custom.
+Kselftests run_tests target isn't intended for building and running
+tests OOT. Also make M= doesn't make sense for them.
 
-So no on adding OUTPUT to TEST_CUSTOM_PROGS in lib.mk.
+There is no support to build OOT at the moment. I would like to get
+a better understanding of your use-case. Can you elaborate?
 
 thanks,
 -- Shuah
+
