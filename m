@@ -2,64 +2,65 @@ Return-Path: <SRS0=ObQj=7J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B8EAC433E2
-	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 17:09:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30AD3C433E1
+	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 17:09:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 76CDD2088E
-	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 17:09:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0AD7C20873
+	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 17:09:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="yMwj2pRf"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="qEIqJDyp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731143AbgE0RIw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 May 2020 13:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
+        id S1731158AbgE0RJD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 May 2020 13:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731135AbgE0RIu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 May 2020 13:08:50 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926BEC08C5C2
-        for <bpf@vger.kernel.org>; Wed, 27 May 2020 10:08:49 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id k8so4814633edq.4
-        for <bpf@vger.kernel.org>; Wed, 27 May 2020 10:08:49 -0700 (PDT)
+        with ESMTP id S1731097AbgE0RIw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 May 2020 13:08:52 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D24C08C5C1
+        for <bpf@vger.kernel.org>; Wed, 27 May 2020 10:08:52 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id k11so3742721ejr.9
+        for <bpf@vger.kernel.org>; Wed, 27 May 2020 10:08:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ahk73YOLkvvyWYNMxGnkIqgt1nGRvSvFH7RHNXZ0uEw=;
-        b=yMwj2pRf55N2y9Q+CDTDEsPGHWWn0C+hL1K5PqwdC2tegDWddI50xYnq5goVqcobvM
-         n7ClDH5Wq3ADKW1kbS1q8D+1qVBIFOwR/jqcndidqd0V1feEi/pcuKpFDF2kZonaEiGY
-         eDjolPjL3J/VJxp+f/EQoGaMvHZLqDMWVXoYM=
+        bh=Ake+ZECmllu4KjoI5HH1jXA8S9PkpzaukmThdKDNcmU=;
+        b=qEIqJDypMvwq/WQxXJFbsfi9MC0b7w5CtjoOu/BPko+4IuBgu8Z0qb1JSjyddg9Cp1
+         FbEGHkh9jiXS3Li/XexO8U1mEBPVgcVQFphun467D9s3Z3uv/JrppbL+F/NS/mGcd/ja
+         e7elLHS+lyzY3StbZZXJrvGZYnUnmdCTxvy04=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ahk73YOLkvvyWYNMxGnkIqgt1nGRvSvFH7RHNXZ0uEw=;
-        b=jzyeEfV+Uwlhh0zIrjbR9Z+4l74Jbr6BixGtHnzH6YR0tJOZoWfp5u66RKRFO55Bdh
-         JfCO3DWBjt0V3uzdU55XGAQxs6aVUzkZxKY1fSCsCIxqiZ05UBHHR3X1aKtFUq9gPn+p
-         yK9WaUs/LHCheYedlACpNZKrMhbjcfPTIPW5cP0hkxmM7RzTSpaGpleYK2Z9i/B/7JHy
-         4XqYwudoxovshzlVfUEOKNuahnJ3vRxgDoBFjHoEIOZ4V3YRtf2Fwr5eTzA9CyHhYSNK
-         KmlfNLQsiddizKLWkeM9/j3nz8ZtZic7Hh5G6+4XrgHuoe8txPcK8e8jjGdh8pI75587
-         TCwQ==
-X-Gm-Message-State: AOAM5300AwAfMC/vW/X0WUiaQ1O5z9V/evrXMo4reJnNTlDCJ62EaJmQ
-        GktlnZMGw9p+JYtzBt3/wQGFGeuzU7c=
-X-Google-Smtp-Source: ABdhPJwBDIdpZiJcwUtUgYDBGNfGLoDwQYI07xxyOYvNbZb0908lEoNEyk7sLecndvNtR1OeQdxA4A==
-X-Received: by 2002:aa7:cb8d:: with SMTP id r13mr24600606edt.12.1590599327756;
-        Wed, 27 May 2020 10:08:47 -0700 (PDT)
+        bh=Ake+ZECmllu4KjoI5HH1jXA8S9PkpzaukmThdKDNcmU=;
+        b=Kj9tegnS+IxPuCxu2CzsOs/jLfJRp7piqaOo9zePmlXlBGhrZSlse63KNLCl8+Es3R
+         sZjVnMUW/T0DHcxOfssW4S2nZthjzhtMXlD2tAWAfRavfcLqZZa2f6VT+2s9kOzVaH0E
+         kP1CnXZ39DJME4wwlibZlbBq4DVVUXmySikn8SNBr06Q92mUl5VZZ3Z2AHNwJsTz7Mms
+         gKp24jutEQQja7TnKgCqkCuUcH/8TwoXKuwgjaHDimt7MVA8Mx9o3ri+MQ9I/jMjb+1c
+         Icu7S6h6gy1ph+W1hyFGcq4dCX3WVANirFIicg6tinimAhc2lDd1+jxhbHU++De9n0IQ
+         XWXA==
+X-Gm-Message-State: AOAM5306VkDb9xyRBPIWKVX9Cj7wPhFCZuazM8AJHQKOHBpBs4EZkRQ3
+        HcbC4KSjFfBSDSuJNTJAwTFpX+ihBr8=
+X-Google-Smtp-Source: ABdhPJxVTX7traBXwpsonrqToKzBslZcI94UNACOACxgAotufo56gbZhV02X88DTU+1pZQMy25peNw==
+X-Received: by 2002:a17:906:b299:: with SMTP id q25mr7390916ejz.448.1590599330909;
+        Wed, 27 May 2020 10:08:50 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id h20sm3260217eja.61.2020.05.27.10.08.46
+        by smtp.gmail.com with ESMTPSA id h10sm2466273ejb.2.2020.05.27.10.08.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2020 10:08:47 -0700 (PDT)
+        Wed, 27 May 2020 10:08:50 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com
-Subject: [PATCH bpf-next 4/8] flow_dissector: Move out netns_bpf prog callbacks
-Date:   Wed, 27 May 2020 19:08:36 +0200
-Message-Id: <20200527170840.1768178-5-jakub@cloudflare.com>
+Subject: [PATCH bpf-next 6/8] libbpf: Add support for bpf_link-based netns attachment
+Date:   Wed, 27 May 2020 19:08:38 +0200
+Message-Id: <20200527170840.1768178-7-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200527170840.1768178-1-jakub@cloudflare.com>
 References: <20200527170840.1768178-1-jakub@cloudflare.com>
@@ -70,356 +71,88 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move functions to manage BPF programs attached to netns that are not
-specific to flow dissector to a dedicated module named
-bpf/net_namespace.c.
-
-The set of functions will grow with the addition of bpf_link support for
-netns attached programs. This patch prepares ground for it by creating a
-place for it.
-
-This is a code move with no functional changes intended.
+Add bpf_program__attach_nets(), which uses LINK_CREATE subcommand to create
+an FD-based kernel bpf_link, for attach types tied to network namespace,
+that is BPF_FLOW_DISSECTOR for the moment.
 
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- include/net/flow_dissector.h |   6 ++
- kernel/bpf/Makefile          |   1 +
- kernel/bpf/net_namespace.c   | 134 +++++++++++++++++++++++++++++++++++
- net/core/flow_dissector.c    | 126 ++------------------------------
- 4 files changed, 145 insertions(+), 122 deletions(-)
- create mode 100644 kernel/bpf/net_namespace.c
+ tools/lib/bpf/libbpf.c   | 20 ++++++++++++++++----
+ tools/lib/bpf/libbpf.h   |  2 ++
+ tools/lib/bpf/libbpf.map |  1 +
+ 3 files changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/include/net/flow_dissector.h b/include/net/flow_dissector.h
-index 628383915827..9af143760e35 100644
---- a/include/net/flow_dissector.h
-+++ b/include/net/flow_dissector.h
-@@ -8,6 +8,8 @@
- #include <linux/string.h>
- #include <uapi/linux/if_ether.h>
- 
-+struct bpf_prog;
-+struct net;
- struct sk_buff;
- 
- /**
-@@ -357,4 +359,8 @@ flow_dissector_init_keys(struct flow_dissector_key_control *key_control,
- 	memset(key_basic, 0, sizeof(*key_basic));
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 5d60de6fd818..a49c1eb5db64 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -7894,8 +7894,8 @@ static struct bpf_link *attach_iter(const struct bpf_sec_def *sec,
+ 	return bpf_program__attach_iter(prog, NULL);
  }
  
-+#ifdef CONFIG_BPF_SYSCALL
-+int flow_dissector_bpf_prog_attach(struct net *net, struct bpf_prog *prog);
-+#endif /* CONFIG_BPF_SYSCALL */
-+
- #endif
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 375b933010dd..ccecb70bfaa0 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -13,6 +13,7 @@ ifeq ($(CONFIG_NET),y)
- obj-$(CONFIG_BPF_SYSCALL) += devmap.o
- obj-$(CONFIG_BPF_SYSCALL) += cpumap.o
- obj-$(CONFIG_BPF_SYSCALL) += offload.o
-+obj-$(CONFIG_BPF_SYSCALL) += net_namespace.o
- endif
- ifeq ($(CONFIG_PERF_EVENTS),y)
- obj-$(CONFIG_BPF_SYSCALL) += stackmap.o
-diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
-new file mode 100644
-index 000000000000..fc89154aed27
---- /dev/null
-+++ b/kernel/bpf/net_namespace.c
-@@ -0,0 +1,134 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <linux/filter.h>
-+#include <net/net_namespace.h>
-+
-+/*
-+ * Functions to manage BPF programs attached to netns
-+ */
-+
-+/* Protects updates to netns_bpf */
-+DEFINE_MUTEX(netns_bpf_mutex);
-+
-+int netns_bpf_prog_query(const union bpf_attr *attr,
-+			 union bpf_attr __user *uattr)
-+{
-+	__u32 __user *prog_ids = u64_to_user_ptr(attr->query.prog_ids);
-+	u32 prog_id, prog_cnt = 0, flags = 0;
-+	enum netns_bpf_attach_type type;
-+	struct bpf_prog *attached;
-+	struct net *net;
-+
-+	if (attr->query.query_flags)
-+		return -EINVAL;
-+
-+	type = to_netns_bpf_attach_type(attr->query.attach_type);
-+	if (type < 0)
-+		return -EINVAL;
-+
-+	net = get_net_ns_by_fd(attr->query.target_fd);
-+	if (IS_ERR(net))
-+		return PTR_ERR(net);
-+
-+	rcu_read_lock();
-+	attached = rcu_dereference(net->bpf.progs[type]);
-+	if (attached) {
-+		prog_cnt = 1;
-+		prog_id = attached->aux->id;
-+	}
-+	rcu_read_unlock();
-+
-+	put_net(net);
-+
-+	if (copy_to_user(&uattr->query.attach_flags, &flags, sizeof(flags)))
-+		return -EFAULT;
-+	if (copy_to_user(&uattr->query.prog_cnt, &prog_cnt, sizeof(prog_cnt)))
-+		return -EFAULT;
-+
-+	if (!attr->query.prog_cnt || !prog_ids || !prog_cnt)
-+		return 0;
-+
-+	if (copy_to_user(prog_ids, &prog_id, sizeof(u32)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+int netns_bpf_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-+{
-+	enum netns_bpf_attach_type type;
-+	struct net *net;
-+	int ret;
-+
-+	type = to_netns_bpf_attach_type(attr->attach_type);
-+	if (type < 0)
-+		return -EINVAL;
-+
-+	net = current->nsproxy->net_ns;
-+	mutex_lock(&netns_bpf_mutex);
-+	switch (type) {
-+	case NETNS_BPF_FLOW_DISSECTOR:
-+		ret = flow_dissector_bpf_prog_attach(net, prog);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+	mutex_unlock(&netns_bpf_mutex);
-+
-+	return ret;
-+}
-+
-+static int __netns_bpf_prog_detach(struct net *net,
-+				   enum netns_bpf_attach_type type)
-+{
-+	struct bpf_prog *attached;
-+
-+	/* No need for update-side lock when net is going away. */
-+	attached = rcu_dereference_protected(net->bpf.progs[type],
-+					     !check_net(net) ||
-+					     lockdep_is_held(&netns_bpf_mutex));
-+	if (!attached)
-+		return -ENOENT;
-+	RCU_INIT_POINTER(net->bpf.progs[type], NULL);
-+	bpf_prog_put(attached);
-+	return 0;
-+}
-+
-+int netns_bpf_prog_detach(const union bpf_attr *attr)
-+{
-+	enum netns_bpf_attach_type type;
-+	int ret;
-+
-+	type = to_netns_bpf_attach_type(attr->attach_type);
-+	if (type < 0)
-+		return -EINVAL;
-+
-+	mutex_lock(&netns_bpf_mutex);
-+	ret = __netns_bpf_prog_detach(current->nsproxy->net_ns, type);
-+	mutex_unlock(&netns_bpf_mutex);
-+
-+	return ret;
-+}
-+
-+static void __net_exit netns_bpf_pernet_pre_exit(struct net *net)
-+{
-+	enum netns_bpf_attach_type type;
-+
-+	for (type = 0; type < MAX_NETNS_BPF_ATTACH_TYPE; type++) {
-+		if (rcu_access_pointer(net->bpf.progs[type]))
-+			__netns_bpf_prog_detach(net, type);
-+	}
-+}
-+
-+static struct pernet_operations netns_bpf_pernet_ops __net_initdata = {
-+	.pre_exit = netns_bpf_pernet_pre_exit,
-+};
-+
-+static int __init netns_bpf_init(void)
-+{
-+	return register_pernet_subsys(&netns_bpf_pernet_ops);
-+}
-+
-+subsys_initcall(netns_bpf_init);
-diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-index 5c978c87e6bc..9a42ac5114e3 100644
---- a/net/core/flow_dissector.c
-+++ b/net/core/flow_dissector.c
-@@ -33,9 +33,6 @@
- #endif
- #include <linux/bpf-netns.h>
- 
--/* Protects updates to netns_bpf */
--DEFINE_MUTEX(netns_bpf_mutex);
--
- static void dissector_set_key(struct flow_dissector *flow_dissector,
- 			      enum flow_dissector_key_id key_id)
+-struct bpf_link *
+-bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
++static struct bpf_link *
++bpf_program__attach_fd(struct bpf_program *prog, int target_fd)
  {
-@@ -72,52 +69,8 @@ void skb_flow_dissector_init(struct flow_dissector *flow_dissector,
- }
- EXPORT_SYMBOL(skb_flow_dissector_init);
+ 	enum bpf_attach_type attach_type;
+ 	char errmsg[STRERR_BUFSIZE];
+@@ -7915,11 +7915,11 @@ bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
+ 	link->detach = &bpf_link__detach_fd;
  
--int netns_bpf_prog_query(const union bpf_attr *attr,
--			 union bpf_attr __user *uattr)
--{
--	__u32 __user *prog_ids = u64_to_user_ptr(attr->query.prog_ids);
--	u32 prog_id, prog_cnt = 0, flags = 0;
--	enum netns_bpf_attach_type type;
--	struct bpf_prog *attached;
--	struct net *net;
--
--	if (attr->query.query_flags)
--		return -EINVAL;
--
--	type = to_netns_bpf_attach_type(attr->query.attach_type);
--	if (type < 0)
--		return -EINVAL;
--
--	net = get_net_ns_by_fd(attr->query.target_fd);
--	if (IS_ERR(net))
--		return PTR_ERR(net);
--
--	rcu_read_lock();
--	attached = rcu_dereference(net->bpf.progs[type]);
--	if (attached) {
--		prog_cnt = 1;
--		prog_id = attached->aux->id;
--	}
--	rcu_read_unlock();
--
--	put_net(net);
--
--	if (copy_to_user(&uattr->query.attach_flags, &flags, sizeof(flags)))
--		return -EFAULT;
--	if (copy_to_user(&uattr->query.prog_cnt, &prog_cnt, sizeof(prog_cnt)))
--		return -EFAULT;
--
--	if (!attr->query.prog_cnt || !prog_ids || !prog_cnt)
--		return 0;
--
--	if (copy_to_user(prog_ids, &prog_id, sizeof(u32)))
--		return -EFAULT;
--
--	return 0;
--}
--
--static int flow_dissector_bpf_prog_attach(struct net *net,
--					  struct bpf_prog *prog)
-+#ifdef CONFIG_BPF_SYSCALL
-+int flow_dissector_bpf_prog_attach(struct net *net, struct bpf_prog *prog)
- {
- 	enum netns_bpf_attach_type type = NETNS_BPF_FLOW_DISSECTOR;
- 	struct bpf_prog *attached;
-@@ -155,77 +108,7 @@ static int flow_dissector_bpf_prog_attach(struct net *net,
- 		bpf_prog_put(attached);
- 	return 0;
+ 	attach_type = bpf_program__get_expected_attach_type(prog);
+-	link_fd = bpf_link_create(prog_fd, cgroup_fd, attach_type, NULL);
++	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, NULL);
+ 	if (link_fd < 0) {
+ 		link_fd = -errno;
+ 		free(link);
+-		pr_warn("program '%s': failed to attach to cgroup: %s\n",
++		pr_warn("program '%s': failed to attach to cgroup/netns: %s\n",
+ 			bpf_program__title(prog, false),
+ 			libbpf_strerror_r(link_fd, errmsg, sizeof(errmsg)));
+ 		return ERR_PTR(link_fd);
+@@ -7928,6 +7928,18 @@ bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
+ 	return link;
  }
--
--int netns_bpf_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
--{
--	enum netns_bpf_attach_type type;
--	struct net *net;
--	int ret;
--
--	type = to_netns_bpf_attach_type(attr->attach_type);
--	if (type < 0)
--		return -EINVAL;
--
--	net = current->nsproxy->net_ns;
--	mutex_lock(&netns_bpf_mutex);
--	switch (type) {
--	case NETNS_BPF_FLOW_DISSECTOR:
--		ret = flow_dissector_bpf_prog_attach(net, prog);
--		break;
--	default:
--		ret = -EINVAL;
--		break;
--	}
--	mutex_unlock(&netns_bpf_mutex);
--
--	return ret;
--}
--
--static int __netns_bpf_prog_detach(struct net *net,
--				   enum netns_bpf_attach_type type)
--{
--	struct bpf_prog *attached;
--
--	/* No need for update-side lock when net is going away. */
--	attached = rcu_dereference_protected(net->bpf.progs[type],
--					     !check_net(net) ||
--					     lockdep_is_held(&netns_bpf_mutex));
--	if (!attached)
--		return -ENOENT;
--	RCU_INIT_POINTER(net->bpf.progs[type], NULL);
--	bpf_prog_put(attached);
--	return 0;
--}
--
--int netns_bpf_prog_detach(const union bpf_attr *attr)
--{
--	enum netns_bpf_attach_type type;
--	int ret;
--
--	type = to_netns_bpf_attach_type(attr->attach_type);
--	if (type < 0)
--		return -EINVAL;
--
--	mutex_lock(&netns_bpf_mutex);
--	ret = __netns_bpf_prog_detach(current->nsproxy->net_ns, type);
--	mutex_unlock(&netns_bpf_mutex);
--
--	return ret;
--}
--
--static void __net_exit netns_bpf_pernet_pre_exit(struct net *net)
--{
--	enum netns_bpf_attach_type type;
--
--	for (type = 0; type < MAX_NETNS_BPF_ATTACH_TYPE; type++) {
--		if (rcu_access_pointer(net->bpf.progs[type]))
--			__netns_bpf_prog_detach(net, type);
--	}
--}
--
--static struct pernet_operations netns_bpf_pernet_ops __net_initdata = {
--	.pre_exit = netns_bpf_pernet_pre_exit,
--};
-+#endif /* CONFIG_BPF_SYSCALL */
  
- /**
-  * __skb_flow_get_ports - extract the upper layer ports and return them
-@@ -1886,7 +1769,6 @@ static int __init init_default_flow_dissectors(void)
- 	skb_flow_dissector_init(&flow_keys_basic_dissector,
- 				flow_keys_basic_dissector_keys,
- 				ARRAY_SIZE(flow_keys_basic_dissector_keys));
--
--	return register_pernet_subsys(&netns_bpf_pernet_ops);
-+	return 0;
- }
- core_initcall(init_default_flow_dissectors);
++struct bpf_link *
++bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
++{
++	return bpf_program__attach_fd(prog, cgroup_fd);
++}
++
++struct bpf_link *
++bpf_program__attach_netns(struct bpf_program *prog, int netns_fd)
++{
++	return bpf_program__attach_fd(prog, netns_fd);
++}
++
+ struct bpf_link *
+ bpf_program__attach_iter(struct bpf_program *prog,
+ 			 const struct bpf_iter_attach_opts *opts)
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 1e2e399a5f2c..adf6fd9b6fe8 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -253,6 +253,8 @@ LIBBPF_API struct bpf_link *
+ bpf_program__attach_lsm(struct bpf_program *prog);
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd);
++LIBBPF_API struct bpf_link *
++bpf_program__attach_netns(struct bpf_program *prog, int netns_fd);
+ 
+ struct bpf_map;
+ 
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 381a7342ecfc..7ad21ba1feb6 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -263,4 +263,5 @@ LIBBPF_0.0.9 {
+ 		bpf_link_get_next_id;
+ 		bpf_program__attach_iter;
+ 		perf_buffer__consume;
++		bpf_program__attach_netns;
+ } LIBBPF_0.0.8;
 -- 
 2.25.4
 
