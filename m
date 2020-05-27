@@ -2,140 +2,140 @@ Return-Path: <SRS0=ObQj=7J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1B32C433E0
-	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 17:09:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6488FC433DF
+	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 17:12:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D0EEB20873
-	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 17:09:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C486C20890
+	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 17:12:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Qtq4RcWn"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="Dx1/Dmht";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="0IfLJJFz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731175AbgE0RJS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 May 2020 13:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731168AbgE0RJS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 May 2020 13:09:18 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA71C08C5C3
-        for <bpf@vger.kernel.org>; Wed, 27 May 2020 10:09:17 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id e1so24813261wrt.5
-        for <bpf@vger.kernel.org>; Wed, 27 May 2020 10:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N7BcF2YbmFlnYsgsgnhG+rP4MiM9BYbCfVaOcHA0CmE=;
-        b=Qtq4RcWnFirDNuZdCyVBt5tPFqmhvzYSUFkVjQjHkQBc6IkA+WeniGp5LmnT8OVVfB
-         UE9q1ImGpjLTJce6qJy6hzRVPiHuV5AmS4EJxRkfHzrKJ9QHTdXlw8wjGUt2+zXOLkZn
-         Se1DyUC2fMvdHcPa6G5vi/3874MVikhkzprOA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N7BcF2YbmFlnYsgsgnhG+rP4MiM9BYbCfVaOcHA0CmE=;
-        b=h3cv4SjHuuI1D1Za+8zruxxKIrElMNste/Y7FVB5xwjGQvx8QBxjLuIIdgcyUF9EqQ
-         P2Q0M+mNoyz9qh9/a2KfV1eQn/d+BM94Ueyxy/FFqG4QD+yRxWVEtA3FJjUPAUNcnlLP
-         H/vPnhAV2KtTzKjG9kO8wAhgR9dghi10mGssrHld9mWW43c+bu1nbizzKxCS89uCkJif
-         oUvWGsVX5U1yhCn0f7bw+Uqgh4NgchM8q8oexPI1AGqXmOPSouiYW7Nx4ytDICa36MB1
-         l28rwNK5ccBSonjzgX7rG1fJucc4k/H+X7NLxvqjrbGGvDalDM5MyUJ64ZW8z0j+lUf3
-         0aNg==
-X-Gm-Message-State: AOAM533KPfVR669Nk/M7q6IHRjKY5vAv7l7SYgdUAkvL7fDxlbRNfTzg
-        nsCisBpf/TfwOGB5wFBRJwU4ln5Lo+WZ/ehT8S9tRA==
-X-Google-Smtp-Source: ABdhPJzb9gs//rirYU8Ktj397bVqkAAUoWJzxzq0eYzi6ZVCA4steGmUtKbIrEXVz5r+7fo8CuNrI6m8cpFs8ONaSh0=
-X-Received: by 2002:a5d:4e88:: with SMTP id e8mr14770779wru.188.1590599356306;
- Wed, 27 May 2020 10:09:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200526163336.63653-1-kpsingh@chromium.org> <20200526163336.63653-3-kpsingh@chromium.org>
- <20200527050823.GA31860@infradead.org> <20200527123840.GA12958@google.com> <f933521f-6370-c9ba-d662-703c1ebc7c03@schaufler-ca.com>
-In-Reply-To: <f933521f-6370-c9ba-d662-703c1ebc7c03@schaufler-ca.com>
-From:   KP Singh <kpsingh@chromium.org>
-Date:   Wed, 27 May 2020 19:09:05 +0200
-Message-ID: <CACYkzJ6f0=r4h9sNqnXp_uBnHu=b6oGQFFGOv7H65UMOjtNKaw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/4] bpf: Implement bpf_local_storage for inodes
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Florent Revest <revest@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1731228AbgE0RMe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 May 2020 13:12:34 -0400
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:55191 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729894AbgE0RMd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 27 May 2020 13:12:33 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 022B8A97;
+        Wed, 27 May 2020 13:12:31 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 27 May 2020 13:12:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
+        content-transfer-encoding:content-type:in-reply-to:date:cc
+        :subject:from:to:message-id; s=fm3; bh=6pxEigjWfelMjOWs/Jq1DeSXe
+        YEVsneKZclbXHsrvFQ=; b=Dx1/DmhtipYpfHdvAyM/R5S0l0Urw1kxEabTy7ndJ
+        KTekDH5RnTfTmgtWbw1GPf0w0zy//8W2XsYDGENYLAJYsG0M8MFKQSDtejpoMNaj
+        hAnXIlNbMdyUmtqWBcPkLMwrLpd0M7Nc9TADOGV8r3gsiI1QSzzcbcOKvskxWyKF
+        nWVGqyFKvv8np6XOsHfTuSvEfCcTazr4q8NN3JRTDddw3g5bkUEkEjt7XqafB7mF
+        s6kv6nZ29QgL09L95cmnqmIRb0l/H+XOyd3tVem/EXMHCkWlMabbx17u+lEyIi6K
+        3pthk+jGFVzijmv9tcwao0yLwP9yMl0ot6BCt4x7h51LQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=6pxEig
+        jWfelMjOWs/Jq1DeSXeYEVsneKZclbXHsrvFQ=; b=0IfLJJFz1oyDNl66pJNJfD
+        fK4c+ZqgBV1JRd7wxvWo0TU2bYMX+yWOONUwtiB+FAnfw5CoMWYA3HuOJmeEcBPU
+        q/R1AyizBPiuyjRbbfpR4f7oAz/w44K8x1bfsWuD6eRh21k1csZ/bGwbNjAylRqG
+        S+zKp5kTf584fTAjy65FIqG4zQT2eZj8e1EzY0n//TpCX4X5shiCofJRsWRjhz+v
+        d8/6CyoSQmHjzKPaqDddMQGkUE8+Pfxftj15FQ6LpZOcIGiJYWbn/7iaf/xmQiV7
+        cU4CzpS/asntOs7f7QqfBxMPHb3C9yAf8NwoTMtLn7S9qV5cTx0tWsr3I2WKHtPw
+        ==
+X-ME-Sender: <xms:fp_OXnzMMddzuGs3DxMkcMGcAaZYDGTqZrX0dF1dx5rYHJOk_uyfcw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedruddvgedgleelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdljedtmdenucfjughrpefgtggjfffuhffvkfesthhqredttddtjeen
+    ucfhrhhomhepfdffrghnihgvlhcuighufdcuoegugihusegugihuuhhurdighiiiqeenuc
+    ggtffrrghtthgvrhhnpeelleelfeekudehudeitdefkeeutdfhieeiudeggfdutdetleek
+    vedtteevieffteenucfkphepjeefrdelfedrvdegjedrudefgeenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:fp_OXvSUMbDbI3ZC12QTnicdy3P20kMOKD3dc3jOfmeB3oesg5oXDA>
+    <xmx:fp_OXhX8P3FO9-Nt1LGVYuVV2rj-Slpt8I8KW0srICQtB7EPwbtJUQ>
+    <xmx:fp_OXhif-JI4R5yF4LAsFNrABBnXAQv97F_q5pBCEdII_QRGP4NGBg>
+    <xmx:f5_OXt7AKk-ovSiZzUxVTphnwaOqRn5Id8NRDUl4Od2wBnp27IJaxlzjc_g>
+Received: from localhost (c-73-93-247-134.hsd1.ca.comcast.net [73.93.247.134])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 7C89A3280063;
+        Wed, 27 May 2020 13:12:29 -0400 (EDT)
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <CAEf4BzbR+7X-boCBC-f60jugp8xWKVTeFTyUmrcv8Qy4iKsvjg@mail.gmail.com>
+Date:   Wed, 27 May 2020 10:03:56 -0700
+Cc:     "Alexei Starovoitov" <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        "Martin Lau" <kafai@fb.com>, "Song Liu" <songliubraving@fb.com>,
+        "Yonghong Song" <yhs@fb.com>, "Andrii Nakryiko" <andriin@fb.com>,
+        "john fastabend" <john.fastabend@gmail.com>,
+        "KP Singh" <kpsingh@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Jesper Dangaard Brouer" <hawk@kernel.org>,
+        "bpf" <bpf@vger.kernel.org>, "Networking" <netdev@vger.kernel.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        "clang-built-linux" <clang-built-linux@googlegroups.com>
+Subject: Re: [PATCH bpf-next] libbpf: Export bpf_object__load_vmlinux_btf
+From:   "Daniel Xu" <dxu@dxuuu.xyz>
+To:     "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
+Message-Id: <C31OATROKNZK.27CUNDSXX9I4K@maharaja>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, May 27, 2020 at 6:41 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->
-> On 5/27/2020 5:38 AM, KP Singh wrote:
-> > On 26-May 22:08, Christoph Hellwig wrote:
-> >> On Tue, May 26, 2020 at 06:33:34PM +0200, KP Singh wrote:
-> >>> From: KP Singh <kpsingh@google.com>
-> >>>
-> >>> Similar to bpf_local_storage for sockets, add local storage for inodes.
-> >>> The life-cycle of storage is managed with the life-cycle of the inode.
-> >>> i.e. the storage is destroyed along with the owning inode.
-> >>>
-> >>> Since, the intention is to use this in LSM programs, the destruction is
-> >>> done after security_inode_free in __destroy_inode.
-> >> NAK onbloating the inode structure.  Please find an out of line way
-> >> to store your information.
-> > The other alternative is to use lbs_inode (security blobs) and we can
-> > do this without adding fields to struct inode.
->
-> This is the correct approach, and always has been. This isn't the
-> first ( or second :( ) case where the correct behavior for an LSM
-> has been pretty darn obvious, but you've taken a different approach
-> for no apparent reason.
->
-> > Here is a rough diff (only illustrative, won't apply cleanly) of the
-> > changes needed to this patch:
+Hi Andrii,
+
+On Tue May 26, 2020 at 3:09 PM PST, Andrii Nakryiko wrote:
+> On Tue, May 26, 2020 at 7:09 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
 > >
-> >  https://gist.github.com/sinkap/1d213d17fb82a5e8ffdc3f320ec37d79
+> > Right now the libbpf model encourages loading the entire object at once=
+.
+> > In this model, libbpf handles loading BTF from vmlinux for us. However,
+> > it can be useful to selectively load certain maps and programs inside a=
+n
+> > object without loading everything else.
 >
-> To do just a little nit-picking, please use bpf_inode() instead of
-> bpf_inode_storage(). This is in keeping with the convention used by
-> the other security modules. Sticking with the existing convention
-> makes it easier for people (and tools) that work with multiple
-> security modules.
+> There is no way to selectively load or not load a map. All maps are
+> created, unless they are reusing map FD or pinned instances. See
+> below, I'd like to understand the use case better.
 >
-> > Once tracing has gets a whitelist based access to inode storage, I
-> > guess it, too, can use bpf_local_storage for inodes
->
-> Only within the BPF module. Your sentence above is slightly garbled,
-> so I'm not really sure what you're saying, but if you're suggesting
-> that tracing code outside of the BPF security module can use the
-> BPF inode data, the answer is a resounding "no".
-
-This is why I wanted to add a separate pointer in struct inode so that
-we could share the implementation with tracing. bpf_local_storage
-is managed (per-program+per-type of storage) with separate BPF maps.
-So, it can be easily shared between two programs (and
-program types) without them clobbering over each other.
-
-I guess we can have separate pointers for tracing,
-use the pointer in the security blob for the LSM and discuss this separately
-if and when we use this for tracing and keep this series patches scoped to
-BPF_PROG_TYPE_LSM.
-
-- KP
-
->
-> >  if CONFIG_BPF_LSM
-> > is enabled. Does this sound reasonable to the BPF folks?
 > >
-> > - KP
-> >
+> > In the latter model, there was perviously no way to load BTF on-demand.
+> > This commit exports the bpf_object__load_vmlinux_btf such that we are
+> > able to load BTF on demand.
 > >
 >
+> Let's start with the real problem, not a solution. Do you have
+> specific use case where you need bpf_object__load_vmlinux_btf()? It
+> might not do anything if none of BPF programs in the object requires
+> BTF, because it's very much tightly coupled with loading bpf_object as
+> a whole model. I'd like to understand what you are after with this,
+> before exposing internal implementation details as an API.
+
+If I try loading a program through the following sequence:
+
+    bpf_object__open_file()
+    bpf_object__find_program_by_name()
+    bpf_program__load()
+
+And the program require BTF (tp_btf), I get an unavoidable (to the best
+of my knowledge) segfault in the following code path:
+
+    bpf_program__load()
+      libbpf_find_attach_btf_id()    <-- [0]
+        __find_vmlinx_btf_id()
+          find_btf_by_prefix_kind()
+            btf__find_by_name_kind() <-- boom (btf->nr_types)
+
+because [0] passes prog->obj->btf_vmlinux which is still null. So the
+solution I'm proposing is exporting bpf_object__load_vmlinux_btf() and
+calling that on struct bpf_object before performing prog loads.
+
+[...]
+
+Thanks,
+Daniel
