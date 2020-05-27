@@ -2,140 +2,80 @@ Return-Path: <SRS0=ObQj=7J=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6488FC433DF
-	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 17:12:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26349C433DF
+	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 17:35:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C486C20890
-	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 17:12:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFF0520707
+	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 17:35:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="Dx1/Dmht";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="0IfLJJFz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dCGTihIt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731228AbgE0RMe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 May 2020 13:12:34 -0400
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:55191 "EHLO
-        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729894AbgE0RMd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 27 May 2020 13:12:33 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 022B8A97;
-        Wed, 27 May 2020 13:12:31 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 27 May 2020 13:12:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
-        content-transfer-encoding:content-type:in-reply-to:date:cc
-        :subject:from:to:message-id; s=fm3; bh=6pxEigjWfelMjOWs/Jq1DeSXe
-        YEVsneKZclbXHsrvFQ=; b=Dx1/DmhtipYpfHdvAyM/R5S0l0Urw1kxEabTy7ndJ
-        KTekDH5RnTfTmgtWbw1GPf0w0zy//8W2XsYDGENYLAJYsG0M8MFKQSDtejpoMNaj
-        hAnXIlNbMdyUmtqWBcPkLMwrLpd0M7Nc9TADOGV8r3gsiI1QSzzcbcOKvskxWyKF
-        nWVGqyFKvv8np6XOsHfTuSvEfCcTazr4q8NN3JRTDddw3g5bkUEkEjt7XqafB7mF
-        s6kv6nZ29QgL09L95cmnqmIRb0l/H+XOyd3tVem/EXMHCkWlMabbx17u+lEyIi6K
-        3pthk+jGFVzijmv9tcwao0yLwP9yMl0ot6BCt4x7h51LQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=6pxEig
-        jWfelMjOWs/Jq1DeSXeYEVsneKZclbXHsrvFQ=; b=0IfLJJFz1oyDNl66pJNJfD
-        fK4c+ZqgBV1JRd7wxvWo0TU2bYMX+yWOONUwtiB+FAnfw5CoMWYA3HuOJmeEcBPU
-        q/R1AyizBPiuyjRbbfpR4f7oAz/w44K8x1bfsWuD6eRh21k1csZ/bGwbNjAylRqG
-        S+zKp5kTf584fTAjy65FIqG4zQT2eZj8e1EzY0n//TpCX4X5shiCofJRsWRjhz+v
-        d8/6CyoSQmHjzKPaqDddMQGkUE8+Pfxftj15FQ6LpZOcIGiJYWbn/7iaf/xmQiV7
-        cU4CzpS/asntOs7f7QqfBxMPHb3C9yAf8NwoTMtLn7S9qV5cTx0tWsr3I2WKHtPw
-        ==
-X-ME-Sender: <xms:fp_OXnzMMddzuGs3DxMkcMGcAaZYDGTqZrX0dF1dx5rYHJOk_uyfcw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedruddvgedgleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdljedtmdenucfjughrpefgtggjfffuhffvkfesthhqredttddtjeen
-    ucfhrhhomhepfdffrghnihgvlhcuighufdcuoegugihusegugihuuhhurdighiiiqeenuc
-    ggtffrrghtthgvrhhnpeelleelfeekudehudeitdefkeeutdfhieeiudeggfdutdetleek
-    vedtteevieffteenucfkphepjeefrdelfedrvdegjedrudefgeenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:fp_OXvSUMbDbI3ZC12QTnicdy3P20kMOKD3dc3jOfmeB3oesg5oXDA>
-    <xmx:fp_OXhX8P3FO9-Nt1LGVYuVV2rj-Slpt8I8KW0srICQtB7EPwbtJUQ>
-    <xmx:fp_OXhif-JI4R5yF4LAsFNrABBnXAQv97F_q5pBCEdII_QRGP4NGBg>
-    <xmx:f5_OXt7AKk-ovSiZzUxVTphnwaOqRn5Id8NRDUl4Od2wBnp27IJaxlzjc_g>
-Received: from localhost (c-73-93-247-134.hsd1.ca.comcast.net [73.93.247.134])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 7C89A3280063;
-        Wed, 27 May 2020 13:12:29 -0400 (EDT)
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-In-Reply-To: <CAEf4BzbR+7X-boCBC-f60jugp8xWKVTeFTyUmrcv8Qy4iKsvjg@mail.gmail.com>
-Date:   Wed, 27 May 2020 10:03:56 -0700
-Cc:     "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Martin Lau" <kafai@fb.com>, "Song Liu" <songliubraving@fb.com>,
-        "Yonghong Song" <yhs@fb.com>, "Andrii Nakryiko" <andriin@fb.com>,
-        "john fastabend" <john.fastabend@gmail.com>,
-        "KP Singh" <kpsingh@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        "bpf" <bpf@vger.kernel.org>, "Networking" <netdev@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        "clang-built-linux" <clang-built-linux@googlegroups.com>
-Subject: Re: [PATCH bpf-next] libbpf: Export bpf_object__load_vmlinux_btf
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
-Message-Id: <C31OATROKNZK.27CUNDSXX9I4K@maharaja>
+        id S2391263AbgE0Rfl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 May 2020 13:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387837AbgE0Rfk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 May 2020 13:35:40 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649ECC03E97D
+        for <bpf@vger.kernel.org>; Wed, 27 May 2020 10:35:39 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id 14so183081qkv.16
+        for <bpf@vger.kernel.org>; Wed, 27 May 2020 10:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=5pjnryafVyy4mvARp4PLvV79vSG5/akHWFEPy2KlnO8=;
+        b=dCGTihItQsGdYpyiMxMhs9bG07VqaX7OZDpHdEgQ/I0ws6IWqscrTrbKj7KnmVsugx
+         L85ohmrQrYqgB5F/1TCwKCYf3AIZSNRBUSzHYw9Cv+cYNiaPGQTJOtCx6Iyy6r5S+Tga
+         k3naGklZtQ4/a4uIwun19KNN7T+1Gu0qn2nCn/TxTvkB/XDzhBiAnAcJ6XDv2vi7oi1Y
+         6j65zq5TwYq8Hp9V7VLehld2v2x9RUZLLvBHRu6pJzniue+UazeBwON5gfDoBqnduqAg
+         zY+LIu4ln8I+LP3bWh1a+HzcJYPs8Q5Kgsry75N+g3/Y9nrTmpGzAZijFMX43oyWWwNH
+         3aQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=5pjnryafVyy4mvARp4PLvV79vSG5/akHWFEPy2KlnO8=;
+        b=Ods+d2gjERSIyboarJpGokA1r4J9ZcP8kM37qNh1+ZRdANPNsAKdn1cBs4ycVNymsh
+         r2NfmeLccV+yOio86G6B+bWYdPnwAZT71lMkdkP5ek+JRvEjURXr7cu7PBHtyGGd8a3L
+         VdfpM6F1eoBZ4e9QaH4sGPSh6ANK3673WqCZFTLYTEIU68V6ruefxlRpBA6VROyI0LNO
+         wgHzcdErMMEQwUXZBKtIeT6aSMePQLY97jBQJWaJAvFzsFWo8im+U02R+/CJHJYYUSKz
+         0GJcCX51Y0D1Ulg2DxVZuXwrpJpfgB2oPK82NEU88ol7N2nviXzlueuH8NjPwCi7goSe
+         fwmg==
+X-Gm-Message-State: AOAM532vwpVemjI2N1Bg6CfQDsyMZ0uZ10BKzmDR6Ex130BZlWPdZcWQ
+        BCp3JN3M/RYxao+LGLEO8XEVWEo=
+X-Google-Smtp-Source: ABdhPJwP0e9h28WtLMf45Hus656qDYeDO+Q/IfiFF60rc2z7Uf9u2AXgp8ITZaNsqnb7aOyvExdPpjA=
+X-Received: by 2002:a0c:fb0e:: with SMTP id c14mr12165721qvp.63.1590600938582;
+ Wed, 27 May 2020 10:35:38 -0700 (PDT)
+Date:   Wed, 27 May 2020 10:35:36 -0700
+In-Reply-To: <20200527170840.1768178-2-jakub@cloudflare.com>
+Message-Id: <20200527173536.GD49942@google.com>
+Mime-Version: 1.0
+References: <20200527170840.1768178-1-jakub@cloudflare.com> <20200527170840.1768178-2-jakub@cloudflare.com>
+Subject: Re: [PATCH bpf-next 1/8] flow_dissector: Don't grab update-side lock
+ on prog detach from pre_exit
+From:   sdf@google.com
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Andrii,
+On 05/27, Jakub Sitnicki wrote:
+> When there are no references to struct net left, that is check_net(net) is
+> false, we don't need to synchronize updates to flow_dissector prog with  
+> BPF
+> prog attach/detach callbacks. That allows us to pull locking up from the
+> shared detach routine and into the bpf prog detach callback.
 
-On Tue May 26, 2020 at 3:09 PM PST, Andrii Nakryiko wrote:
-> On Tue, May 26, 2020 at 7:09 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
-> >
-> > Right now the libbpf model encourages loading the entire object at once=
-.
-> > In this model, libbpf handles loading BTF from vmlinux for us. However,
-> > it can be useful to selectively load certain maps and programs inside a=
-n
-> > object without loading everything else.
->
-> There is no way to selectively load or not load a map. All maps are
-> created, unless they are reusing map FD or pinned instances. See
-> below, I'd like to understand the use case better.
->
-> >
-> > In the latter model, there was perviously no way to load BTF on-demand.
-> > This commit exports the bpf_object__load_vmlinux_btf such that we are
-> > able to load BTF on demand.
-> >
->
-> Let's start with the real problem, not a solution. Do you have
-> specific use case where you need bpf_object__load_vmlinux_btf()? It
-> might not do anything if none of BPF programs in the object requires
-> BTF, because it's very much tightly coupled with loading bpf_object as
-> a whole model. I'd like to understand what you are after with this,
-> before exposing internal implementation details as an API.
-
-If I try loading a program through the following sequence:
-
-    bpf_object__open_file()
-    bpf_object__find_program_by_name()
-    bpf_program__load()
-
-And the program require BTF (tp_btf), I get an unavoidable (to the best
-of my knowledge) segfault in the following code path:
-
-    bpf_program__load()
-      libbpf_find_attach_btf_id()    <-- [0]
-        __find_vmlinx_btf_id()
-          find_btf_by_prefix_kind()
-            btf__find_by_name_kind() <-- boom (btf->nr_types)
-
-because [0] passes prog->obj->btf_vmlinux which is still null. So the
-solution I'm proposing is exporting bpf_object__load_vmlinux_btf() and
-calling that on struct bpf_object before performing prog loads.
-
-[...]
-
-Thanks,
-Daniel
+> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
