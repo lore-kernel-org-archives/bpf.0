@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3744CC433E0
-	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 18:57:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82FC1C433E0
+	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 18:58:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D69120C56
-	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 18:57:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6276E2073B
+	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 18:58:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hl+IXHSF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KVvW98Bq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728707AbgE0S5n (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 May 2020 14:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
+        id S1728648AbgE0S5k (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 May 2020 14:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728688AbgE0S5m (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 May 2020 14:57:42 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AD9C08C5C2;
-        Wed, 27 May 2020 11:57:41 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id m67so12307588oif.4;
-        Wed, 27 May 2020 11:57:41 -0700 (PDT)
+        with ESMTP id S1728620AbgE0S5j (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 May 2020 14:57:39 -0400
+Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73605C08C5C2;
+        Wed, 27 May 2020 11:57:38 -0700 (PDT)
+Received: by mail-oo1-xc41.google.com with SMTP id v3so575272oot.1;
+        Wed, 27 May 2020 11:57:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=I09zh1v7z5u8lEFHdYt72pjx0gywlmdpCKdvNPS3YjA=;
-        b=Hl+IXHSFurDg/vHoOJem9FDAWswbJsRgzR+fGRdAysJ9zCQOtQuNxJWkcmpRqH7649
-         M/Y3j5yHoE5LMgaorq7cDkZC5Z2mNAWvFE13fZRXW/GEBIk9PJ3MOvmc6oGzZk+XS5L+
-         /F8TPP/8cPLNdBA4qIQ4e+DZWgqWR9Cr1T9g9zUph6jFs1GCN2xJ5AR/Es0KSBEiHwTU
-         hQSg+Eb/8CJX62DK1aNQbc9vVlTHIUU6GyM8BV7c71G4ggYUPfJaT3+bQ+zl+AAWz+mE
-         wDuK8owCbABniOeKBJmd+6+RDEWJgA/DBIaDXAvnni/okb0rQo5NfMRA7p0rPeGPGK+Q
-         VaQA==
+        bh=g+Sx+LdvdlNSFwCeU+0IiQJrZn4C+WBNteUBifrI+jE=;
+        b=KVvW98BqWNJ24t4WyN/kDF2iHvPjOBw9yXgMoj+8JhHhAlRDlE+LpzKyLqn3Xpvukv
+         nqown0T98zAjGQYo/R+soVOVV9GmMOEPZemPOE6E9AskUI2lTowG+89h2Nae54qub440
+         nN4oIa7J5phAONxfckHzvZ3M0u8UDlYQE5GLjjgP9oIx0/fYQAjHbPFXdYtLjfyPmfRu
+         HqKv+HM3L6omH2j6MAGfV9IatjOE/0OhnlBCcpfQ119Igf7IDlYpuOPjDsezkhjNiLBs
+         ObWnVQCjDvdmjGWi4ARxA5ZfIhjymjU5aRf6ZmarnM2zUVaqStWptuYpvxI5gXym6FuP
+         31QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=I09zh1v7z5u8lEFHdYt72pjx0gywlmdpCKdvNPS3YjA=;
-        b=motbcn1OSmmwLGxuv7KDz68uDSSQqN4JwASLK8Ahj7UZFmQMR403Jm3w315t5Qmlyv
-         4axzkoTL4AmrC3XPmZDIaIYqP1TiwukfyTHMMaW8K6OGCocCUJueWuovzo9oxulp48vl
-         RXxRsK8cUXaHQLDM+9GolAMl57YhCcRfEJ1tUlt2TTz0m7HR3kvMeTKh2GOSMqDLyEQs
-         sjc7cF2/9lQabjfQQ5Y7csnzI90UhRUDPFjU26FjswOh5TDk3niCmDELVAzIoAOkWcq2
-         78VTUjfDBJh5mkpZwzLsfoXk8QqNWn4mLP6GIECsGw05Hm5PS77jgT89qRjthNmvvOcu
-         Mt/Q==
-X-Gm-Message-State: AOAM530471s0Ej/VIoV6uuucspj3x57naCIs8NWwsWb2vnLzgEra9dTg
-        St1tBMymiNv5LKKtomaE6QnRFInvThQ=
-X-Google-Smtp-Source: ABdhPJxvi0EZe24uD0uYZYuQSoDF1clZ5ClhD7yha8spsIME2wl9ZZLZy5AG25fwLfpFhSyAjB7Fkg==
-X-Received: by 2002:a05:6808:d8:: with SMTP id t24mr3598966oic.10.1590605860922;
-        Wed, 27 May 2020 11:57:40 -0700 (PDT)
+        bh=g+Sx+LdvdlNSFwCeU+0IiQJrZn4C+WBNteUBifrI+jE=;
+        b=oNmLG6Zy4b2/fKHXa3gRIKsE5wGN6HvlOfEluG1ixr0nW0mhrT3q5xG0k2J7PAa75N
+         0csW9QMgsqAMn+348XmVL3E7MF3GNGEedZbRIWLncslLfXNBU9uYumpio3tdGH9v9/za
+         FZGaVWtmyzgXe0UzeITaegRB1jWqpvFJUTHm/P+kigZYAjxPXf+vOofLfH+amalIZTyM
+         O9UuwuxrK84XwYLdobSnBvmeJbyHaNZ9SfFJmaMFv/FvxQG+Mpr7kLZf1Cnf3ZK7YARM
+         F52/ipL12wuDgObeimzp6QFNtoRE75E5V4Sa3XYoQ79Lp8pQWgugkQVGAx7ybgCM7aFk
+         2X6w==
+X-Gm-Message-State: AOAM530X0nVnTEBDKyOfMug/ovbf6nTzG7XguI1kYFkje99UDDbwqUtg
+        UWOJA5yh0f2R8z3314idRgk=
+X-Google-Smtp-Source: ABdhPJxzxs3LBefZR3f9QCZMzmpVC0Xh6Fb7A6WGu2tA0bCiDIdtmf9eu5W4zxbg+ADgH2XQJc85eg==
+X-Received: by 2002:a4a:6b0b:: with SMTP id g11mr4196074ooc.6.1590605857821;
+        Wed, 27 May 2020 11:57:37 -0700 (PDT)
 Received: from localhost.members.linode.com ([2600:3c00::f03c:92ff:fe3e:1759])
-        by smtp.gmail.com with ESMTPSA id i127sm1074596oih.38.2020.05.27.11.57.39
+        by smtp.gmail.com with ESMTPSA id i127sm1074596oih.38.2020.05.27.11.57.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2020 11:57:39 -0700 (PDT)
+        Wed, 27 May 2020 11:57:37 -0700 (PDT)
 From:   Anton Protopopov <a.s.protopopov@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -70,16 +70,14 @@ Cc:     Anton Protopopov <a.s.protopopov@gmail.com>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 5/5] selftests/bpf: add tests for write-only stacks/queues
-Date:   Wed, 27 May 2020 18:57:00 +0000
-Message-Id: <20200527185700.14658-6-a.s.protopopov@gmail.com>
+Subject: [PATCH bpf 3/5] selftests/bpf: cleanup comments in test_maps
+Date:   Wed, 27 May 2020 18:56:58 +0000
+Message-Id: <20200527185700.14658-4-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200527185700.14658-5-a.s.protopopov@gmail.com>
+In-Reply-To: <20200527185700.14658-3-a.s.protopopov@gmail.com>
 References: <20200527185700.14658-1-a.s.protopopov@gmail.com>
  <20200527185700.14658-2-a.s.protopopov@gmail.com>
  <20200527185700.14658-3-a.s.protopopov@gmail.com>
- <20200527185700.14658-4-a.s.protopopov@gmail.com>
- <20200527185700.14658-5-a.s.protopopov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -87,72 +85,41 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For write-only stacks and queues bpf_map_update_elem should be allowed, but
-bpf_map_lookup_elem and bpf_map_lookup_and_delete_elem should fail with EPERM.
+Make comments inside the test_map_rdonly and test_map_wronly tests
+consistent with logic.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- tools/testing/selftests/bpf/test_maps.c | 40 ++++++++++++++++++++++++-
- 1 file changed, 39 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_maps.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index 08d63948514a..6a12a0e01e07 100644
+index 46cf2c232964..08d63948514a 100644
 --- a/tools/testing/selftests/bpf/test_maps.c
 +++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -1405,7 +1405,7 @@ static void test_map_rdonly(void)
- 	close(fd);
- }
+@@ -1394,11 +1394,11 @@ static void test_map_rdonly(void)
  
--static void test_map_wronly(void)
-+static void test_map_wronly_hash(void)
- {
- 	int fd, key = 0, value = 0;
+ 	key = 1;
+ 	value = 1234;
+-	/* Insert key=1 element. */
++	/* Try to insert key=1 element. */
+ 	assert(bpf_map_update_elem(fd, &key, &value, BPF_ANY) == -1 &&
+ 	       errno == EPERM);
  
-@@ -1429,6 +1429,44 @@ static void test_map_wronly(void)
- 	close(fd);
- }
+-	/* Check that key=2 is not found. */
++	/* Check that key=1 is not found. */
+ 	assert(bpf_map_lookup_elem(fd, &key, &value) == -1 && errno == ENOENT);
+ 	assert(bpf_map_get_next_key(fd, &key, &value) == -1 && errno == ENOENT);
  
-+static void test_map_wronly_stack_or_queue(enum bpf_map_type map_type)
-+{
-+	int fd, value = 0;
-+
-+	assert(map_type == BPF_MAP_TYPE_QUEUE ||
-+	       map_type == BPF_MAP_TYPE_STACK);
-+	fd = bpf_create_map(map_type, 0, sizeof(value), MAP_SIZE,
-+			    map_flags | BPF_F_WRONLY);
-+	/* Stack/Queue maps do not support BPF_F_NO_PREALLOC */
-+	if (map_flags & BPF_F_NO_PREALLOC) {
-+		assert(fd < 0 && errno == EINVAL);
-+		return;
-+	}
-+	if (fd < 0) {
-+		printf("Failed to create map '%s'!\n", strerror(errno));
-+		exit(1);
-+	}
-+
-+	value = 1234;
-+	assert(bpf_map_update_elem(fd, NULL, &value, BPF_ANY) == 0);
-+
-+	/* Peek element should fail */
-+	assert(bpf_map_lookup_elem(fd, NULL, &value) == -1 && errno == EPERM);
-+
-+	/* Pop element should fail */
-+	assert(bpf_map_lookup_and_delete_elem(fd, NULL, &value) == -1 &&
-+	       errno == EPERM);
-+
-+	close(fd);
-+}
-+
-+static void test_map_wronly(void)
-+{
-+	test_map_wronly_hash();
-+	test_map_wronly_stack_or_queue(BPF_MAP_TYPE_STACK);
-+	test_map_wronly_stack_or_queue(BPF_MAP_TYPE_QUEUE);
-+}
-+
- static void prepare_reuseport_grp(int type, int map_fd, size_t map_elem_size,
- 				  __s64 *fds64, __u64 *sk_cookies,
- 				  unsigned int n)
+@@ -1422,7 +1422,7 @@ static void test_map_wronly(void)
+ 	/* Insert key=1 element. */
+ 	assert(bpf_map_update_elem(fd, &key, &value, BPF_ANY) == 0);
+ 
+-	/* Check that key=2 is not found. */
++	/* Check that reading elements and keys from the map is not allowed. */
+ 	assert(bpf_map_lookup_elem(fd, &key, &value) == -1 && errno == EPERM);
+ 	assert(bpf_map_get_next_key(fd, &key, &value) == -1 && errno == EPERM);
+ 
 -- 
 2.20.1
 
