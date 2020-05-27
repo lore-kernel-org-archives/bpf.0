@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74C3EC433E0
-	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 18:59:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1458EC433DF
+	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 18:59:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 599C32073B
-	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 18:59:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F17972073B
+	for <bpf@archiver.kernel.org>; Wed, 27 May 2020 18:59:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQIL3L9Q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DFl0fF7d"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729004AbgE0S6w (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 May 2020 14:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
+        id S1725747AbgE0S7F (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 May 2020 14:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbgE0S5k (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 May 2020 14:57:40 -0400
-Received: from mail-oo1-xc43.google.com (mail-oo1-xc43.google.com [IPv6:2607:f8b0:4864:20::c43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3815EC08C5C1;
-        Wed, 27 May 2020 11:57:40 -0700 (PDT)
-Received: by mail-oo1-xc43.google.com with SMTP id x17so1243749oog.6;
-        Wed, 27 May 2020 11:57:40 -0700 (PDT)
+        with ESMTP id S1728564AbgE0S5h (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 May 2020 14:57:37 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3921DC08C5C1;
+        Wed, 27 May 2020 11:57:37 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id x22so415352otq.4;
+        Wed, 27 May 2020 11:57:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/bi2v/w881kTu6aWVQghMQWdHo/A6/i+CwZouKlxmms=;
-        b=CQIL3L9QuGAGDOch3ZMsrDWOowK34i8Dzmn0YPcOlbVnRAkpWIkm5klrZ7exR8KX2V
-         yvoM1/mwIx6c32q4jY+hff50T+XO+4+RwrlJH5VzZ1+9hud0QAGUzzTtnb3Zpyr2n2tV
-         tp1gO7TsKr3QnvY49tvhWCjqbHBmI4cchjZq/CNphEyjEv5bceDjxftzbADAsOUXbZ2u
-         RN4T2b7SqMfyAnp4JyjgbAilvaycZNST78JZEBc4Y9S57yNkJcIaC7Gcs4ppj47iB/Ky
-         qXwwXupF+FcBY/udgJBgefsgsVBNHDPDve4jiF9V9DcOQLcmKyQZzCaNpT5l6cCWS/xL
-         7D1g==
+        bh=eW6ryn1rOfnt2FF7cISQz6U787vY1TgBbRYE31eh+Uw=;
+        b=DFl0fF7dcBxB5zqV1ix3II/kS7GQWkr6h7MlBOIRyyX9w/lmsBDVqgZKwMtq0L4M9H
+         JTBc6t/jarulee9eP3RPJKMS2NvII2IvXAT0SjYl2xUHexw2iLgQZVQwSUPKlmY5/tYu
+         blnENDtu+hHIbyK+fWHgVFD2xWYKMl0dQlHidD4j3U3cRAYEdixqEZsEMbCUaOiO6Iem
+         AaZO+xMLT7bai9YdpZ8wEx6wvizd+XffPHmevaIB/n/EpgKdqo1WI7hkfxe32wVQeBOf
+         UFz9ZFZlvdfXGql8cPsqCC4q63jmWoSjd5QqXTYzEdiKuCUTHUkLidSnDhGYt0Y9Sh8U
+         cFrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/bi2v/w881kTu6aWVQghMQWdHo/A6/i+CwZouKlxmms=;
-        b=nWgasd1qg/E/bb6gkrjIy8qFYjpnzlb/Bke2TQcaWooxHtqdY2ddNNH9/mj6an0Hzu
-         YcpCDfD1PGqgEeW31hYrRqSsH+Rza+z1M2bpJuMtbWxEU5e0pRRiUF4+N88qhwXMzgTa
-         s4m6SSJPtEFrybnK/tD9JoqzR08BS6F4lJsoO+CcmI88/Ej1ho5BMKz5eoTh8OBuSKPP
-         9tXcvP5RpCem4cVqtKE+N8AeA8mouOgwy3wvwtholqs1UpXm9N2YMpwt2GNK0rLDyJIX
-         Xy6+34HpDggVLdA4+4xsTBUiOAkRI3u9gS1bFRu+BRyx0f1gc0tbkvXu0FcJYHLhc6Gu
-         /1Kw==
-X-Gm-Message-State: AOAM533DRdpP+leTPuXHwR+NrjcOGFz+obovEl0lUB9kwaGXxMTMW3WE
-        vZG288V/50k5V8xoghoFjO8=
-X-Google-Smtp-Source: ABdhPJyzzRIMTL2FQqJKEg9svGszotkEOxIapfGj9shfnfRkXZ8OYl6TxV8aHgl0uRVzP+PIFoUAhQ==
-X-Received: by 2002:a4a:5548:: with SMTP id e69mr4198269oob.23.1590605859440;
-        Wed, 27 May 2020 11:57:39 -0700 (PDT)
+        bh=eW6ryn1rOfnt2FF7cISQz6U787vY1TgBbRYE31eh+Uw=;
+        b=LZ78mXkLqXZvW1PqKUgBHFUBx/MvKDMDC4Qm9+ZhiYzssPBbfTBtDjIcty0DZmQ4pE
+         fwx3iv4/de8yBOM7vACUzK8dUpM4N18JXTja1kx6QoBxniGDbaVfPx2xxnn+nAGC5l0/
+         O7HGgHMs9+e8qxKifvWdb8ZIGqBCS/+c1LyN5tINW0NwHolCgOEZkT0DDhe8mBE290dE
+         an/y7bna+GcgWiCD2W6oouxANX02/mWi+WyntD3LU3UFnPJAqbvH47BB/QP1RNIr8+sV
+         nNONuh416mdRNz8am9nusoLfbskgpXKHdljr0VNzzapkRvYxzhhhB1ycXCwFOVTvQjse
+         Hj3A==
+X-Gm-Message-State: AOAM533pk8tM+prv1mkdjWCfJdlIhLUUe9xkeZrSr/m9pl2u6Wp9+V3m
+        A+zDVORpW/IAUrKgJZ9cN2s=
+X-Google-Smtp-Source: ABdhPJy0KJw3sf9zmT1G+HDG+6Q0TCF/0gOW2ku15pcSyJcP5yU5cr/zlnwmgb0j4Gon70V/ZXqnNw==
+X-Received: by 2002:a9d:4807:: with SMTP id c7mr5327778otf.279.1590605856664;
+        Wed, 27 May 2020 11:57:36 -0700 (PDT)
 Received: from localhost.members.linode.com ([2600:3c00::f03c:92ff:fe3e:1759])
-        by smtp.gmail.com with ESMTPSA id i127sm1074596oih.38.2020.05.27.11.57.37
+        by smtp.gmail.com with ESMTPSA id i127sm1074596oih.38.2020.05.27.11.57.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2020 11:57:38 -0700 (PDT)
+        Wed, 27 May 2020 11:57:35 -0700 (PDT)
 From:   Anton Protopopov <a.s.protopopov@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -70,15 +70,13 @@ Cc:     Anton Protopopov <a.s.protopopov@gmail.com>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 4/5] bpf: fix map permissions check
-Date:   Wed, 27 May 2020 18:56:59 +0000
-Message-Id: <20200527185700.14658-5-a.s.protopopov@gmail.com>
+Subject: [PATCH bpf 2/5] selftests/bpf: cleanup some file descriptors in test_maps
+Date:   Wed, 27 May 2020 18:56:57 +0000
+Message-Id: <20200527185700.14658-3-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200527185700.14658-4-a.s.protopopov@gmail.com>
+In-Reply-To: <20200527185700.14658-2-a.s.protopopov@gmail.com>
 References: <20200527185700.14658-1-a.s.protopopov@gmail.com>
  <20200527185700.14658-2-a.s.protopopov@gmail.com>
- <20200527185700.14658-3-a.s.protopopov@gmail.com>
- <20200527185700.14658-4-a.s.protopopov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -86,30 +84,36 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The map_lookup_and_delete_elem() function should check for both FMODE_CAN_WRITE
-and FMODE_CAN_READ permissions because it returns a map element to user space.
-
-Fixes: bd513cd08f10 ("bpf: add MAP_LOOKUP_AND_DELETE_ELEM syscall")
+The test_map_rdonly and test_map_wronly tests should close file descriptors
+which they open.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- kernel/bpf/syscall.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_maps.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 4e6dee19a668..5e52765161f9 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1468,7 +1468,8 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--	if (!(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_READ) ||
-+	    !(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index f717acc0c68d..46cf2c232964 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -1401,6 +1401,8 @@ static void test_map_rdonly(void)
+ 	/* Check that key=2 is not found. */
+ 	assert(bpf_map_lookup_elem(fd, &key, &value) == -1 && errno == ENOENT);
+ 	assert(bpf_map_get_next_key(fd, &key, &value) == -1 && errno == ENOENT);
++
++	close(fd);
+ }
+ 
+ static void test_map_wronly(void)
+@@ -1423,6 +1425,8 @@ static void test_map_wronly(void)
+ 	/* Check that key=2 is not found. */
+ 	assert(bpf_map_lookup_elem(fd, &key, &value) == -1 && errno == EPERM);
+ 	assert(bpf_map_get_next_key(fd, &key, &value) == -1 && errno == EPERM);
++
++	close(fd);
+ }
+ 
+ static void prepare_reuseport_grp(int type, int map_fd, size_t map_elem_size,
 -- 
 2.20.1
 
