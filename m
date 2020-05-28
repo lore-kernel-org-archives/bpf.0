@@ -2,134 +2,119 @@ Return-Path: <SRS0=Fl3P=7K=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A00CC433E0
-	for <bpf@archiver.kernel.org>; Thu, 28 May 2020 17:11:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FCF3C433DF
+	for <bpf@archiver.kernel.org>; Thu, 28 May 2020 17:12:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ECC8720721
-	for <bpf@archiver.kernel.org>; Thu, 28 May 2020 17:11:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2CAC220721
+	for <bpf@archiver.kernel.org>; Thu, 28 May 2020 17:12:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XPXvL/9o"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="flHOiBfm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405349AbgE1RLb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 May 2020 13:11:31 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:54219 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2405320AbgE1RLa (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 28 May 2020 13:11:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590685887;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xaYkM24G2m803F/chb/jq5pTBxpALIamh9MB8ZyiK4k=;
-        b=XPXvL/9oMcKj3o3Os1KDPX1jTM78tAhBs6xzlo5P5fTj9JJujLlsbC36Me65/TV82PflsV
-        rmH2TyDnAcLQg5U8y9fqVfAhUGINnXZFFR9GaC9F5STNjuRtZ2PUyQzRBfSQLiQP1hjGp4
-        Lbt5mu1ljqTcpzq/m4Z1QEBvbYZNyTI=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-504-utugfRQMOh66XuOCRaoeHQ-1; Thu, 28 May 2020 13:11:22 -0400
-X-MC-Unique: utugfRQMOh66XuOCRaoeHQ-1
-Received: by mail-oo1-f70.google.com with SMTP id y16so921627oot.1
-        for <bpf@vger.kernel.org>; Thu, 28 May 2020 10:11:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xaYkM24G2m803F/chb/jq5pTBxpALIamh9MB8ZyiK4k=;
-        b=qmeHdd2x3MGXxQMkoHuuxC78QMJRe+Ox9wR7mgWrtXf2s8qc0WDa9wnbNQWwbYYM1j
-         VSy3sBJyZNGG4zJ2nBMuaWjEDkPFfiiq+TMJalRfSIsYb8WDHoJYgY8Oc+70Ej1rfpBz
-         GDtvIY8cuzgemheFz1a/LxAZ9ffjkKx2q5A0rsFMEDCZCShE8I67WzsbTMoppO8ADCbn
-         WKNCGLHSYNNtBxDAJ0GIdwA35D/4kXQUG1Fm/5qzUfs/jovf6l9xG+n2IA9EhQCWG4vy
-         8hTo/4USNDCedEcvI5JtWUHC99EK6p+sNLkp51sweVt7Y1IrYjVEy8jUm85TP1o96TFV
-         I9LQ==
-X-Gm-Message-State: AOAM530wSUyL6oAxULXs5k3w+N2a10DL/+lmNsa43JQgEYKweOuL2Fqb
-        kZtE+d8be5nptgbuGxtM+ojc3gQjwS+QFtSX4AA1AXE4bB4vUASeuczMmLA8IcqR2cRABQilzVD
-        J4wRE1Q7GYDVoTZef7+Q2HLqsgZMQ
-X-Received: by 2002:aca:f3c6:: with SMTP id r189mr2798497oih.73.1590685873680;
-        Thu, 28 May 2020 10:11:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzNpt7lm09wPE/RS56oNAzVrcNKbkTdlzTw/HKlW3RUZud4VndZKG1homLi/1T2REUUB8K/J+bW21Kp6ThU/Pk=
-X-Received: by 2002:aca:f3c6:: with SMTP id r189mr2798478oih.73.1590685873348;
- Thu, 28 May 2020 10:11:13 -0700 (PDT)
+        id S2405341AbgE1RM4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 May 2020 13:12:56 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59572 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2405336AbgE1RMy (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 28 May 2020 13:12:54 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04SH5XRU010329
+        for <bpf@vger.kernel.org>; Thu, 28 May 2020 10:12:48 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=JfEyNFtXvQs+vT7icUWbvwhGv9lXDmp7BZhGgSEmsbY=;
+ b=flHOiBfmFrDZaElEGh7a7rxiNnyyL/6BpMs7WeQWzZK61UpUen7Dr5VvT9po9zLBXEMc
+ AsNbaSkfxv8ivmt//RkbFkL0p1uTtq3b2Xsdf+tcYG3BUCFRFfjDHjopj8TbSxCG8WIr
+ OOqUSaZg/Z7soIrc01+iC9SuqbOpwRsh/rA= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 319bqcv1ce-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 28 May 2020 10:12:48 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 28 May 2020 10:12:47 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id C36C437053B1; Thu, 28 May 2020 09:50:44 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf 2/2] tools/bpf: add a verifier test for assigning 32bit reg states to 64bit ones
+Date:   Thu, 28 May 2020 09:50:44 -0700
+Message-ID: <20200528165044.1568896-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200528165043.1568623-1-yhs@fb.com>
+References: <20200528165043.1568623-1-yhs@fb.com>
 MIME-Version: 1.0
-References: <xunya71uosvv.fsf@redhat.com> <CAADnVQJUL9=T576jo29F_zcEd=C6_OiExaGbEup6F-mA01EKZQ@mail.gmail.com>
- <xuny367lq1z1.fsf@redhat.com> <CAADnVQ+1o1JAm7w1twW0KgKMHbp-JvVjzET2N+VS1z=LajybzA@mail.gmail.com>
- <xunyh7w1nwem.fsf@redhat.com> <CAADnVQKbKA_Yuj7v3c6fNi7gZ8z_q_hzX2ry9optEHE3B_iWcg@mail.gmail.com>
- <ec5f6bd9-83e9-fc55-1885-18eee404d988@kernel.org> <CAADnVQJhb0+KWY0=4WVKc8NQswDJ5pU7LW1dQE2TQuya0Pn0oA@mail.gmail.com>
- <20200528100557.20489f04@redhat.com> <20200528105631.GE3115014@kroah.com> <20200528161437.x3e2ddxmj6nlhvv7@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20200528161437.x3e2ddxmj6nlhvv7@ast-mbp.dhcp.thefacebook.com>
-From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Date:   Thu, 28 May 2020 20:10:57 +0300
-Message-ID: <CANoWswkGoJEZVcfLiNverDWyh6skSoix=JqxeJR9K8A=H8x=rw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: split -extras target to -static and -gen
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, Jiri Benc <jbenc@redhat.com>,
-        shuah <shuah@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Jiri Olsa <jolsa@redhat.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-05-28_03:2020-05-28,2020-05-28 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ suspectscore=13 mlxlogscore=562 spamscore=0 mlxscore=0 malwarescore=0
+ bulkscore=0 adultscore=0 phishscore=0 clxscore=1015 priorityscore=1501
+ impostorscore=0 cotscore=-2147483648 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2005280119
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi, Alexei,
+Added a verifier test for assigning 32bit reg states to
+64bit where 32bit reg holds a constant value of 0.
 
-On Thu, May 28, 2020 at 7:14 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, May 28, 2020 at 12:56:31PM +0200, Greg KH wrote:
-> > On Thu, May 28, 2020 at 10:05:57AM +0200, Jiri Benc wrote:
-> > > On Wed, 27 May 2020 15:23:13 -0700, Alexei Starovoitov wrote:
-> > > > I prefer to keep selftests/bpf install broken.
-> > > > This forced marriage between kselftests and selftests/bpf
-> > > > never worked well. I think it's a time to free them up from each other.
-> > >
-> > > Alexei, it would be great if you could cooperate with other people
-> > > instead of pushing your own way. The selftests infrastructure was put
-> > > to the kernel to have one place for testing. Inventing yet another way
-> > > to add tests does not help anyone. You don't own the kernel. We're
-> > > community, we should cooperate.
-> >
-> > I agree, we rely on the infrastructure of the kselftests framework so
-> > that testing systems do not have to create "custom" frameworks to handle
-> > all of the individual variants that could easily crop up here.
-> >
-> > Let's keep it easy for people to run and use these tests, to not do so
-> > is to ensure that they are not used, which is the exact opposite goal of
-> > creating tests.
->
-> Greg,
->
-> It is easy for people (bpf developers) to run and use the tests.
-> Every developer runs them before submitting patches.
-> New tests is a hard requirement for any new features.
-> Maintainers run them for every push.
->
-> What I was and will push back hard is when other people (not bpf developers)
-> come back with an excuse that some CI system has a hard time running these
-> tests. It's the problem of weak CI. That CI needs to be fixed. Not the tests.
-> The example of this is that we already have github/libbpf CI that runs
-> selftests/bpf just fine. Anyone who wants to do another CI are welcome to copy
-> paste what already works instead of burdening people (bpf developers) who run
-> and use existing tests. I frankly have no sympathy to folks who put their own
-> interest of their CI development in front of bpf community of developers.
-> The main job of CI is to help developers and maintainers.
-> Where helping means to not impose new dumb rules on developers because CI
-> framework is dumb. Fix CI instead.
->
+Without previous kernel verifier.c fix, the test in
+this patch will fail.
 
-Any good reason why bpf selftests, residing under selftests/, should
-be an exception?
-"Breakages" is not, breakages are fixable.
+Cc: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ tools/testing/selftests/bpf/verifier/bounds.c | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
--- 
-WBR, Yauheni
+diff --git a/tools/testing/selftests/bpf/verifier/bounds.c b/tools/testin=
+g/selftests/bpf/verifier/bounds.c
+index a253a064e6e0..e2739ca2abec 100644
+--- a/tools/testing/selftests/bpf/verifier/bounds.c
++++ b/tools/testing/selftests/bpf/verifier/bounds.c
+@@ -539,3 +539,25 @@
+ 	},
+ 	.result =3D ACCEPT
+ },
++{
++	"assigning 32bit bounds to 64bit for wA =3D 0, wB =3D wA",
++	.insns =3D {
++	BPF_LDX_MEM(BPF_W, BPF_REG_8, BPF_REG_1,
++		    offsetof(struct __sk_buff, data_end)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_1,
++		    offsetof(struct __sk_buff, data)),
++	BPF_MOV32_IMM(BPF_REG_9, 0),
++	BPF_MOV32_REG(BPF_REG_2, BPF_REG_9),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_7),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_6, BPF_REG_2),
++	BPF_MOV64_REG(BPF_REG_3, BPF_REG_6),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_3, 8),
++	BPF_JMP_REG(BPF_JGT, BPF_REG_3, BPF_REG_8, 1),
++	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_6, 0),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
++	.result =3D ACCEPT,
++	.flags =3D F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
+--=20
+2.24.1
 
