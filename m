@@ -2,316 +2,232 @@ Return-Path: <SRS0=Fl3P=7K=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B90FC433E0
-	for <bpf@archiver.kernel.org>; Thu, 28 May 2020 20:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97DE8C433E0
+	for <bpf@archiver.kernel.org>; Thu, 28 May 2020 20:58:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 34EB7208B8
-	for <bpf@archiver.kernel.org>; Thu, 28 May 2020 20:47:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1590698874;
-	bh=vgJrR6hW1YCUyPNPAX535hp1C3q2ppzLzhfPxNuNclg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=2vYbHhwwncBPJdZesyg5IUSZGPtZqhEATFMQ1OWpHowDKeE7m5hvQwUrCiBGRniDr
-	 XVaNVw1z8i61C/cN3Lye76nOFmrY9zOqoI70HCkyXywzRFR5xqEMWU3oW3LAq+p/YZ
-	 eiQzIgVNOwl1bklZUnaEhedkkxN52IBCL//5KyIg=
+	by mail.kernel.org (Postfix) with ESMTP id 6DCFC2088E
+	for <bpf@archiver.kernel.org>; Thu, 28 May 2020 20:58:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FVjFsBjc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407367AbgE1Urx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 May 2020 16:47:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54208 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407361AbgE1Urt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 May 2020 16:47:49 -0400
-Received: from lore-desk.lan (unknown [151.48.140.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 09F16208A7;
-        Thu, 28 May 2020 20:47:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590698868;
-        bh=vgJrR6hW1YCUyPNPAX535hp1C3q2ppzLzhfPxNuNclg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dJjmLh8d2dzsRI7Su/Gcu79SpXv4aFXZiP/eCX2U6jpyN+BeDmW3Kzq0jTJXxPgJW
-         9OM41HSamlGKlWpjOl6bCUN6rX9Y8qCEYPdjjIJytxZjI5xD6YlyjEYrvZOAhk+ex0
-         OQCc+rZQSyMgEIehk84AiT7/y7jGpN2uv1/fLVTM=
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc:     ast@kernel.org, davem@davemloft.net, brouer@redhat.com,
-        daniel@iogearbox.net, lorenzo.bianconi@redhat.com,
-        dsahern@kernel.org
-Subject: [PATCH v3 bpf-next 2/2] xdp: rename convert_to_xdp_frame in xdp_convert_buff_to_frame
-Date:   Thu, 28 May 2020 22:47:29 +0200
-Message-Id: <6344f739be0d1a08ab2b9607584c4d5478c8c083.1590698295.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1590698295.git.lorenzo@kernel.org>
-References: <cover.1590698295.git.lorenzo@kernel.org>
+        id S2407444AbgE1U64 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 May 2020 16:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407425AbgE1U6x (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 May 2020 16:58:53 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DDFC08C5C6
+        for <bpf@vger.kernel.org>; Thu, 28 May 2020 13:58:51 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id q8so259315qkm.12
+        for <bpf@vger.kernel.org>; Thu, 28 May 2020 13:58:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=2fY9YymXzrw7LU6lLyvoWgWwgRDO5sayxiT5HA4ckPI=;
+        b=FVjFsBjc8s71ABUepwnW8TuA73DC9HFLn0ePRFr69H8/wzpdOCMTAZxYEPgsOaz82a
+         c8BrLWOaD85zw3E1lQdZgpbsLFSNljVBpvYI/hJPDBDMWCFjP8psvwwb98LWn77WDEBk
+         qSJlsqr4CFjJqFFmXhuJ1YNVgFTZOmLEG2U9jQboHDmbHx6Fup9+wVgtFQAefPpweB41
+         dYPCYR7mF2NhgKNDxu3oHvDULJwWE0/bprHA55Ix8fveLP6hO6AtG7QcYTLTB4kXW1K0
+         621N8EJgpkioTZTTnHJHyxIB2kc6AYKnoMcxIrswbGa0UnL09BMa9IouY0XU6piUgo87
+         RfpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=2fY9YymXzrw7LU6lLyvoWgWwgRDO5sayxiT5HA4ckPI=;
+        b=V+1CfLXDtleA/4xuiFD70qgKZTQHEup3QOG4CZ7zAjwpBdxuCskyqR5VctTWiSZ8ER
+         jitoDeQwF87fj5i/ijDkSyDG65A1RcX4l59g8YRKBVQiGNJDfYynvwzqXHqzTrjHT+U1
+         SXIBXLYDhcpH50//oiwS+MuXcAkDlsTAb5xrzgxdCprmK5FvSIXC0OfViL8jpRXgdw6e
+         50/E6o8lVyN+CTPyZx5UHtCy26o3YFrgVOoRggOEwZya5HyOj5MmyWnseivcDYlKK0OL
+         sSqV6ZCz+nyPKZtG9hX5yrnfz+/kLU4nzZzw1S0AvYeS3BQuxITfvJ0MOidekg2Hju1A
+         zTrw==
+X-Gm-Message-State: AOAM530DUPBvFh0H8A16jniBcrR6urYHv1/8tPhUdBinbPPGouUepSBk
+        RVYE9MsJne4OXv9h68RL+mJ14brRmkgsB9klcWg=
+X-Google-Smtp-Source: ABdhPJwMjlzVSWtKRHC5uHBCT6fSMVhGR3rAZCboptrmojlUvqkvZy1Zo3fYuGtiLGKXOREqM/0GWONe1ccuYeZVKOE=
+X-Received: by 2002:a05:620a:12d2:: with SMTP id e18mr5089986qkl.437.1590699530661;
+ Thu, 28 May 2020 13:58:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAADnVQJwqH2XFnTeXLnqbONtaU3akNh9BZ-tXk8r=NcGGY_noQ@mail.gmail.com>
+ <CAEf4BzZVVgMbNE4d7b5kPUoWPJz-ENgyP1BfC+h-X29r1Pk2fA@mail.gmail.com>
+ <20200522142813.GF14034@kernel.org> <CA+khW7j=ejncVYgY=hKEnkrkwA=Wjwa6Y2PFWgzrV1EV_8rvpw@mail.gmail.com>
+ <CAEf4Bza9TP50Rtdg1s2qZ7t4547wQr=E-72_6m81ZX8vwZOPEA@mail.gmail.com>
+ <CA+khW7ha-5YSgm5kARO=+JEtf-Ahmc1N_TBJ2iLSntk12pfy3w@mail.gmail.com> <CA+khW7hqemc+xsbMQq-DW3X+mHKO+Lm64hNpWNRyZ75MkUa0Gg@mail.gmail.com>
+In-Reply-To: <CA+khW7hqemc+xsbMQq-DW3X+mHKO+Lm64hNpWNRyZ75MkUa0Gg@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 28 May 2020 13:58:39 -0700
+Message-ID: <CAEf4BzZo7RMQb6HzhqROLjTASXzfCi82f4-ySRBN2UshR73KEA@mail.gmail.com>
+Subject: Re: accessing global and per-cpu vars
+To:     Hao Luo <haoluo@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>, Oleg Rombakh <olegrom@google.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In order to use standard 'xdp' prefix, rename convert_to_xdp_frame
-utility routine in xdp_convert_buff_to_frame and replace all the
-occurrences
+On Thu, May 28, 2020 at 1:51 PM Hao Luo <haoluo@google.com> wrote:
+>
+> A quick update on this thread.
+>
+> I came up with a draft patch that fulfills step 1. I added a ".ksym" sect=
+ion for extern vars. The libbpf fills these vars' values by reading /proc/k=
+allsyms at load time. I think I am going to upload this patch for review to=
+gether with step 3 and 4 after I work them out.
+>
+> Regarding step 2, I have also worked out a patch in pahole that inserts t=
+he kernel's percpu vars into BTF. I realized, because step 2 happens at com=
+pile time, there is no kallsyms file available to extract symbols, so we ha=
+ve to read the global vars from vmlinux. Currently on v5.7-rc7, I was able =
+to extract 291 percpu vars, static or global. The .BTF size increases from =
+2d2c10 to 2d4dd0. A clean build on my local workstation increases from 10m1=
+3s to 11m24s (wall time). Common global percpu vars can be found in .BTF.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- drivers/net/ethernet/amazon/ena/ena_netdev.c     |  2 +-
- drivers/net/ethernet/intel/i40e/i40e_txrx.c      |  2 +-
- drivers/net/ethernet/intel/ice/ice_txrx_lib.c    |  2 +-
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c    |  2 +-
- drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c     |  2 +-
- drivers/net/ethernet/marvell/mvneta.c            |  2 +-
- drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c | 10 +++++-----
- drivers/net/ethernet/sfc/rx.c                    |  2 +-
- drivers/net/ethernet/socionext/netsec.c          |  2 +-
- drivers/net/ethernet/ti/cpsw_priv.c              |  2 +-
- drivers/net/tun.c                                |  2 +-
- drivers/net/veth.c                               |  2 +-
- drivers/net/virtio_net.c                         |  4 ++--
- include/net/xdp.h                                |  2 +-
- kernel/bpf/cpumap.c                              |  2 +-
- kernel/bpf/devmap.c                              |  2 +-
- 16 files changed, 21 insertions(+), 21 deletions(-)
+For humans among us, that's 8640 bytes increase, it seems, not a big
+deal at all. Have you checked how much would it increase if you
+include not just per-cpu variables?
 
-diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-index 46865d5bd7e7..a0af74c93971 100644
---- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-+++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-@@ -263,7 +263,7 @@ static int ena_xdp_tx_map_buff(struct ena_ring *xdp_ring,
- 	dma_addr_t dma = 0;
- 	u32 size;
- 
--	tx_info->xdpf = convert_to_xdp_frame(xdp);
-+	tx_info->xdpf = xdp_convert_buff_to_frame(xdp);
- 	size = tx_info->xdpf->len;
- 	ena_buf = tx_info->bufs;
- 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-index f613782f2f56..f9555c847f73 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-@@ -2167,7 +2167,7 @@ static int i40e_xmit_xdp_ring(struct xdp_frame *xdpf,
- 
- int i40e_xmit_xdp_tx_ring(struct xdp_buff *xdp, struct i40e_ring *xdp_ring)
- {
--	struct xdp_frame *xdpf = convert_to_xdp_frame(xdp);
-+	struct xdp_frame *xdpf = xdp_convert_buff_to_frame(xdp);
- 
- 	if (unlikely(!xdpf))
- 		return I40E_XDP_CONSUMED;
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-index 1ba97172d8d0..b56aa46efa13 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-@@ -259,7 +259,7 @@ int ice_xmit_xdp_ring(void *data, u16 size, struct ice_ring *xdp_ring)
-  */
- int ice_xmit_xdp_buff(struct xdp_buff *xdp, struct ice_ring *xdp_ring)
- {
--	struct xdp_frame *xdpf = convert_to_xdp_frame(xdp);
-+	struct xdp_frame *xdpf = xdp_convert_buff_to_frame(xdp);
- 
- 	if (unlikely(!xdpf))
- 		return ICE_XDP_CONSUMED;
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index 45fc7ce1a543..c878667ab581 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -2215,7 +2215,7 @@ static struct sk_buff *ixgbe_run_xdp(struct ixgbe_adapter *adapter,
- 	case XDP_PASS:
- 		break;
- 	case XDP_TX:
--		xdpf = convert_to_xdp_frame(xdp);
-+		xdpf = xdp_convert_buff_to_frame(xdp);
- 		if (unlikely(!xdpf)) {
- 			result = IXGBE_XDP_CONSUMED;
- 			break;
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-index 86add9fbd36c..be9d2a8da515 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-@@ -107,7 +107,7 @@ static int ixgbe_run_xdp_zc(struct ixgbe_adapter *adapter,
- 	case XDP_PASS:
- 		break;
- 	case XDP_TX:
--		xdpf = convert_to_xdp_frame(xdp);
-+		xdpf = xdp_convert_buff_to_frame(xdp);
- 		if (unlikely(!xdpf)) {
- 			result = IXGBE_XDP_CONSUMED;
- 			break;
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index 37947949345c..bcd9ac444085 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -2072,7 +2072,7 @@ mvneta_xdp_xmit_back(struct mvneta_port *pp, struct xdp_buff *xdp)
- 	int cpu;
- 	u32 ret;
- 
--	xdpf = convert_to_xdp_frame(xdp);
-+	xdpf = xdp_convert_buff_to_frame(xdp);
- 	if (unlikely(!xdpf))
- 		return MVNETA_XDP_DROPPED;
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index 3bea1d4be53b..c9d308e91965 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -64,7 +64,7 @@ mlx5e_xmit_xdp_buff(struct mlx5e_xdpsq *sq, struct mlx5e_rq *rq,
- 	struct xdp_frame *xdpf;
- 	dma_addr_t dma_addr;
- 
--	xdpf = convert_to_xdp_frame(xdp);
-+	xdpf = xdp_convert_buff_to_frame(xdp);
- 	if (unlikely(!xdpf))
- 		return false;
- 
-@@ -97,10 +97,10 @@ mlx5e_xmit_xdp_buff(struct mlx5e_xdpsq *sq, struct mlx5e_rq *rq,
- 		xdpi.frame.xdpf     = xdpf;
- 		xdpi.frame.dma_addr = dma_addr;
- 	} else {
--		/* Driver assumes that convert_to_xdp_frame returns an xdp_frame
--		 * that points to the same memory region as the original
--		 * xdp_buff. It allows to map the memory only once and to use
--		 * the DMA_BIDIRECTIONAL mode.
-+		/* Driver assumes that xdp_convert_buff_to_frame returns
-+		 * an xdp_frame that points to the same memory region as
-+		 * the original xdp_buff. It allows to map the memory only
-+		 * once and to use the DMA_BIDIRECTIONAL mode.
- 		 */
- 
- 		xdpi.mode = MLX5E_XDP_XMIT_MODE_PAGE;
-diff --git a/drivers/net/ethernet/sfc/rx.c b/drivers/net/ethernet/sfc/rx.c
-index 68c47a8c71df..c01916cff507 100644
---- a/drivers/net/ethernet/sfc/rx.c
-+++ b/drivers/net/ethernet/sfc/rx.c
-@@ -329,7 +329,7 @@ static bool efx_do_xdp(struct efx_nic *efx, struct efx_channel *channel,
- 
- 	case XDP_TX:
- 		/* Buffer ownership passes to tx on success. */
--		xdpf = convert_to_xdp_frame(&xdp);
-+		xdpf = xdp_convert_buff_to_frame(&xdp);
- 		err = efx_xdp_tx_buffers(efx, 1, &xdpf, true);
- 		if (unlikely(err != 1)) {
- 			efx_free_rx_buffers(rx_queue, rx_buf, 1);
-diff --git a/drivers/net/ethernet/socionext/netsec.c b/drivers/net/ethernet/socionext/netsec.c
-index e1f4be4b3d69..328bc38848bb 100644
---- a/drivers/net/ethernet/socionext/netsec.c
-+++ b/drivers/net/ethernet/socionext/netsec.c
-@@ -867,7 +867,7 @@ static u32 netsec_xdp_queue_one(struct netsec_priv *priv,
- static u32 netsec_xdp_xmit_back(struct netsec_priv *priv, struct xdp_buff *xdp)
- {
- 	struct netsec_desc_ring *tx_ring = &priv->desc_ring[NETSEC_RING_TX];
--	struct xdp_frame *xdpf = convert_to_xdp_frame(xdp);
-+	struct xdp_frame *xdpf = xdp_convert_buff_to_frame(xdp);
- 	u32 ret;
- 
- 	if (unlikely(!xdpf))
-diff --git a/drivers/net/ethernet/ti/cpsw_priv.c b/drivers/net/ethernet/ti/cpsw_priv.c
-index d940628bff8d..a399f3659346 100644
---- a/drivers/net/ethernet/ti/cpsw_priv.c
-+++ b/drivers/net/ethernet/ti/cpsw_priv.c
-@@ -1355,7 +1355,7 @@ int cpsw_run_xdp(struct cpsw_priv *priv, int ch, struct xdp_buff *xdp,
- 		ret = CPSW_XDP_PASS;
- 		break;
- 	case XDP_TX:
--		xdpf = convert_to_xdp_frame(xdp);
-+		xdpf = xdp_convert_buff_to_frame(xdp);
- 		if (unlikely(!xdpf))
- 			goto drop;
- 
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index c54f967e2c66..f616e6a64a27 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -1295,7 +1295,7 @@ static int tun_xdp_xmit(struct net_device *dev, int n,
- 
- static int tun_xdp_tx(struct net_device *dev, struct xdp_buff *xdp)
- {
--	struct xdp_frame *frame = convert_to_xdp_frame(xdp);
-+	struct xdp_frame *frame = xdp_convert_buff_to_frame(xdp);
- 
- 	if (unlikely(!frame))
- 		return -EOVERFLOW;
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index fb5c17361f64..b594f03eeddb 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -541,7 +541,7 @@ static void veth_xdp_flush(struct veth_rq *rq, struct veth_xdp_tx_bq *bq)
- static int veth_xdp_tx(struct veth_rq *rq, struct xdp_buff *xdp,
- 		       struct veth_xdp_tx_bq *bq)
- {
--	struct xdp_frame *frame = convert_to_xdp_frame(xdp);
-+	struct xdp_frame *frame = xdp_convert_buff_to_frame(xdp);
- 
- 	if (unlikely(!frame))
- 		return -EOVERFLOW;
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index b6951aa76295..ba38765dc490 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -703,7 +703,7 @@ static struct sk_buff *receive_small(struct net_device *dev,
- 			break;
- 		case XDP_TX:
- 			stats->xdp_tx++;
--			xdpf = convert_to_xdp_frame(&xdp);
-+			xdpf = xdp_convert_buff_to_frame(&xdp);
- 			if (unlikely(!xdpf))
- 				goto err_xdp;
- 			err = virtnet_xdp_xmit(dev, 1, &xdpf, 0);
-@@ -892,7 +892,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 			break;
- 		case XDP_TX:
- 			stats->xdp_tx++;
--			xdpf = convert_to_xdp_frame(&xdp);
-+			xdpf = xdp_convert_buff_to_frame(&xdp);
- 			if (unlikely(!xdpf))
- 				goto err_xdp;
- 			err = virtnet_xdp_xmit(dev, 1, &xdpf, 0);
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 96d4d4a9d27b..b31a81735d28 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -118,7 +118,7 @@ void xdp_convert_frame_to_buff(struct xdp_frame *frame, struct xdp_buff *xdp)
- 
- /* Convert xdp_buff to xdp_frame */
- static inline
--struct xdp_frame *convert_to_xdp_frame(struct xdp_buff *xdp)
-+struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
- {
- 	struct xdp_frame *xdp_frame;
- 	int metasize;
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 8b85bfddfac7..27595fc6da56 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -621,7 +621,7 @@ int cpu_map_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_buff *xdp,
- {
- 	struct xdp_frame *xdpf;
- 
--	xdpf = convert_to_xdp_frame(xdp);
-+	xdpf = xdp_convert_buff_to_frame(xdp);
- 	if (unlikely(!xdpf))
- 		return -EOVERFLOW;
- 
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index a51d9fb7a359..f558b6ed0688 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -434,7 +434,7 @@ static inline int __xdp_enqueue(struct net_device *dev, struct xdp_buff *xdp,
- 	if (unlikely(err))
- 		return err;
- 
--	xdpf = convert_to_xdp_frame(xdp);
-+	xdpf = xdp_convert_buff_to_frame(xdp);
- 	if (unlikely(!xdpf))
- 		return -EOVERFLOW;
- 
--- 
-2.26.2
+Also I wonder what adds more than a minute to the build process? Is it
+all pahole's BTF generation step? If yes, why it's so much slower now?
 
+>
+> haoluo@haoluo:~/kernel/tip/pkgs/images/boot$ bpftool btf dump file vmlinu=
+x-5.7.0-smp-DEV | grep runqueues
+>
+> [14098] VAR 'runqueues' type_id=3D13725, linkage=3Dglobal-alloc
+>
+> haoluo@haoluo:~/kernel/tip/pkgs/images/boot$ bpftool btf dump file vmlinu=
+x-5.7.0-smp-DEV | grep cpu_stopper
+>
+> [17589] STRUCT 'cpu_stopper' size=3D72 vlen=3D5
+>
+> [17609] VAR 'cpu_stopper' type_id=3D17589, linkage=3Dglobal-alloc
+>
+> Arnaldo, would you please advise on how to upload the pahole patch for re=
+view? I am going to polish it a bit and think I can upload it for review.
+>
+> Thanks,
+> Hao
+>
+> On Tue, May 26, 2020 at 2:04 PM Hao Luo <haoluo@google.com> wrote:
+>>
+>> I just did some poking and found the source of the format. TLDR is these=
+ letters are of the same semantic of 'nm' output [1]. So we can put the sym=
+bols of 'A' in BTF first, as these symbols have absolute addresses in runti=
+me and it's the safest choice to start with, I think.
+>>
+>> More details. So during linking for vmlinux, the intermediate obj is pas=
+sed to nm and its output is used by the kallsyms to generate a .S file [2].=
+ That .S file builds a data blob 'kallsyms_names' in vmlinux [3] which is u=
+sed to generate /proc/kallsyms [4]. The types of the symbols are carried fr=
+om the output of nm to the kallsyms_names, mostly untouched. The only excep=
+tion is, if CONFIG_KALLSYMS_ABSOLUTE_PERCPU is configured, percpu symbols a=
+re forced to have absolute addresses.
+>>
+>> [1] https://linux.die.net/man/1/nm
+>> [2] https://github.com/torvalds/linux/blob/master/scripts/link-vmlinux.s=
+h#L168
+>> [3] https://github.com/torvalds/linux/blob/master/scripts/kallsyms.c#L44=
+6
+>> [4] https://github.com/torvalds/linux/blob/master/kernel/kallsyms.c#L115
+>>
+>> On Tue, May 26, 2020 at 11:21 AM Andrii Nakryiko <andrii.nakryiko@gmail.=
+com> wrote:
+>>>
+>>> On Tue, May 26, 2020 at 12:58 AM Hao Luo <haoluo@google.com> wrote:
+>>> >
+>>> > Hi, Arnaldo and Andrii,
+>>> >
+>>> > Thanks for taking a look and checking.
+>>> >
+>>> > On Fri, May 22, 2020 at 7:28 AM Arnaldo Carvalho de Melo <acme@kernel=
+.org> wrote:
+>>> >>
+>>> >> Em Thu, May 21, 2020 at 11:58:47AM -0700, Andrii Nakryiko escreveu:
+>>> >> > On Thu, May 21, 2020 at 10:07 AM Alexei Starovoitov <alexei.starov=
+oitov@gmail.com> wrote:
+>>> >> > > 2. teach pahole to store ' A ' annotated kallsyms into vmlinux B=
+TF as
+>>> >> > > BTF_KIND_VAR.
+>>> >> > > There are ~300 of them, so should be minimal increase in size.
+>>> >> >
+>>> >> > I thought we'd do that based on section name? Or we will actually
+>>> >> > teach pahole to extract kallsyms from vmlinux image?
+>>> >>
+>>> >> No need to touch kallsyms:
+>>> >>
+>>> >>   net/core/filter.c
+>>> >>
+>>> >>   DEFINE_PER_CPU(struct bpf_redirect_info, bpf_redirect_info);
+>>> >>
+>>> >>   # grep -w bpf_redirect_info /proc/kallsyms
+>>> >>   000000000002a160 A bpf_redirect_info
+>>> >>   #
+>>> >>   # readelf -s ~acme/git/build/v5.7-rc2+/vmlinux | grep bpf_redirect=
+_info
+>>> >>   113637: 000000000002a2e0    32 OBJECT  GLOBAL DEFAULT   34 bpf_red=
+irect_info
+>>> >>   #
+>>> >>
+>>> >> Its in the ELF symtab.
+>>> >>
+>>> >> [root@quaco ~]# grep ' A ' /proc/kallsyms | wc -l
+>>> >> 351
+>>> >> [root@quaco ~]# readelf -s ~acme/git/build/v5.7-rc2+/vmlinux | grep =
+"OBJECT  GLOBAL" | wc -l
+>>> >> 3221
+>>> >> [root@quaco ~]#
+>>> >>
+>>> >> So ' A ' in kallsyms needs some extra info from the symtab in additi=
+on
+>>> >>
+>>> >> to being OBJECT GLOBAL, checking...
+>>> >
+>>> >
+>>> > After playing a bit, I found 'A' symbols in kallsyms include the per_=
+cpu variables (e.g. runqueues and sched_clock_data), either global or local=
+. An example of the global var is 'runqueues' and the example of local one =
+is 'sched_clock_data'.
+>>> >
+>>> > The OBJECT GLOBAL symbols in vmlinux include the global variables suc=
+h as runqueues. It also includes those symbols annotated as other capital l=
+etters such as 'R' or 'B' in kallsyms. For example, __per_cpu_offset is OBJ=
+ECT GLOBAL in vmlinux and it's annotated as 'R', implying a global const va=
+riable.
+>>> >
+>>> > I think either the vmlinux approach or the kallsyms approach is good =
+enough. I will continue experimenting while working on step 1.
+>>> >
+>>>
+>>> /proc/kallsyms is available in runtime (if configured, of course),
+>>> while vmlinux image might not be available at runtime at all in some
+>>> environments. This is one of the reasons for BTF to be exposed in
+>>> runtime through /sys/kernel/btf/vmlinux, instead of just keeping it in
+>>> vmlinux image. So I think kallsyms approach is better and more
+>>> reliable.
+>>>
+>>> As for 'A', 'R', 'B', etc. Can we please look at source code of
+>>> whatever in kernel defines those lettera in ksyms, instead of guessing
+>>> based on a subset of symbols? Guessing like this makes me nervous :)
+>>>
+>>> > Thanks,
+>>> > Hao
+>>> >
+>>> >>
+>>> >> > There was step 1.5 (or even 0.5) to see if it's feasible to add no=
+t
+>>> >> > just per-CPU variables as well.
+>>> >>
+>>> >> - Arnaldo
