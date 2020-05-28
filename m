@@ -2,178 +2,134 @@ Return-Path: <SRS0=Fl3P=7K=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6474C433E2
-	for <bpf@archiver.kernel.org>; Thu, 28 May 2020 17:07:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A00CC433E0
+	for <bpf@archiver.kernel.org>; Thu, 28 May 2020 17:11:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A0877207BC
-	for <bpf@archiver.kernel.org>; Thu, 28 May 2020 17:07:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ECC8720721
+	for <bpf@archiver.kernel.org>; Thu, 28 May 2020 17:11:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QbD1JXdu";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="C2ieEJbY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XPXvL/9o"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405309AbgE1RHd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 May 2020 13:07:33 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:15882 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2405353AbgE1RHb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 28 May 2020 13:07:31 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04SH5VfE010223;
-        Thu, 28 May 2020 10:07:08 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=ttpklS1jCjfldmKIMBzGwqeDTHTIzeohYbM/31d+z+g=;
- b=QbD1JXduP0r4nMGPWf8zwmXRu8aBrgeZW7uldKNmq7oy/M3jXRmpQD92Go5kdrbaqxXE
- 8yyHFsWpQ3iRWN763uI9Zj9dVep+8EjyC9jsOHbQG0dP+R1qi9r3N4ZNxh0MzN0pScK2
- It+mkrOxS/vbDyM9YH3afv8LGXo2pqbNoSU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 319bqcuysr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 28 May 2020 10:07:08 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 28 May 2020 10:06:35 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ULHtXmn1HonriYbs4H6yqquPDEp+b+R0K+64dlsEjil+mt+pQflAnRw3cgzlFBtrzGDTNcA1p6P94vREsKDW0Sq19+DzztWhWPp7yYOtLC82Dl1fbN07bYHXkGcDTyi0palsRVgfqclxLIcA3D9fAUZbv+HYE5tI88zMocS8OnDJNbWztlFt9kC9+Iw20JFnyFfFVHzZFb63VNMsJQtJftAaSDbNVd6VzzZ3Iym1C3AxPk+pUO/HhZ4bc5nYmGYkTQ6fEgaQEoe2Pnzdwxl3sDYnocwjRL60x3qNwIMcthD/B/ZK7roVA2MpqB8TSc9EE2j4rN17yDjEAuSB/U1+zQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ttpklS1jCjfldmKIMBzGwqeDTHTIzeohYbM/31d+z+g=;
- b=B1G+DUNq9r7tDrZKBsdH9BlIXfBIeRbyFvHkLT6Uf9wgHcMu4d+FGncHynzMhSnWfOHp6Xx+RpXK0ENF6Ozpl+pIgc2ctMA55WIs8+5/aG6FrwQ/idDISlcwrEw+GbCGKtorODdOTSnm0u5EICegCBY1j4lmfBQ682dv2gnDlQZRmUn5U+gkou7YLHeicBUt29pQHAApRqUTC9jq0/JCSxx9gLRNPDQV8l1IF+mQN8IPIfFtCdpKLJhAf75T8QORzkwUI8aL0TK0pdc0uQHTZBNDW+JlqIseeMszWY16t21xHjDIrZ8+zDVm3JAYZloJ2zpW1YcUgCi3zQt2XAwjzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ttpklS1jCjfldmKIMBzGwqeDTHTIzeohYbM/31d+z+g=;
- b=C2ieEJbYcf4YukfpLWYfoPd8zdL8qdsnp2k7DbSGBhaC1mGIEIyanvB4EvWnQqDsU17IxVaHLQCCH1DFvzHjJ3BzQGOXPejN1Qc/hDsmHlT4WZvMP1vbolxa8w6hdCK5x71/Vsk8CeR9sf9rRpmQxaLvprQVZEMqAJ7SdMi26h8=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=fb.com;
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
- by BYAPR15MB2901.namprd15.prod.outlook.com (2603:10b6:a03:b5::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.27; Thu, 28 May
- 2020 17:06:20 +0000
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::4922:9927:5d6c:5301]) by BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::4922:9927:5d6c:5301%7]) with mapi id 15.20.3021.030; Thu, 28 May 2020
- 17:06:20 +0000
-Subject: Re: [PATCH 12/23] bpf: handle the compat string in
- bpf_trace_copy_string better
-To:     Christoph Hellwig <hch@lst.de>
-CC:     Andrew Morton <akpm@linux-foundation.org>, <x86@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        <linux-parisc@vger.kernel.org>, <linux-um@lists.infradead.org>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20200521152301.2587579-1-hch@lst.de>
- <20200521152301.2587579-13-hch@lst.de>
- <20200527190432.e4af1fba00c13cb1421f5a37@linux-foundation.org>
- <2b64fae6-394c-c1e5-8963-c256f4284065@fb.com> <20200528043957.GA28494@lst.de>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <a1aa26f4-8c0a-5f8a-8460-6d61f167702d@fb.com>
-Date:   Thu, 28 May 2020 10:06:17 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
- Gecko/20100101 Thunderbird/68.8.1
-In-Reply-To: <20200528043957.GA28494@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR04CA0020.namprd04.prod.outlook.com
- (2603:10b6:a03:217::25) To BYAPR15MB4088.namprd15.prod.outlook.com
- (2603:10b6:a02:c3::18)
+        id S2405349AbgE1RLb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 May 2020 13:11:31 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:54219 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2405320AbgE1RLa (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 28 May 2020 13:11:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590685887;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xaYkM24G2m803F/chb/jq5pTBxpALIamh9MB8ZyiK4k=;
+        b=XPXvL/9oMcKj3o3Os1KDPX1jTM78tAhBs6xzlo5P5fTj9JJujLlsbC36Me65/TV82PflsV
+        rmH2TyDnAcLQg5U8y9fqVfAhUGINnXZFFR9GaC9F5STNjuRtZ2PUyQzRBfSQLiQP1hjGp4
+        Lbt5mu1ljqTcpzq/m4Z1QEBvbYZNyTI=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-504-utugfRQMOh66XuOCRaoeHQ-1; Thu, 28 May 2020 13:11:22 -0400
+X-MC-Unique: utugfRQMOh66XuOCRaoeHQ-1
+Received: by mail-oo1-f70.google.com with SMTP id y16so921627oot.1
+        for <bpf@vger.kernel.org>; Thu, 28 May 2020 10:11:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xaYkM24G2m803F/chb/jq5pTBxpALIamh9MB8ZyiK4k=;
+        b=qmeHdd2x3MGXxQMkoHuuxC78QMJRe+Ox9wR7mgWrtXf2s8qc0WDa9wnbNQWwbYYM1j
+         VSy3sBJyZNGG4zJ2nBMuaWjEDkPFfiiq+TMJalRfSIsYb8WDHoJYgY8Oc+70Ej1rfpBz
+         GDtvIY8cuzgemheFz1a/LxAZ9ffjkKx2q5A0rsFMEDCZCShE8I67WzsbTMoppO8ADCbn
+         WKNCGLHSYNNtBxDAJ0GIdwA35D/4kXQUG1Fm/5qzUfs/jovf6l9xG+n2IA9EhQCWG4vy
+         8hTo/4USNDCedEcvI5JtWUHC99EK6p+sNLkp51sweVt7Y1IrYjVEy8jUm85TP1o96TFV
+         I9LQ==
+X-Gm-Message-State: AOAM530wSUyL6oAxULXs5k3w+N2a10DL/+lmNsa43JQgEYKweOuL2Fqb
+        kZtE+d8be5nptgbuGxtM+ojc3gQjwS+QFtSX4AA1AXE4bB4vUASeuczMmLA8IcqR2cRABQilzVD
+        J4wRE1Q7GYDVoTZef7+Q2HLqsgZMQ
+X-Received: by 2002:aca:f3c6:: with SMTP id r189mr2798497oih.73.1590685873680;
+        Thu, 28 May 2020 10:11:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzNpt7lm09wPE/RS56oNAzVrcNKbkTdlzTw/HKlW3RUZud4VndZKG1homLi/1T2REUUB8K/J+bW21Kp6ThU/Pk=
+X-Received: by 2002:aca:f3c6:: with SMTP id r189mr2798478oih.73.1590685873348;
+ Thu, 28 May 2020 10:11:13 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from MacBook-Pro-52.local (2620:10d:c090:400::5:454a) by BY3PR04CA0020.namprd04.prod.outlook.com (2603:10b6:a03:217::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.19 via Frontend Transport; Thu, 28 May 2020 17:06:19 +0000
-X-Originating-IP: [2620:10d:c090:400::5:454a]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 278fbe6b-98ee-444c-8673-08d80329716f
-X-MS-TrafficTypeDiagnostic: BYAPR15MB2901:
-X-Microsoft-Antispam-PRVS: <BYAPR15MB2901B71907B4435B8A2226D8D38E0@BYAPR15MB2901.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-Forefront-PRVS: 0417A3FFD2
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j+dC+D5XnjWBEwmX69PNibEbzdzeS//UupfgsW5iCfA/4BzJjnuRqUkGNa5HHwHohkAoXBoMLYcE1YPW0rtXDlvbcTLUzGRW5/Y6WfRvV5yDmCOT5p2jN1YVg2HIs7QtrGDWpcO97bvsjaPcsaXotfRBCscT1o5W54kYrpfeNT4/62ZU3jSNOClbPCPHUt26nU1qsjmzT3lArBxk/StGoBKsYoDYy3Xp74W9AT7mc9arwuf6rBGZ+crZbz+VZDK949fixOH/kxt5JMAwel5g1kFscLIQ1d+XfmO7kNuj0+Jp07verDvZU8qz+5cMl7iXAHmHSyPiXArsOY3YxoRdid9Uk7NRr+yqqB0PTs2Bsje1+b8+MM4TG3OfmmGFfLiSBWTZxZT8wqEpQjccyQe2m5iCXlJ7oL2k/masGX0UYg7IJgpN96gfcLdDJLZN3H5Bdpu5MKliakpXCaRMqirWFy1A0YjhKrBVT7PBBMac368=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(39860400002)(136003)(376002)(346002)(396003)(366004)(316002)(66946007)(8936002)(31686004)(6486002)(8676002)(478600001)(966005)(2906002)(16526019)(7416002)(6512007)(52116002)(2616005)(186003)(6916009)(86362001)(6506007)(36756003)(31696002)(53546011)(5660300002)(66556008)(54906003)(66476007)(4326008)(21314003)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: G6TOGe79IZkCyKy+ZwRwltpLTkOoyiefOFATjdDt9FZ7qIKHS9nqr+S1nrVwldUmPloX4mp+HBXj2hgI3J/xbhqUtwKoSkvT05CNbxfUpOL74OGtKVAxQ88OSoMmbAt4K9NqBjoyu7WpTA5wIEcoWR7322cnrLoNY/qE4kHuHJfZZ4oB5AgdYW2QNQAOchYxGU8wz0EkSABXiFBN6XNS4vqIdT/yr/FtTcEkbsibQagPBgBlECWhw1zmM1mJb6zdUBm1ej2FCVkzu/rVlO9Rgu9jgulsD5qiytEa4UZ7XmqY+5dnfE5Fmh+L1nF8k4G8fHN5qM5TStZVta50kCz9BISbkmYifg2vh95yYW+cdQgb1PvqBoYygIzlhIef1CEdRzLZLuk6WTBK3WXy6rO/RIrHiM8KLFbcPMmqOn8ceTJ/f0waHhLetmujm8Y8Vl8/7iTJVgEOG5g5eqxN3xjXG564TSArKA/vMNHastVVWThWNg+FTRMW3V9o31Pjuek/Pf5gK5I6FVtyiYvZLp+ydQ==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 278fbe6b-98ee-444c-8673-08d80329716f
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2020 17:06:20.7410
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bXZ/iBHo8JZOLnK0G2nipYyS7Q8UyWtDTAA/ELwEGBVm+PqR0S3DrFNOzm9Tmka5
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2901
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-05-28_03:2020-05-28,2020-05-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=742 spamscore=0 mlxscore=0 malwarescore=0
- bulkscore=0 adultscore=0 phishscore=0 clxscore=1015 priorityscore=1501
- impostorscore=0 cotscore=-2147483648 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005280119
-X-FB-Internal: deliver
+References: <xunya71uosvv.fsf@redhat.com> <CAADnVQJUL9=T576jo29F_zcEd=C6_OiExaGbEup6F-mA01EKZQ@mail.gmail.com>
+ <xuny367lq1z1.fsf@redhat.com> <CAADnVQ+1o1JAm7w1twW0KgKMHbp-JvVjzET2N+VS1z=LajybzA@mail.gmail.com>
+ <xunyh7w1nwem.fsf@redhat.com> <CAADnVQKbKA_Yuj7v3c6fNi7gZ8z_q_hzX2ry9optEHE3B_iWcg@mail.gmail.com>
+ <ec5f6bd9-83e9-fc55-1885-18eee404d988@kernel.org> <CAADnVQJhb0+KWY0=4WVKc8NQswDJ5pU7LW1dQE2TQuya0Pn0oA@mail.gmail.com>
+ <20200528100557.20489f04@redhat.com> <20200528105631.GE3115014@kroah.com> <20200528161437.x3e2ddxmj6nlhvv7@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20200528161437.x3e2ddxmj6nlhvv7@ast-mbp.dhcp.thefacebook.com>
+From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Date:   Thu, 28 May 2020 20:10:57 +0300
+Message-ID: <CANoWswkGoJEZVcfLiNverDWyh6skSoix=JqxeJR9K8A=H8x=rw@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: split -extras target to -static and -gen
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, Jiri Benc <jbenc@redhat.com>,
+        shuah <shuah@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Hi, Alexei,
 
+On Thu, May 28, 2020 at 7:14 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, May 28, 2020 at 12:56:31PM +0200, Greg KH wrote:
+> > On Thu, May 28, 2020 at 10:05:57AM +0200, Jiri Benc wrote:
+> > > On Wed, 27 May 2020 15:23:13 -0700, Alexei Starovoitov wrote:
+> > > > I prefer to keep selftests/bpf install broken.
+> > > > This forced marriage between kselftests and selftests/bpf
+> > > > never worked well. I think it's a time to free them up from each other.
+> > >
+> > > Alexei, it would be great if you could cooperate with other people
+> > > instead of pushing your own way. The selftests infrastructure was put
+> > > to the kernel to have one place for testing. Inventing yet another way
+> > > to add tests does not help anyone. You don't own the kernel. We're
+> > > community, we should cooperate.
+> >
+> > I agree, we rely on the infrastructure of the kselftests framework so
+> > that testing systems do not have to create "custom" frameworks to handle
+> > all of the individual variants that could easily crop up here.
+> >
+> > Let's keep it easy for people to run and use these tests, to not do so
+> > is to ensure that they are not used, which is the exact opposite goal of
+> > creating tests.
+>
+> Greg,
+>
+> It is easy for people (bpf developers) to run and use the tests.
+> Every developer runs them before submitting patches.
+> New tests is a hard requirement for any new features.
+> Maintainers run them for every push.
+>
+> What I was and will push back hard is when other people (not bpf developers)
+> come back with an excuse that some CI system has a hard time running these
+> tests. It's the problem of weak CI. That CI needs to be fixed. Not the tests.
+> The example of this is that we already have github/libbpf CI that runs
+> selftests/bpf just fine. Anyone who wants to do another CI are welcome to copy
+> paste what already works instead of burdening people (bpf developers) who run
+> and use existing tests. I frankly have no sympathy to folks who put their own
+> interest of their CI development in front of bpf community of developers.
+> The main job of CI is to help developers and maintainers.
+> Where helping means to not impose new dumb rules on developers because CI
+> framework is dumb. Fix CI instead.
+>
 
-On 5/27/20 9:39 PM, Christoph Hellwig wrote:
-> On Wed, May 27, 2020 at 07:26:30PM -0700, Yonghong Song wrote:
->>> --- a/kernel/trace/bpf_trace.c~xxx
->>> +++ a/kernel/trace/bpf_trace.c
->>> @@ -588,15 +588,22 @@ BPF_CALL_5(bpf_seq_printf, struct seq_fi
->>>    		}
->>>      		if (fmt[i] == 's') {
->>> +			void *unsafe_ptr;
->>> +
->>>    			/* try our best to copy */
->>>    			if (memcpy_cnt >= MAX_SEQ_PRINTF_MAX_MEMCPY) {
->>>    				err = -E2BIG;
->>>    				goto out;
->>>    			}
->>>    -			err = strncpy_from_unsafe(bufs->buf[memcpy_cnt],
->>> -						  (void *) (long) args[fmt_cnt],
->>> -						  MAX_SEQ_PRINTF_STR_LEN);
->>> +			unsafe_ptr = (void *)(long)args[fmt_cnt];
->>> +			if ((unsigned long)unsafe_ptr < TASK_SIZE) {
->>> +				err = strncpy_from_user_nofault(
->>> +					bufs->buf[memcpy_cnt], unsafe_ptr,
->>> +					MAX_SEQ_PRINTF_STR_LEN);
->>> +			} else {
->>> +				err = -EFAULT;
->>> +			}
->>
->> This probably not right.
->> The pointer stored at args[fmt_cnt] is a kernel pointer,
->> but it could be an invalid address and we do not want to fault.
->> Not sure whether it exists or not, we should use
->> strncpy_from_kernel_nofault()?
-> 
-> If you know it is a kernel pointer with this series it should be
-> strncpy_from_kernel_nofault.  But even before the series it should have
-> been strncpy_from_unsafe_strict.
+Any good reason why bpf selftests, residing under selftests/, should
+be an exception?
+"Breakages" is not, breakages are fixable.
 
-The use of strncpy_from_unsafe() mimics old bpf_trace_printk() 
-implementation which just changed to _strict version:
-https://lkml.org/lkml/2020/5/18/1309
+-- 
+WBR, Yauheni
 
-Agreed that we should change to strncpy_from_unsafe_strict().
-I can submit a patch for this.
-
-Thanks!
