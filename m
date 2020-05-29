@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 802A2C433E0
-	for <bpf@archiver.kernel.org>; Fri, 29 May 2020 22:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3902C433E0
+	for <bpf@archiver.kernel.org>; Fri, 29 May 2020 22:07:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C8FE20810
-	for <bpf@archiver.kernel.org>; Fri, 29 May 2020 22:07:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC58020776
+	for <bpf@archiver.kernel.org>; Fri, 29 May 2020 22:07:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1590790046;
-	bh=9ejb3JJZTO2uA6wVq2xDcVJjABkI3hNwj+8SeykZGaM=;
+	s=default; t=1590790052;
+	bh=wkiI9f8oimnx01hAfmXraa6dLlJ6mIXy8rBl03y0oEg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=fRJxW4dJ8McKaabRcYSY6JgDNrTF7B5/ZEmtL8GCs76rTT53cN3fv8xvpjC6o3vGI
-	 gUoLlji/veC37MgoFRvDwwaRNiNZoXQ5Jm6PIOAPFLGdlh6qH4FoXzDVVj/JCxozS0
-	 G50E9sJWFNk+HerGxOnjB78FqcRaoRLxz5sznAlw=
+	b=2mua7XkIYeT5l5KAZd8if+sQwF4LMEAqkwyswB1xvjOz+QljGU8M9Z5+bk9USVEts
+	 dSlfUGLFMv7pJsnu97IrCjGsaqIYPZTfykNI2UJYkVngWu+ebMsUit2uTIBF6JdwEy
+	 7KPQQMIuF7OLvWHNiJOymepUzhN0JPO3y6aRNwOQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728154AbgE2WHX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 29 May 2020 18:07:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51096 "EHLO mail.kernel.org"
+        id S1728315AbgE2WHb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 29 May 2020 18:07:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51214 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727947AbgE2WHX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 29 May 2020 18:07:23 -0400
+        id S1728356AbgE2WH1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 29 May 2020 18:07:27 -0400
 Received: from C02YQ0RWLVCF.internal.digitalocean.com (c-73-181-34-237.hsd1.co.comcast.net [73.181.34.237])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A440520B80;
-        Fri, 29 May 2020 22:07:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CBE312145D;
+        Fri, 29 May 2020 22:07:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590790042;
-        bh=9ejb3JJZTO2uA6wVq2xDcVJjABkI3hNwj+8SeykZGaM=;
+        s=default; t=1590790046;
+        bh=wkiI9f8oimnx01hAfmXraa6dLlJ6mIXy8rBl03y0oEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iL+TJgVPNS1Q5m5eXFB+/kamhczdPd9S6b5EN8qUvNx5jozzV3UEpk2E1s27gh0JL
-         /GVsEt7XQrl2e01ZiXaqcui3gV1YBk3ddoql7RZnaqIyJx53VpuoH8D50kX2uAcNf2
-         GbWa9uGvEhMFTDO9W2LSnatW0zl3r8kb74Dd48bU=
+        b=CAyr6b6qg/NiNJbpOpcD6+OsAChxcpEGCAsrc0kmL7m0i5XjAvf9cMRitTseqUupo
+         F1YbLKmp6rFVWuouyniW2SLgJRjHqsFeC9M2Jb/ZRZ2enHfnVMztz9EONidgFjLzRD
+         wZbJ5bj2RUg+y77GNFaD2dmmM2C1gvC5BAoaWnkg=
 From:   David Ahern <dsahern@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
@@ -45,9 +45,9 @@ Cc:     bpf@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
         daniel@iogearbox.net, john.fastabend@gmail.com, ast@kernel.org,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
         dsahern@gmail.com, David Ahern <dsahern@kernel.org>
-Subject: [PATCH v4 bpf-next 1/5] devmap: Formalize map value as a named struct
-Date:   Fri, 29 May 2020 16:07:12 -0600
-Message-Id: <20200529220716.75383-2-dsahern@kernel.org>
+Subject: [PATCH v4 bpf-next 5/5] selftest: Add tests for XDP programs in devmap entries
+Date:   Fri, 29 May 2020 16:07:16 -0600
+Message-Id: <20200529220716.75383-6-dsahern@kernel.org>
 X-Mailer: git-send-email 2.21.1 (Apple Git-122.3)
 In-Reply-To: <20200529220716.75383-1-dsahern@kernel.org>
 References: <20200529220716.75383-1-dsahern@kernel.org>
@@ -59,144 +59,205 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add 'struct bpf_devmap_val' to formalize the expected values that can
-be passed in for a DEVMAP. Update devmap code to use the struct.
+Add tests to verify ability to add an XDP program to a
+entry in a DEVMAP.
+
+Add negative tests to show DEVMAP programs can not be
+attached to devices as a normal XDP program, and accesses
+to egress_ifindex require BPF_XDP_DEVMAP attach type.
 
 Signed-off-by: David Ahern <dsahern@kernel.org>
 Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- kernel/bpf/devmap.c | 45 ++++++++++++++++++++++++++++-----------------
- 1 file changed, 28 insertions(+), 17 deletions(-)
+ .../bpf/prog_tests/xdp_devmap_attach.c        | 97 +++++++++++++++++++
+ .../bpf/progs/test_xdp_devmap_helpers.c       | 22 +++++
+ .../bpf/progs/test_xdp_with_devmap_helpers.c  | 44 +++++++++
+ 3 files changed, 163 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
 
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index a51d9fb7a359..a1459de0914e 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -60,12 +60,18 @@ struct xdp_dev_bulk_queue {
- 	unsigned int count;
- };
- 
-+/* DEVMAP values */
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+new file mode 100644
+index 000000000000..8454d5b96058
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+@@ -0,0 +1,97 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <uapi/linux/bpf.h>
++#include <linux/if_link.h>
++#include <test_progs.h>
++
++#include "test_xdp_devmap_helpers.skel.h"
++#include "test_xdp_with_devmap_helpers.skel.h"
++
++#define IFINDEX_LO 1
++
 +struct bpf_devmap_val {
 +	u32 ifindex;   /* device index */
++	union {
++		int fd;  /* prog fd on map write */
++		u32 id;  /* prog id on map read */
++	} bpf_prog;
 +};
 +
- struct bpf_dtab_netdev {
- 	struct net_device *dev; /* must be first member, due to tracepoint */
- 	struct hlist_node index_hlist;
- 	struct bpf_dtab *dtab;
- 	struct rcu_head rcu;
- 	unsigned int idx;
-+	struct bpf_devmap_val val;
- };
- 
- struct bpf_dtab {
-@@ -472,18 +478,15 @@ int dev_map_generic_redirect(struct bpf_dtab_netdev *dst, struct sk_buff *skb,
- static void *dev_map_lookup_elem(struct bpf_map *map, void *key)
- {
- 	struct bpf_dtab_netdev *obj = __dev_map_lookup_elem(map, *(u32 *)key);
--	struct net_device *dev = obj ? obj->dev : NULL;
- 
--	return dev ? &dev->ifindex : NULL;
-+	return obj ? &obj->val : NULL;
- }
- 
- static void *dev_map_hash_lookup_elem(struct bpf_map *map, void *key)
- {
- 	struct bpf_dtab_netdev *obj = __dev_map_hash_lookup_elem(map,
- 								*(u32 *)key);
--	struct net_device *dev = obj ? obj->dev : NULL;
--
--	return dev ? &dev->ifindex : NULL;
-+	return obj ? &obj->val : NULL;
- }
- 
- static void __dev_map_entry_free(struct rcu_head *rcu)
-@@ -541,7 +544,7 @@ static int dev_map_hash_delete_elem(struct bpf_map *map, void *key)
- 
- static struct bpf_dtab_netdev *__dev_map_alloc_node(struct net *net,
- 						    struct bpf_dtab *dtab,
--						    u32 ifindex,
-+						    struct bpf_devmap_val *val,
- 						    unsigned int idx)
- {
- 	struct bpf_dtab_netdev *dev;
-@@ -551,16 +554,18 @@ static struct bpf_dtab_netdev *__dev_map_alloc_node(struct net *net,
- 	if (!dev)
- 		return ERR_PTR(-ENOMEM);
- 
--	dev->dev = dev_get_by_index(net, ifindex);
--	if (!dev->dev) {
--		kfree(dev);
--		return ERR_PTR(-EINVAL);
--	}
-+	dev->dev = dev_get_by_index(net, val->ifindex);
-+	if (!dev->dev)
-+		goto err_out;
- 
- 	dev->idx = idx;
- 	dev->dtab = dtab;
-+	dev->val.ifindex = val->ifindex;
- 
- 	return dev;
-+err_out:
-+	kfree(dev);
-+	return ERR_PTR(-EINVAL);
- }
- 
- static int __dev_map_update_elem(struct net *net, struct bpf_map *map,
-@@ -568,7 +573,7 @@ static int __dev_map_update_elem(struct net *net, struct bpf_map *map,
- {
- 	struct bpf_dtab *dtab = container_of(map, struct bpf_dtab, map);
- 	struct bpf_dtab_netdev *dev, *old_dev;
--	u32 ifindex = *(u32 *)value;
-+	struct bpf_devmap_val val = { };
- 	u32 i = *(u32 *)key;
- 
- 	if (unlikely(map_flags > BPF_EXIST))
-@@ -578,10 +583,13 @@ static int __dev_map_update_elem(struct net *net, struct bpf_map *map,
- 	if (unlikely(map_flags == BPF_NOEXIST))
- 		return -EEXIST;
- 
--	if (!ifindex) {
-+	/* already verified value_size <= sizeof val */
-+	memcpy(&val, value, map->value_size);
++void test_xdp_with_devmap_helpers(void)
++{
++	struct test_xdp_with_devmap_helpers *skel;
++	struct bpf_prog_info info = {};
++	struct bpf_devmap_val val = {
++		.ifindex = IFINDEX_LO,
++	};
++	__u32 len = sizeof(info);
++	__u32 duration, idx = 0;
++	int err, dm_fd, map_fd;
 +
-+	if (!val.ifindex) {
- 		dev = NULL;
- 	} else {
--		dev = __dev_map_alloc_node(net, dtab, ifindex, i);
-+		dev = __dev_map_alloc_node(net, dtab, &val, i);
- 		if (IS_ERR(dev))
- 			return PTR_ERR(dev);
- 	}
-@@ -609,12 +617,15 @@ static int __dev_map_hash_update_elem(struct net *net, struct bpf_map *map,
- {
- 	struct bpf_dtab *dtab = container_of(map, struct bpf_dtab, map);
- 	struct bpf_dtab_netdev *dev, *old_dev;
--	u32 ifindex = *(u32 *)value;
-+	struct bpf_devmap_val val = { };
- 	u32 idx = *(u32 *)key;
- 	unsigned long flags;
- 	int err = -EEXIST;
- 
--	if (unlikely(map_flags > BPF_EXIST || !ifindex))
-+	/* already verified value_size <= sizeof val */
-+	memcpy(&val, value, map->value_size);
 +
-+	if (unlikely(map_flags > BPF_EXIST || !val.ifindex))
- 		return -EINVAL;
- 
- 	spin_lock_irqsave(&dtab->index_lock, flags);
-@@ -623,7 +634,7 @@ static int __dev_map_hash_update_elem(struct net *net, struct bpf_map *map,
- 	if (old_dev && (map_flags & BPF_NOEXIST))
- 		goto out_err;
- 
--	dev = __dev_map_alloc_node(net, dtab, ifindex, idx);
-+	dev = __dev_map_alloc_node(net, dtab, &val, idx);
- 	if (IS_ERR(dev)) {
- 		err = PTR_ERR(dev);
- 		goto out_err;
++	skel = test_xdp_with_devmap_helpers__open_and_load();
++	if (CHECK_FAIL(!skel)) {
++		perror("test_xdp_with_devmap_helpers__open_and_load");
++		return;
++	}
++
++	/* can not attach program with DEVMAPs that allow programs
++	 * as xdp generic
++	 */
++	dm_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
++	err = bpf_set_link_xdp_fd(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE);
++	CHECK(err == 0, "Generic attach of program with 8-byte devmap",
++	      "should have failed\n");
++
++	dm_fd = bpf_program__fd(skel->progs.xdp_dummy_dm);
++	map_fd = bpf_map__fd(skel->maps.dm_ports);
++	err = bpf_obj_get_info_by_fd(dm_fd, &info, &len);
++	if (CHECK_FAIL(err))
++		goto out_close;
++
++	val.bpf_prog.fd = dm_fd;
++	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
++	CHECK(err, "Add program to devmap entry",
++	      "err %d errno %d\n", err, errno);
++
++	err = bpf_map_lookup_elem(map_fd, &idx, &val);
++	CHECK(err, "Read devmap entry", "err %d errno %d\n", err, errno);
++	CHECK(info.id != val.bpf_prog.id, "Expected program id in devmap entry",
++	      "expected %u read %u\n", info.id, val.bpf_prog.id);
++
++	/* can not attach BPF_XDP_DEVMAP program to a device */
++	err = bpf_set_link_xdp_fd(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE);
++	CHECK(err == 0, "Attach of BPF_XDP_DEVMAP program",
++	      "should have failed\n");
++
++	val.ifindex = 1;
++	val.bpf_prog.fd = bpf_program__fd(skel->progs.xdp_dummy_prog);
++	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
++	CHECK(err == 0, "Add non-BPF_XDP_DEVMAP program to devmap entry",
++	      "should have failed\n");
++
++out_close:
++	test_xdp_with_devmap_helpers__destroy(skel);
++}
++
++void test_neg_xdp_devmap_helpers(void)
++{
++	struct test_xdp_devmap_helpers *skel;
++	__u32 duration;
++
++	skel = test_xdp_devmap_helpers__open_and_load();
++	if (CHECK(skel,
++		  "Load of XDP program accessing egress ifindex without attach type",
++		  "should have failed\n")) {
++		test_xdp_devmap_helpers__destroy(skel);
++	}
++}
++
++
++void test_xdp_devmap_attach(void)
++{
++	if (test__start_subtest("DEVMAP with programs in entries"))
++		test_xdp_with_devmap_helpers();
++
++	if (test__start_subtest("Verifier check of DEVMAP programs"))
++		test_neg_xdp_devmap_helpers();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c
+new file mode 100644
+index 000000000000..e5c0f131c8a7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: GPL-2.0
++/* fails to load without expected_attach_type = BPF_XDP_DEVMAP
++ * because of access to egress_ifindex
++ */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++SEC("xdp_dm_log")
++int xdpdm_devlog(struct xdp_md *ctx)
++{
++	char fmt[] = "devmap redirect: dev %u -> dev %u len %u\n";
++	void *data_end = (void *)(long)ctx->data_end;
++	void *data = (void *)(long)ctx->data;
++	unsigned int len = data_end - data;
++
++	bpf_trace_printk(fmt, sizeof(fmt),
++			 ctx->ingress_ifindex, ctx->egress_ifindex, len);
++
++	return XDP_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
+new file mode 100644
+index 000000000000..deef0e050863
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_DEVMAP);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(struct bpf_devmap_val));
++	__uint(max_entries, 4);
++} dm_ports SEC(".maps");
++
++SEC("xdp_redir")
++int xdp_redir_prog(struct xdp_md *ctx)
++{
++	return bpf_redirect_map(&dm_ports, 1, 0);
++}
++
++/* invalid program on DEVMAP entry;
++ * SEC name means expected attach type not set
++ */
++SEC("xdp_dummy")
++int xdp_dummy_prog(struct xdp_md *ctx)
++{
++	return XDP_PASS;
++}
++
++/* valid program on DEVMAP entry via SEC name;
++ * has access to egress and ingress ifindex
++ */
++SEC("xdp_devmap")
++int xdp_dummy_dm(struct xdp_md *ctx)
++{
++	char fmt[] = "devmap redirect: dev %u -> dev %u len %u\n";
++	void *data_end = (void *)(long)ctx->data_end;
++	void *data = (void *)(long)ctx->data;
++	unsigned int len = data_end - data;
++
++	bpf_trace_printk(fmt, sizeof(fmt),
++			 ctx->ingress_ifindex, ctx->egress_ifindex, len);
++
++	return XDP_PASS;
++}
++char _license[] SEC("license") = "GPL";
 -- 
 2.21.1 (Apple Git-122.3)
 
