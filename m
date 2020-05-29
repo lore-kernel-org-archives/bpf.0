@@ -2,72 +2,67 @@ Return-Path: <SRS0=8dm5=7L=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46520C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CD38C433E1
 	for <bpf@archiver.kernel.org>; Fri, 29 May 2020 17:37:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 24C78208B8
+	by mail.kernel.org (Postfix) with ESMTP id 7E07D2065F
 	for <bpf@archiver.kernel.org>; Fri, 29 May 2020 17:37:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SsIDa+Et"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fHFrtQ81"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727013AbgE2Rho (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727078AbgE2Rho (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 29 May 2020 13:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726901AbgE2Rhk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 29 May 2020 13:37:40 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2AAC008631
-        for <bpf@vger.kernel.org>; Fri, 29 May 2020 10:29:31 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id n18so86406pfa.2
-        for <bpf@vger.kernel.org>; Fri, 29 May 2020 10:29:31 -0700 (PDT)
+        with ESMTP id S1727013AbgE2Rhl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 29 May 2020 13:37:41 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC5BC08C5CB
+        for <bpf@vger.kernel.org>; Fri, 29 May 2020 10:28:34 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id d66so74394pfd.6
+        for <bpf@vger.kernel.org>; Fri, 29 May 2020 10:28:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:date:message-id:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=g6Xmv8Aoic+dGmRE+DHUL3CUzcIpKcgQcYn9ErwDWD8=;
-        b=SsIDa+EtPdUVsVc+T2wflPrc080k7bUdJ6ZFv3IuoatzBaTljDqWAvugITuVDzxOOu
-         RTttTq+IE0IYz0QU5o325iEezdG8LOTC8f591S9tPGLZpPJJWcO2AZEmpCqjbXV8OHV1
-         9d+sbt1hv3is/q3YxBhFx+mh/s35EISlHGhykNNv+IV5ClnfuThvO0L+yTOvMjJnZH6b
-         mDqERX5XnEzD9eGG+oBLzBhzyRmsfI9/SG9n4YEIFSgiGSyd+B21VBSb/2inykBDUqMO
-         7U8NRKDeLtJLBKBIlAaqUlg6VZnd1L+GFH3ZsGLsyVFfMEXswwNffGd0RZkR6BvmbIpa
-         U7uw==
+        h=subject:from:to:cc:date:message-id:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=lD0hXFyWKhZ6W5LcbqmMvVt0Vx29w4b18D1aGpFG7Y8=;
+        b=fHFrtQ81saDSd65LwEzP9UDbpXKadcBC320p/BfajoBqPn9vtoAogT4bfOVHI9QbW7
+         6Tj2b/qzJ4ofCFkApb8ZpVBXlFxnh/BmtuOlcINhTgTJIIkELixi1aKTAg78/5nYK5ha
+         s7EKfyEc2ujmj9KHalGx/+9e+KXWuKh1msiuro2VK0Gi7++6NWOO+13Ag+NbEf6TUdS7
+         50TaZ+V31tsg9FkGb+7BRbQyXFeazCMNYAUBHX7cq5oG9YKESNv1bHJIOtwj/uk9zMYg
+         ue1JPMkkPOfIm1ZPhs5XApWyLVwIBPDcJcfb8g5Q97E/uR1JEPMkkjvcnz4J+fEw/E0I
+         ueww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=g6Xmv8Aoic+dGmRE+DHUL3CUzcIpKcgQcYn9ErwDWD8=;
-        b=b+DHHk2qK6LWZ7Qgf4v/Y1Fv+L7N4Eg8pWavQNL1kCKbqmpQzqSSehgZnt+XafJolf
-         4DX081ZuD2clHg6gOQ05BpAdHIJtPbowvBCy4EDytraapegJIYJjblvBXdtt4q7HQ+J7
-         LY6nWxat1Y1JMmhwM5872TWT7VB+q6xEn5EOquFQ7AxL9uUBFPKuKH56sm++9KFHl2Zw
-         6ovOdVsGs69zH/2SkfXO6T2X724qi1fbsafIPqw127KbfKUIwS3b2lnDXZWhjU6moUxW
-         kxhTl+XIvMYX1ViHjP0B3QVPQX9/P8PX8BqivYTJknI6wxkCCXUioaUJ2sUfsCku1wMM
-         thgQ==
-X-Gm-Message-State: AOAM530LIQmBNQ85iHALMNUtP5ztqN/mLmv9FHq0LMqpjJpETwlm2Js2
-        MAojsXA9W4Io7MsegrsPJ0y1BqT2
-X-Google-Smtp-Source: ABdhPJzTv5S99Sacn38rJ2nTNyk0Uafcump07ru90F5jTHlNB+h6S+xESqPsnylfligoVMjz6Vge3g==
-X-Received: by 2002:a65:51c7:: with SMTP id i7mr9328073pgq.382.1590773371450;
-        Fri, 29 May 2020 10:29:31 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=lD0hXFyWKhZ6W5LcbqmMvVt0Vx29w4b18D1aGpFG7Y8=;
+        b=sTMRht0eKzWx7ze5AS3Hx1Olc6AruVxcVbWxjULQQJPk1pZ2zPWXoJPIlxOuLAdAAE
+         h6vg7mfoEGA2Bxp3zWn9e9oDSxGdoIw8cwdAmMX6SYzHX2MoCnnqnlQLe/QsjTouAYj+
+         3AlzqXnHGdA75f+xxW/NNo/7s7/Dlf57uUjKkYr7LOeV/m5dQqxzpkbdbqbbmrag+IPF
+         gF5bHCCajHJGS49tD2hVZwP9ewsKhm95ik9Db+uEW+/LhKttr0zNEND0RYqQmkjbvkVx
+         orEA79haQlSA96uupjSsvZvb9HGvU9CVllSD6Alm75OVQFQORnuCA5/C1x1Xsd2S5FPa
+         YC+g==
+X-Gm-Message-State: AOAM530FrcvHJu0boc5hEpWc0+iLAFW4MQw5ZsN+99GBemrPS7dSrtHI
+        l+g+eIU2wNaNcumN8ZjXK7g=
+X-Google-Smtp-Source: ABdhPJwe4AVkJtUgK9h2MyK3OsNEt8L2qAlGES9M0mDnD+mYy//wdwkDyq8vCNuyN//kTQ80N/9okw==
+X-Received: by 2002:a63:7a52:: with SMTP id j18mr9027907pgn.295.1590773313715;
+        Fri, 29 May 2020 10:28:33 -0700 (PDT)
 Received: from [127.0.1.1] ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id k18sm884044pfp.208.2020.05.29.10.29.24
+        by smtp.gmail.com with ESMTPSA id j7sm7773721pfh.154.2020.05.29.10.28.27
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 29 May 2020 10:29:30 -0700 (PDT)
-Subject: [bpf PATCH 3/3] bpf,
- selftests: add a verifier test for assigning 32bit reg states to
- 64bit ones
+        Fri, 29 May 2020 10:28:32 -0700 (PDT)
+Subject: [bpf PATCH 0/3] verifier fix for assigning 32bit reg to 64bit reg
 From:   John Fastabend <john.fastabend@gmail.com>
 To:     yhs@fb.com, alexei.starovoitov@gmail.com, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, john.fastabend@gmail.com, kernel-team@fb.com
-Date:   Fri, 29 May 2020 10:29:18 -0700
-Message-ID: <159077335867.6014.2075350327073125374.stgit@john-Precision-5820-Tower>
-In-Reply-To: <159077324869.6014.6516130782021506562.stgit@john-Precision-5820-Tower>
-References: <159077324869.6014.6516130782021506562.stgit@john-Precision-5820-Tower>
+Date:   Fri, 29 May 2020 10:28:21 -0700
+Message-ID: <159077324869.6014.6516130782021506562.stgit@john-Precision-5820-Tower>
 User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -77,46 +72,24 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Added a verifier test for assigning 32bit reg states to
-64bit where 32bit reg holds a constant value of 0.
+These add a fix for 32 bit to 64 bit assignment introduced with
+latest alu32 bounds tracking. The initial fix was proposed by
+Yonghong and then I updated it slightly and added a test fix.
 
-Without previous kernel verifier.c fix, the test in
-this patch will fail.
+@Yonghong feel free to add your signed-off-by back if you want
+or at minimal a ACK would be good.
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 ---
- tools/testing/selftests/bpf/verifier/bounds.c |   22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/verifier/bounds.c b/tools/testing/selftests/bpf/verifier/bounds.c
-index fafa540..58f4aa59 100644
---- a/tools/testing/selftests/bpf/verifier/bounds.c
-+++ b/tools/testing/selftests/bpf/verifier/bounds.c
-@@ -535,3 +535,25 @@
- 	},
- 	.result = ACCEPT
- },
-+{
-+	"assigning 32bit bounds to 64bit for wA = 0, wB = wA",
-+	.insns = {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_8, BPF_REG_1,
-+		    offsetof(struct __sk_buff, data_end)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_1,
-+		    offsetof(struct __sk_buff, data)),
-+	BPF_MOV32_IMM(BPF_REG_9, 0),
-+	BPF_MOV32_REG(BPF_REG_2, BPF_REG_9),
-+	BPF_MOV64_REG(BPF_REG_6, BPF_REG_7),
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_6, BPF_REG_2),
-+	BPF_MOV64_REG(BPF_REG_3, BPF_REG_6),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_3, 8),
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_3, BPF_REG_8, 1),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_6, 0),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.result = ACCEPT,
-+	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
-+},
+John Fastabend (3):
+      bpf: fix a verifier issue when assigning 32bit reg states to 64bit ones
+      bpf, selftests: verifier bounds tests need to be updated
+      bpf, selftests: add a verifier test for assigning 32bit reg states to 64bit ones
 
+
+ kernel/bpf/verifier.c                         |   10 +++--
+ tools/testing/selftests/bpf/verifier/bounds.c |   46 +++++++++++++++++--------
+ 2 files changed, 37 insertions(+), 19 deletions(-)
+
+--
+Signature
