@@ -2,156 +2,109 @@ Return-Path: <SRS0=8dm5=7L=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D420C433E2
-	for <bpf@archiver.kernel.org>; Fri, 29 May 2020 04:39:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06DBFC433E0
+	for <bpf@archiver.kernel.org>; Fri, 29 May 2020 05:21:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B32720707
-	for <bpf@archiver.kernel.org>; Fri, 29 May 2020 04:39:01 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eNsLLAIP"
+	by mail.kernel.org (Postfix) with ESMTP id D446A21475
+	for <bpf@archiver.kernel.org>; Fri, 29 May 2020 05:21:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1590729676;
+	bh=lT11Tbj+fJhuC/fH3+v5BmwIlh+g585JwvWGiPjw1sY=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=zIGaexaCmTG9CKazym+3vTbr0eOXlTK8hzjUZjJKS2r/UxOBLE21S+bGpPlnGydEO
+	 W2qbHQFcQe5Cs14sBNzkvdhV38zNSEr+5tpppeprSz7L3eRIpdhqQO19hTaPw2Y1Jd
+	 Oeek2GFR9ql4vOewimTw9lgLjXTyNZpsUkCDSoio=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725834AbgE2Ei7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 29 May 2020 00:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725883AbgE2Eis (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 29 May 2020 00:38:48 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61368C08C5C6;
-        Thu, 28 May 2020 21:38:48 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id y198so645082pfb.4;
-        Thu, 28 May 2020 21:38:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=h4ZHrkBgJpMmqdfVG33n92n7yUXUN91GchFFtsy+Ugw=;
-        b=eNsLLAIPN50kCmKBGKqeIVdZe6yDQC48Frtm5lj2RKnLBsnV2BbQn9MJD+9egUbARt
-         D+wnx+D8i6vByDyOQXz49irZkgyQzjkzPZmmHH+H438ti90YM/TUn03AQSJrGMHnZ3SQ
-         NgDkPspmFFEBELL3u77oRpZnhpCZtq07iUL+MNIpamH5Rkgz+471de4ilV+zkBD926hi
-         xCVPzDBQW2rU5ZY2axhGSIAPQ7yPfGA9oclZijNyW+9zzJUI9KsR01oKHjZkdVidGo1f
-         75oW5Y92mZF9wVuiSr5Fa/Wrxx4opoCpx7BPLOggAX/wHoVjj7oTHK2mpnw2Kr3G8XMU
-         mG7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=h4ZHrkBgJpMmqdfVG33n92n7yUXUN91GchFFtsy+Ugw=;
-        b=rPWU4+4ktXpPqCiSTDuLiQKPpjoT1CcvIEt7tnESOIQjBB/huahbtokPwm/45r07wq
-         ql2hP1fCACJOVX6BdjinGh567KCq//kM/z9JbK+BH7Q9H8x7VNNKM0M5s+6qR2QUartB
-         T6acE8v7aGGtn79APxhBwMbojw2AZ7r/4kUluS5Mscbm+dvNKRwWKM0KEnzJVKaKVTOT
-         tQ74jhaNN5PJubZ+m31Q5G+9uE0r/DUvcRToDz++Ix+IHCxaWy/EmUgtG+Z4s43D7g/e
-         Z5WmwgGsALP8EHjUcxq28uyqWpBJOer7IHZZW7HOgvDT+yxhKm1hGablIA4sFWeFVa+k
-         /Ycw==
-X-Gm-Message-State: AOAM533VMeIDF+3FBsQv7360EL/2r/VfIwnvtazg3iRR/oZQHxY5TkXC
-        1/qN8nlmBoYp8LG0AL58PoI=
-X-Google-Smtp-Source: ABdhPJwYL73PfNa8m+wjBjB4qrVnf3jxUHb0RSddv3pOM/qI4Ly+UPLO2Z7OlVWcpwMrLod3Mb21fw==
-X-Received: by 2002:a65:4241:: with SMTP id d1mr247197pgq.307.1590727127955;
-        Thu, 28 May 2020 21:38:47 -0700 (PDT)
-Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id w73sm6288777pfd.113.2020.05.28.21.38.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 28 May 2020 21:38:47 -0700 (PDT)
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     davem@davemloft.net
-Cc:     daniel@iogearbox.net, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
-Subject: [PATCH v2 bpf-next 3/4] libbpf: support sleepable progs
-Date:   Thu, 28 May 2020 21:38:38 -0700
-Message-Id: <20200529043839.15824-4-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.13.5
-In-Reply-To: <20200529043839.15824-1-alexei.starovoitov@gmail.com>
-References: <20200529043839.15824-1-alexei.starovoitov@gmail.com>
+        id S1725681AbgE2FVQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 29 May 2020 01:21:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35796 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725355AbgE2FVQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 29 May 2020 01:21:16 -0400
+Received: from C02YQ0RWLVCF.internal.digitalocean.com (c-73-181-34-237.hsd1.co.comcast.net [73.181.34.237])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 92E99208B8;
+        Fri, 29 May 2020 05:21:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590729675;
+        bh=lT11Tbj+fJhuC/fH3+v5BmwIlh+g585JwvWGiPjw1sY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GPzAyIyTucxPeYDL80/3Thsbe8nLR/vUsOvOGBk8hgFexrCwumV6SQFHlQWfvOjYM
+         th0oZiCbniyYNmA/CWiiQ7th/mIP7nka2ma6UpY1yAuHpeaZyIRpsDihXNJracdvq/
+         +LqyFXi/btxZ7BZqa/Km6g1ZhoxpKAZZaZSIANPA=
+From:   David Ahern <dsahern@kernel.org>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        brouer@redhat.com, toke@redhat.com, lorenzo@kernel.org,
+        daniel@iogearbox.net, john.fastabend@gmail.com, ast@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
+        dsahern@gmail.com, David Ahern <dsahern@kernel.org>
+Subject: [PATCH v3 bpf-next 0/5] bpf: Add support for XDP programs in DEVMAP entries
+Date:   Thu, 28 May 2020 23:20:52 -0600
+Message-Id: <20200529052057.69378-1-dsahern@kernel.org>
+X-Mailer: git-send-email 2.21.1 (Apple Git-122.3)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+Implementation of Daniel's proposal for allowing DEVMAP entries to be
+a device index, program fd pair.
 
-Pass request to load program as sleepable via ".s" suffix in the section name.
-If it happens in the future that all map types and helpers are allowed with
-BPF_F_SLEEPABLE flag "fmod_ret/" and "lsm/" can be aliased to "fmod_ret.s/" and
-"lsm.s/" to make all lsm and fmod_ret programs sleepable by default. The fentry
-and fexit programs would always need to have sleepable vs non-sleepable
-distinction, since not all fentry/fexit progs will be attached to sleepable
-kernel functions.
+Programs are run after XDP_REDIRECT and have access to both Rx device
+and Tx device.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: KP Singh <kpsingh@google.com>
----
- tools/lib/bpf/libbpf.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+v3
+- renamed struct to bpf_devmap_val
+- used offsetofend to check for expected map size, modification of
+  Toke's comment
+- check for explicit value sizes
+- adjusted switch statement in dev_map_run_prog per Andrii's comment
+- changed SEC shortcut to xdp_devmap
+- changed selftests to use skeleton and new map declaration
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 74d967619dcf..d59a362ab8f9 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -209,6 +209,7 @@ struct bpf_sec_def {
- 	bool is_exp_attach_type_optional;
- 	bool is_attachable;
- 	bool is_attach_btf;
-+	bool is_sleepable;
- 	attach_fn_t attach_fn;
- };
- 
-@@ -5451,6 +5452,8 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
- 			/* couldn't guess, but user might manually specify */
- 			continue;
- 
-+		if (prog->sec_def->is_sleepable)
-+			prog->prog_flags |= BPF_F_SLEEPABLE;
- 		bpf_program__set_type(prog, prog->sec_def->prog_type);
- 		bpf_program__set_expected_attach_type(prog,
- 				prog->sec_def->expected_attach_type);
-@@ -6646,6 +6649,21 @@ static const struct bpf_sec_def section_defs[] = {
- 		.expected_attach_type = BPF_TRACE_FEXIT,
- 		.is_attach_btf = true,
- 		.attach_fn = attach_trace),
-+	SEC_DEF("fentry.s/", TRACING,
-+		.expected_attach_type = BPF_TRACE_FENTRY,
-+		.is_attach_btf = true,
-+		.is_sleepable = true,
-+		.attach_fn = attach_trace),
-+	SEC_DEF("fmod_ret.s/", TRACING,
-+		.expected_attach_type = BPF_MODIFY_RETURN,
-+		.is_attach_btf = true,
-+		.is_sleepable = true,
-+		.attach_fn = attach_trace),
-+	SEC_DEF("fexit.s/", TRACING,
-+		.expected_attach_type = BPF_TRACE_FEXIT,
-+		.is_attach_btf = true,
-+		.is_sleepable = true,
-+		.attach_fn = attach_trace),
- 	SEC_DEF("freplace/", EXT,
- 		.is_attach_btf = true,
- 		.attach_fn = attach_trace),
-@@ -6653,6 +6671,11 @@ static const struct bpf_sec_def section_defs[] = {
- 		.is_attach_btf = true,
- 		.expected_attach_type = BPF_LSM_MAC,
- 		.attach_fn = attach_lsm),
-+	SEC_DEF("lsm.s/", LSM,
-+		.is_attach_btf = true,
-+		.is_sleepable = true,
-+		.expected_attach_type = BPF_LSM_MAC,
-+		.attach_fn = attach_lsm),
- 	SEC_DEF("iter/", TRACING,
- 		.expected_attach_type = BPF_TRACE_ITER,
- 		.is_attach_btf = true,
-@@ -7292,7 +7315,7 @@ int bpf_prog_load_xattr(const struct bpf_prog_load_attr *attr,
- 
- 		prog->prog_ifindex = attr->ifindex;
- 		prog->log_level = attr->log_level;
--		prog->prog_flags = attr->prog_flags;
-+		prog->prog_flags |= attr->prog_flags;
- 		if (!first_prog)
- 			first_prog = prog;
- 	}
+v2
+- moved dev_map_ext_val definition to uapi to formalize the API for devmap
+  extensions; add bpf_ prefix to the prog_fd and prog_id entries
+- changed devmap code to handle struct in a way that it can support future
+  extensions
+- fixed subject in libbpf patch
+
+v1
+- fixed prog put on invalid program - Toke
+- changed write value from id to fd per Toke's comments about capabilities
+- add test cases
+
+David Ahern (5):
+  devmap: Formalize map value as a named struct
+  bpf: Add support to attach bpf program to a devmap entry
+  xdp: Add xdp_txq_info to xdp_buff
+  libbpf: Add SEC name for xdp programs attached to device map
+  selftest: Add tests for XDP programs in devmap entries
+
+ include/linux/bpf.h                           |   5 +
+ include/net/xdp.h                             |   5 +
+ include/uapi/linux/bpf.h                      |  12 ++
+ kernel/bpf/devmap.c                           | 121 +++++++++++++++---
+ net/core/dev.c                                |  18 +++
+ net/core/filter.c                             |  17 +++
+ tools/include/uapi/linux/bpf.h                |  12 ++
+ tools/lib/bpf/libbpf.c                        |   2 +
+ .../bpf/prog_tests/xdp_devmap_attach.c        |  89 +++++++++++++
+ .../bpf/progs/test_xdp_devmap_helpers.c       |  22 ++++
+ .../bpf/progs/test_xdp_with_devmap_helpers.c  |  43 +++++++
+ 11 files changed, 328 insertions(+), 18 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
+
 -- 
-2.23.0
+2.21.1 (Apple Git-122.3)
 
