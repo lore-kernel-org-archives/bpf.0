@@ -5,61 +5,61 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E895C433E1
-	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 08:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E001C433E0
+	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 08:29:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E6882207BC
-	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 08:29:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4805B2073B
+	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 08:29:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="YF8P548N"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="pk1TyeuW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727069AbgEaI3G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 31 May 2020 04:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
+        id S1727911AbgEaI3J (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 31 May 2020 04:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727814AbgEaI27 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 31 May 2020 04:28:59 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD0CC05BD43
-        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:28:58 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id z5so6300626ejb.3
-        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:28:58 -0700 (PDT)
+        with ESMTP id S1727869AbgEaI3D (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 31 May 2020 04:29:03 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692E3C03E969
+        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:29:02 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id o15so6242067ejm.12
+        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:29:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RSFhg9HspNeJ3qQOPsunC8GvqiYYfETJuK2zjtAXCog=;
-        b=YF8P548NAD+jZfUBP0mCAXFUuMR2L1wRooR2W+KqdvHO5UB8K6uzWv8q7twYzBLbYE
-         7cUygW1Qrey/alyDp0uRzXxGAu+ThkM5sdHXcJ/3hf3Te/ItmeMQHqNhPcJisUwSJ5dn
-         +x5UpQ7BtBV4X197/pvMotyxDaH10TBJiknho=
+        bh=HbIQz4qBb+Mdbhu6/NilzJ04N5qRw6pfaMGv7iEKJmw=;
+        b=pk1TyeuWzLJRS0oVZPXljlveuw3jX6BuC27OOLAJzfmvJmh5/Ut96Q3fr0nR/4PB82
+         vDenJ4WJijxGYgTGNBtprWh6jFqDP/Ys0gXenHalZ0kS1snVXy/Wh6TtDkEuLRRSasnz
+         NwNsTe5R1kaX5ClweLFXVY4r/rfG36G1/nH6E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RSFhg9HspNeJ3qQOPsunC8GvqiYYfETJuK2zjtAXCog=;
-        b=Z7gYakGJzEXiCmuXef0yyu8zM2W+BajZjDGyQGndYAsgXtZ3lgkYOwg0D1qH/zrJ5I
-         qlI7DSTKCMcW0LSvQpokh+LMKg07cJMqY75LodlzHoAm+NNpcrSPGoZAUQpjo3PGhjbY
-         UI4WxuPOg20QkGhkllCI37lP53kTaNZPJH7c1q5hWHBBjaKgvly1nGIVlmLFEbzdyog/
-         V/AQuI348lRz9GpcsnBFWXKOBW0jg/wU7Fcg+OFXle0rJ31az3nOmFy2lsnUtVlZ97m0
-         1ML7G8qcpVc+/2Tqo8QMVvx+vGHfTznn+x9dBtCAHoLC9he6BwkJyxaxXL3AO6GY3uZj
-         qlHw==
-X-Gm-Message-State: AOAM530c2+dKTyYcMHRJVZvYOYShtOaH+w7sBBgurY89MsxSPfHQA58A
-        pQi2lr+mLNXlvnTBHBpa6o8ysZm3sx4=
-X-Google-Smtp-Source: ABdhPJxzsNHO7BMVbdl2mdjoWW1FCIxgwhPW0u7xqFA903rbPD+Cqw/x6Mnmv1ZnDpUmvayLE8082w==
-X-Received: by 2002:a17:906:f28c:: with SMTP id gu12mr418090ejb.64.1590913736961;
-        Sun, 31 May 2020 01:28:56 -0700 (PDT)
+        bh=HbIQz4qBb+Mdbhu6/NilzJ04N5qRw6pfaMGv7iEKJmw=;
+        b=U31VkpeeWVPibCnaoNaGv9Zfpe+djQdbxtNEORdquR1Vtx0+dTUSHQYemGjQ1bnPTQ
+         4IxXWFPlzVoAkqkU0q7wbKE/xbIoBX6lLNArqCz3Kgucu8Es8C2xE/2ff6nfzL16a8gN
+         yiy++dO6Q7P1WB9XMIYoUb+J0WwOZ2NqHkBbOmOosbKaDAnS2tf5ykOkIOSX1bnUsDYn
+         70k31/PUeWumHkTq4H4w6X3eNKnVTp2VgmIl7ya2duYxdkFpqIO9mTeoUu4JVAMk6sgh
+         ralcvdJ8VG3qseuoQ4Qepsxqj1Z/+moF4kJU882nPG+Fmj4luap5J1M+fAfjuj/V8zuh
+         rFSQ==
+X-Gm-Message-State: AOAM533ClYFo3z1nH1CgsPTLnNGG12Lwpq4wLzXbg2TKvDIcQgC17Ba+
+        uAW+u60UDdYGURovpjOT1DZxWdi22NA=
+X-Google-Smtp-Source: ABdhPJwZsgNvOKh2A1lbQej0azacIlcHujQNEQMbnY2lUxSmxtywd6MhCFG0cOhzEbTSeiqCiy6skA==
+X-Received: by 2002:a17:906:580e:: with SMTP id m14mr15722034ejq.457.1590913740795;
+        Sun, 31 May 2020 01:29:00 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id j21sm5999792ejv.36.2020.05.31.01.28.56
+        by smtp.gmail.com with ESMTPSA id d26sm12521915ejo.1.2020.05.31.01.28.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 May 2020 01:28:56 -0700 (PDT)
+        Sun, 31 May 2020 01:29:00 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com
-Subject: [PATCH bpf-next v2 04/12] bpf: Add link-based BPF program attachment to network namespace
-Date:   Sun, 31 May 2020 10:28:38 +0200
-Message-Id: <20200531082846.2117903-5-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v2 06/12] libbpf: Add support for bpf_link-based netns attachment
+Date:   Sun, 31 May 2020 10:28:40 +0200
+Message-Id: <20200531082846.2117903-7-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200531082846.2117903-1-jakub@cloudflare.com>
 References: <20200531082846.2117903-1-jakub@cloudflare.com>
@@ -70,445 +70,93 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend bpf() syscall subcommands that operate on bpf_link, that is
-LINK_CREATE, LINK_UPDATE, OBJ_GET_INFO, to accept attach types tied to
-network namespaces (only flow dissector at the moment).
-
-Link-based and prog-based attachment can be used interchangeably, but only
-one can exist at a time. Attempts to attach a link when a prog is already
-attached directly, and the other way around, will be met with -EEXIST.
-Attempts to detach a program when link exists result in -EINVAL.
-
-Attachment of multiple links of same attach type to one netns is not
-supported with the intention to lift the restriction when a use-case
-presents itself. Because of that link create returns -E2BIG when trying to
-create another netns link, when one already exists.
-
-Link-based attachments to netns don't keep a netns alive by holding a ref
-to it. Instead links get auto-detached from netns when the latter is being
-destroyed, using a pernet pre_exit callback.
-
-When auto-detached, link lives in defunct state as long there are open FDs
-for it. -ENOLINK is returned if a user tries to update a defunct link.
-
-Because bpf_link to netns doesn't hold a ref to struct net, special care is
-taken when releasing, updating, or filling link info. The netns might be
-getting torn down when any of these link operations are in progress. That
-is why auto-detach and update/release/fill_info are synchronized by the
-same mutex. Also, link ops have to always check if auto-detach has not
-happened yet and if netns is still alive (refcnt > 0).
+Add bpf_program__attach_nets(), which uses LINK_CREATE subcommand to create
+an FD-based kernel bpf_link, for attach types tied to network namespace,
+that is BPF_FLOW_DISSECTOR for the moment.
 
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- include/linux/bpf-netns.h      |   8 ++
- include/linux/bpf_types.h      |   3 +
- include/net/netns/bpf.h        |   1 +
- include/uapi/linux/bpf.h       |   5 +
- kernel/bpf/net_namespace.c     | 244 ++++++++++++++++++++++++++++++++-
- kernel/bpf/syscall.c           |   3 +
- tools/include/uapi/linux/bpf.h |   5 +
- 7 files changed, 267 insertions(+), 2 deletions(-)
+ tools/lib/bpf/libbpf.c   | 23 ++++++++++++++++++-----
+ tools/lib/bpf/libbpf.h   |  2 ++
+ tools/lib/bpf/libbpf.map |  1 +
+ 3 files changed, 21 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/bpf-netns.h b/include/linux/bpf-netns.h
-index f3aec3d79824..4052d649f36d 100644
---- a/include/linux/bpf-netns.h
-+++ b/include/linux/bpf-netns.h
-@@ -34,6 +34,8 @@ int netns_bpf_prog_query(const union bpf_attr *attr,
- int netns_bpf_prog_attach(const union bpf_attr *attr,
- 			  struct bpf_prog *prog);
- int netns_bpf_prog_detach(const union bpf_attr *attr);
-+int netns_bpf_link_create(const union bpf_attr *attr,
-+			  struct bpf_prog *prog);
- #else
- static inline int netns_bpf_prog_query(const union bpf_attr *attr,
- 				       union bpf_attr __user *uattr)
-@@ -51,6 +53,12 @@ static inline int netns_bpf_prog_detach(const union bpf_attr *attr)
- {
- 	return -EOPNOTSUPP;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 74d967619dcf..b8af2f91b7c3 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -7894,8 +7894,9 @@ static struct bpf_link *attach_iter(const struct bpf_sec_def *sec,
+ 	return bpf_program__attach_iter(prog, NULL);
  }
-+
-+static inline int netns_bpf_link_create(const union bpf_attr *attr,
-+					struct bpf_prog *prog)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif
  
- #endif /* _BPF_NETNS_H */
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index fa8e1b552acd..a18ae82a298a 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -126,3 +126,6 @@ BPF_LINK_TYPE(BPF_LINK_TYPE_TRACING, tracing)
- BPF_LINK_TYPE(BPF_LINK_TYPE_CGROUP, cgroup)
- #endif
- BPF_LINK_TYPE(BPF_LINK_TYPE_ITER, iter)
-+#ifdef CONFIG_NET
-+BPF_LINK_TYPE(BPF_LINK_TYPE_NETNS, netns)
-+#endif
-diff --git a/include/net/netns/bpf.h b/include/net/netns/bpf.h
-index a858d1c5b166..a8dce2a380c8 100644
---- a/include/net/netns/bpf.h
-+++ b/include/net/netns/bpf.h
-@@ -12,6 +12,7 @@ struct bpf_prog;
- 
- struct netns_bpf {
- 	struct bpf_prog __rcu *progs[MAX_NETNS_BPF_ATTACH_TYPE];
-+	struct bpf_link *links[MAX_NETNS_BPF_ATTACH_TYPE];
- };
- 
- #endif /* __NETNS_BPF_H__ */
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 974ca6e948e3..d73d3d6596da 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -236,6 +236,7 @@ enum bpf_link_type {
- 	BPF_LINK_TYPE_TRACING = 2,
- 	BPF_LINK_TYPE_CGROUP = 3,
- 	BPF_LINK_TYPE_ITER = 4,
-+	BPF_LINK_TYPE_NETNS = 5,
- 
- 	MAX_BPF_LINK_TYPE,
- };
-@@ -3835,6 +3836,10 @@ struct bpf_link_info {
- 			__u64 cgroup_id;
- 			__u32 attach_type;
- 		} cgroup;
-+		struct  {
-+			__u32 netns_ino;
-+			__u32 attach_type;
-+		} netns;
- 	};
- } __attribute__((aligned(8)));
- 
-diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
-index b37d81450c3a..78cf061f8179 100644
---- a/kernel/bpf/net_namespace.c
-+++ b/kernel/bpf/net_namespace.c
-@@ -8,9 +8,140 @@
-  * Functions to manage BPF programs attached to netns
-  */
- 
-+struct bpf_netns_link {
-+	struct bpf_link	link;
-+	enum bpf_attach_type type;
-+	enum netns_bpf_attach_type netns_type;
-+
-+	/* We don't hold a ref to net in order to auto-detach the link
-+	 * when netns is going away. Instead we rely on pernet
-+	 * pre_exit callback to clear this pointer. Must be accessed
-+	 * with netns_bpf_mutex held.
-+	 */
-+	struct net *net;
-+};
-+
- /* Protects updates to netns_bpf */
- DEFINE_MUTEX(netns_bpf_mutex);
- 
-+/* Must be called with netns_bpf_mutex held. */
-+static void __net_exit bpf_netns_link_auto_detach(struct bpf_link *link)
-+{
-+	struct bpf_netns_link *net_link =
-+		container_of(link, struct bpf_netns_link, link);
-+
-+	net_link->net = NULL;
-+}
-+
-+static void bpf_netns_link_release(struct bpf_link *link)
-+{
-+	struct bpf_netns_link *net_link =
-+		container_of(link, struct bpf_netns_link, link);
-+	enum netns_bpf_attach_type type = net_link->netns_type;
-+	struct net *net;
-+
-+	/* Link auto-detached by dying netns. */
-+	if (!net_link->net)
-+		return;
-+
-+	mutex_lock(&netns_bpf_mutex);
-+
-+	/* Recheck after potential sleep. We can race with cleanup_net
-+	 * here, but if we see a non-NULL struct net pointer pre_exit
-+	 * has not happened yet and will block on netns_bpf_mutex.
-+	 */
-+	net = net_link->net;
-+	if (!net)
-+		goto out_unlock;
-+
-+	net->bpf.links[type] = NULL;
-+	RCU_INIT_POINTER(net->bpf.progs[type], NULL);
-+
-+out_unlock:
-+	mutex_unlock(&netns_bpf_mutex);
-+}
-+
-+static void bpf_netns_link_dealloc(struct bpf_link *link)
-+{
-+	struct bpf_netns_link *net_link =
-+		container_of(link, struct bpf_netns_link, link);
-+
-+	kfree(net_link);
-+}
-+
-+static int bpf_netns_link_update_prog(struct bpf_link *link,
-+				      struct bpf_prog *new_prog,
-+				      struct bpf_prog *old_prog)
-+{
-+	struct bpf_netns_link *net_link =
-+		container_of(link, struct bpf_netns_link, link);
-+	enum netns_bpf_attach_type type = net_link->netns_type;
-+	struct net *net;
-+	int ret = 0;
-+
-+	if (old_prog && old_prog != link->prog)
-+		return -EPERM;
-+	if (new_prog->type != link->prog->type)
-+		return -EINVAL;
-+
-+	mutex_lock(&netns_bpf_mutex);
-+
-+	net = net_link->net;
-+	if (!net || !check_net(net)) {
-+		/* Link auto-detached or netns dying */
-+		ret = -ENOLINK;
-+		goto out_unlock;
-+	}
-+
-+	old_prog = xchg(&link->prog, new_prog);
-+	rcu_assign_pointer(net->bpf.progs[type], new_prog);
-+	bpf_prog_put(old_prog);
-+
-+out_unlock:
-+	mutex_unlock(&netns_bpf_mutex);
-+	return ret;
-+}
-+
-+static int bpf_netns_link_fill_info(const struct bpf_link *link,
-+				    struct bpf_link_info *info)
-+{
-+	const struct bpf_netns_link *net_link =
-+		container_of(link, struct bpf_netns_link, link);
-+	unsigned int inum = 0;
-+	struct net *net;
-+
-+	mutex_lock(&netns_bpf_mutex);
-+	net = net_link->net;
-+	if (net && check_net(net))
-+		inum = net->ns.inum;
-+	mutex_unlock(&netns_bpf_mutex);
-+
-+	info->netns.netns_ino = inum;
-+	info->netns.attach_type = net_link->type;
-+	return 0;
-+}
-+
-+static void bpf_netns_link_show_fdinfo(const struct bpf_link *link,
-+				       struct seq_file *seq)
-+{
-+	struct bpf_link_info info = {};
-+
-+	bpf_netns_link_fill_info(link, &info);
-+	seq_printf(seq,
-+		   "netns_ino:\t%u\n"
-+		   "attach_type:\t%u\n",
-+		   info.netns.netns_ino,
-+		   info.netns.attach_type);
-+}
-+
-+static const struct bpf_link_ops bpf_netns_link_ops = {
-+	.release = bpf_netns_link_release,
-+	.dealloc = bpf_netns_link_dealloc,
-+	.update_prog = bpf_netns_link_update_prog,
-+	.fill_link_info = bpf_netns_link_fill_info,
-+	.show_fdinfo = bpf_netns_link_show_fdinfo,
-+};
-+
- int netns_bpf_prog_query(const union bpf_attr *attr,
- 			 union bpf_attr __user *uattr)
+-struct bpf_link *
+-bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
++static struct bpf_link *
++bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
++		       const char *target_name)
  {
-@@ -67,6 +198,13 @@ int netns_bpf_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ 	enum bpf_attach_type attach_type;
+ 	char errmsg[STRERR_BUFSIZE];
+@@ -7915,12 +7916,12 @@ bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
+ 	link->detach = &bpf_link__detach_fd;
  
- 	net = current->nsproxy->net_ns;
- 	mutex_lock(&netns_bpf_mutex);
-+
-+	/* Attaching prog directly is not compatible with links */
-+	if (net->bpf.links[type]) {
-+		ret = -EEXIST;
-+		goto out_unlock;
-+	}
-+
- 	switch (type) {
- 	case NETNS_BPF_FLOW_DISSECTOR:
- 		ret = flow_dissector_bpf_prog_attach(net, prog);
-@@ -75,6 +213,7 @@ int netns_bpf_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- 		ret = -EINVAL;
- 		break;
+ 	attach_type = bpf_program__get_expected_attach_type(prog);
+-	link_fd = bpf_link_create(prog_fd, cgroup_fd, attach_type, NULL);
++	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, NULL);
+ 	if (link_fd < 0) {
+ 		link_fd = -errno;
+ 		free(link);
+-		pr_warn("program '%s': failed to attach to cgroup: %s\n",
+-			bpf_program__title(prog, false),
++		pr_warn("program '%s': failed to attach to %s: %s\n",
++			bpf_program__title(prog, false), target_name,
+ 			libbpf_strerror_r(link_fd, errmsg, sizeof(errmsg)));
+ 		return ERR_PTR(link_fd);
  	}
-+out_unlock:
- 	mutex_unlock(&netns_bpf_mutex);
- 
- 	return ret;
-@@ -86,6 +225,10 @@ static int __netns_bpf_prog_detach(struct net *net,
- {
- 	struct bpf_prog *attached;
- 
-+	/* Progs attached via links cannot be detached */
-+	if (net->bpf.links[type])
-+		return -EINVAL;
-+
- 	attached = rcu_dereference_protected(net->bpf.progs[type],
- 					     lockdep_is_held(&netns_bpf_mutex));
- 	if (!attached)
-@@ -111,13 +254,110 @@ int netns_bpf_prog_detach(const union bpf_attr *attr)
- 	return ret;
+@@ -7928,6 +7929,18 @@ bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
+ 	return link;
  }
  
-+static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
-+				 enum netns_bpf_attach_type type)
++struct bpf_link *
++bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
 +{
-+	struct bpf_prog *prog;
-+	int err;
-+
-+	mutex_lock(&netns_bpf_mutex);
-+
-+	/* Allow attaching only one prog or link for now */
-+	if (net->bpf.links[type]) {
-+		err = -E2BIG;
-+		goto out_unlock;
-+	}
-+	/* Links are not compatible with attaching prog directly */
-+	prog = rcu_dereference_protected(net->bpf.progs[type],
-+					 lockdep_is_held(&netns_bpf_mutex));
-+	if (prog) {
-+		err = -EEXIST;
-+		goto out_unlock;
-+	}
-+
-+	switch (type) {
-+	case NETNS_BPF_FLOW_DISSECTOR:
-+		err = flow_dissector_bpf_prog_attach(net, link->prog);
-+		break;
-+	default:
-+		err = -EINVAL;
-+		break;
-+	}
-+	if (err)
-+		goto out_unlock;
-+
-+	net->bpf.links[type] = link;
-+
-+out_unlock:
-+	mutex_unlock(&netns_bpf_mutex);
-+	return err;
++	return bpf_program__attach_fd(prog, cgroup_fd, "cgroup");
 +}
 +
-+int netns_bpf_link_create(const union bpf_attr *attr, struct bpf_prog *prog)
++struct bpf_link *
++bpf_program__attach_netns(struct bpf_program *prog, int netns_fd)
 +{
-+	enum netns_bpf_attach_type netns_type;
-+	struct bpf_link_primer link_primer;
-+	struct bpf_netns_link *net_link;
-+	enum bpf_attach_type type;
-+	struct net *net;
-+	int err;
-+
-+	if (attr->link_create.flags)
-+		return -EINVAL;
-+
-+	type = attr->link_create.attach_type;
-+	netns_type = to_netns_bpf_attach_type(type);
-+	if (netns_type < 0)
-+		return -EINVAL;
-+
-+	net = get_net_ns_by_fd(attr->link_create.target_fd);
-+	if (IS_ERR(net))
-+		return PTR_ERR(net);
-+
-+	net_link = kzalloc(sizeof(*net_link), GFP_USER);
-+	if (!net_link) {
-+		err = -ENOMEM;
-+		goto out_put_net;
-+	}
-+	bpf_link_init(&net_link->link, BPF_LINK_TYPE_NETNS,
-+		      &bpf_netns_link_ops, prog);
-+	net_link->net = net;
-+	net_link->type = type;
-+	net_link->netns_type = netns_type;
-+
-+	err = bpf_link_prime(&net_link->link, &link_primer);
-+	if (err) {
-+		kfree(net_link);
-+		goto out_put_net;
-+	}
-+
-+	err = netns_bpf_link_attach(net, &net_link->link, netns_type);
-+	if (err) {
-+		bpf_link_cleanup(&link_primer);
-+		goto out_put_net;
-+	}
-+
-+	put_net(net);
-+	return bpf_link_settle(&link_primer);
-+
-+out_put_net:
-+	put_net(net);
-+	return err;
++	return bpf_program__attach_fd(prog, netns_fd, "netns");
 +}
 +
- static void __net_exit netns_bpf_pernet_pre_exit(struct net *net)
- {
- 	enum netns_bpf_attach_type type;
-+	struct bpf_link *link;
+ struct bpf_link *
+ bpf_program__attach_iter(struct bpf_program *prog,
+ 			 const struct bpf_iter_attach_opts *opts)
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 8528a02d5af8..334437af3014 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -253,6 +253,8 @@ LIBBPF_API struct bpf_link *
+ bpf_program__attach_lsm(struct bpf_program *prog);
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd);
++LIBBPF_API struct bpf_link *
++bpf_program__attach_netns(struct bpf_program *prog, int netns_fd);
  
- 	mutex_lock(&netns_bpf_mutex);
--	for (type = 0; type < MAX_NETNS_BPF_ATTACH_TYPE; type++)
--		__netns_bpf_prog_detach(net, type);
-+	for (type = 0; type < MAX_NETNS_BPF_ATTACH_TYPE; type++) {
-+		link = net->bpf.links[type];
-+		if (link)
-+			bpf_netns_link_auto_detach(link);
-+		else
-+			__netns_bpf_prog_detach(net, type);
-+	}
- 	mutex_unlock(&netns_bpf_mutex);
- }
+ struct bpf_map;
  
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 5b2ae498cc3f..988ec43a4f39 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3887,6 +3887,9 @@ static int link_create(union bpf_attr *attr)
- 	case BPF_PROG_TYPE_TRACING:
- 		ret = tracing_bpf_link_attach(attr, prog);
- 		break;
-+	case BPF_PROG_TYPE_FLOW_DISSECTOR:
-+		ret = netns_bpf_link_create(attr, prog);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 	}
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 974ca6e948e3..d73d3d6596da 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -236,6 +236,7 @@ enum bpf_link_type {
- 	BPF_LINK_TYPE_TRACING = 2,
- 	BPF_LINK_TYPE_CGROUP = 3,
- 	BPF_LINK_TYPE_ITER = 4,
-+	BPF_LINK_TYPE_NETNS = 5,
- 
- 	MAX_BPF_LINK_TYPE,
- };
-@@ -3835,6 +3836,10 @@ struct bpf_link_info {
- 			__u64 cgroup_id;
- 			__u32 attach_type;
- 		} cgroup;
-+		struct  {
-+			__u32 netns_ino;
-+			__u32 attach_type;
-+		} netns;
- 	};
- } __attribute__((aligned(8)));
- 
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index c18860200abb..f732c77b7ed0 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -262,6 +262,7 @@ LIBBPF_0.0.9 {
+ 		bpf_link_get_fd_by_id;
+ 		bpf_link_get_next_id;
+ 		bpf_program__attach_iter;
++		bpf_program__attach_netns;
+ 		perf_buffer__consume;
+ 		ring_buffer__add;
+ 		ring_buffer__consume;
 -- 
 2.25.4
 
