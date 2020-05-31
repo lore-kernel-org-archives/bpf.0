@@ -2,168 +2,171 @@ Return-Path: <SRS0=uCAj=7N=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6E12C433DF
-	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 08:29:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECE31C433E0
+	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 15:10:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C58D52073B
-	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 08:29:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C51DE207C4
+	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 15:10:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ZK/O2CYJ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ggwN0U6K"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727926AbgEaI3X (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 31 May 2020 04:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727890AbgEaI3G (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 31 May 2020 04:29:06 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54048C03E96B
-        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:29:04 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id gl26so6249984ejb.11
-        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:29:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5IQjsvRHHSKlUbL/g6OiBtDTmWqGV/fVFGeB8D88fHc=;
-        b=ZK/O2CYJBORQxCyReYSmErjz92XC5oJ2LAeN9QIGTGleKpNCZauhcD3PRu4Ed12/At
-         QSvFCiWb74racNzhfFqQSrnnD7EIlsAYIzjm1Me0Ela24RmTn9Y12ddBrH+5ljf82OH6
-         O3TSRgWLTNFrSiRSsGBj7sMFpAgjubEVqoVAc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5IQjsvRHHSKlUbL/g6OiBtDTmWqGV/fVFGeB8D88fHc=;
-        b=TALom/HyBvTsaO04bQ6nXSlEo6jc8AHUp2uZGW1ALF1iIpQ/Lx3zD5ujmDvDpSySRs
-         /xqgrZSrra8JoWjxIp8vkJtBvNBbFHJGFcc0Mgj6mYjaZuVA9RTpbc2jUVIl4snMoPLi
-         q5wf5OWL9lcD7425TJZT8mcD/++9qTFxg6vyMB4vTASrZl45yJDRFIlCQfSzIHiJZnLl
-         n23K6hVPYLNQ1bEWKnNztTKlrJM01lDcQRYu+TkN7oYMEaWkZpJ3o86tljLcVJX1gqLP
-         TMk119tM8I2Oo4CV10ypLBBCRUgY9FLEO4k1TFT0fKjmdzQnDC37qcTPWu7GZvThyKlE
-         OkSg==
-X-Gm-Message-State: AOAM531GOjroLLMNofOty9GU2gYhhncd19+0lXWjOlwJws4tlz7wChcM
-        AF92szD9krstxUqz7OdGm5yiyA1Sb1o=
-X-Google-Smtp-Source: ABdhPJy4IX7BZDG8OwmUPaBYTu5C2BWioHOk3rnmGlLoG1h+CREHuSD3IAyDJNzgQ3pUo13v1FQqkg==
-X-Received: by 2002:a17:906:86c5:: with SMTP id j5mr14347483ejy.88.1590913742761;
-        Sun, 31 May 2020 01:29:02 -0700 (PDT)
-Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id f11sm12602957edl.52.2020.05.31.01.29.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 May 2020 01:29:02 -0700 (PDT)
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH bpf-next v2 07/12] bpftool: Extract helpers for showing link attach type
-Date:   Sun, 31 May 2020 10:28:41 +0200
-Message-Id: <20200531082846.2117903-8-jakub@cloudflare.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200531082846.2117903-1-jakub@cloudflare.com>
-References: <20200531082846.2117903-1-jakub@cloudflare.com>
+        id S1728071AbgEaPKx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 31 May 2020 11:10:53 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:22406 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728031AbgEaPKx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 31 May 2020 11:10:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590937851;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5PzQOC014IOVx9/TNBcKObA8/fHxBl+Fe3amH29hNfc=;
+        b=ggwN0U6Ka/LlUK6ggVW40kmL9UkwiDRAh/f6mMZzgEzy5HkgwnnPxPkCGNbu8rjy7dWZta
+        q/byj3707YltZm0fsC93ZJEnE+Ut9HnILP70xQAntPNDQTax/NsJLaVTNkPXVCXu9XTTPk
+        Yon+Fdwi0X87i3OkqJxu5y4+ANgmiYQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-467-32icELIcMk6POeBgo6jIlA-1; Sun, 31 May 2020 11:10:47 -0400
+X-MC-Unique: 32icELIcMk6POeBgo6jIlA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 981091005510;
+        Sun, 31 May 2020 15:10:44 +0000 (UTC)
+Received: from krava (unknown [10.40.192.36])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 72DDA610AB;
+        Sun, 31 May 2020 15:10:40 +0000 (UTC)
+Date:   Sun, 31 May 2020 17:10:39 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
+        David Miller <davem@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Wenbo Zhang <ethercflow@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Brendan Gregg <bgregg@netflix.com>,
+        Florent Revest <revest@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 7/9] bpf: Compile the BTF id whitelist data in vmlinux
+Message-ID: <20200531151039.GA881900@krava>
+References: <20200506132946.2164578-1-jolsa@kernel.org>
+ <20200506132946.2164578-8-jolsa@kernel.org>
+ <20200513182940.gil7v5vkthhwck3t@ast-mbp.dhcp.thefacebook.com>
+ <20200514080515.GH3343750@krava>
+ <CAEf4BzbZ6TYxVTJx3ij1WXy5AvVQio9Ht=tePO+xQf=JLigoog@mail.gmail.com>
+ <20200528172349.GA506785@krava>
+ <CAEf4BzbM-5-_QzDhrJDFJefo-m0OWDhvjsK_F1vA-ja4URVE9Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzbM-5-_QzDhrJDFJefo-m0OWDhvjsK_F1vA-ja4URVE9Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Code for printing link attach_type is duplicated in a couple of places, and
-likely will be duplicated for future link types as well. Create helpers to
-prevent duplication.
+On Fri, May 29, 2020 at 01:48:58PM -0700, Andrii Nakryiko wrote:
+> On Thu, May 28, 2020 at 10:24 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > On Thu, May 14, 2020 at 03:46:26PM -0700, Andrii Nakryiko wrote:
+> >
+> > SNIP
+> >
+> > > > I was thinking of putting the names in __init section and generate the BTF
+> > > > ids on kernel start, but the build time generation seemed more convenient..
+> > > > let's see the linking times with 'real size' whitelist and we can reconsider
+> > > >
+> > >
+> > > Being able to record such places where to put BTF ID in code would be
+> > > really nice, as Alexei mentioned. There are many potential use cases
+> > > where it would be good to have BTF IDs just put into arbitrary
+> > > variables/arrays. This would trigger compilation error, if someone
+> > > screws up the name, or function is renamed, or if function can be
+> > > compiled out under some configuration. E.g., assuming some reasonable
+> > > implementation of the macro
+> >
+> > hi,
+> > I'm struggling with this part.. to get some reasonable reference
+> > to function/name into 32 bits? any idea? ;-)
+> >
+> 
+> Well, you don't have to store actual pointer, right? E.g, emitting
+> something like this in assembly:
+> 
+> .global __BTF_ID___some_function
+> .type __BTF_ID___some_function, @object
+> .size __BTF_ID___some_function, 4
+> __BTF_ID___some_function:
+> .zero  4
+> 
+> Would reserve 4 bytes and emit __BTF_ID___some_function symbol. If we
+> can then post-process vmlinux image and for all symbols starting with
+> __BTF_ID___ find some_function BTF type id and put it into those 4
+> bytes, that should work, no?
+> 
+> Maybe generalize it to __BTF_ID__{func,struct,typedef}__some_function,
+> whatever, not sure. Just an idea.
 
-Suggested-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+nice, so something like below?
+
+it'd be in .S file, or perhaps in inline asm, assuming I'll be
+able to pass macro arguments to asm("")
+
+with externs defined in some header file:
+
+  extern const int bpf_skb_output_btf_ids[];
+  extern const int btf_whitelist_d_path[];
+
+  $ objdump -x ./kernel/bpf/whitelist.o
+  ...
+  0000000000000000 l     O .data  0000000000000004 __BTF_ID__func__vfs_truncate
+  0000000000000004 l     O .data  0000000000000004 __BTF_ID__func__vfs_fallocate
+  0000000000000008 l     O .data  0000000000000004 __BTF_ID__func__krava
+  0000000000000010 l     O .data  0000000000000004 __BTF_ID__struct__sk_buff
+  0000000000000000 g       .data  0000000000000000 btf_whitelist_d_path
+  0000000000000010 g       .data  0000000000000000 bpf_skb_output_btf_ids
+
+also it'd be nice to get rid of BTF_ID__ symbols in the final link
+
+thanks,
+jirka
+
+
 ---
- tools/bpf/bpftool/link.c | 44 ++++++++++++++++++++--------------------
- 1 file changed, 22 insertions(+), 22 deletions(-)
+#define BTF_ID(prefix, name)                    \
+.local __BTF_ID__##prefix##__##name;            \
+.type __BTF_ID__##prefix##__##name, @object;    \
+.size __BTF_ID__##prefix##__##name, 4;          \
+__BTF_ID__##prefix##__##name:                   \
+.zero 4
 
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index 670a561dc31b..1ff416eff3d7 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -62,6 +62,15 @@ show_link_header_json(struct bpf_link_info *info, json_writer_t *wtr)
- 	jsonw_uint_field(json_wtr, "prog_id", info->prog_id);
- }
- 
-+static void show_link_attach_type_json(__u32 attach_type, json_writer_t *wtr)
-+{
-+	if (attach_type < ARRAY_SIZE(attach_type_name))
-+		jsonw_string_field(wtr, "attach_type",
-+				   attach_type_name[attach_type]);
-+	else
-+		jsonw_uint_field(wtr, "attach_type", attach_type);
-+}
-+
- static int get_prog_info(int prog_id, struct bpf_prog_info *info)
- {
- 	__u32 len = sizeof(*info);
-@@ -105,22 +114,13 @@ static int show_link_close_json(int fd, struct bpf_link_info *info)
- 			jsonw_uint_field(json_wtr, "prog_type",
- 					 prog_info.type);
- 
--		if (info->tracing.attach_type < ARRAY_SIZE(attach_type_name))
--			jsonw_string_field(json_wtr, "attach_type",
--			       attach_type_name[info->tracing.attach_type]);
--		else
--			jsonw_uint_field(json_wtr, "attach_type",
--					 info->tracing.attach_type);
-+		show_link_attach_type_json(info->tracing.attach_type,
-+					   json_wtr);
- 		break;
- 	case BPF_LINK_TYPE_CGROUP:
- 		jsonw_lluint_field(json_wtr, "cgroup_id",
- 				   info->cgroup.cgroup_id);
--		if (info->cgroup.attach_type < ARRAY_SIZE(attach_type_name))
--			jsonw_string_field(json_wtr, "attach_type",
--			       attach_type_name[info->cgroup.attach_type]);
--		else
--			jsonw_uint_field(json_wtr, "attach_type",
--					 info->cgroup.attach_type);
-+		show_link_attach_type_json(info->cgroup.attach_type, json_wtr);
- 		break;
- 	default:
- 		break;
-@@ -153,6 +153,14 @@ static void show_link_header_plain(struct bpf_link_info *info)
- 	printf("prog %u  ", info->prog_id);
- }
- 
-+static void show_link_attach_type_plain(__u32 attach_type)
-+{
-+	if (attach_type < ARRAY_SIZE(attach_type_name))
-+		printf("attach_type %s  ", attach_type_name[attach_type]);
-+	else
-+		printf("attach_type %u  ", attach_type);
-+}
-+
- static int show_link_close_plain(int fd, struct bpf_link_info *info)
- {
- 	struct bpf_prog_info prog_info;
-@@ -176,19 +184,11 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
- 		else
- 			printf("\n\tprog_type %u  ", prog_info.type);
- 
--		if (info->tracing.attach_type < ARRAY_SIZE(attach_type_name))
--			printf("attach_type %s  ",
--			       attach_type_name[info->tracing.attach_type]);
--		else
--			printf("attach_type %u  ", info->tracing.attach_type);
-+		show_link_attach_type_plain(info->tracing.attach_type);
- 		break;
- 	case BPF_LINK_TYPE_CGROUP:
- 		printf("\n\tcgroup_id %zu  ", (size_t)info->cgroup.cgroup_id);
--		if (info->cgroup.attach_type < ARRAY_SIZE(attach_type_name))
--			printf("attach_type %s  ",
--			       attach_type_name[info->cgroup.attach_type]);
--		else
--			printf("attach_type %u  ", info->cgroup.attach_type);
-+		show_link_attach_type_plain(info->cgroup.attach_type);
- 		break;
- 	default:
- 		break;
--- 
-2.25.4
+#define BTF_ID_LIST(name)                       \
+.global name;                                   \
+name:                
+
+#define ZERO .zero 4
+
+.data
+
+BTF_ID_LIST(btf_whitelist_d_path)
+BTF_ID(func, vfs_truncate)
+BTF_ID(func, vfs_fallocate)
+BTF_ID(func, krava)
+ZERO
+
+BTF_ID_LIST(bpf_skb_output_btf_ids)
+BTF_ID(struct, sk_buff)
 
