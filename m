@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E001C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBC57C433DF
 	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 08:29:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4805B2073B
+	by mail.kernel.org (Postfix) with ESMTP id A88182073B
 	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 08:29:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="pk1TyeuW"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="j2SQmLXh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727911AbgEaI3J (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727915AbgEaI3J (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sun, 31 May 2020 04:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727869AbgEaI3D (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 31 May 2020 04:29:03 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692E3C03E969
-        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:29:02 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id o15so6242067ejm.12
-        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:29:02 -0700 (PDT)
+        with ESMTP id S1727900AbgEaI3I (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 31 May 2020 04:29:08 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B74DC08C5CA
+        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:29:06 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id w7so1280298edt.1
+        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:29:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HbIQz4qBb+Mdbhu6/NilzJ04N5qRw6pfaMGv7iEKJmw=;
-        b=pk1TyeuWzLJRS0oVZPXljlveuw3jX6BuC27OOLAJzfmvJmh5/Ut96Q3fr0nR/4PB82
-         vDenJ4WJijxGYgTGNBtprWh6jFqDP/Ys0gXenHalZ0kS1snVXy/Wh6TtDkEuLRRSasnz
-         NwNsTe5R1kaX5ClweLFXVY4r/rfG36G1/nH6E=
+        bh=P4mfqd4Xn4EQ0V99iX6SdAGczVXsitpi5uLY0Cm55+M=;
+        b=j2SQmLXhfLAsfWe2dVyx4GZDhXEdFvhnNui7S//zA9EwxI0c9ughXwqFmmtzLvUNUO
+         91A2mugUT2sZMVfxSehiz5EqgeJzb5PtD8kH6w7JL+u8KdaKqUtYO5k1aTEmVhZ5lM+g
+         Gy8GipCPpxLkf1NAbUjF52xOPEo4bT3vntUso=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HbIQz4qBb+Mdbhu6/NilzJ04N5qRw6pfaMGv7iEKJmw=;
-        b=U31VkpeeWVPibCnaoNaGv9Zfpe+djQdbxtNEORdquR1Vtx0+dTUSHQYemGjQ1bnPTQ
-         4IxXWFPlzVoAkqkU0q7wbKE/xbIoBX6lLNArqCz3Kgucu8Es8C2xE/2ff6nfzL16a8gN
-         yiy++dO6Q7P1WB9XMIYoUb+J0WwOZ2NqHkBbOmOosbKaDAnS2tf5ykOkIOSX1bnUsDYn
-         70k31/PUeWumHkTq4H4w6X3eNKnVTp2VgmIl7ya2duYxdkFpqIO9mTeoUu4JVAMk6sgh
-         ralcvdJ8VG3qseuoQ4Qepsxqj1Z/+moF4kJU882nPG+Fmj4luap5J1M+fAfjuj/V8zuh
-         rFSQ==
-X-Gm-Message-State: AOAM533ClYFo3z1nH1CgsPTLnNGG12Lwpq4wLzXbg2TKvDIcQgC17Ba+
-        uAW+u60UDdYGURovpjOT1DZxWdi22NA=
-X-Google-Smtp-Source: ABdhPJwZsgNvOKh2A1lbQej0azacIlcHujQNEQMbnY2lUxSmxtywd6MhCFG0cOhzEbTSeiqCiy6skA==
-X-Received: by 2002:a17:906:580e:: with SMTP id m14mr15722034ejq.457.1590913740795;
-        Sun, 31 May 2020 01:29:00 -0700 (PDT)
+        bh=P4mfqd4Xn4EQ0V99iX6SdAGczVXsitpi5uLY0Cm55+M=;
+        b=QsQf0Djp12IVz9btudFDIO6n6/z4J4gCEWCgInRg3RFmVofiVepUp0LuE3O9S44lmT
+         pGOhgL1k2+me+HBTUwVN0iHVAxAZ4Oujz0V5m4rsJUhf1d6ovOxdToZNSl5qlYryd4x6
+         nl5nVn0Z+aR/sDANG7xqfmvnVq8v0xTQfktPjImxp6y9wDpJcwPAjOpFUoMAPgSkKk2j
+         z6XBs9sakj93XzPqnIjqGXbAqifkPKqrk6nTMSrkmDj1W9+w9O6HbCVPpF7m9Z4yc9uW
+         8W6eiphL7qSGglMmTWr6bevr7OrpHdimNclKsak/CON33oF4pddFGPlRsbMuHrqatKyk
+         jNDQ==
+X-Gm-Message-State: AOAM530IfDAg7RDkwO/vMNXne21+ZisCo3rHDOW0mIvprSBjMVv3IS4f
+        kgDLwNbuQ8+YmVZUy3n1uEir81TOFRA=
+X-Google-Smtp-Source: ABdhPJzCHu0B3zLFyK/UTOwmgfIImU0PHghXhOGoB4Tm04RnReRbV9jJsptjI33EPKOZ95kRfmrt3g==
+X-Received: by 2002:aa7:d84b:: with SMTP id f11mr16585626eds.288.1590913744698;
+        Sun, 31 May 2020 01:29:04 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id d26sm12521915ejo.1.2020.05.31.01.28.59
+        by smtp.gmail.com with ESMTPSA id 64sm12536439eda.85.2020.05.31.01.29.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 May 2020 01:29:00 -0700 (PDT)
+        Sun, 31 May 2020 01:29:04 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com
-Subject: [PATCH bpf-next v2 06/12] libbpf: Add support for bpf_link-based netns attachment
-Date:   Sun, 31 May 2020 10:28:40 +0200
-Message-Id: <20200531082846.2117903-7-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v2 08/12] bpftool: Support link show for netns-attached links
+Date:   Sun, 31 May 2020 10:28:42 +0200
+Message-Id: <20200531082846.2117903-9-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200531082846.2117903-1-jakub@cloudflare.com>
 References: <20200531082846.2117903-1-jakub@cloudflare.com>
@@ -70,93 +70,89 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bpf_program__attach_nets(), which uses LINK_CREATE subcommand to create
-an FD-based kernel bpf_link, for attach types tied to network namespace,
-that is BPF_FLOW_DISSECTOR for the moment.
+Make `bpf link show` aware of new link type, that is links attached to
+netns. When listing netns-attached links, display netns inode number as its
+identifier and link attach type.
+
+Sample session:
+
+  # readlink /proc/self/ns/net
+  net:[4026532251]
+  # bpftool prog show
+  357: flow_dissector  tag a04f5eef06a7f555  gpl
+          loaded_at 2020-05-30T16:53:51+0200  uid 0
+          xlated 16B  jited 37B  memlock 4096B
+  358: flow_dissector  tag a04f5eef06a7f555  gpl
+          loaded_at 2020-05-30T16:53:51+0200  uid 0
+          xlated 16B  jited 37B  memlock 4096B
+  # bpftool link show
+  108: netns  prog 357
+          netns_ino 4026532251  attach_type flow_dissector
+  # bpftool link -jp show
+  [{
+          "id": 108,
+          "type": "netns",
+          "prog_id": 357,
+          "netns_ino": 4026532251,
+          "attach_type": "flow_dissector"
+      }
+  ]
+
+  (... after netns is gone ...)
+
+  # bpftool link show
+  108: netns  prog 357
+          netns_ino 0  attach_type flow_dissector
+  # bpftool link -jp show
+  [{
+          "id": 108,
+          "type": "netns",
+          "prog_id": 357,
+          "netns_ino": 0,
+          "attach_type": "flow_dissector"
+      }
+  ]
 
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- tools/lib/bpf/libbpf.c   | 23 ++++++++++++++++++-----
- tools/lib/bpf/libbpf.h   |  2 ++
- tools/lib/bpf/libbpf.map |  1 +
- 3 files changed, 21 insertions(+), 5 deletions(-)
+ tools/bpf/bpftool/link.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 74d967619dcf..b8af2f91b7c3 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -7894,8 +7894,9 @@ static struct bpf_link *attach_iter(const struct bpf_sec_def *sec,
- 	return bpf_program__attach_iter(prog, NULL);
- }
+diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+index 1ff416eff3d7..fca57ee8fafe 100644
+--- a/tools/bpf/bpftool/link.c
++++ b/tools/bpf/bpftool/link.c
+@@ -17,6 +17,7 @@ static const char * const link_type_name[] = {
+ 	[BPF_LINK_TYPE_TRACING]			= "tracing",
+ 	[BPF_LINK_TYPE_CGROUP]			= "cgroup",
+ 	[BPF_LINK_TYPE_ITER]			= "iter",
++	[BPF_LINK_TYPE_NETNS]			= "netns",
+ };
  
--struct bpf_link *
--bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
-+static struct bpf_link *
-+bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
-+		       const char *target_name)
- {
- 	enum bpf_attach_type attach_type;
- 	char errmsg[STRERR_BUFSIZE];
-@@ -7915,12 +7916,12 @@ bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
- 	link->detach = &bpf_link__detach_fd;
- 
- 	attach_type = bpf_program__get_expected_attach_type(prog);
--	link_fd = bpf_link_create(prog_fd, cgroup_fd, attach_type, NULL);
-+	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, NULL);
- 	if (link_fd < 0) {
- 		link_fd = -errno;
- 		free(link);
--		pr_warn("program '%s': failed to attach to cgroup: %s\n",
--			bpf_program__title(prog, false),
-+		pr_warn("program '%s': failed to attach to %s: %s\n",
-+			bpf_program__title(prog, false), target_name,
- 			libbpf_strerror_r(link_fd, errmsg, sizeof(errmsg)));
- 		return ERR_PTR(link_fd);
+ static int link_parse_fd(int *argc, char ***argv)
+@@ -122,6 +123,11 @@ static int show_link_close_json(int fd, struct bpf_link_info *info)
+ 				   info->cgroup.cgroup_id);
+ 		show_link_attach_type_json(info->cgroup.attach_type, json_wtr);
+ 		break;
++	case BPF_LINK_TYPE_NETNS:
++		jsonw_uint_field(json_wtr, "netns_ino",
++				 info->netns.netns_ino);
++		show_link_attach_type_json(info->netns.attach_type, json_wtr);
++		break;
+ 	default:
+ 		break;
  	}
-@@ -7928,6 +7929,18 @@ bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
- 	return link;
- }
- 
-+struct bpf_link *
-+bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
-+{
-+	return bpf_program__attach_fd(prog, cgroup_fd, "cgroup");
-+}
-+
-+struct bpf_link *
-+bpf_program__attach_netns(struct bpf_program *prog, int netns_fd)
-+{
-+	return bpf_program__attach_fd(prog, netns_fd, "netns");
-+}
-+
- struct bpf_link *
- bpf_program__attach_iter(struct bpf_program *prog,
- 			 const struct bpf_iter_attach_opts *opts)
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 8528a02d5af8..334437af3014 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -253,6 +253,8 @@ LIBBPF_API struct bpf_link *
- bpf_program__attach_lsm(struct bpf_program *prog);
- LIBBPF_API struct bpf_link *
- bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd);
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_netns(struct bpf_program *prog, int netns_fd);
- 
- struct bpf_map;
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index c18860200abb..f732c77b7ed0 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -262,6 +262,7 @@ LIBBPF_0.0.9 {
- 		bpf_link_get_fd_by_id;
- 		bpf_link_get_next_id;
- 		bpf_program__attach_iter;
-+		bpf_program__attach_netns;
- 		perf_buffer__consume;
- 		ring_buffer__add;
- 		ring_buffer__consume;
+@@ -190,6 +196,10 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
+ 		printf("\n\tcgroup_id %zu  ", (size_t)info->cgroup.cgroup_id);
+ 		show_link_attach_type_plain(info->cgroup.attach_type);
+ 		break;
++	case BPF_LINK_TYPE_NETNS:
++		printf("\n\tnetns_ino %u  ", info->netns.netns_ino);
++		show_link_attach_type_plain(info->netns.attach_type);
++		break;
+ 	default:
+ 		break;
+ 	}
 -- 
 2.25.4
 
