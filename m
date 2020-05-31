@@ -5,61 +5,61 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 539ECC433DF
-	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 08:29:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55862C433E0
+	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 08:29:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F6F62073B
-	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 08:29:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30C822073B
+	for <bpf@archiver.kernel.org>; Sun, 31 May 2020 08:29:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="M47TiDPQ"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="CjyJFvhA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727965AbgEaI3P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 31 May 2020 04:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36398 "EHLO
+        id S1728012AbgEaI3X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 31 May 2020 04:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727776AbgEaI3O (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 31 May 2020 04:29:14 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAE0C03E96A
-        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:29:13 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id k11so6262036ejr.9
-        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:29:13 -0700 (PDT)
+        with ESMTP id S1727926AbgEaI3L (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 31 May 2020 04:29:11 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D504C03E96A
+        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:29:10 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id p18so4946495eds.7
+        for <bpf@vger.kernel.org>; Sun, 31 May 2020 01:29:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=01x38t0xTk7+DfmoaUEjlRqGIKh1P8FrwxiKsjkB7Q0=;
-        b=M47TiDPQiix4JzD5xbIyYxnvk+SV3J2SG9KC/B1Q43LjhLe2Ov7y6KaWBqBvFXprN5
-         x3v12joXadiWi/ztMU06F2ifMulrywdyqrmTdU+7yyLfxtxu9/labftjnJU+omwzL+J7
-         kwd/tfrGdALTvY0z0a7FnnjvPjqnrKc+viKgw=
+        bh=LGqQQLJZNiH0SmZKXWhQ8n1ub32eRDUtUafh9Us+7UA=;
+        b=CjyJFvhAsfVbQfOMeT6d0aTWjLYK8Apz/ND3Jzqa3QpIg3BGGnc70OC7O+P735czf/
+         B07rnvj9E3XpINJplm30aEGCldCydqnPr+cD679+iIJ8OXruljp7xXHsmNwNCMCSZXzI
+         ZpxZeOunaUYwccN6zUJy+ci9hUNGvvN+D/mbc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=01x38t0xTk7+DfmoaUEjlRqGIKh1P8FrwxiKsjkB7Q0=;
-        b=K3eJ8K8+6C7A1ZVTh9bEMcEnih7hz5/okrYp4cS1LNBL2Qw74b6qCsl+dOXUdXvTJl
-         vjemszV6yTymsryNuZzwPihYhCT4zs5d8nguvwxyUSIQFcUjmD2JSAODaWKnOGR5TSVT
-         ltUzRh8NZOOtzDGNdpxGSXWvyJw2nT3QV/dO73AmOJWvn9pL/NFPmFt2jvXtPUO9jHey
-         x308h6M7wbu7A3Tc5hR2qppLO2u6FiADwm0Besrjw/K1FAy4v53ZIkqxeSdO30s3kP0P
-         zpFhLBQASTEBZ7Jv307eJV38vFdRFpoYQpLj7pZzGL9S8RdD9aCS/reekNlKbjXnp43a
-         5m0A==
-X-Gm-Message-State: AOAM531akJNgfJeklPFWotpz+ORlnb1WXKT6nonYvKQj2Y7tW6stGL5v
-        m+T5cSdWE1rx4XE3ti2Dea1HMher5JM=
-X-Google-Smtp-Source: ABdhPJz8WjaZwgilQvvQsoR/axJltqOCpIRaF8bSEDEd+xTahOmxmxgPMFlyGjDJ+QM6chfo/sET4w==
-X-Received: by 2002:a17:906:9149:: with SMTP id y9mr9343813ejw.153.1590913752225;
-        Sun, 31 May 2020 01:29:12 -0700 (PDT)
+        bh=LGqQQLJZNiH0SmZKXWhQ8n1ub32eRDUtUafh9Us+7UA=;
+        b=eKR87q+QPeDG0jn4oUisaImFbNj9bfLF2xfsIKPcmdiXYRtM9OczMsEu5t64jG1SZ4
+         7YrJprGod2ukJ3Oy191hEfA0pvuFekDA039O9anq2nBRvG5ahs8IK2Op15OHUKpgdV94
+         pYtb9YLiYnDZP3kgI1rFeOkuK2OqKoJ5V2lH5Cfs3HdHOmPe7+4QRnUodzGKKgI9SNQL
+         J+bkrymzyFk1OeUTypfdS9U7+wflDL1ZAzT3d/ER9nbtDWCEMU2VN3ILna7YzQuY83O/
+         k+elxScjzwRz7xXj0k2bShcxZlMYlqsGUAb+TNhwa+v9gKiNlkubp+BaAxTNUtlYzGgu
+         eFpw==
+X-Gm-Message-State: AOAM533Ee03CseyzlxuZdpfDftQBssEww+LDlZhdEw2IcYFaru0suZoJ
+        FMcZjxP6chsGGedjx2CzhoXDXdOfkIk=
+X-Google-Smtp-Source: ABdhPJw315dJM9Jh+mSn0n0nXJsaftPABoviI2ImZLzzPByCPXY23mX4dEj8/i/itn8f18M6vCg5ig==
+X-Received: by 2002:a50:d785:: with SMTP id w5mr15813809edi.212.1590913748588;
+        Sun, 31 May 2020 01:29:08 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id g13sm11778021ejh.119.2020.05.31.01.29.11
+        by smtp.gmail.com with ESMTPSA id s14sm1117951ejd.111.2020.05.31.01.29.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 May 2020 01:29:11 -0700 (PDT)
+        Sun, 31 May 2020 01:29:08 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com
-Subject: [PATCH bpf-next v2 12/12] selftests/bpf: Extend test_flow_dissector to cover link creation
-Date:   Sun, 31 May 2020 10:28:46 +0200
-Message-Id: <20200531082846.2117903-13-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v2 10/12] selftests/bpf, flow_dissector: Close TAP device FD after the test
+Date:   Sun, 31 May 2020 10:28:44 +0200
+Message-Id: <20200531082846.2117903-11-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200531082846.2117903-1-jakub@cloudflare.com>
 References: <20200531082846.2117903-1-jakub@cloudflare.com>
@@ -70,168 +70,27 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend the existing flow_dissector test case to run tests once using direct
-prog attachments, and then for the second time using indirect attachment
-via link.
+test_flow_dissector leaves a TAP device after it's finished, potentially
+interfering with other tests that will run after it. Fix it by closing the
+TAP descriptor on cleanup.
 
-The intention is to exercises the newly added high-level API for attaching
-programs to network namespace with links (bpf_program__attach_netns).
-
+Fixes: 0905beec9f52 ("selftests/bpf: run flow dissector tests in skb-less mode")
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- .../selftests/bpf/prog_tests/flow_dissector.c | 115 +++++++++++++-----
- 1 file changed, 82 insertions(+), 33 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index b6370c0b3b7a..ea14e3ece812 100644
+index 2301c4d3ecec..ef5aab2f60b5 100644
 --- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
 +++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -103,6 +103,7 @@ struct test {
+@@ -524,6 +524,7 @@ void test_flow_dissector(void)
+ 		CHECK_ATTR(err, tests[i].name, "bpf_map_delete_elem %d\n", err);
+ 	}
  
- #define VLAN_HLEN	4
- 
-+static __u32 duration;
- struct test tests[] = {
- 	{
- 		.name = "ipv4",
-@@ -474,11 +475,87 @@ static int init_prog_array(struct bpf_object *obj, struct bpf_map *prog_array)
- 	return 0;
- }
- 
-+static void run_tests_skb_less(int tap_fd, struct bpf_map *keys)
-+{
-+	int i, err, keys_fd;
-+
-+	keys_fd = bpf_map__fd(keys);
-+	if (CHECK(keys_fd < 0, "bpf_map__fd", "err %d\n", keys_fd))
-+		return;
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		/* Keep in sync with 'flags' from eth_get_headlen. */
-+		__u32 eth_get_headlen_flags =
-+			BPF_FLOW_DISSECTOR_F_PARSE_1ST_FRAG;
-+		struct bpf_prog_test_run_attr tattr = {};
-+		struct bpf_flow_keys flow_keys = {};
-+		__u32 key = (__u32)(tests[i].keys.sport) << 16 |
-+			    tests[i].keys.dport;
-+
-+		/* For skb-less case we can't pass input flags; run
-+		 * only the tests that have a matching set of flags.
-+		 */
-+
-+		if (tests[i].flags != eth_get_headlen_flags)
-+			continue;
-+
-+		err = tx_tap(tap_fd, &tests[i].pkt, sizeof(tests[i].pkt));
-+		CHECK(err < 0, "tx_tap", "err %d errno %d\n", err, errno);
-+
-+		err = bpf_map_lookup_elem(keys_fd, &key, &flow_keys);
-+		CHECK_ATTR(err, tests[i].name, "bpf_map_lookup_elem %d\n", err);
-+
-+		CHECK_ATTR(err, tests[i].name, "skb-less err %d\n", err);
-+		CHECK_FLOW_KEYS(tests[i].name, flow_keys, tests[i].keys);
-+
-+		err = bpf_map_delete_elem(keys_fd, &key);
-+		CHECK_ATTR(err, tests[i].name, "bpf_map_delete_elem %d\n", err);
-+	}
-+}
-+
-+static void test_skb_less_prog_attach(struct bpf_flow *skel, int tap_fd)
-+{
-+	int err, prog_fd;
-+
-+	prog_fd = bpf_program__fd(skel->progs._dissect);
-+	if (CHECK(prog_fd < 0, "bpf_program__fd", "err %d\n", prog_fd))
-+		return;
-+
-+	err = bpf_prog_attach(prog_fd, 0, BPF_FLOW_DISSECTOR, 0);
-+	if (CHECK(err, "bpf_prog_attach", "err %d errno %d\n", err, errno))
-+		return;
-+
-+	run_tests_skb_less(tap_fd, skel->maps.last_dissection);
-+
-+	err = bpf_prog_detach(prog_fd, BPF_FLOW_DISSECTOR);
-+	CHECK(err, "bpf_prog_detach", "err %d errno %d\n", err, errno);
-+}
-+
-+static void test_skb_less_link_create(struct bpf_flow *skel, int tap_fd)
-+{
-+	struct bpf_link *link;
-+	int err, net_fd;
-+
-+	net_fd = open("/proc/self/ns/net", O_RDONLY);
-+	if (CHECK(net_fd < 0, "open(/proc/self/ns/net)", "err %d\n", errno))
-+		return;
-+
-+	link = bpf_program__attach_netns(skel->progs._dissect, net_fd);
-+	if (CHECK(IS_ERR(link), "attach_netns", "err %ld\n", PTR_ERR(link)))
-+		goto out_close;
-+
-+	run_tests_skb_less(tap_fd, skel->maps.last_dissection);
-+
-+	err = bpf_link__destroy(link);
-+	CHECK(err, "bpf_link__destroy", "err %d\n", err);
-+out_close:
-+	close(net_fd);
-+}
-+
- void test_flow_dissector(void)
- {
- 	int i, err, prog_fd, keys_fd = -1, tap_fd;
- 	struct bpf_flow *skel;
--	__u32 duration = 0;
- 
- 	skel = bpf_flow__open_and_load();
- 	if (CHECK(!skel, "skel", "failed to open/load skeleton\n"))
-@@ -526,45 +603,17 @@ void test_flow_dissector(void)
- 	 * via BPF map in this case.
- 	 */
- 
--	err = bpf_prog_attach(prog_fd, 0, BPF_FLOW_DISSECTOR, 0);
--	CHECK(err, "bpf_prog_attach", "err %d errno %d\n", err, errno);
--
- 	tap_fd = create_tap("tap0");
- 	CHECK(tap_fd < 0, "create_tap", "tap_fd %d errno %d\n", tap_fd, errno);
- 	err = ifup("tap0");
- 	CHECK(err, "ifup", "err %d errno %d\n", err, errno);
- 
--	for (i = 0; i < ARRAY_SIZE(tests); i++) {
--		/* Keep in sync with 'flags' from eth_get_headlen. */
--		__u32 eth_get_headlen_flags =
--			BPF_FLOW_DISSECTOR_F_PARSE_1ST_FRAG;
--		struct bpf_prog_test_run_attr tattr = {};
--		struct bpf_flow_keys flow_keys = {};
--		__u32 key = (__u32)(tests[i].keys.sport) << 16 |
--			    tests[i].keys.dport;
--
--		/* For skb-less case we can't pass input flags; run
--		 * only the tests that have a matching set of flags.
--		 */
--
--		if (tests[i].flags != eth_get_headlen_flags)
--			continue;
--
--		err = tx_tap(tap_fd, &tests[i].pkt, sizeof(tests[i].pkt));
--		CHECK(err < 0, "tx_tap", "err %d errno %d\n", err, errno);
--
--		err = bpf_map_lookup_elem(keys_fd, &key, &flow_keys);
--		CHECK_ATTR(err, tests[i].name, "bpf_map_lookup_elem %d\n", err);
--
--		CHECK_ATTR(err, tests[i].name, "skb-less err %d\n", err);
--		CHECK_FLOW_KEYS(tests[i].name, flow_keys, tests[i].keys);
--
--		err = bpf_map_delete_elem(keys_fd, &key);
--		CHECK_ATTR(err, tests[i].name, "bpf_map_delete_elem %d\n", err);
--	}
-+	/* Test direct prog attachment */
-+	test_skb_less_prog_attach(skel, tap_fd);
-+	/* Test indirect prog attachment via link */
-+	test_skb_less_link_create(skel, tap_fd);
- 
- 	close(tap_fd);
--	bpf_prog_detach(prog_fd, BPF_FLOW_DISSECTOR);
- out_destroy_skel:
- 	bpf_flow__destroy(skel);
++	close(tap_fd);
+ 	bpf_prog_detach(prog_fd, BPF_FLOW_DISSECTOR);
+ 	bpf_object__close(obj);
  }
 -- 
 2.25.4
