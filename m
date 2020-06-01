@@ -2,65 +2,65 @@ Return-Path: <SRS0=sVLx=7O=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E7F0C433DF
-	for <bpf@archiver.kernel.org>; Mon,  1 Jun 2020 22:38:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ACA1C433E0
+	for <bpf@archiver.kernel.org>; Mon,  1 Jun 2020 22:42:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D8E16206F1
-	for <bpf@archiver.kernel.org>; Mon,  1 Jun 2020 22:38:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E3DC62054F
+	for <bpf@archiver.kernel.org>; Mon,  1 Jun 2020 22:42:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="grDWpsg3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WCdcJdWe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728336AbgFAWiQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Jun 2020 18:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
+        id S1728445AbgFAWmQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Jun 2020 18:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbgFAWiQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Jun 2020 18:38:16 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDD7C061A0E;
-        Mon,  1 Jun 2020 15:38:16 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id g28so10022026qkl.0;
-        Mon, 01 Jun 2020 15:38:16 -0700 (PDT)
+        with ESMTP id S1725800AbgFAWmQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Jun 2020 18:42:16 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB71DC061A0E;
+        Mon,  1 Jun 2020 15:42:15 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id y9so870412qvs.4;
+        Mon, 01 Jun 2020 15:42:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yvZW9vgdfgQJrU2H7xotPh1pXrCvDZu0ssR+AlBBsJU=;
-        b=grDWpsg3yNeeH22d7CXHwWAz8aH6S8cEJoFpHLUZHOzPhJCDoQVKjMznTZZ3mvzRXv
-         7Ra3XIk+I/yNSZOrKNqh0hD1eYThhHAzyQeBFfFlMM97PozNuBehuFi3eZVmxTYyNBKj
-         ZnJd0yjDGQaS/3+TgFhVarflknACmfOwAXvTykz+HZRAQgXP+m/ajDyF08vZoR45SR1E
-         RTthPYFcPzVV5/CL2rVPUzhiWT2P5xqEleEISXqffOgSrTRg/TELC1GnSSW7PETf2GQC
-         IgPtnlgmXqEDn0ounSv03VJoWqjGzIY7GXM1pAIauKdFcVTO0nBSfd5OalPZseWNYh7M
-         t4mA==
+        bh=vwhzR8RmMestUZjdHXFXyR/5Gz7ZzMKNhkGGSqWytPU=;
+        b=WCdcJdWew+9eWEjq4IIOfHRZ646kpaUQMNP0kCQ4dAqYjf776Dkq17tabijrk8ELsr
+         Ug+JIR8PLWdO4WzrurHnnSnPwxkVIg+jFirvaQAb8wXSUMxWi77Erj1XMGSN1ZySXqz/
+         pC3kvBW6VDOKj+BNmKFWMAEDyPqdMNHQ6AFyvTBx2jc03HMEs8FPC0/NeSSgjyFS6r8j
+         SrCI0VP60puSnLqgo0IYgxNWg9E9G6T+ciaO9+kTa9R/GgvS10mEea+1YlRqi6IBt/o8
+         ZOxvCi2asefBAh4YFuls/vO5oUF0M6ysUJocDaZXszYOR3dkUPypWByyuQxB5Z+/BCEy
+         /BuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yvZW9vgdfgQJrU2H7xotPh1pXrCvDZu0ssR+AlBBsJU=;
-        b=MFAvNB8DYqwq2bfUiARdtpcS7B+FmrWszFc5QB0Q98ifjqr3/7VNtFRsBTweuRa3r4
-         C7j/ptE7jHc/WmrvOSf0PEumYuiIJ8QhSA9tIR2vpwr4IxG3MxyNmeNBzzuddOIIZ2Se
-         Ft1Hkh0OcMNL8vhAyKo7ebCJTKqzviaCJ+KCoEpwSdiL4C5mWHDReStk066BqHb7oqt+
-         QWm9dqSEHI7qzHLlyWSKQDNpykxQh+cS8c7fJ4LB3/C+8yo/sOnYs+jZFuMv17YqMOyC
-         bAuVBByQghRA6DLoUeJqg4/X9mUlKE1OUnikkuUIO6XhOYPsivTthIU0wz7tyW7mdlip
-         f/Eg==
-X-Gm-Message-State: AOAM531ekxgIpRi2qfo9cM7J3NkcCz/+TCrNx23+Vt4GEXLfO5TVyN8F
-        mYwmCqlCwnxuUvY1E9KwbZ1DFW5ftfqm7sG+tiA=
-X-Google-Smtp-Source: ABdhPJzIjyyW+kIvHaEueaSOJQCRg1jcaKN0RnoHf79p2cGaAZQWkC+PYsEzAcnOgj2ULzUnE2aZ9DMkjOSAn2XhT2E=
-X-Received: by 2002:a37:a89:: with SMTP id 131mr21680526qkk.92.1591051095189;
- Mon, 01 Jun 2020 15:38:15 -0700 (PDT)
+        bh=vwhzR8RmMestUZjdHXFXyR/5Gz7ZzMKNhkGGSqWytPU=;
+        b=Qs/t1frlWR3/j23bSXUflcS8552SSjhM3wm8aqWa+CGiyzdZkVIvdKgfTGPsHEydHd
+         5sncAIi/7iwGgpdN8oeNKzznPRbKbtA5BvkMxsWSeByAsQhOJzPr980DIqYMvANXYWXq
+         1cvesPJiCkPLu36CG/obOQ35m5ZSz1AyrTwNDDqy4hcgZvgjo1xh8QtraRyNaySshoA9
+         e4HN5JQDUm3wELkR1Jp45IDa0QInYOQckLtEth6SMsnC4GC9m4GFS0BMWSx3iZotm2tI
+         CF0MNcmBn1hXaqFhKK22D2GFl7ac3iK+UqcStTFCsjuutaK9eHFnbqVdndlABhPfuY99
+         pv5g==
+X-Gm-Message-State: AOAM533Xz68GBn3Ex0Br4ne47h4DBiiRRBXhTpzXm0k55b6hEXItxiHm
+        V7aisqJlkpwkKZlaRS7iWJw9ohJ0kTUerw871bQ=
+X-Google-Smtp-Source: ABdhPJxNvAtFCuRBT/38OtAo9aw6nyCKIDuMbDvEhYWYJg45HDi+dTM4aLYRBbrkDDlsI1dgRvyYkLWFZPT9Ex2VIJg=
+X-Received: by 2002:ad4:598f:: with SMTP id ek15mr10663027qvb.196.1591051334976;
+ Mon, 01 Jun 2020 15:42:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200531082846.2117903-1-jakub@cloudflare.com> <20200531082846.2117903-9-jakub@cloudflare.com>
-In-Reply-To: <20200531082846.2117903-9-jakub@cloudflare.com>
+References: <20200531082846.2117903-1-jakub@cloudflare.com> <20200531082846.2117903-12-jakub@cloudflare.com>
+In-Reply-To: <20200531082846.2117903-12-jakub@cloudflare.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 1 Jun 2020 15:38:04 -0700
-Message-ID: <CAEf4Bzap93RJY4GvSbMA14Z3wCVw4gwYCLJ+4FS0zDNd8wu4Kg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 08/12] bpftool: Support link show for
- netns-attached links
+Date:   Mon, 1 Jun 2020 15:42:04 -0700
+Message-ID: <CAEf4BzbBRNCTxZvtn2s3uN+JG-Z6BpHvgbovi6abaQi6rSeBbQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 11/12] selftests/bpf: Convert
+ test_flow_dissector to use BPF skeleton
 To:     Jakub Sitnicki <jakub@cloudflare.com>
 Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
         kernel-team@cloudflare.com
@@ -70,62 +70,72 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, May 31, 2020 at 1:31 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+On Sun, May 31, 2020 at 1:29 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
 >
-> Make `bpf link show` aware of new link type, that is links attached to
-> netns. When listing netns-attached links, display netns inode number as its
-> identifier and link attach type.
+> Switch flow dissector test setup from custom BPF object loader to BPF
+> skeleton to save boilerplate and prepare for testing higher-level API for
+> attaching flow dissector with bpf_link.
 >
-> Sample session:
->
->   # readlink /proc/self/ns/net
->   net:[4026532251]
->   # bpftool prog show
->   357: flow_dissector  tag a04f5eef06a7f555  gpl
->           loaded_at 2020-05-30T16:53:51+0200  uid 0
->           xlated 16B  jited 37B  memlock 4096B
->   358: flow_dissector  tag a04f5eef06a7f555  gpl
->           loaded_at 2020-05-30T16:53:51+0200  uid 0
->           xlated 16B  jited 37B  memlock 4096B
->   # bpftool link show
->   108: netns  prog 357
->           netns_ino 4026532251  attach_type flow_dissector
->   # bpftool link -jp show
->   [{
->           "id": 108,
->           "type": "netns",
->           "prog_id": 357,
->           "netns_ino": 4026532251,
->           "attach_type": "flow_dissector"
->       }
->   ]
->
->   (... after netns is gone ...)
->
->   # bpftool link show
->   108: netns  prog 357
->           netns_ino 0  attach_type flow_dissector
->   # bpftool link -jp show
->   [{
->           "id": 108,
->           "type": "netns",
->           "prog_id": 357,
->           "netns_ino": 0,
->           "attach_type": "flow_dissector"
->       }
->   ]
+> To avoid depending on program order in the BPF object when populating the
+> flow dissector PROG_ARRAY map, change the program section names to contain
+> the program index into the map. This follows the example set by tailcall
+> tests.
 >
 > Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 > ---
-
-LGTM. Not sure if bpftool allows to filter progs/maps by type, but
-probably we should eventually add link type filtering ("show me only
-netns links")...
-
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-
->  tools/bpf/bpftool/link.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  .../selftests/bpf/prog_tests/flow_dissector.c | 50 +++++++++++++++++--
+>  tools/testing/selftests/bpf/progs/bpf_flow.c  | 20 ++++----
+>  2 files changed, 55 insertions(+), 15 deletions(-)
 >
 
 [...]
+
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_flow.c b/tools/testing/selftests/bpf/progs/bpf_flow.c
+> index 9941f0ba471e..de6de9221518 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_flow.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_flow.c
+> @@ -20,20 +20,20 @@
+>  #include <bpf/bpf_endian.h>
+>
+>  int _version SEC("version") = 1;
+> -#define PROG(F) SEC(#F) int bpf_func_##F
+> +#define PROG(F) PROG_(F, _##F)
+> +#define PROG_(NUM, NAME) SEC("flow_dissector/"#NUM) int bpf_func##NAME
+>
+>  /* These are the identifiers of the BPF programs that will be used in tail
+>   * calls. Name is limited to 16 characters, with the terminating character and
+>   * bpf_func_ above, we have only 6 to work with, anything after will be cropped.
+>   */
+> -enum {
+> -       IP,
+> -       IPV6,
+> -       IPV6OP, /* Destination/Hop-by-Hop Options IPv6 Extension header */
+> -       IPV6FR, /* Fragmentation IPv6 Extension Header */
+> -       MPLS,
+> -       VLAN,
+> -};
+
+not clear why? just add MAX_PROG after VLAN?
+
+> +#define IP             0
+> +#define IPV6           1
+> +#define IPV6OP         2 /* Destination/Hop-by-Hop Options IPv6 Ext. Header */
+> +#define IPV6FR         3 /* Fragmentation IPv6 Extension Header */
+> +#define MPLS           4
+> +#define VLAN           5
+> +#define MAX_PROG       6
+>
+>  #define IP_MF          0x2000
+>  #define IP_OFFSET      0x1FFF
+> @@ -59,7 +59,7 @@ struct frag_hdr {
+>
+>  struct {
+>         __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+> -       __uint(max_entries, 8);
+> +       __uint(max_entries, MAX_PROG);
+>         __uint(key_size, sizeof(__u32));
+>         __uint(value_size, sizeof(__u32));
+>  } jmp_table SEC(".maps");
+> --
+> 2.25.4
+>
