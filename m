@@ -2,95 +2,129 @@ Return-Path: <SRS0=Pto2=7P=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14476C433DF
-	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 12:26:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EFE4C433E0
+	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 12:44:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF257206A2
-	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 12:26:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 740DC20679
+	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 12:44:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726664AbgFBM0a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Jun 2020 08:26:30 -0400
-Received: from mx20.baidu.com ([111.202.115.85]:46736 "EHLO baidu.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726636AbgFBM0a (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Jun 2020 08:26:30 -0400
-X-Greylist: delayed 967 seconds by postgrey-1.27 at vger.kernel.org; Tue, 02 Jun 2020 08:26:27 EDT
-Received: from BC-Mail-Ex30.internal.baidu.com (unknown [172.31.51.24])
-        by Forcepoint Email with ESMTPS id 6E037A58FCA89FDDD2C4;
-        Tue,  2 Jun 2020 20:10:18 +0800 (CST)
-Received: from BJHW-Mail-Ex13.internal.baidu.com (10.127.64.36) by
- BC-Mail-Ex30.internal.baidu.com (172.31.51.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1979.3; Tue, 2 Jun 2020 20:10:18 +0800
-Received: from BJHW-Mail-Ex13.internal.baidu.com ([100.100.100.36]) by
- BJHW-Mail-Ex13.internal.baidu.com ([100.100.100.36]) with mapi id
- 15.01.1713.004; Tue, 2 Jun 2020 20:10:18 +0800
-From:   "Li,Rongqing" <lirongqing@baidu.com>
-To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Netdev <netdev@vger.kernel.org>
-CC:     bpf <bpf@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIGk0MGU6IGZpeCB3cm9uZyBpbmRleCBpbiBpNDBl?=
- =?utf-8?B?X3hza191bWVtX2RtYV9tYXA=?=
-Thread-Topic: [PATCH] i40e: fix wrong index in i40e_xsk_umem_dma_map
-Thread-Index: AQHWONDBAVHG9ypJN0SpezjEH297HKjFO9eQ
-Date:   Tue, 2 Jun 2020 12:10:18 +0000
-Message-ID: <562a0ea8fe694d5c82dba6f446d1b518@baidu.com>
-References: <1591089148-959-1-git-send-email-lirongqing@baidu.com>
- <CAJ+HfNjXh882Dc2N9qpYDGhEuTed9Vp36RuHSXnBMmWXfV9iHg@mail.gmail.com>
-In-Reply-To: <CAJ+HfNjXh882Dc2N9qpYDGhEuTed9Vp36RuHSXnBMmWXfV9iHg@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.198.7]
-x-baidu-bdmsfe-datecheck: 1_BC-Mail-Ex30_2020-06-02 20:10:18:298
-x-baidu-bdmsfe-viruscheck: BC-Mail-Ex30_GRAY_Inside_WithoutAtta_2020-06-02
- 20:10:18:298
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726012AbgFBMoj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Jun 2020 08:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725940AbgFBMoj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Jun 2020 08:44:39 -0400
+Received: from gardel.0pointer.net (gardel.0pointer.net [IPv6:2a01:238:43ed:c300:10c3:bcf3:3266:da74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAE7C061A0E;
+        Tue,  2 Jun 2020 05:44:34 -0700 (PDT)
+Received: from gardel-login.0pointer.net (gardel.0pointer.net [IPv6:2a01:238:43ed:c300:10c3:bcf3:3266:da74])
+        by gardel.0pointer.net (Postfix) with ESMTP id A4773E8154A;
+        Tue,  2 Jun 2020 14:44:31 +0200 (CEST)
+Received: by gardel-login.0pointer.net (Postfix, from userid 1000)
+        id 4D379160AC6; Tue,  2 Jun 2020 14:44:31 +0200 (CEST)
+Date:   Tue, 2 Jun 2020 14:44:31 +0200
+From:   Lennart Poettering <lennart@poettering.net>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "zhujianwei (C)" <zhujianwei7@huawei.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        Hehuazhen <hehuazhen@huawei.com>,
+        Christian Ehrhardt <christian.ehrhardt@canonical.com>,
+        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Subject: Re: new seccomp mode aims to improve performance
+Message-ID: <20200602124431.GA123838@gardel-login>
+References: <c22a6c3cefc2412cad00ae14c1371711@huawei.com>
+ <CAADnVQLnFuOR+Xk1QXpLFGHx-8StPCye7j5UgKbBoLrmKtygQA@mail.gmail.com>
+ <202005290903.11E67AB0FD@keescook>
+ <202005291043.A63D910A8@keescook>
+ <20200601101137.GA121847@gardel-login>
+ <202006011116.3F7109A@keescook>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202006011116.3F7109A@keescook>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-DQoNCj4gLS0tLS3pgq7ku7bljp/ku7YtLS0tLQ0KPiDlj5Hku7bkuro6IEJqw7ZybiBUw7ZwZWwg
-W21haWx0bzpiam9ybi50b3BlbEBnbWFpbC5jb21dDQo+IOWPkemAgeaXtumXtDogMjAyMOW5tDbm
-nIgy5pelIDE5OjI3DQo+IOaUtuS7tuS6ujogTGksUm9uZ3FpbmcgPGxpcm9uZ3FpbmdAYmFpZHUu
-Y29tPjsgaW50ZWwtd2lyZWQtbGFuDQo+IDxpbnRlbC13aXJlZC1sYW5AbGlzdHMub3N1b3NsLm9y
-Zz47IE5ldGRldiA8bmV0ZGV2QHZnZXIua2VybmVsLm9yZz4NCj4g5oqE6YCBOiBicGYgPGJwZkB2
-Z2VyLmtlcm5lbC5vcmc+OyBLYXJsc3NvbiwgTWFnbnVzDQo+IDxtYWdudXMua2FybHNzb25AaW50
-ZWwuY29tPg0KPiDkuLvpopg6IFJlOiBbUEFUQ0hdIGk0MGU6IGZpeCB3cm9uZyBpbmRleCBpbiBp
-NDBlX3hza191bWVtX2RtYV9tYXANCj4gDQo+IE9uIFR1ZSwgMiBKdW4gMjAyMCBhdCAxMToyMCwg
-TGkgUm9uZ1FpbmcgPGxpcm9uZ3FpbmdAYmFpZHUuY29tPiB3cm90ZToNCj4gPg0KPiANCj4gTGks
-IHRoYW5rcyBmb3IgdGhlIHBhdGNoISBHb29kIGNhdGNoIQ0KPiANCj4gUGxlYXNlIGFkZCBhIHBy
-b3BlciBkZXNjcmlwdGlvbiBmb3IgdGhlIHBhdGNoLiBUaGUgZml4IHNob3VsZCBiZSBhZGRlZCB0
-byB0aGUNCj4gc3RhYmxlIGJyYW5jaGVzICg1LjcgYW5kIGVhcmxpZXIpLiBOb3RlIHRoYXQgdGhp
-cyBjb2RlIHdhcyByZWNlbnRseSByZW1vdmVkIGluDQo+IGZhdm9yIG9mIHRoZSBuZXcgQUZfWERQ
-IGJ1ZmZlciBhbGxvY2F0aW9uIHNjaGVtZS4NCj4gDQo+IA0KDQpPaw0KDQotTGlSb25nUWluZyAN
-Cg0KPiBCasO2cm4NCj4gDQo+ID4gRml4ZXM6IDBhNzE0MTg2ZDNjMCAiKGk0MGU6IGFkZCBBRl9Y
-RFAgemVyby1jb3B5IFJ4IHN1cHBvcnQpIg0KPiA+IFNpZ25lZC1vZmYtYnk6IExpIFJvbmdRaW5n
-IDxsaXJvbmdxaW5nQGJhaWR1LmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy9uZXQvZXRoZXJu
-ZXQvaW50ZWwvaTQwZS9pNDBlX3hzay5jIHwgNCArKy0tDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAy
-IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9uZXQvZXRoZXJuZXQvaW50ZWwvaTQwZS9pNDBlX3hzay5jDQo+ID4gYi9kcml2ZXJzL25l
-dC9ldGhlcm5ldC9pbnRlbC9pNDBlL2k0MGVfeHNrLmMNCj4gPiBpbmRleCAwYjdkMjkxOTJiMmMu
-LmM5MjY0MzgxMThlYSAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL25ldC9ldGhlcm5ldC9pbnRl
-bC9pNDBlL2k0MGVfeHNrLmMNCj4gPiArKysgYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9pbnRlbC9p
-NDBlL2k0MGVfeHNrLmMNCj4gPiBAQCAtMzcsOSArMzcsOSBAQCBzdGF0aWMgaW50IGk0MGVfeHNr
-X3VtZW1fZG1hX21hcChzdHJ1Y3QgaTQwZV92c2kNCj4gPiAqdnNpLCBzdHJ1Y3QgeGRwX3VtZW0g
-KnVtZW0pDQo+ID4NCj4gPiAgb3V0X3VubWFwOg0KPiA+ICAgICAgICAgZm9yIChqID0gMDsgaiA8
-IGk7IGorKykgew0KPiA+IC0gICAgICAgICAgICAgICBkbWFfdW5tYXBfcGFnZV9hdHRycyhkZXYs
-IHVtZW0tPnBhZ2VzW2ldLmRtYSwNCj4gUEFHRV9TSVpFLA0KPiA+ICsgICAgICAgICAgICAgICBk
-bWFfdW5tYXBfcGFnZV9hdHRycyhkZXYsIHVtZW0tPnBhZ2VzW2pdLmRtYSwNCj4gPiArIFBBR0Vf
-U0laRSwNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRE1BX0JJRElS
-RUNUSU9OQUwsDQo+IEk0MEVfUlhfRE1BX0FUVFIpOw0KPiA+IC0gICAgICAgICAgICAgICB1bWVt
-LT5wYWdlc1tpXS5kbWEgPSAwOw0KPiA+ICsgICAgICAgICAgICAgICB1bWVtLT5wYWdlc1tqXS5k
-bWEgPSAwOw0KPiA+ICAgICAgICAgfQ0KPiA+DQo+ID4gICAgICAgICByZXR1cm4gLTE7DQo+ID4g
-LS0NCj4gPiAyLjE2LjINCj4gPg0K
+On Mo, 01.06.20 11:21, Kees Cook (keescook@chromium.org) wrote:
+
+> > > # grep SystemCall /lib/systemd/system/systemd-resolved.service
+> > > SystemCallArchitectures=native
+> > > SystemCallErrorNumber=EPERM
+> > > SystemCallFilter=@system-service
+> > >
+> > > I'd like to better understand what they're doing, but haven't had time
+> > > to dig in. (The systemd devel mailing list requires subscription, so
+> > > I've directly CCed some systemd folks that have touched seccomp there
+> > > recently. Hi! The starts of this thread is here[4].)
+> >
+> > Hmm, so on x86-64 we try to install our seccomp filters three times:
+> > for the x86-64 syscall ABI, for the i386 syscall ABI and for the x32
+> > syscall ABI. Not all of the filters we apply work on all ABIs though,
+> > because syscalls are available on some but not others, or cannot
+> > sensibly be matched on some (because of socketcall, ipc and such
+> > multiplexed syscalls).
+> >
+> > [...]
+>
+> Thanks for the details on this! That helps me understand what's
+> happening much better. :)
+>
+> > An easy improvement is probably if libseccomp would now start refusing
+> > to install x32 seccomp filters altogether now that x32 is entirely
+> > dead? Or are the entrypoints for x32 syscalls still available in the
+> > kernel? How could userspace figure out if they are available? If
+> > libseccomp doesn't want to add code for that, we probably could have
+> > that in systemd itself too...
+>
+> Would it make sense to provide a systemd setting for services to declare
+> "no compat" or "no x32" (I'm not sure what to call this mode more
+> generically, "no 32-bit allocation ABI"?) Then you can just install
+> a single merged filter for all the native syscalls that starts with
+> "if not native, reject"?
+
+We have that actually, it's this line you pasted above:
+
+        SystemCallArchitectures=native
+
+It means: block all syscall ABIs but the native one for all processes
+of this service.
+
+We currently use that setting only to synthesize an explicit seccomp
+filter masking the other ABIs wholesale. We do not use it to suppress
+generation of other, unrelated seccomp filters for that
+arch. i.e. which means you might end up with one filter blocking x32
+wholesale, but then another unrelated option might install a filter
+blocking some specific syscall with some specific arguments, but still
+gets installed for x86-64 *and* i386 *and* x32. I guess we could
+relatively easily tweak that and suppress the latter. If we did, then
+on all services that set SystemCallArchitectures=native on x86-64 the
+number of installed seccomp filters should become a third.
+
+> (Or better yet: make the default for filtering be "native only", and
+> let services opt into other ABIs?)
+
+That sounds like it would make people quite unhappy no? given that on
+a systemd system anything that runs in userspace is ultimately part of
+a service managed by systemd, if we'd default to "no native ABIs" this
+would translate to "yeah, we entirely disable the i386 ABI for the
+entire system unless you reconfigure it and/or opt-out your old i386
+services".
+
+Hence, on x86-64, I figure just masking i386 entirely is a bit too
+drastic a compat breakage for us, no? Masking x32 otoh sounds like a
+safe default to do without breaking too much compat given that x32 is
+on its way out.
+
+Lennart
+
+--
+Lennart Poettering, Berlin
