@@ -2,40 +2,62 @@ Return-Path: <SRS0=Pto2=7P=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9128BC433DF
-	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 14:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 532AFC433DF
+	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 15:01:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 76D9220772
-	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 14:58:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 354E62074B
+	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 15:01:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727776AbgFBO6o (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Jun 2020 10:58:44 -0400
-Received: from www62.your-server.de ([213.133.104.62]:37380 "EHLO
+        id S1726139AbgFBPBP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Jun 2020 11:01:15 -0400
+Received: from www62.your-server.de ([213.133.104.62]:37796 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726311AbgFBO6n (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Jun 2020 10:58:43 -0400
-Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
+        with ESMTP id S1726140AbgFBPBP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Jun 2020 11:01:15 -0400
+Received: from sslproxy02.your-server.de ([78.47.166.47])
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1jg8NE-0007bm-Ii; Tue, 02 Jun 2020 16:58:40 +0200
+        id 1jg8Pg-0007l5-LZ; Tue, 02 Jun 2020 17:01:12 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jg8Pg-000WjS-CY; Tue, 02 Jun 2020 17:01:12 +0200
+Subject: Re: Checksum behaviour of bpf_redirected packets
+To:     Lorenz Bauer <lmb@cloudflare.com>,
+        Alan Maguire <alan.maguire@oracle.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <CACAyw9-uU_52esMd1JjuA80fRPHJv5vsSg8GnfW3t_qDU4aVKQ@mail.gmail.com>
+ <CAADnVQKZ63d5A+Jv8bbXzo2RKNCXFH78zos0AjpbJ3ii9OHW0g@mail.gmail.com>
+ <CACAyw9_ygNV1J+PkBJ-i7ysU_Y=rN3Z5adKYExNXCic0gumaow@mail.gmail.com>
+ <39d3bee2-dcfc-8240-4c78-2110d639d386@iogearbox.net>
+ <CACAyw996Q9SdLz0tAn2jL9wg+m5h1FBsXHmUN0ZtP7D5ohY2pg@mail.gmail.com>
+ <a4830bd4-d998-9e5c-afd5-c5ec5504f1f3@iogearbox.net>
+ <CACAyw99_GkLrxEj13R1ZJpnw_eWxhZas=72rtR8Pgt_Vq3dbeg@mail.gmail.com>
+ <ff8e3902-9385-11ee-3cc5-44dd3355c9fc@iogearbox.net>
+ <CACAyw9_LPEOvHbmP8UrpwVkwYT57rKWRisai=Z7kbKxOPh5XNQ@mail.gmail.com>
+ <alpine.LRH.2.21.2006011839430.623@localhost>
+ <835af597-c346-e178-09c4-9f67c9480020@iogearbox.net>
+ <alpine.LRH.2.21.2006012217530.15886@localhost>
+ <CACAyw98FxUjxmr4ai5JiudV5p3pd4U6fxxULrkMWJtuBKtUDgA@mail.gmail.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     alexei.starovoitov@gmail.com
-Cc:     lmb@cloudflare.com, alan.maguire@oracle.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf 1/3] bpf: Fix up bpf_skb_adjust_room helper's skb csum setting
-Date:   Tue,  2 Jun 2020 16:58:32 +0200
-Message-Id: <11a90472e7cce83e76ddbfce81fdfce7bfc68808.1591108731.git.daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.1591108731.git.daniel@iogearbox.net>
-References: <cover.1591108731.git.daniel@iogearbox.net>
+Message-ID: <030555e5-e0ba-3b78-3de3-531eba96245e@iogearbox.net>
+Date:   Tue, 2 Jun 2020 17:01:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACAyw98FxUjxmr4ai5JiudV5p3pd4U6fxxULrkMWJtuBKtUDgA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.102.2/25831/Tue Jun  2 14:41:03 2020)
 Sender: bpf-owner@vger.kernel.org
@@ -43,173 +65,69 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Lorenz recently reported:
+On 6/2/20 12:13 PM, Lorenz Bauer wrote:
+> On Mon, 1 Jun 2020 at 22:25, Alan Maguire <alan.maguire@oracle.com> wrote:
+>> On Mon, 1 Jun 2020, Daniel Borkmann wrote:
+>>> On 6/1/20 7:48 PM, Alan Maguire wrote:
+>>>> On Wed, 13 May 2020, Lorenz Bauer wrote:
+>>>>
+>>>>>>> Option 1: always downgrade UNNECESSARY to NONE
+>>>>>>> - Easiest to back port
+>>>>>>> - The helper is safe by default
+>>>>>>> - Performance impact unclear
+>>>>>>> - No escape hatch for Cilium
+>>>>>>>
+>>>>>>> Option 2: add a flag to force CHECKSUM_NONE
+>>>>>>> - New UAPI, can this be backported?
+>>>>>>> - The helper isn't safe by default, needs documentation
+>>>>>>> - Escape hatch for Cilium
+>>>>>>>
+>>>>>>> Option 3: downgrade to CHECKSUM_NONE, add flag to skip this
+>>>>>>> - New UAPI, can this be backported?
+>>>>>>> - The helper is safe by default
+>>>>>>> - Escape hatch for Cilium (though you'd need to detect availability of
+>>>>>>> the
+>>>>>>>      flag somehow)
+>>>>>>
+>>>>>> This seems most reasonable to me; I can try and cook a proposal for
+>>>>>> tomorrow as
+>>>>>> potential fix. Even if we add a flag, this is still backportable to stable
+>>>>>> (as
+>>>>>> long as the overall patch doesn't get too complex and the backport itself
+>>>>>> stays
+>>>>>> compatible uapi-wise to latest kernels. We've done that before.). I happen
+>>>>>> to
+>>>>>> have two ixgbe NICs on some of my test machines which seem to be setting
+>>>>>> the
+>>>>>> CHECKSUM_UNNECESSARY, so I'll run some experiments from over here as well.
+>>>>>
+>>>>> Great! I'm happy to test, of course.
+>>>>
+>>>> I had a go at implementing option 3 as a few colleagues ran into this
+>>>> problem. They confirmed the fix below resolved the issue.  Daniel is
+>>>> this  roughly what you had in mind? I can submit a patch for the bpf
+>>>> tree if that's acceptable with the new flag. Do we need a few
+>>>> tests though?
+>>>
+>>> Coded this [0] up last week which Lorenz gave a spin as well. Originally
+>>> wanted to
+>>> get it out Friday night, but due to internal release stuff it got too late Fri
+>>> night
+>>> and didn't want to rush it at 3am anymore, so the series as fixes is going out
+>>> tomorrow
+>>> morning [today was public holiday in CH over here].
+>>
+>> Looks great! Although I've only seen this issue arise
+>> for cases where csum_level == 0, should we also
+>> add "skb->csum_level = 0;" when we reset the
+>> ip_summed value?
+> 
+> FWIW I had the same reaction. Maybe it's worth adding after all, Daniel?
 
-  In our TC classifier cls_redirect [0], we use the following sequence of
-  helper calls to decapsulate a GUE (basically IP + UDP + custom header)
-  encapsulated packet:
+Although not needed, but yeah, fair enough. I've added a small skb helper for it.
+Series is out here now, ptal [0].
 
-    bpf_skb_adjust_room(skb, -encap_len, BPF_ADJ_ROOM_MAC, BPF_F_ADJ_ROOM_FIXED_GSO)
-    bpf_redirect(skb->ifindex, BPF_F_INGRESS)
+Thanks,
+Daniel
 
-  It seems like some checksums of the inner headers are not validated in
-  this case. For example, a TCP SYN packet with invalid TCP checksum is
-  still accepted by the network stack and elicits a SYN ACK. [...]
-
-  That is, we receive the following packet from the driver:
-
-    | ETH | IP | UDP | GUE | IP | TCP |
-    skb->ip_summed == CHECKSUM_UNNECESSARY
-
-  ip_summed is CHECKSUM_UNNECESSARY because our NICs do rx checksum offloading.
-  On this packet we run skb_adjust_room_mac(-encap_len), and get the following:
-
-    | ETH | IP | TCP |
-    skb->ip_summed == CHECKSUM_UNNECESSARY
-
-  Note that ip_summed is still CHECKSUM_UNNECESSARY. After bpf_redirect()'ing
-  into the ingress, we end up in tcp_v4_rcv(). There, skb_checksum_init() is
-  turned into a no-op due to CHECKSUM_UNNECESSARY.
-
-The bpf_skb_adjust_room() helper is not aware of protocol specifics. Internally,
-it handles the CHECKSUM_COMPLETE case via skb_postpull_rcsum(), but that does
-not cover CHECKSUM_UNNECESSARY. In this case skb->csum_level of the original
-skb prior to bpf_skb_adjust_room() call was 0, that is, covering UDP. Right now
-there is no way to adjust the skb->csum_level. NICs that have checksum offload
-disabled (CHECKSUM_NONE) or that support CHECKSUM_COMPLETE are not affected.
-
-Use a safe default for CHECKSUM_UNNECESSARY by resetting to CHECKSUM_NONE and
-add a flag to the helper called BPF_F_ADJ_ROOM_NO_CSUM_RESET that allows users
-from opting out. Opting out is useful for the case where we don't remove/add
-full protocol headers, or for the case where a user wants to adjust the csum
-level manually e.g. through bpf_csum_level() helper that is added in subsequent
-patch.
-
-The bpf_skb_proto_{4_to_6,6_to_4}() for NAT64/46 translation from the BPF
-bpf_skb_change_proto() helper uses bpf_skb_net_hdr_{push,pop}() pair internally
-as well but doesn't change layers, only transitions between v4 to v6 and vice
-versa, therefore no adoption is required there.
-
-  [0] https://lore.kernel.org/bpf/20200424185556.7358-1-lmb@cloudflare.com/
-
-Fixes: 2be7e212d541 ("bpf: add bpf_skb_adjust_room helper")
-Reported-by: Lorenz Bauer <lmb@cloudflare.com>
-Reported-by: Alan Maguire <alan.maguire@oracle.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-Link: https://lore.kernel.org/bpf/CACAyw9-uU_52esMd1JjuA80fRPHJv5vsSg8GnfW3t_qDU4aVKQ@mail.gmail.com/
----
- include/linux/skbuff.h         | 8 ++++++++
- include/uapi/linux/bpf.h       | 8 ++++++++
- net/core/filter.c              | 8 ++++++--
- tools/include/uapi/linux/bpf.h | 8 ++++++++
- 4 files changed, 30 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index a0d5c2760103..0c0377fc00c2 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -3919,6 +3919,14 @@ static inline void __skb_incr_checksum_unnecessary(struct sk_buff *skb)
- 	}
- }
- 
-+static inline void __skb_reset_checksum_unnecessary(struct sk_buff *skb)
-+{
-+	if (skb->ip_summed == CHECKSUM_UNNECESSARY) {
-+		skb->ip_summed = CHECKSUM_NONE;
-+		skb->csum_level = 0;
-+	}
-+}
-+
- /* Check if we need to perform checksum complete validation.
-  *
-  * Returns true if checksum complete is needed, false otherwise
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index b9ed9f14f2a2..3ba2bbbed80c 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1635,6 +1635,13 @@ union bpf_attr {
-  * 		Grow or shrink the room for data in the packet associated to
-  * 		*skb* by *len_diff*, and according to the selected *mode*.
-  *
-+ * 		By default, the helper will reset any offloaded checksum
-+ * 		indicator of the skb to CHECKSUM_NONE. This can be avoided
-+ * 		by the following flag:
-+ *
-+ * 		* **BPF_F_ADJ_ROOM_NO_CSUM_RESET**: Do not reset offloaded
-+ * 		  checksum data of the skb to CHECKSUM_NONE.
-+ *
-  *		There are two supported modes at this time:
-  *
-  *		* **BPF_ADJ_ROOM_MAC**: Adjust room at the mac layer
-@@ -3433,6 +3440,7 @@ enum {
- 	BPF_F_ADJ_ROOM_ENCAP_L3_IPV6	= (1ULL << 2),
- 	BPF_F_ADJ_ROOM_ENCAP_L4_GRE	= (1ULL << 3),
- 	BPF_F_ADJ_ROOM_ENCAP_L4_UDP	= (1ULL << 4),
-+	BPF_F_ADJ_ROOM_NO_CSUM_RESET	= (1ULL << 5),
- };
- 
- enum {
-diff --git a/net/core/filter.c b/net/core/filter.c
-index ae82bcb03124..278dcc0af961 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3113,7 +3113,8 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
- {
- 	int ret;
- 
--	if (flags & ~BPF_F_ADJ_ROOM_FIXED_GSO)
-+	if (unlikely(flags & ~(BPF_F_ADJ_ROOM_FIXED_GSO |
-+			       BPF_F_ADJ_ROOM_NO_CSUM_RESET)))
- 		return -EINVAL;
- 
- 	if (skb_is_gso(skb) && !skb_is_gso_tcp(skb)) {
-@@ -3163,7 +3164,8 @@ BPF_CALL_4(bpf_skb_adjust_room, struct sk_buff *, skb, s32, len_diff,
- 	u32 off;
- 	int ret;
- 
--	if (unlikely(flags & ~BPF_F_ADJ_ROOM_MASK))
-+	if (unlikely(flags & ~(BPF_F_ADJ_ROOM_MASK |
-+			       BPF_F_ADJ_ROOM_NO_CSUM_RESET)))
- 		return -EINVAL;
- 	if (unlikely(len_diff_abs > 0xfffU))
- 		return -EFAULT;
-@@ -3191,6 +3193,8 @@ BPF_CALL_4(bpf_skb_adjust_room, struct sk_buff *, skb, s32, len_diff,
- 
- 	ret = shrink ? bpf_skb_net_shrink(skb, off, len_diff_abs, flags) :
- 		       bpf_skb_net_grow(skb, off, len_diff_abs, flags);
-+	if (!ret && !(flags & BPF_F_ADJ_ROOM_NO_CSUM_RESET))
-+		__skb_reset_checksum_unnecessary(skb);
- 
- 	bpf_compute_data_pointers(skb);
- 	return ret;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index b9ed9f14f2a2..3ba2bbbed80c 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1635,6 +1635,13 @@ union bpf_attr {
-  * 		Grow or shrink the room for data in the packet associated to
-  * 		*skb* by *len_diff*, and according to the selected *mode*.
-  *
-+ * 		By default, the helper will reset any offloaded checksum
-+ * 		indicator of the skb to CHECKSUM_NONE. This can be avoided
-+ * 		by the following flag:
-+ *
-+ * 		* **BPF_F_ADJ_ROOM_NO_CSUM_RESET**: Do not reset offloaded
-+ * 		  checksum data of the skb to CHECKSUM_NONE.
-+ *
-  *		There are two supported modes at this time:
-  *
-  *		* **BPF_ADJ_ROOM_MAC**: Adjust room at the mac layer
-@@ -3433,6 +3440,7 @@ enum {
- 	BPF_F_ADJ_ROOM_ENCAP_L3_IPV6	= (1ULL << 2),
- 	BPF_F_ADJ_ROOM_ENCAP_L4_GRE	= (1ULL << 3),
- 	BPF_F_ADJ_ROOM_ENCAP_L4_UDP	= (1ULL << 4),
-+	BPF_F_ADJ_ROOM_NO_CSUM_RESET	= (1ULL << 5),
- };
- 
- enum {
--- 
-2.21.0
-
+   [0] https://lore.kernel.org/bpf/cover.1591108731.git.daniel@iogearbox.net/
