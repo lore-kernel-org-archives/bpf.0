@@ -2,117 +2,95 @@ Return-Path: <SRS0=Pto2=7P=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 621CDC433E0
-	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 12:21:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14476C433DF
+	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 12:26:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 377BB2053B
-	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 12:21:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XscHkRVt"
+	by mail.kernel.org (Postfix) with ESMTP id EF257206A2
+	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 12:26:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726139AbgFBMV4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Jun 2020 08:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726012AbgFBMV4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Jun 2020 08:21:56 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6952C061A0E;
-        Tue,  2 Jun 2020 05:21:55 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id j10so3178182wrw.8;
-        Tue, 02 Jun 2020 05:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zVkoeEucMeIB6OH4Qmi1bhGaxhtXTko9euXWTEwxvl0=;
-        b=XscHkRVto8JiXm+09mevclIQBPj9mO0eUQeqbr2EOFQD1wBZuQYDPTkHMsUKzYllY+
-         8JG0gu+OEHHme4sIVkhkWKa+urWzI9Jcg3CxzaveH+UiFR04e6s9ZAN3f2sT0ozr0c77
-         ld4LKdO1cXAiEBh+wECRRew7L3xF+wxpUHG9A7seynd8pLlVkCbwLd0UYMXbIL2stsFb
-         ZSSiqtc9Ad+wuX9HxwIAN2MIeVmZxAiDNby1VtwQYkC+zVQWJoHypm4KkaJmtanm95+a
-         eRpHR4FGVBZtPD7GeoQihdrtESR6ERYVQIA/NjvYqnJrDY/phmdjWJG8iHWPpHhJ+Xvf
-         BQDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zVkoeEucMeIB6OH4Qmi1bhGaxhtXTko9euXWTEwxvl0=;
-        b=SxLxVpg2OzbaVfrGU43NszrDCymt1CQ6FYNPGoNlqiSDMItiyKEACOkTcuYMGwx1uC
-         5s73csQ539pGLZ/9vp3qyvc9MVA8PbNgstUG/lkz41NpAWgdJv/RuBlkz+J8muOZEiLZ
-         4yBPwDx1YlAop3v3mxsjkI1DdivfKHGSFZ+kFXhayX6pDrv5Vm6nytN2FqFzkuezSd2G
-         NqIOKKaWc63+UawxPajilnRncYjW+jvP8LQ0fr+oRVnTat+B5R88mUX1jat1OZzBVx1+
-         yD8DxRloR3xS/zPhadPPM/iLjiYRongk/lz5lQ6YWtrMlDXj2VGjwbG/B4H+zd9xHhab
-         /zkA==
-X-Gm-Message-State: AOAM531Vnzu/5OripWcBWGw90J228EiSbS0dpUqUcKrx5KcTIWBbD/GT
-        yUIv7p+IL2Mro7IS8btaN1fOs7+8gweGMytCyYA93YsTYnw=
-X-Google-Smtp-Source: ABdhPJysJTB7g4BRZDYt/1PUgTUC9O1tUv0IHmEXYc46vBbqJHejZsDndVIn+FSCxZYfOZRCtR1fxnUlrpUMR1Godn0=
-X-Received: by 2002:adf:edc8:: with SMTP id v8mr25154696wro.176.1591100514661;
- Tue, 02 Jun 2020 05:21:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <1591099973-3091-1-git-send-email-lirongqing@baidu.com>
-In-Reply-To: <1591099973-3091-1-git-send-email-lirongqing@baidu.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Tue, 2 Jun 2020 14:21:42 +0200
-Message-ID: <CAJ+HfNgOoFecFbA3p7QM=bFwuV1k6895w57yH4EWFtSPNZ_wQg@mail.gmail.com>
-Subject: Re: [PATCH][v2] i40e: fix wrong index in i40e_xsk_umem_dma_map
-To:     Li RongQing <lirongqing@baidu.com>,
-        Netdev <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>
-Cc:     bpf <bpf@vger.kernel.org>,
+        id S1726664AbgFBM0a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Jun 2020 08:26:30 -0400
+Received: from mx20.baidu.com ([111.202.115.85]:46736 "EHLO baidu.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726636AbgFBM0a (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Jun 2020 08:26:30 -0400
+X-Greylist: delayed 967 seconds by postgrey-1.27 at vger.kernel.org; Tue, 02 Jun 2020 08:26:27 EDT
+Received: from BC-Mail-Ex30.internal.baidu.com (unknown [172.31.51.24])
+        by Forcepoint Email with ESMTPS id 6E037A58FCA89FDDD2C4;
+        Tue,  2 Jun 2020 20:10:18 +0800 (CST)
+Received: from BJHW-Mail-Ex13.internal.baidu.com (10.127.64.36) by
+ BC-Mail-Ex30.internal.baidu.com (172.31.51.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1979.3; Tue, 2 Jun 2020 20:10:18 +0800
+Received: from BJHW-Mail-Ex13.internal.baidu.com ([100.100.100.36]) by
+ BJHW-Mail-Ex13.internal.baidu.com ([100.100.100.36]) with mapi id
+ 15.01.1713.004; Tue, 2 Jun 2020 20:10:18 +0800
+From:   "Li,Rongqing" <lirongqing@baidu.com>
+To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
         intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        Netdev <netdev@vger.kernel.org>
+CC:     bpf <bpf@vger.kernel.org>,
         "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIGk0MGU6IGZpeCB3cm9uZyBpbmRleCBpbiBpNDBl?=
+ =?utf-8?B?X3hza191bWVtX2RtYV9tYXA=?=
+Thread-Topic: [PATCH] i40e: fix wrong index in i40e_xsk_umem_dma_map
+Thread-Index: AQHWONDBAVHG9ypJN0SpezjEH297HKjFO9eQ
+Date:   Tue, 2 Jun 2020 12:10:18 +0000
+Message-ID: <562a0ea8fe694d5c82dba6f446d1b518@baidu.com>
+References: <1591089148-959-1-git-send-email-lirongqing@baidu.com>
+ <CAJ+HfNjXh882Dc2N9qpYDGhEuTed9Vp36RuHSXnBMmWXfV9iHg@mail.gmail.com>
+In-Reply-To: <CAJ+HfNjXh882Dc2N9qpYDGhEuTed9Vp36RuHSXnBMmWXfV9iHg@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.198.7]
+x-baidu-bdmsfe-datecheck: 1_BC-Mail-Ex30_2020-06-02 20:10:18:298
+x-baidu-bdmsfe-viruscheck: BC-Mail-Ex30_GRAY_Inside_WithoutAtta_2020-06-02
+ 20:10:18:298
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 2 Jun 2020 at 14:13, Li RongQing <lirongqing@baidu.com> wrote:
->
-> The dma should be unmapped in rollback path from
-> umem->pages[0].dma till umem->pages[i-1].dma which
-> is last dma map address
->
-> Fixes: 0a714186d3c0 "(i40e: add AF_XDP zero-copy Rx support)"
-> Signed-off-by: Li RongQing <lirongqing@baidu.com>
-> ---
-> diff with v1: add description
->
-
-Thanks! I think this should be queued for -stable.
-
-Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-
-
->  drivers/net/ethernet/intel/i40e/i40e_xsk.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/eth=
-ernet/intel/i40e/i40e_xsk.c
-> index 0b7d29192b2c..c926438118ea 100644
-> --- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-> +++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-> @@ -37,9 +37,9 @@ static int i40e_xsk_umem_dma_map(struct i40e_vsi *vsi, =
-struct xdp_umem *umem)
->
->  out_unmap:
->         for (j =3D 0; j < i; j++) {
-> -               dma_unmap_page_attrs(dev, umem->pages[i].dma, PAGE_SIZE,
-> +               dma_unmap_page_attrs(dev, umem->pages[j].dma, PAGE_SIZE,
->                                      DMA_BIDIRECTIONAL, I40E_RX_DMA_ATTR)=
-;
-> -               umem->pages[i].dma =3D 0;
-> +               umem->pages[j].dma =3D 0;
->         }
->
->         return -1;
-> --
-> 2.16.2
->
+DQoNCj4gLS0tLS3pgq7ku7bljp/ku7YtLS0tLQ0KPiDlj5Hku7bkuro6IEJqw7ZybiBUw7ZwZWwg
+W21haWx0bzpiam9ybi50b3BlbEBnbWFpbC5jb21dDQo+IOWPkemAgeaXtumXtDogMjAyMOW5tDbm
+nIgy5pelIDE5OjI3DQo+IOaUtuS7tuS6ujogTGksUm9uZ3FpbmcgPGxpcm9uZ3FpbmdAYmFpZHUu
+Y29tPjsgaW50ZWwtd2lyZWQtbGFuDQo+IDxpbnRlbC13aXJlZC1sYW5AbGlzdHMub3N1b3NsLm9y
+Zz47IE5ldGRldiA8bmV0ZGV2QHZnZXIua2VybmVsLm9yZz4NCj4g5oqE6YCBOiBicGYgPGJwZkB2
+Z2VyLmtlcm5lbC5vcmc+OyBLYXJsc3NvbiwgTWFnbnVzDQo+IDxtYWdudXMua2FybHNzb25AaW50
+ZWwuY29tPg0KPiDkuLvpopg6IFJlOiBbUEFUQ0hdIGk0MGU6IGZpeCB3cm9uZyBpbmRleCBpbiBp
+NDBlX3hza191bWVtX2RtYV9tYXANCj4gDQo+IE9uIFR1ZSwgMiBKdW4gMjAyMCBhdCAxMToyMCwg
+TGkgUm9uZ1FpbmcgPGxpcm9uZ3FpbmdAYmFpZHUuY29tPiB3cm90ZToNCj4gPg0KPiANCj4gTGks
+IHRoYW5rcyBmb3IgdGhlIHBhdGNoISBHb29kIGNhdGNoIQ0KPiANCj4gUGxlYXNlIGFkZCBhIHBy
+b3BlciBkZXNjcmlwdGlvbiBmb3IgdGhlIHBhdGNoLiBUaGUgZml4IHNob3VsZCBiZSBhZGRlZCB0
+byB0aGUNCj4gc3RhYmxlIGJyYW5jaGVzICg1LjcgYW5kIGVhcmxpZXIpLiBOb3RlIHRoYXQgdGhp
+cyBjb2RlIHdhcyByZWNlbnRseSByZW1vdmVkIGluDQo+IGZhdm9yIG9mIHRoZSBuZXcgQUZfWERQ
+IGJ1ZmZlciBhbGxvY2F0aW9uIHNjaGVtZS4NCj4gDQo+IA0KDQpPaw0KDQotTGlSb25nUWluZyAN
+Cg0KPiBCasO2cm4NCj4gDQo+ID4gRml4ZXM6IDBhNzE0MTg2ZDNjMCAiKGk0MGU6IGFkZCBBRl9Y
+RFAgemVyby1jb3B5IFJ4IHN1cHBvcnQpIg0KPiA+IFNpZ25lZC1vZmYtYnk6IExpIFJvbmdRaW5n
+IDxsaXJvbmdxaW5nQGJhaWR1LmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy9uZXQvZXRoZXJu
+ZXQvaW50ZWwvaTQwZS9pNDBlX3hzay5jIHwgNCArKy0tDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAy
+IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJp
+dmVycy9uZXQvZXRoZXJuZXQvaW50ZWwvaTQwZS9pNDBlX3hzay5jDQo+ID4gYi9kcml2ZXJzL25l
+dC9ldGhlcm5ldC9pbnRlbC9pNDBlL2k0MGVfeHNrLmMNCj4gPiBpbmRleCAwYjdkMjkxOTJiMmMu
+LmM5MjY0MzgxMThlYSAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL25ldC9ldGhlcm5ldC9pbnRl
+bC9pNDBlL2k0MGVfeHNrLmMNCj4gPiArKysgYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9pbnRlbC9p
+NDBlL2k0MGVfeHNrLmMNCj4gPiBAQCAtMzcsOSArMzcsOSBAQCBzdGF0aWMgaW50IGk0MGVfeHNr
+X3VtZW1fZG1hX21hcChzdHJ1Y3QgaTQwZV92c2kNCj4gPiAqdnNpLCBzdHJ1Y3QgeGRwX3VtZW0g
+KnVtZW0pDQo+ID4NCj4gPiAgb3V0X3VubWFwOg0KPiA+ICAgICAgICAgZm9yIChqID0gMDsgaiA8
+IGk7IGorKykgew0KPiA+IC0gICAgICAgICAgICAgICBkbWFfdW5tYXBfcGFnZV9hdHRycyhkZXYs
+IHVtZW0tPnBhZ2VzW2ldLmRtYSwNCj4gUEFHRV9TSVpFLA0KPiA+ICsgICAgICAgICAgICAgICBk
+bWFfdW5tYXBfcGFnZV9hdHRycyhkZXYsIHVtZW0tPnBhZ2VzW2pdLmRtYSwNCj4gPiArIFBBR0Vf
+U0laRSwNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRE1BX0JJRElS
+RUNUSU9OQUwsDQo+IEk0MEVfUlhfRE1BX0FUVFIpOw0KPiA+IC0gICAgICAgICAgICAgICB1bWVt
+LT5wYWdlc1tpXS5kbWEgPSAwOw0KPiA+ICsgICAgICAgICAgICAgICB1bWVtLT5wYWdlc1tqXS5k
+bWEgPSAwOw0KPiA+ICAgICAgICAgfQ0KPiA+DQo+ID4gICAgICAgICByZXR1cm4gLTE7DQo+ID4g
+LS0NCj4gPiAyLjE2LjINCj4gPg0K
