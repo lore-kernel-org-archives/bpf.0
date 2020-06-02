@@ -2,72 +2,78 @@ Return-Path: <SRS0=Pto2=7P=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B70EC433E0
-	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 15:48:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4650CC433E0
+	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 16:18:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 709EF207D8
-	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 15:48:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 22B1220772
+	for <bpf@archiver.kernel.org>; Tue,  2 Jun 2020 16:18:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1591114710;
+	bh=ArZ6umqiHSZfYPmHnJiMNZHFgrWta8wpfvveeNknTmQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=Endxq0t6rHFB07VgBR3oAySgXIA11nysQphJwgnz4s2neG7+akA7YhkCsZMUrYHHz
+	 Djqerm1wO7p8ejdnADRBt5+6SJO2nj6+I8GyHbTqEoZ2Eg6D1VuY4p+DgUX20LNSvG
+	 OWgzqnVybzT3TJ+VpNt6NiNks5mFu+tgfetcMZp4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726580AbgFBPs5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Jun 2020 11:48:57 -0400
-Received: from www62.your-server.de ([213.133.104.62]:44268 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726000AbgFBPs4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Jun 2020 11:48:56 -0400
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jg99q-0003Uw-QZ; Tue, 02 Jun 2020 17:48:54 +0200
-Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jg99q-0003Xd-JC; Tue, 02 Jun 2020 17:48:54 +0200
-Subject: Re: [PATCH bpf 3/3] bpf, selftests: Adapt cls_redirect to call
- csum_level helper
-To:     Lorenz Bauer <lmb@cloudflare.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>
-References: <cover.1591108731.git.daniel@iogearbox.net>
- <e7458f10e3f3d795307cbc5ad870112671d9c6f7.1591108731.git.daniel@iogearbox.net>
- <CACAyw998Yy6NBJbSi+RfUofpKQYjYA78HGmWEqDTm1B+BkvuOw@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <65cde627-96af-b99e-7a6f-a688c2c6dbdd@iogearbox.net>
-Date:   Tue, 2 Jun 2020 17:48:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1728133AbgFBQS3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Jun 2020 12:18:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57356 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726380AbgFBQS3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Jun 2020 12:18:29 -0400
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F1A1E20772;
+        Tue,  2 Jun 2020 16:18:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591114709;
+        bh=ArZ6umqiHSZfYPmHnJiMNZHFgrWta8wpfvveeNknTmQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bhgt+NOMmVl1Fxs6Jvvmwzj8fcvNejvcPJzWiQH/JJhhUk9mY1fdKlaPQS/ifXgvr
+         CuiDGYQ8r5IykX8DTdBuL0DCNUmYY47BSuBgECS+Glr/lG45UuB5H6BU6JrxBDkka0
+         KvY3TIJN/8D70ZPyvrFOUwUWSRhEUdfNFl+jUou8=
+Received: by mail-lj1-f178.google.com with SMTP id u10so12086291ljj.9;
+        Tue, 02 Jun 2020 09:18:28 -0700 (PDT)
+X-Gm-Message-State: AOAM532sWIc70tw2/Vyzjn1+X7jN19/H7SQ257+gI+09SPa/hGhZdcWg
+        cL/2+NkciUESF6GjIPbYtu1/p8n4p/NlUCCjgzY=
+X-Google-Smtp-Source: ABdhPJzl+VhF4CC9ZMYjRDxd6lcRMoyH/FHhp4+Ze4y2bqt6VOrwRdH00raBrXJmVUHoSofuvnqlnQDbKwTEuDfIftQ=
+X-Received: by 2002:a05:651c:1130:: with SMTP id e16mr13734243ljo.10.1591114707316;
+ Tue, 02 Jun 2020 09:18:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CACAyw998Yy6NBJbSi+RfUofpKQYjYA78HGmWEqDTm1B+BkvuOw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.2/25831/Tue Jun  2 14:41:03 2020)
+References: <20200602050349.215037-1-andriin@fb.com>
+In-Reply-To: <20200602050349.215037-1-andriin@fb.com>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 2 Jun 2020 09:18:16 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5OH9paDZpG-KfYK3EkwpaQWPOcD6c0kyLQ7+ePs9Xd8g@mail.gmail.com>
+Message-ID: <CAPhsuW5OH9paDZpG-KfYK3EkwpaQWPOcD6c0kyLQ7+ePs9Xd8g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: fix sample_cnt shared between two threads
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 6/2/20 5:13 PM, Lorenz Bauer wrote:
-> On Tue, 2 Jun 2020 at 15:58, Daniel Borkmann <daniel@iogearbox.net> wrote:
->>
->> Adapt bpf_skb_adjust_room() to pass in BPF_F_ADJ_ROOM_NO_CSUM_RESET flag and
->> use the new bpf_csum_level() helper to inc/dec the checksum level by one after
->> the encap/decap.
-> 
-> Just to be on the safe side: we go from
->      | ETH | IP | UDP | GUE | IP | TCP |
-> to
->      | ETH | IP | TCP |
-> by cutting | IP | UDP | GUE | after the Ethernet header.
-> 
-> Since IP is never included in csum_level and because GUE is not eligible for
-> CHECKSUM_UNNECESSARY we only need to do csum_level-- once, not twice.
+On Mon, Jun 1, 2020 at 10:04 PM Andrii Nakryiko <andriin@fb.com> wrote:
+>
+> Make sample_cnt volatile to fix possible selftests failure due to compiler
+> optimization preventing latest sample_cnt value to be visible to main thread.
+> sample_cnt is incremented in background thread, which is then joined into main
+> thread. So in terms of visibility sample_cnt update is ok. But because it's
+> not volatile, compiler might make optimizations that would prevent main thread
+> to see latest updated value. Fix this by marking global variable volatile.
+>
+> Fixes: cb1c9ddd5525 ("selftests/bpf: Add BPF ringbuf selftests")
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 
-Yes, that is correct.
+Acked-by: Song Liu <songliubraving@fb.com>
