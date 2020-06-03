@@ -6,196 +6,154 @@ X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
 	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40E7AC433DF
-	for <bpf@archiver.kernel.org>; Wed,  3 Jun 2020 09:12:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE4CC433DF
+	for <bpf@archiver.kernel.org>; Wed,  3 Jun 2020 11:05:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 184212068D
-	for <bpf@archiver.kernel.org>; Wed,  3 Jun 2020 09:12:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA797206A2
+	for <bpf@archiver.kernel.org>; Wed,  3 Jun 2020 11:05:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bnI6OSqh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ilWFgepJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726592AbgFCJML (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Jun 2020 05:12:11 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:40163 "EHLO
+        id S1725993AbgFCLFg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Jun 2020 07:05:36 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:44053 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726469AbgFCJML (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Jun 2020 05:12:11 -0400
+        with ESMTP id S1726003AbgFCLFf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Jun 2020 07:05:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591175529;
+        s=mimecast20190719; t=1591182333;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BNEeWkobKD2qxnRw2R9B0OfjA/AwB7nsH/4jioCd4bQ=;
-        b=bnI6OSqhDo/GtYv2MVSZ7h8gOgH/t4wdMt1dqCkAObNF13PKpuEcuHRPjgLm/cVXlL85bC
-        +KiWzhE7ppzWXCpLdKMCLTg+bzM0o8Bs9cnnWZXrMqmt2hcL9Xvk7kJnpElbYprr8WLe//
-        ovKAKI690vc7iC5ujw2FlwE2tLUBqhQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-96-IF3mv_izPDO11MjlM7tWNg-1; Wed, 03 Jun 2020 05:12:06 -0400
-X-MC-Unique: IF3mv_izPDO11MjlM7tWNg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4A04E100A621;
-        Wed,  3 Jun 2020 09:12:05 +0000 (UTC)
-Received: from carbon (unknown [10.40.208.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0C2205D9CD;
-        Wed,  3 Jun 2020 09:11:59 +0000 (UTC)
-Date:   Wed, 3 Jun 2020 11:11:58 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     David Ahern <dsahern@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>, brouer@redhat.com
-Subject: Re: [PATCH bpf-next RFC 2/3] bpf: devmap dynamic map-value storage
- area based on BTF
-Message-ID: <20200603111158.2cfd99e5@carbon>
-In-Reply-To: <CAADnVQJDj_5i=g0S1UhxP1EUKwNUx1KuQ=V7y089+oy8rdnZ=g@mail.gmail.com>
-References: <159076794319.1387573.8722376887638960093.stgit@firesoul>
-        <159076798566.1387573.8417040652693679408.stgit@firesoul>
-        <20200601213012.vgt7oqplfbzeddzm@ast-mbp.dhcp.thefacebook.com>
-        <20200602090005.5a6eb50c@carbon>
-        <CAADnVQJDj_5i=g0S1UhxP1EUKwNUx1KuQ=V7y089+oy8rdnZ=g@mail.gmail.com>
+        bh=7/UZ1k1Tnz+0aL6W1DGoxSSobfkMGETgBO+uk6FERaM=;
+        b=ilWFgepJztXU8paZnksYiDLX1VCU0fMtCNRPrDMphganF9C0gkEV7afQtU0zppAG+Bd7cS
+        1H7tswEKd0Ni4S1AS/X7YOHGJC1NYaqnCr/vXtT4TMd1AT4qzugSZ0h4Xi7jTsCZc5PGGB
+        0AxT1M2obov90WLVf1izK5BNgghIT80=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-241-KDeOwqGPMUKn62QpSnVlvA-1; Wed, 03 Jun 2020 07:05:31 -0400
+X-MC-Unique: KDeOwqGPMUKn62QpSnVlvA-1
+Received: by mail-ed1-f69.google.com with SMTP id k17so907204edo.20
+        for <bpf@vger.kernel.org>; Wed, 03 Jun 2020 04:05:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=7/UZ1k1Tnz+0aL6W1DGoxSSobfkMGETgBO+uk6FERaM=;
+        b=QtNR5gtabNDSzmNJ09iVCbR0wYx92iGdvxL36C3E4Kw72+kDNEvXzA4Vdhd0ozG5QS
+         GmOx1BjC++Fh9wWvfSyODa4sy9TCD31HJrNlD5ss7kCzjTX6qui13JhkxX0McGZV3dtO
+         MfhiW4TwUrt44mV8V5+Ie5YUxmQpvBBdldXTkhCNnpO7DTafeN9Penc0JSoC/nAiu0qa
+         KQ6Ucg7GFo+XzM4KjlLLO+RmmZG10NFnCym6ZxnFxVg79GgavIS8svmoALkUf9kwZzD5
+         TT2ZT8wwXDuBZZu8s40l6LYZ4Bv5n5aiTkfExDmNCZI19zXlZpT0YiaOsZ9IlZFn/AYO
+         jCZA==
+X-Gm-Message-State: AOAM532m3j8EAy3l0d+/veYuNJdIcA4dDtPRK5ZBBXFI4CRjzeA8xols
+        4yg9pzysn2wo4mjbEQhErKqhh5N2D4s8Lso2TgClarSvgMGz/g4fczADCg/pXXWXFx/hubOykBL
+        67yQaZm+CxhwS
+X-Received: by 2002:a05:6402:311c:: with SMTP id dc28mr15417535edb.184.1591182330459;
+        Wed, 03 Jun 2020 04:05:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyPv1J7mEIffBwXirBApKMnotEG2ItUqEy0W7mVGX7vHKGQMpxhiGMUsPP5lgXN4El4jaQIDg==
+X-Received: by 2002:a05:6402:311c:: with SMTP id dc28mr15417508edb.184.1591182330204;
+        Wed, 03 Jun 2020 04:05:30 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id s14sm933965ejd.111.2020.06.03.04.05.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jun 2020 04:05:28 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 64AED182797; Wed,  3 Jun 2020 13:05:28 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Hangbin Liu <liuhangbin@gmail.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Jiri Benc <jbenc@redhat.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>, ast@kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+Subject: Re: [PATCHv4 bpf-next 0/2] xdp: add dev map multicast support
+In-Reply-To: <20200603024054.GK102436@dhcp-12-153.nay.redhat.com>
+References: <20200415085437.23028-1-liuhangbin@gmail.com> <20200526140539.4103528-1-liuhangbin@gmail.com> <87zh9t1xvh.fsf@toke.dk> <20200603024054.GK102436@dhcp-12-153.nay.redhat.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Wed, 03 Jun 2020 13:05:28 +0200
+Message-ID: <87img8l893.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 2 Jun 2020 11:27:03 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+Hangbin Liu <liuhangbin@gmail.com> writes:
 
-> On Tue, Jun 2, 2020 at 12:00 AM Jesper Dangaard Brouer
-> <brouer@redhat.com> wrote:
-> >
-> > On Mon, 1 Jun 2020 14:30:12 -0700
-> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> >  
-> > > On Fri, May 29, 2020 at 05:59:45PM +0200, Jesper Dangaard Brouer wrote:  
-> > > > +
-> > > > +/* Expected BTF layout that match struct bpf_devmap_val */
-> > > > +static const struct expect layout[] = {
-> > > > +   {BTF_KIND_INT,          true,    0,      4,     "ifindex"},
-> > > > +   {BTF_KIND_UNION,        false,  32,      4,     "bpf_prog"},
-> > > > +   {BTF_KIND_STRUCT,       false,  -1,     -1,     "storage"}
-> > > > +};
-> > > > +
-> > > > +static int dev_map_check_btf(const struct bpf_map *map,
-> > > > +                        const struct btf *btf,
-> > > > +                        const struct btf_type *key_type,
-> > > > +                        const struct btf_type *value_type)
-> > > > +{
-> > > > +   struct bpf_dtab *dtab = container_of(map, struct bpf_dtab, map);
-> > > > +   u32 found_members_cnt = 0;
-> > > > +   u32 int_data;
-> > > > +   int off;
-> > > > +   u32 i;
-> > > > +
-> > > > +   /* Validate KEY type and size */
-> > > > +   if (BTF_INFO_KIND(key_type->info) != BTF_KIND_INT)
-> > > > +           return -EOPNOTSUPP;
-> > > > +
-> > > > +   int_data = *(u32 *)(key_type + 1);
-> > > > +   if (BTF_INT_BITS(int_data) != 32 || BTF_INT_OFFSET(int_data) != 0)
-> > > > +           return -EOPNOTSUPP;
-> > > > +
-> > > > +   /* Validate VALUE have layout that match/map-to struct bpf_devmap_val
-> > > > +    * - With a flexible size of member 'storage'.
-> > > > +    */
-> > > > +
-> > > > +   if (BTF_INFO_KIND(value_type->info) != BTF_KIND_STRUCT)
-> > > > +           return -EOPNOTSUPP;
-> > > > +
-> > > > +   /* Struct/union members in BTF must not exceed (max) expected members */
-> > > > +   if (btf_type_vlen(value_type) > ARRAY_SIZE(layout))
-> > > > +                   return -E2BIG;
-> > > > +
-> > > > +   for (i = 0; i < ARRAY_SIZE(layout); i++) {
-> > > > +           off = btf_find_expect_layout_offset(btf, value_type, &layout[i]);
-> > > > +
-> > > > +           if (off < 0 && layout[i].mandatory)
-> > > > +                   return -EUCLEAN;
-> > > > +
-> > > > +           if (off >= 0)
-> > > > +                   found_members_cnt++;
-> > > > +
-> > > > +           /* Transfer layout config to map */
-> > > > +           switch (i) {
-> > > > +           case 0:
-> > > > +                   dtab->cfg.btf_offset.ifindex = off;
-> > > > +                   break;
-> > > > +           case 1:
-> > > > +                   dtab->cfg.btf_offset.bpf_prog = off;
-> > > > +                   break;
-> > > > +           default:
-> > > > +                   break;
-> > > > +           }
-> > > > +   }
-> > > > +
-> > > > +   /* Detect if BTF/vlen have members that were not found */
-> > > > +   if (btf_type_vlen(value_type) > found_members_cnt)
-> > > > +           return -E2BIG;
-> > > > +
-> > > > +   return 0;
-> > > > +}  
-> > >
-> > > This layout validation looks really weird to me.
-> > > That layout[] array sort of complements BTF to describe the data,
-> > > but double describe of the layout feels like hack.  
-> >
-> > This is the kind of feedback I'm looking for.  I want to make the
-> > map-value more dynamic.  It seems so old school to keep extending the
-> > map-value with a size and fixed binary layout, when we have BTF
-> > available.  I'm open to input on how to better verify/parse/desc the
-> > expected BTF layout for kernel-code side.
-> >
-> > The patch demonstrates that this is possible, I'm open for changes.
-> > E.g. devmap is now extended with a bpf_prog, but most end-users will
-> > not be using this feature. Today they can use value_size=4 to avoid
-> > using this field. When we extend map-value again, then end-users are
-> > force into providing 'bpf_prog.fd' if they want to use the newer
-> > options.  In this patch end-users don't need to provide 'bpf_prog' if
-> > they don't use it. Via BTF we can see this struct member can be skipped.  
-> 
-> I think 'struct bpf_devmap_val' should be in uapi/bpf.h.
+> On Wed, May 27, 2020 at 12:21:54PM +0200, Toke H=C3=83=C6=92=C3=82=C2=B8i=
+land-J=C3=83=C6=92=C3=82=C2=B8rgensen wrote:
+>> > The example in patch 2 is functional, but not a lot of effort
+>> > has been made on performance optimisation. I did a simple test(pkt siz=
+e 64)
+>> > with pktgen. Here is the test result with BPF_MAP_TYPE_DEVMAP_HASH
+>> > arrays:
+>> >
+>> > bpf_redirect_map() with 1 ingress, 1 egress:
+>> > generic path: ~1600k pps
+>> > native path: ~980k pps
+>> >
+>> > bpf_redirect_map_multi() with 1 ingress, 3 egress:
+>> > generic path: ~600k pps
+>> > native path: ~480k pps
+>> >
+>> > bpf_redirect_map_multi() with 1 ingress, 9 egress:
+>> > generic path: ~125k pps
+>> > native path: ~100k pps
+>> >
+>> > The bpf_redirect_map_multi() is slower than bpf_redirect_map() as we l=
+oop
+>> > the arrays and do clone skb/xdpf. The native path is slower than gener=
+ic
+>> > path as we send skbs by pktgen. So the result looks reasonable.
+>>=20
+>> How are you running these tests? Still on virtual devices? We really
+>> need results from a physical setup in native mode to assess the impact
+>> on the native-XDP fast path. The numbers above don't tell much in this
+>> regard. I'd also like to see a before/after patch for straight
+>> bpf_redirect_map(), since you're messing with the fast path, and we want
+>> to make sure it's not causing a performance regression for regular
+>> redirect.
+>>=20
+>> Finally, since the overhead seems to be quite substantial: A comparison
+>> with a regular network stack bridge might make sense? After all we also
+>> want to make sure it's a performance win over that :)
+>
+> Hi Toke,
+>
+> Here is the result I tested with 2 i40e 10G ports on physical machine.
+> The pktgen pkt_size is 64.
 
-I disagree.
+These numbers seem a bit low (I'm getting ~8.5MPPS on my test machine
+for a simple redirect). Some of that may just be performance of the
+machine, I guess (what are you running this on?), but please check that
+you are not limited by pktgen itself - i.e., that pktgen is generating
+traffic at a higher rate than what XDP is processing.
 
-> That's what it is and it will be extended with new fields at the end
-> just like all other structs in uapi/bpf.h
+> Bridge forwarding(I use sample/bpf/xdp1 to count the PPS, so there are tw=
+o modes data):
+> generic mode: 1.32M PPS
+> driver mode: 1.66M PPS
 
-This only works when new fields added will be zero, meaning that
-default value of zero means the feature is not used.  In this specific
-case devmap adds a file-descriptor field, that have to be -1 for the
-feature to be unused.
+I'm not sure I understand this - what are you measuring here exactly?
 
-Thus, when programs gets compiled with this new UAPI header, they will
-start to fail, because they try to map-insert file-descriptor zero.
+> xdp_redirect_map:
+> generic mode: 1.88M PPS
+> driver mode: 2.74M PPS
 
+Please add numbers without your patch applied as well, for comparison.
 
-> I don't think BTF can become a substitute for uapi
-> where uapi struct has to have all fields defined and backwards supported
-> by the kernel.
-> BTF is for flexible structs where fields may disappear.
+> xdp_redirect_map_multi:
+> generic mode: 1.38M PPS
+> driver mode: 2.73M PPS
 
-Then BTF is perfect for this, as e.g. I want to remove field/member
-'ifindex' for the HASH-variant of devmap, and instead use the key as
-the ifindex.
+I assume this is with a single interface only, right? Could you please
+add a test with a second interface (so the packet is cloned) as well?
+You can just use a veth as the second target device.
 
-
-> BTF is there to define a meaning of a binary blob.
-> 'struct bpf_devmap_val' is not such thing. It's very much known with
-> fixed fields and fixed meaning.
-
--- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+-Toke
 
