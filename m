@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3424BC433E1
-	for <bpf@archiver.kernel.org>; Fri,  5 Jun 2020 12:26:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7778EC433DF
+	for <bpf@archiver.kernel.org>; Fri,  5 Jun 2020 12:27:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0BF5320897
-	for <bpf@archiver.kernel.org>; Fri,  5 Jun 2020 12:26:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CCDF2075B
+	for <bpf@archiver.kernel.org>; Fri,  5 Jun 2020 12:27:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591359972;
-	bh=Dimt5y8jni40l+7kWNBHR76jFKglQWP8uF56vJ9AAWQ=;
+	s=default; t=1591360029;
+	bh=y3iudsv8kozWffz/xN23JmqgvUxt40YMFKzvx83ZykI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=PvWw90KHTeAZRTHIGvgjUROQ/uqKQ2tOYbs0tRRhAM/3d9C5Xi4Vip4IxfhGnymGo
-	 ElGPr4+Lar35HTDQtNGgtbMp5fMFfcvEQoUnDgpqpudLBIV9qpvqMo8nDQoIhjFNiU
-	 2Xf388PCB5Wm8WWy0YUcDn08Xiw4nb2uL0B56A7g=
+	b=cjSul78s6O/rb1SyI0SOdRIs8jRYumhkhZhlexr2NiTXRL5IW0VoQUkA6jJh2a/Ka
+	 5FLiwKEr/EihStHQnmA38YJ1nm2D+qD8tJWHjKuuMTcnGzhvPQoivzylAMVtVebapS
+	 7KXvBFF5Sh9RiZD1W3f8Tn8PDJIttS4ZkrmiiOiY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726748AbgFEM0L (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Jun 2020 08:26:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58228 "EHLO mail.kernel.org"
+        id S1727008AbgFEM1A (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Jun 2020 08:27:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58786 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726565AbgFEM0J (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 5 Jun 2020 08:26:09 -0400
+        id S1727828AbgFEM03 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Jun 2020 08:26:29 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0A382207D3;
-        Fri,  5 Jun 2020 12:26:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 668FA207D3;
+        Fri,  5 Jun 2020 12:26:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591359968;
-        bh=Dimt5y8jni40l+7kWNBHR76jFKglQWP8uF56vJ9AAWQ=;
+        s=default; t=1591359988;
+        bh=y3iudsv8kozWffz/xN23JmqgvUxt40YMFKzvx83ZykI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XNJdbEdVgkiXXgltu2ekrTfh9skFzYQF1aC702qBpUHrP0HHcsyD8+uDvQget0N2k
-         WiqZzYu2H0iYfXYNddZlFCAU6DrfO/1vGjRxBOoyDMdH6So5lTGJaWlaii9jRyUrXs
-         ITQtiWwgQ4BclLz+DrlBs1ZWYK1uIM/rL/EEoitE=
+        b=NWyUF/sRY3OVOqVQbkFsWKKmIjqsW3brhDOYgPlSC2qzWZGUIOCq789aNQWDKWXNQ
+         cBesuxer78khcNYY6yYZUrytksgZkIx6a6KLyxp95bM70C9wv4+oOv9PGx6NIoFPy/
+         bdH7+FTlzb+zmLCM+zTN/JkgUC+Dk8upKelt7zWI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Eric Dumazet <edumazet@google.com>,
@@ -46,12 +46,12 @@ Cc:     Eric Dumazet <edumazet@google.com>,
         syzbot+3610d489778b57cc8031@syzkaller.appspotmail.com,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 9/9] l2tp: do not use inet_hash()/inet_unhash()
-Date:   Fri,  5 Jun 2020 08:25:57 -0400
-Message-Id: <20200605122558.2882712-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 6/6] l2tp: do not use inet_hash()/inet_unhash()
+Date:   Fri,  5 Jun 2020 08:26:20 -0400
+Message-Id: <20200605122620.2882962-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200605122558.2882712-1-sashal@kernel.org>
-References: <20200605122558.2882712-1-sashal@kernel.org>
+In-Reply-To: <20200605122620.2882962-1-sashal@kernel.org>
+References: <20200605122620.2882962-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -143,7 +143,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 44 insertions(+), 15 deletions(-)
 
 diff --git a/net/l2tp/l2tp_ip.c b/net/l2tp/l2tp_ip.c
-index d4c60523c549..99881b81f302 100644
+index 4a88c4eb2301..3817c3554641 100644
 --- a/net/l2tp/l2tp_ip.c
 +++ b/net/l2tp/l2tp_ip.c
 @@ -24,7 +24,6 @@
@@ -154,7 +154,7 @@ index d4c60523c549..99881b81f302 100644
  #include <net/tcp_states.h>
  #include <net/protocol.h>
  #include <net/xfrm.h>
-@@ -213,15 +212,31 @@ static int l2tp_ip_recv(struct sk_buff *skb)
+@@ -208,15 +207,31 @@ static int l2tp_ip_recv(struct sk_buff *skb)
  	return 0;
  }
  
@@ -202,7 +202,7 @@ index d4c60523c549..99881b81f302 100644
  #ifdef CONFIG_COMPAT
  	.compat_setsockopt = compat_ip_setsockopt,
 diff --git a/net/l2tp/l2tp_ip6.c b/net/l2tp/l2tp_ip6.c
-index 2f28f9910b92..2ff25c445b82 100644
+index 28274f397c55..76ef758db112 100644
 --- a/net/l2tp/l2tp_ip6.c
 +++ b/net/l2tp/l2tp_ip6.c
 @@ -24,8 +24,6 @@
@@ -214,7 +214,7 @@ index 2f28f9910b92..2ff25c445b82 100644
  #include <net/tcp_states.h>
  #include <net/protocol.h>
  #include <net/xfrm.h>
-@@ -226,15 +224,31 @@ static int l2tp_ip6_recv(struct sk_buff *skb)
+@@ -221,15 +219,31 @@ static int l2tp_ip6_recv(struct sk_buff *skb)
  	return 0;
  }
  
