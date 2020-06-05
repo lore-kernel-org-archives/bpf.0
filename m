@@ -2,134 +2,265 @@ Return-Path: <SRS0=qrx8=7S=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1DC9C433E0
-	for <bpf@archiver.kernel.org>; Fri,  5 Jun 2020 11:01:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3424BC433E1
+	for <bpf@archiver.kernel.org>; Fri,  5 Jun 2020 12:26:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8FC27207D5
-	for <bpf@archiver.kernel.org>; Fri,  5 Jun 2020 11:01:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EMrUf8eV"
+	by mail.kernel.org (Postfix) with ESMTP id 0BF5320897
+	for <bpf@archiver.kernel.org>; Fri,  5 Jun 2020 12:26:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1591359972;
+	bh=Dimt5y8jni40l+7kWNBHR76jFKglQWP8uF56vJ9AAWQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=PvWw90KHTeAZRTHIGvgjUROQ/uqKQ2tOYbs0tRRhAM/3d9C5Xi4Vip4IxfhGnymGo
+	 ElGPr4+Lar35HTDQtNGgtbMp5fMFfcvEQoUnDgpqpudLBIV9qpvqMo8nDQoIhjFNiU
+	 2Xf388PCB5Wm8WWy0YUcDn08Xiw4nb2uL0B56A7g=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726979AbgFELBI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Jun 2020 07:01:08 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:49515 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726950AbgFELBH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 5 Jun 2020 07:01:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591354865;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=99VNPYJGoMPl79e21WOZdb+KAZocUbilTfddS29tBis=;
-        b=EMrUf8eV50QDlKmjTPF7TXEYpAZTcj2nGGcteieg1bOQG+SMrL2cXnK9/gUyNRjkbp0AC/
-        eW/VLrhxyPKbZrRHneuCuqMZpNbQZBiRYua+qQ+q6tmjM1ZQRjz2hBbYt47ncitDZYBccR
-        QBXF8ZY5DqcFR4v8AWe9QNoCd0Mnyio=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-365-Tx9W51jJP5yMGV5XyGSK2Q-1; Fri, 05 Jun 2020 07:01:03 -0400
-X-MC-Unique: Tx9W51jJP5yMGV5XyGSK2Q-1
-Received: by mail-ej1-f69.google.com with SMTP id bo19so3469319ejb.0
-        for <bpf@vger.kernel.org>; Fri, 05 Jun 2020 04:01:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=99VNPYJGoMPl79e21WOZdb+KAZocUbilTfddS29tBis=;
-        b=G25zBSuLjcVHrL0aR5FL0D95Qvd8rn2qq3luj+QTFTRCShHAsB3xs49ZEIk+TEprVJ
-         8mKEPRxeTWMAx5B5gukN4M4ghmEvzvETFS8XmNuJFy/4uF1fIH1BqFoUax/qHUMyQTrE
-         bmVb9jXf+DMOw7XKNHIAtOot57NrkAlrt57oaq0/7qYLNCR+4dqXS04h2gPzswP7b3Z0
-         nn3vchzQYYNXsREho2KRN97g5RxCbFkCf7tITOPAQQ2NXOsYxZEXxxymoLfOz6P0e7M3
-         2zTqNKszbKUd0Nc+cw5xKWjA5uNbqnxHiwBPdFjqKfYtZe8Ygp4hHdGguXNKZEUgu1GA
-         JWfA==
-X-Gm-Message-State: AOAM531vE14sVjMOWNyfSeFWsHaxUivFMXOECpUxdBj11AxPET5ZB5vB
-        vY1PVPrrQSN4rae0nsquzu72ohU6mmA8DzJ6g/QKc44FV7GGS8YD9QzzObgZCPuff6HhZ1qtvnI
-        J+irwkwTuJXI8
-X-Received: by 2002:aa7:d158:: with SMTP id r24mr8533232edo.272.1591354862322;
-        Fri, 05 Jun 2020 04:01:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx3FkyT1V4vxoO2SrH/qvQCMvKtyEkE41uXCPhuRSVuJBMRq0wXuv5atvbNLgcHzJTRm/uNKA==
-X-Received: by 2002:aa7:d158:: with SMTP id r24mr8533193edo.272.1591354861927;
-        Fri, 05 Jun 2020 04:01:01 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id h8sm4703487edk.72.2020.06.05.04.01.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2020 04:01:01 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 9910818200D; Fri,  5 Jun 2020 13:01:00 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     David Ahern <dsahern@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        David Miller <davem@davemloft.net>, brouer@redhat.com
-Subject: Re: [PATCH bpf-next V1] bpf: devmap dynamic map-value area based on BTF
-In-Reply-To: <20200605102323.15c2c06c@carbon>
-References: <159119908343.1649854.17264745504030734400.stgit@firesoul> <20200603162257.nxgultkidnb7yb6q@ast-mbp.dhcp.thefacebook.com> <20200604174806.29130b81@carbon> <205b3716-e571-b38f-614f-86819d153c4e@gmail.com> <20200604173341.rvfrjmt433knl3uv@ast-mbp.dhcp.thefacebook.com> <20200605102323.15c2c06c@carbon>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Fri, 05 Jun 2020 13:01:00 +0200
-Message-ID: <87y2p1dbf7.fsf@toke.dk>
+        id S1726748AbgFEM0L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Jun 2020 08:26:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58228 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726565AbgFEM0J (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Jun 2020 08:26:09 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0A382207D3;
+        Fri,  5 Jun 2020 12:26:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591359968;
+        bh=Dimt5y8jni40l+7kWNBHR76jFKglQWP8uF56vJ9AAWQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XNJdbEdVgkiXXgltu2ekrTfh9skFzYQF1aC702qBpUHrP0HHcsyD8+uDvQget0N2k
+         WiqZzYu2H0iYfXYNddZlFCAU6DrfO/1vGjRxBOoyDMdH6So5lTGJaWlaii9jRyUrXs
+         ITQtiWwgQ4BclLz+DrlBs1ZWYK1uIM/rL/EEoitE=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Eric Dumazet <edumazet@google.com>,
+        James Chapman <jchapman@katalix.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        syzbot+3610d489778b57cc8031@syzkaller.appspotmail.com,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 9/9] l2tp: do not use inet_hash()/inet_unhash()
+Date:   Fri,  5 Jun 2020 08:25:57 -0400
+Message-Id: <20200605122558.2882712-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200605122558.2882712-1-sashal@kernel.org>
+References: <20200605122558.2882712-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jesper Dangaard Brouer <brouer@redhat.com> writes:
+From: Eric Dumazet <edumazet@google.com>
 
-> On Thu, 4 Jun 2020 10:33:41 -0700
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->
->> On Thu, Jun 04, 2020 at 10:40:06AM -0600, David Ahern wrote:
->> > On 6/4/20 9:48 AM, Jesper Dangaard Brouer wrote:  
->> > > I will NOT send a patch that expose this in uapi/bpf.h.  As I explained
->> > > before, this caused the issues for my userspace application, that
->> > > automatically picked-up struct bpf_devmap_val, and started to fail
->> > > (with no code changes), because it needed minus-1 as input.  I fear
->> > > that this will cause more work for me later, when I have to helpout and
->> > > support end-users on e.g. xdp-newbies list, as it will not be obvious
->> > > to end-users why their programs map-insert start to fail.  I have given
->> > > up, so I will not NACK anyone sending such a patch.  
->> 
->> Jesper,
->> 
->> you gave wrong direction to David during development of the patches and
->> now the devmap uapi is suffering the consequences.
->> 
->> > > 
->> > > Why is it we need to support file-descriptor zero as a valid
->> > > file-descriptor for a bpf-prog?  
->> > 
->> > That was a nice property of using the id instead of fd. And the init to
->> > -1 is not unique to this; adopters of the bpf_set_link_xdp_fd_opts for
->> > example have to do the same.  
->> 
->> I think it's better to adopt "fd==0 -> invalid" approach.
->> It won't be unique here. We're already using it in other places in bpf syscall.
->> I agree with Jesper that requiring -1 init of 2nd field is quite ugly
->> and inconvenient.
->
-> Great. If we can remove this requirement of -1 init (and let zero mean
-> feature isn't used), then I'm all for exposing expose in uapi/bpf.h.
+[ Upstream commit 02c71b144c811bcdd865e0a1226d0407d11357e8 ]
 
-If we're going to officially deprecate fd 0 as a valid BPF fd, we should
-at least make sure users don't end up with such an fd after opening a
-BPF object. Not sure how the fd number assignment works, but could we
-make sure that the kernel never returns fd 0 for a BPF program/map?
+syzbot recently found a way to crash the kernel [1]
 
-Alternatively, we could add a check in libbpf and either reject the
-call, or just call dup() before passing the fd to the kernel.
+Issue here is that inet_hash() & inet_unhash() are currently
+only meant to be used by TCP & DCCP, since only these protocols
+provide the needed hashinfo pointer.
 
-Right now it's quite trivial to get a BPF program ref with fd0 - all you
-have to do is open a BPF program is the first thing you do after closing
-stdin (like a daemon might). I'd really rather not have to help anyone
-debug that...
+L2TP uses a single list (instead of a hash table)
 
--Toke
+This old bug became an issue after commit 610236587600
+("bpf: Add new cgroup attach type to enable sock modifications")
+since after this commit, sk_common_release() can be called
+while the L2TP socket is still considered 'hashed'.
+
+general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+CPU: 0 PID: 7063 Comm: syz-executor654 Not tainted 5.7.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:inet_unhash+0x11f/0x770 net/ipv4/inet_hashtables.c:600
+Code: 03 0f b6 04 02 84 c0 74 08 3c 03 0f 8e dd 04 00 00 48 8d 7d 08 44 8b 73 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 55 05 00 00 48 8d 7d 14 4c 8b 6d 08 48 b8 00 00
+RSP: 0018:ffffc90001777d30 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff88809a6df940 RCX: ffffffff8697c242
+RDX: 0000000000000001 RSI: ffffffff8697c251 RDI: 0000000000000008
+RBP: 0000000000000000 R08: ffff88809f3ae1c0 R09: fffffbfff1514cc1
+R10: ffffffff8a8a6607 R11: fffffbfff1514cc0 R12: ffff88809a6df9b0
+R13: 0000000000000007 R14: 0000000000000000 R15: ffffffff873a4d00
+FS:  0000000001d2b880(0000) GS:ffff8880ae600000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000006cd090 CR3: 000000009403a000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ sk_common_release+0xba/0x370 net/core/sock.c:3210
+ inet_create net/ipv4/af_inet.c:390 [inline]
+ inet_create+0x966/0xe00 net/ipv4/af_inet.c:248
+ __sock_create+0x3cb/0x730 net/socket.c:1428
+ sock_create net/socket.c:1479 [inline]
+ __sys_socket+0xef/0x200 net/socket.c:1521
+ __do_sys_socket net/socket.c:1530 [inline]
+ __se_sys_socket net/socket.c:1528 [inline]
+ __x64_sys_socket+0x6f/0xb0 net/socket.c:1528
+ do_syscall_64+0xf6/0x7d0 arch/x86/entry/common.c:295
+ entry_SYSCALL_64_after_hwframe+0x49/0xb3
+RIP: 0033:0x441e29
+Code: e8 fc b3 02 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 eb 08 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007ffdce184148 EFLAGS: 00000246 ORIG_RAX: 0000000000000029
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000441e29
+RDX: 0000000000000073 RSI: 0000000000000002 RDI: 0000000000000002
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000402c30 R14: 0000000000000000 R15: 0000000000000000
+Modules linked in:
+---[ end trace 23b6578228ce553e ]---
+RIP: 0010:inet_unhash+0x11f/0x770 net/ipv4/inet_hashtables.c:600
+Code: 03 0f b6 04 02 84 c0 74 08 3c 03 0f 8e dd 04 00 00 48 8d 7d 08 44 8b 73 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 55 05 00 00 48 8d 7d 14 4c 8b 6d 08 48 b8 00 00
+RSP: 0018:ffffc90001777d30 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff88809a6df940 RCX: ffffffff8697c242
+RDX: 0000000000000001 RSI: ffffffff8697c251 RDI: 0000000000000008
+RBP: 0000000000000000 R08: ffff88809f3ae1c0 R09: fffffbfff1514cc1
+R10: ffffffff8a8a6607 R11: fffffbfff1514cc0 R12: ffff88809a6df9b0
+R13: 0000000000000007 R14: 0000000000000000 R15: ffffffff873a4d00
+FS:  0000000001d2b880(0000) GS:ffff8880ae600000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000006cd090 CR3: 000000009403a000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+Fixes: 0d76751fad77 ("l2tp: Add L2TPv3 IP encapsulation (no UDP) support")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: James Chapman <jchapman@katalix.com>
+Cc: Andrii Nakryiko <andriin@fb.com>
+Reported-by: syzbot+3610d489778b57cc8031@syzkaller.appspotmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/l2tp/l2tp_ip.c  | 29 ++++++++++++++++++++++-------
+ net/l2tp/l2tp_ip6.c | 30 ++++++++++++++++++++++--------
+ 2 files changed, 44 insertions(+), 15 deletions(-)
+
+diff --git a/net/l2tp/l2tp_ip.c b/net/l2tp/l2tp_ip.c
+index d4c60523c549..99881b81f302 100644
+--- a/net/l2tp/l2tp_ip.c
++++ b/net/l2tp/l2tp_ip.c
+@@ -24,7 +24,6 @@
+ #include <net/icmp.h>
+ #include <net/udp.h>
+ #include <net/inet_common.h>
+-#include <net/inet_hashtables.h>
+ #include <net/tcp_states.h>
+ #include <net/protocol.h>
+ #include <net/xfrm.h>
+@@ -213,15 +212,31 @@ static int l2tp_ip_recv(struct sk_buff *skb)
+ 	return 0;
+ }
+ 
+-static int l2tp_ip_open(struct sock *sk)
++static int l2tp_ip_hash(struct sock *sk)
+ {
+-	/* Prevent autobind. We don't have ports. */
+-	inet_sk(sk)->inet_num = IPPROTO_L2TP;
++	if (sk_unhashed(sk)) {
++		write_lock_bh(&l2tp_ip_lock);
++		sk_add_node(sk, &l2tp_ip_table);
++		write_unlock_bh(&l2tp_ip_lock);
++	}
++	return 0;
++}
+ 
++static void l2tp_ip_unhash(struct sock *sk)
++{
++	if (sk_unhashed(sk))
++		return;
+ 	write_lock_bh(&l2tp_ip_lock);
+-	sk_add_node(sk, &l2tp_ip_table);
++	sk_del_node_init(sk);
+ 	write_unlock_bh(&l2tp_ip_lock);
++}
++
++static int l2tp_ip_open(struct sock *sk)
++{
++	/* Prevent autobind. We don't have ports. */
++	inet_sk(sk)->inet_num = IPPROTO_L2TP;
+ 
++	l2tp_ip_hash(sk);
+ 	return 0;
+ }
+ 
+@@ -598,8 +613,8 @@ static struct proto l2tp_ip_prot = {
+ 	.sendmsg	   = l2tp_ip_sendmsg,
+ 	.recvmsg	   = l2tp_ip_recvmsg,
+ 	.backlog_rcv	   = l2tp_ip_backlog_recv,
+-	.hash		   = inet_hash,
+-	.unhash		   = inet_unhash,
++	.hash		   = l2tp_ip_hash,
++	.unhash		   = l2tp_ip_unhash,
+ 	.obj_size	   = sizeof(struct l2tp_ip_sock),
+ #ifdef CONFIG_COMPAT
+ 	.compat_setsockopt = compat_ip_setsockopt,
+diff --git a/net/l2tp/l2tp_ip6.c b/net/l2tp/l2tp_ip6.c
+index 2f28f9910b92..2ff25c445b82 100644
+--- a/net/l2tp/l2tp_ip6.c
++++ b/net/l2tp/l2tp_ip6.c
+@@ -24,8 +24,6 @@
+ #include <net/icmp.h>
+ #include <net/udp.h>
+ #include <net/inet_common.h>
+-#include <net/inet_hashtables.h>
+-#include <net/inet6_hashtables.h>
+ #include <net/tcp_states.h>
+ #include <net/protocol.h>
+ #include <net/xfrm.h>
+@@ -226,15 +224,31 @@ static int l2tp_ip6_recv(struct sk_buff *skb)
+ 	return 0;
+ }
+ 
+-static int l2tp_ip6_open(struct sock *sk)
++static int l2tp_ip6_hash(struct sock *sk)
+ {
+-	/* Prevent autobind. We don't have ports. */
+-	inet_sk(sk)->inet_num = IPPROTO_L2TP;
++	if (sk_unhashed(sk)) {
++		write_lock_bh(&l2tp_ip6_lock);
++		sk_add_node(sk, &l2tp_ip6_table);
++		write_unlock_bh(&l2tp_ip6_lock);
++	}
++	return 0;
++}
+ 
++static void l2tp_ip6_unhash(struct sock *sk)
++{
++	if (sk_unhashed(sk))
++		return;
+ 	write_lock_bh(&l2tp_ip6_lock);
+-	sk_add_node(sk, &l2tp_ip6_table);
++	sk_del_node_init(sk);
+ 	write_unlock_bh(&l2tp_ip6_lock);
++}
++
++static int l2tp_ip6_open(struct sock *sk)
++{
++	/* Prevent autobind. We don't have ports. */
++	inet_sk(sk)->inet_num = IPPROTO_L2TP;
+ 
++	l2tp_ip6_hash(sk);
+ 	return 0;
+ }
+ 
+@@ -732,8 +746,8 @@ static struct proto l2tp_ip6_prot = {
+ 	.sendmsg	   = l2tp_ip6_sendmsg,
+ 	.recvmsg	   = l2tp_ip6_recvmsg,
+ 	.backlog_rcv	   = l2tp_ip6_backlog_recv,
+-	.hash		   = inet6_hash,
+-	.unhash		   = inet_unhash,
++	.hash		   = l2tp_ip6_hash,
++	.unhash		   = l2tp_ip6_unhash,
+ 	.obj_size	   = sizeof(struct l2tp_ip6_sock),
+ #ifdef CONFIG_COMPAT
+ 	.compat_setsockopt = compat_ipv6_setsockopt,
+-- 
+2.25.1
 
