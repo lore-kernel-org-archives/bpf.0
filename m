@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7778EC433DF
-	for <bpf@archiver.kernel.org>; Fri,  5 Jun 2020 12:27:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC34BC433DF
+	for <bpf@archiver.kernel.org>; Fri,  5 Jun 2020 12:27:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CCDF2075B
-	for <bpf@archiver.kernel.org>; Fri,  5 Jun 2020 12:27:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CEFE7207D8
+	for <bpf@archiver.kernel.org>; Fri,  5 Jun 2020 12:27:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591360029;
-	bh=y3iudsv8kozWffz/xN23JmqgvUxt40YMFKzvx83ZykI=;
+	s=default; t=1591360052;
+	bh=fC9izFrruXj6AsbCeQ4l2w0VDiLHQfu+hr89vphmSxI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=cjSul78s6O/rb1SyI0SOdRIs8jRYumhkhZhlexr2NiTXRL5IW0VoQUkA6jJh2a/Ka
-	 5FLiwKEr/EihStHQnmA38YJ1nm2D+qD8tJWHjKuuMTcnGzhvPQoivzylAMVtVebapS
-	 7KXvBFF5Sh9RiZD1W3f8Tn8PDJIttS4ZkrmiiOiY=
+	b=14JfdRL1iHkUZB1chKlqQrSk542r3tSTLSmDlTn+/am2J3oo2uKFX+Y+iRcQA1U0l
+	 fEPjjvrFv71k1u+QUyqzmKAUOuED2vsTsmiSnC+Z/VenytYdkJrZaudEf07YyhX+1d
+	 YI1a+8q+IJeAlBaOvTaUxan89dVj9TJD4eyu7DZc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbgFEM1A (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Jun 2020 08:27:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58786 "EHLO mail.kernel.org"
+        id S1727995AbgFEM1b (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Jun 2020 08:27:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58558 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727828AbgFEM03 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 5 Jun 2020 08:26:29 -0400
+        id S1727785AbgFEM0U (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Jun 2020 08:26:20 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 668FA207D3;
-        Fri,  5 Jun 2020 12:26:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C73A620899;
+        Fri,  5 Jun 2020 12:26:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591359988;
-        bh=y3iudsv8kozWffz/xN23JmqgvUxt40YMFKzvx83ZykI=;
+        s=default; t=1591359979;
+        bh=fC9izFrruXj6AsbCeQ4l2w0VDiLHQfu+hr89vphmSxI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NWyUF/sRY3OVOqVQbkFsWKKmIjqsW3brhDOYgPlSC2qzWZGUIOCq789aNQWDKWXNQ
-         cBesuxer78khcNYY6yYZUrytksgZkIx6a6KLyxp95bM70C9wv4+oOv9PGx6NIoFPy/
-         bdH7+FTlzb+zmLCM+zTN/JkgUC+Dk8upKelt7zWI=
+        b=OIOYeXWGHS2hDzSN5YgHddwCbE4LUMIhRRS5ZcavJWHqtsgfGGO+FmMKugN3plrYT
+         A49PhVveIX8Ug+aaIShZq4PNLIsW/zOETOWkFDGATElzlmJk22+z85qjMRqza8zYIF
+         3/MXRCyzRF+loEQYRwjzyvE7PmFgU+vXxSY8jzfw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Eric Dumazet <edumazet@google.com>,
@@ -46,12 +46,12 @@ Cc:     Eric Dumazet <edumazet@google.com>,
         syzbot+3610d489778b57cc8031@syzkaller.appspotmail.com,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 6/6] l2tp: do not use inet_hash()/inet_unhash()
-Date:   Fri,  5 Jun 2020 08:26:20 -0400
-Message-Id: <20200605122620.2882962-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 8/8] l2tp: do not use inet_hash()/inet_unhash()
+Date:   Fri,  5 Jun 2020 08:26:09 -0400
+Message-Id: <20200605122609.2882841-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200605122620.2882962-1-sashal@kernel.org>
-References: <20200605122620.2882962-1-sashal@kernel.org>
+In-Reply-To: <20200605122609.2882841-1-sashal@kernel.org>
+References: <20200605122609.2882841-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -143,7 +143,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 44 insertions(+), 15 deletions(-)
 
 diff --git a/net/l2tp/l2tp_ip.c b/net/l2tp/l2tp_ip.c
-index 4a88c4eb2301..3817c3554641 100644
+index f7880becc165..37a9f2a25263 100644
 --- a/net/l2tp/l2tp_ip.c
 +++ b/net/l2tp/l2tp_ip.c
 @@ -24,7 +24,6 @@
@@ -154,7 +154,7 @@ index 4a88c4eb2301..3817c3554641 100644
  #include <net/tcp_states.h>
  #include <net/protocol.h>
  #include <net/xfrm.h>
-@@ -208,15 +207,31 @@ static int l2tp_ip_recv(struct sk_buff *skb)
+@@ -215,15 +214,31 @@ static int l2tp_ip_recv(struct sk_buff *skb)
  	return 0;
  }
  
@@ -190,7 +190,7 @@ index 4a88c4eb2301..3817c3554641 100644
  	return 0;
  }
  
-@@ -598,8 +613,8 @@ static struct proto l2tp_ip_prot = {
+@@ -605,8 +620,8 @@ static struct proto l2tp_ip_prot = {
  	.sendmsg	   = l2tp_ip_sendmsg,
  	.recvmsg	   = l2tp_ip_recvmsg,
  	.backlog_rcv	   = l2tp_ip_backlog_recv,
@@ -202,7 +202,7 @@ index 4a88c4eb2301..3817c3554641 100644
  #ifdef CONFIG_COMPAT
  	.compat_setsockopt = compat_ip_setsockopt,
 diff --git a/net/l2tp/l2tp_ip6.c b/net/l2tp/l2tp_ip6.c
-index 28274f397c55..76ef758db112 100644
+index 6efdfc9b5c43..9c4670fb29d7 100644
 --- a/net/l2tp/l2tp_ip6.c
 +++ b/net/l2tp/l2tp_ip6.c
 @@ -24,8 +24,6 @@
@@ -214,7 +214,7 @@ index 28274f397c55..76ef758db112 100644
  #include <net/tcp_states.h>
  #include <net/protocol.h>
  #include <net/xfrm.h>
-@@ -221,15 +219,31 @@ static int l2tp_ip6_recv(struct sk_buff *skb)
+@@ -229,15 +227,31 @@ static int l2tp_ip6_recv(struct sk_buff *skb)
  	return 0;
  }
  
@@ -250,7 +250,7 @@ index 28274f397c55..76ef758db112 100644
  	return 0;
  }
  
-@@ -732,8 +746,8 @@ static struct proto l2tp_ip6_prot = {
+@@ -742,8 +756,8 @@ static struct proto l2tp_ip6_prot = {
  	.sendmsg	   = l2tp_ip6_sendmsg,
  	.recvmsg	   = l2tp_ip6_recvmsg,
  	.backlog_rcv	   = l2tp_ip6_backlog_recv,
