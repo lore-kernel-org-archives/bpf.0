@@ -6,79 +6,76 @@ X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE703C433E0
-	for <bpf@archiver.kernel.org>; Sun,  7 Jun 2020 13:35:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E35CC433E0
+	for <bpf@archiver.kernel.org>; Sun,  7 Jun 2020 15:55:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D32742064C
-	for <bpf@archiver.kernel.org>; Sun,  7 Jun 2020 13:35:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5886B206F6
+	for <bpf@archiver.kernel.org>; Sun,  7 Jun 2020 15:55:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726561AbgFGNfw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 7 Jun 2020 09:35:52 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:37286 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726587AbgFGNfw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 7 Jun 2020 09:35:52 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-56-gAtFnUnCPQuRadnGrFS-tw-1; Sun, 07 Jun 2020 14:35:48 +0100
-X-MC-Unique: gAtFnUnCPQuRadnGrFS-tw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Sun, 7 Jun 2020 14:35:48 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Sun, 7 Jun 2020 14:35:48 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Stanislav Fomichev' <sdf@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>
-Subject: RE: [PATCH bpf v2] bpf: increase {get,set}sockopt optval size limit
-Thread-Topic: [PATCH bpf v2] bpf: increase {get,set}sockopt optval size limit
-Thread-Index: AQHWOs9eM1HPxgEZJ0SdZVJ+nDicwqjNKdyg
-Date:   Sun, 7 Jun 2020 13:35:48 +0000
-Message-ID: <676ee05282404ea98e5de55d0c254902@AcuMS.aculab.com>
-References: <20200605002155.93267-1-sdf@google.com>
-In-Reply-To: <20200605002155.93267-1-sdf@google.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1726643AbgFGPzw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 7 Jun 2020 11:55:52 -0400
+Received: from out03.mta.xmission.com ([166.70.13.233]:47446 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726631AbgFGPzw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 7 Jun 2020 11:55:52 -0400
+Received: from in01.mta.xmission.com ([166.70.13.51])
+        by out03.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jhxeF-00011L-FU; Sun, 07 Jun 2020 09:55:47 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jhxeA-00082p-MQ; Sun, 07 Jun 2020 09:55:47 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        akpm@linux-foundation.org, ast@kernel.org, davem@davemloft.net,
+        viro@zeniv.linux.org.uk, bpf <bpf@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20200329005528.xeKtdz2A0%akpm@linux-foundation.org>
+        <13fb3ab7-9ab1-b25f-52f2-40a6ca5655e1@i-love.sakura.ne.jp>
+        <202006051903.C44988B@keescook>
+        <875zc4c86z.fsf_-_@x220.int.ebiederm.org>
+        <20200606204326.GQ19604@bombadil.infradead.org>
+Date:   Sun, 07 Jun 2020 10:51:39 -0500
+In-Reply-To: <20200606204326.GQ19604@bombadil.infradead.org> (Matthew Wilcox's
+        message of "Sat, 6 Jun 2020 13:43:26 -0700")
+Message-ID: <87k10i7u2c.fsf@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain
+X-XM-SPF: eid=1jhxeA-00082p-MQ;;;mid=<87k10i7u2c.fsf@x220.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/AFHWWMP4Agup0r0xRemu29zCl6v/Lm6Y=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+Subject: Re: [RFC][PATCH] net/bpfilter:  Remove this broken and apparently unmantained
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-RnJvbTogU3RhbmlzbGF2IEZvbWljaGV2DQo+IFNlbnQ6IDA1IEp1bmUgMjAyMCAwMToyMg0KPiBB
-dHRhY2hpbmcgdG8gdGhlc2UgaG9va3MgY2FuIGJyZWFrIGlwdGFibGVzIGJlY2F1c2UgaXRzIG9w
-dHZhbCBpcw0KPiB1c3VhbGx5IHF1aXRlIGJpZywgb3IgYXQgbGVhc3QgYmlnZ2VyIHRoYW4gdGhl
-IGN1cnJlbnQgUEFHRV9TSVpFIGxpbWl0Lg0KPiANCj4gVGhlcmUgYXJlIHR3byBwb3NzaWJsZSB3
-YXlzIHRvIGZpeCBpdDoNCj4gMS4gSW5jcmVhc2UgdGhlIGxpbWl0IHRvIG1hdGNoIGlwdGFibGVz
-IG1heCBvcHR2YWwuDQo+IDIuIEltcGxlbWVudCBzb21lIHdheSB0byBieXBhc3MgdGhlIHZhbHVl
-IGlmIGl0J3MgdG9vIGJpZyBhbmQgdHJpZ2dlcg0KPiAgICBCUEYgb25seSB3aXRoIGxldmVsL29w
-dG5hbWUgc28gQlBGIGNhbiBzdGlsbCBkZWNpZGUgd2hldGhlcg0KPiAgICB0byBhbGxvdy9kZW55
-IGJpZyBzb2Nrb3B0cy4NCj4gDQo+IEkgd2VudCB3aXRoICMxIHdoaWNoIG1lYW5zIHdlIGFyZSBw
-b3RlbnRpYWxseSBpbmNyZWFzaW5nIHRoZQ0KPiBhbW91bnQgb2YgZGF0YSB3ZSBjb3B5IGZyb20g
-dGhlIHVzZXJzcGFjZSBmcm9tIFBBR0VfU0laRSB0byA1MTJNLg0KLi4uDQo+ICsJY29uc3QgaW50
-IG1heF9zdXBwb3J0ZWRfb3B0bGVuID0gNTEyICogMTAyNCAqIDEwMjQgKyAxMjg7DQoNCjUxMk1C
-IHNlZW1zIGEgYml0IGJpZy4NCkknZCBoYXZlIHRob3VnaHQgdGhhdCBpcHRhYmxlcyB3b3VsZCBi
-ZSB1c2FibGUgZnJvbSBhIDMyYml0IGFwcGxpY2F0aW9uDQp3aGVyZSB0aGF0IGlzIDEvNnRoIHRo
-ZSBwcm9jZXNzIGFkZHJlc3Mgc3BhY2UuDQpBbnl0aGluZyB0aGF0IG1pZ2h0IGJlIHRoYXQgYmln
-IG91Z2h0IHRvIGJlIGRvbmUgaW4gY2h1bmtzLg0KDQpJIHdhcyBsb29raW5nIGF0IHRoZSBTQ1RQ
-IHNvY2tldCBvcHRpb24gY29kZS4NCklTVFIgdGhhdCBtYXkgcmVxdWlyZSBqdXN0IG92ZXIgMjU2
-a0IgLSBzdGlsbCBzaWxseSwgYnV0IG5vdCBhcyBiYWQuDQoNClNDVFAgYWxzbyByZXF1aXJlcyB0
-aGF0IGdldHNvY2tvcHQoKSBjb3B5IHRoZSBidWZmZXIgaW4gZnJvbSB1c2Vyc3BhY2UuDQpPbmUg
-Y2FsbCByZXF1aXJlZCBtb3JlIHRoYW4gYSAnc29ja2FkZHIgc3RvcmFnZScgYmUgcmVhZCBpbi4N
-Cg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2Fk
-LCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5v
-OiAxMzk3Mzg2IChXYWxlcykNCg==
+Matthew Wilcox <willy@infradead.org> writes:
+
+> On Sat, Jun 06, 2020 at 02:20:36PM -0500, Eric W. Biederman wrote:
+>> @@ -39,7 +37,6 @@ static kernel_cap_t usermodehelper_inheritable = CAP_FULL_SET;
+>>  static DEFINE_SPINLOCK(umh_sysctl_lock);
+>>  static DECLARE_RWSEM(umhelper_sem);
+>>  static LIST_HEAD(umh_list);
+>> -static DEFINE_MUTEX(umh_list_lock);
+>
+> You can delete the umh_list too; you've deleted all its users.
+
+Good catch, thank you.
+
+Eric
 
