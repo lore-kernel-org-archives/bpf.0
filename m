@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FA7BC433E1
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A293C433E0
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:03:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F6852074B
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:01:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E713E207C3
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:03:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591660892;
-	bh=wJyh5j0fx3dTdY/TvsFuOEKeXxSb+H8xonC0coZh0V0=;
+	s=default; t=1591661021;
+	bh=za9EyI3o5uaFj1FcFu/tNsgXVP1mJnijVnQloGQKC8c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=XDktIEA6JcKZ9Nm2LM+YFenlW8PyXj8UW0XrwppSnqnnOxmmKgPLoHQuPOpilSe5j
-	 61/AITMTdIH+x6NNZIAZj4Of62Cupm7JrntVAz5E1s3aF203WGLNglPNDvue1B32Pv
-	 C+0YMgdglgmLpugL9GoQvqqhAfTkogGmyeU1s6eM=
+	b=JUwOjGu/VTru57B9NSuXil4/qPS/iXNMJHMmUuheK4XzAzmpF51/t9nhi0PWoihiv
+	 MvUEu7aeSMumzNdAAKZueRx+8hy2LIYFR00Es6wdONxb1GkxE8HmeWS9SvyBWipDZF
+	 XF8HHM3OQk4UZ/0p2j212l68KVjoGWt7Kgb6sV6w=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731681AbgFIABO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 20:01:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47082 "EHLO mail.kernel.org"
+        id S1730847AbgFIADW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 20:03:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46132 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730946AbgFHXW2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:22:28 -0400
+        id S1731225AbgFHXVv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:21:51 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A9F1E208B8;
-        Mon,  8 Jun 2020 23:22:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0E34A20842;
+        Mon,  8 Jun 2020 23:21:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658548;
-        bh=wJyh5j0fx3dTdY/TvsFuOEKeXxSb+H8xonC0coZh0V0=;
+        s=default; t=1591658510;
+        bh=za9EyI3o5uaFj1FcFu/tNsgXVP1mJnijVnQloGQKC8c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ywm0/pZwDZcF+0gSsWQd2lp21yqA9KL/sqOgacny5NDQYwTZdtndliWpLCB1iqptj
-         OuzHMDtTeGa7zJr/UlApwL2mhEj3UNIpArL+rbUMrsyXs5FaL736ZO6lfaJHnmA5NJ
-         MbbNPFlNFpI7xe5iJguvW+jRBkVTb596sso5kPw8=
+        b=0QWkDq//IfWdyHXzYu7A2xomoT1iponN6USptM6G49qEdIGy59BwDrpSqcDvHqWj7
+         Q2+BO6dp6oo+NurjVyFOEzsyNcmwmS1n2x+yI8Pr0d9g2eCV3PJJD000QHfw51FKzV
+         bN1omiVfWHEQfcni5tCQN5aC/UtnZ/2T6+ggaPh4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Anton Protopopov <a.s.protopopov@gmail.com>,
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 169/175] bpf: Fix map permissions check
-Date:   Mon,  8 Jun 2020 19:18:42 -0400
-Message-Id: <20200608231848.3366970-169-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 140/175] selftests/bpf: CONFIG_IPV6_SEG6_BPF required for test_seg6_loop.o
+Date:   Mon,  8 Jun 2020 19:18:13 -0400
+Message-Id: <20200608231848.3366970-140-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
 References: <20200608231848.3366970-1-sashal@kernel.org>
@@ -60,37 +60,34 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Anton Protopopov <a.s.protopopov@gmail.com>
+From: Alan Maguire <alan.maguire@oracle.com>
 
-[ Upstream commit 1ea0f9120c8ce105ca181b070561df5cbd6bc049 ]
+[ Upstream commit 3c8e8cf4b18b3a7034fab4c4504fc4b54e4b6195 ]
 
-The map_lookup_and_delete_elem() function should check for both FMODE_CAN_WRITE
-and FMODE_CAN_READ permissions because it returns a map element to user space.
+test_seg6_loop.o uses the helper bpf_lwt_seg6_adjust_srh();
+it will not be present if CONFIG_IPV6_SEG6_BPF is not specified.
 
-Fixes: bd513cd08f10 ("bpf: add MAP_LOOKUP_AND_DELETE_ELEM syscall")
-Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+Fixes: b061017f8b4d ("selftests/bpf: add realistic loop tests")
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20200527185700.14658-5-a.s.protopopov@gmail.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/1590147389-26482-2-git-send-email-alan.maguire@oracle.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/syscall.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/config | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 946cfdd3b2cc..e7af1ac69d75 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1118,7 +1118,8 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--	if (!(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
-+	if (!(map_get_sys_perms(map, f) & FMODE_CAN_READ) ||
-+	    !(map_get_sys_perms(map, f) & FMODE_CAN_WRITE)) {
- 		err = -EPERM;
- 		goto err_put;
- 	}
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 5dc109f4c097..b9601f13cf03 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -25,6 +25,7 @@ CONFIG_XDP_SOCKETS=y
+ CONFIG_FTRACE_SYSCALLS=y
+ CONFIG_IPV6_TUNNEL=y
+ CONFIG_IPV6_GRE=y
++CONFIG_IPV6_SEG6_BPF=y
+ CONFIG_NET_FOU=m
+ CONFIG_NET_FOU_IP_TUNNELS=y
+ CONFIG_IPV6_FOU=m
 -- 
 2.25.1
 
