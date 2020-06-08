@@ -7,47 +7,51 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 392B4C433DF
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:31:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0B68C433E0
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:33:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 16FCB20872
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:31:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8CA1F206C3
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:33:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591662680;
-	bh=wG6r09WBZXBQHy367q4m6MyNiVwiapMtLH9N6qQ59aE=;
+	s=default; t=1591662800;
+	bh=BXez2DSlSl51P+h9LqOJ6exEtf/VkbpZC0uv0fs2zX0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=VRlQqXaPyLXQ7lFR3pgCtQ4EFtMwoPMZWS6knDujVAsIAJe83BIXtgV+OyvOvIm3t
-	 7nH+13ftEqWirh+WEbdcVeMwyOJ2ytr+YFucfUn3WhdjUVnLO9GjAuJ489LSER7h0n
-	 9C5kOyqiBFC6qawBnb6GwqdiCmnkeEAc90AwmyKU=
+	b=o0tlLFLGGdLbvmCSS9HlfyWIT/LxPArS5lxGfIFVbsKwMiZcZeM+D76t5BBM8HPaJ
+	 4MgpWJXPfeBVisEe3HZ+XZyQj+O8Uvs2msScQ8P1vHXiyxMEk98p7cE3yU/NcVIOKx
+	 buPiz4BBRFhDs7wby6RiLfwDjtOUMaK6PCfnItt8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730065AbgFHXPg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:15:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36638 "EHLO mail.kernel.org"
+        id S1731453AbgFIAdH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 20:33:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728270AbgFHXPe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:15:34 -0400
+        id S1729966AbgFHXPB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:15:01 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E2E0B20801;
-        Mon,  8 Jun 2020 23:15:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 45A7D20B80;
+        Mon,  8 Jun 2020 23:14:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658133;
-        bh=wG6r09WBZXBQHy367q4m6MyNiVwiapMtLH9N6qQ59aE=;
+        s=default; t=1591658100;
+        bh=BXez2DSlSl51P+h9LqOJ6exEtf/VkbpZC0uv0fs2zX0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=emtDsbceKDXxlWniNLFFV1AzHJvI/S8gJhRkzM9ac8kiOkzW5Htug9VUSATjjUnWk
-         JBM6/uG/2oeybszudsTxbD//LQtyYpiqqAjAJ9KOM4XXLqDR00btpHj4F+avme6Pvc
-         f9jJakgt0PX9yel2kr3X9sFiXWJhWj96LLwO5KWA=
+        b=wKmF3dY24YsfQzYs898Q8NcD23SZH/Gu2jk4B8sUZo8Onxj4Z3nBLMidSnXjsFMjn
+         kjh8VpXDWUUMo1JqTHoXCBtfAZVP6LY/IXmTN0ZlHcCkqGzD0Se1C84YbUt3bkehjJ
+         3LKmOXOT8puKfvLic/vQpBo31+AQkjHEQuRRhRgM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Sasha Levin <sashal@kernel.org>, linux-kbuild@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 168/606] kbuild: Remove debug info from kallsyms linking
-Date:   Mon,  8 Jun 2020 19:04:53 -0400
-Message-Id: <20200608231211.3363633-168-sashal@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Brendan Gregg <brendan.d.gregg@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 141/606] bpf: Restrict bpf_probe_read{, str}() only to archs where they work
+Date:   Mon,  8 Jun 2020 19:04:26 -0400
+Message-Id: <20200608231211.3363633-141-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
@@ -60,140 +64,124 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-[ Upstream commit af73d78bd384aa9b8789aa6e7ddbb165f971276f ]
+commit 0ebeea8ca8a4d1d453ad299aef0507dab04f6e8d upstream.
 
-When CONFIG_DEBUG_INFO is enabled, the two kallsyms linking steps spend
-time collecting and writing the dwarf sections to the temporary output
-files. kallsyms does not need this information, and leaving it off
-halves their linking time. This is especially noticeable without
-CONFIG_DEBUG_INFO_REDUCED. The BTF linking stage, however, does still
-need those details.
+Given the legacy bpf_probe_read{,str}() BPF helpers are broken on archs
+with overlapping address ranges, we should really take the next step to
+disable them from BPF use there.
 
-Refactor the BTF and kallsyms generation stages slightly for more
-regularized temporary names. Skip debug during kallsyms links.
-Additionally move "info BTF" to the correct place since commit
-8959e39272d6 ("kbuild: Parameterize kallsyms generation and correct
-reporting"), which added "info LD ..." to vmlinux_link calls.
+To generally fix the situation, we've recently added new helper variants
+bpf_probe_read_{user,kernel}() and bpf_probe_read_{user,kernel}_str().
+For details on them, see 6ae08ae3dea2 ("bpf: Add probe_read_{user, kernel}
+and probe_read_{user,kernel}_str helpers").
 
-For a full debug info build with BTF, my link time goes from 1m06s to
-0m54s, saving about 12 seconds, or 18%.
+Given bpf_probe_read{,str}() have been around for ~5 years by now, there
+are plenty of users at least on x86 still relying on them today, so we
+cannot remove them entirely w/o breaking the BPF tracing ecosystem.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
+However, their use should be restricted to archs with non-overlapping
+address ranges where they are working in their current form. Therefore,
+move this behind a CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE and
+have x86, arm64, arm select it (other archs supporting it can follow-up
+on it as well).
+
+For the remaining archs, they can workaround easily by relying on the
+feature probe from bpftool which spills out defines that can be used out
+of BPF C code to implement the drop-in replacement for old/new kernels
+via: bpftool feature probe macro
+
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Link: https://lore.kernel.org/bpf/202003031814.4AEA3351@keescook
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+Acked-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Brendan Gregg <brendan.d.gregg@gmail.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/bpf/20200515101118.6508-2-daniel@iogearbox.net
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/link-vmlinux.sh | 28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ arch/arm/Kconfig         | 1 +
+ arch/arm64/Kconfig       | 1 +
+ arch/x86/Kconfig         | 1 +
+ init/Kconfig             | 3 +++
+ kernel/trace/bpf_trace.c | 6 ++++--
+ 5 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index dd484e92752e..ac569e197bfa 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -63,12 +63,18 @@ vmlinux_link()
- 	local lds="${objtree}/${KBUILD_LDS}"
- 	local output=${1}
- 	local objects
-+	local strip_debug
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 97864aabc2a6..579f7eb6968a 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -13,6 +13,7 @@ config ARM
+ 	select ARCH_HAS_KEEPINITRD
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
++	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 	select ARCH_HAS_PTE_SPECIAL if ARM_LPAE
+ 	select ARCH_HAS_PHYS_TO_DMA
+ 	select ARCH_HAS_SETUP_DMA_OPS
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 0b30e884e088..84e1f0a43cdb 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -21,6 +21,7 @@ config ARM64
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_KEEPINITRD
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
++	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 	select ARCH_HAS_PTE_DEVMAP
+ 	select ARCH_HAS_PTE_SPECIAL
+ 	select ARCH_HAS_SETUP_DMA_OPS
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index beea77046f9b..0bc9a74468be 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -70,6 +70,7 @@ config X86
+ 	select ARCH_HAS_KCOV			if X86_64
+ 	select ARCH_HAS_MEM_ENCRYPT
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
++	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 	select ARCH_HAS_PMEM_API		if X86_64
+ 	select ARCH_HAS_PTE_DEVMAP		if X86_64
+ 	select ARCH_HAS_PTE_SPECIAL
+diff --git a/init/Kconfig b/init/Kconfig
+index ef59c5c36cdb..59908e87ece2 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2223,6 +2223,9 @@ config ASN1
  
- 	info LD ${output}
+ source "kernel/Kconfig.locks"
  
- 	# skip output file argument
- 	shift
- 
-+	# The kallsyms linking does not need debug symbols included.
-+	if [ "$output" != "${output#.tmp_vmlinux.kallsyms}" ] ; then
-+		strip_debug=-Wl,--strip-debug
-+	fi
++config ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
++	bool
 +
- 	if [ "${SRCARCH}" != "um" ]; then
- 		objects="--whole-archive			\
- 			${KBUILD_VMLINUX_OBJS}			\
-@@ -79,6 +85,7 @@ vmlinux_link()
- 			${@}"
+ config ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+ 	bool
  
- 		${LD} ${KBUILD_LDFLAGS} ${LDFLAGS_vmlinux}	\
-+			${strip_debug#-Wl,}			\
- 			-o ${output}				\
- 			-T ${lds} ${objects}
- 	else
-@@ -91,6 +98,7 @@ vmlinux_link()
- 			${@}"
- 
- 		${CC} ${CFLAGS_vmlinux}				\
-+			${strip_debug}				\
- 			-o ${output}				\
- 			-Wl,-T,${lds}				\
- 			${objects}				\
-@@ -106,6 +114,8 @@ gen_btf()
- {
- 	local pahole_ver
- 	local bin_arch
-+	local bin_format
-+	local bin_file
- 
- 	if ! [ -x "$(command -v ${PAHOLE})" ]; then
- 		echo >&2 "BTF: ${1}: pahole (${PAHOLE}) is not available"
-@@ -118,8 +128,9 @@ gen_btf()
- 		return 1
- 	fi
- 
--	info "BTF" ${2}
- 	vmlinux_link ${1}
-+
-+	info "BTF" ${2}
- 	LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}
- 
- 	# dump .BTF section into raw binary file to link with final vmlinux
-@@ -127,11 +138,12 @@ gen_btf()
- 		cut -d, -f1 | cut -d' ' -f2)
- 	bin_format=$(LANG=C ${OBJDUMP} -f ${1} | grep 'file format' | \
- 		awk '{print $4}')
-+	bin_file=.btf.vmlinux.bin
- 	${OBJCOPY} --change-section-address .BTF=0 \
- 		--set-section-flags .BTF=alloc -O binary \
--		--only-section=.BTF ${1} .btf.vmlinux.bin
-+		--only-section=.BTF ${1} $bin_file
- 	${OBJCOPY} -I binary -O ${bin_format} -B ${bin_arch} \
--		--rename-section .data=.BTF .btf.vmlinux.bin ${2}
-+		--rename-section .data=.BTF $bin_file ${2}
- }
- 
- # Create ${2} .o file with all symbols from the ${1} object file
-@@ -166,8 +178,8 @@ kallsyms()
- kallsyms_step()
- {
- 	kallsymso_prev=${kallsymso}
--	kallsymso=.tmp_kallsyms${1}.o
--	kallsyms_vmlinux=.tmp_vmlinux${1}
-+	kallsyms_vmlinux=.tmp_vmlinux.kallsyms${1}
-+	kallsymso=${kallsyms_vmlinux}.o
- 
- 	vmlinux_link ${kallsyms_vmlinux} "${kallsymso_prev}" ${btf_vmlinux_bin_o}
- 	kallsyms ${kallsyms_vmlinux} ${kallsymso}
-@@ -190,7 +202,6 @@ cleanup()
- {
- 	rm -f .btf.*
- 	rm -f .tmp_System.map
--	rm -f .tmp_kallsyms*
- 	rm -f .tmp_vmlinux*
- 	rm -f System.map
- 	rm -f vmlinux
-@@ -257,9 +268,8 @@ tr '\0' '\n' < modules.builtin.modinfo | sed -n 's/^[[:alnum:]:_]*\.file=//p' |
- 
- btf_vmlinux_bin_o=""
- if [ -n "${CONFIG_DEBUG_INFO_BTF}" ]; then
--	if gen_btf .tmp_vmlinux.btf .btf.vmlinux.bin.o ; then
--		btf_vmlinux_bin_o=.btf.vmlinux.bin.o
--	else
-+	btf_vmlinux_bin_o=.btf.vmlinux.bin.o
-+	if ! gen_btf .tmp_vmlinux.btf $btf_vmlinux_bin_o ; then
- 		echo >&2 "Failed to generate BTF for vmlinux"
- 		echo >&2 "Try to disable CONFIG_DEBUG_INFO_BTF"
- 		exit 1
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index b899a2d7e900..158233a2ab6c 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -857,14 +857,16 @@ tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_probe_read_user_proto;
+ 	case BPF_FUNC_probe_read_kernel:
+ 		return &bpf_probe_read_kernel_proto;
+-	case BPF_FUNC_probe_read:
+-		return &bpf_probe_read_compat_proto;
+ 	case BPF_FUNC_probe_read_user_str:
+ 		return &bpf_probe_read_user_str_proto;
+ 	case BPF_FUNC_probe_read_kernel_str:
+ 		return &bpf_probe_read_kernel_str_proto;
++#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
++	case BPF_FUNC_probe_read:
++		return &bpf_probe_read_compat_proto;
+ 	case BPF_FUNC_probe_read_str:
+ 		return &bpf_probe_read_compat_str_proto;
++#endif
+ #ifdef CONFIG_CGROUPS
+ 	case BPF_FUNC_get_current_cgroup_id:
+ 		return &bpf_get_current_cgroup_id_proto;
 -- 
 2.25.1
 
