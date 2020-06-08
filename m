@@ -7,48 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C12FC433E0
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5685EC433E0
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CD51207ED
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 315C320737
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591664174;
-	bh=7qRrtypSSmzWLdDkp9783c/owwEwmGd/9SP07NiOk2s=;
+	s=default; t=1591664186;
+	bh=t8EX+OcVvPjkVogK7HTxyL6ukX9m/HBgPkG41B/CT7o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WnHRaD6pik+5M9Ow1848dp3BJS4u0JgJ5ks639hcaCWuzXj02JmWk5k6N7EN4cf5G
-	 g7/3V4NrMmXkjjnhXskJbcIcNvT3oAWJAeyaZRyBoBmP1q8Yqj6XzzfZ0up6sgNcXj
-	 TtOo3TWxM+F/YNSjzktJMLNgKUamqS8FnU7C5RsU=
+	b=rZPlaIbVceiTcbcdtPEIiY3okKp134ZJXrR1MxfXvM96/SxWE8qNwb3iqqAYuUicZ
+	 GoFjGwLfUzmZWehVWkqtzcSOUhHqgbZQbScQrR/5tk+gyzt1WR+AaFCHmMUBaorEAd
+	 Nser049i17DasqvXkJMaJvP/cOBYfbVfgsSOmCVs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728474AbgFIA4G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 20:56:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54774 "EHLO mail.kernel.org"
+        id S1728318AbgFHXJF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 19:09:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54628 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728342AbgFHXJI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:09:08 -0400
+        id S1728314AbgFHXJC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:09:02 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1D81F208C9;
-        Mon,  8 Jun 2020 23:09:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AB0CB208E4;
+        Mon,  8 Jun 2020 23:09:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657748;
-        bh=7qRrtypSSmzWLdDkp9783c/owwEwmGd/9SP07NiOk2s=;
+        s=default; t=1591657741;
+        bh=t8EX+OcVvPjkVogK7HTxyL6ukX9m/HBgPkG41B/CT7o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RPOGdBSXEHTJ9BjQyX7JAFlmdStNtE5CcFM/TDR0O77+gY9WGx6XW2W5FUIZMc+1Q
-         H8SG7qjhA0L8Wnp3gQMk5YPjGbJfC9XX7VsBqKo7/2x7FWwPY3/G8Md/g8Ygi5hT8F
-         o8IloG+sZrYZ1sXXNAt1yf8YYXeaL7kzynH/QAHU=
+        b=IroOBB1iUIAbfWFEHwfez+w4FimyjYl1vuD59NknoZ2ENcif8Ul+4Z7s9EM+6mNXx
+         OdNuQ9pXXqiVIg/He419YAyJvdXbpePYsXTJUHCaSXxKlxdJnJGNLAC5+ci33MozDM
+         8S4O/QBqADEG0DZtfGNkdVyHBR/7e6zUNrS2TKGA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrii Nakryiko <andriin@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Veronika Kabatova <vkabatov@redhat.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 135/274] selftests/bpf: Add runqslower binary to .gitignore
-Date:   Mon,  8 Jun 2020 19:03:48 -0400
-Message-Id: <20200608230607.3361041-135-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 130/274] selftests/bpf: Fix memory leak in test selector
+Date:   Mon,  8 Jun 2020 19:03:43 -0400
+Message-Id: <20200608230607.3361041-130-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -63,31 +62,58 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit e4e8f4d047fdcf7ac7d944e266e85d8041f16cd6 ]
+[ Upstream commit f25d5416d64c796aa639136eb0b076c8bd579b54 ]
 
-With recent changes, runqslower is being copied into selftests/bpf root
-directory. So add it into .gitignore.
+Free test selector substrings, which were strdup()'ed.
 
-Fixes: b26d1e2b6028 ("selftests/bpf: Copy runqslower to OUTPUT directory")
+Fixes: b65053cd94f4 ("selftests/bpf: Add whitelist/blacklist of test names to test_progs")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Cc: Veronika Kabatova <vkabatov@redhat.com>
-Link: https://lore.kernel.org/bpf/20200429012111.277390-12-andriin@fb.com
+Link: https://lore.kernel.org/bpf/20200429012111.277390-6-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/.gitignore | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_progs.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index c30079c86998..35a577ca0226 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -39,4 +39,4 @@ test_cpp
- /no_alu32
- /bpf_gcc
- /tools
--
-+/runqslower
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index b521e0a512b6..86d0020c9eec 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -420,6 +420,18 @@ static int libbpf_print_fn(enum libbpf_print_level level,
+ 	return 0;
+ }
+ 
++static void free_str_set(const struct str_set *set)
++{
++	int i;
++
++	if (!set)
++		return;
++
++	for (i = 0; i < set->cnt; i++)
++		free((void *)set->strs[i]);
++	free(set->strs);
++}
++
+ static int parse_str_list(const char *s, struct str_set *set)
+ {
+ 	char *input, *state = NULL, *next, **tmp, **strs = NULL;
+@@ -756,11 +768,11 @@ int main(int argc, char **argv)
+ 	fprintf(stdout, "Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
+ 		env.succ_cnt, env.sub_succ_cnt, env.skip_cnt, env.fail_cnt);
+ 
+-	free(env.test_selector.blacklist.strs);
+-	free(env.test_selector.whitelist.strs);
++	free_str_set(&env.test_selector.blacklist);
++	free_str_set(&env.test_selector.whitelist);
+ 	free(env.test_selector.num_set);
+-	free(env.subtest_selector.blacklist.strs);
+-	free(env.subtest_selector.whitelist.strs);
++	free_str_set(&env.subtest_selector.blacklist);
++	free_str_set(&env.subtest_selector.whitelist);
+ 	free(env.subtest_selector.num_set);
+ 
+ 	return env.fail_cnt ? EXIT_FAILURE : EXIT_SUCCESS;
 -- 
 2.25.1
 
