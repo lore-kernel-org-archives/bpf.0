@@ -7,46 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 727DFC433E1
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D32C0C433E0
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 52D21207C3
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B2E7C2076C
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591664186;
-	bh=eLGvbqasm5wT9Qyyy9tJRN20dYjw6ehaSKc9NufMyLk=;
+	s=default; t=1591664190;
+	bh=tHgLy2WBJHYxlwWYiAqfHC5kG4VoDvhBZLkmec1G7tk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=xNn0bXOmRKW/EsyjMEtsIOTVl0OJNGgc55vj9tban7RlLhdaUF3VfP4eHGjyf3/mW
-	 ncwZGEspxfHlY6AWuoOzRazv1534+Zs7/25bcgvT/SsjO+EiRXIIzkTquYHiVM7LIT
-	 PQnDzRYAUKdLqu/xJW/C0YKuhsasm6n82QGD2nzc=
+	b=KB5IfVszpAi7m2L7bYtCfZ2/sbI8629mUUr2iv//+E3kHVR+Iv4zOD6vug1ydu4hc
+	 +2G+RqWKB/mYwrp2DiIJ5azfSgqa0s+xdv+ImzrSjpFXDWwgS0xGayJrdh+mFrJUJG
+	 deQIUPseJIe0JzmpYokdV8blGrJ6jmUoEU1ApPdQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728761AbgFIA4Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 20:56:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54714 "EHLO mail.kernel.org"
+        id S1727940AbgFIA43 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 20:56:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54640 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728323AbgFHXJF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:09:05 -0400
+        id S1727032AbgFHXJD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:09:03 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 817A620B80;
-        Mon,  8 Jun 2020 23:09:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EB17120897;
+        Mon,  8 Jun 2020 23:09:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657745;
-        bh=eLGvbqasm5wT9Qyyy9tJRN20dYjw6ehaSKc9NufMyLk=;
+        s=default; t=1591657742;
+        bh=tHgLy2WBJHYxlwWYiAqfHC5kG4VoDvhBZLkmec1G7tk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UFAcSbgjNs+965jiLFuV2TERJGezRivtk/hkb7aQtTZ0g0CynvXb7o3u3JKZ9qYnf
-         uL9elq8MtaRcyro2jinmJ2n2Jd+DeIfwvGy4JwkgJxKr6SF/b1cGKuXekCI+AEHj3K
-         4eXDZu7OHMw6kuOvH1kqMdf50vf6DEau9O75GQJw=
+        b=ZjeVo+bgkrSoq4ezmky1uef9fp4JAJpdj6tUG/z9TIXZucAycWCsB8CGzKqun9fFs
+         hm1wVkCOQSOP6PXaEW1lTXdPMPtOTNo0C1muRCHJagbSHMbt6eIjVQzeKuLnAE9ca5
+         Xxjh/2k2v5LWJR5Mqi05m1bequd4EFmaAXVk3Jxs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrii Nakryiko <andriin@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        KP Singh <kpsingh@google.com>, Sasha Levin <sashal@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 133/274] libbpf: Fix huge memory leak in libbpf_find_vmlinux_btf_id()
-Date:   Mon,  8 Jun 2020 19:03:46 -0400
-Message-Id: <20200608230607.3361041-133-sashal@kernel.org>
+        Song Liu <songliubraving@fb.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 131/274] selftests/bpf: Fix memory leak in extract_build_id()
+Date:   Mon,  8 Jun 2020 19:03:44 -0400
+Message-Id: <20200608230607.3361041-131-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -61,43 +63,32 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit 3521ffa2ee9a48c3236c93f54ae11c074490ebce ]
+[ Upstream commit 9f56bb531a809ecaa7f0ddca61d2cf3adc1cb81a ]
 
-BTF object wasn't freed.
+getline() allocates string, which has to be freed.
 
-Fixes: a6ed02cac690 ("libbpf: Load btf_vmlinux only once per object.")
+Fixes: 81f77fd0deeb ("bpf: add selftest for stackmap with BPF_F_STACK_BUILD_ID")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Cc: KP Singh <kpsingh@google.com>
-Link: https://lore.kernel.org/bpf/20200429012111.277390-9-andriin@fb.com
+Cc: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/bpf/20200429012111.277390-7-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_progs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 63fc872723fc..cd53204d33f0 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -6688,6 +6688,7 @@ int libbpf_find_vmlinux_btf_id(const char *name,
- 			       enum bpf_attach_type attach_type)
- {
- 	struct btf *btf;
-+	int err;
- 
- 	btf = libbpf_find_kernel_btf();
- 	if (IS_ERR(btf)) {
-@@ -6695,7 +6696,9 @@ int libbpf_find_vmlinux_btf_id(const char *name,
- 		return -EINVAL;
- 	}
- 
--	return __find_vmlinux_btf_id(btf, name, attach_type);
-+	err = __find_vmlinux_btf_id(btf, name, attach_type);
-+	btf__free(btf);
-+	return err;
- }
- 
- static int libbpf_find_prog_btf_id(const char *name, __u32 attach_prog_fd)
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 86d0020c9eec..93970ec1c9e9 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -351,6 +351,7 @@ int extract_build_id(char *build_id, size_t size)
+ 		len = size;
+ 	memcpy(build_id, line, len);
+ 	build_id[len] = '\0';
++	free(line);
+ 	return 0;
+ err:
+ 	fclose(fp);
 -- 
 2.25.1
 
