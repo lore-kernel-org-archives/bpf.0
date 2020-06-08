@@ -7,48 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E4CEC433E0
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:13:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4073AC433E0
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:15:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D691B2078D
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:13:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D5672078D
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:15:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591661599;
-	bh=3PuiUQqDTe/7yEbzJ6QkJxv9BBE61RSsdN3LyjCVq2A=;
+	s=default; t=1591661706;
+	bh=JhpQfRsModk5sQ9aL2T3NULoav7X7hkWKs2gzjta+OE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=I5AlPT/jMVPK5Xh3JDQyKkg90oDayki3oEYAnM1aOhs6JZkeJHFC4rWzia6JPW9VU
-	 JHghhHiqzn1mKiobubKqxB4+ABSEgCw09El9q8gcO3iQogGXnaH1nQmFtlNCL4rI9X
-	 cTJXQIjnha57tH0RZn9iyIF0RaUMjvZnZ5xutOA4=
+	b=HLYkw/ayJ+GxQh0M132/W8wsh3+be5Ybd2ZCqPs75Gk93RMkuCoJPRGFVzH51KVTJ
+	 5Ims/d5NN7fsXEWN+2b0Av7IIpVNL9sH70pBSg0YZM7PVS8KMiwSCCkOWwgEqfAxKZ
+	 23VlehS815tVlWYZDBOQGZymU1kJybrBLQ0NaDqk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730809AbgFHXTd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:19:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42402 "EHLO mail.kernel.org"
+        id S1732384AbgFIAOn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 20:14:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41838 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730803AbgFHXTd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:19:33 -0400
+        id S1728767AbgFHXTI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:19:08 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D339E2086A;
-        Mon,  8 Jun 2020 23:19:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D326920823;
+        Mon,  8 Jun 2020 23:19:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658372;
-        bh=3PuiUQqDTe/7yEbzJ6QkJxv9BBE61RSsdN3LyjCVq2A=;
+        s=default; t=1591658348;
+        bh=JhpQfRsModk5sQ9aL2T3NULoav7X7hkWKs2gzjta+OE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PVB0UJnh+X/PZ77XJKYy0Oir0Kcc2cdWr2Lx+lownIryuTaQ+XrA/YqZSl1ADooBX
-         Tjpn7DUG5vH4HzvdicXv8mS3o5F3XoV3wv68EDvImFGbpbJ5QhGM9Fj5Vgnat0glGv
-         NjXxcxaeByoYei/+n9T42ktT/dFfHuBt/7v/EY8s=
+        b=rpFbyzgNNmH4LspWHtunhToYT4EegV9c64u/IgjnBBcozllYp17ZHKoUEPd0BeDC8
+         Cg1toVKMQFAvDL1NZ1UAgtmjtbcyPdrdlHMiv19JOnJuzrnFciIrd08G27Ql5SOVim
+         x6N5BQy/9daRoLFkT2OzMc+qyj88eozW8iovi4Lg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+Cc:     Andrii Nakryiko <andriin@fb.com>, Alston Tang <alston64@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 035/175] ixgbe: Fix XDP redirect on archs with PAGE_SIZE above 4K
-Date:   Mon,  8 Jun 2020 19:16:28 -0400
-Message-Id: <20200608231848.3366970-35-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 016/175] libbpf: Fix memory leak and possible double-free in hashmap__clear
+Date:   Mon,  8 Jun 2020 19:16:09 -0400
+Message-Id: <20200608231848.3366970-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
 References: <20200608231848.3366970-1-sashal@kernel.org>
@@ -61,46 +59,44 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jesper Dangaard Brouer <brouer@redhat.com>
+From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit 88eb0ee17b2ece64fcf6689a4557a5c2e7a89c4b ]
+[ Upstream commit 229bf8bf4d910510bc1a2fd0b89bd467cd71050d ]
 
-The ixgbe driver have another memory model when compiled on archs with
-PAGE_SIZE above 4096 bytes. In this mode it doesn't split the page in
-two halves, but instead increment rx_buffer->page_offset by truesize of
-packet (which include headroom and tailroom for skb_shared_info).
+Fix memory leak in hashmap_clear() not freeing hashmap_entry structs for each
+of the remaining entries. Also NULL-out bucket list to prevent possible
+double-free between hashmap__clear() and hashmap__free().
 
-This is done correctly in ixgbe_build_skb(), but in ixgbe_rx_buffer_flip
-which is currently only called on XDP_TX and XDP_REDIRECT, it forgets
-to add the tailroom for skb_shared_info. This breaks XDP_REDIRECT, for
-veth and cpumap.  Fix by adding size of skb_shared_info tailroom.
+Running test_progs-asan flavor clearly showed this problem.
 
-Maintainers notice: This fix have been queued to Jeff.
-
-Fixes: 6453073987ba ("ixgbe: add initial support for xdp redirect")
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Reported-by: Alston Tang <alston64@fb.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Cc: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-Link: https://lore.kernel.org/bpf/158945344946.97035.17031588499266605743.stgit@firesoul
+Link: https://lore.kernel.org/bpf/20200429012111.277390-5-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/lib/bpf/hashmap.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index a26f9fb95ac0..edaa0bffa5c3 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -2254,7 +2254,8 @@ static void ixgbe_rx_buffer_flip(struct ixgbe_ring *rx_ring,
- 	rx_buffer->page_offset ^= truesize;
- #else
- 	unsigned int truesize = ring_uses_build_skb(rx_ring) ?
--				SKB_DATA_ALIGN(IXGBE_SKB_PAD + size) :
-+				SKB_DATA_ALIGN(IXGBE_SKB_PAD + size) +
-+				SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) :
- 				SKB_DATA_ALIGN(size);
+diff --git a/tools/lib/bpf/hashmap.c b/tools/lib/bpf/hashmap.c
+index 6122272943e6..9ef9f6201d8b 100644
+--- a/tools/lib/bpf/hashmap.c
++++ b/tools/lib/bpf/hashmap.c
+@@ -56,7 +56,14 @@ struct hashmap *hashmap__new(hashmap_hash_fn hash_fn,
  
- 	rx_buffer->page_offset += truesize;
+ void hashmap__clear(struct hashmap *map)
+ {
++	struct hashmap_entry *cur, *tmp;
++	int bkt;
++
++	hashmap__for_each_entry_safe(map, cur, tmp, bkt) {
++		free(cur);
++	}
+ 	free(map->buckets);
++	map->buckets = NULL;
+ 	map->cap = map->cap_bits = map->sz = 0;
+ }
+ 
 -- 
 2.25.1
 
