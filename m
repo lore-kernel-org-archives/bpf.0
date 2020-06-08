@@ -7,48 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE016C433DF
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:57:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97865C433DF
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 01:02:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9BAA920737
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:57:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6DD2620737
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 01:02:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591664250;
-	bh=fK82cI40GO1yH3Ip1kLba1zXWfkLTxYg+MFpEbXh69w=;
+	s=default; t=1591664542;
+	bh=j6UMYv/Uq7h+aGYlgoZS4ffwA3i/V3dW4llsla38PK0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ISXj9q0izmaJrSw+q80fvKlsrJU/Ud9g6GqNkUwdl3Rt07ak30iUHNZwwPePZ+nXz
-	 Q99HFiLpHMRhCt6dLKz4QptV8sHq4TouSN9ANmdh14TAYqZL6vkfP5VIEK+gbTufI+
-	 jbavZcuaJEftiHBFSYbHD8t+Qi8ZDnpGhSk8tvvE=
+	b=thal5zhbdCrykTLWBrM2+sctNTfLJeM06E4+nw8J6OxYYhKjbEdMhxSJoAwoMT+1v
+	 BI7Sz8zH3sKGnBzXsMxTgokUWQHeMfZ0ZcApBHZaMg3c16nS9kCthtNhLs50et9mCu
+	 xdYwBLibhoysOxvi+PLAjjauKsxY/dAdMnyWYE4I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728274AbgFHXIx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:08:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54422 "EHLO mail.kernel.org"
+        id S1729272AbgFIBCC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 21:02:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52784 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727000AbgFHXIx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:08:53 -0400
+        id S1728060AbgFHXH5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:07:57 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6ED9D2085B;
-        Mon,  8 Jun 2020 23:08:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B6BB22087E;
+        Mon,  8 Jun 2020 23:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657732;
-        bh=fK82cI40GO1yH3Ip1kLba1zXWfkLTxYg+MFpEbXh69w=;
+        s=default; t=1591657676;
+        bh=j6UMYv/Uq7h+aGYlgoZS4ffwA3i/V3dW4llsla38PK0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AB2x00QQzebqBsUwR4YxJzpr5+xeA8I+kaWTScWv1pvzB4lZ32TZQhAQ72rT/0Htb
-         iYMGZaiSMGr4z7ARXLCAUdlKvhYOxRin5QoowGhMP6wiqZswdRHKYnI2JDZ92dWtE7
-         6L5THfCOknEfk/y7lgBM629S6VtZ+NFlKLGNfXbU=
+        b=RoU4TOGqd9y6w5CHHhFk7Nosj9PVPdRo+E3YBgEmKF8cW/Tex2XKuyQOBRmSXz9aA
+         vi6fRLFdJ4sWgZhkugrhJRwBn3hklab5/l1Ndud/HIbN3ahYd3WIK/QQnoFMyICPqK
+         /lIiSsHUttdCitVY0VsrAlJKJUUJzr7Pd5gRo4BM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Luke Nelson <lukenels@cs.washington.edu>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Xi Wang <xi.wang@gmail.com>, Sasha Levin <sashal@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.7 123/274] bpf, riscv: Fix tail call count off by one in RV32 BPF JIT
-Date:   Mon,  8 Jun 2020 19:03:36 -0400
-Message-Id: <20200608230607.3361041-123-sashal@kernel.org>
+Cc:     Willem de Bruijn <willemb@google.com>,
+        Petar Penkov <ppenkov@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 084/274] tun: correct header offsets in napi frags mode
+Date:   Mon,  8 Jun 2020 19:02:57 -0400
+Message-Id: <20200608230607.3361041-84-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -61,46 +60,68 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Luke Nelson <lukenels@cs.washington.edu>
+From: Willem de Bruijn <willemb@google.com>
 
-[ Upstream commit 745abfaa9eafa597d31fdf24a3249e5206a98768 ]
+[ Upstream commit 96aa1b22bd6bb9fccf62f6261f390ed6f3e7967f ]
 
-This patch fixes an off by one error in the RV32 JIT handling for BPF
-tail call. Currently, the code decrements TCC before checking if it
-is less than zero. This limits the maximum number of tail calls to 32
-instead of 33 as in other JITs. The fix is to instead check the old
-value of TCC before decrementing.
+Tun in IFF_NAPI_FRAGS mode calls napi_gro_frags. Unlike netif_rx and
+netif_gro_receive, this expects skb->data to point to the mac layer.
 
-Fixes: 5f316b65e99f ("riscv, bpf: Add RV32G eBPF JIT")
-Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Xi Wang <xi.wang@gmail.com>
-Link: https://lore.kernel.org/bpf/20200421002804.5118-1-luke.r.nels@gmail.com
+But skb_probe_transport_header, __skb_get_hash_symmetric, and
+xdp_do_generic in tun_get_user need skb->data to point to the network
+header. Flow dissection also needs skb->protocol set, so
+eth_type_trans has to be called.
+
+Ensure the link layer header lies in linear as eth_type_trans pulls
+ETH_HLEN. Then take the same code paths for frags as for not frags.
+Push the link layer header back just before calling napi_gro_frags.
+
+By pulling up to ETH_HLEN from frag0 into linear, this disables the
+frag0 optimization in the special case when IFF_NAPI_FRAGS is used
+with zero length iov[0] (and thus empty skb->linear).
+
+Fixes: 90e33d459407 ("tun: enable napi_gro_frags() for TUN/TAP driver")
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Acked-by: Petar Penkov <ppenkov@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/net/bpf_jit_comp32.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/tun.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
-index 302934177760..11083d4d5f2d 100644
---- a/arch/riscv/net/bpf_jit_comp32.c
-+++ b/arch/riscv/net/bpf_jit_comp32.c
-@@ -770,12 +770,13 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
- 	emit_bcc(BPF_JGE, lo(idx_reg), RV_REG_T1, off, ctx);
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 44889eba1dbc..b984733c6c31 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1871,8 +1871,11 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 		skb->dev = tun->dev;
+ 		break;
+ 	case IFF_TAP:
+-		if (!frags)
+-			skb->protocol = eth_type_trans(skb, tun->dev);
++		if (frags && !pskb_may_pull(skb, ETH_HLEN)) {
++			err = -ENOMEM;
++			goto drop;
++		}
++		skb->protocol = eth_type_trans(skb, tun->dev);
+ 		break;
+ 	}
  
- 	/*
--	 * if ((temp_tcc = tcc - 1) < 0)
-+	 * temp_tcc = tcc - 1;
-+	 * if (tcc < 0)
- 	 *   goto out;
- 	 */
- 	emit(rv_addi(RV_REG_T1, RV_REG_TCC, -1), ctx);
- 	off = (tc_ninsn - (ctx->ninsns - start_insn)) << 2;
--	emit_bcc(BPF_JSLT, RV_REG_T1, RV_REG_ZERO, off, ctx);
-+	emit_bcc(BPF_JSLT, RV_REG_TCC, RV_REG_ZERO, off, ctx);
+@@ -1929,9 +1932,12 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 	}
  
- 	/*
- 	 * prog = array->ptrs[index];
+ 	if (frags) {
++		u32 headlen;
++
+ 		/* Exercise flow dissector code path. */
+-		u32 headlen = eth_get_headlen(tun->dev, skb->data,
+-					      skb_headlen(skb));
++		skb_push(skb, ETH_HLEN);
++		headlen = eth_get_headlen(tun->dev, skb->data,
++					  skb_headlen(skb));
+ 
+ 		if (unlikely(headlen > skb_headlen(skb))) {
+ 			this_cpu_inc(tun->pcpu_stats->rx_dropped);
 -- 
 2.25.1
 
