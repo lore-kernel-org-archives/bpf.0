@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FC89C433DF
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:29:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1233CC433E3
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:29:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2DA542078B
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:29:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E3D3A2078B
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:29:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591662543;
-	bh=SCfhZTIaHqAp/kDN9R0eV/qpGB7J/zlJUu4kD5LbpR4=;
+	s=default; t=1591662577;
+	bh=GYCIRJadqCjtngCxpF39DU3VLAgOV9p5ZuU8EFPmBRQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=mlYG7vn2XqQo0Jbshk6/5ptiquXMvv5p9ujYIzF8z+B3945cHYEZOApGs9l5m54WL
-	 +77vIodfo5wZ4Zi63hTUGQvkmdleGLeasm7cyOJuNvr6t+e9WDrf6ktMdxIDjKupvm
-	 YzwB+UcZ/qt0eClafXz2jkf77ElU99HzRE02X1Zo=
+	b=kO36c/crn5iAIFfSVCMdALlNhl8gxytbaanyw66E5ycd7sAFhIRn3ZnemtactpWt9
+	 n9BFBDnpNa9cDwKNe2JD6djFxjhOkvozenrwtE4WLtXKZh8UAx4KkOzZDUNX6/swUP
+	 d3kbU0MK252Y6wGDmRUf+UgX3tfONwuHCRQcMOqM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731503AbgFIA2n (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 20:28:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37598 "EHLO mail.kernel.org"
+        id S1731209AbgFIA3E (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 20:29:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37500 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727961AbgFHXQR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:16:17 -0400
+        id S1730188AbgFHXQM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:16:12 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AF3D220870;
-        Mon,  8 Jun 2020 23:16:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 081222076C;
+        Mon,  8 Jun 2020 23:16:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658176;
-        bh=SCfhZTIaHqAp/kDN9R0eV/qpGB7J/zlJUu4kD5LbpR4=;
+        s=default; t=1591658171;
+        bh=GYCIRJadqCjtngCxpF39DU3VLAgOV9p5ZuU8EFPmBRQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NlDhpgY3zdcxammlDi8Szyi/2zvJ7gXCxtW6Sj36eBLjcVLWP8V0YZzSg+3m1gA9m
-         CSVMqQGDB3WdER5VEAm3VKPmQ6SogVBPMEi5POAlcXYptnXQ1GPLA8WJLD3LHNm6Oa
-         BMON3MP4ROd0jd18g6uM9jR/fV13LPqWfQ5QsVZg=
+        b=f+6EALdU7eNA1mZXNXw3+u3DH0+tJl9DOMsWtGMxBx5EmWhgZmoAfeCB2glw4+vbq
+         aJO2U8a1RPl/a3yF0hr8Ab1lmUzhJNoF5kF2pFo5ttE2r/2pCoCa6Xs54PpEDeVkLP
+         yD+38i2PwbGv9Lst42OrRXiv09IBXopQQzuU1psY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andriin@fb.com>, Jann Horn <jannh@google.com>,
+Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 202/606] bpf: Prevent mmap()'ing read-only maps as writable
-Date:   Mon,  8 Jun 2020 19:05:27 -0400
-Message-Id: <20200608231211.3363633-202-sashal@kernel.org>
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 198/606] flow_dissector: Drop BPF flow dissector prog ref on netns cleanup
+Date:   Mon,  8 Jun 2020 19:05:23 -0400
+Message-Id: <20200608231211.3363633-198-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
@@ -59,110 +60,95 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+From: Jakub Sitnicki <jakub@cloudflare.com>
 
-[ Upstream commit dfeb376dd4cb2c5004aeb625e2475f58a5ff2ea7 ]
+commit 5cf65922bb15279402e1e19b5ee8c51d618fa51f upstream.
 
-As discussed in [0], it's dangerous to allow mapping BPF map, that's meant to
-be frozen and is read-only on BPF program side, because that allows user-space
-to actually store a writable view to the page even after it is frozen. This is
-exacerbated by BPF verifier making a strong assumption that contents of such
-frozen map will remain unchanged. To prevent this, disallow mapping
-BPF_F_RDONLY_PROG mmap()'able BPF maps as writable, ever.
+When attaching a flow dissector program to a network namespace with
+bpf(BPF_PROG_ATTACH, ...) we grab a reference to bpf_prog.
 
-  [0] https://lore.kernel.org/bpf/CAEf4BzYGWYhXdp6BJ7_=9OQPJxQpgug080MMjdSB72i9R+5c6g@mail.gmail.com/
+If netns gets destroyed while a flow dissector is still attached, and there
+are no other references to the prog, we leak the reference and the program
+remains loaded.
 
-Fixes: fc9702273e2e ("bpf: Add mmap() support for BPF_MAP_TYPE_ARRAY")
-Suggested-by: Jann Horn <jannh@google.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Leak can be reproduced by running flow dissector tests from selftests/bpf:
+
+  # bpftool prog list
+  # ./test_flow_dissector.sh
+  ...
+  selftests: test_flow_dissector [PASS]
+  # bpftool prog list
+  4: flow_dissector  name _dissect  tag e314084d332a5338  gpl
+          loaded_at 2020-05-20T18:50:53+0200  uid 0
+          xlated 552B  jited 355B  memlock 4096B  map_ids 3,4
+          btf_id 4
+  #
+
+Fix it by detaching the flow dissector program when netns is going away.
+
+Fixes: d58e468b1112 ("flow_dissector: implements flow dissector BPF hook")
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Reviewed-by: Jann Horn <jannh@google.com>
-Link: https://lore.kernel.org/bpf/20200519053824.1089415-1-andriin@fb.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
+Link: https://lore.kernel.org/bpf/20200521083435.560256-1-jakub@cloudflare.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/bpf/syscall.c                          | 17 ++++++++++++++---
- tools/testing/selftests/bpf/prog_tests/mmap.c | 13 ++++++++++++-
- tools/testing/selftests/bpf/progs/test_mmap.c |  8 ++++++++
- 3 files changed, 34 insertions(+), 4 deletions(-)
+ net/core/flow_dissector.c | 26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index e04ea4c8f935..c0ab9bfdf28a 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -629,9 +629,20 @@ static int bpf_map_mmap(struct file *filp, struct vm_area_struct *vma)
+diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
+index a1670dff0629..0e5012d7b7b5 100644
+--- a/net/core/flow_dissector.c
++++ b/net/core/flow_dissector.c
+@@ -160,12 +160,10 @@ int skb_flow_dissector_bpf_prog_attach(const union bpf_attr *attr,
+ 	return ret;
+ }
  
- 	mutex_lock(&map->freeze_mutex);
+-int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
++static int flow_dissector_bpf_prog_detach(struct net *net)
+ {
+ 	struct bpf_prog *attached;
+-	struct net *net;
  
--	if ((vma->vm_flags & VM_WRITE) && map->frozen) {
--		err = -EPERM;
--		goto out;
-+	if (vma->vm_flags & VM_WRITE) {
-+		if (map->frozen) {
-+			err = -EPERM;
-+			goto out;
-+		}
-+		/* map is meant to be read-only, so do not allow mapping as
-+		 * writable, because it's possible to leak a writable page
-+		 * reference and allows user-space to still modify it after
-+		 * freezing, while verifier will assume contents do not change
-+		 */
-+		if (map->map_flags & BPF_F_RDONLY_PROG) {
-+			err = -EACCES;
-+			goto out;
-+		}
- 	}
+-	net = current->nsproxy->net_ns;
+ 	mutex_lock(&flow_dissector_mutex);
+ 	attached = rcu_dereference_protected(net->flow_dissector_prog,
+ 					     lockdep_is_held(&flow_dissector_mutex));
+@@ -179,6 +177,24 @@ int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
+ 	return 0;
+ }
  
- 	/* set default open/close callbacks */
-diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
-index b0e789678aa4..5495b669fccc 100644
---- a/tools/testing/selftests/bpf/prog_tests/mmap.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
-@@ -19,7 +19,7 @@ void test_mmap(void)
- 	const size_t map_sz = roundup_page(sizeof(struct map_data));
- 	const int zero = 0, one = 1, two = 2, far = 1500;
- 	const long page_size = sysconf(_SC_PAGE_SIZE);
--	int err, duration = 0, i, data_map_fd;
-+	int err, duration = 0, i, data_map_fd, rdmap_fd;
- 	struct bpf_map *data_map, *bss_map;
- 	void *bss_mmaped = NULL, *map_mmaped = NULL, *tmp1, *tmp2;
- 	struct test_mmap__bss *bss_data;
-@@ -36,6 +36,17 @@ void test_mmap(void)
- 	data_map = skel->maps.data_map;
- 	data_map_fd = bpf_map__fd(data_map);
- 
-+	rdmap_fd = bpf_map__fd(skel->maps.rdonly_map);
-+	tmp1 = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, rdmap_fd, 0);
-+	if (CHECK(tmp1 != MAP_FAILED, "rdonly_write_mmap", "unexpected success\n")) {
-+		munmap(tmp1, 4096);
-+		goto cleanup;
-+	}
-+	/* now double-check if it's mmap()'able at all */
-+	tmp1 = mmap(NULL, 4096, PROT_READ, MAP_SHARED, rdmap_fd, 0);
-+	if (CHECK(tmp1 == MAP_FAILED, "rdonly_read_mmap", "failed: %d\n", errno))
-+		goto cleanup;
++int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
++{
++	return flow_dissector_bpf_prog_detach(current->nsproxy->net_ns);
++}
 +
- 	bss_mmaped = mmap(NULL, bss_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
- 			  bpf_map__fd(bss_map), 0);
- 	if (CHECK(bss_mmaped == MAP_FAILED, "bss_mmap",
-diff --git a/tools/testing/selftests/bpf/progs/test_mmap.c b/tools/testing/selftests/bpf/progs/test_mmap.c
-index 6239596cd14e..4eb42cff5fe9 100644
---- a/tools/testing/selftests/bpf/progs/test_mmap.c
-+++ b/tools/testing/selftests/bpf/progs/test_mmap.c
-@@ -7,6 +7,14 @@
- 
- char _license[] SEC("license") = "GPL";
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 4096);
-+	__uint(map_flags, BPF_F_MMAPABLE | BPF_F_RDONLY_PROG);
-+	__type(key, __u32);
-+	__type(value, char);
-+} rdonly_map SEC(".maps");
++static void __net_exit flow_dissector_pernet_pre_exit(struct net *net)
++{
++	/* We're not racing with attach/detach because there are no
++	 * references to netns left when pre_exit gets called.
++	 */
++	if (rcu_access_pointer(net->flow_dissector_prog))
++		flow_dissector_bpf_prog_detach(net);
++}
 +
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
- 	__uint(max_entries, 512 * 4); /* at least 4 pages of data */
++static struct pernet_operations flow_dissector_pernet_ops __net_initdata = {
++	.pre_exit = flow_dissector_pernet_pre_exit,
++};
++
+ /**
+  * __skb_flow_get_ports - extract the upper layer ports and return them
+  * @skb: sk_buff to extract the ports from
+@@ -1838,7 +1854,7 @@ static int __init init_default_flow_dissectors(void)
+ 	skb_flow_dissector_init(&flow_keys_basic_dissector,
+ 				flow_keys_basic_dissector_keys,
+ 				ARRAY_SIZE(flow_keys_basic_dissector_keys));
+-	return 0;
+-}
+ 
++	return register_pernet_subsys(&flow_dissector_pernet_ops);
++}
+ core_initcall(init_default_flow_dissectors);
 -- 
 2.25.1
 
