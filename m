@@ -2,81 +2,97 @@ Return-Path: <SRS0=rM0N=7W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.2 required=3.0 tests=DATE_IN_PAST_03_06,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52829C433DF
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:15:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D547C433E0
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:20:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C16C20801
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:15:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D885920775
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1591662022;
+	bh=MbeZa4VffzmxWAR8MGy0BeRxIsWisBaIT8gBRIYAzuI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=kA30YIC24aOuTX3HVyHpvntb+fr3tEYO4wlK8hGcl40dVppuO5ajK1oeVMsKqSV+p
+	 qIRRBKyREcXDqQzCaJT1GujW+/1sZFBWfHwlQMcZY66bt/JrbfXsiXkInDPTBJzmqp
+	 rHoDM6sm0fHxfD5L5pFIVtZHUM8gQ/X9LjfpfyIE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732919AbgFIAP0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 20:15:26 -0400
-Received: from mga01.intel.com ([192.55.52.88]:34121 "EHLO mga01.intel.com"
+        id S1730938AbgFIAUV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 20:20:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40122 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732864AbgFIAPX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 20:15:23 -0400
-IronPort-SDR: 8q8AjhwCPAKRB63o0Rdenxzrtcq4XJKcOyjIkIux6/fuS3j9iK5wZ+9r83ue3oWvndP897GM5/
- Re/OO7EBHuzw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2020 17:15:21 -0700
-IronPort-SDR: h4gXjZE+EBOrWdTDzIBVdyDssU3TJJ3lTUru/MY8SVcqhndPyK+QGc/jgs0u4oLW7L2FpQMCAa
- 8kCLMxtPu3lg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,489,1583222400"; 
-   d="scan'208";a="379581107"
-Received: from lkp-server01.sh.intel.com (HELO 12d5c0ac8e64) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Jun 2020 17:15:19 -0700
-Received: from kbuild by 12d5c0ac8e64 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jiRvD-00000p-6k; Tue, 09 Jun 2020 00:15:19 +0000
-Date:   Tue, 9 Jun 2020 03:55:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        David Ahern <dsahern@gmail.com>, bpf@vger.kernel.org,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     kbuild-all@lists.01.org,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: [RFC PATCH] bpf: bpf_anon_inode_getfd() can be static
-Message-ID: <20200608195547.GA88820@01856db44629>
-References: <159163507753.1967373.62249862728421448.stgit@firesoul>
+        id S1729085AbgFHXSC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:18:02 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 96F5820884;
+        Mon,  8 Jun 2020 23:18:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591658282;
+        bh=MbeZa4VffzmxWAR8MGy0BeRxIsWisBaIT8gBRIYAzuI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GM8gBrklaLdDsH8u/vDjqO+Hdhp5D0szsTKUEQe074BCpTKqS+fDmUisNDMmKaPgj
+         Y0SBoi8SHQvyjEKFRZUrSW/8giPniVq6o7o9Wgqi7Drf3M/W7Kyk15BulXRDOf6X0x
+         q2avOR84LirNHwfwj3SbJzTbS4ple69R3NfVlZR0=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Matteo Croce <mcroce@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 287/606] samples: bpf: Fix build error
+Date:   Mon,  8 Jun 2020 19:06:52 -0400
+Message-Id: <20200608231211.3363633-287-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
+References: <20200608231211.3363633-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <159163507753.1967373.62249862728421448.stgit@firesoul>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+From: Matteo Croce <mcroce@redhat.com>
 
-Signed-off-by: kernel test robot <lkp@intel.com>
+[ Upstream commit 23ad04669f81f958e9a4121b0266228d2eb3c357 ]
+
+GCC 10 is very strict about symbol clash, and lwt_len_hist_user contains
+a symbol which clashes with libbpf:
+
+/usr/bin/ld: samples/bpf/lwt_len_hist_user.o:(.bss+0x0): multiple definition of `bpf_log_buf'; samples/bpf/bpf_load.o:(.bss+0x8c0): first defined here
+collect2: error: ld returned 1 exit status
+
+bpf_log_buf here seems to be a leftover, so removing it.
+
+Signed-off-by: Matteo Croce <mcroce@redhat.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20200511113234.80722-1-mcroce@redhat.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- syscall.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ samples/bpf/lwt_len_hist_user.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6eba236aacd1f..fcd9860cdf148 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -689,8 +689,8 @@ const struct file_operations bpf_map_fops = {
- };
+diff --git a/samples/bpf/lwt_len_hist_user.c b/samples/bpf/lwt_len_hist_user.c
+index 587b68b1f8dd..430a4b7e353e 100644
+--- a/samples/bpf/lwt_len_hist_user.c
++++ b/samples/bpf/lwt_len_hist_user.c
+@@ -15,8 +15,6 @@
+ #define MAX_INDEX 64
+ #define MAX_STARS 38
  
- /* Code is similar to anon_inode_getfd(), except starts at FD 1 */
--int bpf_anon_inode_getfd(const char *name, const struct file_operations *fops,
--			 void *priv, int flags)
-+static int bpf_anon_inode_getfd(const char *name, const struct file_operations *fops,
-+				void *priv, int flags)
+-char bpf_log_buf[BPF_LOG_BUF_SIZE];
+-
+ static void stars(char *str, long val, long max, int width)
  {
- 	int error, fd;
- 	struct file *file;
+ 	int i;
+-- 
+2.25.1
+
