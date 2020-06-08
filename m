@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA1A5C433DF
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:42:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7D04C433DF
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:44:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 95DCF207ED
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:42:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C624120737
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:44:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591663368;
-	bh=52liZxWS/YVroA/0/89/gMuhBgSh5CrWsVrWvpMtxo8=;
+	s=default; t=1591663461;
+	bh=FVGe8qaMruNT+7gpi3rEtG8gVXNp1V100Vai5EX7ITI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=deyDh1Ppc2ZVUVUNAYWxR/xzf2M9KIwtuRgPkQ0ydDIs5PeG4nLspfRzdlSUxaWX2
-	 BuRp8FPFyp0mTWeWt7HWKfC5kg2zMqPcTp/j9hQarWZ0K+Kzrqxo6s8e9cecwYFlvJ
-	 LU0mXUvgUbGD287lCOV1RrH8btIp6lmF2u/2VvFc=
+	b=gARpdSoWvXdK8k5qu+hcKINwkjn37ov2Lot1uNCkr3dTG9w6ad8dvb2OxP36072CH
+	 h/28gu2+ELa25guceRxzZf3Vk9N5FeGHC1oSezh3zGIx7XswsbjHNxTVuToNKgihPZ
+	 qZE7i12WS8t+zaguf3jazcQz/6WQolMXNkWwQ7+Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729074AbgFHXMW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:12:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59772 "EHLO mail.kernel.org"
+        id S1731994AbgFIAnq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 20:43:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59246 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728384AbgFHXMU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:12:20 -0400
+        id S1729036AbgFHXMD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:12:03 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C7C1212CC;
-        Mon,  8 Jun 2020 23:12:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 81405214D8;
+        Mon,  8 Jun 2020 23:12:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657940;
-        bh=52liZxWS/YVroA/0/89/gMuhBgSh5CrWsVrWvpMtxo8=;
+        s=default; t=1591657922;
+        bh=FVGe8qaMruNT+7gpi3rEtG8gVXNp1V100Vai5EX7ITI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HDwlKid4kRMpQBoMqO5E0dhfpM2WucrsJdCMZSl2gmfXwr4Qck+ua9JJor+CEFOWG
-         kX/FZp20iu9P2XerocXebmYl3jWbHVWPGLvxZ3GW+K+2gf1EhkxP/CWbDNsI7S/Gyd
-         FbXoh99o0Mjt2LgjSMFSOXdI7HKu1neJNUvOLtXQ=
+        b=SvEmzW5f5kwcespfbLpVWQiP9BnN0d+t2Hj4sDcwBH8OopnPsdH+gvs8kQ6KwxEqC
+         SNlY0YPgTjaSeF3vVCHdksgZWdLx3mCWdmi097rNOmxLsGrmMgyxJAFPOuewnUfRqe
+         6iafYs+cJurz/xJcrBJ/PNOBNAYabZCsEu5SGGDg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sasha Levin <sashal@kernel.org>, Andrii Nakryiko <andriin@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 006/606] bpf: Fix bug in mmap() implementation for BPF array map
-Date:   Mon,  8 Jun 2020 19:02:11 -0400
-Message-Id: <20200608231211.3363633-6-sashal@kernel.org>
+Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 271/274] s390/bpf: Maintain 8-byte stack alignment
+Date:   Mon,  8 Jun 2020 19:06:04 -0400
+Message-Id: <20200608230607.3361041-271-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
-References: <20200608231211.3363633-1-sashal@kernel.org>
+In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
+References: <20200608230607.3361041-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,63 +59,111 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-[ Upstream commit 333291ce5055f2039afc907badaf5b66bc1adfdc ]
+From: Ilya Leoshkevich <iii@linux.ibm.com>
 
-mmap() subsystem allows user-space application to memory-map region with
-initial page offset. This wasn't taken into account in initial implementation
-of BPF array memory-mapping. This would result in wrong pages, not taking into
-account requested page shift, being memory-mmaped into user-space. This patch
-fixes this gap and adds a test for such scenario.
+[ Upstream commit effe5be17706167ee968fa28afe40dec9c6f71db ]
 
-Fixes: fc9702273e2e ("bpf: Add mmap() support for BPF_MAP_TYPE_ARRAY")
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20200512235925.3817805-1-andriin@fb.com
+Certain kernel functions (e.g. get_vtimer/set_vtimer) cause kernel
+panic when the stack is not 8-byte aligned. Currently JITed BPF programs
+may trigger this by allocating stack frames with non-rounded sizes and
+then being interrupted. Fix by using rounded fp->aux->stack_depth.
+
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20200602174339.2501066-1-iii@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/arraymap.c                         | 7 ++++++-
- tools/testing/selftests/bpf/prog_tests/mmap.c | 9 +++++++++
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ arch/s390/net/bpf_jit_comp.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 95d77770353c..1d6120fd5ba6 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -486,7 +486,12 @@ static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
- 	if (!(map->map_flags & BPF_F_MMAPABLE))
- 		return -EINVAL;
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index 8d2134136290..0f37a1b635f8 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -594,7 +594,7 @@ static void bpf_jit_epilogue(struct bpf_jit *jit, u32 stack_depth)
+  * stack space for the large switch statement.
+  */
+ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+-				 int i, bool extra_pass)
++				 int i, bool extra_pass, u32 stack_depth)
+ {
+ 	struct bpf_insn *insn = &fp->insnsi[i];
+ 	u32 dst_reg = insn->dst_reg;
+@@ -1207,7 +1207,7 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+ 		 */
  
--	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array), pgoff);
-+	if (vma->vm_pgoff * PAGE_SIZE + (vma->vm_end - vma->vm_start) >
-+	    PAGE_ALIGN((u64)array->map.max_entries * array->elem_size))
-+		return -EINVAL;
-+
-+	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array),
-+				   vma->vm_pgoff + pgoff);
- }
+ 		if (jit->seen & SEEN_STACK)
+-			off = STK_OFF_TCCNT + STK_OFF + fp->aux->stack_depth;
++			off = STK_OFF_TCCNT + STK_OFF + stack_depth;
+ 		else
+ 			off = STK_OFF_TCCNT;
+ 		/* lhi %w0,1 */
+@@ -1249,7 +1249,7 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+ 		/*
+ 		 * Restore registers before calling function
+ 		 */
+-		save_restore_regs(jit, REGS_RESTORE, fp->aux->stack_depth);
++		save_restore_regs(jit, REGS_RESTORE, stack_depth);
  
- const struct bpf_map_ops array_map_ops = {
-diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
-index 16a814eb4d64..b0e789678aa4 100644
---- a/tools/testing/selftests/bpf/prog_tests/mmap.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
-@@ -197,6 +197,15 @@ void test_mmap(void)
- 	CHECK_FAIL(map_data->val[far] != 3 * 321);
+ 		/*
+ 		 * goto *(prog->bpf_func + tail_call_start);
+@@ -1519,7 +1519,7 @@ static int bpf_set_addr(struct bpf_jit *jit, int i)
+  * Compile eBPF program into s390x code
+  */
+ static int bpf_jit_prog(struct bpf_jit *jit, struct bpf_prog *fp,
+-			bool extra_pass)
++			bool extra_pass, u32 stack_depth)
+ {
+ 	int i, insn_count, lit32_size, lit64_size;
  
- 	munmap(tmp2, 4 * page_size);
-+
-+	/* map all 4 pages, but with pg_off=1 page, should fail */
-+	tmp1 = mmap(NULL, 4 * page_size, PROT_READ, MAP_SHARED | MAP_FIXED,
-+		    data_map_fd, page_size /* initial page shift */);
-+	if (CHECK(tmp1 != MAP_FAILED, "adv_mmap7", "unexpected success")) {
-+		munmap(tmp1, 4 * page_size);
-+		goto cleanup;
-+	}
-+
- cleanup:
- 	if (bss_mmaped)
- 		CHECK_FAIL(munmap(bss_mmaped, bss_sz));
+@@ -1527,18 +1527,18 @@ static int bpf_jit_prog(struct bpf_jit *jit, struct bpf_prog *fp,
+ 	jit->lit64 = jit->lit64_start;
+ 	jit->prg = 0;
+ 
+-	bpf_jit_prologue(jit, fp->aux->stack_depth);
++	bpf_jit_prologue(jit, stack_depth);
+ 	if (bpf_set_addr(jit, 0) < 0)
+ 		return -1;
+ 	for (i = 0; i < fp->len; i += insn_count) {
+-		insn_count = bpf_jit_insn(jit, fp, i, extra_pass);
++		insn_count = bpf_jit_insn(jit, fp, i, extra_pass, stack_depth);
+ 		if (insn_count < 0)
+ 			return -1;
+ 		/* Next instruction address */
+ 		if (bpf_set_addr(jit, i + insn_count) < 0)
+ 			return -1;
+ 	}
+-	bpf_jit_epilogue(jit, fp->aux->stack_depth);
++	bpf_jit_epilogue(jit, stack_depth);
+ 
+ 	lit32_size = jit->lit32 - jit->lit32_start;
+ 	lit64_size = jit->lit64 - jit->lit64_start;
+@@ -1569,6 +1569,7 @@ struct s390_jit_data {
+  */
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ {
++	u32 stack_depth = round_up(fp->aux->stack_depth, 8);
+ 	struct bpf_prog *tmp, *orig_fp = fp;
+ 	struct bpf_binary_header *header;
+ 	struct s390_jit_data *jit_data;
+@@ -1621,7 +1622,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 	 *   - 3:   Calculate program size and addrs arrray
+ 	 */
+ 	for (pass = 1; pass <= 3; pass++) {
+-		if (bpf_jit_prog(&jit, fp, extra_pass)) {
++		if (bpf_jit_prog(&jit, fp, extra_pass, stack_depth)) {
+ 			fp = orig_fp;
+ 			goto free_addrs;
+ 		}
+@@ -1635,7 +1636,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 		goto free_addrs;
+ 	}
+ skip_init_ctx:
+-	if (bpf_jit_prog(&jit, fp, extra_pass)) {
++	if (bpf_jit_prog(&jit, fp, extra_pass, stack_depth)) {
+ 		bpf_jit_binary_free(header);
+ 		fp = orig_fp;
+ 		goto free_addrs;
 -- 
 2.25.1
 
