@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D547C433E0
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:20:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86C16C433E0
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:23:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D885920775
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:20:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B648207FB
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:23:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591662022;
-	bh=MbeZa4VffzmxWAR8MGy0BeRxIsWisBaIT8gBRIYAzuI=;
+	s=default; t=1591662227;
+	bh=SIl+6gDDlAgE5/oHLwCHDU0dl1CfSAmHwDjMoN+E624=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=kA30YIC24aOuTX3HVyHpvntb+fr3tEYO4wlK8hGcl40dVppuO5ajK1oeVMsKqSV+p
-	 qIRRBKyREcXDqQzCaJT1GujW+/1sZFBWfHwlQMcZY66bt/JrbfXsiXkInDPTBJzmqp
-	 rHoDM6sm0fHxfD5L5pFIVtZHUM8gQ/X9LjfpfyIE=
+	b=lYKomcRG5ZvZXpplZVzCv61l1bg4SFkIPUPpVG+1VMxmJAfm6wrhQFmm4brO6sKSc
+	 wZdOY/7I4W3DuwcM4HoZ+4wM41t/Fm9BecdhkG+ihXCXL0P3Fqq1Hl9xtEIq9ciXEL
+	 KWZoalgbF0LaDkl1Y1KF70CHdi5EFGKHANK5c4cY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730938AbgFIAUV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 20:20:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40122 "EHLO mail.kernel.org"
+        id S1730413AbgFHXRM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 19:17:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38480 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729085AbgFHXSC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:18:02 -0400
+        id S1728533AbgFHXRL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:17:11 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 96F5820884;
-        Mon,  8 Jun 2020 23:18:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0FE702085B;
+        Mon,  8 Jun 2020 23:17:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658282;
-        bh=MbeZa4VffzmxWAR8MGy0BeRxIsWisBaIT8gBRIYAzuI=;
+        s=default; t=1591658230;
+        bh=SIl+6gDDlAgE5/oHLwCHDU0dl1CfSAmHwDjMoN+E624=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GM8gBrklaLdDsH8u/vDjqO+Hdhp5D0szsTKUEQe074BCpTKqS+fDmUisNDMmKaPgj
-         Y0SBoi8SHQvyjEKFRZUrSW/8giPniVq6o7o9Wgqi7Drf3M/W7Kyk15BulXRDOf6X0x
-         q2avOR84LirNHwfwj3SbJzTbS4ple69R3NfVlZR0=
+        b=yLthxuXYvCYJ7MI8sg9feveoDnJzzFyhGAh7aPcuA0SRknYTkEimPV3bmB5DkvjLu
+         17Xd7yUTDyBttw0TAB21CVrWFfixwf/Z+nEdxTaBo+BtRFahxRCoRVp254D9zR7Ap6
+         axi4IpzbCSr8FPvBqqGZUSsqcHy0I/pZI2DxOBJE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Matteo Croce <mcroce@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
+Cc:     Vadim Fedorenko <vfedorenko@novek.ru>,
+        "David S . Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 287/606] samples: bpf: Fix build error
-Date:   Mon,  8 Jun 2020 19:06:52 -0400
-Message-Id: <20200608231211.3363633-287-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 243/606] net/tls: fix encryption error checking
+Date:   Mon,  8 Jun 2020 19:06:08 -0400
+Message-Id: <20200608231211.3363633-243-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
@@ -59,40 +59,74 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Matteo Croce <mcroce@redhat.com>
+From: Vadim Fedorenko <vfedorenko@novek.ru>
 
-[ Upstream commit 23ad04669f81f958e9a4121b0266228d2eb3c357 ]
+commit a7bff11f6f9afa87c25711db8050c9b5324db0e2 upstream.
 
-GCC 10 is very strict about symbol clash, and lwt_len_hist_user contains
-a symbol which clashes with libbpf:
+bpf_exec_tx_verdict() can return negative value for copied
+variable. In that case this value will be pushed back to caller
+and the real error code will be lost. Fix it using signed type and
+checking for positive value.
 
-/usr/bin/ld: samples/bpf/lwt_len_hist_user.o:(.bss+0x0): multiple definition of `bpf_log_buf'; samples/bpf/bpf_load.o:(.bss+0x8c0): first defined here
-collect2: error: ld returned 1 exit status
-
-bpf_log_buf here seems to be a leftover, so removing it.
-
-Signed-off-by: Matteo Croce <mcroce@redhat.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20200511113234.80722-1-mcroce@redhat.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: d10523d0b3d7 ("net/tls: free the record on encryption error")
+Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
+Signed-off-by: Vadim Fedorenko <vfedorenko@novek.ru>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- samples/bpf/lwt_len_hist_user.c | 2 --
- 1 file changed, 2 deletions(-)
+ net/tls/tls_sw.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/samples/bpf/lwt_len_hist_user.c b/samples/bpf/lwt_len_hist_user.c
-index 587b68b1f8dd..430a4b7e353e 100644
---- a/samples/bpf/lwt_len_hist_user.c
-+++ b/samples/bpf/lwt_len_hist_user.c
-@@ -15,8 +15,6 @@
- #define MAX_INDEX 64
- #define MAX_STARS 38
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index ffa3cbc5449d..34684b98c792 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -784,7 +784,7 @@ static int tls_push_record(struct sock *sk, int flags,
  
--char bpf_log_buf[BPF_LOG_BUF_SIZE];
--
- static void stars(char *str, long val, long max, int width)
+ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
+ 			       bool full_record, u8 record_type,
+-			       size_t *copied, int flags)
++			       ssize_t *copied, int flags)
  {
- 	int i;
+ 	struct tls_context *tls_ctx = tls_get_ctx(sk);
+ 	struct tls_sw_context_tx *ctx = tls_sw_ctx_tx(tls_ctx);
+@@ -920,7 +920,8 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 	unsigned char record_type = TLS_RECORD_TYPE_DATA;
+ 	bool is_kvec = iov_iter_is_kvec(&msg->msg_iter);
+ 	bool eor = !(msg->msg_flags & MSG_MORE);
+-	size_t try_to_copy, copied = 0;
++	size_t try_to_copy;
++	ssize_t copied = 0;
+ 	struct sk_msg *msg_pl, *msg_en;
+ 	struct tls_rec *rec;
+ 	int required_size;
+@@ -1129,7 +1130,7 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 
+ 	release_sock(sk);
+ 	mutex_unlock(&tls_ctx->tx_lock);
+-	return copied ? copied : ret;
++	return copied > 0 ? copied : ret;
+ }
+ 
+ static int tls_sw_do_sendpage(struct sock *sk, struct page *page,
+@@ -1143,7 +1144,7 @@ static int tls_sw_do_sendpage(struct sock *sk, struct page *page,
+ 	struct sk_msg *msg_pl;
+ 	struct tls_rec *rec;
+ 	int num_async = 0;
+-	size_t copied = 0;
++	ssize_t copied = 0;
+ 	bool full_record;
+ 	int record_room;
+ 	int ret = 0;
+@@ -1245,7 +1246,7 @@ static int tls_sw_do_sendpage(struct sock *sk, struct page *page,
+ 	}
+ sendpage_end:
+ 	ret = sk_stream_error(sk, flags, ret);
+-	return copied ? copied : ret;
++	return copied > 0 ? copied : ret;
+ }
+ 
+ int tls_sw_sendpage_locked(struct sock *sk, struct page *page,
 -- 
 2.25.1
 
