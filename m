@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86C16C433E0
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:23:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FC89C433DF
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:29:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B648207FB
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:23:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DA542078B
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:29:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591662227;
-	bh=SIl+6gDDlAgE5/oHLwCHDU0dl1CfSAmHwDjMoN+E624=;
+	s=default; t=1591662543;
+	bh=SCfhZTIaHqAp/kDN9R0eV/qpGB7J/zlJUu4kD5LbpR4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=lYKomcRG5ZvZXpplZVzCv61l1bg4SFkIPUPpVG+1VMxmJAfm6wrhQFmm4brO6sKSc
-	 wZdOY/7I4W3DuwcM4HoZ+4wM41t/Fm9BecdhkG+ihXCXL0P3Fqq1Hl9xtEIq9ciXEL
-	 KWZoalgbF0LaDkl1Y1KF70CHdi5EFGKHANK5c4cY=
+	b=mlYG7vn2XqQo0Jbshk6/5ptiquXMvv5p9ujYIzF8z+B3945cHYEZOApGs9l5m54WL
+	 +77vIodfo5wZ4Zi63hTUGQvkmdleGLeasm7cyOJuNvr6t+e9WDrf6ktMdxIDjKupvm
+	 YzwB+UcZ/qt0eClafXz2jkf77ElU99HzRE02X1Zo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730413AbgFHXRM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:17:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38480 "EHLO mail.kernel.org"
+        id S1731503AbgFIA2n (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 20:28:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37598 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728533AbgFHXRL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:17:11 -0400
+        id S1727961AbgFHXQR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:16:17 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0FE702085B;
-        Mon,  8 Jun 2020 23:17:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AF3D220870;
+        Mon,  8 Jun 2020 23:16:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658230;
-        bh=SIl+6gDDlAgE5/oHLwCHDU0dl1CfSAmHwDjMoN+E624=;
+        s=default; t=1591658176;
+        bh=SCfhZTIaHqAp/kDN9R0eV/qpGB7J/zlJUu4kD5LbpR4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yLthxuXYvCYJ7MI8sg9feveoDnJzzFyhGAh7aPcuA0SRknYTkEimPV3bmB5DkvjLu
-         17Xd7yUTDyBttw0TAB21CVrWFfixwf/Z+nEdxTaBo+BtRFahxRCoRVp254D9zR7Ap6
-         axi4IpzbCSr8FPvBqqGZUSsqcHy0I/pZI2DxOBJE=
+        b=NlDhpgY3zdcxammlDi8Szyi/2zvJ7gXCxtW6Sj36eBLjcVLWP8V0YZzSg+3m1gA9m
+         CSVMqQGDB3WdER5VEAm3VKPmQ6SogVBPMEi5POAlcXYptnXQ1GPLA8WJLD3LHNm6Oa
+         BMON3MP4ROd0jd18g6uM9jR/fV13LPqWfQ5QsVZg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vadim Fedorenko <vfedorenko@novek.ru>,
-        "David S . Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 243/606] net/tls: fix encryption error checking
-Date:   Mon,  8 Jun 2020 19:06:08 -0400
-Message-Id: <20200608231211.3363633-243-sashal@kernel.org>
+Cc:     Andrii Nakryiko <andriin@fb.com>, Jann Horn <jannh@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 202/606] bpf: Prevent mmap()'ing read-only maps as writable
+Date:   Mon,  8 Jun 2020 19:05:27 -0400
+Message-Id: <20200608231211.3363633-202-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
@@ -59,74 +59,110 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Vadim Fedorenko <vfedorenko@novek.ru>
+From: Andrii Nakryiko <andriin@fb.com>
 
-commit a7bff11f6f9afa87c25711db8050c9b5324db0e2 upstream.
+[ Upstream commit dfeb376dd4cb2c5004aeb625e2475f58a5ff2ea7 ]
 
-bpf_exec_tx_verdict() can return negative value for copied
-variable. In that case this value will be pushed back to caller
-and the real error code will be lost. Fix it using signed type and
-checking for positive value.
+As discussed in [0], it's dangerous to allow mapping BPF map, that's meant to
+be frozen and is read-only on BPF program side, because that allows user-space
+to actually store a writable view to the page even after it is frozen. This is
+exacerbated by BPF verifier making a strong assumption that contents of such
+frozen map will remain unchanged. To prevent this, disallow mapping
+BPF_F_RDONLY_PROG mmap()'able BPF maps as writable, ever.
 
-Fixes: d10523d0b3d7 ("net/tls: free the record on encryption error")
-Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
-Signed-off-by: Vadim Fedorenko <vfedorenko@novek.ru>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  [0] https://lore.kernel.org/bpf/CAEf4BzYGWYhXdp6BJ7_=9OQPJxQpgug080MMjdSB72i9R+5c6g@mail.gmail.com/
+
+Fixes: fc9702273e2e ("bpf: Add mmap() support for BPF_MAP_TYPE_ARRAY")
+Suggested-by: Jann Horn <jannh@google.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Reviewed-by: Jann Horn <jannh@google.com>
+Link: https://lore.kernel.org/bpf/20200519053824.1089415-1-andriin@fb.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tls/tls_sw.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ kernel/bpf/syscall.c                          | 17 ++++++++++++++---
+ tools/testing/selftests/bpf/prog_tests/mmap.c | 13 ++++++++++++-
+ tools/testing/selftests/bpf/progs/test_mmap.c |  8 ++++++++
+ 3 files changed, 34 insertions(+), 4 deletions(-)
 
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index ffa3cbc5449d..34684b98c792 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -784,7 +784,7 @@ static int tls_push_record(struct sock *sk, int flags,
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index e04ea4c8f935..c0ab9bfdf28a 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -629,9 +629,20 @@ static int bpf_map_mmap(struct file *filp, struct vm_area_struct *vma)
  
- static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
- 			       bool full_record, u8 record_type,
--			       size_t *copied, int flags)
-+			       ssize_t *copied, int flags)
- {
- 	struct tls_context *tls_ctx = tls_get_ctx(sk);
- 	struct tls_sw_context_tx *ctx = tls_sw_ctx_tx(tls_ctx);
-@@ -920,7 +920,8 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
- 	unsigned char record_type = TLS_RECORD_TYPE_DATA;
- 	bool is_kvec = iov_iter_is_kvec(&msg->msg_iter);
- 	bool eor = !(msg->msg_flags & MSG_MORE);
--	size_t try_to_copy, copied = 0;
-+	size_t try_to_copy;
-+	ssize_t copied = 0;
- 	struct sk_msg *msg_pl, *msg_en;
- 	struct tls_rec *rec;
- 	int required_size;
-@@ -1129,7 +1130,7 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 	mutex_lock(&map->freeze_mutex);
  
- 	release_sock(sk);
- 	mutex_unlock(&tls_ctx->tx_lock);
--	return copied ? copied : ret;
-+	return copied > 0 ? copied : ret;
- }
- 
- static int tls_sw_do_sendpage(struct sock *sk, struct page *page,
-@@ -1143,7 +1144,7 @@ static int tls_sw_do_sendpage(struct sock *sk, struct page *page,
- 	struct sk_msg *msg_pl;
- 	struct tls_rec *rec;
- 	int num_async = 0;
--	size_t copied = 0;
-+	ssize_t copied = 0;
- 	bool full_record;
- 	int record_room;
- 	int ret = 0;
-@@ -1245,7 +1246,7 @@ static int tls_sw_do_sendpage(struct sock *sk, struct page *page,
+-	if ((vma->vm_flags & VM_WRITE) && map->frozen) {
+-		err = -EPERM;
+-		goto out;
++	if (vma->vm_flags & VM_WRITE) {
++		if (map->frozen) {
++			err = -EPERM;
++			goto out;
++		}
++		/* map is meant to be read-only, so do not allow mapping as
++		 * writable, because it's possible to leak a writable page
++		 * reference and allows user-space to still modify it after
++		 * freezing, while verifier will assume contents do not change
++		 */
++		if (map->map_flags & BPF_F_RDONLY_PROG) {
++			err = -EACCES;
++			goto out;
++		}
  	}
- sendpage_end:
- 	ret = sk_stream_error(sk, flags, ret);
--	return copied ? copied : ret;
-+	return copied > 0 ? copied : ret;
- }
  
- int tls_sw_sendpage_locked(struct sock *sk, struct page *page,
+ 	/* set default open/close callbacks */
+diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
+index b0e789678aa4..5495b669fccc 100644
+--- a/tools/testing/selftests/bpf/prog_tests/mmap.c
++++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
+@@ -19,7 +19,7 @@ void test_mmap(void)
+ 	const size_t map_sz = roundup_page(sizeof(struct map_data));
+ 	const int zero = 0, one = 1, two = 2, far = 1500;
+ 	const long page_size = sysconf(_SC_PAGE_SIZE);
+-	int err, duration = 0, i, data_map_fd;
++	int err, duration = 0, i, data_map_fd, rdmap_fd;
+ 	struct bpf_map *data_map, *bss_map;
+ 	void *bss_mmaped = NULL, *map_mmaped = NULL, *tmp1, *tmp2;
+ 	struct test_mmap__bss *bss_data;
+@@ -36,6 +36,17 @@ void test_mmap(void)
+ 	data_map = skel->maps.data_map;
+ 	data_map_fd = bpf_map__fd(data_map);
+ 
++	rdmap_fd = bpf_map__fd(skel->maps.rdonly_map);
++	tmp1 = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, rdmap_fd, 0);
++	if (CHECK(tmp1 != MAP_FAILED, "rdonly_write_mmap", "unexpected success\n")) {
++		munmap(tmp1, 4096);
++		goto cleanup;
++	}
++	/* now double-check if it's mmap()'able at all */
++	tmp1 = mmap(NULL, 4096, PROT_READ, MAP_SHARED, rdmap_fd, 0);
++	if (CHECK(tmp1 == MAP_FAILED, "rdonly_read_mmap", "failed: %d\n", errno))
++		goto cleanup;
++
+ 	bss_mmaped = mmap(NULL, bss_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
+ 			  bpf_map__fd(bss_map), 0);
+ 	if (CHECK(bss_mmaped == MAP_FAILED, "bss_mmap",
+diff --git a/tools/testing/selftests/bpf/progs/test_mmap.c b/tools/testing/selftests/bpf/progs/test_mmap.c
+index 6239596cd14e..4eb42cff5fe9 100644
+--- a/tools/testing/selftests/bpf/progs/test_mmap.c
++++ b/tools/testing/selftests/bpf/progs/test_mmap.c
+@@ -7,6 +7,14 @@
+ 
+ char _license[] SEC("license") = "GPL";
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 4096);
++	__uint(map_flags, BPF_F_MMAPABLE | BPF_F_RDONLY_PROG);
++	__type(key, __u32);
++	__type(value, char);
++} rdonly_map SEC(".maps");
++
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_ARRAY);
+ 	__uint(max_entries, 512 * 4); /* at least 4 pages of data */
 -- 
 2.25.1
 
