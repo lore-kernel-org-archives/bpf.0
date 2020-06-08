@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B92B7C433E1
-	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 23:12:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EDAEC433DF
+	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 23:13:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9661E20C09
-	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 23:12:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10CE5214D8
+	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 23:13:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591657921;
-	bh=htY2h0GstHAbvPa8FAJHHtbwHJ9ASPWtxZDcFkiX6f4=;
+	s=default; t=1591658027;
+	bh=O4sIm0dMTHqRZCNxs3PMb5hcgRJULMMM54RSsYvmZzM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=OTy+M/mvmltNxJH/WRzcnDAVcRssvw2YAOQdKszOJaVm4ECP3mpnRFdr0Fj3gH55I
-	 yf4UFmZHXUp0+w625JJ9wbpvMCun9/weWdKomM2WC4lb39dLXR8hVcD9iUlDHWiZvC
-	 pmu5zBewuq8fHKYmQj6kztwNlf2/boucIkzVmsFE=
+	b=1LVWcRlMjSpat5ds1BEFG2FmeARQKhbTmWvix/BwrGus/gqwBWl178pFFLnkkntob
+	 MCsfjUSqVwskHmUYWcB6a00v4l76GvEOwfy2P0nhiaoZ7y2K4dDFngT3z6+7Fl/K+v
+	 wRghi+FLrHs+FNsqAJ5/Jo7FDdmey+ZVKEgqZXPs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727836AbgFHXMA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:12:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59122 "EHLO mail.kernel.org"
+        id S1729567AbgFHXNp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 19:13:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33578 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729017AbgFHXL7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:11:59 -0400
+        id S1729551AbgFHXNn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:13:43 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 98540212CC;
-        Mon,  8 Jun 2020 23:11:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ADBF7214D8;
+        Mon,  8 Jun 2020 23:13:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657918;
-        bh=htY2h0GstHAbvPa8FAJHHtbwHJ9ASPWtxZDcFkiX6f4=;
+        s=default; t=1591658022;
+        bh=O4sIm0dMTHqRZCNxs3PMb5hcgRJULMMM54RSsYvmZzM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wbRtUqHoKVo/0qn8t70tRaPtoEFWFl2HAc9mvdWbs2MHEiVB/DczOeiISa0fx30oM
-         gsxrqS+ALTf4dptuZPRATS82UFVU/om5jUI97Cw9/hfVfwhvBO42CizEVflgi6eRB0
-         IuEAJBHrd9ZYAGIqwT2R4a0r9qTCzyPxNLR4nVmc=
+        b=F1yw1wz+uI9OEFQsyy85GOQZGHGC3KoGlB+D/SIm0JmdbSTAmmD1l3wts9O9c//c6
+         ic/0LubGEJyDE4eQxEaPXgyJbTzL7zLwOZb0IVHgz4KJJTij391/f4h86OZSLw2S8F
+         MGGaJuS01F2kLvG7WOQmjW/T54rB3TZcAW3IkKb8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 268/274] bpf: Fix running sk_skb program types with ktls
-Date:   Mon,  8 Jun 2020 19:06:01 -0400
-Message-Id: <20200608230607.3361041-268-sashal@kernel.org>
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 075/606] bpf: Enforce returning 0 for fentry/fexit progs
+Date:   Mon,  8 Jun 2020 19:03:20 -0400
+Message-Id: <20200608231211.3363633-75-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
-References: <20200608230607.3361041-1-sashal@kernel.org>
+In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
+References: <20200608231211.3363633-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,225 +59,64 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: John Fastabend <john.fastabend@gmail.com>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit e91de6afa81c10e9f855c5695eb9a53168d96b73 ]
+commit e92888c72fbdc6f9d07b3b0604c012e81d7c0da7 upstream.
 
-KTLS uses a stream parser to collect TLS messages and send them to
-the upper layer tls receive handler. This ensures the tls receiver
-has a full TLS header to parse when it is run. However, when a
-socket has BPF_SK_SKB_STREAM_VERDICT program attached before KTLS
-is enabled we end up with two stream parsers running on the same
-socket.
+Currently, tracing/fentry and tracing/fexit prog
+return values are not enforced. In trampoline codes,
+the fentry/fexit prog return values are ignored.
+Let us enforce it to be 0 to avoid confusion and
+allows potential future extension.
 
-The result is both try to run on the same socket. First the KTLS
-stream parser runs and calls read_sock() which will tcp_read_sock
-which in turn calls tcp_rcv_skb(). This dequeues the skb from the
-sk_receive_queue. When this is done KTLS code then data_ready()
-callback which because we stacked KTLS on top of the bpf stream
-verdict program has been replaced with sk_psock_start_strp(). This
-will in turn kick the stream parser again and eventually do the
-same thing KTLS did above calling into tcp_rcv_skb() and dequeuing
-a skb from the sk_receive_queue.
+This patch also explicitly added return value
+checking for tracing/raw_tp, tracing/fmod_ret,
+and freplace programs such that these program
+return values can be anything. The purpose are
+two folds:
+ 1. to make it explicit about return value expectations
+    for these programs in verifier.
+ 2. for tracing prog_type, if a future attach type
+    is added, the default is -ENOTSUPP which will
+    enforce to specify return value ranges explicitly.
 
-At this point the data stream is broke. Part of the stream was
-handled by the KTLS side some other bytes may have been handled
-by the BPF side. Generally this results in either missing data
-or more likely a "Bad Message" complaint from the kTLS receive
-handler as the BPF program steals some bytes meant to be in a
-TLS header and/or the TLS header length is no longer correct.
-
-We've already broke the idealized model where we can stack ULPs
-in any order with generic callbacks on the TX side to handle this.
-So in this patch we do the same thing but for RX side. We add
-a sk_psock_strp_enabled() helper so TLS can learn a BPF verdict
-program is running and add a tls_sw_has_ctx_rx() helper so BPF
-side can learn there is a TLS ULP on the socket.
-
-Then on BPF side we omit calling our stream parser to avoid
-breaking the data stream for the KTLS receiver. Then on the
-KTLS side we call BPF_SK_SKB_STREAM_VERDICT once the KTLS
-receiver is done with the packet but before it posts the
-msg to userspace. This gives us symmetry between the TX and
-RX halfs and IMO makes it usable again. On the TX side we
-process packets in this order BPF -> TLS -> TCP and on
-the receive side in the reverse order TCP -> TLS -> BPF.
-
-Discovered while testing OpenSSL 3.0 Alpha2.0 release.
-
-Fixes: d829e9c4112b5 ("tls: convert to generic sk_msg interface")
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+Fixes: fec56f5890d9 ("bpf: Introduce BPF trampoline")
+Signed-off-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/159079361946.5745.605854335665044485.stgit@john-Precision-5820-Tower
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Link: https://lore.kernel.org/bpf/20200514053206.1298415-1-yhs@fb.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/skmsg.h |  8 ++++++++
- include/net/tls.h     |  9 +++++++++
- net/core/skmsg.c      | 43 ++++++++++++++++++++++++++++++++++++++++---
- net/tls/tls_sw.c      | 20 ++++++++++++++++++--
- 4 files changed, 75 insertions(+), 5 deletions(-)
+ kernel/bpf/verifier.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index ad31c9fb7158..08674cd14d5a 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -437,4 +437,12 @@ static inline void psock_progs_drop(struct sk_psock_progs *progs)
- 	psock_set_prog(&progs->skb_verdict, NULL);
- }
- 
-+int sk_psock_tls_strp_read(struct sk_psock *psock, struct sk_buff *skb);
-+
-+static inline bool sk_psock_strp_enabled(struct sk_psock *psock)
-+{
-+	if (!psock)
-+		return false;
-+	return psock->parser.enabled;
-+}
- #endif /* _LINUX_SKMSG_H */
-diff --git a/include/net/tls.h b/include/net/tls.h
-index 18cd4f418464..ca5f7f437289 100644
---- a/include/net/tls.h
-+++ b/include/net/tls.h
-@@ -571,6 +571,15 @@ static inline bool tls_sw_has_ctx_tx(const struct sock *sk)
- 	return !!tls_sw_ctx_tx(ctx);
- }
- 
-+static inline bool tls_sw_has_ctx_rx(const struct sock *sk)
-+{
-+	struct tls_context *ctx = tls_get_ctx(sk);
-+
-+	if (!ctx)
-+		return false;
-+	return !!tls_sw_ctx_rx(ctx);
-+}
-+
- void tls_sw_write_space(struct sock *sk, struct tls_context *ctx);
- void tls_device_write_space(struct sock *sk, struct tls_context *ctx);
- 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 9d72f71e9b47..351afbf6bfba 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -7,6 +7,7 @@
- 
- #include <net/sock.h>
- #include <net/tcp.h>
-+#include <net/tls.h>
- 
- static bool sk_msg_try_coalesce_ok(struct sk_msg *msg, int elem_first_coalesce)
- {
-@@ -714,6 +715,38 @@ static void sk_psock_skb_redirect(struct sk_psock *psock, struct sk_buff *skb)
- 	}
- }
- 
-+static void sk_psock_tls_verdict_apply(struct sk_psock *psock,
-+				       struct sk_buff *skb, int verdict)
-+{
-+	switch (verdict) {
-+	case __SK_REDIRECT:
-+		sk_psock_skb_redirect(psock, skb);
-+		break;
-+	case __SK_PASS:
-+	case __SK_DROP:
-+	default:
-+		break;
-+	}
-+}
-+
-+int sk_psock_tls_strp_read(struct sk_psock *psock, struct sk_buff *skb)
-+{
-+	struct bpf_prog *prog;
-+	int ret = __SK_PASS;
-+
-+	rcu_read_lock();
-+	prog = READ_ONCE(psock->progs.skb_verdict);
-+	if (likely(prog)) {
-+		tcp_skb_bpf_redirect_clear(skb);
-+		ret = sk_psock_bpf_run(psock, prog, skb);
-+		ret = sk_psock_map_verd(ret, tcp_skb_bpf_redirect_fetch(skb));
-+	}
-+	rcu_read_unlock();
-+	sk_psock_tls_verdict_apply(psock, skb, ret);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(sk_psock_tls_strp_read);
-+
- static void sk_psock_verdict_apply(struct sk_psock *psock,
- 				   struct sk_buff *skb, int verdict)
- {
-@@ -792,9 +825,13 @@ static void sk_psock_strp_data_ready(struct sock *sk)
- 	rcu_read_lock();
- 	psock = sk_psock(sk);
- 	if (likely(psock)) {
--		write_lock_bh(&sk->sk_callback_lock);
--		strp_data_ready(&psock->parser.strp);
--		write_unlock_bh(&sk->sk_callback_lock);
-+		if (tls_sw_has_ctx_rx(sk)) {
-+			psock->parser.saved_data_ready(sk);
-+		} else {
-+			write_lock_bh(&sk->sk_callback_lock);
-+			strp_data_ready(&psock->parser.strp);
-+			write_unlock_bh(&sk->sk_callback_lock);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1c53ccbd5b5d..c1bb5be530e9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6498,6 +6498,22 @@ static int check_return_code(struct bpf_verifier_env *env)
+ 			return 0;
+ 		range = tnum_const(0);
+ 		break;
++	case BPF_PROG_TYPE_TRACING:
++		switch (env->prog->expected_attach_type) {
++		case BPF_TRACE_FENTRY:
++		case BPF_TRACE_FEXIT:
++			range = tnum_const(0);
++			break;
++		case BPF_TRACE_RAW_TP:
++			return 0;
++		default:
++			return -ENOTSUPP;
 +		}
++		break;
++	case BPF_PROG_TYPE_EXT:
++		/* freplace program can return anything as its return value
++		 * depends on the to-be-replaced kernel func or bpf program.
++		 */
+ 	default:
+ 		return 0;
  	}
- 	rcu_read_unlock();
- }
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 8c2763eb6aae..24f64bc0de18 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -1742,6 +1742,7 @@ int tls_sw_recvmsg(struct sock *sk,
- 	long timeo;
- 	bool is_kvec = iov_iter_is_kvec(&msg->msg_iter);
- 	bool is_peek = flags & MSG_PEEK;
-+	bool bpf_strp_enabled;
- 	int num_async = 0;
- 	int pending;
- 
-@@ -1752,6 +1753,7 @@ int tls_sw_recvmsg(struct sock *sk,
- 
- 	psock = sk_psock_get(sk);
- 	lock_sock(sk);
-+	bpf_strp_enabled = sk_psock_strp_enabled(psock);
- 
- 	/* Process pending decrypted records. It must be non-zero-copy */
- 	err = process_rx_list(ctx, msg, &control, &cmsg, 0, len, false,
-@@ -1805,11 +1807,12 @@ int tls_sw_recvmsg(struct sock *sk,
- 
- 		if (to_decrypt <= len && !is_kvec && !is_peek &&
- 		    ctx->control == TLS_RECORD_TYPE_DATA &&
--		    prot->version != TLS_1_3_VERSION)
-+		    prot->version != TLS_1_3_VERSION &&
-+		    !bpf_strp_enabled)
- 			zc = true;
- 
- 		/* Do not use async mode if record is non-data */
--		if (ctx->control == TLS_RECORD_TYPE_DATA)
-+		if (ctx->control == TLS_RECORD_TYPE_DATA && !bpf_strp_enabled)
- 			async_capable = ctx->async_capable;
- 		else
- 			async_capable = false;
-@@ -1859,6 +1862,19 @@ int tls_sw_recvmsg(struct sock *sk,
- 			goto pick_next_record;
- 
- 		if (!zc) {
-+			if (bpf_strp_enabled) {
-+				err = sk_psock_tls_strp_read(psock, skb);
-+				if (err != __SK_PASS) {
-+					rxm->offset = rxm->offset + rxm->full_len;
-+					rxm->full_len = 0;
-+					if (err == __SK_DROP)
-+						consume_skb(skb);
-+					ctx->recv_pkt = NULL;
-+					__strp_unpause(&ctx->strp);
-+					continue;
-+				}
-+			}
-+
- 			if (rxm->full_len > len) {
- 				retain_skb = true;
- 				chunk = len;
 -- 
 2.25.1
 
