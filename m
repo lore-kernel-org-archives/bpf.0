@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5685EC433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 727DFC433E1
 	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 315C320737
+	by mail.kernel.org (Postfix) with ESMTP id 52D21207C3
 	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1591664186;
-	bh=t8EX+OcVvPjkVogK7HTxyL6ukX9m/HBgPkG41B/CT7o=;
+	bh=eLGvbqasm5wT9Qyyy9tJRN20dYjw6ehaSKc9NufMyLk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=rZPlaIbVceiTcbcdtPEIiY3okKp134ZJXrR1MxfXvM96/SxWE8qNwb3iqqAYuUicZ
-	 GoFjGwLfUzmZWehVWkqtzcSOUhHqgbZQbScQrR/5tk+gyzt1WR+AaFCHmMUBaorEAd
-	 Nser049i17DasqvXkJMaJvP/cOBYfbVfgsSOmCVs=
+	b=xNn0bXOmRKW/EsyjMEtsIOTVl0OJNGgc55vj9tban7RlLhdaUF3VfP4eHGjyf3/mW
+	 ncwZGEspxfHlY6AWuoOzRazv1534+Zs7/25bcgvT/SsjO+EiRXIIzkTquYHiVM7LIT
+	 PQnDzRYAUKdLqu/xJW/C0YKuhsasm6n82QGD2nzc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728318AbgFHXJF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:09:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54628 "EHLO mail.kernel.org"
+        id S1728761AbgFIA4Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 20:56:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54714 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728314AbgFHXJC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:09:02 -0400
+        id S1728323AbgFHXJF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:09:05 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AB0CB208E4;
-        Mon,  8 Jun 2020 23:09:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 817A620B80;
+        Mon,  8 Jun 2020 23:09:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657741;
-        bh=t8EX+OcVvPjkVogK7HTxyL6ukX9m/HBgPkG41B/CT7o=;
+        s=default; t=1591657745;
+        bh=eLGvbqasm5wT9Qyyy9tJRN20dYjw6ehaSKc9NufMyLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IroOBB1iUIAbfWFEHwfez+w4FimyjYl1vuD59NknoZ2ENcif8Ul+4Z7s9EM+6mNXx
-         OdNuQ9pXXqiVIg/He419YAyJvdXbpePYsXTJUHCaSXxKlxdJnJGNLAC5+ci33MozDM
-         8S4O/QBqADEG0DZtfGNkdVyHBR/7e6zUNrS2TKGA=
+        b=UFAcSbgjNs+965jiLFuV2TERJGezRivtk/hkb7aQtTZ0g0CynvXb7o3u3JKZ9qYnf
+         uL9elq8MtaRcyro2jinmJ2n2Jd+DeIfwvGy4JwkgJxKr6SF/b1cGKuXekCI+AEHj3K
+         4eXDZu7OHMw6kuOvH1kqMdf50vf6DEau9O75GQJw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrii Nakryiko <andriin@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 130/274] selftests/bpf: Fix memory leak in test selector
-Date:   Mon,  8 Jun 2020 19:03:43 -0400
-Message-Id: <20200608230607.3361041-130-sashal@kernel.org>
+        KP Singh <kpsingh@google.com>, Sasha Levin <sashal@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 133/274] libbpf: Fix huge memory leak in libbpf_find_vmlinux_btf_id()
+Date:   Mon,  8 Jun 2020 19:03:46 -0400
+Message-Id: <20200608230607.3361041-133-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -62,58 +61,43 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit f25d5416d64c796aa639136eb0b076c8bd579b54 ]
+[ Upstream commit 3521ffa2ee9a48c3236c93f54ae11c074490ebce ]
 
-Free test selector substrings, which were strdup()'ed.
+BTF object wasn't freed.
 
-Fixes: b65053cd94f4 ("selftests/bpf: Add whitelist/blacklist of test names to test_progs")
+Fixes: a6ed02cac690 ("libbpf: Load btf_vmlinux only once per object.")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20200429012111.277390-6-andriin@fb.com
+Cc: KP Singh <kpsingh@google.com>
+Link: https://lore.kernel.org/bpf/20200429012111.277390-9-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/test_progs.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ tools/lib/bpf/libbpf.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index b521e0a512b6..86d0020c9eec 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -420,6 +420,18 @@ static int libbpf_print_fn(enum libbpf_print_level level,
- 	return 0;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 63fc872723fc..cd53204d33f0 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -6688,6 +6688,7 @@ int libbpf_find_vmlinux_btf_id(const char *name,
+ 			       enum bpf_attach_type attach_type)
+ {
+ 	struct btf *btf;
++	int err;
+ 
+ 	btf = libbpf_find_kernel_btf();
+ 	if (IS_ERR(btf)) {
+@@ -6695,7 +6696,9 @@ int libbpf_find_vmlinux_btf_id(const char *name,
+ 		return -EINVAL;
+ 	}
+ 
+-	return __find_vmlinux_btf_id(btf, name, attach_type);
++	err = __find_vmlinux_btf_id(btf, name, attach_type);
++	btf__free(btf);
++	return err;
  }
  
-+static void free_str_set(const struct str_set *set)
-+{
-+	int i;
-+
-+	if (!set)
-+		return;
-+
-+	for (i = 0; i < set->cnt; i++)
-+		free((void *)set->strs[i]);
-+	free(set->strs);
-+}
-+
- static int parse_str_list(const char *s, struct str_set *set)
- {
- 	char *input, *state = NULL, *next, **tmp, **strs = NULL;
-@@ -756,11 +768,11 @@ int main(int argc, char **argv)
- 	fprintf(stdout, "Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
- 		env.succ_cnt, env.sub_succ_cnt, env.skip_cnt, env.fail_cnt);
- 
--	free(env.test_selector.blacklist.strs);
--	free(env.test_selector.whitelist.strs);
-+	free_str_set(&env.test_selector.blacklist);
-+	free_str_set(&env.test_selector.whitelist);
- 	free(env.test_selector.num_set);
--	free(env.subtest_selector.blacklist.strs);
--	free(env.subtest_selector.whitelist.strs);
-+	free_str_set(&env.subtest_selector.blacklist);
-+	free_str_set(&env.subtest_selector.whitelist);
- 	free(env.subtest_selector.num_set);
- 
- 	return env.fail_cnt ? EXIT_FAILURE : EXIT_SUCCESS;
+ static int libbpf_find_prog_btf_id(const char *name, __u32 attach_prog_fd)
 -- 
 2.25.1
 
