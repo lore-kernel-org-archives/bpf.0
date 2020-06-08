@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1233CC433E3
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:29:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 392B4C433DF
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:31:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E3D3A2078B
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:29:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16FCB20872
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:31:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591662577;
-	bh=GYCIRJadqCjtngCxpF39DU3VLAgOV9p5ZuU8EFPmBRQ=;
+	s=default; t=1591662680;
+	bh=wG6r09WBZXBQHy367q4m6MyNiVwiapMtLH9N6qQ59aE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=kO36c/crn5iAIFfSVCMdALlNhl8gxytbaanyw66E5ycd7sAFhIRn3ZnemtactpWt9
-	 n9BFBDnpNa9cDwKNe2JD6djFxjhOkvozenrwtE4WLtXKZh8UAx4KkOzZDUNX6/swUP
-	 d3kbU0MK252Y6wGDmRUf+UgX3tfONwuHCRQcMOqM=
+	b=VRlQqXaPyLXQ7lFR3pgCtQ4EFtMwoPMZWS6knDujVAsIAJe83BIXtgV+OyvOvIm3t
+	 7nH+13ftEqWirh+WEbdcVeMwyOJ2ytr+YFucfUn3WhdjUVnLO9GjAuJ489LSER7h0n
+	 9C5kOyqiBFC6qawBnb6GwqdiCmnkeEAc90AwmyKU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731209AbgFIA3E (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 20:29:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37500 "EHLO mail.kernel.org"
+        id S1730065AbgFHXPg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 19:15:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36638 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730188AbgFHXQM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:16:12 -0400
+        id S1728270AbgFHXPe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:15:34 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 081222076C;
-        Mon,  8 Jun 2020 23:16:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E2E0B20801;
+        Mon,  8 Jun 2020 23:15:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658171;
-        bh=GYCIRJadqCjtngCxpF39DU3VLAgOV9p5ZuU8EFPmBRQ=;
+        s=default; t=1591658133;
+        bh=wG6r09WBZXBQHy367q4m6MyNiVwiapMtLH9N6qQ59aE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f+6EALdU7eNA1mZXNXw3+u3DH0+tJl9DOMsWtGMxBx5EmWhgZmoAfeCB2glw4+vbq
-         aJO2U8a1RPl/a3yF0hr8Ab1lmUzhJNoF5kF2pFo5ttE2r/2pCoCa6Xs54PpEDeVkLP
-         yD+38i2PwbGv9Lst42OrRXiv09IBXopQQzuU1psY=
+        b=emtDsbceKDXxlWniNLFFV1AzHJvI/S8gJhRkzM9ac8kiOkzW5Htug9VUSATjjUnWk
+         JBM6/uG/2oeybszudsTxbD//LQtyYpiqqAjAJ9KOM4XXLqDR00btpHj4F+avme6Pvc
+         f9jJakgt0PX9yel2kr3X9sFiXWJhWj96LLwO5KWA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Kees Cook <keescook@chromium.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Sasha Levin <sashal@kernel.org>, linux-kbuild@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 198/606] flow_dissector: Drop BPF flow dissector prog ref on netns cleanup
-Date:   Mon,  8 Jun 2020 19:05:23 -0400
-Message-Id: <20200608231211.3363633-198-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 168/606] kbuild: Remove debug info from kallsyms linking
+Date:   Mon,  8 Jun 2020 19:04:53 -0400
+Message-Id: <20200608231211.3363633-168-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
@@ -60,95 +60,140 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+From: Kees Cook <keescook@chromium.org>
 
-commit 5cf65922bb15279402e1e19b5ee8c51d618fa51f upstream.
+[ Upstream commit af73d78bd384aa9b8789aa6e7ddbb165f971276f ]
 
-When attaching a flow dissector program to a network namespace with
-bpf(BPF_PROG_ATTACH, ...) we grab a reference to bpf_prog.
+When CONFIG_DEBUG_INFO is enabled, the two kallsyms linking steps spend
+time collecting and writing the dwarf sections to the temporary output
+files. kallsyms does not need this information, and leaving it off
+halves their linking time. This is especially noticeable without
+CONFIG_DEBUG_INFO_REDUCED. The BTF linking stage, however, does still
+need those details.
 
-If netns gets destroyed while a flow dissector is still attached, and there
-are no other references to the prog, we leak the reference and the program
-remains loaded.
+Refactor the BTF and kallsyms generation stages slightly for more
+regularized temporary names. Skip debug during kallsyms links.
+Additionally move "info BTF" to the correct place since commit
+8959e39272d6 ("kbuild: Parameterize kallsyms generation and correct
+reporting"), which added "info LD ..." to vmlinux_link calls.
 
-Leak can be reproduced by running flow dissector tests from selftests/bpf:
+For a full debug info build with BTF, my link time goes from 1m06s to
+0m54s, saving about 12 seconds, or 18%.
 
-  # bpftool prog list
-  # ./test_flow_dissector.sh
-  ...
-  selftests: test_flow_dissector [PASS]
-  # bpftool prog list
-  4: flow_dissector  name _dissect  tag e314084d332a5338  gpl
-          loaded_at 2020-05-20T18:50:53+0200  uid 0
-          xlated 552B  jited 355B  memlock 4096B  map_ids 3,4
-          btf_id 4
-  #
-
-Fix it by detaching the flow dissector program when netns is going away.
-
-Fixes: d58e468b1112 ("flow_dissector: implements flow dissector BPF hook")
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
-Link: https://lore.kernel.org/bpf/20200521083435.560256-1-jakub@cloudflare.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Link: https://lore.kernel.org/bpf/202003031814.4AEA3351@keescook
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/flow_dissector.c | 26 +++++++++++++++++++++-----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+ scripts/link-vmlinux.sh | 28 +++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-index a1670dff0629..0e5012d7b7b5 100644
---- a/net/core/flow_dissector.c
-+++ b/net/core/flow_dissector.c
-@@ -160,12 +160,10 @@ int skb_flow_dissector_bpf_prog_attach(const union bpf_attr *attr,
- 	return ret;
- }
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index dd484e92752e..ac569e197bfa 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -63,12 +63,18 @@ vmlinux_link()
+ 	local lds="${objtree}/${KBUILD_LDS}"
+ 	local output=${1}
+ 	local objects
++	local strip_debug
  
--int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
-+static int flow_dissector_bpf_prog_detach(struct net *net)
+ 	info LD ${output}
+ 
+ 	# skip output file argument
+ 	shift
+ 
++	# The kallsyms linking does not need debug symbols included.
++	if [ "$output" != "${output#.tmp_vmlinux.kallsyms}" ] ; then
++		strip_debug=-Wl,--strip-debug
++	fi
++
+ 	if [ "${SRCARCH}" != "um" ]; then
+ 		objects="--whole-archive			\
+ 			${KBUILD_VMLINUX_OBJS}			\
+@@ -79,6 +85,7 @@ vmlinux_link()
+ 			${@}"
+ 
+ 		${LD} ${KBUILD_LDFLAGS} ${LDFLAGS_vmlinux}	\
++			${strip_debug#-Wl,}			\
+ 			-o ${output}				\
+ 			-T ${lds} ${objects}
+ 	else
+@@ -91,6 +98,7 @@ vmlinux_link()
+ 			${@}"
+ 
+ 		${CC} ${CFLAGS_vmlinux}				\
++			${strip_debug}				\
+ 			-o ${output}				\
+ 			-Wl,-T,${lds}				\
+ 			${objects}				\
+@@ -106,6 +114,8 @@ gen_btf()
  {
- 	struct bpf_prog *attached;
--	struct net *net;
+ 	local pahole_ver
+ 	local bin_arch
++	local bin_format
++	local bin_file
  
--	net = current->nsproxy->net_ns;
- 	mutex_lock(&flow_dissector_mutex);
- 	attached = rcu_dereference_protected(net->flow_dissector_prog,
- 					     lockdep_is_held(&flow_dissector_mutex));
-@@ -179,6 +177,24 @@ int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
- 	return 0;
+ 	if ! [ -x "$(command -v ${PAHOLE})" ]; then
+ 		echo >&2 "BTF: ${1}: pahole (${PAHOLE}) is not available"
+@@ -118,8 +128,9 @@ gen_btf()
+ 		return 1
+ 	fi
+ 
+-	info "BTF" ${2}
+ 	vmlinux_link ${1}
++
++	info "BTF" ${2}
+ 	LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}
+ 
+ 	# dump .BTF section into raw binary file to link with final vmlinux
+@@ -127,11 +138,12 @@ gen_btf()
+ 		cut -d, -f1 | cut -d' ' -f2)
+ 	bin_format=$(LANG=C ${OBJDUMP} -f ${1} | grep 'file format' | \
+ 		awk '{print $4}')
++	bin_file=.btf.vmlinux.bin
+ 	${OBJCOPY} --change-section-address .BTF=0 \
+ 		--set-section-flags .BTF=alloc -O binary \
+-		--only-section=.BTF ${1} .btf.vmlinux.bin
++		--only-section=.BTF ${1} $bin_file
+ 	${OBJCOPY} -I binary -O ${bin_format} -B ${bin_arch} \
+-		--rename-section .data=.BTF .btf.vmlinux.bin ${2}
++		--rename-section .data=.BTF $bin_file ${2}
  }
  
-+int skb_flow_dissector_bpf_prog_detach(const union bpf_attr *attr)
-+{
-+	return flow_dissector_bpf_prog_detach(current->nsproxy->net_ns);
-+}
-+
-+static void __net_exit flow_dissector_pernet_pre_exit(struct net *net)
-+{
-+	/* We're not racing with attach/detach because there are no
-+	 * references to netns left when pre_exit gets called.
-+	 */
-+	if (rcu_access_pointer(net->flow_dissector_prog))
-+		flow_dissector_bpf_prog_detach(net);
-+}
-+
-+static struct pernet_operations flow_dissector_pernet_ops __net_initdata = {
-+	.pre_exit = flow_dissector_pernet_pre_exit,
-+};
-+
- /**
-  * __skb_flow_get_ports - extract the upper layer ports and return them
-  * @skb: sk_buff to extract the ports from
-@@ -1838,7 +1854,7 @@ static int __init init_default_flow_dissectors(void)
- 	skb_flow_dissector_init(&flow_keys_basic_dissector,
- 				flow_keys_basic_dissector_keys,
- 				ARRAY_SIZE(flow_keys_basic_dissector_keys));
--	return 0;
--}
+ # Create ${2} .o file with all symbols from the ${1} object file
+@@ -166,8 +178,8 @@ kallsyms()
+ kallsyms_step()
+ {
+ 	kallsymso_prev=${kallsymso}
+-	kallsymso=.tmp_kallsyms${1}.o
+-	kallsyms_vmlinux=.tmp_vmlinux${1}
++	kallsyms_vmlinux=.tmp_vmlinux.kallsyms${1}
++	kallsymso=${kallsyms_vmlinux}.o
  
-+	return register_pernet_subsys(&flow_dissector_pernet_ops);
-+}
- core_initcall(init_default_flow_dissectors);
+ 	vmlinux_link ${kallsyms_vmlinux} "${kallsymso_prev}" ${btf_vmlinux_bin_o}
+ 	kallsyms ${kallsyms_vmlinux} ${kallsymso}
+@@ -190,7 +202,6 @@ cleanup()
+ {
+ 	rm -f .btf.*
+ 	rm -f .tmp_System.map
+-	rm -f .tmp_kallsyms*
+ 	rm -f .tmp_vmlinux*
+ 	rm -f System.map
+ 	rm -f vmlinux
+@@ -257,9 +268,8 @@ tr '\0' '\n' < modules.builtin.modinfo | sed -n 's/^[[:alnum:]:_]*\.file=//p' |
+ 
+ btf_vmlinux_bin_o=""
+ if [ -n "${CONFIG_DEBUG_INFO_BTF}" ]; then
+-	if gen_btf .tmp_vmlinux.btf .btf.vmlinux.bin.o ; then
+-		btf_vmlinux_bin_o=.btf.vmlinux.bin.o
+-	else
++	btf_vmlinux_bin_o=.btf.vmlinux.bin.o
++	if ! gen_btf .tmp_vmlinux.btf $btf_vmlinux_bin_o ; then
+ 		echo >&2 "Failed to generate BTF for vmlinux"
+ 		echo >&2 "Try to disable CONFIG_DEBUG_INFO_BTF"
+ 		exit 1
 -- 
 2.25.1
 
