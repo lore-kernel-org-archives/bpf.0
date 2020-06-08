@@ -2,147 +2,89 @@ Return-Path: <SRS0=G29D=7V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACEBAC433E1
-	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 21:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF9FAC433E1
+	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 23:11:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A8182074B
-	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 21:09:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9288520E65
+	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 23:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1591657867;
+	bh=H41nqotO2pzomHP53p6h5JZJ/pOdapmKqlagWJkG6tY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=YYa6w3vc6Ok4JQ+cizDxYp7bbss+ZMLsBkflVrCbjobvIrrTuopbaR9P5foe3FUzy
+	 EMZ01KLhd1vJoU+b+M/zLKyhc+Pq4Mat/7hrh+gzAmwk7JydRwG8K/mQeOrk07ukrQ
+	 Ir8nqR/AY+sWGfRkDKFHT1jcdJl3iaA3Jwr72bV8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726566AbgFHVJN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 17:09:13 -0400
-Received: from mga07.intel.com ([134.134.136.100]:4792 "EHLO mga07.intel.com"
+        id S1728823AbgFHXLG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 19:11:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57694 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726725AbgFHVJI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 17:09:08 -0400
-IronPort-SDR: pigDRql+fRd4Ju4Ts1fHZYMlOjqX2kTALj9tB0Vv3lW+s6Pp+dzF1gU3t2k18bsOjvKAUOi6+4
- uV1HK8LWkp+A==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2020 14:09:06 -0700
-IronPort-SDR: frmd7NyexTaQPNjw1Wq1AJSAV6dMLQE7KIOqLtiiSTgWfM1QMpgYdkgCZm7nHZaMI3r22Vvpob
- O5elf8Oxn2/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,489,1583222400"; 
-   d="scan'208";a="288603314"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
-  by orsmga002.jf.intel.com with ESMTP; 08 Jun 2020 14:09:06 -0700
-Date:   Mon, 8 Jun 2020 14:09:06 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S1728817AbgFHXLF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:11:05 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9097A208FE;
+        Mon,  8 Jun 2020 23:11:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591657864;
+        bh=H41nqotO2pzomHP53p6h5JZJ/pOdapmKqlagWJkG6tY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=N24tVHbF5bA3naoTQim6FDAES1W4lWvycgWcPIQ68yYdkbMvEzBksVFGy5uiiinBt
+         e28Fe1tzbRnEltCgLHhXldupzz60LiwkhGBl1gXUh091Ac0NBGIWnExHPHRrTd2tAi
+         p4VI80eZiBzkSg3MBo59If+KY7/EHaf6ufHhzaHY=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: Re: [PATCH] virtio_net: Unregister and re-register xdp_rxq across
- freeze/restore
-Message-ID: <20200608210906.GG8223@linux.intel.com>
-References: <20200605214624.21430-1-sean.j.christopherson@intel.com>
- <20200607091542-mutt-send-email-mst@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 226/274] selftests/bpf: CONFIG_LIRC required for test_lirc_mode2.sh
+Date:   Mon,  8 Jun 2020 19:05:19 -0400
+Message-Id: <20200608230607.3361041-226-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
+References: <20200608230607.3361041-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200607091542-mutt-send-email-mst@kernel.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Jun 07, 2020 at 09:23:03AM -0400, Michael S. Tsirkin wrote:
-> On Fri, Jun 05, 2020 at 02:46:24PM -0700, Sean Christopherson wrote:
-> > @@ -1480,17 +1495,10 @@ static int virtnet_open(struct net_device *dev)
-> >  			if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
-> >  				schedule_delayed_work(&vi->refill, 0);
-> >  
-> > -		err = xdp_rxq_info_reg(&vi->rq[i].xdp_rxq, dev, i);
-> > +		err = virtnet_reg_xdp(&vi->rq[i].xdp_rxq, dev, i);
-> >  		if (err < 0)
-> >  			return err;
-> >  
-> > -		err = xdp_rxq_info_reg_mem_model(&vi->rq[i].xdp_rxq,
-> > -						 MEM_TYPE_PAGE_SHARED, NULL);
-> > -		if (err < 0) {
-> > -			xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
-> > -			return err;
-> > -		}
-> > -
-> >  		virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
-> >  		virtnet_napi_tx_enable(vi, vi->sq[i].vq, &vi->sq[i].napi);
-> >  	}
-> > @@ -2306,6 +2314,7 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
-> >  
-> >  	if (netif_running(vi->dev)) {
-> >  		for (i = 0; i < vi->max_queue_pairs; i++) {
-> > +			xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
-> >  			napi_disable(&vi->rq[i].napi);
-> >  			virtnet_napi_tx_disable(&vi->sq[i].napi);
-> 
-> I suspect the right thing to do is to first disable all NAPI,
-> then play with XDP. Generally cleanup in the reverse order
-> of init is a good idea.
+From: Alan Maguire <alan.maguire@oracle.com>
 
-Hmm, I was simply following virtnet_close().  Actually, the entire loop
-could be factored out into a separate helper.  Perhaps do that as part of
-the fix, and then invert the ordering in a separate patch?
+[ Upstream commit a5dfaa2ab94057dd75c7911143482a0a85593c14 ]
 
-> >  		}
-> > @@ -2313,6 +2322,8 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
-> >  }
-> >  
-> >  static int init_vqs(struct virtnet_info *vi);
-> > +static void virtnet_del_vqs(struct virtnet_info *vi);
-> > +static void free_receive_page_frags(struct virtnet_info *vi);
-> 
-> I'd really rather we reordered code so forward decls are not necessary.
+test_lirc_mode2.sh assumes presence of /sys/class/rc/rc0/lirc*/uevent
+which will not be present unless CONFIG_LIRC=y
 
-Yeah, no argument from me.  Would you prefer the reordering in a separate
-patch on top, e.g. to simplify potential backporting?
+Fixes: 6bdd533cee9a ("bpf: add selftest for lirc_mode2 type program")
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/1590147389-26482-3-git-send-email-alan.maguire@oracle.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/bpf/config | 1 +
+ 1 file changed, 1 insertion(+)
 
-> >  static int virtnet_restore_up(struct virtio_device *vdev)
-> >  {
-> > @@ -2331,6 +2342,10 @@ static int virtnet_restore_up(struct virtio_device *vdev)
-> >  				schedule_delayed_work(&vi->refill, 0);
-> >  
-> >  		for (i = 0; i < vi->max_queue_pairs; i++) {
-> > +			err = virtnet_reg_xdp(&vi->rq[i].xdp_rxq, vi->dev, i);
-> > +			if (err)
-> > +				goto free_vqs;
-> > +
-> >  			virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
-> >  			virtnet_napi_tx_enable(vi, vi->sq[i].vq,
-> >  					       &vi->sq[i].napi);
-> > @@ -2340,6 +2355,12 @@ static int virtnet_restore_up(struct virtio_device *vdev)
-> >  	netif_tx_lock_bh(vi->dev);
-> >  	netif_device_attach(vi->dev);
-> >  	netif_tx_unlock_bh(vi->dev);
-> > +	return 0;
-> > +
-> > +free_vqs:
-> > +	cancel_delayed_work_sync(&vi->refill);
-> > +	free_receive_page_frags(vi);
-> > +	virtnet_del_vqs(vi);
-> 
-> 
-> I am not sure this is safe to do after device-ready.
-> 
-> Can reg xdp happen before device ready?
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 48e058552eb7..2118e23ac07a 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -38,3 +38,4 @@ CONFIG_IPV6_SIT=m
+ CONFIG_BPF_JIT=y
+ CONFIG_BPF_LSM=y
+ CONFIG_SECURITY=y
++CONFIG_LIRC=y
+-- 
+2.25.1
 
-From a code perspective, I don't see anything that will explode, but I have
-no idea if that's correct/sane behavior.
-
-FWIW, the xdp error handling in virtnet_open() also looks bizarre to me,
-e.g. bails in the middle of a loop without doing any cleanup.  I assume
-virtnet_close() wouldn't called if open failed?  But I can't determine
-whether or not that holds true based on code inspection, there are too many
-call sites that lead to open and close.
