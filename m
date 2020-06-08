@@ -7,48 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CF4BC433E0
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:38:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA1A5C433DF
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:42:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29DA1206C3
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:38:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95DCF207ED
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:42:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591663109;
-	bh=X7FpV+JC98CvjiH85Qi4hqa20p22Tnz7RmdeG4ZzTk0=;
+	s=default; t=1591663368;
+	bh=52liZxWS/YVroA/0/89/gMuhBgSh5CrWsVrWvpMtxo8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=GxfgKyz9lzgDXU1MAbEy9hQ8Vp/gNeQhwuBWdpJKhiOYTT5sfaH/+J1o0Lg7EOINg
-	 TpA7+Jb90t24LKxCMWSHLrVdMRyzYPq0U0iGBiWvnVyvt/HPNfwnYxYYaJl0C+ELVr
-	 Nkv7r8KESQjYQucKraT1P8exAZ4tor3upxfjpYls=
+	b=deyDh1Ppc2ZVUVUNAYWxR/xzf2M9KIwtuRgPkQ0ydDIs5PeG4nLspfRzdlSUxaWX2
+	 BuRp8FPFyp0mTWeWt7HWKfC5kg2zMqPcTp/j9hQarWZ0K+Kzrqxo6s8e9cecwYFlvJ
+	 LU0mXUvgUbGD287lCOV1RrH8btIp6lmF2u/2VvFc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728646AbgFIAh7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 20:37:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33398 "EHLO mail.kernel.org"
+        id S1729074AbgFHXMW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 19:12:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59772 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729520AbgFHXNe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:13:34 -0400
+        id S1728384AbgFHXMU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:12:20 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 15C1C21508;
-        Mon,  8 Jun 2020 23:13:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4C7C1212CC;
+        Mon,  8 Jun 2020 23:12:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658014;
-        bh=X7FpV+JC98CvjiH85Qi4hqa20p22Tnz7RmdeG4ZzTk0=;
+        s=default; t=1591657940;
+        bh=52liZxWS/YVroA/0/89/gMuhBgSh5CrWsVrWvpMtxo8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=brrh6MaN1SdjZ2qD9RdMS0e+NQ7k91InovUL1ntk0OlZIxahNmBA/0F6FxCGLvrYu
-         8TEAn4Akjp2r5w0ebCdYoiMT5xSXrGyki+hbBEzqr45Fs2oRL2mEbCJldchNlOLAGi
-         aMzQzOS5P/ZpQnBysyN2ULdmQ3Mt3hprzoRNXHh4=
+        b=HDwlKid4kRMpQBoMqO5E0dhfpM2WucrsJdCMZSl2gmfXwr4Qck+ua9JJor+CEFOWG
+         kX/FZp20iu9P2XerocXebmYl3jWbHVWPGLvxZ3GW+K+2gf1EhkxP/CWbDNsI7S/Gyd
+         FbXoh99o0Mjt2LgjSMFSOXdI7HKu1neJNUvOLtXQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 068/606] bpf: Fix sk_psock refcnt leak when receiving message
-Date:   Mon,  8 Jun 2020 19:03:13 -0400
-Message-Id: <20200608231211.3363633-68-sashal@kernel.org>
+Cc:     Sasha Levin <sashal@kernel.org>, Andrii Nakryiko <andriin@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 006/606] bpf: Fix bug in mmap() implementation for BPF array map
+Date:   Mon,  8 Jun 2020 19:02:11 -0400
+Message-Id: <20200608231211.3363633-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
@@ -61,60 +59,63 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+[ Upstream commit 333291ce5055f2039afc907badaf5b66bc1adfdc ]
 
-commit 18f02ad19e2c2a1d9e1d55a4e1c0cbf51419151c upstream.
+mmap() subsystem allows user-space application to memory-map region with
+initial page offset. This wasn't taken into account in initial implementation
+of BPF array memory-mapping. This would result in wrong pages, not taking into
+account requested page shift, being memory-mmaped into user-space. This patch
+fixes this gap and adds a test for such scenario.
 
-tcp_bpf_recvmsg() invokes sk_psock_get(), which returns a reference of
-the specified sk_psock object to "psock" with increased refcnt.
-
-When tcp_bpf_recvmsg() returns, local variable "psock" becomes invalid,
-so the refcount should be decreased to keep refcount balanced.
-
-The reference counting issue happens in several exception handling paths
-of tcp_bpf_recvmsg(). When those error scenarios occur such as "flags"
-includes MSG_ERRQUEUE, the function forgets to decrease the refcnt
-increased by sk_psock_get(), causing a refcnt leak.
-
-Fix this issue by calling sk_psock_put() or pulling up the error queue
-read handling when those error scenarios occur.
-
-Fixes: e7a5f1f1cd000 ("bpf/sockmap: Read psock ingress_msg before sk_receive_queue")
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-Link: https://lore.kernel.org/bpf/1587872115-42805-1-git-send-email-xiyuyang19@fudan.edu.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: fc9702273e2e ("bpf: Add mmap() support for BPF_MAP_TYPE_ARRAY")
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20200512235925.3817805-1-andriin@fb.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_bpf.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ kernel/bpf/arraymap.c                         | 7 ++++++-
+ tools/testing/selftests/bpf/prog_tests/mmap.c | 9 +++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 19bd10e6ab83..69b025408390 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -121,14 +121,17 @@ int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
- 	struct sk_psock *psock;
- 	int copied, ret;
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 95d77770353c..1d6120fd5ba6 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -486,7 +486,12 @@ static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
+ 	if (!(map->map_flags & BPF_F_MMAPABLE))
+ 		return -EINVAL;
  
-+	if (unlikely(flags & MSG_ERRQUEUE))
-+		return inet_recv_error(sk, msg, len, addr_len);
+-	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array), pgoff);
++	if (vma->vm_pgoff * PAGE_SIZE + (vma->vm_end - vma->vm_start) >
++	    PAGE_ALIGN((u64)array->map.max_entries * array->elem_size))
++		return -EINVAL;
 +
- 	psock = sk_psock_get(sk);
- 	if (unlikely(!psock))
- 		return tcp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
--	if (unlikely(flags & MSG_ERRQUEUE))
--		return inet_recv_error(sk, msg, len, addr_len);
- 	if (!skb_queue_empty(&sk->sk_receive_queue) &&
--	    sk_psock_queue_empty(psock))
-+	    sk_psock_queue_empty(psock)) {
-+		sk_psock_put(sk, psock);
- 		return tcp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
++	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array),
++				   vma->vm_pgoff + pgoff);
+ }
+ 
+ const struct bpf_map_ops array_map_ops = {
+diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
+index 16a814eb4d64..b0e789678aa4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/mmap.c
++++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
+@@ -197,6 +197,15 @@ void test_mmap(void)
+ 	CHECK_FAIL(map_data->val[far] != 3 * 321);
+ 
+ 	munmap(tmp2, 4 * page_size);
++
++	/* map all 4 pages, but with pg_off=1 page, should fail */
++	tmp1 = mmap(NULL, 4 * page_size, PROT_READ, MAP_SHARED | MAP_FIXED,
++		    data_map_fd, page_size /* initial page shift */);
++	if (CHECK(tmp1 != MAP_FAILED, "adv_mmap7", "unexpected success")) {
++		munmap(tmp1, 4 * page_size);
++		goto cleanup;
 +	}
- 	lock_sock(sk);
- msg_bytes_ready:
- 	copied = __tcp_bpf_recvmsg(sk, psock, msg, len, flags);
++
+ cleanup:
+ 	if (bss_mmaped)
+ 		CHECK_FAIL(munmap(bss_mmaped, bss_sz));
 -- 
 2.25.1
 
