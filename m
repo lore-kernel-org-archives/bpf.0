@@ -2,100 +2,115 @@ Return-Path: <SRS0=G29D=7V=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43D2EC433DF
-	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 23:15:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FC46C433DF
+	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 23:50:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1BBA821532
-	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 23:15:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591658106;
-	bh=q+/YNJFG0GRlIcTN8/G1ReOa5iQS1CReUKZzJgxNyxE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=AyLX9IbvaKQcrgw/4XCkRFLWMtKuLM8gZZ2b15836eHk4sjB5Up4ac3c14+kD00my
-	 m2mIz0zKPh7nZ9O6GHGwAazvverQ6MPVB9WM7Tj7wfq68yF1LiBkx1ZU2dgZ0AhCN8
-	 paZ0L3HRLk+7gpYgyigUgkEbk6FA+ub51WgUmKlo=
+	by mail.kernel.org (Postfix) with ESMTP id 469CE20812
+	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 23:50:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wg9CygL0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729970AbgFHXPE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:15:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35732 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729954AbgFHXPC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:15:02 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DCAF621531;
-        Mon,  8 Jun 2020 23:15:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658102;
-        bh=q+/YNJFG0GRlIcTN8/G1ReOa5iQS1CReUKZzJgxNyxE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qQJ90JEU4iRiJ+em6F+/ImFFSr293/GElhc8WCUPN+ZSbXQpNiABHCntFUjsbKtzh
-         vMonIVwh/GDcokTYqNdDpF9Li+KnroJ1CNlkawHr9i3nTzxeFkIsSMs0g8x4R4r5WK
-         lorJtJ0QAGPNJFQJ/iHzJMRLG7EkHUVrOoAk9Jig=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Yonghong Song <yhs@fb.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 142/606] bpf: Add bpf_probe_read_{user, kernel}_str() to do_refine_retval_range
-Date:   Mon,  8 Jun 2020 19:04:27 -0400
-Message-Id: <20200608231211.3363633-142-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
-References: <20200608231211.3363633-1-sashal@kernel.org>
+        id S1732639AbgFHXuu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 19:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732633AbgFHXut (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:50:49 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290C8C08C5C2;
+        Mon,  8 Jun 2020 16:50:49 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id g28so19189151qkl.0;
+        Mon, 08 Jun 2020 16:50:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=suyqWS/ZUReE4gxYDGm5ZphsdqSoTMupn6xMnhtwXkI=;
+        b=Wg9CygL0m9uKEgVPKFylzpVrbe6Krbbgc1oC+k21qtA85ViAFs99NXazhZQRWmb/ts
+         n06z9ksIKMeLNnwZCQLPzCPqNjTjyRcm90Z0Oy2iXCL0+yD/F6ycqxrsfPLkxHKQML0i
+         66C9N54QzY6EMOj6EoT06BOA0yeNfhz1UFHSwDJmMyoD1aTOKSurfg/p2ZbNFaF2Z92z
+         XOODqEG2INVCQbbzRmfCWYsjA4glEi/P1e/vGYKUMYvKj4FT+uMkyDuEXhcg4o4uZZzY
+         K4eblO4hYkFHAlO+NIGikYC72T84Kb07TAt6TQsjgSyRHwQt0w7OCpae9i/ofhJhGMjK
+         6qzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=suyqWS/ZUReE4gxYDGm5ZphsdqSoTMupn6xMnhtwXkI=;
+        b=FGEvjg+BWlRO4B1HphMWEXZpiN/LjolFYg9g4czOh4Y79ouI+ujHE/lKmtGxSNdhAj
+         ByIfR55mJLlUW0VJH3QVUB/9YZOp+xxf4yAa3b/VSKPrO3O0pQvKw+YfnihRMnNGIKTA
+         3DYQlhw1LFLXabhG4DUhNYxYYDevNh92+ZFnRiJIuSNNvA/1KWYuqiOQYivFBhKx+CDR
+         701LNBl429LGTpEFnm+hMgNOv4yXmkIKrE6U/KJAl8j7mEerO4eJ9zpEtB1dT4EOp/AC
+         tiPUCaNBP4/vlpkFNqTFb0NBWgn9JIf/a8lKfM/1D8N8XZOqHuTKys3smoMtiNbL7au4
+         JEvQ==
+X-Gm-Message-State: AOAM530U0iHTrVzjnslJwaLxYSjujtDQWtYvs3Qtjx/wTwqMVVVN2cKR
+        jRbOGf11oVnJbz2yxQ+suc30DJgrt4Ul9D633QcsiO6WndY=
+X-Google-Smtp-Source: ABdhPJzyA4pPmouxN9UqA3SLetGKvJTIicTZcdhMGJ6l2k+V2EZpqHrw+/opdh3iNjInD77Caax8jW1GXkdsKnO8uTI=
+X-Received: by 2002:a37:4595:: with SMTP id s143mr26306198qka.449.1591660248298;
+ Mon, 08 Jun 2020 16:50:48 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20200608152052.898491-1-jean-philippe@linaro.org>
+In-Reply-To: <20200608152052.898491-1-jean-philippe@linaro.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 8 Jun 2020 16:50:37 -0700
+Message-ID: <CAEf4BzaNaHGBxNLdA1RA7VPou7ypO3Z5XBRG5gpkePx4g27yWA@mail.gmail.com>
+Subject: Re: [PATCH bpf] libbpf: Fix BTF-to-C conversion of noreturn function pointers
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andriin@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+On Mon, Jun 8, 2020 at 8:23 AM Jean-Philippe Brucker
+<jean-philippe@linaro.org> wrote:
+>
+> When trying to convert the BTF for a function pointer marked "noreturn"
+> to C code, bpftool currently generates a syntax error. This happens with
+> the exit() pointer in drivers/firmware/efi/libstub/efistub.h, in an
+> arm64 vmlinux. When dealing with this declaration:
+>
+>         efi_status_t __noreturn (__efiapi *exit)(...);
+>
+> bpftool produces the following output:
+>
+>         efi_status_tvolatile  (*exit)(...);
 
-commit 47cc0ed574abcbbde0cf143ddb21a0baed1aa2df upstream.
 
-Given bpf_probe_read{,str}() BPF helpers are now only available under
-CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE, we need to add the drop-in
-replacements of bpf_probe_read_{kernel,user}_str() to do_refine_retval_range()
-as well to avoid hitting the same issue as in 849fa50662fbc ("bpf/verifier:
-refine retval R0 state for bpf_get_stack helper").
+I'm curious where this volatile is coming from, I don't see it in
+__efiapi. But even if it's there, shouldn't it be inside parens
+instead:
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20200515101118.6508-3-daniel@iogearbox.net
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- kernel/bpf/verifier.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+efi_status_t (volatile *exit)(...);
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c1bb5be530e9..775fca737909 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4113,7 +4113,9 @@ static int do_refine_retval_range(struct bpf_verifier_env *env,
- 
- 	if (ret_type != RET_INTEGER ||
- 	    (func_id != BPF_FUNC_get_stack &&
--	     func_id != BPF_FUNC_probe_read_str))
-+	     func_id != BPF_FUNC_probe_read_str &&
-+	     func_id != BPF_FUNC_probe_read_kernel_str &&
-+	     func_id != BPF_FUNC_probe_read_user_str))
- 		return 0;
- 
- 	/* Error case where ret is in interval [S32MIN, -1]. */
--- 
-2.25.1
+?
 
+>
+> Fix the error by inserting the space before the function modifier.
+>
+> Fixes: 351131b51c7a ("libbpf: add btf_dump API for BTF-to-C conversion")
+> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> ---
+
+Can you please add tests for this case into selftests (probably
+progs/btf_dump_test_case_syntax.c?) So it's clear what's the input and
+what's the expected output.
+
+>  tools/lib/bpf/btf_dump.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
+>
+
+[...]
