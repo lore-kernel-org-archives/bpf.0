@@ -1,57 +1,56 @@
-Return-Path: <SRS0=G29D=7V=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=rM0N=7W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02301C433DF
-	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 23:59:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 259C6C433E2
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:00:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD82120659
-	for <bpf@archiver.kernel.org>; Mon,  8 Jun 2020 23:59:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED2792083E
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 00:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591660769;
-	bh=N751oS8NC36Y0dt+fAPASAJvAAoD3/nSM5jly+El1lA=;
+	s=default; t=1591660835;
+	bh=iGDstssJZNRPmYGflzsJwE0HzniypEW0XvpWSC3yA2I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=hSaRGhkW12l3JPJ2jvbk+9bPiigfQpNwK3QOiGJcFM5Cfe2T6wtsgkVVTPQ1qHSqu
-	 O1cCuODeKgIqmYtA6wR1NgMgXSWGPm12kLKyRfqzOPHWPe694zNCqs6cNv4Yg8DF9Q
-	 RKNzejX946K16rP/EFz3zPIQUS+kDGuO1phCjb5M=
+	b=PzZniX3pDqsAmYnoTjgKGv8lVukoSwoqSOth9nW0gKOZYw/VAc5HVBY0jS92ftZNV
+	 toBrcLYxdJbxeWp8YQ/ICCB+t7QWJ9iP7lsO0yVxhHULbMPyLuwSk1L5esY0jIHDpl
+	 5tlNWUOZCUZlFg1tNO8TJJpiY91TMJhjEPjUdFT0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730142AbgFHX70 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:59:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47908 "EHLO mail.kernel.org"
+        id S1730645AbgFHXWg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Jun 2020 19:22:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47198 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731407AbgFHXW5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:22:57 -0400
+        id S1731329AbgFHXWd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:22:33 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7631D2087E;
-        Mon,  8 Jun 2020 23:22:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E6BCD20842;
+        Mon,  8 Jun 2020 23:22:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658577;
-        bh=N751oS8NC36Y0dt+fAPASAJvAAoD3/nSM5jly+El1lA=;
+        s=default; t=1591658552;
+        bh=iGDstssJZNRPmYGflzsJwE0HzniypEW0XvpWSC3yA2I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O7nD4nQxrnUy3AmHrns2tiPIOLRXOyZoygNREr6+e83XwmT1kZ4t3WYVkPwxPfpWt
-         UqSINfZ/PYYZD0n7YSd93kP06rbE2vHVbISiQuRISKzYnDHvcrnFEazoLrDsV5eUSt
-         keaNF33EEqbFj6T/gya3SKupFZmajkfHRwSW+aLs=
+        b=quIj+6HEDqQdkv08blxJ0QTVvaUzbIxT94q6Ia+/fyiqOgrCN7DdeTg+J6p4WVl05
+         r48Gz4iSGqsGf9Qxe7sddLsWkBbcBcQ8V6SBUHQzKzgZ+/cwfbFC8d1+nnTb9FWI9F
+         cnsGO8FD5LDhrcti8dZz1xmnRMODBl2FtJW99wGw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
         Sasha Levin <sashal@kernel.org>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 015/106] ixgbe: Fix XDP redirect on archs with PAGE_SIZE above 4K
-Date:   Mon,  8 Jun 2020 19:21:07 -0400
-Message-Id: <20200608232238.3368589-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 172/175] selftests/bpf, flow_dissector: Close TAP device FD after the test
+Date:   Mon,  8 Jun 2020 19:18:45 -0400
+Message-Id: <20200608231848.3366970-172-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608232238.3368589-1-sashal@kernel.org>
-References: <20200608232238.3368589-1-sashal@kernel.org>
+In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
+References: <20200608231848.3366970-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,46 +60,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jesper Dangaard Brouer <brouer@redhat.com>
+From: Jakub Sitnicki <jakub@cloudflare.com>
 
-[ Upstream commit 88eb0ee17b2ece64fcf6689a4557a5c2e7a89c4b ]
+[ Upstream commit b8215dce7dfd817ca38807f55165bf502146cd68 ]
 
-The ixgbe driver have another memory model when compiled on archs with
-PAGE_SIZE above 4096 bytes. In this mode it doesn't split the page in
-two halves, but instead increment rx_buffer->page_offset by truesize of
-packet (which include headroom and tailroom for skb_shared_info).
+test_flow_dissector leaves a TAP device after it's finished, potentially
+interfering with other tests that will run after it. Fix it by closing the
+TAP descriptor on cleanup.
 
-This is done correctly in ixgbe_build_skb(), but in ixgbe_rx_buffer_flip
-which is currently only called on XDP_TX and XDP_REDIRECT, it forgets
-to add the tailroom for skb_shared_info. This breaks XDP_REDIRECT, for
-veth and cpumap.  Fix by adding size of skb_shared_info tailroom.
-
-Maintainers notice: This fix have been queued to Jeff.
-
-Fixes: 6453073987ba ("ixgbe: add initial support for xdp redirect")
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Fixes: 0905beec9f52 ("selftests/bpf: run flow dissector tests in skb-less mode")
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Cc: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-Link: https://lore.kernel.org/bpf/158945344946.97035.17031588499266605743.stgit@firesoul
+Link: https://lore.kernel.org/bpf/20200531082846.2117903-11-jakub@cloudflare.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index 8177276500f5..7d723b70fcf6 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -2258,7 +2258,8 @@ static void ixgbe_rx_buffer_flip(struct ixgbe_ring *rx_ring,
- 	rx_buffer->page_offset ^= truesize;
- #else
- 	unsigned int truesize = ring_uses_build_skb(rx_ring) ?
--				SKB_DATA_ALIGN(IXGBE_SKB_PAD + size) :
-+				SKB_DATA_ALIGN(IXGBE_SKB_PAD + size) +
-+				SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) :
- 				SKB_DATA_ALIGN(size);
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+index 92563898867c..9f3634c9971d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+@@ -523,6 +523,7 @@ void test_flow_dissector(void)
+ 		CHECK_ATTR(err, tests[i].name, "bpf_map_delete_elem %d\n", err);
+ 	}
  
- 	rx_buffer->page_offset += truesize;
++	close(tap_fd);
+ 	bpf_prog_detach(prog_fd, BPF_FLOW_DISSECTOR);
+ 	bpf_object__close(obj);
+ }
 -- 
 2.25.1
 
