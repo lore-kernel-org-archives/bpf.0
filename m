@@ -2,115 +2,108 @@ Return-Path: <SRS0=rM0N=7W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 482D8C433DF
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 09:55:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21615C433E0
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 11:39:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2649520823
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 09:55:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F16F32064C
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 11:39:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hS8268ed"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EVE/MUme"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728579AbgFIJz1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Jun 2020 05:55:27 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:49005 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728068AbgFIJz1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Jun 2020 05:55:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591696525;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8fFbCsU1oSPk2DqSBeHz33w2HQ4HTjTHQAGGZ09Klps=;
-        b=hS8268edcJphAsV4Jk0gX2jYsWkZZ3b7WxgGG3OYY2h6j0SfaXqnlCZstr1IA5fiEY7KDm
-        lJia/8XOyrnfYznfqF2fU9EyoAGTwb9s9Wo9F442fDhHiZiPu+sVYz+988j5o9J/npFa1c
-        xS/hvb3+UK2xSTRLKPIMO2KlZXna5sI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-478-LrN1mwcBP5yToYNUaMAEOQ-1; Tue, 09 Jun 2020 05:55:22 -0400
-X-MC-Unique: LrN1mwcBP5yToYNUaMAEOQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B0EBA461;
-        Tue,  9 Jun 2020 09:55:20 +0000 (UTC)
-Received: from carbon (unknown [10.40.208.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A1E02B580;
-        Tue,  9 Jun 2020 09:55:15 +0000 (UTC)
-Date:   Tue, 9 Jun 2020 11:55:13 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     David Ahern <dsahern@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>, brouer@redhat.com
-Subject: Re: [PATCH bpf 0/3] bpf: avoid using/returning file descriptor
- value zero
-Message-ID: <20200609115513.2422b53a@carbon>
-In-Reply-To: <20200609013410.5ktyuzlqu5xpbp4a@ast-mbp.dhcp.thefacebook.com>
-References: <159163498340.1967373.5048584263152085317.stgit@firesoul>
-        <20200609013410.5ktyuzlqu5xpbp4a@ast-mbp.dhcp.thefacebook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        id S1729076AbgFILjs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Jun 2020 07:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729014AbgFILjk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Jun 2020 07:39:40 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6451FC03E97C;
+        Tue,  9 Jun 2020 04:39:40 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id w1so20400311qkw.5;
+        Tue, 09 Jun 2020 04:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:in-reply-to:references;
+        bh=UYWL4b+Nksdqw2T1bjsF7nZO4cYFZU9p52lDBPWks3Q=;
+        b=EVE/MUmeNfXmLgTiwN5/i+wciCoKUwFN5h7WteGzb3uFj47uWistcYYVYgoLIMWUya
+         0mdzYDev4qaM1LIeOsWOR/IiRRiU3mULp01mh1rDC02Tfxfv2jNZc0MJXYFF8GNVnm91
+         mxx3fB9LaOjpzYVgDRBBPNrORD1BO1Z1UV4og/HwThZjR/UI2jPpqXGsxtd6pmvIIiBp
+         or7N5kR1jTvcexoFpu8lI9k9fdPCd06yQ8BhwvP49VfTjtVtCJZ5i3MQEo9YPcdQBAeV
+         hA3ufNs7D+YD7QXrSczACvOjUOLw5kdKRhU6g8xPesviG7SZKD2icTbCT8jm0s4Ylx9j
+         oLPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references;
+        bh=UYWL4b+Nksdqw2T1bjsF7nZO4cYFZU9p52lDBPWks3Q=;
+        b=U+qDKnX0hArrIFGWuS/SeUd4kDwOskap4+DZ44zoo22f0NOoVPOP9RrvPSkfUh5t+m
+         cN8cgt82tbLg0h/ZJgWNjsLww7ScHpp15RhxHtgam0Cl5QVnzBIbn4qIR7qYjXfaOcmN
+         5TJRXv9/6ILYzrf/k/TMqhqg3ze1KOYE0H3y2BdG7yz1Cey+qe6Nl2Wz/DQY4yOC/Q2g
+         ZjXt13NBgrKd9tshMfOR/+XnIC/xeR6DiUcvSS50xI6gegtSk26l5m+TySqdbaZ61ki7
+         Hm1xeQjCI2uADSSTxiI3ULHQcX/JGnLDbPYj98T8n4KFX0XXCX5UsTs/WdISqo699Ukc
+         WOow==
+X-Gm-Message-State: AOAM533v/pLyFXv19JkVromjWFdL5GptFUwr2T65GDiZ/fXQ9lKbQN2h
+        ysxvjKGgHtcJhPSkmRnRemU=
+X-Google-Smtp-Source: ABdhPJw82gvLnPVRojON5y8/81l8qJFH5PwKefp/eQWm+pI3IoYi1CfHo4jZKwrlXaPWYhQlnEIoCg==
+X-Received: by 2002:a37:a504:: with SMTP id o4mr26378752qke.245.1591702779549;
+        Tue, 09 Jun 2020 04:39:39 -0700 (PDT)
+Received: from linux.home ([2604:2000:1344:41d:29ac:7979:1e2e:c67b])
+        by smtp.googlemail.com with ESMTPSA id n13sm11281614qtb.20.2020.06.09.04.39.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2020 04:39:39 -0700 (PDT)
+From:   Gaurav Singh <gaurav1086@gmail.com>
+To:     gaurav1086@gmail.com, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        netdev@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
+        bpf@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] bpf: alloc_record_per_cpu Add null check after malloc
+Date:   Tue,  9 Jun 2020 07:38:39 -0400
+Message-Id: <20200609113839.9628-2-gaurav1086@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200609113839.9628-1-gaurav1086@gmail.com>
+References: <20200609113839.9628-1-gaurav1086@gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 8 Jun 2020 18:34:10 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+Signed-off-by: Gaurav Singh <gaurav1086@gmail.com>
+---
+ samples/bpf/xdp_rxq_info_user.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> On Mon, Jun 08, 2020 at 06:51:12PM +0200, Jesper Dangaard Brouer wrote:
-> > Make it easier to handle UAPI/kABI extensions by avoid BPF using/returning
-> > file descriptor value zero. Use this in recent devmap extension to keep
-> > older applications compatible with newer kernels.
-> > 
-> > For special type maps (e.g. devmap and cpumap) the map-value data-layout is
-> > a configuration interface. This is a kernel Application Binary Interface
-> > (kABI) that can only be tail extended. Thus, new members (and thus features)
-> > can only be added to the end of this structure, and the kernel uses the
-> > map->value_size from userspace to determine feature set 'version'.  
-> 
-> please drop these kabi references. As far as I know kabi is a redhat invention
-> and I'm not even sure what exactly it means.
-> 'struct bpf_devmap_val' is uapi. No need to invent new names for existing concept.
-
-Sure I can call it UAPI.
-
-I was alluding to the difference between API and ABI, but it doesn't matter.
-For the record, Red Hat didn't invent ABI (Application Binary Interface):
- https://en.wikipedia.org/wiki/Application_binary_interface
-
-
-> > The recent extension of devmap with a bpf_prog.fd requires end-user to
-> > supply the file-descriptor value minus-1 to communicate that the features
-> > isn't used. This isn't compatible with the described kABI extension model.  
-> 
-> non-zero prog_fd requirement exists already in bpf syscall. It's not recent.
-> So I don't think patch 1 is appropriate at this point. Certainly not
-> for bpf tree. We can argue about it usefulness when bpf-next reopens.
-> For now I think patches 2 and 3 are good to go.
-
-Great.
-
-> Don't delete 'enum sk_action' in patch 2 though.
-
-Sorry, yes, that was a mistake.
-
-> The rest looks good to me.
-
-Thanks!
+diff --git a/samples/bpf/xdp_rxq_info_user.c b/samples/bpf/xdp_rxq_info_user.c
+index 4fe47502ebed..490b07b7df78 100644
+--- a/samples/bpf/xdp_rxq_info_user.c
++++ b/samples/bpf/xdp_rxq_info_user.c
+@@ -202,11 +202,11 @@ static struct datarec *alloc_record_per_cpu(void)
+ 
+ 	size = sizeof(struct datarec) * nr_cpus;
+ 	array = malloc(size);
+-	memset(array, 0, size);
+ 	if (!array) {
+ 		fprintf(stderr, "Mem alloc error (nr_cpus:%u)\n", nr_cpus);
+ 		exit(EXIT_FAIL_MEM);
+ 	}
++	memset(array, 0, size);
+ 	return array;
+ }
+ 
 -- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+2.17.1
 
