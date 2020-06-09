@@ -2,117 +2,182 @@ Return-Path: <SRS0=rM0N=7W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43E78C433DF
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 12:23:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4132EC433DF
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 13:32:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B1DD2078C
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 12:23:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 214522074B
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 13:32:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WKD2WtuM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aPBSmaXq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728162AbgFIMXb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Jun 2020 08:23:31 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:60623 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727865AbgFIMXa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Jun 2020 08:23:30 -0400
+        id S1730097AbgFINcF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Jun 2020 09:32:05 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:27375 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728710AbgFINcE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 9 Jun 2020 09:32:04 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591705409;
+        s=mimecast20190719; t=1591709522;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=d3aWiXtS8cF+u5/TS5j+n1u7AbVcRqeRZ4SH9J+GaOc=;
-        b=WKD2WtuM0+nuv4bAR+O/tj8YcKzXGUTExm+N/3gaq2OLApaTBGDsKbSUkxD9705Q9m8UJa
-        s2kUvPyVQOLdpZqdTDTGL8WOkcNbvcMeffAeLioRhJ8pWe8dUzekRQFuK8PrYD6Z8y1nAI
-        lpXErSd+tq78tZFcH3Vbkrt5UcGorXM=
+        bh=PFvWo3CucggmGPriTROKDBuxeyYpTwvcGiM7IDwsL8o=;
+        b=aPBSmaXqdndgA5Ik0oi8iiqivgLLNzUt++rQpIyi4GfrsF1GmI2hCPfTHEMngbwQJnUgTu
+        D4xAKmVJDQn5VJRniAf88+OaZhOEJ8wAaUzmoUEED3e+CqaNAxCx74mND8QS3YpKCsQ/Gn
+        Qnx5CZNDK4In4KJc42xJAj8hDOHtcZU=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-252-mSCxeT0HPrWtom8qduK5cQ-1; Tue, 09 Jun 2020 08:23:26 -0400
-X-MC-Unique: mSCxeT0HPrWtom8qduK5cQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+ us-mta-489-JamM1E_IMkWXJ1x5qGXcBA-1; Tue, 09 Jun 2020 09:31:52 -0400
+X-MC-Unique: JamM1E_IMkWXJ1x5qGXcBA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3CEF2107B266;
-        Tue,  9 Jun 2020 12:23:24 +0000 (UTC)
-Received: from carbon (unknown [10.40.208.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C715F5D9C9;
-        Tue,  9 Jun 2020 12:23:19 +0000 (UTC)
-Date:   Tue, 9 Jun 2020 14:23:15 +0200
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-To:     Gaurav Singh <gaurav1086@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        KP Singh <kpsingh@chromium.org>,
-        netdev@vger.kernel.org (open list:XDP (eXpress Data Path)),
-        bpf@vger.kernel.org (open list:XDP (eXpress Data Path)),
-        linux-kernel@vger.kernel.org (open list)
-Subject: Re: [PATCH] bpf: alloc_record_per_cpu Add null check after malloc
-Message-ID: <20200609142315.4d131599@carbon>
-In-Reply-To: <20200609120804.10569-1-gaurav1086@gmail.com>
-References: <20200609120804.10569-1-gaurav1086@gmail.com>
-Organization: Red Hat Inc.
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F235A81CBE1;
+        Tue,  9 Jun 2020 13:31:50 +0000 (UTC)
+Received: from firesoul.localdomain (unknown [10.40.208.32])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BD5D910190A7;
+        Tue,  9 Jun 2020 13:31:47 +0000 (UTC)
+Received: from [192.168.42.3] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id E68F8300003EB;
+        Tue,  9 Jun 2020 15:31:46 +0200 (CEST)
+Subject: [PATCH bpf V2 1/2] bpf: devmap adjust uapi for attach bpf program
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     David Ahern <dsahern@gmail.com>, bpf@vger.kernel.org,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Date:   Tue, 09 Jun 2020 15:31:46 +0200
+Message-ID: <159170950687.2102545.7235914718298050113.stgit@firesoul>
+In-Reply-To: <159170947966.2102545.14401752480810420709.stgit@firesoul>
+References: <159170947966.2102545.14401752480810420709.stgit@firesoul>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue,  9 Jun 2020 08:08:03 -0400
-Gaurav Singh <gaurav1086@gmail.com> wrote:
+V2:
+- Defer changing BPF-syscall to start at file-descriptor 1
+- Use {} to zero initialise struct.
 
-> The memset call is made right after malloc call. To fix this, add the null check right after malloc and then do memset.
-> 
+The recent commit fbee97feed9b ("bpf: Add support to attach bpf program to a
+devmap entry"), introduced ability to attach (and run) a separate XDP
+bpf_prog for each devmap entry. A bpf_prog is added via a file-descriptor.
+As zero were a valid FD, not using the feature requires using value minus-1.
+The UAPI is extended via tail-extending struct bpf_devmap_val and using
+map->value_size to determine the feature set.
 
-Did you read the section about how long lines should be in desc?
+This will break older userspace applications not using the bpf_prog feature.
+Consider an old userspace app that is compiled against newer kernel
+uapi/bpf.h, it will not know that it need to initialise the member
+bpf_prog.fd to minus-1. Thus, users will be forced to update source code to
+get program running on newer kernels.
 
+This patch remove the minus-1 checks, and have zero mean feature isn't used.
 
-> Signed-off-by: Gaurav Singh <gaurav1086@gmail.com>
-> ---
->  samples/bpf/xdp_rxq_info_user.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/samples/bpf/xdp_rxq_info_user.c b/samples/bpf/xdp_rxq_info_user.c
-> index 4fe47502ebed..490b07b7df78 100644
-> --- a/samples/bpf/xdp_rxq_info_user.c
-> +++ b/samples/bpf/xdp_rxq_info_user.c
-> @@ -202,11 +202,11 @@ static struct datarec *alloc_record_per_cpu(void)
->  
->  	size = sizeof(struct datarec) * nr_cpus;
->  	array = malloc(size);
-> -	memset(array, 0, size);
->  	if (!array) {
->  		fprintf(stderr, "Mem alloc error (nr_cpus:%u)\n", nr_cpus);
->  		exit(EXIT_FAIL_MEM);
->  	}
-> +	memset(array, 0, size);
->  	return array;
->  }
+Followup patches either for kernel or libbpf should handle and avoid
+returning file-descriptor zero in the first place.
 
-Looking at code, this bug happen in more places. Please fix up all locations.
+Fixes: fbee97feed9b ("bpf: Add support to attach bpf program to a devmap entry")
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+---
+ include/uapi/linux/bpf.h |   13 +++++++++++++
+ kernel/bpf/devmap.c      |   17 ++++-------------
+ 2 files changed, 17 insertions(+), 13 deletions(-)
 
-I think this fix should go through the "bpf" tree.
-Please read:
- https://github.com/torvalds/linux/blob/master/Documentation/bpf/bpf_devel_QA.rst
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c65b374a5090..19684813faae 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3761,6 +3761,19 @@ struct xdp_md {
+ 	__u32 egress_ifindex;  /* txq->dev->ifindex */
+ };
+ 
++/* DEVMAP map-value layout
++ *
++ * The struct data-layout of map-value is a configuration interface.
++ * New members can only be added to the end of this structure.
++ */
++struct bpf_devmap_val {
++	__u32 ifindex;   /* device index */
++	union {
++		int   fd;  /* prog fd on map write */
++		__u32 id;  /* prog id on map read */
++	} bpf_prog;
++};
++
+ enum sk_action {
+ 	SK_DROP = 0,
+ 	SK_PASS,
+diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+index 854b09beb16b..899a30a67cc1 100644
+--- a/kernel/bpf/devmap.c
++++ b/kernel/bpf/devmap.c
+@@ -60,15 +60,6 @@ struct xdp_dev_bulk_queue {
+ 	unsigned int count;
+ };
+ 
+-/* DEVMAP values */
+-struct bpf_devmap_val {
+-	u32 ifindex;   /* device index */
+-	union {
+-		int fd;  /* prog fd on map write */
+-		u32 id;  /* prog id on map read */
+-	} bpf_prog;
+-};
+-
+ struct bpf_dtab_netdev {
+ 	struct net_device *dev; /* must be first member, due to tracepoint */
+ 	struct hlist_node index_hlist;
+@@ -618,7 +609,7 @@ static struct bpf_dtab_netdev *__dev_map_alloc_node(struct net *net,
+ 	if (!dev->dev)
+ 		goto err_out;
+ 
+-	if (val->bpf_prog.fd >= 0) {
++	if (val->bpf_prog.fd > 0) {
+ 		prog = bpf_prog_get_type_dev(val->bpf_prog.fd,
+ 					     BPF_PROG_TYPE_XDP, false);
+ 		if (IS_ERR(prog))
+@@ -652,8 +643,8 @@ static int __dev_map_update_elem(struct net *net, struct bpf_map *map,
+ 				 void *key, void *value, u64 map_flags)
+ {
+ 	struct bpf_dtab *dtab = container_of(map, struct bpf_dtab, map);
+-	struct bpf_devmap_val val = { .bpf_prog.fd = -1 };
+ 	struct bpf_dtab_netdev *dev, *old_dev;
++	struct bpf_devmap_val val = {};
+ 	u32 i = *(u32 *)key;
+ 
+ 	if (unlikely(map_flags > BPF_EXIST))
+@@ -669,7 +660,7 @@ static int __dev_map_update_elem(struct net *net, struct bpf_map *map,
+ 	if (!val.ifindex) {
+ 		dev = NULL;
+ 		/* can not specify fd if ifindex is 0 */
+-		if (val.bpf_prog.fd != -1)
++		if (val.bpf_prog.fd > 0)
+ 			return -EINVAL;
+ 	} else {
+ 		dev = __dev_map_alloc_node(net, dtab, &val, i);
+@@ -699,8 +690,8 @@ static int __dev_map_hash_update_elem(struct net *net, struct bpf_map *map,
+ 				     void *key, void *value, u64 map_flags)
+ {
+ 	struct bpf_dtab *dtab = container_of(map, struct bpf_dtab, map);
+-	struct bpf_devmap_val val = { .bpf_prog.fd = -1 };
+ 	struct bpf_dtab_netdev *dev, *old_dev;
++	struct bpf_devmap_val val = {};
+ 	u32 idx = *(u32 *)key;
+ 	unsigned long flags;
+ 	int err = -EEXIST;
 
--- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
 
