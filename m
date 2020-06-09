@@ -2,91 +2,155 @@ Return-Path: <SRS0=rM0N=7W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A0AAC433DF
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 11:39:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AC79C433E0
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 15:27:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 68D8E20823
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 11:39:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ldS3WwZQ"
+	by mail.kernel.org (Postfix) with ESMTP id DE18D207C3
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 15:27:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1591716444;
+	bh=+G6K2bBk9m7F6q10jOAFNy2mtaj6j/CL2mVQ8BMDbMU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=yLcKATb5T/2XWwX2ZgnJwC+sa5mua86uiDYo85nItTS720ZqXc5DGeq4MdKJTAOKM
+	 xihTyPIsOBUL0zGN4A9ErF4WqWsgXA1AYm2sP1U6dLo11VnhLHkhTGRRWt+UsaWPgR
+	 kjr8IRHGLVmA7GWhiaq0XkWJGuqmTvErIv2wvVeA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729061AbgFILjk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Jun 2020 07:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729009AbgFILjk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Jun 2020 07:39:40 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7FEC05BD1E;
-        Tue,  9 Jun 2020 04:39:38 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id n11so20396557qkn.8;
-        Tue, 09 Jun 2020 04:39:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id;
-        bh=wlYOKY2I6wi0AZVoSy6PBE75mux/rrdwmF8a8HBdn5M=;
-        b=ldS3WwZQWTk8bDSo8NDt5VogtC72qUiaBdLyNmHMC8Na3TD+2I3riqEBMX9k/bv+9Y
-         S1o5oKbL6sDjCNhOfrfB6gt5xc6SYsPVzEQHv4BQdY3ZCTIj1o7CUkmks+CtvzTADCHm
-         WWfro0C6furMkC0n/rJJYwN9ke/lpL0ztj4F4Useg660aeEhdvCs6AHnETcKRt5zv1M+
-         e5+5VYhldjoNZYuvdsrdbO13Jhoe41zlzAhXTiJizXHMMxEAPcVTGrBXoEVTGrpH2A5H
-         TwFm8fk2JpTUlL4RbBYcP97AauT7BIaThq2W63+ZFVuacDlWHCRxND6GBGp21VuKOTOm
-         eWGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=wlYOKY2I6wi0AZVoSy6PBE75mux/rrdwmF8a8HBdn5M=;
-        b=BT0uDdLAtpvS+dpYN0v0RaPNC0k7Sr/vN1gjxxRH/WX7G6OeGW9ghupSwS3V4+eEqa
-         RNMYo1fBFdT4w5mUB0o1hWKH6zCinzrIr6Kt8U8//VlC3XKhhPSCXE7cc+S7z08CZjVc
-         7zLwRrC7XgDu20e0oZ6z5TA5hIdfs5utIKP8mvrB3AFs/THQjHOdLD5tI3HupYllZQyT
-         wOtAbgdiQouFWcrpyP7IAn75Wrqk2hznK2arq0Dylh+xYw1ym3gqAG8why5kdJUPJyCQ
-         UjV1NrCThNQorPbA3dCMRduLIkShQL/jLmVNWWg3vwrmbUY46zmcZ5l6+yICLWMUf/1Q
-         DbLQ==
-X-Gm-Message-State: AOAM533hLRUHmIu7A0ScNiZdcbj46fbr1GVe+xHqjD8+NC8EKoVFnYzH
-        fHbpm+qU6im46ji7V07m7/E=
-X-Google-Smtp-Source: ABdhPJyETuxHuDwV7vkN1AD62FuGp1fzYttn8Uu7IuV44VL/4wUSxOlnH0PrL/NZQOuUhH5eecI9ag==
-X-Received: by 2002:a05:620a:1321:: with SMTP id p1mr27394982qkj.476.1591702778157;
-        Tue, 09 Jun 2020 04:39:38 -0700 (PDT)
-Received: from linux.home ([2604:2000:1344:41d:29ac:7979:1e2e:c67b])
-        by smtp.googlemail.com with ESMTPSA id n13sm11281614qtb.20.2020.06.09.04.39.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2020 04:39:37 -0700 (PDT)
-From:   Gaurav Singh <gaurav1086@gmail.com>
-To:     gaurav1086@gmail.com, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        netdev@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
-        bpf@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
-        linux-kernel@vger.kernel.org (open list)
-Subject: 
-Date:   Tue,  9 Jun 2020 07:38:38 -0400
-Message-Id: <20200609113839.9628-1-gaurav1086@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1730800AbgFIP1U (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Jun 2020 11:27:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54624 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728609AbgFIP1R (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Jun 2020 11:27:17 -0400
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 370412072F;
+        Tue,  9 Jun 2020 15:27:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591716436;
+        bh=+G6K2bBk9m7F6q10jOAFNy2mtaj6j/CL2mVQ8BMDbMU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X4ksryTqYamNQ2lrRDMtUA7tUZ9RD4TCRYardbbTPbb8w9eVNJW7yxmbVq7I01zld
+         Gz8n7FtUfdufEaHH7kt7Lvys1aLPFHv6Kgb2y43QBDM6B6ml+ZWHsT50mlLzUG1xl9
+         9+4O7DwehXT1rjvzMusRo8vdqk+E5cbLZOdcmki8=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 51C9440AFD; Tue,  9 Jun 2020 12:27:14 -0300 (-03)
+Date:   Tue, 9 Jun 2020 12:27:14 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Sumanth Korikkar <sumanthk@linux.ibm.com>
+Cc:     linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>, tmricht@linux.ibm.com,
+        heiko.carstens@de.ibm.com, mhiramat@kernel.org, iii@linux.ibm.com,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Wang Nan <wangnan0@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] perf: Fix bpf prologue generation
+Message-ID: <20200609152714.GE24868@kernel.org>
+References: <20200609081019.60234-1-sumanthk@linux.ibm.com>
+ <20200609081019.60234-3-sumanthk@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200609081019.60234-3-sumanthk@linux.ibm.com>
+X-Url:  http://acmel.wordpress.com
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Please find the patch below.
+Em Tue, Jun 09, 2020 at 10:10:19AM +0200, Sumanth Korikkar escreveu:
+> Issue:
+> bpf_probe_read is no longer available for architecture which has
+> overlapping address space. Hence bpf prologue generation fails
+> 
+> Fix:
+> Use bpf_probe_read_kernel for kernel member access. For user
+> attribute access in kprobes, use bpf_probe_read_user.
+> 
+> Other:
+> @user attribute was introduced in commit 1e032f7cfa14 ("perf-probe:
+>  Add user memory access attribute support")
+> 
+> Test:
+> 1. ulimit -l 128 ; ./perf record -e tests/bpf_sched_setscheduler.c
+> 2. cat tests/bpf_sched_setscheduler.c
+> 
+> static void (*bpf_trace_printk)(const char *fmt, int fmt_size, ...) =
+>         (void *) 6;
+> static int (*bpf_probe_read_user)(void *dst, __u32 size,
+>                                   const void *unsafe_ptr) = (void *) 112;
+> static int (*bpf_probe_read_kernel)(void *dst, __u32 size,
+>         const void *unsafe_ptr) = (void *) 113;
+> 
+> SEC("func=do_sched_setscheduler  pid policy param->sched_priority@user")
+> int bpf_func__setscheduler(void *ctx, int err, pid_t pid, int policy,
+>                            int param)
+> {
+>         char fmt[] = "prio: %ld";
+>         bpf_trace_printk(fmt, sizeof(fmt), param);
+>         return 1;
+> }
+> 
+> char _license[] SEC("license") = "GPL";
+> int _version SEC("version") = LINUX_VERSION_CODE;
+> 
+> 3. ./perf script
+>    sched 305669 [000] 1614458.838675: perf_bpf_probe:func: (2904e508)
+>    pid=261614 policy=2 sched_priority=1
+> 
+> 4. cat /sys/kernel/debug/tracing/trace
+>    <...>-309956 [006] .... 1616098.093957: 0: prio: 1
 
-Thanks and regards,
-Gaurav.
+Thanks for providing a detailed set of steps to test your patch, that is
+great!
 
-From Gaurav Singh <gaurav1086@gmail.com> # This line is ignored.
-From: Gaurav Singh <gaurav1086@gmail.com>
-Reply-To: 
-Subject: 
-In-Reply-To: 
+I added this, an alterenative way to test it, combining all the aspects
+in one 'perf trace' call:
 
+Committer testing:
 
+I had to add some missing headers in the bpf_sched_setscheduler.c test
+proggie, then instead of using record+script I used 'perf trace' to
+drive everything in one go:
+
+  # cat bpf_sched_setscheduler.c
+  #include <linux/types.h>
+  #include <bpf.h>
+
+  static void (*bpf_trace_printk)(const char *fmt, int fmt_size, ...) = (void *) 6;
+  static int (*bpf_probe_read_user)(void *dst, __u32 size, const void *unsafe_ptr) = (void *) 112;
+  static int (*bpf_probe_read_kernel)(void *dst, __u32 size, const void *unsafe_ptr) = (void *) 113;
+
+  SEC("func=do_sched_setscheduler  pid policy param->sched_priority@user")
+  int bpf_func__setscheduler(void *ctx, int err, pid_t pid, int policy, int param)
+  {
+          char fmt[] = "prio: %ld";
+          bpf_trace_printk(fmt, sizeof(fmt), param);
+          return 1;
+  }
+
+  char _license[] SEC("license") = "GPL";
+  int _version SEC("version") = LINUX_VERSION_CODE;
+  #
+  #
+  # perf trace -e bpf_sched_setscheduler.c chrt -f 42 sleep 1
+     0.000 chrt/80125 perf_bpf_probe:func(__probe_ip: -1676607808, policy: 1, sched_priority: 42)
+  #
+
+And even with backtraces :-)
+
+  # perf trace -e bpf_sched_setscheduler.c/max-stack=8/ chrt -f 42 sleep 1
+       0.000 chrt/79805 perf_bpf_probe:func(__probe_ip: -1676607808, policy: 1, sched_priority: 42)
+                                         do_sched_setscheduler ([kernel.kallsyms])
+                                         __x64_sys_sched_setscheduler ([kernel.kallsyms])
+                                         do_syscall_64 ([kernel.kallsyms])
+                                         entry_SYSCALL_64 ([kernel.kallsyms])
+                                         __GI___sched_setscheduler (/usr/lib64/libc-2.30.so)
+  # 
+
+- Arnaldo
