@@ -2,51 +2,52 @@ Return-Path: <SRS0=rM0N=7W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18BBEC433E0
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 13:32:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A45EC433DF
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 13:32:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E96C42074B
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 13:32:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 27F2720774
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 13:32:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g85+6a24"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OdrRwXhx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729000AbgFINcK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Jun 2020 09:32:10 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:45008 "EHLO
+        id S1729906AbgFINcX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Jun 2020 09:32:23 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:32509 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729644AbgFINb6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 9 Jun 2020 09:31:58 -0400
+        by vger.kernel.org with ESMTP id S1728601AbgFINcW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 9 Jun 2020 09:32:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591709517;
+        s=mimecast20190719; t=1591709541;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yI7IMsyT2cyUZiENZ8NN7SZy7IVjzdxQU2eq9zUxhow=;
-        b=g85+6a24BBD56vwn/wlK2Kc7umPzHBw1+xfEZgBEtsqBjXE4k/M5rwta5I3SikqaJp1W/c
-        21AvaEh20mSzrRT3RXG45DnysAasS5QCasp4TZtkWn5whzpU2Hk3ai0tBWVwfglcaFu3Tw
-        ZV94CheWBAiSbKIH4Fi3QCLIGKnssvU=
+        bh=Wzb/OdB2K9TTm5W+fzpXC+PDsqs8gqBPN5O/uP2aEcQ=;
+        b=OdrRwXhxhJ7UfjyTlQo8uauS2hVS0wFcy6e8RDvl4v0djsch/V7ezcNJam2Y0DW6/UQLRr
+        DCfREtOvUXevz4F7jJLc+k061U8KxeFLekzsFpRksCu2SnhyHmz4Jk4tFCXoN+Z23sxG2F
+        CPsx0/k9NgOjQDZENTFeDj9zdSvcRNY=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-231-mELueZGPPnet7pC3fggmEA-1; Tue, 09 Jun 2020 09:31:47 -0400
-X-MC-Unique: mELueZGPPnet7pC3fggmEA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+ us-mta-408-xjwc8HGPNOy0tkgGvKhe-A-1; Tue, 09 Jun 2020 09:31:57 -0400
+X-MC-Unique: xjwc8HGPNOy0tkgGvKhe-A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 35121872FEB;
-        Tue,  9 Jun 2020 13:31:46 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 345738730BE;
+        Tue,  9 Jun 2020 13:31:56 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 16ADC5D9E4;
-        Tue,  9 Jun 2020 13:31:43 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 108A061984;
+        Tue,  9 Jun 2020 13:31:53 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id D3944300003EB;
-        Tue,  9 Jun 2020 15:31:41 +0200 (CEST)
-Subject: [PATCH bpf V2 0/2] bpf: adjust uapi for devmap prior to kernel
- release
+        by firesoul.localdomain (Postfix) with ESMTP id 05078300003EB;
+        Tue,  9 Jun 2020 15:31:52 +0200 (CEST)
+Subject: [PATCH bpf V2 2/2] bpf: selftests and tools use struct bpf_devmap_val
+ from uapi
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     David Ahern <dsahern@gmail.com>, bpf@vger.kernel.org,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>
@@ -54,53 +55,98 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Daniel Borkmann <borkmann@iogearbox.net>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Lorenzo Bianconi <lorenzo@kernel.org>
-Date:   Tue, 09 Jun 2020 15:31:41 +0200
-Message-ID: <159170947966.2102545.14401752480810420709.stgit@firesoul>
-In-Reply-To: <20200609013410.5ktyuzlqu5xpbp4a@ast-mbp.dhcp.thefacebook.com>
-References: <20200609013410.5ktyuzlqu5xpbp4a@ast-mbp.dhcp.thefacebook.com>
+Date:   Tue, 09 Jun 2020 15:31:52 +0200
+Message-ID: <159170951195.2102545.1833108712124273987.stgit@firesoul>
+In-Reply-To: <159170947966.2102545.14401752480810420709.stgit@firesoul>
+References: <159170947966.2102545.14401752480810420709.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For special type maps (e.g. devmap and cpumap) the map-value data-layout is
-a configuration interface. This is uapi that can only be tail extended.
-Thus, new members (and thus features) can only be added to the end of this
-structure, and the kernel uses the map->value_size from userspace to
-determine feature set 'version'.
+Sync tools uapi bpf.h header file and update selftests that use
+struct bpf_devmap_val.
 
-For this kind of uapi to be extensible and backward compatible, is it common
-that new members/fields (that represent a new feature) in the struct are
-initialized as zero, which indicate that the feature isn't used. This makes
-it possible to write userspace applications that are unaware of new kernel
-features, but just include latest uapi headers, zero-init struct and
-populate features it knows about.
-
-The recent extension of devmap with a bpf_prog.fd requires end-user to
-supply the file-descriptor value minus-1 to communicate that the features
-isn't used. This isn't compatible with the described kABI extension model.
-
-V2: Drop patch-1 that changed BPF-syscall to start at file-descriptor 1
-
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
-
-Jesper Dangaard Brouer (2):
-      bpf: devmap adjust uapi for attach bpf program
-      bpf: selftests and tools use struct bpf_devmap_val from uapi
-
-
- include/uapi/linux/bpf.h                           |   13 +++++++++++++
- kernel/bpf/devmap.c                                |   17 ++++-------------
  tools/include/uapi/linux/bpf.h                     |   13 +++++++++++++
  .../selftests/bpf/prog_tests/xdp_devmap_attach.c   |    8 --------
  .../selftests/bpf/progs/test_xdp_devmap_helpers.c  |    2 +-
  .../bpf/progs/test_xdp_with_devmap_helpers.c       |    3 +--
- 6 files changed, 32 insertions(+), 24 deletions(-)
+ 4 files changed, 15 insertions(+), 11 deletions(-)
 
---
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index c65b374a5090..19684813faae 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3761,6 +3761,19 @@ struct xdp_md {
+ 	__u32 egress_ifindex;  /* txq->dev->ifindex */
+ };
+ 
++/* DEVMAP map-value layout
++ *
++ * The struct data-layout of map-value is a configuration interface.
++ * New members can only be added to the end of this structure.
++ */
++struct bpf_devmap_val {
++	__u32 ifindex;   /* device index */
++	union {
++		int   fd;  /* prog fd on map write */
++		__u32 id;  /* prog id on map read */
++	} bpf_prog;
++};
++
+ enum sk_action {
+ 	SK_DROP = 0,
+ 	SK_PASS,
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+index d19dbd668f6a..88ef3ec8ac4c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+@@ -8,14 +8,6 @@
+ 
+ #define IFINDEX_LO 1
+ 
+-struct bpf_devmap_val {
+-	u32 ifindex;   /* device index */
+-	union {
+-		int fd;  /* prog fd on map write */
+-		u32 id;  /* prog id on map read */
+-	} bpf_prog;
+-};
+-
+ void test_xdp_with_devmap_helpers(void)
+ {
+ 	struct test_xdp_with_devmap_helpers *skel;
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c
+index e5c0f131c8a7..b360ba2bd441 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c
+@@ -2,7 +2,7 @@
+ /* fails to load without expected_attach_type = BPF_XDP_DEVMAP
+  * because of access to egress_ifindex
+  */
+-#include "vmlinux.h"
++#include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ 
+ SEC("xdp_dm_log")
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
+index deef0e050863..330811260123 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
+@@ -1,6 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-
+-#include "vmlinux.h"
++#include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ 
+ struct {
+
 
