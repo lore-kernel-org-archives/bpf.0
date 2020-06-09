@@ -2,86 +2,96 @@ Return-Path: <SRS0=rM0N=7W=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C0F2C433DF
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 20:06:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92000C433DF
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 20:10:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 623892076A
-	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 20:06:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D9972072F
+	for <bpf@archiver.kernel.org>; Tue,  9 Jun 2020 20:10:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="en8rMeGE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732919AbgFIUGs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Jun 2020 16:06:48 -0400
-Received: from out03.mta.xmission.com ([166.70.13.233]:43362 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731802AbgFIUGs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Jun 2020 16:06:48 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out03.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jikW5-0006JY-D5; Tue, 09 Jun 2020 14:06:37 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jikW4-0000aA-OL; Tue, 09 Jun 2020 14:06:37 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>
-References: <20200329005528.xeKtdz2A0%akpm@linux-foundation.org>
-        <13fb3ab7-9ab1-b25f-52f2-40a6ca5655e1@i-love.sakura.ne.jp>
-        <202006051903.C44988B@keescook>
-        <875zc4c86z.fsf_-_@x220.int.ebiederm.org>
-        <20200606201956.rvfanoqkevjcptfl@ast-mbp>
-        <CAHk-=wi=rpNZMeubhq2un3rCMAiOL8A+FZpdPnwFLEY09XGgAQ@mail.gmail.com>
-        <20200607014935.vhd3scr4qmawq7no@ast-mbp>
-        <33cf7a57-0afa-9bb9-f831-61cca6c19eba@i-love.sakura.ne.jp>
-        <20200608162306.iu35p4xoa2kcp3bu@ast-mbp.dhcp.thefacebook.com>
-Date:   Tue, 09 Jun 2020 15:02:30 -0500
-In-Reply-To: <20200608162306.iu35p4xoa2kcp3bu@ast-mbp.dhcp.thefacebook.com>
-        (Alexei Starovoitov's message of "Mon, 8 Jun 2020 09:23:06 -0700")
-Message-ID: <87r1uo2ejt.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1732941AbgFIUKd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Jun 2020 16:10:33 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:37667 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731802AbgFIUKd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 9 Jun 2020 16:10:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591733431;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rIBz2nM/i5kWg1owng6M9L0w19pJxveVwHk7hkV+/2c=;
+        b=en8rMeGEfL+EQJCmO2nOFkGh+lT0+3kdxey3e6lW5MmyxtVQyiXkSDxlm7wCcMqStm5/h7
+        aZAC+OTD8aSIaWJwNQ1GJe4C0bYJ9ns5c9HFxgsbOdU79gRv0Uw1BgANSj3QjPFL59sZnZ
+        7IZdNp1nAr4Gvz0IZQvPsTzYmgUkr/I=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-71-Nz-sTPBUMfSAwWQ1oNWi8g-1; Tue, 09 Jun 2020 16:10:30 -0400
+X-MC-Unique: Nz-sTPBUMfSAwWQ1oNWi8g-1
+Received: by mail-ed1-f72.google.com with SMTP id y5so3111848edt.3
+        for <bpf@vger.kernel.org>; Tue, 09 Jun 2020 13:10:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=rIBz2nM/i5kWg1owng6M9L0w19pJxveVwHk7hkV+/2c=;
+        b=NG+xZP6Jh73Rgabrv6v9/Hsb54DIg4hx/BuyKq0st2vBtN45QI2JMDWDKJ8SdVJr/1
+         q8uzJY0l3JV3oX82xHBiRIcnmI+0GjDephqte5aza52eIW8S69RYTkZdj3cL5frTXBcT
+         res4sHlog1bCV/oykCtKyhrwpvrp4zaJ0idwk+d0h5ncqN/t5bucxSVcK/rrq1SHefTZ
+         pwfixH9pPe8SZtJRLOfh8kwmTcG+lAaiaicnRQ2lXMF9PlWX+FK2LdATSnytVi2b55PE
+         JrgKEnInOQ42fpTCfbefYeQRwEaBQWSyZGi5ZBHeecQbe8BQKyg3IMGdw8COBukhEBL5
+         pUaw==
+X-Gm-Message-State: AOAM530J3VM/JtHGcFu0HMlHC6s63eqIkHsTIku/Z4Q29ob5nRUV4wCO
+        ojem0j6VJ0COFWrIFP5/+XbpsifmBmPEy/DGkS4JwDWVEJfWHbc6531ujuHc7yElkEx6h1GoTXg
+        572lHDQSg1Osp
+X-Received: by 2002:a17:906:1841:: with SMTP id w1mr86277eje.21.1591733429078;
+        Tue, 09 Jun 2020 13:10:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzhzKST1N5AbWaZKuqZEg8N4xtlo13xa2B0900r3iNywVgyEJwUOyuKAHUumf2R7GN011qnRQ==
+X-Received: by 2002:a17:906:1841:: with SMTP id w1mr86256eje.21.1591733428888;
+        Tue, 09 Jun 2020 13:10:28 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id v26sm13484784ejx.25.2020.06.09.13.10.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2020 13:10:28 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id BBC65180654; Tue,  9 Jun 2020 22:10:27 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
+        john.fastabend@gmail.com
+Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        magnus.karlsson@intel.com, netdev@vger.kernel.org,
+        brouer@redhat.com, maciej.fijalkowski@intel.com,
+        bjorn.topel@intel.com
+Subject: Re: [RFC PATCH bpf-next 0/2] bpf_redirect_map() tail call detection and xdp_do_redirect() avoidance
+In-Reply-To: <20200609172622.37990-1-bjorn.topel@gmail.com>
+References: <20200609172622.37990-1-bjorn.topel@gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 09 Jun 2020 22:10:27 +0200
+Message-ID: <87o8ps80gc.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1jikW4-0000aA-OL;;;mid=<87r1uo2ejt.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19gQTaRjO4Mx1juX3WAXHvndJoAGFsdmro=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: Re: [RFC][PATCH] net/bpfilter: Remove this broken and apparently unmantained
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> writes:
 
-> bpf_lsm is that thing that needs to load and start acting early.
-> It's somewhat chicken and egg. fork_usermode_blob() will start a process
-> that will load and apply security policy to all further forks and
-> execs.
+> Is this a good idea? I have only measured for AF_XDP redirects, but
+> all XDP_REDIRECT targets should benefit. For AF_XDP the rxdrop
+> scenario went from 21.5 to 23.2 Mpps on my machine.
 
-What is the timeframe for bpf_lsm patches wanting to use
-fork_usermode_blob()?
+I like it! I guess in the end the feasibility will depend on the quality
+tail call detection, which I don't have any ideas for improving. I'm
+sure someone else will, though :)
 
-Are we possibly looking at something that will be ready for the next
-merge window?
-
-Eric
+-Toke
 
