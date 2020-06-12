@@ -2,118 +2,79 @@ Return-Path: <SRS0=5juC=7Z=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2F36C433E0
-	for <bpf@archiver.kernel.org>; Fri, 12 Jun 2020 10:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10B98C433DF
+	for <bpf@archiver.kernel.org>; Fri, 12 Jun 2020 10:15:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7851A20801
-	for <bpf@archiver.kernel.org>; Fri, 12 Jun 2020 10:01:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="D5L2iCYN";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SqZY9HAv"
+	by mail.kernel.org (Postfix) with ESMTP id E00A2204EC
+	for <bpf@archiver.kernel.org>; Fri, 12 Jun 2020 10:15:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726279AbgFLKBb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Jun 2020 06:01:31 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:42637 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725805AbgFLKBa (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 12 Jun 2020 06:01:30 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id CD8785C00C6;
-        Fri, 12 Jun 2020 06:01:27 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 12 Jun 2020 06:01:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=k9Hc0n0ZZ+r2PM/CxaFyy+acOdU
-        13GIRtpmvbo4Scvg=; b=D5L2iCYNJvs1gTEpItjsH85GlZQdEXixFw1xImAjDYh
-        KDXQu+rOyhfQ+V7T8pvJk290aZowGukLNGIRDftlZe/eg1g3qjrjagDPPUe9wGs9
-        Ikc0VfpF6fWsAJjCwnu5eq7Z3R/t1A3F0rFihxstBLei50s5yrd9h7E917qFuZ4R
-        k6Q1P3gX4TsLe1KCrRHwUIlj+WJumV561XjIrwie2sTGzVBuES72LoG2qufr167H
-        wppqGhfsyCCiyBbD/A9oTIFISQ1Q99dUTYIUXCHK9wCM7Wc5y8pv1UJrmhXbxeKM
-        qj+4kxxt2auxu1EUsFDteF45zY+danP6qp0ZioDUyHg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=k9Hc0n
-        0ZZ+r2PM/CxaFyy+acOdU13GIRtpmvbo4Scvg=; b=SqZY9HAvgKrAzKIwAteYtM
-        bHUxJ+E/+SOf+uczdqw8tuPaWBE1vBEzyvLFe0QsaZaR+/78zDIYUD3q0bE/igt9
-        x/dNzVBG231z/y9tLosoADDA2cTn5WJ88AQ/I0Iwt5rflDA6ZjoSdYCCVDOECd/E
-        vn27Xu6L0m+DJ3oiv6DxDGhWdS03WDQvPMrk+m+nVXOJCKRSKaMrXrFNG2Qs4uLT
-        ajKJFgRMGGiiXmr2vrQTFEb8oAQl9UT/yu6tVbOyztwR3IpldGerro2bRFJONJjO
-        KB5x54Cz+k4kabCJKsz8biKLFsLEGHdFXx5jJ8RZAacPVBJO2Dwhmk+39I+CEUdg
-        ==
-X-ME-Sender: <xms:c1LjXjtbUoLQLWh24Xw1PNX9tj9ckKsftBYTgk1LN8IAXyi5hkrp7g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudeiuddgvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
-    rdekiedrkeelrddutdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:c1LjXkf2YQed55oCLiGxpGONoKGwz3_5Bzz7s7W28SwIdqFHt6b5EQ>
-    <xmx:c1LjXmz-zbq9KoJJYlstbCUaCmhDHp4u1BrI6iPw1WEYE8IpSNB-MA>
-    <xmx:c1LjXiPIvRQsyC1qBv12yXEl1eNsJ7pSkpyr4qc23OlFOkgHJQP_dQ>
-    <xmx:d1LjXukvL5SdC2m3M83mE2b74Bu4DICQVt7-6ZeUEMwQp2ukNnU5RA>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id F3ACE328005E;
-        Fri, 12 Jun 2020 06:01:22 -0400 (EDT)
-Date:   Fri, 12 Jun 2020 12:01:11 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     Cheng Jian <cj.chengjian@huawei.com>,
-        Chen Wandun <chenwandun@huawei.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 1/2] perf tools: Fix potential memory leaks in perf
- events parser
-Message-ID: <20200612100111.GA3157576@kroah.com>
-References: <20200611145605.21427-1-chenwandun@huawei.com>
- <20200611145605.21427-2-chenwandun@huawei.com>
- <51efcf82-4c0c-70d3-9700-6969e6decde1@web.de>
+        id S1726009AbgFLKPG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Jun 2020 06:15:06 -0400
+Received: from smtprelay0080.hostedemail.com ([216.40.44.80]:56746 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725927AbgFLKPF (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 12 Jun 2020 06:15:05 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 5E8FE18002A55;
+        Fri, 12 Jun 2020 10:15:02 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: tree29_1c128ad26ddb
+X-Filterd-Recvd-Size: 2024
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf19.hostedemail.com (Postfix) with ESMTPA;
+        Fri, 12 Jun 2020 10:14:59 +0000 (UTC)
+Message-ID: <427be84b1154978342ef861f1f4634c914d03a94.camel@perches.com>
+Subject: Re: [PATCH] xdp_rxq_info_user: Replace malloc/memset w/calloc
+From:   Joe Perches <joe@perches.com>
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        Gaurav Singh <gaurav1086@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "open list:XDP (eXpress Data Path)" <netdev@vger.kernel.org>,
+        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Fri, 12 Jun 2020 03:14:58 -0700
+In-Reply-To: <20200612084244.4ab4f6c6@carbon>
+References: <20200611150221.15665-1-gaurav1086@gmail.com>
+         <20200612003640.16248-1-gaurav1086@gmail.com>
+         <20200612084244.4ab4f6c6@carbon>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.2-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <51efcf82-4c0c-70d3-9700-6969e6decde1@web.de>
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 11, 2020 at 08:50:58PM +0200, Markus Elfring wrote:
-> > Fix memory leak of in function parse_events_term__sym_hw()
-> > and parse_events_term__clone() when error occur.
+On Fri, 2020-06-12 at 08:42 +0200, Jesper Dangaard Brouer wrote:
+> On Thu, 11 Jun 2020 20:36:40 -0400
+> Gaurav Singh <gaurav1086@gmail.com> wrote:
 > 
-> How do you think about a wording variant like the following?
+> > Replace malloc/memset with calloc
+> > 
+> > Fixes: 0fca931a6f21 ("samples/bpf: program demonstrating access to xdp_rxq_info")
+> > Signed-off-by: Gaurav Singh <gaurav1086@gmail.com>
 > 
->    Release a configuration object after a string duplication failed.
+> Above is the correct use of Fixes + Signed-off-by.
 > 
-> Regards,
-> Markus
+> Now you need to update/improve the description, to also
+> mention/describe that this also solves the bug you found.
 
-Hi,
+This is not a fix, it's a conversion of one
+correct code to a shorter one.
 
-This is the semi-friendly patch-bot of Greg Kroah-Hartman.
 
-Markus, you seem to have sent a nonsensical or otherwise pointless
-review comment to a patch submission on a Linux kernel developer mailing
-list.  I strongly suggest that you not do this anymore.  Please do not
-bother developers who are actively working to produce patches and
-features with comments that, in the end, are a waste of time.
-
-Patch submitter, please ignore Markus's suggestion; you do not need to
-follow it at all.  The person/bot/AI that sent it is being ignored by
-almost all Linux kernel maintainers for having a persistent pattern of
-behavior of producing distracting and pointless commentary, and
-inability to adapt to feedback.  Please feel free to also ignore emails
-from them.
-
-thanks,
-
-greg k-h's patch email bot
