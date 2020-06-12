@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C88BBC433E1
-	for <bpf@archiver.kernel.org>; Fri, 12 Jun 2020 22:34:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4DFBC433DF
+	for <bpf@archiver.kernel.org>; Fri, 12 Jun 2020 22:34:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A36BD206D7
-	for <bpf@archiver.kernel.org>; Fri, 12 Jun 2020 22:34:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A46092078A
+	for <bpf@archiver.kernel.org>; Fri, 12 Jun 2020 22:34:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="nAIMYR6Z"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QdkUj0xG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbgFLWep (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Jun 2020 18:34:45 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:47214 "EHLO
+        id S1726309AbgFLWes (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Jun 2020 18:34:48 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:25396 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726302AbgFLWep (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 12 Jun 2020 18:34:45 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05CM6MgC025615
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2020 15:34:44 -0700
+        by vger.kernel.org with ESMTP id S1726302AbgFLWer (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 12 Jun 2020 18:34:47 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05CMYRXW012048
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2020 15:34:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=cNRfGcbMbBf94VQ5FUSapjaaDr7Mz+2SNVUjQz4+BWc=;
- b=nAIMYR6Zx6d+Td3Q4Po0oUY0ZTBc7FNs7KNk/+cNc3wdSOzI6o5blA2tnhKy1iQR3o7u
- ePxXByqElpmg0/3PWPc4N/hpSTriJoHfOYQzYrfpKTLdjD7SCF+j2CUAaKLWqrrnTAn6
- WbK0Qi74zvCzSeM1K/ZV+xQ20t31X/qx2Fw= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31kqwwy6j5-1
+ bh=p6s6yy2to69lAotDnkW6qYKDvQMUksQa7VIbz34yPfk=;
+ b=QdkUj0xG+PKe6sfUwBBqhxKBlhm/5JgXEBoWfbkDmIjbzAiVIU03pqnfhf82x7U6y/Wm
+ S3nfHra3vxpnO1DZlkUtPoM+og1ULNYoQWPRP5nOFmAnMhZeT6P/G+Af8VODUXPDoUF4
+ Tym3Pje0niPLtinkw/T3Uep8aspE8tCmcCY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31k6s3kp31-13
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 12 Jun 2020 15:34:44 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 12 Jun 2020 15:34:47 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Fri, 12 Jun 2020 15:34:41 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id B9D912EC1D14; Fri, 12 Jun 2020 15:32:04 -0700 (PDT)
+        id 850552EC1DEE; Fri, 12 Jun 2020 15:32:13 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -52,9 +52,9 @@ CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>,
         Quentin Monnet <quentin@isovalent.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next 3/8] selftests/bpf: add __ksym extern selftest
-Date:   Fri, 12 Jun 2020 15:31:45 -0700
-Message-ID: <20200612223150.1177182-4-andriin@fb.com>
+Subject: [RFC PATCH bpf-next 7/8] libbpf: wrap source argument of BPF_CORE_READ macro in parentheses
+Date:   Fri, 12 Jun 2020 15:31:49 -0700
+Message-ID: <20200612223150.1177182-8-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200612223150.1177182-1-andriin@fb.com>
 References: <20200612223150.1177182-1-andriin@fb.com>
@@ -65,145 +65,64 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-12_17:2020-06-12,2020-06-12 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- mlxscore=0 mlxlogscore=859 spamscore=0 priorityscore=1501 impostorscore=0
- malwarescore=0 phishscore=0 suspectscore=8 cotscore=-2147483648
- adultscore=0 bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006120164
+ suspectscore=8 malwarescore=0 mlxscore=0 mlxlogscore=999
+ cotscore=-2147483648 spamscore=0 adultscore=0 clxscore=1015 phishscore=0
+ bulkscore=0 priorityscore=1501 impostorscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006120168
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Validate libbpf is able to handle weak and strong kernel symbol externs i=
-n BPF
-code correctly.
+Wrap source argument of BPF_CORE_READ family of macros into parentheses t=
+o
+allow uses like this:
 
+BPF_CORE_READ((struct cast_struct *)src, a, b, c);
+
+Fixes: 7db3822ab991 ("libbpf: Add BPF_CORE_READ/BPF_CORE_READ_INTO helper=
+s")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../testing/selftests/bpf/prog_tests/ksyms.c  | 71 +++++++++++++++++++
- .../testing/selftests/bpf/progs/test_ksyms.c  | 32 +++++++++
- 2 files changed, 103 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ksyms.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms.c
+ tools/lib/bpf/bpf_core_read.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/testi=
-ng/selftests/bpf/prog_tests/ksyms.c
-new file mode 100644
-index 000000000000..8f041c9059ed
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2019 Facebook */
-+
-+#include <test_progs.h>
-+#include "test_ksyms.skel.h"
-+#include <sys/stat.h>
-+
-+static int duration;
-+
-+static __u64 kallsyms_find(const char *sym)
-+{
-+	char type, name[256];
-+	unsigned long addr, res =3D 0;
-+	FILE *f;
-+
-+	f =3D fopen("/proc/kallsyms", "r");
-+	if (CHECK(!f, "kallsyms_fopen", "failed to open: %d\n", errno))
-+		return 0;
-+
-+	while (fscanf(f, "%lx %c %s%*[^\n]\n", &addr, &type, name) > 0) {
-+		if (strcmp(name, sym) =3D=3D 0) {
-+			res =3D addr;
-+			goto out;
-+		}
-+	}
-+
-+	CHECK(false, "not_found", "symbol %s not found\n", sym);
-+out:
-+	fclose(f);
-+	return res;
-+}
-+
-+void test_ksyms(void)
-+{
-+	__u64 link_fops_addr =3D kallsyms_find("bpf_link_fops");
-+	const char *btf_path =3D "/sys/kernel/btf/vmlinux";
-+	struct test_ksyms *skel;
-+	struct test_ksyms__data *data;
-+	struct stat st;
-+	__u64 btf_size;
-+	int err;
-+
-+	if (CHECK(stat(btf_path, &st), "stat_btf", "err %d\n", errno))
-+		return;
-+	btf_size =3D st.st_size;
-+
-+	skel =3D test_ksyms__open_and_load();
-+	if (CHECK(!skel, "skel_open", "failed to open and load skeleton\n"))
-+		return;
-+
-+	err =3D test_ksyms__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	/* trigger tracepoint */
-+	usleep(1);
-+
-+	data =3D skel->data;
-+	CHECK(data->out__bpf_link_fops !=3D link_fops_addr, "bpf_link_fops",
-+	      "got 0x%llx, exp 0x%llx\n",
-+	      data->out__bpf_link_fops, link_fops_addr);
-+	CHECK(data->out__bpf_link_fops1 !=3D 0, "bpf_link_fops1",
-+	      "got %llu, exp %llu\n", data->out__bpf_link_fops1, (__u64)0);
-+	CHECK(data->out__btf_size !=3D btf_size, "btf_size",
-+	      "got %llu, exp %llu\n", data->out__btf_size, btf_size);
-+	CHECK(data->out__fixed_percpu_data !=3D 0, "fixed_percpu_data",
-+	      "got %llu, exp %llu\n", data->out__fixed_percpu_data, (__u64)0);
-+
-+cleanup:
-+	test_ksyms__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_ksyms.c b/tools/testi=
-ng/selftests/bpf/progs/test_ksyms.c
-new file mode 100644
-index 000000000000..598d6749b691
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_ksyms.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2019 Facebook */
-+
-+#include <stdbool.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+__u64 out__bpf_link_fops =3D -1;
-+__u64 out__bpf_link_fops1 =3D -1;
-+__u64 out__btf_size =3D -1;
-+__u64 out__fixed_percpu_data =3D -1;
-+
-+extern const void bpf_link_fops __ksym;
-+/* non-existing symbol, weak, default to zero */
-+extern const void bpf_link_fops1 __ksym __weak;
-+extern const void __start_BTF __ksym;
-+extern const void __stop_BTF __ksym;
-+/* fixed_percpu_data is always at zero offset */
-+extern const void fixed_percpu_data __ksym;
-+
-+SEC("raw_tp/sys_enter")
-+int handler(const void *ctx)
-+{
-+	out__bpf_link_fops =3D (__u64)&bpf_link_fops;
-+	out__bpf_link_fops1 =3D (__u64)&bpf_link_fops1;
-+	out__btf_size =3D (__u64)(&__stop_BTF - &__start_BTF);
-+	out__fixed_percpu_data =3D (__u64)&fixed_percpu_data;
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.=
+h
+index 7009dc90e012..eae5cccff761 100644
+--- a/tools/lib/bpf/bpf_core_read.h
++++ b/tools/lib/bpf/bpf_core_read.h
+@@ -217,7 +217,7 @@ enum bpf_field_info_kind {
+  */
+ #define BPF_CORE_READ_INTO(dst, src, a, ...)				    \
+ 	({								    \
+-		___core_read(bpf_core_read, dst, src, a, ##__VA_ARGS__)	    \
++		___core_read(bpf_core_read, dst, (src), a, ##__VA_ARGS__)   \
+ 	})
+=20
+ /*
+@@ -227,7 +227,7 @@ enum bpf_field_info_kind {
+  */
+ #define BPF_CORE_READ_STR_INTO(dst, src, a, ...)			    \
+ 	({								    \
+-		___core_read(bpf_core_read_str, dst, src, a, ##__VA_ARGS__) \
++		___core_read(bpf_core_read_str, dst, (src), a, ##__VA_ARGS__)\
+ 	})
+=20
+ /*
+@@ -254,8 +254,8 @@ enum bpf_field_info_kind {
+  */
+ #define BPF_CORE_READ(src, a, ...)					    \
+ 	({								    \
+-		___type(src, a, ##__VA_ARGS__) __r;			    \
+-		BPF_CORE_READ_INTO(&__r, src, a, ##__VA_ARGS__);	    \
++		___type((src), a, ##__VA_ARGS__) __r;			    \
++		BPF_CORE_READ_INTO(&__r, (src), a, ##__VA_ARGS__);	    \
+ 		__r;							    \
+ 	})
+=20
 --=20
 2.24.1
 
