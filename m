@@ -2,133 +2,132 @@ Return-Path: <SRS0=kWZw=74=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA976C433E1
-	for <bpf@archiver.kernel.org>; Mon, 15 Jun 2020 16:41:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECCDEC433E0
+	for <bpf@archiver.kernel.org>; Mon, 15 Jun 2020 18:55:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A7EB02067B
-	for <bpf@archiver.kernel.org>; Mon, 15 Jun 2020 16:41:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C4C4A207D3
+	for <bpf@archiver.kernel.org>; Mon, 15 Jun 2020 18:55:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Rwy0WzcH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IOgvDhNZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731104AbgFOQlw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Jun 2020 12:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
+        id S1731371AbgFOSzh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Jun 2020 14:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730985AbgFOQlv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Jun 2020 12:41:51 -0400
+        with ESMTP id S1729124AbgFOSzg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Jun 2020 14:55:36 -0400
 Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0996C05BD43
-        for <bpf@vger.kernel.org>; Mon, 15 Jun 2020 09:41:50 -0700 (PDT)
-Received: by mail-qv1-xf42.google.com with SMTP id fc4so8055089qvb.1
-        for <bpf@vger.kernel.org>; Mon, 15 Jun 2020 09:41:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC48C061A0E;
+        Mon, 15 Jun 2020 11:55:36 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id fc4so8276062qvb.1;
+        Mon, 15 Jun 2020 11:55:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2GiKBA0Yhba1TI03GaAPY7BkOWgJVPjHL3sAxzmKYpk=;
-        b=Rwy0WzcH61XLCenE33ke+EInFA6layi0G4vtRVPwec4HQx1IZl1dDsWvrv2iNirxZo
-         u+MxABZ9Bj7lD2MKmY+7alFcTYbxsi86spc0fR3oyPZarOiBBZCQFl6RQzFACAvc2eee
-         V+8V3tJpMRNXoTf8MyrH63hvhKjj2B6kMBg81CywSqQXbMBamD65uKvFiEUUJ8vtzHfx
-         sO+cIIeceS8+ZekeFylI+hmkiWkqqQWf+h2XPdxvLa7e9fO3/BO+b3N3sUBtEGfOQ6DH
-         wU9YeT78do697MmBI85BoMwni23GJIRKRm0hJvj0nx0ADIVklsfTtKbF9b/ZHPVmqlc8
-         GJJg==
+        bh=DTBEE8O+flfnTDcID6fw3qIeYva77rci1DenkZlJUeE=;
+        b=IOgvDhNZZ/Ra63kjHD80BCrrPdgVrPnQ2POdr5g3f9gXeDNXx0co9Bt3iHtQANhGNM
+         jIDRxQrjAuy28PtpHq4Yy9R0DY0G5i98RuMJmes0LcZfnae+SJ22TVPlt68D6Tapq7LH
+         QLKZfpyk1A/ovY4N5bBFmhGa74Dym20SOdnK8RpJtBqunCek1pN1LOlrAwKgJySWJIoA
+         vOh5J36E8oMyMkek3/ukB6iCtAEnrfjUSgY2YxhY3dWB0XY8/vBChzBo1dQHLtfS7Vap
+         IiN3FEWpE+00lFUNDjeyRoXMSP/3WeBMhDo8r4kJIBhs4Ew1ljUYZeCJFTe4MC/EGcBl
+         jbDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2GiKBA0Yhba1TI03GaAPY7BkOWgJVPjHL3sAxzmKYpk=;
-        b=iOrRrrTZ/Xr3h6AwOZd8h/VgNmnrYEt1b48aODsP8hRt1iOMBof2ArGwjEYSN2O00q
-         x0fUy0v7bVNtCu1PaEvZPtmYWIgjWDnHF9GmeJs14dF4slh/cJ1BnvMfujm2IVwcWczo
-         bmpY8R3jeLkuua4auTsgzSZ2DnZhF6EZ2SnUM4ukRbW9kWXXTNgFXj6ZTtxaFmwYjiL8
-         2vEiCarCIvnfG8dO/XN57hlXu3f3ckzflhFPYwKVS5JGHqfHx6+M+8rX+MU9CItQyyFc
-         iScJI41OEoBpbTtmtiK4jK+pxejVBQTqbOMvCskyLYovRPwXBG18W6NsyRVfPrK5yl16
-         st6g==
-X-Gm-Message-State: AOAM532XLr78a+jp8Q4AntUquiOoSevMSuj/GjVw1Mrd8u81wnVbTAbm
-        XEy8LDAyEmv9vVj+TnHRZvmzmN7Mrqr6U5dik1cUcA==
-X-Google-Smtp-Source: ABdhPJyTf9MxpzxwGxlkjLiriktRyuTpJGqoFyBlJLkFmk78sb8FdtJykzGOumVYFxDcXTsdVoYqqSe3MmZ+CVgR2tU=
-X-Received: by 2002:ad4:5512:: with SMTP id az18mr25620752qvb.51.1592239309534;
- Mon, 15 Jun 2020 09:41:49 -0700 (PDT)
+        bh=DTBEE8O+flfnTDcID6fw3qIeYva77rci1DenkZlJUeE=;
+        b=TpnN+8c9Z1yz/syD8fAAgn/7vUj3q5XwlFdFvZ4bnjLHFnB5KDe70Hnjk/pL5SuZqs
+         as2oQApnc/PVojd4rN27zzCrSPFBKb6S5mf2bnHRLpk2vueeyRay866HAoCHTNo9oLwi
+         aW6SYQ1wIivqlj3vO4F0rw44jE2NejQZLQPiyTNhxJFz5/HLbIHNjnDdi7rdyjrDNX+O
+         uodUiqKXY69cb+xXA5FnKcdk1W74FIJU6szAnXoW+juH/sagcWjNC5GKbhV8w2XOi+pP
+         leg8dru024ScW7JlWiVmuQq8CvV5qlMsMYfTALfV5XyHtmjXVXv11rlXJ8DN8pdhlujk
+         Y3kQ==
+X-Gm-Message-State: AOAM531LdH00NNAoJM14N2WirnbQDeoO2M2YcCxlFkWhbOksmue8gbIL
+        DySCBOx885VZuhISFflTugZ192jfhs4OlNGYmM4=
+X-Google-Smtp-Source: ABdhPJzh9EwvKt4ruH7h5aplNvcYreWfmUZoQoLPG2HTPkgQ+e541yQdxQmiQttQCjQuuvZ8rs5Ayn+GCIkD8HmRYrs=
+X-Received: by 2002:ad4:4baa:: with SMTP id i10mr27198653qvw.163.1592247335714;
+ Mon, 15 Jun 2020 11:55:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200608182748.6998-1-sdf@google.com> <20200613003356.sqp6zn3lnh4qeqyl@ast-mbp.dhcp.thefacebook.com>
- <CAKH8qBuJpks_ny-8MDzzZ5axobn=35P3krVbyz2mtBBtR8Uv+A@mail.gmail.com> <20200613035038.qmoxtf5mn3g3aiqe@ast-mbp>
-In-Reply-To: <20200613035038.qmoxtf5mn3g3aiqe@ast-mbp>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Mon, 15 Jun 2020 09:41:38 -0700
-Message-ID: <CAKH8qBvUv_OwjFA70JQfL-rET662okH87QYyeivbybCPwCEJEQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 1/2] bpf: don't return EINVAL from {get,set}sockopt
- when optlen > PAGE_SIZE
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
+References: <20200612223150.1177182-1-andriin@fb.com> <20200612223150.1177182-2-andriin@fb.com>
+ <CA+khW7hAYVdoQX5-j0z1iGEVZeww4BBu4NXzy5eS5OwDRYqe2w@mail.gmail.com>
+In-Reply-To: <CA+khW7hAYVdoQX5-j0z1iGEVZeww4BBu4NXzy5eS5OwDRYqe2w@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 15 Jun 2020 11:55:24 -0700
+Message-ID: <CAEf4Bzbmw8VE9JcpgPNztS0W=MQBXC7Y9ewzUGF9-BgU+uO_zQ@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 1/8] libbpf: generalize libbpf externs support
+To:     Hao Luo <haoluo@google.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        David Laight <David.Laight@aculab.com>
+        Kernel Team <kernel-team@fb.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Quentin Monnet <quentin@isovalent.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jun 12, 2020 at 8:50 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-[ .. ]
-> > > It's probably ok, but makes me uneasy about verifier consequences.
-> > > ctx->optval is PTR_TO_PACKET and it's a valid pointer from verifier pov.
-> > > Do we have cases already where PTR_TO_PACKET == PTR_TO_PACKET_END ?
-> > > I don't think we have such tests. I guess bpf prog won't be able to read
-> > > anything and nothing will crash, but having PTR_TO_PACKET that is
-> > > actually NULL would be an odd special case to keep in mind for everyone
-> > > who will work on the verifier from now on.
-> > >
-> > > Also consider bpf prog that simply reads something small like 4 bytes.
-> > > IP_FREEBIND sockopt (like your selftest in the patch 2) will have
-> > > those 4 bytes, so it's natural for the prog to assume that it can read it.
-> > > It will have
-> > > p = ctx->optval;
-> > > if (p + 4 > ctx->optval_end)
-> > >  /* goto out and don't bother logging, since that never happens */
-> > > *(u32*)p;
-> > >
-> > > but 'clever' user space would pass long optlen and prog suddenly
-> > > 'not seeing' the sockopt. It didn't crash, but debugging would be
-> > > surprising.
-> > >
-> > > I feel it's better to copy the first 4k and let the program see it.
-> > Agreed with the IP_FREEBIND example wrt observability, however it's
-> > not clear what to do with the cropped buffer if the bpf program
-> > modifies it.
-> >
-> > Consider that huge iptables setsockopts where the usespace passes
-> > PAGE_SIZE*10 optlen with real data and bpf prog sees only part of it.
-> > Now, if the bpf program modifies the buffer (say, flips some byte), we
-> > are back to square one. We either have to silently discard that buffer
-> > or reallocate/merge. My reasoning with data == NULL, is that at least
-> > there is a clear signal that the program can't access the data (and
-> > can look at optlen to see if the original buffer is indeed non-zero
-> > and maybe deny such requests?).
-> > At this point I'm really starting to think that maybe we should just
-> > vmalloc everything that is >PAGE_SIZE and add a sysclt to limit an
-> > upper bound :-/
-> > I'll try to think about this a bit more over the weekend.
+On Mon, Jun 15, 2020 at 9:44 AM Hao Luo <haoluo@google.com> wrote:
 >
-> Yeah. Tough choices.
-> We can also detect in the verifier whether program accessed ctx->optval
-> and skip alloc/copy if program didn't touch it, but I suspect in most
-> case the program would want to read it.
-> I think vmallocing what optlen said is DoS-able. It's better to
-> stick with single page.
-> Let's keep brainstorming.
-Btw, can we use sleepable bpf for that? As in, do whatever I suggested
-in these patches (don't expose optval>PAGE_SIZE via context), but add
-a new helper where you can say 'copy x bytes from y offset of the
-original optval' (the helper will do sleepable copy_form_user).
-That way we have a clean signal to the BPF that the value is too big
-(optval==optval_end==NULL) and the user can fallback to the helper to
-inspect the value. We can also provide another helper to export new
-value for this case.
-WDYT?
+> Andrii,
+>
+> Thanks for this patch, it looks very nice! Decoupling kconfig from generic externs is much needed.
+>
+> On Fri, Jun 12, 2020 at 3:34 PM Andrii Nakryiko <andriin@fb.com> wrote:
+>>
+>> Switch existing Kconfig externs to be just one of few possible kinds of more
+>> generic externs. This refactoring is in preparation for ksymbol extern
+>> support, added in the follow up patch. There are no functional changes
+>> intended.
+>>
+>> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+>> ---
+>>  tools/lib/bpf/libbpf.c | 332 ++++++++++++++++++++++++-----------------
+>>  1 file changed, 199 insertions(+), 133 deletions(-)
+>>
+
+[...]
+
+>> @@ -1443,12 +1454,12 @@ static int set_ext_value_tri(struct extern_desc *ext, void *ext_val,
+>>                 else /* value == 'n' */
+>>                         *(enum libbpf_tristate *)ext_val = TRI_NO;
+>>                 break;
+>> -       case EXT_CHAR:
+>> +       case KCFG_CHAR:
+>>                 *(char *)ext_val = value;
+>>                 break;
+>> -       case EXT_UNKNOWN:
+>> -       case EXT_INT:
+>> -       case EXT_CHAR_ARR:
+>> +       case KCFG_UNKNOWN:
+>> +       case KCFG_INT:
+>> +       case KCFG_CHAR_ARR:
+>>         default:
+>>                 pr_warn("extern %s=%c should be bool, tristate, or char\n",
+>>                         ext->name, value);
+>
+>
+> Very minor: pr_warn("kconfig extern ..."); I noticed you have one similar message changed below.
+>
+
+yeah, good catch, I'll update
+
+>>
+>> @@ -1458,12 +1469,12 @@ static int set_ext_value_tri(struct extern_desc *ext, void *ext_val,
+>>         return 0;
+>>  }
+>>
+
+for the future, please cut irrelevant parts of the patch, makes it
+easier to see where your replies are
+
+[...]
