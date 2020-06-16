@@ -4,40 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C66C433DF
-	for <bpf@archiver.kernel.org>; Tue, 16 Jun 2020 10:05:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16CC3C433E0
+	for <bpf@archiver.kernel.org>; Tue, 16 Jun 2020 10:05:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 232F620707
-	for <bpf@archiver.kernel.org>; Tue, 16 Jun 2020 10:05:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E221920734
+	for <bpf@archiver.kernel.org>; Tue, 16 Jun 2020 10:05:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592301950;
-	bh=giwX+2ZdBVf6YYXrb1PkJLZYGeMbN+hGfX/N1vbvSD4=;
+	s=default; t=1592301957;
+	bh=0ywlkednVggh9I7+TBEKsl++LHT7iCbm2pWBu5zCdGQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=NvUyb7kMJ+C+bZhL/bo1w5AzzsUI3pAzZuqWCX7i8o68pZzk8BH8mX5s+bnnCcOK3
-	 zG65PTMeKXOeP5Dx307OHEM/qmT37LN+qNvCsPt34+Qy+DNXtO7bEpnXxG/9Qf/w8a
-	 VQJIBQzT3WQygk08HXxlGbGVM+Vq7lsjplQpCfss=
+	b=F53EDwBPMY4bf5W4tQzdwD1iFe+pZGU8FI5c+NGmoTwA9TxjgIUi5D58eRgfJWNb1
+	 CgkCfjHHFrKM72uCHKixUNv0JVRBTeWPShMdxvZ6AqytNFBY5xd3m/0ouwfwToqNXF
+	 XefkkPIw3fT6OiwwmnfiOAhOjGYTKqXqNbIuIens=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728306AbgFPKFt convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 16 Jun 2020 06:05:49 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:58310 "EHLO
+        id S1728264AbgFPKF4 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 16 Jun 2020 06:05:56 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:41721 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728154AbgFPKFt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Jun 2020 06:05:49 -0400
+        with ESMTP id S1728346AbgFPKF4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Jun 2020 06:05:56 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-90-DMGxkoffOPON-Fih67QkUw-1; Tue, 16 Jun 2020 06:05:42 -0400
-X-MC-Unique: DMGxkoffOPON-Fih67QkUw-1
+ us-mta-469-pX9VizinNoG_56EMAEfUlQ-1; Tue, 16 Jun 2020 06:05:51 -0400
+X-MC-Unique: pX9VizinNoG_56EMAEfUlQ-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 99EE618A2671;
-        Tue, 16 Jun 2020 10:05:40 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4DD1681EE58;
+        Tue, 16 Jun 2020 10:05:49 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.195.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AFBC65D994;
-        Tue, 16 Jun 2020 10:05:35 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 805765D747;
+        Tue, 16 Jun 2020 10:05:45 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
@@ -52,9 +51,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Brendan Gregg <bgregg@netflix.com>,
         Florent Revest <revest@chromium.org>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH 04/11] bpf: Resolve BTF IDs in vmlinux image
-Date:   Tue, 16 Jun 2020 12:05:05 +0200
-Message-Id: <20200616100512.2168860-5-jolsa@kernel.org>
+Subject: [PATCH 06/11] bpf: Do not pass enum bpf_access_type to btf_struct_access
+Date:   Tue, 16 Jun 2020 12:05:07 +0200
+Message-Id: <20200616100512.2168860-7-jolsa@kernel.org>
 In-Reply-To: <20200616100512.2168860-1-jolsa@kernel.org>
 References: <20200616100512.2168860-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -68,131 +67,75 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Run btfid on vmlinux object during linking, so the
-.BTF_ids section is processed and IDs are resolved.
+There's no need for it.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- Makefile                 |  3 ++-
- include/linux/bpf.h      |  5 +++++
- kernel/bpf/btf_ids.c     | 12 ++++++++++++
- kernel/trace/bpf_trace.c |  2 --
- net/core/filter.c        |  2 --
- scripts/link-vmlinux.sh  |  6 ++++++
- 6 files changed, 25 insertions(+), 5 deletions(-)
+ include/linux/bpf.h   | 1 -
+ kernel/bpf/btf.c      | 3 +--
+ kernel/bpf/verifier.c | 2 +-
+ net/ipv4/bpf_tcp_ca.c | 2 +-
+ 4 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index b190d502d7d7..889d909fd71a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -448,6 +448,7 @@ OBJSIZE		= $(CROSS_COMPILE)size
- STRIP		= $(CROSS_COMPILE)strip
- endif
- PAHOLE		= pahole
-+BTFID		= $(srctree)/tools/bpf/btfid/btfid
- LEX		= flex
- YACC		= bison
- AWK		= awk
-@@ -524,7 +525,7 @@ GCC_PLUGINS_CFLAGS :=
- CLANG_FLAGS :=
- 
- export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC
--export CPP AR NM STRIP OBJCOPY OBJDUMP OBJSIZE READELF PAHOLE LEX YACC AWK INSTALLKERNEL
-+export CPP AR NM STRIP OBJCOPY OBJDUMP OBJSIZE READELF PAHOLE BTFID LEX YACC AWK INSTALLKERNEL
- export PERL PYTHON PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
- export _GZIP _BZIP2 _LZOP LZMA LZ4 XZ
- export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS LDFLAGS_MODULE
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 07052d44bca1..f18c23dcc858 100644
+index f18c23dcc858..b7d3b5f3dc09 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -1743,4 +1743,9 @@ enum bpf_text_poke_type {
- int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		       void *addr1, void *addr2);
+@@ -1282,7 +1282,6 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 		    struct bpf_insn_access_aux *info);
+ int btf_struct_access(struct bpf_verifier_log *log,
+ 		      const struct btf_type *t, int off, int size,
+-		      enum bpf_access_type atype,
+ 		      u32 *next_btf_id);
+ int btf_resolve_helper_id(struct bpf_verifier_log *log,
+ 			  const struct bpf_func_proto *fn, int);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index aea7b2cc8d26..304369a4c2e2 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3831,7 +3831,6 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
  
-+extern int bpf_skb_output_btf_ids[];
-+extern int bpf_seq_printf_btf_ids[];
-+extern int bpf_seq_write_btf_ids[];
-+extern int bpf_xdp_output_btf_ids[];
-+
- #endif /* _LINUX_BPF_H */
-diff --git a/kernel/bpf/btf_ids.c b/kernel/bpf/btf_ids.c
-index e7f9d94ad293..d8d0df162f04 100644
---- a/kernel/bpf/btf_ids.c
-+++ b/kernel/bpf/btf_ids.c
-@@ -1,3 +1,15 @@
- // SPDX-License-Identifier: GPL-2.0-only
+ int btf_struct_access(struct bpf_verifier_log *log,
+ 		      const struct btf_type *t, int off, int size,
+-		      enum bpf_access_type atype,
+ 		      u32 *next_btf_id)
+ {
+ 	u32 i, moff, mtrue_end, msize = 0, total_nelems = 0;
+@@ -3880,7 +3879,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 			goto error;
  
- #include "btf_ids.h"
-+
-+BTF_ID_LIST(bpf_skb_output_btf_ids)
-+BTF_ID(struct, sk_buff)
-+
-+BTF_ID_LIST(bpf_seq_printf_btf_ids)
-+BTF_ID(struct, seq_file)
-+
-+BTF_ID_LIST(bpf_seq_write_btf_ids)
-+BTF_ID(struct, seq_file)
-+
-+BTF_ID_LIST(bpf_xdp_output_btf_ids)
-+BTF_ID(struct, xdp_buff)
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 3744372a24e2..c1866d76041f 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -667,7 +667,6 @@ BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char *, fmt, u32, fmt_size,
- 	return err;
- }
+ 		off = (off - moff) % elem_type->size;
+-		return btf_struct_access(log, elem_type, off, size, atype,
++		return btf_struct_access(log, elem_type, off, size,
+ 					 next_btf_id);
  
--static int bpf_seq_printf_btf_ids[5];
- static const struct bpf_func_proto bpf_seq_printf_proto = {
- 	.func		= bpf_seq_printf,
- 	.gpl_only	= true,
-@@ -685,7 +684,6 @@ BPF_CALL_3(bpf_seq_write, struct seq_file *, m, const void *, data, u32, len)
- 	return seq_write(m, data, len) ? -EOVERFLOW : 0;
- }
+ error:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5c7bbaac81ef..b553e4523bd3 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3175,7 +3175,7 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 			return -EACCES;
+ 		}
  
--static int bpf_seq_write_btf_ids[5];
- static const struct bpf_func_proto bpf_seq_write_proto = {
- 	.func		= bpf_seq_write,
- 	.gpl_only	= true,
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 209482a4eaa2..440e52061be8 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3775,7 +3775,6 @@ static const struct bpf_func_proto bpf_skb_event_output_proto = {
- 	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
- };
+-		ret = btf_struct_access(&env->log, t, off, size, atype,
++		ret = btf_struct_access(&env->log, t, off, size,
+ 					&btf_id);
+ 	}
  
--static int bpf_skb_output_btf_ids[5];
- const struct bpf_func_proto bpf_skb_output_proto = {
- 	.func		= bpf_skb_event_output,
- 	.gpl_only	= true,
-@@ -4169,7 +4168,6 @@ static const struct bpf_func_proto bpf_xdp_event_output_proto = {
- 	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
- };
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index e3939f76b024..c6aab9389ac4 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -130,7 +130,7 @@ static int bpf_tcp_ca_btf_struct_access(struct bpf_verifier_log *log,
+ 	size_t end;
  
--static int bpf_xdp_output_btf_ids[5];
- const struct bpf_func_proto bpf_xdp_output_proto = {
- 	.func		= bpf_xdp_event_output,
- 	.gpl_only	= true,
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 57cb14bd8925..99a3f8c65e84 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -336,6 +336,12 @@ fi
+ 	if (atype == BPF_READ)
+-		return btf_struct_access(log, t, off, size, atype, next_btf_id);
++		return btf_struct_access(log, t, off, size, next_btf_id);
  
- vmlinux_link vmlinux "${kallsymso}" ${btf_vmlinux_bin_o}
- 
-+# fill in BTF IDs
-+if [ -n "${CONFIG_DEBUG_INFO_BTF}" ]; then
-+info BTFID vmlinux
-+${BTFID} vmlinux
-+fi
-+
- if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
- 	info SORTTAB vmlinux
- 	if ! sorttable vmlinux; then
+ 	if (t != tcp_sock_type) {
+ 		bpf_log(log, "only read is supported\n");
 -- 
 2.25.4
 
