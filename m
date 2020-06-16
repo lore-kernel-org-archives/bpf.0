@@ -6,37 +6,37 @@ X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF0C6C433E0
-	for <bpf@archiver.kernel.org>; Tue, 16 Jun 2020 10:06:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12157C433E0
+	for <bpf@archiver.kernel.org>; Tue, 16 Jun 2020 10:06:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B738320707
-	for <bpf@archiver.kernel.org>; Tue, 16 Jun 2020 10:06:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E16B220734
+	for <bpf@archiver.kernel.org>; Tue, 16 Jun 2020 10:06:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592301972;
-	bh=7KO7BfC+1chAdqjHmpiQEXnCMGZbPktIj4h5xMKRYaY=;
+	s=default; t=1592301981;
+	bh=s5AIqPLMYjaiTPQsq7x7wZzFuQIUauowM5NMNehpPMM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Zqe6tvMofQelLxGPRrqYRHSfbTU3CDPeqKCQn8ptt/Up0p78s4CckDbLjzlUXnUN2
-	 jd73LbRMmEfzhw1z92DsBaDthox517vgSVWIlLAWcPqFDqwaBgdCcGEjvACWkbSyZ4
-	 vVjkhQT734Iv7kPJV0npguNED+G0KO+RZCsFPKbA=
+	b=lnr/6cdZsMuLe5AkojwQwZaI/Bb5NIczEvXWFU9LtlS8EDJz2KcpZNxNCHbbkIk+T
+	 bd/gRq9JAcjC/1QhSqkGoyYNd2jRU7PypyR34fWQRGIP0gSYoIiZOukZgqUV+xWlmh
+	 ZUf/s6VCSMnJMIlEjYIi6mtZ1/Zxp9eJKzCc37BE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728332AbgFPKGM convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 16 Jun 2020 06:06:12 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:48112 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727795AbgFPKGJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Jun 2020 06:06:09 -0400
+        id S1728329AbgFPKGV convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 16 Jun 2020 06:06:21 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:23464 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728160AbgFPKGS (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 16 Jun 2020 06:06:18 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-371-Lj4C1gQvNjqpGm3PO0QhvA-1; Tue, 16 Jun 2020 06:06:03 -0400
-X-MC-Unique: Lj4C1gQvNjqpGm3PO0QhvA-1
+ us-mta-294-1j_u1g3XMPmpIZEatOc1uQ-1; Tue, 16 Jun 2020 06:06:14 -0400
+X-MC-Unique: 1j_u1g3XMPmpIZEatOc1uQ-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9DC1F83DE70;
-        Tue, 16 Jun 2020 10:05:59 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9DE191030C53;
+        Tue, 16 Jun 2020 10:06:11 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.195.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 30C5C5D9D5;
-        Tue, 16 Jun 2020 10:05:54 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 495195D9D5;
+        Tue, 16 Jun 2020 10:06:06 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
@@ -51,9 +51,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Brendan Gregg <bgregg@netflix.com>,
         Florent Revest <revest@chromium.org>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH 08/11] bpf: Add BTF whitelist support
-Date:   Tue, 16 Jun 2020 12:05:09 +0200
-Message-Id: <20200616100512.2168860-9-jolsa@kernel.org>
+Subject: [PATCH 10/11] selftests/bpf: Add verifier test for d_path helper
+Date:   Tue, 16 Jun 2020 12:05:11 +0200
+Message-Id: <20200616100512.2168860-11-jolsa@kernel.org>
 In-Reply-To: <20200616100512.2168860-1-jolsa@kernel.org>
 References: <20200616100512.2168860-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -67,144 +67,94 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding support to define 'whitelist' of BTF IDs, which is
-also sorted.
-
-Following defines sorted list of BTF IDs that is accessible
-within kernel code as btf_whitelist_d_path and its count is
-in btf_whitelist_d_path_cnt variable.
-
-  extern int btf_whitelist_d_path[];
-  extern int btf_whitelist_d_path_cnt;
-
-  BTF_WHITELIST_ENTRY(btf_whitelist_d_path)
-  BTF_ID(func, vfs_truncate)
-  BTF_ID(func, vfs_fallocate)
-  BTF_ID(func, dentry_open)
-  BTF_ID(func, vfs_getattr)
-  BTF_ID(func, filp_close)
-  BTF_WHITELIST_END(btf_whitelist_d_path)
+Adding verifier test for attaching tracing program and
+calling d_path helper from within and testing that it's
+allowed for dentry_open function and denied for 'd_path'
+function with appropriate error.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/bpf.h   |  3 +++
- kernel/bpf/btf.c      | 13 +++++++++++++
- kernel/bpf/btf_ids.h  | 38 ++++++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c |  5 +++++
- 4 files changed, 59 insertions(+)
+ tools/testing/selftests/bpf/test_verifier.c   | 13 ++++++-
+ tools/testing/selftests/bpf/verifier/d_path.c | 38 +++++++++++++++++++
+ 2 files changed, 50 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/verifier/d_path.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index e98c113a5d27..a94e85c2ec50 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -283,6 +283,7 @@ struct bpf_func_proto {
- 		enum bpf_arg_type arg_type[5];
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 78a6bae56ea6..3cce3dc766a2 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -114,6 +114,7 @@ struct bpf_test {
+ 		bpf_testdata_struct_t retvals[MAX_TEST_RUNS];
  	};
- 	int *btf_id; /* BTF ids of arguments */
-+	bool (*allowed)(const struct bpf_prog *prog);
+ 	enum bpf_attach_type expected_attach_type;
++	const char *kfunc;
  };
  
- /* bpf_context is intentionally undefined structure. Pointer to bpf_context is
-@@ -1745,6 +1746,8 @@ enum bpf_text_poke_type {
- int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		       void *addr1, void *addr2);
+ /* Note we want this to be 64 bit aligned so that the end of our array is
+@@ -984,8 +985,18 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 		attr.log_level = 4;
+ 	attr.prog_flags = pflags;
  
-+bool btf_whitelist_search(int id, int list[], int cnt);
-+
- extern int bpf_skb_output_btf_ids[];
- extern int bpf_seq_printf_btf_ids[];
- extern int bpf_seq_write_btf_ids[];
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 6924180a19c4..feda74d232c5 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -20,6 +20,7 @@
- #include <linux/btf.h>
- #include <linux/skmsg.h>
- #include <linux/perf_event.h>
-+#include <linux/bsearch.h>
- #include <net/sock.h>
- 
- /* BTF (BPF Type Format) is the meta data format which describes
-@@ -4669,3 +4670,15 @@ u32 btf_id(const struct btf *btf)
- {
- 	return btf->id;
- }
-+
-+static int btf_id_cmp_func(const void *a, const void *b)
-+{
-+	const int *pa = a, *pb = b;
-+
-+	return *pa - *pb;
-+}
-+
-+bool btf_whitelist_search(int id, int list[], int cnt)
-+{
-+	return bsearch(&id, list, cnt, sizeof(int), btf_id_cmp_func) != NULL;
-+}
-diff --git a/kernel/bpf/btf_ids.h b/kernel/bpf/btf_ids.h
-index 68aa5c38a37f..a90c09faa515 100644
---- a/kernel/bpf/btf_ids.h
-+++ b/kernel/bpf/btf_ids.h
-@@ -67,4 +67,42 @@ asm(							\
- #name ":;                                      \n"	\
- ".popsection;                                  \n");
- 
-+
-+/*
-+ * The BTF_WHITELIST_ENTRY/END macros pair defines sorted
-+ * list of BTF IDs plus its members count, with following
-+ * layout:
-+ *
-+ * BTF_WHITELIST_ENTRY(list2)
-+ * BTF_ID(type1, name1)
-+ * BTF_ID(type2, name2)
-+ * BTF_WHITELIST_END(list)
-+ *
-+ * __BTF_ID__sort__list:
-+ * list2_cnt:
-+ * .zero 4
-+ * list2:
-+ * __BTF_ID__type1__name1__3:
-+ * .zero 4
-+ * __BTF_ID__type2__name2__4:
-+ * .zero 4
-+ *
-+ */
-+#define BTF_WHITELIST_ENTRY(name)			\
-+asm(							\
-+".pushsection " SECTION ",\"a\";               \n"	\
-+".global __BTF_ID__sort__" #name ";            \n"	\
-+"__BTF_ID__sort__" #name ":;                   \n"	\
-+".global " #name "_cnt;                        \n"	\
-+#name "_cnt:;                                  \n"	\
-+".zero 4                                       \n"	\
-+".popsection;                                  \n");	\
-+BTF_ID_LIST(name)
-+
-+#define BTF_WHITELIST_END(name)				\
-+asm(							\
-+".pushsection " SECTION ",\"a\";              \n"	\
-+".size __BTF_ID__sort__" #name ", .-" #name " \n"	\
-+".popsection;                                 \n");
-+
- #endif
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bee3da2cd945..5a9a6fd72907 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4633,6 +4633,11 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
- 		return -EINVAL;
- 	}
- 
-+	if (fn->allowed && !fn->allowed(env->prog)) {
-+		verbose(env, "helper call is not allowed in probe\n");
-+		return -EINVAL;
++	if (prog_type == BPF_PROG_TYPE_TRACING && test->kfunc) {
++		attr.attach_btf_id = libbpf_find_vmlinux_btf_id(test->kfunc,
++						attr.expected_attach_type);
 +	}
 +
- 	/* With LD_ABS/IND some JITs save/restore skb from r1. */
- 	changes_data = bpf_helper_changes_pkt_data(fn->func);
- 	if (changes_data && fn->arg1_type != ARG_PTR_TO_CTX) {
+ 	fd_prog = bpf_load_program_xattr(&attr, bpf_vlog, sizeof(bpf_vlog));
+-	if (fd_prog < 0 && !bpf_probe_prog_type(prog_type, 0)) {
++
++	/* BPF_PROG_TYPE_TRACING requires more setup and
++	 * bpf_probe_prog_type won't give correct answer
++	 */
++	if (fd_prog < 0 && (prog_type != BPF_PROG_TYPE_TRACING) &&
++	    !bpf_probe_prog_type(prog_type, 0)) {
+ 		printf("SKIP (unsupported program type %d)\n", prog_type);
+ 		skips++;
+ 		goto close_fds;
+diff --git a/tools/testing/selftests/bpf/verifier/d_path.c b/tools/testing/selftests/bpf/verifier/d_path.c
+new file mode 100644
+index 000000000000..e08181abc056
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier/d_path.c
+@@ -0,0 +1,38 @@
++{
++	"d_path accept",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_1, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_MOV64_IMM(BPF_REG_6, 0),
++	BPF_STX_MEM(BPF_DW, BPF_REG_2, BPF_REG_6, 0),
++	BPF_LD_IMM64(BPF_REG_3, 8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_d_path),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.errstr = "R0 max value is outside of the array range",
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACING,
++	.expected_attach_type = BPF_TRACE_FENTRY,
++	.kfunc = "dentry_open",
++},
++{
++	"d_path reject",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_1, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_MOV64_IMM(BPF_REG_6, 0),
++	BPF_STX_MEM(BPF_DW, BPF_REG_2, BPF_REG_6, 0),
++	BPF_LD_IMM64(BPF_REG_3, 8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_d_path),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.errstr = "helper call is not allowed in probe",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_TRACING,
++	.expected_attach_type = BPF_TRACE_FENTRY,
++	.kfunc = "d_path",
++},
 -- 
 2.25.4
 
