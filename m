@@ -1,111 +1,285 @@
-Return-Path: <SRS0=otRl=75=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=fSoz=76=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4DFDC433DF
-	for <bpf@archiver.kernel.org>; Tue, 16 Jun 2020 23:20:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD2ECC433E0
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 01:04:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8CB6E207E8
-	for <bpf@archiver.kernel.org>; Tue, 16 Jun 2020 23:20:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 93FB82080D
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 01:04:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nf1vgdPf"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="g9bLvjss"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726401AbgFPXUv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Jun 2020 19:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60438 "EHLO
+        id S1726270AbgFQBE0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Jun 2020 21:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbgFPXUu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Jun 2020 19:20:50 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE330C061573
-        for <bpf@vger.kernel.org>; Tue, 16 Jun 2020 16:20:50 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id i16so141951qtr.7
-        for <bpf@vger.kernel.org>; Tue, 16 Jun 2020 16:20:50 -0700 (PDT)
+        with ESMTP id S1726456AbgFQBEX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Jun 2020 21:04:23 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BE9C061755
+        for <bpf@vger.kernel.org>; Tue, 16 Jun 2020 18:04:21 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id e20so603552ybc.23
+        for <bpf@vger.kernel.org>; Tue, 16 Jun 2020 18:04:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=pqIyQnUzXL5D4KsY5srH61fM06Ml//ffTL2G2f2q/+I=;
-        b=nf1vgdPfxioxYb678T+PGpk3e9XZjrx5frEV88ZO9w+rxRFoN6I+vXrBwNxYikpAr0
-         4qgGlVtlEm1kj9qbcVzkraXqYUMzoi+elLGivjtl1o7AP53OX7jUviC3GoXe90UuMEwL
-         ZibG6EDWYTXBwiab8QOlX9NrGFuRo5RjsbMYMKJU01xxUK0GAqIE91/mWbKy8D4L+6ln
-         6eLNLjfujVEODkbXUH+sCopGW5oQzR0pQ67ONMrtW+mPrBRzm0dJVRPP6dAwDzUHrNSi
-         lHl7CD6cqUjZraEHRqeFrNewr9+8F8yXSWC7YxxtrFygZCRLsosptjVno/LwPr+wNZcJ
-         3iBA==
+        bh=MkbdLvL2Zi1F3Tsi0YsCAEZhQKEx0IBwe0FoxjY0e3c=;
+        b=g9bLvjsstMgwhrFyn2geeCipVFJDfjFr9/8EzPLrncu8SsjJ2uFI8H/IeFhK/9rsO0
+         vzC+nBEerldx7v6RIhgIwFp+5jZ7xgsuU2EMeRMNki5DzXAJ94ji4bfXEhzOWxUJVupd
+         89PkXXVGcaFXhfKueij1hQRr5cub8+1cLHJbYOn2yx1XMFc+E2ImE07pMi3UecnT9PgV
+         bH09jIxxcN0XOOiFjKjUQjt5CgXYVH7YwhxkMEF5ALzhmdP5YlguqaPxGzeCKP4iZklZ
+         qr7EPnz5KFxL8BQya11L5BiTrxnQHOjCbTFuIdYCpufNEW6qe6e0xMX7fxMa85viptMw
+         Bw+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pqIyQnUzXL5D4KsY5srH61fM06Ml//ffTL2G2f2q/+I=;
-        b=qAmi8EPzfHMRdG54rogouWd3Q6Oi3K6WlR8fTT9rmEV5lAuKxgeicjqI77VpAcNHaM
-         WkCcd4MLKo14pFmawJnKkqCgBhwNjDSqOU4azNysxDJ6pSQA/Sc+XSrXk2OJDm5Q+Y64
-         sCIVESeGMuWs79MGPmkyUAPnD8ZDCng7FWjwDdurQ7BnRdbtezMPPeK9wXi2W1iboSP+
-         cre4AH4wvCp7esb+SmClj4FpiTRhfslQonnYSzeNT0oJjQX/O7/FkK2nau6bHvB5yxZX
-         tjyP9mlNXk4XgazRYFAhoZOD0r/GaoFkutX4fJxEvRhOrKrsOhrBQva7Z6AK5FErhja8
-         eP3A==
-X-Gm-Message-State: AOAM5302N8oxZwddcS8O2/mRQDIMvNtVkJ5lU0mHqP3XBVXqFwUQ6Qi9
-        XbELZPieSlW9nD92AJxfqh0hMN8VPyneadb+vBepLw==
-X-Google-Smtp-Source: ABdhPJwD3v60Mm1RwFrItNO59U2z4MW3Y+zBVZD4ijXCaWBscZ76kjKPr6/TN7Q/V/cDiH0X8KSR88U3EhUcbxgFBI4=
-X-Received: by 2002:ac8:4c89:: with SMTP id j9mr23961366qtv.326.1592349649706;
- Tue, 16 Jun 2020 16:20:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200616225256.246769-1-sdf@google.com> <CAADnVQLS7=UmT9ivyuUiq8i9ZJRUyPNhN0dvdeiF32sUi=A3NQ@mail.gmail.com>
-In-Reply-To: <CAADnVQLS7=UmT9ivyuUiq8i9ZJRUyPNhN0dvdeiF32sUi=A3NQ@mail.gmail.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=MkbdLvL2Zi1F3Tsi0YsCAEZhQKEx0IBwe0FoxjY0e3c=;
+        b=ZKPTqy3mUCoiBaySWeLF7EjdCR4qI2lc+3kvfz8Va8agTSLfYeZCna4/EfUH1zVaWq
+         269Tauoh0kuaPL0ig3wlprye7KEqYbnqFdzHV+qxjcJ6pFK+6rUmMWdlrmAQnSgJ3v0d
+         z7Mkpq9TgWh0b/Qg91ZHiiPXdgwWQZam4E4nbvFanXb3gxoj1tp1RNr+6z5+9WwyUCOu
+         cgJ3gIB1pBPdbxZsKNXFRUibhnqHU2IwMMon3joGaAx6xmRgbeq8ziNGElFgkm3oQNb8
+         06XKPUOVlWLB54jQ6fOZsCCglOD3qwU+MF2Y1KzBsiSTa9OGXmZa0Mq7VWl8NZoj9WdH
+         ljiA==
+X-Gm-Message-State: AOAM532GlWVmzqmK8BvmfjPG9XIdEJfKgcp93ntze+dL71wwuw2xY9oB
+        fjFH9NuSYuZacIypcTwMIzUw9KA=
+X-Google-Smtp-Source: ABdhPJw0253CCA3tRzHDPqpiCitYohp6QS9lcZBoJFKaztrU98zWvQViWAcHhVCShRPrZziZIGcDDw8=
+X-Received: by 2002:a25:9ac5:: with SMTP id t5mr8859813ybo.410.1592355860214;
+ Tue, 16 Jun 2020 18:04:20 -0700 (PDT)
+Date:   Tue, 16 Jun 2020 18:04:15 -0700
+In-Reply-To: <20200617010416.93086-1-sdf@google.com>
+Message-Id: <20200617010416.93086-2-sdf@google.com>
+Mime-Version: 1.0
+References: <20200617010416.93086-1-sdf@google.com>
+X-Mailer: git-send-email 2.27.0.290.gba653c62da-goog
+Subject: [PATCH bpf v5 2/3] selftests/bpf: make sure optvals > PAGE_SIZE are bypassed
 From:   Stanislav Fomichev <sdf@google.com>
-Date:   Tue, 16 Jun 2020 16:20:38 -0700
-Message-ID: <CAKH8qBso=z3Thz0pimhLOVvPd2iGMmMoPvUA3j4dZYe1ivr97g@mail.gmail.com>
-Subject: Re: [PATCH bpf v4 1/2] bpf: don't return EINVAL from {get,set}sockopt
- when optlen > PAGE_SIZE
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Laight <David.Laight@aculab.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        Stanislav Fomichev <sdf@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 16, 2020 at 4:05 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Jun 16, 2020 at 3:53 PM Stanislav Fomichev <sdf@google.com> wrote:
-> >
-> > Attaching to these hooks can break iptables because its optval is
-> > usually quite big, or at least bigger than the current PAGE_SIZE limit.
-> > David also mentioned some SCTP options can be big (around 256k).
-> >
-> > There are two possible ways to fix it:
-> > 1. Increase the limit to match iptables max optval. There is, however,
-> >    no clear upper limit. Technically, iptables can accept up to
-> >    512M of data (not sure how practical it is though).
-> >
-> > 2. Bypass the value (don't expose to BPF) if it's too big and trigger
-> >    BPF only with level/optname so BPF can still decide whether
-> >    to allow/deny big sockopts.
-> >
-> > The initial attempt was implemented using strategy #1. Due to
-> > listed shortcomings, let's switch to strategy #2. When there is
-> > legitimate a real use-case for iptables/SCTP, we can consider increasing
-> >  the PAGE_SIZE limit.
-> >
-> > To support the cases where len(optval) > PAGE_SIZE we can
-> > leverage upcoming sleepable BPF work by providing a helper
-> > which can do copy_from_user (sleepable) at the given offset
-> > from the original large buffer.
-> >
-> > v4:
-> > * use temporary buffer to avoid optval == optval_end == NULL;
-> >   this removes the corner case in the verifier that might assume
-> >   non-zero PTR_TO_PACKET/PTR_TO_PACKET_END.
->
-> just replied with another idea in v3 thread...
-Yeah, sorry about that, posted 5 mins before your reply :-( Sorry for the noise.
+We are relying on the fact, that we can pass > sizeof(int) optvals
+to the SOL_IP+IP_FREEBIND option (the kernel will take first 4 bytes).
+In the BPF program we check that we can only touch PAGE_SIZE bytes,
+but the real optlen is PAGE_SIZE * 2. In both cases, we override it to
+some predefined value and trim the optlen.
+
+Also, let's modify exiting IP_TOS usecase to test optlen=0 case
+where BPF program just bypasses the data as is.
+
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ .../selftests/bpf/prog_tests/sockopt_sk.c     | 46 +++++++++++++---
+ .../testing/selftests/bpf/progs/sockopt_sk.c  | 54 ++++++++++++++++++-
+ 2 files changed, 91 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+index 2061a6beac0f..5f54c6aec7f0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+@@ -13,6 +13,7 @@ static int getsetsockopt(void)
+ 		char cc[16]; /* TCP_CA_NAME_MAX */
+ 	} buf = {};
+ 	socklen_t optlen;
++	char *big_buf = NULL;
+ 
+ 	fd = socket(AF_INET, SOCK_STREAM, 0);
+ 	if (fd < 0) {
+@@ -22,24 +23,31 @@ static int getsetsockopt(void)
+ 
+ 	/* IP_TOS - BPF bypass */
+ 
+-	buf.u8[0] = 0x08;
+-	err = setsockopt(fd, SOL_IP, IP_TOS, &buf, 1);
++	optlen = getpagesize() * 2;
++	big_buf = calloc(1, optlen);
++	if (!big_buf) {
++		log_err("Couldn't allocate two pages");
++		goto err;
++	}
++
++	*(int *)big_buf = 0x08;
++	err = setsockopt(fd, SOL_IP, IP_TOS, big_buf, optlen);
+ 	if (err) {
+ 		log_err("Failed to call setsockopt(IP_TOS)");
+ 		goto err;
+ 	}
+ 
+-	buf.u8[0] = 0x00;
++	memset(big_buf, 0, optlen);
+ 	optlen = 1;
+-	err = getsockopt(fd, SOL_IP, IP_TOS, &buf, &optlen);
++	err = getsockopt(fd, SOL_IP, IP_TOS, big_buf, &optlen);
+ 	if (err) {
+ 		log_err("Failed to call getsockopt(IP_TOS)");
+ 		goto err;
+ 	}
+ 
+-	if (buf.u8[0] != 0x08) {
+-		log_err("Unexpected getsockopt(IP_TOS) buf[0] 0x%02x != 0x08",
+-			buf.u8[0]);
++	if (*(int *)big_buf != 0x08) {
++		log_err("Unexpected getsockopt(IP_TOS) optval 0x%x != 0x08",
++			*(int *)big_buf);
+ 		goto err;
+ 	}
+ 
+@@ -78,6 +86,28 @@ static int getsetsockopt(void)
+ 		goto err;
+ 	}
+ 
++	/* IP_FREEBIND - BPF can't access optval past PAGE_SIZE */
++
++	optlen = getpagesize() * 2;
++	memset(big_buf, 0, optlen);
++
++	err = setsockopt(fd, SOL_IP, IP_FREEBIND, big_buf, optlen);
++	if (err != 0) {
++		log_err("Failed to call setsockopt, ret=%d", err);
++		goto err;
++	}
++
++	err = getsockopt(fd, SOL_IP, IP_FREEBIND, big_buf, &optlen);
++	if (err != 0) {
++		log_err("Failed to call getsockopt, ret=%d", err);
++		goto err;
++	}
++
++	if (optlen != 1 || *(__u8 *)big_buf != 0x55) {
++		log_err("Unexpected IP_FREEBIND getsockopt, optlen=%d, optval=0x%x",
++			optlen, *(__u8 *)big_buf);
++	}
++
+ 	/* SO_SNDBUF is overwritten */
+ 
+ 	buf.u32 = 0x01010101;
+@@ -124,9 +154,11 @@ static int getsetsockopt(void)
+ 		goto err;
+ 	}
+ 
++	free(big_buf);
+ 	close(fd);
+ 	return 0;
+ err:
++	free(big_buf);
+ 	close(fd);
+ 	return -1;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/sockopt_sk.c b/tools/testing/selftests/bpf/progs/sockopt_sk.c
+index d5a5eeb5fb52..712df7b49cb1 100644
+--- a/tools/testing/selftests/bpf/progs/sockopt_sk.c
++++ b/tools/testing/selftests/bpf/progs/sockopt_sk.c
+@@ -8,6 +8,10 @@
+ char _license[] SEC("license") = "GPL";
+ __u32 _version SEC("version") = 1;
+ 
++#ifndef PAGE_SIZE
++#define PAGE_SIZE 4096
++#endif
++
+ #define SOL_CUSTOM			0xdeadbeef
+ 
+ struct sockopt_sk {
+@@ -28,12 +32,14 @@ int _getsockopt(struct bpf_sockopt *ctx)
+ 	__u8 *optval = ctx->optval;
+ 	struct sockopt_sk *storage;
+ 
+-	if (ctx->level == SOL_IP && ctx->optname == IP_TOS)
++	if (ctx->level == SOL_IP && ctx->optname == IP_TOS) {
+ 		/* Not interested in SOL_IP:IP_TOS;
+ 		 * let next BPF program in the cgroup chain or kernel
+ 		 * handle it.
+ 		 */
++		ctx->optlen = 0; /* bypass optval>PAGE_SIZE */
+ 		return 1;
++	}
+ 
+ 	if (ctx->level == SOL_SOCKET && ctx->optname == SO_SNDBUF) {
+ 		/* Not interested in SOL_SOCKET:SO_SNDBUF;
+@@ -51,6 +57,26 @@ int _getsockopt(struct bpf_sockopt *ctx)
+ 		return 1;
+ 	}
+ 
++	if (ctx->level == SOL_IP && ctx->optname == IP_FREEBIND) {
++		if (optval + 1 > optval_end)
++			return 0; /* EPERM, bounds check */
++
++		ctx->retval = 0; /* Reset system call return value to zero */
++
++		/* Always export 0x55 */
++		optval[0] = 0x55;
++		ctx->optlen = 1;
++
++		/* Userspace buffer is PAGE_SIZE * 2, but BPF
++		 * program can only see the first PAGE_SIZE
++		 * bytes of data.
++		 */
++		if (optval_end - optval != PAGE_SIZE)
++			return 0; /* EPERM, unexpected data size */
++
++		return 1;
++	}
++
+ 	if (ctx->level != SOL_CUSTOM)
+ 		return 0; /* EPERM, deny everything except custom level */
+ 
+@@ -81,12 +107,14 @@ int _setsockopt(struct bpf_sockopt *ctx)
+ 	__u8 *optval = ctx->optval;
+ 	struct sockopt_sk *storage;
+ 
+-	if (ctx->level == SOL_IP && ctx->optname == IP_TOS)
++	if (ctx->level == SOL_IP && ctx->optname == IP_TOS) {
+ 		/* Not interested in SOL_IP:IP_TOS;
+ 		 * let next BPF program in the cgroup chain or kernel
+ 		 * handle it.
+ 		 */
++		ctx->optlen = 0; /* bypass optval>PAGE_SIZE */
+ 		return 1;
++	}
+ 
+ 	if (ctx->level == SOL_SOCKET && ctx->optname == SO_SNDBUF) {
+ 		/* Overwrite SO_SNDBUF value */
+@@ -112,6 +140,28 @@ int _setsockopt(struct bpf_sockopt *ctx)
+ 		return 1;
+ 	}
+ 
++	if (ctx->level == SOL_IP && ctx->optname == IP_FREEBIND) {
++		/* Original optlen is larger than PAGE_SIZE. */
++		if (ctx->optlen != PAGE_SIZE * 2)
++			return 0; /* EPERM, unexpected data size */
++
++		if (optval + 1 > optval_end)
++			return 0; /* EPERM, bounds check */
++
++		/* Make sure we can trim the buffer. */
++		optval[0] = 0;
++		ctx->optlen = 1;
++
++		/* Usepace buffer is PAGE_SIZE * 2, but BPF
++		 * program can only see the first PAGE_SIZE
++		 * bytes of data.
++		 */
++		if (optval_end - optval != PAGE_SIZE)
++			return 0; /* EPERM, unexpected data size */
++
++		return 1;
++	}
++
+ 	if (ctx->level != SOL_CUSTOM)
+ 		return 0; /* EPERM, deny everything except custom level */
+ 
+-- 
+2.27.0.290.gba653c62da-goog
+
