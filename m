@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E773DC433DF
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C19BBC433E1
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8D4F208D5
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A28F6208D5
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hUaYw/9N"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="WUnwdqt4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbgFQQVp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 12:21:45 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36670 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726329AbgFQQVo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 17 Jun 2020 12:21:44 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05HGGDPD001015
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:42 -0700
+        id S1726919AbgFQQVq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 12:21:46 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:7054 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726835AbgFQQVq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 17 Jun 2020 12:21:46 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05HGJh9G030886
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:44 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=9qWLedTgtvcCGyo4uhPRdXtrqY0QUHpwmQpuboELokk=;
- b=hUaYw/9NnALFgjolQNXs7e/FAq6y7yy3E9vI6yNOmEO7uaVhqy5/1xugPcX/TjGpMVb7
- 41MF2sjsGqAtYBQJn/6ZyhMlgTcpsVI1w6qZArC0RnWMgnMGLHgtpX4tTKdPWtuOtBjV
- +ZxZeC6sobuliU8Klpb4MLiLiWi6yQdI/dg= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 31q65d5cmn-2
+ bh=qKyRPnw3dryXu+uIWmha2EysccEdmZ+EjtZCA4qbfzM=;
+ b=WUnwdqt4D8HHT9PMNMhHovlGIFYevTAhSMKFvnjugqa4k+vCQ1t60lx9drYI9ZWNZI4o
+ Jk2Or/1VQ3rymNxAJasquA1Cay3AHHOh9hhk4UQ5xDhhtZp20VlAcI1RODv+U0lBva3Z
+ UYfslWYJMiNyFbDwhxpfrXkcI0Wg+6izMX0= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 31q653db1h-12
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:41 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:44 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 17 Jun 2020 09:21:35 -0700
+ 15.1.1979.3; Wed, 17 Jun 2020 09:21:38 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 18F5A2EC3539; Wed, 17 Jun 2020 09:18:55 -0700 (PDT)
+        id 56E6F2EC3738; Wed, 17 Jun 2020 09:19:15 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -52,9 +52,9 @@ CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>,
         Quentin Monnet <quentin@isovalent.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 1/9] libbpf: generalize libbpf externs support
-Date:   Wed, 17 Jun 2020 09:18:24 -0700
-Message-ID: <20200617161832.1438371-2-andriin@fb.com>
+Subject: [PATCH bpf-next 9/9] tools/bpftool: add documentation and sample output for process info
+Date:   Wed, 17 Jun 2020 09:18:32 -0700
+Message-ID: <20200617161832.1438371-10-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200617161832.1438371-1-andriin@fb.com>
 References: <20200617161832.1438371-1-andriin@fb.com>
@@ -64,10 +64,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-17_06:2020-06-17,2020-06-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- bulkscore=0 adultscore=0 malwarescore=0 suspectscore=9 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 cotscore=-2147483648
- phishscore=0 impostorscore=0 priorityscore=1501 classifier=spam adjust=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 cotscore=-2147483648 suspectscore=8
+ spamscore=0 lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0
+ adultscore=0 mlxlogscore=999 malwarescore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2006170129
 X-FB-Internal: deliver
@@ -76,637 +76,141 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Switch existing Kconfig externs to be just one of few possible kinds of m=
-ore
-generic externs. This refactoring is in preparation for ksymbol extern
-support, added in the follow up patch. There are no functional changes
-intended.
+Add statements about bpftool being able to discover process info, holding
+reference to BPF map, prog, link, or BTF. Show example output as well.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 348 ++++++++++++++++++++++++-----------------
- 1 file changed, 207 insertions(+), 141 deletions(-)
+ tools/bpf/bpftool/Documentation/bpftool-btf.rst  |  5 +++++
+ tools/bpf/bpftool/Documentation/bpftool-link.rst | 13 ++++++++++++-
+ tools/bpf/bpftool/Documentation/bpftool-map.rst  |  8 +++++++-
+ tools/bpf/bpftool/Documentation/bpftool-prog.rst | 11 +++++++++++
+ 4 files changed, 35 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 477c679ed945..23a65f8f2eaf 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -329,24 +329,35 @@ struct bpf_map {
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/=
+bpftool/Documentation/bpftool-btf.rst
+index ce3a724f50c1..85f7c82ebb28 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+@@ -36,6 +36,11 @@ DESCRIPTION
+ 		  otherwise list all BTF objects currently loaded on the
+ 		  system.
 =20
- enum extern_type {
- 	EXT_UNKNOWN,
--	EXT_CHAR,
--	EXT_BOOL,
--	EXT_INT,
--	EXT_TRISTATE,
--	EXT_CHAR_ARR,
-+	EXT_KCFG,
-+};
++		  Since Linux 5.8 bpftool is able to discover information about
++		  processes that hold open file descriptors (FDs) against BPF
++		  links. On such kernels bpftool will automatically emit this
++		  information as well.
 +
-+enum kcfg_type {
-+	KCFG_UNKNOWN,
-+	KCFG_CHAR,
-+	KCFG_BOOL,
-+	KCFG_INT,
-+	KCFG_TRISTATE,
-+	KCFG_CHAR_ARR,
- };
+ 	**bpftool btf dump** *BTF_SRC*
+ 		  Dump BTF entries from a given *BTF_SRC*.
 =20
- struct extern_desc {
--	const char *name;
-+	enum extern_type type;
- 	int sym_idx;
- 	int btf_id;
--	enum extern_type type;
--	int sz;
--	int align;
--	int data_off;
--	bool is_signed;
--	bool is_weak;
-+	int sec_btf_id;
-+	const char *name;
- 	bool is_set;
-+	bool is_weak;
-+	union {
-+		struct {
-+			enum kcfg_type type;
-+			int sz;
-+			int align;
-+			int data_off;
-+			bool is_signed;
-+		} kcfg;
-+	};
- };
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-link.rst b/tools/bpf=
+/bpftool/Documentation/bpftool-link.rst
+index 0e43d7b06c11..1da7ef65b514 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-link.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-link.rst
+@@ -37,6 +37,11 @@ DESCRIPTION
+ 		  zero or more named attributes, some of which depend on type
+ 		  of link.
 =20
- static LIST_HEAD(bpf_objects_list);
-@@ -1423,19 +1434,19 @@ static struct extern_desc *find_extern_by_name(co=
-nst struct bpf_object *obj,
- 	return NULL;
- }
-=20
--static int set_ext_value_tri(struct extern_desc *ext, void *ext_val,
--			     char value)
-+static int set_kcfg_value_tri(struct extern_desc *ext, void *ext_val,
-+			      char value)
- {
--	switch (ext->type) {
--	case EXT_BOOL:
-+	switch (ext->kcfg.type) {
-+	case KCFG_BOOL:
- 		if (value =3D=3D 'm') {
--			pr_warn("extern %s=3D%c should be tristate or char\n",
-+			pr_warn("extern (kcfg) %s=3D%c should be tristate or char\n",
- 				ext->name, value);
- 			return -EINVAL;
- 		}
- 		*(bool *)ext_val =3D value =3D=3D 'y' ? true : false;
- 		break;
--	case EXT_TRISTATE:
-+	case KCFG_TRISTATE:
- 		if (value =3D=3D 'y')
- 			*(enum libbpf_tristate *)ext_val =3D TRI_YES;
- 		else if (value =3D=3D 'm')
-@@ -1443,14 +1454,14 @@ static int set_ext_value_tri(struct extern_desc *=
-ext, void *ext_val,
- 		else /* value =3D=3D 'n' */
- 			*(enum libbpf_tristate *)ext_val =3D TRI_NO;
- 		break;
--	case EXT_CHAR:
-+	case KCFG_CHAR:
- 		*(char *)ext_val =3D value;
- 		break;
--	case EXT_UNKNOWN:
--	case EXT_INT:
--	case EXT_CHAR_ARR:
-+	case KCFG_UNKNOWN:
-+	case KCFG_INT:
-+	case KCFG_CHAR_ARR:
- 	default:
--		pr_warn("extern %s=3D%c should be bool, tristate, or char\n",
-+		pr_warn("extern (kcfg) %s=3D%c should be bool, tristate, or char\n",
- 			ext->name, value);
- 		return -EINVAL;
- 	}
-@@ -1458,29 +1469,29 @@ static int set_ext_value_tri(struct extern_desc *=
-ext, void *ext_val,
- 	return 0;
- }
-=20
--static int set_ext_value_str(struct extern_desc *ext, char *ext_val,
--			     const char *value)
-+static int set_kcfg_value_str(struct extern_desc *ext, char *ext_val,
-+			      const char *value)
- {
- 	size_t len;
-=20
--	if (ext->type !=3D EXT_CHAR_ARR) {
--		pr_warn("extern %s=3D%s should char array\n", ext->name, value);
-+	if (ext->kcfg.type !=3D KCFG_CHAR_ARR) {
-+		pr_warn("extern (kcfg) %s=3D%s should be char array\n", ext->name, val=
-ue);
- 		return -EINVAL;
- 	}
-=20
- 	len =3D strlen(value);
- 	if (value[len - 1] !=3D '"') {
--		pr_warn("extern '%s': invalid string config '%s'\n",
-+		pr_warn("extern (kcfg) '%s': invalid string config '%s'\n",
- 			ext->name, value);
- 		return -EINVAL;
- 	}
-=20
- 	/* strip quotes */
- 	len -=3D 2;
--	if (len >=3D ext->sz) {
--		pr_warn("extern '%s': long string config %s of (%zu bytes) truncated t=
-o %d bytes\n",
--			ext->name, value, len, ext->sz - 1);
--		len =3D ext->sz - 1;
-+	if (len >=3D ext->kcfg.sz) {
-+		pr_warn("extern (kcfg) '%s': long string config %s of (%zu bytes) trun=
-cated to %d bytes\n",
-+			ext->name, value, len, ext->kcfg.sz - 1);
-+		len =3D ext->kcfg.sz - 1;
- 	}
- 	memcpy(ext_val, value + 1, len);
- 	ext_val[len] =3D '\0';
-@@ -1507,11 +1518,11 @@ static int parse_u64(const char *value, __u64 *re=
-s)
- 	return 0;
- }
-=20
--static bool is_ext_value_in_range(const struct extern_desc *ext, __u64 v=
-)
-+static bool is_kcfg_value_in_range(const struct extern_desc *ext, __u64 =
-v)
- {
--	int bit_sz =3D ext->sz * 8;
-+	int bit_sz =3D ext->kcfg.sz * 8;
-=20
--	if (ext->sz =3D=3D 8)
-+	if (ext->kcfg.sz =3D=3D 8)
- 		return true;
-=20
- 	/* Validate that value stored in u64 fits in integer of `ext->sz`
-@@ -1526,26 +1537,26 @@ static bool is_ext_value_in_range(const struct ex=
-tern_desc *ext, __u64 v)
- 	 *  For unsigned target integer, check that all the (64 - Y) bits are
- 	 *  zero.
- 	 */
--	if (ext->is_signed)
-+	if (ext->kcfg.is_signed)
- 		return v + (1ULL << (bit_sz - 1)) < (1ULL << bit_sz);
- 	else
- 		return (v >> bit_sz) =3D=3D 0;
- }
-=20
--static int set_ext_value_num(struct extern_desc *ext, void *ext_val,
--			     __u64 value)
-+static int set_kcfg_value_num(struct extern_desc *ext, void *ext_val,
-+			      __u64 value)
- {
--	if (ext->type !=3D EXT_INT && ext->type !=3D EXT_CHAR) {
--		pr_warn("extern %s=3D%llu should be integer\n",
-+	if (ext->kcfg.type !=3D KCFG_INT && ext->kcfg.type !=3D KCFG_CHAR) {
-+		pr_warn("extern (kcfg) %s=3D%llu should be integer\n",
- 			ext->name, (unsigned long long)value);
- 		return -EINVAL;
- 	}
--	if (!is_ext_value_in_range(ext, value)) {
--		pr_warn("extern %s=3D%llu value doesn't fit in %d bytes\n",
--			ext->name, (unsigned long long)value, ext->sz);
-+	if (!is_kcfg_value_in_range(ext, value)) {
-+		pr_warn("extern (kcfg) %s=3D%llu value doesn't fit in %d bytes\n",
-+			ext->name, (unsigned long long)value, ext->kcfg.sz);
- 		return -ERANGE;
- 	}
--	switch (ext->sz) {
-+	switch (ext->kcfg.sz) {
- 		case 1: *(__u8 *)ext_val =3D value; break;
- 		case 2: *(__u16 *)ext_val =3D value; break;
- 		case 4: *(__u32 *)ext_val =3D value; break;
-@@ -1591,30 +1602,30 @@ static int bpf_object__process_kconfig_line(struc=
-t bpf_object *obj,
- 	if (!ext || ext->is_set)
- 		return 0;
-=20
--	ext_val =3D data + ext->data_off;
-+	ext_val =3D data + ext->kcfg.data_off;
- 	value =3D sep + 1;
-=20
- 	switch (*value) {
- 	case 'y': case 'n': case 'm':
--		err =3D set_ext_value_tri(ext, ext_val, *value);
-+		err =3D set_kcfg_value_tri(ext, ext_val, *value);
- 		break;
- 	case '"':
--		err =3D set_ext_value_str(ext, ext_val, value);
-+		err =3D set_kcfg_value_str(ext, ext_val, value);
- 		break;
- 	default:
- 		/* assume integer */
- 		err =3D parse_u64(value, &num);
- 		if (err) {
--			pr_warn("extern %s=3D%s should be integer\n",
-+			pr_warn("extern (kcfg) %s=3D%s should be integer\n",
- 				ext->name, value);
- 			return err;
- 		}
--		err =3D set_ext_value_num(ext, ext_val, num);
-+		err =3D set_kcfg_value_num(ext, ext_val, num);
- 		break;
- 	}
- 	if (err)
- 		return err;
--	pr_debug("extern %s=3D%s\n", ext->name, value);
-+	pr_debug("extern (kcfg) %s=3D%s\n", ext->name, value);
- 	return 0;
- }
-=20
-@@ -1685,16 +1696,20 @@ static int bpf_object__read_kconfig_mem(struct bp=
-f_object *obj,
-=20
- static int bpf_object__init_kconfig_map(struct bpf_object *obj)
- {
--	struct extern_desc *last_ext;
-+	struct extern_desc *last_ext =3D NULL, *ext;
- 	size_t map_sz;
--	int err;
-+	int i, err;
-=20
--	if (obj->nr_extern =3D=3D 0)
--		return 0;
-+	for (i =3D 0; i < obj->nr_extern; i++) {
-+		ext =3D &obj->externs[i];
-+		if (ext->type =3D=3D EXT_KCFG)
-+			last_ext =3D ext;
-+	}
-=20
--	last_ext =3D &obj->externs[obj->nr_extern - 1];
--	map_sz =3D last_ext->data_off + last_ext->sz;
-+	if (!last_ext)
-+		return 0;
-=20
-+	map_sz =3D last_ext->kcfg.data_off + last_ext->kcfg.sz;
- 	err =3D bpf_object__init_internal_map(obj, LIBBPF_MAP_KCONFIG,
- 					    obj->efile.symbols_shndx,
- 					    NULL, map_sz);
-@@ -2709,8 +2724,33 @@ static int find_extern_btf_id(const struct btf *bt=
-f, const char *ext_name)
- 	return -ENOENT;
- }
-=20
--static enum extern_type find_extern_type(const struct btf *btf, int id,
--					 bool *is_signed)
-+static int find_extern_sec_btf_id(struct btf *btf, int ext_btf_id) {
-+	const struct btf_var_secinfo *vs;
-+	const struct btf_type *t;
-+	int i, j, n;
++		  Since Linux 5.8 bpftool is able to discover information about
++		  processes that hold open file descriptors (FDs) against BPF
++		  links. On such kernels bpftool will automatically emit this
++		  information as well.
 +
-+	if (!btf)
-+		return -ESRCH;
+ 	**bpftool link pin** *LINK* *FILE*
+ 		  Pin link *LINK* as *FILE*.
+=20
+@@ -82,6 +87,7 @@ EXAMPLES
+=20
+     10: cgroup  prog 25
+             cgroup_id 614  attach_type egress
++            pids test_progs(2238417)
+=20
+ **# bpftool --json --pretty link show**
+=20
+@@ -91,7 +97,12 @@ EXAMPLES
+             "type": "cgroup",
+             "prog_id": 25,
+             "cgroup_id": 614,
+-            "attach_type": "egress"
++            "attach_type": "egress",
++            "pids": [{
++                    "pid": 2238417,
++                    "comm": "test_progs"
++                }
++            ]
+         }
+     ]
+=20
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/=
+bpftool/Documentation/bpftool-map.rst
+index 31101643e57c..5bc2123e9944 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+@@ -62,6 +62,11 @@ DESCRIPTION
+ 		  Output will start with map ID followed by map type and
+ 		  zero or more named attributes (depending on kernel version).
+=20
++		  Since Linux 5.8 bpftool is able to discover information about
++		  processes that hold open file descriptors (FDs) against BPF
++		  maps. On such kernels bpftool will automatically emit this
++		  information as well.
 +
-+	n =3D btf__get_nr_types(btf);
-+	for (i =3D 1; i <=3D n; i++) {
-+		t =3D btf__type_by_id(btf, i);
+ 	**bpftool map create** *FILE* **type** *TYPE* **key** *KEY_SIZE* **valu=
+e** *VALUE_SIZE*  **entries** *MAX_ENTRIES* **name** *NAME* [**flags** *F=
+LAGS*] [**dev** *NAME*]
+ 		  Create a new map with given parameters and pin it to *bpffs*
+ 		  as *FILE*.
+@@ -180,7 +185,8 @@ EXAMPLES
+ ::
+=20
+   10: hash  name some_map  flags 0x0
+-	key 4B  value 8B  max_entries 2048  memlock 167936B
++        key 4B  value 8B  max_entries 2048  memlock 167936B
++        pids systemd(1)
+=20
+ The following three commands are equivalent:
+=20
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf=
+/bpftool/Documentation/bpftool-prog.rst
+index 2b254959d488..412ea3d9bf7f 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -75,6 +75,11 @@ DESCRIPTION
+ 		  program run. Activation or deactivation of the feature is
+ 		  performed via the **kernel.bpf_stats_enabled** sysctl knob.
+=20
++		  Since Linux 5.8 bpftool is able to discover information about
++		  processes that hold open file descriptors (FDs) against BPF
++		  programs. On such kernels bpftool will automatically emit this
++		  information as well.
 +
-+		if (!btf_is_datasec(t))
-+			continue;
-+
-+		vs =3D btf_var_secinfos(t);
-+		for (j =3D 0; j < btf_vlen(t); j++, vs++) {
-+			if (vs->type =3D=3D ext_btf_id)
-+				return i;
-+		}
-+	}
-+
-+	return -ENOENT;
-+}
-+
-+static enum kcfg_type find_kcfg_type(const struct btf *btf, int id,
-+				     bool *is_signed)
- {
- 	const struct btf_type *t;
- 	const char *name;
-@@ -2725,29 +2765,29 @@ static enum extern_type find_extern_type(const st=
-ruct btf *btf, int id,
- 		int enc =3D btf_int_encoding(t);
+ 	**bpftool prog dump xlated** *PROG* [{ **file** *FILE* | **opcodes** | =
+**visual** | **linum** }]
+ 		  Dump eBPF instructions of the programs from the kernel. By
+ 		  default, eBPF will be disassembled and printed to standard
+@@ -243,6 +248,7 @@ EXAMPLES
+     10: xdp  name some_prog  tag 005a3d2123620c8b  gpl run_time_ns 81632=
+ run_cnt 10
+             loaded_at 2017-09-29T20:11:00+0000  uid 0
+             xlated 528B  jited 370B  memlock 4096B  map_ids 10
++            pids systemd(1)
 =20
- 		if (enc & BTF_INT_BOOL)
--			return t->size =3D=3D 1 ? EXT_BOOL : EXT_UNKNOWN;
-+			return t->size =3D=3D 1 ? KCFG_BOOL : KCFG_UNKNOWN;
- 		if (is_signed)
- 			*is_signed =3D enc & BTF_INT_SIGNED;
- 		if (t->size =3D=3D 1)
--			return EXT_CHAR;
-+			return KCFG_CHAR;
- 		if (t->size < 1 || t->size > 8 || (t->size & (t->size - 1)))
--			return EXT_UNKNOWN;
--		return EXT_INT;
-+			return KCFG_UNKNOWN;
-+		return KCFG_INT;
- 	}
- 	case BTF_KIND_ENUM:
- 		if (t->size !=3D 4)
--			return EXT_UNKNOWN;
-+			return KCFG_UNKNOWN;
- 		if (strcmp(name, "libbpf_tristate"))
--			return EXT_UNKNOWN;
--		return EXT_TRISTATE;
-+			return KCFG_UNKNOWN;
-+		return KCFG_TRISTATE;
- 	case BTF_KIND_ARRAY:
- 		if (btf_array(t)->nelems =3D=3D 0)
--			return EXT_UNKNOWN;
--		if (find_extern_type(btf, btf_array(t)->type, NULL) !=3D EXT_CHAR)
--			return EXT_UNKNOWN;
--		return EXT_CHAR_ARR;
-+			return KCFG_UNKNOWN;
-+		if (find_kcfg_type(btf, btf_array(t)->type, NULL) !=3D KCFG_CHAR)
-+			return KCFG_UNKNOWN;
-+		return KCFG_CHAR_ARR;
- 	default:
--		return EXT_UNKNOWN;
-+		return KCFG_UNKNOWN;
- 	}
- }
+ **# bpftool --json --pretty prog show**
 =20
-@@ -2756,23 +2796,29 @@ static int cmp_externs(const void *_a, const void=
- *_b)
- 	const struct extern_desc *a =3D _a;
- 	const struct extern_desc *b =3D _b;
-=20
--	/* descending order by alignment requirements */
--	if (a->align !=3D b->align)
--		return a->align > b->align ? -1 : 1;
--	/* ascending order by size, within same alignment class */
--	if (a->sz !=3D b->sz)
--		return a->sz < b->sz ? -1 : 1;
--	/* resolve ties by name */
-+	if (a->type !=3D b->type)
-+		return a->type < b->type ? -1 : 1;
-+
-+	if (a->type =3D=3D EXT_KCFG) {
-+		/* descending order by alignment requirements */
-+		if (a->kcfg.align !=3D b->kcfg.align)
-+			return a->kcfg.align > b->kcfg.align ? -1 : 1;
-+		/* ascending order by size, within same alignment class */
-+		if (a->kcfg.sz !=3D b->kcfg.sz)
-+			return a->kcfg.sz < b->kcfg.sz ? -1 : 1;
-+		/* resolve ties by name */
-+	}
-+
- 	return strcmp(a->name, b->name);
- }
-=20
- static int bpf_object__collect_externs(struct bpf_object *obj)
- {
-+	struct btf_type *sec, *kcfg_sec =3D NULL;
- 	const struct btf_type *t;
- 	struct extern_desc *ext;
--	int i, n, off, btf_id;
--	struct btf_type *sec;
--	const char *ext_name;
-+	int i, n, off;
-+	const char *ext_name, *sec_name;
- 	Elf_Scn *scn;
- 	GElf_Shdr sh;
-=20
-@@ -2818,22 +2864,39 @@ static int bpf_object__collect_externs(struct bpf=
-_object *obj)
- 		ext->name =3D btf__name_by_offset(obj->btf, t->name_off);
- 		ext->sym_idx =3D i;
- 		ext->is_weak =3D GELF_ST_BIND(sym.st_info) =3D=3D STB_WEAK;
--		ext->sz =3D btf__resolve_size(obj->btf, t->type);
--		if (ext->sz <=3D 0) {
--			pr_warn("failed to resolve size of extern '%s': %d\n",
--				ext_name, ext->sz);
--			return ext->sz;
--		}
--		ext->align =3D btf__align_of(obj->btf, t->type);
--		if (ext->align <=3D 0) {
--			pr_warn("failed to determine alignment of extern '%s': %d\n",
--				ext_name, ext->align);
--			return -EINVAL;
--		}
--		ext->type =3D find_extern_type(obj->btf, t->type,
--					     &ext->is_signed);
--		if (ext->type =3D=3D EXT_UNKNOWN) {
--			pr_warn("extern '%s' type is unsupported\n", ext_name);
-+
-+		ext->sec_btf_id =3D find_extern_sec_btf_id(obj->btf, ext->btf_id);
-+		if (ext->btf_id <=3D 0) {
-+			pr_warn("failed to find BTF for extern '%s' [%d] section: %d\n",
-+				ext_name, ext->btf_id, ext->sec_btf_id);
-+			return ext->sec_btf_id;
-+		}
-+		sec =3D (void *)btf__type_by_id(obj->btf, ext->sec_btf_id);
-+		sec_name =3D btf__name_by_offset(obj->btf, sec->name_off);
-+
-+		if (strcmp(sec_name, KCONFIG_SEC) =3D=3D 0) {
-+			kcfg_sec =3D sec;
-+			ext->type =3D EXT_KCFG;
-+			ext->kcfg.sz =3D btf__resolve_size(obj->btf, t->type);
-+			if (ext->kcfg.sz <=3D 0) {
-+				pr_warn("failed to resolve size of extern (kcfg) '%s': %d\n",
-+					ext_name, ext->kcfg.sz);
-+				return ext->kcfg.sz;
-+			}
-+			ext->kcfg.align =3D btf__align_of(obj->btf, t->type);
-+			if (ext->kcfg.align <=3D 0) {
-+				pr_warn("failed to determine alignment of extern (kcfg) '%s': %d\n",
-+					ext_name, ext->kcfg.align);
-+				return -EINVAL;
-+			}
-+			ext->kcfg.type =3D find_kcfg_type(obj->btf, t->type,
-+						        &ext->kcfg.is_signed);
-+			if (ext->kcfg.type =3D=3D KCFG_UNKNOWN) {
-+				pr_warn("extern (kcfg) '%s' type is unsupported\n", ext_name);
-+				return -ENOTSUP;
-+			}
-+		} else {
-+			pr_warn("unrecognized extern section '%s'\n", sec_name);
- 			return -ENOTSUP;
- 		}
- 	}
-@@ -2842,42 +2905,40 @@ static int bpf_object__collect_externs(struct bpf=
-_object *obj)
- 	if (!obj->nr_extern)
- 		return 0;
-=20
--	/* sort externs by (alignment, size, name) and calculate their offsets
--	 * within a map */
-+	/* sort externs by type, for kcfg ones also by (align, size, name) */
- 	qsort(obj->externs, obj->nr_extern, sizeof(*ext), cmp_externs);
--	off =3D 0;
--	for (i =3D 0; i < obj->nr_extern; i++) {
--		ext =3D &obj->externs[i];
--		ext->data_off =3D roundup(off, ext->align);
--		off =3D ext->data_off + ext->sz;
--		pr_debug("extern #%d: symbol %d, off %u, name %s\n",
--			 i, ext->sym_idx, ext->data_off, ext->name);
--	}
-=20
--	btf_id =3D btf__find_by_name(obj->btf, KCONFIG_SEC);
--	if (btf_id <=3D 0) {
--		pr_warn("no BTF info found for '%s' datasec\n", KCONFIG_SEC);
--		return -ESRCH;
--	}
-+	if (kcfg_sec) {
-+		sec =3D kcfg_sec;
-+		/* for kcfg externs calculate their offsets within a .kconfig map */
-+		off =3D 0;
-+		for (i =3D 0; i < obj->nr_extern; i++) {
-+			ext =3D &obj->externs[i];
-+			if (ext->type !=3D EXT_KCFG)
-+				continue;
-=20
--	sec =3D (struct btf_type *)btf__type_by_id(obj->btf, btf_id);
--	sec->size =3D off;
--	n =3D btf_vlen(sec);
--	for (i =3D 0; i < n; i++) {
--		struct btf_var_secinfo *vs =3D btf_var_secinfos(sec) + i;
--
--		t =3D btf__type_by_id(obj->btf, vs->type);
--		ext_name =3D btf__name_by_offset(obj->btf, t->name_off);
--		ext =3D find_extern_by_name(obj, ext_name);
--		if (!ext) {
--			pr_warn("failed to find extern definition for BTF var '%s'\n",
--				ext_name);
--			return -ESRCH;
-+			ext->kcfg.data_off =3D roundup(off, ext->kcfg.align);
-+			off =3D ext->kcfg.data_off + ext->kcfg.sz;
-+			pr_debug("extern #%d (kcfg): symbol %d, off %u, name %s\n",
-+				 i, ext->sym_idx, ext->kcfg.data_off, ext->name);
-+		}
-+		sec->size =3D off;
-+		n =3D btf_vlen(sec);
-+		for (i =3D 0; i < n; i++) {
-+			struct btf_var_secinfo *vs =3D btf_var_secinfos(sec) + i;
-+
-+			t =3D btf__type_by_id(obj->btf, vs->type);
-+			ext_name =3D btf__name_by_offset(obj->btf, t->name_off);
-+			ext =3D find_extern_by_name(obj, ext_name);
-+			if (!ext) {
-+				pr_warn("failed to find extern definition for BTF var '%s'\n",
-+					ext_name);
-+				return -ESRCH;
-+			}
-+			btf_var(t)->linkage =3D BTF_VAR_GLOBAL_ALLOCATED;
-+			vs->offset =3D ext->kcfg.data_off;
- 		}
--		vs->offset =3D ext->data_off;
--		btf_var(t)->linkage =3D BTF_VAR_GLOBAL_ALLOCATED;
- 	}
--
- 	return 0;
- }
-=20
-@@ -3007,11 +3068,11 @@ static int bpf_program__record_reloc(struct bpf_p=
-rogram *prog,
- 				sym_idx);
- 			return -LIBBPF_ERRNO__RELOC;
- 		}
--		pr_debug("found extern #%d '%s' (sym %d, off %u) for insn %u\n",
--			 i, ext->name, ext->sym_idx, ext->data_off, insn_idx);
-+		pr_debug("found extern #%d '%s' (sym %d) for insn %u\n",
-+			 i, ext->name, ext->sym_idx, insn_idx);
- 		reloc_desc->type =3D RELO_EXTERN;
- 		reloc_desc->insn_idx =3D insn_idx;
--		reloc_desc->sym_off =3D ext->data_off;
-+		reloc_desc->sym_off =3D i; /* sym_off stores extern index */
- 		return 0;
- 	}
-=20
-@@ -4928,6 +4989,7 @@ bpf_program__relocate(struct bpf_program *prog, str=
-uct bpf_object *obj)
- 	for (i =3D 0; i < prog->nr_reloc; i++) {
- 		struct reloc_desc *relo =3D &prog->reloc_desc[i];
- 		struct bpf_insn *insn =3D &prog->insns[relo->insn_idx];
-+		struct extern_desc *ext;
-=20
- 		if (relo->insn_idx + 1 >=3D (int)prog->insns_cnt) {
- 			pr_warn("relocation out of range: '%s'\n",
-@@ -4946,9 +5008,10 @@ bpf_program__relocate(struct bpf_program *prog, st=
-ruct bpf_object *obj)
- 			insn[0].imm =3D obj->maps[relo->map_idx].fd;
- 			break;
- 		case RELO_EXTERN:
-+			ext =3D &obj->externs[relo->sym_off];
- 			insn[0].src_reg =3D BPF_PSEUDO_MAP_VALUE;
- 			insn[0].imm =3D obj->maps[obj->kconfig_map_idx].fd;
--			insn[1].imm =3D relo->sym_off;
-+			insn[1].imm =3D ext->kcfg.data_off;
- 			break;
- 		case RELO_CALL:
- 			err =3D bpf_program__reloc_text(prog, obj, relo);
-@@ -5572,30 +5635,33 @@ static int bpf_object__resolve_externs(struct bpf=
-_object *obj,
- {
- 	bool need_config =3D false;
- 	struct extern_desc *ext;
-+	void *kcfg_data;
- 	int err, i;
--	void *data;
-=20
- 	if (obj->nr_extern =3D=3D 0)
- 		return 0;
-=20
--	data =3D obj->maps[obj->kconfig_map_idx].mmaped;
-+	if (obj->kconfig_map_idx >=3D 0)
-+		kcfg_data =3D obj->maps[obj->kconfig_map_idx].mmaped;
-=20
- 	for (i =3D 0; i < obj->nr_extern; i++) {
- 		ext =3D &obj->externs[i];
-=20
--		if (strcmp(ext->name, "LINUX_KERNEL_VERSION") =3D=3D 0) {
--			void *ext_val =3D data + ext->data_off;
-+		if (ext->type =3D=3D EXT_KCFG &&
-+		    strcmp(ext->name, "LINUX_KERNEL_VERSION") =3D=3D 0) {
-+			void *ext_val =3D kcfg_data + ext->kcfg.data_off;
- 			__u32 kver =3D get_kernel_version();
-=20
- 			if (!kver) {
- 				pr_warn("failed to get kernel version\n");
- 				return -EINVAL;
- 			}
--			err =3D set_ext_value_num(ext, ext_val, kver);
-+			err =3D set_kcfg_value_num(ext, ext_val, kver);
- 			if (err)
- 				return err;
--			pr_debug("extern %s=3D0x%x\n", ext->name, kver);
--		} else if (strncmp(ext->name, "CONFIG_", 7) =3D=3D 0) {
-+			pr_debug("extern (kcfg) %s=3D0x%x\n", ext->name, kver);
-+		} else if (ext->type =3D=3D EXT_KCFG &&
-+			   strncmp(ext->name, "CONFIG_", 7) =3D=3D 0) {
- 			need_config =3D true;
- 		} else {
- 			pr_warn("unrecognized extern '%s'\n", ext->name);
-@@ -5603,20 +5669,20 @@ static int bpf_object__resolve_externs(struct bpf=
-_object *obj,
- 		}
- 	}
- 	if (need_config && extra_kconfig) {
--		err =3D bpf_object__read_kconfig_mem(obj, extra_kconfig, data);
-+		err =3D bpf_object__read_kconfig_mem(obj, extra_kconfig, kcfg_data);
- 		if (err)
- 			return -EINVAL;
- 		need_config =3D false;
- 		for (i =3D 0; i < obj->nr_extern; i++) {
- 			ext =3D &obj->externs[i];
--			if (!ext->is_set) {
-+			if (ext->type =3D=3D EXT_KCFG && !ext->is_set) {
- 				need_config =3D true;
- 				break;
- 			}
- 		}
- 	}
- 	if (need_config) {
--		err =3D bpf_object__read_kconfig_file(obj, data);
-+		err =3D bpf_object__read_kconfig_file(obj, kcfg_data);
- 		if (err)
- 			return -EINVAL;
- 	}
+@@ -262,6 +268,11 @@ EXAMPLES
+             "bytes_jited": 370,
+             "bytes_memlock": 4096,
+             "map_ids": [10
++            ],
++            "pids": [{
++                    "pid": 1,
++                    "comm": "systemd"
++                }
+             ]
+         }
+     ]
 --=20
 2.24.1
 
