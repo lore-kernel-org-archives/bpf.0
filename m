@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31A6CC433E0
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 21:16:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 863FEC433E0
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 21:16:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CFF321841
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 21:16:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6384D21841
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 21:16:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="C+W+9lHy"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="FuH5QKLE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726864AbgFQVQS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 17:16:18 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:2592 "EHLO
+        id S1727024AbgFQVQ1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 17:16:27 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:50186 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726930AbgFQVQS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 17 Jun 2020 17:16:18 -0400
+        by vger.kernel.org with ESMTP id S1726999AbgFQVQX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 17 Jun 2020 17:16:23 -0400
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05HLGESr026970
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 14:16:17 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05HLGEQ7026949
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 14:16:22 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=W84U0/rHyfEzdtTEQlzXf47jQqrUKrtgUvA8m+iCglw=;
- b=C+W+9lHyjZxZrp21+NzqCVPpvaqTQdNwVCUlHrzQ9I44mxCzFaovzDWV4a+e/YYVXICj
- zqSwIANc9vNptZ+9b7MkZzzhKSmG3w3+ROfti6DVtSxKWpYqEC9uzESBYZOlf7J7L1KD
- l8nZZpjHJd3AHdR5WA2yE1yeetr39qivxL0= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31q656g103-2
+ bh=Y3J8EbuGgmJ6+yeF41eAEww2Kg2rG58i/h09XRBWEl8=;
+ b=FuH5QKLEGyTCDyn6Nx47d3TapLBVOPoxcYpGvGHa35UrLjPxUfS60J97zpjjxh13llqC
+ U0khu2kjCr/QSuvI9Y0sn2nqW3pMTnlgxYskhnbDJFFizealak4HbgByL32XbJDj1s2g
+ I4kr9iEjz3UkqBv0YMx2d0Xjug0I073KVm4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31q656g134-8
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 14:16:15 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 14:16:22 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Wed, 17 Jun 2020 14:15:50 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 6E6A73704EF2; Wed, 17 Jun 2020 14:15:44 -0700 (PDT)
+        id 68D253704B9E; Wed, 17 Jun 2020 14:15:46 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 06/13] bpf: add bpf_skc_to_{tcp,tcp_timewait,tcp_request}_sock() helpers
-Date:   Wed, 17 Jun 2020 14:15:44 -0700
-Message-ID: <20200617211544.1856132-1-yhs@fb.com>
+Subject: [PATCH bpf-next 08/13] net: bpf: implement bpf iterator for udp
+Date:   Wed, 17 Jun 2020 14:15:46 -0700
+Message-ID: <20200617211546.1856347-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200617211536.1854348-1-yhs@fb.com>
 References: <20200617211536.1854348-1-yhs@fb.com>
@@ -61,9 +61,9 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-17_11:2020-06-17,2020-06-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=15
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=13
  bulkscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
- mlxlogscore=999 clxscore=1015 cotscore=-2147483648 malwarescore=0
+ mlxlogscore=827 clxscore=1015 cotscore=-2147483648 malwarescore=0
  spamscore=0 mlxscore=0 adultscore=0 impostorscore=0 classifier=spam
  adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2006170159
@@ -73,245 +73,157 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Three more helpers are added to cast a sock_common pointer to
-an tcp_sock, tcp_timewait_sock or a tcp_request_sock for
-tracing programs.
+The bpf iterator for udp is implemented. Both udp4 and udp6
+sockets will be traversed. It is up to bpf program to
+filter for udp4 or udp6 only, or both families of sockets.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/linux/bpf.h            |  3 ++
- include/uapi/linux/bpf.h       | 23 +++++++++++-
- kernel/trace/bpf_trace.c       |  6 ++++
- net/core/filter.c              | 66 ++++++++++++++++++++++++++++++++++
- scripts/bpf_helpers_doc.py     |  6 ++++
- tools/include/uapi/linux/bpf.h | 23 +++++++++++-
- 6 files changed, 125 insertions(+), 2 deletions(-)
+ net/ipv4/udp.c | 117 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 117 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index e455aa09039b..64059f91e8d7 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1639,6 +1639,9 @@ extern const struct bpf_func_proto bpf_ringbuf_subm=
-it_proto;
- extern const struct bpf_func_proto bpf_ringbuf_discard_proto;
- extern const struct bpf_func_proto bpf_ringbuf_query_proto;
- extern const struct bpf_func_proto bpf_skc_to_tcp6_sock_proto;
-+extern const struct bpf_func_proto bpf_skc_to_tcp_sock_proto;
-+extern const struct bpf_func_proto bpf_skc_to_tcp_timewait_sock_proto;
-+extern const struct bpf_func_proto bpf_skc_to_tcp_request_sock_proto;
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 90355301b266..727a5664f1d1 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -2968,6 +2968,67 @@ int udp4_seq_show(struct seq_file *seq, void *v)
+ 	return 0;
+ }
 =20
- const struct bpf_func_proto *bpf_tracing_func_proto(
- 	enum bpf_func_id func_id, const struct bpf_prog *prog);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 394fcba27b6a..e256417d94c2 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3258,6 +3258,24 @@ union bpf_attr {
-  *		Dynamically cast a *sk* pointer to a *tcp6_sock* pointer.
-  *	Return
-  *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct tcp_sock *bpf_skc_to_tcp_sock(void *sk)
-+ *	Description
-+ *		Dynamically cast a *sk* pointer to a *tcp_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct tcp_timewait_sock *bpf_skc_to_tcp_timewait_sock(void *sk)
-+ * 	Description
-+ *		Dynamically cast a *sk* pointer to a *tcp_timewait_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct tcp_request_sock *bpf_skc_to_tcp_request_sock(void *sk)
-+ * 	Description
-+ *		Dynamically cast a *sk* pointer to a *tcp_request_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3396,7 +3414,10 @@ union bpf_attr {
- 	FN(ringbuf_discard),		\
- 	FN(ringbuf_query),		\
- 	FN(csum_level),			\
--	FN(skc_to_tcp6_sock),
-+	FN(skc_to_tcp6_sock),		\
-+	FN(skc_to_tcp_sock),		\
-+	FN(skc_to_tcp_timewait_sock),	\
-+	FN(skc_to_tcp_request_sock),
-=20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-  * function eBPF program intends to call
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 478c10d1ec33..de5fbe66e1ca 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1517,6 +1517,12 @@ tracing_prog_func_proto(enum bpf_func_id func_id, =
-const struct bpf_prog *prog)
- 		return &bpf_xdp_output_proto;
- 	case BPF_FUNC_skc_to_tcp6_sock:
- 		return &bpf_skc_to_tcp6_sock_proto;
-+	case BPF_FUNC_skc_to_tcp_sock:
-+		return &bpf_skc_to_tcp_sock_proto;
-+	case BPF_FUNC_skc_to_tcp_timewait_sock:
-+		return &bpf_skc_to_tcp_timewait_sock_proto;
-+	case BPF_FUNC_skc_to_tcp_request_sock:
-+		return &bpf_skc_to_tcp_request_sock_proto;
- #endif
- 	case BPF_FUNC_seq_printf:
- 		return prog->expected_attach_type =3D=3D BPF_TRACE_ITER ?
-diff --git a/net/core/filter.c b/net/core/filter.c
-index faf6feedd78e..03c0e2e34805 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -9247,6 +9247,60 @@ const struct bpf_func_proto bpf_skc_to_tcp6_sock_p=
-roto =3D {
- 	.ret_btf_id		=3D &bpf_skc_to_tcp6_sock_ret_btf_id,
++#ifdef CONFIG_BPF_SYSCALL
++struct bpf_iter__udp {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct udp_sock *, udp_sk);
++	uid_t uid __aligned(8);
++	int bucket __aligned(8);
++};
++
++static int udp_prog_seq_show(struct bpf_prog *prog, struct bpf_iter_meta=
+ *meta,
++			     struct udp_sock *udp_sk, uid_t uid, int bucket)
++{
++	struct bpf_iter__udp ctx;
++
++	meta->seq_num--;  /* skip SEQ_START_TOKEN */
++	ctx.meta =3D meta;
++	ctx.udp_sk =3D udp_sk;
++	ctx.uid =3D uid;
++	ctx.bucket =3D bucket;
++	return bpf_iter_run_prog(prog, &ctx);
++}
++
++static int bpf_iter_udp_seq_show(struct seq_file *seq, void *v)
++{
++	struct udp_iter_state *state =3D seq->private;
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++	struct sock *sk =3D v;
++	uid_t uid;
++
++	if (v =3D=3D SEQ_START_TOKEN)
++		return 0;
++
++	uid =3D from_kuid_munged(seq_user_ns(seq), sock_i_uid(sk));
++	meta.seq =3D seq;
++	prog =3D bpf_iter_get_info(&meta, false);
++	return udp_prog_seq_show(prog, &meta, v, uid, state->bucket);
++}
++
++static void bpf_iter_udp_seq_stop(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++
++	if (!v) {
++		meta.seq =3D seq;
++		prog =3D bpf_iter_get_info(&meta, true);
++		if (prog)
++			(void)udp_prog_seq_show(prog, &meta, v, 0, 0);
++	}
++
++	udp_seq_stop(seq, v);
++}
++
++static const struct seq_operations bpf_iter_udp_seq_ops =3D {
++	.start		=3D udp_seq_start,
++	.next		=3D udp_seq_next,
++	.stop		=3D bpf_iter_udp_seq_stop,
++	.show		=3D bpf_iter_udp_seq_show,
++};
++#endif
++
+ const struct seq_operations udp_seq_ops =3D {
+ 	.start		=3D udp_seq_start,
+ 	.next		=3D udp_seq_next,
+@@ -3085,6 +3146,58 @@ static struct pernet_operations __net_initdata udp=
+_sysctl_ops =3D {
+ 	.init	=3D udp_sysctl_init,
  };
 =20
-+BPF_CALL_1(bpf_skc_to_tcp_sock, struct sock *, sk)
-+{
-+	if (sk_fullsock(sk) && sk->sk_protocol =3D=3D IPPROTO_TCP)
-+		return (unsigned long)sk;
++#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
++DEFINE_BPF_ITER_FUNC(udp, struct bpf_iter_meta *meta,
++		     struct udp_sock *udp_sk, uid_t uid, int bucket)
 +
-+	return (unsigned long)NULL;
++static int bpf_iter_init_udp(void *priv_data)
++{
++	struct udp_iter_state *st =3D priv_data;
++	struct udp_seq_afinfo *afinfo;
++	int ret;
++
++	afinfo =3D kmalloc(sizeof(*afinfo), GFP_USER | __GFP_NOWARN);
++	if (!afinfo)
++		return -ENOMEM;
++
++	afinfo->family =3D AF_UNSPEC;
++	afinfo->udp_table =3D &udp_table;
++	st->bpf_seq_afinfo =3D afinfo;
++	ret =3D bpf_iter_init_seq_net(priv_data);
++	if (ret)
++		kfree(afinfo);
++	return ret;
 +}
 +
-+static int bpf_skc_to_tcp_sock_ret_btf_id;
-+const struct bpf_func_proto bpf_skc_to_tcp_sock_proto =3D {
-+	.func			=3D bpf_skc_to_tcp_sock,
-+	.gpl_only		=3D true,
-+	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
-+	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
-+	.check_btf_id		=3D check_arg_btf_id,
-+	.ret_btf_id		=3D &bpf_skc_to_tcp_sock_ret_btf_id,
-+};
-+
-+BPF_CALL_1(bpf_skc_to_tcp_timewait_sock, struct sock *, sk)
++static void bpf_iter_fini_udp(void *priv_data)
 +{
-+	if (sk->sk_state =3D=3D TCP_TIME_WAIT)
-+		return (unsigned long)sk;
++	struct udp_iter_state *st =3D priv_data;
 +
-+	return (unsigned long)NULL;
++	kfree(st->bpf_seq_afinfo);
++	bpf_iter_fini_seq_net(priv_data);
 +}
 +
-+static int bpf_skc_to_tcp_timewait_sock_ret_btf_id;
-+const struct bpf_func_proto bpf_skc_to_tcp_timewait_sock_proto =3D {
-+	.func			=3D bpf_skc_to_tcp_timewait_sock,
-+	.gpl_only		=3D true,
-+	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
-+	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
-+	.check_btf_id		=3D check_arg_btf_id,
-+	.ret_btf_id		=3D &bpf_skc_to_tcp_timewait_sock_ret_btf_id,
++static const struct bpf_iter_reg udp_reg_info =3D {
++	.target			=3D "udp",
++	.seq_ops		=3D &bpf_iter_udp_seq_ops,
++	.init_seq_private	=3D bpf_iter_init_udp,
++	.fini_seq_private	=3D bpf_iter_fini_udp,
++	.seq_priv_size		=3D sizeof(struct udp_iter_state),
++	.ctx_arg_info_size	=3D 1,
++	.ctx_arg_info		=3D {
++		{ offsetof(struct bpf_iter__udp, udp_sk),
++		  PTR_TO_BTF_ID_OR_NULL },
++	},
 +};
 +
-+BPF_CALL_1(bpf_skc_to_tcp_request_sock, struct sock *, sk)
++static void __init bpf_iter_register(void)
 +{
-+	if (sk->sk_state =3D=3D TCP_NEW_SYN_RECV)
-+		return (unsigned long)sk;
-+
-+	return (unsigned long)NULL;
++	if (bpf_iter_reg_target(&udp_reg_info))
++		pr_warn("Warning: could not register bpf iterator udp\n");
 +}
 +
-+static int bpf_skc_to_tcp_request_sock_ret_btf_id;
-+const struct bpf_func_proto bpf_skc_to_tcp_request_sock_proto =3D {
-+	.func			=3D bpf_skc_to_tcp_request_sock,
-+	.gpl_only		=3D true,
-+	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
-+	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
-+	.check_btf_id		=3D check_arg_btf_id,
-+	.ret_btf_id		=3D &bpf_skc_to_tcp_request_sock_ret_btf_id,
-+};
++#endif
 +
- void init_sock_cast_types(struct btf *btf)
+ void __init udp_init(void)
  {
- 	char *ret_type_name;
-@@ -9259,4 +9313,16 @@ void init_sock_cast_types(struct btf *btf)
- 	ret_type_name =3D "tcp6_sock";
- 	find_array_of_btf_ids(btf, &ret_type_name,
- 			      &bpf_skc_to_tcp6_sock_ret_btf_id, 1);
+ 	unsigned long limit;
+@@ -3110,4 +3223,8 @@ void __init udp_init(void)
+=20
+ 	if (register_pernet_subsys(&udp_sysctl_ops))
+ 		panic("UDP: failed to init sysctl parameters.\n");
 +
-+	ret_type_name =3D "tcp_sock";
-+	find_array_of_btf_ids(btf, &ret_type_name,
-+			      &bpf_skc_to_tcp_sock_ret_btf_id, 1);
-+
-+	ret_type_name =3D "tcp_timewait_sock";
-+	find_array_of_btf_ids(btf, &ret_type_name,
-+			      &bpf_skc_to_tcp_timewait_sock_ret_btf_id, 1);
-+
-+	ret_type_name =3D "tcp_request_sock";
-+	find_array_of_btf_ids(btf, &ret_type_name,
-+			      &bpf_skc_to_tcp_request_sock_ret_btf_id, 1);
++#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
++	bpf_iter_register();
++#endif
  }
-diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
-index 6c2f64118651..d886657c6aaa 100755
---- a/scripts/bpf_helpers_doc.py
-+++ b/scripts/bpf_helpers_doc.py
-@@ -422,6 +422,9 @@ class PrinterHelpers(Printer):
-             'struct tcphdr',
-             'struct seq_file',
-             'struct tcp6_sock',
-+            'struct tcp_sock',
-+            'struct tcp_timewait_sock',
-+            'struct tcp_request_sock',
-=20
-             'struct __sk_buff',
-             'struct sk_msg_md',
-@@ -460,6 +463,9 @@ class PrinterHelpers(Printer):
-             'struct tcphdr',
-             'struct seq_file',
-             'struct tcp6_sock',
-+            'struct tcp_sock',
-+            'struct tcp_timewait_sock',
-+            'struct tcp_request_sock',
-     }
-     mapped_types =3D {
-             'u8': '__u8',
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 394fcba27b6a..e256417d94c2 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3258,6 +3258,24 @@ union bpf_attr {
-  *		Dynamically cast a *sk* pointer to a *tcp6_sock* pointer.
-  *	Return
-  *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct tcp_sock *bpf_skc_to_tcp_sock(void *sk)
-+ *	Description
-+ *		Dynamically cast a *sk* pointer to a *tcp_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct tcp_timewait_sock *bpf_skc_to_tcp_timewait_sock(void *sk)
-+ * 	Description
-+ *		Dynamically cast a *sk* pointer to a *tcp_timewait_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct tcp_request_sock *bpf_skc_to_tcp_request_sock(void *sk)
-+ * 	Description
-+ *		Dynamically cast a *sk* pointer to a *tcp_request_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3396,7 +3414,10 @@ union bpf_attr {
- 	FN(ringbuf_discard),		\
- 	FN(ringbuf_query),		\
- 	FN(csum_level),			\
--	FN(skc_to_tcp6_sock),
-+	FN(skc_to_tcp6_sock),		\
-+	FN(skc_to_tcp_sock),		\
-+	FN(skc_to_tcp_timewait_sock),	\
-+	FN(skc_to_tcp_request_sock),
-=20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-  * function eBPF program intends to call
 --=20
 2.24.1
 
