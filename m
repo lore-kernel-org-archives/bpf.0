@@ -2,169 +2,116 @@ Return-Path: <SRS0=fSoz=76=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4718EC433DF
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 06:49:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A35E9C433E0
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 11:02:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F871208C3
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 06:49:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 539692071A
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 11:02:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WbBb8vSs"
+	dkim=pass (1024-bit key) header.d=yandex-team.ru header.i=@yandex-team.ru header.b="o/p1aAfw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725846AbgFQGt3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 02:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
+        id S1726605AbgFQLCq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 07:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725773AbgFQGt3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Jun 2020 02:49:29 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA7CC061573;
-        Tue, 16 Jun 2020 23:49:29 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id c75so1093663ila.8;
-        Tue, 16 Jun 2020 23:49:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=4A3MtNFTe4w9BDypUAIy1seTZtwzWwLTKRoee1JE3PQ=;
-        b=WbBb8vSsDhjdJXd4XuVwDnm+Z9MGNEi8xoJ6cfO6i5qLDcoskwZpfo3yxD10g1ik6i
-         kfCLNlbxGZmSJLaHQwyViXewkmmdT/bsLV+otoxUNA0DrFCHhA7jpvkPjHbfAxwupgbk
-         ocH7vswJZc3H1PVD57dRzr80idtrM/3mjJ0lXbZF7KL1MtOvnSjVo70dwNBcpEElhAdA
-         aqNx28sb06PH7cX0VDYnexE2nm/WxCUL2yXmsoOx1qyyeM0vQJ3c8gcEhHCM25YfJBBJ
-         409xEbYd5Y+E5FV78vHlhz8CSd4sRDtWahmXdovYJ3CEPBfUehxKaA11ICSCxJPjISoi
-         hINg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=4A3MtNFTe4w9BDypUAIy1seTZtwzWwLTKRoee1JE3PQ=;
-        b=M0BSZg25Tf/p4b4uWmjBkElHs/IAtSxaLbMmQ4zNT8Cc9Uoj5j3uwRE6psAPb09Z9K
-         jaFSrDM8MAhQjuuwo79P5+2e7CaF1tAZ7YntD70LKixVjK060IWargmGRW41xBrBgqTi
-         8Qeyho8s7bOqr0d+7jdlRsF2tPTh85hfvEI7aEuZEfM6jvYWTUjjD+UpzYxkyTXhfUIB
-         PMUo93MtwKXq/U6tz+cZan7djs+wCTrV8UB6uNBXZ3qJprkxWuJOOcp0q3hVvr30hZ3Y
-         EwtP7aGsblVuFcQ16r89B+QQI+CKH/hNMdbnx1Q79klV/jehQFSOfnJ9Oufvjnoep60s
-         wmlQ==
-X-Gm-Message-State: AOAM533JD8BGSvF5MMSx+n4RVsQlBv5EKRIgFQlCnjpPo0N72e4BRyYG
-        GByw6yAaHqGMzfjKB/MgHdk=
-X-Google-Smtp-Source: ABdhPJzoViRRgRiDo3oeUBmL8dkI1s+7DM8xGfda1WPyLBnSUCeb+71tbXgaNb2/tCUFXk5A5IMS4A==
-X-Received: by 2002:a92:8bc7:: with SMTP id i190mr7017207ild.53.1592376568525;
-        Tue, 16 Jun 2020 23:49:28 -0700 (PDT)
-Received: from localhost ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id w18sm11197128ili.19.2020.06.16.23.49.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2020 23:49:27 -0700 (PDT)
-Date:   Tue, 16 Jun 2020 23:49:19 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        kernel-team <kernel-team@cloudflare.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Message-ID: <5ee9bcefda5a3_1d4a2af9b18625c4c0@john-XPS-13-9370.notmuch>
-In-Reply-To: <CAADnVQLXEq5+ko_ojmuh1Oc84HiPrfLF-7Cdh1xwwm-PhoFwBQ@mail.gmail.com>
-References: <20200612160141.188370-1-lmb@cloudflare.com>
- <CAADnVQ+owOvkZ03qyodmh+4NkZD=1LpgTN+YJqiKgr0_OKqRtA@mail.gmail.com>
- <CACAyw9-Jy+r2t5Yy83EEZ8GDnxEsGOPdrqr2JSfVqcC2E6dYmQ@mail.gmail.com>
- <CAADnVQJP_i+KsP771L=GwxousnE=w9o2KckZ7ZCbc064EqSq6w@mail.gmail.com>
- <CACAyw99Szs3nUTx=DSmh0x8iTBLNF9TTLGC0GQLZ=FifVnbzBA@mail.gmail.com>
- <CAADnVQLXEq5+ko_ojmuh1Oc84HiPrfLF-7Cdh1xwwm-PhoFwBQ@mail.gmail.com>
-Subject: Re: [PATCH bpf 1/2] flow_dissector: reject invalid attach_flags
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S1726480AbgFQLCp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Jun 2020 07:02:45 -0400
+Received: from forwardcorp1p.mail.yandex.net (forwardcorp1p.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b6:217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261C8C061573;
+        Wed, 17 Jun 2020 04:02:45 -0700 (PDT)
+Received: from mxbackcorp1j.mail.yandex.net (mxbackcorp1j.mail.yandex.net [IPv6:2a02:6b8:0:1619::162])
+        by forwardcorp1p.mail.yandex.net (Yandex) with ESMTP id 76F032E1502;
+        Wed, 17 Jun 2020 14:02:42 +0300 (MSK)
+Received: from iva8-88b7aa9dc799.qloud-c.yandex.net (iva8-88b7aa9dc799.qloud-c.yandex.net [2a02:6b8:c0c:77a0:0:640:88b7:aa9d])
+        by mxbackcorp1j.mail.yandex.net (mxbackcorp/Yandex) with ESMTP id 9Elz8S6ekL-2eiKrrLa;
+        Wed, 17 Jun 2020 14:02:42 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1592391762; bh=xOQuytZWSwa238kUfui+ZoHaMS42DfZq5NAfzHI2Y34=;
+        h=In-Reply-To:Message-Id:References:Date:Subject:To:From:Cc;
+        b=o/p1aAfwEN2qyx2VDik1U2/qPxtcErEdwliEJ/8KW0CT7DzFqEfsdGfAv2WUK1RN/
+         bYxAlYB10TYvnLsN88cnEVD4Ld0p+sL58ltu65Va5W1QqYXTlhG8XW1wMbBvayzIXf
+         98qbo4zKPn57SjI7OV2EaKfLtCs8xlk9EalBd6eA=
+Authentication-Results: mxbackcorp1j.mail.yandex.net; dkim=pass header.i=@yandex-team.ru
+Received: from 37.9.89.23-iva.dhcp.yndx.net (37.9.89.23-iva.dhcp.yndx.net [37.9.89.23])
+        by iva8-88b7aa9dc799.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id XJqgFOjlJF-2ekiGnvr;
+        Wed, 17 Jun 2020 14:02:40 +0300
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client certificate not present)
+From:   Dmitry Yakunin <zeil@yandex-team.ru>
+To:     daniel@iogearbox.net, alexei.starovoitov@gmail.com
+Cc:     davem@davemloft.net, brakmo@fb.com, eric.dumazet@gmail.com,
+        kafai@fb.com, bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH bpf-next v4 2/3] tcp: expose tcp_sock_set_keepidle_locked
+Date:   Wed, 17 Jun 2020 14:02:16 +0300
+Message-Id: <20200617110217.35669-2-zeil@yandex-team.ru>
+In-Reply-To: <20200617110217.35669-1-zeil@yandex-team.ru>
+References: <20200617110217.35669-1-zeil@yandex-team.ru>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Alexei Starovoitov wrote:
-> On Tue, Jun 16, 2020 at 1:30 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
-> >
-> > On Tue, 16 Jun 2020 at 04:55, Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Mon, Jun 15, 2020 at 7:43 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
-> > > >
-> > > > On Fri, 12 Jun 2020 at 23:36, Alexei Starovoitov
-> > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > >
-> > > > > On Fri, Jun 12, 2020 at 9:02 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
-> > > > > >
-> > > > > > Using BPF_PROG_ATTACH on a flow dissector program supports neither flags
-> > > > > > nor target_fd but accepts any value. Return EINVAL if either are non-zero.
-> > > > > >
-> > > > > > Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-> > > > > > Fixes: b27f7bb590ba ("flow_dissector: Move out netns_bpf prog callbacks")
-> > > > > > ---
-> > > > > >  kernel/bpf/net_namespace.c | 3 +++
-> > > > > >  1 file changed, 3 insertions(+)
-> > > > > >
-> > > > > > diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
-> > > > > > index 78cf061f8179..56133e78ae4f 100644
-> > > > > > --- a/kernel/bpf/net_namespace.c
-> > > > > > +++ b/kernel/bpf/net_namespace.c
-> > > > > > @@ -192,6 +192,9 @@ int netns_bpf_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-> > > > > >         struct net *net;
-> > > > > >         int ret;
-> > > > > >
-> > > > > > +       if (attr->attach_flags || attr->target_fd)
-> > > > > > +               return -EINVAL;
-> > > > > > +
-> > > > >
-> > > > > In theory it makes sense, but how did you test it?
-> > > >
-> > > > Not properly it seems, sorry!
-> > > >
-> > > > > test_progs -t flow
-> > > > > fails 5 tests.
-> > > >
-> > > > I spent today digging through this, and the issue is actually more annoying than
-> > > > I thought. BPF_PROG_DETACH for sockmap and flow_dissector ignores
-> > > > attach_bpf_fd. The cgroup and lirc2 attach point use this to make sure that the
-> > > > program being detached is actually what user space expects. We actually have
-> > > > tests that set attach_bpf_fd for these to attach points, which tells
-> > > > me that this is
-> > > > an easy mistake to make.
+This is preparation for usage in bpf_setsockopt.
 
-In sockmap case I didn't manage to think what multiple programs of the same type
-on the same map would look like so we can just remove whatever program is there.
-Is there a problem with this or is it that we just want the sanity check.
+v2:
+  - remove redundant EXPORT_SYMBOL (Alexei Starovoitov)
 
-> > > >
-> > > > Unfortunately I can't come up with a good fix that seems backportable:
-> > > > - Making sockmap and flow_dissector have the same semantics as cgroup
-> > > >   and lirc2 requires a bunch of changes (probably a new function for sockmap)
-> > >
-> > > making flow dissector pass prog_fd as cg and lirc is certainly my preference.
-> > > Especially since tests are passing fd user code is likely doing the same,
-> > > so breakage is unlikely. Also it wasn't done that long ago, so
-> > > we can backport far enough.
-> > > It will remove cap_net_admin ugly check in bpf_prog_detach()
-> > > which is the only exception now in cap model.
-> >
-> > SGTM. What about sockmap though? The code for that has been around for ages.
-> 
-> you mean the second patch that enforces sock_map_get_from_fd doesn't
-> use attach_flags?
-> I think it didn't break anything, so enforcing is fine.
+Signed-off-by: Dmitry Yakunin <zeil@yandex-team.ru>
+---
+ include/linux/tcp.h | 1 +
+ net/ipv4/tcp.c      | 6 +++---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-I'm ok with enforcing it.
+diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+index 9aac824..3bdec31 100644
+--- a/include/linux/tcp.h
++++ b/include/linux/tcp.h
+@@ -499,6 +499,7 @@ int tcp_skb_shift(struct sk_buff *to, struct sk_buff *from, int pcount,
+ 
+ void tcp_sock_set_cork(struct sock *sk, bool on);
+ int tcp_sock_set_keepcnt(struct sock *sk, int val);
++int tcp_sock_set_keepidle_locked(struct sock *sk, int val);
+ int tcp_sock_set_keepidle(struct sock *sk, int val);
+ int tcp_sock_set_keepintvl(struct sock *sk, int val);
+ void tcp_sock_set_nodelay(struct sock *sk);
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 15d47d5..18f8d54 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -2901,7 +2901,7 @@ void tcp_sock_set_user_timeout(struct sock *sk, u32 val)
+ }
+ EXPORT_SYMBOL(tcp_sock_set_user_timeout);
+ 
+-static int __tcp_sock_set_keepidle(struct sock *sk, int val)
++int tcp_sock_set_keepidle_locked(struct sock *sk, int val)
+ {
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 
+@@ -2928,7 +2928,7 @@ int tcp_sock_set_keepidle(struct sock *sk, int val)
+ 	int err;
+ 
+ 	lock_sock(sk);
+-	err = __tcp_sock_set_keepidle(sk, val);
++	err = tcp_sock_set_keepidle_locked(sk, val);
+ 	release_sock(sk);
+ 	return err;
+ }
+@@ -3127,7 +3127,7 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
+ 		break;
+ 
+ 	case TCP_KEEPIDLE:
+-		err = __tcp_sock_set_keepidle(sk, val);
++		err = tcp_sock_set_keepidle_locked(sk, val);
+ 		break;
+ 	case TCP_KEEPINTVL:
+ 		if (val < 1 || val > MAX_TCP_KEEPINTVL)
+-- 
+2.7.4
 
-> 
-> or the detach part that doesn't use prog_fd ?
-> I'm not sure what's the best here.
-> At least from cap perspective it's fine because map_fd is there.
-> 
-> John, wdyt?
-
-I think we can keep the current detach without the prog_fd as-is. And
-then add logic so that if the prog_fd is included we check it?
