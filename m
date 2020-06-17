@@ -5,105 +5,214 @@ X-Spam-Level:
 X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 235ECC433E2
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 01:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BED91C433E1
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 01:04:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 037E52080D
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 01:04:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9AF2A2080D
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 01:04:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZVhBtc1w"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a3QcOkj2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726456AbgFQBE1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Jun 2020 21:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
+        id S1726626AbgFQBE3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Jun 2020 21:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726529AbgFQBEX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726329AbgFQBEX (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 16 Jun 2020 21:04:23 -0400
 Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07AFC0613EE
-        for <bpf@vger.kernel.org>; Tue, 16 Jun 2020 18:04:22 -0700 (PDT)
-Received: by mail-qk1-x74a.google.com with SMTP id j16so584966qka.11
-        for <bpf@vger.kernel.org>; Tue, 16 Jun 2020 18:04:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1FFC06174E
+        for <bpf@vger.kernel.org>; Tue, 16 Jun 2020 18:04:20 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id l6so578794qkk.14
+        for <bpf@vger.kernel.org>; Tue, 16 Jun 2020 18:04:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=2CrLirlaHAmpJk5kLUn85BP1eGSiGI6fSEUxktNV0QA=;
-        b=ZVhBtc1w6d4rwoHbUdHbgpZ8HX+pGtyWu4h6+apBtM0FLFC8vviz+NpS3PgZm+v3If
-         /NZJxDHy8DNIfJQnKbL6lIjVUFGxAI9LkCyj+2TuyXvzBO+gS6r4IX9fUzRWECdMUQqJ
-         AkejeV0e0036IjqKExSfZprBvKMU/4nwEwzQH8L7FelmJFMUNVDrrl0aJluZTaeifv6F
-         2SBn+GqFJ80v+e6vSA1rzE2P79TKo5QJgtBabdWI8kg6SeSZ6RMjXpeSjEMy+PIbgGyT
-         Ko6o9LygqpTG0OH1pmOplaLc0tqDdaARTlHySh3GF4yEWU0HDWutzNYbVXRsohB9zKei
-         GFDA==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ElhOma4gQ0OPfIjSUT22cb9hvoULnOkjRgU5fDqO5Dg=;
+        b=a3QcOkj2WOe4iE4Y/U7Cs/HGVVwKjy4nSdV8+/SWygE7198rR4NXMQkqfh4WWk9lX6
+         MtfRiBvWNrsRNTSwBuPuhUSPNy8IdibcRUwxPE9dHhZzdTuHXI4aX9fLJG9YHiTVEWna
+         +KlSyK0jkVckAXXzPPe39JafLdZS1N58vUGnSUtZKupBndmrfJUbdbjrHyc4LxkkDH11
+         j4hvH6Bmo3UYB4nJ25j5b0ayaOY/ZkXUF1aKURGcHh3dsKquiZq6lvCy2+qRDhLCI5yy
+         lK3rtCBRG2QynjOJBvHTEhknqciSzUXr/wrbNG4WFexawyEknPOvq1cVGcn1yrti+yDB
+         X2xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=2CrLirlaHAmpJk5kLUn85BP1eGSiGI6fSEUxktNV0QA=;
-        b=eAC/Q6duKG0D2T5h6PEIq3Z3gXMjf+jgVgel4tSdbxBqwN6ua/DUL9PAtT+jZhbMww
-         ZMLTT+cDPLIptNZwKp0xnSe3zxB+rw0s3DB80/I/yS0CEvImOdrCTuPTlKOnfgrIqKzG
-         uL3fRWAZ2n+RVauldloE2o6qc8GZ3s4o9VcfRlkmpYUMVLbW6jAAzPLt9S2diDbVeJj7
-         qyR+8WVknD8FdT7SneArH3Cnu4oOawN8jmthCE+Xb+MiPDOLVLqBFt7ko8pAQTPN/XNN
-         BnKt3g3Y7fnkEeJzBAtBp65iV+XVnpRHzVPnOQ4ieLPzPHWMcjmtaExQfe14iitcKgja
-         kgHA==
-X-Gm-Message-State: AOAM531eQ5QC3dFrD/meGzeFryDgXJFGoSUMnqB7EFISFWllXH3ZRSU5
-        tHE1eR54yoL05Tn058nR8l5QUig=
-X-Google-Smtp-Source: ABdhPJwIdK30fqgjFPehn3672rL1ww9JBMgZJdErUkcgVnk9eCXsg4LZ2AZ4olVtymRGg1FM0Hw4LcA=
-X-Received: by 2002:ad4:556e:: with SMTP id w14mr5112805qvy.137.1592355862157;
- Tue, 16 Jun 2020 18:04:22 -0700 (PDT)
-Date:   Tue, 16 Jun 2020 18:04:16 -0700
-In-Reply-To: <20200617010416.93086-1-sdf@google.com>
-Message-Id: <20200617010416.93086-3-sdf@google.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ElhOma4gQ0OPfIjSUT22cb9hvoULnOkjRgU5fDqO5Dg=;
+        b=emkrKPbV/nJRMmcmDRRGGrT/638f1s2b7UquXYjJgmbqItmVoioCZHZXUCjAC/1vss
+         NdMe+ILNj/SQJO2RZojmJbw27I73Ync55SBoqEWhswN0AVWGcdcYlFFXqNCZMqbdaIfF
+         3MiJaE79CDWpTsgsY8DU6kQmA/7P2K9WQljw4YXVhaqe44l+RDNHrV2qmCjGzczvhMUm
+         krt+wO8LA9hWyd34BgOV1kaovPXj+ZM/2f0cwqXzkD9WwKGwY9zedepi9R1VqZj3v3lD
+         bZA7ZcpRqwxR0dw0pYhm6Lv9pnuCd1bV8XKkbvWkDwvOFxH4jq+h5xm57J0qy4TNTy9h
+         Rtjg==
+X-Gm-Message-State: AOAM530IBWce5e9bG+mq0Hl3vh/7LyrnBwXj2yqbmf/Btw4gvmkqqJu7
+        k3mY+DoWmKJcCcflyiVdKgPW/lw=
+X-Google-Smtp-Source: ABdhPJy85YW8JFPMFPvtrXCPq1/krJyL+LUXfqnfj0YU0WjOLN687+DjQbt70rUNaEOIfnzSFib2T6o=
+X-Received: by 2002:a0c:ecc6:: with SMTP id o6mr5106743qvq.243.1592355858412;
+ Tue, 16 Jun 2020 18:04:18 -0700 (PDT)
+Date:   Tue, 16 Jun 2020 18:04:14 -0700
+Message-Id: <20200617010416.93086-1-sdf@google.com>
 Mime-Version: 1.0
-References: <20200617010416.93086-1-sdf@google.com>
 X-Mailer: git-send-email 2.27.0.290.gba653c62da-goog
-Subject: [PATCH bpf v5 3/3] bpf: document optval > PAGE_SIZE behavior for
- sockopt hooks
+Subject: [PATCH bpf v5 1/3] bpf: don't return EINVAL from {get,set}sockopt
+ when optlen > PAGE_SIZE
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>
+        Stanislav Fomichev <sdf@google.com>,
+        David Laight <David.Laight@ACULAB.COM>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend existing doc with more details about requiring ctx->optlen = 0
-for handling optval > PAGE_SIZE.
+Attaching to these hooks can break iptables because its optval is
+usually quite big, or at least bigger than the current PAGE_SIZE limit.
+David also mentioned some SCTP options can be big (around 256k).
 
+For such optvals we expose only the first PAGE_SIZE bytes to
+the BPF program. BPF program has two options:
+1. Set ctx->optlen to 0 to indicate that the BPF's optval
+   should be ignored and the kernel should use original userspace
+   value.
+2. Set ctx->optlen to something that's smaller than the PAGE_SIZE.
+
+v5:
+* use ctx->optlen == 0 with trimmed buffer (Alexei Starovoitov)
+* update the docs accordingly
+
+v4:
+* use temporary buffer to avoid optval == optval_end == NULL;
+  this removes the corner case in the verifier that might assume
+  non-zero PTR_TO_PACKET/PTR_TO_PACKET_END.
+
+v3:
+* don't increase the limit, bypass the argument
+
+v2:
+* proper comments formatting (Jakub Kicinski)
+
+Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
+Cc: David Laight <David.Laight@ACULAB.COM>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- Documentation/bpf/prog_cgroup_sockopt.rst | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ kernel/bpf/cgroup.c | 53 ++++++++++++++++++++++++++++-----------------
+ 1 file changed, 33 insertions(+), 20 deletions(-)
 
-diff --git a/Documentation/bpf/prog_cgroup_sockopt.rst b/Documentation/bpf/prog_cgroup_sockopt.rst
-index c47d974629ae..172f957204bf 100644
---- a/Documentation/bpf/prog_cgroup_sockopt.rst
-+++ b/Documentation/bpf/prog_cgroup_sockopt.rst
-@@ -86,6 +86,20 @@ then the next program in the chain (A) will see those changes,
- *not* the original input ``setsockopt`` arguments. The potentially
- modified values will be then passed down to the kernel.
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 4d76f16524cc..ac53102e244a 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1276,16 +1276,23 @@ static bool __cgroup_bpf_prog_array_is_empty(struct cgroup *cgrp,
  
-+Large optval
-+============
-+When the ``optval`` is greater than the ``PAGE_SIZE``, the BPF program
-+can access only the first ``PAGE_SIZE`` of that data. So it has to options:
-+
-+* Set ``optlen`` to zero, which indicates that the kernel should
-+  use the original buffer from the userspace. Any modifications
-+  done by the BPF program to the ``optval`` are ignored.
-+* Set ``optlen`` to the value less than ``PAGE_SIZE``, which
-+  indicates that the kernel should use BPF's trimmed ``optval``.
-+
-+When the BPF program returns with the ``optlen`` greater than
-+``PAGE_SIZE``, the userspace will receive ``EFAULT`` errno.
-+
- Example
- =======
+ static int sockopt_alloc_buf(struct bpf_sockopt_kern *ctx, int max_optlen)
+ {
+-	if (unlikely(max_optlen > PAGE_SIZE) || max_optlen < 0)
++	if (unlikely(max_optlen < 0))
+ 		return -EINVAL;
  
++	if (unlikely(max_optlen > PAGE_SIZE)) {
++		/* We don't expose optvals that are greater than PAGE_SIZE
++		 * to the BPF program.
++		 */
++		max_optlen = PAGE_SIZE;
++	}
++
+ 	ctx->optval = kzalloc(max_optlen, GFP_USER);
+ 	if (!ctx->optval)
+ 		return -ENOMEM;
+ 
+ 	ctx->optval_end = ctx->optval + max_optlen;
+ 
+-	return 0;
++	return max_optlen;
+ }
+ 
+ static void sockopt_free_buf(struct bpf_sockopt_kern *ctx)
+@@ -1319,13 +1326,13 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+ 	 */
+ 	max_optlen = max_t(int, 16, *optlen);
+ 
+-	ret = sockopt_alloc_buf(&ctx, max_optlen);
+-	if (ret)
+-		return ret;
++	max_optlen = sockopt_alloc_buf(&ctx, max_optlen);
++	if (max_optlen < 0)
++		return max_optlen;
+ 
+ 	ctx.optlen = *optlen;
+ 
+-	if (copy_from_user(ctx.optval, optval, *optlen) != 0) {
++	if (copy_from_user(ctx.optval, optval, min(*optlen, max_optlen)) != 0) {
+ 		ret = -EFAULT;
+ 		goto out;
+ 	}
+@@ -1353,8 +1360,14 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+ 		/* export any potential modifications */
+ 		*level = ctx.level;
+ 		*optname = ctx.optname;
+-		*optlen = ctx.optlen;
+-		*kernel_optval = ctx.optval;
++
++		/* optlen == 0 from BPF indicates that we should
++		 * use original userspace data.
++		 */
++		if (ctx.optlen != 0) {
++			*optlen = ctx.optlen;
++			*kernel_optval = ctx.optval;
++		}
+ 	}
+ 
+ out:
+@@ -1385,12 +1398,12 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 	    __cgroup_bpf_prog_array_is_empty(cgrp, BPF_CGROUP_GETSOCKOPT))
+ 		return retval;
+ 
+-	ret = sockopt_alloc_buf(&ctx, max_optlen);
+-	if (ret)
+-		return ret;
+-
+ 	ctx.optlen = max_optlen;
+ 
++	max_optlen = sockopt_alloc_buf(&ctx, max_optlen);
++	if (max_optlen < 0)
++		return max_optlen;
++
+ 	if (!retval) {
+ 		/* If kernel getsockopt finished successfully,
+ 		 * copy whatever was returned to the user back
+@@ -1404,10 +1417,8 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 			goto out;
+ 		}
+ 
+-		if (ctx.optlen > max_optlen)
+-			ctx.optlen = max_optlen;
+-
+-		if (copy_from_user(ctx.optval, optval, ctx.optlen) != 0) {
++		if (copy_from_user(ctx.optval, optval,
++				   min(ctx.optlen, max_optlen)) != 0) {
+ 			ret = -EFAULT;
+ 			goto out;
+ 		}
+@@ -1436,10 +1447,12 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 		goto out;
+ 	}
+ 
+-	if (copy_to_user(optval, ctx.optval, ctx.optlen) ||
+-	    put_user(ctx.optlen, optlen)) {
+-		ret = -EFAULT;
+-		goto out;
++	if (ctx.optlen != 0) {
++		if (copy_to_user(optval, ctx.optval, ctx.optlen) ||
++		    put_user(ctx.optlen, optlen)) {
++			ret = -EFAULT;
++			goto out;
++		}
+ 	}
+ 
+ 	ret = ctx.retval;
 -- 
 2.27.0.290.gba653c62da-goog
 
