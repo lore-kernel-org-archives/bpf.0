@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBFF6C433E0
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00038C433DF
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 91A9121527
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA031208D5
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="JbnY37rq"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="W8yG8ZPG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726763AbgFQQVg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 12:21:36 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:20936 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726540AbgFQQVg (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 17 Jun 2020 12:21:36 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 05HGKgXk025851
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:33 -0700
+        id S1726540AbgFQQVh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 12:21:37 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:44326 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726329AbgFQQVh (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 17 Jun 2020 12:21:37 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05HGH5hY019153
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:35 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=/kXp96I0P5v2tcNd7jxuImqM/cdXQMvbw+oGFCAXfQg=;
- b=JbnY37rqsBUEiY6Aq14OugAcKb+QMm/Y1JA2FTXK5wB7tx9SD6v8jOxe2sKlVIwxA0pj
- A9Lf1nUVLVMAl4TKvrVl2OzLYHG6dZyNjzUs1Pt3zav5G58vrAP2WADgVzYaqm5dN9/U
- I3JPoeuZAH3ePQcwYuzYmcRaTySqadLbyDU= 
+ bh=NgnqiNaPaoLBOZjlfMuWqqjrtiW4/dnX85haVCYaKn0=;
+ b=W8yG8ZPG3IheIOsgkig0oabX1NzUJBjPSSr+11fcXG3OXl7jHLlS9lvJrJ4dMTxvirYw
+ TYggKTFSt8ft+1H3zx2CNKlPuTKYeQDysS+Uyx5veYuF27OHVkBojOvcUgF0rK1yYiVj
+ iABtcBklMg5N3HfHqnZ+ltpJtwby04HiVRk= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 31q65k5d23-1
+        by mx0a-00082601.pphosted.com with ESMTP id 31q65snbfd-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:33 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:35 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 17 Jun 2020 09:21:32 -0700
+ 15.1.1979.3; Wed, 17 Jun 2020 09:21:34 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id EF42F2EC356A; Wed, 17 Jun 2020 09:18:58 -0700 (PDT)
+        id 2230F2EC3711; Wed, 17 Jun 2020 09:19:13 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -52,9 +52,9 @@ CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>,
         Quentin Monnet <quentin@isovalent.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/9] libbpf: add support for extracting kernel symbol addresses
-Date:   Wed, 17 Jun 2020 09:18:25 -0700
-Message-ID: <20200617161832.1438371-3-andriin@fb.com>
+Subject: [PATCH bpf-next 8/9] tools/bpftool: show info for processes holding BPF map/prog/link/btf FDs
+Date:   Wed, 17 Jun 2020 09:18:31 -0700
+Message-ID: <20200617161832.1438371-9-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200617161832.1438371-1-andriin@fb.com>
 References: <20200617161832.1438371-1-andriin@fb.com>
@@ -64,10 +64,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-17_06:2020-06-17,2020-06-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- cotscore=-2147483648 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
- mlxscore=0 phishscore=0 adultscore=0 bulkscore=0 impostorscore=0
- clxscore=1015 spamscore=0 suspectscore=9 classifier=spam adjust=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 cotscore=-2147483648
+ phishscore=0 clxscore=1015 malwarescore=0 mlxscore=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 bulkscore=0
+ mlxlogscore=999 suspectscore=29 adultscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2006170129
 X-FB-Internal: deliver
@@ -76,319 +76,672 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for another (in addition to existing Kconfig) special kind of
-externs in BPF code, kernel symbol externs. Such externs allow BPF code t=
-o
-"know" kernel symbol address and either use it for comparisons with kerne=
-l
-data structures (e.g., struct file's f_op pointer, to distinguish differe=
-nt
-kinds of file), or, with the help of bpf_probe_user_kernel(), to follow
-pointers and read data from global variables. Kernel symbol addresses are
-found through /proc/kallsyms, which should be present in the system.
+Add bpf_iter-based way to find all the processes that hold open FDs again=
+st
+BPF object (map, prog, link, btf). bpftool always attempts to discover th=
+is,
+but will silently give up if kernel doesn't yet support bpf_iter BPF prog=
+rams.
+Process name and PID are emitted for each process (task group).
 
-Currently, such kernel symbol variables are typeless: they have to be def=
-ined
-as `extern const void <symbol>` and the only operation you can do (in C c=
-ode)
-with them is to take its address. Such extern should reside in a special
-section '.ksyms'. bpf_helpers.h header provides __ksym macro for this. St=
-rong
-vs weak semantics stays the same as with Kconfig externs. If symbol is no=
-t
-found in /proc/kallsyms, this will be a failure for strong (non-weak) ext=
-ern,
-but will be defaulted to 0 for weak externs.
+Sample output for each of 4 BPF objects:
 
-If the same symbol is defined multiple times in /proc/kallsyms, then it w=
-ill
-be error if any of the associated addresses differs. In that case, addres=
-s is
-ambiguous, so libbpf falls on the side of caution, rather than confusing =
-user
-with randomly chosen address.
+$ sudo ./bpftool prog show
+2694: cgroup_device  tag 8c42dee26e8cd4c2  gpl
+        loaded_at 2020-06-16T15:34:32-0700  uid 0
+        xlated 648B  jited 409B  memlock 4096B
+        pids systemd(1)
+2907: cgroup_skb  name egress  tag 9ad187367cf2b9e8  gpl
+        loaded_at 2020-06-16T18:06:54-0700  uid 0
+        xlated 48B  jited 59B  memlock 4096B  map_ids 2436
+        btf_id 1202
+        pids test_progs(2238417), test_progs(2238445)
 
-In the future, once kernel is extended with variables BTF information, su=
-ch
-ksym externs will be supported in a typed version, which will allow BPF
-program to read variable's contents directly, similarly to how it's done =
-for
-fentry/fexit input arguments.
+$ sudo ./bpftool map show
+2436: array  name test_cgr.bss  flags 0x400
+        key 4B  value 8B  max_entries 1  memlock 8192B
+        btf_id 1202
+        pids test_progs(2238417), test_progs(2238445)
+2445: array  name pid_iter.rodata  flags 0x480
+        key 4B  value 4B  max_entries 1  memlock 8192B
+        btf_id 1214  frozen
+        pids bpftool(2239612)
+
+$ sudo ./bpftool link show
+61: cgroup  prog 2908
+        cgroup_id 375301  attach_type egress
+        pids test_progs(2238417), test_progs(2238445)
+62: cgroup  prog 2908
+        cgroup_id 375344  attach_type egress
+        pids test_progs(2238417), test_progs(2238445)
+
+$ sudo ./bpftool btf show
+1202: size 1527B  prog_ids 2908,2907  map_ids 2436
+        pids test_progs(2238417), test_progs(2238445)
+1242: size 34684B
+        pids bpftool(2258892)
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/bpf_helpers.h |   1 +
- tools/lib/bpf/btf.h         |   5 ++
- tools/lib/bpf/libbpf.c      | 144 ++++++++++++++++++++++++++++++++++--
- 3 files changed, 144 insertions(+), 6 deletions(-)
+ tools/bpf/bpftool/Makefile                |   2 +
+ tools/bpf/bpftool/btf.c                   |   6 +
+ tools/bpf/bpftool/link.c                  |   7 +
+ tools/bpf/bpftool/main.c                  |   1 +
+ tools/bpf/bpftool/main.h                  |  27 +++
+ tools/bpf/bpftool/map.c                   |   7 +
+ tools/bpf/bpftool/pids.c                  | 229 ++++++++++++++++++++++
+ tools/bpf/bpftool/prog.c                  |   7 +
+ tools/bpf/bpftool/skeleton/pid_iter.bpf.c |  80 ++++++++
+ tools/bpf/bpftool/skeleton/pid_iter.h     |  12 ++
+ 10 files changed, 378 insertions(+)
+ create mode 100644 tools/bpf/bpftool/pids.c
+ create mode 100644 tools/bpf/bpftool/skeleton/pid_iter.bpf.c
+ create mode 100644 tools/bpf/bpftool/skeleton/pid_iter.h
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index f67dce2af802..a510d8ed716f 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -75,5 +75,6 @@ enum libbpf_tristate {
- };
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index bdb6e38c6c5c..06f436e8191a 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -150,6 +150,8 @@ $(OUTPUT)%.skel.h: $(OUTPUT)%.bpf.o $(BPFTOOL_BOOTSTR=
+AP)
 =20
- #define __kconfig __attribute__((section(".kconfig")))
-+#define __ksym __attribute__((section(".ksyms")))
+ $(OUTPUT)prog.o: $(OUTPUT)profiler.skel.h
 =20
- #endif
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 70c1b7ec2bd0..06cd1731c154 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -168,6 +168,11 @@ static inline bool btf_kflag(const struct btf_type *=
-t)
- 	return BTF_INFO_KFLAG(t->info);
++$(OUTPUT)pids.o: $(OUTPUT)pid_iter.skel.h
++
+ endif
+ endif
+=20
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index faac8189b285..fc9bc7a23db6 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -809,6 +809,7 @@ show_btf_plain(struct bpf_btf_info *info, int fd,
+ 			printf("%s%u", n++ =3D=3D 0 ? "  map_ids " : ",",
+ 			       obj->obj_id);
+ 	}
++	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
+=20
+ 	printf("\n");
+ }
+@@ -841,6 +842,9 @@ show_btf_json(struct bpf_btf_info *info, int fd,
+ 			jsonw_uint(json_wtr, obj->obj_id);
+ 	}
+ 	jsonw_end_array(json_wtr);	/* map_ids */
++
++	emit_obj_refs_json(&refs_table, info->id, json_wtr); /* pids */
++
+ 	jsonw_end_object(json_wtr);	/* btf object */
  }
 =20
-+static inline bool btf_is_void(const struct btf_type *t)
+@@ -893,6 +897,7 @@ static int do_show(int argc, char **argv)
+ 			close(fd);
+ 		return err;
+ 	}
++	build_obj_refs_table(&refs_table, BPF_OBJ_BTF);
+=20
+ 	if (fd >=3D 0) {
+ 		err =3D show_btf(fd, &btf_prog_table, &btf_map_table);
+@@ -939,6 +944,7 @@ static int do_show(int argc, char **argv)
+ exit_free:
+ 	delete_btf_table(&btf_prog_table);
+ 	delete_btf_table(&btf_map_table);
++	delete_obj_refs_table(&refs_table);
+=20
+ 	return err;
+ }
+diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+index fca57ee8fafe..7329f3134283 100644
+--- a/tools/bpf/bpftool/link.c
++++ b/tools/bpf/bpftool/link.c
+@@ -143,6 +143,9 @@ static int show_link_close_json(int fd, struct bpf_li=
+nk_info *info)
+ 		}
+ 		jsonw_end_array(json_wtr);
+ 	}
++
++	emit_obj_refs_json(&refs_table, info->id, json_wtr);
++
+ 	jsonw_end_object(json_wtr);
+=20
+ 	return 0;
+@@ -212,6 +215,7 @@ static int show_link_close_plain(int fd, struct bpf_l=
+ink_info *info)
+ 				printf("\n\tpinned %s", obj->path);
+ 		}
+ 	}
++	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
+=20
+ 	printf("\n");
+=20
+@@ -257,6 +261,7 @@ static int do_show(int argc, char **argv)
+=20
+ 	if (show_pinned)
+ 		build_pinned_obj_table(&link_table, BPF_OBJ_LINK);
++	build_obj_refs_table(&refs_table, BPF_OBJ_LINK);
+=20
+ 	if (argc =3D=3D 2) {
+ 		fd =3D link_parse_fd(&argc, &argv);
+@@ -296,6 +301,8 @@ static int do_show(int argc, char **argv)
+ 	if (json_output)
+ 		jsonw_end_array(json_wtr);
+=20
++	delete_obj_refs_table(&refs_table);
++
+ 	return errno =3D=3D ENOENT ? 0 : -1;
+ }
+=20
+diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+index bf4d7487552a..4a191fcbeb82 100644
+--- a/tools/bpf/bpftool/main.c
++++ b/tools/bpf/bpftool/main.c
+@@ -31,6 +31,7 @@ bool relaxed_maps;
+ struct pinned_obj_table prog_table;
+ struct pinned_obj_table map_table;
+ struct pinned_obj_table link_table;
++struct obj_refs_table refs_table;
+=20
+ static void __noreturn clean_and_exit(int i)
+ {
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index aad7be74e8a7..ce26271e5f0c 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -127,11 +127,13 @@ static const char * const attach_type_name[__MAX_BP=
+F_ATTACH_TYPE] =3D {
+ extern const char * const map_type_name[];
+ extern const size_t map_type_name_size;
+=20
++/* keep in sync with the definition in skeleton/pid_iter.bpf.c */
+ enum bpf_obj_type {
+ 	BPF_OBJ_UNKNOWN,
+ 	BPF_OBJ_PROG,
+ 	BPF_OBJ_MAP,
+ 	BPF_OBJ_LINK,
++	BPF_OBJ_BTF,
+ };
+=20
+ extern const char *bin_name;
+@@ -139,12 +141,14 @@ extern const char *bin_name;
+ extern json_writer_t *json_wtr;
+ extern bool json_output;
+ extern bool show_pinned;
++extern bool show_pids;
+ extern bool block_mount;
+ extern bool verifier_logs;
+ extern bool relaxed_maps;
+ extern struct pinned_obj_table prog_table;
+ extern struct pinned_obj_table map_table;
+ extern struct pinned_obj_table link_table;
++extern struct obj_refs_table refs_table;
+=20
+ void __printf(1, 2) p_err(const char *fmt, ...);
+ void __printf(1, 2) p_info(const char *fmt, ...);
+@@ -168,12 +172,35 @@ struct pinned_obj {
+ 	struct hlist_node hash;
+ };
+=20
++struct obj_refs_table {
++	DECLARE_HASHTABLE(table, 16);
++};
++
++struct obj_ref {
++	int pid;
++	char comm[16];
++};
++
++struct obj_refs {
++	struct hlist_node node;
++	__u32 id;
++	int ref_cnt;
++	struct obj_ref *refs;
++};
++
+ struct btf;
+ struct bpf_line_info;
+=20
+ int build_pinned_obj_table(struct pinned_obj_table *table,
+ 			   enum bpf_obj_type type);
+ void delete_pinned_obj_table(struct pinned_obj_table *tab);
++__weak int build_obj_refs_table(struct obj_refs_table *table,
++				enum bpf_obj_type type);
++__weak void delete_obj_refs_table(struct obj_refs_table *table);
++__weak void emit_obj_refs_json(struct obj_refs_table *table, __u32 id,
++			       json_writer_t *json_wtr);
++__weak void emit_obj_refs_plain(struct obj_refs_table *table, __u32 id,
++				const char *prefix);
+ void print_dev_plain(__u32 ifindex, __u64 ns_dev, __u64 ns_inode);
+ void print_dev_json(__u32 ifindex, __u64 ns_dev, __u64 ns_inode);
+=20
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index b9eee19b094c..0a6a5d82d380 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -509,6 +509,8 @@ static int show_map_close_json(int fd, struct bpf_map=
+_info *info)
+ 		jsonw_end_array(json_wtr);
+ 	}
+=20
++	emit_obj_refs_json(&refs_table, info->id, json_wtr);
++
+ 	jsonw_end_object(json_wtr);
+=20
+ 	return 0;
+@@ -596,6 +598,8 @@ static int show_map_close_plain(int fd, struct bpf_ma=
+p_info *info)
+ 	if (frozen)
+ 		printf("%sfrozen", info->btf_id ? "  " : "");
+=20
++	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
++
+ 	printf("\n");
+ 	return 0;
+ }
+@@ -654,6 +658,7 @@ static int do_show(int argc, char **argv)
+=20
+ 	if (show_pinned)
+ 		build_pinned_obj_table(&map_table, BPF_OBJ_MAP);
++	build_obj_refs_table(&refs_table, BPF_OBJ_MAP);
+=20
+ 	if (argc =3D=3D 2)
+ 		return do_show_subset(argc, argv);
+@@ -697,6 +702,8 @@ static int do_show(int argc, char **argv)
+ 	if (json_output)
+ 		jsonw_end_array(json_wtr);
+=20
++	delete_obj_refs_table(&refs_table);
++
+ 	return errno =3D=3D ENOENT ? 0 : -1;
+ }
+=20
+diff --git a/tools/bpf/bpftool/pids.c b/tools/bpf/bpftool/pids.c
+new file mode 100644
+index 000000000000..3474a91743ff
+--- /dev/null
++++ b/tools/bpf/bpftool/pids.c
+@@ -0,0 +1,229 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++/* Copyright (C) 2020 Facebook */
++#include <errno.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <bpf/bpf.h>
++
++#include "main.h"
++#include "skeleton/pid_iter.h"
++
++#ifdef BPFTOOL_WITHOUT_SKELETONS
++
++int build_obj_refs_table(struct obj_refs_table *table, enum bpf_obj_type=
+ type)
 +{
-+	return btf_kind(t) =3D=3D BTF_KIND_UNKN;
++	p_err("bpftool built without PID iterator support");
++	return -ENOTSUP;
++}
++void delete_obj_refs_table(struct obj_refs_table *table) {}
++
++#else /* BPFTOOL_WITHOUT_SKELETONS */
++
++#include "pid_iter.skel.h"
++
++static void add_ref(struct obj_refs_table *table, struct pid_iter_entry =
+*e)
++{
++	struct obj_refs *refs;
++	struct obj_ref *ref;
++	void *tmp;
++	int i;
++
++	hash_for_each_possible(table->table, refs, node, e->id) {
++		if (refs->id !=3D e->id)
++			continue;
++
++		for (i =3D 0; i < refs->ref_cnt; i++) {
++			if (refs->refs[i].pid =3D=3D e->pid)
++				return;
++		}
++
++		tmp =3D realloc(refs->refs, (refs->ref_cnt + 1) * sizeof(*ref));
++		if (!tmp) {
++			p_err("failed to re-alloc memory for ID %u, PID %d, COMM %s...",
++			      e->id, e->pid, e->comm);
++			return;
++		}
++		refs->refs =3D tmp;
++		ref =3D &refs->refs[refs->ref_cnt];
++		ref->pid =3D e->pid;
++		memcpy(ref->comm, e->comm, sizeof(ref->comm));
++		refs->ref_cnt++;
++
++		return;
++	}
++
++	/* new ref */
++	refs =3D calloc(1, sizeof(*refs));
++	if (!refs) {
++		p_err("failed to alloc memory for ID %u, PID %d, COMM %s...",
++		      e->id, e->pid, e->comm);
++		return;
++	}
++
++	refs->id =3D e->id;
++	refs->refs =3D malloc(sizeof(*refs->refs));
++	if (!refs->refs) {
++		free(refs);
++		p_err("failed to alloc memory for ID %u, PID %d, COMM %s...",
++		      e->id, e->pid, e->comm);
++		return;
++	}
++	ref =3D &refs->refs[0];
++	ref->pid =3D e->pid;
++	memcpy(ref->comm, e->comm, sizeof(ref->comm));
++	refs->ref_cnt =3D 1;
++	hash_add(table->table, &refs->node, e->id);
 +}
 +
- static inline bool btf_is_int(const struct btf_type *t)
- {
- 	return btf_kind(t) =3D=3D BTF_KIND_INT;
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 23a65f8f2eaf..4b7a4f542cbe 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -285,6 +285,7 @@ struct bpf_struct_ops {
- #define BSS_SEC ".bss"
- #define RODATA_SEC ".rodata"
- #define KCONFIG_SEC ".kconfig"
-+#define KSYMS_SEC ".ksyms"
- #define STRUCT_OPS_SEC ".struct_ops"
++static int __printf(2, 0)
++libbpf_print_none(__maybe_unused enum libbpf_print_level level,
++		  __maybe_unused const char *format,
++		  __maybe_unused va_list args)
++{
++	return 0;
++}
++
++int build_obj_refs_table(struct obj_refs_table *table, enum bpf_obj_type=
+ type)
++{
++	char buf[4096];
++	struct pid_iter_bpf *skel;
++	struct pid_iter_entry *e;
++	int err, ret, fd =3D -1, i;
++	libbpf_print_fn_t default_print;
++
++	hash_init(table->table);
++	set_max_rlimit();
++
++	skel =3D pid_iter_bpf__open();
++	if (!skel) {
++		p_err("failed to open PID iterator skeleton");
++		return -1;
++	}
++
++	skel->rodata->obj_type =3D type;
++
++	/* we don't want output polluted with libbpf errors if bpf_iter is not
++	 * supported
++	 */
++	default_print =3D libbpf_set_print(libbpf_print_none);
++	err =3D pid_iter_bpf__load(skel);
++	libbpf_set_print(default_print);
++	if (err) {
++		/* too bad, kernel doesn't support BPF iterators yet */
++		err =3D 0;
++		goto out;
++	}
++	err =3D pid_iter_bpf__attach(skel);
++	if (err) {
++		/* if we loaded above successfully, attach has to succeed */
++		p_err("failed to attach PID iterator: %d", err);
++		goto out;
++	}
++
++	fd =3D bpf_iter_create(bpf_link__fd(skel->links.iter));
++	if (fd < 0) {
++		err =3D -errno;
++		p_err("failed to create PID iterator session: %d", err);
++		goto out;
++	}
++
++	while (true) {
++		ret =3D read(fd, buf, sizeof(buf));
++		if (ret < 0) {
++			err =3D -errno;
++			p_err("failed to read PID iterator output: %d", err);
++			goto out;
++		}
++		if (ret =3D=3D 0)
++			break;
++		if (ret % sizeof(*e)) {
++			err =3D -EINVAL;
++			p_err("invalid PID iterator output format");
++			goto out;
++		}
++		ret /=3D sizeof(*e);
++
++		e =3D (void *)buf;
++		for (i =3D 0; i < ret; i++, e++) {
++			add_ref(table, e);
++		}
++	}
++	err =3D 0;
++out:
++	if (fd >=3D 0)
++		close(fd);
++	pid_iter_bpf__destroy(skel);
++	return err;
++}
++
++void delete_obj_refs_table(struct obj_refs_table *table)
++{
++	struct obj_refs *refs;
++	struct hlist_node *tmp;
++	unsigned int bkt;
++
++	hash_for_each_safe(table->table, bkt, tmp, refs, node) {
++		hash_del(&refs->node);
++		free(refs->refs);
++		free(refs);
++	}
++}
++
++void emit_obj_refs_json(struct obj_refs_table *table, __u32 id, json_wri=
+ter_t *json_wtr)
++{
++	struct obj_refs *refs;
++	struct obj_ref *ref;
++	int i;
++
++	if (hash_empty(table->table))
++		return;
++
++	hash_for_each_possible(table->table, refs, node, id) {
++		if (refs->id !=3D id)
++			continue;
++		if (refs->ref_cnt =3D=3D 0)
++			break;
++
++		jsonw_name(json_wtr, "pids");
++		jsonw_start_array(json_wtr);
++		for (i =3D 0; i < refs->ref_cnt; i++) {
++			ref =3D &refs->refs[i];
++			jsonw_start_object(json_wtr);
++			jsonw_int_field(json_wtr, "pid", ref->pid);
++			jsonw_string_field(json_wtr, "comm", ref->comm);
++			jsonw_end_object(json_wtr);
++		}
++		jsonw_end_array(json_wtr);
++		break;
++	}
++}
++
++void emit_obj_refs_plain(struct obj_refs_table *table, __u32 id, const c=
+har *prefix)
++{
++	struct obj_refs *refs;
++	struct obj_ref *ref;
++	int i;
++
++	if (hash_empty(table->table))
++		return;
++
++	hash_for_each_possible(table->table, refs, node, id) {
++		if (refs->id !=3D id)
++			continue;
++		if (refs->ref_cnt =3D=3D 0)
++			break;
++
++		printf("%s", prefix);
++		for (i =3D 0; i < refs->ref_cnt; i++) {
++			ref =3D &refs->refs[i];
++			printf("%s%s(%d)", i =3D=3D 0 ? "" : ", ", ref->comm, ref->pid);
++		}
++		break;
++	}
++}
++
++
++#endif
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 53d47610ff58..e21fa8ad2efa 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -190,6 +190,8 @@ static void print_prog_json(struct bpf_prog_info *inf=
+o, int fd)
+ 		jsonw_end_array(json_wtr);
+ 	}
 =20
- enum libbpf_map_type {
-@@ -330,6 +331,7 @@ struct bpf_map {
- enum extern_type {
- 	EXT_UNKNOWN,
- 	EXT_KCFG,
-+	EXT_KSYM,
- };
-=20
- enum kcfg_type {
-@@ -357,6 +359,9 @@ struct extern_desc {
- 			int data_off;
- 			bool is_signed;
- 		} kcfg;
-+		struct {
-+			unsigned long long addr;
-+		} ksym;
- 	};
- };
-=20
-@@ -2812,9 +2817,25 @@ static int cmp_externs(const void *_a, const void =
-*_b)
- 	return strcmp(a->name, b->name);
++	emit_obj_refs_json(&refs_table, info->id, json_wtr);
++
+ 	jsonw_end_object(json_wtr);
  }
 =20
-+static int find_int_btf_id(const struct btf *btf)
+@@ -256,6 +258,8 @@ static void print_prog_plain(struct bpf_prog_info *in=
+fo, int fd)
+ 	if (info->btf_id)
+ 		printf("\n\tbtf_id %d", info->btf_id);
+=20
++	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
++
+ 	printf("\n");
+ }
+=20
+@@ -321,6 +325,7 @@ static int do_show(int argc, char **argv)
+=20
+ 	if (show_pinned)
+ 		build_pinned_obj_table(&prog_table, BPF_OBJ_PROG);
++	build_obj_refs_table(&refs_table, BPF_OBJ_PROG);
+=20
+ 	if (argc =3D=3D 2)
+ 		return do_show_subset(argc, argv);
+@@ -362,6 +367,8 @@ static int do_show(int argc, char **argv)
+ 	if (json_output)
+ 		jsonw_end_array(json_wtr);
+=20
++	delete_obj_refs_table(&refs_table);
++
+ 	return err;
+ }
+=20
+diff --git a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c b/tools/bpf/bpftoo=
+l/skeleton/pid_iter.bpf.c
+new file mode 100644
+index 000000000000..f560e48add07
+--- /dev/null
++++ b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
+@@ -0,0 +1,80 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Facebook
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
++#include <bpf/bpf_tracing.h>
++#include "pid_iter.h"
++
++/* keep in sync with the definition in main.h */
++enum bpf_obj_type {
++	BPF_OBJ_UNKNOWN,
++	BPF_OBJ_PROG,
++	BPF_OBJ_MAP,
++	BPF_OBJ_LINK,
++	BPF_OBJ_BTF,
++};
++
++extern const void bpf_link_fops __ksym;
++extern const void bpf_map_fops __ksym;
++extern const void bpf_prog_fops __ksym;
++extern const void btf_fops __ksym;
++
++const volatile enum bpf_obj_type obj_type =3D BPF_OBJ_UNKNOWN;
++
++static __always_inline __u32 get_obj_id(void *ent, enum bpf_obj_type typ=
+e)
 +{
-+	const struct btf_type *t;
-+	int i, n;
-+
-+	n =3D btf__get_nr_types(btf);
-+	for (i =3D 1; i <=3D n; i++) {
-+		t =3D btf__type_by_id(btf, i);
-+
-+		if (btf_is_int(t) && btf_int_bits(t) =3D=3D 32)
-+			return i;
++	switch (type) {
++	case BPF_OBJ_PROG:
++		return BPF_CORE_READ((struct bpf_prog *)ent, aux, id);
++	case BPF_OBJ_MAP:
++		return BPF_CORE_READ((struct bpf_map *)ent, id);
++	case BPF_OBJ_BTF:
++		return BPF_CORE_READ((struct btf *)ent, id);
++	case BPF_OBJ_LINK:
++		return BPF_CORE_READ((struct bpf_link *)ent, id);
++	default:
++		return 0;
 +	}
++}
++
++SEC("iter/task_file")
++int iter(struct bpf_iter__task_file *ctx)
++{
++	struct file *file =3D ctx->file;
++	struct task_struct *task =3D ctx->task;
++	struct pid_iter_entry e;
++	const void *fops;
++
++	if (!file || !task)
++		return 0;
++
++	switch (obj_type) {
++	case BPF_OBJ_PROG:
++		fops =3D &bpf_prog_fops;
++		break;
++	case BPF_OBJ_MAP:
++		fops =3D &bpf_map_fops;
++		break;
++	case BPF_OBJ_BTF:
++		fops =3D &btf_fops;
++		break;
++	case BPF_OBJ_LINK:
++		fops =3D &bpf_link_fops;
++		break;
++	default:
++		return 0;
++	}
++
++	if (file->f_op !=3D fops)
++		return 0;
++
++	e.pid =3D task->tgid;
++	e.id =3D get_obj_id(file->private_data, obj_type);
++	bpf_probe_read(&e.comm, sizeof(e.comm), task->group_leader->comm);
++	bpf_seq_write(ctx->meta->seq, &e, sizeof(e));
 +
 +	return 0;
 +}
 +
- static int bpf_object__collect_externs(struct bpf_object *obj)
- {
--	struct btf_type *sec, *kcfg_sec =3D NULL;
-+	struct btf_type *sec, *kcfg_sec =3D NULL, *ksym_sec =3D NULL;
- 	const struct btf_type *t;
- 	struct extern_desc *ext;
- 	int i, n, off;
-@@ -2895,6 +2916,17 @@ static int bpf_object__collect_externs(struct bpf_=
-object *obj)
- 				pr_warn("extern (kcfg) '%s' type is unsupported\n", ext_name);
- 				return -ENOTSUP;
- 			}
-+		} else if (strcmp(sec_name, KSYMS_SEC) =3D=3D 0) {
-+			const struct btf_type *vt;
++char LICENSE[] SEC("license") =3D "GPL";
+diff --git a/tools/bpf/bpftool/skeleton/pid_iter.h b/tools/bpf/bpftool/sk=
+eleton/pid_iter.h
+new file mode 100644
+index 000000000000..5692cf257adb
+--- /dev/null
++++ b/tools/bpf/bpftool/skeleton/pid_iter.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/* Copyright (c) 2020 Facebook */
++#ifndef __PID_ITER_H
++#define __PID_ITER_H
 +
-+			ksym_sec =3D sec;
-+			ext->type =3D EXT_KSYM;
++struct pid_iter_entry {
++	__u32 id;
++	int pid;
++	char comm[16];
++};
 +
-+			vt =3D skip_mods_and_typedefs(obj->btf, t->type, NULL);
-+			if (!btf_is_void(vt)) {
-+				pr_warn("extern (ksym) '%s' is not typeless (void)\n", ext_name);
-+				return -ENOTSUP;
-+			}
- 		} else {
- 			pr_warn("unrecognized extern section '%s'\n", sec_name);
- 			return -ENOTSUP;
-@@ -2908,6 +2940,46 @@ static int bpf_object__collect_externs(struct bpf_=
-object *obj)
- 	/* sort externs by type, for kcfg ones also by (align, size, name) */
- 	qsort(obj->externs, obj->nr_extern, sizeof(*ext), cmp_externs);
-=20
-+	/* for .ksyms section, we need to turn all externs into allocated
-+	 * variables in BTF to pass kernel verification; we do this by
-+	 * pretending that each extern is a 8-byte variable
-+	 */
-+	if (ksym_sec) {
-+		/* find existing 4-byte integer type in BTF to use for fake
-+		 * extern variables in DATASEC
-+		 */
-+		int int_btf_id =3D find_int_btf_id(obj->btf);
-+
-+		for (i =3D 0; i < obj->nr_extern; i++) {
-+			ext =3D &obj->externs[i];
-+			if (ext->type !=3D EXT_KSYM)
-+				continue;
-+			pr_debug("extern (ksym) #%d: symbol %d, name %s\n",
-+				 i, ext->sym_idx, ext->name);
-+		}
-+
-+		sec =3D ksym_sec;
-+		n =3D btf_vlen(sec);
-+		for (i =3D 0, off =3D 0; i < n; i++, off +=3D sizeof(int)) {
-+			struct btf_var_secinfo *vs =3D btf_var_secinfos(sec) + i;
-+			struct btf_type *vt;
-+
-+			vt =3D (void *)btf__type_by_id(obj->btf, vs->type);
-+			ext_name =3D btf__name_by_offset(obj->btf, vt->name_off);
-+			ext =3D find_extern_by_name(obj, ext_name);
-+			if (!ext) {
-+				pr_warn("failed to find extern definition for BTF var '%s'\n",
-+					ext_name);
-+				return -ESRCH;
-+			}
-+			btf_var(vt)->linkage =3D BTF_VAR_GLOBAL_ALLOCATED;
-+			vt->type =3D int_btf_id;
-+			vs->offset =3D off;
-+			vs->size =3D sizeof(int);
-+		}
-+		sec->size =3D off;
-+	}
-+
- 	if (kcfg_sec) {
- 		sec =3D kcfg_sec;
- 		/* for kcfg externs calculate their offsets within a .kconfig map */
-@@ -2919,7 +2991,7 @@ static int bpf_object__collect_externs(struct bpf_o=
-bject *obj)
-=20
- 			ext->kcfg.data_off =3D roundup(off, ext->kcfg.align);
- 			off =3D ext->kcfg.data_off + ext->kcfg.sz;
--			pr_debug("extern #%d (kcfg): symbol %d, off %u, name %s\n",
-+			pr_debug("extern (kcfg) #%d: symbol %d, off %u, name %s\n",
- 				 i, ext->sym_idx, ext->kcfg.data_off, ext->name);
- 		}
- 		sec->size =3D off;
-@@ -5009,9 +5081,14 @@ bpf_program__relocate(struct bpf_program *prog, st=
-ruct bpf_object *obj)
- 			break;
- 		case RELO_EXTERN:
- 			ext =3D &obj->externs[relo->sym_off];
--			insn[0].src_reg =3D BPF_PSEUDO_MAP_VALUE;
--			insn[0].imm =3D obj->maps[obj->kconfig_map_idx].fd;
--			insn[1].imm =3D ext->kcfg.data_off;
-+			if (ext->type =3D=3D EXT_KCFG) {
-+				insn[0].src_reg =3D BPF_PSEUDO_MAP_VALUE;
-+				insn[0].imm =3D obj->maps[obj->kconfig_map_idx].fd;
-+				insn[1].imm =3D ext->kcfg.data_off;
-+			} else /* EXT_KSYM */ {
-+				insn[0].imm =3D (__u32)ext->ksym.addr;
-+				insn[1].imm =3D ext->ksym.addr >> 32;
-+			}
- 			break;
- 		case RELO_CALL:
- 			err =3D bpf_program__reloc_text(prog, obj, relo);
-@@ -5630,10 +5707,58 @@ static int bpf_object__sanitize_maps(struct bpf_o=
-bject *obj)
- 	return 0;
- }
-=20
-+static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
-+{
-+	char sym_type, sym_name[500];
-+	unsigned long long sym_addr;
-+	struct extern_desc *ext;
-+	int ret, err =3D 0;
-+	FILE *f;
-+
-+	f =3D fopen("/proc/kallsyms", "r");
-+	if (!f) {
-+		err =3D -errno;
-+		pr_warn("failed to open /proc/kallsyms: %d\n", err);
-+		return err;
-+	}
-+
-+	while (true) {
-+		ret =3D fscanf(f, "%llx %c %499s%*[^\n]\n",
-+			     &sym_addr, &sym_type, sym_name);
-+		if (ret =3D=3D EOF && feof(f))
-+			break;
-+		if (ret !=3D 3) {
-+			pr_warn("failed to read kallasyms entry: %d\n", ret);
-+			err =3D -EINVAL;
-+			goto out;
-+		}
-+
-+		ext =3D find_extern_by_name(obj, sym_name);
-+		if (!ext || ext->type !=3D EXT_KSYM)
-+			continue;
-+
-+		if (ext->is_set && ext->ksym.addr !=3D sym_addr) {
-+			pr_warn("extern (ksym) '%s' resolution is ambiguous: 0x%llx or 0x%llx=
-\n",
-+				sym_name, ext->ksym.addr, sym_addr);
-+			err =3D -EINVAL;
-+			goto out;
-+		}
-+		if (!ext->is_set) {
-+			ext->is_set =3D true;
-+			ext->ksym.addr =3D sym_addr;
-+			pr_debug("extern (ksym) %s=3D0x%llx\n", sym_name, sym_addr);
-+		}
-+	}
-+
-+out:
-+	fclose(f);
-+	return err;
-+}
-+
- static int bpf_object__resolve_externs(struct bpf_object *obj,
- 				       const char *extra_kconfig)
- {
--	bool need_config =3D false;
-+	bool need_config =3D false, need_kallsyms =3D false;
- 	struct extern_desc *ext;
- 	void *kcfg_data;
- 	int err, i;
-@@ -5663,6 +5788,8 @@ static int bpf_object__resolve_externs(struct bpf_o=
-bject *obj,
- 		} else if (ext->type =3D=3D EXT_KCFG &&
- 			   strncmp(ext->name, "CONFIG_", 7) =3D=3D 0) {
- 			need_config =3D true;
-+		} else if (ext->type =3D=3D EXT_KSYM) {
-+			need_kallsyms =3D true;
- 		} else {
- 			pr_warn("unrecognized extern '%s'\n", ext->name);
- 			return -EINVAL;
-@@ -5686,6 +5813,11 @@ static int bpf_object__resolve_externs(struct bpf_=
-object *obj,
- 		if (err)
- 			return -EINVAL;
- 	}
-+	if (need_kallsyms) {
-+		err =3D bpf_object__read_kallsyms_file(obj);
-+		if (err)
-+			return -EINVAL;
-+	}
- 	for (i =3D 0; i < obj->nr_extern; i++) {
- 		ext =3D &obj->externs[i];
-=20
++#endif
 --=20
 2.24.1
 
