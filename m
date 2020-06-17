@@ -8,65 +8,64 @@ X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 859E6C433E0
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:18:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E82DC433DF
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:19:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4822A2080D
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:18:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6512C21527
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:19:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D6iQY8mc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eD3sX1aK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbgFQQSR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 12:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
+        id S1726848AbgFQQT2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 12:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726540AbgFQQSP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Jun 2020 12:18:15 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1F5C06174E;
-        Wed, 17 Jun 2020 09:18:13 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id g139so860789lfd.10;
-        Wed, 17 Jun 2020 09:18:13 -0700 (PDT)
+        with ESMTP id S1726496AbgFQQT1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Jun 2020 12:19:27 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85045C06174E;
+        Wed, 17 Jun 2020 09:19:27 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id d82so2539928qkc.10;
+        Wed, 17 Jun 2020 09:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DbdKwODoe45DOZ3Q5t/MAeoc7NKC4buXJp9RqrSI/NQ=;
-        b=D6iQY8mc5Nsprr4zZZePshJV+pBfPfZD9w/gF32GkNcR7wD5Cbn7qKILI18fGYF0YI
-         0OmLCvgqMHp0fd04hZ9UpZSvew0IqxBKHLVKOAZlsPjUDqN7xBf/odwH0+EXewZ3zZx4
-         oRpyO222vus3XmDjbqASH+PPrJVOCLNobCazM5j8p4JuhTjjheLuCb63K6BCU8mvHzOb
-         RZjrPADWcUryesYj4LlNeDQXKayLIR69ZbuE3rRSoWZeWLphGbFWruiZcAb8OjGEZE4U
-         OEeO1CD9GR4BBNMk50+mLIFE/SbqpurbAddX5S7K5t91vLS+ISRyfs8jEDl/s9XJZDBR
-         PmmA==
+        bh=PVufv+wGfM5FlL19P66hJ3jDiaqB0sb6Nsu+imjTKnw=;
+        b=eD3sX1aK3YUFUi938YQ//SvRlHM1et8inYDL7kUlLxB3EYr4goLGxtdbKLKgCtLOxP
+         42ZwsYSV0o4B5gq3v0OdCDseM304stNszqQRNClpJgS7QzfSXiG+449rNcVUd2LHGZ7j
+         4XagsUw5Gwr/V1mEDhorc+1P+SmzbHW4dN1CN0A6SMQyCWG4VMhE/hGVAKlRGXB5cngO
+         fT7Yn/mGcJq2DkuUmNy9yOEEaOdCBdQkKTaS6L0So6CX9SI4izdeFw+CdteB+V+6OsYA
+         D3N8cWf6viPCAMs8p8DPFH1lGe/9cTWUIE7t+Gs95SXGHriv1ku5TrJATv9A4oQQsNUS
+         k7Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DbdKwODoe45DOZ3Q5t/MAeoc7NKC4buXJp9RqrSI/NQ=;
-        b=eC1X/vb8HZr1kIX6vWdmVhQppRzhqU6TJ1PKYeC8SlGJNIghSY2sGL6amHQb7K/GaY
-         rqsElH8Z/P8faCDd/hJYBa3pa3Vg4Bs4s6wCaX++yXPCP5N+qEkfea3/7jEo6CjBxwpk
-         9E93fBdsyIkKJT1b+ifwwSZXxTW83vMAXAXC8BawD4S+eIpD8kja2/UxD6NrCANjj6Md
-         wCiM5Ob8rIPhsUV4x8opt4Yi86q2mo/N16D8jYpOakrsahIKAJovn4qfdu1D+2K0ymTe
-         WqH20lw4WtEABT/XoOLvG+HCSktlTns2B2anIGJp/sxvsPNtjf6tfe6mlACcDrpTds+M
-         XGBA==
-X-Gm-Message-State: AOAM533l6+z5jA+1p0t3L8LsLmMuo5rdcIMsWUeebKfPRjgJhcDdHQso
-        6DKS9e1f+DXwr442IPaMAqN84zjJf5YXoxTkGt8=
-X-Google-Smtp-Source: ABdhPJzHh4azELYorjEM/JxdcGGAZe5KgqqAHiNUES/BhrAGSNGCmxKe6SdeEYk6zfhnQMPtB5ot+XSphN/PbmUWyQI=
-X-Received: by 2002:ac2:53a6:: with SMTP id j6mr4968199lfh.73.1592410692037;
- Wed, 17 Jun 2020 09:18:12 -0700 (PDT)
+        bh=PVufv+wGfM5FlL19P66hJ3jDiaqB0sb6Nsu+imjTKnw=;
+        b=FKuo2ISB6PfPH7I0DPKWvPWv0127cGQarSUXuHCxHgguudR2kqqTpaOXf6b+V/njT9
+         I+e3JtlaQ3ntFy7ao9T4bUhq3Lc/Ag+Kr9M5iL72FXgtGX0MOAovXb5GWqUYEM5Xzp69
+         5K/nNkLNaGDRqhggHM35pz4HEPtjMer7G0GDZRn8mxogXEgMYsr1a0nP1Naw4KxbInrG
+         ZvhApY2Qu5ZTSM6TkP0VdOyofc5t7oIkczdmimKgKF3ZRoriOTmI8jQUXzV8vDc396ty
+         g/Pg8gChDzcXuId0+z13xT0rAyscukKtIcrmtTo4l6zFtstR2tMJ3YA7mGYU3ITYSZS2
+         LG3A==
+X-Gm-Message-State: AOAM532XubIOMEVw9UWnNR+pJ75zSAkzYtjaLQoOWJqW1vK34cxb2Vyg
+        kTVV1kCkMQ//it3HffIPZN/LJtX80uI3vZp6enI=
+X-Google-Smtp-Source: ABdhPJz7QGnkQFztlyaYHLpZisLJDqmRW08vS28q4CL1huTuy5xbvFBw9U0xBB51DIjBNzjcPKK9PIV7nnJoY0xJ72Q=
+X-Received: by 2002:a37:a89:: with SMTP id 131mr25908887qkk.92.1592410766355;
+ Wed, 17 Jun 2020 09:19:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200617155539.1223558-1-andriin@fb.com>
-In-Reply-To: <20200617155539.1223558-1-andriin@fb.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 17 Jun 2020 09:17:59 -0700
-Message-ID: <CAADnVQLqg5DSXQXMeVAmCBx001cz-ogkZO1TZ43aJ4Grp93cSA@mail.gmail.com>
+References: <20200617155539.1223558-1-andriin@fb.com> <CAADnVQLqg5DSXQXMeVAmCBx001cz-ogkZO1TZ43aJ4Grp93cSA@mail.gmail.com>
+In-Reply-To: <CAADnVQLqg5DSXQXMeVAmCBx001cz-ogkZO1TZ43aJ4Grp93cSA@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 17 Jun 2020 09:19:14 -0700
+Message-ID: <CAEf4Bzb4WeHSgM0up99wPV75Fq-tmSMZ5Q=Kw7vkD11YqFRS3w@mail.gmail.com>
 Subject: Re: [PATCH bpf-next] libbpf: bump version to 0.0.10
-To:     Andrii Nakryiko <andriin@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>,
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
         Network Development <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
@@ -74,25 +73,30 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 8:59 AM Andrii Nakryiko <andriin@fb.com> wrote:
+On Wed, Jun 17, 2020 at 9:18 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Let's start new cycle with another libbpf version bump.
+> On Wed, Jun 17, 2020 at 8:59 AM Andrii Nakryiko <andriin@fb.com> wrote:
+> >
+> > Let's start new cycle with another libbpf version bump.
+> >
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> > ---
+> >  tools/lib/bpf/libbpf.map | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> > index f732c77b7ed0..3b37b8867cec 100644
+> > --- a/tools/lib/bpf/libbpf.map
+> > +++ b/tools/lib/bpf/libbpf.map
+> > @@ -270,3 +270,6 @@ LIBBPF_0.0.9 {
+> >                 ring_buffer__new;
+> >                 ring_buffer__poll;
+> >  } LIBBPF_0.0.8;
+> > +
+> > +LIBBPF_0.0.10 {
+> > +} LIBBPF_0.0.9;
 >
-> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> ---
->  tools/lib/bpf/libbpf.map | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index f732c77b7ed0..3b37b8867cec 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -270,3 +270,6 @@ LIBBPF_0.0.9 {
->                 ring_buffer__new;
->                 ring_buffer__poll;
->  } LIBBPF_0.0.8;
-> +
-> +LIBBPF_0.0.10 {
-> +} LIBBPF_0.0.9;
+> How about 0.1.0 instead?
 
-How about 0.1.0 instead?
+sure, why not?
