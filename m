@@ -2,45 +2,45 @@ Return-Path: <SRS0=fSoz=76=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3556C433E2
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 21:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40BCAC433DF
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 21:16:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A1CDE21841
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 21:16:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1127521841
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 21:16:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="rOBwuXvf"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="rc+Loheu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726999AbgFQVQ1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 17:16:27 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:21244 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727023AbgFQVQY (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 17 Jun 2020 17:16:24 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05HLG5w1024505
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 14:16:22 -0700
+        id S1726758AbgFQVQb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 17:16:31 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33886 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726930AbgFQVQ2 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 17 Jun 2020 17:16:28 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05HLFOBH019626
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 14:16:25 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=BFb/AGI4CUufTSdKR+g2tOOd/whWg5Ac05UTOz9gqp8=;
- b=rOBwuXvfe8SzLtF+qinas+C+xhJpEs5NCcQPtPSXQQ5T/stV5x1K9nPhbW+v8wAXsLlz
- 2FakA13GrBTtztef94zz9XXpw2kM/fYUDdxytrJEbVL5wGRK4y4TJbizqk9kyejcrz5w
- tsDeFjiG8CFMDyk0o6c6jix5mHaXok4Q07Q= 
+ bh=1oNZDegdDnv5tIfLlJ4fFstXvv2173kbvjqyxrLHgyM=;
+ b=rc+LoheuZZo1oAZmGuHFJn5GV3AwpQJcStEi8Oshx5ISCHesv437N4wKFwz4EyeuPFxt
+ VEZID2qEZrq/Mo3oQr3/gO3/5uJmN053LoymHsKBYcsrVHDQ+PAwQEPF6k6cC8noUvUe
+ KWtY33zB/9TswoBerT3rESnRq4U5xOkXnD0= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31q653g1s5-19
+        by mx0a-00082601.pphosted.com with ESMTP id 31q65sr6mc-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 14:16:22 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:208::11) by
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 14:16:25 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:108::8) by
  mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 17 Jun 2020 14:15:48 -0700
+ 15.1.1979.3; Wed, 17 Jun 2020 14:15:54 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id B70F43704CD7; Wed, 17 Jun 2020 14:15:45 -0700 (PDT)
+        id B29A43704B9E; Wed, 17 Jun 2020 14:15:51 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 07/13] bpf: add bpf_seq_afinfo in udp_iter_state
-Date:   Wed, 17 Jun 2020 14:15:45 -0700
-Message-ID: <20200617211545.1856242-1-yhs@fb.com>
+Subject: [PATCH bpf-next 11/13] tools/bpf: selftests: implement sample tcp/tcp6 bpf_iter programs
+Date:   Wed, 17 Jun 2020 14:15:51 -0700
+Message-ID: <20200617211551.1856689-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200617211536.1854348-1-yhs@fb.com>
 References: <20200617211536.1854348-1-yhs@fb.com>
@@ -60,11 +60,11 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-17_11:2020-06-17,2020-06-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- priorityscore=1501 impostorscore=0 cotscore=-2147483648 suspectscore=13
- spamscore=0 lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0
- adultscore=0 mlxlogscore=533 malwarescore=0 classifier=spam adjust=0
+ definitions=2020-06-17_12:2020-06-17,2020-06-17 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 cotscore=-2147483648
+ phishscore=0 clxscore=1015 malwarescore=0 mlxscore=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 bulkscore=0
+ mlxlogscore=999 suspectscore=13 adultscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2006170159
 X-FB-Internal: deliver
@@ -73,106 +73,646 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Similar to tcp_iter_state, a new field bpf_seq_afinfo is
-added to udp_iter_state to provide bpf udp iterator
-afinfo.
+In my VM, I got identical result compared to /proc/net/{tcp,tcp6}.
+For tcp6:
+  $ cat /proc/net/tcp6
+    sl  local_address                         remote_address             =
+           st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode
+     0: 00000000000000000000000000000000:0016 000000000000000000000000000=
+00000:0000 0A 00000000:00000000 00:00000001 00000000     0        0 17955=
+ 1 000000003eb3102e 100 0 0 10 0
 
-This does not change /proc/net/{udp, udp6} behavior. But
-it enables bpf iterator to avoid get afinfo from PDE_DATA
-and iterate through all udp and udp6 sockets in one pass.
+  $ cat /sys/fs/bpf/p1
+    sl  local_address                         remote_address             =
+           st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode
+     0: 00000000000000000000000000000000:0016 000000000000000000000000000=
+00000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 17955=
+ 1 000000003eb3102e 100 0 0 10 0
+
+For tcp:
+  $ cat /proc/net/tcp
+  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrns=
+mt   uid  timeout inode
+   0: 00000000:0016 00000000:0000 0A 00000000:00000000 00:00000000 000000=
+00     0        0 2666 1 000000007152e43f 100 0 0 10 0
+  $ cat /sys/fs/bpf/p2
+  sl  local_address                         remote_address               =
+         st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode
+   1: 00000000:0016 00000000:0000 0A 00000000:00000000 00:00000000 000000=
+00     0        0 2666 1 000000007152e43f 100 0 0 10 0
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/net/udp.h |  1 +
- net/ipv4/udp.c    | 28 +++++++++++++++++++++++-----
- 2 files changed, 24 insertions(+), 5 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_iter.h  |  15 +
+ .../selftests/bpf/progs/bpf_iter_tcp4.c       | 261 +++++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_tcp6.c       | 277 ++++++++++++++++++
+ 3 files changed, 553 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
 
-diff --git a/include/net/udp.h b/include/net/udp.h
-index a8fa6c0c6ded..67c8b7368845 100644
---- a/include/net/udp.h
-+++ b/include/net/udp.h
-@@ -440,6 +440,7 @@ struct udp_seq_afinfo {
- struct udp_iter_state {
- 	struct seq_net_private  p;
- 	int			bucket;
-+	struct udp_seq_afinfo	*bpf_seq_afinfo;
- };
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter.h b/tools/testing=
+/selftests/bpf/progs/bpf_iter.h
+index d8e6820e49e6..ab3ed904d391 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter.h
++++ b/tools/testing/selftests/bpf/progs/bpf_iter.h
+@@ -7,6 +7,8 @@
+ #define bpf_iter__netlink bpf_iter__netlink___not_used
+ #define bpf_iter__task bpf_iter__task___not_used
+ #define bpf_iter__task_file bpf_iter__task_file___not_used
++#define bpf_iter__tcp bpf_iter__tcp___not_used
++#define tcp6_sock tcp6_sock___not_used
+ #include "vmlinux.h"
+ #undef bpf_iter_meta
+ #undef bpf_iter__bpf_map
+@@ -14,6 +16,8 @@
+ #undef bpf_iter__netlink
+ #undef bpf_iter__task
+ #undef bpf_iter__task_file
++#undef bpf_iter__tcp
++#undef tcp6_sock
 =20
- void *udp_seq_start(struct seq_file *seq, loff_t *pos);
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 1b7ebbcae497..90355301b266 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -2826,10 +2826,15 @@ EXPORT_SYMBOL(udp_prot);
- static struct sock *udp_get_first(struct seq_file *seq, int start)
- {
- 	struct sock *sk;
--	struct udp_seq_afinfo *afinfo =3D PDE_DATA(file_inode(seq->file));
-+	struct udp_seq_afinfo *afinfo;
- 	struct udp_iter_state *state =3D seq->private;
- 	struct net *net =3D seq_file_net(seq);
-=20
-+	if (state->bpf_seq_afinfo)
-+		afinfo =3D state->bpf_seq_afinfo;
-+	else
-+		afinfo =3D PDE_DATA(file_inode(seq->file));
+ struct bpf_iter_meta {
+ 	struct seq_file *seq;
+@@ -47,3 +51,14 @@ struct bpf_iter__bpf_map {
+ 	struct bpf_iter_meta *meta;
+ 	struct bpf_map *map;
+ } __attribute__((preserve_access_index));
 +
- 	for (state->bucket =3D start; state->bucket <=3D afinfo->udp_table->mas=
-k;
- 	     ++state->bucket) {
- 		struct udp_hslot *hslot =3D &afinfo->udp_table->hash[state->bucket];
-@@ -2841,7 +2846,8 @@ static struct sock *udp_get_first(struct seq_file *=
-seq, int start)
- 		sk_for_each(sk, &hslot->head) {
- 			if (!net_eq(sock_net(sk), net))
- 				continue;
--			if (sk->sk_family =3D=3D afinfo->family)
-+			if (afinfo->family =3D=3D AF_UNSPEC ||
-+			    sk->sk_family =3D=3D afinfo->family)
- 				goto found;
- 		}
- 		spin_unlock_bh(&hslot->lock);
-@@ -2853,13 +2859,20 @@ static struct sock *udp_get_first(struct seq_file=
- *seq, int start)
-=20
- static struct sock *udp_get_next(struct seq_file *seq, struct sock *sk)
- {
--	struct udp_seq_afinfo *afinfo =3D PDE_DATA(file_inode(seq->file));
-+	struct udp_seq_afinfo *afinfo;
- 	struct udp_iter_state *state =3D seq->private;
- 	struct net *net =3D seq_file_net(seq);
-=20
-+	if (state->bpf_seq_afinfo)
-+		afinfo =3D state->bpf_seq_afinfo;
-+	else
-+		afinfo =3D PDE_DATA(file_inode(seq->file));
++struct bpf_iter__tcp {
++	struct bpf_iter_meta *meta;
++	struct sock_common *sk_common;
++	uid_t uid;
++} __attribute__((preserve_access_index));
 +
- 	do {
- 		sk =3D sk_next(sk);
--	} while (sk && (!net_eq(sock_net(sk), net) || sk->sk_family !=3D afinfo=
-->family));
-+	} while (sk && (!net_eq(sock_net(sk), net) ||
-+			(afinfo->family !=3D AF_UNSPEC &&
-+			 sk->sk_family !=3D afinfo->family)));
-=20
- 	if (!sk) {
- 		if (state->bucket <=3D afinfo->udp_table->mask)
-@@ -2904,9 +2917,14 @@ EXPORT_SYMBOL(udp_seq_next);
-=20
- void udp_seq_stop(struct seq_file *seq, void *v)
- {
--	struct udp_seq_afinfo *afinfo =3D PDE_DATA(file_inode(seq->file));
-+	struct udp_seq_afinfo *afinfo;
- 	struct udp_iter_state *state =3D seq->private;
-=20
-+	if (state->bpf_seq_afinfo)
-+		afinfo =3D state->bpf_seq_afinfo;
-+	else
-+		afinfo =3D PDE_DATA(file_inode(seq->file));
++struct tcp6_sock {
++	struct tcp_sock	tcp;
++	struct ipv6_pinfo inet6;
++} __attribute__((preserve_access_index));
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_tcp4.c
+new file mode 100644
+index 000000000000..37008b914334
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
+@@ -0,0 +1,261 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include "bpf_iter.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_endian.h>
 +
- 	if (state->bucket <=3D afinfo->udp_table->mask)
- 		spin_unlock_bh(&afinfo->udp_table->hash[state->bucket].lock);
- }
++char _license[] SEC("license") =3D "GPL";
++
++#define sk_state	__sk_common.skc_state
++#define sk_refcnt	__sk_common.skc_refcnt
++
++#define inet_daddr	sk.__sk_common.skc_daddr
++#define inet_rcv_saddr	sk.__sk_common.skc_rcv_saddr
++#define inet_dport	sk.__sk_common.skc_dport
++
++#define tw_daddr	__tw_common.skc_daddr
++#define tw_rcv_saddr	__tw_common.skc_rcv_saddr
++#define tw_dport	__tw_common.skc_dport
++#define tw_refcnt	__tw_common.skc_refcnt
++
++#define ir_loc_addr	req.__req_common.skc_rcv_saddr
++#define ir_rmt_addr	req.__req_common.skc_daddr
++#define ir_rmt_port	req.__req_common.skc_dport
++#define ir_num		req.__req_common.skc_num
++
++#define ICSK_TIME_RETRANS	1
++#define ICSK_TIME_PROBE0	3
++#define ICSK_TIME_LOSS_PROBE	5
++#define ICSK_TIME_REO_TIMEOUT	6
++
++#define TCP_INFINITE_SSTHRESH	0x7fffffff
++#define TCP_PINGPONG_THRESH	3
++
++#define AF_INET			2
++
++static int hlist_unhashed_lockless(const struct hlist_node *h)
++{
++        return !(h->pprev);
++}
++
++static int timer_pending(const struct timer_list * timer)
++{
++	return !hlist_unhashed_lockless(&timer->entry);
++}
++
++extern unsigned CONFIG_HZ __kconfig __weak;
++
++#define USER_HZ		100
++#define NSEC_PER_SEC	1000000000ULL
++static clock_t jiffies_to_clock_t(unsigned long x)
++{
++	/* The implementation here tailored to a particular
++	 * setting of USER_HZ.
++	 */
++	u64 tick_nsec =3D (NSEC_PER_SEC + CONFIG_HZ/2) / CONFIG_HZ;
++	u64 user_hz_nsec =3D NSEC_PER_SEC / USER_HZ;
++
++	if ((tick_nsec % user_hz_nsec) =3D=3D 0) {
++		if (CONFIG_HZ < USER_HZ)
++			return x * (USER_HZ / CONFIG_HZ);
++		else
++			return x / (CONFIG_HZ / USER_HZ);
++	}
++	return x * tick_nsec/user_hz_nsec;
++}
++
++static clock_t jiffies_delta_to_clock_t(long delta)
++{
++	if (delta <=3D 0)
++		return 0;
++
++	return jiffies_to_clock_t(delta);
++}
++
++static long sock_i_ino(const struct sock *sk)
++{
++	const struct socket *sk_socket =3D sk->sk_socket;
++	const struct inode *inode;
++	unsigned long ino;
++
++	if (!sk_socket)
++		return 0;
++
++	inode =3D &container_of(sk_socket, struct socket_alloc, socket)->vfs_in=
+ode;
++	bpf_probe_read(&ino, sizeof(ino), &inode->i_ino);
++	return ino;
++}
++
++static bool
++inet_csk_in_pingpong_mode(const struct inet_connection_sock *icsk)
++{
++	return icsk->icsk_ack.pingpong >=3D TCP_PINGPONG_THRESH;
++}
++
++static bool tcp_in_initial_slowstart(const struct tcp_sock *tcp)
++{
++	return tcp->snd_ssthresh >=3D TCP_INFINITE_SSTHRESH;
++}
++
++static int dump_tcp_sock(struct seq_file *seq, struct tcp_sock *tp,
++			 uid_t uid, __u32 seq_num)
++{
++	const struct inet_connection_sock *icsk;
++	const struct fastopen_queue *fastopenq;
++	const struct inet_sock *inet;
++	unsigned long timer_expires;
++	const struct sock *sp;
++	__u16 destp, srcp;
++	__be32 dest, src;
++	int timer_active;
++	int rx_queue;
++	int state;
++
++	icsk =3D &tp->inet_conn;
++	inet =3D &icsk->icsk_inet;
++	sp =3D &inet->sk;
++	fastopenq =3D &icsk->icsk_accept_queue.fastopenq;
++
++	dest =3D inet->inet_daddr;
++	src =3D inet->inet_rcv_saddr;
++	destp =3D bpf_ntohs(inet->inet_dport);
++	srcp =3D bpf_ntohs(inet->inet_sport);
++
++	if (icsk->icsk_pending =3D=3D ICSK_TIME_RETRANS ||
++	    icsk->icsk_pending =3D=3D ICSK_TIME_REO_TIMEOUT ||
++	    icsk->icsk_pending =3D=3D ICSK_TIME_LOSS_PROBE) {
++		timer_active =3D 1;
++		timer_expires =3D icsk->icsk_timeout;
++	} else if (icsk->icsk_pending =3D=3D ICSK_TIME_PROBE0) {
++		timer_active =3D 4;
++		timer_expires =3D icsk->icsk_timeout;
++	} else if (timer_pending(&sp->sk_timer)) {
++		timer_active =3D 2;
++		timer_expires =3D sp->sk_timer.expires;
++	} else {
++		timer_active =3D 0;
++		timer_expires =3D bpf_jiffies64();
++	}
++
++	state =3D sp->sk_state;
++	if (state =3D=3D TCP_LISTEN) {
++		rx_queue =3D sp->sk_ack_backlog;
++	} else {
++		rx_queue =3D tp->rcv_nxt - tp->copied_seq;
++		if (rx_queue < 0)
++			rx_queue =3D 0;
++	}
++
++	BPF_SEQ_PRINTF(seq, "%4d: %08X:%04X %08X:%04X ",
++		       seq_num, src, srcp, destp, destp);
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d ",
++		       state,
++		       tp->write_seq - tp->snd_una, rx_queue,
++		       timer_active,
++		       jiffies_delta_to_clock_t(timer_expires - bpf_jiffies64()),
++		       icsk->icsk_retransmits, uid,
++		       icsk->icsk_probes_out,
++		       sock_i_ino(sp),
++		       sp->sk_refcnt.refs.counter);
++	BPF_SEQ_PRINTF(seq, "%pK %lu %lu %u %u %d\n",
++		       tp,
++		       jiffies_to_clock_t(icsk->icsk_rto),
++		       jiffies_to_clock_t(icsk->icsk_ack.ato),
++		       (icsk->icsk_ack.quick << 1) | inet_csk_in_pingpong_mode(icsk),
++		       tp->snd_cwnd,
++		       state =3D=3D TCP_LISTEN ? fastopenq->max_qlen
++				: (tcp_in_initial_slowstart(tp) ? -1 : tp->snd_ssthresh)
++		      );
++
++	return 0;
++}
++
++static int dump_tw_sock(struct seq_file *seq, struct tcp_timewait_sock *=
+ttw,
++			uid_t uid, __u32 seq_num)
++{
++	struct inet_timewait_sock *tw =3D &ttw->tw_sk;
++	__u16 destp, srcp;
++	__be32 dest, src;
++	long delta;
++
++	delta =3D tw->tw_timer.expires - bpf_jiffies64();
++	dest =3D tw->tw_daddr;
++	src  =3D tw->tw_rcv_saddr;
++	destp =3D bpf_ntohs(tw->tw_dport);
++	srcp  =3D bpf_ntohs(tw->tw_sport);
++
++	BPF_SEQ_PRINTF(seq, "%4d: %08X:%04X %08X:%04X ",
++		       seq_num, src, srcp, dest, destp);
++
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n=
+",
++		       tw->tw_substate, 0, 0,
++		       3, jiffies_delta_to_clock_t(delta), 0, 0, 0, 0,
++		       tw->tw_refcnt.refs.counter, tw);
++
++	return 0;
++}
++
++static int dump_req_sock(struct seq_file *seq, struct tcp_request_sock *=
+treq,
++			 uid_t uid, __u32 seq_num)
++{
++	struct inet_request_sock *irsk =3D &treq->req;
++	struct request_sock *req =3D &irsk->req;
++	long ttd;
++
++	ttd =3D req->rsk_timer.expires - bpf_jiffies64();
++
++	if (ttd < 0)
++		ttd =3D 0;
++
++	BPF_SEQ_PRINTF(seq, "%4d: %08X:%04X %08X:%04X ",
++		       seq_num, irsk->ir_loc_addr,
++		       irsk->ir_num, irsk->ir_rmt_addr,
++		       bpf_ntohs(irsk->ir_rmt_port));
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n=
+",
++		       TCP_SYN_RECV, 0, 0, 1, jiffies_to_clock_t(ttd),
++		       req->num_timeout, uid, 0, 0, 0, req);
++
++	return 0;
++}
++
++SEC("iter/tcp")
++int dump_tcp4(struct bpf_iter__tcp *ctx)
++{
++	struct sock_common *sk_common =3D ctx->sk_common;
++	struct seq_file *seq =3D ctx->meta->seq;
++	struct tcp_timewait_sock *tw;
++	struct tcp_request_sock *req;
++	struct tcp_sock *tp;
++	uid_t uid =3D ctx->uid;
++	__u32 seq_num;
++
++	if (sk_common =3D=3D (void *)0)
++		return 0;
++
++	seq_num =3D ctx->meta->seq_num;
++	if (seq_num =3D=3D 0)
++		BPF_SEQ_PRINTF(seq, "  sl  "
++				    "local_address "
++				    "rem_address   "
++				    "st tx_queue rx_queue tr tm->when retrnsmt"
++				    "   uid  timeout inode\n");
++
++	if (sk_common->skc_family !=3D AF_INET)
++		return 0;
++
++	tp =3D bpf_skc_to_tcp_sock(sk_common);
++	if (tp) {
++		return dump_tcp_sock(seq, tp, uid, seq_num);
++	}
++
++	tw =3D bpf_skc_to_tcp_timewait_sock(sk_common);
++	if (tw)
++		return dump_tw_sock(seq, tw, uid, seq_num);
++
++	req =3D bpf_skc_to_tcp_request_sock(sk_common);
++	if (req)
++		return dump_req_sock(seq, req, uid, seq_num);
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_tcp6.c
+new file mode 100644
+index 000000000000..525a2c05e7a4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
+@@ -0,0 +1,277 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include "bpf_iter.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_endian.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++#define sk_v6_daddr	__sk_common.skc_v6_daddr
++#define sk_v6_rcv_saddr	__sk_common.skc_v6_rcv_saddr
++#define sk_state	__sk_common.skc_state
++#define sk_refcnt	__sk_common.skc_refcnt
++
++#define inet_dport	sk.__sk_common.skc_dport
++#define s6_addr32	in6_u.u6_addr32
++
++#define tw_v6_daddr	__tw_common.skc_v6_daddr
++#define tw_v6_rcv_saddr	__tw_common.skc_v6_rcv_saddr
++#define tw_dport	__tw_common.skc_dport
++#define tw_refcnt	__tw_common.skc_refcnt
++
++#define ir_v6_rmt_addr	req.__req_common.skc_v6_daddr
++#define ir_v6_loc_addr	req.__req_common.skc_v6_rcv_saddr
++#define ir_rmt_port	req.__req_common.skc_dport
++#define ir_num		req.__req_common.skc_num
++
++#define ICSK_TIME_RETRANS	1
++#define ICSK_TIME_PROBE0	3
++#define ICSK_TIME_LOSS_PROBE	5
++#define ICSK_TIME_REO_TIMEOUT	6
++
++#define TCP_INFINITE_SSTHRESH	0x7fffffff
++#define TCP_PINGPONG_THRESH	3
++
++#define AF_INET6		10
++
++static int hlist_unhashed_lockless(const struct hlist_node *h)
++{
++        return !(h->pprev);
++}
++
++static int timer_pending(const struct timer_list * timer)
++{
++	return !hlist_unhashed_lockless(&timer->entry);
++}
++
++extern unsigned CONFIG_HZ __kconfig __weak;
++
++#define USER_HZ		100
++#define NSEC_PER_SEC	1000000000ULL
++static clock_t jiffies_to_clock_t(unsigned long x)
++{
++	/* The implementation here tailored to a particular
++	 * setting of USER_HZ.
++	 */
++	u64 tick_nsec =3D (NSEC_PER_SEC + CONFIG_HZ/2) / CONFIG_HZ;
++	u64 user_hz_nsec =3D NSEC_PER_SEC / USER_HZ;
++
++	if ((tick_nsec % user_hz_nsec) =3D=3D 0) {
++		if (CONFIG_HZ < USER_HZ)
++			return x * (USER_HZ / CONFIG_HZ);
++		else
++			return x / (CONFIG_HZ / USER_HZ);
++	}
++	return x * tick_nsec/user_hz_nsec;
++}
++
++static clock_t jiffies_delta_to_clock_t(long delta)
++{
++	if (delta <=3D 0)
++		return 0;
++
++	return jiffies_to_clock_t(delta);
++}
++
++static long sock_i_ino(const struct sock *sk)
++{
++	const struct socket *sk_socket =3D sk->sk_socket;
++	const struct inode *inode;
++	unsigned long ino;
++
++	if (!sk_socket)
++		return 0;
++
++	inode =3D &container_of(sk_socket, struct socket_alloc, socket)->vfs_in=
+ode;
++	bpf_probe_read(&ino, sizeof(ino), &inode->i_ino);
++	return ino;
++}
++
++static bool
++inet_csk_in_pingpong_mode(const struct inet_connection_sock *icsk)
++{
++	return icsk->icsk_ack.pingpong >=3D TCP_PINGPONG_THRESH;
++}
++
++static bool tcp_in_initial_slowstart(const struct tcp_sock *tcp)
++{
++	return tcp->snd_ssthresh >=3D TCP_INFINITE_SSTHRESH;
++}
++
++static int dump_tcp6_sock(struct seq_file *seq, struct tcp6_sock *tp,
++			 uid_t uid, __u32 seq_num)
++{
++	const struct inet_connection_sock *icsk;
++	const struct fastopen_queue *fastopenq;
++	const struct in6_addr *dest, *src;
++	const struct inet_sock *inet;
++	unsigned long timer_expires;
++	const struct sock *sp;
++	__u16 destp, srcp;
++	int timer_active;
++	int rx_queue;
++	int state;
++
++	icsk =3D &tp->tcp.inet_conn;
++	inet =3D &icsk->icsk_inet;
++	sp =3D &inet->sk;
++	fastopenq =3D &icsk->icsk_accept_queue.fastopenq;
++
++	dest =3D &sp->sk_v6_daddr;
++	src =3D &sp->sk_v6_rcv_saddr;
++	destp =3D bpf_ntohs(inet->inet_dport);
++	srcp =3D bpf_ntohs(inet->inet_sport);
++
++	if (icsk->icsk_pending =3D=3D ICSK_TIME_RETRANS ||
++	    icsk->icsk_pending =3D=3D ICSK_TIME_REO_TIMEOUT ||
++	    icsk->icsk_pending =3D=3D ICSK_TIME_LOSS_PROBE) {
++		timer_active =3D 1;
++		timer_expires =3D icsk->icsk_timeout;
++	} else if (icsk->icsk_pending =3D=3D ICSK_TIME_PROBE0) {
++		timer_active =3D 4;
++		timer_expires =3D icsk->icsk_timeout;
++	} else if (timer_pending(&sp->sk_timer)) {
++		timer_active =3D 2;
++		timer_expires =3D sp->sk_timer.expires;
++	} else {
++		timer_active =3D 0;
++		timer_expires =3D bpf_jiffies64();
++	}
++
++	state =3D sp->sk_state;
++	if (state =3D=3D TCP_LISTEN) {
++		rx_queue =3D sp->sk_ack_backlog;
++	} else {
++		rx_queue =3D tp->tcp.rcv_nxt - tp->tcp.copied_seq;
++		if (rx_queue < 0)
++			rx_queue =3D 0;
++	}
++
++	BPF_SEQ_PRINTF(seq, "%4d: %08X%08X%08X%08X:%04X %08X%08X%08X%08X:%04X "=
+,
++		       seq_num,
++		       src->s6_addr32[0], src->s6_addr32[1],
++		       src->s6_addr32[2], src->s6_addr32[3], srcp,
++		       dest->s6_addr32[0], dest->s6_addr32[1],
++		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d ",
++		       state,
++		       tp->tcp.write_seq - tp->tcp.snd_una, rx_queue,
++		       timer_active,
++		       jiffies_delta_to_clock_t(timer_expires - bpf_jiffies64()),
++		       icsk->icsk_retransmits, uid,
++		       icsk->icsk_probes_out,
++		       sock_i_ino(sp),
++		       sp->sk_refcnt.refs.counter);
++	BPF_SEQ_PRINTF(seq, "%pK %lu %lu %u %u %d\n",
++		       tp,
++		       jiffies_to_clock_t(icsk->icsk_rto),
++		       jiffies_to_clock_t(icsk->icsk_ack.ato),
++		       (icsk->icsk_ack.quick << 1) | inet_csk_in_pingpong_mode(icsk),
++		       tp->tcp.snd_cwnd,
++		       state =3D=3D TCP_LISTEN ? fastopenq->max_qlen
++				: (tcp_in_initial_slowstart(&tp->tcp) ? -1
++								      : tp->tcp.snd_ssthresh)
++		      );
++
++	return 0;
++}
++
++static int dump_tw_sock(struct seq_file *seq, struct tcp_timewait_sock *=
+ttw,
++			uid_t uid, __u32 seq_num)
++{
++	struct inet_timewait_sock *tw =3D &ttw->tw_sk;
++	const struct in6_addr *dest, *src;
++	__u16 destp, srcp;
++	long delta;
++
++	delta =3D tw->tw_timer.expires - bpf_jiffies64();
++	dest =3D &tw->tw_v6_daddr;
++	src  =3D &tw->tw_v6_rcv_saddr;
++	destp =3D bpf_ntohs(tw->tw_dport);
++	srcp  =3D bpf_ntohs(tw->tw_sport);
++
++	BPF_SEQ_PRINTF(seq, "%4d: %08X%08X%08X%08X:%04X %08X%08X%08X%08X:%04X "=
+,
++		       seq_num,
++		       src->s6_addr32[0], src->s6_addr32[1],
++		       src->s6_addr32[2], src->s6_addr32[3], srcp,
++		       dest->s6_addr32[0], dest->s6_addr32[1],
++		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
++
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n=
+",
++		       tw->tw_substate, 0, 0,
++		       3, jiffies_delta_to_clock_t(delta), 0, 0, 0, 0,
++		       tw->tw_refcnt.refs.counter, tw);
++
++	return 0;
++}
++
++static int dump_req_sock(struct seq_file *seq, struct tcp_request_sock *=
+treq,
++			 uid_t uid, __u32 seq_num)
++{
++	struct inet_request_sock *irsk =3D &treq->req;
++	struct request_sock *req =3D &irsk->req;
++	struct in6_addr *src, *dest;
++	long ttd;
++
++	ttd =3D req->rsk_timer.expires - bpf_jiffies64();
++	src =3D &irsk->ir_v6_loc_addr;
++	dest =3D &irsk->ir_v6_rmt_addr;
++
++	if (ttd < 0)
++		ttd =3D 0;
++
++	BPF_SEQ_PRINTF(seq, "%4d: %08X%08X%08X%08X:%04X %08X%08X%08X%08X:%04X "=
+,
++		       seq_num,
++		       src->s6_addr32[0], src->s6_addr32[1],
++		       src->s6_addr32[2], src->s6_addr32[3],
++		       irsk->ir_num,
++		       dest->s6_addr32[0], dest->s6_addr32[1],
++		       dest->s6_addr32[2], dest->s6_addr32[3],
++		       bpf_ntohs(irsk->ir_rmt_port));
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n=
+",
++		       TCP_SYN_RECV, 0, 0, 1, jiffies_to_clock_t(ttd),
++		       req->num_timeout, uid, 0, 0, 0, req);
++
++	return 0;
++}
++
++SEC("iter/tcp")
++int dump_tcp6(struct bpf_iter__tcp *ctx)
++{
++	struct sock_common *sk_common =3D ctx->sk_common;
++	struct seq_file *seq =3D ctx->meta->seq;
++	struct tcp_timewait_sock *tw;
++	struct tcp_request_sock *req;
++	struct tcp6_sock *tp;
++	uid_t uid =3D ctx->uid;
++	__u32 seq_num;
++
++	if (sk_common =3D=3D (void *)0)
++		return 0;
++
++	seq_num =3D ctx->meta->seq_num;
++	if (seq_num =3D=3D 0)
++		BPF_SEQ_PRINTF(seq, "  sl  "
++				    "local_address                         "
++				    "remote_address                        "
++				    "st tx_queue rx_queue tr tm->when retrnsmt"
++				    "   uid  timeout inode\n");
++
++	if (sk_common->skc_family !=3D AF_INET6)
++		return 0;
++
++	tp =3D bpf_skc_to_tcp6_sock(sk_common);
++	if (tp)
++		return dump_tcp6_sock(seq, tp, uid, seq_num);
++
++	tw =3D bpf_skc_to_tcp_timewait_sock(sk_common);
++	if (tw)
++		return dump_tw_sock(seq, tw, uid, seq_num);
++
++	req =3D bpf_skc_to_tcp_request_sock(sk_common);
++	if (req)
++		return dump_req_sock(seq, req, uid, seq_num);
++
++	return 0;
++}
 --=20
 2.24.1
 
