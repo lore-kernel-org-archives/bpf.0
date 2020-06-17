@@ -2,44 +2,45 @@ Return-Path: <SRS0=fSoz=76=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6743C433E0
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9F80C433E1
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 82A62208D5
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F20B208D5
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="PahKFQuI"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="J6K2RHUH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726708AbgFQQVe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 12:21:34 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:1472 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726329AbgFQQVd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 17 Jun 2020 12:21:33 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05HGFYue032101
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:32 -0700
+        id S1726809AbgFQQVf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 12:21:35 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:14058 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726496AbgFQQVe (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 17 Jun 2020 12:21:34 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05HGJrTO018429
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:33 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=6bFP+Xzc2xdJu0TuKt9N3ue977E9TVzgGzNKPoftMUQ=;
- b=PahKFQuIgzjpFjCqWmVqLje3OJgn43k5q9C1qNCW/4yvZvsFUXbnsCUG4mVdqRZthvER
- KhzYtomGCOYaI12N7CA3tcyqYi4KEsjOe4TTS45hydkHDftY7etjBEkQjhAiAE1nPu98
- l3HGL3gOj9RbNyZd2stY2UO04iUovuRqx3Q= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31q660nbrx-2
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=UgcuYgzih3G3M8MeDPijOANANxFcJVy+/4hkmg4If7Q=;
+ b=J6K2RHUHrKWf+rUaNOOyDhbX6jvKHqiINm5n58850m+PEf4P3ahZUPWETArljpcKU/Oa
+ jWtbs5ZOJvA7YzDyttG8bJb6EEnD8JZaFpgge641oygQEjg5mYaS/7vCrEdrM/VWVUPf
+ 3sBzNv6dpjFQH4/agrT1dZMsogzngWXqS8U= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31q656dajs-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:32 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Wed, 17 Jun 2020 09:21:31 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 32B482EC350D; Wed, 17 Jun 2020 09:18:52 -0700 (PDT)
+        id 6AB132EC36B2; Wed, 17 Jun 2020 09:19:08 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -51,10 +52,12 @@ CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>,
         Quentin Monnet <quentin@isovalent.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 0/9] libbpf ksym support and bpftool show PIDs
-Date:   Wed, 17 Jun 2020 09:18:23 -0700
-Message-ID: <20200617161832.1438371-1-andriin@fb.com>
+Subject: [PATCH bpf-next 6/9] tools/bpftool: generalize BPF skeleton support and generate vmlinux.h
+Date:   Wed, 17 Jun 2020 09:18:29 -0700
+Message-ID: <20200617161832.1438371-7-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200617161832.1438371-1-andriin@fb.com>
+References: <20200617161832.1438371-1-andriin@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
@@ -62,103 +65,265 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-17_06:2020-06-17,2020-06-17 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=8
- clxscore=1015 mlxscore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0
- phishscore=0 mlxlogscore=999 adultscore=0 impostorscore=0 malwarescore=0
- cotscore=-2147483648 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006170129
+ bulkscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxlogscore=999 clxscore=1015 cotscore=-2147483648 malwarescore=0
+ spamscore=0 mlxscore=0 adultscore=0 impostorscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006170129
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set implements libbpf support for a second kind of special ext=
-erns,
-kernel symbols, in addition to existing Kconfig externs.=20
+Adapt Makefile to support BPF skeleton generation beyond single profiler.=
+bpf.c
+case. Also add vmlinux.h generation and switch profiler.bpf.c to use it.
 
-Right now, only untyped (const void) externs are supported, which, in
-C language, allow only to take their address. In the future, with kernel =
-BTF
-getting type info about its own global and per-cpu variables, libbpf will
-extend this support with BTF type info, which will allow to also directly
-access variable's contents and follow its internal pointers, similarly to=
- how
-it's possible today in fentry/fexit programs.
+clang-bpf-global-var feature is extended and renamed to clang-bpf-co-re t=
+o
+check for support of preserve_access_index attribute, which, together wit=
+h BTF
+for global variables, is the minimum requirement for modern BPF programs.
 
-As a first practical use of this functionality, bpftool gained ability to=
- show
-PIDs of processes that have open file descriptors for BPF map/program/lin=
-k/BTF
-object. It relies on iter/task_file BPF iterator program to extract this
-information efficiently.
-
-There was a bunch of bpftool refactoring (especially Makefile) necessary =
-to
-generalize bpftool's internal BPF program use. This includes generalizati=
-on of
-BPF skeletons support, addition of a vmlinux.h generation, extracting and
-building minimal subset of bpftool for bootstrapping.
-
-rfc -> v1:
-- show pids, if supported by kernel, always (Alexei);
-- switched iter output to binary to support showing process names;
-- update man pages;
-- fix few minor bugs in libbpf w.r.t. extern iteration.
-
-Cc: Hao Luo <haoluo@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Quentin Monnet <quentin@isovalent.com>
-
-Andrii Nakryiko (9):
-  libbpf: generalize libbpf externs support
-  libbpf: add support for extracting kernel symbol addresses
-  selftests/bpf: add __ksym extern selftest
-  tools/bpftool: move map/prog parsing logic into common
-  tools/bpftool: minimize bootstrap bpftool
-  tools/bpftool: generalize BPF skeleton support and generate vmlinux.h
-  libbpf: wrap source argument of BPF_CORE_READ macro in parentheses
-  tools/bpftool: show info for processes holding BPF map/prog/link/btf
-    FDs
-  tools/bpftool: add documentation and sample output for process info
-
- tools/bpf/bpftool/.gitignore                  |   5 +-
- .../bpf/bpftool/Documentation/bpftool-btf.rst |   5 +
- .../bpftool/Documentation/bpftool-link.rst    |  13 +-
- .../bpf/bpftool/Documentation/bpftool-map.rst |   8 +-
- .../bpftool/Documentation/bpftool-prog.rst    |  11 +
- tools/bpf/bpftool/Makefile                    |  60 ++-
- tools/bpf/bpftool/btf.c                       |   6 +
- tools/bpf/bpftool/common.c                    | 308 +++++++++++
- tools/bpf/bpftool/link.c                      |   7 +
- tools/bpf/bpftool/main.c                      |  12 +-
- tools/bpf/bpftool/main.h                      |  56 +-
- tools/bpf/bpftool/map.c                       | 163 +-----
- tools/bpf/bpftool/pids.c                      | 229 +++++++++
- tools/bpf/bpftool/prog.c                      | 159 +-----
- tools/bpf/bpftool/skeleton/pid_iter.bpf.c     |  80 +++
- tools/bpf/bpftool/skeleton/pid_iter.h         |  12 +
- tools/bpf/bpftool/skeleton/profiler.bpf.c     |   3 +-
- tools/bpf/bpftool/skeleton/profiler.h         |  46 --
- tools/build/feature/Makefile                  |   4 +-
- tools/build/feature/test-clang-bpf-co-re.c    |   9 +
- .../build/feature/test-clang-bpf-global-var.c |   4 -
- tools/lib/bpf/bpf_core_read.h                 |   8 +-
- tools/lib/bpf/bpf_helpers.h                   |   1 +
- tools/lib/bpf/btf.h                           |   5 +
- tools/lib/bpf/libbpf.c                        | 484 ++++++++++++------
- .../testing/selftests/bpf/prog_tests/ksyms.c  |  71 +++
- .../testing/selftests/bpf/progs/test_ksyms.c  |  32 ++
- 27 files changed, 1253 insertions(+), 548 deletions(-)
- create mode 100644 tools/bpf/bpftool/pids.c
- create mode 100644 tools/bpf/bpftool/skeleton/pid_iter.bpf.c
- create mode 100644 tools/bpf/bpftool/skeleton/pid_iter.h
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/bpf/bpftool/.gitignore                  |  3 +-
+ tools/bpf/bpftool/Makefile                    | 42 ++++++++++++-----
+ tools/bpf/bpftool/skeleton/profiler.bpf.c     |  3 +-
+ tools/bpf/bpftool/skeleton/profiler.h         | 46 -------------------
+ tools/build/feature/Makefile                  |  4 +-
+ tools/build/feature/test-clang-bpf-co-re.c    |  9 ++++
+ .../build/feature/test-clang-bpf-global-var.c |  4 --
+ 7 files changed, 45 insertions(+), 66 deletions(-)
  delete mode 100644 tools/bpf/bpftool/skeleton/profiler.h
  create mode 100644 tools/build/feature/test-clang-bpf-co-re.c
  delete mode 100644 tools/build/feature/test-clang-bpf-global-var.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ksyms.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms.c
 
+diff --git a/tools/bpf/bpftool/.gitignore b/tools/bpf/bpftool/.gitignore
+index ce721adf3161..3e601bcfd461 100644
+--- a/tools/bpf/bpftool/.gitignore
++++ b/tools/bpf/bpftool/.gitignore
+@@ -7,4 +7,5 @@ bpf-helpers.*
+ FEATURE-DUMP.bpftool
+ feature
+ libbpf
+-profiler.skel.h
++/*.skel.h
++/vmlinux.h
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index eec2da4d45d2..bdb6e38c6c5c 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -42,6 +42,7 @@ CFLAGS +=3D -O2
+ CFLAGS +=3D -W -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-in=
+itializers
+ CFLAGS +=3D $(filter-out -Wswitch-enum,$(EXTRA_WARNINGS))
+ CFLAGS +=3D -DPACKAGE=3D'"bpftool"' -D__EXPORTED_HEADERS__ \
++	-I$(if $(OUTPUT),$(OUTPUT),.) \
+ 	-I$(srctree)/kernel/bpf/ \
+ 	-I$(srctree)/tools/include \
+ 	-I$(srctree)/tools/include/uapi \
+@@ -61,9 +62,9 @@ CLANG ?=3D clang
+=20
+ FEATURE_USER =3D .bpftool
+ FEATURE_TESTS =3D libbfd disassembler-four-args reallocarray zlib libcap=
+ \
+-	clang-bpf-global-var
++	clang-bpf-co-re
+ FEATURE_DISPLAY =3D libbfd disassembler-four-args zlib libcap \
+-	clang-bpf-global-var
++	clang-bpf-co-re
+=20
+ check_feat :=3D 1
+ NON_CHECK_FEAT_TARGETS :=3D clean uninstall doc doc-clean doc-install do=
+c-uninstall
+@@ -121,20 +122,38 @@ BPFTOOL_BOOTSTRAP :=3D $(if $(OUTPUT),$(OUTPUT)bpft=
+ool-bootstrap,./bpftool-bootstr
+ BOOTSTRAP_OBJS =3D $(addprefix $(OUTPUT),main.o common.o json_writer.o g=
+en.o btf.o)
+ OBJS =3D $(patsubst %.c,$(OUTPUT)%.o,$(SRCS)) $(OUTPUT)disasm.o
+=20
+-ifneq ($(feature-clang-bpf-global-var),1)
+-	CFLAGS +=3D -DBPFTOOL_WITHOUT_SKELETONS
+-endif
++VMLINUX_BTF_PATHS :=3D $(if $(O),$(O)/vmlinux)				\
++		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)	\
++		     ../../../vmlinux					\
++		     /sys/kernel/btf/vmlinux				\
++		     /boot/vmlinux-$(shell uname -r)
++VMLINUX_BTF :=3D $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS)))=
+)
++
++ifneq ($(VMLINUX_BTF),)
++ifeq ($(feature-clang-bpf-co-re),1)
++
++BUILD_BPF_SKELS :=3D 1
++
++$(OUTPUT)vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL_BOOTSTRAP)
++	$(QUIET_GEN)$(BPFTOOL_BOOTSTRAP) btf dump file $< format c > $@
+=20
+-skeleton/profiler.bpf.o: skeleton/profiler.bpf.c $(LIBBPF)
++$(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF)
+ 	$(QUIET_CLANG)$(CLANG) \
++		-I$(if $(OUTPUT),$(OUTPUT),.) \
+ 		-I$(srctree)/tools/include/uapi/ \
+-		-I$(LIBBPF_PATH) -I$(srctree)/tools/lib \
++		-I$(LIBBPF_PATH) \
++		-I$(srctree)/tools/lib \
+ 		-g -O2 -target bpf -c $< -o $@
+=20
+-profiler.skel.h: $(BPFTOOL_BOOTSTRAP) skeleton/profiler.bpf.o
+-	$(QUIET_GEN)$(BPFTOOL_BOOTSTRAP) gen skeleton skeleton/profiler.bpf.o >=
+ $@
++$(OUTPUT)%.skel.h: $(OUTPUT)%.bpf.o $(BPFTOOL_BOOTSTRAP)
++	$(QUIET_GEN)$(BPFTOOL_BOOTSTRAP) gen skeleton $< > $@
++
++$(OUTPUT)prog.o: $(OUTPUT)profiler.skel.h
++
++endif
++endif
+=20
+-$(OUTPUT)prog.o: prog.c profiler.skel.h
++CFLAGS +=3D $(if BUILD_BPF_SKELS,,-DBPFTOOL_WITHOUT_SKELETONS)
+=20
+ $(OUTPUT)disasm.o: $(srctree)/kernel/bpf/disasm.c
+ 	$(QUIET_CC)$(CC) $(CFLAGS) -c -MMD -o $@ $<
+@@ -153,7 +172,7 @@ $(OUTPUT)%.o: %.c
+ clean: $(LIBBPF)-clean
+ 	$(call QUIET_CLEAN, bpftool)
+ 	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)*.o $(OUTPUT)*.d
+-	$(Q)$(RM) -- $(BPFTOOL_BOOTSTRAP) profiler.skel.h skeleton/profiler.bpf=
+.o
++	$(Q)$(RM) -- $(BPFTOOL_BOOTSTRAP) $(OUTPUT)*.skel.h $(OUTPUT)vmlinux.h
+ 	$(Q)$(RM) -r -- $(OUTPUT)libbpf/
+ 	$(call QUIET_CLEAN, core-gen)
+ 	$(Q)$(RM) -- $(OUTPUT)FEATURE-DUMP.bpftool
+@@ -188,6 +207,7 @@ FORCE:
+ zdep:
+ 	@if [ "$(feature-zlib)" !=3D "1" ]; then echo "No zlib found"; exit 1 ;=
+ fi
+=20
++.SECONDARY:
+ .PHONY: all FORCE clean install uninstall zdep
+ .PHONY: doc doc-clean doc-install doc-uninstall
+ .DEFAULT_GOAL :=3D all
+diff --git a/tools/bpf/bpftool/skeleton/profiler.bpf.c b/tools/bpf/bpftoo=
+l/skeleton/profiler.bpf.c
+index 20034c12f7c5..5207880b9204 100644
+--- a/tools/bpf/bpftool/skeleton/profiler.bpf.c
++++ b/tools/bpf/bpftool/skeleton/profiler.bpf.c
+@@ -1,7 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2020 Facebook
+-#include "profiler.h"
+-#include <linux/bpf.h>
++#include <vmlinux.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+=20
+diff --git a/tools/bpf/bpftool/skeleton/profiler.h b/tools/bpf/bpftool/sk=
+eleton/profiler.h
+deleted file mode 100644
+index 1f767e9510f7..000000000000
+--- a/tools/bpf/bpftool/skeleton/profiler.h
++++ /dev/null
+@@ -1,46 +0,0 @@
+-/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
+-#ifndef __PROFILER_H
+-#define __PROFILER_H
+-
+-/* useful typedefs from vmlinux.h */
+-
+-typedef signed char __s8;
+-typedef unsigned char __u8;
+-typedef short int __s16;
+-typedef short unsigned int __u16;
+-typedef int __s32;
+-typedef unsigned int __u32;
+-typedef long long int __s64;
+-typedef long long unsigned int __u64;
+-
+-typedef __s8 s8;
+-typedef __u8 u8;
+-typedef __s16 s16;
+-typedef __u16 u16;
+-typedef __s32 s32;
+-typedef __u32 u32;
+-typedef __s64 s64;
+-typedef __u64 u64;
+-
+-enum {
+-	false =3D 0,
+-	true =3D 1,
+-};
+-
+-#ifdef __CHECKER__
+-#define __bitwise__ __attribute__((bitwise))
+-#else
+-#define __bitwise__
+-#endif
+-
+-typedef __u16 __bitwise__ __le16;
+-typedef __u16 __bitwise__ __be16;
+-typedef __u32 __bitwise__ __le32;
+-typedef __u32 __bitwise__ __be32;
+-typedef __u64 __bitwise__ __le64;
+-typedef __u64 __bitwise__ __be64;
+-
+-typedef __u16 __bitwise__ __sum16;
+-typedef __u32 __bitwise__ __wsum;
+-
+-#endif /* __PROFILER_H */
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index b1f0321180f5..88371f7f0369 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -68,7 +68,7 @@ FILES=3D                                          \
+          test-llvm-version.bin			\
+          test-libaio.bin			\
+          test-libzstd.bin			\
+-         test-clang-bpf-global-var.bin		\
++         test-clang-bpf-co-re.bin		\
+          test-file-handle.bin			\
+          test-libpfm4.bin
+=20
+@@ -325,7 +325,7 @@ $(OUTPUT)test-libaio.bin:
+ $(OUTPUT)test-libzstd.bin:
+ 	$(BUILD) -lzstd
+=20
+-$(OUTPUT)test-clang-bpf-global-var.bin:
++$(OUTPUT)test-clang-bpf-co-re.bin:
+ 	$(CLANG) -S -g -target bpf -o - $(patsubst %.bin,%.c,$(@F)) |	\
+ 		grep BTF_KIND_VAR
+=20
+diff --git a/tools/build/feature/test-clang-bpf-co-re.c b/tools/build/fea=
+ture/test-clang-bpf-co-re.c
+new file mode 100644
+index 000000000000..cb5265bfdd83
+--- /dev/null
++++ b/tools/build/feature/test-clang-bpf-co-re.c
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Facebook
++
++struct test {
++	int a;
++	int b;
++} __attribute__((preserve_access_index));
++
++volatile struct test global_value_for_test =3D {};
+diff --git a/tools/build/feature/test-clang-bpf-global-var.c b/tools/buil=
+d/feature/test-clang-bpf-global-var.c
+deleted file mode 100644
+index 221f1481d52e..000000000000
+--- a/tools/build/feature/test-clang-bpf-global-var.c
++++ /dev/null
+@@ -1,4 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-// Copyright (c) 2020 Facebook
+-
+-volatile int global_value_for_test =3D 1;
 --=20
 2.24.1
 
