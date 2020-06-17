@@ -2,153 +2,267 @@ Return-Path: <SRS0=fSoz=76=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7182AC433E0
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 20:10:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD86CC433E0
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 20:21:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B1FE206DB
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 20:10:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99A4F2080D
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 20:21:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RTBffP1V"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="j6OPaf7/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726845AbgFQUKZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 16:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726809AbgFQUKY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Jun 2020 16:10:24 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AC6C06174E;
-        Wed, 17 Jun 2020 13:10:23 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id u8so1497702pje.4;
-        Wed, 17 Jun 2020 13:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sf2DciuJci1s3v36ZVasHTC5UZyw/h2w9sDVox6RVzk=;
-        b=RTBffP1V6FhXLiGiSWfmmgloSEMevbXsMFLj/Z4NoIZIOFj/rt3p/zwtGaYcSR4X8j
-         xhpaIicO51PT7j3zJD4/h22EFuUSU7QgCTw4hxS0NI8HU5ZsF26Jc/VzoqkkwBPza/iC
-         S6KVOYIUFaVdxetcGeQjN4rlXfv4Su/0JDo6oyCjec2JNhvM6qfprrGpum4dFKb9+WSL
-         vL5RcLKZSUfTKYf7f0710QuNLlqMfI/F6zCECZZz+ouE/q2lBuroRLI7z/GtWw7PN9EU
-         sruNEAxI8JwlMVbKRVHpJEnukLOzN0vPxwPhiZ1HkZte6hiRxSygwqMNcDBcpaXrRFCe
-         NS5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sf2DciuJci1s3v36ZVasHTC5UZyw/h2w9sDVox6RVzk=;
-        b=e9NjbqlxhCsCqywWyhsYz6Z50g0EUfJzFd/rVPGjsKBA9g2YPbap0n+z9yx4ZBM3lQ
-         9mIbDC0lQcYWzhpkBBbf4EGijT93HaRwn44CM/mMEYsVr/sUypy+Jf9tLD3mYdtrlh8W
-         jDkmmtTYSiMin/Z5vswcJnLqCKRNy2tippvebuE1BQspAzxkA56HFJIwLcLIkTGSVOKB
-         1vY+9RaWVE9g/g6ZgBLryPnDU263SNnP5oK5ZODSB/mmONRXMKnSPcr3R1FldYHwBvqV
-         WEKNOKVvOmMInWG4djOXqT/UiKJWdxyGnxVxKp/dDJ4PI+2BE1fSuQVq/3COVI+LQsAA
-         OGHQ==
-X-Gm-Message-State: AOAM532t1J8ceohK6EYpEBhoHzUzBRykX6coPJMIf4fm/3YcMAMKWCdl
-        KHW3L3DrIcrpHP0SO9bvN3g=
-X-Google-Smtp-Source: ABdhPJyFbaFTHdv2xqTmiazkdjPb7zgLq6KZuCABGV7qeGVfWdDBW2FcCfFGIQw1ZQu4WWCD1U+7bA==
-X-Received: by 2002:a17:902:be05:: with SMTP id r5mr637454pls.252.1592424622995;
-        Wed, 17 Jun 2020 13:10:22 -0700 (PDT)
-Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id j17sm360969pjy.22.2020.06.17.13.10.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Jun 2020 13:10:22 -0700 (PDT)
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     davem@davemloft.net
-Cc:     daniel@iogearbox.net, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
-Subject: pull-request: bpf 2020-06-17
-Date:   Wed, 17 Jun 2020 13:10:20 -0700
-Message-Id: <20200617201020.48276-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.13.5
+        id S1726496AbgFQUVV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 16:21:21 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46006 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726835AbgFQUVU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 17 Jun 2020 16:21:20 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05HK9xS4009186
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 13:21:20 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=7bVyTdMAFXmUN5jQXDncpOp5DVPQqlX5kqCf8xXUqtw=;
+ b=j6OPaf7/soE7UmlOqbye1styCfKgtyDWHKWgyZgcX5m3ANKhFvQClyRUXQELLq4WYAUj
+ SipuPM2FzGtMsQIZLn5J1Gzt9+OPe5Qzg6y+MmfcuCAipPHPrv/IHHorCmblW8Z6YMig
+ 5VbWTOUTRBqtpJrUa2ai9q8V+jfxt05VHh8= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31q65d7v6t-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 13:21:20 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 17 Jun 2020 13:21:18 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 28AF82EC3A1B; Wed, 17 Jun 2020 13:21:17 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next 2/2] selftests/bpf: add variable-length data concatenation pattern test
+Date:   Wed, 17 Jun 2020 13:21:12 -0700
+Message-ID: <20200617202112.2438062-2-andriin@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200617202112.2438062-1-andriin@fb.com>
+References: <20200617202112.2438062-1-andriin@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-17_11:2020-06-17,2020-06-17 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=919
+ bulkscore=0 adultscore=0 malwarescore=0 suspectscore=8 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 cotscore=-2147483648
+ phishscore=0 impostorscore=0 priorityscore=1501 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006170152
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi David,
+Add selftest that validates variable-length data reading and concatentati=
+on
+with one big shared data array. This is a common pattern in production us=
+e for
+monitoring and tracing applications, that potentially can read a lot of d=
+ata,
+but overall read much less. Such pattern allows to determine precisely wh=
+at
+amount of data needs to be sent over perfbuf/ringbuf and maximize efficie=
+ncy.
 
-The following pull-request contains BPF updates for your *net* tree.
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
 
-We've added 10 non-merge commits during the last 2 day(s) which contain
-a total of 14 files changed, 158 insertions(+), 59 deletions(-).
+N.B. This patch requires 02553b91da5d ("bpf: bpf_probe_read_kernel_str() =
+has to return amount of data read on success"),
+currently in bpf tree only.
 
-The main changes are:
+ .../testing/selftests/bpf/prog_tests/varlen.c | 56 +++++++++++
+ .../testing/selftests/bpf/progs/test_varlen.c | 96 +++++++++++++++++++
+ 2 files changed, 152 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/varlen.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_varlen.c
 
-1) Important fix for bpf_probe_read_kernel_str() return value, from Andrii.
+diff --git a/tools/testing/selftests/bpf/prog_tests/varlen.c b/tools/test=
+ing/selftests/bpf/prog_tests/varlen.c
+new file mode 100644
+index 000000000000..7533565e096d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/varlen.c
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++
++#include <test_progs.h>
++#include <time.h>
++#include "test_varlen.skel.h"
++
++#define CHECK_VAL(got, exp) \
++	CHECK((got) !=3D (exp), "check", "got %ld !=3D exp %ld\n", \
++	      (long)(got), (long)(exp))
++
++void test_varlen(void)
++{
++	int duration =3D 0, err;
++	struct test_varlen* skel;
++	struct test_varlen__bss *bss;
++	struct test_varlen__data *data;
++	const char str1[] =3D "Hello, ";
++	const char str2[] =3D "World!";
++	const char exp_str[] =3D "Hello, \0World!\0";
++	const int size1 =3D sizeof(str1);
++	const int size2 =3D sizeof(str2);
++
++	skel =3D test_varlen__open_and_load();
++	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
++		return;
++	bss =3D skel->bss;
++	data =3D skel->data;
++
++	err =3D test_varlen__attach(skel);
++	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
++		goto cleanup;
++
++	bss->test_pid =3D getpid();
++
++	/* trigger everything */
++	memcpy(bss->buf_in1, str1, size1);
++	memcpy(bss->buf_in2, str2, size2);
++	bss->capture =3D true;
++	usleep(1);
++	bss->capture =3D false;
++
++	CHECK_VAL(bss->payload1_len1, size1);
++	CHECK_VAL(bss->payload1_len2, size2);
++	CHECK_VAL(bss->total1, size1 + size2);
++	CHECK(memcmp(bss->payload1, exp_str, size1 + size2), "content_check",
++	      "doesn't match!");
++
++	CHECK_VAL(data->payload2_len1, size1);
++	CHECK_VAL(data->payload2_len2, size2);
++	CHECK_VAL(data->total2, size1 + size2);
++	CHECK(memcmp(data->payload2, exp_str, size1 + size2), "content_check",
++	      "doesn't match!");
++cleanup:
++	test_varlen__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_varlen.c b/tools/test=
+ing/selftests/bpf/progs/test_varlen.c
+new file mode 100644
+index 000000000000..09691852debf
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_varlen.c
+@@ -0,0 +1,96 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++
++#define MAX_LEN 256
++
++char buf_in1[MAX_LEN] =3D {};
++char buf_in2[MAX_LEN] =3D {};
++
++int test_pid =3D 0;
++bool capture =3D false;
++
++/* .bss */
++long payload1_len1 =3D 0;
++long payload1_len2 =3D 0;
++long total1 =3D 0;
++char payload1[MAX_LEN + MAX_LEN] =3D {};
++
++/* .data */
++int payload2_len1 =3D -1;
++int payload2_len2 =3D -1;
++int total2 =3D -1;
++char payload2[MAX_LEN + MAX_LEN] =3D { 1 };
++
++SEC("raw_tp/sys_enter")
++int handler64(void *regs)
++{
++	int pid =3D bpf_get_current_pid_tgid() >> 32;
++	void *payload =3D payload1;
++	u64 len;
++
++	/* ignore irrelevant invocations */
++	if (test_pid !=3D pid || !capture)
++		return 0;
++
++	len =3D bpf_probe_read_kernel_str(payload, MAX_LEN, &buf_in1[0]);
++	if (len <=3D MAX_LEN) {
++		payload +=3D len;
++		payload1_len1 =3D len;
++	}
++
++	len =3D bpf_probe_read_kernel_str(payload, MAX_LEN, &buf_in2[0]);
++	if (len <=3D MAX_LEN) {
++		payload +=3D len;
++		payload1_len2 =3D len;
++	}
++
++	total1 =3D payload - (void *)payload1;
++
++	return 0;
++}
++
++SEC("tp_btf/sys_enter")
++int handler32(void *regs)
++{
++	int pid =3D bpf_get_current_pid_tgid() >> 32;
++	void *payload =3D payload2;
++	u32 len;
++
++	/* ignore irrelevant invocations */
++	if (test_pid !=3D pid || !capture)
++		return 0;
++
++	len =3D bpf_probe_read_kernel_str(payload, MAX_LEN, &buf_in1[0]);
++	if (len <=3D MAX_LEN) {
++		payload +=3D len;
++		payload2_len1 =3D len;
++	}
++
++	len =3D bpf_probe_read_kernel_str(payload, MAX_LEN, &buf_in2[0]);
++	if (len <=3D MAX_LEN) {
++		payload +=3D len;
++		payload2_len2 =3D len;
++	}
++
++	total2 =3D payload - (void *)payload2;
++
++	return 0;
++}
++
++SEC("tp_btf/sys_exit")
++int handler_exit(void *regs)
++{
++	long bla;
++
++	if (bpf_probe_read_kernel(&bla, sizeof(bla), 0))
++		return 1;
++	else
++		return 0;
++}
++
++char LICENSE[] SEC("license") =3D "GPL";
+--=20
+2.24.1
 
-2) [gs]etsockopt fix for large optlen, from Stanislav.
-
-3) devmap allocation fix, from Toke.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-Thanks a lot!
-
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
-
-Andrii Nakryiko, Christoph Hellwig, Jesper Dangaard Brouer, John 
-Fastabend, Xiumei Mu
-
-----------------------------------------------------------------
-
-The following changes since commit c92cbaea3cc0a80807e386922f801eb6d3652c81:
-
-  net: dsa: sja1105: fix PTP timestamping with large tc-taprio cycles (2020-06-15 13:45:59 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
-
-for you to fetch changes up to 8030e250d882db174cbcd88273570ffb36a13080:
-
-  bpf: Document optval > PAGE_SIZE behavior for sockopt hooks (2020-06-17 10:54:05 -0700)
-
-----------------------------------------------------------------
-Andrii Nakryiko (3):
-      bpf: Fix definition of bpf_ringbuf_output() helper in UAPI comments
-      tools/bpftool: Add ringbuf map to a list of known map types
-      bpf: bpf_probe_read_kernel_str() has to return amount of data read on success
-
-Gaurav Singh (1):
-      bpf, xdp, samples: Fix null pointer dereference in *_user code
-
-Hangbin Liu (1):
-      xdp: Handle frame_sz in xdp_convert_zc_to_xdp_frame()
-
-Stanislav Fomichev (3):
-      bpf: Don't return EINVAL from {get,set}sockopt when optlen > PAGE_SIZE
-      selftests/bpf: Make sure optvals > PAGE_SIZE are bypassed
-      bpf: Document optval > PAGE_SIZE behavior for sockopt hooks
-
-Tobias Klauser (1):
-      tools, bpftool: Add ringbuf map type to map command docs
-
-Toke Høiland-Jørgensen (1):
-      devmap: Use bpf_map_area_alloc() for allocating hash buckets
-
- Documentation/bpf/prog_cgroup_sockopt.rst          | 14 ++++++
- include/uapi/linux/bpf.h                           |  2 +-
- kernel/bpf/cgroup.c                                | 53 +++++++++++++--------
- kernel/bpf/devmap.c                                | 10 ++--
- kernel/trace/bpf_trace.c                           |  2 +-
- net/core/xdp.c                                     |  1 +
- samples/bpf/xdp_monitor_user.c                     |  8 +---
- samples/bpf/xdp_redirect_cpu_user.c                |  7 +--
- samples/bpf/xdp_rxq_info_user.c                    | 13 ++----
- tools/bpf/bpftool/Documentation/bpftool-map.rst    |  2 +-
- tools/bpf/bpftool/map.c                            |  3 +-
- tools/include/uapi/linux/bpf.h                     |  2 +-
- .../testing/selftests/bpf/prog_tests/sockopt_sk.c  | 46 +++++++++++++++---
- tools/testing/selftests/bpf/progs/sockopt_sk.c     | 54 +++++++++++++++++++++-
- 14 files changed, 158 insertions(+), 59 deletions(-)
