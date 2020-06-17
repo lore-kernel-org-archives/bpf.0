@@ -2,217 +2,163 @@ Return-Path: <SRS0=fSoz=76=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BED91C433E1
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 01:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E253BC433E0
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 01:24:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9AF2A2080D
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 01:04:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B104C20C09
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 01:24:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a3QcOkj2"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TrlPqHJu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726626AbgFQBE3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Jun 2020 21:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S1726456AbgFQBYf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Jun 2020 21:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726329AbgFQBEX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Jun 2020 21:04:23 -0400
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1FFC06174E
-        for <bpf@vger.kernel.org>; Tue, 16 Jun 2020 18:04:20 -0700 (PDT)
-Received: by mail-qk1-x74a.google.com with SMTP id l6so578794qkk.14
-        for <bpf@vger.kernel.org>; Tue, 16 Jun 2020 18:04:20 -0700 (PDT)
+        with ESMTP id S1726044AbgFQBYf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Jun 2020 21:24:35 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3725C061573
+        for <bpf@vger.kernel.org>; Tue, 16 Jun 2020 18:24:34 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id q19so466033eja.7
+        for <bpf@vger.kernel.org>; Tue, 16 Jun 2020 18:24:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ElhOma4gQ0OPfIjSUT22cb9hvoULnOkjRgU5fDqO5Dg=;
-        b=a3QcOkj2WOe4iE4Y/U7Cs/HGVVwKjy4nSdV8+/SWygE7198rR4NXMQkqfh4WWk9lX6
-         MtfRiBvWNrsRNTSwBuPuhUSPNy8IdibcRUwxPE9dHhZzdTuHXI4aX9fLJG9YHiTVEWna
-         +KlSyK0jkVckAXXzPPe39JafLdZS1N58vUGnSUtZKupBndmrfJUbdbjrHyc4LxkkDH11
-         j4hvH6Bmo3UYB4nJ25j5b0ayaOY/ZkXUF1aKURGcHh3dsKquiZq6lvCy2+qRDhLCI5yy
-         lK3rtCBRG2QynjOJBvHTEhknqciSzUXr/wrbNG4WFexawyEknPOvq1cVGcn1yrti+yDB
-         X2xw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LSIqW5JaPcAnOUzpMadSGonBYMJj0ci6vy8jvMVGPVI=;
+        b=TrlPqHJuaClVx+nMFprjxAPaXgcujsepiYAf6aA6MNK0ox18J+ZydKJD7PtBeLAGD3
+         B+rOtasiL3jYbjLtDFj5iJHHmlca26k04Hv4PsFPzIkNfxCvk3i/8vzwVhpe36vu6f3F
+         X8T60gJnul/IcUAeVD20fk+Hr9xl9VdHvTFo4xg6R8Dl7czAAadBS8RCwilrFTZEJMnN
+         bNkbMvB2EE4r4uqnkHsqP9kz9qKCAxppnyXemVPRorBKPcHFEMHdZGmzF2xCf7OdGfAE
+         /IPYQthp3VArvW4c67UMTcj0DyMXRTUcmspeKM9W8qFdlMQy7VI2jJKJSUQ4LDNMW0Oq
+         uK2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ElhOma4gQ0OPfIjSUT22cb9hvoULnOkjRgU5fDqO5Dg=;
-        b=emkrKPbV/nJRMmcmDRRGGrT/638f1s2b7UquXYjJgmbqItmVoioCZHZXUCjAC/1vss
-         NdMe+ILNj/SQJO2RZojmJbw27I73Ync55SBoqEWhswN0AVWGcdcYlFFXqNCZMqbdaIfF
-         3MiJaE79CDWpTsgsY8DU6kQmA/7P2K9WQljw4YXVhaqe44l+RDNHrV2qmCjGzczvhMUm
-         krt+wO8LA9hWyd34BgOV1kaovPXj+ZM/2f0cwqXzkD9WwKGwY9zedepi9R1VqZj3v3lD
-         bZA7ZcpRqwxR0dw0pYhm6Lv9pnuCd1bV8XKkbvWkDwvOFxH4jq+h5xm57J0qy4TNTy9h
-         Rtjg==
-X-Gm-Message-State: AOAM530IBWce5e9bG+mq0Hl3vh/7LyrnBwXj2yqbmf/Btw4gvmkqqJu7
-        k3mY+DoWmKJcCcflyiVdKgPW/lw=
-X-Google-Smtp-Source: ABdhPJy85YW8JFPMFPvtrXCPq1/krJyL+LUXfqnfj0YU0WjOLN687+DjQbt70rUNaEOIfnzSFib2T6o=
-X-Received: by 2002:a0c:ecc6:: with SMTP id o6mr5106743qvq.243.1592355858412;
- Tue, 16 Jun 2020 18:04:18 -0700 (PDT)
-Date:   Tue, 16 Jun 2020 18:04:14 -0700
-Message-Id: <20200617010416.93086-1-sdf@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.27.0.290.gba653c62da-goog
-Subject: [PATCH bpf v5 1/3] bpf: don't return EINVAL from {get,set}sockopt
- when optlen > PAGE_SIZE
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>,
-        David Laight <David.Laight@ACULAB.COM>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LSIqW5JaPcAnOUzpMadSGonBYMJj0ci6vy8jvMVGPVI=;
+        b=aiqRxxBVgKCvOPWb4Jf/YgY44AKB5gDIhfda7x1tbvvLPcM1BIBZYRrOUKa2nogRDH
+         45tY2omgdPqxvWmI+QJD5JEcETGaNMDK8SYDjN6xbYL5ZYkFud1R5zkFIsHwBFAKMFFc
+         MxYi9BCXc5ysH882ZppiXjl0i3O7xfvGe/h0pHTNYP+S9Y8h0/kWAyrPLrrZlvCJ2O3R
+         TMv1ScejC/uyfGRhoL5URB3DM/rQJdWz5bpD5nj7V63umSj/zftbVT5FbuF3MxLsjhQC
+         EoaaOl6ajVXFwmszBSQ8n/TpKP7DZeucmhYlmTdvSGsWAgbL5ikR4G/DQRVJrXLMVaEx
+         JJDQ==
+X-Gm-Message-State: AOAM533OoILl/xgZ/ZIutc1U6zSLLZmMFtwCcpXo8xBYFDqcvCgj4zsT
+        wenGVRcXUMjiK6RGTJiAU+AoKc1ZsO6G4BakrD+k9A==
+X-Google-Smtp-Source: ABdhPJx0DeylCJAyby2sjEKfD2w7jyvHOO9nxQjQZBiLYBLw72FhCDGS5lznk94VKqitkn6bLqTUWrgm/dHJuivso+Q=
+X-Received: by 2002:a17:907:2718:: with SMTP id w24mr1386628ejk.487.1592357073192;
+ Tue, 16 Jun 2020 18:24:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200612223150.1177182-1-andriin@fb.com> <20200612223150.1177182-3-andriin@fb.com>
+ <CA+khW7hFZzp_K_xydSFw0O3LYB22_fC=Z4wG7i9Si+phGHn4cQ@mail.gmail.com>
+ <CAEf4BzYVY-sA_SRqxr-dxrkR5DPW6tv3tnNonK=4WPx6eEiZFQ@mail.gmail.com> <CA+khW7iU4oT3N2fYK6ym7XtWAnyD4fmiMpkuNybrJSROJeuk8A@mail.gmail.com>
+In-Reply-To: <CA+khW7iU4oT3N2fYK6ym7XtWAnyD4fmiMpkuNybrJSROJeuk8A@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 16 Jun 2020 18:24:21 -0700
+Message-ID: <CA+khW7gRw+4o2P+cDY+D08OPa8xH3msgQC7C5+9qMy0yashOsA@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 2/8] libbpf: add support for extracting
+ kernel symbol addresses
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Quentin Monnet <quentin@isovalent.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Attaching to these hooks can break iptables because its optval is
-usually quite big, or at least bigger than the current PAGE_SIZE limit.
-David also mentioned some SCTP options can be big (around 256k).
+Andrii,
 
-For such optvals we expose only the first PAGE_SIZE bytes to
-the BPF program. BPF program has two options:
-1. Set ctx->optlen to 0 to indicate that the BPF's optval
-   should be ignored and the kernel should use original userspace
-   value.
-2. Set ctx->optlen to something that's smaller than the PAGE_SIZE.
+Do you think we need to put the kernel's variables in one single
+DATASEC in vmlinux BTF? It looks like all the ksyms in the program
+will be under one ".ksyms" section, so we are not able to tell whether
+a ksym is from a percpu section or a .rodata section. Without this
+information, if the vmlinux has multiple DATASECs, the loader may need
+to traverse all of them. If vmlinux BTF has only one DATASEC, it
+matches the object's BTF better.
 
-v5:
-* use ctx->optlen == 0 with trimmed buffer (Alexei Starovoitov)
-* update the docs accordingly
+Right now, the percpu vars are in a ".data..percpu" DATASEC in my
+patch and the plan seems that we will introduce more DATASECs to hold
+other data.
 
-v4:
-* use temporary buffer to avoid optval == optval_end == NULL;
-  this removes the corner case in the verifier that might assume
-  non-zero PTR_TO_PACKET/PTR_TO_PACKET_END.
+Please let me know your insights here. Thanks.
 
-v3:
-* don't increase the limit, bypass the argument
+Hao
 
-v2:
-* proper comments formatting (Jakub Kicinski)
-
-Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
-Cc: David Laight <David.Laight@ACULAB.COM>
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- kernel/bpf/cgroup.c | 53 ++++++++++++++++++++++++++++-----------------
- 1 file changed, 33 insertions(+), 20 deletions(-)
-
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 4d76f16524cc..ac53102e244a 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1276,16 +1276,23 @@ static bool __cgroup_bpf_prog_array_is_empty(struct cgroup *cgrp,
- 
- static int sockopt_alloc_buf(struct bpf_sockopt_kern *ctx, int max_optlen)
- {
--	if (unlikely(max_optlen > PAGE_SIZE) || max_optlen < 0)
-+	if (unlikely(max_optlen < 0))
- 		return -EINVAL;
- 
-+	if (unlikely(max_optlen > PAGE_SIZE)) {
-+		/* We don't expose optvals that are greater than PAGE_SIZE
-+		 * to the BPF program.
-+		 */
-+		max_optlen = PAGE_SIZE;
-+	}
-+
- 	ctx->optval = kzalloc(max_optlen, GFP_USER);
- 	if (!ctx->optval)
- 		return -ENOMEM;
- 
- 	ctx->optval_end = ctx->optval + max_optlen;
- 
--	return 0;
-+	return max_optlen;
- }
- 
- static void sockopt_free_buf(struct bpf_sockopt_kern *ctx)
-@@ -1319,13 +1326,13 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
- 	 */
- 	max_optlen = max_t(int, 16, *optlen);
- 
--	ret = sockopt_alloc_buf(&ctx, max_optlen);
--	if (ret)
--		return ret;
-+	max_optlen = sockopt_alloc_buf(&ctx, max_optlen);
-+	if (max_optlen < 0)
-+		return max_optlen;
- 
- 	ctx.optlen = *optlen;
- 
--	if (copy_from_user(ctx.optval, optval, *optlen) != 0) {
-+	if (copy_from_user(ctx.optval, optval, min(*optlen, max_optlen)) != 0) {
- 		ret = -EFAULT;
- 		goto out;
- 	}
-@@ -1353,8 +1360,14 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
- 		/* export any potential modifications */
- 		*level = ctx.level;
- 		*optname = ctx.optname;
--		*optlen = ctx.optlen;
--		*kernel_optval = ctx.optval;
-+
-+		/* optlen == 0 from BPF indicates that we should
-+		 * use original userspace data.
-+		 */
-+		if (ctx.optlen != 0) {
-+			*optlen = ctx.optlen;
-+			*kernel_optval = ctx.optval;
-+		}
- 	}
- 
- out:
-@@ -1385,12 +1398,12 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
- 	    __cgroup_bpf_prog_array_is_empty(cgrp, BPF_CGROUP_GETSOCKOPT))
- 		return retval;
- 
--	ret = sockopt_alloc_buf(&ctx, max_optlen);
--	if (ret)
--		return ret;
--
- 	ctx.optlen = max_optlen;
- 
-+	max_optlen = sockopt_alloc_buf(&ctx, max_optlen);
-+	if (max_optlen < 0)
-+		return max_optlen;
-+
- 	if (!retval) {
- 		/* If kernel getsockopt finished successfully,
- 		 * copy whatever was returned to the user back
-@@ -1404,10 +1417,8 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
- 			goto out;
- 		}
- 
--		if (ctx.optlen > max_optlen)
--			ctx.optlen = max_optlen;
--
--		if (copy_from_user(ctx.optval, optval, ctx.optlen) != 0) {
-+		if (copy_from_user(ctx.optval, optval,
-+				   min(ctx.optlen, max_optlen)) != 0) {
- 			ret = -EFAULT;
- 			goto out;
- 		}
-@@ -1436,10 +1447,12 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
- 		goto out;
- 	}
- 
--	if (copy_to_user(optval, ctx.optval, ctx.optlen) ||
--	    put_user(ctx.optlen, optlen)) {
--		ret = -EFAULT;
--		goto out;
-+	if (ctx.optlen != 0) {
-+		if (copy_to_user(optval, ctx.optval, ctx.optlen) ||
-+		    put_user(ctx.optlen, optlen)) {
-+			ret = -EFAULT;
-+			goto out;
-+		}
- 	}
- 
- 	ret = ctx.retval;
--- 
-2.27.0.290.gba653c62da-goog
-
+On Tue, Jun 16, 2020 at 1:05 AM Hao Luo <haoluo@google.com> wrote:
+>
+> On Mon, Jun 15, 2020 at 12:08 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Mon, Jun 15, 2020 at 9:44 AM Hao Luo <haoluo@google.com> wrote:
+> > >
+> > > Thanks, Andrii,
+> > >
+> > > This change looks nice! A couple of comments:
+> > >
+> > > 1. A 'void' type variable looks slightly odd from a user's perspective. How about using 'u64' or 'void *'? Or at least, a named type, which aliases to 'void'?
+> >
+> > That choice is very deliberate one. `extern const void` is the right
+> > way in C language to access linker-generated symbols, for instance,
+> > which is quite similar to what the intent is her. Having void type is
+> > very explicit that you don't know/care about that value pointed to by
+> > extern address, the only operation you can perform is to get it's
+> > address.
+> >
+> > Once we add kernel variables support, that's when types will start to
+> > be specified and libbpf will do extra checks (type matching) and extra
+> > work (generating ldimm64 with BTF ID, for instance), to allow C code
+> > to access data pointed to by extern address.
+> >
+> > Switching type to u64 would be misleading in allowing C code to
+> > implicitly dereference value of extern. E.g., there is a big
+> > difference between:
+> >
+> > extern u64 bla;
+> >
+> > printf("%lld\n", bla); /* de-reference happens here, we get contents
+> > of memory pointed to by "bla" symbol */
+> >
+> > printf("%p\n", &bla); /* here we get value of linker symbol/address of
+> > extern variable */
+> >
+> > Currently I explicitly support only the latter and want to prevent the
+> > former, until we have kernel variables in BTF. Using `extern void`
+> > makes compiler enforce that only the &bla form is allowed. Everything
+> > else is compilation error.
+> >
+>
+> Ah, I see. I've been taking the extern variable as an actual variable
+> that contains the symbol's address, which is the first case. Your
+> approach makes sense. Thanks for explaining.
+>
+> > > 2. About the type size of ksym, IIUC, it looks strange that the values read from kallsyms have 8 bytes but their corresponding vs->size is 4 bytes and vs->type points to 4-byte int. Can we make them of the same size?
+> >
+> > That's a bit of a hack on my part. Variable needs to point to some
+> > type, which size will match the size of datasec's varinfo entry. This
+> > is checked and enforced by kernel. I'm looking for 4-byte int, because
+> > it's almost guaranteed that it will be present in program's BTF and I
+> > won't have to explicitly add it (it's because all BPF programs return
+> > int, so it must be in program's BTF already). While 8-byte long is
+> > less likely to be there.
+> >
+> > In the future, if we have a nicer way to extend BTF (and we will
+> > soon), we can do this a bit better, but either way that .ksyms DATASEC
+> > type isn't used for anything (there is no map with that DATASEC as a
+> > value type), so it doesn't matter.
+> >
+>
+> Thanks for explaining, Andrii.
+>
+> These explanations as comments in the code would be quite helpful, IMHO.
