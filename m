@@ -2,762 +2,97 @@ Return-Path: <SRS0=fSoz=76=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29433C433E0
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42125C433E0
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 17:00:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00841208D5
-	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 16:21:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1286F20773
+	for <bpf@archiver.kernel.org>; Wed, 17 Jun 2020 17:00:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="G/4zmdvZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dqowQoYC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726835AbgFQQVr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 12:21:47 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:49904 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726329AbgFQQVr (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 17 Jun 2020 12:21:47 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05HGGDPN001015
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:46 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=feWGpUWHA1a6mRfO2vCPEC6cRM6Z41YkJq8M3fe7Suc=;
- b=G/4zmdvZuReBz5x1WGo5j/mBPCRKqMvmzp3qUdgdl10n5xzeXCOlHer0nj+kpKcngTTp
- BnIs5w7/7Ga37RftrBDtNsKDENj37mnZUnovC92iv+/pBWWh2OQhWoKmNMcImrZMlVUr
- CPOeLUT/RAIESqqzBJuf9qJ4xV4Xa8UWsNg= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 31q65d5cmn-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 17 Jun 2020 09:21:45 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 17 Jun 2020 09:21:37 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 9D52B2EC3612; Wed, 17 Jun 2020 09:19:03 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>, Hao Luo <haoluo@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 4/9] tools/bpftool: move map/prog parsing logic into common
-Date:   Wed, 17 Jun 2020 09:18:27 -0700
-Message-ID: <20200617161832.1438371-5-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200617161832.1438371-1-andriin@fb.com>
-References: <20200617161832.1438371-1-andriin@fb.com>
+        id S1726881AbgFQRAg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 13:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726879AbgFQRAf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Jun 2020 13:00:35 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF51C06174E;
+        Wed, 17 Jun 2020 10:00:34 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id g2so1776787lfb.0;
+        Wed, 17 Jun 2020 10:00:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hpv46MVpGznrve282OD9AABsHhzo5kEAV9FAN+EOhcs=;
+        b=dqowQoYCthVBCfN1XzIxZwyErGKsnyQ4nKyajEz+2/DiD/Z4+UwfdCTFrvlcLUIw75
+         U4hoveujBWbVmE7hHRETZGM1RKHZ/6T5o3jd4AJA0Pnd+yX0MW7HIN6LxEmOHVvMTK98
+         htqaMy0jnkWrw75PskXf0zfrh5DJcfr/S+mq6i4Jw+wJg/vp8DcFyFP1ZLMzkz05L/NJ
+         nPyCh9yRZ3PPb8mRHr8D18Ot/bzCYMib6XTq0bHOtjjbAzeybQ6AlAVzcuv0cvkXeUHf
+         JqRFHHz35OkZvA1laatubHdByWuE58jukuntB/8YZ8pdOCdhCmDg0CwNSGYcDUZnj2/2
+         Mi4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hpv46MVpGznrve282OD9AABsHhzo5kEAV9FAN+EOhcs=;
+        b=cD8GTe0JvC/hBFeRpKKki6TRGx+rC7mNMp/BizgqzoE3T43Yh8rqyFHLgy7p7vV+qG
+         DRt264P9kKqIsFg2ip4BoCQeNSlrW+vY0NVg8KrERnyZyQ9A+BdrT6s97m6IagNpQ7mw
+         ssBmRoEPJd+rHeZzIE3H9P7g9xvLCzbaO7RKk0iGSBvn0gzxjBYHB5kJ+z9ieQvbX1VF
+         788bJ4yjiMIGpeWTgKFTKVaNyb7dRmNg7u+xEFBlFxRhOjBFGJjQhaMEiXXlTG0KBH5W
+         m9u94nRAp4jLytS7w90uwVSOid3+uzd3rV2GJdiQ/neRh5H+58L2H0TeCxcCy9mmuzVU
+         booA==
+X-Gm-Message-State: AOAM531uP4Tc4jZaKLM/FTrQGG4oxZEksKf42EFs4xpXKSqj52ya9RFt
+        AYHTvCRzLbbvDZosCzU8mcCFNW0L7QapOoSBy2Q=
+X-Google-Smtp-Source: ABdhPJxBrxK8hJxAKQ/K0aWdXmzkAQe1jOG752+Sk3C0mPTClOB07WUXlYlcr9jT5AkKBKkKQHeM98mDyxwxypV/dGo=
+X-Received: by 2002:a19:815:: with SMTP id 21mr1678328lfi.119.1592413229398;
+ Wed, 17 Jun 2020 10:00:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-17_06:2020-06-17,2020-06-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=672
- bulkscore=0 adultscore=0 malwarescore=0 suspectscore=29 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 cotscore=-2147483648
- phishscore=0 impostorscore=0 priorityscore=1501 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006170129
-X-FB-Internal: deliver
+References: <20200616103518.2963410-1-liuhangbin@gmail.com>
+ <20200616171233.1579d079@carbon> <5ee9b212af6a1_1d4a2af9b18625c434@john-XPS-13-9370.notmuch>
+In-Reply-To: <5ee9b212af6a1_1d4a2af9b18625c434@john-XPS-13-9370.notmuch>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 17 Jun 2020 10:00:17 -0700
+Message-ID: <CAADnVQ+0vFcvWt5E0VfjhMc-DEwZFjkv7h=BU9TBzKCkoAnMJg@mail.gmail.com>
+Subject: Re: [PATCH bpf] xdp: handle frame_sz in xdp_convert_zc_to_xdp_frame()
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move functions that parse map and prog by id/tag/name/etc outside of
-map.c/prog.c, respectively. These functions are used outside of those fil=
-es
-and are generic enough to be in common. This also makes heavy-weight map.=
-c and
-prog.c more decoupled from the rest of bpftool files and facilitates more
-lightweight bootstrap bpftool variant.
+On Tue, Jun 16, 2020 at 11:03 PM John Fastabend
+<john.fastabend@gmail.com> wrote:
+>
+> Jesper Dangaard Brouer wrote:
+> > On Tue, 16 Jun 2020 18:35:18 +0800
+> > Hangbin Liu <liuhangbin@gmail.com> wrote:
+> >
+> > > In commit 34cc0b338a61 we only handled the frame_sz in convert_to_xdp_frame().
+> > > This patch will also handle frame_sz in xdp_convert_zc_to_xdp_frame().
+> > >
+> > > Fixes: 34cc0b338a61 ("xdp: Xdp_frame add member frame_sz and handle in convert_to_xdp_frame")
+> > > Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> >
+> > Thanks for spotting and fixing this! :-)
+> >
+> > Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> >
+>
+> Acked-by: John Fastabend <john.fastabend@gmail.com>
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/bpf/bpftool/common.c | 308 +++++++++++++++++++++++++++++++++++++
- tools/bpf/bpftool/main.h   |   2 +
- tools/bpf/bpftool/map.c    | 156 -------------------
- tools/bpf/bpftool/prog.c   | 152 ------------------
- 4 files changed, 310 insertions(+), 308 deletions(-)
-
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index c47bdc65de8e..6c864c3683fc 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -581,3 +581,311 @@ print_all_levels(__maybe_unused enum libbpf_print_l=
-evel level,
- {
- 	return vfprintf(stderr, format, args);
- }
-+
-+static int prog_fd_by_nametag(void *nametag, int **fds, bool tag)
-+{
-+	unsigned int id =3D 0;
-+	int fd, nb_fds =3D 0;
-+	void *tmp;
-+	int err;
-+
-+	while (true) {
-+		struct bpf_prog_info info =3D {};
-+		__u32 len =3D sizeof(info);
-+
-+		err =3D bpf_prog_get_next_id(id, &id);
-+		if (err) {
-+			if (errno !=3D ENOENT) {
-+				p_err("%s", strerror(errno));
-+				goto err_close_fds;
-+			}
-+			return nb_fds;
-+		}
-+
-+		fd =3D bpf_prog_get_fd_by_id(id);
-+		if (fd < 0) {
-+			p_err("can't get prog by id (%u): %s",
-+			      id, strerror(errno));
-+			goto err_close_fds;
-+		}
-+
-+		err =3D bpf_obj_get_info_by_fd(fd, &info, &len);
-+		if (err) {
-+			p_err("can't get prog info (%u): %s",
-+			      id, strerror(errno));
-+			goto err_close_fd;
-+		}
-+
-+		if ((tag && memcmp(nametag, info.tag, BPF_TAG_SIZE)) ||
-+		    (!tag && strncmp(nametag, info.name, BPF_OBJ_NAME_LEN))) {
-+			close(fd);
-+			continue;
-+		}
-+
-+		if (nb_fds > 0) {
-+			tmp =3D realloc(*fds, (nb_fds + 1) * sizeof(int));
-+			if (!tmp) {
-+				p_err("failed to realloc");
-+				goto err_close_fd;
-+			}
-+			*fds =3D tmp;
-+		}
-+		(*fds)[nb_fds++] =3D fd;
-+	}
-+
-+err_close_fd:
-+	close(fd);
-+err_close_fds:
-+	while (--nb_fds >=3D 0)
-+		close((*fds)[nb_fds]);
-+	return -1;
-+}
-+
-+int prog_parse_fds(int *argc, char ***argv, int **fds)
-+{
-+	if (is_prefix(**argv, "id")) {
-+		unsigned int id;
-+		char *endptr;
-+
-+		NEXT_ARGP();
-+
-+		id =3D strtoul(**argv, &endptr, 0);
-+		if (*endptr) {
-+			p_err("can't parse %s as ID", **argv);
-+			return -1;
-+		}
-+		NEXT_ARGP();
-+
-+		(*fds)[0] =3D bpf_prog_get_fd_by_id(id);
-+		if ((*fds)[0] < 0) {
-+			p_err("get by id (%u): %s", id, strerror(errno));
-+			return -1;
-+		}
-+		return 1;
-+	} else if (is_prefix(**argv, "tag")) {
-+		unsigned char tag[BPF_TAG_SIZE];
-+
-+		NEXT_ARGP();
-+
-+		if (sscanf(**argv, BPF_TAG_FMT, tag, tag + 1, tag + 2,
-+			   tag + 3, tag + 4, tag + 5, tag + 6, tag + 7)
-+		    !=3D BPF_TAG_SIZE) {
-+			p_err("can't parse tag");
-+			return -1;
-+		}
-+		NEXT_ARGP();
-+
-+		return prog_fd_by_nametag(tag, fds, true);
-+	} else if (is_prefix(**argv, "name")) {
-+		char *name;
-+
-+		NEXT_ARGP();
-+
-+		name =3D **argv;
-+		if (strlen(name) > BPF_OBJ_NAME_LEN - 1) {
-+			p_err("can't parse name");
-+			return -1;
-+		}
-+		NEXT_ARGP();
-+
-+		return prog_fd_by_nametag(name, fds, false);
-+	} else if (is_prefix(**argv, "pinned")) {
-+		char *path;
-+
-+		NEXT_ARGP();
-+
-+		path =3D **argv;
-+		NEXT_ARGP();
-+
-+		(*fds)[0] =3D open_obj_pinned_any(path, BPF_OBJ_PROG);
-+		if ((*fds)[0] < 0)
-+			return -1;
-+		return 1;
-+	}
-+
-+	p_err("expected 'id', 'tag', 'name' or 'pinned', got: '%s'?", **argv);
-+	return -1;
-+}
-+
-+int prog_parse_fd(int *argc, char ***argv)
-+{
-+	int *fds =3D NULL;
-+	int nb_fds, fd;
-+
-+	fds =3D malloc(sizeof(int));
-+	if (!fds) {
-+		p_err("mem alloc failed");
-+		return -1;
-+	}
-+	nb_fds =3D prog_parse_fds(argc, argv, &fds);
-+	if (nb_fds !=3D 1) {
-+		if (nb_fds > 1) {
-+			p_err("several programs match this handle");
-+			while (nb_fds--)
-+				close(fds[nb_fds]);
-+		}
-+		fd =3D -1;
-+		goto exit_free;
-+	}
-+
-+	fd =3D fds[0];
-+exit_free:
-+	free(fds);
-+	return fd;
-+}
-+
-+static int map_fd_by_name(char *name, int **fds)
-+{
-+	unsigned int id =3D 0;
-+	int fd, nb_fds =3D 0;
-+	void *tmp;
-+	int err;
-+
-+	while (true) {
-+		struct bpf_map_info info =3D {};
-+		__u32 len =3D sizeof(info);
-+
-+		err =3D bpf_map_get_next_id(id, &id);
-+		if (err) {
-+			if (errno !=3D ENOENT) {
-+				p_err("%s", strerror(errno));
-+				goto err_close_fds;
-+			}
-+			return nb_fds;
-+		}
-+
-+		fd =3D bpf_map_get_fd_by_id(id);
-+		if (fd < 0) {
-+			p_err("can't get map by id (%u): %s",
-+			      id, strerror(errno));
-+			goto err_close_fds;
-+		}
-+
-+		err =3D bpf_obj_get_info_by_fd(fd, &info, &len);
-+		if (err) {
-+			p_err("can't get map info (%u): %s",
-+			      id, strerror(errno));
-+			goto err_close_fd;
-+		}
-+
-+		if (strncmp(name, info.name, BPF_OBJ_NAME_LEN)) {
-+			close(fd);
-+			continue;
-+		}
-+
-+		if (nb_fds > 0) {
-+			tmp =3D realloc(*fds, (nb_fds + 1) * sizeof(int));
-+			if (!tmp) {
-+				p_err("failed to realloc");
-+				goto err_close_fd;
-+			}
-+			*fds =3D tmp;
-+		}
-+		(*fds)[nb_fds++] =3D fd;
-+	}
-+
-+err_close_fd:
-+	close(fd);
-+err_close_fds:
-+	while (--nb_fds >=3D 0)
-+		close((*fds)[nb_fds]);
-+	return -1;
-+}
-+
-+int map_parse_fds(int *argc, char ***argv, int **fds)
-+{
-+	if (is_prefix(**argv, "id")) {
-+		unsigned int id;
-+		char *endptr;
-+
-+		NEXT_ARGP();
-+
-+		id =3D strtoul(**argv, &endptr, 0);
-+		if (*endptr) {
-+			p_err("can't parse %s as ID", **argv);
-+			return -1;
-+		}
-+		NEXT_ARGP();
-+
-+		(*fds)[0] =3D bpf_map_get_fd_by_id(id);
-+		if ((*fds)[0] < 0) {
-+			p_err("get map by id (%u): %s", id, strerror(errno));
-+			return -1;
-+		}
-+		return 1;
-+	} else if (is_prefix(**argv, "name")) {
-+		char *name;
-+
-+		NEXT_ARGP();
-+
-+		name =3D **argv;
-+		if (strlen(name) > BPF_OBJ_NAME_LEN - 1) {
-+			p_err("can't parse name");
-+			return -1;
-+		}
-+		NEXT_ARGP();
-+
-+		return map_fd_by_name(name, fds);
-+	} else if (is_prefix(**argv, "pinned")) {
-+		char *path;
-+
-+		NEXT_ARGP();
-+
-+		path =3D **argv;
-+		NEXT_ARGP();
-+
-+		(*fds)[0] =3D open_obj_pinned_any(path, BPF_OBJ_MAP);
-+		if ((*fds)[0] < 0)
-+			return -1;
-+		return 1;
-+	}
-+
-+	p_err("expected 'id', 'name' or 'pinned', got: '%s'?", **argv);
-+	return -1;
-+}
-+
-+int map_parse_fd(int *argc, char ***argv)
-+{
-+	int *fds =3D NULL;
-+	int nb_fds, fd;
-+
-+	fds =3D malloc(sizeof(int));
-+	if (!fds) {
-+		p_err("mem alloc failed");
-+		return -1;
-+	}
-+	nb_fds =3D map_parse_fds(argc, argv, &fds);
-+	if (nb_fds !=3D 1) {
-+		if (nb_fds > 1) {
-+			p_err("several maps match this handle");
-+			while (nb_fds--)
-+				close(fds[nb_fds]);
-+		}
-+		fd =3D -1;
-+		goto exit_free;
-+	}
-+
-+	fd =3D fds[0];
-+exit_free:
-+	free(fds);
-+	return fd;
-+}
-+
-+int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *in=
-fo_len)
-+{
-+	int err;
-+	int fd;
-+
-+	fd =3D map_parse_fd(argc, argv);
-+	if (fd < 0)
-+		return -1;
-+
-+	err =3D bpf_obj_get_info_by_fd(fd, info, info_len);
-+	if (err) {
-+		p_err("can't get map info: %s", strerror(errno));
-+		close(fd);
-+		return err;
-+	}
-+
-+	return fd;
-+}
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 5cdf0bc049bd..4338ab9d86d4 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -210,7 +210,9 @@ int do_iter(int argc, char **argv);
-=20
- int parse_u32_arg(int *argc, char ***argv, __u32 *val, const char *what)=
-;
- int prog_parse_fd(int *argc, char ***argv);
-+int prog_parse_fds(int *argc, char ***argv, int **fds);
- int map_parse_fd(int *argc, char ***argv);
-+int map_parse_fds(int *argc, char ***argv, int **fds);
- int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *in=
-fo_len);
-=20
- struct bpf_prog_linfo;
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index c5fac8068ba1..b9eee19b094c 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -92,162 +92,6 @@ static void *alloc_value(struct bpf_map_info *info)
- 		return malloc(info->value_size);
- }
-=20
--static int map_fd_by_name(char *name, int **fds)
--{
--	unsigned int id =3D 0;
--	int fd, nb_fds =3D 0;
--	void *tmp;
--	int err;
--
--	while (true) {
--		struct bpf_map_info info =3D {};
--		__u32 len =3D sizeof(info);
--
--		err =3D bpf_map_get_next_id(id, &id);
--		if (err) {
--			if (errno !=3D ENOENT) {
--				p_err("%s", strerror(errno));
--				goto err_close_fds;
--			}
--			return nb_fds;
--		}
--
--		fd =3D bpf_map_get_fd_by_id(id);
--		if (fd < 0) {
--			p_err("can't get map by id (%u): %s",
--			      id, strerror(errno));
--			goto err_close_fds;
--		}
--
--		err =3D bpf_obj_get_info_by_fd(fd, &info, &len);
--		if (err) {
--			p_err("can't get map info (%u): %s",
--			      id, strerror(errno));
--			goto err_close_fd;
--		}
--
--		if (strncmp(name, info.name, BPF_OBJ_NAME_LEN)) {
--			close(fd);
--			continue;
--		}
--
--		if (nb_fds > 0) {
--			tmp =3D realloc(*fds, (nb_fds + 1) * sizeof(int));
--			if (!tmp) {
--				p_err("failed to realloc");
--				goto err_close_fd;
--			}
--			*fds =3D tmp;
--		}
--		(*fds)[nb_fds++] =3D fd;
--	}
--
--err_close_fd:
--	close(fd);
--err_close_fds:
--	while (--nb_fds >=3D 0)
--		close((*fds)[nb_fds]);
--	return -1;
--}
--
--static int map_parse_fds(int *argc, char ***argv, int **fds)
--{
--	if (is_prefix(**argv, "id")) {
--		unsigned int id;
--		char *endptr;
--
--		NEXT_ARGP();
--
--		id =3D strtoul(**argv, &endptr, 0);
--		if (*endptr) {
--			p_err("can't parse %s as ID", **argv);
--			return -1;
--		}
--		NEXT_ARGP();
--
--		(*fds)[0] =3D bpf_map_get_fd_by_id(id);
--		if ((*fds)[0] < 0) {
--			p_err("get map by id (%u): %s", id, strerror(errno));
--			return -1;
--		}
--		return 1;
--	} else if (is_prefix(**argv, "name")) {
--		char *name;
--
--		NEXT_ARGP();
--
--		name =3D **argv;
--		if (strlen(name) > BPF_OBJ_NAME_LEN - 1) {
--			p_err("can't parse name");
--			return -1;
--		}
--		NEXT_ARGP();
--
--		return map_fd_by_name(name, fds);
--	} else if (is_prefix(**argv, "pinned")) {
--		char *path;
--
--		NEXT_ARGP();
--
--		path =3D **argv;
--		NEXT_ARGP();
--
--		(*fds)[0] =3D open_obj_pinned_any(path, BPF_OBJ_MAP);
--		if ((*fds)[0] < 0)
--			return -1;
--		return 1;
--	}
--
--	p_err("expected 'id', 'name' or 'pinned', got: '%s'?", **argv);
--	return -1;
--}
--
--int map_parse_fd(int *argc, char ***argv)
--{
--	int *fds =3D NULL;
--	int nb_fds, fd;
--
--	fds =3D malloc(sizeof(int));
--	if (!fds) {
--		p_err("mem alloc failed");
--		return -1;
--	}
--	nb_fds =3D map_parse_fds(argc, argv, &fds);
--	if (nb_fds !=3D 1) {
--		if (nb_fds > 1) {
--			p_err("several maps match this handle");
--			while (nb_fds--)
--				close(fds[nb_fds]);
--		}
--		fd =3D -1;
--		goto exit_free;
--	}
--
--	fd =3D fds[0];
--exit_free:
--	free(fds);
--	return fd;
--}
--
--int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *in=
-fo_len)
--{
--	int err;
--	int fd;
--
--	fd =3D map_parse_fd(argc, argv);
--	if (fd < 0)
--		return -1;
--
--	err =3D bpf_obj_get_info_by_fd(fd, info, info_len);
--	if (err) {
--		p_err("can't get map info: %s", strerror(errno));
--		close(fd);
--		return err;
--	}
--
--	return fd;
--}
--
- static int do_dump_btf(const struct btf_dumper *d,
- 		       struct bpf_map_info *map_info, void *key,
- 		       void *value)
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index a5eff83496f2..53d47610ff58 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -86,158 +86,6 @@ static void print_boot_time(__u64 nsecs, char *buf, u=
-nsigned int size)
- 		strftime(buf, size, "%FT%T%z", &load_tm);
- }
-=20
--static int prog_fd_by_nametag(void *nametag, int **fds, bool tag)
--{
--	unsigned int id =3D 0;
--	int fd, nb_fds =3D 0;
--	void *tmp;
--	int err;
--
--	while (true) {
--		struct bpf_prog_info info =3D {};
--		__u32 len =3D sizeof(info);
--
--		err =3D bpf_prog_get_next_id(id, &id);
--		if (err) {
--			if (errno !=3D ENOENT) {
--				p_err("%s", strerror(errno));
--				goto err_close_fds;
--			}
--			return nb_fds;
--		}
--
--		fd =3D bpf_prog_get_fd_by_id(id);
--		if (fd < 0) {
--			p_err("can't get prog by id (%u): %s",
--			      id, strerror(errno));
--			goto err_close_fds;
--		}
--
--		err =3D bpf_obj_get_info_by_fd(fd, &info, &len);
--		if (err) {
--			p_err("can't get prog info (%u): %s",
--			      id, strerror(errno));
--			goto err_close_fd;
--		}
--
--		if ((tag && memcmp(nametag, info.tag, BPF_TAG_SIZE)) ||
--		    (!tag && strncmp(nametag, info.name, BPF_OBJ_NAME_LEN))) {
--			close(fd);
--			continue;
--		}
--
--		if (nb_fds > 0) {
--			tmp =3D realloc(*fds, (nb_fds + 1) * sizeof(int));
--			if (!tmp) {
--				p_err("failed to realloc");
--				goto err_close_fd;
--			}
--			*fds =3D tmp;
--		}
--		(*fds)[nb_fds++] =3D fd;
--	}
--
--err_close_fd:
--	close(fd);
--err_close_fds:
--	while (--nb_fds >=3D 0)
--		close((*fds)[nb_fds]);
--	return -1;
--}
--
--static int prog_parse_fds(int *argc, char ***argv, int **fds)
--{
--	if (is_prefix(**argv, "id")) {
--		unsigned int id;
--		char *endptr;
--
--		NEXT_ARGP();
--
--		id =3D strtoul(**argv, &endptr, 0);
--		if (*endptr) {
--			p_err("can't parse %s as ID", **argv);
--			return -1;
--		}
--		NEXT_ARGP();
--
--		(*fds)[0] =3D bpf_prog_get_fd_by_id(id);
--		if ((*fds)[0] < 0) {
--			p_err("get by id (%u): %s", id, strerror(errno));
--			return -1;
--		}
--		return 1;
--	} else if (is_prefix(**argv, "tag")) {
--		unsigned char tag[BPF_TAG_SIZE];
--
--		NEXT_ARGP();
--
--		if (sscanf(**argv, BPF_TAG_FMT, tag, tag + 1, tag + 2,
--			   tag + 3, tag + 4, tag + 5, tag + 6, tag + 7)
--		    !=3D BPF_TAG_SIZE) {
--			p_err("can't parse tag");
--			return -1;
--		}
--		NEXT_ARGP();
--
--		return prog_fd_by_nametag(tag, fds, true);
--	} else if (is_prefix(**argv, "name")) {
--		char *name;
--
--		NEXT_ARGP();
--
--		name =3D **argv;
--		if (strlen(name) > BPF_OBJ_NAME_LEN - 1) {
--			p_err("can't parse name");
--			return -1;
--		}
--		NEXT_ARGP();
--
--		return prog_fd_by_nametag(name, fds, false);
--	} else if (is_prefix(**argv, "pinned")) {
--		char *path;
--
--		NEXT_ARGP();
--
--		path =3D **argv;
--		NEXT_ARGP();
--
--		(*fds)[0] =3D open_obj_pinned_any(path, BPF_OBJ_PROG);
--		if ((*fds)[0] < 0)
--			return -1;
--		return 1;
--	}
--
--	p_err("expected 'id', 'tag', 'name' or 'pinned', got: '%s'?", **argv);
--	return -1;
--}
--
--int prog_parse_fd(int *argc, char ***argv)
--{
--	int *fds =3D NULL;
--	int nb_fds, fd;
--
--	fds =3D malloc(sizeof(int));
--	if (!fds) {
--		p_err("mem alloc failed");
--		return -1;
--	}
--	nb_fds =3D prog_parse_fds(argc, argv, &fds);
--	if (nb_fds !=3D 1) {
--		if (nb_fds > 1) {
--			p_err("several programs match this handle");
--			while (nb_fds--)
--				close(fds[nb_fds]);
--		}
--		fd =3D -1;
--		goto exit_free;
--	}
--
--	fd =3D fds[0];
--exit_free:
--	free(fds);
--	return fd;
--}
--
- static void show_prog_maps(int fd, __u32 num_maps)
- {
- 	struct bpf_prog_info info =3D {};
---=20
-2.24.1
-
+Applied. Thanks
