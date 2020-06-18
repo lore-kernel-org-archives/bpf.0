@@ -4,52 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8581CC433DF
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:07:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 725D2C433E0
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:08:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B60D21974
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:07:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 475392088E
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:08:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592446060;
-	bh=84CiTjOmC6L1iB5HAl8uSFlVjOWCYawhCLhEijI3Jpk=;
+	s=default; t=1592446085;
+	bh=Qst3gLNK9wrok6P6osrJ4g7xTY41Syzr7EHJ/Cl8yVI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WC0FvLEWIqWifARf96VNnaKjBMi60bg2+QAZ/PrHuR7SHPSXMJ6DDf7fmj626z9Yi
-	 2MWFKe9XyOazExbgph/XknW2Ua6Ra9ZlsrOrgbcRxd6jhNrr2ejVq1zHQLxmBWgquJ
-	 oLtjLgryXMLrZXOoPFFGNCtn5k7tjRwVI5m5dbuI=
+	b=U9frIcZb7eHVviyuD5n+ePQus3n1MrgS5h2ggaPesRRy+6nF4rJQ10cESPJGyukZS
+	 uB/FrNs7yXOiZiXTVg/or5ht/rRIM7LoVivrTbGu+FxCeAZ0gGdwFC3iSa4jgwEW/8
+	 3fWNBnG953Hxth1TYiZWYdzKKWEmCtjZYOwoob6U=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729676AbgFRCHh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 22:07:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55176 "EHLO mail.kernel.org"
+        id S1730944AbgFRCH5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 22:07:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55080 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730699AbgFRBWQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:22:16 -0400
+        id S1730673AbgFRBWM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:22:12 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 14599221F0;
-        Thu, 18 Jun 2020 01:22:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE1E1221EF;
+        Thu, 18 Jun 2020 01:22:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443335;
-        bh=84CiTjOmC6L1iB5HAl8uSFlVjOWCYawhCLhEijI3Jpk=;
+        s=default; t=1592443332;
+        bh=Qst3gLNK9wrok6P6osrJ4g7xTY41Syzr7EHJ/Cl8yVI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C8pE7w4gwpKdS7XbVZOaKNOnLQJMRYQAJGcol5219RrH4UcNFwZtq2Mscu9xhIZMH
-         mpUzpVnk19jOpsd+CoUuYBTKmzOqqWoLhuD/adIAOSStC/XCSaXC8dSSat5rq2zRt6
-         zfdJof+FtRMh93bNg8YV1HERA1NRDjKXGHxzkXCM=
+        b=WORZfR56P3nzA12RbV9lh0uCfD/mUf71Cu6RF11UzBPMv/Rg412p7AXnLT3YqNoUL
+         5pK617GemWL7yBW1IrFnFehPEtENn+N96AoteDBz0m5mWJp4bee58RvqaxoCixql/k
+         Zc8EJJAeSSuvpUtkcKZP72K8Lqi+EvScpTUSb1z0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrey Ignatov <rdna@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+Cc:     Li RongQing <lirongqing@baidu.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 266/266] bpf: Fix memlock accounting for sock_hash
-Date:   Wed, 17 Jun 2020 21:16:31 -0400
-Message-Id: <20200618011631.604574-266-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 264/266] xdp: Fix xsk_generic_xmit errno
+Date:   Wed, 17 Jun 2020 21:16:29 -0400
+Message-Id: <20200618011631.604574-264-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
 References: <20200618011631.604574-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -58,57 +61,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrey Ignatov <rdna@fb.com>
+From: Li RongQing <lirongqing@baidu.com>
 
-[ Upstream commit 60e5ca8a64bad8f3e2e20a1e57846e497361c700 ]
+[ Upstream commit aa2cad0600ed2ca6a0ab39948d4db1666b6c962b ]
 
-Add missed bpf_map_charge_init() in sock_hash_alloc() and
-correspondingly bpf_map_charge_finish() on ENOMEM.
+Propagate sock_alloc_send_skb error code, not set it to
+EAGAIN unconditionally, when fail to allocate skb, which
+might cause that user space unnecessary loops.
 
-It was found accidentally while working on unrelated selftest that
-checks "map->memory.pages > 0" is true for all map types.
-
-Before:
-	# bpftool m l
-	...
-	3692: sockhash  name m_sockhash  flags 0x0
-		key 4B  value 4B  max_entries 8  memlock 0B
-
-After:
-	# bpftool m l
-	...
-	84: sockmap  name m_sockmap  flags 0x0
-		key 4B  value 4B  max_entries 8  memlock 4096B
-
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: Andrey Ignatov <rdna@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20200612000857.2881453-1-rdna@fb.com
+Fixes: 35fcde7f8deb ("xsk: support for Tx")
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Björn Töpel <bjorn.topel@intel.com>
+Link: https://lore.kernel.org/bpf/1591852266-24017-1-git-send-email-lirongqing@baidu.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/sock_map.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ net/xdp/xsk.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index b22e9f119180..6bbc118bf00e 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -837,11 +837,15 @@ static struct bpf_map *sock_hash_alloc(union bpf_attr *attr)
- 		err = -EINVAL;
- 		goto free_htab;
- 	}
-+	err = bpf_map_charge_init(&htab->map.memory, cost);
-+	if (err)
-+		goto free_htab;
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 7181a30666b4..f9eb5efb237c 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -362,10 +362,8 @@ static int xsk_generic_xmit(struct sock *sk)
  
- 	htab->buckets = bpf_map_area_alloc(htab->buckets_num *
- 					   sizeof(struct bpf_htab_bucket),
- 					   htab->map.numa_node);
- 	if (!htab->buckets) {
-+		bpf_map_charge_finish(&htab->map.memory);
- 		err = -ENOMEM;
- 		goto free_htab;
- 	}
+ 		len = desc.len;
+ 		skb = sock_alloc_send_skb(sk, len, 1, &err);
+-		if (unlikely(!skb)) {
+-			err = -EAGAIN;
++		if (unlikely(!skb))
+ 			goto out;
+-		}
+ 
+ 		skb_put(skb, len);
+ 		addr = desc.addr;
 -- 
 2.25.1
 
