@@ -7,45 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34208C433DF
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:28:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CE0DC433E0
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:29:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0AE6B214DB
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:28:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3CDCD2192A
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:29:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592447306;
-	bh=0jMV01Hr/k5fwyr9/IzNm3Brrq5ZzBS2voK5XEJ5s1c=;
+	s=default; t=1592447357;
+	bh=daUevcPQwSz8ypE0/GRlaqeC7kN8wLzXpFUXl6xgYxE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=HME8EGb6oeMKPr/GhAQQvi1ybouF6QEopRyQ+3EavlGpf482J26bnf2UvUipxiWMu
-	 2BbqNTiECT4MD+LqQfbifCM+mSOzSnbIzb4qm4UKDmBm2MDMDinM0454HzDH9zLd2B
-	 Na/3o7ZJIxTJ8a/ild0q8nOC8Z5Iml7ofnIBFuVc=
+	b=fscqupej5I2j2mVpxrHsOBNf37HKWDvh/tbrx7Vjrd5K/KGzVa9oIfQIDTrb7thwK
+	 N5IRJsS5MewLe8aO6AU1p8C/EJ7ZxYkuv1B5K8/jo3tNz3SMSKshZYxRB59oE1vgjj
+	 fpMD5XC8sSLggM8aHVBvZWpCrYitPEHhiaLLqJog=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729927AbgFRC2L (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 22:28:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46480 "EHLO mail.kernel.org"
+        id S1732718AbgFRC3C (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 22:29:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46816 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728513AbgFRBQ0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:16:26 -0400
+        id S1728628AbgFRBQO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:16:14 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 314F221D82;
-        Thu, 18 Jun 2020 01:16:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3145921D82;
+        Thu, 18 Jun 2020 01:16:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442986;
-        bh=0jMV01Hr/k5fwyr9/IzNm3Brrq5ZzBS2voK5XEJ5s1c=;
+        s=default; t=1592442974;
+        bh=daUevcPQwSz8ypE0/GRlaqeC7kN8wLzXpFUXl6xgYxE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tlvu5LEQYWQhtM5WmA+gaIl6/9ZO90JTBe8o+sdiiFIJPpz1FCh8SCdmeiFSzBiHx
-         aJ7VTGdiFN2ITSJwzCw9Nag/HAXtWKZPdbfA8BK9TMm5of6soKc95d0ggEFNS7NPIA
-         bLvhFUXU2DBUyeCq9cDBLbFJwMzQXMvwj9KLs5MA=
+        b=yXsyeDbfDPP2z3lrIkMJqmAOEHXmWAnHiNrd3VMV284yxd9zDKpPjNfYyZ73j277t
+         j4DZ+9XxzKXeEaoUdtQGCosjuuVOYeHjzqxkSbXBypQsF9fZNfgnLXOuB2LuWF2Uq5
+         O0A8BSJAoSmR+ZXTyz51SRRb2xn3aMWyqO5C/Rys=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrey Ignatov <rdna@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+Cc:     Tobias Klauser <tklauser@distanz.ch>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 386/388] bpf: Fix memlock accounting for sock_hash
-Date:   Wed, 17 Jun 2020 21:08:03 -0400
-Message-Id: <20200618010805.600873-386-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 377/388] tools, bpftool: Fix memory leak in codegen error cases
+Date:   Wed, 17 Jun 2020 21:07:54 -0400
+Message-Id: <20200618010805.600873-377-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
 References: <20200618010805.600873-1-sashal@kernel.org>
@@ -58,57 +60,42 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrey Ignatov <rdna@fb.com>
+From: Tobias Klauser <tklauser@distanz.ch>
 
-[ Upstream commit 60e5ca8a64bad8f3e2e20a1e57846e497361c700 ]
+[ Upstream commit d4060ac969563113101c79433f2ae005feca1c29 ]
 
-Add missed bpf_map_charge_init() in sock_hash_alloc() and
-correspondingly bpf_map_charge_finish() on ENOMEM.
+Free the memory allocated for the template on error paths in function
+codegen.
 
-It was found accidentally while working on unrelated selftest that
-checks "map->memory.pages > 0" is true for all map types.
-
-Before:
-	# bpftool m l
-	...
-	3692: sockhash  name m_sockhash  flags 0x0
-		key 4B  value 4B  max_entries 8  memlock 0B
-
-After:
-	# bpftool m l
-	...
-	84: sockmap  name m_sockmap  flags 0x0
-		key 4B  value 4B  max_entries 8  memlock 4096B
-
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: Andrey Ignatov <rdna@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20200612000857.2881453-1-rdna@fb.com
+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Link: https://lore.kernel.org/bpf/20200610130804.21423-1-tklauser@distanz.ch
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/sock_map.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/bpf/bpftool/gen.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 7e858c1dd711..591457fcbd02 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -984,11 +984,15 @@ static struct bpf_map *sock_hash_alloc(union bpf_attr *attr)
- 		err = -EINVAL;
- 		goto free_htab;
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index f8113b3646f5..f5960b48c861 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -225,6 +225,7 @@ static int codegen(const char *template, ...)
+ 		} else {
+ 			p_err("unrecognized character at pos %td in template '%s'",
+ 			      src - template - 1, template);
++			free(s);
+ 			return -EINVAL;
+ 		}
  	}
-+	err = bpf_map_charge_init(&htab->map.memory, cost);
-+	if (err)
-+		goto free_htab;
- 
- 	htab->buckets = bpf_map_area_alloc(htab->buckets_num *
- 					   sizeof(struct bpf_htab_bucket),
- 					   htab->map.numa_node);
- 	if (!htab->buckets) {
-+		bpf_map_charge_finish(&htab->map.memory);
- 		err = -ENOMEM;
- 		goto free_htab;
- 	}
+@@ -235,6 +236,7 @@ static int codegen(const char *template, ...)
+ 			if (*src != '\t') {
+ 				p_err("not enough tabs at pos %td in template '%s'",
+ 				      src - template - 1, template);
++				free(s);
+ 				return -EINVAL;
+ 			}
+ 		}
 -- 
 2.25.1
 
