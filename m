@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E7CCC433E1
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:30:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97DCBC433E1
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:31:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D50A2193E
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:30:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 760BC20720
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:31:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592447406;
-	bh=kE4r/DncWHkvPGYKD8JFmPlP3Dy3jow243D+vlxfFl4=;
+	s=default; t=1592447515;
+	bh=hWvsQYDqO6ODPc2VivaR0tA2XykBahjovGY7dkG8Gk0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=mzco195uMlQkRFh6Bj+oHgLOKOSED0nJpYcgHv9JGYn8XsFuj9uczO/PVYeyEyssv
-	 X7kauB07eR8TSB2xlorOMuMvIU09ZZO4n6hFGurj2tS7SqPRizJX7m1+a6d1zGUF8I
-	 YtHjLtViLrWVrVK+IJlqFafc18RxTi1/rF/Y9odg=
+	b=kAsUEyEVewEqm1w6H8kp1l4vDLdJBo3epteYqUloK5qXLOfeoQ8jR4mf5Nb2Uzb+0
+	 6GusLzXXcDyWhpfOcbOUpio9GLofcWQW25r5mImXemu+lVuXBcUTSVBhra15aNp2q4
+	 XsuQMJJUypGjQ397lv+BHHRLpLfQQp8ScPWvrXPE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728828AbgFRC3v (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 22:29:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46358 "EHLO mail.kernel.org"
+        id S1728945AbgFRBPZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 21:15:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45350 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729283AbgFRBQB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:16:01 -0400
+        id S1728727AbgFRBPR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:15:17 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 112C12088E;
-        Thu, 18 Jun 2020 01:15:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5C4532088E;
+        Thu, 18 Jun 2020 01:15:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442961;
-        bh=kE4r/DncWHkvPGYKD8JFmPlP3Dy3jow243D+vlxfFl4=;
+        s=default; t=1592442917;
+        bh=hWvsQYDqO6ODPc2VivaR0tA2XykBahjovGY7dkG8Gk0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nTTbtMmVfHW6AZE1kOfTycl3cXcd/upOqFbR+5RpAkqnCw7xzI47h5gh9on4Rk9Dd
-         PiPpzNY1BSDlt/Xma4KFUJQZOHOc8H37fb7NK5/t64N4zlWgSMmgC29tZr2x1GRcAA
-         M8fGBACy8jSGmS6V1U+OduEKHLEIqQcbkjB5OBhg=
+        b=MSJ4YnZkQFbsdQVpkI1DtK5v+O+YLp70YFL66+jJiny4i3Yq2E5soGiJ3CLYX0qi5
+         4jmSNY+pypFlSZN0DpdyDLSX+DllGr91Tw0qxGzGytL19zzl2O1w2yf1DcOBWrT0du
+         WlEgsee6uEitn78U21ObRzbWTcIGI02t6f0M5i08=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     dihu <anny.hu@linux.alibaba.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 367/388] bpf/sockmap: Fix kernel panic at __tcp_bpf_recvmsg
-Date:   Wed, 17 Jun 2020 21:07:44 -0400
-Message-Id: <20200618010805.600873-367-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 334/388] bpf: Fix an error code in check_btf_func()
+Date:   Wed, 17 Jun 2020 21:07:11 -0400
+Message-Id: <20200618010805.600873-334-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
 References: <20200618010805.600873-1-sashal@kernel.org>
@@ -61,61 +60,36 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: dihu <anny.hu@linux.alibaba.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 487082fb7bd2a32b66927d2b22e3a81b072b44f0 ]
+[ Upstream commit e7ed83d6fa1a00d0f2ad0327e73d3ea9e7ea8de1 ]
 
-When user application calls read() with MSG_PEEK flag to read data
-of bpf sockmap socket, kernel panic happens at
-__tcp_bpf_recvmsg+0x12c/0x350. sk_msg is not removed from ingress_msg
-queue after read out under MSG_PEEK flag is set. Because it's not
-judged whether sk_msg is the last msg of ingress_msg queue, the next
-sk_msg may be the head of ingress_msg queue, whose memory address of
-sg page is invalid. So it's necessary to add check codes to prevent
-this problem.
+This code returns success if the "info_aux" allocation fails but it
+should return -ENOMEM.
 
-[20759.125457] BUG: kernel NULL pointer dereference, address:
-0000000000000008
-[20759.132118] CPU: 53 PID: 51378 Comm: envoy Tainted: G            E
-5.4.32 #1
-[20759.140890] Hardware name: Inspur SA5212M4/YZMB-00370-109, BIOS
-4.1.12 06/18/2017
-[20759.149734] RIP: 0010:copy_page_to_iter+0xad/0x300
-[20759.270877] __tcp_bpf_recvmsg+0x12c/0x350
-[20759.276099] tcp_bpf_recvmsg+0x113/0x370
-[20759.281137] inet_recvmsg+0x55/0xc0
-[20759.285734] __sys_recvfrom+0xc8/0x130
-[20759.290566] ? __audit_syscall_entry+0x103/0x130
-[20759.296227] ? syscall_trace_enter+0x1d2/0x2d0
-[20759.301700] ? __audit_syscall_exit+0x1e4/0x290
-[20759.307235] __x64_sys_recvfrom+0x24/0x30
-[20759.312226] do_syscall_64+0x55/0x1b0
-[20759.316852] entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-Signed-off-by: dihu <anny.hu@linux.alibaba.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
-Link: https://lore.kernel.org/bpf/20200605084625.9783-1-anny.hu@linux.alibaba.com
+Fixes: 8c1b6e69dcc1 ("bpf: Compare BTF types of functions arguments with actual types")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/bpf/20200604085436.GA943001@mwanda
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_bpf.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 9c5540887fbe..7aa68f4aae6c 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -64,6 +64,9 @@ int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
- 		} while (i != msg_rx->sg.end);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index efe14cf24bc6..739d9ba3ba6b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7366,7 +7366,7 @@ static int check_btf_func(struct bpf_verifier_env *env,
+ 	const struct btf *btf;
+ 	void __user *urecord;
+ 	u32 prev_offset = 0;
+-	int ret = 0;
++	int ret = -ENOMEM;
  
- 		if (unlikely(peek)) {
-+			if (msg_rx == list_last_entry(&psock->ingress_msg,
-+						      struct sk_msg, list))
-+				break;
- 			msg_rx = list_next_entry(msg_rx, list);
- 			continue;
- 		}
+ 	nfuncs = attr->func_info_cnt;
+ 	if (!nfuncs)
 -- 
 2.25.1
 
