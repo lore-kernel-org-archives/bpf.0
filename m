@@ -2,102 +2,144 @@ Return-Path: <SRS0=N9AH=77=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E6B8C433DF
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 19:03:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16518C433E0
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 19:09:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5BDD8207DD
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 19:03:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7C02207E8
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 19:09:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zXdc+Iew"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ilcNBpp4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726940AbgFRTDs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Jun 2020 15:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
+        id S1727978AbgFRTJr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Jun 2020 15:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726882AbgFRTDp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Jun 2020 15:03:45 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2283FC06174E
-        for <bpf@vger.kernel.org>; Thu, 18 Jun 2020 12:03:45 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id t6so5389684otk.9
-        for <bpf@vger.kernel.org>; Thu, 18 Jun 2020 12:03:45 -0700 (PDT)
+        with ESMTP id S1728071AbgFRTJq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Jun 2020 15:09:46 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53081C06174E;
+        Thu, 18 Jun 2020 12:09:46 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id a13so6950435ilh.3;
+        Thu, 18 Jun 2020 12:09:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ADpL0Q3zTC6e1Jx91yWqfx4lOG/Qk7A5LHq5efYjizU=;
-        b=zXdc+Iew77X/SkJmNVS3AnASuo67NlOM+BlSZdEP3IZRmaZWpFjXdBnL/TDDW47UNE
-         gERfUPA/0FJZjzrg5lzgzXbQ4DtSx2AZZM2DeH0Is9zhBrrR5+PDD6Njbd9HTVGZLqzs
-         6wrpXWoIDi9EeooIAIDeqhoUsW/58eG95mkKtuCv3E0kj9rTrKALRh7UwP+AOj6jWGj2
-         BftyBMXCU8+IVyqpvpNU5f/mIjcWjwteXAUms6H7FGObOnqCuwJC56EkHsTb6rqvnfZ+
-         4ZqE1i16RseZjV6j5TTogARhsbv8/emFu4riwdjp0yKwNwPsfFQMUR5d6IE1GUCjhbf/
-         ItnQ==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=6IBczb4kdESWB+hwv7Y/EqKNNCjEHpD367/7iKBzQeg=;
+        b=ilcNBpp4n+Dk8Np0QClpGicPlk/LuLVga5lRALNS8fJJC4h/hzUvTHWbdS1t0HgKjT
+         nXMwTG3m2Yq59nhTPd8kQwvPMLH3/deFEdFj9ObWq9zew3S4fpeqJ6oH5lDZdyQwkCa1
+         SIuSRctv5D3gEZANQKuY92fo+s542Mtf5c+HW8iQthMypvJZAO7YAC94q9hDhI5rJXfi
+         KKr5A1skl2qQ4d2kUdryE+y4zH4NNXs/hM/WyhaFGAiZ4vHCjJX1YKW0Be0aRiJbHOij
+         ulKC36UlZNA/fe1LBM4Jdf1GYyLQMh+pkSJaiipWcXSeq6wCeVjQilPdR8Ajugv5QZrL
+         Mt+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ADpL0Q3zTC6e1Jx91yWqfx4lOG/Qk7A5LHq5efYjizU=;
-        b=ok2zvde+6xCFJqCEADyUgGS/3c2IPwMclqX3qEUj2zRXGlYgp5NKLXJDkJx9N/r1cA
-         +xoB0ryM3Jh0v7gNffCmm7FpSgYVyEzYu5wqosSVMuFY2GCP1RrVjFiWQL+cbMR5eJrV
-         H/dZt5iwldYkHGeIYq2Vv5g5Imbo1sHgWGPzyCTGgMfiFmKIhUlQ0wWNozEDIrHv9udI
-         r1Xun3Eiuz0OjPDSWKr9mbZl9k4HCbpM/oIcjX9OHOtNGpfhwE4SQfNwQzaZCMErVG7u
-         jRIxNZp7p48jmJNwO8o8p4fc1w291SRSl4FA/5MPJevpXxD0Ten0g0/zOKsa3xiA9vg7
-         TLGg==
-X-Gm-Message-State: AOAM533pWQcea24jE79RoHpOnvcMkrBw/gMoEBLM7LOplDTWXaHNCLw2
-        EUAPFnyAusE+iCoqQLP/7ip3XF3FpL+pH7bsyw809w==
-X-Google-Smtp-Source: ABdhPJxCkUjA0P6DBPfUyyXr1BNUHIZ+CloIY0fwFw9t8HJ59KT66Q5snQRMM3Ndd7LKzgbmQwSM2CPggwes7nv7yZk=
-X-Received: by 2002:a9d:1296:: with SMTP id g22mr182244otg.102.1592507023480;
- Thu, 18 Jun 2020 12:03:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHo-OoxJ6XBrBDXUxhCr0J58eOGq3FZu5+Rg6GLeeCjThrA8rg@mail.gmail.com>
- <CAADnVQKXbd986SrW2u4nxY-0nNuC7VoVM29=3LeD9potOJTdZQ@mail.gmail.com> <CAHo-Ooz4smKgTDTit4NAnaasUDLJLkX7iRcYouv4KY=AG5SUaA@mail.gmail.com>
-In-Reply-To: <CAHo-Ooz4smKgTDTit4NAnaasUDLJLkX7iRcYouv4KY=AG5SUaA@mail.gmail.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Thu, 18 Jun 2020 12:03:32 -0700
-Message-ID: <CALAqxLXgnqSM16=a3O1NyqYae1n_rMyw4_hcx5APm9s-h3TBtQ@mail.gmail.com>
-Subject: Re: capable_bpf_net_admin()
-To:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        BPF Mailing List <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Amit Pundir <amit.pundir@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=6IBczb4kdESWB+hwv7Y/EqKNNCjEHpD367/7iKBzQeg=;
+        b=KpKgJ2UDVA03JpyVDlxxmga8JHYt9YmVAa14EE5wLlEahqADWirv7+FKfr4Q0EuHIL
+         CY2SohSpkkUmPbwrc6Q4Hrv/rSjAekPrBoD/qEE8TET9sJNeN0D/R0BDC/sDo5TBGeAu
+         rDbKVhUE0kzofLjFjLrUPO7HVE63bisZ/WBRjni5qvcI3EiAiIYRaG46Go8OKbVs18vr
+         JXWdi9vR80wjwR68H9BriTkbFnEAdHnVkZ2hfc0d88jiaVAwh5SemS0CoODXXA2AbHrc
+         K+GGj0Lo/cTBmDO3rt7TVJ8KpSJx2/gQVGn7eiUcDwlIUbffZBaotrq47C7lmKpByDTR
+         E1XQ==
+X-Gm-Message-State: AOAM530ePb6ES7lnuAALSqiOpQBftJZEcsojgx8RLM6si7Ek2aWfOgdn
+        2dXK/Db5CjJS3VfijqhBLRE=
+X-Google-Smtp-Source: ABdhPJylgxbxpzMxEgHLmcmn7pqbENP1FanyK8WWk3EdKjG0Urfb8NmKdqnCt3ugJcvOW9l16EGIww==
+X-Received: by 2002:a92:dc47:: with SMTP id x7mr5929701ilq.130.1592507385742;
+        Thu, 18 Jun 2020 12:09:45 -0700 (PDT)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id t14sm1868055ilp.73.2020.06.18.12.09.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2020 12:09:44 -0700 (PDT)
+Date:   Thu, 18 Jun 2020 12:09:35 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Andrii Nakryiko <andriin@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, ast@fb.com, daniel@iogearbox.net
+Cc:     andrii.nakryiko@gmail.com, kernel-team@fb.com,
+        Andrii Nakryiko <andriin@fb.com>,
+        Christoph Hellwig <hch@lst.de>
+Message-ID: <5eebbbef8f904_6d292ad5e7a285b883@john-XPS-13-9370.notmuch>
+In-Reply-To: <20200616050432.1902042-2-andriin@fb.com>
+References: <20200616050432.1902042-1-andriin@fb.com>
+ <20200616050432.1902042-2-andriin@fb.com>
+Subject: RE: [PATCH bpf 2/2] selftests/bpf: add variable-length data
+ concatenation pattern test
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 3:20 AM Maciej =C5=BBenczykowski
-<zenczykowski@gmail.com> wrote:
->
-> John has all the details.  I'm just guessing.
->
-> But having actually looked at the code, commit 2c78ee898d8f1 ie.
->
-> kernel/bpf/syscall.c: bpf_prog_load()
-> +       if (is_net_admin_prog_type(type) && !capable(CAP_NET_ADMIN))
-> +               return -EPERM;
->
-> looks fishy, since our bpfloader only has CHOWN SYS_ADMIN, and the
-> maps/programs it creates/loads are used by netd which only has
-> NET_ADMIN (but not SYS_ADMIN).  Furthermore I don't really want to
-> grant it NET_ADMIN.
->
-> I think this should again be either NET_ADMIN or SYS_ADMIN.
+Andrii Nakryiko wrote:
+> Add selftest that validates variable-length data reading and concatentation
+> with one big shared data array. This is a common pattern in production use for
+> monitoring and tracing applications, that potentially can read a lot of data,
+> but usually reads much less. Such pattern allows to determine precisely what
+> amount of data needs to be sent over perfbuf/ringbuf and maximize efficiency.
+> 
+> This is the first BPF selftest that at all looks at and tests
+> bpf_probe_read_str()-like helper's return value, closing a major gap in BPF
+> testing. It surfaced the problem with bpf_probe_read_kernel_str() returning
+> 0 on success, instead of amount of bytes successfully read.
+> 
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> ---
 
-Just to confirm, reverting 2c78ee898d8f1 (which doesn't revert
-perfectly cleanly) seems to avoid the failure I was seeing.
+[...]
 
-And specifically in the chunk Maciej pointed out above, if we just
-switch the check to CAP_SYS_ADMIN it also avoids the problem.
+> +/* .data */
+> +int payload2_len1 = -1;
+> +int payload2_len2 = -1;
+> +int total2 = -1;
+> +char payload2[MAX_LEN + MAX_LEN] = { 1 };
+> +
+> +SEC("raw_tp/sys_enter")
+> +int handler64(void *regs)
+> +{
+> +	int pid = bpf_get_current_pid_tgid() >> 32;
+> +	void *payload = payload1;
+> +	u64 len;
+> +
+> +	/* ignore irrelevant invocations */
+> +	if (test_pid != pid || !capture)
+> +		return 0;
+> +
+> +	len = bpf_probe_read_kernel_str(payload, MAX_LEN, &buf_in1[0]);
+> +	if (len <= MAX_LEN) {
 
-Let me know if there is anything folks would like me to test!
+Took me a bit grok this. You are relying on the fact that in errors,
+such as a page fault, will encode to a large u64 value and so you
+verifier is happy. But most of my programs actually want to distinguish
+between legitimate errors on the probe vs buffer overrun cases.
 
-thanks
--john
+Can we make these tests do explicit check for errors. For example,
+
+  if (len < 0) goto abort;
+
+But this also breaks your types here. This is what I was trying to
+point out in the 1/2 patch thread. Wanted to make the point here as
+well in case it wasn't clear. Not sure I did the best job explaining.
+
+> +		payload += len;
+> +		payload1_len1 = len;
+> +	}
+> +
+> +	len = bpf_probe_read_kernel_str(payload, MAX_LEN, &buf_in2[0]);
+> +	if (len <= MAX_LEN) {
+> +		payload += len;
+> +		payload1_len2 = len;
+> +	}
+> +
+> +	total1 = payload - (void *)payload1;
+> +
+> +	return 0;
+> +}
