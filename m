@@ -2,111 +2,96 @@ Return-Path: <SRS0=N9AH=77=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2FC0C433E1
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:47:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60A37C433E0
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 05:01:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7259220776
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:47:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592448435;
-	bh=/GQEdGujnbIHnkLHzej4D5czD149ccqynnLQLOD0wVA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=PuapnaA7RT16jYLHXflPZDj9ehHolsqby4PoCCm4GOK3v1fG8HueYQO1/TfbIxeCN
-	 BapKkirDpczH+Ar1wEEi0QBX1wF+KMR/X20clMRGs1ezpN8texfSL2yqaECg4jHOfG
-	 MVBcLNM0tFB14EKIDinlMLwLU4TcE6B5AymVCZwY=
+	by mail.kernel.org (Postfix) with ESMTP id 3AB662186A
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 05:01:14 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V7fKP5QK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728703AbgFRCrI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 22:47:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37574 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728493AbgFRBK0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:10:26 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E7CFC2089D;
-        Thu, 18 Jun 2020 01:10:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442625;
-        bh=/GQEdGujnbIHnkLHzej4D5czD149ccqynnLQLOD0wVA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T53g89eUx2kZYZiGC3ivVVjTq9ekRaI1fB13lk3LVW5Gio7IA5+1AAyXXjCF5oLNG
-         vIgffQW63lmxq+oOF7XBiNsg0Q+56rexnOIsE23pmDl13PLSDxDd3q2fqmqYXNslcr
-         dnnMbtI19UNy/0HSe8/h8DmKbQnIgr61008bQ/NM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 104/388] bpf, sockhash: Fix memory leak when unlinking sockets in sock_hash_free
-Date:   Wed, 17 Jun 2020 21:03:21 -0400
-Message-Id: <20200618010805.600873-104-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
-References: <20200618010805.600873-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1726949AbgFRFBN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Jun 2020 01:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726220AbgFRFBN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Jun 2020 01:01:13 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FB7C06174E;
+        Wed, 17 Jun 2020 22:01:13 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id c75so4534528ila.8;
+        Wed, 17 Jun 2020 22:01:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=Hmlgb0kshx2wMfxkcoful6TZ5DnpZrqmHttLkGE0Vww=;
+        b=V7fKP5QKisZa73lR+j+mb8Jl7UQGqcX9UbEqzE44iEc1meYhzKmIqGDEwuKI6ZVG/7
+         F5RHdtegSJgwmNnSVJDiHOOYMT0GfdTDtZe6yoY3rAuAJULlYsZ0E37FZx2H9T5yRWuc
+         qQ1uJIjeyxBJ2TJInTPmGp9yd4sU3kQi3Az2dvMAbKfYXV67+JPxgLTm3FDhzoSMPvUZ
+         IZIn761JXoL21cX3LIcWb4Q3Z6IWRzjMjDoWnMXb9CprUeDa51lw9WNoHPgcMS7mY17M
+         DTc+VMn0d3ph3TrIVwcXYllI4kxAemwLGLBlqrf8J3TF3IUqS4f2b/7794SvlgAHcTpJ
+         iVvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=Hmlgb0kshx2wMfxkcoful6TZ5DnpZrqmHttLkGE0Vww=;
+        b=CEoyS7JO74qTVIFhSn7JmaGBnnqUbURfOn3JqAHG6rbTQ+fI91OFBaA8kk4qIFSJsw
+         Vqu82kvigyObTgSwwQFzHrj+eFPS1YD3Ym/k+xH5a6Yi4Jcbl2sRFgNZmrnhugNGUkXF
+         Ge2+qUB/RBkGFI6C3fJqvePGowZevcKmDDl7yZjjmsna06i8AzxTGObdyy6oQdAh2ZvZ
+         QT9NP5aoLrexJG2I/8I6cdeRjxNXLhN+loyCz6JdXokdZ8nT+hJbKDWhAMdWAbCmsQbT
+         HBrNeda1QB8m7ANt7W9nmNHzJGj2Jl7QXsdLuAAOcFKEtfhKD9MPjAuioTsJFgGjuMHg
+         UpAQ==
+X-Gm-Message-State: AOAM531Nq7Uq4pmVaCPTRJIoUEehkNp6tLktjAG5On++i+8yLWl46/xz
+        IDnTg3nrjl9eocSy2/GLAgc=
+X-Google-Smtp-Source: ABdhPJznI6iUQnMasNuNUdSCyYZBMz5VAwwcadz//pZMiqmXGQa98geqeEdgx0Tl+iiD082r/zWyoA==
+X-Received: by 2002:a05:6e02:f44:: with SMTP id y4mr2423963ilj.237.1592456472735;
+        Wed, 17 Jun 2020 22:01:12 -0700 (PDT)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id y5sm911010ilp.57.2020.06.17.22.01.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2020 22:01:11 -0700 (PDT)
+Date:   Wed, 17 Jun 2020 22:01:03 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Martin KaFai Lau <kafai@fb.com>, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+        netdev@vger.kernel.org
+Message-ID: <5eeaf50fec904_38b82b28075185c44c@john-XPS-13-9370.notmuch>
+In-Reply-To: <20200617174226.2301909-1-kafai@fb.com>
+References: <20200617174226.2301909-1-kafai@fb.com>
+Subject: RE: [PATCH bpf-next] bpf: sk_storage: Prefer to get a free cache_idx
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+Martin KaFai Lau wrote:
+> The cache_idx is currently picked by RR.  There is chance that
+> the same cache_idx will be picked by multiple sk_storage_maps while
+> other cache_idx is still unused.  e.g. It could happen when the
+> sk_storage_map is recreated during the restart of the user
+> space process.
+> 
+> This patch tracks the usage count for each cache_idx.  There is
+> 16 of them now (defined in BPF_SK_STORAGE_CACHE_SIZE).
+> It will try to pick the free cache_idx.  If none was found,
+> it would pick one with the minimal usage count.
+> 
+> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+> ---
+>  net/core/bpf_sk_storage.c | 41 +++++++++++++++++++++++++++++++++++----
+>  1 file changed, 37 insertions(+), 4 deletions(-)
+> 
 
-[ Upstream commit 33a7c831565c43a7ee2f38c7df4c4a40e1dfdfed ]
-
-When sockhash gets destroyed while sockets are still linked to it, we will
-walk the bucket lists and delete the links. However, we are not freeing the
-list elements after processing them, leaking the memory.
-
-The leak can be triggered by close()'ing a sockhash map when it still
-contains sockets, and observed with kmemleak:
-
-  unreferenced object 0xffff888116e86f00 (size 64):
-    comm "race_sock_unlin", pid 223, jiffies 4294731063 (age 217.404s)
-    hex dump (first 32 bytes):
-      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-      81 de e8 41 00 00 00 00 c0 69 2f 15 81 88 ff ff  ...A.....i/.....
-    backtrace:
-      [<00000000dd089ebb>] sock_hash_update_common+0x4ca/0x760
-      [<00000000b8219bd5>] sock_hash_update_elem+0x1d2/0x200
-      [<000000005e2c23de>] __do_sys_bpf+0x2046/0x2990
-      [<00000000d0084618>] do_syscall_64+0xad/0x9a0
-      [<000000000d96f263>] entry_SYSCALL_64_after_hwframe+0x49/0xb3
-
-Fix it by freeing the list element when we're done with it.
-
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Acked-by: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/bpf/20200607205229.2389672-2-jakub@cloudflare.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/core/sock_map.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index b08dfae10f88..7edbf1e92457 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -1024,6 +1024,7 @@ static void sock_hash_free(struct bpf_map *map)
- 			sock_map_unref(elem->sk, elem);
- 			rcu_read_unlock();
- 			release_sock(elem->sk);
-+			sock_hash_free_elem(htab, elem);
- 		}
- 	}
- 
--- 
-2.25.1
-
