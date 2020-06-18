@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B751C433DF
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 23:46:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59CF1C433E0
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 23:46:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E370020888
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 23:46:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35D4D207D8
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 23:46:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qSoTJvlj"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="eJ9aXhgq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbgFRXqe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Jun 2020 19:46:34 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:43282 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726001AbgFRXqd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 18 Jun 2020 19:46:33 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05INkXs9005219
-        for <bpf@vger.kernel.org>; Thu, 18 Jun 2020 16:46:33 -0700
+        id S1727019AbgFRXqg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Jun 2020 19:46:36 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:49242 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726001AbgFRXqg (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 18 Jun 2020 19:46:36 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 05INhewi005000
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2020 16:46:35 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=eVCfGBwz39LU/svwoTLby1J/LxKGSWubshX1i2Mel64=;
- b=qSoTJvljoXOj4t4CUWASlBQfySu7A8gDtX6An32lBuNSVG6ej44w1V6QIpwpQGG4RfN4
- B+uYPKh7anBSRNxjcLVpFkW4WIuiF6lXuG2rqsw7q6TO0TV1o3eVtS5S3zQSUxCevJ+E
- kiMnDGYM6sVYT/JX3jtWVikrdrS29vJ8Vag= 
+ bh=SMhyFLdD4X1h7RYfqJWuVJB9LC3jiUtXAga6EpQL8vI=;
+ b=eJ9aXhgql4IPbSxS1+TzqIt5bQXyKY4OmzjyORsJhUoMbe7e4t3k490HgG/HtxNR2vVt
+ SljwLQSfihFxC+m6aoGizjPm6y0DI9ixKu6oGwF91txkATcK0okUKn/BSuvj0Dk5LNqb
+ MBT011CEGBC3pHygq0T2JYZoUH67bzBWfI8= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31q65df5jh-2
+        by m0001303.ppops.net with ESMTP id 31q644y0ca-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 18 Jun 2020 16:46:33 -0700
+        for <bpf@vger.kernel.org>; Thu, 18 Jun 2020 16:46:35 -0700
 Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::f) by
  mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 18 Jun 2020 16:46:32 -0700
+ 15.1.1979.3; Thu, 18 Jun 2020 16:46:34 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id BACE83704D98; Thu, 18 Jun 2020 16:46:31 -0700 (PDT)
+        id 1FD873704C19; Thu, 18 Jun 2020 16:46:32 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 1/2] bpf: avoid verifier failure for 32bit pointer arithmetic
-Date:   Thu, 18 Jun 2020 16:46:31 -0700
-Message-ID: <20200618234631.3321118-1-yhs@fb.com>
+Subject: [PATCH bpf-next 2/2] tools/bpf: add verifier tests for 32bit pointer/scalar arithmetic
+Date:   Thu, 18 Jun 2020 16:46:32 -0700
+Message-ID: <20200618234632.3321367-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200618234631.3321026-1-yhs@fb.com>
 References: <20200618234631.3321026-1-yhs@fb.com>
@@ -60,75 +60,73 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-18_21:2020-06-18,2020-06-18 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=849
- bulkscore=0 adultscore=0 malwarescore=0 suspectscore=13 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 cotscore=-2147483648
- phishscore=0 impostorscore=0 priorityscore=1501 classifier=spam adjust=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ impostorscore=0 cotscore=-2147483648 suspectscore=13 adultscore=0
+ spamscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=641 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006180183
+ definitions=main-2006180182
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When do experiments with llvm (disabling instcombine and
-simplifyCFG), I hit the following error with test_seg6_loop.o.
-
-  ; R1=3Dpkt(id=3D0,off=3D0,r=3D48,imm=3D0), R7=3Dpkt(id=3D0,off=3D40,r=3D=
-48,imm=3D0)
-  w2 =3D w7
-  ; R2_w=3Dinv(id=3D0,umax_value=3D4294967295,var_off=3D(0x0; 0xffffffff)=
-)
-  w2 -=3D w1
-  R2 32-bit pointer arithmetic prohibited
-
-The corresponding source code is:
-  uint32_t srh_off
-  // srh and skb->data are all packet pointers
-  srh_off =3D (char *)srh - (char *)(long)skb->data;
-
-The verifier does not support 32-bit pointer/scalar arithmetic.
-
-Without my llvm change, the code looks like
-
-  ; R3=3Dpkt(id=3D0,off=3D40,r=3D48,imm=3D0), R8=3Dpkt(id=3D0,off=3D0,r=3D=
-48,imm=3D0)
-  w3 -=3D w8
-  ; R3_w=3Dinv(id=3D0)
-
-This is explicitly allowed in verifier if both registers are
-pointers and the opcode is BPF_SUB.
-
-To fix this problem, I changed the verifier to allow
-32-bit pointer/scaler BPF_SUB operations.
-
-At the source level, the issue could be workarounded with
-inline asm or changing "uint32_t srh_off" to "uint64_t srh_off".
-But I feel that verifier change might be the right thing to do.
+Added two test_verifier subtests for 32bit pointer/scalar arithmetic
+with BPF_SUB operator. They are passing verifier now.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- kernel/bpf/verifier.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../selftests/bpf/verifier/value_ptr_arith.c  | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 22d90d47befa..bbf6d655d6ad 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5052,6 +5052,11 @@ static int adjust_ptr_min_max_vals(struct bpf_veri=
-fier_env *env,
-=20
- 	if (BPF_CLASS(insn->code) !=3D BPF_ALU64) {
- 		/* 32-bit ALU ops on pointers produce (meaningless) scalars */
-+		if (opcode =3D=3D BPF_SUB && env->allow_ptr_leaks) {
-+			__mark_reg_unknown(env, dst_reg);
-+			return 0;
-+		}
-+
- 		verbose(env,
- 			"R%d 32-bit pointer arithmetic prohibited\n",
- 			dst);
+diff --git a/tools/testing/selftests/bpf/verifier/value_ptr_arith.c b/too=
+ls/testing/selftests/bpf/verifier/value_ptr_arith.c
+index 97ee658e1242..ed4e76b24649 100644
+--- a/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
++++ b/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
+@@ -836,3 +836,41 @@
+ 	.errstr =3D "R0 invalid mem access 'inv'",
+ 	.errstr_unpriv =3D "R0 pointer -=3D pointer prohibited",
+ },
++{
++	"32bit pkt_ptr -=3D scalar",
++	.insns =3D {
++	BPF_LDX_MEM(BPF_W, BPF_REG_8, BPF_REG_1,
++		    offsetof(struct __sk_buff, data_end)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_1,
++		    offsetof(struct __sk_buff, data)),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_7),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_6, 40),
++	BPF_JMP_REG(BPF_JGT, BPF_REG_6, BPF_REG_8, 2),
++	BPF_ALU32_REG(BPF_MOV, BPF_REG_4, BPF_REG_7),
++	BPF_ALU32_REG(BPF_SUB, BPF_REG_6, BPF_REG_4),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
++	.result =3D ACCEPT,
++	.flags =3D F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
++{
++	"32bit scalar -=3D pkt_ptr",
++	.insns =3D {
++	BPF_LDX_MEM(BPF_W, BPF_REG_8, BPF_REG_1,
++		    offsetof(struct __sk_buff, data_end)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_1,
++		    offsetof(struct __sk_buff, data)),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_7),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_6, 40),
++	BPF_JMP_REG(BPF_JGT, BPF_REG_6, BPF_REG_8, 2),
++	BPF_ALU32_REG(BPF_MOV, BPF_REG_4, BPF_REG_6),
++	BPF_ALU32_REG(BPF_SUB, BPF_REG_4, BPF_REG_7),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
++	.result =3D ACCEPT,
++	.flags =3D F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
 --=20
 2.24.1
 
