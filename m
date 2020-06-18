@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DCA8C433E0
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:29:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8B14C433E1
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:29:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2024A21534
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:29:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A6893214DB
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:29:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592447359;
-	bh=wZAQsidRpruN3wZZ4eFfyqQT1wMLScdt0Bf/+b16xc0=;
+	s=default; t=1592447367;
+	bh=WDQHmXC96rpYPjUTKUtm1BoCjSJ3P3r3dBXWh66rDzo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vC3f+VrYD1RIV1PLvgdsoSKGVKlCCiGbVF6eCyEQtV7Nc+AOhCvehAeC4SjUyXwSH
-	 VFF4RcZ1wHZWdCrmfeqWbRR+5Lmh0L5V46swQrMr1zxA8Ho6pSDvrECWxjtVJFaytv
-	 SfyvW+6NM+laMEjAU2C3qHD8bwKC9l7UiSjpPaPk=
+	b=0NziVYkdhXRp/1d7aNrnFE3WJ0lGPQ6GGjOiUI6bBWXJODnN2hFn6+2uwQIr+c1Zk
+	 PxSyFyfAJhidJyB0t8zxVTCJn5XlgBsuplJ+meJ5RnokkZVWlxqNsx/MEvAp5T0WQF
+	 pVV2xinZQHVzTiaMK2xNrLMEd2faiUKd6J0FtdWQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727783AbgFRC3S (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 22:29:18 -0400
+        id S1729558AbgFRBQM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 21:16:12 -0400
 Received: from mail.kernel.org ([198.145.29.99]:46568 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729236AbgFRBQN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:16:13 -0400
+        id S1729157AbgFRBQH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:16:07 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C536821D80;
-        Thu, 18 Jun 2020 01:16:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B45F72088E;
+        Thu, 18 Jun 2020 01:16:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442972;
-        bh=wZAQsidRpruN3wZZ4eFfyqQT1wMLScdt0Bf/+b16xc0=;
+        s=default; t=1592442966;
+        bh=WDQHmXC96rpYPjUTKUtm1BoCjSJ3P3r3dBXWh66rDzo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gcgeq3upFyJHTbc8PNH8MoMgsD11JyHSgh4nAriS5/bpV9nLl07sFcIWk+rPdF1Qo
-         neTmB+KxNv819DU0+2fxbh/yUlrfwGNpXcT7Frpv4r4m46acTk+hcYlBHcAHVqHHHu
-         /NkE6WDwj0JWVweu+HsPKmgZ108IzyUUrAEWFVdE=
+        b=PU81N6T0LuJK33UTkmdzDdU0E6rC75SfzmFf1T+1m9QVTkR0R7LrnPq7TklGkaQw/
+         lBpC7iy4NqxBjE+mDcBoTScPVpamZsh/PAG50StGQb5tzsISU7X7gWmZV6DPR+ptGf
+         IO/Y5HxQOxC1HhIUJDMIIrQAUwSslPPLJoFc1chs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     YiFei Zhu <zhuyifei1999@gmail.com>,
-        YiFei Zhu <zhuyifei@google.com>,
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Stanislav Fomichev <sdf@google.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 376/388] net/filter: Permit reading NET in load_bytes_relative when MAC not set
-Date:   Wed, 17 Jun 2020 21:07:53 -0400
-Message-Id: <20200618010805.600873-376-sashal@kernel.org>
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.7 371/388] libbpf: Handle GCC noreturn-turned-volatile quirk
+Date:   Wed, 17 Jun 2020 21:07:48 -0400
+Message-Id: <20200618010805.600873-371-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
 References: <20200618010805.600873-1-sashal@kernel.org>
@@ -61,71 +60,106 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: YiFei Zhu <zhuyifei1999@gmail.com>
+From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit 0f5d82f187e1beda3fe7295dfc500af266a5bd80 ]
+[ Upstream commit 32022fd97ed34f6812802bf1288db27c313576f4 ]
 
-Added a check in the switch case on start_header that checks for
-the existence of the header, and in the case that MAC is not set
-and the caller requests for MAC, -EFAULT. If the caller requests
-for NET then MAC's existence is completely ignored.
+Handle a GCC quirk of emitting extra volatile modifier in DWARF (and
+subsequently preserved in BTF by pahole) for function pointers marked as
+__attribute__((noreturn)). This was the way to mark such functions before GCC
+2.5 added noreturn attribute. Drop such func_proto modifiers, similarly to how
+it's done for array (also to handle GCC quirk/bug).
 
-There is no function to check NET header's existence and as far
-as cgroup_skb/egress is concerned it should always be set.
+Such volatile attribute is emitted by GCC only, so existing selftests can't
+express such test. Simple repro is like this (compiled with GCC + BTF
+generated by pahole):
 
-Removed for ptr >= the start of header, considering offset is
-bounded unsigned and should always be true. len <= end - mac is
-redundant to ptr + len <= end.
+  struct my_struct {
+      void __attribute__((noreturn)) (*fn)(int);
+  };
+  struct my_struct a;
 
-Fixes: 3eee1f75f2b9 ("bpf: fix bpf_skb_load_bytes_relative pkt length check")
-Signed-off-by: YiFei Zhu <zhuyifei@google.com>
+Without this fix, output will be:
+
+struct my_struct {
+    voidvolatile  (*fn)(int);
+};
+
+With the fix:
+
+struct my_struct {
+    void (*fn)(int);
+};
+
+Fixes: 351131b51c7a ("libbpf: add btf_dump API for BTF-to-C conversion")
+Reported-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
-Link: https://lore.kernel.org/bpf/76bb820ddb6a95f59a772ecbd8c8a336f646b362.1591812755.git.zhuyifei@google.com
+Tested-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Link: https://lore.kernel.org/bpf/20200610052335.2862559-1-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/filter.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ tools/lib/bpf/btf_dump.c | 33 ++++++++++++++++++++++++---------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 5cc9276f1023..9080d01d9638 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -1766,25 +1766,27 @@ BPF_CALL_5(bpf_skb_load_bytes_relative, const struct sk_buff *, skb,
- 	   u32, offset, void *, to, u32, len, u32, start_header)
- {
- 	u8 *end = skb_tail_pointer(skb);
--	u8 *net = skb_network_header(skb);
--	u8 *mac = skb_mac_header(skb);
--	u8 *ptr;
-+	u8 *start, *ptr;
- 
--	if (unlikely(offset > 0xffff || len > (end - mac)))
-+	if (unlikely(offset > 0xffff))
- 		goto err_clear;
- 
- 	switch (start_header) {
- 	case BPF_HDR_START_MAC:
--		ptr = mac + offset;
-+		if (unlikely(!skb_mac_header_was_set(skb)))
-+			goto err_clear;
-+		start = skb_mac_header(skb);
- 		break;
- 	case BPF_HDR_START_NET:
--		ptr = net + offset;
-+		start = skb_network_header(skb);
- 		break;
- 	default:
- 		goto err_clear;
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 0c28ee82834b..653dbbe2e366 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -1137,6 +1137,20 @@ static void btf_dump_emit_mods(struct btf_dump *d, struct id_stack *decl_stack)
  	}
+ }
  
--	if (likely(ptr >= mac && ptr + len <= end)) {
-+	ptr = start + offset;
++static void btf_dump_drop_mods(struct btf_dump *d, struct id_stack *decl_stack)
++{
++	const struct btf_type *t;
++	__u32 id;
 +
-+	if (likely(ptr + len <= end)) {
- 		memcpy(to, ptr, len);
- 		return 0;
- 	}
++	while (decl_stack->cnt) {
++		id = decl_stack->ids[decl_stack->cnt - 1];
++		t = btf__type_by_id(d->btf, id);
++		if (!btf_is_mod(t))
++			return;
++		decl_stack->cnt--;
++	}
++}
++
+ static void btf_dump_emit_name(const struct btf_dump *d,
+ 			       const char *name, bool last_was_ptr)
+ {
+@@ -1235,14 +1249,7 @@ static void btf_dump_emit_type_chain(struct btf_dump *d,
+ 			 * a const/volatile modifier for array, so we are
+ 			 * going to silently skip them here.
+ 			 */
+-			while (decls->cnt) {
+-				next_id = decls->ids[decls->cnt - 1];
+-				next_t = btf__type_by_id(d->btf, next_id);
+-				if (btf_is_mod(next_t))
+-					decls->cnt--;
+-				else
+-					break;
+-			}
++			btf_dump_drop_mods(d, decls);
+ 
+ 			if (decls->cnt == 0) {
+ 				btf_dump_emit_name(d, fname, last_was_ptr);
+@@ -1270,7 +1277,15 @@ static void btf_dump_emit_type_chain(struct btf_dump *d,
+ 			__u16 vlen = btf_vlen(t);
+ 			int i;
+ 
+-			btf_dump_emit_mods(d, decls);
++			/*
++			 * GCC emits extra volatile qualifier for
++			 * __attribute__((noreturn)) function pointers. Clang
++			 * doesn't do it. It's a GCC quirk for backwards
++			 * compatibility with code written for GCC <2.5. So,
++			 * similarly to extra qualifiers for array, just drop
++			 * them, instead of handling them.
++			 */
++			btf_dump_drop_mods(d, decls);
+ 			if (decls->cnt) {
+ 				btf_dump_printf(d, " (");
+ 				btf_dump_emit_type_chain(d, decls, fname, lvl);
 -- 
 2.25.1
 
