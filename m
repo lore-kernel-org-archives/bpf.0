@@ -4,54 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A2F6C433E1
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 01:54:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8581CC433DF
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:07:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EFD1B22245
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 01:54:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B60D21974
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:07:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592445277;
-	bh=kdeBSY1UQnQcLc3FNUD5cVVOyGyzCfr9P780dxsXKuk=;
+	s=default; t=1592446060;
+	bh=84CiTjOmC6L1iB5HAl8uSFlVjOWCYawhCLhEijI3Jpk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=UJYahdBOluueIeRiKUUfp1MLjW19Mq/aljGYW+tPCBsuEjfr9dBFoTJCBwvevkFBB
-	 tt5zeVmsIhGt3k5abt0XazmySF1zGqvg4WEj00Zxt1cRg+yGRn6+0DktJbEHbknguh
-	 NS/mVMYqnUTZck3SZ9po+TST8l4K4YdMqdvlnvKI=
+	b=WC0FvLEWIqWifARf96VNnaKjBMi60bg2+QAZ/PrHuR7SHPSXMJ6DDf7fmj626z9Yi
+	 2MWFKe9XyOazExbgph/XknW2Ua6Ra9ZlsrOrgbcRxd6jhNrr2ejVq1zHQLxmBWgquJ
+	 oLtjLgryXMLrZXOoPFFGNCtn5k7tjRwVI5m5dbuI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731547AbgFRBZ6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 21:25:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33184 "EHLO mail.kernel.org"
+        id S1729676AbgFRCHh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 22:07:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55176 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729472AbgFRBZ6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:25:58 -0400
+        id S1730699AbgFRBWQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:22:16 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7A69B20897;
-        Thu, 18 Jun 2020 01:25:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 14599221F0;
+        Thu, 18 Jun 2020 01:22:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443557;
-        bh=kdeBSY1UQnQcLc3FNUD5cVVOyGyzCfr9P780dxsXKuk=;
+        s=default; t=1592443335;
+        bh=84CiTjOmC6L1iB5HAl8uSFlVjOWCYawhCLhEijI3Jpk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PHFF1SfDSY1OlCZ0ZjgLf69QQcnPzZdHNGAeJvGwsYKwXU8YhLIMl3r7ZmmOCVfPj
-         1W55eOSz8ZSAlnNQQyQbjlk+9TZoyqNmtjvIqisEyezjQsdymZUwekPRKJHm10iiLj
-         2vZJCIkY8Z3eOQRGWsyIV5V5Xxo13y7Em5ok0JfI=
+        b=C8pE7w4gwpKdS7XbVZOaKNOnLQJMRYQAJGcol5219RrH4UcNFwZtq2Mscu9xhIZMH
+         mpUzpVnk19jOpsd+CoUuYBTKmzOqqWoLhuD/adIAOSStC/XCSaXC8dSSat5rq2zRt6
+         zfdJof+FtRMh93bNg8YV1HERA1NRDjKXGHxzkXCM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     YiFei Zhu <zhuyifei1999@gmail.com>,
-        YiFei Zhu <zhuyifei@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Stanislav Fomichev <sdf@google.com>,
+Cc:     Andrey Ignatov <rdna@fb.com>, Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 171/172] net/filter: Permit reading NET in load_bytes_relative when MAC not set
-Date:   Wed, 17 Jun 2020 21:22:17 -0400
-Message-Id: <20200618012218.607130-171-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 266/266] bpf: Fix memlock accounting for sock_hash
+Date:   Wed, 17 Jun 2020 21:16:31 -0400
+Message-Id: <20200618011631.604574-266-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618012218.607130-1-sashal@kernel.org>
-References: <20200618012218.607130-1-sashal@kernel.org>
+In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
+References: <20200618011631.604574-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,70 +58,56 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: YiFei Zhu <zhuyifei1999@gmail.com>
+From: Andrey Ignatov <rdna@fb.com>
 
-[ Upstream commit 0f5d82f187e1beda3fe7295dfc500af266a5bd80 ]
+[ Upstream commit 60e5ca8a64bad8f3e2e20a1e57846e497361c700 ]
 
-Added a check in the switch case on start_header that checks for
-the existence of the header, and in the case that MAC is not set
-and the caller requests for MAC, -EFAULT. If the caller requests
-for NET then MAC's existence is completely ignored.
+Add missed bpf_map_charge_init() in sock_hash_alloc() and
+correspondingly bpf_map_charge_finish() on ENOMEM.
 
-There is no function to check NET header's existence and as far
-as cgroup_skb/egress is concerned it should always be set.
+It was found accidentally while working on unrelated selftest that
+checks "map->memory.pages > 0" is true for all map types.
 
-Removed for ptr >= the start of header, considering offset is
-bounded unsigned and should always be true. len <= end - mac is
-redundant to ptr + len <= end.
+Before:
+	# bpftool m l
+	...
+	3692: sockhash  name m_sockhash  flags 0x0
+		key 4B  value 4B  max_entries 8  memlock 0B
 
-Fixes: 3eee1f75f2b9 ("bpf: fix bpf_skb_load_bytes_relative pkt length check")
-Signed-off-by: YiFei Zhu <zhuyifei@google.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
-Link: https://lore.kernel.org/bpf/76bb820ddb6a95f59a772ecbd8c8a336f646b362.1591812755.git.zhuyifei@google.com
+After:
+	# bpftool m l
+	...
+	84: sockmap  name m_sockmap  flags 0x0
+		key 4B  value 4B  max_entries 8  memlock 4096B
+
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Signed-off-by: Andrey Ignatov <rdna@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20200612000857.2881453-1-rdna@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/filter.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ net/core/sock_map.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 40b3af05c883..b5521b60a2d4 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -1730,25 +1730,27 @@ BPF_CALL_5(bpf_skb_load_bytes_relative, const struct sk_buff *, skb,
- 	   u32, offset, void *, to, u32, len, u32, start_header)
- {
- 	u8 *end = skb_tail_pointer(skb);
--	u8 *net = skb_network_header(skb);
--	u8 *mac = skb_mac_header(skb);
--	u8 *ptr;
-+	u8 *start, *ptr;
- 
--	if (unlikely(offset > 0xffff || len > (end - mac)))
-+	if (unlikely(offset > 0xffff))
- 		goto err_clear;
- 
- 	switch (start_header) {
- 	case BPF_HDR_START_MAC:
--		ptr = mac + offset;
-+		if (unlikely(!skb_mac_header_was_set(skb)))
-+			goto err_clear;
-+		start = skb_mac_header(skb);
- 		break;
- 	case BPF_HDR_START_NET:
--		ptr = net + offset;
-+		start = skb_network_header(skb);
- 		break;
- 	default:
- 		goto err_clear;
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index b22e9f119180..6bbc118bf00e 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -837,11 +837,15 @@ static struct bpf_map *sock_hash_alloc(union bpf_attr *attr)
+ 		err = -EINVAL;
+ 		goto free_htab;
  	}
++	err = bpf_map_charge_init(&htab->map.memory, cost);
++	if (err)
++		goto free_htab;
  
--	if (likely(ptr >= mac && ptr + len <= end)) {
-+	ptr = start + offset;
-+
-+	if (likely(ptr + len <= end)) {
- 		memcpy(to, ptr, len);
- 		return 0;
+ 	htab->buckets = bpf_map_area_alloc(htab->buckets_num *
+ 					   sizeof(struct bpf_htab_bucket),
+ 					   htab->map.numa_node);
+ 	if (!htab->buckets) {
++		bpf_map_charge_finish(&htab->map.memory);
+ 		err = -ENOMEM;
+ 		goto free_htab;
  	}
 -- 
 2.25.1
