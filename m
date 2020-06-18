@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 725D2C433E0
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:08:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81076C433E0
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:08:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 475392088E
-	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:08:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5397F2088E
+	for <bpf@archiver.kernel.org>; Thu, 18 Jun 2020 02:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592446085;
-	bh=Qst3gLNK9wrok6P6osrJ4g7xTY41Syzr7EHJ/Cl8yVI=;
+	s=default; t=1592446087;
+	bh=peDTYNHEUfnCxbVfnWAt6h2520DHO5lsM1u8rApleLw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=U9frIcZb7eHVviyuD5n+ePQus3n1MrgS5h2ggaPesRRy+6nF4rJQ10cESPJGyukZS
-	 uB/FrNs7yXOiZiXTVg/or5ht/rRIM7LoVivrTbGu+FxCeAZ0gGdwFC3iSa4jgwEW/8
-	 3fWNBnG953Hxth1TYiZWYdzKKWEmCtjZYOwoob6U=
+	b=2jZzkb73olpmtemZt1w2WywX2mlUUILLz3SXJPXeF7AkL/J4MDeZ1HrUq2HOPi8R3
+	 R0kRHyVOCxHxoYlWQ5LsINUKKnTa2hMdqiO1HtGHMB9clMd7U9JX1t7a8mMoWpwoEJ
+	 wlyKxYewTbp+LYowLKwuarzsrI95xD+vNoliSx24=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730944AbgFRCH5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Jun 2020 22:07:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55080 "EHLO mail.kernel.org"
+        id S1730666AbgFRBWK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Jun 2020 21:22:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730673AbgFRBWM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:22:12 -0400
+        id S1730659AbgFRBWJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:22:09 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AE1E1221EF;
-        Thu, 18 Jun 2020 01:22:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D45C920CC7;
+        Thu, 18 Jun 2020 01:22:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443332;
-        bh=Qst3gLNK9wrok6P6osrJ4g7xTY41Syzr7EHJ/Cl8yVI=;
+        s=default; t=1592443328;
+        bh=peDTYNHEUfnCxbVfnWAt6h2520DHO5lsM1u8rApleLw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WORZfR56P3nzA12RbV9lh0uCfD/mUf71Cu6RF11UzBPMv/Rg412p7AXnLT3YqNoUL
-         5pK617GemWL7yBW1IrFnFehPEtENn+N96AoteDBz0m5mWJp4bee58RvqaxoCixql/k
-         Zc8EJJAeSSuvpUtkcKZP72K8Lqi+EvScpTUSb1z0=
+        b=0thg7zgOyui1J80AsUEj5ocV8iU5Fu10sa1i2RevOY27/8mQZzgX0Tu1fVptKUWvv
+         TQojQJaW/ywL4j+L1z5et9yrZ51PwtCsEq+tkyAYRaPSCIbzCQmyO6HxhG2Z6J6MMf
+         5xt88RaS+1YOGWqepUSScvZt7SGiXRwNejEEcbKM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Li RongQing <lirongqing@baidu.com>,
+Cc:     YiFei Zhu <zhuyifei1999@gmail.com>,
+        YiFei Zhu <zhuyifei@google.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Stanislav Fomichev <sdf@google.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 264/266] xdp: Fix xsk_generic_xmit errno
-Date:   Wed, 17 Jun 2020 21:16:29 -0400
-Message-Id: <20200618011631.604574-264-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 261/266] net/filter: Permit reading NET in load_bytes_relative when MAC not set
+Date:   Wed, 17 Jun 2020 21:16:26 -0400
+Message-Id: <20200618011631.604574-261-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
 References: <20200618011631.604574-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -61,40 +61,71 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Li RongQing <lirongqing@baidu.com>
+From: YiFei Zhu <zhuyifei1999@gmail.com>
 
-[ Upstream commit aa2cad0600ed2ca6a0ab39948d4db1666b6c962b ]
+[ Upstream commit 0f5d82f187e1beda3fe7295dfc500af266a5bd80 ]
 
-Propagate sock_alloc_send_skb error code, not set it to
-EAGAIN unconditionally, when fail to allocate skb, which
-might cause that user space unnecessary loops.
+Added a check in the switch case on start_header that checks for
+the existence of the header, and in the case that MAC is not set
+and the caller requests for MAC, -EFAULT. If the caller requests
+for NET then MAC's existence is completely ignored.
 
-Fixes: 35fcde7f8deb ("xsk: support for Tx")
-Signed-off-by: Li RongQing <lirongqing@baidu.com>
+There is no function to check NET header's existence and as far
+as cgroup_skb/egress is concerned it should always be set.
+
+Removed for ptr >= the start of header, considering offset is
+bounded unsigned and should always be true. len <= end - mac is
+redundant to ptr + len <= end.
+
+Fixes: 3eee1f75f2b9 ("bpf: fix bpf_skb_load_bytes_relative pkt length check")
+Signed-off-by: YiFei Zhu <zhuyifei@google.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Björn Töpel <bjorn.topel@intel.com>
-Link: https://lore.kernel.org/bpf/1591852266-24017-1-git-send-email-lirongqing@baidu.com
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
+Link: https://lore.kernel.org/bpf/76bb820ddb6a95f59a772ecbd8c8a336f646b362.1591812755.git.zhuyifei@google.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xdp/xsk.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ net/core/filter.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 7181a30666b4..f9eb5efb237c 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -362,10 +362,8 @@ static int xsk_generic_xmit(struct sock *sk)
+diff --git a/net/core/filter.c b/net/core/filter.c
+index f1f2304822e3..a0a492f7cf9c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -1766,25 +1766,27 @@ BPF_CALL_5(bpf_skb_load_bytes_relative, const struct sk_buff *, skb,
+ 	   u32, offset, void *, to, u32, len, u32, start_header)
+ {
+ 	u8 *end = skb_tail_pointer(skb);
+-	u8 *net = skb_network_header(skb);
+-	u8 *mac = skb_mac_header(skb);
+-	u8 *ptr;
++	u8 *start, *ptr;
  
- 		len = desc.len;
- 		skb = sock_alloc_send_skb(sk, len, 1, &err);
--		if (unlikely(!skb)) {
--			err = -EAGAIN;
-+		if (unlikely(!skb))
- 			goto out;
--		}
+-	if (unlikely(offset > 0xffff || len > (end - mac)))
++	if (unlikely(offset > 0xffff))
+ 		goto err_clear;
  
- 		skb_put(skb, len);
- 		addr = desc.addr;
+ 	switch (start_header) {
+ 	case BPF_HDR_START_MAC:
+-		ptr = mac + offset;
++		if (unlikely(!skb_mac_header_was_set(skb)))
++			goto err_clear;
++		start = skb_mac_header(skb);
+ 		break;
+ 	case BPF_HDR_START_NET:
+-		ptr = net + offset;
++		start = skb_network_header(skb);
+ 		break;
+ 	default:
+ 		goto err_clear;
+ 	}
+ 
+-	if (likely(ptr >= mac && ptr + len <= end)) {
++	ptr = start + offset;
++
++	if (likely(ptr + len <= end)) {
+ 		memcpy(to, ptr, len);
+ 		return 0;
+ 	}
 -- 
 2.25.1
 
