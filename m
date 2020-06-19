@@ -2,745 +2,198 @@ Return-Path: <SRS0=nKFI=AA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EBA1C433E0
-	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 23:20:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62354C433E0
+	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 23:46:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 72E482242E
-	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 23:20:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D92621D7D
+	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 23:46:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="D9qdmdb0"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="P9hs3bg3";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="Ym8wH0xk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730396AbgFSXUf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Jun 2020 19:20:35 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:31578 "EHLO
+        id S1730571AbgFSXqH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Jun 2020 19:46:07 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:2520 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730379AbgFSXUe (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 19 Jun 2020 19:20:34 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05JNGSkF025808
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2020 16:20:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=ddut+Y7XhFVX4fc9Pg6f4h797bFljT4X23VtM2gJNhc=;
- b=D9qdmdb0FHWhiYr1uPePbib26sIGQATYaFZmU2ta09POskO/LUpdWHJNu/3SkncmzXoI
- /A9Q4ZJjQcDvmCgfIOoycT9yCC7qHeNmYT0tCvXuaZ0fjrP5hYAAdhyPWvgBqCwL3CVx
- xXmvmKszK71ltS6gMxIn461TEaRBefE3raI= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31q661763h-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2020 16:20:32 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        by vger.kernel.org with ESMTP id S1728606AbgFSXqG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 19 Jun 2020 19:46:06 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05JNehq0003056;
+        Fri, 19 Jun 2020 16:45:52 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=Bq9tqiVWnRasmZSWNi2vTXpVYIBefGkKN2UxqbcadDE=;
+ b=P9hs3bg3QqhzFs5VEmPOj4hythI9IRHgIqeA87oTpj9IFM6+Q6f9XRG5wfaNbfQNerkS
+ iw+LeA2nCS8Dlo1eV0bUq7Fowo+rNI8g757KcTHgJP3iQtooGDLyl/5lOWcHbQBB337w
+ zRP3JJXDrVzxowBXDYSk18oK8QYnrbzoBWs= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31rqwqxv07-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 19 Jun 2020 16:45:51 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.101) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 19 Jun 2020 16:20:31 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 5D28F2EC37CE; Fri, 19 Jun 2020 16:17:24 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>, Hao Luo <haoluo@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 8/9] tools/bpftool: show info for processes holding BPF map/prog/link/btf FDs
-Date:   Fri, 19 Jun 2020 16:17:02 -0700
-Message-ID: <20200619231703.738941-9-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200619231703.738941-1-andriin@fb.com>
-References: <20200619231703.738941-1-andriin@fb.com>
+ 15.1.1979.3; Fri, 19 Jun 2020 16:45:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fCqQDcRyJpxIzDzLwcyeQb4PcE7tq5+ehVOO1QyVgPBMpe6P28uaxg8SWDeTfNKpqn8QEFiQXmPpqYENj+7WDWjdcOyD92pOfn/vAvQaqVSl+ZNwVW2F2mq6DxPuwAe42rMp9GiYy3EiExFZYAW1+XQP19pHx8yLtKIt3/8FAT39CIDrBWLZHYDL2ZxrCzz4r+EjZyvx+SJewSjDCzoYCl6jkgVoHULSVIJHg+5uppJLw6clhyjeNlv80Sl2+RswGjfOFdq4sJlWRZ0m9g2QBoZFQo9FkooTiDyYofeFg/3Gqq2vb4ZPlvW98kg2NjFNHCmL2grbRlBhbcEeU5xikw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Bq9tqiVWnRasmZSWNi2vTXpVYIBefGkKN2UxqbcadDE=;
+ b=KsnovDTa575t3p4DzXMAxddljXmw5iaghYJ96OEsDLEKgEUtyhTv8DwIArPqjXf5D5G+u58D32xPbdf9foOaQXntOCqCZK3nTUJ1hMYK1q/Knd79UBqhV3lw1KY2uHydFa1OoieEeQ5t+fHpm4zjmFtURGy9m5LETR3uEP7+6PbxpraxO6gQfKrPE7JOiKzKH/KU2OvT7fEUgqG/n+EQmEThXGa61qoLeY58ubSbkiYln0AwXTGQ/b6x45wUtSyYSK+oDnQgylHxbxjR3/uyLm2YgVdyFWFystmfoSISVH6gEVWK4x3HS0aIBs/wOcWtogVw9nDYGjxMf5OKdudpXg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Bq9tqiVWnRasmZSWNi2vTXpVYIBefGkKN2UxqbcadDE=;
+ b=Ym8wH0xkaKLOOLIBr8artbgUCSnBXAbcF6/d9GSGiRdMzZp/K7yuWE03mHmTAn9z3HpE3KC9WE1ZtR0Bg4tyea5Y93P5RW/Sawvcd88j4kCsvKDG7w7fGXvdJ7hWbqFbiyJBrZamJhn89+jx3UW1gH7JolLhlC2S+O0YeD/R2K8=
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB3510.namprd15.prod.outlook.com (2603:10b6:a03:112::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22; Fri, 19 Jun
+ 2020 23:45:28 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::4922:9927:5d6c:5301]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::4922:9927:5d6c:5301%7]) with mapi id 15.20.3109.021; Fri, 19 Jun 2020
+ 23:45:28 +0000
+Subject: Re: [PATCH bpf-next 1/2] bpf: avoid verifier failure for 32bit
+ pointer arithmetic
+To:     Daniel Borkmann <daniel@iogearbox.net>, <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>, <kernel-team@fb.com>
+References: <20200618234631.3321026-1-yhs@fb.com>
+ <20200618234631.3321118-1-yhs@fb.com>
+ <93091308-0865-6bad-aa1f-3b46cbc71895@iogearbox.net>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <71c7db8e-d88c-971c-7be3-46dcd5e05a8b@fb.com>
+Date:   Fri, 19 Jun 2020 16:45:26 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.9.0
+In-Reply-To: <93091308-0865-6bad-aa1f-3b46cbc71895@iogearbox.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BY5PR03CA0019.namprd03.prod.outlook.com
+ (2603:10b6:a03:1e0::29) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21c8::1477] (2620:10d:c090:400::5:a1ad) by BY5PR03CA0019.namprd03.prod.outlook.com (2603:10b6:a03:1e0::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22 via Frontend Transport; Fri, 19 Jun 2020 23:45:27 +0000
+X-Originating-IP: [2620:10d:c090:400::5:a1ad]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 272742fa-a2d1-4d2b-7136-08d814aad846
+X-MS-TrafficTypeDiagnostic: BYAPR15MB3510:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB3510770DE7951EE7FB9FD0B5D3980@BYAPR15MB3510.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-Forefront-PRVS: 0439571D1D
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: c9itEPvgdv5jMARS41ExbcMP95utS0vkWPXJCb3Wy9UBwXtfsKpMyFs3rlurF9oB8TByQtnaCPnli9PClc4/6JMortftRKn8GarD8YI99CydEuGiF3a15rW3EqK3ZO/T2KKJGV9uMM3NsxRfiFEvKpVaDJTwz18iaF+6jJSek/pKRON1i2r7LB0hokEZUGzNdvILCGG+TYgBR5MWpphHUOVg2gDmOapfvYSJiwolRPN/o6WFHnOHagup1aivyCochS8phvjN4OXQiMPxqDejYjdJfL37H0sAOg7xbk18LtmimU8n3Nnoa+ksqQCbWgoGiIoyT6lQSWoSu1HUGHyZLcpd6AKUuN8Zz96CRJvOFR9BCyOh4ohdGBfkkLv/gFJk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(136003)(39860400002)(376002)(396003)(346002)(366004)(186003)(8936002)(5660300002)(86362001)(2906002)(4326008)(31696002)(53546011)(8676002)(52116002)(31686004)(16526019)(478600001)(316002)(2616005)(66946007)(66476007)(66556008)(36756003)(6486002)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: hpd5l1uBNN3X2Ph3+sZwPkwSoAsdfK2/rNijlvJGqAAfMCXUMjwyGMdb19TRcuqUDAgv3KlaoqllyY1V2w7QYW9Ioeqx+pG7/TWb9q8vEkvAhzNpMOc1xprOyhZeHaXk3MisD7ETIXOqDrEfl/F8ITodopzhYFCcqD6hC3oX4jD1dXPbv3eAZS4gKHmUtJ7s5hclspUW8kf6uxZAUvpkbbI+bKaafBAuwRXGk23drh0tp2Bo7vX9YMyIBUdfu/XE/Of2IW/ZvPm/RGgPDqFObcxakBL56yqsbU953ViWlKWipxwjTZGLxaPBIJsIxkRADoHKSoAt8s066AFpgD94M3knEFzdAi8bJLdbh7lEnTGAfPyVm30NK5q5xK/B4rlUMFuA20Kdj/Hew2a6sz26lFJT/v4jqSe56i8zuTijUzyL+OhqkISzFuVcuoifCaE+cX4iPwiXDoHAIrBXgqYxQQkweRg4hbT/yGIYnoKLV7uqVKsENvBdxKjKENo3On0jjMdhCyGPX6ren9o154L6yw==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 272742fa-a2d1-4d2b-7136-08d814aad846
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2020 23:45:28.0215
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HE4coCUIp9Tl6nepzMFM0xR0kSQoZHixWZdSYFU1AIcUEkVUswtVsBCAG2gqQKs7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3510
+X-OriginatorOrg: fb.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-19_22:2020-06-19,2020-06-19 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=29
- clxscore=1015 mlxscore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0
- phishscore=0 mlxlogscore=999 adultscore=0 impostorscore=0 malwarescore=0
- cotscore=-2147483648 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006190163
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ suspectscore=0 phishscore=0 clxscore=1015 impostorscore=0 adultscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 mlxlogscore=999
+ cotscore=-2147483648 spamscore=0 mlxscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006190167
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bpf_iter-based way to find all the processes that hold open FDs again=
-st
-BPF object (map, prog, link, btf). bpftool always attempts to discover th=
-is,
-but will silently give up if kernel doesn't yet support bpf_iter BPF prog=
-rams.
-Process name and PID are emitted for each process (task group).
 
-Sample output for each of 4 BPF objects:
 
-$ sudo ./bpftool prog show
-2694: cgroup_device  tag 8c42dee26e8cd4c2  gpl
-        loaded_at 2020-06-16T15:34:32-0700  uid 0
-        xlated 648B  jited 409B  memlock 4096B
-        pids systemd(1)
-2907: cgroup_skb  name egress  tag 9ad187367cf2b9e8  gpl
-        loaded_at 2020-06-16T18:06:54-0700  uid 0
-        xlated 48B  jited 59B  memlock 4096B  map_ids 2436
-        btf_id 1202
-        pids test_progs(2238417), test_progs(2238445)
+On 6/19/20 2:49 PM, Daniel Borkmann wrote:
+> On 6/19/20 1:46 AM, Yonghong Song wrote:
+>> When do experiments with llvm (disabling instcombine and
+>> simplifyCFG), I hit the following error with test_seg6_loop.o.
+>>
+>>    ; R1=pkt(id=0,off=0,r=48,imm=0), R7=pkt(id=0,off=40,r=48,imm=0)
+>>    w2 = w7
+>>    ; R2_w=inv(id=0,umax_value=4294967295,var_off=(0x0; 0xffffffff))
+>>    w2 -= w1
+>>    R2 32-bit pointer arithmetic prohibited
+>>
+>> The corresponding source code is:
+>>    uint32_t srh_off
+>>    // srh and skb->data are all packet pointers
+>>    srh_off = (char *)srh - (char *)(long)skb->data;
+>>
+>> The verifier does not support 32-bit pointer/scalar arithmetic.
+>>
+>> Without my llvm change, the code looks like
+>>
+>>    ; R3=pkt(id=0,off=40,r=48,imm=0), R8=pkt(id=0,off=0,r=48,imm=0)
+>>    w3 -= w8
+>>    ; R3_w=inv(id=0)
+>>
+>> This is explicitly allowed in verifier if both registers are
+>> pointers and the opcode is BPF_SUB.
+>>
+>> To fix this problem, I changed the verifier to allow
+>> 32-bit pointer/scaler BPF_SUB operations.
+>>
+>> At the source level, the issue could be workarounded with
+>> inline asm or changing "uint32_t srh_off" to "uint64_t srh_off".
+>> But I feel that verifier change might be the right thing to do.
+>>
+>> Signed-off-by: Yonghong Song <yhs@fb.com>
+> 
+> Looks good, both applied, thanks!
+> 
+>> ---
+>>   kernel/bpf/verifier.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 22d90d47befa..bbf6d655d6ad 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -5052,6 +5052,11 @@ static int adjust_ptr_min_max_vals(struct 
+>> bpf_verifier_env *env,
+>>       if (BPF_CLASS(insn->code) != BPF_ALU64) {
+>>           /* 32-bit ALU ops on pointers produce (meaningless) scalars */
+>> +        if (opcode == BPF_SUB && env->allow_ptr_leaks) {
+>> +            __mark_reg_unknown(env, dst_reg);
+>> +            return 0;
+>> +        }
+>> +
+> 
+> We could have also allowed ADD case while at it, but ok either way. Wrt 
+> pointer
+> sanitation, nothing additional seems to be needed here as we 'destroy' 
+> the reg
+> to fully unknown.
 
-$ sudo ./bpftool map show
-2436: array  name test_cgr.bss  flags 0x400
-        key 4B  value 8B  max_entries 1  memlock 8192B
-        btf_id 1202
-        pids test_progs(2238417), test_progs(2238445)
-2445: array  name pid_iter.rodata  flags 0x480
-        key 4B  value 4B  max_entries 1  memlock 8192B
-        btf_id 1214  frozen
-        pids bpftool(2239612)
+Right. This may happen for use case like `(w1 + off) - w2` where w1 and 
+w2 are packet pointers and off is a register to encode a scalar. I will 
+do a followup on this.
 
-$ sudo ./bpftool link show
-61: cgroup  prog 2908
-        cgroup_id 375301  attach_type egress
-        pids test_progs(2238417), test_progs(2238445)
-62: cgroup  prog 2908
-        cgroup_id 375344  attach_type egress
-        pids test_progs(2238417), test_progs(2238445)
-
-$ sudo ./bpftool btf show
-1202: size 1527B  prog_ids 2908,2907  map_ids 2436
-        pids test_progs(2238417), test_progs(2238445)
-1242: size 34684B
-        pids bpftool(2258892)
-
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/bpf/bpftool/Makefile                |   2 +
- tools/bpf/bpftool/btf.c                   |   6 +
- tools/bpf/bpftool/link.c                  |   7 +
- tools/bpf/bpftool/main.c                  |   1 +
- tools/bpf/bpftool/main.h                  |  27 +++
- tools/bpf/bpftool/map.c                   |   7 +
- tools/bpf/bpftool/pids.c                  | 229 ++++++++++++++++++++++
- tools/bpf/bpftool/prog.c                  |   7 +
- tools/bpf/bpftool/skeleton/pid_iter.bpf.c |  80 ++++++++
- tools/bpf/bpftool/skeleton/pid_iter.h     |  12 ++
- 10 files changed, 378 insertions(+)
- create mode 100644 tools/bpf/bpftool/pids.c
- create mode 100644 tools/bpf/bpftool/skeleton/pid_iter.bpf.c
- create mode 100644 tools/bpf/bpftool/skeleton/pid_iter.h
-
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index bdb6e38c6c5c..06f436e8191a 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -150,6 +150,8 @@ $(OUTPUT)%.skel.h: $(OUTPUT)%.bpf.o $(BPFTOOL_BOOTSTR=
-AP)
-=20
- $(OUTPUT)prog.o: $(OUTPUT)profiler.skel.h
-=20
-+$(OUTPUT)pids.o: $(OUTPUT)pid_iter.skel.h
-+
- endif
- endif
-=20
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index faac8189b285..fc9bc7a23db6 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -809,6 +809,7 @@ show_btf_plain(struct bpf_btf_info *info, int fd,
- 			printf("%s%u", n++ =3D=3D 0 ? "  map_ids " : ",",
- 			       obj->obj_id);
- 	}
-+	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
-=20
- 	printf("\n");
- }
-@@ -841,6 +842,9 @@ show_btf_json(struct bpf_btf_info *info, int fd,
- 			jsonw_uint(json_wtr, obj->obj_id);
- 	}
- 	jsonw_end_array(json_wtr);	/* map_ids */
-+
-+	emit_obj_refs_json(&refs_table, info->id, json_wtr); /* pids */
-+
- 	jsonw_end_object(json_wtr);	/* btf object */
- }
-=20
-@@ -893,6 +897,7 @@ static int do_show(int argc, char **argv)
- 			close(fd);
- 		return err;
- 	}
-+	build_obj_refs_table(&refs_table, BPF_OBJ_BTF);
-=20
- 	if (fd >=3D 0) {
- 		err =3D show_btf(fd, &btf_prog_table, &btf_map_table);
-@@ -939,6 +944,7 @@ static int do_show(int argc, char **argv)
- exit_free:
- 	delete_btf_table(&btf_prog_table);
- 	delete_btf_table(&btf_map_table);
-+	delete_obj_refs_table(&refs_table);
-=20
- 	return err;
- }
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index fca57ee8fafe..7329f3134283 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -143,6 +143,9 @@ static int show_link_close_json(int fd, struct bpf_li=
-nk_info *info)
- 		}
- 		jsonw_end_array(json_wtr);
- 	}
-+
-+	emit_obj_refs_json(&refs_table, info->id, json_wtr);
-+
- 	jsonw_end_object(json_wtr);
-=20
- 	return 0;
-@@ -212,6 +215,7 @@ static int show_link_close_plain(int fd, struct bpf_l=
-ink_info *info)
- 				printf("\n\tpinned %s", obj->path);
- 		}
- 	}
-+	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
-=20
- 	printf("\n");
-=20
-@@ -257,6 +261,7 @@ static int do_show(int argc, char **argv)
-=20
- 	if (show_pinned)
- 		build_pinned_obj_table(&link_table, BPF_OBJ_LINK);
-+	build_obj_refs_table(&refs_table, BPF_OBJ_LINK);
-=20
- 	if (argc =3D=3D 2) {
- 		fd =3D link_parse_fd(&argc, &argv);
-@@ -296,6 +301,8 @@ static int do_show(int argc, char **argv)
- 	if (json_output)
- 		jsonw_end_array(json_wtr);
-=20
-+	delete_obj_refs_table(&refs_table);
-+
- 	return errno =3D=3D ENOENT ? 0 : -1;
- }
-=20
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index bf4d7487552a..4a191fcbeb82 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -31,6 +31,7 @@ bool relaxed_maps;
- struct pinned_obj_table prog_table;
- struct pinned_obj_table map_table;
- struct pinned_obj_table link_table;
-+struct obj_refs_table refs_table;
-=20
- static void __noreturn clean_and_exit(int i)
- {
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index aad7be74e8a7..ce26271e5f0c 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -127,11 +127,13 @@ static const char * const attach_type_name[__MAX_BP=
-F_ATTACH_TYPE] =3D {
- extern const char * const map_type_name[];
- extern const size_t map_type_name_size;
-=20
-+/* keep in sync with the definition in skeleton/pid_iter.bpf.c */
- enum bpf_obj_type {
- 	BPF_OBJ_UNKNOWN,
- 	BPF_OBJ_PROG,
- 	BPF_OBJ_MAP,
- 	BPF_OBJ_LINK,
-+	BPF_OBJ_BTF,
- };
-=20
- extern const char *bin_name;
-@@ -139,12 +141,14 @@ extern const char *bin_name;
- extern json_writer_t *json_wtr;
- extern bool json_output;
- extern bool show_pinned;
-+extern bool show_pids;
- extern bool block_mount;
- extern bool verifier_logs;
- extern bool relaxed_maps;
- extern struct pinned_obj_table prog_table;
- extern struct pinned_obj_table map_table;
- extern struct pinned_obj_table link_table;
-+extern struct obj_refs_table refs_table;
-=20
- void __printf(1, 2) p_err(const char *fmt, ...);
- void __printf(1, 2) p_info(const char *fmt, ...);
-@@ -168,12 +172,35 @@ struct pinned_obj {
- 	struct hlist_node hash;
- };
-=20
-+struct obj_refs_table {
-+	DECLARE_HASHTABLE(table, 16);
-+};
-+
-+struct obj_ref {
-+	int pid;
-+	char comm[16];
-+};
-+
-+struct obj_refs {
-+	struct hlist_node node;
-+	__u32 id;
-+	int ref_cnt;
-+	struct obj_ref *refs;
-+};
-+
- struct btf;
- struct bpf_line_info;
-=20
- int build_pinned_obj_table(struct pinned_obj_table *table,
- 			   enum bpf_obj_type type);
- void delete_pinned_obj_table(struct pinned_obj_table *tab);
-+__weak int build_obj_refs_table(struct obj_refs_table *table,
-+				enum bpf_obj_type type);
-+__weak void delete_obj_refs_table(struct obj_refs_table *table);
-+__weak void emit_obj_refs_json(struct obj_refs_table *table, __u32 id,
-+			       json_writer_t *json_wtr);
-+__weak void emit_obj_refs_plain(struct obj_refs_table *table, __u32 id,
-+				const char *prefix);
- void print_dev_plain(__u32 ifindex, __u64 ns_dev, __u64 ns_inode);
- void print_dev_json(__u32 ifindex, __u64 ns_dev, __u64 ns_inode);
-=20
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index b9eee19b094c..0a6a5d82d380 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -509,6 +509,8 @@ static int show_map_close_json(int fd, struct bpf_map=
-_info *info)
- 		jsonw_end_array(json_wtr);
- 	}
-=20
-+	emit_obj_refs_json(&refs_table, info->id, json_wtr);
-+
- 	jsonw_end_object(json_wtr);
-=20
- 	return 0;
-@@ -596,6 +598,8 @@ static int show_map_close_plain(int fd, struct bpf_ma=
-p_info *info)
- 	if (frozen)
- 		printf("%sfrozen", info->btf_id ? "  " : "");
-=20
-+	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
-+
- 	printf("\n");
- 	return 0;
- }
-@@ -654,6 +658,7 @@ static int do_show(int argc, char **argv)
-=20
- 	if (show_pinned)
- 		build_pinned_obj_table(&map_table, BPF_OBJ_MAP);
-+	build_obj_refs_table(&refs_table, BPF_OBJ_MAP);
-=20
- 	if (argc =3D=3D 2)
- 		return do_show_subset(argc, argv);
-@@ -697,6 +702,8 @@ static int do_show(int argc, char **argv)
- 	if (json_output)
- 		jsonw_end_array(json_wtr);
-=20
-+	delete_obj_refs_table(&refs_table);
-+
- 	return errno =3D=3D ENOENT ? 0 : -1;
- }
-=20
-diff --git a/tools/bpf/bpftool/pids.c b/tools/bpf/bpftool/pids.c
-new file mode 100644
-index 000000000000..3474a91743ff
---- /dev/null
-+++ b/tools/bpf/bpftool/pids.c
-@@ -0,0 +1,229 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/* Copyright (C) 2020 Facebook */
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <bpf/bpf.h>
-+
-+#include "main.h"
-+#include "skeleton/pid_iter.h"
-+
-+#ifdef BPFTOOL_WITHOUT_SKELETONS
-+
-+int build_obj_refs_table(struct obj_refs_table *table, enum bpf_obj_type=
- type)
-+{
-+	p_err("bpftool built without PID iterator support");
-+	return -ENOTSUP;
-+}
-+void delete_obj_refs_table(struct obj_refs_table *table) {}
-+
-+#else /* BPFTOOL_WITHOUT_SKELETONS */
-+
-+#include "pid_iter.skel.h"
-+
-+static void add_ref(struct obj_refs_table *table, struct pid_iter_entry =
-*e)
-+{
-+	struct obj_refs *refs;
-+	struct obj_ref *ref;
-+	void *tmp;
-+	int i;
-+
-+	hash_for_each_possible(table->table, refs, node, e->id) {
-+		if (refs->id !=3D e->id)
-+			continue;
-+
-+		for (i =3D 0; i < refs->ref_cnt; i++) {
-+			if (refs->refs[i].pid =3D=3D e->pid)
-+				return;
-+		}
-+
-+		tmp =3D realloc(refs->refs, (refs->ref_cnt + 1) * sizeof(*ref));
-+		if (!tmp) {
-+			p_err("failed to re-alloc memory for ID %u, PID %d, COMM %s...",
-+			      e->id, e->pid, e->comm);
-+			return;
-+		}
-+		refs->refs =3D tmp;
-+		ref =3D &refs->refs[refs->ref_cnt];
-+		ref->pid =3D e->pid;
-+		memcpy(ref->comm, e->comm, sizeof(ref->comm));
-+		refs->ref_cnt++;
-+
-+		return;
-+	}
-+
-+	/* new ref */
-+	refs =3D calloc(1, sizeof(*refs));
-+	if (!refs) {
-+		p_err("failed to alloc memory for ID %u, PID %d, COMM %s...",
-+		      e->id, e->pid, e->comm);
-+		return;
-+	}
-+
-+	refs->id =3D e->id;
-+	refs->refs =3D malloc(sizeof(*refs->refs));
-+	if (!refs->refs) {
-+		free(refs);
-+		p_err("failed to alloc memory for ID %u, PID %d, COMM %s...",
-+		      e->id, e->pid, e->comm);
-+		return;
-+	}
-+	ref =3D &refs->refs[0];
-+	ref->pid =3D e->pid;
-+	memcpy(ref->comm, e->comm, sizeof(ref->comm));
-+	refs->ref_cnt =3D 1;
-+	hash_add(table->table, &refs->node, e->id);
-+}
-+
-+static int __printf(2, 0)
-+libbpf_print_none(__maybe_unused enum libbpf_print_level level,
-+		  __maybe_unused const char *format,
-+		  __maybe_unused va_list args)
-+{
-+	return 0;
-+}
-+
-+int build_obj_refs_table(struct obj_refs_table *table, enum bpf_obj_type=
- type)
-+{
-+	char buf[4096];
-+	struct pid_iter_bpf *skel;
-+	struct pid_iter_entry *e;
-+	int err, ret, fd =3D -1, i;
-+	libbpf_print_fn_t default_print;
-+
-+	hash_init(table->table);
-+	set_max_rlimit();
-+
-+	skel =3D pid_iter_bpf__open();
-+	if (!skel) {
-+		p_err("failed to open PID iterator skeleton");
-+		return -1;
-+	}
-+
-+	skel->rodata->obj_type =3D type;
-+
-+	/* we don't want output polluted with libbpf errors if bpf_iter is not
-+	 * supported
-+	 */
-+	default_print =3D libbpf_set_print(libbpf_print_none);
-+	err =3D pid_iter_bpf__load(skel);
-+	libbpf_set_print(default_print);
-+	if (err) {
-+		/* too bad, kernel doesn't support BPF iterators yet */
-+		err =3D 0;
-+		goto out;
-+	}
-+	err =3D pid_iter_bpf__attach(skel);
-+	if (err) {
-+		/* if we loaded above successfully, attach has to succeed */
-+		p_err("failed to attach PID iterator: %d", err);
-+		goto out;
-+	}
-+
-+	fd =3D bpf_iter_create(bpf_link__fd(skel->links.iter));
-+	if (fd < 0) {
-+		err =3D -errno;
-+		p_err("failed to create PID iterator session: %d", err);
-+		goto out;
-+	}
-+
-+	while (true) {
-+		ret =3D read(fd, buf, sizeof(buf));
-+		if (ret < 0) {
-+			err =3D -errno;
-+			p_err("failed to read PID iterator output: %d", err);
-+			goto out;
-+		}
-+		if (ret =3D=3D 0)
-+			break;
-+		if (ret % sizeof(*e)) {
-+			err =3D -EINVAL;
-+			p_err("invalid PID iterator output format");
-+			goto out;
-+		}
-+		ret /=3D sizeof(*e);
-+
-+		e =3D (void *)buf;
-+		for (i =3D 0; i < ret; i++, e++) {
-+			add_ref(table, e);
-+		}
-+	}
-+	err =3D 0;
-+out:
-+	if (fd >=3D 0)
-+		close(fd);
-+	pid_iter_bpf__destroy(skel);
-+	return err;
-+}
-+
-+void delete_obj_refs_table(struct obj_refs_table *table)
-+{
-+	struct obj_refs *refs;
-+	struct hlist_node *tmp;
-+	unsigned int bkt;
-+
-+	hash_for_each_safe(table->table, bkt, tmp, refs, node) {
-+		hash_del(&refs->node);
-+		free(refs->refs);
-+		free(refs);
-+	}
-+}
-+
-+void emit_obj_refs_json(struct obj_refs_table *table, __u32 id, json_wri=
-ter_t *json_wtr)
-+{
-+	struct obj_refs *refs;
-+	struct obj_ref *ref;
-+	int i;
-+
-+	if (hash_empty(table->table))
-+		return;
-+
-+	hash_for_each_possible(table->table, refs, node, id) {
-+		if (refs->id !=3D id)
-+			continue;
-+		if (refs->ref_cnt =3D=3D 0)
-+			break;
-+
-+		jsonw_name(json_wtr, "pids");
-+		jsonw_start_array(json_wtr);
-+		for (i =3D 0; i < refs->ref_cnt; i++) {
-+			ref =3D &refs->refs[i];
-+			jsonw_start_object(json_wtr);
-+			jsonw_int_field(json_wtr, "pid", ref->pid);
-+			jsonw_string_field(json_wtr, "comm", ref->comm);
-+			jsonw_end_object(json_wtr);
-+		}
-+		jsonw_end_array(json_wtr);
-+		break;
-+	}
-+}
-+
-+void emit_obj_refs_plain(struct obj_refs_table *table, __u32 id, const c=
-har *prefix)
-+{
-+	struct obj_refs *refs;
-+	struct obj_ref *ref;
-+	int i;
-+
-+	if (hash_empty(table->table))
-+		return;
-+
-+	hash_for_each_possible(table->table, refs, node, id) {
-+		if (refs->id !=3D id)
-+			continue;
-+		if (refs->ref_cnt =3D=3D 0)
-+			break;
-+
-+		printf("%s", prefix);
-+		for (i =3D 0; i < refs->ref_cnt; i++) {
-+			ref =3D &refs->refs[i];
-+			printf("%s%s(%d)", i =3D=3D 0 ? "" : ", ", ref->comm, ref->pid);
-+		}
-+		break;
-+	}
-+}
-+
-+
-+#endif
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 53d47610ff58..e21fa8ad2efa 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -190,6 +190,8 @@ static void print_prog_json(struct bpf_prog_info *inf=
-o, int fd)
- 		jsonw_end_array(json_wtr);
- 	}
-=20
-+	emit_obj_refs_json(&refs_table, info->id, json_wtr);
-+
- 	jsonw_end_object(json_wtr);
- }
-=20
-@@ -256,6 +258,8 @@ static void print_prog_plain(struct bpf_prog_info *in=
-fo, int fd)
- 	if (info->btf_id)
- 		printf("\n\tbtf_id %d", info->btf_id);
-=20
-+	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
-+
- 	printf("\n");
- }
-=20
-@@ -321,6 +325,7 @@ static int do_show(int argc, char **argv)
-=20
- 	if (show_pinned)
- 		build_pinned_obj_table(&prog_table, BPF_OBJ_PROG);
-+	build_obj_refs_table(&refs_table, BPF_OBJ_PROG);
-=20
- 	if (argc =3D=3D 2)
- 		return do_show_subset(argc, argv);
-@@ -362,6 +367,8 @@ static int do_show(int argc, char **argv)
- 	if (json_output)
- 		jsonw_end_array(json_wtr);
-=20
-+	delete_obj_refs_table(&refs_table);
-+
- 	return err;
- }
-=20
-diff --git a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c b/tools/bpf/bpftoo=
-l/skeleton/pid_iter.bpf.c
-new file mode 100644
-index 000000000000..8468a608911e
---- /dev/null
-+++ b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/* Copyright (c) 2020 Facebook */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
-+#include <bpf/bpf_tracing.h>
-+#include "pid_iter.h"
-+
-+/* keep in sync with the definition in main.h */
-+enum bpf_obj_type {
-+	BPF_OBJ_UNKNOWN,
-+	BPF_OBJ_PROG,
-+	BPF_OBJ_MAP,
-+	BPF_OBJ_LINK,
-+	BPF_OBJ_BTF,
-+};
-+
-+extern const void bpf_link_fops __ksym;
-+extern const void bpf_map_fops __ksym;
-+extern const void bpf_prog_fops __ksym;
-+extern const void btf_fops __ksym;
-+
-+const volatile enum bpf_obj_type obj_type =3D BPF_OBJ_UNKNOWN;
-+
-+static __always_inline __u32 get_obj_id(void *ent, enum bpf_obj_type typ=
-e)
-+{
-+	switch (type) {
-+	case BPF_OBJ_PROG:
-+		return BPF_CORE_READ((struct bpf_prog *)ent, aux, id);
-+	case BPF_OBJ_MAP:
-+		return BPF_CORE_READ((struct bpf_map *)ent, id);
-+	case BPF_OBJ_BTF:
-+		return BPF_CORE_READ((struct btf *)ent, id);
-+	case BPF_OBJ_LINK:
-+		return BPF_CORE_READ((struct bpf_link *)ent, id);
-+	default:
-+		return 0;
-+	}
-+}
-+
-+SEC("iter/task_file")
-+int iter(struct bpf_iter__task_file *ctx)
-+{
-+	struct file *file =3D ctx->file;
-+	struct task_struct *task =3D ctx->task;
-+	struct pid_iter_entry e;
-+	const void *fops;
-+
-+	if (!file || !task)
-+		return 0;
-+
-+	switch (obj_type) {
-+	case BPF_OBJ_PROG:
-+		fops =3D &bpf_prog_fops;
-+		break;
-+	case BPF_OBJ_MAP:
-+		fops =3D &bpf_map_fops;
-+		break;
-+	case BPF_OBJ_BTF:
-+		fops =3D &btf_fops;
-+		break;
-+	case BPF_OBJ_LINK:
-+		fops =3D &bpf_link_fops;
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	if (file->f_op !=3D fops)
-+		return 0;
-+
-+	e.pid =3D task->tgid;
-+	e.id =3D get_obj_id(file->private_data, obj_type);
-+	bpf_probe_read(&e.comm, sizeof(e.comm), task->group_leader->comm);
-+	bpf_seq_write(ctx->meta->seq, &e, sizeof(e));
-+
-+	return 0;
-+}
-+
-+char LICENSE[] SEC("license") =3D "Dual BSD/GPL";
-diff --git a/tools/bpf/bpftool/skeleton/pid_iter.h b/tools/bpf/bpftool/sk=
-eleton/pid_iter.h
-new file mode 100644
-index 000000000000..5692cf257adb
---- /dev/null
-+++ b/tools/bpf/bpftool/skeleton/pid_iter.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/* Copyright (c) 2020 Facebook */
-+#ifndef __PID_ITER_H
-+#define __PID_ITER_H
-+
-+struct pid_iter_entry {
-+	__u32 id;
-+	int pid;
-+	char comm[16];
-+};
-+
-+#endif
---=20
-2.24.1
-
+> 
+>>           verbose(env,
+>>               "R%d 32-bit pointer arithmetic prohibited\n",
+>>               dst);
+>>
+> 
