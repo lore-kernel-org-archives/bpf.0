@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE490C433DF
-	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 20:33:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6D0DC433DF
+	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 20:33:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A483F20890
-	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 20:33:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B9F6020890
+	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 20:33:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="WBhAcTET"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hIxilUTC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390170AbgFSUdj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Jun 2020 16:33:39 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:64774 "EHLO
+        id S2390175AbgFSUdl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Jun 2020 16:33:41 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:24110 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390027AbgFSUdi (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 19 Jun 2020 16:33:38 -0400
+        by vger.kernel.org with ESMTP id S2390027AbgFSUdl (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 19 Jun 2020 16:33:41 -0400
 Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05JKXUSt018615
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2020 13:33:36 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05JKXUT3018615
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2020 13:33:40 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=PEOsKzlc21oVFnqVz+ZIM8/OMmzZ7OmqH3v4qLerN3k=;
- b=WBhAcTETdMtCPoW0M47iw5KGTXz34ck6NLXg22R92Ov5P1vW7HkQalC2WeRhCjfjHq3w
- L3XkaNPddQF5/BzJRDG0IOgT1PiEpTovm4T8sOosKKAXJsrBZ9DPGCTpo/jN9UaFbQq+
- 3UWM0mqGlpqUH6JQRuOPNcPp/CYSwNqrL8g= 
+ bh=A7vE1AzvUbJxYqsGBnaogqsVNH8mmqxZtX49AzGxJtg=;
+ b=hIxilUTCxabO8Sdd6dGnUFkWu1c8A+L2kfi8h/Bnmup0xCqrlrJyrIYM1kT30fFEUNgj
+ TZfWOLvWXAUUcbk/iZcBS8avO2t+hh7fmHMzWysh7ZQqE/FtHJ2CxQ7W9w48yS3sBIWK
+ Zfhl/WtwDwFwCns26l3dij+2StDXpUliAo4= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 31rvjcbr0m-7
+        by mx0a-00082601.pphosted.com with ESMTP id 31rvjcbr0m-15
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2020 13:33:36 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2020 13:33:40 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 19 Jun 2020 13:33:23 -0700
+ 15.1.1979.3; Fri, 19 Jun 2020 13:33:29 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 254502EC319E; Fri, 19 Jun 2020 13:30:36 -0700 (PDT)
+        id 9E99E2EC316B; Fri, 19 Jun 2020 13:30:29 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -52,9 +52,9 @@ CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>,
         Quentin Monnet <quentin@isovalent.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 4/9] tools/bpftool: move map/prog parsing logic into common
-Date:   Fri, 19 Jun 2020 13:30:20 -0700
-Message-ID: <20200619203026.78267-5-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 1/9] libbpf: generalize libbpf externs support
+Date:   Fri, 19 Jun 2020 13:30:17 -0700
+Message-ID: <20200619203026.78267-2-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200619203026.78267-1-andriin@fb.com>
 References: <20200619203026.78267-1-andriin@fb.com>
@@ -65,8 +65,8 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-19_22:2020-06-19,2020-06-19 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- suspectscore=29 malwarescore=0 clxscore=1015 mlxscore=0 adultscore=0
- cotscore=-2147483648 lowpriorityscore=0 mlxlogscore=630 spamscore=0
+ suspectscore=9 malwarescore=0 clxscore=1015 mlxscore=0 adultscore=0
+ cotscore=-2147483648 lowpriorityscore=0 mlxlogscore=999 spamscore=0
  phishscore=0 bulkscore=0 priorityscore=1501 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2006190146
@@ -76,689 +76,637 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move functions that parse map and prog by id/tag/name/etc outside of
-map.c/prog.c, respectively. These functions are used outside of those fil=
-es
-and are generic enough to be in common. This also makes heavy-weight map.=
-c and
-prog.c more decoupled from the rest of bpftool files and facilitates more
-lightweight bootstrap bpftool variant.
+Switch existing Kconfig externs to be just one of few possible kinds of m=
+ore
+generic externs. This refactoring is in preparation for ksymbol extern
+support, added in the follow up patch. There are no functional changes
+intended.
 
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/bpf/bpftool/common.c | 308 +++++++++++++++++++++++++++++++++++++
- tools/bpf/bpftool/main.h   |   2 +
- tools/bpf/bpftool/map.c    | 156 -------------------
- tools/bpf/bpftool/prog.c   | 152 ------------------
- 4 files changed, 310 insertions(+), 308 deletions(-)
+ tools/lib/bpf/libbpf.c | 348 ++++++++++++++++++++++++-----------------
+ 1 file changed, 207 insertions(+), 141 deletions(-)
 
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index c47bdc65de8e..6c864c3683fc 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -581,3 +581,311 @@ print_all_levels(__maybe_unused enum libbpf_print_l=
-evel level,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 477c679ed945..0068be9b5f24 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -329,24 +329,35 @@ struct bpf_map {
+=20
+ enum extern_type {
+ 	EXT_UNKNOWN,
+-	EXT_CHAR,
+-	EXT_BOOL,
+-	EXT_INT,
+-	EXT_TRISTATE,
+-	EXT_CHAR_ARR,
++	EXT_KCFG,
++};
++
++enum kcfg_type {
++	KCFG_UNKNOWN,
++	KCFG_CHAR,
++	KCFG_BOOL,
++	KCFG_INT,
++	KCFG_TRISTATE,
++	KCFG_CHAR_ARR,
+ };
+=20
+ struct extern_desc {
+-	const char *name;
++	enum extern_type type;
+ 	int sym_idx;
+ 	int btf_id;
+-	enum extern_type type;
+-	int sz;
+-	int align;
+-	int data_off;
+-	bool is_signed;
+-	bool is_weak;
++	int sec_btf_id;
++	const char *name;
+ 	bool is_set;
++	bool is_weak;
++	union {
++		struct {
++			enum kcfg_type type;
++			int sz;
++			int align;
++			int data_off;
++			bool is_signed;
++		} kcfg;
++	};
+ };
+=20
+ static LIST_HEAD(bpf_objects_list);
+@@ -1423,19 +1434,19 @@ static struct extern_desc *find_extern_by_name(co=
+nst struct bpf_object *obj,
+ 	return NULL;
+ }
+=20
+-static int set_ext_value_tri(struct extern_desc *ext, void *ext_val,
+-			     char value)
++static int set_kcfg_value_tri(struct extern_desc *ext, void *ext_val,
++			      char value)
  {
- 	return vfprintf(stderr, format, args);
- }
-+
-+static int prog_fd_by_nametag(void *nametag, int **fds, bool tag)
-+{
-+	unsigned int id =3D 0;
-+	int fd, nb_fds =3D 0;
-+	void *tmp;
-+	int err;
-+
-+	while (true) {
-+		struct bpf_prog_info info =3D {};
-+		__u32 len =3D sizeof(info);
-+
-+		err =3D bpf_prog_get_next_id(id, &id);
-+		if (err) {
-+			if (errno !=3D ENOENT) {
-+				p_err("%s", strerror(errno));
-+				goto err_close_fds;
-+			}
-+			return nb_fds;
-+		}
-+
-+		fd =3D bpf_prog_get_fd_by_id(id);
-+		if (fd < 0) {
-+			p_err("can't get prog by id (%u): %s",
-+			      id, strerror(errno));
-+			goto err_close_fds;
-+		}
-+
-+		err =3D bpf_obj_get_info_by_fd(fd, &info, &len);
-+		if (err) {
-+			p_err("can't get prog info (%u): %s",
-+			      id, strerror(errno));
-+			goto err_close_fd;
-+		}
-+
-+		if ((tag && memcmp(nametag, info.tag, BPF_TAG_SIZE)) ||
-+		    (!tag && strncmp(nametag, info.name, BPF_OBJ_NAME_LEN))) {
-+			close(fd);
-+			continue;
-+		}
-+
-+		if (nb_fds > 0) {
-+			tmp =3D realloc(*fds, (nb_fds + 1) * sizeof(int));
-+			if (!tmp) {
-+				p_err("failed to realloc");
-+				goto err_close_fd;
-+			}
-+			*fds =3D tmp;
-+		}
-+		(*fds)[nb_fds++] =3D fd;
-+	}
-+
-+err_close_fd:
-+	close(fd);
-+err_close_fds:
-+	while (--nb_fds >=3D 0)
-+		close((*fds)[nb_fds]);
-+	return -1;
-+}
-+
-+int prog_parse_fds(int *argc, char ***argv, int **fds)
-+{
-+	if (is_prefix(**argv, "id")) {
-+		unsigned int id;
-+		char *endptr;
-+
-+		NEXT_ARGP();
-+
-+		id =3D strtoul(**argv, &endptr, 0);
-+		if (*endptr) {
-+			p_err("can't parse %s as ID", **argv);
-+			return -1;
-+		}
-+		NEXT_ARGP();
-+
-+		(*fds)[0] =3D bpf_prog_get_fd_by_id(id);
-+		if ((*fds)[0] < 0) {
-+			p_err("get by id (%u): %s", id, strerror(errno));
-+			return -1;
-+		}
-+		return 1;
-+	} else if (is_prefix(**argv, "tag")) {
-+		unsigned char tag[BPF_TAG_SIZE];
-+
-+		NEXT_ARGP();
-+
-+		if (sscanf(**argv, BPF_TAG_FMT, tag, tag + 1, tag + 2,
-+			   tag + 3, tag + 4, tag + 5, tag + 6, tag + 7)
-+		    !=3D BPF_TAG_SIZE) {
-+			p_err("can't parse tag");
-+			return -1;
-+		}
-+		NEXT_ARGP();
-+
-+		return prog_fd_by_nametag(tag, fds, true);
-+	} else if (is_prefix(**argv, "name")) {
-+		char *name;
-+
-+		NEXT_ARGP();
-+
-+		name =3D **argv;
-+		if (strlen(name) > BPF_OBJ_NAME_LEN - 1) {
-+			p_err("can't parse name");
-+			return -1;
-+		}
-+		NEXT_ARGP();
-+
-+		return prog_fd_by_nametag(name, fds, false);
-+	} else if (is_prefix(**argv, "pinned")) {
-+		char *path;
-+
-+		NEXT_ARGP();
-+
-+		path =3D **argv;
-+		NEXT_ARGP();
-+
-+		(*fds)[0] =3D open_obj_pinned_any(path, BPF_OBJ_PROG);
-+		if ((*fds)[0] < 0)
-+			return -1;
-+		return 1;
-+	}
-+
-+	p_err("expected 'id', 'tag', 'name' or 'pinned', got: '%s'?", **argv);
-+	return -1;
-+}
-+
-+int prog_parse_fd(int *argc, char ***argv)
-+{
-+	int *fds =3D NULL;
-+	int nb_fds, fd;
-+
-+	fds =3D malloc(sizeof(int));
-+	if (!fds) {
-+		p_err("mem alloc failed");
-+		return -1;
-+	}
-+	nb_fds =3D prog_parse_fds(argc, argv, &fds);
-+	if (nb_fds !=3D 1) {
-+		if (nb_fds > 1) {
-+			p_err("several programs match this handle");
-+			while (nb_fds--)
-+				close(fds[nb_fds]);
-+		}
-+		fd =3D -1;
-+		goto exit_free;
-+	}
-+
-+	fd =3D fds[0];
-+exit_free:
-+	free(fds);
-+	return fd;
-+}
-+
-+static int map_fd_by_name(char *name, int **fds)
-+{
-+	unsigned int id =3D 0;
-+	int fd, nb_fds =3D 0;
-+	void *tmp;
-+	int err;
-+
-+	while (true) {
-+		struct bpf_map_info info =3D {};
-+		__u32 len =3D sizeof(info);
-+
-+		err =3D bpf_map_get_next_id(id, &id);
-+		if (err) {
-+			if (errno !=3D ENOENT) {
-+				p_err("%s", strerror(errno));
-+				goto err_close_fds;
-+			}
-+			return nb_fds;
-+		}
-+
-+		fd =3D bpf_map_get_fd_by_id(id);
-+		if (fd < 0) {
-+			p_err("can't get map by id (%u): %s",
-+			      id, strerror(errno));
-+			goto err_close_fds;
-+		}
-+
-+		err =3D bpf_obj_get_info_by_fd(fd, &info, &len);
-+		if (err) {
-+			p_err("can't get map info (%u): %s",
-+			      id, strerror(errno));
-+			goto err_close_fd;
-+		}
-+
-+		if (strncmp(name, info.name, BPF_OBJ_NAME_LEN)) {
-+			close(fd);
-+			continue;
-+		}
-+
-+		if (nb_fds > 0) {
-+			tmp =3D realloc(*fds, (nb_fds + 1) * sizeof(int));
-+			if (!tmp) {
-+				p_err("failed to realloc");
-+				goto err_close_fd;
-+			}
-+			*fds =3D tmp;
-+		}
-+		(*fds)[nb_fds++] =3D fd;
-+	}
-+
-+err_close_fd:
-+	close(fd);
-+err_close_fds:
-+	while (--nb_fds >=3D 0)
-+		close((*fds)[nb_fds]);
-+	return -1;
-+}
-+
-+int map_parse_fds(int *argc, char ***argv, int **fds)
-+{
-+	if (is_prefix(**argv, "id")) {
-+		unsigned int id;
-+		char *endptr;
-+
-+		NEXT_ARGP();
-+
-+		id =3D strtoul(**argv, &endptr, 0);
-+		if (*endptr) {
-+			p_err("can't parse %s as ID", **argv);
-+			return -1;
-+		}
-+		NEXT_ARGP();
-+
-+		(*fds)[0] =3D bpf_map_get_fd_by_id(id);
-+		if ((*fds)[0] < 0) {
-+			p_err("get map by id (%u): %s", id, strerror(errno));
-+			return -1;
-+		}
-+		return 1;
-+	} else if (is_prefix(**argv, "name")) {
-+		char *name;
-+
-+		NEXT_ARGP();
-+
-+		name =3D **argv;
-+		if (strlen(name) > BPF_OBJ_NAME_LEN - 1) {
-+			p_err("can't parse name");
-+			return -1;
-+		}
-+		NEXT_ARGP();
-+
-+		return map_fd_by_name(name, fds);
-+	} else if (is_prefix(**argv, "pinned")) {
-+		char *path;
-+
-+		NEXT_ARGP();
-+
-+		path =3D **argv;
-+		NEXT_ARGP();
-+
-+		(*fds)[0] =3D open_obj_pinned_any(path, BPF_OBJ_MAP);
-+		if ((*fds)[0] < 0)
-+			return -1;
-+		return 1;
-+	}
-+
-+	p_err("expected 'id', 'name' or 'pinned', got: '%s'?", **argv);
-+	return -1;
-+}
-+
-+int map_parse_fd(int *argc, char ***argv)
-+{
-+	int *fds =3D NULL;
-+	int nb_fds, fd;
-+
-+	fds =3D malloc(sizeof(int));
-+	if (!fds) {
-+		p_err("mem alloc failed");
-+		return -1;
-+	}
-+	nb_fds =3D map_parse_fds(argc, argv, &fds);
-+	if (nb_fds !=3D 1) {
-+		if (nb_fds > 1) {
-+			p_err("several maps match this handle");
-+			while (nb_fds--)
-+				close(fds[nb_fds]);
-+		}
-+		fd =3D -1;
-+		goto exit_free;
-+	}
-+
-+	fd =3D fds[0];
-+exit_free:
-+	free(fds);
-+	return fd;
-+}
-+
-+int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *in=
-fo_len)
-+{
-+	int err;
-+	int fd;
-+
-+	fd =3D map_parse_fd(argc, argv);
-+	if (fd < 0)
-+		return -1;
-+
-+	err =3D bpf_obj_get_info_by_fd(fd, info, info_len);
-+	if (err) {
-+		p_err("can't get map info: %s", strerror(errno));
-+		close(fd);
-+		return err;
-+	}
-+
-+	return fd;
-+}
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 5cdf0bc049bd..4338ab9d86d4 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -210,7 +210,9 @@ int do_iter(int argc, char **argv);
-=20
- int parse_u32_arg(int *argc, char ***argv, __u32 *val, const char *what)=
-;
- int prog_parse_fd(int *argc, char ***argv);
-+int prog_parse_fds(int *argc, char ***argv, int **fds);
- int map_parse_fd(int *argc, char ***argv);
-+int map_parse_fds(int *argc, char ***argv, int **fds);
- int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *in=
-fo_len);
-=20
- struct bpf_prog_linfo;
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index c5fac8068ba1..b9eee19b094c 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -92,162 +92,6 @@ static void *alloc_value(struct bpf_map_info *info)
- 		return malloc(info->value_size);
+-	switch (ext->type) {
+-	case EXT_BOOL:
++	switch (ext->kcfg.type) {
++	case KCFG_BOOL:
+ 		if (value =3D=3D 'm') {
+-			pr_warn("extern %s=3D%c should be tristate or char\n",
++			pr_warn("extern (kcfg) %s=3D%c should be tristate or char\n",
+ 				ext->name, value);
+ 			return -EINVAL;
+ 		}
+ 		*(bool *)ext_val =3D value =3D=3D 'y' ? true : false;
+ 		break;
+-	case EXT_TRISTATE:
++	case KCFG_TRISTATE:
+ 		if (value =3D=3D 'y')
+ 			*(enum libbpf_tristate *)ext_val =3D TRI_YES;
+ 		else if (value =3D=3D 'm')
+@@ -1443,14 +1454,14 @@ static int set_ext_value_tri(struct extern_desc *=
+ext, void *ext_val,
+ 		else /* value =3D=3D 'n' */
+ 			*(enum libbpf_tristate *)ext_val =3D TRI_NO;
+ 		break;
+-	case EXT_CHAR:
++	case KCFG_CHAR:
+ 		*(char *)ext_val =3D value;
+ 		break;
+-	case EXT_UNKNOWN:
+-	case EXT_INT:
+-	case EXT_CHAR_ARR:
++	case KCFG_UNKNOWN:
++	case KCFG_INT:
++	case KCFG_CHAR_ARR:
+ 	default:
+-		pr_warn("extern %s=3D%c should be bool, tristate, or char\n",
++		pr_warn("extern (kcfg) %s=3D%c should be bool, tristate, or char\n",
+ 			ext->name, value);
+ 		return -EINVAL;
+ 	}
+@@ -1458,29 +1469,29 @@ static int set_ext_value_tri(struct extern_desc *=
+ext, void *ext_val,
+ 	return 0;
  }
 =20
--static int map_fd_by_name(char *name, int **fds)
--{
--	unsigned int id =3D 0;
--	int fd, nb_fds =3D 0;
--	void *tmp;
--	int err;
--
--	while (true) {
--		struct bpf_map_info info =3D {};
--		__u32 len =3D sizeof(info);
--
--		err =3D bpf_map_get_next_id(id, &id);
--		if (err) {
--			if (errno !=3D ENOENT) {
--				p_err("%s", strerror(errno));
--				goto err_close_fds;
--			}
--			return nb_fds;
--		}
--
--		fd =3D bpf_map_get_fd_by_id(id);
--		if (fd < 0) {
--			p_err("can't get map by id (%u): %s",
--			      id, strerror(errno));
--			goto err_close_fds;
--		}
--
--		err =3D bpf_obj_get_info_by_fd(fd, &info, &len);
--		if (err) {
--			p_err("can't get map info (%u): %s",
--			      id, strerror(errno));
--			goto err_close_fd;
--		}
--
--		if (strncmp(name, info.name, BPF_OBJ_NAME_LEN)) {
--			close(fd);
--			continue;
--		}
--
--		if (nb_fds > 0) {
--			tmp =3D realloc(*fds, (nb_fds + 1) * sizeof(int));
--			if (!tmp) {
--				p_err("failed to realloc");
--				goto err_close_fd;
--			}
--			*fds =3D tmp;
--		}
--		(*fds)[nb_fds++] =3D fd;
--	}
--
--err_close_fd:
--	close(fd);
--err_close_fds:
--	while (--nb_fds >=3D 0)
--		close((*fds)[nb_fds]);
--	return -1;
--}
--
--static int map_parse_fds(int *argc, char ***argv, int **fds)
--{
--	if (is_prefix(**argv, "id")) {
--		unsigned int id;
--		char *endptr;
--
--		NEXT_ARGP();
--
--		id =3D strtoul(**argv, &endptr, 0);
--		if (*endptr) {
--			p_err("can't parse %s as ID", **argv);
--			return -1;
--		}
--		NEXT_ARGP();
--
--		(*fds)[0] =3D bpf_map_get_fd_by_id(id);
--		if ((*fds)[0] < 0) {
--			p_err("get map by id (%u): %s", id, strerror(errno));
--			return -1;
--		}
--		return 1;
--	} else if (is_prefix(**argv, "name")) {
--		char *name;
--
--		NEXT_ARGP();
--
--		name =3D **argv;
--		if (strlen(name) > BPF_OBJ_NAME_LEN - 1) {
--			p_err("can't parse name");
--			return -1;
--		}
--		NEXT_ARGP();
--
--		return map_fd_by_name(name, fds);
--	} else if (is_prefix(**argv, "pinned")) {
--		char *path;
--
--		NEXT_ARGP();
--
--		path =3D **argv;
--		NEXT_ARGP();
--
--		(*fds)[0] =3D open_obj_pinned_any(path, BPF_OBJ_MAP);
--		if ((*fds)[0] < 0)
--			return -1;
--		return 1;
--	}
--
--	p_err("expected 'id', 'name' or 'pinned', got: '%s'?", **argv);
--	return -1;
--}
--
--int map_parse_fd(int *argc, char ***argv)
--{
--	int *fds =3D NULL;
--	int nb_fds, fd;
--
--	fds =3D malloc(sizeof(int));
--	if (!fds) {
--		p_err("mem alloc failed");
--		return -1;
--	}
--	nb_fds =3D map_parse_fds(argc, argv, &fds);
--	if (nb_fds !=3D 1) {
--		if (nb_fds > 1) {
--			p_err("several maps match this handle");
--			while (nb_fds--)
--				close(fds[nb_fds]);
--		}
--		fd =3D -1;
--		goto exit_free;
--	}
--
--	fd =3D fds[0];
--exit_free:
--	free(fds);
--	return fd;
--}
--
--int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *in=
-fo_len)
--{
--	int err;
--	int fd;
--
--	fd =3D map_parse_fd(argc, argv);
--	if (fd < 0)
--		return -1;
--
--	err =3D bpf_obj_get_info_by_fd(fd, info, info_len);
--	if (err) {
--		p_err("can't get map info: %s", strerror(errno));
--		close(fd);
--		return err;
--	}
--
--	return fd;
--}
--
- static int do_dump_btf(const struct btf_dumper *d,
- 		       struct bpf_map_info *map_info, void *key,
- 		       void *value)
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index a5eff83496f2..53d47610ff58 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -86,158 +86,6 @@ static void print_boot_time(__u64 nsecs, char *buf, u=
-nsigned int size)
- 		strftime(buf, size, "%FT%T%z", &load_tm);
- }
-=20
--static int prog_fd_by_nametag(void *nametag, int **fds, bool tag)
--{
--	unsigned int id =3D 0;
--	int fd, nb_fds =3D 0;
--	void *tmp;
--	int err;
--
--	while (true) {
--		struct bpf_prog_info info =3D {};
--		__u32 len =3D sizeof(info);
--
--		err =3D bpf_prog_get_next_id(id, &id);
--		if (err) {
--			if (errno !=3D ENOENT) {
--				p_err("%s", strerror(errno));
--				goto err_close_fds;
--			}
--			return nb_fds;
--		}
--
--		fd =3D bpf_prog_get_fd_by_id(id);
--		if (fd < 0) {
--			p_err("can't get prog by id (%u): %s",
--			      id, strerror(errno));
--			goto err_close_fds;
--		}
--
--		err =3D bpf_obj_get_info_by_fd(fd, &info, &len);
--		if (err) {
--			p_err("can't get prog info (%u): %s",
--			      id, strerror(errno));
--			goto err_close_fd;
--		}
--
--		if ((tag && memcmp(nametag, info.tag, BPF_TAG_SIZE)) ||
--		    (!tag && strncmp(nametag, info.name, BPF_OBJ_NAME_LEN))) {
--			close(fd);
--			continue;
--		}
--
--		if (nb_fds > 0) {
--			tmp =3D realloc(*fds, (nb_fds + 1) * sizeof(int));
--			if (!tmp) {
--				p_err("failed to realloc");
--				goto err_close_fd;
--			}
--			*fds =3D tmp;
--		}
--		(*fds)[nb_fds++] =3D fd;
--	}
--
--err_close_fd:
--	close(fd);
--err_close_fds:
--	while (--nb_fds >=3D 0)
--		close((*fds)[nb_fds]);
--	return -1;
--}
--
--static int prog_parse_fds(int *argc, char ***argv, int **fds)
--{
--	if (is_prefix(**argv, "id")) {
--		unsigned int id;
--		char *endptr;
--
--		NEXT_ARGP();
--
--		id =3D strtoul(**argv, &endptr, 0);
--		if (*endptr) {
--			p_err("can't parse %s as ID", **argv);
--			return -1;
--		}
--		NEXT_ARGP();
--
--		(*fds)[0] =3D bpf_prog_get_fd_by_id(id);
--		if ((*fds)[0] < 0) {
--			p_err("get by id (%u): %s", id, strerror(errno));
--			return -1;
--		}
--		return 1;
--	} else if (is_prefix(**argv, "tag")) {
--		unsigned char tag[BPF_TAG_SIZE];
--
--		NEXT_ARGP();
--
--		if (sscanf(**argv, BPF_TAG_FMT, tag, tag + 1, tag + 2,
--			   tag + 3, tag + 4, tag + 5, tag + 6, tag + 7)
--		    !=3D BPF_TAG_SIZE) {
--			p_err("can't parse tag");
--			return -1;
--		}
--		NEXT_ARGP();
--
--		return prog_fd_by_nametag(tag, fds, true);
--	} else if (is_prefix(**argv, "name")) {
--		char *name;
--
--		NEXT_ARGP();
--
--		name =3D **argv;
--		if (strlen(name) > BPF_OBJ_NAME_LEN - 1) {
--			p_err("can't parse name");
--			return -1;
--		}
--		NEXT_ARGP();
--
--		return prog_fd_by_nametag(name, fds, false);
--	} else if (is_prefix(**argv, "pinned")) {
--		char *path;
--
--		NEXT_ARGP();
--
--		path =3D **argv;
--		NEXT_ARGP();
--
--		(*fds)[0] =3D open_obj_pinned_any(path, BPF_OBJ_PROG);
--		if ((*fds)[0] < 0)
--			return -1;
--		return 1;
--	}
--
--	p_err("expected 'id', 'tag', 'name' or 'pinned', got: '%s'?", **argv);
--	return -1;
--}
--
--int prog_parse_fd(int *argc, char ***argv)
--{
--	int *fds =3D NULL;
--	int nb_fds, fd;
--
--	fds =3D malloc(sizeof(int));
--	if (!fds) {
--		p_err("mem alloc failed");
--		return -1;
--	}
--	nb_fds =3D prog_parse_fds(argc, argv, &fds);
--	if (nb_fds !=3D 1) {
--		if (nb_fds > 1) {
--			p_err("several programs match this handle");
--			while (nb_fds--)
--				close(fds[nb_fds]);
--		}
--		fd =3D -1;
--		goto exit_free;
--	}
--
--	fd =3D fds[0];
--exit_free:
--	free(fds);
--	return fd;
--}
--
- static void show_prog_maps(int fd, __u32 num_maps)
+-static int set_ext_value_str(struct extern_desc *ext, char *ext_val,
+-			     const char *value)
++static int set_kcfg_value_str(struct extern_desc *ext, char *ext_val,
++			      const char *value)
  {
- 	struct bpf_prog_info info =3D {};
+ 	size_t len;
+=20
+-	if (ext->type !=3D EXT_CHAR_ARR) {
+-		pr_warn("extern %s=3D%s should char array\n", ext->name, value);
++	if (ext->kcfg.type !=3D KCFG_CHAR_ARR) {
++		pr_warn("extern (kcfg) %s=3D%s should be char array\n", ext->name, val=
+ue);
+ 		return -EINVAL;
+ 	}
+=20
+ 	len =3D strlen(value);
+ 	if (value[len - 1] !=3D '"') {
+-		pr_warn("extern '%s': invalid string config '%s'\n",
++		pr_warn("extern (kcfg) '%s': invalid string config '%s'\n",
+ 			ext->name, value);
+ 		return -EINVAL;
+ 	}
+=20
+ 	/* strip quotes */
+ 	len -=3D 2;
+-	if (len >=3D ext->sz) {
+-		pr_warn("extern '%s': long string config %s of (%zu bytes) truncated t=
+o %d bytes\n",
+-			ext->name, value, len, ext->sz - 1);
+-		len =3D ext->sz - 1;
++	if (len >=3D ext->kcfg.sz) {
++		pr_warn("extern (kcfg) '%s': long string config %s of (%zu bytes) trun=
+cated to %d bytes\n",
++			ext->name, value, len, ext->kcfg.sz - 1);
++		len =3D ext->kcfg.sz - 1;
+ 	}
+ 	memcpy(ext_val, value + 1, len);
+ 	ext_val[len] =3D '\0';
+@@ -1507,11 +1518,11 @@ static int parse_u64(const char *value, __u64 *re=
+s)
+ 	return 0;
+ }
+=20
+-static bool is_ext_value_in_range(const struct extern_desc *ext, __u64 v=
+)
++static bool is_kcfg_value_in_range(const struct extern_desc *ext, __u64 =
+v)
+ {
+-	int bit_sz =3D ext->sz * 8;
++	int bit_sz =3D ext->kcfg.sz * 8;
+=20
+-	if (ext->sz =3D=3D 8)
++	if (ext->kcfg.sz =3D=3D 8)
+ 		return true;
+=20
+ 	/* Validate that value stored in u64 fits in integer of `ext->sz`
+@@ -1526,26 +1537,26 @@ static bool is_ext_value_in_range(const struct ex=
+tern_desc *ext, __u64 v)
+ 	 *  For unsigned target integer, check that all the (64 - Y) bits are
+ 	 *  zero.
+ 	 */
+-	if (ext->is_signed)
++	if (ext->kcfg.is_signed)
+ 		return v + (1ULL << (bit_sz - 1)) < (1ULL << bit_sz);
+ 	else
+ 		return (v >> bit_sz) =3D=3D 0;
+ }
+=20
+-static int set_ext_value_num(struct extern_desc *ext, void *ext_val,
+-			     __u64 value)
++static int set_kcfg_value_num(struct extern_desc *ext, void *ext_val,
++			      __u64 value)
+ {
+-	if (ext->type !=3D EXT_INT && ext->type !=3D EXT_CHAR) {
+-		pr_warn("extern %s=3D%llu should be integer\n",
++	if (ext->kcfg.type !=3D KCFG_INT && ext->kcfg.type !=3D KCFG_CHAR) {
++		pr_warn("extern (kcfg) %s=3D%llu should be integer\n",
+ 			ext->name, (unsigned long long)value);
+ 		return -EINVAL;
+ 	}
+-	if (!is_ext_value_in_range(ext, value)) {
+-		pr_warn("extern %s=3D%llu value doesn't fit in %d bytes\n",
+-			ext->name, (unsigned long long)value, ext->sz);
++	if (!is_kcfg_value_in_range(ext, value)) {
++		pr_warn("extern (kcfg) %s=3D%llu value doesn't fit in %d bytes\n",
++			ext->name, (unsigned long long)value, ext->kcfg.sz);
+ 		return -ERANGE;
+ 	}
+-	switch (ext->sz) {
++	switch (ext->kcfg.sz) {
+ 		case 1: *(__u8 *)ext_val =3D value; break;
+ 		case 2: *(__u16 *)ext_val =3D value; break;
+ 		case 4: *(__u32 *)ext_val =3D value; break;
+@@ -1591,30 +1602,30 @@ static int bpf_object__process_kconfig_line(struc=
+t bpf_object *obj,
+ 	if (!ext || ext->is_set)
+ 		return 0;
+=20
+-	ext_val =3D data + ext->data_off;
++	ext_val =3D data + ext->kcfg.data_off;
+ 	value =3D sep + 1;
+=20
+ 	switch (*value) {
+ 	case 'y': case 'n': case 'm':
+-		err =3D set_ext_value_tri(ext, ext_val, *value);
++		err =3D set_kcfg_value_tri(ext, ext_val, *value);
+ 		break;
+ 	case '"':
+-		err =3D set_ext_value_str(ext, ext_val, value);
++		err =3D set_kcfg_value_str(ext, ext_val, value);
+ 		break;
+ 	default:
+ 		/* assume integer */
+ 		err =3D parse_u64(value, &num);
+ 		if (err) {
+-			pr_warn("extern %s=3D%s should be integer\n",
++			pr_warn("extern (kcfg) %s=3D%s should be integer\n",
+ 				ext->name, value);
+ 			return err;
+ 		}
+-		err =3D set_ext_value_num(ext, ext_val, num);
++		err =3D set_kcfg_value_num(ext, ext_val, num);
+ 		break;
+ 	}
+ 	if (err)
+ 		return err;
+-	pr_debug("extern %s=3D%s\n", ext->name, value);
++	pr_debug("extern (kcfg) %s=3D%s\n", ext->name, value);
+ 	return 0;
+ }
+=20
+@@ -1685,16 +1696,20 @@ static int bpf_object__read_kconfig_mem(struct bp=
+f_object *obj,
+=20
+ static int bpf_object__init_kconfig_map(struct bpf_object *obj)
+ {
+-	struct extern_desc *last_ext;
++	struct extern_desc *last_ext =3D NULL, *ext;
+ 	size_t map_sz;
+-	int err;
++	int i, err;
+=20
+-	if (obj->nr_extern =3D=3D 0)
+-		return 0;
++	for (i =3D 0; i < obj->nr_extern; i++) {
++		ext =3D &obj->externs[i];
++		if (ext->type =3D=3D EXT_KCFG)
++			last_ext =3D ext;
++	}
+=20
+-	last_ext =3D &obj->externs[obj->nr_extern - 1];
+-	map_sz =3D last_ext->data_off + last_ext->sz;
++	if (!last_ext)
++		return 0;
+=20
++	map_sz =3D last_ext->kcfg.data_off + last_ext->kcfg.sz;
+ 	err =3D bpf_object__init_internal_map(obj, LIBBPF_MAP_KCONFIG,
+ 					    obj->efile.symbols_shndx,
+ 					    NULL, map_sz);
+@@ -2709,8 +2724,33 @@ static int find_extern_btf_id(const struct btf *bt=
+f, const char *ext_name)
+ 	return -ENOENT;
+ }
+=20
+-static enum extern_type find_extern_type(const struct btf *btf, int id,
+-					 bool *is_signed)
++static int find_extern_sec_btf_id(struct btf *btf, int ext_btf_id) {
++	const struct btf_var_secinfo *vs;
++	const struct btf_type *t;
++	int i, j, n;
++
++	if (!btf)
++		return -ESRCH;
++
++	n =3D btf__get_nr_types(btf);
++	for (i =3D 1; i <=3D n; i++) {
++		t =3D btf__type_by_id(btf, i);
++
++		if (!btf_is_datasec(t))
++			continue;
++
++		vs =3D btf_var_secinfos(t);
++		for (j =3D 0; j < btf_vlen(t); j++, vs++) {
++			if (vs->type =3D=3D ext_btf_id)
++				return i;
++		}
++	}
++
++	return -ENOENT;
++}
++
++static enum kcfg_type find_kcfg_type(const struct btf *btf, int id,
++				     bool *is_signed)
+ {
+ 	const struct btf_type *t;
+ 	const char *name;
+@@ -2725,29 +2765,29 @@ static enum extern_type find_extern_type(const st=
+ruct btf *btf, int id,
+ 		int enc =3D btf_int_encoding(t);
+=20
+ 		if (enc & BTF_INT_BOOL)
+-			return t->size =3D=3D 1 ? EXT_BOOL : EXT_UNKNOWN;
++			return t->size =3D=3D 1 ? KCFG_BOOL : KCFG_UNKNOWN;
+ 		if (is_signed)
+ 			*is_signed =3D enc & BTF_INT_SIGNED;
+ 		if (t->size =3D=3D 1)
+-			return EXT_CHAR;
++			return KCFG_CHAR;
+ 		if (t->size < 1 || t->size > 8 || (t->size & (t->size - 1)))
+-			return EXT_UNKNOWN;
+-		return EXT_INT;
++			return KCFG_UNKNOWN;
++		return KCFG_INT;
+ 	}
+ 	case BTF_KIND_ENUM:
+ 		if (t->size !=3D 4)
+-			return EXT_UNKNOWN;
++			return KCFG_UNKNOWN;
+ 		if (strcmp(name, "libbpf_tristate"))
+-			return EXT_UNKNOWN;
+-		return EXT_TRISTATE;
++			return KCFG_UNKNOWN;
++		return KCFG_TRISTATE;
+ 	case BTF_KIND_ARRAY:
+ 		if (btf_array(t)->nelems =3D=3D 0)
+-			return EXT_UNKNOWN;
+-		if (find_extern_type(btf, btf_array(t)->type, NULL) !=3D EXT_CHAR)
+-			return EXT_UNKNOWN;
+-		return EXT_CHAR_ARR;
++			return KCFG_UNKNOWN;
++		if (find_kcfg_type(btf, btf_array(t)->type, NULL) !=3D KCFG_CHAR)
++			return KCFG_UNKNOWN;
++		return KCFG_CHAR_ARR;
+ 	default:
+-		return EXT_UNKNOWN;
++		return KCFG_UNKNOWN;
+ 	}
+ }
+=20
+@@ -2756,23 +2796,29 @@ static int cmp_externs(const void *_a, const void=
+ *_b)
+ 	const struct extern_desc *a =3D _a;
+ 	const struct extern_desc *b =3D _b;
+=20
+-	/* descending order by alignment requirements */
+-	if (a->align !=3D b->align)
+-		return a->align > b->align ? -1 : 1;
+-	/* ascending order by size, within same alignment class */
+-	if (a->sz !=3D b->sz)
+-		return a->sz < b->sz ? -1 : 1;
+-	/* resolve ties by name */
++	if (a->type !=3D b->type)
++		return a->type < b->type ? -1 : 1;
++
++	if (a->type =3D=3D EXT_KCFG) {
++		/* descending order by alignment requirements */
++		if (a->kcfg.align !=3D b->kcfg.align)
++			return a->kcfg.align > b->kcfg.align ? -1 : 1;
++		/* ascending order by size, within same alignment class */
++		if (a->kcfg.sz !=3D b->kcfg.sz)
++			return a->kcfg.sz < b->kcfg.sz ? -1 : 1;
++		/* resolve ties by name */
++	}
++
+ 	return strcmp(a->name, b->name);
+ }
+=20
+ static int bpf_object__collect_externs(struct bpf_object *obj)
+ {
++	struct btf_type *sec, *kcfg_sec =3D NULL;
+ 	const struct btf_type *t;
+ 	struct extern_desc *ext;
+-	int i, n, off, btf_id;
+-	struct btf_type *sec;
+-	const char *ext_name;
++	int i, n, off;
++	const char *ext_name, *sec_name;
+ 	Elf_Scn *scn;
+ 	GElf_Shdr sh;
+=20
+@@ -2818,22 +2864,39 @@ static int bpf_object__collect_externs(struct bpf=
+_object *obj)
+ 		ext->name =3D btf__name_by_offset(obj->btf, t->name_off);
+ 		ext->sym_idx =3D i;
+ 		ext->is_weak =3D GELF_ST_BIND(sym.st_info) =3D=3D STB_WEAK;
+-		ext->sz =3D btf__resolve_size(obj->btf, t->type);
+-		if (ext->sz <=3D 0) {
+-			pr_warn("failed to resolve size of extern '%s': %d\n",
+-				ext_name, ext->sz);
+-			return ext->sz;
+-		}
+-		ext->align =3D btf__align_of(obj->btf, t->type);
+-		if (ext->align <=3D 0) {
+-			pr_warn("failed to determine alignment of extern '%s': %d\n",
+-				ext_name, ext->align);
+-			return -EINVAL;
+-		}
+-		ext->type =3D find_extern_type(obj->btf, t->type,
+-					     &ext->is_signed);
+-		if (ext->type =3D=3D EXT_UNKNOWN) {
+-			pr_warn("extern '%s' type is unsupported\n", ext_name);
++
++		ext->sec_btf_id =3D find_extern_sec_btf_id(obj->btf, ext->btf_id);
++		if (ext->btf_id <=3D 0) {
++			pr_warn("failed to find BTF for extern '%s' [%d] section: %d\n",
++				ext_name, ext->btf_id, ext->sec_btf_id);
++			return ext->sec_btf_id;
++		}
++		sec =3D (void *)btf__type_by_id(obj->btf, ext->sec_btf_id);
++		sec_name =3D btf__name_by_offset(obj->btf, sec->name_off);
++
++		if (strcmp(sec_name, KCONFIG_SEC) =3D=3D 0) {
++			kcfg_sec =3D sec;
++			ext->type =3D EXT_KCFG;
++			ext->kcfg.sz =3D btf__resolve_size(obj->btf, t->type);
++			if (ext->kcfg.sz <=3D 0) {
++				pr_warn("failed to resolve size of extern (kcfg) '%s': %d\n",
++					ext_name, ext->kcfg.sz);
++				return ext->kcfg.sz;
++			}
++			ext->kcfg.align =3D btf__align_of(obj->btf, t->type);
++			if (ext->kcfg.align <=3D 0) {
++				pr_warn("failed to determine alignment of extern (kcfg) '%s': %d\n",
++					ext_name, ext->kcfg.align);
++				return -EINVAL;
++			}
++			ext->kcfg.type =3D find_kcfg_type(obj->btf, t->type,
++						        &ext->kcfg.is_signed);
++			if (ext->kcfg.type =3D=3D KCFG_UNKNOWN) {
++				pr_warn("extern (kcfg) '%s' type is unsupported\n", ext_name);
++				return -ENOTSUP;
++			}
++		} else {
++			pr_warn("unrecognized extern section '%s'\n", sec_name);
+ 			return -ENOTSUP;
+ 		}
+ 	}
+@@ -2842,42 +2905,40 @@ static int bpf_object__collect_externs(struct bpf=
+_object *obj)
+ 	if (!obj->nr_extern)
+ 		return 0;
+=20
+-	/* sort externs by (alignment, size, name) and calculate their offsets
+-	 * within a map */
++	/* sort externs by type, for kcfg ones also by (align, size, name) */
+ 	qsort(obj->externs, obj->nr_extern, sizeof(*ext), cmp_externs);
+-	off =3D 0;
+-	for (i =3D 0; i < obj->nr_extern; i++) {
+-		ext =3D &obj->externs[i];
+-		ext->data_off =3D roundup(off, ext->align);
+-		off =3D ext->data_off + ext->sz;
+-		pr_debug("extern #%d: symbol %d, off %u, name %s\n",
+-			 i, ext->sym_idx, ext->data_off, ext->name);
+-	}
+=20
+-	btf_id =3D btf__find_by_name(obj->btf, KCONFIG_SEC);
+-	if (btf_id <=3D 0) {
+-		pr_warn("no BTF info found for '%s' datasec\n", KCONFIG_SEC);
+-		return -ESRCH;
+-	}
++	if (kcfg_sec) {
++		sec =3D kcfg_sec;
++		/* for kcfg externs calculate their offsets within a .kconfig map */
++		off =3D 0;
++		for (i =3D 0; i < obj->nr_extern; i++) {
++			ext =3D &obj->externs[i];
++			if (ext->type !=3D EXT_KCFG)
++				continue;
+=20
+-	sec =3D (struct btf_type *)btf__type_by_id(obj->btf, btf_id);
+-	sec->size =3D off;
+-	n =3D btf_vlen(sec);
+-	for (i =3D 0; i < n; i++) {
+-		struct btf_var_secinfo *vs =3D btf_var_secinfos(sec) + i;
+-
+-		t =3D btf__type_by_id(obj->btf, vs->type);
+-		ext_name =3D btf__name_by_offset(obj->btf, t->name_off);
+-		ext =3D find_extern_by_name(obj, ext_name);
+-		if (!ext) {
+-			pr_warn("failed to find extern definition for BTF var '%s'\n",
+-				ext_name);
+-			return -ESRCH;
++			ext->kcfg.data_off =3D roundup(off, ext->kcfg.align);
++			off =3D ext->kcfg.data_off + ext->kcfg.sz;
++			pr_debug("extern #%d (kcfg): symbol %d, off %u, name %s\n",
++				 i, ext->sym_idx, ext->kcfg.data_off, ext->name);
++		}
++		sec->size =3D off;
++		n =3D btf_vlen(sec);
++		for (i =3D 0; i < n; i++) {
++			struct btf_var_secinfo *vs =3D btf_var_secinfos(sec) + i;
++
++			t =3D btf__type_by_id(obj->btf, vs->type);
++			ext_name =3D btf__name_by_offset(obj->btf, t->name_off);
++			ext =3D find_extern_by_name(obj, ext_name);
++			if (!ext) {
++				pr_warn("failed to find extern definition for BTF var '%s'\n",
++					ext_name);
++				return -ESRCH;
++			}
++			btf_var(t)->linkage =3D BTF_VAR_GLOBAL_ALLOCATED;
++			vs->offset =3D ext->kcfg.data_off;
+ 		}
+-		vs->offset =3D ext->data_off;
+-		btf_var(t)->linkage =3D BTF_VAR_GLOBAL_ALLOCATED;
+ 	}
+-
+ 	return 0;
+ }
+=20
+@@ -3007,11 +3068,11 @@ static int bpf_program__record_reloc(struct bpf_p=
+rogram *prog,
+ 				sym_idx);
+ 			return -LIBBPF_ERRNO__RELOC;
+ 		}
+-		pr_debug("found extern #%d '%s' (sym %d, off %u) for insn %u\n",
+-			 i, ext->name, ext->sym_idx, ext->data_off, insn_idx);
++		pr_debug("found extern #%d '%s' (sym %d) for insn %u\n",
++			 i, ext->name, ext->sym_idx, insn_idx);
+ 		reloc_desc->type =3D RELO_EXTERN;
+ 		reloc_desc->insn_idx =3D insn_idx;
+-		reloc_desc->sym_off =3D ext->data_off;
++		reloc_desc->sym_off =3D i; /* sym_off stores extern index */
+ 		return 0;
+ 	}
+=20
+@@ -4928,6 +4989,7 @@ bpf_program__relocate(struct bpf_program *prog, str=
+uct bpf_object *obj)
+ 	for (i =3D 0; i < prog->nr_reloc; i++) {
+ 		struct reloc_desc *relo =3D &prog->reloc_desc[i];
+ 		struct bpf_insn *insn =3D &prog->insns[relo->insn_idx];
++		struct extern_desc *ext;
+=20
+ 		if (relo->insn_idx + 1 >=3D (int)prog->insns_cnt) {
+ 			pr_warn("relocation out of range: '%s'\n",
+@@ -4946,9 +5008,10 @@ bpf_program__relocate(struct bpf_program *prog, st=
+ruct bpf_object *obj)
+ 			insn[0].imm =3D obj->maps[relo->map_idx].fd;
+ 			break;
+ 		case RELO_EXTERN:
++			ext =3D &obj->externs[relo->sym_off];
+ 			insn[0].src_reg =3D BPF_PSEUDO_MAP_VALUE;
+ 			insn[0].imm =3D obj->maps[obj->kconfig_map_idx].fd;
+-			insn[1].imm =3D relo->sym_off;
++			insn[1].imm =3D ext->kcfg.data_off;
+ 			break;
+ 		case RELO_CALL:
+ 			err =3D bpf_program__reloc_text(prog, obj, relo);
+@@ -5572,30 +5635,33 @@ static int bpf_object__resolve_externs(struct bpf=
+_object *obj,
+ {
+ 	bool need_config =3D false;
+ 	struct extern_desc *ext;
++	void *kcfg_data =3D NULL;
+ 	int err, i;
+-	void *data;
+=20
+ 	if (obj->nr_extern =3D=3D 0)
+ 		return 0;
+=20
+-	data =3D obj->maps[obj->kconfig_map_idx].mmaped;
++	if (obj->kconfig_map_idx >=3D 0)
++		kcfg_data =3D obj->maps[obj->kconfig_map_idx].mmaped;
+=20
+ 	for (i =3D 0; i < obj->nr_extern; i++) {
+ 		ext =3D &obj->externs[i];
+=20
+-		if (strcmp(ext->name, "LINUX_KERNEL_VERSION") =3D=3D 0) {
+-			void *ext_val =3D data + ext->data_off;
++		if (ext->type =3D=3D EXT_KCFG &&
++		    strcmp(ext->name, "LINUX_KERNEL_VERSION") =3D=3D 0) {
++			void *ext_val =3D kcfg_data + ext->kcfg.data_off;
+ 			__u32 kver =3D get_kernel_version();
+=20
+ 			if (!kver) {
+ 				pr_warn("failed to get kernel version\n");
+ 				return -EINVAL;
+ 			}
+-			err =3D set_ext_value_num(ext, ext_val, kver);
++			err =3D set_kcfg_value_num(ext, ext_val, kver);
+ 			if (err)
+ 				return err;
+-			pr_debug("extern %s=3D0x%x\n", ext->name, kver);
+-		} else if (strncmp(ext->name, "CONFIG_", 7) =3D=3D 0) {
++			pr_debug("extern (kcfg) %s=3D0x%x\n", ext->name, kver);
++		} else if (ext->type =3D=3D EXT_KCFG &&
++			   strncmp(ext->name, "CONFIG_", 7) =3D=3D 0) {
+ 			need_config =3D true;
+ 		} else {
+ 			pr_warn("unrecognized extern '%s'\n", ext->name);
+@@ -5603,20 +5669,20 @@ static int bpf_object__resolve_externs(struct bpf=
+_object *obj,
+ 		}
+ 	}
+ 	if (need_config && extra_kconfig) {
+-		err =3D bpf_object__read_kconfig_mem(obj, extra_kconfig, data);
++		err =3D bpf_object__read_kconfig_mem(obj, extra_kconfig, kcfg_data);
+ 		if (err)
+ 			return -EINVAL;
+ 		need_config =3D false;
+ 		for (i =3D 0; i < obj->nr_extern; i++) {
+ 			ext =3D &obj->externs[i];
+-			if (!ext->is_set) {
++			if (ext->type =3D=3D EXT_KCFG && !ext->is_set) {
+ 				need_config =3D true;
+ 				break;
+ 			}
+ 		}
+ 	}
+ 	if (need_config) {
+-		err =3D bpf_object__read_kconfig_file(obj, data);
++		err =3D bpf_object__read_kconfig_file(obj, kcfg_data);
+ 		if (err)
+ 			return -EINVAL;
+ 	}
 --=20
 2.24.1
 
