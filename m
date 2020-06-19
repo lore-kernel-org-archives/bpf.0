@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FA1EC433E0
-	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 23:20:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC38CC433E0
+	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 23:20:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2AD0A22454
-	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 23:20:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7EDBF2242E
+	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 23:20:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="pVdhZ9xu"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="q6KUyzwF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730393AbgFSXT7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Jun 2020 19:19:59 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:24538 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730379AbgFSXT7 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 19 Jun 2020 19:19:59 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05JNJsa2000982
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2020 16:19:58 -0700
+        id S1730394AbgFSXU1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Jun 2020 19:20:27 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:42320 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730379AbgFSXU0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 19 Jun 2020 19:20:26 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 05JNDnot002958
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2020 16:20:25 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=6ENgc7mV1pjTqzJvZLO+o3HnsiY+Qwqtmd6iQKDqhS4=;
- b=pVdhZ9xung4vn5yttHwspoxS4pP5UxjTNAiMVCU3M7eNPt7rNIYcDhV8fAbwSSdzxrve
- BQEO8vK1/onN3+kSkT5Z2f930q7/42CdWJtfnBr179WtDPIPpwUVc/Ct6QK+0laBEQ+q
- hlPTUveTUvcK1Y+Q7LHvmm7lgGEnqRuAZaI= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31s31es5pu-9
+ bh=NbHcmE7CR3c6Yw/WXiXlu0mB8SL0O4dcycL68+Dgq20=;
+ b=q6KUyzwFCrCseEvisSTPFn5p1alFjzQNE0YTSPLhZJg0WG6kr680boISMprwR0bVrSk3
+ Idj6DoCxjboH8FH7OFMdGQ9c6vt9HeeJ2naSmzGP13oq4fbFV1pTLfJ/leqoqpTYJ//J
+ EE9istkKOFVaO2wo08EviqLtOZEZAvX8nkE= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 31q64579kj-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 19 Jun 2020 16:19:58 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2020 16:20:25 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 19 Jun 2020 16:19:31 -0700
+ 15.1.1979.3; Fri, 19 Jun 2020 16:20:24 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 76B782EC3762; Fri, 19 Jun 2020 16:17:13 -0700 (PDT)
+        id 8DE222EC37CF; Fri, 19 Jun 2020 16:17:26 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -52,9 +52,9 @@ CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>,
         Quentin Monnet <quentin@isovalent.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 3/9] selftests/bpf: add __ksym extern selftest
-Date:   Fri, 19 Jun 2020 16:16:57 -0700
-Message-ID: <20200619231703.738941-4-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 9/9] tools/bpftool: add documentation and sample output for process info
+Date:   Fri, 19 Jun 2020 16:17:03 -0700
+Message-ID: <20200619231703.738941-10-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200619231703.738941-1-andriin@fb.com>
 References: <20200619231703.738941-1-andriin@fb.com>
@@ -64,147 +64,153 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-19_22:2020-06-19,2020-06-19 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- suspectscore=8 lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0
- priorityscore=1501 clxscore=1015 cotscore=-2147483648 bulkscore=0
- mlxlogscore=882 mlxscore=0 phishscore=0 classifier=spam adjust=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ impostorscore=0 cotscore=-2147483648 suspectscore=8 adultscore=0
+ spamscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=999 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006190164
+ definitions=main-2006190163
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Validate libbpf is able to handle weak and strong kernel symbol externs i=
-n BPF
-code correctly.
+Add statements about bpftool being able to discover process info, holding
+reference to BPF map, prog, link, or BTF. Show example output as well.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../testing/selftests/bpf/prog_tests/ksyms.c  | 71 +++++++++++++++++++
- .../testing/selftests/bpf/progs/test_ksyms.c  | 32 +++++++++
- 2 files changed, 103 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ksyms.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms.c
+ tools/bpf/bpftool/Documentation/bpftool-btf.rst  |  5 +++++
+ tools/bpf/bpftool/Documentation/bpftool-link.rst | 13 ++++++++++++-
+ tools/bpf/bpftool/Documentation/bpftool-map.rst  |  8 +++++++-
+ tools/bpf/bpftool/Documentation/bpftool-prog.rst | 11 +++++++++++
+ 4 files changed, 35 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/testi=
-ng/selftests/bpf/prog_tests/ksyms.c
-new file mode 100644
-index 000000000000..e3d6777226a8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2019 Facebook */
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/=
+bpftool/Documentation/bpftool-btf.rst
+index ce3a724f50c1..896f4c6c2870 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+@@ -36,6 +36,11 @@ DESCRIPTION
+ 		  otherwise list all BTF objects currently loaded on the
+ 		  system.
+=20
++		  Since Linux 5.8 bpftool is able to discover information about
++		  processes that hold open file descriptors (FDs) against BTF
++		  objects. On such kernels bpftool will automatically emit this
++		  information as well.
 +
-+#include <test_progs.h>
-+#include "test_ksyms.skel.h"
-+#include <sys/stat.h>
+ 	**bpftool btf dump** *BTF_SRC*
+ 		  Dump BTF entries from a given *BTF_SRC*.
+=20
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-link.rst b/tools/bpf=
+/bpftool/Documentation/bpftool-link.rst
+index 0e43d7b06c11..38b0949a185b 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-link.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-link.rst
+@@ -37,6 +37,11 @@ DESCRIPTION
+ 		  zero or more named attributes, some of which depend on type
+ 		  of link.
+=20
++		  Since Linux 5.8 bpftool is able to discover information about
++		  processes that hold open file descriptors (FDs) against BPF
++		  links. On such kernels bpftool will automatically emit this
++		  information as well.
 +
-+static int duration;
+ 	**bpftool link pin** *LINK* *FILE*
+ 		  Pin link *LINK* as *FILE*.
+=20
+@@ -82,6 +87,7 @@ EXAMPLES
+=20
+     10: cgroup  prog 25
+             cgroup_id 614  attach_type egress
++            pids test_progs(223)
+=20
+ **# bpftool --json --pretty link show**
+=20
+@@ -91,7 +97,12 @@ EXAMPLES
+             "type": "cgroup",
+             "prog_id": 25,
+             "cgroup_id": 614,
+-            "attach_type": "egress"
++            "attach_type": "egress",
++            "pids": [{
++                    "pid": 223,
++                    "comm": "test_progs"
++                }
++            ]
+         }
+     ]
+=20
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/=
+bpftool/Documentation/bpftool-map.rst
+index 31101643e57c..5bc2123e9944 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+@@ -62,6 +62,11 @@ DESCRIPTION
+ 		  Output will start with map ID followed by map type and
+ 		  zero or more named attributes (depending on kernel version).
+=20
++		  Since Linux 5.8 bpftool is able to discover information about
++		  processes that hold open file descriptors (FDs) against BPF
++		  maps. On such kernels bpftool will automatically emit this
++		  information as well.
 +
-+static __u64 kallsyms_find(const char *sym)
-+{
-+	char type, name[500];
-+	__u64 addr, res =3D 0;
-+	FILE *f;
+ 	**bpftool map create** *FILE* **type** *TYPE* **key** *KEY_SIZE* **valu=
+e** *VALUE_SIZE*  **entries** *MAX_ENTRIES* **name** *NAME* [**flags** *F=
+LAGS*] [**dev** *NAME*]
+ 		  Create a new map with given parameters and pin it to *bpffs*
+ 		  as *FILE*.
+@@ -180,7 +185,8 @@ EXAMPLES
+ ::
+=20
+   10: hash  name some_map  flags 0x0
+-	key 4B  value 8B  max_entries 2048  memlock 167936B
++        key 4B  value 8B  max_entries 2048  memlock 167936B
++        pids systemd(1)
+=20
+ The following three commands are equivalent:
+=20
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf=
+/bpftool/Documentation/bpftool-prog.rst
+index 2b254959d488..412ea3d9bf7f 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -75,6 +75,11 @@ DESCRIPTION
+ 		  program run. Activation or deactivation of the feature is
+ 		  performed via the **kernel.bpf_stats_enabled** sysctl knob.
+=20
++		  Since Linux 5.8 bpftool is able to discover information about
++		  processes that hold open file descriptors (FDs) against BPF
++		  programs. On such kernels bpftool will automatically emit this
++		  information as well.
 +
-+	f =3D fopen("/proc/kallsyms", "r");
-+	if (CHECK(!f, "kallsyms_fopen", "failed to open: %d\n", errno))
-+		return 0;
-+
-+	while (fscanf(f, "%llx %c %499s%*[^\n]\n", &addr, &type, name) > 0) {
-+		if (strcmp(name, sym) =3D=3D 0) {
-+			res =3D addr;
-+			goto out;
-+		}
-+	}
-+
-+	CHECK(false, "not_found", "symbol %s not found\n", sym);
-+out:
-+	fclose(f);
-+	return res;
-+}
-+
-+void test_ksyms(void)
-+{
-+	__u64 link_fops_addr =3D kallsyms_find("bpf_link_fops");
-+	const char *btf_path =3D "/sys/kernel/btf/vmlinux";
-+	struct test_ksyms *skel;
-+	struct test_ksyms__data *data;
-+	struct stat st;
-+	__u64 btf_size;
-+	int err;
-+
-+	if (CHECK(stat(btf_path, &st), "stat_btf", "err %d\n", errno))
-+		return;
-+	btf_size =3D st.st_size;
-+
-+	skel =3D test_ksyms__open_and_load();
-+	if (CHECK(!skel, "skel_open", "failed to open and load skeleton\n"))
-+		return;
-+
-+	err =3D test_ksyms__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	/* trigger tracepoint */
-+	usleep(1);
-+
-+	data =3D skel->data;
-+	CHECK(data->out__bpf_link_fops !=3D link_fops_addr, "bpf_link_fops",
-+	      "got 0x%llx, exp 0x%llx\n",
-+	      data->out__bpf_link_fops, link_fops_addr);
-+	CHECK(data->out__bpf_link_fops1 !=3D 0, "bpf_link_fops1",
-+	      "got %llu, exp %llu\n", data->out__bpf_link_fops1, (__u64)0);
-+	CHECK(data->out__btf_size !=3D btf_size, "btf_size",
-+	      "got %llu, exp %llu\n", data->out__btf_size, btf_size);
-+	CHECK(data->out__per_cpu_start !=3D 0, "__per_cpu_start",
-+	      "got %llu, exp %llu\n", data->out__per_cpu_start, (__u64)0);
-+
-+cleanup:
-+	test_ksyms__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_ksyms.c b/tools/testi=
-ng/selftests/bpf/progs/test_ksyms.c
-new file mode 100644
-index 000000000000..6c9cbb5a3bdf
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_ksyms.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2019 Facebook */
-+
-+#include <stdbool.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+__u64 out__bpf_link_fops =3D -1;
-+__u64 out__bpf_link_fops1 =3D -1;
-+__u64 out__btf_size =3D -1;
-+__u64 out__per_cpu_start =3D -1;
-+
-+extern const void bpf_link_fops __ksym;
-+extern const void __start_BTF __ksym;
-+extern const void __stop_BTF __ksym;
-+extern const void __per_cpu_start __ksym;
-+/* non-existing symbol, weak, default to zero */
-+extern const void bpf_link_fops1 __ksym __weak;
-+
-+SEC("raw_tp/sys_enter")
-+int handler(const void *ctx)
-+{
-+	out__bpf_link_fops =3D (__u64)&bpf_link_fops;
-+	out__btf_size =3D (__u64)(&__stop_BTF - &__start_BTF);
-+	out__per_cpu_start =3D (__u64)&__per_cpu_start;
-+
-+	out__bpf_link_fops1 =3D (__u64)&bpf_link_fops1;
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
+ 	**bpftool prog dump xlated** *PROG* [{ **file** *FILE* | **opcodes** | =
+**visual** | **linum** }]
+ 		  Dump eBPF instructions of the programs from the kernel. By
+ 		  default, eBPF will be disassembled and printed to standard
+@@ -243,6 +248,7 @@ EXAMPLES
+     10: xdp  name some_prog  tag 005a3d2123620c8b  gpl run_time_ns 81632=
+ run_cnt 10
+             loaded_at 2017-09-29T20:11:00+0000  uid 0
+             xlated 528B  jited 370B  memlock 4096B  map_ids 10
++            pids systemd(1)
+=20
+ **# bpftool --json --pretty prog show**
+=20
+@@ -262,6 +268,11 @@ EXAMPLES
+             "bytes_jited": 370,
+             "bytes_memlock": 4096,
+             "map_ids": [10
++            ],
++            "pids": [{
++                    "pid": 1,
++                    "comm": "systemd"
++                }
+             ]
+         }
+     ]
 --=20
 2.24.1
 
