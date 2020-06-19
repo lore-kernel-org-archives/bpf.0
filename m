@@ -2,163 +2,127 @@ Return-Path: <SRS0=nKFI=AA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8EEBC433E0
-	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 23:11:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B5C6C433E0
+	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 23:19:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A6CC222450
-	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 23:11:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0472022454
+	for <bpf@archiver.kernel.org>; Fri, 19 Jun 2020 23:19:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="npX+WAy5"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="T9qi6pWh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730345AbgFSXLU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Jun 2020 19:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730253AbgFSXLT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Jun 2020 19:11:19 -0400
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68312C06174E;
-        Fri, 19 Jun 2020 16:11:19 -0700 (PDT)
-Received: by mail-qv1-xf41.google.com with SMTP id cv17so5259031qvb.13;
-        Fri, 19 Jun 2020 16:11:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ar26egJbF99kcPEeMmrjA86yF8a71qXeh2j+7ovsSZw=;
-        b=npX+WAy59xvh7eSJe9LYqsYVP+lIV5Rt3a/1E3Dh1GAdNViZ1ARk33U6AxxSr4zfoH
-         pdMqvSqA1kggRtCcZqL0gV+K8XoVw6f0Mj35OKqZKq5usvkNgE92ctQjybqdlatdYKeO
-         hmehPLp5L/a3Q/wzy8x6KkBr82J+PFhlNXQGTOYSZoMrdwNk8QWy2D19FopaSrp2TkRa
-         /scfcRNjd8wNKFrduobCb7ZWbXN5oKqQzjgW38WjNBlCZhkoVlpKEbyKUCZSEz3KTr0b
-         7JXjDXA30l7OncXcV0MaCmgrrpq73T3JXv4uf0RZmbnu9+80cAgsWbzNf7OT8+npIJt3
-         B84A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ar26egJbF99kcPEeMmrjA86yF8a71qXeh2j+7ovsSZw=;
-        b=mLvNRyFy+yS6Xnl8PoACKKTMer/9U7RuheVcScZa0Do7/PTRcfTUdmutRTL0YaODEN
-         LLZwSIS0dG/fEagjr8RJGEW1elLSuECOHEMrQ9bBbB316r55MMaI2ZVPLta5BCJQqSRe
-         LIPP3ZVAbsBPh/nUxgyQ4gnx6r8LFte3Ddgcjy8/6vEhTVCyklilZ42YlOMIyOG/Vriq
-         rmkH+vEDXpFggt3jB9JhMvuaOiIazUATnYJwj+A+KezKqGQ2cjYMEhQTbnoN2+OPbMDJ
-         Ovs3kChcy7hg7645fkUBrVBkEG+BAnb1vXlN/bguebdq3T176UGWAntZ+EYmHQOUOkUV
-         2NvA==
-X-Gm-Message-State: AOAM5327SVTxVpjsS0ozaXfkccMMbmQ4qko1X61CmkKFg0PDq6f4iTac
-        mmlS83/8OAFj+m3dIQdIK9y0RxSJchmboSZeu5E=
-X-Google-Smtp-Source: ABdhPJydr/ZESX9+fhLLtzP52CMGiwSuj0ybyuLBa6C6YxOf56sg07hsFNCJoZo+75GOLkN9sOua9TYh7GON66r8pNU=
-X-Received: by 2002:ad4:4baa:: with SMTP id i10mr11562273qvw.163.1592608278572;
- Fri, 19 Jun 2020 16:11:18 -0700 (PDT)
+        id S1730377AbgFSXT1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Jun 2020 19:19:27 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:39624 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730374AbgFSXT1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 19 Jun 2020 19:19:27 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05JNISvo004825
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2020 16:19:26 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=p6s6yy2to69lAotDnkW6qYKDvQMUksQa7VIbz34yPfk=;
+ b=T9qi6pWhjm/YaaLSybbgWrBc+PS2bCHw/ulU/fuVhfHRzomvvMdL6HezhxqLP4l23qOZ
+ P6gUQD2N3SQDOiykmB2sKQTQCCF2x7maY58ZXGmDZcZCOFKLO8yOPmffkdRJQexm/NJh
+ Co33YRyYXvDQpaU4WMDpnRMZ6zOIELgl9RE= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 31rg9k0sun-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 19 Jun 2020 16:19:26 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 19 Jun 2020 16:19:24 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 2993C2EC37A6; Fri, 19 Jun 2020 16:17:22 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>, Hao Luo <haoluo@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v3 bpf-next 7/9] libbpf: wrap source argument of BPF_CORE_READ macro in parentheses
+Date:   Fri, 19 Jun 2020 16:17:01 -0700
+Message-ID: <20200619231703.738941-8-andriin@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200619231703.738941-1-andriin@fb.com>
+References: <20200619231703.738941-1-andriin@fb.com>
 MIME-Version: 1.0
-References: <20200617202112.2438062-1-andriin@fb.com> <5eeb0e5dcb010_8712abba49be5bc91@john-XPS-13-9370.notmuch>
- <CAEf4BzZi5pMTC9Fq53Mi_mXUm-EQZDyqS_pxEYuGoc0J1ETGUA@mail.gmail.com>
- <5eebb95299a20_6d292ad5e7a285b835@john-XPS-13-9370.notmuch>
- <CAEf4BzZmWO=hO0kmtwkACEfHZm+H7+FZ+5moaLie2=13U3xU=g@mail.gmail.com>
- <5eebf9321e11a_519a2abc9795c5bc21@john-XPS-13-9370.notmuch>
- <5eec09418954e_27ce2adb0816a5b8f7@john-XPS-13-9370.notmuch>
- <45321002-2676-0f5b-c729-5526e503ebd2@iogearbox.net> <CAEf4Bzb-nqK0Z=GaWWejriSqqGd6D5Cz_w689N7_51D+daGyvw@mail.gmail.com>
- <24ac4e42-5831-f698-02f4-5f63d4620f1c@iogearbox.net>
-In-Reply-To: <24ac4e42-5831-f698-02f4-5f63d4620f1c@iogearbox.net>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 19 Jun 2020 16:11:07 -0700
-Message-ID: <CAEf4Bza6uGaxFURJaZirjVUt5yfFg5r-0mzaNPRg-irnA9CkcQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: switch most helper return values from
- 32-bit int to 64-bit long
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-19_22:2020-06-19,2020-06-19 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ impostorscore=0 clxscore=1015 priorityscore=1501 cotscore=-2147483648
+ lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0 phishscore=0
+ spamscore=0 suspectscore=8 mlxlogscore=999 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006190164
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 3:21 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 6/19/20 8:41 PM, Andrii Nakryiko wrote:
-> > On Fri, Jun 19, 2020 at 6:08 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> >> On 6/19/20 2:39 AM, John Fastabend wrote:
-> >>> John Fastabend wrote:
-> >>>> Andrii Nakryiko wrote:
-> >>>>> On Thu, Jun 18, 2020 at 11:58 AM John Fastabend
-> >>>>> <john.fastabend@gmail.com> wrote:
-> >>>
-> >>> [...]
-> >>>
-> >>>>> That would be great. Self-tests do work, but having more testing with
-> >>>>> real-world application would certainly help as well.
-> >>>>
-> >>>> Thanks for all the follow up.
-> >>>>
-> >>>> I ran the change through some CI on my side and it passed so I can
-> >>>> complain about a few shifts here and there or just update my code or
-> >>>> just not change the return types on my side but I'm convinced its OK
-> >>>> in most cases and helps in some so...
-> >>>>
-> >>>> Acked-by: John Fastabend <john.fastabend@gmail.com>
-> >>>
-> >>> I'll follow this up with a few more selftests to capture a couple of our
-> >>> patterns. These changes are subtle and I worry a bit that additional
-> >>> <<,s>> pattern could have the potential to break something.
-> >>>
-> >>> Another one we didn't discuss that I found in our code base is feeding
-> >>> the output of a probe_* helper back into the size field (after some
-> >>> alu ops) of subsequent probe_* call. Unfortunately, the tests I ran
-> >>> today didn't cover that case.
-> >>>
-> >>> I'll put it on the list tomorrow and encode these in selftests. I'll
-> >>> let the mainainers decide if they want to wait for those or not.
-> >>
-> >> Given potential fragility on verifier side, my preference would be that we
-> >> have the known variations all covered in selftests before moving forward in
-> >> order to make sure they don't break in any way. Back in [0] I've seen mostly
-> >> similar cases in the way John mentioned in other projects, iirc, sysdig was
-> >> another one. If both of you could hack up the remaining cases we need to
-> >> cover and then submit a combined series, that would be great. I don't think
-> >> we need to rush this optimization w/o necessary selftests.
-> >
-> > There is no rush, but there is also no reason to delay it. I'd rather
-> > land it early in the libbpf release cycle and let people try it in
-> > their prod environments, for those concerned about such code patterns.
->
-> Andrii, define 'delay'. John mentioned above to put together few more
-> selftests today so that there is better coverage at least, why is that
-> an 'issue'? I'm not sure how you read 'late in release cycle' out of it,
-> it's still as early. The unsigned optimization for len <= MAX_LEN is
-> reasonable and makes sense, but it's still one [specific] variant only.
+Wrap source argument of BPF_CORE_READ family of macros into parentheses t=
+o
+allow uses like this:
 
-I'm totally fine waiting for John's tests, but I read your reply as a
-request to go dig up some more examples from sysdig and other
-projects, which I don't think I can commit to. So if it's just about
-waiting for John's examples, that's fine and sorry for
-misunderstanding.
+BPF_CORE_READ((struct cast_struct *)src, a, b, c);
 
->
-> > I don't have a list of all the patterns that we might need to test.
-> > Going through all open-source BPF source code to identify possible
-> > patterns and then coding them up in minimal selftests is a bit too
-> > much for me, honestly.
->
-> I think we're probably talking past each other. John wrote above:
+Fixes: 7db3822ab991 ("libbpf: Add BPF_CORE_READ/BPF_CORE_READ_INTO helper=
+s")
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/bpf_core_read.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Yep, sorry, I assumed more general context, not specifically John's reply.
+diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.=
+h
+index 7009dc90e012..eae5cccff761 100644
+--- a/tools/lib/bpf/bpf_core_read.h
++++ b/tools/lib/bpf/bpf_core_read.h
+@@ -217,7 +217,7 @@ enum bpf_field_info_kind {
+  */
+ #define BPF_CORE_READ_INTO(dst, src, a, ...)				    \
+ 	({								    \
+-		___core_read(bpf_core_read, dst, src, a, ##__VA_ARGS__)	    \
++		___core_read(bpf_core_read, dst, (src), a, ##__VA_ARGS__)   \
+ 	})
+=20
+ /*
+@@ -227,7 +227,7 @@ enum bpf_field_info_kind {
+  */
+ #define BPF_CORE_READ_STR_INTO(dst, src, a, ...)			    \
+ 	({								    \
+-		___core_read(bpf_core_read_str, dst, src, a, ##__VA_ARGS__) \
++		___core_read(bpf_core_read_str, dst, (src), a, ##__VA_ARGS__)\
+ 	})
+=20
+ /*
+@@ -254,8 +254,8 @@ enum bpf_field_info_kind {
+  */
+ #define BPF_CORE_READ(src, a, ...)					    \
+ 	({								    \
+-		___type(src, a, ##__VA_ARGS__) __r;			    \
+-		BPF_CORE_READ_INTO(&__r, src, a, ##__VA_ARGS__);	    \
++		___type((src), a, ##__VA_ARGS__) __r;			    \
++		BPF_CORE_READ_INTO(&__r, (src), a, ##__VA_ARGS__);	    \
+ 		__r;							    \
+ 	})
+=20
+--=20
+2.24.1
 
->
->  >>> I'll follow this up with a few more selftests to capture a couple of our
->  >>> patterns. These changes are subtle and I worry a bit that additional
->  >>> <<,s>> pattern could have the potential to break something.
->
-> So submitting this as a full series together makes absolutely sense to me,
-> so there's maybe not perfect but certainly more confidence that also other
-> patterns where the shifts optimized out in one case are then appearing in
-> another are tested on a best effort and run our kselftest suite.
->
-> Thanks,
-> Daniel
