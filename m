@@ -2,226 +2,382 @@ Return-Path: <SRS0=b4Fz=AC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD791C433E1
-	for <bpf@archiver.kernel.org>; Sun, 21 Jun 2020 05:55:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 652A3C433E1
+	for <bpf@archiver.kernel.org>; Sun, 21 Jun 2020 06:21:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C1EB20C09
-	for <bpf@archiver.kernel.org>; Sun, 21 Jun 2020 05:55:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B5F623F57
+	for <bpf@archiver.kernel.org>; Sun, 21 Jun 2020 06:21:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QXJPv6Lf"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="J/05DqK1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729274AbgFUFzk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 21 Jun 2020 01:55:40 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:44330 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729288AbgFUFzk (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 21 Jun 2020 01:55:40 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05L5tc8U021532
-        for <bpf@vger.kernel.org>; Sat, 20 Jun 2020 22:55:39 -0700
+        id S1729338AbgFUGVg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 21 Jun 2020 02:21:36 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:16186 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729297AbgFUGVg (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 21 Jun 2020 02:21:36 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05L6G1jn029580
+        for <bpf@vger.kernel.org>; Sat, 20 Jun 2020 23:21:34 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=hUXhBLAo1x7DJDr0LDxWbuprCm3JNcwqJkMx6Ekyv6g=;
- b=QXJPv6LfzqDy3jquJCtCda8zwMkhnTSaQU8ZfQ9SQ66mmNKnbdb72yrwernRg1QvatCi
- fwD6daAfavTvHPvNViJ0ig6MNmUnsbOaM1FAAjP1ppjgNc1pWKQ/FX4xRC2i9tY6hkBz
- 3uuGZ7pqN/GPjmFnFPLj3z44EXiIitLGFxk= 
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=WtbHcKoo9zgpNdU92esspKAW4w/WK00h84H8CdkSglw=;
+ b=J/05DqK1uhkY91OohTdKKj0FxvlUd5kEI25aYYhsQEbjtY9tORTtSm2JnO2w2qLkInMr
+ kL1YHfOgo6/+UmeAC7/oFcZhKP8tsyN0LXTfcmHnxft+jNLDKRkKlSYx9jp9WUrik8fE
+ oPbQTeXoKnPvaWsfjrFQquSKMvwwepp8ubQ= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31sdskax7e-4
+        by mx0a-00082601.pphosted.com with ESMTP id 31sfykjm1h-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 20 Jun 2020 22:55:39 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sat, 20 Jun 2020 23:21:33 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Sat, 20 Jun 2020 22:55:14 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id D39EA37052DE; Sat, 20 Jun 2020 22:55:10 -0700 (PDT)
+ 15.1.1979.3; Sat, 20 Jun 2020 23:21:32 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id ACCF12EC154D; Sat, 20 Jun 2020 23:21:21 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 09/15] bpf: add bpf_skc_to_udp6_sock() helper
-Date:   Sat, 20 Jun 2020 22:55:10 -0700
-Message-ID: <20200621055510.2630175-1-yhs@fb.com>
+Subject: [PATCH bpf-next] libbpf: add a bunch of attribute getters/setters for map definitions
+Date:   Sat, 20 Jun 2020 23:21:12 -0700
+Message-ID: <20200621062112.3006313-1-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200621055459.2629116-1-yhs@fb.com>
-References: <20200621055459.2629116-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-20_16:2020-06-19,2020-06-20 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 cotscore=-2147483648
- mlxlogscore=999 clxscore=1015 impostorscore=0 priorityscore=1501
- phishscore=0 adultscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
- malwarescore=0 suspectscore=15 mlxscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006210048
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ suspectscore=8 adultscore=0 cotscore=-2147483648 impostorscore=0
+ malwarescore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0
+ phishscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006210051
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The helper is used in tracing programs to cast a socket
-pointer to a udp6_sock pointer.
-The return value could be NULL if the casting is illegal.
+Add a bunch of getter for various aspects of BPF map. Some of these attri=
+bute
+(e.g., key_size, value_size, type, etc) are available right now in struct
+bpf_map_def, but this patch adds getter allowing to fetch them individual=
+ly.
+bpf_map_def approach isn't very scalable, when ABI stability requirements=
+ are
+taken into account. It's much easier to extend libbpf and add support for=
+ new
+features, when each aspect of BPF map has separate getter/setter.
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
+Getters follow the common naming convention of not explicitly having "get=
+" in
+its name: bpf_map__type() returns map type, bpf_map__key_size() returns
+key_size. Setters, though, explicitly have set in their name:
+bpf_map__set_type(), bpf_map__set_key_size().
+
+This patch ensures we now have a getter and a setter for the following
+map attributes:
+  - type;
+  - max_entries;
+  - map_flags;
+  - numa_node;
+  - key_size;
+  - value_size;
+  - ifindex.
+
+bpf_map__resize() enforces unnecessary restriction of max_entries > 0. It=
+ is
+unnecessary, because libbpf actually supports zero max_entries for some c=
+ases
+(e.g., for PERF_EVENT_ARRAY map) and treats it specially during map creat=
+ion
+time. To allow setting max_entries=3D0, new bpf_map__set_max_entries() se=
+tter is
+added. bpf_map__resize()'s behavior is preserved for backwards compatibil=
+ity
+reasons.
+
+Map ifindex getter is added as well. There is a setter already, but no
+corresponding getter. Fix this assymetry as well. bpf_map__set_ifindex()
+itself is converted from void function into error-returning one, similar =
+to
+other setters. The only error returned right now is -EBUSY, if BPF map is
+already loaded and has corresponding FD.
+
+One lacking attribute with no ability to get/set or even specify it
+declaratively is numa_node. This patch fixes this gap and both adds
+programmatic getter/setter, as well as adds support for numa_node field i=
+n
+BTF-defined map.
+
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- include/linux/bpf.h            |  1 +
- include/uapi/linux/bpf.h       |  9 ++++++++-
- kernel/trace/bpf_trace.c       |  2 ++
- net/core/filter.c              | 22 ++++++++++++++++++++++
- scripts/bpf_helpers_doc.py     |  2 ++
- tools/include/uapi/linux/bpf.h |  9 ++++++++-
- 6 files changed, 43 insertions(+), 2 deletions(-)
+ tools/lib/bpf/libbpf.c   | 100 ++++++++++++++++++++++++++++++++++++---
+ tools/lib/bpf/libbpf.h   |  30 ++++++++++--
+ tools/lib/bpf/libbpf.map |  14 ++++++
+ 3 files changed, 134 insertions(+), 10 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index b17e682454e5..378b6748a8ec 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1640,6 +1640,7 @@ extern const struct bpf_func_proto bpf_skc_to_tcp6_=
-sock_proto;
- extern const struct bpf_func_proto bpf_skc_to_tcp_sock_proto;
- extern const struct bpf_func_proto bpf_skc_to_tcp_timewait_sock_proto;
- extern const struct bpf_func_proto bpf_skc_to_tcp_request_sock_proto;
-+extern const struct bpf_func_proto bpf_skc_to_udp6_sock_proto;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 477c679ed945..259a6360475f 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -310,6 +310,7 @@ struct bpf_map {
+ 	int map_ifindex;
+ 	int inner_map_fd;
+ 	struct bpf_map_def def;
++	__u32 numa_node;
+ 	__u32 btf_var_idx;
+ 	__u32 btf_key_type_id;
+ 	__u32 btf_value_type_id;
+@@ -1957,6 +1958,10 @@ static int parse_btf_map_def(struct bpf_object *ob=
+j,
+ 				return -EINVAL;
+ 			pr_debug("map '%s': found map_flags =3D %u.\n",
+ 				 map->name, map->def.map_flags);
++		} else if (strcmp(name, "numa_node") =3D=3D 0) {
++			if (!get_map_field_int(map->name, obj->btf, m, &map->numa_node))
++				return -EINVAL;
++			pr_debug("map '%s': found numa_node =3D %u.\n", map->name, map->numa_=
+node);
+ 		} else if (strcmp(name, "key_size") =3D=3D 0) {
+ 			__u32 sz;
 =20
- const struct bpf_func_proto *bpf_tracing_func_proto(
- 	enum bpf_func_id func_id, const struct bpf_prog *prog);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index e256417d94c2..3f4b12c5c563 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3276,6 +3276,12 @@ union bpf_attr {
-  *		Dynamically cast a *sk* pointer to a *tcp_request_sock* pointer.
-  *	Return
-  *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct udp6_sock *bpf_skc_to_udp6_sock(void *sk)
-+ * 	Description
-+ *		Dynamically cast a *sk* pointer to a *udp6_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3417,7 +3423,8 @@ union bpf_attr {
- 	FN(skc_to_tcp6_sock),		\
- 	FN(skc_to_tcp_sock),		\
- 	FN(skc_to_tcp_timewait_sock),	\
--	FN(skc_to_tcp_request_sock),
-+	FN(skc_to_tcp_request_sock),	\
-+	FN(skc_to_udp6_sock),
+@@ -3222,20 +3227,27 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd=
+)
+ 	return err;
+ }
 =20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-  * function eBPF program intends to call
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index de5fbe66e1ca..d10ab16c4a2f 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1523,6 +1523,8 @@ tracing_prog_func_proto(enum bpf_func_id func_id, c=
-onst struct bpf_prog *prog)
- 		return &bpf_skc_to_tcp_timewait_sock_proto;
- 	case BPF_FUNC_skc_to_tcp_request_sock:
- 		return &bpf_skc_to_tcp_request_sock_proto;
-+	case BPF_FUNC_skc_to_udp6_sock:
-+		return &bpf_skc_to_udp6_sock_proto;
- #endif
- 	case BPF_FUNC_seq_printf:
- 		return prog->expected_attach_type =3D=3D BPF_TRACE_ITER ?
-diff --git a/net/core/filter.c b/net/core/filter.c
-index d26ce3b5e3d5..4ecdadc4aee9 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -9322,3 +9322,25 @@ const struct bpf_func_proto bpf_skc_to_tcp_request=
-_sock_proto =3D {
- 	.check_btf_id		=3D check_arg_btf_id,
- 	.ret_btf_id		=3D &sock_cast_btf_ids[SOCK_CAST_TCP_REQ_SOCK],
- };
-+
-+BPF_CALL_1(bpf_skc_to_udp6_sock, struct sock *, sk)
+-int bpf_map__resize(struct bpf_map *map, __u32 max_entries)
++__u32 bpf_map__max_entries(const struct bpf_map *map)
+ {
+-	if (!map || !max_entries)
+-		return -EINVAL;
++	return map->def.max_entries;
++}
+=20
+-	/* If map already created, its attributes can't be changed. */
++int bpf_map__set_max_entries(struct bpf_map *map, __u32 max_entries)
 +{
-+	/* udp6_sock type is not generated in dwarf and hence btf,
-+	 * trigger an explicit type generation here.
-+	 */
-+	BTF_TYPE_EMIT(struct udp6_sock);
-+	if (sk_fullsock(sk) && sk->sk_protocol =3D=3D IPPROTO_UDP &&
-+	    sk->sk_family =3D=3D AF_INET6)
-+		return (unsigned long)sk;
+ 	if (map->fd >=3D 0)
+ 		return -EBUSY;
+-
+ 	map->def.max_entries =3D max_entries;
+-
+ 	return 0;
+ }
+=20
++int bpf_map__resize(struct bpf_map *map, __u32 max_entries)
++{
++	if (!map || !max_entries)
++		return -EINVAL;
 +
-+	return (unsigned long)NULL;
++	return bpf_map__set_max_entries(map, max_entries);
 +}
 +
-+const struct bpf_func_proto bpf_skc_to_udp6_sock_proto =3D {
-+	.func			=3D bpf_skc_to_udp6_sock,
-+	.gpl_only		=3D true,
-+	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
-+	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
-+	.check_btf_id		=3D check_arg_btf_id,
-+	.ret_btf_id		=3D &sock_cast_btf_ids[SOCK_CAST_UDP6_SOCK],
-+};
-diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
-index d886657c6aaa..6bab40ff442e 100755
---- a/scripts/bpf_helpers_doc.py
-+++ b/scripts/bpf_helpers_doc.py
-@@ -425,6 +425,7 @@ class PrinterHelpers(Printer):
-             'struct tcp_sock',
-             'struct tcp_timewait_sock',
-             'struct tcp_request_sock',
-+            'struct udp6_sock',
+ static int
+ bpf_object__probe_loading(struct bpf_object *obj)
+ {
+@@ -3603,6 +3615,7 @@ static int bpf_object__create_map(struct bpf_object=
+ *obj, struct bpf_map *map)
+ 	create_attr.map_flags =3D def->map_flags;
+ 	create_attr.key_size =3D def->key_size;
+ 	create_attr.value_size =3D def->value_size;
++	create_attr.numa_node =3D map->numa_node;
 =20
-             'struct __sk_buff',
-             'struct sk_msg_md',
-@@ -466,6 +467,7 @@ class PrinterHelpers(Printer):
-             'struct tcp_sock',
-             'struct tcp_timewait_sock',
-             'struct tcp_request_sock',
-+            'struct udp6_sock',
-     }
-     mapped_types =3D {
-             'u8': '__u8',
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index e256417d94c2..3f4b12c5c563 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3276,6 +3276,12 @@ union bpf_attr {
-  *		Dynamically cast a *sk* pointer to a *tcp_request_sock* pointer.
-  *	Return
-  *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct udp6_sock *bpf_skc_to_udp6_sock(void *sk)
-+ * 	Description
-+ *		Dynamically cast a *sk* pointer to a *udp6_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3417,7 +3423,8 @@ union bpf_attr {
- 	FN(skc_to_tcp6_sock),		\
- 	FN(skc_to_tcp_sock),		\
- 	FN(skc_to_tcp_timewait_sock),	\
--	FN(skc_to_tcp_request_sock),
-+	FN(skc_to_tcp_request_sock),	\
-+	FN(skc_to_udp6_sock),
+ 	if (def->type =3D=3D BPF_MAP_TYPE_PERF_EVENT_ARRAY && !def->max_entries=
+) {
+ 		int nr_cpus;
+@@ -7088,6 +7101,71 @@ const char *bpf_map__name(const struct bpf_map *ma=
+p)
+ 	return map ? map->name : NULL;
+ }
 =20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-  * function eBPF program intends to call
++enum bpf_map_type bpf_map__type(const struct bpf_map *map)
++{
++	return map->def.type;
++}
++
++int bpf_map__set_type(struct bpf_map *map, enum bpf_map_type type)
++{
++	if (map->fd >=3D 0)
++		return -EBUSY;
++	map->def.type =3D type;
++	return 0;
++}
++
++__u32 bpf_map__map_flags(const struct bpf_map *map)
++{
++	return map->def.map_flags;
++}
++
++int bpf_map__set_map_flags(struct bpf_map *map, __u32 flags)
++{
++	if (map->fd >=3D 0)
++		return -EBUSY;
++	map->def.map_flags =3D flags;
++	return 0;
++}
++
++__u32 bpf_map__numa_node(const struct bpf_map *map)
++{
++	return map->numa_node;
++}
++
++int bpf_map__set_numa_node(struct bpf_map *map, __u32 numa_node)
++{
++	if (map->fd >=3D 0)
++		return -EBUSY;
++	map->numa_node =3D numa_node;
++	return 0;
++}
++
++__u32 bpf_map__key_size(const struct bpf_map *map)
++{
++	return map->def.key_size;
++}
++
++int bpf_map__set_key_size(struct bpf_map *map, __u32 size)
++{
++	if (map->fd >=3D 0)
++		return -EBUSY;
++	map->def.key_size =3D size;
++	return 0;
++}
++
++__u32 bpf_map__value_size(const struct bpf_map *map)
++{
++	return map->def.value_size;
++}
++
++int bpf_map__set_value_size(struct bpf_map *map, __u32 size)
++{
++	if (map->fd >=3D 0)
++		return -EBUSY;
++	map->def.value_size =3D size;
++	return 0;
++}
++
+ __u32 bpf_map__btf_key_type_id(const struct bpf_map *map)
+ {
+ 	return map ? map->btf_key_type_id : 0;
+@@ -7140,9 +7218,17 @@ bool bpf_map__is_internal(const struct bpf_map *ma=
+p)
+ 	return map->libbpf_type !=3D LIBBPF_MAP_UNSPEC;
+ }
+=20
+-void bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex)
++__u32 bpf_map__ifindex(const struct bpf_map *map)
++{
++	return map->map_ifindex;
++}
++
++int bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex)
+ {
++	if (map->fd >=3D 0)
++		return -EBUSY;
+ 	map->map_ifindex =3D ifindex;
++	return 0;
+ }
+=20
+ int bpf_map__set_inner_map_fd(struct bpf_map *map, int fd)
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 334437af3014..fdd279fb1866 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -418,11 +418,38 @@ bpf_map__next(const struct bpf_map *map, const stru=
+ct bpf_object *obj);
+ LIBBPF_API struct bpf_map *
+ bpf_map__prev(const struct bpf_map *map, const struct bpf_object *obj);
+=20
++/* get/set map FD */
+ LIBBPF_API int bpf_map__fd(const struct bpf_map *map);
++LIBBPF_API int bpf_map__reuse_fd(struct bpf_map *map, int fd);
++/* get map definition */
+ LIBBPF_API const struct bpf_map_def *bpf_map__def(const struct bpf_map *=
+map);
++/* get map name */
+ LIBBPF_API const char *bpf_map__name(const struct bpf_map *map);
++/* get/set map type */
++LIBBPF_API enum bpf_map_type bpf_map__type(const struct bpf_map *map);
++LIBBPF_API int bpf_map__set_type(struct bpf_map *map, enum bpf_map_type =
+type);
++/* get/set map size (max_entries) */
++LIBBPF_API __u32 bpf_map__max_entries(const struct bpf_map *map);
++LIBBPF_API int bpf_map__set_max_entries(struct bpf_map *map, __u32 max_e=
+ntries);
++LIBBPF_API int bpf_map__resize(struct bpf_map *map, __u32 max_entries);
++/* get/set map flags */
++LIBBPF_API __u32 bpf_map__map_flags(const struct bpf_map *map);
++LIBBPF_API int bpf_map__set_map_flags(struct bpf_map *map, __u32 flags);
++/* get/set map NUMA node */
++LIBBPF_API __u32 bpf_map__numa_node(const struct bpf_map *map);
++LIBBPF_API int bpf_map__set_numa_node(struct bpf_map *map, __u32 numa_no=
+de);
++/* get/set map key size */
++LIBBPF_API __u32 bpf_map__key_size(const struct bpf_map *map);
++LIBBPF_API int bpf_map__set_key_size(struct bpf_map *map, __u32 size);
++/* get/set map value size */
++LIBBPF_API __u32 bpf_map__value_size(const struct bpf_map *map);
++LIBBPF_API int bpf_map__set_value_size(struct bpf_map *map, __u32 size);
++/* get map key/value BTF type IDs */
+ LIBBPF_API __u32 bpf_map__btf_key_type_id(const struct bpf_map *map);
+ LIBBPF_API __u32 bpf_map__btf_value_type_id(const struct bpf_map *map);
++/* get/set map if_index */
++LIBBPF_API __u32 bpf_map__ifindex(const struct bpf_map *map);
++LIBBPF_API int bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex);
+=20
+ typedef void (*bpf_map_clear_priv_t)(struct bpf_map *, void *);
+ LIBBPF_API int bpf_map__set_priv(struct bpf_map *map, void *priv,
+@@ -430,11 +457,8 @@ LIBBPF_API int bpf_map__set_priv(struct bpf_map *map=
+, void *priv,
+ LIBBPF_API void *bpf_map__priv(const struct bpf_map *map);
+ LIBBPF_API int bpf_map__set_initial_value(struct bpf_map *map,
+ 					  const void *data, size_t size);
+-LIBBPF_API int bpf_map__reuse_fd(struct bpf_map *map, int fd);
+-LIBBPF_API int bpf_map__resize(struct bpf_map *map, __u32 max_entries);
+ LIBBPF_API bool bpf_map__is_offload_neutral(const struct bpf_map *map);
+ LIBBPF_API bool bpf_map__is_internal(const struct bpf_map *map);
+-LIBBPF_API void bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex)=
+;
+ LIBBPF_API int bpf_map__set_pin_path(struct bpf_map *map, const char *pa=
+th);
+ LIBBPF_API const char *bpf_map__get_pin_path(const struct bpf_map *map);
+ LIBBPF_API bool bpf_map__is_pinned(const struct bpf_map *map);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index c914347f5065..9914e0db4859 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -272,4 +272,18 @@ LIBBPF_0.0.9 {
+ } LIBBPF_0.0.8;
+=20
+ LIBBPF_0.1.0 {
++	global:
++		bpf_map__ifindex;
++		bpf_map__key_size;
++		bpf_map__map_flags;
++		bpf_map__max_entries;
++		bpf_map__numa_node;
++		bpf_map__set_key_size;
++		bpf_map__set_map_flags;
++		bpf_map__set_max_entries;
++		bpf_map__set_numa_node;
++		bpf_map__set_type;
++		bpf_map__set_value_size;
++		bpf_map__type;
++		bpf_map__value_size;
+ } LIBBPF_0.0.9;
 --=20
 2.24.1
 
