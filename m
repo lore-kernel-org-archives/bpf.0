@@ -2,108 +2,137 @@ Return-Path: <SRS0=dTH6=AD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F46EC433E1
-	for <bpf@archiver.kernel.org>; Mon, 22 Jun 2020 16:03:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4313EC433E0
+	for <bpf@archiver.kernel.org>; Mon, 22 Jun 2020 16:08:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E3F102074D
-	for <bpf@archiver.kernel.org>; Mon, 22 Jun 2020 16:03:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F1BB2078A
+	for <bpf@archiver.kernel.org>; Mon, 22 Jun 2020 16:08:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="vsz3cKLg"
+	dkim=pass (2048-bit key) header.d=networkplumber-org.20150623.gappssmtp.com header.i=@networkplumber-org.20150623.gappssmtp.com header.b="R29M2ivG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729881AbgFVQDF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Jun 2020 12:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
+        id S1729441AbgFVQI2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Jun 2020 12:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729870AbgFVQDE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Jun 2020 12:03:04 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0759C061795
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 09:03:03 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id c11so9932798lfh.8
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 09:03:03 -0700 (PDT)
+        with ESMTP id S1726328AbgFVQI2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Jun 2020 12:08:28 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6D3C061573
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 09:08:28 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id r18so8326776pgk.11
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 09:08:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
+        d=networkplumber-org.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:mime-version
          :content-transfer-encoding;
-        bh=n0x8JMyuQeWpT4jjHGqeBWL1VYHUNE3enc3T3KdEcmg=;
-        b=vsz3cKLgjxDj6grniVMEROqGAK4H6uuP3XSrIDjMg7iLDFoKnzH6H6i9YruhHe/Hw2
-         2LACgk0RKZS++vBMte6jLZrzA0qYWeLL3FZ9ycb3YWJtILegGIHw/SEX10Fv8ZwEoESa
-         QiiuW2GPycTBQ03MAsW7RMf+9kOpNUe0/vvCc=
+        bh=nwcou3MEs51lcRUW6H0Q5+j+k4cv1O6Eg8DPqVQAwSE=;
+        b=R29M2ivGtVoipuZJxzUU1tt43eW8f26kkOktlCqY2CQwmRITQpN6sk0KocOVeKYkXx
+         HHvVOcadgbXnMb24WenQzrEUisLm/qX/kP+w3X6/YwpiewQtyDOz1yWbITIEAv0V4XH8
+         Gy5HLUSml/CKyAR6/tins+zsWSIaI5qTgvLLtq5ZK5ZG3Dy2pa/YAZ3V0yniGIuS20yz
+         jaHFym4lz8tVFFauqeb/JonbhVMhDRi7vjrRNex/zLfqjdUVLzvVpH1lTtBoWb4AuoNK
+         fBCCMS+ydAkTmv5CtoGmAsLKyonBr4P2dfmHvNJ8Ode997nQBtgZh7+ANfE83OOwr4En
+         pqHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-transfer-encoding;
-        bh=n0x8JMyuQeWpT4jjHGqeBWL1VYHUNE3enc3T3KdEcmg=;
-        b=C4twdal2hnab9i/vzgHQ7Oyo0BPDVOoZVNJ+wJqi8vzxiJpLbmfDUdwZF+vbof8K1J
-         Rwn7048hDLEu0+ko/Af6t8r3IMaZVwOnDfgg8G8VJ5VEKT55brP+9/Tyu4aDSr57p51p
-         K3cwK9c+xjYb4fsXnMIto/YoiIcmYuwAMnFKGuKep78esdbijlsj3edkJj4Asw86j/8i
-         6wk9sWuhW+8wcRQOJyp/XeKi+NerOUewpI0LouIEAsZvhM8Wpk5Y0hbRP8r9AeEajzCJ
-         ULOSyxZSWstxrx8AJ7jyDDWwsi66EmL7ewuHi9ZPL+GucQ5x22DhtdP96tQaw6do6D2q
-         IB5A==
-X-Gm-Message-State: AOAM531N/lat8xnBV3tTIzvp0kksiBSKg5H5l9HfMHdlT99sswnuXq/b
-        rpx7IcFC8LPH1K92FbF/AKkER5AbZ0wZxQ==
-X-Google-Smtp-Source: ABdhPJwqspDF9rxVsAEIDWnONZikjWTjSiB7JQfI8uG/UdNDW8HPu9NwbZDETPaa6UQamECJBCwzog==
-X-Received: by 2002:a05:6512:3049:: with SMTP id b9mr10124293lfb.44.1592841781607;
-        Mon, 22 Jun 2020 09:03:01 -0700 (PDT)
-Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id t13sm2789827ljg.78.2020.06.22.09.03.00
+        bh=nwcou3MEs51lcRUW6H0Q5+j+k4cv1O6Eg8DPqVQAwSE=;
+        b=bKddX07eAVYQB1xMLGajtY4hJmA6lXTLL85dRN6Wrvmt2Lcj+dNEEpSS1LchuSgu1b
+         YvIsVsnw3ptB6CbpTXb0PaYKf4lcPtlCUdi9mDZP0Mxofi6XU82DpyR41OALgmRpi8Z1
+         Vx9xwjIiOGyo3UhI66E0NQ0QjLYypKLzuFPGvegDGDHMlFVEWMy7wvC64U6GVmxuaH3T
+         8e1xYai8F0qNuLQpqN75WGVHa4Fq+8JmbHym1BVkhu8GwNqTHy/5lP5U4+4V8OQjK2vB
+         tAmtaFeszO270IS5P6Ek/GVEWrKo1ba+D1KY1hR6R+CBUorVnekJxWdkZizTkAzLrnAj
+         STHA==
+X-Gm-Message-State: AOAM533uMGfDYxXoahYr37HZEZx8+lmCeAjgbEV4aiqWG6W7M+VZt6Kd
+        4rSM3C6WV4DYnj4nuMoxNGKDjw==
+X-Google-Smtp-Source: ABdhPJxctp8yykVAH5m77mguBFeHwzX7L5NM4zae/H4TZ6naIDUbOu73XE1mL1v2bEfTgRcPiUsZVA==
+X-Received: by 2002:a63:ab0d:: with SMTP id p13mr8248724pgf.327.1592842107791;
+        Mon, 22 Jun 2020 09:08:27 -0700 (PDT)
+Received: from hermes.lan (204-195-22-127.wavecable.com. [204.195.22.127])
+        by smtp.gmail.com with ESMTPSA id o8sm4484095pgb.23.2020.06.22.09.08.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2020 09:03:00 -0700 (PDT)
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH bpf-next 0/3] bpf, netns: Prepare for multi-prog attachment
-Date:   Mon, 22 Jun 2020 18:02:57 +0200
-Message-Id: <20200622160300.636567-1-jakub@cloudflare.com>
-X-Mailer: git-send-email 2.25.4
+        Mon, 22 Jun 2020 09:08:27 -0700 (PDT)
+Date:   Mon, 22 Jun 2020 09:08:24 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Cc:     bpf@vger.kernel.org
+Subject: Fw: [Bug 208275] New: kernel hang occasionally while running the
+ sample of xdpsock
+Message-ID: <20200622090824.41cff8a3@hermes.lan>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set prepares ground for link-based multi-prog attachment for
-future netns attach types, with BPF_SK_LOOKUP attach type in mind [0].
 
-Two changes are needed in order to attach and run a series of BPF programs:
 
-  1) an bpf_prog_array of programs to run (patch #2), and
-  2) a list of attached links to keep track of attachments (patch #3).
+Begin forwarded message:
 
-I've been using these patches with the next iteration of BPF socket lookup
-hook patches, and saw that they are self-contained and can be split out to
-ease the review burden.
+Date: Mon, 22 Jun 2020 10:13:52 +0000
+From: bugzilla-daemon@bugzilla.kernel.org
+To: stephen@networkplumber.org
+Subject: [Bug 208275] New: kernel hang occasionally while running the sample of xdpsock
 
-Nothing changes for BPF flow_dissector. That is at most one prog can be
-attached.
 
-Thanks,
--jkbs
+https://bugzilla.kernel.org/show_bug.cgi?id=208275
 
-[0] https://lore.kernel.org/bpf/20200511185218.1422406-1-jakub@cloudflare.com/
+            Bug ID: 208275
+           Summary: kernel hang occasionally while running the sample of
+                    xdpsock
+           Product: Networking
+           Version: 2.5
+    Kernel Version: 5.7.0
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: high
+          Priority: P1
+         Component: Other
+          Assignee: stephen@networkplumber.org
+          Reporter: goodluckwillcomesoon@gmail.com
+        Regression: No
 
-Cc: Stanislav Fomichev <sdf@google.com>
+Distribution:
+5.7.0-1.el7.centos.x86_64
 
-Jakub Sitnicki (3):
-  flow_dissector: Pull BPF program assignment up to bpf-netns
-  bpf, netns: Keep attached programs in bpf_prog_array
-  bpf, netns: Keep a list of attached bpf_link's
+Hardware Environment:
+Dell Inc. PowerEdge R730/0WCJNT, BIOS 2.1.7 06/16/2016
 
- include/linux/bpf.h          |   3 +
- include/net/flow_dissector.h |   3 +-
- include/net/netns/bpf.h      |   7 +-
- kernel/bpf/core.c            |  19 +++-
- kernel/bpf/net_namespace.c   | 189 +++++++++++++++++++++++++----------
- net/core/flow_dissector.c    |  34 +++----
- 6 files changed, 172 insertions(+), 83 deletions(-)
+Software Environment:
+
+
+Problem Description:
+kernel hang occasionally while running the sample of xdpsock
+
+Steps to reproduce:
+
+I want to test the rx performace of AF_XDP. I change the nic to 4 queues by cmd
+`ethtool -L p6p1 combined 4`, then I will create 1 socket for every queue.
+
+for ((i=0; i<4; i++));
+do 
+./xdpsock -r -z -i p6p1 -m -q $i &
+done
+
+I run the xdpsock in samples/bpf using the shell command above.
+And occasionally the kernel hang, so I have to power off and on.
+
+Additonal information:
 
 -- 
-2.25.4
-
+You are receiving this mail because:
+You are the assignee for the bug.
