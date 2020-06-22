@@ -2,106 +2,194 @@ Return-Path: <SRS0=dTH6=AD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EC6BC433DF
-	for <bpf@archiver.kernel.org>; Mon, 22 Jun 2020 15:17:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45EAEC433DF
+	for <bpf@archiver.kernel.org>; Mon, 22 Jun 2020 16:03:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58DA2206FA
-	for <bpf@archiver.kernel.org>; Mon, 22 Jun 2020 15:17:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19EF22074D
+	for <bpf@archiver.kernel.org>; Mon, 22 Jun 2020 16:03:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="kigM39Hl"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="WEpePu8I"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729092AbgFVPRJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Jun 2020 11:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
+        id S1729905AbgFVQDH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Jun 2020 12:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729086AbgFVPRI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Jun 2020 11:17:08 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FA4C061573
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 08:17:07 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id q2so14641309wrv.8
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 08:17:07 -0700 (PDT)
+        with ESMTP id S1729873AbgFVQDG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Jun 2020 12:03:06 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DF9C061795
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 09:03:05 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id m26so9937089lfo.13
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 09:03:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qCeAhT0j4Xt2n79DhTOAMVll18eLiNHIwPbPSkmp1Xs=;
-        b=kigM39HlxeK35791BoNz+aBa8IQZ55UZRT54rbcmrs9bCAUpdkhz2DMTt18QqSQIO9
-         iPD49X4FkMVBfj6fdwQAVOTbWkOzHzDO9DnQcPVaD5w7mRtMoqnlD5F9diwUvi62Cqnb
-         ls/qSLXK4tB7Z7n/ktZFAUkB8++TxblBqnKyAmXnLuBumU57dCXoZq0+ADnuK/ZBOkGO
-         TFSmp7ndvHZc4VnBHaJJ2Lzb6u36uZkShXCoyTIDmNI5mdqmWIDZoOoWP1E+wQquTCiE
-         3Uep5wsRYE6zJL4g7EJ0YSgsSJXnt2ALxj7EFm8SuDVjQ+9+L62pp7P8edlmsKY3DIIN
-         BhXw==
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HdIvYx+tqNu7jSLu3BPp4H3DI+qK/NhTufCEIwjYSL0=;
+        b=WEpePu8IePtYAMhO+wmxma3RHSXd+WCdHpWUpHLC0k2nwUpsC9qWY595DtIcvwHwVQ
+         MASOLqJMqhZsKMT7rJLieof1veM9DIVCovycaG0ukxrCIEaewYRxX+Ql1Wwf0WYLJEGv
+         UTvlqS5rOjlN8neqEquP3kg6s3xRforEYxiVg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qCeAhT0j4Xt2n79DhTOAMVll18eLiNHIwPbPSkmp1Xs=;
-        b=bwg+8ZfNtIavJDp0jmD0CKtiUTi0FSpoorUPkesdYQaTB+QgssahSNw0X6iOlEHdCn
-         QTuO3Xzxa+2aHFkQyhmVGKRtBO1vwE2aRFTpYZ/Q16WOxEClk4huCRaK5iTMsyz+Y6MH
-         phmsC6TkHGfj3aO4ZhtNGub43vSFK2sIB268wXE39f4hlQt9bxbzQw3UPWcp3fTP/zCw
-         OaCUtTZwrrcrnVHF5W6O/B7HlYOY6rBxcod9lvjofmV65HdHpyjHHC9y8MWVd13HA+1H
-         15YamLrOi4DwLJcLTqk70Wkthgesc0aSYS2tdorVIxRBDXNwpHNw2zZp8Wa6EuoPNX5T
-         KB7w==
-X-Gm-Message-State: AOAM531lvl6ZQsHCG95mf775yBdux6jP2OnrRyN8pSC5/ln9olB3uCR3
-        gZrabeHCEUum0+TpfnVxXa0jXQC6SW7V3w==
-X-Google-Smtp-Source: ABdhPJz5L07ZYUTeoL5WHAd5f218eoDLzeaQauA6fgM1WyKnY++rohfo9hMGa7q+zQEcjObNxmNlmQ==
-X-Received: by 2002:adf:db4d:: with SMTP id f13mr15913611wrj.336.1592839025582;
-        Mon, 22 Jun 2020 08:17:05 -0700 (PDT)
-Received: from [192.168.1.12] ([194.53.184.63])
-        by smtp.gmail.com with ESMTPSA id u74sm17652456wmu.31.2020.06.22.08.17.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Jun 2020 08:17:05 -0700 (PDT)
-Subject: Re: [PATCH bpf-next 1/2] tools, bpftool: Define prog_type_name array
- only once
-To:     Tobias Klauser <tklauser@distanz.ch>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>, bpf@vger.kernel.org
-References: <20200622140007.4922-1-tklauser@distanz.ch>
- <20200622140007.4922-2-tklauser@distanz.ch>
- <c961c0ee-424a-6f3b-942e-42fdc7ee9b95@isovalent.com>
- <20200622150510.nk6pkzsof2diolwt@distanz.ch>
-From:   Quentin Monnet <quentin@isovalent.com>
-Message-ID: <2df810b0-b31d-641a-9d81-47eb11c3f0a4@isovalent.com>
-Date:   Mon, 22 Jun 2020 16:17:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HdIvYx+tqNu7jSLu3BPp4H3DI+qK/NhTufCEIwjYSL0=;
+        b=qD+YXOcf2lWoJZTqtU0O2kq+Z2AY/uH/4ajHU2f9hhYvDLsT8gwq/S+9cFJheDDoaE
+         WRXFTaEnm4JNog2si+xdQ5RdsoW1Qt+HjrPVRysQ0gO/48mdHmNyv5V5++ZG+KeZuvny
+         DkBk2p3MJA5P1PT6mNWX9FXw4UZGM5e+F+FXe9uLmvFZc6t9icsczeM3ParEAsH6nJ4M
+         HFYTOTJkzQLDZkNRxMhTtBEpnmjIReoYU1KaKEiogRS6p4RLYSgkRVlP6hZC6bh+FraK
+         Cgiypz3hRvBD6hO/q4B6QwxKf6mGt8M2OuHWTp672zx7ooZlvy/7CwCxcxAhQVEsX9GO
+         EjGw==
+X-Gm-Message-State: AOAM531cipvDBITvaDCd6VVx7knI1fm+d98m9Oan6DaPN5Xux8F8lpnO
+        DseYR97JB7zjYyune6fsZxATGqcGuUJWSw==
+X-Google-Smtp-Source: ABdhPJxEL3eGf2Cf84ZqN9aFIy1XV25Ayy9SFXzFFbdHMkltEwjumbpcUtz6XoFKWWm1cSuhsxPEnQ==
+X-Received: by 2002:ac2:44b7:: with SMTP id c23mr10138487lfm.169.1592841783556;
+        Mon, 22 Jun 2020 09:03:03 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id x16sm274131lfc.76.2020.06.22.09.03.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jun 2020 09:03:02 -0700 (PDT)
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com
+Subject: [PATCH bpf-next 1/3] flow_dissector: Pull BPF program assignment up to bpf-netns
+Date:   Mon, 22 Jun 2020 18:02:58 +0200
+Message-Id: <20200622160300.636567-2-jakub@cloudflare.com>
+X-Mailer: git-send-email 2.25.4
+In-Reply-To: <20200622160300.636567-1-jakub@cloudflare.com>
+References: <20200622160300.636567-1-jakub@cloudflare.com>
 MIME-Version: 1.0
-In-Reply-To: <20200622150510.nk6pkzsof2diolwt@distanz.ch>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-2020-06-22 17:05 UTC+0200 ~ Tobias Klauser <tklauser@distanz.ch>
-> On 2020-06-22 at 16:26:17 +0200, Quentin Monnet <quentin@isovalent.com> wrote:
->> 2020-06-22 16:00 UTC+0200 ~ Tobias Klauser <tklauser@distanz.ch>
->>> Follow the same approach as for map_type_name. This leads to a slight
->>
->> map_type_name looks unchanged in this series, could you please check
->> your commit log?
-> 
-> Yes this patch intentionally shouldn't change map_type_name. The idea
-> was to say "do the same thing for prog_type_name name as is already done
-> for map_type_name". I can rephrase that to become more clear if you
-> want.
+Prepare for using bpf_prog_array to store attached programs by moving out
+code that updates the attached program out of flow dissector.
 
-Ok sorry, I thought you meant map_type_name had been moved to reduce the
-size as well. I think I got confused by "Follow the same approach",
-since map_type_name has always been in map.c, but it's both
-prog_type_name and attach_type_name that were moved to main.h from their
-original files some time ago (so not much to "follow" from map_type_name).
+Managing bpf_prog_array is more involved than updating a single bpf_prog
+pointer. This will let us do it all from one place, bpf/net_namespace.c, in
+the subsequent patch.
 
-Anyway, minor confusion on my side, no need to respin just for that.
-Thanks for the clarification.
+No functional change intended.
 
-Quentin
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+ include/net/flow_dissector.h |  3 ++-
+ kernel/bpf/net_namespace.c   | 20 ++++++++++++++++++--
+ net/core/flow_dissector.c    | 13 ++-----------
+ 3 files changed, 22 insertions(+), 14 deletions(-)
+
+diff --git a/include/net/flow_dissector.h b/include/net/flow_dissector.h
+index a7eba43fe4e4..4b6e36288ddd 100644
+--- a/include/net/flow_dissector.h
++++ b/include/net/flow_dissector.h
+@@ -372,7 +372,8 @@ flow_dissector_init_keys(struct flow_dissector_key_control *key_control,
+ }
+ 
+ #ifdef CONFIG_BPF_SYSCALL
+-int flow_dissector_bpf_prog_attach(struct net *net, struct bpf_prog *prog);
++int flow_dissector_bpf_prog_attach_check(struct net *net,
++					 struct bpf_prog *prog);
+ #endif /* CONFIG_BPF_SYSCALL */
+ 
+ #endif
+diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
+index 78cf061f8179..b951dab2687f 100644
+--- a/kernel/bpf/net_namespace.c
++++ b/kernel/bpf/net_namespace.c
+@@ -189,6 +189,7 @@ int netns_bpf_prog_query(const union bpf_attr *attr,
+ int netns_bpf_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ {
+ 	enum netns_bpf_attach_type type;
++	struct bpf_prog *attached;
+ 	struct net *net;
+ 	int ret;
+ 
+@@ -207,12 +208,26 @@ int netns_bpf_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ 
+ 	switch (type) {
+ 	case NETNS_BPF_FLOW_DISSECTOR:
+-		ret = flow_dissector_bpf_prog_attach(net, prog);
++		ret = flow_dissector_bpf_prog_attach_check(net, prog);
+ 		break;
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
+ 	}
++	if (ret)
++		goto out_unlock;
++
++	attached = rcu_dereference_protected(net->bpf.progs[type],
++					     lockdep_is_held(&netns_bpf_mutex));
++	if (attached == prog) {
++		/* The same program cannot be attached twice */
++		ret = -EINVAL;
++		goto out_unlock;
++	}
++	rcu_assign_pointer(net->bpf.progs[type], prog);
++	if (attached)
++		bpf_prog_put(attached);
++
+ out_unlock:
+ 	mutex_unlock(&netns_bpf_mutex);
+ 
+@@ -277,7 +292,7 @@ static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
+ 
+ 	switch (type) {
+ 	case NETNS_BPF_FLOW_DISSECTOR:
+-		err = flow_dissector_bpf_prog_attach(net, link->prog);
++		err = flow_dissector_bpf_prog_attach_check(net, link->prog);
+ 		break;
+ 	default:
+ 		err = -EINVAL;
+@@ -286,6 +301,7 @@ static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
+ 	if (err)
+ 		goto out_unlock;
+ 
++	rcu_assign_pointer(net->bpf.progs[type], link->prog);
+ 	net->bpf.links[type] = link;
+ 
+ out_unlock:
+diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
+index d02df0b6d0d9..b57fb1359395 100644
+--- a/net/core/flow_dissector.c
++++ b/net/core/flow_dissector.c
+@@ -70,10 +70,10 @@ void skb_flow_dissector_init(struct flow_dissector *flow_dissector,
+ EXPORT_SYMBOL(skb_flow_dissector_init);
+ 
+ #ifdef CONFIG_BPF_SYSCALL
+-int flow_dissector_bpf_prog_attach(struct net *net, struct bpf_prog *prog)
++int flow_dissector_bpf_prog_attach_check(struct net *net,
++					 struct bpf_prog *prog)
+ {
+ 	enum netns_bpf_attach_type type = NETNS_BPF_FLOW_DISSECTOR;
+-	struct bpf_prog *attached;
+ 
+ 	if (net == &init_net) {
+ 		/* BPF flow dissector in the root namespace overrides
+@@ -97,15 +97,6 @@ int flow_dissector_bpf_prog_attach(struct net *net, struct bpf_prog *prog)
+ 			return -EEXIST;
+ 	}
+ 
+-	attached = rcu_dereference_protected(net->bpf.progs[type],
+-					     lockdep_is_held(&netns_bpf_mutex));
+-	if (attached == prog)
+-		/* The same program cannot be attached twice */
+-		return -EINVAL;
+-
+-	rcu_assign_pointer(net->bpf.progs[type], prog);
+-	if (attached)
+-		bpf_prog_put(attached);
+ 	return 0;
+ }
+ #endif /* CONFIG_BPF_SYSCALL */
+-- 
+2.25.4
+
