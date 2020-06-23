@@ -2,44 +2,45 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFEDDC433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 00:36:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A969C433DF
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 00:36:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CB47420738
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 00:36:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D985420738
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 00:36:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="WorQRQ4H"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mPs8Nyi0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731826AbgFWAgh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Jun 2020 20:36:37 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:51586 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731652AbgFWAgf (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 22 Jun 2020 20:36:35 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05N0aL2g029185
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 17:36:34 -0700
+        id S1731745AbgFWAgj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Jun 2020 20:36:39 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:50424 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731637AbgFWAgh (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 22 Jun 2020 20:36:37 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05N0YAFl026883
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 17:36:36 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=/WjtTuu69x4/ntg+0tJF8JFgCZ0iWnzVxhW3jWmNGOY=;
- b=WorQRQ4HAKToaKBNNhAYr9wMzH61DWdyOhQTaLcD6mdbiZE/Qi03FJbSyLlt/C3KkoSB
- HkX9t2VF1icWtheX1Qg875I9s+8LxKL/u5I7EA6u6o8tq3UrhJawoo54Fnncc+AjUps5
- 0Qpakg8ysxKdI0600hufEk24TTWiLyD1DCk= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31sfyku4as-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=uHabQB9HEAdfl7piGtF8McZM+QcqjpcXItHVmF1a50s=;
+ b=mPs8Nyi0k6JN3/UmhohEwwAxtWxAFLP2CDYod46onGlPmri1ecTb9jAgJBVibU6N4FcY
+ uILZhfG/JD0brl/Dh56oqnECFfce3MQYgJsIOY9YOJBD2BPDuS3kNGGpatrEsoxRlwLh
+ hhuYzL4LnHTY4azLkH+CAmDTPKS71R9dOGA= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31t2e8rdtf-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 17:36:34 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 17:36:36 -0700
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 22 Jun 2020 17:36:32 -0700
+ 15.1.1979.3; Mon, 22 Jun 2020 17:36:34 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 1AF163704FDA; Mon, 22 Jun 2020 17:36:26 -0700 (PDT)
+        id 8FEAE3705002; Mon, 22 Jun 2020 17:36:32 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -48,133 +49,255 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v3 00/15] implement bpf iterator for tcp and udp sockets
-Date:   Mon, 22 Jun 2020 17:36:26 -0700
-Message-ID: <20200623003626.3072825-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 06/15] bpf: add bpf_skc_to_{tcp,tcp_timewait,tcp_request}_sock() helpers
+Date:   Mon, 22 Jun 2020 17:36:32 -0700
+Message-ID: <20200623003632.3074077-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200623003626.3072825-1-yhs@fb.com>
+References: <20200623003626.3072825-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-22_16:2020-06-22,2020-06-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- suspectscore=0 adultscore=0 cotscore=-2147483648 impostorscore=0
- malwarescore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0
- phishscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 classifier=spam
- adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006230000
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 spamscore=0
+ impostorscore=0 mlxscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
+ suspectscore=9 bulkscore=0 cotscore=-2147483648 lowpriorityscore=0
+ mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006230000
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf iterator implments traversal of kernel data structures and these
-data structures are passed to a bpf program for processing.
-This gives great flexibility for users to examine kernel data
-structure without using e.g. /proc/net which has limited and
-fixed format.
+Three more helpers are added to cast a sock_common pointer to
+an tcp_sock, tcp_timewait_sock or a tcp_request_sock for
+tracing programs.
 
-Commit 138d0be35b14 ("net: bpf: Add netlink and ipv6_route bpf_iter targe=
-ts")
-implemented bpf iterators for netlink and ipv6_route.
-This patch set intends to implement bpf iterators for tcp and udp.
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ include/linux/bpf.h            |  3 ++
+ include/uapi/linux/bpf.h       | 23 ++++++++++++++-
+ kernel/trace/bpf_trace.c       |  6 ++++
+ net/core/filter.c              | 54 ++++++++++++++++++++++++++++++++++
+ scripts/bpf_helpers_doc.py     |  6 ++++
+ tools/include/uapi/linux/bpf.h | 23 ++++++++++++++-
+ 6 files changed, 113 insertions(+), 2 deletions(-)
 
-Currently, /proc/net/tcp is used to print tcp4 stats and /proc/net/tcp6
-is used to print tcp6 stats. /proc/net/udp[6] have similar usage model.
-In contrast, only one tcp iterator is implemented and it is bpf program
-resposibility to filter based on socket family. The same is for udp.
-This will avoid another unnecessary traversal pass if users want
-to check both tcp4 and tcp6.
-
-Several helpers are also implemented in this patch
-  bpf_skc_to_{tcp, tcp6, tcp_timewait, tcp_request, udp6}_sock
-The argument for these helpers is not a fixed btf_id. For example,
-  bpf_skc_to_tcp(struct sock_common *), or
-  bpf_skc_to_tcp(struct sock *), or
-  bpf_skc_to_tcp(struct inet_sock *), ...
-are all valid. At runtime, the helper will check whether pointer cast
-is legal or not. Please see Patch #5 for details.
-
-Since btf_id's for both arguments and return value are known at
-build time, the btf_id's are pre-computed once vmlinux btf becomes
-valid. Jiri's "adding d_path helper" patch set
-  https://lore.kernel.org/bpf/20200616100512.2168860-1-jolsa@kernel.org/T=
-/
-provides a way to pre-compute btf id during vmlinux build time.
-This can be applied here as well. A followup patch can convert
-to build time btf id computation after Jiri's patch landed.
-
-Changelogs:
-  v2 -> v3:
-    - change sock_cast*/SOCK_CAST* names to btf_sock* names for generalit=
-y (Martin)
-    - change gpl_license to false (Martin)
-    - fix helper to cast to tcp timewait/request socket. (Martin)
-  v1 -> v2:
-    - guard init_sock_cast_types() defination properly with CONFIG_NET (M=
-artin)
-    - reuse the btf_ids, computed for new helper argument, for return
-      values (Martin)
-    - using BTF_TYPE_EMIT to express intent of btf type generation (Andri=
-i)
-    - abstract out common net macros into bpf_tracing_net.h (Andrii)
-
-Yonghong Song (15):
-  net: bpf: add bpf_seq_afinfo in tcp_iter_state
-  net: bpf: implement bpf iterator for tcp
-  bpf: support 'X' in bpf_seq_printf() helper
-  bpf: allow tracing programs to use bpf_jiffies64() helper
-  bpf: add bpf_skc_to_tcp6_sock() helper
-  bpf: add bpf_skc_to_{tcp,tcp_timewait,tcp_request}_sock() helpers
-  net: bpf: add bpf_seq_afinfo in udp_iter_state
-  net: bpf: implement bpf iterator for udp
-  bpf: add bpf_skc_to_udp6_sock() helper
-  bpf/selftests: move newer bpf_iter_* type redefining to a new header
-    file
-  tools/bpf: refactor some net macros to libbpf bpf_tracing_net.h
-  tools/libbpf: add more common macros to bpf_tracing_net.h
-  tools/bpf: selftests: implement sample tcp/tcp6 bpf_iter programs
-  tools/bpf: add udp4/udp6 bpf iterator
-  bpf/selftests: add tcp/udp iterator programs to selftests
-
- include/linux/bpf.h                           |  16 ++
- include/net/tcp.h                             |   1 +
- include/net/udp.h                             |   1 +
- include/uapi/linux/bpf.h                      |  37 ++-
- kernel/bpf/btf.c                              |   1 +
- kernel/bpf/verifier.c                         |  43 ++-
- kernel/trace/bpf_trace.c                      |  15 +-
- net/core/filter.c                             | 156 +++++++++++
- net/ipv4/tcp_ipv4.c                           | 153 ++++++++++-
- net/ipv4/udp.c                                | 144 +++++++++-
- scripts/bpf_helpers_doc.py                    |  10 +
- tools/include/uapi/linux/bpf.h                |  37 ++-
- tools/lib/bpf/Makefile                        |   1 +
- tools/lib/bpf/bpf_tracing_net.h               |  51 ++++
- .../selftests/bpf/prog_tests/bpf_iter.c       |  68 +++++
- tools/testing/selftests/bpf/progs/bpf_iter.h  |  80 ++++++
- .../selftests/bpf/progs/bpf_iter_bpf_map.c    |  18 +-
- .../selftests/bpf/progs/bpf_iter_ipv6_route.c |  25 +-
- .../selftests/bpf/progs/bpf_iter_netlink.c    |  22 +-
- .../selftests/bpf/progs/bpf_iter_task.c       |  18 +-
- .../selftests/bpf/progs/bpf_iter_task_file.c  |  20 +-
- .../selftests/bpf/progs/bpf_iter_tcp4.c       | 235 ++++++++++++++++
- .../selftests/bpf/progs/bpf_iter_tcp6.c       | 250 ++++++++++++++++++
- .../selftests/bpf/progs/bpf_iter_test_kern3.c |  17 +-
- .../selftests/bpf/progs/bpf_iter_test_kern4.c |  17 +-
- .../bpf/progs/bpf_iter_test_kern_common.h     |  18 +-
- .../selftests/bpf/progs/bpf_iter_udp4.c       |  71 +++++
- .../selftests/bpf/progs/bpf_iter_udp6.c       |  79 ++++++
- 28 files changed, 1435 insertions(+), 169 deletions(-)
- create mode 100644 tools/lib/bpf/bpf_tracing_net.h
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter.h
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index e2b9f2075e5b..cc3f89827b89 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1646,6 +1646,9 @@ extern const struct bpf_func_proto bpf_ringbuf_subm=
+it_proto;
+ extern const struct bpf_func_proto bpf_ringbuf_discard_proto;
+ extern const struct bpf_func_proto bpf_ringbuf_query_proto;
+ extern const struct bpf_func_proto bpf_skc_to_tcp6_sock_proto;
++extern const struct bpf_func_proto bpf_skc_to_tcp_sock_proto;
++extern const struct bpf_func_proto bpf_skc_to_tcp_timewait_sock_proto;
++extern const struct bpf_func_proto bpf_skc_to_tcp_request_sock_proto;
+=20
+ const struct bpf_func_proto *bpf_tracing_func_proto(
+ 	enum bpf_func_id func_id, const struct bpf_prog *prog);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 394fcba27b6a..e256417d94c2 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3258,6 +3258,24 @@ union bpf_attr {
+  *		Dynamically cast a *sk* pointer to a *tcp6_sock* pointer.
+  *	Return
+  *		*sk* if casting is valid, or NULL otherwise.
++ *
++ * struct tcp_sock *bpf_skc_to_tcp_sock(void *sk)
++ *	Description
++ *		Dynamically cast a *sk* pointer to a *tcp_sock* pointer.
++ *	Return
++ *		*sk* if casting is valid, or NULL otherwise.
++ *
++ * struct tcp_timewait_sock *bpf_skc_to_tcp_timewait_sock(void *sk)
++ * 	Description
++ *		Dynamically cast a *sk* pointer to a *tcp_timewait_sock* pointer.
++ *	Return
++ *		*sk* if casting is valid, or NULL otherwise.
++ *
++ * struct tcp_request_sock *bpf_skc_to_tcp_request_sock(void *sk)
++ * 	Description
++ *		Dynamically cast a *sk* pointer to a *tcp_request_sock* pointer.
++ *	Return
++ *		*sk* if casting is valid, or NULL otherwise.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3396,7 +3414,10 @@ union bpf_attr {
+ 	FN(ringbuf_discard),		\
+ 	FN(ringbuf_query),		\
+ 	FN(csum_level),			\
+-	FN(skc_to_tcp6_sock),
++	FN(skc_to_tcp6_sock),		\
++	FN(skc_to_tcp_sock),		\
++	FN(skc_to_tcp_timewait_sock),	\
++	FN(skc_to_tcp_request_sock),
+=20
+ /* integer value in 'imm' field of BPF_CALL instruction selects which he=
+lper
+  * function eBPF program intends to call
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 478c10d1ec33..de5fbe66e1ca 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1517,6 +1517,12 @@ tracing_prog_func_proto(enum bpf_func_id func_id, =
+const struct bpf_prog *prog)
+ 		return &bpf_xdp_output_proto;
+ 	case BPF_FUNC_skc_to_tcp6_sock:
+ 		return &bpf_skc_to_tcp6_sock_proto;
++	case BPF_FUNC_skc_to_tcp_sock:
++		return &bpf_skc_to_tcp_sock_proto;
++	case BPF_FUNC_skc_to_tcp_timewait_sock:
++		return &bpf_skc_to_tcp_timewait_sock_proto;
++	case BPF_FUNC_skc_to_tcp_request_sock:
++		return &bpf_skc_to_tcp_request_sock_proto;
+ #endif
+ 	case BPF_FUNC_seq_printf:
+ 		return prog->expected_attach_type =3D=3D BPF_TRACE_ITER ?
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 32efc1fc16cf..140fc0fdf3e1 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -74,6 +74,7 @@
+ #include <net/lwtunnel.h>
+ #include <net/ipv6_stubs.h>
+ #include <net/bpf_sk_storage.h>
++#include <net/transp_v6.h>
+=20
+ /**
+  *	sk_filter_trim_cap - run a packet through a socket filter
+@@ -9271,3 +9272,56 @@ const struct bpf_func_proto bpf_skc_to_tcp6_sock_p=
+roto =3D {
+ 	.check_btf_id		=3D check_arg_btf_id,
+ 	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP6],
+ };
++
++BPF_CALL_1(bpf_skc_to_tcp_sock, struct sock *, sk)
++{
++	if (sk_fullsock(sk) && sk->sk_protocol =3D=3D IPPROTO_TCP)
++		return (unsigned long)sk;
++
++	return (unsigned long)NULL;
++}
++
++const struct bpf_func_proto bpf_skc_to_tcp_sock_proto =3D {
++	.func			=3D bpf_skc_to_tcp_sock,
++	.gpl_only		=3D false,
++	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
++	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
++	.check_btf_id		=3D check_arg_btf_id,
++	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP],
++};
++
++BPF_CALL_1(bpf_skc_to_tcp_timewait_sock, struct sock *, sk)
++{
++	if ((sk->sk_prot =3D=3D &tcp_prot || sk->sk_prot =3D=3D &tcpv6_prot) &&
++	    sk->sk_state =3D=3D TCP_TIME_WAIT)
++		return (unsigned long)sk;
++
++	return (unsigned long)NULL;
++}
++
++const struct bpf_func_proto bpf_skc_to_tcp_timewait_sock_proto =3D {
++	.func			=3D bpf_skc_to_tcp_timewait_sock,
++	.gpl_only		=3D false,
++	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
++	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
++	.check_btf_id		=3D check_arg_btf_id,
++	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP_TW],
++};
++
++BPF_CALL_1(bpf_skc_to_tcp_request_sock, struct sock *, sk)
++{
++	if ((sk->sk_prot =3D=3D &tcp_prot || sk->sk_prot =3D=3D &tcpv6_prot) &&
++	    sk->sk_state =3D=3D TCP_NEW_SYN_RECV)
++		return (unsigned long)sk;
++
++	return (unsigned long)NULL;
++}
++
++const struct bpf_func_proto bpf_skc_to_tcp_request_sock_proto =3D {
++	.func			=3D bpf_skc_to_tcp_request_sock,
++	.gpl_only		=3D false,
++	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
++	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
++	.check_btf_id		=3D check_arg_btf_id,
++	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP_REQ],
++};
+diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
+index 6c2f64118651..d886657c6aaa 100755
+--- a/scripts/bpf_helpers_doc.py
++++ b/scripts/bpf_helpers_doc.py
+@@ -422,6 +422,9 @@ class PrinterHelpers(Printer):
+             'struct tcphdr',
+             'struct seq_file',
+             'struct tcp6_sock',
++            'struct tcp_sock',
++            'struct tcp_timewait_sock',
++            'struct tcp_request_sock',
+=20
+             'struct __sk_buff',
+             'struct sk_msg_md',
+@@ -460,6 +463,9 @@ class PrinterHelpers(Printer):
+             'struct tcphdr',
+             'struct seq_file',
+             'struct tcp6_sock',
++            'struct tcp_sock',
++            'struct tcp_timewait_sock',
++            'struct tcp_request_sock',
+     }
+     mapped_types =3D {
+             'u8': '__u8',
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index 394fcba27b6a..e256417d94c2 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3258,6 +3258,24 @@ union bpf_attr {
+  *		Dynamically cast a *sk* pointer to a *tcp6_sock* pointer.
+  *	Return
+  *		*sk* if casting is valid, or NULL otherwise.
++ *
++ * struct tcp_sock *bpf_skc_to_tcp_sock(void *sk)
++ *	Description
++ *		Dynamically cast a *sk* pointer to a *tcp_sock* pointer.
++ *	Return
++ *		*sk* if casting is valid, or NULL otherwise.
++ *
++ * struct tcp_timewait_sock *bpf_skc_to_tcp_timewait_sock(void *sk)
++ * 	Description
++ *		Dynamically cast a *sk* pointer to a *tcp_timewait_sock* pointer.
++ *	Return
++ *		*sk* if casting is valid, or NULL otherwise.
++ *
++ * struct tcp_request_sock *bpf_skc_to_tcp_request_sock(void *sk)
++ * 	Description
++ *		Dynamically cast a *sk* pointer to a *tcp_request_sock* pointer.
++ *	Return
++ *		*sk* if casting is valid, or NULL otherwise.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3396,7 +3414,10 @@ union bpf_attr {
+ 	FN(ringbuf_discard),		\
+ 	FN(ringbuf_query),		\
+ 	FN(csum_level),			\
+-	FN(skc_to_tcp6_sock),
++	FN(skc_to_tcp6_sock),		\
++	FN(skc_to_tcp_sock),		\
++	FN(skc_to_tcp_timewait_sock),	\
++	FN(skc_to_tcp_request_sock),
+=20
+ /* integer value in 'imm' field of BPF_CALL instruction selects which he=
+lper
+  * function eBPF program intends to call
 --=20
 2.24.1
 
