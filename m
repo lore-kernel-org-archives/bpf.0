@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5496C433DF
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 18:54:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8946C433DF
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 18:55:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BA085207F9
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 18:54:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B94852064B
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 18:55:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="opr8gGF0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b//vyW2r"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733188AbgFWSyq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 14:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S1733178AbgFWSzi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 14:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733170AbgFWSyq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 14:54:46 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67C5C061573;
-        Tue, 23 Jun 2020 11:54:44 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id f18so19870703qkh.1;
-        Tue, 23 Jun 2020 11:54:44 -0700 (PDT)
+        with ESMTP id S1733170AbgFWSzi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 14:55:38 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E21C061573;
+        Tue, 23 Jun 2020 11:55:37 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id e13so1565727qkg.5;
+        Tue, 23 Jun 2020 11:55:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=H3Kv5Cn6Gw8U/v9uCplQ7bnbpY87sHsbN9JyoRZpRIk=;
-        b=opr8gGF0GD11wAKId2EKH6oSo5WjJP9l6wZeyyA/jpexoxwdIXX1wkUHOcIhkIHaEq
-         EYlWbrj3gSAJ67IFETmUBeVxQKRPPE9ljydm8GhlU4e6reke6Ay1/BnnBvXEgI8QHue4
-         eg6DwWBpzGcIDF/ZGx3YxX0yZ7ct3gMZUkj+jbbT/4hWnWRsQAeJ8EHzod1BKFbsdJcF
-         94CJX7Epas69gfM33FK8hHUIsI3D748rzGJxjnjIpegUYVNn4/gCyWPgZpb9kuUKvcCb
-         sCfe9/TXXHWs9Z8lNh6bF6LfnD2XpkQ1BHokEWI+wvQeG5auXQP8FLtxpXg2qrWekfsT
-         A7SA==
+        bh=+GtTOEjrnVjJo2x9/yYoA12gBw1AbLHR2r4C11c4zLM=;
+        b=b//vyW2r5AQ2vHf92V/+ojguanoz50bXx2ZwGSWuAcZWkul59K6Ng7d7vYURLpKucS
+         KUzjwJ8DbrCD2na5nH133K1lCDc05E/uEsfNiTBiDf7mGj1hEku6S2dHYaDxrNYb9hmh
+         O21uxJWyX5++2j3j1EVCp2R94coMHoaG49cDS5oYvIyHF5ri9Hz2FnEWCwE6tWQ/GWVk
+         +bs1ki7Fq8LWACPk/tydX3eesq3oVs10lPxWkgP4VtkCO68GuBKziiWzPljmZ/orL9/O
+         X4jnOASaxSDQK7+llki2IGAHG0VldUBcvEcqjGYVnnNaw4h7iHOpHV6jza1RZRP+Pzvw
+         HDxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=H3Kv5Cn6Gw8U/v9uCplQ7bnbpY87sHsbN9JyoRZpRIk=;
-        b=LJSTvw42PzH0b7X730iJMc4oezxpkkxKHY15GTS+ijD64nAqrDnoc/jknh8s5LRVyz
-         Y/5Um+QsMapC6En1ZYDwAqh0vuOTplo059tRhlsboGjs1ER+W0vm9Cw/DvQHB9ALzNeI
-         +0LA7IkCvQbgZ96BqPOMv0E5WxYC7/qjOkvypGWhP0Fmq/GRbzz1d4oWTGSgRcOU8L8s
-         jjHU1ZjByQdnykupDrLbnGtEUmd2uMRMINfbKlEbE/2cklwTHAksVuy076lpVlEflqSE
-         v+ZeprNXOmWzGHNmUGH9ZXkDdgY2rtHydlzpW1fHGM2pAC2rvNCd6IfRQrcTU/tKC2w4
-         3KNg==
-X-Gm-Message-State: AOAM5305v6QtIZEPzxnGSuECnyg+eFKJCsjmmm2eCzbQIcRXAUdE8eGX
-        3D0g5R3UoVtlfopTR+Lr9bvs4qkmYK+5N6uNkrI=
-X-Google-Smtp-Source: ABdhPJzF6pWGxYiKZIbYK7BAeMh5SvgJXwwXGaK2fuSwIxkGqi6NWhh+3Otf3/tSqMGc8B3ZP5Lqqyu7t2jPVmJLLDw=
-X-Received: by 2002:a37:d0b:: with SMTP id 11mr23105377qkn.449.1592938483918;
- Tue, 23 Jun 2020 11:54:43 -0700 (PDT)
+        bh=+GtTOEjrnVjJo2x9/yYoA12gBw1AbLHR2r4C11c4zLM=;
+        b=MJnAsmVUbDiprMiAgELFcHfuQ2Va8yoPzlPlwBl13W/cBXoWt4ceX5hPXmHqL1z4um
+         QFq3khQijim5VBKd+9VxzIkfawuPolAhpfXKdXwXuE4LW9EY1uKfNknfIrs8fbc9q5l6
+         yIqr+ujP/x/5PKxBjZeeQ/+igj4fkEr3AgAKtm52ClwzEyWBNm/uFLjdqaEqfMnDEWe0
+         5Fh26MEb67dBRJ9j9ermK8oVAQLqgI4Ytq/q8/WFa4VotrzXdVkMuAkM8yi/SGr27p+6
+         ZTV+BUJ8deH9kRebMYDqx84Sj+eCOgUUBJX1Yt4kGbNBmTMZ/oVHYidFlq0TtDiPJxLb
+         xGxA==
+X-Gm-Message-State: AOAM532W+gaZD4/0PZZ1HzIOX/IHiSIt46kEUKEqES8vGbZceeo9sI62
+        NKu9NOSCRV2dKqdaar8oIZUfRgLPFnVZbcyHRE7vJoBj
+X-Google-Smtp-Source: ABdhPJyoSo8AQ6QQbqf36ib+qkBnaZa7TedkFPdRrJAbHrnHrG9S2nekoSxMvo/Bw79n5jYu+zQAs5Vfwc99ysPpSMI=
+X-Received: by 2002:a05:620a:2409:: with SMTP id d9mr15804490qkn.36.1592938537019;
+ Tue, 23 Jun 2020 11:55:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200623161749.2500196-1-yhs@fb.com> <20200623161803.2501574-1-yhs@fb.com>
-In-Reply-To: <20200623161803.2501574-1-yhs@fb.com>
+References: <20200623161749.2500196-1-yhs@fb.com> <20200623161804.2501684-1-yhs@fb.com>
+In-Reply-To: <20200623161804.2501684-1-yhs@fb.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 23 Jun 2020 11:54:32 -0700
-Message-ID: <CAEf4BzZ+m3gG-WSApdBkyk8G3Uws0VDUx=9-MjefM-Esx1RGJQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 11/15] selftests/bpf: refactor some net macros
+Date:   Tue, 23 Jun 2020 11:55:26 -0700
+Message-ID: <CAEf4BzbUtWz6BUiuOcCpbw0_F+1jYmKx2SJZiGxRxbKus3pBug@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 12/15] selftests/bpf: add more common macros
  to bpf_tracing_net.h
 To:     Yonghong Song <yhs@fb.com>
 Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
@@ -75,23 +75,16 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Tue, Jun 23, 2020 at 9:19 AM Yonghong Song <yhs@fb.com> wrote:
 >
-> Refactor bpf_iter_ipv6_route.c and bpf_iter_netlink.c
-> so net macros, originally from various include/linux header
-> files, are moved to a new header file
-> bpf_tracing_net.h. The goal is to improve reuse so
-> networking tracing programs do not need to
-> copy these macros every time they use them.
+> These newly added macros will be used in subsequent bpf iterator
+> tcp{4,6} and udp{4,6} programs.
 >
 > Signed-off-by: Yonghong Song <yhs@fb.com>
 > ---
 
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 
->  .../selftests/bpf/progs/bpf_iter_ipv6_route.c    |  7 +------
->  .../selftests/bpf/progs/bpf_iter_netlink.c       |  4 +---
->  .../selftests/bpf/progs/bpf_tracing_net.h        | 16 ++++++++++++++++
->  3 files changed, 18 insertions(+), 9 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+>  .../selftests/bpf/progs/bpf_tracing_net.h     | 35 +++++++++++++++++++
+>  1 file changed, 35 insertions(+)
 >
 
 [...]
