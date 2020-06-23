@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B98F5C433E1
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 23:08:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E96DC433E0
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 23:08:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9260720874
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 23:08:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 010C620874
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 23:08:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="O1+v6+zd"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="HcHy+RkU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388530AbgFWXIW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 19:08:22 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:14054 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388568AbgFWXIV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jun 2020 19:08:21 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 05NN4YOm015171
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 16:08:19 -0700
+        id S2388625AbgFWXIY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 19:08:24 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:43104 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388601AbgFWXIW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jun 2020 19:08:22 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05NN4WX1011503
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 16:08:21 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=3LYR+RxkT0wuVODbb2QNGuPwWSqAgTmv5gpK0NeRex8=;
- b=O1+v6+zdrsRAx0W/RQgDMdbY8HwW8YqOpF0PXld9vGMck1iVj1GojzF72oAy3tDZbX4M
- 82eOsAyMzIypwC6xLCgtoYdxEFsxNpz3wjS+lkb6Oz2xKdDsDeXiyCF4IOOkCNbhAA1t
- lMBWnNE5fop8oKiTnVXjRj8YgdjvcsuURn8= 
+ bh=0n1K2RnUaoVTO67e6IgE7yUAi2m0kvr1tzd0PpT7i3A=;
+ b=HcHy+RkUkHwTiTMdTl0KjTomcVJ2Jp7LZE27A6aFghF1lum7Ib5cU8wUlCQ+TTW2OSj2
+ QmVRTagL6/KCLgapSC4loyNRDoSsPnY1RM03hSZYPs+ShJn/kGoGrKqnFW+ZPcwpMvSS
+ PgpKUqYGHQNxO/54b+NTvlhdzR5R5+f1jfQ= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 31utrk03p0-2
+        by mx0a-00082601.pphosted.com with ESMTP id 31utqn0414-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 16:08:19 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 16:08:21 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 23 Jun 2020 16:08:18 -0700
+ 15.1.1979.3; Tue, 23 Jun 2020 16:08:20 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 599CF3704F8E; Tue, 23 Jun 2020 16:08:11 -0700 (PDT)
+        id 986923704F8E; Tue, 23 Jun 2020 16:08:16 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>
+        Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v5 06/15] bpf: add bpf_skc_to_{tcp,tcp_timewait,tcp_request}_sock() helpers
-Date:   Tue, 23 Jun 2020 16:08:11 -0700
-Message-ID: <20200623230811.3988277-1-yhs@fb.com>
+Subject: [PATCH bpf-next v5 10/15] selftests/bpf: move newer bpf_iter_* type redefining to a new header file
+Date:   Tue, 23 Jun 2020 16:08:16 -0700
+Message-ID: <20200623230816.3988656-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200623230803.3987674-1-yhs@fb.com>
 References: <20200623230803.3987674-1-yhs@fb.com>
@@ -61,10 +62,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-23_14:2020-06-23,2020-06-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0 mlxscore=0
- mlxlogscore=999 clxscore=1015 suspectscore=9 spamscore=0 phishscore=0
- impostorscore=0 adultscore=0 bulkscore=0 priorityscore=1501
- cotscore=-2147483648 lowpriorityscore=0 classifier=spam adjust=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 impostorscore=0 suspectscore=8
+ bulkscore=0 malwarescore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
+ cotscore=-2147483648 priorityscore=1501 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2006230153
 X-FB-Internal: deliver
@@ -73,244 +74,360 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Three more helpers are added to cast a sock_common pointer to
-an tcp_sock, tcp_timewait_sock or a tcp_request_sock for
-tracing programs.
+Commit b9f4c01f3e0b ("selftest/bpf: Make bpf_iter selftest
+compilable against old vmlinux.h") and Commit dda18a5c0b75
+("selftests/bpf: Convert bpf_iter_test_kern{3, 4}.c to define
+own bpf_iter_meta") redefined newly introduced types
+in bpf programs so the bpf program can still compile
+properly with old kernels although loading may fail.
 
+Since this patch set introduced new types and the same
+workaround is needed, so let us move the workaround
+to a separate header file so they do not clutter
+bpf programs.
+
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/linux/bpf.h            |  3 ++
- include/uapi/linux/bpf.h       | 23 ++++++++++++-
- kernel/trace/bpf_trace.c       |  6 ++++
- net/core/filter.c              | 62 ++++++++++++++++++++++++++++++++++
- scripts/bpf_helpers_doc.py     |  6 ++++
- tools/include/uapi/linux/bpf.h | 23 ++++++++++++-
- 6 files changed, 121 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_iter.h  | 49 +++++++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_bpf_map.c    | 18 +------
+ .../selftests/bpf/progs/bpf_iter_ipv6_route.c | 18 +------
+ .../selftests/bpf/progs/bpf_iter_netlink.c    | 18 +------
+ .../selftests/bpf/progs/bpf_iter_task.c       | 18 +------
+ .../selftests/bpf/progs/bpf_iter_task_file.c  | 20 +-------
+ .../selftests/bpf/progs/bpf_iter_test_kern3.c | 17 +------
+ .../selftests/bpf/progs/bpf_iter_test_kern4.c | 17 +------
+ .../bpf/progs/bpf_iter_test_kern_common.h     | 18 +------
+ 9 files changed, 57 insertions(+), 136 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter.h
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c0e38ad07848..c23998cf6699 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1650,6 +1650,9 @@ extern const struct bpf_func_proto bpf_ringbuf_subm=
-it_proto;
- extern const struct bpf_func_proto bpf_ringbuf_discard_proto;
- extern const struct bpf_func_proto bpf_ringbuf_query_proto;
- extern const struct bpf_func_proto bpf_skc_to_tcp6_sock_proto;
-+extern const struct bpf_func_proto bpf_skc_to_tcp_sock_proto;
-+extern const struct bpf_func_proto bpf_skc_to_tcp_timewait_sock_proto;
-+extern const struct bpf_func_proto bpf_skc_to_tcp_request_sock_proto;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter.h b/tools/testing=
+/selftests/bpf/progs/bpf_iter.h
+new file mode 100644
+index 000000000000..3757e88c6406
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter.h
+@@ -0,0 +1,49 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2020 Facebook */
++/* "undefine" structs in vmlinux.h, because we "override" them below */
++#define bpf_iter_meta bpf_iter_meta___not_used
++#define bpf_iter__bpf_map bpf_iter__bpf_map___not_used
++#define bpf_iter__ipv6_route bpf_iter__ipv6_route___not_used
++#define bpf_iter__netlink bpf_iter__netlink___not_used
++#define bpf_iter__task bpf_iter__task___not_used
++#define bpf_iter__task_file bpf_iter__task_file___not_used
++#include "vmlinux.h"
++#undef bpf_iter_meta
++#undef bpf_iter__bpf_map
++#undef bpf_iter__ipv6_route
++#undef bpf_iter__netlink
++#undef bpf_iter__task
++#undef bpf_iter__task_file
++
++struct bpf_iter_meta {
++	struct seq_file *seq;
++	__u64 session_id;
++	__u64 seq_num;
++} __attribute__((preserve_access_index));
++
++struct bpf_iter__ipv6_route {
++	struct bpf_iter_meta *meta;
++	struct fib6_info *rt;
++} __attribute__((preserve_access_index));
++
++struct bpf_iter__netlink {
++	struct bpf_iter_meta *meta;
++	struct netlink_sock *sk;
++} __attribute__((preserve_access_index));
++
++struct bpf_iter__task {
++	struct bpf_iter_meta *meta;
++	struct task_struct *task;
++} __attribute__((preserve_access_index));
++
++struct bpf_iter__task_file {
++	struct bpf_iter_meta *meta;
++	struct task_struct *task;
++	__u32 fd;
++	struct file *file;
++} __attribute__((preserve_access_index));
++
++struct bpf_iter__bpf_map {
++	struct bpf_iter_meta *meta;
++	struct bpf_map *map;
++} __attribute__((preserve_access_index));
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c b/tools=
+/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
+index b57bd6fef208..08651b23edba 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
+@@ -1,27 +1,11 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
+-/* "undefine" structs in vmlinux.h, because we "override" them below */
+-#define bpf_iter_meta bpf_iter_meta___not_used
+-#define bpf_iter__bpf_map bpf_iter__bpf_map___not_used
+-#include "vmlinux.h"
+-#undef bpf_iter_meta
+-#undef bpf_iter__bpf_map
++#include "bpf_iter.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
 =20
- const struct bpf_func_proto *bpf_tracing_func_proto(
- 	enum bpf_func_id func_id, const struct bpf_prog *prog);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 394fcba27b6a..e256417d94c2 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3258,6 +3258,24 @@ union bpf_attr {
-  *		Dynamically cast a *sk* pointer to a *tcp6_sock* pointer.
-  *	Return
-  *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct tcp_sock *bpf_skc_to_tcp_sock(void *sk)
-+ *	Description
-+ *		Dynamically cast a *sk* pointer to a *tcp_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct tcp_timewait_sock *bpf_skc_to_tcp_timewait_sock(void *sk)
-+ * 	Description
-+ *		Dynamically cast a *sk* pointer to a *tcp_timewait_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct tcp_request_sock *bpf_skc_to_tcp_request_sock(void *sk)
-+ * 	Description
-+ *		Dynamically cast a *sk* pointer to a *tcp_request_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3396,7 +3414,10 @@ union bpf_attr {
- 	FN(ringbuf_discard),		\
- 	FN(ringbuf_query),		\
- 	FN(csum_level),			\
--	FN(skc_to_tcp6_sock),
-+	FN(skc_to_tcp6_sock),		\
-+	FN(skc_to_tcp_sock),		\
-+	FN(skc_to_tcp_timewait_sock),	\
-+	FN(skc_to_tcp_request_sock),
+ char _license[] SEC("license") =3D "GPL";
 =20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-  * function eBPF program intends to call
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 478c10d1ec33..de5fbe66e1ca 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1517,6 +1517,12 @@ tracing_prog_func_proto(enum bpf_func_id func_id, =
-const struct bpf_prog *prog)
- 		return &bpf_xdp_output_proto;
- 	case BPF_FUNC_skc_to_tcp6_sock:
- 		return &bpf_skc_to_tcp6_sock_proto;
-+	case BPF_FUNC_skc_to_tcp_sock:
-+		return &bpf_skc_to_tcp_sock_proto;
-+	case BPF_FUNC_skc_to_tcp_timewait_sock:
-+		return &bpf_skc_to_tcp_timewait_sock_proto;
-+	case BPF_FUNC_skc_to_tcp_request_sock:
-+		return &bpf_skc_to_tcp_request_sock_proto;
- #endif
- 	case BPF_FUNC_seq_printf:
- 		return prog->expected_attach_type =3D=3D BPF_TRACE_ITER ?
-diff --git a/net/core/filter.c b/net/core/filter.c
-index cdcc62f4e2eb..a285a2d00edc 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -74,6 +74,7 @@
- #include <net/lwtunnel.h>
- #include <net/ipv6_stubs.h>
- #include <net/bpf_sk_storage.h>
-+#include <net/transp_v6.h>
+-struct bpf_iter_meta {
+-	struct seq_file *seq;
+-	__u64 session_id;
+-	__u64 seq_num;
+-} __attribute__((preserve_access_index));
+-
+-struct bpf_iter__bpf_map {
+-	struct bpf_iter_meta *meta;
+-	struct bpf_map *map;
+-} __attribute__((preserve_access_index));
+-
+ SEC("iter/bpf_map")
+ int dump_bpf_map(struct bpf_iter__bpf_map *ctx)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c b/to=
+ols/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c
+index c8e9ca74c87b..93a452d1d136 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c
+@@ -1,25 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
+-/* "undefine" structs in vmlinux.h, because we "override" them below */
+-#define bpf_iter_meta bpf_iter_meta___not_used
+-#define bpf_iter__ipv6_route bpf_iter__ipv6_route___not_used
+-#include "vmlinux.h"
+-#undef bpf_iter_meta
+-#undef bpf_iter__ipv6_route
++#include "bpf_iter.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
 =20
- /**
-  *	sk_filter_trim_cap - run a packet through a socket filter
-@@ -9273,3 +9274,64 @@ const struct bpf_func_proto bpf_skc_to_tcp6_sock_p=
-roto =3D {
- 	.check_btf_id		=3D check_arg_btf_id,
- 	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP6],
- };
-+
-+BPF_CALL_1(bpf_skc_to_tcp_sock, struct sock *, sk)
-+{
-+	if (sk_fullsock(sk) && sk->sk_protocol =3D=3D IPPROTO_TCP)
-+		return (unsigned long)sk;
-+
-+	return (unsigned long)NULL;
-+}
-+
-+const struct bpf_func_proto bpf_skc_to_tcp_sock_proto =3D {
-+	.func			=3D bpf_skc_to_tcp_sock,
-+	.gpl_only		=3D false,
-+	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
-+	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
-+	.check_btf_id		=3D check_arg_btf_id,
-+	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP],
-+};
-+
-+BPF_CALL_1(bpf_skc_to_tcp_timewait_sock, struct sock *, sk)
-+{
-+	if (sk->sk_prot =3D=3D &tcp_prot && sk->sk_state =3D=3D TCP_TIME_WAIT)
-+		return (unsigned long)sk;
-+
-+#if IS_BUILTIN(CONFIG_IPV6)
-+	if (sk->sk_prot =3D=3D &tcpv6_prot && sk->sk_state =3D=3D TCP_TIME_WAIT=
-)
-+		return (unsigned long)sk;
-+#endif
-+
-+	return (unsigned long)NULL;
-+}
-+
-+const struct bpf_func_proto bpf_skc_to_tcp_timewait_sock_proto =3D {
-+	.func			=3D bpf_skc_to_tcp_timewait_sock,
-+	.gpl_only		=3D false,
-+	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
-+	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
-+	.check_btf_id		=3D check_arg_btf_id,
-+	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP_TW],
-+};
-+
-+BPF_CALL_1(bpf_skc_to_tcp_request_sock, struct sock *, sk)
-+{
-+	if (sk->sk_prot =3D=3D &tcp_prot  && sk->sk_state =3D=3D TCP_NEW_SYN_RE=
-CV)
-+		return (unsigned long)sk;
-+
-+#if IS_BUILTIN(CONFIG_IPV6)
-+	if (sk->sk_prot =3D=3D &tcpv6_prot && sk->sk_state =3D=3D TCP_NEW_SYN_R=
-ECV)
-+		return (unsigned long)sk;
-+#endif
-+
-+	return (unsigned long)NULL;
-+}
-+
-+const struct bpf_func_proto bpf_skc_to_tcp_request_sock_proto =3D {
-+	.func			=3D bpf_skc_to_tcp_request_sock,
-+	.gpl_only		=3D false,
-+	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
-+	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
-+	.check_btf_id		=3D check_arg_btf_id,
-+	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP_REQ],
-+};
-diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
-index 6c2f64118651..d886657c6aaa 100755
---- a/scripts/bpf_helpers_doc.py
-+++ b/scripts/bpf_helpers_doc.py
-@@ -422,6 +422,9 @@ class PrinterHelpers(Printer):
-             'struct tcphdr',
-             'struct seq_file',
-             'struct tcp6_sock',
-+            'struct tcp_sock',
-+            'struct tcp_timewait_sock',
-+            'struct tcp_request_sock',
+-struct bpf_iter_meta {
+-	struct seq_file *seq;
+-	__u64 session_id;
+-	__u64 seq_num;
+-} __attribute__((preserve_access_index));
+-
+-struct bpf_iter__ipv6_route {
+-	struct bpf_iter_meta *meta;
+-	struct fib6_info *rt;
+-} __attribute__((preserve_access_index));
+-
+ char _license[] SEC("license") =3D "GPL";
 =20
-             'struct __sk_buff',
-             'struct sk_msg_md',
-@@ -460,6 +463,9 @@ class PrinterHelpers(Printer):
-             'struct tcphdr',
-             'struct seq_file',
-             'struct tcp6_sock',
-+            'struct tcp_sock',
-+            'struct tcp_timewait_sock',
-+            'struct tcp_request_sock',
-     }
-     mapped_types =3D {
-             'u8': '__u8',
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 394fcba27b6a..e256417d94c2 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3258,6 +3258,24 @@ union bpf_attr {
-  *		Dynamically cast a *sk* pointer to a *tcp6_sock* pointer.
-  *	Return
-  *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct tcp_sock *bpf_skc_to_tcp_sock(void *sk)
-+ *	Description
-+ *		Dynamically cast a *sk* pointer to a *tcp_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct tcp_timewait_sock *bpf_skc_to_tcp_timewait_sock(void *sk)
-+ * 	Description
-+ *		Dynamically cast a *sk* pointer to a *tcp_timewait_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-+ *
-+ * struct tcp_request_sock *bpf_skc_to_tcp_request_sock(void *sk)
-+ * 	Description
-+ *		Dynamically cast a *sk* pointer to a *tcp_request_sock* pointer.
-+ *	Return
-+ *		*sk* if casting is valid, or NULL otherwise.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3396,7 +3414,10 @@ union bpf_attr {
- 	FN(ringbuf_discard),		\
- 	FN(ringbuf_query),		\
- 	FN(csum_level),			\
--	FN(skc_to_tcp6_sock),
-+	FN(skc_to_tcp6_sock),		\
-+	FN(skc_to_tcp_sock),		\
-+	FN(skc_to_tcp_timewait_sock),	\
-+	FN(skc_to_tcp_request_sock),
+ extern bool CONFIG_IPV6_SUBTREES __kconfig __weak;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/tools=
+/testing/selftests/bpf/progs/bpf_iter_netlink.c
+index e7b8753eac0b..fda5036fdf75 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+@@ -1,11 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
+-/* "undefine" structs in vmlinux.h, because we "override" them below */
+-#define bpf_iter_meta bpf_iter_meta___not_used
+-#define bpf_iter__netlink bpf_iter__netlink___not_used
+-#include "vmlinux.h"
+-#undef bpf_iter_meta
+-#undef bpf_iter__netlink
++#include "bpf_iter.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
 =20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-  * function eBPF program intends to call
+@@ -14,17 +9,6 @@ char _license[] SEC("license") =3D "GPL";
+ #define sk_rmem_alloc	sk_backlog.rmem_alloc
+ #define sk_refcnt	__sk_common.skc_refcnt
+=20
+-struct bpf_iter_meta {
+-	struct seq_file *seq;
+-	__u64 session_id;
+-	__u64 seq_num;
+-} __attribute__((preserve_access_index));
+-
+-struct bpf_iter__netlink {
+-	struct bpf_iter_meta *meta;
+-	struct netlink_sock *sk;
+-} __attribute__((preserve_access_index));
+-
+ static inline struct inode *SOCK_INODE(struct socket *socket)
+ {
+ 	return &container_of(socket, struct socket_alloc, socket)->vfs_inode;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_task.c
+index ee754021f98e..4983087852a0 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_task.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task.c
+@@ -1,27 +1,11 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
+-/* "undefine" structs in vmlinux.h, because we "override" them below */
+-#define bpf_iter_meta bpf_iter_meta___not_used
+-#define bpf_iter__task bpf_iter__task___not_used
+-#include "vmlinux.h"
+-#undef bpf_iter_meta
+-#undef bpf_iter__task
++#include "bpf_iter.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+=20
+-struct bpf_iter_meta {
+-	struct seq_file *seq;
+-	__u64 session_id;
+-	__u64 seq_num;
+-} __attribute__((preserve_access_index));
+-
+-struct bpf_iter__task {
+-	struct bpf_iter_meta *meta;
+-	struct task_struct *task;
+-} __attribute__((preserve_access_index));
+-
+ SEC("iter/task")
+ int dump_task(struct bpf_iter__task *ctx)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_file.c b/too=
+ls/testing/selftests/bpf/progs/bpf_iter_task_file.c
+index 0f0ec3db20ba..8b787baa2654 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_task_file.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task_file.c
+@@ -1,29 +1,11 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
+-/* "undefine" structs in vmlinux.h, because we "override" them below */
+-#define bpf_iter_meta bpf_iter_meta___not_used
+-#define bpf_iter__task_file bpf_iter__task_file___not_used
+-#include "vmlinux.h"
+-#undef bpf_iter_meta
+-#undef bpf_iter__task_file
++#include "bpf_iter.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+=20
+-struct bpf_iter_meta {
+-	struct seq_file *seq;
+-	__u64 session_id;
+-	__u64 seq_num;
+-} __attribute__((preserve_access_index));
+-
+-struct bpf_iter__task_file {
+-	struct bpf_iter_meta *meta;
+-	struct task_struct *task;
+-	__u32 fd;
+-	struct file *file;
+-} __attribute__((preserve_access_index));
+-
+ SEC("iter/task_file")
+ int dump_task_file(struct bpf_iter__task_file *ctx)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern3.c b/to=
+ols/testing/selftests/bpf/progs/bpf_iter_test_kern3.c
+index 13c2c90c835f..2a4647f20c46 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern3.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern3.c
+@@ -1,25 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
+-#define bpf_iter_meta bpf_iter_meta___not_used
+-#define bpf_iter__task bpf_iter__task___not_used
+-#include "vmlinux.h"
+-#undef bpf_iter_meta
+-#undef bpf_iter__task
++#include "bpf_iter.h"
+ #include <bpf/bpf_helpers.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+=20
+-struct bpf_iter_meta {
+-	struct seq_file *seq;
+-	__u64 session_id;
+-	__u64 seq_num;
+-} __attribute__((preserve_access_index));
+-
+-struct bpf_iter__task {
+-	struct bpf_iter_meta *meta;
+-	struct task_struct *task;
+-} __attribute__((preserve_access_index));
+-
+ SEC("iter/task")
+ int dump_task(struct bpf_iter__task *ctx)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern4.c b/to=
+ols/testing/selftests/bpf/progs/bpf_iter_test_kern4.c
+index 0aa71b333cf3..ee49493dc125 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern4.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern4.c
+@@ -1,25 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
+-#define bpf_iter_meta bpf_iter_meta___not_used
+-#define bpf_iter__bpf_map bpf_iter__bpf_map___not_used
+-#include "vmlinux.h"
+-#undef bpf_iter_meta
+-#undef bpf_iter__bpf_map
++#include "bpf_iter.h"
+ #include <bpf/bpf_helpers.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+=20
+-struct bpf_iter_meta {
+-	struct seq_file *seq;
+-	__u64 session_id;
+-	__u64 seq_num;
+-} __attribute__((preserve_access_index));
+-
+-struct bpf_iter__bpf_map {
+-	struct bpf_iter_meta *meta;
+-	struct bpf_map *map;
+-} __attribute__((preserve_access_index));
+-
+ __u32 map1_id =3D 0, map2_id =3D 0;
+ __u32 map1_accessed =3D 0, map2_accessed =3D 0;
+ __u64 map1_seqnum =3D 0, map2_seqnum1 =3D 0, map2_seqnum2 =3D 0;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern_common.=
+h b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern_common.h
+index dee1339e6905..d5e3df66ad9a 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern_common.h
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern_common.h
+@@ -1,27 +1,11 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /* Copyright (c) 2020 Facebook */
+-/* "undefine" structs in vmlinux.h, because we "override" them below */
+-#define bpf_iter_meta bpf_iter_meta___not_used
+-#define bpf_iter__task bpf_iter__task___not_used
+-#include "vmlinux.h"
+-#undef bpf_iter_meta
+-#undef bpf_iter__task
++#include "bpf_iter.h"
+ #include <bpf/bpf_helpers.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+ int count =3D 0;
+=20
+-struct bpf_iter_meta {
+-	struct seq_file *seq;
+-	__u64 session_id;
+-	__u64 seq_num;
+-} __attribute__((preserve_access_index));
+-
+-struct bpf_iter__task {
+-	struct bpf_iter_meta *meta;
+-	struct task_struct *task;
+-} __attribute__((preserve_access_index));
+-
+ SEC("iter/task")
+ int dump_task(struct bpf_iter__task *ctx)
+ {
 --=20
 2.24.1
 
