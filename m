@@ -2,169 +2,85 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8BC0C433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 15:19:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C396EC433DF
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 15:23:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 89D1320774
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 15:19:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95C412070E
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 15:23:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P2uaReEK"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eadu6oiN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732982AbgFWPTU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 11:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732951AbgFWPTU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 11:19:20 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F65DC061573;
-        Tue, 23 Jun 2020 08:19:19 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id 9so23911738ljc.8;
-        Tue, 23 Jun 2020 08:19:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Zg5KrHOcQrVCDVOVV1dxi5MJGq6i4wHlqMrQXmXPUSo=;
-        b=P2uaReEK5NwiTTG5uk8gT05JIjoCpzK+Y6gQCqAo02RmYaqV8iLo8DJ+Mn8KeIiwt4
-         mshaieTmNk+Hu+LdwbqqHbFQeTOZkva/WMCfi2YLs3YnD9mOd+3TnwtMcogD5YTPDhE2
-         pfIRgZjMTI8qAvq58aTxg8cKbYgrwzbZnGUADP+AuZ68TiOuGkbobefhe14AW2JrO2So
-         SX8dF9tG0JUXhi9JTFUqklXmd6FMpVUbndJqLE6nF3xvg2K7omKhXzT3I3xrk/JWOfNw
-         o/ioyMpcJwAlEE+qjFb1QAVtsaCmxFfl7YCZhjm7MmT6+n9yEAV6g/dtNnFfiUfhsodP
-         0qhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Zg5KrHOcQrVCDVOVV1dxi5MJGq6i4wHlqMrQXmXPUSo=;
-        b=maSsbEsSLUoj569jI/dAZqcYt74USNP9eBdqc1Muzru6SOuQMLeSXT4gOa7hfmECOT
-         ls7ktNYHc/tzcA1YoSuk1FPQlIYrwdGZIvNPaETsghrhWUKCRS7/q/DGH/c2PQV2A7kH
-         fShWFNgXsfasM6byB9SrvsQe8B5jb5Ftp1nqwV+iQHNDv6JJFOR7ezPrSvjbUdkptjzp
-         ZFV0HUskQAboJwwDv+Zt65ja2uRdxdGUNFmJzpmke3oxLma+8htDaeC80RYigZO64OBe
-         8xLe8Tvq2DMQDtqEU9nJhuJttXRuBYNSAVkEi01PG1V0QS3O44RRdZdZXw7Cp/KpnI6X
-         xyWg==
-X-Gm-Message-State: AOAM533RXMgEutGnkKoSbE7q2PielzCMPtpI1BJ6yYrdOL2/BxP5tSyw
-        +Bi5iT6J/rmBJ1AQm7rjGZVWQ4x+qOy+t/PQWYw=
-X-Google-Smtp-Source: ABdhPJzLAZtdQh5aznejLbauphcFF8+SS5/1cEVf1PaB+zfU5KEleGAsRuo5NLJx+k3GkTZco8Sg8YU+JkPD0/pStnc=
-X-Received: by 2002:a2e:2f07:: with SMTP id v7mr10860497ljv.51.1592925557988;
- Tue, 23 Jun 2020 08:19:17 -0700 (PDT)
+        id S1732955AbgFWPXq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 11:23:46 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:43865 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732781AbgFWPXn (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jun 2020 11:23:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592925821;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZkdtYf2kwyyb+dIrinnWgEYhv+CYsPN/Gka6CU8eb4Q=;
+        b=eadu6oiNvDdNkLAsIdNBn3QmVnCC0q4hjQN2EB+7s9GeXwN1pVbTv1WVt5Izg5vTtPP4US
+        0muUO5MV39Qj0DgaVYMzEXgqsfkR78CQ2jobrWJWM973Bg84NINZqW5AgMfDi+hFpNqXm0
+        xMQ72IKjrOGdzVbMQLLzNwAjXeOq61c=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-392-aHO5NrcdMgqP1jauFqqg6A-1; Tue, 23 Jun 2020 11:23:37 -0400
+X-MC-Unique: aHO5NrcdMgqP1jauFqqg6A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3C051835B48;
+        Tue, 23 Jun 2020 15:23:36 +0000 (UTC)
+Received: from carbon (unknown [10.40.208.36])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EB79B60CD3;
+        Tue, 23 Jun 2020 15:23:24 +0000 (UTC)
+Date:   Tue, 23 Jun 2020 17:23:23 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
+        ast@kernel.org, daniel@iogearbox.net, toke@redhat.com,
+        lorenzo.bianconi@redhat.com, dsahern@kernel.org, brouer@redhat.com
+Subject: Re: [PATCH v2 bpf-next 4/8] bpf: cpumap: add the possibility to
+ attach an eBPF program to cpumap
+Message-ID: <20200623172323.603cf62c@carbon>
+In-Reply-To: <734113565894cb8447d1526e6a93eaf6ae994c2d.1592606391.git.lorenzo@kernel.org>
+References: <cover.1592606391.git.lorenzo@kernel.org>
+        <734113565894cb8447d1526e6a93eaf6ae994c2d.1592606391.git.lorenzo@kernel.org>
 MIME-Version: 1.0
-References: <20200623070802.2310018-1-songliubraving@fb.com> <20200623070802.2310018-2-songliubraving@fb.com>
-In-Reply-To: <20200623070802.2310018-2-songliubraving@fb.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 23 Jun 2020 08:19:06 -0700
-Message-ID: <CAADnVQJxinR1fY69hf_rLShdbi947DjGXAH+55eZQDTtm4VBRg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/3] bpf: introduce helper bpf_get_task_stack_trace()
-To:     Song Liu <songliubraving@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 12:08 AM Song Liu <songliubraving@fb.com> wrote:
->
-> This helper can be used with bpf_iter__task to dump all /proc/*/stack to
-> a seq_file.
->
-> Signed-off-by: Song Liu <songliubraving@fb.com>
-> ---
->  include/uapi/linux/bpf.h       | 10 +++++++++-
->  kernel/trace/bpf_trace.c       | 21 +++++++++++++++++++++
->  scripts/bpf_helpers_doc.py     |  2 ++
->  tools/include/uapi/linux/bpf.h | 10 +++++++++-
->  4 files changed, 41 insertions(+), 2 deletions(-)
->
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 19684813faaed..a30416b822fe3 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -3252,6 +3252,13 @@ union bpf_attr {
->   *             case of **BPF_CSUM_LEVEL_QUERY**, the current skb->csum_level
->   *             is returned or the error code -EACCES in case the skb is not
->   *             subject to CHECKSUM_UNNECESSARY.
-> + *
-> + * int bpf_get_task_stack_trace(struct task_struct *task, void *entries, u32 size)
-> + *     Description
-> + *             Save a task stack trace into array *entries*. This is a wrapper
-> + *             over stack_trace_save_tsk().
-> + *     Return
-> + *             Number of trace entries stored.
->   */
->  #define __BPF_FUNC_MAPPER(FN)          \
->         FN(unspec),                     \
-> @@ -3389,7 +3396,8 @@ union bpf_attr {
->         FN(ringbuf_submit),             \
->         FN(ringbuf_discard),            \
->         FN(ringbuf_query),              \
-> -       FN(csum_level),
-> +       FN(csum_level),                 \
-> +       FN(get_task_stack_trace),
->
->  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
->   * function eBPF program intends to call
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index e729c9e587a07..2c13bcb5c2bce 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1488,6 +1488,23 @@ static const struct bpf_func_proto bpf_get_stack_proto_raw_tp = {
->         .arg4_type      = ARG_ANYTHING,
->  };
->
-> +BPF_CALL_3(bpf_get_task_stack_trace, struct task_struct *, task,
-> +          void *, entries, u32, size)
-> +{
-> +       return stack_trace_save_tsk(task, (unsigned long *)entries, size, 0);
-> +}
-> +
-> +static int bpf_get_task_stack_trace_btf_ids[5];
-> +static const struct bpf_func_proto bpf_get_task_stack_trace_proto = {
-> +       .func           = bpf_get_task_stack_trace,
-> +       .gpl_only       = true,
+On Sat, 20 Jun 2020 00:57:20 +0200
+Lorenzo Bianconi <lorenzo@kernel.org> wrote:
 
-why?
+> @@ -260,10 +322,11 @@ static int cpu_map_kthread_run(void *data)
+>  		 * kthread CPU pinned. Lockless access to ptr_ring
+>  		 * consume side valid as no-resize allowed of queue.
+>  		 */
+> -		n = ptr_ring_consume_batched(rcpu->queue, frames, CPUMAP_BATCH);
+> +		n = ptr_ring_consume_batched(rcpu->queue, xdp_frames,
+> +					     CPUMAP_BATCH);
 
-> +       .ret_type       = RET_INTEGER,
-> +       .arg1_type      = ARG_PTR_TO_BTF_ID,
-> +       .arg2_type      = ARG_PTR_TO_MEM,
-> +       .arg3_type      = ARG_CONST_SIZE_OR_ZERO,
+This should have used the non-lock variant __ ptr_ring_consume_batched().
+It did before, but I can see in git-history that this is this is a
+bug/issue I introduced myself earlier... ups.
 
-OR_ZERO ? why?
+-- 
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
-> +       .btf_id         = bpf_get_task_stack_trace_btf_ids,
-> +};
-> +
->  static const struct bpf_func_proto *
->  raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->  {
-> @@ -1521,6 +1538,10 @@ tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->                 return prog->expected_attach_type == BPF_TRACE_ITER ?
->                        &bpf_seq_write_proto :
->                        NULL;
-> +       case BPF_FUNC_get_task_stack_trace:
-> +               return prog->expected_attach_type == BPF_TRACE_ITER ?
-> +                       &bpf_get_task_stack_trace_proto :
-
-why limit to iter only?
-
-> + *
-> + * int bpf_get_task_stack_trace(struct task_struct *task, void *entries, u32 size)
-> + *     Description
-> + *             Save a task stack trace into array *entries*. This is a wrapper
-> + *             over stack_trace_save_tsk().
-
-size is not documented and looks wrong.
-the verifier checks it in bytes, but it's consumed as number of u32s.
