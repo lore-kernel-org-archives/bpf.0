@@ -2,99 +2,121 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB20DC433DF
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 07:08:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 189EEC433E0
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 07:27:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C924206B7
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 07:08:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E60752072E
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 07:27:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LPJ22L+F"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tIQMGLF0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731143AbgFWHId (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 03:08:33 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:2906 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730852AbgFWHI3 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jun 2020 03:08:29 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05N74rXk031834
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 00:08:27 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=G8U8wLrivL4Bm9XBrSH1qxyAz1VKRcKWF+DdWmgC89Y=;
- b=LPJ22L+FI8aKXka1ibGAObYe4nxbwiVZzzHwFNj9Jrrc2xgKBaVjzFmAYR3G3AIS/D8M
- JCyq3zjepc48YpFDZJOnb2cXvCYfkbySe1ttTrqEJWLQyrFQsVPmAKyrt7Hy0BntvFSd
- PeF/7EcffmmyRDPppgzZw1C1B/abZ+yoWc0= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 31sg9fm98b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 00:08:27 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 23 Jun 2020 00:08:25 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id BD84362E50B5; Tue, 23 Jun 2020 00:08:20 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Song Liu <songliubraving@fb.com>
-Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
-        Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/3] bpf: allow %pB in bpf_seq_printf()
-Date:   Tue, 23 Jun 2020 00:08:01 -0700
-Message-ID: <20200623070802.2310018-3-songliubraving@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200623070802.2310018-1-songliubraving@fb.com>
-References: <20200623070802.2310018-1-songliubraving@fb.com>
+        id S1731202AbgFWH1S (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 03:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731145AbgFWH1R (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 03:27:17 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9BBC061573;
+        Tue, 23 Jun 2020 00:27:17 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id y20so2070304wmi.2;
+        Tue, 23 Jun 2020 00:27:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YSf1VMixS4/MhdwnpIJAY01v6Njpn3cj81WloMPQ2nM=;
+        b=tIQMGLF0oaj7fV5xjzTUfIHHdYV6QIpPUavaOYOyVNiRBoOzMv4tysRDd42CcCuSqq
+         XS6beEy7yYXCi1tQcr8Vl2BwsNnS6vRUImfkGGUIeiWLKLGh6KqBuwLqMbcCSVJpI99z
+         zndVY+xaIwAcsbRJf3SpcgbESTSGyBWoSH0b4vxhHNB+VIbrHVcfp4fBc4UbQvqzkzIq
+         FDdKMjfDCJAv05ZgctMec9UTivJeiFMJZylbpeZBleo2DdFO/QFHrgGMwnuhPa/Fu8eq
+         4wVIsepnnfGEYY2pCaLwbq/DeIapMMCsOpwh3O+iTK3JeYJOKANB6gxmjtZszYGefQ/u
+         9gXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YSf1VMixS4/MhdwnpIJAY01v6Njpn3cj81WloMPQ2nM=;
+        b=WFGjxjCxPSbFUlywz6ID5/4rpjtg9tSxSbEt+sYTp1A2O9DGj1GrChrfHhi6zv8MPN
+         9o8jn7nNVX3qDicLlF3f9aMDL/MLyy5G2u2lbRyXIzG6Kq/q7U8ohCNzcbULjGWqjTGR
+         YOEqdL/vKJZ5eVm6SKMvJ1yCl70Y28Q3i2BKjnk7TKWKVF3abl7J9ZuHtFRMlTwyOAaT
+         7m4ObuqPBoRi5sdao+w09nbFbaPCqnlOWjxwl4PAx7vc3LDhi8QV8w8wMPmOAD4b9qLZ
+         BhlLPRsei7Ucwx4aCGvs7vg5CEqDGZKAkqQcfAFDlDIsOOXhUdC4qeIA0wPCMgmHEuVj
+         LNXQ==
+X-Gm-Message-State: AOAM531CtNfDICywPUhxHZFFLCQ5frSOGovak7itpBUV2Gv8eQXKLn3s
+        JCiWPbTlQ3UyGH/SgM2+QFtn6WpXa8hSwUcHlfs=
+X-Google-Smtp-Source: ABdhPJyKnBFpSUFzuIaP7YB37PaQJr7RqTCo17MtjKztZM2lUnj2peTtX/LbtbzjwHjE+2tcMR4pKRUtsEyP90JNcI0=
+X-Received: by 2002:a7b:c041:: with SMTP id u1mr23622951wmc.56.1592897234836;
+ Tue, 23 Jun 2020 00:27:14 -0700 (PDT)
 MIME-Version: 1.0
+References: <CAPydje97m+hG3_Cqg560uHoq8aKG9eDpTHA1eJC=hLuKtMf_vw@mail.gmail.com>
+In-Reply-To: <CAPydje97m+hG3_Cqg560uHoq8aKG9eDpTHA1eJC=hLuKtMf_vw@mail.gmail.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Date:   Tue, 23 Jun 2020 09:27:03 +0200
+Message-ID: <CAJ+HfNgi5wEwmFTgKpR1KemVm3p0FCPTd8V+BBWC6C59OO9O8Q@mail.gmail.com>
+Subject: Re: Talk about AF_XDP support multithread concurrently receive packet
+To:     Yahui Chen <goodluckwillcomesoon@gmail.com>
+Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Xdp <xdp-newbies@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-23_04:2020-06-22,2020-06-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 clxscore=1015
- phishscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
- cotscore=-2147483648 suspectscore=8 mlxlogscore=803 mlxscore=0
- malwarescore=0 impostorscore=0 bulkscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006230055
-X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This makes it easy to dump stack trace with bpf_seq_printf().
+On Tue, 23 Jun 2020 at 08:21, Yahui Chen <goodluckwillcomesoon@gmail.com> w=
+rote:
+>
+> I have make an issue for the libbpf in github, issue number 163.
+>
+> Andrii suggest me sending a mail here. So ,I paste out the content of the=
+ issue:
+>
 
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- kernel/trace/bpf_trace.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Yes, and the xdp-newsbies is an even better list for these kinds of
+discussions (added).
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 2c13bcb5c2bce..ced3176801ae8 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -636,7 +636,8 @@ BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char=
- *, fmt, u32, fmt_size,
- 		if (fmt[i] =3D=3D 'p') {
- 			if (fmt[i + 1] =3D=3D 0 ||
- 			    fmt[i + 1] =3D=3D 'K' ||
--			    fmt[i + 1] =3D=3D 'x') {
-+			    fmt[i + 1] =3D=3D 'x' ||
-+			    fmt[i + 1] =3D=3D 'B') {
- 				/* just kernel pointers */
- 				params[fmt_cnt] =3D args[fmt_cnt];
- 				fmt_cnt++;
---=20
-2.24.1
+> Currently, libbpf do not support concurrently receive pkts using AF_XDP.
+>
+> For example: I create 4 af_xdp sockets on nic's ring 0. Four sockets
+> receiving packets concurrently can't work correctly because the API of
+> cq `xsk_ring_prod__reserve` and `xsk_ring_prod__submit` don't support
+> concurrence.
+>
 
+In other words, you are using shared umem sockets. The 4 sockets can
+potentially receive packets from queue 0, depending on how the XDP
+program is done.
+
+> So, my question is why libbpf was designed non-concurrent mode, is the
+> limit of kernel or other reason? I want to change the code to support
+> concurrent receive pkts, therefore I want to find out whether this is
+> theoretically supported.
+>
+
+You are right that the AF_XDP functionality in libbpf is *not* by
+itself multi-process/thread safe, and this is deliberate. From the
+libbpf perspective we cannot know how a user will construct the
+application, and we don't want to penalize the single-thread/process
+case.
+
+It's entirely up to you to add explicit locking, if the
+single-producer/single-consumer queues are shared between
+threads/processes. Explicit synchronization is required using, say,
+POSIX mutexes.
+
+Does that clear things up?
+
+
+Cheers,
+Bj=C3=B6rn
+
+> Thx.
