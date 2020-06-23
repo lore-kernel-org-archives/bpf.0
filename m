@@ -2,89 +2,112 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F709C433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 05:45:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E867C433E0
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 05:51:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 37FD320738
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 05:45:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7310320716
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 05:51:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SIqcQv4R"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fH+xm7FP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728830AbgFWFpI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 01:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
+        id S1728873AbgFWFvF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 01:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728800AbgFWFpI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 01:45:08 -0400
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E59C061573
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 22:45:08 -0700 (PDT)
-Received: by mail-qk1-x743.google.com with SMTP id j80so6485013qke.0
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 22:45:07 -0700 (PDT)
+        with ESMTP id S1728866AbgFWFvE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 01:51:04 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568D8C061573;
+        Mon, 22 Jun 2020 22:51:04 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id x62so11185380qtd.3;
+        Mon, 22 Jun 2020 22:51:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=iQb1LWarUNT4u6FgFIJlMZU0dc6S9SQHy5vQlSUDJQA=;
-        b=SIqcQv4RAPWdGwdngkfhBAEwvCqVo2hpbpqWdIDOI/qEtn1oeF7Vn0aaePpoPEm1ne
-         4Febm6CK4+XyHdPPW7JnflnuENYe86+8PLeIwIqx4BNtodOfj0rT2axXoU8YB2GfRCww
-         lzBmJo8Asvyhe9/ff0SNS8yJ4gD09zfC0pOdMXFnwO8uuMf0WICLFtsE+SUqAwmZlFnu
-         5SLGoDIF47Ox38py1hwidGvRGkQ6Ar+KksCiW2k8kliVmx9o/3AWXNtEH315R/vW+6i+
-         Er9eUek0q7vSqdweG8TcksmhzKGaU7HlDk+h/keiGoVoi0vsZKSWw8PBixq7/zUEg/JT
-         T1Fw==
+        bh=W7H9rFr0HDbGGTki2DoZ9cdBNBATy4Q0Mwa9jAl6H4c=;
+        b=fH+xm7FPIT3buuXkBUtE/0fpG8TC/aXZl9mwdDD+anFJMvm1OI3meZsQ0phxcz5N+8
+         exmclaeunt4CRoRR580kqQIJtBSlrvEHVLZlG/CX/WmGZN5cLk/mBn/AtEcSdrQ9wjfP
+         5UnX1I/Y3YwO+l2xZkFL3NEPusecS7kNi7HZlZ51sYPzEijpCGYYG13DKqRCl9KqyLV+
+         y+HVTJEL/di3BRIxRw1T3OeGxoZHpVMu6gvZMY+Yy5ZEyDMd87oEf1vJYI2Dng9YQpZc
+         tR7lLil3UV9hFzifyxFFgKxZdK0BEYzzPnBR7nWXFykOQkhKWafRxFiENdFu42adtyCR
+         8LIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iQb1LWarUNT4u6FgFIJlMZU0dc6S9SQHy5vQlSUDJQA=;
-        b=DYYV4yGeGg8aoRO1+OptJLDTyUNZ9mc9X4o92+6s4CYFZbQgiGDph3lRo9XBhlNWY7
-         9cuuorWDmBJ7ZO9U9fASYs/b1MujaiiGCZRrm8kYtC39ew6gE5LS1o7Tk95OOlIPXHuv
-         GNjobnvxE6b8xwKchzIXQuevBBZ2Hz4imdEzGlCU6aLHsFFpSWh48dyEwPs2jksX8/Gb
-         ngeFLlhVGCVu6gDVg2E629RQZNEPUSDxHJY7djcJHMzc6bxb4g5ThhnDXcGg7aAkpz5i
-         kDopnrx/gQ4xdpWemLggm7LIf5JIBK9ft0RiTA8cW7u73R2e09hfCLR1rO1/+Ma2IzK0
-         TDRA==
-X-Gm-Message-State: AOAM530h7mRW6NWvOzYbMz+XJtLlsJkym8EOWO6XHRyBvOZrXZSsLrj0
-        3A9dRspIhVDFh2qMPYdes+P63k5DLcxlUQhrHbY=
-X-Google-Smtp-Source: ABdhPJxLOwCrbXNMXY2g8BbgiJ/a4A2blbATs/yhelSaRWtqSwQuinmm7+HKK6n1dcSlLDVnOMDBm2bSjEwjtvasqS4=
-X-Received: by 2002:a37:a89:: with SMTP id 131mr18607609qkk.92.1592891107201;
- Mon, 22 Jun 2020 22:45:07 -0700 (PDT)
+        bh=W7H9rFr0HDbGGTki2DoZ9cdBNBATy4Q0Mwa9jAl6H4c=;
+        b=WNVyXd+tqEy3+7bfv33dh9u0o+JfDGTiaAjEClM8sF/o4jDG5z6iGYnjTD2CmnDoNS
+         gFwiwrlfcjDgpqhM7439hw3PYqvmuQdB9lvT3M0Q9W81rfdazDvxaLb5idr4yHUdA3YS
+         l4e00YrrWq1BVAw/kcftapyq/WAKLmbODf+cmPoUZmjbc22sC+WQavyWIliTAR/dpnf1
+         B/3S/Ouxstka1NvRRWoEB0sJNM5ihPuoXRZS2nS1nc5EF1bD/dR8gpelFRPUuzXcgHLz
+         r2Fuc4f4R9uNYtH1Xk/i3J/tlxK9BcFBWdQknLUvXFEodeDOpZxFsWL1WgHPakhvFeWC
+         evng==
+X-Gm-Message-State: AOAM53302Zuk8BhbEO1tyGSx3Y1ez5MbjtZxPkPeEA5Zk7JjM9Mn5lvc
+        dLjNQhvpiENhDmQPFPIPh1aKDsKLljMwBAi7hng=
+X-Google-Smtp-Source: ABdhPJz60Np4FlkYko6/J/n7fMDxCBUzWk0F+c9HsZ/+6u5PS4gcLAw4V+1TfM6C9xynnh/0EqGN7kfA+LwG59yCH+M=
+X-Received: by 2002:ac8:42ce:: with SMTP id g14mr19962014qtm.117.1592891463454;
+ Mon, 22 Jun 2020 22:51:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200621142559.GA25517@stranger.qboosh.pl>
-In-Reply-To: <20200621142559.GA25517@stranger.qboosh.pl>
+References: <cover.1592606391.git.lorenzo@kernel.org> <02a278b08d7c33a8cf0faf2a16931cd11addbc47.1592606391.git.lorenzo@kernel.org>
+In-Reply-To: <02a278b08d7c33a8cf0faf2a16931cd11addbc47.1592606391.git.lorenzo@kernel.org>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 22 Jun 2020 22:44:56 -0700
-Message-ID: <CAEf4BzafxBFCa=sm-MoG71iwMA77Rj4OS-6w4U1OahP3+cH_wQ@mail.gmail.com>
-Subject: Re: [PATCH] fix libbpf hashmap with size_t shorter than long long
-To:     Jakub Bogusz <qboosh@pld-linux.org>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
+Date:   Mon, 22 Jun 2020 22:50:52 -0700
+Message-ID: <CAEf4BzYNMtR56RRWDZEMK-nZj3AWoQJm-8-SL+vfhRT1nZjJhA@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 6/8] libbpf: add SEC name for xdp programs
+ attached to CPUMAP
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        lorenzo.bianconi@redhat.com, David Ahern <dsahern@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Jun 21, 2020 at 7:34 AM Jakub Bogusz <qboosh@pld-linux.org> wrote:
+On Fri, Jun 19, 2020 at 9:55 PM Lorenzo Bianconi <lorenzo@kernel.org> wrote:
 >
-> Hello,
+> As for DEVMAP, support SEC("xdp_cpumap*") as a short cut for loading
+> the program with type BPF_PROG_TYPE_XDP and expected attach type
+> BPF_XDP_CPUMAP.
 >
-> I noticed that _bpftool crashes when building kernel tools (5.7.x) for
-> 32-bit targets because in libbpf hashmap implementation hash_bits()
-> function returning numbers exceeding hashmap buckets capacity.
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> ---
+>  tools/lib/bpf/libbpf.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> Attached patch fixes this problem.
->
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 477c679ed945..0cd13cad8375 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -6655,6 +6655,8 @@ static const struct bpf_sec_def section_defs[] = {
+>                 .attach_fn = attach_iter),
+>         BPF_EAPROG_SEC("xdp_devmap",            BPF_PROG_TYPE_XDP,
+>                                                 BPF_XDP_DEVMAP),
+> +       BPF_EAPROG_SEC("xdp_cpumap",            BPF_PROG_TYPE_XDP,
+> +                                               BPF_XDP_CPUMAP),
 
-Thanks! But this was already fixed by Arnaldo Carvalho de Melo <acme@kernel.org>
-in 8ca8d4a84173 ("libbpf: Define __WORDSIZE if not available").
+I noticed that XDP and a bunch of other progs don't enforce "/" at the
+end of the prog type prefix. Is there any reason for that? Tracing
+prog types are pretty consistent about that (except for perf_event, I
+think). I'd love it if we were trying to converge here. Do you mind
+switching this to "xdp_cpumap/"? Would be nice to do the same for
+xdp_devmap, if it's not too late yet.
 
->
-> Regards,
->
+
+>         BPF_PROG_SEC("xdp",                     BPF_PROG_TYPE_XDP),
+>         BPF_PROG_SEC("perf_event",              BPF_PROG_TYPE_PERF_EVENT),
+>         BPF_PROG_SEC("lwt_in",                  BPF_PROG_TYPE_LWT_IN),
 > --
-> Jakub Bogusz    http://qboosh.pl/
+> 2.26.2
+>
