@@ -2,270 +2,138 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 638A5C433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:32:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A660C433DF
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:36:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E05C20724
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:32:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57DEF2078A
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:36:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lziI7Y5p"
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="nBH37Fqi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388913AbgFWUMA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 16:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
+        id S2393752AbgFWVgO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 17:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388912AbgFWULy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 16:11:54 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BEAC061573;
-        Tue, 23 Jun 2020 13:11:54 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id h23so9318599qtr.0;
-        Tue, 23 Jun 2020 13:11:54 -0700 (PDT)
+        with ESMTP id S2389132AbgFWVgM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 17:36:12 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0414C061755
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 14:36:12 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id a6so115953wrm.4
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 14:36:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nDwWByC8Ar56Z4zR3w5yx/IeXP1wkHtIj67Ct0+hsF8=;
-        b=lziI7Y5pEMhhUHyHcGhVXL6VPqikxtRVMS4Xy4Z2yG93PRpKqwmaHlV3W8/n/1VEHi
-         w45xDzMHS6yzfwz7TeO5vXkH70X8WAm3vDRb24D4OTa8bABIVx8mwcvVaHDBINgDtdLM
-         GdyAQzPR8TXdJn/4IKo3Ol5dxqbsfuKoDf3SC3FpGzEenV9RypM9QGgFGpwO24i5Y2ly
-         FS09D3bU32C2YBiK3kFGhB+rr75W23Xhh4tG27aBAMPgoSyAc/MvpYiiN17qZWc0ytHa
-         avX8+FmTzv/XzM5IhfPy3fDQZhg3F9SvW+ykJBISzj08wUrRMD3ALiaprpwBvesJLsuW
-         V95w==
+        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q0et8A1jvBs+4gpipR2Yxk3Lns2E2/sXQjUw7PswoOA=;
+        b=nBH37Fqimk/4BvTltMrYF76tcLtVwn+B/szjczHcXOGaHlOCWeq6TKpb//WqkHnR7p
+         NDt7WuLTD+WHrHyr2cmmG+TK/go0r7bQh1dCTVIXXzA3lZlL1IyUc/9dF2ktMYxJcstq
+         dSutNqazaL8zIS3rFapjJXVaSDZ2pk/Ias2OzqmhhSMkuIk+AzdihZ69AlCi2bQhrr1G
+         EIaa69qsocbLjyjXB85B1pjWlj6TuS+/DzoTfWgG45sD68iCAOFojh/cl16+OxYDJNMn
+         BPBUjdeJ42X5zzFhwkn5rc3iSPaKlXeUMGe98EmlYN5ZItzU8t1nT1Mf3gDCqTGV0U+V
+         CE8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nDwWByC8Ar56Z4zR3w5yx/IeXP1wkHtIj67Ct0+hsF8=;
-        b=VBe37vCGAPQbfwjrU7gH0D+6Yw6RpTb1pWy+9buSCJK/SREEpjdeNuOz0SjyCQkyci
-         D5zH2AY9APiDRJsYfpFBPsfm3bKW9BD4IgtTC3HFVW1c8r3iLJyd1IrWsu77ZYFycVeC
-         hnlmCdBpFqhKxWpTH4ZbS3s2XPdPup0Q8GaZGEj4PKNzaTLcQOcwNUAfPUWQ9pCvNBD2
-         xbpBL15doSdPbsp51b/E0WXm4JZpIILsNbVYHvvKBoZsP7F1PR2env9pM/v64D89lnSF
-         ULoPsBSbBfLUrsup0KzCV8TW7yMzyPVxQYCdEpvKjOlMlYQaNcjWKakzof84Q7Y3eSx2
-         A5ng==
-X-Gm-Message-State: AOAM53128R04u1ifxAwxY1B6yALq66iyIGTKgjxnxOGlyuz5IbNeFa3q
-        4/SHn2BH2FsiH5jxSNtFSzjyCLtcCMcZDhKsTUtfZ1I2xbE=
-X-Google-Smtp-Source: ABdhPJzpujLHGAOv3FOGumXzobOFnJX1IAMHmcycgQMqUboTFJDbal3lAymtGRg3XM3l2TfOT0gnC3Wv2eXDhXPa3Hk=
-X-Received: by 2002:ac8:1991:: with SMTP id u17mr16003839qtj.93.1592943113685;
- Tue, 23 Jun 2020 13:11:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q0et8A1jvBs+4gpipR2Yxk3Lns2E2/sXQjUw7PswoOA=;
+        b=QjwtywM6u5BovGcQEmi1fscxf7a1Ohp2UTQYH1EOwQz80kCCbNEvQ+NF30/c3uqfIx
+         ZZ4n9pY2v5RmwyPQIywyS5m8lbFY0EhJngB/7jzLowTQHoDfwK6ykKrPDFJ5l5p0fatH
+         Q/oVb+ZZDY3Tl6TDra7bBY9izaQHmRoRzNmdFDQ4LvH/DiTWuV3XQKMFw0o+i8yrC5dR
+         jyasuqY8b44wTUHUNS4UhpCBMctRUw1gvIFLi+GniLrDp1dDwYlFOXnGmdlQoWwUfaDB
+         zegkd08HUyiwZWiTieCGGy9E4RZYVGxdxZpgu7RimSvo17vZxLuRHxKiTURhQFjAyoe3
+         Tf/g==
+X-Gm-Message-State: AOAM530yfPDwAByI3ln7LmeE+m001hu2WUP6VEIzaLIqe85GiRhDYeO4
+        lDgawADm/sKiDt5PMWdFOA4kPwLxLPZtNw==
+X-Google-Smtp-Source: ABdhPJxdq2/Xj1pkXyaS20CuheymStjrbpHd/M5NN2CLPlqx5eCXK1hwbLtayPo7dZ8S5UYZyyMSZg==
+X-Received: by 2002:adf:c441:: with SMTP id a1mr27004567wrg.130.1592948171317;
+        Tue, 23 Jun 2020 14:36:11 -0700 (PDT)
+Received: from localhost.localdomain ([194.53.184.63])
+        by smtp.gmail.com with ESMTPSA id v7sm3885686wmj.11.2020.06.23.14.36.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jun 2020 14:36:10 -0700 (PDT)
+From:   Quentin Monnet <quentin@isovalent.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCH bpf-next v2] tools: bpftool: fix variable shadowing in emit_obj_refs_json()
+Date:   Tue, 23 Jun 2020 22:36:00 +0100
+Message-Id: <20200623213600.16643-1-quentin@isovalent.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20200623003626.3072825-1-yhs@fb.com> <20200623003631.3073864-1-yhs@fb.com>
- <CAEf4BzaGWuAYzN2-+Gy9X8N2YPb341ZGugKzk78qiPURMgv7rw@mail.gmail.com>
- <26d6f7ee-28ea-80ba-fd76-e3b2f0327163@fb.com> <CAEf4BzYvra0bijcbzpBbwwtFQg4_8Uy3tGLwYYj=9CpkMPW=-w@mail.gmail.com>
- <bfd134a9-d808-d66d-3870-361f8f5aab64@fb.com>
-In-Reply-To: <bfd134a9-d808-d66d-3870-361f8f5aab64@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 23 Jun 2020 13:11:42 -0700
-Message-ID: <CAEf4BzYMG7xu2ot-8OVJjYG7w14OciKgN=hZombOqo=7d5oUNQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 05/15] bpf: add bpf_skc_to_tcp6_sock() helper
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 12:47 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 6/23/20 11:23 AM, Andrii Nakryiko wrote:
-> > On Tue, Jun 23, 2020 at 7:52 AM Yonghong Song <yhs@fb.com> wrote:
-> >>
-> >>
-> >>
-> >> On 6/22/20 11:39 PM, Andrii Nakryiko wrote:
-> >>> On Mon, Jun 22, 2020 at 5:38 PM Yonghong Song <yhs@fb.com> wrote:
-> >>>>
-> >>>> The helper is used in tracing programs to cast a socket
-> >>>> pointer to a tcp6_sock pointer.
-> >>>> The return value could be NULL if the casting is illegal.
-> >>>>
-> >>>> A new helper return type RET_PTR_TO_BTF_ID_OR_NULL is added
-> >>>> so the verifier is able to deduce proper return types for the helper.
-> >>>>
-> >>>> Different from the previous BTF_ID based helpers,
-> >>>> the bpf_skc_to_tcp6_sock() argument can be several possible
-> >>>> btf_ids. More specifically, all possible socket data structures
-> >>>> with sock_common appearing in the first in the memory layout.
-> >>>> This patch only added socket types related to tcp and udp.
-> >>>>
-> >>>> All possible argument btf_id and return value btf_id
-> >>>> for helper bpf_skc_to_tcp6_sock() are pre-calculcated and
-> >>>> cached. In the future, it is even possible to precompute
-> >>>> these btf_id's at kernel build time.
-> >>>>
-> >>>> Acked-by: Martin KaFai Lau <kafai@fb.com>
-> >>>> Signed-off-by: Yonghong Song <yhs@fb.com>
-> >>>> ---
-> >>>
-> >>> Looks good to me as is, but see a few suggestions, they will probably
-> >>> save me time at some point as well :)
-> >>>
-> >>> Acked-by: Andrii Nakryiko <andriin@fb.com>
-> >>>
-> >>>
-> >>>>    include/linux/bpf.h            | 12 +++++
-> >>>>    include/uapi/linux/bpf.h       |  9 +++-
-> >>>>    kernel/bpf/btf.c               |  1 +
-> >>>>    kernel/bpf/verifier.c          | 43 +++++++++++++-----
-> >>>>    kernel/trace/bpf_trace.c       |  2 +
-> >>>>    net/core/filter.c              | 80 ++++++++++++++++++++++++++++++++++
-> >>>>    scripts/bpf_helpers_doc.py     |  2 +
-> >>>>    tools/include/uapi/linux/bpf.h |  9 +++-
-> >>>>    8 files changed, 146 insertions(+), 12 deletions(-)
-> >>>>
-> >>>
-> >>> [...]
-> >>>
-> >>>> @@ -4815,6 +4826,18 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
-> >>>>                   regs[BPF_REG_0].type = PTR_TO_MEM_OR_NULL;
-> >>>>                   regs[BPF_REG_0].id = ++env->id_gen;
-> >>>>                   regs[BPF_REG_0].mem_size = meta.mem_size;
-> >>>> +       } else if (fn->ret_type == RET_PTR_TO_BTF_ID_OR_NULL) {
-> >>>> +               int ret_btf_id;
-> >>>> +
-> >>>> +               mark_reg_known_zero(env, regs, BPF_REG_0);
-> >>>> +               regs[BPF_REG_0].type = PTR_TO_BTF_ID_OR_NULL;
-> >>>> +               ret_btf_id = *fn->ret_btf_id;
-> >>>
-> >>> might be a good idea to check fb->ret_btf_id for NULL and print a
-> >>> warning + return -EFAULT. It's not supposed to happen on properly
-> >>> configured kernel, but during development this will save a bunch of
-> >>> time and frustration for next person trying to add something with
-> >>> RET_PTR_TO_BTF_ID_OR_NULL.
-> >>
-> >> I would like prefer to delay this with current code. Otherwise,
-> >> it gives an impression fn->ret_btf_id might be NULL and it is
-> >> actually never NULL. We can add NULL check if the future change
-> >> requires it. I am not sure what the future change could be,
-> >> but you need some way to get the return btf_id, the above is
-> >> one of them.
-> >
-> > It's not **supposed** to be NULL, same as a bunch of other invariants
-> > about BPF helper proto definitions, but verifier does check sanity for
-> > such cases, instead of crashing. But up to you. I'm pretty sure
-> > someone will trip up on this.
->
-> I think there are certain expectation for argument reg_state vs. certain
-> fields in the structure.
->
-> int btf_resolve_helper_id(struct bpf_verifier_log *log,
->                            const struct bpf_func_proto *fn, int arg)
-> {
->          int *btf_id = &fn->btf_id[arg];
->          int ret;
->
->          if (fn->arg_type[arg] != ARG_PTR_TO_BTF_ID)
->                  return -EINVAL;
->
->          ret = READ_ONCE(*btf_id);
->         ...
-> }
->
-> If ARG_PTR_TO_BTF_ID, the verifier did not really check
-> whether btf_id pointer is valid or not. It just use it.
+Building bpftool yields the following complaint:
 
-Right, it's not a universal rule. But grep for "misconfigured" in
-kernel/bpf/verifier.c to see a bunch of places where the verifier
-could crash on NULL dereference, but instead emits an error message
-and returns failure.
+    pids.c: In function 'emit_obj_refs_json':
+    pids.c:175:80: warning: declaration of 'json_wtr' shadows a global declaration [-Wshadow]
+      175 | void emit_obj_refs_json(struct obj_refs_table *table, __u32 id, json_writer_t *json_wtr)
+          |                                                                 ~~~~~~~~~~~~~~~^~~~~~~~
+    In file included from pids.c:11:
+    main.h:141:23: note: shadowed declaration is here
+      141 | extern json_writer_t *json_wtr;
+          |                       ^~~~~~~~
 
-This was a suggestion, I'll stop asking for this :)
+Let's rename the variable.
 
->
-> The same applies to the new return type. If in func_proto,
-> somebody sets RET_PTR_TO_BTF_ID_OR_NULL, it is expected
-> that func_proto->ret_btf_id is valid.
->
-> Code review or feature selftest should catch errors
-> if they are out-of-sync.
->
-> >
-> >>
-> >>>
-> >>>> +               if (ret_btf_id == 0) {
-> >>>
-> >>> This also has to be struct/union (after typedef/mods stripping, of
-> >>> course). Or are there other cases?
-> >>
-> >> This is an "int". The func_proto difinition is below:
-> >> int *ret_btf_id; /* return value btf_id */
-> >
-> > I meant the BTF type itself that this btf_id points to. Is there any
-> > use case where this won't be a pointer to struct/union and instead
-> > something like a pointer to an int?
->
-> Maybe you misunderstood. The mechanism is similar to the argument btf_id
-> encoding in func_proto's:
->
-> static int bpf_seq_printf_btf_ids[5];
-> ...
->          .btf_id         = bpf_seq_printf_btf_ids,
->
-> func_proto->ret_btf_id will be a pointer to int which encodes the
-> btf_id, not the btf_type.
+v2:
+- Rename the variable instead of calling the global json_wtr directly.
 
-I understand that. Say it points to value 25. BTF type with ID=25 is
-going to be BTF_KIND_PTR -> BTF_KIND_STRUCT. I was wondering if we
-want/need to check that it's always BTF_KIND_PTR -> (modifier)* ->
-BTF_KIND_STRUCT/BTF_KIND_UNION. That's it.
+Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+---
+v1 was "tools: bpftool: do not pass json_wtr to emit_obj_refs_json()"
+---
+ tools/bpf/bpftool/pids.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
->
-> >
-> >>
-> >>>
-> >>>> +                       verbose(env, "invalid return type %d of func %s#%d\n",
-> >>>> +                               fn->ret_type, func_id_name(func_id), func_id);
-> >>>> +                       return -EINVAL;
-> >>>> +               }
-> >>>> +               regs[BPF_REG_0].btf_id = ret_btf_id;
-> >>>>           } else {
-> >>>>                   verbose(env, "unknown return type %d of func %s#%d\n",
-> >>>>                           fn->ret_type, func_id_name(func_id), func_id);
-> >>>
-> >>> [...]
-> >>>
-> >>>> +void init_btf_sock_ids(struct btf *btf)
-> >>>> +{
-> >>>> +       int i, btf_id;
-> >>>> +
-> >>>> +       for (i = 0; i < MAX_BTF_SOCK_TYPE; i++) {
-> >>>> +               btf_id = btf_find_by_name_kind(btf, bpf_sock_types[i],
-> >>>> +                                              BTF_KIND_STRUCT);
-> >>>> +               if (btf_id > 0)
-> >>>> +                       btf_sock_ids[i] = btf_id;
-> >>>> +       }
-> >>>> +}
-> >>>
-> >>> This will hopefully go away with Jiri's work on static BTF IDs, right?
-> >>> So looking forward to that :)
-> >>
-> >> Yes. That's the plan.
-> >>
-> >>>
-> >>>> +
-> >>>> +static bool check_arg_btf_id(u32 btf_id, u32 arg)
-> >>>> +{
-> >>>> +       int i;
-> >>>> +
-> >>>> +       /* only one argument, no need to check arg */
-> >>>> +       for (i = 0; i < MAX_BTF_SOCK_TYPE; i++)
-> >>>> +               if (btf_sock_ids[i] == btf_id)
-> >>>> +                       return true;
-> >>>> +       return false;
-> >>>> +}
-> >>>> +
-> >>>
-> >>> [...]
-> >>>
+diff --git a/tools/bpf/bpftool/pids.c b/tools/bpf/bpftool/pids.c
+index 3474a91743ff..2709be4de2b1 100644
+--- a/tools/bpf/bpftool/pids.c
++++ b/tools/bpf/bpftool/pids.c
+@@ -172,7 +172,8 @@ void delete_obj_refs_table(struct obj_refs_table *table)
+ 	}
+ }
+ 
+-void emit_obj_refs_json(struct obj_refs_table *table, __u32 id, json_writer_t *json_wtr)
++void emit_obj_refs_json(struct obj_refs_table *table, __u32 id,
++			json_writer_t *json_writer)
+ {
+ 	struct obj_refs *refs;
+ 	struct obj_ref *ref;
+@@ -187,16 +188,16 @@ void emit_obj_refs_json(struct obj_refs_table *table, __u32 id, json_writer_t *j
+ 		if (refs->ref_cnt == 0)
+ 			break;
+ 
+-		jsonw_name(json_wtr, "pids");
+-		jsonw_start_array(json_wtr);
++		jsonw_name(json_writer, "pids");
++		jsonw_start_array(json_writer);
+ 		for (i = 0; i < refs->ref_cnt; i++) {
+ 			ref = &refs->refs[i];
+-			jsonw_start_object(json_wtr);
+-			jsonw_int_field(json_wtr, "pid", ref->pid);
+-			jsonw_string_field(json_wtr, "comm", ref->comm);
+-			jsonw_end_object(json_wtr);
++			jsonw_start_object(json_writer);
++			jsonw_int_field(json_writer, "pid", ref->pid);
++			jsonw_string_field(json_writer, "comm", ref->comm);
++			jsonw_end_object(json_writer);
+ 		}
+-		jsonw_end_array(json_wtr);
++		jsonw_end_array(json_writer);
+ 		break;
+ 	}
+ }
+-- 
+2.20.1
+
