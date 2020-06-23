@@ -2,190 +2,141 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B29E3C433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 11:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56B6DC433DF
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 12:10:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D90E2072E
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 11:27:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30A5620776
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 12:10:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tScBdMx+"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="TTlHi/7C"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732294AbgFWL1U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 07:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732189AbgFWL1T (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 07:27:19 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD96C061573;
-        Tue, 23 Jun 2020 04:27:19 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id l17so18360385qki.9;
-        Tue, 23 Jun 2020 04:27:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=cMD8in+tcSZ+cxLcLApA3NSEHIECL6G2aR2hs0xW3CM=;
-        b=tScBdMx+HCr8IkPx+oY+4m3Qx2Y9c1/rjC8ioAfphyv/ELknRv571qL7I4AJrwXPUL
-         B9buMDByA8fU2FEv3t1GElqrIdDCZ6QVWe8yfhOf0VfPuL+GePi9Vb+7d/wZTIdDpZq5
-         8watSm6p/PgvpQ/yqIP7pmCGKJlX3LNLIaXZy4XpW5BdZJTccG5eezk5f0SK9jQhrlMZ
-         nIIohI+oVp3TadiSEH6Yep55iMSzQW4+f6DJvPXoTgTqIs1Q7Aed19gBe/Ez5sHLXV5w
-         Tr5AcMW0mGZo+g7T1LGFRCbtwoB2uAXWAXbepkm5pwcaV4fiPENj+EYPhRckkINyaUd+
-         vmRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cMD8in+tcSZ+cxLcLApA3NSEHIECL6G2aR2hs0xW3CM=;
-        b=NE933Q+X4EO+ETDBCdh5yTYBvolY0DKK0EGv2p8Wv9tCeB1bMlbEq9IknTtB4mJLLW
-         qV6VWf3gVXyaHY7jbti2s5iuCguLbpNYZWFfb+jKjKlHU5EIVBQ+JDgEUkke/lbn4FdV
-         rbpeJ5HAhD+RvB20ecEayJaMLw4MwXMdw9BQqQ1tyq9/yoxd0d/Y6Fc545QYdjzcgNSh
-         1IyqWVTI7UmC9jQoNVrPnfCQLF+GsTYBSlDaQGUhO4wMrpFrbGaLohh8kExP/hZycIG1
-         NjdZlGgP+0ofdzRkOerfTY7i3zoQjEGtx+pKAn8b8cLOA422YUD4grdrDtTAT7/snsc9
-         ywEg==
-X-Gm-Message-State: AOAM530qnKhRGyZpfzCQrG5kzQWDWLeVW4c8OEdX6yKuELlPt9GqQkBU
-        cJMa3BSATMAgnxZxw7JmXvQ30x5w/CFM5u9pxfs=
-X-Google-Smtp-Source: ABdhPJzA0PI8zSWVsq7NsZXokgRHQ67Muc5QOK414TzszbhAwWE1zmIwGyxjtOIcjCdAHxNAxVMv1xuMgiK9/IHzebs=
-X-Received: by 2002:a05:620a:148d:: with SMTP id w13mr20318528qkj.248.1592911638820;
- Tue, 23 Jun 2020 04:27:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAPydje97m+hG3_Cqg560uHoq8aKG9eDpTHA1eJC=hLuKtMf_vw@mail.gmail.com>
- <CAJ+HfNgi5wEwmFTgKpR1KemVm3p0FCPTd8V+BBWC6C59OO9O8Q@mail.gmail.com>
-In-Reply-To: <CAJ+HfNgi5wEwmFTgKpR1KemVm3p0FCPTd8V+BBWC6C59OO9O8Q@mail.gmail.com>
-From:   Yahui Chen <goodluckwillcomesoon@gmail.com>
-Date:   Tue, 23 Jun 2020 19:27:06 +0800
-Message-ID: <CAPydje-tiJ6F5i9=o9VLMJK0_j+KV5XGOok3Wq+okHdOS9k0Aw@mail.gmail.com>
-Subject: Re: Talk about AF_XDP support multithread concurrently receive packet
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Xdp <xdp-newbies@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1732489AbgFWMKC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 08:10:02 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:51092 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732396AbgFWMKB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 08:10:01 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05NC7jqi051976;
+        Tue, 23 Jun 2020 12:09:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=MTrI+iVmFvo3cZvwKsuePw6GQVm8XRiz1/7qTOD9t8c=;
+ b=TTlHi/7CvdLjijxnAnnu9u13VHtEsGJVTOXOWpBjLHqSmvLmTRmqUZ5jEtu/N4SvdM0Q
+ h5b4CLqeRVOqiU+FBr7xwOfblrnTKU8txZxmUHjuFW3DZPL1sUFfuCK9qxEnVUfCM+Aj
+ Kb4+2t6xZNGYAQKVyVOorZfzwZDwSbaF6IKIzojRllm/9zVh2NCsMaCPKtan8lUjpLfO
+ MzBcc+BJ7hPfK27BwtZ6r2zJtQteGic0584Q+ZYfbQWYqwip3Bg9Vn76erHj7HDsry4l
+ nNfnZCdH8PxR3fhNKdrNZQ1DYurrLK2bzr6+rbq2404fwJc+khRdUJmNZQ5XT6AONgK6 lA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 31sebbcv8x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 23 Jun 2020 12:09:08 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05NC7h9X185364;
+        Tue, 23 Jun 2020 12:09:08 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 31sv1n7gtn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Jun 2020 12:09:08 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05NC9469018634;
+        Tue, 23 Jun 2020 12:09:04 GMT
+Received: from localhost.uk.oracle.com (/10.175.166.3)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 23 Jun 2020 12:09:04 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com, andriin@fb.com,
+        arnaldo.melo@gmail.com
+Cc:     kafai@fb.com, songliubraving@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, linux@rasmusvillemoes.dk, joe@perches.com,
+        pmladek@suse.com, rostedt@goodmis.org,
+        sergey.senozhatsky@gmail.com, andriy.shevchenko@linux.intel.com,
+        corbet@lwn.net, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH v3 bpf-next 1/8] bpf: provide function to get vmlinux BTF information
+Date:   Tue, 23 Jun 2020 13:07:04 +0100
+Message-Id: <1592914031-31049-2-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1592914031-31049-1-git-send-email-alan.maguire@oracle.com>
+References: <1592914031-31049-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9660 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ adultscore=0 phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006230097
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9660 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 cotscore=-2147483648
+ lowpriorityscore=0 phishscore=0 bulkscore=0 clxscore=1015 impostorscore=0
+ malwarescore=0 priorityscore=1501 spamscore=0 mlxscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006230097
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Bj=C3=B6rn,
-Thx for your clarification.
+It will be used later for BTF printk() support
 
-Lock-free queue may be a better choice, which almost does not impact
-performance. The XDP mode is multi-producer/single-consumer for the
-filling queue when receiving packets, and single-producer/multi-consumer
-for the complete queue when sending packets.
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ include/linux/bpf.h   |  2 ++
+ kernel/bpf/verifier.c | 18 ++++++++++++------
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
-So, the date structure for lock-free queue could be defined blow:
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 07052d4..a2ecebd 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1237,6 +1237,8 @@ int bpf_check(struct bpf_prog **fp, union bpf_attr *attr,
+ 	      union bpf_attr __user *uattr);
+ void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
+ 
++struct btf *bpf_get_btf_vmlinux(void);
++
+ /* Map specifics */
+ struct xdp_buff;
+ struct sk_buff;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a1857c4..d448aa8 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10878,6 +10878,17 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 	}
+ }
+ 
++struct btf *bpf_get_btf_vmlinux(void)
++{
++	if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
++		mutex_lock(&bpf_verifier_lock);
++		if (!btf_vmlinux)
++			btf_vmlinux = btf_parse_vmlinux();
++		mutex_unlock(&bpf_verifier_lock);
++	}
++	return btf_vmlinux;
++}
++
+ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	      union bpf_attr __user *uattr)
+ {
+@@ -10911,12 +10922,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	env->ops = bpf_verifier_ops[env->prog->type];
+ 	is_priv = bpf_capable();
+ 
+-	if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
+-		mutex_lock(&bpf_verifier_lock);
+-		if (!btf_vmlinux)
+-			btf_vmlinux = btf_parse_vmlinux();
+-		mutex_unlock(&bpf_verifier_lock);
+-	}
++	bpf_get_btf_vmlinux();
+ 
+ 	/* grab the mutex to protect few globals used by verifier */
+ 	if (!is_priv)
+-- 
+1.8.3.1
 
-$ git diff xsk.h
-diff --git a/src/xsk.h b/src/xsk.h
-index 584f682..2e24bc8 100644
---- a/src/xsk.h
-+++ b/src/xsk.h
-@@ -23,20 +23,26 @@ extern "C" {
- #endif
-
- /* Do not access these members directly. Use the functions below. */
--#define DEFINE_XSK_RING(name) \
--struct name { \
--       __u32 cached_prod; \
--       __u32 cached_cons; \
--       __u32 mask; \
--       __u32 size; \
--       __u32 *producer; \
--       __u32 *consumer; \
--       void *ring; \
--       __u32 *flags; \
--}
--
--DEFINE_XSK_RING(xsk_ring_prod);
--DEFINE_XSK_RING(xsk_ring_cons);
-+struct xsk_ring_prod{
-+       __u32 cached_prod_head;
-+       __u32 cached_prod_tail;
-+       __u32 cached_cons;
-+       __u32 size;
-+       __u32 *producer;
-+       __u32 *consumer;
-+       void *ring;
-+       __u32 *flags;
-+};
-+struct xsk_ring_cons{
-+       __u32 cached_prod;
-+       __u32 cached_cons_head;
-+       __u32 cached_cons_tail;
-+       __u32 size;
-+       __u32 *producer;
-+       __u32 *consumer;
-+       void *ring;
-+       __u32 *flags;
-+};
-
-The element mask, is equal `size - 1`, could be removed to remain the
-structure size unchanged.
-
-To sum up, it's possible to consider impelementing lock-free queue
-function to support mc/sp and sc/mp.
-
-Thx.
-
-
-Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> =E4=BA=8E2020=E5=B9=B46=E6=9C=
-=8823=E6=97=A5=E5=91=A8=E4=BA=8C =E4=B8=8B=E5=8D=883:27=E5=86=99=E9=81=93=
-=EF=BC=9A
->
-> On Tue, 23 Jun 2020 at 08:21, Yahui Chen <goodluckwillcomesoon@gmail.com>=
- wrote:
-> >
-> > I have make an issue for the libbpf in github, issue number 163.
-> >
-> > Andrii suggest me sending a mail here. So ,I paste out the content of t=
-he issue:
-> >
->
-> Yes, and the xdp-newsbies is an even better list for these kinds of
-> discussions (added).
->
-> > Currently, libbpf do not support concurrently receive pkts using AF_XDP=
-.
-> >
-> > For example: I create 4 af_xdp sockets on nic's ring 0. Four sockets
-> > receiving packets concurrently can't work correctly because the API of
-> > cq `xsk_ring_prod__reserve` and `xsk_ring_prod__submit` don't support
-> > concurrence.
-> >
->
-> In other words, you are using shared umem sockets. The 4 sockets can
-> potentially receive packets from queue 0, depending on how the XDP
-> program is done.
->
-> > So, my question is why libbpf was designed non-concurrent mode, is the
-> > limit of kernel or other reason? I want to change the code to support
-> > concurrent receive pkts, therefore I want to find out whether this is
-> > theoretically supported.
-> >
->
-> You are right that the AF_XDP functionality in libbpf is *not* by
-> itself multi-process/thread safe, and this is deliberate. From the
-> libbpf perspective we cannot know how a user will construct the
-> application, and we don't want to penalize the single-thread/process
-> case.
->
-> It's entirely up to you to add explicit locking, if the
-> single-producer/single-consumer queues are shared between
-> threads/processes. Explicit synchronization is required using, say,
-> POSIX mutexes.
->
-> Does that clear things up?
->
->
-> Cheers,
-> Bj=C3=B6rn
->
-> > Thx.
