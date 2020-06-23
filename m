@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3A5CC433DF
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:40:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06F0DC433E1
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:40:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A0C92085B
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:40:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D51FF207E8
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:40:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592948414;
-	bh=hv2b5i3Paqb8BmjecdXjJHnMWbphNIwkGd9HpD5ekOI=;
+	s=default; t=1592948420;
+	bh=39nK/nXqvDHuUPZgpGAmEmsgZKOsgV2ZPJy+N53fGzI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=UM7eTwiSZLmvpOn77Cy8BwflPCHDXiXdNdFFC7Hd5AxY39WtHVyEB0hFiJzAtPHdk
-	 9omAhw2yJsLXBjVdOnSIcuqaKL3d39IPY++kuu6iuRbgs3SerSs/N3kAkklrOAhcVz
-	 EEEJasE6V9A+Saq00jdhqcQRP22C2cKuD4PSTpV4=
+	b=ide0DYcBdvn4k/LF8MnnsuoFepMzFkmCMWZifqavt8NP09EFPzLFE1uVUMHRPDF/X
+	 /G9/3qZbz28o89RsmBec2jWreuYbZRdsxlGgJaN6EaUqHPrk6lxW/KArmQHk3OvG0k
+	 rjur5n1Oi+ThHpUwIp77VLfFnE+07mO8zdG7Wedg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394030AbgFWVkN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 17:40:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58048 "EHLO mail.kernel.org"
+        id S2393748AbgFWVkS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 17:40:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58160 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393827AbgFWVkJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 17:40:09 -0400
+        id S2394046AbgFWVkQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 17:40:16 -0400
 Received: from localhost.localdomain.com (unknown [151.48.138.186])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B62582078E;
-        Tue, 23 Jun 2020 21:40:06 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1DC30208C9;
+        Tue, 23 Jun 2020 21:40:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592948408;
-        bh=hv2b5i3Paqb8BmjecdXjJHnMWbphNIwkGd9HpD5ekOI=;
+        s=default; t=1592948416;
+        bh=39nK/nXqvDHuUPZgpGAmEmsgZKOsgV2ZPJy+N53fGzI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=saoLmcZ99uInmMm1PbHzKx36B3BKqcz3PK58Fsl0mJwwdz+41tByk/4eDtQf0TJh3
-         wLxkBXE3v2UZCgJAuJ1oROz5lK3J1ZmKkXR4A7CRLnODYmtrJV3X07HXuAfhGMDMDt
-         YjyIu8khE8D9dIBKXsU6E5I7zODgdG95GDAj1B0A=
+        b=v9uOK54o6eNKQdBI9sDBu/kOp7KkQHtp/DixHKuXyg1DWNYA1rp1Cc8MEAZ8jQMoA
+         tbgrVhVZfCa1MT6KjWTp9DfnR7YpFoFn9puXm0TSju1pt5cmEJSVg4DW4pQids5Zvz
+         0zd//R+UWkGOyD/qqLiRL+2jnxaz5JG83cpQJRiA=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, brouer@redhat.com,
         daniel@iogearbox.net, toke@redhat.com, lorenzo.bianconi@redhat.com,
         dsahern@kernel.org, andrii.nakryiko@gmail.com
-Subject: [PATCH v3 bpf-next 4/9] cpumap: formalize map value as a named struct
-Date:   Tue, 23 Jun 2020 23:39:29 +0200
-Message-Id: <c1eadbcdef365c5d52e01f4a442390bb20950618.1592947694.git.lorenzo@kernel.org>
+Subject: [PATCH v3 bpf-next 7/9] libbpf: add SEC name for xdp programs attached to CPUMAP
+Date:   Tue, 23 Jun 2020 23:39:32 +0200
+Message-Id: <372755fa10bdbe9b5db4e207db6b0829e18513fe.1592947694.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1592947694.git.lorenzo@kernel.org>
 References: <cover.1592947694.git.lorenzo@kernel.org>
@@ -56,152 +56,28 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As it has been already done for devmap, introduce 'struct bpf_cpumap_val'
-to formalize the expected values that can be passed in for a CPUMAP.
-Update cpumap code to use the struct.
+As for DEVMAP, support SEC("xdp_cpumap*") as a short cut for loading
+the program with type BPF_PROG_TYPE_XDP and expected attach type
+BPF_XDP_CPUMAP.
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- include/uapi/linux/bpf.h       |  9 +++++++++
- kernel/bpf/cpumap.c            | 25 +++++++++++++------------
- tools/include/uapi/linux/bpf.h |  9 +++++++++
- 3 files changed, 31 insertions(+), 12 deletions(-)
+ tools/lib/bpf/libbpf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 19684813faae..fa3b342985f9 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3774,6 +3774,15 @@ struct bpf_devmap_val {
- 	} bpf_prog;
- };
- 
-+/* CPUMAP map-value layout
-+ *
-+ * The struct data-layout of map-value is a configuration interface.
-+ * New members can only be added to the end of this structure.
-+ */
-+struct bpf_cpumap_val {
-+	__u32 qsize;	/* queue size to remote target CPU */
-+};
-+
- enum sk_action {
- 	SK_DROP = 0,
- 	SK_PASS,
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 323c91c4fab0..7e8eec4f7089 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -52,7 +52,6 @@ struct xdp_bulk_queue {
- struct bpf_cpu_map_entry {
- 	u32 cpu;    /* kthread CPU and map index */
- 	int map_id; /* Back reference to map */
--	u32 qsize;  /* Queue size placeholder for map lookup */
- 
- 	/* XDP can run multiple RX-ring queues, need __percpu enqueue store */
- 	struct xdp_bulk_queue __percpu *bulkq;
-@@ -66,6 +65,8 @@ struct bpf_cpu_map_entry {
- 
- 	atomic_t refcnt; /* Control when this struct can be free'ed */
- 	struct rcu_head rcu;
-+
-+	struct bpf_cpumap_val value;
- };
- 
- struct bpf_cpu_map {
-@@ -307,8 +308,8 @@ static int cpu_map_kthread_run(void *data)
- 	return 0;
- }
- 
--static struct bpf_cpu_map_entry *__cpu_map_entry_alloc(u32 qsize, u32 cpu,
--						       int map_id)
-+static struct bpf_cpu_map_entry *
-+__cpu_map_entry_alloc(struct bpf_cpumap_val *value, u32 cpu, int map_id)
- {
- 	gfp_t gfp = GFP_KERNEL | __GFP_NOWARN;
- 	struct bpf_cpu_map_entry *rcpu;
-@@ -338,13 +339,13 @@ static struct bpf_cpu_map_entry *__cpu_map_entry_alloc(u32 qsize, u32 cpu,
- 	if (!rcpu->queue)
- 		goto free_bulkq;
- 
--	err = ptr_ring_init(rcpu->queue, qsize, gfp);
-+	err = ptr_ring_init(rcpu->queue, value->qsize, gfp);
- 	if (err)
- 		goto free_queue;
- 
- 	rcpu->cpu    = cpu;
- 	rcpu->map_id = map_id;
--	rcpu->qsize  = qsize;
-+	rcpu->value.qsize  = value->qsize;
- 
- 	/* Setup kthread */
- 	rcpu->kthread = kthread_create_on_node(cpu_map_kthread_run, rcpu, numa,
-@@ -437,12 +438,12 @@ static int cpu_map_update_elem(struct bpf_map *map, void *key, void *value,
- 			       u64 map_flags)
- {
- 	struct bpf_cpu_map *cmap = container_of(map, struct bpf_cpu_map, map);
-+	struct bpf_cpumap_val cpumap_value = {};
- 	struct bpf_cpu_map_entry *rcpu;
--
- 	/* Array index key correspond to CPU number */
- 	u32 key_cpu = *(u32 *)key;
--	/* Value is the queue size */
--	u32 qsize = *(u32 *)value;
-+
-+	memcpy(&cpumap_value, value, map->value_size);
- 
- 	if (unlikely(map_flags > BPF_EXIST))
- 		return -EINVAL;
-@@ -450,18 +451,18 @@ static int cpu_map_update_elem(struct bpf_map *map, void *key, void *value,
- 		return -E2BIG;
- 	if (unlikely(map_flags == BPF_NOEXIST))
- 		return -EEXIST;
--	if (unlikely(qsize > 16384)) /* sanity limit on qsize */
-+	if (unlikely(cpumap_value.qsize > 16384)) /* sanity limit on qsize */
- 		return -EOVERFLOW;
- 
- 	/* Make sure CPU is a valid possible cpu */
- 	if (key_cpu >= nr_cpumask_bits || !cpu_possible(key_cpu))
- 		return -ENODEV;
- 
--	if (qsize == 0) {
-+	if (cpumap_value.qsize == 0) {
- 		rcpu = NULL; /* Same as deleting */
- 	} else {
- 		/* Updating qsize cause re-allocation of bpf_cpu_map_entry */
--		rcpu = __cpu_map_entry_alloc(qsize, key_cpu, map->id);
-+		rcpu = __cpu_map_entry_alloc(&cpumap_value, key_cpu, map->id);
- 		if (!rcpu)
- 			return -ENOMEM;
- 		rcpu->cmap = cmap;
-@@ -523,7 +524,7 @@ static void *cpu_map_lookup_elem(struct bpf_map *map, void *key)
- 	struct bpf_cpu_map_entry *rcpu =
- 		__cpu_map_lookup_elem(map, *(u32 *)key);
- 
--	return rcpu ? &rcpu->qsize : NULL;
-+	return rcpu ? &rcpu->value : NULL;
- }
- 
- static int cpu_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 19684813faae..fa3b342985f9 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3774,6 +3774,15 @@ struct bpf_devmap_val {
- 	} bpf_prog;
- };
- 
-+/* CPUMAP map-value layout
-+ *
-+ * The struct data-layout of map-value is a configuration interface.
-+ * New members can only be added to the end of this structure.
-+ */
-+struct bpf_cpumap_val {
-+	__u32 qsize;	/* queue size to remote target CPU */
-+};
-+
- enum sk_action {
- 	SK_DROP = 0,
- 	SK_PASS,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 18461deb1b19..16fa3b84ac38 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -6866,6 +6866,8 @@ static const struct bpf_sec_def section_defs[] = {
+ 		.attach_fn = attach_iter),
+ 	BPF_EAPROG_SEC("xdp_devmap",		BPF_PROG_TYPE_XDP,
+ 						BPF_XDP_DEVMAP),
++	BPF_EAPROG_SEC("xdp_cpumap/",		BPF_PROG_TYPE_XDP,
++						BPF_XDP_CPUMAP),
+ 	BPF_PROG_SEC("xdp",			BPF_PROG_TYPE_XDP),
+ 	BPF_PROG_SEC("perf_event",		BPF_PROG_TYPE_PERF_EVENT),
+ 	BPF_PROG_SEC("lwt_in",			BPF_PROG_TYPE_LWT_IN),
 -- 
 2.26.2
 
