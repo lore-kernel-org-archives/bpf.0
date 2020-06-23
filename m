@@ -2,131 +2,144 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80FDDC433DF
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 18:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D353C433E0
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 18:58:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 68D4E207E8
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 18:58:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CFDF207E8
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 18:58:46 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vfgYDgTT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733200AbgFWS6U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 14:58:20 -0400
-Received: from out02.mta.xmission.com ([166.70.13.232]:41676 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733138AbgFWS6T (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 14:58:19 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out02.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jno7Z-0004g1-A5; Tue, 23 Jun 2020 12:58:13 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jno7Y-0004Sv-7m; Tue, 23 Jun 2020 12:58:13 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>
-References: <87r1uo2ejt.fsf@x220.int.ebiederm.org>
-        <20200609235631.ukpm3xngbehfqthz@ast-mbp.dhcp.thefacebook.com>
-        <87d066vd4y.fsf@x220.int.ebiederm.org>
-        <20200611233134.5vofl53dj5wpwp5j@ast-mbp.dhcp.thefacebook.com>
-        <87bllngirv.fsf@x220.int.ebiederm.org>
-        <CAADnVQ+qNxFjTYBpYW9ZhStMh_oJBS5C_FsxSS=0Mzy=u54MSg@mail.gmail.com>
-        <CAADnVQLuGYX=LamARhrZcze1ej4ELj-y99fLzOCgz60XLPw_cQ@mail.gmail.com>
-        <87ftaxd7ky.fsf@x220.int.ebiederm.org>
-        <20200616015552.isi6j5x732okiky4@ast-mbp.dhcp.thefacebook.com>
-        <87h7v1pskt.fsf@x220.int.ebiederm.org>
-        <20200623183520.5e7fmlt3omwa2lof@ast-mbp.dhcp.thefacebook.com>
-Date:   Tue, 23 Jun 2020 13:53:48 -0500
-In-Reply-To: <20200623183520.5e7fmlt3omwa2lof@ast-mbp.dhcp.thefacebook.com>
-        (Alexei Starovoitov's message of "Tue, 23 Jun 2020 11:35:20 -0700")
-Message-ID: <87h7v1mx4z.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1733188AbgFWS6q (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 14:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733138AbgFWS6p (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 14:58:45 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65702C061573;
+        Tue, 23 Jun 2020 11:58:45 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id e13so1575141qkg.5;
+        Tue, 23 Jun 2020 11:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Hm8MncAba0d07uZxTGbanApe6GFEaJ+ZLuWt1ecBMsI=;
+        b=vfgYDgTTx9QGUL/xV8zFYlnIv9IU6HwXWsnn8togNKhCPWpOaL+EFkEBrXbqix+JiP
+         tG9qVhiNUhXOTpWPghzO4HaQBei7IPa/u5h1SiZcoW8lJ+knKGDXOosgSND/y95FAbRj
+         Eq497faHhHBoSoTd5pnnflFUAchSoF2vt0JG5g91wF3XRpMe4uRUq+MPh1tvAhPcvpIM
+         P5tAS6c1FVyatn5CkPWHxYrKn9S0WJB+c9+opFS/0TgMkBJ6zidetaqBxVV5HINUYznj
+         vHG2i7/bXZPKofsKs5SFKk0i+RM7NAZ6dJmmQ0VEWjL60OSDDPFDVon9jTgb9ANs1Y3e
+         t+Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hm8MncAba0d07uZxTGbanApe6GFEaJ+ZLuWt1ecBMsI=;
+        b=EiV26LziMCq3qXOgKpT3uZh8iatsZZHPBFGl8UQIaU5uVfhpyFayoTeXhRz2EEs1es
+         iIGFZR4xQjQ0GXvh4I1XL2KzCGyH5EK6Ma2xtpdLZNbgzrs2PkZZfZkbaCn6LdlWfR4X
+         mDfB0jw2EegK5bwcoLe85eh7BPhKT78WGFw7FOu35guHovxZQ/P5ALw32OM13VM6QPQy
+         w+5AVQrjE8UzNm+sqlq72ifwUzK66z9J8xFpXvlvhZZRDpWvjSn9qiBHtv09eRVNFwdR
+         LVClTrdyLKgCaaFD64K4tIhqBs6r4ZHUUDhZxjM9Iyuy+vlt6dJOUBPPX9uRV6MzS9RF
+         Xc8w==
+X-Gm-Message-State: AOAM5310aFB8XZknTlryEOh+1WhOVyz4JlT8gFbGc+6/XgIxXgR65H0m
+        HPFRLhOMRa6MPgnkUHnHSSwoGPXBgcBznQALNptKCA8m
+X-Google-Smtp-Source: ABdhPJxsmZ+ZPp6zHAM2E98+rvkAnAjn0qdnRmf6zdMKuXC7zfCdEhOSmVhnzRfj+q79fs88w/tEsA675d5UVOk7KNU=
+X-Received: by 2002:a05:620a:b84:: with SMTP id k4mr21911096qkh.39.1592938724542;
+ Tue, 23 Jun 2020 11:58:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1jno7Y-0004Sv-7m;;;mid=<87h7v1mx4z.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18/RJglEZjLIMbAudmB45pz7qaMdYp7mJU=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: Re: [RFC][PATCH] net/bpfilter: Remove this broken and apparently unmantained
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+References: <20200616100512.2168860-1-jolsa@kernel.org> <20200616100512.2168860-10-jolsa@kernel.org>
+ <CAEf4BzY=d5y_-fXvomG7SjkbK7DZn5=-f+sdCYRdZh9qeynQrQ@mail.gmail.com>
+ <20200619133124.GJ2465907@krava> <CAEf4BzZDCtW-5r5rN+ufZi1hUXjw8QCF+CiyT5sOvQQEEOqtiQ@mail.gmail.com>
+ <20200622090205.GD2556590@krava> <CAEf4BzZOph2EJLfq9FCYUhesi5NP0L_OQTrEKE-s0NPmt3HmWw@mail.gmail.com>
+ <20200623100230.GA2619137@krava>
+In-Reply-To: <20200623100230.GA2619137@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 23 Jun 2020 11:58:33 -0700
+Message-ID: <CAEf4BzZ=oYo6TiROpHQWpQ8Mn1CwONLSx44QJ0pqQH=9OUTWTQ@mail.gmail.com>
+Subject: Re: [PATCH 09/11] bpf: Add d_path helper
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        David Miller <davem@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wenbo Zhang <ethercflow@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Brendan Gregg <bgregg@netflix.com>,
+        Florent Revest <revest@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-
-> On Tue, Jun 23, 2020 at 01:04:02PM -0500, Eric W. Biederman wrote:
->> 
->> Sigh.  I was busy last week so I left reading this until now in the
->> hopes I would see something reasonable.
->> 
->> What I see is rejecting of everything that is said to you.
->> 
->> What I do not see are patches fixing issues.  I will await patches.
+On Tue, Jun 23, 2020 at 3:02 AM Jiri Olsa <jolsa@redhat.com> wrote:
 >
-> huh?
-> I can say exactly the same. You keep ignoring numerous points I brought up.
-> You still haven't showed what kind of refactoring you have in mind and
-> why fork_blob is in its way.
+> On Mon, Jun 22, 2020 at 12:18:19PM -0700, Andrii Nakryiko wrote:
+> > On Mon, Jun 22, 2020 at 2:02 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > >
+> > > On Fri, Jun 19, 2020 at 11:25:27AM -0700, Andrii Nakryiko wrote:
+> > >
+> > > SNIP
+> > >
+> > > > > > >  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> > > > > > >   * function eBPF program intends to call
+> > > > > > > diff --git a/kernel/bpf/btf_ids.c b/kernel/bpf/btf_ids.c
+> > > > > > > index d8d0df162f04..853c8fd59b06 100644
+> > > > > > > --- a/kernel/bpf/btf_ids.c
+> > > > > > > +++ b/kernel/bpf/btf_ids.c
+> > > > > > > @@ -13,3 +13,14 @@ BTF_ID(struct, seq_file)
+> > > > > > >
+> > > > > > >  BTF_ID_LIST(bpf_xdp_output_btf_ids)
+> > > > > > >  BTF_ID(struct, xdp_buff)
+> > > > > > > +
+> > > > > > > +BTF_ID_LIST(bpf_d_path_btf_ids)
+> > > > > > > +BTF_ID(struct, path)
+> > > > > > > +
+> > > > > > > +BTF_WHITELIST_ENTRY(btf_whitelist_d_path)
+> > > > > > > +BTF_ID(func, vfs_truncate)
+> > > > > > > +BTF_ID(func, vfs_fallocate)
+> > > > > > > +BTF_ID(func, dentry_open)
+> > > > > > > +BTF_ID(func, vfs_getattr)
+> > > > > > > +BTF_ID(func, filp_close)
+> > > > > > > +BTF_WHITELIST_END(btf_whitelist_d_path)
+> > > > > >
+> > > > > > Oh, so that's why you added btf_ids.c. Do you think centralizing all
+> > > > > > those BTF ID lists in one file is going to be more convenient? I lean
+> > > > > > towards keeping them closer to where they are used, as it was with all
+> > > > > > those helper BTF IDS. But I wonder what others think...
+> > > > >
+> > > > > either way works for me, but then BTF_ID_* macros needs to go
+> > > > > to include/linux/btf_ids.h header right?
+> > > > >
+> > > >
+> > > > given it's internal API, I'd probably just put it in
+> > > > include/linux/btf.h or include/linux/bpf.h, don't think we need extra
+> > > > header just for these
+> > >
+> > > actually, I might end up with extra header, so it's possible
+> > > to add selftest for this
+> > >
+> >
+> > How does extra header help with selftest?
+>
+> to create binary with various lists defined like we do in kernel
+> using the same macros..  and check they are properly made/sorted
+>
 
-That is correct.  What I wind up doing with exec is irrelevant.
+So the problem here is that selftests don't have access to internal
+(non-UAPI) linux/bpf.h header, right? Ok, that's a fair point.
 
-What is relevant is getting correct working code on the fork_blob path.
-Something that is clean enough that whatever weird things it winds up
-doing are readable.  The way things are intermingled today it took 2
-years for someone to realize there was a basic reference counting bug.
-
-This isn't work anyone else can do because there are not yet any real in
-tree users of fork_blob.  The fact that no one else can make
-substantials changes to the code because it has no users is what gets in
-the way of maintenance.
-
-
-One of the 2 year old bugs that needs to be fixed is that some LSMs
-work in terms of paths.  Tetsuo has been very gracious in pointing that
-out.  Either a path needs to be provided or the LSMs that work in terms
-of paths need to be fixed.
-
-
-
-Now I really don't care how the bugs are fixed.
-
-
-My recomendation for long term maintenance is to split fork_blob into 2
-functions: fs_from_blob, and the ordinary call_usermodehelper_exec.
-That removes the need for any special support for anything in the exec
-path because your blob will also have a path for your file, and the
-file in the filesystem can be reused for restart.
-
-That feels like the least long term work on everyone.
-
-But with no in-tree users none of us can do anything bug guess what
-the actual requirements of fork_usermode_blob are.
-
-
-So patches to fix the bugs please.
-
-Eric
-
-
-
-
+> jirka
+>
