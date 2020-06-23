@@ -6,42 +6,47 @@ X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7BDEC433DF
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:02:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02D30C433DF
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:16:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C34C20663
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:02:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D48602072E
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:16:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392040AbgFWVCc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 17:02:32 -0400
-Received: from www62.your-server.de ([213.133.104.62]:44484 "EHLO
+        id S2391192AbgFWVQB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 17:16:01 -0400
+Received: from www62.your-server.de ([213.133.104.62]:48478 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392030AbgFWUjP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 16:39:15 -0400
-Received: from sslproxy01.your-server.de ([78.46.139.224])
+        with ESMTP id S2391205AbgFWVQB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 17:16:01 -0400
+Received: from sslproxy06.your-server.de ([78.46.172.3])
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1jnphK-0000bs-1x; Tue, 23 Jun 2020 22:39:14 +0200
+        id 1jnqGt-00040a-99; Tue, 23 Jun 2020 23:15:59 +0200
 Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <daniel@iogearbox.net>)
-        id 1jnphJ-000UCZ-Ph; Tue, 23 Jun 2020 22:39:13 +0200
+        id 1jnqGt-000S0y-01; Tue, 23 Jun 2020 23:15:59 +0200
 Subject: Re: [PATCH v3 bpf-next 2/3] selftests/bpf: add variable-length data
  concatenation pattern test
-To:     Andrii Nakryiko <andriin@fb.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, ast@fb.com, john.fastabend@gmail.com
-Cc:     andrii.nakryiko@gmail.com, kernel-team@fb.com
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        Kernel Team <kernel-team@fb.com>
 References: <20200623032224.4020118-1-andriin@fb.com>
  <20200623032224.4020118-2-andriin@fb.com>
+ <7ed6ada5-2539-3090-0db7-0f65b67e4699@iogearbox.net>
+ <CAEf4BzbsRyt5Y4-oMaKTUNu_ijnRD09+WW3iA+bfGLZcLpd77w@mail.gmail.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <7ed6ada5-2539-3090-0db7-0f65b67e4699@iogearbox.net>
-Date:   Tue, 23 Jun 2020 22:39:13 +0200
+Message-ID: <ee6df475-b7d4-b8ed-dc91-560e42d2e7fc@iogearbox.net>
+Date:   Tue, 23 Jun 2020 23:15:58 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20200623032224.4020118-2-andriin@fb.com>
+In-Reply-To: <CAEf4BzbsRyt5Y4-oMaKTUNu_ijnRD09+WW3iA+bfGLZcLpd77w@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -52,59 +57,31 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hey Andrii,
-
-On 6/23/20 5:22 AM, Andrii Nakryiko wrote:
-> Add selftest that validates variable-length data reading and concatentation
-> with one big shared data array. This is a common pattern in production use for
-> monitoring and tracing applications, that potentially can read a lot of data,
-> but overall read much less. Such pattern allows to determine precisely what
-> amount of data needs to be sent over perfbuf/ringbuf and maximize efficiency.
+On 6/23/20 10:52 PM, Andrii Nakryiko wrote:
+> On Tue, Jun 23, 2020 at 1:39 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>> On 6/23/20 5:22 AM, Andrii Nakryiko wrote:
+>>> Add selftest that validates variable-length data reading and concatentation
+>>> with one big shared data array. This is a common pattern in production use for
+>>> monitoring and tracing applications, that potentially can read a lot of data,
+>>> but overall read much less. Such pattern allows to determine precisely what
+>>> amount of data needs to be sent over perfbuf/ringbuf and maximize efficiency.
+>>>
+>>> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+>>
+>> Currently getting the below errors on these tests. My last clang/llvm git build
+>> is on 4676cf444ea2 ("[Clang] Skip adding begin source location for PragmaLoopHint'd
+>> loop when[...]"):
 > 
-> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> Yeah, you need 02553b91da5d ("bpf: bpf_probe_read_kernel_str() has to
+> return amount of data read on success") from bpf tree.
 
-Currently getting the below errors on these tests. My last clang/llvm git build
-is on 4676cf444ea2 ("[Clang] Skip adding begin source location for PragmaLoopHint'd
-loop when[...]"):
+Fair point, it's in net- but not yet in net-next tree, so bpf-next sync needs
+to wait.
 
-# ./test_progs -t varlen
-test_varlen:PASS:skel_open 0 nsec
-test_varlen:PASS:skel_attach 0 nsec
-test_varlen:FAIL:check got 0 != exp 8
-test_varlen:FAIL:check got 0 != exp 7
-test_varlen:FAIL:check got 0 != exp 15
-test_varlen:FAIL:content_check doesn't match!test_varlen:FAIL:check got 0 != exp 8
-test_varlen:FAIL:check got 0 != exp 7
-test_varlen:FAIL:check got 0 != exp 15
-test_varlen:FAIL:content_check doesn't match!test_varlen:FAIL:check got 0 != exp 8
-test_varlen:FAIL:check got 0 != exp 7
-test_varlen:FAIL:check got 0 != exp 15
-test_varlen:FAIL:content_check doesn't match!test_varlen:FAIL:check got 0 != exp 8
-test_varlen:FAIL:check got 0 != exp 7
-test_varlen:FAIL:check got 0 != exp 15
-test_varlen:FAIL:content_check doesn't match!
-#87 varlen:FAIL
-Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+> I'm eagerly awaiting bpf being merged into bpf-next :)
 
-# ./test_progs-no_alu32 -t varlen
-Switching to flavor 'no_alu32' subdirectory...
-test_varlen:PASS:skel_open 0 nsec
-test_varlen:PASS:skel_attach 0 nsec
-test_varlen:FAIL:check got 0 != exp 8
-test_varlen:FAIL:check got 0 != exp 7
-test_varlen:FAIL:check got 0 != exp 15
-test_varlen:FAIL:content_check doesn't match!test_varlen:FAIL:check got 0 != exp 8
-test_varlen:FAIL:check got 0 != exp 7
-test_varlen:FAIL:check got 0 != exp 15
-test_varlen:FAIL:content_check doesn't match!test_varlen:FAIL:check got 0 != exp 8
-test_varlen:FAIL:check got 0 != exp 7
-test_varlen:FAIL:check got 0 != exp 15
-test_varlen:FAIL:content_check doesn't match!test_varlen:FAIL:check got 0 != exp 8
-test_varlen:FAIL:check got 0 != exp 7
-test_varlen:FAIL:check got 0 != exp 15
-test_varlen:FAIL:content_check doesn't match!
-#87 varlen:FAIL
-Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+I'll cherry-pick 02553b91da5d locally for testing and if it passes I'll push
+these out.
 
 Thanks,
 Daniel
