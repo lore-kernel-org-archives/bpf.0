@@ -2,110 +2,196 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03DDBC433E1
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:25:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DEE7C433E1
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:27:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D699D20724
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:25:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="owCwA7l+"
+	by mail.kernel.org (Postfix) with ESMTP id 1C84220724
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:27:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1592947645;
+	bh=iremO8qJ45paftYAO3M1qTShaKNRP4EwjN7wWH9FyL0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=WCMxNgvnCOB16LJJA8odhFykibcmXMnSwHsuQuZ2MgY5noVo3BCnwOnQgDwVN/hps
+	 NX5VMZrG8rznfsFh5fhpBra7cBXdIrkjBBFuzqhdMwCLE6OAy1FKrNZjffs+4kyKcH
+	 qRkqif8PjeWZ/LFQqCsiqaQ9eOxhvPOl00hgD4tw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393536AbgFWVZU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 17:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390329AbgFWVZT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 17:25:19 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C82C061573
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 14:25:19 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id z63so8214786qkb.8
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 14:25:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lH+ih/vqFpzEdsQlJyuItTRWtUoLO51P5/RAt97fSjg=;
-        b=owCwA7l+uTWbmFwqRrzTtv1NrpMNALafzClMrPE/lHv5WdPVyxp/N+avMqRqB3pyam
-         BnytARO4coG7vmCecW8fSqq2LJ5vgvz+AyEGH2V3clmZgIQNbZZHk0RMEU5MGm47lFIt
-         EgBmLA6NLADkISWikODZyZKKssGNy2hNE3cWjI0Un5PW2gbtSUbMLPhBNS7jz8cOCECy
-         A0VSUMq9AwjtE83RUwRRBhad0Yzi5TfCI0zGLRICepI+cFEwwPjgJwkr8cWpiKYcgtq5
-         z0xxLYe24WfESiqQb7Ym9pP3hZEobIPoI+4mGwC7hM73cffkvNbby12hJSNADNJTKtH5
-         yodQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lH+ih/vqFpzEdsQlJyuItTRWtUoLO51P5/RAt97fSjg=;
-        b=hC8qwA+R6N3CMFFfpS2/zqMaAeXLswD6Hgr6WlEGvnXkdXoM86r0CnJnpEDJMVz/eJ
-         8Z2EZygtPHz0EKO0KZxItLAqFv4GQM6pnXHYracVNUVn3FDsUn+yjy0Kw+GyeDlqMxgW
-         oGolxX8Bi7L9J/FrneGN+EaANnGyr/0wxTdhwtx0TH8INA+4bj6wonsPFmw3zrPj+5I7
-         dr/X7SZPVwK9HvGbgWcwrKqk+pNBSU/XllunaQJiSS6GceU/lt7Uf7hRSxydON540IV0
-         U1W06v0Yqg3+SXRZKE/GydvgYz13xYybdbjmhPg8ikL7xeXu6Q4zQ6xadB3/3iK6ery/
-         A7TQ==
-X-Gm-Message-State: AOAM533/d4Y5tiwNj1kTGokiu1/k8l/q7Xgkz2aYOYpzajjHAffbHb5W
-        5gcBjyeBhi6GCMaMLENixwCv42Ep0H4HWxZaFjIUSw==
-X-Google-Smtp-Source: ABdhPJzUhrjoo6e99z5AIDHw42VevQgGkK47alrb0vZxUqaI3G+5aWz3ZMeemCdVB7dOu8MWzWoBDqanPFNdc5VWf0s=
-X-Received: by 2002:a05:620a:23a:: with SMTP id u26mr21569480qkm.443.1592947518301;
- Tue, 23 Jun 2020 14:25:18 -0700 (PDT)
+        id S2390681AbgFWV1X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 17:27:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60952 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389229AbgFWUQ7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 16:16:59 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D36012145D;
+        Tue, 23 Jun 2020 20:16:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592943419;
+        bh=iremO8qJ45paftYAO3M1qTShaKNRP4EwjN7wWH9FyL0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Tld/yRDocRi67pnPWJ4WoBIkWt3fIK75DIo2kIuo+2YzSEa63pLRefVPa0BSDF41t
+         gXVLUQ6qE1fievZJ/FOp3pJOJ8gIydgAe6sdWPT0IZWxWPK4ta1i8/ertwjBRwvjMY
+         EGWaS0ENp58uBUxKtzk1nM2Xt7Y+ik4eS5L3OgqI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        bpf@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.7 385/477] perf probe: Fix user attribute access in kprobes
+Date:   Tue, 23 Jun 2020 21:56:22 +0200
+Message-Id: <20200623195425.725155460@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200623195407.572062007@linuxfoundation.org>
+References: <20200623195407.572062007@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-References: <20200623155157.13082-1-quentin@isovalent.com> <CAEf4BzYeP784xwgnSsoCn=vy37-bLa4=jZUDW35t3MNMUGVdmA@mail.gmail.com>
-In-Reply-To: <CAEf4BzYeP784xwgnSsoCn=vy37-bLa4=jZUDW35t3MNMUGVdmA@mail.gmail.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-Date:   Tue, 23 Jun 2020 22:25:07 +0100
-Message-ID: <CACdoK4JtoehffN73A-q77JCOPc6O4hK9zMG1XSai2TdM7NCtYw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] tools: bpftool: do not pass json_wtr to emit_obj_refs_json()
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 23 Jun 2020 at 19:27, Andrii Nakryiko <andrii.nakryiko@gmail.com> w=
-rote:
->
-> On Tue, Jun 23, 2020 at 8:54 AM Quentin Monnet <quentin@isovalent.com> wr=
-ote:
-> >
-> > Building bpftool yields the following complaint:
-> >
-> >     pids.c: In function =E2=80=98emit_obj_refs_json=E2=80=99:
-> >     pids.c:175:80: warning: declaration of =E2=80=98json_wtr=E2=80=99 s=
-hadows a global declaration [-Wshadow]
-> >       175 | void emit_obj_refs_json(struct obj_refs_table *table, __u32=
- id, json_writer_t *json_wtr)
-> >           |                                                            =
-     ~~~~~~~~~~~~~~~^~~~~~~~
-> >     In file included from pids.c:11:
-> >     main.h:141:23: note: shadowed declaration is here
-> >       141 | extern json_writer_t *json_wtr;
-> >           |                       ^~~~~~~~
-> >
-> > json_wtr being exposed in main.h (included in pids.c) as an extern, it
-> > is directly available and there is no need to pass it through the
-> > function. Let's simply use the global variable.
->
-> I don't think it's a good approach to assume that emit_obj_refs_json
-> is always going to be using a global json writer. I think this shadow
-> warning is bogus in this case, honestly. But if it bothers you, let's
-> just rename json_wtr into whatever other name of argument you prefer.
+From: Sumanth Korikkar <sumanthk@linux.ibm.com>
 
-I didn't mind using the global JSON writer, but I'm not strictly opposed to
-passing a writer down to emit_obj_refs_json() either, so ok. I'll
-still respin to
-rename the variable, it will be clearer that the function does not rely on =
-the
-global writer.
+[ Upstream commit 9256c3031eb9beafa3957c61093104c3c75a6148 ]
 
-Thanks for the feedback.
-Quentin
+Issue:
+
+  # perf probe -a 'do_sched_setscheduler pid policy param->sched_priority@user'
+
+did not work before.
+
+Fix:
+
+Make:
+
+  # perf probe -a 'do_sched_setscheduler pid policy param->sched_priority@user'
+
+output equivalent to ftrace:
+
+  # echo 'p:probe/do_sched_setscheduler _text+517384 pid=%r2:s32 policy=%r3:s32 sched_priority=+u0(%r4):s32' > /sys/kernel/debug/tracing/kprobe_events
+
+Other:
+
+1. Right now, __match_glob() does not handle [u]<offset>. For now, use
+  *u]<offset>.
+
+2. @user attribute was introduced in commit 1e032f7cfa14 ("perf-probe:
+   Add user memory access attribute support")
+
+Test:
+1. perf probe -a 'do_sched_setscheduler  pid policy
+   param->sched_priority@user'
+
+2 ./perf script
+   sched 305669 [000] 1614458.838675: perf_bpf_probe:func: (2904e508)
+   pid=261614 policy=2 sched_priority=1
+
+3. cat /sys/kernel/debug/tracing/trace
+   <...>-309956 [006] .... 1616098.093957: 0: prio: 1
+
+Committer testing:
+
+Before:
+
+  # perf probe -a 'do_sched_setscheduler pid policy param->sched_priority@user'
+  param(type:sched_param) has no member sched_priority@user.
+    Error: Failed to add events.
+  # pahole sched_param
+  struct sched_param {
+  	int                        sched_priority;       /*     0     4 */
+
+  	/* size: 4, cachelines: 1, members: 1 */
+  	/* last cacheline: 4 bytes */
+  };
+  #
+
+After:
+
+  # perf probe -a 'do_sched_setscheduler pid policy param->sched_priority@user'
+  Added new event:
+    probe:do_sched_setscheduler (on do_sched_setscheduler with pid policy sched_priority=param->sched_priority)
+
+  You can now use it in all perf tools, such as:
+
+  	perf record -e probe:do_sched_setscheduler -aR sleep 1
+
+  # cat /sys/kernel/debug/tracing/kprobe_events
+  p:probe/do_sched_setscheduler _text+1113792 pid=%di:s32 policy=%si:s32 sched_priority=+u0(%dx):s32
+  #
+
+Fixes: 1e032f7cfa14 ("perf-probe: Add user memory access attribute support")
+Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
+Reviewed-by: Thomas Richter <tmricht@linux.ibm.com>
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+Cc: Ilya Leoshkevich <iii@linux.ibm.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Cc: bpf@vger.kernel.org
+LPU-Reference: 20200609081019.60234-2-sumanthk@linux.ibm.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/perf/util/probe-event.c | 7 +++++--
+ tools/perf/util/probe-file.c  | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
+index a08f373d33056..df713a5d1e26a 100644
+--- a/tools/perf/util/probe-event.c
++++ b/tools/perf/util/probe-event.c
+@@ -1575,7 +1575,7 @@ static int parse_perf_probe_arg(char *str, struct perf_probe_arg *arg)
+ 	}
+ 
+ 	tmp = strchr(str, '@');
+-	if (tmp && tmp != str && strcmp(tmp + 1, "user")) { /* user attr */
++	if (tmp && tmp != str && !strcmp(tmp + 1, "user")) { /* user attr */
+ 		if (!user_access_is_supported()) {
+ 			semantic_error("ftrace does not support user access\n");
+ 			return -EINVAL;
+@@ -1995,7 +1995,10 @@ static int __synthesize_probe_trace_arg_ref(struct probe_trace_arg_ref *ref,
+ 		if (depth < 0)
+ 			return depth;
+ 	}
+-	err = strbuf_addf(buf, "%+ld(", ref->offset);
++	if (ref->user_access)
++		err = strbuf_addf(buf, "%s%ld(", "+u", ref->offset);
++	else
++		err = strbuf_addf(buf, "%+ld(", ref->offset);
+ 	return (err < 0) ? err : depth;
+ }
+ 
+diff --git a/tools/perf/util/probe-file.c b/tools/perf/util/probe-file.c
+index 8c852948513e3..064b63a6a3f31 100644
+--- a/tools/perf/util/probe-file.c
++++ b/tools/perf/util/probe-file.c
+@@ -1044,7 +1044,7 @@ static struct {
+ 	DEFINE_TYPE(FTRACE_README_PROBE_TYPE_X, "*type: * x8/16/32/64,*"),
+ 	DEFINE_TYPE(FTRACE_README_KRETPROBE_OFFSET, "*place (kretprobe): *"),
+ 	DEFINE_TYPE(FTRACE_README_UPROBE_REF_CTR, "*ref_ctr_offset*"),
+-	DEFINE_TYPE(FTRACE_README_USER_ACCESS, "*[u]<offset>*"),
++	DEFINE_TYPE(FTRACE_README_USER_ACCESS, "*u]<offset>*"),
+ 	DEFINE_TYPE(FTRACE_README_MULTIPROBE_EVENT, "*Create/append/*"),
+ 	DEFINE_TYPE(FTRACE_README_IMMEDIATE_VALUE, "*\\imm-value,*"),
+ };
+-- 
+2.25.1
+
+
+
