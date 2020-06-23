@@ -2,470 +2,173 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82A45C433DF
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:40:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2221C433DF
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:59:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5313020780
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:40:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592948436;
-	bh=GkFvgxVWqKOU0Jwgf2uzlNON6UZQ+UK1+twa9d8kmVE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Q81K5Yg0RfXyJEz0zXnr4/I2a5shUelOxnI8agUkYDMX25v6FNbkYOEzyv1I4CRKz
-	 /XNkrG+VSHWZZkZrJu/hPzwVPkPZ1buMLXImxPzBCymT0RAJid3RyO4Xu8++kIDVPs
-	 K8UArSv1CibSFP9cPhlL2lGWUvUTSun4Lfd34Ro8=
+	by mail.kernel.org (Postfix) with ESMTP id 962A82078E
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:59:21 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Yupy1dzW";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="kFxg25p3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394032AbgFWVkO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 17:40:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58084 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394027AbgFWVkM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 17:40:12 -0400
-Received: from localhost.localdomain.com (unknown [151.48.138.186])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0FBC0206E2;
-        Tue, 23 Jun 2020 21:40:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592948411;
-        bh=GkFvgxVWqKOU0Jwgf2uzlNON6UZQ+UK1+twa9d8kmVE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dV9NuLg1hWkrcdaHw2BmRboeuCQaQBdePFe0md5bigRcy0I7kFs/o/o/zVbjUUOi1
-         SlBUQfrDoAembRP6QOMejp41wPHnfOsJ4Ur6WxKj2SFIpN/E57s27hg1mzeefGeBdP
-         G+R9iE2Hqe1g/Yu6ICFnV2eYTxmZ9JisRbATvlbg=
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, brouer@redhat.com,
-        daniel@iogearbox.net, toke@redhat.com, lorenzo.bianconi@redhat.com,
-        dsahern@kernel.org, andrii.nakryiko@gmail.com
-Subject: [PATCH v3 bpf-next 5/9] bpf: cpumap: add the possibility to attach an eBPF program to cpumap
-Date:   Tue, 23 Jun 2020 23:39:30 +0200
-Message-Id: <7f40456531a507b53e30165afa229b4e2a22e8e7.1592947694.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1592947694.git.lorenzo@kernel.org>
-References: <cover.1592947694.git.lorenzo@kernel.org>
+        id S2388717AbgFWV7V (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 17:59:21 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14164 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387558AbgFWV7U (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jun 2020 17:59:20 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05NLi2oq031722;
+        Tue, 23 Jun 2020 14:59:04 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=szC+AB8as0sMRwBt/YtbrVDSjzCaLXzwBH9NgvoizQc=;
+ b=Yupy1dzWowuTbACFBq++n38dMXAGuckQMr6S6LCPPOwFKbDMR201tAIopjUb8QA29zug
+ pmY9qVbttYS1Ss0P1YGVpjZUAyc6roOEjWdd2fGxGqx7ddLOjQReKBbF6LhiYzxWuii9
+ mu0NcvAOYTCM8KvWhr3FIgjUvJv+4PuETF4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31uk1qtex1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 23 Jun 2020 14:59:04 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 23 Jun 2020 14:59:03 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O0wgcR9B2uED4y2cMP9ZTLZiuRuPIN4ZJHmQoOdeZAlhKEMRXWHY8ZJGi2s0GsRyBtk5RbSDIYMJPfSuqVjPTzF/5J/pHdsz+5scyrjnA9H8cY7E70c6Uyc+igzNbLfQEavr+K5Ljdepyyk9kMBG+K1OTQWKBZ9b6CITF+3VBGNCVGWK4sczO9JHsWU0MCFyIU6k3Rk0v8S02XRLza1fSaT2ZvnEljpkEP1LS176BaPHaM9PextAg2K0kMq4HkK1Dkc97vtW+dwtFYemWG94HlA2w8i9ujCCW7ficea6sS1Uo4fbFegmfeGjlsUZchtGH0c132FJoHCMq+EofpXHHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=szC+AB8as0sMRwBt/YtbrVDSjzCaLXzwBH9NgvoizQc=;
+ b=O5WRTHfq7p9sj4tJ610yEBz9pM6K7wMiT7OPVSqzaxqBmoxtp8C85T+n2cVPdwrW5xdj/cy0EwDxP6hXwOZeSpRARkbGN5R608mPP4McbcAuE+DokJLsYabOzNNT7Nqy6YQ+AckAcbuNPqBxuGBMmUS6yw881WTgNbDAVdo0U5I91sDrsYDs7NDw3jXsWoYyQFLYvdYiui2DjeG06Cjpo3KpxpX1SvFzS7nkUIiF4R5lzXwxhXDM7tePHNAZcaNKSUyZv256PWTYN3t3GLIE7LRxzAd7hzxj7hijESVm8a/ZLXdV0kKJZIk9mtk5bs3UU5ENp0jegXSDgUB85FEbUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=szC+AB8as0sMRwBt/YtbrVDSjzCaLXzwBH9NgvoizQc=;
+ b=kFxg25p3TV2o0RED0PubUOsz+3F9k5I5KTRAsfAETZNkSBu+8yZwLE37eeePtAjPNHATXei7v1UdJjgsS/KJcmnSGY991KEfEvUpht+EU3YbwDiJp49pIpj5lNKSIMzx6Kab2cPiS+q1F+DeKxM65rgmkJF8z8rH9ZHUxNecvDY=
+Received: from DM6PR15MB3580.namprd15.prod.outlook.com (2603:10b6:5:1f9::10)
+ by DM5PR15MB1241.namprd15.prod.outlook.com (2603:10b6:3:b8::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22; Tue, 23 Jun
+ 2020 21:59:02 +0000
+Received: from DM6PR15MB3580.namprd15.prod.outlook.com
+ ([fe80::88ab:3896:e702:55e4]) by DM6PR15MB3580.namprd15.prod.outlook.com
+ ([fe80::88ab:3896:e702:55e4%6]) with mapi id 15.20.3109.025; Tue, 23 Jun 2020
+ 21:59:02 +0000
+Date:   Tue, 23 Jun 2020 14:59:00 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Yonghong Song <yhs@fb.com>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next v4 00/15] implement bpf iterator for tcp and udp
+ sockets
+Message-ID: <20200623215900.2bcnpzzamdctj3dx@kafai-mbp.dhcp.thefacebook.com>
+References: <20200623161749.2500196-1-yhs@fb.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200623161749.2500196-1-yhs@fb.com>
+User-Agent: NeoMutt/20180716
+X-ClientProxiedBy: BY5PR16CA0028.namprd16.prod.outlook.com
+ (2603:10b6:a03:1a0::41) To DM6PR15MB3580.namprd15.prod.outlook.com
+ (2603:10b6:5:1f9::10)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:400::5:ddf5) by BY5PR16CA0028.namprd16.prod.outlook.com (2603:10b6:a03:1a0::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22 via Frontend Transport; Tue, 23 Jun 2020 21:59:01 +0000
+X-Originating-IP: [2620:10d:c090:400::5:ddf5]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 632835f3-b556-457d-6dfe-08d817c0a3b3
+X-MS-TrafficTypeDiagnostic: DM5PR15MB1241:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DM5PR15MB1241D14A66895C24D2CAD441D5940@DM5PR15MB1241.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-Forefront-PRVS: 04433051BF
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VO4pAAGOhs+GWA/jeRNoOBC4ASHUb2ChFekUvCQ3Nvm7u8nBs4uMemXagjXSrJgro3Xkr4pI6aB++IARI1oUZmjfnoG9ZTVORXpwxNOy4l5CstRHhDtP/rAGpM/NdtQdeIQ8mXjKJJhNgPxPeoIHkNPYRQhu3IWBUcacKnONAJQ99Uq/vEZ5QDd1sreYjb8fMPPT8r3NCmxj8pZvOZnvfHy7ZIhcU4xKrNXnGUrtjFqnN17LZJWflUY9TxsRZa+7F85pu/u1UOk2c/q/wCm5tNk1taeWHRtP4aXKwlTmH9w1gllFSEHTo4Oxh1iZfNKboy911/YU6jop7x0y/K9B2h1dUmXmv++tHTWLeRCfRsMeEZ14ffDIZBKNcPD6BhTt/GV7CkJuAoFlMU4gDd/ySA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR15MB3580.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(136003)(366004)(396003)(39860400002)(346002)(376002)(66946007)(5660300002)(8936002)(54906003)(83380400001)(4326008)(2906002)(66476007)(66556008)(55016002)(9686003)(6862004)(1076003)(8676002)(16526019)(478600001)(86362001)(186003)(966005)(7696005)(52116002)(6636002)(6506007)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: QxFoWwIe5q8Q1VrdhtjSupX2aNuLVHLh04wiIuKbY56YbdTO0VU3kmG49LvWxqOch7eviIPRphk80fcHA0mlK4xk8iYHBG/UluTzknGU1CoqUENgkYXsGv1NXOM8GD/6mVkgbxWkhO6vz3GRAZI/u1+GwjtfJl39VkDEYAKl9gr2H168nfYu4kuNetA1KkAuayXZ1r8U0zNxkfQFLz7Uaml3TjODk2EmpM3TzLNuM8eJpBGHIg+bg37UDVyTncKbMNQXvhfx0pGzZCByPuy7N4ZTkV0Vl2bfYSKG8gd8q/9l0thr/hMfn0P7saW/iPIvBzDEm71U5VJTrCfrOr/Rf4EdgnH8ovTa4k3nJRlpV4l4PmglKFRS3SfcQZebX2H60nNMWWZYDDFZMFPY0ew3NsCeckmhhlQhjD+USkRKLnF2jNzVkG1eETw5UQb/V98Pbr0Sh+dVO4zoGXe/wVaFRcuBFgpc3aGTniMnhx9LC0KQ/QwvQiWc/V/kIcTnGU4Xqd8g99NjBpJO7aBDUIhgmA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 632835f3-b556-457d-6dfe-08d817c0a3b3
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2020 21:59:02.2618
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lWoQCjrE6/eu2qo0u5YzkEDxkG1A8FKkwb3svOdJh/UQBGKzHUJE5LLr4umbIyaW
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1241
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-23_14:2020-06-23,2020-06-23 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ phishscore=0 clxscore=1015 adultscore=0 spamscore=0 mlxscore=0
+ mlxlogscore=999 bulkscore=0 priorityscore=1501 impostorscore=0
+ malwarescore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006120000 definitions=main-2006230146
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce the capability to attach an eBPF program to cpumap entries.
-The idea behind this feature is to add the possibility to define on
-which CPU run the eBPF program if the underlying hw does not support
-RSS. Current supported verdicts are XDP_DROP and XDP_PASS.
-
-This patch has been tested on Marvell ESPRESSObin using xdp_redirect_cpu
-sample available in the kernel tree to identify possible performance
-regressions. Results show there are no observable differences in
-packet-per-second:
-
-$./xdp_redirect_cpu --progname xdp_cpu_map0 --dev eth0 --cpu 1
-rx: 354.8 Kpps
-rx: 356.0 Kpps
-rx: 356.8 Kpps
-rx: 356.3 Kpps
-rx: 356.6 Kpps
-rx: 356.6 Kpps
-rx: 356.7 Kpps
-rx: 355.8 Kpps
-rx: 356.8 Kpps
-rx: 356.8 Kpps
-
-Co-developed-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- include/linux/bpf.h            |   6 ++
- include/net/xdp.h              |   5 ++
- include/trace/events/xdp.h     |  14 ++--
- include/uapi/linux/bpf.h       |   5 ++
- kernel/bpf/cpumap.c            | 122 +++++++++++++++++++++++++++++----
- net/core/dev.c                 |   8 +++
- tools/include/uapi/linux/bpf.h |   5 ++
- 7 files changed, 148 insertions(+), 17 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 1e1501ee53ce..759f280265d0 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1265,6 +1265,7 @@ struct bpf_cpu_map_entry *__cpu_map_lookup_elem(struct bpf_map *map, u32 key);
- void __cpu_map_flush(void);
- int cpu_map_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_buff *xdp,
- 		    struct net_device *dev_rx);
-+bool cpu_map_prog_allowed(struct bpf_map *map);
- 
- /* Return map's numa specified by userspace */
- static inline int bpf_map_attr_numa_node(const union bpf_attr *attr)
-@@ -1425,6 +1426,11 @@ static inline int cpu_map_enqueue(struct bpf_cpu_map_entry *rcpu,
- 	return 0;
- }
- 
-+static inline bool cpu_map_prog_allowed(struct bpf_map *map)
-+{
-+	return false;
-+}
-+
- static inline struct bpf_prog *bpf_prog_get_type_path(const char *name,
- 				enum bpf_prog_type type)
- {
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 5b383c450858..83b9e0142b52 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -98,6 +98,11 @@ struct xdp_frame {
- 	struct net_device *dev_rx; /* used by cpumap */
- };
- 
-+struct xdp_cpumap_stats {
-+	unsigned int pass;
-+	unsigned int drop;
-+};
-+
- /* Clear kernel pointers in xdp_frame */
- static inline void xdp_scrub_frame(struct xdp_frame *frame)
- {
-diff --git a/include/trace/events/xdp.h b/include/trace/events/xdp.h
-index b73d3e141323..e2c99f5bee39 100644
---- a/include/trace/events/xdp.h
-+++ b/include/trace/events/xdp.h
-@@ -177,9 +177,9 @@ DEFINE_EVENT(xdp_redirect_template, xdp_redirect_map_err,
- TRACE_EVENT(xdp_cpumap_kthread,
- 
- 	TP_PROTO(int map_id, unsigned int processed,  unsigned int drops,
--		 int sched),
-+		 int sched, struct xdp_cpumap_stats *xdp_stats),
- 
--	TP_ARGS(map_id, processed, drops, sched),
-+	TP_ARGS(map_id, processed, drops, sched, xdp_stats),
- 
- 	TP_STRUCT__entry(
- 		__field(int, map_id)
-@@ -188,6 +188,8 @@ TRACE_EVENT(xdp_cpumap_kthread,
- 		__field(unsigned int, drops)
- 		__field(unsigned int, processed)
- 		__field(int, sched)
-+		__field(unsigned int, xdp_pass)
-+		__field(unsigned int, xdp_drop)
- 	),
- 
- 	TP_fast_assign(
-@@ -197,16 +199,20 @@ TRACE_EVENT(xdp_cpumap_kthread,
- 		__entry->drops		= drops;
- 		__entry->processed	= processed;
- 		__entry->sched	= sched;
-+		__entry->xdp_pass	= xdp_stats->pass;
-+		__entry->xdp_drop	= xdp_stats->drop;
- 	),
- 
- 	TP_printk("kthread"
- 		  " cpu=%d map_id=%d action=%s"
- 		  " processed=%u drops=%u"
--		  " sched=%d",
-+		  " sched=%d"
-+		  " xdp_pass=%u xdp_drop=%u",
- 		  __entry->cpu, __entry->map_id,
- 		  __print_symbolic(__entry->act, __XDP_ACT_SYM_TAB),
- 		  __entry->processed, __entry->drops,
--		  __entry->sched)
-+		  __entry->sched,
-+		  __entry->xdp_pass, __entry->xdp_drop)
- );
- 
- TRACE_EVENT(xdp_cpumap_enqueue,
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index fa3b342985f9..856c8db22517 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -226,6 +226,7 @@ enum bpf_attach_type {
- 	BPF_CGROUP_INET4_GETSOCKNAME,
- 	BPF_CGROUP_INET6_GETSOCKNAME,
- 	BPF_XDP_DEVMAP,
-+	BPF_XDP_CPUMAP,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-@@ -3781,6 +3782,10 @@ struct bpf_devmap_val {
-  */
- struct bpf_cpumap_val {
- 	__u32 qsize;	/* queue size to remote target CPU */
-+	union {
-+		int   fd;	/* prog fd on map write */
-+		__u32 id;	/* prog id on map read */
-+	} bpf_prog;
- };
- 
- enum sk_action {
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 7e8eec4f7089..4e4cd240f07b 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -67,6 +67,7 @@ struct bpf_cpu_map_entry {
- 	struct rcu_head rcu;
- 
- 	struct bpf_cpumap_val value;
-+	struct bpf_prog *prog;
- };
- 
- struct bpf_cpu_map {
-@@ -81,6 +82,7 @@ static int bq_flush_to_queue(struct xdp_bulk_queue *bq);
- 
- static struct bpf_map *cpu_map_alloc(union bpf_attr *attr)
- {
-+	u32 value_size = attr->value_size;
- 	struct bpf_cpu_map *cmap;
- 	int err = -ENOMEM;
- 	u64 cost;
-@@ -91,7 +93,9 @@ static struct bpf_map *cpu_map_alloc(union bpf_attr *attr)
- 
- 	/* check sanity of attributes */
- 	if (attr->max_entries == 0 || attr->key_size != 4 ||
--	    attr->value_size != 4 || attr->map_flags & ~BPF_F_NUMA_NODE)
-+	    (value_size != offsetofend(struct bpf_cpumap_val, qsize) &&
-+	     value_size != offsetofend(struct bpf_cpumap_val, bpf_prog.fd)) ||
-+	    attr->map_flags & ~BPF_F_NUMA_NODE)
- 		return ERR_PTR(-EINVAL);
- 
- 	cmap = kzalloc(sizeof(*cmap), GFP_USER);
-@@ -221,6 +225,63 @@ static void put_cpu_map_entry(struct bpf_cpu_map_entry *rcpu)
- 	}
- }
- 
-+static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
-+				    void **frames, int n,
-+				    struct xdp_cpumap_stats *stats)
-+{
-+	struct xdp_rxq_info rxq;
-+	struct bpf_prog *prog;
-+	struct xdp_buff xdp;
-+	int i, nframes = 0;
-+
-+	if (!rcpu->prog)
-+		return n;
-+
-+	xdp_set_return_frame_no_direct();
-+	xdp.rxq = &rxq;
-+
-+	rcu_read_lock();
-+
-+	prog = READ_ONCE(rcpu->prog);
-+	for (i = 0; i < n; i++) {
-+		struct xdp_frame *xdpf = frames[i];
-+		u32 act;
-+		int err;
-+
-+		rxq.dev = xdpf->dev_rx;
-+		rxq.mem = xdpf->mem;
-+		/* TODO: report queue_index to xdp_rxq_info */
-+
-+		xdp_convert_frame_to_buff(xdpf, &xdp);
-+
-+		act = bpf_prog_run_xdp(prog, &xdp);
-+		switch (act) {
-+		case XDP_PASS:
-+			err = xdp_update_frame_from_buff(&xdp, xdpf);
-+			if (err < 0) {
-+				xdp_return_frame(xdpf);
-+				stats->drop++;
-+			} else {
-+				frames[nframes++] = xdpf;
-+				stats->pass++;
-+			}
-+			break;
-+		default:
-+			bpf_warn_invalid_xdp_action(act);
-+			/* fallthrough */
-+		case XDP_DROP:
-+			xdp_return_frame(xdpf);
-+			stats->drop++;
-+			break;
-+		}
-+	}
-+
-+	rcu_read_unlock();
-+	xdp_clear_return_frame_no_direct();
-+
-+	return nframes;
-+}
-+
- #define CPUMAP_BATCH 8
- 
- static int cpu_map_kthread_run(void *data)
-@@ -235,11 +296,12 @@ static int cpu_map_kthread_run(void *data)
- 	 * kthread_stop signal until queue is empty.
- 	 */
- 	while (!kthread_should_stop() || !__ptr_ring_empty(rcpu->queue)) {
-+		struct xdp_cpumap_stats stats = {}; /* zero stats */
-+		gfp_t gfp = __GFP_ZERO | GFP_ATOMIC;
- 		unsigned int drops = 0, sched = 0;
- 		void *frames[CPUMAP_BATCH];
- 		void *skbs[CPUMAP_BATCH];
--		gfp_t gfp = __GFP_ZERO | GFP_ATOMIC;
--		int i, n, m;
-+		int i, n, m, nframes;
- 
- 		/* Release CPU reschedule checks */
- 		if (__ptr_ring_empty(rcpu->queue)) {
-@@ -260,8 +322,8 @@ static int cpu_map_kthread_run(void *data)
- 		 * kthread CPU pinned. Lockless access to ptr_ring
- 		 * consume side valid as no-resize allowed of queue.
- 		 */
--		n = __ptr_ring_consume_batched(rcpu->queue, frames, CPUMAP_BATCH);
--
-+		n = __ptr_ring_consume_batched(rcpu->queue, frames,
-+					       CPUMAP_BATCH);
- 		for (i = 0; i < n; i++) {
- 			void *f = frames[i];
- 			struct page *page = virt_to_page(f);
-@@ -273,15 +335,19 @@ static int cpu_map_kthread_run(void *data)
- 			prefetchw(page);
- 		}
- 
--		m = kmem_cache_alloc_bulk(skbuff_head_cache, gfp, n, skbs);
--		if (unlikely(m == 0)) {
--			for (i = 0; i < n; i++)
--				skbs[i] = NULL; /* effect: xdp_return_frame */
--			drops = n;
-+		/* Support running another XDP prog on this CPU */
-+		nframes = cpu_map_bpf_prog_run_xdp(rcpu, frames, n, &stats);
-+		if (nframes) {
-+			m = kmem_cache_alloc_bulk(skbuff_head_cache, gfp, nframes, skbs);
-+			if (unlikely(m == 0)) {
-+				for (i = 0; i < nframes; i++)
-+					skbs[i] = NULL; /* effect: xdp_return_frame */
-+				drops += nframes;
-+			}
- 		}
- 
- 		local_bh_disable();
--		for (i = 0; i < n; i++) {
-+		for (i = 0; i < nframes; i++) {
- 			struct xdp_frame *xdpf = frames[i];
- 			struct sk_buff *skb = skbs[i];
- 			int ret;
-@@ -298,7 +364,7 @@ static int cpu_map_kthread_run(void *data)
- 				drops++;
- 		}
- 		/* Feedback loop via tracepoint */
--		trace_xdp_cpumap_kthread(rcpu->map_id, n, drops, sched);
-+		trace_xdp_cpumap_kthread(rcpu->map_id, n, drops, sched, &stats);
- 
- 		local_bh_enable(); /* resched point, may call do_softirq() */
- 	}
-@@ -308,13 +374,38 @@ static int cpu_map_kthread_run(void *data)
- 	return 0;
- }
- 
-+bool cpu_map_prog_allowed(struct bpf_map *map)
-+{
-+	return map->map_type == BPF_MAP_TYPE_CPUMAP &&
-+	       map->value_size != offsetofend(struct bpf_cpumap_val, qsize);
-+}
-+
-+static int __cpu_map_load_bpf_program(struct bpf_cpu_map_entry *rcpu, int fd)
-+{
-+	struct bpf_prog *prog;
-+
-+	prog = bpf_prog_get_type_dev(fd, BPF_PROG_TYPE_XDP, false);
-+	if (IS_ERR(prog))
-+		return PTR_ERR(prog);
-+
-+	if (prog->expected_attach_type != BPF_XDP_CPUMAP) {
-+		bpf_prog_put(prog);
-+		return -EINVAL;
-+	}
-+
-+	rcpu->value.bpf_prog.id = prog->aux->id;
-+	rcpu->prog = prog;
-+
-+	return 0;
-+}
-+
- static struct bpf_cpu_map_entry *
- __cpu_map_entry_alloc(struct bpf_cpumap_val *value, u32 cpu, int map_id)
- {
-+	int numa, err, i, fd = value->bpf_prog.fd;
- 	gfp_t gfp = GFP_KERNEL | __GFP_NOWARN;
- 	struct bpf_cpu_map_entry *rcpu;
- 	struct xdp_bulk_queue *bq;
--	int numa, err, i;
- 
- 	/* Have map->numa_node, but choose node of redirect target CPU */
- 	numa = cpu_to_node(cpu);
-@@ -356,6 +447,9 @@ __cpu_map_entry_alloc(struct bpf_cpumap_val *value, u32 cpu, int map_id)
- 	get_cpu_map_entry(rcpu); /* 1-refcnt for being in cmap->cpu_map[] */
- 	get_cpu_map_entry(rcpu); /* 1-refcnt for kthread */
- 
-+	if (fd > 0 && __cpu_map_load_bpf_program(rcpu, fd))
-+		goto free_ptr_ring;
-+
- 	/* Make sure kthread runs on a single CPU */
- 	kthread_bind(rcpu->kthread, cpu);
- 	wake_up_process(rcpu->kthread);
-@@ -415,6 +509,8 @@ static void __cpu_map_entry_replace(struct bpf_cpu_map *cmap,
- 
- 	old_rcpu = xchg(&cmap->cpu_map[key_cpu], rcpu);
- 	if (old_rcpu) {
-+		if (old_rcpu->prog)
-+			bpf_prog_put(old_rcpu->prog);
- 		call_rcu(&old_rcpu->rcu, __cpu_map_entry_free);
- 		INIT_WORK(&old_rcpu->kthread_stop_wq, cpu_map_kthread_stop);
- 		schedule_work(&old_rcpu->kthread_stop_wq);
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 6bc2388141f6..2867df05cf82 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -5440,6 +5440,8 @@ static int generic_xdp_install(struct net_device *dev, struct netdev_bpf *xdp)
- 		for (i = 0; i < new->aux->used_map_cnt; i++) {
- 			if (dev_map_can_have_prog(new->aux->used_maps[i]))
- 				return -EINVAL;
-+			if (cpu_map_prog_allowed(new->aux->used_maps[i]))
-+				return -EINVAL;
- 		}
- 	}
- 
-@@ -8864,6 +8866,12 @@ int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
- 			return -EINVAL;
- 		}
- 
-+		if (prog->expected_attach_type == BPF_XDP_CPUMAP) {
-+			NL_SET_ERR_MSG(extack, "BPF_XDP_CPUMAP programs can not be attached to a device");
-+			bpf_prog_put(prog);
-+			return -EINVAL;
-+		}
-+
- 		/* prog->aux->id may be 0 for orphaned device-bound progs */
- 		if (prog->aux->id && prog->aux->id == prog_id) {
- 			bpf_prog_put(prog);
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index fa3b342985f9..856c8db22517 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -226,6 +226,7 @@ enum bpf_attach_type {
- 	BPF_CGROUP_INET4_GETSOCKNAME,
- 	BPF_CGROUP_INET6_GETSOCKNAME,
- 	BPF_XDP_DEVMAP,
-+	BPF_XDP_CPUMAP,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-@@ -3781,6 +3782,10 @@ struct bpf_devmap_val {
-  */
- struct bpf_cpumap_val {
- 	__u32 qsize;	/* queue size to remote target CPU */
-+	union {
-+		int   fd;	/* prog fd on map write */
-+		__u32 id;	/* prog id on map read */
-+	} bpf_prog;
- };
- 
- enum sk_action {
--- 
-2.26.2
-
+On Tue, Jun 23, 2020 at 09:17:49AM -0700, Yonghong Song wrote:
+> bpf iterator implments traversal of kernel data structures and these
+> data structures are passed to a bpf program for processing.
+> This gives great flexibility for users to examine kernel data
+> structure without using e.g. /proc/net which has limited and
+> fixed format.
+> 
+> Commit 138d0be35b14 ("net: bpf: Add netlink and ipv6_route bpf_iter targets")
+> implemented bpf iterators for netlink and ipv6_route.
+> This patch set intends to implement bpf iterators for tcp and udp.
+> 
+> Currently, /proc/net/tcp is used to print tcp4 stats and /proc/net/tcp6
+> is used to print tcp6 stats. /proc/net/udp[6] have similar usage model.
+> In contrast, only one tcp iterator is implemented and it is bpf program
+> resposibility to filter based on socket family. The same is for udp.
+> This will avoid another unnecessary traversal pass if users want
+> to check both tcp4 and tcp6.
+> 
+> Several helpers are also implemented in this patch
+>   bpf_skc_to_{tcp, tcp6, tcp_timewait, tcp_request, udp6}_sock
+> The argument for these helpers is not a fixed btf_id. For example,
+>   bpf_skc_to_tcp(struct sock_common *), or
+>   bpf_skc_to_tcp(struct sock *), or
+>   bpf_skc_to_tcp(struct inet_sock *), ...
+> are all valid. At runtime, the helper will check whether pointer cast
+> is legal or not. Please see Patch #5 for details.
+> 
+> Since btf_id's for both arguments and return value are known at
+> build time, the btf_id's are pre-computed once vmlinux btf becomes
+> valid. Jiri's "adding d_path helper" patch set
+>   https://lore.kernel.org/bpf/20200616100512.2168860-1-jolsa@kernel.org/T/
+> provides a way to pre-compute btf id during vmlinux build time.
+> This can be applied here as well. A followup patch can convert
+> to build time btf id computation after Jiri's patch landed.
+> 
+> Changelogs:
+>   v3 -> v4:
+>     - fix bpf_skc_to_{tcp_timewait, tcp_request} helper implementation
+>       as just checking sk->sk_state is not enough (Martin)
+>     - fix a few kernel test robot reported failures
+>     - move bpf_tracing_net.h from libbpf to selftests (Andrii)
+>     - remove __weak attribute from selftests CONFIG_HZ variables (Andrii)
+>   v2 -> v3:
+>     - change sock_cast*/SOCK_CAST* names to btf_sock* names for generality (Martin)
+>     - change gpl_license to false (Martin)
+>     - fix helper to cast to tcp timewait/request socket. (Martin)
+>   v1 -> v2:
+>     - guard init_sock_cast_types() defination properly with CONFIG_NET (Martin)
+>     - reuse the btf_ids, computed for new helper argument, for return
+>       values (Martin)
+>     - using BTF_TYPE_EMIT to express intent of btf type generation (Andrii)
+>     - abstract out common net macros into bpf_tracing_net.h (Andrii)
+Acked-by: Martin KaFai Lau <kafai@fb.com>
