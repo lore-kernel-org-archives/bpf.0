@@ -2,326 +2,102 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D105C433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 16:19:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACDEAC433DF
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 16:27:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 24D442076E
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 16:19:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 83E7E20780
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 16:27:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="A4Yhf8wv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sMLRTHSV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732212AbgFWQTU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 12:19:20 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:62578 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732174AbgFWQTU (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jun 2020 12:19:20 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05NG71Z7030093
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 09:19:20 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=XfXH41ELztuZrfm+eToc1698XtZKxIJquzk7A+OOqak=;
- b=A4Yhf8wvIspuqU4hknrB41t/yHec5Ljkstp1kj5eH6fdjgcdxJ1WWamAyKEz+K2h/oj9
- CAMAu5I3Z/8EvUpBA+zmh6xdRxTGxdBXyKbFv4xmtSwwJFU0N0FBs49eoO5Y/WmMyjXe
- aH25FEk377JbMDXhQTci/AcprYkrfOfzXWM= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31uk3cgpuc-12
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 09:19:19 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 23 Jun 2020 09:18:12 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 94D6C3701A38; Tue, 23 Jun 2020 09:18:07 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v4 14/15] selftests/bpf: implement sample udp/udp6 bpf_iter programs
-Date:   Tue, 23 Jun 2020 09:18:07 -0700
-Message-ID: <20200623161807.2501962-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200623161749.2500196-1-yhs@fb.com>
-References: <20200623161749.2500196-1-yhs@fb.com>
+        id S1732613AbgFWQ13 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 12:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732212AbgFWQ12 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 12:27:28 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF54C061573;
+        Tue, 23 Jun 2020 09:27:28 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id ne5so1679423pjb.5;
+        Tue, 23 Jun 2020 09:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zPA26VQSEKAOa0rfhz3zW4u7FT323RiZzt+Zev3RAO4=;
+        b=sMLRTHSV9EJwf6H4bWAsaQcE/FHOFhvDTfZqVhCrLt2LPWJvDbzl8dWf5IAlnTtU4P
+         TeCRYtoPi/ruLjcM7FiX1BxCHbeMEHHhJg8AEDnVdJIe8bzi5nx+z7JWNGneOSKCl1nw
+         G2ja7K+CbiaCBXVB6NRdrfrZV7TrIg5wJbhn4yhAbBgO7XYJfZUTgx0BzowEb29AQtpE
+         ayDRy88WU4pYBX/ZE0AyOYK6DfjqbrcLuhMYeNr4xJnhj75IabHKISHAyhyUXnZ8rj+l
+         OFNS468xEj24RKAPOrWVH+0nIOYBy6h5NEcNpbeb9GT5p3ADdnRyMJdVeWzElGOSy/+T
+         PeXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zPA26VQSEKAOa0rfhz3zW4u7FT323RiZzt+Zev3RAO4=;
+        b=r5Jr4ro+HoqWtKmwP2l4sv/Me0ajXnsd1S/1afSSRYUTTErK6/aisyR8gIMjgvdCEN
+         UEmztbGFXMChCvdYWY6jctZyGtH0uAX1+OoWhsYuiIJBaN8rQ0c5Aq2vYlcgUwYQEQFx
+         4n5GoaZd1yA8n+o+VQyaQjGJT0LWG/KY2lGqRzb6/5Fv+S13+1LNbpslytY+E04ImRge
+         hs3uxEsFLJEJo/osBRr9QmeeihOXtE07GLkY/y9w7MGqnw9I0e3YgR0dEpO36O9t0/30
+         knzdTG7PinNBSJnNkeWSk4l0Ydy3nO16821CMJzfVDcHSgUEJfqQeI2C3PL0ERGoCmlL
+         bEEQ==
+X-Gm-Message-State: AOAM532cLP5eOXbdip26YGKhY7iPJY6ZW+FeNPy0Z7zF5biFGpvFQ/Ni
+        Pvje7N4i7L+efeMK+KWeGI0N20K6
+X-Google-Smtp-Source: ABdhPJx+VmrkAc0ZE7xHDGvo224LzKBjbSzM8YoTgjTbubNQPu+8V2pcaTE7md471ebJV1k8cUa0Cw==
+X-Received: by 2002:a17:90b:915:: with SMTP id bo21mr24341349pjb.52.1592929647915;
+        Tue, 23 Jun 2020 09:27:27 -0700 (PDT)
+Received: from [10.1.10.11] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
+        by smtp.gmail.com with ESMTPSA id u25sm17182337pfm.115.2020.06.23.09.27.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jun 2020 09:27:26 -0700 (PDT)
+Subject: Re: [PATCH bpf-next v3 09/15] bpf: add bpf_skc_to_udp6_sock() helper
+To:     Yonghong Song <yhs@fb.com>, Eric Dumazet <eric.dumazet@gmail.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+        Martin KaFai Lau <kafai@fb.com>
+References: <20200623003626.3072825-1-yhs@fb.com>
+ <20200623003636.3074473-1-yhs@fb.com>
+ <d0a594f6-bd83-bb48-01ce-bb960fdf8eb3@gmail.com>
+ <a721817d-7382-f3d1-9cd0-7e6564b70f8b@fb.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <37d6021e-1f93-259e-e90a-5cda7fddcb21@gmail.com>
+Date:   Tue, 23 Jun 2020 09:27:25 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-23_10:2020-06-23,2020-06-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- impostorscore=0 suspectscore=8 phishscore=0 mlxlogscore=999
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 adultscore=0 spamscore=0
- malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006120000 definitions=main-2006230120
-X-FB-Internal: deliver
+In-Reply-To: <a721817d-7382-f3d1-9cd0-7e6564b70f8b@fb.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On my VM, I got identical results between /proc/net/udp[6] and
-the udp{4,6} bpf iterator.
 
-For udp6:
-  $ cat /sys/fs/bpf/p1
-    sl  local_address                         remote_address             =
-           st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode=
- ref pointer drops
-   1405: 000080FE00000000FF7CC4D0D9EFE4FE:0222 00000000000000000000000000=
-000000:0000 07 00000000:00000000 00:00000000 00000000   193        0 1918=
-3 2 0000000029eab111 0
-  $ cat /proc/net/udp6
-    sl  local_address                         remote_address             =
-           st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode=
- ref pointer drops
-   1405: 000080FE00000000FF7CC4D0D9EFE4FE:0222 00000000000000000000000000=
-000000:0000 07 00000000:00000000 00:00000000 00000000   193        0 1918=
-3 2 0000000029eab111 0
 
-For udp4:
-  $ cat /sys/fs/bpf/p4
-    sl  local_address rem_address   st tx_queue rx_queue tr tm->when retr=
-nsmt   uid  timeout inode ref pointer drops
-   2007: 00000000:1F90 00000000:0000 07 00000000:00000000 00:00000000 000=
-00000     0        0 72540 2 000000004ede477a 0
-  $ cat /proc/net/udp
-    sl  local_address rem_address   st tx_queue rx_queue tr tm->when retr=
-nsmt   uid  timeout inode ref pointer drops
-   2007: 00000000:1F90 00000000:0000 07 00000000:00000000 00:00000000 000=
-00000     0        0 72540 2 000000004ede477a 0
+On 6/22/20 7:22 PM, Yonghong Song wrote:
+> 
+> 
+> On 6/22/20 6:47 PM, Eric Dumazet wrote:
+&
+>>
+>> Why is the sk_fullsock(sk) needed ?
+> 
+> The parameter 'sk' could be a sock_common. That is why the
+> helper name bpf_skc_to_udp6_sock implies. The sock_common cannot
+> access sk_protocol, hence we requires sk_fullsock(sk) here.
+> Did I miss anything?
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- tools/testing/selftests/bpf/progs/bpf_iter.h  | 16 ++++
- .../selftests/bpf/progs/bpf_iter_udp4.c       | 71 +++++++++++++++++
- .../selftests/bpf/progs/bpf_iter_udp6.c       | 79 +++++++++++++++++++
- 3 files changed, 166 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
+OK, if arbitrary sockets can land here, you need also to check sk_type
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter.h b/tools/testing=
-/selftests/bpf/progs/bpf_iter.h
-index bde23e16e777..17db3bac518b 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter.h
-@@ -9,6 +9,8 @@
- #define bpf_iter__task_file bpf_iter__task_file___not_used
- #define bpf_iter__tcp bpf_iter__tcp___not_used
- #define tcp6_sock tcp6_sock___not_used
-+#define bpf_iter__udp bpf_iter__udp___not_used
-+#define udp6_sock udp6_sock___not_used
- #include "vmlinux.h"
- #undef bpf_iter_meta
- #undef bpf_iter__bpf_map
-@@ -18,6 +20,8 @@
- #undef bpf_iter__task_file
- #undef bpf_iter__tcp
- #undef tcp6_sock
-+#undef bpf_iter__udp
-+#undef udp6_sock
-=20
- struct bpf_iter_meta {
- 	struct seq_file *seq;
-@@ -62,3 +66,15 @@ struct tcp6_sock {
- 	struct tcp_sock	tcp;
- 	struct ipv6_pinfo inet6;
- } __attribute__((preserve_access_index));
-+
-+struct bpf_iter__udp {
-+	struct bpf_iter_meta *meta;
-+	struct udp_sock *udp_sk;
-+	uid_t uid __attribute__((aligned(8)));
-+	int bucket __attribute__((aligned(8)));
-+} __attribute__((preserve_access_index));
-+
-+struct udp6_sock {
-+	struct udp_sock	udp;
-+	struct ipv6_pinfo inet6;
-+} __attribute__((preserve_access_index));
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c b/tools/te=
-sting/selftests/bpf/progs/bpf_iter_udp4.c
-new file mode 100644
-index 000000000000..7053784575e4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include "bpf_iter.h"
-+#include "bpf_tracing_net.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_endian.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+static long sock_i_ino(const struct sock *sk)
-+{
-+	const struct socket *sk_socket =3D sk->sk_socket;
-+	const struct inode *inode;
-+	unsigned long ino;
-+
-+	if (!sk_socket)
-+		return 0;
-+
-+	inode =3D &container_of(sk_socket, struct socket_alloc, socket)->vfs_in=
-ode;
-+	bpf_probe_read(&ino, sizeof(ino), &inode->i_ino);
-+	return ino;
-+}
-+
-+SEC("iter/udp")
-+int dump_udp4(struct bpf_iter__udp *ctx)
-+{
-+	struct seq_file *seq =3D ctx->meta->seq;
-+	struct udp_sock *udp_sk =3D ctx->udp_sk;
-+	struct inet_sock *inet;
-+	__u16 srcp, destp;
-+	__be32 dest, src;
-+	__u32 seq_num;
-+	int rqueue;
-+
-+	if (udp_sk =3D=3D (void *)0)
-+		return 0;
-+
-+	seq_num =3D ctx->meta->seq_num;
-+	if (seq_num =3D=3D 0)
-+		BPF_SEQ_PRINTF(seq,
-+			       "  sl  local_address rem_address   st tx_queue "
-+			       "rx_queue tr tm->when retrnsmt   uid  timeout "
-+			       "inode ref pointer drops\n");
-+
-+	/* filter out udp6 sockets */
-+	inet =3D &udp_sk->inet;
-+	if (inet->sk.sk_family =3D=3D AF_INET6)
-+		return 0;
-+
-+	inet =3D &udp_sk->inet;
-+	dest =3D inet->inet_daddr;
-+	src =3D inet->inet_rcv_saddr;
-+	srcp =3D bpf_ntohs(inet->inet_sport);
-+	destp =3D bpf_ntohs(inet->inet_dport);
-+	rqueue =3D inet->sk.sk_rmem_alloc.counter - udp_sk->forward_deficit;
-+
-+	BPF_SEQ_PRINTF(seq, "%5d: %08X:%04X %08X:%04X ",
-+		       ctx->bucket, src, srcp, dest, destp);
-+
-+	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK =
-%u\n",
-+		       inet->sk.sk_state,
-+		       inet->sk.sk_wmem_alloc.refs.counter - 1,
-+		       rqueue,
-+		       0, 0L, 0, ctx->uid, 0,
-+		       sock_i_ino(&inet->sk),
-+		       inet->sk.sk_refcnt.refs.counter, udp_sk,
-+		       inet->sk.sk_drops.counter);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c b/tools/te=
-sting/selftests/bpf/progs/bpf_iter_udp6.c
-new file mode 100644
-index 000000000000..c1175a6ecf43
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include "bpf_iter.h"
-+#include "bpf_tracing_net.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_endian.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+#define IPV6_SEQ_DGRAM_HEADER				\
-+	"  sl  "					\
-+	"local_address                         "	\
-+	"remote_address                        "	\
-+	"st tx_queue rx_queue tr tm->when retrnsmt"	\
-+	"   uid  timeout inode ref pointer drops\n"
-+
-+static long sock_i_ino(const struct sock *sk)
-+{
-+	const struct socket *sk_socket =3D sk->sk_socket;
-+	const struct inode *inode;
-+	unsigned long ino;
-+
-+	if (!sk_socket)
-+		return 0;
-+
-+	inode =3D &container_of(sk_socket, struct socket_alloc, socket)->vfs_in=
-ode;
-+	bpf_probe_read(&ino, sizeof(ino), &inode->i_ino);
-+	return ino;
-+}
-+
-+SEC("iter/udp")
-+int dump_udp6(struct bpf_iter__udp *ctx)
-+{
-+	struct seq_file *seq =3D ctx->meta->seq;
-+	struct udp_sock *udp_sk =3D ctx->udp_sk;
-+	const struct in6_addr *dest, *src;
-+	struct udp6_sock *udp6_sk;
-+	struct inet_sock *inet;
-+	__u16 srcp, destp;
-+	__u32 seq_num;
-+	int rqueue;
-+
-+	if (udp_sk =3D=3D (void *)0)
-+		return 0;
-+
-+	seq_num =3D ctx->meta->seq_num;
-+	if (seq_num =3D=3D 0)
-+		BPF_SEQ_PRINTF(seq, IPV6_SEQ_DGRAM_HEADER);
-+
-+	udp6_sk =3D bpf_skc_to_udp6_sock(udp_sk);
-+	if (udp6_sk =3D=3D (void *)0)
-+		return 0;
-+
-+	inet =3D &udp_sk->inet;
-+	srcp =3D bpf_ntohs(inet->inet_sport);
-+	destp =3D bpf_ntohs(inet->inet_dport);
-+	rqueue =3D inet->sk.sk_rmem_alloc.counter - udp_sk->forward_deficit;
-+	dest  =3D &inet->sk.sk_v6_daddr;
-+	src   =3D &inet->sk.sk_v6_rcv_saddr;
-+
-+	BPF_SEQ_PRINTF(seq, "%5d: %08X%08X%08X%08X:%04X %08X%08X%08X%08X:%04X "=
-,
-+		       ctx->bucket,
-+		       src->s6_addr32[0], src->s6_addr32[1],
-+		       src->s6_addr32[2], src->s6_addr32[3], srcp,
-+		       dest->s6_addr32[0], dest->s6_addr32[1],
-+		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
-+
-+	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK =
-%u\n",
-+		       inet->sk.sk_state,
-+		       inet->sk.sk_wmem_alloc.refs.counter - 1,
-+		       rqueue,
-+		       0, 0L, 0, ctx->uid, 0,
-+		       sock_i_ino(&inet->sk),
-+		       inet->sk.sk_refcnt.refs.counter, udp_sk,
-+		       inet->sk.sk_drops.counter);
-+
-+	return 0;
-+}
---=20
-2.24.1
 
