@@ -2,112 +2,190 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF5B7C433DF
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 10:51:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B29E3C433E0
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 11:27:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CCC3420768
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 10:51:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D90E2072E
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 11:27:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="j5JxL8i2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tScBdMx+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732339AbgFWKvb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 06:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S1732294AbgFWL1U (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 07:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732348AbgFWKvb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 06:51:31 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD8EC061755
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 03:51:29 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id g139so10605966lfd.10
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 03:51:29 -0700 (PDT)
+        with ESMTP id S1732189AbgFWL1T (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 07:27:19 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD96C061573;
+        Tue, 23 Jun 2020 04:27:19 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id l17so18360385qki.9;
+        Tue, 23 Jun 2020 04:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=jAVX5qNY3xX90Cjh1Jp/0eHcv8V0BN7tJ1RLPzcNmkY=;
-        b=j5JxL8i2bmFYP+AJWUrt5NYM1E/hZ1+g76xW4twVTVGKD3ts2RRa6z2EYc2m9ZnAkp
-         htcEhGDxIgIlsNHBS1Kmk/5YEfxOlOtC9VxcyKfPjjSuaDzF4BDD4oDVTHMFcMHHqNc1
-         ohAVpEy+3IDrl8Ar9rrgMHqEYJeqWhluuXYJY=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=cMD8in+tcSZ+cxLcLApA3NSEHIECL6G2aR2hs0xW3CM=;
+        b=tScBdMx+HCr8IkPx+oY+4m3Qx2Y9c1/rjC8ioAfphyv/ELknRv571qL7I4AJrwXPUL
+         B9buMDByA8fU2FEv3t1GElqrIdDCZ6QVWe8yfhOf0VfPuL+GePi9Vb+7d/wZTIdDpZq5
+         8watSm6p/PgvpQ/yqIP7pmCGKJlX3LNLIaXZy4XpW5BdZJTccG5eezk5f0SK9jQhrlMZ
+         nIIohI+oVp3TadiSEH6Yep55iMSzQW4+f6DJvPXoTgTqIs1Q7Aed19gBe/Ez5sHLXV5w
+         Tr5AcMW0mGZo+g7T1LGFRCbtwoB2uAXWAXbepkm5pwcaV4fiPENj+EYPhRckkINyaUd+
+         vmRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=jAVX5qNY3xX90Cjh1Jp/0eHcv8V0BN7tJ1RLPzcNmkY=;
-        b=phKhjoOb/u+k0Xqz8zv77MtXB8G3U/LNBiB8O0eYfxm4xKXHRRNB8PiiWpI79BiPsV
-         TPMF9NhS5zEEVI2BV2zVZXpR6x9s1PZ8bcuBL4n8uro9xNeO+Cz4br01Gcd5ahlDR7J5
-         IjIFcgI25pWd3Dvz1V7a4eShKdqE9KSFk6W7Koz6HTm4MXUyw+3pJdN00vDifaCWH17k
-         ZLs0b1MRDFanZVh2hpjGNb3TtbkWKuaqBnRMvdE9m0hplg6PlzZ/X2iQ5KF9B/cUTPZe
-         kjA9lX216ulgZgmCEpxg6nb6Evjt6hBedZtjOOLToRJav62GO2qwh0rCevp7v3ZgPsz3
-         aLcQ==
-X-Gm-Message-State: AOAM5309/QVoWcX2oi86gU3COemWo3rX6UT8yCr8vr55XJErk4NEL9uX
-        R3j61USuWm0SlqvKTzyzxysacQ==
-X-Google-Smtp-Source: ABdhPJxbnGdD/ZA++Wu2bUgEA8N29ibeSN0ZMP0hSCkMfEx4C/B2e6V4J2ZR13lythD02XxEYCmb5w==
-X-Received: by 2002:a19:8407:: with SMTP id g7mr12472742lfd.61.1592909487933;
-        Tue, 23 Jun 2020 03:51:27 -0700 (PDT)
-Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id q190sm3200937ljb.29.2020.06.23.03.51.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 03:51:27 -0700 (PDT)
-References: <20200622160300.636567-1-jakub@cloudflare.com> <20200622160300.636567-3-jakub@cloudflare.com> <CAEf4BzYY8NcmprF-V3SxBgiF0mqNpK-qrymt=wvz6iCON=geiw@mail.gmail.com>
-User-agent: mu4e 1.1.0; emacs 26.3
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        kernel-team@cloudflare.com
-Subject: Re: [PATCH bpf-next 2/3] bpf, netns: Keep attached programs in bpf_prog_array
-In-reply-to: <CAEf4BzYY8NcmprF-V3SxBgiF0mqNpK-qrymt=wvz6iCON=geiw@mail.gmail.com>
-Date:   Tue, 23 Jun 2020 12:51:26 +0200
-Message-ID: <87tuz2m4wh.fsf@cloudflare.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cMD8in+tcSZ+cxLcLApA3NSEHIECL6G2aR2hs0xW3CM=;
+        b=NE933Q+X4EO+ETDBCdh5yTYBvolY0DKK0EGv2p8Wv9tCeB1bMlbEq9IknTtB4mJLLW
+         qV6VWf3gVXyaHY7jbti2s5iuCguLbpNYZWFfb+jKjKlHU5EIVBQ+JDgEUkke/lbn4FdV
+         rbpeJ5HAhD+RvB20ecEayJaMLw4MwXMdw9BQqQ1tyq9/yoxd0d/Y6Fc545QYdjzcgNSh
+         1IyqWVTI7UmC9jQoNVrPnfCQLF+GsTYBSlDaQGUhO4wMrpFrbGaLohh8kExP/hZycIG1
+         NjdZlGgP+0ofdzRkOerfTY7i3zoQjEGtx+pKAn8b8cLOA422YUD4grdrDtTAT7/snsc9
+         ywEg==
+X-Gm-Message-State: AOAM530qnKhRGyZpfzCQrG5kzQWDWLeVW4c8OEdX6yKuELlPt9GqQkBU
+        cJMa3BSATMAgnxZxw7JmXvQ30x5w/CFM5u9pxfs=
+X-Google-Smtp-Source: ABdhPJzA0PI8zSWVsq7NsZXokgRHQ67Muc5QOK414TzszbhAwWE1zmIwGyxjtOIcjCdAHxNAxVMv1xuMgiK9/IHzebs=
+X-Received: by 2002:a05:620a:148d:: with SMTP id w13mr20318528qkj.248.1592911638820;
+ Tue, 23 Jun 2020 04:27:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <CAPydje97m+hG3_Cqg560uHoq8aKG9eDpTHA1eJC=hLuKtMf_vw@mail.gmail.com>
+ <CAJ+HfNgi5wEwmFTgKpR1KemVm3p0FCPTd8V+BBWC6C59OO9O8Q@mail.gmail.com>
+In-Reply-To: <CAJ+HfNgi5wEwmFTgKpR1KemVm3p0FCPTd8V+BBWC6C59OO9O8Q@mail.gmail.com>
+From:   Yahui Chen <goodluckwillcomesoon@gmail.com>
+Date:   Tue, 23 Jun 2020 19:27:06 +0800
+Message-ID: <CAPydje-tiJ6F5i9=o9VLMJK0_j+KV5XGOok3Wq+okHdOS9k0Aw@mail.gmail.com>
+Subject: Re: Talk about AF_XDP support multithread concurrently receive packet
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Xdp <xdp-newbies@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 08:23 AM CEST, Andrii Nakryiko wrote:
-> On Mon, Jun 22, 2020 at 9:04 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
->>
->> Prepare for having multi-prog attachments for new netns attach types by
->> storing programs to run in a bpf_prog_array, which is well suited for
->> iterating over programs and running them in sequence.
->>
->> Because bpf_prog_array is dynamically resized, after this change a
->> potentially blocking memory allocation in bpf(PROG_QUERY) callback can
->> happen, in order to collect program IDs before copying the values to
->> user-space supplied buffer. This forces us to adapt how we protect access
->> to the attached program in the callback. As bpf_prog_array_copy_to_user()
->> helper can sleep, we switch from an RCU read lock to holding a mutex that
->> serializes updaters.
->>
->> To handle bpf(PROG_ATTACH) scenario when we are replacing an already
->> attached program, we introduce a new bpf_prog_array helper called
->> bpf_prog_array_replace_item that will exchange the old program with a new
->> one. bpf-cgroup does away with such helper by computing an index into the
->> array based on program position in an external list of attached
->> programs/links. Such approach seems fragile, however, when dummy progs can
->> be left in the array after a memory allocation failure on link release.
+Hi Bj=C3=B6rn,
+Thx for your clarification.
+
+Lock-free queue may be a better choice, which almost does not impact
+performance. The XDP mode is multi-producer/single-consumer for the
+filling queue when receiving packets, and single-producer/multi-consumer
+for the complete queue when sending packets.
+
+So, the date structure for lock-free queue could be defined blow:
+
+$ git diff xsk.h
+diff --git a/src/xsk.h b/src/xsk.h
+index 584f682..2e24bc8 100644
+--- a/src/xsk.h
++++ b/src/xsk.h
+@@ -23,20 +23,26 @@ extern "C" {
+ #endif
+
+ /* Do not access these members directly. Use the functions below. */
+-#define DEFINE_XSK_RING(name) \
+-struct name { \
+-       __u32 cached_prod; \
+-       __u32 cached_cons; \
+-       __u32 mask; \
+-       __u32 size; \
+-       __u32 *producer; \
+-       __u32 *consumer; \
+-       void *ring; \
+-       __u32 *flags; \
+-}
+-
+-DEFINE_XSK_RING(xsk_ring_prod);
+-DEFINE_XSK_RING(xsk_ring_cons);
++struct xsk_ring_prod{
++       __u32 cached_prod_head;
++       __u32 cached_prod_tail;
++       __u32 cached_cons;
++       __u32 size;
++       __u32 *producer;
++       __u32 *consumer;
++       void *ring;
++       __u32 *flags;
++};
++struct xsk_ring_cons{
++       __u32 cached_prod;
++       __u32 cached_cons_head;
++       __u32 cached_cons_tail;
++       __u32 size;
++       __u32 *producer;
++       __u32 *consumer;
++       void *ring;
++       __u32 *flags;
++};
+
+The element mask, is equal `size - 1`, could be removed to remain the
+structure size unchanged.
+
+To sum up, it's possible to consider impelementing lock-free queue
+function to support mc/sp and sc/mp.
+
+Thx.
+
+
+Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> =E4=BA=8E2020=E5=B9=B46=E6=9C=
+=8823=E6=97=A5=E5=91=A8=E4=BA=8C =E4=B8=8B=E5=8D=883:27=E5=86=99=E9=81=93=
+=EF=BC=9A
 >
-> bpf-cgroup can have the same BPF program present multiple times in the
-> effective prog array due to inheritance. It also has strict
-> guarantee/requirement about relative order of programs in parent
-> cgroup vs child cgroups. For such cases, replacing a BPF program based
-> on its pointer is not going to work correctly.
-
-Thanks for the explanation. That did not occur to me. Incorporated it
-into the description in v2.
-
+> On Tue, 23 Jun 2020 at 08:21, Yahui Chen <goodluckwillcomesoon@gmail.com>=
+ wrote:
+> >
+> > I have make an issue for the libbpf in github, issue number 163.
+> >
+> > Andrii suggest me sending a mail here. So ,I paste out the content of t=
+he issue:
+> >
 >
-> We do need to make sure that cgroup detachment never fails by falling
-> back to replacing BPF prog with dummy prog, though. If you are
-> interested in a challenge, you are very welcome to do that! :)
-
-I keep a list of tasks for a slow day.
-
-[...]
+> Yes, and the xdp-newsbies is an even better list for these kinds of
+> discussions (added).
+>
+> > Currently, libbpf do not support concurrently receive pkts using AF_XDP=
+.
+> >
+> > For example: I create 4 af_xdp sockets on nic's ring 0. Four sockets
+> > receiving packets concurrently can't work correctly because the API of
+> > cq `xsk_ring_prod__reserve` and `xsk_ring_prod__submit` don't support
+> > concurrence.
+> >
+>
+> In other words, you are using shared umem sockets. The 4 sockets can
+> potentially receive packets from queue 0, depending on how the XDP
+> program is done.
+>
+> > So, my question is why libbpf was designed non-concurrent mode, is the
+> > limit of kernel or other reason? I want to change the code to support
+> > concurrent receive pkts, therefore I want to find out whether this is
+> > theoretically supported.
+> >
+>
+> You are right that the AF_XDP functionality in libbpf is *not* by
+> itself multi-process/thread safe, and this is deliberate. From the
+> libbpf perspective we cannot know how a user will construct the
+> application, and we don't want to penalize the single-thread/process
+> case.
+>
+> It's entirely up to you to add explicit locking, if the
+> single-producer/single-consumer queues are shared between
+> threads/processes. Explicit synchronization is required using, say,
+> POSIX mutexes.
+>
+> Does that clear things up?
+>
+>
+> Cheers,
+> Bj=C3=B6rn
+>
+> > Thx.
