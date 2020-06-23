@@ -2,110 +2,109 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B4EDC433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 20:59:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7BDEC433DF
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:02:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4031420656
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 20:59:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="m+WSj3bt"
+	by mail.kernel.org (Postfix) with ESMTP id 8C34C20663
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:02:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391041AbgFWU7n (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 16:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390114AbgFWU7l (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 16:59:41 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD95C061573
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 13:59:40 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id 9so94300ljc.8
-        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 13:59:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=TT2FZxgpjI3VkckydSkMTZ86IbhbF6gKg3r0vREiuvk=;
-        b=m+WSj3btBtZQ/D6lseNcykWUPiFeFygNNYhSssoKxz+FopYF+OQrtacfrQKI7odjvK
-         GvvCY2sAIPaL2PqhZBWLCdHEcWN0UxRSMRQ9GLAgKuNMgqflcjNgQNe4dXmz6LP2HOmG
-         v0S/jglF4lP8Pp5PTd4K/PmrhQxhWF8yhGJy4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=TT2FZxgpjI3VkckydSkMTZ86IbhbF6gKg3r0vREiuvk=;
-        b=MuKpl8GfqoybR194JC6Q1hnx9mT8Axn0FUhT1repTaivRvLWVhaaz4MGQaJazrG7Ba
-         j7eJ9r1Wu3lzr9wGu3CVmy5+/pRA51UBXRK+nQRhPAfa2ndUlejAkAxAKBbYy+wVirvT
-         25BA6iYiqOsR5eilLcySKIZ0Fv8fgFs/0OBTiahtrPt76+5lzoUqTrryH3twLdI7kmrY
-         Gm0lyNuOh9SvoepqVOpgWetC6fsbJFmcO4GvIEWrecYuQ62EWKXl8NtmnTxcRSYpWYk0
-         5huJ0pRxSukztrs+RQkW1m4hI/fc3CnwJIl6tvFpFciCpSoJgvh3GKSXAwfXQo/jlclc
-         t9Eg==
-X-Gm-Message-State: AOAM533QUnOniLJpADBnnVJig8Y8n5OzfaFStzk4AtC0XDMUXaA7NASI
-        V4SFpBhj2ReqBDoHmZaKPjBC3g==
-X-Google-Smtp-Source: ABdhPJzVM7jBvlMi/1dIDGHjpIwo7Vb0q67nlm85VQ9OwQDLnc5UYl+TRxakJLLS1YEM9e+jS1BCZg==
-X-Received: by 2002:a05:651c:544:: with SMTP id q4mr12640870ljp.310.1592945979425;
-        Tue, 23 Jun 2020 13:59:39 -0700 (PDT)
-Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id r15sm3518864ljm.31.2020.06.23.13.59.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 13:59:38 -0700 (PDT)
-References: <20200623103459.697774-1-jakub@cloudflare.com> <20200623103459.697774-3-jakub@cloudflare.com> <20200623193352.4mdmfg4mfmgfeku4@kafai-mbp.dhcp.thefacebook.com>
-User-agent: mu4e 1.1.0; emacs 26.3
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, Andrii Nakryiko <andriin@fb.com>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf, netns: Keep attached programs in bpf_prog_array
-In-reply-to: <20200623193352.4mdmfg4mfmgfeku4@kafai-mbp.dhcp.thefacebook.com>
-Date:   Tue, 23 Jun 2020 22:59:37 +0200
-Message-ID: <87sgelmrba.fsf@cloudflare.com>
+        id S2392040AbgFWVCc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 17:02:32 -0400
+Received: from www62.your-server.de ([213.133.104.62]:44484 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392030AbgFWUjP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 16:39:15 -0400
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jnphK-0000bs-1x; Tue, 23 Jun 2020 22:39:14 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jnphJ-000UCZ-Ph; Tue, 23 Jun 2020 22:39:13 +0200
+Subject: Re: [PATCH v3 bpf-next 2/3] selftests/bpf: add variable-length data
+ concatenation pattern test
+To:     Andrii Nakryiko <andriin@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, ast@fb.com, john.fastabend@gmail.com
+Cc:     andrii.nakryiko@gmail.com, kernel-team@fb.com
+References: <20200623032224.4020118-1-andriin@fb.com>
+ <20200623032224.4020118-2-andriin@fb.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <7ed6ada5-2539-3090-0db7-0f65b67e4699@iogearbox.net>
+Date:   Tue, 23 Jun 2020 22:39:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20200623032224.4020118-2-andriin@fb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.3/25852/Tue Jun 23 15:09:58 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 09:33 PM CEST, Martin KaFai Lau wrote:
-> On Tue, Jun 23, 2020 at 12:34:58PM +0200, Jakub Sitnicki wrote:
->
-> [ ... ]
->
->> @@ -93,8 +108,16 @@ static int bpf_netns_link_update_prog(struct bpf_link *link,
->>  		goto out_unlock;
->>  	}
->>
->> +	run_array = rcu_dereference_protected(net->bpf.run_array[type],
->> +					      lockdep_is_held(&netns_bpf_mutex));
->> +	if (run_array)
->> +		ret = bpf_prog_array_replace_item(run_array, link->prog, new_prog);
->> +	else
-> When will this happen?
+Hey Andrii,
 
-This will never happen, unless there is a bug. As long as there is a
-link attached, run_array should never be detached (null). Because it can
-be handled gracefully, we fail the bpf(LINK_UPDATE) syscall.
+On 6/23/20 5:22 AM, Andrii Nakryiko wrote:
+> Add selftest that validates variable-length data reading and concatentation
+> with one big shared data array. This is a common pattern in production use for
+> monitoring and tracing applications, that potentially can read a lot of data,
+> but overall read much less. Such pattern allows to determine precisely what
+> amount of data needs to be sent over perfbuf/ringbuf and maximize efficiency.
+> 
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 
-Your question makes me think that perhaps it should trigger a warning,
-with WARN_ON_ONCE, to signal clearly to the reader that this is an
-unexpected state.
+Currently getting the below errors on these tests. My last clang/llvm git build
+is on 4676cf444ea2 ("[Clang] Skip adding begin source location for PragmaLoopHint'd
+loop when[...]"):
 
-WDYT?
+# ./test_progs -t varlen
+test_varlen:PASS:skel_open 0 nsec
+test_varlen:PASS:skel_attach 0 nsec
+test_varlen:FAIL:check got 0 != exp 8
+test_varlen:FAIL:check got 0 != exp 7
+test_varlen:FAIL:check got 0 != exp 15
+test_varlen:FAIL:content_check doesn't match!test_varlen:FAIL:check got 0 != exp 8
+test_varlen:FAIL:check got 0 != exp 7
+test_varlen:FAIL:check got 0 != exp 15
+test_varlen:FAIL:content_check doesn't match!test_varlen:FAIL:check got 0 != exp 8
+test_varlen:FAIL:check got 0 != exp 7
+test_varlen:FAIL:check got 0 != exp 15
+test_varlen:FAIL:content_check doesn't match!test_varlen:FAIL:check got 0 != exp 8
+test_varlen:FAIL:check got 0 != exp 7
+test_varlen:FAIL:check got 0 != exp 15
+test_varlen:FAIL:content_check doesn't match!
+#87 varlen:FAIL
+Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
 
->
->> +		ret = -ENOENT;
->> +	if (ret)
->> +		goto out_unlock;
->> +
->>  	old_prog = xchg(&link->prog, new_prog);
->> -	rcu_assign_pointer(net->bpf.progs[type], new_prog);
->>  	bpf_prog_put(old_prog);
->>
->>  out_unlock:
->> @@ -142,14 +165,38 @@ static const struct bpf_link_ops bpf_netns_link_ops = {
->>  	.show_fdinfo = bpf_netns_link_show_fdinfo,
->>  };
+# ./test_progs-no_alu32 -t varlen
+Switching to flavor 'no_alu32' subdirectory...
+test_varlen:PASS:skel_open 0 nsec
+test_varlen:PASS:skel_attach 0 nsec
+test_varlen:FAIL:check got 0 != exp 8
+test_varlen:FAIL:check got 0 != exp 7
+test_varlen:FAIL:check got 0 != exp 15
+test_varlen:FAIL:content_check doesn't match!test_varlen:FAIL:check got 0 != exp 8
+test_varlen:FAIL:check got 0 != exp 7
+test_varlen:FAIL:check got 0 != exp 15
+test_varlen:FAIL:content_check doesn't match!test_varlen:FAIL:check got 0 != exp 8
+test_varlen:FAIL:check got 0 != exp 7
+test_varlen:FAIL:check got 0 != exp 15
+test_varlen:FAIL:content_check doesn't match!test_varlen:FAIL:check got 0 != exp 8
+test_varlen:FAIL:check got 0 != exp 7
+test_varlen:FAIL:check got 0 != exp 15
+test_varlen:FAIL:content_check doesn't match!
+#87 varlen:FAIL
+Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+
+Thanks,
+Daniel
