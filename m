@@ -2,212 +2,212 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A0D6C433DF
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 22:54:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AD97C433DF
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 23:08:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2CFF320780
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 22:54:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 638B620874
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 23:08:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hRbV37Pa";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="SZKzfFUE"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fU2t/GtP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387568AbgFWWyM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 18:54:12 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:54876 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387656AbgFWWyM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jun 2020 18:54:12 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05NMn4wF030165;
-        Tue, 23 Jun 2020 15:53:57 -0700
+        id S2388199AbgFWXII (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 19:08:08 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14134 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387848AbgFWXIH (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jun 2020 19:08:07 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05NN76Ff021043
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 16:08:07 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=ssfuOkTftakwRXLmK/K9W+cJYvjdQhvmbcG5WZiL88I=;
- b=hRbV37Pa6tExxKXVDgMhsfMbpUJ4GMrmvlohTGlgXPqObvVNlPvXkpjNvj4m+NRrnZBo
- s8FQF/zp0rd6aQgaKXtXm0YM+ZMjkQJBJg8ggAophiAyDv9BBMRUBd5nbfNmhGHorEnB
- G4NDnLNLfbF8SBO3BRw9V9slMyUmYUqzl8I= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=9tkT5IZd256zAt286gxF0Go74BEIw2yWSn/HUxO5LY0=;
+ b=fU2t/GtPI15XlyplCvZsmOQhTtU1i4wSQJ5A6dxweZoz0oOUcNqn1Q5vQZot0v1cIwZE
+ XuI4KrGKyAOedmFe6MQO1764y/NrvzZnBDDI8xzHoK3o4yZdlukJnxOpInX0BiJJyX3R
+ VfVMr+TK59HszRxSlNR28Bh1odE2mKzRPMo= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31utqsr1rr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 23 Jun 2020 15:53:57 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.198) with Microsoft SMTP Server
+        by mx0a-00082601.pphosted.com with ESMTP id 31utrvr3pp-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 23 Jun 2020 16:08:07 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 23 Jun 2020 15:53:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l/3uyrMvmYg3CmFpiNtO1XM50uU+/MH+VUKThHjc9TqLGJvqzSkeHyDVaxQ9uCvMwzaTFoO9yhR0RbRAvaQ7W+DQv6j2c/ceihl9QP2qXxpZkJFXtHWnUlALfAlhmWQ00sAjHaqjhx2XGxO3AvjGUB55IgiZkq+9CAvQ1NAZdIYUKZfBTUu5RbmBsX/3nzDhq7Me1XgJL4SKDbhEBhBf0rp/tlyJ/x98M9B19mWslcHJtzlB0OQ5Z43eoUNVH5V63+K3uUwyhpxrnr1Y/zw/95BKAja4PdBSKEuu68c22Ejat37P9V1e+xyqPKR2qBdr8gukTtPb9IiNuZpTagyIGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ssfuOkTftakwRXLmK/K9W+cJYvjdQhvmbcG5WZiL88I=;
- b=kUn00bxWiTZk2zYI/kE3aP0I/f4Yrtuyj9D0cna6WTcv28BRGbVxF0vrt+SWhUpkj5pbl0G8JO5JTGLvBnp7OyuAuYcTsJPoVcGnOOM5yULTrOMLQ7QIFEIeFNJ7c3bDT5CIDD3Qs1nwrmYxa0y9dhOfv898hklZUkJ3yXW6cDVid+/3IdaDVyl5WJaEVfQLlilDIisS7kSv3uXlJ5F3nNF3K72YGrJ65fjV9kMjKNfLkA4ykoBg8Alc59+DYI7P/NDO+KNYCHMkJZIxssBslMPR7tYDvMFlGAQomHJCAdNPMi4CHaJ0JOhDbLzT8Ciod5RzkmWBmJmrzTaumKOBIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ssfuOkTftakwRXLmK/K9W+cJYvjdQhvmbcG5WZiL88I=;
- b=SZKzfFUE6kOtMRwFU0oMTryoMAq36ScO6nXVL+P9d5/zhG2xBqJ96STgtfcZ5oEF1HpmeXkYfPc5fm0bwKRzLIcApaT3qz5HAEiayZOldLOeSKaoi2eih4rQ6N9HJbUY7G0c8jS5/8rPwNP/IAQld+YMmYG5OrIMIExOhMpo21g=
-Received: from BYAPR15MB2999.namprd15.prod.outlook.com (2603:10b6:a03:fa::12)
- by BYAPR15MB2694.namprd15.prod.outlook.com (2603:10b6:a03:158::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.23; Tue, 23 Jun
- 2020 22:53:54 +0000
-Received: from BYAPR15MB2999.namprd15.prod.outlook.com
- ([fe80::543:b185:ef4a:7e8]) by BYAPR15MB2999.namprd15.prod.outlook.com
- ([fe80::543:b185:ef4a:7e8%5]) with mapi id 15.20.3109.027; Tue, 23 Jun 2020
- 22:53:54 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Kernel Team" <Kernel-team@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        "KP Singh" <kpsingh@chromium.org>
-Subject: Re: [PATCH bpf-next 1/3] bpf: introduce helper
- bpf_get_task_stack_trace()
-Thread-Topic: [PATCH bpf-next 1/3] bpf: introduce helper
- bpf_get_task_stack_trace()
-Thread-Index: AQHWSS0VOUl6AqeRSEG9pyL6IiSf06jmiq8AgABFTIA=
-Date:   Tue, 23 Jun 2020 22:53:54 +0000
-Message-ID: <A91D5293-AA57-4C7B-AC71-472BD966D17B@fb.com>
-References: <20200623070802.2310018-1-songliubraving@fb.com>
- <20200623070802.2310018-2-songliubraving@fb.com>
- <CAEf4Bzb3_oAyOKKEQ8+Ub5H6aaYQPh15NqyAdQQ+BXjur2Yswg@mail.gmail.com>
-In-Reply-To: <CAEf4Bzb3_oAyOKKEQ8+Ub5H6aaYQPh15NqyAdQQ+BXjur2Yswg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3608.80.23.2.2)
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
-x-originating-ip: [2620:10d:c090:400::5:5ffc]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0987de5a-d8f4-4af3-baed-08d817c84e37
-x-ms-traffictypediagnostic: BYAPR15MB2694:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR15MB2694E701B9945E749F67D9D1B3940@BYAPR15MB2694.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 04433051BF
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: aMXjjW4A1rqdKoYNd6nQj1fdykt1yAruXAr8l3al0AMSemtrXLzHWDCRQ6GZY48cQSGyuey4FZpFEN+Nex/U+0fR2TcQCEwgw9n7LYgLp2STiNJnO6mHYUUVut3cTdTxLI3wBVYsG4hYB3KwHCwNEM0VvYQ2K1683T5M2n/8R8iIVV9cfAMDu2ah9/AmhUmZYkCxFA8EcuEpttz2jprg8YMqvGgHN9BIaGkmTKUzh6uMfO86T9BXn591bbTcD7ze6QwRAg/uDWuwFCPXoQeozoWpNDpl1txHfE5frQoY5t4dGsw1Fqxe24+gkaUy3Sqg
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB2999.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(396003)(366004)(136003)(346002)(39860400002)(376002)(316002)(54906003)(71200400001)(83380400001)(2616005)(6486002)(6916009)(478600001)(33656002)(66446008)(66556008)(8936002)(64756008)(66476007)(66946007)(6506007)(6512007)(53546011)(5660300002)(186003)(86362001)(8676002)(4326008)(36756003)(76116006)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: MnxLJnBrQpahE/s9eB8hBLWz+BCi3Y5NE5Dt7OQA1CyFfxcHddd2ioOQ2FHJmc61ySH4HJnt8a0TX6PA7ZLIpLA5gYMwuycFvKb49CHd5hIuWJNoawwnypxiET7H0AN2mTUrDVKtdNSXpZa7bdbepOc+uuM8et7zwdQGjQ5MKoeSmtUAn/IQkiNdFLkS9nT7ki5HpFxJ6E81g+HxcgOYxz3bTVs60vUDw0hofbs12LXgHN8Gt9hMBirH7EDGcQSSPK/QtZVhyAr4RUeiMHyyO4d5oM+xKACV0YRf9Gn0V22s4Ge8NfpxHO04lZiAMgmvYMGiaFk6wGc0/z/v4sz6yWQuJLyjasowsUJD7ZEm3q9c48RyJrPkCPHjNJKjdNR9iRaQYO9L0mfn5S6aeMMGsHe4tlHPisTWCclLyhNADSrcIbVxtmblOglCbF/OXhJPj1semupiqdulb2z5CVq6iN8n39/HIQwViZ39dAa20wIe1k9R1f97dAON8+MHldzqCM2KQAOpbq6tXVJE6Q3HMA==
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <14A6284F03FA2F42B9F5D79EBDC357F1@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ 15.1.1979.3; Tue, 23 Jun 2020 16:08:06 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 939663704F8E; Tue, 23 Jun 2020 16:08:04 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next v5 01/15] net: bpf: add bpf_seq_afinfo in tcp_iter_state
+Date:   Tue, 23 Jun 2020 16:08:04 -0700
+Message-ID: <20200623230804.3987829-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200623230803.3987674-1-yhs@fb.com>
+References: <20200623230803.3987674-1-yhs@fb.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0987de5a-d8f4-4af3-baed-08d817c84e37
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jun 2020 22:53:54.4199
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yMUTFdmxt4KZ/2W1T/x0s4TnnMcjtprVnTMHdVibfG9BgVNYya6qj6CRPWXdMGzaegClPG2qoHmbok6OvwNhYg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2694
-X-OriginatorOrg: fb.com
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-23_14:2020-06-23,2020-06-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- clxscore=1015 phishscore=0 adultscore=0 priorityscore=1501
- cotscore=-2147483648 lowpriorityscore=0 malwarescore=0 impostorscore=0
- mlxscore=0 bulkscore=0 spamscore=0 mlxlogscore=999 classifier=spam
- adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006230151
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ malwarescore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0 phishscore=0
+ cotscore=-2147483648 mlxlogscore=793 mlxscore=0 priorityscore=1501
+ suspectscore=8 spamscore=0 adultscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006230153
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+A new field bpf_seq_afinfo is added to tcp_iter_state
+to provide bpf tcp iterator afinfo. There are two
+reasons on why we did this.
 
+First, the current way to get afinfo from PDE_DATA
+does not work for bpf iterator as its seq_file
+inode does not conform to /proc/net/{tcp,tcp6}
+inode structures. More specifically, anonymous
+bpf iterator will use an anonymous inode which
+is shared in the system and we cannot change inode
+private data structure at all.
 
-> On Jun 23, 2020, at 11:45 AM, Andrii Nakryiko <andrii.nakryiko@gmail.com>=
- wrote:
->=20
-> On Tue, Jun 23, 2020 at 12:08 AM Song Liu <songliubraving@fb.com> wrote:
->>=20
->> This helper can be used with bpf_iter__task to dump all /proc/*/stack to
->> a seq_file.
->>=20
->> Signed-off-by: Song Liu <songliubraving@fb.com>
->> ---
->> include/uapi/linux/bpf.h       | 10 +++++++++-
->> kernel/trace/bpf_trace.c       | 21 +++++++++++++++++++++
->> scripts/bpf_helpers_doc.py     |  2 ++
->> tools/include/uapi/linux/bpf.h | 10 +++++++++-
->> 4 files changed, 41 insertions(+), 2 deletions(-)
->>=20
->> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->> index 19684813faaed..a30416b822fe3 100644
->> --- a/include/uapi/linux/bpf.h
->> +++ b/include/uapi/linux/bpf.h
->> @@ -3252,6 +3252,13 @@ union bpf_attr {
->>  *             case of **BPF_CSUM_LEVEL_QUERY**, the current skb->csum_l=
-evel
->>  *             is returned or the error code -EACCES in case the skb is =
-not
->>  *             subject to CHECKSUM_UNNECESSARY.
->> + *
->> + * int bpf_get_task_stack_trace(struct task_struct *task, void *entries=
-, u32 size)
->> + *     Description
->> + *             Save a task stack trace into array *entries*. This is a =
-wrapper
->> + *             over stack_trace_save_tsk().
->> + *     Return
->> + *             Number of trace entries stored.
->>  */
->> #define __BPF_FUNC_MAPPER(FN)          \
->>        FN(unspec),                     \
->> @@ -3389,7 +3396,8 @@ union bpf_attr {
->>        FN(ringbuf_submit),             \
->>        FN(ringbuf_discard),            \
->>        FN(ringbuf_query),              \
->> -       FN(csum_level),
->> +       FN(csum_level),                 \
->> +       FN(get_task_stack_trace),
->=20
-> We have get_stackid and get_stack, I think to stay consistent it
-> should be named get_task_stack
->=20
->>=20
->> /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
->>  * function eBPF program intends to call
->> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
->> index e729c9e587a07..2c13bcb5c2bce 100644
->> --- a/kernel/trace/bpf_trace.c
->> +++ b/kernel/trace/bpf_trace.c
->> @@ -1488,6 +1488,23 @@ static const struct bpf_func_proto bpf_get_stack_=
-proto_raw_tp =3D {
->>        .arg4_type      =3D ARG_ANYTHING,
->> };
->>=20
->> +BPF_CALL_3(bpf_get_task_stack_trace, struct task_struct *, task,
->> +          void *, entries, u32, size)
->=20
-> See get_stack definition, this one needs to support flags as well. And
-> we should probably support BPF_F_USER_BUILD_ID as well. And
-> BPF_F_USER_STACK is also a good idea, I presume?
+Second, bpf iterator for tcp/tcp6 wants to
+traverse all tcp and tcp6 sockets in one pass
+and bpf program can control whether they want
+to skip one sk_family or not. Having a different
+afinfo with family AF_UNSPEC make it easier
+to understand in the code.
 
-This will be a different direction that is similar to stackmap implementati=
-on.
-Current version follows the implementation behind /proc/<pid>/stack . Let m=
-e=20
-check which of them is better.=20
+This patch does not change /proc/net/{tcp,tcp6} behavior
+as the bpf_seq_afinfo will be NULL for these two proc files.
 
-Thanks,
-Song
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ include/net/tcp.h   |  1 +
+ net/ipv4/tcp_ipv4.c | 30 ++++++++++++++++++++++++------
+ 2 files changed, 25 insertions(+), 6 deletions(-)
+
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 4de9485f73d9..eab1c7d0facb 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1935,6 +1935,7 @@ struct tcp_iter_state {
+ 	struct seq_net_private	p;
+ 	enum tcp_seq_states	state;
+ 	struct sock		*syn_wait_sk;
++	struct tcp_seq_afinfo	*bpf_seq_afinfo;
+ 	int			bucket, offset, sbucket, num;
+ 	loff_t			last_pos;
+ };
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index ad6435ba6d72..9cb65ee4ec63 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -2211,13 +2211,18 @@ EXPORT_SYMBOL(tcp_v4_destroy_sock);
+  */
+ static void *listening_get_next(struct seq_file *seq, void *cur)
+ {
+-	struct tcp_seq_afinfo *afinfo =3D PDE_DATA(file_inode(seq->file));
++	struct tcp_seq_afinfo *afinfo;
+ 	struct tcp_iter_state *st =3D seq->private;
+ 	struct net *net =3D seq_file_net(seq);
+ 	struct inet_listen_hashbucket *ilb;
+ 	struct hlist_nulls_node *node;
+ 	struct sock *sk =3D cur;
+=20
++	if (st->bpf_seq_afinfo)
++		afinfo =3D st->bpf_seq_afinfo;
++	else
++		afinfo =3D PDE_DATA(file_inode(seq->file));
++
+ 	if (!sk) {
+ get_head:
+ 		ilb =3D &tcp_hashinfo.listening_hash[st->bucket];
+@@ -2235,7 +2240,8 @@ static void *listening_get_next(struct seq_file *se=
+q, void *cur)
+ 	sk_nulls_for_each_from(sk, node) {
+ 		if (!net_eq(sock_net(sk), net))
+ 			continue;
+-		if (sk->sk_family =3D=3D afinfo->family)
++		if (afinfo->family =3D=3D AF_UNSPEC ||
++		    sk->sk_family =3D=3D afinfo->family)
+ 			return sk;
+ 	}
+ 	spin_unlock(&ilb->lock);
+@@ -2272,11 +2278,16 @@ static inline bool empty_bucket(const struct tcp_=
+iter_state *st)
+  */
+ static void *established_get_first(struct seq_file *seq)
+ {
+-	struct tcp_seq_afinfo *afinfo =3D PDE_DATA(file_inode(seq->file));
++	struct tcp_seq_afinfo *afinfo;
+ 	struct tcp_iter_state *st =3D seq->private;
+ 	struct net *net =3D seq_file_net(seq);
+ 	void *rc =3D NULL;
+=20
++	if (st->bpf_seq_afinfo)
++		afinfo =3D st->bpf_seq_afinfo;
++	else
++		afinfo =3D PDE_DATA(file_inode(seq->file));
++
+ 	st->offset =3D 0;
+ 	for (; st->bucket <=3D tcp_hashinfo.ehash_mask; ++st->bucket) {
+ 		struct sock *sk;
+@@ -2289,7 +2300,8 @@ static void *established_get_first(struct seq_file =
+*seq)
+=20
+ 		spin_lock_bh(lock);
+ 		sk_nulls_for_each(sk, node, &tcp_hashinfo.ehash[st->bucket].chain) {
+-			if (sk->sk_family !=3D afinfo->family ||
++			if ((afinfo->family !=3D AF_UNSPEC &&
++			     sk->sk_family !=3D afinfo->family) ||
+ 			    !net_eq(sock_net(sk), net)) {
+ 				continue;
+ 			}
+@@ -2304,19 +2316,25 @@ static void *established_get_first(struct seq_fil=
+e *seq)
+=20
+ static void *established_get_next(struct seq_file *seq, void *cur)
+ {
+-	struct tcp_seq_afinfo *afinfo =3D PDE_DATA(file_inode(seq->file));
++	struct tcp_seq_afinfo *afinfo;
+ 	struct sock *sk =3D cur;
+ 	struct hlist_nulls_node *node;
+ 	struct tcp_iter_state *st =3D seq->private;
+ 	struct net *net =3D seq_file_net(seq);
+=20
++	if (st->bpf_seq_afinfo)
++		afinfo =3D st->bpf_seq_afinfo;
++	else
++		afinfo =3D PDE_DATA(file_inode(seq->file));
++
+ 	++st->num;
+ 	++st->offset;
+=20
+ 	sk =3D sk_nulls_next(sk);
+=20
+ 	sk_nulls_for_each_from(sk, node) {
+-		if (sk->sk_family =3D=3D afinfo->family &&
++		if ((afinfo->family =3D=3D AF_UNSPEC ||
++		     sk->sk_family =3D=3D afinfo->family) &&
+ 		    net_eq(sock_net(sk), net))
+ 			return sk;
+ 	}
+--=20
+2.24.1
 
