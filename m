@@ -2,108 +2,222 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51E99C433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 02:29:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27E81C433E0
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 03:22:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A6FF206EB
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 02:29:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F39692076A
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 03:22:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pg+3wznS"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ofhWpTG1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731312AbgFWC3K (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Jun 2020 22:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730456AbgFWC3J (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Jun 2020 22:29:09 -0400
-Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D69C061573;
-        Mon, 22 Jun 2020 19:29:09 -0700 (PDT)
-Received: by mail-qv1-xf43.google.com with SMTP id a14so2687091qvq.6;
-        Mon, 22 Jun 2020 19:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y34PuLuvoebTFHQz4NV34Ht84jRdx47rlhf4JZDyuZI=;
-        b=pg+3wznSA9JX3kc7tzI6WmsnYb7R3HjwjQUJz6i87X/GdRH7AUnp5xrH/5o9Iq72TJ
-         ecgIZvWwKNfGQdyu2ahShGPXxHrgVTrL3jKpw64Xrxc9xQ/30f083rgDfYyoxi3PNegI
-         j/niEx1cqIL+WfKQxpcO+2RYOjb1uasK0yK1wkNbx3Hm7hcSaFWeO+ksbkwju52ykDiR
-         D3vdOCbgKyjwvPim8kSQOipMAhh7wlgJmWQbJxtn5TjpKep1IJIL2lM8Lf4mYgW7rklr
-         n9vj2DwKTBnbZDSOxS7K1d6+pOSVfgu0YFJfHX3cLd9q4lwM7mTg/HqhNL+FsuLLrY4T
-         j3TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y34PuLuvoebTFHQz4NV34Ht84jRdx47rlhf4JZDyuZI=;
-        b=NoWeF8tP71/oqwkIC7nFxpR/dM9TB/ZTiaYeU/FRSgfJEhltKkixkllBTBNOR7yETP
-         u5wr5QvXPm12dWov0JbzONXPUVswu4HQVOrUvwqwlQPoWFqbYsdjD6r/wtlGKzLP/UUF
-         ITVXd2fwE/qI1CD2IrpnofvqFLKiF+xwvPsQdG2TlhnbXiKze2UgyaQOMM1bFITj0Iuv
-         ZjSO5rG000VnaTDcDm389UnfI2M8R2+otVE6nZW5hZ/CjJNCyfrYRkpyV6XLUzvhfRyo
-         6kGIOsVO2Ug16R/qvw54bVO3qS+g+/njpeAoohVhL8ON6VrgccIaFP34zNIDE10/8Xgu
-         sURg==
-X-Gm-Message-State: AOAM53115HPC1xv9OvaT/D6RHeB2uLb2vLLUv45/ZcOT4eV1Y5OXHPkR
-        pFhxu1priDs7PEyQJYNMG20NClP59zF7wn44+nCayw==
-X-Google-Smtp-Source: ABdhPJwRSDu5eC6xyDn8C4rnzIbdTs4Tf/UL2Zz7E4qSk5X0IobIglWrQ9BN5Ah16IiKEZyiCf3JdLlA38LEmB++4Fw=
-X-Received: by 2002:ad4:598f:: with SMTP id ek15mr24483463qvb.196.1592879348496;
- Mon, 22 Jun 2020 19:29:08 -0700 (PDT)
+        id S1731909AbgFWDWk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Jun 2020 23:22:40 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:1462 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731803AbgFWDWj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 22 Jun 2020 23:22:39 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05N3Fseg025247
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 20:22:39 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=jGEd8Qm8VYhVNHEomGb8YOl2uMOuG8pc+dweqhO0500=;
+ b=ofhWpTG1CQ1SCDp2xE+HKKhUiZNPvpmE+eKQJ1TgtcSGYkSiiYkIoa5hqwtigUQ7fcBq
+ HWm4JF4hPmpAYCXFlj17FOzGA6CtfC51veduL8jXydzqAWn+rlED6eFXQpsY7W6VR37T
+ VWe5zL9YZMRejFAJf2nyVAe5xT7pidDAwHA= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31t2a2gx9x-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 20:22:38 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Mon, 22 Jun 2020 20:22:36 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 9DD882EC33D1; Mon, 22 Jun 2020 20:22:29 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>, <john.fastabend@gmail.com>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v3 bpf-next 3/3] selftests/bpf: add variable-length data concat pattern less than test
+Date:   Mon, 22 Jun 2020 20:22:23 -0700
+Message-ID: <20200623032224.4020118-3-andriin@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200623032224.4020118-1-andriin@fb.com>
+References: <20200623032224.4020118-1-andriin@fb.com>
 MIME-Version: 1.0
-References: <20200623000905.3076979-1-andriin@fb.com> <20200623000905.3076979-3-andriin@fb.com>
- <20200623003119.onlwey7ko5z6heyq@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20200623003119.onlwey7ko5z6heyq@ast-mbp.dhcp.thefacebook.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 22 Jun 2020 19:28:57 -0700
-Message-ID: <CAEf4BzZFPoqdvVBdyqY=t9Ccfvf-_VysJ7UR9L9qQ5-SxdPeKg@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 3/3] selftests/bpf: add variable-length data
- concat pattern less than test
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        john fastabend <john.fastabend@gmail.com>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-22_16:2020-06-22,2020-06-22 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ adultscore=0 priorityscore=1501 phishscore=0 malwarescore=0 clxscore=1015
+ mlxlogscore=534 bulkscore=0 cotscore=-2147483648 mlxscore=0
+ impostorscore=0 suspectscore=8 spamscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006230024
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 5:31 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Jun 22, 2020 at 05:09:04PM -0700, Andrii Nakryiko wrote:
-> > Extend original variable-length tests with a case to catch a common
-> > existing pattern of testing for < 0 for errors. Note because
-> > verifier also tracks upper bounds and we know it can not be greater
-> > than MAX_LEN here we can skip upper bound check.
-> >
-> > In ALU64 enabled compilation converting from long->int return types
-> > in probe helpers results in extra instruction pattern, <<= 32, s >>= 32.
-> > The trade-off is the non-ALU64 case works. If you really care about
-> > every extra insn (XDP case?) then you probably should be using original
-> > int type.
-> >
-> > In addition adding a sext insn to bpf might help the verifier in the
-> > general case to avoid these types of tricks.
-> >
-> > Signed-off-by: John Fastabend <john.fastabend@gmail.com>
->
-> Please keep John's 'Author:' on the patch.
-> git commit --author= --amend
-> or keep 'From:' when you applied to your local git.
+From: John Fastabend <john.fastabend@gmail.com>
 
-I manually re-did the patch, because it wasn't applying cleanly. I'll
-use --author, though, I didn't know about it, thanks.
+Extend original variable-length tests with a case to catch a common
+existing pattern of testing for < 0 for errors. Note because
+verifier also tracks upper bounds and we know it can not be greater
+than MAX_LEN here we can skip upper bound check.
 
-> Also add your SOB after John's.
-> Even if you didn't change the patch at all.
-> Same thing if you've reworked the patch.
+In ALU64 enabled compilation converting from long->int return types
+in probe helpers results in extra instruction pattern, <<=3D 32, s >>=3D =
+32.
+The trade-off is the non-ALU64 case works. If you really care about
+every extra insn (XDP case?) then you probably should be using original
+int type.
 
-ok, will do
+In addition adding a sext insn to bpf might help the verifier in the
+general case to avoid these types of tricks.
+
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ .../testing/selftests/bpf/prog_tests/varlen.c | 12 ++++
+ .../testing/selftests/bpf/progs/test_varlen.c | 70 +++++++++++++++++--
+ 2 files changed, 78 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/varlen.c b/tools/test=
+ing/selftests/bpf/prog_tests/varlen.c
+index 7533565e096d..c75525eab02c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/varlen.c
++++ b/tools/testing/selftests/bpf/prog_tests/varlen.c
+@@ -51,6 +51,18 @@ void test_varlen(void)
+ 	CHECK_VAL(data->total2, size1 + size2);
+ 	CHECK(memcmp(data->payload2, exp_str, size1 + size2), "content_check",
+ 	      "doesn't match!");
++
++	CHECK_VAL(data->payload3_len1, size1);
++	CHECK_VAL(data->payload3_len2, size2);
++	CHECK_VAL(data->total3, size1 + size2);
++	CHECK(memcmp(data->payload3, exp_str, size1 + size2), "content_check",
++	      "doesn't match!");
++
++	CHECK_VAL(data->payload4_len1, size1);
++	CHECK_VAL(data->payload4_len2, size2);
++	CHECK_VAL(data->total4, size1 + size2);
++	CHECK(memcmp(data->payload4, exp_str, size1 + size2), "content_check",
++	      "doesn't match!");
+ cleanup:
+ 	test_varlen__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_varlen.c b/tools/test=
+ing/selftests/bpf/progs/test_varlen.c
+index 09691852debf..cd4b72c55dfe 100644
+--- a/tools/testing/selftests/bpf/progs/test_varlen.c
++++ b/tools/testing/selftests/bpf/progs/test_varlen.c
+@@ -26,8 +26,18 @@ int payload2_len2 =3D -1;
+ int total2 =3D -1;
+ char payload2[MAX_LEN + MAX_LEN] =3D { 1 };
+=20
++int payload3_len1 =3D -1;
++int payload3_len2 =3D -1;
++int total3=3D -1;
++char payload3[MAX_LEN + MAX_LEN] =3D { 1 };
++
++int payload4_len1 =3D -1;
++int payload4_len2 =3D -1;
++int total4=3D -1;
++char payload4[MAX_LEN + MAX_LEN] =3D { 1 };
++
+ SEC("raw_tp/sys_enter")
+-int handler64(void *regs)
++int handler64_unsigned(void *regs)
+ {
+ 	int pid =3D bpf_get_current_pid_tgid() >> 32;
+ 	void *payload =3D payload1;
+@@ -54,8 +64,34 @@ int handler64(void *regs)
+ 	return 0;
+ }
+=20
+-SEC("tp_btf/sys_enter")
+-int handler32(void *regs)
++SEC("raw_tp/sys_exit")
++int handler64_signed(void *regs)
++{
++	int pid =3D bpf_get_current_pid_tgid() >> 32;
++	void *payload =3D payload3;
++	long len;
++
++	/* ignore irrelevant invocations */
++	if (test_pid !=3D pid || !capture)
++		return 0;
++
++	len =3D bpf_probe_read_kernel_str(payload, MAX_LEN, &buf_in1[0]);
++	if (len >=3D 0) {
++		payload +=3D len;
++		payload3_len1 =3D len;
++	}
++	len =3D bpf_probe_read_kernel_str(payload, MAX_LEN, &buf_in2[0]);
++	if (len >=3D 0) {
++		payload +=3D len;
++		payload3_len2 =3D len;
++	}
++	total3 =3D payload - (void *)payload3;
++
++	return 0;
++}
++
++SEC("tp/raw_syscalls/sys_enter")
++int handler32_unsigned(void *regs)
+ {
+ 	int pid =3D bpf_get_current_pid_tgid() >> 32;
+ 	void *payload =3D payload2;
+@@ -82,7 +118,33 @@ int handler32(void *regs)
+ 	return 0;
+ }
+=20
+-SEC("tp_btf/sys_exit")
++SEC("tp/raw_syscalls/sys_exit")
++int handler32_signed(void *regs)
++{
++	int pid =3D bpf_get_current_pid_tgid() >> 32;
++	void *payload =3D payload4;
++	int len;
++
++	/* ignore irrelevant invocations */
++	if (test_pid !=3D pid || !capture)
++		return 0;
++
++	len =3D bpf_probe_read_kernel_str(payload, MAX_LEN, &buf_in1[0]);
++	if (len >=3D 0) {
++		payload +=3D len;
++		payload4_len1 =3D len;
++	}
++	len =3D bpf_probe_read_kernel_str(payload, MAX_LEN, &buf_in2[0]);
++	if (len >=3D 0) {
++		payload +=3D len;
++		payload4_len2 =3D len;
++	}
++	total4 =3D payload - (void *)payload4;
++
++	return 0;
++}
++
++SEC("tp/syscalls/sys_exit_getpid")
+ int handler_exit(void *regs)
+ {
+ 	long bla;
+--=20
+2.24.1
+
