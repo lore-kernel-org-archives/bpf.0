@@ -2,45 +2,45 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35A05C433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 00:37:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F169C433E3
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 00:37:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 119F620738
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 00:37:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D27C20738
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 00:37:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="KJhpkeSx"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LyChJUh7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732130AbgFWAhN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Jun 2020 20:37:13 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:24970 "EHLO
+        id S1732123AbgFWAhK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Jun 2020 20:37:10 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:34748 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732120AbgFWAhL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 22 Jun 2020 20:37:11 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05N0Y9oH026843
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 17:37:10 -0700
+        by vger.kernel.org with ESMTP id S1731883AbgFWAhJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 22 Jun 2020 20:37:09 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05N0b9VR021128
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 17:37:09 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=3WJmBObGj969FT9Qa7gmTEdu/9pK3YV6Io3HAzJZ4zc=;
- b=KJhpkeSxKL2yFxzc2URg921lab/mZfnjdjM6O0Q16PPECwFofkIbd2p5bZjcN3428A4t
- 6oc7aMJuTUppw2zHqujPazxuc+dS7Sj+IwTLoCM7Jm81TLTdqd+VnG7cCMx4tRwIfl9n
- a8P4+c9nsH4H8FDfgwva2sMVVSXOfVubZjA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31t2e8rdvh-6
+ bh=y6unUCc7oaozRSFNhcNylAAHdEoE8d8GZzeuQJp4dL8=;
+ b=LyChJUh7/psgJacrADennPDbnRwh0mVx9AAwE66C5BZb/co9owVic5dqx7OVhUxrWVb8
+ 4LEzfYe1/gh08dcEoiKrL6KmQNBUEZFNvQ6CQB824OOB+QnNNL3fZJcTLC4G1Nv1vd12
+ ZdHfQWD8/EjrNLq9H8wXbB6JDpUz8jxaV9s= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31t25brdkd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 17:37:10 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 17:37:09 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 22 Jun 2020 17:36:45 -0700
+ 15.1.1979.3; Mon, 22 Jun 2020 17:36:31 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 91D7F3705002; Mon, 22 Jun 2020 17:36:42 -0700 (PDT)
+        id 92C1F3704FDA; Mon, 22 Jun 2020 17:36:27 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v3 14/15] tools/bpf: add udp4/udp6 bpf iterator
-Date:   Mon, 22 Jun 2020 17:36:42 -0700
-Message-ID: <20200623003642.3075027-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 02/15] net: bpf: implement bpf iterator for tcp
+Date:   Mon, 22 Jun 2020 17:36:27 -0700
+Message-ID: <20200623003627.3073022-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200623003626.3072825-1-yhs@fb.com>
 References: <20200623003626.3072825-1-yhs@fb.com>
@@ -61,263 +61,174 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-22_16:2020-06-22,2020-06-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 spamscore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
- suspectscore=8 bulkscore=0 cotscore=-2147483648 lowpriorityscore=0
- mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006230000
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ phishscore=0 impostorscore=0 cotscore=-2147483648 bulkscore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=952 adultscore=0 suspectscore=8
+ mlxscore=0 malwarescore=0 priorityscore=1501 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006230000
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On my VM, I got identical results between /proc/net/udp[6] and
-the udp{4,6} bpf iterator.
+The bpf iterator for tcp is implemented. Both tcp4 and tcp6
+sockets will be traversed. It is up to bpf program to
+filter for tcp4 or tcp6 only, or both families of sockets.
 
-For udp6:
-  $ cat /sys/fs/bpf/p1
-    sl  local_address                         remote_address             =
-           st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode=
- ref pointer drops
-   1405: 000080FE00000000FF7CC4D0D9EFE4FE:0222 00000000000000000000000000=
-000000:0000 07 00000000:00000000 00:00000000 00000000   193        0 1918=
-3 2 0000000029eab111 0
-  $ cat /proc/net/udp6
-    sl  local_address                         remote_address             =
-           st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode=
- ref pointer drops
-   1405: 000080FE00000000FF7CC4D0D9EFE4FE:0222 00000000000000000000000000=
-000000:0000 07 00000000:00000000 00:00000000 00000000   193        0 1918=
-3 2 0000000029eab111 0
-
-For udp4:
-  $ cat /sys/fs/bpf/p4
-    sl  local_address rem_address   st tx_queue rx_queue tr tm->when retr=
-nsmt   uid  timeout inode ref pointer drops
-   2007: 00000000:1F90 00000000:0000 07 00000000:00000000 00:00000000 000=
-00000     0        0 72540 2 000000004ede477a 0
-  $ cat /proc/net/udp
-    sl  local_address rem_address   st tx_queue rx_queue tr tm->when retr=
-nsmt   uid  timeout inode ref pointer drops
-   2007: 00000000:1F90 00000000:0000 07 00000000:00000000 00:00000000 000=
-00000     0        0 72540 2 000000004ede477a 0
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/testing/selftests/bpf/progs/bpf_iter.h  | 16 ++++
- .../selftests/bpf/progs/bpf_iter_udp4.c       | 71 +++++++++++++++++
- .../selftests/bpf/progs/bpf_iter_udp6.c       | 79 +++++++++++++++++++
- 3 files changed, 166 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
+ net/ipv4/tcp_ipv4.c | 123 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 123 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter.h b/tools/testing=
-/selftests/bpf/progs/bpf_iter.h
-index ab3ed904d391..d2b9e26efbe0 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter.h
-@@ -9,6 +9,8 @@
- #define bpf_iter__task_file bpf_iter__task_file___not_used
- #define bpf_iter__tcp bpf_iter__tcp___not_used
- #define tcp6_sock tcp6_sock___not_used
-+#define bpf_iter__udp bpf_iter__udp___not_used
-+#define udp6_sock udp6_sock___not_used
- #include "vmlinux.h"
- #undef bpf_iter_meta
- #undef bpf_iter__bpf_map
-@@ -18,6 +20,8 @@
- #undef bpf_iter__task_file
- #undef bpf_iter__tcp
- #undef tcp6_sock
-+#undef bpf_iter__udp
-+#undef udp6_sock
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index 9cb65ee4ec63..ea0df9fd7618 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -2613,6 +2613,74 @@ static int tcp4_seq_show(struct seq_file *seq, voi=
+d *v)
+ 	return 0;
+ }
 =20
- struct bpf_iter_meta {
- 	struct seq_file *seq;
-@@ -62,3 +66,15 @@ struct tcp6_sock {
- 	struct tcp_sock	tcp;
- 	struct ipv6_pinfo inet6;
- } __attribute__((preserve_access_index));
++#ifdef CONFIG_BPF_SYSCALL
++struct bpf_iter__tcp {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct sock_common *, sk_common);
++	uid_t uid __aligned(8);
++};
 +
-+struct bpf_iter__udp {
-+	struct bpf_iter_meta *meta;
-+	struct udp_sock *udp_sk;
-+	uid_t uid __attribute__((aligned(8)));
-+	int bucket __attribute__((aligned(8)));
-+} __attribute__((preserve_access_index));
-+
-+struct udp6_sock {
-+	struct udp_sock	udp;
-+	struct ipv6_pinfo inet6;
-+} __attribute__((preserve_access_index));
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c b/tools/te=
-sting/selftests/bpf/progs/bpf_iter_udp4.c
-new file mode 100644
-index 000000000000..8a06b7f4a05d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include "bpf_iter.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_tracing_net.h>
-+#include <bpf/bpf_endian.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+static long sock_i_ino(const struct sock *sk)
++static int tcp_prog_seq_show(struct bpf_prog *prog, struct bpf_iter_meta=
+ *meta,
++			     struct sock_common *sk_common, uid_t uid)
 +{
-+	const struct socket *sk_socket =3D sk->sk_socket;
-+	const struct inode *inode;
-+	unsigned long ino;
++	struct bpf_iter__tcp ctx;
 +
-+	if (!sk_socket)
-+		return 0;
-+
-+	inode =3D &container_of(sk_socket, struct socket_alloc, socket)->vfs_in=
-ode;
-+	bpf_probe_read(&ino, sizeof(ino), &inode->i_ino);
-+	return ino;
++	meta->seq_num--;  /* skip SEQ_START_TOKEN */
++	ctx.meta =3D meta;
++	ctx.sk_common =3D sk_common;
++	ctx.uid =3D uid;
++	return bpf_iter_run_prog(prog, &ctx);
 +}
 +
-+SEC("iter/udp")
-+int dump_udp4(struct bpf_iter__udp *ctx)
++static int bpf_iter_tcp_seq_show(struct seq_file *seq, void *v)
 +{
-+	struct seq_file *seq =3D ctx->meta->seq;
-+	struct udp_sock *udp_sk =3D ctx->udp_sk;
-+	struct inet_sock *inet;
-+	__u16 srcp, destp;
-+	__be32 dest, src;
-+	__u32 seq_num;
-+	int rqueue;
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++	struct sock *sk =3D v;
++	uid_t uid;
 +
-+	if (udp_sk =3D=3D (void *)0)
++	if (v =3D=3D SEQ_START_TOKEN)
 +		return 0;
 +
-+	seq_num =3D ctx->meta->seq_num;
-+	if (seq_num =3D=3D 0)
-+		BPF_SEQ_PRINTF(seq,
-+			       "  sl  local_address rem_address   st tx_queue "
-+			       "rx_queue tr tm->when retrnsmt   uid  timeout "
-+			       "inode ref pointer drops\n");
++	if (sk->sk_state =3D=3D TCP_TIME_WAIT) {
++		uid =3D 0;
++	} else if (sk->sk_state =3D=3D TCP_NEW_SYN_RECV) {
++		const struct request_sock *req =3D v;
 +
-+	/* filter out udp6 sockets */
-+	inet =3D &udp_sk->inet;
-+	if (inet->sk.sk_family =3D=3D AF_INET6)
-+		return 0;
++		uid =3D from_kuid_munged(seq_user_ns(seq),
++				       sock_i_uid(req->rsk_listener));
++	} else {
++		uid =3D from_kuid_munged(seq_user_ns(seq), sock_i_uid(sk));
++	}
 +
-+	inet =3D &udp_sk->inet;
-+	dest =3D inet->inet_daddr;
-+	src =3D inet->inet_rcv_saddr;
-+	srcp =3D bpf_ntohs(inet->inet_sport);
-+	destp =3D bpf_ntohs(inet->inet_dport);
-+	rqueue =3D inet->sk.sk_rmem_alloc.counter - udp_sk->forward_deficit;
-+
-+	BPF_SEQ_PRINTF(seq, "%5d: %08X:%04X %08X:%04X ",
-+		       ctx->bucket, src, srcp, dest, destp);
-+
-+	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK =
-%u\n",
-+		       inet->sk.sk_state,
-+		       inet->sk.sk_wmem_alloc.refs.counter - 1,
-+		       rqueue,
-+		       0, 0L, 0, ctx->uid, 0,
-+		       sock_i_ino(&inet->sk),
-+		       inet->sk.sk_refcnt.refs.counter, udp_sk,
-+		       inet->sk.sk_drops.counter);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c b/tools/te=
-sting/selftests/bpf/progs/bpf_iter_udp6.c
-new file mode 100644
-index 000000000000..f5735baf45aa
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include "bpf_iter.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_tracing_net.h>
-+#include <bpf/bpf_endian.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+#define IPV6_SEQ_DGRAM_HEADER				\
-+	"  sl  "					\
-+	"local_address                         "	\
-+	"remote_address                        "	\
-+	"st tx_queue rx_queue tr tm->when retrnsmt"	\
-+	"   uid  timeout inode ref pointer drops\n"
-+
-+static long sock_i_ino(const struct sock *sk)
-+{
-+	const struct socket *sk_socket =3D sk->sk_socket;
-+	const struct inode *inode;
-+	unsigned long ino;
-+
-+	if (!sk_socket)
-+		return 0;
-+
-+	inode =3D &container_of(sk_socket, struct socket_alloc, socket)->vfs_in=
-ode;
-+	bpf_probe_read(&ino, sizeof(ino), &inode->i_ino);
-+	return ino;
++	meta.seq =3D seq;
++	prog =3D bpf_iter_get_info(&meta, false);
++	return tcp_prog_seq_show(prog, &meta, v, uid);
 +}
 +
-+SEC("iter/udp")
-+int dump_udp6(struct bpf_iter__udp *ctx)
++static void bpf_iter_tcp_seq_stop(struct seq_file *seq, void *v)
 +{
-+	struct seq_file *seq =3D ctx->meta->seq;
-+	struct udp_sock *udp_sk =3D ctx->udp_sk;
-+	const struct in6_addr *dest, *src;
-+	struct udp6_sock *udp6_sk;
-+	struct inet_sock *inet;
-+	__u16 srcp, destp;
-+	__u32 seq_num;
-+	int rqueue;
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
 +
-+	if (udp_sk =3D=3D (void *)0)
-+		return 0;
++	if (!v) {
++		meta.seq =3D seq;
++		prog =3D bpf_iter_get_info(&meta, true);
++		if (prog)
++			(void)tcp_prog_seq_show(prog, &meta, v, 0);
++	}
 +
-+	seq_num =3D ctx->meta->seq_num;
-+	if (seq_num =3D=3D 0)
-+		BPF_SEQ_PRINTF(seq, IPV6_SEQ_DGRAM_HEADER);
-+
-+	udp6_sk =3D bpf_skc_to_udp6_sock(udp_sk);
-+	if (udp6_sk =3D=3D (void *)0)
-+		return 0;
-+
-+	inet =3D &udp_sk->inet;
-+	srcp =3D bpf_ntohs(inet->inet_sport);
-+	destp =3D bpf_ntohs(inet->inet_dport);
-+	rqueue =3D inet->sk.sk_rmem_alloc.counter - udp_sk->forward_deficit;
-+	dest  =3D &inet->sk.sk_v6_daddr;
-+	src   =3D &inet->sk.sk_v6_rcv_saddr;
-+
-+	BPF_SEQ_PRINTF(seq, "%5d: %08X%08X%08X%08X:%04X %08X%08X%08X%08X:%04X "=
-,
-+		       ctx->bucket,
-+		       src->s6_addr32[0], src->s6_addr32[1],
-+		       src->s6_addr32[2], src->s6_addr32[3], srcp,
-+		       dest->s6_addr32[0], dest->s6_addr32[1],
-+		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
-+
-+	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK =
-%u\n",
-+		       inet->sk.sk_state,
-+		       inet->sk.sk_wmem_alloc.refs.counter - 1,
-+		       rqueue,
-+		       0, 0L, 0, ctx->uid, 0,
-+		       sock_i_ino(&inet->sk),
-+		       inet->sk.sk_refcnt.refs.counter, udp_sk,
-+		       inet->sk.sk_drops.counter);
-+
-+	return 0;
++	tcp_seq_stop(seq, v);
 +}
++
++static const struct seq_operations bpf_iter_tcp_seq_ops =3D {
++	.show		=3D bpf_iter_tcp_seq_show,
++	.start		=3D tcp_seq_start,
++	.next		=3D tcp_seq_next,
++	.stop		=3D bpf_iter_tcp_seq_stop,
++};
++#endif
++
+ static const struct seq_operations tcp4_seq_ops =3D {
+ 	.show		=3D tcp4_seq_show,
+ 	.start		=3D tcp_seq_start,
+@@ -2844,8 +2912,63 @@ static struct pernet_operations __net_initdata tcp=
+_sk_ops =3D {
+        .exit_batch =3D tcp_sk_exit_batch,
+ };
+=20
++#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
++DEFINE_BPF_ITER_FUNC(tcp, struct bpf_iter_meta *meta,
++		     struct sock_common *sk_common, uid_t uid)
++
++static int bpf_iter_init_tcp(void *priv_data)
++{
++	struct tcp_iter_state *st =3D priv_data;
++	struct tcp_seq_afinfo *afinfo;
++	int ret;
++
++	afinfo =3D kmalloc(sizeof(*afinfo), GFP_USER | __GFP_NOWARN);
++	if (!afinfo)
++		return -ENOMEM;
++
++	afinfo->family =3D AF_UNSPEC;
++	st->bpf_seq_afinfo =3D afinfo;
++	ret =3D bpf_iter_init_seq_net(priv_data);
++	if (ret)
++		kfree(afinfo);
++	return ret;
++}
++
++static void bpf_iter_fini_tcp(void *priv_data)
++{
++	struct tcp_iter_state *st =3D priv_data;
++
++	kfree(st->bpf_seq_afinfo);
++	bpf_iter_fini_seq_net(priv_data);
++}
++
++static const struct bpf_iter_reg tcp_reg_info =3D {
++	.target			=3D "tcp",
++	.seq_ops		=3D &bpf_iter_tcp_seq_ops,
++	.init_seq_private	=3D bpf_iter_init_tcp,
++	.fini_seq_private	=3D bpf_iter_fini_tcp,
++	.seq_priv_size		=3D sizeof(struct tcp_iter_state),
++	.ctx_arg_info_size	=3D 1,
++	.ctx_arg_info		=3D {
++		{ offsetof(struct bpf_iter__tcp, sk_common),
++		  PTR_TO_BTF_ID_OR_NULL },
++	},
++};
++
++static void __init bpf_iter_register(void)
++{
++	if (bpf_iter_reg_target(&tcp_reg_info))
++		pr_warn("Warning: could not register bpf iterator tcp\n");
++}
++
++#endif
++
+ void __init tcp_v4_init(void)
+ {
+ 	if (register_pernet_subsys(&tcp_sk_ops))
+ 		panic("Failed to create the TCP control socket.\n");
++
++#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
++	bpf_iter_register();
++#endif
+ }
 --=20
 2.24.1
 
