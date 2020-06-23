@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F91BC433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 00:36:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DEBFC433DF
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 00:36:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00E3B207DD
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 00:36:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB80C20738
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 00:36:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="I7txTJfw"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="m2KDYyVl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731924AbgFWAgk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Jun 2020 20:36:40 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:61062 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731848AbgFWAgi (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 22 Jun 2020 20:36:38 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05N0YAFo026883
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 17:36:37 -0700
+        id S1732037AbgFWAgs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Jun 2020 20:36:48 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:29546 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731929AbgFWAgo (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 22 Jun 2020 20:36:44 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05N0aLDC029181
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 17:36:43 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=2x1cn1n6ksC6EaE/hPOfZCR+5DPz/KXwal5k5k3D98Q=;
- b=I7txTJfwm92J4yVRlU/JWl+yo39eDV34qfB6Jom1xH+tsPydJ3s0T2I2AuZY779QHUMq
- ytAWsPGQFgaJfsu+kBCHHTc75H6cfo9pswJ2N9w/k/FIoRPWqxdIoEVLQBiCXql0OZDZ
- 9oSoAbapQeHnYaRhCT7pOdYHXsHTULzDbCc= 
+ bh=fNwFnCXpJd6Isoq61aBHv3JXGA8bG2tNK6/6IwZLjWY=;
+ b=m2KDYyVlMwY8+0t/wYF5ZiOdFeDT1/dbgu3S9QPWiBfYDMsCcZL+Ks8OQswCIbvmK2AP
+ SNhCngv+SyT8WEbuVWWYAQSTfMjtT1RrAdm6X8F/3VpOTWkPCljsSU0VOs6xJEzSsuJU
+ O0B4wnj/Csjg0c7HDnHwsugRREk25cTZ31o= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 31t2e8rdtf-10
+        by mx0a-00082601.pphosted.com with ESMTP id 31sfyku4ba-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 17:36:37 -0700
+        for <bpf@vger.kernel.org>; Mon, 22 Jun 2020 17:36:43 -0700
 Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 22 Jun 2020 17:36:36 -0700
+ 15.1.1979.3; Mon, 22 Jun 2020 17:36:42 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id CB5F13705002; Mon, 22 Jun 2020 17:36:33 -0700 (PDT)
+        id D5A5D3705002; Mon, 22 Jun 2020 17:36:38 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v3 07/15] net: bpf: add bpf_seq_afinfo in udp_iter_state
-Date:   Mon, 22 Jun 2020 17:36:33 -0700
-Message-ID: <20200623003633.3074221-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 11/15] tools/bpf: refactor some net macros to libbpf bpf_tracing_net.h
+Date:   Mon, 22 Jun 2020 17:36:38 -0700
+Message-ID: <20200623003638.3074707-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200623003626.3072825-1-yhs@fb.com>
 References: <20200623003626.3072825-1-yhs@fb.com>
@@ -61,118 +61,112 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-22_16:2020-06-22,2020-06-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 spamscore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
- suspectscore=8 bulkscore=0 cotscore=-2147483648 lowpriorityscore=0
- mlxlogscore=682 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006230000
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ suspectscore=8 adultscore=0 cotscore=-2147483648 impostorscore=0
+ malwarescore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0
+ phishscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006230000
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Similar to tcp_iter_state, a new field bpf_seq_afinfo is
-added to udp_iter_state to provide bpf udp iterator
-afinfo.
+Refactor bpf_iter_ipv6_route.c and bpf_iter_netlink.c
+so net macros, originally from various include/linux header
+files, are moved to a new libbpf installable header file
+bpf_tracing_net.h. The goal is to improve reuse so
+networking tracing programs do not need to
+copy these macros every time they use them.
 
-This does not change /proc/net/{udp, udp6} behavior. But
-it enables bpf iterator to avoid get afinfo from PDE_DATA
-and iterate through all udp and udp6 sockets in one pass.
-
-Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/net/udp.h |  1 +
- net/ipv4/udp.c    | 28 +++++++++++++++++++++++-----
- 2 files changed, 24 insertions(+), 5 deletions(-)
+ tools/lib/bpf/Makefile                           |  1 +
+ tools/lib/bpf/bpf_tracing_net.h                  | 16 ++++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_ipv6_route.c    |  7 +------
+ .../selftests/bpf/progs/bpf_iter_netlink.c       |  4 +---
+ 4 files changed, 19 insertions(+), 9 deletions(-)
+ create mode 100644 tools/lib/bpf/bpf_tracing_net.h
 
-diff --git a/include/net/udp.h b/include/net/udp.h
-index a8fa6c0c6ded..67c8b7368845 100644
---- a/include/net/udp.h
-+++ b/include/net/udp.h
-@@ -440,6 +440,7 @@ struct udp_seq_afinfo {
- struct udp_iter_state {
- 	struct seq_net_private  p;
- 	int			bucket;
-+	struct udp_seq_afinfo	*bpf_seq_afinfo;
- };
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index bf8ed134cb8a..3d766c80eb78 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -257,6 +257,7 @@ install_headers: $(BPF_HELPER_DEFS)
+ 		$(call do_install,bpf_helpers.h,$(prefix)/include/bpf,644); \
+ 		$(call do_install,$(BPF_HELPER_DEFS),$(prefix)/include/bpf,644); \
+ 		$(call do_install,bpf_tracing.h,$(prefix)/include/bpf,644); \
++		$(call do_install,bpf_tracing_net.h,$(prefix)/include/bpf,644); \
+ 		$(call do_install,bpf_endian.h,$(prefix)/include/bpf,644); \
+ 		$(call do_install,bpf_core_read.h,$(prefix)/include/bpf,644);
 =20
- void *udp_seq_start(struct seq_file *seq, loff_t *pos);
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 1b7ebbcae497..90355301b266 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -2826,10 +2826,15 @@ EXPORT_SYMBOL(udp_prot);
- static struct sock *udp_get_first(struct seq_file *seq, int start)
- {
- 	struct sock *sk;
--	struct udp_seq_afinfo *afinfo =3D PDE_DATA(file_inode(seq->file));
-+	struct udp_seq_afinfo *afinfo;
- 	struct udp_iter_state *state =3D seq->private;
- 	struct net *net =3D seq_file_net(seq);
-=20
-+	if (state->bpf_seq_afinfo)
-+		afinfo =3D state->bpf_seq_afinfo;
-+	else
-+		afinfo =3D PDE_DATA(file_inode(seq->file));
+diff --git a/tools/lib/bpf/bpf_tracing_net.h b/tools/lib/bpf/bpf_tracing_=
+net.h
+new file mode 100644
+index 000000000000..1f38a1098727
+--- /dev/null
++++ b/tools/lib/bpf/bpf_tracing_net.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
++#ifndef __BPF_TRACING_NET_H__
++#define __BPF_TRACING_NET_H__
 +
- 	for (state->bucket =3D start; state->bucket <=3D afinfo->udp_table->mas=
-k;
- 	     ++state->bucket) {
- 		struct udp_hslot *hslot =3D &afinfo->udp_table->hash[state->bucket];
-@@ -2841,7 +2846,8 @@ static struct sock *udp_get_first(struct seq_file *=
-seq, int start)
- 		sk_for_each(sk, &hslot->head) {
- 			if (!net_eq(sock_net(sk), net))
- 				continue;
--			if (sk->sk_family =3D=3D afinfo->family)
-+			if (afinfo->family =3D=3D AF_UNSPEC ||
-+			    sk->sk_family =3D=3D afinfo->family)
- 				goto found;
- 		}
- 		spin_unlock_bh(&hslot->lock);
-@@ -2853,13 +2859,20 @@ static struct sock *udp_get_first(struct seq_file=
- *seq, int start)
-=20
- static struct sock *udp_get_next(struct seq_file *seq, struct sock *sk)
- {
--	struct udp_seq_afinfo *afinfo =3D PDE_DATA(file_inode(seq->file));
-+	struct udp_seq_afinfo *afinfo;
- 	struct udp_iter_state *state =3D seq->private;
- 	struct net *net =3D seq_file_net(seq);
-=20
-+	if (state->bpf_seq_afinfo)
-+		afinfo =3D state->bpf_seq_afinfo;
-+	else
-+		afinfo =3D PDE_DATA(file_inode(seq->file));
++#define IFNAMSIZ		16
 +
- 	do {
- 		sk =3D sk_next(sk);
--	} while (sk && (!net_eq(sock_net(sk), net) || sk->sk_family !=3D afinfo=
-->family));
-+	} while (sk && (!net_eq(sock_net(sk), net) ||
-+			(afinfo->family !=3D AF_UNSPEC &&
-+			 sk->sk_family !=3D afinfo->family)));
-=20
- 	if (!sk) {
- 		if (state->bucket <=3D afinfo->udp_table->mask)
-@@ -2904,9 +2917,14 @@ EXPORT_SYMBOL(udp_seq_next);
-=20
- void udp_seq_stop(struct seq_file *seq, void *v)
- {
--	struct udp_seq_afinfo *afinfo =3D PDE_DATA(file_inode(seq->file));
-+	struct udp_seq_afinfo *afinfo;
- 	struct udp_iter_state *state =3D seq->private;
-=20
-+	if (state->bpf_seq_afinfo)
-+		afinfo =3D state->bpf_seq_afinfo;
-+	else
-+		afinfo =3D PDE_DATA(file_inode(seq->file));
++#define RTF_GATEWAY		0x0002
 +
- 	if (state->bucket <=3D afinfo->udp_table->mask)
- 		spin_unlock_bh(&afinfo->udp_table->hash[state->bucket].lock);
- }
++#define fib_nh_dev		nh_common.nhc_dev
++#define fib_nh_gw_family	nh_common.nhc_gw_family
++#define fib_nh_gw6		nh_common.nhc_gw.ipv6
++
++#define sk_rmem_alloc		sk_backlog.rmem_alloc
++#define sk_refcnt		__sk_common.skc_refcnt
++
++#endif
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c b/to=
+ols/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c
+index 93a452d1d136..64f952d68710 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_ipv6_route.c
+@@ -3,17 +3,12 @@
+ #include "bpf_iter.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
++#include <bpf/bpf_tracing_net.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+=20
+ extern bool CONFIG_IPV6_SUBTREES __kconfig __weak;
+=20
+-#define RTF_GATEWAY		0x0002
+-#define IFNAMSIZ		16
+-#define fib_nh_gw_family	nh_common.nhc_gw_family
+-#define fib_nh_gw6		nh_common.nhc_gw.ipv6
+-#define fib_nh_dev		nh_common.nhc_dev
+-
+ SEC("iter/ipv6_route")
+ int dump_ipv6_route(struct bpf_iter__ipv6_route *ctx)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/tools=
+/testing/selftests/bpf/progs/bpf_iter_netlink.c
+index fda5036fdf75..cde88ad957a2 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+@@ -3,12 +3,10 @@
+ #include "bpf_iter.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
++#include <bpf/bpf_tracing_net.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+=20
+-#define sk_rmem_alloc	sk_backlog.rmem_alloc
+-#define sk_refcnt	__sk_common.skc_refcnt
+-
+ static inline struct inode *SOCK_INODE(struct socket *socket)
+ {
+ 	return &container_of(socket, struct socket_alloc, socket)->vfs_inode;
 --=20
 2.24.1
 
