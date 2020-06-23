@@ -2,196 +2,143 @@ Return-Path: <SRS0=QOwA=AE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DEE7C433E1
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:27:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95E60C433E0
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:29:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C84220724
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592947645;
-	bh=iremO8qJ45paftYAO3M1qTShaKNRP4EwjN7wWH9FyL0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WCMxNgvnCOB16LJJA8odhFykibcmXMnSwHsuQuZ2MgY5noVo3BCnwOnQgDwVN/hps
-	 NX5VMZrG8rznfsFh5fhpBra7cBXdIrkjBBFuzqhdMwCLE6OAy1FKrNZjffs+4kyKcH
-	 qRkqif8PjeWZ/LFQqCsiqaQ9eOxhvPOl00hgD4tw=
+	by mail.kernel.org (Postfix) with ESMTP id 69C1620781
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:29:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jKR57uaK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390681AbgFWV1X (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 17:27:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60952 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389229AbgFWUQ7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 16:16:59 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S2389283AbgFWUPA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 16:15:00 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:39603 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2389253AbgFWUO6 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Jun 2020 16:14:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592943296;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5zAEMMthAF+BgcxpI9EmxBAla8RvrwDJp/YeL5TwdGk=;
+        b=jKR57uaKDDFNgYESCUmBu+m0B8XwJjc6I6slD6p+16PUWQhVDmgyNYZjAokYvoDoxFqATk
+        MrJV9NriznU/5RmEj+59I044086ecoIteh4c/lkQzw893c+ZRfRwM4ukJYz3Rm9cOtCteh
+        g0zO+qB1ZxEXWfgTj98Jyud79cbd88s=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-75-sTNbpeNaOfqO7aGYHNPdgg-1; Tue, 23 Jun 2020 16:14:54 -0400
+X-MC-Unique: sTNbpeNaOfqO7aGYHNPdgg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D36012145D;
-        Tue, 23 Jun 2020 20:16:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592943419;
-        bh=iremO8qJ45paftYAO3M1qTShaKNRP4EwjN7wWH9FyL0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tld/yRDocRi67pnPWJ4WoBIkWt3fIK75DIo2kIuo+2YzSEa63pLRefVPa0BSDF41t
-         gXVLUQ6qE1fievZJ/FOp3pJOJ8gIydgAe6sdWPT0IZWxWPK4ta1i8/ertwjBRwvjMY
-         EGWaS0ENp58uBUxKtzk1nM2Xt7Y+ik4eS5L3OgqI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        bpf@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.7 385/477] perf probe: Fix user attribute access in kprobes
-Date:   Tue, 23 Jun 2020 21:56:22 +0200
-Message-Id: <20200623195425.725155460@linuxfoundation.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200623195407.572062007@linuxfoundation.org>
-References: <20200623195407.572062007@linuxfoundation.org>
-User-Agent: quilt/0.66
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 987CF8464BE;
+        Tue, 23 Jun 2020 20:14:51 +0000 (UTC)
+Received: from krava (unknown [10.40.192.77])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 06C625BAC4;
+        Tue, 23 Jun 2020 20:14:47 +0000 (UTC)
+Date:   Tue, 23 Jun 2020 22:14:47 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        David Miller <davem@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wenbo Zhang <ethercflow@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Brendan Gregg <bgregg@netflix.com>,
+        Florent Revest <revest@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 09/11] bpf: Add d_path helper
+Message-ID: <20200623201447.GM2619137@krava>
+References: <20200616100512.2168860-1-jolsa@kernel.org>
+ <20200616100512.2168860-10-jolsa@kernel.org>
+ <CAEf4BzY=d5y_-fXvomG7SjkbK7DZn5=-f+sdCYRdZh9qeynQrQ@mail.gmail.com>
+ <20200619133124.GJ2465907@krava>
+ <CAEf4BzZDCtW-5r5rN+ufZi1hUXjw8QCF+CiyT5sOvQQEEOqtiQ@mail.gmail.com>
+ <20200622090205.GD2556590@krava>
+ <CAEf4BzZOph2EJLfq9FCYUhesi5NP0L_OQTrEKE-s0NPmt3HmWw@mail.gmail.com>
+ <20200623100230.GA2619137@krava>
+ <CAEf4BzZ=oYo6TiROpHQWpQ8Mn1CwONLSx44QJ0pqQH=9OUTWTQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZ=oYo6TiROpHQWpQ8Mn1CwONLSx44QJ0pqQH=9OUTWTQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Sumanth Korikkar <sumanthk@linux.ibm.com>
+On Tue, Jun 23, 2020 at 11:58:33AM -0700, Andrii Nakryiko wrote:
+> On Tue, Jun 23, 2020 at 3:02 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > On Mon, Jun 22, 2020 at 12:18:19PM -0700, Andrii Nakryiko wrote:
+> > > On Mon, Jun 22, 2020 at 2:02 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > > >
+> > > > On Fri, Jun 19, 2020 at 11:25:27AM -0700, Andrii Nakryiko wrote:
+> > > >
+> > > > SNIP
+> > > >
+> > > > > > > >  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> > > > > > > >   * function eBPF program intends to call
+> > > > > > > > diff --git a/kernel/bpf/btf_ids.c b/kernel/bpf/btf_ids.c
+> > > > > > > > index d8d0df162f04..853c8fd59b06 100644
+> > > > > > > > --- a/kernel/bpf/btf_ids.c
+> > > > > > > > +++ b/kernel/bpf/btf_ids.c
+> > > > > > > > @@ -13,3 +13,14 @@ BTF_ID(struct, seq_file)
+> > > > > > > >
+> > > > > > > >  BTF_ID_LIST(bpf_xdp_output_btf_ids)
+> > > > > > > >  BTF_ID(struct, xdp_buff)
+> > > > > > > > +
+> > > > > > > > +BTF_ID_LIST(bpf_d_path_btf_ids)
+> > > > > > > > +BTF_ID(struct, path)
+> > > > > > > > +
+> > > > > > > > +BTF_WHITELIST_ENTRY(btf_whitelist_d_path)
+> > > > > > > > +BTF_ID(func, vfs_truncate)
+> > > > > > > > +BTF_ID(func, vfs_fallocate)
+> > > > > > > > +BTF_ID(func, dentry_open)
+> > > > > > > > +BTF_ID(func, vfs_getattr)
+> > > > > > > > +BTF_ID(func, filp_close)
+> > > > > > > > +BTF_WHITELIST_END(btf_whitelist_d_path)
+> > > > > > >
+> > > > > > > Oh, so that's why you added btf_ids.c. Do you think centralizing all
+> > > > > > > those BTF ID lists in one file is going to be more convenient? I lean
+> > > > > > > towards keeping them closer to where they are used, as it was with all
+> > > > > > > those helper BTF IDS. But I wonder what others think...
+> > > > > >
+> > > > > > either way works for me, but then BTF_ID_* macros needs to go
+> > > > > > to include/linux/btf_ids.h header right?
+> > > > > >
+> > > > >
+> > > > > given it's internal API, I'd probably just put it in
+> > > > > include/linux/btf.h or include/linux/bpf.h, don't think we need extra
+> > > > > header just for these
+> > > >
+> > > > actually, I might end up with extra header, so it's possible
+> > > > to add selftest for this
+> > > >
+> > >
+> > > How does extra header help with selftest?
+> >
+> > to create binary with various lists defined like we do in kernel
+> > using the same macros..  and check they are properly made/sorted
+> >
+> 
+> So the problem here is that selftests don't have access to internal
+> (non-UAPI) linux/bpf.h header, right? Ok, that's a fair point.
 
-[ Upstream commit 9256c3031eb9beafa3957c61093104c3c75a6148 ]
+hm, how about we keep tools/include/linux/btf_ids.h copy
+like we do for other kernel headers
 
-Issue:
-
-  # perf probe -a 'do_sched_setscheduler pid policy param->sched_priority@user'
-
-did not work before.
-
-Fix:
-
-Make:
-
-  # perf probe -a 'do_sched_setscheduler pid policy param->sched_priority@user'
-
-output equivalent to ftrace:
-
-  # echo 'p:probe/do_sched_setscheduler _text+517384 pid=%r2:s32 policy=%r3:s32 sched_priority=+u0(%r4):s32' > /sys/kernel/debug/tracing/kprobe_events
-
-Other:
-
-1. Right now, __match_glob() does not handle [u]<offset>. For now, use
-  *u]<offset>.
-
-2. @user attribute was introduced in commit 1e032f7cfa14 ("perf-probe:
-   Add user memory access attribute support")
-
-Test:
-1. perf probe -a 'do_sched_setscheduler  pid policy
-   param->sched_priority@user'
-
-2 ./perf script
-   sched 305669 [000] 1614458.838675: perf_bpf_probe:func: (2904e508)
-   pid=261614 policy=2 sched_priority=1
-
-3. cat /sys/kernel/debug/tracing/trace
-   <...>-309956 [006] .... 1616098.093957: 0: prio: 1
-
-Committer testing:
-
-Before:
-
-  # perf probe -a 'do_sched_setscheduler pid policy param->sched_priority@user'
-  param(type:sched_param) has no member sched_priority@user.
-    Error: Failed to add events.
-  # pahole sched_param
-  struct sched_param {
-  	int                        sched_priority;       /*     0     4 */
-
-  	/* size: 4, cachelines: 1, members: 1 */
-  	/* last cacheline: 4 bytes */
-  };
-  #
-
-After:
-
-  # perf probe -a 'do_sched_setscheduler pid policy param->sched_priority@user'
-  Added new event:
-    probe:do_sched_setscheduler (on do_sched_setscheduler with pid policy sched_priority=param->sched_priority)
-
-  You can now use it in all perf tools, such as:
-
-  	perf record -e probe:do_sched_setscheduler -aR sleep 1
-
-  # cat /sys/kernel/debug/tracing/kprobe_events
-  p:probe/do_sched_setscheduler _text+1113792 pid=%di:s32 policy=%si:s32 sched_priority=+u0(%dx):s32
-  #
-
-Fixes: 1e032f7cfa14 ("perf-probe: Add user memory access attribute support")
-Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
-Reviewed-by: Thomas Richter <tmricht@linux.ibm.com>
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-Cc: Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Cc: bpf@vger.kernel.org
-LPU-Reference: 20200609081019.60234-2-sumanthk@linux.ibm.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/perf/util/probe-event.c | 7 +++++--
- tools/perf/util/probe-file.c  | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
-index a08f373d33056..df713a5d1e26a 100644
---- a/tools/perf/util/probe-event.c
-+++ b/tools/perf/util/probe-event.c
-@@ -1575,7 +1575,7 @@ static int parse_perf_probe_arg(char *str, struct perf_probe_arg *arg)
- 	}
- 
- 	tmp = strchr(str, '@');
--	if (tmp && tmp != str && strcmp(tmp + 1, "user")) { /* user attr */
-+	if (tmp && tmp != str && !strcmp(tmp + 1, "user")) { /* user attr */
- 		if (!user_access_is_supported()) {
- 			semantic_error("ftrace does not support user access\n");
- 			return -EINVAL;
-@@ -1995,7 +1995,10 @@ static int __synthesize_probe_trace_arg_ref(struct probe_trace_arg_ref *ref,
- 		if (depth < 0)
- 			return depth;
- 	}
--	err = strbuf_addf(buf, "%+ld(", ref->offset);
-+	if (ref->user_access)
-+		err = strbuf_addf(buf, "%s%ld(", "+u", ref->offset);
-+	else
-+		err = strbuf_addf(buf, "%+ld(", ref->offset);
- 	return (err < 0) ? err : depth;
- }
- 
-diff --git a/tools/perf/util/probe-file.c b/tools/perf/util/probe-file.c
-index 8c852948513e3..064b63a6a3f31 100644
---- a/tools/perf/util/probe-file.c
-+++ b/tools/perf/util/probe-file.c
-@@ -1044,7 +1044,7 @@ static struct {
- 	DEFINE_TYPE(FTRACE_README_PROBE_TYPE_X, "*type: * x8/16/32/64,*"),
- 	DEFINE_TYPE(FTRACE_README_KRETPROBE_OFFSET, "*place (kretprobe): *"),
- 	DEFINE_TYPE(FTRACE_README_UPROBE_REF_CTR, "*ref_ctr_offset*"),
--	DEFINE_TYPE(FTRACE_README_USER_ACCESS, "*[u]<offset>*"),
-+	DEFINE_TYPE(FTRACE_README_USER_ACCESS, "*u]<offset>*"),
- 	DEFINE_TYPE(FTRACE_README_MULTIPROBE_EVENT, "*Create/append/*"),
- 	DEFINE_TYPE(FTRACE_README_IMMEDIATE_VALUE, "*\\imm-value,*"),
- };
--- 
-2.25.1
-
-
+jirka
 
