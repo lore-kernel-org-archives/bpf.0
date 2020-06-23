@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DCF2C433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB453C433E0
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:40:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08CDA206E2
-	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:40:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9509E206E2
+	for <bpf@archiver.kernel.org>; Tue, 23 Jun 2020 21:40:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592948430;
-	bh=nnhLuWjhAmtqdh/h9McwI2+rIxXUasdP/Hjaz6p8JLk=;
+	s=default; t=1592948435;
+	bh=rOARAAomKOZ2UyjowH+zQYnlfdJiAFzJVzpbFtYQX3s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jHfwlqVvsrIvGjJViLoRhil1iDy665n4zKZLuguQQRGAjErIZjbgCIREuaJUnwlZx
-	 0dCHZt6H/jYT/8+l763YPfKTqH6swsKK5+3c0W+qdgXQoYnA65Wsn4Idx3CDhNCDYA
-	 GOe2AwiElbOqmsJ8kRS+3i+w1Q/kEXAsWxdwWVJo=
+	b=wf0yrOvz01RQ1Ui0R5KmNmO4DIw+20kLLzhkVKyuXTpdD0hn6QzYSaBzAnnpWEqXa
+	 v0xLtLC1r2WILGX8vWjGdw2E5887XzfbHvL13K4X5ma8zGqZc4fBql8lvdchJJteda
+	 3GhQl24vzemxPKim7lS7V5+HxO6C2SqINty2Y0ZM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388747AbgFWVkZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Jun 2020 17:40:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58204 "EHLO mail.kernel.org"
+        id S2389701AbgFWVkc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Jun 2020 17:40:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58100 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394046AbgFWVkV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Jun 2020 17:40:21 -0400
+        id S2389202AbgFWVkO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Jun 2020 17:40:14 -0400
 Received: from localhost.localdomain.com (unknown [151.48.138.186])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E526B2078E;
-        Tue, 23 Jun 2020 21:40:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B13F420836;
+        Tue, 23 Jun 2020 21:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592948420;
-        bh=nnhLuWjhAmtqdh/h9McwI2+rIxXUasdP/Hjaz6p8JLk=;
+        s=default; t=1592948413;
+        bh=rOARAAomKOZ2UyjowH+zQYnlfdJiAFzJVzpbFtYQX3s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=13PGfucgHJy7tvjWCF9VC7aGxsTrTg58wQks/nfHjexf0EyAI9Xa22bYW8JNQmpiJ
-         DZFfIl8xi+I/woe4IHhmi8pkKd6qMiLrNnInbED5XcAPaSW4hSEhnrgZei7XR02xdO
-         qJFjgquzmBsuFT7s1xLPxHSfzZi69kDwMvq1t1Ig=
+        b=GM0/C175paF1TidoRKlP2274ht1fYvbcoLjeoFIMTYkiiqShX1jW2OdnlUk0rxyix
+         iPAsO/R2dv+sl9JEgxEL5VpLgsg2qCFhrbpmZfhbOdMwQfPLIAsKq4moEfx0lxr0GH
+         V91SK4j9ggIxLK1diZr0qlH/wsJWZGB/Adx9x7tQ=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, brouer@redhat.com,
         daniel@iogearbox.net, toke@redhat.com, lorenzo.bianconi@redhat.com,
         dsahern@kernel.org, andrii.nakryiko@gmail.com
-Subject: [PATCH v3 bpf-next 9/9] selftest: add tests for XDP programs in CPUMAP entries
-Date:   Tue, 23 Jun 2020 23:39:34 +0200
-Message-Id: <81ff56ab7ba1f0e48cba821563d311fa8f7e2e28.1592947694.git.lorenzo@kernel.org>
+Subject: [PATCH v3 bpf-next 6/9] bpf: cpumap: implement XDP_REDIRECT for eBPF programs attached to map entries
+Date:   Tue, 23 Jun 2020 23:39:31 +0200
+Message-Id: <cad5c3a21ba8ac953b2a6e7fb70b39ae49c597ac.1592947694.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1592947694.git.lorenzo@kernel.org>
 References: <cover.1592947694.git.lorenzo@kernel.org>
@@ -56,142 +56,122 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Similar to what have been done for DEVMAP, introduce tests to verify
-ability to add a XDP program to an entry in a CPUMAP.
-Verify CPUMAP programs can not be attached to devices as a normal
-XDP program, and only programs with BPF_XDP_CPUMAP attach type can
-be loaded in a CPUMAP.
+Introduce XDP_REDIRECT support for eBPF programs attached to cpumap
+entries.
+This patch has been tested on Marvell ESPRESSObin using a modified
+version of xdp_redirect_cpu sample in order to attach a XDP program
+to CPUMAP entries to perform a redirect on the mvneta interface.
+In particular the following scenario has been tested:
 
+rq (cpu0) --> mvneta - XDP_REDIRECT (cpu0) --> CPUMAP - XDP_REDIRECT (cpu1) --> mvneta
+
+$./xdp_redirect_cpu -p xdp_cpu_map0 -d eth0 -c 1 -e xdp_redirect \
+	-f xdp_redirect_kern.o -m tx_port -r eth0
+
+tx: 285.2 Kpps rx: 285.2 Kpps
+
+Attacching a simple XDP program on eth0 to perform XDP_TX gives
+comparable results:
+
+tx: 288.4 Kpps rx: 288.4 Kpps
+
+Co-developed-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- .../bpf/prog_tests/xdp_cpumap_attach.c        | 70 +++++++++++++++++++
- .../bpf/progs/test_xdp_with_cpumap_helpers.c  | 40 +++++++++++
- 2 files changed, 110 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
+ include/net/xdp.h          |  1 +
+ include/trace/events/xdp.h |  6 ++++--
+ kernel/bpf/cpumap.c        | 17 +++++++++++++++--
+ 3 files changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-new file mode 100644
-index 000000000000..0176573fe4e7
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-@@ -0,0 +1,70 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <uapi/linux/bpf.h>
-+#include <linux/if_link.h>
-+#include <test_progs.h>
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 83b9e0142b52..5be0d4d65b94 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -99,6 +99,7 @@ struct xdp_frame {
+ };
+ 
+ struct xdp_cpumap_stats {
++	unsigned int redirect;
+ 	unsigned int pass;
+ 	unsigned int drop;
+ };
+diff --git a/include/trace/events/xdp.h b/include/trace/events/xdp.h
+index e2c99f5bee39..cd24e8a59529 100644
+--- a/include/trace/events/xdp.h
++++ b/include/trace/events/xdp.h
+@@ -190,6 +190,7 @@ TRACE_EVENT(xdp_cpumap_kthread,
+ 		__field(int, sched)
+ 		__field(unsigned int, xdp_pass)
+ 		__field(unsigned int, xdp_drop)
++		__field(unsigned int, xdp_redirect)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -201,18 +202,19 @@ TRACE_EVENT(xdp_cpumap_kthread,
+ 		__entry->sched	= sched;
+ 		__entry->xdp_pass	= xdp_stats->pass;
+ 		__entry->xdp_drop	= xdp_stats->drop;
++		__entry->xdp_redirect	= xdp_stats->redirect;
+ 	),
+ 
+ 	TP_printk("kthread"
+ 		  " cpu=%d map_id=%d action=%s"
+ 		  " processed=%u drops=%u"
+ 		  " sched=%d"
+-		  " xdp_pass=%u xdp_drop=%u",
++		  " xdp_pass=%u xdp_drop=%u xdp_redirect=%u",
+ 		  __entry->cpu, __entry->map_id,
+ 		  __print_symbolic(__entry->act, __XDP_ACT_SYM_TAB),
+ 		  __entry->processed, __entry->drops,
+ 		  __entry->sched,
+-		  __entry->xdp_pass, __entry->xdp_drop)
++		  __entry->xdp_pass, __entry->xdp_drop, __entry->xdp_redirect)
+ );
+ 
+ TRACE_EVENT(xdp_cpumap_enqueue,
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 4e4cd240f07b..c0b2f265ccb2 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -240,7 +240,7 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
+ 	xdp_set_return_frame_no_direct();
+ 	xdp.rxq = &rxq;
+ 
+-	rcu_read_lock();
++	rcu_read_lock_bh();
+ 
+ 	prog = READ_ONCE(rcpu->prog);
+ 	for (i = 0; i < n; i++) {
+@@ -266,6 +266,16 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
+ 				stats->pass++;
+ 			}
+ 			break;
++		case XDP_REDIRECT:
++			err = xdp_do_redirect(xdpf->dev_rx, &xdp,
++					      prog);
++			if (unlikely(err)) {
++				xdp_return_frame(xdpf);
++				stats->drop++;
++			} else {
++				stats->redirect++;
++			}
++			break;
+ 		default:
+ 			bpf_warn_invalid_xdp_action(act);
+ 			/* fallthrough */
+@@ -276,7 +286,10 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
+ 		}
+ 	}
+ 
+-	rcu_read_unlock();
++	if (stats->redirect)
++		xdp_do_flush_map();
 +
-+#include "test_xdp_with_cpumap_helpers.skel.h"
-+
-+#define IFINDEX_LO	1
-+
-+void test_xdp_with_cpumap_helpers(void)
-+{
-+	struct test_xdp_with_cpumap_helpers *skel;
-+	struct bpf_prog_info info = {};
-+	struct bpf_cpumap_val val = {
-+		.qsize = 192,
-+	};
-+	__u32 duration = 0, idx = 0;
-+	__u32 len = sizeof(info);
-+	int err, prog_fd, map_fd;
-+
-+	skel = test_xdp_with_cpumap_helpers__open_and_load();
-+	if (CHECK_FAIL(!skel)) {
-+		perror("test_xdp_with_cpumap_helpers__open_and_load");
-+		return;
-+	}
-+
-+	/* can not attach program with cpumaps that allow programs
-+	 * as xdp generic
-+	 */
-+	prog_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
-+	err = bpf_set_link_xdp_fd(IFINDEX_LO, prog_fd, XDP_FLAGS_SKB_MODE);
-+	CHECK(err == 0, "Generic attach of program with 8-byte CPUMAP",
-+	      "should have failed\n");
-+
-+	prog_fd = bpf_program__fd(skel->progs.xdp_dummy_cm);
-+	map_fd = bpf_map__fd(skel->maps.cpu_map);
-+	err = bpf_obj_get_info_by_fd(prog_fd, &info, &len);
-+	if (CHECK_FAIL(err))
-+		goto out_close;
-+
-+	val.bpf_prog.fd = prog_fd;
-+	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
-+	CHECK(err, "Add program to cpumap entry", "err %d errno %d\n",
-+	      err, errno);
-+
-+	err = bpf_map_lookup_elem(map_fd, &idx, &val);
-+	CHECK(err, "Read cpumap entry", "err %d errno %d\n", err, errno);
-+	CHECK(info.id != val.bpf_prog.id, "Expected program id in cpumap entry",
-+	      "expected %u read %u\n", info.id, val.bpf_prog.id);
-+
-+	/* can not attach BPF_XDP_CPUMAP program to a device */
-+	err = bpf_set_link_xdp_fd(IFINDEX_LO, prog_fd, XDP_FLAGS_SKB_MODE);
-+	CHECK(err == 0, "Attach of BPF_XDP_CPUMAP program",
-+	      "should have failed\n");
-+
-+	val.qsize = 192;
-+	val.bpf_prog.fd = bpf_program__fd(skel->progs.xdp_dummy_prog);
-+	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
-+	CHECK(err == 0, "Add non-BPF_XDP_CPUMAP program to cpumap entry",
-+	      "should have failed\n");
-+
-+out_close:
-+	test_xdp_with_cpumap_helpers__destroy(skel);
-+}
-+
-+void test_xdp_cpumap_attach(void)
-+{
-+	if (test__start_subtest("cpumap_with_progs"))
-+		test_xdp_with_cpumap_helpers();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
-new file mode 100644
-index 000000000000..861848d0c353
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+static __u32 ingress_ifindex;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_CPUMAP);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(struct bpf_cpumap_val));
-+	__uint(max_entries, 4);
-+} cpu_map SEC(".maps");
-+
-+SEC("xdp_redir")
-+int xdp_redir_prog(struct xdp_md *ctx)
-+{
-+	return bpf_redirect_map(&cpu_map, 1, 0);
-+}
-+
-+SEC("xdp_dummy")
-+int xdp_dummy_prog(struct xdp_md *ctx)
-+{
-+	return XDP_PASS;
-+}
-+
-+SEC("xdp_cpumap/dummy_cm")
-+int xdp_dummy_cm(struct xdp_md *ctx)
-+{
-+	char fmt[] = "devmap redirect: dev %u len %u\n";
-+	void *data_end = (void *)(long)ctx->data_end;
-+	void *data = (void *)(long)ctx->data;
-+	unsigned int len = data_end - data;
-+
-+	ingress_ifindex = ctx->ingress_ifindex;
-+
-+	return XDP_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
++	rcu_read_unlock_bh(); /* resched point, may call do_softirq() */
+ 	xdp_clear_return_frame_no_direct();
+ 
+ 	return nframes;
 -- 
 2.26.2
 
