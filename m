@@ -2,170 +2,280 @@ Return-Path: <SRS0=qFa8=AG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36CC9C433E0
-	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 23:13:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16800C433E0
+	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 23:26:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0FA9520768
-	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 23:13:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D5F7120768
+	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 23:26:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e/5wXZyN"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="DrXhKuuJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407700AbgFYXNw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Jun 2020 19:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406631AbgFYXNw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Jun 2020 19:13:52 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BF4C08C5C1;
-        Thu, 25 Jun 2020 16:13:52 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id e64so2985922iof.12;
-        Thu, 25 Jun 2020 16:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:date:message-id:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=2dDp4wdTOXkTlMfK+S1sLZUdmr8B+CfJrwoh3NxWVt8=;
-        b=e/5wXZyNhEhlZ5rpDWJ2/3vVtIupUKHBD/sDdHvqFyE+Bt2HefyUme/ogAM/y9cXYC
-         +8xGgC44veimAb0dTz0SNFhk9Dr6GJzY087XRqtPvmqIOJcs+ecRnjUQQMFjvpDk6JgD
-         w7BLdP8rQoxlFSVSR5vIyZvpi3tMPlovb3cVQj3/+NqDMWaLI/OSQe2cuay7Az7XoSyw
-         LZ1ED3UaSiWAG8pd7LxwG1NET81umigHarqt0BdYkJXwurkZ6RtpKhxza2APssgoj18Y
-         asPGcJ1aPKRb/b4WLXz6tSQdWUMjgO46v+CBT31njbD+coCMkh9aMHgWs7CGybl4lEbo
-         S9LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=2dDp4wdTOXkTlMfK+S1sLZUdmr8B+CfJrwoh3NxWVt8=;
-        b=bhME/MMILqjvL0zkive0yvH04EazZt6GuvvwVR4T7/qvy+71JTS8b7PRUQy0yDeQCU
-         n4VGn6K/IQv59g0G8a7UWNeZjRiJ7fK2ehepQ6Oo5Jmttz5oQqY297XqDW5Io0/xyR+Z
-         0xdzOC+TBkm1PZOcWX9UPgDatUixR4ctE4bRScyujgylaYQxgQ6frupmRIlvaPiWAg5O
-         TT83C4TauZmo0mLJyHyzbGpuB8vG1HxvLQMPJ2N6x4UQepOJiAcBRbCm6Kzc5ysb+ic8
-         sgAZed4copV6/Y1vEYAYEaryIMfc1YbXjUNaBiniDFabBf1ewTThVsi5TUzAg3acJyg/
-         Wq1Q==
-X-Gm-Message-State: AOAM533TC5Hz5oEysMTfZnpnHp0l3Z2p2M3M8J7/VFVvxSiqFjMqnY6u
-        8NUVC8cnqqqJsBig6RwnOBE=
-X-Google-Smtp-Source: ABdhPJyeAHc7ZaCtUtouKsmYR+vIfTgTh+QRzXwQoaMUp9ppuRgtnlOCho+dG7XIv7hvcdkuAczElA==
-X-Received: by 2002:a05:6602:2dd4:: with SMTP id l20mr502009iow.13.1593126831515;
-        Thu, 25 Jun 2020 16:13:51 -0700 (PDT)
-Received: from [127.0.1.1] ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id e12sm13744538ili.68.2020.06.25.16.13.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2020 16:13:50 -0700 (PDT)
-Subject: [bpf PATCH v2 3/3] bpf,
- sockmap: Add ingres skb tests that utilize merge skbs
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     kafai@fb.com, jakub@cloudflare.com, daniel@iogearbox.net,
-        ast@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        john.fastabend@gmail.com
-Date:   Thu, 25 Jun 2020 16:13:38 -0700
-Message-ID: <159312681884.18340.4922800172600252370.stgit@john-XPS-13-9370>
-In-Reply-To: <159312606846.18340.6821004346409614051.stgit@john-XPS-13-9370>
-References: <159312606846.18340.6821004346409614051.stgit@john-XPS-13-9370>
-User-Agent: StGit/0.17.1-dirty
+        id S2407797AbgFYX0l (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Jun 2020 19:26:41 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:9322 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2390262AbgFYX0k (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 25 Jun 2020 19:26:40 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05PNP2Zq005348
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 16:26:37 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=O4IM4mpnzr7vgIA5lsTt2Q+KkRs3BwRS6vEquW93BCg=;
+ b=DrXhKuuJLGG8OkVFjZHLqayY8BbYINIVLZzxbWGtVS0FwKjpVa+fK/URHc1QRXYgfLpq
+ GjiQtkaNX5ddUciqBLI10lEDbal5VSdHlQLVTY1bCpCBBlk++5uuBTaD7Y8thn4MGddl
+ U44X3r1pKWcZG6gczdpY4ahKwRRM0pghV3M= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31ux0qas2r-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 16:26:37 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 25 Jun 2020 16:26:36 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id AA0692EC3954; Thu, 25 Jun 2020 16:26:35 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next 1/2] libbpf: support disabling auto-loading BPF programs
+Date:   Thu, 25 Jun 2020 16:26:28 -0700
+Message-ID: <20200625232629.3444003-2-andriin@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200625232629.3444003-1-andriin@fb.com>
+References: <20200625232629.3444003-1-andriin@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-25_19:2020-06-25,2020-06-25 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 adultscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 suspectscore=29 phishscore=0 clxscore=1015
+ cotscore=-2147483648 mlxlogscore=999 spamscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006250136
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a test to check strparser merging skbs is working.
+Currently, bpf_object__load() (and by induction skeleton's load), will al=
+ways
+attempt to prepare, relocate, and load into kernel every single BPF progr=
+am
+found inside the BPF object file. This is often convenient and the right =
+thing
+to do and what users expect.
 
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+But there are plenty of cases (especially with BPF development constantly
+picking up the pace), where BPF application is intended to work with old
+kernels, with potentially reduced set of features. But on kernels support=
+ing
+extra features, it would like to take a full advantage of them, by employ=
+ing
+extra BPF program. This could be a choice of using fentry/fexit over
+kprobe/kretprobe, if kernel is recent enough and is built with BTF. Or BP=
+F
+program might be providing optimized bpf_iter-based solution that user-sp=
+ace
+might want to use, whenever available. And so on.
+
+With libbpf and BPF CO-RE in particular, it's advantageous to not have to
+maintain two separate BPF object files to achieve this. So to enable such=
+ use
+cases, this patch adds ability to request not auto-loading chosen BPF
+programs. In such case, libbpf won't attempt to perform relocations (whic=
+h
+might fail due to old kernel), won't try to resolve BTF types for
+BTF-aware (tp_btf/fentry/fexit/etc) program types, because BTF might not =
+be
+present, and so on. Skeleton will also automatically skip auto-attachment=
+ step
+for such not loaded BPF programs.
+
+Overall, this feature allows to simplify development and deployment of
+real-world BPF applications with complicated compatibility requirements.
+
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../selftests/bpf/progs/test_sockmap_kern.h        |    8 +++++++-
- tools/testing/selftests/bpf/test_sockmap.c         |   18 ++++++++++++++++++
- 2 files changed, 25 insertions(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.c   | 48 +++++++++++++++++++++++++++++++++-------
+ tools/lib/bpf/libbpf.h   |  2 ++
+ tools/lib/bpf/libbpf.map |  2 ++
+ 3 files changed, 44 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_kern.h b/tools/testing/selftests/bpf/progs/test_sockmap_kern.h
-index 057036ca1111..3dca4c2e2418 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_kern.h
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_kern.h
-@@ -79,7 +79,7 @@ struct {
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
--	__uint(max_entries, 2);
-+	__uint(max_entries, 3);
- 	__type(key, int);
- 	__type(value, int);
- } sock_skb_opts SEC(".maps");
-@@ -94,6 +94,12 @@ struct {
- SEC("sk_skb1")
- int bpf_prog1(struct __sk_buff *skb)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 6b4955d170ff..4ea7f4f1a691 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -230,6 +230,7 @@ struct bpf_program {
+ 	struct bpf_insn *insns;
+ 	size_t insns_cnt, main_prog_cnt;
+ 	enum bpf_prog_type type;
++	bool load;
+=20
+ 	struct reloc_desc *reloc_desc;
+ 	int nr_reloc;
+@@ -541,6 +542,7 @@ bpf_program__init(void *data, size_t size, char *sect=
+ion_name, int idx,
+ 	prog->instances.fds =3D NULL;
+ 	prog->instances.nr =3D -1;
+ 	prog->type =3D BPF_PROG_TYPE_UNSPEC;
++	prog->load =3D true;
+=20
+ 	return 0;
+ errout:
+@@ -2513,6 +2515,8 @@ static int bpf_object__load_vmlinux_btf(struct bpf_=
+object *obj)
+ 		need_vmlinux_btf =3D true;
+=20
+ 	bpf_object__for_each_program(prog, obj) {
++		if (!prog->load)
++			continue;
+ 		if (libbpf_prog_needs_vmlinux_btf(prog)) {
+ 			need_vmlinux_btf =3D true;
+ 			break;
+@@ -5445,6 +5449,12 @@ int bpf_program__load(struct bpf_program *prog, ch=
+ar *license, __u32 kern_ver)
  {
-+	int *f, two = 2;
-+
-+	f = bpf_map_lookup_elem(&sock_skb_opts, &two);
-+	if (f && *f) {
-+		return *f;
+ 	int err =3D 0, fd, i, btf_id;
+=20
++	if (prog->obj->loaded) {
++		pr_warn("prog '%s'('%s'): can't load after object was loaded\n",
++			prog->name, prog->section_name);
++		return -EINVAL;
 +	}
- 	return skb->len;
- }
- 
-diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index 37695fc8096a..78789b27e573 100644
---- a/tools/testing/selftests/bpf/test_sockmap.c
-+++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -85,6 +85,7 @@ int txmsg_ktls_skb_drop;
- int txmsg_ktls_skb_redir;
- int ktls;
- int peek_flag;
-+int skb_use_parser;
- 
- static const struct option long_options[] = {
- 	{"help",	no_argument,		NULL, 'h' },
-@@ -174,6 +175,7 @@ static void test_reset(void)
- 	txmsg_apply = txmsg_cork = 0;
- 	txmsg_ingress = txmsg_redir_skb = 0;
- 	txmsg_ktls_skb = txmsg_ktls_skb_drop = txmsg_ktls_skb_redir = 0;
-+	skb_use_parser = 0;
- }
- 
- static int test_start_subtest(const struct _test *t, struct sockmap_options *o)
-@@ -1211,6 +1213,11 @@ static int run_options(struct sockmap_options *options, int cg_fd,  int test)
- 		}
++
+ 	if ((prog->type =3D=3D BPF_PROG_TYPE_TRACING ||
+ 	     prog->type =3D=3D BPF_PROG_TYPE_LSM ||
+ 	     prog->type =3D=3D BPF_PROG_TYPE_EXT) && !prog->attach_btf_id) {
+@@ -5533,16 +5543,21 @@ static bool bpf_program__is_function_storage(cons=
+t struct bpf_program *prog,
+ static int
+ bpf_object__load_progs(struct bpf_object *obj, int log_level)
+ {
++	struct bpf_program *prog;
+ 	size_t i;
+ 	int err;
+=20
+ 	for (i =3D 0; i < obj->nr_programs; i++) {
+-		if (bpf_program__is_function_storage(&obj->programs[i], obj))
++		prog =3D &obj->programs[i];
++		if (bpf_program__is_function_storage(prog, obj))
+ 			continue;
+-		obj->programs[i].log_level |=3D log_level;
+-		err =3D bpf_program__load(&obj->programs[i],
+-					obj->license,
+-					obj->kern_version);
++		if (!prog->load) {
++			pr_debug("prog '%s'('%s'): skipped loading\n",
++				 prog->name, prog->section_name);
++			continue;
++		}
++		prog->log_level |=3D log_level;
++		err =3D bpf_program__load(prog, obj->license, obj->kern_version);
+ 		if (err)
+ 			return err;
  	}
- 
-+	if (skb_use_parser) {
-+		i = 2;
-+		err = bpf_map_update_elem(map_fd[7], &i, &skb_use_parser, BPF_ANY);
-+	}
+@@ -5869,12 +5884,10 @@ int bpf_object__load_xattr(struct bpf_object_load=
+_attr *attr)
+ 		return -EINVAL;
+=20
+ 	if (obj->loaded) {
+-		pr_warn("object should not be loaded twice\n");
++		pr_warn("object '%s': load can't be attempted twice\n", obj->name);
+ 		return -EINVAL;
+ 	}
+=20
+-	obj->loaded =3D true;
+-
+ 	err =3D bpf_object__probe_loading(obj);
+ 	err =3D err ? : bpf_object__probe_caps(obj);
+ 	err =3D err ? : bpf_object__resolve_externs(obj, obj->kconfig);
+@@ -5889,6 +5902,8 @@ int bpf_object__load_xattr(struct bpf_object_load_a=
+ttr *attr)
+ 	btf__free(obj->btf_vmlinux);
+ 	obj->btf_vmlinux =3D NULL;
+=20
++	obj->loaded =3D true; /* doesn't matter if successfully or not */
 +
- 	if (txmsg_drop)
- 		options->drop_expected = true;
- 
-@@ -1650,6 +1657,16 @@ static void test_txmsg_cork(int cgrp, struct sockmap_options *opt)
- 	test_send(opt, cgrp);
+ 	if (err)
+ 		goto out;
+=20
+@@ -6661,6 +6676,20 @@ const char *bpf_program__title(const struct bpf_pr=
+ogram *prog, bool needs_copy)
+ 	return title;
  }
- 
-+static void test_txmsg_ingress_parser(int cgrp, struct sockmap_options *opt)
+=20
++bool bpf_program__autoload(const struct bpf_program *prog)
 +{
-+	txmsg_pass = 1;
-+	skb_use_parser = 512;
-+	opt->iov_length = 256;
-+	opt->iov_count = 1;
-+	opt->rate = 2;
-+	test_exec(cgrp, opt);
++	return prog->load;
 +}
 +
- char *map_names[] = {
- 	"sock_map",
- 	"sock_map_txmsg",
-@@ -1748,6 +1765,7 @@ struct _test test[] = {
- 	{"txmsg test pull-data", test_txmsg_pull},
- 	{"txmsg test pop-data", test_txmsg_pop},
- 	{"txmsg test push/pop data", test_txmsg_push_pop},
-+	{"txmsg text ingress parser", test_txmsg_ingress_parser},
- };
- 
- static int check_whitelist(struct _test *t, struct sockmap_options *opt)
++int bpf_program__set_autoload(struct bpf_program *prog, bool autoload)
++{
++	if (prog->obj->loaded)
++		return -EINVAL;
++
++	prog->load =3D autoload;
++	return 0;
++}
++
+ int bpf_program__fd(const struct bpf_program *prog)
+ {
+ 	return bpf_program__nth_fd(prog, 0);
+@@ -9283,6 +9312,9 @@ int bpf_object__attach_skeleton(struct bpf_object_s=
+keleton *s)
+ 		const struct bpf_sec_def *sec_def;
+ 		const char *sec_name =3D bpf_program__title(prog, false);
+=20
++		if (!prog->load)
++			continue;
++
+ 		sec_def =3D find_sec_def(sec_name);
+ 		if (!sec_def || !sec_def->attach_fn)
+ 			continue;
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index fdd279fb1866..2335971ed0bd 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -200,6 +200,8 @@ LIBBPF_API void bpf_program__set_ifindex(struct bpf_p=
+rogram *prog,
+ LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog)=
+;
+ LIBBPF_API const char *bpf_program__title(const struct bpf_program *prog=
+,
+ 					  bool needs_copy);
++LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
++LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool =
+autoload);
+=20
+ /* returns program size in bytes */
+ LIBBPF_API size_t bpf_program__size(const struct bpf_program *prog);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 9914e0db4859..6544d2cd1ed6 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -286,4 +286,6 @@ LIBBPF_0.1.0 {
+ 		bpf_map__set_value_size;
+ 		bpf_map__type;
+ 		bpf_map__value_size;
++		bpf_program__autoload;
++		bpf_program__set_autoload;
+ } LIBBPF_0.0.9;
+--=20
+2.24.1
 
