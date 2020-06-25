@@ -2,44 +2,45 @@ Return-Path: <SRS0=qFa8=AG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C20CEC433DF
-	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 23:26:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DAB5C433E1
+	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 23:26:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 920CC20768
-	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 23:26:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11CE320768
+	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 23:26:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="pWUBgyv7"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jAj9iABJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407824AbgFYX0s (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Jun 2020 19:26:48 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:46538 "EHLO
+        id S2407820AbgFYX0w (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Jun 2020 19:26:52 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63244 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2407819AbgFYX0r (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 25 Jun 2020 19:26:47 -0400
+        by vger.kernel.org with ESMTP id S2407821AbgFYX0s (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 25 Jun 2020 19:26:48 -0400
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 05PNPE7c001179
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 16:26:45 -0700
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 05PNPEJf001186
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 16:26:46 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=xHvaJCjS5W4fLW1ZiRlnErBKkcBhTdM0kQ+/ka3syqk=;
- b=pWUBgyv7wm4Ohp+VHcsxsYe3oNI5eBPMRdp+U4Do7/lNXAQy3VMbtSeZPW8JRihUp46J
- /nk5lzsi6J7JEDi2KHeFNGLLoEWs6xXWeY9wSsaO1VeNq21XinIcuD/7Q3NE2rJGExkI
- B+riKRfLNdlrPZWwH0yk1KMMBghgsSncjQM= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=3J/l+YMR3k0ECoOCBzx0bWGdEUEGMc9fABAjFynRYsM=;
+ b=jAj9iABJH4rMVcJhXWGZaVxBQ2e9fkPVbLFr9PZygQW4Z2qL6YyyaiffsjApO9ikfAG0
+ 5o21cB5xIEpUOA4mmHIhKmM+iWrZ6vds1j72qCv+/Ho116jdXwOMybogf7bfJhh2+2Yi
+ TscQFT7eV1ABBLtue4hbwRfNVitBW0ckLi4= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 31ux0ntp74-3
+        by m0089730.ppops.net with ESMTP id 31ux0ntp76-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 16:26:45 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 16:26:46 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 25 Jun 2020 16:26:43 -0700
+ 15.1.1979.3; Thu, 25 Jun 2020 16:26:44 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 7EDA72EC3954; Thu, 25 Jun 2020 16:26:33 -0700 (PDT)
+        id D3B3B2EC3954; Thu, 25 Jun 2020 16:26:37 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -48,10 +49,12 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 0/2] Support disabling auto-loading of BPF programs
-Date:   Thu, 25 Jun 2020 16:26:27 -0700
-Message-ID: <20200625232629.3444003-1-andriin@fb.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: test auto-load disabling logic for BPF programs
+Date:   Thu, 25 Jun 2020 16:26:29 -0700
+Message-ID: <20200625232629.3444003-3-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200625232629.3444003-1-andriin@fb.com>
+References: <20200625232629.3444003-1-andriin@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
@@ -70,26 +73,113 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add ability to turn off default auto-loading of each BPF program by libbp=
-f on
-BPF object load. This is the feature that allows BPF applications to have
-optional functionality, which is only excercised on kernel that support
-necessary features, while falling back to reduced/less performant
-functionality, if kernel is outdated.
+Validate that BPF object with broken (in multiple ways) BPF program can s=
+till
+be successfully loaded, if that broken BPF program is disabled.
 
-Andrii Nakryiko (2):
-  libbpf: support disabling auto-loading BPF programs
-  selftests/bpf: test auto-load disabling logic for BPF programs
-
- tools/lib/bpf/libbpf.c                        | 48 +++++++++++++++----
- tools/lib/bpf/libbpf.h                        |  2 +
- tools/lib/bpf/libbpf.map                      |  2 +
- .../selftests/bpf/prog_tests/autoload.c       | 41 ++++++++++++++++
- .../selftests/bpf/progs/test_autoload.c       | 40 ++++++++++++++++
- 5 files changed, 125 insertions(+), 8 deletions(-)
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ .../selftests/bpf/prog_tests/autoload.c       | 41 +++++++++++++++++++
+ .../selftests/bpf/progs/test_autoload.c       | 40 ++++++++++++++++++
+ 2 files changed, 81 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/autoload.c
  create mode 100644 tools/testing/selftests/bpf/progs/test_autoload.c
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/autoload.c b/tools/te=
+sting/selftests/bpf/prog_tests/autoload.c
+new file mode 100644
+index 000000000000..3693f7d133eb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/autoload.c
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++
++#include <test_progs.h>
++#include <time.h>
++#include "test_autoload.skel.h"
++
++void test_autoload(void)
++{
++	int duration =3D 0, err;
++	struct test_autoload* skel;
++
++	skel =3D test_autoload__open_and_load();
++	/* prog3 should be broken */
++	if (CHECK(skel, "skel_open_and_load", "unexpected success\n"))
++		goto cleanup;
++
++	skel =3D test_autoload__open();
++	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
++		goto cleanup;
++
++	/* don't load prog3 */
++	bpf_program__set_autoload(skel->progs.prog3, false);
++
++	err =3D test_autoload__load(skel);
++	if (CHECK(err, "skel_load", "failed to load skeleton: %d\n", err))
++		goto cleanup;
++
++	err =3D test_autoload__attach(skel);
++	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
++		goto cleanup;
++
++	usleep(1);
++
++	CHECK(!skel->bss->prog1_called, "prog1", "not called\n");
++	CHECK(!skel->bss->prog2_called, "prog2", "not called\n");
++	CHECK(skel->bss->prog3_called, "prog3", "called?!\n");
++
++cleanup:
++	test_autoload__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_autoload.c b/tools/te=
+sting/selftests/bpf/progs/test_autoload.c
+new file mode 100644
+index 000000000000..62c8cdec6d5d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_autoload.c
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++
++bool prog1_called =3D false;
++bool prog2_called =3D false;
++bool prog3_called =3D false;
++
++SEC("raw_tp/sys_enter")
++int prog1(const void *ctx)
++{
++	prog1_called =3D true;
++	return 0;
++}
++
++SEC("raw_tp/sys_exit")
++int prog2(const void *ctx)
++{
++	prog2_called =3D true;
++	return 0;
++}
++
++struct fake_kernel_struct {
++	int whatever;
++} __attribute__((preserve_access_index));
++
++SEC("fentry/unexisting-kprobe-will-fail-if-loaded")
++int prog3(const void *ctx)
++{
++	struct fake_kernel_struct *fake =3D (void *)ctx;
++	fake->whatever =3D 123;
++	prog3_called =3D true;
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.24.1
 
