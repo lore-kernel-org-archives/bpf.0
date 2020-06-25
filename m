@@ -2,413 +2,139 @@ Return-Path: <SRS0=qFa8=AG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01431C433E0
-	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 14:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33976C433DF
+	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 14:22:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF21B20781
-	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 14:14:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="u2+ylto/"
+	by mail.kernel.org (Postfix) with ESMTP id 1613C206FA
+	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 14:22:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405392AbgFYOOQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Jun 2020 10:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405367AbgFYOOH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Jun 2020 10:14:07 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A66DC08C5DD
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 07:14:06 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id i3so6715740ljg.3
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 07:14:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MQPngL9TiDnLWfORRYBLFIi1xFMCbQlZKd+Xog1DvxE=;
-        b=u2+ylto/ovSGT5iefFuJsUGRzvGZLtwZaNCsGBgtB2hTuuI8GVjS/h41uJXFAlHW+N
-         nHgU0w9tp4b8YGYV2tDXG+PDkykvyeC2cfCRvDyS1Dn0HOMZq/qtJ8taOsEUujnWgfbN
-         9nWN+7C6N5Wljd5a3xBFs9Oyetv6qrkBvFW7k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MQPngL9TiDnLWfORRYBLFIi1xFMCbQlZKd+Xog1DvxE=;
-        b=czvZ5IPfIMfUPFzpangzJQ9fD9CP5xwabw+rnU/FPIZqEVNmdFrC110ueekFpgnTlZ
-         DMCEnOg6RtVHCeGobYF4VGgI4hp2fdWvkwnnZG01dhdJOtK5vWTUPWLtX3gkra8fLGlk
-         lnTkWBue2zuip0W1YJ5HiTuVYdo8wo8cKGK023c6akHxHYnzRrcfqT/Dz+v4Zu7LsmCT
-         ZIZYdcJWHnstwr9K2ZcEGgxcbAacIk35lcYdXSyfzJW1SBrFvEE/m26VmpMTxxf9LR0e
-         F0Cez0KriGyofVHODjCRrLmuPHtn4immAU75vi/6UfSFPK4uyHnC/2vtB0NS/vosRcI9
-         oLCA==
-X-Gm-Message-State: AOAM5305nRuiR1Je2SSUtFXZXlcAzibobBFIpHowKQBBLCkapWtU4BhP
-        q9ii8y6HUNtK8GxhcD7MUNfSgipHpsMm8Q==
-X-Google-Smtp-Source: ABdhPJxQOekBLwIU8lBZQFf1Hxrb9rQaWgLeZXy61XCUyHu9B470HBm0dUbxZtrIhSBQLRsce3pBKw==
-X-Received: by 2002:a2e:8150:: with SMTP id t16mr16595105ljg.160.1593094444556;
-        Thu, 25 Jun 2020 07:14:04 -0700 (PDT)
-Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id w20sm4817269ljo.68.2020.06.25.07.14.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2020 07:14:03 -0700 (PDT)
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com
-Subject: [PATCH bpf-next v3 2/4] bpf, netns: Keep attached programs in bpf_prog_array
-Date:   Thu, 25 Jun 2020 16:13:55 +0200
-Message-Id: <20200625141357.910330-3-jakub@cloudflare.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200625141357.910330-1-jakub@cloudflare.com>
-References: <20200625141357.910330-1-jakub@cloudflare.com>
+        id S2405200AbgFYOWP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Jun 2020 10:22:15 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:62204 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404890AbgFYOWO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Jun 2020 10:22:14 -0400
+Received: from fsav102.sakura.ne.jp (fsav102.sakura.ne.jp [27.133.134.229])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 05PEL9iM055217;
+        Thu, 25 Jun 2020 23:21:09 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav102.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav102.sakura.ne.jp);
+ Thu, 25 Jun 2020 23:21:09 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav102.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 05PEL95i055207
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+        Thu, 25 Jun 2020 23:21:09 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [RFC][PATCH] net/bpfilter: Remove this broken and apparently
+ unmantained
+To:     Greg KH <greg@kroah.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20200623183520.5e7fmlt3omwa2lof@ast-mbp.dhcp.thefacebook.com>
+ <87h7v1mx4z.fsf@x220.int.ebiederm.org>
+ <20200623194023.lzl34qt2wndhcehk@ast-mbp.dhcp.thefacebook.com>
+ <878sgck6g0.fsf@x220.int.ebiederm.org>
+ <CAADnVQL8WrfV74v1ChvCKE=pQ_zo+A5EtEBB3CbD=P5ote8_MA@mail.gmail.com>
+ <2f55102e-5d11-5569-8248-13618d517e93@i-love.sakura.ne.jp>
+ <20200625013518.chuqehybelk2k27x@ast-mbp.dhcp.thefacebook.com>
+ <b83831ba-c330-7eb8-e6d5-5087de68a9b8@i-love.sakura.ne.jp>
+ <20200625095725.GA3303921@kroah.com>
+ <778297d2-512a-8361-cf05-42d9379e6977@i-love.sakura.ne.jp>
+ <20200625120725.GA3493334@kroah.com>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <46edbddb-6da8-d9b6-1ad2-9e24ac74fbcf@i-love.sakura.ne.jp>
+Date:   Thu, 25 Jun 2020 23:21:09 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200625120725.GA3493334@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Prepare for having multi-prog attachments for new netns attach types by
-storing programs to run in a bpf_prog_array, which is well suited for
-iterating over programs and running them in sequence.
+On 2020/06/25 21:07, Greg KH wrote:
+>>>>     call_usermodehelper() can teach LSM modules via pre-existing file's pathname and
+>>>>     inode's security label at security_bprm_creds_for_exec()/security_bprm_check() etc.
+>>>>     But since fork_usermode_blob() accepts only "byte array" and "length of byte array"
+>>>>     arguments, I'm not sure whether LSM modules can obtain information needed for
+>>>>     inspection. How does fork_usermode_blob() tell that information?
+>>>
+>>> It would seem that the "security context" for those would be the same as
+>>> anything created before userspace launches today, right?  You handle
+>>> that ok, and this should be just the same.
+>>
+>> I don't think so. Today when call_usermodehelper() is called, LSMs switch their security
+>> context (at least TOMOYO does it) for further syscalls from the usermode process started
+>> by the kernel context. But when fork_usermode_blob() is called, how LSMs can switch their
+>> security context for further syscalls from the usermode process started by the kernel
+>> context?
+> 
+> Ok, that makes a bit more sense.  Why not just do the same thing that
+> you do today with call_usermodehelper()?  The logic in a way is the
+> same, right?
+> 
 
-After this change bpf(PROG_QUERY) may block to allocate memory in
-bpf_prog_array_copy_to_user() for collected program IDs. This forces a
-change in how we protect access to the attached program in the query
-callback. Because bpf_prog_array_copy_to_user() can sleep, we switch from
-an RCU read lock to holding a mutex that serializes updaters.
+call_usermodehelper() provides information like "the kernel is about to run
+/sbin/modprobe in order to load foo module" but fork_usermode_blob() does not
+provide information like "the kernel is about to run a blob that we think is
+a userspace USB IR filter driver". That is unfriendly to LSM modules.
 
-Because we allow only one BPF flow_dissector program to be attached to
-netns at all times, the bpf_prog_array pointed by net->bpf.run_array is
-always either detached (null) or one element long.
+> 
+>>> Right now I, as a kernel module, can read/write to any file in the
+>>> system, and do all sorts of other fun things.  You can't mediate that
+>>> today from a LSM, and this is just one other example of this.
+>>
+>> Some functions (e.g. kernel_sock_shutdown()) bypass permission checks by LSMs
+>> comes from a sort of trustness that the byte array kept inside kernel address
+>> space remains secure/intact.
+> 
+> And what is going to change that "trustness" here?  The byte array came
+> from the kernel address space to start with.  Are you thinking something
+> outside of the kernel will then tamper with those bytes to do something
+> else with them?
 
-No functional changes intended.
+Right. e.g. ptrace() will allow reading/writing those bytes to do something
+else with them. I guess 'gdb -p' is the same meaning.
 
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
----
- include/net/netns/bpf.h    |   5 +-
- kernel/bpf/net_namespace.c | 120 +++++++++++++++++++++++++------------
- net/core/flow_dissector.c  |  19 +++---
- 3 files changed, 96 insertions(+), 48 deletions(-)
+>                  If so, shouldn't you be preventing that userspace
+> program that does the tampering from doing that in the first place with
+> the LSM running?
 
-diff --git a/include/net/netns/bpf.h b/include/net/netns/bpf.h
-index a8dce2a380c8..a5015bda9979 100644
---- a/include/net/netns/bpf.h
-+++ b/include/net/netns/bpf.h
-@@ -9,9 +9,12 @@
- #include <linux/bpf-netns.h>
- 
- struct bpf_prog;
-+struct bpf_prog_array;
- 
- struct netns_bpf {
--	struct bpf_prog __rcu *progs[MAX_NETNS_BPF_ATTACH_TYPE];
-+	/* Array of programs to run compiled from progs or links */
-+	struct bpf_prog_array __rcu *run_array[MAX_NETNS_BPF_ATTACH_TYPE];
-+	struct bpf_prog *progs[MAX_NETNS_BPF_ATTACH_TYPE];
- 	struct bpf_link *links[MAX_NETNS_BPF_ATTACH_TYPE];
- };
- 
-diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
-index b951dab2687f..0dba97202357 100644
---- a/kernel/bpf/net_namespace.c
-+++ b/kernel/bpf/net_namespace.c
-@@ -33,6 +33,17 @@ static void __net_exit bpf_netns_link_auto_detach(struct bpf_link *link)
- 	net_link->net = NULL;
- }
- 
-+/* Must be called with netns_bpf_mutex held. */
-+static void netns_bpf_run_array_detach(struct net *net,
-+				       enum netns_bpf_attach_type type)
-+{
-+	struct bpf_prog_array *run_array;
-+
-+	run_array = rcu_replace_pointer(net->bpf.run_array[type], NULL,
-+					lockdep_is_held(&netns_bpf_mutex));
-+	bpf_prog_array_free(run_array);
-+}
-+
- static void bpf_netns_link_release(struct bpf_link *link)
- {
- 	struct bpf_netns_link *net_link =
-@@ -54,8 +65,8 @@ static void bpf_netns_link_release(struct bpf_link *link)
- 	if (!net)
- 		goto out_unlock;
- 
-+	netns_bpf_run_array_detach(net, type);
- 	net->bpf.links[type] = NULL;
--	RCU_INIT_POINTER(net->bpf.progs[type], NULL);
- 
- out_unlock:
- 	mutex_unlock(&netns_bpf_mutex);
-@@ -76,6 +87,7 @@ static int bpf_netns_link_update_prog(struct bpf_link *link,
- 	struct bpf_netns_link *net_link =
- 		container_of(link, struct bpf_netns_link, link);
- 	enum netns_bpf_attach_type type = net_link->netns_type;
-+	struct bpf_prog_array *run_array;
- 	struct net *net;
- 	int ret = 0;
- 
-@@ -93,8 +105,11 @@ static int bpf_netns_link_update_prog(struct bpf_link *link,
- 		goto out_unlock;
- 	}
- 
-+	run_array = rcu_dereference_protected(net->bpf.run_array[type],
-+					      lockdep_is_held(&netns_bpf_mutex));
-+	WRITE_ONCE(run_array->items[0].prog, new_prog);
-+
- 	old_prog = xchg(&link->prog, new_prog);
--	rcu_assign_pointer(net->bpf.progs[type], new_prog);
- 	bpf_prog_put(old_prog);
- 
- out_unlock:
-@@ -142,14 +157,38 @@ static const struct bpf_link_ops bpf_netns_link_ops = {
- 	.show_fdinfo = bpf_netns_link_show_fdinfo,
- };
- 
-+/* Must be called with netns_bpf_mutex held. */
-+static int __netns_bpf_prog_query(const union bpf_attr *attr,
-+				  union bpf_attr __user *uattr,
-+				  struct net *net,
-+				  enum netns_bpf_attach_type type)
-+{
-+	__u32 __user *prog_ids = u64_to_user_ptr(attr->query.prog_ids);
-+	struct bpf_prog_array *run_array;
-+	u32 prog_cnt = 0, flags = 0;
-+
-+	run_array = rcu_dereference_protected(net->bpf.run_array[type],
-+					      lockdep_is_held(&netns_bpf_mutex));
-+	if (run_array)
-+		prog_cnt = bpf_prog_array_length(run_array);
-+
-+	if (copy_to_user(&uattr->query.attach_flags, &flags, sizeof(flags)))
-+		return -EFAULT;
-+	if (copy_to_user(&uattr->query.prog_cnt, &prog_cnt, sizeof(prog_cnt)))
-+		return -EFAULT;
-+	if (!attr->query.prog_cnt || !prog_ids || !prog_cnt)
-+		return 0;
-+
-+	return bpf_prog_array_copy_to_user(run_array, prog_ids,
-+					   attr->query.prog_cnt);
-+}
-+
- int netns_bpf_prog_query(const union bpf_attr *attr,
- 			 union bpf_attr __user *uattr)
- {
--	__u32 __user *prog_ids = u64_to_user_ptr(attr->query.prog_ids);
--	u32 prog_id, prog_cnt = 0, flags = 0;
- 	enum netns_bpf_attach_type type;
--	struct bpf_prog *attached;
- 	struct net *net;
-+	int ret;
- 
- 	if (attr->query.query_flags)
- 		return -EINVAL;
-@@ -162,32 +201,17 @@ int netns_bpf_prog_query(const union bpf_attr *attr,
- 	if (IS_ERR(net))
- 		return PTR_ERR(net);
- 
--	rcu_read_lock();
--	attached = rcu_dereference(net->bpf.progs[type]);
--	if (attached) {
--		prog_cnt = 1;
--		prog_id = attached->aux->id;
--	}
--	rcu_read_unlock();
-+	mutex_lock(&netns_bpf_mutex);
-+	ret = __netns_bpf_prog_query(attr, uattr, net, type);
-+	mutex_unlock(&netns_bpf_mutex);
- 
- 	put_net(net);
--
--	if (copy_to_user(&uattr->query.attach_flags, &flags, sizeof(flags)))
--		return -EFAULT;
--	if (copy_to_user(&uattr->query.prog_cnt, &prog_cnt, sizeof(prog_cnt)))
--		return -EFAULT;
--
--	if (!attr->query.prog_cnt || !prog_ids || !prog_cnt)
--		return 0;
--
--	if (copy_to_user(prog_ids, &prog_id, sizeof(u32)))
--		return -EFAULT;
--
--	return 0;
-+	return ret;
- }
- 
- int netns_bpf_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- {
-+	struct bpf_prog_array *run_array;
- 	enum netns_bpf_attach_type type;
- 	struct bpf_prog *attached;
- 	struct net *net;
-@@ -217,14 +241,28 @@ int netns_bpf_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- 	if (ret)
- 		goto out_unlock;
- 
--	attached = rcu_dereference_protected(net->bpf.progs[type],
--					     lockdep_is_held(&netns_bpf_mutex));
-+	attached = net->bpf.progs[type];
- 	if (attached == prog) {
- 		/* The same program cannot be attached twice */
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
--	rcu_assign_pointer(net->bpf.progs[type], prog);
-+
-+	run_array = rcu_dereference_protected(net->bpf.run_array[type],
-+					      lockdep_is_held(&netns_bpf_mutex));
-+	if (run_array) {
-+		WRITE_ONCE(run_array->items[0].prog, prog);
-+	} else {
-+		run_array = bpf_prog_array_alloc(1, GFP_KERNEL);
-+		if (!run_array) {
-+			ret = -ENOMEM;
-+			goto out_unlock;
-+		}
-+		run_array->items[0].prog = prog;
-+		rcu_assign_pointer(net->bpf.run_array[type], run_array);
-+	}
-+
-+	net->bpf.progs[type] = prog;
- 	if (attached)
- 		bpf_prog_put(attached);
- 
-@@ -244,11 +282,11 @@ static int __netns_bpf_prog_detach(struct net *net,
- 	if (net->bpf.links[type])
- 		return -EINVAL;
- 
--	attached = rcu_dereference_protected(net->bpf.progs[type],
--					     lockdep_is_held(&netns_bpf_mutex));
-+	attached = net->bpf.progs[type];
- 	if (!attached)
- 		return -ENOENT;
--	RCU_INIT_POINTER(net->bpf.progs[type], NULL);
-+	netns_bpf_run_array_detach(net, type);
-+	net->bpf.progs[type] = NULL;
- 	bpf_prog_put(attached);
- 	return 0;
- }
-@@ -272,7 +310,7 @@ int netns_bpf_prog_detach(const union bpf_attr *attr)
- static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
- 				 enum netns_bpf_attach_type type)
- {
--	struct bpf_prog *prog;
-+	struct bpf_prog_array *run_array;
- 	int err;
- 
- 	mutex_lock(&netns_bpf_mutex);
-@@ -283,9 +321,7 @@ static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
- 		goto out_unlock;
- 	}
- 	/* Links are not compatible with attaching prog directly */
--	prog = rcu_dereference_protected(net->bpf.progs[type],
--					 lockdep_is_held(&netns_bpf_mutex));
--	if (prog) {
-+	if (net->bpf.progs[type]) {
- 		err = -EEXIST;
- 		goto out_unlock;
- 	}
-@@ -301,7 +337,14 @@ static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
- 	if (err)
- 		goto out_unlock;
- 
--	rcu_assign_pointer(net->bpf.progs[type], link->prog);
-+	run_array = bpf_prog_array_alloc(1, GFP_KERNEL);
-+	if (!run_array) {
-+		err = -ENOMEM;
-+		goto out_unlock;
-+	}
-+	run_array->items[0].prog = link->prog;
-+	rcu_assign_pointer(net->bpf.run_array[type], run_array);
-+
- 	net->bpf.links[type] = link;
- 
- out_unlock:
-@@ -368,11 +411,12 @@ static void __net_exit netns_bpf_pernet_pre_exit(struct net *net)
- 
- 	mutex_lock(&netns_bpf_mutex);
- 	for (type = 0; type < MAX_NETNS_BPF_ATTACH_TYPE; type++) {
-+		netns_bpf_run_array_detach(net, type);
- 		link = net->bpf.links[type];
- 		if (link)
- 			bpf_netns_link_auto_detach(link);
--		else
--			__netns_bpf_prog_detach(net, type);
-+		else if (net->bpf.progs[type])
-+			bpf_prog_put(net->bpf.progs[type]);
- 	}
- 	mutex_unlock(&netns_bpf_mutex);
- }
-diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-index b57fb1359395..142a8824f0a8 100644
---- a/net/core/flow_dissector.c
-+++ b/net/core/flow_dissector.c
-@@ -86,14 +86,14 @@ int flow_dissector_bpf_prog_attach_check(struct net *net,
- 		for_each_net(ns) {
- 			if (ns == &init_net)
- 				continue;
--			if (rcu_access_pointer(ns->bpf.progs[type]))
-+			if (rcu_access_pointer(ns->bpf.run_array[type]))
- 				return -EEXIST;
- 		}
- 	} else {
- 		/* Make sure root flow dissector is not attached
- 		 * when attaching to the non-root namespace.
- 		 */
--		if (rcu_access_pointer(init_net.bpf.progs[type]))
-+		if (rcu_access_pointer(init_net.bpf.run_array[type]))
- 			return -EEXIST;
- 	}
- 
-@@ -894,7 +894,6 @@ bool __skb_flow_dissect(const struct net *net,
- 	struct flow_dissector_key_addrs *key_addrs;
- 	struct flow_dissector_key_tags *key_tags;
- 	struct flow_dissector_key_vlan *key_vlan;
--	struct bpf_prog *attached = NULL;
- 	enum flow_dissect_ret fdret;
- 	enum flow_dissector_key_id dissector_vlan = FLOW_DISSECTOR_KEY_MAX;
- 	bool mpls_el = false;
-@@ -951,14 +950,14 @@ bool __skb_flow_dissect(const struct net *net,
- 	WARN_ON_ONCE(!net);
- 	if (net) {
- 		enum netns_bpf_attach_type type = NETNS_BPF_FLOW_DISSECTOR;
-+		struct bpf_prog_array *run_array;
- 
- 		rcu_read_lock();
--		attached = rcu_dereference(init_net.bpf.progs[type]);
-+		run_array = rcu_dereference(init_net.bpf.run_array[type]);
-+		if (!run_array)
-+			run_array = rcu_dereference(net->bpf.run_array[type]);
- 
--		if (!attached)
--			attached = rcu_dereference(net->bpf.progs[type]);
--
--		if (attached) {
-+		if (run_array) {
- 			struct bpf_flow_keys flow_keys;
- 			struct bpf_flow_dissector ctx = {
- 				.flow_keys = &flow_keys,
-@@ -966,6 +965,7 @@ bool __skb_flow_dissect(const struct net *net,
- 				.data_end = data + hlen,
- 			};
- 			__be16 n_proto = proto;
-+			struct bpf_prog *prog;
- 
- 			if (skb) {
- 				ctx.skb = skb;
-@@ -976,7 +976,8 @@ bool __skb_flow_dissect(const struct net *net,
- 				n_proto = skb->protocol;
- 			}
- 
--			ret = bpf_flow_dissect(attached, &ctx, n_proto, nhoff,
-+			prog = READ_ONCE(run_array->items[0].prog);
-+			ret = bpf_flow_dissect(prog, &ctx, n_proto, nhoff,
- 					       hlen, flags);
- 			__skb_flow_bpf_to_target(&flow_keys, flow_dissector,
- 						 target_container);
--- 
-2.25.4
+SELinux can handle process isolation very well. But the reality is that none of customers
+I'm working for can afford using SELinux because SELinux is too complicated to support.
+Instead, they use proprietary antivirus kernel modules (which tamper with syscall tables
+and/or security_hook_heads). Therefore, I wish that isolation between processes running
+fork_usermode_blob() and processes running normal usermode programs is implemented by
+built-in mechanism (like DAC), and I said
+
+  We might need to invent built-in "protected userspace" because existing
+  "unprotected userspace" is not trustworthy enough to run kernel modules.
+  That's not just inventing fork_usermode_blob().
+
+at https://lkml.kernel.org/r/62859212-df69-b913-c1e0-cd2e358d1adf@i-love.sakura.ne.jp .
+I'm happy if we can implement such isolation without counting on in-tree LSMs.
 
