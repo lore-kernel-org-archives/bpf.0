@@ -4,62 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D00FC433DF
-	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 22:14:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B8D5C433DF
+	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 22:14:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4D44720789
-	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 22:14:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE2D920781
+	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 22:14:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1593123250;
-	bh=PxY4wnlMyEobj/rUy4Gt/cQAzebZ7wEmeXzvYkQiFT0=;
+	s=default; t=1593123255;
+	bh=GjrGjaEvRsfsxMBS3M8MCaUgCg1uwOx2T9y4A3AqjEk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EEDU8b/YcGj4WIpFpZ37u0NvJLKK6HiOySF+zZPCnloox1g5DcBbCviyOh9UeUYfF
-	 F0wL63scSMRprGBsmpuLQE3ydZ1AApQG0E/xtwqb7MaHDbijADPjxNh9LBFX4v3APj
-	 ojA8KjUA+lzxCawYIHtEsxW7jnnUjmxzuTcc0UMQ=
+	b=X9tGqSjG77RP34VB3jl1vlzR8SriiC94+0GIQJIun+N/v7EGTlirjwbFRCStYaLiF
+	 AUFMm8OQk3Nh7DQTrNcTPGYnaLJpHKrWBUN2D4yl9MNlkjHBVF2AlN7IXh7RQXACRS
+	 PiaPtotU8UlgZGLO3PxlXaL3BhLSSsp339EOCq2Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407499AbgFYWOJ convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 25 Jun 2020 18:14:09 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:36282 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2407498AbgFYWOH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Jun 2020 18:14:07 -0400
+        id S2407495AbgFYWOM convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 25 Jun 2020 18:14:12 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:40864 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2407512AbgFYWOM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 25 Jun 2020 18:14:12 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-39-z_oPBcBxMi6pAFxeG6pQwg-1; Thu, 25 Jun 2020 18:13:58 -0400
-X-MC-Unique: z_oPBcBxMi6pAFxeG6pQwg-1
+ us-mta-356-THOrCUthPSS8F3Y0UWXv8Q-1; Thu, 25 Jun 2020 18:14:05 -0400
+X-MC-Unique: THOrCUthPSS8F3Y0UWXv8Q-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 403431085947;
-        Thu, 25 Jun 2020 22:13:56 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4286380400A;
+        Thu, 25 Jun 2020 22:14:03 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1E10279C56;
-        Thu, 25 Jun 2020 22:13:52 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2118379303;
+        Thu, 25 Jun 2020 22:13:59 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
+Cc:     Wenbo Zhang <ethercflow@gmail.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
         David Miller <davem@redhat.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Wenbo Zhang <ethercflow@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Andrii Nakryiko <andriin@fb.com>,
         Brendan Gregg <bgregg@netflix.com>,
         Florent Revest <revest@chromium.org>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH v4 bpf-next 11/14] tools headers: Adopt verbatim copy of btf_ids.h from kernel sources
-Date:   Fri, 26 Jun 2020 00:13:01 +0200
-Message-Id: <20200625221304.2817194-12-jolsa@kernel.org>
+Subject: [PATCH v4 bpf-next 13/14] selftests/bpf: Add test for d_path helper
+Date:   Fri, 26 Jun 2020 00:13:03 +0200
+Message-Id: <20200625221304.2817194-14-jolsa@kernel.org>
 In-Reply-To: <20200625221304.2817194-1-jolsa@kernel.org>
 References: <20200625221304.2817194-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: kernel.org
 Content-Type: text/plain; charset=WINDOWS-1252
@@ -69,150 +66,230 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It will be needed by bpf selftest for resolve_btfids tool.
+Adding test for d_path helper which is pretty much
+copied from Wenbo Zhang's test for bpf_get_fd_path,
+which never made it in.
 
-Also adding __PASTE macro as btf_ids.h dependency, which is
-defined in:
+I've failed so far to compile the test with <linux/fs.h>
+kernel header, so for now adding 'struct file' with f_path
+member that has same offset as kernel's file object.
 
-  include/linux/compiler_types.h
-
-but because tools/include do not have this header, I'm putting
-the macro into linux/compiler.h header.
-
+Original-patch-by: Wenbo Zhang <ethercflow@gmail.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/include/linux/btf_ids.h  | 108 +++++++++++++++++++++++++++++++++
- tools/include/linux/compiler.h |   4 ++
- 2 files changed, 112 insertions(+)
- create mode 100644 tools/include/linux/btf_ids.h
+ .../testing/selftests/bpf/prog_tests/d_path.c | 145 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/test_d_path.c |  50 ++++++
+ 2 files changed, 195 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/d_path.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_d_path.c
 
-diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.h
+diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
 new file mode 100644
-index 000000000000..5eb8983ee0a0
+index 000000000000..c0ea45d43634
 --- /dev/null
-+++ b/tools/include/linux/btf_ids.h
-@@ -0,0 +1,108 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
+@@ -0,0 +1,145 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <test_progs.h>
++#include <sys/stat.h>
++#include <linux/sched.h>
++#include <sys/syscall.h>
 +
-+#ifndef _LINUX_BTF_IDS_H
-+#define _LINUX_BTF_IDS_H 1
++#define MAX_PATH_LEN		128
++#define MAX_FILES		7
++#define MAX_EVENT_NUM		16
 +
-+#include <linux/compiler.h> /* for __PASTE */
++#include "test_d_path.skel.h"
 +
-+/*
-+ * Following macros help to define lists of BTF IDs placed
-+ * in .BTF_ids section. They are initially filled with zeros
-+ * (during compilation) and resolved later during the
-+ * linking phase by btfid tool.
-+ *
-+ * Any change in list layout must be reflected in btfid
-+ * tool logic.
-+ */
++static struct {
++	__u32 cnt;
++	char paths[MAX_EVENT_NUM][MAX_PATH_LEN];
++} src;
 +
-+#define BTF_IDS_SECTION ".BTF.ids"
++static int set_pathname(int fd, pid_t pid)
++{
++	char buf[MAX_PATH_LEN];
 +
-+#define ____BTF_ID(symbol)				\
-+asm(							\
-+".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
-+".local " #symbol " ;                          \n"	\
-+".type  " #symbol ", @object;                  \n"	\
-+".size  " #symbol ", 4;                        \n"	\
-+#symbol ":                                     \n"	\
-+".zero 4                                       \n"	\
-+".popsection;                                  \n");
++	snprintf(buf, MAX_PATH_LEN, "/proc/%d/fd/%d", pid, fd);
++	return readlink(buf, src.paths[src.cnt++], MAX_PATH_LEN);
++}
 +
-+#define __BTF_ID(symbol) \
-+	____BTF_ID(symbol)
++static int trigger_fstat_events(pid_t pid)
++{
++	int sockfd = -1, procfd = -1, devfd = -1;
++	int localfd = -1, indicatorfd = -1;
++	int pipefd[2] = { -1, -1 };
++	struct stat fileStat;
++	int ret = -1;
 +
-+#define __ID(prefix) \
-+	__PASTE(prefix, __COUNTER__)
++	/* unmountable pseudo-filesystems */
++	if (CHECK_FAIL(pipe(pipefd) < 0))
++		return ret;
++	/* unmountable pseudo-filesystems */
++	sockfd = socket(AF_INET, SOCK_STREAM, 0);
++	if (CHECK_FAIL(sockfd < 0))
++		goto out_close;
++	/* mountable pseudo-filesystems */
++	procfd = open("/proc/self/comm", O_RDONLY);
++	if (CHECK_FAIL(procfd < 0))
++		goto out_close;
++	devfd = open("/dev/urandom", O_RDONLY);
++	if (CHECK_FAIL(devfd < 0))
++		goto out_close;
++	localfd = open("/tmp/d_path_loadgen.txt", O_CREAT | O_RDONLY);
++	if (CHECK_FAIL(localfd < 0))
++		goto out_close;
++	/* bpf_d_path will return path with (deleted) */
++	remove("/tmp/d_path_loadgen.txt");
++	indicatorfd = open("/tmp/", O_PATH);
++	if (CHECK_FAIL(indicatorfd < 0))
++		goto out_close;
 +
-+/*
-+ * The BTF_ID defines unique symbol for each ID pointing
-+ * to 4 zero bytes.
-+ */
-+#define BTF_ID(prefix, name) \
-+	__BTF_ID(__ID(__BTF_ID__##prefix##__##name##__))
++	ret = set_pathname(pipefd[0], pid);
++	if (CHECK_FAIL(ret < 0))
++		goto out_close;
++	ret = set_pathname(pipefd[1], pid);
++	if (CHECK_FAIL(ret < 0))
++		goto out_close;
++	ret = set_pathname(sockfd, pid);
++	if (CHECK_FAIL(ret < 0))
++		goto out_close;
++	ret = set_pathname(procfd, pid);
++	if (CHECK_FAIL(ret < 0))
++		goto out_close;
++	ret = set_pathname(devfd, pid);
++	if (CHECK_FAIL(ret < 0))
++		goto out_close;
++	ret = set_pathname(localfd, pid);
++	if (CHECK_FAIL(ret < 0))
++		goto out_close;
++	ret = set_pathname(indicatorfd, pid);
++	if (CHECK_FAIL(ret < 0))
++		goto out_close;
 +
-+/*
-+ * The BTF_ID_LIST macro defines pure (unsorted) list
-+ * of BTF IDs, with following layout:
-+ *
-+ * BTF_ID_LIST(list1)
-+ * BTF_ID(type1, name1)
-+ * BTF_ID(type2, name2)
-+ *
-+ * list1:
-+ * __BTF_ID__type1__name1__1:
-+ * .zero 4
-+ * __BTF_ID__type2__name2__2:
-+ * .zero 4
-+ *
-+ */
-+#define __BTF_ID_LIST(name)				\
-+asm(							\
-+".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
-+".local " #name ";                             \n"	\
-+#name ":;                                      \n"	\
-+".popsection;                                  \n");	\
++	/* triggers vfs_getattr */
++	fstat(pipefd[0], &fileStat);
++	fstat(pipefd[1], &fileStat);
++	fstat(sockfd, &fileStat);
++	fstat(procfd, &fileStat);
++	fstat(devfd, &fileStat);
++	fstat(localfd, &fileStat);
++	fstat(indicatorfd, &fileStat);
 +
-+#define BTF_ID_LIST(name)				\
-+__BTF_ID_LIST(name)					\
-+extern int name[];
++out_close:
++	/* triggers filp_close */
++	close(pipefd[0]);
++	close(pipefd[1]);
++	close(sockfd);
++	close(procfd);
++	close(devfd);
++	close(localfd);
++	close(indicatorfd);
++	return ret;
++}
 +
-+struct btf_id_set {
-+	u32 cnt;
-+	u32 ids[];
-+};
++void test_d_path(void)
++{
++	struct test_d_path__bss *bss;
++	struct test_d_path *skel;
++	__u32 duration = 0;
++	int err;
 +
-+/*
-+ * The BTF_SET_START/END macros pair defines sorted list of
-+ * BTF IDs plus its members count, with following layout:
-+ *
-+ * BTF_SET_START(list)
-+ * BTF_ID(type1, name1)
-+ * BTF_ID(type2, name2)
-+ * BTF_SET_END(list)
-+ *
-+ * __BTF_ID__set__list:
-+ * .zero 4
-+ * list:
-+ * __BTF_ID__type1__name1__3:
-+ * .zero 4
-+ * __BTF_ID__type2__name2__4:
-+ * .zero 4
-+ *
-+ */
-+#define BTF_SET_START(name)				\
-+__BTF_ID_LIST(name)					\
-+asm(							\
-+".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
-+".local __BTF_ID__set__" #name ";              \n"	\
-+"__BTF_ID__set__" #name ":;                    \n"	\
-+".zero 4                                       \n"	\
-+".popsection;                                  \n");	\
++	skel = test_d_path__open_and_load();
++	if (CHECK(!skel, "test_d_path_load", "d_path skeleton failed\n"))
++		goto cleanup;
 +
-+#define BTF_SET_END(name)				\
-+asm(							\
-+".pushsection " BTF_IDS_SECTION ",\"a\";      \n"	\
-+".size __BTF_ID__set__" #name ", .-" #name "  \n"	\
-+".popsection;                                 \n");	\
-+extern struct btf_id_set name;
++	err = test_d_path__attach(skel);
++	if (CHECK(err, "modify_return", "attach failed: %d\n", err))
++		goto cleanup;
 +
-+#endif
-diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
-index 9f9002734e19..6eac24d44e81 100644
---- a/tools/include/linux/compiler.h
-+++ b/tools/include/linux/compiler.h
-@@ -201,4 +201,8 @@ static __always_inline void __write_once_size(volatile void *p, void *res, int s
- # define __fallthrough
- #endif
- 
-+/* Indirect macros required for expanded argument pasting, eg. __LINE__. */
-+#define ___PASTE(a, b) a##b
-+#define __PASTE(a, b) ___PASTE(a, b)
++	bss = skel->bss;
++	bss->my_pid = getpid();
 +
- #endif /* _TOOLS_LINUX_COMPILER_H */
++	err = trigger_fstat_events(bss->my_pid);
++	if (CHECK_FAIL(err < 0))
++		goto cleanup;
++
++	for (int i = 0; i < MAX_FILES; i++) {
++		if (i < 3) {
++			CHECK((bss->paths_stat[i][0] == 0), "d_path",
++			      "failed to filter fs [%d]: %s vs %s\n",
++			      i, src.paths[i], bss->paths_stat[i]);
++			CHECK((bss->paths_close[i][0] == 0), "d_path",
++			      "failed to filter fs [%d]: %s vs %s\n",
++			      i, src.paths[i], bss->paths_close[i]);
++		} else {
++			CHECK(strncmp(src.paths[i], bss->paths_stat[i], MAX_PATH_LEN),
++			      "d_path",
++			      "failed to get stat path[%d]: %s vs %s\n",
++			      i, src.paths[i], bss->paths_stat[i]);
++			CHECK(strncmp(src.paths[i], bss->paths_close[i], MAX_PATH_LEN),
++			      "d_path",
++			      "failed to get close path[%d]: %s vs %s\n",
++			      i, src.paths[i], bss->paths_close[i]);
++		}
++	}
++
++cleanup:
++	test_d_path__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_d_path.c b/tools/testing/selftests/bpf/progs/test_d_path.c
+new file mode 100644
+index 000000000000..6096aef2bafc
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_d_path.c
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++#define MAX_PATH_LEN		128
++#define MAX_EVENT_NUM		16
++
++pid_t my_pid;
++__u32 cnt_stat;
++__u32 cnt_close;
++char paths_stat[MAX_EVENT_NUM][MAX_PATH_LEN];
++char paths_close[MAX_EVENT_NUM][MAX_PATH_LEN];
++
++SEC("fentry/vfs_getattr")
++int BPF_PROG(prog_stat, struct path *path, struct kstat *stat,
++	     __u32 request_mask, unsigned int query_flags)
++{
++	pid_t pid = bpf_get_current_pid_tgid() >> 32;
++
++	if (pid != my_pid)
++		return 0;
++
++	if (cnt_stat >= MAX_EVENT_NUM)
++		return 0;
++
++	bpf_d_path(path, paths_stat[cnt_stat], MAX_PATH_LEN);
++	cnt_stat++;
++	return 0;
++}
++
++SEC("fentry/filp_close")
++int BPF_PROG(prog_close, struct file *file, void *id)
++{
++	pid_t pid = bpf_get_current_pid_tgid() >> 32;
++
++	if (pid != my_pid)
++		return 0;
++
++	if (cnt_close >= MAX_EVENT_NUM)
++		return 0;
++
++	bpf_d_path((struct path *) &file->f_path,
++		   paths_close[cnt_close], MAX_PATH_LEN);
++	cnt_close++;
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.25.4
 
