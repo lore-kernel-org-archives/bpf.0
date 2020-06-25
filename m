@@ -4,39 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 406E1C433DF
-	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 22:13:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AB58C433DF
+	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 22:14:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2008220781
-	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 22:13:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08C3820789
+	for <bpf@archiver.kernel.org>; Thu, 25 Jun 2020 22:14:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1593123236;
-	bh=ThNVG5xmZW5+hj8pDMI3M6Zkg8URBn/JVx+GyMjvJW8=;
+	s=default; t=1593123248;
+	bh=jykWB+JN/VCbSC986BeOlSV7S/VZlqs/SvUZ5+6Vn2o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=OhgoWs9mPXTnOMev1ox4eYC2zlk18fv1yFdC7i4NiztOGH/QaWeEYP9tbE5CHh/Ln
-	 zMcLfyL9EiZMyn3rEamIKUrcMlJizbh6aF/D8osgxQtkaLSwUJ8ZSstMDhFYhgrMTI
-	 zs0sqPl6LRwPCumndu1s18xtCK4J+tXZBwR2ariY=
+	b=OFILL7xC4X0lqgbsBPBEklghxyi4/OTYOrKOaCuf0agrnogESr7KHE0vGSFcaQXbJ
+	 pFDjlJj0NptxcsUPtr4+GsEsfpV46bMNziC8zJi7g1TV7pJ6iapus41VfbzYcdbpgJ
+	 0Fq4insoKXSdDH3u3YQ3c6DDYi3p6nTb6HJdfcZA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436631AbgFYWNz convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 25 Jun 2020 18:13:55 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:39589 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2436629AbgFYWNz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Jun 2020 18:13:55 -0400
+        id S2407502AbgFYWOG convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 25 Jun 2020 18:14:06 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:57896 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2407497AbgFYWOF (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 25 Jun 2020 18:14:05 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-301-_Co-Te7bPKmbezZsOlJ7qg-1; Thu, 25 Jun 2020 18:13:47 -0400
-X-MC-Unique: _Co-Te7bPKmbezZsOlJ7qg-1
+ us-mta-175-faoY__PJPGWrPQ7dxs7s0g-1; Thu, 25 Jun 2020 18:13:56 -0400
+X-MC-Unique: faoY__PJPGWrPQ7dxs7s0g-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 36B498015FB;
-        Thu, 25 Jun 2020 22:13:45 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B8E91A0BEB;
+        Thu, 25 Jun 2020 22:13:52 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 78FA17B612;
-        Thu, 25 Jun 2020 22:13:41 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 70D9779303;
+        Thu, 25 Jun 2020 22:13:49 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
@@ -51,9 +51,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Brendan Gregg <bgregg@netflix.com>,
         Florent Revest <revest@chromium.org>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH v4 bpf-next 08/14] bpf: Add BTF_SET_START/END macros
-Date:   Fri, 26 Jun 2020 00:12:58 +0200
-Message-Id: <20200625221304.2817194-9-jolsa@kernel.org>
+Subject: [PATCH v4 bpf-next 10/14] bpf: Add d_path helper
+Date:   Fri, 26 Jun 2020 00:13:00 +0200
+Message-Id: <20200625221304.2817194-11-jolsa@kernel.org>
 In-Reply-To: <20200625221304.2817194-1-jolsa@kernel.org>
 References: <20200625221304.2817194-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -67,151 +67,172 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding support to define sorted set of BTF ID values.
+Adding d_path helper function that returns full path
+for give 'struct path' object, which needs to be the
+kernel BTF 'path' object.
 
-Following defines sorted set of BTF ID values:
+The helper calls directly d_path function.
 
-  BTF_SET_START(btf_whitelist_d_path)
-  BTF_ID(func, vfs_truncate)
-  BTF_ID(func, vfs_fallocate)
-  BTF_ID(func, dentry_open)
-  BTF_ID(func, vfs_getattr)
-  BTF_ID(func, filp_close)
-  BTF_SET_END(btf_whitelist_d_path)
-
-It defines following 'struct btf_id_set' variable to access
-values and count:
-
-  struct btf_id_set btf_whitelist_d_path;
-
-Adding 'allowed' callback to struct bpf_func_proto, to allow
-verifier the check on allowed callers.
-
-Adding btf_id_set_contains, which will be used by allowed
-callbacks to verify the caller's BTF ID value is within
-allowed set.
+Updating also bpf.h tools uapi header and adding
+'path' to bpf_helpers_doc.py script.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/bpf.h     |  4 ++++
- include/linux/btf_ids.h | 39 +++++++++++++++++++++++++++++++++++++++
- kernel/bpf/btf.c        | 14 ++++++++++++++
- kernel/bpf/verifier.c   |  5 +++++
- 4 files changed, 62 insertions(+)
+ include/uapi/linux/bpf.h       | 14 +++++++++-
+ kernel/trace/bpf_trace.c       | 47 ++++++++++++++++++++++++++++++++++
+ scripts/bpf_helpers_doc.py     |  2 ++
+ tools/include/uapi/linux/bpf.h | 14 +++++++++-
+ 4 files changed, 75 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c0fd1f3037dd..9efd0c23147d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -294,6 +294,7 @@ struct bpf_func_proto {
- 						    * for this argument.
- 						    */
- 	int *ret_btf_id; /* return value btf_id */
-+	bool (*allowed)(const struct bpf_prog *prog);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 0cb8ec948816..23274c81f244 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3285,6 +3285,17 @@ union bpf_attr {
+  *		Dynamically cast a *sk* pointer to a *udp6_sock* pointer.
+  *	Return
+  *		*sk* if casting is valid, or NULL otherwise.
++ *
++ * int bpf_d_path(struct path *path, char *buf, u32 sz)
++ *	Description
++ *		Return full path for given 'struct path' object, which
++ *		needs to be the kernel BTF 'path' object. The path is
++ *		returned in buffer provided 'buf' of size 'sz'.
++ *
++ *	Return
++ *		length of returned string on success, or a negative
++ *		error in case of failure
++ *
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3427,7 +3438,8 @@ union bpf_attr {
+ 	FN(skc_to_tcp_sock),		\
+ 	FN(skc_to_tcp_timewait_sock),	\
+ 	FN(skc_to_tcp_request_sock),	\
+-	FN(skc_to_udp6_sock),
++	FN(skc_to_udp6_sock),		\
++	FN(d_path),
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+  * function eBPF program intends to call
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index b124d468688c..6f31e21565b6 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1060,6 +1060,51 @@ static const struct bpf_func_proto bpf_send_signal_thread_proto = {
+ 	.arg1_type	= ARG_ANYTHING,
  };
  
- /* bpf_context is intentionally undefined structure. Pointer to bpf_context is
-@@ -1771,4 +1772,7 @@ enum bpf_text_poke_type {
- int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		       void *addr1, void *addr2);
- 
-+struct btf_id_set;
-+bool btf_id_set_contains(struct btf_id_set *set, u32 id);
-+
- #endif /* _LINUX_BPF_H */
-diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index f7f9dc4d9a9f..5eb8983ee0a0 100644
---- a/include/linux/btf_ids.h
-+++ b/include/linux/btf_ids.h
-@@ -66,4 +66,43 @@ asm(							\
- __BTF_ID_LIST(name)					\
- extern int name[];
- 
-+struct btf_id_set {
-+	u32 cnt;
-+	u32 ids[];
-+};
-+
-+/*
-+ * The BTF_SET_START/END macros pair defines sorted list of
-+ * BTF IDs plus its members count, with following layout:
-+ *
-+ * BTF_SET_START(list)
-+ * BTF_ID(type1, name1)
-+ * BTF_ID(type2, name2)
-+ * BTF_SET_END(list)
-+ *
-+ * __BTF_ID__set__list:
-+ * .zero 4
-+ * list:
-+ * __BTF_ID__type1__name1__3:
-+ * .zero 4
-+ * __BTF_ID__type2__name2__4:
-+ * .zero 4
-+ *
-+ */
-+#define BTF_SET_START(name)				\
-+__BTF_ID_LIST(name)					\
-+asm(							\
-+".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
-+".local __BTF_ID__set__" #name ";              \n"	\
-+"__BTF_ID__set__" #name ":;                    \n"	\
-+".zero 4                                       \n"	\
-+".popsection;                                  \n");	\
-+
-+#define BTF_SET_END(name)				\
-+asm(							\
-+".pushsection " BTF_IDS_SECTION ",\"a\";      \n"	\
-+".size __BTF_ID__set__" #name ", .-" #name "  \n"	\
-+".popsection;                                 \n");	\
-+extern struct btf_id_set name;
-+
- #endif
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index f87e5f1dc64d..201fe564bb84 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -21,6 +21,8 @@
- #include <linux/btf_ids.h>
- #include <linux/skmsg.h>
- #include <linux/perf_event.h>
-+#include <linux/bsearch.h>
-+#include <linux/btf_ids.h>
- #include <net/sock.h>
- 
- /* BTF (BPF Type Format) is the meta data format which describes
-@@ -4712,3 +4714,15 @@ u32 btf_id(const struct btf *btf)
- {
- 	return btf->id;
- }
-+
-+static int btf_id_cmp_func(const void *a, const void *b)
++BPF_CALL_3(bpf_d_path, struct path *, path, char *, buf, u32, sz)
 +{
-+	const int *pa = a, *pb = b;
++	char *p = d_path(path, buf, sz - 1);
++	int len;
 +
-+	return *pa - *pb;
-+}
-+
-+bool btf_id_set_contains(struct btf_id_set *set, u32 id)
-+{
-+	return bsearch(&id, set->ids, set->cnt, sizeof(int), btf_id_cmp_func) != NULL;
-+}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index da7351184295..b6f583e3e24f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4708,6 +4708,11 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
- 		return -EINVAL;
- 	}
- 
-+	if (fn->allowed && !fn->allowed(env->prog)) {
-+		verbose(env, "helper call is not allowed in probe\n");
-+		return -EINVAL;
++	if (IS_ERR(p)) {
++		len = PTR_ERR(p);
++	} else {
++		len = strlen(p);
++		if (len && p != buf) {
++			memmove(buf, p, len);
++			buf[len] = 0;
++		}
 +	}
 +
- 	/* With LD_ABS/IND some JITs save/restore skb from r1. */
- 	changes_data = bpf_helper_changes_pkt_data(fn->func);
- 	if (changes_data && fn->arg1_type != ARG_PTR_TO_CTX) {
++	return len;
++}
++
++BTF_SET_START(btf_whitelist_d_path)
++BTF_ID(func, vfs_truncate)
++BTF_ID(func, vfs_fallocate)
++BTF_ID(func, dentry_open)
++BTF_ID(func, vfs_getattr)
++BTF_ID(func, filp_close)
++BTF_SET_END(btf_whitelist_d_path)
++
++static bool bpf_d_path_allowed(const struct bpf_prog *prog)
++{
++	return btf_id_set_contains(&btf_whitelist_d_path, prog->aux->attach_btf_id);
++}
++
++BTF_ID_LIST(bpf_d_path_btf_ids)
++BTF_ID(struct, path)
++
++static const struct bpf_func_proto bpf_d_path_proto = {
++	.func		= bpf_d_path,
++	.gpl_only	= true,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_BTF_ID,
++	.arg2_type	= ARG_PTR_TO_MEM,
++	.arg3_type	= ARG_CONST_SIZE,
++	.btf_id		= bpf_d_path_btf_ids,
++	.allowed	= bpf_d_path_allowed,
++};
++
+ const struct bpf_func_proto *
+ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+@@ -1539,6 +1584,8 @@ tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return prog->expected_attach_type == BPF_TRACE_ITER ?
+ 		       &bpf_seq_write_proto :
+ 		       NULL;
++	case BPF_FUNC_d_path:
++		return &bpf_d_path_proto;
+ 	default:
+ 		return raw_tp_prog_func_proto(func_id, prog);
+ 	}
+diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
+index 6bab40ff442e..bacc0a2856c7 100755
+--- a/scripts/bpf_helpers_doc.py
++++ b/scripts/bpf_helpers_doc.py
+@@ -430,6 +430,7 @@ class PrinterHelpers(Printer):
+             'struct __sk_buff',
+             'struct sk_msg_md',
+             'struct xdp_md',
++            'struct path',
+     ]
+     known_types = {
+             '...',
+@@ -468,6 +469,7 @@ class PrinterHelpers(Printer):
+             'struct tcp_timewait_sock',
+             'struct tcp_request_sock',
+             'struct udp6_sock',
++            'struct path',
+     }
+     mapped_types = {
+             'u8': '__u8',
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 0cb8ec948816..23274c81f244 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3285,6 +3285,17 @@ union bpf_attr {
+  *		Dynamically cast a *sk* pointer to a *udp6_sock* pointer.
+  *	Return
+  *		*sk* if casting is valid, or NULL otherwise.
++ *
++ * int bpf_d_path(struct path *path, char *buf, u32 sz)
++ *	Description
++ *		Return full path for given 'struct path' object, which
++ *		needs to be the kernel BTF 'path' object. The path is
++ *		returned in buffer provided 'buf' of size 'sz'.
++ *
++ *	Return
++ *		length of returned string on success, or a negative
++ *		error in case of failure
++ *
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3427,7 +3438,8 @@ union bpf_attr {
+ 	FN(skc_to_tcp_sock),		\
+ 	FN(skc_to_tcp_timewait_sock),	\
+ 	FN(skc_to_tcp_request_sock),	\
+-	FN(skc_to_udp6_sock),
++	FN(skc_to_udp6_sock),		\
++	FN(d_path),
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+  * function eBPF program intends to call
 -- 
 2.25.4
 
