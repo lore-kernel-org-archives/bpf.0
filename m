@@ -2,65 +2,64 @@ Return-Path: <SRS0=o7vX=AH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48D35C433E0
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 21:33:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 844B2C433DF
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 21:35:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 197C520B80
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 21:33:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 569AB2100A
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 21:35:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cMpQEhjA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bUzYOEIH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725828AbgFZVdB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Jun 2020 17:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S1725793AbgFZVfI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Jun 2020 17:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725780AbgFZVdA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Jun 2020 17:33:00 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A46C03E979;
-        Fri, 26 Jun 2020 14:33:00 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id o38so8590390qtf.6;
-        Fri, 26 Jun 2020 14:33:00 -0700 (PDT)
+        with ESMTP id S1725780AbgFZVfH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Jun 2020 17:35:07 -0400
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E97DC03E979;
+        Fri, 26 Jun 2020 14:35:07 -0700 (PDT)
+Received: by mail-qv1-xf41.google.com with SMTP id h18so5157393qvl.3;
+        Fri, 26 Jun 2020 14:35:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YGOn4OHMzKMUBD2Ka3ClzBwELUAGANd/QNEPI3e6ipA=;
-        b=cMpQEhjAeArSQL8NL1hdjCfFT73zPKzDcjMK7YGhEDX1qSYCOtmF2oMubzKe/3ROGE
-         HdaCPaW1K7IUGOTxDVISrOddQmpGMOuUKf7PvUtLMAUs6kMzJdY8AALczpCrG0MW1Oys
-         EnZ8KUywkOjMkMSNUb53Sxk3IxKPRk9OOa2aVmcFFullcAWgJmS/z+Ot11kcaJMtjs6a
-         wNenRVxlo2F60R2kux7TrbzfC/ivBimGZRpAO/KbSAOG4eBOEh9fEuqETZT2RYGLwipQ
-         7OvlrAmAKXByICXKp/UyqgoZNPmyNeB1Xqpc+VuY/xcp7qFeDmkI1TTrZRw8qtv+jEyP
-         hPXQ==
+        bh=023NKTkZGg4IC8ZwEuOqLRGqtbebfZV/WPOtqSM/PQM=;
+        b=bUzYOEIH6HkrjtORASge6JEyzjjXPOkp/iTWAjc362wWNH3LF8FQNDQKxRvn2rD7zb
+         yFYDhtyJRZ06KNq+6RtMizJjG9IEAyBgWr0Y/6yipo7L6WIe6xr5cXowwNLj0u+sJYyL
+         ZqmtsIQJaTM3TqXOagZt0OBJxPihYNsLxoLpknjyIVtsEMwRFyWIk0EM9ViwdFmKPZyt
+         l9eXrzjIC02M5Vp+QWKR/XwhXaNoJxScXx912O/ooHi5N9al4c4I9+p0/499y640NDIl
+         aAor+jiA1Dl5BjIZgoPOH4esOvjLljAO1b2NnESCQ49dOySC6ojqjwWWT04WSmWxS+nZ
+         Y1ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YGOn4OHMzKMUBD2Ka3ClzBwELUAGANd/QNEPI3e6ipA=;
-        b=HfoP/agl3IiWQlCxcV7eizGsCteT00cvjkMhyQ91MEGima1wtwt3+ELn/bhrbTTuiN
-         SqyLEkiWzhDZ6N5GflR+WyZstEE5tlWK+o5jvB3qQ7H0y8CozVSPZ4FXqZ1nJN/83JKS
-         1FgCbe7mg834jQc1ABXAg3E6I01IA0ADanAPm8Z29FAWQrHTHjU0RdRpt5C6aP97UePj
-         wbEeun3oGMTnEuFA6dreViWZODlO8Mrj/HVbyredNGjw4tBr+44ItrswMcp5CrXFGgQL
-         HfJE0Ia4/hJ/x36Sxilwh5iJ7w8MJanrry55f8iAjfrYFBvo6Iplp84D0BcAZT45CLWP
-         Mwug==
-X-Gm-Message-State: AOAM53004ctjUyy+KQE4a4HotES14fIBwas8KK8DupaylvT4gWhFr6Xa
-        KkpfPL92TVFP646VckwHRZujUr9OyMHdch6Scoo=
-X-Google-Smtp-Source: ABdhPJxcihi/OvVwmt0+6PdkzjXjSYqzJ0rqP30TPE75nOS5bDfFEufLF3VuI5IxqhrGzdg6RKfBc7zYphcN6nOwl2A=
-X-Received: by 2002:ac8:2bba:: with SMTP id m55mr4872782qtm.171.1593207179708;
- Fri, 26 Jun 2020 14:32:59 -0700 (PDT)
+        bh=023NKTkZGg4IC8ZwEuOqLRGqtbebfZV/WPOtqSM/PQM=;
+        b=kqjXmQqGCRZttD3aVrGsfMf/yEeW+m8zDY7VBOE1Fy3NM8muhe69Tg/6ak5/4WfaFB
+         I9p+Ft3Zl9EY2aW48LYwvwz5iQWIrNrm9SfUoRgnp5RJGSjhzJqJmDP0GLBUeV+1+c+W
+         1w1o3IoIQSAZbFBdyS5284oXf7qYj2l7sr3bMk+Dlb7tVSkg+3tr9Qw5Z705BJ7q8QuR
+         h9A+VnFq2qm0MQrelEUw1w8jCVKv1Yq3W1P9ZtZ9mRFBjXCI9ZB/4RR64cWycqS7ghpe
+         rMJaeuoWkqV6wDbWPyf8NjjdHEawCUjabkYJ4h/lx/o6WlOZOfGdFNUexmyAzvfnIvCk
+         jEyg==
+X-Gm-Message-State: AOAM5332hoxTrcNEg2sL44AT50bbF+OvNP8uzM0H1Tk/mqptizdFNviY
+        wHrNS3mTVairDOa7EktnGU8h5XhQz+nXpXwdjl4=
+X-Google-Smtp-Source: ABdhPJwMT0Gle7nbNkJCVgJmMogHItbVOAusJ+YOpaibh4GkoYwmeoKLtIXQ4csRzP+jbB4hvmIBYHZaPP3i48tzI8U=
+X-Received: by 2002:a05:6214:8f4:: with SMTP id dr20mr4888713qvb.228.1593207306814;
+ Fri, 26 Jun 2020 14:35:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200625221304.2817194-1-jolsa@kernel.org> <20200625221304.2817194-4-jolsa@kernel.org>
-In-Reply-To: <20200625221304.2817194-4-jolsa@kernel.org>
+References: <20200625221304.2817194-1-jolsa@kernel.org> <20200625221304.2817194-5-jolsa@kernel.org>
+In-Reply-To: <20200625221304.2817194-5-jolsa@kernel.org>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 26 Jun 2020 14:32:48 -0700
-Message-ID: <CAEf4BzbceMFA60=7Jp7oC9x-gMvhKQtWmuhV3ncVKUhHHDzugA@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 03/14] bpf: Add BTF_ID_LIST/BTF_ID macros
+Date:   Fri, 26 Jun 2020 14:34:55 -0700
+Message-ID: <CAEf4BzaDYBq34PLpFd_+Zdk1PpKg-jsRw3Xs_QQ4XN4hMDphBQ@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 04/14] bpf: Resolve BTF IDs in vmlinux image
 To:     Jiri Olsa <jolsa@kernel.org>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -81,75 +80,23 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 25, 2020 at 3:13 PM Jiri Olsa <jolsa@kernel.org> wrote:
+On Thu, Jun 25, 2020 at 4:48 PM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> Adding support to generate .BTF_ids section that will hold BTF
-> ID lists for verifier.
+> Using BTF_ID_LIST macro to define lists for several helpers
+> using BTF arguments.
 >
-> Adding macros that will help to define lists of BTF ID values
-> placed in .BTF_ids section. They are initially filled with zeros
-> (during compilation) and resolved later during the linking phase
-> by resolve_btfids tool.
+> And running resolve_btfids on vmlinux elf object during linking,
+> so the .BTF_ids section gets the IDs resolved.
 >
-> Following defines list of one BTF ID value:
->
->   BTF_ID_LIST(bpf_skb_output_btf_ids)
->   BTF_ID(struct, sk_buff)
->
-> It also defines following variable to access the list:
->
->   extern int bpf_skb_output_btf_ids[];
->
-> Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
 
-Looks good, with few nits below.
-
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 
->  include/asm-generic/vmlinux.lds.h |  4 ++
->  include/linux/btf_ids.h           | 69 +++++++++++++++++++++++++++++++
->  2 files changed, 73 insertions(+)
->  create mode 100644 include/linux/btf_ids.h
->
+>  Makefile                 | 3 ++-
+>  kernel/trace/bpf_trace.c | 9 +++++++--
+>  net/core/filter.c        | 9 +++++++--
+>  scripts/link-vmlinux.sh  | 6 ++++++
+>  4 files changed, 22 insertions(+), 5 deletions(-)
 
 [...]
-
-> diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-> new file mode 100644
-> index 000000000000..f7f9dc4d9a9f
-> --- /dev/null
-> +++ b/include/linux/btf_ids.h
-> @@ -0,0 +1,69 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef _LINUX_BTF_IDS_H
-> +#define _LINUX_BTF_IDS_H 1
-
-this "1", is it necessary? I think it's always just `#define HEADER_GUARD`?
-
-> +
-> +#include <linux/compiler.h> /* for __PASTE */
-> +
-
-[...]
-
-> +#define __BTF_ID_LIST(name)                            \
-> +asm(                                                   \
-> +".pushsection " BTF_IDS_SECTION ",\"a\";       \n"     \
-> +".local " #name ";                             \n"     \
-> +#name ":;                                      \n"     \
-> +".popsection;                                  \n");   \
-> +
-> +#define BTF_ID_LIST(name)                              \
-> +__BTF_ID_LIST(name)                                    \
-> +extern int name[];
-
-nit: extern u32 (or __u32) perhaps?
-
-> +
-> +#endif
-> --
-> 2.25.4
->
