@@ -2,79 +2,170 @@ Return-Path: <SRS0=o7vX=AH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F0A7C433E0
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 23:08:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22E7CC433E0
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 23:12:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 56160208C7
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 23:08:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED6272073E
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 23:12:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IuV68Sj0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725998AbgFZXIB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Jun 2020 19:08:01 -0400
-Received: from www62.your-server.de ([213.133.104.62]:54272 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725883AbgFZXIB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Jun 2020 19:08:01 -0400
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1joxRv-00018K-9Z; Sat, 27 Jun 2020 01:07:59 +0200
-Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1joxRv-0002GK-2P; Sat, 27 Jun 2020 01:07:59 +0200
-Subject: Re: [PATCH bpf-next v2 3/4] bpftool: support
- BPF_CGROUP_INET_SOCK_RELEASE
-To:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org
-References: <20200626165231.672001-1-sdf@google.com>
- <20200626165231.672001-3-sdf@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <862111f0-b71a-0b7a-1f52-4f2fed28b8ff@iogearbox.net>
-Date:   Sat, 27 Jun 2020 01:07:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726276AbgFZXMJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Jun 2020 19:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725883AbgFZXMJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Jun 2020 19:12:09 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA0AC03E979;
+        Fri, 26 Jun 2020 16:12:08 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id j10so8735916qtq.11;
+        Fri, 26 Jun 2020 16:12:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pTmR+y5xQvCfn7qLWQjIR68Juu6JdR5gHIQY84QdEd4=;
+        b=IuV68Sj0SKSJ8kJjMhRBv9rc+wRa/O+XtkXwVtnjm7MTGWGuJrVPQ+E/1xuhQFFzxt
+         Jst27nZ5ngYKEXFcNkh5sn4SzU1XaPQuvCbnIOAFFavbzQ4ZtH2L3Hypyu1nsdBnm3Fo
+         Xq4TrdiFvw1hMdh5eep5MK7hnVkfLopKDB8T1zgcTDgaOzNhJvImLfHDMLVNRUUMyH1u
+         ofMPXZrjNtIkZDcG7eTNxjr9TPWauKc8q1lUpsHfeAJIRG+lJ7MzKOF8PfAXx/CQy8tY
+         5oyXfEKd7mTGriQm2etbaS/uuJgmSnC1PC+moNrG/vDJDP+zC/pylnqEnKR9aEdeuykz
+         iBJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pTmR+y5xQvCfn7qLWQjIR68Juu6JdR5gHIQY84QdEd4=;
+        b=hjNuAkgxBuC6MU541v63JR4e/GkEbk9LarKwWIC3oCgJ6Nb6jpi/cL5PQEEItvYzXM
+         75YZYX8HtYVvN//r1SuGwREqQ7ItK8NQE/501Zw4Z+L6S0/cmUshg3+jBZxcrwqELMlX
+         47aRi7+T+rJ8HVN/q/UbPyjz1V/f3TikWerarKDbyV3zH3+CoOnFCZ26XGhL51dZdNBQ
+         IbGE907/X53HmXdve51QjTJIGSdowkG4RecnZAN9FSkWLqKfY2IpHVhclPVXWtxcQ2xk
+         wiX2BtmkUkokDwKuobHNlttFYQDv64f3z7RJux0ihSgr+z1usyx+3kg7XnEE58ypKSIv
+         sJ9Q==
+X-Gm-Message-State: AOAM530jfm9d3URqi25uXulcimCMlEVwAXDupD9RfQthc2V/VE7yKn7Y
+        TUY2vE2qSZrLUF5heeBc6tn8itwef76w/+ZqxxWUGBdu
+X-Google-Smtp-Source: ABdhPJxzIyclZTlu3aoGsOzhVwJsAXglRMI7FIJ4PJA2sz/uUtUXt8Zh+DhIqtUNNUK+mveDG+YVuDseREIBsP1ls1s=
+X-Received: by 2002:ac8:1991:: with SMTP id u17mr5099484qtj.93.1593213128220;
+ Fri, 26 Jun 2020 16:12:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200626165231.672001-3-sdf@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.3/25855/Fri Jun 26 15:19:25 2020)
+References: <20200626001332.1554603-1-songliubraving@fb.com>
+ <20200626001332.1554603-5-songliubraving@fb.com> <CAEf4Bzb6H3a48S3L4WZtPTMSLZpAe4C5_2aFwJAnNDVLVWDTQA@mail.gmail.com>
+ <6B6E4195-BC5C-4A13-80A6-9493469D6A2E@fb.com>
+In-Reply-To: <6B6E4195-BC5C-4A13-80A6-9493469D6A2E@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 26 Jun 2020 16:11:57 -0700
+Message-ID: <CAEf4Bzb543EVJF+nU0X+1JNMaTehgiwx_0V=80W-frBYku0odA@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 4/4] selftests/bpf: add bpf_iter test with bpf_get_task_stack()
+To:     Song Liu <songliubraving@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Peter Ziljstra <peterz@infradead.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 6/26/20 6:52 PM, Stanislav Fomichev wrote:
-> Support attaching to sock_release from the bpftool.
-> 
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> ---
->   tools/bpf/bpftool/main.h | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-> index 5cdf0bc049bd..0a281d3cceb8 100644
-> --- a/tools/bpf/bpftool/main.h
-> +++ b/tools/bpf/bpftool/main.h
-> @@ -92,6 +92,7 @@ static const char * const attach_type_name[__MAX_BPF_ATTACH_TYPE] = {
->   	[BPF_CGROUP_INET_INGRESS] = "ingress",
->   	[BPF_CGROUP_INET_EGRESS] = "egress",
->   	[BPF_CGROUP_INET_SOCK_CREATE] = "sock_create",
-> +	[BPF_CGROUP_INET_SOCK_RELEASE] = "sock_release",
->   	[BPF_CGROUP_SOCK_OPS] = "sock_ops",
->   	[BPF_CGROUP_DEVICE] = "device",
->   	[BPF_CGROUP_INET4_BIND] = "bind4",
+On Fri, Jun 26, 2020 at 4:05 PM Song Liu <songliubraving@fb.com> wrote:
+>
+>
+>
+> > On Jun 26, 2020, at 1:21 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Thu, Jun 25, 2020 at 5:15 PM Song Liu <songliubraving@fb.com> wrote:
+> >>
+> >> The new test is similar to other bpf_iter tests.
+> >>
+> >> Signed-off-by: Song Liu <songliubraving@fb.com>
+> >> ---
+> >> .../selftests/bpf/prog_tests/bpf_iter.c       | 17 ++++++
+> >> .../selftests/bpf/progs/bpf_iter_task_stack.c | 60 +++++++++++++++++++
+> >> 2 files changed, 77 insertions(+)
+> >> create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c
+> >>
+> >> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+> >> index 87c29dde1cf96..baa83328f810d 100644
+> >> --- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+> >> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+> >> @@ -5,6 +5,7 @@
+> >> #include "bpf_iter_netlink.skel.h"
+> >> #include "bpf_iter_bpf_map.skel.h"
+> >> #include "bpf_iter_task.skel.h"
+> >> +#include "bpf_iter_task_stack.skel.h"
+> >> #include "bpf_iter_task_file.skel.h"
+> >> #include "bpf_iter_test_kern1.skel.h"
+> >> #include "bpf_iter_test_kern2.skel.h"
+> >> @@ -106,6 +107,20 @@ static void test_task(void)
+> >>        bpf_iter_task__destroy(skel);
+> >> }
+> >>
+> >> +static void test_task_stack(void)
+> >> +{
+> >> +       struct bpf_iter_task_stack *skel;
+> >> +
+> >> +       skel = bpf_iter_task_stack__open_and_load();
+> >> +       if (CHECK(!skel, "bpf_iter_task_stack__open_and_load",
+> >> +                 "skeleton open_and_load failed\n"))
+> >> +               return;
+> >> +
+> >> +       do_dummy_read(skel->progs.dump_task_stack);
+> >> +
+> >> +       bpf_iter_task_stack__destroy(skel);
+> >> +}
+> >> +
+> >> static void test_task_file(void)
+> >> {
+> >>        struct bpf_iter_task_file *skel;
+> >> @@ -392,6 +407,8 @@ void test_bpf_iter(void)
+> >>                test_bpf_map();
+> >>        if (test__start_subtest("task"))
+> >>                test_task();
+> >> +       if (test__start_subtest("task_stack"))
+> >> +               test_task_stack();
+> >>        if (test__start_subtest("task_file"))
+> >>                test_task_file();
+> >>        if (test__start_subtest("anon"))
+> >> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c b/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c
+> >> new file mode 100644
+> >> index 0000000000000..83aca5b1a7965
+> >> --- /dev/null
+> >> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c
+> >> @@ -0,0 +1,60 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >> +/* Copyright (c) 2020 Facebook */
+> >> +/* "undefine" structs in vmlinux.h, because we "override" them below */
+> >> +#define bpf_iter_meta bpf_iter_meta___not_used
+> >> +#define bpf_iter__task bpf_iter__task___not_used
+> >> +#include "vmlinux.h"
+> >> +#undef bpf_iter_meta
+> >> +#undef bpf_iter__task
+> >> +#include <bpf/bpf_helpers.h>
+> >> +#include <bpf/bpf_tracing.h>
+> >> +
+> >> +char _license[] SEC("license") = "GPL";
+> >> +
+> >> +/* bpf_get_task_stack needs a stackmap to work */
+> >
+> > no it doesn't anymore :) please drop
+>
+> We still need stack_map_alloc() to call get_callchain_buffers() in this
+> case. Without an active stack map, get_callchain_buffers() may fail.
 
-This one is not on latest bpf-next, needs rebase due to 16d37ee3d2b1 ("tools, bpftool: Define
-attach_type_name array only once").
+Oh... um... is it possible to do it some other way? It's extremely
+confusing dependency. Does bpf_get_stack() also require stackmap?
 
-Thanks,
-Daniel
+>
+> Thanks,
+> Song
