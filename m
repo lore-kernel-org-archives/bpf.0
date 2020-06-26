@@ -2,93 +2,133 @@ Return-Path: <SRS0=o7vX=AH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24D60C433DF
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 00:09:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05C1DC433DF
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 00:13:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBEFE2072E
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 00:09:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6DC620773
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 00:13:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OruMzUJG"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Y+uNakqO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725994AbgFZAJk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Jun 2020 20:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726067AbgFZAJg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Jun 2020 20:09:36 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0917BC08C5C1
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 17:09:36 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id o84so7913930ybg.0
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 17:09:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Po39cTrb4umUGd/JnKFlg9lYtuzyyRnUnXZQpa3U0lU=;
-        b=OruMzUJGvxCCYiWGiEkVCinWPSdqr1wMBdbZV0GzX37FKfkT849ItKzQF4DwCmkbRD
-         Xa39dWBv2pzYUvw6xuUKvQtx3h3ybZxA5tWZJmB/vkQQpdPL59WK3TZXQZ/mZqMWXD5J
-         IscQp7tvMAunXFqJqypEj3K5cFB5wigaCq2zENnZoFQAHBJow9BpjC2AzIiPKR0DdtQ0
-         b8/HoDKKfr8Fm+j4T00hbUWlxpEgixT+H5jUCG70+p0fEF1yOfkNCcnfU8AmCgfDTr0g
-         yyMdOH8Py5TN8Si31ppSHBP8yuSRxh4TAk1/dyleuqXul9XEyh4dqxj07ilj8RgUJ0S9
-         zniQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Po39cTrb4umUGd/JnKFlg9lYtuzyyRnUnXZQpa3U0lU=;
-        b=FHQg3FCFUeFu6y9K5ESZ6TELaKNoOGbiDtPCUKK85GrFVzbYbqL308t/l4oxsGfk3E
-         +rIrZagGHzeBoEBm3voAdw9Qyi9YH9ce/jQ/SrXxE4GLE14LnntaD9wRwQjUI78L/8zG
-         n5A0eYajl83Uou9EAoWEjXDPX/JYKq+tr9W89S5pnWTzshNtapCzKYdkWwjei6CFW16f
-         cmQMxBiz0PWrlLJ6wK7VkeDKA4tbifk4NW6OWmjWomMjfgTdzG2CGAjmt9Amve9WjX4S
-         WW28VUnSkTesWVKbjBCjO8zuOEXVJxlWi95e/IV5Jk+ekm1GlB+Xkc6WRR/smFfXQYwH
-         06DA==
-X-Gm-Message-State: AOAM5304nk/MvmtSvSfwz/sbPsG68Zk0n5v/JgEBBT2yuU3R2c/T2EJR
-        +LLIfYmHCxKUFnvntwrc3FJrJfg=
-X-Google-Smtp-Source: ABdhPJxCU7Cn8UcnnQpFemEz22ZR+/j2WiU/1JW7YkYSdNLk6xgmRCVfOPQAZJVIbp1qu2tuliJU78g=
-X-Received: by 2002:a05:6902:4ef:: with SMTP id w15mr740042ybs.44.1593130175290;
- Thu, 25 Jun 2020 17:09:35 -0700 (PDT)
-Date:   Thu, 25 Jun 2020 17:09:28 -0700
-In-Reply-To: <20200626000929.217930-1-sdf@google.com>
-Message-Id: <20200626000929.217930-3-sdf@google.com>
-Mime-Version: 1.0
-References: <20200626000929.217930-1-sdf@google.com>
-X-Mailer: git-send-email 2.27.0.111.gc72c7da667-goog
-Subject: [PATCH bpf-next 3/4] bpftool: support BPF_CGROUP_INET_SOCK_RELEASE
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1725880AbgFZANv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Jun 2020 20:13:51 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:4690 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725767AbgFZANu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 25 Jun 2020 20:13:50 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05Q0BrOs007687
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 17:13:50 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=PB4mymUPZh9olBqG+tmu3FmZh6UViBX5lSwF10QNN6A=;
+ b=Y+uNakqO8dHNIv0pZW0f4P3kZ7qlLNkaUOPOTu35Izx8zZedKHj6zQYrd8KKbE8lgfNP
+ tKb3dbgxDeHm/r9uBQaxzr/T1Ic1FdnekIDv2T4hzqGSNd+ocQrKZLFsWSGG6Ra998Qj
+ 7X/lk8ZH6wI3txTGmPNUriZJMlQ/LcUK4z4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31ux0xttq5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 17:13:49 -0700
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 25 Jun 2020 17:13:48 -0700
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 5BED762E4FA9; Thu, 25 Jun 2020 17:13:47 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Song Liu <songliubraving@fb.com>
+Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <peterz@infradead.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <kernel-team@fb.com>, <john.fastabend@gmail.com>,
+        <kpsingh@chromium.org>, Song Liu <songliubraving@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v2 bpf-next 3/4] bpf: allow %pB in bpf_seq_printf() and bpf_trace_printk()
+Date:   Thu, 25 Jun 2020 17:13:31 -0700
+Message-ID: <20200626001332.1554603-4-songliubraving@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200626001332.1554603-1-songliubraving@fb.com>
+References: <20200626001332.1554603-1-songliubraving@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-25_19:2020-06-25,2020-06-25 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=8
+ spamscore=0 mlxscore=0 impostorscore=0 cotscore=-2147483648 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
+ priorityscore=1501 phishscore=0 clxscore=1015 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006250142
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Support attaching to sock_release from the bpftool.
+This makes it easy to dump stack trace in text.
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- tools/bpf/bpftool/main.h | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/trace/bpf_trace.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 5cdf0bc049bd..0a281d3cceb8 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -92,6 +92,7 @@ static const char * const attach_type_name[__MAX_BPF_ATTACH_TYPE] = {
- 	[BPF_CGROUP_INET_INGRESS] = "ingress",
- 	[BPF_CGROUP_INET_EGRESS] = "egress",
- 	[BPF_CGROUP_INET_SOCK_CREATE] = "sock_create",
-+	[BPF_CGROUP_INET_SOCK_RELEASE] = "sock_release",
- 	[BPF_CGROUP_SOCK_OPS] = "sock_ops",
- 	[BPF_CGROUP_DEVICE] = "device",
- 	[BPF_CGROUP_INET4_BIND] = "bind4",
--- 
-2.27.0.111.gc72c7da667-goog
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 65fa62723e2f8..1cb90b0868817 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -376,7 +376,7 @@ static void bpf_trace_copy_string(char *buf, void *un=
+safe_ptr, char fmt_ptype,
+=20
+ /*
+  * Only limited trace_printk() conversion specifiers allowed:
+- * %d %i %u %x %ld %li %lu %lx %lld %lli %llu %llx %p %pks %pus %s
++ * %d %i %u %x %ld %li %lu %lx %lld %lli %llu %llx %p %pB %pks %pus %s
+  */
+ BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_size, u64, arg1,
+ 	   u64, arg2, u64, arg3)
+@@ -420,6 +420,11 @@ BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_s=
+ize, u64, arg1,
+ 				goto fmt_str;
+ 			}
+=20
++			if (fmt[i + 1] =3D=3D 'B') {
++				i++;
++				goto fmt_next;
++			}
++
+ 			/* disallow any further format extensions */
+ 			if (fmt[i + 1] !=3D 0 &&
+ 			    !isspace(fmt[i + 1]) &&
+@@ -479,7 +484,7 @@ BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_si=
+ze, u64, arg1,
+ #define __BPF_TP_EMIT()	__BPF_ARG3_TP()
+ #define __BPF_TP(...)							\
+ 	__trace_printk(0 /* Fake ip */,					\
+-		       fmt, ##__VA_ARGS__)
++		       fmt, ##__VA_ARGS__)\
+=20
+ #define __BPF_ARG1_TP(...)						\
+ 	((mod[0] =3D=3D 2 || (mod[0] =3D=3D 1 && __BITS_PER_LONG =3D=3D 64))	\
+@@ -636,7 +641,8 @@ BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char=
+ *, fmt, u32, fmt_size,
+ 		if (fmt[i] =3D=3D 'p') {
+ 			if (fmt[i + 1] =3D=3D 0 ||
+ 			    fmt[i + 1] =3D=3D 'K' ||
+-			    fmt[i + 1] =3D=3D 'x') {
++			    fmt[i + 1] =3D=3D 'x' ||
++			    fmt[i + 1] =3D=3D 'B') {
+ 				/* just kernel pointers */
+ 				params[fmt_cnt] =3D args[fmt_cnt];
+ 				fmt_cnt++;
+--=20
+2.24.1
 
