@@ -2,107 +2,104 @@ Return-Path: <SRS0=o7vX=AH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BEE2C433E2
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 16:52:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38A2FC433DF
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:09:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 580BF20836
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 16:52:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 129B9207E8
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:09:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GpbBei1c"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R3ikkHbu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727943AbgFZQwh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Jun 2020 12:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S1728365AbgFZRJr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Jun 2020 13:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727053AbgFZQwg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Jun 2020 12:52:36 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0895DC03E979
-        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 09:52:36 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id n10so6774023qvp.17
-        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 09:52:35 -0700 (PDT)
+        with ESMTP id S1728210AbgFZRJq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Jun 2020 13:09:46 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFA6C03E979
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 10:09:46 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id v8so10498303iox.2
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 10:09:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=eUwmZKxCGJq9Xs8nLFS4B15rV5sLgo86/VMV9gkjb/4=;
-        b=GpbBei1cwX7kTf8cUy0QTU7xkWGkbB+/alxZvCAx+Y1ytygViG7wgzj8Ui3ECpUGu4
-         UuD7qs0PtYpzSn7pLq31oLP1psu7OkOw5qh1lbVgerCxptFzE4ju+DfWkJDp/IH7fJOA
-         MnxWxztIRd4bHEIpzJ+6PFXU6tcETTA8niKcIYmfeu9eu2lN7bRqEWA5QgWZaCci5xGA
-         WmIeBkzNVMsHKcxjZaz0trQnTfOm8+YWuwHnAc5UcZW0cZVP2S27Wan6AzQNpnPotbV5
-         6uf1s/Swi4Bt6SQRPJ21RPHlHyO7O4rPKUUlBnwEuGv3ioOdiINu4Y3oZQ9CSMonT1Vm
-         VqBg==
+        bh=9FJhWQ6DJzhTxp5Gv7WI23ebr6dsFSZggRiHM0eeP+M=;
+        b=R3ikkHbu/ghIHNDmJjeRdHsJBje2305VTLSxQNHBHrHgVC0+eWIgIIFziZK+/HgOhq
+         I0WCsmrh0wPLAUFlRX/ZR8XwbbruhDtB0GaFt6uvgOWJFt2NZ/aHR1Q2mTrJ7R7ZfCKo
+         A2hV/x6cgNmniUlEGTd4CH1k4X17xnQoVd8v5+xAZfZAdiAgseQTcZFndGi3ieJOL0f6
+         MXXi0xGS9vab68tQOPtmeTgmBtcfaXw8UH+iWM15lVZnQR2IE/wgDSRVeebWv4ii4xUq
+         3LI5eGwGUCoPhbFB8QVD8c6GE7bSNnLpWyi1BJdGXOLSFIAY+z7jd2ZHe5kETS2hbeR0
+         ZYRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=eUwmZKxCGJq9Xs8nLFS4B15rV5sLgo86/VMV9gkjb/4=;
-        b=CYwyHVL8q59rZzanB5c3ZEuJAbONlfqMdGjGWpyc1H9wctIA0rD+A1zOJPXl6Il3+1
-         YhnCC4PEtJSsShvSZdMfN4Smx102iKpcp/jl4QFFyIPXYS7B4az/XJTvcGKn0KTjRT02
-         mFVKzVvFYNlJRPxhv/LiXK8l5wIZcc1ombhGFyG2XZuv9c61c5uMEmVZJByO+BP7/FBY
-         GbR+QeCbPmTF4D72wPp3I5tZAw1jpOKxQlHoOg8xYtXnXs6/QXl2rXUaF2l0dQJD6o+M
-         Qi2UB+jFub5eJsAMjMM/oji0fW114FobIvmzLUfMMgWw7KM1ICjhYJdHXiYFTuIsgMqI
-         5/4g==
-X-Gm-Message-State: AOAM532dp59JHrURu+5SR7s88UAzff9w3Suxx6ckW5qWyxqi+pNnbhXO
-        vaUJBSfnEf7u0M08qbdAcpvU76A=
-X-Google-Smtp-Source: ABdhPJwE6V/rqLyi3zRXFMUkuntbGD8cd9sZnn5khxLup5Lt7jLTREOlbOMwRihlbXlcf6IMTqupD/U=
-X-Received: by 2002:a0c:f78b:: with SMTP id s11mr4132483qvn.33.1593190355221;
- Fri, 26 Jun 2020 09:52:35 -0700 (PDT)
-Date:   Fri, 26 Jun 2020 09:52:29 -0700
-In-Reply-To: <20200626165231.672001-1-sdf@google.com>
-Message-Id: <20200626165231.672001-2-sdf@google.com>
-Mime-Version: 1.0
-References: <20200626165231.672001-1-sdf@google.com>
-X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-Subject: [PATCH bpf-next v2 2/4] libbpf: add support for BPF_CGROUP_INET_SOCK_RELEASE
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9FJhWQ6DJzhTxp5Gv7WI23ebr6dsFSZggRiHM0eeP+M=;
+        b=Yy1uoa+6tUglawXCcImkeBR/AlekyaojmXsfgdBztaXonWL1AONEVWAr4wVQIvuiEA
+         HYZ6YdqNRlQ1/i0K/4JSkWX/caa+syPJpPCcy6sQPCYqGp0Zf6JZWir7t3NA4ex5zu7k
+         xx3U4Rrm8rD3fkMIOZD+77qDNttetzggHH+Vy8WkQtXEAxNm0gIUJ1pMRTMY/7auO77n
+         iPN+bUzSclze0+4EiG8vx+t2SLJMpZcTseN4UNBIG5OQbuLwxnFeXZkc0r1TPIykzoNz
+         YhizUO43zAFGqpC2DG0AFHyL8+Q1l0N/DgeM5XPuWodHyMawS7Y2h9P+JFHTnoYGxbZ0
+         4/ZA==
+X-Gm-Message-State: AOAM530/XuLbJx9h7jUbKfx6XHqd1BHNUElA5bBhGVgVkLTno4imR/xx
+        yloKT9j8sMybpKar6PyNIyPss63BYoOfh9sOfOs=
+X-Google-Smtp-Source: ABdhPJw0Zr3Sn+BU5BpBnJHbvGWG2xvFUp9N2x2WFoE0eIHaOoIiQ2Wduv7DKa3hr++BW2exQWEhDNmB6EmHe1yfJ6Q=
+X-Received: by 2002:a5e:9708:: with SMTP id w8mr4458917ioj.16.1593191385519;
+ Fri, 26 Jun 2020 10:09:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAP5XGZejdCVA0rk9ctj3=i_QPSDVzJem+nbzz6KVwJaGUS_8GA@mail.gmail.com>
+ <7e8f76ab-c130-36b7-91e4-e155a0a91aa8@fb.com>
+In-Reply-To: <7e8f76ab-c130-36b7-91e4-e155a0a91aa8@fb.com>
+From:   Simone Magnani <simonemagnani.96@gmail.com>
+Date:   Fri, 26 Jun 2020 19:09:34 +0200
+Message-ID: <CAP5XGZcus93WhxXAJ2j3MCB7kuBaGiR-j4YXidwDye+FOQNhKQ@mail.gmail.com>
+Subject: Re: [LINUX-KERNEL] - bpf batch support for queue/stack
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add auto-detection for the cgroup/sock_release programs.
+Thanks Yonghong, clear and straight to the point.
+I'll update you if I will be able to make it, by now many thanks :)
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- tools/include/uapi/linux/bpf.h | 1 +
- tools/lib/bpf/libbpf.c         | 2 ++
- 2 files changed, 3 insertions(+)
-
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index c65b374a5090..d7aea1d0167a 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -226,6 +226,7 @@ enum bpf_attach_type {
- 	BPF_CGROUP_INET4_GETSOCKNAME,
- 	BPF_CGROUP_INET6_GETSOCKNAME,
- 	BPF_XDP_DEVMAP,
-+	BPF_CGROUP_INET_SOCK_RELEASE,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7f01be2b88b8..acbab6d0672d 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -6670,6 +6670,8 @@ static const struct bpf_sec_def section_defs[] = {
- 	BPF_APROG_SEC("cgroup_skb/egress",	BPF_PROG_TYPE_CGROUP_SKB,
- 						BPF_CGROUP_INET_EGRESS),
- 	BPF_APROG_COMPAT("cgroup/skb",		BPF_PROG_TYPE_CGROUP_SKB),
-+	BPF_EAPROG_SEC("cgroup/sock_release",	BPF_PROG_TYPE_CGROUP_SOCK,
-+						BPF_CGROUP_INET_SOCK_RELEASE),
- 	BPF_APROG_SEC("cgroup/sock",		BPF_PROG_TYPE_CGROUP_SOCK,
- 						BPF_CGROUP_INET_SOCK_CREATE),
- 	BPF_EAPROG_SEC("cgroup/post_bind4",	BPF_PROG_TYPE_CGROUP_SOCK,
--- 
-2.27.0.212.ge8ba1cc988-goog
-
+Il giorno ven 26 giu 2020 alle ore 18:00 Yonghong Song <yhs@fb.com> ha scritto:
+>
+>
+>
+> On 6/26/20 5:01 AM, Simone Magnani wrote:
+> > Hi,
+> >
+> > I'm Simone and I'm new to this community.
+> > Lately, I've been working on in-kernel traffic analysis with eBPF and
+> > the newest features released in the latest kernel versions
+> > (queue/stack, batch operations,...).
+> > For some reason, I couldn't help but notice that Queues and Stacks bpf
+> > map types don't support batch operations at all, and I was wondering
+> > why. Is there any reason why this decision has been made or it is just
+> > temporary and you are planning to implement it later on?
+>
+> The initial implementation targets to specific use cases for
+> hash and array maps. Yes, queue and stack batch operations could
+> be supported. The necessary infrastructure and example implementation
+> for hash/array maps are in the kernel tree. You or anyone interested
+> are welcome to take a try.
+>
+> >
+> > Reference file: linux/kernel/bpf/queue_stack_maps.c (and all the
+> > others belonging to the same directory)
+> >
+> > Thanks in advance,
+> >
+> > Regards,
+> > Simone
+> >
