@@ -2,123 +2,137 @@ Return-Path: <SRS0=o7vX=AH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79960C433E1
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 00:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3624C433DF
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 01:36:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 57B2B2072E
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 00:14:12 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="CJGYCOcs"
+	by mail.kernel.org (Postfix) with ESMTP id A417720702
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 01:36:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1593135416;
+	bh=ZcjKlzC9pTr1KWbXb9k9N/aQuHEz3Utm8JPHFrnBfcg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=2Z+sN8sbWtKps0ViCCGUAx9pdWLMux2/E2+nCOD9+xn36XXBCWyHyFmYerOEIzJlQ
+	 4tsueiKgkflp8tRJCHbrp8J+gPAt9BvXBqyXSQ1u14yvXY26N7gupP1558nAcDh7nH
+	 7IN8nsNyvASXZyHVqgL+FzgVNxsraPDiVSOm9F0c=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725833AbgFZAOL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Jun 2020 20:14:11 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63962 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725897AbgFZANx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 25 Jun 2020 20:13:53 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05Q0AeHW019922
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 17:13:51 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=L+G+5ICmD+hXddYJtcmy5XMdUPoBv6VGsfT8fpChsDI=;
- b=CJGYCOcsr6tdSepWqrREDfcoW7d9YzW3EzwEREokPhgduifDZ/zm2a4vVBDGx4nI7JSy
- 1osPEHkEfTL4Zq84p7kvGg6f+ztmESU1PiM9nVZrQNcEAIWkPEKweQF6g0k7eLlogyh8
- wKCS/sqAW5dQt0ROEMHYTTT5TYftokvBr2k= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31ux1etv45-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 17:13:51 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 25 Jun 2020 17:13:50 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 2DDAD62E4FA9; Thu, 25 Jun 2020 17:13:39 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Song Liu <songliubraving@fb.com>
-Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <peterz@infradead.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <kernel-team@fb.com>, <john.fastabend@gmail.com>,
-        <kpsingh@chromium.org>, Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 0/4] bpf: introduce bpf_get_task_stack()
-Date:   Thu, 25 Jun 2020 17:13:28 -0700
-Message-ID: <20200626001332.1554603-1-songliubraving@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1727043AbgFZBg4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Jun 2020 21:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727041AbgFZBgz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Jun 2020 21:36:55 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B0BC08C5C1
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 18:36:55 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id b25so5011877ljp.6
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 18:36:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iBlssWGvZOAUnwbFE+tTOZwoNXNhC7FxvKiwWZijAmg=;
+        b=Qby8f0yox/HTyimDKy8WH3QjOnsg/2FljFlSp/oNDI3KhHpuZAxj1N6Z18mesHmIms
+         NOZMN7rYftj4wIT3wsgRxLsZf9lBCRiKDlD1XlyYLBOunfkrsxx012pA879ViQA3++T/
+         co+GFPa4HCJ+SssCzgmGMtkAllEXMS8wzS4JM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iBlssWGvZOAUnwbFE+tTOZwoNXNhC7FxvKiwWZijAmg=;
+        b=UjUgJnten/jFCXfj/4m+RnH5eeKWZ4LQa7HzHP4QSzwcVo/Ay6d4VMeqtq+vbXPCGY
+         8OXHzWlM9dmNbQ3707jNdF+rubuz0n2Of+0I6gaPEvhtt4YzE8/nI5xiHoMkkVIhG0qW
+         on5ycqckI3giKJJg5iNJ3k1qJLq0N/xJIP+CQOicLtmoPTIfVQ7vBLl5Pkq+MXwBNqlH
+         mo+pbC8RBnjVjcH+QGm6rkis1q9awXZOnVXU0qQ371RTHU6fxXM80TWstmMfFR6EgWef
+         9KIfdNIqkvgEVeOB4ZqA+tw4OT0vZD3HghlclZJ46AubgnmLgfv1RBZfq8C08VL7qAqs
+         DR2Q==
+X-Gm-Message-State: AOAM533F8NMFjtxYDh7cUzOV88ycp1U5kigzocIDeTDDT5nOJ7PvDrnr
+        PpPzdmXaWRD9qlTceW1Bbc0ciOw5plU=
+X-Google-Smtp-Source: ABdhPJzusRBzmv9cyATl7JVHK3hDExdMa+noG6PuL070iZnny5eMFAw2nJa8YIbHb3ipiJfiWVmuXw==
+X-Received: by 2002:a2e:3808:: with SMTP id f8mr212978lja.165.1593135413324;
+        Thu, 25 Jun 2020 18:36:53 -0700 (PDT)
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
+        by smtp.gmail.com with ESMTPSA id b7sm6381496lfb.53.2020.06.25.18.36.50
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Jun 2020 18:36:51 -0700 (PDT)
+Received: by mail-lj1-f182.google.com with SMTP id b25so5011774ljp.6
+        for <bpf@vger.kernel.org>; Thu, 25 Jun 2020 18:36:50 -0700 (PDT)
+X-Received: by 2002:a2e:b5d7:: with SMTP id g23mr215388ljn.70.1593135410467;
+ Thu, 25 Jun 2020 18:36:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-25_19:2020-06-25,2020-06-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- clxscore=1015 cotscore=-2147483648 spamscore=0 mlxlogscore=999 bulkscore=0
- adultscore=0 phishscore=0 priorityscore=1501 malwarescore=0 mlxscore=0
- suspectscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006250142
-X-FB-Internal: deliver
+References: <20200625095725.GA3303921@kroah.com> <778297d2-512a-8361-cf05-42d9379e6977@i-love.sakura.ne.jp>
+ <20200625120725.GA3493334@kroah.com> <20200625.123437.2219826613137938086.davem@davemloft.net>
+In-Reply-To: <20200625.123437.2219826613137938086.davem@davemloft.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 25 Jun 2020 18:36:34 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whuTwGHEPjvtbBvneHHXeqJC=q5S09mbPnqb=Q+MSPMag@mail.gmail.com>
+Message-ID: <CAHk-=whuTwGHEPjvtbBvneHHXeqJC=q5S09mbPnqb=Q+MSPMag@mail.gmail.com>
+Subject: Re: [RFC][PATCH] net/bpfilter: Remove this broken and apparently unmantained
+To:     David Miller <davem@davemloft.net>
+Cc:     Greg Kroah-Hartman <greg@kroah.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set introduces a new helper bpf_get_task_stack(). The primary use ca=
-se
-is to dump all /proc/*/stack to seq_file via bpf_iter__task.
+On Thu, Jun 25, 2020 at 12:34 PM David Miller <davem@davemloft.net> wrote:
+>
+> It's kernel code executing in userspace.  If you don't trust the
+> signed code you don't trust the signed code.
+>
+> Nothing is magic about a piece of code executing in userspace.
 
-A few different approaches have been explored and compared:
+Well, there's one real issue: the most likely thing that code is going
+to do is execute llvm to generate more code.
 
-  1. A simple wrapper around stack_trace_save_tsk(), as v1 [1].
+And that's I think the real security issue here: the context in which
+the code executes. It may be triggered in one namespace, but what
+namespaces and what rules should the thing actually then execute in.
 
-     This approach introduces new syntax, which is different to existing
-     helper bpf_get_stack(). Therefore, this is not ideal.
+So no, trying to dismiss this as "there are no security issues" is
+bogus. There very much are security issues.
 
-  2. Extend get_perf_callchain() to support "task" as argument.
+It's just that the current code that is just a dummy wrapper around
+something that doesn't actually do anything doesn't happen to _show_
+those issues, because it does nothing.
 
-     This approach reuses most of bpf_get_stack(). However, extending
-     get_perf_callchain() requires non-trivial changes to architecture
-     specific code. Which is error prone.
+I've stayed away from this discussion because I wanted to see if it
+went anywhere, but it doesn't seem to.
 
-  3. Current (v2) approach, leverages most of existing bpf_get_stack(), a=
-nd
-     uses stack_trace_save_tsk() to handle architecture specific logic.
+My personally strongest argument for remoiving this kernel code is
+that it's been there for a couple of years now, and it has never
+actually done anything useful, and there's no actual sign that it ever
+will, or that there is a solid plan in place for it.
 
-[1] https://lore.kernel.org/netdev/20200623070802.2310018-1-songliubravin=
-g@fb.com/
+So to me, it really looks like it was an interesting idea, but one
+that hasn't proven itself, and most certainly not one that has shown
+itself to be the _right_ idea.
 
-Changes v1 =3D> v2:
-1. Reuse most of bpf_get_stack() logic. (Andrii)
-2. Fix unsigned long vs. u64 mismatch for 32-bit systems. (Yonghong)
-3. Add %pB support in bpf_trace_printk(). (Daniel)
-4. Fix buffer size to bytes.
+We can dance around the "what about security modules", but that
+fundamental problem of "this code hasn't done anything useful for two
+years and we don't even know if it's the right thing to do or what the
+real security issues _will_ be" is I think the real issue here.
 
-Song Liu (4):
-  perf: export get/put_chain_entry()
-  bpf: introduce helper bpf_get_task_stak()
-  bpf: allow %pB in bpf_seq_printf() and bpf_trace_printk()
-  selftests/bpf: add bpf_iter test with bpf_get_task_stack_trace()
+Hmm?
 
- include/linux/bpf.h                           |  1 +
- include/linux/perf_event.h                    |  2 +
- include/uapi/linux/bpf.h                      | 35 +++++++-
- kernel/bpf/stackmap.c                         | 79 ++++++++++++++++++-
- kernel/events/callchain.c                     |  4 +-
- kernel/trace/bpf_trace.c                      | 14 +++-
- scripts/bpf_helpers_doc.py                    |  2 +
- tools/include/uapi/linux/bpf.h                | 35 +++++++-
- .../selftests/bpf/prog_tests/bpf_iter.c       | 17 ++++
- .../selftests/bpf/progs/bpf_iter_task_stack.c | 60 ++++++++++++++
- 10 files changed, 239 insertions(+), 10 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_stack=
-.c
-
---
-2.24.1
+             Linus
