@@ -2,158 +2,237 @@ Return-Path: <SRS0=o7vX=AH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B88E0C433DF
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE7A1C433DF
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:55:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A0BC320707
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:22:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB4E120707
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:55:18 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jnfJ5tm9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726209AbgFZRWO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Jun 2020 13:22:14 -0400
-Received: from out03.mta.xmission.com ([166.70.13.233]:38286 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726139AbgFZRWO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Jun 2020 13:22:14 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out03.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jos3F-00056A-ME; Fri, 26 Jun 2020 11:22:09 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jos3E-00066Y-OC; Fri, 26 Jun 2020 11:22:09 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Miller <davem@davemloft.net>,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        id S1726469AbgFZRzS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Jun 2020 13:55:18 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:30996 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725833AbgFZRzQ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Jun 2020 13:55:16 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05QHt5oC020002
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 10:55:15 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=fNk8fwe90WPy8Og2xFMAGWElPpQdJ4rSphcfyurgQrs=;
+ b=jnfJ5tm9m8I3y4WWXExPvN7j5K/Yn4+u93wdO+x3LOqXuZ5LLhUnlntpWJyv8/APlm2i
+ a8xl2sicRQOHDNu+nkJTJGW4/hjDURhqZJpVHeYyyEA7uDQN5J1aWMOTnVbZ8KlaEU/C
+ 7OALsfb8h+ILZjZnVpTf6aAV9/6OpQR2UrA= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 31ux1exn0e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 10:55:15 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 26 Jun 2020 10:55:14 -0700
+Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
+        id 24A112942E38; Fri, 26 Jun 2020 10:55:08 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Martin KaFai Lau <kafai@fb.com>
+Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20200625095725.GA3303921@kroah.com>
-        <778297d2-512a-8361-cf05-42d9379e6977@i-love.sakura.ne.jp>
-        <20200625120725.GA3493334@kroah.com>
-        <20200625.123437.2219826613137938086.davem@davemloft.net>
-        <CAHk-=whuTwGHEPjvtbBvneHHXeqJC=q5S09mbPnqb=Q+MSPMag@mail.gmail.com>
-        <87pn9mgfc2.fsf_-_@x220.int.ebiederm.org>
-        <20200626164055.5iasnou57yrtt6wz@ast-mbp.dhcp.thefacebook.com>
-Date:   Fri, 26 Jun 2020 12:17:40 -0500
-In-Reply-To: <20200626164055.5iasnou57yrtt6wz@ast-mbp.dhcp.thefacebook.com>
-        (Alexei Starovoitov's message of "Fri, 26 Jun 2020 09:40:55 -0700")
-Message-ID: <87sgeh926j.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Eric Dumazet <edumazet@google.com>, <kernel-team@fb.com>,
+        Lawrence Brakmo <brakmo@fb.com>,
+        Neal Cardwell <ncardwell@google.com>, <netdev@vger.kernel.org>,
+        Yuchung Cheng <ycheng@google.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next 01/10] tcp: Use a struct to represent a saved_syn
+Date:   Fri, 26 Jun 2020 10:55:08 -0700
+Message-ID: <20200626175508.1460345-1-kafai@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200626175501.1459961-1-kafai@fb.com>
+References: <20200626175501.1459961-1-kafai@fb.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
 Content-Type: text/plain
-X-XM-SPF: eid=1jos3E-00066Y-OC;;;mid=<87sgeh926j.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19iYzMwx7bCBaPQ2l8NqBFdNQa296MM+Fw=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: Re: [PATCH 00/14] Make the user mode driver code a better citizen
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-26_10:2020-06-26,2020-06-26 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ clxscore=1015 cotscore=-2147483648 spamscore=0 mlxlogscore=534 bulkscore=0
+ adultscore=0 phishscore=0 priorityscore=1501 malwarescore=0 mlxscore=0
+ suspectscore=38 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006260126
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+The total length of the saved syn packet is currently stored in
+the first 4 bytes (u32) and the actual packet data is stored after that.
 
-> On Fri, Jun 26, 2020 at 07:51:41AM -0500, Eric W. Biederman wrote:
->> 
->> Asking for people to fix their bugs in this user mode driver code has
->> been remarkably unproductive.  So here are my bug fixes.
->> 
->> I have tested them by booting with the code compiled in and
->> by killing "bpfilter_umh" and running iptables -vnL to restart
->> the userspace driver.
->> 
->> I have split the changes into small enough pieces so they should be
->> easily readable and testable.  
->> 
->> The changes lean into the preexisting interfaces in the kernel and
->> remove special cases for user mode driver code in favor of solutions
->> that don't need special cases.  This results in smaller code with
->> fewer bugs.
->> 
->> At a practical level this removes the maintenance burden of the
->> user mode drivers from the user mode helper code and from exec as
->> the special cases are removed.
->> 
->> Similarly the LSM interaction bugs are fixed by not having unnecessary
->> special cases for user mode drivers.
->> 
->> Please let me know if you see any bugs.  Once the code review is
->> finished I plan to take this through my tree.
->
-> I did a quick look and I like the cleanup. Thanks!
+A latter patch will also want to store an offset (bpf_hdr_opt_off) to
+a TCP header option which the bpf program will be interested in parsing.
+Instead of anonymously storing this offset into the second 4 bytes,
+this patch creates a struct for the existing saved_syn.
+It can give a readable name to the stored lengths instead of implicitly
+using the first few u32(s) to do that.
 
-Good then we have a path forward.
+The new TCP bpf header offset (bpf_hdr_opt_off) added in a latter patch i=
+s
+an offset from the tcp header instead of from the network header.
+It will make the bpf programming side easier.  Thus, this patch stores
+the network header length instead of the total length of the syn
+header.  The total length can be obtained by the
+"network header len + tcp_hdrlen".  The latter patch can
+then also gets the offset to the TCP bpf header option by
+"network header len + bpf_hdr_opt_off".
 
-> The end result looks good.
-> The only problem that you keep breaking the build between patches,
-> so series will not be bisectable.
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ include/linux/tcp.h        | 11 ++++++++++-
+ include/net/request_sock.h |  7 ++++++-
+ net/core/filter.c          |  4 ++--
+ net/ipv4/tcp.c             |  9 +++++----
+ net/ipv4/tcp_input.c       | 12 ++++++------
+ 5 files changed, 29 insertions(+), 14 deletions(-)
 
-Keep breaking?  There is an issue with patch 5/14 where the build breaks
-when bpfilter is not enabled.  Do you see any others? I know I tested
-each patch individually.  But I was only testing with CONFIG_BPFILTER
-enabled so I missed one.
-
-So there should not be things that break
-but things slip through occassionally.
-
-I will resend this shortly with the fix and any others that I can find.
-
-> blob_to_mnt is a great idea. Much better than embedding fs you advocated earlier.
-
-I was lazy and not overdesigning but I still suspect the blob will
-benefit from becoming a cpio in the future.
-
-> I'm swamped with other stuff today and will test the set Sunday/Monday
-> with other patches that I'm working on.
-> I'm not sure why you want to rename the interface. Seems
-> pointless. But fine.
-
-For maintainability I think the code very much benefits from a clear
-separation between the user mode driver code from the user mode helper
-code.
-
-> As far as routing trees. Do you mind I'll take it via bpf-next ?
-> As I said countless times we're working on bpf_iter using fork_blob.
-> If you take this set via your tree we would need to wait the whole kernel release.
-> Which is 8+ weeks before we can use the interface (due to renaming and overall changes).
-> I'd really like to avoid this huge delay.
-> Unless you can land it into 5.8-rc2 or rc3.
-
-I also want to build upon this code.
-
-How about when the review is done I post a frozen branch based on
-v5.8-rc1 that you can merge into the bpf-next tree, and I can merge into
-my branch.  That way we both can build upon this code.  That is the way
-conflicts like this are usually handled.
-
-Further I will leave any further enhancements to the user mode driver
-infrastructure that people have suggested to you.
-
-I will probably replace do_execve with a kernel_execve that doesn't need
-set_fs() to copy the command line argument.  I haven't seen Christoph
-Hellwig address that yet, and it looks pretty straight foward at this
-point.
-
-
-Eric
+diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+index 3bdec31ce8f4..9d50132d95e6 100644
+--- a/include/linux/tcp.h
++++ b/include/linux/tcp.h
+@@ -404,7 +404,7 @@ struct tcp_sock {
+ 	 * socket. Used to retransmit SYNACKs etc.
+ 	 */
+ 	struct request_sock __rcu *fastopen_rsk;
+-	u32	*saved_syn;
++	struct saved_syn *saved_syn;
+ };
+=20
+ enum tsq_enum {
+@@ -482,6 +482,15 @@ static inline void tcp_saved_syn_free(struct tcp_soc=
+k *tp)
+ 	tp->saved_syn =3D NULL;
+ }
+=20
++static inline u32 tcp_saved_syn_len(const struct saved_syn *saved_syn)
++{
++	const struct tcphdr *th;
++
++	th =3D (void *)saved_syn->data + saved_syn->network_hdrlen;
++
++	return saved_syn->network_hdrlen + __tcp_hdrlen(th);
++}
++
+ struct sk_buff *tcp_get_timestamping_opt_stats(const struct sock *sk);
+=20
+ static inline u16 tcp_mss_clamp(const struct tcp_sock *tp, u16 mss)
+diff --git a/include/net/request_sock.h b/include/net/request_sock.h
+index cf8b33213bbc..d77237ec9fb4 100644
+--- a/include/net/request_sock.h
++++ b/include/net/request_sock.h
+@@ -41,6 +41,11 @@ struct request_sock_ops {
+=20
+ int inet_rtx_syn_ack(const struct sock *parent, struct request_sock *req=
+);
+=20
++struct saved_syn {
++	u32 network_hdrlen;
++	u8 data[];
++};
++
+ /* struct request_sock - mini sock to represent a connection request
+  */
+ struct request_sock {
+@@ -60,7 +65,7 @@ struct request_sock {
+ 	struct timer_list		rsk_timer;
+ 	const struct request_sock_ops	*rsk_ops;
+ 	struct sock			*sk;
+-	u32				*saved_syn;
++	struct saved_syn		*saved_syn;
+ 	u32				secid;
+ 	u32				peer_secid;
+ };
+diff --git a/net/core/filter.c b/net/core/filter.c
+index c796e141ea8e..19dbcc8448d8 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4522,9 +4522,9 @@ static int _bpf_getsockopt(struct sock *sk, int lev=
+el, int optname,
+ 			tp =3D tcp_sk(sk);
+=20
+ 			if (optlen <=3D 0 || !tp->saved_syn ||
+-			    optlen > tp->saved_syn[0])
++			    optlen > tcp_saved_syn_len(tp->saved_syn))
+ 				goto err_clear;
+-			memcpy(optval, tp->saved_syn + 1, optlen);
++			memcpy(optval, tp->saved_syn->data, optlen);
+ 			break;
+ 		default:
+ 			goto err_clear;
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index de36c91d32ea..60093a211f4d 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -3805,20 +3805,21 @@ static int do_tcp_getsockopt(struct sock *sk, int=
+ level,
+=20
+ 		lock_sock(sk);
+ 		if (tp->saved_syn) {
+-			if (len < tp->saved_syn[0]) {
+-				if (put_user(tp->saved_syn[0], optlen)) {
++			if (len < tcp_saved_syn_len(tp->saved_syn)) {
++				if (put_user(tcp_saved_syn_len(tp->saved_syn),
++					     optlen)) {
+ 					release_sock(sk);
+ 					return -EFAULT;
+ 				}
+ 				release_sock(sk);
+ 				return -EINVAL;
+ 			}
+-			len =3D tp->saved_syn[0];
++			len =3D tcp_saved_syn_len(tp->saved_syn);
+ 			if (put_user(len, optlen)) {
+ 				release_sock(sk);
+ 				return -EFAULT;
+ 			}
+-			if (copy_to_user(optval, tp->saved_syn + 1, len)) {
++			if (copy_to_user(optval, tp->saved_syn->data, len)) {
+ 				release_sock(sk);
+ 				return -EFAULT;
+ 			}
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 12fda8f27b08..eb0e32b2def9 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -6557,13 +6557,13 @@ static void tcp_reqsk_record_syn(const struct soc=
+k *sk,
+ {
+ 	if (tcp_sk(sk)->save_syn) {
+ 		u32 len =3D skb_network_header_len(skb) + tcp_hdrlen(skb);
+-		u32 *copy;
++		struct saved_syn *saved_syn;
+=20
+-		copy =3D kmalloc(len + sizeof(u32), GFP_ATOMIC);
+-		if (copy) {
+-			copy[0] =3D len;
+-			memcpy(&copy[1], skb_network_header(skb), len);
+-			req->saved_syn =3D copy;
++		saved_syn =3D kmalloc(len + sizeof(*saved_syn), GFP_ATOMIC);
++		if (saved_syn) {
++			saved_syn->network_hdrlen =3D skb_network_header_len(skb);
++			memcpy(saved_syn->data, skb_network_header(skb), len);
++			req->saved_syn =3D saved_syn;
+ 		}
+ 	}
+ }
+--=20
+2.24.1
 
