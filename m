@@ -2,120 +2,186 @@ Return-Path: <SRS0=o7vX=AH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00531C433DF
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 16:50:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 554D6C433DF
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 16:52:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DBA24206BE
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 16:50:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29497206BE
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 16:52:37 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KDKt6xqp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727860AbgFZQuF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Jun 2020 12:50:05 -0400
-Received: from out01.mta.xmission.com ([166.70.13.231]:56708 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727053AbgFZQuF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Jun 2020 12:50:05 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jorY9-0005GM-1G; Fri, 26 Jun 2020 10:50:01 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jorY2-0000c6-V9; Fri, 26 Jun 2020 10:50:00 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Miller <davem@davemloft.net>,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20200625095725.GA3303921@kroah.com>
-        <778297d2-512a-8361-cf05-42d9379e6977@i-love.sakura.ne.jp>
-        <20200625120725.GA3493334@kroah.com>
-        <20200625.123437.2219826613137938086.davem@davemloft.net>
-        <CAHk-=whuTwGHEPjvtbBvneHHXeqJC=q5S09mbPnqb=Q+MSPMag@mail.gmail.com>
-        <87pn9mgfc2.fsf_-_@x220.int.ebiederm.org>
-        <87tuyyf0ln.fsf_-_@x220.int.ebiederm.org>
-        <5ce4d340-096a-f468-6719-4c34a951511e@i-love.sakura.ne.jp>
-Date:   Fri, 26 Jun 2020 11:45:27 -0500
-In-Reply-To: <5ce4d340-096a-f468-6719-4c34a951511e@i-love.sakura.ne.jp>
-        (Tetsuo Handa's message of "Sat, 27 Jun 2020 01:22:12 +0900")
-Message-ID: <87d05lbwt4.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1jorY2-0000c6-V9;;;mid=<87d05lbwt4.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19kMmKGvmUojtO4rei5sXZ7Qr00EPT1MD0=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: Re: [PATCH 05/14] umh: Separate the user mode driver and the user mode helper support
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+        id S1726737AbgFZQwf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Jun 2020 12:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726192AbgFZQwf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Jun 2020 12:52:35 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E2AC03E97A
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 09:52:34 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id a205so7009300qkc.16
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 09:52:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=8T9UcUdWSX0ttb1WtDDxPNgqHJdOlrPTkZTwK0rEYOo=;
+        b=KDKt6xqpFlaiAPsD8ziYgL2Iwvm2a4gE0np2UKG2Xw8mylFBwkNljntqMDZNXdPU40
+         OtzHlUvTlrRUXVrDas38vj2QrTtC48Z6MYWudViRV04bbNhNSqgpaCqqM1wAITffDnRM
+         J7D4hD9OxkuRpWBUB1JmStjAMtEkm21DsYCuh7u8uw0pb/LwudNY65osUrZfAJT3c83S
+         Xa46ogiQozxqMYpwjijooO5oLGKe8v3xXWJCzuqxFPFoEgqe2Cu0vHxWBQTyTEZN3Of8
+         hvwmNu/IP4ZcIQuNeIRZ61p4x5P/oCTz0RlpmfgbZjVvYrKrw13oef9irYZ7ZqESGORe
+         Gy6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=8T9UcUdWSX0ttb1WtDDxPNgqHJdOlrPTkZTwK0rEYOo=;
+        b=Jt7/LUZaXMOrXJjFL2du/SQKkBo+rM0cK8MxO9HxfEGPZI8cCFuFpqVjU3k3eYTDsr
+         eO17eUpwcwryRZJsn/PxUonkx+/qQhiGkdca0UlNyg7fDY9OcNwpLbOkXQqOJlGY3KvN
+         RoYcG+R4y7iI+YvUBt65W/8mHIUmygtxAfJ/dTj3Btqp1tbSmNBDJhO+2vEkiwaItJa5
+         +q4Guu/pED2zjlTVuBgLJmWgcApaBk2ziWDRQfFK4xfoDTmF/Gpd1fs6kNfpGiqKjmMu
+         aW0NL/F2Oibnu9XHtbb7ZO8MgQ2FunKyYpfNNRioevGieeVaLy5CZlsWYAxWtW4rQLUi
+         wmYg==
+X-Gm-Message-State: AOAM532myj/4UeIvIPOlOEgNReybdWV0090EBIE5lERBjNgNeBhAkLQc
+        Zzcinr6bHbDw9Bx1j4xpcVL/b7Y=
+X-Google-Smtp-Source: ABdhPJw1i76iXkgQ4//c+MK0T1tQu/HCzNwM6V7w51BDkW/gJLfqnTfSgAqgaqjK5mh4eGLmmIaDSDo=
+X-Received: by 2002:ad4:4b34:: with SMTP id s20mr4154042qvw.177.1593190353520;
+ Fri, 26 Jun 2020 09:52:33 -0700 (PDT)
+Date:   Fri, 26 Jun 2020 09:52:28 -0700
+Message-Id: <20200626165231.672001-1-sdf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
+Subject: [PATCH bpf-next v2 1/4] bpf: add BPF_CGROUP_INET_SOCK_RELEASE hook
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp> writes:
+Sometimes it's handy to know when the socket gets freed.
+In particular, we'd like to try to use a smarter allocation
+of ports for bpf_bind and explore the possibility of
+limiting the number of SOCK_DGRAM sockets the process can have.
+Adding a release pair to existing BPF_CGROUP_INET_SOCK_CREATE
+can unlock both of the mentioned features.
 
-> On 2020/06/26 21:55, Eric W. Biederman wrote:
->> +static void umd_cleanup(struct subprocess_info *info)
->> +{
->> +	struct umh_info *umh_info = info->data;
->> +
->> +	/* cleanup if umh_pipe_setup() was successful but exec failed */
->
-> s/umh_pipe_setup/umd_setup/
+The only questionable part here is the sock->sk check
+in the inet_release. Looking at the places where we
+do 'sock->sk = NULL', I don't understand how it can race
+with inet_release and why the check is there (it's been
+there since the initial git import). Otherwise, the
+change itself is pretty simple, we add a BPF hook
+to the inet_release and avoid calling it for kernel
+sockets.
 
-Good catch.  I will fix that when I respin.
+v2:
+* fix compile issue with CONFIG_CGROUP_BPF=n (kernel test robot)
 
->> +	if (info->retval) {
->> +		fput(umh_info->pipe_to_umh);
->> +		fput(umh_info->pipe_from_umh);
->> +	}
->> +}
->
-> After this cleanup, I expect adding some protections/isolation which kernel threads
-> have (e.g. excluded from ptrace(), excluded from OOM victim selection, excluded from
-> SysRq-i, won't be terminated by SIGKILL from usermode processes, won't be stopped by
-> SIGSTOP from usermode processes, what else?). Doing it means giving up Alexei's
->
->   It's nice to be able to compile that blob with -g and be able to 'gdb -p' into it.
->   That works and very convenient when it comes to debugging. Compare that to debugging
->   a kernel module!
->
-> but I think doing it is essential for keeping usermode blob processes as secure/robust
-> as kernel threads.
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ include/linux/bpf-cgroup.h | 4 ++++
+ include/uapi/linux/bpf.h   | 1 +
+ kernel/bpf/syscall.c       | 3 +++
+ net/core/filter.c          | 1 +
+ net/ipv4/af_inet.c         | 3 +++
+ 5 files changed, 12 insertions(+)
 
-Do you have an application for a user mode driver?
-
-I think concerns like that are best addressed in the context of a
-specific driver/usecase.  Just to make certain we are solving the right
-problems.
-
-My sense is that an advantage of user mode drivers can safely be buggier
-than kernel drivers and the freedom to kill them when the drivers go
-wrong (knowing the drivers will restart) is important.
-
-Does this series by using the normal path through exec solve your
-concerns with LSMs being able to identify these processes (both
-individually and as class)?.
-
-Eric
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index c66c545e161a..2c6f26670acc 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -210,6 +210,9 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
+ #define BPF_CGROUP_RUN_PROG_INET_SOCK(sk)				       \
+ 	BPF_CGROUP_RUN_SK_PROG(sk, BPF_CGROUP_INET_SOCK_CREATE)
+ 
++#define BPF_CGROUP_RUN_PROG_INET_SOCK_RELEASE(sk)			       \
++	BPF_CGROUP_RUN_SK_PROG(sk, BPF_CGROUP_INET_SOCK_RELEASE)
++
+ #define BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk)				       \
+ 	BPF_CGROUP_RUN_SK_PROG(sk, BPF_CGROUP_INET4_POST_BIND)
+ 
+@@ -401,6 +404,7 @@ static inline int bpf_percpu_cgroup_storage_update(struct bpf_map *map,
+ #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk,skb) ({ 0; })
+ #define BPF_CGROUP_RUN_PROG_INET_EGRESS(sk,skb) ({ 0; })
+ #define BPF_CGROUP_RUN_PROG_INET_SOCK(sk) ({ 0; })
++#define BPF_CGROUP_RUN_PROG_INET_SOCK_RELEASE(sk) ({ 0; })
+ #define BPF_CGROUP_RUN_PROG_INET4_BIND(sk, uaddr) ({ 0; })
+ #define BPF_CGROUP_RUN_PROG_INET6_BIND(sk, uaddr) ({ 0; })
+ #define BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk) ({ 0; })
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c65b374a5090..d7aea1d0167a 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -226,6 +226,7 @@ enum bpf_attach_type {
+ 	BPF_CGROUP_INET4_GETSOCKNAME,
+ 	BPF_CGROUP_INET6_GETSOCKNAME,
+ 	BPF_XDP_DEVMAP,
++	BPF_CGROUP_INET_SOCK_RELEASE,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 4d530b1d5683..2a3d4b8f95c7 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1994,6 +1994,7 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
+ 	case BPF_PROG_TYPE_CGROUP_SOCK:
+ 		switch (expected_attach_type) {
+ 		case BPF_CGROUP_INET_SOCK_CREATE:
++		case BPF_CGROUP_INET_SOCK_RELEASE:
+ 		case BPF_CGROUP_INET4_POST_BIND:
+ 		case BPF_CGROUP_INET6_POST_BIND:
+ 			return 0;
+@@ -2792,6 +2793,7 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
+ 		return BPF_PROG_TYPE_CGROUP_SKB;
+ 		break;
+ 	case BPF_CGROUP_INET_SOCK_CREATE:
++	case BPF_CGROUP_INET_SOCK_RELEASE:
+ 	case BPF_CGROUP_INET4_POST_BIND:
+ 	case BPF_CGROUP_INET6_POST_BIND:
+ 		return BPF_PROG_TYPE_CGROUP_SOCK;
+@@ -2942,6 +2944,7 @@ static int bpf_prog_query(const union bpf_attr *attr,
+ 	case BPF_CGROUP_INET_INGRESS:
+ 	case BPF_CGROUP_INET_EGRESS:
+ 	case BPF_CGROUP_INET_SOCK_CREATE:
++	case BPF_CGROUP_INET_SOCK_RELEASE:
+ 	case BPF_CGROUP_INET4_BIND:
+ 	case BPF_CGROUP_INET6_BIND:
+ 	case BPF_CGROUP_INET4_POST_BIND:
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 209482a4eaa2..7bcac182383c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6855,6 +6855,7 @@ static bool __sock_filter_check_attach_type(int off,
+ 	case offsetof(struct bpf_sock, priority):
+ 		switch (attach_type) {
+ 		case BPF_CGROUP_INET_SOCK_CREATE:
++		case BPF_CGROUP_INET_SOCK_RELEASE:
+ 			goto full_access;
+ 		default:
+ 			return false;
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index 02aa5cb3a4fd..965a96ea1168 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -411,6 +411,9 @@ int inet_release(struct socket *sock)
+ 	if (sk) {
+ 		long timeout;
+ 
++		if (!sk->sk_kern_sock)
++			BPF_CGROUP_RUN_PROG_INET_SOCK_RELEASE(sk);
++
+ 		/* Applications forget to leave groups before exiting */
+ 		ip_mc_drop_socket(sk);
+ 
+-- 
+2.27.0.212.ge8ba1cc988-goog
 
