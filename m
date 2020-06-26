@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D266FC433E0
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:56:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A80BC433DF
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:56:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B45E2206B7
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:56:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1BA49206B7
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:56:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="WTwL9b7L"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="KZ8kGK6t"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbgFZR4F (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Jun 2020 13:56:05 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32772 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726469AbgFZR4F (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Jun 2020 13:56:05 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05QHtLdv023876
-        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 10:56:05 -0700
+        id S1726990AbgFZR4N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Jun 2020 13:56:13 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:5774 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726616AbgFZR4N (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Jun 2020 13:56:13 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05QHtTbN008180
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 10:56:12 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=kMpkHAoNoXcS35j6GdLuqJ6103rO+lrTGIWE9rdBsr4=;
- b=WTwL9b7LJ5KAvg7iBr7TJneY3F1s7HqcikHAPhoLSi/MZrXBKYexmdwvOxcI9b8QSq43
- 6Mx1UCp2NtBAyC670Cjz0KdJQdtP4XygXkHTuR2X+8SEdgXvxTxhw/Rm6wk1UxYnTyDy
- QWbNlKm1pYkd4kfuHjYMVK6L1+Cvw84OOj8= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31ux0m6nxx-19
+ bh=UHFQQFqYSY8aevwSYLHh6Hobk6A4dxuODVh5qoz6O0I=;
+ b=KZ8kGK6tZ2/Y2glbND15vFuJBXyR6zlf7Rs3Hq7BRSRTZVPPpECLI65lbAsaACOyuZM3
+ uxcFi/BheiBqUc66daSqCV35+KPjbo+vbY+QkAyozwVAhVYaTkMPT8ycND/yQw1q9lbo
+ +EXuGnq1n+jY3NfxE8gqaM/Zi2wdaQMjTSY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31ux0u6jrk-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 10:56:05 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 10:56:12 -0700
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 26 Jun 2020 10:55:49 -0700
+ 15.1.1979.3; Fri, 26 Jun 2020 10:56:09 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id EA3EF2942E38; Fri, 26 Jun 2020 10:55:45 -0700 (PDT)
+        id CA5942942E38; Fri, 26 Jun 2020 10:56:04 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -52,9 +52,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Neal Cardwell <ncardwell@google.com>, <netdev@vger.kernel.org>,
         Yuchung Cheng <ycheng@google.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 07/10] bpf: selftests: Restore netns after each test
-Date:   Fri, 26 Jun 2020 10:55:45 -0700
-Message-ID: <20200626175545.1462191-1-kafai@fb.com>
+Subject: [PATCH bpf-next 10/10] bpf: selftest: Add test for TCP_BPF_DELACK_MAX and TCP_BPF_RTO_MIN
+Date:   Fri, 26 Jun 2020 10:56:04 -0700
+Message-ID: <20200626175604.1462935-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200626175501.1459961-1-kafai@fb.com>
 References: <20200626175501.1459961-1-kafai@fb.com>
@@ -64,10 +64,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-26_10:2020-06-26,2020-06-26 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- lowpriorityscore=0 adultscore=0 suspectscore=38 mlxlogscore=779
- clxscore=1015 priorityscore=1501 mlxscore=0 cotscore=-2147483648
- malwarescore=0 spamscore=0 impostorscore=0 phishscore=0 classifier=spam
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ priorityscore=1501 adultscore=0 spamscore=0 impostorscore=0
+ cotscore=-2147483648 mlxlogscore=739 lowpriorityscore=0 clxscore=1015
+ mlxscore=0 bulkscore=0 phishscore=0 suspectscore=13 classifier=spam
  adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2006260126
 X-FB-Internal: deliver
@@ -76,90 +76,101 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It is common for networking tests creating its netns and making its own
-setting under this new netns (e.g. changing tcp sysctl).  If the test
-forgot to restore to the original netns, it would affect the
-result of other tests.
-
-This patch saves the original netns at the beginning and then restores it
-after every test.  Since the restore "setns()" is not expensive, it does =
-it
-on all tests without tracking if a test has created a new netns or not.
+This patch tests a bpf prog that parses/writes a max_delack_ms bpf header
+option and also bpf_setsockopt its TCP_BPF_DELACK_MAX/TCP_BPF_RTO_MIN
+accordingly.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/testing/selftests/bpf/test_progs.c | 21 +++++++++++++++++++++
- tools/testing/selftests/bpf/test_progs.h |  2 ++
- 2 files changed, 23 insertions(+)
+ .../bpf/prog_tests/tcp_hdr_options.c          |  6 ++--
+ .../bpf/progs/test_tcp_hdr_options.c          | 34 +++++++++++++++++++
+ 2 files changed, 38 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
-ftests/bpf/test_progs.c
-index 54fa5fa688ce..b521ce366381 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -121,6 +121,24 @@ static void reset_affinity() {
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c b/t=
+ools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+index f8daf36783f3..5a58f60d2889 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
++++ b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+@@ -447,11 +447,13 @@ static void simple_estab(void)
+ 	struct bpf_link *link;
+ 	struct sk_fds sk_fds;
+=20
+-	exp_passive_estab_in.flags =3D OPTION_F_MAGIC;
++	exp_passive_estab_in.flags =3D OPTION_F_MAGIC | OPTION_F_MAX_DELACK_MS;
+ 	exp_passive_estab_in.magic =3D 0xfa;
++	exp_passive_estab_in.max_delack_ms =3D 11;
+=20
+-	exp_active_estab_in.flags =3D OPTION_F_MAGIC;
++	exp_active_estab_in.flags =3D OPTION_F_MAGIC | OPTION_F_MAX_DELACK_MS;
+ 	exp_active_estab_in.magic =3D 0xce;
++	exp_active_estab_in.max_delack_ms =3D 22;
+=20
+ 	prepare_out();
+=20
+diff --git a/tools/testing/selftests/bpf/progs/test_tcp_hdr_options.c b/t=
+ools/testing/selftests/bpf/progs/test_tcp_hdr_options.c
+index 631181bfb4cc..eb3b3c2a21f9 100644
+--- a/tools/testing/selftests/bpf/progs/test_tcp_hdr_options.c
++++ b/tools/testing/selftests/bpf/progs/test_tcp_hdr_options.c
+@@ -465,6 +465,24 @@ static __always_inline int handle_write_hdr_opt(stru=
+ct bpf_sock_ops *skops)
+ 	return write_nodata_opt(skops);
  }
 =20
-+static void save_netns(void)
++static __always_inline int set_delack_max(struct bpf_sock_ops *skops,
++					  __u8 max_delack_ms)
 +{
-+	env.saved_netns_fd =3D open("/proc/self/ns/net", O_RDONLY);
-+	if (env.saved_netns_fd =3D=3D -1) {
-+		perror("open(/proc/self/ns/net)");
-+		exit(-1);
-+	}
++	__u32 max_delack_us =3D max_delack_ms * 1000;
++
++	return bpf_setsockopt(skops, SOL_TCP, TCP_BPF_DELACK_MAX,
++			      &max_delack_us, sizeof(max_delack_us));
 +}
 +
-+static void restore_netns(void)
++static __always_inline int set_rto_min(struct bpf_sock_ops *skops,
++				       __u8 peer_max_delack_ms)
 +{
-+	if (setns(env.saved_netns_fd, CLONE_NEWNET) =3D=3D -1) {
-+		stdio_restore();
-+		perror("setns(CLONE_NEWNS)");
-+		exit(-1);
-+	}
++	__u32 min_rto_us =3D peer_max_delack_ms * 1000;
++
++	return bpf_setsockopt(skops, SOL_TCP, TCP_BPF_RTO_MIN, &min_rto_us,
++			      sizeof(min_rto_us));
 +}
 +
- void test__end_subtest()
+ static __always_inline int handle_active_estab(struct bpf_sock_ops *skop=
+s)
  {
- 	struct prog_test_def *test =3D env.test;
-@@ -643,6 +661,7 @@ int main(int argc, char **argv)
- 		return -1;
- 	}
+ 	__u8 bpf_hdr_opt_off =3D skops->skb_bpf_hdr_opt_off;
+@@ -505,6 +523,14 @@ static __always_inline int handle_active_estab(struc=
+t bpf_sock_ops *skops)
+ 		/* No options will be written from now */
+ 		clear_hdr_cb_flags(skops);
 =20
-+	save_netns();
- 	stdio_hijack();
- 	for (i =3D 0; i < prog_test_cnt; i++) {
- 		struct prog_test_def *test =3D &prog_test_defs[i];
-@@ -673,6 +692,7 @@ int main(int argc, char **argv)
- 			test->error_cnt ? "FAIL" : "OK");
-=20
- 		reset_affinity();
-+		restore_netns();
- 		if (test->need_cgroup_cleanup)
- 			cleanup_cgroup_environment();
- 	}
-@@ -686,6 +706,7 @@ int main(int argc, char **argv)
- 	free_str_set(&env.subtest_selector.blacklist);
- 	free_str_set(&env.subtest_selector.whitelist);
- 	free(env.subtest_selector.num_set);
-+	close(env.saved_netns_fd);
-=20
- 	return env.fail_cnt ? EXIT_FAILURE : EXIT_SUCCESS;
- }
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/sel=
-ftests/bpf/test_progs.h
-index f4503c926aca..b80924603918 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -78,6 +78,8 @@ struct test_env {
- 	int sub_succ_cnt; /* successful sub-tests */
- 	int fail_cnt; /* total failed tests + sub-tests */
- 	int skip_cnt; /* skipped tests */
++	if (active_syn_out.max_delack_ms &&
++	    set_delack_max(skops, active_syn_out.max_delack_ms))
++		RET_CG_ERR(skops);
 +
-+	int saved_netns_fd;
- };
++	if (active_estab_in.max_delack_ms &&
++	    set_rto_min(skops, active_estab_in.max_delack_ms))
++		RET_CG_ERR(skops);
++
+ 	return CG_OK;
+ }
 =20
- extern struct test_env env;
+@@ -590,6 +616,14 @@ static __always_inline int handle_passive_estab(stru=
+ct bpf_sock_ops *skops)
+ 		/* No options will be written from now */
+ 		clear_hdr_cb_flags(skops);
+=20
++	if (passive_synack_out.max_delack_ms &&
++	    set_delack_max(skops, passive_synack_out.max_delack_ms))
++		RET_CG_ERR(skops);
++
++	if (passive_estab_in.max_delack_ms &&
++	    set_rto_min(skops, passive_estab_in.max_delack_ms))
++		RET_CG_ERR(skops);
++
+ 	return CG_OK;
+ }
+=20
 --=20
 2.24.1
 
