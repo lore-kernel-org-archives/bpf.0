@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C9C3C433E1
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:56:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D266FC433E0
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:56:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C98E206B7
-	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:56:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B45E2206B7
+	for <bpf@archiver.kernel.org>; Fri, 26 Jun 2020 17:56:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="GAnaiBGm"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="WTwL9b7L"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726441AbgFZR4E (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Jun 2020 13:56:04 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:60134 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726736AbgFZR4D (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Jun 2020 13:56:03 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05QHtfkV008840
-        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 10:56:02 -0700
+        id S1726730AbgFZR4F (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Jun 2020 13:56:05 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32772 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726469AbgFZR4F (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Jun 2020 13:56:05 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05QHtLdv023876
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 10:56:05 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=x9+g55k1QE3JMJ1MSBZfXQgh+V/wM36C3TVhv6OzQtM=;
- b=GAnaiBGmYGqCbBMZLH2EKsDLkqlxbQoP0UBACJ8qHzZsRgKAJNMJiIrtYZznjVIc2B9P
- tCFWyP+GWJljAME3CIZlWWVjJ22iWcxc+Wq0MdxmzUES/8dAUqKSrX9cNizUfx2tP0y2
- b9eRBGk0nzK1qnSWFEYxEln66wzFTkNlnNE= 
+ bh=kMpkHAoNoXcS35j6GdLuqJ6103rO+lrTGIWE9rdBsr4=;
+ b=WTwL9b7LJ5KAvg7iBr7TJneY3F1s7HqcikHAPhoLSi/MZrXBKYexmdwvOxcI9b8QSq43
+ 6Mx1UCp2NtBAyC670Cjz0KdJQdtP4XygXkHTuR2X+8SEdgXvxTxhw/Rm6wk1UxYnTyDy
+ QWbNlKm1pYkd4kfuHjYMVK6L1+Cvw84OOj8= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31ux0u6jqu-1
+        by mx0a-00082601.pphosted.com with ESMTP id 31ux0m6nxx-19
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 10:56:02 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 26 Jun 2020 10:56:05 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 26 Jun 2020 10:56:01 -0700
+ 15.1.1979.3; Fri, 26 Jun 2020 10:55:49 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 842D32942E38; Fri, 26 Jun 2020 10:55:58 -0700 (PDT)
+        id EA3EF2942E38; Fri, 26 Jun 2020 10:55:45 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -52,9 +52,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Neal Cardwell <ncardwell@google.com>, <netdev@vger.kernel.org>,
         Yuchung Cheng <ycheng@google.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 09/10] tcp: bpf: Add TCP_BPF_DELACK_MAX and TCP_BPF_RTO_MIN to bpf_setsockopt
-Date:   Fri, 26 Jun 2020 10:55:58 -0700
-Message-ID: <20200626175558.1462731-1-kafai@fb.com>
+Subject: [PATCH bpf-next 07/10] bpf: selftests: Restore netns after each test
+Date:   Fri, 26 Jun 2020 10:55:45 -0700
+Message-ID: <20200626175545.1462191-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200626175501.1459961-1-kafai@fb.com>
 References: <20200626175501.1459961-1-kafai@fb.com>
@@ -64,10 +64,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
  definitions=2020-06-26_10:2020-06-26,2020-06-26 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- priorityscore=1501 adultscore=0 spamscore=0 impostorscore=0
- cotscore=-2147483648 mlxlogscore=999 lowpriorityscore=0 clxscore=1015
- mlxscore=0 bulkscore=0 phishscore=0 suspectscore=13 classifier=spam
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ lowpriorityscore=0 adultscore=0 suspectscore=38 mlxlogscore=779
+ clxscore=1015 priorityscore=1501 mlxscore=0 cotscore=-2147483648
+ malwarescore=0 spamscore=0 impostorscore=0 phishscore=0 classifier=spam
  adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2006260126
 X-FB-Internal: deliver
@@ -76,153 +76,90 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change is mostly from an internal patch and adapts it from sysctl
-config to the bpf_setsockopt setup.
+It is common for networking tests creating its netns and making its own
+setting under this new netns (e.g. changing tcp sysctl).  If the test
+forgot to restore to the original netns, it would affect the
+result of other tests.
 
-The bpf_prog can set the max delay ack by using
-bpf_setsockopt(TCP_BPF_DELACK_MAX).  This max delay ack can be communicat=
-ed
-to its peer through bpf header option.  The receiving peer can then use
-this max delay ack and set a potentially lower rto by using
-bpf_setsockopt(TCP_BPF_RTO_MIN).  A latter patch will use it
-like this in a test as an example.
+This patch saves the original netns at the beginning and then restores it
+after every test.  Since the restore "setns()" is not expensive, it does =
+it
+on all tests without tracking if a test has created a new netns or not.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/net/inet_connection_sock.h |  2 ++
- include/net/tcp.h                  |  2 +-
- include/uapi/linux/bpf.h           |  2 ++
- net/core/filter.c                  | 15 +++++++++++++++
- net/ipv4/tcp.c                     |  4 ++++
- net/ipv4/tcp_output.c              |  2 ++
- tools/include/uapi/linux/bpf.h     |  2 ++
- 7 files changed, 28 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_progs.c | 21 +++++++++++++++++++++
+ tools/testing/selftests/bpf/test_progs.h |  2 ++
+ 2 files changed, 23 insertions(+)
 
-diff --git a/include/net/inet_connection_sock.h b/include/net/inet_connec=
-tion_sock.h
-index e5b388f5fa20..43d45864e5f0 100644
---- a/include/net/inet_connection_sock.h
-+++ b/include/net/inet_connection_sock.h
-@@ -93,6 +93,8 @@ struct inet_connection_sock {
-  	struct timer_list	  icsk_retransmit_timer;
-  	struct timer_list	  icsk_delack_timer;
- 	__u32			  icsk_rto;
-+	__u32                     icsk_rto_min;
-+	__u32                     icsk_delack_max;
- 	__u32			  icsk_pmtu_cookie;
- 	const struct tcp_congestion_ops *icsk_ca_ops;
- 	const struct inet_connection_sock_af_ops *icsk_af_ops;
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index e93ef2d324f3..8a682d678971 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -703,7 +703,7 @@ static inline void tcp_fast_path_check(struct sock *s=
-k)
- static inline u32 tcp_rto_min(struct sock *sk)
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
+ftests/bpf/test_progs.c
+index 54fa5fa688ce..b521ce366381 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -121,6 +121,24 @@ static void reset_affinity() {
+ 	}
+ }
+=20
++static void save_netns(void)
++{
++	env.saved_netns_fd =3D open("/proc/self/ns/net", O_RDONLY);
++	if (env.saved_netns_fd =3D=3D -1) {
++		perror("open(/proc/self/ns/net)");
++		exit(-1);
++	}
++}
++
++static void restore_netns(void)
++{
++	if (setns(env.saved_netns_fd, CLONE_NEWNET) =3D=3D -1) {
++		stdio_restore();
++		perror("setns(CLONE_NEWNS)");
++		exit(-1);
++	}
++}
++
+ void test__end_subtest()
  {
- 	const struct dst_entry *dst =3D __sk_dst_get(sk);
--	u32 rto_min =3D TCP_RTO_MIN;
-+	u32 rto_min =3D inet_csk(sk)->icsk_rto_min;
-=20
- 	if (dst && dst_metric_locked(dst, RTAX_RTO_MIN))
- 		rto_min =3D dst_metric_rtt(dst, RTAX_RTO_MIN);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 479b83d05811..2ccc81548eef 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -4299,6 +4299,8 @@ enum {
- 	 *	    is not saved by TCP_SAVE_SYN.
- 	 */
- 	TCP_BPF_SYN_HDR_OPT	=3D 1003,
-+	TCP_BPF_DELACK_MAX	=3D 1004, /* Max delay ack in usecs */
-+	TCP_BPF_RTO_MIN		=3D 1005, /* Min delay ack in usecs */
- };
-=20
- struct bpf_perf_event_value {
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 5784f1bede2f..4b80934e6876 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4431,6 +4431,7 @@ static int _bpf_setsockopt(struct sock *sk, int lev=
-el, int optname,
- 		} else {
- 			struct inet_connection_sock *icsk =3D inet_csk(sk);
- 			struct tcp_sock *tp =3D tcp_sk(sk);
-+			unsigned long timeout;
-=20
- 			if (optlen !=3D sizeof(int))
- 				return -EINVAL;
-@@ -4452,6 +4453,20 @@ static int _bpf_setsockopt(struct sock *sk, int le=
-vel, int optname,
- 					tp->snd_ssthresh =3D val;
- 				}
- 				break;
-+			case TCP_BPF_DELACK_MAX:
-+				timeout =3D usecs_to_jiffies(val);
-+				if (timeout > TCP_DELACK_MAX ||
-+				    timeout < TCP_TIMEOUT_MIN)
-+					return -EINVAL;
-+				inet_csk(sk)->icsk_delack_max =3D timeout;
-+				break;
-+			case TCP_BPF_RTO_MIN:
-+				timeout =3D usecs_to_jiffies(val);
-+				if (timeout > TCP_RTO_MIN ||
-+				    timeout < TCP_TIMEOUT_MIN)
-+					return -EINVAL;
-+				inet_csk(sk)->icsk_rto_min =3D timeout;
-+				break;
- 			case TCP_SAVE_SYN:
- 				if (val < 0 || val > 1)
- 					ret =3D -EINVAL;
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 60093a211f4d..02be3e2a2fdb 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -418,6 +418,8 @@ void tcp_init_sock(struct sock *sk)
- 	INIT_LIST_HEAD(&tp->tsorted_sent_queue);
-=20
- 	icsk->icsk_rto =3D TCP_TIMEOUT_INIT;
-+	icsk->icsk_rto_min =3D TCP_RTO_MIN;
-+	icsk->icsk_delack_max =3D TCP_DELACK_MAX;
- 	tp->mdev_us =3D jiffies_to_usecs(TCP_TIMEOUT_INIT);
- 	minmax_reset(&tp->rtt_min, tcp_jiffies32, ~0U);
-=20
-@@ -2685,6 +2687,8 @@ int tcp_disconnect(struct sock *sk, int flags)
- 	icsk->icsk_backoff =3D 0;
- 	icsk->icsk_probes_out =3D 0;
- 	icsk->icsk_rto =3D TCP_TIMEOUT_INIT;
-+	icsk->icsk_rto_min =3D TCP_RTO_MIN;
-+	icsk->icsk_delack_max =3D TCP_DELACK_MAX;
- 	tp->snd_ssthresh =3D TCP_INFINITE_SSTHRESH;
- 	tp->snd_cwnd =3D TCP_INIT_CWND;
- 	tp->snd_cwnd_cnt =3D 0;
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index a78a29980e1f..db872a2a01c6 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -3899,6 +3899,8 @@ void tcp_send_delayed_ack(struct sock *sk)
- 		ato =3D min(ato, max_ato);
+ 	struct prog_test_def *test =3D env.test;
+@@ -643,6 +661,7 @@ int main(int argc, char **argv)
+ 		return -1;
  	}
 =20
-+	ato =3D min_t(u32, ato, inet_csk(sk)->icsk_delack_max);
-+
- 	/* Stay within the limit we were given */
- 	timeout =3D jiffies + ato;
++	save_netns();
+ 	stdio_hijack();
+ 	for (i =3D 0; i < prog_test_cnt; i++) {
+ 		struct prog_test_def *test =3D &prog_test_defs[i];
+@@ -673,6 +692,7 @@ int main(int argc, char **argv)
+ 			test->error_cnt ? "FAIL" : "OK");
 =20
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 479b83d05811..2ccc81548eef 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -4299,6 +4299,8 @@ enum {
- 	 *	    is not saved by TCP_SAVE_SYN.
- 	 */
- 	TCP_BPF_SYN_HDR_OPT	=3D 1003,
-+	TCP_BPF_DELACK_MAX	=3D 1004, /* Max delay ack in usecs */
-+	TCP_BPF_RTO_MIN		=3D 1005, /* Min delay ack in usecs */
+ 		reset_affinity();
++		restore_netns();
+ 		if (test->need_cgroup_cleanup)
+ 			cleanup_cgroup_environment();
+ 	}
+@@ -686,6 +706,7 @@ int main(int argc, char **argv)
+ 	free_str_set(&env.subtest_selector.blacklist);
+ 	free_str_set(&env.subtest_selector.whitelist);
+ 	free(env.subtest_selector.num_set);
++	close(env.saved_netns_fd);
+=20
+ 	return env.fail_cnt ? EXIT_FAILURE : EXIT_SUCCESS;
+ }
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/sel=
+ftests/bpf/test_progs.h
+index f4503c926aca..b80924603918 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -78,6 +78,8 @@ struct test_env {
+ 	int sub_succ_cnt; /* successful sub-tests */
+ 	int fail_cnt; /* total failed tests + sub-tests */
+ 	int skip_cnt; /* skipped tests */
++
++	int saved_netns_fd;
  };
 =20
- struct bpf_perf_event_value {
+ extern struct test_env env;
 --=20
 2.24.1
 
