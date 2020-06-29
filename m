@@ -2,84 +2,97 @@ Return-Path: <SRS0=DuKs=AK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 456F6C433E1
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E899C433E2
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:07:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2674920663
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:06:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 364CE208D5
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:07:55 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FTbcEof5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730388AbgF2TGD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 15:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
+        id S1730199AbgF2THs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 15:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730406AbgF2TCn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:02:43 -0400
-X-Greylist: delayed 1419 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 29 Jun 2020 07:16:46 PDT
-Received: from www62.your-server.de (www62.your-server.de [IPv6:2a01:4f8:d0a:276a::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337D4C02E2E8;
-        Mon, 29 Jun 2020 07:16:46 -0700 (PDT)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jpuDM-0001DH-6o; Mon, 29 Jun 2020 15:52:52 +0200
-Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jpuDL-0002Xa-QH; Mon, 29 Jun 2020 15:52:51 +0200
-Subject: Re: [PATCH net] xsk: remove cheap_dma optimization
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        netdev@vger.kernel.org, davem@davemloft.net,
-        konrad.wilk@oracle.com, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        maximmi@mellanox.com, magnus.karlsson@intel.com,
-        jonathan.lemon@gmail.com
-References: <20200626134358.90122-1-bjorn.topel@gmail.com>
- <c60dfb5a-2bf3-20bd-74b3-6b5e215f73f8@iogearbox.net>
- <20200627070406.GB11854@lst.de>
- <88d27e1b-dbda-301c-64ba-2391092e3236@intel.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <e879bcc8-5f7d-b1b3-9b66-1032dec6245d@iogearbox.net>
-Date:   Mon, 29 Jun 2020 15:52:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        with ESMTP id S1730671AbgF2THn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:07:43 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40530C031C6A;
+        Mon, 29 Jun 2020 10:48:36 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id t74so9629718lff.2;
+        Mon, 29 Jun 2020 10:48:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ybGXMKNhDBo5PBd7dMGTNB+NKn/M8wbDbj+FSv497kA=;
+        b=FTbcEof5mQ5AtbU2qMu8nqf/RaXgjo+qUZz2FYAp7+7T5toEGdniO0LzE8R1Z8u8qf
+         xQ5Md/ebsR8A/RKHeRU1M4N8QpxvpPyuJ5PiFjbp0HwLcyRAcCqJh6w5+73zNJXPaRNg
+         qJGsSvumlSa/DU+20IYMSWg0KcfR+ZDxFLtzGADNGcY2lW8AcYdeNxga3M8N3Op4C87r
+         NbW1si6I1BQukRPlMdqro2tpbrxQTvR2LRrv3EDKk4gZ+Rv+VvFUxQkkQa6Y5ruBbhUJ
+         daFntdO4bwspNqRGwLgkLgubsBMokEXJFxOq5yxIs88z43RINNxGuRlmNyNUewT7dG6M
+         o6IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ybGXMKNhDBo5PBd7dMGTNB+NKn/M8wbDbj+FSv497kA=;
+        b=sngSP58VdNsW0b5z5rJ4J5kQflyxpqy4V5i6nMc+MfDCt/MM+fRlW4tzTq4QCE92J2
+         MWsyQlDglyQlkCvLeJIplBdp8yFe5YPyRBvqgEaopK+SfYikNKPn4uXtp8z5sXd5bwNU
+         lgDzHuPfOupuvvfUX7R3RoO+6isuoqhajhsI1gc7vBGVVA0FwHnIRsmHJ4IpQVcD5rnv
+         EOEDj5PpRGs4ZFtAeLcGBF/9zHt23tQ/xbHQQCyRINdae1a740Kux4c8FrrBK5eWUDPL
+         VsKIIv0LuwRVDzttCmMNUnyjiUaMIBEOq9ec7xeqMemDv9IaDUeuLJyZwvi5GRdoCi9x
+         HYgg==
+X-Gm-Message-State: AOAM5332rhyNJDa7LhBbj9u0+0+5hRrZIKbauBCLlRjxf1q8jlNZhAYP
+        D3zAZs6jagJNCIh5av3zfFU6R7YYcewApgeY0EW3Tg==
+X-Google-Smtp-Source: ABdhPJzZDr0HwEoLFL7dYzolxGZR+HKuaAQBS5yCdNgwW0eFKrNa/0UgV6HRDrUsRbVYgAhakBOutFkj1UCxakKoAWM=
+X-Received: by 2002:a05:6512:49d:: with SMTP id v29mr9912417lfq.134.1593452914654;
+ Mon, 29 Jun 2020 10:48:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <88d27e1b-dbda-301c-64ba-2391092e3236@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.3/25857/Sun Jun 28 15:28:36 2020)
+References: <20200629093336.20963-1-tklauser@distanz.ch> <20200629093336.20963-2-tklauser@distanz.ch>
+In-Reply-To: <20200629093336.20963-2-tklauser@distanz.ch>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 29 Jun 2020 10:48:23 -0700
+Message-ID: <CAADnVQLNAJoV1-0jADDMA=pv7f_P6nNdDVnYnVsLFQxJNgWbuQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, x86: Factor common x86 JIT code
+To:     Tobias Klauser <tklauser@distanz.ch>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Wang YanQing <udknight@gmail.com>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        X86 ML <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 6/28/20 7:16 PM, Björn Töpel wrote:
-> On 2020-06-27 09:04, Christoph Hellwig wrote:
->> On Sat, Jun 27, 2020 at 01:00:19AM +0200, Daniel Borkmann wrote:
->>> Given there is roughly a ~5 weeks window at max where this removal could
->>> still be applied in the worst case, could we come up with a fix / proposal
->>> first that moves this into the DMA mapping core? If there is something that
->>> can be agreed upon by all parties, then we could avoid re-adding the 9%
->>> slowdown. :/
->>
->> I'd rather turn it upside down - this abuse of the internals blocks work
->> that has basically just missed the previous window and I'm not going
->> to wait weeks to sort out the API misuse.  But we can add optimizations
->> back later if we find a sane way.
-> 
-> I'm not super excited about the performance loss, but I do get
-> Christoph's frustration about gutting the DMA API making it harder for
-> DMA people to get work done. Lets try to solve this properly using
-> proper DMA APIs.
+On Mon, Jun 29, 2020 at 2:33 AM Tobias Klauser <tklauser@distanz.ch> wrote:
+>
+> Factor out code common for 32-bit and 64-bit x86 BPF JITs to bpf_jit.h
+>
+> Also follow other architectures and rename bpf_jit_comp.c to
+> bpf_jit_comp64.c to be more explicit.
+>
+> Also adjust the file matching pattern in MAINTAINERS such that the
+> common x86 files are included for both the 32-bit and 64-bit BPF JIT
+> sections.
+>
+> Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+> ---
+>  MAINTAINERS                                   |   3 +-
+>  arch/x86/net/Makefile                         |   2 +-
+>  arch/x86/net/bpf_jit.h                        |  93 ++++++++++++
+>  arch/x86/net/bpf_jit_comp32.c                 | 135 ++++--------------
+>  .../net/{bpf_jit_comp.c => bpf_jit_comp64.c}  |  84 +----------
+>  5 files changed, 123 insertions(+), 194 deletions(-)
+>  create mode 100644 arch/x86/net/bpf_jit.h
+>  rename arch/x86/net/{bpf_jit_comp.c => bpf_jit_comp64.c} (96%)
 
-Ok, fair enough, please work with DMA folks to get this properly integrated and
-restored then. Applied, thanks!
+I don't see any value in such refactoring.
+Looks like code churn to me.
