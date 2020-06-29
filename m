@@ -2,60 +2,76 @@ Return-Path: <SRS0=DuKs=AK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.4 required=3.0 tests=DATE_IN_PAST_03_06,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DED78C433E0
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:11:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4E85C433E2
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:17:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC75D206E2
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:11:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B00BC206A5
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:17:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730276AbgF2TLj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 15:11:39 -0400
-Received: from verein.lst.de ([213.95.11.211]:59074 "EHLO verein.lst.de"
+        id S1731879AbgF2TQy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 15:16:54 -0400
+Received: from mga01.intel.com ([192.55.52.88]:63720 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728452AbgF2TLg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:11:36 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 590416736F; Mon, 29 Jun 2020 16:22:25 +0200 (CEST)
-Date:   Mon, 29 Jun 2020 16:22:25 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: add an API to check if a streamming mapping needs sync calls
-Message-ID: <20200629142225.GA22336@lst.de>
-References: <20200629130359.2690853-1-hch@lst.de> <b97104e1-433c-8e35-59c6-b4dad047464c@intel.com>
+        id S1731807AbgF2TQw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:16:52 -0400
+IronPort-SDR: /awpK8vauA1UY5MpEZ/YTnuYaQaZ4sDgei+W1TMRpYQL7dQwcjJ2isBadoMAnfC5R01SflKf/7
+ LdcjrdMZm54Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="163998934"
+X-IronPort-AV: E=Sophos;i="5.75,295,1589266800"; 
+   d="scan'208";a="163998934"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2020 08:10:46 -0700
+IronPort-SDR: mw6GdldLIMHUg1p42ZqiigUai0KEvZPO4JmOhxUKKwkLU1eWIPjoi4leEGe+trp6TiAwM03dva
+ 0x/VdwNad0nA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,295,1589266800"; 
+   d="scan'208";a="313073307"
+Received: from unknown (HELO btopel-mobl.ger.intel.com) ([10.252.54.90])
+  by fmsmga002.fm.intel.com with ESMTP; 29 Jun 2020 08:10:43 -0700
+Subject: Re: [PATCH net] xsk: remove cheap_dma optimization
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        netdev@vger.kernel.org, davem@davemloft.net,
+        konrad.wilk@oracle.com, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        maximmi@mellanox.com, magnus.karlsson@intel.com,
+        jonathan.lemon@gmail.com
+References: <20200626134358.90122-1-bjorn.topel@gmail.com>
+ <c60dfb5a-2bf3-20bd-74b3-6b5e215f73f8@iogearbox.net>
+ <20200627070406.GB11854@lst.de>
+ <88d27e1b-dbda-301c-64ba-2391092e3236@intel.com>
+ <e879bcc8-5f7d-b1b3-9b66-1032dec6245d@iogearbox.net>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <81aec200-c1a0-6d57-e3b6-26dad30790b8@intel.com>
+Date:   Mon, 29 Jun 2020 17:10:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <e879bcc8-5f7d-b1b3-9b66-1032dec6245d@iogearbox.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b97104e1-433c-8e35-59c6-b4dad047464c@intel.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 03:39:01PM +0200, Bjˆrn Tˆpel wrote:
-> On 2020-06-29 15:03, Christoph Hellwig wrote:
->> Hi all,
->>
->> this series lifts the somewhat hacky checks in the XSK code if a DMA
->> streaming mapping needs dma_sync_single_for_{device,cpu} calls to the
->> DMA API.
->>
->
-> Thanks a lot for working on, and fixing this, Christoph!
->
-> I took the series for a spin, and there are (obviously) no performance
-> regressions.
->
-> Would the patches go through the net/bpf trees or somewhere else?
+On 2020-06-29 15:52, Daniel Borkmann wrote:
+> 
+> Ok, fair enough, please work with DMA folks to get this properly 
+> integrated and
+> restored then. Applied, thanks!
 
-either the net tree or (my) dma-mapping tree would be fine with me.
+Daniel, you were too quick! Please revert this one; Christoph just 
+submitted a 4-patch-series that addresses both the DMA API, and the perf 
+regression!
+
+
+Bj√∂rn
