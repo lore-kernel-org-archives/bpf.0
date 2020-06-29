@@ -2,252 +2,117 @@ Return-Path: <SRS0=DuKs=AK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 652F5C433E0
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:52:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF7C5C433DF
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:53:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F84420663
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:52:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E1BD20663
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:53:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="h7oYUfvr"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="HfRHaYe1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730094AbgF2Uw1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 16:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
+        id S1729973AbgF2Uwh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 16:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731369AbgF2TN1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:13:27 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8708C008644
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 02:59:49 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id g75so14757471wme.5
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 02:59:49 -0700 (PDT)
+        with ESMTP id S1731343AbgF2TNY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:13:24 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5722C0A893C
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 00:42:26 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id o4so8522095lfi.7
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 00:42:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oFfXGUJ5tvK97U58LQIn0NKX672onJPqp41bujeJCXE=;
-        b=h7oYUfvrC3xot+cEiTG2VjZ8Kso5bLdXrVOsqfSBjHbv97QeHI2E/CM9cBddbLeZ02
-         n/xOu90a6kB91tMUIC5lYjilqbTFwjNGrDn3vNIj+QvQc0uAv/e1HqHQj3mGShOmYUG4
-         v1ajfZJdem+3WCV033nM3guNV4FKC1sKEBtfE=
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=dehoAPWG1C4zFRAsM2Hgz51wnypP3bkZmHH0inC/SE4=;
+        b=HfRHaYe1bLPiZrP3enkwPCpjwaVwCHWeRiz6TUInU4PWdR2CQVF7DKY4T13zP/B4K4
+         0EaxCRhvHXARTsFJKg9BnUm3QshCsc8n2IqVG/rX6v/vgukiSK8MnTL+wENyeG88SaLn
+         PqCaBwQ0rgrxjbUKT+S/rYT2c3iQoxOIOO3Wk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oFfXGUJ5tvK97U58LQIn0NKX672onJPqp41bujeJCXE=;
-        b=A76h49zkwCDa/YvCyZFnArn3XEA2w3I2qrTz8rTELtjqWmRTbHQODlzTLrN+qleARo
-         ooDXj9i2M+0eotE88GAIntcSgqynhwMdtBSYMCc/PAhCp2wc23lCDuUjUovr700hd2x2
-         SlLvgYkLpHlzGyhH52ASUgtVsuDqGUqgB3+8ITamLWy61F9h8vio8LTOSHArN4P8PRzX
-         rOnK1TmYeYRdrW2wcwr2RHruyMgP8Z58VQ7HfILC9pish1kVU35CmBVCNMeZiSJhBKXK
-         3W1eNu0LMpJ5B8wxfCeMr5kBSh0Lxaq9z/aFtyPPuA0aapot3Phlotpg1pkdHNfxjRaX
-         2AwA==
-X-Gm-Message-State: AOAM532I5BVvgniQuAYypHirP8q/tHubniclX7Jcc/YD4ZDKxciV7Wva
-        mGNQjCFDvPsHdb4xAcWWO8vZkmDtoZ9FMA==
-X-Google-Smtp-Source: ABdhPJwSR0cXrAQoAqc1/x0C7VFPJzbnrYCX47BAGZ0Ed9MBKo5K/KYizablzaeC3OdK1ndLrGm5Dw==
-X-Received: by 2002:a7b:c250:: with SMTP id b16mr8783236wmj.30.1593424788562;
-        Mon, 29 Jun 2020 02:59:48 -0700 (PDT)
-Received: from antares.lan (d.b.7.8.9.b.a.6.9.b.2.7.e.d.5.5.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:55de:72b9:6ab9:87bd])
-        by smtp.gmail.com with ESMTPSA id y7sm42565369wrt.11.2020.06.29.02.59.47
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=dehoAPWG1C4zFRAsM2Hgz51wnypP3bkZmHH0inC/SE4=;
+        b=uREGFwCj5D5giJrEbpF9UGCs3fIL1jYErl0iKEuB4PVE/VaAnZjFORXNG9bsqvPUOU
+         q/8r/Czpu2vidtLYEFA+/GuEAnjvE8uoNx6cfCnf1oqlBe5CShmKDkx6Tp3Tr0hx3i8h
+         dgB28iwBTX9B2PZz71TXx9AHobD4GSQpeViFdu3gLwLq1AU2A64Hcqdx8gD9dinFY12q
+         Xl6a+Q4VOLZO0xXqYCfOUQMWjL4YCWZsqMT12P/ZGrUFBqtGl1L07Cb/7ybWEOIEZZAT
+         QXeluptO5gTT0Y8dlK3kC7XE8ZNx8PGHybDxpAc77hbfyV0Pdqy+EB7bOePegFcu//hT
+         Wcog==
+X-Gm-Message-State: AOAM533ojW2EoDNkdmG1kjQMloPRwmt8eWIqV+lUY8BWu5yLV0R5fYBf
+        WA1DuDU+xZYg0E2asjfLIpI4EXuMW2u4AQ==
+X-Google-Smtp-Source: ABdhPJwrtWoK6TAjkCMcGUSuVkzv9DxW/3FrqZvLStmAWpY/6EKvwNcFbQyy9OA4Sq7EnCigTcNxqA==
+X-Received: by 2002:a05:6512:3398:: with SMTP id h24mr8399914lfg.135.1593416545225;
+        Mon, 29 Jun 2020 00:42:25 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id e29sm7826437lfc.51.2020.06.29.00.42.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 02:59:47 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     ast@kernel.org, daniel@iogearbox.net, sdf@google.com,
-        jakub@cloudflare.com, john.fastabend@gmail.com
-Cc:     kernel-team@cloudflare.com, bpf@vger.kernel.org,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf v2 4/6] bpf: sockmap: require attach_bpf_fd when detaching a program
-Date:   Mon, 29 Jun 2020 10:56:28 +0100
-Message-Id: <20200629095630.7933-5-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200629095630.7933-1-lmb@cloudflare.com>
-References: <20200629095630.7933-1-lmb@cloudflare.com>
+        Mon, 29 Jun 2020 00:42:24 -0700 (PDT)
+References: <159312606846.18340.6821004346409614051.stgit@john-XPS-13-9370> <159312679888.18340.15248924071966273998.stgit@john-XPS-13-9370>
+User-agent: mu4e 1.1.0; emacs 26.3
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     kafai@fb.com, daniel@iogearbox.net, ast@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [bpf PATCH v2 2/3] bpf, sockmap: RCU dereferenced psock may be used outside RCU block
+In-reply-to: <159312679888.18340.15248924071966273998.stgit@john-XPS-13-9370>
+Date:   Mon, 29 Jun 2020 09:42:23 +0200
+Message-ID: <87d05imi74.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The sockmap code currently ignores the value of attach_bpf_fd when
-detaching a program. This is contrary to the usual behaviour of
-checking that attach_bpf_fd represents the currently attached
-program.
+On Fri, Jun 26, 2020 at 01:13 AM CEST, John Fastabend wrote:
+> If an ingress verdict program specifies message sizes greater than
+> skb->len and there is an ENOMEM error due to memory pressure we
+> may call the rcv_msg handler outside the strp_data_ready() caller
+> context. This is because on an ENOMEM error the strparser will
+> retry from a workqueue. The caller currently protects the use of
+> psock by calling the strp_data_ready() inside a rcu_read_lock/unlock
+> block.
+>
+> But, in above workqueue error case the psock is accessed outside
+> the read_lock/unlock block of the caller. So instead of using
+> psock directly we must do a look up against the sk again to
+> ensure the psock is available.
+>
+> There is an an ugly piece here where we must handle
+> the case where we paused the strp and removed the psock. On
+> psock removal we first pause the strparser and then remove
+> the psock. If the strparser is paused while an skb is
+> scheduled on the workqueue the skb will be dropped on the
+> flow and kfree_skb() is called. If the workqueue manages
+> to get called before we pause the strparser but runs the rcvmsg
+> callback after the psock is removed we will hit the unlikely
+> case where we run the sockmap rcvmsg handler but do not have
+> a psock. For now we will follow strparser logic and drop the
+> skb on the floor with skb_kfree(). This is ugly because the
+> data is dropped. To date this has not caused problems in practice
+> because either the application controlling the sockmap is
+> coordinating with the datapath so that skbs are "flushed"
+> before removal or we simply wait for the sock to be closed before
+> removing it.
+>
+> This patch fixes the describe RCU bug and dropping the skb doesn't
+> make things worse. Future patches will improve this by allowing
+> the normal case where skbs are not merged to skip the strparser
+> altogether. In practice many (most?) use cases have no need to
+> merge skbs so its both a code complexity hit as seen above and
+> a performance issue. For example, in the Cilium case we always
+> set the strparser up to return sbks 1:1 without any merging and
+> have avoided above issues.
+>
+> Fixes: e91de6afa81c1 ("bpf: Fix running sk_skb program types with ktls")
+> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+> ---
 
-Ensure that attach_bpf_fd is indeed the currently attached
-program. It turns out that all sockmap selftests already do this,
-which indicates that this is unlikely to cause breakage.
-
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
----
- include/linux/bpf.h   | 13 +++++++++--
- include/linux/skmsg.h | 13 +++++++++++
- kernel/bpf/syscall.c  |  2 +-
- net/core/sock_map.c   | 50 ++++++++++++++++++++++++++++++++++++++-----
- 4 files changed, 70 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 5d0506f46f24..6c3160fbae0b 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1555,13 +1555,16 @@ static inline void bpf_map_offload_map_free(struct bpf_map *map)
- #endif /* CONFIG_NET && CONFIG_BPF_SYSCALL */
- 
- #if defined(CONFIG_BPF_STREAM_PARSER)
--int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog, u32 which);
-+int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
-+			 struct bpf_prog *old, u32 which);
- int sock_map_get_from_fd(const union bpf_attr *attr, struct bpf_prog *prog);
-+int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype);
- void sock_map_unhash(struct sock *sk);
- void sock_map_close(struct sock *sk, long timeout);
- #else
- static inline int sock_map_prog_update(struct bpf_map *map,
--				       struct bpf_prog *prog, u32 which)
-+				       struct bpf_prog *prog,
-+				       struct bpf_prog *old, u32 which)
- {
- 	return -EOPNOTSUPP;
- }
-@@ -1571,6 +1574,12 @@ static inline int sock_map_get_from_fd(const union bpf_attr *attr,
- {
- 	return -EINVAL;
- }
-+
-+static inline int sock_map_prog_detach(const union bpf_attr *attr,
-+				       enum bpf_prog_type ptype)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif /* CONFIG_BPF_STREAM_PARSER */
- 
- #if defined(CONFIG_INET) && defined(CONFIG_BPF_SYSCALL)
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index 08674cd14d5a..1e9ed840b9fc 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -430,6 +430,19 @@ static inline void psock_set_prog(struct bpf_prog **pprog,
- 		bpf_prog_put(prog);
- }
- 
-+static inline int psock_replace_prog(struct bpf_prog **pprog,
-+				     struct bpf_prog *prog,
-+				     struct bpf_prog *old)
-+{
-+	if (cmpxchg(pprog, old, prog) != old)
-+		return -ENOENT;
-+
-+	if (old)
-+		bpf_prog_put(old);
-+
-+	return 0;
-+}
-+
- static inline void psock_progs_drop(struct sk_psock_progs *progs)
- {
- 	psock_set_prog(&progs->msg_parser, NULL);
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index c0ec572f056c..77340045b071 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2893,7 +2893,7 @@ static int bpf_prog_detach(const union bpf_attr *attr)
- 	switch (ptype) {
- 	case BPF_PROG_TYPE_SK_MSG:
- 	case BPF_PROG_TYPE_SK_SKB:
--		return sock_map_get_from_fd(attr, NULL);
-+		return sock_map_prog_detach(attr, ptype);
- 	case BPF_PROG_TYPE_LIRC_MODE2:
- 		return lirc_prog_detach(attr);
- 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index db45c1453d39..119f52a99dc1 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -77,7 +77,42 @@ int sock_map_get_from_fd(const union bpf_attr *attr, struct bpf_prog *prog)
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
--	ret = sock_map_prog_update(map, prog, attr->attach_type);
-+	ret = sock_map_prog_update(map, prog, NULL, attr->attach_type);
-+	fdput(f);
-+	return ret;
-+}
-+
-+int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype)
-+{
-+	u32 ufd = attr->target_fd;
-+	struct bpf_prog *prog;
-+	struct bpf_map *map;
-+	struct fd f;
-+	int ret;
-+
-+	if (attr->attach_flags || attr->replace_bpf_fd)
-+		return -EINVAL;
-+
-+	f = fdget(ufd);
-+	map = __bpf_map_get(f);
-+	if (IS_ERR(map))
-+		return PTR_ERR(map);
-+
-+	prog = bpf_prog_get(attr->attach_bpf_fd);
-+	if (IS_ERR(prog)) {
-+		ret = PTR_ERR(prog);
-+		goto put_map;
-+	}
-+
-+	if (prog->type != ptype) {
-+		ret = -EINVAL;
-+		goto put_prog;
-+	}
-+
-+	ret = sock_map_prog_update(map, NULL, prog, attr->attach_type);
-+put_prog:
-+	bpf_prog_put(prog);
-+put_map:
- 	fdput(f);
- 	return ret;
- }
-@@ -1212,27 +1247,32 @@ static struct sk_psock_progs *sock_map_progs(struct bpf_map *map)
- }
- 
- int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
--			 u32 which)
-+			 struct bpf_prog *old, u32 which)
- {
- 	struct sk_psock_progs *progs = sock_map_progs(map);
-+	struct bpf_prog **pprog;
- 
- 	if (!progs)
- 		return -EOPNOTSUPP;
- 
- 	switch (which) {
- 	case BPF_SK_MSG_VERDICT:
--		psock_set_prog(&progs->msg_parser, prog);
-+		pprog = &progs->msg_parser;
- 		break;
- 	case BPF_SK_SKB_STREAM_PARSER:
--		psock_set_prog(&progs->skb_parser, prog);
-+		pprog = &progs->skb_parser;
- 		break;
- 	case BPF_SK_SKB_STREAM_VERDICT:
--		psock_set_prog(&progs->skb_verdict, prog);
-+		pprog = &progs->skb_verdict;
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
- 
-+	if (old)
-+		return psock_replace_prog(pprog, prog, old);
-+
-+	psock_set_prog(pprog, prog);
- 	return 0;
- }
- 
--- 
-2.25.1
-
+LGTM. Sorry for the delay, needed to make sure I understand this.
