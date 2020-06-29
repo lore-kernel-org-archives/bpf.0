@@ -2,142 +2,117 @@ Return-Path: <SRS0=DuKs=AK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCE4BC433DF
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:18:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EF38C433E0
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:24:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF55720656
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:18:12 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SQQbB8OZ"
+	by mail.kernel.org (Postfix) with ESMTP id 5818720656
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:24:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733169AbgF2URx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 16:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732647AbgF2TZl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:25:41 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C0AC061755;
-        Mon, 29 Jun 2020 12:25:41 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id w73so3661687ila.11;
-        Mon, 29 Jun 2020 12:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=awRqujOiMrDdEv/OOzJOIKIzdh+u8WQaaIXpTu/mSk0=;
-        b=SQQbB8OZtY8KVolOJ6QYhRlc/DURbUQ07ItMEpjAbF+W+aNVxTkluJqoo1+6a6daKx
-         ZEbfRLv9nmOVSirZ8lGn8Dav3wQCKjRCKzUoLt+tl5+9c/W+tlNYG8h/0Ib48YKCzfuu
-         lLS1MbHrqAK0VfOAEI9AO4kw3kcJ/1D8Q8X3bJ5n07fzpreXbbHU/SV6YdK3KSHl/W3a
-         /J2MYTo+x5fduZAUyqHx1tPp7RHthfbJ2VavWzQsWG5KIuozx+5d0TTh3faKtwbHhWxz
-         xGIIyN4M0G9RTV9irrAdM1B757qpwPeTGtOFc8lG+CkT0Co1yiIaUc4+fAtKCq21udCy
-         NTmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=awRqujOiMrDdEv/OOzJOIKIzdh+u8WQaaIXpTu/mSk0=;
-        b=GRqeNNSKLvLg9jMvN0hb6JI9i6s9MMC3MX7vjelROZ8l3ny/r5VzWI0X829PxciUBQ
-         DgobQgnG8HsLLX2hTbrnsBOT/ZFDkjjRMl9N0thAVNvj8PajFd47Lx7UG/sHCprZ3zYa
-         LF2jkf7/l7R9/3CrxefTxrrB8Gs8XsQiT87MDQ0JUXXx5z48VkE5QHgKL4U9RAkPC74H
-         xHpDfWRS99PYzSMecPxLytRVHymudgVaCBglIEbLTRW7SJHwKCKduIVr6+VFFZ5fLGx5
-         Ve4WX+VR8cQQGRUvqyCmfH4hKv8rluVTKGGilHl/3Nz8fWLnG4JUzo/657+J7o9kXrnj
-         Ldmw==
-X-Gm-Message-State: AOAM5328MFXXMM26V997rIxJTHatqCWAfJ7RxJ0gv+RntUZ/c4rm3O0o
-        jHO+Y77T7UWN8x44DsxvSMCQAgE33teKO8pDhW8=
-X-Google-Smtp-Source: ABdhPJw/Lp5J7VJZzWUMpKXFLNVSc2m8IqqQPvYMNlTYwBZMTO4BHXQsap8uE9Ir128HGPXlXy8p6kDi/w+RvplAavs=
-X-Received: by 2002:a92:6b05:: with SMTP id g5mr16679410ilc.120.1593458741165;
- Mon, 29 Jun 2020 12:25:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200629055530.3244342-1-songliubraving@fb.com>
-In-Reply-To: <20200629055530.3244342-1-songliubraving@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 29 Jun 2020 12:25:29 -0700
-Message-ID: <CAEf4BzbUh-Q=7a0cyxWm+=DA9hhovpLRcBGsq2ocXoCWpC2SUA@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 0/4] bpf: introduce bpf_get_task_stack()
-To:     Song Liu <songliubraving@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Peter Ziljstra <peterz@infradead.org>,
+        id S1731805AbgF2UYm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 16:24:42 -0400
+Received: from out03.mta.xmission.com ([166.70.13.233]:46406 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730311AbgF2UYk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Jun 2020 16:24:40 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out03.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jq0KS-0008Ab-2k; Mon, 29 Jun 2020 14:24:36 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jq0KM-0006dY-76; Mon, 29 Jun 2020 14:24:35 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Miller <davem@davemloft.net>,
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20200625095725.GA3303921@kroah.com>
+        <778297d2-512a-8361-cf05-42d9379e6977@i-love.sakura.ne.jp>
+        <20200625120725.GA3493334@kroah.com>
+        <20200625.123437.2219826613137938086.davem@davemloft.net>
+        <CAHk-=whuTwGHEPjvtbBvneHHXeqJC=q5S09mbPnqb=Q+MSPMag@mail.gmail.com>
+        <87pn9mgfc2.fsf_-_@x220.int.ebiederm.org>
+        <40720db5-92f0-4b5b-3d8a-beb78464a57f@i-love.sakura.ne.jp>
+        <87366g8y1e.fsf@x220.int.ebiederm.org>
+        <aa737d87-cf38-55d6-32f1-2d989a5412ea@i-love.sakura.ne.jp>
+        <20200628194440.puzh7nhdnk6i4rqj@ast-mbp.dhcp.thefacebook.com>
+        <c99d0cfc-8526-0daf-90b5-33e560efdede@i-love.sakura.ne.jp>
+Date:   Mon, 29 Jun 2020 15:19:59 -0500
+In-Reply-To: <c99d0cfc-8526-0daf-90b5-33e560efdede@i-love.sakura.ne.jp>
+        (Tetsuo Handa's message of "Mon, 29 Jun 2020 11:20:14 +0900")
+Message-ID: <874kqt39qo.fsf@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1jq0KM-0006dY-76;;;mid=<874kqt39qo.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/d3NN0BDGHtc/aZ8NKVRKAhcNPeBHT1DI=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+Subject: Re: [PATCH 00/14] Make the user mode driver code a better citizen
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 11:54 AM Song Liu <songliubraving@fb.com> wrote:
->
-> This set introduces a new helper bpf_get_task_stack(). The primary use case
-> is to dump all /proc/*/stack to seq_file via bpf_iter__task.
->
-> A few different approaches have been explored and compared:
->
->   1. A simple wrapper around stack_trace_save_tsk(), as v1 [1].
->
->      This approach introduces new syntax, which is different to existing
->      helper bpf_get_stack(). Therefore, this is not ideal.
->
->   2. Extend get_perf_callchain() to support "task" as argument.
->
->      This approach reuses most of bpf_get_stack(). However, extending
->      get_perf_callchain() requires non-trivial changes to architecture
->      specific code. Which is error prone.
->
->   3. Current (v2) approach, leverages most of existing bpf_get_stack(), and
->      uses stack_trace_save_tsk() to handle architecture specific logic.
->
-> [1] https://lore.kernel.org/netdev/20200623070802.2310018-1-songliubraving@fb.com/
->
-> Changes v3 => v4:
-> 1. Simplify the selftests with bpf_iter.h. (Yonghong)
-> 2. Add example output to commit log of 4/4. (Yonghong)
->
-> Changes v2 => v3:
-> 1. Rebase on top of bpf-next. (Yonghong)
-> 2. Sanitize get_callchain_entry(). (Peter)
-> 3. Use has_callchain_buf for bpf_get_task_stack. (Andrii)
-> 4. Other small clean up. (Yonghong, Andrii).
->
-> Changes v1 => v2:
-> 1. Reuse most of bpf_get_stack() logic. (Andrii)
-> 2. Fix unsigned long vs. u64 mismatch for 32-bit systems. (Yonghong)
-> 3. Add %pB support in bpf_trace_printk(). (Daniel)
-> 4. Fix buffer size to bytes.
->
-> Song Liu (4):
->   perf: expose get/put_callchain_entry()
->   bpf: introduce helper bpf_get_task_stack()
->   bpf: allow %pB in bpf_seq_printf() and bpf_trace_printk()
->   selftests/bpf: add bpf_iter test with bpf_get_task_stack()
->
->  include/linux/bpf.h                           |  1 +
->  include/linux/perf_event.h                    |  2 +
->  include/uapi/linux/bpf.h                      | 36 ++++++++-
->  kernel/bpf/stackmap.c                         | 75 ++++++++++++++++++-
->  kernel/bpf/verifier.c                         |  4 +-
->  kernel/events/callchain.c                     | 13 ++--
->  kernel/trace/bpf_trace.c                      | 12 ++-
->  scripts/bpf_helpers_doc.py                    |  2 +
->  tools/include/uapi/linux/bpf.h                | 36 ++++++++-
->  .../selftests/bpf/prog_tests/bpf_iter.c       | 17 +++++
->  .../selftests/bpf/progs/bpf_iter_task_stack.c | 37 +++++++++
->  11 files changed, 220 insertions(+), 15 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c
->
-> --
-> 2.24.1
+Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp> writes:
 
-Thanks for working on this! This will enable a whole new set of tools
-and applications.
+> On 2020/06/29 4:44, Alexei Starovoitov wrote:
+>> But all the defensive programming kinda goes against general kernel style.
+>> I wouldn't do it. Especially pr_info() ?!
+>> Though I don't feel strongly about it.
+>
+> Honestly speaking, caller should check for errors and print appropriate
+> messages. info->wd.mnt->mnt_root != info->wd.dentry indicates that something
+> went wrong (maybe memory corruption). But other conditions are not fatal.
+> That is, I consider even pr_info() here should be unnecessary.
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
+They were all should never happen cases.  Which is why my patches do:
+if (WARN_ON_ONCE(...))
+
+That let's the caller know the messed up very clearly while still
+providing a change to continue.
+
+If they were clearly corruption no ones kernel should ever continue
+BUG_ON would be appropriate.
+
+>> I would like to generalize elf_header_check() a bit and call it
+>> before doing blob_to_mnt() to make sure that all blobs are elf files only.
+>> Supporting '#!/bin/bash' or other things as blobs seems wrong to me.
+
+I vote for not worry about things that have never happened, and are
+obviously incorrect.
+
+The only points of checks like that is to catch cases where other
+developers misunderstand the interface.  When you get to something like
+sysfs with lots and lots of users where it is hard to audit there
+is real value in sanity checks.  In something like this with very few
+users. Just making the code clear should be enough for people not to do
+ridiculous things.
+
+
+In any case Tetsuo I will leave futher sanity checks for you and Alexei
+to work out.  It is beyond the scope of my patchset, and they are easy
+enough to add as follow on patches.
+
+Eric
