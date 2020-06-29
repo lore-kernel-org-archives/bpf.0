@@ -2,241 +2,194 @@ Return-Path: <SRS0=DuKs=AK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78263C433E0
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 18:46:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0126BC433DF
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 18:50:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CD5A204EC
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 18:46:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D637D206A1
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 18:50:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NPkMmLbS";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="XwjZKVcP"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IBbygPif"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726008AbgF2SqL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 14:46:11 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:32228 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727972AbgF2SqI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 29 Jun 2020 14:46:08 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 05THteKF004317;
-        Mon, 29 Jun 2020 11:00:43 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=rO/841CCW4viLJ1vwuWK+ySgIDLVZDlP4s8QDJjUd+g=;
- b=NPkMmLbSQKPYs53RAWX4ApwNKGAQo1+HmyDvxk0NRslz75VKKX8z/N3yTpmUmRSVUx5X
- a0pkXpC6m11VFNzmIjBehgkmo6dF+B7359l75Il8WpppN1DToVwK7YkfxLLSmMtpZFgL
- SYG1XYyZd2yNE3QgCffGtJMU3byfBaGoa8w= 
+        id S1726637AbgF2Sur (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 14:50:47 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:24134 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726084AbgF2Suq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 29 Jun 2020 14:50:46 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05T5qBlp008728
+        for <bpf@vger.kernel.org>; Sun, 28 Jun 2020 22:55:45 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=LMXoHFeYD1SRI2JRp/FowRzsgayo8g+979xURW23qz8=;
+ b=IBbygPifhYrbrDshoexHPwvlmW3AILeEaol5TYNFOaM9TG99uDrDYuHnK/LPA4DjeD5A
+ 8G0RETsEg6LEIAA8R7++5oAiuJpH3EEQlsxaxEY+FdZqAlYDn5YEllMstfN/3KJvT1mh
+ IuJVPGOQ7T4pjH1ZZYMVw3nI0NKEbpYnge0= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 31yd4p29yh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 29 Jun 2020 11:00:43 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
+        by mx0a-00082601.pphosted.com with ESMTP id 31xntbjwtr-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 28 Jun 2020 22:55:45 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 29 Jun 2020 11:00:42 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ax3gEA1216XIKposoGFL9IRReMLdyKSl/tCNOZFuWHindT7IPBmKRw56RujkvzzSBvIgrKkxO3bik8T6c7bFf2Um2bBtqXpuTTtsMSsVDPnUB3+IJ9ioscHye/IW3uHI8mLl0Lrt9mQ4Ond+RUr7/Wm/SL6Jj5ho6T8KK0lSdGG5/XDzBxc7KjXuwDtZaOSPmJIZIR5sm4C6Bi6g7mrZ2VVft8kYO0bfsuECnrTUCNIM+1g2ELs3dQ+0XwZkC+21JIpmAI/fffvk0i82VSWRDcHGTll6PJzPeJrbyk1k+DQPm5NU4J2krFohBjK9O0s//u75IwGZo7YPde7i8pfKAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rO/841CCW4viLJ1vwuWK+ySgIDLVZDlP4s8QDJjUd+g=;
- b=iZ86o9DYQMO8VQBY0zLC+qqVgB+QxjrFvd+ltuylxlaXKIZlrMDp3s/dNgpNZqXR/B6l/OdX12eJdQ4InR4TCQPkHl1bfrscX2kIlvoojnxPQ0S7LpdwjOQ71rgwZrrEAGEPVnqsFEZ01DMdtPavZza0iuErVr7Xakye1ez+2eQoctqb3coH0fvR9jWc+OZ3M0Mu6KC1Y/E2I8CdiGWQZhBvX7pAvJSCogrsrbW/l/CMcgNrLOlOkT23hmG5UnWADYgV5YedFBGTS2jkNA7iG7f1Zf97jq3DIZIpO+jqVHm8E9/jEqpgM2ugn3+4pQL0epihAYMqAKLUp3F7kbpxQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rO/841CCW4viLJ1vwuWK+ySgIDLVZDlP4s8QDJjUd+g=;
- b=XwjZKVcP+GhhtRSE/nO8KwlnxSx/Wbf9C7gkzD6FluS3kYmFmiLNnGw2eP8QCh6Puz7l7QtWXaRtZqHhNVyVQY40pZXS+LGbp25+pSsbtYJ5K7cf5JpMQVPyv+KjPi+QznZ9jU873NbRHf+DKwPgLBtWI3FOhHAa/mc72FaCS2U=
-Authentication-Results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
-Received: from CH2PR15MB3573.namprd15.prod.outlook.com (2603:10b6:610:e::28)
- by CH2PR15MB3640.namprd15.prod.outlook.com (2603:10b6:610:7::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.21; Mon, 29 Jun
- 2020 18:00:38 +0000
-Received: from CH2PR15MB3573.namprd15.prod.outlook.com
- ([fe80::b0ab:989:1165:107]) by CH2PR15MB3573.namprd15.prod.outlook.com
- ([fe80::b0ab:989:1165:107%5]) with mapi id 15.20.3131.026; Mon, 29 Jun 2020
- 18:00:38 +0000
-Date:   Mon, 29 Jun 2020 11:00:35 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Kernel Team <kernel-team@fb.com>,
-        Lawrence Brakmo <brakmo@fb.com>,
-        Neal Cardwell <ncardwell@google.com>,
-        Networking <netdev@vger.kernel.org>,
-        Yuchung Cheng <ycheng@google.com>
-Subject: Re: [PATCH bpf-next 07/10] bpf: selftests: Restore netns after each
- test
-Message-ID: <20200629180035.huq42fif7wktfbja@kafai-mbp.dhcp.thefacebook.com>
-References: <20200626175501.1459961-1-kafai@fb.com>
- <20200626175545.1462191-1-kafai@fb.com>
- <CAEf4BzZ3Jb296zJ7bfsntk7v5fkynrBcKncGQgrSHJ2zqifgsA@mail.gmail.com>
- <20200627002302.3tqklvjxxuetjoxr@kafai-mbp.dhcp.thefacebook.com>
- <CAEf4BzZevDLp8Hzax3T8XzHLsMm85upCONULVVOEOyAxVGe4dA@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZevDLp8Hzax3T8XzHLsMm85upCONULVVOEOyAxVGe4dA@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-ClientProxiedBy: BYAPR05CA0074.namprd05.prod.outlook.com
- (2603:10b6:a03:e0::15) To CH2PR15MB3573.namprd15.prod.outlook.com
- (2603:10b6:610:e::28)
+ 15.1.1979.3; Sun, 28 Jun 2020 22:55:43 -0700
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id B662762E5213; Sun, 28 Jun 2020 22:55:41 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Song Liu <songliubraving@fb.com>
+Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <peterz@infradead.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <kernel-team@fb.com>, <john.fastabend@gmail.com>,
+        <kpsingh@chromium.org>, Song Liu <songliubraving@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v4 bpf-next 4/4] selftests/bpf: add bpf_iter test with bpf_get_task_stack()
+Date:   Sun, 28 Jun 2020 22:55:30 -0700
+Message-ID: <20200629055530.3244342-5-songliubraving@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200629055530.3244342-1-songliubraving@fb.com>
+References: <20200629055530.3244342-1-songliubraving@fb.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:400::5:875e) by BYAPR05CA0074.namprd05.prod.outlook.com (2603:10b6:a03:e0::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.10 via Frontend Transport; Mon, 29 Jun 2020 18:00:37 +0000
-X-Originating-IP: [2620:10d:c090:400::5:875e]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 476be970-8054-4500-e9db-08d81c56548c
-X-MS-TrafficTypeDiagnostic: CH2PR15MB3640:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CH2PR15MB3640DFA6E1EC9938D1248323D56E0@CH2PR15MB3640.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-Forefront-PRVS: 044968D9E1
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0FXyZunM1QGcmP0VBEOmcUvgRrvu0/SEBi+HiWeEjgcGWbUyy2TobTqLowNDOUNpHZSCd/+Z4fxdsUwada1cfDJUsLIhWXYWVSIlMFNH1/MBqLjbp/3W0sD1Fa9eSl2HvZl/dCk/i6jFlCo0/fYfKmB9lKfSxSYr+O4QlNz4BI4t62h22nV1bz49Fxuy19mf1IvS4/p5aU6vd5col26/cUD2077RaI7RYTVQzZDVV2qKnKbTm62wHAP5bci425JGUCdvelxYb9fBiU8rcRw8xsQF3VdVTipo6r5x+kX5YZxGGXRjCYyi9wXh0ZwvT3oEUXfQaOdU8h7I8KEJNiL2rw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR15MB3573.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(136003)(366004)(346002)(376002)(396003)(39860400002)(186003)(16526019)(83380400001)(86362001)(7696005)(52116002)(478600001)(2906002)(6916009)(8676002)(4326008)(66476007)(66946007)(8936002)(53546011)(6506007)(316002)(66556008)(54906003)(9686003)(1076003)(5660300002)(55016002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: kq5p1AkrKLnDjIpCYgriF2IFePFwW81svaQwq1EVIU+YWMSr8LbR/DbnJPxPSCj62GlY5djtyWpra3Yf6axGaxiSzcx1SUsrRkYxIpBLVESMwQzTVi/40pKKUtKHDDrp/mKYj9S+S7w6LsFGLN27ovSJmk/mt8An9BeQ1GQn4KUf63DZ2C13okZC/PyEqHOF4s7Bf5iOXZAjlenU68kEPbuggbvIOQz3k+rMkJDP8gSvIEimCpycjyvQ80Xq7s6APUXocgqLLk1R2DXEhGvJ6+BlUszAb8LEme+wxvHwxTz3ZJr6SkosMWDrf5K9DgF4NhqH661fl3jaXHhBjspoBgk4fzKn0n8Qbt1mPUdu/Wk8bt7Zhw33JRJndtag4Bf432VH8/CRfIPxSBiQl4lcyqEvs+G+EjYUU8bpTGRC2ZgMk7nZgeKtPySPCtpFlii/vvUxKMPq/6Yu4Q569uMoXe0dzhz519/A4e0VbLj1XdnmS6t1p5YQtwlUJuKac6G0ZVjmHWBAbCZjILeBWHyMag==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 476be970-8054-4500-e9db-08d81c56548c
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR15MB3573.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2020 18:00:38.6809
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LvcTXo0Be5CyZETfr7Xxyd+bpOXtBs8V1p8Sn6s0q5302WXoawTMTErprsA33ZBW
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR15MB3640
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-06-29_21:2020-06-29,2020-06-29 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 adultscore=0
- impostorscore=0 malwarescore=0 mlxscore=0 suspectscore=0
- lowpriorityscore=0 cotscore=-2147483648 clxscore=1015 mlxlogscore=999
- priorityscore=1501 phishscore=0 spamscore=0 classifier=spam adjust=0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-29_04:2020-06-26,2020-06-29 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ cotscore=-2147483648 lowpriorityscore=0 mlxscore=0 clxscore=1015
+ bulkscore=0 spamscore=0 suspectscore=8 impostorscore=0 priorityscore=1501
+ adultscore=0 mlxlogscore=999 phishscore=0 classifier=spam adjust=0
  reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006290113
+ definitions=main-2006290042
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Jun 27, 2020 at 01:31:42PM -0700, Andrii Nakryiko wrote:
-> On Fri, Jun 26, 2020 at 5:23 PM Martin KaFai Lau <kafai@fb.com> wrote:
-> >
-> > On Fri, Jun 26, 2020 at 03:45:04PM -0700, Andrii Nakryiko wrote:
-> > > On Fri, Jun 26, 2020 at 10:56 AM Martin KaFai Lau <kafai@fb.com> wrote:
-> > > >
-> > > > It is common for networking tests creating its netns and making its own
-> > > > setting under this new netns (e.g. changing tcp sysctl).  If the test
-> > > > forgot to restore to the original netns, it would affect the
-> > > > result of other tests.
-> > > >
-> > > > This patch saves the original netns at the beginning and then restores it
-> > > > after every test.  Since the restore "setns()" is not expensive, it does it
-> > > > on all tests without tracking if a test has created a new netns or not.
-> > > >
-> > > > Signed-off-by: Martin KaFai Lau <kafai@fb.com>
-> > > > ---
-> > > >  tools/testing/selftests/bpf/test_progs.c | 21 +++++++++++++++++++++
-> > > >  tools/testing/selftests/bpf/test_progs.h |  2 ++
-> > > >  2 files changed, 23 insertions(+)
-> > > >
-> > > > diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-> > > > index 54fa5fa688ce..b521ce366381 100644
-> > > > --- a/tools/testing/selftests/bpf/test_progs.c
-> > > > +++ b/tools/testing/selftests/bpf/test_progs.c
-> > > > @@ -121,6 +121,24 @@ static void reset_affinity() {
-> > > >         }
-> > > >  }
-> > > >
-> > > > +static void save_netns(void)
-> > > > +{
-> > > > +       env.saved_netns_fd = open("/proc/self/ns/net", O_RDONLY);
-> > > > +       if (env.saved_netns_fd == -1) {
-> > > > +               perror("open(/proc/self/ns/net)");
-> > > > +               exit(-1);
-> > > > +       }
-> > > > +}
-> > > > +
-> > > > +static void restore_netns(void)
-> > > > +{
-> > > > +       if (setns(env.saved_netns_fd, CLONE_NEWNET) == -1) {
-> > > > +               stdio_restore();
-> > > > +               perror("setns(CLONE_NEWNS)");
-> > > > +               exit(-1);
-> > > > +       }
-> > > > +}
-> > > > +
-> > > >  void test__end_subtest()
-> > > >  {
-> > > >         struct prog_test_def *test = env.test;
-> > > > @@ -643,6 +661,7 @@ int main(int argc, char **argv)
-> > > >                 return -1;
-> > > >         }
-> > > >
-> > > > +       save_netns();
-> > >
-> > > you should probably do this also after each sub-test in test__end_subtest()?
-> > You mean restore_netns()?
-> 
-> oops, yeah :)
-> 
-> >
-> > It is a tough call.
-> > Some tests may only want to create a netns at the beginning for all the subtests
-> > to use (e.g. sk_assign.c).  restore_netns() after each subtest may catch
-> > tester in surprise that the netns is not in its full control while its
-> > own test is running.
-> 
-> Wouldn't it be better to update such self-tests to setns on each
-> sub-test properly? It should be a simple code re-use exercise, unless
-> I'm missing some other implications of having to do it before each
-> sub-test?
-It should be simple, I think.  Haven't looked into details of each test.
-However, I won't count re-running the same piece of code in a for-loop
-as a re-use exercise ;)
+The new test is similar to other bpf_iter tests. It dumps all
+/proc/<pid>/stack to a seq_file. Here is some example output:
 
-In my vm, a quick try in forcing sk_assign.c to reconfigure netns in each
-subtest in the for loop increased the runtime from 1s to 8s.
-I guess it is not a big deal for test_progs.
+pid:     2873 num_entries:        3
+[<0>] worker_thread+0xc6/0x380
+[<0>] kthread+0x135/0x150
+[<0>] ret_from_fork+0x22/0x30
 
-> 
-> The idea behind sub-test is (at least it was so far) that it's
-> independent from other sub-tests and tests, and it's only co-located
-> with other sub-tests for the purpose of code reuse and logical
-> grouping. Which is why we reset CPU affinity, for instance.
-> 
-> >
-> > I think an individual test should have managed the netns properly within its
-> > subtests already if it wants a correct test result.  It can unshare at the
-> > beginning of each subtest to get a clean state (e.g. in patch 8).
-> > test_progs.c only ensures a config made by an earlier test does
-> > not affect the following tests.
-> 
-> It's true that it gives more flexibility for test setup, but if we go
-> that way, we should do it consistently for CPU affinity resetting and
-> whatever else we do per-subtest. I wonder what your answers would be
-> for the above questions. We can go either way, just let's be
-> consistent.
-Right, I also don't feel strongly about which way to go for netns.
-I noticed reset_affinity().  cgroup cleanup is also per test though.
-I think netns is more close to cgroup in terms of bpf prog is running under it,
-so this patch picked the current way.
+pid:     2874 num_entries:        9
+[<0>] __bpf_get_stack+0x15e/0x250
+[<0>] bpf_prog_22a400774977bb30_dump_task_stack+0x4a/0xb3c
+[<0>] bpf_iter_run_prog+0x81/0x170
+[<0>] __task_seq_show+0x58/0x80
+[<0>] bpf_seq_read+0x1c3/0x3b0
+[<0>] vfs_read+0x9e/0x170
+[<0>] ksys_read+0xa7/0xe0
+[<0>] do_syscall_64+0x4c/0xa0
+[<0>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-If it is decided to stay with reset_affinity's way,  I can make netns change
-to other tests (there are two if i grep properly).
+Note: To print the output, it is necessary to modify the selftest.
 
-It seems there is no existing subtest requires to reset_affinity.
+Signed-off-by: Song Liu <songliubraving@fb.com>
+---
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 17 +++++++++
+ .../selftests/bpf/progs/bpf_iter_task_stack.c | 37 +++++++++++++++++++
+ 2 files changed, 54 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_stack=
+.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
+sting/selftests/bpf/prog_tests/bpf_iter.c
+index 1e2e0fced6e81..fed42755416db 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -5,6 +5,7 @@
+ #include "bpf_iter_netlink.skel.h"
+ #include "bpf_iter_bpf_map.skel.h"
+ #include "bpf_iter_task.skel.h"
++#include "bpf_iter_task_stack.skel.h"
+ #include "bpf_iter_task_file.skel.h"
+ #include "bpf_iter_tcp4.skel.h"
+ #include "bpf_iter_tcp6.skel.h"
+@@ -110,6 +111,20 @@ static void test_task(void)
+ 	bpf_iter_task__destroy(skel);
+ }
+=20
++static void test_task_stack(void)
++{
++	struct bpf_iter_task_stack *skel;
++
++	skel =3D bpf_iter_task_stack__open_and_load();
++	if (CHECK(!skel, "bpf_iter_task_stack__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		return;
++
++	do_dummy_read(skel->progs.dump_task_stack);
++
++	bpf_iter_task_stack__destroy(skel);
++}
++
+ static void test_task_file(void)
+ {
+ 	struct bpf_iter_task_file *skel;
+@@ -452,6 +467,8 @@ void test_bpf_iter(void)
+ 		test_bpf_map();
+ 	if (test__start_subtest("task"))
+ 		test_task();
++	if (test__start_subtest("task_stack"))
++		test_task_stack();
+ 	if (test__start_subtest("task_file"))
+ 		test_task_file();
+ 	if (test__start_subtest("tcp4"))
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c b/to=
+ols/testing/selftests/bpf/progs/bpf_iter_task_stack.c
+new file mode 100644
+index 0000000000000..e40d32a2ed93d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include "bpf_iter.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++#define MAX_STACK_TRACE_DEPTH   64
++unsigned long entries[MAX_STACK_TRACE_DEPTH];
++#define SIZE_OF_ULONG (sizeof(unsigned long))
++
++SEC("iter/task")
++int dump_task_stack(struct bpf_iter__task *ctx)
++{
++	struct seq_file *seq =3D ctx->meta->seq;
++	struct task_struct *task =3D ctx->task;
++	long i, retlen;
++
++	if (task =3D=3D (void *)0)
++		return 0;
++
++	retlen =3D bpf_get_task_stack(task, entries,
++				    MAX_STACK_TRACE_DEPTH * SIZE_OF_ULONG, 0);
++	if (retlen < 0)
++		return 0;
++
++	BPF_SEQ_PRINTF(seq, "pid: %8u num_entries: %8u\n", task->pid,
++		       retlen / SIZE_OF_ULONG);
++	for (i =3D 0; i < MAX_STACK_TRACE_DEPTH; i++) {
++		if (retlen > i * SIZE_OF_ULONG)
++			BPF_SEQ_PRINTF(seq, "[<0>] %pB\n", (void *)entries[i]);
++	}
++	BPF_SEQ_PRINTF(seq, "\n");
++
++	return 0;
++}
+--=20
+2.24.1
+
