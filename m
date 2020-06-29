@@ -2,136 +2,71 @@ Return-Path: <SRS0=DuKs=AK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC829C433E2
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2259EC433E2
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:02:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9FE4620663
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:01:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC5B020663
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:02:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EnSRVb6M"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jWJmLvGH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729441AbgF2TBx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 15:01:53 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:48206 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730361AbgF2TBr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:01:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1593457306;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=kFIJkw7uizlumVYgU4yOLgni5TnkFJaj4wh2hYKWb4c=;
-        b=EnSRVb6MIyAHnOtWDrKUm4TEEQnKqZ5/8osJlqubuJkyBVSCXSrF8ppOBIcjEdQkrPrG3a
-        X+RpFFWEMRAwXPtVc0nQ7mqlf4ORLEdLof7Xnyh0tX2a7p91FLmhJ6IPpgUUPnqRrynrQJ
-        ukzByPhyHnwKUbbhXXErcfbBlffE1xU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-27-zYKQbKhyPBq9vP7PMP_2ww-1; Mon, 29 Jun 2020 12:01:23 -0400
-X-MC-Unique: zYKQbKhyPBq9vP7PMP_2ww-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 93CAFA0BDB;
-        Mon, 29 Jun 2020 16:01:22 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.40.208.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6EDD119C4F;
-        Mon, 29 Jun 2020 16:01:19 +0000 (UTC)
-Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 2F5BB300003EB;
-        Mon, 29 Jun 2020 18:01:18 +0200 (CEST)
-Subject: [PATCH bpf-next] selftests/bpf: test_progs option for getting number
- of tests
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org, Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        Hangbin Liu <haliu@redhat.com>
-Date:   Mon, 29 Jun 2020 18:01:18 +0200
-Message-ID: <159344647797.836609.7781883615056725815.stgit@firesoul>
-User-Agent: StGit/0.19
+        id S1730532AbgF2TCn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 15:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730509AbgF2TCm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:02:42 -0400
+Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C2FC02A552;
+        Mon, 29 Jun 2020 06:04:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=hCeEFPJauELL9pZELwR8NI9hO7+eRck24vlEYcHykOI=; b=jWJmLvGHLCXZqD+9nHGBpk8RJJ
+        tZEw3mH374vZSArhHhnpGf3fzMx6xn+4T+ORiEdT5+4lPhWyDdnz3JjTZh9/3Wtck2vqFScH/9G/J
+        u4LVSP/cj9xTJk4Ckay1YCcJrlSpYpCPwix/DUpDcxoNbuscvo6HKYUYw09OpXMQGOUG1UPKk5h1R
+        I3eShOTEfFGU9Ja0KzA7j41GBHdpp5HO/DOzw6cKjpixzfNV8H9j71Gb6OnIfIM/OBDTmJC5gUL61
+        YFnCpxS9+nbGCj3YwQd7bAh3L87CfMsmO+LuaXEzqneInL6n6Nzaas0SsF/W9iCpEmQP30CE7l3I7
+        yMgYzDrw==;
+Received: from [2001:4bb8:184:76e3:c71:f334:376b:cf5f] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jptS5-0004Wr-LR; Mon, 29 Jun 2020 13:04:02 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>
+Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: add an API to check if a streamming mapping needs sync calls
+Date:   Mon, 29 Jun 2020 15:03:55 +0200
+Message-Id: <20200629130359.2690853-1-hch@lst.de>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It can be practial to get the number of tests that test_progs
-contain.  This could for example be used to create a shell
-for-loop construct that runs the individual tests.
+Hi all,
 
-Like:
- for N in $(seq 1 $(./test_progs -c)); do
-   ./test_progs -n $N 2>&1 > result_test_${N}.log &
- done ; wait
-
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
----
- tools/testing/selftests/bpf/test_progs.c |   11 +++++++++++
- tools/testing/selftests/bpf/test_progs.h |    1 +
- 2 files changed, 12 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 54fa5fa688ce..1aa5360c427f 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -366,6 +366,7 @@ enum ARG_KEYS {
- 	ARG_TEST_NAME_BLACKLIST = 'b',
- 	ARG_VERIFIER_STATS = 's',
- 	ARG_VERBOSE = 'v',
-+	ARG_GET_TEST_CNT = 'c',
- };
- 
- static const struct argp_option opts[] = {
-@@ -379,6 +380,8 @@ static const struct argp_option opts[] = {
- 	  "Output verifier statistics", },
- 	{ "verbose", ARG_VERBOSE, "LEVEL", OPTION_ARG_OPTIONAL,
- 	  "Verbose output (use -vv or -vvv for progressively verbose output)" },
-+	{ "count", ARG_GET_TEST_CNT, NULL, 0,
-+	  "Get number of top-level tests " },
- 	{},
- };
- 
-@@ -511,6 +514,9 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
- 			}
- 		}
- 		break;
-+	case ARG_GET_TEST_CNT:
-+		env->get_test_cnt = true;
-+		break;
- 	case ARGP_KEY_ARG:
- 		argp_usage(state);
- 		break;
-@@ -643,6 +649,11 @@ int main(int argc, char **argv)
- 		return -1;
- 	}
- 
-+	if (env.get_test_cnt) {
-+		printf("%d\n", prog_test_cnt);
-+		return EXIT_SUCCESS;
-+	}
-+
- 	stdio_hijack();
- 	for (i = 0; i < prog_test_cnt; i++) {
- 		struct prog_test_def *test = &prog_test_defs[i];
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index f4503c926aca..0030584619c3 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -66,6 +66,7 @@ struct test_env {
- 	enum verbosity verbosity;
- 
- 	bool jit_enabled;
-+	bool get_test_cnt;
- 
- 	struct prog_test_def *test;
- 	FILE *stdout;
+this series lifts the somewhat hacky checks in the XSK code if a DMA
+streaming mapping needs dma_sync_single_for_{device,cpu} calls to the
+DMA API.
 
 
+Diffstat:
+ Documentation/core-api/dma-api.rst |    8 +++++
+ include/linux/dma-direct.h         |    1 
+ include/linux/dma-mapping.h        |    5 +++
+ include/net/xsk_buff_pool.h        |    6 ++--
+ kernel/dma/direct.c                |    6 ++++
+ kernel/dma/mapping.c               |   10 ++++++
+ net/xdp/xsk_buff_pool.c            |   54 ++-----------------------------------
+ 7 files changed, 37 insertions(+), 53 deletions(-)
