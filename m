@@ -2,96 +2,78 @@ Return-Path: <SRS0=DuKs=AK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CD57C433E2
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 21:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B0B0C433DF
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 21:13:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EB9BB206A1
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 21:12:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l6FSd0In"
+	by mail.kernel.org (Postfix) with ESMTP id 6934E20720
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 21:13:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390487AbgF2VMz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 17:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
+        id S1731765AbgF2VNY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 17:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730137AbgF2S5n (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1730123AbgF2S5n (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 29 Jun 2020 14:57:43 -0400
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD01DC031C5C
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 10:39:51 -0700 (PDT)
-Received: by mail-qk1-x743.google.com with SMTP id b4so15999278qkn.11
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 10:39:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/DkJLGr2YKRXiLLH1Q6VhLFiWB4wUGNH1QgmtPqjWno=;
-        b=l6FSd0In6b81j2G/sx0DuCx5xKhUbQxcxyrd+0kzeLc94/5kWmMKfbfMrBn3vi2Q9h
-         DkFbZkcwVJ+o+jMMR029YMk6aNikxvNaD09m2XnHzQZ7l0YlEs19fGJiPDxANFeSqWJ7
-         +2u7L8aYmOZRrFS/rIXqYfToPbYAo2j3gfBYdYDofU/97+hHGkZHMd5EqsO4EeoEVN2W
-         Myki9xAUIHt6oBTxIHmlOLKLhYBPP0wyrqoScJNDrVdFO006riG5zCysdYpoNrmdqUVb
-         TM6EGmRl282UofMe65ue1qXHa3JAJEkA54gXwqT+8Z6WiowIjjX7jIt5mj26mUd8rlvR
-         V3tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/DkJLGr2YKRXiLLH1Q6VhLFiWB4wUGNH1QgmtPqjWno=;
-        b=Ob06xXEYJf8XCC10QpZOkR/BMT4Yl745gEWikkahwvk+akMCiYenlfdor2ofBpcqXW
-         /xx6opb8sBLoZRqmIL860SCtCUDoCdOSLRUwA8Hjz+uEAX3wr5MqOdg34W1NObpR9CBt
-         23DOqijPKL4yh9j1tBcsaXrH+9jata9bsuNMYfws7fz/pfsp+QLDpGiBHJVsW8ljn75r
-         Sh+Xzx5oAVRqNgp4/t8VM0L3MxCskbyv6vc4v3SIiyo8HcxgUI5Ugqi8tvLIAWDEtN+l
-         RVh02mWY6/vZK8QiE9BrkL72/EnrBvTSKnhfccShR5cU4mQN+iyptNWAvMzI0Yc7pkwa
-         tVJQ==
-X-Gm-Message-State: AOAM533fDsL9MieIkubfE9yKHDJoWN+aLfc8F9Xnal8uaN5tUwJsuIKC
-        JyK8Kz/3p4Y3LJf5NsDcW4VkyqHwd7o3rQKEvgU=
-X-Google-Smtp-Source: ABdhPJwQZhxdg+duMocMSg8BT6YjK70QxRpBI9s6U+uzy6ZOL/tM9rMUz7uNJC+8E2J2mxl6JzvVBrn3RBIRjKzLapY=
-X-Received: by 2002:a37:7683:: with SMTP id r125mr13707956qkc.39.1593452391019;
- Mon, 29 Jun 2020 10:39:51 -0700 (PDT)
+Received: from www62.your-server.de (www62.your-server.de [IPv6:2a01:4f8:d0a:276a::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D088C030787;
+        Mon, 29 Jun 2020 08:18:51 -0700 (PDT)
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jpvYN-0003Oq-V0; Mon, 29 Jun 2020 17:18:39 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jpvYN-000POt-Hi; Mon, 29 Jun 2020 17:18:39 +0200
+Subject: Re: [PATCH net] xsk: remove cheap_dma optimization
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        netdev@vger.kernel.org, davem@davemloft.net,
+        konrad.wilk@oracle.com, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        maximmi@mellanox.com, magnus.karlsson@intel.com,
+        jonathan.lemon@gmail.com
+References: <20200626134358.90122-1-bjorn.topel@gmail.com>
+ <c60dfb5a-2bf3-20bd-74b3-6b5e215f73f8@iogearbox.net>
+ <20200627070406.GB11854@lst.de>
+ <88d27e1b-dbda-301c-64ba-2391092e3236@intel.com>
+ <e879bcc8-5f7d-b1b3-9b66-1032dec6245d@iogearbox.net>
+ <81aec200-c1a0-6d57-e3b6-26dad30790b8@intel.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <903c646c-dc74-a15c-eb33-e1b67bc7da0d@iogearbox.net>
+Date:   Mon, 29 Jun 2020 17:18:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <159344647797.836609.7781883615056725815.stgit@firesoul>
-In-Reply-To: <159344647797.836609.7781883615056725815.stgit@firesoul>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 29 Jun 2020 10:39:39 -0700
-Message-ID: <CAEf4BzavSVPQ4Gq3PvvckUhFOGVDHruuZQdnxb10PeO9mWifKQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: test_progs option for getting
- number of tests
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     bpf <bpf@vger.kernel.org>, Hangbin Liu <haliu@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <81aec200-c1a0-6d57-e3b6-26dad30790b8@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.3/25858/Mon Jun 29 15:30:49 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 9:01 AM Jesper Dangaard Brouer
-<brouer@redhat.com> wrote:
->
-> It can be practial to get the number of tests that test_progs
-> contain.  This could for example be used to create a shell
-> for-loop construct that runs the individual tests.
->
-> Like:
->  for N in $(seq 1 $(./test_progs -c)); do
->    ./test_progs -n $N 2>&1 > result_test_${N}.log &
->  done ; wait
->
-> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-> ---
+On 6/29/20 5:10 PM, Björn Töpel wrote:
+> On 2020-06-29 15:52, Daniel Borkmann wrote:
+>>
+>> Ok, fair enough, please work with DMA folks to get this properly integrated and
+>> restored then. Applied, thanks!
+> 
+> Daniel, you were too quick! Please revert this one; Christoph just submitted a 4-patch-series that addresses both the DMA API, and the perf regression!
 
-LGTM.
+Nice, tossed from bpf tree then! (Looks like it didn't land on the bpf list yet,
+but seems other mails are currently stuck as well on vger. I presume it will be
+routed to Linus via Christoph?)
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-
-
->  tools/testing/selftests/bpf/test_progs.c |   11 +++++++++++
->  tools/testing/selftests/bpf/test_progs.h |    1 +
->  2 files changed, 12 insertions(+)
->
-
-[...]
+Thanks,
+Daniel
