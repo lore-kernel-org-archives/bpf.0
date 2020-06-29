@@ -2,117 +2,143 @@ Return-Path: <SRS0=DuKs=AK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF7C5C433DF
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:53:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16F3DC433E0
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:57:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E1BD20663
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:53:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6F66206F1
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:57:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="HfRHaYe1"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="JcFgNg0s"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729973AbgF2Uwh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 16:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
+        id S1731263AbgF2U5u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 16:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731343AbgF2TNY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:13:24 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5722C0A893C
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 00:42:26 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id o4so8522095lfi.7
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 00:42:26 -0700 (PDT)
+        with ESMTP id S1729778AbgF2TNG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:13:06 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E71C008645
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 02:59:51 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id g10so1958128wmc.1
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 02:59:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=dehoAPWG1C4zFRAsM2Hgz51wnypP3bkZmHH0inC/SE4=;
-        b=HfRHaYe1bLPiZrP3enkwPCpjwaVwCHWeRiz6TUInU4PWdR2CQVF7DKY4T13zP/B4K4
-         0EaxCRhvHXARTsFJKg9BnUm3QshCsc8n2IqVG/rX6v/vgukiSK8MnTL+wENyeG88SaLn
-         PqCaBwQ0rgrxjbUKT+S/rYT2c3iQoxOIOO3Wk=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YW2cEsPoVOANORC8b/EG6UO/ChXsjB8EetXmH7OMF1M=;
+        b=JcFgNg0sycST8PeN/Ca68zgTFUh+34pry02M4AXkF6JwEzpxpZpXIwUzC8Tt7cjJU4
+         C70t3H+bcpRoW/3Pdh5BELZ1NTg7BEZ8ARksDrpbw15l6V6moFJ1ngJfLVAHZ89mE7PM
+         3iMJlTiihQUXI3AIfpnT3S3PYrFcRgDzg98YM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=dehoAPWG1C4zFRAsM2Hgz51wnypP3bkZmHH0inC/SE4=;
-        b=uREGFwCj5D5giJrEbpF9UGCs3fIL1jYErl0iKEuB4PVE/VaAnZjFORXNG9bsqvPUOU
-         q/8r/Czpu2vidtLYEFA+/GuEAnjvE8uoNx6cfCnf1oqlBe5CShmKDkx6Tp3Tr0hx3i8h
-         dgB28iwBTX9B2PZz71TXx9AHobD4GSQpeViFdu3gLwLq1AU2A64Hcqdx8gD9dinFY12q
-         Xl6a+Q4VOLZO0xXqYCfOUQMWjL4YCWZsqMT12P/ZGrUFBqtGl1L07Cb/7ybWEOIEZZAT
-         QXeluptO5gTT0Y8dlK3kC7XE8ZNx8PGHybDxpAc77hbfyV0Pdqy+EB7bOePegFcu//hT
-         Wcog==
-X-Gm-Message-State: AOAM533ojW2EoDNkdmG1kjQMloPRwmt8eWIqV+lUY8BWu5yLV0R5fYBf
-        WA1DuDU+xZYg0E2asjfLIpI4EXuMW2u4AQ==
-X-Google-Smtp-Source: ABdhPJwrtWoK6TAjkCMcGUSuVkzv9DxW/3FrqZvLStmAWpY/6EKvwNcFbQyy9OA4Sq7EnCigTcNxqA==
-X-Received: by 2002:a05:6512:3398:: with SMTP id h24mr8399914lfg.135.1593416545225;
-        Mon, 29 Jun 2020 00:42:25 -0700 (PDT)
-Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id e29sm7826437lfc.51.2020.06.29.00.42.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YW2cEsPoVOANORC8b/EG6UO/ChXsjB8EetXmH7OMF1M=;
+        b=FsGWPNIEpzdEsJJ0gglTajI5xXTO9wpwEWNuUzmDFOHmluazTMsY6PV0fTxl/iet11
+         QJhydjlisBQVkq0vie1nIB5E9x8ZzakdqY11eFa1gEfXhZeE8KWZnmzHscKZq20ZpvS8
+         TS/qbsgWllINJRh7r6ItaNUISv1IUFfiDiQZwOJZJW7JPZeYjFwoRwjUVYy5t8ps6eHQ
+         ReNYcZK3FXDIx+W0C9ISZGecDNRMwbubVrJr2L/Dzn5mGXeti2Ac5g16SMOjkxSLXdgK
+         QDfpwNuXqlXANM2X+AQZ0vXDfjQIV0yKs7e32nGInPfbRyfSRZFX70jS3/wx0Jp98kJr
+         7GGQ==
+X-Gm-Message-State: AOAM5302BDr1S7DjChAJSLPjSI6OKHT27gkiLZN5WD0bvNQ982FtnyWA
+        5yUf7rpjAQ8n8qZc4wyZd7ra3g==
+X-Google-Smtp-Source: ABdhPJyCMTTI5fepeVzQW/4K8YIvYXMEERDWihv0e+7RbHjTB4L35LYo47ifNzqXI18r4+xZL/pjvg==
+X-Received: by 2002:a1c:8094:: with SMTP id b142mr13990136wmd.122.1593424789741;
+        Mon, 29 Jun 2020 02:59:49 -0700 (PDT)
+Received: from antares.lan (d.b.7.8.9.b.a.6.9.b.2.7.e.d.5.5.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:55de:72b9:6ab9:87bd])
+        by smtp.gmail.com with ESMTPSA id y7sm42565369wrt.11.2020.06.29.02.59.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 00:42:24 -0700 (PDT)
-References: <159312606846.18340.6821004346409614051.stgit@john-XPS-13-9370> <159312679888.18340.15248924071966273998.stgit@john-XPS-13-9370>
-User-agent: mu4e 1.1.0; emacs 26.3
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     kafai@fb.com, daniel@iogearbox.net, ast@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [bpf PATCH v2 2/3] bpf, sockmap: RCU dereferenced psock may be used outside RCU block
-In-reply-to: <159312679888.18340.15248924071966273998.stgit@john-XPS-13-9370>
-Date:   Mon, 29 Jun 2020 09:42:23 +0200
-Message-ID: <87d05imi74.fsf@cloudflare.com>
+        Mon, 29 Jun 2020 02:59:49 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     ast@kernel.org, daniel@iogearbox.net, sdf@google.com,
+        jakub@cloudflare.com, john.fastabend@gmail.com
+Cc:     kernel-team@cloudflare.com, bpf@vger.kernel.org,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf v2 5/6] selftests: bpf: pass program and target_fd in flow_dissector_reattach
+Date:   Mon, 29 Jun 2020 10:56:29 +0100
+Message-Id: <20200629095630.7933-6-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200629095630.7933-1-lmb@cloudflare.com>
+References: <20200629095630.7933-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 01:13 AM CEST, John Fastabend wrote:
-> If an ingress verdict program specifies message sizes greater than
-> skb->len and there is an ENOMEM error due to memory pressure we
-> may call the rcv_msg handler outside the strp_data_ready() caller
-> context. This is because on an ENOMEM error the strparser will
-> retry from a workqueue. The caller currently protects the use of
-> psock by calling the strp_data_ready() inside a rcu_read_lock/unlock
-> block.
->
-> But, in above workqueue error case the psock is accessed outside
-> the read_lock/unlock block of the caller. So instead of using
-> psock directly we must do a look up against the sk again to
-> ensure the psock is available.
->
-> There is an an ugly piece here where we must handle
-> the case where we paused the strp and removed the psock. On
-> psock removal we first pause the strparser and then remove
-> the psock. If the strparser is paused while an skb is
-> scheduled on the workqueue the skb will be dropped on the
-> flow and kfree_skb() is called. If the workqueue manages
-> to get called before we pause the strparser but runs the rcvmsg
-> callback after the psock is removed we will hit the unlikely
-> case where we run the sockmap rcvmsg handler but do not have
-> a psock. For now we will follow strparser logic and drop the
-> skb on the floor with skb_kfree(). This is ugly because the
-> data is dropped. To date this has not caused problems in practice
-> because either the application controlling the sockmap is
-> coordinating with the datapath so that skbs are "flushed"
-> before removal or we simply wait for the sock to be closed before
-> removing it.
->
-> This patch fixes the describe RCU bug and dropping the skb doesn't
-> make things worse. Future patches will improve this by allowing
-> the normal case where skbs are not merged to skip the strparser
-> altogether. In practice many (most?) use cases have no need to
-> merge skbs so its both a code complexity hit as seen above and
-> a performance issue. For example, in the Cilium case we always
-> set the strparser up to return sbks 1:1 without any merging and
-> have avoided above issues.
->
-> Fixes: e91de6afa81c1 ("bpf: Fix running sk_skb program types with ktls")
-> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-> ---
+Pass 0 as target_fd when attaching and detaching flow dissector.
+Additionally, pass the expected program when detaching.
 
-LGTM. Sorry for the delay, needed to make sure I understand this.
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Fixes: 1f043f87bb59 ("selftests/bpf: Add tests for attaching bpf_link to netns")
+---
+ .../bpf/prog_tests/flow_dissector_reattach.c         | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector_reattach.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector_reattach.c
+index 15cb554a66d8..d70adbc7309a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/flow_dissector_reattach.c
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector_reattach.c
+@@ -116,7 +116,7 @@ static void test_prog_attach_prog_attach(int netns, int prog1, int prog2)
+ 	CHECK_FAIL(query_attached_prog_id(netns) != query_prog_id(prog2));
+ 
+ out_detach:
+-	err = bpf_prog_detach(0, BPF_FLOW_DISSECTOR);
++	err = bpf_prog_detach2(prog2, 0, BPF_FLOW_DISSECTOR);
+ 	if (CHECK_FAIL(err))
+ 		perror("bpf_prog_detach");
+ 	CHECK_FAIL(prog_is_attached(netns));
+@@ -152,7 +152,7 @@ static void test_prog_attach_link_create(int netns, int prog1, int prog2)
+ 	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts);
+ 	int err, link;
+ 
+-	err = bpf_prog_attach(prog1, -1, BPF_FLOW_DISSECTOR, 0);
++	err = bpf_prog_attach(prog1, 0, BPF_FLOW_DISSECTOR, 0);
+ 	if (CHECK_FAIL(err)) {
+ 		perror("bpf_prog_attach(prog1)");
+ 		return;
+@@ -168,7 +168,7 @@ static void test_prog_attach_link_create(int netns, int prog1, int prog2)
+ 		close(link);
+ 	CHECK_FAIL(query_attached_prog_id(netns) != query_prog_id(prog1));
+ 
+-	err = bpf_prog_detach(-1, BPF_FLOW_DISSECTOR);
++	err = bpf_prog_detach2(prog1, 0, BPF_FLOW_DISSECTOR);
+ 	if (CHECK_FAIL(err))
+ 		perror("bpf_prog_detach");
+ 	CHECK_FAIL(prog_is_attached(netns));
+@@ -188,7 +188,7 @@ static void test_link_create_prog_attach(int netns, int prog1, int prog2)
+ 
+ 	/* Expect failure attaching prog when link exists */
+ 	errno = 0;
+-	err = bpf_prog_attach(prog2, -1, BPF_FLOW_DISSECTOR, 0);
++	err = bpf_prog_attach(prog2, 0, BPF_FLOW_DISSECTOR, 0);
+ 	if (CHECK_FAIL(!err || errno != EEXIST))
+ 		perror("bpf_prog_attach(prog2) expected EEXIST");
+ 	CHECK_FAIL(query_attached_prog_id(netns) != query_prog_id(prog1));
+@@ -211,7 +211,7 @@ static void test_link_create_prog_detach(int netns, int prog1, int prog2)
+ 
+ 	/* Expect failure detaching prog when link exists */
+ 	errno = 0;
+-	err = bpf_prog_detach(-1, BPF_FLOW_DISSECTOR);
++	err = bpf_prog_detach2(prog1, 0, BPF_FLOW_DISSECTOR);
+ 	if (CHECK_FAIL(!err || errno != EINVAL))
+ 		perror("bpf_prog_detach expected EINVAL");
+ 	CHECK_FAIL(query_attached_prog_id(netns) != query_prog_id(prog1));
+@@ -231,7 +231,7 @@ static void test_prog_attach_detach_query(int netns, int prog1, int prog2)
+ 	}
+ 	CHECK_FAIL(query_attached_prog_id(netns) != query_prog_id(prog1));
+ 
+-	err = bpf_prog_detach(0, BPF_FLOW_DISSECTOR);
++	err = bpf_prog_detach2(prog1, 0, BPF_FLOW_DISSECTOR);
+ 	if (CHECK_FAIL(err)) {
+ 		perror("bpf_prog_detach");
+ 		return;
+-- 
+2.25.1
+
