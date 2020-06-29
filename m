@@ -2,81 +2,124 @@ Return-Path: <SRS0=DuKs=AK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A85B2C433E1
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0143C433DF
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:09:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81886206F1
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:09:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90CFF206F1
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:09:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DOW+nDlK"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="MAEwAxmw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730201AbgF2TIs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 15:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730515AbgF2TCm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:02:42 -0400
-Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D271C02A555;
-        Mon, 29 Jun 2020 06:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=MUpR3vxb/3x7pTgYotaCnl85fDRP0t+XWiQf/ROkfg0=; b=DOW+nDlKUSsiGmK5DH33nDnu+G
-        WQD2B/v3z8dljEfR8h8SR5xiWTW0ipG8Wiz7Gp4w3ZkYZAnLqHLVRsBh5RdKZ7JcCu+FqDm5lqGms
-        WIOQU9BqRysseIn7+alAM3ekaP6gzbrQvU9qIyhm0sTrYtrdSrmbi7ys3nIZaieB7dkOdHIsGgvZ+
-        i0ZxE45pWYhPHfkPiBOpqTXdf4I/frWWCsctA+aiESgiY8Mkw3YG/6U7BI0NIeKcFOb6LMXK8GLix
-        gPLLcd1n+bfPSALMaQyoZB4IBXEZEXNxBWcAgu/4T+YMv0eHMzD5eCJbRYSF8BDoQW3wVUsCJgzWH
-        +4JMo08Q==;
-Received: from [2001:4bb8:184:76e3:c71:f334:376b:cf5f] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jptSA-0004Xh-2X; Mon, 29 Jun 2020 13:04:06 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>
-Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] xsk: remove a double pool->dev assignment in xp_dma_map
-Date:   Mon, 29 Jun 2020 15:03:58 +0200
-Message-Id: <20200629130359.2690853-4-hch@lst.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200629130359.2690853-1-hch@lst.de>
-References: <20200629130359.2690853-1-hch@lst.de>
+        id S1730487AbgF2TJV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 15:09:21 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7240 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728118AbgF2TJL (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 29 Jun 2020 15:09:11 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05T5rWiD013055
+        for <bpf@vger.kernel.org>; Sun, 28 Jun 2020 22:58:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=PXwo5w25H1G3trFLqpf6ijaWoyxKihUhCvb9tnUjxmk=;
+ b=MAEwAxmwX9IbQ+/LhoO8OUG4LxYmT//9QLKqCAIRNPKNO6ywihqUMAZ74tjiWf306UlT
+ lQya+YSxxOW+uWxHrxS7mRbm9zeChqxBkN9VtdlUyKodUaLotXXr/LCxEhw3egY8HLpX
+ kFMKbxptCaly8puWDd+yz2a8ORLQVmC2vD4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31xp3rauug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 28 Jun 2020 22:58:21 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Sun, 28 Jun 2020 22:58:20 -0700
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id BA97B62E520B; Sun, 28 Jun 2020 22:55:39 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Song Liu <songliubraving@fb.com>
+Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <peterz@infradead.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <kernel-team@fb.com>, <john.fastabend@gmail.com>,
+        <kpsingh@chromium.org>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v4 bpf-next 3/4] bpf: allow %pB in bpf_seq_printf() and bpf_trace_printk()
+Date:   Sun, 28 Jun 2020 22:55:29 -0700
+Message-ID: <20200629055530.3244342-4-songliubraving@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200629055530.3244342-1-songliubraving@fb.com>
+References: <20200629055530.3244342-1-songliubraving@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-29_04:2020-06-26,2020-06-29 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ adultscore=0 lowpriorityscore=0 mlxscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 spamscore=0 priorityscore=1501 suspectscore=8 clxscore=1015
+ cotscore=-2147483648 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006290042
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-->dev is already assigned at the top of the function, remove the duplicate
-one at the end.
+This makes it easy to dump stack trace in text.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- net/xdp/xsk_buff_pool.c | 1 -
- 1 file changed, 1 deletion(-)
+ kernel/trace/bpf_trace.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 9fe84c797a7060..6733e2c59e4835 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -193,7 +193,6 @@ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
- 	if (pool->unaligned)
- 		xp_check_dma_contiguity(pool);
- 
--	pool->dev = dev;
- 	pool->dma_need_sync = !xp_check_cheap_dma(pool);
- 	return 0;
- }
--- 
-2.26.2
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 977ba3b6f6c64..1d874d8e4384b 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -376,7 +376,7 @@ static void bpf_trace_copy_string(char *buf, void *un=
+safe_ptr, char fmt_ptype,
+=20
+ /*
+  * Only limited trace_printk() conversion specifiers allowed:
+- * %d %i %u %x %ld %li %lu %lx %lld %lli %llu %llx %p %pks %pus %s
++ * %d %i %u %x %ld %li %lu %lx %lld %lli %llu %llx %p %pB %pks %pus %s
+  */
+ BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_size, u64, arg1,
+ 	   u64, arg2, u64, arg3)
+@@ -420,6 +420,11 @@ BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_s=
+ize, u64, arg1,
+ 				goto fmt_str;
+ 			}
+=20
++			if (fmt[i + 1] =3D=3D 'B') {
++				i++;
++				goto fmt_next;
++			}
++
+ 			/* disallow any further format extensions */
+ 			if (fmt[i + 1] !=3D 0 &&
+ 			    !isspace(fmt[i + 1]) &&
+@@ -636,7 +641,8 @@ BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char=
+ *, fmt, u32, fmt_size,
+ 		if (fmt[i] =3D=3D 'p') {
+ 			if (fmt[i + 1] =3D=3D 0 ||
+ 			    fmt[i + 1] =3D=3D 'K' ||
+-			    fmt[i + 1] =3D=3D 'x') {
++			    fmt[i + 1] =3D=3D 'x' ||
++			    fmt[i + 1] =3D=3D 'B') {
+ 				/* just kernel pointers */
+ 				params[fmt_cnt] =3D args[fmt_cnt];
+ 				fmt_cnt++;
+--=20
+2.24.1
 
