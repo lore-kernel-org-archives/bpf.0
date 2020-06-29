@@ -2,97 +2,131 @@ Return-Path: <SRS0=DuKs=AK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E899C433E2
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:07:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F39BC433DF
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:08:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 364CE208D5
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:07:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 814C220720
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 19:08:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FTbcEof5"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="qk1Cj7ld"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730199AbgF2THs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 15:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
+        id S1730283AbgF2TIX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 15:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730671AbgF2THn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:07:43 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40530C031C6A;
-        Mon, 29 Jun 2020 10:48:36 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id t74so9629718lff.2;
-        Mon, 29 Jun 2020 10:48:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ybGXMKNhDBo5PBd7dMGTNB+NKn/M8wbDbj+FSv497kA=;
-        b=FTbcEof5mQ5AtbU2qMu8nqf/RaXgjo+qUZz2FYAp7+7T5toEGdniO0LzE8R1Z8u8qf
-         xQ5Md/ebsR8A/RKHeRU1M4N8QpxvpPyuJ5PiFjbp0HwLcyRAcCqJh6w5+73zNJXPaRNg
-         qJGsSvumlSa/DU+20IYMSWg0KcfR+ZDxFLtzGADNGcY2lW8AcYdeNxga3M8N3Op4C87r
-         NbW1si6I1BQukRPlMdqro2tpbrxQTvR2LRrv3EDKk4gZ+Rv+VvFUxQkkQa6Y5ruBbhUJ
-         daFntdO4bwspNqRGwLgkLgubsBMokEXJFxOq5yxIs88z43RINNxGuRlmNyNUewT7dG6M
-         o6IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ybGXMKNhDBo5PBd7dMGTNB+NKn/M8wbDbj+FSv497kA=;
-        b=sngSP58VdNsW0b5z5rJ4J5kQflyxpqy4V5i6nMc+MfDCt/MM+fRlW4tzTq4QCE92J2
-         MWsyQlDglyQlkCvLeJIplBdp8yFe5YPyRBvqgEaopK+SfYikNKPn4uXtp8z5sXd5bwNU
-         lgDzHuPfOupuvvfUX7R3RoO+6isuoqhajhsI1gc7vBGVVA0FwHnIRsmHJ4IpQVcD5rnv
-         EOEDj5PpRGs4ZFtAeLcGBF/9zHt23tQ/xbHQQCyRINdae1a740Kux4c8FrrBK5eWUDPL
-         VsKIIv0LuwRVDzttCmMNUnyjiUaMIBEOq9ec7xeqMemDv9IaDUeuLJyZwvi5GRdoCi9x
-         HYgg==
-X-Gm-Message-State: AOAM5332rhyNJDa7LhBbj9u0+0+5hRrZIKbauBCLlRjxf1q8jlNZhAYP
-        D3zAZs6jagJNCIh5av3zfFU6R7YYcewApgeY0EW3Tg==
-X-Google-Smtp-Source: ABdhPJzZDr0HwEoLFL7dYzolxGZR+HKuaAQBS5yCdNgwW0eFKrNa/0UgV6HRDrUsRbVYgAhakBOutFkj1UCxakKoAWM=
-X-Received: by 2002:a05:6512:49d:: with SMTP id v29mr9912417lfq.134.1593452914654;
- Mon, 29 Jun 2020 10:48:34 -0700 (PDT)
+        with ESMTP id S1730517AbgF2TCm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:02:42 -0400
+Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AB3C02A554;
+        Mon, 29 Jun 2020 06:04:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=WyEJJJCgRVGRkU8WN9UhcfcVIsZ/sAYcYt3L52514pY=; b=qk1Cj7ldG0VpKJ1L7Ep/8xe7Pp
+        9k8cZZkYCa9IL95hgfUKHEHwW5s0KAblbjeuqZsBnnI19CuvowPCfw1dTLPgKS3FkUrR2h/n+PY06
+        97TcUIzDwgjb3IoJlyscKkAb+5yQbGTCnnbpdeI4EHtPTtcKUIydPZpk1bl3qU3VujBRKSjd6eZOE
+        xa8Uy4g5ks9sala8WPuPI2bA+n2Uemvv63DHiSiJB2j0isoWOYVRwxxV9ATckd3YJ84tCER+b87zL
+        98iF0nzBOOdoXt6wfFrzLO8gp5Is05eIxrkinodskxZv/6i5kYtNMdYJ5hn9S2090WmBMKAHWHzL+
+        w/V6IeJQ==;
+Received: from [2001:4bb8:184:76e3:c71:f334:376b:cf5f] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jptS8-0004XF-Gg; Mon, 29 Jun 2020 13:04:05 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>
+Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/4] xsk: replace the cheap_dma flag with a dma_need_sync flag
+Date:   Mon, 29 Jun 2020 15:03:57 +0200
+Message-Id: <20200629130359.2690853-3-hch@lst.de>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200629130359.2690853-1-hch@lst.de>
+References: <20200629130359.2690853-1-hch@lst.de>
 MIME-Version: 1.0
-References: <20200629093336.20963-1-tklauser@distanz.ch> <20200629093336.20963-2-tklauser@distanz.ch>
-In-Reply-To: <20200629093336.20963-2-tklauser@distanz.ch>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 29 Jun 2020 10:48:23 -0700
-Message-ID: <CAADnVQLNAJoV1-0jADDMA=pv7f_P6nNdDVnYnVsLFQxJNgWbuQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf, x86: Factor common x86 JIT code
-To:     Tobias Klauser <tklauser@distanz.ch>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Wang YanQing <udknight@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 2:33 AM Tobias Klauser <tklauser@distanz.ch> wrote:
->
-> Factor out code common for 32-bit and 64-bit x86 BPF JITs to bpf_jit.h
->
-> Also follow other architectures and rename bpf_jit_comp.c to
-> bpf_jit_comp64.c to be more explicit.
->
-> Also adjust the file matching pattern in MAINTAINERS such that the
-> common x86 files are included for both the 32-bit and 64-bit BPF JIT
-> sections.
->
-> Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-> ---
->  MAINTAINERS                                   |   3 +-
->  arch/x86/net/Makefile                         |   2 +-
->  arch/x86/net/bpf_jit.h                        |  93 ++++++++++++
->  arch/x86/net/bpf_jit_comp32.c                 | 135 ++++--------------
->  .../net/{bpf_jit_comp.c => bpf_jit_comp64.c}  |  84 +----------
->  5 files changed, 123 insertions(+), 194 deletions(-)
->  create mode 100644 arch/x86/net/bpf_jit.h
->  rename arch/x86/net/{bpf_jit_comp.c => bpf_jit_comp64.c} (96%)
+Invert the polarity and better name the flag so that the use case is
+properly documented.
 
-I don't see any value in such refactoring.
-Looks like code churn to me.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ include/net/xsk_buff_pool.h | 6 +++---
+ net/xdp/xsk_buff_pool.c     | 5 ++---
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+index a4ff226505c99c..6842990e2712bd 100644
+--- a/include/net/xsk_buff_pool.h
++++ b/include/net/xsk_buff_pool.h
+@@ -40,7 +40,7 @@ struct xsk_buff_pool {
+ 	u32 headroom;
+ 	u32 chunk_size;
+ 	u32 frame_len;
+-	bool cheap_dma;
++	bool dma_need_sync;
+ 	bool unaligned;
+ 	void *addrs;
+ 	struct device *dev;
+@@ -80,7 +80,7 @@ static inline dma_addr_t xp_get_frame_dma(struct xdp_buff_xsk *xskb)
+ void xp_dma_sync_for_cpu_slow(struct xdp_buff_xsk *xskb);
+ static inline void xp_dma_sync_for_cpu(struct xdp_buff_xsk *xskb)
+ {
+-	if (xskb->pool->cheap_dma)
++	if (!xskb->pool->dma_need_sync)
+ 		return;
+ 
+ 	xp_dma_sync_for_cpu_slow(xskb);
+@@ -91,7 +91,7 @@ void xp_dma_sync_for_device_slow(struct xsk_buff_pool *pool, dma_addr_t dma,
+ static inline void xp_dma_sync_for_device(struct xsk_buff_pool *pool,
+ 					  dma_addr_t dma, size_t size)
+ {
+-	if (pool->cheap_dma)
++	if (!pool->dma_need_sync)
+ 		return;
+ 
+ 	xp_dma_sync_for_device_slow(pool, dma, size);
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 540ed75e44821c..9fe84c797a7060 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -55,7 +55,6 @@ struct xsk_buff_pool *xp_create(struct page **pages, u32 nr_pages, u32 chunks,
+ 	pool->free_heads_cnt = chunks;
+ 	pool->headroom = headroom;
+ 	pool->chunk_size = chunk_size;
+-	pool->cheap_dma = true;
+ 	pool->unaligned = unaligned;
+ 	pool->frame_len = chunk_size - headroom - XDP_PACKET_HEADROOM;
+ 	INIT_LIST_HEAD(&pool->free_list);
+@@ -195,7 +194,7 @@ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
+ 		xp_check_dma_contiguity(pool);
+ 
+ 	pool->dev = dev;
+-	pool->cheap_dma = xp_check_cheap_dma(pool);
++	pool->dma_need_sync = !xp_check_cheap_dma(pool);
+ 	return 0;
+ }
+ EXPORT_SYMBOL(xp_dma_map);
+@@ -280,7 +279,7 @@ struct xdp_buff *xp_alloc(struct xsk_buff_pool *pool)
+ 	xskb->xdp.data = xskb->xdp.data_hard_start + XDP_PACKET_HEADROOM;
+ 	xskb->xdp.data_meta = xskb->xdp.data;
+ 
+-	if (!pool->cheap_dma) {
++	if (pool->dma_need_sync) {
+ 		dma_sync_single_range_for_device(pool->dev, xskb->dma, 0,
+ 						 pool->frame_len,
+ 						 DMA_BIDIRECTIONAL);
+-- 
+2.26.2
+
