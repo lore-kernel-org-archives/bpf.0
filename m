@@ -2,596 +2,252 @@ Return-Path: <SRS0=DuKs=AK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51B4DC433DF
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:51:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 652F5C433E0
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:52:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3230E206F1
-	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:51:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F84420663
+	for <bpf@archiver.kernel.org>; Mon, 29 Jun 2020 20:52:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="h7oYUfvr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731640AbgF2Uva (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 16:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
+        id S1730094AbgF2Uw1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 16:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730470AbgF2TN3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:13:29 -0400
-Received: from sym2.noone.org (sym2.noone.org [IPv6:2a01:4f8:120:4161::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435F3C0086E0
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 02:33:39 -0700 (PDT)
-Received: by sym2.noone.org (Postfix, from userid 1002)
-        id 49wMk85dTTzvjdX; Mon, 29 Jun 2020 11:33:36 +0200 (CEST)
-From:   Tobias Klauser <tklauser@distanz.ch>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Wang YanQing <udknight@gmail.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, x86@kernel.org
-Subject: [PATCH bpf-next 1/2] bpf, x86: Factor common x86 JIT code
-Date:   Mon, 29 Jun 2020 11:33:35 +0200
-Message-Id: <20200629093336.20963-2-tklauser@distanz.ch>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20200629093336.20963-1-tklauser@distanz.ch>
-References: <20200629093336.20963-1-tklauser@distanz.ch>
+        with ESMTP id S1731369AbgF2TN1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:13:27 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8708C008644
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 02:59:49 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id g75so14757471wme.5
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 02:59:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=oFfXGUJ5tvK97U58LQIn0NKX672onJPqp41bujeJCXE=;
+        b=h7oYUfvrC3xot+cEiTG2VjZ8Kso5bLdXrVOsqfSBjHbv97QeHI2E/CM9cBddbLeZ02
+         n/xOu90a6kB91tMUIC5lYjilqbTFwjNGrDn3vNIj+QvQc0uAv/e1HqHQj3mGShOmYUG4
+         v1ajfZJdem+3WCV033nM3guNV4FKC1sKEBtfE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=oFfXGUJ5tvK97U58LQIn0NKX672onJPqp41bujeJCXE=;
+        b=A76h49zkwCDa/YvCyZFnArn3XEA2w3I2qrTz8rTELtjqWmRTbHQODlzTLrN+qleARo
+         ooDXj9i2M+0eotE88GAIntcSgqynhwMdtBSYMCc/PAhCp2wc23lCDuUjUovr700hd2x2
+         SlLvgYkLpHlzGyhH52ASUgtVsuDqGUqgB3+8ITamLWy61F9h8vio8LTOSHArN4P8PRzX
+         rOnK1TmYeYRdrW2wcwr2RHruyMgP8Z58VQ7HfILC9pish1kVU35CmBVCNMeZiSJhBKXK
+         3W1eNu0LMpJ5B8wxfCeMr5kBSh0Lxaq9z/aFtyPPuA0aapot3Phlotpg1pkdHNfxjRaX
+         2AwA==
+X-Gm-Message-State: AOAM532I5BVvgniQuAYypHirP8q/tHubniclX7Jcc/YD4ZDKxciV7Wva
+        mGNQjCFDvPsHdb4xAcWWO8vZkmDtoZ9FMA==
+X-Google-Smtp-Source: ABdhPJwSR0cXrAQoAqc1/x0C7VFPJzbnrYCX47BAGZ0Ed9MBKo5K/KYizablzaeC3OdK1ndLrGm5Dw==
+X-Received: by 2002:a7b:c250:: with SMTP id b16mr8783236wmj.30.1593424788562;
+        Mon, 29 Jun 2020 02:59:48 -0700 (PDT)
+Received: from antares.lan (d.b.7.8.9.b.a.6.9.b.2.7.e.d.5.5.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:55de:72b9:6ab9:87bd])
+        by smtp.gmail.com with ESMTPSA id y7sm42565369wrt.11.2020.06.29.02.59.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 02:59:47 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     ast@kernel.org, daniel@iogearbox.net, sdf@google.com,
+        jakub@cloudflare.com, john.fastabend@gmail.com
+Cc:     kernel-team@cloudflare.com, bpf@vger.kernel.org,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf v2 4/6] bpf: sockmap: require attach_bpf_fd when detaching a program
+Date:   Mon, 29 Jun 2020 10:56:28 +0100
+Message-Id: <20200629095630.7933-5-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200629095630.7933-1-lmb@cloudflare.com>
+References: <20200629095630.7933-1-lmb@cloudflare.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Factor out code common for 32-bit and 64-bit x86 BPF JITs to bpf_jit.h
+The sockmap code currently ignores the value of attach_bpf_fd when
+detaching a program. This is contrary to the usual behaviour of
+checking that attach_bpf_fd represents the currently attached
+program.
 
-Also follow other architectures and rename bpf_jit_comp.c to
-bpf_jit_comp64.c to be more explicit.
+Ensure that attach_bpf_fd is indeed the currently attached
+program. It turns out that all sockmap selftests already do this,
+which indicates that this is unlikely to cause breakage.
 
-Also adjust the file matching pattern in MAINTAINERS such that the
-common x86 files are included for both the 32-bit and 64-bit BPF JIT
-sections.
-
-Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
 ---
- MAINTAINERS                                   |   3 +-
- arch/x86/net/Makefile                         |   2 +-
- arch/x86/net/bpf_jit.h                        |  93 ++++++++++++
- arch/x86/net/bpf_jit_comp32.c                 | 135 ++++--------------
- .../net/{bpf_jit_comp.c => bpf_jit_comp64.c}  |  84 +----------
- 5 files changed, 123 insertions(+), 194 deletions(-)
- create mode 100644 arch/x86/net/bpf_jit.h
- rename arch/x86/net/{bpf_jit_comp.c => bpf_jit_comp64.c} (96%)
+ include/linux/bpf.h   | 13 +++++++++--
+ include/linux/skmsg.h | 13 +++++++++++
+ kernel/bpf/syscall.c  |  2 +-
+ net/core/sock_map.c   | 50 ++++++++++++++++++++++++++++++++++++++-----
+ 4 files changed, 70 insertions(+), 8 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 301330e02bca..509e0c6a9590 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3326,7 +3326,8 @@ M:	Wang YanQing <udknight@gmail.com>
- L:	netdev@vger.kernel.org
- L:	bpf@vger.kernel.org
- S:	Maintained
--F:	arch/x86/net/bpf_jit_comp32.c
-+F:	arch/x86/net/
-+X:	arch/x86/net/bpf_jit_comp64.c
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 5d0506f46f24..6c3160fbae0b 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1555,13 +1555,16 @@ static inline void bpf_map_offload_map_free(struct bpf_map *map)
+ #endif /* CONFIG_NET && CONFIG_BPF_SYSCALL */
  
- BPF JIT for X86 64-BIT
- M:	Alexei Starovoitov <ast@kernel.org>
-diff --git a/arch/x86/net/Makefile b/arch/x86/net/Makefile
-index 383c87300b0d..bf71548fad2c 100644
---- a/arch/x86/net/Makefile
-+++ b/arch/x86/net/Makefile
-@@ -6,5 +6,5 @@
- ifeq ($(CONFIG_X86_32),y)
-         obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
- else
--        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o
-+        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
- endif
-diff --git a/arch/x86/net/bpf_jit.h b/arch/x86/net/bpf_jit.h
-new file mode 100644
-index 000000000000..44cbab10962a
---- /dev/null
-+++ b/arch/x86/net/bpf_jit.h
-@@ -0,0 +1,93 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Common functionality for x86 32-bit and 64-bit BPF JIT compilers
-+ */
-+#ifndef _BPF_JIT_H
-+#define _BPF_JIT_H
+ #if defined(CONFIG_BPF_STREAM_PARSER)
+-int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog, u32 which);
++int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
++			 struct bpf_prog *old, u32 which);
+ int sock_map_get_from_fd(const union bpf_attr *attr, struct bpf_prog *prog);
++int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype);
+ void sock_map_unhash(struct sock *sk);
+ void sock_map_close(struct sock *sk, long timeout);
+ #else
+ static inline int sock_map_prog_update(struct bpf_map *map,
+-				       struct bpf_prog *prog, u32 which)
++				       struct bpf_prog *prog,
++				       struct bpf_prog *old, u32 which)
+ {
+ 	return -EOPNOTSUPP;
+ }
+@@ -1571,6 +1574,12 @@ static inline int sock_map_get_from_fd(const union bpf_attr *attr,
+ {
+ 	return -EINVAL;
+ }
 +
-+#include <linux/bpf.h>
-+
-+static inline u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
++static inline int sock_map_prog_detach(const union bpf_attr *attr,
++				       enum bpf_prog_type ptype)
 +{
-+	if (len == 1)
-+		*ptr = bytes;
-+	else if (len == 2)
-+		*(u16 *)ptr = bytes;
-+	else {
-+		*(u32 *)ptr = bytes;
-+		barrier();
++	return -EOPNOTSUPP;
++}
+ #endif /* CONFIG_BPF_STREAM_PARSER */
+ 
+ #if defined(CONFIG_INET) && defined(CONFIG_BPF_SYSCALL)
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index 08674cd14d5a..1e9ed840b9fc 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -430,6 +430,19 @@ static inline void psock_set_prog(struct bpf_prog **pprog,
+ 		bpf_prog_put(prog);
+ }
+ 
++static inline int psock_replace_prog(struct bpf_prog **pprog,
++				     struct bpf_prog *prog,
++				     struct bpf_prog *old)
++{
++	if (cmpxchg(pprog, old, prog) != old)
++		return -ENOENT;
++
++	if (old)
++		bpf_prog_put(old);
++
++	return 0;
++}
++
+ static inline void psock_progs_drop(struct sk_psock_progs *progs)
+ {
+ 	psock_set_prog(&progs->msg_parser, NULL);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index c0ec572f056c..77340045b071 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2893,7 +2893,7 @@ static int bpf_prog_detach(const union bpf_attr *attr)
+ 	switch (ptype) {
+ 	case BPF_PROG_TYPE_SK_MSG:
+ 	case BPF_PROG_TYPE_SK_SKB:
+-		return sock_map_get_from_fd(attr, NULL);
++		return sock_map_prog_detach(attr, ptype);
+ 	case BPF_PROG_TYPE_LIRC_MODE2:
+ 		return lirc_prog_detach(attr);
+ 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index db45c1453d39..119f52a99dc1 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -77,7 +77,42 @@ int sock_map_get_from_fd(const union bpf_attr *attr, struct bpf_prog *prog)
+ 	map = __bpf_map_get(f);
+ 	if (IS_ERR(map))
+ 		return PTR_ERR(map);
+-	ret = sock_map_prog_update(map, prog, attr->attach_type);
++	ret = sock_map_prog_update(map, prog, NULL, attr->attach_type);
++	fdput(f);
++	return ret;
++}
++
++int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype)
++{
++	u32 ufd = attr->target_fd;
++	struct bpf_prog *prog;
++	struct bpf_map *map;
++	struct fd f;
++	int ret;
++
++	if (attr->attach_flags || attr->replace_bpf_fd)
++		return -EINVAL;
++
++	f = fdget(ufd);
++	map = __bpf_map_get(f);
++	if (IS_ERR(map))
++		return PTR_ERR(map);
++
++	prog = bpf_prog_get(attr->attach_bpf_fd);
++	if (IS_ERR(prog)) {
++		ret = PTR_ERR(prog);
++		goto put_map;
 +	}
-+	return ptr + len;
-+}
 +
-+#define EMIT(bytes, len) \
-+	do { prog = emit_code(prog, bytes, len); cnt += len; } while (0)
++	if (prog->type != ptype) {
++		ret = -EINVAL;
++		goto put_prog;
++	}
 +
-+#define EMIT1(b1)		EMIT(b1, 1)
-+#define EMIT2(b1, b2)		EMIT((b1) + ((b2) << 8), 2)
-+#define EMIT3(b1, b2, b3)	EMIT((b1) + ((b2) << 8) + ((b3) << 16), 3)
-+#define EMIT4(b1, b2, b3, b4)   EMIT((b1) + ((b2) << 8) + ((b3) << 16) + ((b4) << 24), 4)
-+
-+#define EMIT1_off32(b1, off) \
-+	do { EMIT1(b1); EMIT(off, 4); } while (0)
-+#define EMIT2_off32(b1, b2, off) \
-+	do { EMIT2(b1, b2); EMIT(off, 4); } while (0)
-+#define EMIT3_off32(b1, b2, b3, off) \
-+	do { EMIT3(b1, b2, b3); EMIT(off, 4); } while (0)
-+#define EMIT4_off32(b1, b2, b3, b4, off) \
-+	do { EMIT4(b1, b2, b3, b4); EMIT(off, 4); } while (0)
-+
-+static inline bool is_imm8(int value)
-+{
-+	return value <= 127 && value >= -128;
-+}
-+
-+static inline bool is_simm32(s64 value)
-+{
-+	return value == (s64)(s32)value;
-+}
-+
-+static inline int bpf_size_to_x86_bytes(int bpf_size)
-+{
-+	if (bpf_size == BPF_W)
-+		return 4;
-+	else if (bpf_size == BPF_H)
-+		return 2;
-+	else if (bpf_size == BPF_B)
-+		return 1;
-+	else if (bpf_size == BPF_DW)
-+		return 4; /* imm32 */
-+	else
-+		return 0;
-+}
-+
-+/*
-+ * List of x86 cond jumps opcodes (. + s8)
-+ * Add 0x10 (and an extra 0x0f) to generate far jumps (. + s32)
-+ */
-+#define X86_JB  0x72
-+#define X86_JAE 0x73
-+#define X86_JE  0x74
-+#define X86_JNE 0x75
-+#define X86_JBE 0x76
-+#define X86_JA  0x77
-+#define X86_JL  0x7C
-+#define X86_JGE 0x7D
-+#define X86_JLE 0x7E
-+#define X86_JG  0x7F
-+
-+/* Maximum number of bytes emitted while JITing one eBPF insn */
-+#define BPF_MAX_INSN_SIZE	128
-+#define BPF_INSN_SAFETY		64
-+
-+static inline void jit_fill_hole(void *area, unsigned int size)
-+{
-+	/* Fill whole space with INT3 instructions */
-+	memset(area, 0xcc, size);
-+}
-+
-+struct jit_context {
-+	int cleanup_addr; /* Epilogue code offset */
-+};
-+
-+#endif /* _BPF_JIT_H */
-diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-index 96fde03aa987..aabb44e08737 100644
---- a/arch/x86/net/bpf_jit_comp32.c
-+++ b/arch/x86/net/bpf_jit_comp32.c
-@@ -16,6 +16,7 @@
- #include <asm/set_memory.h>
- #include <asm/nospec-branch.h>
- #include <linux/bpf.h>
-+#include "bpf_jit.h"
- 
- /*
-  * eBPF prog stack layout:
-@@ -47,49 +48,8 @@
-  *                                low
-  */
- 
--static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
--{
--	if (len == 1)
--		*ptr = bytes;
--	else if (len == 2)
--		*(u16 *)ptr = bytes;
--	else {
--		*(u32 *)ptr = bytes;
--		barrier();
--	}
--	return ptr + len;
--}
--
--#define EMIT(bytes, len) \
--	do { prog = emit_code(prog, bytes, len); cnt += len; } while (0)
--
--#define EMIT1(b1)		EMIT(b1, 1)
--#define EMIT2(b1, b2)		EMIT((b1) + ((b2) << 8), 2)
--#define EMIT3(b1, b2, b3)	EMIT((b1) + ((b2) << 8) + ((b3) << 16), 3)
--#define EMIT4(b1, b2, b3, b4)   \
--	EMIT((b1) + ((b2) << 8) + ((b3) << 16) + ((b4) << 24), 4)
--
--#define EMIT1_off32(b1, off) \
--	do { EMIT1(b1); EMIT(off, 4); } while (0)
--#define EMIT2_off32(b1, b2, off) \
--	do { EMIT2(b1, b2); EMIT(off, 4); } while (0)
--#define EMIT3_off32(b1, b2, b3, off) \
--	do { EMIT3(b1, b2, b3); EMIT(off, 4); } while (0)
--#define EMIT4_off32(b1, b2, b3, b4, off) \
--	do { EMIT4(b1, b2, b3, b4); EMIT(off, 4); } while (0)
--
- #define jmp_label(label, jmp_insn_len) (label - cnt - jmp_insn_len)
- 
--static bool is_imm8(int value)
--{
--	return value <= 127 && value >= -128;
--}
--
--static bool is_simm32(s64 value)
--{
--	return value == (s64) (s32) value;
--}
--
- #define STACK_OFFSET(k)	(k)
- #define TCALL_CNT	(MAX_BPF_JIT_REG + 0)	/* Tail Call Count */
- 
-@@ -102,21 +62,6 @@ static bool is_simm32(s64 value)
- #define IA32_EBP	(0x5)
- #define IA32_ESP	(0x4)
- 
--/*
-- * List of x86 cond jumps opcodes (. + s8)
-- * Add 0x10 (and an extra 0x0f) to generate far jumps (. + s32)
-- */
--#define IA32_JB  0x72
--#define IA32_JAE 0x73
--#define IA32_JE  0x74
--#define IA32_JNE 0x75
--#define IA32_JBE 0x76
--#define IA32_JA  0x77
--#define IA32_JL  0x7C
--#define IA32_JGE 0x7D
--#define IA32_JLE 0x7E
--#define IA32_JG  0x7F
--
- #define COND_JMP_OPCODE_INVALID	(0xFF)
- 
- /*
-@@ -196,12 +141,6 @@ static u8 add_2reg(u8 byte, u32 dst_reg, u32 src_reg)
- 	return byte + dst_reg + (src_reg << 3);
++	ret = sock_map_prog_update(map, NULL, prog, attr->attach_type);
++put_prog:
++	bpf_prog_put(prog);
++put_map:
+ 	fdput(f);
+ 	return ret;
+ }
+@@ -1212,27 +1247,32 @@ static struct sk_psock_progs *sock_map_progs(struct bpf_map *map)
  }
  
--static void jit_fill_hole(void *area, unsigned int size)
--{
--	/* Fill whole space with int3 instructions */
--	memset(area, 0xcc, size);
--}
--
- static inline void emit_ia32_mov_i(const u8 dst, const u32 val, bool dstk,
- 				   u8 **pprog)
+ int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
+-			 u32 which)
++			 struct bpf_prog *old, u32 which)
  {
-@@ -760,7 +699,7 @@ static inline void emit_ia32_lsh_r64(const u8 dst[], const u8 src[],
- 	/* cmp ecx,32 */
- 	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), 32);
- 	/* skip the next two instructions (4 bytes) when < 32 */
--	EMIT2(IA32_JB, 4);
-+	EMIT2(X86_JB, 4);
+ 	struct sk_psock_progs *progs = sock_map_progs(map);
++	struct bpf_prog **pprog;
  
- 	/* mov dreg_hi,dreg_lo */
- 	EMIT2(0x89, add_2reg(0xC0, dreg_hi, dreg_lo));
-@@ -813,7 +752,7 @@ static inline void emit_ia32_arsh_r64(const u8 dst[], const u8 src[],
- 	/* cmp ecx,32 */
- 	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), 32);
- 	/* skip the next two instructions (5 bytes) when < 32 */
--	EMIT2(IA32_JB, 5);
-+	EMIT2(X86_JB, 5);
+ 	if (!progs)
+ 		return -EOPNOTSUPP;
  
- 	/* mov dreg_lo,dreg_hi */
- 	EMIT2(0x89, add_2reg(0xC0, dreg_lo, dreg_hi));
-@@ -866,7 +805,7 @@ static inline void emit_ia32_rsh_r64(const u8 dst[], const u8 src[], bool dstk,
- 	/* cmp ecx,32 */
- 	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), 32);
- 	/* skip the next two instructions (4 bytes) when < 32 */
--	EMIT2(IA32_JB, 4);
-+	EMIT2(X86_JB, 4);
+ 	switch (which) {
+ 	case BPF_SK_MSG_VERDICT:
+-		psock_set_prog(&progs->msg_parser, prog);
++		pprog = &progs->msg_parser;
+ 		break;
+ 	case BPF_SK_SKB_STREAM_PARSER:
+-		psock_set_prog(&progs->skb_parser, prog);
++		pprog = &progs->skb_parser;
+ 		break;
+ 	case BPF_SK_SKB_STREAM_VERDICT:
+-		psock_set_prog(&progs->skb_verdict, prog);
++		pprog = &progs->skb_verdict;
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
  
- 	/* mov dreg_lo,dreg_hi */
- 	EMIT2(0x89, add_2reg(0xC0, dreg_lo, dreg_hi));
-@@ -1168,28 +1107,6 @@ static inline void emit_ia32_mul_i64(const u8 dst[], const u32 val,
- 	*pprog = prog;
++	if (old)
++		return psock_replace_prog(pprog, prog, old);
++
++	psock_set_prog(pprog, prog);
+ 	return 0;
  }
- 
--static int bpf_size_to_x86_bytes(int bpf_size)
--{
--	if (bpf_size == BPF_W)
--		return 4;
--	else if (bpf_size == BPF_H)
--		return 2;
--	else if (bpf_size == BPF_B)
--		return 1;
--	else if (bpf_size == BPF_DW)
--		return 4; /* imm32 */
--	else
--		return 0;
--}
--
--struct jit_context {
--	int cleanup_addr; /* Epilogue code offset */
--};
--
--/* Maximum number of bytes emitted while JITing one eBPF insn */
--#define BPF_MAX_INSN_SIZE	128
--#define BPF_INSN_SAFETY		64
--
- #define PROLOGUE_SIZE 35
- 
- /*
-@@ -1304,7 +1221,7 @@ static void emit_bpf_tail_call(u8 **pprog)
- 	EMIT3(0x39, add_2reg(0x40, IA32_EAX, IA32_EDX),
- 	      offsetof(struct bpf_array, map.max_entries));
- 	/* jbe out */
--	EMIT2(IA32_JBE, jmp_label(jmp_label1, 2));
-+	EMIT2(X86_JBE, jmp_label(jmp_label1, 2));
- 
- 	/*
- 	 * if (tail_call_cnt > MAX_TAIL_CALL_CNT)
-@@ -1317,12 +1234,12 @@ static void emit_bpf_tail_call(u8 **pprog)
- 
- 	/* cmp edx,hi */
- 	EMIT3(0x83, add_1reg(0xF8, IA32_EBX), hi);
--	EMIT2(IA32_JNE, 3);
-+	EMIT2(X86_JNE, 3);
- 	/* cmp ecx,lo */
- 	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), lo);
- 
- 	/* ja out */
--	EMIT2(IA32_JAE, jmp_label(jmp_label1, 2));
-+	EMIT2(X86_JAE, jmp_label(jmp_label1, 2));
- 
- 	/* add eax,0x1 */
- 	EMIT3(0x83, add_1reg(0xC0, IA32_ECX), 0x01);
-@@ -1345,7 +1262,7 @@ static void emit_bpf_tail_call(u8 **pprog)
- 	/* test edx,edx */
- 	EMIT2(0x85, add_2reg(0xC0, IA32_EDX, IA32_EDX));
- 	/* je out */
--	EMIT2(IA32_JE, jmp_label(jmp_label1, 2));
-+	EMIT2(X86_JE, jmp_label(jmp_label1, 2));
- 
- 	/* goto *(prog->bpf_func + prologue_size); */
- 	/* mov edx, dword ptr [edx + 32] */
-@@ -1397,59 +1314,59 @@ static u8 get_cond_jmp_opcode(const u8 op, bool is_cmp_lo)
- 	/* Convert BPF opcode to x86 */
- 	switch (op) {
- 	case BPF_JEQ:
--		jmp_cond = IA32_JE;
-+		jmp_cond = X86_JE;
- 		break;
- 	case BPF_JSET:
- 	case BPF_JNE:
--		jmp_cond = IA32_JNE;
-+		jmp_cond = X86_JNE;
- 		break;
- 	case BPF_JGT:
- 		/* GT is unsigned '>', JA in x86 */
--		jmp_cond = IA32_JA;
-+		jmp_cond = X86_JA;
- 		break;
- 	case BPF_JLT:
- 		/* LT is unsigned '<', JB in x86 */
--		jmp_cond = IA32_JB;
-+		jmp_cond = X86_JB;
- 		break;
- 	case BPF_JGE:
- 		/* GE is unsigned '>=', JAE in x86 */
--		jmp_cond = IA32_JAE;
-+		jmp_cond = X86_JAE;
- 		break;
- 	case BPF_JLE:
- 		/* LE is unsigned '<=', JBE in x86 */
--		jmp_cond = IA32_JBE;
-+		jmp_cond = X86_JBE;
- 		break;
- 	case BPF_JSGT:
- 		if (!is_cmp_lo)
- 			/* Signed '>', GT in x86 */
--			jmp_cond = IA32_JG;
-+			jmp_cond = X86_JG;
- 		else
- 			/* GT is unsigned '>', JA in x86 */
--			jmp_cond = IA32_JA;
-+			jmp_cond = X86_JA;
- 		break;
- 	case BPF_JSLT:
- 		if (!is_cmp_lo)
- 			/* Signed '<', LT in x86 */
--			jmp_cond = IA32_JL;
-+			jmp_cond = X86_JL;
- 		else
- 			/* LT is unsigned '<', JB in x86 */
--			jmp_cond = IA32_JB;
-+			jmp_cond = X86_JB;
- 		break;
- 	case BPF_JSGE:
- 		if (!is_cmp_lo)
- 			/* Signed '>=', GE in x86 */
--			jmp_cond = IA32_JGE;
-+			jmp_cond = X86_JGE;
- 		else
- 			/* GE is unsigned '>=', JAE in x86 */
--			jmp_cond = IA32_JAE;
-+			jmp_cond = X86_JAE;
- 		break;
- 	case BPF_JSLE:
- 		if (!is_cmp_lo)
- 			/* Signed '<=', LE in x86 */
--			jmp_cond = IA32_JLE;
-+			jmp_cond = X86_JLE;
- 		else
- 			/* LE is unsigned '<=', JBE in x86 */
--			jmp_cond = IA32_JBE;
-+			jmp_cond = X86_JBE;
- 		break;
- 	default: /* to silence GCC warning */
- 		jmp_cond = COND_JMP_OPCODE_INVALID;
-@@ -1972,7 +1889,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 			if (is_jmp64) {
- 				/* cmp dreg_hi,sreg_hi */
- 				EMIT2(0x39, add_2reg(0xC0, dreg_hi, sreg_hi));
--				EMIT2(IA32_JNE, 2);
-+				EMIT2(X86_JNE, 2);
- 			}
- 			/* cmp dreg_lo,sreg_lo */
- 			EMIT2(0x39, add_2reg(0xC0, dreg_lo, sreg_lo));
-@@ -2007,7 +1924,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 
- 			/* cmp dreg_hi,sreg_hi */
- 			EMIT2(0x39, add_2reg(0xC0, dreg_hi, sreg_hi));
--			EMIT2(IA32_JNE, 10);
-+			EMIT2(X86_JNE, 10);
- 			/* cmp dreg_lo,sreg_lo */
- 			EMIT2(0x39, add_2reg(0xC0, dreg_lo, sreg_lo));
- 			goto emit_cond_jmp_signed;
-@@ -2139,7 +2056,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 				EMIT2_off32(0xC7, add_1reg(0xC0, IA32_EBX), hi);
- 				/* cmp dreg_hi,sreg_hi */
- 				EMIT2(0x39, add_2reg(0xC0, dreg_hi, sreg_hi));
--				EMIT2(IA32_JNE, 2);
-+				EMIT2(X86_JNE, 2);
- 			}
- 			/* cmp dreg_lo,sreg_lo */
- 			EMIT2(0x39, add_2reg(0xC0, dreg_lo, sreg_lo));
-@@ -2184,7 +2101,7 @@ emit_cond_jmp:		jmp_cond = get_cond_jmp_opcode(BPF_OP(code), false);
- 			EMIT2_off32(0xC7, add_1reg(0xC0, IA32_EBX), hi);
- 			/* cmp dreg_hi,sreg_hi */
- 			EMIT2(0x39, add_2reg(0xC0, dreg_hi, sreg_hi));
--			EMIT2(IA32_JNE, 10);
-+			EMIT2(X86_JNE, 10);
- 			/* cmp dreg_lo,sreg_lo */
- 			EMIT2(0x39, add_2reg(0xC0, dreg_lo, sreg_lo));
- 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp64.c
-similarity index 96%
-rename from arch/x86/net/bpf_jit_comp.c
-rename to arch/x86/net/bpf_jit_comp64.c
-index 42b6709e6dc7..e8d0f784ab14 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp64.c
-@@ -16,46 +16,7 @@
- #include <asm/nospec-branch.h>
- #include <asm/text-patching.h>
- #include <asm/asm-prototypes.h>
--
--static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
--{
--	if (len == 1)
--		*ptr = bytes;
--	else if (len == 2)
--		*(u16 *)ptr = bytes;
--	else {
--		*(u32 *)ptr = bytes;
--		barrier();
--	}
--	return ptr + len;
--}
--
--#define EMIT(bytes, len) \
--	do { prog = emit_code(prog, bytes, len); cnt += len; } while (0)
--
--#define EMIT1(b1)		EMIT(b1, 1)
--#define EMIT2(b1, b2)		EMIT((b1) + ((b2) << 8), 2)
--#define EMIT3(b1, b2, b3)	EMIT((b1) + ((b2) << 8) + ((b3) << 16), 3)
--#define EMIT4(b1, b2, b3, b4)   EMIT((b1) + ((b2) << 8) + ((b3) << 16) + ((b4) << 24), 4)
--
--#define EMIT1_off32(b1, off) \
--	do { EMIT1(b1); EMIT(off, 4); } while (0)
--#define EMIT2_off32(b1, b2, off) \
--	do { EMIT2(b1, b2); EMIT(off, 4); } while (0)
--#define EMIT3_off32(b1, b2, b3, off) \
--	do { EMIT3(b1, b2, b3); EMIT(off, 4); } while (0)
--#define EMIT4_off32(b1, b2, b3, b4, off) \
--	do { EMIT4(b1, b2, b3, b4); EMIT(off, 4); } while (0)
--
--static bool is_imm8(int value)
--{
--	return value <= 127 && value >= -128;
--}
--
--static bool is_simm32(s64 value)
--{
--	return value == (s64)(s32)value;
--}
-+#include "bpf_jit.h"
- 
- static bool is_uimm32(u64 value)
- {
-@@ -69,35 +30,6 @@ static bool is_uimm32(u64 value)
- 			EMIT3(add_2mod(0x48, DST, SRC), 0x89, add_2reg(0xC0, DST, SRC)); \
- 	} while (0)
- 
--static int bpf_size_to_x86_bytes(int bpf_size)
--{
--	if (bpf_size == BPF_W)
--		return 4;
--	else if (bpf_size == BPF_H)
--		return 2;
--	else if (bpf_size == BPF_B)
--		return 1;
--	else if (bpf_size == BPF_DW)
--		return 4; /* imm32 */
--	else
--		return 0;
--}
--
--/*
-- * List of x86 cond jumps opcodes (. + s8)
-- * Add 0x10 (and an extra 0x0f) to generate far jumps (. + s32)
-- */
--#define X86_JB  0x72
--#define X86_JAE 0x73
--#define X86_JE  0x74
--#define X86_JNE 0x75
--#define X86_JBE 0x76
--#define X86_JA  0x77
--#define X86_JL  0x7C
--#define X86_JGE 0x7D
--#define X86_JLE 0x7E
--#define X86_JG  0x7F
--
- /* Pick a register outside of BPF range for JIT internal work */
- #define AUX_REG (MAX_BPF_JIT_REG + 1)
- #define X86_REG_R9 (MAX_BPF_JIT_REG + 2)
-@@ -205,20 +137,6 @@ static u8 add_2reg(u8 byte, u32 dst_reg, u32 src_reg)
- 	return byte + reg2hex[dst_reg] + (reg2hex[src_reg] << 3);
- }
- 
--static void jit_fill_hole(void *area, unsigned int size)
--{
--	/* Fill whole space with INT3 instructions */
--	memset(area, 0xcc, size);
--}
--
--struct jit_context {
--	int cleanup_addr; /* Epilogue code offset */
--};
--
--/* Maximum number of bytes emitted while JITing one eBPF insn */
--#define BPF_MAX_INSN_SIZE	128
--#define BPF_INSN_SAFETY		64
--
- /* Number of bytes emit_patch() needs to generate instructions */
- #define X86_PATCH_SIZE		5
  
 -- 
-2.27.0
+2.25.1
 
