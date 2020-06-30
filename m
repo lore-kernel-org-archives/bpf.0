@@ -2,320 +2,126 @@ Return-Path: <SRS0=4Gtr=AL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D566C433E2
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 00:34:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE6AEC433E0
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 00:48:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4F459206A5
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 00:34:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB1E720760
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 00:48:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cBSgPGxk"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="pIMjerEw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728745AbgF3Aex (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 20:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728666AbgF3Aew (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jun 2020 20:34:52 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75407C03E979;
-        Mon, 29 Jun 2020 17:34:52 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id a14so4059272pfi.2;
-        Mon, 29 Jun 2020 17:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Y0yfUYX1LHC1cSeSPnzA7X7oxr0zSt80Xa4AUD6Ku4U=;
-        b=cBSgPGxkERdTV2e+0plkVIaoe4IveAHgXoxDM0sYLHZZgMHz17Nw68/2htuoUb9Rme
-         plRll9eHKnqj6PzNCO3K5WC8bjDcDE+HuWk6z1So6MiMW1XT2F5o7LfvRKnOhxGmYJKV
-         +GI8g/7FoXnhvMoPTwsExjHmXOjJ2Xg20+4sbzFe9wHqqCBFxyEyBcjqw1uPk/AvUiY9
-         GqnsKbrPlE8Kk2t21NrIHDpgiN4gxK8B0jGUVHEIF6kuPpq6IBCE7psPWhakZ+VPkgYw
-         GK4h9IBsQis3j+LdYLyoqwDZxsF4v+74cQsUmGYq4a8vTUDqD8v3Tp3CU/3MAkWBKm8u
-         vD2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Y0yfUYX1LHC1cSeSPnzA7X7oxr0zSt80Xa4AUD6Ku4U=;
-        b=hEW4L6I/6MVoOBLneMUeRQCNhtxHRWrQbHnP1AAbkqwSh6+0Dg6paymkF7aANmqEPT
-         1igbVgURfdKMVZLbJzyWXk/YTR/jGE2w66C/FVMGKyOnfKWKfLP/kTZv9TvTxbGJGTML
-         U6p8m3MGSquEQw3RoTic6DG5s43qEgT47z8npZbvS4/0pvlwc9KdpWv9neLVNpleMtI1
-         drOvmnFb4i9wozgADepadUZY+YY5gOTK8E//XMvXsPIGxwP3ZNjmc/i+l/16r0YwggKq
-         6r8cUw9uV1oXLmQp8n2cDt2XnpoAp043vr/IiROn6g5MXSHBTpCZtrAjPegPEDT1YXoC
-         oZ5w==
-X-Gm-Message-State: AOAM530bAsSx7dQmyKIYkR81OneIE6xo0dfOA8rFC3V1dMXZXvqWr97g
-        3hODG58TMDhH2mr5sBhUgB0=
-X-Google-Smtp-Source: ABdhPJw+FFbne61C9GlyHI+UFTJEB2r51GuZyd5OCrt3Nu0a6KvfIaXrjsnoxWnwWGIdL756Xgco8w==
-X-Received: by 2002:a63:1104:: with SMTP id g4mr12370458pgl.369.1593477291846;
-        Mon, 29 Jun 2020 17:34:51 -0700 (PDT)
-Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id b4sm700658pfo.137.2020.06.29.17.34.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Jun 2020 17:34:51 -0700 (PDT)
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     davem@davemloft.net
-Cc:     daniel@iogearbox.net, paulmck@kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v4 bpf-next 5/5] selftests/bpf: Add sleepable tests
-Date:   Mon, 29 Jun 2020 17:34:41 -0700
-Message-Id: <20200630003441.42616-6-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.13.5
-In-Reply-To: <20200630003441.42616-1-alexei.starovoitov@gmail.com>
-References: <20200630003441.42616-1-alexei.starovoitov@gmail.com>
+        id S1726403AbgF3AsK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 20:48:10 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:8844 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726056AbgF3AsK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 29 Jun 2020 20:48:10 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05U0jrjV012119
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 17:48:09 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=+P2JGEwyVtIs5pjj2XqteeK6ETp3ZCALVo1itEn0MzU=;
+ b=pIMjerEw6Qs+mfQrdIBZtNvu7hypHEkRTzW3t1fah/eLTiSO5vA3Dcg2fbXTIqTXeVFO
+ ox+9qvBUuPbgwSQaE48987zOqvOmqOdfY01HB1R21tEH8vbOgVuEyOIHbAbT3QPVFuEE
+ wVX4Uf3PlfLSXW6ownuEq0CaDDx+x1slcpU= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31xntbqhc6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 17:48:09 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Mon, 29 Jun 2020 17:48:08 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id E6E3C2EC3BFA; Mon, 29 Jun 2020 17:48:04 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next 2/2] selftests/bpf: allow substituting custom vmlinux.h for selftests build
+Date:   Mon, 29 Jun 2020 17:47:59 -0700
+Message-ID: <20200630004759.521530-2-andriin@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200630004759.521530-1-andriin@fb.com>
+References: <20200630004759.521530-1-andriin@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-06-29_21:2020-06-29,2020-06-29 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ cotscore=-2147483648 lowpriorityscore=0 mlxscore=0 clxscore=1015
+ bulkscore=0 spamscore=0 suspectscore=8 impostorscore=0 priorityscore=1501
+ adultscore=0 mlxlogscore=540 phishscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006300003
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+Similarly to bpftool Makefile, allow to specify custom location of vmlinu=
+x.h
+to be used during the build. This allows simpler testing setups with
+checked-in pre-generated vmlinux.h.
 
-Modify few tests to sanity test sleepable bpf functionality.
-
-Running 'bench trig-fentry-sleep' vs 'bench trig-fentry' and 'perf report':
-sleepable with SRCU:
-   3.86%  bench     [k] __srcu_read_unlock
-   3.22%  bench     [k] __srcu_read_lock
-   0.92%  bench     [k] bpf_prog_740d4210cdcd99a3_bench_trigger_fentry_sleep
-   0.50%  bench     [k] bpf_trampoline_10297
-   0.26%  bench     [k] __bpf_prog_exit_sleepable
-   0.21%  bench     [k] __bpf_prog_enter_sleepable
-
-sleepable with RCU_TRACE:
-   0.79%  bench     [k] bpf_prog_740d4210cdcd99a3_bench_trigger_fentry_sleep
-   0.72%  bench     [k] bpf_trampoline_10381
-   0.31%  bench     [k] __bpf_prog_exit_sleepable
-   0.29%  bench     [k] __bpf_prog_enter_sleepable
-
-non-sleepable with RCU:
-   0.88%  bench     [k] bpf_prog_740d4210cdcd99a3_bench_trigger_fentry
-   0.84%  bench     [k] bpf_trampoline_10297
-   0.13%  bench     [k] __bpf_prog_enter
-   0.12%  bench     [k] __bpf_prog_exit
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: KP Singh <kpsingh@google.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/bench.c           |  2 +
- .../selftests/bpf/benchs/bench_trigger.c      | 17 +++++
- .../selftests/bpf/prog_tests/test_lsm.c       |  9 +++
- tools/testing/selftests/bpf/progs/lsm.c       | 64 ++++++++++++++++++-
- .../selftests/bpf/progs/trigger_bench.c       |  7 ++
- 5 files changed, 97 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 944ad4721c83..1a427685a8a8 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -317,6 +317,7 @@ extern const struct bench bench_trig_tp;
- extern const struct bench bench_trig_rawtp;
- extern const struct bench bench_trig_kprobe;
- extern const struct bench bench_trig_fentry;
-+extern const struct bench bench_trig_fentry_sleep;
- extern const struct bench bench_trig_fmodret;
- extern const struct bench bench_rb_libbpf;
- extern const struct bench bench_rb_custom;
-@@ -338,6 +339,7 @@ static const struct bench *benchs[] = {
- 	&bench_trig_rawtp,
- 	&bench_trig_kprobe,
- 	&bench_trig_fentry,
-+	&bench_trig_fentry_sleep,
- 	&bench_trig_fmodret,
- 	&bench_rb_libbpf,
- 	&bench_rb_custom,
-diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-index 49c22832f216..2a0b6c9885a4 100644
---- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-@@ -90,6 +90,12 @@ static void trigger_fentry_setup()
- 	attach_bpf(ctx.skel->progs.bench_trigger_fentry);
- }
- 
-+static void trigger_fentry_sleep_setup()
-+{
-+	setup_ctx();
-+	attach_bpf(ctx.skel->progs.bench_trigger_fentry_sleep);
-+}
-+
- static void trigger_fmodret_setup()
- {
- 	setup_ctx();
-@@ -155,6 +161,17 @@ const struct bench bench_trig_fentry = {
- 	.report_final = hits_drops_report_final,
- };
- 
-+const struct bench bench_trig_fentry_sleep = {
-+	.name = "trig-fentry-sleep",
-+	.validate = trigger_validate,
-+	.setup = trigger_fentry_sleep_setup,
-+	.producer_thread = trigger_producer,
-+	.consumer_thread = trigger_consumer,
-+	.measure = trigger_measure,
-+	.report_progress = hits_drops_report_progress,
-+	.report_final = hits_drops_report_final,
-+};
-+
- const struct bench bench_trig_fmodret = {
- 	.name = "trig-fmodret",
- 	.validate = trigger_validate,
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_lsm.c b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-index b17eb2045c1d..6ab29226c99b 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-@@ -10,6 +10,7 @@
- #include <unistd.h>
- #include <malloc.h>
- #include <stdlib.h>
-+#include <unistd.h>
- 
- #include "lsm.skel.h"
- 
-@@ -55,6 +56,7 @@ void test_test_lsm(void)
- {
- 	struct lsm *skel = NULL;
- 	int err, duration = 0;
-+	int buf = 1234;
- 
- 	skel = lsm__open_and_load();
- 	if (CHECK(!skel, "skel_load", "lsm skeleton failed\n"))
-@@ -81,6 +83,13 @@ void test_test_lsm(void)
- 	CHECK(skel->bss->mprotect_count != 1, "mprotect_count",
- 	      "mprotect_count = %d\n", skel->bss->mprotect_count);
- 
-+	syscall(__NR_setdomainname, &buf, -2L);
-+	syscall(__NR_setdomainname, 0, -3L);
-+	syscall(__NR_setdomainname, ~0L, -4L);
-+
-+	CHECK(skel->bss->copy_test != 3, "copy_test",
-+	      "copy_test = %d\n", skel->bss->copy_test);
-+
- close_prog:
- 	lsm__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/selftests/bpf/progs/lsm.c
-index b4598d4bc4f7..efa586018f03 100644
---- a/tools/testing/selftests/bpf/progs/lsm.c
-+++ b/tools/testing/selftests/bpf/progs/lsm.c
-@@ -9,16 +9,41 @@
- #include <bpf/bpf_tracing.h>
- #include  <errno.h>
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} array SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} hash SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_LRU_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} lru_hash SEC(".maps");
-+
- char _license[] SEC("license") = "GPL";
- 
- int monitored_pid = 0;
- int mprotect_count = 0;
- int bprm_count = 0;
- 
--SEC("lsm/file_mprotect")
-+SEC("lsm.s/file_mprotect")
- int BPF_PROG(test_int_hook, struct vm_area_struct *vma,
- 	     unsigned long reqprot, unsigned long prot, int ret)
- {
-+	char args[64];
-+	__u32 key = 0;
-+	__u64 *value;
-+
- 	if (ret != 0)
- 		return ret;
- 
-@@ -28,6 +53,18 @@ int BPF_PROG(test_int_hook, struct vm_area_struct *vma,
- 	is_stack = (vma->vm_start <= vma->vm_mm->start_stack &&
- 		    vma->vm_end >= vma->vm_mm->start_stack);
- 
-+	bpf_copy_from_user(args, sizeof(args), (void *)vma->vm_mm->arg_start);
-+
-+	value = bpf_map_lookup_elem(&array, &key);
-+	if (value)
-+		*value = 0;
-+	value = bpf_map_lookup_elem(&hash, &key);
-+	if (value)
-+		*value = 0;
-+	value = bpf_map_lookup_elem(&lru_hash, &key);
-+	if (value)
-+		*value = 0;
-+
- 	if (is_stack && monitored_pid == pid) {
- 		mprotect_count++;
- 		ret = -EPERM;
-@@ -36,7 +73,7 @@ int BPF_PROG(test_int_hook, struct vm_area_struct *vma,
- 	return ret;
- }
- 
--SEC("lsm/bprm_committed_creds")
-+SEC("lsm.s/bprm_committed_creds")
- int BPF_PROG(test_void_hook, struct linux_binprm *bprm)
- {
- 	__u32 pid = bpf_get_current_pid_tgid() >> 32;
-@@ -46,3 +83,26 @@ int BPF_PROG(test_void_hook, struct linux_binprm *bprm)
- 
- 	return 0;
- }
-+SEC("lsm/task_free") /* lsm/ is ok, lsm.s/ fails */
-+int BPF_PROG(test_task_free, struct task_struct *task)
-+{
-+	return 0;
-+}
-+
-+int copy_test = 0;
-+
-+SEC("fentry.s/__x64_sys_setdomainname")
-+int BPF_PROG(test_sys_setdomainname, struct pt_regs *regs)
-+{
-+	int buf = 0;
-+	long ret;
-+
-+	ret = bpf_copy_from_user(&buf, sizeof(buf), (void *)regs->di);
-+	if (regs->si == -2 && ret == 0 && buf == 1234)
-+		copy_test++;
-+	if (regs->si == -3 && ret == -EFAULT)
-+		copy_test++;
-+	if (regs->si == -4 && ret == -EFAULT)
-+		copy_test++;
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/trigger_bench.c b/tools/testing/selftests/bpf/progs/trigger_bench.c
-index 8b36b6640e7e..9a4d09590b3d 100644
---- a/tools/testing/selftests/bpf/progs/trigger_bench.c
-+++ b/tools/testing/selftests/bpf/progs/trigger_bench.c
-@@ -39,6 +39,13 @@ int bench_trigger_fentry(void *ctx)
- 	return 0;
- }
- 
-+SEC("fentry.s/__x64_sys_getpgid")
-+int bench_trigger_fentry_sleep(void *ctx)
-+{
-+	__sync_add_and_fetch(&hits, 1);
-+	return 0;
-+}
-+
- SEC("fmod_ret/__x64_sys_getpgid")
- int bench_trigger_fmodret(void *ctx)
- {
--- 
-2.23.0
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+index 22aaec74ea0a..1f9c696b3edf 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -134,12 +134,12 @@ $(OUTPUT)/test_stub.o: test_stub.c $(BPFOBJ)
+ 	$(call msg,CC,,$@)
+ 	$(CC) -c $(CFLAGS) -o $@ $<
+=20
+-VMLINUX_BTF_PATHS :=3D $(if $(O),$(O)/vmlinux)				\
++VMLINUX_BTF_PATHS ?=3D $(if $(O),$(O)/vmlinux)				\
+ 		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)	\
+ 		     ../../../../vmlinux				\
+ 		     /sys/kernel/btf/vmlinux				\
+ 		     /boot/vmlinux-$(shell uname -r)
+-VMLINUX_BTF :=3D $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS)))=
+)
++VMLINUX_BTF ?=3D $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS)))=
+)
+=20
+ $(OUTPUT)/runqslower: $(BPFOBJ)
+ 	$(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower	\
+@@ -182,8 +182,13 @@ $(BUILD_DIR)/libbpf $(BUILD_DIR)/bpftool $(INCLUDE_D=
+IR):
+ 	mkdir -p $@
+=20
+ $(INCLUDE_DIR)/vmlinux.h: $(VMLINUX_BTF) | $(BPFTOOL) $(INCLUDE_DIR)
++ifeq ($(VMLINUX_H),)
+ 	$(call msg,GEN,,$@)
+ 	$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
++else
++	$(call msg,CP,,$@)
++	cp "$(VMLINUX_H)" $@
++endif
+=20
+ # Get Clang's default includes on this system, as opposed to those seen =
+by
+ # '-target bpf'. This fixes "missing" files on some architectures/distro=
+s,
+--=20
+2.24.1
 
