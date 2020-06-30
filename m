@@ -2,112 +2,159 @@ Return-Path: <SRS0=4Gtr=AL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-10.5 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDDB2C433E1
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 12:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01CC3C433DF
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 12:39:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D78AA2073E
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 12:37:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF71B20774
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 12:39:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387762AbgF3MhT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Jun 2020 08:37:19 -0400
-Received: from out03.mta.xmission.com ([166.70.13.233]:39166 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387756AbgF3MhT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 30 Jun 2020 08:37:19 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out03.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jqFVg-0000GB-8B; Tue, 30 Jun 2020 06:37:12 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jqFVf-0001Kb-E9; Tue, 30 Jun 2020 06:37:12 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Miller <davem@davemloft.net>,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Kees Cook <keescook@chromium.org>,
+        id S1732042AbgF3MjR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Jun 2020 08:39:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44222 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387773AbgF3MjQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Jun 2020 08:39:16 -0400
+Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BAF772078B;
+        Tue, 30 Jun 2020 12:39:13 +0000 (UTC)
+Date:   Tue, 30 Jun 2020 08:39:11 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Nicolas Boichat <drinkcat@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20200625095725.GA3303921@kroah.com>
-        <778297d2-512a-8361-cf05-42d9379e6977@i-love.sakura.ne.jp>
-        <20200625120725.GA3493334@kroah.com>
-        <20200625.123437.2219826613137938086.davem@davemloft.net>
-        <CAHk-=whuTwGHEPjvtbBvneHHXeqJC=q5S09mbPnqb=Q+MSPMag@mail.gmail.com>
-        <87pn9mgfc2.fsf_-_@x220.int.ebiederm.org>
-        <40720db5-92f0-4b5b-3d8a-beb78464a57f@i-love.sakura.ne.jp>
-        <87366g8y1e.fsf@x220.int.ebiederm.org>
-        <aa737d87-cf38-55d6-32f1-2d989a5412ea@i-love.sakura.ne.jp>
-        <20200628194440.puzh7nhdnk6i4rqj@ast-mbp.dhcp.thefacebook.com>
-        <c99d0cfc-8526-0daf-90b5-33e560efdede@i-love.sakura.ne.jp>
-        <874kqt39qo.fsf@x220.int.ebiederm.org>
-        <6a9dd8be-333a-fd21-d125-ec20fb7c81df@i-love.sakura.ne.jp>
-Date:   Tue, 30 Jun 2020 07:32:39 -0500
-In-Reply-To: <6a9dd8be-333a-fd21-d125-ec20fb7c81df@i-love.sakura.ne.jp>
-        (Tetsuo Handa's message of "Tue, 30 Jun 2020 15:28:49 +0900")
-Message-ID: <871rlwzqc8.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Kees Cook <keescook@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Guilherme G . Piccoli" <gpiccoli@canonical.com>,
+        Will Deacon <will@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>, bpf@vger.kernel.org
+Subject: Re: [PATCH] kernel/trace: Add TRACING_ALLOW_PRINTK config option
+Message-ID: <20200630083912.40a6c50d@oasis.local.home>
+In-Reply-To: <20200630051659.uqnkkwaho3lvvnu7@ast-mbp.dhcp.thefacebook.com>
+References: <CANMq1KCAUfxy-njMJj0=+02Jew_1rJGwxLzp6BRTE=9CL2DZNA@mail.gmail.com>
+        <20200625035913.z4setdowrgt4sqpd@ast-mbp.dhcp.thefacebook.com>
+        <20200626181455.155912d9@oasis.local.home>
+        <20200628172700.5ea422tmw77otadn@ast-mbp.dhcp.thefacebook.com>
+        <20200628144616.52f09152@oasis.local.home>
+        <20200628192107.sa3ppfmxtgxh7sfs@ast-mbp.dhcp.thefacebook.com>
+        <20200628154331.2c69d43e@oasis.local.home>
+        <20200628220209.3oztcjnzsotlfria@ast-mbp.dhcp.thefacebook.com>
+        <20200628182842.2abb0de2@oasis.local.home>
+        <20200628194334.6238b933@oasis.local.home>
+        <20200630051659.uqnkkwaho3lvvnu7@ast-mbp.dhcp.thefacebook.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1jqFVf-0001Kb-E9;;;mid=<871rlwzqc8.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+cf8KC/zQ0OW1Sl8Ww5gwt7JSMLP+Y3F4=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: Re: [PATCH 00/14] Make the user mode driver code a better citizen
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp> writes:
+On Mon, 29 Jun 2020 22:16:59 -0700
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-> On 2020/06/30 5:19, Eric W. Biederman wrote:
->> Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp> writes:
->> 
->>> On 2020/06/29 4:44, Alexei Starovoitov wrote:
->>>> But all the defensive programming kinda goes against general kernel style.
->>>> I wouldn't do it. Especially pr_info() ?!
->>>> Though I don't feel strongly about it.
->>>
->>> Honestly speaking, caller should check for errors and print appropriate
->>> messages. info->wd.mnt->mnt_root != info->wd.dentry indicates that something
->>> went wrong (maybe memory corruption). But other conditions are not fatal.
->>> That is, I consider even pr_info() here should be unnecessary.
->> 
->> They were all should never happen cases.  Which is why my patches do:
->> if (WARN_ON_ONCE(...))
->
-> No. Fuzz testing (which uses panic_on_warn=1) will trivially hit them.
-> This bug was unfortunately not found by syzkaller because this path is
-> not easily reachable via syscall interface.
+> > 
+> > Warning, not even compiled tested.  
+> 
+> Thanks! I see what you mean now.
 
-Absolutely yes.  These are cases that should never happen.
-They should never be reachable by userspace.
+Great! :-)
 
-It is absolutely a bug if these are hit by userspace.
+> 
+> > 
+> > -- Steve
+> > 
+> > diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
+> > index 6575bb0a0434..aeba5ee7325a 100644
+> > --- a/kernel/trace/Makefile
+> > +++ b/kernel/trace/Makefile
+> > @@ -31,6 +31,8 @@ ifdef CONFIG_GCOV_PROFILE_FTRACE
+> >  GCOV_PROFILE := y
+> >  endif
+> >  
+> > +CFLAGS_bpf_trace.o := -I$(src)  
+> 
+> not following. why this is needed?
 
-Now if fuzzers want horrible cases to be even more horrible and change a
-nice friendly warn into a panic that is their problem.  The issue being
-do they capture the information the rest of us need to fix.
+It's required in order to have the TRACE_EVENT macro magic work. More
+info about it here:
 
-Eric
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/samples/trace_events/Makefile
 
 
+> 
+> > +
+> >  CFLAGS_trace_benchmark.o := -I$(src)
+> >  CFLAGS_trace_events_filter.o := -I$(src)
+> >  
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index dc05626979b8..01bedf335b2e 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -19,6 +19,9 @@
+> >  #include "trace_probe.h"
+> >  #include "trace.h"
+> >  
+> > +#define CREATE_TRACE_EVENTS  
+> 
+> CREATE_TRACE_POINTS ?
+
+
+Doh, yeah. I did say it wasn't even compiled tested ;-)
+
+> 
+> > +#include "bpf_trace.h"
+> > +
+> >  #define bpf_event_rcu_dereference(p)					\
+> >  	rcu_dereference_protected(p, lockdep_is_held(&bpf_event_mutex))
+> >  
+> > @@ -473,13 +476,29 @@ BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_size, u64, arg1,
+> >  		fmt_cnt++;
+> >  	}
+> >  
+> > +static DEFINE_SPINLOCK(trace_printk_lock);
+> > +#define BPF_TRACE_PRINTK_SIZE	1024
+> > +
+> > +static inline void do_trace_printk(const char *fmt, ...)
+> > +{
+> > +	static char buf[BPF_TRACE_PRINT_SIZE];
+> > +	unsigned long flags;
+> > +
+> > +	spin_lock_irqsave(&trace_printk_lock, flags);
+> > +	va_start(ap, fmt);
+> > +	vsnprintf(buf, BPF_TRACE_PRINT_SIZE, fmt, ap);
+> > +	va_end(ap);
+> > +
+> > +	trace_bpf_trace_printk(buf);
+> > +	spin_unlock_irqrestore(&trace_printk_lock, flags);  
+> 
+> interesting. I don't think anyone would care about spin_lock overhead.
+> It's better because 'trace_bpf_trace_printk' would be a separate event
+> that can be individually enabled/disabled?
+> I guess it can work.
+> Thanks!
+
+I hope this does everything you need for bpf_trace_printk. If there's
+something  that's not working for you, PLEASE reach out to me and ask
+what you need.
+
+Cheers!
+
+-- Steve
