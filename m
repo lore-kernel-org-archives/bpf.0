@@ -2,115 +2,135 @@ Return-Path: <SRS0=4Gtr=AL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA2C5C433E0
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 01:18:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C63BC433DF
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 01:18:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 91DE52078B
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 01:18:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24CB120780
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 01:18:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ndhXs9ye"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728002AbgF3BS0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 21:18:26 -0400
-Received: from out01.mta.xmission.com ([166.70.13.231]:53410 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726436AbgF3BSZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jun 2020 21:18:25 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jq4uh-0000O9-IN; Mon, 29 Jun 2020 19:18:19 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jq4ug-0002jh-Pf; Mon, 29 Jun 2020 19:18:19 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, David Miller <davem@davemloft.net>,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20200625095725.GA3303921@kroah.com>
-        <778297d2-512a-8361-cf05-42d9379e6977@i-love.sakura.ne.jp>
-        <20200625120725.GA3493334@kroah.com>
-        <20200625.123437.2219826613137938086.davem@davemloft.net>
-        <CAHk-=whuTwGHEPjvtbBvneHHXeqJC=q5S09mbPnqb=Q+MSPMag@mail.gmail.com>
-        <87pn9mgfc2.fsf_-_@x220.int.ebiederm.org>
-        <87y2oac50p.fsf@x220.int.ebiederm.org>
-        <87bll17ili.fsf_-_@x220.int.ebiederm.org>
-        <20200629221231.jjc2czk3ul2roxkw@ast-mbp.dhcp.thefacebook.com>
-Date:   Mon, 29 Jun 2020 20:13:47 -0500
-In-Reply-To: <20200629221231.jjc2czk3ul2roxkw@ast-mbp.dhcp.thefacebook.com>
-        (Alexei Starovoitov's message of "Mon, 29 Jun 2020 15:12:31 -0700")
-Message-ID: <87y2o51hkk.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1727913AbgF3BSt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 21:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726436AbgF3BSt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Jun 2020 21:18:49 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612B8C061755;
+        Mon, 29 Jun 2020 18:18:49 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id c30so13292050qka.10;
+        Mon, 29 Jun 2020 18:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d8tAMwICXqgKPvOzjahMVAzDJDS8NleEPw2GGyNN/2U=;
+        b=ndhXs9yeqlT5U78P3dbddL3NvAwigxMvkx+Cr4dXlaa0XLnw6aZtgVEcLm9xEuyjDw
+         1Yd+a6c9qHnfnF52G+M77lp+WdVZX3mS8FWu33cpQEmBPoMjx0CCyrLGdM+ktClczjI3
+         qmwvRKCvS0jP5FEwGmqatU5EYT1gSahpwCO8JH7tx2eFsfsCHlexWTNOAoiRwDx0VWuI
+         h4PV/cdMrpQQMkU8u6cWIftVa4TTp/s7I2FkQxf6Q0mmBs/iNWYQzYbOjIbu0W2sFoLx
+         pZmvRQZZP4cHytcPEAUvH6DCdR8zHcEd0ew+KlWAQqA0PA4qCPsJ8lDDYtZCtG8JMZ32
+         8TlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d8tAMwICXqgKPvOzjahMVAzDJDS8NleEPw2GGyNN/2U=;
+        b=Fz+ninBzr1kDlrTMrdMT1kaoNyEwB6SREZEuErkJDq4zkwAn7+BD3DAoP4ihSdOTmK
+         UJgboBZdVOW+2nGiGctc8RHex6QW1o/xWmAe2aVy2Xk7pS3sO2NPHsCTOBghJtOdIhZn
+         26wuAqkAoq6A52metpSMvBsr2rjf0480FfEiMrWbzxM9umr2s5NTVBHo97ODRjuPPhRL
+         pwYO4gQC+wrYWnqlJd5PCCQIpi80F6b+2WyV6gYAe42vG0xXL89Nnvq1BEO4MkKSxEYX
+         Ku+lArFdQl5HZZRjZcsK0Gpc0hkXXpvrNAGtGvZ9Uc9+gMRZc2WQznqjDGvsRJRQGJO9
+         es9w==
+X-Gm-Message-State: AOAM531V5g6No2VmueODUDUc7n2oM/jh4wuu5NYSCtAcCDVxM7chgHsW
+        FrIZjy+Mpjq88hH2QyKIVO2Z06nCe8x15Zzuux8=
+X-Google-Smtp-Source: ABdhPJxA/2GwwRG+MrzupQDYE8NUyQBkIhjOFFypsT4PBrge/kfCAJG2fCTXx5+N9/Jim+6xApq4RFES1UPnBrDlb00=
+X-Received: by 2002:a37:270e:: with SMTP id n14mr16635482qkn.92.1593479928606;
+ Mon, 29 Jun 2020 18:18:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1jq4ug-0002jh-Pf;;;mid=<87y2o51hkk.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+/8MQJ7LM/LZopl5fhfWi2DThHoCOY7Hc=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: Re: [PATCH v2 00/15] Make the user mode driver code a better citizen
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+References: <20200630003441.42616-1-alexei.starovoitov@gmail.com> <20200630003441.42616-4-alexei.starovoitov@gmail.com>
+In-Reply-To: <20200630003441.42616-4-alexei.starovoitov@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 29 Jun 2020 18:18:37 -0700
+Message-ID: <CAEf4BzZ_ZGkMXRYV7VeudCVs=A3xY=1Mz97GLbbazXv-KUcnRw@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 3/5] bpf: Add bpf_copy_from_user() helper.
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+On Mon, Jun 29, 2020 at 5:35 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> Sleepable BPF programs can now use copy_from_user() to access user memory.
+>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
+>  include/linux/bpf.h            |  1 +
+>  include/uapi/linux/bpf.h       | 11 ++++++++++-
+>  kernel/bpf/helpers.c           | 22 ++++++++++++++++++++++
+>  kernel/trace/bpf_trace.c       |  2 ++
+>  tools/include/uapi/linux/bpf.h | 11 ++++++++++-
+>  5 files changed, 45 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index e2b1581b2195..c9f27d5fdb7c 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1657,6 +1657,7 @@ extern const struct bpf_func_proto bpf_skc_to_tcp_sock_proto;
+>  extern const struct bpf_func_proto bpf_skc_to_tcp_timewait_sock_proto;
+>  extern const struct bpf_func_proto bpf_skc_to_tcp_request_sock_proto;
+>  extern const struct bpf_func_proto bpf_skc_to_udp6_sock_proto;
+> +extern const struct bpf_func_proto bpf_copy_from_user_proto;
+>
+>  const struct bpf_func_proto *bpf_tracing_func_proto(
+>         enum bpf_func_id func_id, const struct bpf_prog *prog);
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 73f9e3f84b77..6b347454dedc 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -3293,6 +3293,13 @@ union bpf_attr {
+>   *             Dynamically cast a *sk* pointer to a *udp6_sock* pointer.
+>   *     Return
+>   *             *sk* if casting is valid, or NULL otherwise.
+> + *
+> + * long bpf_copy_from_user(void *dst, u32 size, const void *user_ptr)
+> + *     Description
+> + *             Read *size* bytes from user space address *user_ptr* and store
+> + *             the data in *dst*. This is a wrapper of copy_from_user().
+> + *     Return
+> + *             0 on success, or a negative error in case of failure.
+>   */
+>  #define __BPF_FUNC_MAPPER(FN)          \
+>         FN(unspec),                     \
+> @@ -3435,7 +3442,9 @@ union bpf_attr {
+>         FN(skc_to_tcp_sock),            \
+>         FN(skc_to_tcp_timewait_sock),   \
+>         FN(skc_to_tcp_request_sock),    \
+> -       FN(skc_to_udp6_sock),
+> +       FN(skc_to_udp6_sock),           \
+> +       FN(copy_from_user),             \
+> +       /* */
 
-> On Mon, Jun 29, 2020 at 02:55:05PM -0500, Eric W. Biederman wrote:
->> 
->> I have tested thes changes by booting with the code compiled in and
->> by killing "bpfilter_umh" and running iptables -vnL to restart
->> the userspace driver.
->> 
->> I have compiled tested each change with and without CONFIG_BPFILTER
->> enabled.
->
-> With
-> CONFIG_BPFILTER=y
-> CONFIG_BPFILTER_UMH=m
-> it doesn't build:
->
-> ERROR: modpost: "kill_pid_info" [net/bpfilter/bpfilter.ko] undefined!
->
-> I've added:
-> +EXPORT_SYMBOL(kill_pid_info);
-> to continue testing...
->
-> And then did:
-> while true; do iptables -L;rmmod bpfilter; done
->  
-> Unfortunately sometimes 'rmmod bpfilter' hangs in wait_event().
->
-> I suspect patch 13 is somehow responsible:
-> +	if (tgid) {
-> +		kill_pid_info(SIGKILL, SEND_SIG_PRIV, tgid);
-> +		wait_event(tgid->wait_pidfd, !pid_task(tgid, PIDTYPE_TGID));
-> +		bpfilter_umh_cleanup(info);
-> +	}
->
-> I cannot figure out why it hangs. Some sort of race ?
-> Since adding short delay between kill and wait makes it work.
+Thank you for this! Those trivial merge conflicts due to '\' were
+really annoying.
 
-Thanks.  I will take a look.
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
-Eric
+[...]
