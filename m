@@ -2,78 +2,103 @@ Return-Path: <SRS0=4Gtr=AL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D1E0C433E0
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 23:26:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88074C433E0
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 23:35:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0BC112073E
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 23:26:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A07920722
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 23:35:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JQNj0YwG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726016AbgF3X06 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Jun 2020 19:26:58 -0400
-Received: from www62.your-server.de ([213.133.104.62]:57986 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725791AbgF3X06 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 30 Jun 2020 19:26:58 -0400
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jqPeH-0008In-Hz; Wed, 01 Jul 2020 01:26:45 +0200
-Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jqPeH-000FUM-CW; Wed, 01 Jul 2020 01:26:45 +0200
-Subject: Re: [PATCH v5 bpf-next 2/5] bpf: Introduce sleepable BPF programs
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        davem@davemloft.net
-Cc:     paulmck@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
-References: <20200630043343.53195-1-alexei.starovoitov@gmail.com>
- <20200630043343.53195-3-alexei.starovoitov@gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <d0c6b6a6-7b82-e620-8ced-8a1acfaf6f6d@iogearbox.net>
-Date:   Wed, 1 Jul 2020 01:26:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726752AbgF3Xfe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Jun 2020 19:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726432AbgF3Xfd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Jun 2020 19:35:33 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71709C03E979
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2020 16:35:33 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id j19so7982105ybj.1
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2020 16:35:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0F8vRF7FG/PmZ2g7D4qS+C0vzq8AzEmPQZfZWSdh8t8=;
+        b=JQNj0YwGs1q0Op3C1DQ/IyH20Fk6fr1hMAmR2ZG9OBuvn2Wk4vGsbXSBqQQbdclmvS
+         AjdEOk/C8Nv7674b1/7TWuoOmMjfQ/rzo35mFoVXwGkRIFbDet5yazY9TGYE8d8rPz0F
+         7wutxLf/s3kyFQHjLJvyx13dYxJrONWXqkvHOgHGNHNAfnKGLXv6CJCnoMNktvWxRHrY
+         bBgz/ck5v5+AzMfHBkHP1tDQOT3DbkYtwGbR5rDLmVVbK9PMxy39nc8dvJhmsnzvU+mk
+         aGazopAfZ4FunEfTmohq2edxbE1YP3roL1Lga2KMIL6qatIZcSduTcGSU7J83kQg9rR0
+         1AdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0F8vRF7FG/PmZ2g7D4qS+C0vzq8AzEmPQZfZWSdh8t8=;
+        b=lC4RwIeUBN+urs9F1+UA9AYj4TEDy3rTkNrW0oexfoHloPjNrF0VkaafpaRUO826cH
+         vn4GEXYv1HjPmkblIxl/lQB2W4kAWGi6GMlifKDOhUiAB6puXU9+pFh8NRJbtO3taUeX
+         U1TGbKoah16tjiLpCRD8D75Qtik288ZXcj8AZtSACVFYzmvyn529dvLpfHJVwScIrhkl
+         WN7TkI/KpTxxXJVmfNi5mPalbOUFkBSGsokeYGFlf7Tyf3eMj7Ezivs/LptVNM5lN7xJ
+         uVbQRHqPAzV/vgJP+V5TDTRvvGEWT0hfMOuhrQf7HcFy5XN9VqK/3DhNn4XguXZoC2Tc
+         qS/A==
+X-Gm-Message-State: AOAM533M46Q82Zb4j6b/EeeL2qT/PdbKwvoiQaQLYoyTRL39Zpb0/z97
+        gbP7+wrnI4lKJKm7qKRC7EfjnMzSeVOgKjijMFWaLA==
+X-Google-Smtp-Source: ABdhPJwfI5teRlieTKunjXebBLbTtdL6FHmmt7Dnqbioh0wVFJe6Ug7M0TYPDKZumu8hXK10U6N36FjIBdZZsfSFUFU=
+X-Received: by 2002:a25:7003:: with SMTP id l3mr36625730ybc.380.1593560132411;
+ Tue, 30 Jun 2020 16:35:32 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200630043343.53195-3-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.3/25859/Tue Jun 30 15:38:05 2020)
+References: <20200626175501.1459961-1-kafai@fb.com> <20200626175508.1460345-1-kafai@fb.com>
+ <CANn89iLJNWh6bkH7DNhy_kmcAexuUCccqERqe7z2QsvPhGrYPQ@mail.gmail.com> <20200630232406.3ozanjlyx5a2mv6i@kafai-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20200630232406.3ozanjlyx5a2mv6i@kafai-mbp.dhcp.thefacebook.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 30 Jun 2020 16:35:20 -0700
+Message-ID: <CANn89iKj-okNmJhUnOmzdGVbOHi8zdF+=oO4RUFOo2X6M1kZHw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 01/10] tcp: Use a struct to represent a saved_syn
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        kernel-team <kernel-team@fb.com>,
+        Lawrence Brakmo <brakmo@fb.com>,
+        Neal Cardwell <ncardwell@google.com>,
+        netdev <netdev@vger.kernel.org>,
+        Yuchung Cheng <ycheng@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 6/30/20 6:33 AM, Alexei Starovoitov wrote:
-[...]
->   
-> +/* list of non-sleepable kernel functions that are otherwise
-> + * available to attach by bpf_lsm or fmod_ret progs.
-> + */
-> +static int check_sleepable_blacklist(unsigned long addr)
-> +{
-> +#ifdef CONFIG_BPF_LSM
-> +	if (addr == (long)bpf_lsm_task_free)
-> +		return -EINVAL;
-> +#endif
-> +#ifdef CONFIG_SECURITY
-> +	if (addr == (long)security_task_free)
-> +		return -EINVAL;
-> +#endif
-> +	return 0;
-> +}
+On Tue, Jun 30, 2020 at 4:24 PM Martin KaFai Lau <kafai@fb.com> wrote:
 
-Would be nice to have some sort of generic function annotation to describe
-that code cannot sleep inside of it, and then filter based on that. Anyway,
-is above from manual code inspection?
+> Interesting idea.  I don't have an immediate use case in the mac header of
+> the SYN but I think it may be useful going forward.
+>
+> Although bpf_hdr_opt_off may be no longer needed in v2,
+> it will still be convenient for the bpf prog to be able to get the TCP header
+> only instead of reparsing from the mac/ip[46] and also save some stack space
+> of the bpf prog.  Thus, storing the length of each hdr would still be nice
+> so that the bpf helper can directly offset to the start of the required
+> header.
+>
+> Do you prefer to incorporate this "save_syn:2" idea in this set
+> so that mac hdrlen can be stored in the "struct saved_syn"?
 
-What about others like security_sock_rcv_skb() for example which could be
-bh_lock_sock()'ed (or, generally hooks running in softirq context)?
+Sure, please go ahead.
+
+>
+> This "unused:2" bits have already been used by "fastopen_client_fail:2".
+
+Oh that is possible, I have sent the patch as it was when we merged it
+years ago.
+
+> May be get 2 bits from repair_queue?
+
+Hmm... this repair_queue is used in fast path, I would rather keep it
+as u8 for better code generation.
