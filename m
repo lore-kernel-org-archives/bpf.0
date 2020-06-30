@@ -2,213 +2,115 @@ Return-Path: <SRS0=4Gtr=AL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5430BC433DF
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 01:15:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA2C5C433E0
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 01:18:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2B12920780
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 01:15:54 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eaUHkyaX"
+	by mail.kernel.org (Postfix) with ESMTP id 91DE52078B
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 01:18:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726813AbgF3BPx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 21:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726612AbgF3BPx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Jun 2020 21:15:53 -0400
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60897C061755;
-        Mon, 29 Jun 2020 18:15:53 -0700 (PDT)
-Received: by mail-qk1-x743.google.com with SMTP id k18so17144173qke.4;
-        Mon, 29 Jun 2020 18:15:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bluXrv2i9iRY9NcyhAJF7V1sF2baNdUR1fqtdj+ICac=;
-        b=eaUHkyaXTMQMuAYCNYLWbSS1H1QXQucyCmSFbTjYh7dAlIXL3ZcYCs7Bez6CnWobx1
-         U8KHz9BDLmgrKV6FDa2iCmhxPJwjTTKQ/zo4miQBzrx8jAnAGEc+uF+I0rtiDm0s7XBt
-         sNnrS3XFEr5J2Nm4SjRZkP1iU8bBdg4djCJxvNEMuq7liD8Pu1xUs+PgoGoJeiyizJZK
-         gT0DEs6R1+ufBzThDKCSh3C12a5x1sgASPKTchzM4EToHsdQog52piqoyg79wj+rj1DS
-         vpcwpl2R8slQYoQZHKsheYORfaCMzfqrj0RFqKLyVZSQ8fCSGIUqjGseBqNglXmINrwO
-         S43A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bluXrv2i9iRY9NcyhAJF7V1sF2baNdUR1fqtdj+ICac=;
-        b=Jw6HzXp62zbpHZi32kprk0f/YJPRuB8Mz1LrOp6lW8CBHGeRweT89y+hxChRFneJKT
-         JVs+PQSNGxHWtTaJ3lYLxf6yz2wwFJrweuuaIOaX3qq0cdVzTETcox8IeFTW4LEwrI8k
-         YybHRYsKjwad5skBzg3HXwH/JijIMSwI+4wvWhi/55f+fnkFtlMT0+AgKjiBn5o5mUgX
-         8qFPFjipNy72ZrEsaDmLX6CXaAASuEQC6V8WleBethtYqFcOCpx9WM8p71/u0regK6gP
-         91sD02ti3jevVykpwfr8wMeqbUY4/4ByFELHspKJyD8puuWL1s35RlpCr5cwayFTHsF4
-         sPAw==
-X-Gm-Message-State: AOAM531ouZU+ongDQQ9oRlr3ZbXjn0QTjZZiHq3whFFwZJpHhD+W4ThZ
-        9lFAMnr3B5yS0Lrrv2Ow7Xz1U1jX4x0w2ginUxc=
-X-Google-Smtp-Source: ABdhPJwWTyAB44Pht91Lxg8kP0ZRrFUyWrIkyTxCRNFpFBpjQdAeAMDiCiAkGJnhmGBeICCXrGjns5oF0rD+YRbpzr4=
-X-Received: by 2002:a05:620a:1666:: with SMTP id d6mr17593699qko.449.1593479752371;
- Mon, 29 Jun 2020 18:15:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200630003441.42616-1-alexei.starovoitov@gmail.com> <20200630003441.42616-3-alexei.starovoitov@gmail.com>
-In-Reply-To: <20200630003441.42616-3-alexei.starovoitov@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 29 Jun 2020 18:15:41 -0700
-Message-ID: <CAEf4BzZPmtsJu8L42rMrFc3mW+h=a9ZPH_kR+dv35szi04Dz5g@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 2/5] bpf: Introduce sleepable BPF programs
+        id S1728002AbgF3BS0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 21:18:26 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:53410 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726436AbgF3BSZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Jun 2020 21:18:25 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jq4uh-0000O9-IN; Mon, 29 Jun 2020 19:18:19 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jq4ug-0002jh-Pf; Mon, 29 Jun 2020 19:18:19 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
 To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
+Cc:     linux-kernel@vger.kernel.org, David Miller <davem@davemloft.net>,
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20200625095725.GA3303921@kroah.com>
+        <778297d2-512a-8361-cf05-42d9379e6977@i-love.sakura.ne.jp>
+        <20200625120725.GA3493334@kroah.com>
+        <20200625.123437.2219826613137938086.davem@davemloft.net>
+        <CAHk-=whuTwGHEPjvtbBvneHHXeqJC=q5S09mbPnqb=Q+MSPMag@mail.gmail.com>
+        <87pn9mgfc2.fsf_-_@x220.int.ebiederm.org>
+        <87y2oac50p.fsf@x220.int.ebiederm.org>
+        <87bll17ili.fsf_-_@x220.int.ebiederm.org>
+        <20200629221231.jjc2czk3ul2roxkw@ast-mbp.dhcp.thefacebook.com>
+Date:   Mon, 29 Jun 2020 20:13:47 -0500
+In-Reply-To: <20200629221231.jjc2czk3ul2roxkw@ast-mbp.dhcp.thefacebook.com>
+        (Alexei Starovoitov's message of "Mon, 29 Jun 2020 15:12:31 -0700")
+Message-ID: <87y2o51hkk.fsf@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1jq4ug-0002jh-Pf;;;mid=<87y2o51hkk.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+/8MQJ7LM/LZopl5fhfWi2DThHoCOY7Hc=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+Subject: Re: [PATCH v2 00/15] Make the user mode driver code a better citizen
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 5:35 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> From: Alexei Starovoitov <ast@kernel.org>
->
-> Introduce sleepable BPF programs that can request such property for themselves
-> via BPF_F_SLEEPABLE flag at program load time. In such case they will be able
-> to use helpers like bpf_copy_from_user() that might sleep. At present only
-> fentry/fexit/fmod_ret and lsm programs can request to be sleepable and only
-> when they are attached to kernel functions that are known to allow sleeping.
->
-> The non-sleepable programs are relying on implicit rcu_read_lock() and
-> migrate_disable() to protect life time of programs, maps that they use and
-> per-cpu kernel structures used to pass info between bpf programs and the
-> kernel. The sleepable programs cannot be enclosed into rcu_read_lock().
-> migrate_disable() maps to preempt_disable() in non-RT kernels, so the progs
-> should not be enclosed in migrate_disable() as well. Therefore
-> rcu_read_lock_trace is used to protect the life time of sleepable progs.
->
-> There are many networking and tracing program types. In many cases the
-> 'struct bpf_prog *' pointer itself is rcu protected within some other kernel
-> data structure and the kernel code is using rcu_dereference() to load that
-> program pointer and call BPF_PROG_RUN() on it. All these cases are not touched.
-> Instead sleepable bpf programs are allowed with bpf trampoline only. The
-> program pointers are hard-coded into generated assembly of bpf trampoline and
-> synchronize_rcu_tasks_trace() is used to protect the life time of the program.
-> The same trampoline can hold both sleepable and non-sleepable progs.
->
-> When rcu_read_lock_trace is held it means that some sleepable bpf program is running
-> from bpf trampoline. Those programs can use bpf arrays and preallocated hash/lru
-> maps. These map types are waiting on programs to complete via
-> synchronize_rcu_tasks_trace();
->
-> Updates to trampoline now has to do synchronize_rcu_tasks_trace() and
-> synchronize_rcu_tasks() to wait for sleepable progs to finish and for
-> trampoline assembly to finish.
->
-> This is the first step of introducing sleepable progs.
->
-> After that dynamically allocated hash maps can be allowed. All map elements
-> would have to be rcu_trace protected instead of normal rcu.
-> per-cpu maps will be allowed. Either via the following pattern:
-> void *elem = bpf_map_lookup_elem(map, key);
-> if (elem) {
->    // access elem
->    bpf_map_release_elem(map, elem);
-> }
-> where modified lookup() helper will do migrate_disable() and
-> new bpf_map_release_elem() will do corresponding migrate_enable().
-> Or explicit bpf_migrate_disable/enable() helpers will be introduced.
->
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-LGTM.
-
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-
->  arch/x86/net/bpf_jit_comp.c    | 32 ++++++++++++------
->  include/linux/bpf.h            |  3 ++
->  include/uapi/linux/bpf.h       |  8 +++++
->  init/Kconfig                   |  1 +
->  kernel/bpf/arraymap.c          |  1 +
->  kernel/bpf/hashtab.c           | 12 +++----
->  kernel/bpf/syscall.c           | 13 +++++--
->  kernel/bpf/trampoline.c        | 33 ++++++++++++++++--
->  kernel/bpf/verifier.c          | 62 +++++++++++++++++++++++++++++++++-
->  tools/include/uapi/linux/bpf.h |  8 +++++
->  10 files changed, 149 insertions(+), 24 deletions(-)
+> On Mon, Jun 29, 2020 at 02:55:05PM -0500, Eric W. Biederman wrote:
+>> 
+>> I have tested thes changes by booting with the code compiled in and
+>> by killing "bpfilter_umh" and running iptables -vnL to restart
+>> the userspace driver.
+>> 
+>> I have compiled tested each change with and without CONFIG_BPFILTER
+>> enabled.
 >
-
-[...]
-
-> @@ -394,6 +406,21 @@ void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start)
->         rcu_read_unlock();
->  }
+> With
+> CONFIG_BPFILTER=y
+> CONFIG_BPFILTER_UMH=m
+> it doesn't build:
 >
-> +/* when rcu_read_lock_trace is held it means that some sleepable bpf program is
-> + * running. Those programs can use bpf arrays and preallocated hash maps. These
-> + * map types are waiting on programs to complete via
-> + * synchronize_rcu_tasks_trace();
-
-Wanted to leave comment that "map types are waiting" is outdated after
-patch #1 and then recalled map-in-map complexities. So depending if
-I'm right or wrong regarding issue in patch #1, this would stay or has
-to be removed.
-
-> + */
-> +void notrace __bpf_prog_enter_sleepable(void)
-> +{
-> +       rcu_read_lock_trace();
-> +}
-> +
-> +void notrace __bpf_prog_exit_sleepable(void)
-> +{
-> +       rcu_read_unlock_trace();
-> +}
-> +
->  int __weak
->  arch_prepare_bpf_trampoline(void *image, void *image_end,
->                             const struct btf_func_model *m, u32 flags,
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7de98906ddf4..05aa990ba9a4 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -9112,6 +9112,23 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
->                 return -EINVAL;
->         }
+> ERROR: modpost: "kill_pid_info" [net/bpfilter/bpfilter.ko] undefined!
 >
-> +       if (prog->aux->sleepable)
-> +               switch (map->map_type) {
-> +               case BPF_MAP_TYPE_HASH:
-> +               case BPF_MAP_TYPE_LRU_HASH:
-> +               case BPF_MAP_TYPE_ARRAY:
-> +                       if (!is_preallocated_map(map)) {
-> +                               verbose(env,
-> +                                       "Sleepable programs can only use preallocated hash maps\n");
-> +                               return -EINVAL;
-> +                       }
-> +                       break;
-> +               default:
-> +                       verbose(env,
-> +                               "Sleepable programs can only use array and hash maps\n");
-
-nit: message is a bit misleading. per-cpu array is also an array, yet
-is not supported.
-
-> +                       return -EINVAL;
-> +               }
-> +
->         return 0;
->  }
+> I've added:
+> +EXPORT_SYMBOL(kill_pid_info);
+> to continue testing...
 >
-> @@ -10722,6 +10739,22 @@ static int check_attach_modify_return(struct bpf_prog *prog, unsigned long addr)
->         return -EINVAL;
->  }
+> And then did:
+> while true; do iptables -L;rmmod bpfilter; done
+>  
+> Unfortunately sometimes 'rmmod bpfilter' hangs in wait_event().
 >
+> I suspect patch 13 is somehow responsible:
+> +	if (tgid) {
+> +		kill_pid_info(SIGKILL, SEND_SIG_PRIV, tgid);
+> +		wait_event(tgid->wait_pidfd, !pid_task(tgid, PIDTYPE_TGID));
+> +		bpfilter_umh_cleanup(info);
+> +	}
+>
+> I cannot figure out why it hangs. Some sort of race ?
+> Since adding short delay between kill and wait makes it work.
 
-[...]
+Thanks.  I will take a look.
+
+Eric
