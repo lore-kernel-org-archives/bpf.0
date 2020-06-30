@@ -2,128 +2,99 @@ Return-Path: <SRS0=4Gtr=AL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF5BCC433E0
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 00:48:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B50DC433DF
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 00:58:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E88420760
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 00:48:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1475F20781
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 00:58:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TH50JquV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AGCzq5Sc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727973AbgF3AsP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Jun 2020 20:48:15 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:2166 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727068AbgF3AsP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 29 Jun 2020 20:48:15 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05U0fgiM009168
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 17:48:14 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=wJknqwqYXRSE1Pr2C/jpMeiiLRFWsPl+mXUJxchPZ04=;
- b=TH50JquVuzF39SA9QtjLrFma14p1l8pB9UEYJ6gBeFm1DVfFTenrWiYPrS5H1nXZ7VL4
- FGO+9QiXk8Hn9X/t2XzqjdwqcM4pbCvonsv0hjulEkrMxDrFDTF+ySRjlhQOwEuGow/S
- BmXVyYFXGatbq1E7OXyrb1e0ILcuhDwnrKE= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31x3mmhywy-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 17:48:13 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 29 Jun 2020 17:48:12 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id C00982EC3BFA; Mon, 29 Jun 2020 17:48:02 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 1/2] tools/bpftool: allow substituting custom vmlinux.h for the build
-Date:   Mon, 29 Jun 2020 17:47:58 -0700
-Message-ID: <20200630004759.521530-1-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1726226AbgF3A6u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Jun 2020 20:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726175AbgF3A6u (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Jun 2020 20:58:50 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3804DC061755;
+        Mon, 29 Jun 2020 17:58:50 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id h23so14446945qtr.0;
+        Mon, 29 Jun 2020 17:58:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=k8JPo/MRdDtQmsz/fwYcyAAt5f70n0S8x1+bnn70EMc=;
+        b=AGCzq5ScGJKEZa0pAhrXN+4oRqcY/tDqrJNThwziEDxbIwTKX895Gmk36T/vOl77NQ
+         F/Qk0MOlcMge8TzVAwmu3AkJJnWTyK3ikJtNGZD0c5i1WwYkBKyCFSpgAES/LFfbn+tZ
+         jlLq1gxqBcgbS0jG41BTOZHc86faMjr/7rQi+TiWx4p4QRE74HqzZpX2B3dn62ndEBf/
+         Hjjg96cPwDFItSsIRigYdUhTX2WmJJM362yfXfgJ66u6UvbHPDFpx/Q5OWC/w/WO6eXO
+         yfJcoVYQQoFPUKaJFVj9BPpvmOUVRb0AsnBVPnvZT/jmAtJJ3m90tDMFySKKnUVv/fcq
+         gDXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=k8JPo/MRdDtQmsz/fwYcyAAt5f70n0S8x1+bnn70EMc=;
+        b=BvFj9TWs+I64tu7/0tZqzoho4blxyRmuFd4vBvVDJyuacmbEYgja3f1xvSYnbSY9zM
+         Wab2LehpafRI/hg+uoa6jPtVQwj9flXGSCR5izQEjUFSR5NdN0i8OjGoATPcFkrZQJ7Q
+         VlKu1kdmOSlM6i9yF4MHrDB6c+W8WQtWkDlu7miG4HarQfQqfgYBXiA40kVDiM3zDUPi
+         eg69x6rUEmdeSeWW3Q8NyxH32O9Yir4WG1pEtQzwVpIQ8AEeB5zAxQ1u/xzWLnsmdI8v
+         iwhEU9/lYVXAR2AF3z0xVnbBiGI/QidUH36utHnh5enxNSIcyzh8qpu0yOZZIwHmrZXl
+         2Wmg==
+X-Gm-Message-State: AOAM532ZyLjyQcNA4yWYBSiEjwZ8n0gvq7drcVT2sLwrYpgmsL3VrJhY
+        Hra3R1PU4+AVgw4LVvIJERCDHAMLnk0Y4B15D/B7g6UT
+X-Google-Smtp-Source: ABdhPJyj2tlK4BHxtQNdgkkHACBQbL8CsdI8VFvbVoDT0vScG2ZadtRPa8Rf9zeoXSwgXMl/drqX2Uhtm6rPQz7jTrs=
+X-Received: by 2002:ac8:1991:: with SMTP id u17mr17805577qtj.93.1593478729427;
+ Mon, 29 Jun 2020 17:58:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-06-29_21:2020-06-29,2020-06-29 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 bulkscore=0
- impostorscore=0 lowpriorityscore=0 cotscore=-2147483648 spamscore=0
- mlxlogscore=733 adultscore=0 clxscore=1015 malwarescore=0 suspectscore=8
- priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006300002
-X-FB-Internal: deliver
+References: <20200630003441.42616-1-alexei.starovoitov@gmail.com> <20200630003441.42616-2-alexei.starovoitov@gmail.com>
+In-Reply-To: <20200630003441.42616-2-alexei.starovoitov@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 29 Jun 2020 17:58:38 -0700
+Message-ID: <CAEf4BzaLJ619mcN9pBQkupkJOcFfXWiuM8oy0Qjezy65Rpd_vA@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 1/5] bpf: Remove redundant synchronize_rcu.
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In some build contexts (e.g., Travis CI build for outdated kernel), vmlin=
-ux.h,
-generated from available kernel, doesn't contain all the types necessary =
-for
-BPF program compilation. For such set up, the most maintainable way to de=
-al
-with this problem is to keep pre-generated (almost up-to-date) vmlinux.h
-checked in and use it for compilation purposes. bpftool after that can de=
-al
-with kernel missing some of the features in runtime with no problems.
+On Mon, Jun 29, 2020 at 5:35 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> bpf_free_used_maps() or close(map_fd) will trigger map_free callback.
+> bpf_free_used_maps() is called after bpf prog is no longer executing:
+> bpf_prog_put->call_rcu->bpf_prog_free->bpf_free_used_maps.
+> Hence there is no need to call synchronize_rcu() to protect map elements.
+>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
 
-To that effect, allow to specify path to custom vmlinux.h to bpftool's
-Makefile with VMLINUX_H variable.
+Seems correct. And nice that maps don't have to care about this anymore.
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/bpf/bpftool/Makefile | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 8c6563e56ffc..273da1615503 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -122,20 +122,24 @@ BPFTOOL_BOOTSTRAP :=3D $(if $(OUTPUT),$(OUTPUT)bpft=
-ool-bootstrap,./bpftool-bootstr
- BOOTSTRAP_OBJS =3D $(addprefix $(OUTPUT),main.o common.o json_writer.o g=
-en.o btf.o)
- OBJS =3D $(patsubst %.c,$(OUTPUT)%.o,$(SRCS)) $(OUTPUT)disasm.o
-=20
--VMLINUX_BTF_PATHS :=3D $(if $(O),$(O)/vmlinux)				\
-+VMLINUX_BTF_PATHS ?=3D $(if $(O),$(O)/vmlinux)				\
- 		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)	\
- 		     ../../../vmlinux					\
- 		     /sys/kernel/btf/vmlinux				\
- 		     /boot/vmlinux-$(shell uname -r)
--VMLINUX_BTF :=3D $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS)))=
-)
-+VMLINUX_BTF ?=3D $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS)))=
-)
-=20
--ifneq ($(VMLINUX_BTF),)
-+ifneq ($(VMLINUX_BTF)$(VMLINUX_H),)
- ifeq ($(feature-clang-bpf-co-re),1)
-=20
- BUILD_BPF_SKELS :=3D 1
-=20
- $(OUTPUT)vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL_BOOTSTRAP)
-+ifeq ($(VMLINUX_H),)
- 	$(QUIET_GEN)$(BPFTOOL_BOOTSTRAP) btf dump file $< format c > $@
-+else
-+	$(Q)cp "$(VMLINUX_H)" $@
-+endif
-=20
- $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF)
- 	$(QUIET_CLANG)$(CLANG) \
---=20
-2.24.1
-
+>  kernel/bpf/arraymap.c         | 9 ---------
+>  kernel/bpf/hashtab.c          | 8 +++-----
+>  kernel/bpf/lpm_trie.c         | 5 -----
+>  kernel/bpf/queue_stack_maps.c | 7 -------
+>  kernel/bpf/reuseport_array.c  | 2 --
+>  kernel/bpf/ringbuf.c          | 7 -------
+>  kernel/bpf/stackmap.c         | 3 ---
+>  7 files changed, 3 insertions(+), 38 deletions(-)
+>
