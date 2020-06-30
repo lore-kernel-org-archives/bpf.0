@@ -2,126 +2,214 @@ Return-Path: <SRS0=4Gtr=AL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 786C6C433E0
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 06:34:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54A77C433E0
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 06:41:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5692320672
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 06:34:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IvXfTGQB"
+	by mail.kernel.org (Postfix) with ESMTP id 30B1320775
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 06:41:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1593499310;
+	bh=sTebAlWFotw4g3QTIOQOm4LIU5U7mCjawFbDLdWTlL0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=JVldXSRMjCCcYX8v17ie/oNkZNVxuE0tapaaccUDq9aA4jrBDsr+bbEm4Afjq9+bm
+	 8xLdz6EtQqQot0rJZL95FS5e5VJN+g16FcpsY0hjXp79mqh3o+6wY3WxyiD25ZsiRJ
+	 Z4OVwcoviO9uPDWtdbXRE5mPlLWw+vhedmj8uiiY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730119AbgF3GeM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Jun 2020 02:34:12 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:50106 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730002AbgF3GeM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 30 Jun 2020 02:34:12 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05U6StTP018750
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 23:34:12 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=kRyshNtqpdYOMp9DHrkzg6Ozozw/ZB7f/leGOK7exq0=;
- b=IvXfTGQBTMAjmqIROl1jelKccu7UiNqXpK9lLbYezF8M3t8eajGGcxXFR1j4kWPXtlbB
- mzb1vUUCOXEvUcB5JUH4Nyhlk9aIXTpky4ESMn2cPqGEG+jEYU5cL3sObQ6UPIe36M2C
- ey/PUEnNbO9AWyOzj4Royqomc9vxprqVGZM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 31xp398h3x-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 29 Jun 2020 23:34:11 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 29 Jun 2020 23:34:07 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 32CA162E5214; Mon, 29 Jun 2020 23:28:55 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Song Liu <songliubraving@fb.com>
-Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <peterz@infradead.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <kernel-team@fb.com>, <john.fastabend@gmail.com>,
-        <kpsingh@chromium.org>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v5 bpf-next 3/4] bpf: allow %pB in bpf_seq_printf() and bpf_trace_printk()
-Date:   Mon, 29 Jun 2020 23:28:45 -0700
-Message-ID: <20200630062846.664389-4-songliubraving@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200630062846.664389-1-songliubraving@fb.com>
-References: <20200630062846.664389-1-songliubraving@fb.com>
+        id S1730190AbgF3Glt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Jun 2020 02:41:49 -0400
+Received: from condef-02.nifty.com ([202.248.20.67]:37176 "EHLO
+        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730434AbgF3Glt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Jun 2020 02:41:49 -0400
+X-Greylist: delayed 416 seconds by postgrey-1.27 at vger.kernel.org; Tue, 30 Jun 2020 02:41:48 EDT
+Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-02.nifty.com with ESMTP id 05U6VLE1009899;
+        Tue, 30 Jun 2020 15:31:21 +0900
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 05U6UgIb011232;
+        Tue, 30 Jun 2020 15:30:42 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 05U6UgIb011232
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1593498643;
+        bh=hWw/PnfkqdzxZlXBfdr5ZsRULyy797gdejQ+pX6AzaU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZhAbYh7zx1kczWaedEG6cKzY69GueVLOcznv9ldVPHTsWHek3NL2YwuGkV7kFDLGb
+         rQ5l8dVh5CvsJuOb1srMpPqZWRgRMoK9XMkZ+kR8BOisxy5RRixhan8Di1eMdS70DG
+         eXQL+diXuQWzA+yu+sapyFhsvHF+sDUGvy0dwyOe4lFIey6+M+3iBzGbIEMBOiJsv5
+         pBK5sCVtscl3TgYquXJkI/OjtavekrEye92GSHIP/NYQ2KuOvgWq8W2KHHerjjRxJ0
+         bUo+IVFBqiZNVhF17AEz79MgMIj/ZkC4gM/aET2SMUSqSNo7cOdqmefnUN+yB7YAVx
+         jHxb8KRPbWGUw==
+X-Nifty-SrcIP: [209.85.222.51]
+Received: by mail-ua1-f51.google.com with SMTP id z47so6122322uad.5;
+        Mon, 29 Jun 2020 23:30:42 -0700 (PDT)
+X-Gm-Message-State: AOAM5325Udae0HlR72Y6pRI2WvJ7cLJfoiMJc/1E7rjJpBkfJAtOedQ1
+        gG6+3TxHQwzkxEoWy7dJZ5cRf6wxdqQgm/irAKA=
+X-Google-Smtp-Source: ABdhPJw4WXNDTVroElfgeqLVDMNI7bd4mrYrp5LWdLRuCY5G094o1kEYH5ERVBEamOeUfiHOcfZYY7koTqlFDLQ6t3M=
+X-Received: by 2002:ab0:156d:: with SMTP id p42mr13408863uae.121.1593498641294;
+ Mon, 29 Jun 2020 23:30:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-06-30_01:2020-06-30,2020-06-29 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- impostorscore=0 phishscore=0 cotscore=-2147483648 malwarescore=0
- lowpriorityscore=0 mlxscore=0 suspectscore=8 clxscore=1015
- priorityscore=1501 bulkscore=0 spamscore=0 mlxlogscore=999 classifier=spam
- adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006300048
-X-FB-Internal: deliver
+References: <20200423073929.127521-1-masahiroy@kernel.org> <20200423073929.127521-5-masahiroy@kernel.org>
+ <20200608115628.osizkpo76cgn2ci7@lion.mk-sys.cz>
+In-Reply-To: <20200608115628.osizkpo76cgn2ci7@lion.mk-sys.cz>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 30 Jun 2020 15:30:04 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARGKCyWbfWUOX3nLLOBS3gi1QU3acdXLPVK4C+ErMDLpA@mail.gmail.com>
+Message-ID: <CAK7LNARGKCyWbfWUOX3nLLOBS3gi1QU3acdXLPVK4C+ErMDLpA@mail.gmail.com>
+Subject: Re: [PATCH 04/16] net: bpfilter: use 'userprogs' syntax to build bpfilter_umh
+To:     Michal Kubecek <mkubecek@suse.cz>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This makes it easy to dump stack trace in text.
+Hi Michal, Alexei,
 
-Acked-by: Yonghong Song <yhs@fb.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- kernel/trace/bpf_trace.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+On Mon, Jun 8, 2020 at 8:56 PM Michal Kubecek <mkubecek@suse.cz> wrote:
+>
+> On Thu, Apr 23, 2020 at 04:39:17PM +0900, Masahiro Yamada wrote:
+> > The user mode helper should be compiled for the same architecture as
+> > the kernel.
+> >
+> > This Makefile reuses the 'hostprogs' syntax by overriding HOSTCC with CC.
+> >
+> > Now that Kbuild provides the syntax 'userprogs', use it to fix the
+> > Makefile mess.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > Reported-by: kbuild test robot <lkp@intel.com>
+> > ---
+> >
+> >  net/bpfilter/Makefile | 11 ++++-------
+> >  1 file changed, 4 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
+> > index 36580301da70..6ee650c6badb 100644
+> > --- a/net/bpfilter/Makefile
+> > +++ b/net/bpfilter/Makefile
+> > @@ -3,17 +3,14 @@
+> >  # Makefile for the Linux BPFILTER layer.
+> >  #
+> >
+> > -hostprogs := bpfilter_umh
+> > +userprogs := bpfilter_umh
+> >  bpfilter_umh-objs := main.o
+> > -KBUILD_HOSTCFLAGS += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
+> > -HOSTCC := $(CC)
+> > +user-ccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
+> >
+> > -ifeq ($(CONFIG_BPFILTER_UMH), y)
+> > -# builtin bpfilter_umh should be compiled with -static
+> > +# builtin bpfilter_umh should be linked with -static
+> >  # since rootfs isn't mounted at the time of __init
+> >  # function is called and do_execv won't find elf interpreter
+> > -KBUILD_HOSTLDFLAGS += -static
+> > -endif
+> > +bpfilter_umh-ldflags += -static
+> >
+> >  $(obj)/bpfilter_umh_blob.o: $(obj)/bpfilter_umh
+>
+> Hello,
+>
+> I just noticed that this patch (now in mainline as commit 8a2cc0505cc4)
+> drops the test if CONFIG_BPFILTER_UMH is "y" so that -static is now
+> passed to the linker even if bpfilter_umh is built as a module which
+> wasn't the case in v5.7.
+>
+> This is not mentioned in the commit message and the comment still says
+> "*builtin* bpfilter_umh should be linked with -static" so this change
+> doesn't seem to be intentional. Did I miss something?
+>
+> Michal Kubecek
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 977ba3b6f6c64..1d874d8e4384b 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -376,7 +376,7 @@ static void bpf_trace_copy_string(char *buf, void *un=
-safe_ptr, char fmt_ptype,
-=20
- /*
-  * Only limited trace_printk() conversion specifiers allowed:
-- * %d %i %u %x %ld %li %lu %lx %lld %lli %llu %llx %p %pks %pus %s
-+ * %d %i %u %x %ld %li %lu %lx %lld %lli %llu %llx %p %pB %pks %pus %s
-  */
- BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_size, u64, arg1,
- 	   u64, arg2, u64, arg3)
-@@ -420,6 +420,11 @@ BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_s=
-ize, u64, arg1,
- 				goto fmt_str;
- 			}
-=20
-+			if (fmt[i + 1] =3D=3D 'B') {
-+				i++;
-+				goto fmt_next;
-+			}
-+
- 			/* disallow any further format extensions */
- 			if (fmt[i + 1] !=3D 0 &&
- 			    !isspace(fmt[i + 1]) &&
-@@ -636,7 +641,8 @@ BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char=
- *, fmt, u32, fmt_size,
- 		if (fmt[i] =3D=3D 'p') {
- 			if (fmt[i + 1] =3D=3D 0 ||
- 			    fmt[i + 1] =3D=3D 'K' ||
--			    fmt[i + 1] =3D=3D 'x') {
-+			    fmt[i + 1] =3D=3D 'x' ||
-+			    fmt[i + 1] =3D=3D 'B') {
- 				/* just kernel pointers */
- 				params[fmt_cnt] =3D args[fmt_cnt];
- 				fmt_cnt++;
---=20
-2.24.1
+I was away for a while from this because I saw long discussion in
+"net/bpfilter: Remove this broken and apparently unmaintained"
 
+
+Please let me resume this topic now.
+
+
+The original behavior of linking umh was like this:
+  - If CONFIG_BPFILTER_UMH=y, bpfilter_umh was linked with -static
+  - If CONFIG_BPFILTER_UMH=m, bpfilter_umh was linked without -static
+
+
+
+Restoring the original behavior will add more complexity because
+now we have CONFIG_CC_CAN_LINK and CONFIG_CC_CAN_LINK_STATIC
+since commit b1183b6dca3e0d5
+
+If CONFIG_BPFILTER_UMH=y, we need to check CONFIG_CC_CAN_LINK_STATIC.
+If CONFIG_BPFILTER_UMH=m, we need to check CONFIG_CC_CAN_LINK.
+This would make the Kconfig dependency logic too complicated.
+
+
+To make it simpler, I'd like to suggest two options.
+
+
+
+Idea 1:
+
+  Always use -static irrespective of whether
+  CONFIG_BPFILTER_UMH is y or m.
+
+  Add two more lines to clarify this
+  in the comment in net/bpfilter/Makefile:
+
+  # builtin bpfilter_umh should be linked with -static
+  # since rootfs isn't mounted at the time of __init
+  # function is called and do_execv won't find elf interpreter.
+  # Static linking is not required when bpfilter is modular, but
+  # we always pass -static to keep the 'depends on' in Kconfig simple.
+
+
+
+Idea 2:
+
+   Allow umh to become only modular,
+   and drop -static flag entirely.
+
+   If you look at net/bpfilter/Kconfig,
+   BPFILTER_UMH already has 'default m'.
+   So, I assume the most expected use-case
+   is modular.
+
+   My suggestion is to replace 'default m' with 'depends on m'.
+
+   config BPFILTER_UMH
+           tristate "bpfilter kernel module with user mode helper"
+           depends on CC_CAN_LINK
+           depends on m
+
+   Then BPFILTER_UMH will be restricted to either m or n.
+   Link umh dynamically because we can expect rootfs
+   is already mounted for the module case.
+
+
+
+
+
+
+Comments are appreciated.
+
+
+-- 
+Best Regards
+Masahiro Yamada
