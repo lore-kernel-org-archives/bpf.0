@@ -2,139 +2,127 @@ Return-Path: <SRS0=4Gtr=AL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0498C433E0
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 08:57:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A634CC433E0
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 11:31:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFA60206BE
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 08:57:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82510207E8
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 11:31:42 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BDbyBT3o"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731726AbgF3I5J (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Jun 2020 04:57:09 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40932 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729992AbgF3I5J (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 30 Jun 2020 04:57:09 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 87A42AE61;
-        Tue, 30 Jun 2020 08:57:06 +0000 (UTC)
-Received: by lion.mk-sys.cz (Postfix, from userid 1000)
-        id E8BAB604DC; Tue, 30 Jun 2020 10:57:05 +0200 (CEST)
-Date:   Tue, 30 Jun 2020 10:57:05 +0200
-From:   Michal Kubecek <mkubecek@suse.cz>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Subject: Re: [PATCH 04/16] net: bpfilter: use 'userprogs' syntax to build
- bpfilter_umh
-Message-ID: <20200630085705.txwn62zixvxxs7rt@lion.mk-sys.cz>
-References: <20200423073929.127521-1-masahiroy@kernel.org>
- <20200423073929.127521-5-masahiroy@kernel.org>
- <20200608115628.osizkpo76cgn2ci7@lion.mk-sys.cz>
- <CAK7LNARGKCyWbfWUOX3nLLOBS3gi1QU3acdXLPVK4C+ErMDLpA@mail.gmail.com>
+        id S1731302AbgF3Lbm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Jun 2020 07:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726875AbgF3Lbl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Jun 2020 07:31:41 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B66C061755;
+        Tue, 30 Jun 2020 04:31:41 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id l6so6274200pjq.1;
+        Tue, 30 Jun 2020 04:31:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iSzKjPE7Q/bcmLPgwav6pvuAnH2KjNETVRm7VbUG+wc=;
+        b=BDbyBT3ogv3cW0OPfgttzmIhkVAi258FDi/waFPExBvW77tkP8dTvnhPhS/wNG95oC
+         4XeiunNymDn3Ej3mp901CB1x/ExSDw6mZO7cYlkngJTMD/YQTap0jhdir7BSTL+94Iel
+         DfWkgOy9WTbjfezSjeslu+ywU3tmGI5lrEm77E4GROYc0KUOTWtQdcMBa+QEgRBLdujs
+         k+nkE/kwsMCXixPciNUpbBWA8rudmJ6h6EOK/urQJHQEb4TzubyFPFTjmn2LayGUEzSw
+         8vHCle6hPaNFR7lAMxwXRc1gZoGbMabwDoJZ4IZ4aecL+HT+3iMYmXZbMoNAqsM2ExH0
+         QkvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iSzKjPE7Q/bcmLPgwav6pvuAnH2KjNETVRm7VbUG+wc=;
+        b=p5D4eyPUllOj4KOpSuRP0N70mLL+zmnsEzx8XvY1Zob+MbfUOH7McG7mMRCsKcrOan
+         SCRUEh/MUJPUhV3WkpgXEcjySzfCoBvSM3T+Mxf0RRgeVy8jdCiwSGEqDXOXNuEmQkln
+         GngI+Kl8TTBK/4p0DWOGKe3uuKXIGDWbptjTWr24r04P8OBJFKGITmLrP3inwBWde/mn
+         cXmWqTOQVcrbENRpZxk5amXDQDp8yqyFyvYsUxCestQWUQMRyvq7KwHpyDjECWjp+y14
+         tNWr+fnr2Tu+KICzmNKE3Qlifyuf6hVXxNef5DfJv/FfZY/H2OamW6Up8sGe1dtbyvS/
+         ZpZQ==
+X-Gm-Message-State: AOAM532C+Axq3irx2FWbBrnXuYXyOhiZlGOILI6v7rB/QEJ+f03KoE3y
+        4OKdpx/+UqdK1z0kWw41rgw=
+X-Google-Smtp-Source: ABdhPJwApLDmnbZsW2059pf2TQp6rsBGpQ7CU9JsEecPlrcz1m2w+Ma/YAwx/UMmY9kJ4laYypXj3Q==
+X-Received: by 2002:a17:90a:a887:: with SMTP id h7mr20346290pjq.0.1593516700728;
+        Tue, 30 Jun 2020 04:31:40 -0700 (PDT)
+Received: from localhost ([2409:10:2e40:5100:6e29:95ff:fe2d:8f34])
+        by smtp.gmail.com with ESMTPSA id ia13sm2100255pjb.42.2020.06.30.04.31.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2020 04:31:39 -0700 (PDT)
+From:   Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+X-Google-Original-From: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+Date:   Tue, 30 Jun 2020 20:31:37 +0900
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, yhs@fb.com, andriin@fb.com,
+        arnaldo.melo@gmail.com, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
+        linux@rasmusvillemoes.dk, joe@perches.com, pmladek@suse.com,
+        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
+        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 bpf-next 0/8] bpf, printk: add BTF-based type printing
+Message-ID: <20200630113137.GA145027@jagdpanzerIV.localdomain>
+References: <1592914031-31049-1-git-send-email-alan.maguire@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK7LNARGKCyWbfWUOX3nLLOBS3gi1QU3acdXLPVK4C+ErMDLpA@mail.gmail.com>
+In-Reply-To: <1592914031-31049-1-git-send-email-alan.maguire@oracle.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 03:30:04PM +0900, Masahiro Yamada wrote:
-> On Mon, Jun 8, 2020 at 8:56 PM Michal Kubecek <mkubecek@suse.cz> wrote:
-> >
-> > I just noticed that this patch (now in mainline as commit 8a2cc0505cc4)
-> > drops the test if CONFIG_BPFILTER_UMH is "y" so that -static is now
-> > passed to the linker even if bpfilter_umh is built as a module which
-> > wasn't the case in v5.7.
-> >
-> > This is not mentioned in the commit message and the comment still says
-> > "*builtin* bpfilter_umh should be linked with -static" so this change
-> > doesn't seem to be intentional. Did I miss something?
+On (20/06/23 13:07), Alan Maguire wrote:
+>   struct sk_buff *skb = alloc_skb(64, GFP_KERNEL);
 > 
-> I was away for a while from this because I saw long discussion in
-> "net/bpfilter: Remove this broken and apparently unmaintained"
+>   pr_info("%pT", BTF_PTR_TYPE(skb, "struct sk_buff"));
 > 
+> ...gives us:
 > 
-> Please let me resume this topic now.
-> 
-> 
-> The original behavior of linking umh was like this:
->   - If CONFIG_BPFILTER_UMH=y, bpfilter_umh was linked with -static
->   - If CONFIG_BPFILTER_UMH=m, bpfilter_umh was linked without -static
-> 
-> 
-> 
-> Restoring the original behavior will add more complexity because
-> now we have CONFIG_CC_CAN_LINK and CONFIG_CC_CAN_LINK_STATIC
-> since commit b1183b6dca3e0d5
-> 
-> If CONFIG_BPFILTER_UMH=y, we need to check CONFIG_CC_CAN_LINK_STATIC.
-> If CONFIG_BPFILTER_UMH=m, we need to check CONFIG_CC_CAN_LINK.
-> This would make the Kconfig dependency logic too complicated.
-> 
-> 
-> To make it simpler, I'd like to suggest two options.
-> 
-> 
-> 
-> Idea 1:
-> 
->   Always use -static irrespective of whether
->   CONFIG_BPFILTER_UMH is y or m.
-> 
->   Add two more lines to clarify this
->   in the comment in net/bpfilter/Makefile:
-> 
->   # builtin bpfilter_umh should be linked with -static
->   # since rootfs isn't mounted at the time of __init
->   # function is called and do_execv won't find elf interpreter.
->   # Static linking is not required when bpfilter is modular, but
->   # we always pass -static to keep the 'depends on' in Kconfig simple.
+> (struct sk_buff){
+>  .transport_header = (__u16)65535,
+>  .mac_header = (__u16)65535,
+>  .end = (sk_buff_data_t)192,
+>  .head = (unsigned char *)000000007524fd8b,
+>  .data = (unsigned char *)000000007524fd8b,
+>  .truesize = (unsigned int)768,
+>  .users = (refcount_t){
+>   .refs = (atomic_t){
+>    .counter = (int)1,
+>   },
+>  },
+> }
 
-I wouldn't be very happy with this solution as that would mean adding an
-extra build dependency which we don't really need. We might even
-consider disabling CONFIG_BPFILTER_UMH instead.
+Hmm. So this can expose the kernel memory layout (IOW do you print out real
+%px pointers and so on)? If so, then I'd suggest not to use printk.
+Unprivileged /dev/kmsg or /proc/kmsg reads are really OK thing for printk()
+log buffer. And if you are going to print pointer hashes instead,
 
-> Idea 2:
-> 
->    Allow umh to become only modular,
->    and drop -static flag entirely.
-> 
->    If you look at net/bpfilter/Kconfig,
->    BPFILTER_UMH already has 'default m'.
->    So, I assume the most expected use-case
->    is modular.
-> 
->    My suggestion is to replace 'default m' with 'depends on m'.
-> 
->    config BPFILTER_UMH
->            tristate "bpfilter kernel module with user mode helper"
->            depends on CC_CAN_LINK
->            depends on m
-> 
->    Then BPFILTER_UMH will be restricted to either m or n.
->    Link umh dynamically because we can expect rootfs
->    is already mounted for the module case.
+  .transport_header = (__u16)65535,
+  .mac_header = (__u16)65535,
+  .end = (sk_buff_data_t)192,
+  .head = (unsigned char *)34897918740,   // pointer_hash
+  .data = (unsigned char *)23942384983,   // pointer hash
+  .truesize = (unsigned int)768,
+  .users = (refcount_t){
+   .refs = (atomic_t){
+    .counter = (int)1,
+   },
+  },
 
-This wouldn't be a problem for me or openSUSE kernels as we already have
-CONFIG_BPFILTER_UMH=m. But I can't speak for others, I'm not sure if
-there are some use cases requiring CONFIG_BPFILTER_UMH=y.
+then the value of such printouts becomes a bit unclear to me, sorry.
 
-Michal
+Probably, something like a seq print into a file somewhere in
+/sys/kernel/debug/foo, from which only privileged processes can
+read, would be a better approach? My 5 cents.
+
+	-ss
