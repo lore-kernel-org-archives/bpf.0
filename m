@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A489DC433E0
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 17:13:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB1CAC433DF
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 17:13:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 834F520772
-	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 17:13:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C3B4A20723
+	for <bpf@archiver.kernel.org>; Tue, 30 Jun 2020 17:13:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="dG55tokP"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mw3dS25Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387434AbgF3RNB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Jun 2020 13:13:01 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:63468 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729963AbgF3RNB (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 30 Jun 2020 13:13:01 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05UHClRS015844
-        for <bpf@vger.kernel.org>; Tue, 30 Jun 2020 10:13:01 -0700
+        id S2387736AbgF3RNJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Jun 2020 13:13:09 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:55612 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729963AbgF3RNI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 30 Jun 2020 13:13:08 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05UGFvib029333
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2020 10:13:08 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=QBBlwTOVhORfIFqyWDrTRGGbAzuqVdM0VcYhatntdW4=;
- b=dG55tokP7paSiFFyrcb1mgbKY84SS2qJwPAJfJcWL9HolTX/x9JodGRMKuH9gEi0wuXn
- q/7h1tGv2h2orjrFJIrMVQcsrBb4HsIhKNBw4U9oigg8l01mxrF49SIQ1ZLEyh5b8bpj
- YgGLSPtfiSa1+jyNhXnqtIDACfjIbRVV4RI= 
+ bh=Tq6+1il9pk6akMcywfwAMr6DPQXnuUNhk/RVge8GW/E=;
+ b=mw3dS25YO7OJ++iJ7r7vgR5pO24rYaFgLSPb88i/lC7peyWfIFHel++rcaClh+1tV8g+
+ WDDACvyQSdS17ifbLoa0jnwLOK5Tan4r3AubohZXCjK3P3c2H5np0771wxEyjYbuJ04x
+ NEheHczXAFTFDChnHuhu/cCaN/cDYm5n8Qg= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 31xny2axdk-14
+        by mx0a-00082601.pphosted.com with ESMTP id 31x3upnekj-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 30 Jun 2020 10:13:01 -0700
+        for <bpf@vger.kernel.org>; Tue, 30 Jun 2020 10:13:07 -0700
 Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 30 Jun 2020 10:12:44 -0700
+ 15.1.1979.3; Tue, 30 Jun 2020 10:12:45 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 82986370229B; Tue, 30 Jun 2020 10:12:40 -0700 (PDT)
+        id BE8FE3702224; Tue, 30 Jun 2020 10:12:41 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -51,9 +51,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         Wenbo Zhang <ethercflow@gmail.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf 1/2] bpf: fix an incorrect branch elimination by verifier
-Date:   Tue, 30 Jun 2020 10:12:40 -0700
-Message-ID: <20200630171240.2523722-1-yhs@fb.com>
+Subject: [PATCH bpf 2/2] bpf: add tests for PTR_TO_BTF_ID vs. null comparison
+Date:   Tue, 30 Jun 2020 10:12:41 -0700
+Message-ID: <20200630171241.2523875-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200630171240.2523628-1-yhs@fb.com>
 References: <20200630171240.2523628-1-yhs@fb.com>
@@ -63,29 +63,25 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-06-30_06:2020-06-30,2020-06-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 cotscore=-2147483648
- mlxscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
- spamscore=0 clxscore=1015 mlxlogscore=751 adultscore=0 suspectscore=1
- bulkscore=0 impostorscore=0 phishscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006300118
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ mlxlogscore=999 lowpriorityscore=0 impostorscore=0 phishscore=0
+ spamscore=0 bulkscore=0 priorityscore=1501 cotscore=-2147483648
+ suspectscore=13 mlxscore=0 malwarescore=0 clxscore=1015 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006300116
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Wenbo reported an issue in [1] where a checking of null
-pointer is evaluated as always false. In this particular
-case, the program type is tp_btf and the pointer to
-compare is a PTR_TO_BTF_ID.
+Add two tests for PTR_TO_BTF_ID vs. null ptr comparison,
+one for PTR_TO_BTF_ID in the ctx structure and the
+other for PTR_TO_BTF_ID after one level pointer chasing.
+In both cases, the test ensures condition is not
+removed.
 
-The current verifier considers PTR_TO_BTF_ID always
-reprents a non-null pointer, hence all PTR_TO_BTF_ID compares
-to 0 will be evaluated as always not-equal, which resulted
-in the branch elimination.
-
-For example,
+For example, for this test
  struct bpf_fentry_test_t {
      struct bpf_fentry_test_t *a;
  };
@@ -95,65 +91,162 @@ For example,
          test7_result =3D 1;
      return 0;
  }
- int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
- {
-     if (arg->a =3D=3D 0)
-         test8_result =3D 1;
-     return 0;
- }
+Before the previous verifier change, we have xlated codes:
+  int test7(long long unsigned int * ctx):
+  ; int BPF_PROG(test7, struct bpf_fentry_test_t *arg)
+     0: (79) r1 =3D *(u64 *)(r1 +0)
+  ; int BPF_PROG(test7, struct bpf_fentry_test_t *arg)
+     1: (b4) w0 =3D 0
+     2: (95) exit
+After the previous verifier change, we have:
+  int test7(long long unsigned int * ctx):
+  ; int BPF_PROG(test7, struct bpf_fentry_test_t *arg)
+     0: (79) r1 =3D *(u64 *)(r1 +0)
+  ; if (arg =3D=3D 0)
+     1: (55) if r1 !=3D 0x0 goto pc+4
+  ; test7_result =3D 1;
+     2: (18) r1 =3D map[id:6][0]+48
+     4: (b7) r2 =3D 1
+     5: (7b) *(u64 *)(r1 +0) =3D r2
+  ; int BPF_PROG(test7, struct bpf_fentry_test_t *arg)
+     6: (b4) w0 =3D 0
+     7: (95) exit
 
-In above bpf programs, both branch arg =3D=3D 0 and arg->a =3D=3D 0
-are removed. This may not be what developer expected.
-
-The bug is introduced by Commit cac616db39c2 ("bpf: Verifier
-track null pointer branch_taken with JNE and JEQ"),
-where PTR_TO_BTF_ID is considered to be non-null when evaluting
-pointer vs. scalar comparison. This may be added
-considering we have PTR_TO_BTF_ID_OR_NULL in the verifier
-as well.
-
-PTR_TO_BTF_ID_OR_NULL is added to explicitly requires
-a non-NULL testing in selective cases. The current generic
-pointer tracing framework in verifier always
-assigns PTR_TO_BTF_ID so users does not need to
-check NULL pointer at every pointer level like a->b->c->d.
-
-We may not want to assign every PTR_TO_BTF_ID as
-PTR_TO_BTF_ID_OR_NULL as this will require a null test
-before pointer dereference which may cause inconvenience
-for developers. But we could avoid branch elimination
-to preserve original code intention.
-
-This patch simply removed PTR_TO_BTD_ID from reg_type_not_null()
-in verifier, which prevented the above branches from being eliminated.
-
- [1]: https://lore.kernel.org/bpf/79dbb7c0-449d-83eb-5f4f-7af0cc269168@fb=
-.com/T/
-
-Fixes: cac616db39c2 ("bpf: Verifier track null pointer branch_taken with =
-JNE and JEQ")
 Cc: Andrii Nakryiko <andriin@fb.com>
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: Wenbo Zhang <ethercflow@gmail.com>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- kernel/bpf/verifier.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ net/bpf/test_run.c                            | 19 +++++++++++++++-
+ .../selftests/bpf/prog_tests/fentry_fexit.c   |  2 +-
+ .../testing/selftests/bpf/progs/fentry_test.c | 22 +++++++++++++++++++
+ .../testing/selftests/bpf/progs/fexit_test.c  | 22 +++++++++++++++++++
+ 4 files changed, 63 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8911d0576399..94cead5a43e5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -399,8 +399,7 @@ static bool reg_type_not_null(enum bpf_reg_type type)
- 	return type =3D=3D PTR_TO_SOCKET ||
- 		type =3D=3D PTR_TO_TCP_SOCK ||
- 		type =3D=3D PTR_TO_MAP_VALUE ||
--		type =3D=3D PTR_TO_SOCK_COMMON ||
--	        type =3D=3D PTR_TO_BTF_ID;
-+		type =3D=3D PTR_TO_SOCK_COMMON;
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index bfd4ccd80847..b03c469cd01f 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -147,6 +147,20 @@ int noinline bpf_fentry_test6(u64 a, void *b, short =
+c, int d, void *e, u64 f)
+ 	return a + (long)b + c + d + (long)e + f;
  }
 =20
- static bool reg_type_may_be_null(enum bpf_reg_type type)
++struct bpf_fentry_test_t {
++	struct bpf_fentry_test_t *a;
++};
++
++int noinline bpf_fentry_test7(struct bpf_fentry_test_t *arg)
++{
++	return (long)arg;
++}
++
++int noinline bpf_fentry_test8(struct bpf_fentry_test_t *arg)
++{
++	return (long)arg->a;
++}
++
+ int noinline bpf_modify_return_test(int a, int *b)
+ {
+ 	*b +=3D 1;
+@@ -185,6 +199,7 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
+ 			      const union bpf_attr *kattr,
+ 			      union bpf_attr __user *uattr)
+ {
++	struct bpf_fentry_test_t arg =3D {};
+ 	u16 side_effect =3D 0, ret =3D 0;
+ 	int b =3D 2, err =3D -EFAULT;
+ 	u32 retval =3D 0;
+@@ -197,7 +212,9 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
+ 		    bpf_fentry_test3(4, 5, 6) !=3D 15 ||
+ 		    bpf_fentry_test4((void *)7, 8, 9, 10) !=3D 34 ||
+ 		    bpf_fentry_test5(11, (void *)12, 13, 14, 15) !=3D 65 ||
+-		    bpf_fentry_test6(16, (void *)17, 18, 19, (void *)20, 21) !=3D 111)
++		    bpf_fentry_test6(16, (void *)17, 18, 19, (void *)20, 21) !=3D 111 =
+||
++		    bpf_fentry_test7((struct bpf_fentry_test_t *)0) !=3D 0 ||
++		    bpf_fentry_test8(&arg) !=3D 0)
+ 			goto out;
+ 		break;
+ 	case BPF_MODIFY_RETURN:
+diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tool=
+s/testing/selftests/bpf/prog_tests/fentry_fexit.c
+index 83493bd5745c..109d0345a2be 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+@@ -36,7 +36,7 @@ void test_fentry_fexit(void)
+ 	fentry_res =3D (__u64 *)fentry_skel->bss;
+ 	fexit_res =3D (__u64 *)fexit_skel->bss;
+ 	printf("%lld\n", fentry_skel->bss->test1_result);
+-	for (i =3D 0; i < 6; i++) {
++	for (i =3D 0; i < 8; i++) {
+ 		CHECK(fentry_res[i] !=3D 1, "result",
+ 		      "fentry_test%d failed err %lld\n", i + 1, fentry_res[i]);
+ 		CHECK(fexit_res[i] !=3D 1, "result",
+diff --git a/tools/testing/selftests/bpf/progs/fentry_test.c b/tools/test=
+ing/selftests/bpf/progs/fentry_test.c
+index 9365b686f84b..5f645fdaba6f 100644
+--- a/tools/testing/selftests/bpf/progs/fentry_test.c
++++ b/tools/testing/selftests/bpf/progs/fentry_test.c
+@@ -55,3 +55,25 @@ int BPF_PROG(test6, __u64 a, void *b, short c, int d, =
+void * e, __u64 f)
+ 		e =3D=3D (void *)20 && f =3D=3D 21;
+ 	return 0;
+ }
++
++struct bpf_fentry_test_t {
++	struct bpf_fentry_test_t *a;
++};
++
++__u64 test7_result =3D 0;
++SEC("fentry/bpf_fentry_test7")
++int BPF_PROG(test7, struct bpf_fentry_test_t *arg)
++{
++	if (arg =3D=3D 0)
++		test7_result =3D 1;
++	return 0;
++}
++
++__u64 test8_result =3D 0;
++SEC("fentry/bpf_fentry_test8")
++int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
++{
++	if (arg->a =3D=3D 0)
++		test8_result =3D 1;
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/fexit_test.c b/tools/testi=
+ng/selftests/bpf/progs/fexit_test.c
+index bd1e17d8024c..0952affb22a6 100644
+--- a/tools/testing/selftests/bpf/progs/fexit_test.c
++++ b/tools/testing/selftests/bpf/progs/fexit_test.c
+@@ -56,3 +56,25 @@ int BPF_PROG(test6, __u64 a, void *b, short c, int d, =
+void *e, __u64 f, int ret)
+ 		e =3D=3D (void *)20 && f =3D=3D 21 && ret =3D=3D 111;
+ 	return 0;
+ }
++
++struct bpf_fentry_test_t {
++	struct bpf_fentry_test *a;
++};
++
++__u64 test7_result =3D 0;
++SEC("fexit/bpf_fentry_test7")
++int BPF_PROG(test7, struct bpf_fentry_test_t *arg)
++{
++	if (arg =3D=3D 0)
++		test7_result =3D 1;
++	return 0;
++}
++
++__u64 test8_result =3D 0;
++SEC("fexit/bpf_fentry_test8")
++int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
++{
++	if (arg->a =3D=3D 0)
++		test8_result =3D 1;
++	return 0;
++}
 --=20
 2.24.1
 
