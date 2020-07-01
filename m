@@ -2,111 +2,133 @@ Return-Path: <SRS0=pDiR=AM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D972C433E1
-	for <bpf@archiver.kernel.org>; Wed,  1 Jul 2020 17:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7830AC433E1
+	for <bpf@archiver.kernel.org>; Wed,  1 Jul 2020 17:17:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7DD6A2078B
-	for <bpf@archiver.kernel.org>; Wed,  1 Jul 2020 17:03:05 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FNRiKjGO"
+	by mail.kernel.org (Postfix) with ESMTP id 5C16520747
+	for <bpf@archiver.kernel.org>; Wed,  1 Jul 2020 17:17:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732639AbgGARDC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Jul 2020 13:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732625AbgGARDB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Jul 2020 13:03:01 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9A9C08C5DD
-        for <bpf@vger.kernel.org>; Wed,  1 Jul 2020 10:03:01 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id e15so20707783edr.2
-        for <bpf@vger.kernel.org>; Wed, 01 Jul 2020 10:03:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sXLocZuYa5LyRW+7c8dY9wi1ppvduxYFU7Sa4aAHUQ0=;
-        b=FNRiKjGOLujr2GHcouB/onGnSBkqERG4/SfGtF+Ui+ASREDVq0YOFGgipw9Hvu1XeC
-         q8heD9a6c0iKic1AFiHslIDWRsk3kJuygMm66NNQI3CKH+rjWm7qheoPxrMSMqJirLId
-         u0O6QB0nEFLdDv+1vKCf2hb9UR/WD5bow+KZtf+Yai71jqQEIysBGBLVTL5bXK91wveb
-         aW19JVd27lMuXuDtDqanawo4WQLJ1PS+jkTc68VMGHm6mJimVzgSBzRTHIDNYK5Wuy8e
-         MdEyachNYELHOsU4Av3kBkd99S9yklbFxhFQ6+0bJLfrFOw8CzsQH0eP8+R4xf2mYRJs
-         VJTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sXLocZuYa5LyRW+7c8dY9wi1ppvduxYFU7Sa4aAHUQ0=;
-        b=KOuuF/0sPb6Ht0pN+4UO8lO7LdSArRjToSVvigvuUhRQFXxFSDHjGDqyvvsJLWx06C
-         ulK0aaoLw01/214/VoLEvmZRjNheqZSwLHEZiHYbDeufH/n1bjM1tZRRVuhjTquA6+Il
-         HpkFaE9StDlHTGYSAwG0K+WYvSJAlHTM9zQuLCseCVyptl88cs380AlVIS19mF9uWnhk
-         M2nAP4KuGyOjc9gFMb5Kt0zkEkMgknsgygm9fqhKaW1JlS3q2qeIjG+x0MH6hTcMSkBP
-         kuayYfCSoWSJKdhymK1RCVm37TCB0+clx0XIqowgQ7O3efXeFQ/2sQphip1zLBDX81sF
-         DxuQ==
-X-Gm-Message-State: AOAM530UBrW8wtm+XRUsB+Yg3UQNkfbeaORXPu8H8H6dyhVbhB7QS3Ob
-        lFq5aN9NfGqqrY3QEormgQU35G+gaenHDtHmTHSmoQ==
-X-Google-Smtp-Source: ABdhPJx8LUrrdnwmBIDiSNRuGB4f6C/45FYDSPt9e8ZYnDUngrST9sVe5bZuefihx+MmlBauk2XZmDEsc574ZFY6EU0=
-X-Received: by 2002:a50:c355:: with SMTP id q21mr27751649edb.121.1593622979559;
- Wed, 01 Jul 2020 10:02:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200630184922.455439-1-haoluo@google.com> <49df8306-ecc7-b979-d887-b023275e4842@fb.com>
- <CA+khW7iJu2tzcz36XzL6gBq4poq+5Qt0vbrmPRdYuvC-c5U4_A@mail.gmail.com>
- <CA+khW7jNqVMqq2dzf6Dy0pWCZYjHrG7Vm_sUEKKLS-L-ptzEtQ@mail.gmail.com> <46fc8e13-fb3e-6464-b794-60cf90d16543@fb.com>
-In-Reply-To: <46fc8e13-fb3e-6464-b794-60cf90d16543@fb.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 1 Jul 2020 10:02:48 -0700
-Message-ID: <CA+khW7hLL+=sZwCT_6gHHjHTZnmbNk5Pju9vsLOJF4VjyHY-iA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Switch test_vmlinux to use hrtimer_range_start_ns.
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Stanislav Fomichev <sdf@google.com>,
-        Shuah Khan <shuah@kernel.org>,
+        id S1732572AbgGARRQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Jul 2020 13:17:16 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:43496 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731122AbgGARRP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Jul 2020 13:17:15 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jqgMA-0003Fl-5f; Wed, 01 Jul 2020 11:17:10 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jqgM9-0004As-5q; Wed, 01 Jul 2020 11:17:10 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, David Miller <davem@davemloft.net>,
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Bill Wendling <morbo@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20200625095725.GA3303921@kroah.com>
+        <778297d2-512a-8361-cf05-42d9379e6977@i-love.sakura.ne.jp>
+        <20200625120725.GA3493334@kroah.com>
+        <20200625.123437.2219826613137938086.davem@davemloft.net>
+        <CAHk-=whuTwGHEPjvtbBvneHHXeqJC=q5S09mbPnqb=Q+MSPMag@mail.gmail.com>
+        <87pn9mgfc2.fsf_-_@x220.int.ebiederm.org>
+        <87y2oac50p.fsf@x220.int.ebiederm.org>
+        <87bll17ili.fsf_-_@x220.int.ebiederm.org>
+        <20200629221231.jjc2czk3ul2roxkw@ast-mbp.dhcp.thefacebook.com>
+        <87eepwzqhd.fsf@x220.int.ebiederm.org>
+        <20200630165256.i7wdfjxmqu73fewc@ast-mbp.dhcp.thefacebook.com>
+Date:   Wed, 01 Jul 2020 12:12:35 -0500
+In-Reply-To: <20200630165256.i7wdfjxmqu73fewc@ast-mbp.dhcp.thefacebook.com>
+        (Alexei Starovoitov's message of "Tue, 30 Jun 2020 09:52:56 -0700")
+Message-ID: <87lfk3w458.fsf@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1jqgM9-0004As-5q;;;mid=<87lfk3w458.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/OTl4+7uj9gmckES4vam8J/yGBVetut8Y=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+Subject: Re: [PATCH v2 00/15] Make the user mode driver code a better citizen
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 7:26 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 6/30/20 5:10 PM, Hao Luo wrote:
-> > Ok, with the help of my colleague Ian Rogers, I think we solved the
-> > mystery. Clang actually inlined hrtimer_nanosleep() inside
-> > SyS_nanosleep(), so there is no call to that function throughout the
-> > path of the nanosleep syscall. I've been looking at the function body
-> > of hrtimer_nanosleep for quite some time, but clearly overlooked the
-> > caller of hrtimer_nanosleep. hrtimer_nanosleep is pretty short and
-> > there are many constants, inlining would not be too surprising.
->
-> Oh thanks for explanation. inlining makes sense. We have many other
-> instances like this in the past where kprobe won't work properly.
->
-> Could you reword your commit message then?
->
->  > causing fentry and kprobe to not hook on this function properly on a
->  > Clang build kernel.
->
-> The above is a little vague on what happens. What really happens is
-> fentry/kprobe does hook on this function but has no effect since
-> its caller has inlined the function.
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-Sure, sending a v2 with a more accurate description of the issue.
+> On Tue, Jun 30, 2020 at 07:29:34AM -0500, Eric W. Biederman wrote:
+>> 
+>> diff --git a/net/bpfilter/bpfilter_kern.c b/net/bpfilter/bpfilter_kern.c
+>> index 91474884ddb7..3e1874030daa 100644
+>> --- a/net/bpfilter/bpfilter_kern.c
+>> +++ b/net/bpfilter/bpfilter_kern.c
+>> @@ -19,8 +19,8 @@ static void shutdown_umh(void)
+>>         struct pid *tgid = info->tgid;
+>>  
+>>         if (tgid) {
+>> -               kill_pid_info(SIGKILL, SEND_SIG_PRIV, tgid);
+>> -               wait_event(tgid->wait_pidfd, !pid_task(tgid, PIDTYPE_TGID));
+>> +               kill_pid(tgid, SIGKILL, 1);
+>> +               wait_event(tgid->wait_pidfd, !pid_has_task(tgid, PIDTYPE_TGID));
+>>                 bpfilter_umh_cleanup(info);
+>>         }
+>>  }
+>> 
+>> > And then did:
+>> > while true; do iptables -L;rmmod bpfilter; done
+>> >  
+>> > Unfortunately sometimes 'rmmod bpfilter' hangs in wait_event().
+>> 
+>> Hmm.  The wake up happens just of tgid->wait_pidfd happens just before
+>> release_task is called so there is a race.  As it is possible to wake
+>> up and then go back to sleep before pid_has_task becomes false.
+>> 
+>> So I think I need a friendly helper that does:
+>> 
+>> bool task_has_exited(struct pid *tgid)
+>> {
+>> 	bool exited = false;
+>> 
+>> 	rcu_read_lock();
+>>         tsk = pid_task(tgid, PIDTYPE_TGID);
+>>         exited = !!tsk;
+>>         if (tsk) {
+>>         	exited = !!tsk->exit_state;
+>> out:
+>> 	rcu_unlock();
+>> 	return exited;
+>> }
+>
+> All makes sense to me.
+> If I understood the race condition such helper should indeed solve it.
+> Are you going to add such patch to your series?
+> I'll proceed with my work on top of your series and will ignore this
+> race for now, but I think it should be fixed before we land this set
+> into multiple trees.
 
-Hao
+Yes. I am just finishing it up now.
+
+Eric
+
