@@ -2,63 +2,111 @@ Return-Path: <SRS0=pDiR=AM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6166BC433E0
-	for <bpf@archiver.kernel.org>; Wed,  1 Jul 2020 19:46:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26B08C433E0
+	for <bpf@archiver.kernel.org>; Wed,  1 Jul 2020 19:55:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 49EB920760
-	for <bpf@archiver.kernel.org>; Wed,  1 Jul 2020 19:46:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0762720748
+	for <bpf@archiver.kernel.org>; Wed,  1 Jul 2020 19:55:49 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AjW1ipIl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbgGATqb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Jul 2020 15:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        id S1725915AbgGATzs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Jul 2020 15:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726287AbgGATqa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Jul 2020 15:46:30 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6EAC08C5C1;
-        Wed,  1 Jul 2020 12:46:30 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id B90CF12722D0A;
-        Wed,  1 Jul 2020 12:46:29 -0700 (PDT)
-Date:   Wed, 01 Jul 2020 12:46:28 -0700 (PDT)
-Message-Id: <20200701.124628.2214462813443329914.davem@davemloft.net>
-To:     weiyongjun1@huawei.com
-Cc:     hulkci@huawei.com, aelior@marvell.com,
-        GR-everest-linux-l2@marvell.com, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next] qed: Make symbol 'qed_hw_err_type_descr'
- static
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200701153803.69360-1-weiyongjun1@huawei.com>
-References: <20200701153803.69360-1-weiyongjun1@huawei.com>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 01 Jul 2020 12:46:30 -0700 (PDT)
+        with ESMTP id S1725771AbgGATzs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Jul 2020 15:55:48 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4595AC08C5C1;
+        Wed,  1 Jul 2020 12:55:48 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id e13so23436237qkg.5;
+        Wed, 01 Jul 2020 12:55:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=204Z8SCKBHDXt3DvKOYxwVxQkY6yC7+XwE10WZf+lI4=;
+        b=AjW1ipIlLo42Xv7enmuMw4YS7CSvtyEnELzruW5ReDEmEFkWl8NbNVzcCAX+R25MVg
+         DguGPh2fJiK82gADxXdUc+069u+cr9Z0lHd1FIt3lQTnoC1ZZ6JaZO1fBMY4we/6IwP4
+         KFGCJ/ksBT1mI7GTzpcU3Ch0sklkBz/XwL2yelhyLz1H4fIr2KXQJhOjW1rPhWWW8Qhv
+         0vun/3y9nVnCRZP1mNChIqLSD/Zr9vd8fboPqJW0wLvQsz1gu14YADVRIkz01jTo9Uq9
+         scrLUSf9iUQlXVpwPNFQEjA53z4AsMuUAKRUOciSmfI8n22ed6XO4Hx8mGrYkiQQEDgq
+         ADTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=204Z8SCKBHDXt3DvKOYxwVxQkY6yC7+XwE10WZf+lI4=;
+        b=CL7LQlTzARpykMrCCJYKh5CcchpddndCrFeUhAAZ0Fhz6cvyE1eaq/hOQIosVlYTty
+         xuM1O+DfPpALtXbjox375NqZJCq26AbWmn1wBPfoiUdnSnwZ3an5et0nGQvKKP3PfVy4
+         01aCd7qiTKj0nlPo2Z438ooy5JKrbpqeCtgfgMiS3PXnftZnGU47H2AnLlcrbOUFlvFs
+         pG82M4KIiuj6cW4Z1VLU2oZ3bROkUWbQrl0H2iCGjQFU03mJ/fAZMGWhBZx394hlD3dG
+         iobS5iT6/m3GGl73Xw416vBqQhY/HjyE8DmU4m8Ni6BCZ3A3E0/qZgPmZnzDQYpk6rzQ
+         PzDg==
+X-Gm-Message-State: AOAM533wLFh+3LFhRq13t8AZZRYPBYs04H6nl0O5N4oluh+vgxU0dqoy
+        Ci3K+RebjGcEGKMjQWsz00HQsDThEGU5KTI1cwY=
+X-Google-Smtp-Source: ABdhPJz3LimDv2AYM3dSalEg8gwxtEhMHQx1NTJ66XClXOvzYp+KtDPcou9Mo2/TSWzNEJ7+dNTsgWwSSJNAF4orciM=
+X-Received: by 2002:a37:270e:: with SMTP id n14mr25548495qkn.92.1593633347460;
+ Wed, 01 Jul 2020 12:55:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200701194600.948847-1-kafai@fb.com> <20200701194613.949560-1-kafai@fb.com>
+In-Reply-To: <20200701194613.949560-1-kafai@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 1 Jul 2020 12:55:36 -0700
+Message-ID: <CAEf4BzYUV4ay6STtaGWQWcR1PQsD3w6HYpQjdXpSxdCOU56Gog@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] bpf: selftests: Restore netns after each test
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
-Date: Wed, 1 Jul 2020 23:38:03 +0800
+On Wed, Jul 1, 2020 at 12:48 PM Martin KaFai Lau <kafai@fb.com> wrote:
+>
+> It is common for networking tests creating its netns and making its own
+> setting under this new netns (e.g. changing tcp sysctl).  If the test
+> forgot to restore to the original netns, it would affect the
+> result of other tests.
+>
+> This patch saves the original netns at the beginning and then restores it
+> after every test.  Since the restore "setns()" is not expensive, it does it
+> on all tests without tracking if a test has created a new netns or not.
+>
+> The new restore_netns() could also be done in test__end_subtest() such
+> that each subtest will get an automatic netns reset.  However,
+> the individual test would lose flexibility to have total control
+> on netns for its own subtests.  In some cases, forcing a test to do
+> unnecessary netns re-configure for each subtest is time consuming.
+> e.g. In my vm, forcing netns re-configure on each subtest in sk_assign.c
+> increased the runtime from 1s to 8s.  On top of that,  test_progs.c
+> is also doing per-test (instead of per-subtest) cleanup for cgroup.
+> Thus, this patch also does per-test restore_netns().  The only existing
+> per-subtest cleanup is reset_affinity() and no test is depending on this.
+> Thus, it is removed from test__end_subtest() to give a consistent
+> expectation to the individual tests.  test_progs.c only ensures
+> any affinity/netns/cgroup change made by an earlier test does not
+> affect the following tests.
+>
+> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+> ---
 
-> From: Hulk Robot <hulkci@huawei.com>
-> 
-> Fix sparse build warning:
-> 
-> drivers/net/ethernet/qlogic/qed/qed_main.c:2480:6: warning:
->  symbol 'qed_hw_err_type_descr' was not declared. Should it be static?
-> 
-> Signed-off-by: Hulk Robot <hulkci@huawei.com>
+LGTM, thanks.
 
-Applied.
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+
+>  tools/testing/selftests/bpf/test_progs.c | 23 +++++++++++++++++++++--
+>  tools/testing/selftests/bpf/test_progs.h |  2 ++
+>  2 files changed, 23 insertions(+), 2 deletions(-)
+>
+
+[...]
