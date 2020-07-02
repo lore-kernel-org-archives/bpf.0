@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-10.0 required=3.0
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03CE3C433DF
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 16:48:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82A4FC433E0
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 16:49:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB483208D5
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 16:48:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E78C20885
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 16:49:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727796AbgGBQsk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jul 2020 12:48:40 -0400
-Received: from out01.mta.xmission.com ([166.70.13.231]:49850 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726949AbgGBQsi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1727789AbgGBQsj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jul 2020 12:48:39 -0400
+Received: from out03.mta.xmission.com ([166.70.13.233]:40794 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727120AbgGBQsi (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 2 Jul 2020 12:48:38 -0400
 Received: from in01.mta.xmission.com ([166.70.13.51])
-        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        by out03.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.90_1)
         (envelope-from <ebiederm@xmission.com>)
-        id 1jr2O5-0005rb-C3; Thu, 02 Jul 2020 10:48:37 -0600
+        id 1jr2O5-000260-NZ; Thu, 02 Jul 2020 10:48:37 -0600
 Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
         by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.87)
         (envelope-from <ebiederm@xmission.com>)
-        id 1jr2Nt-0007up-FR; Thu, 02 Jul 2020 10:48:26 -0600
+        id 1jr2Nl-0007up-A6; Thu, 02 Jul 2020 10:48:18 -0600
 From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     David Miller <davem@davemloft.net>,
@@ -49,20 +49,19 @@ Cc:     David Miller <davem@davemloft.net>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Christian Brauner <christian.brauner@ubuntu.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date:   Thu,  2 Jul 2020 11:41:39 -0500
-Message-Id: <20200702164140.4468-15-ebiederm@xmission.com>
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Date:   Thu,  2 Jul 2020 11:41:37 -0500
+Message-Id: <20200702164140.4468-13-ebiederm@xmission.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <87y2o1swee.fsf_-_@x220.int.ebiederm.org>
 References: <87y2o1swee.fsf_-_@x220.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1jr2Nt-0007up-FR;;;mid=<20200702164140.4468-15-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/hrrWX1LUGWB585RL9Tl7KNIKxEd+QPqY=
+X-XM-SPF: eid=1jr2Nl-0007up-A6;;;mid=<20200702164140.4468-13-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19HmRhPZpVcthqXrkTnKi3I8QVAgMh9DzI=
 X-SA-Exim-Connect-IP: 68.227.160.95
 X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: [PATCH v3 15/16] umd: Remove exit_umh
+Subject: [PATCH v3 13/16] exit: Factor thread_group_exited out of pidfd_poll
 X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
 X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Sender: bpf-owner@vger.kernel.org
@@ -70,143 +69,103 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpfilter code no longer uses the umd_info.cleanup callback.  This
-callback is what exit_umh exists to call.  So remove exit_umh and all
-of it's associated booking.
+Create an independent helper thread_group_exited report return true
+when all threads have passed exit_notify in do_exit.  AKA all of the
+threads are at least zombies and might be dead or completely gone.
 
-v1: https://lkml.kernel.org/r/87bll6dlte.fsf_-_@x220.int.ebiederm.org
-v2: https://lkml.kernel.org/r/87y2o53abg.fsf_-_@x220.int.ebiederm.org
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Create this helper by taking the logic out of pidfd_poll where
+it is already tested, and adding a missing READ_ONCE on
+the read of task->exit_state.
+
+I will be changing the user mode driver code to use this same logic
+to know when a user mode driver needs to be restarted.
+
+Place the new helper thread_group_exited in kernel/exit.c and
+EXPORT it so it can be used by modules.
+
 Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 ---
- include/linux/sched.h           |  1 -
- include/linux/usermode_driver.h | 16 ----------------
- kernel/exit.c                   |  3 ---
- kernel/usermode_driver.c        | 28 ----------------------------
- 4 files changed, 48 deletions(-)
+ include/linux/sched/signal.h |  2 ++
+ kernel/exit.c                | 24 ++++++++++++++++++++++++
+ kernel/fork.c                |  6 +-----
+ 3 files changed, 27 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 59d1e92bb88e..edb2020875ad 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1511,7 +1511,6 @@ extern struct pid *cad_pid;
- #define PF_KTHREAD		0x00200000	/* I am a kernel thread */
- #define PF_RANDOMIZE		0x00400000	/* Randomize virtual address space */
- #define PF_SWAPWRITE		0x00800000	/* Allowed to write to swap */
--#define PF_UMH			0x02000000	/* I'm an Usermodehelper process */
- #define PF_NO_SETAFFINITY	0x04000000	/* Userland is not allowed to meddle with cpus_mask */
- #define PF_MCE_EARLY		0x08000000      /* Early kill for mce process policy */
- #define PF_MEMALLOC_NOCMA	0x10000000	/* All allocation request will have _GFP_MOVABLE cleared */
-diff --git a/include/linux/usermode_driver.h b/include/linux/usermode_driver.h
-index 45adbffb31d9..073a9e0ec07d 100644
---- a/include/linux/usermode_driver.h
-+++ b/include/linux/usermode_driver.h
-@@ -4,26 +4,10 @@
- #include <linux/umh.h>
- #include <linux/path.h>
+diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+index 0ee5e696c5d8..1bad18a1d8ba 100644
+--- a/include/linux/sched/signal.h
++++ b/include/linux/sched/signal.h
+@@ -674,6 +674,8 @@ static inline int thread_group_empty(struct task_struct *p)
+ #define delay_group_leader(p) \
+ 		(thread_group_leader(p) && !thread_group_empty(p))
  
--#ifdef CONFIG_BPFILTER
--void __exit_umh(struct task_struct *tsk);
--
--static inline void exit_umh(struct task_struct *tsk)
--{
--	if (unlikely(tsk->flags & PF_UMH))
--		__exit_umh(tsk);
--}
--#else
--static inline void exit_umh(struct task_struct *tsk)
--{
--}
--#endif
--
- struct umd_info {
- 	const char *driver_name;
- 	struct file *pipe_to_umh;
- 	struct file *pipe_from_umh;
--	struct list_head list;
--	void (*cleanup)(struct umd_info *info);
- 	struct path wd;
- 	struct pid *tgid;
- };
++extern bool thread_group_exited(struct pid *pid);
++
+ extern struct sighand_struct *__lock_task_sighand(struct task_struct *task,
+ 							unsigned long *flags);
+ 
 diff --git a/kernel/exit.c b/kernel/exit.c
-index a7f112feb0f6..4ec82859bfe5 100644
+index d3294b611df1..a7f112feb0f6 100644
 --- a/kernel/exit.c
 +++ b/kernel/exit.c
-@@ -63,7 +63,6 @@
- #include <linux/random.h>
- #include <linux/rcuwait.h>
- #include <linux/compat.h>
--#include <linux/usermode_driver.h>
+@@ -1713,6 +1713,30 @@ COMPAT_SYSCALL_DEFINE5(waitid,
+ }
+ #endif
  
- #include <linux/uaccess.h>
- #include <asm/unistd.h>
-@@ -805,8 +804,6 @@ void __noreturn do_exit(long code)
- 	exit_task_namespaces(tsk);
- 	exit_task_work(tsk);
- 	exit_thread(tsk);
--	if (group_dead)
--		exit_umh(tsk);
- 
- 	/*
- 	 * Flush inherited counters to the parent - before the parent
-diff --git a/kernel/usermode_driver.c b/kernel/usermode_driver.c
-index f77f8d7ce9e3..cd136f86f799 100644
---- a/kernel/usermode_driver.c
-+++ b/kernel/usermode_driver.c
-@@ -9,9 +9,6 @@
- #include <linux/task_work.h>
- #include <linux/usermode_driver.h>
- 
--static LIST_HEAD(umh_list);
--static DEFINE_MUTEX(umh_list_lock);
--
- static struct vfsmount *blob_to_mnt(const void *data, size_t len, const char *name)
++/**
++ * thread_group_exited - check that a thread group has exited
++ * @pid: tgid of thread group to be checked.
++ *
++ * Test if thread group is has exited (all threads are zombies, dead
++ * or completely gone).
++ *
++ * Return: true if the thread group has exited. false otherwise.
++ */
++bool thread_group_exited(struct pid *pid)
++{
++	struct task_struct *task;
++	bool exited;
++
++	rcu_read_lock();
++	task = pid_task(pid, PIDTYPE_PID);
++	exited = !task ||
++		(READ_ONCE(task->exit_state) && thread_group_empty(task));
++	rcu_read_unlock();
++
++	return exited;
++}
++EXPORT_SYMBOL(thread_group_exited);
++
+ __weak void abort(void)
  {
- 	struct file_system_type *type;
-@@ -134,7 +131,6 @@ static int umd_setup(struct subprocess_info *info, struct cred *new)
- 	umd_info->pipe_to_umh = to_umh[1];
- 	umd_info->pipe_from_umh = from_umh[0];
- 	umd_info->tgid = get_pid(task_tgid(current));
--	current->flags |= PF_UMH;
- 	return 0;
+ 	BUG();
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 142b23645d82..bf215af7a904 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1787,22 +1787,18 @@ static void pidfd_show_fdinfo(struct seq_file *m, struct file *f)
+  */
+ static __poll_t pidfd_poll(struct file *file, struct poll_table_struct *pts)
+ {
+-	struct task_struct *task;
+ 	struct pid *pid = file->private_data;
+ 	__poll_t poll_flags = 0;
+ 
+ 	poll_wait(file, &pid->wait_pidfd, pts);
+ 
+-	rcu_read_lock();
+-	task = pid_task(pid, PIDTYPE_PID);
+ 	/*
+ 	 * Inform pollers only when the whole thread group exits.
+ 	 * If the thread group leader exits before all other threads in the
+ 	 * group, then poll(2) should block, similar to the wait(2) family.
+ 	 */
+-	if (!task || (task->exit_state && thread_group_empty(task)))
++	if (thread_group_exited(pid))
+ 		poll_flags = EPOLLIN | EPOLLRDNORM;
+-	rcu_read_unlock();
+ 
+ 	return poll_flags;
  }
- 
-@@ -182,11 +178,6 @@ int fork_usermode_driver(struct umd_info *info)
- 		goto out;
- 
- 	err = call_usermodehelper_exec(sub_info, UMH_WAIT_EXEC);
--	if (!err) {
--		mutex_lock(&umh_list_lock);
--		list_add(&info->list, &umh_list);
--		mutex_unlock(&umh_list_lock);
--	}
- out:
- 	if (argv)
- 		argv_free(argv);
-@@ -194,23 +185,4 @@ int fork_usermode_driver(struct umd_info *info)
- }
- EXPORT_SYMBOL_GPL(fork_usermode_driver);
- 
--void __exit_umh(struct task_struct *tsk)
--{
--	struct umd_info *info;
--	struct pid *tgid = task_tgid(tsk);
--
--	mutex_lock(&umh_list_lock);
--	list_for_each_entry(info, &umh_list, list) {
--		if (info->tgid == tgid) {
--			list_del(&info->list);
--			mutex_unlock(&umh_list_lock);
--			goto out;
--		}
--	}
--	mutex_unlock(&umh_list_lock);
--	return;
--out:
--	if (info->cleanup)
--		info->cleanup(info);
--}
- 
 -- 
 2.25.0
 
