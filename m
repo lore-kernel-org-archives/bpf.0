@@ -2,167 +2,254 @@ Return-Path: <SRS0=396g=AN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E794C433E0
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 01:35:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB06AC433E0
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 01:40:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D27520781
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 01:35:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1593653742;
-	bh=ORPv43D/MfkF8nCaY6eTl41d5n0TRntKOvuBRXLyLPg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vLcFrwCNQk1HmpWE4EzSq947CsJt3mX14RUuuhd1kpdpQ66y7GPDR3/PQg5QOU485
-	 fFbnKMOxoo4F7TJBRUD1EY9OUmINqGlL9NrJ8s2+j66XgN1mQ4/+fcYo7bGtDoAD4k
-	 S1A1+X1S76H4dtH0/5zMCNPPR2kwk9/TcOrqPadg=
+	by mail.kernel.org (Postfix) with ESMTP id 8EF5B20781
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 01:40:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cdxiNcGV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728968AbgGBBfX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Jul 2020 21:35:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54016 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728350AbgGBBX2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Jul 2020 21:23:28 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7AF722082F;
-        Thu,  2 Jul 2020 01:23:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593653007;
-        bh=ORPv43D/MfkF8nCaY6eTl41d5n0TRntKOvuBRXLyLPg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yGr/jOHaa4V4iXHdx+2xpuIBRNH9nH6Z2TnK7EVMwcMohISwxkp1J35C551ykpU09
-         d3L44dcp4ZG0/TRGV/EPxFSI2fdHfg8oBqpm+6BADN/EYcqfilIU6mCP1QPnsyQP8W
-         zQ6soI1ix7wvYuChq+ly8QXlnHVC6jJ4xjb2FnnA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ciara Loftus <ciara.loftus@intel.com>,
-        Andrew Bowers <andrewx.bowers@intel.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 26/53] i40e: protect ring accesses with READ- and WRITE_ONCE
-Date:   Wed,  1 Jul 2020 21:21:35 -0400
-Message-Id: <20200702012202.2700645-26-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200702012202.2700645-1-sashal@kernel.org>
-References: <20200702012202.2700645-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1727805AbgGBBkF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Jul 2020 21:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727801AbgGBBkE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Jul 2020 21:40:04 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A18C08C5C1;
+        Wed,  1 Jul 2020 18:40:04 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id e8so12651851pgc.5;
+        Wed, 01 Jul 2020 18:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=51AUnoQ4Cnz88Kbm4onJmgeuZ1Abce+MfMXT9uG9jmA=;
+        b=cdxiNcGVhWxXObTtYxl/9RVRQ2+z9RYQSijhVLa1JZ1T4kjecGPK2A1cQNdiOaJF5V
+         UUphxBm1DhSMh/+q436D0wneCmhb4ZGY/8AtJBgV0crtt0Bbn+7cLxfDghh9C8SAM9TM
+         xAUNL/AXuG9S0Jyqb9eSYccokdVEzH3D6S7EYDugGysdxC2uO8aC9YYq4FpzJT3TW5As
+         H6AabWihCZzSPHRzti5n9vNpMikCRJLL1p8UuZlaBzYsFcEK20iAxPrlBx4lvMfmrxIo
+         n48aozcY3t5G6URVn+f83f/qkM7U0QUr/6JcetopLl53kmwhP70Zsg065xmQH+Jj0qIw
+         U8zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=51AUnoQ4Cnz88Kbm4onJmgeuZ1Abce+MfMXT9uG9jmA=;
+        b=tyvAkiG3GZBxViUT6kILruLZLLLxh/2/ORIrxQL2fAHEt9hUXS1OHq0ofBglUDE/2o
+         VLMKQPMBcwbQXmxQZYpdQncDPEx3W37MdnBADL1CxSuputrUcRVOGB8Bn7+Rd4cqFF9X
+         sA1F8ANuUL1mInhOTQRH4TG1NWgbF+qpKNbyz4eMAnC8kgcOnzvBXwdGA9qKt6fP9roV
+         qDKhKN9Kp5gIRUvg8YQCxU3ryTzpmfjlblyTfc7sKLczU6b9ebV+kjnKamXC1W2Srah1
+         x57lFNF6IhhL3h5jPLwTXhXhw9o9Gr25GKw9SLnvPHWstcfrT8vB1tPMQUWXt8VfijKx
+         5O2A==
+X-Gm-Message-State: AOAM531YXV9jZX0hNef5XMr0ZvRRD1lEPLKy52yoDA6+fhhLozERG37M
+        F45B8LK8k9B4pco9VvDoNgE3Hg+B
+X-Google-Smtp-Source: ABdhPJwZmZ4lExn+a3iT4LDtwexery19H+/aAN78rGMg1PNpZwfik+OmGTJnNvcL3/g2XHNGti17iA==
+X-Received: by 2002:a63:ff54:: with SMTP id s20mr23343990pgk.251.1593654004179;
+        Wed, 01 Jul 2020 18:40:04 -0700 (PDT)
+Received: from ast-mbp.thefacebook.com ([163.114.132.7])
+        by smtp.gmail.com with ESMTPSA id c14sm6976669pfj.82.2020.07.01.18.40.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 01 Jul 2020 18:40:03 -0700 (PDT)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@fb.com
+Subject: [PATCH bpf-next] bpf: Add bpf_prog iterator
+Date:   Wed,  1 Jul 2020 18:40:01 -0700
+Message-Id: <20200702014001.37945-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.13.5
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ciara Loftus <ciara.loftus@intel.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-[ Upstream commit d59e267912cd90b0adf33b4659050d831e746317 ]
+It's mostly a copy paste of commit 6086d29def80 ("bpf: Add bpf_map iterator")
+that is use to implement bpf_seq_file opreations to traverse all bpf programs.
 
-READ_ONCE should be used when reading rings prior to accessing the
-statistics pointer. Introduce this as well as the corresponding WRITE_ONCE
-usage when allocating and freeing the rings, to ensure protected access.
-
-Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
-Tested-by: Andrew Bowers <andrewx.bowers@intel.com>
-Signed-off-by: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c | 29 ++++++++++++++-------
- 1 file changed, 19 insertions(+), 10 deletions(-)
+No selftests?!
+They're coming as part of "usermode_driver for iterators" set.
+This patch is trivial and independent, so sending it first.
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 2a037ec244b94..80dc5fcb82db7 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -439,11 +439,15 @@ static void i40e_get_netdev_stats_struct(struct net_device *netdev,
- 		i40e_get_netdev_stats_struct_tx(ring, stats);
+ include/linux/bpf.h    |   1 +
+ kernel/bpf/Makefile    |   2 +-
+ kernel/bpf/prog_iter.c | 102 +++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/syscall.c   |  19 ++++++++
+ 4 files changed, 123 insertions(+), 1 deletion(-)
+ create mode 100644 kernel/bpf/prog_iter.c
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 0cd7f6884c5c..3c659f36591d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1112,6 +1112,7 @@ int  generic_map_delete_batch(struct bpf_map *map,
+ 			      const union bpf_attr *attr,
+ 			      union bpf_attr __user *uattr);
+ struct bpf_map *bpf_map_get_curr_or_next(u32 *id);
++struct bpf_prog *bpf_prog_get_curr_or_next(u32 *id);
  
- 		if (i40e_enabled_xdp_vsi(vsi)) {
--			ring++;
-+			ring = READ_ONCE(vsi->xdp_rings[i]);
-+			if (!ring)
-+				continue;
- 			i40e_get_netdev_stats_struct_tx(ring, stats);
- 		}
+ extern int sysctl_unprivileged_bpf_disabled;
  
--		ring++;
-+		ring = READ_ONCE(vsi->rx_rings[i]);
-+		if (!ring)
-+			continue;
- 		do {
- 			start   = u64_stats_fetch_begin_irq(&ring->syncp);
- 			packets = ring->stats.packets;
-@@ -787,6 +791,8 @@ static void i40e_update_vsi_stats(struct i40e_vsi *vsi)
- 	for (q = 0; q < vsi->num_queue_pairs; q++) {
- 		/* locate Tx ring */
- 		p = READ_ONCE(vsi->tx_rings[q]);
-+		if (!p)
-+			continue;
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 1131a921e1a6..e6eb9c0402da 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -2,7 +2,7 @@
+ obj-y := core.o
+ CFLAGS_core.o += $(call cc-disable-warning, override-init)
  
- 		do {
- 			start = u64_stats_fetch_begin_irq(&p->syncp);
-@@ -800,8 +806,11 @@ static void i40e_update_vsi_stats(struct i40e_vsi *vsi)
- 		tx_linearize += p->tx_stats.tx_linearize;
- 		tx_force_wb += p->tx_stats.tx_force_wb;
- 
--		/* Rx queue is part of the same block as Tx queue */
--		p = &p[1];
-+		/* locate Rx ring */
-+		p = READ_ONCE(vsi->rx_rings[q]);
-+		if (!p)
-+			continue;
+-obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o
++obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o
+ obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o
+ obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o
+ obj-$(CONFIG_BPF_SYSCALL) += disasm.o
+diff --git a/kernel/bpf/prog_iter.c b/kernel/bpf/prog_iter.c
+new file mode 100644
+index 000000000000..3080abd4d8ad
+--- /dev/null
++++ b/kernel/bpf/prog_iter.c
+@@ -0,0 +1,102 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2020 Facebook */
++#include <linux/bpf.h>
++#include <linux/fs.h>
++#include <linux/filter.h>
++#include <linux/kernel.h>
 +
- 		do {
- 			start = u64_stats_fetch_begin_irq(&p->syncp);
- 			packets = p->stats.packets;
-@@ -10816,10 +10825,10 @@ static void i40e_vsi_clear_rings(struct i40e_vsi *vsi)
- 	if (vsi->tx_rings && vsi->tx_rings[0]) {
- 		for (i = 0; i < vsi->alloc_queue_pairs; i++) {
- 			kfree_rcu(vsi->tx_rings[i], rcu);
--			vsi->tx_rings[i] = NULL;
--			vsi->rx_rings[i] = NULL;
-+			WRITE_ONCE(vsi->tx_rings[i], NULL);
-+			WRITE_ONCE(vsi->rx_rings[i], NULL);
- 			if (vsi->xdp_rings)
--				vsi->xdp_rings[i] = NULL;
-+				WRITE_ONCE(vsi->xdp_rings[i], NULL);
- 		}
- 	}
++struct bpf_iter_seq_prog_info {
++	u32 mid;
++};
++
++static void *bpf_prog_seq_start(struct seq_file *seq, loff_t *pos)
++{
++	struct bpf_iter_seq_prog_info *info = seq->private;
++	struct bpf_prog *prog;
++
++	prog = bpf_prog_get_curr_or_next(&info->mid);
++	if (!prog)
++		return NULL;
++
++	++*pos;
++	return prog;
++}
++
++static void *bpf_prog_seq_next(struct seq_file *seq, void *v, loff_t *pos)
++{
++	struct bpf_iter_seq_prog_info *info = seq->private;
++	struct bpf_prog *prog;
++
++	++*pos;
++	++info->mid;
++	bpf_prog_put((struct bpf_prog *)v);
++	prog = bpf_prog_get_curr_or_next(&info->mid);
++	if (!prog)
++		return NULL;
++
++	return prog;
++}
++
++struct bpf_iter__bpf_prog {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct bpf_prog *, prog);
++};
++
++DEFINE_BPF_ITER_FUNC(bpf_prog, struct bpf_iter_meta *meta, struct bpf_prog *prog)
++
++static int __bpf_prog_seq_show(struct seq_file *seq, void *v, bool in_stop)
++{
++	struct bpf_iter__bpf_prog ctx;
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++	int ret = 0;
++
++	ctx.meta = &meta;
++	ctx.prog = v;
++	meta.seq = seq;
++	prog = bpf_iter_get_info(&meta, in_stop);
++	if (prog)
++		ret = bpf_iter_run_prog(prog, &ctx);
++
++	return ret;
++}
++
++static int bpf_prog_seq_show(struct seq_file *seq, void *v)
++{
++	return __bpf_prog_seq_show(seq, v, false);
++}
++
++static void bpf_prog_seq_stop(struct seq_file *seq, void *v)
++{
++	if (!v)
++		(void)__bpf_prog_seq_show(seq, v, true);
++	else
++		bpf_prog_put((struct bpf_prog *)v);
++}
++
++static const struct seq_operations bpf_prog_seq_ops = {
++	.start	= bpf_prog_seq_start,
++	.next	= bpf_prog_seq_next,
++	.stop	= bpf_prog_seq_stop,
++	.show	= bpf_prog_seq_show,
++};
++
++static const struct bpf_iter_reg bpf_prog_reg_info = {
++	.target			= "bpf_prog",
++	.seq_ops		= &bpf_prog_seq_ops,
++	.init_seq_private	= NULL,
++	.fini_seq_private	= NULL,
++	.seq_priv_size		= sizeof(struct bpf_iter_seq_prog_info),
++	.ctx_arg_info_size	= 1,
++	.ctx_arg_info		= {
++		{ offsetof(struct bpf_iter__bpf_prog, prog),
++		  PTR_TO_BTF_ID_OR_NULL },
++	},
++};
++
++static int __init bpf_prog_iter_init(void)
++{
++	return bpf_iter_reg_target(&bpf_prog_reg_info);
++}
++
++late_initcall(bpf_prog_iter_init);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 8da159936bab..e236a6c0aea4 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3035,6 +3035,25 @@ struct bpf_map *bpf_map_get_curr_or_next(u32 *id)
+ 	return map;
  }
-@@ -10853,7 +10862,7 @@ static int i40e_alloc_rings(struct i40e_vsi *vsi)
- 		if (vsi->back->hw_features & I40E_HW_WB_ON_ITR_CAPABLE)
- 			ring->flags = I40E_TXR_FLAGS_WB_ON_ITR;
- 		ring->itr_setting = pf->tx_itr_default;
--		vsi->tx_rings[i] = ring++;
-+		WRITE_ONCE(vsi->tx_rings[i], ring++);
  
- 		if (!i40e_enabled_xdp_vsi(vsi))
- 			goto setup_rx;
-@@ -10871,7 +10880,7 @@ static int i40e_alloc_rings(struct i40e_vsi *vsi)
- 			ring->flags = I40E_TXR_FLAGS_WB_ON_ITR;
- 		set_ring_xdp(ring);
- 		ring->itr_setting = pf->tx_itr_default;
--		vsi->xdp_rings[i] = ring++;
-+		WRITE_ONCE(vsi->xdp_rings[i], ring++);
++struct bpf_prog *bpf_prog_get_curr_or_next(u32 *id)
++{
++	struct bpf_prog *prog;
++
++	spin_lock_bh(&prog_idr_lock);
++again:
++	prog = idr_get_next(&prog_idr, id);
++	if (prog) {
++		prog = bpf_prog_inc_not_zero(prog);
++		if (IS_ERR(prog)) {
++			(*id)++;
++			goto again;
++		}
++	}
++	spin_unlock_bh(&prog_idr_lock);
++
++	return prog;
++}
++
+ #define BPF_PROG_GET_FD_BY_ID_LAST_FIELD prog_id
  
- setup_rx:
- 		ring->queue_index = i;
-@@ -10884,7 +10893,7 @@ static int i40e_alloc_rings(struct i40e_vsi *vsi)
- 		ring->size = 0;
- 		ring->dcb_tc = 0;
- 		ring->itr_setting = pf->rx_itr_default;
--		vsi->rx_rings[i] = ring;
-+		WRITE_ONCE(vsi->rx_rings[i], ring);
- 	}
- 
- 	return 0;
+ struct bpf_prog *bpf_prog_by_id(u32 id)
 -- 
-2.25.1
+2.23.0
 
