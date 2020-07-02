@@ -7,53 +7,53 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0887DC433E0
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 09:24:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E445C433DF
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 09:24:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D4F7020702
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 09:24:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0079220771
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 09:24:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="gSeEI8cQ"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="DPO0/u7T"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728330AbgGBJYu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jul 2020 05:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
+        id S1728350AbgGBJYw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jul 2020 05:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728340AbgGBJYq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jul 2020 05:24:46 -0400
+        with ESMTP id S1728257AbgGBJYj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jul 2020 05:24:39 -0400
 Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC99C08C5DE
-        for <bpf@vger.kernel.org>; Thu,  2 Jul 2020 02:24:45 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id dp18so28466161ejc.8
-        for <bpf@vger.kernel.org>; Thu, 02 Jul 2020 02:24:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA3AC08C5DC
+        for <bpf@vger.kernel.org>; Thu,  2 Jul 2020 02:24:39 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id dp18so28465795ejc.8
+        for <bpf@vger.kernel.org>; Thu, 02 Jul 2020 02:24:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3ybsptQ1uDuYH5yr/joHYcohd4KEboQtBfB059oe4Vg=;
-        b=gSeEI8cQUCh9Chub/HLEFbCB1unWvLNij8kVX6/rIPneSZkht0ksnmozVCkE33wCEw
-         Flc2SxfrzsuwnZBCzIOyYn4oPVzKul+ddqO5wWHfpOMEWPdnm+Tsu96bbCfrCJCUSbUH
-         z9xzQq2FElY4yc+W2VNX2+Lt6zXqYzGMs/F8M=
+        bh=3bSpGEFWynhqkY85qsplbaX/55c/sszNhOOsxHciCGM=;
+        b=DPO0/u7TYVlbmPPky9lgED13ACU7duG0w5flTmcIOAdcyJJlzwpLwnCd+r8aZwgHZt
+         h4iCb9vIdgcKXv8L4BdaGzX+6Gh3yEkXRZnUJUmYEZqSfzcvgS1/SN+MBeSzz9C8U31A
+         VjCdq3Ha+3UI08gT7yYJUc6wwlTJskXozfMOI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3ybsptQ1uDuYH5yr/joHYcohd4KEboQtBfB059oe4Vg=;
-        b=EIIkrKzigWU+5/jUXpp25eByA8IZxF7squ3XpZ5VMGRTV7kfQsgi+8nGzLEK5Cw0gx
-         tNkEFuDrreyqMWVUQy218HZUXYfXW8x5i/BSCmYDGvnqCMu5cOPO7y/w8u2t2f3C765g
-         RPLMoxBmZRL5Z95dNzsekhAG9pGbvGQjh56W0kDb5rHtRSiV6wCtgqJjmzxQw/flHnMs
-         eAVwAJ2OCBuj5YGh6pWvy1/3XGn+lWZHgAQ+mTIu+5kZC5Po96+Z+uVeAY8wglJUuJsd
-         f078TpZMhf6a07d+x70KeDgzOlD0RpiwmWrNy1Q/gd7sVH8wAkYY3BRzzjAcH6Qe5m8N
-         hmMQ==
-X-Gm-Message-State: AOAM533I2+gp9WEBNSWfruGIO5iFGE5zHpgPlBtCRHTDKPrmuNX4AhLW
-        XAulKTPyTHH7rJvHoXuQNJB+FsfRcj+2bg==
-X-Google-Smtp-Source: ABdhPJzLGBXtzogWZ/UlSVZIMiV9loLF8MIVSP23mTF+TVAgJ2TBNZN5cFjAePuWK+5HFTwu4ly65A==
-X-Received: by 2002:a17:906:87c8:: with SMTP id zb8mr26130500ejb.35.1593681884480;
-        Thu, 02 Jul 2020 02:24:44 -0700 (PDT)
+        bh=3bSpGEFWynhqkY85qsplbaX/55c/sszNhOOsxHciCGM=;
+        b=Becn5Ke6HzAvlVlh+DYQI31FUTejLPdDJeZEfhKWS4POStxvskDf7/PLzy0IkS/IZT
+         GkkfWbB4S/1Zfo2WtZcAacY/Q4h2XVY0bzSiIXnn9Apgh/dTNC/mzSQ8VREFioQBttJ8
+         oXVhuHwNT1RbqwPRPoQ+fPLCyLb4h9JDKZCjYOd2hSc554pfgEVMQWoFmDTsY4zTjxxP
+         d/NHoeWl150kwjLZ0jwtJCOVrcMevP4enF/Ltw+SkXpgig/IuLdNCrmzIrBPDABq/LLd
+         jTnxED8cFl+fzP4Gbcyz9Lu6bWPuzZlmQBmZbjmoChYRjymTgu/Rp1T25g2c4dX7ciGH
+         eWmw==
+X-Gm-Message-State: AOAM5314echJszJHf869p6vnYtaORbtuy+5TCikAW7xM6QlThHolMIEc
+        UIXyYbyzYh23RlMhnplL0RA0oZhM6oaz2w==
+X-Google-Smtp-Source: ABdhPJzOavD9RSmOFAEgkRzi04T+vmCI8wxfCTZN+crvROSMy/fCD72yOsU7hByBWWt8FBHHfDvKGw==
+X-Received: by 2002:a17:906:1386:: with SMTP id f6mr26934725ejc.66.1593681877631;
+        Thu, 02 Jul 2020 02:24:37 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id m22sm6519828ejb.47.2020.07.02.02.24.43
+        by smtp.gmail.com with ESMTPSA id q21sm6359603ejc.112.2020.07.02.02.24.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2020 02:24:44 -0700 (PDT)
+        Thu, 02 Jul 2020 02:24:37 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
@@ -61,9 +61,9 @@ Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH bpf-next v3 15/16] selftests/bpf: Rename test_sk_lookup_kern.c to test_ref_track_kern.c
-Date:   Thu,  2 Jul 2020 11:24:15 +0200
-Message-Id: <20200702092416.11961-16-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v3 11/16] bpf: Sync linux/bpf.h to tools/
+Date:   Thu,  2 Jul 2020 11:24:11 +0200
+Message-Id: <20200702092416.11961-12-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200702092416.11961-1-jakub@cloudflare.com>
 References: <20200702092416.11961-1-jakub@cloudflare.com>
@@ -74,35 +74,140 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Name the BPF C file after the test case that uses it.
-
-This frees up "test_sk_lookup" namespace for BPF sk_lookup program tests
-introduced by the following patch.
+Newly added program, context type and helper is used by tests in a
+subsequent patch. Synchronize the header file.
 
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- tools/testing/selftests/bpf/prog_tests/reference_tracking.c     | 2 +-
- .../bpf/progs/{test_sk_lookup_kern.c => test_ref_track_kern.c}  | 0
- 2 files changed, 1 insertion(+), 1 deletion(-)
- rename tools/testing/selftests/bpf/progs/{test_sk_lookup_kern.c => test_ref_track_kern.c} (100%)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
-index fc0d7f4f02cf..106ca8bb2a8f 100644
---- a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
-+++ b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
-@@ -3,7 +3,7 @@
+Notes:
+    v3:
+    - Update after changes to bpf.h in earlier patch.
+    
+    v2:
+    - Update after changes to bpf.h in earlier patch.
+
+ tools/include/uapi/linux/bpf.h | 74 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 0cb8ec948816..8dd6e6ce5de9 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -189,6 +189,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_STRUCT_OPS,
+ 	BPF_PROG_TYPE_EXT,
+ 	BPF_PROG_TYPE_LSM,
++	BPF_PROG_TYPE_SK_LOOKUP,
+ };
  
- void test_reference_tracking(void)
- {
--	const char *file = "test_sk_lookup_kern.o";
-+	const char *file = "test_ref_track_kern.o";
- 	const char *obj_name = "ref_track";
- 	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, open_opts,
- 		.object_name = obj_name,
-diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c b/tools/testing/selftests/bpf/progs/test_ref_track_kern.c
-similarity index 100%
-rename from tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
-rename to tools/testing/selftests/bpf/progs/test_ref_track_kern.c
+ enum bpf_attach_type {
+@@ -226,6 +227,7 @@ enum bpf_attach_type {
+ 	BPF_CGROUP_INET4_GETSOCKNAME,
+ 	BPF_CGROUP_INET6_GETSOCKNAME,
+ 	BPF_XDP_DEVMAP,
++	BPF_SK_LOOKUP,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+@@ -3067,6 +3069,10 @@ union bpf_attr {
+  *
+  * long bpf_sk_assign(struct sk_buff *skb, struct bpf_sock *sk, u64 flags)
+  *	Description
++ *		Helper is overloaded depending on BPF program type. This
++ *		description applies to **BPF_PROG_TYPE_SCHED_CLS** and
++ *		**BPF_PROG_TYPE_SCHED_ACT** programs.
++ *
+  *		Assign the *sk* to the *skb*. When combined with appropriate
+  *		routing configuration to receive the packet towards the socket,
+  *		will cause *skb* to be delivered to the specified socket.
+@@ -3092,6 +3098,53 @@ union bpf_attr {
+  *		**-ESOCKTNOSUPPORT** if the socket type is not supported
+  *		(reuseport).
+  *
++ * int bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
++ *	Description
++ *		Helper is overloaded depending on BPF program type. This
++ *		description applies to **BPF_PROG_TYPE_SK_LOOKUP** programs.
++ *
++ *		Select the *sk* as a result of a socket lookup.
++ *
++ *		For the operation to succeed passed socket must be compatible
++ *		with the packet description provided by the *ctx* object.
++ *
++ *		L4 protocol (**IPPROTO_TCP** or **IPPROTO_UDP**) must
++ *		be an exact match. While IP family (**AF_INET** or
++ *		**AF_INET6**) must be compatible, that is IPv6 sockets
++ *		that are not v6-only can be selected for IPv4 packets.
++ *
++ *		Only TCP listeners and UDP unconnected sockets can be
++ *		selected.
++ *
++ *		*flags* argument can combination of following values:
++ *
++ *		* **BPF_SK_LOOKUP_F_REPLACE** to override the previous
++ *		  socket selection, potentially done by a BPF program
++ *		  that ran before us.
++ *
++ *		* **BPF_SK_LOOKUP_F_NO_REUSEPORT** to skip
++ *		  load-balancing within reuseport group for the socket
++ *		  being selected.
++ *
++ *	Return
++ *		0 on success, or a negative errno in case of failure.
++ *
++ *		* **-EAFNOSUPPORT** if socket family (*sk->family*) is
++ *		  not compatible with packet family (*ctx->family*).
++ *
++ *		* **-EEXIST** if socket has been already selected,
++ *		  potentially by another program, and
++ *		  **BPF_SK_LOOKUP_F_REPLACE** flag was not specified.
++ *
++ *		* **-EINVAL** if unsupported flags were specified.
++ *
++ *		* **-EPROTOTYPE** if socket L4 protocol
++ *		  (*sk->protocol*) doesn't match packet protocol
++ *		  (*ctx->protocol*).
++ *
++ *		* **-ESOCKTNOSUPPORT** if socket is not in allowed
++ *		  state (TCP listening or UDP unconnected).
++ *
+  * u64 bpf_ktime_get_boot_ns(void)
+  * 	Description
+  * 		Return the time elapsed since system boot, in nanoseconds.
+@@ -3569,6 +3622,12 @@ enum {
+ 	BPF_RINGBUF_HDR_SZ		= 8,
+ };
+ 
++/* BPF_FUNC_sk_assign flags in bpf_sk_lookup context. */
++enum {
++	BPF_SK_LOOKUP_F_REPLACE		= (1ULL << 0),
++	BPF_SK_LOOKUP_F_NO_REUSEPORT	= (1ULL << 1),
++};
++
+ /* Mode for BPF_FUNC_skb_adjust_room helper. */
+ enum bpf_adj_room_mode {
+ 	BPF_ADJ_ROOM_NET,
+@@ -4298,4 +4357,19 @@ struct bpf_pidns_info {
+ 	__u32 pid;
+ 	__u32 tgid;
+ };
++
++/* User accessible data for SK_LOOKUP programs. Add new fields at the end. */
++struct bpf_sk_lookup {
++	__u32 family;		/* Protocol family (AF_INET, AF_INET6) */
++	__u32 protocol;		/* IP protocol (IPPROTO_TCP, IPPROTO_UDP) */
++	__u32 remote_ip4;	/* Network byte order */
++	__u32 remote_ip6[4];	/* Network byte order */
++	__u32 remote_port;	/* Network byte order */
++	__u32 local_ip4;	/* Network byte order */
++	__u32 local_ip6[4];	/* Network byte order */
++	__u32 local_port;	/* Host byte order */
++
++	__bpf_md_ptr(struct bpf_sock *, sk); /* Selected socket */
++};
++
+ #endif /* _UAPI__LINUX_BPF_H__ */
 -- 
 2.25.4
 
