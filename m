@@ -2,109 +2,79 @@ Return-Path: <SRS0=396g=AN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11421C433E0
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 22:14:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00F7FC433DF
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 22:17:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E304A20899
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 22:14:00 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kg6yLeFQ"
+	by mail.kernel.org (Postfix) with ESMTP id CDD25206BE
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 22:17:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726048AbgGBWOA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jul 2020 18:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726032AbgGBWOA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jul 2020 18:14:00 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E23BC08C5C1;
-        Thu,  2 Jul 2020 15:14:00 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id x11so11832374plo.7;
-        Thu, 02 Jul 2020 15:14:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=6oWu8CGvUHxicXVBr6Djg+FI6SK9f+5RLFtIeKJCKoQ=;
-        b=Kg6yLeFQkYuYlGuTGlH8RpB/8QyZN7ayi8Kmblyda3HyVQW8KZarHzTEO8j9QiIQQ2
-         Ojyw1CijRsJmicug/Cc/ouz7/zxT6z45Ls2cIyk2euuvZ04DbKj3pIIFNOby+jBti/iW
-         f94ZMLPw/RrmZbPTVpXHLles2/HvxgPRn1fUZWUWDO3nL8iiWvKZnnY2i1rYV+KXZbyl
-         U/CyLRJtpBd1uWKL4yZu3qfZpdWu0OZ/nmLCgI6OwcdluJg9LS3L7U5AcNZNcQQFrpnR
-         xQgK59XDDBAYP1AOvrXQNYbVvJuzg5NaJf1wbmeP9k4xlirDBsKue62x9TaU/Whbv6Hs
-         v81g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=6oWu8CGvUHxicXVBr6Djg+FI6SK9f+5RLFtIeKJCKoQ=;
-        b=VVKo8hlO9PMj5HlHnnCafgYOuVyQP+lX7k13qRs9HvnhrInYKUZ9DLURtMRqXC/enB
-         0F+HWX6QvR2OhV9g1+dJmbmtX4jCj76F6nMs0iNdxTf5NulYwv9wXIovaic5OaXji9m/
-         qIoVrWcFKVlx5yUg0HlFLyY1BQK0nYNJa14dhp91neDvy+/Z1e80eyg/lOlYsDoPAkl9
-         5JYip3Jk5OClLsJlQ6xN9NI60I21mIhkBOgc42zl8gLXJ7/hXPuw/bD6peTae2PyoYq2
-         478dsfMKEqqvpXMfEIPED8HUI99AdldazaGfWfpNpA3xrRwezuMq5VMnzq03hYDklqM/
-         TUmQ==
-X-Gm-Message-State: AOAM532fKJm/Q0K3g6WDN30bUWexdGqjZClDrLemd2j8F6qXRY7eMzK0
-        81u9i8qfDiSi8cTi8s5eIIQ=
-X-Google-Smtp-Source: ABdhPJyVFpqOvhx2lOLP9HTgx4ksvqPWVFw5kfuwAYv84vVPBxgiuYi8T6w/iZ621zdxYYC2MmlsBA==
-X-Received: by 2002:a17:902:9a02:: with SMTP id v2mr28968513plp.321.1593728039427;
-        Thu, 02 Jul 2020 15:13:59 -0700 (PDT)
-Received: from taoren-ubuntu-R90MNF91.thefacebook.com (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
-        by smtp.gmail.com with ESMTPSA id nl8sm8979501pjb.13.2020.07.02.15.13.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2020 15:13:58 -0700 (PDT)
-From:   rentao.bupt@gmail.com
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        openbmc@lists.ozlabs.org,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>, taoren@fb.com
-Cc:     Tao Ren <rentao.bupt@gmail.com>
-Subject: [PATCH] hwmon: (pmbus) fix a typo in Kconfig SENSORS_IR35221 option
-Date:   Thu,  2 Jul 2020 15:13:49 -0700
-Message-Id: <20200702221349.18139-1-rentao.bupt@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726121AbgGBWR2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jul 2020 18:17:28 -0400
+Received: from www62.your-server.de ([213.133.104.62]:56938 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725937AbgGBWR2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jul 2020 18:17:28 -0400
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jr7WI-0001uy-0b; Fri, 03 Jul 2020 00:17:26 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jr7WH-0009fC-PD; Fri, 03 Jul 2020 00:17:25 +0200
+Subject: Re: [PATCH v2 bpf-next 0/2] bpf: selftests: A few changes to
+ network_helpers and netns-reset
+To:     Martin KaFai Lau <kafai@fb.com>, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>, kernel-team@fb.com,
+        netdev@vger.kernel.org
+References: <20200702004846.2101805-1-kafai@fb.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <92b5e5bc-53bf-aff0-377b-39cafdf8b0f7@iogearbox.net>
+Date:   Fri, 3 Jul 2020 00:17:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <20200702004846.2101805-1-kafai@fb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.3/25861/Thu Jul  2 15:47:32 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Tao Ren <rentao.bupt@gmail.com>
+On 7/2/20 2:48 AM, Martin KaFai Lau wrote:
+> This set is separated out from the bpf tcp header option series [1] since
+> I think it is in general useful for other network related tests.
+> e.g. enforce socket-fd related timeout and restore netns after each test.
+> 
+> [1]: https://lore.kernel.org/netdev/20200626175501.1459961-1-kafai@fb.com/
+> 
+> v2:
+> - Mention non-NULL addr use case in commit message. (Yonghong)
+> - Add prefix "__" to variables used in macro. (Yonghong)
+> 
+> Martin KaFai Lau (2):
+>    bpf: selftests: A few improvements to network_helpers.c
+>    bpf: selftests: Restore netns after each test
+> 
+>   tools/testing/selftests/bpf/network_helpers.c | 157 +++++++++++-------
+>   tools/testing/selftests/bpf/network_helpers.h |   9 +-
+>   .../bpf/prog_tests/cgroup_skb_sk_lookup.c     |  12 +-
+>   .../bpf/prog_tests/connect_force_port.c       |  10 +-
+>   .../bpf/prog_tests/load_bytes_relative.c      |   4 +-
+>   .../selftests/bpf/prog_tests/tcp_rtt.c        |   4 +-
+>   tools/testing/selftests/bpf/test_progs.c      |  23 ++-
+>   tools/testing/selftests/bpf/test_progs.h      |   2 +
+>   8 files changed, 133 insertions(+), 88 deletions(-)
+> 
 
-Fix a typo in SENSORS_IR35221 option: module name should be "ir35221"
-instead of "ir35521".
-
-Fixes: 8991ebd9c9a6 ("hwmon: (pmbus) Add client driver for IR35221")
-
-Cc: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
----
- drivers/hwmon/pmbus/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 3ad97fd5ce03..e35db489b76f 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -71,7 +71,7 @@ config SENSORS_IR35221
- 	  Infineon IR35221 controller.
- 
- 	  This driver can also be built as a module. If so, the module will
--	  be called ir35521.
-+	  be called ir35221.
- 
- config SENSORS_IR38064
- 	tristate "Infineon IR38064"
--- 
-2.17.1
-
+Applied, thanks!
