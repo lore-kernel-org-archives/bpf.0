@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-10.0 required=3.0
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09A48C433E2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7BBBC433E4
 	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 16:48:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E83E92084C
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 16:48:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D43CD2084C
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 16:48:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727079AbgGBQsP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jul 2020 12:48:15 -0400
-Received: from out01.mta.xmission.com ([166.70.13.231]:49616 "EHLO
+        id S1726985AbgGBQrt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jul 2020 12:47:49 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:49416 "EHLO
         out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727081AbgGBQsH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jul 2020 12:48:07 -0400
+        with ESMTP id S1726300AbgGBQrr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jul 2020 12:47:47 -0400
 Received: from in01.mta.xmission.com ([166.70.13.51])
         by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.90_1)
         (envelope-from <ebiederm@xmission.com>)
-        id 1jr2Na-0005oh-HP; Thu, 02 Jul 2020 10:48:06 -0600
+        id 1jr2NG-0005lr-C3; Thu, 02 Jul 2020 10:47:46 -0600
 Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
         by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.87)
         (envelope-from <ebiederm@xmission.com>)
-        id 1jr2NZ-0007up-F8; Thu, 02 Jul 2020 10:48:06 -0600
+        id 1jr2NF-0007up-0j; Thu, 02 Jul 2020 10:47:46 -0600
 From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     David Miller <davem@davemloft.net>,
@@ -50,20 +50,19 @@ Cc:     David Miller <davem@davemloft.net>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Christian Brauner <christian.brauner@ubuntu.com>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date:   Thu,  2 Jul 2020 11:41:34 -0500
-Message-Id: <20200702164140.4468-10-ebiederm@xmission.com>
+Date:   Thu,  2 Jul 2020 11:41:29 -0500
+Message-Id: <20200702164140.4468-5-ebiederm@xmission.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <87y2o1swee.fsf_-_@x220.int.ebiederm.org>
 References: <87y2o1swee.fsf_-_@x220.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1jr2NZ-0007up-F8;;;mid=<20200702164140.4468-10-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19I2zv1ELlhLqv1GXWB9t4A7j0C1O9/nC0=
+X-XM-SPF: eid=1jr2NF-0007up-0j;;;mid=<20200702164140.4468-5-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/mEZPZA1cZccSF5Mpi3FfsFNGY8nuFL04=
 X-SA-Exim-Connect-IP: 68.227.160.95
 X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: [PATCH v3 10/16] exec: Remove do_execve_file
+Subject: [PATCH v3 05/16] umh: Separate the user mode driver and the user mode helper support
 X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
 X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Sender: bpf-owner@vger.kernel.org
@@ -71,135 +70,466 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now that the last callser has been removed remove this code from exec.
+This makes it clear which code is part of the core user mode
+helper support and which code is needed to implement user mode
+drivers.
 
-For anyone thinking of resurrecing do_execve_file please note that
-the code was buggy in several fundamental ways.
+This makes the kernel smaller for everyone who does not use a usermode
+driver.
 
-- It did not ensure the file it was passed was read-only and that
-  deny_write_access had been called on it.  Which subtlely breaks
-  invaniants in exec.
-
-- The caller of do_execve_file was expected to hold and put a
-  reference to the file, but an extra reference for use by exec was
-  not taken so that when exec put it's reference to the file an
-  underflow occured on the file reference count.
-
-- The point of the interface was so that a pathname did not need to
-  exist.  Which breaks pathname based LSMs.
-
-Tetsuo Handa originally reported these issues[1].  While it was clear
-that deny_write_access was missing the fundamental incompatibility
-with the passed in O_RDWR filehandle was not immediately recognized.
-
-All of these issues were fixed by modifying the usermode driver code
-to have a path, so it did not need this hack.
-
-Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-[1] https://lore.kernel.org/linux-fsdevel/2a8775b4-1dd5-9d5c-aa42-9872445e0942@i-love.sakura.ne.jp/
-v1: https://lkml.kernel.org/r/871rm2f0hi.fsf_-_@x220.int.ebiederm.org
-v2: https://lkml.kernel.org/r/87lfk54p0m.fsf_-_@x220.int.ebiederm.org
+v1: https://lkml.kernel.org/r/87tuyyf0ln.fsf_-_@x220.int.ebiederm.org
+v2: https://lkml.kernel.org/r/87imf963s6.fsf_-_@x220.int.ebiederm.org
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 ---
- fs/exec.c               | 38 +++++++++-----------------------------
- include/linux/binfmts.h |  1 -
- 2 files changed, 9 insertions(+), 30 deletions(-)
+ include/linux/bpfilter.h        |   2 +-
+ include/linux/sched.h           |   8 --
+ include/linux/umh.h             |  10 ---
+ include/linux/usermode_driver.h |  30 +++++++
+ kernel/Makefile                 |   1 +
+ kernel/exit.c                   |   1 +
+ kernel/umh.c                    | 139 ------------------------------
+ kernel/usermode_driver.c        | 146 ++++++++++++++++++++++++++++++++
+ 8 files changed, 179 insertions(+), 158 deletions(-)
+ create mode 100644 include/linux/usermode_driver.h
+ create mode 100644 kernel/usermode_driver.c
 
-diff --git a/fs/exec.c b/fs/exec.c
-index e6e8a9a70327..23dfbb820626 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1818,13 +1818,14 @@ static int exec_binprm(struct linux_binprm *bprm)
- /*
-  * sys_execve() executes a new program.
-  */
--static int __do_execve_file(int fd, struct filename *filename,
--			    struct user_arg_ptr argv,
--			    struct user_arg_ptr envp,
--			    int flags, struct file *file)
-+static int do_execveat_common(int fd, struct filename *filename,
-+			      struct user_arg_ptr argv,
-+			      struct user_arg_ptr envp,
-+			      int flags)
+diff --git a/include/linux/bpfilter.h b/include/linux/bpfilter.h
+index d815622cd31e..d6d6206052a6 100644
+--- a/include/linux/bpfilter.h
++++ b/include/linux/bpfilter.h
+@@ -3,7 +3,7 @@
+ #define _LINUX_BPFILTER_H
+ 
+ #include <uapi/linux/bpfilter.h>
+-#include <linux/umh.h>
++#include <linux/usermode_driver.h>
+ 
+ struct sock;
+ int bpfilter_ip_set_sockopt(struct sock *sk, int optname, char __user *optval,
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index b62e6aaf28f0..59d1e92bb88e 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -2020,14 +2020,6 @@ static inline void rseq_execve(struct task_struct *t)
+ 
+ #endif
+ 
+-void __exit_umh(struct task_struct *tsk);
+-
+-static inline void exit_umh(struct task_struct *tsk)
+-{
+-	if (unlikely(tsk->flags & PF_UMH))
+-		__exit_umh(tsk);
+-}
+-
+ #ifdef CONFIG_DEBUG_RSEQ
+ 
+ void rseq_syscall(struct pt_regs *regs);
+diff --git a/include/linux/umh.h b/include/linux/umh.h
+index de08af00c68a..73173c4a07e5 100644
+--- a/include/linux/umh.h
++++ b/include/linux/umh.h
+@@ -39,16 +39,6 @@ call_usermodehelper_setup(const char *path, char **argv, char **envp,
+ 			  int (*init)(struct subprocess_info *info, struct cred *new),
+ 			  void (*cleanup)(struct subprocess_info *), void *data);
+ 
+-struct umh_info {
+-	const char *cmdline;
+-	struct file *pipe_to_umh;
+-	struct file *pipe_from_umh;
+-	struct list_head list;
+-	void (*cleanup)(struct umh_info *info);
+-	pid_t pid;
+-};
+-int fork_usermode_blob(void *data, size_t len, struct umh_info *info);
+-
+ extern int
+ call_usermodehelper_exec(struct subprocess_info *info, int wait);
+ 
+diff --git a/include/linux/usermode_driver.h b/include/linux/usermode_driver.h
+new file mode 100644
+index 000000000000..c5f6dc950227
+--- /dev/null
++++ b/include/linux/usermode_driver.h
+@@ -0,0 +1,30 @@
++#ifndef __LINUX_USERMODE_DRIVER_H__
++#define __LINUX_USERMODE_DRIVER_H__
++
++#include <linux/umh.h>
++
++#ifdef CONFIG_BPFILTER
++void __exit_umh(struct task_struct *tsk);
++
++static inline void exit_umh(struct task_struct *tsk)
++{
++	if (unlikely(tsk->flags & PF_UMH))
++		__exit_umh(tsk);
++}
++#else
++static inline void exit_umh(struct task_struct *tsk)
++{
++}
++#endif
++
++struct umh_info {
++	const char *cmdline;
++	struct file *pipe_to_umh;
++	struct file *pipe_from_umh;
++	struct list_head list;
++	void (*cleanup)(struct umh_info *info);
++	pid_t pid;
++};
++int fork_usermode_blob(void *data, size_t len, struct umh_info *info);
++
++#endif /* __LINUX_USERMODE_DRIVER_H__ */
+diff --git a/kernel/Makefile b/kernel/Makefile
+index f3218bc5ec69..43928759893a 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -12,6 +12,7 @@ obj-y     = fork.o exec_domain.o panic.o \
+ 	    notifier.o ksysfs.o cred.o reboot.o \
+ 	    async.o range.o smpboot.o ucount.o
+ 
++obj-$(CONFIG_BPFILTER) += usermode_driver.o
+ obj-$(CONFIG_MODULES) += kmod.o
+ obj-$(CONFIG_MULTIUSER) += groups.o
+ 
+diff --git a/kernel/exit.c b/kernel/exit.c
+index 727150f28103..a081deea52ca 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -63,6 +63,7 @@
+ #include <linux/random.h>
+ #include <linux/rcuwait.h>
+ #include <linux/compat.h>
++#include <linux/usermode_driver.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/unistd.h>
+diff --git a/kernel/umh.c b/kernel/umh.c
+index b8fa9b99b366..3e4e453d45c8 100644
+--- a/kernel/umh.c
++++ b/kernel/umh.c
+@@ -26,8 +26,6 @@
+ #include <linux/ptrace.h>
+ #include <linux/async.h>
+ #include <linux/uaccess.h>
+-#include <linux/shmem_fs.h>
+-#include <linux/pipe_fs_i.h>
+ 
+ #include <trace/events/module.h>
+ 
+@@ -38,8 +36,6 @@ static kernel_cap_t usermodehelper_bset = CAP_FULL_SET;
+ static kernel_cap_t usermodehelper_inheritable = CAP_FULL_SET;
+ static DEFINE_SPINLOCK(umh_sysctl_lock);
+ static DECLARE_RWSEM(umhelper_sem);
+-static LIST_HEAD(umh_list);
+-static DEFINE_MUTEX(umh_list_lock);
+ 
+ static void call_usermodehelper_freeinfo(struct subprocess_info *info)
  {
- 	char *pathbuf = NULL;
- 	struct linux_binprm *bprm;
-+	struct file *file;
- 	struct files_struct *displaced;
- 	int retval;
+@@ -402,121 +398,6 @@ struct subprocess_info *call_usermodehelper_setup(const char *path, char **argv,
+ }
+ EXPORT_SYMBOL(call_usermodehelper_setup);
  
-@@ -1863,8 +1864,7 @@ static int __do_execve_file(int fd, struct filename *filename,
- 	check_unsafe_exec(bprm);
- 	current->in_execve = 1;
- 
--	if (!file)
--		file = do_open_execat(fd, filename, flags);
-+	file = do_open_execat(fd, filename, flags);
- 	retval = PTR_ERR(file);
- 	if (IS_ERR(file))
- 		goto out_unmark;
-@@ -1872,9 +1872,7 @@ static int __do_execve_file(int fd, struct filename *filename,
- 	sched_exec();
- 
- 	bprm->file = file;
--	if (!filename) {
--		bprm->filename = "none";
--	} else if (fd == AT_FDCWD || filename->name[0] == '/') {
-+	if (fd == AT_FDCWD || filename->name[0] == '/') {
- 		bprm->filename = filename->name;
- 	} else {
- 		if (filename->name[0] == '\0')
-@@ -1935,8 +1933,7 @@ static int __do_execve_file(int fd, struct filename *filename,
- 	task_numa_free(current, false);
- 	free_bprm(bprm);
- 	kfree(pathbuf);
--	if (filename)
--		putname(filename);
-+	putname(filename);
- 	if (displaced)
- 		put_files_struct(displaced);
- 	return retval;
-@@ -1967,27 +1964,10 @@ static int __do_execve_file(int fd, struct filename *filename,
- 	if (displaced)
- 		reset_files_struct(displaced);
- out_ret:
--	if (filename)
--		putname(filename);
-+	putname(filename);
- 	return retval;
+-static int umd_setup(struct subprocess_info *info, struct cred *new)
+-{
+-	struct umh_info *umh_info = info->data;
+-	struct file *from_umh[2];
+-	struct file *to_umh[2];
+-	int err;
+-
+-	/* create pipe to send data to umh */
+-	err = create_pipe_files(to_umh, 0);
+-	if (err)
+-		return err;
+-	err = replace_fd(0, to_umh[0], 0);
+-	fput(to_umh[0]);
+-	if (err < 0) {
+-		fput(to_umh[1]);
+-		return err;
+-	}
+-
+-	/* create pipe to receive data from umh */
+-	err = create_pipe_files(from_umh, 0);
+-	if (err) {
+-		fput(to_umh[1]);
+-		replace_fd(0, NULL, 0);
+-		return err;
+-	}
+-	err = replace_fd(1, from_umh[1], 0);
+-	fput(from_umh[1]);
+-	if (err < 0) {
+-		fput(to_umh[1]);
+-		replace_fd(0, NULL, 0);
+-		fput(from_umh[0]);
+-		return err;
+-	}
+-
+-	umh_info->pipe_to_umh = to_umh[1];
+-	umh_info->pipe_from_umh = from_umh[0];
+-	umh_info->pid = task_pid_nr(current);
+-	current->flags |= PF_UMH;
+-	return 0;
+-}
+-
+-static void umd_cleanup(struct subprocess_info *info)
+-{
+-	struct umh_info *umh_info = info->data;
+-
+-	/* cleanup if umh_setup() was successful but exec failed */
+-	if (info->retval) {
+-		fput(umh_info->pipe_to_umh);
+-		fput(umh_info->pipe_from_umh);
+-	}
+-}
+-
+-/**
+- * fork_usermode_blob - fork a blob of bytes as a usermode process
+- * @data: a blob of bytes that can be do_execv-ed as a file
+- * @len: length of the blob
+- * @info: information about usermode process (shouldn't be NULL)
+- *
+- * If info->cmdline is set it will be used as command line for the
+- * user process, else "usermodehelper" is used.
+- *
+- * Returns either negative error or zero which indicates success
+- * in executing a blob of bytes as a usermode process. In such
+- * case 'struct umh_info *info' is populated with two pipes
+- * and a pid of the process. The caller is responsible for health
+- * check of the user process, killing it via pid, and closing the
+- * pipes when user process is no longer needed.
+- */
+-int fork_usermode_blob(void *data, size_t len, struct umh_info *info)
+-{
+-	const char *cmdline = (info->cmdline) ? info->cmdline : "usermodehelper";
+-	struct subprocess_info *sub_info;
+-	char **argv = NULL;
+-	struct file *file;
+-	ssize_t written;
+-	loff_t pos = 0;
+-	int err;
+-
+-	file = shmem_kernel_file_setup("", len, 0);
+-	if (IS_ERR(file))
+-		return PTR_ERR(file);
+-
+-	written = kernel_write(file, data, len, &pos);
+-	if (written != len) {
+-		err = written;
+-		if (err >= 0)
+-			err = -ENOMEM;
+-		goto out;
+-	}
+-
+-	err = -ENOMEM;
+-	argv = argv_split(GFP_KERNEL, cmdline, NULL);
+-	if (!argv)
+-		goto out;
+-
+-	sub_info = call_usermodehelper_setup("none", argv, NULL, GFP_KERNEL,
+-					     umd_setup, umd_cleanup, info);
+-	if (!sub_info)
+-		goto out;
+-
+-	sub_info->file = file;
+-	err = call_usermodehelper_exec(sub_info, UMH_WAIT_EXEC);
+-	if (!err) {
+-		mutex_lock(&umh_list_lock);
+-		list_add(&info->list, &umh_list);
+-		mutex_unlock(&umh_list_lock);
+-	}
+-out:
+-	if (argv)
+-		argv_free(argv);
+-	fput(file);
+-	return err;
+-}
+-EXPORT_SYMBOL_GPL(fork_usermode_blob);
+-
+ /**
+  * call_usermodehelper_exec - start a usermode application
+  * @sub_info: information about the subprocessa
+@@ -678,26 +559,6 @@ static int proc_cap_handler(struct ctl_table *table, int write,
+ 	return 0;
  }
  
--static int do_execveat_common(int fd, struct filename *filename,
--			      struct user_arg_ptr argv,
--			      struct user_arg_ptr envp,
--			      int flags)
+-void __exit_umh(struct task_struct *tsk)
 -{
--	return __do_execve_file(fd, filename, argv, envp, flags, NULL);
+-	struct umh_info *info;
+-	pid_t pid = tsk->pid;
+-
+-	mutex_lock(&umh_list_lock);
+-	list_for_each_entry(info, &umh_list, list) {
+-		if (info->pid == pid) {
+-			list_del(&info->list);
+-			mutex_unlock(&umh_list_lock);
+-			goto out;
+-		}
+-	}
+-	mutex_unlock(&umh_list_lock);
+-	return;
+-out:
+-	if (info->cleanup)
+-		info->cleanup(info);
 -}
 -
--int do_execve_file(struct file *file, void *__argv, void *__envp)
--{
--	struct user_arg_ptr argv = { .ptr.native = __argv };
--	struct user_arg_ptr envp = { .ptr.native = __envp };
--
--	return __do_execve_file(AT_FDCWD, NULL, argv, envp, 0, file);
--}
--
- int do_execve(struct filename *filename,
- 	const char __user *const __user *__argv,
- 	const char __user *const __user *__envp)
-diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
-index 4a20b7517dd0..7c27d7b57871 100644
---- a/include/linux/binfmts.h
-+++ b/include/linux/binfmts.h
-@@ -141,6 +141,5 @@ extern int do_execveat(int, struct filename *,
- 		       const char __user * const __user *,
- 		       const char __user * const __user *,
- 		       int);
--int do_execve_file(struct file *file, void *__argv, void *__envp);
- 
- #endif /* _LINUX_BINFMTS_H */
+ struct ctl_table usermodehelper_table[] = {
+ 	{
+ 		.procname	= "bset",
+diff --git a/kernel/usermode_driver.c b/kernel/usermode_driver.c
+new file mode 100644
+index 000000000000..5b05863af855
+--- /dev/null
++++ b/kernel/usermode_driver.c
+@@ -0,0 +1,146 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * umd - User mode driver support
++ */
++#include <linux/shmem_fs.h>
++#include <linux/pipe_fs_i.h>
++#include <linux/usermode_driver.h>
++
++static LIST_HEAD(umh_list);
++static DEFINE_MUTEX(umh_list_lock);
++
++static int umd_setup(struct subprocess_info *info, struct cred *new)
++{
++	struct umh_info *umh_info = info->data;
++	struct file *from_umh[2];
++	struct file *to_umh[2];
++	int err;
++
++	/* create pipe to send data to umh */
++	err = create_pipe_files(to_umh, 0);
++	if (err)
++		return err;
++	err = replace_fd(0, to_umh[0], 0);
++	fput(to_umh[0]);
++	if (err < 0) {
++		fput(to_umh[1]);
++		return err;
++	}
++
++	/* create pipe to receive data from umh */
++	err = create_pipe_files(from_umh, 0);
++	if (err) {
++		fput(to_umh[1]);
++		replace_fd(0, NULL, 0);
++		return err;
++	}
++	err = replace_fd(1, from_umh[1], 0);
++	fput(from_umh[1]);
++	if (err < 0) {
++		fput(to_umh[1]);
++		replace_fd(0, NULL, 0);
++		fput(from_umh[0]);
++		return err;
++	}
++
++	umh_info->pipe_to_umh = to_umh[1];
++	umh_info->pipe_from_umh = from_umh[0];
++	umh_info->pid = task_pid_nr(current);
++	current->flags |= PF_UMH;
++	return 0;
++}
++
++static void umd_cleanup(struct subprocess_info *info)
++{
++	struct umh_info *umh_info = info->data;
++
++	/* cleanup if umh_setup() was successful but exec failed */
++	if (info->retval) {
++		fput(umh_info->pipe_to_umh);
++		fput(umh_info->pipe_from_umh);
++	}
++}
++
++/**
++ * fork_usermode_blob - fork a blob of bytes as a usermode process
++ * @data: a blob of bytes that can be do_execv-ed as a file
++ * @len: length of the blob
++ * @info: information about usermode process (shouldn't be NULL)
++ *
++ * If info->cmdline is set it will be used as command line for the
++ * user process, else "usermodehelper" is used.
++ *
++ * Returns either negative error or zero which indicates success
++ * in executing a blob of bytes as a usermode process. In such
++ * case 'struct umh_info *info' is populated with two pipes
++ * and a pid of the process. The caller is responsible for health
++ * check of the user process, killing it via pid, and closing the
++ * pipes when user process is no longer needed.
++ */
++int fork_usermode_blob(void *data, size_t len, struct umh_info *info)
++{
++	const char *cmdline = (info->cmdline) ? info->cmdline : "usermodehelper";
++	struct subprocess_info *sub_info;
++	char **argv = NULL;
++	struct file *file;
++	ssize_t written;
++	loff_t pos = 0;
++	int err;
++
++	file = shmem_kernel_file_setup("", len, 0);
++	if (IS_ERR(file))
++		return PTR_ERR(file);
++
++	written = kernel_write(file, data, len, &pos);
++	if (written != len) {
++		err = written;
++		if (err >= 0)
++			err = -ENOMEM;
++		goto out;
++	}
++
++	err = -ENOMEM;
++	argv = argv_split(GFP_KERNEL, cmdline, NULL);
++	if (!argv)
++		goto out;
++
++	sub_info = call_usermodehelper_setup("none", argv, NULL, GFP_KERNEL,
++					     umd_setup, umd_cleanup, info);
++	if (!sub_info)
++		goto out;
++
++	sub_info->file = file;
++	err = call_usermodehelper_exec(sub_info, UMH_WAIT_EXEC);
++	if (!err) {
++		mutex_lock(&umh_list_lock);
++		list_add(&info->list, &umh_list);
++		mutex_unlock(&umh_list_lock);
++	}
++out:
++	if (argv)
++		argv_free(argv);
++	fput(file);
++	return err;
++}
++EXPORT_SYMBOL_GPL(fork_usermode_blob);
++
++void __exit_umh(struct task_struct *tsk)
++{
++	struct umh_info *info;
++	pid_t pid = tsk->pid;
++
++	mutex_lock(&umh_list_lock);
++	list_for_each_entry(info, &umh_list, list) {
++		if (info->pid == pid) {
++			list_del(&info->list);
++			mutex_unlock(&umh_list_lock);
++			goto out;
++		}
++	}
++	mutex_unlock(&umh_list_lock);
++	return;
++out:
++	if (info->cleanup)
++		info->cleanup(info);
++}
++
 -- 
 2.25.0
 
