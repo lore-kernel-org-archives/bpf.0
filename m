@@ -2,169 +2,217 @@ Return-Path: <SRS0=396g=AN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9274FC433E1
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 12:20:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62D49C433E0
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 12:46:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 75FBB204EC
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 12:20:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2FD9E20890
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 12:46:46 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Ej7YQvLZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728933AbgGBMUS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jul 2020 08:20:18 -0400
-Received: from mga12.intel.com ([192.55.52.136]:6897 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728921AbgGBMUR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jul 2020 08:20:17 -0400
-IronPort-SDR: xtOkRQasXUGkBOYeRY9lm13dDVu13pD3Mk6K0YTHRWTIkAB+r2io25NbHRrDgx7DNFFoGtbJur
- 5Q6eIInuMWIQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9669"; a="126486174"
-X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
-   d="scan'208";a="126486174"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 05:20:17 -0700
-IronPort-SDR: 42O+LHzk2ACppVGu7nE6BVAPwrjiev36xpHwFn7e3KqP/SEYvf9c4uFHa7Oh6h1xdP9NMxcdNx
- GlM9efUiNMeg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
-   d="scan'208";a="425933488"
-Received: from mkarlsso-mobl.ger.corp.intel.com (HELO localhost.localdomain) ([10.252.39.242])
-  by orsmga004.jf.intel.com with ESMTP; 02 Jul 2020 05:20:14 -0700
-From:   Magnus Karlsson <magnus.karlsson@intel.com>
-To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        jonathan.lemon@gmail.com, maximmi@mellanox.com
-Cc:     bpf@vger.kernel.org, jeffrey.t.kirsher@intel.com,
-        maciej.fijalkowski@intel.com, maciejromanfijalkowski@gmail.com,
-        cristian.dumitrescu@intel.com
-Subject: [PATCH bpf-next 14/14] xsk: documentation for XDP_SHARED_UMEM between queues and netdevs
-Date:   Thu,  2 Jul 2020 14:19:13 +0200
-Message-Id: <1593692353-15102-15-git-send-email-magnus.karlsson@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1593692353-15102-1-git-send-email-magnus.karlsson@intel.com>
-References: <1593692353-15102-1-git-send-email-magnus.karlsson@intel.com>
+        id S1729017AbgGBMqp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jul 2020 08:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728918AbgGBMqp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jul 2020 08:46:45 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD61C08C5DC
+        for <bpf@vger.kernel.org>; Thu,  2 Jul 2020 05:46:44 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id w6so29402869ejq.6
+        for <bpf@vger.kernel.org>; Thu, 02 Jul 2020 05:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=OZapjkMScVIrstSkX0mIC5olbP3zrciZIMCY+tSnuRw=;
+        b=Ej7YQvLZnSpoGD8JTwx6ejxc/qvpsz07mRAnzXGMx7CjgG4WzN22X7PuYPFetDoSwk
+         acEudpYc6lYUh9/pitVq/f69wSHgZ2V9BOGnEwnS06LA76dd6wJh29n3BkNE63tA6Cb7
+         eG6Gz9L9x/MGFiCE5E303onmECFlHpuUU+0hY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=OZapjkMScVIrstSkX0mIC5olbP3zrciZIMCY+tSnuRw=;
+        b=LXLjSr/1VWfJHCJzvNrKzSlqK9D9d2ymhdJJ6NNPaqBsEzd3nueTz7gz2DbOk2TUcF
+         rVwfukmOlsmHwoL+0gRe3x/5n6Bpx0vmMZKvWUjIqvr4MZ3vclVS65lbcPh9ZDExF+Oj
+         hNK1LBzDM8Dg55vHGPebwWiWed7P+zpOfcDHOwZScmqZnAEvxdLkbZ9N0bJBb63A8S+z
+         NIn4Ywra5DJlGKuXfb2vWtMqLq2TY+266DpD1xWOnPNoZ9eaVeZgTIuO0FOTy9YWEfGM
+         z1+oTesjq787cafOV+KVRE1+hoF+tOD1qcNszDIXG1QzQQO3v8bFqkQI79wr4YsYoCFv
+         iHtQ==
+X-Gm-Message-State: AOAM530/BmxsLqiv5HnVJryLIJw5LB7lz6fiMTdthzZuPlrFgXdiLy/f
+        N0sQNb1Kl4N6no914RMVL+llTg==
+X-Google-Smtp-Source: ABdhPJwLGHkfiTaFLMJ+1fVVeiugmoPZq/QdlhhhsZNoVHE6hnqzhCYAxgQ9JFqulll4LuZARS0JLw==
+X-Received: by 2002:a17:906:57da:: with SMTP id u26mr28312297ejr.157.1593694003341;
+        Thu, 02 Jul 2020 05:46:43 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id n16sm6864449ejo.54.2020.07.02.05.46.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2020 05:46:42 -0700 (PDT)
+References: <20200702092416.11961-1-jakub@cloudflare.com> <20200702092416.11961-5-jakub@cloudflare.com> <CACAyw9-6OCPqg3eoPOPeKYy=kBNVJT8-qbLh6QOo=8aEV6pWjw@mail.gmail.com>
+User-agent: mu4e 1.1.0; emacs 26.3
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marek Majkowski <marek@cloudflare.com>
+Subject: Re: [PATCH bpf-next v3 04/16] inet: Run SK_LOOKUP BPF program on socket lookup
+In-reply-to: <CACAyw9-6OCPqg3eoPOPeKYy=kBNVJT8-qbLh6QOo=8aEV6pWjw@mail.gmail.com>
+Date:   Thu, 02 Jul 2020 14:46:41 +0200
+Message-ID: <87mu4inky6.fsf@cloudflare.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add documentation for the XDP_SHARED_UMEM feature when a UMEM is
-shared between different queues and/or netdevs.
+On Thu, Jul 02, 2020 at 12:27 PM CEST, Lorenz Bauer wrote:
+> On Thu, 2 Jul 2020 at 10:24, Jakub Sitnicki <jakub@cloudflare.com> wrote:
+>>
+>> Run a BPF program before looking up a listening socket on the receive path.
+>> Program selects a listening socket to yield as result of socket lookup by
+>> calling bpf_sk_assign() helper and returning BPF_REDIRECT (7) code.
+>>
+>> Alternatively, program can also fail the lookup by returning with
+>> BPF_DROP (1), or let the lookup continue as usual with BPF_OK (0) on
+>> return. Other return values are treated the same as BPF_OK.
+>
+> I'd prefer if other values were treated as BPF_DROP, with other semantics
+> unchanged. Otherwise we won't be able to introduce new semantics
+> without potentially breaking user code.
 
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
----
- Documentation/networking/af_xdp.rst | 68 +++++++++++++++++++++++++++++++------
- 1 file changed, 58 insertions(+), 10 deletions(-)
+That might be surprising or even risky. If you attach a badly written
+program that say returns a negative value, it will drop all TCP SYNs and
+UDP traffic.
 
-diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
-index 5bc55a4..2ccc564 100644
---- a/Documentation/networking/af_xdp.rst
-+++ b/Documentation/networking/af_xdp.rst
-@@ -258,14 +258,21 @@ socket into zero-copy mode or fail.
- XDP_SHARED_UMEM bind flag
- -------------------------
- 
--This flag enables you to bind multiple sockets to the same UMEM, but
--only if they share the same queue id. In this mode, each socket has
--their own RX and TX rings, but the UMEM (tied to the fist socket
--created) only has a single FILL ring and a single COMPLETION
--ring. To use this mode, create the first socket and bind it in the normal
--way. Create a second socket and create an RX and a TX ring, or at
--least one of them, but no FILL or COMPLETION rings as the ones from
--the first socket will be used. In the bind call, set he
-+This flag enables you to bind multiple sockets to the same UMEM. It
-+works on the same queue id, between queue ids and between
-+netdevs/devices. In this mode, each socket has their own RX and TX
-+rings as usual, but you are going to have one or more FILL and
-+COMPLETION ring pairs. You have to create one of these pairs per
-+unique netdev and queue id tuple that you bind to.
-+
-+Starting with the case were we would like to share a UMEM between
-+sockets bound to the same netdev and queue id. The UMEM (tied to the
-+fist socket created) will only have a single FILL ring and a single
-+COMPLETION ring as there is only on unique netdev,queue_id tuple that
-+we have bound to. To use this mode, create the first socket and bind
-+it in the normal way. Create a second socket and create an RX and a TX
-+ring, or at least one of them, but no FILL or COMPLETION rings as the
-+ones from the first socket will be used. In the bind call, set he
- XDP_SHARED_UMEM option and provide the initial socket's fd in the
- sxdp_shared_umem_fd field. You can attach an arbitrary number of extra
- sockets this way.
-@@ -305,11 +312,41 @@ concurrently. There are no synchronization primitives in the
- libbpf code that protects multiple users at this point in time.
- 
- Libbpf uses this mode if you create more than one socket tied to the
--same umem. However, note that you need to supply the
-+same UMEM. However, note that you need to supply the
- XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD libbpf_flag with the
- xsk_socket__create calls and load your own XDP program as there is no
- built in one in libbpf that will route the traffic for you.
- 
-+The second case is when you share a UMEM between sockets that are
-+bound to different queue ids and/or netdevs. In this case you have to
-+create one FILL ring and one COMPLETION ring for each unique
-+netdev,queue_id pair. Let us say you want to create two sockets bound
-+to two different queue ids on the same netdev. Create the first socket
-+and bind it in the normal way. Create a second socket and create an RX
-+and a TX ring, or at least one of them, and then one FILL and
-+COMPLETION ring for this socket. Then in the bind call, set he
-+XDP_SHARED_UMEM option and provide the initial socket's fd in the
-+sxdp_shared_umem_fd field as you registered the UMEM on that
-+socket. These two sockets will now share one and the same UMEM.
-+
-+There is no need to supply an XDP program like the one in the previous
-+case where sockets were bound to the same queue id and
-+device. Instead, use the NIC's packet steering capabilities to steer
-+the packets to the right queue. In the previous example, there is only
-+one queue shared among sockets, so the NIC cannot do this steering. It
-+can only steer between queues.
-+
-+In libbpf, you need to use the xsk_socket__create_shared() API as it
-+takes a reference to a FILL ring and a COMPLETION ring that will be
-+created for you and bound to the shared UMEM. You can use this
-+function for all the sockets you create, or you can use it for the
-+second and following ones and use xsk_socket__create() for the first
-+one. Both methods yield the same result.
-+
-+Note that a UMEM can be shared between sockets on the same queue id
-+and device, as well as between queues on the same device and between
-+devices at the same time.
-+
- XDP_USE_NEED_WAKEUP bind flag
- -----------------------------
- 
-@@ -364,7 +401,7 @@ resources by only setting up one of them. Both the FILL ring and the
- COMPLETION ring are mandatory as you need to have a UMEM tied to your
- socket. But if the XDP_SHARED_UMEM flag is used, any socket after the
- first one does not have a UMEM and should in that case not have any
--FILL or COMPLETION rings created as the ones from the shared umem will
-+FILL or COMPLETION rings created as the ones from the shared UMEM will
- be used. Note, that the rings are single-producer single-consumer, so
- do not try to access them from multiple processes at the same
- time. See the XDP_SHARED_UMEM section.
-@@ -567,6 +604,17 @@ A: The short answer is no, that is not supported at the moment. The
-    switch, or other distribution mechanism, in your NIC to direct
-    traffic to the correct queue id and socket.
- 
-+Q: My packets are sometimes corrupted. What is wrong?
-+
-+A: Care has to be taken not to feed the same buffer in the UMEM into
-+   more than one ring at the same time. If you for example feed the
-+   same buffer into the FILL ring and the TX ring at the same time, the
-+   NIC might receive data into the buffer at the same time it is
-+   sending it. This will cause some packets to become corrupted. Same
-+   thing goes for feeding the same buffer into the FILL rings
-+   belonging to different queue ids or netdevs bound with the
-+   XDP_SHARED_UMEM flag.
-+
- Credits
- =======
- 
--- 
-2.7.4
+>
+>>
+>> This lets the user match packets with listening sockets freely at the last
+>> possible point on the receive path, where we know that packets are destined
+>> for local delivery after undergoing policing, filtering, and routing.
+>>
+>> With BPF code selecting the socket, directing packets destined to an IP
+>> range or to a port range to a single socket becomes possible.
+>>
+>> In case multiple programs are attached, they are run in series in the order
+>> in which they were attached. The end result gets determined from return
+>> code from each program according to following rules.
+>>
+>>  1. If any program returned BPF_REDIRECT and selected a valid socket, this
+>>     socket will be used as result of the lookup.
+>>  2. If more than one program returned BPF_REDIRECT and selected a socket,
+>>     last selection takes effect.
+>>  3. If any program returned BPF_DROP and none returned BPF_REDIRECT, the
+>>     socket lookup will fail with -ECONNREFUSED.
+>>  4. If no program returned neither BPF_DROP nor BPF_REDIRECT, socket lookup
+>>     continues to htable-based lookup.
+>>
+>> Suggested-by: Marek Majkowski <marek@cloudflare.com>
+>> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+>> ---
+>>
+>> Notes:
+>>     v3:
+>>     - Use a static_key to minimize the hook overhead when not used. (Alexei)
+>>     - Adapt for running an array of attached programs. (Alexei)
+>>     - Adapt for optionally skipping reuseport selection. (Martin)
+>>
+>>  include/linux/bpf.h        | 29 ++++++++++++++++++++++++++++
+>>  include/linux/filter.h     | 39 ++++++++++++++++++++++++++++++++++++++
+>>  kernel/bpf/net_namespace.c | 32 ++++++++++++++++++++++++++++++-
+>>  net/core/filter.c          |  2 ++
+>>  net/ipv4/inet_hashtables.c | 31 ++++++++++++++++++++++++++++++
+>>  5 files changed, 132 insertions(+), 1 deletion(-)
+>>
 
+[...]
+
+>> diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
+>> index 090166824ca4..a7768feb3ade 100644
+>> --- a/kernel/bpf/net_namespace.c
+>> +++ b/kernel/bpf/net_namespace.c
+>> @@ -25,6 +25,28 @@ struct bpf_netns_link {
+>>  /* Protects updates to netns_bpf */
+>>  DEFINE_MUTEX(netns_bpf_mutex);
+>>
+>> +static void netns_bpf_attach_type_disable(enum netns_bpf_attach_type type)
+>
+> Nit: maybe netns_bpf_attach_type_dec()? Disable sounds like it happens
+> unconditionally.
+
+attach_type_dec()/_inc() seems a bit cryptic, since it's not the attach
+type we are incrementing/decrementing.
+
+But I was considering _need()/_unneed(), which would follow an existing
+example, if you think that improves things.
+
+>
+>> +{
+>> +       switch (type) {
+>> +       case NETNS_BPF_SK_LOOKUP:
+>> +               static_branch_dec(&bpf_sk_lookup_enabled);
+>> +               break;
+>> +       default:
+>> +               break;
+>> +       }
+>> +}
+>> +
+>> +static void netns_bpf_attach_type_enable(enum netns_bpf_attach_type type)
+>> +{
+>> +       switch (type) {
+>> +       case NETNS_BPF_SK_LOOKUP:
+>> +               static_branch_inc(&bpf_sk_lookup_enabled);
+>> +               break;
+>> +       default:
+>> +               break;
+>> +       }
+>> +}
+>> +
+>>  /* Must be called with netns_bpf_mutex held. */
+>>  static void netns_bpf_run_array_detach(struct net *net,
+>>                                        enum netns_bpf_attach_type type)
+>> @@ -93,6 +115,9 @@ static void bpf_netns_link_release(struct bpf_link *link)
+>>         if (!net)
+>>                 goto out_unlock;
+>>
+>> +       /* Mark attach point as unused */
+>> +       netns_bpf_attach_type_disable(type);
+>> +
+>>         /* Remember link position in case of safe delete */
+>>         idx = link_index(net, type, net_link);
+>>         list_del(&net_link->node);
+>> @@ -416,6 +441,9 @@ static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
+>>                                         lockdep_is_held(&netns_bpf_mutex));
+>>         bpf_prog_array_free(run_array);
+>>
+>> +       /* Mark attach point as used */
+>> +       netns_bpf_attach_type_enable(type);
+>> +
+>>  out_unlock:
+>>         mutex_unlock(&netns_bpf_mutex);
+>>         return err;
+>> @@ -491,8 +519,10 @@ static void __net_exit netns_bpf_pernet_pre_exit(struct net *net)
+>>         mutex_lock(&netns_bpf_mutex);
+>>         for (type = 0; type < MAX_NETNS_BPF_ATTACH_TYPE; type++) {
+>>                 netns_bpf_run_array_detach(net, type);
+>> -               list_for_each_entry(net_link, &net->bpf.links[type], node)
+>> +               list_for_each_entry(net_link, &net->bpf.links[type], node) {
+>>                         net_link->net = NULL; /* auto-detach link */
+>> +                       netns_bpf_attach_type_disable(type);
+>> +               }
+>>                 if (net->bpf.progs[type])
+>>                         bpf_prog_put(net->bpf.progs[type]);
+>>         }
+>> diff --git a/net/core/filter.c b/net/core/filter.c
+
+[...]
