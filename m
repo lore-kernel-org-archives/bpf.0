@@ -5,65 +5,66 @@ X-Spam-Level:
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E445C433DF
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 09:24:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F8F4C433E0
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 09:24:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0079220771
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 09:24:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F3E420702
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 09:24:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="DPO0/u7T"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="GGYzkthx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728350AbgGBJYw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jul 2020 05:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S1728263AbgGBJYe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jul 2020 05:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728257AbgGBJYj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jul 2020 05:24:39 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA3AC08C5DC
-        for <bpf@vger.kernel.org>; Thu,  2 Jul 2020 02:24:39 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id dp18so28465795ejc.8
-        for <bpf@vger.kernel.org>; Thu, 02 Jul 2020 02:24:39 -0700 (PDT)
+        with ESMTP id S1728225AbgGBJYb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jul 2020 05:24:31 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E836C08C5DC
+        for <bpf@vger.kernel.org>; Thu,  2 Jul 2020 02:24:30 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id n2so13847387edr.5
+        for <bpf@vger.kernel.org>; Thu, 02 Jul 2020 02:24:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3bSpGEFWynhqkY85qsplbaX/55c/sszNhOOsxHciCGM=;
-        b=DPO0/u7TYVlbmPPky9lgED13ACU7duG0w5flTmcIOAdcyJJlzwpLwnCd+r8aZwgHZt
-         h4iCb9vIdgcKXv8L4BdaGzX+6Gh3yEkXRZnUJUmYEZqSfzcvgS1/SN+MBeSzz9C8U31A
-         VjCdq3Ha+3UI08gT7yYJUc6wwlTJskXozfMOI=
+        bh=0BY6ok1QYTMHoHC2FyFBlpP9FnBum5gXQ+nmbXEQDKU=;
+        b=GGYzkthxBLIF0Y59p+WWENuYhgg1Uj/dr8HNGZoOjnmseZ1A3gs3i0w5HKI47EKeTu
+         6kz3bI3uyWCkVFmgWXhmf1p3G64m5//80UURBmT6Gw2OpG/fc9UXAzDP2DnLCGpfI2ZW
+         CpNNQgIKXIgfH7mXtRU8aLJY8LC867MIx0ZDI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3bSpGEFWynhqkY85qsplbaX/55c/sszNhOOsxHciCGM=;
-        b=Becn5Ke6HzAvlVlh+DYQI31FUTejLPdDJeZEfhKWS4POStxvskDf7/PLzy0IkS/IZT
-         GkkfWbB4S/1Zfo2WtZcAacY/Q4h2XVY0bzSiIXnn9Apgh/dTNC/mzSQ8VREFioQBttJ8
-         oXVhuHwNT1RbqwPRPoQ+fPLCyLb4h9JDKZCjYOd2hSc554pfgEVMQWoFmDTsY4zTjxxP
-         d/NHoeWl150kwjLZ0jwtJCOVrcMevP4enF/Ltw+SkXpgig/IuLdNCrmzIrBPDABq/LLd
-         jTnxED8cFl+fzP4Gbcyz9Lu6bWPuzZlmQBmZbjmoChYRjymTgu/Rp1T25g2c4dX7ciGH
-         eWmw==
-X-Gm-Message-State: AOAM5314echJszJHf869p6vnYtaORbtuy+5TCikAW7xM6QlThHolMIEc
-        UIXyYbyzYh23RlMhnplL0RA0oZhM6oaz2w==
-X-Google-Smtp-Source: ABdhPJzOavD9RSmOFAEgkRzi04T+vmCI8wxfCTZN+crvROSMy/fCD72yOsU7hByBWWt8FBHHfDvKGw==
-X-Received: by 2002:a17:906:1386:: with SMTP id f6mr26934725ejc.66.1593681877631;
-        Thu, 02 Jul 2020 02:24:37 -0700 (PDT)
+        bh=0BY6ok1QYTMHoHC2FyFBlpP9FnBum5gXQ+nmbXEQDKU=;
+        b=CBqPPvjvSNcnb1G96QI/qVmiAiJAkKs1tXlZvuUK+NFYwePk/cETUknjegxmvM3IyQ
+         +nWuwLDOwZFxCd7Ny7OmksLupkB7s1cZYGQ0ZsO5rYmR3LCluoUiC9sq3IB7AiQPgKa0
+         QbvKaYOc6CSebkMfSP/pdd5aiQPzwuumTQGlWFrEmHfiCG634G/mKf0sWEi1BLSulc4B
+         mXW2cB8NluGzijVG7o4i2v25kktFpSfDO4bidrN6M6yQQwQ5Ui30Ly7D3gT81PlNlyiT
+         3ovpaL8MhYJ1Nu8eWCIrBXuHKJXQ3J+u8esRwu/maOJ73CHd+5fdzrmMFRnCa/2qvrL6
+         uGzQ==
+X-Gm-Message-State: AOAM533SaQrICwaH/Jh+lZQkPVwdoaxpBKOLS3nwWg4vWy9WMN4+peFP
+        rUkD6H415h38Nutcck0Q502IRxe0GcQhdQ==
+X-Google-Smtp-Source: ABdhPJxFpwzyX42hZ6RtTwFi9hA0EMYHwFRgTQb8F/h53KlCOWfRR8AYYEfjmZrEXZu0lFAqMYW47Q==
+X-Received: by 2002:a05:6402:1ad9:: with SMTP id ba25mr1844654edb.74.1593681869078;
+        Thu, 02 Jul 2020 02:24:29 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id q21sm6359603ejc.112.2020.07.02.02.24.36
+        by smtp.gmail.com with ESMTPSA id d12sm8899912edx.80.2020.07.02.02.24.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2020 02:24:37 -0700 (PDT)
+        Thu, 02 Jul 2020 02:24:28 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH bpf-next v3 11/16] bpf: Sync linux/bpf.h to tools/
-Date:   Thu,  2 Jul 2020 11:24:11 +0200
-Message-Id: <20200702092416.11961-12-jakub@cloudflare.com>
+        Jakub Kicinski <kuba@kernel.org>,
+        Marek Majkowski <marek@cloudflare.com>
+Subject: [PATCH bpf-next v3 06/16] inet6: Run SK_LOOKUP BPF program on socket lookup
+Date:   Thu,  2 Jul 2020 11:24:06 +0200
+Message-Id: <20200702092416.11961-7-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200702092416.11961-1-jakub@cloudflare.com>
 References: <20200702092416.11961-1-jakub@cloudflare.com>
@@ -74,140 +75,135 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Newly added program, context type and helper is used by tests in a
-subsequent patch. Synchronize the header file.
+Following ipv4 stack changes, run a BPF program attached to netns before
+looking up a listening socket. Program can return a listening socket to use
+as result of socket lookup, fail the lookup, or take no action.
 
+Suggested-by: Marek Majkowski <marek@cloudflare.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
 
 Notes:
     v3:
-    - Update after changes to bpf.h in earlier patch.
-    
-    v2:
-    - Update after changes to bpf.h in earlier patch.
+    - Use a static_key to minimize the hook overhead when not used. (Alexei)
+    - Don't copy struct in6_addr when populating BPF prog context. (Martin)
+    - Adapt for running an array of attached programs. (Alexei)
+    - Adapt for optionally skipping reuseport selection. (Martin)
 
- tools/include/uapi/linux/bpf.h | 74 ++++++++++++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+ include/linux/filter.h      | 41 +++++++++++++++++++++++++++++++++++++
+ net/ipv6/inet6_hashtables.c | 35 +++++++++++++++++++++++++++++++
+ 2 files changed, 76 insertions(+)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 0cb8ec948816..8dd6e6ce5de9 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -189,6 +189,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_STRUCT_OPS,
- 	BPF_PROG_TYPE_EXT,
- 	BPF_PROG_TYPE_LSM,
-+	BPF_PROG_TYPE_SK_LOOKUP,
- };
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index ff7721d862c2..e7462f178213 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1336,4 +1336,45 @@ static inline bool bpf_sk_lookup_run_v4(struct net *net, int protocol,
+ 	return do_reuseport;
+ }
  
- enum bpf_attach_type {
-@@ -226,6 +227,7 @@ enum bpf_attach_type {
- 	BPF_CGROUP_INET4_GETSOCKNAME,
- 	BPF_CGROUP_INET6_GETSOCKNAME,
- 	BPF_XDP_DEVMAP,
-+	BPF_SK_LOOKUP,
- 	__MAX_BPF_ATTACH_TYPE
- };
++#if IS_ENABLED(CONFIG_IPV6)
++static inline bool bpf_sk_lookup_run_v6(struct net *net, int protocol,
++					const struct in6_addr *saddr,
++					const __be16 sport,
++					const struct in6_addr *daddr,
++					const u16 dport,
++					struct sock **psk)
++{
++	struct bpf_prog_array *run_array;
++	bool do_reuseport = false;
++	struct sock *sk = NULL;
++
++	rcu_read_lock();
++	run_array = rcu_dereference(net->bpf.run_array[NETNS_BPF_SK_LOOKUP]);
++	if (run_array) {
++		const struct bpf_sk_lookup_kern ctx = {
++			.family		= AF_INET6,
++			.protocol	= protocol,
++			.v6.saddr	= saddr,
++			.v6.daddr	= daddr,
++			.sport		= sport,
++			.dport		= dport,
++		};
++		u32 ret;
++
++		ret = BPF_PROG_SK_LOOKUP_RUN_ARRAY(run_array, &ctx,
++						   BPF_PROG_RUN);
++		if (ret & (1U << BPF_REDIRECT)) {
++			sk = ctx.selected_sk;
++			do_reuseport = sk && !ctx.no_reuseport;
++		} else if (ret & (1U << BPF_DROP)) {
++			sk = ERR_PTR(-ECONNREFUSED);
++		}
++	}
++	rcu_read_unlock();
++
++	*psk = sk;
++	return do_reuseport;
++}
++#endif /* IS_ENABLED(CONFIG_IPV6) */
++
+ #endif /* __LINUX_FILTER_H__ */
+diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
+index 03942eef8ab6..b63583d2aa76 100644
+--- a/net/ipv6/inet6_hashtables.c
++++ b/net/ipv6/inet6_hashtables.c
+@@ -21,6 +21,8 @@
+ #include <net/ip.h>
+ #include <net/sock_reuseport.h>
  
-@@ -3067,6 +3069,10 @@ union bpf_attr {
-  *
-  * long bpf_sk_assign(struct sk_buff *skb, struct bpf_sock *sk, u64 flags)
-  *	Description
-+ *		Helper is overloaded depending on BPF program type. This
-+ *		description applies to **BPF_PROG_TYPE_SCHED_CLS** and
-+ *		**BPF_PROG_TYPE_SCHED_ACT** programs.
-+ *
-  *		Assign the *sk* to the *skb*. When combined with appropriate
-  *		routing configuration to receive the packet towards the socket,
-  *		will cause *skb* to be delivered to the specified socket.
-@@ -3092,6 +3098,53 @@ union bpf_attr {
-  *		**-ESOCKTNOSUPPORT** if the socket type is not supported
-  *		(reuseport).
-  *
-+ * int bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
-+ *	Description
-+ *		Helper is overloaded depending on BPF program type. This
-+ *		description applies to **BPF_PROG_TYPE_SK_LOOKUP** programs.
-+ *
-+ *		Select the *sk* as a result of a socket lookup.
-+ *
-+ *		For the operation to succeed passed socket must be compatible
-+ *		with the packet description provided by the *ctx* object.
-+ *
-+ *		L4 protocol (**IPPROTO_TCP** or **IPPROTO_UDP**) must
-+ *		be an exact match. While IP family (**AF_INET** or
-+ *		**AF_INET6**) must be compatible, that is IPv6 sockets
-+ *		that are not v6-only can be selected for IPv4 packets.
-+ *
-+ *		Only TCP listeners and UDP unconnected sockets can be
-+ *		selected.
-+ *
-+ *		*flags* argument can combination of following values:
-+ *
-+ *		* **BPF_SK_LOOKUP_F_REPLACE** to override the previous
-+ *		  socket selection, potentially done by a BPF program
-+ *		  that ran before us.
-+ *
-+ *		* **BPF_SK_LOOKUP_F_NO_REUSEPORT** to skip
-+ *		  load-balancing within reuseport group for the socket
-+ *		  being selected.
-+ *
-+ *	Return
-+ *		0 on success, or a negative errno in case of failure.
-+ *
-+ *		* **-EAFNOSUPPORT** if socket family (*sk->family*) is
-+ *		  not compatible with packet family (*ctx->family*).
-+ *
-+ *		* **-EEXIST** if socket has been already selected,
-+ *		  potentially by another program, and
-+ *		  **BPF_SK_LOOKUP_F_REPLACE** flag was not specified.
-+ *
-+ *		* **-EINVAL** if unsupported flags were specified.
-+ *
-+ *		* **-EPROTOTYPE** if socket L4 protocol
-+ *		  (*sk->protocol*) doesn't match packet protocol
-+ *		  (*ctx->protocol*).
-+ *
-+ *		* **-ESOCKTNOSUPPORT** if socket is not in allowed
-+ *		  state (TCP listening or UDP unconnected).
-+ *
-  * u64 bpf_ktime_get_boot_ns(void)
-  * 	Description
-  * 		Return the time elapsed since system boot, in nanoseconds.
-@@ -3569,6 +3622,12 @@ enum {
- 	BPF_RINGBUF_HDR_SZ		= 8,
- };
++extern struct inet_hashinfo tcp_hashinfo;
++
+ u32 inet6_ehashfn(const struct net *net,
+ 		  const struct in6_addr *laddr, const u16 lport,
+ 		  const struct in6_addr *faddr, const __be16 fport)
+@@ -159,6 +161,31 @@ static struct sock *inet6_lhash2_lookup(struct net *net,
+ 	return result;
+ }
  
-+/* BPF_FUNC_sk_assign flags in bpf_sk_lookup context. */
-+enum {
-+	BPF_SK_LOOKUP_F_REPLACE		= (1ULL << 0),
-+	BPF_SK_LOOKUP_F_NO_REUSEPORT	= (1ULL << 1),
-+};
++static inline struct sock *inet6_lookup_run_bpf(struct net *net,
++						struct inet_hashinfo *hashinfo,
++						struct sk_buff *skb, int doff,
++						const struct in6_addr *saddr,
++						const __be16 sport,
++						const struct in6_addr *daddr,
++						const u16 hnum)
++{
++	struct sock *sk, *reuse_sk;
++	bool do_reuseport;
 +
- /* Mode for BPF_FUNC_skb_adjust_room helper. */
- enum bpf_adj_room_mode {
- 	BPF_ADJ_ROOM_NET,
-@@ -4298,4 +4357,19 @@ struct bpf_pidns_info {
- 	__u32 pid;
- 	__u32 tgid;
- };
++	if (hashinfo != &tcp_hashinfo)
++		return NULL; /* only TCP is supported */
 +
-+/* User accessible data for SK_LOOKUP programs. Add new fields at the end. */
-+struct bpf_sk_lookup {
-+	__u32 family;		/* Protocol family (AF_INET, AF_INET6) */
-+	__u32 protocol;		/* IP protocol (IPPROTO_TCP, IPPROTO_UDP) */
-+	__u32 remote_ip4;	/* Network byte order */
-+	__u32 remote_ip6[4];	/* Network byte order */
-+	__u32 remote_port;	/* Network byte order */
-+	__u32 local_ip4;	/* Network byte order */
-+	__u32 local_ip6[4];	/* Network byte order */
-+	__u32 local_port;	/* Host byte order */
++	do_reuseport = bpf_sk_lookup_run_v6(net, IPPROTO_TCP,
++					    saddr, sport, daddr, hnum, &sk);
++	if (do_reuseport) {
++		reuse_sk = lookup_reuseport(net, sk, skb, doff,
++					    saddr, sport, daddr, hnum);
++		if (reuse_sk)
++			sk = reuse_sk;
++	}
++	return sk;
++}
 +
-+	__bpf_md_ptr(struct bpf_sock *, sk); /* Selected socket */
-+};
+ struct sock *inet6_lookup_listener(struct net *net,
+ 		struct inet_hashinfo *hashinfo,
+ 		struct sk_buff *skb, int doff,
+@@ -170,6 +197,14 @@ struct sock *inet6_lookup_listener(struct net *net,
+ 	struct sock *result = NULL;
+ 	unsigned int hash2;
+ 
++	/* Lookup redirect from BPF */
++	if (static_branch_unlikely(&bpf_sk_lookup_enabled)) {
++		result = inet6_lookup_run_bpf(net, hashinfo, skb, doff,
++					      saddr, sport, daddr, hnum);
++		if (result)
++			goto done;
++	}
 +
- #endif /* _UAPI__LINUX_BPF_H__ */
+ 	hash2 = ipv6_portaddr_hash(net, daddr, hnum);
+ 	ilb2 = inet_lhash2_bucket(hashinfo, hash2);
+ 
 -- 
 2.25.4
 
