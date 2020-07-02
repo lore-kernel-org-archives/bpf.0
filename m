@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85A80C433E1
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 23:27:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9663CC433E3
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 23:27:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62AAF20760
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 23:27:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6EF4D20760
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 23:27:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AZNXg5cA"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YYtApD/6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbgGBX1P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726263AbgGBX1P (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 2 Jul 2020 19:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726573AbgGBX0p (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726575AbgGBX0p (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 2 Jul 2020 19:26:45 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C63C08C5E1
-        for <bpf@vger.kernel.org>; Thu,  2 Jul 2020 16:26:44 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id c1so5898674pja.5
-        for <bpf@vger.kernel.org>; Thu, 02 Jul 2020 16:26:44 -0700 (PDT)
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51076C08C5C1
+        for <bpf@vger.kernel.org>; Thu,  2 Jul 2020 16:26:45 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id u8so12773154pje.4
+        for <bpf@vger.kernel.org>; Thu, 02 Jul 2020 16:26:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Be8/RXHNUg3guKcAU0wzFOahH212pJR/5S0VSq/hiLk=;
-        b=AZNXg5cAGqKc/O1ef4Kc/yy3qUbP8UuKWLzdKUZA44cFM8OkYapLq3J29luk4nI4ms
-         xZlrbLj6B/RkKmXJeAwDSYoGxQU0jiD1te9ioq8uMs2I3waXWUfWcElsMjAEAshyT9y5
-         dvNbYPegQb9XnQnvHreZbZu6+7+uuOFy6Gv8U=
+        bh=Ln6rO86x9ZxOiyZZPuxFfPT8Nugldwg64LyJUHiqZT0=;
+        b=YYtApD/6rs1BT/ZzA44IlQCH/zgH3loPHO4nrJjyar1pcWSs1f1U/7EWSBhEGCnNpn
+         8b0/wokfQx35rbyVYIClE0w0NMPrndlLoC+wumiIdrB2Y4ekwvsxyhRYnCbn/1sCRXHP
+         Gx5nfmAXpl7AHzdKNGugYuKJOZHn9lUV3gJ1A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Be8/RXHNUg3guKcAU0wzFOahH212pJR/5S0VSq/hiLk=;
-        b=lzxfNAhOF1eYyZeitdeNcBkW80IeJs7HloLyIZcRX5kP17q/RfUcZzSXh4OZW/cOW2
-         EQRvUtqO9pbyD/mZgRIU9LG7aYbAwxnigAFQMpZGA88ehzV8mQFpClGFiyFnQ4aw3kH4
-         buaFJidDR2m2Im1Vi6bm6h+LOMWmyvT7K4/w4u3UKh4inD1Q9N13jQtL4pXElJHZebx9
-         Xz0PvQe5pqrivEnEa4xprejP9v+TDbmePReKuz1CSIA2pU2ECM+gC2+HDnIztar9JZTF
-         n64EZEbd2AE4ok86ZwG7WZgotdUJRCfIr2/ZWHVGchnGeJe+BKRZfB2O8nqnrUY6HPzQ
-         EcXw==
-X-Gm-Message-State: AOAM532vBLNRN18NNnCYN7GxbhBfNOGYHmLm6I3Q+EPu98i2zKV9BVYq
-        9GFsDxGC/lYge5k93dOavyhJ3A==
-X-Google-Smtp-Source: ABdhPJxTnpQERPtJv7OGqHQCc+gfp34thsR2FhSVKFIpGMpGOmREcUT37nlgZdRzgpRwqbSxEkGurg==
-X-Received: by 2002:a17:902:8a82:: with SMTP id p2mr27275418plo.316.1593732403984;
-        Thu, 02 Jul 2020 16:26:43 -0700 (PDT)
+        bh=Ln6rO86x9ZxOiyZZPuxFfPT8Nugldwg64LyJUHiqZT0=;
+        b=fvhfh7aVNZxZ8nNDixyDvV52WH8K6TZlx7OxJkoXOFpyusLBQnWsDFjNK5J3hBhj2B
+         8q+x1fBPM3M0sJb37BbJKLJVaw6elcKG+I+3q3B0KeHw+rdqm8GmjcXEcNRnp6daLOwA
+         2p899L6XVCgPz81zAcfRQAItCqt5epklO0OHF91b5Spz9binb1/psogps2edduKbZU9m
+         hFcq8lCUNwHTW7jdBLJBek9yjmEGgkmVk71k8/MICNlWjcmz7Ldbdp3fEk4dGt3ophyt
+         Xmxqz9mOokiYEUZ0PhXtNe191ys4YIh14HebLGpHxeIjIQuwetMNm6aSki5aI91wt8Qc
+         bUUQ==
+X-Gm-Message-State: AOAM532kGGS68SYTJ9g+UL0EEB1J8g1I0OblzSWirdIi1mFmUBzAsvhE
+        po6PoR+nQBG84uPMza2KV6Eflw==
+X-Google-Smtp-Source: ABdhPJwfJJ4gw99qjzyTNpCmCsOoWMzyap43GRDeaqgnGHrygOWaZADTDGp6Bqu/EDIf8o0sxOAFGw==
+X-Received: by 2002:a17:902:704a:: with SMTP id h10mr27952959plt.85.1593732404766;
+        Thu, 02 Jul 2020 16:26:44 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 2sm9791094pfa.110.2020.07.02.16.26.41
+        by smtp.gmail.com with ESMTPSA id m140sm9987328pfd.195.2020.07.02.16.26.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 02 Jul 2020 16:26:41 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -86,9 +86,9 @@ Cc:     Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
         Thomas Richter <tmricht@linux.ibm.com>,
         Ingo Molnar <mingo@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] module: Do not expose section addresses to non-CAP_SYSLOG
-Date:   Thu,  2 Jul 2020 16:26:36 -0700
-Message-Id: <20200702232638.2946421-4-keescook@chromium.org>
+Subject: [PATCH 1/5] kallsyms: Refactor kallsyms_show_value() to take cred
+Date:   Thu,  2 Jul 2020 16:26:34 -0700
+Message-Id: <20200702232638.2946421-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200702232638.2946421-1-keescook@chromium.org>
 References: <20200702232638.2946421-1-keescook@chromium.org>
@@ -99,59 +99,144 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The printing of section addresses in /sys/module/*/sections/* was not
-using the correct credentials to evaluate visibility.
+In order to perform future tests against the cred saved during open(),
+switch kallsyms_show_value() to operate on a cred, and have all current
+callers pass current_cred(). This makes it very obvious where callers
+are checking the wrong credential in their "read" contexts. These will
+be fixed in the coming patches.
 
-Before:
-
- # cat /sys/module/*/sections/.*text
- 0xffffffffc0458000
- ...
- # capsh --drop=CAP_SYSLOG -- -c "cat /sys/module/*/sections/.*text"
- 0xffffffffc0458000
- ...
-
-After:
-
- # cat /sys/module/*/sections/*.text
- 0xffffffffc0458000
- ...
- # capsh --drop=CAP_SYSLOG -- -c "cat /sys/module/*/sections/.*text"
- 0x0000000000000000
- ...
-
-Additionally replaces the existing (safe) /proc/modules check with
-file->f_cred for consistency.
+Additionally switch return value to bool, since it is always used as a
+direct permission check, not a 0-on-success, negative-on-error style
+function return.
 
 Cc: stable@vger.kernel.org
-Reported-by: Dominik Czarnota <dominik.czarnota@trailofbits.com>
-Fixes: be71eda5383f ("module: Fix display of wrong module .text address")
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- kernel/module.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ include/linux/filter.h   |  2 +-
+ include/linux/kallsyms.h |  5 +++--
+ kernel/kallsyms.c        | 17 +++++++++++------
+ kernel/kprobes.c         |  4 ++--
+ kernel/module.c          |  2 +-
+ 5 files changed, 18 insertions(+), 12 deletions(-)
 
-diff --git a/kernel/module.c b/kernel/module.c
-index 9e2954519259..e6c7571092cb 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -1530,8 +1530,8 @@ static ssize_t module_sect_read(struct file *file, struct kobject *kobj,
- 	if (pos != 0)
- 		return -EINVAL;
- 
--	return sprintf(buf, "0x%px\n", kptr_restrict < 2 ?
--		       (void *)sattr->address : NULL);
-+	return sprintf(buf, "0x%px\n",
-+		       kallsyms_show_value(file->f_cred) ? (void *)sattr->address : NULL);
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 259377723603..55104f6c78e8 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -889,7 +889,7 @@ static inline bool bpf_dump_raw_ok(void)
+ 	/* Reconstruction of call-sites is dependent on kallsyms,
+ 	 * thus make dump the same restriction.
+ 	 */
+-	return kallsyms_show_value() == 1;
++	return kallsyms_show_value(current_cred());
  }
  
- static void free_sect_attrs(struct module_sect_attrs *sect_attrs)
-@@ -4380,7 +4380,7 @@ static int modules_open(struct inode *inode, struct file *file)
+ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
+diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+index 98338dc6b5d2..481273f0c72d 100644
+--- a/include/linux/kallsyms.h
++++ b/include/linux/kallsyms.h
+@@ -18,6 +18,7 @@
+ #define KSYM_SYMBOL_LEN (sizeof("%s+%#lx/%#lx [%s]") + (KSYM_NAME_LEN - 1) + \
+ 			 2*(BITS_PER_LONG*3/10) + (MODULE_NAME_LEN - 1) + 1)
+ 
++struct cred;
+ struct module;
+ 
+ static inline int is_kernel_inittext(unsigned long addr)
+@@ -98,7 +99,7 @@ int lookup_symbol_name(unsigned long addr, char *symname);
+ int lookup_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name);
+ 
+ /* How and when do we show kallsyms values? */
+-extern int kallsyms_show_value(void);
++extern bool kallsyms_show_value(const struct cred *cred);
+ 
+ #else /* !CONFIG_KALLSYMS */
+ 
+@@ -158,7 +159,7 @@ static inline int lookup_symbol_attrs(unsigned long addr, unsigned long *size, u
+ 	return -ERANGE;
+ }
+ 
+-static inline int kallsyms_show_value(void)
++static inline bool kallsyms_show_value(const struct cred *cred)
+ {
+ 	return false;
+ }
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 16c8c605f4b0..bb14e64f62a4 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -644,19 +644,20 @@ static inline int kallsyms_for_perf(void)
+  * Otherwise, require CAP_SYSLOG (assuming kptr_restrict isn't set to
+  * block even that).
+  */
+-int kallsyms_show_value(void)
++bool kallsyms_show_value(const struct cred *cred)
+ {
+ 	switch (kptr_restrict) {
+ 	case 0:
+ 		if (kallsyms_for_perf())
+-			return 1;
++			return true;
+ 	/* fallthrough */
+ 	case 1:
+-		if (has_capability_noaudit(current, CAP_SYSLOG))
+-			return 1;
++		if (security_capable(cred, &init_user_ns, CAP_SYSLOG,
++				     CAP_OPT_NOAUDIT) == 0)
++			return true;
+ 	/* fallthrough */
+ 	default:
+-		return 0;
++		return false;
+ 	}
+ }
+ 
+@@ -673,7 +674,11 @@ static int kallsyms_open(struct inode *inode, struct file *file)
+ 		return -ENOMEM;
+ 	reset_iter(iter, 0);
+ 
+-	iter->show_value = kallsyms_show_value();
++	/*
++	 * Instead of checking this on every s_show() call, cache
++	 * the result here at open time.
++	 */
++	iter->show_value = kallsyms_show_value(file->f_cred);
+ 	return 0;
+ }
+ 
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index 4a904cc56d68..d4de217e4a91 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -2448,7 +2448,7 @@ static void report_probe(struct seq_file *pi, struct kprobe *p,
+ 	else
+ 		kprobe_type = "k";
+ 
+-	if (!kallsyms_show_value())
++	if (!kallsyms_show_value(current_cred()))
+ 		addr = NULL;
+ 
+ 	if (sym)
+@@ -2540,7 +2540,7 @@ static int kprobe_blacklist_seq_show(struct seq_file *m, void *v)
+ 	 * If /proc/kallsyms is not showing kernel address, we won't
+ 	 * show them here either.
+ 	 */
+-	if (!kallsyms_show_value())
++	if (!kallsyms_show_value(current_cred()))
+ 		seq_printf(m, "0x%px-0x%px\t%ps\n", NULL, NULL,
+ 			   (void *)ent->start_addr);
+ 	else
+diff --git a/kernel/module.c b/kernel/module.c
+index e8a198588f26..a5022ae84e50 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -4377,7 +4377,7 @@ static int modules_open(struct inode *inode, struct file *file)
  
  	if (!err) {
  		struct seq_file *m = file->private_data;
--		m->private = kallsyms_show_value(current_cred()) ? NULL : (void *)8ul;
-+		m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
+-		m->private = kallsyms_show_value() ? NULL : (void *)8ul;
++		m->private = kallsyms_show_value(current_cred()) ? NULL : (void *)8ul;
  	}
  
  	return err;
