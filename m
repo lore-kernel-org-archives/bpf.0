@@ -2,122 +2,103 @@ Return-Path: <SRS0=396g=AN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 297FDC433E0
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 16:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0615C433E0
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 17:25:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 13F51212CC
-	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 16:49:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C023E206DD
+	for <bpf@archiver.kernel.org>; Thu,  2 Jul 2020 17:25:23 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h28wOu+r"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727125AbgGBQsi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jul 2020 12:48:38 -0400
-Received: from out02.mta.xmission.com ([166.70.13.232]:35290 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726721AbgGBQsh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jul 2020 12:48:37 -0400
-Received: from in01.mta.xmission.com ([166.70.13.51])
-        by out02.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jr2O4-0007e6-OQ; Thu, 02 Jul 2020 10:48:36 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
-        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jr2Nx-0007up-Jp; Thu, 02 Jul 2020 10:48:30 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     David Miller <davem@davemloft.net>,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Thu,  2 Jul 2020 11:41:40 -0500
-Message-Id: <20200702164140.4468-16-ebiederm@xmission.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <87y2o1swee.fsf_-_@x220.int.ebiederm.org>
-References: <87y2o1swee.fsf_-_@x220.int.ebiederm.org>
+        id S1727817AbgGBRZX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jul 2020 13:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726829AbgGBRZW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jul 2020 13:25:22 -0400
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79B9C08C5C1;
+        Thu,  2 Jul 2020 10:25:22 -0700 (PDT)
+Received: by mail-il1-x142.google.com with SMTP id t18so4985336ilh.2;
+        Thu, 02 Jul 2020 10:25:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:date:message-id:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=5a1L/cUU/PyyphLNAPTJUUU499uUA25oZAeEw3ikCBs=;
+        b=h28wOu+rsB2L+YvdUIZkUdK6TnWcw0TcHqS3Sr2Mgc6FzScgrTa/MiueKDBf0rwwLz
+         lxm8QqtRm+XhSNu4QKYCQBPCn4HorvlBlQ5ljtw8TcKA8QJ0iUaOmB9L1OTztjNQO9gx
+         UpcGMN3i4YU6fK5G/jEkMNFO/X94aEj8XTz0XG7KRCfZ1J27A37tKuttcckFbU9hvgBK
+         YCAezlKrvFLTnr9+17ibidczPbQtdeapfqa5cXXYv8uN57ZOsNYPOFz9ulN1xuXL23Cq
+         kJ98Nwf1oH5kp3DiNJkP/Pcvd+Pk+WC9s2uhZpwyU5EoggXfZi9+ASrdp7jlhoPIU0Uq
+         ECYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=5a1L/cUU/PyyphLNAPTJUUU499uUA25oZAeEw3ikCBs=;
+        b=ALt7QD1HTPbyPHhhHBC1KIA/jD2uTVkusY3OJgmAf3YPMIg08s2STBRcGX8Yj5xWUO
+         rrD8VsoXNrf6EVumaXj2GfKfmMHcxEf2G6i3/GWaAGAO6m1Edw9Tmizd/dfC05rI0fwB
+         5HoqLXhN0gYZYMLHzonQvjS45pxXFCKcWZ+7LvqsHKQsjoIxb5g0RehF2Id5Lx6BV4Yt
+         OV0eQC6hDYPhNtPy2j9SOZ/k8ViQ74cxHaDYPmsYZB6yLipxmDMN6goqMeoqgFuRyDdy
+         md8s3qZ0yKv4vI7pOoums/uPzRMZjBV+gqN51pURqSkFOt7bnksdcok7xLXKTjHRxACs
+         UE0g==
+X-Gm-Message-State: AOAM530DM9N9/YhyPE4IuFwpPO+C5PD1Bxu+DCoA3YsQVQ0z9+SZi7zP
+        zMEj4Cl8A58dYyp9b96P+Vg=
+X-Google-Smtp-Source: ABdhPJzeSwv0FOtn5Vxz3chkswCucMf2bs3yG+egyYK48UchHv32z0UF9AilXbQCOtNUWP8CRiqQ2A==
+X-Received: by 2002:a92:290d:: with SMTP id l13mr12563679ilg.62.1593710722005;
+        Thu, 02 Jul 2020 10:25:22 -0700 (PDT)
+Received: from [127.0.1.1] ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id k3sm5129399ils.8.2020.07.02.10.25.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2020 10:25:21 -0700 (PDT)
+Subject: [bpf-next PATCH] bpf: fix bpftool without skeleton code enabled
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     andriin@fb.com, ast@kernel.org, daniel@iogearbox.net
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        john.fastabend@gmail.com
+Date:   Thu, 02 Jul 2020 10:25:08 -0700
+Message-ID: <159371070880.18158.837974429614447605.stgit@john-XPS-13-9370>
+User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1jr2Nx-0007up-Jp;;;mid=<20200702164140.4468-16-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18OB1SGxTOeo4/dzJbPeWbHPytle+s5LkM=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: [PATCH v3 16/16] umd: Stop using split_argv
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There is exactly one argument so there is nothing to split.  All
-split_argv does now is cause confusion and avoid the need for a cast
-when passing a "const char *" string to call_usermodehelper_setup.
+Fix segfault from bpftool by adding emit_obj_refs_plain when skeleton
+code is disabled.
 
-So avoid confusion and the possibility of an odd driver name causing
-problems by just using a fixed argv array with a cast in the call to
-call_usermodehelper_setup.
+Tested by deleting BUILD_BPF_SKELS in Makefile.
 
-v1: https://lkml.kernel.org/r/87sged3a9n.fsf_-_@x220.int.ebiederm.org
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+# ./bpftool prog show
+Error: bpftool built without PID iterator support
+3: cgroup_skb  tag 7be49e3934a125ba  gpl
+        loaded_at 2020-07-01T08:01:29-0700  uid 0
+Segmentation fault
+
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 ---
- kernel/usermode_driver.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ tools/bpf/bpftool/pids.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/usermode_driver.c b/kernel/usermode_driver.c
-index cd136f86f799..0b35212ffc3d 100644
---- a/kernel/usermode_driver.c
-+++ b/kernel/usermode_driver.c
-@@ -160,27 +160,21 @@ static void umd_cleanup(struct subprocess_info *info)
- int fork_usermode_driver(struct umd_info *info)
- {
- 	struct subprocess_info *sub_info;
--	char **argv = NULL;
-+	const char *argv[] = { info->driver_name, NULL };
- 	int err;
- 
- 	if (WARN_ON_ONCE(info->tgid))
- 		return -EBUSY;
- 
- 	err = -ENOMEM;
--	argv = argv_split(GFP_KERNEL, info->driver_name, NULL);
--	if (!argv)
--		goto out;
--
--	sub_info = call_usermodehelper_setup(info->driver_name, argv, NULL,
--					     GFP_KERNEL,
-+	sub_info = call_usermodehelper_setup(info->driver_name,
-+					     (char **)argv, NULL, GFP_KERNEL,
- 					     umd_setup, umd_cleanup, info);
- 	if (!sub_info)
- 		goto out;
- 
- 	err = call_usermodehelper_exec(sub_info, UMH_WAIT_EXEC);
- out:
--	if (argv)
--		argv_free(argv);
- 	return err;
+diff --git a/tools/bpf/bpftool/pids.c b/tools/bpf/bpftool/pids.c
+index 2709be4de2b1..7d5416667c85 100644
+--- a/tools/bpf/bpftool/pids.c
++++ b/tools/bpf/bpftool/pids.c
+@@ -19,6 +19,7 @@ int build_obj_refs_table(struct obj_refs_table *table, enum bpf_obj_type type)
+ 	return -ENOTSUP;
  }
- EXPORT_SYMBOL_GPL(fork_usermode_driver);
--- 
-2.25.0
+ void delete_obj_refs_table(struct obj_refs_table *table) {}
++void emit_obj_refs_plain(struct obj_refs_table *table, __u32 id, const char *prefix) {}
+ 
+ #else /* BPFTOOL_WITHOUT_SKELETONS */
+ 
 
