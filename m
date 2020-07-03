@@ -2,244 +2,150 @@ Return-Path: <SRS0=a4pm=AO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEA5CC433E0
-	for <bpf@archiver.kernel.org>; Fri,  3 Jul 2020 14:47:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A18CC433E0
+	for <bpf@archiver.kernel.org>; Fri,  3 Jul 2020 15:13:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A921B2088E
-	for <bpf@archiver.kernel.org>; Fri,  3 Jul 2020 14:47:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D406120737
+	for <bpf@archiver.kernel.org>; Fri,  3 Jul 2020 15:13:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jTE6oOsC"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Icz9sgNv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726063AbgGCOrd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 3 Jul 2020 10:47:33 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:37090 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726039AbgGCOrc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 Jul 2020 10:47:32 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 063EcUTZ047306;
-        Fri, 3 Jul 2020 14:46:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=lq5sVyx1UalpiHI43tkae6jUDgNoIVMM3yi7/H6bvs8=;
- b=jTE6oOsCjzcSV44EGWqEhTyApm7H87Rd9aB2gKS/9D61v5YhqQV9iA8wd2+ZfzSRYcqX
- e2TA4ORyc1AGbbYgWSO8Fngr6gXM1VrCzEZ42nYF6EZ+mYKNrdMcY2SgAcOjJcgZQkXI
- eXn4FANQtqTmoYVRXjbCJRHtpM4eUVUdCi1aSGgE0gE7lDVNvoIndoT4y9WuFYyqmxr6
- evqfXTu4GvtEo0Jyp6F7vVkOQVN3zMhi/7PnCBbqQ9xTnPRlaLLIh2fkl4fv1PjRbRoR
- nhgohcqyuOnbfm7v7CuMkuNhTTDtfXpIcks7aiYWWkVbMWThCSWZKwlgIwfGccZDU3ee 7g== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 31wxrnp2wc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 03 Jul 2020 14:46:44 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 063EgrXb193561;
-        Fri, 3 Jul 2020 14:44:44 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 31xg1cjyw0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 03 Jul 2020 14:44:43 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 063EigIT023486;
-        Fri, 3 Jul 2020 14:44:42 GMT
-Received: from localhost.uk.oracle.com (/10.175.204.239)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 03 Jul 2020 14:44:42 +0000
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH bpf-next 1/2] bpf: use dedicated bpf_trace_printk event instead of trace_printk()
-Date:   Fri,  3 Jul 2020 15:44:27 +0100
-Message-Id: <1593787468-29931-2-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1593787468-29931-1-git-send-email-alan.maguire@oracle.com>
-References: <1593787468-29931-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9670 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
- mlxlogscore=999 suspectscore=0 bulkscore=0 mlxscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007030102
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9670 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
- malwarescore=0 phishscore=0 adultscore=0 cotscore=-2147483648
- lowpriorityscore=0 suspectscore=0 spamscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007030102
+        id S1726147AbgGCPN2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 3 Jul 2020 11:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726098AbgGCPN2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 Jul 2020 11:13:28 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD961C061794
+        for <bpf@vger.kernel.org>; Fri,  3 Jul 2020 08:13:27 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id d10so12759719pls.5
+        for <bpf@vger.kernel.org>; Fri, 03 Jul 2020 08:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f9QVB5RC/+nRHe4+ZctWFco2K4WItpSZAlqb2p+cews=;
+        b=Icz9sgNvxcWFuhBYB0YeBdhBi2CejbD8M+/dpJjsCSxzglKvoyeolYtXX6QUKWs23q
+         kIzWD0TIv+eChFkgz3ZVB3evXDiVJfoJRMgwEvI53XNGkTJOW0FGlZuPKyjsTDchykVZ
+         pQ+cWY05WljFot57kPZ9rjhamkIMTkaeqr2WY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f9QVB5RC/+nRHe4+ZctWFco2K4WItpSZAlqb2p+cews=;
+        b=Y7h1sPfaAAfhK9DIgUbitARlFH47dRG1WgWcZ72PRxoSs2RyJldJdmMlff4dsuKOyo
+         m5/chLQ4mEnXitRxZVHMjVTJfjcjphgIwK9cotNVNxa8cnh98nuRUOm5s8Q7PvM0bmAK
+         lruHdZulxWbvCn1dsfS1qFPOyQSKZZXjLoNEV+HEqQH5hfFV4Unh9QvzIxdQlgIzjNsa
+         3KYR9S5YMkRqV7K1QSX3STQhVO0xUyV7Zgt8jc/5vhauv4qpDu7EATLPxhI+6d0BlZBS
+         /WNPbjDwDmCu5if0iq10N9kuUFKBeALiibuBXhABjNzgio0obDt23SrXBzQDyIHajYhQ
+         47cw==
+X-Gm-Message-State: AOAM5320xbQX0MJcQ2V9rFderUSvf2i8q5GFRuDz7aM2aq+/3bLJ7xw5
+        7ZRCPvn6eoQOs2fAc8NQAwjzaw==
+X-Google-Smtp-Source: ABdhPJy1mHH6GBElAbdYB6aP9+yvHXEZTRhHh+TpVvCFVz/U4Q5Tvvqgs9q7O2KtkqlNf3AFhPyPzQ==
+X-Received: by 2002:a17:90b:213:: with SMTP id fy19mr37426487pjb.41.1593789207248;
+        Fri, 03 Jul 2020 08:13:27 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v15sm11875900pgo.15.2020.07.03.08.13.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jul 2020 08:13:25 -0700 (PDT)
+Date:   Fri, 3 Jul 2020 08:13:24 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Dominik Czarnota <dominik.czarnota@trailofbits.com>,
+        stable <stable@vger.kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matteo Croce <mcroce@redhat.com>,
+        Edward Cree <ecree@solarflare.com>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        Alexander Lobakin <alobakin@dlink.ru>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/5] kprobes: Do not expose probe addresses to
+ non-CAP_SYSLOG
+Message-ID: <202007021815.97C76C192@keescook>
+References: <20200702232638.2946421-1-keescook@chromium.org>
+ <20200702232638.2946421-5-keescook@chromium.org>
+ <CAHk-=wiZi-v8Xgu_B3wV0B4RQYngKyPeONdiXNgrHJFU5jbe1w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiZi-v8Xgu_B3wV0B4RQYngKyPeONdiXNgrHJFU5jbe1w@mail.gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf helper bpf_trace_printk() uses trace_printk() under the hood.
-This leads to an alarming warning message originating from trace
-buffer allocation which occurs the first time a program using
-bpf_trace_printk() is loaded.
+On Thu, Jul 02, 2020 at 06:00:17PM -0700, Linus Torvalds wrote:
+> On Thu, Jul 2, 2020 at 4:26 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > The kprobe show() functions were using "current"'s creds instead
+> > of the file opener's creds for kallsyms visibility. Fix to use
+> > seq_file->file->f_cred.
+> 
+> Side note: I have a distinct - but despite that possibly quite
+> incorrect - memory that I've discussed with somebody several years ago
+> about making "current_cred()" simply warn in any IO context.
+> 
+> IOW, we could have read and write just increment/decrement a
+> per-thread counter, and have current_cred() do a WARN_ON_ONCE() if
+> it's called with that counter incremented.
 
-We can instead create a trace event for bpf_trace_printk() and enable
-it in-kernel when/if we encounter a program using the
-bpf_trace_printk() helper.  With this approach, trace_printk()
-is not used directly and no warning message appears.
+That does sound familiar. I can't find a thread on it, but my search
+abilities are poor. :) So an increment/decrement in all the IO-related
+syscalls, or were you thinking of some other location?
 
-This work was started by Steven (see Link) and finished by Alan; added
-Steven's Signed-off-by with his permission.
+> The issue of ioctl's is a bit less obvious - there are reasons to
+> argue those should also use open-time credentials, but on the other
+> hand I think it's reasonable to pass a file descriptor to a suid app
+> in order for that app to do things that the normal user cannot.
+>
+> But read/write are dangerous because of the "it's so easy to fool suid
+> apps to read/write stdin/stdout".
+>
+> So pread/pwrite/ioctl/splice etc are things that suid applications
+> very much do on purpose to affect a file descriptor. But plain
+> read/write are things that might be accidental and used by attack
+> vectors.
 
-Link: https://lore.kernel.org/r/20200628194334.6238b933@oasis.local.home
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- kernel/trace/Makefile    |  2 ++
- kernel/trace/bpf_trace.c | 41 +++++++++++++++++++++++++++++++++++++----
- kernel/trace/bpf_trace.h | 34 ++++++++++++++++++++++++++++++++++
- 3 files changed, 73 insertions(+), 4 deletions(-)
- create mode 100644 kernel/trace/bpf_trace.h
+So probably just start with read/write and tighten it over time, if we
+find other clear places, leaving ioctl/pread/pwrite/splice alone.
 
-diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
-index 6575bb0..aeba5ee 100644
---- a/kernel/trace/Makefile
-+++ b/kernel/trace/Makefile
-@@ -31,6 +31,8 @@ ifdef CONFIG_GCOV_PROFILE_FTRACE
- GCOV_PROFILE := y
- endif
- 
-+CFLAGS_bpf_trace.o := -I$(src)
-+
- CFLAGS_trace_benchmark.o := -I$(src)
- CFLAGS_trace_events_filter.o := -I$(src)
- 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 1d874d8..cdbafc4 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2,6 +2,10 @@
- /* Copyright (c) 2011-2015 PLUMgrid, http://plumgrid.com
-  * Copyright (c) 2016 Facebook
-  */
-+#define CREATE_TRACE_POINTS
-+
-+#include "bpf_trace.h"
-+
- #include <linux/kernel.h>
- #include <linux/types.h>
- #include <linux/slab.h>
-@@ -11,6 +15,7 @@
- #include <linux/uaccess.h>
- #include <linux/ctype.h>
- #include <linux/kprobes.h>
-+#include <linux/spinlock.h>
- #include <linux/syscalls.h>
- #include <linux/error-injection.h>
- 
-@@ -374,6 +379,28 @@ static void bpf_trace_copy_string(char *buf, void *unsafe_ptr, char fmt_ptype,
- 	}
- }
- 
-+static DEFINE_SPINLOCK(trace_printk_lock);
-+
-+#define BPF_TRACE_PRINTK_SIZE   1024
-+
-+static inline int bpf_do_trace_printk(const char *fmt, ...)
-+{
-+	static char buf[BPF_TRACE_PRINTK_SIZE];
-+	unsigned long flags;
-+	va_list ap;
-+	int ret;
-+
-+	spin_lock_irqsave(&trace_printk_lock, flags);
-+	va_start(ap, fmt);
-+	ret = vsnprintf(buf, BPF_TRACE_PRINTK_SIZE, fmt, ap);
-+	va_end(ap);
-+	if (ret > 0)
-+		trace_bpf_trace_printk(buf);
-+	spin_unlock_irqrestore(&trace_printk_lock, flags);
-+
-+	return ret;
-+}
-+
- /*
-  * Only limited trace_printk() conversion specifiers allowed:
-  * %d %i %u %x %ld %li %lu %lx %lld %lli %llu %llx %p %pB %pks %pus %s
-@@ -483,8 +510,7 @@ static void bpf_trace_copy_string(char *buf, void *unsafe_ptr, char fmt_ptype,
-  */
- #define __BPF_TP_EMIT()	__BPF_ARG3_TP()
- #define __BPF_TP(...)							\
--	__trace_printk(0 /* Fake ip */,					\
--		       fmt, ##__VA_ARGS__)
-+	bpf_do_trace_printk(fmt, ##__VA_ARGS__)
- 
- #define __BPF_ARG1_TP(...)						\
- 	((mod[0] == 2 || (mod[0] == 1 && __BITS_PER_LONG == 64))	\
-@@ -518,13 +544,20 @@ static void bpf_trace_copy_string(char *buf, void *unsafe_ptr, char fmt_ptype,
- 	.arg2_type	= ARG_CONST_SIZE,
- };
- 
-+int bpf_trace_printk_enabled;
-+
- const struct bpf_func_proto *bpf_get_trace_printk_proto(void)
- {
- 	/*
- 	 * this program might be calling bpf_trace_printk,
--	 * so allocate per-cpu printk buffers
-+	 * so enable the associated bpf_trace/bpf_trace_printk event.
- 	 */
--	trace_printk_init_buffers();
-+	if (!bpf_trace_printk_enabled) {
-+		if (trace_set_clr_event("bpf_trace", "bpf_trace_printk", 1))
-+			pr_warn_ratelimited("could not enable bpf_trace_printk events");
-+		else
-+			bpf_trace_printk_enabled = 1;
-+	}
- 
- 	return &bpf_trace_printk_proto;
- }
-diff --git a/kernel/trace/bpf_trace.h b/kernel/trace/bpf_trace.h
-new file mode 100644
-index 0000000..9acbc11
---- /dev/null
-+++ b/kernel/trace/bpf_trace.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM bpf_trace
-+
-+#if !defined(_TRACE_BPF_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
-+
-+#define _TRACE_BPF_TRACE_H
-+
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(bpf_trace_printk,
-+
-+	TP_PROTO(const char *bpf_string),
-+
-+	TP_ARGS(bpf_string),
-+
-+	TP_STRUCT__entry(
-+		__string(bpf_string, bpf_string)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(bpf_string, bpf_string);
-+	),
-+
-+	TP_printk("%s", __get_str(bpf_string))
-+);
-+
-+#endif /* _TRACE_BPF_TRACE_H */
-+
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH .
-+#define TRACE_INCLUDE_FILE bpf_trace
-+
-+#include <trace/define_trace.h>
+> If somebody is interested in looking into things like that, it might
+> be a good idea to have kernel threads with that counter incremented by
+> 
+> Just throwing this idea out in case somebody wants to try it. It's not
+> just "current_cred", of course. It's all the current_cred_xxx() users
+> too. But it may be that there are a ton of false positives because
+> maybe some code on purpose ends up doing things like just *comparing*
+> current_cred with file->f_cred and then that would warn too.
+
+Yeah ... and I think the kthread test should answer that question.
+
 -- 
-1.8.3.1
-
+Kees Cook
