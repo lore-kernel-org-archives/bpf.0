@@ -2,125 +2,83 @@ Return-Path: <SRS0=q05f=AQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.4 required=3.0 tests=FROM_LOCAL_DIGITS,
-	FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30F10C433E0
-	for <bpf@archiver.kernel.org>; Sun,  5 Jul 2020 07:20:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C828CC433E0
+	for <bpf@archiver.kernel.org>; Sun,  5 Jul 2020 09:21:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A10520724
-	for <bpf@archiver.kernel.org>; Sun,  5 Jul 2020 07:20:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADC4420772
+	for <bpf@archiver.kernel.org>; Sun,  5 Jul 2020 09:21:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726480AbgGEHUT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 5 Jul 2020 03:20:19 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:53684 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725964AbgGEHUT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 5 Jul 2020 03:20:19 -0400
-Received: by mail-io1-f71.google.com with SMTP id g11so21243590ioc.20
-        for <bpf@vger.kernel.org>; Sun, 05 Jul 2020 00:20:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=pAcGC6+psa2V/SCa2Ha9u6KtoRKdEBhZ1vBT1tVTLzA=;
-        b=G6qLQvUdxfHb5z2XA3Uq6ESNtC+AvdO6usSKXLTVtsjB9tWgC1v5vfLExlzfC+HkZe
-         A4UIYiVCvfMJ1GWxQX/ZSikWE0R3OwV9qfBw8j1182r9++lqGlmjsRF6D2hdf+dZrJWR
-         MLvPvSJcvNC2P76Us5uG5wqTCYuFwfWBUTMtNaqU/RYNYWN4V12G26oLCyD4bt5Q2Y8R
-         Ovg5vTaXJPKAJels6INs60YHREFezKcTfOXgGiQ92dTFBFdTo+Q3ACWToiRdsH5EWOR+
-         D28TscrNn4xwWXeywXQC2+Rr25jH65jIzCOae00d5sJhC8JSphc3NBzXLwASRhi/6C5M
-         SP7Q==
-X-Gm-Message-State: AOAM531zvoHs53ps2Zdx0+efi+sWXLUQZUwMxa4R/Xo2ygTsbVbXhdAE
-        AAy957BiJA3n6UgU76q95kTsIu+8yFP41X5vYhdd2wpQ1U43
-X-Google-Smtp-Source: ABdhPJypt9Y88ghxSt7nKGHMiTroHIa8PUIpQE7HmqOZgR/TJrvXzaoQmIe5gSGdebYCw2uYqRXiWqiOvKXygaOqCvKxZyJ+3RoA
+        id S1726565AbgGEJVB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 5 Jul 2020 05:21:01 -0400
+Received: from mga02.intel.com ([134.134.136.20]:58499 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726355AbgGEJVB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 5 Jul 2020 05:21:01 -0400
+IronPort-SDR: P4uSjWMWP5M1ua7hsaEAjbRfC1tpbMMjrc5nTu0dbk5p4u2C1fuhqjH0E/WZ/B9bFlK3DEi7F3
+ rZ/4aapmYjqg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9672"; a="135561355"
+X-IronPort-AV: E=Sophos;i="5.75,314,1589266800"; 
+   d="scan'208";a="135561355"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2020 02:21:00 -0700
+IronPort-SDR: Yig/QGCrEv1I+ZbWVj8LAADfFNZt8YO8onJVR6e4rIzu8r5ysDXLVVE4enmjSM0QU+7nfDJrPP
+ 5qMd+NIpmMbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,314,1589266800"; 
+   d="scan'208";a="267690803"
+Received: from lkp-server01.sh.intel.com (HELO 6dc8ab148a5d) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Jul 2020 02:20:58 -0700
+Received: from kbuild by 6dc8ab148a5d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1js0pV-0001hz-TI; Sun, 05 Jul 2020 09:20:57 +0000
+Date:   Sun, 5 Jul 2020 17:20:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jakub Sitnicki <jakub@cloudflare.com>, bpf@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marek Majkowski <marek@cloudflare.com>
+Subject: [RFC PATCH] bpf: sk_lookup_prog_ops can be static
+Message-ID: <20200705092044.GA44776@7b422c9ed8a7>
+References: <20200702092416.11961-3-jakub@cloudflare.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2d89:: with SMTP id k9mr19915215iow.41.1593933618033;
- Sun, 05 Jul 2020 00:20:18 -0700 (PDT)
-Date:   Sun, 05 Jul 2020 00:20:18 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001936ab05a9ac97d1@google.com>
-Subject: WARNING in bpf_xdp_adjust_tail
-From:   syzbot <syzbot+c3157bda041952444952@syzkaller.appspotmail.com>
-To:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@chromium.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200702092416.11961-3-jakub@cloudflare.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
 
-syzbot found the following crash on:
-
-HEAD commit:    2ce578ca net: ipv4: Fix wrong type conversion from hint to..
-git tree:       net
-console output: https://syzkaller.appspot.com/x/log.txt?x=1190cf23100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bf3aec367b9ab569
-dashboard link: https://syzkaller.appspot.com/bug?extid=c3157bda041952444952
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-
-Unfortunately, I don't have any reproducer for this crash yet.
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+c3157bda041952444952@syzkaller.appspotmail.com
-
-WARNING: CPU: 0 PID: 22595 at net/core/filter.c:3463 ____bpf_xdp_adjust_tail net/core/filter.c:3463 [inline]
-WARNING: CPU: 0 PID: 22595 at net/core/filter.c:3463 bpf_xdp_adjust_tail+0x18e/0x1e0 net/core/filter.c:3452
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 22595 Comm: syz-executor.4 Not tainted 5.8.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x18f/0x20d lib/dump_stack.c:118
- panic+0x2e3/0x75c kernel/panic.c:231
- __warn.cold+0x20/0x45 kernel/panic.c:600
- report_bug+0x1bd/0x210 lib/bug.c:198
- exc_invalid_op+0x24d/0x400 arch/x86/kernel/traps.c:235
- asm_exc_invalid_op+0x12/0x20 arch/x86/include/asm/idtentry.h:563
-RIP: 0010:____bpf_xdp_adjust_tail net/core/filter.c:3463 [inline]
-RIP: 0010:bpf_xdp_adjust_tail+0x18e/0x1e0 net/core/filter.c:3452
-Code: 37 fb 84 db 74 09 49 c7 c4 ea ff ff ff eb c7 e8 f8 f5 37 fb 44 89 e6 48 c7 c7 e0 fc fd 88 c6 05 dc f5 6d 04 01 e8 94 3b 09 fb <0f> 0b eb d8 e8 d9 48 77 fb e9 c5 fe ff ff e8 df 48 77 fb e9 92 fe
-RSP: 0018:ffffc900018878e0 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000040000 RSI: ffffffff815ce8d7 RDI: fffff52000310f0e
-RBP: 0000000000000000 R08: 0000000000000001 R09: ffff8880ae620fcb
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000020000
-R13: ffff88804c20feef R14: ffff88804c20feef R15: 0000000000000000
- bpf_prog_4add87e5301a4105+0x20/0x818
- bpf_prog_run_xdp include/linux/filter.h:734 [inline]
- netif_receive_generic_xdp+0x70f/0x1760 net/core/dev.c:4647
- do_xdp_generic net/core/dev.c:4735 [inline]
- do_xdp_generic+0x96/0x1a0 net/core/dev.c:4728
- tun_get_user+0x22d2/0x35b0 drivers/net/tun.c:1905
- tun_chr_write_iter+0xba/0x151 drivers/net/tun.c:1999
- call_write_iter include/linux/fs.h:1907 [inline]
- new_sync_write+0x422/0x650 fs/read_write.c:484
- __vfs_write+0xc9/0x100 fs/read_write.c:497
- vfs_write+0x268/0x5d0 fs/read_write.c:559
- ksys_write+0x12d/0x250 fs/read_write.c:612
- do_syscall_64+0x60/0xe0 arch/x86/entry/common.c:359
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x416661
-Code: Bad RIP value.
-RSP: 002b:00007f8bc3971c60 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00000000005095a0 RCX: 0000000000416661
-RDX: 000000000000fdef RSI: 0000000020000080 RDI: 00000000000000f0
-RBP: 000000000078bf00 R08: 0000000000000000 R09: 0000000000000000
-R10: 00007f8bc39729d0 R11: 0000000000000293 R12: 00000000ffffffff
-R13: 0000000000000bfd R14: 00000000004ce559 R15: 00007f8bc39726d4
-Kernel Offset: disabled
-
-
+Signed-off-by: kernel test robot <lkp@intel.com>
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ filter.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 477f3bb440c4c..d8153d217ca8e 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -9396,10 +9396,10 @@ static u32 sk_lookup_convert_ctx_access(enum bpf_access_type type,
+ 	return insn - insn_buf;
+ }
+ 
+-const struct bpf_prog_ops sk_lookup_prog_ops = {
++static const struct bpf_prog_ops sk_lookup_prog_ops = {
+ };
+ 
+-const struct bpf_verifier_ops sk_lookup_verifier_ops = {
++static const struct bpf_verifier_ops sk_lookup_verifier_ops = {
+ 	.get_func_proto		= sk_lookup_func_proto,
+ 	.is_valid_access	= sk_lookup_is_valid_access,
+ 	.convert_ctx_access	= sk_lookup_convert_ctx_access,
