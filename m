@@ -2,111 +2,110 @@ Return-Path: <SRS0=6Iyx=AS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5357C433DF
-	for <bpf@archiver.kernel.org>; Tue,  7 Jul 2020 07:12:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BA06C433DF
+	for <bpf@archiver.kernel.org>; Tue,  7 Jul 2020 07:24:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A1ADE206F6
-	for <bpf@archiver.kernel.org>; Tue,  7 Jul 2020 07:12:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA9482065D
+	for <bpf@archiver.kernel.org>; Tue,  7 Jul 2020 07:24:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ePe1gpJm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YZObO+C6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728155AbgGGHM3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Jul 2020 03:12:29 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:42141 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726681AbgGGHM2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 7 Jul 2020 03:12:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594105947;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bn+ruZS7FY0l4m1bwh4y9EZU234WLtYiVGQrbxmji8I=;
-        b=ePe1gpJmxMrOqNdT0crIIMaS0qTGPlFklvAjAHmxU+dS0JFjHdN/h8xJBzSZoXGhJJvF5e
-        WfUIKz+OqZWrzglpTI9gAvdrHSFaJD9NCea1C8EOBzYPthn7acyemvTh3F9+RFrN+Wdij/
-        pBEHqHmB8WgJ3wSDO7dzrDKLgurmqpE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-311-dm8ShyrnNbiNIFTlEzAj2g-1; Tue, 07 Jul 2020 03:12:25 -0400
-X-MC-Unique: dm8ShyrnNbiNIFTlEzAj2g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3F2508015F7;
-        Tue,  7 Jul 2020 07:12:24 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.40.208.45])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F3A9BCF934;
-        Tue,  7 Jul 2020 07:12:20 +0000 (UTC)
-Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id F0F2F3002D6DA;
-        Tue,  7 Jul 2020 09:12:19 +0200 (CEST)
-Subject: [PATCH bpf-next V3 1/2] selftests/bpf: test_progs use another shell
- exit on non-actions
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org, Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        Hangbin Liu <haliu@redhat.com>,
+        id S1727008AbgGGHYA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Jul 2020 03:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725825AbgGGHYA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Jul 2020 03:24:00 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1BDC061755;
+        Tue,  7 Jul 2020 00:24:00 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id z63so37231202qkb.8;
+        Tue, 07 Jul 2020 00:24:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TUUobSdNBrJuF1EW+dIJdI5D+Jjq/ev7F+J15Oa8C9Q=;
+        b=YZObO+C6WuoXFjMmxg/9UDWawj60dvqkpoNj4mqu9yFcyqHn4G8vR/bfVzQrtqUCk9
+         /38EPWQQx9oy2h4U2FkCeRn0QXB8RmKe6LOowfQfg/h+5UMUFbjRj87puqupYKKeU2oz
+         8/7Dv7PTAAHGxIzPRZD/Y9mp0TuZJGi284VnX/16uU2EmOhnay0KibNZB8p2UoeIHtqq
+         vJHkapVoo7CBkf33NzoZva098D4yJuetQcEclWlIb/kew10lFcLnA/PZBfW1Nkxu6YeK
+         Ma58lL6pTXP8py5hUi96wSsnQC6gOieWz8GauUihu7Qi2guzXap1/iZkUmEf6ZUmlRIA
+         oOQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TUUobSdNBrJuF1EW+dIJdI5D+Jjq/ev7F+J15Oa8C9Q=;
+        b=steYoq5Ab2/pmyteAJJHe2vIOF1VeY5mQ4mthYUxnoZmA0LiI3d1lv3KzWyQehQ6bl
+         9KDpBIxxH6EjUhgPBrb97IUlOdwnpmSkQNbEE10Oxw2re9gXM4k3ASx3BAG1wM/9DatK
+         nOTGb+inopTh9XcdFn/EJ5rZR/chCvcg/67EsG02QorL+IG/4qlQ47NUalAoEFQP5j0A
+         nvMRcepNbdS9yK+cHNawRuNG0oXdjSfipciiPy7+G2bJlEt4Wia2WzjZCBOkYMlpZWkJ
+         ba3AOmKdXqs54GrUsTHvhUein1CilOeo6a9VmL0aS26AbO/QwtVsxVN9L2Ry2ZcDKRCE
+         Xh1g==
+X-Gm-Message-State: AOAM530+sz5AX1DC1oA7jJUKfF8WQZzPOMJA0jz9R/Ntjw213xepVwRB
+        opJrQTuFdRl6J9prBcq3Ky4LRPIs9SyqgHwEpNY=
+X-Google-Smtp-Source: ABdhPJxBQfF7heAYoEgSKht4+fIfPmJ4ngreCUqxM96ndAYK2PAmq94ztrEuft/Y5So7ikOwEA06muPnntfXkmMjnu8=
+X-Received: by 2002:a37:7683:: with SMTP id r125mr48103373qkc.39.1594106639361;
+ Tue, 07 Jul 2020 00:23:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <159410590190.1093222.8436994742373578091.stgit@firesoul>
+In-Reply-To: <159410590190.1093222.8436994742373578091.stgit@firesoul>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 7 Jul 2020 00:23:48 -0700
+Message-ID: <CAEf4Bzb07mdCQ5DS_gao4b9GSyeg406wpteC9uDaGdfOAHXFVA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next V3 0/2] BPF selftests test runner 'test_progs'
+ use proper shell exit codes
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     bpf <bpf@vger.kernel.org>, Hangbin Liu <haliu@redhat.com>,
         Daniel Borkmann <borkmann@iogearbox.net>,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        vkabatov@redhat.com, jbenc@redhat.com, yhs@fb.com, kafai@fb.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 07 Jul 2020 09:12:19 +0200
-Message-ID: <159410593992.1093222.90072558386094370.stgit@firesoul>
-In-Reply-To: <159410590190.1093222.8436994742373578091.stgit@firesoul>
-References: <159410590190.1093222.8436994742373578091.stgit@firesoul>
-User-Agent: StGit/0.19
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+        Veronika Kabatova <vkabatov@redhat.com>,
+        Jiri Benc <jbenc@redhat.com>, Yonghong Song <yhs@fb.com>,
+        Martin Lau <kafai@fb.com>, Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is a follow up adjustment to commit 6c92bd5cd465 ("selftests/bpf:
-Test_progs indicate to shell on non-actions"), that returns shell exit
-indication EXIT_FAILURE (value 1) when user selects a non-existing test.
+On Tue, Jul 7, 2020 at 12:12 AM Jesper Dangaard Brouer
+<brouer@redhat.com> wrote:
+>
+> This patchset makes it easier to use test_progs from shell scripts, by using
+> proper shell exit codes. The process's exit status should be a number
+> between 0 and 255 as defined in man exit(3) else it will be masked to comply.
+>
+> Shell exit codes used by programs should be below 127. As 127 and above are
+> used for indicating signals. E.g. 139 means 11=SIGSEGV $((139 & 127))=11.
+> POSIX defines in man wait(3p) signal check if WIFSIGNALED(STATUS) and
+> WTERMSIG(139)=11. (Hint: cmd 'kill -l' list signals and their numbers).
+>
+> Using Segmentation fault as an example, as these have happened before with
+> different tests (that are part of test_progs). CI people writing these
+> shell-scripts could pickup these hints and report them, if that makes sense.
+>
+> ---
+>
+> Jesper Dangaard Brouer (2):
+>       selftests/bpf: test_progs use another shell exit on non-actions
+>       selftests/bpf: test_progs avoid minus shell exit codes
+>
+>
+>  tools/testing/selftests/bpf/test_progs.c |   13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+>
+> --
+>
 
-The problem with using EXIT_FAILURE is that a shell script cannot tell
-the difference between a non-existing test and the test failing.
+For the series:
 
-This patch uses value 2 as shell exit indication.
-(Aside note unrecognized option parameters use value 64).
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
-Fixes: 6c92bd5cd465 ("selftests/bpf: Test_progs indicate to shell on non-actions")
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
----
- tools/testing/selftests/bpf/test_progs.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 104e833d0087..65d3f8686e29 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -12,6 +12,8 @@
- #include <string.h>
- #include <execinfo.h> /* backtrace */
- 
-+#define EXIT_NO_TEST		2
-+
- /* defined in test_progs.h */
- struct test_env env = {};
- 
-@@ -740,7 +742,7 @@ int main(int argc, char **argv)
- 	close(env.saved_netns_fd);
- 
- 	if (env.succ_cnt + env.fail_cnt + env.skip_cnt == 0)
--		return EXIT_FAILURE;
-+		return EXIT_NO_TEST;
- 
- 	return env.fail_cnt ? EXIT_FAILURE : EXIT_SUCCESS;
- }
-
-
+My preference was shorter EXIT_ERR_SETUP, but it doesn't matter.
