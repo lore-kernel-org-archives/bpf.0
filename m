@@ -2,127 +2,85 @@ Return-Path: <SRS0=baQi=AT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E5F5C433E0
-	for <bpf@archiver.kernel.org>; Wed,  8 Jul 2020 01:56:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F204C433E1
+	for <bpf@archiver.kernel.org>; Wed,  8 Jul 2020 03:53:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E008020738
-	for <bpf@archiver.kernel.org>; Wed,  8 Jul 2020 01:56:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HQlNN60W"
+	by mail.kernel.org (Postfix) with ESMTP id 2666620720
+	for <bpf@archiver.kernel.org>; Wed,  8 Jul 2020 03:53:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729026AbgGHB4h (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Jul 2020 21:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728191AbgGHB4g (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Jul 2020 21:56:36 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8116DC061755;
-        Tue,  7 Jul 2020 18:56:35 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id a15so6681879ybs.8;
-        Tue, 07 Jul 2020 18:56:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t5M9JPUM1j5qrEGwQrDEhxL8yvysp3tc5eFEm3iD0IM=;
-        b=HQlNN60WOTFKIJL3AIqB0WmM995JEINeFgLZl4r+AglI92f4iKGlFf0epxqaciLc3l
-         o25ptkw/cL05d2aIrD9n/VvRDM9ELASm4Yn1+fEpb7M8PEgz2hQn2cgTpv0ARxg7noik
-         qj3F3yxhjdFpKPQ6Qd76yjdv9t4sxbjTo2rLK9gjcjtme9FTtgUF4l5CDgvOJbIB17c2
-         LN8wq/PNAbfjEGj0TIZg6yz19QeN9hLGfB5yrcDgV1v9WQJYkNhOwe8qYXQ+2aRaA5On
-         rAyMUZEPY3MQRxWHqNqbaptakF+oy3zc0As1JOmCpSqCv3j4o69ZQBIcRAaCv4INGEHF
-         lfYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t5M9JPUM1j5qrEGwQrDEhxL8yvysp3tc5eFEm3iD0IM=;
-        b=Nx7p7A6E4AV1H0bmnOB3q7auBT+LgFkjM7ozzAinLfvXijit03WagqOdGQkJda5CZv
-         15RVfRFahvfotQpXgSJxMD7hjZpet4WHrY3cAj51a8v0jEatghb9uDWVnEZt9Ur41aAt
-         PoC2ypBeLGPuKi7384CIGwFte/nGHp1m0IWYLxgZjjVvkN5BCZTBMmGLncTEutz/cY0h
-         89XtXRaU8AqAbW36nviiF11hJWB2jUzmblGlwSPRHGrpvBFAkTm8hk4J/hC32V5zAZ1n
-         BvZChO6QyDkDaLRozmP9CGvIk8fBIOiYyw2/6g8JJo4fwo4XMWrz8i6VwDXcIxLf2TBG
-         ziIg==
-X-Gm-Message-State: AOAM533wcgEVFn0/H0nr6HPdetGvAyt3Ld4AT5AMwoKvtT+cJXv1Ukcy
-        UhiRZ1+Rq1Ocx7q17Sg1jVh1YUUe6jOBfsRl7q+etyhR1w==
-X-Google-Smtp-Source: ABdhPJxITtvsBJerF5nQ+bSEq52bar4lO39tfO/pSfvkYA4tNIFJ5jlSCw1JMQ9SL5CrMZajdZgBoFI70LmCKBVT0/w=
-X-Received: by 2002:a25:a505:: with SMTP id h5mr8431292ybi.419.1594173393738;
- Tue, 07 Jul 2020 18:56:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200707184855.30968-1-danieltimlee@gmail.com>
- <20200707184855.30968-5-danieltimlee@gmail.com> <CAEf4Bzb5QKJcbTd+etoERgfzrNW47VxxC3Z=p_+OJrJMmYz4XQ@mail.gmail.com>
-In-Reply-To: <CAEf4Bzb5QKJcbTd+etoERgfzrNW47VxxC3Z=p_+OJrJMmYz4XQ@mail.gmail.com>
-From:   "Daniel T. Lee" <danieltimlee@gmail.com>
-Date:   Wed, 8 Jul 2020 10:56:14 +0900
-Message-ID: <CAEKGpzh3WeC7xctBXBq0xFMVqSkDrmxOBpdJgMO3yXR3a3zJGQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 4/4] selftests: bpf: remove unused
- bpf_map_def_legacy struct
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        id S1728881AbgGHDxA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Jul 2020 23:53:00 -0400
+Received: from out03.mta.xmission.com ([166.70.13.233]:32788 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728369AbgGHDw7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Jul 2020 23:52:59 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out03.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jt18d-0004xm-Kc; Tue, 07 Jul 2020 21:52:51 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jt18c-00011Y-RJ; Tue, 07 Jul 2020 21:52:51 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        linux-kernel@vger.kernel.org, David Miller <davem@davemloft.net>,
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <87y2o1swee.fsf_-_@x220.int.ebiederm.org>
+        <20200702164140.4468-13-ebiederm@xmission.com>
+        <20200703203021.paebx25miovmaxqt@ast-mbp.dhcp.thefacebook.com>
+        <873668s2j8.fsf@x220.int.ebiederm.org>
+        <20200704155052.kmrest5useyxcfnu@wittgenstein>
+        <87mu4bjlqm.fsf@x220.int.ebiederm.org>
+        <a84ec1df-dc9b-dd5b-cc34-385fd3ca1da4@iogearbox.net>
+Date:   Tue, 07 Jul 2020 22:50:07 -0500
+In-Reply-To: <a84ec1df-dc9b-dd5b-cc34-385fd3ca1da4@iogearbox.net> (Daniel
+        Borkmann's message of "Wed, 8 Jul 2020 02:05:03 +0200")
+Message-ID: <87wo3ek6mo.fsf@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1jt18c-00011Y-RJ;;;mid=<87wo3ek6mo.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+D9EfKJ8jTyPBEpHFcGJQyQvMMwdPPB/0=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+Subject: Re: [PATCH v3 13/16] exit: Factor thread_group_exited out of pidfd_poll
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jul 8, 2020 at 4:00 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Tue, Jul 7, 2020 at 11:49 AM Daniel T. Lee <danieltimlee@gmail.com> wrote:
-> >
-> > samples/bpf no longer use bpf_map_def_legacy and instead use the
-> > libbpf's bpf_map_def or new BTF-defined MAP format. This commit removes
-> > unused bpf_map_def_legacy struct from selftests/bpf/bpf_legacy.h.
-> >
-> > Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
-> > ---
->
-> Next time please don't forget to keep Ack's you've received on
-> previous revision.
->
+Daniel Borkmann <daniel@iogearbox.net> writes:
 
-I'll keep that in mind.
+> Hey Eric, are you planning to push the final version into a topic branch
+> so it can be pulled into bpf-next as discussed earlier?
 
-Thank you for your time and effort for the review.
-Daniel.
+Yes.  I just about have it ready.  I am taking one last pass through the
+review comments to make certain I have not missed anything before I do.
 
-> >  tools/testing/selftests/bpf/bpf_legacy.h | 14 --------------
-> >  1 file changed, 14 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/bpf_legacy.h b/tools/testing/selftests/bpf/bpf_legacy.h
-> > index 6f8988738bc1..719ab56cdb5d 100644
-> > --- a/tools/testing/selftests/bpf/bpf_legacy.h
-> > +++ b/tools/testing/selftests/bpf/bpf_legacy.h
-> > @@ -2,20 +2,6 @@
-> >  #ifndef __BPF_LEGACY__
-> >  #define __BPF_LEGACY__
-> >
-> > -/*
-> > - * legacy bpf_map_def with extra fields supported only by bpf_load(), do not
-> > - * use outside of samples/bpf
-> > - */
-> > -struct bpf_map_def_legacy {
-> > -       unsigned int type;
-> > -       unsigned int key_size;
-> > -       unsigned int value_size;
-> > -       unsigned int max_entries;
-> > -       unsigned int map_flags;
-> > -       unsigned int inner_map_idx;
-> > -       unsigned int numa_node;
-> > -};
-> > -
-> >  #define BPF_ANNOTATE_KV_PAIR(name, type_key, type_val)         \
-> >         struct ____btf_map_##name {                             \
-> >                 type_key key;                                   \
-> > --
-> > 2.25.1
-> >
+I am hoping I can get it out tonight. Fingers crossed.
+
+Eric
