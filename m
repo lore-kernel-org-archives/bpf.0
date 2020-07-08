@@ -2,178 +2,127 @@ Return-Path: <SRS0=baQi=AT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA3CDC433E4
-	for <bpf@archiver.kernel.org>; Wed,  8 Jul 2020 01:54:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E5F5C433E0
+	for <bpf@archiver.kernel.org>; Wed,  8 Jul 2020 01:56:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A99A720772
-	for <bpf@archiver.kernel.org>; Wed,  8 Jul 2020 01:54:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E008020738
+	for <bpf@archiver.kernel.org>; Wed,  8 Jul 2020 01:56:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="RLr9+gu4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HQlNN60W"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729314AbgGHByK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Jul 2020 21:54:10 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:17658 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729304AbgGHByI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 7 Jul 2020 21:54:08 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0681s4sT031906
-        for <bpf@vger.kernel.org>; Tue, 7 Jul 2020 18:54:08 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=M8qte6aUYHvlqu1pqz09htIAbuhJ0OGOKTLO38N0+yU=;
- b=RLr9+gu4RCespPiUPh4+ZjG6nUbMbiIaKaJmfAc/8wiUDGGJZPjbPE9Q47y+PVBoSiYN
- UuAmaM4RGlrbhjie5IsXF4VebHes9YyljyucEu50P5WmWmZHf851OhI+sHoHH/OH5TCO
- M9yAd6D0o97JqncqtJaz8VMrZ8JBp6C066A= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3239r9mxb8-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 07 Jul 2020 18:54:08 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 7 Jul 2020 18:53:32 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 394D62EC39F5; Tue,  7 Jul 2020 18:53:29 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Matthew Lim <matthewlim@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 4/6] selftests/bpf: add test relying only on CO-RE and no recent kernel features
-Date:   Tue, 7 Jul 2020 18:53:16 -0700
-Message-ID: <20200708015318.3827358-5-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200708015318.3827358-1-andriin@fb.com>
-References: <20200708015318.3827358-1-andriin@fb.com>
+        id S1729026AbgGHB4h (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Jul 2020 21:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728191AbgGHB4g (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Jul 2020 21:56:36 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8116DC061755;
+        Tue,  7 Jul 2020 18:56:35 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id a15so6681879ybs.8;
+        Tue, 07 Jul 2020 18:56:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t5M9JPUM1j5qrEGwQrDEhxL8yvysp3tc5eFEm3iD0IM=;
+        b=HQlNN60WOTFKIJL3AIqB0WmM995JEINeFgLZl4r+AglI92f4iKGlFf0epxqaciLc3l
+         o25ptkw/cL05d2aIrD9n/VvRDM9ELASm4Yn1+fEpb7M8PEgz2hQn2cgTpv0ARxg7noik
+         qj3F3yxhjdFpKPQ6Qd76yjdv9t4sxbjTo2rLK9gjcjtme9FTtgUF4l5CDgvOJbIB17c2
+         LN8wq/PNAbfjEGj0TIZg6yz19QeN9hLGfB5yrcDgV1v9WQJYkNhOwe8qYXQ+2aRaA5On
+         rAyMUZEPY3MQRxWHqNqbaptakF+oy3zc0As1JOmCpSqCv3j4o69ZQBIcRAaCv4INGEHF
+         lfYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t5M9JPUM1j5qrEGwQrDEhxL8yvysp3tc5eFEm3iD0IM=;
+        b=Nx7p7A6E4AV1H0bmnOB3q7auBT+LgFkjM7ozzAinLfvXijit03WagqOdGQkJda5CZv
+         15RVfRFahvfotQpXgSJxMD7hjZpet4WHrY3cAj51a8v0jEatghb9uDWVnEZt9Ur41aAt
+         PoC2ypBeLGPuKi7384CIGwFte/nGHp1m0IWYLxgZjjVvkN5BCZTBMmGLncTEutz/cY0h
+         89XtXRaU8AqAbW36nviiF11hJWB2jUzmblGlwSPRHGrpvBFAkTm8hk4J/hC32V5zAZ1n
+         BvZChO6QyDkDaLRozmP9CGvIk8fBIOiYyw2/6g8JJo4fwo4XMWrz8i6VwDXcIxLf2TBG
+         ziIg==
+X-Gm-Message-State: AOAM533wcgEVFn0/H0nr6HPdetGvAyt3Ld4AT5AMwoKvtT+cJXv1Ukcy
+        UhiRZ1+Rq1Ocx7q17Sg1jVh1YUUe6jOBfsRl7q+etyhR1w==
+X-Google-Smtp-Source: ABdhPJxITtvsBJerF5nQ+bSEq52bar4lO39tfO/pSfvkYA4tNIFJ5jlSCw1JMQ9SL5CrMZajdZgBoFI70LmCKBVT0/w=
+X-Received: by 2002:a25:a505:: with SMTP id h5mr8431292ybi.419.1594173393738;
+ Tue, 07 Jul 2020 18:56:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-07_15:2020-07-07,2020-07-07 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=8
- impostorscore=0 adultscore=0 phishscore=0 mlxlogscore=999 clxscore=1015
- priorityscore=1501 lowpriorityscore=0 spamscore=0 malwarescore=0
- mlxscore=0 cotscore=-2147483648 bulkscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007080010
-X-FB-Internal: deliver
+References: <20200707184855.30968-1-danieltimlee@gmail.com>
+ <20200707184855.30968-5-danieltimlee@gmail.com> <CAEf4Bzb5QKJcbTd+etoERgfzrNW47VxxC3Z=p_+OJrJMmYz4XQ@mail.gmail.com>
+In-Reply-To: <CAEf4Bzb5QKJcbTd+etoERgfzrNW47VxxC3Z=p_+OJrJMmYz4XQ@mail.gmail.com>
+From:   "Daniel T. Lee" <danieltimlee@gmail.com>
+Date:   Wed, 8 Jul 2020 10:56:14 +0900
+Message-ID: <CAEKGpzh3WeC7xctBXBq0xFMVqSkDrmxOBpdJgMO3yXR3a3zJGQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/4] selftests: bpf: remove unused
+ bpf_map_def_legacy struct
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a test that relies on CO-RE, but doesn't expect any of the recent
-features, not available on old kernels. This is useful for Travis CI test=
-s
-running against very old kernels (e.g., libbpf has 4.9 kernel testing now=
-), to
-verify that CO-RE still works, even if kernel itself doesn't support BTF =
-yet,
-as long as there is .BTF embedded into vmlinux image by pahole. Given mos=
-t of
-CO-RE doesn't require any kernel awareness of BTF, it is a useful test to
-validate that libbpf's BTF sanitization is working well even with ancient
-kernels.
+On Wed, Jul 8, 2020 at 4:00 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Tue, Jul 7, 2020 at 11:49 AM Daniel T. Lee <danieltimlee@gmail.com> wrote:
+> >
+> > samples/bpf no longer use bpf_map_def_legacy and instead use the
+> > libbpf's bpf_map_def or new BTF-defined MAP format. This commit removes
+> > unused bpf_map_def_legacy struct from selftests/bpf/bpf_legacy.h.
+> >
+> > Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+> > ---
+>
+> Next time please don't forget to keep Ack's you've received on
+> previous revision.
+>
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- .../selftests/bpf/prog_tests/core_retro.c     | 33 +++++++++++++++++++
- .../selftests/bpf/progs/test_core_retro.c     | 30 +++++++++++++++++
- 2 files changed, 63 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/core_retro.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_core_retro.c
+I'll keep that in mind.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_retro.c b/tools/=
-testing/selftests/bpf/prog_tests/core_retro.c
-new file mode 100644
-index 000000000000..78e30d3a23d5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/core_retro.c
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Facebook
-+#define _GNU_SOURCE
-+#include <test_progs.h>
-+#include "test_core_retro.skel.h"
-+
-+void test_core_retro(void)
-+{
-+	int err, zero =3D 0, res, duration =3D 0;
-+	struct test_core_retro *skel;
-+
-+	/* load program */
-+	skel =3D test_core_retro__open_and_load();
-+	if (CHECK(!skel, "skel_load", "skeleton open/load failed\n"))
-+		goto out_close;
-+
-+	/* attach probe */
-+	err =3D test_core_retro__attach(skel);
-+	if (CHECK(err, "attach_kprobe", "err %d\n", err))
-+		goto out_close;
-+
-+	/* trigger */
-+	usleep(1);
-+
-+	err =3D bpf_map_lookup_elem(bpf_map__fd(skel->maps.results), &zero, &re=
-s);
-+	if (CHECK(err, "map_lookup", "failed to lookup result: %d\n", errno))
-+		goto out_close;
-+
-+	CHECK(res !=3D getpid(), "pid_check", "got %d !=3D exp %d\n", res, getp=
-id());
-+
-+out_close:
-+	test_core_retro__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_core_retro.c b/tools/=
-testing/selftests/bpf/progs/test_core_retro.c
-new file mode 100644
-index 000000000000..75c60c3c29cf
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_core_retro.c
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Facebook
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
-+
-+struct task_struct {
-+	int tgid;
-+} __attribute__((preserve_access_index));
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+} results SEC(".maps");
-+
-+SEC("tp/raw_syscalls/sys_enter")
-+int handle_sys_enter(void *ctx)
-+{
-+	struct task_struct *task =3D (void *)bpf_get_current_task();
-+	int tgid =3D BPF_CORE_READ(task, tgid);
-+	int zero =3D 0;
-+
-+	bpf_map_update_elem(&results, &zero, &tgid, 0);
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
---=20
-2.24.1
+Thank you for your time and effort for the review.
+Daniel.
 
+> >  tools/testing/selftests/bpf/bpf_legacy.h | 14 --------------
+> >  1 file changed, 14 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/bpf_legacy.h b/tools/testing/selftests/bpf/bpf_legacy.h
+> > index 6f8988738bc1..719ab56cdb5d 100644
+> > --- a/tools/testing/selftests/bpf/bpf_legacy.h
+> > +++ b/tools/testing/selftests/bpf/bpf_legacy.h
+> > @@ -2,20 +2,6 @@
+> >  #ifndef __BPF_LEGACY__
+> >  #define __BPF_LEGACY__
+> >
+> > -/*
+> > - * legacy bpf_map_def with extra fields supported only by bpf_load(), do not
+> > - * use outside of samples/bpf
+> > - */
+> > -struct bpf_map_def_legacy {
+> > -       unsigned int type;
+> > -       unsigned int key_size;
+> > -       unsigned int value_size;
+> > -       unsigned int max_entries;
+> > -       unsigned int map_flags;
+> > -       unsigned int inner_map_idx;
+> > -       unsigned int numa_node;
+> > -};
+> > -
+> >  #define BPF_ANNOTATE_KV_PAIR(name, type_key, type_val)         \
+> >         struct ____btf_map_##name {                             \
+> >                 type_key key;                                   \
+> > --
+> > 2.25.1
+> >
