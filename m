@@ -2,200 +2,183 @@ Return-Path: <SRS0=tFjc=AU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72BA4C433DF
-	for <bpf@archiver.kernel.org>; Thu,  9 Jul 2020 04:29:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D4B1C433DF
+	for <bpf@archiver.kernel.org>; Thu,  9 Jul 2020 05:25:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C2B620663
-	for <bpf@archiver.kernel.org>; Thu,  9 Jul 2020 04:29:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 79C3520658
+	for <bpf@archiver.kernel.org>; Thu,  9 Jul 2020 05:25:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LWnlW9nV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xr+i/aFz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726319AbgGIE3G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Jul 2020 00:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S1726099AbgGIFZP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Jul 2020 01:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726099AbgGIE3F (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Jul 2020 00:29:05 -0400
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B2EC061A0B;
-        Wed,  8 Jul 2020 21:29:05 -0700 (PDT)
-Received: by mail-qv1-xf41.google.com with SMTP id di5so394216qvb.11;
-        Wed, 08 Jul 2020 21:29:05 -0700 (PDT)
+        with ESMTP id S1726064AbgGIFZP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Jul 2020 01:25:15 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8461CC061A0B
+        for <bpf@vger.kernel.org>; Wed,  8 Jul 2020 22:25:14 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id dm12so437377qvb.9
+        for <bpf@vger.kernel.org>; Wed, 08 Jul 2020 22:25:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=sOjoYmzZvYKUf8AanyNz0tUJlETbNj/h4lwDEzvkiGA=;
-        b=LWnlW9nVcM9gYN5hR+qyQuaNNx6KvD2dg7gS+NqU61lh8NjCPv0ftjq7GfYDOLM0Pl
-         xXepHL6xz9p5O2/7jB8sgIWcjEqFdk68X0/GvxEMmJLI4V3s/xSad2+/zgzno8Lw748c
-         elGdm2nclyrjiSopdHw2ZXo2z+htNhAIzs9JW/q2+81IKQCrv0XAOA/C9Z1SLnBhq3CW
-         NMOmKMju6nhWQIejo3dYAi36ODrAISMLpdj7ucqQZ4xCcMCQn4DCcglNmRpzO5YgG0Zw
-         7wxDCTSruLnCrdPjA09f43qQt0IjkrXkEpsVc1t6GCIp1NpZlQJdHAbSoHHFExh/I++V
-         tHhQ==
+        bh=OtXViVDmhQpSsmNLrFxMQguvHOspx8hEJmDnkF5dknM=;
+        b=Xr+i/aFzmDUgeNasuAms4R1deOEiQbswaTIJhGsRzOGcoGJpw8NZBkxEOuUaMlAxu9
+         DZ5pcyRWA8AeLhTcWvVbSc9Y5QgIwshQscbPiTyawZIPdTJPTVuUcYWXu8TesJmyrypC
+         H9m0RDNOl96gm4EqXNO4IbgzMMscfiiv1ga6udn9BEIQp4LFJfTjHhPppdQThHtJ+nq3
+         2LWnsuACen4MCon/d8Y1+5zcNPM0FaH7s8Nn/8MOiQqPYMCmJV3KDyxoKCS4s12MOLg8
+         HBvdq5qhUlpeUNEkhEJ+Dmf7QJEHg26NGajejWe6SRQCNxrKJ6oqLzl6rkyB5GIeu7eq
+         3liA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sOjoYmzZvYKUf8AanyNz0tUJlETbNj/h4lwDEzvkiGA=;
-        b=GrsNEPL9BrIVcL5oBUBxqKSqmdXeXlA1sll/dECmyyBuXwV3BUesRrZ2wyUZfzmXO7
-         k6w+id5JCWxvmat9DXyM2Vsw7mlhPb971ps/v3gRNfRSrDSGiMNRIR4MEn5y3WMfWD1N
-         bE19q1DWuhMhJttL/PuWy/uxOJIuI6PUSk8AAYL5e3ym24XeqNgGZLSn4/rhaL1egn0f
-         /3VMknhntglJ1pKtbLyIMpqtDedsdR2F7Pyhyf5I+Qm2WP+NrsYKzh7JDD9GoOLUfqhq
-         mhnyPYHN2k7/t6od4tgPteu7pUNUuP4etjSH72cTghN05RtON1oPgnxLWTjX8R6PvHf/
-         jzLg==
-X-Gm-Message-State: AOAM530izppUvQSoY3ScHHiYSPN2DPyh7NmXmU88/tQPLEtWeo7II++i
-        S1Jg3Uq6e2wRH5/H6IOn/Nk6a8jZpX4NfaM5tzQ=
-X-Google-Smtp-Source: ABdhPJxOooBl8uAErTW+S3riLTUTX0/8CIQkH5s51Fx+vUlmJNMI9890CIk6V487pH6A4wGMVN+fE/UtYVQ5WG+ejhs=
-X-Received: by 2002:a05:6214:bce:: with SMTP id ff14mr59901841qvb.196.1594268944726;
- Wed, 08 Jul 2020 21:29:04 -0700 (PDT)
+        bh=OtXViVDmhQpSsmNLrFxMQguvHOspx8hEJmDnkF5dknM=;
+        b=Rz7Akx+sgQHyXZX1GGSutpsXBiaAHCIzwJ9/UxwYT5WqfByZU44VY0JAYuJ82Wb5e+
+         wSECNx6XtxFo+mF7LjQMxWzhkSQVuKPPDqJtnmj7Ob70M8AOL8vnsbnPd0eYwUPQxgpL
+         tJoqLsIZD8b5U2kfrQPfr9xKtSqlVn9PBkK+MS57WMoPIWknGVY/n3PXC33OVgDOIoaN
+         8MeRrnsjUDX6rQONYAxtd7p5oSVE2hfbosjFYFzinY+5PyZErGmyW83Woibs7/9CKY01
+         34JDxccEG+0G3xaXNHX3lY6oRwbSxuaT+9PpLSRZdpX1tIj7wbfAFfA+Tg7CF2/9k3M9
+         Zbeg==
+X-Gm-Message-State: AOAM532V2bSA8OygjDF/N6Csa1wuzdafq2sMtt3rOnXvzR6A6/he2fdS
+        zSSZFUoUg1wOo6Gog8hk6/KPZceB1C1MLt/diq0=
+X-Google-Smtp-Source: ABdhPJy6Zjw9HqsMSH2zLz2TDOgWfr/jB8c8ePT5ijFNWLwSeL7lpQc+fEcsllKHookq4CtFR15IpzFvcuVxzguFjgg=
+X-Received: by 2002:a0c:9ae2:: with SMTP id k34mr59161016qvf.247.1594272313730;
+ Wed, 08 Jul 2020 22:25:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200702092416.11961-1-jakub@cloudflare.com> <20200702092416.11961-17-jakub@cloudflare.com>
- <CACAyw98-DaSJ6ZkDv=7Cr62SK1yjvrJVTnz4CrAcvgT-2qqkug@mail.gmail.com> <87lfk2nkdi.fsf@cloudflare.com>
-In-Reply-To: <87lfk2nkdi.fsf@cloudflare.com>
+References: <cover.1594065127.git.zhuyifei@google.com> <cf91469d82c2b9954779e5e786c2fa852694e14e.1594065127.git.zhuyifei@google.com>
+In-Reply-To: <cf91469d82c2b9954779e5e786c2fa852694e14e.1594065127.git.zhuyifei@google.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 8 Jul 2020 21:28:53 -0700
-Message-ID: <CAEf4BzawjM=CnCBSbY2boGAD4qn+vMHwaKxT-SB-CzY1Zv507g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 16/16] selftests/bpf: Tests for BPF_SK_LOOKUP
- attach point
-To:     Jakub Sitnicki <jakub@cloudflare.com>
-Cc:     Lorenz Bauer <lmb@cloudflare.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+Date:   Wed, 8 Jul 2020 22:25:02 -0700
+Message-ID: <CAEf4BzaNuStoxHe6YQiAF3bo3uUi=rrfTp83Z1129W2+-QP6OA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/5] selftests/bpf: Add test for CGROUP_STORAGE
+ map on multiple attaches
+To:     YiFei Zhu <zhuyifei1999@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
+        Stanislav Fomichev <sdf@google.com>,
+        Mahesh Bandewar <maheshb@google.com>,
+        Roman Gushchin <guro@fb.com>, YiFei Zhu <zhuyifei@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jul 2, 2020 at 6:00 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+On Mon, Jul 6, 2020 at 1:54 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
 >
-> On Thu, Jul 02, 2020 at 01:01 PM CEST, Lorenz Bauer wrote:
-> > On Thu, 2 Jul 2020 at 10:24, Jakub Sitnicki <jakub@cloudflare.com> wrote:
-> >>
-> >> Add tests to test_progs that exercise:
-> >>
-> >>  - attaching/detaching/querying programs to BPF_SK_LOOKUP hook,
-> >>  - redirecting socket lookup to a socket selected by BPF program,
-> >>  - failing a socket lookup on BPF program's request,
-> >>  - error scenarios for selecting a socket from BPF program,
-> >>  - accessing BPF program context,
-> >>  - attaching and running multiple BPF programs.
-> >>
-> >> Run log:
-> >> | # ./test_progs -n 68
-> >> | #68/1 query lookup prog:OK
-> >> | #68/2 TCP IPv4 redir port:OK
-> >> | #68/3 TCP IPv4 redir addr:OK
-> >> | #68/4 TCP IPv4 redir with reuseport:OK
-> >> | #68/5 TCP IPv4 redir skip reuseport:OK
-> >> | #68/6 TCP IPv6 redir port:OK
-> >> | #68/7 TCP IPv6 redir addr:OK
-> >> | #68/8 TCP IPv4->IPv6 redir port:OK
-> >> | #68/9 TCP IPv6 redir with reuseport:OK
-> >> | #68/10 TCP IPv6 redir skip reuseport:OK
-> >> | #68/11 UDP IPv4 redir port:OK
-> >> | #68/12 UDP IPv4 redir addr:OK
-> >> | #68/13 UDP IPv4 redir with reuseport:OK
-> >> | #68/14 UDP IPv4 redir skip reuseport:OK
-> >> | #68/15 UDP IPv6 redir port:OK
-> >> | #68/16 UDP IPv6 redir addr:OK
-> >> | #68/17 UDP IPv4->IPv6 redir port:OK
-> >> | #68/18 UDP IPv6 redir and reuseport:OK
-> >> | #68/19 UDP IPv6 redir skip reuseport:OK
-> >> | #68/20 TCP IPv4 drop on lookup:OK
-> >> | #68/21 TCP IPv6 drop on lookup:OK
-> >> | #68/22 UDP IPv4 drop on lookup:OK
-> >> | #68/23 UDP IPv6 drop on lookup:OK
-> >> | #68/24 TCP IPv4 drop on reuseport:OK
-> >> | #68/25 TCP IPv6 drop on reuseport:OK
-> >> | #68/26 UDP IPv4 drop on reuseport:OK
-> >> | #68/27 TCP IPv6 drop on reuseport:OK
-> >> | #68/28 sk_assign returns EEXIST:OK
-> >> | #68/29 sk_assign honors F_REPLACE:OK
-> >> | #68/30 access ctx->sk:OK
-> >> | #68/31 sk_assign rejects TCP established:OK
-> >> | #68/32 sk_assign rejects UDP connected:OK
-> >> | #68/33 multi prog - pass, pass:OK
-> >> | #68/34 multi prog - pass, inval:OK
-> >> | #68/35 multi prog - inval, pass:OK
-> >> | #68/36 multi prog - drop, drop:OK
-> >> | #68/37 multi prog - pass, drop:OK
-> >> | #68/38 multi prog - drop, pass:OK
-> >> | #68/39 multi prog - drop, inval:OK
-> >> | #68/40 multi prog - inval, drop:OK
-> >> | #68/41 multi prog - pass, redir:OK
-> >> | #68/42 multi prog - redir, pass:OK
-> >> | #68/43 multi prog - drop, redir:OK
-> >> | #68/44 multi prog - redir, drop:OK
-> >> | #68/45 multi prog - inval, redir:OK
-> >> | #68/46 multi prog - redir, inval:OK
-> >> | #68/47 multi prog - redir, redir:OK
-> >> | #68 sk_lookup:OK
-> >> | Summary: 1/47 PASSED, 0 SKIPPED, 0 FAILED
-> >>
-> >> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-> >> ---
-> >>
-> >> Notes:
-> >>     v3:
-> >>     - Extend tests to cover new functionality in v3:
-> >>       - multi-prog attachments (query, running, verdict precedence)
-> >>       - socket selecting for the second time with bpf_sk_assign
-> >>       - skipping over reuseport load-balancing
-> >>
-> >>     v2:
-> >>      - Adjust for fields renames in struct bpf_sk_lookup.
-> >>
-> >>  .../selftests/bpf/prog_tests/sk_lookup.c      | 1353 +++++++++++++++++
-> >>  .../selftests/bpf/progs/test_sk_lookup_kern.c |  399 +++++
-> >>  2 files changed, 1752 insertions(+)
-> >>  create mode 100644 tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-> >>  create mode 100644 tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
-> >>
-> >> diff --git a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-> >> new file mode 100644
-> >> index 000000000000..2859dc7e65b0
-> >> --- /dev/null
-> >> +++ b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
+> From: YiFei Zhu <zhuyifei@google.com>
 >
-> [...]
+> This test creates a parent cgroup, and a child of that cgroup.
+> It attaches a cgroup_skb/egress program that simply counts packets,
+> to a global variable (ARRAY map), and to a CGROUP_STORAGE map.
+> The program is first attached to the parent cgroup only, then to
+> parent and child.
+>
+> The test cases sends a message within the child cgroup, and because
+> the program is inherited across parent / child cgroups, it will
+> trigger the egress program for both the parent and child, if they
+> exist. The program, when looking up a CGROUP_STORAGE map, uses the
+> cgroup and attach type of the attachment parameters; therefore,
+> both attaches uses different cgroup storages.
+>
+> We assert that all packet counts returns what we expects.
+>
+> Signed-off-by: YiFei Zhu <zhuyifei@google.com>
+> ---
+>  .../bpf/prog_tests/cg_storage_multi.c         | 154 ++++++++++++++++++
+>  .../bpf/progs/cg_storage_multi_egress_only.c  |  30 ++++
+>  2 files changed, 184 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/cg_storage_multi.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/cg_storage_multi_egress_only.c
 >
 
 [...]
 
-> >> +static void run_lookup_prog(const struct test *t)
-> >> +{
-> >> +       int client_fd, server_fds[MAX_SERVERS] = { -1 };
-> >> +       struct bpf_link *lookup_link;
-> >> +       int i, err;
-> >> +
-> >> +       lookup_link = attach_lookup_prog(t->lookup_prog);
-> >> +       if (!lookup_link)
-> >
-> > Why doesn't this fail the test? Same for the other error paths in the
-> > function, and the other helpers.
->
-> I took the approach of placing CHECK_FAIL checks only right after the
-> failure point. So a syscall or a call to libbpf.
->
-> This way if I'm calling a helper, I know it already fails the test if
-> anything goes wrong, and I can have less CHECK_FAILs peppered over the
-> code.
+> +
+> +static bool assert_storage(struct bpf_map *map, const char *cgroup_path,
+> +                          __u32 expected)
+> +{
+> +       struct bpf_cgroup_storage_key key = {0};
+> +       __u32 value;
+> +       int map_fd;
+> +
+> +       map_fd = bpf_map__fd(map);
+> +
+> +       key.cgroup_inode_id = get_cgroup_id(cgroup_path);
+> +       key.attach_type = BPF_CGROUP_INET_EGRESS;
+> +       if (CHECK_FAIL(bpf_map_lookup_elem(map_fd, &key, &value) < 0))
 
-Please prefere CHECK() over CHECK_FAIL(), unless you are making
-hundreds of checks and it's extremely unlikely they will ever fail.
-Using CHECK_FAIL makes even knowing where the test fails hard. CHECK()
-leaves a trail, so it's easier to pinpoint what and why failed.
+please don't use CHECK_FAIL, use CHECK instead
 
+> +               return true;
+> +       if (CHECK_FAIL(value != expected))
+> +               return true;
+> +
+> +       return false;
+> +}
+> +
+
+[...]
+
+> +
+> +static void test_egress_only(int parent_cgroup_fd, int child_cgroup_fd)
+> +{
+> +       struct cg_storage_multi_egress_only *obj;
+> +       int err;
+> +
+> +       if (!test__start_subtest("egress_only"))
+> +               return;
+
+subtest check should be done in test_cg_storage_multi, otherwise it's
+not even clear that this test has subtests
+
+> +
+> +       obj = cg_storage_multi_egress_only__open_and_load();
+> +       if (CHECK_FAIL(!obj))
+> +               return;
+> +
+> +       /* Attach to parent cgroup, trigger packet from child.
+> +        * Assert that there is only one run and in that run the storage is
+> +        * parent cgroup's storage.
+> +        * Also assert that child cgroup's storage does not exist
+> +        */
+> +       err = bpf_prog_attach(bpf_program__fd(obj->progs.egress),
+> +                             parent_cgroup_fd,
+> +                             BPF_CGROUP_INET_EGRESS, BPF_F_ALLOW_MULTI);
+
+please use bpf_program__attach_cgroup() instead
+
+> +       if (CHECK_FAIL(err))
+> +               goto close_bpf_object;
+> +       err = connect_send(CHILD_CGROUP);
+> +       if (CHECK_FAIL(err))
+> +               goto close_bpf_object;
+> +       if (CHECK_FAIL(obj->bss->invocations != 1))
+> +               goto close_bpf_object;
+> +       if (CHECK_FAIL(assert_storage(obj->maps.cgroup_storage,
+> +                                     PARENT_CGROUP, 1)))
+> +               goto close_bpf_object;
+> +       if (CHECK_FAIL(assert_storage_noexist(obj->maps.cgroup_storage,
+> +                                             CHILD_CGROUP)))
+> +               goto close_bpf_object;
+> +
+> +       /* Attach to parent and child cgroup, trigger packet from child.
+> +        * Assert that there are two additional runs, one that run with parent
+> +        * cgroup's storage and one with child cgroup's storage.
+> +        */
+> +       err = bpf_prog_attach(bpf_program__fd(obj->progs.egress),
+> +                             child_cgroup_fd,
+> +                             BPF_CGROUP_INET_EGRESS, BPF_F_ALLOW_MULTI);
+
+Here as well.
 
 [...]
