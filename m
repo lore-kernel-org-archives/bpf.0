@@ -2,69 +2,66 @@ Return-Path: <SRS0=tFjc=AU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DC02C433E0
-	for <bpf@archiver.kernel.org>; Thu,  9 Jul 2020 06:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 762AEC433E1
+	for <bpf@archiver.kernel.org>; Thu,  9 Jul 2020 06:11:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 666BC206A5
-	for <bpf@archiver.kernel.org>; Thu,  9 Jul 2020 06:11:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BF7A206A5
+	for <bpf@archiver.kernel.org>; Thu,  9 Jul 2020 06:11:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="HUc+zgjj"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LsmU5CAH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726505AbgGIGLO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Jul 2020 02:11:14 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11042 "EHLO
+        id S1726519AbgGIGLP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Jul 2020 02:11:15 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14190 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725787AbgGIGLN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 9 Jul 2020 02:11:13 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0696AFpA030734
-        for <bpf@vger.kernel.org>; Wed, 8 Jul 2020 23:11:13 -0700
+        by vger.kernel.org with ESMTP id S1725787AbgGIGLO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 9 Jul 2020 02:11:14 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0696BDuY015503
+        for <bpf@vger.kernel.org>; Wed, 8 Jul 2020 23:11:14 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=1mOYUP3p9l9wcQtvCkS2V2xZ09Ny/LcRNNc/FMDSKkw=;
- b=HUc+zgjjdcwMu51Kunl5t3xDBsqgkV729WW+ewKt4hmyH1ho9/QD4CR1+kh7bdTbPwHL
- Aalw03/F+V2QPoUfcDAg9iWlJld8XK1CnoPKtKZhAKaYMzcep6mOrkBSHC+M1FAMKri0
- T5HTckZ1LC8zOtm/M4j+6x6KMF4/8lymZS8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 325k0ajxee-2
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=9w/W7gadCnPV8FsAX9sFMZ/0YEwhyKmbyL970+hTteU=;
+ b=LsmU5CAH0J7SN5gMEc0CqM7xtaSFHA0/PZDpIYC3K7jqU4hwHegB4UMa5Ea5UdFh5qNJ
+ 3U6OXdFKBsPlZRwdpDkruKO5gBviq7y+C3+CJXh8bSZBGt2hZHkzEvoyigRdkRZ/jBC+
+ YQMv7Cc3Mm46LQ5wj4WH7UahbT1e6bpesAI= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 325jysjyb8-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 08 Jul 2020 23:11:13 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 08 Jul 2020 23:11:14 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 8 Jul 2020 23:11:11 -0700
+ 15.1.1979.3; Wed, 8 Jul 2020 23:10:59 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 80F532945AE1; Wed,  8 Jul 2020 23:11:10 -0700 (PDT)
+        id F26452945AE1; Wed,  8 Jul 2020 23:10:57 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>, James Chapman <jchapman@katalix.com>
+        <netdev@vger.kernel.org>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf 2/2] bpf: net: Avoid incorrect bpf_sk_reuseport_detach call
-Date:   Wed, 8 Jul 2020 23:11:10 -0700
-Message-ID: <20200709061110.4019316-1-kafai@fb.com>
+Subject: [PATCH v2 bpf 0/2] bpf: net: Fixes in sk_user_data of reuseport_array
+Date:   Wed, 8 Jul 2020 23:10:57 -0700
+Message-ID: <20200709061057.4018499-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200709061057.4018499-1-kafai@fb.com>
-References: <20200709061057.4018499-1-kafai@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-09_01:2020-07-08,2020-07-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- bulkscore=0 malwarescore=0 mlxscore=0 mlxlogscore=693 suspectscore=3
- clxscore=1015 phishscore=0 impostorscore=0 adultscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
+ mlxlogscore=382 suspectscore=13 adultscore=0 phishscore=0 impostorscore=0
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2007090049
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -72,77 +69,28 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_sk_reuseport_detach is currently called when sk->sk_user_data
-is not NULL.  It is incorrect because sk->sk_user_data may not be
-managed by the bpf's reuseport_array.  It has been reported in [1] that,
-the bpf_sk_reuseport_detach() which is called from udp_lib_unhash() has
-corrupted the sk_user_data managed by l2tp.
+This set fixes two issues on sk_user_data when a sk is added to
+a reuseport_array.
 
-This patch solves it by using another bit (defined as SK_USER_DATA_BPF)
-of the sk_user_data pointer value.  It marks that a sk_user_data is
-managed/owned by BPF.
+The first patch is to avoid the sk_user_data being copied
+to a cloned sk.  The second patch avoids doing bpf_sk_reuseport_detach()
+on sk_user_data that is not managed by reuseport_array.
 
-The patch depends on a PTRMASK introduced in
-commit f1ff5ce2cd5e ("net, sk_msg: Clear sk_user_data pointer on clone if=
- tagged").
+Since the changes are mostly related to bpf reuseport_array, so it is
+currently tagged as bpf fixes.
 
-[ Note: sk->sk_user_data is used by bpf's reuseport_array only when a sk =
-is
-  added to the bpf's reuseport_array.
-  i.e. doing setsockopt(SO_REUSEPORT) and having "sk->sk_reuseport =3D=3D=
- 1"
-  alone will not stop sk->sk_user_data being used by other means. ]
+v2:
+- Avoid ~3UL (Andrii)
 
-[1]: https://lore.kernel.org/netdev/20200706121259.GA20199@katalix.com/
+Martin KaFai Lau (2):
+  bpf: net: Avoid copying sk_user_data of reuseport_array during
+    sk_clone
+  bpf: net: Avoid incorrect bpf_sk_reuseport_detach call
 
-Reported-by: James Chapman <jchapman@katalix.com>
-Cc: James Chapman <jchapman@katalix.com>
-Fixes: 5dc4c4b7d4e8 ("bpf: Introduce BPF_MAP_TYPE_REUSEPORT_SOCKARRAY")
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
----
- include/net/sock.h           | 3 ++-
- kernel/bpf/reuseport_array.c | 5 +++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ include/net/sock.h           |  3 ++-
+ kernel/bpf/reuseport_array.c | 14 ++++++++++----
+ 2 files changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 3428619faae4..1183507df95b 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -533,7 +533,8 @@ enum sk_pacing {
-  * be copied.
-  */
- #define SK_USER_DATA_NOCOPY	1UL
--#define SK_USER_DATA_PTRMASK	~(SK_USER_DATA_NOCOPY)
-+#define SK_USER_DATA_BPF	2UL	/* Managed by BPF */
-+#define SK_USER_DATA_PTRMASK	~(SK_USER_DATA_NOCOPY | SK_USER_DATA_BPF)
-=20
- /**
-  * sk_user_data_is_nocopy - Test if sk_user_data pointer must not be cop=
-ied
-diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
-index a95bc8d7e812..cae9d505e04a 100644
---- a/kernel/bpf/reuseport_array.c
-+++ b/kernel/bpf/reuseport_array.c
-@@ -24,7 +24,7 @@ void bpf_sk_reuseport_detach(struct sock *sk)
-=20
- 	write_lock_bh(&sk->sk_callback_lock);
- 	sk_user_data =3D (uintptr_t)sk->sk_user_data;
--	if (sk_user_data) {
-+	if (sk_user_data & SK_USER_DATA_BPF) {
- 		struct sock __rcu **socks;
-=20
- 		socks =3D (void *)(sk_user_data & SK_USER_DATA_PTRMASK);
-@@ -309,7 +309,8 @@ int bpf_fd_reuseport_array_update_elem(struct bpf_map=
- *map, void *key,
- 	if (err)
- 		goto put_file_unlock;
-=20
--	sk_user_data =3D (uintptr_t)&array->ptrs[index] | SK_USER_DATA_NOCOPY;
-+	sk_user_data =3D (uintptr_t)&array->ptrs[index] | SK_USER_DATA_NOCOPY |
-+		SK_USER_DATA_BPF;
- 	WRITE_ONCE(nsk->sk_user_data, (void *)sk_user_data);
- 	rcu_assign_pointer(array->ptrs[index], nsk);
- 	free_osk =3D osk;
 --=20
 2.24.1
 
