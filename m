@@ -2,51 +2,53 @@ Return-Path: <SRS0=tFjc=AU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 690A1C433E0
-	for <bpf@archiver.kernel.org>; Thu,  9 Jul 2020 15:57:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D499AC433E0
+	for <bpf@archiver.kernel.org>; Thu,  9 Jul 2020 15:57:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 415C9207DA
-	for <bpf@archiver.kernel.org>; Thu,  9 Jul 2020 15:57:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A59A9207DD
+	for <bpf@archiver.kernel.org>; Thu,  9 Jul 2020 15:57:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594310253;
-	bh=/hYDyIwEH9rjd957bQCbW5tu9SOD+1iN0znNbq7hnNg=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=hJK9ryvzLBLIviEAxxAonFafTDaBBJkf2Ok6iSumS9CK+ikpUQ9SHVko2GNftyR9K
-	 ki+aLgbEwaIMivc5wurI/XCouVAmyFCcYnyXuU2YDmJKMaswB5qv0Fu4oAFBaZQxUN
-	 yr9vFENfLUKLXfwmTNLH0NDrlK2A2gEUQj1trMj4=
+	s=default; t=1594310256;
+	bh=DH8W/hh60f/yucHMLcmPgq4bufUV9mRBqjqUBraxbyQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=JUxU0RapFg7Zi5xcgGPmfe6av9jy3/OVxaeSroAkJiifsHjpVvP8CGtsCpkt0WXEI
+	 kYERHMAc2Y+CPBSe3EJCkD92ofKTzLX4BaVR/6t3/F8lpWl51taYR5tRLSWrt9AUmj
+	 hXsx8FGqlkyKVcvQN7o/wv+Mp43wApy1XhNdQkW4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726910AbgGIP5c (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Jul 2020 11:57:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50526 "EHLO mail.kernel.org"
+        id S1728186AbgGIP5g (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Jul 2020 11:57:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50560 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726497AbgGIP5c (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Jul 2020 11:57:32 -0400
+        id S1726497AbgGIP5g (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Jul 2020 11:57:36 -0400
 Received: from localhost.localdomain.com (unknown [151.48.133.17])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 777E72077D;
-        Thu,  9 Jul 2020 15:57:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F39BC207DA;
+        Thu,  9 Jul 2020 15:57:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594310252;
-        bh=/hYDyIwEH9rjd957bQCbW5tu9SOD+1iN0znNbq7hnNg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZTLVlDjlZ57SNcOKez7sti6h2duhaBYL8LEyV5isdqdmUbbnRJ9uJlU/iSZ3RqG4F
-         jFkNFQQDeZnN9gxRWXnV10Ff7U+wj63NVqw2s8ymZIrqX1ZflNYGC+HP4eN1cBM/9h
-         xd5LLUtk07rdpxzIiUsa/KOXwUQze/rPv41+0i5A=
+        s=default; t=1594310255;
+        bh=DH8W/hh60f/yucHMLcmPgq4bufUV9mRBqjqUBraxbyQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dBb4hXpReQoz6oN8qgfgN7f/JqiG7aOWgUYNSPDrs169t3rsYE4Uav2yP2+GI2VYu
+         3WiIo36Is0EkAAmbEaMOtoMo/Xn8uXbbVoeup2SUPZoFyk0BziTtZsvGT5tVjbMf9H
+         4jEuVDgrnaBNWf4zG1f2CWKQyydy8dgEaZJq6Wbg=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, bpf@vger.kernel.org, kuba@kernel.org,
         ilias.apalodimas@linaro.org, lorenzo.bianconi@redhat.com,
         brouer@redhat.com, echaudro@redhat.com, sameehj@amazon.com
-Subject: [PATCH 0/6] rework mvneta napi_poll loop for XDP multi-buffers
-Date:   Thu,  9 Jul 2020 17:57:17 +0200
-Message-Id: <cover.1594309075.git.lorenzo@kernel.org>
+Subject: [PATCH 1/6] xdp: introduce xdp_get_shared_info_from_{buff,frame} utility routines
+Date:   Thu,  9 Jul 2020 17:57:18 +0200
+Message-Id: <9e7a2e62d6283880d79a20599519e0db4b433b5b.1594309075.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1594309075.git.lorenzo@kernel.org>
+References: <cover.1594309075.git.lorenzo@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -54,27 +56,49 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Rework mvneta_rx_swbm routine in order to process all rx descriptors before
-building the skb or run the xdp program attached to the interface.
-Introduce xdp_get_shared_info_from_{buff,frame} utility routines to get the
-skb_shared_info pointer from xdp_buff or xdp_frame.
-This is a preliminary series to enable multi-buffers and jumbo frames for XDP
-according to [1]
+Introduce xdp_get_shared_info_from_{buff,frame} utility routines to get
+skb_shared_info from xdp buffer/frame pointer.
+xdp_get_shared_info_from_{buff,frame} will be used to implement xdp
+multi-buffer support
 
-[1] https://github.com/xdp-project/xdp-project/blob/master/areas/core/xdp-multi-buffer01-design.org
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+---
+ include/net/xdp.h | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Lorenzo Bianconi (6):
-  xdp: introduce xdp_get_shared_info_from_{buff,frame} utility routines
-  net: mvneta: move skb build after descriptors processing
-  net: mvneta: move mvneta_run_xdp after descriptors processing
-  net: mvneta: drop all fragments in XDP_DROP
-  net: mvneta: get rid of skb in mvneta_rx_queue
-  net: mvneta: move rxq->left_size on the stack
-
- drivers/net/ethernet/marvell/mvneta.c | 220 ++++++++++++++------------
- include/net/xdp.h                     |  15 ++
- 2 files changed, 137 insertions(+), 98 deletions(-)
-
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 609f819ed08b..d3005bef812f 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -85,6 +85,12 @@ struct xdp_buff {
+ 	((xdp)->data_hard_start + (xdp)->frame_sz -	\
+ 	 SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
+ 
++static inline struct skb_shared_info *
++xdp_get_shared_info_from_buff(struct xdp_buff *xdp)
++{
++	return (struct skb_shared_info *)xdp_data_hard_end(xdp);
++}
++
+ struct xdp_frame {
+ 	void *data;
+ 	u16 len;
+@@ -98,6 +104,15 @@ struct xdp_frame {
+ 	struct net_device *dev_rx; /* used by cpumap */
+ };
+ 
++static inline struct skb_shared_info *
++xdp_get_shared_info_from_frame(struct xdp_frame *frame)
++{
++	void *data_hard_start = frame->data - frame->headroom - sizeof(*frame);
++
++	return (struct skb_shared_info *)(data_hard_start + frame->frame_sz -
++				SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
++}
++
+ /* Clear kernel pointers in xdp_frame */
+ static inline void xdp_scrub_frame(struct xdp_frame *frame)
+ {
 -- 
 2.26.2
 
