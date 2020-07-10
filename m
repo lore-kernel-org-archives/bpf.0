@@ -2,114 +2,108 @@ Return-Path: <SRS0=293s=AV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3E09C433DF
-	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 19:37:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76520C433E0
+	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 20:21:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 79C662078B
-	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 19:37:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4459720748
+	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 20:21:00 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Gh+opm5u"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728049AbgGJThv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Jul 2020 15:37:51 -0400
-Received: from smtprelay0004.hostedemail.com ([216.40.44.4]:42658 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726867AbgGJThv (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 10 Jul 2020 15:37:51 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 68277100E7B48;
-        Fri, 10 Jul 2020 19:37:50 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: prose65_0f116ea26ed0
-X-Filterd-Recvd-Size: 2625
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf04.hostedemail.com (Postfix) with ESMTPA;
-        Fri, 10 Jul 2020 19:37:48 +0000 (UTC)
-Message-ID: <28a81dfe62b1dc00ccc721ddb88669d13665252b.camel@perches.com>
-Subject: Re: [PATCH v2] MAINTAINERS: XDP: restrict N: and K:
-From:   Joe Perches <joe@perches.com>
-To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>, ast@kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, john.fastabend@gmail.com,
-        mchehab+huawei@kernel.org, robh@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Date:   Fri, 10 Jul 2020 12:37:47 -0700
-In-Reply-To: <20200710190407.31269-1-grandmaster@al2klimov.de>
-References: <87tuyfi4fm.fsf@toke.dk>
-         <20200710190407.31269-1-grandmaster@al2klimov.de>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.3-0ubuntu1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727038AbgGJUU7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Jul 2020 16:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726867AbgGJUU7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Jul 2020 16:20:59 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCC2C08C5DC
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 13:20:59 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id d27so8497654ybe.20
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 13:20:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=CCfVk47cKFyn5A7kSIRBR/MSG0dqmh+4caIuYgMADCE=;
+        b=Gh+opm5uBDlogGnNxbr3R+dFOcm2dfawQS+Zcs+sV2i3ShlyhC6RqL/2PTxEZKikym
+         a+dNeJXm2+glFOZkKgjMKhOv6kizFoIXhgy5kwJuAqDBfhoZj12EVBGKK3iw3QOOm2rk
+         3QpnBeo67Nc7/P75jFjdjppCxF03kIyVu8NSpv+O6WplZcYKBxftgtL9pIG0SAqgjk6M
+         L8MmZdFOPxPibJLIy9kd4ehw+/Bzu32IYKgKtMDQ8Nq+zyJl7vQzkzPNYlUaV4GD+He6
+         Hzk5tyDMKq+4yaiqYyuE5pZTv9QZIoYMC/gi9YGKrXWawDPESSNjtaT/A8JggByQk3F+
+         m3kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=CCfVk47cKFyn5A7kSIRBR/MSG0dqmh+4caIuYgMADCE=;
+        b=LGqgxEeofDMDFzNhCdbK6cgskhLzGfOTy3OmQFJBqA3M7H5qjT4BP0Zx1WCdSrzYxj
+         5npDTyQUcLhl1NQn5TY0Ld6iMWdd6BqMUuRLhY17jSHbtfwUENoEiVqvuMqzK9zNrwci
+         yK7tGVOAKqhZ2uMYu1WtGSskUjH3VeqIG0jvK+MxHh0SjGXLdb1pxv52nMEeYIZVjR3u
+         bR6JEtwFAcfAdeBJV/OTkd4U4FJbx/+yKswZvjWQsky8SAAUVOkwQYvhoLabxF3xdBfj
+         tEftgownboG2BSusXyAI2nnsI4S+fBmQDx0cuJGfvwlOuDXy7CJzpB6SKUJlTaL6E/5E
+         3oDQ==
+X-Gm-Message-State: AOAM530zvKCJYkp4l2wuiAxbb8v7bDeWWvznh8PnzVULx6Ldn5FC1p2Q
+        uQ2g9E/EHZOuFJz+81dsNVj4RVg=
+X-Google-Smtp-Source: ABdhPJyq0f/0ap3e6q+tJUZYqlfYpnW1KIpvVCRlZd1e4ndXoOdgn8UTMuX9vjHi6FmgEFD/6W6QjDk=
+X-Received: by 2002:a25:d4d6:: with SMTP id m205mr17904366ybf.390.1594412458376;
+ Fri, 10 Jul 2020 13:20:58 -0700 (PDT)
+Date:   Fri, 10 Jul 2020 13:20:56 -0700
+In-Reply-To: <CAEf4BzY0-bVNHmCkMFPgObs=isUAyg-dFzGDY7QWYkmm7rmTSg@mail.gmail.com>
+Message-Id: <20200710202056.GA184844@google.com>
+Mime-Version: 1.0
+References: <CAEf4BzY0-bVNHmCkMFPgObs=isUAyg-dFzGDY7QWYkmm7rmTSg@mail.gmail.com>
+Subject: Re: Occasionally hanging sockopts selftests
+From:   sdf@google.com
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 2020-07-10 at 21:04 +0200, Alexander A. Klimov wrote:
-> Rationale:
-> Documentation/arm/ixp4xx.rst contains "xdp" as part of "ixdp465"
-> which has nothing to do with XDP.
-> 
-> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
-> ---
->  Better?
-> 
->  MAINTAINERS | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 1d4aa7f942de..735e2475e926 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18708,8 +18708,8 @@ F:	include/trace/events/xdp.h
->  F:	kernel/bpf/cpumap.c
->  F:	kernel/bpf/devmap.c
->  F:	net/core/xdp.c
-> -N:	xdp
-> -K:	xdp
-> +N:	(?:\b|_)xdp
-> +K:	(?:\b|_)xdp
+On 07/10, Andrii Nakryiko wrote:
+> Hey Stanislav,
 
-Generally, it's better to have comprehensive files lists
-rather than adding name matching regexes.
+> I've noticed that on 5.5 kernel libbpf Travis CI test runs
+> occasionally fail due to selftests hanging indefinitely. It seems like
+> it always happens after sockopt tests succeed, and while
+> sockopt_inherit test is running. Doesn't seem like the latest kernel
+> is affected (I haven't found hangs for the latest kernel in recent
+> history).
 
-Perhaps:
----
- MAINTAINERS | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+> This is the latest version of selftests, but running on an older (5.5)
+> version of kernel. So whatever fixes went into selftests are there
+> already. So I wonder if there were any kernel bugs that were fixed
+> already but could cause hangs on 5.5?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 16854e47e8cb..2e96cbf15b31 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18763,13 +18763,19 @@ M:	John Fastabend <john.fastabend@gmail.com>
- L:	netdev@vger.kernel.org
- L:	bpf@vger.kernel.org
- S:	Supported
--F:	include/net/xdp.h
-+F:	Documentation/networking/af_xdp.rst
-+F:	include/net/xdp*
- F:	include/trace/events/xdp.h
-+F:	include/uapi/linux/if_xdp.h
-+F:	include/uapi/linux/xdp_diag.h
- F:	kernel/bpf/cpumap.c
- F:	kernel/bpf/devmap.c
- F:	net/core/xdp.c
--N:	xdp
--K:	xdp
-+F:	net/xdp/
-+F:	samples/bpf/xdp*
-+F:	tools/testing/selftests/bfp/*xdp*
-+F:	tools/testing/selftests/bfp/*/*xdp*
-+K:	(?:\b|_)xdp(?:\b|_)
- 
- XDP SOCKETS (AF_XDP)
- M:	Björn Töpel <bjorn.topel@intel.com>
+> I can disable that specific test for 5.5, but though I should bring
+> this up first, just in case there are still some bugs in selftests.
 
+> Thanks for checking!
 
+> Two most recent failures (not that they are helpful, because there is
+> no output until tests completes, but still):
+
+>    - https://travis-ci.com/github/libbpf/libbpf/jobs/359067538
+>    - https://travis-ci.com/github/libbpf/libbpf/jobs/359784775
+Nothing pops up, I don't think we did any fixes to address any
+occasional failles like that.
+
+The only fixes we did are:
+d8fe449a9c51 - bpf: Don't return EINVAL from {get,set}sockopt when optlen >  
+PAGE_SIZE
+9babe825da76 - bpf: always allocate at least 16 bytes for setsockopt hook
+
+And I don't see how this test can hang without any of those (should
+either always pass or fail).
+
+Let's maybe try to disable it, as you suggested, and see if that's
+indeed this sockopt_inherit test that's misbehaving?
+I can try to find some time next week to reproduce.
