@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8F96C433F7
-	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 19:38:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 255E1C433F8
+	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 19:38:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BCA5820748
-	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 19:38:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE05120748
+	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 19:38:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594409909;
-	bh=9fVlEAT+V/8RJhZErtSojhafclsxkw9IHIC0K4IbEAc=;
+	s=default; t=1594409915;
+	bh=ZULmpBV6NMmOHx/j2vj7ZfYeo5r76NxA755KJHF110M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=BxhAKaSsma/TnL2ZkHyHf46gK/RdWqhKMYHZMFOUL5bfXBpstKPbSeKEXWFOkQ5VP
-	 02VKonbHSIHCjgJIyx4vijzo7b7MQZPvBQTFoLQbNK495AifnMlNOwT4zcvHSynlzo
-	 uDIMP6S+0gTfhbhS+Zf6IjJGeA4wlz/nVOGCN+9E=
+	b=JtkzL4BomTDt8T7AqV+WuaJXc5nPRIKVle5bYsbHuqNKlF1BV/wkxkZWZUWCH5st1
+	 LNhFGLCvMclzRZxYTB7AwclpF9IB5PpN8a0xVLrHyyHQ3BCyGOTPZO/weJYiZZ5ZmK
+	 HEctyYYTC5ysjPxa/6FuANXwTvWLecGl2gOi/COA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728459AbgGJTi2 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 10 Jul 2020 15:38:28 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:39289 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728437AbgGJTiV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 10 Jul 2020 15:38:21 -0400
+        id S1728477AbgGJTie convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 10 Jul 2020 15:38:34 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:40241 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728385AbgGJTiQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Jul 2020 15:38:16 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-469-pXsXF9x0MgqWVx4crsZIeg-1; Fri, 10 Jul 2020 15:38:15 -0400
-X-MC-Unique: pXsXF9x0MgqWVx4crsZIeg-1
+ us-mta-404-UKDMRcDJN6ygbf6EQjxtTw-1; Fri, 10 Jul 2020 15:38:13 -0400
+X-MC-Unique: UKDMRcDJN6ygbf6EQjxtTw-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6FBB98015F7;
-        Fri, 10 Jul 2020 19:38:14 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.192.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C42D610016E8;
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 637B31800D42;
         Fri, 10 Jul 2020 19:38:12 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.192.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D227E10016E8;
+        Fri, 10 Jul 2020 19:38:10 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v6 bpf-next 9/9] selftests/bpf: Add test for resolve_btfids
-Date:   Fri, 10 Jul 2020 21:37:54 +0200
-Message-Id: <20200710193754.3821104-10-jolsa@kernel.org>
+Subject: [PATCH v6 bpf-next 8/9] tools headers: Adopt verbatim copy of btf_ids.h from kernel sources
+Date:   Fri, 10 Jul 2020 21:37:53 +0200
+Message-Id: <20200710193754.3821104-9-jolsa@kernel.org>
 In-Reply-To: <20200710193754.3821104-1-jolsa@kernel.org>
 References: <20200710193754.3821104-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -59,213 +59,130 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding resolve_btfids test under test_progs suite.
+It will be needed by bpf selftest for resolve_btfids tool.
 
-It's possible to use btf_ids.h header and its logic in
-user space application, so we can add easy test for it.
+Also adding __PASTE macro as btf_ids.h dependency, which is
+defined in:
 
-The test defines BTF_ID_LIST and checks it gets properly
-resolved.
+  include/linux/compiler_types.h
 
-For this reason the test_progs binary (and other binaries
-that use TRUNNER* macros) is processed with resolve_btfids
-tool, which resolves BTF IDs in .BTF_ids section. The BTF
-data are taken from btf_data.o object rceated from
-progs/btf_data.c.
+but because tools/include do not have this header, I'm putting
+the macro into linux/compiler.h header.
 
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile          |  14 ++-
- .../selftests/bpf/prog_tests/resolve_btfids.c | 107 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/btf_data.c  |  26 +++++
- 3 files changed, 146 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf_data.c
+ tools/include/linux/btf_ids.h  | 87 ++++++++++++++++++++++++++++++++++
+ tools/include/linux/compiler.h |  4 ++
+ 2 files changed, 91 insertions(+)
+ create mode 100644 tools/include/linux/btf_ids.h
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 1f9c696b3edf..2eae482b2713 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -190,6 +190,16 @@ else
- 	cp "$(VMLINUX_H)" $@
- endif
- 
-+$(SCRATCH_DIR)/resolve_btfids: $(BPFOBJ)				\
-+			       $(TOOLSDIR)/bpf/resolve_btfids/main.c	\
-+			       $(TOOLSDIR)/lib/rbtree.c			\
-+			       $(TOOLSDIR)/lib/zalloc.c			\
-+			       $(TOOLSDIR)/lib/string.c			\
-+			       $(TOOLSDIR)/lib/ctype.c			\
-+			       $(TOOLSDIR)/lib/str_error_r.c
-+	$(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/resolve_btfids	\
-+		OUTPUT=$(SCRATCH_DIR)/ BPFOBJ=$(BPFOBJ)
-+
- # Get Clang's default includes on this system, as opposed to those seen by
- # '-target bpf'. This fixes "missing" files on some architectures/distros,
- # such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
-@@ -355,6 +365,7 @@ $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
- 			     | $(TRUNNER_BINARY)-extras
- 	$$(call msg,BINARY,,$$@)
- 	$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) -o $$@
-+	$(SCRATCH_DIR)/resolve_btfids --no-fail --btf btf_data.o $$@
- 
- endef
- 
-@@ -365,7 +376,8 @@ TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c	\
- 			 network_helpers.c testing_helpers.c		\
- 			 flow_dissector_load.h
- TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
--		       $(wildcard progs/btf_dump_test_case_*.c)
-+		       $(wildcard progs/btf_dump_test_case_*.c)		\
-+		       $(SCRATCH_DIR)/resolve_btfids
- TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
- TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS)
- TRUNNER_BPF_LDFLAGS := -mattr=+alu32
-diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.h
 new file mode 100644
-index 000000000000..060264c96601
+index 000000000000..fe019774f8a7
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-@@ -0,0 +1,107 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/tools/include/linux/btf_ids.h
+@@ -0,0 +1,87 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +
-+#include <linux/err.h>
-+#include <string.h>
-+#include <bpf/btf.h>
-+#include <bpf/libbpf.h>
-+#include <linux/btf.h>
-+#include <linux/kernel.h>
-+#include <linux/btf_ids.h>
-+#include "test_progs.h"
++#ifndef _LINUX_BTF_IDS_H
++#define _LINUX_BTF_IDS_H
 +
-+static int duration;
++#include <linux/compiler.h> /* for __PASTE */
 +
-+struct symbol {
-+	const char	*name;
-+	int		 type;
-+	int		 id;
-+};
++/*
++ * Following macros help to define lists of BTF IDs placed
++ * in .BTF_ids section. They are initially filled with zeros
++ * (during compilation) and resolved later during the
++ * linking phase by resolve_btfids tool.
++ *
++ * Any change in list layout must be reflected in resolve_btfids
++ * tool logic.
++ */
 +
-+struct symbol test_symbols[] = {
-+	{ "unused",  BTF_KIND_UNKN,     0 },
-+	{ "T",       BTF_KIND_TYPEDEF, -1 },
-+	{ "S",       BTF_KIND_STRUCT,  -1 },
-+	{ "U",       BTF_KIND_UNION,   -1 },
-+	{ "func",    BTF_KIND_FUNC,    -1 },
-+};
++#define BTF_IDS_SECTION ".BTF_ids"
 +
-+BTF_ID_LIST(test_list)
-+BTF_ID_UNUSED
-+BTF_ID(typedef, T)
-+BTF_ID(struct,  S)
-+BTF_ID(union,   U)
-+BTF_ID(func,    func)
++#define ____BTF_ID(symbol)				\
++asm(							\
++".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
++".local " #symbol " ;                          \n"	\
++".type  " #symbol ", @object;                  \n"	\
++".size  " #symbol ", 4;                        \n"	\
++#symbol ":                                     \n"	\
++".zero 4                                       \n"	\
++".popsection;                                  \n");
 +
-+static int
-+__resolve_symbol(struct btf *btf, int type_id)
-+{
-+	const struct btf_type *type;
-+	const char *str;
-+	unsigned int i;
++#define __BTF_ID(symbol) \
++	____BTF_ID(symbol)
 +
-+	type = btf__type_by_id(btf, type_id);
-+	if (!type) {
-+		PRINT_FAIL("Failed to get type for ID %d\n", type_id);
-+		return -1;
-+	}
++#define __ID(prefix) \
++	__PASTE(prefix, __COUNTER__)
 +
-+	for (i = 0; i < ARRAY_SIZE(test_symbols); i++) {
-+		if (test_symbols[i].id != -1)
-+			continue;
++/*
++ * The BTF_ID defines unique symbol for each ID pointing
++ * to 4 zero bytes.
++ */
++#define BTF_ID(prefix, name) \
++	__BTF_ID(__ID(__BTF_ID__##prefix##__##name##__))
 +
-+		if (BTF_INFO_KIND(type->info) != test_symbols[i].type)
-+			continue;
++/*
++ * The BTF_ID_LIST macro defines pure (unsorted) list
++ * of BTF IDs, with following layout:
++ *
++ * BTF_ID_LIST(list1)
++ * BTF_ID(type1, name1)
++ * BTF_ID(type2, name2)
++ *
++ * list1:
++ * __BTF_ID__type1__name1__1:
++ * .zero 4
++ * __BTF_ID__type2__name2__2:
++ * .zero 4
++ *
++ */
++#define __BTF_ID_LIST(name)				\
++asm(							\
++".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
++".local " #name ";                             \n"	\
++#name ":;                                      \n"	\
++".popsection;                                  \n");	\
 +
-+		str = btf__name_by_offset(btf, type->name_off);
-+		if (!str) {
-+			PRINT_FAIL("Failed to get name for BTF ID %d\n", type_id);
-+			return -1;
-+		}
++#define BTF_ID_LIST(name)				\
++__BTF_ID_LIST(name)					\
++extern u32 name[];
 +
-+		if (!strcmp(str, test_symbols[i].name))
-+			test_symbols[i].id = type_id;
-+	}
++/*
++ * The BTF_ID_UNUSED macro defines 4 zero bytes.
++ * It's used when we want to define 'unused' entry
++ * in BTF_ID_LIST, like:
++ *
++ *   BTF_ID_LIST(bpf_skb_output_btf_ids)
++ *   BTF_ID(struct, sk_buff)
++ *   BTF_ID_UNUSED
++ *   BTF_ID(struct, task_struct)
++ */
 +
-+	return 0;
-+}
++#define BTF_ID_UNUSED					\
++asm(							\
++".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
++".zero 4                                       \n"	\
++".popsection;                                  \n");
 +
-+static int resolve_symbols(void)
-+{
-+	struct btf *btf;
-+	int type_id;
-+	__u32 nr;
 +
-+	btf = btf__parse_elf("btf_data.o", NULL);
-+	if (CHECK(libbpf_get_error(btf), "resolve",
-+		  "Failed to load BTF from btf_data.o\n"))
-+		return -1;
++#endif
+diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
+index 9f9002734e19..6eac24d44e81 100644
+--- a/tools/include/linux/compiler.h
++++ b/tools/include/linux/compiler.h
+@@ -201,4 +201,8 @@ static __always_inline void __write_once_size(volatile void *p, void *res, int s
+ # define __fallthrough
+ #endif
+ 
++/* Indirect macros required for expanded argument pasting, eg. __LINE__. */
++#define ___PASTE(a, b) a##b
++#define __PASTE(a, b) ___PASTE(a, b)
 +
-+	nr = btf__get_nr_types(btf);
-+
-+	for (type_id = 1; type_id <= nr; type_id++) {
-+		if (__resolve_symbol(btf, type_id))
-+			break;
-+	}
-+
-+	btf__free(btf);
-+	return 0;
-+}
-+
-+int test_resolve_btfids(void)
-+{
-+	unsigned int i;
-+	int ret = 0;
-+
-+	if (resolve_symbols())
-+		return -1;
-+
-+	/* Check BTF_ID_LIST(test_list) IDs */
-+	for (i = 0; i < ARRAY_SIZE(test_symbols) && !ret; i++) {
-+		ret = CHECK(test_list[i] != test_symbols[i].id,
-+			    "id_check",
-+			    "wrong ID for %s (%d != %d)\n", test_symbols[i].name,
-+			    test_list[i], test_symbols[i].id);
-+	}
-+
-+	return ret;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/btf_data.c b/tools/testing/selftests/bpf/progs/btf_data.c
-new file mode 100644
-index 000000000000..26b85f45e584
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf_data.c
-@@ -0,0 +1,26 @@
-+// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+
-+struct S {
-+	int	a;
-+	int	b;
-+	int	c;
-+};
-+
-+union U {
-+	int	a;
-+	int	b;
-+	int	c;
-+};
-+
-+typedef int T;
-+
-+struct root_struct {
-+	T		m_1;
-+	struct S	m_2;
-+	union U		m_3;
-+};
-+
-+int func(struct root_struct *root)
-+{
-+	return 0;
-+}
+ #endif /* _TOOLS_LINUX_COMPILER_H */
 -- 
 2.25.4
 
