@@ -2,95 +2,201 @@ Return-Path: <SRS0=293s=AV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 182ADC4345A
-	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 14:17:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D58CC4345E
+	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 14:24:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ED35020767
-	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 14:17:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F919207D0
+	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 14:24:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="DpcBSikV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728315AbgGJORc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Jul 2020 10:17:32 -0400
-Received: from mga06.intel.com ([134.134.136.31]:32698 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726925AbgGJORa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Jul 2020 10:17:30 -0400
-IronPort-SDR: GpbzhEB2ihNkTHsI3fVBMtn1XSbIDnTXWJ3CbtnB6YtFAjgsT4N9jcsHl0cw+EZU2wc78KZJZp
- ScrwOmPe/KEg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9677"; a="209731707"
-X-IronPort-AV: E=Sophos;i="5.75,336,1589266800"; 
-   d="scan'208";a="209731707"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2020 07:17:30 -0700
-IronPort-SDR: p4geW7vI2ggQk02oyV59fYjRxw2KxEw2sNbcbFCuiEhE9VgyDSZgUegxZn1Byn+/Z6cwtkZBf0
- uWrOzi7kNZ/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,336,1589266800"; 
-   d="scan'208";a="428575492"
-Received: from mkarlsso-mobl.ger.corp.intel.com (HELO localhost.localdomain) ([10.252.54.29])
-  by orsmga004.jf.intel.com with ESMTP; 10 Jul 2020 07:17:27 -0700
-From:   Magnus Karlsson <magnus.karlsson@intel.com>
-To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        jonathan.lemon@gmail.com, maximmi@mellanox.com
-Cc:     bpf@vger.kernel.org, jeffrey.t.kirsher@intel.com,
-        maciej.fijalkowski@intel.com, maciejromanfijalkowski@gmail.com,
-        cristian.dumitrescu@intel.com
-Subject: [PATCH bpf-next v2 11/14] xsk: add shared umem support between devices
-Date:   Fri, 10 Jul 2020 16:16:39 +0200
-Message-Id: <1594390602-7635-12-git-send-email-magnus.karlsson@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1594390602-7635-1-git-send-email-magnus.karlsson@intel.com>
-References: <1594390602-7635-1-git-send-email-magnus.karlsson@intel.com>
+        id S1728588AbgGJOYL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Jul 2020 10:24:11 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:58426 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728541AbgGJOYL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Jul 2020 10:24:11 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06AELumT028561;
+        Fri, 10 Jul 2020 14:23:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=VC3kOgFikop4jtNAHQvE25/L4vJ4XvWGd6htnn5j8jE=;
+ b=DpcBSikVSvhoG5rFISMuyhcGInAvBWV/IOOWLx909J3x26RI2wrvLndtydCxKHERdryX
+ aRYsaXjLGURL0/zwpzL7KTymiOTourc6FWjpKKHM1WnsUYoE2T+EQUfQEkn28pnEXLlK
+ CrRKgjwPOaprtH+nvRKQjGZvf7gjj8iwUSXj4Y0qKB4vznyeNzwwKRaXM/S6uwW/OxA+
+ zyyS92UPvOy2HnYh1ZVJaf/ApCDFT24ThsmXonoCuFCI0JSpsiHv15XtlEGjNbtcvihB
+ zbZN30RFFM/Qod6bUj76qLnScKw1YzeosrlVLzqRbLxy7pW16zT9DAYA1M3Hs3UMnYeK EA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 325y0aqrpv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 10 Jul 2020 14:23:26 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06AENOj2115128;
+        Fri, 10 Jul 2020 14:23:26 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 325k3kdsuy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Jul 2020 14:23:26 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06AENOgZ002545;
+        Fri, 10 Jul 2020 14:23:24 GMT
+Received: from localhost.uk.oracle.com (/10.175.190.31)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 10 Jul 2020 07:23:24 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andriin@fb.com
+Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 2/2] selftests/bpf: add selftests verifying bpf_trace_printk() behaviour
+Date:   Fri, 10 Jul 2020 15:22:33 +0100
+Message-Id: <1594390953-31757-3-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1594390953-31757-1-git-send-email-alan.maguire@oracle.com>
+References: <1594390953-31757-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9677 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 phishscore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007100101
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9677 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 clxscore=1015
+ lowpriorityscore=0 impostorscore=0 malwarescore=0 bulkscore=0 phishscore=0
+ adultscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007100101
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support to share a umem between different devices. This mode
-can be invoked with the XDP_SHARED_UMEM bind flag. Previously,
-sharing was only supported within the same device. Note that when
-sharing a umem between devices, just as in the case of sharing a
-umem between queue ids, you need to create a fill ring and a
-completion ring and tie them to the socket (with two setsockopts,
-one for each ring) before you do the bind with the
-XDP_SHARED_UMEM flag. This so that the single-producer
-single-consumer semantics of the rings can be upheld.
+Simple selftests that verifies bpf_trace_printk() returns a sensible
+value and tracing messages appear.
 
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- net/xdp/xsk.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ .../selftests/bpf/prog_tests/trace_printk.c        | 74 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/trace_printk.c   | 21 ++++++
+ 2 files changed, 95 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/trace_printk.c
+ create mode 100644 tools/testing/selftests/bpf/progs/trace_printk.c
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 05fadd9..4bf47d3 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -695,14 +695,11 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
- 			sockfd_put(sock);
- 			goto out_unlock;
- 		}
--		if (umem_xs->dev != dev) {
--			err = -EINVAL;
--			sockfd_put(sock);
--			goto out_unlock;
--		}
- 
--		if (umem_xs->queue_id != qid) {
--			/* Share the umem with another socket on another qid */
-+		if (umem_xs->queue_id != qid || umem_xs->dev != dev) {
-+			/* Share the umem with another socket on another qid
-+			 * and/or device.
-+			 */
- 			xs->pool = xp_create_and_assign_umem(xs,
- 							     umem_xs->umem);
- 			if (!xs->pool) {
+diff --git a/tools/testing/selftests/bpf/prog_tests/trace_printk.c b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+new file mode 100644
+index 0000000..25dd0f47
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020, Oracle and/or its affiliates. */
++
++#include <test_progs.h>
++
++#include "trace_printk.skel.h"
++
++#define TRACEBUF	"/sys/kernel/debug/tracing/trace_pipe"
++#define SEARCHMSG	"testing,testing"
++
++void test_trace_printk(void)
++{
++	int err, iter = 0, duration = 0, found = 0, fd = -1;
++	struct trace_printk__bss *bss;
++	struct trace_printk *skel;
++	char buf[1024];
++
++	skel = trace_printk__open();
++	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
++		return;
++
++	err = trace_printk__load(skel);
++	if (CHECK(err, "skel_load", "failed to load skeleton: %d\n", err))
++		goto cleanup;
++
++	bss = skel->bss;
++
++	err = trace_printk__attach(skel);
++	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
++		goto cleanup;
++
++	fd = open(TRACEBUF, O_RDONLY);
++	if (CHECK(fd < 0, "could not open trace buffer",
++		  "error %d opening %s", errno, TRACEBUF))
++		goto cleanup;
++
++	/* We do not want to wait forever if this test fails... */
++	fcntl(fd, F_SETFL, O_NONBLOCK);
++
++	/* wait for tracepoint to trigger */
++	usleep(1);
++	trace_printk__detach(skel);
++
++	if (CHECK(bss->trace_printk_ran == 0,
++		  "bpf_trace_printk never ran",
++		  "ran == %d", bss->trace_printk_ran))
++		goto cleanup;
++
++	if (CHECK(bss->trace_printk_ret <= 0,
++		  "bpf_trace_printk returned <= 0 value",
++		  "got %d", bss->trace_printk_ret))
++		goto cleanup;
++
++	/* verify our search string is in the trace buffer */
++	while (read(fd, buf, sizeof(buf)) >= 0 || errno == EAGAIN) {
++		if (strstr(buf, SEARCHMSG) != NULL)
++			found++;
++		if (found == bss->trace_printk_ran)
++			break;
++		if (++iter > 1000)
++			break;
++	}
++
++	if (CHECK(!found, "message from bpf_trace_printk not found",
++		  "no instance of %s in %s", SEARCHMSG, TRACEBUF))
++		goto cleanup;
++
++	printf("ran %d times; last return value %d, with %d instances of msg\n",
++	       bss->trace_printk_ran, bss->trace_printk_ret, found);
++cleanup:
++	trace_printk__destroy(skel);
++	if (fd != -1)
++		close(fd);
++}
+diff --git a/tools/testing/selftests/bpf/progs/trace_printk.c b/tools/testing/selftests/bpf/progs/trace_printk.c
+new file mode 100644
+index 0000000..8ca7f39
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/trace_printk.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020, Oracle and/or its affiliates.
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++int trace_printk_ret = 0;
++int trace_printk_ran = 0;
++
++SEC("tp/raw_syscalls/sys_enter")
++int sys_enter(void *ctx)
++{
++	static const char fmt[] = "testing,testing %d\n";
++
++	trace_printk_ret = bpf_trace_printk(fmt, sizeof(fmt),
++					    ++trace_printk_ran);
++	return 0;
++}
 -- 
-2.7.4
+1.8.3.1
 
