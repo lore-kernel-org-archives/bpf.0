@@ -7,65 +7,65 @@ X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87349C433E6
-	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 16:54:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAD36C433FE
+	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 16:54:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 679A82078B
-	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 16:54:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA77E2078B
+	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 16:54:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="izG97bMk"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="jZK/7OrV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728513AbgGJQxD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Jul 2020 12:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
+        id S1728733AbgGJQyK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Jul 2020 12:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728453AbgGJQwr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Jul 2020 12:52:47 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEAEC08C5DD
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 09:52:47 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id u25so3598775lfm.1
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 09:52:47 -0700 (PDT)
+        with ESMTP id S1728549AbgGJQyF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Jul 2020 12:54:05 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3938AC08E6DC
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 09:54:05 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id b25so7229810ljp.6
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 09:54:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=date:from:to:cc:subject:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RlISFKaDjH1zyGnB/suGTc9TB09Qw6+4Fx2g8+KHkUU=;
-        b=izG97bMkZJyNC+IiukufSHXq+4DnOVA9GWOfuBNjyri3NRCeFiGnKTwfDZsUCCwpSU
-         vYNaf4v0+qXvc92/HNLPFBnv/bKe32x0fGilfH1gH6iDS/qCc7ievqk+uBX1LW49yMUp
-         cJGoEkkeFBICh9JAOeBn9LtWuhRw8OSPxShms=
+        bh=b0UCI+vE/H5YEMNhzArkLPkiIfli4eA98Ddz6rfQoAE=;
+        b=jZK/7OrVXtX30S+NFpQlALDPq6xCyQiqDzUDKtmbnBYpY5pbNM8KZNfjFeOJZG+MyM
+         /oH7lHovV8Oz/nPDSvoPOKWmC2PTkGeq2MzaUf6b4b4jiEZGyfjwwTquQpiYy117Lju1
+         5cyccxAqVAAanN0yF+02cnIKObq+0JIOQqDVQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RlISFKaDjH1zyGnB/suGTc9TB09Qw6+4Fx2g8+KHkUU=;
-        b=IJw4CIc1/s8GjLA5TRzWAblyapDllpj9LAPT6wRTDljEl5CpRMsfwh0W5zwlWawxDJ
-         mv+NEO5S3p+19ctibowunerXrXFD3qVEab+KVNFTZPrMb8TybCpUl8kCVjx1a+hfY/NK
-         oOK7KdAefgqco1VDQyo1xIGdYmzYUPDISu1ouNuNkKq+pS99oTxdjGSVmu8zPAUBWxza
-         3vAgIJh6zpkWmv1VQN3j/Ds2O1+B7zg4F/gZHqd7yEDLoejEUkaqCd52UBJMRFu+CRrk
-         3V5ciYtojm7EgueKCaBoByivZ7P9kFTFemLFjFsvzvdPtOSNB+xDbLtlQJ43/Ddyc3ZT
-         72Hg==
-X-Gm-Message-State: AOAM531t/McAtu0wBNwvxd1DgCGGfk9P2XnF3iYv3R7cLoDri3AXWP5v
-        GFPGremTL+g2zYWG6cy0XVLUoQ==
-X-Google-Smtp-Source: ABdhPJzTTgesc2bWjzIePhKgkseUApJSkL5rVcAIuWLzP98oRHNpV1xwx9xU8OcdVAvSZHGB0V7cDA==
-X-Received: by 2002:a19:8a07:: with SMTP id m7mr43895647lfd.31.1594399965482;
-        Fri, 10 Jul 2020 09:52:45 -0700 (PDT)
+        bh=b0UCI+vE/H5YEMNhzArkLPkiIfli4eA98Ddz6rfQoAE=;
+        b=hMnK2R9KyiRBlJTqGrH+p8d62D5Y3lJb8U6f1b0LB4A7VmNA57/x01h+0RxxzthE4Q
+         0TjFozs7U5MZ9cOJMb+CQA0mCoMQVCbC166UjOS09zq5beaXT/VC7/l7vmkosCFP15kj
+         wcUtYcc6pSLkOEcVak01Cf3Wm3dzDzX3snBS8+/QNsnx6/2om31nayHiBY6wgpkKjPCl
+         QTB5D46gVZK4tx1BSJpry3mHyguAxNFeq0o9v4frEGnfvF6zzBAH8yqxPgrgk1h+nctB
+         sWfmeJ69haO1GQ387rJbtgORR/YUxdzi1PUsVf4kFdf4vr7lDz+OhrgpnK4IwFiVh8AK
+         SqPg==
+X-Gm-Message-State: AOAM531BcwhGHhkglEJRDVrnjU9ATmI6nqluUJX07NU+Qg39QYs/36/H
+        VYWqIEsyeoEk+mL2Wag7TEkBrw==
+X-Google-Smtp-Source: ABdhPJxcE085DZvWGPSpPnNdiuGFrUCCovySUBZOmQpIGKEtFXT01kX3wYYa1mdUgjSozvjPAhUZPw==
+X-Received: by 2002:a2e:a54a:: with SMTP id e10mr41905143ljn.198.1594400043603;
+        Fri, 10 Jul 2020 09:54:03 -0700 (PDT)
 Received: from toad ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id f19sm2069527lja.84.2020.07.10.09.52.44
+        by smtp.gmail.com with ESMTPSA id x30sm2347043lfn.3.2020.07.10.09.54.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2020 09:52:45 -0700 (PDT)
-Date:   Fri, 10 Jul 2020 18:52:41 +0200
+        Fri, 10 Jul 2020 09:54:03 -0700 (PDT)
+Date:   Fri, 10 Jul 2020 18:54:00 +0200
 From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Jakub Sitnicki <jakub@cloudflare.com>, bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Stanislav Fomichev <sdf@google.com>
-Subject: Re: [PATCH bpf] selftests/bpf: Set attach type for CGROUP_SOCKOPT
- verifier test
-Message-ID: <20200710185241.07d53eb2@toad>
-In-Reply-To: <20200710164917.423125-1-jakub@cloudflare.com>
-References: <20200710164917.423125-1-jakub@cloudflare.com>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, sdf@google.com
+Subject: Re: [PATCH bpf] selftests/bpf: Fix cgroup sockopt verifier test
+Message-ID: <20200710185400.153cef3b@toad>
+In-Reply-To: <20200710150439.126627-1-jean-philippe@linaro.org>
+References: <20200710150439.126627-1-jean-philippe@linaro.org>
 X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -75,17 +75,19 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 10 Jul 2020 16:49:17 +0000
-Jakub Sitnicki <jakub@cloudflare.com> wrote:
+On Fri, 10 Jul 2020 17:04:40 +0200
+Jean-Philippe Brucker <jean-philippe@linaro.org> wrote:
 
-> BPF_PROG_TYPE_CGROUP_SOCKOPT requires expected_attach_type to be set on
-> prog load. Set it in the verifier test that checks if calling
-> bpf_perf_event_output() from CGROUP_SOCKOPT is allowed so that the runner
-> does skip it.
+> Since the BPF_PROG_TYPE_CGROUP_SOCKOPT verifier test does not set an
+> attach type, bpf_prog_load_check_attach() disallows loading the program
+> and the test is always skipped:
 > 
-> Cc: Stanislav Fomichev <sdf@google.com>
+>  #434/p perfevent for cgroup sockopt SKIP (unsupported program type 25)
+> 
+> Fix the issue by setting a valid attach type.
+> 
 > Fixes: 0456ea170cd6 ("bpf: Enable more helpers for BPF_PROG_TYPE_CGROUP_{DEVICE,SYSCTL,SOCKOPT}")
-> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 > ---
 >  tools/testing/selftests/bpf/verifier/event_output.c | 1 +
 >  1 file changed, 1 insertion(+)
@@ -103,8 +105,4 @@ Jakub Sitnicki <jakub@cloudflare.com> wrote:
 >  	.result = ACCEPT,
 >  	.retval = 1,
 
-Just noticed same fix has been already posted a couple hours earlier:
-
-  https://lore.kernel.org/bpf/20200710150439.126627-1-jean-philippe@linaro.org/
-
-Please ignore.
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
