@@ -2,124 +2,109 @@ Return-Path: <SRS0=293s=AV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D733C433EA
-	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 16:52:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87349C433E6
+	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 16:54:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DAFBF20836
-	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 16:52:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 679A82078B
+	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 16:54:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h+kxtmgC"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="izG97bMk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728415AbgGJQws (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Jul 2020 12:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37916 "EHLO
+        id S1728513AbgGJQxD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Jul 2020 12:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728449AbgGJQwq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Jul 2020 12:52:46 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7552BC08C5DC;
-        Fri, 10 Jul 2020 09:52:46 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id 145so5894803qke.9;
-        Fri, 10 Jul 2020 09:52:46 -0700 (PDT)
+        with ESMTP id S1728453AbgGJQwr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Jul 2020 12:52:47 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEAEC08C5DD
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 09:52:47 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id u25so3598775lfm.1
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 09:52:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=n2GO5ZJ8LczdnU8kmwHXchFCiGk6Ti6c0vCFbbXfOVs=;
-        b=h+kxtmgCb6TYJADBiDvGER3yYkaALQ3l7K88ZBh3uhwl2R06QupSmOgAX5c+0n/Xrl
-         iguyUOPj1Ft+Tm+hasuLMzPH53PErjy7qWFE6lVVflkvm5xyZQn4zVc3VRzBhDUe7P/a
-         V0moqVaf+/UZno0F/lxB+/rJbr548uZofZU8OS5k8IzOxN6PeszcwxIQFytI4WRdbtJI
-         lFxyvZ5Y8b0w0Nd3Yw6GFzyPk0tN5NzQeG3CDwTuCwZRlcr/2FsY272EYZn76mzLIyKz
-         P+cawwRS3KbzLNyDIKA9UO3AYuC+2U1/QvkojH7j7pSINwjROdQIkRGDAdSx1PlHTj6i
-         RnAw==
+        d=cloudflare.com; s=google;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=RlISFKaDjH1zyGnB/suGTc9TB09Qw6+4Fx2g8+KHkUU=;
+        b=izG97bMkZJyNC+IiukufSHXq+4DnOVA9GWOfuBNjyri3NRCeFiGnKTwfDZsUCCwpSU
+         vYNaf4v0+qXvc92/HNLPFBnv/bKe32x0fGilfH1gH6iDS/qCc7ievqk+uBX1LW49yMUp
+         cJGoEkkeFBICh9JAOeBn9LtWuhRw8OSPxShms=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=n2GO5ZJ8LczdnU8kmwHXchFCiGk6Ti6c0vCFbbXfOVs=;
-        b=FPTNqSeos6n7KumeR1STUCULKePeve5hv2lVzGuO2sBteVu2QlRIlOKppfPnCN2lBa
-         vvnstjy+PlXwFwg2BCZvzpdL0mWOJxCphObPB+OdBMLvCDl4FCW5hAAHKY0pQq0OTPc/
-         +ElDcR2YjcJ4oT3Cxs0GhosvrzjXvRJ6tZxE5vdCoJDOVjcEfFvSrOKpX4UUADoxYmQL
-         zmfhhOY+NBft6HReOGejQidA9J3qyfaHqjZOmdQbECU3BZAQtBaoZzwuwWg7RPRtKyJA
-         TpnE1QsbklGsORFSLz3iTaHws7FrqVG4PJ5cCdA3SXuZ4p614VVnLQqhBSFGoE8dYU1q
-         Toyw==
-X-Gm-Message-State: AOAM531+N693msdV3qOhdHyF/Eiq5FJXrybAek8DG+5wS05yPlA4XoOj
-        LrQO6T+oOIOCbNXCD3OCZaQ=
-X-Google-Smtp-Source: ABdhPJwccJQrHgJR2ikrn49yxMc2mqxvzj3OlykWGkGbmpKhb8VMRiYVDMUoYBUehSYVX1+F9NObfg==
-X-Received: by 2002:a37:a306:: with SMTP id m6mr50442291qke.7.1594399965681;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RlISFKaDjH1zyGnB/suGTc9TB09Qw6+4Fx2g8+KHkUU=;
+        b=IJw4CIc1/s8GjLA5TRzWAblyapDllpj9LAPT6wRTDljEl5CpRMsfwh0W5zwlWawxDJ
+         mv+NEO5S3p+19ctibowunerXrXFD3qVEab+KVNFTZPrMb8TybCpUl8kCVjx1a+hfY/NK
+         oOK7KdAefgqco1VDQyo1xIGdYmzYUPDISu1ouNuNkKq+pS99oTxdjGSVmu8zPAUBWxza
+         3vAgIJh6zpkWmv1VQN3j/Ds2O1+B7zg4F/gZHqd7yEDLoejEUkaqCd52UBJMRFu+CRrk
+         3V5ciYtojm7EgueKCaBoByivZ7P9kFTFemLFjFsvzvdPtOSNB+xDbLtlQJ43/Ddyc3ZT
+         72Hg==
+X-Gm-Message-State: AOAM531t/McAtu0wBNwvxd1DgCGGfk9P2XnF3iYv3R7cLoDri3AXWP5v
+        GFPGremTL+g2zYWG6cy0XVLUoQ==
+X-Google-Smtp-Source: ABdhPJzTTgesc2bWjzIePhKgkseUApJSkL5rVcAIuWLzP98oRHNpV1xwx9xU8OcdVAvSZHGB0V7cDA==
+X-Received: by 2002:a19:8a07:: with SMTP id m7mr43895647lfd.31.1594399965482;
         Fri, 10 Jul 2020 09:52:45 -0700 (PDT)
-Received: from ?IPv6:2601:282:803:7700:94b4:214e:fabf:bc82? ([2601:282:803:7700:94b4:214e:fabf:bc82])
-        by smtp.googlemail.com with ESMTPSA id a185sm7804517qkg.3.2020.07.10.09.52.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+Received: from toad ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id f19sm2069527lja.84.2020.07.10.09.52.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 10 Jul 2020 09:52:45 -0700 (PDT)
-Subject: Re: [PATCHv6 bpf-next 0/3] xdp: add a new helper for dev map
- multicast support
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Hangbin Liu <liuhangbin@gmail.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Jiri Benc <jbenc@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>, ast@kernel.org,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-References: <20200701041938.862200-1-liuhangbin@gmail.com>
- <20200709013008.3900892-1-liuhangbin@gmail.com>
- <7c80ca4b-4c7d-0322-9483-f6f0465d6370@iogearbox.net>
- <20200710073652.GC2531@dhcp-12-153.nay.redhat.com>
- <9a04393c-f924-5aaf-4644-d7f33350004f@iogearbox.net>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <0c97f21a-03d8-6c9f-2071-b0c4b87c4955@gmail.com>
-Date:   Fri, 10 Jul 2020 10:52:43 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.10.0
+Date:   Fri, 10 Jul 2020 18:52:41 +0200
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Jakub Sitnicki <jakub@cloudflare.com>, bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Stanislav Fomichev <sdf@google.com>
+Subject: Re: [PATCH bpf] selftests/bpf: Set attach type for CGROUP_SOCKOPT
+ verifier test
+Message-ID: <20200710185241.07d53eb2@toad>
+In-Reply-To: <20200710164917.423125-1-jakub@cloudflare.com>
+References: <20200710164917.423125-1-jakub@cloudflare.com>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <9a04393c-f924-5aaf-4644-d7f33350004f@iogearbox.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 7/10/20 9:02 AM, Daniel Borkmann wrote:
-> Right, but what about the other direction where one device forwards to a
-> bond,
-> presumably eth1 + eth2 are in the include map and shared also between other
-> ifaces? Given the logic for the bond mode is on bond0, so one layer
-> higher, how
-> do you determine which of eth1 + eth2 to send to in the BPF prog? Daemon
-> listening
-> for link events via arp or mii monitor and then update include map?
-> Ideally would
-> be nice to have some sort of a bond0 pass-through for the XDP buffer so
-> it ends
-> up eventually at one of the two through the native logic, e.g. what do
-> you do when
-> it's configured in xor mode or when slave dev is selected via hash or
-> some other
-> user logic (e.g. via team driver); how would this be modeled via
-> inclusion map? I
-> guess the issue can be regarded independently to this set, but given you
-> mention
-> explicitly bond here as a use case for the exclusion map, I was
-> wondering how you
-> solve the inclusion one for bond devices for your data plane?
+On Fri, 10 Jul 2020 16:49:17 +0000
+Jakub Sitnicki <jakub@cloudflare.com> wrote:
 
-bond driver does not support xdp_xmit, and I do not believe there is a
-good ROI for adapting it to handle xdp buffers.
+> BPF_PROG_TYPE_CGROUP_SOCKOPT requires expected_attach_type to be set on
+> prog load. Set it in the verifier test that checks if calling
+> bpf_perf_event_output() from CGROUP_SOCKOPT is allowed so that the runner
+> does skip it.
+> 
+> Cc: Stanislav Fomichev <sdf@google.com>
+> Fixes: 0456ea170cd6 ("bpf: Enable more helpers for BPF_PROG_TYPE_CGROUP_{DEVICE,SYSCTL,SOCKOPT}")
+> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+> ---
+>  tools/testing/selftests/bpf/verifier/event_output.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/verifier/event_output.c b/tools/testing/selftests/bpf/verifier/event_output.c
+> index 99f8f582c02b..c5e805980409 100644
+> --- a/tools/testing/selftests/bpf/verifier/event_output.c
+> +++ b/tools/testing/selftests/bpf/verifier/event_output.c
+> @@ -112,6 +112,7 @@
+>  	"perfevent for cgroup sockopt",
+>  	.insns =  { __PERF_EVENT_INSNS__ },
+>  	.prog_type = BPF_PROG_TYPE_CGROUP_SOCKOPT,
+> +	.expected_attach_type = BPF_CGROUP_SETSOCKOPT,
+>  	.fixup_map_event_output = { 4 },
+>  	.result = ACCEPT,
+>  	.retval = 1,
 
-For round robin and active-backup modes it is straightforward to adapt
-the new ndo_get_xmit_slave to work with ebpf. That is not the case for
-any of them that use a hash on the skb. e.g., for L3+L4 hashing I found
-it easier to replicate the algorithm in bpf than trying to adapt the
-bond code to work with XDP buffers. I put that in the category of 'XDP
-is advanced networking that requires unraveling the generic for a
-specific deployment.' In short, for bonds and Tx the bpf program needs
-to pick the slave device.
+Just noticed same fix has been already posted a couple hours earlier:
+
+  https://lore.kernel.org/bpf/20200710150439.126627-1-jean-philippe@linaro.org/
+
+Please ignore.
