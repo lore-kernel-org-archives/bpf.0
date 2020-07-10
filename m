@@ -7,49 +7,51 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 823D5C433EB
-	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 19:38:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9768C433E8
+	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 19:38:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 54A792078B
-	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 19:38:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8FFAD20748
+	for <bpf@archiver.kernel.org>; Fri, 10 Jul 2020 19:38:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594409900;
-	bh=GN+WCVKo5ynWcGLI/vbl8Mu1RTWOTnu212vdno1Omss=;
+	s=default; t=1594409897;
+	bh=gRwDLTzN9UamkB5hKy30fm3LvZWk3XOvaMZZpCw/i6A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=QsUmOfdXxuOlzEv1WZml7G4N3opLsbBHeb6x5Sf387DIUubFTuXm1/01Ix4YKat0e
-	 afrmQ9yndmiwu0L6K4pRN3eIqrrWegnrRPRiaZFfUqV4NsHIvTSzLtyE5ErZ44gFe3
-	 Hjm/k4fcA6COtpGlQEsefyh3ekZQ190PwwMtYfk0=
+	b=Ajk4NPblsaJDAHMnZ+BBR+C2AVoHy4MLLKHSfvNEPEnuZQn31WJPxXotRpx33CSJ2
+	 V/12Xcj8ldXUpe1ZpjaTRaPIThmzhUZsfWtc0Qj62cI90TW0SJrZCJXt4sitCxif2A
+	 gxHecD82IC/OKF38tGq1TspkK07L0UHJ2a8jqIyg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728436AbgGJTiT convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 10 Jul 2020 15:38:19 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:38900 "EHLO
+        id S1728410AbgGJTiQ convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 10 Jul 2020 15:38:16 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:38853 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728430AbgGJTiS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 10 Jul 2020 15:38:18 -0400
+        by vger.kernel.org with ESMTP id S1728391AbgGJTiM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 10 Jul 2020 15:38:12 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-287-kzUhjEaDN-6g3bVtLVEAZw-1; Fri, 10 Jul 2020 15:38:11 -0400
-X-MC-Unique: kzUhjEaDN-6g3bVtLVEAZw-1
+ us-mta-25-n9VTanRhNfaWCudU6L4y4Q-1; Fri, 10 Jul 2020 15:38:08 -0400
+X-MC-Unique: n9VTanRhNfaWCudU6L4y4Q-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 77217100CCC0;
-        Fri, 10 Jul 2020 19:38:10 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D9284100CCC6;
+        Fri, 10 Jul 2020 19:38:06 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0F73D100EBA9;
-        Fri, 10 Jul 2020 19:38:08 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 71D5110016E8;
+        Fri, 10 Jul 2020 19:38:05 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v6 bpf-next 7/9] bpf: Add info about .BTF_ids section to btf.rst
-Date:   Fri, 10 Jul 2020 21:37:52 +0200
-Message-Id: <20200710193754.3821104-8-jolsa@kernel.org>
+Subject: [PATCH v6 bpf-next 5/9] bpf: Remove btf_id helpers resolving
+Date:   Fri, 10 Jul 2020 21:37:50 +0200
+Message-Id: <20200710193754.3821104-6-jolsa@kernel.org>
 In-Reply-To: <20200710193754.3821104-1-jolsa@kernel.org>
 References: <20200710193754.3821104-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: kernel.org
 Content-Type: text/plain; charset=WINDOWS-1252
@@ -59,60 +61,121 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Updating btf.rst doc with info about .BTF_ids section
+Now when we moved the helpers btf_id arrays into .BTF_ids section,
+we can remove the code that resolve those IDs in runtime.
 
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- Documentation/bpf/btf.rst | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ kernel/bpf/btf.c | 89 +++---------------------------------------------
+ 1 file changed, 5 insertions(+), 84 deletions(-)
 
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index 4d565d202ce3..c9dec7a565e8 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -691,6 +691,42 @@ kernel API, the ``insn_off`` is the instruction offset in the unit of ``struct
- bpf_insn``. For ELF API, the ``insn_off`` is the byte offset from the
- beginning of section (``btf_ext_info_sec->sec_name_off``).
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 4c3007f428b1..71140b73ae3c 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -4079,96 +4079,17 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 	return -EINVAL;
+ }
  
-+4.2 .BTF_ids section
-+====================
-+
-+The .BTF_ids section encodes BTF ID values that are used within the kernel.
-+
-+This section is created during the kernel compilation with the help of
-+macros defined in ``include/linux/btf_ids.h`` header file. Kernel code can
-+use them to create lists and sets (sorted lists) of BTF ID values.
-+
-+The ``BTF_ID_LIST`` and ``BTF_ID`` macros define unsorted list of BTF ID values,
-+with following syntax::
-+
-+  BTF_ID_LIST(list)
-+  BTF_ID(type1, name1)
-+  BTF_ID(type2, name2)
-+
-+resulting in following layout in .BTF_ids section::
-+
-+  __BTF_ID__type1__name1__1:
-+  .zero 4
-+  __BTF_ID__type2__name2__2:
-+  .zero 4
-+
-+The ``int list[];`` variable is defined to access the list.
-+
-+The ``BTF_ID_UNUSED`` macro defines 4 zero bytes. It's used when we
-+want to define unused entry in BTF_ID_LIST, like::
-+
-+      BTF_ID_LIST(bpf_skb_output_btf_ids)
-+      BTF_ID(struct, sk_buff)
-+      BTF_ID_UNUSED
-+      BTF_ID(struct, task_struct)
-+
-+All the BTF ID lists and sets are compiled in the .BTF_ids section and
-+resolved during the linking phase of kernel build by ``resolve_btfids`` tool.
-+
- 5. Using BTF
- ************
+-static int __btf_resolve_helper_id(struct bpf_verifier_log *log, void *fn,
+-				   int arg)
+-{
+-	char fnname[KSYM_SYMBOL_LEN + 4] = "btf_";
+-	const struct btf_param *args;
+-	const struct btf_type *t;
+-	const char *tname, *sym;
+-	u32 btf_id, i;
+-
+-	if (IS_ERR(btf_vmlinux)) {
+-		bpf_log(log, "btf_vmlinux is malformed\n");
+-		return -EINVAL;
+-	}
+-
+-	sym = kallsyms_lookup((long)fn, NULL, NULL, NULL, fnname + 4);
+-	if (!sym) {
+-		bpf_log(log, "kernel doesn't have kallsyms\n");
+-		return -EFAULT;
+-	}
+-
+-	for (i = 1; i <= btf_vmlinux->nr_types; i++) {
+-		t = btf_type_by_id(btf_vmlinux, i);
+-		if (BTF_INFO_KIND(t->info) != BTF_KIND_TYPEDEF)
+-			continue;
+-		tname = __btf_name_by_offset(btf_vmlinux, t->name_off);
+-		if (!strcmp(tname, fnname))
+-			break;
+-	}
+-	if (i > btf_vmlinux->nr_types) {
+-		bpf_log(log, "helper %s type is not found\n", fnname);
+-		return -ENOENT;
+-	}
+-
+-	t = btf_type_by_id(btf_vmlinux, t->type);
+-	if (!btf_type_is_ptr(t))
+-		return -EFAULT;
+-	t = btf_type_by_id(btf_vmlinux, t->type);
+-	if (!btf_type_is_func_proto(t))
+-		return -EFAULT;
+-
+-	args = (const struct btf_param *)(t + 1);
+-	if (arg >= btf_type_vlen(t)) {
+-		bpf_log(log, "bpf helper %s doesn't have %d-th argument\n",
+-			fnname, arg);
+-		return -EINVAL;
+-	}
+-
+-	t = btf_type_by_id(btf_vmlinux, args[arg].type);
+-	if (!btf_type_is_ptr(t) || !t->type) {
+-		/* anything but the pointer to struct is a helper config bug */
+-		bpf_log(log, "ARG_PTR_TO_BTF is misconfigured\n");
+-		return -EFAULT;
+-	}
+-	btf_id = t->type;
+-	t = btf_type_by_id(btf_vmlinux, t->type);
+-	/* skip modifiers */
+-	while (btf_type_is_modifier(t)) {
+-		btf_id = t->type;
+-		t = btf_type_by_id(btf_vmlinux, t->type);
+-	}
+-	if (!btf_type_is_struct(t)) {
+-		bpf_log(log, "ARG_PTR_TO_BTF is not a struct\n");
+-		return -EFAULT;
+-	}
+-	bpf_log(log, "helper %s arg%d has btf_id %d struct %s\n", fnname + 4,
+-		arg, btf_id, __btf_name_by_offset(btf_vmlinux, t->name_off));
+-	return btf_id;
+-}
+-
+ int btf_resolve_helper_id(struct bpf_verifier_log *log,
+ 			  const struct bpf_func_proto *fn, int arg)
+ {
+-	int *btf_id = &fn->btf_id[arg];
+-	int ret;
++	int id;
  
+ 	if (fn->arg_type[arg] != ARG_PTR_TO_BTF_ID)
+ 		return -EINVAL;
+-
+-	ret = READ_ONCE(*btf_id);
+-	if (ret)
+-		return ret;
+-	/* ok to race the search. The result is the same */
+-	ret = __btf_resolve_helper_id(log, fn->func, arg);
+-	if (!ret) {
+-		/* Function argument cannot be type 'void' */
+-		bpf_log(log, "BTF resolution bug\n");
+-		return -EFAULT;
+-	}
+-	WRITE_ONCE(*btf_id, ret);
+-	return ret;
++	id = fn->btf_id[arg];
++	if (!id || id > btf_vmlinux->nr_types)
++		return -EINVAL;
++	return id;
+ }
+ 
+ static int __get_type_size(struct btf *btf, u32 btf_id,
 -- 
 2.25.4
 
