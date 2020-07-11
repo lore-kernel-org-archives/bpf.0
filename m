@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3788AC433E5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F199C433E3
 	for <bpf@archiver.kernel.org>; Sat, 11 Jul 2020 21:53:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 148692077D
+	by mail.kernel.org (Postfix) with ESMTP id 5094720725
 	for <bpf@archiver.kernel.org>; Sat, 11 Jul 2020 21:53:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1594504427;
-	bh=At95q+Ek//Mjzk0exvBF9J9iPqLoXyXSfVACXDgATeQ=;
+	bh=xdks69nzTB+vkJu2iHcWCVESeqL3KVpDaRkLHp9HmSk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=DSV7CSwzPJ6SdXRimr+d1vsRuImqmdscxQW9bl2bljgD5L95uHpMNDAV/i/5b+L1s
-	 7/Ti/S7KBYWK7I9I8d+pwg1/TfxXhG8cnV2I+RAp/n85EJdYVdGVdCFvDMbI68AXIQ
-	 bQlPYJN1c53Qo3Y2Aw1eyqj9is0ZXmgzFEPXRwVA=
+	b=GeIsO+wQeN3u2vJfGWnODvmJUdNqGDHZOIN3/AVOjrG3+o9fZtiPtQAqRa9F2rhxg
+	 LVGU1KA+VyEWKRgs4G2UL/O2+LrhhGG9QJwNYYjNUFGszIvpaVMz5Q+pNIXJtxsnPs
+	 CMLtQ0ua/wNeGrtz/1IcxX99/oo+G50HxscpMLtw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728159AbgGKVxq convert rfc822-to-8bit (ORCPT
+        id S1728174AbgGKVxq convert rfc822-to-8bit (ORCPT
         <rfc822;bpf@archiver.kernel.org>); Sat, 11 Jul 2020 17:53:46 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:33130 "EHLO
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:32653 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726948AbgGKVxm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 11 Jul 2020 17:53:42 -0400
+        with ESMTP id S1728055AbgGKVxq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 11 Jul 2020 17:53:46 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-469-me_e3ufYNbeEaXm6jnZhbQ-1; Sat, 11 Jul 2020 17:53:37 -0400
-X-MC-Unique: me_e3ufYNbeEaXm6jnZhbQ-1
+ us-mta-398-2ldoa5ufMpuIFwogLLZYkg-1; Sat, 11 Jul 2020 17:53:41 -0400
+X-MC-Unique: 2ldoa5ufMpuIFwogLLZYkg-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 11D8A106B242;
-        Sat, 11 Jul 2020 21:53:36 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DC1DB800597;
+        Sat, 11 Jul 2020 21:53:39 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E84560BEC;
-        Sat, 11 Jul 2020 21:53:34 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 73A2060BEC;
+        Sat, 11 Jul 2020 21:53:38 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v7 bpf-next 2/9] bpf: Compile resolve_btfids tool at kernel compilation start
-Date:   Sat, 11 Jul 2020 23:53:22 +0200
-Message-Id: <20200711215329.41165-3-jolsa@kernel.org>
+Subject: [PATCH v7 bpf-next 4/9] bpf: Resolve BTF IDs in vmlinux image
+Date:   Sat, 11 Jul 2020 23:53:24 +0200
+Message-Id: <20200711215329.41165-5-jolsa@kernel.org>
 In-Reply-To: <20200711215329.41165-1-jolsa@kernel.org>
 References: <20200711215329.41165-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -59,112 +59,152 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The resolve_btfids tool will be used during the vmlinux linking,
-so it's necessary it's ready for it.
+Using BTF_ID_LIST macro to define lists for several helpers
+using BTF arguments.
+
+And running resolve_btfids on vmlinux elf object during linking,
+so the .BTF_ids section gets the IDs resolved.
 
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Tested-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- Makefile           | 22 ++++++++++++++++++----
- tools/Makefile     |  3 +++
- tools/bpf/Makefile |  9 ++++++++-
- 3 files changed, 29 insertions(+), 5 deletions(-)
+ Makefile                 | 3 ++-
+ kernel/bpf/stackmap.c    | 5 ++++-
+ kernel/trace/bpf_trace.c | 9 +++++++--
+ net/core/filter.c        | 9 +++++++--
+ scripts/link-vmlinux.sh  | 6 ++++++
+ 5 files changed, 26 insertions(+), 6 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index ac2c61c37a73..017e775b3288 100644
+index 017e775b3288..462f1a75fcb3 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1053,9 +1053,10 @@ export mod_sign_cmd
- 
- HOST_LIBELF_LIBS = $(shell pkg-config libelf --libs 2>/dev/null || echo -lelf)
- 
-+has_libelf = $(call try-run,\
-+               echo "int main() {}" | $(HOSTCC) -xc -o /dev/null $(HOST_LIBELF_LIBS) -,1,0)
-+
- ifdef CONFIG_STACK_VALIDATION
--  has_libelf := $(call try-run,\
--		echo "int main() {}" | $(HOSTCC) -xc -o /dev/null $(HOST_LIBELF_LIBS) -,1,0)
-   ifeq ($(has_libelf),1)
-     objtool_target := tools/objtool FORCE
-   else
-@@ -1064,6 +1065,14 @@ ifdef CONFIG_STACK_VALIDATION
-   endif
+@@ -448,6 +448,7 @@ OBJSIZE		= $(CROSS_COMPILE)size
+ STRIP		= $(CROSS_COMPILE)strip
  endif
+ PAHOLE		= pahole
++RESOLVE_BTFIDS	= $(objtree)/tools/bpf/resolve_btfids/resolve_btfids
+ LEX		= flex
+ YACC		= bison
+ AWK		= awk
+@@ -510,7 +511,7 @@ GCC_PLUGINS_CFLAGS :=
+ CLANG_FLAGS :=
  
-+ifdef CONFIG_DEBUG_INFO_BTF
-+  ifeq ($(has_libelf),1)
-+    resolve_btfids_target := tools/bpf/resolve_btfids FORCE
-+  else
-+    ERROR_RESOLVE_BTFIDS := 1
-+  endif
-+endif
+ export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC
+-export CPP AR NM STRIP OBJCOPY OBJDUMP OBJSIZE READELF PAHOLE LEX YACC AWK INSTALLKERNEL
++export CPP AR NM STRIP OBJCOPY OBJDUMP OBJSIZE READELF PAHOLE RESOLVE_BTFIDS LEX YACC AWK INSTALLKERNEL
+ export PERL PYTHON PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
+ export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ
+ export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS LDFLAGS_MODULE
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index a6c361ed7937..48d8e739975f 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -9,6 +9,7 @@
+ #include <linux/elf.h>
+ #include <linux/pagemap.h>
+ #include <linux/irq_work.h>
++#include <linux/btf_ids.h>
+ #include "percpu_freelist.h"
+ 
+ #define STACK_CREATE_FLAG_MASK					\
+@@ -576,7 +577,9 @@ BPF_CALL_4(bpf_get_task_stack, struct task_struct *, task, void *, buf,
+ 	return __bpf_get_stack(regs, task, buf, size, flags);
+ }
+ 
+-static int bpf_get_task_stack_btf_ids[5];
++BTF_ID_LIST(bpf_get_task_stack_btf_ids)
++BTF_ID(struct, task_struct)
 +
- PHONY += prepare0
+ const struct bpf_func_proto bpf_get_task_stack_proto = {
+ 	.func		= bpf_get_task_stack,
+ 	.gpl_only	= false,
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index e0b7775039ab..e178e8e32b33 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -13,6 +13,7 @@
+ #include <linux/kprobes.h>
+ #include <linux/syscalls.h>
+ #include <linux/error-injection.h>
++#include <linux/btf_ids.h>
  
- export MODORDER := $(extmod-prefix)modules.order
-@@ -1175,7 +1184,7 @@ prepare0: archprepare
- 	$(Q)$(MAKE) $(build)=.
+ #include <asm/tlb.h>
  
- # All the preparing..
--prepare: prepare0 prepare-objtool
-+prepare: prepare0 prepare-objtool prepare-resolve_btfids
+@@ -710,7 +711,9 @@ BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char *, fmt, u32, fmt_size,
+ 	return err;
+ }
  
- # Support for using generic headers in asm-generic
- asm-generic := -f $(srctree)/scripts/Makefile.asm-generic obj
-@@ -1188,7 +1197,7 @@ uapi-asm-generic:
- 	$(Q)$(MAKE) $(asm-generic)=arch/$(SRCARCH)/include/generated/uapi/asm \
- 	generic=include/uapi/asm-generic
- 
--PHONY += prepare-objtool
-+PHONY += prepare-objtool prepare-resolve_btfids
- prepare-objtool: $(objtool_target)
- ifeq ($(SKIP_STACK_VALIDATION),1)
- ifdef CONFIG_UNWINDER_ORC
-@@ -1199,6 +1208,11 @@ else
- endif
- endif
- 
-+prepare-resolve_btfids: $(resolve_btfids_target)
-+ifeq ($(ERROR_RESOLVE_BTFIDS),1)
-+	@echo "error: Cannot resolve BTF IDs for CONFIG_DEBUG_INFO_BTF, please install libelf-dev, libelf-devel or elfutils-libelf-devel" >&2
-+	@false
-+endif
- # Generate some files
- # ---------------------------------------------------------------------------
- 
-diff --git a/tools/Makefile b/tools/Makefile
-index bd778812e915..85af6ebbce91 100644
---- a/tools/Makefile
-+++ b/tools/Makefile
-@@ -67,6 +67,9 @@ cpupower: FORCE
- cgroup firewire hv guest bootconfig spi usb virtio vm bpf iio gpio objtool leds wmi pci firmware debugging: FORCE
- 	$(call descend,$@)
- 
-+bpf/%: FORCE
-+	$(call descend,$@)
+-static int bpf_seq_printf_btf_ids[5];
++BTF_ID_LIST(bpf_seq_printf_btf_ids)
++BTF_ID(struct, seq_file)
 +
- liblockdep: FORCE
- 	$(call descend,lib/lockdep)
+ static const struct bpf_func_proto bpf_seq_printf_proto = {
+ 	.func		= bpf_seq_printf,
+ 	.gpl_only	= true,
+@@ -728,7 +731,9 @@ BPF_CALL_3(bpf_seq_write, struct seq_file *, m, const void *, data, u32, len)
+ 	return seq_write(m, data, len) ? -EOVERFLOW : 0;
+ }
  
-diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
-index 6df1850f8353..74bc9a105225 100644
---- a/tools/bpf/Makefile
-+++ b/tools/bpf/Makefile
-@@ -123,5 +123,12 @@ runqslower_install:
- runqslower_clean:
- 	$(call descend,runqslower,clean)
+-static int bpf_seq_write_btf_ids[5];
++BTF_ID_LIST(bpf_seq_write_btf_ids)
++BTF_ID(struct, seq_file)
++
+ static const struct bpf_func_proto bpf_seq_write_proto = {
+ 	.func		= bpf_seq_write,
+ 	.gpl_only	= true,
+diff --git a/net/core/filter.c b/net/core/filter.c
+index ddcc0d6209e1..4e572441e64a 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -75,6 +75,7 @@
+ #include <net/ipv6_stubs.h>
+ #include <net/bpf_sk_storage.h>
+ #include <net/transp_v6.h>
++#include <linux/btf_ids.h>
  
-+resolve_btfids:
-+	$(call descend,resolve_btfids)
+ /**
+  *	sk_filter_trim_cap - run a packet through a socket filter
+@@ -3779,7 +3780,9 @@ static const struct bpf_func_proto bpf_skb_event_output_proto = {
+ 	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
+ };
+ 
+-static int bpf_skb_output_btf_ids[5];
++BTF_ID_LIST(bpf_skb_output_btf_ids)
++BTF_ID(struct, sk_buff)
 +
-+resolve_btfids_clean:
-+	$(call descend,resolve_btfids,clean)
+ const struct bpf_func_proto bpf_skb_output_proto = {
+ 	.func		= bpf_skb_event_output,
+ 	.gpl_only	= true,
+@@ -4173,7 +4176,9 @@ static const struct bpf_func_proto bpf_xdp_event_output_proto = {
+ 	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
+ };
+ 
+-static int bpf_xdp_output_btf_ids[5];
++BTF_ID_LIST(bpf_xdp_output_btf_ids)
++BTF_ID(struct, xdp_buff)
 +
- .PHONY: all install clean bpftool bpftool_install bpftool_clean \
--	runqslower runqslower_install runqslower_clean
-+	runqslower runqslower_install runqslower_clean \
-+	resolve_btfids resolve_btfids_clean
+ const struct bpf_func_proto bpf_xdp_output_proto = {
+ 	.func		= bpf_xdp_event_output,
+ 	.gpl_only	= true,
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index 92dd745906f4..e26f02dbedee 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -336,6 +336,12 @@ fi
+ 
+ vmlinux_link vmlinux "${kallsymso}" ${btf_vmlinux_bin_o}
+ 
++# fill in BTF IDs
++if [ -n "${CONFIG_DEBUG_INFO_BTF}" ]; then
++info BTFIDS vmlinux
++${RESOLVE_BTFIDS} vmlinux
++fi
++
+ if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
+ 	info SORTTAB vmlinux
+ 	if ! sorttable vmlinux; then
 -- 
 2.25.4
 
