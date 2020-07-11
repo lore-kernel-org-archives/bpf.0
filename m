@@ -2,224 +2,151 @@ Return-Path: <SRS0=M/y+=AW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22070C433DF
-	for <bpf@archiver.kernel.org>; Sat, 11 Jul 2020 06:55:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB1BEC433E3
+	for <bpf@archiver.kernel.org>; Sat, 11 Jul 2020 08:23:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ECB6D20720
-	for <bpf@archiver.kernel.org>; Sat, 11 Jul 2020 06:55:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A3F5A2077D
+	for <bpf@archiver.kernel.org>; Sat, 11 Jul 2020 08:23:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fIUosOHn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728090AbgGKGzU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Jul 2020 02:55:20 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:40804 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728049AbgGKGzU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 11 Jul 2020 02:55:20 -0400
-Received: by mail-io1-f69.google.com with SMTP id f25so5009347ioh.7
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 23:55:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=+dz85Sf0hRZ/UgjIsHMdP1g1MRjmFGmwDieydsvrQOk=;
-        b=Kwt0fyjeeuIvr5DTjcSOV3tEAr/jpjQ7Cu4vcylXnUf7GBebuMG1f0SBM8mjCuMAiJ
-         XBFiUY5KA6rdWjpuzx9Rd9grOzjN+r471KBBB3j5OGyRtEjTgqrYFjevIJ5AD9OqN+Kk
-         LD9U8D/zM+7b6BBHxMpItJNz+bd3b3Y3oHeJYKTYUhR0fzcUaky+wrKC9rtznm2MXHSd
-         jLs4amOLMRsktkDXzhHALxuwXxTy6vZOJnQoIC3zL3PbnBOdmLGr8ptd6oLEl2/ugNd4
-         2DKmPYSKC4avHqwga2e+s/2GhnBdgpKfFL+ZDOcOcKP13yYwDSTYtCrrYQNVlpztTleW
-         uCSQ==
-X-Gm-Message-State: AOAM5334rcwq3R4jmQCMwtq8ztcLhq1lWJMKFlpWVRJ6LDB418VCQ1Yo
-        miNeNWYriR1i2eTFyxSOCsG5SI0KZ75+ssLY34rabG8n1dTT
-X-Google-Smtp-Source: ABdhPJyuoiyF2Hi/zB2jC9J3N7RUUrUrDxIu/t2RdVsun9X1Al2bnspROLoTsGxlWPCV0Wlwsa59jhdZSe131eIfZeqwHwYfVu6W
+        id S1728102AbgGKIXg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Jul 2020 04:23:36 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:53877 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728049AbgGKIXg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 11 Jul 2020 04:23:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594455813;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3JWZc4C758CGaQ7kXP65ZxsN+MDs4VksrbvIUzURHM4=;
+        b=fIUosOHnGs8QAb+KB3sXcZCkUe9lAWgS9sGu9FqBfuR7gqPM4kr38GQa2g6K0KW1vkSL1N
+        FfeYNHXwmkyzqZwQg5IYho0CCA8ZI2GjKTKmEJRQ7rkye52FQhnVM7Dpnb7vfcNSweApPB
+        khTBMSIxoqcKy61zpZVm7kXTsELBjmI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-10-shM6vVWLPsCKbBcbh1p3Cw-1; Sat, 11 Jul 2020 04:23:29 -0400
+X-MC-Unique: shM6vVWLPsCKbBcbh1p3Cw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9B4D6800C64;
+        Sat, 11 Jul 2020 08:23:27 +0000 (UTC)
+Received: from carbon (unknown [10.40.208.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 46BE52DE6B;
+        Sat, 11 Jul 2020 08:23:20 +0000 (UTC)
+Date:   Sat, 11 Jul 2020 10:23:18 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     brouer@redhat.com,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>, ast@kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, john.fastabend@gmail.com,
+        mchehab+huawei@kernel.org, robh@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v2] MAINTAINERS: XDP: restrict N: and K:
+Message-ID: <20200711102318.28ce29d6@carbon>
+In-Reply-To: <28a81dfe62b1dc00ccc721ddb88669d13665252b.camel@perches.com>
+References: <87tuyfi4fm.fsf@toke.dk>
+        <20200710190407.31269-1-grandmaster@al2klimov.de>
+        <28a81dfe62b1dc00ccc721ddb88669d13665252b.camel@perches.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:9642:: with SMTP id c60mr80203032jai.71.1594450519081;
- Fri, 10 Jul 2020 23:55:19 -0700 (PDT)
-Date:   Fri, 10 Jul 2020 23:55:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cd4de605aa24f03c@google.com>
-Subject: BUG: stack guard page was hit in no_context
-From:   syzbot <syzbot+b344c6786fc0f8409a1c@syzkaller.appspotmail.com>
-To:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, jeyu@kernel.org, john.fastabend@gmail.com,
-        kafai@fb.com, kpsingh@chromium.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+On Fri, 10 Jul 2020 12:37:47 -0700
+Joe Perches <joe@perches.com> wrote:
 
-syzbot found the following crash on:
+> On Fri, 2020-07-10 at 21:04 +0200, Alexander A. Klimov wrote:
+> > Rationale:
+> > Documentation/arm/ixp4xx.rst contains "xdp" as part of "ixdp465"
+> > which has nothing to do with XDP.
+> >=20
+> > Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+> > ---
+> >  Better?
+> >=20
+> >  MAINTAINERS | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 1d4aa7f942de..735e2475e926 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -18708,8 +18708,8 @@ F:	include/trace/events/xdp.h
+> >  F:	kernel/bpf/cpumap.c
+> >  F:	kernel/bpf/devmap.c
+> >  F:	net/core/xdp.c
+> > -N:	xdp
+> > -K:	xdp
+> > +N:	(?:\b|_)xdp
+> > +K:	(?:\b|_)xdp =20
+>=20
+> Generally, it's better to have comprehensive files lists
+> rather than adding name matching regexes.
 
-HEAD commit:    7cc2a8ea Merge tag 'block-5.8-2020-07-01' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15dd7d83100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7be693511b29b338
-dashboard link: https://syzkaller.appspot.com/bug?extid=b344c6786fc0f8409a1c
-compiler:       gcc (GCC) 10.1.0-syz 20200507
+I like below more direct matching of the files we already know are XDP
+related. The pattern match are meant to catch drivers containing XDP
+related bits.
 
-Unfortunately, I don't have any reproducer for this crash yet.
+(small typo in your patch below)
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+b344c6786fc0f8409a1c@syzkaller.appspotmail.com
+> Perhaps:
+> ---
+>  MAINTAINERS | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 16854e47e8cb..2e96cbf15b31 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18763,13 +18763,19 @@ M:	John Fastabend <john.fastabend@gmail.com>
+>  L:	netdev@vger.kernel.org
+>  L:	bpf@vger.kernel.org
+>  S:	Supported
+> -F:	include/net/xdp.h
+> +F:	Documentation/networking/af_xdp.rst
+> +F:	include/net/xdp*
+>  F:	include/trace/events/xdp.h
+> +F:	include/uapi/linux/if_xdp.h
+> +F:	include/uapi/linux/xdp_diag.h
+>  F:	kernel/bpf/cpumap.c
+>  F:	kernel/bpf/devmap.c
+>  F:	net/core/xdp.c
+> -N:	xdp
+> -K:	xdp
+> +F:	net/xdp/
+> +F:	samples/bpf/xdp*
+> +F:	tools/testing/selftests/bfp/*xdp*
+                               ^^^^=20
+Typo, should be "bpf"
 
-BUG: stack guard page was hit at 000000006422ef1c (stack is 000000009e8a746a..00000000d32e48ea)
-kernel stack overflow (double-fault): 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 8234 Comm: kworker/u4:8 Not tainted 5.8.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: bat_events batadv_purge_orig
-RIP: 0010:no_context+0x33/0x9f0 arch/x86/mm/fault.c:584
-Code: fc ff df 41 56 41 89 ce 41 55 49 89 f5 41 54 49 89 d4 55 48 89 fd 53 48 8d 9d 88 00 00 00 48 81 ec d0 00 00 00 48 8d 44 24 30 <44> 89 44 24 10 48 c7 44 24 30 b3 8a b5 41 48 c1 e8 03 48 89 04 24
-RSP: 0018:ffffc9001642ffe8 EFLAGS: 00010086
-RAX: ffffc90016430018 RBX: ffffc90016430280 RCX: 000000000000000b
-RDX: 0000000000000000 RSI: 0000000000000002 RDI: ffffc900164301f8
-RBP: ffffc900164301f8 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000002 R14: 000000000000000b R15: dffffc0000000000
-FS:  0000000000000000(0000) GS:ffff8880ae700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffc9001642ffd8 CR3: 0000000025a2b000 CR4: 00000000001406e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- __bad_area_nosemaphore+0xa9/0x480 arch/x86/mm/fault.c:789
- do_user_addr_fault+0x783/0xd00 arch/x86/mm/fault.c:1171
- handle_page_fault arch/x86/mm/fault.c:1365 [inline]
- exc_page_fault+0xab/0x170 arch/x86/mm/fault.c:1418
- asm_exc_page_fault+0x1e/0x30 arch/x86/include/asm/idtentry.h:565
-RIP: 0010:preempt_schedule_thunk+0x0/0x18 arch/x86/entry/thunk_64.S:40
-Code: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 <00> 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-RSP: 0018:ffffc900164302a8 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: ffffc900164305b0 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff83967dab RDI: 0000000000000001
-RBP: ffffffff810078f7 R08: ffffffff83ad5e30 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 000000000000000e R14: 0000000000000002 R15: 0000000000000000
- search_module_extables+0xce/0x100 kernel/module.c:4422
- search_exception_tables+0x42/0x50 kernel/extable.c:59
- fixup_exception+0x4b/0xca arch/x86/mm/extable.c:161
- no_context+0xe7/0x9f0 arch/x86/mm/fault.c:599
- __bad_area_nosemaphore+0xa9/0x480 arch/x86/mm/fault.c:789
- do_user_addr_fault+0x783/0xd00 arch/x86/mm/fault.c:1171
- handle_page_fault arch/x86/mm/fault.c:1365 [inline]
- exc_page_fault+0xab/0x170 arch/x86/mm/fault.c:1418
- asm_exc_page_fault+0x1e/0x30 arch/x86/include/asm/idtentry.h:565
-RIP: 0010:preempt_schedule_thunk+0x0/0x18 arch/x86/entry/thunk_64.S:40
-Code: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 <00> 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-RSP: 0018:ffffc900164305d8 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: ffffc900164308e0 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff83967dab RDI: 0000000000000001
-RBP: ffffffff810078f7 R08: ffffffff83ad5e30 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 000000000000000e R14: 0000000000000002 R15: 0000000000000000
- search_module_extables+0xce/0x100 kernel/module.c:4422
- search_exception_tables+0x42/0x50 kernel/extable.c:59
- fixup_exception+0x4b/0xca arch/x86/mm/extable.c:161
- no_context+0xe7/0x9f0 arch/x86/mm/fault.c:599
- __bad_area_nosemaphore+0xa9/0x480 arch/x86/mm/fault.c:789
- do_user_addr_fault+0x783/0xd00 arch/x86/mm/fault.c:1171
- handle_page_fault arch/x86/mm/fault.c:1365 [inline]
- exc_page_fault+0xab/0x170 arch/x86/mm/fault.c:1418
- asm_exc_page_fault+0x1e/0x30 arch/x86/include/asm/idtentry.h:565
-RIP: 0010:preempt_schedule_thunk+0x0/0x18 arch/x86/entry/thunk_64.S:40
-Code: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 <00> 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-RSP: 0018:ffffc90016430908 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: ffffc90016430c10 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff83967dab RDI: 0000000000000001
-RBP: ffffffff810078f7 R08: ffffffff83ad5e30 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 000000000000000e R14: 0000000000000002 R15: 0000000000000000
- search_module_extables+0xce/0x100 kernel/module.c:4422
- search_exception_tables+0x42/0x50 kernel/extable.c:59
- fixup_exception+0x4b/0xca arch/x86/mm/extable.c:161
- no_context+0xe7/0x9f0 arch/x86/mm/fault.c:599
- __bad_area_nosemaphore+0xa9/0x480 arch/x86/mm/fault.c:789
- do_user_addr_fault+0x783/0xd00 arch/x86/mm/fault.c:1171
- handle_page_fault arch/x86/mm/fault.c:1365 [inline]
- exc_page_fault+0xab/0x170 arch/x86/mm/fault.c:1418
- asm_exc_page_fault+0x1e/0x30 arch/x86/include/asm/idtentry.h:565
-RIP: 0010:preempt_schedule_thunk+0x0/0x18 arch/x86/entry/thunk_64.S:40
-Code: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 <00> 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-RSP: 0018:ffffc90016430c38 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: ffffc90016430f40 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff83967dab RDI: 0000000000000001
-RBP: ffffffff810078f7 R08: ffffffff83ad5e30 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 000000000000000e R14: 0000000000000002 R15: 0000000000000000
- search_module_extables+0xce/0x100 kernel/module.c:4422
- search_exception_tables+0x42/0x50 kernel/extable.c:59
- fixup_exception+0x4b/0xca arch/x86/mm/extable.c:161
- no_context+0xe7/0x9f0 arch/x86/mm/fault.c:599
- __bad_area_nosemaphore+0xa9/0x480 arch/x86/mm/fault.c:789
- do_user_addr_fault+0x783/0xd00 arch/x86/mm/fault.c:1171
- handle_page_fault arch/x86/mm/fault.c:1365 [inline]
- exc_page_fault+0xab/0x170 arch/x86/mm/fault.c:1418
- asm_exc_page_fault+0x1e/0x30 arch/x86/include/asm/idtentry.h:565
-RIP: 0010:preempt_schedule_thunk+0x0/0x18 arch/x86/entry/thunk_64.S:40
-Code: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 <00> 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-RSP: 0018:ffffc90016430f68 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: ffffc90016431270 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff83967dab RDI: 0000000000000001
-RBP: ffffffff810078f7 R08: ffffffff83ad5e30 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 000000000000000e R14: 0000000000000002 R15: 0000000000000000
- search_module_extables+0xce/0x100 kernel/module.c:4422
- search_exception_tables+0x42/0x50 kernel/extable.c:59
- fixup_exception+0x4b/0xca arch/x86/mm/extable.c:161
- no_context+0xe7/0x9f0 arch/x86/mm/fault.c:599
- __bad_area_nosemaphore+0xa9/0x480 arch/x86/mm/fault.c:789
- do_user_addr_fault+0x783/0xd00 arch/x86/mm/fault.c:1171
- handle_page_fault arch/x86/mm/fault.c:1365 [inline]
- exc_page_fault+0xab/0x170 arch/x86/mm/fault.c:1418
- asm_exc_page_fault+0x1e/0x30 arch/x86/include/asm/idtentry.h:565
-RIP: 0010:preempt_schedule_thunk+0x0/0x18 arch/x86/entry/thunk_64.S:40
-Code: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 <00> 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-RSP: 0018:ffffc90016431298 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: ffffc900164315a0 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff83967dab RDI: 0000000000000001
-RBP: ffffffff810078f7 R08: ffffffff83ad5e30 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 000000000000000e R14: 0000000000000002 R15: 0000000000000000
- search_module_extables+0xce/0x100 kernel/module.c:4422
- search_exception_tables+0x42/0x50 kernel/extable.c:59
- fixup_exception+0x4b/0xca arch/x86/mm/extable.c:161
- no_context+0xe7/0x9f0 arch/x86/mm/fault.c:599
- __bad_area_nosemaphore+0xa9/0x480 arch/x86/mm/fault.c:789
- do_user_addr_fault+0x783/0xd00 arch/x86/mm/fault.c:1171
- handle_page_fault arch/x86/mm/fault.c:1365 [inline]
- exc_page_fault+0xab/0x170 arch/x86/mm/fault.c:1418
- asm_exc_page_fault+0x1e/0x30 arch/x86/include/asm/idtentry.h:565
-RIP: 0010:preempt_schedule_thunk+0x0/0x18 arch/x86/entry/thunk_64.S:40
-Code: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 <00> 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-RSP: 0
-Lost 828 message(s)!
----[ end trace ec14fcfb6d9859f3 ]---
-RIP: 0010:no_context+0x33/0x9f0 arch/x86/mm/fault.c:584
-Code: fc ff df 41 56 41 89 ce 41 55 49 89 f5 41 54 49 89 d4 55 48 89 fd 53 48 8d 9d 88 00 00 00 48 81 ec d0 00 00 00 48 8d 44 24 30 <44> 89 44 24 10 48 c7 44 24 30 b3 8a b5 41 48 c1 e8 03 48 89 04 24
-RSP: 0018:ffffc9001642ffe8 EFLAGS: 00010086
-RAX: ffffc90016430018 RBX: ffffc90016430280 RCX: 000000000000000b
-RDX: 0000000000000000 RSI: 0000000000000002 RDI: ffffc900164301f8
-RBP: ffffc900164301f8 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000002 R14: 000000000000000b R15: dffffc0000000000
-FS:  0000000000000000(0000) GS:ffff8880ae700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffc9001642ffd8 CR3: 0000000025a2b000 CR4: 00000000001406e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> +F:	tools/testing/selftests/bfp/*/*xdp*
+> +K:	(?:\b|_)xdp(?:\b|_)
+> =20
+>  XDP SOCKETS (AF_XDP)
+>  M:	Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+>=20
 
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--=20
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
+
