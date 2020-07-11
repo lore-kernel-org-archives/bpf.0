@@ -8,40 +8,40 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13ACDC433E6
-	for <bpf@archiver.kernel.org>; Sat, 11 Jul 2020 01:29:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E4D6C433EA
+	for <bpf@archiver.kernel.org>; Sat, 11 Jul 2020 01:29:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E34162077D
-	for <bpf@archiver.kernel.org>; Sat, 11 Jul 2020 01:29:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF6252077D
+	for <bpf@archiver.kernel.org>; Sat, 11 Jul 2020 01:29:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="iWQDjuYI"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="DPMQQlhC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727075AbgGKB3V (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Jul 2020 21:29:21 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:46376 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727028AbgGKB3R (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 10 Jul 2020 21:29:17 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06B1SpSp018705
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 18:29:15 -0700
+        id S1727768AbgGKB3e (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Jul 2020 21:29:34 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:16986 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727115AbgGKB3e (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 10 Jul 2020 21:29:34 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06B1TXgr003173
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 18:29:33 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=RUib/HXP+VBprzF23xQbf2Dp0Yp03NX2lImz1c9fDJE=;
- b=iWQDjuYIdV7RPt0IGz7XVSPSDg0dibn2GeinZf7LAQ4ZURFFLOF6C7GjjPW2qI0CFGx1
- yyySJfYlwTCSPuOQVdEUELZB2DRRvlG7qEOVIKo33Le89ZkueTr3gfhYLwyf4I6455m7
- ionkgMMg+Qe6vyJmTwyeVsmOBI25iRwQ9FA= 
+ bh=+7acijKP+ydJH0i9GNfmpy6At+PfvVqznxldN0G+Kyg=;
+ b=DPMQQlhCmXucNNFx5LOCfjRWJODrT3owbrEDq3m6rdgLSt5pi4/0JbJS6pjDpTWqPtz/
+ iVTNiMtMR6W3opdqPdxsQBHvPBmIomDfiADj1GhxoM6syxDk+IE6/fhoBvSEY9wsNly1
+ JfmGszEmqXRx1+AGDAJDj/Sx/uXBzmw29T8= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 325k2cn9td-5
+        by mx0a-00082601.pphosted.com with ESMTP id 325k1s5brv-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 18:29:15 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 10 Jul 2020 18:29:33 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Fri, 10 Jul 2020 18:29:12 -0700
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 338A662E51D5; Fri, 10 Jul 2020 18:26:54 -0700 (PDT)
+        id 298B362E5286; Fri, 10 Jul 2020 18:26:58 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -52,9 +52,9 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <brouer@redhat.com>, <peterz@infradead.org>,
         Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 2/5] bpf: add callchain to bpf_perf_event_data
-Date:   Fri, 10 Jul 2020 18:26:36 -0700
-Message-ID: <20200711012639.3429622-3-songliubraving@fb.com>
+Subject: [PATCH bpf-next 4/5] selftests/bpf: add get_stackid_cannot_attach
+Date:   Fri, 10 Jul 2020 18:26:38 -0700
+Message-ID: <20200711012639.3429622-5-songliubraving@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200711012639.3429622-1-songliubraving@fb.com>
 References: <20200711012639.3429622-1-songliubraving@fb.com>
@@ -64,10 +64,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-10_14:2020-07-10,2020-07-10 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 spamscore=0
- priorityscore=1501 clxscore=1015 malwarescore=0 adultscore=0
- lowpriorityscore=0 mlxscore=0 suspectscore=0 bulkscore=0 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 clxscore=1015
+ malwarescore=0 mlxlogscore=999 priorityscore=1501 suspectscore=0
+ impostorscore=0 phishscore=0 bulkscore=0 spamscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2007110007
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -75,198 +75,81 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If the callchain is available, BPF program can use bpf_probe_read_kernel(=
-)
-to fetch the callchain, or use it in a BPF helper.
+This test confirms that BPF program that calls bpf_get_stackid() cannot
+attach to perf_event with PEBS entry.
 
 Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- include/linux/perf_event.h                |  5 -----
- include/linux/trace_events.h              |  5 +++++
- include/uapi/linux/bpf_perf_event.h       |  7 ++++++
- kernel/bpf/btf.c                          |  5 +++++
- kernel/trace/bpf_trace.c                  | 27 +++++++++++++++++++++++
- tools/include/uapi/linux/bpf_perf_event.h |  8 +++++++
- 6 files changed, 52 insertions(+), 5 deletions(-)
+ .../prog_tests/get_stackid_cannot_attach.c    | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/get_stackid_ca=
+nnot_attach.c
 
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 00ab5efa38334..3a68c999f50d1 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -59,11 +59,6 @@ struct perf_guest_info_callbacks {
- #include <linux/security.h>
- #include <asm/local.h>
-=20
--struct perf_callchain_entry {
--	__u64				nr;
--	__u64				ip[]; /* /proc/sys/kernel/perf_event_max_stack */
--};
--
- struct perf_callchain_entry_ctx {
- 	struct perf_callchain_entry *entry;
- 	u32			    max_stack;
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index 5c69433540494..8e1e88f40eef9 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -631,6 +631,7 @@ void bpf_put_raw_tracepoint(struct bpf_raw_event_map =
-*btp);
- int bpf_get_perf_event_info(const struct perf_event *event, u32 *prog_id=
-,
- 			    u32 *fd_type, const char **buf,
- 			    u64 *probe_offset, u64 *probe_addr);
-+int bpf_trace_init_btf_ids(struct btf *btf);
- #else
- static inline unsigned int trace_call_bpf(struct trace_event_call *call,=
- void *ctx)
- {
-@@ -672,6 +673,10 @@ static inline int bpf_get_perf_event_info(const stru=
-ct perf_event *event,
- {
- 	return -EOPNOTSUPP;
- }
-+int bpf_trace_init_btf_ids(struct btf *btf)
+diff --git a/tools/testing/selftests/bpf/prog_tests/get_stackid_cannot_at=
+tach.c b/tools/testing/selftests/bpf/prog_tests/get_stackid_cannot_attach=
+.c
+new file mode 100644
+index 0000000000000..ae943c502b62b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/get_stackid_cannot_attach.c
+@@ -0,0 +1,57 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Facebook
++#include <test_progs.h>
++#include "test_stacktrace_build_id.skel.h"
++
++void test_get_stackid_cannot_attach(void)
 +{
-+	return -EOPNOTSUPP;
++	struct perf_event_attr attr =3D {
++		/* .type =3D PERF_TYPE_SOFTWARE, */
++		.type =3D PERF_TYPE_HARDWARE,
++		.config =3D PERF_COUNT_HW_CPU_CYCLES,
++		.precise_ip =3D 2,
++		.sample_type =3D PERF_SAMPLE_IP | PERF_SAMPLE_BRANCH_STACK |
++			PERF_SAMPLE_CALLCHAIN,
++		.branch_sample_type =3D PERF_SAMPLE_BRANCH_USER |
++			PERF_SAMPLE_BRANCH_NO_FLAGS |
++			PERF_SAMPLE_BRANCH_NO_CYCLES |
++			PERF_SAMPLE_BRANCH_CALL_STACK,
++		.sample_period =3D 5000,
++		.size =3D sizeof(struct perf_event_attr),
++	};
++	struct test_stacktrace_build_id *skel;
++	__u32 duration =3D 0;
++	int pmu_fd, err;
++
++	skel =3D test_stacktrace_build_id__open();
++	if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
++		return;
++
++	/* override program type */
++	bpf_program__set_perf_event(skel->progs.oncpu);
++
++	err =3D test_stacktrace_build_id__load(skel);
++	if (CHECK(err, "skel_load", "skeleton load failed: %d\n", err))
++		goto cleanup;
++
++	pmu_fd =3D syscall(__NR_perf_event_open, &attr, -1 /* pid */,
++			 0 /* cpu 0 */, -1 /* group id */,
++			 0 /* flags */);
++	if (pmu_fd < 0 && errno =3D=3D ENOENT) {
++		printf("%s:SKIP:no PERF_COUNT_HW_CPU_CYCLES\n", __func__);
++		test__skip();
++		goto cleanup;
++	}
++	if (CHECK(pmu_fd < 0, "perf_event_open", "err %d errno %d\n",
++		  pmu_fd, errno))
++		goto cleanup;
++
++	skel->links.oncpu =3D bpf_program__attach_perf_event(skel->progs.oncpu,
++							   pmu_fd);
++	CHECK(!IS_ERR(skel->links.oncpu), "attach_perf_event",
++	      "should have failed\n");
++	close(pmu_fd);
++
++cleanup:
++	test_stacktrace_build_id__destroy(skel);
 +}
- #endif
-=20
- enum {
-diff --git a/include/uapi/linux/bpf_perf_event.h b/include/uapi/linux/bpf=
-_perf_event.h
-index eb1b9d21250c6..40f4df80ab4fa 100644
---- a/include/uapi/linux/bpf_perf_event.h
-+++ b/include/uapi/linux/bpf_perf_event.h
-@@ -9,11 +9,18 @@
- #define _UAPI__LINUX_BPF_PERF_EVENT_H__
-=20
- #include <asm/bpf_perf_event.h>
-+#include <linux/bpf.h>
-+
-+struct perf_callchain_entry {
-+	__u64				nr;
-+	__u64				ip[]; /* /proc/sys/kernel/perf_event_max_stack */
-+};
-=20
- struct bpf_perf_event_data {
- 	bpf_user_pt_regs_t regs;
- 	__u64 sample_period;
- 	__u64 addr;
-+	__bpf_md_ptr(struct perf_callchain_entry *, callchain);
- };
-=20
- #endif /* _UAPI__LINUX_BPF_PERF_EVENT_H__ */
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 4c3007f428b16..cb122e14dba38 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -20,6 +20,7 @@
- #include <linux/btf.h>
- #include <linux/skmsg.h>
- #include <linux/perf_event.h>
-+#include <linux/trace_events.h>
- #include <net/sock.h>
-=20
- /* BTF (BPF Type Format) is the meta data format which describes
-@@ -3673,6 +3674,10 @@ struct btf *btf_parse_vmlinux(void)
- 	if (err < 0)
- 		goto errout;
-=20
-+	err =3D bpf_trace_init_btf_ids(btf);
-+	if (err < 0)
-+		goto errout;
-+
- 	bpf_struct_ops_init(btf, log);
- 	init_btf_sock_ids(btf);
-=20
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index e0b7775039ab9..c014846c2723c 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -6,6 +6,7 @@
- #include <linux/types.h>
- #include <linux/slab.h>
- #include <linux/bpf.h>
-+#include <linux/btf.h>
- #include <linux/bpf_perf_event.h>
- #include <linux/filter.h>
- #include <linux/uaccess.h>
-@@ -31,6 +32,20 @@ struct bpf_trace_module {
- static LIST_HEAD(bpf_trace_modules);
- static DEFINE_MUTEX(bpf_module_mutex);
-=20
-+static u32 perf_callchain_entry_btf_id;
-+
-+int bpf_trace_init_btf_ids(struct btf *btf)
-+{
-+	s32 type_id;
-+
-+	type_id =3D btf_find_by_name_kind(btf, "perf_callchain_entry",
-+					BTF_KIND_STRUCT);
-+	if (type_id < 0)
-+		return -EINVAL;
-+	perf_callchain_entry_btf_id =3D type_id;
-+	return 0;
-+}
-+
- static struct bpf_raw_event_map *bpf_get_raw_tracepoint_module(const cha=
-r *name)
- {
- 	struct bpf_raw_event_map *btp, *ret =3D NULL;
-@@ -1650,6 +1665,10 @@ static bool pe_prog_is_valid_access(int off, int s=
-ize, enum bpf_access_type type
- 		if (!bpf_ctx_narrow_access_ok(off, size, size_u64))
- 			return false;
- 		break;
-+	case bpf_ctx_range(struct bpf_perf_event_data, callchain):
-+		info->reg_type =3D PTR_TO_BTF_ID;
-+		info->btf_id =3D perf_callchain_entry_btf_id;
-+		break;
- 	default:
- 		if (size !=3D sizeof(long))
- 			return false;
-@@ -1682,6 +1701,14 @@ static u32 pe_prog_convert_ctx_access(enum bpf_acc=
-ess_type type,
- 				      bpf_target_off(struct perf_sample_data, addr, 8,
- 						     target_size));
- 		break;
-+	case offsetof(struct bpf_perf_event_data, callchain):
-+		*insn++ =3D BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct bpf_perf_event_data_ke=
-rn,
-+						       data), si->dst_reg, si->src_reg,
-+				      offsetof(struct bpf_perf_event_data_kern, data));
-+		*insn++ =3D BPF_LDX_MEM(BPF_DW, si->dst_reg, si->dst_reg,
-+				      bpf_target_off(struct perf_sample_data, callchain,
-+						     8, target_size));
-+		break;
- 	default:
- 		*insn++ =3D BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct bpf_perf_event_data_ke=
-rn,
- 						       regs), si->dst_reg, si->src_reg,
-diff --git a/tools/include/uapi/linux/bpf_perf_event.h b/tools/include/ua=
-pi/linux/bpf_perf_event.h
-index 8f95303f9d807..40f4df80ab4fa 100644
---- a/tools/include/uapi/linux/bpf_perf_event.h
-+++ b/tools/include/uapi/linux/bpf_perf_event.h
-@@ -9,10 +9,18 @@
- #define _UAPI__LINUX_BPF_PERF_EVENT_H__
-=20
- #include <asm/bpf_perf_event.h>
-+#include <linux/bpf.h>
-+
-+struct perf_callchain_entry {
-+	__u64				nr;
-+	__u64				ip[]; /* /proc/sys/kernel/perf_event_max_stack */
-+};
-=20
- struct bpf_perf_event_data {
- 	bpf_user_pt_regs_t regs;
- 	__u64 sample_period;
-+	__u64 addr;
-+	__bpf_md_ptr(struct perf_callchain_entry *, callchain);
- };
-=20
- #endif /* _UAPI__LINUX_BPF_PERF_EVENT_H__ */
 --=20
 2.24.1
 
