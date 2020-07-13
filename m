@@ -2,117 +2,105 @@ Return-Path: <SRS0=NpDT=AY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A71B6C433ED
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 20:12:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C675C433E1
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 22:07:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E9E72075D
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 20:12:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01C4820663
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 22:07:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SIAlkDuq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uREvi7vp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726318AbgGMUMc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 16:12:32 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:27417 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726855AbgGMUMa (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 16:12:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594671149;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r62uEiX4gXx9on9wTU8Kbsa3mLKmRZ7+dNYoSyMkncA=;
-        b=SIAlkDuqG1wYrJpEBs1JgJ2B2tlDM34Hdi6ga+6m5UMYstkxbdg+ePFiri1ydQ9GON2n5e
-        JPmJYJML/2ULWpGS2u7s4/0mavbjYKD4fCllyXkpxJ7KI4lyzAanlL5si2BOErQT44YU3q
-        JLVRpcxuFOo7SqhB2UI7rTWQziyhsSE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-350-xTKO-1dFPTOnqwVzHRaI6g-1; Mon, 13 Jul 2020 16:12:27 -0400
-X-MC-Unique: xTKO-1dFPTOnqwVzHRaI6g-1
-Received: by mail-wm1-f72.google.com with SMTP id e15so705268wme.8
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 13:12:27 -0700 (PDT)
+        id S1726477AbgGMWHm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 18:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbgGMWHm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jul 2020 18:07:42 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A25EC061755;
+        Mon, 13 Jul 2020 15:07:42 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id y18so10096886lfh.11;
+        Mon, 13 Jul 2020 15:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0DqOeuvMvgOG1fi+hX0/mTw8jeFBumsX73UVgduYAUg=;
+        b=uREvi7vpjIcBz7Mk7w6xVU8eX1YYsSBHXHej4Zz+G5km+L7hxU+v8h+ea9pTGE9VXz
+         r+g+z09am3R4hz3p0W6lkMKpaKUo9k0VDnxxOzUmCtqOLxoCdHXAuQniX6Yd52yFcWh1
+         bdgA2rbqc/mjG29K40cof8+BiS53zoRLnyi3FjfxZDR/6pdiPqJd4EfflDoc70cD6bdw
+         4IPk1GtEL3BbXR6XSTLnyqEmUAavpeDsNUvvrEKBoxbJul2XieeSYuKRovUoYZIPFc/h
+         iO4fjt1TtKf60RUHoUv/unIuBEabuc8YT29YEJJoBDevSiqa8YZtYaX1Qkn0YNF62tO0
+         JlNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=r62uEiX4gXx9on9wTU8Kbsa3mLKmRZ7+dNYoSyMkncA=;
-        b=OxX90CXgPAY07Lgi3UYDd5tFxUpuD/HS8fYgu4UgREYxu8Yj+lCS3bDHdK6XC2n1QG
-         Gj4rfQ0wUNd6pUXunUV78F2MPUGn/Czb8ijMVQ70lJu7BGVt+ySgPtYEcNGeW9y+Zkkg
-         FX6Uwd+CpNXBM5G/rgu79/FxiTIcE/8VY8czG6UzOoeUbbvsMJgAg4p24ZyuEeD9L5Y+
-         Owb5/BuMF6mGcLFu6ssZUvyn1YyyoZXY/YQLlXSw6yRAOz8H9UwbebRfwIk/AsQ2ESLY
-         Qk61nW+5uBk0iGWeoZ7tvpIEb+7CqZFwGXdi2zA+/KDSVARiZ2acQ2lkMyB4Vy9aNxru
-         b1mQ==
-X-Gm-Message-State: AOAM530qCbJGezzkZ77+SwRB+w99+VIM2lAEmW5UavafWu0sng4yjgat
-        1o+HMuggHtxYhLwztUA0ZzAJbUJM7sIqdeNL6EQR7MYZvaF6sCsY6Xo7jFK8U7tuMIvgZ2grhK5
-        MnyDA3hicshOZ
-X-Received: by 2002:a05:6000:10c4:: with SMTP id b4mr1171132wrx.50.1594671146020;
-        Mon, 13 Jul 2020 13:12:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwHuL1u53iYWEo0/trUpZpXNAJTAQGz0n6g3EupXuadC4qKdfTjweczjX09j3dGLz98+Hj6cA==
-X-Received: by 2002:a05:6000:10c4:: with SMTP id b4mr1171120wrx.50.1594671145870;
-        Mon, 13 Jul 2020 13:12:25 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id m4sm848784wmi.48.2020.07.13.13.12.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 13:12:25 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 26330180653; Mon, 13 Jul 2020 22:12:24 +0200 (CEST)
-Subject: [PATCH bpf-next 4/6] tools: add new members to
- bpf_attr.raw_tracepoint in bpf.h
-From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Date:   Mon, 13 Jul 2020 22:12:24 +0200
-Message-ID: <159467114405.370286.1690821122507970067.stgit@toke.dk>
-In-Reply-To: <159467113970.370286.17656404860101110795.stgit@toke.dk>
-References: <159467113970.370286.17656404860101110795.stgit@toke.dk>
-User-Agent: StGit/0.23
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0DqOeuvMvgOG1fi+hX0/mTw8jeFBumsX73UVgduYAUg=;
+        b=UcQQT1sokSY1Eh2fUaA6ap2CLbKljSLhUc768v8qJ5SIDO2HX51tCtCMnGGtHDhv5S
+         9pHSh5/gPNtxzphbVgV0+TnQH5HHf2AuL45OSlWQ2oaYltU5F4GRi3cQIchA7uahZVL6
+         3XM39MpGEYkHBLttV5FKIVEB2GcFhMfg2r6UZwmQKsZMbphREVBiFCZn9cjm1AsY+QfC
+         PPfEp25Ze7uFuQgi4ZUMEIi2uMTOcidDdoxmZpwj7ol2CrXGa1FCSMfw0BePpz8B9I6Q
+         JkEc3BqGH4/zMtXM3HQzD/JpqoEKFB4lsQv7rF+AKuSc2l/EO/bNJ/MPnl7WRhdwT8JO
+         wI3A==
+X-Gm-Message-State: AOAM530/MpIs4ndudzx2VAy8AXrOFLjNDAscjUl4sH0np8MgFkT99rt2
+        M18j/Y7/1PFu2Rh1bv1b9v1Y6Ywo3eUCQfktXBs=
+X-Google-Smtp-Source: ABdhPJyPddgL2CH3CkW+aWDI/hqCrEW9ym320u0pevasTugOh8SUGNP1nVfUdj2o9Mf3zWLU9Xt5wo09y2gT7Q4iAhY=
+X-Received: by 2002:a19:8497:: with SMTP id g145mr575586lfd.73.1594678060333;
+ Mon, 13 Jul 2020 15:07:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20200711215329.41165-1-jolsa@kernel.org>
+In-Reply-To: <20200711215329.41165-1-jolsa@kernel.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 13 Jul 2020 15:07:28 -0700
+Message-ID: <CAADnVQK4z0EmQZ77d2+nb4XY8AJaveT3fxkWi=ptkRqZh1UtYQ@mail.gmail.com>
+Subject: Re: [PATCH v7 bpf-next 0/9] bpf: Add d_path helper - preparation changes
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+On Sat, Jul 11, 2020 at 2:53 PM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> hi,
+> this patchset does preparation work for adding d_path helper,
+> which still needs more work, but the initial set of patches
+> is ready and useful to have.
+>
+> This patchset adds:
+>   - support to generate BTF ID lists that are resolved during
+>     kernel linking and usable within kernel code with following
+>     macros:
+>
+>       BTF_ID_LIST(bpf_skb_output_btf_ids)
+>       BTF_ID(struct, sk_buff)
+>
+>     and access it in kernel code via:
+>       extern u32 bpf_skb_output_btf_ids[];
+>
+>   - resolve_btfids tool that scans elf object for .BTF_ids
+>     section and resolves its symbols with BTF ID values
+>   - resolving of bpf_ctx_convert struct and several other
+>     objects with BTF_ID_LIST
+>
+> v7 changes:
+>   - added more acks [Andrii]
+>   - added some name-conflicting entries and fixed resolve_btfids
+>     to process them properly [Andrii]
+>   - changed bpf_get_task_stack_proto to use BTF_IDS_LIST/BTF_ID
+>     macros [Andrii]
+>   - fixed selftest build for resolve_btfids test
 
-Sync addition of new members from main kernel tree.
-
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- tools/include/uapi/linux/bpf.h |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index da9bf35a26f8..662a15e4a1a1 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -573,8 +573,13 @@ union bpf_attr {
- 	} query;
- 
- 	struct { /* anonymous struct used by BPF_RAW_TRACEPOINT_OPEN command */
--		__u64 name;
--		__u32 prog_fd;
-+		__u64		name;
-+		__u32		prog_fd;
-+		__u32		log_level;	/* verbosity level of log */
-+		__u32		log_size;	/* size of user buffer */
-+		__aligned_u64	log_buf;	/* user supplied buffer */
-+		__u32		tgt_prog_fd;
-+		__u32		tgt_btf_id;
- 	} raw_tracepoint;
- 
- 	struct { /* anonymous struct for BPF_BTF_LOAD */
-
+Applied. Thanks!
