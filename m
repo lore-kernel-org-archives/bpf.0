@@ -2,46 +2,46 @@ Return-Path: <SRS0=NpDT=AY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07B96C433F1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C4AFC433F4
 	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 05:13:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D8DF720724
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 05:13:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A1D220724
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 05:13:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="dQPzQAR7"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cuvWWXnt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725804AbgGMFMz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 01:12:55 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:16428 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728934AbgGMFMx (ORCPT
+        id S1728941AbgGMFMy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 01:12:54 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:29404 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728932AbgGMFMx (ORCPT
         <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 01:12:53 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06D5Bw2E000308
-        for <bpf@vger.kernel.org>; Sun, 12 Jul 2020 22:12:53 -0700
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06D5Ch0p012842
+        for <bpf@vger.kernel.org>; Sun, 12 Jul 2020 22:12:52 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=lY8jqGB5yEiCQoIFrglOBjwMr4AdHmKN1+KoNKWRh28=;
- b=dQPzQAR7D/KuWCVqOM7HolF69/ZVY0vYDWyVvePFxqwWrpky28JPVU59OpdraL3W1Cve
- VeAj+7U2V+vXeRvi1Lq5BdPDssMXYewgCN72jbjswWHRMYlCUzNmFBADlgii7o3f0HA0
- LYLzAR2JCGfB3w08pX3batzS/+L3Jt6BTCk= 
+ bh=qBWFoM1JsJ015I5FXQ/P9WcbICD3OVxu3us4c9Q/xnI=;
+ b=cuvWWXntaRfnMxFGjrbdX/cWbYzeb4+Um2+gUdW9V2F2iLzo9pfGkp5AN1K3JNPdNYcY
+ PaALL77Fel3mRjPFCwXdczHSW27mKypd7/NBXG/5BhkChUMC3wljdYHmuZvD8aCR3m0y
+ A0ybO/+pUB7viuyorFNIW5uwMibAdltw9YE= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3288hks9hb-2
+        by m0001303.ppops.net with ESMTP id 32793kxa67-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 12 Jul 2020 22:12:53 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sun, 12 Jul 2020 22:12:51 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Sun, 12 Jul 2020 22:12:52 -0700
+ 15.1.1979.3; Sun, 12 Jul 2020 22:12:51 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 38C282EC3F93; Sun, 12 Jul 2020 22:12:51 -0700 (PDT)
+        id D697B2EC3F93; Sun, 12 Jul 2020 22:12:46 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -51,9 +51,9 @@ CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>, Andrey Ignatov <rdna@fb.com>,
         Takshak Chahande <ctakshak@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 5/7] libbpf: add support for BPF XDP link
-Date:   Sun, 12 Jul 2020 22:12:28 -0700
-Message-ID: <20200713051230.3250515-6-andriin@fb.com>
+Subject: [PATCH bpf-next 3/7] bpf, xdp: implement LINK_UPDATE for BPF XDP link
+Date:   Sun, 12 Jul 2020 22:12:26 -0700
+Message-ID: <20200713051230.3250515-4-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200713051230.3250515-1-andriin@fb.com>
 References: <20200713051230.3250515-1-andriin@fb.com>
@@ -63,147 +63,86 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-13_03:2020-07-10,2020-07-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- mlxlogscore=999 suspectscore=8 phishscore=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 malwarescore=0 spamscore=0 impostorscore=0 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007130038
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ malwarescore=0 mlxlogscore=710 lowpriorityscore=0 mlxscore=0 adultscore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 clxscore=1015 suspectscore=8
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007130039
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sync UAPI header and add support for using bpf_link-based XDP attachment.
-Make xdp/ prog type set expected attach type. Kernel didn't enforce
-attach_type for XDP programs before, so there is no backwards compatiblit=
-y
-issues there.
-
-Also fix section_names selftest to recognize that xdp prog types now have
-expected attach type.
+Add support for LINK_UPDATE command for BPF XDP link to enable reliable
+replacement of underlying BPF program.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/include/uapi/linux/bpf.h                         | 10 +++++++++-
- tools/lib/bpf/libbpf.c                                 |  9 ++++++++-
- tools/lib/bpf/libbpf.h                                 |  2 ++
- tools/lib/bpf/libbpf.map                               |  1 +
- tools/testing/selftests/bpf/prog_tests/section_names.c |  2 +-
- 5 files changed, 21 insertions(+), 3 deletions(-)
+ net/core/dev.c | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 548a749aebb3..533eb4fe4e03 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -227,6 +227,7 @@ enum bpf_attach_type {
- 	BPF_CGROUP_INET6_GETSOCKNAME,
- 	BPF_XDP_DEVMAP,
- 	BPF_CGROUP_INET_SOCK_RELEASE,
-+	BPF_XDP,
- 	__MAX_BPF_ATTACH_TYPE
- };
-=20
-@@ -239,6 +240,7 @@ enum bpf_link_type {
- 	BPF_LINK_TYPE_CGROUP =3D 3,
- 	BPF_LINK_TYPE_ITER =3D 4,
- 	BPF_LINK_TYPE_NETNS =3D 5,
-+	BPF_LINK_TYPE_XDP =3D 6,
-=20
- 	MAX_BPF_LINK_TYPE,
- };
-@@ -604,7 +606,10 @@ union bpf_attr {
-=20
- 	struct { /* struct used by BPF_LINK_CREATE command */
- 		__u32		prog_fd;	/* eBPF program to attach */
--		__u32		target_fd;	/* object to attach to */
-+		union {
-+			__u32		target_fd;	/* object to attach to */
-+			__u32		target_ifindex; /* target ifindex */
-+		};
- 		__u32		attach_type;	/* attach type */
- 		__u32		flags;		/* extra flags */
- 	} link_create;
-@@ -3980,6 +3985,9 @@ struct bpf_link_info {
- 			__u32 netns_ino;
- 			__u32 attach_type;
- 		} netns;
-+		struct {
-+			__u32 ifindex;
-+		} xdp;
- 	};
- } __attribute__((aligned(8)));
-=20
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 25e4f77be8d7..d2e49b1c09e1 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -6906,7 +6906,8 @@ static const struct bpf_sec_def section_defs[] =3D =
-{
- 		.attach_fn =3D attach_iter),
- 	BPF_EAPROG_SEC("xdp_devmap",		BPF_PROG_TYPE_XDP,
- 						BPF_XDP_DEVMAP),
--	BPF_PROG_SEC("xdp",			BPF_PROG_TYPE_XDP),
-+	BPF_EAPROG_SEC("xdp",			BPF_PROG_TYPE_XDP,
-+						BPF_XDP),
- 	BPF_PROG_SEC("perf_event",		BPF_PROG_TYPE_PERF_EVENT),
- 	BPF_PROG_SEC("lwt_in",			BPF_PROG_TYPE_LWT_IN),
- 	BPF_PROG_SEC("lwt_out",			BPF_PROG_TYPE_LWT_OUT),
-@@ -8267,6 +8268,12 @@ bpf_program__attach_netns(struct bpf_program *prog=
-, int netns_fd)
- 	return bpf_program__attach_fd(prog, netns_fd, "netns");
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 84f755a1ec36..025687120442 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -8973,9 +8973,52 @@ static void bpf_xdp_link_dealloc(struct bpf_link *=
+link)
+ 	kfree(xdp_link);
  }
 =20
-+struct bpf_link *bpf_program__attach_xdp(struct bpf_program *prog, int i=
-findex)
++static int bpf_xdp_link_update(struct bpf_link *link, struct bpf_prog *n=
+ew_prog,
++			       struct bpf_prog *old_prog)
 +{
-+	/* target_fd/target_ifindex use the same field in LINK_CREATE */
-+	return bpf_program__attach_fd(prog, ifindex, "xdp");
++	struct bpf_xdp_link *xdp_link =3D container_of(link, struct bpf_xdp_lin=
+k, link);
++	enum bpf_xdp_mode mode;
++	bpf_op_t bpf_op;
++	int err =3D 0;
++
++	rtnl_lock();
++
++	/* link might have been auto-released already, so fail */
++	if (!xdp_link->dev) {
++		err =3D -ENOLINK;
++		goto out_unlock;
++	}
++
++	if (old_prog && link->prog !=3D old_prog) {
++		err =3D -EPERM;
++		goto out_unlock;
++	}
++	old_prog =3D link->prog;
++	if (old_prog =3D=3D new_prog) {
++		/* no-op, don't disturb drivers */
++		bpf_prog_put(new_prog);
++		goto out_unlock;
++	}
++
++	mode =3D dev_xdp_mode(xdp_link->flags);
++	bpf_op =3D dev_xdp_bpf_op(xdp_link->dev, mode);
++	err =3D dev_xdp_install(xdp_link->dev, mode, bpf_op, NULL,
++			      xdp_link->flags, new_prog);
++	if (err)
++		goto out_unlock;
++
++	old_prog =3D xchg(&link->prog, new_prog);
++	bpf_prog_put(old_prog);
++
++out_unlock:
++	rtnl_unlock();
++	return err;
 +}
 +
- struct bpf_link *
- bpf_program__attach_iter(struct bpf_program *prog,
- 			 const struct bpf_iter_attach_opts *opts)
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 2335971ed0bd..000e93734aa6 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -257,6 +257,8 @@ LIBBPF_API struct bpf_link *
- bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd);
- LIBBPF_API struct bpf_link *
- bpf_program__attach_netns(struct bpf_program *prog, int netns_fd);
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_xdp(struct bpf_program *prog, int ifindex);
+ static const struct bpf_link_ops bpf_xdp_link_lops =3D {
+ 	.release =3D bpf_xdp_link_release,
+ 	.dealloc =3D bpf_xdp_link_dealloc,
++	.update_prog =3D bpf_xdp_link_update,
+ };
 =20
- struct bpf_map;
-=20
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index c5d5c7664c3b..a88c07b6d77f 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -286,6 +286,7 @@ LIBBPF_0.1.0 {
- 		bpf_map__set_value_size;
- 		bpf_map__type;
- 		bpf_map__value_size;
-+		bpf_program__attach_xdp;
- 		bpf_program__autoload;
- 		bpf_program__set_autoload;
- 		btf__set_fd;
-diff --git a/tools/testing/selftests/bpf/prog_tests/section_names.c b/too=
-ls/testing/selftests/bpf/prog_tests/section_names.c
-index 713167449c98..8b571890c57e 100644
---- a/tools/testing/selftests/bpf/prog_tests/section_names.c
-+++ b/tools/testing/selftests/bpf/prog_tests/section_names.c
-@@ -35,7 +35,7 @@ static struct sec_name_test tests[] =3D {
- 		{-EINVAL, 0},
- 	},
- 	{"raw_tp/", {0, BPF_PROG_TYPE_RAW_TRACEPOINT, 0}, {-EINVAL, 0} },
--	{"xdp", {0, BPF_PROG_TYPE_XDP, 0}, {-EINVAL, 0} },
-+	{"xdp", {0, BPF_PROG_TYPE_XDP, BPF_XDP}, {0, BPF_XDP} },
- 	{"perf_event", {0, BPF_PROG_TYPE_PERF_EVENT, 0}, {-EINVAL, 0} },
- 	{"lwt_in", {0, BPF_PROG_TYPE_LWT_IN, 0}, {-EINVAL, 0} },
- 	{"lwt_out", {0, BPF_PROG_TYPE_LWT_OUT, 0}, {-EINVAL, 0} },
+ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *pro=
+g)
 --=20
 2.24.1
 
