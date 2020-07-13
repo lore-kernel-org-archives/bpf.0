@@ -2,50 +2,51 @@ Return-Path: <SRS0=NpDT=AY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8F17C433E4
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:25:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB348C433E6
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:25:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C16320738
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:25:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF94B206F5
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:25:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex-team.ru header.i=@yandex-team.ru header.b="LexA0gbk"
+	dkim=pass (1024-bit key) header.d=yandex-team.ru header.i=@yandex-team.ru header.b="yte1IYcl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726400AbgGMSZg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 14:25:36 -0400
-Received: from forwardcorp1p.mail.yandex.net ([77.88.29.217]:50802 "EHLO
+        id S1726767AbgGMSZj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 14:25:39 -0400
+Received: from forwardcorp1p.mail.yandex.net ([77.88.29.217]:50848 "EHLO
         forwardcorp1p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726309AbgGMSZf (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 14:25:35 -0400
+        by vger.kernel.org with ESMTP id S1726396AbgGMSZi (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 14:25:38 -0400
 Received: from iva8-d077482f1536.qloud-c.yandex.net (iva8-d077482f1536.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:2f26:0:640:d077:482f])
-        by forwardcorp1p.mail.yandex.net (Yandex) with ESMTP id 383282E14E8;
-        Mon, 13 Jul 2020 21:25:33 +0300 (MSK)
+        by forwardcorp1p.mail.yandex.net (Yandex) with ESMTP id E8D1B2E1520;
+        Mon, 13 Jul 2020 21:25:34 +0300 (MSK)
 Received: from iva8-88b7aa9dc799.qloud-c.yandex.net (iva8-88b7aa9dc799.qloud-c.yandex.net [2a02:6b8:c0c:77a0:0:640:88b7:aa9d])
-        by iva8-d077482f1536.qloud-c.yandex.net (mxbackcorp/Yandex) with ESMTP id lDmw63WbnS-PWs0YY0x;
-        Mon, 13 Jul 2020 21:25:33 +0300
+        by iva8-d077482f1536.qloud-c.yandex.net (mxbackcorp/Yandex) with ESMTP id Ax2rUDHLt3-PYs0WUrW;
+        Mon, 13 Jul 2020 21:25:34 +0300
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1594664733; bh=/X1gyoVSLyvvewERQIpDIhxJ6bTCdcdtv1IWCHjjaxc=;
+        t=1594664734; bh=jFK3JKbc4DJ8+menrIhytuE5eis3Psm77MfgY58tsR4=;
         h=In-Reply-To:Message-Id:References:Date:Subject:To:From:Cc;
-        b=LexA0gbkQ7rv4XLR2n+Jjc4XN5uNTyfobnP1v5YxjiYh+SdWGl+nNRCeVRRIuTC1R
-         ggZAKg0ibyYZV6I1qcBEYdUNRXvEi2GGawU0NaGlQCGptpqxYfajLw3hYbu5IOV3vv
-         86T3ZMqpypv566c3kLJY6p65JPXyhuZDPco/vx3o=
+        b=yte1IYclYTmOnUM3Cqq7JboWJpU8hegKSzGzpypxendTJQIkd5yG3kZ4o+aZS3QBE
+         9N7dpPG9af+mADVvsJX05n2+6UUaDHN8ATWxtyYD9sXBH7/XGbslW2/LtzSM7pg9jT
+         151qWuj0W2fKFonM4X++OF+di0Zg4XeiM22gULTY=
 Authentication-Results: iva8-d077482f1536.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
 Received: from 37.9.72.97-iva.dhcp.yndx.net (37.9.72.97-iva.dhcp.yndx.net [37.9.72.97])
-        by iva8-88b7aa9dc799.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id liA4tjrt5e-PWjqR8Tn;
-        Mon, 13 Jul 2020 21:25:32 +0300
+        by iva8-88b7aa9dc799.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id liA4tjrt5e-PYjqepNP;
+        Mon, 13 Jul 2020 21:25:34 +0300
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (Client certificate not present)
 From:   Dmitry Yakunin <zeil@yandex-team.ru>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net,
         netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     sdf@google.com
-Subject: [PATCH bpf-next 2/4] bpf: allow to specify ifindex for skb in bpf_prog_test_run_skb
-Date:   Mon, 13 Jul 2020 21:25:18 +0300
-Message-Id: <20200713182520.97606-3-zeil@yandex-team.ru>
+Subject: [PATCH bpf-next 4/4] bpf: try to use existing cgroup storage in bpf_prog_test_run_skb
+Date:   Mon, 13 Jul 2020 21:25:20 +0300
+Message-Id: <20200713182520.97606-5-zeil@yandex-team.ru>
 In-Reply-To: <20200713182520.97606-1-zeil@yandex-team.ru>
 References: <20200713182520.97606-1-zeil@yandex-team.ru>
 MIME-Version: 1.0
@@ -55,109 +56,196 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now skb->dev is unconditionally set to the loopback device in current net
-namespace. But if we want to test bpf program which contains code branch
-based on ifindex condition (eg filters out localhost packets) it is useful
-to allow specifying of ifindex from userspace. This patch adds such option
-through ctx_in (__sk_buff) parameter.
+Now we cannot check results in cgroup storage after running
+BPF_PROG_TEST_RUN command because it allocates dummy cgroup storage
+during test. This patch implements simple logic for searching already
+allocated cgroup storage through iterating effective programs of current
+cgroup and finding the first match. If match is not found fallback to
+temporary storage is happened.
 
 Signed-off-by: Dmitry Yakunin <zeil@yandex-team.ru>
 ---
- net/bpf/test_run.c                               | 22 ++++++++++++++++++++--
- tools/testing/selftests/bpf/prog_tests/skb_ctx.c |  5 +++++
- 2 files changed, 25 insertions(+), 2 deletions(-)
+ net/bpf/test_run.c                                 | 53 ++++++++++++++-
+ .../selftests/bpf/prog_tests/cgroup_skb_prog_run.c | 78 ++++++++++++++++++++++
+ 2 files changed, 128 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
 
 diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index a58b399..1e10a7e 100644
+index 5c4835c..16808cb 100644
 --- a/net/bpf/test_run.c
 +++ b/net/bpf/test_run.c
-@@ -310,6 +310,12 @@ static int convert___skb_to_skb(struct sk_buff *skb, struct __sk_buff *__skb)
- 	/* priority is allowed */
+@@ -15,15 +15,56 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/bpf_test_run.h>
  
- 	if (!range_is_zero(__skb, offsetofend(struct __sk_buff, priority),
-+			   offsetof(struct __sk_buff, ifindex)))
-+		return -EINVAL;
++static struct bpf_prog_array_item *bpf_prog_find_active(struct bpf_prog *prog,
++							struct bpf_prog_array *effective)
++{
++	struct bpf_prog_array_item *item;
++	struct bpf_prog_array *array;
++	struct bpf_prog *p;
 +
-+	/* ifindex is allowed */
++	array = rcu_dereference(effective);
++	if (!array)
++		return NULL;
 +
-+	if (!range_is_zero(__skb, offsetofend(struct __sk_buff, ifindex),
- 			   offsetof(struct __sk_buff, cb)))
- 		return -EINVAL;
- 
-@@ -364,6 +370,7 @@ static void convert_skb_to___skb(struct sk_buff *skb, struct __sk_buff *__skb)
- 
- 	__skb->mark = skb->mark;
- 	__skb->priority = skb->priority;
-+	__skb->ifindex = skb->dev->ifindex;
- 	__skb->tstamp = skb->tstamp;
- 	memcpy(__skb->cb, &cb->data, QDISC_CB_PRIV_LEN);
- 	__skb->wire_len = cb->pkt_len;
-@@ -374,6 +381,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 			  union bpf_attr __user *uattr)
- {
- 	bool is_l2 = false, is_direct_pkt_access = false;
-+	struct net *net = current->nsproxy->net_ns;
-+	struct net_device *dev = net->loopback_dev;
- 	u32 size = kattr->test.data_size_in;
- 	u32 repeat = kattr->test.repeat;
- 	struct __sk_buff *ctx = NULL;
-@@ -415,7 +424,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		kfree(ctx);
- 		return -ENOMEM;
- 	}
--	sock_net_set(sk, current->nsproxy->net_ns);
-+	sock_net_set(sk, net);
- 	sock_init_data(NULL, sk);
- 
- 	skb = build_skb(data, 0);
-@@ -429,7 +438,14 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 
- 	skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
- 	__skb_put(skb, size);
--	skb->protocol = eth_type_trans(skb, current->nsproxy->net_ns->loopback_dev);
-+	if (ctx && ctx->ifindex > 1) {
-+		dev = dev_get_by_index(net, ctx->ifindex);
-+		if (!dev) {
-+			ret = -ENODEV;
-+			goto out;
-+		}
++	item = &array->items[0];
++	while ((p = READ_ONCE(item->prog))) {
++		if (p == prog)
++			return item;
++		item++;
 +	}
-+	skb->protocol = eth_type_trans(skb, dev);
- 	skb_reset_network_header(skb);
++
++	return NULL;
++}
++
++static struct bpf_cgroup_storage **bpf_prog_find_active_storage(struct bpf_prog *prog)
++{
++	struct bpf_prog_array_item *item;
++	struct cgroup *cgrp;
++
++	if (prog->type != BPF_PROG_TYPE_CGROUP_SKB)
++		return NULL;
++
++	cgrp = task_dfl_cgroup(current);
++
++	item = bpf_prog_find_active(prog,
++				    cgrp->bpf.effective[BPF_CGROUP_INET_INGRESS]);
++	if (!item)
++		item = bpf_prog_find_active(prog,
++					    cgrp->bpf.effective[BPF_CGROUP_INET_EGRESS]);
++
++	return item ? item->cgroup_storage : NULL;
++}
++
+ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+ 			u32 *retval, u32 *time, bool xdp)
+ {
+-	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
++	struct bpf_cgroup_storage *dummy_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
++	struct bpf_cgroup_storage **storage = dummy_storage;
+ 	u64 time_start, time_spent = 0;
+ 	int ret = 0;
+ 	u32 i;
  
- 	switch (skb->protocol) {
-@@ -479,6 +495,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		ret = bpf_ctx_finish(kattr, uattr, ctx,
- 				     sizeof(struct __sk_buff));
- out:
-+	if (dev && dev != net->loopback_dev)
-+		dev_put(dev);
- 	kfree_skb(skb);
- 	bpf_sk_storage_free(sk);
- 	kfree(sk);
-diff --git a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-index 7021b92..25de86a 100644
---- a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-+++ b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-@@ -11,6 +11,7 @@ void test_skb_ctx(void)
- 		.cb[3] = 4,
- 		.cb[4] = 5,
- 		.priority = 6,
-+		.ifindex = 1,
- 		.tstamp = 7,
- 		.wire_len = 100,
- 		.gso_segs = 8,
-@@ -92,6 +93,10 @@ void test_skb_ctx(void)
- 		   "ctx_out_priority",
- 		   "skb->priority == %d, expected %d\n",
- 		   skb.priority, 7);
-+	CHECK_ATTR(skb.ifindex != 1,
-+		   "ctx_out_ifindex",
-+		   "skb->ifindex == %d, expected %d\n",
-+		   skb.ifindex, 1);
- 	CHECK_ATTR(skb.tstamp != 8,
- 		   "ctx_out_tstamp",
- 		   "skb->tstamp == %lld, expected %d\n",
+-	ret = bpf_cgroup_storages_alloc(storage, prog);
++	ret = bpf_cgroup_storages_alloc(dummy_storage, prog);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -31,6 +72,9 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+ 		repeat = 1;
+ 
+ 	rcu_read_lock();
++	storage = bpf_prog_find_active_storage(prog);
++	if (!storage)
++		storage = dummy_storage;
+ 	migrate_disable();
+ 	time_start = ktime_get_ns();
+ 	for (i = 0; i < repeat; i++) {
+@@ -54,6 +98,9 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+ 			cond_resched();
+ 
+ 			rcu_read_lock();
++			storage = bpf_prog_find_active_storage(prog);
++			if (!storage)
++				storage = dummy_storage;
+ 			migrate_disable();
+ 			time_start = ktime_get_ns();
+ 		}
+@@ -65,7 +112,7 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+ 	do_div(time_spent, repeat);
+ 	*time = time_spent > U32_MAX ? U32_MAX : (u32)time_spent;
+ 
+-	bpf_cgroup_storages_free(storage);
++	bpf_cgroup_storages_free(dummy_storage);
+ 
+ 	return ret;
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
+new file mode 100644
+index 0000000..12ca881
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
+@@ -0,0 +1,78 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++
++#include "cgroup_helpers.h"
++#include "network_helpers.h"
++
++static char bpf_log_buf[BPF_LOG_BUF_SIZE];
++
++void test_cgroup_skb_prog_run(void)
++{
++	struct bpf_insn prog[] = {
++		BPF_LD_MAP_FD(BPF_REG_1, 0), /* map fd */
++		BPF_MOV64_IMM(BPF_REG_2, 0), /* flags, not used */
++		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_local_storage),
++		BPF_MOV64_IMM(BPF_REG_1, 1),
++		BPF_RAW_INSN(BPF_STX | BPF_XADD | BPF_W, BPF_REG_0, BPF_REG_1, 0, 0),
++
++		BPF_MOV64_IMM(BPF_REG_0, 1), /* r0 = 1 */
++		BPF_EXIT_INSN(),
++	};
++	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
++	int storage_fd = -1, prog_fd = -1, cg_fd = -1;
++	struct bpf_cgroup_storage_key key;
++	__u32 duration, retval, size;
++	char buf[128];
++	__u64 value;
++	int err;
++
++	storage_fd = bpf_create_map(BPF_MAP_TYPE_CGROUP_STORAGE,
++				    sizeof(struct bpf_cgroup_storage_key),
++				    8, 0, 0);
++	if (CHECK(storage_fd < 0, "create_map", "%s\n", strerror(errno)))
++		goto out;
++
++	prog[0].imm = storage_fd;
++
++	prog_fd = bpf_load_program(BPF_PROG_TYPE_CGROUP_SKB,
++				   prog, insns_cnt, "GPL", 0,
++				   bpf_log_buf, BPF_LOG_BUF_SIZE);
++	if (CHECK(prog_fd < 0, "prog_load",
++		  "verifier output:\n%s\n-------\n", bpf_log_buf))
++		goto out;
++
++	if (CHECK_FAIL(setup_cgroup_environment()))
++		goto out;
++
++	cg_fd = create_and_get_cgroup("/cg");
++	if (CHECK_FAIL(cg_fd < 0))
++		goto out;
++
++	if (CHECK_FAIL(join_cgroup("/cg")))
++		goto out;
++
++	if (CHECK(bpf_prog_attach(prog_fd, cg_fd, BPF_CGROUP_INET_EGRESS, 0),
++		  "prog_attach", "%s\n", strerror(errno)))
++		goto out;
++
++	err = bpf_prog_test_run(prog_fd, NUM_ITER, &pkt_v4, sizeof(pkt_v4),
++				buf, &size, &retval, &duration);
++	CHECK(err || retval != 1, "prog_test_run",
++	      "err %d errno %d retval %d\n", err, errno, retval);
++
++	/* check that cgroup storage results are available after test run */
++
++	err = bpf_map_get_next_key(storage_fd, NULL, &key);
++	CHECK(err, "map_get_next_key", "%s\n", strerror(errno));
++
++	err = bpf_map_lookup_elem(storage_fd, &key, &value);
++	CHECK(err || value != NUM_ITER,
++	      "map_lookup_elem",
++	      "err %d errno %d cnt %lld(%d)\n", err, errno, value, NUM_ITER);
++out:
++	close(storage_fd);
++	close(prog_fd);
++	close(cg_fd);
++	cleanup_cgroup_environment();
++}
 -- 
 2.7.4
 
