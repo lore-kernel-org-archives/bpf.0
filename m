@@ -2,112 +2,154 @@ Return-Path: <SRS0=NpDT=AY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F784C433E2
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 02:55:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32CDBC433E8
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 05:13:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E683206B6
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 02:55:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10B1820724
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 05:13:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k1zPbJAz"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qdrHf7Ww"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727098AbgGMCzu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 12 Jul 2020 22:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726261AbgGMCzu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 12 Jul 2020 22:55:50 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2290BC061794;
-        Sun, 12 Jul 2020 19:55:50 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id q198so10936908qka.2;
-        Sun, 12 Jul 2020 19:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bNXPF6+Om5R3sQ6XjurA2+A7JrWXO8Ws/6EvEMQiNak=;
-        b=k1zPbJAzQYunqh3hpt/60sDyTPewxs8cn1cTgb+LBOV5hLQqh9BcF17XeFIzi+swrq
-         YUR36iLZYKdhzbPpofJ6tnebgpFwx1iV97LKc+yjF8LgF1NQt3MgWUH8Jpz/nZmrLDeV
-         T39vGvXfofOK/BZ1aXK3XxTaHk8GNNJ1k+IA51rG6cdco03nriGDsU89VkORRHoqetAf
-         opVoc/Oc1ne1/nKaZjsWsqTfFVa5ZZA5KsDv3ugbSucRopzGIM66OX1+Eg+aLDqwxE80
-         dMOESV71ADGgNDlsThGdTWo6xzRQ26K6ZTHmYZjDSJo8/19Q/styLObXA1jvokXfb7Zu
-         azQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bNXPF6+Om5R3sQ6XjurA2+A7JrWXO8Ws/6EvEMQiNak=;
-        b=IzjKUqivYvEzJh0MMw4TLPx3z7M+b7iTiUdAi2hAn2W1CT2mTJ+worsXlussABFwr7
-         LzV5b8SHLkhxamEW64KN0N8/vzyeGebNRPsSnBpTf3M+p7jzDfvyuxzKHdv4s3IaeeH5
-         HZ77vPFSJUDrMwTqKSjw80vjoi8jJqHaets0dYg5a7NlQ62uAkgxg3lKcwvBB1USztR2
-         u9/ptWemvajlA1Jfw/OUwXEnkbm574Pn+ty4kvr8Kvy/vcvk6+NwCDXo+HMVFzYq75qL
-         pyNEGE0323jMdjmLEbeoguwrRFacPBaSNYFiSMO+R4advCXWnAQZt1PPQilcAlxyMAzG
-         2Dsg==
-X-Gm-Message-State: AOAM532vKDGr6Z5BgatVnwO8ZYmxHQsIf3luNwUlOG6FEgqqBnq5BWcH
-        QIPN4+ona8a7s0X+8ZdoCvnqZw7zQx++QKzNvf4=
-X-Google-Smtp-Source: ABdhPJy8XJNQbmL4ru60bEfVwykiVPcjm1GCJHy12OlbDD2DK8UGXnsaVrGNSnOOoXWe3VMMbY0mspgwiIiBpJBfwCo=
-X-Received: by 2002:ae9:f803:: with SMTP id x3mr75827914qkh.488.1594608948228;
- Sun, 12 Jul 2020 19:55:48 -0700 (PDT)
+        id S1728974AbgGMFM6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 01:12:58 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:60754 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728952AbgGMFM5 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 01:12:57 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06D5BgW0032693
+        for <bpf@vger.kernel.org>; Sun, 12 Jul 2020 22:12:56 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=Cp68a6sxp6nDfKPzm02M6qmdMMqx2lvKAxWO81zldS8=;
+ b=qdrHf7Wwf8bHuqkwg8yNPbc0vK6P8YNcgnfh3XqhazlLIBp+J/Guu9KOuNCdtPBUtUO4
+ XZZY1mf+/SEMAdlk2jJHV08m68DjNhaZ3/+k2O30Su4CAcWTq+ALxOK8ETxD/nW6lSDH
+ SA/p7v26CpSV0m3HKzb6/aIc1dNRbUYm7/Q= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3288hks9hh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 12 Jul 2020 22:12:56 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Sun, 12 Jul 2020 22:12:56 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 0DA942EC3F93; Sun, 12 Jul 2020 22:12:49 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>, Andrey Ignatov <rdna@fb.com>,
+        Takshak Chahande <ctakshak@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next 4/7] bpf: implement BPF XDP link-specific introspection APIs
+Date:   Sun, 12 Jul 2020 22:12:27 -0700
+Message-ID: <20200713051230.3250515-5-andriin@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200713051230.3250515-1-andriin@fb.com>
+References: <20200713051230.3250515-1-andriin@fb.com>
 MIME-Version: 1.0
-References: <1594462239-19596-1-git-send-email-goodluckwillcomesoon@gmail.com> <20200711111421.0db76fa9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20200711111421.0db76fa9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Yahui Chen <goodluckwillcomesoon@gmail.com>
-Date:   Mon, 13 Jul 2020 10:55:36 +0800
-Message-ID: <CAPydje9rv2cR2YZvOcYT_w4E7cvERi0cEbs7hiwLKk4Bqhk+RA@mail.gmail.com>
-Subject: Re: [PATCH] xsk: ixgbe: solve the soft interrupt 100% CPU usage when
- xdp rx traffic congestion
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>, steven.zou@intel.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-13_03:2020-07-10,2020-07-13 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ mlxlogscore=907 suspectscore=8 phishscore=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 spamscore=0 impostorscore=0 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007130038
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-xdp skb-mode does not have this problem because `ixgbe_alloc_rx_buffers`
-always returns success and can always get the DMA address for packets. I
-think drv-mode should do the same.
+Implement XDP link-specific show_fdinfo and link_info to emit ifindex.
 
-If the drv-mode app does not use the wakeup flag, the xdp queue's soft
-interrupt handles fewer packets but may occupy 100% of the CPU,
-according to the analysis of the previous email.
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ include/uapi/linux/bpf.h |  3 +++
+ net/core/dev.c           | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 34 insertions(+)
 
-If the user APP uses the wakeup flag, it maybe seriously affect other
-queues just because the APP is not processing the packet fast enough.
-In extreme cases, the APP can no longer receive packets, and port-level
-flow control will cause no packets to be received in all queues of the
-network card.
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 41eba148217b..533eb4fe4e03 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3985,6 +3985,9 @@ struct bpf_link_info {
+ 			__u32 netns_ino;
+ 			__u32 attach_type;
+ 		} netns;
++		struct {
++			__u32 ifindex;
++		} xdp;
+ 	};
+ } __attribute__((aligned(8)));
+=20
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 025687120442..a9c634be8dd7 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -8973,6 +8973,35 @@ static void bpf_xdp_link_dealloc(struct bpf_link *=
+link)
+ 	kfree(xdp_link);
+ }
+=20
++static void bpf_xdp_link_show_fdinfo(const struct bpf_link *link,
++				     struct seq_file *seq)
++{
++	struct bpf_xdp_link *xdp_link =3D container_of(link, struct bpf_xdp_lin=
+k, link);
++	u32 ifindex =3D 0;
++
++	rtnl_lock();
++	if (xdp_link->dev)
++		ifindex =3D xdp_link->dev->ifindex;
++	rtnl_unlock();
++
++	seq_printf(seq, "ifindex:\t%u\n", ifindex);
++}
++
++static int bpf_xdp_link_fill_link_info(const struct bpf_link *link,
++				       struct bpf_link_info *info)
++{
++	struct bpf_xdp_link *xdp_link =3D container_of(link, struct bpf_xdp_lin=
+k, link);
++	u32 ifindex =3D 0;
++
++	rtnl_lock();
++	if (xdp_link->dev)
++		ifindex =3D xdp_link->dev->ifindex;
++	rtnl_unlock();
++
++	info->xdp.ifindex =3D ifindex;
++	return 0;
++}
++
+ static int bpf_xdp_link_update(struct bpf_link *link, struct bpf_prog *n=
+ew_prog,
+ 			       struct bpf_prog *old_prog)
+ {
+@@ -9018,6 +9047,8 @@ static int bpf_xdp_link_update(struct bpf_link *lin=
+k, struct bpf_prog *new_prog,
+ static const struct bpf_link_ops bpf_xdp_link_lops =3D {
+ 	.release =3D bpf_xdp_link_release,
+ 	.dealloc =3D bpf_xdp_link_dealloc,
++	.show_fdinfo =3D bpf_xdp_link_show_fdinfo,
++	.fill_link_info =3D bpf_xdp_link_fill_link_info,
+ 	.update_prog =3D bpf_xdp_link_update,
+ };
+=20
+--=20
+2.24.1
 
-As a result, the user needs to explicitly turn off flow control of network
-card, which is unfriendly to users.
-
-Jakub Kicinski <kuba@kernel.org> =E4=BA=8E2020=E5=B9=B47=E6=9C=8812=E6=97=
-=A5=E5=91=A8=E6=97=A5 =E4=B8=8A=E5=8D=882:14=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Sat, 11 Jul 2020 18:10:38 +0800 Yahui Chen wrote:
-> > 2. If the wakeup mechanism is used, that is, use the
-> > `XDP_UMEM_USES_NEED_WAKEUP` flag. This method takes advantage of the
-> > interrupt delay function of ixgbe skillfully, thus solving the problem
-> > that the si CPU is always 100%. However, it will cause other problems.
-> > The port-level flow control will be triggered on 82599, and the pause
-> > frame will be sent to the upstream sender. This will affect the other
-> > packet receiving queues of the network card, resulting in the packet
-> > receiving rate of all queues dropping to 10Kpps.
->
-> To me the current behavior sounds correct.. if you don't want pause
-> frames to be generated you have to disable them completely. The point
-> of pause frames is to prevent drops.
