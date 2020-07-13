@@ -8,40 +8,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75742C4345A
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 16:18:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82586C4345B
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 16:18:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4EAF220738
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 16:18:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 641E620771
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 16:18:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Ch1wvyfy"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jg8hKF4G"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730286AbgGMQSR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 12:18:17 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45116 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730234AbgGMQR6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 12:17:58 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06DFx6B9004753
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 09:17:55 -0700
+        id S1729902AbgGMQSX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 12:18:23 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:52306 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729835AbgGMQR4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 12:17:56 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06DFwqCh015004
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 09:17:53 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=t8JI+PY1bgZg0wUSyE0ryif/vrdWVstv6UukUas34zE=;
- b=Ch1wvyfynRl1sR8Bz9AspQFIlFhAEtIWN1GlXehfDtsMwy+of9O2DqfkViZkvSOBMZIp
- uLbm+2f7ic2GhJKb1sudIY6rqJrqX82G3hRZTJdjab2l2zy8ZTQmSRGwqO4MU4klhEFZ
- seVHz/OV7PpWwHOQHgRTo4izHYTAGVWsmjY= 
+ bh=R3e1vilAyBP9xKORneDXNUD69wbKezTPAabVLSmv4YM=;
+ b=jg8hKF4GLDU7AVLEf4nN4xXLSIVBLH6fpRmlvSI3F5BotBdyZpf0Nug5UBgJK5Hbqjjz
+ zupkFMm+yb2O1tU2EwvCil9I3aH7d3Iv3cEx4uagS3O8tFGNCKHCPW03PZhAaGBvxxNZ
+ bopE4f7QNCGseSb1FihJkC678ljBSTtF0/M= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 327b8hrbkd-1
+        by m0001303.ppops.net with ESMTP id 32793m0u06-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 09:17:55 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 09:17:53 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 13 Jul 2020 09:17:55 -0700
+ 15.1.1979.3; Mon, 13 Jul 2020 09:17:47 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 3F9C53702065; Mon, 13 Jul 2020 09:17:46 -0700 (PDT)
+        id 826153701B4A; Mon, 13 Jul 2020 09:17:42 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -50,9 +50,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 06/13] bpf: implement bpf iterator for array maps
-Date:   Mon, 13 Jul 2020 09:17:46 -0700
-Message-ID: <20200713161746.3077087-1-yhs@fb.com>
+Subject: [PATCH bpf-next 03/13] bpf: support readonly buffer in verifier
+Date:   Mon, 13 Jul 2020 09:17:42 -0700
+Message-ID: <20200713161742.3076597-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200713161739.3076283-1-yhs@fb.com>
 References: <20200713161739.3076283-1-yhs@fb.com>
@@ -62,10 +62,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-13_15:2020-07-13,2020-07-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=8
- mlxlogscore=999 phishscore=0 impostorscore=0 clxscore=1015 bulkscore=0
- spamscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ malwarescore=0 mlxlogscore=999 lowpriorityscore=0 mlxscore=0 adultscore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 clxscore=1015 suspectscore=8
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2007130119
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -73,204 +73,321 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf iterators for array and percpu array
-are implemented. Similar to hash maps, for percpu
-array map, bpf program will receive values
-from all cpus.
+Two new readonly buffer PTR_TO_RDONLY_BUF or
+PTR_TO_RDONLY_BUF_OR_NULL register states
+are introduced. These new register states will be used
+by later bpf map element iterator.
+
+New register states share some similarity to
+PTR_TO_TP_BUFFER as it will calculate accessed buffer
+size during verification time. The accessed buffer
+size will be later compared to other metrics during
+later attach/link_create time.
+
+Two differences between PTR_TO_TP_BUFFER and
+PTR_TO_RDONLY_BUF[_OR_NULL].
+PTR_TO_TP_BUFFER is for write only
+and PTR_TO_RDONLY_BUF[_OR_NULL] is for read only.
+In addition, a rdonly_buf_seq_id is also added to the
+register state since it is possible for the same program
+there could be two PTR_TO_RDONLY_BUF[_OR_NULL] ctx arguments.
+For example, for bpf later map element iterator,
+both key and value may be PTR_TO_TP_BUFFER_OR_NULL.
+
+Similar to reg_state PTR_TO_BTF_ID_OR_NULL in bpf
+iterator programs, PTR_TO_RDONLY_BUF_OR_NULL reg_type and
+its rdonly_buf_seq_id can be set at
+prog->aux->bpf_ctx_arg_aux, and bpf verifier will
+retrieve the values during btf_ctx_access().
+Later bpf map element iterator implementation
+will show how such information will be assigned
+during target registeration time.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- kernel/bpf/arraymap.c | 140 ++++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/map_iter.c |   6 +-
- 2 files changed, 144 insertions(+), 2 deletions(-)
+ include/linux/bpf.h          |  7 ++++
+ include/linux/bpf_verifier.h |  2 +
+ kernel/bpf/btf.c             | 13 +++++++
+ kernel/bpf/verifier.c        | 74 +++++++++++++++++++++++++++++++-----
+ 4 files changed, 87 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index c66e8273fccd..e855bafb3a59 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -487,6 +487,144 @@ static int array_map_mmap(struct bpf_map *map, stru=
-ct vm_area_struct *vma)
- 				   vma->vm_pgoff + pgoff);
- }
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 97c6e2605978..8f708d51733b 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -352,6 +352,8 @@ enum bpf_reg_type {
+ 	PTR_TO_BTF_ID_OR_NULL,	 /* reg points to kernel struct or NULL */
+ 	PTR_TO_MEM,		 /* reg points to valid memory region */
+ 	PTR_TO_MEM_OR_NULL,	 /* reg points to valid memory region or NULL */
++	PTR_TO_RDONLY_BUF,	 /* reg points to a readonly buffer */
++	PTR_TO_RDONLY_BUF_OR_NULL, /* reg points to a readonly buffer or NULL *=
+/
+ };
 =20
-+struct bpf_iter_seq_array_map_info {
-+	struct bpf_map *map;
-+	void *percpu_value_buf;
-+	u32 index;
-+};
+ /* The information passed from prog-specific *_is_valid_access
+@@ -362,6 +364,7 @@ struct bpf_insn_access_aux {
+ 	union {
+ 		int ctx_field_size;
+ 		u32 btf_id;
++		u32 rdonly_buf_seq_id;
+ 	};
+ 	struct bpf_verifier_log *log; /* for verbose logs */
+ };
+@@ -678,8 +681,11 @@ struct bpf_jit_poke_descriptor {
+ struct bpf_ctx_arg_aux {
+ 	u32 offset;
+ 	enum bpf_reg_type reg_type;
++	u32 rdonly_buf_seq_id;
+ };
+=20
++#define BPF_MAX_RDONLY_BUF	2
 +
-+static void *bpf_array_map_seq_start(struct seq_file *seq, loff_t *pos)
-+{
-+	struct bpf_iter_seq_array_map_info *info =3D seq->private;
-+	struct bpf_map *map =3D info->map;
-+	struct bpf_array *array;
-+	u32 index;
+ struct bpf_prog_aux {
+ 	atomic64_t refcnt;
+ 	u32 used_map_cnt;
+@@ -693,6 +699,7 @@ struct bpf_prog_aux {
+ 	u32 attach_btf_id; /* in-kernel BTF type id to attach to */
+ 	u32 ctx_arg_info_size;
+ 	const struct bpf_ctx_arg_aux *ctx_arg_info;
++	u32 max_rdonly_access[BPF_MAX_RDONLY_BUF];
+ 	struct bpf_prog *linked_prog;
+ 	bool verifier_zext; /* Zero extensions has been inserted by verifier. *=
+/
+ 	bool offload_requested;
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 53c7bd568c5d..063e4ab2dd77 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -56,6 +56,8 @@ struct bpf_reg_state {
+=20
+ 		u32 mem_size; /* for PTR_TO_MEM | PTR_TO_MEM_OR_NULL */
+=20
++		u32 rdonly_buf_seq_id; /* for PTR_TO_RDONLY_BUF */
 +
-+	if (info->index >=3D map->max_entries)
-+		return NULL;
+ 		/* Max size from any of the above. */
+ 		unsigned long raw;
+ 	};
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 4c3007f428b1..895de2b21385 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3809,6 +3809,19 @@ bool btf_ctx_access(int off, int size, enum bpf_ac=
+cess_type type,
+ 			btf_kind_str[BTF_INFO_KIND(t->info)]);
+ 		return false;
+ 	}
 +
-+	if (*pos =3D=3D 0)
-+		++*pos;
-+	array =3D container_of(map, struct bpf_array, map);
-+	index =3D info->index & array->index_mask;
-+	if (info->percpu_value_buf)
-+	       return array->pptrs[index];
-+	return array->value + array->elem_size * index;
-+}
++	/* check for PTR_TO_RDONLY_BUF_OR_NULL */
++	for (i =3D 0; i < prog->aux->ctx_arg_info_size; i++) {
++		const struct bpf_ctx_arg_aux *ctx_arg_info =3D &prog->aux->ctx_arg_inf=
+o[i];
 +
-+static void *bpf_array_map_seq_next(struct seq_file *seq, void *v, loff_=
-t *pos)
-+{
-+	struct bpf_iter_seq_array_map_info *info =3D seq->private;
-+	struct bpf_map *map =3D info->map;
-+	struct bpf_array *array;
-+	u32 index;
-+
-+	++*pos;
-+	++info->index;
-+	if (info->index >=3D map->max_entries)
-+		return NULL;
-+
-+	array =3D container_of(map, struct bpf_array, map);
-+	index =3D info->index & array->index_mask;
-+	if (info->percpu_value_buf)
-+	       return array->pptrs[index];
-+	return array->value + array->elem_size * index;
-+}
-+
-+static int __bpf_array_map_seq_show(struct seq_file *seq, void *v)
-+{
-+	struct bpf_iter_seq_array_map_info *info =3D seq->private;
-+	struct bpf_iter__bpf_map_elem ctx =3D {};
-+	struct bpf_map *map =3D info->map;
-+	struct bpf_iter_meta meta;
-+	struct bpf_array *array;
-+	struct bpf_prog *prog;
-+	int off =3D 0, cpu =3D 0;
-+	void __percpu **pptr;
-+	u32 size;
-+
-+	meta.seq =3D seq;
-+	prog =3D bpf_iter_get_info(&meta, v =3D=3D NULL);
-+	if (!prog)
-+		return 0;
-+
-+	ctx.meta =3D &meta;
-+	ctx.map =3D info->map;
-+	if (v) {
-+		ctx.key =3D &info->index;
-+
-+		array =3D container_of(map, struct bpf_array, map);
-+		if (!info->percpu_value_buf) {
-+			ctx.value =3D v;
-+		} else {
-+			pptr =3D v;
-+			size =3D round_up(map->value_size, 8);
-+			for_each_possible_cpu(cpu) {
-+				bpf_long_memcpy(info->percpu_value_buf + off,
-+						per_cpu_ptr(pptr, cpu),
-+						size);
-+				off +=3D size;
-+			}
-+			ctx.value =3D info->percpu_value_buf;
++		if (ctx_arg_info->offset =3D=3D off &&
++		    ctx_arg_info->reg_type =3D=3D PTR_TO_RDONLY_BUF_OR_NULL) {
++			info->reg_type =3D ctx_arg_info->reg_type;
++			info->rdonly_buf_seq_id =3D ctx_arg_info->rdonly_buf_seq_id;
++			return true;
 +		}
 +	}
 +
-+	return bpf_iter_run_prog(prog, &ctx);
-+}
+ 	if (t->type =3D=3D 0)
+ 		/* This is a pointer to void.
+ 		 * It is the same as scalar from the verifier safety pov.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b608185e1ffd..87801afa26fc 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -410,7 +410,8 @@ static bool reg_type_may_be_null(enum bpf_reg_type ty=
+pe)
+ 	       type =3D=3D PTR_TO_SOCK_COMMON_OR_NULL ||
+ 	       type =3D=3D PTR_TO_TCP_SOCK_OR_NULL ||
+ 	       type =3D=3D PTR_TO_BTF_ID_OR_NULL ||
+-	       type =3D=3D PTR_TO_MEM_OR_NULL;
++	       type =3D=3D PTR_TO_MEM_OR_NULL ||
++	       type =3D=3D PTR_TO_RDONLY_BUF_OR_NULL;
+ }
+=20
+ static bool reg_may_point_to_spin_lock(const struct bpf_reg_state *reg)
+@@ -504,6 +505,8 @@ static const char * const reg_type_str[] =3D {
+ 	[PTR_TO_BTF_ID_OR_NULL]	=3D "ptr_or_null_",
+ 	[PTR_TO_MEM]		=3D "mem",
+ 	[PTR_TO_MEM_OR_NULL]	=3D "mem_or_null",
++	[PTR_TO_RDONLY_BUF]	=3D "rdonly_buf",
++	[PTR_TO_RDONLY_BUF_OR_NULL] =3D "rdonly_buf_or_null",
+ };
+=20
+ static char slot_type_char[] =3D {
+@@ -579,6 +582,9 @@ static void print_verifier_state(struct bpf_verifier_=
+env *env,
+ 				verbose(env, ",ks=3D%d,vs=3D%d",
+ 					reg->map_ptr->key_size,
+ 					reg->map_ptr->value_size);
++			else if (t =3D=3D PTR_TO_RDONLY_BUF ||
++				 t =3D=3D PTR_TO_RDONLY_BUF_OR_NULL)
++				verbose(env, ",seq_id=3D%u", reg->rdonly_buf_seq_id);
+ 			if (tnum_is_const(reg->var_off)) {
+ 				/* Typically an immediate SCALAR_VALUE, but
+ 				 * could be a pointer whose offset is too big
+@@ -2174,6 +2180,8 @@ static bool is_spillable_regtype(enum bpf_reg_type =
+type)
+ 	case PTR_TO_XDP_SOCK:
+ 	case PTR_TO_BTF_ID:
+ 	case PTR_TO_BTF_ID_OR_NULL:
++	case PTR_TO_RDONLY_BUF:
++	case PTR_TO_RDONLY_BUF_OR_NULL:
+ 		return true;
+ 	default:
+ 		return false;
+@@ -2699,7 +2707,7 @@ static int check_packet_access(struct bpf_verifier_=
+env *env, u32 regno, int off,
+ /* check access to 'struct bpf_context' fields.  Supports fixed offsets =
+only */
+ static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, =
+int off, int size,
+ 			    enum bpf_access_type t, enum bpf_reg_type *reg_type,
+-			    u32 *btf_id)
++			    u32 *btf_id, u32 *rdonly_buf_seq_id)
+ {
+ 	struct bpf_insn_access_aux info =3D {
+ 		.reg_type =3D *reg_type,
+@@ -2719,6 +2727,8 @@ static int check_ctx_access(struct bpf_verifier_env=
+ *env, int insn_idx, int off,
+=20
+ 		if (*reg_type =3D=3D PTR_TO_BTF_ID || *reg_type =3D=3D PTR_TO_BTF_ID_O=
+R_NULL)
+ 			*btf_id =3D info.btf_id;
++		else if (*reg_type =3D=3D PTR_TO_RDONLY_BUF_OR_NULL)
++			*rdonly_buf_seq_id =3D info.rdonly_buf_seq_id;
+ 		else
+ 			env->insn_aux_data[insn_idx].ctx_field_size =3D info.ctx_field_size;
+ 		/* remember the offset of last byte accessed in ctx */
+@@ -3053,14 +3063,15 @@ int check_ctx_reg(struct bpf_verifier_env *env,
+ 	return 0;
+ }
+=20
+-static int check_tp_buffer_access(struct bpf_verifier_env *env,
+-				  const struct bpf_reg_state *reg,
+-				  int regno, int off, int size)
++static int __check_buffer_access(struct bpf_verifier_env *env,
++				 const char *buf_info,
++				 const struct bpf_reg_state *reg,
++				 int regno, int off, int size)
+ {
+ 	if (off < 0) {
+ 		verbose(env,
+-			"R%d invalid tracepoint buffer access: off=3D%d, size=3D%d",
+-			regno, off, size);
++			"R%d invalid %s buffer access: off=3D%d, size=3D%d",
++			regno, buf_info, off, size);
+ 		return -EACCES;
+ 	}
+ 	if (!tnum_is_const(reg->var_off) || reg->var_off.value) {
+@@ -3072,12 +3083,43 @@ static int check_tp_buffer_access(struct bpf_veri=
+fier_env *env,
+ 			regno, off, tn_buf);
+ 		return -EACCES;
+ 	}
 +
-+static int bpf_array_map_seq_show(struct seq_file *seq, void *v)
-+{
-+	return __bpf_array_map_seq_show(seq, v);
-+}
-+
-+static void bpf_array_map_seq_stop(struct seq_file *seq, void *v)
-+{
-+	if (!v)
-+		(void)__bpf_array_map_seq_show(seq, NULL);
-+}
-+
-+static int bpf_iter_init_array_map(void *priv_data,
-+				   struct bpf_iter_aux_info *aux)
-+{
-+	struct bpf_iter_seq_array_map_info *seq_info =3D priv_data;
-+	struct bpf_map *map =3D aux->map;
-+	void *value_buf;
-+	u32 buf_size;
-+
-+	if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY) {
-+		buf_size =3D round_up(map->value_size, 8) * num_possible_cpus();
-+		value_buf =3D kmalloc(buf_size, GFP_USER | __GFP_NOWARN);
-+		if (!value_buf)
-+			return -ENOMEM;
-+
-+		seq_info->percpu_value_buf =3D value_buf;
-+	}
-+
-+	seq_info->map =3D map;
 +	return 0;
 +}
 +
-+static void bpf_iter_fini_array_map(void *priv_data)
++static int check_tp_buffer_access(struct bpf_verifier_env *env,
++				  const struct bpf_reg_state *reg,
++				  int regno, int off, int size)
 +{
-+	struct bpf_iter_seq_array_map_info *seq_info =3D priv_data;
++	int err;
 +
-+	kfree(seq_info->percpu_value_buf);
++	err =3D __check_buffer_access(env, "tracepoint", reg, regno, off, size)=
+;
++	if (err)
++		return err;
++
+ 	if (off + size > env->prog->aux->max_tp_access)
+ 		env->prog->aux->max_tp_access =3D off + size;
+=20
+ 	return 0;
+ }
+=20
++static int check_rdonly_buf_access(struct bpf_verifier_env *env,
++				   const struct bpf_reg_state *reg,
++				   int regno, int off, int size)
++{
++	u32 seq_id =3D reg->rdonly_buf_seq_id;
++	int err;
++
++	err =3D __check_buffer_access(env, "readonly", reg, regno, off, size);
++	if (err)
++		return err;
++
++	if (off + size > env->prog->aux->max_rdonly_access[seq_id])
++		env->prog->aux->max_rdonly_access[seq_id] =3D off + size;
++
++	return 0;
 +}
 +
-+static const struct seq_operations bpf_array_map_seq_ops =3D {
-+	.start	=3D bpf_array_map_seq_start,
-+	.next	=3D bpf_array_map_seq_next,
-+	.stop	=3D bpf_array_map_seq_stop,
-+	.show	=3D bpf_array_map_seq_show,
-+};
-+
-+static const struct bpf_iter_seq_info iter_seq_info =3D {
-+	.seq_ops		=3D &bpf_array_map_seq_ops,
-+	.init_seq_private	=3D bpf_iter_init_array_map,
-+	.fini_seq_private	=3D bpf_iter_fini_array_map,
-+	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_array_map_info),
-+};
-+
- static int array_map_btf_id;
- const struct bpf_map_ops array_map_ops =3D {
- 	.map_alloc_check =3D array_map_alloc_check,
-@@ -506,6 +644,7 @@ const struct bpf_map_ops array_map_ops =3D {
- 	.map_update_batch =3D generic_map_update_batch,
- 	.map_btf_name =3D "bpf_array",
- 	.map_btf_id =3D &array_map_btf_id,
-+	.iter_seq_info =3D &iter_seq_info,
- };
+ /* BPF architecture zero extends alu32 ops into 64-bit registesr */
+ static void zext_32_to_64(struct bpf_reg_state *reg)
+ {
+@@ -3327,7 +3369,7 @@ static int check_mem_access(struct bpf_verifier_env=
+ *env, int insn_idx, u32 regn
+ 			mark_reg_unknown(env, regs, value_regno);
+ 	} else if (reg->type =3D=3D PTR_TO_CTX) {
+ 		enum bpf_reg_type reg_type =3D SCALAR_VALUE;
+-		u32 btf_id =3D 0;
++		u32 btf_id =3D 0, rdonly_buf_seq_id =3D 0;
 =20
- static int percpu_array_map_btf_id;
-@@ -521,6 +660,7 @@ const struct bpf_map_ops percpu_array_map_ops =3D {
- 	.map_check_btf =3D array_map_check_btf,
- 	.map_btf_name =3D "bpf_array",
- 	.map_btf_id =3D &percpu_array_map_btf_id,
-+	.iter_seq_info =3D &iter_seq_info,
- };
+ 		if (t =3D=3D BPF_WRITE && value_regno >=3D 0 &&
+ 		    is_pointer_value(env, value_regno)) {
+@@ -3339,7 +3381,8 @@ static int check_mem_access(struct bpf_verifier_env=
+ *env, int insn_idx, u32 regn
+ 		if (err < 0)
+ 			return err;
 =20
- static int fd_array_map_alloc_check(union bpf_attr *attr)
-diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-index 2988244853d1..5729d78166e3 100644
---- a/kernel/bpf/map_iter.c
-+++ b/kernel/bpf/map_iter.c
-@@ -106,10 +106,12 @@ static int bpf_iter_check_map(struct bpf_prog *prog=
-,
- 	bool is_percpu =3D false;
-=20
- 	if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_HASH ||
--	    map->map_type =3D=3D BPF_MAP_TYPE_LRU_PERCPU_HASH)
-+	    map->map_type =3D=3D BPF_MAP_TYPE_LRU_PERCPU_HASH ||
-+	    map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY)
- 		is_percpu =3D true;
- 	else if (map->map_type !=3D BPF_MAP_TYPE_HASH &&
--		 map->map_type !=3D BPF_MAP_TYPE_LRU_HASH)
-+		 map->map_type !=3D BPF_MAP_TYPE_LRU_HASH &&
-+		 map->map_type !=3D BPF_MAP_TYPE_ARRAY)
- 		return -EINVAL;
-=20
- 	key_acc_size =3D prog->aux->max_rdonly_access[0];
+-		err =3D check_ctx_access(env, insn_idx, off, size, t, &reg_type, &btf_=
+id);
++		err =3D check_ctx_access(env, insn_idx, off, size, t, &reg_type, &btf_=
+id,
++				       &rdonly_buf_seq_id);
+ 		if (err)
+ 			verbose_linfo(env, insn_idx, "; ");
+ 		if (!err && t =3D=3D BPF_READ && value_regno >=3D 0) {
+@@ -3363,6 +3406,8 @@ static int check_mem_access(struct bpf_verifier_env=
+ *env, int insn_idx, u32 regn
+ 				if (reg_type =3D=3D PTR_TO_BTF_ID ||
+ 				    reg_type =3D=3D PTR_TO_BTF_ID_OR_NULL)
+ 					regs[value_regno].btf_id =3D btf_id;
++				else if (reg_type =3D=3D PTR_TO_RDONLY_BUF_OR_NULL)
++					regs[value_regno].rdonly_buf_seq_id =3D rdonly_buf_seq_id;
+ 			}
+ 			regs[value_regno].type =3D reg_type;
+ 		}
+@@ -3428,6 +3473,15 @@ static int check_mem_access(struct bpf_verifier_en=
+v *env, int insn_idx, u32 regn
+ 	} else if (reg->type =3D=3D CONST_PTR_TO_MAP) {
+ 		err =3D check_ptr_to_map_access(env, regs, regno, off, size, t,
+ 					      value_regno);
++	} else if (reg->type =3D=3D PTR_TO_RDONLY_BUF) {
++		if (t =3D=3D BPF_WRITE) {
++			verbose(env, "R%d cannot write into %s\n",
++				regno, reg_type_str[reg->type]);
++			return -EACCES;
++		}
++		err =3D check_rdonly_buf_access(env, reg, regno, off, size);
++		if (!err && value_regno >=3D 0)
++			mark_reg_unknown(env, regs, value_regno);
+ 	} else {
+ 		verbose(env, "R%d invalid mem access '%s'\n", regno,
+ 			reg_type_str[reg->type]);
+@@ -6803,6 +6857,8 @@ static void mark_ptr_or_null_reg(struct bpf_func_st=
+ate *state,
+ 			reg->type =3D PTR_TO_BTF_ID;
+ 		} else if (reg->type =3D=3D PTR_TO_MEM_OR_NULL) {
+ 			reg->type =3D PTR_TO_MEM;
++		} else if (reg->type =3D=3D PTR_TO_RDONLY_BUF_OR_NULL) {
++			reg->type =3D PTR_TO_RDONLY_BUF;
+ 		}
+ 		if (is_null) {
+ 			/* We don't need id and ref_obj_id from this point
 --=20
 2.24.1
 
