@@ -2,64 +2,63 @@ Return-Path: <SRS0=NpDT=AY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 307A9C433E8
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:37:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE995C433E0
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:37:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EECC120771
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:37:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D16A8206F0
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:37:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="F3V2SH1C"
+	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="eIJXO0/I"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726828AbgGMShd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 14:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
+        id S1726400AbgGMShz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 14:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726891AbgGMShc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Jul 2020 14:37:32 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832F9C08C5DF
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 11:37:30 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id md7so272443pjb.1
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 11:37:30 -0700 (PDT)
+        with ESMTP id S1726788AbgGMShZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jul 2020 14:37:25 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE104C08C5DB
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 11:37:25 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id x9so5890852plr.2
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 11:37:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cs.washington.edu; s=goo201206;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=05GTUKxISSPCflYrWMkNERCLsbPNwySCKdDwTsPQbQE=;
-        b=F3V2SH1CcmajH85a12KW2s+lHzG52mAuH3DfWM+jPhn66cjSYOPOF69WGaitlgmFzu
-         1oiKFpW8ozKKYDCeh0N0cuZSzDAs7HoZhIMqYBKOsESYTKvsSlu0LoM0Gex5Nt0/M1zC
-         jVOyRGb2kbPZO2fm76Y7niIx1sSmSsz72dblg=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ex9NjyWc3V6Bi5bAxe687NL7Tzc9ig6eAA5UMdHYprI=;
+        b=eIJXO0/If0B5aBd44ahb08ihRI2GtsNKFQ7pTlz/wT6/TJjKzO502T7CJcvZe9WdR5
+         u/qrS/5vxINqmyOT/yLBZZgVNkONvdkC5egbLzM2YycQsLldSIUq0FWKy51uV6YC91Lm
+         9apZeRbnW6mztFt+DWU+E4jyvTyoU0WgWdnQ8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=05GTUKxISSPCflYrWMkNERCLsbPNwySCKdDwTsPQbQE=;
-        b=nQmo76teyUfdw+1bVOJ6MC9RSZ8hYThT4iMgLMcy39IfAEK4fj4H81XY/8SLCdfXL4
-         rnuFH0ot1U2PopilmNVbah+3M68IFF3DrRIGi1ngqPOIorbqGfZEDzGttyaC8GixgYyk
-         4VWkkjGq6xHyNwE0SOE1Lie5gdIBKs3aplxmA7HhXcBgmurlQuoVFHzw1n/zUcSlHDxZ
-         G4GaHVyXdYuEeqWHCcOoPrgLymaaykA39zIc2mel9T5+UxmstI6nJU7b3++KB8s9e3xe
-         7Ex/YT5Tf8v5gb6jsc5kBHgyTJ0vIOW3Qu/yJenwE0lM0Vp7FPcupFtAd5BXEJ6X2jxu
-         tENg==
-X-Gm-Message-State: AOAM530nVHwzxvdRzC6XVaGfGmOxfj8ifXopje6YB0LQPWoUWRmoVrCc
-        Z04d2c6XbR9o8YQTZteNPo9JBy9O+tFTvw==
-X-Google-Smtp-Source: ABdhPJy5Fk9yKtVyPWpdslEMtRlE/xL6mM7wDkpVQ/sAIE5SydcPAO/WMkc65tzLMGvr+kQVmkN99g==
-X-Received: by 2002:a17:902:be17:: with SMTP id r23mr797612pls.284.1594665449223;
-        Mon, 13 Jul 2020 11:37:29 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ex9NjyWc3V6Bi5bAxe687NL7Tzc9ig6eAA5UMdHYprI=;
+        b=B9RDsnvs5kZd3HqH2Yd5crP+q9zoa4d/LqyXlHecvFoZl7baqgulJVHWOAo/ZVRWLf
+         0HGOXhVMrAwPB6CqS87eWtU5e/JjtXxFb6gsi/KA7EUVpnmSxq6WQuZbvKolxrYmFzxh
+         +4NV1wKx2x5/ogtN8jehZVkCy9M0O8vgspkMYg+nxWY6ogMfVzw5VMs0vBBfvy9o0uOE
+         OTvQZJ5X0xF0a1g2u4ys3lwl9tJfnS+OBelK54t3aDs1BBvaoRzWXvU9+7nS3akfzvG9
+         taVmYBsb7tyz6OHT+21PXxDeH09a+m8QmHKR0ha+8/mMH+7X/ee0BLfQYH5rQXCdFCxn
+         YdGw==
+X-Gm-Message-State: AOAM532Ahe38x4NYQbP33kvNQFruS5wCJoo05PxpdPM5EZrcvK8CCU/K
+        ORwZSzQ78XCXIcNioWjCDu0os8hMavYRMQ==
+X-Google-Smtp-Source: ABdhPJwJZ4LXHG3AEpB4QbfoNcdQpuRpmEWG4B06RaqAn3egDPdZSGr1tTw7ZyXyNVuR3iTm+ixTgg==
+X-Received: by 2002:a17:90a:1b4a:: with SMTP id q68mr717791pjq.1.1594665444865;
+        Mon, 13 Jul 2020 11:37:24 -0700 (PDT)
 Received: from localhost.localdomain (c-73-53-94-119.hsd1.wa.comcast.net. [73.53.94.119])
-        by smtp.gmail.com with ESMTPSA id ia13sm264985pjb.42.2020.07.13.11.37.28
+        by smtp.gmail.com with ESMTPSA id ia13sm264985pjb.42.2020.07.13.11.37.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 11:37:28 -0700 (PDT)
+        Mon, 13 Jul 2020 11:37:24 -0700 (PDT)
 From:   Luke Nelson <lukenels@cs.washington.edu>
 X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
 To:     bpf@vger.kernel.org
-Cc:     Luke Nelson <luke.r.nels@gmail.com>,
+Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
         =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
@@ -71,12 +70,10 @@ Cc:     Luke Nelson <luke.r.nels@gmail.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH bpf-next 3/3] bpf, riscv: Use compressed instructions in the rv64 JIT
-Date:   Mon, 13 Jul 2020 11:37:11 -0700
-Message-Id: <20200713183711.762244-4-luke.r.nels@gmail.com>
+Subject: [RFC PATCH bpf-next 0/3] bpf, riscv: Add compressed instructions to rv64 JIT
+Date:   Mon, 13 Jul 2020 11:37:08 -0700
+Message-Id: <20200713183711.762244-1-luke.r.nels@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200713183711.762244-1-luke.r.nels@gmail.com>
-References: <20200713183711.762244-1-luke.r.nels@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -84,12 +81,20 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch uses the RVC support and encodings from bpf_jit.h to optimize
-the rv64 jit.
+This patch series enables using compressed riscv (RVC) instructions
+in the rv64 BPF JIT.
 
-The optimizations work by replacing emit(rv_X(...)) with a call to a
-helper function emit_X, which will emit a compressed version of the
-instruction when possible, and when RVC is enabled.
+RVC is a standard riscv extension that adds a set of compressed,
+2-byte instructions that can replace some regular 4-byte instructions
+for improved code density.
+
+This series first modifies the JIT to support using 2-byte instructions
+(e.g., in jump offset computations), then adds RVC encoding and
+helper functions, and finally uses the helper functions to optimize
+the rv64 JIT.
+
+I used our formal verification framework, Serval, to verify the
+correctness of the RVC encodings and their uses in the rv64 JIT.
 
 The JIT continues to pass all tests in lib/test_bpf.c, and introduces
 no new failures to test_verifier; both with and without RVC being enabled.
@@ -191,693 +196,17 @@ With RVC:
   6c:   853e        c.mv    a0,a5
   6e:   8082        c.jr    ra
 
-Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
----
- arch/riscv/net/bpf_jit_comp64.c | 275 +++++++++++++++++---------------
- 1 file changed, 142 insertions(+), 133 deletions(-)
+Luke Nelson (3):
+  bpf, riscv: Modify JIT ctx to support compressed instructions
+  bpf, riscv: Add encodings for compressed instructions
+  bpf, riscv: Use compressed instructions in the rv64 JIT
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 26feed92f1bc..823fe800f406 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -137,14 +137,14 @@ static void emit_imm(u8 rd, s64 val, struct rv_jit_context *ctx)
- 
- 	if (is_32b_int(val)) {
- 		if (upper)
--			emit(rv_lui(rd, upper), ctx);
-+			emit_lui(rd, upper, ctx);
- 
- 		if (!upper) {
--			emit(rv_addi(rd, RV_REG_ZERO, lower), ctx);
-+			emit_li(rd, lower, ctx);
- 			return;
- 		}
- 
--		emit(rv_addiw(rd, rd, lower), ctx);
-+		emit_addiw(rd, rd, lower, ctx);
- 		return;
- 	}
- 
-@@ -154,9 +154,9 @@ static void emit_imm(u8 rd, s64 val, struct rv_jit_context *ctx)
- 
- 	emit_imm(rd, upper, ctx);
- 
--	emit(rv_slli(rd, rd, shift), ctx);
-+	emit_slli(rd, rd, shift, ctx);
- 	if (lower)
--		emit(rv_addi(rd, rd, lower), ctx);
-+		emit_addi(rd, rd, lower, ctx);
- }
- 
- static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
-@@ -164,43 +164,43 @@ static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
- 	int stack_adjust = ctx->stack_size, store_offset = stack_adjust - 8;
- 
- 	if (seen_reg(RV_REG_RA, ctx)) {
--		emit(rv_ld(RV_REG_RA, store_offset, RV_REG_SP), ctx);
-+		emit_ld(RV_REG_RA, store_offset, RV_REG_SP, ctx);
- 		store_offset -= 8;
- 	}
--	emit(rv_ld(RV_REG_FP, store_offset, RV_REG_SP), ctx);
-+	emit_ld(RV_REG_FP, store_offset, RV_REG_SP, ctx);
- 	store_offset -= 8;
- 	if (seen_reg(RV_REG_S1, ctx)) {
--		emit(rv_ld(RV_REG_S1, store_offset, RV_REG_SP), ctx);
-+		emit_ld(RV_REG_S1, store_offset, RV_REG_SP, ctx);
- 		store_offset -= 8;
- 	}
- 	if (seen_reg(RV_REG_S2, ctx)) {
--		emit(rv_ld(RV_REG_S2, store_offset, RV_REG_SP), ctx);
-+		emit_ld(RV_REG_S2, store_offset, RV_REG_SP, ctx);
- 		store_offset -= 8;
- 	}
- 	if (seen_reg(RV_REG_S3, ctx)) {
--		emit(rv_ld(RV_REG_S3, store_offset, RV_REG_SP), ctx);
-+		emit_ld(RV_REG_S3, store_offset, RV_REG_SP, ctx);
- 		store_offset -= 8;
- 	}
- 	if (seen_reg(RV_REG_S4, ctx)) {
--		emit(rv_ld(RV_REG_S4, store_offset, RV_REG_SP), ctx);
-+		emit_ld(RV_REG_S4, store_offset, RV_REG_SP, ctx);
- 		store_offset -= 8;
- 	}
- 	if (seen_reg(RV_REG_S5, ctx)) {
--		emit(rv_ld(RV_REG_S5, store_offset, RV_REG_SP), ctx);
-+		emit_ld(RV_REG_S5, store_offset, RV_REG_SP, ctx);
- 		store_offset -= 8;
- 	}
- 	if (seen_reg(RV_REG_S6, ctx)) {
--		emit(rv_ld(RV_REG_S6, store_offset, RV_REG_SP), ctx);
-+		emit_ld(RV_REG_S6, store_offset, RV_REG_SP, ctx);
- 		store_offset -= 8;
- 	}
- 
--	emit(rv_addi(RV_REG_SP, RV_REG_SP, stack_adjust), ctx);
-+	emit_addi(RV_REG_SP, RV_REG_SP, stack_adjust, ctx);
- 	/* Set return value. */
- 	if (!is_tail_call)
--		emit(rv_addi(RV_REG_A0, RV_REG_A5, 0), ctx);
--	emit(rv_jalr(RV_REG_ZERO, is_tail_call ? RV_REG_T3 : RV_REG_RA,
--		     is_tail_call ? 4 : 0), /* skip TCC init */
--	     ctx);
-+		emit_mv(RV_REG_A0, RV_REG_A5, ctx);
-+	emit_jalr(RV_REG_ZERO, is_tail_call ? RV_REG_T3 : RV_REG_RA,
-+		  is_tail_call ? 4 : 0, /* skip TCC init */
-+		  ctx);
- }
- 
- static void emit_bcc(u8 cond, u8 rd, u8 rs, int rvoff,
-@@ -280,8 +280,8 @@ static void emit_branch(u8 cond, u8 rd, u8 rs, int rvoff,
- 
- static void emit_zext_32(u8 reg, struct rv_jit_context *ctx)
- {
--	emit(rv_slli(reg, reg, 32), ctx);
--	emit(rv_srli(reg, reg, 32), ctx);
-+	emit_slli(reg, reg, 32, ctx);
-+	emit_srli(reg, reg, 32, ctx);
- }
- 
- static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
-@@ -310,7 +310,7 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
- 	/* if (TCC-- < 0)
- 	 *     goto out;
- 	 */
--	emit(rv_addi(RV_REG_T1, tcc, -1), ctx);
-+	emit_addi(RV_REG_T1, tcc, -1, ctx);
- 	off = RVOFF(tc_ninsn - (ctx->ninsns - start_insn));
- 	emit_branch(BPF_JSLT, tcc, RV_REG_ZERO, off, ctx);
- 
-@@ -318,12 +318,12 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
- 	 * if (!prog)
- 	 *     goto out;
- 	 */
--	emit(rv_slli(RV_REG_T2, RV_REG_A2, 3), ctx);
--	emit(rv_add(RV_REG_T2, RV_REG_T2, RV_REG_A1), ctx);
-+	emit_slli(RV_REG_T2, RV_REG_A2, 3, ctx);
-+	emit_add(RV_REG_T2, RV_REG_T2, RV_REG_A1, ctx);
- 	off = offsetof(struct bpf_array, ptrs);
- 	if (is_12b_check(off, insn))
- 		return -1;
--	emit(rv_ld(RV_REG_T2, off, RV_REG_T2), ctx);
-+	emit_ld(RV_REG_T2, off, RV_REG_T2, ctx);
- 	off = RVOFF(tc_ninsn - (ctx->ninsns - start_insn));
- 	emit_branch(BPF_JEQ, RV_REG_T2, RV_REG_ZERO, off, ctx);
- 
-@@ -331,8 +331,8 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
- 	off = offsetof(struct bpf_prog, bpf_func);
- 	if (is_12b_check(off, insn))
- 		return -1;
--	emit(rv_ld(RV_REG_T3, off, RV_REG_T2), ctx);
--	emit(rv_addi(RV_REG_TCC, RV_REG_T1, 0), ctx);
-+	emit_ld(RV_REG_T3, off, RV_REG_T2, ctx);
-+	emit_mv(RV_REG_TCC, RV_REG_T1, ctx);
- 	__build_epilogue(true, ctx);
- 	return 0;
- }
-@@ -360,9 +360,9 @@ static void init_regs(u8 *rd, u8 *rs, const struct bpf_insn *insn,
- 
- static void emit_zext_32_rd_rs(u8 *rd, u8 *rs, struct rv_jit_context *ctx)
- {
--	emit(rv_addi(RV_REG_T2, *rd, 0), ctx);
-+	emit_mv(RV_REG_T2, *rd, ctx);
- 	emit_zext_32(RV_REG_T2, ctx);
--	emit(rv_addi(RV_REG_T1, *rs, 0), ctx);
-+	emit_mv(RV_REG_T1, *rs, ctx);
- 	emit_zext_32(RV_REG_T1, ctx);
- 	*rd = RV_REG_T2;
- 	*rs = RV_REG_T1;
-@@ -370,15 +370,15 @@ static void emit_zext_32_rd_rs(u8 *rd, u8 *rs, struct rv_jit_context *ctx)
- 
- static void emit_sext_32_rd_rs(u8 *rd, u8 *rs, struct rv_jit_context *ctx)
- {
--	emit(rv_addiw(RV_REG_T2, *rd, 0), ctx);
--	emit(rv_addiw(RV_REG_T1, *rs, 0), ctx);
-+	emit_addiw(RV_REG_T2, *rd, 0, ctx);
-+	emit_addiw(RV_REG_T1, *rs, 0, ctx);
- 	*rd = RV_REG_T2;
- 	*rs = RV_REG_T1;
- }
- 
- static void emit_zext_32_rd_t1(u8 *rd, struct rv_jit_context *ctx)
- {
--	emit(rv_addi(RV_REG_T2, *rd, 0), ctx);
-+	emit_mv(RV_REG_T2, *rd, ctx);
- 	emit_zext_32(RV_REG_T2, ctx);
- 	emit_zext_32(RV_REG_T1, ctx);
- 	*rd = RV_REG_T2;
-@@ -386,7 +386,7 @@ static void emit_zext_32_rd_t1(u8 *rd, struct rv_jit_context *ctx)
- 
- static void emit_sext_32_rd(u8 *rd, struct rv_jit_context *ctx)
- {
--	emit(rv_addiw(RV_REG_T2, *rd, 0), ctx);
-+	emit_addiw(RV_REG_T2, *rd, 0, ctx);
- 	*rd = RV_REG_T2;
- }
- 
-@@ -432,7 +432,7 @@ static int emit_call(bool fixed, u64 addr, struct rv_jit_context *ctx)
- 	if (ret)
- 		return ret;
- 	rd = bpf_to_rv_reg(BPF_REG_0, ctx);
--	emit(rv_addi(rd, RV_REG_A0, 0), ctx);
-+	emit_mv(rd, RV_REG_A0, ctx);
- 	return 0;
- }
- 
-@@ -458,7 +458,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit_zext_32(rd, ctx);
- 			break;
- 		}
--		emit(is64 ? rv_addi(rd, rs, 0) : rv_addiw(rd, rs, 0), ctx);
-+		emit_mv(rd, rs, ctx);
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
-@@ -466,31 +466,35 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	/* dst = dst OP src */
- 	case BPF_ALU | BPF_ADD | BPF_X:
- 	case BPF_ALU64 | BPF_ADD | BPF_X:
--		emit(is64 ? rv_add(rd, rd, rs) : rv_addw(rd, rd, rs), ctx);
-+		emit_add(rd, rd, rs, ctx);
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_SUB | BPF_X:
- 	case BPF_ALU64 | BPF_SUB | BPF_X:
--		emit(is64 ? rv_sub(rd, rd, rs) : rv_subw(rd, rd, rs), ctx);
-+		if (is64)
-+			emit_sub(rd, rd, rs, ctx);
-+		else
-+			emit_subw(rd, rd, rs, ctx);
-+
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_AND | BPF_X:
- 	case BPF_ALU64 | BPF_AND | BPF_X:
--		emit(rv_and(rd, rd, rs), ctx);
-+		emit_and(rd, rd, rs, ctx);
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_OR | BPF_X:
- 	case BPF_ALU64 | BPF_OR | BPF_X:
--		emit(rv_or(rd, rd, rs), ctx);
-+		emit_or(rd, rd, rs, ctx);
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_XOR | BPF_X:
- 	case BPF_ALU64 | BPF_XOR | BPF_X:
--		emit(rv_xor(rd, rd, rs), ctx);
-+		emit_xor(rd, rd, rs, ctx);
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
-@@ -534,8 +538,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	/* dst = -dst */
- 	case BPF_ALU | BPF_NEG:
- 	case BPF_ALU64 | BPF_NEG:
--		emit(is64 ? rv_sub(rd, RV_REG_ZERO, rd) :
--		     rv_subw(rd, RV_REG_ZERO, rd), ctx);
-+		emit_sub(rd, RV_REG_ZERO, rd, ctx);
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
-@@ -544,8 +547,8 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ALU | BPF_END | BPF_FROM_LE:
- 		switch (imm) {
- 		case 16:
--			emit(rv_slli(rd, rd, 48), ctx);
--			emit(rv_srli(rd, rd, 48), ctx);
-+			emit_slli(rd, rd, 48, ctx);
-+			emit_srli(rd, rd, 48, ctx);
- 			break;
- 		case 32:
- 			if (!aux->verifier_zext)
-@@ -558,51 +561,51 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		break;
- 
- 	case BPF_ALU | BPF_END | BPF_FROM_BE:
--		emit(rv_addi(RV_REG_T2, RV_REG_ZERO, 0), ctx);
-+		emit_li(RV_REG_T2, 0, ctx);
- 
--		emit(rv_andi(RV_REG_T1, rd, 0xff), ctx);
--		emit(rv_add(RV_REG_T2, RV_REG_T2, RV_REG_T1), ctx);
--		emit(rv_slli(RV_REG_T2, RV_REG_T2, 8), ctx);
--		emit(rv_srli(rd, rd, 8), ctx);
-+		emit_andi(RV_REG_T1, rd, 0xff, ctx);
-+		emit_add(RV_REG_T2, RV_REG_T2, RV_REG_T1, ctx);
-+		emit_slli(RV_REG_T2, RV_REG_T2, 8, ctx);
-+		emit_srli(rd, rd, 8, ctx);
- 		if (imm == 16)
- 			goto out_be;
- 
--		emit(rv_andi(RV_REG_T1, rd, 0xff), ctx);
--		emit(rv_add(RV_REG_T2, RV_REG_T2, RV_REG_T1), ctx);
--		emit(rv_slli(RV_REG_T2, RV_REG_T2, 8), ctx);
--		emit(rv_srli(rd, rd, 8), ctx);
-+		emit_andi(RV_REG_T1, rd, 0xff, ctx);
-+		emit_add(RV_REG_T2, RV_REG_T2, RV_REG_T1, ctx);
-+		emit_slli(RV_REG_T2, RV_REG_T2, 8, ctx);
-+		emit_srli(rd, rd, 8, ctx);
- 
--		emit(rv_andi(RV_REG_T1, rd, 0xff), ctx);
--		emit(rv_add(RV_REG_T2, RV_REG_T2, RV_REG_T1), ctx);
--		emit(rv_slli(RV_REG_T2, RV_REG_T2, 8), ctx);
--		emit(rv_srli(rd, rd, 8), ctx);
-+		emit_andi(RV_REG_T1, rd, 0xff, ctx);
-+		emit_add(RV_REG_T2, RV_REG_T2, RV_REG_T1, ctx);
-+		emit_slli(RV_REG_T2, RV_REG_T2, 8, ctx);
-+		emit_srli(rd, rd, 8, ctx);
- 		if (imm == 32)
- 			goto out_be;
- 
--		emit(rv_andi(RV_REG_T1, rd, 0xff), ctx);
--		emit(rv_add(RV_REG_T2, RV_REG_T2, RV_REG_T1), ctx);
--		emit(rv_slli(RV_REG_T2, RV_REG_T2, 8), ctx);
--		emit(rv_srli(rd, rd, 8), ctx);
--
--		emit(rv_andi(RV_REG_T1, rd, 0xff), ctx);
--		emit(rv_add(RV_REG_T2, RV_REG_T2, RV_REG_T1), ctx);
--		emit(rv_slli(RV_REG_T2, RV_REG_T2, 8), ctx);
--		emit(rv_srli(rd, rd, 8), ctx);
--
--		emit(rv_andi(RV_REG_T1, rd, 0xff), ctx);
--		emit(rv_add(RV_REG_T2, RV_REG_T2, RV_REG_T1), ctx);
--		emit(rv_slli(RV_REG_T2, RV_REG_T2, 8), ctx);
--		emit(rv_srli(rd, rd, 8), ctx);
--
--		emit(rv_andi(RV_REG_T1, rd, 0xff), ctx);
--		emit(rv_add(RV_REG_T2, RV_REG_T2, RV_REG_T1), ctx);
--		emit(rv_slli(RV_REG_T2, RV_REG_T2, 8), ctx);
--		emit(rv_srli(rd, rd, 8), ctx);
-+		emit_andi(RV_REG_T1, rd, 0xff, ctx);
-+		emit_add(RV_REG_T2, RV_REG_T2, RV_REG_T1, ctx);
-+		emit_slli(RV_REG_T2, RV_REG_T2, 8, ctx);
-+		emit_srli(rd, rd, 8, ctx);
-+
-+		emit_andi(RV_REG_T1, rd, 0xff, ctx);
-+		emit_add(RV_REG_T2, RV_REG_T2, RV_REG_T1, ctx);
-+		emit_slli(RV_REG_T2, RV_REG_T2, 8, ctx);
-+		emit_srli(rd, rd, 8, ctx);
-+
-+		emit_andi(RV_REG_T1, rd, 0xff, ctx);
-+		emit_add(RV_REG_T2, RV_REG_T2, RV_REG_T1, ctx);
-+		emit_slli(RV_REG_T2, RV_REG_T2, 8, ctx);
-+		emit_srli(rd, rd, 8, ctx);
-+
-+		emit_andi(RV_REG_T1, rd, 0xff, ctx);
-+		emit_add(RV_REG_T2, RV_REG_T2, RV_REG_T1, ctx);
-+		emit_slli(RV_REG_T2, RV_REG_T2, 8, ctx);
-+		emit_srli(rd, rd, 8, ctx);
- out_be:
--		emit(rv_andi(RV_REG_T1, rd, 0xff), ctx);
--		emit(rv_add(RV_REG_T2, RV_REG_T2, RV_REG_T1), ctx);
-+		emit_andi(RV_REG_T1, rd, 0xff, ctx);
-+		emit_add(RV_REG_T2, RV_REG_T2, RV_REG_T1, ctx);
- 
--		emit(rv_addi(rd, RV_REG_T2, 0), ctx);
-+		emit_mv(rd, RV_REG_T2, ctx);
- 		break;
- 
- 	/* dst = imm */
-@@ -617,12 +620,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ALU | BPF_ADD | BPF_K:
- 	case BPF_ALU64 | BPF_ADD | BPF_K:
- 		if (is_12b_int(imm)) {
--			emit(is64 ? rv_addi(rd, rd, imm) :
--			     rv_addiw(rd, rd, imm), ctx);
-+			emit_addi(rd, rd, imm, ctx);
- 		} else {
- 			emit_imm(RV_REG_T1, imm, ctx);
--			emit(is64 ? rv_add(rd, rd, RV_REG_T1) :
--			     rv_addw(rd, rd, RV_REG_T1), ctx);
-+			emit_add(rd, rd, RV_REG_T1, ctx);
- 		}
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
-@@ -630,12 +631,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ALU | BPF_SUB | BPF_K:
- 	case BPF_ALU64 | BPF_SUB | BPF_K:
- 		if (is_12b_int(-imm)) {
--			emit(is64 ? rv_addi(rd, rd, -imm) :
--			     rv_addiw(rd, rd, -imm), ctx);
-+			emit_addi(rd, rd, -imm, ctx);
- 		} else {
- 			emit_imm(RV_REG_T1, imm, ctx);
--			emit(is64 ? rv_sub(rd, rd, RV_REG_T1) :
--			     rv_subw(rd, rd, RV_REG_T1), ctx);
-+			emit_sub(rd, rd, RV_REG_T1, ctx);
- 		}
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
-@@ -643,10 +642,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ALU | BPF_AND | BPF_K:
- 	case BPF_ALU64 | BPF_AND | BPF_K:
- 		if (is_12b_int(imm)) {
--			emit(rv_andi(rd, rd, imm), ctx);
-+			emit_andi(rd, rd, imm, ctx);
- 		} else {
- 			emit_imm(RV_REG_T1, imm, ctx);
--			emit(rv_and(rd, rd, RV_REG_T1), ctx);
-+			emit_and(rd, rd, RV_REG_T1, ctx);
- 		}
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
-@@ -657,7 +656,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit(rv_ori(rd, rd, imm), ctx);
- 		} else {
- 			emit_imm(RV_REG_T1, imm, ctx);
--			emit(rv_or(rd, rd, RV_REG_T1), ctx);
-+			emit_or(rd, rd, RV_REG_T1, ctx);
- 		}
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
-@@ -668,7 +667,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit(rv_xori(rd, rd, imm), ctx);
- 		} else {
- 			emit_imm(RV_REG_T1, imm, ctx);
--			emit(rv_xor(rd, rd, RV_REG_T1), ctx);
-+			emit_xor(rd, rd, RV_REG_T1, ctx);
- 		}
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
-@@ -699,19 +698,28 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		break;
- 	case BPF_ALU | BPF_LSH | BPF_K:
- 	case BPF_ALU64 | BPF_LSH | BPF_K:
--		emit(is64 ? rv_slli(rd, rd, imm) : rv_slliw(rd, rd, imm), ctx);
-+		emit_slli(rd, rd, imm, ctx);
-+
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_RSH | BPF_K:
- 	case BPF_ALU64 | BPF_RSH | BPF_K:
--		emit(is64 ? rv_srli(rd, rd, imm) : rv_srliw(rd, rd, imm), ctx);
-+		if (is64)
-+			emit_srli(rd, rd, imm, ctx);
-+		else
-+			emit(rv_srliw(rd, rd, imm), ctx);
-+
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
- 	case BPF_ALU | BPF_ARSH | BPF_K:
- 	case BPF_ALU64 | BPF_ARSH | BPF_K:
--		emit(is64 ? rv_srai(rd, rd, imm) : rv_sraiw(rd, rd, imm), ctx);
-+		if (is64)
-+			emit_srai(rd, rd, imm, ctx);
-+		else
-+			emit(rv_sraiw(rd, rd, imm), ctx);
-+
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zext_32(rd, ctx);
- 		break;
-@@ -763,7 +771,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		if (BPF_OP(code) == BPF_JSET) {
- 			/* Adjust for and */
- 			rvoff -= 4;
--			emit(rv_and(RV_REG_T1, rd, rs), ctx);
-+			emit_and(RV_REG_T1, rd, rs, ctx);
- 			emit_branch(BPF_JNE, RV_REG_T1, RV_REG_ZERO, rvoff,
- 				    ctx);
- 		} else {
-@@ -819,17 +827,17 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		rvoff = rv_offset(i, off, ctx);
- 		s = ctx->ninsns;
- 		if (is_12b_int(imm)) {
--			emit(rv_andi(RV_REG_T1, rd, imm), ctx);
-+			emit_andi(RV_REG_T1, rd, imm, ctx);
- 		} else {
- 			emit_imm(RV_REG_T1, imm, ctx);
--			emit(rv_and(RV_REG_T1, rd, RV_REG_T1), ctx);
-+			emit_and(RV_REG_T1, rd, RV_REG_T1, ctx);
- 		}
- 		/* For jset32, we should clear the upper 32 bits of t1, but
- 		 * sign-extension is sufficient here and saves one instruction,
- 		 * as t1 is used only in comparison against zero.
- 		 */
- 		if (!is64 && imm < 0)
--			emit(rv_addiw(RV_REG_T1, RV_REG_T1, 0), ctx);
-+			emit_addiw(RV_REG_T1, RV_REG_T1, 0, ctx);
- 		e = ctx->ninsns;
- 		rvoff -= RVOFF(e - s);
- 		emit_branch(BPF_JNE, RV_REG_T1, RV_REG_ZERO, rvoff, ctx);
-@@ -887,7 +895,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		}
- 
- 		emit_imm(RV_REG_T1, off, ctx);
--		emit(rv_add(RV_REG_T1, RV_REG_T1, rs), ctx);
-+		emit_add(RV_REG_T1, RV_REG_T1, rs, ctx);
- 		emit(rv_lbu(rd, 0, RV_REG_T1), ctx);
- 		if (insn_is_zext(&insn[1]))
- 			return 1;
-@@ -899,7 +907,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		}
- 
- 		emit_imm(RV_REG_T1, off, ctx);
--		emit(rv_add(RV_REG_T1, RV_REG_T1, rs), ctx);
-+		emit_add(RV_REG_T1, RV_REG_T1, rs, ctx);
- 		emit(rv_lhu(rd, 0, RV_REG_T1), ctx);
- 		if (insn_is_zext(&insn[1]))
- 			return 1;
-@@ -911,20 +919,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		}
- 
- 		emit_imm(RV_REG_T1, off, ctx);
--		emit(rv_add(RV_REG_T1, RV_REG_T1, rs), ctx);
-+		emit_add(RV_REG_T1, RV_REG_T1, rs, ctx);
- 		emit(rv_lwu(rd, 0, RV_REG_T1), ctx);
- 		if (insn_is_zext(&insn[1]))
- 			return 1;
- 		break;
- 	case BPF_LDX | BPF_MEM | BPF_DW:
- 		if (is_12b_int(off)) {
--			emit(rv_ld(rd, off, rs), ctx);
-+			emit_ld(rd, off, rs, ctx);
- 			break;
- 		}
- 
- 		emit_imm(RV_REG_T1, off, ctx);
--		emit(rv_add(RV_REG_T1, RV_REG_T1, rs), ctx);
--		emit(rv_ld(rd, 0, RV_REG_T1), ctx);
-+		emit_add(RV_REG_T1, RV_REG_T1, rs, ctx);
-+		emit_ld(rd, 0, RV_REG_T1, ctx);
- 		break;
- 
- 	/* ST: *(size *)(dst + off) = imm */
-@@ -936,7 +944,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		}
- 
- 		emit_imm(RV_REG_T2, off, ctx);
--		emit(rv_add(RV_REG_T2, RV_REG_T2, rd), ctx);
-+		emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
- 		emit(rv_sb(RV_REG_T2, 0, RV_REG_T1), ctx);
- 		break;
- 
-@@ -948,30 +956,30 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		}
- 
- 		emit_imm(RV_REG_T2, off, ctx);
--		emit(rv_add(RV_REG_T2, RV_REG_T2, rd), ctx);
-+		emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
- 		emit(rv_sh(RV_REG_T2, 0, RV_REG_T1), ctx);
- 		break;
- 	case BPF_ST | BPF_MEM | BPF_W:
- 		emit_imm(RV_REG_T1, imm, ctx);
- 		if (is_12b_int(off)) {
--			emit(rv_sw(rd, off, RV_REG_T1), ctx);
-+			emit_sw(rd, off, RV_REG_T1, ctx);
- 			break;
- 		}
- 
- 		emit_imm(RV_REG_T2, off, ctx);
--		emit(rv_add(RV_REG_T2, RV_REG_T2, rd), ctx);
--		emit(rv_sw(RV_REG_T2, 0, RV_REG_T1), ctx);
-+		emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
-+		emit_sw(RV_REG_T2, 0, RV_REG_T1, ctx);
- 		break;
- 	case BPF_ST | BPF_MEM | BPF_DW:
- 		emit_imm(RV_REG_T1, imm, ctx);
- 		if (is_12b_int(off)) {
--			emit(rv_sd(rd, off, RV_REG_T1), ctx);
-+			emit_sd(rd, off, RV_REG_T1, ctx);
- 			break;
- 		}
- 
- 		emit_imm(RV_REG_T2, off, ctx);
--		emit(rv_add(RV_REG_T2, RV_REG_T2, rd), ctx);
--		emit(rv_sd(RV_REG_T2, 0, RV_REG_T1), ctx);
-+		emit_add(RV_REG_T2, RV_REG_T2, rd, ctx);
-+		emit_sd(RV_REG_T2, 0, RV_REG_T1, ctx);
- 		break;
- 
- 	/* STX: *(size *)(dst + off) = src */
-@@ -982,7 +990,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		}
- 
- 		emit_imm(RV_REG_T1, off, ctx);
--		emit(rv_add(RV_REG_T1, RV_REG_T1, rd), ctx);
-+		emit_add(RV_REG_T1, RV_REG_T1, rd, ctx);
- 		emit(rv_sb(RV_REG_T1, 0, rs), ctx);
- 		break;
- 	case BPF_STX | BPF_MEM | BPF_H:
-@@ -992,28 +1000,28 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		}
- 
- 		emit_imm(RV_REG_T1, off, ctx);
--		emit(rv_add(RV_REG_T1, RV_REG_T1, rd), ctx);
-+		emit_add(RV_REG_T1, RV_REG_T1, rd, ctx);
- 		emit(rv_sh(RV_REG_T1, 0, rs), ctx);
- 		break;
- 	case BPF_STX | BPF_MEM | BPF_W:
- 		if (is_12b_int(off)) {
--			emit(rv_sw(rd, off, rs), ctx);
-+			emit_sw(rd, off, rs, ctx);
- 			break;
- 		}
- 
- 		emit_imm(RV_REG_T1, off, ctx);
--		emit(rv_add(RV_REG_T1, RV_REG_T1, rd), ctx);
--		emit(rv_sw(RV_REG_T1, 0, rs), ctx);
-+		emit_add(RV_REG_T1, RV_REG_T1, rd, ctx);
-+		emit_sw(RV_REG_T1, 0, rs, ctx);
- 		break;
- 	case BPF_STX | BPF_MEM | BPF_DW:
- 		if (is_12b_int(off)) {
--			emit(rv_sd(rd, off, rs), ctx);
-+			emit_sd(rd, off, rs, ctx);
- 			break;
- 		}
- 
- 		emit_imm(RV_REG_T1, off, ctx);
--		emit(rv_add(RV_REG_T1, RV_REG_T1, rd), ctx);
--		emit(rv_sd(RV_REG_T1, 0, rs), ctx);
-+		emit_add(RV_REG_T1, RV_REG_T1, rd, ctx);
-+		emit_sd(RV_REG_T1, 0, rs, ctx);
- 		break;
- 	/* STX XADD: lock *(u32 *)(dst + off) += src */
- 	case BPF_STX | BPF_XADD | BPF_W:
-@@ -1021,10 +1029,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_STX | BPF_XADD | BPF_DW:
- 		if (off) {
- 			if (is_12b_int(off)) {
--				emit(rv_addi(RV_REG_T1, rd, off), ctx);
-+				emit_addi(RV_REG_T1, rd, off, ctx);
- 			} else {
- 				emit_imm(RV_REG_T1, off, ctx);
--				emit(rv_add(RV_REG_T1, RV_REG_T1, rd), ctx);
-+				emit_add(RV_REG_T1, RV_REG_T1, rd, ctx);
- 			}
- 
- 			rd = RV_REG_T1;
-@@ -1073,52 +1081,53 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx)
- 
- 	/* First instruction is always setting the tail-call-counter
- 	 * (TCC) register. This instruction is skipped for tail calls.
-+	 * Force using a 4-byte (non-compressed) instruction.
- 	 */
- 	emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
- 
--	emit(rv_addi(RV_REG_SP, RV_REG_SP, -stack_adjust), ctx);
-+	emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
- 
- 	if (seen_reg(RV_REG_RA, ctx)) {
--		emit(rv_sd(RV_REG_SP, store_offset, RV_REG_RA), ctx);
-+		emit_sd(RV_REG_SP, store_offset, RV_REG_RA, ctx);
- 		store_offset -= 8;
- 	}
--	emit(rv_sd(RV_REG_SP, store_offset, RV_REG_FP), ctx);
-+	emit_sd(RV_REG_SP, store_offset, RV_REG_FP, ctx);
- 	store_offset -= 8;
- 	if (seen_reg(RV_REG_S1, ctx)) {
--		emit(rv_sd(RV_REG_SP, store_offset, RV_REG_S1), ctx);
-+		emit_sd(RV_REG_SP, store_offset, RV_REG_S1, ctx);
- 		store_offset -= 8;
- 	}
- 	if (seen_reg(RV_REG_S2, ctx)) {
--		emit(rv_sd(RV_REG_SP, store_offset, RV_REG_S2), ctx);
-+		emit_sd(RV_REG_SP, store_offset, RV_REG_S2, ctx);
- 		store_offset -= 8;
- 	}
- 	if (seen_reg(RV_REG_S3, ctx)) {
--		emit(rv_sd(RV_REG_SP, store_offset, RV_REG_S3), ctx);
-+		emit_sd(RV_REG_SP, store_offset, RV_REG_S3, ctx);
- 		store_offset -= 8;
- 	}
- 	if (seen_reg(RV_REG_S4, ctx)) {
--		emit(rv_sd(RV_REG_SP, store_offset, RV_REG_S4), ctx);
-+		emit_sd(RV_REG_SP, store_offset, RV_REG_S4, ctx);
- 		store_offset -= 8;
- 	}
- 	if (seen_reg(RV_REG_S5, ctx)) {
--		emit(rv_sd(RV_REG_SP, store_offset, RV_REG_S5), ctx);
-+		emit_sd(RV_REG_SP, store_offset, RV_REG_S5, ctx);
- 		store_offset -= 8;
- 	}
- 	if (seen_reg(RV_REG_S6, ctx)) {
--		emit(rv_sd(RV_REG_SP, store_offset, RV_REG_S6), ctx);
-+		emit_sd(RV_REG_SP, store_offset, RV_REG_S6, ctx);
- 		store_offset -= 8;
- 	}
- 
--	emit(rv_addi(RV_REG_FP, RV_REG_SP, stack_adjust), ctx);
-+	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
- 
- 	if (bpf_stack_adjust)
--		emit(rv_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust), ctx);
-+		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
- 
- 	/* Program contains calls and tail calls, so RV_REG_TCC need
- 	 * to be saved across calls.
- 	 */
- 	if (seen_tail_call(ctx) && seen_call(ctx))
--		emit(rv_addi(RV_REG_TCC_SAVED, RV_REG_TCC, 0), ctx);
-+		emit_mv(RV_REG_TCC_SAVED, RV_REG_TCC, ctx);
- 
- 	ctx->stack_size = stack_adjust;
- }
+ arch/riscv/net/bpf_jit.h        | 495 +++++++++++++++++++++++++++++++-
+ arch/riscv/net/bpf_jit_comp32.c |  14 +-
+ arch/riscv/net/bpf_jit_comp64.c | 287 +++++++++---------
+ arch/riscv/net/bpf_jit_core.c   |   6 +-
+ 4 files changed, 650 insertions(+), 152 deletions(-)
+
 -- 
 2.25.1
 
