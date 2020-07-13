@@ -2,178 +2,139 @@ Return-Path: <SRS0=NpDT=AY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFE1FC433E2
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 23:25:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30203C433E1
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 23:25:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A24CF2145D
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 23:25:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0FB3220DD4
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 23:25:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cfpj6Lfu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UBvbEld4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726715AbgGMXZC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 19:25:02 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:21104 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726698AbgGMXZC (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 19:25:02 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06DNKaEO019149
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 16:25:01 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=iO6Z0rbAmQVRyf6UvboOnbNBq/HdRiy1eI3jgGDd/Rc=;
- b=cfpj6LfuWImMP8XTnnfufB6ULlp14Z0j+v8zGWF81kBQBYiOl6fHJAu/JV12SXcuxd7V
- uyBa6SXm146gBGrmBHdYOKsF7BtMBYDeH80DQXpXJhLoTUGYmCLshehVOVF3K2ytEK56
- UMkJxcx/xLIAv8xMZJOu/0tWavhyvYsVjWg= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 327axn2bee-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 16:25:01 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 13 Jul 2020 16:24:57 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 0BAC42EC4105; Mon, 13 Jul 2020 16:24:45 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Anton Protopopov <a.s.protopopov@gmail.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 1/2] libbpf: support stripping modifiers for btf_dump
-Date:   Mon, 13 Jul 2020 16:24:08 -0700
-Message-ID: <20200713232409.3062144-2-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200713232409.3062144-1-andriin@fb.com>
-References: <20200713232409.3062144-1-andriin@fb.com>
+        id S1726752AbgGMXZt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 19:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726356AbgGMXZt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jul 2020 19:25:49 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26775C061755;
+        Mon, 13 Jul 2020 16:25:49 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id b9so6204466plx.6;
+        Mon, 13 Jul 2020 16:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5xn0OqUp0O7nqCbMsuOb1oZ0701cRSWUCiC9nyOTwII=;
+        b=UBvbEld41mizD/D/AJ+KTIef/uEsz/YkQP4SYjpDx7bmoWJ6EWIn7cFA7MCJa3fTwE
+         n+7EzC7krYOznuUeqtbeHLrKKQmfiNCcOy8nF3nLFqdHTW7zcqKZA7YgtcA4ITeDsjU5
+         nlyghQM7YlK2wfK2K3NYZFAcPOxYVDqUUqGZlYQGemuf5SquNIu6IXJUzv8rJwxMbO7K
+         BTciXx+uNBqULZ6zszCxhkCY7blW0SgFgOEzDBnltf08qtueTgAju1edbSIW5ecU573G
+         9HTkPqXQ8rxRj9jSOXNILsdgpLkkrS9I0vXVFFdr4C28T06Xvu+MNZNGpQnXz9bRxnO9
+         C9TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5xn0OqUp0O7nqCbMsuOb1oZ0701cRSWUCiC9nyOTwII=;
+        b=VXXHGiQ3jUhy6oIc+RdbHJeKvOlblhPvgI1ZQ8cZsYB6MrT8fwguM+WPq32AIs9Bdi
+         4juztXM+ydJsKyy48XhJsHqJsPBTTlwj+rWg1y1itRaQIZLmAj5wiSqltFwbqHFpcJrm
+         bbRZJEs3fxQF04wuEm4tvSkLpzBjy7Em5/TmcoaQcEA9/cTwYAiwKuhLwt1s1PF13YGy
+         PjHOOi6PsSa4u5PD1HPSov+y1gJmTyicOM6TmT9cheAVKSR6Dkx6r76vVv1NJgUN3vE/
+         PoH5CkY0ZVWRFJi3Sa0HHaU2EhxeJDFcH74m34113fwWcJ4Wkg3LUIFWgEzyG1sYuLdI
+         t+Cw==
+X-Gm-Message-State: AOAM5338MakH7DCIErGvrifI0TMktZbjWPeRYu6AETNg8YXF7YDcHKXe
+        vAVq8P0fR2UPw9oKS9h9bxU=
+X-Google-Smtp-Source: ABdhPJwJ3c+RZ8cMsxWgLkViW6FhYWni3N6qXg/qFUlk5cpI/nGgIKPmhditqIA2eYZ9HtjtubOmSw==
+X-Received: by 2002:a17:90a:d809:: with SMTP id a9mr1740942pjv.40.1594682748579;
+        Mon, 13 Jul 2020 16:25:48 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:1ca])
+        by smtp.gmail.com with ESMTPSA id s194sm14294118pgs.24.2020.07.13.16.25.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2020 16:25:47 -0700 (PDT)
+Date:   Mon, 13 Jul 2020 16:25:45 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+        Martin KaFai Lau <kafai@fb.com>
+Subject: Re: [PATCH bpf-next 03/13] bpf: support readonly buffer in verifier
+Message-ID: <20200713232545.mmocpqgqpiapcdvg@ast-mbp.dhcp.thefacebook.com>
+References: <20200713161739.3076283-1-yhs@fb.com>
+ <20200713161742.3076597-1-yhs@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-13_17:2020-07-13,2020-07-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- impostorscore=0 suspectscore=8 phishscore=0 malwarescore=0 spamscore=0
- mlxlogscore=999 lowpriorityscore=0 adultscore=0 bulkscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007130170
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200713161742.3076597-1-yhs@fb.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-One important use case when emitting const/volatile/restrict is undesirab=
-le is
-BPF skeleton generation of DATASEC layout. These are further memory-mappe=
-d and
-can be written/read from user-space directly.
+On Mon, Jul 13, 2020 at 09:17:42AM -0700, Yonghong Song wrote:
+> Two new readonly buffer PTR_TO_RDONLY_BUF or
+> PTR_TO_RDONLY_BUF_OR_NULL register states
+> are introduced. These new register states will be used
+> by later bpf map element iterator.
+> 
+> New register states share some similarity to
+> PTR_TO_TP_BUFFER as it will calculate accessed buffer
+> size during verification time. The accessed buffer
+> size will be later compared to other metrics during
+> later attach/link_create time.
+> 
+> Two differences between PTR_TO_TP_BUFFER and
+> PTR_TO_RDONLY_BUF[_OR_NULL].
+> PTR_TO_TP_BUFFER is for write only
+> and PTR_TO_RDONLY_BUF[_OR_NULL] is for read only.
+> In addition, a rdonly_buf_seq_id is also added to the
+> register state since it is possible for the same program
+> there could be two PTR_TO_RDONLY_BUF[_OR_NULL] ctx arguments.
+> For example, for bpf later map element iterator,
+> both key and value may be PTR_TO_TP_BUFFER_OR_NULL.
+> 
+> Similar to reg_state PTR_TO_BTF_ID_OR_NULL in bpf
+> iterator programs, PTR_TO_RDONLY_BUF_OR_NULL reg_type and
+> its rdonly_buf_seq_id can be set at
+> prog->aux->bpf_ctx_arg_aux, and bpf verifier will
+> retrieve the values during btf_ctx_access().
+> Later bpf map element iterator implementation
+> will show how such information will be assigned
+> during target registeration time.
+...
+>  struct bpf_ctx_arg_aux {
+>  	u32 offset;
+>  	enum bpf_reg_type reg_type;
+> +	u32 rdonly_buf_seq_id;
+>  };
+>  
+> +#define BPF_MAX_RDONLY_BUF	2
+> +
+>  struct bpf_prog_aux {
+>  	atomic64_t refcnt;
+>  	u32 used_map_cnt;
+> @@ -693,6 +699,7 @@ struct bpf_prog_aux {
+>  	u32 attach_btf_id; /* in-kernel BTF type id to attach to */
+>  	u32 ctx_arg_info_size;
+>  	const struct bpf_ctx_arg_aux *ctx_arg_info;
+> +	u32 max_rdonly_access[BPF_MAX_RDONLY_BUF];
 
-For important case of .rodata variables, bpftool strips away first-level
-modifiers, to make their use on user-space side simple and not requiring =
-extra
-type casts to override compiler complaining about writing to const variab=
-les.
+I think PTR_TO_RDONLY_BUF approach is too limiting.
+I think the map value should probably be writable from the beginning,
+but I don't see how this RDONLY_BUF support can be naturally extended.
+Also key and value can be large, so just load/store is going to be
+limiting pretty quickly. People would want to use helpers to access
+key/value areas. I think any existing helper that accepts ARG_PTR_TO_MEM
+should be usable with data from this key/value.
+PTR_TO_TP_BUFFER was a quick hack for tiny scratch area.
+Here I think the verifier should be smart from the start.
 
-This logic works mostly fine, but breaks in some more complicated cases. =
-E.g.:
-
-    const volatile int params[10];
-
-Because in BTF it's a chain of ARRAY -> CONST -> VOLATILE -> INT, bpftool
-stops at ARRAY and doesn't strip CONST and VOLATILE. In skeleton this var=
-iable
-will be emitted as is. So when used from user-space, compiler will compla=
-in
-about writing to const array. This is problematic, as also mentioned in [=
-0].
-
-To solve this for arrays and other non-trivial cases (e.g., inner
-const/volatile fields inside the struct), teach btf_dump to strip away an=
-y
-modifier, when requested. This is done as an extra option on
-btf_dump__emit_type_decl() API.
-
-Reported-by: Anton Protopopov <a.s.protopopov@gmail.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/btf.h      |  2 ++
- tools/lib/bpf/btf_dump.c | 10 ++++++++--
- 2 files changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 70c1b7ec2bd0..be98dd75b791 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -143,6 +143,8 @@ struct btf_dump_emit_type_decl_opts {
- 	 * necessary indentation already
- 	 */
- 	int indent_level;
-+	/* strip all the const/volatile/restrict mods */
-+	bool strip_mods;
- };
- #define btf_dump_emit_type_decl_opts__last_field indent_level
-=20
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index bbb430317260..e1c344504cae 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -60,6 +60,7 @@ struct btf_dump {
- 	const struct btf_ext *btf_ext;
- 	btf_dump_printf_fn_t printf_fn;
- 	struct btf_dump_opts opts;
-+	bool strip_mods;
-=20
- 	/* per-type auxiliary state */
- 	struct btf_dump_type_aux_state *type_states;
-@@ -1032,7 +1033,9 @@ int btf_dump__emit_type_decl(struct btf_dump *d, __=
-u32 id,
-=20
- 	fname =3D OPTS_GET(opts, field_name, "");
- 	lvl =3D OPTS_GET(opts, indent_level, 0);
-+	d->strip_mods =3D OPTS_GET(opts, strip_mods, false);
- 	btf_dump_emit_type_decl(d, id, fname, lvl);
-+	d->strip_mods =3D false;
- 	return 0;
- }
-=20
-@@ -1045,6 +1048,10 @@ static void btf_dump_emit_type_decl(struct btf_dum=
-p *d, __u32 id,
-=20
- 	stack_start =3D d->decl_stack_cnt;
- 	for (;;) {
-+		t =3D btf__type_by_id(d->btf, id);
-+		if (d->strip_mods && btf_is_mod(t))
-+			goto skip_mod;
-+
- 		err =3D btf_dump_push_decl_stack_id(d, id);
- 		if (err < 0) {
- 			/*
-@@ -1056,12 +1063,11 @@ static void btf_dump_emit_type_decl(struct btf_du=
-mp *d, __u32 id,
- 			d->decl_stack_cnt =3D stack_start;
- 			return;
- 		}
--
-+skip_mod:
- 		/* VOID */
- 		if (id =3D=3D 0)
- 			break;
-=20
--		t =3D btf__type_by_id(d->btf, id);
- 		switch (btf_kind(t)) {
- 		case BTF_KIND_PTR:
- 		case BTF_KIND_VOLATILE:
---=20
-2.24.1
-
+The next patch populates bpf_ctx_arg_aux with hardcoded 0 and 1.
+imo that's too hacky. Helper definitions shouldn't be in business
+of poking into such verifier internals.
