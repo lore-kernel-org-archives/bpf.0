@@ -8,64 +8,63 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05A83C43459
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 17:47:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE525C433E2
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 17:47:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0B4520771
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 17:47:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A08DA20771
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 17:47:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="PrJnbZuc"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="FxObrd5y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729840AbgGMRrY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 13:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60304 "EHLO
+        id S1730538AbgGMRr2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 13:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730430AbgGMRrJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Jul 2020 13:47:09 -0400
+        with ESMTP id S1730528AbgGMRr1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jul 2020 13:47:27 -0400
 Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04D9C061794
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 10:47:08 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id f5so18949628ljj.10
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 10:47:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E3AC08C5E1
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 10:47:25 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id q7so19004852ljm.1
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 10:47:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=V0LD3bn+WRHrd+N/cPZAGVVSG99I0PJVGPePLpxK9tw=;
-        b=PrJnbZuc4RuZm6vbyl7Xl3YCGpAOyjWAbOryqvufulLr7lbKmrgpTYZw1BmlgbQRmu
-         VOmxNzrMNFtFhWD//eGPk0HVJoP/0NGtrxuD0BUA5bwjVm4deNKdaAyLifKMughPS5cZ
-         aPw4xBOhgt37xMM4w5ZAOLMe/SS/yuIun9MG4=
+        bh=3ybsptQ1uDuYH5yr/joHYcohd4KEboQtBfB059oe4Vg=;
+        b=FxObrd5yQWq6ZMDTHzPP1ehrdv0JRCKwevvJG2XyGrLv25bYbEr+6GqSpjuI1zG91D
+         KxRe1uM1CrJSHG7rcUGkJMK9iAu+Lrt2Nzz7ym2JT/fDxcn0kWz7E/UvqHQyvsRpX0PS
+         XkW1OXMuCPdEEiGUCFfnCPzfoGu4qJ9aZa7FA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=V0LD3bn+WRHrd+N/cPZAGVVSG99I0PJVGPePLpxK9tw=;
-        b=kwvCiBJvnooUaAXk1BC8JU27kKc41srfSrZZJFxm7WWzn3LGZhXB/8I4AG8ivK5hza
-         Iw42szQ2Mtih1bBrIFfpzxZD5XDvSjoJgl/60wMhE4O2YuD2MSJlFNgWZYjW27PAX1Ax
-         zHXMtFGwDttUKbQS6aACpUz1LRBmRdD4FoBSqf5IpN8ztF/Mqe8rPhRGWN+hMmcpN8zO
-         4aIFWxxWuvA+4OKIntx+rFA5YBWpFhbaG9FiE971PuW7VQXwyEr7z5Yv17r8E81RJleA
-         Ou9Zl1w4M7gzcvNs9eWweDnNPoBhG6SiuZEOqsdCLofYVVHBRobnSCVtUcJjmvpjOKDw
-         MCGw==
-X-Gm-Message-State: AOAM531n+JBBQlqhUJR9u/k3H1XaLnD+ek7uAqJSL9EctZV8R+OrGmEP
-        EKX8v2boND96ys6BAzM8qxoxuSdFeNXsZg==
-X-Google-Smtp-Source: ABdhPJwjmBeJY92EPBffVFiioAiZDwb9VJR3FpV2hlwwJ3XVrRczEf3WdEE9ZrQeJeo0Qb0NhGNZzA==
-X-Received: by 2002:a2e:a375:: with SMTP id i21mr384347ljn.403.1594662427013;
-        Mon, 13 Jul 2020 10:47:07 -0700 (PDT)
+        bh=3ybsptQ1uDuYH5yr/joHYcohd4KEboQtBfB059oe4Vg=;
+        b=hUQs6uVQAEoWaz9UC2vOSpKwR+MXkTM80zgoauPA/QgiXiSX6BXyBK7PbHMZ1yy1z3
+         aqHwRn88NIs5NzNrJijGc5hXgZUvh0bZWsI1rYY3qJPDvva0vjemTuinCjSE0vG1Q5C+
+         dRU7RBxLJGuaf2MHYSg95Z/d8eG0Oqj68JtDdJLvcZ3KGphVqKL5zC/ACmmMI9IuJiEk
+         Q4cGaRTFaLIc4segJHsjvxiqi23FoY3Z7a6Ws+XSEQtFX4FKW2MeqAzLdnpZIePhvWkj
+         vt6w0jVCSBybAn/7ZpKWNjlgOD39OlLXwl9WmPhYwENumFSfnPxxCCGG8LIFB+arIVsR
+         cbqQ==
+X-Gm-Message-State: AOAM531cr6980bcI6ABqH3bb5O7DMIbAIiHZfdw4benz79ViUt23fvbC
+        dXP+ylVYFaSwQR8wczHz1N/rtv8fpVfhRg==
+X-Google-Smtp-Source: ABdhPJw4XghKF8wejD8Baxl8SdCIahGaAt0NbnbabRhRsbM3aemz1CoXDjje9sYW2csvK2oOWdZlOA==
+X-Received: by 2002:a05:651c:8c:: with SMTP id 12mr354416ljq.420.1594662443573;
+        Mon, 13 Jul 2020 10:47:23 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id 132sm4727993lfl.37.2020.07.13.10.47.05
+        by smtp.gmail.com with ESMTPSA id j25sm4737668lfh.95.2020.07.13.10.47.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 10:47:06 -0700 (PDT)
+        Mon, 13 Jul 2020 10:47:23 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marek Majkowski <marek@cloudflare.com>
-Subject: [PATCH bpf-next v4 06/16] inet6: Run SK_LOOKUP BPF program on socket lookup
-Date:   Mon, 13 Jul 2020 19:46:44 +0200
-Message-Id: <20200713174654.642628-7-jakub@cloudflare.com>
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH bpf-next v4 15/16] selftests/bpf: Rename test_sk_lookup_kern.c to test_ref_track_kern.c
+Date:   Mon, 13 Jul 2020 19:46:53 +0200
+Message-Id: <20200713174654.642628-16-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200713174654.642628-1-jakub@cloudflare.com>
 References: <20200713174654.642628-1-jakub@cloudflare.com>
@@ -76,142 +75,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Following ipv4 stack changes, run a BPF program attached to netns before
-looking up a listening socket. Program can return a listening socket to use
-as result of socket lookup, fail the lookup, or take no action.
+Name the BPF C file after the test case that uses it.
 
-Suggested-by: Marek Majkowski <marek@cloudflare.com>
+This frees up "test_sk_lookup" namespace for BPF sk_lookup program tests
+introduced by the following patch.
+
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
+ tools/testing/selftests/bpf/prog_tests/reference_tracking.c     | 2 +-
+ .../bpf/progs/{test_sk_lookup_kern.c => test_ref_track_kern.c}  | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename tools/testing/selftests/bpf/progs/{test_sk_lookup_kern.c => test_ref_track_kern.c} (100%)
 
-Notes:
-    v4:
-    - Adapt to changes in BPF prog return codes.
-    - Invert return value from bpf_sk_lookup_run_v6 to true on skip reuseport.
-    
-    v3:
-    - Use a static_key to minimize the hook overhead when not used. (Alexei)
-    - Don't copy struct in6_addr when populating BPF prog context. (Martin)
-    - Adapt for running an array of attached programs. (Alexei)
-    - Adapt for optionally skipping reuseport selection. (Martin)
-
- include/linux/filter.h      | 44 +++++++++++++++++++++++++++++++++++++
- net/ipv6/inet6_hashtables.c | 35 +++++++++++++++++++++++++++++
- 2 files changed, 79 insertions(+)
-
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index b9ad0fdabca5..900b71af5580 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1397,4 +1397,48 @@ static inline bool bpf_sk_lookup_run_v4(struct net *net, int protocol,
- 	return no_reuseport;
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
+index fc0d7f4f02cf..106ca8bb2a8f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
++++ b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
+@@ -3,7 +3,7 @@
  
-+#if IS_ENABLED(CONFIG_IPV6)
-+static inline bool bpf_sk_lookup_run_v6(struct net *net, int protocol,
-+					const struct in6_addr *saddr,
-+					const __be16 sport,
-+					const struct in6_addr *daddr,
-+					const u16 dport,
-+					struct sock **psk)
-+{
-+	struct bpf_prog_array *run_array;
-+	struct sock *selected_sk = NULL;
-+	bool no_reuseport = false;
-+
-+	rcu_read_lock();
-+	run_array = rcu_dereference(net->bpf.run_array[NETNS_BPF_SK_LOOKUP]);
-+	if (run_array) {
-+		struct bpf_sk_lookup_kern ctx = {
-+			.family		= AF_INET6,
-+			.protocol	= protocol,
-+			.v6.saddr	= saddr,
-+			.v6.daddr	= daddr,
-+			.sport		= sport,
-+			.dport		= dport,
-+		};
-+		u32 act;
-+
-+		act = BPF_PROG_SK_LOOKUP_RUN_ARRAY(run_array, ctx, BPF_PROG_RUN);
-+		if (act == SK_PASS) {
-+			selected_sk = ctx.selected_sk;
-+			no_reuseport = ctx.no_reuseport;
-+			goto unlock;
-+		}
-+
-+		selected_sk = ERR_PTR(-ECONNREFUSED);
-+		WARN_ONCE(act != SK_DROP,
-+			  "Illegal BPF SK_LOOKUP return value %u, expect packet loss!\n",
-+			  act);
-+	}
-+unlock:
-+	rcu_read_unlock();
-+	*psk = selected_sk;
-+	return no_reuseport;
-+}
-+#endif /* IS_ENABLED(CONFIG_IPV6) */
-+
- #endif /* __LINUX_FILTER_H__ */
-diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
-index 03942eef8ab6..2d3add9e6116 100644
---- a/net/ipv6/inet6_hashtables.c
-+++ b/net/ipv6/inet6_hashtables.c
-@@ -21,6 +21,8 @@
- #include <net/ip.h>
- #include <net/sock_reuseport.h>
- 
-+extern struct inet_hashinfo tcp_hashinfo;
-+
- u32 inet6_ehashfn(const struct net *net,
- 		  const struct in6_addr *laddr, const u16 lport,
- 		  const struct in6_addr *faddr, const __be16 fport)
-@@ -159,6 +161,31 @@ static struct sock *inet6_lhash2_lookup(struct net *net,
- 	return result;
- }
- 
-+static inline struct sock *inet6_lookup_run_bpf(struct net *net,
-+						struct inet_hashinfo *hashinfo,
-+						struct sk_buff *skb, int doff,
-+						const struct in6_addr *saddr,
-+						const __be16 sport,
-+						const struct in6_addr *daddr,
-+						const u16 hnum)
-+{
-+	struct sock *sk, *reuse_sk;
-+	bool no_reuseport;
-+
-+	if (hashinfo != &tcp_hashinfo)
-+		return NULL; /* only TCP is supported */
-+
-+	no_reuseport = bpf_sk_lookup_run_v6(net, IPPROTO_TCP,
-+					    saddr, sport, daddr, hnum, &sk);
-+	if (no_reuseport || IS_ERR_OR_NULL(sk))
-+		return sk;
-+
-+	reuse_sk = lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
-+	if (reuse_sk)
-+		sk = reuse_sk;
-+	return sk;
-+}
-+
- struct sock *inet6_lookup_listener(struct net *net,
- 		struct inet_hashinfo *hashinfo,
- 		struct sk_buff *skb, int doff,
-@@ -170,6 +197,14 @@ struct sock *inet6_lookup_listener(struct net *net,
- 	struct sock *result = NULL;
- 	unsigned int hash2;
- 
-+	/* Lookup redirect from BPF */
-+	if (static_branch_unlikely(&bpf_sk_lookup_enabled)) {
-+		result = inet6_lookup_run_bpf(net, hashinfo, skb, doff,
-+					      saddr, sport, daddr, hnum);
-+		if (result)
-+			goto done;
-+	}
-+
- 	hash2 = ipv6_portaddr_hash(net, daddr, hnum);
- 	ilb2 = inet_lhash2_bucket(hashinfo, hash2);
- 
+ void test_reference_tracking(void)
+ {
+-	const char *file = "test_sk_lookup_kern.o";
++	const char *file = "test_ref_track_kern.o";
+ 	const char *obj_name = "ref_track";
+ 	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, open_opts,
+ 		.object_name = obj_name,
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c b/tools/testing/selftests/bpf/progs/test_ref_track_kern.c
+similarity index 100%
+rename from tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
+rename to tools/testing/selftests/bpf/progs/test_ref_track_kern.c
 -- 
 2.25.4
 
