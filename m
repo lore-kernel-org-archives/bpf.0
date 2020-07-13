@@ -7,45 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78E60C433EA
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2848C433E3
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:25:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B11C206F5
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:25:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 805BE20738
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:25:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex-team.ru header.i=@yandex-team.ru header.b="kNrW8Ghi"
+	dkim=pass (1024-bit key) header.d=yandex-team.ru header.i=@yandex-team.ru header.b="lYH6gHJB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbgGMSZl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 14:25:41 -0400
-Received: from forwardcorp1j.mail.yandex.net ([5.45.199.163]:41136 "EHLO
-        forwardcorp1j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726758AbgGMSZj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 14:25:39 -0400
+        id S1726762AbgGMSZj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 14:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726309AbgGMSZh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jul 2020 14:25:37 -0400
+Received: from forwardcorp1p.mail.yandex.net (forwardcorp1p.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b6:217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DD6C061755;
+        Mon, 13 Jul 2020 11:25:37 -0700 (PDT)
 Received: from iva8-d077482f1536.qloud-c.yandex.net (iva8-d077482f1536.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:2f26:0:640:d077:482f])
-        by forwardcorp1j.mail.yandex.net (Yandex) with ESMTP id 9DD552E0906;
-        Mon, 13 Jul 2020 21:25:32 +0300 (MSK)
+        by forwardcorp1p.mail.yandex.net (Yandex) with ESMTP id 26C412E12D7;
+        Mon, 13 Jul 2020 21:25:34 +0300 (MSK)
 Received: from iva8-88b7aa9dc799.qloud-c.yandex.net (iva8-88b7aa9dc799.qloud-c.yandex.net [2a02:6b8:c0c:77a0:0:640:88b7:aa9d])
-        by iva8-d077482f1536.qloud-c.yandex.net (mxbackcorp/Yandex) with ESMTP id IehjKGftm9-PVs0unNT;
-        Mon, 13 Jul 2020 21:25:32 +0300
+        by iva8-d077482f1536.qloud-c.yandex.net (mxbackcorp/Yandex) with ESMTP id PynIViMCjb-PXsCI05h;
+        Mon, 13 Jul 2020 21:25:34 +0300
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1594664732; bh=cywGoq2TmkojrQZol7y+3L633j2AT6oJYK8jB49KVOs=;
+        t=1594664734; bh=/Tkd3OmLu3FPpAv3WUko7xzHf9Qit7HMtTcSNe2k4iU=;
         h=In-Reply-To:Message-Id:References:Date:Subject:To:From:Cc;
-        b=kNrW8Ghi6BWEW3au2mGPfl2Vu5Wjl1DGIYfwCz+PO6hSEaXfaO0hg1sLFKTXPtF9Y
-         6oWYKnT4EQo57jxeLfDs6P4sG6WeBIvJOXrWJ++4KGq1Ul+lD9EAvREux7ZYkUFx5G
-         k5V5x5a8+qropD9tdUliR8v3LwVYcGfH29FsJwVM=
+        b=lYH6gHJBQIoVsySnle0aLtAGpVbPimBy3z1whkKbUEhJLUjZFSrbN7HFpWptvm7Sl
+         GaSwRmGxSsGfIwsOe7CEyIqohQaFAmHttN1dvBcuzhFo0d/V6uc66jn/XTadUDcedh
+         id4POZ4iJHNyykU5iSJREX2K2JiN13P19c3dbxAY=
 Authentication-Results: iva8-d077482f1536.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
 Received: from 37.9.72.97-iva.dhcp.yndx.net (37.9.72.97-iva.dhcp.yndx.net [37.9.72.97])
-        by iva8-88b7aa9dc799.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id liA4tjrt5e-PVjq9U62;
-        Mon, 13 Jul 2020 21:25:31 +0300
+        by iva8-88b7aa9dc799.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id liA4tjrt5e-PXjqGfI8;
+        Mon, 13 Jul 2020 21:25:33 +0300
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (Client certificate not present)
 From:   Dmitry Yakunin <zeil@yandex-team.ru>
 To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net,
         netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     sdf@google.com
-Subject: [PATCH bpf-next 1/4] bpf: setup socket family and addresses in bpf_prog_test_run_skb
-Date:   Mon, 13 Jul 2020 21:25:17 +0300
-Message-Id: <20200713182520.97606-2-zeil@yandex-team.ru>
+Subject: [PATCH bpf-next 3/4] bpf: export some cgroup storages allocation helpers for reusing
+Date:   Mon, 13 Jul 2020 21:25:19 +0300
+Message-Id: <20200713182520.97606-4-zeil@yandex-team.ru>
 In-Reply-To: <20200713182520.97606-1-zeil@yandex-team.ru>
 References: <20200713182520.97606-1-zeil@yandex-team.ru>
 MIME-Version: 1.0
@@ -55,42 +58,128 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now it's impossible to test all branches of cgroup_skb bpf program which
-accesses skb->family and skb->{local,remote}_ip{4,6} fields because they
-are zeroed during socket allocation. This commit fills socket family and
-addresses from related fields in constructed skb.
+This patch exports bpf_cgroup_storages_alloc and bpf_cgroup_storages_free
+helpers to the header file and reuses them in bpf_test_run.
 
 Signed-off-by: Dmitry Yakunin <zeil@yandex-team.ru>
 ---
- net/bpf/test_run.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ include/linux/bpf-cgroup.h | 27 +++++++++++++++++++++++++++
+ kernel/bpf/cgroup.c        | 25 -------------------------
+ net/bpf/test_run.c         | 16 ++++------------
+ 3 files changed, 31 insertions(+), 37 deletions(-)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index bfd4ccd..a58b399 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -432,6 +432,21 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	skb->protocol = eth_type_trans(skb, current->nsproxy->net_ns->loopback_dev);
- 	skb_reset_network_header(skb);
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 2c6f266..8bde9bb 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -175,6 +175,33 @@ int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key, void *value);
+ int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
+ 				     void *value, u64 flags);
  
-+	switch (skb->protocol) {
-+	case htons(ETH_P_IP):
-+		sk->sk_family = AF_INET;
-+		sk->sk_rcv_saddr = ip_hdr(skb)->saddr;
-+		sk->sk_daddr = ip_hdr(skb)->daddr;
-+		break;
-+	case htons(ETH_P_IPV6):
-+		sk->sk_family = AF_INET6;
-+		sk->sk_v6_rcv_saddr = ipv6_hdr(skb)->saddr;
-+		sk->sk_v6_daddr = ipv6_hdr(skb)->daddr;
-+		break;
-+	default:
-+		break;
++static inline void bpf_cgroup_storages_free(struct bpf_cgroup_storage
++					    *storage[MAX_BPF_CGROUP_STORAGE_TYPE])
++{
++	enum bpf_cgroup_storage_type stype;
++
++	for_each_cgroup_storage_type(stype)
++		bpf_cgroup_storage_free(storage[stype]);
++}
++
++static inline int bpf_cgroup_storages_alloc(struct bpf_cgroup_storage
++					    *storage[MAX_BPF_CGROUP_STORAGE_TYPE],
++					    struct bpf_prog *prog)
++{
++	enum bpf_cgroup_storage_type stype;
++
++	for_each_cgroup_storage_type(stype) {
++		storage[stype] = bpf_cgroup_storage_alloc(prog, stype);
++		if (IS_ERR(storage[stype])) {
++			storage[stype] = NULL;
++			bpf_cgroup_storages_free(storage);
++			return -ENOMEM;
++		}
 +	}
 +
- 	if (is_l2)
- 		__skb_push(skb, hh_len);
- 	if (is_direct_pkt_access)
++	return 0;
++}
++
+ /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
+ #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)			      \
+ ({									      \
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index ac53102..e4c2792 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -28,31 +28,6 @@ void cgroup_bpf_offline(struct cgroup *cgrp)
+ 	percpu_ref_kill(&cgrp->bpf.refcnt);
+ }
+ 
+-static void bpf_cgroup_storages_free(struct bpf_cgroup_storage *storages[])
+-{
+-	enum bpf_cgroup_storage_type stype;
+-
+-	for_each_cgroup_storage_type(stype)
+-		bpf_cgroup_storage_free(storages[stype]);
+-}
+-
+-static int bpf_cgroup_storages_alloc(struct bpf_cgroup_storage *storages[],
+-				     struct bpf_prog *prog)
+-{
+-	enum bpf_cgroup_storage_type stype;
+-
+-	for_each_cgroup_storage_type(stype) {
+-		storages[stype] = bpf_cgroup_storage_alloc(prog, stype);
+-		if (IS_ERR(storages[stype])) {
+-			storages[stype] = NULL;
+-			bpf_cgroup_storages_free(storages);
+-			return -ENOMEM;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+ static void bpf_cgroup_storages_assign(struct bpf_cgroup_storage *dst[],
+ 				       struct bpf_cgroup_storage *src[])
+ {
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 1e10a7e..5c4835c 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -19,20 +19,13 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+ 			u32 *retval, u32 *time, bool xdp)
+ {
+ 	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
+-	enum bpf_cgroup_storage_type stype;
+ 	u64 time_start, time_spent = 0;
+ 	int ret = 0;
+ 	u32 i;
+ 
+-	for_each_cgroup_storage_type(stype) {
+-		storage[stype] = bpf_cgroup_storage_alloc(prog, stype);
+-		if (IS_ERR(storage[stype])) {
+-			storage[stype] = NULL;
+-			for_each_cgroup_storage_type(stype)
+-				bpf_cgroup_storage_free(storage[stype]);
+-			return -ENOMEM;
+-		}
+-	}
++	ret = bpf_cgroup_storages_alloc(storage, prog);
++	if (ret)
++		return ret;
+ 
+ 	if (!repeat)
+ 		repeat = 1;
+@@ -72,8 +65,7 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+ 	do_div(time_spent, repeat);
+ 	*time = time_spent > U32_MAX ? U32_MAX : (u32)time_spent;
+ 
+-	for_each_cgroup_storage_type(stype)
+-		bpf_cgroup_storage_free(storage[stype]);
++	bpf_cgroup_storages_free(storage);
+ 
+ 	return ret;
+ }
 -- 
 2.7.4
 
