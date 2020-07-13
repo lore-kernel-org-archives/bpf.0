@@ -2,68 +2,70 @@ Return-Path: <SRS0=NpDT=AY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C054CC433E5
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 17:47:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CE57C433F4
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 17:47:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A09B420771
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 17:47:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E7AF207BC
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 17:47:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="vkij8c4e"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="tetYQPuo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730332AbgGMRrG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 13:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
+        id S1730477AbgGMRrN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 13:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730043AbgGMRrA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Jul 2020 13:47:00 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C6FC061794
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 10:46:59 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id r19so18938395ljn.12
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 10:46:59 -0700 (PDT)
+        with ESMTP id S1730466AbgGMRrM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jul 2020 13:47:12 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E261C061794
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 10:47:12 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id k17so9590160lfg.3
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 10:47:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=opL//BYzhcQPBoxrHchY4vZX82iC++4GHZTFlkl4Nb8=;
-        b=vkij8c4eti22az1c2OF806pGH9GUJG7d3hmjrZ9M0KM7TyJqQtp3lBuyKJnpbZVhL1
-         q70nFRE7LT9DO7jFOy0smkUdLcO/uWfJL75lqpLV/hVE2ONNY6upC3BqNAB4zmEGMoji
-         BhJD1QHXBHoryQPm/NFBxFEUk2SN0CQQbRu0c=
+        bh=4adtaF+vh9ZCjhGrf1+RjNro+KhZMebp2/WL08RlLtc=;
+        b=tetYQPuo1HNfbQu7YB33sGi0dcbFBATg/HeznsxFxVoA92dczroFy75rMBQv6SPA69
+         DNRrA9E4KjSH8CDQP+/fghtq9rWIoRcehmYOs3JDLgee6cQuS52b8K8R+64WU3LsAQ1g
+         2AhOVjbta5jKnsaj9fyifypGgKb+WDYZKFhZQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=opL//BYzhcQPBoxrHchY4vZX82iC++4GHZTFlkl4Nb8=;
-        b=rr6Mj7afsX1hrLTdJtrz6/tR9P7JYfBBiaDdYmEuEJmxYvqfvpO67uqYjVitXRodWB
-         uGzg0BEQm02b2gJLTaPCfNfTJ+euz9DY8dmXYQwdJ+X1Hx6yU9PA+Pp7QJM2vBHBIqbV
-         srqt09LprJQ7EreOh2W9UPZ+kMo/BC9HfczIPVGshJ/SciT3A8vFVLfUKbEVnlFjpJUr
-         pdM5FPUP9mob6C7Ia1Y+hA4cyKFcyIuSHqUHSo3uxE0u/M9K++3ig9mUtAueSU3uDBq/
-         vWTB4mNhA3+6BjibtBL5oFj7nc9XP41nwwpDb0DuJEgsunaGDwlepdcFdoTeQjlGGNaq
-         b+1Q==
-X-Gm-Message-State: AOAM530+TMs5lKXzprJmLJrRPMc2/7fqyJBwiBwznBDho4+CXuKYJ3K0
-        4lQecmfA2mANQKKLRXWWmyX39LBUZWWEzQ==
-X-Google-Smtp-Source: ABdhPJxOhso6OoTmlFc2xk0wErkRYTNkDXXkmvLn/bCi9OjuQp0edzUKBtoDNdgwmdQP1EAEXqDoSQ==
-X-Received: by 2002:a2e:a544:: with SMTP id e4mr424887ljn.264.1594662417544;
-        Mon, 13 Jul 2020 10:46:57 -0700 (PDT)
+        bh=4adtaF+vh9ZCjhGrf1+RjNro+KhZMebp2/WL08RlLtc=;
+        b=YuOs4rvQx8ZXAQSvqTfq/DQqRg1I6I5AaRXaMXlvRSXzq6njXo/CUsVEGD2PSYV/t/
+         P7mopZtNbWK+z/us8dbFk2L+jvdz74WF5gEAOK5gTLXTp8V+ZG9Wo2ejYxRFgvSGy0OO
+         DXf6JHXLW6yIUvJHtAsEG8c4LBIydvtlZBr5KAhKGZye5R3X6nhK/K3C7exJzUez+bDS
+         mclNdZ1dArezD4juUMCn6jgr8jcmGhLjIMce6sL6qzTgakovVvr5IEGUKKPQShkFO5R+
+         kCFy0c3lfk09M6AXMLyqocuR5rkUEmXqNrR3uXgVkzcFhD3Dh8HtPjw1t0pipz8raN7n
+         aH1g==
+X-Gm-Message-State: AOAM532WjaVim8mS34HEV5V5JcyH6bO6b83Pl57nregdiQa9yGCfJKa8
+        Gz/+OSIVxYJFVprkzdjHDPXNHPF2RxRIpA==
+X-Google-Smtp-Source: ABdhPJyj9c5rR9UY+ckpPyOhrZ39eULC/Cyi0TZxxCaOU5hZjpnCZ9safKIrK4XOPvb9HIneCZk5Ng==
+X-Received: by 2002:a19:22d6:: with SMTP id i205mr175738lfi.50.1594662430546;
+        Mon, 13 Jul 2020 10:47:10 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id g22sm4741921lfb.43.2020.07.13.10.46.56
+        by smtp.gmail.com with ESMTPSA id a17sm4771942lfo.73.2020.07.13.10.47.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 10:46:57 -0700 (PDT)
+        Mon, 13 Jul 2020 10:47:09 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH bpf-next v4 01/16] bpf, netns: Handle multiple link attachments
-Date:   Mon, 13 Jul 2020 19:46:39 +0200
-Message-Id: <20200713174654.642628-2-jakub@cloudflare.com>
+        Jakub Kicinski <kuba@kernel.org>,
+        Marek Majkowski <marek@cloudflare.com>
+Subject: [PATCH bpf-next v4 08/16] udp: Run SK_LOOKUP BPF program on socket lookup
+Date:   Mon, 13 Jul 2020 19:46:46 +0200
+Message-Id: <20200713174654.642628-9-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200713174654.642628-1-jakub@cloudflare.com>
 References: <20200713174654.642628-1-jakub@cloudflare.com>
@@ -74,271 +76,119 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend the BPF netns link callbacks to rebuild (grow/shrink) or update the
-prog_array at given position when link gets attached/updated/released.
+Following INET/TCP socket lookup changes, modify UDP socket lookup to let
+BPF program select a receiving socket before searching for a socket by
+destination address and port as usual.
 
-This let's us lift the limit of having just one link attached for the new
-attach type introduced by subsequent patch.
+Lookup of connected sockets that match packet 4-tuple is unaffected by this
+change. BPF program runs, and potentially overrides the lookup result, only
+if a 4-tuple match was not found.
 
-No functional changes intended.
-
+Suggested-by: Marek Majkowski <marek@cloudflare.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
 
 Notes:
     v4:
-    - Document prog_array {delete_safe,update}_at() behavior. (Andrii)
-    - Return -EINVAL/-ENOENT on failure in {delete_safe,update}_at(). (Andrii)
-    - Return -ENOENT on index out of range in link_index(). (Andrii)
+    - Adapt to change in bpf_sk_lookup_run_v4 return value semantics.
     
     v3:
-    - New in v3 to support multi-prog attachments. (Alexei)
+    - Use a static_key to minimize the hook overhead when not used. (Alexei)
+    - Adapt for running an array of attached programs. (Alexei)
+    - Adapt for optionally skipping reuseport selection. (Martin)
 
- include/linux/bpf.h        |  3 ++
- kernel/bpf/core.c          | 55 +++++++++++++++++++++++
- kernel/bpf/net_namespace.c | 90 ++++++++++++++++++++++++++++++++++----
- 3 files changed, 139 insertions(+), 9 deletions(-)
+ net/ipv4/udp.c | 59 ++++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 50 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0cd7f6884c5c..ad9c61ae8640 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -928,6 +928,9 @@ int bpf_prog_array_copy_to_user(struct bpf_prog_array *progs,
- 
- void bpf_prog_array_delete_safe(struct bpf_prog_array *progs,
- 				struct bpf_prog *old_prog);
-+int bpf_prog_array_delete_safe_at(struct bpf_prog_array *array, int index);
-+int bpf_prog_array_update_at(struct bpf_prog_array *array, int index,
-+			     struct bpf_prog *prog);
- int bpf_prog_array_copy_info(struct bpf_prog_array *array,
- 			     u32 *prog_ids, u32 request_cnt,
- 			     u32 *prog_cnt);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 9df4cc9a2907..7be02e555ab9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1958,6 +1958,61 @@ void bpf_prog_array_delete_safe(struct bpf_prog_array *array,
- 		}
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 0d03e0277263..e82db3ab49d3 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -456,6 +456,29 @@ static struct sock *udp4_lib_lookup2(struct net *net,
+ 	return result;
  }
  
-+/**
-+ * bpf_prog_array_delete_safe_at() - Replaces the program at the given
-+ *                                   index into the program array with
-+ *                                   a dummy no-op program.
-+ * @array: a bpf_prog_array
-+ * @index: the index of the program to replace
-+ *
-+ * Skips over dummy programs, by not counting them, when calculating
-+ * the the position of the program to replace.
-+ *
-+ * Return:
-+ * * 0		- Success
-+ * * -EINVAL	- Invalid index value. Must be a non-negative integer.
-+ * * -ENOENT	- Index out of range
-+ */
-+int bpf_prog_array_delete_safe_at(struct bpf_prog_array *array, int index)
++static inline struct sock *udp4_lookup_run_bpf(struct net *net,
++					       struct udp_table *udptable,
++					       struct sk_buff *skb,
++					       __be32 saddr, __be16 sport,
++					       __be32 daddr, u16 hnum)
 +{
-+	return bpf_prog_array_update_at(array, index, &dummy_bpf_prog.prog);
++	struct sock *sk, *reuse_sk;
++	bool no_reuseport;
++
++	if (udptable != &udp_table)
++		return NULL; /* only UDP is supported */
++
++	no_reuseport = bpf_sk_lookup_run_v4(net, IPPROTO_UDP,
++					    saddr, sport, daddr, hnum, &sk);
++	if (no_reuseport || IS_ERR_OR_NULL(sk))
++		return sk;
++
++	reuse_sk = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
++	if (reuse_sk)
++		sk = reuse_sk;
++	return sk;
 +}
 +
-+/**
-+ * bpf_prog_array_update_at() - Updates the program at the given index
-+ *                              into the program array.
-+ * @array: a bpf_prog_array
-+ * @index: the index of the program to update
-+ * @prog: the program to insert into the array
-+ *
-+ * Skips over dummy programs, by not counting them, when calculating
-+ * the position of the program to update.
-+ *
-+ * Return:
-+ * * 0		- Success
-+ * * -EINVAL	- Invalid index value. Must be a non-negative integer.
-+ * * -ENOENT	- Index out of range
-+ */
-+int bpf_prog_array_update_at(struct bpf_prog_array *array, int index,
-+			     struct bpf_prog *prog)
-+{
-+	struct bpf_prog_array_item *item;
+ /* UDP is nearly always wildcards out the wazoo, it makes no sense to try
+  * harder than this. -DaveM
+  */
+@@ -463,27 +486,45 @@ struct sock *__udp4_lib_lookup(struct net *net, __be32 saddr,
+ 		__be16 sport, __be32 daddr, __be16 dport, int dif,
+ 		int sdif, struct udp_table *udptable, struct sk_buff *skb)
+ {
+-	struct sock *result;
+ 	unsigned short hnum = ntohs(dport);
+ 	unsigned int hash2, slot2;
+ 	struct udp_hslot *hslot2;
++	struct sock *result, *sk;
+ 
+ 	hash2 = ipv4_portaddr_hash(net, daddr, hnum);
+ 	slot2 = hash2 & udptable->mask;
+ 	hslot2 = &udptable->hash2[slot2];
+ 
++	/* Lookup connected or non-wildcard socket */
+ 	result = udp4_lib_lookup2(net, saddr, sport,
+ 				  daddr, hnum, dif, sdif,
+ 				  hslot2, skb);
+-	if (!result) {
+-		hash2 = ipv4_portaddr_hash(net, htonl(INADDR_ANY), hnum);
+-		slot2 = hash2 & udptable->mask;
+-		hslot2 = &udptable->hash2[slot2];
+-
+-		result = udp4_lib_lookup2(net, saddr, sport,
+-					  htonl(INADDR_ANY), hnum, dif, sdif,
+-					  hslot2, skb);
++	if (!IS_ERR_OR_NULL(result) && result->sk_state == TCP_ESTABLISHED)
++		goto done;
 +
-+	if (unlikely(index < 0))
-+		return -EINVAL;
-+
-+	for (item = array->items; item->prog; item++) {
-+		if (item->prog == &dummy_bpf_prog.prog)
-+			continue;
-+		if (!index) {
-+			WRITE_ONCE(item->prog, prog);
-+			return 0;
++	/* Lookup redirect from BPF */
++	if (static_branch_unlikely(&bpf_sk_lookup_enabled)) {
++		sk = udp4_lookup_run_bpf(net, udptable, skb,
++					 saddr, sport, daddr, hnum);
++		if (sk) {
++			result = sk;
++			goto done;
 +		}
-+		index--;
-+	}
-+	return -ENOENT;
-+}
-+
- int bpf_prog_array_copy(struct bpf_prog_array *old_array,
- 			struct bpf_prog *exclude_prog,
- 			struct bpf_prog *include_prog,
-diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
-index 247543380fa6..988c2766ec97 100644
---- a/kernel/bpf/net_namespace.c
-+++ b/kernel/bpf/net_namespace.c
-@@ -36,12 +36,50 @@ static void netns_bpf_run_array_detach(struct net *net,
- 	bpf_prog_array_free(run_array);
- }
- 
-+static int link_index(struct net *net, enum netns_bpf_attach_type type,
-+		      struct bpf_netns_link *link)
-+{
-+	struct bpf_netns_link *pos;
-+	int i = 0;
-+
-+	list_for_each_entry(pos, &net->bpf.links[type], node) {
-+		if (pos == link)
-+			return i;
-+		i++;
-+	}
-+	return -ENOENT;
-+}
-+
-+static int link_count(struct net *net, enum netns_bpf_attach_type type)
-+{
-+	struct list_head *pos;
-+	int i = 0;
-+
-+	list_for_each(pos, &net->bpf.links[type])
-+		i++;
-+	return i;
-+}
-+
-+static void fill_prog_array(struct net *net, enum netns_bpf_attach_type type,
-+			    struct bpf_prog_array *prog_array)
-+{
-+	struct bpf_netns_link *pos;
-+	unsigned int i = 0;
-+
-+	list_for_each_entry(pos, &net->bpf.links[type], node) {
-+		prog_array->items[i].prog = pos->link.prog;
-+		i++;
-+	}
-+}
-+
- static void bpf_netns_link_release(struct bpf_link *link)
- {
- 	struct bpf_netns_link *net_link =
- 		container_of(link, struct bpf_netns_link, link);
- 	enum netns_bpf_attach_type type = net_link->netns_type;
-+	struct bpf_prog_array *old_array, *new_array;
- 	struct net *net;
-+	int cnt, idx;
- 
- 	mutex_lock(&netns_bpf_mutex);
- 
-@@ -53,9 +91,27 @@ static void bpf_netns_link_release(struct bpf_link *link)
- 	if (!net)
- 		goto out_unlock;
- 
--	netns_bpf_run_array_detach(net, type);
-+	/* Remember link position in case of safe delete */
-+	idx = link_index(net, type, net_link);
- 	list_del(&net_link->node);
- 
-+	cnt = link_count(net, type);
-+	if (!cnt) {
-+		netns_bpf_run_array_detach(net, type);
-+		goto out_unlock;
-+	}
-+
-+	old_array = rcu_dereference_protected(net->bpf.run_array[type],
-+					      lockdep_is_held(&netns_bpf_mutex));
-+	new_array = bpf_prog_array_alloc(cnt, GFP_KERNEL);
-+	if (!new_array) {
-+		WARN_ON(bpf_prog_array_delete_safe_at(old_array, idx));
-+		goto out_unlock;
-+	}
-+	fill_prog_array(net, type, new_array);
-+	rcu_assign_pointer(net->bpf.run_array[type], new_array);
-+	bpf_prog_array_free(old_array);
-+
- out_unlock:
- 	mutex_unlock(&netns_bpf_mutex);
- }
-@@ -77,7 +133,7 @@ static int bpf_netns_link_update_prog(struct bpf_link *link,
- 	enum netns_bpf_attach_type type = net_link->netns_type;
- 	struct bpf_prog_array *run_array;
- 	struct net *net;
--	int ret = 0;
-+	int idx, ret;
- 
- 	if (old_prog && old_prog != link->prog)
- 		return -EPERM;
-@@ -95,7 +151,10 @@ static int bpf_netns_link_update_prog(struct bpf_link *link,
- 
- 	run_array = rcu_dereference_protected(net->bpf.run_array[type],
- 					      lockdep_is_held(&netns_bpf_mutex));
--	WRITE_ONCE(run_array->items[0].prog, new_prog);
-+	idx = link_index(net, type, net_link);
-+	ret = bpf_prog_array_update_at(run_array, idx, new_prog);
-+	if (ret)
-+		goto out_unlock;
- 
- 	old_prog = xchg(&link->prog, new_prog);
- 	bpf_prog_put(old_prog);
-@@ -295,18 +354,28 @@ int netns_bpf_prog_detach(const union bpf_attr *attr)
- 	return ret;
- }
- 
-+static int netns_bpf_max_progs(enum netns_bpf_attach_type type)
-+{
-+	switch (type) {
-+	case NETNS_BPF_FLOW_DISSECTOR:
-+		return 1;
-+	default:
-+		return 0;
-+	}
-+}
-+
- static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
- 				 enum netns_bpf_attach_type type)
- {
- 	struct bpf_netns_link *net_link =
- 		container_of(link, struct bpf_netns_link, link);
- 	struct bpf_prog_array *run_array;
--	int err;
-+	int cnt, err;
- 
- 	mutex_lock(&netns_bpf_mutex);
- 
--	/* Allow attaching only one prog or link for now */
--	if (!list_empty(&net->bpf.links[type])) {
-+	cnt = link_count(net, type);
-+	if (cnt >= netns_bpf_max_progs(type)) {
- 		err = -E2BIG;
- 		goto out_unlock;
  	}
-@@ -327,16 +396,19 @@ static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
- 	if (err)
- 		goto out_unlock;
- 
--	run_array = bpf_prog_array_alloc(1, GFP_KERNEL);
-+	run_array = bpf_prog_array_alloc(cnt + 1, GFP_KERNEL);
- 	if (!run_array) {
- 		err = -ENOMEM;
- 		goto out_unlock;
- 	}
--	run_array->items[0].prog = link->prog;
--	rcu_assign_pointer(net->bpf.run_array[type], run_array);
- 
- 	list_add_tail(&net_link->node, &net->bpf.links[type]);
- 
-+	fill_prog_array(net, type, run_array);
-+	run_array = rcu_replace_pointer(net->bpf.run_array[type], run_array,
-+					lockdep_is_held(&netns_bpf_mutex));
-+	bpf_prog_array_free(run_array);
 +
- out_unlock:
- 	mutex_unlock(&netns_bpf_mutex);
- 	return err;
++	/* Got non-wildcard socket or error on first lookup */
++	if (result)
++		goto done;
++
++	/* Lookup wildcard sockets */
++	hash2 = ipv4_portaddr_hash(net, htonl(INADDR_ANY), hnum);
++	slot2 = hash2 & udptable->mask;
++	hslot2 = &udptable->hash2[slot2];
++
++	result = udp4_lib_lookup2(net, saddr, sport,
++				  htonl(INADDR_ANY), hnum, dif, sdif,
++				  hslot2, skb);
++done:
+ 	if (IS_ERR(result))
+ 		return NULL;
+ 	return result;
 -- 
 2.25.4
 
