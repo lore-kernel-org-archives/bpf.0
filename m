@@ -7,53 +7,53 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73062C433EA
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 17:47:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39614C433E7
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 17:47:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5227020773
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 17:47:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11C6F20791
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 17:47:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="a1ct+skd"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Xsqfq1e+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730395AbgGMRrH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 13:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S1729703AbgGMRrD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 13:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730319AbgGMRrG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Jul 2020 13:47:06 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2255C08C5DD
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 10:47:05 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id y13so9600749lfe.9
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 10:47:05 -0700 (PDT)
+        with ESMTP id S1730297AbgGMRrC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jul 2020 13:47:02 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E15EC061755
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 10:47:02 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id g2so9586889lfb.0
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 10:47:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dcblGvWhBWCzM643yO1GenYw1yXlx9Mn/KsJt0ZGcP4=;
-        b=a1ct+skdVvh1aO+JIKVD9+N25TdD+eLWjFfuh96vrpH+GfEr3P/7OCAOojRnelTgs9
-         rJS6H9nFEcedN6kk3ttMiHCYzOVOmR3XzgnQDjU50uGHk8N5dTBeyIjInb7xEN+DWzSN
-         NORcgZtRZr4uo/Unc4D7VUPV5wT/Og5akrkt8=
+        bh=7bIusmK25t+OvYXtTDBqMTp8M1en4/Qe8ODN3kY6Mb8=;
+        b=Xsqfq1e+xdTAC0c7tjEdwIoCDSwNjUjQiZzfj0P6IJ14XNdwt0UwEL1dF0+LQMypNk
+         9iZ5neOOyUKN0qQaeMDuegpTgeCtj1bN3c2RUM8aoEQGF0euFboqc/k61tdvvnmIgM1d
+         B0lD5ELrlJrpzMzsw3Bo4PsCn4uNO/lkrbnMw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dcblGvWhBWCzM643yO1GenYw1yXlx9Mn/KsJt0ZGcP4=;
-        b=MaMTi2LR+sJJ+tAXKTGY63vDYqDh84qADX+kLKjaTmTFZuv8czLd+ZOqUmEFLP1HKr
-         Y5uDofjbIhtyHnWGgjTqsLHdmf21YfnXbenRmLBXy/TrNOiXb5ZkreKxjzWSest4XGlv
-         XusE8DNK00LTtziZ1yGDZgO3N5uL/iY8SJEyk6EL5y95l6w8hc9LxTgVArldFZgAEY/w
-         FB2kn85vrJO++gpXfjpmpdC8HWY9t+eZVHZUe2rygXYLhT6BGm7CfQr3LElCxTWXRbeg
-         gwD/uu3gSa+kSeDHfWJ+c1Lr3hlECVPDqQ0QQJv5gRPmDjn82b94/2iDzLZhMQpM7x0u
-         imNg==
-X-Gm-Message-State: AOAM530XqZEvM9UNfkxpngNmn0gmQ8ieZLlb5tw46QNSETEfv8NAnHP8
-        EAyNAS8Jpwt9drdB9pzaxsqA0HvVh/VP6Q==
-X-Google-Smtp-Source: ABdhPJzgtWnsFDRcL2v+crbBG+Jw4Sf07C9czStdGuHZanBVUu43t1WqdYkZH0Ovv+5NU9SJmtgtIg==
-X-Received: by 2002:a19:e05d:: with SMTP id g29mr142258lfj.217.1594662423437;
-        Mon, 13 Jul 2020 10:47:03 -0700 (PDT)
+        bh=7bIusmK25t+OvYXtTDBqMTp8M1en4/Qe8ODN3kY6Mb8=;
+        b=GPo4DcK/tvYokJ5tNPaToreS2vG10J04jtHN2UQnnwfL718vkybsrjBgdqhSUd1yH9
+         7G+08wI1xx2ECOEcjjjZBwzgzcvA5zRu2Y9EW5ar7BJX3vf0fZw8iqRQEiaGe67wZ33c
+         Q+kKrm4mwPrI6EyheaRVffRpHGykVuLUFs+uVRNinh471Thb1d1GuM4ywhkeVVWmp3UC
+         8Eo/yzD9WVfHvUcMVxjidgaU5szeBGl8eDLjnTMPPWHNs214XcVweSf2hSJWg2f6ohO+
+         JTdEJ7cfuPWW6h3DbpLwaNwCG2DIAkME1JlZYYF82dmKlUeZ6WlE38HZQpVSNNeLciEu
+         Z7Rw==
+X-Gm-Message-State: AOAM533KcOpf7cq+rhCUgYMZ59FS6vAvgmZXb5JX2xwvZMxnF2vytCpD
+        Bpr/Q1U+NkVmoETE1ICUo6m/clxkoP90Jg==
+X-Google-Smtp-Source: ABdhPJwPwJD4cu+xD/Sj8sDOFsFTEzkAzA2g43TxEErlWhmNsfUR23wSTG+ESF8oyNEE4pQvBl5lww==
+X-Received: by 2002:a19:c886:: with SMTP id y128mr170115lff.98.1594662419713;
+        Mon, 13 Jul 2020 10:46:59 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id l22sm5752360lje.81.2020.07.13.10.47.02
+        by smtp.gmail.com with ESMTPSA id z16sm4162112ljg.68.2020.07.13.10.46.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 10:47:02 -0700 (PDT)
+        Mon, 13 Jul 2020 10:46:59 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
@@ -62,9 +62,9 @@ Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Marek Majkowski <marek@cloudflare.com>
-Subject: [PATCH bpf-next v4 04/16] inet: Run SK_LOOKUP BPF program on socket lookup
-Date:   Mon, 13 Jul 2020 19:46:42 +0200
-Message-Id: <20200713174654.642628-5-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v4 02/16] bpf: Introduce SK_LOOKUP program type with a dedicated attach point
+Date:   Mon, 13 Jul 2020 19:46:40 +0200
+Message-Id: <20200713174654.642628-3-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200713174654.642628-1-jakub@cloudflare.com>
 References: <20200713174654.642628-1-jakub@cloudflare.com>
@@ -75,36 +75,37 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Run a BPF program before looking up a listening socket on the receive path.
-Program selects a listening socket to yield as result of socket lookup by
-calling bpf_sk_assign() helper and returning SK_PASS code. Program can
-revert its decision by assigning a NULL socket with bpf_sk_assign().
+Add a new program type BPF_PROG_TYPE_SK_LOOKUP with a dedicated attach type
+BPF_SK_LOOKUP. The new program kind is to be invoked by the transport layer
+when looking up a listening socket for a new connection request for
+connection oriented protocols, or when looking up an unconnected socket for
+a packet for connection-less protocols.
 
-Alternatively, BPF program can also fail the lookup by returning with
-SK_DROP, or let the lookup continue as usual with SK_PASS on return, when
-no socket has not been selected with bpf_sk_assign(). Other return values
-are treated the same as SK_DROP.
+When called, SK_LOOKUP BPF program can select a socket that will receive
+the packet. This serves as a mechanism to overcome the limits of what
+bind() API allows to express. Two use-cases driving this work are:
 
-This lets the user match packets with listening sockets freely at the last
-possible point on the receive path, where we know that packets are destined
-for local delivery after undergoing policing, filtering, and routing.
+ (1) steer packets destined to an IP range, on fixed port to a socket
 
-With BPF code selecting the socket, directing packets destined to an IP
-range or to a port range to a single socket becomes possible.
+     192.0.2.0/24, port 80 -> NGINX socket
 
-In case multiple programs are attached, they are run in series in the order
-in which they were attached. The end result is determined from return codes
-of all the programs according to following rules:
+ (2) steer packets destined to an IP address, on any port to a socket
 
- 1. If any program returned SK_PASS and selected a valid socket, the socket
-    is used as result of socket lookup.
- 2. If more than one program returned SK_PASS and selected a socket,
-    last selection takes effect.
- 3. If any program returned SK_DROP or an invalid return code, and no
-    program returned SK_PASS and selected a socket, socket lookup fails
-    with -ECONNREFUSED.
- 4. If all programs returned SK_PASS and none of them selected a socket,
-    socket lookup continues to htable-based lookup.
+     198.51.100.1, any port -> L7 proxy socket
+
+In its run-time context program receives information about the packet that
+triggered the socket lookup. Namely IP version, L4 protocol identifier, and
+address 4-tuple. Context can be further extended to include ingress
+interface identifier.
+
+To select a socket BPF program fetches it from a map holding socket
+references, like SOCKMAP or SOCKHASH, and calls bpf_sk_assign(ctx, sk, ...)
+helper to record the selection. Transport layer then uses the selected
+socket as a result of socket lookup.
+
+This patch only enables the user to attach an SK_LOOKUP program to a
+network namespace. Subsequent patches hook it up to run on local delivery
+path in ipv4 and ipv6 stacks.
 
 Suggested-by: Marek Majkowski <marek@cloudflare.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
@@ -112,263 +113,565 @@ Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 
 Notes:
     v4:
-    - Reduce BPF sk_lookup prog return codes to SK_PASS/SK_DROP. (Lorenz)
-    - Default to drop & warn on illegal return value from BPF prog. (Lorenz)
-    - Rename netns_bpf_attach_type_enable/disable to _need/unneed. (Lorenz)
-    - Export bpf_sk_lookup_enabled symbol for CONFIG_IPV6=m (kernel test robot)
-    - Invert return value from bpf_sk_lookup_run_v4 to true on skip reuseport.
-    - Move dedicated prog_array runner close to its callers in filter.h.
+    - Reintroduce narrow load support for most BPF context fields. (Yonghong)
+    - Fix null-ptr-deref in BPF context access when IPv6 address not set.
+    - Unpack v4/v6 IP address union in bpf_sk_lookup context type.
+    - Add verifier support for ARG_PTR_TO_SOCKET_OR_NULL.
+    - Allow resetting socket selection with bpf_sk_assign(ctx, NULL).
+    - Document that bpf_sk_assign accepts a NULL socket.
     
     v3:
-    - Use a static_key to minimize the hook overhead when not used. (Alexei)
-    - Adapt for running an array of attached programs. (Alexei)
-    - Adapt for optionally skipping reuseport selection. (Martin)
+    - Allow bpf_sk_assign helper to replace previously selected socket only
+      when BPF_SK_LOOKUP_F_REPLACE flag is set, as a precaution for multiple
+      programs running in series to accidentally override each other's verdict.
+    - Let BPF program decide that load-balancing within a reuseport socket group
+      should be skipped for the socket selected with bpf_sk_assign() by passing
+      BPF_SK_LOOKUP_F_NO_REUSEPORT flag. (Martin)
+    - Extend struct bpf_sk_lookup program context with an 'sk' field containing
+      the selected socket with an intention for multiple attached program
+      running in series to see each other's choices. However, currently the
+      verifier doesn't allow checking if pointer is set.
+    - Use bpf-netns infra for link-based multi-program attachment. (Alexei)
+    - Get rid of macros in convert_ctx_access to make it easier to read.
+    - Disallow 1-,2-byte access to context fields containing IP addresses.
+    
+    v2:
+    - Make bpf_sk_assign reject sockets that don't use RCU freeing.
+      Update bpf_sk_assign docs accordingly. (Martin)
+    - Change bpf_sk_assign proto to take PTR_TO_SOCKET as argument. (Martin)
+    - Fix broken build when CONFIG_INET is not selected. (Martin)
+    - Rename bpf_sk_lookup{} src_/dst_* fields remote_/local_*. (Martin)
+    - Enforce BPF_SK_LOOKUP attach point on load & attach. (Martin)
 
- include/linux/filter.h     | 102 +++++++++++++++++++++++++++++++++++++
- kernel/bpf/net_namespace.c |  32 +++++++++++-
- net/core/filter.c          |   3 ++
- net/ipv4/inet_hashtables.c |  31 +++++++++++
- 4 files changed, 167 insertions(+), 1 deletion(-)
+ include/linux/bpf-netns.h  |   3 +
+ include/linux/bpf.h        |   1 +
+ include/linux/bpf_types.h  |   2 +
+ include/linux/filter.h     |  17 ++++
+ include/uapi/linux/bpf.h   |  77 ++++++++++++++++
+ kernel/bpf/net_namespace.c |   5 ++
+ kernel/bpf/syscall.c       |   9 ++
+ kernel/bpf/verifier.c      |  10 ++-
+ net/core/filter.c          | 179 +++++++++++++++++++++++++++++++++++++
+ scripts/bpf_helpers_doc.py |   9 +-
+ 10 files changed, 308 insertions(+), 4 deletions(-)
 
+diff --git a/include/linux/bpf-netns.h b/include/linux/bpf-netns.h
+index 4052d649f36d..cb1d849c5d4f 100644
+--- a/include/linux/bpf-netns.h
++++ b/include/linux/bpf-netns.h
+@@ -8,6 +8,7 @@
+ enum netns_bpf_attach_type {
+ 	NETNS_BPF_INVALID = -1,
+ 	NETNS_BPF_FLOW_DISSECTOR = 0,
++	NETNS_BPF_SK_LOOKUP,
+ 	MAX_NETNS_BPF_ATTACH_TYPE
+ };
+ 
+@@ -17,6 +18,8 @@ to_netns_bpf_attach_type(enum bpf_attach_type attach_type)
+ 	switch (attach_type) {
+ 	case BPF_FLOW_DISSECTOR:
+ 		return NETNS_BPF_FLOW_DISSECTOR;
++	case BPF_SK_LOOKUP:
++		return NETNS_BPF_SK_LOOKUP;
+ 	default:
+ 		return NETNS_BPF_INVALID;
+ 	}
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index ad9c61ae8640..f092d13bdd08 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -249,6 +249,7 @@ enum bpf_arg_type {
+ 	ARG_PTR_TO_INT,		/* pointer to int */
+ 	ARG_PTR_TO_LONG,	/* pointer to long */
+ 	ARG_PTR_TO_SOCKET,	/* pointer to bpf_sock (fullsock) */
++	ARG_PTR_TO_SOCKET_OR_NULL,	/* pointer to bpf_sock (fullsock) or NULL */
+ 	ARG_PTR_TO_BTF_ID,	/* pointer to in-kernel struct */
+ 	ARG_PTR_TO_ALLOC_MEM,	/* pointer to dynamically allocated memory */
+ 	ARG_PTR_TO_ALLOC_MEM_OR_NULL,	/* pointer to dynamically allocated memory or NULL */
+diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
+index a18ae82a298a..a52a5688418e 100644
+--- a/include/linux/bpf_types.h
++++ b/include/linux/bpf_types.h
+@@ -64,6 +64,8 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_LIRC_MODE2, lirc_mode2,
+ #ifdef CONFIG_INET
+ BPF_PROG_TYPE(BPF_PROG_TYPE_SK_REUSEPORT, sk_reuseport,
+ 	      struct sk_reuseport_md, struct sk_reuseport_kern)
++BPF_PROG_TYPE(BPF_PROG_TYPE_SK_LOOKUP, sk_lookup,
++	      struct bpf_sk_lookup, struct bpf_sk_lookup_kern)
+ #endif
+ #if defined(CONFIG_BPF_JIT)
+ BPF_PROG_TYPE(BPF_PROG_TYPE_STRUCT_OPS, bpf_struct_ops,
 diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 380746f47fa1..b9ad0fdabca5 100644
+index 259377723603..380746f47fa1 100644
 --- a/include/linux/filter.h
 +++ b/include/linux/filter.h
-@@ -1295,4 +1295,106 @@ struct bpf_sk_lookup_kern {
- 	bool		no_reuseport;
+@@ -1278,4 +1278,21 @@ struct bpf_sockopt_kern {
+ 	s32		retval;
  };
  
-+extern struct static_key_false bpf_sk_lookup_enabled;
-+
-+/* Runners for BPF_SK_LOOKUP programs to invoke on socket lookup.
-+ *
-+ * Allowed return values for a BPF SK_LOOKUP program are SK_PASS and
-+ * SK_DROP. Any other return value is treated as SK_DROP. Their
-+ * meaning is as follows:
-+ *
-+ *  SK_PASS && ctx.selected_sk != NULL: use selected_sk as lookup result
-+ *  SK_PASS && ctx.selected_sk == NULL: continue to htable-based socket lookup
-+ *  SK_DROP                           : terminate lookup with -ECONNREFUSED
-+ *
-+ * This macro aggregates return values and selected sockets from
-+ * multiple BPF programs according to following rules:
-+ *
-+ *  1. If any program returned SK_PASS and a non-NULL ctx.selected_sk,
-+ *     macro result is SK_PASS and last ctx.selected_sk is used.
-+ *  2. If any program returned non-SK_PASS return value,
-+ *     macro result is the last non-SK_PASS return value.
-+ *  3. Otherwise result is SK_PASS and ctx.selected_sk is NULL.
-+ *
-+ * Caller must ensure that the prog array is non-NULL, and that the
-+ * array as well as the programs it contains remain valid.
-+ */
-+#define BPF_PROG_SK_LOOKUP_RUN_ARRAY(array, ctx, func)			\
-+	({								\
-+		struct bpf_sk_lookup_kern *_ctx = &(ctx);		\
-+		struct bpf_prog_array_item *_item;			\
-+		struct sock *_selected_sk;				\
-+		struct bpf_prog *_prog;					\
-+		u32 _ret, _last_ret;					\
-+		bool _no_reuseport;					\
-+									\
-+		migrate_disable();					\
-+		_last_ret = SK_PASS;					\
-+		_selected_sk = NULL;					\
-+		_no_reuseport = false;					\
-+		_item = &(array)->items[0];				\
-+		while ((_prog = READ_ONCE(_item->prog))) {		\
-+			/* restore most recent selection */		\
-+			_ctx->selected_sk = _selected_sk;		\
-+			_ctx->no_reuseport = _no_reuseport;		\
-+									\
-+			_ret = func(_prog, _ctx);			\
-+			if (_ret == SK_PASS) {				\
-+				/* remember last non-NULL socket */	\
-+				if (_ctx->selected_sk) {		\
-+					_selected_sk = _ctx->selected_sk;	\
-+					_no_reuseport = _ctx->no_reuseport;	\
-+				}					\
-+			} else {					\
-+				/* remember last non-PASS ret code */	\
-+				_last_ret = _ret;			\
-+			}						\
-+			_item++;					\
-+		}							\
-+		_ctx->selected_sk = _selected_sk;			\
-+		_ctx->no_reuseport = _no_reuseport;			\
-+		migrate_enable();					\
-+		_ctx->selected_sk ? SK_PASS : _last_ret;		\
-+	 })
-+
-+static inline bool bpf_sk_lookup_run_v4(struct net *net, int protocol,
-+					const __be32 saddr, const __be16 sport,
-+					const __be32 daddr, const u16 dport,
-+					struct sock **psk)
-+{
-+	struct bpf_prog_array *run_array;
-+	struct sock *selected_sk = NULL;
-+	bool no_reuseport = false;
-+
-+	rcu_read_lock();
-+	run_array = rcu_dereference(net->bpf.run_array[NETNS_BPF_SK_LOOKUP]);
-+	if (run_array) {
-+		struct bpf_sk_lookup_kern ctx = {
-+			.family		= AF_INET,
-+			.protocol	= protocol,
-+			.v4.saddr	= saddr,
-+			.v4.daddr	= daddr,
-+			.sport		= sport,
-+			.dport		= dport,
-+		};
-+		u32 act;
-+
-+		act = BPF_PROG_SK_LOOKUP_RUN_ARRAY(run_array, ctx, BPF_PROG_RUN);
-+		if (act == SK_PASS) {
-+			selected_sk = ctx.selected_sk;
-+			no_reuseport = ctx.no_reuseport;
-+			goto unlock;
-+		}
-+
-+		selected_sk = ERR_PTR(-ECONNREFUSED);
-+		WARN_ONCE(act != SK_DROP,
-+			  "Illegal BPF SK_LOOKUP return value %u, expect packet loss!\n",
-+			  act);
-+	}
-+unlock:
-+	rcu_read_unlock();
-+	*psk = selected_sk;
-+	return no_reuseport;
-+}
++struct bpf_sk_lookup_kern {
++	u16		family;
++	u16		protocol;
++	struct {
++		__be32 saddr;
++		__be32 daddr;
++	} v4;
++	struct {
++		const struct in6_addr *saddr;
++		const struct in6_addr *daddr;
++	} v6;
++	__be16		sport;
++	u16		dport;
++	struct sock	*selected_sk;
++	bool		no_reuseport;
++};
 +
  #endif /* __LINUX_FILTER_H__ */
-diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
-index 596c30b963f3..ee3599a51891 100644
---- a/kernel/bpf/net_namespace.c
-+++ b/kernel/bpf/net_namespace.c
-@@ -25,6 +25,28 @@ struct bpf_netns_link {
- /* Protects updates to netns_bpf */
- DEFINE_MUTEX(netns_bpf_mutex);
- 
-+static void netns_bpf_attach_type_unneed(enum netns_bpf_attach_type type)
-+{
-+	switch (type) {
-+	case NETNS_BPF_SK_LOOKUP:
-+		static_branch_dec(&bpf_sk_lookup_enabled);
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static void netns_bpf_attach_type_need(enum netns_bpf_attach_type type)
-+{
-+	switch (type) {
-+	case NETNS_BPF_SK_LOOKUP:
-+		static_branch_inc(&bpf_sk_lookup_enabled);
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
- /* Must be called with netns_bpf_mutex held. */
- static void netns_bpf_run_array_detach(struct net *net,
- 				       enum netns_bpf_attach_type type)
-@@ -91,6 +113,9 @@ static void bpf_netns_link_release(struct bpf_link *link)
- 	if (!net)
- 		goto out_unlock;
- 
-+	/* Mark attach point as unused */
-+	netns_bpf_attach_type_unneed(type);
-+
- 	/* Remember link position in case of safe delete */
- 	idx = link_index(net, type, net_link);
- 	list_del(&net_link->node);
-@@ -414,6 +439,9 @@ static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
- 					lockdep_is_held(&netns_bpf_mutex));
- 	bpf_prog_array_free(run_array);
- 
-+	/* Mark attach point as used */
-+	netns_bpf_attach_type_need(type);
-+
- out_unlock:
- 	mutex_unlock(&netns_bpf_mutex);
- 	return err;
-@@ -489,8 +517,10 @@ static void __net_exit netns_bpf_pernet_pre_exit(struct net *net)
- 	mutex_lock(&netns_bpf_mutex);
- 	for (type = 0; type < MAX_NETNS_BPF_ATTACH_TYPE; type++) {
- 		netns_bpf_run_array_detach(net, type);
--		list_for_each_entry(net_link, &net->bpf.links[type], node)
-+		list_for_each_entry(net_link, &net->bpf.links[type], node) {
- 			net_link->net = NULL; /* auto-detach link */
-+			netns_bpf_attach_type_unneed(type);
-+		}
- 		if (net->bpf.progs[type])
- 			bpf_prog_put(net->bpf.progs[type]);
- 	}
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 81c462881133..3fcb9c8cec4c 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -9221,6 +9221,9 @@ const struct bpf_verifier_ops sk_reuseport_verifier_ops = {
- const struct bpf_prog_ops sk_reuseport_prog_ops = {
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 548a749aebb3..e2ffeb150d0f 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -189,6 +189,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_STRUCT_OPS,
+ 	BPF_PROG_TYPE_EXT,
+ 	BPF_PROG_TYPE_LSM,
++	BPF_PROG_TYPE_SK_LOOKUP,
  };
  
-+DEFINE_STATIC_KEY_FALSE(bpf_sk_lookup_enabled);
-+EXPORT_SYMBOL(bpf_sk_lookup_enabled);
-+
- BPF_CALL_3(bpf_sk_lookup_assign, struct bpf_sk_lookup_kern *, ctx,
- 	   struct sock *, sk, u64, flags)
- {
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index ab64834837c8..4eb4cd8d20dd 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -299,6 +299,29 @@ static struct sock *inet_lhash2_lookup(struct net *net,
- 	return result;
- }
+ enum bpf_attach_type {
+@@ -227,6 +228,7 @@ enum bpf_attach_type {
+ 	BPF_CGROUP_INET6_GETSOCKNAME,
+ 	BPF_XDP_DEVMAP,
+ 	BPF_CGROUP_INET_SOCK_RELEASE,
++	BPF_SK_LOOKUP,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
  
-+static inline struct sock *inet_lookup_run_bpf(struct net *net,
-+					       struct inet_hashinfo *hashinfo,
-+					       struct sk_buff *skb, int doff,
-+					       __be32 saddr, __be16 sport,
-+					       __be32 daddr, u16 hnum)
+@@ -3068,6 +3070,10 @@ union bpf_attr {
+  *
+  * long bpf_sk_assign(struct sk_buff *skb, struct bpf_sock *sk, u64 flags)
+  *	Description
++ *		Helper is overloaded depending on BPF program type. This
++ *		description applies to **BPF_PROG_TYPE_SCHED_CLS** and
++ *		**BPF_PROG_TYPE_SCHED_ACT** programs.
++ *
+  *		Assign the *sk* to the *skb*. When combined with appropriate
+  *		routing configuration to receive the packet towards the socket,
+  *		will cause *skb* to be delivered to the specified socket.
+@@ -3093,6 +3099,56 @@ union bpf_attr {
+  *		**-ESOCKTNOSUPPORT** if the socket type is not supported
+  *		(reuseport).
+  *
++ * long bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
++ *	Description
++ *		Helper is overloaded depending on BPF program type. This
++ *		description applies to **BPF_PROG_TYPE_SK_LOOKUP** programs.
++ *
++ *		Select the *sk* as a result of a socket lookup.
++ *
++ *		For the operation to succeed passed socket must be compatible
++ *		with the packet description provided by the *ctx* object.
++ *
++ *		L4 protocol (**IPPROTO_TCP** or **IPPROTO_UDP**) must
++ *		be an exact match. While IP family (**AF_INET** or
++ *		**AF_INET6**) must be compatible, that is IPv6 sockets
++ *		that are not v6-only can be selected for IPv4 packets.
++ *
++ *		Only TCP listeners and UDP unconnected sockets can be
++ *		selected. *sk* can also be NULL to reset any previous
++ *		selection.
++ *
++ *		*flags* argument can combination of following values:
++ *
++ *		* **BPF_SK_LOOKUP_F_REPLACE** to override the previous
++ *		  socket selection, potentially done by a BPF program
++ *		  that ran before us.
++ *
++ *		* **BPF_SK_LOOKUP_F_NO_REUSEPORT** to skip
++ *		  load-balancing within reuseport group for the socket
++ *		  being selected.
++ *
++ *		On success *ctx->sk* will point to the selected socket.
++ *
++ *	Return
++ *		0 on success, or a negative errno in case of failure.
++ *
++ *		* **-EAFNOSUPPORT** if socket family (*sk->family*) is
++ *		  not compatible with packet family (*ctx->family*).
++ *
++ *		* **-EEXIST** if socket has been already selected,
++ *		  potentially by another program, and
++ *		  **BPF_SK_LOOKUP_F_REPLACE** flag was not specified.
++ *
++ *		* **-EINVAL** if unsupported flags were specified.
++ *
++ *		* **-EPROTOTYPE** if socket L4 protocol
++ *		  (*sk->protocol*) doesn't match packet protocol
++ *		  (*ctx->protocol*).
++ *
++ *		* **-ESOCKTNOSUPPORT** if socket is not in allowed
++ *		  state (TCP listening or UDP unconnected).
++ *
+  * u64 bpf_ktime_get_boot_ns(void)
+  * 	Description
+  * 		Return the time elapsed since system boot, in nanoseconds.
+@@ -3605,6 +3661,12 @@ enum {
+ 	BPF_RINGBUF_HDR_SZ		= 8,
+ };
+ 
++/* BPF_FUNC_sk_assign flags in bpf_sk_lookup context. */
++enum {
++	BPF_SK_LOOKUP_F_REPLACE		= (1ULL << 0),
++	BPF_SK_LOOKUP_F_NO_REUSEPORT	= (1ULL << 1),
++};
++
+ /* Mode for BPF_FUNC_skb_adjust_room helper. */
+ enum bpf_adj_room_mode {
+ 	BPF_ADJ_ROOM_NET,
+@@ -4334,4 +4396,19 @@ struct bpf_pidns_info {
+ 	__u32 pid;
+ 	__u32 tgid;
+ };
++
++/* User accessible data for SK_LOOKUP programs. Add new fields at the end. */
++struct bpf_sk_lookup {
++	__bpf_md_ptr(struct bpf_sock *, sk); /* Selected socket */
++
++	__u32 family;		/* Protocol family (AF_INET, AF_INET6) */
++	__u32 protocol;		/* IP protocol (IPPROTO_TCP, IPPROTO_UDP) */
++	__u32 remote_ip4;	/* Network byte order */
++	__u32 remote_ip6[4];	/* Network byte order */
++	__u32 remote_port;	/* Network byte order */
++	__u32 local_ip4;	/* Network byte order */
++	__u32 local_ip6[4];	/* Network byte order */
++	__u32 local_port;	/* Host byte order */
++};
++
+ #endif /* _UAPI__LINUX_BPF_H__ */
+diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
+index 988c2766ec97..596c30b963f3 100644
+--- a/kernel/bpf/net_namespace.c
++++ b/kernel/bpf/net_namespace.c
+@@ -359,6 +359,8 @@ static int netns_bpf_max_progs(enum netns_bpf_attach_type type)
+ 	switch (type) {
+ 	case NETNS_BPF_FLOW_DISSECTOR:
+ 		return 1;
++	case NETNS_BPF_SK_LOOKUP:
++		return 64;
+ 	default:
+ 		return 0;
+ 	}
+@@ -389,6 +391,9 @@ static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
+ 	case NETNS_BPF_FLOW_DISSECTOR:
+ 		err = flow_dissector_bpf_prog_attach_check(net, link->prog);
+ 		break;
++	case NETNS_BPF_SK_LOOKUP:
++		err = 0; /* nothing to check */
++		break;
+ 	default:
+ 		err = -EINVAL;
+ 		break;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 156f51ffada2..945975a14582 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2022,6 +2022,10 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
+ 		default:
+ 			return -EINVAL;
+ 		}
++	case BPF_PROG_TYPE_SK_LOOKUP:
++		if (expected_attach_type == BPF_SK_LOOKUP)
++			return 0;
++		return -EINVAL;
+ 	case BPF_PROG_TYPE_EXT:
+ 		if (expected_attach_type)
+ 			return -EINVAL;
+@@ -2756,6 +2760,7 @@ static int bpf_prog_attach_check_attach_type(const struct bpf_prog *prog,
+ 	case BPF_PROG_TYPE_CGROUP_SOCK:
+ 	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+ 	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
++	case BPF_PROG_TYPE_SK_LOOKUP:
+ 		return attach_type == prog->expected_attach_type ? 0 : -EINVAL;
+ 	case BPF_PROG_TYPE_CGROUP_SKB:
+ 		if (!capable(CAP_NET_ADMIN))
+@@ -2817,6 +2822,8 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
+ 		return BPF_PROG_TYPE_CGROUP_SOCKOPT;
+ 	case BPF_TRACE_ITER:
+ 		return BPF_PROG_TYPE_TRACING;
++	case BPF_SK_LOOKUP:
++		return BPF_PROG_TYPE_SK_LOOKUP;
+ 	default:
+ 		return BPF_PROG_TYPE_UNSPEC;
+ 	}
+@@ -2955,6 +2962,7 @@ static int bpf_prog_query(const union bpf_attr *attr,
+ 	case BPF_LIRC_MODE2:
+ 		return lirc_prog_query(attr, uattr);
+ 	case BPF_FLOW_DISSECTOR:
++	case BPF_SK_LOOKUP:
+ 		return netns_bpf_prog_query(attr, uattr);
+ 	default:
+ 		return -EINVAL;
+@@ -3888,6 +3896,7 @@ static int link_create(union bpf_attr *attr)
+ 		ret = tracing_bpf_link_attach(attr, prog);
+ 		break;
+ 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
++	case BPF_PROG_TYPE_SK_LOOKUP:
+ 		ret = netns_bpf_link_create(attr, prog);
+ 		break;
+ 	default:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2196523c9716..cc6cc92c19e2 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3879,10 +3879,14 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			}
+ 			meta->ref_obj_id = reg->ref_obj_id;
+ 		}
+-	} else if (arg_type == ARG_PTR_TO_SOCKET) {
++	} else if (arg_type == ARG_PTR_TO_SOCKET ||
++		   arg_type == ARG_PTR_TO_SOCKET_OR_NULL) {
+ 		expected_type = PTR_TO_SOCKET;
+-		if (type != expected_type)
+-			goto err_type;
++		if (!(register_is_null(reg) &&
++		      arg_type == ARG_PTR_TO_SOCKET_OR_NULL)) {
++			if (type != expected_type)
++				goto err_type;
++		}
+ 	} else if (arg_type == ARG_PTR_TO_BTF_ID) {
+ 		expected_type = PTR_TO_BTF_ID;
+ 		if (type != expected_type)
+diff --git a/net/core/filter.c b/net/core/filter.c
+index ddcc0d6209e1..81c462881133 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -9220,6 +9220,185 @@ const struct bpf_verifier_ops sk_reuseport_verifier_ops = {
+ 
+ const struct bpf_prog_ops sk_reuseport_prog_ops = {
+ };
++
++BPF_CALL_3(bpf_sk_lookup_assign, struct bpf_sk_lookup_kern *, ctx,
++	   struct sock *, sk, u64, flags)
 +{
-+	struct sock *sk, *reuse_sk;
-+	bool no_reuseport;
++	if (unlikely(flags & ~(BPF_SK_LOOKUP_F_REPLACE |
++			       BPF_SK_LOOKUP_F_NO_REUSEPORT)))
++		return -EINVAL;
++	if (unlikely(sk && sk_is_refcounted(sk)))
++		return -ESOCKTNOSUPPORT; /* reject non-RCU freed sockets */
++	if (unlikely(sk && sk->sk_state == TCP_ESTABLISHED))
++		return -ESOCKTNOSUPPORT; /* reject connected sockets */
 +
-+	if (hashinfo != &tcp_hashinfo)
-+		return NULL; /* only TCP is supported */
++	/* Check if socket is suitable for packet L3/L4 protocol */
++	if (sk && sk->sk_protocol != ctx->protocol)
++		return -EPROTOTYPE;
++	if (sk && sk->sk_family != ctx->family &&
++	    (sk->sk_family == AF_INET || ipv6_only_sock(sk)))
++		return -EAFNOSUPPORT;
 +
-+	no_reuseport = bpf_sk_lookup_run_v4(net, IPPROTO_TCP,
-+					    saddr, sport, daddr, hnum, &sk);
-+	if (no_reuseport || IS_ERR_OR_NULL(sk))
-+		return sk;
++	if (ctx->selected_sk && !(flags & BPF_SK_LOOKUP_F_REPLACE))
++		return -EEXIST;
 +
-+	reuse_sk = lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
-+	if (reuse_sk)
-+		sk = reuse_sk;
-+	return sk;
++	/* Select socket as lookup result */
++	ctx->selected_sk = sk;
++	ctx->no_reuseport = flags & BPF_SK_LOOKUP_F_NO_REUSEPORT;
++	return 0;
 +}
 +
- struct sock *__inet_lookup_listener(struct net *net,
- 				    struct inet_hashinfo *hashinfo,
- 				    struct sk_buff *skb, int doff,
-@@ -310,6 +333,14 @@ struct sock *__inet_lookup_listener(struct net *net,
- 	struct sock *result = NULL;
- 	unsigned int hash2;
- 
-+	/* Lookup redirect from BPF */
-+	if (static_branch_unlikely(&bpf_sk_lookup_enabled)) {
-+		result = inet_lookup_run_bpf(net, hashinfo, skb, doff,
-+					     saddr, sport, daddr, hnum);
-+		if (result)
-+			goto done;
++static const struct bpf_func_proto bpf_sk_lookup_assign_proto = {
++	.func		= bpf_sk_lookup_assign,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++	.arg2_type	= ARG_PTR_TO_SOCKET_OR_NULL,
++	.arg3_type	= ARG_ANYTHING,
++};
++
++static const struct bpf_func_proto *
++sk_lookup_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
++{
++	switch (func_id) {
++	case BPF_FUNC_sk_assign:
++		return &bpf_sk_lookup_assign_proto;
++	case BPF_FUNC_sk_release:
++		return &bpf_sk_release_proto;
++	default:
++		return bpf_base_func_proto(func_id);
++	}
++}
++
++static bool sk_lookup_is_valid_access(int off, int size,
++				      enum bpf_access_type type,
++				      const struct bpf_prog *prog,
++				      struct bpf_insn_access_aux *info)
++{
++	if (off < 0 || off >= sizeof(struct bpf_sk_lookup))
++		return false;
++	if (off % size != 0)
++		return false;
++	if (type != BPF_READ)
++		return false;
++
++	switch (off) {
++	case offsetof(struct bpf_sk_lookup, sk):
++		info->reg_type = PTR_TO_SOCKET_OR_NULL;
++		return size == sizeof(__u64);
++
++	case bpf_ctx_range(struct bpf_sk_lookup, family):
++	case bpf_ctx_range(struct bpf_sk_lookup, protocol):
++	case bpf_ctx_range(struct bpf_sk_lookup, remote_ip4):
++	case bpf_ctx_range(struct bpf_sk_lookup, local_ip4):
++	case bpf_ctx_range_till(struct bpf_sk_lookup, remote_ip6[0], remote_ip6[3]):
++	case bpf_ctx_range_till(struct bpf_sk_lookup, local_ip6[0], local_ip6[3]):
++	case bpf_ctx_range(struct bpf_sk_lookup, remote_port):
++	case bpf_ctx_range(struct bpf_sk_lookup, local_port):
++		bpf_ctx_record_field_size(info, sizeof(__u32));
++		return bpf_ctx_narrow_access_ok(off, size, sizeof(__u32));
++
++	default:
++		return false;
++	}
++}
++
++static u32 sk_lookup_convert_ctx_access(enum bpf_access_type type,
++					const struct bpf_insn *si,
++					struct bpf_insn *insn_buf,
++					struct bpf_prog *prog,
++					u32 *target_size)
++{
++	struct bpf_insn *insn = insn_buf;
++#if IS_ENABLED(CONFIG_IPV6)
++	int off;
++#endif
++
++	switch (si->off) {
++	case offsetof(struct bpf_sk_lookup, sk):
++		*insn++ = BPF_LDX_MEM(BPF_SIZEOF(void *), si->dst_reg, si->src_reg,
++				      offsetof(struct bpf_sk_lookup_kern, selected_sk));
++		break;
++
++	case offsetof(struct bpf_sk_lookup, family):
++		*insn++ = BPF_LDX_MEM(BPF_H, si->dst_reg, si->src_reg,
++				      bpf_target_off(struct bpf_sk_lookup_kern,
++						     family, 2, target_size));
++		break;
++
++	case offsetof(struct bpf_sk_lookup, protocol):
++		*insn++ = BPF_LDX_MEM(BPF_H, si->dst_reg, si->src_reg,
++				      bpf_target_off(struct bpf_sk_lookup_kern,
++						     protocol, 2, target_size));
++		break;
++
++	case offsetof(struct bpf_sk_lookup, remote_ip4):
++		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->src_reg,
++				      bpf_target_off(struct bpf_sk_lookup_kern,
++						     v4.saddr, 4, target_size));
++		break;
++
++	case offsetof(struct bpf_sk_lookup, local_ip4):
++		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->src_reg,
++				      bpf_target_off(struct bpf_sk_lookup_kern,
++						     v4.daddr, 4, target_size));
++		break;
++
++	case bpf_ctx_range_till(struct bpf_sk_lookup,
++				remote_ip6[0], remote_ip6[3]):
++#if IS_ENABLED(CONFIG_IPV6)
++		off = si->off;
++		off -= offsetof(struct bpf_sk_lookup, remote_ip6[0]);
++		off += bpf_target_off(struct in6_addr, s6_addr32[0], 4, target_size);
++		*insn++ = BPF_LDX_MEM(BPF_SIZEOF(void *), si->dst_reg, si->src_reg,
++				      offsetof(struct bpf_sk_lookup_kern, v6.saddr));
++		*insn++ = BPF_JMP_IMM(BPF_JEQ, si->dst_reg, 0, 1);
++		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg, off);
++#else
++		*insn++ = BPF_MOV32_IMM(si->dst_reg, 0);
++#endif
++		break;
++
++	case bpf_ctx_range_till(struct bpf_sk_lookup,
++				local_ip6[0], local_ip6[3]):
++#if IS_ENABLED(CONFIG_IPV6)
++		off = si->off;
++		off -= offsetof(struct bpf_sk_lookup, local_ip6[0]);
++		off += bpf_target_off(struct in6_addr, s6_addr32[0], 4, target_size);
++		*insn++ = BPF_LDX_MEM(BPF_SIZEOF(void *), si->dst_reg, si->src_reg,
++				      offsetof(struct bpf_sk_lookup_kern, v6.daddr));
++		*insn++ = BPF_JMP_IMM(BPF_JEQ, si->dst_reg, 0, 1);
++		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg, off);
++#else
++		*insn++ = BPF_MOV32_IMM(si->dst_reg, 0);
++#endif
++		break;
++
++	case offsetof(struct bpf_sk_lookup, remote_port):
++		*insn++ = BPF_LDX_MEM(BPF_H, si->dst_reg, si->src_reg,
++				      bpf_target_off(struct bpf_sk_lookup_kern,
++						     sport, 2, target_size));
++		break;
++
++	case offsetof(struct bpf_sk_lookup, local_port):
++		*insn++ = BPF_LDX_MEM(BPF_H, si->dst_reg, si->src_reg,
++				      bpf_target_off(struct bpf_sk_lookup_kern,
++						     dport, 2, target_size));
++		break;
 +	}
 +
- 	hash2 = ipv4_portaddr_hash(net, daddr, hnum);
- 	ilb2 = inet_lhash2_bucket(hashinfo, hash2);
++	return insn - insn_buf;
++}
++
++const struct bpf_prog_ops sk_lookup_prog_ops = {
++};
++
++const struct bpf_verifier_ops sk_lookup_verifier_ops = {
++	.get_func_proto		= sk_lookup_func_proto,
++	.is_valid_access	= sk_lookup_is_valid_access,
++	.convert_ctx_access	= sk_lookup_convert_ctx_access,
++};
++
+ #endif /* CONFIG_INET */
  
+ DEFINE_BPF_DISPATCHER(xdp)
+diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
+index 6843376733df..5bfa448b4704 100755
+--- a/scripts/bpf_helpers_doc.py
++++ b/scripts/bpf_helpers_doc.py
+@@ -404,6 +404,7 @@ class PrinterHelpers(Printer):
+ 
+     type_fwds = [
+             'struct bpf_fib_lookup',
++            'struct bpf_sk_lookup',
+             'struct bpf_perf_event_data',
+             'struct bpf_perf_event_value',
+             'struct bpf_pidns_info',
+@@ -450,6 +451,7 @@ class PrinterHelpers(Printer):
+             'struct bpf_perf_event_data',
+             'struct bpf_perf_event_value',
+             'struct bpf_pidns_info',
++            'struct bpf_sk_lookup',
+             'struct bpf_sock',
+             'struct bpf_sock_addr',
+             'struct bpf_sock_ops',
+@@ -487,6 +489,11 @@ class PrinterHelpers(Printer):
+             'struct sk_msg_buff': 'struct sk_msg_md',
+             'struct xdp_buff': 'struct xdp_md',
+     }
++    # Helpers overloaded for different context types.
++    overloaded_helpers = [
++        'bpf_get_socket_cookie',
++        'bpf_sk_assign',
++    ]
+ 
+     def print_header(self):
+         header = '''\
+@@ -543,7 +550,7 @@ class PrinterHelpers(Printer):
+         for i, a in enumerate(proto['args']):
+             t = a['type']
+             n = a['name']
+-            if proto['name'] == 'bpf_get_socket_cookie' and i == 0:
++            if proto['name'] in self.overloaded_helpers and i == 0:
+                     t = 'void'
+                     n = 'ctx'
+             one_arg = '{}{}'.format(comma, self.map_type(t))
 -- 
 2.25.4
 
