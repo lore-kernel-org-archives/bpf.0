@@ -2,53 +2,80 @@ Return-Path: <SRS0=NpDT=AY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB348C433E6
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:25:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21CFBC433E2
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:37:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF94B206F5
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:25:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E78F82076D
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 18:37:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex-team.ru header.i=@yandex-team.ru header.b="yte1IYcl"
+	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="ktxCbVq7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726767AbgGMSZj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 14:25:39 -0400
-Received: from forwardcorp1p.mail.yandex.net ([77.88.29.217]:50848 "EHLO
-        forwardcorp1p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726396AbgGMSZi (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 14:25:38 -0400
-Received: from iva8-d077482f1536.qloud-c.yandex.net (iva8-d077482f1536.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:2f26:0:640:d077:482f])
-        by forwardcorp1p.mail.yandex.net (Yandex) with ESMTP id E8D1B2E1520;
-        Mon, 13 Jul 2020 21:25:34 +0300 (MSK)
-Received: from iva8-88b7aa9dc799.qloud-c.yandex.net (iva8-88b7aa9dc799.qloud-c.yandex.net [2a02:6b8:c0c:77a0:0:640:88b7:aa9d])
-        by iva8-d077482f1536.qloud-c.yandex.net (mxbackcorp/Yandex) with ESMTP id Ax2rUDHLt3-PYs0WUrW;
-        Mon, 13 Jul 2020 21:25:34 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1594664734; bh=jFK3JKbc4DJ8+menrIhytuE5eis3Psm77MfgY58tsR4=;
-        h=In-Reply-To:Message-Id:References:Date:Subject:To:From:Cc;
-        b=yte1IYclYTmOnUM3Cqq7JboWJpU8hegKSzGzpypxendTJQIkd5yG3kZ4o+aZS3QBE
-         9N7dpPG9af+mADVvsJX05n2+6UUaDHN8ATWxtyYD9sXBH7/XGbslW2/LtzSM7pg9jT
-         151qWuj0W2fKFonM4X++OF+di0Zg4XeiM22gULTY=
-Authentication-Results: iva8-d077482f1536.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-Received: from 37.9.72.97-iva.dhcp.yndx.net (37.9.72.97-iva.dhcp.yndx.net [37.9.72.97])
-        by iva8-88b7aa9dc799.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id liA4tjrt5e-PYjqepNP;
-        Mon, 13 Jul 2020 21:25:34 +0300
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client certificate not present)
-From:   Dmitry Yakunin <zeil@yandex-team.ru>
-To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     sdf@google.com
-Subject: [PATCH bpf-next 4/4] bpf: try to use existing cgroup storage in bpf_prog_test_run_skb
-Date:   Mon, 13 Jul 2020 21:25:20 +0300
-Message-Id: <20200713182520.97606-5-zeil@yandex-team.ru>
-In-Reply-To: <20200713182520.97606-1-zeil@yandex-team.ru>
-References: <20200713182520.97606-1-zeil@yandex-team.ru>
+        id S1726836AbgGMSh3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 14:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726829AbgGMSh1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jul 2020 14:37:27 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E11C08C5DB
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 11:37:27 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id d1so630766plr.8
+        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 11:37:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cs.washington.edu; s=goo201206;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Of6XYrb8YfAT1EAaZlbZgE3HUj6lfeO1u7FMIJtnMiU=;
+        b=ktxCbVq7G9edQWu/AHzjiGiplp9JA7N1lAtnLhCNv4TIo/K136HYs6V1RvboESnB1Y
+         2YUHdTpRfs3D6rJgsBk7KlmtfUjdMosd/BWzLDtzhsn+0KhjBKNhVrMr1adJgD4Wv/DP
+         klX5g1N0+uJLwPLbiBTKS0LgQdrm9i4FUhOho=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Of6XYrb8YfAT1EAaZlbZgE3HUj6lfeO1u7FMIJtnMiU=;
+        b=GsOE8T+uf2KLBwKYmxFCdVe9onoIh657kr7CJYV45CEMiDO+YAdptLWYBJhFbhNnqu
+         okTC7ICYTzbD02KrVV642xZ7KeiTMHOOpAvhfAXJo5w1b8bVorDW5LAOHsW5hDM60KXi
+         JOkuZvg6dlaLiQw9ulpkqcKjFapLHg3GSYtuj97x1Ejxb6dDsRmFBsehp4woTxwCcwIa
+         uauPpZtL9FksujPccwj3fUPt4ARb5WxPjK7a3u3WvHgGKDhZ+8KhTZsUu7iLyDXuiPsW
+         739S1OISugb2TgTIuZSHXRGvsuZiO1n/wb8ko5DQbdbIS9EGVlpd7AVQoqJnszN3Ykfm
+         7HYw==
+X-Gm-Message-State: AOAM530WnGjoZX8lYXMnANioxWCg3orwRRNGx2Db1Bv/iamiQpIfze/a
+        EWAGjAvgnf3Wt195qMxuLsmeZE88NionvQ==
+X-Google-Smtp-Source: ABdhPJw02MefwFzQTFIE1dbm832lcNJXdoH8PZKaFwN/CI9OwUamO+06lU++Dt7tG27c4WPFlRDOzw==
+X-Received: by 2002:a17:90a:d181:: with SMTP id fu1mr730014pjb.60.1594665446292;
+        Mon, 13 Jul 2020 11:37:26 -0700 (PDT)
+Received: from localhost.localdomain (c-73-53-94-119.hsd1.wa.comcast.net. [73.53.94.119])
+        by smtp.gmail.com with ESMTPSA id ia13sm264985pjb.42.2020.07.13.11.37.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2020 11:37:25 -0700 (PDT)
+From:   Luke Nelson <lukenels@cs.washington.edu>
+X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH bpf-next 1/3] bpf, riscv: Modify JIT ctx to support compressed instructions
+Date:   Mon, 13 Jul 2020 11:37:09 -0700
+Message-Id: <20200713183711.762244-2-luke.r.nels@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200713183711.762244-1-luke.r.nels@gmail.com>
+References: <20200713183711.762244-1-luke.r.nels@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -56,196 +83,247 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now we cannot check results in cgroup storage after running
-BPF_PROG_TEST_RUN command because it allocates dummy cgroup storage
-during test. This patch implements simple logic for searching already
-allocated cgroup storage through iterating effective programs of current
-cgroup and finding the first match. If match is not found fallback to
-temporary storage is happened.
+This patch makes the necessary changes to struct rv_jit_context and to
+bpf_int_jit_compile to support compressed riscv (RVC) instructions in
+the BPF JIT.
 
-Signed-off-by: Dmitry Yakunin <zeil@yandex-team.ru>
+It changes the JIT image to be u16 instead of u32, since RVC instructions
+are 2 bytes as opposed to 4.
+
+It also changes ctx->offset and ctx->ninsns to refer to 2-byte
+instructions rather than 4-byte ones. The riscv PC is always 16-bit
+aligned, so this is sufficient to refer to any valid riscv offset.
+
+The code for computing jump offsets in bytes is updated accordingly,
+and factored in to the RVOFF macro to simplify the code.
+
+Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
 ---
- net/bpf/test_run.c                                 | 53 ++++++++++++++-
- .../selftests/bpf/prog_tests/cgroup_skb_prog_run.c | 78 ++++++++++++++++++++++
- 2 files changed, 128 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
+ arch/riscv/net/bpf_jit.h        | 23 ++++++++++++++++++++---
+ arch/riscv/net/bpf_jit_comp32.c | 14 +++++++-------
+ arch/riscv/net/bpf_jit_comp64.c | 12 ++++++------
+ arch/riscv/net/bpf_jit_core.c   |  6 +++---
+ 4 files changed, 36 insertions(+), 19 deletions(-)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 5c4835c..16808cb 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -15,15 +15,56 @@
- #define CREATE_TRACE_POINTS
- #include <trace/events/bpf_test_run.h>
+diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+index 20e235d06f66..5c89ea904c1a 100644
+--- a/arch/riscv/net/bpf_jit.h
++++ b/arch/riscv/net/bpf_jit.h
+@@ -50,7 +50,7 @@ enum {
  
-+static struct bpf_prog_array_item *bpf_prog_find_active(struct bpf_prog *prog,
-+							struct bpf_prog_array *effective)
-+{
-+	struct bpf_prog_array_item *item;
-+	struct bpf_prog_array *array;
-+	struct bpf_prog *p;
+ struct rv_jit_context {
+ 	struct bpf_prog *prog;
+-	u32 *insns;		/* RV insns */
++	u16 *insns;		/* RV insns */
+ 	int ninsns;
+ 	int epilogue_offset;
+ 	int *offset;		/* BPF to RV */
+@@ -58,6 +58,9 @@ struct rv_jit_context {
+ 	int stack_size;
+ };
+ 
++/* Convert from ninsns to bytes. */
++#define RVOFF(ninsns)	((ninsns) << 1)
 +
-+	array = rcu_dereference(effective);
-+	if (!array)
-+		return NULL;
-+
-+	item = &array->items[0];
-+	while ((p = READ_ONCE(item->prog))) {
-+		if (p == prog)
-+			return item;
-+		item++;
+ struct rv_jit_data {
+ 	struct bpf_binary_header *header;
+ 	u8 *image;
+@@ -74,8 +77,22 @@ static inline void bpf_flush_icache(void *start, void *end)
+ 	flush_icache_range((unsigned long)start, (unsigned long)end);
+ }
+ 
++/* Emit a 4-byte riscv instruction. */
+ static inline void emit(const u32 insn, struct rv_jit_context *ctx)
+ {
++	if (ctx->insns) {
++		ctx->insns[ctx->ninsns] = insn;
++		ctx->insns[ctx->ninsns + 1] = (insn >> 16);
 +	}
 +
-+	return NULL;
++	ctx->ninsns += 2;
 +}
 +
-+static struct bpf_cgroup_storage **bpf_prog_find_active_storage(struct bpf_prog *prog)
++/* Emit a 2-byte riscv compressed instruction. */
++static inline void emitc(const u16 insn, struct rv_jit_context *ctx)
 +{
-+	struct bpf_prog_array_item *item;
-+	struct cgroup *cgrp;
++	BUILD_BUG_ON(!rvc_enabled());
 +
-+	if (prog->type != BPF_PROG_TYPE_CGROUP_SKB)
-+		return NULL;
-+
-+	cgrp = task_dfl_cgroup(current);
-+
-+	item = bpf_prog_find_active(prog,
-+				    cgrp->bpf.effective[BPF_CGROUP_INET_INGRESS]);
-+	if (!item)
-+		item = bpf_prog_find_active(prog,
-+					    cgrp->bpf.effective[BPF_CGROUP_INET_EGRESS]);
-+
-+	return item ? item->cgroup_storage : NULL;
-+}
-+
- static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
- 			u32 *retval, u32 *time, bool xdp)
+ 	if (ctx->insns)
+ 		ctx->insns[ctx->ninsns] = insn;
+ 
+@@ -86,7 +103,7 @@ static inline int epilogue_offset(struct rv_jit_context *ctx)
  {
--	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
-+	struct bpf_cgroup_storage *dummy_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
-+	struct bpf_cgroup_storage **storage = dummy_storage;
- 	u64 time_start, time_spent = 0;
- 	int ret = 0;
- 	u32 i;
+ 	int to = ctx->epilogue_offset, from = ctx->ninsns;
  
--	ret = bpf_cgroup_storages_alloc(storage, prog);
-+	ret = bpf_cgroup_storages_alloc(dummy_storage, prog);
- 	if (ret)
- 		return ret;
- 
-@@ -31,6 +72,9 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
- 		repeat = 1;
- 
- 	rcu_read_lock();
-+	storage = bpf_prog_find_active_storage(prog);
-+	if (!storage)
-+		storage = dummy_storage;
- 	migrate_disable();
- 	time_start = ktime_get_ns();
- 	for (i = 0; i < repeat; i++) {
-@@ -54,6 +98,9 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
- 			cond_resched();
- 
- 			rcu_read_lock();
-+			storage = bpf_prog_find_active_storage(prog);
-+			if (!storage)
-+				storage = dummy_storage;
- 			migrate_disable();
- 			time_start = ktime_get_ns();
- 		}
-@@ -65,7 +112,7 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
- 	do_div(time_spent, repeat);
- 	*time = time_spent > U32_MAX ? U32_MAX : (u32)time_spent;
- 
--	bpf_cgroup_storages_free(storage);
-+	bpf_cgroup_storages_free(dummy_storage);
- 
- 	return ret;
+-	return (to - from) << 2;
++	return RVOFF(to - from);
  }
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
-new file mode 100644
-index 0000000..12ca881
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+
-+#include "cgroup_helpers.h"
-+#include "network_helpers.h"
-+
-+static char bpf_log_buf[BPF_LOG_BUF_SIZE];
-+
-+void test_cgroup_skb_prog_run(void)
-+{
-+	struct bpf_insn prog[] = {
-+		BPF_LD_MAP_FD(BPF_REG_1, 0), /* map fd */
-+		BPF_MOV64_IMM(BPF_REG_2, 0), /* flags, not used */
-+		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_local_storage),
-+		BPF_MOV64_IMM(BPF_REG_1, 1),
-+		BPF_RAW_INSN(BPF_STX | BPF_XADD | BPF_W, BPF_REG_0, BPF_REG_1, 0, 0),
-+
-+		BPF_MOV64_IMM(BPF_REG_0, 1), /* r0 = 1 */
-+		BPF_EXIT_INSN(),
-+	};
-+	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
-+	int storage_fd = -1, prog_fd = -1, cg_fd = -1;
-+	struct bpf_cgroup_storage_key key;
-+	__u32 duration, retval, size;
-+	char buf[128];
-+	__u64 value;
-+	int err;
-+
-+	storage_fd = bpf_create_map(BPF_MAP_TYPE_CGROUP_STORAGE,
-+				    sizeof(struct bpf_cgroup_storage_key),
-+				    8, 0, 0);
-+	if (CHECK(storage_fd < 0, "create_map", "%s\n", strerror(errno)))
-+		goto out;
-+
-+	prog[0].imm = storage_fd;
-+
-+	prog_fd = bpf_load_program(BPF_PROG_TYPE_CGROUP_SKB,
-+				   prog, insns_cnt, "GPL", 0,
-+				   bpf_log_buf, BPF_LOG_BUF_SIZE);
-+	if (CHECK(prog_fd < 0, "prog_load",
-+		  "verifier output:\n%s\n-------\n", bpf_log_buf))
-+		goto out;
-+
-+	if (CHECK_FAIL(setup_cgroup_environment()))
-+		goto out;
-+
-+	cg_fd = create_and_get_cgroup("/cg");
-+	if (CHECK_FAIL(cg_fd < 0))
-+		goto out;
-+
-+	if (CHECK_FAIL(join_cgroup("/cg")))
-+		goto out;
-+
-+	if (CHECK(bpf_prog_attach(prog_fd, cg_fd, BPF_CGROUP_INET_EGRESS, 0),
-+		  "prog_attach", "%s\n", strerror(errno)))
-+		goto out;
-+
-+	err = bpf_prog_test_run(prog_fd, NUM_ITER, &pkt_v4, sizeof(pkt_v4),
-+				buf, &size, &retval, &duration);
-+	CHECK(err || retval != 1, "prog_test_run",
-+	      "err %d errno %d retval %d\n", err, errno, retval);
-+
-+	/* check that cgroup storage results are available after test run */
-+
-+	err = bpf_map_get_next_key(storage_fd, NULL, &key);
-+	CHECK(err, "map_get_next_key", "%s\n", strerror(errno));
-+
-+	err = bpf_map_lookup_elem(storage_fd, &key, &value);
-+	CHECK(err || value != NUM_ITER,
-+	      "map_lookup_elem",
-+	      "err %d errno %d cnt %lld(%d)\n", err, errno, value, NUM_ITER);
-+out:
-+	close(storage_fd);
-+	close(prog_fd);
-+	close(cg_fd);
-+	cleanup_cgroup_environment();
-+}
+ 
+ /* Return -1 or inverted cond. */
+@@ -149,7 +166,7 @@ static inline int rv_offset(int insn, int off, struct rv_jit_context *ctx)
+ 	off++; /* BPF branch is from PC+1, RV is from PC */
+ 	from = (insn > 0) ? ctx->offset[insn - 1] : 0;
+ 	to = (insn + off > 0) ? ctx->offset[insn + off - 1] : 0;
+-	return (to - from) << 2;
++	return RVOFF(to - from);
+ }
+ 
+ /* Instruction formats. */
+diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
+index b198eaa74456..d22001aa0057 100644
+--- a/arch/riscv/net/bpf_jit_comp32.c
++++ b/arch/riscv/net/bpf_jit_comp32.c
+@@ -644,7 +644,7 @@ static int emit_branch_r64(const s8 *src1, const s8 *src2, s32 rvoff,
+ 
+ 	e = ctx->ninsns;
+ 	/* Adjust for extra insns. */
+-	rvoff -= (e - s) << 2;
++	rvoff -= RVOFF(e - s);
+ 	emit_jump_and_link(RV_REG_ZERO, rvoff, true, ctx);
+ 	return 0;
+ }
+@@ -713,7 +713,7 @@ static int emit_bcc(u8 op, u8 rd, u8 rs, int rvoff, struct rv_jit_context *ctx)
+ 	if (far) {
+ 		e = ctx->ninsns;
+ 		/* Adjust for extra insns. */
+-		rvoff -= (e - s) << 2;
++		rvoff -= RVOFF(e - s);
+ 		emit_jump_and_link(RV_REG_ZERO, rvoff, true, ctx);
+ 	}
+ 	return 0;
+@@ -731,7 +731,7 @@ static int emit_branch_r32(const s8 *src1, const s8 *src2, s32 rvoff,
+ 
+ 	e = ctx->ninsns;
+ 	/* Adjust for extra insns. */
+-	rvoff -= (e - s) << 2;
++	rvoff -= RVOFF(e - s);
+ 
+ 	if (emit_bcc(op, lo(rs1), lo(rs2), rvoff, ctx))
+ 		return -1;
+@@ -795,7 +795,7 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
+ 	 * if (index >= max_entries)
+ 	 *   goto out;
+ 	 */
+-	off = (tc_ninsn - (ctx->ninsns - start_insn)) << 2;
++	off = RVOFF(tc_ninsn - (ctx->ninsns - start_insn));
+ 	emit_bcc(BPF_JGE, lo(idx_reg), RV_REG_T1, off, ctx);
+ 
+ 	/*
+@@ -804,7 +804,7 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
+ 	 *   goto out;
+ 	 */
+ 	emit(rv_addi(RV_REG_T1, RV_REG_TCC, -1), ctx);
+-	off = (tc_ninsn - (ctx->ninsns - start_insn)) << 2;
++	off = RVOFF(tc_ninsn - (ctx->ninsns - start_insn));
+ 	emit_bcc(BPF_JSLT, RV_REG_TCC, RV_REG_ZERO, off, ctx);
+ 
+ 	/*
+@@ -818,7 +818,7 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
+ 	if (is_12b_check(off, insn))
+ 		return -1;
+ 	emit(rv_lw(RV_REG_T0, off, RV_REG_T0), ctx);
+-	off = (tc_ninsn - (ctx->ninsns - start_insn)) << 2;
++	off = RVOFF(tc_ninsn - (ctx->ninsns - start_insn));
+ 	emit_bcc(BPF_JEQ, RV_REG_T0, RV_REG_ZERO, off, ctx);
+ 
+ 	/*
+@@ -1214,7 +1214,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 			emit_imm32(tmp2, imm, ctx);
+ 			src = tmp2;
+ 			e = ctx->ninsns;
+-			rvoff -= (e - s) << 2;
++			rvoff -= RVOFF(e - s);
+ 		}
+ 
+ 		if (is64)
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index 6cfd164cbe88..26feed92f1bc 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -304,14 +304,14 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
+ 	if (is_12b_check(off, insn))
+ 		return -1;
+ 	emit(rv_lwu(RV_REG_T1, off, RV_REG_A1), ctx);
+-	off = (tc_ninsn - (ctx->ninsns - start_insn)) << 2;
++	off = RVOFF(tc_ninsn - (ctx->ninsns - start_insn));
+ 	emit_branch(BPF_JGE, RV_REG_A2, RV_REG_T1, off, ctx);
+ 
+ 	/* if (TCC-- < 0)
+ 	 *     goto out;
+ 	 */
+ 	emit(rv_addi(RV_REG_T1, tcc, -1), ctx);
+-	off = (tc_ninsn - (ctx->ninsns - start_insn)) << 2;
++	off = RVOFF(tc_ninsn - (ctx->ninsns - start_insn));
+ 	emit_branch(BPF_JSLT, tcc, RV_REG_ZERO, off, ctx);
+ 
+ 	/* prog = array->ptrs[index];
+@@ -324,7 +324,7 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
+ 	if (is_12b_check(off, insn))
+ 		return -1;
+ 	emit(rv_ld(RV_REG_T2, off, RV_REG_T2), ctx);
+-	off = (tc_ninsn - (ctx->ninsns - start_insn)) << 2;
++	off = RVOFF(tc_ninsn - (ctx->ninsns - start_insn));
+ 	emit_branch(BPF_JEQ, RV_REG_T2, RV_REG_ZERO, off, ctx);
+ 
+ 	/* goto *(prog->bpf_func + 4); */
+@@ -757,7 +757,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 			e = ctx->ninsns;
+ 
+ 			/* Adjust for extra insns */
+-			rvoff -= (e - s) << 2;
++			rvoff -= RVOFF(e - s);
+ 		}
+ 
+ 		if (BPF_OP(code) == BPF_JSET) {
+@@ -810,7 +810,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 		e = ctx->ninsns;
+ 
+ 		/* Adjust for extra insns */
+-		rvoff -= (e - s) << 2;
++		rvoff -= RVOFF(e - s);
+ 		emit_branch(BPF_OP(code), rd, rs, rvoff, ctx);
+ 		break;
+ 
+@@ -831,7 +831,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 		if (!is64 && imm < 0)
+ 			emit(rv_addiw(RV_REG_T1, RV_REG_T1, 0), ctx);
+ 		e = ctx->ninsns;
+-		rvoff -= (e - s) << 2;
++		rvoff -= RVOFF(e - s);
+ 		emit_branch(BPF_JNE, RV_REG_T1, RV_REG_ZERO, rvoff, ctx);
+ 		break;
+ 
+diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
+index 709b94ece3ed..cd156efe4944 100644
+--- a/arch/riscv/net/bpf_jit_core.c
++++ b/arch/riscv/net/bpf_jit_core.c
+@@ -73,7 +73,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 
+ 	if (ctx->offset) {
+ 		extra_pass = true;
+-		image_size = sizeof(u32) * ctx->ninsns;
++		image_size = sizeof(u16) * ctx->ninsns;
+ 		goto skip_init_ctx;
+ 	}
+ 
+@@ -103,7 +103,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 			if (jit_data->header)
+ 				break;
+ 
+-			image_size = sizeof(u32) * ctx->ninsns;
++			image_size = sizeof(u16) * ctx->ninsns;
+ 			jit_data->header =
+ 				bpf_jit_binary_alloc(image_size,
+ 						     &jit_data->image,
+@@ -114,7 +114,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 				goto out_offset;
+ 			}
+ 
+-			ctx->insns = (u32 *)jit_data->image;
++			ctx->insns = (u16 *)jit_data->image;
+ 			/*
+ 			 * Now, when the image is allocated, the image can
+ 			 * potentially shrink more (auipc/jalr -> jal).
 -- 
-2.7.4
+2.25.1
 
