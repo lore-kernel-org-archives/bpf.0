@@ -2,46 +2,44 @@ Return-Path: <SRS0=NpDT=AY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C4AFC433F4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6862C433F2
 	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 05:13:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A1D220724
+	by mail.kernel.org (Postfix) with ESMTP id B547820724
 	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 05:13:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cuvWWXnt"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="UQp75//H"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728941AbgGMFMy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 01:12:54 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:29404 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728932AbgGMFMx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 01:12:53 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06D5Ch0p012842
-        for <bpf@vger.kernel.org>; Sun, 12 Jul 2020 22:12:52 -0700
+        id S1728895AbgGMFMv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 01:12:51 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:5716 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728878AbgGMFMu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 01:12:50 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06D5BgqC032696
+        for <bpf@vger.kernel.org>; Sun, 12 Jul 2020 22:12:50 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=qBWFoM1JsJ015I5FXQ/P9WcbICD3OVxu3us4c9Q/xnI=;
- b=cuvWWXntaRfnMxFGjrbdX/cWbYzeb4+Um2+gUdW9V2F2iLzo9pfGkp5AN1K3JNPdNYcY
- PaALL77Fel3mRjPFCwXdczHSW27mKypd7/NBXG/5BhkChUMC3wljdYHmuZvD8aCR3m0y
- A0ybO/+pUB7viuyorFNIW5uwMibAdltw9YE= 
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=kjzNwt0LGsEsU5ik9WYrJ2khKRpNWjLXpEfDehbrXO0=;
+ b=UQp75//HC71KhwYbn9hSfRv2EdMGJ3ZkiRDpNOGsnBpm6wF4k+/TCjt0CxrDgyBmfsjQ
+ zJvFLZraYDh7ZzzrQAfJF6itbne2vqYqBe7OrOccpdjvfYbthV3S9pIHSUBf6X8CBRD9
+ 9UBeSfjuoVzMvRwJJjSqB2yv2zhqQazKJkY= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 32793kxa67-4
+        by mx0a-00082601.pphosted.com with ESMTP id 3288hks9h9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 12 Jul 2020 22:12:51 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sun, 12 Jul 2020 22:12:50 -0700
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Sun, 12 Jul 2020 22:12:51 -0700
+ 15.1.1979.3; Sun, 12 Jul 2020 22:12:48 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id D697B2EC3F93; Sun, 12 Jul 2020 22:12:46 -0700 (PDT)
+        id 5399C2EC3F93; Sun, 12 Jul 2020 22:12:40 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -51,98 +49,109 @@ CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>, Andrey Ignatov <rdna@fb.com>,
         Takshak Chahande <ctakshak@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 3/7] bpf, xdp: implement LINK_UPDATE for BPF XDP link
-Date:   Sun, 12 Jul 2020 22:12:26 -0700
-Message-ID: <20200713051230.3250515-4-andriin@fb.com>
+Subject: [PATCH bpf-next 0/7] BPF XDP link
+Date:   Sun, 12 Jul 2020 22:12:23 -0700
+Message-ID: <20200713051230.3250515-1-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200713051230.3250515-1-andriin@fb.com>
-References: <20200713051230.3250515-1-andriin@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-13_03:2020-07-10,2020-07-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- malwarescore=0 mlxlogscore=710 lowpriorityscore=0 mlxscore=0 adultscore=0
- phishscore=0 bulkscore=0 priorityscore=1501 clxscore=1015 suspectscore=8
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007130039
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ mlxlogscore=994 suspectscore=8 phishscore=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 spamscore=0 impostorscore=0 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007130038
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for LINK_UPDATE command for BPF XDP link to enable reliable
-replacement of underlying BPF program.
+Following cgroup and netns examples, implement bpf_link support for XDP.
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- net/core/dev.c | 43 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+The semantics is described in patch #2. Program and link attachments are
+mutually exclusive, in the sense that neither link can replace attached
+program, nor program can replace attached link. Link can't replace attach=
+ed
+link as well, as is the case for any other bpf_link implementation.
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 84f755a1ec36..025687120442 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -8973,9 +8973,52 @@ static void bpf_xdp_link_dealloc(struct bpf_link *=
-link)
- 	kfree(xdp_link);
- }
-=20
-+static int bpf_xdp_link_update(struct bpf_link *link, struct bpf_prog *n=
-ew_prog,
-+			       struct bpf_prog *old_prog)
-+{
-+	struct bpf_xdp_link *xdp_link =3D container_of(link, struct bpf_xdp_lin=
-k, link);
-+	enum bpf_xdp_mode mode;
-+	bpf_op_t bpf_op;
-+	int err =3D 0;
-+
-+	rtnl_lock();
-+
-+	/* link might have been auto-released already, so fail */
-+	if (!xdp_link->dev) {
-+		err =3D -ENOLINK;
-+		goto out_unlock;
-+	}
-+
-+	if (old_prog && link->prog !=3D old_prog) {
-+		err =3D -EPERM;
-+		goto out_unlock;
-+	}
-+	old_prog =3D link->prog;
-+	if (old_prog =3D=3D new_prog) {
-+		/* no-op, don't disturb drivers */
-+		bpf_prog_put(new_prog);
-+		goto out_unlock;
-+	}
-+
-+	mode =3D dev_xdp_mode(xdp_link->flags);
-+	bpf_op =3D dev_xdp_bpf_op(xdp_link->dev, mode);
-+	err =3D dev_xdp_install(xdp_link->dev, mode, bpf_op, NULL,
-+			      xdp_link->flags, new_prog);
-+	if (err)
-+		goto out_unlock;
-+
-+	old_prog =3D xchg(&link->prog, new_prog);
-+	bpf_prog_put(old_prog);
-+
-+out_unlock:
-+	rtnl_unlock();
-+	return err;
-+}
-+
- static const struct bpf_link_ops bpf_xdp_link_lops =3D {
- 	.release =3D bpf_xdp_link_release,
- 	.dealloc =3D bpf_xdp_link_dealloc,
-+	.update_prog =3D bpf_xdp_link_update,
- };
-=20
- int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *pro=
-g)
+Patch #1 refactors existing BPF program-based attachment API and centrali=
+zes
+high-level query/attach decisions in generic kernel code, while drivers a=
+re
+kept simple and are instructed with low-level decisions about attaching a=
+nd
+detaching specific bpf_prog. This also makes QUERY command unnecessary, a=
+nd
+patch #7 removes support for it from all kernel drivers. If that's a bad =
+idea,
+we can drop that patch altogether.
+
+With refactoring in patch #1, adding bpf_xdp_link is completely transpare=
+nt to
+drivers, they are still functioning at the level of "effective" bpf_prog,=
+ that
+should be called in XDP data path.
+
+Corresponding libbpf support for BPF XDP link is added in patch #5.
+
+Cc: Andrey Ignatov <rdna@fb.com>
+Cc: Takshak Chahande <ctakshak@fb.com>
+
+Andrii Nakryiko (7):
+  bpf, xdp: maintain info on attached XDP BPF programs in net_device
+  bpf, xdp: add bpf_link-based XDP attachment API
+  bpf, xdp: implement LINK_UPDATE for BPF XDP link
+  bpf: implement BPF XDP link-specific introspection APIs
+  libbpf: add support for BPF XDP link
+  selftests/bpf: add BPF XDP link selftests
+  bpf, xdp: remove XDP_QUERY_PROG and XDP_QUERY_PROG_HW XDP commands
+
+ drivers/net/ethernet/amazon/ena/ena_netdev.c  |   4 -
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c |   4 -
+ .../net/ethernet/cavium/thunder/nicvf_main.c  |   3 -
+ .../net/ethernet/freescale/dpaa2/dpaa2-eth.c  |   3 -
+ drivers/net/ethernet/intel/i40e/i40e_main.c   |   3 -
+ drivers/net/ethernet/intel/ice/ice_main.c     |   3 -
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |   4 -
+ .../net/ethernet/intel/ixgbevf/ixgbevf_main.c |   4 -
+ drivers/net/ethernet/marvell/mvneta.c         |   3 -
+ .../net/ethernet/marvell/mvpp2/mvpp2_main.c   |   3 -
+ .../net/ethernet/mellanox/mlx4/en_netdev.c    |  24 -
+ .../net/ethernet/mellanox/mlx5/core/en_main.c |  18 -
+ .../ethernet/netronome/nfp/nfp_net_common.c   |   4 -
+ .../net/ethernet/qlogic/qede/qede_filter.c    |   3 -
+ drivers/net/ethernet/sfc/efx.c                |   4 -
+ drivers/net/ethernet/socionext/netsec.c       |   3 -
+ drivers/net/ethernet/ti/cpsw_priv.c           |   3 -
+ drivers/net/hyperv/netvsc_bpf.c               |  21 +-
+ drivers/net/netdevsim/bpf.c                   |   4 -
+ drivers/net/netdevsim/netdevsim.h             |   2 +-
+ drivers/net/tun.c                             |   3 -
+ drivers/net/veth.c                            |  15 -
+ drivers/net/virtio_net.c                      |  17 -
+ drivers/net/xen-netfront.c                    |  21 -
+ include/linux/netdevice.h                     |  31 +-
+ include/net/xdp.h                             |   2 -
+ include/uapi/linux/bpf.h                      |  10 +-
+ kernel/bpf/syscall.c                          |   5 +
+ net/core/dev.c                                | 510 +++++++++++++-----
+ net/core/rtnetlink.c                          |   5 +-
+ net/core/xdp.c                                |   9 -
+ tools/include/uapi/linux/bpf.h                |  10 +-
+ tools/lib/bpf/libbpf.c                        |   9 +-
+ tools/lib/bpf/libbpf.h                        |   2 +
+ tools/lib/bpf/libbpf.map                      |   1 +
+ .../selftests/bpf/prog_tests/section_names.c  |   2 +-
+ .../selftests/bpf/prog_tests/xdp_link.c       | 137 +++++
+ .../selftests/bpf/progs/test_xdp_link.c       |  12 +
+ 38 files changed, 590 insertions(+), 331 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_link.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_link.c
+
 --=20
 2.24.1
 
