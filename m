@@ -2,53 +2,54 @@ Return-Path: <SRS0=NpDT=AY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FD48C433E4
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 11:53:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6057DC433E0
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 11:53:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F02A2072D
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 11:53:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 369E620738
+	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 11:53:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Rg+UJMXC"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="nMuqAZb1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727890AbgGMLxf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 07:53:35 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:57796 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728950AbgGMLxf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Jul 2020 07:53:35 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06DBq4hP030666;
-        Mon, 13 Jul 2020 11:52:49 GMT
+        id S1729659AbgGMLxk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 07:53:40 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:54056 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729621AbgGMLxj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jul 2020 07:53:39 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06DBqoYZ053984;
+        Mon, 13 Jul 2020 11:52:55 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2020-01-29;
- bh=4izpwHKKMvRnbjuHNXeJZ7HUs0gTe7+RGmJG7LzOJj0=;
- b=Rg+UJMXC2Cxnu5R6b5pbXPjSI+14yq8It1GYRjhC9ytpuBOQ1pN7K+uhzwQ9hqieheAN
- ctSA8zeYXAnoqJ62HsmiYEFQopOu2f1ZtJgz/+1It/IE7uAS7X+LG32TYGJD9EU0pxFr
- fsjO2a/Kx/30IRioysQv0DyB6+7RK+x09uhFtngsjNnb6zzm6Hm826oxUfLzczj5+aXu
- TN++0t8PgGz/TPOBGiXebbofIvCk0dJbscfJr5YbzeM/gavznp3NzlOzZLnNBGHPHc7b
- AfZKhfylpPuSq1lE/Sz31k96ca+9FPN5HEKwPh/hI29zF3ijqlVZ0VSoi9mQreRTTOJl Lw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 3274uqxk1p-1
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=z/1QPWqbNyssbqBldMP+d1+QFcSjoQ7OXySDQDNPWcc=;
+ b=nMuqAZb1fl7VT6hBcuSqplj5RvdkimFGmNkOOo04qXrpBVDfEhxxm9kO4Q3winHDZFA0
+ jG7KAXmpxDa6wTPcX5sYxm6EuBfPiWSEd3Q0FDc1WuDMwoQbJ3qoElBmYab3EO1nuFUD
+ xVEW7ebQvOVNZmTB8Uc+yUhOHpKFjwQnJYjjxgwW7yxv2a9A8ail3i2HOr605MencrWY
+ yc5sAPInTV8NyGoWHklMcOLvIpAiIiH9Z5sYjGgzV7KVp8aYYs0XIlvC+cJXT531T14d
+ frZdcjlJO76eGkLYxY/on25SbvqI97ZPlxuR+60fvBmexZKJIMADXBNZqB/TfyoCbC0u Qg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 32762n6dke-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 13 Jul 2020 11:52:49 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06DBhhQP104260;
-        Mon, 13 Jul 2020 11:52:48 GMT
+        Mon, 13 Jul 2020 11:52:55 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06DBhlpf106797;
+        Mon, 13 Jul 2020 11:52:54 GMT
 Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 327qb0epdf-1
+        by aserp3030.oracle.com with ESMTP id 327q0m7usr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Jul 2020 11:52:48 +0000
+        Mon, 13 Jul 2020 11:52:54 +0000
 Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06DBqkju020260;
-        Mon, 13 Jul 2020 11:52:46 GMT
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06DBqsvG020305;
+        Mon, 13 Jul 2020 11:52:54 GMT
 Received: from localhost.uk.oracle.com (/10.175.215.251)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 13 Jul 2020 04:52:46 -0700
+        with ESMTP ; Mon, 13 Jul 2020 04:52:53 -0700
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
         daniel@iogearbox.net
@@ -56,19 +57,21 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
         john.fastabend@gmail.com, kpsingh@chromium.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v3 bpf-next 0/2] bpf: fix use of trace_printk() in BPF
-Date:   Mon, 13 Jul 2020 12:52:32 +0100
-Message-Id: <1594641154-18897-1-git-send-email-alan.maguire@oracle.com>
+Subject: [PATCH v3 bpf-next 2/2] selftests/bpf: add selftests verifying bpf_trace_printk() behaviour
+Date:   Mon, 13 Jul 2020 12:52:34 +0100
+Message-Id: <1594641154-18897-3-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1594641154-18897-1-git-send-email-alan.maguire@oracle.com>
+References: <1594641154-18897-1-git-send-email-alan.maguire@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9680 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 spamscore=0 phishscore=0 suspectscore=0 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007130088
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
+ mlxlogscore=999 bulkscore=0 adultscore=0 phishscore=0 suspectscore=2
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007130088
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9680 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 impostorscore=0
- suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1015
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
+ clxscore=1015 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ bulkscore=0 suspectscore=2 phishscore=0 adultscore=0 impostorscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2007130089
 Sender: bpf-owner@vger.kernel.org
@@ -76,57 +79,126 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Steven suggested a way to resolve the appearance of the warning banner
-that appears as a result of using trace_printk() in BPF [1].
-Applying the patch and testing reveals all works as expected; we
-can call bpf_trace_printk() and see the trace messages in
-/sys/kernel/debug/tracing/trace_pipe and no banner message appears.
+Simple selftests that verifies bpf_trace_printk() returns a sensible
+value and tracing messages appear.
 
-Also add a test prog to verify basic bpf_trace_printk() helper behaviour.
-
-Changes since v2:
-
-- fixed stray newline in bpf_trace_printk(), use sizeof(buf)
-  rather than #defined value in vsnprintf() (Daniel, patch 1)
-- Daniel also pointed out that vsnprintf() returns 0 on error rather
-  than a negative value; also turns out that a null byte is not
-  appended if the length of the string written is zero, so to fix
-  for cases where the string to be traced is zero length we set the
-  null byte explicitly (Daniel, patch 1)
-- switch to using getline() for retrieving lines from trace buffer
-  to ensure we don't read a portion of the search message in one
-  read() operation and then fail to find it (Andrii, patch 2)
-
-Changes since v1:
-
-- reorder header inclusion in bpf_trace.c (Steven, patch 1)
-- trace zero-length messages also (Andrii, patch 1)
-- use a raw spinlock to ensure there are no issues for PREMMPT_RT
-  kernels when using bpf_trace_printk() within other raw spinlocks
-  (Steven, patch 1)
-- always enable bpf_trace_printk() tracepoint when loading programs
-  using bpf_trace_printk() as this will ensure that a user disabling
-  that tracepoint will not prevent tracing output from being logged
-  (Steven, patch 1)
-- use "tp/raw_syscalls/sys_enter" and a usleep(1) to trigger events
-  in the selftest ensuring test runs faster (Andrii, patch 2)
-
-[1]  https://lore.kernel.org/r/20200628194334.6238b933@oasis.local.home
-
-Alan Maguire (2):
-  bpf: use dedicated bpf_trace_printk event instead of trace_printk()
-  selftests/bpf: add selftests verifying bpf_trace_printk() behaviour
-
- kernel/trace/Makefile                              |  2 +
- kernel/trace/bpf_trace.c                           | 42 ++++++++++--
- kernel/trace/bpf_trace.h                           | 34 ++++++++++
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+---
  .../selftests/bpf/prog_tests/trace_printk.c        | 75 ++++++++++++++++++++++
  tools/testing/selftests/bpf/progs/trace_printk.c   | 21 ++++++
- 5 files changed, 169 insertions(+), 5 deletions(-)
- create mode 100644 kernel/trace/bpf_trace.h
+ 2 files changed, 96 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/trace_printk.c
  create mode 100644 tools/testing/selftests/bpf/progs/trace_printk.c
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/trace_printk.c b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+new file mode 100644
+index 0000000..39b0dec
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020, Oracle and/or its affiliates. */
++
++#include <test_progs.h>
++
++#include "trace_printk.skel.h"
++
++#define TRACEBUF	"/sys/kernel/debug/tracing/trace_pipe"
++#define SEARCHMSG	"testing,testing"
++
++void test_trace_printk(void)
++{
++	int err, iter = 0, duration = 0, found = 0;
++	struct trace_printk__bss *bss;
++	struct trace_printk *skel;
++	char *buf = NULL;
++	FILE *fp = NULL;
++	size_t buflen;
++
++	skel = trace_printk__open();
++	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
++		return;
++
++	err = trace_printk__load(skel);
++	if (CHECK(err, "skel_load", "failed to load skeleton: %d\n", err))
++		goto cleanup;
++
++	bss = skel->bss;
++
++	err = trace_printk__attach(skel);
++	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
++		goto cleanup;
++
++	fp = fopen(TRACEBUF, "r");
++	if (CHECK(fp == NULL, "could not open trace buffer",
++		  "error %d opening %s", errno, TRACEBUF))
++		goto cleanup;
++
++	/* We do not want to wait forever if this test fails... */
++	fcntl(fileno(fp), F_SETFL, O_NONBLOCK);
++
++	/* wait for tracepoint to trigger */
++	usleep(1);
++	trace_printk__detach(skel);
++
++	if (CHECK(bss->trace_printk_ran == 0,
++		  "bpf_trace_printk never ran",
++		  "ran == %d", bss->trace_printk_ran))
++		goto cleanup;
++
++	if (CHECK(bss->trace_printk_ret <= 0,
++		  "bpf_trace_printk returned <= 0 value",
++		  "got %d", bss->trace_printk_ret))
++		goto cleanup;
++
++	/* verify our search string is in the trace buffer */
++	while (getline(&buf, &buflen, fp) >= 0 || errno == EAGAIN) {
++		if (strstr(buf, SEARCHMSG) != NULL)
++			found++;
++		if (found == bss->trace_printk_ran)
++			break;
++		if (++iter > 1000)
++			break;
++	}
++
++	if (CHECK(!found, "message from bpf_trace_printk not found",
++		  "no instance of %s in %s", SEARCHMSG, TRACEBUF))
++		goto cleanup;
++
++cleanup:
++	trace_printk__destroy(skel);
++	free(buf);
++	if (fp)
++		fclose(fp);
++}
+diff --git a/tools/testing/selftests/bpf/progs/trace_printk.c b/tools/testing/selftests/bpf/progs/trace_printk.c
+new file mode 100644
+index 0000000..8ca7f39
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/trace_printk.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020, Oracle and/or its affiliates.
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++int trace_printk_ret = 0;
++int trace_printk_ran = 0;
++
++SEC("tp/raw_syscalls/sys_enter")
++int sys_enter(void *ctx)
++{
++	static const char fmt[] = "testing,testing %d\n";
++
++	trace_printk_ret = bpf_trace_printk(fmt, sizeof(fmt),
++					    ++trace_printk_ran);
++	return 0;
++}
 -- 
 1.8.3.1
 
