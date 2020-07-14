@@ -2,89 +2,135 @@ Return-Path: <SRS0=I/LR=AZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55834C433E3
-	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48720C433E1
+	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 30D37224F9
-	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594735024;
-	bh=1pJytwJejZQnTfJpmOAYaRgg4T3M4iz5/khnbm9cSqk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=GZf+xefk2S1azgXIuP/lAvxJT3pSHdnqdi4GqvYcdXnOzq3yLKvW/jEBwMQVzvahP
-	 cxnZO341Stq3svPo0HKQakOicLNXH931mkel8a4QVwkO3Q1xhFiYCJXn45WZ/v2TKR
-	 l3f3QxTnemEAUzic90sqHIYsM3zjxtgKjF3ZGeWA=
+	by mail.kernel.org (Postfix) with ESMTP id 209842250F
+	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:31 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bVkMvy8o"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725997AbgGNN5D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jul 2020 09:57:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34370 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725877AbgGNN5D (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Jul 2020 09:57:03 -0400
-Received: from localhost.localdomain.com (unknown [151.48.133.17])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 16DBA224F4;
-        Tue, 14 Jul 2020 13:57:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594735023;
-        bh=1pJytwJejZQnTfJpmOAYaRgg4T3M4iz5/khnbm9cSqk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IYzP35GFjkIh7LiYeNm95fAIQyOAvmkshic9dfDL7g/c2jWwZ2Go636m5+RXBerAU
-         GtmGofpFLPSmwK3ntPoVsvs6OiRVBcv2LV+3sslQ0txMPGGESjhWpHqxN1entTOXvL
-         sp/4tnM21UWfwz1xyQwMlUoiTV+i/ylN3lDdYaKw=
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, brouer@redhat.com,
-        daniel@iogearbox.net, toke@redhat.com, lorenzo.bianconi@redhat.com,
-        dsahern@kernel.org, andrii.nakryiko@gmail.com
-Subject: [PATCH v7 bpf-next 1/9] cpumap: use non-locked version __ptr_ring_consume_batched
-Date:   Tue, 14 Jul 2020 15:56:34 +0200
-Message-Id: <a9c7d06f9a009e282209f0c8c7b2c5d9b9ad60b9.1594734381.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1594734381.git.lorenzo@kernel.org>
-References: <cover.1594734381.git.lorenzo@kernel.org>
+        id S1726742AbgGNN5a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Jul 2020 09:57:30 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:28608 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728175AbgGNN51 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Jul 2020 09:57:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594735045;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZBinmgwxUJlj0oYqhR2BRvHslB/E0uckUbNPpgAvrHM=;
+        b=bVkMvy8oHCnz6ZLdKM42O6uUheToxr2yodVtMVJ3VEvZUNBPQkWtUBgOU4rH0+tZ1NgWs/
+        I9iutEEKvbnzhHWSBRgh6e9TNEZjKBLZP6btBJFdf3XA8IxtzN5i389LOHVojb67i4REbX
+        a6p45fkzMvYrhxTQtJ7DH5FpzegHwbc=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-460-esHi6tNtPMmVcyEe7MZQFg-1; Tue, 14 Jul 2020 09:57:22 -0400
+X-MC-Unique: esHi6tNtPMmVcyEe7MZQFg-1
+Received: by mail-wr1-f70.google.com with SMTP id y13so21810781wrp.13
+        for <bpf@vger.kernel.org>; Tue, 14 Jul 2020 06:57:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=ZBinmgwxUJlj0oYqhR2BRvHslB/E0uckUbNPpgAvrHM=;
+        b=OfEgYwgOHHT3BVniBY8YTJgDNKDXmD7ak7An6O+kbcxhTfg+OmRCKiSsdQaDz1dDZE
+         ATWU5Z57KyHmL54MKkxkDVpZM4hYeA0zHz/ceWoF/MTrzeLpsAbsqNs7JStiGAJJDwkL
+         ZNTDBUTLsZp6Ikw+O+3BbQjlPx8TXOYnyeptKuU8NSG1pAuTMZu0vxPBcqihWRDTpxHC
+         521D4iy4AwJoXAZQD17fjGyV2joXFusTGAQhUXupyv6AILkpnMXm1qC90TvtvfDf0zOD
+         8NmExklVFl3006N33UorrLYlMXfwowsFlD6UggNxeD1AcQrbjBaOI2U9silFZYhjqii+
+         T5lQ==
+X-Gm-Message-State: AOAM5327k9mEE3hD7r3UwByYTgZR2gmif9PU+TngMw1rnWmlUw5PC8mU
+        OKUABC7kwMqGp/bWzepUB7QJZIr+rhd8TRTzHRflReMvL+Gzr3ka57NYvwxKka1wP5VnQfy6X03
+        dfFtbDQLwjfYD
+X-Received: by 2002:adf:ec90:: with SMTP id z16mr5724563wrn.52.1594735041471;
+        Tue, 14 Jul 2020 06:57:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy8nyShzr50LWR0kfVtYp25AKUucCrNZUcCDwG03fM+BsRRR8/Xztl5Oy91ZYK3cZacgFcXvw==
+X-Received: by 2002:adf:ec90:: with SMTP id z16mr5724514wrn.52.1594735041183;
+        Tue, 14 Jul 2020 06:57:21 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id y7sm28719976wrt.11.2020.07.14.06.57.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2020 06:57:20 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 406F51804F0; Tue, 14 Jul 2020 15:57:18 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andriin@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, ast@fb.com, daniel@iogearbox.net
+Cc:     andrii.nakryiko@gmail.com, kernel-team@fb.com,
+        Andrii Nakryiko <andriin@fb.com>,
+        David Ahern <dsahern@gmail.com>,
+        Jakub Kicinski <kicinski@fb.com>, Andrey Ignatov <rdna@fb.com>,
+        Takshak Chahande <ctakshak@fb.com>
+Subject: Re: [PATCH bpf-next 2/7] bpf, xdp: add bpf_link-based XDP attachment API
+In-Reply-To: <20200710224924.4087399-3-andriin@fb.com>
+References: <20200710224924.4087399-1-andriin@fb.com> <20200710224924.4087399-3-andriin@fb.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 14 Jul 2020 15:57:18 +0200
+Message-ID: <877dv6gpxd.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Andrii Nakryiko <andriin@fb.com> writes:
 
-Commit 77361825bb01 ("bpf: cpumap use ptr_ring_consume_batched") changed
-away from using single frame ptr_ring dequeue (__ptr_ring_consume) to
-consume a batched, but it uses a locked version, which as the comment
-explain isn't needed.
+> Add bpf_link-based API (bpf_xdp_link) to attach BPF XDP program through
+> BPF_LINK_CREATE command.
 
-Change to use the non-locked version __ptr_ring_consume_batched.
+I'm still not convinced this is a good idea. As far as I can tell, at
+this point adding this gets you three things:
 
-Fixes: 77361825bb01 ("bpf: cpumap use ptr_ring_consume_batched")
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- kernel/bpf/cpumap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+1. The ability to 'lock' an attachment in place.
 
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index bd8658055c16..323c91c4fab0 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -259,7 +259,7 @@ static int cpu_map_kthread_run(void *data)
- 		 * kthread CPU pinned. Lockless access to ptr_ring
- 		 * consume side valid as no-resize allowed of queue.
- 		 */
--		n = ptr_ring_consume_batched(rcpu->queue, frames, CPUMAP_BATCH);
-+		n = __ptr_ring_consume_batched(rcpu->queue, frames, CPUMAP_BATCH);
- 
- 		for (i = 0; i < n; i++) {
- 			void *f = frames[i];
--- 
-2.26.2
+2. Automatic detach on fd close
+
+3. API unification with other uses of BPF_LINK_CREATE.
+
+
+Of those, 1. is certainly useful, but can be trivially achieved with the
+existing netlink API (add a flag on attach that prevents removal unless
+the original prog_fd is supplied as EXPECTED_FD).
+
+2. is IMO the wrong model for XDP, as I believe I argued the last time
+we discussed this :)
+In particular, in a situation with multiple XDP programs attached
+through a dispatcher, the 'owner' application of each program don't
+'own' the interface attachment anyway, so if using bpf_link for that it
+would have to be pinned somewhere anyway. So the 'automatic detach'
+feature is only useful in the "xdpd" deployment scenario, whereas in the
+common usage model of command-line attachment ('ip link set xdp...') it
+is something that needs to be worked around.
+
+3. would be kinda nice, I guess, if we were designing the API from
+scratch. But we already have an existing API, so IMO the cost of
+duplication outweighs any benefits of API unification.
+
+So why is XDP worth it? I assume you weigh this differently, but please
+explain how. Ideally, this should have been in the commit message
+already...
+
+> bpf_xdp_link is mutually exclusive with direct BPF program attachment,
+> previous BPF program should be detached prior to attempting to create a new
+> bpf_xdp_link attachment (for a given XDP mode). Once link is attached, it
+> can't be replaced by other BPF program attachment or link attachment. It will
+> be detached only when the last BPF link FD is closed.
+
+I was under the impression that forcible attachment of bpf_links was
+already possible, but looking at the code now it doesn't appear to be?
+Wasn't that the whole point of BPF_LINK_GET_FD_BY_ID? I.e., that a
+sysadmin with CAP_SYS_ADMIN privs could grab the offending bpf_link FD
+and force-remove it? I certainly think this should be added before we
+expand bpf_link usage any more...
+
+-Toke
 
