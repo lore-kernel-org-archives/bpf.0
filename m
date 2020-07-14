@@ -1,235 +1,121 @@
-Return-Path: <SRS0=NpDT=AY=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=I/LR=AZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DEF6C433E6
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 23:25:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ED52C433E1
+	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 00:02:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0586F20DD4
-	for <bpf@archiver.kernel.org>; Mon, 13 Jul 2020 23:25:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D981221883
+	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 00:02:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="MnqZNGva"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uo6J2KIa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726609AbgGMXZJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jul 2020 19:25:09 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:27350 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726356AbgGMXZG (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 13 Jul 2020 19:25:06 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06DNKaET019149
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 16:25:05 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=a/eqtSLjPpof28HW6O/K0A0q8XFB+yRskLA59OiOEbk=;
- b=MnqZNGvavZs7Vr33igH6T1AEibyWy2B34KZHw74awpAt8itbQ+628RbhvXU3TvlxE6YW
- n7D8opJukgN70rtrA5uL3yXl3mJjM22I7sAWZ0IqKUu06R5Ual/jUUB2ixLS5fGGxQDw
- fco01HVULGZTkdq6ta8cd+anWS5fnKmR+vE= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 327axn2beu-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 13 Jul 2020 16:25:05 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 13 Jul 2020 16:24:58 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 4078D2EC4105; Mon, 13 Jul 2020 16:24:48 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Anton Protopopov <a.s.protopopov@gmail.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 2/2] tools/bpftool: strip away modifiers from global variables
-Date:   Mon, 13 Jul 2020 16:24:09 -0700
-Message-ID: <20200713232409.3062144-3-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200713232409.3062144-1-andriin@fb.com>
-References: <20200713232409.3062144-1-andriin@fb.com>
+        id S1726374AbgGNACH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jul 2020 20:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726150AbgGNACH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jul 2020 20:02:07 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC251C061755;
+        Mon, 13 Jul 2020 17:02:06 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id d17so20285670ljl.3;
+        Mon, 13 Jul 2020 17:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t0cfrkzzv7XgU7cyUuzXAx+2nPotIXfhcv+12wgA2PU=;
+        b=Uo6J2KIaVi5iU9mYcgcqzhVJBqxlVa4sYe1wJAUnnbea4/LUpZMBgnxgFadQoedtGJ
+         OuH4hfjd0FSrVHyokDb3dobfnJ4J13kG23lMdkYO87RuDq5eac/8AGiIFFKlkS3C5Wat
+         71/xV22dzhJL5hiXv1sFI0Yayeo3aVTr3ML24asM2kGs0bkESZ8meoTLnDt6nH2byEfk
+         DnQ5PvOffeJq+oYlmdPsY52SsgTrCBY4M2PQxlbrsztQxfE6rg+fYiqUc7JodnftFm9k
+         ai34hbCWTYyLZc5L3zMpszTx2mAqL94AsWYfx5vlF+X27gkfbH8ZhjWwUt+5oW0T1fMN
+         HIPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t0cfrkzzv7XgU7cyUuzXAx+2nPotIXfhcv+12wgA2PU=;
+        b=gWxEDg768C8cFiD/pSziQoX/m/+LyaCZGnazjkTcU86OO5yCYuuSdC9q6eabLVDcPu
+         kmGvETX0z3SkmPO9j0R6sDi43wC7CilTd5dQ7iWtRsCoNR8Lp8QNka+up3e6VVoLY2dF
+         xxOkXc4gzCMw2sKwWKsSHpl0HIRAIRyR8QBjzau6j5zyTutTHFH08kFhUc665S5x5Z94
+         GsHSY8WRkZO5RqHIWhP3UVNeoPXoSlX5i3y3cU4lpUMjIiDtqfH2bl0jzqJDNUtvcaAf
+         jVQbeuUPZdPomb1SeCfNJzCmrs5yuFpidDL7OaLZI8RzRTTJGCv8vu90TBCgShnJEBV+
+         Xjqg==
+X-Gm-Message-State: AOAM530dvNfNOgO+MrdBhPQ8ZFXFqYO2O6ngiyzudmmAocTtlulF6vIC
+        xmIvuPeO5V0pPWQ4WrhNSc+SSwqTgAlo56YKfRY=
+X-Google-Smtp-Source: ABdhPJyWXrP4OKhLSQynsQ3WHaYu7RkyIxlewG61uW/dnYgJxXYryPcW5+IGLewX0Oxs/Mz1G5tjSbXwF94RYlStLms=
+X-Received: by 2002:a2e:8216:: with SMTP id w22mr985388ljg.2.1594684925231;
+ Mon, 13 Jul 2020 17:02:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-13_17:2020-07-13,2020-07-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- impostorscore=0 suspectscore=8 phishscore=0 malwarescore=0 spamscore=0
- mlxlogscore=982 lowpriorityscore=0 adultscore=0 bulkscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007130170
-X-FB-Internal: deliver
+References: <1594641154-18897-1-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1594641154-18897-1-git-send-email-alan.maguire@oracle.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 13 Jul 2020 17:01:53 -0700
+Message-ID: <CAADnVQ+zBgz0DBJr0sLK3PsfCYgfSLp6fZMh=m7XtMKfSOupEQ@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 0/2] bpf: fix use of trace_printk() in BPF
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Reliably remove all the type modifiers from read-only (.rodata) global
-variable definitions, including cases of inner field const modifiers and
-arrays of const values.
+On Mon, Jul 13, 2020 at 4:53 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> Steven suggested a way to resolve the appearance of the warning banner
+> that appears as a result of using trace_printk() in BPF [1].
+> Applying the patch and testing reveals all works as expected; we
+> can call bpf_trace_printk() and see the trace messages in
+> /sys/kernel/debug/tracing/trace_pipe and no banner message appears.
+>
+> Also add a test prog to verify basic bpf_trace_printk() helper behaviour.
+>
+> Changes since v2:
+>
+> - fixed stray newline in bpf_trace_printk(), use sizeof(buf)
+>   rather than #defined value in vsnprintf() (Daniel, patch 1)
+> - Daniel also pointed out that vsnprintf() returns 0 on error rather
+>   than a negative value; also turns out that a null byte is not
+>   appended if the length of the string written is zero, so to fix
+>   for cases where the string to be traced is zero length we set the
+>   null byte explicitly (Daniel, patch 1)
+> - switch to using getline() for retrieving lines from trace buffer
+>   to ensure we don't read a portion of the search message in one
+>   read() operation and then fail to find it (Andrii, patch 2)
+>
+> Changes since v1:
+>
+> - reorder header inclusion in bpf_trace.c (Steven, patch 1)
+> - trace zero-length messages also (Andrii, patch 1)
+> - use a raw spinlock to ensure there are no issues for PREMMPT_RT
+>   kernels when using bpf_trace_printk() within other raw spinlocks
+>   (Steven, patch 1)
+> - always enable bpf_trace_printk() tracepoint when loading programs
+>   using bpf_trace_printk() as this will ensure that a user disabling
+>   that tracepoint will not prevent tracing output from being logged
+>   (Steven, patch 1)
+> - use "tp/raw_syscalls/sys_enter" and a usleep(1) to trigger events
+>   in the selftest ensuring test runs faster (Andrii, patch 2)
+>
+> [1]  https://lore.kernel.org/r/20200628194334.6238b933@oasis.local.home
 
-Also modify one of selftests to ensure that const volatile struct doesn't
-prevent user-space from modifying .rodata variable.
-
-Fixes: 985ead416df3 ("bpftool: Add skeleton codegen command")
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/bpf/bpftool/gen.c                       | 23 ++++++++-----------
- tools/lib/bpf/btf.h                           |  2 +-
- .../selftests/bpf/prog_tests/skeleton.c       |  6 ++---
- .../selftests/bpf/progs/test_skeleton.c       |  6 +++--
- 4 files changed, 18 insertions(+), 19 deletions(-)
-
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index 10de76b296ba..b59d26e89367 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -88,7 +88,7 @@ static const char *get_map_ident(const struct bpf_map *=
-map)
- 		return NULL;
- }
-=20
--static void codegen_btf_dump_printf(void *ct, const char *fmt, va_list a=
-rgs)
-+static void codegen_btf_dump_printf(void *ctx, const char *fmt, va_list =
-args)
- {
- 	vprintf(fmt, args);
- }
-@@ -104,17 +104,20 @@ static int codegen_datasec_def(struct bpf_object *o=
-bj,
- 	int i, err, off =3D 0, pad_cnt =3D 0, vlen =3D btf_vlen(sec);
- 	const char *sec_ident;
- 	char var_ident[256];
-+	bool strip_mods =3D false;
-=20
--	if (strcmp(sec_name, ".data") =3D=3D 0)
-+	if (strcmp(sec_name, ".data") =3D=3D 0) {
- 		sec_ident =3D "data";
--	else if (strcmp(sec_name, ".bss") =3D=3D 0)
-+	} else if (strcmp(sec_name, ".bss") =3D=3D 0) {
- 		sec_ident =3D "bss";
--	else if (strcmp(sec_name, ".rodata") =3D=3D 0)
-+	} else if (strcmp(sec_name, ".rodata") =3D=3D 0) {
- 		sec_ident =3D "rodata";
--	else if (strcmp(sec_name, ".kconfig") =3D=3D 0)
-+		strip_mods =3D true;
-+	} else if (strcmp(sec_name, ".kconfig") =3D=3D 0) {
- 		sec_ident =3D "kconfig";
--	else
-+	} else {
- 		return 0;
-+	}
-=20
- 	printf("	struct %s__%s {\n", obj_name, sec_ident);
- 	for (i =3D 0; i < vlen; i++, sec_var++) {
-@@ -123,16 +126,10 @@ static int codegen_datasec_def(struct bpf_object *o=
-bj,
- 		DECLARE_LIBBPF_OPTS(btf_dump_emit_type_decl_opts, opts,
- 			.field_name =3D var_ident,
- 			.indent_level =3D 2,
-+			.strip_mods =3D strip_mods,
- 		);
- 		int need_off =3D sec_var->offset, align_off, align;
- 		__u32 var_type_id =3D var->type;
--		const struct btf_type *t;
--
--		t =3D btf__type_by_id(btf, var_type_id);
--		while (btf_is_mod(t)) {
--			var_type_id =3D t->type;
--			t =3D btf__type_by_id(btf, var_type_id);
--		}
-=20
- 		if (off > need_off) {
- 			p_err("Something is wrong for %s's variable #%d: need offset %d, alre=
-ady at %d.\n",
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index be98dd75b791..7f003bbeb35e 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -146,7 +146,7 @@ struct btf_dump_emit_type_decl_opts {
- 	/* strip all the const/volatile/restrict mods */
- 	bool strip_mods;
- };
--#define btf_dump_emit_type_decl_opts__last_field indent_level
-+#define btf_dump_emit_type_decl_opts__last_field strip_mods
-=20
- LIBBPF_API int
- btf_dump__emit_type_decl(struct btf_dump *d, __u32 id,
-diff --git a/tools/testing/selftests/bpf/prog_tests/skeleton.c b/tools/te=
-sting/selftests/bpf/prog_tests/skeleton.c
-index fa153cf67b1b..fe87b77af459 100644
---- a/tools/testing/selftests/bpf/prog_tests/skeleton.c
-+++ b/tools/testing/selftests/bpf/prog_tests/skeleton.c
-@@ -41,7 +41,7 @@ void test_skeleton(void)
- 	CHECK(bss->in4 !=3D 0, "in4", "got %lld !=3D exp %lld\n", bss->in4, 0LL=
-);
- 	CHECK(bss->out4 !=3D 0, "out4", "got %lld !=3D exp %lld\n", bss->out4, =
-0LL);
-=20
--	CHECK(rodata->in6 !=3D 0, "in6", "got %d !=3D exp %d\n", rodata->in6, 0=
-);
-+	CHECK(rodata->in.in6 !=3D 0, "in6", "got %d !=3D exp %d\n", rodata->in.=
-in6, 0);
- 	CHECK(bss->out6 !=3D 0, "out6", "got %d !=3D exp %d\n", bss->out6, 0);
-=20
- 	/* validate we can pre-setup global variables, even in .bss */
-@@ -49,7 +49,7 @@ void test_skeleton(void)
- 	data->in2 =3D 11;
- 	bss->in3 =3D 12;
- 	bss->in4 =3D 13;
--	rodata->in6 =3D 14;
-+	rodata->in.in6 =3D 14;
-=20
- 	err =3D test_skeleton__load(skel);
- 	if (CHECK(err, "skel_load", "failed to load skeleton: %d\n", err))
-@@ -60,7 +60,7 @@ void test_skeleton(void)
- 	CHECK(data->in2 !=3D 11, "in2", "got %lld !=3D exp %lld\n", data->in2, =
-11LL);
- 	CHECK(bss->in3 !=3D 12, "in3", "got %d !=3D exp %d\n", bss->in3, 12);
- 	CHECK(bss->in4 !=3D 13, "in4", "got %lld !=3D exp %lld\n", bss->in4, 13=
-LL);
--	CHECK(rodata->in6 !=3D 14, "in6", "got %d !=3D exp %d\n", rodata->in6, =
-14);
-+	CHECK(rodata->in.in6 !=3D 14, "in6", "got %d !=3D exp %d\n", rodata->in=
-.in6, 14);
-=20
- 	/* now set new values and attach to get them into outX variables */
- 	data->in1 =3D 1;
-diff --git a/tools/testing/selftests/bpf/progs/test_skeleton.c b/tools/te=
-sting/selftests/bpf/progs/test_skeleton.c
-index 77ae86f44db5..374ccef704e1 100644
---- a/tools/testing/selftests/bpf/progs/test_skeleton.c
-+++ b/tools/testing/selftests/bpf/progs/test_skeleton.c
-@@ -20,7 +20,9 @@ long long in4 __attribute__((aligned(64))) =3D 0;
- struct s in5 =3D {};
-=20
- /* .rodata section */
--const volatile int in6 =3D 0;
-+const volatile struct {
-+	const int in6;
-+} in =3D {};
-=20
- /* .data section */
- int out1 =3D -1;
-@@ -46,7 +48,7 @@ int handler(const void *ctx)
- 	out3 =3D in3;
- 	out4 =3D in4;
- 	out5 =3D in5;
--	out6 =3D in6;
-+	out6 =3D in.in6;
-=20
- 	bpf_syscall =3D CONFIG_BPF_SYSCALL;
- 	kern_ver =3D LINUX_KERNEL_VERSION;
---=20
-2.24.1
-
+Applied. Thanks
