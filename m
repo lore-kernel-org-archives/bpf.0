@@ -4,465 +4,122 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2BF3C43459
-	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CE4BC433E7
+	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 14:45:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E6BC224F9
-	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 27B0222409
+	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 14:45:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594735059;
-	bh=W4EbKf90l1dI1qE334+NwIA8pQjA+Fw3oFhA8QjKQmk=;
+	s=default; t=1594737941;
+	bh=Iwpq0K3LI/457THLc5GqV5NyV/1EOMMNxj0I7YNH3+c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=FYxyzgQmEZrpdUANY3uJmFETxsaGY4p6JYTgqwaLFuPUey1aLTDkzdTPu+lP+F82R
-	 O1gv1jQSFttFcR/tZGFuWZwoJiN8OANPlZiW4nlQqk7zZ3c9WYyOtdBzDo93Nh9z9p
-	 sjnUH5w2BQem9a2f1vQe2bljH/rchmuml6kWEDJg=
+	b=fwCvKo+IZoQ0hBEKYvAEpv5F0VazpwMLkCctrXD/ENV2AoZd9MoVueRUhFPHV+l60
+	 PHBzfOTU2RUkdPVixC5XpOqN9GXKvvXzkdij0rt5kVv4+pbzBW/j20GzWkpCg5fj5F
+	 Iday3U9i258RcJlP54rsBG4sIBnTQtG/qqd8sleU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728329AbgGNN5c (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jul 2020 09:57:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34974 "EHLO mail.kernel.org"
+        id S1728623AbgGNOpf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Jul 2020 10:45:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54158 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728300AbgGNN5b (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Jul 2020 09:57:31 -0400
-Received: from localhost.localdomain.com (unknown [151.48.133.17])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728455AbgGNOi5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Jul 2020 10:38:57 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 97A6A22516;
-        Tue, 14 Jul 2020 13:57:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A3926222C8;
+        Tue, 14 Jul 2020 14:38:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594735050;
-        bh=W4EbKf90l1dI1qE334+NwIA8pQjA+Fw3oFhA8QjKQmk=;
+        s=default; t=1594737536;
+        bh=Iwpq0K3LI/457THLc5GqV5NyV/1EOMMNxj0I7YNH3+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e7u4JE28XiXyr/ToSN7l/LbR9eQuuJRbB0ApeQaj6jYn1QeWBKCceyCJFFobXB12+
-         SB2B2d+Dn8Hir1ANhb8zW/AjA+GTOr9GVpCcUHI0/AnvLHe0643vySszUyrl35g7RU
-         O3uBt05bTY3Eht0tMBzGvv84PJcAYyqZmR/0PbIc=
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, brouer@redhat.com,
-        daniel@iogearbox.net, toke@redhat.com, lorenzo.bianconi@redhat.com,
-        dsahern@kernel.org, andrii.nakryiko@gmail.com
-Subject: [PATCH v7 bpf-next 8/9] samples/bpf: xdp_redirect_cpu: load a eBPF program on cpumap
-Date:   Tue, 14 Jul 2020 15:56:41 +0200
-Message-Id: <aa5a9a281b9dac425620fdabe82670ffb6bbdb92.1594734381.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1594734381.git.lorenzo@kernel.org>
-References: <cover.1594734381.git.lorenzo@kernel.org>
+        b=w5jEPgTezU+byQQVS1Me13LKRT5bEOqTVr8LKj2MrZ9V38keHKA89xU8JtYHaSTOw
+         Xyq/5wZnlTG5peDEXtGIotlJEoWudWWKDVhZ2wm3zNlZ1VKoVpaEpdcH/HTfdjPVnA
+         Y5dd7mYhAy53fn2RbF580BeNebw3qJ3JTRHLpyjk=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 05/19] bpf: Set the number of exception entries properly for subprograms
+Date:   Tue, 14 Jul 2020 10:38:35 -0400
+Message-Id: <20200714143849.4035283-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200714143849.4035283-1-sashal@kernel.org>
+References: <20200714143849.4035283-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend xdp_redirect_cpu_{usr,kern}.c adding the possibility to load
-a XDP program on cpumap entries. The following options have been added:
-- mprog-name: cpumap entry program name
-- mprog-filename: cpumap entry program filename
-- redirect-device: output interface if the cpumap program performs a
-  XDP_REDIRECT to an egress interface
-- redirect-map: bpf map used to perform XDP_REDIRECT to an egress
-  interface
-- mprog-disable: disable loading XDP program on cpumap entries
+From: Yonghong Song <yhs@fb.com>
 
-Add xdp_pass, xdp_drop, xdp_redirect stats accounting
+[ Upstream commit c4c0bdc0d2d084ed847c7066bdf59fe2cd25aa17 ]
 
-Co-developed-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Currently, if a bpf program has more than one subprograms, each program will be
+jitted separately. For programs with bpf-to-bpf calls the
+prog->aux->num_exentries is not setup properly. For example, with
+bpf_iter_netlink.c modified to force one function to be not inlined and with
+CONFIG_BPF_JIT_ALWAYS_ON the following error is seen:
+   $ ./test_progs -n 3/3
+   ...
+   libbpf: failed to load program 'iter/netlink'
+   libbpf: failed to load object 'bpf_iter_netlink'
+   libbpf: failed to load BPF skeleton 'bpf_iter_netlink': -4007
+   test_netlink:FAIL:bpf_iter_netlink__open_and_load skeleton open_and_load failed
+   #3/3 netlink:FAIL
+The dmesg shows the following errors:
+   ex gen bug
+which is triggered by the following code in arch/x86/net/bpf_jit_comp.c:
+   if (excnt >= bpf_prog->aux->num_exentries) {
+     pr_err("ex gen bug\n");
+     return -EFAULT;
+   }
+
+This patch fixes the issue by computing proper num_exentries for each
+subprogram before calling JIT.
+
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- samples/bpf/xdp_redirect_cpu_kern.c |  25 ++--
- samples/bpf/xdp_redirect_cpu_user.c | 175 +++++++++++++++++++++++++---
- 2 files changed, 178 insertions(+), 22 deletions(-)
+ kernel/bpf/verifier.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/samples/bpf/xdp_redirect_cpu_kern.c b/samples/bpf/xdp_redirect_cpu_kern.c
-index 2baf8db1f7e7..8255025dea97 100644
---- a/samples/bpf/xdp_redirect_cpu_kern.c
-+++ b/samples/bpf/xdp_redirect_cpu_kern.c
-@@ -21,7 +21,7 @@
- struct {
- 	__uint(type, BPF_MAP_TYPE_CPUMAP);
- 	__uint(key_size, sizeof(u32));
--	__uint(value_size, sizeof(u32));
-+	__uint(value_size, sizeof(struct bpf_cpumap_val));
- 	__uint(max_entries, MAX_CPUS);
- } cpu_map SEC(".maps");
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 739d9ba3ba6b7..eebdd5307713b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9613,7 +9613,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ 	int i, j, subprog_start, subprog_end = 0, len, subprog;
+ 	struct bpf_insn *insn;
+ 	void *old_bpf_func;
+-	int err;
++	int err, num_exentries;
  
-@@ -30,6 +30,9 @@ struct datarec {
- 	__u64 processed;
- 	__u64 dropped;
- 	__u64 issue;
-+	__u64 xdp_pass;
-+	__u64 xdp_drop;
-+	__u64 xdp_redirect;
- };
- 
- /* Count RX packets, as XDP bpf_prog doesn't get direct TX-success
-@@ -692,13 +695,16 @@ int trace_xdp_cpumap_enqueue(struct cpumap_enqueue_ctx *ctx)
-  * Code in:         kernel/include/trace/events/xdp.h
-  */
- struct cpumap_kthread_ctx {
--	u64 __pad;		// First 8 bytes are not accessible by bpf code
--	int map_id;		//	offset:8;  size:4; signed:1;
--	u32 act;		//	offset:12; size:4; signed:0;
--	int cpu;		//	offset:16; size:4; signed:1;
--	unsigned int drops;	//	offset:20; size:4; signed:0;
--	unsigned int processed;	//	offset:24; size:4; signed:0;
--	int sched;		//	offset:28; size:4; signed:1;
-+	u64 __pad;			// First 8 bytes are not accessible
-+	int map_id;			//	offset:8;  size:4; signed:1;
-+	u32 act;			//	offset:12; size:4; signed:0;
-+	int cpu;			//	offset:16; size:4; signed:1;
-+	unsigned int drops;		//	offset:20; size:4; signed:0;
-+	unsigned int processed;		//	offset:24; size:4; signed:0;
-+	int sched;			//	offset:28; size:4; signed:1;
-+	unsigned int xdp_pass;		//	offset:32; size:4; signed:0;
-+	unsigned int xdp_drop;		//	offset:36; size:4; signed:0;
-+	unsigned int xdp_redirect;	//	offset:40; size:4; signed:0;
- };
- 
- SEC("tracepoint/xdp/xdp_cpumap_kthread")
-@@ -712,6 +718,9 @@ int trace_xdp_cpumap_kthread(struct cpumap_kthread_ctx *ctx)
+ 	if (env->subprog_cnt <= 1)
  		return 0;
- 	rec->processed += ctx->processed;
- 	rec->dropped   += ctx->drops;
-+	rec->xdp_pass  += ctx->xdp_pass;
-+	rec->xdp_drop  += ctx->xdp_drop;
-+	rec->xdp_redirect  += ctx->xdp_redirect;
- 
- 	/* Count times kthread yielded CPU via schedule call */
- 	if (ctx->sched)
-diff --git a/samples/bpf/xdp_redirect_cpu_user.c b/samples/bpf/xdp_redirect_cpu_user.c
-index 6bb2d95cb26c..004c0622c913 100644
---- a/samples/bpf/xdp_redirect_cpu_user.c
-+++ b/samples/bpf/xdp_redirect_cpu_user.c
-@@ -70,6 +70,11 @@ static const struct option long_options[] = {
- 	{"stress-mode", no_argument,		NULL, 'x' },
- 	{"no-separators", no_argument,		NULL, 'z' },
- 	{"force",	no_argument,		NULL, 'F' },
-+	{"mprog-disable", no_argument,		NULL, 'n' },
-+	{"mprog-name",	required_argument,	NULL, 'e' },
-+	{"mprog-filename", required_argument,	NULL, 'f' },
-+	{"redirect-device", required_argument,	NULL, 'r' },
-+	{"redirect-map", required_argument,	NULL, 'm' },
- 	{0, 0, NULL,  0 }
- };
- 
-@@ -156,6 +161,9 @@ struct datarec {
- 	__u64 processed;
- 	__u64 dropped;
- 	__u64 issue;
-+	__u64 xdp_pass;
-+	__u64 xdp_drop;
-+	__u64 xdp_redirect;
- };
- struct record {
- 	__u64 timestamp;
-@@ -175,6 +183,9 @@ static bool map_collect_percpu(int fd, __u32 key, struct record *rec)
- 	/* For percpu maps, userspace gets a value per possible CPU */
- 	unsigned int nr_cpus = bpf_num_possible_cpus();
- 	struct datarec values[nr_cpus];
-+	__u64 sum_xdp_redirect = 0;
-+	__u64 sum_xdp_pass = 0;
-+	__u64 sum_xdp_drop = 0;
- 	__u64 sum_processed = 0;
- 	__u64 sum_dropped = 0;
- 	__u64 sum_issue = 0;
-@@ -196,10 +207,19 @@ static bool map_collect_percpu(int fd, __u32 key, struct record *rec)
- 		sum_dropped        += values[i].dropped;
- 		rec->cpu[i].issue = values[i].issue;
- 		sum_issue        += values[i].issue;
-+		rec->cpu[i].xdp_pass = values[i].xdp_pass;
-+		sum_xdp_pass += values[i].xdp_pass;
-+		rec->cpu[i].xdp_drop = values[i].xdp_drop;
-+		sum_xdp_drop += values[i].xdp_drop;
-+		rec->cpu[i].xdp_redirect = values[i].xdp_redirect;
-+		sum_xdp_redirect += values[i].xdp_redirect;
- 	}
- 	rec->total.processed = sum_processed;
- 	rec->total.dropped   = sum_dropped;
- 	rec->total.issue     = sum_issue;
-+	rec->total.xdp_pass  = sum_xdp_pass;
-+	rec->total.xdp_drop  = sum_xdp_drop;
-+	rec->total.xdp_redirect = sum_xdp_redirect;
- 	return true;
- }
- 
-@@ -300,17 +320,33 @@ static __u64 calc_errs_pps(struct datarec *r,
- 	return pps;
- }
- 
-+static void calc_xdp_pps(struct datarec *r, struct datarec *p,
-+			 double *xdp_pass, double *xdp_drop,
-+			 double *xdp_redirect, double period_)
-+{
-+	*xdp_pass = 0, *xdp_drop = 0, *xdp_redirect = 0;
-+	if (period_ > 0) {
-+		*xdp_redirect = (r->xdp_redirect - p->xdp_redirect) / period_;
-+		*xdp_pass = (r->xdp_pass - p->xdp_pass) / period_;
-+		*xdp_drop = (r->xdp_drop - p->xdp_drop) / period_;
-+	}
-+}
-+
- static void stats_print(struct stats_record *stats_rec,
- 			struct stats_record *stats_prev,
--			char *prog_name)
-+			char *prog_name, char *mprog_name, int mprog_fd)
- {
- 	unsigned int nr_cpus = bpf_num_possible_cpus();
- 	double pps = 0, drop = 0, err = 0;
-+	bool mprog_enabled = false;
- 	struct record *rec, *prev;
- 	int to_cpu;
- 	double t;
- 	int i;
- 
-+	if (mprog_fd > 0)
-+		mprog_enabled = true;
-+
- 	/* Header */
- 	printf("Running XDP/eBPF prog_name:%s\n", prog_name);
- 	printf("%-15s %-7s %-14s %-11s %-9s\n",
-@@ -455,6 +491,34 @@ static void stats_print(struct stats_record *stats_rec,
- 		printf(fm2_err, "xdp_exception", "total", pps, drop);
- 	}
- 
-+	/* CPUMAP attached XDP program that runs on remote/destination CPU */
-+	if (mprog_enabled) {
-+		char *fmt_k = "%-15s %-7d %'-14.0f %'-11.0f %'-10.0f\n";
-+		char *fm2_k = "%-15s %-7s %'-14.0f %'-11.0f %'-10.0f\n";
-+		double xdp_pass, xdp_drop, xdp_redirect;
-+
-+		printf("\n2nd remote XDP/eBPF prog_name: %s\n", mprog_name);
-+		printf("%-15s %-7s %-14s %-11s %-9s\n",
-+		       "XDP-cpumap", "CPU:to", "xdp-pass", "xdp-drop", "xdp-redir");
-+
-+		rec  = &stats_rec->kthread;
-+		prev = &stats_prev->kthread;
-+		t = calc_period(rec, prev);
-+		for (i = 0; i < nr_cpus; i++) {
-+			struct datarec *r = &rec->cpu[i];
-+			struct datarec *p = &prev->cpu[i];
-+
-+			calc_xdp_pps(r, p, &xdp_pass, &xdp_drop,
-+				     &xdp_redirect, t);
-+			if (xdp_pass > 0 || xdp_drop > 0 || xdp_redirect > 0)
-+				printf(fmt_k, "xdp-in-kthread", i, xdp_pass, xdp_drop,
-+				       xdp_redirect);
+@@ -9688,6 +9688,14 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ 		func[i]->aux->nr_linfo = prog->aux->nr_linfo;
+ 		func[i]->aux->jited_linfo = prog->aux->jited_linfo;
+ 		func[i]->aux->linfo_idx = env->subprog_info[i].linfo_idx;
++		num_exentries = 0;
++		insn = func[i]->insnsi;
++		for (j = 0; j < func[i]->len; j++, insn++) {
++			if (BPF_CLASS(insn->code) == BPF_LDX &&
++			    BPF_MODE(insn->code) == BPF_PROBE_MEM)
++				num_exentries++;
 +		}
-+		calc_xdp_pps(&rec->total, &prev->total, &xdp_pass, &xdp_drop,
-+			     &xdp_redirect, t);
-+		printf(fm2_k, "xdp-in-kthread", "total", xdp_pass, xdp_drop, xdp_redirect);
-+	}
-+
- 	printf("\n");
- 	fflush(stdout);
- }
-@@ -491,7 +555,7 @@ static inline void swap(struct stats_record **a, struct stats_record **b)
- 	*b = tmp;
- }
- 
--static int create_cpu_entry(__u32 cpu, __u32 queue_size,
-+static int create_cpu_entry(__u32 cpu, struct bpf_cpumap_val *value,
- 			    __u32 avail_idx, bool new)
- {
- 	__u32 curr_cpus_count = 0;
-@@ -501,7 +565,7 @@ static int create_cpu_entry(__u32 cpu, __u32 queue_size,
- 	/* Add a CPU entry to cpumap, as this allocate a cpu entry in
- 	 * the kernel for the cpu.
- 	 */
--	ret = bpf_map_update_elem(cpu_map_fd, &cpu, &queue_size, 0);
-+	ret = bpf_map_update_elem(cpu_map_fd, &cpu, value, 0);
- 	if (ret) {
- 		fprintf(stderr, "Create CPU entry failed (err:%d)\n", ret);
- 		exit(EXIT_FAIL_BPF);
-@@ -532,9 +596,9 @@ static int create_cpu_entry(__u32 cpu, __u32 queue_size,
- 		}
- 	}
- 	/* map_fd[7] = cpus_iterator */
--	printf("%s CPU:%u as idx:%u queue_size:%d (total cpus_count:%u)\n",
-+	printf("%s CPU:%u as idx:%u qsize:%d prog_fd: %d (cpus_count:%u)\n",
- 	       new ? "Add-new":"Replace", cpu, avail_idx,
--	       queue_size, curr_cpus_count);
-+	       value->qsize, value->bpf_prog.fd, curr_cpus_count);
- 
- 	return 0;
- }
-@@ -558,21 +622,26 @@ static void mark_cpus_unavailable(void)
- }
- 
- /* Stress cpumap management code by concurrently changing underlying cpumap */
--static void stress_cpumap(void)
-+static void stress_cpumap(struct bpf_cpumap_val *value)
- {
- 	/* Changing qsize will cause kernel to free and alloc a new
- 	 * bpf_cpu_map_entry, with an associated/complicated tear-down
- 	 * procedure.
- 	 */
--	create_cpu_entry(1,  1024, 0, false);
--	create_cpu_entry(1,     8, 0, false);
--	create_cpu_entry(1, 16000, 0, false);
-+	value->qsize = 1024;
-+	create_cpu_entry(1, value, 0, false);
-+	value->qsize = 8;
-+	create_cpu_entry(1, value, 0, false);
-+	value->qsize = 16000;
-+	create_cpu_entry(1, value, 0, false);
- }
- 
- static void stats_poll(int interval, bool use_separators, char *prog_name,
-+		       char *mprog_name, struct bpf_cpumap_val *value,
- 		       bool stress_mode)
- {
- 	struct stats_record *record, *prev;
-+	int mprog_fd;
- 
- 	record = alloc_stats_record();
- 	prev   = alloc_stats_record();
-@@ -584,11 +653,12 @@ static void stats_poll(int interval, bool use_separators, char *prog_name,
- 
- 	while (1) {
- 		swap(&prev, &record);
-+		mprog_fd = value->bpf_prog.fd;
- 		stats_collect(record);
--		stats_print(record, prev, prog_name);
-+		stats_print(record, prev, prog_name, mprog_name, mprog_fd);
- 		sleep(interval);
- 		if (stress_mode)
--			stress_cpumap();
-+			stress_cpumap(value);
- 	}
- 
- 	free_stats_record(record);
-@@ -661,15 +731,66 @@ static int init_map_fds(struct bpf_object *obj)
- 	return 0;
- }
- 
-+static int load_cpumap_prog(char *file_name, char *prog_name,
-+			    char *redir_interface, char *redir_map)
-+{
-+	struct bpf_prog_load_attr prog_load_attr = {
-+		.prog_type		= BPF_PROG_TYPE_XDP,
-+		.expected_attach_type	= BPF_XDP_CPUMAP,
-+		.file = file_name,
-+	};
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	int fd;
-+
-+	if (bpf_prog_load_xattr(&prog_load_attr, &obj, &fd))
-+		return -1;
-+
-+	if (fd < 0) {
-+		fprintf(stderr, "ERR: bpf_prog_load_xattr: %s\n",
-+			strerror(errno));
-+		return fd;
-+	}
-+
-+	if (redir_interface && redir_map) {
-+		int err, map_fd, ifindex_out, key = 0;
-+
-+		map_fd = bpf_object__find_map_fd_by_name(obj, redir_map);
-+		if (map_fd < 0)
-+			return map_fd;
-+
-+		ifindex_out = if_nametoindex(redir_interface);
-+		if (!ifindex_out)
-+			return -1;
-+
-+		err = bpf_map_update_elem(map_fd, &key, &ifindex_out, 0);
-+		if (err < 0)
-+			return err;
-+	}
-+
-+	prog = bpf_object__find_program_by_title(obj, prog_name);
-+	if (!prog) {
-+		fprintf(stderr, "bpf_object__find_program_by_title failed\n");
-+		return EXIT_FAIL;
-+	}
-+
-+	return bpf_program__fd(prog);
-+}
-+
- int main(int argc, char **argv)
- {
- 	struct rlimit r = {10 * 1024 * 1024, RLIM_INFINITY};
- 	char *prog_name = "xdp_cpu_map5_lb_hash_ip_pairs";
-+	char *mprog_filename = "xdp_redirect_kern.o";
-+	char *redir_interface = NULL, *redir_map = NULL;
-+	char *mprog_name = "xdp_redirect_dummy";
-+	bool mprog_disable = false;
- 	struct bpf_prog_load_attr prog_load_attr = {
- 		.prog_type	= BPF_PROG_TYPE_UNSPEC,
- 	};
- 	struct bpf_prog_info info = {};
- 	__u32 info_len = sizeof(info);
-+	struct bpf_cpumap_val value;
- 	bool use_separators = true;
- 	bool stress_mode = false;
- 	struct bpf_program *prog;
-@@ -725,7 +846,7 @@ int main(int argc, char **argv)
- 	memset(cpu, 0, n_cpus * sizeof(int));
- 
- 	/* Parse commands line args */
--	while ((opt = getopt_long(argc, argv, "hSd:s:p:q:c:xzF",
-+	while ((opt = getopt_long(argc, argv, "hSd:s:p:q:c:xzFf:e:r:m:",
- 				  long_options, &longindex)) != -1) {
- 		switch (opt) {
- 		case 'd':
-@@ -759,6 +880,21 @@ int main(int argc, char **argv)
- 			/* Selecting eBPF prog to load */
- 			prog_name = optarg;
- 			break;
-+		case 'n':
-+			mprog_disable = true;
-+			break;
-+		case 'f':
-+			mprog_filename = optarg;
-+			break;
-+		case 'e':
-+			mprog_name = optarg;
-+			break;
-+		case 'r':
-+			redir_interface = optarg;
-+			break;
-+		case 'm':
-+			redir_map = optarg;
-+			break;
- 		case 'c':
- 			/* Add multiple CPUs */
- 			add_cpu = strtoul(optarg, NULL, 0);
-@@ -804,8 +940,18 @@ int main(int argc, char **argv)
- 		goto out;
- 	}
- 
-+	value.bpf_prog.fd = 0;
-+	if (!mprog_disable)
-+		value.bpf_prog.fd = load_cpumap_prog(mprog_filename, mprog_name,
-+						     redir_interface, redir_map);
-+	if (value.bpf_prog.fd < 0) {
-+		err = value.bpf_prog.fd;
-+		goto out;
-+	}
-+	value.qsize = qsize;
-+
- 	for (i = 0; i < added_cpus; i++)
--		create_cpu_entry(cpu[i], qsize, i, true);
-+		create_cpu_entry(cpu[i], &value, i, true);
- 
- 	/* Remove XDP program when program is interrupted or killed */
- 	signal(SIGINT, int_exit);
-@@ -838,7 +984,8 @@ int main(int argc, char **argv)
- 	}
- 	prog_id = info.id;
- 
--	stats_poll(interval, use_separators, prog_name, stress_mode);
-+	stats_poll(interval, use_separators, prog_name, mprog_name,
-+		   &value, stress_mode);
- out:
- 	free(cpu);
- 	return err;
++		func[i]->aux->num_exentries = num_exentries;
+ 		func[i] = bpf_int_jit_compile(func[i]);
+ 		if (!func[i]->jited) {
+ 			err = -ENOTSUPP;
 -- 
-2.26.2
+2.25.1
 
