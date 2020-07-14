@@ -2,135 +2,177 @@ Return-Path: <SRS0=I/LR=AZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48720C433E1
-	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2411C433E6
+	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 209842250F
-	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:31 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bVkMvy8o"
+	by mail.kernel.org (Postfix) with ESMTP id D2CBA22507
+	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1594735035;
+	bh=0CFcyr++U2Vc7lYUhB9yuFkG2h/avB0S5DLeZdlQ4ZU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=xfEEryRXtyCk5vbA55cPcL3XHhlcp4uV1t4GPvK+5l1j01HGBaJ2WJDIpgqa4OY4j
+	 4SztnNE3L9bmXCAJzUq26oFVl5JPqaoDSXCoT0aZLq89QNZl99DT8z0omEeFUFshR/
+	 fiRjmxoT6JjvJn5QGVAzFUXn5/JLhxRmHRhie5uQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726742AbgGNN5a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jul 2020 09:57:30 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:28608 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728175AbgGNN51 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Jul 2020 09:57:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594735045;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZBinmgwxUJlj0oYqhR2BRvHslB/E0uckUbNPpgAvrHM=;
-        b=bVkMvy8oHCnz6ZLdKM42O6uUheToxr2yodVtMVJ3VEvZUNBPQkWtUBgOU4rH0+tZ1NgWs/
-        I9iutEEKvbnzhHWSBRgh6e9TNEZjKBLZP6btBJFdf3XA8IxtzN5i389LOHVojb67i4REbX
-        a6p45fkzMvYrhxTQtJ7DH5FpzegHwbc=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-460-esHi6tNtPMmVcyEe7MZQFg-1; Tue, 14 Jul 2020 09:57:22 -0400
-X-MC-Unique: esHi6tNtPMmVcyEe7MZQFg-1
-Received: by mail-wr1-f70.google.com with SMTP id y13so21810781wrp.13
-        for <bpf@vger.kernel.org>; Tue, 14 Jul 2020 06:57:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=ZBinmgwxUJlj0oYqhR2BRvHslB/E0uckUbNPpgAvrHM=;
-        b=OfEgYwgOHHT3BVniBY8YTJgDNKDXmD7ak7An6O+kbcxhTfg+OmRCKiSsdQaDz1dDZE
-         ATWU5Z57KyHmL54MKkxkDVpZM4hYeA0zHz/ceWoF/MTrzeLpsAbsqNs7JStiGAJJDwkL
-         ZNTDBUTLsZp6Ikw+O+3BbQjlPx8TXOYnyeptKuU8NSG1pAuTMZu0vxPBcqihWRDTpxHC
-         521D4iy4AwJoXAZQD17fjGyV2joXFusTGAQhUXupyv6AILkpnMXm1qC90TvtvfDf0zOD
-         8NmExklVFl3006N33UorrLYlMXfwowsFlD6UggNxeD1AcQrbjBaOI2U9silFZYhjqii+
-         T5lQ==
-X-Gm-Message-State: AOAM5327k9mEE3hD7r3UwByYTgZR2gmif9PU+TngMw1rnWmlUw5PC8mU
-        OKUABC7kwMqGp/bWzepUB7QJZIr+rhd8TRTzHRflReMvL+Gzr3ka57NYvwxKka1wP5VnQfy6X03
-        dfFtbDQLwjfYD
-X-Received: by 2002:adf:ec90:: with SMTP id z16mr5724563wrn.52.1594735041471;
-        Tue, 14 Jul 2020 06:57:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy8nyShzr50LWR0kfVtYp25AKUucCrNZUcCDwG03fM+BsRRR8/Xztl5Oy91ZYK3cZacgFcXvw==
-X-Received: by 2002:adf:ec90:: with SMTP id z16mr5724514wrn.52.1594735041183;
-        Tue, 14 Jul 2020 06:57:21 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id y7sm28719976wrt.11.2020.07.14.06.57.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2020 06:57:20 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 406F51804F0; Tue, 14 Jul 2020 15:57:18 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Andrii Nakryiko <andriin@fb.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, ast@fb.com, daniel@iogearbox.net
-Cc:     andrii.nakryiko@gmail.com, kernel-team@fb.com,
-        Andrii Nakryiko <andriin@fb.com>,
-        David Ahern <dsahern@gmail.com>,
-        Jakub Kicinski <kicinski@fb.com>, Andrey Ignatov <rdna@fb.com>,
-        Takshak Chahande <ctakshak@fb.com>
-Subject: Re: [PATCH bpf-next 2/7] bpf, xdp: add bpf_link-based XDP attachment API
-In-Reply-To: <20200710224924.4087399-3-andriin@fb.com>
-References: <20200710224924.4087399-1-andriin@fb.com> <20200710224924.4087399-3-andriin@fb.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Tue, 14 Jul 2020 15:57:18 +0200
-Message-ID: <877dv6gpxd.fsf@toke.dk>
+        id S1726974AbgGNN5P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Jul 2020 09:57:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34682 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725821AbgGNN5P (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Jul 2020 09:57:15 -0400
+Received: from localhost.localdomain.com (unknown [151.48.133.17])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5B66B224D3;
+        Tue, 14 Jul 2020 13:57:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594735034;
+        bh=0CFcyr++U2Vc7lYUhB9yuFkG2h/avB0S5DLeZdlQ4ZU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Uhg+IVls68Sh87IXKOY92ZRVpCi4gc1396JjmedMFdmj8IbwxzREcPcJPRj53oVkK
+         OjC1uJ4zYxH84Fr9s2f1Y7BAk0IupDt+rt5eCcPh0zTKLAQhOMUe8HEujsDXT4nvGM
+         JKt4Y4P3FQ5LsLTtHpkbugIJJyOsVCnQBKBcuVWs=
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, brouer@redhat.com,
+        daniel@iogearbox.net, toke@redhat.com, lorenzo.bianconi@redhat.com,
+        dsahern@kernel.org, andrii.nakryiko@gmail.com
+Subject: [PATCH v7 bpf-next 3/9] samples/bpf: xdp_redirect_cpu_user: do not update bpf maps in option loop
+Date:   Tue, 14 Jul 2020 15:56:36 +0200
+Message-Id: <95dc46286fd2c609042948e04bb7ae1f5b425538.1594734381.git.lorenzo@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1594734381.git.lorenzo@kernel.org>
+References: <cover.1594734381.git.lorenzo@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii Nakryiko <andriin@fb.com> writes:
+Do not update xdp_redirect_cpu maps running while option loop but
+defer it after all available options have been parsed. This is a
+preliminary patch to pass the program name we want to attach to the
+map entries as a user option
 
-> Add bpf_link-based API (bpf_xdp_link) to attach BPF XDP program through
-> BPF_LINK_CREATE command.
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+---
+ samples/bpf/xdp_redirect_cpu_user.c | 36 +++++++++++++++++++++--------
+ 1 file changed, 27 insertions(+), 9 deletions(-)
 
-I'm still not convinced this is a good idea. As far as I can tell, at
-this point adding this gets you three things:
-
-1. The ability to 'lock' an attachment in place.
-
-2. Automatic detach on fd close
-
-3. API unification with other uses of BPF_LINK_CREATE.
-
-
-Of those, 1. is certainly useful, but can be trivially achieved with the
-existing netlink API (add a flag on attach that prevents removal unless
-the original prog_fd is supplied as EXPECTED_FD).
-
-2. is IMO the wrong model for XDP, as I believe I argued the last time
-we discussed this :)
-In particular, in a situation with multiple XDP programs attached
-through a dispatcher, the 'owner' application of each program don't
-'own' the interface attachment anyway, so if using bpf_link for that it
-would have to be pinned somewhere anyway. So the 'automatic detach'
-feature is only useful in the "xdpd" deployment scenario, whereas in the
-common usage model of command-line attachment ('ip link set xdp...') it
-is something that needs to be worked around.
-
-3. would be kinda nice, I guess, if we were designing the API from
-scratch. But we already have an existing API, so IMO the cost of
-duplication outweighs any benefits of API unification.
-
-So why is XDP worth it? I assume you weigh this differently, but please
-explain how. Ideally, this should have been in the commit message
-already...
-
-> bpf_xdp_link is mutually exclusive with direct BPF program attachment,
-> previous BPF program should be detached prior to attempting to create a new
-> bpf_xdp_link attachment (for a given XDP mode). Once link is attached, it
-> can't be replaced by other BPF program attachment or link attachment. It will
-> be detached only when the last BPF link FD is closed.
-
-I was under the impression that forcible attachment of bpf_links was
-already possible, but looking at the code now it doesn't appear to be?
-Wasn't that the whole point of BPF_LINK_GET_FD_BY_ID? I.e., that a
-sysadmin with CAP_SYS_ADMIN privs could grab the offending bpf_link FD
-and force-remove it? I certainly think this should be added before we
-expand bpf_link usage any more...
-
--Toke
+diff --git a/samples/bpf/xdp_redirect_cpu_user.c b/samples/bpf/xdp_redirect_cpu_user.c
+index f4e755e0dd73..6bb2d95cb26c 100644
+--- a/samples/bpf/xdp_redirect_cpu_user.c
++++ b/samples/bpf/xdp_redirect_cpu_user.c
+@@ -681,6 +681,7 @@ int main(int argc, char **argv)
+ 	int add_cpu = -1;
+ 	int opt, err;
+ 	int prog_fd;
++	int *cpu, i;
+ 	__u32 qsize;
+ 
+ 	n_cpus = get_nprocs_conf();
+@@ -716,6 +717,13 @@ int main(int argc, char **argv)
+ 	}
+ 	mark_cpus_unavailable();
+ 
++	cpu = malloc(n_cpus * sizeof(int));
++	if (!cpu) {
++		fprintf(stderr, "failed to allocate cpu array\n");
++		return EXIT_FAIL;
++	}
++	memset(cpu, 0, n_cpus * sizeof(int));
++
+ 	/* Parse commands line args */
+ 	while ((opt = getopt_long(argc, argv, "hSd:s:p:q:c:xzF",
+ 				  long_options, &longindex)) != -1) {
+@@ -760,8 +768,7 @@ int main(int argc, char **argv)
+ 					errno, strerror(errno));
+ 				goto error;
+ 			}
+-			create_cpu_entry(add_cpu, qsize, added_cpus, true);
+-			added_cpus++;
++			cpu[added_cpus++] = add_cpu;
+ 			break;
+ 		case 'q':
+ 			qsize = atoi(optarg);
+@@ -772,6 +779,7 @@ int main(int argc, char **argv)
+ 		case 'h':
+ 		error:
+ 		default:
++			free(cpu);
+ 			usage(argv, obj);
+ 			return EXIT_FAIL_OPTION;
+ 		}
+@@ -784,16 +792,21 @@ int main(int argc, char **argv)
+ 	if (ifindex == -1) {
+ 		fprintf(stderr, "ERR: required option --dev missing\n");
+ 		usage(argv, obj);
+-		return EXIT_FAIL_OPTION;
++		err = EXIT_FAIL_OPTION;
++		goto out;
+ 	}
+ 	/* Required option */
+ 	if (add_cpu == -1) {
+ 		fprintf(stderr, "ERR: required option --cpu missing\n");
+ 		fprintf(stderr, " Specify multiple --cpu option to add more\n");
+ 		usage(argv, obj);
+-		return EXIT_FAIL_OPTION;
++		err = EXIT_FAIL_OPTION;
++		goto out;
+ 	}
+ 
++	for (i = 0; i < added_cpus; i++)
++		create_cpu_entry(cpu[i], qsize, i, true);
++
+ 	/* Remove XDP program when program is interrupted or killed */
+ 	signal(SIGINT, int_exit);
+ 	signal(SIGTERM, int_exit);
+@@ -801,27 +814,32 @@ int main(int argc, char **argv)
+ 	prog = bpf_object__find_program_by_title(obj, prog_name);
+ 	if (!prog) {
+ 		fprintf(stderr, "bpf_object__find_program_by_title failed\n");
+-		return EXIT_FAIL;
++		err = EXIT_FAIL;
++		goto out;
+ 	}
+ 
+ 	prog_fd = bpf_program__fd(prog);
+ 	if (prog_fd < 0) {
+ 		fprintf(stderr, "bpf_program__fd failed\n");
+-		return EXIT_FAIL;
++		err = EXIT_FAIL;
++		goto out;
+ 	}
+ 
+ 	if (bpf_set_link_xdp_fd(ifindex, prog_fd, xdp_flags) < 0) {
+ 		fprintf(stderr, "link set xdp fd failed\n");
+-		return EXIT_FAIL_XDP;
++		err = EXIT_FAIL_XDP;
++		goto out;
+ 	}
+ 
+ 	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
+ 	if (err) {
+ 		printf("can't get prog info - %s\n", strerror(errno));
+-		return err;
++		goto out;
+ 	}
+ 	prog_id = info.id;
+ 
+ 	stats_poll(interval, use_separators, prog_name, stress_mode);
+-	return EXIT_OK;
++out:
++	free(cpu);
++	return err;
+ }
+-- 
+2.26.2
 
