@@ -2,166 +2,193 @@ Return-Path: <SRS0=I/LR=AZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29D19C433EA
-	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 20:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33094C433EC
+	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 20:13:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0A2D5212CC
-	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 20:13:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1155F212CC
+	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 20:13:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex-team.ru header.i=@yandex-team.ru header.b="SIfYX8G3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Upz8g/u6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729309AbgGNUNC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jul 2020 16:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728270AbgGNUNC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Jul 2020 16:13:02 -0400
-X-Greylist: delayed 92844 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Jul 2020 13:13:01 PDT
-Received: from forwardcorp1j.mail.yandex.net (forwardcorp1j.mail.yandex.net [IPv6:2a02:6b8:0:1619::183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F8DC061755;
-        Tue, 14 Jul 2020 13:13:01 -0700 (PDT)
-Received: from iva8-d077482f1536.qloud-c.yandex.net (iva8-d077482f1536.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:2f26:0:640:d077:482f])
-        by forwardcorp1j.mail.yandex.net (Yandex) with ESMTP id 925D22E14A9;
-        Tue, 14 Jul 2020 23:12:58 +0300 (MSK)
-Received: from iva8-88b7aa9dc799.qloud-c.yandex.net (iva8-88b7aa9dc799.qloud-c.yandex.net [2a02:6b8:c0c:77a0:0:640:88b7:aa9d])
-        by iva8-d077482f1536.qloud-c.yandex.net (mxbackcorp/Yandex) with ESMTP id otQgsBOFuo-CvsaCD7r;
-        Tue, 14 Jul 2020 23:12:58 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1594757578; bh=/X1gyoVSLyvvewERQIpDIhxJ6bTCdcdtv1IWCHjjaxc=;
-        h=In-Reply-To:Message-Id:References:Date:Subject:To:From:Cc;
-        b=SIfYX8G3hnDrE6ks3PRVTJo6hb9tsMT0lPowlgAFC9/7dmcaYxBUbkaGqnB1pH79t
-         9JBgloiWCAqZKhhCi89DBRkS7MPlgGvySJDkZJPmEZooPQNtB3XJJP1gVV5eSYv+h5
-         o20ZR1/3o1qC8AMjhb6nXx2SDfRDlxg6dom3m1Tg=
-Authentication-Results: iva8-d077482f1536.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-Received: from 37.9.72.161-iva.dhcp.yndx.net (37.9.72.161-iva.dhcp.yndx.net [37.9.72.161])
-        by iva8-88b7aa9dc799.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id PwhVeBFRq1-CvjCD2er;
-        Tue, 14 Jul 2020 23:12:57 +0300
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client certificate not present)
-From:   Dmitry Yakunin <zeil@yandex-team.ru>
-To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     sdf@google.com
-Subject: [PATCH bpf-next v2 2/4] bpf: allow to specify ifindex for skb in bpf_prog_test_run_skb
-Date:   Tue, 14 Jul 2020 23:12:43 +0300
-Message-Id: <20200714201245.99528-3-zeil@yandex-team.ru>
-In-Reply-To: <20200714201245.99528-1-zeil@yandex-team.ru>
-References: <20200714201245.99528-1-zeil@yandex-team.ru>
+        id S1728305AbgGNUNK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Jul 2020 16:13:10 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:54758 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726358AbgGNUNC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 14 Jul 2020 16:13:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594757579;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=epQzRWmEJ0TEVMCJclQkMZjp6uajfCoJPt5RjKAabKg=;
+        b=Upz8g/u6OkRZWKy0z25vZb8sOM91aegLaCXZ5ZcNv2bwAiqHQ/Vkp9Bbm55fZoj5Ff6dE+
+        uc7LlTENxFIzoWEH0KlxNXw0aAiVQAzomOsOL3emh9pGRt/rSHwuWnmvrgn1rD0z0hcPBo
+        M4jKo289dpu75nlxgDhd/hvUG76el58=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-342-N2Ed4zyrMEiLWFY_gm5ABQ-1; Tue, 14 Jul 2020 16:12:58 -0400
+X-MC-Unique: N2Ed4zyrMEiLWFY_gm5ABQ-1
+Received: by mail-qk1-f199.google.com with SMTP id j79so13889581qke.5
+        for <bpf@vger.kernel.org>; Tue, 14 Jul 2020 13:12:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=epQzRWmEJ0TEVMCJclQkMZjp6uajfCoJPt5RjKAabKg=;
+        b=SF4KRD1uzk9kz6pr9cyK0J8lJjMqK47YaDvl2Te9h7WSh3qYe5Q6Ad52cnDbqwjuBS
+         AnORyOKkLTExaq2Lw92yTiSpxl9ZeZrh8i1AgvoRcozOJBTmqmFOwviitYnO9+RyZ1rV
+         qDsqU98eorriuqEUWqAjf3CbQUnbF43+4VXt5pqg1YbNAVpC9ZA9maKbHPEEalYqKa/F
+         DUxKrE20cJ/vzCaJDg4lusUe+2E4RTU6a+kKCIg16PZKlo38HVrBEn9VaAsFA3WPaVcr
+         zfFeDYZXxs5itN/cV0uTz15K0q4cMsGpTTiNM+5vV2OdD38pJ8NhfRdw5M719Blnrrg3
+         u1GQ==
+X-Gm-Message-State: AOAM530EbTZ/0hw1K9luy/XHxAjeH0+wONjPEJzjbGvs6mR4umSqJMgT
+        nOcDg4o7Nzo53fjr0hqM76PvkXW+FQXk32AnstXM4MYEdV8nCKDww1ITNtdmKyU9Lb2djGb1/Lb
+        EGU89xuO3xl5X
+X-Received: by 2002:ad4:424a:: with SMTP id l10mr6393534qvq.29.1594757577602;
+        Tue, 14 Jul 2020 13:12:57 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx+y9aS9yXrgvbZCrNrOp/eSMCyejrZWDa1jSC0/SGQAeR7GIrBilIVGztv4Wg0bXvSF6r/nQ==
+X-Received: by 2002:ad4:424a:: with SMTP id l10mr6393505qvq.29.1594757577273;
+        Tue, 14 Jul 2020 13:12:57 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id r2sm53431qtn.27.2020.07.14.13.12.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2020 13:12:56 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 8A0CC1804F0; Tue, 14 Jul 2020 22:12:54 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        David Ahern <dsahern@gmail.com>,
+        Jakub Kicinski <kicinski@fb.com>, Andrey Ignatov <rdna@fb.com>,
+        Takshak Chahande <ctakshak@fb.com>
+Subject: Re: [PATCH bpf-next 2/7] bpf, xdp: add bpf_link-based XDP attachment API
+In-Reply-To: <CAEf4BzY7qRsdcdhzf2--Bfgo-GB=ZoKKizOb+OHO7o2PMiNubA@mail.gmail.com>
+References: <20200710224924.4087399-1-andriin@fb.com> <20200710224924.4087399-3-andriin@fb.com> <877dv6gpxd.fsf@toke.dk> <CAEf4BzY7qRsdcdhzf2--Bfgo-GB=ZoKKizOb+OHO7o2PMiNubA@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 14 Jul 2020 22:12:54 +0200
+Message-ID: <87v9ipg8jd.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now skb->dev is unconditionally set to the loopback device in current net
-namespace. But if we want to test bpf program which contains code branch
-based on ifindex condition (eg filters out localhost packets) it is useful
-to allow specifying of ifindex from userspace. This patch adds such option
-through ctx_in (__sk_buff) parameter.
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-Signed-off-by: Dmitry Yakunin <zeil@yandex-team.ru>
----
- net/bpf/test_run.c                               | 22 ++++++++++++++++++++--
- tools/testing/selftests/bpf/prog_tests/skb_ctx.c |  5 +++++
- 2 files changed, 25 insertions(+), 2 deletions(-)
+> On Tue, Jul 14, 2020 at 6:57 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+>>
+>> Andrii Nakryiko <andriin@fb.com> writes:
+>>
+>> > Add bpf_link-based API (bpf_xdp_link) to attach BPF XDP program through
+>> > BPF_LINK_CREATE command.
+>>
+>> I'm still not convinced this is a good idea. As far as I can tell, at
+>> this point adding this gets you three things:
+>>
+>> 1. The ability to 'lock' an attachment in place.
+>>
+>> 2. Automatic detach on fd close
+>>
+>> 3. API unification with other uses of BPF_LINK_CREATE.
+>>
+>>
+>> Of those, 1. is certainly useful, but can be trivially achieved with the
+>> existing netlink API (add a flag on attach that prevents removal unless
+>> the original prog_fd is supplied as EXPECTED_FD).
+>
+> Given it's trivial to discover attached prog FD on a given ifindex, it
+> doesn't add much of a peace of mind to the application that installs
+> bpf_link. Any other XDP-enabled program (even some trivial test
+> program) can unknowingly break other applications by deciding to
+> "auto-cleanup" it's previous instance on restart ("what's my previous
+> prog FD? let's replace it with my up-to-date program FD! What do you
+> mean it wasn't my prog FD before?). We went over this discussion many
+> times already: relying on the correct behavior of *other*
+> applications, which you don't necessarily control, is not working well
+> in real production use cases.
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index a58b399..1e10a7e 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -310,6 +310,12 @@ static int convert___skb_to_skb(struct sk_buff *skb, struct __sk_buff *__skb)
- 	/* priority is allowed */
- 
- 	if (!range_is_zero(__skb, offsetofend(struct __sk_buff, priority),
-+			   offsetof(struct __sk_buff, ifindex)))
-+		return -EINVAL;
-+
-+	/* ifindex is allowed */
-+
-+	if (!range_is_zero(__skb, offsetofend(struct __sk_buff, ifindex),
- 			   offsetof(struct __sk_buff, cb)))
- 		return -EINVAL;
- 
-@@ -364,6 +370,7 @@ static void convert_skb_to___skb(struct sk_buff *skb, struct __sk_buff *__skb)
- 
- 	__skb->mark = skb->mark;
- 	__skb->priority = skb->priority;
-+	__skb->ifindex = skb->dev->ifindex;
- 	__skb->tstamp = skb->tstamp;
- 	memcpy(__skb->cb, &cb->data, QDISC_CB_PRIV_LEN);
- 	__skb->wire_len = cb->pkt_len;
-@@ -374,6 +381,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 			  union bpf_attr __user *uattr)
- {
- 	bool is_l2 = false, is_direct_pkt_access = false;
-+	struct net *net = current->nsproxy->net_ns;
-+	struct net_device *dev = net->loopback_dev;
- 	u32 size = kattr->test.data_size_in;
- 	u32 repeat = kattr->test.repeat;
- 	struct __sk_buff *ctx = NULL;
-@@ -415,7 +424,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		kfree(ctx);
- 		return -ENOMEM;
- 	}
--	sock_net_set(sk, current->nsproxy->net_ns);
-+	sock_net_set(sk, net);
- 	sock_init_data(NULL, sk);
- 
- 	skb = build_skb(data, 0);
-@@ -429,7 +438,14 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 
- 	skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
- 	__skb_put(skb, size);
--	skb->protocol = eth_type_trans(skb, current->nsproxy->net_ns->loopback_dev);
-+	if (ctx && ctx->ifindex > 1) {
-+		dev = dev_get_by_index(net, ctx->ifindex);
-+		if (!dev) {
-+			ret = -ENODEV;
-+			goto out;
-+		}
-+	}
-+	skb->protocol = eth_type_trans(skb, dev);
- 	skb_reset_network_header(skb);
- 
- 	switch (skb->protocol) {
-@@ -479,6 +495,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		ret = bpf_ctx_finish(kattr, uattr, ctx,
- 				     sizeof(struct __sk_buff));
- out:
-+	if (dev && dev != net->loopback_dev)
-+		dev_put(dev);
- 	kfree_skb(skb);
- 	bpf_sk_storage_free(sk);
- 	kfree(sk);
-diff --git a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-index 7021b92..25de86a 100644
---- a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-+++ b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-@@ -11,6 +11,7 @@ void test_skb_ctx(void)
- 		.cb[3] = 4,
- 		.cb[4] = 5,
- 		.priority = 6,
-+		.ifindex = 1,
- 		.tstamp = 7,
- 		.wire_len = 100,
- 		.gso_segs = 8,
-@@ -92,6 +93,10 @@ void test_skb_ctx(void)
- 		   "ctx_out_priority",
- 		   "skb->priority == %d, expected %d\n",
- 		   skb.priority, 7);
-+	CHECK_ATTR(skb.ifindex != 1,
-+		   "ctx_out_ifindex",
-+		   "skb->ifindex == %d, expected %d\n",
-+		   skb.ifindex, 1);
- 	CHECK_ATTR(skb.tstamp != 8,
- 		   "ctx_out_tstamp",
- 		   "skb->tstamp == %lld, expected %d\n",
--- 
-2.7.4
+It's trivial to discover the attached *ID*. But the id-to-fd transition
+requires CAP_SYS_ADMIN, which presumably you're not granting these
+not-necessarily-well-behaved programs. Because if you are, what's
+stopping them from just killing the owner of the bpf_link to clear it
+("oh, must be a previous instance of myself that's still running, let's
+clear that up")? Or what else am I missing here?
+
+>> 2. is IMO the wrong model for XDP, as I believe I argued the last time
+>> we discussed this :)
+>> In particular, in a situation with multiple XDP programs attached
+>> through a dispatcher, the 'owner' application of each program don't
+>> 'own' the interface attachment anyway, so if using bpf_link for that it
+>> would have to be pinned somewhere anyway. So the 'automatic detach'
+>> feature is only useful in the "xdpd" deployment scenario, whereas in the
+>> common usage model of command-line attachment ('ip link set xdp...') it
+>> is something that needs to be worked around.
+>
+> Right, nothing changed since we last discussed. There are cases where
+> one or another approach is more convenient. Having bpf_link for XDP
+> finally gives an option to have an auto-detaching (on last FD close)
+> approach, but you still insist there shouldn't be such an option. Why?
+
+Because the last time we discussed this, it was in the context of me
+trying to extend the existing API and being told "no, don't do that, use
+bpf_link instead". So I'm objecting to bpf_link being a *replacement*
+for the exiting API; if that's not what you're intending, and we can
+agree to keep both around and actively supported (including things like
+adding that flag to the netlink API I talked about above), then that's a
+totally different matter :)
+
+>> 3. would be kinda nice, I guess, if we were designing the API from
+>> scratch. But we already have an existing API, so IMO the cost of
+>> duplication outweighs any benefits of API unification.
+>
+> Not unification of BPF_LINK_CREATE, but unification of bpf_link
+> infrastructure in general, with its introspection and discoverability
+> APIs. bpftool can show which programs are attached where and it can
+> show PIDs of processes that own the BPF link.
+
+Right, sure, I was using BPF_LINK_CREATE as a shorthand for bpf_link in
+general.
+
+> With CAP_BPF you have also more options now how to control who can
+> mess with your bpf_link.
+
+What are those, exactly?
+
+[...]
+
+>> I was under the impression that forcible attachment of bpf_links was
+>> already possible, but looking at the code now it doesn't appear to be?
+>> Wasn't that the whole point of BPF_LINK_GET_FD_BY_ID? I.e., that a
+>> sysadmin with CAP_SYS_ADMIN privs could grab the offending bpf_link FD
+>> and force-remove it? I certainly think this should be added before we
+>> expand bpf_link usage any more...
+>
+> I still maintain that killing processes that installed the bpf_link is
+> the better approach. Instead of letting the process believe and act as
+> if it has an active XDP program, while it doesn't, it's better to
+> altogether kill/restart the process.
+
+Killing the process seems like a very blunt tool, though. Say it's a
+daemon that attaches XDP programs to all available interfaces, but you
+want to bring down an interface for some one-off maintenance task, but
+the daemon authors neglected to provide an interface to tell the daemon
+to detach from specific interfaces. If your only option is to kill the
+daemon, you can't bring down that interface without disrupting whatever
+that daemon is doing with XDP on all the other interfaces.
+
+-Toke
 
