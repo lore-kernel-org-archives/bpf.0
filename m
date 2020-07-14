@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D6A2C433E5
-	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2714CC433F7
+	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D140422507
-	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 038FE22510
+	for <bpf@archiver.kernel.org>; Tue, 14 Jul 2020 13:57:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594735030;
-	bh=TCfmtM1TWRRmjCPXPoHi2E42e61IF3B52TN3qoLXr9s=;
+	s=default; t=1594735046;
+	bh=kKbAHKvpV2nPetNA2rZd6Mce3joaSgniiiDWc+Aph1U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=rTKgcmBrs3ozNzWaXhUvD5H550BsRkITZRxmHzVZWqz0G0I/oDrHMihgm6ieT/+Fh
-	 NDZdEehPNFYlZ2mQ2GJYC67mcV084p/o4E8WNbt5+C0iQpIbwVlvBpe4JqSy9QECgD
-	 mONK9nnOS/ZtzUnXJF5LsS1AKZk/Q/C5OMP26ks0=
+	b=POl0Vrlyx4Szqq6mgsaxWyJCgLiFcCXzzJof+p8gEIwMdaIAxaXHJkjrLPILW1ZDm
+	 sBsr+6OPOuP0VshfyU4Fswgnc++WkDrTc50RDfr/uaSgMIv7ffJjSl5L0zq8meZ8Zc
+	 mnf086KvaUaAiT85tVFdeXqkGV/qj2f48gHOmGOE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726456AbgGNN5K (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jul 2020 09:57:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34492 "EHLO mail.kernel.org"
+        id S1728118AbgGNN5Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Jul 2020 09:57:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34818 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725821AbgGNN5J (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Jul 2020 09:57:09 -0400
+        id S1727115AbgGNN5Z (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Jul 2020 09:57:25 -0400
 Received: from localhost.localdomain.com (unknown [151.48.133.17])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0F156224F9;
-        Tue, 14 Jul 2020 13:57:06 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 289E1224F9;
+        Tue, 14 Jul 2020 13:57:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594735029;
-        bh=TCfmtM1TWRRmjCPXPoHi2E42e61IF3B52TN3qoLXr9s=;
+        s=default; t=1594735044;
+        bh=kKbAHKvpV2nPetNA2rZd6Mce3joaSgniiiDWc+Aph1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DT0wtZR02LwyPdWuLbl0a6N7Uu9ShES2E+bSWpOB8ygftZ8hcunfWtDH9hZKkOOf0
-         LpmCrkRp+QsFp9E1ia0lztd+I3UoQwHKNCah1d+TIknaTbCUd9rYKv9khpanQDwp8E
-         9lRoULMaNT1fz+tmOuG/V3i4WqLIEZZR+kloxluU=
+        b=hVfyQT9E3D9j3AzvcMaXdKhEX1QiXUf1H9qqMNtSb3FstjOROBKaeKXPnc/B8e1SR
+         ThVBdv2UkxVqpvq4aYKa4QAZ6wtNGt/CiTrMvFEeqZKYZ9hcPgua9ZRHliAnT/TETA
+         /yGcwX+uD4ekk11xvL6jj7P/TzLRhjapxKPlefd0=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, brouer@redhat.com,
         daniel@iogearbox.net, toke@redhat.com, lorenzo.bianconi@redhat.com,
         dsahern@kernel.org, andrii.nakryiko@gmail.com
-Subject: [PATCH v7 bpf-next 2/9] net: refactor xdp_convert_buff_to_frame
-Date:   Tue, 14 Jul 2020 15:56:35 +0200
-Message-Id: <90a68c283d7ebeb48924934c9b7ac79492300472.1594734381.git.lorenzo@kernel.org>
+Subject: [PATCH v7 bpf-next 6/9] bpf: cpumap: implement XDP_REDIRECT for eBPF programs attached to map entries
+Date:   Tue, 14 Jul 2020 15:56:39 +0200
+Message-Id: <2cf8373a731867af302b00c4ff16c122630c4980.1594734381.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1594734381.git.lorenzo@kernel.org>
 References: <cover.1594734381.git.lorenzo@kernel.org>
@@ -56,86 +56,125 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+Introduce XDP_REDIRECT support for eBPF programs attached to cpumap
+entries.
+This patch has been tested on Marvell ESPRESSObin using a modified
+version of xdp_redirect_cpu sample in order to attach a XDP program
+to CPUMAP entries to perform a redirect on the mvneta interface.
+In particular the following scenario has been tested:
 
-Move the guts of xdp_convert_buff_to_frame to a new helper,
-xdp_update_frame_from_buff so it can be reused removing code duplication
+rq (cpu0) --> mvneta - XDP_REDIRECT (cpu0) --> CPUMAP - XDP_REDIRECT (cpu1) --> mvneta
 
-Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
+$./xdp_redirect_cpu -p xdp_cpu_map0 -d eth0 -c 1 -e xdp_redirect \
+	-f xdp_redirect_kern.o -m tx_port -r eth0
+
+tx: 285.2 Kpps rx: 285.2 Kpps
+
+Attaching a simple XDP program on eth0 to perform XDP_TX gives
+comparable results:
+
+tx: 288.4 Kpps rx: 288.4 Kpps
+
 Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Co-developed-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Co-developed-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: David Ahern <dsahern@kernel.org>
 ---
- include/net/xdp.h | 35 ++++++++++++++++++++++-------------
- 1 file changed, 22 insertions(+), 13 deletions(-)
+ include/net/xdp.h          |  1 +
+ include/trace/events/xdp.h |  6 ++++--
+ kernel/bpf/cpumap.c        | 17 +++++++++++++++--
+ 3 files changed, 20 insertions(+), 4 deletions(-)
 
 diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 609f819ed08b..5b383c450858 100644
+index 83b9e0142b52..5be0d4d65b94 100644
 --- a/include/net/xdp.h
 +++ b/include/net/xdp.h
-@@ -121,39 +121,48 @@ void xdp_convert_frame_to_buff(struct xdp_frame *frame, struct xdp_buff *xdp)
- 	xdp->frame_sz = frame->frame_sz;
- }
+@@ -99,6 +99,7 @@ struct xdp_frame {
+ };
  
--/* Convert xdp_buff to xdp_frame */
- static inline
--struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
-+int xdp_update_frame_from_buff(struct xdp_buff *xdp,
-+			       struct xdp_frame *xdp_frame)
- {
--	struct xdp_frame *xdp_frame;
--	int metasize;
--	int headroom;
--
--	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL)
--		return xdp_convert_zc_to_xdp_frame(xdp);
-+	int metasize, headroom;
+ struct xdp_cpumap_stats {
++	unsigned int redirect;
+ 	unsigned int pass;
+ 	unsigned int drop;
+ };
+diff --git a/include/trace/events/xdp.h b/include/trace/events/xdp.h
+index e2c99f5bee39..cd24e8a59529 100644
+--- a/include/trace/events/xdp.h
++++ b/include/trace/events/xdp.h
+@@ -190,6 +190,7 @@ TRACE_EVENT(xdp_cpumap_kthread,
+ 		__field(int, sched)
+ 		__field(unsigned int, xdp_pass)
+ 		__field(unsigned int, xdp_drop)
++		__field(unsigned int, xdp_redirect)
+ 	),
  
- 	/* Assure headroom is available for storing info */
- 	headroom = xdp->data - xdp->data_hard_start;
- 	metasize = xdp->data - xdp->data_meta;
- 	metasize = metasize > 0 ? metasize : 0;
- 	if (unlikely((headroom - metasize) < sizeof(*xdp_frame)))
--		return NULL;
-+		return -ENOSPC;
+ 	TP_fast_assign(
+@@ -201,18 +202,19 @@ TRACE_EVENT(xdp_cpumap_kthread,
+ 		__entry->sched	= sched;
+ 		__entry->xdp_pass	= xdp_stats->pass;
+ 		__entry->xdp_drop	= xdp_stats->drop;
++		__entry->xdp_redirect	= xdp_stats->redirect;
+ 	),
  
- 	/* Catch if driver didn't reserve tailroom for skb_shared_info */
- 	if (unlikely(xdp->data_end > xdp_data_hard_end(xdp))) {
- 		XDP_WARN("Driver BUG: missing reserved tailroom");
--		return NULL;
-+		return -ENOSPC;
+ 	TP_printk("kthread"
+ 		  " cpu=%d map_id=%d action=%s"
+ 		  " processed=%u drops=%u"
+ 		  " sched=%d"
+-		  " xdp_pass=%u xdp_drop=%u",
++		  " xdp_pass=%u xdp_drop=%u xdp_redirect=%u",
+ 		  __entry->cpu, __entry->map_id,
+ 		  __print_symbolic(__entry->act, __XDP_ACT_SYM_TAB),
+ 		  __entry->processed, __entry->drops,
+ 		  __entry->sched,
+-		  __entry->xdp_pass, __entry->xdp_drop)
++		  __entry->xdp_pass, __entry->xdp_drop, __entry->xdp_redirect)
+ );
+ 
+ TRACE_EVENT(xdp_cpumap_enqueue,
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index b3a8aea81ee5..4c95d0615ca2 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -239,7 +239,7 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
+ 	if (!rcpu->prog)
+ 		return n;
+ 
+-	rcu_read_lock();
++	rcu_read_lock_bh();
+ 
+ 	xdp_set_return_frame_no_direct();
+ 	xdp.rxq = &rxq;
+@@ -267,6 +267,16 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
+ 				stats->pass++;
+ 			}
+ 			break;
++		case XDP_REDIRECT:
++			err = xdp_do_redirect(xdpf->dev_rx, &xdp,
++					      rcpu->prog);
++			if (unlikely(err)) {
++				xdp_return_frame(xdpf);
++				stats->drop++;
++			} else {
++				stats->redirect++;
++			}
++			break;
+ 		default:
+ 			bpf_warn_invalid_xdp_action(act);
+ 			/* fallthrough */
+@@ -277,9 +287,12 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
+ 		}
  	}
  
--	/* Store info in top of packet */
--	xdp_frame = xdp->data_hard_start;
--
- 	xdp_frame->data = xdp->data;
- 	xdp_frame->len  = xdp->data_end - xdp->data;
- 	xdp_frame->headroom = headroom - sizeof(*xdp_frame);
- 	xdp_frame->metasize = metasize;
- 	xdp_frame->frame_sz = xdp->frame_sz;
++	if (stats->redirect)
++		xdp_do_flush_map();
++
+ 	xdp_clear_return_frame_no_direct();
  
-+	return 0;
-+}
-+
-+/* Convert xdp_buff to xdp_frame */
-+static inline
-+struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
-+{
-+	struct xdp_frame *xdp_frame;
-+
-+	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL)
-+		return xdp_convert_zc_to_xdp_frame(xdp);
-+
-+	/* Store info in top of packet */
-+	xdp_frame = xdp->data_hard_start;
-+	if (unlikely(xdp_update_frame_from_buff(xdp, xdp_frame) < 0))
-+		return NULL;
-+
- 	/* rxq only valid until napi_schedule ends, convert to xdp_mem_info */
- 	xdp_frame->mem = xdp->rxq->mem;
+-	rcu_read_unlock();
++	rcu_read_unlock_bh(); /* resched point, may call do_softirq() */
  
+ 	return nframes;
+ }
 -- 
 2.26.2
 
