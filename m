@@ -2,224 +2,419 @@ Return-Path: <SRS0=G0Da=A2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BB73C433E1
-	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 05:13:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93F63C433DF
+	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 05:29:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DBD9B20657
-	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 05:13:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B48B2068F
+	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 05:29:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p7611sWY"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="dx6TtZ6C"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727790AbgGOFNE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jul 2020 01:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725770AbgGOFNE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Jul 2020 01:13:04 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BD9C061755;
-        Tue, 14 Jul 2020 22:13:03 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id q17so1545392pfu.8;
-        Tue, 14 Jul 2020 22:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=/AUgaV//mu/IhyWO8XOKIplPZQ8poyjpSJ406HJn+YY=;
-        b=p7611sWYcFs4qiTaZw3FQX2esZt0IjdJcebtSeVlnpfUkMKxWz+f71cE3reh8Pmo/f
-         MSoefRwXanV9N5KbAbNgGvVCea6xBB7csefoPcsmHygozc+a6/UY13W+6L3UqAy/8XI+
-         Sz97KQKrGiVSRt9LqIFg9EfdQzGXCe9/0hAzwt0kZk0dRt7i4a5Cn9dons8M1CmVD0EQ
-         F9SoIngKoE4NE7C7ZfNTLSuh7PeTrj2z6yGFbTw5GuGVMb8TNKVdCooYIch5yOGttGeb
-         6B71Oti/1BWmgoa7+FvDT6z5oJlDBATiESuiRg6T936jC++K3vqGmc7j17hykEeC5Qwv
-         GvjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=/AUgaV//mu/IhyWO8XOKIplPZQ8poyjpSJ406HJn+YY=;
-        b=kPCnn6ZiffMjMVC2KDIb5KNocEC3pYhMJrsRqzZboJI+OAdZKfGXuc9s89s8OwYWe/
-         MguS672Uch1cQpEfdQ0Lo3+tirpXi+K1kMTr6km/vAD7YfZ0ItiyI8/TPcFSeZ4MxURl
-         /PNZ7I6zS5bWWBx27JkTruwSuDW5lYHk/XSh25dsienzEK3Ont9k74dGOzcAg8dp6Txy
-         igOxp8AGdqdYhRcktBwJ2+t1hFpnkbbeqs/6qHBdfJamz2IBkVwdQOztllpVqmnzdceC
-         383nmJHR3Qu4iQJ/K29IX25npZRHKQQ/nvW2HU8RTIOpZYprCtum5DANVp4nVygZODv4
-         LdrQ==
-X-Gm-Message-State: AOAM532typQrMKO/N1vUlxK4XubYCrqP63HgVlFsomZRP0P2BzBj0+VF
-        AAZsAXLF+rohmq4OoPSBFQu497RSib4=
-X-Google-Smtp-Source: ABdhPJzyTw6d5Q5WfyEsh2b/E7lJiVQ8w3Nb96jVSH6KzfQgSI1UuNoL6pT9Mgeajb701TLPYWrAtQ==
-X-Received: by 2002:a63:2946:: with SMTP id p67mr6565230pgp.227.1594789982569;
-        Tue, 14 Jul 2020 22:13:02 -0700 (PDT)
-Received: from ubuntu.lan ([2001:470:e92d:10:6551:7fa7:cd6f:d69])
-        by smtp.gmail.com with ESMTPSA id u23sm816034pgn.26.2020.07.14.22.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2020 22:13:02 -0700 (PDT)
-From:   Tony Ambardar <tony.ambardar@gmail.com>
-X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Tony Ambardar <Tony.Ambardar@gmail.com>
-Subject: [PATCH bpf-next] bpftool: use only nftw for file tree parsing
-Date:   Tue, 14 Jul 2020 22:12:14 -0700
-Message-Id: <20200715051214.28099-1-Tony.Ambardar@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1728248AbgGOF3K (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jul 2020 01:29:10 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:9490 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726034AbgGOF3J (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 15 Jul 2020 01:29:09 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06F5SEU5018689
+        for <bpf@vger.kernel.org>; Tue, 14 Jul 2020 22:29:08 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=XSMkumciHLDEqkxs1TfDOcyUVuWIsOhqryFAIq0eY8Q=;
+ b=dx6TtZ6CyzDqZ0D9nVxKuoOJ/XVFn8MagsmcldzYbVSjHOC7gvGxSjaAlIqlLFsUi6Eg
+ 4CwrfdfeTv0tk3zYwu1eNZ4xti9R4ZN6OEV9A0aJn24JoOWwgUbo4rDeQxj/f4g0MJ/l
+ HY84ewyaeOKXyBRJCsDA6qCx/JCPJ8bYyYY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 327wdrp17s-9
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 14 Jul 2020 22:29:08 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 14 Jul 2020 22:29:04 -0700
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id E552A62E52E0; Tue, 14 Jul 2020 22:26:07 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Song Liu <songliubraving@fb.com>
+Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
+To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
+        <brouer@redhat.com>, <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v2 bpf-next 1/2] bpf: separate bpf_get_[stack|stackid] for perf events BPF
+Date:   Tue, 14 Jul 2020 22:26:00 -0700
+Message-ID: <20200715052601.2404533-2-songliubraving@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200715052601.2404533-1-songliubraving@fb.com>
+References: <20200715052601.2404533-1-songliubraving@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-15_02:2020-07-15,2020-07-15 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 mlxscore=0
+ malwarescore=0 phishscore=0 clxscore=1015 impostorscore=0 suspectscore=0
+ adultscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007150046
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpftool sources include code to walk file trees, but use multiple
-frameworks to do so: nftw and fts. While nftw conforms to POSIX/SUSv3 and
-is widely available, fts is not conformant and less common, especially on
-non-glibc systems. The inconsistent framework usage hampers maintenance
-and portability of bpftool, in particular for embedded systems.
+Calling get_perf_callchain() on perf_events from PEBS entries may cause
+unwinder errors. To fix this issue, the callchain is fetched early. Such
+perf_events are marked with __PERF_SAMPLE_CALLCHAIN_EARLY.
 
-Standardize usage by rewriting one fts-based function to use nftw. This
-change allows building bpftool against musl for OpenWrt.
+Similarly, calling bpf_get_[stack|stackid] on perf_events from PEBS may
+also cause unwinder errors. To fix this, add separate version of these
+two helpers, bpf_get_[stack|stackid]_pe. These two hepers use callchain i=
+n
+bpf_perf_event_data_kern->data->callchain.
 
-Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
+Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- tools/bpf/bpftool/common.c | 102 ++++++++++++++++++++-----------------
- 1 file changed, 54 insertions(+), 48 deletions(-)
+ include/linux/bpf.h      |   2 +
+ kernel/bpf/stackmap.c    | 204 +++++++++++++++++++++++++++++++++++----
+ kernel/trace/bpf_trace.c |   4 +-
+ 3 files changed, 190 insertions(+), 20 deletions(-)
 
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index 29f4e7611ae8..765de99770fb 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -4,7 +4,7 @@
- #include <ctype.h>
- #include <errno.h>
- #include <fcntl.h>
--#include <fts.h>
-+#include <ftw.h>
- #include <libgen.h>
- #include <mntent.h>
- #include <stdbool.h>
-@@ -367,68 +367,74 @@ void print_hex_data_json(uint8_t *data, size_t len)
- 	jsonw_end_array(json_wtr);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c67c88ad35f85..bfc7a283c0f93 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1637,6 +1637,8 @@ extern const struct bpf_func_proto bpf_get_current_=
+comm_proto;
+ extern const struct bpf_func_proto bpf_get_stackid_proto;
+ extern const struct bpf_func_proto bpf_get_stack_proto;
+ extern const struct bpf_func_proto bpf_get_task_stack_proto;
++extern const struct bpf_func_proto bpf_get_stackid_proto_pe;
++extern const struct bpf_func_proto bpf_get_stack_proto_pe;
+ extern const struct bpf_func_proto bpf_sock_map_update_proto;
+ extern const struct bpf_func_proto bpf_sock_hash_update_proto;
+ extern const struct bpf_func_proto bpf_get_current_cgroup_id_proto;
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 48d8e739975fa..0587d4ddb06ce 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -4,6 +4,7 @@
+ #include <linux/bpf.h>
+ #include <linux/jhash.h>
+ #include <linux/filter.h>
++#include <linux/kernel.h>
+ #include <linux/stacktrace.h>
+ #include <linux/perf_event.h>
+ #include <linux/elf.h>
+@@ -387,11 +388,10 @@ get_callchain_entry_for_task(struct task_struct *ta=
+sk, u32 init_nr)
+ #endif
  }
- 
--int build_pinned_obj_table(struct pinned_obj_table *tab,
--			   enum bpf_obj_type type)
-+static struct pinned_obj_table *build_fn_table; /* params for nftw cb*/
-+static enum bpf_obj_type build_fn_type;
-+
-+static int do_build_table_cb(const char *fpath, const struct stat *sb,
-+			    int typeflag, struct FTW *ftwbuf)
+=20
+-BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, ma=
+p,
+-	   u64, flags)
++static long __bpf_get_stackid(struct bpf_map *map,
++			      struct perf_callchain_entry *trace, u64 flags)
  {
- 	struct bpf_prog_info pinned_info = {};
- 	struct pinned_obj *obj_node = NULL;
- 	__u32 len = sizeof(pinned_info);
--	struct mntent *mntent = NULL;
- 	enum bpf_obj_type objtype;
-+	int fd, err = 0;
+ 	struct bpf_stack_map *smap =3D container_of(map, struct bpf_stack_map, =
+map);
+-	struct perf_callchain_entry *trace;
+ 	struct stack_map_bucket *bucket, *new_bucket, *old_bucket;
+ 	u32 max_depth =3D map->value_size / stack_map_data_size(map);
+ 	/* stack_map_alloc() checks that max_depth <=3D sysctl_perf_event_max_s=
+tack */
+@@ -399,21 +399,9 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, =
+struct bpf_map *, map,
+ 	u32 skip =3D flags & BPF_F_SKIP_FIELD_MASK;
+ 	u32 hash, id, trace_nr, trace_len;
+ 	bool user =3D flags & BPF_F_USER_STACK;
+-	bool kernel =3D !user;
+ 	u64 *ips;
+ 	bool hash_matches;
+=20
+-	if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
+-			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
+-		return -EINVAL;
+-
+-	trace =3D get_perf_callchain(regs, init_nr, kernel, user,
+-				   sysctl_perf_event_max_stack, false, false);
+-
+-	if (unlikely(!trace))
+-		/* couldn't fetch the stack trace */
+-		return -EFAULT;
+-
+ 	/* get_perf_callchain() guarantees that trace->nr >=3D init_nr
+ 	 * and trace-nr <=3D sysctl_perf_event_max_stack, so trace_nr <=3D max_=
+depth
+ 	 */
+@@ -478,6 +466,30 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, =
+struct bpf_map *, map,
+ 	return id;
+ }
+=20
++BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, ma=
+p,
++	   u64, flags)
++{
++	u32 max_depth =3D map->value_size / stack_map_data_size(map);
++	/* stack_map_alloc() checks that max_depth <=3D sysctl_perf_event_max_s=
+tack */
++	u32 init_nr =3D sysctl_perf_event_max_stack - max_depth;
++	bool user =3D flags & BPF_F_USER_STACK;
++	struct perf_callchain_entry *trace;
++	bool kernel =3D !user;
 +
-+	if (typeflag != FTW_F)
-+		goto out_ret;
-+	fd = open_obj_pinned(fpath, true);
-+	if (fd < 0)
-+		goto out_ret;
++	if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
++			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
++		return -EINVAL;
 +
-+	objtype = get_fd_type(fd);
-+	if (objtype != build_fn_type)
-+		goto out_close;
++	trace =3D get_perf_callchain(regs, init_nr, kernel, user,
++				   sysctl_perf_event_max_stack, false, false);
 +
-+	memset(&pinned_info, 0, sizeof(pinned_info));
-+	if (bpf_obj_get_info_by_fd(fd, &pinned_info, &len)) {
-+		p_err("can't get obj info: %s", strerror(errno));
-+		goto out_close;
-+	}
++	if (unlikely(!trace))
++		/* couldn't fetch the stack trace */
++		return -EFAULT;
 +
-+	obj_node = malloc(sizeof(*obj_node));
-+	if (!obj_node) {
-+		p_err("mem alloc failed");
-+		err = -1;
-+		goto out_close;
-+	}
-+
-+	memset(obj_node, 0, sizeof(*obj_node));
-+	obj_node->id = pinned_info.id;
-+	obj_node->path = strdup(fpath);
-+	hash_add(build_fn_table->table, &obj_node->hash, obj_node->id);
-+
-+out_close:
-+	close(fd);
-+out_ret:
-+	return err;
++	return __bpf_get_stackid(map, trace, flags);
 +}
 +
-+int build_pinned_obj_table(struct pinned_obj_table *tab,
-+			   enum bpf_obj_type type)
+ const struct bpf_func_proto bpf_get_stackid_proto =3D {
+ 	.func		=3D bpf_get_stackid,
+ 	.gpl_only	=3D true,
+@@ -487,7 +499,87 @@ const struct bpf_func_proto bpf_get_stackid_proto =3D=
+ {
+ 	.arg3_type	=3D ARG_ANYTHING,
+ };
+=20
++static __u64 count_kernel_ip(struct perf_callchain_entry *trace)
 +{
-+	struct mntent *mntent = NULL;
- 	FILE *mntfile = NULL;
--	FTSENT *ftse = NULL;
--	FTS *fts = NULL;
--	int fd, err;
-+	int flags = FTW_PHYS;
-+	int nopenfd = 16;
- 
- 	mntfile = setmntent("/proc/mounts", "r");
- 	if (!mntfile)
- 		return -1;
- 
-+	build_fn_table = tab;
-+	build_fn_type = type;
++	__u64 nr_kernel =3D 0;
 +
- 	while ((mntent = getmntent(mntfile))) {
--		char *path[] = { mntent->mnt_dir, NULL };
-+		char *path = mntent->mnt_dir;
- 
- 		if (strncmp(mntent->mnt_type, "bpf", 3) != 0)
- 			continue;
--
--		fts = fts_open(path, 0, NULL);
--		if (!fts)
--			continue;
--
--		while ((ftse = fts_read(fts))) {
--			if (!(ftse->fts_info & FTS_F))
--				continue;
--			fd = open_obj_pinned(ftse->fts_path, true);
--			if (fd < 0)
--				continue;
--
--			objtype = get_fd_type(fd);
--			if (objtype != type) {
--				close(fd);
--				continue;
--			}
--			memset(&pinned_info, 0, sizeof(pinned_info));
--			err = bpf_obj_get_info_by_fd(fd, &pinned_info, &len);
--			if (err) {
--				close(fd);
--				continue;
--			}
--
--			obj_node = malloc(sizeof(*obj_node));
--			if (!obj_node) {
--				close(fd);
--				fts_close(fts);
--				fclose(mntfile);
--				return -1;
--			}
--
--			memset(obj_node, 0, sizeof(*obj_node));
--			obj_node->id = pinned_info.id;
--			obj_node->path = strdup(ftse->fts_path);
--			hash_add(tab->table, &obj_node->hash, obj_node->id);
--
--			close(fd);
--		}
--		fts_close(fts);
-+		if (nftw(path, do_build_table_cb, nopenfd, flags) == -1)
++	while (nr_kernel < trace->nr) {
++		if (trace->ip[nr_kernel] =3D=3D PERF_CONTEXT_USER)
 +			break;
- 	}
- 	fclose(mntfile);
- 	return 0;
--- 
-2.17.1
++		nr_kernel++;
++	}
++	return nr_kernel;
++}
++
++BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
++	   struct bpf_map *, map, u64, flags)
++{
++	struct perf_event *event =3D ctx->event;
++	struct perf_callchain_entry *trace;
++	bool has_kernel, has_user;
++	bool kernel, user;
++
++	/* perf_sample_data doesn't have callchain, use bpf_get_stackid */
++	if (!(event->attr.sample_type & __PERF_SAMPLE_CALLCHAIN_EARLY))
++		return bpf_get_stackid((unsigned long)(ctx->regs),
++				       (unsigned long) map, flags, 0, 0);
++
++	if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
++			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
++		return -EINVAL;
++
++	user =3D flags & BPF_F_USER_STACK;
++	kernel =3D !user;
++
++	has_kernel =3D !event->attr.exclude_callchain_kernel;
++	has_user =3D !event->attr.exclude_callchain_user;
++
++	if ((kernel && !has_kernel) || (user && !has_user))
++		return -EINVAL;
++
++	trace =3D ctx->data->callchain;
++	if (!trace || (!has_kernel && !has_user))
++		return -EFAULT;
++
++	if (has_kernel && has_user) {
++		__u64 nr_kernel =3D count_kernel_ip(trace);
++		int ret;
++
++		if (kernel) {
++			__u64 nr =3D trace->nr;
++
++			trace->nr =3D nr_kernel;
++			ret =3D __bpf_get_stackid(map, trace, flags);
++
++			/* restore nr */
++			trace->nr =3D nr;
++		} else { /* user */
++			u64 skip =3D flags & BPF_F_SKIP_FIELD_MASK;
++
++			skip +=3D nr_kernel;
++			if (skip > ~BPF_F_SKIP_FIELD_MASK)
++				return -EFAULT;
++
++			flags =3D (flags & ~BPF_F_SKIP_FIELD_MASK) |
++				(skip  & BPF_F_SKIP_FIELD_MASK);
++			ret =3D __bpf_get_stackid(map, trace, flags);
++		}
++		return ret;
++	}
++	return __bpf_get_stackid(map, trace, flags);
++}
++
++const struct bpf_func_proto bpf_get_stackid_proto_pe =3D {
++	.func		=3D bpf_get_stackid_pe,
++	.gpl_only	=3D false,
++	.ret_type	=3D RET_INTEGER,
++	.arg1_type	=3D ARG_PTR_TO_CTX,
++	.arg2_type	=3D ARG_CONST_MAP_PTR,
++	.arg3_type	=3D ARG_ANYTHING,
++};
++
+ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *ta=
+sk,
++			    struct perf_callchain_entry *trace_in,
+ 			    void *buf, u32 size, u64 flags)
+ {
+ 	u32 init_nr, trace_nr, copy_len, elem_size, num_elem;
+@@ -520,7 +612,9 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
+uct task_struct *task,
+ 	else
+ 		init_nr =3D sysctl_perf_event_max_stack - num_elem;
+=20
+-	if (kernel && task)
++	if (trace_in)
++		trace =3D trace_in;
++	else if (kernel && task)
+ 		trace =3D get_callchain_entry_for_task(task, init_nr);
+ 	else
+ 		trace =3D get_perf_callchain(regs, init_nr, kernel, user,
+@@ -556,7 +650,7 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
+uct task_struct *task,
+ BPF_CALL_4(bpf_get_stack, struct pt_regs *, regs, void *, buf, u32, size=
+,
+ 	   u64, flags)
+ {
+-	return __bpf_get_stack(regs, NULL, buf, size, flags);
++	return __bpf_get_stack(regs, NULL, NULL, buf, size, flags);
+ }
+=20
+ const struct bpf_func_proto bpf_get_stack_proto =3D {
+@@ -574,7 +668,7 @@ BPF_CALL_4(bpf_get_task_stack, struct task_struct *, =
+task, void *, buf,
+ {
+ 	struct pt_regs *regs =3D task_pt_regs(task);
+=20
+-	return __bpf_get_stack(regs, task, buf, size, flags);
++	return __bpf_get_stack(regs, task, NULL, buf, size, flags);
+ }
+=20
+ BTF_ID_LIST(bpf_get_task_stack_btf_ids)
+@@ -591,6 +685,80 @@ const struct bpf_func_proto bpf_get_task_stack_proto=
+ =3D {
+ 	.btf_id		=3D bpf_get_task_stack_btf_ids,
+ };
+=20
++BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_data_kern *, ctx,
++	   void *, buf, u32, size, u64, flags)
++{
++	struct perf_event *event =3D ctx->event;
++	struct perf_callchain_entry *trace;
++	bool has_kernel, has_user;
++	bool kernel, user;
++	int err =3D -EINVAL;
++
++	if (!(event->attr.sample_type & __PERF_SAMPLE_CALLCHAIN_EARLY))
++		return __bpf_get_stack(ctx->regs, NULL, NULL, buf, size, flags);
++
++	if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
++			       BPF_F_USER_BUILD_ID)))
++		goto clear;
++
++	user =3D flags & BPF_F_USER_STACK;
++	kernel =3D !user;
++
++	has_kernel =3D !event->attr.exclude_callchain_kernel;
++	has_user =3D !event->attr.exclude_callchain_user;
++
++	if ((kernel && !has_kernel) || (user && !has_user))
++		goto clear;
++
++	err =3D -EFAULT;
++	trace =3D ctx->data->callchain;
++	if (!trace || (!has_kernel && !has_user))
++		goto clear;
++
++	if (has_kernel && has_user) {
++		__u64 nr_kernel =3D count_kernel_ip(trace);
++		int ret;
++
++		if (kernel) {
++			__u64 nr =3D trace->nr;
++
++			trace->nr =3D nr_kernel;
++			ret =3D __bpf_get_stack(ctx->regs, NULL, trace, buf,
++					      size, flags);
++
++			/* restore nr */
++			trace->nr =3D nr;
++		} else { /* user */
++			u64 skip =3D flags & BPF_F_SKIP_FIELD_MASK;
++
++			skip +=3D nr_kernel;
++			if (skip > ~BPF_F_SKIP_FIELD_MASK)
++				goto clear;
++
++			flags =3D (flags & ~BPF_F_SKIP_FIELD_MASK) |
++				(skip  & BPF_F_SKIP_FIELD_MASK);
++			ret =3D __bpf_get_stack(ctx->regs, NULL, trace, buf,
++					      size, flags);
++		}
++		return ret;
++	}
++	return __bpf_get_stack(ctx->regs, NULL, trace, buf, size, flags);
++clear:
++	memset(buf, 0, size);
++	return err;
++
++}
++
++const struct bpf_func_proto bpf_get_stack_proto_pe =3D {
++	.func		=3D bpf_get_stack_pe,
++	.gpl_only	=3D true,
++	.ret_type	=3D RET_INTEGER,
++	.arg1_type	=3D ARG_PTR_TO_CTX,
++	.arg2_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	=3D ARG_CONST_SIZE_OR_ZERO,
++	.arg4_type	=3D ARG_ANYTHING,
++};
++
+ /* Called from eBPF program */
+ static void *stack_map_lookup_elem(struct bpf_map *map, void *key)
+ {
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 3cc0dcb60ca20..cb91ef902cc43 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1411,9 +1411,9 @@ pe_prog_func_proto(enum bpf_func_id func_id, const =
+struct bpf_prog *prog)
+ 	case BPF_FUNC_perf_event_output:
+ 		return &bpf_perf_event_output_proto_tp;
+ 	case BPF_FUNC_get_stackid:
+-		return &bpf_get_stackid_proto_tp;
++		return &bpf_get_stackid_proto_pe;
+ 	case BPF_FUNC_get_stack:
+-		return &bpf_get_stack_proto_tp;
++		return &bpf_get_stack_proto_pe;
+ 	case BPF_FUNC_perf_prog_read_value:
+ 		return &bpf_perf_prog_read_value_proto;
+ 	case BPF_FUNC_read_branch_records:
+--=20
+2.24.1
 
