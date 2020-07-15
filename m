@@ -2,67 +2,68 @@ Return-Path: <SRS0=G0Da=A2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C5E9C433E8
-	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 13:09:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87F1AC433F4
+	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 13:09:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C44820657
-	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 13:09:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6032A2071B
+	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 13:09:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AEEBYttX"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M+0+4u6Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731482AbgGONJG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jul 2020 09:09:06 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:30641 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731476AbgGONJG (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 15 Jul 2020 09:09:06 -0400
+        id S1731517AbgGONJL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jul 2020 09:09:11 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:57723 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1731503AbgGONJL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Jul 2020 09:09:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594818545;
+        s=mimecast20190719; t=1594818549;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KxvBS+x/c3n7X+53Golhdx75/yWdayPMXF8ZysL3UmE=;
-        b=AEEBYttX92mQRuDszPB8S+LxkniDE+h3zLgAAvZ/ALgRHt1Pq/JqfzR2klua98IvkvIlb8
-        liq2IV0iOjAOde9OKv3vnvcZfG7/Vr23CsX81hmqkhUwJY29XkuTVjqNpxUZeINDRHGCkl
-        85qTwcktkux3xE7qBjO3oaEz0v6bacw=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-208-TrE4ruw6PKSqA0PBQ0DY4w-1; Wed, 15 Jul 2020 09:09:02 -0400
-X-MC-Unique: TrE4ruw6PKSqA0PBQ0DY4w-1
-Received: by mail-qk1-f200.google.com with SMTP id v16so1418731qka.18
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 06:09:02 -0700 (PDT)
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YM5wS3/iQvsLxkvvgQKlzXyu1TZ85UBWopqL4qdKj4M=;
+        b=M+0+4u6Y3B+fXHV5r5jxL3GurXp49kGTLdPEFWhyk4U21bUYPGCUtdhty6T9SbVIYh4Xij
+        9oNT/HwxL2hZNQiTqkT7cgxkVjB5ek4y4PObTY00+Qo7lll17oPi3HJLoDKUbEA3k/Vh6f
+        JQv9WcO1gelHyrMIet3qo8HmtXj/4zA=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-342-EfRYXt-sN5aP8GdoGSmRgg-1; Wed, 15 Jul 2020 09:09:08 -0400
+X-MC-Unique: EfRYXt-sN5aP8GdoGSmRgg-1
+Received: by mail-qk1-f199.google.com with SMTP id g12so1421134qko.19
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 06:09:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=KxvBS+x/c3n7X+53Golhdx75/yWdayPMXF8ZysL3UmE=;
-        b=PKSbuEBT2PsTDG0tPXPU97cC2YxfK42ruYLwpqWbzfKT/rtnePlBskLrYQm6eTR/yv
-         TNJhxO2SEaIWsYfK6dMF8I3ib3oMlOf7Q60FmrFElk4EoFsiUjSDvDnfkkqWTtYpjBoH
-         H7dKFiChW3Pfpnh5aZFHpfQGMZV6JDHB3DImzmeGRL8ZO+TZa5tWUxrXuK/REZeSIURA
-         +mKQgvQDmg8d2SQvpKCVnb42IyT8doTP5I6Q/QYMMmRbrZxFZuB+HNNtZit+/Z4evB3M
-         e2V1Hto4FBziPOPnps+VursvfShlG0sAb9cvtRvrP52xp689BBHMPG44iWjULZ8xIVfs
-         MxPw==
-X-Gm-Message-State: AOAM530Cv8jd/ryinavls8ggHLABzwfStvTDyHB/SVnLN+IonYvqZAqx
-        IY99DfSEbqkbVxXQuphbvHECJZqmvCCMW6sWKbf+nTvbl6N2AoAtgC/+jjCfENQmsrcNoad57rv
-        HpxUf51VVGQvy
-X-Received: by 2002:ae9:e809:: with SMTP id a9mr9419625qkg.315.1594818541867;
-        Wed, 15 Jul 2020 06:09:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw/O4D7cXIrjdto3G7rXonIZsapZnjMx7Q5d91zuxkwI9PQExlMBvCP55gmTwYS7bHOch6p8w==
-X-Received: by 2002:ae9:e809:: with SMTP id a9mr9419591qkg.315.1594818541518;
-        Wed, 15 Jul 2020 06:09:01 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=YM5wS3/iQvsLxkvvgQKlzXyu1TZ85UBWopqL4qdKj4M=;
+        b=kkt/HY0LoOZfpssX71s22T1Mwm1Di+/Zz3C9KnwezWeWzhKM2TG6/Z4JnZ+3MznUxE
+         Wu0EyOFSuHLstc+fXLJKNRvpWgflXHRoDDO/3U22tHnKfuw+wxSnQF8NT6sFEJ7e5LEg
+         6MPuciGrShYYZo72vsMq8+JWhq+ranLxcCApKXP8bCUw1HXoieX6k4OumKGNgjmWKDeL
+         mgbUI7KWdQTencdjlmR/RfSn6YYQ72Tdsv7xFuyJTAa7bwHluAQPjm4tsvqcb2ysBp4Y
+         vLuXTJ8yv7m6i5Ect0TG55BHFG22kolc2mwS0qkhFjNIADK3lo13o/OXIAihzagpG11H
+         u/Tw==
+X-Gm-Message-State: AOAM532XrufBwDvHUf8/8HJ2i4Lxpc+jsxDlDOBQnH5F9lc0OWWaZlC6
+        5M7QISTShBl8kDR2FvFg/o32zZ5WZfwdxqPwGN8m0T7oPaQjqdgvnIK6XXXXB/y2GPcUR+4z3pI
+        IkZCcjdXZQimI
+X-Received: by 2002:aed:2f26:: with SMTP id l35mr10223932qtd.79.1594818547484;
+        Wed, 15 Jul 2020 06:09:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxexpd8ety7QWvJP1K2X2hD9z59ditVhtwpVUDy9a287FPwbwF6xrDuhKtLsNljtlww08V1FA==
+X-Received: by 2002:aed:2f26:: with SMTP id l35mr10223910qtd.79.1594818547268;
+        Wed, 15 Jul 2020 06:09:07 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id u68sm2583882qkd.59.2020.07.15.06.09.00
+        by smtp.gmail.com with ESMTPSA id a185sm2061895qkg.3.2020.07.15.06.09.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 06:09:00 -0700 (PDT)
+        Wed, 15 Jul 2020 06:09:06 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 52A6A1804F0; Wed, 15 Jul 2020 15:08:59 +0200 (CEST)
-Subject: [PATCH bpf-next v2 0/6] bpf: Support multi-attach for freplace
- programs
+        id CD7DF181C9D; Wed, 15 Jul 2020 15:09:04 +0200 (CEST)
+Subject: [PATCH bpf-next v2 5/6] libbpf: add support for supplying target to
+ bpf_raw_tracepoint_open()
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -72,8 +73,10 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Wed, 15 Jul 2020 15:08:59 +0200
-Message-ID: <159481853923.454654.12184603524310603480.stgit@toke.dk>
+Date:   Wed, 15 Jul 2020 15:09:04 +0200
+Message-ID: <159481854475.454654.15685979293063948667.stgit@toke.dk>
+In-Reply-To: <159481853923.454654.12184603524310603480.stgit@toke.dk>
+References: <159481853923.454654.12184603524310603480.stgit@toke.dk>
 User-Agent: StGit/0.23
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -83,52 +86,84 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series adds support attaching freplace BPF programs to multiple targets.
-This is needed to support incremental attachment of multiple XDP programs using
-the libxdp dispatcher model.
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-The first two patches are refactoring patches: The first one is a trivial change
-to the logging in the verifier, split out to make the subsequent refactor easier
-to read. Patch 2 refactors check_attach_btf_id() so that the checks on program
-and target compatibility can be reused when attaching to a secondary location.
+This adds support for supplying a target fd and btf ID for the
+raw_tracepoint_open() BPF operation, using a new bpf_raw_tracepoint_opts
+structure. This can be used for attaching freplace programs to multiple
+destinations.
 
-Patch 3 contains the change that actually allows attaching freplace programs in
-multiple places. Patches 4-6 are the usual tools header updates, libbpf support
-and selftest.
-
-See the individual patches for details.
-
-Changelog:
-
-v2:
-  - Drop the log arguments from bpf_raw_tracepoint_open
-  - Fix kbot errors
-  - Rebase to latest bpf-next
-
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
+ tools/lib/bpf/bpf.c      |   13 ++++++++++++-
+ tools/lib/bpf/bpf.h      |    9 +++++++++
+ tools/lib/bpf/libbpf.map |    1 +
+ 3 files changed, 22 insertions(+), 1 deletion(-)
 
-Toke Høiland-Jørgensen (6):
-      bpf: change logging calls from verbose() to bpf_log() and use log pointer
-      bpf: verifier: refactor check_attach_btf_id()
-      bpf: support attaching freplace programs to multiple attach points
-      tools: add new members to bpf_attr.raw_tracepoint in bpf.h
-      libbpf: add support for supplying target to bpf_raw_tracepoint_open()
-      selftests: add test for multiple attachments of freplace program
-
-
- include/linux/bpf.h                           |  23 ++-
- include/linux/bpf_verifier.h                  |   9 +
- include/uapi/linux/bpf.h                      |   6 +-
- kernel/bpf/core.c                             |   1 -
- kernel/bpf/syscall.c                          |  78 +++++++-
- kernel/bpf/trampoline.c                       |  36 +++-
- kernel/bpf/verifier.c                         | 171 ++++++++++--------
- tools/include/uapi/linux/bpf.h                |   6 +-
- tools/lib/bpf/bpf.c                           |  13 +-
- tools/lib/bpf/bpf.h                           |   9 +
- tools/lib/bpf/libbpf.map                      |   1 +
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 164 ++++++++++++++---
- .../bpf/progs/freplace_get_constant.c         |  15 ++
- 13 files changed, 404 insertions(+), 128 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_get_constant.c
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index a7329b671c41..030c57f8d7c9 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -793,17 +793,28 @@ int bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len)
+ 	return err;
+ }
+ 
+-int bpf_raw_tracepoint_open(const char *name, int prog_fd)
++int bpf_raw_tracepoint_open_opts(const char *name, int prog_fd,
++				 struct bpf_raw_tracepoint_opts *opts)
+ {
+ 	union bpf_attr attr;
+ 
++	if (!OPTS_VALID(opts, bpf_raw_tracepoint_opts))
++		return -EINVAL;
++
+ 	memset(&attr, 0, sizeof(attr));
+ 	attr.raw_tracepoint.name = ptr_to_u64(name);
+ 	attr.raw_tracepoint.prog_fd = prog_fd;
++	attr.raw_tracepoint.tgt_prog_fd = OPTS_GET(opts, tgt_prog_fd, 0);
++	attr.raw_tracepoint.tgt_btf_id = OPTS_GET(opts, tgt_btf_id, 0);
+ 
+ 	return sys_bpf(BPF_RAW_TRACEPOINT_OPEN, &attr, sizeof(attr));
+ }
+ 
++int bpf_raw_tracepoint_open(const char *name, int prog_fd)
++{
++	return bpf_raw_tracepoint_open_opts(name, prog_fd, NULL);
++}
++
+ int bpf_load_btf(void *btf, __u32 btf_size, char *log_buf, __u32 log_buf_size,
+ 		 bool do_log)
+ {
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index dbef24ebcfcb..bae0003899f4 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -227,7 +227,16 @@ LIBBPF_API int bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len);
+ LIBBPF_API int bpf_prog_query(int target_fd, enum bpf_attach_type type,
+ 			      __u32 query_flags, __u32 *attach_flags,
+ 			      __u32 *prog_ids, __u32 *prog_cnt);
++struct bpf_raw_tracepoint_opts {
++	size_t sz; /* size of this struct for forward/backward compatibility */
++	int tgt_prog_fd; /* target program to attach to */
++	__u32 tgt_btf_id; /* BTF ID of target function */
++};
++#define bpf_raw_tracepoint_opts__last_field tgt_btf_id
++
+ LIBBPF_API int bpf_raw_tracepoint_open(const char *name, int prog_fd);
++LIBBPF_API int bpf_raw_tracepoint_open_opts(const char *name, int prog_fd,
++					    struct bpf_raw_tracepoint_opts *opts);
+ LIBBPF_API int bpf_load_btf(void *btf, __u32 btf_size, char *log_buf,
+ 			    __u32 log_buf_size, bool do_log);
+ LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index c5d5c7664c3b..17320a5721a5 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -288,5 +288,6 @@ LIBBPF_0.1.0 {
+ 		bpf_map__value_size;
+ 		bpf_program__autoload;
+ 		bpf_program__set_autoload;
++		bpf_raw_tracepoint_open_opts;
+ 		btf__set_fd;
+ } LIBBPF_0.0.9;
 
