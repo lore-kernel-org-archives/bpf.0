@@ -2,211 +2,91 @@ Return-Path: <SRS0=G0Da=A2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 162E4C433E0
-	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 17:49:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BB37C433E0
+	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 17:53:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBF3E2065F
-	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 17:49:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 422B920663
+	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 17:53:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TL5lV3jr";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="WjsgdXPe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qW5AXC2Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725866AbgGORtH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jul 2020 13:49:07 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:29914 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725861AbgGORtF (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 15 Jul 2020 13:49:05 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06FHjKwL029604;
-        Wed, 15 Jul 2020 10:48:50 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=4O27lc3HJfa52oGh76iBTwdDSd/QIKuoA1Z3/cnHWik=;
- b=TL5lV3jrI2LLyDio4KE/XiZ+qmezz9LG3MqPsbh0nyFbK8f6CLCa8Ny8jdLtuC9YWYXm
- 7BWBekGpaZS/91BDE/gF8JWVPkOUM+gjvSW6tQ7gzNQerBdRWIC1f2q1okm5TDCwdRMq
- YcmhP2O9AB2rMS5zMa/ZeqFWUEEjdY+fqco= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32a43f0tyh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 15 Jul 2020 10:48:50 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.175) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 15 Jul 2020 10:48:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nfsTVHztAdpuA93aeyLeKFMYNPcXoYfKdEtYeinP3tbDM86IpRjiTm/pANUD2B/Cjya4ZSLr7c8ggjLYjwlKvtDba8v1xPqR9F8AXU2CMbw4gXH7igqFE0IUPfWi1CCq1UhR3lJd8+WfbhLQqKCx11mA6jb+74m2Bl47JVyuwTOq3nXQMj7B5lJ6QDuc+66CRmXFvVQ+5bIhM0ifsu0q5zi7vUu+uyQLleMT5bi6J6WypQ1jjAhpj4EER2pVVHoYLiC7UBJG9Y0an/1FkzJ+C1AVQOx+0lnkhRZ9ZlXZRVuEck51OSxKpPdOMc23DSnYLBUBC6aqnr1K4pACWJd3kg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4O27lc3HJfa52oGh76iBTwdDSd/QIKuoA1Z3/cnHWik=;
- b=EzNMTn/EBSME0bNb1WoBc59uBKqZrdtWtCUx81m3GgRo2Sfp6d8pjT1fHrMAvDalKyXlUFiJO3dN9pXafrXXBbXhYoXPu+tSKqNe2X3k1iKuJ8c0eP2weUmr1qKnrUaej5/KcvVQ8e6LlmlS9rtvwQAkRMIosoCNHhkFO350lFvA6wudhD2fc7M4HuZ8Q+o7gS/8SJ5HOl4XRsvUgPzZ8wabX/Ky3O/X3dJw1agXlBBQv0IWlpp0KYm6qRp37OZ271sIKrTOFoVwpje3YoUrPM6I7Z2nnHueOb31K+t/aLW1841hhQVJyf4EcZFYk2wwFfv27IIP7v8e368nledM+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4O27lc3HJfa52oGh76iBTwdDSd/QIKuoA1Z3/cnHWik=;
- b=WjsgdXPe02+4Tr9fTbXh4B6ov2B8tjZlYiTim5huFnt6h/Kxw/cKV6RK4wdR88hMia1TtOL2Ena6q3f34oagov99s7rB+yaS8WstHLJGwiifDCj7buovgaZKy71Vk3wpiL4s9kVETxzeaDMsBAFWogBhB8SrIB3tuVYnPyRPmVA=
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
- by BYAPR15MB2998.namprd15.prod.outlook.com (2603:10b6:a03:fc::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.21; Wed, 15 Jul
- 2020 17:34:20 +0000
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::56b:2925:8762:2d80]) by BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::56b:2925:8762:2d80%7]) with mapi id 15.20.3174.026; Wed, 15 Jul 2020
- 17:34:20 +0000
-Subject: Re: [PATCH bpf-next 03/13] bpf: support readonly buffer in verifier
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>
-References: <20200713161739.3076283-1-yhs@fb.com>
- <20200713161742.3076597-1-yhs@fb.com>
- <20200713232545.mmocpqgqpiapcdvg@ast-mbp.dhcp.thefacebook.com>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <2b641c41-fd6e-b1fa-4043-02b92776140e@fb.com>
-Date:   Wed, 15 Jul 2020 10:34:19 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.10.0
-In-Reply-To: <20200713232545.mmocpqgqpiapcdvg@ast-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR06CA0056.namprd06.prod.outlook.com
- (2603:10b6:a03:14b::33) To BYAPR15MB4088.namprd15.prod.outlook.com
- (2603:10b6:a02:c3::18)
+        id S1725882AbgGORxE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jul 2020 13:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725861AbgGORxD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Jul 2020 13:53:03 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9304CC061755;
+        Wed, 15 Jul 2020 10:53:03 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id g139so1543123lfd.10;
+        Wed, 15 Jul 2020 10:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Kzxx9RCldh3DF2JWeX19dZw4RjKkD4KoJuSfX3PHNJQ=;
+        b=qW5AXC2Yja3W1A52gYUqCskX1FKrCdiGVWVNMlxPUBjnPRwxvtff4mZwg1L9SpEveC
+         Qd9WuJkImx2UkE9WoLAeC/xt90kYdvlnYqJ85anwQek1YJ+HMuh8AvJE2oOgnltweKGf
+         X4uU8Uok/qkEv5fs9u8TvLfuzCfyXt2XGj/VMCmAuc9UuGVpH5+Dih9Bnpp19w3jZotM
+         OonXlr/J4Nt3RxxEKTSmqbnuI6NvRcY/NVEKtt22KilDY0pzxGRnQkashBBjJ7puNLYR
+         xM9Bb/+hNPuUFtrBVnPZlSiurBb5NxGOUvgo1U8//1obKXoZ5mZIjb2gaIQsPxvMbJrb
+         FxOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Kzxx9RCldh3DF2JWeX19dZw4RjKkD4KoJuSfX3PHNJQ=;
+        b=kmVgpxXRDg6JTAKKo3Z7V8Jk7zxbStQXLql0YKqPGVN4oAgX+yJB3dxsXnRCQrQr5Y
+         n9ZRPsBDfM+KjZIwOE4MoyQfBYivVMZHezBmWl864Q5OfnBKI4nQFe8jmToCzk7UA3Cm
+         JCVAGg1gX/dzFDxXf+LX9rcfUGT/L1sii+FCcPjEAKPNwBUos1lMRvAomHPgjTXz5y1y
+         JJ/s1uKKiouyzmYRFJXsC8/kn6Y8OAsEgfH8bZWbtKaIrDTlgiG99ykIHC8mitWv6K0t
+         WP1hNXRS/t67YzUPSQYLU2tEgKMWhhkxjn9fdBag1lfmqbS3yPMJzSELf2mo1VeKyRmj
+         xoQQ==
+X-Gm-Message-State: AOAM531jtRKfa3/hVUKoVCO21zUAzcGLnilV7TSKNVCsK2KQtKGAj1rw
+        oC+Ddep/z7OCnM3k+XvhoJceAyZ7J9GwtHP+WaI=
+X-Google-Smtp-Source: ABdhPJxeXRyiSlooQK4CZ0BwYELn9wcNO6PMpKVr0ehAqhKnTARZVOCc3oCHuE2p+cWx+UVz2bWL8Vck7IoMJMq4LDY=
+X-Received: by 2002:a19:a95:: with SMTP id 143mr109682lfk.174.1594835581993;
+ Wed, 15 Jul 2020 10:53:01 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21e8::1176] (2620:10d:c090:400::5:7353) by BYAPR06CA0056.namprd06.prod.outlook.com (2603:10b6:a03:14b::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.18 via Frontend Transport; Wed, 15 Jul 2020 17:34:20 +0000
-X-Originating-IP: [2620:10d:c090:400::5:7353]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 10e36dc7-3272-4db8-4e76-08d828e54e7b
-X-MS-TrafficTypeDiagnostic: BYAPR15MB2998:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR15MB2998D85FE5C28B961BBA5A28D37E0@BYAPR15MB2998.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C8Xs0OYkGeMXmHia4Sl5LiYGmbeak/sKF2hhADso/OvMPf9NtoYTD74fSGo2cJv37s0Rjd/5qVchV/lJvGctB78QDpVqkSuXKzTCItkGuleYUw7aGhVnp0Nw5vEPNa/Bwtn+IEPJVApdiK4eFVYbUttlmwMppWA3OoHQOJwpQN++eyjV8726851Y+Xr4F6Omz86Ds0yFKLT/s6ziIX935K6HvsBj4dLCqzdW8ZtyVXcgG9C9FoN0APsKAExIv7oTAVG6+8CaPpJHC1SIIJwi/PBQUpjMHxoJ1IONmHQvYgDgctEt/PtG7YuGc8AreAVvgnPj5dJXVwDzsFN24b2JTyCmvfFwqpxHzSuEeC3vu5GPsSYZwHOgesR/c12PBFfb
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(136003)(366004)(346002)(396003)(39860400002)(376002)(16526019)(186003)(8676002)(66556008)(66476007)(2616005)(31696002)(66946007)(6486002)(8936002)(478600001)(54906003)(6916009)(31686004)(36756003)(2906002)(4326008)(316002)(83380400001)(5660300002)(86362001)(53546011)(52116002)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: 1WKMHVIgUtqRqahGbBZl+GUEnhs0qxb/qEF1Vxbx8KCHGAoyYN7mz3Z/vr1qL+eA5cFue13QD6wU9UVUUBmvNXWXva26nZ2hV8KXzSUR0mlmxxM2aMOEP6dRkhPl8dlozLnxD0iNo5K4IUyOlYlKJ2kwHcPs/0xo13nEt48kX2kszdfkVELNv6eUtVLNdQzyGHDSMg68ii7+pO87WKjwFavWp89FuXuMU4QDk55aPcn45JR0dK3xMTuJPBdGmGG6qQqyJ2bbxAj+9UIF3S4O0Zn/NncK/BSrvo+Av+z7WSlLrCA85zLA1+t+MhcVAKaKgz8xtrXi5W78g0hHa1GD/flcQCaTIBWFvhr1URk6gVn5ffSHSQOBmiKcydTR9hZb2OB2IRgBoE6XFjHr/CpulTE+EKMyyyg35Ce9pfH6gx9N5BTuEuytNXEnofdS/81yLIPOoUbvHUJYI2815hVaQKjmbCKyhMHPmkBsq5x9c1PEozYf1MVoNFzLPfCDOC7kGafynOChrYtDLlz4TAtFyQ==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10e36dc7-3272-4db8-4e76-08d828e54e7b
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2020 17:34:20.4209
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 02qQISAPhJ7frzwp04c+XhzQk/2bOys5eGan5TAw2QLaDnNVYiHSmLHDIBX4rx4M
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2998
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-15_12:2020-07-15,2020-07-15 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- phishscore=0 clxscore=1015 impostorscore=0 mlxlogscore=999
- priorityscore=1501 spamscore=0 malwarescore=0 bulkscore=0 adultscore=0
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007150138
-X-FB-Internal: deliver
+References: <20200713161739.3076283-1-yhs@fb.com> <20200713161742.3076597-1-yhs@fb.com>
+ <20200713232545.mmocpqgqpiapcdvg@ast-mbp.dhcp.thefacebook.com> <2b641c41-fd6e-b1fa-4043-02b92776140e@fb.com>
+In-Reply-To: <2b641c41-fd6e-b1fa-4043-02b92776140e@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 15 Jul 2020 10:52:50 -0700
+Message-ID: <CAADnVQKYGF+KY5LTq-OAdWNmGc5dw1=BmftkP8n++pfEMyNWMg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 03/13] bpf: support readonly buffer in verifier
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Wed, Jul 15, 2020 at 10:48 AM Yonghong Song <yhs@fb.com> wrote:
+>
+> > PTR_TO_TP_BUFFER was a quick hack for tiny scratch area.
+> > Here I think the verifier should be smart from the start. >
+> > The next patch populates bpf_ctx_arg_aux with hardcoded 0 and 1.
+> > imo that's too hacky. Helper definitions shouldn't be in business
+> > of poking into such verifier internals.
+>
+> The reason I am using 0/1 so later on I can easily correlate
+> which rdonly_buf access size corresponds to key or value. I guess
+> I can have a verifier callback to given an ctx argument index to
+> get the access size.
 
-
-On 7/13/20 4:25 PM, Alexei Starovoitov wrote:
-> On Mon, Jul 13, 2020 at 09:17:42AM -0700, Yonghong Song wrote:
->> Two new readonly buffer PTR_TO_RDONLY_BUF or
->> PTR_TO_RDONLY_BUF_OR_NULL register states
->> are introduced. These new register states will be used
->> by later bpf map element iterator.
->>
->> New register states share some similarity to
->> PTR_TO_TP_BUFFER as it will calculate accessed buffer
->> size during verification time. The accessed buffer
->> size will be later compared to other metrics during
->> later attach/link_create time.
->>
->> Two differences between PTR_TO_TP_BUFFER and
->> PTR_TO_RDONLY_BUF[_OR_NULL].
->> PTR_TO_TP_BUFFER is for write only
->> and PTR_TO_RDONLY_BUF[_OR_NULL] is for read only.
->> In addition, a rdonly_buf_seq_id is also added to the
->> register state since it is possible for the same program
->> there could be two PTR_TO_RDONLY_BUF[_OR_NULL] ctx arguments.
->> For example, for bpf later map element iterator,
->> both key and value may be PTR_TO_TP_BUFFER_OR_NULL.
->>
->> Similar to reg_state PTR_TO_BTF_ID_OR_NULL in bpf
->> iterator programs, PTR_TO_RDONLY_BUF_OR_NULL reg_type and
->> its rdonly_buf_seq_id can be set at
->> prog->aux->bpf_ctx_arg_aux, and bpf verifier will
->> retrieve the values during btf_ctx_access().
->> Later bpf map element iterator implementation
->> will show how such information will be assigned
->> during target registeration time.
-> ...
->>   struct bpf_ctx_arg_aux {
->>   	u32 offset;
->>   	enum bpf_reg_type reg_type;
->> +	u32 rdonly_buf_seq_id;
->>   };
->>   
->> +#define BPF_MAX_RDONLY_BUF	2
->> +
->>   struct bpf_prog_aux {
->>   	atomic64_t refcnt;
->>   	u32 used_map_cnt;
->> @@ -693,6 +699,7 @@ struct bpf_prog_aux {
->>   	u32 attach_btf_id; /* in-kernel BTF type id to attach to */
->>   	u32 ctx_arg_info_size;
->>   	const struct bpf_ctx_arg_aux *ctx_arg_info;
->> +	u32 max_rdonly_access[BPF_MAX_RDONLY_BUF];
-> 
-> I think PTR_TO_RDONLY_BUF approach is too limiting.
-> I think the map value should probably be writable from the beginning,
-> but I don't see how this RDONLY_BUF support can be naturally extended.
-
-Agreed. Let me try to make map value read/write-able.
-
-One thing we discussed earlier is whether and how we could make
-map element deletable during iterator traversal. I will explore
-this as well.
-
-> Also key and value can be large, so just load/store is going to be
-> limiting pretty quickly. People would want to use helpers to access
-> key/value areas. I think any existing helper that accepts ARG_PTR_TO_MEM
-> should be usable with data from this key/value.
-
-This is a useful suggestion. I actually indeed hacked trying to
-allow
-   bpf_seq_write(seq, buf, buf_size) accepts rdonly_buf register state
-so bpf iterator can also copy key/value to user space through seq_file.
-The bpf_seq_write 2nd arg is ARG_PTR_TO_MEM. This actually works.
-
-I originally planned to have this as a followup. Since you mentioned 
-this, I will incorporate it in the next revision.
-
-> PTR_TO_TP_BUFFER was a quick hack for tiny scratch area.
-> Here I think the verifier should be smart from the start. >
-> The next patch populates bpf_ctx_arg_aux with hardcoded 0 and 1.
-> imo that's too hacky. Helper definitions shouldn't be in business
-> of poking into such verifier internals.
-
-The reason I am using 0/1 so later on I can easily correlate
-which rdonly_buf access size corresponds to key or value. I guess
-I can have a verifier callback to given an ctx argument index to
-get the access size.
+I see. Hardcoding key vs value in some way is necessary, of course.
+Some #define for that with clear name would be good.
+I was pointing out that 0/1 were used beyond that need.
