@@ -2,82 +2,101 @@ Return-Path: <SRS0=G0Da=A2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D623FC433E0
-	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 19:51:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85F68C433DF
+	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 19:58:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F11A2065F
-	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 19:51:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex-team.ru header.i=@yandex-team.ru header.b="yYBP7FKT"
+	by mail.kernel.org (Postfix) with ESMTP id 6283E20672
+	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 19:58:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1594843128;
+	bh=kgLUYhenQ2s182M/0+H610d75MLJhx48t/EpB1gdcmg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=L+AhGeEISocP2gIMIpFLdbNj/lDVHCfmQiH9GBdU/YkW1buZE6lq0EAm07+uRng6q
+	 brJTEsk9JoPYftzaE/o7XZ4EwjvS8VHoYZilnNyPIPyEXG6d0yMZw9uoRZqgL8BXkN
+	 VVRszjeRPPKv9jHCDxP8lZDioAlROgR6HO3T4trY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726864AbgGOTvu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jul 2020 15:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726661AbgGOTvt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Jul 2020 15:51:49 -0400
-Received: from forwardcorp1j.mail.yandex.net (forwardcorp1j.mail.yandex.net [IPv6:2a02:6b8:0:1619::183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A28C061755;
-        Wed, 15 Jul 2020 12:51:49 -0700 (PDT)
-Received: from sas1-ec30c78b6c5b.qloud-c.yandex.net (sas1-ec30c78b6c5b.qloud-c.yandex.net [IPv6:2a02:6b8:c14:2704:0:640:ec30:c78b])
-        by forwardcorp1j.mail.yandex.net (Yandex) with ESMTP id 30B1F2E136F;
-        Wed, 15 Jul 2020 22:51:45 +0300 (MSK)
-Received: from sas2-32987e004045.qloud-c.yandex.net (sas2-32987e004045.qloud-c.yandex.net [2a02:6b8:c08:b889:0:640:3298:7e00])
-        by sas1-ec30c78b6c5b.qloud-c.yandex.net (mxbackcorp/Yandex) with ESMTP id sD3rcpQHM6-phsKMj3E;
-        Wed, 15 Jul 2020 22:51:45 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1594842705; bh=daxBHMcK5rtz7A+97AJsSnaeW/8sYa7HolZemtA0Hxc=;
-        h=Message-Id:Date:Subject:To:From:Cc;
-        b=yYBP7FKTyA0a1FS+8Eeo9mT8h89WdKWpxmQ0GDNfPA/d8M9EUd32aQPeiViihd+Ju
-         UX/ajoULrlyTvdRYUi/wc1zp3qDF4hUQRomlXH95vBtthJfVCQ83IWG8bEgmpSCQfi
-         E+tNP8ySIXAcfH9LqxTIiS+xq/ZB1kpCdvcuEGmo=
-Authentication-Results: sas1-ec30c78b6c5b.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-Received: from 37.9.121.196-vpn.dhcp.yndx.net (37.9.121.196-vpn.dhcp.yndx.net [37.9.121.196])
-        by sas2-32987e004045.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id kLmvqU3zdD-phiKeQal;
-        Wed, 15 Jul 2020 22:51:43 +0300
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client certificate not present)
-From:   Dmitry Yakunin <zeil@yandex-team.ru>
-To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     sdf@google.com
-Subject: [PATCH bpf-next v3 0/4] bpf: cgroup skb improvements for bpf_prog_test_run
-Date:   Wed, 15 Jul 2020 22:51:28 +0300
-Message-Id: <20200715195132.4286-1-zeil@yandex-team.ru>
+        id S1726715AbgGOT6r (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jul 2020 15:58:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52634 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726650AbgGOT6q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Jul 2020 15:58:46 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EC1962065F;
+        Wed, 15 Jul 2020 19:58:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594843126;
+        bh=kgLUYhenQ2s182M/0+H610d75MLJhx48t/EpB1gdcmg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lKchPb2+RzyaC1rzDN3xOG/MasPpXqSJ1R0eZwfsqMKsVNaBY7OVwDhrjtC7/BHTj
+         SZAJFHoeJXORte+aFey289IMPWM4KFlzTQEfdP39to8y8pL7mif1Lp0mi0qOWfMgJX
+         Co7r3Joezmkl7lsi8rH7oxqSrn2kySAKK2l8sZSM=
+Date:   Wed, 15 Jul 2020 12:58:44 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, bpf@vger.kernel.org,
+        ilias.apalodimas@linaro.org, lorenzo.bianconi@redhat.com,
+        brouer@redhat.com, echaudro@redhat.com, sameehj@amazon.com
+Subject: Re: [PATCH 2/6] net: mvneta: move skb build after descriptors
+ processing
+Message-ID: <20200715125844.567e5795@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <f5e95c08e22113d21e86662f1cf5ccce16ccbfca.1594309075.git.lorenzo@kernel.org>
+References: <cover.1594309075.git.lorenzo@kernel.org>
+        <f5e95c08e22113d21e86662f1cf5ccce16ccbfca.1594309075.git.lorenzo@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset contains some improvements for testing cgroup/skb programs
-through BPF_PROG_TEST_RUN command.
+On Thu,  9 Jul 2020 17:57:19 +0200 Lorenzo Bianconi wrote:
+> +		frag->bv_offset = pp->rx_offset_correction;
+> +		skb_frag_size_set(frag, data_len);
+> +		frag->bv_page = page;
+> +		sinfo->nr_frags++;
 
-v2:
-  - fix build without CONFIG_CGROUP_BPF (kernel test robot <lkp@intel.com>)
+nit: please use the skb_frag_* helpers, in case we have to rename those
+     fields again. You should also consider adding a helper for the
+     operation of appending a frag, I bet most drivers will needs this.
 
-v3:
-  - fix build without CONFIG_IPV6 (kernel test robot <lkp@intel.com>)
+> +static struct sk_buff *
+> +mvneta_swbm_build_skb(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
+> +		      struct xdp_buff *xdp, u32 desc_status)
+> +{
+> +	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
+> +	int i, num_frags = sinfo->nr_frags;
+> +	skb_frag_t frags[MAX_SKB_FRAGS];
+> +	struct sk_buff *skb;
+> +
+> +	memcpy(frags, sinfo->frags, sizeof(skb_frag_t) * num_frags);
+> +
+> +	skb = build_skb(xdp->data_hard_start, PAGE_SIZE);
+> +	if (!skb)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	page_pool_release_page(rxq->page_pool, virt_to_page(xdp->data));
+> +
+> +	skb_reserve(skb, xdp->data - xdp->data_hard_start);
+> +	skb_put(skb, xdp->data_end - xdp->data);
+> +	mvneta_rx_csum(pp, desc_status, skb);
+> +
+> +	for (i = 0; i < num_frags; i++) {
+> +		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags,
+> +				frags[i].bv_page, frags[i].bv_offset,
+> +				skb_frag_size(&frags[i]), PAGE_SIZE);
+> +		page_pool_release_page(rxq->page_pool, frags[i].bv_page);
+> +	}
+> +
+> +	return skb;
+> +}
 
-Dmitry Yakunin (4):
-  bpf: setup socket family and addresses in bpf_prog_test_run_skb
-  bpf: allow to specify ifindex for skb in bpf_prog_test_run_skb
-  bpf: export some cgroup storages allocation helpers for reusing
-  bpf: try to use existing cgroup storage in bpf_prog_test_run_skb
-
- include/linux/bpf-cgroup.h                         |  36 +++++++
- kernel/bpf/cgroup.c                                |  25 -----
- net/bpf/test_run.c                                 | 113 ++++++++++++++++++---
- .../selftests/bpf/prog_tests/cgroup_skb_prog_run.c |  78 ++++++++++++++
- tools/testing/selftests/bpf/prog_tests/skb_ctx.c   |   5 +
- 5 files changed, 217 insertions(+), 40 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
-
--- 
-2.7.4
-
+Here as well - is the plan to turn more of this function into common
+code later on? Looks like most of this is not really driver specific.
