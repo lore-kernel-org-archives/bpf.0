@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 357BBC433E7
-	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 23:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34964C433EA
+	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 23:41:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1493E2071B
-	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 23:41:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 18A82206F5
+	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 23:41:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727075AbgGOXlp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jul 2020 19:41:45 -0400
-Received: from mga06.intel.com ([134.134.136.31]:52501 "EHLO mga06.intel.com"
+        id S1727121AbgGOXls (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jul 2020 19:41:48 -0400
+Received: from mga06.intel.com ([134.134.136.31]:52537 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727042AbgGOXlo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Jul 2020 19:41:44 -0400
-IronPort-SDR: jmhNPQTZpE9UFZ/gnrUQtZTxonm0qMiA3FVBgycAYK9JXUzQSBtURaPgAaXicZ5fR67GpaLCEC
- KmgljHDtcVBw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9683"; a="210823664"
+        id S1727114AbgGOXls (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Jul 2020 19:41:48 -0400
+IronPort-SDR: qdOKp5mOq79kyIvAOqNtZgeSe85lBMABwHnZ0+rX9NX4AR6/3fvAxSzQFrVKqYc/PUv0Q/8wUD
+ 2VYs8ILBnOpQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9683"; a="210823671"
 X-IronPort-AV: E=Sophos;i="5.75,357,1589266800"; 
-   d="scan'208";a="210823664"
+   d="scan'208";a="210823671"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 16:41:44 -0700
-IronPort-SDR: noQi8yOnnUPrvGa1AUOu207EPxmoFkDA8G+VT5M9J7IiRK15aNnYW9H4ce84r6TADgSXQ6cKgf
- PtZxrsFRASsg==
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 16:41:48 -0700
+IronPort-SDR: lxDrqOEyVXCgEjk6kzEUufp93S3XQdgvTnLdxEGgGmZTQc0BPlK11RTaoTjydXgGNn0dnUHSK3
+ aFiRGwE3+fvA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,357,1589266800"; 
-   d="scan'208";a="390935584"
+   d="scan'208";a="390935600"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Jul 2020 16:41:42 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 15 Jul 2020 16:41:46 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     ast@kernel.org, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
         magnus.karlsson@intel.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH bpf-next 3/5] bpf: propagate poke descriptors to subprograms
-Date:   Thu, 16 Jul 2020 01:36:32 +0200
-Message-Id: <20200715233634.3868-4-maciej.fijalkowski@intel.com>
+Subject: [PATCH bpf-next 5/5] selftests: bpf: add dummy prog for bpf2bpf with tailcall
+Date:   Thu, 16 Jul 2020 01:36:34 +0200
+Message-Id: <20200715233634.3868-6-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200715233634.3868-1-maciej.fijalkowski@intel.com>
 References: <20200715233634.3868-1-maciej.fijalkowski@intel.com>
@@ -53,47 +53,167 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Previously, there was no need for poke descriptors being present in
-subprogram's bpf_prog_aux struct since tailcalls were simply not allowed
-in them. Each subprog is JITed independently so in order to enable
-JITing such subprograms, simply copy poke descriptors from main program
-to subprogram's poke tab.
-
-Add also subprog's aux struct to the BPF map poke_progs list by calling
-on it map_poke_track().
+Introduce 6th test to taicalls kselftest that checks if tailcall can be
+correctly executed from the BPF subprogram.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- kernel/bpf/verifier.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../selftests/bpf/prog_tests/tailcalls.c      | 85 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/tailcall6.c | 38 +++++++++
+ 2 files changed, 123 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall6.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6481342b31ba..3b406b2860ef 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9932,6 +9932,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		goto out_undo_insn;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+index bb8fe646dd9f..192c94896809 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
++++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
++#include <network_helpers.h>
  
- 	for (i = 0; i < env->subprog_cnt; i++) {
-+		struct bpf_map *map_ptr;
-+		int j;
+ /* test_tailcall_1 checks basic functionality by patching multiple locations
+  * in a single program for a single tail call slot with nop->jmp, jmp->nop
+@@ -472,6 +473,88 @@ static void test_tailcall_5(void)
+ 	bpf_object__close(obj);
+ }
+ 
++/* test_tailcall_6 purpose is to make sure that tailcalls are working
++ * correctly in correlation with BPF subprograms
++ */
++static void test_tailcall_6(void)
++{
++	int err, map_fd, prog_fd, main_fd, i;
++	struct bpf_map *prog_array;
++	struct bpf_program *prog;
++	struct bpf_object *obj;
++	__u32 retval, duration;
++	char prog_name[32];
 +
- 		subprog_start = subprog_end;
- 		subprog_end = env->subprog_info[i + 1].start;
- 
-@@ -9956,6 +9959,12 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		func[i]->aux->btf = prog->aux->btf;
- 		func[i]->aux->func_info = prog->aux->func_info;
- 
-+		for (j = 0; j < prog->aux->size_poke_tab; j++) {
-+			bpf_jit_add_poke_descriptor(func[i], &prog->aux->poke_tab[j]);
-+			map_ptr = func[i]->aux->poke_tab[j].tail_call.map;
-+			map_ptr->ops->map_poke_track(map_ptr, func[i]->aux);
-+		}
++	err = bpf_prog_load("tailcall6.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
++			    &prog_fd);
++	if (CHECK_FAIL(err))
++		return;
 +
- 		/* Use bpf_prog_F_tag to indicate functions in stack traces.
- 		 * Long term would need debug info to populate names
- 		 */
++	prog = bpf_object__find_program_by_title(obj, "classifier");
++	if (CHECK_FAIL(!prog))
++		goto out;
++
++	main_fd = bpf_program__fd(prog);
++	if (CHECK_FAIL(main_fd < 0))
++		goto out;
++
++	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
++	if (CHECK_FAIL(!prog_array))
++		goto out;
++
++	map_fd = bpf_map__fd(prog_array);
++	if (CHECK_FAIL(map_fd < 0))
++		goto out;
++
++	/* nop -> jmp */
++	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
++		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
++
++		prog = bpf_object__find_program_by_title(obj, prog_name);
++		if (CHECK_FAIL(!prog))
++			goto out;
++
++		prog_fd = bpf_program__fd(prog);
++		if (CHECK_FAIL(prog_fd < 0))
++			goto out;
++
++		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
++		if (CHECK_FAIL(err))
++			goto out;
++	}
++
++	err = bpf_prog_test_run(main_fd, 1, &pkt_v4, sizeof(pkt_v4), 0,
++				0, &retval, &duration);
++	CHECK(err || retval != 1, "tailcall",
++	      "err %d errno %d retval %d\n", err, errno, retval);
++
++	/* jmp -> nop, call subprog that will do tailcall */
++	i = 1;
++	err = bpf_map_delete_elem(map_fd, &i);
++	if (CHECK_FAIL(err))
++		goto out;
++
++	err = bpf_prog_test_run(main_fd, 1, &pkt_v4, sizeof(pkt_v4), 0,
++				0, &retval, &duration);
++	CHECK(err || retval != 0, "tailcall", "err %d errno %d retval %d\n",
++	      err, errno, retval);
++
++	/* make sure that subprog can access ctx and entry prog that
++	 * called this subprog can properly return
++	 */
++	i = 0;
++	err = bpf_map_delete_elem(map_fd, &i);
++	if (CHECK_FAIL(err))
++		goto out;
++
++	err = bpf_prog_test_run(main_fd, 1, &pkt_v4, sizeof(pkt_v4), 0,
++				0, &retval, &duration);
++	CHECK(err || retval != 108, "tailcall", "err %d errno %d retval %d\n",
++	      err, errno, retval);
++out:
++	bpf_object__close(obj);
++}
++
+ void test_tailcalls(void)
+ {
+ 	if (test__start_subtest("tailcall_1"))
+@@ -484,4 +567,6 @@ void test_tailcalls(void)
+ 		test_tailcall_4();
+ 	if (test__start_subtest("tailcall_5"))
+ 		test_tailcall_5();
++	if (test__start_subtest("tailcall_6"))
++		test_tailcall_6();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/tailcall6.c b/tools/testing/selftests/bpf/progs/tailcall6.c
+new file mode 100644
+index 000000000000..e72ca5869b58
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tailcall6.c
+@@ -0,0 +1,38 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 2);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table SEC(".maps");
++
++#define TAIL_FUNC(x) 				\
++	SEC("classifier/" #x)			\
++	int bpf_func_##x(struct __sk_buff *skb)	\
++	{					\
++		return x;			\
++	}
++TAIL_FUNC(0)
++TAIL_FUNC(1)
++
++static __attribute__ ((noinline))
++int subprog_tail(struct __sk_buff *skb)
++{
++	bpf_tail_call(skb, &jmp_table, 0);
++
++	return skb->len * 2;
++}
++
++SEC("classifier")
++int entry(struct __sk_buff *skb)
++{
++	bpf_tail_call(skb, &jmp_table, 1);
++
++	return subprog_tail(skb);
++}
++
++char __license[] SEC("license") = "GPL";
++int _version SEC("version") = 1;
 -- 
 2.20.1
 
