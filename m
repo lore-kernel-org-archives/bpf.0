@@ -2,60 +2,65 @@ Return-Path: <SRS0=G0Da=A2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-20.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CCC5C433E2
-	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 21:43:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32D34C433EB
+	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 21:43:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 06DD82072E
-	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 21:43:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E84620771
+	for <bpf@archiver.kernel.org>; Wed, 15 Jul 2020 21:43:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PvN9qtLW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M/9Hf/LT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727108AbgGOVnT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Jul 2020 17:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
+        id S1727858AbgGOVnc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Jul 2020 17:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726356AbgGOVnS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Jul 2020 17:43:18 -0400
+        with ESMTP id S1727814AbgGOVn3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Jul 2020 17:43:29 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30C4C061755
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 14:43:18 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id i203so4593362yba.9
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 14:43:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49BBC061755
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 14:43:29 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id x184so4602347ybx.10
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 14:43:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=WPW2jthcymgJJnDe4srAy8GflGzwLl52ZFtIA0Ixzqw=;
-        b=PvN9qtLWYSDsNHkgj/A27DsYxbLZ/Xnm+V0boSzvB8ey5BIexmosCy7fP6UkN8Zb4C
-         sjRU/+R5zu11ex3BuKYJXCu8Ou4nJO1JBvDeL/VWYvR9Ex4e5VutdUb9RQCUUB8sYUag
-         2w+3i8jQdmRvbG9KhMIy39jcQELLbsG//2Iy5fj3qTFiC12LFmrkC3diSfvc5Yuxy/9F
-         KtwNHAQwI/2lNQ+CS57Ti7gxaqePN96jkHJ039IoZCkJHRp1e/E5SdJmPZj6+/Kr/vMy
-         7T5pI1oyS6yTvXp3k+5+h5huvsrNOh7L4gpAnasiC27Ib9QLtf6R2tjZRCDElxuZLeOS
-         18uQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=ml+sd9PV8EvUQ7KhKL77+R7Whg5aSMZ83owFPqGx5e8=;
+        b=M/9Hf/LTNpql/NGtl2rSNbltCgdU1qoTHNtmZZUDdz0zlA0Aa06tg9Kkwk7FHflyJS
+         isS2O8ZMpKycgy1QcsYrUqiI3Zdb/BQOQ7t+hVTG+qAOzNUZAE6SqqIm2r+qfLtDrHYN
+         qPgIK0EKZdOrAewBpkokymRzmBm16vTyias/uArmk+hlpgIqB8JLMDvW3TsA3/URW4Ip
+         JlkT8QPtzTuvT6ZhsQiWisV5ujGrv6bNErH1zNUaaAef9VaC04g91+QgZ+C85PDs+U12
+         xZ0fvZGtpFoI4O95ol4TMYUTXzjYDAtvJyKg43cqjVvlZPCxHJzMAhTiVZW8lOdlA9w5
+         YVoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=WPW2jthcymgJJnDe4srAy8GflGzwLl52ZFtIA0Ixzqw=;
-        b=Iz+z3mXPahWelolofW3w7N/MspJItPyD3p6dX8iQSizra9FtKvG7mSBDtydD6sdrls
-         5ZLVNvUi8DlFFaMF2uZwOwb9quUxqH1CGG2eXF0b4dV3s5+iteXjJKMZ/wb5L8PAMSVz
-         dRVIpwfAShDp5N6CuEKLuv1frnXNSiZH8Lpli0Tq933sx7ElQpAHxLeNf3TdeaLuVvxP
-         g6gjhGPV0hUHn+XANOzJSeMtdQ3zdXQjPi/3yyHXOLMyI7OkAFeoJ6SXHEtrLb61EMAD
-         J0DhHWZJTvbfuXLC2PIcsboLVIrYveeLPzaOln6lb6f+P+Td+8D0xwyzjqsJko8V1yRx
-         5Z5A==
-X-Gm-Message-State: AOAM531FZcg/L9gJZZ8xU3+7lfxth8J7ROkz9BeR6vDWDPy6uho6f7uz
-        K/IUD0SQxsA2BkUxnQo1+HMwibNkAoo=
-X-Google-Smtp-Source: ABdhPJz/qTdRjOyD9NiyHcxQ5X4u25G5pK7DjjWbH8sfOQ6b1U0bIDyl+0KlG5qp/aUt1V0yHVOLYZN+VVE=
-X-Received: by 2002:a25:6c57:: with SMTP id h84mr1497780ybc.211.1594849397781;
- Wed, 15 Jul 2020 14:43:17 -0700 (PDT)
-Date:   Wed, 15 Jul 2020 14:43:10 -0700
-Message-Id: <20200715214312.2266839-1-haoluo@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=ml+sd9PV8EvUQ7KhKL77+R7Whg5aSMZ83owFPqGx5e8=;
+        b=Fyqi4agdQiDF4wv3ICh+XgZdgf9UoErxfR/3zvRw3WyWSYnTVMUtwx9HmGuU3T/sil
+         BDwHHJfjRi0zrqfhAlIm3PoSDw5WODg7pPnJyxvqDMGJs9OrZa/YK2lZYmBQAR3I+mfC
+         /v14NX98eXvwtjPoTCY0BOI0EqNOrkXCUvNq7PVwnTTerA2YNtM64cBQA/SrNv8TsgEk
+         /qV4lLYjvzQ3+76sS8kqvaWTDZdBI7eij8lsLqs6F1H2AZAKaMTd7k5rH8Q/K1FpP6AB
+         SJJsYCZFr9Gy+5Xo7Nc02iAH4mN9RUqP0+knsHc1CuVll7k28LeZ4kuDxqOGrwAcZWnR
+         U83A==
+X-Gm-Message-State: AOAM5314KcDDhjAB5yB9fXvvKE+7ZQGoe94fNP9T38ewqE2OGahLnl2G
+        2MRFBx4sQ4HBYR79xxMJeJ5LdS5amp8=
+X-Google-Smtp-Source: ABdhPJynHiusihyK/x2cYRfD3Qc6KyMIcpBUhTWUSKqKGSV5IUy21FYmh6OBCc+FPihODrmESwIwn7GbZ8k=
+X-Received: by 2002:a25:ac02:: with SMTP id w2mr1734259ybi.57.1594849408882;
+ Wed, 15 Jul 2020 14:43:28 -0700 (PDT)
+Date:   Wed, 15 Jul 2020 14:43:12 -0700
+In-Reply-To: <20200715214312.2266839-1-haoluo@google.com>
+Message-Id: <20200715214312.2266839-3-haoluo@google.com>
 Mime-Version: 1.0
+References: <20200715214312.2266839-1-haoluo@google.com>
 X-Mailer: git-send-email 2.27.0.389.gc38d7665816-goog
-Subject: [RFC PATCH bpf-next 0/2] BTF support for ksyms
+Subject: [RFC PATCH bpf-next 2/2] selftests/bpf: Test __ksym externs with BTF
 From:   Hao Luo <haoluo@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
@@ -75,45 +80,71 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch series extends the previously add __ksym externs with btf
-info.
+Extend ksyms.c selftest to make sure BTF enables direct loads of ksyms.
 
-Right now the __ksym externs are treated as pure 64-bit scalar value.
-Libbpf replaces ld_imm64 insn of __ksym by its kernel address at load
-time. This patch series extend those extern with their btf info. Note
-that btf support for __ksym must come with the btf that has VARs encoded
-to work properly. Therefore, these patches are tested against a btf
-generated by a patched pahole, whose change will available in released
-pahole soon.
+Note that test is done against the kernel btf extended with kernel VARs.
 
-There are a couple of design choices that I would like feedbacks from
-bpf/btf experts.
+Signed-off-by: Hao Luo <haoluo@google.com>
+---
+ tools/testing/selftests/bpf/prog_tests/ksyms.c |  2 ++
+ tools/testing/selftests/bpf/progs/test_ksyms.c | 14 ++++++++++++++
+ 2 files changed, 16 insertions(+)
 
- 1. Because the newly added pseudo_btf_id needs to carry both a kernel
-    address (64 bits) and a btf id (32 bits), I used the 'off' fields
-    of ld_imm insn to carry btf id. I wonder if this breaks anything or
-    if there is a better idea.
- 2. Since only a subset of vars are going to be encoded into the new
-    btf, if a ksym that doesn't find its btf id, it doesn't get
-    converted into pseudo_btf_id. It is still treated as pure scalar
-    value. But we require kernel btf to be loaded in libbpf if there is
-    any ksym in the bpf prog.
-
-This is RFC as it requires pahole changes that encode kernel vars into
-btf.
-
-Hao Luo (2):
-  bpf: BTF support for __ksym externs
-  selftests/bpf: Test __ksym externs with BTF
-
- include/uapi/linux/bpf.h                      | 37 ++++++++++----
- kernel/bpf/verifier.c                         | 26 ++++++++--
- tools/include/uapi/linux/bpf.h                | 37 ++++++++++----
- tools/lib/bpf/libbpf.c                        | 50 ++++++++++++++++++-
- .../testing/selftests/bpf/prog_tests/ksyms.c  |  2 +
- .../testing/selftests/bpf/progs/test_ksyms.c  | 14 ++++++
- 6 files changed, 143 insertions(+), 23 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/testing/selftests/bpf/prog_tests/ksyms.c
+index e3d6777226a8..0e7f3bc3b0ae 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ksyms.c
++++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
+@@ -65,6 +65,8 @@ void test_ksyms(void)
+ 	      "got %llu, exp %llu\n", data->out__btf_size, btf_size);
+ 	CHECK(data->out__per_cpu_start != 0, "__per_cpu_start",
+ 	      "got %llu, exp %llu\n", data->out__per_cpu_start, (__u64)0);
++	CHECK(data->out__rq_cpu != 0, "rq_cpu",
++	      "got %llu, exp %llu\n", data->out__rq_cpu, (__u64)0);
+ 
+ cleanup:
+ 	test_ksyms__destroy(skel);
+diff --git a/tools/testing/selftests/bpf/progs/test_ksyms.c b/tools/testing/selftests/bpf/progs/test_ksyms.c
+index 6c9cbb5a3bdf..e777603757e5 100644
+--- a/tools/testing/selftests/bpf/progs/test_ksyms.c
++++ b/tools/testing/selftests/bpf/progs/test_ksyms.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2019 Facebook */
+ 
++#include "vmlinux.h"
+ #include <stdbool.h>
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+@@ -9,11 +10,13 @@ __u64 out__bpf_link_fops = -1;
+ __u64 out__bpf_link_fops1 = -1;
+ __u64 out__btf_size = -1;
+ __u64 out__per_cpu_start = -1;
++__u64 out__rq_cpu = -1;
+ 
+ extern const void bpf_link_fops __ksym;
+ extern const void __start_BTF __ksym;
+ extern const void __stop_BTF __ksym;
+ extern const void __per_cpu_start __ksym;
++extern const void runqueues __ksym;
+ /* non-existing symbol, weak, default to zero */
+ extern const void bpf_link_fops1 __ksym __weak;
+ 
+@@ -29,4 +32,15 @@ int handler(const void *ctx)
+ 	return 0;
+ }
+ 
++SEC("tp_btf/sys_enter")
++int handler_tp_btf(const void *ctx)
++{
++	const struct rq *rq = &runqueues;
++
++	/* rq now points to the runqueue of cpu 0. */
++	out__rq_cpu = rq->cpu;
++
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.27.0.389.gc38d7665816-goog
 
