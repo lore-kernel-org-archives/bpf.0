@@ -7,157 +7,110 @@ X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF146C433E0
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 20:09:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3B59C433E0
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 20:19:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9AB58206F4
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 20:09:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B69C2076A
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 20:19:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WJhSRDMr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fzA2N4E1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729048AbgGPUJW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jul 2020 16:09:22 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:56531 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729650AbgGPUJV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 16 Jul 2020 16:09:21 -0400
+        id S1729623AbgGPUTO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jul 2020 16:19:14 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:38168 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729344AbgGPUTN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jul 2020 16:19:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594930159;
+        s=mimecast20190719; t=1594930752;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ez9kSf3C99h3MbxOXeTKF0m1HHkl4jQ86xmI9lFRRtU=;
-        b=WJhSRDMrtZAaizJWYYuoThoT7FkYvqoHq9qQuwQP8HTO98kagZCUVPCofefdRq/GX+qusJ
-        6uzHCoaJn+ob0DOp6PgV1J/8DKKiRWqcTjLLAfxwQg3zqfsKkblCoAsmSOEIL50R2J7gdd
-        GBX5tB340CMDX7hpZoWzx35eqSvDZHU=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-463-KhlK7-WJNguz6UKh-9QBfQ-1; Thu, 16 Jul 2020 16:09:15 -0400
-X-MC-Unique: KhlK7-WJNguz6UKh-9QBfQ-1
-Received: by mail-wm1-f72.google.com with SMTP id g187so5757292wme.0
-        for <bpf@vger.kernel.org>; Thu, 16 Jul 2020 13:09:15 -0700 (PDT)
+        bh=oAKhQEv8kqbTsiiO7GkkYrOtrj4zaX5iatFNWMQEm90=;
+        b=fzA2N4E1LSH1A0VivB1168wBgP/m1Hl++TnIZjvkUHxSzijHOxPAEH2d+UXqWPYu1gF9ob
+        y3Sa2DK8/nbrWyeyJYpFfpTM3VC3SQXkCxc0WJ6oULgceI+oI16PBMRbpZCy1Shmlm+eWg
+        2bLg9YKfhYT4F3XG133/fU9QJKFht+Q=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-429-bgRVuWFUMoSM5U0Q2w_0HQ-1; Thu, 16 Jul 2020 16:19:11 -0400
+X-MC-Unique: bgRVuWFUMoSM5U0Q2w_0HQ-1
+Received: by mail-pl1-f200.google.com with SMTP id 65so5166684plf.1
+        for <bpf@vger.kernel.org>; Thu, 16 Jul 2020 13:19:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ez9kSf3C99h3MbxOXeTKF0m1HHkl4jQ86xmI9lFRRtU=;
-        b=U3yuXcGLGx5InH5ZogUXdfqU9sWq00k+sCqEWddqmxeRnNvB0zaHnOM5aMGML1Wlu2
-         Sdv9C6Z+o9YL4hMqPEVMh6f/sUd+l5Zx8n6jrret6zTnjfrVYKcs+Vh0pR2NB7HNbYkK
-         cmCMb8z1sqL/KfW9SurNpSU7c+a40m0C3nOHVNTqa2tmOTIBiOlpOP61/IcQa3pnt9Ng
-         7MmN1QSEdd6th+LQBUDqqEugExoBZtYPmwSBcKoinkrfk3vgM7yzVHjnIWQOV9WVptCf
-         gc5vm/4L188eVktLuJTEMbzWrmjuxejQ3c3py80Tyrmfm+Uhq6jDFMhmgDB8p1ifzUxA
-         +6LQ==
-X-Gm-Message-State: AOAM533LR3D4dLHnsyJtf4oxsJnvkM9tQsQ5QteZoPa38DRPur/N1bs0
-        T9J3bsErrVnH2rnVzhPjn6Y8/ZesqPckvDc1EoD7j9HMwj06FVlYfhG2cv3LRP4cBOpkehPT75u
-        51uemu4XalHOx
-X-Received: by 2002:a1c:1bc4:: with SMTP id b187mr6118064wmb.105.1594930153991;
-        Thu, 16 Jul 2020 13:09:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy0BayKJJx8tyF9sFuhtaRO6aybkj1qTN7Tatdq/i+X2iJesqBOHYObM2Z30+oiaJV+rkArbw==
-X-Received: by 2002:a1c:1bc4:: with SMTP id b187mr6118044wmb.105.1594930153725;
-        Thu, 16 Jul 2020 13:09:13 -0700 (PDT)
-Received: from localhost ([151.48.133.17])
-        by smtp.gmail.com with ESMTPSA id x18sm10820513wrq.13.2020.07.16.13.09.12
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=oAKhQEv8kqbTsiiO7GkkYrOtrj4zaX5iatFNWMQEm90=;
+        b=DkExPIopuXx5mnmtNkrqdq36j+N7Ou5GuTe6geMUjIX6bCSHDUNbjuXvu3PLYxnEvy
+         m/pS8h8MpLzS8M3z7helznJmZyCHJ9y7fHihXHQgmrjPW6+izTVw2FQa73+SWypxV2Y1
+         Z09vtVmlcvnGc/HJ/I9axmwAwl9UTdVoM79M+dxqArfDwslMy4aiNGFcmSnAHfL6bECn
+         +4+h3HyAMhcHl0fkFNP5QiGC2UYyXhv70lDQvlh/1Uf9fPWSo0NbmQOLl97MsN4AdHp+
+         4pXw5igydfd/G1iLf4SC9yEdDkTvrrhT2FXSvx2kt8hEODoR+WwMZ3T4W7eyIVFUojf/
+         v+eg==
+X-Gm-Message-State: AOAM532i7cOdTAbGJkQUNvzIr5mok07RMc8LPxmVNNGYcxg21OMD8Vn5
+        /mudP9CJxc2l/r0jR1S5DDkzJwTrNW+vRvp/7T/scLBWShWTJ4vrOnibODmKwaSKhWfz55yWPg+
+        rytYpNE4Sykeh
+X-Received: by 2002:a62:7505:: with SMTP id q5mr4749113pfc.262.1594930749910;
+        Thu, 16 Jul 2020 13:19:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzQJAqwU80lmN2Fr6gcy27CcYUXMipS5Iggux57Bh9ZVxocDdGvGYaJ0/SXRyKkI5o9gsIdhw==
+X-Received: by 2002:a62:7505:: with SMTP id q5mr4749096pfc.262.1594930749659;
+        Thu, 16 Jul 2020 13:19:09 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id gn5sm787181pjb.23.2020.07.16.13.19.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2020 13:09:12 -0700 (PDT)
-Date:   Thu, 16 Jul 2020 22:09:09 +0200
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, netdev@vger.kernel.org,
-        davem@davemloft.net, bpf@vger.kernel.org,
-        ilias.apalodimas@linaro.org, brouer@redhat.com,
-        echaudro@redhat.com, sameehj@amazon.com
-Subject: Re: [PATCH 2/6] net: mvneta: move skb build after descriptors
- processing
-Message-ID: <20200716200909.GJ2174@localhost.localdomain>
-References: <cover.1594309075.git.lorenzo@kernel.org>
- <f5e95c08e22113d21e86662f1cf5ccce16ccbfca.1594309075.git.lorenzo@kernel.org>
- <20200715125844.567e5795@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20200716191251.GH2174@localhost.localdomain>
- <20200716124426.4f7c3a67@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Thu, 16 Jul 2020 13:19:08 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 8F77E181719; Thu, 16 Jul 2020 22:19:03 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Networking <netdev@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Blake Matheny <bmatheny@fb.com>
+Subject: Re: BPF logging infrastructure. Was: [PATCH bpf-next 4/6] tools: add new members to bpf_attr.raw_tracepoint in bpf.h
+In-Reply-To: <CAEf4BzbiD9Cuqip2=FGHGHLZs-7b8AziS-hJOpX1HuONTM4udQ@mail.gmail.com>
+References: <CAEf4BzZ_-vXP_3hSEjuceW10VX_H+EeuXMiV=_meBPZn7izK8A@mail.gmail.com> <87r1tegusj.fsf@toke.dk> <CAEf4Bzbu1wnwWFOWYA3e6KFeSmfg8oANPWD9LsUMRy2E_zrQ0w@mail.gmail.com> <87pn8xg6x7.fsf@toke.dk> <CAEf4BzYAoetyfyofTX45RQjtz3M-c9=YNeH1uRDbYgK4Ae0TwA@mail.gmail.com> <87d04xg2p4.fsf@toke.dk> <20200714231133.ap5qnalf6moptvfk@ast-mbp.dhcp.thefacebook.com> <874kq9ey2j.fsf@toke.dk> <20200715234123.rr7oj74t5hflzmsn@ast-mbp.dhcp.thefacebook.com> <CAEf4BzbodR-+=Q3wRE2UaiouBexvqfwpE-zJGm4Rr1cV2dgZHQ@mail.gmail.com> <20200716054408.so34cuc2g2iqcppr@ast-mbp.dhcp.thefacebook.com> <CAEf4BzbiD9Cuqip2=FGHGHLZs-7b8AziS-hJOpX1HuONTM4udQ@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 16 Jul 2020 22:19:03 +0200
+Message-ID: <87wo33cix4.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SLfjTIIQuAzj8yil"
-Content-Disposition: inline
-In-Reply-To: <20200716124426.4f7c3a67@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
---SLfjTIIQuAzj8yil
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>> So myself and Toke are wearing 'bpf user' hat in that context.
+>> Both of us indicated that libbpf output is too verbose.
+>> Your response "just send a patch" is a sure way to turn away more users.
+>>
+>
+> I can't find any such complaint from Toke in this thread, and can't
+> really recall something like that from recent discussions. I'd rather
+> have him speak for himself.
 
-> On Thu, 16 Jul 2020 21:12:51 +0200 Lorenzo Bianconi wrote:
-> > > > +static struct sk_buff *
-> > > > +mvneta_swbm_build_skb(struct mvneta_port *pp, struct mvneta_rx_que=
-ue *rxq,
-> > > > +		      struct xdp_buff *xdp, u32 desc_status)
-> > > > +{
-> > > > +	struct skb_shared_info *sinfo =3D xdp_get_shared_info_from_buff(x=
-dp);
-> > > > +	int i, num_frags =3D sinfo->nr_frags;
-> > > > +	skb_frag_t frags[MAX_SKB_FRAGS];
-> > > > +	struct sk_buff *skb;
-> > > > +
-> > > > +	memcpy(frags, sinfo->frags, sizeof(skb_frag_t) * num_frags);
-> > > > +
-> > > > +	skb =3D build_skb(xdp->data_hard_start, PAGE_SIZE);
-> > > > +	if (!skb)
-> > > > +		return ERR_PTR(-ENOMEM);
-> > > > +
-> > > > +	page_pool_release_page(rxq->page_pool, virt_to_page(xdp->data));
-> > > > +
-> > > > +	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-> > > > +	skb_put(skb, xdp->data_end - xdp->data);
-> > > > +	mvneta_rx_csum(pp, desc_status, skb);
-> > > > +
-> > > > +	for (i =3D 0; i < num_frags; i++) {
-> > > > +		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags,
-> > > > +				frags[i].bv_page, frags[i].bv_offset,
-> > > > +				skb_frag_size(&frags[i]), PAGE_SIZE);
-> > > > +		page_pool_release_page(rxq->page_pool, frags[i].bv_page);
-> > > > +	}
-> > > > +
-> > > > +	return skb;
-> > > > +} =20
-> > >=20
-> > > Here as well - is the plan to turn more of this function into common
-> > > code later on? Looks like most of this is not really driver specific.=
- =20
-> >=20
-> > I agree. What about adding it when other drivers will add multi-buff su=
-pport?
-> > (here we have even page_pool dependency)
->=20
-> I guess that's okay on the condition that you're going to be the one
-> adding the support to the next driver, or at least review it very
-> closely to make sure it's done.
+I think what I said (not in this thread, way back during some other
+discussion) was that I agreed that libbpf was being too verbose by
+dumping all the sections and relocations it finds when reading an ELF
+file, which causes the useful error messages to get lost. I would like
+to see those messages demoted to another log level, or removed
+altogether.
 
-I am completely fine to work on it if I have the hw handy (or if someone el=
-se
-can test it) otherwise I will review the code :)
+I won't have time to look more at this right now, but I do plan to
+circle back to it: I agree with you that we need to make this more
+friendly. And yes, I also think this should include finding a way to
+disambiguate between different conditions leading to the same error from
+the kernel. I've run into a lot of the same issues as you when
+supporting people who are new to BPF - thank you for the extensive list!
 
-Regards,
-Lorenzo
-
->=20
-> In general vendors prove rather resistant to factoring code out,=20
-> the snowflakes they feel they are.
->=20
-
---SLfjTIIQuAzj8yil
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCXxCz4gAKCRA6cBh0uS2t
-rKYeAP9T+DbMpV8y5blKeFxebc+VsOhV9BX7DTvhxv2dTaQcPQEAz1I7ZrI8O+Ix
-y1BTBeec7AxBIFs4X0hPIRHFwMYVAAs=
-=xYTl
------END PGP SIGNATURE-----
-
---SLfjTIIQuAzj8yil--
+-Toke
 
