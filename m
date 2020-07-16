@@ -2,50 +2,50 @@ Return-Path: <SRS0=dSfD=A3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C429EC433E6
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 23:35:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6E34C433EB
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 23:35:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D4802063A
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 23:35:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82B862063A
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 23:35:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594942525;
-	bh=d9cF/ZBuzR9s0OP0dNQBKo0Eay6UEDLJVp7pqfYSc0Q=;
+	s=default; t=1594942528;
+	bh=glVmAVBjlEt2NPzW7GvqW8dqC/B/Xub2wycXL0vZ0pw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=KM0lR0J2wFfrRwk7fNlJHui4lGmUPre6vxF6TiafDpi9Pn2s44djzcU5kKVoEZ7vl
-	 kuBfNsaYWSQ76qxkzIcHv0+UuG90kEIK2HOg/l0NUOiVUrMBHiweg6t5MOLa6utQWr
-	 Tb4SsIBGggU82NP7rfNJ2JxOzjs70ku/UBEavXEI=
+	b=zkes07uzt+NyU91NMKCUUxQneNIrG+JsOFfZM9G+Y/FEmtrUjZ2Tyr6mLFeEMNNZN
+	 IFq3kncY1+ZMFs7nLjgG6YivIXhikyKsouUJwb6T+qxyOTW97WewS5mLpMfBsWUI3r
+	 f7i4o/uZWXlIyZgZhTa9s2JbGuZH4AapwrjluVRI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727060AbgGPXfS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726984AbgGPXfS (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 16 Jul 2020 19:35:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42512 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:42508 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726333AbgGPXfS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jul 2020 19:35:18 -0400
+        id S1726189AbgGPXfR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jul 2020 19:35:17 -0400
 Received: from localhost.localdomain.com (unknown [151.48.133.17])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D8E232084C;
-        Thu, 16 Jul 2020 22:17:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CB03E20899;
+        Thu, 16 Jul 2020 22:17:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594937826;
-        bh=d9cF/ZBuzR9s0OP0dNQBKo0Eay6UEDLJVp7pqfYSc0Q=;
+        s=default; t=1594937838;
+        bh=glVmAVBjlEt2NPzW7GvqW8dqC/B/Xub2wycXL0vZ0pw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YtbsuzPi4dGGjbFMgKa3J06x3k/N6QsqulRNs32xoFSrYcyDIsKK6K0olMBz0U1tG
-         L4fuFbAFKbm1CjCfi3u5vHJ+p+G6lz1SrDMAMN+iSv0TNVNtu4ZeWJX8Qe+mDxaYBQ
-         UmWjT0eWmTQNxnoxrT77wYMfXFlUm5DgKU6sUpJI=
+        b=X19CjIw5gA732WG19nKUu7qoxJgturik8DUp7lCn06hejTCBA+JpdV5nRvQ2lx01W
+         QZIe+XTFG50pR7KTEJIv06/d+9Wb5LRITUfxDlYLP6pgqWSbCV5pSf2miXpL3D5Oe+
+         3AdPovIxSZAhaFFPCzn2MjLVRwpf9DhpyIVbt4WQ=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, bpf@vger.kernel.org, kuba@kernel.org,
         ilias.apalodimas@linaro.org, lorenzo.bianconi@redhat.com,
         brouer@redhat.com, echaudro@redhat.com, sameehj@amazon.com
-Subject: [PATCH v2 net-next 2/6] net: mvneta: move skb build after descriptors processing
-Date:   Fri, 17 Jul 2020 00:16:30 +0200
-Message-Id: <ab161e0fa13ab2f77b32e0138b965b490cbd7049.1594936660.git.lorenzo@kernel.org>
+Subject: [PATCH v2 net-next 6/6] net: mvneta: move rxq->left_size on the stack
+Date:   Fri, 17 Jul 2020 00:16:34 +0200
+Message-Id: <571d5b29a22c38f263743d45f22fbbd2f695473b.1594936660.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1594936660.git.lorenzo@kernel.org>
 References: <cover.1594936660.git.lorenzo@kernel.org>
@@ -56,272 +56,126 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move skb build after all descriptors processing. This is a preliminary
-patch to enable multi-buffers and JUMBO frames support for XDP.
-Introduce mvneta_xdp_put_buff routine to release all pages used by a
-XDP multi-buffer
+Allocate rxq->left_size on mvneta_rx_swbm stack since it is used just
+in sw bm napi_poll
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- drivers/net/ethernet/marvell/mvneta.c | 158 ++++++++++++++++----------
- 1 file changed, 101 insertions(+), 57 deletions(-)
+ drivers/net/ethernet/marvell/mvneta.c | 29 ++++++++++++---------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index 7191902f6cfe..e9b3fb778d76 100644
+index 8b7f6fcd4cca..2c9277e73cef 100644
 --- a/drivers/net/ethernet/marvell/mvneta.c
 +++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -2026,6 +2026,20 @@ int mvneta_rx_refill_queue(struct mvneta_port *pp, struct mvneta_rx_queue *rxq)
- 	return i;
+@@ -698,8 +698,6 @@ struct mvneta_rx_queue {
+ 	/* Index of first RX DMA descriptor to refill */
+ 	int first_to_refill;
+ 	u32 refill_num;
+-
+-	int left_size;
+ };
+ 
+ static enum cpuhp_state online_hpstate;
+@@ -2228,7 +2226,7 @@ static void
+ mvneta_swbm_rx_frame(struct mvneta_port *pp,
+ 		     struct mvneta_rx_desc *rx_desc,
+ 		     struct mvneta_rx_queue *rxq,
+-		     struct xdp_buff *xdp,
++		     struct xdp_buff *xdp, int *size,
+ 		     struct page *page,
+ 		     struct mvneta_stats *stats)
+ {
+@@ -2262,7 +2260,7 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
+ 	sinfo = xdp_get_shared_info_from_buff(xdp);
+ 	sinfo->nr_frags = 0;
+ 
+-	rxq->left_size = rx_desc->data_size - len;
++	*size = rx_desc->data_size - len;
+ 	rx_desc->buf_phys_addr = 0;
  }
  
-+static void
-+mvneta_xdp_put_buff(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
-+		    struct xdp_buff *xdp, int sync_len, bool napi)
-+{
-+	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
-+	int i;
-+
-+	page_pool_put_page(rxq->page_pool, virt_to_head_page(xdp->data),
-+			   sync_len, napi);
-+	for (i = 0; i < sinfo->nr_frags; i++)
-+		page_pool_put_full_page(rxq->page_pool,
-+					skb_frag_page(&sinfo->frags[i]), napi);
-+}
-+
- static int
- mvneta_xdp_submit_frame(struct mvneta_port *pp, struct mvneta_tx_queue *txq,
- 			struct xdp_frame *xdpf, bool dma_map)
-@@ -2229,6 +2243,7 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
- 	int data_len = -MVNETA_MH_SIZE, len;
- 	struct net_device *dev = pp->dev;
- 	enum dma_data_direction dma_dir;
-+	struct skb_shared_info *sinfo;
- 	int ret = 0;
- 
- 	if (MVNETA_SKB_SIZE(rx_desc->data_size) > PAGE_SIZE) {
-@@ -2252,35 +2267,13 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
- 	xdp->data_end = xdp->data + data_len;
- 	xdp_set_data_meta_invalid(xdp);
- 
--	if (xdp_prog) {
--		ret = mvneta_run_xdp(pp, rxq, xdp_prog, xdp, stats);
--		if (ret)
--			goto out;
--	}
--
--	rxq->skb = build_skb(xdp->data_hard_start, PAGE_SIZE);
--	if (unlikely(!rxq->skb)) {
--		struct mvneta_pcpu_stats *stats = this_cpu_ptr(pp->stats);
-+	sinfo = xdp_get_shared_info_from_buff(xdp);
-+	sinfo->nr_frags = 0;
- 
--		netdev_err(dev, "Can't allocate skb on queue %d\n", rxq->id);
--
--		u64_stats_update_begin(&stats->syncp);
--		stats->es.skb_alloc_error++;
--		stats->rx_dropped++;
--		u64_stats_update_end(&stats->syncp);
--
--		return -ENOMEM;
--	}
--	page_pool_release_page(rxq->page_pool, page);
--
--	skb_reserve(rxq->skb,
--		    xdp->data - xdp->data_hard_start);
--	skb_put(rxq->skb, xdp->data_end - xdp->data);
--	mvneta_rx_csum(pp, rx_desc->status, rxq->skb);
-+	if (xdp_prog)
-+		ret = mvneta_run_xdp(pp, rxq, xdp_prog, xdp, stats);
- 
- 	rxq->left_size = rx_desc->data_size - len;
--
--out:
- 	rx_desc->buf_phys_addr = 0;
- 
- 	return ret;
-@@ -2290,8 +2283,10 @@ static void
+@@ -2270,7 +2268,7 @@ static void
  mvneta_swbm_add_rx_fragment(struct mvneta_port *pp,
  			    struct mvneta_rx_desc *rx_desc,
  			    struct mvneta_rx_queue *rxq,
-+			    struct xdp_buff *xdp,
+-			    struct xdp_buff *xdp,
++			    struct xdp_buff *xdp, int *size,
  			    struct page *page)
  {
-+	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
- 	struct net_device *dev = pp->dev;
+ 	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
+@@ -2278,11 +2276,11 @@ mvneta_swbm_add_rx_fragment(struct mvneta_port *pp,
  	enum dma_data_direction dma_dir;
  	int data_len, len;
-@@ -2307,18 +2302,53 @@ mvneta_swbm_add_rx_fragment(struct mvneta_port *pp,
- 	dma_sync_single_for_cpu(dev->dev.parent,
- 				rx_desc->buf_phys_addr,
- 				len, dma_dir);
--	if (data_len > 0) {
--		/* refill descriptor with new buffer later */
--		skb_add_rx_frag(rxq->skb,
--				skb_shinfo(rxq->skb)->nr_frags,
--				page, pp->rx_offset_correction, data_len,
--				PAGE_SIZE);
--	}
--	page_pool_release_page(rxq->page_pool, page);
--	rx_desc->buf_phys_addr = 0;
-+
-+	if (data_len > 0 && sinfo->nr_frags < MAX_SKB_FRAGS) {
-+		skb_frag_t *frag = &sinfo->frags[sinfo->nr_frags];
-+
-+		skb_frag_off_set(frag, pp->rx_offset_correction);
-+		skb_frag_size_set(frag, data_len);
-+		__skb_frag_set_page(frag, page);
-+		sinfo->nr_frags++;
-+
-+		rx_desc->buf_phys_addr = 0;
-+	}
- 	rxq->left_size -= len;
+ 
+-	if (rxq->left_size > MVNETA_MAX_RX_BUF_SIZE) {
++	if (*size > MVNETA_MAX_RX_BUF_SIZE) {
+ 		len = MVNETA_MAX_RX_BUF_SIZE;
+ 		data_len = len;
+ 	} else {
+-		len = rxq->left_size;
++		len = *size;
+ 		data_len = len - ETH_FCS_LEN;
+ 	}
+ 	dma_dir = page_pool_get_dma_dir(rxq->page_pool);
+@@ -2300,7 +2298,7 @@ mvneta_swbm_add_rx_fragment(struct mvneta_port *pp,
+ 
+ 		rx_desc->buf_phys_addr = 0;
+ 	}
+-	rxq->left_size -= len;
++	*size -= len;
  }
  
-+static struct sk_buff *
-+mvneta_swbm_build_skb(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
-+		      struct xdp_buff *xdp, u32 desc_status)
-+{
-+	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
-+	int i, num_frags = sinfo->nr_frags;
-+	skb_frag_t frags[MAX_SKB_FRAGS];
-+	struct sk_buff *skb;
-+
-+	memcpy(frags, sinfo->frags, sizeof(skb_frag_t) * num_frags);
-+
-+	skb = build_skb(xdp->data_hard_start, PAGE_SIZE);
-+	if (!skb)
-+		return ERR_PTR(-ENOMEM);
-+
-+	page_pool_release_page(rxq->page_pool, virt_to_page(xdp->data));
-+
-+	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-+	skb_put(skb, xdp->data_end - xdp->data);
-+	mvneta_rx_csum(pp, desc_status, skb);
-+
-+	for (i = 0; i < num_frags; i++) {
-+		struct page *page = skb_frag_page(&frags[i]);
-+
-+		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags,
-+				page, skb_frag_off(&frags[i]),
-+				skb_frag_size(&frags[i]), PAGE_SIZE);
-+		page_pool_release_page(rxq->page_pool, page);
-+	}
-+
-+	return skb;
-+}
-+
- /* Main rx processing when using software buffer management */
- static int mvneta_rx_swbm(struct napi_struct *napi,
+ static struct sk_buff *
+@@ -2341,7 +2339,7 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
  			  struct mvneta_port *pp, int budget,
-@@ -2326,22 +2356,25 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
+ 			  struct mvneta_rx_queue *rxq)
  {
- 	int rx_proc = 0, rx_todo, refill;
+-	int rx_proc = 0, rx_todo, refill;
++	int rx_proc = 0, rx_todo, refill, size = 0;
  	struct net_device *dev = pp->dev;
-+	struct xdp_buff xdp_buf = {
-+		.frame_sz = PAGE_SIZE,
-+		.rxq = &rxq->xdp_rxq,
-+	};
- 	struct mvneta_stats ps = {};
- 	struct bpf_prog *xdp_prog;
--	struct xdp_buff xdp_buf;
-+	u32 desc_status;
- 
- 	/* Get number of received packets */
- 	rx_todo = mvneta_rxq_busy_desc_num_get(pp, rxq);
- 
- 	rcu_read_lock();
- 	xdp_prog = READ_ONCE(pp->xdp_prog);
--	xdp_buf.rxq = &rxq->xdp_rxq;
--	xdp_buf.frame_sz = PAGE_SIZE;
- 
- 	/* Fairness NAPI loop */
- 	while (rx_proc < budget && rx_proc < rx_todo) {
- 		struct mvneta_rx_desc *rx_desc = mvneta_rxq_next_desc_get(rxq);
- 		u32 rx_status, index;
-+		struct sk_buff *skb;
- 		struct page *page;
- 
- 		index = rx_desc - rxq->descs;
-@@ -2357,21 +2390,21 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
- 			/* Check errors only for FIRST descriptor */
- 			if (rx_status & MVNETA_RXD_ERR_SUMMARY) {
- 				mvneta_rx_error(pp, rx_desc);
--				/* leave the descriptor untouched */
--				continue;
-+				goto next;
+ 	struct xdp_buff xdp_buf = {
+ 		.frame_sz = PAGE_SIZE,
+@@ -2378,25 +2376,25 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
+ 				goto next;
  			}
  
- 			err = mvneta_swbm_rx_frame(pp, rx_desc, rxq, &xdp_buf,
- 						   xdp_prog, page, &ps);
- 			if (err)
- 				continue;
-+
-+			desc_status = rx_desc->status;
+-			frame_sz = rx_desc->data_size - ETH_FCS_LEN;
++			size = rx_desc->data_size;
++			frame_sz = size - ETH_FCS_LEN;
+ 			desc_status = rx_desc->status;
+ 
+-			mvneta_swbm_rx_frame(pp, rx_desc, rxq, &xdp_buf, page,
+-					     &ps);
++			mvneta_swbm_rx_frame(pp, rx_desc, rxq, &xdp_buf,
++					     &size, page, &ps);
  		} else {
--			if (unlikely(!rxq->skb)) {
--				pr_debug("no skb for rx_status 0x%x\n",
--					 rx_status);
-+			if (unlikely(!xdp_buf.data_hard_start))
+ 			if (unlikely(!xdp_buf.data_hard_start))
  				continue;
--			}
--			mvneta_swbm_add_rx_fragment(pp, rx_desc, rxq, page);
-+
-+			mvneta_swbm_add_rx_fragment(pp, rx_desc, rxq, &xdp_buf,
-+						    page);
+ 
+ 			mvneta_swbm_add_rx_fragment(pp, rx_desc, rxq, &xdp_buf,
+-						    page);
++						    &size, page);
  		} /* Middle or Last descriptor */
  
  		if (!(rx_status & MVNETA_RXD_LAST_DESC))
-@@ -2379,27 +2412,38 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
+ 			/* no last descriptor this time */
  			continue;
  
- 		if (rxq->left_size) {
--			pr_err("get last desc, but left_size (%d) != 0\n",
--			       rxq->left_size);
--			dev_kfree_skb_any(rxq->skb);
- 			rxq->left_size = 0;
--			rxq->skb = NULL;
--			continue;
-+			mvneta_xdp_put_buff(pp, rxq, &xdp_buf, -1, true);
-+			goto next;
+-		if (rxq->left_size) {
+-			rxq->left_size = 0;
++		if (size) {
+ 			mvneta_xdp_put_buff(pp, rxq, &xdp_buf, -1, true);
+ 			goto next;
  		}
+@@ -3372,7 +3370,6 @@ static void mvneta_rxq_deinit(struct mvneta_port *pp,
+ 	rxq->descs_phys        = 0;
+ 	rxq->first_to_refill   = 0;
+ 	rxq->refill_num        = 0;
+-	rxq->left_size         = 0;
+ }
  
--		ps.rx_bytes += rxq->skb->len;
--		ps.rx_packets++;
-+		skb = mvneta_swbm_build_skb(pp, rxq, &xdp_buf, desc_status);
-+		if (IS_ERR(skb)) {
-+			struct mvneta_pcpu_stats *stats = this_cpu_ptr(pp->stats);
- 
--		/* Linux processing */
--		rxq->skb->protocol = eth_type_trans(rxq->skb, dev);
-+			mvneta_xdp_put_buff(pp, rxq, &xdp_buf, -1, true);
-+
-+			u64_stats_update_begin(&stats->syncp);
-+			stats->es.skb_alloc_error++;
-+			stats->rx_dropped++;
-+			u64_stats_update_end(&stats->syncp);
-+
-+			goto next;
-+		}
- 
--		napi_gro_receive(napi, rxq->skb);
-+		ps.rx_bytes += skb->len;
-+		ps.rx_packets++;
- 
--		/* clean uncomplete skb pointer in queue */
--		rxq->skb = NULL;
-+		skb->protocol = eth_type_trans(skb, dev);
-+		napi_gro_receive(napi, skb);
-+next:
-+		xdp_buf.data_hard_start = NULL;
- 	}
- 	rcu_read_unlock();
- 
-+	if (xdp_buf.data_hard_start)
-+		mvneta_xdp_put_buff(pp, rxq, &xdp_buf, -1, true);
-+
- 	if (ps.xdp_redirect)
- 		xdp_do_flush_map();
- 
+ static int mvneta_txq_sw_init(struct mvneta_port *pp,
 -- 
 2.26.2
 
