@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5B83C433EC
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3F7CC433ED
 	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 23:35:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A4C42063A
+	by mail.kernel.org (Postfix) with ESMTP id AE1272063A
 	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 23:35:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1594942529;
-	bh=STQ6Do2lWIqjCP+0TDQ1QJOzFZ973F8f0Q30dhcTy2Q=;
+	bh=YxVF/rz7N6Vl7/RW2/fvVoSAIMf7NnV+qlVFE0IH2D0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=VeIDpZbeKL7lBAEuxmjn3oUevxIU1eu0pykWw0ya5sJpo3BhFoBKVlB/Rq6lIWog6
-	 jqYn1dx1NtTo6fLMbDtYZFf0cW3+NQafOhxfIlgBM/q46eAma11gbKcmv28mJv71iS
-	 xHnhzR5uuRpaxJZvzxa1pOBwpEmmPaBLSyq60ims=
+	b=jZzuOwCPrA5O3OX6U1q4T3mqMAOkA9L+ZIX3NpENeFGBxG48GFx4ShFOoiqjClntH
+	 kqiESkQTpX6HZRB7VnfW6L51D09OQcljtNYc+2upiy5nSZnu4QRZxST5AjbSuCk0pH
+	 ju01/OkHzN6RZVl0J9vrXkLx8ISai9JsAdjAO4vo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726870AbgGPXfR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jul 2020 19:35:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42516 "EHLO mail.kernel.org"
+        id S1726846AbgGPXf3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jul 2020 19:35:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42514 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726359AbgGPXfR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1726337AbgGPXfR (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 16 Jul 2020 19:35:17 -0400
 Received: from localhost.localdomain.com (unknown [151.48.133.17])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7CE8A2088E;
-        Thu, 16 Jul 2020 22:17:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D10322085B;
+        Thu, 16 Jul 2020 22:17:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594937835;
-        bh=STQ6Do2lWIqjCP+0TDQ1QJOzFZ973F8f0Q30dhcTy2Q=;
+        s=default; t=1594937829;
+        bh=YxVF/rz7N6Vl7/RW2/fvVoSAIMf7NnV+qlVFE0IH2D0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gob9AencWu8dvvXQOOF6V79EkekdURjRRua/hgr2IEoQhw9zYviCm1ptzMRMXM6fv
-         P6c+Ti5oAVva7uY8xckDYjQUFUAmhw09+A0PX/6onSfEZg1rlI8Nqn0vv6yoFgr2xr
-         REFYjLWfZ0MsXYPOku5gz3n4jd4XZNquQ+/sSrK0=
+        b=TppmXgjY/0jLyA6tKGNS0cZaL6rq33r2REfVqgTVgm/b7WWOsibZHqZh0PiqPZkWi
+         MqzYN/V1gXDlKKNpKYQs+xSuXhQXhDPVSDkR2SjHhivOdWY9U+mjjOQRLSIE6TKiTb
+         LyXMhRHnbn+999P5gxB9dQ5dAo/hsgoY4v1Nh+iE=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, bpf@vger.kernel.org, kuba@kernel.org,
         ilias.apalodimas@linaro.org, lorenzo.bianconi@redhat.com,
         brouer@redhat.com, echaudro@redhat.com, sameehj@amazon.com
-Subject: [PATCH v2 net-next 5/6] net: mvneta: get rid of skb in mvneta_rx_queue
-Date:   Fri, 17 Jul 2020 00:16:33 +0200
-Message-Id: <c747fec1d2445fa29ff61f3751b56a2cc2e5a2a0.1594936660.git.lorenzo@kernel.org>
+Subject: [PATCH v2 net-next 3/6] net: mvneta: move mvneta_run_xdp after descriptors processing
+Date:   Fri, 17 Jul 2020 00:16:31 +0200
+Message-Id: <3bb5b9970e31093c5975ffbe964e54b9b90ce64e.1594936660.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1594936660.git.lorenzo@kernel.org>
 References: <cover.1594936660.git.lorenzo@kernel.org>
@@ -56,45 +56,89 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Remove skb pointer in mvneta_rx_queue data structure since it is no
-longer used
+Move mvneta_run_xdp routine after all descriptor processing. This is a
+preliminary patch to enable multi-buffers and JUMBO frames support for
+XDP
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- drivers/net/ethernet/marvell/mvneta.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/net/ethernet/marvell/mvneta.c | 22 +++++++---------------
+ 1 file changed, 7 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index 7746693a3de1..8b7f6fcd4cca 100644
+index e9b3fb778d76..021419428ff8 100644
 --- a/drivers/net/ethernet/marvell/mvneta.c
 +++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -699,8 +699,6 @@ struct mvneta_rx_queue {
- 	int first_to_refill;
- 	u32 refill_num;
- 
--	/* pointer to uncomplete skb buffer */
--	struct sk_buff *skb;
- 	int left_size;
- };
- 
-@@ -3362,9 +3360,6 @@ static void mvneta_rxq_deinit(struct mvneta_port *pp,
- {
- 	mvneta_rxq_drop_pkts(pp, rxq);
- 
--	if (rxq->skb)
--		dev_kfree_skb_any(rxq->skb);
--
- 	if (rxq->descs)
- 		dma_free_coherent(pp->dev->dev.parent,
- 				  rxq->size * MVNETA_DESC_ALIGNED_SIZE,
-@@ -3377,7 +3372,6 @@ static void mvneta_rxq_deinit(struct mvneta_port *pp,
- 	rxq->descs_phys        = 0;
- 	rxq->first_to_refill   = 0;
- 	rxq->refill_num        = 0;
--	rxq->skb               = NULL;
- 	rxq->left_size         = 0;
+@@ -2230,12 +2230,11 @@ mvneta_run_xdp(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
+ 	return ret;
  }
  
+-static int
++static void
+ mvneta_swbm_rx_frame(struct mvneta_port *pp,
+ 		     struct mvneta_rx_desc *rx_desc,
+ 		     struct mvneta_rx_queue *rxq,
+ 		     struct xdp_buff *xdp,
+-		     struct bpf_prog *xdp_prog,
+ 		     struct page *page,
+ 		     struct mvneta_stats *stats)
+ {
+@@ -2244,7 +2243,6 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
+ 	struct net_device *dev = pp->dev;
+ 	enum dma_data_direction dma_dir;
+ 	struct skb_shared_info *sinfo;
+-	int ret = 0;
+ 
+ 	if (MVNETA_SKB_SIZE(rx_desc->data_size) > PAGE_SIZE) {
+ 		len = MVNETA_MAX_RX_BUF_SIZE;
+@@ -2270,13 +2268,8 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
+ 	sinfo = xdp_get_shared_info_from_buff(xdp);
+ 	sinfo->nr_frags = 0;
+ 
+-	if (xdp_prog)
+-		ret = mvneta_run_xdp(pp, rxq, xdp_prog, xdp, stats);
+-
+ 	rxq->left_size = rx_desc->data_size - len;
+ 	rx_desc->buf_phys_addr = 0;
+-
+-	return ret;
+ }
+ 
+ static void
+@@ -2385,20 +2378,15 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
+ 		rxq->refill_num++;
+ 
+ 		if (rx_status & MVNETA_RXD_FIRST_DESC) {
+-			int err;
+-
+ 			/* Check errors only for FIRST descriptor */
+ 			if (rx_status & MVNETA_RXD_ERR_SUMMARY) {
+ 				mvneta_rx_error(pp, rx_desc);
+ 				goto next;
+ 			}
+ 
+-			err = mvneta_swbm_rx_frame(pp, rx_desc, rxq, &xdp_buf,
+-						   xdp_prog, page, &ps);
+-			if (err)
+-				continue;
+-
+ 			desc_status = rx_desc->status;
++			mvneta_swbm_rx_frame(pp, rx_desc, rxq, &xdp_buf, page,
++					     &ps);
+ 		} else {
+ 			if (unlikely(!xdp_buf.data_hard_start))
+ 				continue;
+@@ -2417,6 +2405,10 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
+ 			goto next;
+ 		}
+ 
++		if (xdp_prog &&
++		    mvneta_run_xdp(pp, rxq, xdp_prog, &xdp_buf, &ps))
++			goto next;
++
+ 		skb = mvneta_swbm_build_skb(pp, rxq, &xdp_buf, desc_status);
+ 		if (IS_ERR(skb)) {
+ 			struct mvneta_pcpu_stats *stats = this_cpu_ptr(pp->stats);
 -- 
 2.26.2
 
