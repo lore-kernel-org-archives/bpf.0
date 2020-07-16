@@ -4,43 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23E78C433E6
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 19:03:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B06CC433DF
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 19:02:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B050207CB
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 19:03:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 691D8207CB
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 19:02:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729574AbgGPTDm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jul 2020 15:03:42 -0400
-Received: from www62.your-server.de ([213.133.104.62]:36736 "EHLO
+        id S1728163AbgGPTCa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jul 2020 15:02:30 -0400
+Received: from www62.your-server.de ([213.133.104.62]:36450 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728163AbgGPTDm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jul 2020 15:03:42 -0400
+        with ESMTP id S1726986AbgGPTC3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jul 2020 15:02:29 -0400
 Received: from sslproxy02.your-server.de ([78.47.166.47])
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1jw9AR-0007wI-3g; Thu, 16 Jul 2020 21:03:39 +0200
+        id 1jw99D-0007pK-MD; Thu, 16 Jul 2020 21:02:23 +0200
 Received: from [178.196.57.75] (helo=pc-9.home)
         by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <daniel@iogearbox.net>)
-        id 1jw9AQ-000RfX-Ul; Thu, 16 Jul 2020 21:03:38 +0200
-Subject: Re: [PATCH] bpf: bpf.h: drop duplicated words in comments
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>
-References: <6b9f71ae-4f8e-0259-2c5d-187ddaefe6eb@infradead.org>
+        id 1jw99D-000NPL-Dl; Thu, 16 Jul 2020 21:02:23 +0200
+Subject: Re: [PATCH] Revert "test_bpf: flag tests that cannot be jited on
+ s390"
+To:     Seth Forshee <seth.forshee@canonical.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200716143931.330122-1-seth.forshee@canonical.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <bcee7775-fafd-624c-b55f-73a691bdec9f@iogearbox.net>
-Date:   Thu, 16 Jul 2020 21:03:38 +0200
+Message-ID: <daba54b3-e2c8-645c-76a6-cc6524ec0c96@iogearbox.net>
+Date:   Thu, 16 Jul 2020 21:02:22 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <6b9f71ae-4f8e-0259-2c5d-187ddaefe6eb@infradead.org>
+In-Reply-To: <20200716143931.330122-1-seth.forshee@canonical.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -51,15 +59,15 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 7/16/20 3:29 AM, Randy Dunlap wrote:
-> From: Randy Dunlap <rdunlap@infradead.org>
+On 7/16/20 4:39 PM, Seth Forshee wrote:
+> This reverts commit 3203c9010060806ff88c9989aeab4dc8d9a474dc.
 > 
-> Drop doubled words "will" and "attach".
+> The s390 bpf JIT previously had a restriction on the maximum
+> program size, which required some tests in test_bpf to be flagged
+> as expected failures. The program size limitation has been removed,
+> and the tests now pass, so these tests should no longer be flagged.
 > 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: netdev@vger.kernel.org
-> Cc: bpf@vger.kernel.org
+> Fixes: d1242b10ff03 ("s390/bpf: Remove JITed image size limitations")
+> Signed-off-by: Seth Forshee <seth.forshee@canonical.com>
 
-Applied & fixed up also tooling infra header, thanks!
+Applied, thanks!
