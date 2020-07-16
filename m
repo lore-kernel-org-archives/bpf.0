@@ -4,45 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BBDCC433E2
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 19:42:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ECAFC433EA
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 19:46:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A7F62074B
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 19:42:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 63A6E20657
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 19:46:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729048AbgGPTmk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jul 2020 15:42:40 -0400
-Received: from www62.your-server.de ([213.133.104.62]:44586 "EHLO
+        id S1729344AbgGPTqG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jul 2020 15:46:06 -0400
+Received: from www62.your-server.de ([213.133.104.62]:45016 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728788AbgGPTmk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jul 2020 15:42:40 -0400
+        with ESMTP id S1728788AbgGPTqD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jul 2020 15:46:03 -0400
 Received: from sslproxy02.your-server.de ([78.47.166.47])
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1jw9m9-0004Nc-Hi; Thu, 16 Jul 2020 21:42:37 +0200
+        id 1jw9pR-0004ec-AK; Thu, 16 Jul 2020 21:46:01 +0200
 Received: from [178.196.57.75] (helo=pc-9.home)
         by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <daniel@iogearbox.net>)
-        id 1jw9m9-000G61-BX; Thu, 16 Jul 2020 21:42:37 +0200
-Subject: Re: [PATCH bpf-next v3 2/4] bpf: allow to specify ifindex for skb in
- bpf_prog_test_run_skb
+        id 1jw9pR-000Q9W-4z; Thu, 16 Jul 2020 21:46:01 +0200
+Subject: Re: [PATCH bpf-next v3 3/4] bpf: export some cgroup storages
+ allocation helpers for reusing
 To:     Dmitry Yakunin <zeil@yandex-team.ru>, alexei.starovoitov@gmail.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     sdf@google.com
 References: <20200715195132.4286-1-zeil@yandex-team.ru>
- <20200715195132.4286-3-zeil@yandex-team.ru>
+ <20200715195132.4286-4-zeil@yandex-team.ru>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <08c685b1-da91-9815-29fe-c7b8f3edc3c1@iogearbox.net>
-Date:   Thu, 16 Jul 2020 21:42:36 +0200
+Message-ID: <ab6460c2-1c01-3471-4368-1ddb19fa3695@iogearbox.net>
+Date:   Thu, 16 Jul 2020 21:46:00 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20200715195132.4286-3-zeil@yandex-team.ru>
+In-Reply-To: <20200715195132.4286-4-zeil@yandex-team.ru>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -54,88 +54,150 @@ List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 On 7/15/20 9:51 PM, Dmitry Yakunin wrote:
-> Now skb->dev is unconditionally set to the loopback device in current net
-> namespace. But if we want to test bpf program which contains code branch
-> based on ifindex condition (eg filters out localhost packets) it is useful
-> to allow specifying of ifindex from userspace. This patch adds such option
-> through ctx_in (__sk_buff) parameter.
+> This patch exports bpf_cgroup_storages_alloc and bpf_cgroup_storages_free
+> helpers to the header file and reuses them in bpf_test_run.
+> 
+> v2:
+>    - fix build without CONFIG_CGROUP_BPF (kernel test robot <lkp@intel.com>)
 > 
 > Signed-off-by: Dmitry Yakunin <zeil@yandex-team.ru>
 > ---
->   net/bpf/test_run.c                               | 22 ++++++++++++++++++++--
->   tools/testing/selftests/bpf/prog_tests/skb_ctx.c |  5 +++++
->   2 files changed, 25 insertions(+), 2 deletions(-)
+>   include/linux/bpf-cgroup.h | 36 ++++++++++++++++++++++++++++++++++++
+>   kernel/bpf/cgroup.c        | 25 -------------------------
+>   net/bpf/test_run.c         | 16 ++++------------
+>   3 files changed, 40 insertions(+), 37 deletions(-)
 > 
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 0c3283d..0e92973 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -310,6 +310,12 @@ static int convert___skb_to_skb(struct sk_buff *skb, struct __sk_buff *__skb)
->   	/* priority is allowed */
+> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+> index 2c6f266..5c10fe6 100644
+> --- a/include/linux/bpf-cgroup.h
+> +++ b/include/linux/bpf-cgroup.h
+> @@ -175,6 +175,33 @@ int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key, void *value);
+>   int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
+>   				     void *value, u64 flags);
 >   
->   	if (!range_is_zero(__skb, offsetofend(struct __sk_buff, priority),
-> +			   offsetof(struct __sk_buff, ifindex)))
-> +		return -EINVAL;
+> +static inline void bpf_cgroup_storages_free(struct bpf_cgroup_storage
+> +					    *storage[MAX_BPF_CGROUP_STORAGE_TYPE])
+> +{
+> +	enum bpf_cgroup_storage_type stype;
 > +
-> +	/* ifindex is allowed */
+> +	for_each_cgroup_storage_type(stype)
+> +		bpf_cgroup_storage_free(storage[stype]);
+> +}
 > +
-> +	if (!range_is_zero(__skb, offsetofend(struct __sk_buff, ifindex),
->   			   offsetof(struct __sk_buff, cb)))
->   		return -EINVAL;
->   
-> @@ -364,6 +370,7 @@ static void convert_skb_to___skb(struct sk_buff *skb, struct __sk_buff *__skb)
->   
->   	__skb->mark = skb->mark;
->   	__skb->priority = skb->priority;
-> +	__skb->ifindex = skb->dev->ifindex;
->   	__skb->tstamp = skb->tstamp;
->   	memcpy(__skb->cb, &cb->data, QDISC_CB_PRIV_LEN);
->   	__skb->wire_len = cb->pkt_len;
-> @@ -374,6 +381,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
->   			  union bpf_attr __user *uattr)
->   {
->   	bool is_l2 = false, is_direct_pkt_access = false;
-> +	struct net *net = current->nsproxy->net_ns;
-> +	struct net_device *dev = net->loopback_dev;
->   	u32 size = kattr->test.data_size_in;
->   	u32 repeat = kattr->test.repeat;
->   	struct __sk_buff *ctx = NULL;
-> @@ -415,7 +424,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
->   		kfree(ctx);
->   		return -ENOMEM;
->   	}
-> -	sock_net_set(sk, current->nsproxy->net_ns);
-> +	sock_net_set(sk, net);
->   	sock_init_data(NULL, sk);
->   
->   	skb = build_skb(data, 0);
-> @@ -429,7 +438,14 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
->   
->   	skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
->   	__skb_put(skb, size);
-> -	skb->protocol = eth_type_trans(skb, current->nsproxy->net_ns->loopback_dev);
-> +	if (ctx && ctx->ifindex > 1) {
-> +		dev = dev_get_by_index(net, ctx->ifindex);
-> +		if (!dev) {
-> +			ret = -ENODEV;
-> +			goto out;
+> +static inline int bpf_cgroup_storages_alloc(struct bpf_cgroup_storage
+> +					    *storage[MAX_BPF_CGROUP_STORAGE_TYPE],
+> +					    struct bpf_prog *prog)
+> +{
+> +	enum bpf_cgroup_storage_type stype;
+> +
+> +	for_each_cgroup_storage_type(stype) {
+> +		storage[stype] = bpf_cgroup_storage_alloc(prog, stype);
+> +		if (IS_ERR(storage[stype])) {
+> +			storage[stype] = NULL;
+> +			bpf_cgroup_storages_free(storage);
+> +			return -ENOMEM;
 > +		}
 > +	}
-> +	skb->protocol = eth_type_trans(skb, dev);
->   	skb_reset_network_header(skb);
+> +
+> +	return 0;
+> +}
+> +
+>   /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
+>   #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)			      \
+>   ({									      \
+> @@ -398,6 +425,15 @@ static inline int bpf_percpu_cgroup_storage_update(struct bpf_map *map,
+>   	return 0;
+>   }
 >   
->   	switch (skb->protocol) {
-> @@ -481,6 +497,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
->   		ret = bpf_ctx_finish(kattr, uattr, ctx,
->   				     sizeof(struct __sk_buff));
->   out:
+> +static inline void bpf_cgroup_storages_free(
+> +	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE]) {}
+> +
+> +static inline int bpf_cgroup_storages_alloc(
+> +	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE],
+> +	struct bpf_prog *prog) {
+> +	return 0;
+> +}
+> +
+>   #define cgroup_bpf_enabled (0)
+>   #define BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, type, t_ctx) ({ 0; })
+>   #define BPF_CGROUP_PRE_CONNECT_ENABLED(sk) (0)
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index ac53102..e4c2792 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -28,31 +28,6 @@ void cgroup_bpf_offline(struct cgroup *cgrp)
+>   	percpu_ref_kill(&cgrp->bpf.refcnt);
+>   }
+>   
+> -static void bpf_cgroup_storages_free(struct bpf_cgroup_storage *storages[])
+> -{
+> -	enum bpf_cgroup_storage_type stype;
+> -
+> -	for_each_cgroup_storage_type(stype)
+> -		bpf_cgroup_storage_free(storages[stype]);
+> -}
+> -
+> -static int bpf_cgroup_storages_alloc(struct bpf_cgroup_storage *storages[],
+> -				     struct bpf_prog *prog)
+> -{
+> -	enum bpf_cgroup_storage_type stype;
+> -
+> -	for_each_cgroup_storage_type(stype) {
+> -		storages[stype] = bpf_cgroup_storage_alloc(prog, stype);
+> -		if (IS_ERR(storages[stype])) {
+> -			storages[stype] = NULL;
+> -			bpf_cgroup_storages_free(storages);
+> -			return -ENOMEM;
+> -		}
+> -	}
+> -
+> -	return 0;
+> -}
+> -
 
-Overall this looks good. One small note is that dev_get_by_index() will hold the device
-for the entire test duration preventing to release it from user side, but I think in this
-context it's an acceptable trade-off.
+nit: Can't we just export them from here instead of inlining? Given this is for
+test_run.c anyway, I don't think it's worth the extra churn.
 
-> +	if (dev && dev != net->loopback_dev)
-> +		dev_put(dev);
->   	kfree_skb(skb);
->   	bpf_sk_storage_free(sk);
->   	kfree(sk);
+>   static void bpf_cgroup_storages_assign(struct bpf_cgroup_storage *dst[],
+>   				       struct bpf_cgroup_storage *src[])
+>   {
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 0e92973..050390d 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -19,20 +19,13 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+>   			u32 *retval, u32 *time, bool xdp)
+>   {
+>   	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
+> -	enum bpf_cgroup_storage_type stype;
+>   	u64 time_start, time_spent = 0;
+>   	int ret = 0;
+>   	u32 i;
+>   
+> -	for_each_cgroup_storage_type(stype) {
+> -		storage[stype] = bpf_cgroup_storage_alloc(prog, stype);
+> -		if (IS_ERR(storage[stype])) {
+> -			storage[stype] = NULL;
+> -			for_each_cgroup_storage_type(stype)
+> -				bpf_cgroup_storage_free(storage[stype]);
+> -			return -ENOMEM;
+> -		}
+> -	}
+> +	ret = bpf_cgroup_storages_alloc(storage, prog);
+> +	if (ret)
+> +		return ret;
+>   
+>   	if (!repeat)
+>   		repeat = 1;
+> @@ -72,8 +65,7 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+>   	do_div(time_spent, repeat);
+>   	*time = time_spent > U32_MAX ? U32_MAX : (u32)time_spent;
+>   
+> -	for_each_cgroup_storage_type(stype)
+> -		bpf_cgroup_storage_free(storage[stype]);
+> +	bpf_cgroup_storages_free(storage);
+>   
+>   	return ret;
+>   }
+> 
+
