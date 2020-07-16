@@ -2,269 +2,116 @@ Return-Path: <SRS0=dSfD=A3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC8CCC433E3
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 20:19:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD092C433E0
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 20:31:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9414A2076A
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 20:19:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91280207E8
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 20:31:29 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TQVqXQTl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729576AbgGPUTE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jul 2020 16:19:04 -0400
-Received: from www62.your-server.de ([213.133.104.62]:49886 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728788AbgGPUTD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jul 2020 16:19:03 -0400
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jwALM-0008Ac-K3; Thu, 16 Jul 2020 22:19:00 +0200
-Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jwALM-000P4S-EH; Thu, 16 Jul 2020 22:19:00 +0200
-Subject: Re: [PATCH bpf-next v3 4/4] bpf: try to use existing cgroup storage
- in bpf_prog_test_run_skb
-To:     Dmitry Yakunin <zeil@yandex-team.ru>, alexei.starovoitov@gmail.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     sdf@google.com
-References: <20200715195132.4286-1-zeil@yandex-team.ru>
- <20200715195132.4286-5-zeil@yandex-team.ru>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <0308c9ab-04aa-f367-14e9-8289f30e7fcf@iogearbox.net>
-Date:   Thu, 16 Jul 2020 22:18:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726528AbgGPUb3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jul 2020 16:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725921AbgGPUb2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jul 2020 16:31:28 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCE9C061755;
+        Thu, 16 Jul 2020 13:31:28 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id w34so6027805qte.1;
+        Thu, 16 Jul 2020 13:31:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q7fkaWy5BOtDK66VES6I+b2FcjwYtxNfF67s5vYVVds=;
+        b=TQVqXQTlQbyDYaO4gsISTQQfQmiO2VHodzKgRjm2AkLSVfH/bscXy/M4ukmL9Dww7Y
+         eu8Z1in18q8ssuF3uzYwVS6PLbdDkBKZgLDh5X1puh7JtVSquD0cHoSFxtnLozraH94X
+         8m5y4dQrec6fV+nnoXL/15UiOVn5CpFTeyPEHLv32yYLwfhODOPiAkGeug/VfRYC6bdv
+         O4+HwIvwKgGKG8T6IK1oAmXdAEFd47BxI7X24GNtVVWDakotZ8v/NeDJlXhAt3SBWjc0
+         RAZlgTUV0yCzKMCf76Jaf8IBgBnI2LBP3hFkZ4FQEdSTsbQ+LFd9viXkrXm0tk7IT2qo
+         fIrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q7fkaWy5BOtDK66VES6I+b2FcjwYtxNfF67s5vYVVds=;
+        b=WrZLd7PiS0CGLA8yZMUyebwuBa20ieHRKvooI9XvsdrifLMIx4443bcYAHfpcUCz6k
+         14ANP+qBASbL535bo/4shx7MGPO8c37ON8wtkbMVp0l6OZ0OZNUf5N8mHKzRPc49LaPg
+         QG3hxRIBPLjOUdLid4PoX50AvylZSwxjhnxrQVYTuIZJsjDpHOavPSUPWxDMxXy5uAKO
+         BvlrIkL0Xms5KdGvAJrdLlHo18Nlpb1CSWwKdRdnL4/uvGyzv+2sqU6iLCYyjI2GhkhQ
+         rSXpGN5wjMwoIWlzpchiPR7rWEWv8OaYjAq6hWctj5krVUz3x9Cr2ouAlfS9NSSIt23X
+         Efqg==
+X-Gm-Message-State: AOAM533uu7ZdouVsq/pMgI+9cGJF4Ae4xmWdt0/Z5fdMwZLPX3mYCKCd
+        waF0bWVYeERrOL4TDvxlrlODyBcNPXG9GgdfurQ=
+X-Google-Smtp-Source: ABdhPJxApln5rpI1d+//DgIRGwBSpTw1+8LsChc+F4EET3NnZ2MTL43y1VVVDJTX4QYXOm0DEF0u2ClJp6p9RiXGDSk=
+X-Received: by 2002:ac8:345c:: with SMTP id v28mr6996098qtb.171.1594931487933;
+ Thu, 16 Jul 2020 13:31:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200715195132.4286-5-zeil@yandex-team.ru>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.3/25875/Thu Jul 16 16:46:30 2020)
+References: <20200716045602.3896926-1-andriin@fb.com> <20200716045602.3896926-3-andriin@fb.com>
+ <4cffee3d-6af9-57e6-a2d5-202925ee8e77@gmail.com>
+In-Reply-To: <4cffee3d-6af9-57e6-a2d5-202925ee8e77@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 16 Jul 2020 13:31:17 -0700
+Message-ID: <CAEf4BzZVxTGM9mDoHMv478vQjV6Hmf_ts50=ABXkP4GxAG85eg@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 2/9] bpf, xdp: maintain info on attached XDP
+ BPF programs in net_device
+To:     David Ahern <dsahern@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 7/15/20 9:51 PM, Dmitry Yakunin wrote:
-> Now we cannot check results in cgroup storage after running
-> BPF_PROG_TEST_RUN command because it allocates dummy cgroup storage
-> during test. This patch implements simple logic for searching already
-> allocated cgroup storage through iterating effective programs of current
-> cgroup and finding the first match. If match is not found fallback to
-> temporary storage is happened.
-> 
-> v2:
->    - fix build without CONFIG_CGROUP_BPF (kernel test robot <lkp@intel.com>)
-> 
-> Signed-off-by: Dmitry Yakunin <zeil@yandex-team.ru>
-> ---
->   net/bpf/test_run.c                                 | 64 +++++++++++++++++-
->   .../selftests/bpf/prog_tests/cgroup_skb_prog_run.c | 78 ++++++++++++++++++++++
->   2 files changed, 139 insertions(+), 3 deletions(-)
->   create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
-> 
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 050390d..7382b22 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -15,15 +15,67 @@
->   #define CREATE_TRACE_POINTS
->   #include <trace/events/bpf_test_run.h>
->   
-> +#ifdef CONFIG_CGROUP_BPF
-> +
-> +static struct bpf_prog_array_item *bpf_prog_find_active(struct bpf_prog *prog,
-> +							struct bpf_prog_array *effective)
-> +{
-> +	struct bpf_prog_array_item *item;
-> +	struct bpf_prog_array *array;
-> +	struct bpf_prog *p;
-> +
-> +	array = rcu_dereference(effective);
-> +	if (!array)
-> +		return NULL;
-> +
-> +	item = &array->items[0];
-> +	while ((p = READ_ONCE(item->prog))) {
-> +		if (p == prog)
-> +			return item;
-> +		item++;
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
-> +static struct bpf_cgroup_storage **bpf_prog_find_active_storage(struct bpf_prog *prog)
-> +{
-> +	struct bpf_prog_array_item *item;
-> +	struct cgroup *cgrp;
-> +
-> +	if (prog->type != BPF_PROG_TYPE_CGROUP_SKB)
-> +		return NULL;
-> +
-> +	cgrp = task_dfl_cgroup(current);
-> +
-> +	item = bpf_prog_find_active(prog,
-> +				    cgrp->bpf.effective[BPF_CGROUP_INET_INGRESS]);
-> +	if (!item)
-> +		item = bpf_prog_find_active(prog,
-> +					    cgrp->bpf.effective[BPF_CGROUP_INET_EGRESS]);
-> +
-> +	return item ? item->cgroup_storage : NULL;
-> +}
-> +
-> +#else
-> +
-> +static struct bpf_cgroup_storage **bpf_prog_find_active_storage(struct bpf_prog *prog)
-> +{
-> +	return NULL;
-> +}
-> +
-> +#endif
-> +
->   static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
->   			u32 *retval, u32 *time, bool xdp)
->   {
-> -	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
-> +	struct bpf_cgroup_storage *dummy_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
-> +	struct bpf_cgroup_storage **storage = dummy_storage;
->   	u64 time_start, time_spent = 0;
->   	int ret = 0;
->   	u32 i;
->   
-> -	ret = bpf_cgroup_storages_alloc(storage, prog);
-> +	ret = bpf_cgroup_storages_alloc(dummy_storage, prog);
->   	if (ret)
->   		return ret;
->   
-> @@ -31,6 +83,9 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
->   		repeat = 1;
->   
->   	rcu_read_lock();
-> +	storage = bpf_prog_find_active_storage(prog);
-> +	if (!storage)
-> +		storage = dummy_storage;
->   	migrate_disable();
->   	time_start = ktime_get_ns();
->   	for (i = 0; i < repeat; i++) {
-> @@ -54,6 +109,9 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
->   			cond_resched();
->   
->   			rcu_read_lock();
-> +			storage = bpf_prog_find_active_storage(prog);
-> +			if (!storage)
-> +				storage = dummy_storage;
->   			migrate_disable();
->   			time_start = ktime_get_ns();
->   		}
-> @@ -65,7 +123,7 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
->   	do_div(time_spent, repeat);
->   	*time = time_spent > U32_MAX ? U32_MAX : (u32)time_spent;
->   
-> -	bpf_cgroup_storages_free(storage);
-> +	bpf_cgroup_storages_free(dummy_storage);
->   
->   	return ret;
->   }
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
-> new file mode 100644
-> index 0000000..12ca881
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
-> @@ -0,0 +1,78 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <test_progs.h>
-> +
-> +#include "cgroup_helpers.h"
-> +#include "network_helpers.h"
-> +
-> +static char bpf_log_buf[BPF_LOG_BUF_SIZE];
-> +
-> +void test_cgroup_skb_prog_run(void)
-> +{
-> +	struct bpf_insn prog[] = {
-> +		BPF_LD_MAP_FD(BPF_REG_1, 0), /* map fd */
-> +		BPF_MOV64_IMM(BPF_REG_2, 0), /* flags, not used */
-> +		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_local_storage),
-> +		BPF_MOV64_IMM(BPF_REG_1, 1),
-> +		BPF_RAW_INSN(BPF_STX | BPF_XADD | BPF_W, BPF_REG_0, BPF_REG_1, 0, 0),
-> +
-> +		BPF_MOV64_IMM(BPF_REG_0, 1), /* r0 = 1 */
-> +		BPF_EXIT_INSN(),
-> +	};
-> +	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
-> +	int storage_fd = -1, prog_fd = -1, cg_fd = -1;
-> +	struct bpf_cgroup_storage_key key;
-> +	__u32 duration, retval, size;
-> +	char buf[128];
-> +	__u64 value;
-> +	int err;
-> +
-> +	storage_fd = bpf_create_map(BPF_MAP_TYPE_CGROUP_STORAGE,
-> +				    sizeof(struct bpf_cgroup_storage_key),
-> +				    8, 0, 0);
-> +	if (CHECK(storage_fd < 0, "create_map", "%s\n", strerror(errno)))
-> +		goto out;
-> +
-> +	prog[0].imm = storage_fd;
-> +
-> +	prog_fd = bpf_load_program(BPF_PROG_TYPE_CGROUP_SKB,
-> +				   prog, insns_cnt, "GPL", 0,
-> +				   bpf_log_buf, BPF_LOG_BUF_SIZE);
-> +	if (CHECK(prog_fd < 0, "prog_load",
-> +		  "verifier output:\n%s\n-------\n", bpf_log_buf))
-> +		goto out;
-> +
-> +	if (CHECK_FAIL(setup_cgroup_environment()))
-> +		goto out;
-> +
-> +	cg_fd = create_and_get_cgroup("/cg");
-> +	if (CHECK_FAIL(cg_fd < 0))
-> +		goto out;
-> +
-> +	if (CHECK_FAIL(join_cgroup("/cg")))
-> +		goto out;
-> +
-> +	if (CHECK(bpf_prog_attach(prog_fd, cg_fd, BPF_CGROUP_INET_EGRESS, 0),
-> +		  "prog_attach", "%s\n", strerror(errno)))
-> +		goto out;
-> +
-> +	err = bpf_prog_test_run(prog_fd, NUM_ITER, &pkt_v4, sizeof(pkt_v4),
-> +				buf, &size, &retval, &duration);
+On Thu, Jul 16, 2020 at 12:01 PM David Ahern <dsahern@gmail.com> wrote:
+>
+> On 7/15/20 10:55 PM, Andrii Nakryiko wrote:
+> > Instead of delegating to drivers, maintain information about which BPF
+> > programs are attached in which XDP modes (generic/skb, driver, or hardware)
+> > locally in net_device. This effectively obsoletes XDP_QUERY_PROG command.
+> >
+> > Such re-organization simplifies existing code already. But it also allows to
+> > further add bpf_link-based XDP attachments without drivers having to know
+> > about any of this at all, which seems like a good setup.
+> > XDP_SETUP_PROG/XDP_SETUP_PROG_HW are just low-level commands to driver to
+> > install/uninstall active BPF program. All the higher-level concerns about
+> > prog/link interaction will be contained within generic driver-agnostic logic.
+> >
+> > All the XDP_QUERY_PROG calls to driver in dev_xdp_uninstall() were removed.
+> > It's not clear for me why dev_xdp_uninstall() were passing previous prog_flags
+> > when resetting installed programs. That seems unnecessary, plus most drivers
+> > don't populate prog_flags anyways. Having XDP_SETUP_PROG vs XDP_SETUP_PROG_HW
+> > should be enough of an indicator of what is required of driver to correctly
+> > reset active BPF program. dev_xdp_uninstall() is also generalized as an
+> > iteration over all three supported mode.
+> >
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> > ---
+> >  include/linux/netdevice.h |  17 +++-
+> >  net/core/dev.c            | 158 +++++++++++++++++++++-----------------
+>
+> Similar to my comment on a v1 patch, this change is doing multiple
+> things that really should be split into 2 patches - one moving code
+> around and the second making the change you want. As is the patch is
+> difficult to properly review.
+>
 
-Hm, I think this approach is rather suboptimal, meaning, you need to load & even
-actively attach the test program also to the cgroup aside from pushing this via
-BPF prog test infra. So any other potential background traffic egressing from the
-application will also go through the test program via BPF_CGROUP_INET_EGRESS.
-Can't we instead extend the test infra to prepopulate and fetch the content from
-the temp storage instead so this does not have any other side-effects?
+You mean xdp_uninstall? In patch 1 leave it as three separate
+sections, but switch to different querying. And then in a separate
+patch do a loop?
 
-> +	CHECK(err || retval != 1, "prog_test_run",
-> +	      "err %d errno %d retval %d\n", err, errno, retval);
-> +
-> +	/* check that cgroup storage results are available after test run */
-> +
-> +	err = bpf_map_get_next_key(storage_fd, NULL, &key);
-> +	CHECK(err, "map_get_next_key", "%s\n", strerror(errno));
-> +
-> +	err = bpf_map_lookup_elem(storage_fd, &key, &value);
-> +	CHECK(err || value != NUM_ITER,
-> +	      "map_lookup_elem",
-> +	      "err %d errno %d cnt %lld(%d)\n", err, errno, value, NUM_ITER);
-> +out:
-> +	close(storage_fd);
-> +	close(prog_fd);
-> +	close(cg_fd);
-> +	cleanup_cgroup_environment();
-> +}
-> 
+Alright, I'll split that up as well. But otherwise I don't really see
+much more opportunities to split it.
 
+> Given that you need a v4 anyways, can you split this patch into 2?
