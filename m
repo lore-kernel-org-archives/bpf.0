@@ -3,142 +3,285 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3F7CC433ED
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 23:35:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BC8CC433DF
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 23:37:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE1272063A
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 23:35:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594942529;
-	bh=YxVF/rz7N6Vl7/RW2/fvVoSAIMf7NnV+qlVFE0IH2D0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jZzuOwCPrA5O3OX6U1q4T3mqMAOkA9L+ZIX3NpENeFGBxG48GFx4ShFOoiqjClntH
-	 kqiESkQTpX6HZRB7VnfW6L51D09OQcljtNYc+2upiy5nSZnu4QRZxST5AjbSuCk0pH
-	 ju01/OkHzN6RZVl0J9vrXkLx8ISai9JsAdjAO4vo=
+	by mail.kernel.org (Postfix) with ESMTP id 09A3D2065F
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 23:37:43 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="SSVa2bWn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbgGPXf3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jul 2020 19:35:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42514 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726337AbgGPXfR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jul 2020 19:35:17 -0400
-Received: from localhost.localdomain.com (unknown [151.48.133.17])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D10322085B;
-        Thu, 16 Jul 2020 22:17:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594937829;
-        bh=YxVF/rz7N6Vl7/RW2/fvVoSAIMf7NnV+qlVFE0IH2D0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TppmXgjY/0jLyA6tKGNS0cZaL6rq33r2REfVqgTVgm/b7WWOsibZHqZh0PiqPZkWi
-         MqzYN/V1gXDlKKNpKYQs+xSuXhQXhDPVSDkR2SjHhivOdWY9U+mjjOQRLSIE6TKiTb
-         LyXMhRHnbn+999P5gxB9dQ5dAo/hsgoY4v1Nh+iE=
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, bpf@vger.kernel.org, kuba@kernel.org,
-        ilias.apalodimas@linaro.org, lorenzo.bianconi@redhat.com,
-        brouer@redhat.com, echaudro@redhat.com, sameehj@amazon.com
-Subject: [PATCH v2 net-next 3/6] net: mvneta: move mvneta_run_xdp after descriptors processing
-Date:   Fri, 17 Jul 2020 00:16:31 +0200
-Message-Id: <3bb5b9970e31093c5975ffbe964e54b9b90ce64e.1594936660.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1594936660.git.lorenzo@kernel.org>
-References: <cover.1594936660.git.lorenzo@kernel.org>
+        id S1725958AbgGPXhn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jul 2020 19:37:43 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45876 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725933AbgGPXhn (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 16 Jul 2020 19:37:43 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06GMrY0D005577
+        for <bpf@vger.kernel.org>; Thu, 16 Jul 2020 16:05:40 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=HC19BocnzqfbZdasNet2djSQezi7uoWDz8ER7wUvdIo=;
+ b=SSVa2bWne1k8JfwGfXA9LexuAIe9u83aTYiQnOi9a0wywp9Wx+K3lPFDvlwUBp/TGhpb
+ rrtLhz6aS30ZFd4S84lLyPOYOA6UOg9SR7Y7lP7Jy1jgkK9gSZSI5uNLQYH1DebdSDy5
+ aDjdcD3F2L3lS2sFY9qf4fqLhEmBWoOPNnE= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 32aajewsd2-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 16 Jul 2020 16:05:40 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 16 Jul 2020 16:05:38 -0700
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id D11E762E52F4; Thu, 16 Jul 2020 15:59:43 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Song Liu <songliubraving@fb.com>
+Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
+To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
+        <brouer@redhat.com>, <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v3 bpf-next 2/2] selftests/bpf: add callchain_stackid
+Date:   Thu, 16 Jul 2020 15:59:33 -0700
+Message-ID: <20200716225933.196342-3-songliubraving@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200716225933.196342-1-songliubraving@fb.com>
+References: <20200716225933.196342-1-songliubraving@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-16_11:2020-07-16,2020-07-16 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ mlxscore=0 mlxlogscore=999 phishscore=0 clxscore=1015 impostorscore=0
+ bulkscore=0 suspectscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007160148
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move mvneta_run_xdp routine after all descriptor processing. This is a
-preliminary patch to enable multi-buffers and JUMBO frames support for
-XDP
+This tests new helper function bpf_get_stackid_pe and bpf_get_stack_pe.
+These two helpers have different implementation for perf_event with PEB
+entries.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- drivers/net/ethernet/marvell/mvneta.c | 22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
+ .../bpf/prog_tests/perf_event_stackmap.c      | 116 ++++++++++++++++++
+ .../selftests/bpf/progs/perf_event_stackmap.c |  59 +++++++++
+ 2 files changed, 175 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_event_sta=
+ckmap.c
+ create mode 100644 tools/testing/selftests/bpf/progs/perf_event_stackmap=
+.c
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index e9b3fb778d76..021419428ff8 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -2230,12 +2230,11 @@ mvneta_run_xdp(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
- 	return ret;
- }
- 
--static int
-+static void
- mvneta_swbm_rx_frame(struct mvneta_port *pp,
- 		     struct mvneta_rx_desc *rx_desc,
- 		     struct mvneta_rx_queue *rxq,
- 		     struct xdp_buff *xdp,
--		     struct bpf_prog *xdp_prog,
- 		     struct page *page,
- 		     struct mvneta_stats *stats)
- {
-@@ -2244,7 +2243,6 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
- 	struct net_device *dev = pp->dev;
- 	enum dma_data_direction dma_dir;
- 	struct skb_shared_info *sinfo;
--	int ret = 0;
- 
- 	if (MVNETA_SKB_SIZE(rx_desc->data_size) > PAGE_SIZE) {
- 		len = MVNETA_MAX_RX_BUF_SIZE;
-@@ -2270,13 +2268,8 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
- 	sinfo = xdp_get_shared_info_from_buff(xdp);
- 	sinfo->nr_frags = 0;
- 
--	if (xdp_prog)
--		ret = mvneta_run_xdp(pp, rxq, xdp_prog, xdp, stats);
--
- 	rxq->left_size = rx_desc->data_size - len;
- 	rx_desc->buf_phys_addr = 0;
--
--	return ret;
- }
- 
- static void
-@@ -2385,20 +2378,15 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
- 		rxq->refill_num++;
- 
- 		if (rx_status & MVNETA_RXD_FIRST_DESC) {
--			int err;
--
- 			/* Check errors only for FIRST descriptor */
- 			if (rx_status & MVNETA_RXD_ERR_SUMMARY) {
- 				mvneta_rx_error(pp, rx_desc);
- 				goto next;
- 			}
- 
--			err = mvneta_swbm_rx_frame(pp, rx_desc, rxq, &xdp_buf,
--						   xdp_prog, page, &ps);
--			if (err)
--				continue;
--
- 			desc_status = rx_desc->status;
-+			mvneta_swbm_rx_frame(pp, rx_desc, rxq, &xdp_buf, page,
-+					     &ps);
- 		} else {
- 			if (unlikely(!xdp_buf.data_hard_start))
- 				continue;
-@@ -2417,6 +2405,10 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
- 			goto next;
- 		}
- 
-+		if (xdp_prog &&
-+		    mvneta_run_xdp(pp, rxq, xdp_prog, &xdp_buf, &ps))
-+			goto next;
+diff --git a/tools/testing/selftests/bpf/prog_tests/perf_event_stackmap.c=
+ b/tools/testing/selftests/bpf/prog_tests/perf_event_stackmap.c
+new file mode 100644
+index 0000000000000..72c3690844fba
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/perf_event_stackmap.c
+@@ -0,0 +1,116 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Facebook
++#define _GNU_SOURCE
++#include <pthread.h>
++#include <sched.h>
++#include <test_progs.h>
++#include "perf_event_stackmap.skel.h"
 +
- 		skb = mvneta_swbm_build_skb(pp, rxq, &xdp_buf, desc_status);
- 		if (IS_ERR(skb)) {
- 			struct mvneta_pcpu_stats *stats = this_cpu_ptr(pp->stats);
--- 
-2.26.2
++#ifndef noinline
++#define noinline __attribute__((noinline))
++#endif
++
++noinline int func_1(void)
++{
++	static int val =3D 1;
++
++	val +=3D 1;
++
++	usleep(100);
++	return val;
++}
++
++noinline int func_2(void)
++{
++	return func_1();
++}
++
++noinline int func_3(void)
++{
++	return func_2();
++}
++
++noinline int func_4(void)
++{
++	return func_3();
++}
++
++noinline int func_5(void)
++{
++	return func_4();
++}
++
++noinline int func_6(void)
++{
++	int i, val =3D 1;
++
++	for (i =3D 0; i < 100; i++)
++		val +=3D func_5();
++
++	return val;
++}
++
++void test_perf_event_stackmap(void)
++{
++	struct perf_event_attr attr =3D {
++		/* .type =3D PERF_TYPE_SOFTWARE, */
++		.type =3D PERF_TYPE_HARDWARE,
++		.config =3D PERF_COUNT_HW_CPU_CYCLES,
++		.precise_ip =3D 2,
++		.sample_type =3D PERF_SAMPLE_IP | PERF_SAMPLE_BRANCH_STACK |
++			PERF_SAMPLE_CALLCHAIN,
++		.branch_sample_type =3D PERF_SAMPLE_BRANCH_USER |
++			PERF_SAMPLE_BRANCH_NO_FLAGS |
++			PERF_SAMPLE_BRANCH_NO_CYCLES |
++			PERF_SAMPLE_BRANCH_CALL_STACK,
++		.sample_period =3D 5000,
++		.size =3D sizeof(struct perf_event_attr),
++	};
++	struct perf_event_stackmap *skel;
++	__u32 duration =3D 0;
++	cpu_set_t cpu_set;
++	int pmu_fd, err;
++
++	skel =3D perf_event_stackmap__open();
++
++	if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
++		return;
++
++	err =3D perf_event_stackmap__load(skel);
++	if (CHECK(err, "skel_load", "skeleton load failed: %d\n", err))
++		goto cleanup;
++
++	CPU_ZERO(&cpu_set);
++	CPU_SET(0, &cpu_set);
++	err =3D pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &cpu_se=
+t);
++	if (CHECK(err, "set_affinity", "err %d, errno %d\n", err, errno))
++		goto cleanup;
++
++	pmu_fd =3D syscall(__NR_perf_event_open, &attr, -1 /* pid */,
++			 0 /* cpu 0 */, -1 /* group id */,
++			 0 /* flags */);
++	if (pmu_fd < 0) {
++		printf("%s:SKIP:cpu doesn't support the event\n", __func__);
++		test__skip();
++		goto cleanup;
++	}
++
++	skel->links.oncpu =3D bpf_program__attach_perf_event(skel->progs.oncpu,
++							   pmu_fd);
++	if (CHECK(IS_ERR(skel->links.oncpu), "attach_perf_event",
++		  "err %ld\n", PTR_ERR(skel->links.oncpu))) {
++		close(pmu_fd);
++		goto cleanup;
++	}
++
++	/* create kernel and user stack traces for testing */
++	func_6();
++
++	CHECK(skel->data->stackid_kernel !=3D 2, "get_stackid_kernel", "failed\=
+n");
++	CHECK(skel->data->stackid_user !=3D 2, "get_stackid_user", "failed\n");
++	CHECK(skel->data->stack_kernel !=3D 2, "get_stack_kernel", "failed\n");
++	CHECK(skel->data->stack_user !=3D 2, "get_stack_user", "failed\n");
++
++cleanup:
++	perf_event_stackmap__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/perf_event_stackmap.c b/to=
+ols/testing/selftests/bpf/progs/perf_event_stackmap.c
+new file mode 100644
+index 0000000000000..25467d13c356a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/perf_event_stackmap.c
+@@ -0,0 +1,59 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Facebook
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++#ifndef PERF_MAX_STACK_DEPTH
++#define PERF_MAX_STACK_DEPTH         127
++#endif
++
++typedef __u64 stack_trace_t[PERF_MAX_STACK_DEPTH];
++struct {
++	__uint(type, BPF_MAP_TYPE_STACK_TRACE);
++	__uint(max_entries, 16384);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(stack_trace_t));
++} stackmap SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, stack_trace_t);
++} stackdata_map SEC(".maps");
++
++long stackid_kernel =3D 1;
++long stackid_user =3D 1;
++long stack_kernel =3D 1;
++long stack_user =3D 1;
++
++SEC("perf_event")
++int oncpu(void *ctx)
++{
++	stack_trace_t *trace;
++	__u32 key =3D 0;
++	long val;
++
++	val =3D bpf_get_stackid(ctx, &stackmap, 0);
++	if (val > 0)
++		stackid_kernel =3D 2;
++	val =3D bpf_get_stackid(ctx, &stackmap, BPF_F_USER_STACK);
++	if (val > 0)
++		stackid_user =3D 2;
++
++	trace =3D bpf_map_lookup_elem(&stackdata_map, &key);
++	if (!trace)
++		return 0;
++
++	val =3D bpf_get_stack(ctx, trace, sizeof(stack_trace_t), 0);
++	if (val > 0)
++		stack_kernel =3D 2;
++
++	val =3D bpf_get_stack(ctx, trace, sizeof(stack_trace_t), BPF_F_USER_STA=
+CK);
++	if (val > 0)
++		stack_user =3D 2;
++
++	return 0;
++}
++
++char LICENSE[] SEC("license") =3D "GPL";
+--=20
+2.24.1
 
