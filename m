@@ -8,40 +8,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1CE8C433F8
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 04:56:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 674DCC433DF
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 04:57:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 900CB20775
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 04:56:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4091B20775
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 04:57:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="PCoviKG0"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hwbRcGrx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbgGPE4a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jul 2020 00:56:30 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:9820 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726550AbgGPE43 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 16 Jul 2020 00:56:29 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06G4rISR015309
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 21:56:27 -0700
+        id S1725913AbgGPE5Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jul 2020 00:57:25 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7230 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726105AbgGPE5Z (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 16 Jul 2020 00:57:25 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06G4uIwk013474
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 21:57:24 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=52uDPvZHpM8dja7Q1VN27Rx2aaoG0bKvDlzDUpwQtqk=;
- b=PCoviKG0vUIaSAXM1vIrbBbumC0zB0kWiYiiLMDvoRADuaZSYoCEvtxy8ZghCcTZuWXH
- 5/rUZJe9XZX+BYqGoUDqW7mc1yiaMP4Uk58f1l0hhU2kGAd/SbANIpauZDjQwV0laljQ
- y1qZjtQaFIkGn3wgj74HgO/HHowhu6asylA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 32793meshd-3
+ bh=/zbODb/YH1jOdAZL55iyKGaFJ0W1VBwuoHDCNgwwrQ8=;
+ b=hwbRcGrxYMradKuAzVsX/J62SCU7w1aCTQit6MJMx82UiNEm/tipk1zkacpIcYlcA8Zi
+ 8T4J1R22gVzHefB5Qmdrajty+QRP9isKZZ6ph/j/JfSsmivdr1q+VR0LSrTTbEXT1ddD
+ UNNrW3mtNEuXMfPnJwN95BoD9ktfWu3WEf8= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 32a7fpt5tu-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 21:56:27 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 21:57:24 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 15 Jul 2020 21:56:26 -0700
+ 15.1.1979.3; Wed, 15 Jul 2020 21:56:17 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 52B592EC422D; Wed, 15 Jul 2020 21:56:21 -0700 (PDT)
+        id CD9132EC422D; Wed, 15 Jul 2020 21:56:14 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -50,9 +50,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 8/9] selftests/bpf: add BPF XDP link selftests
-Date:   Wed, 15 Jul 2020 21:56:00 -0700
-Message-ID: <20200716045602.3896926-9-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 5/9] bpf, xdp: implement LINK_UPDATE for BPF XDP link
+Date:   Wed, 15 Jul 2020 21:55:57 -0700
+Message-ID: <20200716045602.3896926-6-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200716045602.3896926-1-andriin@fb.com>
 References: <20200716045602.3896926-1-andriin@fb.com>
@@ -62,196 +62,86 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-15_12:2020-07-15,2020-07-15 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- malwarescore=0 mlxlogscore=806 lowpriorityscore=0 mlxscore=0 adultscore=0
- phishscore=0 bulkscore=0 priorityscore=1501 clxscore=1015 suspectscore=9
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007160036
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ impostorscore=0 mlxlogscore=707 malwarescore=0 spamscore=0
+ lowpriorityscore=0 suspectscore=8 clxscore=1015 priorityscore=1501
+ bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007160037
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add selftest validating all the attachment logic around BPF XDP link. Tes=
-t
-also link updates and get_obj_info() APIs.
+Add support for LINK_UPDATE command for BPF XDP link to enable reliable
+replacement of underlying BPF program.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../selftests/bpf/prog_tests/xdp_link.c       | 137 ++++++++++++++++++
- .../selftests/bpf/progs/test_xdp_link.c       |  12 ++
- 2 files changed, 149 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_link.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_link.c
+ net/core/dev.c | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_link.c b/tools/te=
-sting/selftests/bpf/prog_tests/xdp_link.c
-new file mode 100644
-index 000000000000..52cba6795d40
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-@@ -0,0 +1,137 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include <uapi/linux/if_link.h>
-+#include <test_progs.h>
-+#include "test_xdp_link.skel.h"
-+
-+#define IFINDEX_LO 1
-+
-+void test_xdp_link(void)
+diff --git a/net/core/dev.c b/net/core/dev.c
+index ba50f68a6121..8b085dbe3cf1 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -8990,9 +8990,52 @@ static void bpf_xdp_link_dealloc(struct bpf_link *=
+link)
+ 	kfree(xdp_link);
+ }
+=20
++static int bpf_xdp_link_update(struct bpf_link *link, struct bpf_prog *n=
+ew_prog,
++			       struct bpf_prog *old_prog)
 +{
-+	__u32 duration =3D 0, id1, id2, id0 =3D 0, prog_fd1, prog_fd2, err;
-+	DECLARE_LIBBPF_OPTS(bpf_xdp_set_link_opts, opts, .old_fd =3D -1);
-+	struct test_xdp_link *skel1 =3D NULL, *skel2 =3D NULL;
-+	struct bpf_link_info link_info;
-+	struct bpf_prog_info prog_info;
-+	struct bpf_link *link;
-+	__u32 link_info_len =3D sizeof(link_info);
-+	__u32 prog_info_len =3D sizeof(prog_info);
++	struct bpf_xdp_link *xdp_link =3D container_of(link, struct bpf_xdp_lin=
+k, link);
++	enum bpf_xdp_mode mode;
++	bpf_op_t bpf_op;
++	int err =3D 0;
 +
-+	skel1 =3D test_xdp_link__open_and_load();
-+	if (CHECK(!skel1, "skel_load", "skeleton open and load failed\n"))
-+		goto cleanup;
-+	prog_fd1 =3D bpf_program__fd(skel1->progs.xdp_handler);
++	rtnl_lock();
 +
-+	skel2 =3D test_xdp_link__open_and_load();
-+	if (CHECK(!skel2, "skel_load", "skeleton open and load failed\n"))
-+		goto cleanup;
-+	prog_fd2 =3D bpf_program__fd(skel2->progs.xdp_handler);
-+
-+	memset(&prog_info, 0, sizeof(prog_info));
-+	err =3D bpf_obj_get_info_by_fd(prog_fd1, &prog_info, &prog_info_len);
-+	if (CHECK(err, "fd_info1", "failed %d\n", -errno))
-+		goto cleanup;
-+	id1 =3D prog_info.id;
-+
-+	memset(&prog_info, 0, sizeof(prog_info));
-+	err =3D bpf_obj_get_info_by_fd(prog_fd2, &prog_info, &prog_info_len);
-+	if (CHECK(err, "fd_info2", "failed %d\n", -errno))
-+		goto cleanup;
-+	id2 =3D prog_info.id;
-+
-+	/* set initial prog attachment */
-+	err =3D bpf_set_link_xdp_fd_opts(IFINDEX_LO, prog_fd1, XDP_FLAGS_REPLAC=
-E, &opts);
-+	if (CHECK(err, "fd_attach", "initial prog attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	/* validate prog ID */
-+	err =3D bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-+	CHECK(err || id0 !=3D id1, "id1_check",
-+	      "loaded prog id %u !=3D id1 %u, err %d", id0, id1, err);
-+
-+	/* BPF link is not allowed to replace prog attachment */
-+	link =3D bpf_program__attach_xdp(skel1->progs.xdp_handler, IFINDEX_LO);
-+	if (CHECK(!IS_ERR(link), "link_attach_fail", "unexpected success\n")) {
-+		bpf_link__destroy(link);
-+		/* best-effort detach prog */
-+		opts.old_fd =3D prog_fd1;
-+		bpf_set_link_xdp_fd_opts(IFINDEX_LO, -1, XDP_FLAGS_REPLACE, &opts);
-+		goto cleanup;
++	/* link might have been auto-released already, so fail */
++	if (!xdp_link->dev) {
++		err =3D -ENOLINK;
++		goto out_unlock;
 +	}
 +
-+	/* detach BPF program */
-+	opts.old_fd =3D prog_fd1;
-+	err =3D bpf_set_link_xdp_fd_opts(IFINDEX_LO, -1, XDP_FLAGS_REPLACE, &op=
-ts);
-+	if (CHECK(err, "prog_detach", "failed %d\n", err))
-+		goto cleanup;
-+
-+	/* now BPF link should attach successfully */
-+	link =3D bpf_program__attach_xdp(skel1->progs.xdp_handler, IFINDEX_LO);
-+	if (CHECK(IS_ERR(link), "link_attach", "failed: %ld\n", PTR_ERR(link)))
-+		goto cleanup;
-+	skel1->links.xdp_handler =3D link;
-+
-+	/* validate prog ID */
-+	err =3D bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-+	if (CHECK(err || id0 !=3D id1, "id1_check",
-+		  "loaded prog id %u !=3D id1 %u, err %d", id0, id1, err))
-+		goto cleanup;
-+
-+	/* BPF prog attach is not allowed to replace BPF link */
-+	opts.old_fd =3D prog_fd1;
-+	err =3D bpf_set_link_xdp_fd_opts(IFINDEX_LO, prog_fd2, XDP_FLAGS_REPLAC=
-E, &opts);
-+	if (CHECK(!err, "prog_attach_fail", "unexpected success\n"))
-+		goto cleanup;
-+
-+	/* Can't force-update when BPF link is active */
-+	err =3D bpf_set_link_xdp_fd(IFINDEX_LO, prog_fd2, 0);
-+	if (CHECK(!err, "prog_update_fail", "unexpected success\n"))
-+		goto cleanup;
-+
-+	/* Can't force-detach when BPF link is active */
-+	err =3D bpf_set_link_xdp_fd(IFINDEX_LO, -1, 0);
-+	if (CHECK(!err, "prog_detach_fail", "unexpected success\n"))
-+		goto cleanup;
-+
-+	/* BPF link is not allowed to replace another BPF link */
-+	link =3D bpf_program__attach_xdp(skel2->progs.xdp_handler, IFINDEX_LO);
-+	if (CHECK(!IS_ERR(link), "link_attach_fail", "unexpected success\n")) {
-+		bpf_link__destroy(link);
-+		goto cleanup;
++	if (old_prog && link->prog !=3D old_prog) {
++		err =3D -EPERM;
++		goto out_unlock;
++	}
++	old_prog =3D link->prog;
++	if (old_prog =3D=3D new_prog) {
++		/* no-op, don't disturb drivers */
++		bpf_prog_put(new_prog);
++		goto out_unlock;
 +	}
 +
-+	bpf_link__destroy(skel1->links.xdp_handler);
-+	skel1->links.xdp_handler =3D NULL;
++	mode =3D dev_xdp_mode(xdp_link->flags);
++	bpf_op =3D dev_xdp_bpf_op(xdp_link->dev, mode);
++	err =3D dev_xdp_install(xdp_link->dev, mode, bpf_op, NULL,
++			      xdp_link->flags, new_prog);
++	if (err)
++		goto out_unlock;
 +
-+	/* new link attach should succeed */
-+	link =3D bpf_program__attach_xdp(skel2->progs.xdp_handler, IFINDEX_LO);
-+	if (CHECK(IS_ERR(link), "link_attach", "failed: %ld\n", PTR_ERR(link)))
-+		goto cleanup;
-+	skel2->links.xdp_handler =3D link;
++	old_prog =3D xchg(&link->prog, new_prog);
++	bpf_prog_put(old_prog);
 +
-+	err =3D bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-+	if (CHECK(err || id0 !=3D id2, "id2_check",
-+		  "loaded prog id %u !=3D id2 %u, err %d", id0, id1, err))
-+		goto cleanup;
-+
-+	/* updating program under active BPF link works as expected */
-+	err =3D bpf_link__update_program(link, skel1->progs.xdp_handler);
-+	if (CHECK(err, "link_upd", "failed: %d\n", err))
-+		goto cleanup;
-+
-+	memset(&link_info, 0, sizeof(link_info));
-+	err =3D bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_in=
-fo_len);
-+	if (CHECK(err, "link_info", "failed: %d\n", err))
-+		goto cleanup;
-+
-+	CHECK(link_info.type !=3D BPF_LINK_TYPE_XDP, "link_type",
-+	      "got %u !=3D exp %u\n", link_info.type, BPF_LINK_TYPE_XDP);
-+	CHECK(link_info.prog_id !=3D id1, "link_prog_id",
-+	      "got %u !=3D exp %u\n", link_info.prog_id, id1);
-+	CHECK(link_info.xdp.ifindex !=3D IFINDEX_LO, "link_ifindex",
-+	      "got %u !=3D exp %u\n", link_info.xdp.ifindex, IFINDEX_LO);
-+
-+cleanup:
-+	test_xdp_link__destroy(skel1);
-+	test_xdp_link__destroy(skel2);
++out_unlock:
++	rtnl_unlock();
++	return err;
 +}
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_link.c b/tools/te=
-sting/selftests/bpf/progs/test_xdp_link.c
-new file mode 100644
-index 000000000000..eb93ea95d1d8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_link.c
-@@ -0,0 +1,12 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
 +
-+char LICENSE[] SEC("license") =3D "GPL";
-+
-+SEC("xdp/handler")
-+int xdp_handler(struct xdp_md *xdp)
-+{
-+	return 0;
-+}
+ static const struct bpf_link_ops bpf_xdp_link_lops =3D {
+ 	.release =3D bpf_xdp_link_release,
+ 	.dealloc =3D bpf_xdp_link_dealloc,
++	.update_prog =3D bpf_xdp_link_update,
+ };
+=20
+ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *pro=
+g)
 --=20
 2.24.1
 
