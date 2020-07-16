@@ -2,146 +2,82 @@ Return-Path: <SRS0=dSfD=A3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 674DCC433DF
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 04:57:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF741C433E3
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 05:00:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4091B20775
-	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 04:57:26 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hwbRcGrx"
+	by mail.kernel.org (Postfix) with ESMTP id CD4C320787
+	for <bpf@archiver.kernel.org>; Thu, 16 Jul 2020 05:00:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725913AbgGPE5Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jul 2020 00:57:25 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7230 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726105AbgGPE5Z (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 16 Jul 2020 00:57:25 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06G4uIwk013474
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 21:57:24 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=/zbODb/YH1jOdAZL55iyKGaFJ0W1VBwuoHDCNgwwrQ8=;
- b=hwbRcGrxYMradKuAzVsX/J62SCU7w1aCTQit6MJMx82UiNEm/tipk1zkacpIcYlcA8Zi
- 8T4J1R22gVzHefB5Qmdrajty+QRP9isKZZ6ph/j/JfSsmivdr1q+VR0LSrTTbEXT1ddD
- UNNrW3mtNEuXMfPnJwN95BoD9ktfWu3WEf8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32a7fpt5tu-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 21:57:24 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 15 Jul 2020 21:56:17 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id CD9132EC422D; Wed, 15 Jul 2020 21:56:14 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>, <dsahern@gmail.com>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 5/9] bpf, xdp: implement LINK_UPDATE for BPF XDP link
-Date:   Wed, 15 Jul 2020 21:55:57 -0700
-Message-ID: <20200716045602.3896926-6-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200716045602.3896926-1-andriin@fb.com>
-References: <20200716045602.3896926-1-andriin@fb.com>
+        id S1726060AbgGPFAH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jul 2020 01:00:07 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:33996 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725921AbgGPFAG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jul 2020 01:00:06 -0400
+Received: by mail-il1-f197.google.com with SMTP id y3so2909702ily.1
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2020 22:00:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=cE1hhRVuLf2gZer2Ucpnx9HKI06D31CoZ/RNlVo8Pe0=;
+        b=svGNeVsIAqDLdm4LFAle/y606NwLKGYyrUWST9JyNn+05XK55vR2JO4bGB9IYvAtPk
+         J2q4V0ag2D0la4iuxyg7hbxmuK4GFMQ5aYsfVa5ImJIsg1thPa6vzGRWfYpo9JW6hM43
+         usprPw2sgzs2iKw0tZ3O0RaUU9ILcw99JvaokaS38wbWhD0loClzxvNYSXWt7oMoRxh2
+         2Eb3qcJhtOqI+MpPJv2TQfNM8hsIuYj/VRvqyVWpo9f1bUQekL13k9lnGA3GRuWGOBBH
+         khCmCFjNx6g9j6JWIFfbNk6WCDXLXxnmEF8rClKl/t8ot78/Akmzw4DScIOX7drikpto
+         vIqw==
+X-Gm-Message-State: AOAM531RIMJ0dA7AuXaaxYdw/MNz2fzazn+6CLEVTDk7uKd69TfFPIKJ
+        8lZXfersKSD5sgcSfvmWoQXW+K6Ax7bRepE7qTUgh3eoc3ZN
+X-Google-Smtp-Source: ABdhPJwrtEU1PwKJDwMkynoxse8GDaDxlNH/e4aaSkK3f5Z72MwWHALTn6uAryXSscOV5ZuIi1/gjdhbEGKyVnlXGRdUASMWb0gi
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-15_12:2020-07-15,2020-07-15 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
- impostorscore=0 mlxlogscore=707 malwarescore=0 spamscore=0
- lowpriorityscore=0 suspectscore=8 clxscore=1015 priorityscore=1501
- bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007160037
-X-FB-Internal: deliver
+X-Received: by 2002:a6b:7c02:: with SMTP id m2mr2790747iok.49.1594875605629;
+ Wed, 15 Jul 2020 22:00:05 -0700 (PDT)
+Date:   Wed, 15 Jul 2020 22:00:05 -0700
+In-Reply-To: <00000000000029663005aa23cff4@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ef406d05aa87e9ba@google.com>
+Subject: Re: WARNING in submit_bio_checks
+From:   syzbot <syzbot+4c50ac32e5b10e4133e1@syzkaller.appspotmail.com>
+To:     andriin@fb.com, ast@kernel.org, axboe@kernel.dk,
+        bkkarthik@pesu.pes.edu, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, ebiggers@kernel.org, hch@infradead.org,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@chromium.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mcgrof@kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
+        yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for LINK_UPDATE command for BPF XDP link to enable reliable
-replacement of underlying BPF program.
+syzbot has bisected this issue to:
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- net/core/dev.c | 43 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+commit 449325b52b7a6208f65ed67d3484fd7b7184477b
+Author: Alexei Starovoitov <ast@kernel.org>
+Date:   Tue May 22 02:22:29 2018 +0000
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index ba50f68a6121..8b085dbe3cf1 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -8990,9 +8990,52 @@ static void bpf_xdp_link_dealloc(struct bpf_link *=
-link)
- 	kfree(xdp_link);
- }
-=20
-+static int bpf_xdp_link_update(struct bpf_link *link, struct bpf_prog *n=
-ew_prog,
-+			       struct bpf_prog *old_prog)
-+{
-+	struct bpf_xdp_link *xdp_link =3D container_of(link, struct bpf_xdp_lin=
-k, link);
-+	enum bpf_xdp_mode mode;
-+	bpf_op_t bpf_op;
-+	int err =3D 0;
-+
-+	rtnl_lock();
-+
-+	/* link might have been auto-released already, so fail */
-+	if (!xdp_link->dev) {
-+		err =3D -ENOLINK;
-+		goto out_unlock;
-+	}
-+
-+	if (old_prog && link->prog !=3D old_prog) {
-+		err =3D -EPERM;
-+		goto out_unlock;
-+	}
-+	old_prog =3D link->prog;
-+	if (old_prog =3D=3D new_prog) {
-+		/* no-op, don't disturb drivers */
-+		bpf_prog_put(new_prog);
-+		goto out_unlock;
-+	}
-+
-+	mode =3D dev_xdp_mode(xdp_link->flags);
-+	bpf_op =3D dev_xdp_bpf_op(xdp_link->dev, mode);
-+	err =3D dev_xdp_install(xdp_link->dev, mode, bpf_op, NULL,
-+			      xdp_link->flags, new_prog);
-+	if (err)
-+		goto out_unlock;
-+
-+	old_prog =3D xchg(&link->prog, new_prog);
-+	bpf_prog_put(old_prog);
-+
-+out_unlock:
-+	rtnl_unlock();
-+	return err;
-+}
-+
- static const struct bpf_link_ops bpf_xdp_link_lops =3D {
- 	.release =3D bpf_xdp_link_release,
- 	.dealloc =3D bpf_xdp_link_dealloc,
-+	.update_prog =3D bpf_xdp_link_update,
- };
-=20
- int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *pro=
-g)
---=20
-2.24.1
+    umh: introduce fork_usermode_blob() helper
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10fc4b00900000
+start commit:   9e50b94b Add linux-next specific files for 20200703
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=12fc4b00900000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14fc4b00900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f99cc0faa1476ed6
+dashboard link: https://syzkaller.appspot.com/bug?extid=4c50ac32e5b10e4133e1
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1111fb6d100000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1218fa1f100000
+
+Reported-by: syzbot+4c50ac32e5b10e4133e1@syzkaller.appspotmail.com
+Fixes: 449325b52b7a ("umh: introduce fork_usermode_blob() helper")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
