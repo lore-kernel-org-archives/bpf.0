@@ -2,106 +2,206 @@ Return-Path: <SRS0=6WSx=A4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB957C433E0
-	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 17:29:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3782C433E2
+	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 18:47:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C33C82074B
-	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 17:29:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1AC32076A
+	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 18:47:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UWjEk4wy"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="KBfFLn3/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgGQR3B (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Jul 2020 13:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726232AbgGQR3A (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Jul 2020 13:29:00 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6229DC0619D2;
-        Fri, 17 Jul 2020 10:29:00 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id u25so6508952lfm.1;
-        Fri, 17 Jul 2020 10:29:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OssE5JOZoxVh4WZc8eAWRj3F23YE7gliVHRaokik27A=;
-        b=UWjEk4wyWLWlcqghqtpOkkFoqCZOZVvDFfmVMjJz9HiNpvyvro+M75Y5SN8cqJYTo7
-         7fMlOk1IkeC9wjhkhCDYRT4M7E2raUo2keyxSShKC26WoT3kX8/KtZDA/xkZEICnxC/C
-         gFo4pBLQCxI83zTKUo1t90RZC6dB1hEi5pPvm8Z2keS6FiSNyZXJmRXym7uQ/3g358qH
-         vj7B+u8UPnm9wfl4+ThnNgwlwbvFnS/FnMVAkABQD4yqRMD/Rzsm/Vq7Hi/ghee3SAVj
-         cuU3KUQ2bRMNKAPKwEZx256ZI6luPJXFF3AzJ1jEnCRhGWT7IzVsPHXXnYcgDlCZAikM
-         3lWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OssE5JOZoxVh4WZc8eAWRj3F23YE7gliVHRaokik27A=;
-        b=bZT1CmoCb3+EeQNgxdFtQobUExG1N+LmoKgmQmunRUEf3V0iLyVYImNYGeyML2WFHQ
-         YZW8Bimrr+RT6Y8ohoBg2x9b6IXNC6wgNdgKpNlvBd8DYc6acjUqeHlrrCrBdwH1TjQ7
-         vTYHfQojYvKHtg6JxTjNFI3IbN9ZM+ABHnvYibN9dhhl/Anvgx75izjddkqb0Gsy/zaS
-         hvKdpGPzhLZYudUoEypLTdO+f/NZoSXadM1ackbaY8tCnlpm1acvxj9694HDxXQqSBp7
-         st9dYD7NvlPbBdzRCbgXCop5FFwmK35VpYwvlSk4iJnVTlM6L3nnsSUPXkOpotpAFR89
-         0K/g==
-X-Gm-Message-State: AOAM533fVhEisLPtdZip2wJX94ZeSqxeuQ1U5pbaHS4wSi4r1eqOLPLl
-        MtTE98tF+WAxk4F6r6BCupLe7o/HRoYduG0G1kg=
-X-Google-Smtp-Source: ABdhPJyH6Glorpg8aP3ugpC5YuYiHWmZYhxw3D/PmXsx1ga5VfUrXD8FiMxCiXQhuIWtiBH0Ln/SL9wDLVUEnbL5Wuo=
-X-Received: by 2002:ac2:5970:: with SMTP id h16mr2269254lfp.196.1595006938836;
- Fri, 17 Jul 2020 10:28:58 -0700 (PDT)
+        id S1728188AbgGQSrN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Jul 2020 14:47:13 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18244 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726205AbgGQSrM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 17 Jul 2020 14:47:12 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06HIZ8o7030788
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 11:47:11 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=+WjxlQfmO63N0MdiH4e65kCAwb958zHuzw4cGIBJ3nA=;
+ b=KBfFLn3/6ux/E9OEZbe1ZJHqh43tp0A7wRYPRylBfK9X+uMQph13H/EVx980Iwck8mMD
+ omIlaEwKu/djMD64pt4F2o4iCr61k0x5w7k8RoWr8f2NXOR/Pg3WrbL+SuAYlO4e4oOL
+ +7Lot+Do09JNji0DvtxOVCwvD1hl9nzLyf4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 32a7x7tpf3-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 11:47:11 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 17 Jul 2020 11:47:09 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id A20AC3704BBE; Fri, 17 Jul 2020 11:47:07 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jiri Olsa <jolsa@kernel.org>, <kernel-team@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next 2/2] bpf: compute bpf_skc_to_*() helper socket btf ids at build time
+Date:   Fri, 17 Jul 2020 11:47:07 -0700
+Message-ID: <20200717184707.3477423-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200717184706.3476992-1-yhs@fb.com>
+References: <20200717184706.3476992-1-yhs@fb.com>
 MIME-Version: 1.0
-References: <20200717055245.GA9577@lst.de> <CAADnVQ+rD+7fAsLZT4pG7AN4iO7-dQ+3adw0tBhrf8TGbtLjtA@mail.gmail.com>
- <20200717162526.GA17072@lst.de>
-In-Reply-To: <20200717162526.GA17072@lst.de>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 17 Jul 2020 10:28:47 -0700
-Message-ID: <CAADnVQJoMC=vfS4yb7gYZF4fmwrHd+gdOf9zmPm2XyK1jfosHg@mail.gmail.com>
-Subject: Re: how is the bpfilter sockopt processing supposed to work
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-17_09:2020-07-17,2020-07-17 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ priorityscore=1501 bulkscore=0 impostorscore=0 lowpriorityscore=0
+ suspectscore=25 clxscore=1015 mlxlogscore=999 malwarescore=0 mlxscore=0
+ adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007170130
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 9:25 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Fri, Jul 17, 2020 at 09:13:07AM -0700, Alexei Starovoitov wrote:
-> > On Thu, Jul 16, 2020 at 10:52 PM Christoph Hellwig <hch@lst.de> wrote:
-> > >
-> > > Hi Alexei,
-> > >
-> > > I've just been auditing the sockopt code, and bpfilter looks really
-> > > odd.  Both getsockopts and setsockopt eventually end up
-> > > in__bpfilter_process_sockopt, which then passes record to the
-> > > userspace helper containing the address of the optval buffer.
-> > > Which depending on bpf-cgroup might be in user or kernel space.
-> > > But even if it is in userspace it would be in a different process
-> > > than the bpfiler helper.  What makes all this work?
-> >
-> > Hmm. Good point. bpfilter assumes user addresses. It will break
-> > if bpf cgroup sockopt messes with it.
-> > We had a different issue with bpf-cgroup-sockopt and iptables in the past.
-> > Probably the easiest way forward is to special case this particular one.
-> > With your new series is there a way to tell in bpfilter_ip_get_sockopt()
-> > whether addr is kernel or user? And if it's the kernel just return with error.
->
-> Yes, I can send a fix.  But how do even the user space addressed work?
-> If some random process calls getsockopt or setsockopt, how does the
-> bpfilter user mode helper attach to its address space?
+Currently, socket types (struct tcp_sock, udp_sock, etc.)
+used by bpf_skc_to_*() helpers are computed when vmlinux_btf
+is first built in the kernel.
 
-The actual bpfilter processing is in two patches that we didn't land:
-https://lore.kernel.org/patchwork/patch/902785/
-https://lore.kernel.org/patchwork/patch/902783/
-UMD is using process_vm_readv().
-The target process is waiting for the sockopt syscall to return,
-so from the toctou perspective it's the same as the kernel doing copy_from_user.
+Commit 5a2798ab32ba
+("bpf: Add BTF_ID_LIST/BTF_ID/BTF_ID_UNUSED macros")
+implemented a mechanism to compute btf_ids at kernel build
+time which can simplify kernel implementation and reduce
+runtime overhead by removing in-kernel btf_id calculation.
+This patch did exactly this, removing in-kernel btf_id
+computation and utilizing build-time btf_id computation.
+
+If CONFIG_DEBUG_INFO_BTF is not defined, BTF_ID_LIST will
+define an array with size of 5, which is not enough for
+btf_sock_ids. So define its own static array if
+CONFIG_DEBUG_INFO_BTF is not defined.
+
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ include/linux/bpf.h |  4 ----
+ kernel/bpf/btf.c    |  1 -
+ net/core/filter.c   | 49 +++++++++++++++++----------------------------
+ 3 files changed, 18 insertions(+), 36 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 54ad426dbea1..bc7a4e475d5c 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1537,7 +1537,6 @@ static inline bool bpf_map_is_dev_bound(struct bpf_=
+map *map)
+=20
+ struct bpf_map *bpf_map_offload_map_alloc(union bpf_attr *attr);
+ void bpf_map_offload_map_free(struct bpf_map *map);
+-void init_btf_sock_ids(struct btf *btf);
+ #else
+ static inline int bpf_prog_offload_init(struct bpf_prog *prog,
+ 					union bpf_attr *attr)
+@@ -1563,9 +1562,6 @@ static inline struct bpf_map *bpf_map_offload_map_a=
+lloc(union bpf_attr *attr)
+ static inline void bpf_map_offload_map_free(struct bpf_map *map)
+ {
+ }
+-static inline void init_btf_sock_ids(struct btf *btf)
+-{
+-}
+ #endif /* CONFIG_NET && CONFIG_BPF_SYSCALL */
+=20
+ #if defined(CONFIG_BPF_STREAM_PARSER)
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 03d6d43bb1d6..315cde73421b 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3672,7 +3672,6 @@ struct btf *btf_parse_vmlinux(void)
+ 		goto errout;
+=20
+ 	bpf_struct_ops_init(btf, log);
+-	init_btf_sock_ids(btf);
+=20
+ 	btf_verifier_env_free(env);
+ 	refcount_set(&btf->refcnt, 1);
+diff --git a/net/core/filter.c b/net/core/filter.c
+index bdd2382e655d..d861455ec7bd 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -9243,19 +9243,19 @@ void bpf_prog_change_xdp(struct bpf_prog *prev_pr=
+og, struct bpf_prog *prog)
+  * sock_common as the first argument in its memory layout.
+  */
+ #define BTF_SOCK_TYPE_xxx \
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_INET, "inet_sock")			\
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_INET_CONN, "inet_connection_sock")	\
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_INET_REQ, "inet_request_sock")	\
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_INET_TW, "inet_timewait_sock")	\
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_REQ, "request_sock")		\
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_SOCK, "sock")			\
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_SOCK_COMMON, "sock_common")		\
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_TCP, "tcp_sock")			\
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_TCP_REQ, "tcp_request_sock")	\
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_TCP_TW, "tcp_timewait_sock")	\
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_TCP6, "tcp6_sock")			\
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_UDP, "udp_sock")			\
+-	BTF_SOCK_TYPE(BTF_SOCK_TYPE_UDP6, "udp6_sock")
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_INET, inet_sock)			\
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_INET_CONN, inet_connection_sock)	\
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_INET_REQ, inet_request_sock)	\
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_INET_TW, inet_timewait_sock)	\
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_REQ, request_sock)			\
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_SOCK, sock)				\
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_SOCK_COMMON, sock_common)		\
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_TCP, tcp_sock)			\
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_TCP_REQ, tcp_request_sock)		\
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_TCP_TW, tcp_timewait_sock)		\
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_TCP6, tcp6_sock)			\
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_UDP, udp_sock)			\
++	BTF_SOCK_TYPE(BTF_SOCK_TYPE_UDP6, udp6_sock)
+=20
+ enum {
+ #define BTF_SOCK_TYPE(name, str) name,
+@@ -9264,26 +9264,13 @@ BTF_SOCK_TYPE_xxx
+ MAX_BTF_SOCK_TYPE,
+ };
+=20
+-static int btf_sock_ids[MAX_BTF_SOCK_TYPE];
+-
+-#ifdef CONFIG_BPF_SYSCALL
+-static const char *bpf_sock_types[] =3D {
+-#define BTF_SOCK_TYPE(name, str) str,
++#ifdef CONFIG_DEBUG_INFO_BTF
++BTF_ID_LIST(btf_sock_ids)
++#define BTF_SOCK_TYPE(name, type) BTF_ID(struct, type)
+ BTF_SOCK_TYPE_xxx
+ #undef BTF_SOCK_TYPE
+-};
+-
+-void init_btf_sock_ids(struct btf *btf)
+-{
+-	int i, btf_id;
+-
+-	for (i =3D 0; i < MAX_BTF_SOCK_TYPE; i++) {
+-		btf_id =3D btf_find_by_name_kind(btf, bpf_sock_types[i],
+-					       BTF_KIND_STRUCT);
+-		if (btf_id > 0)
+-			btf_sock_ids[i] =3D btf_id;
+-	}
+-}
++#else
++static u32 btf_sock_ids[MAX_BTF_SOCK_TYPE];
+ #endif
+=20
+ static bool check_arg_btf_id(u32 btf_id, u32 arg)
+--=20
+2.24.1
+
