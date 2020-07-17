@@ -2,68 +2,71 @@ Return-Path: <SRS0=6WSx=A4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5F6FC43457
-	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 10:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B76FC43459
+	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 10:36:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ADF0020734
-	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 10:36:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 174602076A
+	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 10:36:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="aRfP1xdq"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="mWIffWZd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725864AbgGQKgS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Jul 2020 06:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
+        id S1726686AbgGQKf5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Jul 2020 06:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726768AbgGQKgA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Jul 2020 06:36:00 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841A7C08C5CE
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 03:36:00 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id r19so11956448ljn.12
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 03:36:00 -0700 (PDT)
+        with ESMTP id S1726627AbgGQKf4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Jul 2020 06:35:56 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F7FC061755
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 03:35:55 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id s9so12002648ljm.11
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 03:35:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=eri9q6YTTJuTcDHCnqTQ8a4HARgJ3515jt9CHeDHUoQ=;
-        b=aRfP1xdqjqlWmGbPARg7nbKtz8w2jRhfnEJ2769OvRF3mVJKVSt9U8RkZTxb5BCEHs
-         PGmifqSiM3F6NG0dN7vKOB8Da18wL+ceaOhhXUfoAKFmZvs6exvetnvjusfs+7ivx23v
-         OT//Vp5U/L+tpalwTxkl7mNThAVVEYZGnMTqs=
+        bh=zxJH2GAZm69sAYbUnzoD13o3dlmlVhw7Uh36sUPZfy8=;
+        b=mWIffWZdY3rDJXD5U2n31gQ+qRbzhu6fe2jRdKO7Y/TZYd4k/giZFs4YwbE1NHbX0q
+         qOdmUJGHrWuWP/MmBjxc5Ca+NayyIVQzVNURE2Uj9TN0dtIydKqWpjuDd/S/5ObKQrey
+         pQN3vCMZ8yh46yD8GpkxcCQOuL/YBmAWf+9Fg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=eri9q6YTTJuTcDHCnqTQ8a4HARgJ3515jt9CHeDHUoQ=;
-        b=RfGmSsq7g94kdYqQ+uAA07xD7GvatXgGtxCtAM2QnmtcM/rAz/wAu0P3KtC2NaR/Iz
-         A53KI4gtg3DMvdYIb83QnddU3ynT3D21/NYD6xG70ht5doxPbFzLLGor/ipHHGaOzUuA
-         eqv0EGdIcH/I/12KyYqvcoojHBDdL7P3/Yk8O/x+jr7A8AO5nfgMM7LkWaT+RkchTwTt
-         2LuUCL/UF6pk8IZZdMxisjIl2creSltdlrbY2FT4X9a3qQKN1b23rUOyndRE7268U7hs
-         hzG5eKROJmzZYBHuqaWPJFZObzSnx3VFEvIVGnaGt+OzV0uXA2JLTMC1Jga8BqHlOj+0
-         O7qA==
-X-Gm-Message-State: AOAM532vTvPBdGhzwGosGN5dMSzdvpZ/hAWAqtuQnw7gVv3hOt8pnM+g
-        Vb9s5+sLgLC49gHM8DWyJJVRXF6mzP+ehA==
-X-Google-Smtp-Source: ABdhPJzAE0yA8Ogvtj+DgtKPwTkF9gZVzpjzcuW3we90NMwts5efYis+psAEeaAW43xqtskOZqlYWQ==
-X-Received: by 2002:a2e:8357:: with SMTP id l23mr3921650ljh.290.1594982158657;
-        Fri, 17 Jul 2020 03:35:58 -0700 (PDT)
+        bh=zxJH2GAZm69sAYbUnzoD13o3dlmlVhw7Uh36sUPZfy8=;
+        b=DFrhoFKzuCUtfvW+oxdwvLtqYOiOBC32N//V8/WcWG11dARVjTioiRtfiDxoWE1dAl
+         OjHuNXY0Gg65DfODHZW7SfChFtgXEFQi9y3Z07z3PPmk9GYK8gFjFYy0gGAvBHnCFhc0
+         QobkwWr9pd189+yCLfnWnQkJCrynrx794y1k3/GbEUYFeUdLdJh52urnT6662BRB3mk2
+         potuh9Owhx1trbyjngJxLNVrKG3hVQzWbPB1a54m415AqxYOupg+5WnfXJwvWE5CwC4F
+         fZ3D9zckJsbRjbIeUKzczxi2aHfkjW3obdx/qzixQmPmq6hNepWsw99q/3vOLVR80n0t
+         FePQ==
+X-Gm-Message-State: AOAM533ynbEM+mr3L2hUkoCjLXZ8cNFmJ4qxiayGoPTxe5K7esnA3lGV
+        nlDLJpTJkJqYyNSd947K89Flx/QJ8vLJjg==
+X-Google-Smtp-Source: ABdhPJz9Jc4U038Fwk/ocHCuTF43yxRkz6GCrztUblGnTr55PP2OzFeC3XX5sAPu6DW9N9ugIbGb5Q==
+X-Received: by 2002:a2e:8804:: with SMTP id x4mr4249671ljh.56.1594982154041;
+        Fri, 17 Jul 2020 03:35:54 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id 11sm1568806ljw.69.2020.07.17.03.35.57
+        by smtp.gmail.com with ESMTPSA id s7sm1574657ljc.86.2020.07.17.03.35.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2020 03:35:58 -0700 (PDT)
+        Fri, 17 Jul 2020 03:35:53 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH bpf-next v5 13/15] tools/bpftool: Add name mappings for SK_LOOKUP prog and attach type
-Date:   Fri, 17 Jul 2020 12:35:34 +0200
-Message-Id: <20200717103536.397595-14-jakub@cloudflare.com>
+        Jakub Kicinski <kuba@kernel.org>,
+        Marek Majkowski <marek@cloudflare.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH bpf-next v5 10/15] udp6: Run SK_LOOKUP BPF program on socket lookup
+Date:   Fri, 17 Jul 2020 12:35:31 +0200
+Message-Id: <20200717103536.397595-11-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200717103536.397595-1-jakub@cloudflare.com>
 References: <20200717103536.397595-1-jakub@cloudflare.com>
@@ -74,86 +77,115 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make bpftool show human-friendly identifiers for newly introduced program
-and attach type, BPF_PROG_TYPE_SK_LOOKUP and BPF_SK_LOOKUP, respectively.
+Same as for udp4, let BPF program override the socket lookup result, by
+selecting a receiving socket of its choice or failing the lookup, if no
+connected UDP socket matched packet 4-tuple.
 
-Also, add the new prog type bash-completion, man page and help message.
-
+Suggested-by: Marek Majkowski <marek@cloudflare.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
 
 Notes:
-    v5:
-    - Update prog type list in bash-completion and bpftool-prog man page. (Andrii)
+    v4:
+    - Adapt to change in bpf_sk_lookup_run_v6 return value semantics.
     
     v3:
-    - New patch in v3.
+    - Use a static_key to minimize the hook overhead when not used. (Alexei)
+    - Adapt for running an array of attached programs. (Alexei)
+    - Adapt for optionally skipping reuseport selection. (Martin)
 
- tools/bpf/bpftool/Documentation/bpftool-prog.rst | 2 +-
- tools/bpf/bpftool/bash-completion/bpftool        | 2 +-
- tools/bpf/bpftool/common.c                       | 1 +
- tools/bpf/bpftool/prog.c                         | 3 ++-
- 4 files changed, 5 insertions(+), 3 deletions(-)
+ net/ipv6/udp.c | 60 ++++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 51 insertions(+), 9 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 412ea3d9bf7f..82e356b664e8 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -45,7 +45,7 @@ PROG COMMANDS
- |               **cgroup/getsockname4** | **cgroup/getsockname6** | **cgroup/sendmsg4** | **cgroup/sendmsg6** |
- |		**cgroup/recvmsg4** | **cgroup/recvmsg6** | **cgroup/sysctl** |
- |		**cgroup/getsockopt** | **cgroup/setsockopt** |
--|		**struct_ops** | **fentry** | **fexit** | **freplace**
-+|		**struct_ops** | **fentry** | **fexit** | **freplace** | **sk_lookup**
- |	}
- |       *ATTACH_TYPE* := {
- |		**msg_verdict** | **stream_verdict** | **stream_parser** | **flow_dissector**
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 25b25aca1112..7b137264ea3a 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -479,7 +479,7 @@ _bpftool()
-                                 cgroup/post_bind4 cgroup/post_bind6 \
-                                 cgroup/sysctl cgroup/getsockopt \
-                                 cgroup/setsockopt struct_ops \
--                                fentry fexit freplace" -- \
-+                                fentry fexit freplace sk_lookup" -- \
-                                                    "$cur" ) )
-                             return 0
-                             ;;
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index 29f4e7611ae8..9b28c69dd8e4 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -64,6 +64,7 @@ const char * const attach_type_name[__MAX_BPF_ATTACH_TYPE] = {
- 	[BPF_TRACE_FEXIT]		= "fexit",
- 	[BPF_MODIFY_RETURN]		= "mod_ret",
- 	[BPF_LSM_MAC]			= "lsm_mac",
-+	[BPF_SK_LOOKUP]			= "sk_lookup",
- };
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 084205c18a33..ff8be202726a 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -190,6 +190,31 @@ static struct sock *udp6_lib_lookup2(struct net *net,
+ 	return result;
+ }
  
- void p_err(const char *fmt, ...)
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 6863c57effd0..3e6ecc6332e2 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -59,6 +59,7 @@ const char * const prog_type_name[] = {
- 	[BPF_PROG_TYPE_TRACING]			= "tracing",
- 	[BPF_PROG_TYPE_STRUCT_OPS]		= "struct_ops",
- 	[BPF_PROG_TYPE_EXT]			= "ext",
-+	[BPF_PROG_TYPE_SK_LOOKUP]		= "sk_lookup",
- };
++static inline struct sock *udp6_lookup_run_bpf(struct net *net,
++					       struct udp_table *udptable,
++					       struct sk_buff *skb,
++					       const struct in6_addr *saddr,
++					       __be16 sport,
++					       const struct in6_addr *daddr,
++					       u16 hnum)
++{
++	struct sock *sk, *reuse_sk;
++	bool no_reuseport;
++
++	if (udptable != &udp_table)
++		return NULL; /* only UDP is supported */
++
++	no_reuseport = bpf_sk_lookup_run_v6(net, IPPROTO_UDP,
++					    saddr, sport, daddr, hnum, &sk);
++	if (no_reuseport || IS_ERR_OR_NULL(sk))
++		return sk;
++
++	reuse_sk = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
++	if (reuse_sk)
++		sk = reuse_sk;
++	return sk;
++}
++
+ /* rcu_read_lock() must be held */
+ struct sock *__udp6_lib_lookup(struct net *net,
+ 			       const struct in6_addr *saddr, __be16 sport,
+@@ -200,25 +225,42 @@ struct sock *__udp6_lib_lookup(struct net *net,
+ 	unsigned short hnum = ntohs(dport);
+ 	unsigned int hash2, slot2;
+ 	struct udp_hslot *hslot2;
+-	struct sock *result;
++	struct sock *result, *sk;
  
- const size_t prog_type_name_size = ARRAY_SIZE(prog_type_name);
-@@ -1905,7 +1906,7 @@ static int do_help(int argc, char **argv)
- 		"                 cgroup/getsockname4 | cgroup/getsockname6 | cgroup/sendmsg4 |\n"
- 		"                 cgroup/sendmsg6 | cgroup/recvmsg4 | cgroup/recvmsg6 |\n"
- 		"                 cgroup/getsockopt | cgroup/setsockopt |\n"
--		"                 struct_ops | fentry | fexit | freplace }\n"
-+		"                 struct_ops | fentry | fexit | freplace | sk_lookup }\n"
- 		"       ATTACH_TYPE := { msg_verdict | stream_verdict | stream_parser |\n"
- 		"                        flow_dissector }\n"
- 		"       METRIC := { cycles | instructions | l1d_loads | llc_misses }\n"
+ 	hash2 = ipv6_portaddr_hash(net, daddr, hnum);
+ 	slot2 = hash2 & udptable->mask;
+ 	hslot2 = &udptable->hash2[slot2];
+ 
++	/* Lookup connected or non-wildcard sockets */
+ 	result = udp6_lib_lookup2(net, saddr, sport,
+ 				  daddr, hnum, dif, sdif,
+ 				  hslot2, skb);
+-	if (!result) {
+-		hash2 = ipv6_portaddr_hash(net, &in6addr_any, hnum);
+-		slot2 = hash2 & udptable->mask;
++	if (!IS_ERR_OR_NULL(result) && result->sk_state == TCP_ESTABLISHED)
++		goto done;
++
++	/* Lookup redirect from BPF */
++	if (static_branch_unlikely(&bpf_sk_lookup_enabled)) {
++		sk = udp6_lookup_run_bpf(net, udptable, skb,
++					 saddr, sport, daddr, hnum);
++		if (sk) {
++			result = sk;
++			goto done;
++		}
++	}
+ 
+-		hslot2 = &udptable->hash2[slot2];
++	/* Got non-wildcard socket or error on first lookup */
++	if (result)
++		goto done;
+ 
+-		result = udp6_lib_lookup2(net, saddr, sport,
+-					  &in6addr_any, hnum, dif, sdif,
+-					  hslot2, skb);
+-	}
++	/* Lookup wildcard sockets */
++	hash2 = ipv6_portaddr_hash(net, &in6addr_any, hnum);
++	slot2 = hash2 & udptable->mask;
++	hslot2 = &udptable->hash2[slot2];
++
++	result = udp6_lib_lookup2(net, saddr, sport,
++				  &in6addr_any, hnum, dif, sdif,
++				  hslot2, skb);
++done:
+ 	if (IS_ERR(result))
+ 		return NULL;
+ 	return result;
 -- 
 2.25.4
 
