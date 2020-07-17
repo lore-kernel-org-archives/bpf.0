@@ -2,194 +2,189 @@ Return-Path: <SRS0=6WSx=A4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28633C4345B
-	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 10:36:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF0DCC433E4
+	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 10:43:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 05C1620734
-	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 10:36:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="De3AyfdB"
+	by mail.kernel.org (Postfix) with ESMTP id 893B0207E8
+	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 10:43:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1594982635;
+	bh=s7S0uANMH/iCoX+RiHihsKlp/l+WXiRZz63TRmxgvac=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=S7XDNNHeu0TNDEKE6A/Hr/T5cz265/Ahd/0ycm42krY8Gw2Quj8LLn2jSQ7a47HUw
+	 K1RIhnuhxgy5D3IFobd9MlFvVHS2aOYvrswBeW05klLgMzCqkBrFLlUEFlCnT9KP+m
+	 zvQf+BLcLbbJTxGP2hW5YcAweZeTyPpPsnqbacZ0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726635AbgGQKf4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Jul 2020 06:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726411AbgGQKfz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Jul 2020 06:35:55 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEACDC08C5DD
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 03:35:52 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id q4so12106218lji.2
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 03:35:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LPXPoxj9sk9RYPwMSCYR+PV+oV7CMuYMBBVgyyAlEyA=;
-        b=De3AyfdBCd/kNvQAqMJMWG87C6e15az2OmmYDIXUUhfKw4ciqCBK+ymMzPynLRjM9r
-         b0167rWcKYHLJm+8IEa4nJEC03I2uEfDrD4eqVz99ENqsH/Vy0VBTxQLS7RjvMvDo90+
-         yLG5S4zfIccWOlswBNgMVnmCDJab7qZL6YLXU=
+        id S1726059AbgGQKny (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Jul 2020 06:43:54 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:52872 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726013AbgGQKnx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Jul 2020 06:43:53 -0400
+Received: by mail-wm1-f65.google.com with SMTP id q15so14172453wmj.2;
+        Fri, 17 Jul 2020 03:43:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LPXPoxj9sk9RYPwMSCYR+PV+oV7CMuYMBBVgyyAlEyA=;
-        b=kh2NhSw19ZaK8nazg7292vch/I33cYX04vnOVar/C9gVH96zWNqW79Mb/mbePUwXm6
-         gi4PMuUZMARk33pJACRrF/atr1HNnry/loonOXn/f5ORwKuHIeGWF8wMc7ohADMpwevt
-         Z9WxGorhDchMw7fGAjq3Dh/l78G+Of5aqmPethuYgeBqhnANFHxxPYw2DQDePOx1rcgH
-         xPVeuLRJnvLHmvSSuJ/FoGbh3Hdj/jVqSwg8IzYr1YqO/h6ngQCRmkQOngIxCR2zIace
-         2378WMoT4Uf9ZaOIEpRuYFc1G/799TV/+o8GADPSf0VXpZgUn6KtVsyAp5mh5HrsE2ag
-         EVNg==
-X-Gm-Message-State: AOAM532MdhY/WPSPMQUF449/JKRGsMlO1IUCr2hY3h0Yu9fhb5ORvcyV
-        4SKbChNYh9xyZjl8M+Ty/bXR6MsqEJZYVg==
-X-Google-Smtp-Source: ABdhPJy717iY5PK3LFbNDSGyiScNSrygHzIIL4465sTOE6iOtptBculw2TIerX7iQXcEsO0nZYHx8A==
-X-Received: by 2002:a05:651c:305:: with SMTP id a5mr4011098ljp.387.1594982150831;
-        Fri, 17 Jul 2020 03:35:50 -0700 (PDT)
-Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id 193sm2122534lfa.90.2020.07.17.03.35.49
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LSE9umRH3nWIvfdFNBwmB1m+0/8khnsXtG7gUR3+lhQ=;
+        b=MTclCLxnSGTulDMf7kw9bdG5Rsenwxy0FR7VPd6FmSHhoQCGrM+Kh3ejyehZZDVROz
+         e6NVV445Ter2u3ARYoEzQwa04Aa/8On2/gF3GjB+Vd1qBbt/8tyZvb+T5MGGd3LfSyAV
+         eYCKUOo5tB1I8gYltMxENXQTvqkgEUI8phy3CMNQDvFjW93CaT1JQ9dYAOC4kWj4wvmz
+         QUPkVivj2tDHp61MplATuZTojRIFG6Dm/5TGNfqTZuDhndRaOspCT2XBH7ymD9FNgeHu
+         qvS2+sS4E+S3WmHxSiofyIPDK/2fMwnQxrswMVoH3zaUh43zyqFAu7z+9ig4rVyluYNi
+         g+yg==
+X-Gm-Message-State: AOAM530w/Jx7LKlVNvHqpDMRAM6Eof0kqjWwFlT0DlRztYu0W8G6GTp6
+        QaFpBkhvCxRpijY4fIrAZZw=
+X-Google-Smtp-Source: ABdhPJx8welwCuOA1l/xNh4E/9QDLWouXozoXt96oAhI1heXK8k2dfzmyqMAsKsdrZS8NTxZy7UyPQ==
+X-Received: by 2002:a1c:4d11:: with SMTP id o17mr8486138wmh.134.1594982630965;
+        Fri, 17 Jul 2020 03:43:50 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id w2sm13172955wrs.77.2020.07.17.03.43.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2020 03:35:50 -0700 (PDT)
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        Fri, 17 Jul 2020 03:43:50 -0700 (PDT)
+Date:   Fri, 17 Jul 2020 10:43:48 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Chi Song <Song.Chi@microsoft.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Marek Majkowski <marek@cloudflare.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH bpf-next v5 08/15] udp: Run SK_LOOKUP BPF program on socket lookup
-Date:   Fri, 17 Jul 2020 12:35:29 +0200
-Message-Id: <20200717103536.397595-9-jakub@cloudflare.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200717103536.397595-1-jakub@cloudflare.com>
-References: <20200717103536.397595-1-jakub@cloudflare.com>
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next] net: hyperv: Add attributes to show RX/TX
+ indirection table
+Message-ID: <20200717104348.epj54vr3evmullol@liuwe-devbox-debian-v2>
+References: <HK0P153MB027502644323A21B09F6DA60987C0@HK0P153MB0275.APCP153.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <HK0P153MB027502644323A21B09F6DA60987C0@HK0P153MB0275.APCP153.PROD.OUTLOOK.COM>
+User-Agent: NeoMutt/20180716
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Following INET/TCP socket lookup changes, modify UDP socket lookup to let
-BPF program select a receiving socket before searching for a socket by
-destination address and port as usual.
+Hi Chi
 
-Lookup of connected sockets that match packet 4-tuple is unaffected by this
-change. BPF program runs, and potentially overrides the lookup result, only
-if a 4-tuple match was not found.
+Thanks for your patch. A few things need to be fixed before it can be
+accepted upstream.
 
-Suggested-by: Marek Majkowski <marek@cloudflare.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
----
+On Fri, Jul 17, 2020 at 06:04:31AM +0000, Chi Song wrote:
+> The network is observed with low performance, if TX indirection table
+> is imbalance.  But the table is in memory and set in runtime, it's
+> hard to know. Add them to attributes can help on troubleshooting.
 
-Notes:
-    v4:
-    - Adapt to change in bpf_sk_lookup_run_v4 return value semantics.
-    
-    v3:
-    - Use a static_key to minimize the hook overhead when not used. (Alexei)
-    - Adapt for running an array of attached programs. (Alexei)
-    - Adapt for optionally skipping reuseport selection. (Martin)
+Missing Signed-off-by here. I assume you wrote this patch so please add
 
- net/ipv4/udp.c | 59 ++++++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 50 insertions(+), 9 deletions(-)
+    Signed-off-by: Chi Song <song.chi@microsoft.com>
 
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 9296faea3acf..b738c63d7a77 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -456,6 +456,29 @@ static struct sock *udp4_lib_lookup2(struct net *net,
- 	return result;
- }
- 
-+static inline struct sock *udp4_lookup_run_bpf(struct net *net,
-+					       struct udp_table *udptable,
-+					       struct sk_buff *skb,
-+					       __be32 saddr, __be16 sport,
-+					       __be32 daddr, u16 hnum)
-+{
-+	struct sock *sk, *reuse_sk;
-+	bool no_reuseport;
-+
-+	if (udptable != &udp_table)
-+		return NULL; /* only UDP is supported */
-+
-+	no_reuseport = bpf_sk_lookup_run_v4(net, IPPROTO_UDP,
-+					    saddr, sport, daddr, hnum, &sk);
-+	if (no_reuseport || IS_ERR_OR_NULL(sk))
-+		return sk;
-+
-+	reuse_sk = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
-+	if (reuse_sk)
-+		sk = reuse_sk;
-+	return sk;
-+}
-+
- /* UDP is nearly always wildcards out the wazoo, it makes no sense to try
-  * harder than this. -DaveM
-  */
-@@ -463,27 +486,45 @@ struct sock *__udp4_lib_lookup(struct net *net, __be32 saddr,
- 		__be16 sport, __be32 daddr, __be16 dport, int dif,
- 		int sdif, struct udp_table *udptable, struct sk_buff *skb)
- {
--	struct sock *result;
- 	unsigned short hnum = ntohs(dport);
- 	unsigned int hash2, slot2;
- 	struct udp_hslot *hslot2;
-+	struct sock *result, *sk;
- 
- 	hash2 = ipv4_portaddr_hash(net, daddr, hnum);
- 	slot2 = hash2 & udptable->mask;
- 	hslot2 = &udptable->hash2[slot2];
- 
-+	/* Lookup connected or non-wildcard socket */
- 	result = udp4_lib_lookup2(net, saddr, sport,
- 				  daddr, hnum, dif, sdif,
- 				  hslot2, skb);
--	if (!result) {
--		hash2 = ipv4_portaddr_hash(net, htonl(INADDR_ANY), hnum);
--		slot2 = hash2 & udptable->mask;
--		hslot2 = &udptable->hash2[slot2];
--
--		result = udp4_lib_lookup2(net, saddr, sport,
--					  htonl(INADDR_ANY), hnum, dif, sdif,
--					  hslot2, skb);
-+	if (!IS_ERR_OR_NULL(result) && result->sk_state == TCP_ESTABLISHED)
-+		goto done;
-+
-+	/* Lookup redirect from BPF */
-+	if (static_branch_unlikely(&bpf_sk_lookup_enabled)) {
-+		sk = udp4_lookup_run_bpf(net, udptable, skb,
-+					 saddr, sport, daddr, hnum);
-+		if (sk) {
-+			result = sk;
-+			goto done;
-+		}
- 	}
-+
-+	/* Got non-wildcard socket or error on first lookup */
-+	if (result)
-+		goto done;
-+
-+	/* Lookup wildcard sockets */
-+	hash2 = ipv4_portaddr_hash(net, htonl(INADDR_ANY), hnum);
-+	slot2 = hash2 & udptable->mask;
-+	hslot2 = &udptable->hash2[slot2];
-+
-+	result = udp4_lib_lookup2(net, saddr, sport,
-+				  htonl(INADDR_ANY), hnum, dif, sdif,
-+				  hslot2, skb);
-+done:
- 	if (IS_ERR(result))
- 		return NULL;
- 	return result;
--- 
-2.25.4
+If there are other authors, please add their SoBs too.
 
+Please wrap the commit message to around 72 to 80 columns wide.
+
+I notice you only talked about TX table but in the code your also added
+support for RX table.
+
+I would also suggest changing the commit message a bit to:
+
+    An imbalanced TX indirection table causes netvsc to have low
+    performance. This table is created and managed during runtime. To help
+    better diagnose performance issues caused by imbalanced tables, add
+    device attributes to show the content of TX and RX indirection tables.
+
+Perhaps RX table causes low performance as well? If so, the above
+message needs further adjustment to account for that too.
+
+I will leave reviewing the code to Haiyang and Stephen.
+
+Wei.
+
+
+> ---
+>  drivers/net/hyperv/netvsc_drv.c | 46 +++++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+> 
+> diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
+> index 6267f706e8ee..cd6fe96e10c1 100644
+> --- a/drivers/net/hyperv/netvsc_drv.c
+> +++ b/drivers/net/hyperv/netvsc_drv.c
+> @@ -2370,6 +2370,51 @@ static int netvsc_unregister_vf(struct net_device *vf_netdev)
+>  	return NOTIFY_OK;
+>  }
+>  
+> +static ssize_t tx_indirection_table_show(struct device *dev,
+> +					 struct device_attribute *dev_attr,
+> +					 char *buf)
+> +{
+> +	struct net_device *ndev = to_net_dev(dev);
+> +	struct net_device_context *ndc = netdev_priv(ndev);
+> +	int i = 0;
+> +	ssize_t offset = 0;
+> +
+> +	for (i = 0; i < VRSS_SEND_TAB_SIZE; i++)
+> +		offset += sprintf(buf + offset, "%u ", ndc->tx_table[i]);
+> +	buf[offset - 1] = '\n';
+> +
+> +	return offset;
+> +}
+> +static DEVICE_ATTR_RO(tx_indirection_table);
+> +
+> +static ssize_t rx_indirection_table_show(struct device *dev,
+> +					 struct device_attribute *dev_attr,
+> +					 char *buf)
+> +{
+> +	struct net_device *ndev = to_net_dev(dev);
+> +	struct net_device_context *ndc = netdev_priv(ndev);
+> +	int i = 0;
+> +	ssize_t offset = 0;
+> +
+> +	for (i = 0; i < ITAB_NUM; i++)
+> +		offset += sprintf(buf + offset, "%u ", ndc->rx_table[i]);
+> +	buf[offset - 1] = '\n';
+> +
+> +	return offset;
+> +}
+> +static DEVICE_ATTR_RO(rx_indirection_table);
+> +
+> +static struct attribute *netvsc_dev_attrs[] = {
+> +	&dev_attr_tx_indirection_table.attr,
+> +	&dev_attr_rx_indirection_table.attr,
+> +	NULL
+> +};
+> +
+> +const struct attribute_group netvsc_dev_group = {
+> +	.name = NULL,
+> +	.attrs = netvsc_dev_attrs,
+> +};
+> +
+>  static int netvsc_probe(struct hv_device *dev,
+>  			const struct hv_vmbus_device_id *dev_id)
+>  {
+> @@ -2410,6 +2455,7 @@ static int netvsc_probe(struct hv_device *dev,
+>  
+>  	net->netdev_ops = &device_ops;
+>  	net->ethtool_ops = &ethtool_ops;
+> +	net->sysfs_groups[0] = &netvsc_dev_group;
+>  	SET_NETDEV_DEV(net, &dev->device);
+>  
+>  	/* We always need headroom for rndis header */
+> -- 
+> 2.25.1
