@@ -2,44 +2,45 @@ Return-Path: <SRS0=6WSx=A4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9ED9C433E3
-	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 18:47:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82AACC433E5
+	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 18:47:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C22EE2083B
-	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 18:47:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 60965207EA
+	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 18:47:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fpSD0tcU"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZH57aRgN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728202AbgGQSrN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Jul 2020 14:47:13 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:31670 "EHLO
+        id S1728119AbgGQSrR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Jul 2020 14:47:17 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:43594 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728103AbgGQSrM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 17 Jul 2020 14:47:12 -0400
+        by vger.kernel.org with ESMTP id S1728175AbgGQSrR (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 17 Jul 2020 14:47:17 -0400
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06HIYaBC025407
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 11:47:11 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06HIYcvs025498
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 11:47:16 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=1PZwPd90O5NnMdPnysaJrwBMIuoVWVgTGWu5QvT08+U=;
- b=fpSD0tcURducxmnSmpAk3HqRi42DacsXaHDlahNNF+rT2200y1x4C4ON5yKi2phOqr0/
- FyXYPyXTSZd2U8FkJZs5tICOZ1b1LYWNZFI6hwcmyxrGUwLrzx5rx5luZTMDF3FF7qDQ
- 71t8zsJuubJ47pclVor/VUqq8pUnwnV/UZY= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=0ztTVug7x2t80UXoWNU42SxtICydLJeqvLLBtfZ/gFo=;
+ b=ZH57aRgNwXUGjsDrOG46XZRwG4YkfTZblDAAgKXIoOF2FxdAOIW/6+7S32Asjvg7BRqx
+ Gpm9T/f/6kK7kv4cZMwKqZp9mf27gBFfcVjN6W9y8RCT3lj4qjiAJBK/vaAeszimInZC
+ DH1Tthv6AzvEbR4kAlC3an6i2wHy+P/t4l8= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 32au0anntc-3
+        by mx0a-00082601.pphosted.com with ESMTP id 32au0anntr-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 11:47:11 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 11:47:16 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 17 Jul 2020 11:47:09 -0700
+ 15.1.1979.3; Fri, 17 Jul 2020 11:47:11 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 2B7583704BBE; Fri, 17 Jul 2020 11:47:06 -0700 (PDT)
+        id 65E193704CE3; Fri, 17 Jul 2020 11:47:06 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -48,10 +49,12 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jiri Olsa <jolsa@kernel.org>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 0/2] compute bpf_skc_to_*() helper socket btf ids at build time
+Subject: [PATCH bpf-next 1/2] bpf: change var type of BTF_ID_LIST to static
 Date:   Fri, 17 Jul 2020 11:47:06 -0700
-Message-ID: <20200717184706.3476992-1-yhs@fb.com>
+Message-ID: <20200717184706.3477154-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200717184706.3476992-1-yhs@fb.com>
+References: <20200717184706.3476992-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
@@ -60,7 +63,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-17_09:2020-07-17,2020-07-17 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 phishscore=0
  impostorscore=0 bulkscore=0 priorityscore=1501 malwarescore=0 adultscore=0
- clxscore=1015 lowpriorityscore=0 suspectscore=8 mlxlogscore=822 mlxscore=0
+ clxscore=1015 lowpriorityscore=0 suspectscore=8 mlxlogscore=806 mlxscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2007170130
 X-FB-Internal: deliver
@@ -69,27 +72,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit af7ec1383361 ("bpf: Add bpf_skc_to_tcp6_sock() helper")
-computed btf ids for a list of sockets at runtime when vmlinux_btf
-is available. Commit 5a2798ab32ba
-("bpf: Add BTF_ID_LIST/BTF_ID/BTF_ID_UNUSED macros") added support
-to calculate btf_ids during linux build time. Patch #2
-replaced runtime mechanism with new build-time btf_id computation
-mechanism. Patch #1 also fixed a minor issue to use "static" instead
-of "extern" for variable declaration to conform to actual
-variable scope.
+The BTF_ID_LIST macro definition in btf_ids.h:
+   #define BTF_ID_LIST(name)                \
+   __BTF_ID_LIST(name)                      \
+   extern u32 name[];
 
-Yonghong Song (2):
-  bpf: change var type of BTF_ID_LIST to static
-  bpf: compute bpf_skc_to_*() helper socket btf ids at build time
+The variable defined in __BTF_ID_LIST has
+".local" directive, which means the variable
+is only available in the current file.
+So change the scope of "name" in the declaration
+from "extern" to "static".
 
- include/linux/bpf.h           |  4 ---
- include/linux/btf_ids.h       |  2 +-
- kernel/bpf/btf.c              |  1 -
- net/core/filter.c             | 49 +++++++++++++----------------------
- tools/include/linux/btf_ids.h |  2 +-
- 5 files changed, 20 insertions(+), 38 deletions(-)
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ include/linux/btf_ids.h       | 2 +-
+ tools/include/linux/btf_ids.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+index 1cdb56950ffe..cebc9a655959 100644
+--- a/include/linux/btf_ids.h
++++ b/include/linux/btf_ids.h
+@@ -66,7 +66,7 @@ asm(							\
+=20
+ #define BTF_ID_LIST(name)				\
+ __BTF_ID_LIST(name)					\
+-extern u32 name[];
++static u32 name[];
+=20
+ /*
+  * The BTF_ID_UNUSED macro defines 4 zero bytes.
+diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.=
+h
+index fe019774f8a7..b870776201e5 100644
+--- a/tools/include/linux/btf_ids.h
++++ b/tools/include/linux/btf_ids.h
+@@ -64,7 +64,7 @@ asm(							\
+=20
+ #define BTF_ID_LIST(name)				\
+ __BTF_ID_LIST(name)					\
+-extern u32 name[];
++static u32 name[];
+=20
+ /*
+  * The BTF_ID_UNUSED macro defines 4 zero bytes.
 --=20
 2.24.1
 
