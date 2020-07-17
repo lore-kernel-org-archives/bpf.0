@@ -2,69 +2,69 @@ Return-Path: <SRS0=6WSx=A4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9F9EC433E7
-	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 10:35:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CCC5C433F7
+	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 10:36:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A13022076A
-	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 10:35:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D1DBA20734
+	for <bpf@archiver.kernel.org>; Fri, 17 Jul 2020 10:36:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="jrPApZee"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Eb619zQS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726335AbgGQKfx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Jul 2020 06:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S1726000AbgGQKgI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Jul 2020 06:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726386AbgGQKfr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Jul 2020 06:35:47 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C00C08C5C0
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 03:35:46 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id h22so12029110lji.9
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 03:35:46 -0700 (PDT)
+        with ESMTP id S1726812AbgGQKgD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Jul 2020 06:36:03 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A31EC08C5C0
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 03:36:02 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id z24so12012348ljn.8
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2020 03:36:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=72e8cCZm/q7iCHRMQTpm0Tz32Yebz18ercdbU01IXjU=;
-        b=jrPApZeeQhSatpcHT3gWz/BhhQLe/Nf8Nl6czXsSuteMfTkonWBJr1o6xBN9jzZupV
-         eDuKN43m2dlUUlE+HecTpcD5l0w3c2qmSfR3SHDbMSP6nCh4JyCDYk62btCAlSi9jLGM
-         E5gqc1xbV75g8WLRRlJ1/S4EGUxCeGuPqbJ8A=
+        bh=YSrKV3F/+kj7mAVdK64Rr/OQq7GDyKmHxXrNmHW8dUQ=;
+        b=Eb619zQSEBk1O8WrtwwH+SvMLKfCmLSSS1NXNdLlaSA/n7k2nVIVhdyZaEQ7LbvdYF
+         WawPvgGwkXja9PL/ebKE0sJYcsTSefavkO3G8HzpBHOvq8hqegOOHP/TQxgBmpIVOtQG
+         FFSLhCyANBBLNzdM1743+RITzp8xkUPeGTaQg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=72e8cCZm/q7iCHRMQTpm0Tz32Yebz18ercdbU01IXjU=;
-        b=XSucoQ0o8DJ8rwQYBQVDp/kNM5RjfHue/jvfuqK0zT7/KmOITAlJoZBb11AiRQV5+l
-         QWsgoqeuP5dlF6oyK6GS7HpmZ++C8CjL3MeC9kCPuD2i25vy+H62cqa7eTL78ZDRzOIF
-         mnwdevmIr8LqAkBXWf6/vH9Ctla+or3uWgvYtWE0MVIfkrMGfH/VJkdLI2u6I8Mocy4U
-         5asDtaCnEgQjB+85Yc2p1nqn6kLKT8jZaHgRUG2hyoa0sM20TSQLFelHeRyG+vXR8ugf
-         qTzTIAkxFA7zJiZniTfaE1znvXlvpZG5DIokJYcRReW3qBAygHUgd9nwMcOOoAZ5/aYM
-         0uYg==
-X-Gm-Message-State: AOAM533KUeu8Dbntb8VW9PstCX2xFU0PHqYBtOJKnbW13rQM1gw2/KGs
-        +fnrViWUrRE+NJYBCncParpPabnAVFPWpg==
-X-Google-Smtp-Source: ABdhPJwyGhGqz/ETM24/rTn1frL8ZFG2j/g9y39n7HKOYobtDaSeFGX7gDW8SZV6I9ufEghbICMlRw==
-X-Received: by 2002:a2e:8157:: with SMTP id t23mr4226801ljg.417.1594982144586;
-        Fri, 17 Jul 2020 03:35:44 -0700 (PDT)
+        bh=YSrKV3F/+kj7mAVdK64Rr/OQq7GDyKmHxXrNmHW8dUQ=;
+        b=G/yK7zXaYKdID826u+FEfqpbD4dk+tUr/uaAyCNdvqO54xYT92ybkMSZ5YWLK+0nT2
+         oCYh3dj9/TOOxqKVipXsY1z3+Hk1ls6rhLC28z0MBY9grkPw52QYv2uV2sLGE1WHpvWV
+         s62JL12NW6isQ/OVBc+qw5HJueKHThl++ZXJQ7Asd76oKOv0dsXIYjtOIAMA6UNi7dKh
+         pK4ehkm1Kcaf/Hg8xgWHztJf6gn23YgvHEyCEYNqShIAHioREl+B4QIEg6+8V4ypHXWH
+         nsrF62xsiQAIqzFnGAjUTDgHFOO0OdrTuUBvgdJjamTz9a7tFOvKCiK3VGEAcXriRagx
+         5Zkw==
+X-Gm-Message-State: AOAM53229aVkyJcwBKi7vQbVVEyGzhqmjpzIOWGwh/viPtXgAOArWgIX
+        54fCr13vFAp1YNrJ97beowSl6EzuD0BokQ==
+X-Google-Smtp-Source: ABdhPJyTKdQzM9XIo6uXGiZ8YdzMaHJTefywUhvX/ZpnK/fa4xPw80O9qprDf04zAGBkx9o0nKUzVQ==
+X-Received: by 2002:a05:651c:217:: with SMTP id y23mr4444515ljn.447.1594982160439;
+        Fri, 17 Jul 2020 03:36:00 -0700 (PDT)
 Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id b26sm1891247lji.36.2020.07.17.03.35.43
+        by smtp.gmail.com with ESMTPSA id a17sm1589818lji.5.2020.07.17.03.35.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2020 03:35:43 -0700 (PDT)
+        Fri, 17 Jul 2020 03:35:59 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marek Majkowski <marek@cloudflare.com>
-Subject: [PATCH bpf-next v5 04/15] inet: Run SK_LOOKUP BPF program on socket lookup
-Date:   Fri, 17 Jul 2020 12:35:25 +0200
-Message-Id: <20200717103536.397595-5-jakub@cloudflare.com>
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH bpf-next v5 14/15] selftests/bpf: Add verifier tests for bpf_sk_lookup context access
+Date:   Fri, 17 Jul 2020 12:35:35 +0200
+Message-Id: <20200717103536.397595-15-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200717103536.397595-1-jakub@cloudflare.com>
 References: <20200717103536.397595-1-jakub@cloudflare.com>
@@ -75,291 +75,529 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Run a BPF program before looking up a listening socket on the receive path.
-Program selects a listening socket to yield as result of socket lookup by
-calling bpf_sk_assign() helper and returning SK_PASS code. Program can
-revert its decision by assigning a NULL socket with bpf_sk_assign().
+Exercise verifier access checks for bpf_sk_lookup context fields.
 
-Alternatively, BPF program can also fail the lookup by returning with
-SK_DROP, or let the lookup continue as usual with SK_PASS on return, when
-no socket has been selected with bpf_sk_assign().
-
-This lets the user match packets with listening sockets freely at the last
-possible point on the receive path, where we know that packets are destined
-for local delivery after undergoing policing, filtering, and routing.
-
-With BPF code selecting the socket, directing packets destined to an IP
-range or to a port range to a single socket becomes possible.
-
-In case multiple programs are attached, they are run in series in the order
-in which they were attached. The end result is determined from return codes
-of all the programs according to following rules:
-
- 1. If any program returned SK_PASS and selected a valid socket, the socket
-    is used as result of socket lookup.
- 2. If more than one program returned SK_PASS and selected a socket,
-    last selection takes effect.
- 3. If any program returned SK_DROP, and no program returned SK_PASS and
-    selected a socket, socket lookup fails with -ECONNREFUSED.
- 4. If all programs returned SK_PASS and none of them selected a socket,
-    socket lookup continues to htable-based lookup.
-
-Suggested-by: Marek Majkowski <marek@cloudflare.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
 
 Notes:
     v5:
-    - Move variable initialization out of critical section. (Andrii)
-    - Simplify prog runners now that only SK_DROP/PASS can be returned.
+    - Return an allowed value (SK_DROP) in all tests.
     
     v4:
-    - Reduce BPF sk_lookup prog return codes to SK_PASS/SK_DROP. (Lorenz)
-    - Default to drop & warn on illegal return value from BPF prog. (Lorenz)
-    - Rename netns_bpf_attach_type_enable/disable to _need/unneed. (Lorenz)
-    - Export bpf_sk_lookup_enabled symbol for CONFIG_IPV6=m (kernel test robot)
-    - Invert return value from bpf_sk_lookup_run_v4 to true on skip reuseport.
-    - Move dedicated prog_array runner close to its callers in filter.h.
+    - Bring back tests for narrow loads.
     
     v3:
-    - Use a static_key to minimize the hook overhead when not used. (Alexei)
-    - Adapt for running an array of attached programs. (Alexei)
-    - Adapt for optionally skipping reuseport selection. (Martin)
+    - Consolidate ACCEPT tests into one.
+    - Deduplicate REJECT tests and arrange them into logical groups.
+    - Add tests for out-of-bounds and unaligned access.
+    - Cover access to newly introduced 'sk' field.
+    
+    v2:
+     - Adjust for fields renames in struct bpf_sk_lookup.
 
- include/linux/filter.h     | 91 ++++++++++++++++++++++++++++++++++++++
- kernel/bpf/net_namespace.c | 32 +++++++++++++-
- net/core/filter.c          |  3 ++
- net/ipv4/inet_hashtables.c | 31 +++++++++++++
- 4 files changed, 156 insertions(+), 1 deletion(-)
+ .../selftests/bpf/verifier/ctx_sk_lookup.c    | 492 ++++++++++++++++++
+ 1 file changed, 492 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index fa1ea12ad2cd..c4f54c216347 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1295,4 +1295,95 @@ struct bpf_sk_lookup_kern {
- 	bool		no_reuseport;
- };
- 
-+extern struct static_key_false bpf_sk_lookup_enabled;
-+
-+/* Runners for BPF_SK_LOOKUP programs to invoke on socket lookup.
-+ *
-+ * Allowed return values for a BPF SK_LOOKUP program are SK_PASS and
-+ * SK_DROP. Their meaning is as follows:
-+ *
-+ *  SK_PASS && ctx.selected_sk != NULL: use selected_sk as lookup result
-+ *  SK_PASS && ctx.selected_sk == NULL: continue to htable-based socket lookup
-+ *  SK_DROP                           : terminate lookup with -ECONNREFUSED
-+ *
-+ * This macro aggregates return values and selected sockets from
-+ * multiple BPF programs according to following rules in order:
-+ *
-+ *  1. If any program returned SK_PASS and a non-NULL ctx.selected_sk,
-+ *     macro result is SK_PASS and last ctx.selected_sk is used.
-+ *  2. If any program returned SK_DROP return value,
-+ *     macro result is SK_DROP.
-+ *  3. Otherwise result is SK_PASS and ctx.selected_sk is NULL.
-+ *
-+ * Caller must ensure that the prog array is non-NULL, and that the
-+ * array as well as the programs it contains remain valid.
-+ */
-+#define BPF_PROG_SK_LOOKUP_RUN_ARRAY(array, ctx, func)			\
-+	({								\
-+		struct bpf_sk_lookup_kern *_ctx = &(ctx);		\
-+		struct bpf_prog_array_item *_item;			\
-+		struct sock *_selected_sk = NULL;			\
-+		bool _no_reuseport = false;				\
-+		struct bpf_prog *_prog;					\
-+		bool _all_pass = true;					\
-+		u32 _ret;						\
-+									\
-+		migrate_disable();					\
-+		_item = &(array)->items[0];				\
-+		while ((_prog = READ_ONCE(_item->prog))) {		\
-+			/* restore most recent selection */		\
-+			_ctx->selected_sk = _selected_sk;		\
-+			_ctx->no_reuseport = _no_reuseport;		\
-+									\
-+			_ret = func(_prog, _ctx);			\
-+			if (_ret == SK_PASS && _ctx->selected_sk) {	\
-+				/* remember last non-NULL socket */	\
-+				_selected_sk = _ctx->selected_sk;	\
-+				_no_reuseport = _ctx->no_reuseport;	\
-+			} else if (_ret == SK_DROP && _all_pass) {	\
-+				_all_pass = false;			\
-+			}						\
-+			_item++;					\
-+		}							\
-+		_ctx->selected_sk = _selected_sk;			\
-+		_ctx->no_reuseport = _no_reuseport;			\
-+		migrate_enable();					\
-+		_all_pass || _selected_sk ? SK_PASS : SK_DROP;		\
-+	 })
-+
-+static inline bool bpf_sk_lookup_run_v4(struct net *net, int protocol,
-+					const __be32 saddr, const __be16 sport,
-+					const __be32 daddr, const u16 dport,
-+					struct sock **psk)
+diff --git a/tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c b/tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c
+new file mode 100644
+index 000000000000..2ad5f974451c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c
+@@ -0,0 +1,492 @@
 +{
-+	struct bpf_prog_array *run_array;
-+	struct sock *selected_sk = NULL;
-+	bool no_reuseport = false;
++	"valid 1,2,4,8-byte reads from bpf_sk_lookup",
++	.insns = {
++		/* 1-byte read from family field */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, family)),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, family) + 1),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, family) + 2),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, family) + 3),
++		/* 2-byte read from family field */
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, family)),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, family) + 2),
++		/* 4-byte read from family field */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, family)),
 +
-+	rcu_read_lock();
-+	run_array = rcu_dereference(net->bpf.run_array[NETNS_BPF_SK_LOOKUP]);
-+	if (run_array) {
-+		struct bpf_sk_lookup_kern ctx = {
-+			.family		= AF_INET,
-+			.protocol	= protocol,
-+			.v4.saddr	= saddr,
-+			.v4.daddr	= daddr,
-+			.sport		= sport,
-+			.dport		= dport,
-+		};
-+		u32 act;
++		/* 1-byte read from protocol field */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, protocol)),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, protocol) + 1),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, protocol) + 2),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, protocol) + 3),
++		/* 2-byte read from protocol field */
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, protocol)),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, protocol) + 2),
++		/* 4-byte read from protocol field */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, protocol)),
 +
-+		act = BPF_PROG_SK_LOOKUP_RUN_ARRAY(run_array, ctx, BPF_PROG_RUN);
-+		if (act == SK_PASS) {
-+			selected_sk = ctx.selected_sk;
-+			no_reuseport = ctx.no_reuseport;
-+		} else {
-+			selected_sk = ERR_PTR(-ECONNREFUSED);
-+		}
-+	}
-+	rcu_read_unlock();
-+	*psk = selected_sk;
-+	return no_reuseport;
-+}
++		/* 1-byte read from remote_ip4 field */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip4)),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip4) + 1),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip4) + 2),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip4) + 3),
++		/* 2-byte read from remote_ip4 field */
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip4)),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip4) + 2),
++		/* 4-byte read from remote_ip4 field */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip4)),
 +
- #endif /* __LINUX_FILTER_H__ */
-diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
-index 38b368bccda2..4e1bcaa2c3cb 100644
---- a/kernel/bpf/net_namespace.c
-+++ b/kernel/bpf/net_namespace.c
-@@ -25,6 +25,28 @@ struct bpf_netns_link {
- /* Protects updates to netns_bpf */
- DEFINE_MUTEX(netns_bpf_mutex);
- 
-+static void netns_bpf_attach_type_unneed(enum netns_bpf_attach_type type)
++		/* 1-byte read from remote_ip6 field */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6)),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 1),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 2),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 3),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 4),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 5),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 6),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 7),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 8),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 9),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 10),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 11),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 12),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 13),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 14),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 15),
++		/* 2-byte read from remote_ip6 field */
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6)),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 2),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 4),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 6),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 8),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 10),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 12),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 14),
++		/* 4-byte read from remote_ip6 field */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6)),
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 4),
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 8),
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6) + 12),
++
++		/* 1-byte read from remote_port field */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_port)),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_port) + 1),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_port) + 2),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_port) + 3),
++		/* 2-byte read from remote_port field */
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_port)),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_port) + 2),
++		/* 4-byte read from remote_port field */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_port)),
++
++		/* 1-byte read from local_ip4 field */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip4)),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip4) + 1),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip4) + 2),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip4) + 3),
++		/* 2-byte read from local_ip4 field */
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip4)),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip4) + 2),
++		/* 4-byte read from local_ip4 field */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip4)),
++
++		/* 1-byte read from local_ip6 field */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6)),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 1),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 2),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 3),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 4),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 5),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 6),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 7),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 8),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 9),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 10),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 11),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 12),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 13),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 14),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 15),
++		/* 2-byte read from local_ip6 field */
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6)),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 2),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 4),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 6),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 8),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 10),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 12),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 14),
++		/* 4-byte read from local_ip6 field */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6)),
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 4),
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 8),
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6) + 12),
++
++		/* 1-byte read from local_port field */
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_port)),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_port) + 1),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_port) + 2),
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_port) + 3),
++		/* 2-byte read from local_port field */
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_port)),
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_port) + 2),
++		/* 4-byte read from local_port field */
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_port)),
++
++		/* 8-byte read from sk field */
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, sk)),
++
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++/* invalid 8-byte reads from a 4-byte fields in bpf_sk_lookup */
 +{
-+	switch (type) {
-+	case NETNS_BPF_SK_LOOKUP:
-+		static_branch_dec(&bpf_sk_lookup_enabled);
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static void netns_bpf_attach_type_need(enum netns_bpf_attach_type type)
++	"invalid 8-byte read from bpf_sk_lookup family field",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, family)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
 +{
-+	switch (type) {
-+	case NETNS_BPF_SK_LOOKUP:
-+		static_branch_inc(&bpf_sk_lookup_enabled);
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
- /* Must be called with netns_bpf_mutex held. */
- static void netns_bpf_run_array_detach(struct net *net,
- 				       enum netns_bpf_attach_type type)
-@@ -91,6 +113,9 @@ static void bpf_netns_link_release(struct bpf_link *link)
- 	if (!net)
- 		goto out_unlock;
- 
-+	/* Mark attach point as unused */
-+	netns_bpf_attach_type_unneed(type);
-+
- 	/* Remember link position in case of safe delete */
- 	idx = link_index(net, type, net_link);
- 	list_del(&net_link->node);
-@@ -428,6 +453,9 @@ static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
- 					lockdep_is_held(&netns_bpf_mutex));
- 	bpf_prog_array_free(run_array);
- 
-+	/* Mark attach point as used */
-+	netns_bpf_attach_type_need(type);
-+
- out_unlock:
- 	mutex_unlock(&netns_bpf_mutex);
- 	return err;
-@@ -503,8 +531,10 @@ static void __net_exit netns_bpf_pernet_pre_exit(struct net *net)
- 	mutex_lock(&netns_bpf_mutex);
- 	for (type = 0; type < MAX_NETNS_BPF_ATTACH_TYPE; type++) {
- 		netns_bpf_run_array_detach(net, type);
--		list_for_each_entry(net_link, &net->bpf.links[type], node)
-+		list_for_each_entry(net_link, &net->bpf.links[type], node) {
- 			net_link->net = NULL; /* auto-detach link */
-+			netns_bpf_attach_type_unneed(type);
-+		}
- 		if (net->bpf.progs[type])
- 			bpf_prog_put(net->bpf.progs[type]);
- 	}
-diff --git a/net/core/filter.c b/net/core/filter.c
-index d099436b3ff5..2bd129b5ae74 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -9230,6 +9230,9 @@ const struct bpf_verifier_ops sk_reuseport_verifier_ops = {
- const struct bpf_prog_ops sk_reuseport_prog_ops = {
- };
- 
-+DEFINE_STATIC_KEY_FALSE(bpf_sk_lookup_enabled);
-+EXPORT_SYMBOL(bpf_sk_lookup_enabled);
-+
- BPF_CALL_3(bpf_sk_lookup_assign, struct bpf_sk_lookup_kern *, ctx,
- 	   struct sock *, sk, u64, flags)
- {
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index ab64834837c8..4eb4cd8d20dd 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -299,6 +299,29 @@ static struct sock *inet_lhash2_lookup(struct net *net,
- 	return result;
- }
- 
-+static inline struct sock *inet_lookup_run_bpf(struct net *net,
-+					       struct inet_hashinfo *hashinfo,
-+					       struct sk_buff *skb, int doff,
-+					       __be32 saddr, __be16 sport,
-+					       __be32 daddr, u16 hnum)
++	"invalid 8-byte read from bpf_sk_lookup protocol field",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, protocol)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
 +{
-+	struct sock *sk, *reuse_sk;
-+	bool no_reuseport;
-+
-+	if (hashinfo != &tcp_hashinfo)
-+		return NULL; /* only TCP is supported */
-+
-+	no_reuseport = bpf_sk_lookup_run_v4(net, IPPROTO_TCP,
-+					    saddr, sport, daddr, hnum, &sk);
-+	if (no_reuseport || IS_ERR_OR_NULL(sk))
-+		return sk;
-+
-+	reuse_sk = lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
-+	if (reuse_sk)
-+		sk = reuse_sk;
-+	return sk;
-+}
-+
- struct sock *__inet_lookup_listener(struct net *net,
- 				    struct inet_hashinfo *hashinfo,
- 				    struct sk_buff *skb, int doff,
-@@ -310,6 +333,14 @@ struct sock *__inet_lookup_listener(struct net *net,
- 	struct sock *result = NULL;
- 	unsigned int hash2;
- 
-+	/* Lookup redirect from BPF */
-+	if (static_branch_unlikely(&bpf_sk_lookup_enabled)) {
-+		result = inet_lookup_run_bpf(net, hashinfo, skb, doff,
-+					     saddr, sport, daddr, hnum);
-+		if (result)
-+			goto done;
-+	}
-+
- 	hash2 = ipv4_portaddr_hash(net, daddr, hnum);
- 	ilb2 = inet_lhash2_bucket(hashinfo, hash2);
- 
++	"invalid 8-byte read from bpf_sk_lookup remote_ip4 field",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip4)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 8-byte read from bpf_sk_lookup remote_ip6 field",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_ip6)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 8-byte read from bpf_sk_lookup remote_port field",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, remote_port)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 8-byte read from bpf_sk_lookup local_ip4 field",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip4)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 8-byte read from bpf_sk_lookup local_ip6 field",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_ip6)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 8-byte read from bpf_sk_lookup local_port field",
++	.insns = {
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, local_port)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++/* invalid 1,2,4-byte reads from 8-byte fields in bpf_sk_lookup */
++{
++	"invalid 4-byte read from bpf_sk_lookup sk field",
++	.insns = {
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, sk)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 2-byte read from bpf_sk_lookup sk field",
++	.insns = {
++		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, sk)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 1-byte read from bpf_sk_lookup sk field",
++	.insns = {
++		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
++			    offsetof(struct bpf_sk_lookup, sk)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++/* out of bounds and unaligned reads from bpf_sk_lookup */
++{
++	"invalid 4-byte read past end of bpf_sk_lookup",
++	.insns = {
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
++			    sizeof(struct bpf_sk_lookup)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 4-byte unaligned read from bpf_sk_lookup at odd offset",
++	.insns = {
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, 1),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 4-byte unaligned read from bpf_sk_lookup at even offset",
++	.insns = {
++		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, 2),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++/* in-bound and out-of-bound writes to bpf_sk_lookup */
++{
++	"invalid 8-byte write to bpf_sk_lookup",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0xcafe4a11U),
++		BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, 0),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 4-byte write to bpf_sk_lookup",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0xcafe4a11U),
++		BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0, 0),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 2-byte write to bpf_sk_lookup",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0xcafe4a11U),
++		BPF_STX_MEM(BPF_H, BPF_REG_1, BPF_REG_0, 0),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 1-byte write to bpf_sk_lookup",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0xcafe4a11U),
++		BPF_STX_MEM(BPF_B, BPF_REG_1, BPF_REG_0, 0),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
++{
++	"invalid 4-byte write past end of bpf_sk_lookup",
++	.insns = {
++		BPF_MOV64_IMM(BPF_REG_0, 0xcafe4a11U),
++		BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
++			    sizeof(struct bpf_sk_lookup)),
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.errstr = "invalid bpf_context access",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
++	.expected_attach_type = BPF_SK_LOOKUP,
++},
 -- 
 2.25.4
 
