@@ -2,53 +2,61 @@ Return-Path: <SRS0=ko52=A5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCA35C433E0
-	for <bpf@archiver.kernel.org>; Sat, 18 Jul 2020 11:51:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 377D7C433DF
+	for <bpf@archiver.kernel.org>; Sat, 18 Jul 2020 16:46:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A8B3620759
-	for <bpf@archiver.kernel.org>; Sat, 18 Jul 2020 11:51:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C3742080D
+	for <bpf@archiver.kernel.org>; Sat, 18 Jul 2020 16:46:23 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k3zhHAVq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726780AbgGRLvR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 18 Jul 2020 07:51:17 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:39302 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726524AbgGRLvQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 18 Jul 2020 07:51:16 -0400
-Received: by mail-io1-f72.google.com with SMTP id r19so8238652iod.6
-        for <bpf@vger.kernel.org>; Sat, 18 Jul 2020 04:51:15 -0700 (PDT)
+        id S1726648AbgGRQqW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 18 Jul 2020 12:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726604AbgGRQqW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 18 Jul 2020 12:46:22 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E675C0619D2
+        for <bpf@vger.kernel.org>; Sat, 18 Jul 2020 09:46:22 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id b9so6762768plx.6
+        for <bpf@vger.kernel.org>; Sat, 18 Jul 2020 09:46:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=eYKC7xD1BXJTtPGIfQSAHoHuwUxup8dsR9UzHTh14Bw=;
+        b=k3zhHAVqOofU1sAmN5KjAWDv9xPHrapPeYvftccLJgSf13dx+CB3q+MNAQ/tw+U9i6
+         aFrwqpY3t/Pe4QQAB2xWfhDchNeysoO6y5/A+do3o47OiMmLgnahXQvFM4WGEBlnaX7J
+         hltYMuiQwCicXXo61xuRnH6NEf/yWm6UAspWLmG0B+ZEW1c7Jaz2rAsStfCZExs9syE9
+         cpPtLTmQYGtMZYZvLZL4vDl91sdLlrcMGUKC6ApLjVuI5CkUu681yK74gEmdAt5SfHkA
+         gjVdq1LD8CAiVgDBMtEs22vxUl3NfHHK7Uud1FuHbe1Y1/ksqQyqIntpXtoYi2sV/UL8
+         s88A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=z0LkxvZaWa7FCO6qQ25lxpzCVYJgsHN+PR2MXygFdtk=;
-        b=amGg9pXrWZURdpjrSfrAfnCVeAjgtsM/z9uHNJCg7iCgjQCCikc+RnraHwTv5BzEIs
-         6Kj6BkXMfgYKrvMdbK4A39HIuDAOLO5L5slAIZFfLH9VsInERXIypIpokt22+fkhM5sd
-         qQb1zfIuvtLQaiqpdKF3Q9jW1lbINORvxnvzl32X9h8AQylGoNlYdOpjyUUJiTjBBmXn
-         eVNl56oqFojnY57KzNuOFd/PxSUpTZMxW1q2Wt+1ZokZneTEOB+d1DdgWBE3NiOgFSXK
-         hu6n92PoJoEiE+DZQ/7dvnj2obBpZQFxOwVlT4sRk094BfrocBXRq1fXo6Qiqdl09k5Y
-         A69A==
-X-Gm-Message-State: AOAM531YZelnKwQJo/M1jSdx/ZLFrZv863RuRxmzyUacKiji3uAuf3tG
-        8eeo8cFV91ikNhTwHU1HBFrYX6ksNvX1KE1S/oTO2W2TF/ZQ
-X-Google-Smtp-Source: ABdhPJzd5N31myVpwqLIDWSCzWam0gIdvy3K3WtgZ44K0a2++CHFcuLHlBw6nAM6ePiMIl1/vdQ5OucaxAgJH1KC3L4dw8j0IU1O
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=eYKC7xD1BXJTtPGIfQSAHoHuwUxup8dsR9UzHTh14Bw=;
+        b=ACRNTiT1be41MeetFyEUh0kbpNUxIZGVNibkw91smcIqrxf1dbDwP6ccECOZgyLcht
+         8iICEIgXLRPyHwe29lF1TISMtnNcG2+IDWpj/Laouq8UcBIbU+Qi3PVzibTTiMgjf8Dy
+         d095xPIYBN4UzdoNwIrDcZjgMYY8Eo76Owg3cZejdxxunuAmW7HnCW5uvFrji8Yp6wHH
+         dzIbWR0SApVVXU5lTYAUhZcx+3hImRr6znGzLoQajrRkWe3ApDmm/bsTP/Nx98gAe5KB
+         UczO1Rx1ZNVqjNHaTfoblPTxnqmBCBmyyVvMfgfXVtlaftQJyk9txAHGn4zkplKz9rLh
+         1Grg==
+X-Gm-Message-State: AOAM530doIaBShglZ18PigF6YHbgHbIq+/Uc9QUXHtj6Xqjp5sMhP1LK
+        SNTcVZAMN8r4z9AvhV9UjXesiGMQg4uSCvMPtUnnVx4fvJQ=
+X-Google-Smtp-Source: ABdhPJyrtSAd/dbVpBkfuDQ+T0aAx0tGqdhuZbhHx70ABGEb9LPxSELh4QdlvdG4999bKHabuETY10SenZ63hWgWlrg=
+X-Received: by 2002:a17:902:7683:: with SMTP id m3mr12008849pll.182.1595090780646;
+ Sat, 18 Jul 2020 09:46:20 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:5d49:: with SMTP id w70mr16049699jaa.16.1595073075244;
- Sat, 18 Jul 2020 04:51:15 -0700 (PDT)
-Date:   Sat, 18 Jul 2020 04:51:15 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000a730805aab5e470@google.com>
-Subject: memory leak in veth_dev_init
-From:   syzbot <syzbot+59ef240dd8f0ed7598a8@syzkaller.appspotmail.com>
-To:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@chromium.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
+From:   Venkata Sai Reddy Avuluri <avulurivenkatasaireddy@gmail.com>
+Date:   Sat, 18 Jul 2020 22:16:08 +0530
+Message-ID: <CAJW+K3E-O3-kT_Q3kba_pTmFj7h-LvP01FpTj=4Rv=DX+M3BGA@mail.gmail.com>
+Subject: Doubt eBPF
+To:     bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
@@ -57,56 +65,36 @@ X-Mailing-List: bpf@vger.kernel.org
 
 Hello,
 
-syzbot found the following issue on:
+I am Sai Reddy  an undergrad student in Rajiv Gandhi University of
+Knowledge Technologies  in Basar, Telangana, India.
 
-HEAD commit:    e9919e11 Merge branch 'for-linus' of git://git.kernel.org/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17058f57100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=175942c28d9b8dd0
-dashboard link: https://syzkaller.appspot.com/bug?extid=59ef240dd8f0ed7598a8
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12f95700900000
+As of now for Summer internship, i am doing in IIT Madras, We are
+working on some message filters.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+59ef240dd8f0ed7598a8@syzkaller.appspotmail.com
+My professor questioned my team "How is BPF happening inside the Kernel?"
 
-BUG: memory leak
-unreferenced object 0xffff8881097d2400 (size 1024):
-  comm "syz-executor.2", pid 6690, jiffies 4295037413 (age 16.990s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000e43a1d47>] kmalloc_array include/linux/slab.h:597 [inline]
-    [<00000000e43a1d47>] kcalloc include/linux/slab.h:608 [inline]
-    [<00000000e43a1d47>] veth_alloc_queues drivers/net/veth.c:1018 [inline]
-    [<00000000e43a1d47>] veth_dev_init+0x7b/0x120 drivers/net/veth.c:1045
-    [<000000003f373d1e>] register_netdevice+0x143/0x760 net/core/dev.c:9444
-    [<00000000b86f82c1>] veth_newlink+0x1d5/0x460 drivers/net/veth.c:1366
-    [<000000008d2f627f>] __rtnl_newlink+0x8f3/0xbb0 net/core/rtnetlink.c:3339
-    [<000000008e87c660>] rtnl_newlink+0x49/0x70 net/core/rtnetlink.c:3397
-    [<000000002569c6f3>] rtnetlink_rcv_msg+0x17e/0x460 net/core/rtnetlink.c:5460
-    [<00000000ea72628d>] netlink_rcv_skb+0x5b/0x180 net/netlink/af_netlink.c:2469
-    [<0000000006d33309>] netlink_unicast_kernel net/netlink/af_netlink.c:1303 [inline]
-    [<0000000006d33309>] netlink_unicast+0x2b6/0x3c0 net/netlink/af_netlink.c:1329
-    [<000000002d1084c2>] netlink_sendmsg+0x2ba/0x570 net/netlink/af_netlink.c:1918
-    [<000000002ba4c104>] sock_sendmsg_nosec net/socket.c:652 [inline]
-    [<000000002ba4c104>] sock_sendmsg+0x4c/0x60 net/socket.c:672
-    [<00000000c343726d>] __sys_sendto+0x11d/0x1c0 net/socket.c:1995
-    [<00000000f1ad5dc1>] __do_sys_sendto net/socket.c:2007 [inline]
-    [<00000000f1ad5dc1>] __se_sys_sendto net/socket.c:2003 [inline]
-    [<00000000f1ad5dc1>] __x64_sys_sendto+0x26/0x30 net/socket.c:2003
-    [<000000004ab49ca5>] do_syscall_64+0x4c/0xe0 arch/x86/entry/common.c:384
-    [<00000000e04d67c2>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+More precisely he pointed out that something.. When we said ," When a
+kprobe is used, some BPF instruction's are going to happen before
+actual syscall instructions happen"..He questioned us back, "Means
+it's actually modifying the underlying syscall instrutions...with jump
+instructions..is that feasible? and we are actually making an extra
+overhead too?"..
 
+We tried to explain as much as possible, using XDP at NIC level..and
+many more..But the Professor is asking "This internal modification of
+instructions is really useful?"
 
+And one more question I have, "How does a BPF program know a
+particular syscall has happened. Is it going to check always, Where
+for checking some set of  instructions executed again?".
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+I hope you will reach me back with answers to the above questions.
+Thanks for your time and clarifying my doubts.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Regards,
+
+    Avuluri Venkata Sai Reddy
+
+    B.Tech 3rd Year(CSE),
+
+    RGUKT IIIT BASAR.
