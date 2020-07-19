@@ -1,97 +1,139 @@
-Return-Path: <SRS0=ko52=A5=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=W08L=A6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	FROM_LOCAL_NOVOWEL,HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FF67C433E0
-	for <bpf@archiver.kernel.org>; Sat, 18 Jul 2020 18:11:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02A57C433E5
+	for <bpf@archiver.kernel.org>; Sun, 19 Jul 2020 02:17:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 098E62073A
-	for <bpf@archiver.kernel.org>; Sat, 18 Jul 2020 18:11:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CE6C222C9D
+	for <bpf@archiver.kernel.org>; Sun, 19 Jul 2020 02:17:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="I+9YnZtR";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nvRMrqu7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S0w/Q3ab"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726604AbgGRSLP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 18 Jul 2020 14:11:15 -0400
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:36909 "EHLO
-        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726155AbgGRSLP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 18 Jul 2020 14:11:15 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5B2705C0106;
-        Sat, 18 Jul 2020 14:11:14 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sat, 18 Jul 2020 14:11:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=leTxMSxZYI6GaPQrWTsPAI1LVoG
-        vJAzLwE9vA1kDEQI=; b=I+9YnZtRC3VjqT7Mrdw6Zu0kF6zS/tMBEOnwidhNj1G
-        YmO0Y3Vhfp78VMV99vfHVkzQeeVdqx32TiGOHU8OwEztDBibllF0gJMJ6kvHSvUr
-        Dc5Xm/Nni1c6joS1GoRH0YPfHSPg2gA2u+axxgzHa3p6hYeO/2wSe6USAypiZn+N
-        PTTlpMTR2OybGACmfgEexvd3NpClLqmg+yJykGS0puu5edAQbtNNZYrY6AXOahSm
-        w6379qoAivlRl8DQqn29+tppMYK6euiqO0/iWFwJWrfFI9PxdLi3McbcAJTAev7w
-        f/X/Qq8JK++I6NsRc6UtjoAkoLNhdkfBmaRTKouoJUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=leTxMS
-        xZYI6GaPQrWTsPAI1LVoGvJAzLwE9vA1kDEQI=; b=nvRMrqu7DgGksClfeheOGs
-        cBkJ9t3PYvlP5TUPwXZyMe0b9Km6or7wQmUQ4wGxME/PhCeit0i4CUsDVDBPTi4c
-        Et0i1il257vHIG2bW3vogF4nfqyNWVZrMp3VBYtSvXpGH3iAayTUNiy3kez1yfQ8
-        BuTKEUHCMq1gtdWnMBGYM6bYkcqxSRUokfLKWyEjgrLjhabtR/KJ3HhdvA289wb0
-        etrdWgnp9xySw/KwMKcD6iX5uQEdvb8ir99K+QxqHswxhMqXSLqgCCzY+6C3Rax8
-        IXmmw6HSfV7pdUQYRLpv9LfszGKqx9150GaiR9E36V7iDDrem0d+BRvYOUeoXLHg
-        ==
-X-ME-Sender: <xms:QjsTX5qVEdt-Zx7lT8ZymKJwFZ1f0hDOAQH3IDv0EnkHhkY5_p_O4w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrfeelgdduvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
-    rdekiedrkeelrddutdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:QjsTX7oq09BXh3cmyP50EX2yMsjhFz42NPmCpEm9_y-H6VtCRzmTjA>
-    <xmx:QjsTX2OlJElcdfqda_Bjl2Dkf93-6yedH50TGW4xzccIrw0ZhuxD1A>
-    <xmx:QjsTX07JWKd8JhoS7BKMDJ8VEPRSh2ZrPMM2MgJVhiBowFG_5NjKPw>
-    <xmx:QjsTX6FZwfohx38GTn8_YzeVb3VLkqHWmtCU3lObn3UY3ATkaaQBXg>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id D3CF93280060;
-        Sat, 18 Jul 2020 14:11:13 -0400 (EDT)
-Date:   Sat, 18 Jul 2020 20:11:10 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Venkata Sai Reddy Avuluri <avulurivenkatasaireddy@gmail.com>
-Cc:     bpf@vger.kernel.org
-Subject: Re: Doubt eBPF
-Message-ID: <20200718181110.GA273491@kroah.com>
-References: <CAJW+K3E-O3-kT_Q3kba_pTmFj7h-LvP01FpTj=4Rv=DX+M3BGA@mail.gmail.com>
+        id S1726619AbgGSCRI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 18 Jul 2020 22:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726284AbgGSCRE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 18 Jul 2020 22:17:04 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB66FC0619D2;
+        Sat, 18 Jul 2020 19:17:03 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id l63so8604307pge.12;
+        Sat, 18 Jul 2020 19:17:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kl14Oyojnz7qNzdRV9kI+oI9qkQq4W7peOgG+/MweoU=;
+        b=S0w/Q3abVzMaa0Pd0coBL4i43B8ZKc9v9Yen8P4muuNJs1guw3MlR5AoFEWgL7DKe4
+         xo8SGd9JNLlv5siZ13SDqNooEUp2Zwrb4InjZmNlUWu2IMuUEy8lJnPo2NGskEoY11pp
+         7nZiKEJ2jLrsSrtZ1X4G4fwMYEW5IVF3WDWQVA47Nl2D7D4mm7OrMySqtSraOUkIC3Ow
+         KBNllHlDpR6zZ+8FP1zOKCDi2rAXfF/G9K2R5E8QVAGWWXq0a0g62wLeykkeZAtO+z0K
+         wYpVTSv9Uwd+PDuhYi+RCpGJd/z7gpUB8yYxEJDKrXTL1o2Sl5UmL8UU/roe6+fHw/c9
+         EWoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kl14Oyojnz7qNzdRV9kI+oI9qkQq4W7peOgG+/MweoU=;
+        b=Ij6nvO5eGKe8MSlklKOk/PCi2RvGkxFub86DzGaOazavPYbHiZlMz1FSH2gB1Utzo6
+         fdU+JfM6OEGMrYkoNMjJ2IBx3OsM6CrUfBcLwG3pMjrW7IknWb4fvD4rhPIFXaCUHy6N
+         sVD1uKWq+a9tJf5yFOtn0hAsjS/FItRzqjCIKdEx1GuFQl62oOzkdHoQm21IIBv9bKi4
+         SJNwwBXu3C2lYnyP5A2dbfdT4ntRTMiSZdIVDb/CDMDlmLyyj81B+h6wvZFBgbjZrjQv
+         aVR4u7x3hzs7Vpay5pMGWntC1kVU5oAKvZLEjHF8vT3XcCvu/GdI4WXfD0qAvKVt7/24
+         /p8w==
+X-Gm-Message-State: AOAM531Tq8pxhkJiM97APlJ4atnSjrisT32hXlxYsIHdYDw4BiTctVkK
+        qtWQr7U6kv8eYcZhSwNj9Ik=
+X-Google-Smtp-Source: ABdhPJzTUABuF2Vzp+Y9Usd6Hjkm7rZDYp+mvf/3yQZOoG7CAfvk2coMFaxyRLh2S+YAc0Z4L3XduQ==
+X-Received: by 2002:a62:834c:: with SMTP id h73mr14490407pfe.221.1595125023447;
+        Sat, 18 Jul 2020 19:17:03 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:400:e00:19b7:f650:7bbe:a7fb])
+        by smtp.gmail.com with ESMTPSA id a68sm6891159pje.35.2020.07.18.19.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Jul 2020 19:17:03 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH 3/3] selftests/seccomp: add xtensa support
+Date:   Sat, 18 Jul 2020 19:16:54 -0700
+Message-Id: <20200719021654.25922-4-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200719021654.25922-1-jcmvbkbc@gmail.com>
+References: <20200719021654.25922-1-jcmvbkbc@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJW+K3E-O3-kT_Q3kba_pTmFj7h-LvP01FpTj=4Rv=DX+M3BGA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Jul 18, 2020 at 10:16:08PM +0530, Venkata Sai Reddy Avuluri wrote:
-> Hello,
-> 
-> I am Sai Reddy  an undergrad student in Rajiv Gandhi University of
-> Knowledge Technologies  in Basar, Telangana, India.
-> 
-> As of now for Summer internship, i am doing in IIT Madras, We are
-> working on some message filters.
-> 
-> My professor questioned my team "How is BPF happening inside the Kernel?"
+Xtensa returns syscall number can be obtained and changed through the
+struct user_pt_regs. Syscall return value register is fixed relatively
+to the current register window in the user_pt_regs, so it needs a bit of
+special treatment.
 
-That really sounds like a homework question, you have the full source,
-what is keeping you all from determining this on your own?
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-thanks,
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 252140a52553..1b445c2e7fbe 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -122,6 +122,8 @@ struct seccomp_data {
+ #  define __NR_seccomp 358
+ # elif defined(__s390__)
+ #  define __NR_seccomp 348
++# elif defined(__xtensa__)
++#  define __NR_seccomp 337
+ # else
+ #  warning "seccomp syscall number unknown for this architecture"
+ #  define __NR_seccomp 0xffff
+@@ -1622,6 +1624,14 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+ # define SYSCALL_SYSCALL_NUM regs[4]
+ # define SYSCALL_RET	regs[2]
+ # define SYSCALL_NUM_RET_SHARE_REG
++#elif defined(__xtensa__)
++# define ARCH_REGS	struct user_pt_regs
++# define SYSCALL_NUM	syscall
++/*
++ * On xtensa syscall return value is in the register
++ * a2 of the current window which is not fixed.
++ */
++#define SYSCALL_RET(reg) a[(reg).windowbase * 4 + 2]
+ #else
+ # error "Do not know how to find your architecture's registers and syscalls"
+ #endif
+@@ -1693,7 +1703,8 @@ void change_syscall(struct __test_metadata *_metadata,
+ 	EXPECT_EQ(0, ret) {}
+ 
+ #if defined(__x86_64__) || defined(__i386__) || defined(__powerpc__) || \
+-	defined(__s390__) || defined(__hppa__) || defined(__riscv)
++	defined(__s390__) || defined(__hppa__) || defined(__riscv) || \
++	defined(__xtensa__)
+ 	{
+ 		regs.SYSCALL_NUM = syscall;
+ 	}
+@@ -1736,6 +1747,9 @@ void change_syscall(struct __test_metadata *_metadata,
+ 	if (syscall == -1)
+ #ifdef SYSCALL_NUM_RET_SHARE_REG
+ 		TH_LOG("Can't modify syscall return on this architecture");
++
++#elif defined(__xtensa__)
++		regs.SYSCALL_RET(regs) = result;
+ #else
+ 		regs.SYSCALL_RET = result;
+ #endif
+-- 
+2.20.1
 
-greg k-h
