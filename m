@@ -2,230 +2,166 @@ Return-Path: <SRS0=N7Fo=A7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1E96C433FC
-	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 16:34:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB293C433EB
+	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 16:38:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BFFA62176B
-	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 16:34:28 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Q9mXyi7Q"
+	by mail.kernel.org (Postfix) with ESMTP id B8A6720773
+	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 16:38:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1595263083;
+	bh=smDDaCk04kMr6EUzVkdVBl94CFmKvpleITLelmvA8+8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=HhSh4oq9iAg2/5SHtPAAF2+o6BMNFYOLPdfIr9bzL3yK75weAqLDu6SPF2EAXCpcX
+	 TumsGeQdwHcHHU8LSOWKPcC4EsBrv/JeJ/nstY7JZVmCcb79dZoB4E4X4T3T50yXWc
+	 i0mGR9OVQ0Edm76ubJH/nwZGnw8KrGd7kHu0kZl0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389003AbgGTQe2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Jul 2020 12:34:28 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10070 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729649AbgGTQeL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 20 Jul 2020 12:34:11 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06KGY88Y019197
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2020 09:34:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=IPGHMB686m/6Ual+13vtkstExaGWgZVIMyQdj6sfna8=;
- b=Q9mXyi7Qs6X75FGvSK0xBcsXmtIa+vjS+KyeTguco9MnvZUS6TEUrLG5IAXSZoK2NLIL
- ksTMyN6SL6M0MLuhg4/Oe2uIyLLYJAsjDsj95dO3Wd12Y5N6pIhBIrFaf4SN5JM9fJIB
- QAkn0DpGleYSQkBArAWsDdi652FDmlu+Jb8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32bxwfqg10-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2020 09:34:11 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 20 Jul 2020 09:34:02 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 16705370209A; Mon, 20 Jul 2020 09:34:01 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+        id S1733101AbgGTQhw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Jul 2020 12:37:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50816 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730889AbgGTQhv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Jul 2020 12:37:51 -0400
+Received: from gmail.com (unknown [104.132.1.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9248320734;
+        Mon, 20 Jul 2020 16:37:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595263070;
+        bh=smDDaCk04kMr6EUzVkdVBl94CFmKvpleITLelmvA8+8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JJC8sbphJDydEPEmQ9bsAOdVV0pki83XX29vWiTOyf6AsmPXVOTyRrnnrci7D6Bhd
+         g+Lq7h/M7GIp2Q3yjvb33D7hXLYV7+QkF/cJUlgxrp5Jsp6dTPG3ALVp7AD8PFZTTR
+         fVVidPSEdf7dnCSggZDPP0jvSNjJIbQpG4SHFy4k=
+Date:   Mon, 20 Jul 2020 09:37:48 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jiri Olsa <jolsa@kernel.org>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 3/5] bpf: add BTF_ID_LIST_GLOBAL in btf_ids.h
-Date:   Mon, 20 Jul 2020 09:34:01 -0700
-Message-ID: <20200720163401.1393159-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200720163358.1392964-1-yhs@fb.com>
-References: <20200720163358.1392964-1-yhs@fb.com>
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-sctp@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-can@vger.kernel.org, dccp@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net,
+        linux-wpan@vger.kernel.org, linux-s390@vger.kernel.org,
+        mptcp@lists.01.org, lvs-devel@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
+        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
+Subject: Re: [PATCH 03/24] net: add a new sockptr_t type
+Message-ID: <20200720163748.GA1292162@gmail.com>
+References: <20200720124737.118617-1-hch@lst.de>
+ <20200720124737.118617-4-hch@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-20_09:2020-07-20,2020-07-20 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=8
- bulkscore=0 spamscore=0 mlxscore=0 malwarescore=0 priorityscore=1501
- mlxlogscore=813 phishscore=0 adultscore=0 impostorscore=0 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007200111
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200720124737.118617-4-hch@lst.de>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Existing BTF_ID_LIST used a local static variable
-to store btf_ids. This patch provided a new macro
-BTF_ID_LIST_GLOBAL to store btf_ids in a global
-variable which can be shared among multiple files.
+On Mon, Jul 20, 2020 at 02:47:16PM +0200, Christoph Hellwig wrote:
+> Add a uptr_t type that can hold a pointer to either a user or kernel
+> memory region, and simply helpers to copy to and from it.  For
+> architectures like x86 that have non-overlapping user and kernel
+> address space it just is a union and uses a TASK_SIZE check to
+> select the proper copy routine.  For architectures with overlapping
+> address spaces a flag to indicate the address space is used instead.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  include/linux/sockptr.h | 121 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 121 insertions(+)
+>  create mode 100644 include/linux/sockptr.h
+> 
+> diff --git a/include/linux/sockptr.h b/include/linux/sockptr.h
+> new file mode 100644
+> index 00000000000000..e41dfa52555dec
+> --- /dev/null
+> +++ b/include/linux/sockptr.h
+> @@ -0,0 +1,121 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2020 Christoph Hellwig.
+> + *
+> + * Support for "universal" pointers that can point to either kernel or userspace
+> + * memory.
+> + */
+> +#ifndef _LINUX_SOCKPTR_H
+> +#define _LINUX_SOCKPTR_H
+> +
+> +#include <linux/slab.h>
+> +#include <linux/uaccess.h>
+> +
+> +#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+> +typedef union {
+> +	void		*kernel;
+> +	void __user	*user;
+> +} sockptr_t;
+> +
+> +static inline bool sockptr_is_kernel(sockptr_t sockptr)
+> +{
+> +	return (unsigned long)sockptr.kernel >= TASK_SIZE;
+> +}
+> +
+> +static inline sockptr_t KERNEL_SOCKPTR(void *p)
+> +{
+> +	return (sockptr_t) { .kernel = p };
+> +}
+> +#else /* CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE */
+> +typedef struct {
+> +	union {
+> +		void		*kernel;
+> +		void __user	*user;
+> +	};
+> +	bool		is_kernel : 1;
+> +} sockptr_t;
+> +
+> +static inline bool sockptr_is_kernel(sockptr_t sockptr)
+> +{
+> +	return sockptr.is_kernel;
+> +}
+> +
+> +static inline sockptr_t KERNEL_SOCKPTR(void *p)
+> +{
+> +	return (sockptr_t) { .kernel = p, .is_kernel = true };
+> +}
+> +#endif /* CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE */
+> +
+> +static inline sockptr_t USER_SOCKPTR(void __user *p)
+> +{
+> +	return (sockptr_t) { .user = p };
+> +}
+> +
+> +static inline bool sockptr_is_null(sockptr_t sockptr)
+> +{
+> +	return !sockptr.user && !sockptr.kernel;
+> +}
+> +
+> +static inline int copy_from_sockptr(void *dst, sockptr_t src, size_t size)
+> +{
+> +	if (!sockptr_is_kernel(src))
+> +		return copy_from_user(dst, src.user, size);
+> +	memcpy(dst, src.kernel, size);
+> +	return 0;
+> +}
 
-The existing BTF_ID_LIST is still retained.
-Two reasons. First, BTF_ID_LIST is also used to build
-btf_ids for helper arguments which typically
-is an array of 5. Since typically different
-helpers have different signature, it makes
-little sense to share them. Second, some
-current computed btf_ids are indeed local.
-If later those btf_ids are shared between
-different files, they can use BTF_ID_LIST_GLOBAL then.
+How does this not introduce a massive security hole when
+CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE?
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- include/linux/btf_ids.h                       | 10 ++++--
- tools/include/linux/btf_ids.h                 | 10 ++++--
- .../selftests/bpf/prog_tests/resolve_btfids.c | 33 ++++++++++++++-----
- 3 files changed, 39 insertions(+), 14 deletions(-)
+AFAICS, userspace can pass in a pointer >= TASK_SIZE,
+and this code makes it be treated as a kernel pointer.
 
-diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index 1cdb56950ffe..77ab45baa095 100644
---- a/include/linux/btf_ids.h
-+++ b/include/linux/btf_ids.h
-@@ -57,17 +57,20 @@ asm(							\
-  * .zero 4
-  *
-  */
--#define __BTF_ID_LIST(name)				\
-+#define __BTF_ID_LIST(name, scope)			\
- asm(							\
- ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
--".local " #name ";                             \n"	\
-+"." #scope " " #name ";                        \n"	\
- #name ":;                                      \n"	\
- ".popsection;                                  \n");	\
-=20
- #define BTF_ID_LIST(name)				\
--__BTF_ID_LIST(name)					\
-+__BTF_ID_LIST(name, local)				\
- extern u32 name[];
-=20
-+#define BTF_ID_LIST_GLOBAL(name)			\
-+__BTF_ID_LIST(name, globl)
-+
- /*
-  * The BTF_ID_UNUSED macro defines 4 zero bytes.
-  * It's used when we want to define 'unused' entry
-@@ -90,6 +93,7 @@ asm(							\
- #define BTF_ID_LIST(name) static u32 name[5];
- #define BTF_ID(prefix, name)
- #define BTF_ID_UNUSED
-+#define BTF_ID_LIST_GLOBAL(name) u32 name[1];
-=20
- #endif /* CONFIG_DEBUG_INFO_BTF */
-=20
-diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.=
-h
-index 1cdb56950ffe..77ab45baa095 100644
---- a/tools/include/linux/btf_ids.h
-+++ b/tools/include/linux/btf_ids.h
-@@ -57,17 +57,20 @@ asm(							\
-  * .zero 4
-  *
-  */
--#define __BTF_ID_LIST(name)				\
-+#define __BTF_ID_LIST(name, scope)			\
- asm(							\
- ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
--".local " #name ";                             \n"	\
-+"." #scope " " #name ";                        \n"	\
- #name ":;                                      \n"	\
- ".popsection;                                  \n");	\
-=20
- #define BTF_ID_LIST(name)				\
--__BTF_ID_LIST(name)					\
-+__BTF_ID_LIST(name, local)				\
- extern u32 name[];
-=20
-+#define BTF_ID_LIST_GLOBAL(name)			\
-+__BTF_ID_LIST(name, globl)
-+
- /*
-  * The BTF_ID_UNUSED macro defines 4 zero bytes.
-  * It's used when we want to define 'unused' entry
-@@ -90,6 +93,7 @@ asm(							\
- #define BTF_ID_LIST(name) static u32 name[5];
- #define BTF_ID(prefix, name)
- #define BTF_ID_UNUSED
-+#define BTF_ID_LIST_GLOBAL(name) u32 name[1];
-=20
- #endif /* CONFIG_DEBUG_INFO_BTF */
-=20
-diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/to=
-ols/testing/selftests/bpf/prog_tests/resolve_btfids.c
-index 22d83bba4e91..3b127cab4864 100644
---- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-+++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-@@ -28,7 +28,17 @@ struct symbol test_symbols[] =3D {
- 	{ "func",    BTF_KIND_FUNC,    -1 },
- };
-=20
--BTF_ID_LIST(test_list)
-+BTF_ID_LIST(test_list_local)
-+BTF_ID_UNUSED
-+BTF_ID(typedef, S)
-+BTF_ID(typedef, T)
-+BTF_ID(typedef, U)
-+BTF_ID(struct,  S)
-+BTF_ID(union,   U)
-+BTF_ID(func,    func)
-+
-+extern __u32 test_list_global[];
-+BTF_ID_LIST_GLOBAL(test_list_global)
- BTF_ID_UNUSED
- BTF_ID(typedef, S)
- BTF_ID(typedef, T)
-@@ -94,18 +104,25 @@ static int resolve_symbols(void)
-=20
- int test_resolve_btfids(void)
- {
--	unsigned int i;
-+	__u32 *test_list, *test_lists[] =3D { test_list_local, test_list_global=
- };
-+	unsigned int i, j;
- 	int ret =3D 0;
-=20
- 	if (resolve_symbols())
- 		return -1;
-=20
--	/* Check BTF_ID_LIST(test_list) IDs */
--	for (i =3D 0; i < ARRAY_SIZE(test_symbols) && !ret; i++) {
--		ret =3D CHECK(test_list[i] !=3D test_symbols[i].id,
--			    "id_check",
--			    "wrong ID for %s (%d !=3D %d)\n", test_symbols[i].name,
--			    test_list[i], test_symbols[i].id);
-+	/* Check BTF_ID_LIST(test_list_local) and
-+	 * BTF_ID_LIST_GLOBAL(test_list_global) IDs
-+	 */
-+	for (j =3D 0; j < ARRAY_SIZE(test_lists); j++) {
-+		test_list =3D test_lists[j];
-+		for (i =3D 0; i < ARRAY_SIZE(test_symbols) && !ret; i++) {
-+			ret =3D CHECK(test_list[i] !=3D test_symbols[i].id,
-+				    "id_check",
-+				    "wrong ID for %s (%d !=3D %d)\n",
-+				    test_symbols[i].name,
-+				    test_list[i], test_symbols[i].id);
-+		}
- 	}
-=20
- 	return ret;
---=20
-2.24.1
-
+- Eric
