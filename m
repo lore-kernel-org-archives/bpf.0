@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 734CEC433E7
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 908E1C433EA
 	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 19:55:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 477C32080D
+	by mail.kernel.org (Postfix) with ESMTP id 7073C22B4E
 	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 19:55:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NV+fbgol"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UWccam6O"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730637AbgGTTzM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Jul 2020 15:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
+        id S1730304AbgGTTzN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Jul 2020 15:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730304AbgGTTzL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Jul 2020 15:55:11 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774F7C061794
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2020 12:55:10 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id k6so14389783ili.6
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2020 12:55:10 -0700 (PDT)
+        with ESMTP id S1726619AbgGTTzM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Jul 2020 15:55:12 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F111BC0619D2
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2020 12:55:11 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id q3so14381617ilt.8
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2020 12:55:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7C4FbpTt1cXqFOfacZ2aXmH+uuIX6W3mPxgZ4Kdjswg=;
-        b=NV+fbgolaeou8qumfNNMAN9tZndvi5ihM2NDNYU9r8PabUurJSLANkN7Xxtb7kITXu
-         EomFRzGfEdcZ4Y2DKfJ8l5LrVJJGrsl1UMOU3GUPV8aEzvvYfuY+YatY/4Eb+L8FunT9
-         bN32+VMFAIe6uqspbgPJFg8os/NR0tX9SEjVvf2fMu6pTgREXBfDW3cYR6dQvbMuw/Eh
-         SitLTx6gBRU9T8OERFlVkJERpsSBPUt0cVRxTaH51wWQt/AYvsF1p202Xpb4oSvRLa/J
-         O/ed0S+OnGz5N7mlUFte++l+zk8C1TBdhTQMRv9BU0hzn0P8wH2tpM9UsY5CsVXEM4tP
-         pYeQ==
+        bh=of9+3qI/MyRMYwvrISkr1vjZMf+9lj7qYnhFd6xNdRY=;
+        b=UWccam6Or09YD9Ho7B6+Dxc+ogz5IqHcvBCgQRp1jRZwmw6HbCrgjy7+js36Gx/TPl
+         /byGm3menqG6QKl8MRW6j6NnTQC8UnLKrlNCvyYJ8FRxo0Oyo/ohX3AcXq014umYKml6
+         r6/9ChJ2NfcpMefHozSCePLarS4/rTXAPYQaoY2KCtj7D4RloqoQAiYhccC+7YIliTJY
+         6LY7CqlkumEUxI3iHflJgB9a3fK33cJWXdzlNYKqFp4dZeXHv6C0UNk6XVdsHWroPP2s
+         J3cJ9jvZ0b01db2ZB4tViqNdvPzUNjlboUfuVBcDa/AwSbbSa9W7scfQcxQK8+NPDwF2
+         AIew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7C4FbpTt1cXqFOfacZ2aXmH+uuIX6W3mPxgZ4Kdjswg=;
-        b=TJ5RRdcXtXFGZoJCkaue7P5fUTJPW7chfrJ81uCLf4hXtaRKv1TV1QLJ4c5KWTtgBF
-         6tIH01iC6vIrClpxeX3s8LNwyqSNCFuz7DdqZDFl6p8fTHjBw6fnkFBvH9h2u85T50k3
-         jB6VIaDpkpTx2CqLtFDw6KJk+ANAB54Wzg0d8j6+2yLkqeAQA1Bzkka9+bmqomn1BjyE
-         hMS9wobY7aTtRx/ZCjPYSvev3ThQLLfauInX9QI60KOCNlfUbmAr5PSJz4d6L8yD2ST3
-         FE/fwH0WVSUOfcHTqLpKqBSbAtVJNWcD3wCl39U6dRfCPMoj8xu/mrJxZiObKvpyALRX
-         iYsA==
-X-Gm-Message-State: AOAM532/kX9bni4JFR5TLhl5BvNUykIEOwEjv5uW8l24o1q9BcDBFqRA
-        LB14W/SBWupRf6TfDSvGQiRQyICwkEcdcQ==
-X-Google-Smtp-Source: ABdhPJyaWyxJaMgXhpzKdKnmztD+XbYaZGg0PxqBf0UbQayfmY5NjbzvZBnXn5X0MVOupbIiD+1G4Q==
-X-Received: by 2002:a92:d24a:: with SMTP id v10mr25660096ilg.224.1595274907927;
-        Mon, 20 Jul 2020 12:55:07 -0700 (PDT)
+        bh=of9+3qI/MyRMYwvrISkr1vjZMf+9lj7qYnhFd6xNdRY=;
+        b=OEy1ukjzh88btkjFXx5jb1+ArjGSjr8M6OY9CmbqqOWVZfdTU7o7XlvBzQaq06XzX8
+         d0wgH3ImcD1erBCc9oU4rwZxj0N+NXrMrKaUix/q/3kuZ8lfNCyjIsgvUvr1vVgRlIee
+         gOhaWfiNOY2FnDwilR+j/BLbr55+oRQ4YqWc4pNp23000nLae5dUbVZE3CERyFGdr7QE
+         rONxFBx96bvV4ks8xwMPCirdrW+hqEhJIIT7/SSpNhaqGFjKF7sqgx4EYb3NGen0TRgb
+         xQKblRdWf88eAytz7syGPNHAXDyZq9rEpdSZf6JZUp9CZbyYqWUPuBpyusDDbHIgE4YY
+         7OdQ==
+X-Gm-Message-State: AOAM532EevJPpJ0KAxQYnjUEMkNXp/c/b7Ql+QOItSPaCXo4obDYjM0d
+        5RWg6Bp2ruy0nZ8+lk3LuIzQ1xBJSnyJuQ==
+X-Google-Smtp-Source: ABdhPJxPgfjRiCuebefE9D7zLLz+7OfNFRyDPsIH+FhyCFG0iyExXbNqrCVnAsLkPPd+R+gwnh3nUQ==
+X-Received: by 2002:a92:488f:: with SMTP id j15mr25169373ilg.269.1595274909640;
+        Mon, 20 Jul 2020 12:55:09 -0700 (PDT)
 Received: from localhost.localdomain (host-173-230-99-219.tnkngak.clients.pavlovmedia.com. [173.230.99.219])
-        by smtp.gmail.com with ESMTPSA id v10sm9347174ilj.40.2020.07.20.12.55.07
+        by smtp.gmail.com with ESMTPSA id v10sm9347174ilj.40.2020.07.20.12.55.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2020 12:55:07 -0700 (PDT)
+        Mon, 20 Jul 2020 12:55:09 -0700 (PDT)
 From:   YiFei Zhu <zhuyifei1999@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Martin KaFai Lau <kafai@fb.com>,
         YiFei Zhu <zhuyifei@google.com>
-Subject: [PATCH v4 bpf-next 3/5] bpf: Make cgroup storages shared across attaches on the same cgroup
-Date:   Mon, 20 Jul 2020 14:54:53 -0500
-Message-Id: <f56279652110face35e35f2d4182da371cfe937c.1595274799.git.zhuyifei@google.com>
+Subject: [PATCH v4 bpf-next 5/5] Documentation/bpf: Document CGROUP_STORAGE map type
+Date:   Mon, 20 Jul 2020 14:54:55 -0500
+Message-Id: <0f1ed5471cfa1fa148ac42d8fa5f44e2e1556417.1595274799.git.zhuyifei@google.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <cover.1595274799.git.zhuyifei@google.com>
 References: <cover.1595274799.git.zhuyifei@google.com>
@@ -83,511 +83,139 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: YiFei Zhu <zhuyifei@google.com>
 
-This change comes in several parts:
-
-One, the restriction that the CGROUP_STORAGE map can only be used
-by one program is removed. This results in the removal of the field
-'aux' in struct bpf_cgroup_storage_map, and removal of relevant
-code associated with the field, and removal of now-noop functions
-bpf_free_cgroup_storage and bpf_cgroup_storage_release.
-
-Second, because there could be multiple attach types to the same
-cgroup, the attach type is completely ignored on comparison in
-the map key. Newly added keys have it zeroed. The only value in
-the key that still matters is the cgroup inode. bpftool map dump
-will also show an attach type of zero.
-
-Third, because the storages are now shared, the storages cannot
-be unconditionally freed on program detach. There could be two
-ways to solve this issue:
-* A. Reference count the usage of the storages, and free when the
-     last program is detached.
-* B. Free only when the storage is impossible to be referred to
-     again, i.e. when either the cgroup_bpf it is attached to, or
-     the map itself, is freed.
-Option A has the side effect that, when the user detach and
-reattach a program, whether the program gets a fresh storage
-depends on whether there is another program attached using that
-storage. This could trigger races if the user is multi-threaded,
-and since nondeterminism in data races is evil, go with option B.
-
-The both the map and the cgroup_bpf now tracks their associated
-storages, and the storage unlink and free are removed from
-cgroup_bpf_detach and added to cgroup_bpf_release and
-cgroup_storage_map_free. The latter also new holds the cgroup_mutex
-to prevent any races with the former.
-
-Fourth, on attach, we reuse the old storage if the key already
-exists in the map, via cgroup_storage_lookup. If the storage
-does not exist yet, we create a new one, and publish it at the
-last step in the attach process. This does not create a race
-condition because for the whole attach the cgroup_mutex is held.
-We keep track of an array of new storages that was allocated
-and if the process fails only the new storages would get freed.
+The machanics and usage are not very straightforward. Given the
+changes it's better to document how it works and how to use it,
+rather than having to rely on the examples and implementation to
+infer what is going on.
 
 Signed-off-by: YiFei Zhu <zhuyifei@google.com>
 ---
- include/linux/bpf-cgroup.h     | 15 ++++---
- include/uapi/linux/bpf.h       |  2 +-
- kernel/bpf/cgroup.c            | 69 ++++++++++++++++++--------------
- kernel/bpf/core.c              | 12 ------
- kernel/bpf/local_storage.c     | 73 ++++++++++++----------------------
- tools/include/uapi/linux/bpf.h |  2 +-
- 6 files changed, 76 insertions(+), 97 deletions(-)
+ Documentation/bpf/index.rst              |  9 +++
+ Documentation/bpf/map_cgroup_storage.rst | 95 ++++++++++++++++++++++++
+ 2 files changed, 104 insertions(+)
+ create mode 100644 Documentation/bpf/map_cgroup_storage.rst
 
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index 2c6f26670acc..2d5a04c0f4be 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -46,7 +46,8 @@ struct bpf_cgroup_storage {
- 	};
- 	struct bpf_cgroup_storage_map *map;
- 	struct bpf_cgroup_storage_key key;
--	struct list_head list;
-+	struct list_head list_map;
-+	struct list_head list_cg;
- 	struct rb_node node;
- 	struct rcu_head rcu;
- };
-@@ -78,6 +79,9 @@ struct cgroup_bpf {
- 	struct list_head progs[MAX_BPF_ATTACH_TYPE];
- 	u32 flags[MAX_BPF_ATTACH_TYPE];
+diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
+index 38b4db8be7a2..26f4bb3107fc 100644
+--- a/Documentation/bpf/index.rst
++++ b/Documentation/bpf/index.rst
+@@ -48,6 +48,15 @@ Program types
+    bpf_lsm
  
-+	/* list of cgroup shared storages */
-+	struct list_head storages;
+ 
++Map types
++=========
 +
- 	/* temp storage for effective prog array used by prog_attach/detach */
- 	struct bpf_prog_array *inactive;
- 
-@@ -161,15 +165,16 @@ static inline void bpf_cgroup_storage_set(struct bpf_cgroup_storage
- 		this_cpu_write(bpf_cgroup_storage[stype], storage[stype]);
- }
- 
-+struct bpf_cgroup_storage *
-+cgroup_storage_lookup(struct bpf_cgroup_storage_map *map,
-+		      struct bpf_cgroup_storage_key *key, bool locked);
- struct bpf_cgroup_storage *bpf_cgroup_storage_alloc(struct bpf_prog *prog,
- 					enum bpf_cgroup_storage_type stype);
- void bpf_cgroup_storage_free(struct bpf_cgroup_storage *storage);
- void bpf_cgroup_storage_link(struct bpf_cgroup_storage *storage,
--			     struct cgroup *cgroup,
--			     enum bpf_attach_type type);
-+			     struct cgroup *cgroup);
- void bpf_cgroup_storage_unlink(struct bpf_cgroup_storage *storage);
- int bpf_cgroup_storage_assign(struct bpf_prog_aux *aux, struct bpf_map *map);
--void bpf_cgroup_storage_release(struct bpf_prog_aux *aux, struct bpf_map *map);
- 
- int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key, void *value);
- int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
-@@ -383,8 +388,6 @@ static inline void bpf_cgroup_storage_set(
- 	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE]) {}
- static inline int bpf_cgroup_storage_assign(struct bpf_prog_aux *aux,
- 					    struct bpf_map *map) { return 0; }
--static inline void bpf_cgroup_storage_release(struct bpf_prog_aux *aux,
--					      struct bpf_map *map) {}
- static inline struct bpf_cgroup_storage *bpf_cgroup_storage_alloc(
- 	struct bpf_prog *prog, enum bpf_cgroup_storage_type stype) { return NULL; }
- static inline void bpf_cgroup_storage_free(
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 54d0c886e3ba..db93a211d2b1 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -78,7 +78,7 @@ struct bpf_lpm_trie_key {
- 
- struct bpf_cgroup_storage_key {
- 	__u64	cgroup_inode_id;	/* cgroup inode id */
--	__u32	attach_type;		/* program attach type */
-+	__u32	attach_type;		/* program attach type, unused */
- };
- 
- /* BPF syscall commands, see bpf(2) man-page for details. */
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index ac53102e244a..f91c554d6be6 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -37,17 +37,33 @@ static void bpf_cgroup_storages_free(struct bpf_cgroup_storage *storages[])
- }
- 
- static int bpf_cgroup_storages_alloc(struct bpf_cgroup_storage *storages[],
--				     struct bpf_prog *prog)
-+				     struct bpf_cgroup_storage *new_storages[],
-+				     struct bpf_prog *prog,
-+				     struct cgroup *cgrp)
- {
- 	enum bpf_cgroup_storage_type stype;
-+	struct bpf_cgroup_storage_key key;
-+	struct bpf_map *map;
++.. toctree::
++   :maxdepth: 1
 +
-+	key.cgroup_inode_id = cgroup_id(cgrp);
-+	key.attach_type = 0;
- 
- 	for_each_cgroup_storage_type(stype) {
-+		map = prog->aux->cgroup_storage[stype];
-+		if (!map)
-+			continue;
++   map_cgroup_storage
 +
-+		storages[stype] = cgroup_storage_lookup((void *)map, &key, false);
-+		if (storages[stype])
-+			continue;
 +
- 		storages[stype] = bpf_cgroup_storage_alloc(prog, stype);
- 		if (IS_ERR(storages[stype])) {
--			storages[stype] = NULL;
--			bpf_cgroup_storages_free(storages);
-+			bpf_cgroup_storages_free(new_storages);
- 			return -ENOMEM;
- 		}
+ Testing and debugging BPF
+ =========================
+ 
+diff --git a/Documentation/bpf/map_cgroup_storage.rst b/Documentation/bpf/map_cgroup_storage.rst
+new file mode 100644
+index 000000000000..b7210cb3f294
+--- /dev/null
++++ b/Documentation/bpf/map_cgroup_storage.rst
+@@ -0,0 +1,95 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++.. Copyright (C) 2020 Google LLC.
 +
-+		new_storages[stype] = storages[stype];
- 	}
- 
- 	return 0;
-@@ -63,21 +79,12 @@ static void bpf_cgroup_storages_assign(struct bpf_cgroup_storage *dst[],
- }
- 
- static void bpf_cgroup_storages_link(struct bpf_cgroup_storage *storages[],
--				     struct cgroup* cgrp,
--				     enum bpf_attach_type attach_type)
--{
--	enum bpf_cgroup_storage_type stype;
--
--	for_each_cgroup_storage_type(stype)
--		bpf_cgroup_storage_link(storages[stype], cgrp, attach_type);
--}
--
--static void bpf_cgroup_storages_unlink(struct bpf_cgroup_storage *storages[])
-+				     struct cgroup *cgrp)
- {
- 	enum bpf_cgroup_storage_type stype;
- 
- 	for_each_cgroup_storage_type(stype)
--		bpf_cgroup_storage_unlink(storages[stype]);
-+		bpf_cgroup_storage_link(storages[stype], cgrp);
- }
- 
- /* Called when bpf_cgroup_link is auto-detached from dying cgroup.
-@@ -101,22 +108,23 @@ static void cgroup_bpf_release(struct work_struct *work)
- 	struct cgroup *p, *cgrp = container_of(work, struct cgroup,
- 					       bpf.release_work);
- 	struct bpf_prog_array *old_array;
-+	struct list_head *storages = &cgrp->bpf.storages;
-+	struct bpf_cgroup_storage *storage, *stmp;
++===========================
++BPF_MAP_TYPE_CGROUP_STORAGE
++===========================
 +
- 	unsigned int type;
- 
- 	mutex_lock(&cgroup_mutex);
- 
- 	for (type = 0; type < ARRAY_SIZE(cgrp->bpf.progs); type++) {
- 		struct list_head *progs = &cgrp->bpf.progs[type];
--		struct bpf_prog_list *pl, *tmp;
-+		struct bpf_prog_list *pl, *pltmp;
- 
--		list_for_each_entry_safe(pl, tmp, progs, node) {
-+		list_for_each_entry_safe(pl, pltmp, progs, node) {
- 			list_del(&pl->node);
- 			if (pl->prog)
- 				bpf_prog_put(pl->prog);
- 			if (pl->link)
- 				bpf_cgroup_link_auto_detach(pl->link);
--			bpf_cgroup_storages_unlink(pl->storage);
--			bpf_cgroup_storages_free(pl->storage);
- 			kfree(pl);
- 			static_branch_dec(&cgroup_bpf_enabled_key);
- 		}
-@@ -126,6 +134,11 @@ static void cgroup_bpf_release(struct work_struct *work)
- 		bpf_prog_array_free(old_array);
- 	}
- 
-+	list_for_each_entry_safe(storage, stmp, storages, list_cg) {
-+		bpf_cgroup_storage_unlink(storage);
-+		bpf_cgroup_storage_free(storage);
-+	}
++The ``BPF_MAP_TYPE_CGROUP_STORAGE`` map type represents a local fix-sized
++storage. It is only available with ``CONFIG_CGROUP_BPF``, and to programs that
++attach to cgroups; the programs are made available by the same config. The
++storage is identified by the cgroup the program is attached to.
 +
- 	mutex_unlock(&cgroup_mutex);
- 
- 	for (p = cgroup_parent(cgrp); p; p = cgroup_parent(p))
-@@ -290,6 +303,8 @@ int cgroup_bpf_inherit(struct cgroup *cgrp)
- 	for (i = 0; i < NR; i++)
- 		INIT_LIST_HEAD(&cgrp->bpf.progs[i]);
- 
-+	INIT_LIST_HEAD(&cgrp->bpf.storages);
++This document describes the usage and semantics of the
++``BPF_MAP_TYPE_CGROUP_STORAGE`` map type. Some of its behaviors was changed in
++Linux 5.9 and this document will describe the differences.
 +
- 	for (i = 0; i < NR; i++)
- 		if (compute_effective_progs(cgrp, i, &arrays[i]))
- 			goto cleanup;
-@@ -422,7 +437,7 @@ int __cgroup_bpf_attach(struct cgroup *cgrp,
- 	struct list_head *progs = &cgrp->bpf.progs[type];
- 	struct bpf_prog *old_prog = NULL;
- 	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
--	struct bpf_cgroup_storage *old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
-+	struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
- 	struct bpf_prog_list *pl;
- 	int err;
- 
-@@ -455,17 +470,16 @@ int __cgroup_bpf_attach(struct cgroup *cgrp,
- 	if (IS_ERR(pl))
- 		return PTR_ERR(pl);
- 
--	if (bpf_cgroup_storages_alloc(storage, prog ? : link->link.prog))
-+	if (bpf_cgroup_storages_alloc(storage, new_storage,
-+				      prog ? : link->link.prog, cgrp))
- 		return -ENOMEM;
- 
- 	if (pl) {
- 		old_prog = pl->prog;
--		bpf_cgroup_storages_unlink(pl->storage);
--		bpf_cgroup_storages_assign(old_storage, pl->storage);
- 	} else {
- 		pl = kmalloc(sizeof(*pl), GFP_KERNEL);
- 		if (!pl) {
--			bpf_cgroup_storages_free(storage);
-+			bpf_cgroup_storages_free(new_storage);
- 			return -ENOMEM;
- 		}
- 		list_add_tail(&pl->node, progs);
-@@ -480,12 +494,11 @@ int __cgroup_bpf_attach(struct cgroup *cgrp,
- 	if (err)
- 		goto cleanup;
- 
--	bpf_cgroup_storages_free(old_storage);
- 	if (old_prog)
- 		bpf_prog_put(old_prog);
- 	else
- 		static_branch_inc(&cgroup_bpf_enabled_key);
--	bpf_cgroup_storages_link(pl->storage, cgrp, type);
-+	bpf_cgroup_storages_link(new_storage, cgrp);
- 	return 0;
- 
- cleanup:
-@@ -493,9 +506,7 @@ int __cgroup_bpf_attach(struct cgroup *cgrp,
- 		pl->prog = old_prog;
- 		pl->link = NULL;
- 	}
--	bpf_cgroup_storages_free(pl->storage);
--	bpf_cgroup_storages_assign(pl->storage, old_storage);
--	bpf_cgroup_storages_link(pl->storage, cgrp, type);
-+	bpf_cgroup_storages_free(new_storage);
- 	if (!old_prog) {
- 		list_del(&pl->node);
- 		kfree(pl);
-@@ -679,8 +690,6 @@ int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
- 
- 	/* now can actually delete it from this cgroup list */
- 	list_del(&pl->node);
--	bpf_cgroup_storages_unlink(pl->storage);
--	bpf_cgroup_storages_free(pl->storage);
- 	kfree(pl);
- 	if (list_empty(progs))
- 		/* last program was detached, reset flags to zero */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 7be02e555ab9..bde93344164d 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2097,24 +2097,12 @@ int bpf_prog_array_copy_info(struct bpf_prog_array *array,
- 								     : 0;
- }
- 
--static void bpf_free_cgroup_storage(struct bpf_prog_aux *aux)
--{
--	enum bpf_cgroup_storage_type stype;
--
--	for_each_cgroup_storage_type(stype) {
--		if (!aux->cgroup_storage[stype])
--			continue;
--		bpf_cgroup_storage_release(aux, aux->cgroup_storage[stype]);
--	}
--}
--
- void __bpf_free_used_maps(struct bpf_prog_aux *aux,
- 			  struct bpf_map **used_maps, u32 len)
- {
- 	struct bpf_map *map;
- 	u32 i;
- 
--	bpf_free_cgroup_storage(aux);
- 	for (i = 0; i < len; i++) {
- 		map = used_maps[i];
- 		if (map->ops->map_poke_untrack)
-diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
-index 51bd5a8cb01b..0b94b4ba99ba 100644
---- a/kernel/bpf/local_storage.c
-+++ b/kernel/bpf/local_storage.c
-@@ -9,6 +9,8 @@
- #include <linux/slab.h>
- #include <uapi/linux/btf.h>
- 
-+#include "../cgroup/cgroup-internal.h"
++Usage
++=====
 +
- DEFINE_PER_CPU(struct bpf_cgroup_storage*, bpf_cgroup_storage[MAX_BPF_CGROUP_STORAGE_TYPE]);
- 
- #ifdef CONFIG_CGROUP_BPF
-@@ -20,7 +22,6 @@ struct bpf_cgroup_storage_map {
- 	struct bpf_map map;
- 
- 	spinlock_t lock;
--	struct bpf_prog_aux *aux;
- 	struct rb_root root;
- 	struct list_head list;
- };
-@@ -38,16 +39,12 @@ static int bpf_cgroup_storage_key_cmp(
- 		return -1;
- 	else if (key1->cgroup_inode_id > key2->cgroup_inode_id)
- 		return 1;
--	else if (key1->attach_type < key2->attach_type)
--		return -1;
--	else if (key1->attach_type > key2->attach_type)
--		return 1;
- 	return 0;
- }
- 
--static struct bpf_cgroup_storage *cgroup_storage_lookup(
--	struct bpf_cgroup_storage_map *map, struct bpf_cgroup_storage_key *key,
--	bool locked)
-+struct bpf_cgroup_storage *
-+cgroup_storage_lookup(struct bpf_cgroup_storage_map *map,
-+		      struct bpf_cgroup_storage_key *key, bool locked)
- {
- 	struct rb_root *root = &map->root;
- 	struct rb_node *node;
-@@ -131,10 +128,7 @@ static int cgroup_storage_update_elem(struct bpf_map *map, void *_key,
- 	struct bpf_cgroup_storage *storage;
- 	struct bpf_storage_buffer *new;
- 
--	if (unlikely(flags & ~(BPF_F_LOCK | BPF_EXIST | BPF_NOEXIST)))
--		return -EINVAL;
--
--	if (unlikely(flags & BPF_NOEXIST))
-+	if (unlikely(flags & ~(BPF_F_LOCK | BPF_EXIST)))
- 		return -EINVAL;
- 
- 	if (unlikely((flags & BPF_F_LOCK) &&
-@@ -250,16 +244,15 @@ static int cgroup_storage_get_next_key(struct bpf_map *_map, void *_key,
- 		if (!storage)
- 			goto enoent;
- 
--		storage = list_next_entry(storage, list);
-+		storage = list_next_entry(storage, list_map);
- 		if (!storage)
- 			goto enoent;
- 	} else {
- 		storage = list_first_entry(&map->list,
--					 struct bpf_cgroup_storage, list);
-+					 struct bpf_cgroup_storage, list_map);
- 	}
- 
- 	spin_unlock_bh(&map->lock);
--	next->attach_type = storage->key.attach_type;
- 	next->cgroup_inode_id = storage->key.cgroup_inode_id;
- 	return 0;
- 
-@@ -318,6 +311,17 @@ static struct bpf_map *cgroup_storage_map_alloc(union bpf_attr *attr)
- static void cgroup_storage_map_free(struct bpf_map *_map)
- {
- 	struct bpf_cgroup_storage_map *map = map_to_storage(_map);
-+	struct list_head *storages = &map->list;
-+	struct bpf_cgroup_storage *storage, *stmp;
++The map uses key of type ``struct bpf_cgroup_storage_key``, declared in
++``linux/bpf.h``::
 +
-+	mutex_lock(&cgroup_mutex);
++    struct bpf_cgroup_storage_key {
++            __u64 cgroup_inode_id;
++            __u32 attach_type;
++    };
 +
-+	list_for_each_entry_safe(storage, stmp, storages, list_map) {
-+		bpf_cgroup_storage_unlink(storage);
-+		bpf_cgroup_storage_free(storage);
-+	}
++``cgroup_inode_id`` is the inode id of the cgroup directory.
++``attach_type`` was the the program's attach type prior to Linux 5.9, since 5.9
++it is ignored and kept for backwards compatibility.
 +
-+	mutex_unlock(&cgroup_mutex);
- 
- 	WARN_ON(!RB_EMPTY_ROOT(&map->root));
- 	WARN_ON(!list_empty(&map->list));
-@@ -426,38 +430,13 @@ const struct bpf_map_ops cgroup_storage_map_ops = {
- int bpf_cgroup_storage_assign(struct bpf_prog_aux *aux, struct bpf_map *_map)
- {
- 	enum bpf_cgroup_storage_type stype = cgroup_storage_type(_map);
--	struct bpf_cgroup_storage_map *map = map_to_storage(_map);
--	int ret = -EBUSY;
--
--	spin_lock_bh(&map->lock);
- 
--	if (map->aux && map->aux != aux)
--		goto unlock;
- 	if (aux->cgroup_storage[stype] &&
- 	    aux->cgroup_storage[stype] != _map)
--		goto unlock;
-+		return -EBUSY;
- 
--	map->aux = aux;
- 	aux->cgroup_storage[stype] = _map;
--	ret = 0;
--unlock:
--	spin_unlock_bh(&map->lock);
--
--	return ret;
--}
--
--void bpf_cgroup_storage_release(struct bpf_prog_aux *aux, struct bpf_map *_map)
--{
--	enum bpf_cgroup_storage_type stype = cgroup_storage_type(_map);
--	struct bpf_cgroup_storage_map *map = map_to_storage(_map);
--
--	spin_lock_bh(&map->lock);
--	if (map->aux == aux) {
--		WARN_ON(aux->cgroup_storage[stype] != _map);
--		map->aux = NULL;
--		aux->cgroup_storage[stype] = NULL;
--	}
--	spin_unlock_bh(&map->lock);
-+	return 0;
- }
- 
- static size_t bpf_cgroup_storage_calculate_size(struct bpf_map *map, u32 *pages)
-@@ -563,22 +542,21 @@ void bpf_cgroup_storage_free(struct bpf_cgroup_storage *storage)
- }
- 
- void bpf_cgroup_storage_link(struct bpf_cgroup_storage *storage,
--			     struct cgroup *cgroup,
--			     enum bpf_attach_type type)
-+			     struct cgroup *cgroup)
- {
- 	struct bpf_cgroup_storage_map *map;
- 
- 	if (!storage)
- 		return;
- 
--	storage->key.attach_type = type;
- 	storage->key.cgroup_inode_id = cgroup_id(cgroup);
- 
- 	map = storage->map;
- 
- 	spin_lock_bh(&map->lock);
- 	WARN_ON(cgroup_storage_insert(map, storage));
--	list_add(&storage->list, &map->list);
-+	list_add(&storage->list_map, &map->list);
-+	list_add(&storage->list_cg, &cgroup->bpf.storages);
- 	spin_unlock_bh(&map->lock);
- }
- 
-@@ -596,7 +574,8 @@ void bpf_cgroup_storage_unlink(struct bpf_cgroup_storage *storage)
- 	root = &map->root;
- 	rb_erase(&storage->node, root);
- 
--	list_del(&storage->list);
-+	list_del(&storage->list_map);
-+	list_del(&storage->list_cg);
- 	spin_unlock_bh(&map->lock);
- }
- 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 54d0c886e3ba..db93a211d2b1 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -78,7 +78,7 @@ struct bpf_lpm_trie_key {
- 
- struct bpf_cgroup_storage_key {
- 	__u64	cgroup_inode_id;	/* cgroup inode id */
--	__u32	attach_type;		/* program attach type */
-+	__u32	attach_type;		/* program attach type, unused */
- };
- 
- /* BPF syscall commands, see bpf(2) man-page for details. */
++To access the storage in a program, use ``bpf_get_local_storage``::
++
++    void *bpf_get_local_storage(void *map, u64 flags)
++
++``flags`` is reserved for future use and must be 0.
++
++There is no implicit synchronization. Storages of ``BPF_MAP_TYPE_CGROUP_STORAGE``
++can be accessed by multiple programs across different CPUs, and user should
++take care of synchronization by themselves.
++
++Example usage::
++
++    #include <linux/bpf.h>
++
++    struct {
++            __uint(type, BPF_MAP_TYPE_CGROUP_STORAGE);
++            __type(key, struct bpf_cgroup_storage_key);
++            __type(value, __u32);
++    } cgroup_storage SEC(".maps");
++
++    int program(struct __sk_buff *skb)
++    {
++            __u32 *ptr = bpf_get_local_storage(&cgroup_storage, 0);
++            __sync_fetch_and_add(ptr_cg_storage-, 1);
++
++            return 0;
++    }
++
++Semantics
++=========
++
++``BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE`` is a variant of this map type. This
++per-CPU variant will have different memory regions for each CPU for each
++storage. The non-per-CPU will have the same memory region for each storage.
++
++Prior to Linux 5.9, the lifetime of a storage is precisely per-attachment, and
++for a single ``CGROUP_STORAGE`` map, there can be at most one program loaded
++that uses the map. A program may be attached to multiple cgroups or have
++multiple attach types, and each attach creates a fresh zeroed storage. The
++storage is freed upon detach.
++
++Userspace may use the the attach parameters of cgroup and attach type pair
++in ``struct bpf_cgroup_storage_key`` as the key to the BPF map APIs to read or
++update the storage for a given attachment.
++
++Since Linux 5.9, storage can be shared by multiple programs, and attach type
++is ignored. When a program is attached to a cgroup, the kernel would create a
++new storage only if the map does not already contain an entry for the cgroup,
++or else the old storage is reused for the new attachment. Storage is freed
++only when either the map or the cgroup attached to is being freed. Detaching
++will not directly free the storage, but it may cause the reference to the map
++to reach zero and indirectly freeing all storage in the map.
++
++Userspace may use the the attach parameters of cgroup only in
++``struct bpf_cgroup_storage_key`` as the key to the BPF map APIs to read or
++update the storage for a given attachment. The struct also contains an
++``attach_type`` field; this field is ignored.
++
++In all versions, the storage is bound at attach time. Even if the program is
++attached to parent and triggers in child, the storage still belongs to the
++parent.
++
++Userspace cannot create a new entry in the map or delete an existing entry.
++Program test runs always use a temporary storage.
 -- 
 2.27.0
 
