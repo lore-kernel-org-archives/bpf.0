@@ -2,94 +2,149 @@ Return-Path: <SRS0=N7Fo=A7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 666A3C4346A
-	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 12:53:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCD9DC433E0
+	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 13:23:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3841C22D02
-	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 12:53:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B83EA20729
+	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 13:23:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="b3r2mKtI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y1lnxgFo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729391AbgGTMw4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Jul 2020 08:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
+        id S1727119AbgGTNXj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Jul 2020 09:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728639AbgGTMsJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Jul 2020 08:48:09 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D01C0619D6;
-        Mon, 20 Jul 2020 05:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=KEtThMnZn1T5ZTjfnNtMK17c9WUSVU4JmbBC5GmCo8k=; b=b3r2mKtIMupzynpcKcbswq0IqO
-        x3CWNt0l1PaHzJxn2EcCC+srtF/Mq7HfV7lip1uXJnLFShlYH6QJQY2jSIkrIhnf3sVEJDkDqNjCk
-        V9gH3mJH8SwG877l7uoU1FWRwM1GLEq8XtvlkXitbXzib9XAND6UehTN8tWUA9fqsXsKJmKc92eZP
-        41LRqgsw0A7LsuqS0rj5uDt0YAbFizVFlTTXyAufbzXcu0u4npMvicFmVcDeqbg1ysEaqfgYRNkAX
-        lniUhrynXQcYhppU4L4hxBrdsYQ3Wipg5bJvAirZt9QkqUN7wtobU7Ll7F9/YFeTzKA4LaNkLx22I
-        ibp2wKgg==;
-Received: from [2001:4bb8:105:4a81:2a8f:15b1:2c3:7be7] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jxVCp-0004WT-Jf; Mon, 20 Jul 2020 12:47:46 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        with ESMTP id S1726535AbgGTNXj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Jul 2020 09:23:39 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FC4C061794;
+        Mon, 20 Jul 2020 06:23:38 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id a17so8473291vsq.6;
+        Mon, 20 Jul 2020 06:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/6DloG2b0r9CUqLKLWeciEJEXdPx3rqElZz2QEFevOg=;
+        b=Y1lnxgFo9H6d4l4Aqpv9Mcc1TgPSgFIwL5RO7on41cQVl9/DNZMoCpY1On4/1ZymEc
+         AMZHJHw5mNsry96EhHRCHE1velwxCy/+ujwKRpW24S7KPOVqptWZKsl3PVYCnH9oPut8
+         gzlljtBNQIKEwOSUKUFA4ntcDe9RTEql4W6Eq3RE9W7EMnDM78OjxZhbOWz0c/vcsxUs
+         5vlcpOJ8VRmjq7JinFfcmNj8z6ZqRuKdRWrwQpru4SMjqfW1H5WThyxSNqFsV5QGvHhH
+         GQeJtX3rn5m7DdN0mwV5mk3YMr6t8fkrF8zwyLYCo/rV15yeyetADroAK0g8E5LJJerr
+         Mv8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/6DloG2b0r9CUqLKLWeciEJEXdPx3rqElZz2QEFevOg=;
+        b=hZO7D+Wqbefri/hEVAOEjRnSjIYFS5tYLcNuyQCvGc0Ia5Tik6ej4k4Z1rs1YtidbP
+         zt1PR0Vv/GLmVB3jTlNgtsIjIgQuBnUSxZt7qrwAZviJh6LYyWc0e4R/TtsYdmWQScpR
+         x8YC0NSajgoM+NjgUiesc4+rPEhjKkAx4Yx0OUC49pRcyXYOgts0q26loxOOqGIk0uZ2
+         v87Uy3WYFuZNFg+Fn/lAU7DRMkGhz25H9RPup/t/6+ojzZcpC7wjAACSihDyHzCuu5bG
+         CmCztPVQr44qycgy1kFrOjF0gFjOgxx4a0wcW3bfNY9Rwzt78ebapsiNxUVyUPcLwo0S
+         VrSw==
+X-Gm-Message-State: AOAM531B2MitSiyV+F36ovM7WBnubmmrhxE1R/6So9txeYT+gK4lUjYj
+        2gfeor8pp06Eci3iLMdaBMxciBZ2S0NLIRPtbTk=
+X-Google-Smtp-Source: ABdhPJw/DLry+B6SgDHJh8lxN/bTXWUPhnY1HfGc9wOE4MEE0/VuSha/XRneMkeHrshmyziIfD3wX/a9ORHN120Ahpk=
+X-Received: by 2002:a67:ed59:: with SMTP id m25mr16254532vsp.218.1595251418042;
+ Mon, 20 Jul 2020 06:23:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <1595236694-12749-5-git-send-email-magnus.karlsson@intel.com> <202007201930.0SiyJL6b%lkp@intel.com>
+In-Reply-To: <202007201930.0SiyJL6b%lkp@intel.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Mon, 20 Jul 2020 15:23:26 +0200
+Message-ID: <CAJ8uoz1ReofjQQRpqKa80P1L93SRsdAPPLcEJsuaOpXzq5_=yg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 04/14] xsk: move fill and completion rings to
+ buffer pool
+To:     kernel test robot <lkp@intel.com>
+Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-sctp@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-can@vger.kernel.org, dccp@vger.kernel.org,
-        linux-decnet-user@lists.sourceforge.net,
-        linux-wpan@vger.kernel.org, linux-s390@vger.kernel.org,
-        mptcp@lists.01.org, lvs-devel@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
-        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
-Subject: [PATCH 02/24] bpfilter: fix up a sparse annotation
-Date:   Mon, 20 Jul 2020 14:47:15 +0200
-Message-Id: <20200720124737.118617-3-hch@lst.de>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200720124737.118617-1-hch@lst.de>
-References: <20200720124737.118617-1-hch@lst.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+        Network Development <netdev@vger.kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Maxim Mikityanskiy <maximmi@mellanox.com>,
+        kbuild-all@lists.01.org, bpf <bpf@vger.kernel.org>,
+        jeffrey.t.kirsher@intel.com, anthony.l.nguyen@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The __user doesn't make sense when casting to an integer type.
+On Mon, Jul 20, 2020 at 2:21 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Magnus,
+>
+> I love your patch! Yet something to improve:
+>
+> [auto build test ERROR on bpf-next/master]
+>
+> url:    https://github.com/0day-ci/linux/commits/Magnus-Karlsson/xsk-supp=
+ort-shared-umems-between-devices-and-queues/20200720-180143
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git =
+master
+> config: alpha-allmodconfig (attached as .config)
+> compiler: alpha-linux-gcc (GCC) 9.3.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0 make.cros=
+s ARCH=3Dalpha
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    net/xdp/xsk_diag.c: In function 'xsk_diag_put_stats':
+> >> net/xdp/xsk_diag.c:88:70: error: 'struct xdp_umem' has no member named=
+ 'fq'
+>       88 |  du.n_fill_ring_empty =3D xs->umem ? xskq_nb_queue_empty_descs=
+(xs->umem->fq) : 0;
+>          |                                                               =
+       ^~
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- net/bpfilter/bpfilter_kern.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you Mr LKP robot. Yes, bisectability is broken in patch 3. Will spin =
+a v4.
 
-diff --git a/net/bpfilter/bpfilter_kern.c b/net/bpfilter/bpfilter_kern.c
-index 977e9dad72ca4f..713b4b3d02005d 100644
---- a/net/bpfilter/bpfilter_kern.c
-+++ b/net/bpfilter/bpfilter_kern.c
-@@ -49,7 +49,7 @@ static int __bpfilter_process_sockopt(struct sock *sk, int optname,
- 	req.is_set = is_set;
- 	req.pid = current->pid;
- 	req.cmd = optname;
--	req.addr = (long __force __user)optval;
-+	req.addr = (__force long)optval;
- 	req.len = optlen;
- 	if (!bpfilter_ops.info.tgid)
- 		goto out;
--- 
-2.27.0
+/Magnus
 
+> vim +88 net/xdp/xsk_diag.c
+>
+> a36b38aa2af611 Bj=C3=B6rn T=C3=B6pel  2019-01-24  80
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08  81  static int xsk_diag_put_stats=
+(const struct xdp_sock *xs, struct sk_buff *nlskb)
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08  82  {
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08  83      struct xdp_diag_stats du =
+=3D {};
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08  84
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08  85      du.n_rx_dropped =3D xs->r=
+x_dropped;
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08  86      du.n_rx_invalid =3D xskq_=
+nb_invalid_descs(xs->rx);
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08  87      du.n_rx_full =3D xs->rx_q=
+ueue_full;
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08 @88      du.n_fill_ring_empty =3D =
+xs->umem ? xskq_nb_queue_empty_descs(xs->umem->fq) : 0;
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08  89      du.n_tx_invalid =3D xskq_=
+nb_invalid_descs(xs->tx);
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08  90      du.n_tx_ring_empty =3D xs=
+kq_nb_queue_empty_descs(xs->tx);
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08  91      return nla_put(nlskb, XDP=
+_DIAG_STATS, sizeof(du), &du);
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08  92  }
+> 0d80cb4612aa32 Ciara Loftus 2020-07-08  93
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
