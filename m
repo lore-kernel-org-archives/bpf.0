@@ -7,34 +7,34 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC253C433E2
-	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 09:18:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9273DC433EB
+	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 09:18:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 955472080D
-	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 09:18:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7704A21775
+	for <bpf@archiver.kernel.org>; Mon, 20 Jul 2020 09:18:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728232AbgGTJSu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Jul 2020 05:18:50 -0400
+        id S1728224AbgGTJS6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Jul 2020 05:18:58 -0400
 Received: from mga05.intel.com ([192.55.52.43]:40701 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728224AbgGTJSt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Jul 2020 05:18:49 -0400
-IronPort-SDR: xed59Kkz/8GqjJpCQ/Fn6A8iRK8YrsGUscI8RixY/FZ1XyvQiWhKFKeG04WlLtDOn3IoeK8FrA
- Xez+ElmbYSXQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9687"; a="234729919"
+        id S1728116AbgGTJS5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Jul 2020 05:18:57 -0400
+IronPort-SDR: DondevalVkwBA2WPHIbNwZSXeudJBiIlwz3P+8gtC07kR36SBTiQbrxcO/Aphx9evkXwktFBOm
+ bwJZgHdyJ/Qg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9687"; a="234729935"
 X-IronPort-AV: E=Sophos;i="5.75,374,1589266800"; 
-   d="scan'208";a="234729919"
+   d="scan'208";a="234729935"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2020 02:18:49 -0700
-IronPort-SDR: VOoXb7RRe1TBE60d4SWxHOgilfcl94wpn2w+Zz9So+uDCf1YN46dngT0sdBlF+wdLQr7Dzprjd
- wStNarGlpBnA==
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2020 02:18:57 -0700
+IronPort-SDR: 8S3b5GN4l2qv93+9Jw6sScbjQ+2FpmbPF9kvKvoMfV8o0xeXIpZ4SrEsToAjF3t0qbA2nO5bIf
+ hJYu8Bq2n7tQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,374,1589266800"; 
-   d="scan'208";a="431549116"
+   d="scan'208";a="431549146"
 Received: from mkarlsso-mobl.ger.corp.intel.com (HELO localhost.localdomain) ([10.252.34.51])
-  by orsmga004.jf.intel.com with ESMTP; 20 Jul 2020 02:18:45 -0700
+  by orsmga004.jf.intel.com with ESMTP; 20 Jul 2020 02:18:53 -0700
 From:   Magnus Karlsson <magnus.karlsson@intel.com>
 To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
@@ -42,9 +42,9 @@ To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
 Cc:     bpf@vger.kernel.org, jeffrey.t.kirsher@intel.com,
         anthony.l.nguyen@intel.com, maciej.fijalkowski@intel.com,
         maciejromanfijalkowski@gmail.com, cristian.dumitrescu@intel.com
-Subject: [PATCH bpf-next v3 06/14] xsk: move xsk_tx_list and its lock to buffer pool
-Date:   Mon, 20 Jul 2020 11:18:06 +0200
-Message-Id: <1595236694-12749-7-git-send-email-magnus.karlsson@intel.com>
+Subject: [PATCH bpf-next v3 08/14] xsk: enable sharing of dma mappings
+Date:   Mon, 20 Jul 2020 11:18:08 +0200
+Message-Id: <1595236694-12749-9-git-send-email-magnus.karlsson@intel.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1595236694-12749-1-git-send-email-magnus.karlsson@intel.com>
 References: <1595236694-12749-1-git-send-email-magnus.karlsson@intel.com>
@@ -53,229 +53,254 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move the xsk_tx_list and the xsk_tx_list_lock from the umem to
-the buffer pool. This so that we in a later commit can share the
-umem between multiple HW queues. There is one xsk_tx_list per
-device and queue id, so it should be located in the buffer pool.
+Enable the sharing of dma mappings by moving them out from the buffer
+pool. Instead we put each dma mapped umem region in a list in the umem
+structure. If dma has already been mapped for this umem and device, it
+is not mapped again and the existing dma mappings are reused.
 
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- include/net/xdp_sock.h      |  4 +---
- include/net/xsk_buff_pool.h |  5 +++++
- net/xdp/xdp_umem.c          | 26 --------------------------
- net/xdp/xdp_umem.h          |  2 --
- net/xdp/xsk.c               | 13 ++++++-------
- net/xdp/xsk_buff_pool.c     | 26 ++++++++++++++++++++++++++
- 6 files changed, 38 insertions(+), 38 deletions(-)
+ include/net/xdp_sock.h      |   1 +
+ include/net/xsk_buff_pool.h |   7 +++
+ net/xdp/xdp_umem.c          |   1 +
+ net/xdp/xsk_buff_pool.c     | 112 ++++++++++++++++++++++++++++++++++++--------
+ 4 files changed, 102 insertions(+), 19 deletions(-)
 
 diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index b052f1c..9a61d05 100644
+index 126d243..282aeba 100644
 --- a/include/net/xdp_sock.h
 +++ b/include/net/xdp_sock.h
-@@ -29,8 +29,6 @@ struct xdp_umem {
+@@ -30,6 +30,7 @@ struct xdp_umem {
  	u8 flags;
  	int id;
  	bool zc;
--	spinlock_t xsk_tx_list_lock;
--	struct list_head xsk_tx_list;
++	struct list_head xsk_dma_list;
  };
  
  struct xsk_map {
-@@ -57,7 +55,7 @@ struct xdp_sock {
- 	/* Protects multiple processes in the control path */
- 	struct mutex mutex;
- 	struct xsk_queue *tx ____cacheline_aligned_in_smp;
--	struct list_head list;
-+	struct list_head tx_list;
- 	/* Mutual exclusion of NAPI TX thread and sendmsg error paths
- 	 * in the SKB destructor callback.
- 	 */
 diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-index 2d94890..83f100c 100644
+index 83f100c..8f1dc4c 100644
 --- a/include/net/xsk_buff_pool.h
 +++ b/include/net/xsk_buff_pool.h
-@@ -52,6 +52,9 @@ struct xsk_buff_pool {
- 	void *addrs;
- 	struct device *dev;
- 	struct net_device *netdev;
-+	struct list_head xsk_tx_list;
-+	/* Protects modifications to the xsk_tx_list */
-+	spinlock_t xsk_tx_list_lock;
- 	refcount_t users;
- 	struct work_struct work;
- 	struct xdp_buff_xsk *free_heads[];
-@@ -67,6 +70,8 @@ void xp_release(struct xdp_buff_xsk *xskb);
- void xp_get_pool(struct xsk_buff_pool *pool);
- void xp_put_pool(struct xsk_buff_pool *pool);
- void xp_clear_dev(struct xsk_buff_pool *pool);
-+void xp_add_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs);
-+void xp_del_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs);
+@@ -28,6 +28,13 @@ struct xdp_buff_xsk {
+ 	struct list_head free_list_node;
+ };
  
- /* AF_XDP, and XDP core. */
- void xp_free(struct xdp_buff_xsk *xskb);
++struct xsk_dma_map {
++	dma_addr_t *dma_pages;
++	struct net_device *dev;
++	refcount_t users;
++	struct list_head list; /* Protected by the RTNL_LOCK */
++};
++
+ struct xsk_buff_pool {
+ 	struct xsk_queue *fq;
+ 	struct xsk_queue *cq;
 diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index b1699d0..a871c75 100644
+index 372998d..cf27249 100644
 --- a/net/xdp/xdp_umem.c
 +++ b/net/xdp/xdp_umem.c
-@@ -23,30 +23,6 @@
- 
- static DEFINE_IDA(umem_ida);
- 
--void xdp_add_sk_umem(struct xdp_umem *umem, struct xdp_sock *xs)
--{
--	unsigned long flags;
--
--	if (!xs->tx)
--		return;
--
--	spin_lock_irqsave(&umem->xsk_tx_list_lock, flags);
--	list_add_rcu(&xs->list, &umem->xsk_tx_list);
--	spin_unlock_irqrestore(&umem->xsk_tx_list_lock, flags);
--}
--
--void xdp_del_sk_umem(struct xdp_umem *umem, struct xdp_sock *xs)
--{
--	unsigned long flags;
--
--	if (!xs->tx)
--		return;
--
--	spin_lock_irqsave(&umem->xsk_tx_list_lock, flags);
--	list_del_rcu(&xs->list);
--	spin_unlock_irqrestore(&umem->xsk_tx_list_lock, flags);
--}
--
- static void xdp_umem_unpin_pages(struct xdp_umem *umem)
- {
- 	unpin_user_pages_dirty_lock(umem->pgs, umem->npgs, true);
-@@ -206,8 +182,6 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 	umem->pgs = NULL;
+@@ -199,6 +199,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
  	umem->user = NULL;
  	umem->flags = mr->flags;
--	INIT_LIST_HEAD(&umem->xsk_tx_list);
--	spin_lock_init(&umem->xsk_tx_list_lock);
  
++	INIT_LIST_HEAD(&umem->xsk_dma_list);
  	refcount_set(&umem->users, 1);
  
-diff --git a/net/xdp/xdp_umem.h b/net/xdp/xdp_umem.h
-index 67bf3f3..181fdda 100644
---- a/net/xdp/xdp_umem.h
-+++ b/net/xdp/xdp_umem.h
-@@ -10,8 +10,6 @@
- 
- void xdp_get_umem(struct xdp_umem *umem);
- void xdp_put_umem(struct xdp_umem *umem);
--void xdp_add_sk_umem(struct xdp_umem *umem, struct xdp_sock *xs);
--void xdp_del_sk_umem(struct xdp_umem *umem, struct xdp_sock *xs);
- struct xdp_umem *xdp_umem_create(struct xdp_umem_reg *mr);
- 
- #endif /* XDP_UMEM_H_ */
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 624d0fc..d0ff5e8 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -57,7 +57,7 @@ void xsk_set_tx_need_wakeup(struct xsk_buff_pool *pool)
- 		return;
- 
- 	rcu_read_lock();
--	list_for_each_entry_rcu(xs, &xs->umem->xsk_tx_list, list) {
-+	list_for_each_entry_rcu(xs, &pool->xsk_tx_list, tx_list) {
- 		xs->tx->ring->flags |= XDP_RING_NEED_WAKEUP;
- 	}
- 	rcu_read_unlock();
-@@ -84,7 +84,7 @@ void xsk_clear_tx_need_wakeup(struct xsk_buff_pool *pool)
- 		return;
- 
- 	rcu_read_lock();
--	list_for_each_entry_rcu(xs, &xs->umem->xsk_tx_list, list) {
-+	list_for_each_entry_rcu(xs, &pool->xsk_tx_list, tx_list) {
- 		xs->tx->ring->flags &= ~XDP_RING_NEED_WAKEUP;
- 	}
- 	rcu_read_unlock();
-@@ -300,7 +300,7 @@ void xsk_tx_release(struct xsk_buff_pool *pool)
- 	struct xdp_sock *xs;
- 
- 	rcu_read_lock();
--	list_for_each_entry_rcu(xs, &pool->umem->xsk_tx_list, list) {
-+	list_for_each_entry_rcu(xs, &pool->xsk_tx_list, tx_list) {
- 		__xskq_cons_release(xs->tx);
- 		xs->sk.sk_write_space(&xs->sk);
- 	}
-@@ -310,11 +310,10 @@ EXPORT_SYMBOL(xsk_tx_release);
- 
- bool xsk_tx_peek_desc(struct xsk_buff_pool *pool, struct xdp_desc *desc)
- {
--	struct xdp_umem *umem = pool->umem;
- 	struct xdp_sock *xs;
- 
- 	rcu_read_lock();
--	list_for_each_entry_rcu(xs, &umem->xsk_tx_list, list) {
-+	list_for_each_entry_rcu(xs, &pool->xsk_tx_list, tx_list) {
- 		if (!xskq_cons_peek_desc(xs->tx, desc, pool)) {
- 			xs->tx->queue_empty_descs++;
- 			continue;
-@@ -522,7 +521,7 @@ static void xsk_unbind_dev(struct xdp_sock *xs)
- 	WRITE_ONCE(xs->state, XSK_UNBOUND);
- 
- 	/* Wait for driver to stop using the xdp socket. */
--	xdp_del_sk_umem(xs->umem, xs);
-+	xp_del_xsk(xs->pool, xs);
- 	xs->dev = NULL;
- 	synchronize_net();
- 	dev_put(dev);
-@@ -742,7 +741,7 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
- 	xs->dev = dev;
- 	xs->zc = xs->umem->zc;
- 	xs->queue_id = qid;
--	xdp_add_sk_umem(xs->umem, xs);
-+	xp_add_xsk(xs->pool, xs);
- 
- out_unlock:
- 	if (err) {
+ 	err = xdp_umem_account_pages(umem);
 diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 436648a..dbd913e 100644
+index c563874..ca74a3e 100644
 --- a/net/xdp/xsk_buff_pool.c
 +++ b/net/xdp/xsk_buff_pool.c
-@@ -11,6 +11,30 @@
- #include "xdp_umem.h"
- #include "xsk.h"
+@@ -104,6 +104,25 @@ void xp_set_rxq_info(struct xsk_buff_pool *pool, struct xdp_rxq_info *rxq)
+ }
+ EXPORT_SYMBOL(xp_set_rxq_info);
  
-+void xp_add_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs)
++static void xp_disable_drv_zc(struct xsk_buff_pool *pool)
 +{
-+	unsigned long flags;
++	struct netdev_bpf bpf;
++	int err;
 +
-+	if (!xs->tx)
-+		return;
++	ASSERT_RTNL();
 +
-+	spin_lock_irqsave(&pool->xsk_tx_list_lock, flags);
-+	list_add_rcu(&xs->tx_list, &pool->xsk_tx_list);
-+	spin_unlock_irqrestore(&pool->xsk_tx_list_lock, flags);
++	if (pool->umem->zc) {
++		bpf.command = XDP_SETUP_XSK_POOL;
++		bpf.xsk.pool = NULL;
++		bpf.xsk.queue_id = pool->queue_id;
++
++		err = pool->netdev->netdev_ops->ndo_bpf(pool->netdev, &bpf);
++
++		if (err)
++			WARN(1, "Failed to disable zero-copy!\n");
++	}
 +}
 +
-+void xp_del_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs)
-+{
-+	unsigned long flags;
-+
-+	if (!xs->tx)
-+		return;
-+
-+	spin_lock_irqsave(&pool->xsk_tx_list_lock, flags);
-+	list_del_rcu(&xs->tx_list);
-+	spin_unlock_irqrestore(&pool->xsk_tx_list_lock, flags);
-+}
-+
- static void xp_addr_unmap(struct xsk_buff_pool *pool)
+ int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *netdev,
+ 		  u16 queue_id, u16 flags)
  {
- 	vunmap(pool->addrs);
-@@ -63,6 +87,8 @@ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
- 		XDP_PACKET_HEADROOM;
- 	pool->umem = umem;
- 	INIT_LIST_HEAD(&pool->free_list);
-+	INIT_LIST_HEAD(&pool->xsk_tx_list);
-+	spin_lock_init(&pool->xsk_tx_list_lock);
- 	refcount_set(&pool->users, 1);
+@@ -122,6 +141,8 @@ int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *netdev,
+ 	if (xsk_get_pool_from_qid(netdev, queue_id))
+ 		return -EBUSY;
  
- 	pool->fq = xs->fq_tmp;
++	pool->netdev = netdev;
++	pool->queue_id = queue_id;
+ 	err = xsk_reg_pool_at_qid(netdev, pool, queue_id);
+ 	if (err)
+ 		return err;
+@@ -155,11 +176,15 @@ int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *netdev,
+ 	if (err)
+ 		goto err_unreg_pool;
+ 
+-	pool->netdev = netdev;
+-	pool->queue_id = queue_id;
++	if (!pool->dma_pages) {
++		WARN(1, "Driver did not DMA map zero-copy buffers");
++		goto err_unreg_xsk;
++	}
+ 	pool->umem->zc = true;
+ 	return 0;
+ 
++err_unreg_xsk:
++	xp_disable_drv_zc(pool);
+ err_unreg_pool:
+ 	if (!force_zc)
+ 		err = 0; /* fallback to copy mode */
+@@ -170,25 +195,10 @@ int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *netdev,
+ 
+ void xp_clear_dev(struct xsk_buff_pool *pool)
+ {
+-	struct netdev_bpf bpf;
+-	int err;
+-
+-	ASSERT_RTNL();
+-
+ 	if (!pool->netdev)
+ 		return;
+ 
+-	if (pool->umem->zc) {
+-		bpf.command = XDP_SETUP_XSK_POOL;
+-		bpf.xsk.pool = NULL;
+-		bpf.xsk.queue_id = pool->queue_id;
+-
+-		err = pool->netdev->netdev_ops->ndo_bpf(pool->netdev, &bpf);
+-
+-		if (err)
+-			WARN(1, "Failed to disable zero-copy!\n");
+-	}
+-
++	xp_disable_drv_zc(pool);
+ 	xsk_clear_pool_at_qid(pool->netdev, pool->queue_id);
+ 	dev_put(pool->netdev);
+ 	pool->netdev = NULL;
+@@ -233,14 +243,61 @@ void xp_put_pool(struct xsk_buff_pool *pool)
+ 	}
+ }
+ 
++static struct xsk_dma_map *xp_find_dma_map(struct xsk_buff_pool *pool)
++{
++	struct xsk_dma_map *dma_map;
++
++	list_for_each_entry(dma_map, &pool->umem->xsk_dma_list, list) {
++		if (dma_map->dev == pool->netdev)
++			return dma_map;
++	}
++
++	return NULL;
++}
++
++static void xp_destroy_dma_map(struct xsk_dma_map *dma_map)
++{
++	list_del(&dma_map->list);
++	kfree(dma_map);
++}
++
++static void xp_put_dma_map(struct xsk_dma_map *dma_map)
++{
++	if (!refcount_dec_and_test(&dma_map->users))
++		return;
++
++	xp_destroy_dma_map(dma_map);
++}
++
++static struct xsk_dma_map *xp_create_dma_map(struct xsk_buff_pool *pool)
++{
++	struct xsk_dma_map *dma_map;
++
++	dma_map = kzalloc(sizeof(*dma_map), GFP_KERNEL);
++	if (!dma_map)
++		return NULL;
++
++	dma_map->dev = pool->netdev;
++	refcount_set(&dma_map->users, 1);
++	list_add(&dma_map->list, &pool->umem->xsk_dma_list);
++	return dma_map;
++}
++
+ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
+ {
++	struct xsk_dma_map *dma_map;
+ 	dma_addr_t *dma;
+ 	u32 i;
+ 
+ 	if (pool->dma_pages_cnt == 0)
+ 		return;
+ 
++	dma_map = xp_find_dma_map(pool);
++	if (!dma_map) {
++		WARN(1, "Could not find dma_map for device");
++		return;
++	}
++
+ 	for (i = 0; i < pool->dma_pages_cnt; i++) {
+ 		dma = &pool->dma_pages[i];
+ 		if (*dma) {
+@@ -250,6 +307,7 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
+ 		}
+ 	}
+ 
++	xp_put_dma_map(dma_map);
+ 	kvfree(pool->dma_pages);
+ 	pool->dma_pages_cnt = 0;
+ 	pool->dev = NULL;
+@@ -271,14 +329,29 @@ static void xp_check_dma_contiguity(struct xsk_buff_pool *pool)
+ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
+ 	       unsigned long attrs, struct page **pages, u32 nr_pages)
+ {
++	struct xsk_dma_map *dma_map;
+ 	dma_addr_t dma;
+ 	u32 i;
+ 
++	dma_map = xp_find_dma_map(pool);
++	if (dma_map) {
++		pool->dma_pages = dma_map->dma_pages;
++		refcount_inc(&dma_map->users);
++		return 0;
++	}
++
++	dma_map = xp_create_dma_map(pool);
++	if (!dma_map)
++		return -ENOMEM;
++
+ 	pool->dma_pages = kvcalloc(nr_pages, sizeof(*pool->dma_pages),
+ 				   GFP_KERNEL);
+-	if (!pool->dma_pages)
++	if (!pool->dma_pages) {
++		xp_destroy_dma_map(dma_map);
+ 		return -ENOMEM;
++	}
+ 
++	dma_map->dma_pages = pool->dma_pages;
+ 	pool->dev = dev;
+ 	pool->dma_pages_cnt = nr_pages;
+ 	pool->dma_need_sync = false;
+@@ -288,6 +361,7 @@ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
+ 					 DMA_BIDIRECTIONAL, attrs);
+ 		if (dma_mapping_error(dev, dma)) {
+ 			xp_dma_unmap(pool, attrs);
++			xp_destroy_dma_map(dma_map);
+ 			return -ENOMEM;
+ 		}
+ 		if (dma_need_sync(dev, dma))
 -- 
 2.7.4
 
