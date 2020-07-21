@@ -2,597 +2,237 @@ Return-Path: <SRS0=BdeU=BA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51131C433FE
-	for <bpf@archiver.kernel.org>; Tue, 21 Jul 2020 02:53:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 545F3C4345D
+	for <bpf@archiver.kernel.org>; Tue, 21 Jul 2020 02:53:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1E9162077D
-	for <bpf@archiver.kernel.org>; Tue, 21 Jul 2020 02:53:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2C1582077D
+	for <bpf@archiver.kernel.org>; Tue, 21 Jul 2020 02:53:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="eoQUnl6n"
+	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="bmKwkYBH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728673AbgGUCxH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Jul 2020 22:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
+        id S1728552AbgGUCwp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Jul 2020 22:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728583AbgGUCws (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Jul 2020 22:52:48 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17204C0619D7
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2020 19:52:48 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id x9so9612926plr.2
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2020 19:52:48 -0700 (PDT)
+        with ESMTP id S1728545AbgGUCwp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Jul 2020 22:52:45 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3394FC0619D6
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2020 19:52:45 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id l6so9593839plt.7
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2020 19:52:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cs.washington.edu; s=goo201206;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZLIWvysF1C5d8TSKuMS5aP5i+ZqkWdLF8dd1Gt10AhQ=;
-        b=eoQUnl6niWkeedct+t0u3kAA5svSXQDpADC8734or8i+rJMSN79XLSeZbLXzEI+sVV
-         TcF/lUlXtDoAYSlTLh1lBE4aF9ckCKG4xSl7iee1yefW9g294+Ht4QtazfHecLlxbsnt
-         S4WT79fzacDiCT/d6hSP13p/5197VaYuMOuLk=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/WbGkn+wvw226WWVfxHp0ZWh+j6mSIy6XFA68Tzw7oc=;
+        b=bmKwkYBH8n0mhHSrgarzUE4ElRiyDr+K4d2EBgchfYCzvYKggUsehrSJ49zrx5+KGZ
+         jZBmOR8m0Cm+ET55fu5CAFMRKzhezCGaNXCJi3fHuXkXYuXHmc3E0MwBXWgl0NRVozmh
+         wxKAMJeaCiUL0yMgzU7ZvH2N32+faZ7xZj7sA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZLIWvysF1C5d8TSKuMS5aP5i+ZqkWdLF8dd1Gt10AhQ=;
-        b=K+VOQ5Ftkuh1DNQtJvTIYYUXIGx/Eo68WJy8eKM5j6n1j3X6d9Xxfwypl/pXv28Zhu
-         laT36D0mNO5nJTsIXxAtSs2G7LYrpaGats1HpqoExNnHPBO7Htz48jfoyHvw4cl/X7oq
-         G7G88b6WL5XYM+H1Pz4w+nFNdFxGZNPVv8SJU/3GHkxuDc7ANdeVJi2g4jptheHp91Q7
-         pEG5QpItaanNrPz3UJ5OLiR4cx/OgykaGR+pONLi/B+vkLtx7jt12zzlB9BF7izeybax
-         onGZdjB+uiqgPScLUtuedwUz8nuq42qqh6yZK0FiXgtjgA3P6SlKacVfjn38qMuXKdlr
-         evGg==
-X-Gm-Message-State: AOAM532u3Pmm6Ya53oQuhyNxbZqwHxXtVJVNcEnkqlLH/PZ38cG/kG/+
-        ovVKtm1zqU4RrcSsr4ba+3Dk6lgznWq5kg==
-X-Google-Smtp-Source: ABdhPJyaDHfJvH0sJQYvn1SrPD3Wsf3L+yPd0liTBdcKHlgXT6NmPwwJ9PejQ1z/1O+Md4Wcaw+x9w==
-X-Received: by 2002:a17:90b:112:: with SMTP id p18mr2499313pjz.92.1595299967064;
-        Mon, 20 Jul 2020 19:52:47 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/WbGkn+wvw226WWVfxHp0ZWh+j6mSIy6XFA68Tzw7oc=;
+        b=R5/Syn1xJY7GojqOcINfgaeRoBI4TuM/R+7JRZVoaUG/+JLzKJoCh/UcTFsGxrDZNj
+         by5UEjSXvk43/u42ZBOhgi9AN9OUzHAAQmmvbI0vs/7ZOR6U3OF3q9HEjoY/wX+0gGZg
+         tLg+n1bgAxg3LpWxsrjqP6Xxkr5C1E5Sy5AmlAfro2M6SnrdMzihv0z4aBZo6m7IKLpS
+         AeBZkIEnlgTPtKp10NmIg+lngd/z6E+tSbRlM1X34DdwQLjE0MuRUaAagvJJRoWfMZY8
+         tnEmVFXW6ilNPkgLolXWGkndrkHrLYMSeYuuP5LPKbZqN0/1zksl7YiaZfr4O/M19fvk
+         x3Eg==
+X-Gm-Message-State: AOAM531qM7I9eCGpekAq2pulLz+M3vAigBTk6hw/itx2ga5dIq8jKbys
+        6OhkjAaeAksqhjCr1SpBuC57MbeHJoU=
+X-Google-Smtp-Source: ABdhPJyh88Ogb8H3OVRgDrNhABdUb5B/+sOrg08AXUvSzNymIUmCNOySpZ8QfNpdyttJETrJaOkJkA==
+X-Received: by 2002:a17:902:6194:: with SMTP id u20mr20732136plj.68.1595299964253;
+        Mon, 20 Jul 2020 19:52:44 -0700 (PDT)
 Received: from localhost.localdomain (c-73-53-94-119.hsd1.wa.comcast.net. [73.53.94.119])
-        by smtp.gmail.com with ESMTPSA id m16sm18769753pfd.101.2020.07.20.19.52.46
+        by smtp.gmail.com with ESMTPSA id m16sm18769753pfd.101.2020.07.20.19.52.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2020 19:52:46 -0700 (PDT)
+        Mon, 20 Jul 2020 19:52:43 -0700 (PDT)
 From:   Luke Nelson <lukenels@cs.washington.edu>
 X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
 To:     bpf@vger.kernel.org
-Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+Cc:     Luke Nelson <luke.r.nels@gmail.com>,
         =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+        Xi Wang <xi.wang@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        KP Singh <kpsingh@chromium.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, netdev@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v1 2/3] bpf, riscv: Add encodings for compressed instructions
-Date:   Mon, 20 Jul 2020 19:52:39 -0700
-Message-Id: <20200721025241.8077-3-luke.r.nels@gmail.com>
+Subject: [PATCH bpf-next v1 0/3] bpf, riscv: Add compressed instructions to rv64 JIT
+Date:   Mon, 20 Jul 2020 19:52:37 -0700
+Message-Id: <20200721025241.8077-1-luke.r.nels@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200721025241.8077-1-luke.r.nels@gmail.com>
-References: <20200721025241.8077-1-luke.r.nels@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds functions for encoding and emitting compressed riscv
-(RVC) instructions to the BPF JIT.
+This patch series enables using compressed riscv (RVC) instructions
+in the rv64 BPF JIT.
 
-Some regular riscv instructions can be compressed into an RVC instruction
-if the instruction fields meet some requirements. For example, "add rd,
-rs1, rs2" can be compressed into "c.add rd, rs2" when rd == rs1.
+RVC is a standard riscv extension that adds a set of compressed,
+2-byte instructions that can replace some regular 4-byte instructions
+for improved code density.
 
-To make using RVC encodings simpler, this patch also adds helper
-functions that selectively emit either a regular instruction or a
-compressed instruction if possible.
+This series first modifies the JIT to support using 2-byte instructions
+(e.g., in jump offset computations), then adds RVC encoding and
+helper functions, and finally uses the helper functions to optimize
+the rv64 JIT.
 
-For example, emit_add will produce a "c.add" if possible and regular
-"add" otherwise.
+I used our formal verification framework, Serval, to verify the
+correctness of the RVC encodings and their uses in the rv64 JIT.
 
-Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
----
- arch/riscv/net/bpf_jit.h | 452 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 452 insertions(+)
+The JIT continues to pass all tests in lib/test_bpf.c, and introduces
+no new failures to test_verifier; both with and without RVC being enabled.
 
-diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-index e90d336a9e5f..75c1e9996867 100644
---- a/arch/riscv/net/bpf_jit.h
-+++ b/arch/riscv/net/bpf_jit.h
-@@ -53,6 +53,18 @@ enum {
- 	RV_REG_T6 =	31,
- };
- 
-+static inline bool is_creg(u8 reg)
-+{
-+	return (1 << reg) & (BIT(RV_REG_FP) |
-+			     BIT(RV_REG_S1) |
-+			     BIT(RV_REG_A0) |
-+			     BIT(RV_REG_A1) |
-+			     BIT(RV_REG_A2) |
-+			     BIT(RV_REG_A3) |
-+			     BIT(RV_REG_A4) |
-+			     BIT(RV_REG_A5));
-+}
-+
- struct rv_jit_context {
- 	struct bpf_prog *prog;
- 	u16 *insns;		/* RV insns */
-@@ -142,6 +154,36 @@ static inline int invert_bpf_cond(u8 cond)
- 	return -1;
- }
- 
-+static inline bool is_6b_int(long val)
-+{
-+	return -(1L << 5) <= val && val < (1L << 5);
-+}
-+
-+static inline bool is_7b_uint(unsigned long val)
-+{
-+	return val < (1UL << 7);
-+}
-+
-+static inline bool is_8b_uint(unsigned long val)
-+{
-+	return val < (1UL << 8);
-+}
-+
-+static inline bool is_9b_uint(unsigned long val)
-+{
-+	return val < (1UL << 9);
-+}
-+
-+static inline bool is_10b_int(long val)
-+{
-+	return -(1L << 9) <= val && val < (1L << 9);
-+}
-+
-+static inline bool is_10b_uint(unsigned long val)
-+{
-+	return val < (1UL << 10);
-+}
-+
- static inline bool is_12b_int(long val)
- {
- 	return -(1L << 11) <= val && val < (1L << 11);
-@@ -232,6 +274,59 @@ static inline u32 rv_amo_insn(u8 funct5, u8 aq, u8 rl, u8 rs2, u8 rs1,
- 	return rv_r_insn(funct7, rs2, rs1, funct3, rd, opcode);
- }
- 
-+/* RISC-V compressed instruction formats. */
-+
-+static inline u16 rv_cr_insn(u8 funct4, u8 rd, u8 rs2, u8 op)
-+{
-+	return (funct4 << 12) | (rd << 7) | (rs2 << 2) | op;
-+}
-+
-+static inline u16 rv_ci_insn(u8 funct3, u32 imm6, u8 rd, u8 op)
-+{
-+	u32 imm;
-+
-+	imm = ((imm6 & 0x20) << 7) | ((imm6 & 0x1f) << 2);
-+	return (funct3 << 13) | (rd << 7) | op | imm;
-+}
-+
-+static inline u16 rv_css_insn(u8 funct3, u32 uimm, u8 rs2, u8 op)
-+{
-+	return (funct3 << 13) | (uimm << 7) | (rs2 << 2) | op;
-+}
-+
-+static inline u16 rv_ciw_insn(u8 funct3, u32 uimm, u8 rd, u8 op)
-+{
-+	return (funct3 << 13) | (uimm << 5) | ((rd & 0x7) << 2) | op;
-+}
-+
-+static inline u16 rv_cl_insn(u8 funct3, u32 imm_hi, u8 rs1, u32 imm_lo, u8 rd,
-+			     u8 op)
-+{
-+	return (funct3 << 13) | (imm_hi << 10) | ((rs1 & 0x7) << 7) |
-+		(imm_lo << 5) | ((rd & 0x7) << 2) | op;
-+}
-+
-+static inline u16 rv_cs_insn(u8 funct3, u32 imm_hi, u8 rs1, u32 imm_lo, u8 rs2,
-+			     u8 op)
-+{
-+	return (funct3 << 13) | (imm_hi << 10) | ((rs1 & 0x7) << 7) |
-+		(imm_lo << 5) | ((rs2 & 0x7) << 2) | op;
-+}
-+
-+static inline u16 rv_ca_insn(u8 funct6, u8 rd, u8 funct2, u8 rs2, u8 op)
-+{
-+	return (funct6 << 10) | ((rd & 0x7) << 7) | (funct2 << 5) |
-+		((rs2 & 0x7) << 2) | op;
-+}
-+
-+static inline u16 rv_cb_insn(u8 funct3, u32 imm6, u8 funct2, u8 rd, u8 op)
-+{
-+	u32 imm;
-+
-+	imm = ((imm6 & 0x20) << 7) | ((imm6 & 0x1f) << 2);
-+	return (funct3 << 13) | (funct2 << 10) | ((rd & 0x7) << 7) | op | imm;
-+}
-+
- /* Instructions shared by both RV32 and RV64. */
- 
- static inline u32 rv_addi(u8 rd, u8 rs1, u16 imm11_0)
-@@ -439,6 +534,135 @@ static inline u32 rv_amoadd_w(u8 rd, u8 rs2, u8 rs1, u8 aq, u8 rl)
- 	return rv_amo_insn(0, aq, rl, rs2, rs1, 2, rd, 0x2f);
- }
- 
-+/* RVC instrutions. */
-+
-+static inline u16 rvc_addi4spn(u8 rd, u32 imm10)
-+{
-+	u32 imm;
-+
-+	imm = ((imm10 & 0x30) << 2) | ((imm10 & 0x3c0) >> 4) |
-+		((imm10 & 0x4) >> 1) | ((imm10 & 0x8) >> 3);
-+	return rv_ciw_insn(0x0, imm, rd, 0x0);
-+}
-+
-+static inline u16 rvc_lw(u8 rd, u32 imm7, u8 rs1)
-+{
-+	u32 imm_hi, imm_lo;
-+
-+	imm_hi = (imm7 & 0x38) >> 3;
-+	imm_lo = ((imm7 & 0x4) >> 1) | ((imm7 & 0x40) >> 6);
-+	return rv_cl_insn(0x2, imm_hi, rs1, imm_lo, rd, 0x0);
-+}
-+
-+static inline u16 rvc_sw(u8 rs1, u32 imm7, u8 rs2)
-+{
-+	u32 imm_hi, imm_lo;
-+
-+	imm_hi = (imm7 & 0x38) >> 3;
-+	imm_lo = ((imm7 & 0x4) >> 1) | ((imm7 & 0x40) >> 6);
-+	return rv_cs_insn(0x6, imm_hi, rs1, imm_lo, rs2, 0x0);
-+}
-+
-+static inline u16 rvc_addi(u8 rd, u32 imm6)
-+{
-+	return rv_ci_insn(0, imm6, rd, 0x1);
-+}
-+
-+static inline u16 rvc_li(u8 rd, u32 imm6)
-+{
-+	return rv_ci_insn(0x2, imm6, rd, 0x1);
-+}
-+
-+static inline u16 rvc_addi16sp(u32 imm10)
-+{
-+	u32 imm;
-+
-+	imm = ((imm10 & 0x200) >> 4) | (imm10 & 0x10) | ((imm10 & 0x40) >> 3) |
-+		((imm10 & 0x180) >> 6) | ((imm10 & 0x20) >> 5);
-+	return rv_ci_insn(0x3, imm, RV_REG_SP, 0x1);
-+}
-+
-+static inline u16 rvc_lui(u8 rd, u32 imm6)
-+{
-+	return rv_ci_insn(0x3, imm6, rd, 0x1);
-+}
-+
-+static inline u16 rvc_srli(u8 rd, u32 imm6)
-+{
-+	return rv_cb_insn(0x4, imm6, 0, rd, 0x1);
-+}
-+
-+static inline u16 rvc_srai(u8 rd, u32 imm6)
-+{
-+	return rv_cb_insn(0x4, imm6, 0x1, rd, 0x1);
-+}
-+
-+static inline u16 rvc_andi(u8 rd, u32 imm6)
-+{
-+	return rv_cb_insn(0x4, imm6, 0x2, rd, 0x1);
-+}
-+
-+static inline u16 rvc_sub(u8 rd, u8 rs)
-+{
-+	return rv_ca_insn(0x23, rd, 0, rs, 0x1);
-+}
-+
-+static inline u16 rvc_xor(u8 rd, u8 rs)
-+{
-+	return rv_ca_insn(0x23, rd, 0x1, rs, 0x1);
-+}
-+
-+static inline u16 rvc_or(u8 rd, u8 rs)
-+{
-+	return rv_ca_insn(0x23, rd, 0x2, rs, 0x1);
-+}
-+
-+static inline u16 rvc_and(u8 rd, u8 rs)
-+{
-+	return rv_ca_insn(0x23, rd, 0x3, rs, 0x1);
-+}
-+
-+static inline u16 rvc_slli(u8 rd, u32 imm6)
-+{
-+	return rv_ci_insn(0, imm6, rd, 0x2);
-+}
-+
-+static inline u16 rvc_lwsp(u8 rd, u32 imm8)
-+{
-+	u32 imm;
-+
-+	imm = ((imm8 & 0xc0) >> 6) | (imm8 & 0x3c);
-+	return rv_ci_insn(0x2, imm, rd, 0x2);
-+}
-+
-+static inline u16 rvc_jr(u8 rs1)
-+{
-+	return rv_cr_insn(0x8, rs1, RV_REG_ZERO, 0x2);
-+}
-+
-+static inline u16 rvc_mv(u8 rd, u8 rs)
-+{
-+	return rv_cr_insn(0x8, rd, rs, 0x2);
-+}
-+
-+static inline u16 rvc_jalr(u8 rs1)
-+{
-+	return rv_cr_insn(0x9, rs1, RV_REG_ZERO, 0x2);
-+}
-+
-+static inline u16 rvc_add(u8 rd, u8 rs)
-+{
-+	return rv_cr_insn(0x9, rd, rs, 0x2);
-+}
-+
-+static inline u16 rvc_swsp(u32 imm8, u8 rs2)
-+{
-+	u32 imm;
-+
-+	imm = (imm8 & 0x3c) | ((imm8 & 0xc0) >> 6);
-+	return rv_css_insn(0x6, imm, rs2, 0x2);
-+}
-+
- /*
-  * RV64-only instructions.
-  *
-@@ -528,6 +752,234 @@ static inline u32 rv_amoadd_d(u8 rd, u8 rs2, u8 rs1, u8 aq, u8 rl)
- 	return rv_amo_insn(0, aq, rl, rs2, rs1, 3, rd, 0x2f);
- }
- 
-+/* RV64-only RVC instructions. */
-+
-+static inline u16 rvc_ld(u8 rd, u32 imm8, u8 rs1)
-+{
-+	u32 imm_hi, imm_lo;
-+
-+	imm_hi = (imm8 & 0x38) >> 3;
-+	imm_lo = (imm8 & 0xc0) >> 6;
-+	return rv_cl_insn(0x3, imm_hi, rs1, imm_lo, rd, 0x0);
-+}
-+
-+static inline u16 rvc_sd(u8 rs1, u32 imm8, u8 rs2)
-+{
-+	u32 imm_hi, imm_lo;
-+
-+	imm_hi = (imm8 & 0x38) >> 3;
-+	imm_lo = (imm8 & 0xc0) >> 6;
-+	return rv_cs_insn(0x7, imm_hi, rs1, imm_lo, rs2, 0x0);
-+}
-+
-+static inline u16 rvc_subw(u8 rd, u8 rs)
-+{
-+	return rv_ca_insn(0x27, rd, 0, rs, 0x1);
-+}
-+
-+static inline u16 rvc_addiw(u8 rd, u32 imm6)
-+{
-+	return rv_ci_insn(0x1, imm6, rd, 0x1);
-+}
-+
-+static inline u16 rvc_ldsp(u8 rd, u32 imm9)
-+{
-+	u32 imm;
-+
-+	imm = ((imm9 & 0x1c0) >> 6) | (imm9 & 0x38);
-+	return rv_ci_insn(0x3, imm, rd, 0x2);
-+}
-+
-+static inline u16 rvc_sdsp(u32 imm9, u8 rs2)
-+{
-+	u32 imm;
-+
-+	imm = (imm9 & 0x38) | ((imm9 & 0x1c0) >> 6);
-+	return rv_css_insn(0x7, imm, rs2, 0x2);
-+}
-+
-+#endif /* __riscv_xlen == 64 */
-+
-+/* Helper functions that emit RVC instructions when possible. */
-+
-+static inline void emit_jalr(u8 rd, u8 rs, s32 imm, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && rd == RV_REG_RA && rs && !imm)
-+		emitc(rvc_jalr(rs), ctx);
-+	else if (rvc_enabled() && !rd && rs && !imm)
-+		emitc(rvc_jr(rs), ctx);
-+	else
-+		emit(rv_jalr(rd, rs, imm), ctx);
-+}
-+
-+static inline void emit_mv(u8 rd, u8 rs, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && rd && rs)
-+		emitc(rvc_mv(rd, rs), ctx);
-+	else
-+		emit(rv_addi(rd, rs, 0), ctx);
-+}
-+
-+static inline void emit_add(u8 rd, u8 rs1, u8 rs2, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && rd && rd == rs1 && rs2)
-+		emitc(rvc_add(rd, rs2), ctx);
-+	else
-+		emit(rv_add(rd, rs1, rs2), ctx);
-+}
-+
-+static inline void emit_addi(u8 rd, u8 rs, s32 imm, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && rd == RV_REG_SP && rd == rs && is_10b_int(imm) && imm && !(imm & 0xf))
-+		emitc(rvc_addi16sp(imm), ctx);
-+	else if (rvc_enabled() && is_creg(rd) && rs == RV_REG_SP && is_10b_uint(imm) &&
-+		 !(imm & 0x3) && imm)
-+		emitc(rvc_addi4spn(rd, imm), ctx);
-+	else if (rvc_enabled() && rd && rd == rs && imm && is_6b_int(imm))
-+		emitc(rvc_addi(rd, imm), ctx);
-+	else
-+		emit(rv_addi(rd, rs, imm), ctx);
-+}
-+
-+static inline void emit_li(u8 rd, s32 imm, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && rd && is_6b_int(imm))
-+		emitc(rvc_li(rd, imm), ctx);
-+	else
-+		emit(rv_addi(rd, RV_REG_ZERO, imm), ctx);
-+}
-+
-+static inline void emit_lui(u8 rd, s32 imm, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && rd && rd != RV_REG_SP && is_6b_int(imm) && imm)
-+		emitc(rvc_lui(rd, imm), ctx);
-+	else
-+		emit(rv_lui(rd, imm), ctx);
-+}
-+
-+static inline void emit_slli(u8 rd, u8 rs, s32 imm, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && rd && rd == rs && imm && (u32)imm < __riscv_xlen)
-+		emitc(rvc_slli(rd, imm), ctx);
-+	else
-+		emit(rv_slli(rd, rs, imm), ctx);
-+}
-+
-+static inline void emit_andi(u8 rd, u8 rs, s32 imm, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && is_creg(rd) && rd == rs && is_6b_int(imm))
-+		emitc(rvc_andi(rd, imm), ctx);
-+	else
-+		emit(rv_andi(rd, rs, imm), ctx);
-+}
-+
-+static inline void emit_srli(u8 rd, u8 rs, s32 imm, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && is_creg(rd) && rd == rs && imm && (u32)imm < __riscv_xlen)
-+		emitc(rvc_srli(rd, imm), ctx);
-+	else
-+		emit(rv_srli(rd, rs, imm), ctx);
-+}
-+
-+static inline void emit_srai(u8 rd, u8 rs, s32 imm, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && is_creg(rd) && rd == rs && imm && (u32)imm < __riscv_xlen)
-+		emitc(rvc_srai(rd, imm), ctx);
-+	else
-+		emit(rv_srai(rd, rs, imm), ctx);
-+}
-+
-+static inline void emit_sub(u8 rd, u8 rs1, u8 rs2, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && is_creg(rd) && rd == rs1 && is_creg(rs2))
-+		emitc(rvc_sub(rd, rs2), ctx);
-+	else
-+		emit(rv_sub(rd, rs1, rs2), ctx);
-+}
-+
-+static inline void emit_or(u8 rd, u8 rs1, u8 rs2, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && is_creg(rd) && rd == rs1 && is_creg(rs2))
-+		emitc(rvc_or(rd, rs2), ctx);
-+	else
-+		emit(rv_or(rd, rs1, rs2), ctx);
-+}
-+
-+static inline void emit_and(u8 rd, u8 rs1, u8 rs2, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && is_creg(rd) && rd == rs1 && is_creg(rs2))
-+		emitc(rvc_and(rd, rs2), ctx);
-+	else
-+		emit(rv_and(rd, rs1, rs2), ctx);
-+}
-+
-+static inline void emit_xor(u8 rd, u8 rs1, u8 rs2, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && is_creg(rd) && rd == rs1 && is_creg(rs2))
-+		emitc(rvc_xor(rd, rs2), ctx);
-+	else
-+		emit(rv_xor(rd, rs1, rs2), ctx);
-+}
-+
-+static inline void emit_lw(u8 rd, s32 off, u8 rs1, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && rs1 == RV_REG_SP && rd && is_8b_uint(off) && !(off & 0x3))
-+		emitc(rvc_lwsp(rd, off), ctx);
-+	else if (rvc_enabled() && is_creg(rd) && is_creg(rs1) && is_7b_uint(off) && !(off & 0x3))
-+		emitc(rvc_lw(rd, off, rs1), ctx);
-+	else
-+		emit(rv_lw(rd, off, rs1), ctx);
-+}
-+
-+static inline void emit_sw(u8 rs1, s32 off, u8 rs2, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && rs1 == RV_REG_SP && is_8b_uint(off) && !(off & 0x3))
-+		emitc(rvc_swsp(off, rs2), ctx);
-+	else if (rvc_enabled() && is_creg(rs1) && is_creg(rs2) && is_7b_uint(off) && !(off & 0x3))
-+		emitc(rvc_sw(rs1, off, rs2), ctx);
-+	else
-+		emit(rv_sw(rs1, off, rs2), ctx);
-+}
-+
-+/* RV64-only helper functions. */
-+#if __riscv_xlen == 64
-+
-+static inline void emit_addiw(u8 rd, u8 rs, s32 imm, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && rd && rd == rs && is_6b_int(imm))
-+		emitc(rvc_addiw(rd, imm), ctx);
-+	else
-+		emit(rv_addiw(rd, rs, imm), ctx);
-+}
-+
-+static inline void emit_ld(u8 rd, s32 off, u8 rs1, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && rs1 == RV_REG_SP && rd && is_9b_uint(off) && !(off & 0x7))
-+		emitc(rvc_ldsp(rd, off), ctx);
-+	else if (rvc_enabled() && is_creg(rd) && is_creg(rs1) && is_8b_uint(off) && !(off & 0x7))
-+		emitc(rvc_ld(rd, off, rs1), ctx);
-+	else
-+		emit(rv_ld(rd, off, rs1), ctx);
-+}
-+
-+static inline void emit_sd(u8 rs1, s32 off, u8 rs2, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && rs1 == RV_REG_SP && is_9b_uint(off) && !(off & 0x7))
-+		emitc(rvc_sdsp(off, rs2), ctx);
-+	else if (rvc_enabled() && is_creg(rs1) && is_creg(rs2) && is_8b_uint(off) && !(off & 0x7))
-+		emitc(rvc_sd(rs1, off, rs2), ctx);
-+	else
-+		emit(rv_sd(rs1, off, rs2), ctx);
-+}
-+
-+static inline void emit_subw(u8 rd, u8 rs1, u8 rs2, struct rv_jit_context *ctx)
-+{
-+	if (rvc_enabled() && is_creg(rd) && rd == rs1 && is_creg(rs2))
-+		emitc(rvc_subw(rd, rs2), ctx);
-+	else
-+		emit(rv_subw(rd, rs1, rs2), ctx);
-+}
-+
- #endif /* __riscv_xlen == 64 */
- 
- void bpf_jit_build_prologue(struct rv_jit_context *ctx);
+The following are examples of the JITed code for the verifier selftest
+"direct packet read test#3 for CGROUP_SKB OK", without and with RVC
+enabled, respectively. The former uses 178 bytes, and the latter uses 112,
+for a ~37% reduction in code size for this example.
+
+Without RVC:
+
+   0: 02000813    addi  a6,zero,32
+   4: fd010113    addi  sp,sp,-48
+   8: 02813423    sd    s0,40(sp)
+   c: 02913023    sd    s1,32(sp)
+  10: 01213c23    sd    s2,24(sp)
+  14: 01313823    sd    s3,16(sp)
+  18: 01413423    sd    s4,8(sp)
+  1c: 03010413    addi  s0,sp,48
+  20: 03056683    lwu   a3,48(a0)
+  24: 02069693    slli  a3,a3,0x20
+  28: 0206d693    srli  a3,a3,0x20
+  2c: 03456703    lwu   a4,52(a0)
+  30: 02071713    slli  a4,a4,0x20
+  34: 02075713    srli  a4,a4,0x20
+  38: 03856483    lwu   s1,56(a0)
+  3c: 02049493    slli  s1,s1,0x20
+  40: 0204d493    srli  s1,s1,0x20
+  44: 03c56903    lwu   s2,60(a0)
+  48: 02091913    slli  s2,s2,0x20
+  4c: 02095913    srli  s2,s2,0x20
+  50: 04056983    lwu   s3,64(a0)
+  54: 02099993    slli  s3,s3,0x20
+  58: 0209d993    srli  s3,s3,0x20
+  5c: 09056a03    lwu   s4,144(a0)
+  60: 020a1a13    slli  s4,s4,0x20
+  64: 020a5a13    srli  s4,s4,0x20
+  68: 00900313    addi  t1,zero,9
+  6c: 006a7463    bgeu  s4,t1,0x74
+  70: 00000a13    addi  s4,zero,0
+  74: 02d52823    sw    a3,48(a0)
+  78: 02e52a23    sw    a4,52(a0)
+  7c: 02952c23    sw    s1,56(a0)
+  80: 03252e23    sw    s2,60(a0)
+  84: 05352023    sw    s3,64(a0)
+  88: 00000793    addi  a5,zero,0
+  8c: 02813403    ld    s0,40(sp)
+  90: 02013483    ld    s1,32(sp)
+  94: 01813903    ld    s2,24(sp)
+  98: 01013983    ld    s3,16(sp)
+  9c: 00813a03    ld    s4,8(sp)
+  a0: 03010113    addi  sp,sp,48
+  a4: 00078513    addi  a0,a5,0
+  a8: 00008067    jalr  zero,0(ra)
+
+With RVC:
+
+   0:   02000813    addi    a6,zero,32
+   4:   7179        c.addi16sp  sp,-48
+   6:   f422        c.sdsp  s0,40(sp)
+   8:   f026        c.sdsp  s1,32(sp)
+   a:   ec4a        c.sdsp  s2,24(sp)
+   c:   e84e        c.sdsp  s3,16(sp)
+   e:   e452        c.sdsp  s4,8(sp)
+  10:   1800        c.addi4spn  s0,sp,48
+  12:   03056683    lwu     a3,48(a0)
+  16:   1682        c.slli  a3,0x20
+  18:   9281        c.srli  a3,0x20
+  1a:   03456703    lwu     a4,52(a0)
+  1e:   1702        c.slli  a4,0x20
+  20:   9301        c.srli  a4,0x20
+  22:   03856483    lwu     s1,56(a0)
+  26:   1482        c.slli  s1,0x20
+  28:   9081        c.srli  s1,0x20
+  2a:   03c56903    lwu     s2,60(a0)
+  2e:   1902        c.slli  s2,0x20
+  30:   02095913    srli    s2,s2,0x20
+  34:   04056983    lwu     s3,64(a0)
+  38:   1982        c.slli  s3,0x20
+  3a:   0209d993    srli    s3,s3,0x20
+  3e:   09056a03    lwu     s4,144(a0)
+  42:   1a02        c.slli  s4,0x20
+  44:   020a5a13    srli    s4,s4,0x20
+  48:   4325        c.li    t1,9
+  4a:   006a7363    bgeu    s4,t1,0x50
+  4e:   4a01        c.li    s4,0
+  50:   d914        c.sw    a3,48(a0)
+  52:   d958        c.sw    a4,52(a0)
+  54:   dd04        c.sw    s1,56(a0)
+  56:   03252e23    sw      s2,60(a0)
+  5a:   05352023    sw      s3,64(a0)
+  5e:   4781        c.li    a5,0
+  60:   7422        c.ldsp  s0,40(sp)
+  62:   7482        c.ldsp  s1,32(sp)
+  64:   6962        c.ldsp  s2,24(sp)
+  66:   69c2        c.ldsp  s3,16(sp)
+  68:   6a22        c.ldsp  s4,8(sp)
+  6a:   6145        c.addi16sp  sp,48
+  6c:   853e        c.mv    a0,a5
+  6e:   8082        c.jr    ra
+
+RFC -> v1:
+  - From Björn Töpel:
+    * Changed RVOFF macro to static inline "ninsns_rvoff".
+    * Changed return type of rvc_ functions from u32 to u16.
+    * Changed sizeof(u16) to sizeof(*ctx->insns).
+  * Factored unsigned immediate checks into helper functions
+    (is_8b_uint, etc.)
+  * Changed to use IS_ENABLED instead of #ifdef to check if RVC is
+    enabled.
+  * Changed type of immediate arguments to rvc_* encoding to u32
+    to avoid issues from promotion of u16 to signed int.
+  * Cleaned up RVC checks in emit_{addi,slli,srli,srai}.
+    + Wrapped lines at 100 instead of 80 columns for increased clarity.
+	+ Move !imm checks into each branch instead of checking
+	  separately.
+	+ Strengthed checks for c.{slli,srli,srai} to check that
+	  imm < XLEN. Otherwise, imm could be non-zero but the lower
+	  XLEN bits could all be zero, leading to invalid RVC encoding.
+  * Changed emit_imm to sign-extend the 12-bit value in "lower"
+    + The immediate checks for emit_{addiw,li,addi} use signed
+	  comparisons, so this enables the RVC variants to be used
+	  more often (e.g., if val == -1, then lower should be -1
+	  as opposed to 4095).
+
+Luke Nelson (3):
+  bpf, riscv: Modify JIT ctx to support compressed instructions
+  bpf, riscv: Add encodings for compressed instructions
+  bpf, riscv: Use compressed instructions in the rv64 JIT
+
+ arch/riscv/net/bpf_jit.h        | 483 +++++++++++++++++++++++++++++++-
+ arch/riscv/net/bpf_jit_comp32.c |  14 +-
+ arch/riscv/net/bpf_jit_comp64.c | 293 ++++++++++---------
+ arch/riscv/net/bpf_jit_core.c   |   6 +-
+ 4 files changed, 643 insertions(+), 153 deletions(-)
+
 -- 
 2.25.1
 
