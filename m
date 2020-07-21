@@ -2,34 +2,66 @@ Return-Path: <SRS0=BdeU=BA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55724C433E1
-	for <bpf@archiver.kernel.org>; Tue, 21 Jul 2020 14:24:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A6EFC433E8
+	for <bpf@archiver.kernel.org>; Tue, 21 Jul 2020 14:28:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B37420714
-	for <bpf@archiver.kernel.org>; Tue, 21 Jul 2020 14:24:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DFA7E2070A
+	for <bpf@archiver.kernel.org>; Tue, 21 Jul 2020 14:28:00 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lpqtCpBN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728839AbgGUOYg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Jul 2020 10:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
+        id S1729146AbgGUO2A (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Jul 2020 10:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728362AbgGUOYg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Jul 2020 10:24:36 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66099C061794;
-        Tue, 21 Jul 2020 07:24:36 -0700 (PDT)
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 56F4A453;
-        Tue, 21 Jul 2020 14:24:35 +0000 (UTC)
-Date:   Tue, 21 Jul 2020 08:24:34 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Cc:     pmladek@suse.com, rostedt@goodmis.org,
+        with ESMTP id S1728383AbgGUO17 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Jul 2020 10:27:59 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F93C0619DA;
+        Tue, 21 Jul 2020 07:27:59 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id k4so10327564pld.12;
+        Tue, 21 Jul 2020 07:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rztZLDwVmXshy2I0VYii6VvZ6b/CEa6jKXB3iTVWQ4o=;
+        b=lpqtCpBNGrEpb9rB920qsdHHd+u3Ln+pKgNfy/rj9J7Dr2HWhw6k5XNE5uSHnfU2Dw
+         0PXA4XuoKG4rRHrRCWF5QquD6H7rIXu96KOZTw0ko0E5G/18zbtU8V1K0ZGAkoJeWWe3
+         ZKAqHP1z5e2vkEHEBunH5Kxk+zc0jRw0CCcgQRrjQ3LzfgLD0T6kbbeTMhvKHDO1+PLV
+         LMHh8aTrXB8Q8LEN9fqVX9ypuc6JmgzMHLLMieoucnASGCGZLe81nTBVx35OcFuU/iOT
+         EDiUYnGh1FPZ1T2vHhphqi8WGZAilUK1Cmf3XMx3qMaiBnWVoadmGQqjXXqQMKRPP9jR
+         BipQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rztZLDwVmXshy2I0VYii6VvZ6b/CEa6jKXB3iTVWQ4o=;
+        b=sz/3xVfrRLZ+WS3au57u/JyDyNhynT/9H5yYCkR+sKhKfv7KAc84b1ubkoq7Ab1uGf
+         5LwmwCPc1X/lo2MZ6IJ7jUOjcjHMqufaRd4aDjM+8g67PGc/z/W2ZhvlV1wYpV+DShDA
+         uNAqZHPyML7pOaW7d9zCFkr0C/tIqyFY40IMK69tMOJA+QgVtGc/KLj0cf7lOQmm2YPf
+         rGOlJSe9QbO8SHh06l/YRcB9CkVkT12FKH/ok1SS5JHtsVXWw1PotA0GSEy4GLRaKCKn
+         Ll6fBgihrFOkqzmeuWWOp9F1rs/TRPuh3bATNWWGVtPLYCQy4ESNMbkahHrBvHXwYfWD
+         88Xg==
+X-Gm-Message-State: AOAM530jEeLbVTbDBS45dDLBkqllgLZuATEPnRtyPvR3WAs69h+8ePLO
+        taABjehP+9zg0Q9F4gyWzuU=
+X-Google-Smtp-Source: ABdhPJwOZkGf2+hjpzR0ukUubhMTS+fw15qB9NT03kp3OB6E49eATRpV/OJ5KldIqcX9/AUJ4fVx5Q==
+X-Received: by 2002:a17:90a:b009:: with SMTP id x9mr5047312pjq.136.1595341679439;
+        Tue, 21 Jul 2020 07:27:59 -0700 (PDT)
+Received: from localhost ([2409:10:2e40:5100:6e29:95ff:fe2d:8f34])
+        by smtp.gmail.com with ESMTPSA id r9sm3592981pje.12.2020.07.21.07.27.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2020 07:27:58 -0700 (PDT)
+Date:   Tue, 21 Jul 2020 23:27:56 +0900
+From:   Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        pmladek@suse.com, rostedt@goodmis.org,
         andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
         ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
         songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
@@ -39,29 +71,25 @@ Cc:     pmladek@suse.com, rostedt@goodmis.org,
         "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
 Subject: Re: [PATCH] docs: core-api/printk-formats.rst: use literal block
  syntax
-Message-ID: <20200721082434.504d5788@lwn.net>
-In-Reply-To: <20200721140246.GB44523@jagdpanzerIV.localdomain>
+Message-ID: <20200721142756.GD44523@jagdpanzerIV.localdomain>
 References: <20200718165107.625847-1-dwlsalmeida@gmail.com>
-        <20200718165107.625847-8-dwlsalmeida@gmail.com>
-        <20200721140246.GB44523@jagdpanzerIV.localdomain>
-Organization: LWN.net
+ <20200718165107.625847-8-dwlsalmeida@gmail.com>
+ <20200721140246.GB44523@jagdpanzerIV.localdomain>
+ <20200721082434.504d5788@lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200721082434.504d5788@lwn.net>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 21 Jul 2020 23:02:46 +0900
-Sergey Senozhatsky <sergey.senozhatsky@gmail.com> wrote:
+On (20/07/21 08:24), Jonathan Corbet wrote:
+> On Tue, 21 Jul 2020 23:02:46 +0900
+> 
+> I'm happy either way.  I'll grab it
 
-> Jonathan, will you route it via the Documentation tree or do
-> you want it to land in the printk tree?
+Please go ahead.
 
-I'm happy either way.  I'll grab it unless you tell me you'd rather pick
-it up.
-
-Thanks,
-
-jon
+	-ss
