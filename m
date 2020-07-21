@@ -2,281 +2,182 @@ Return-Path: <SRS0=BdeU=BA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E748C433E6
-	for <bpf@archiver.kernel.org>; Tue, 21 Jul 2020 11:06:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68C2BC433E1
+	for <bpf@archiver.kernel.org>; Tue, 21 Jul 2020 11:58:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D0FC20709
-	for <bpf@archiver.kernel.org>; Tue, 21 Jul 2020 11:06:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex-team.ru header.i=@yandex-team.ru header.b="hQIX4Sq+"
+	by mail.kernel.org (Postfix) with ESMTP id 4EFE522482
+	for <bpf@archiver.kernel.org>; Tue, 21 Jul 2020 11:58:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728047AbgGULGP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Jul 2020 07:06:15 -0400
-Received: from forwardcorp1p.mail.yandex.net ([77.88.29.217]:53758 "EHLO
-        forwardcorp1p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726715AbgGULGN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 21 Jul 2020 07:06:13 -0400
-Received: from sas1-ec30c78b6c5b.qloud-c.yandex.net (sas1-ec30c78b6c5b.qloud-c.yandex.net [IPv6:2a02:6b8:c14:2704:0:640:ec30:c78b])
-        by forwardcorp1p.mail.yandex.net (Yandex) with ESMTP id 85E292E142A;
-        Tue, 21 Jul 2020 14:06:07 +0300 (MSK)
-Received: from unknown (unknown [::1])
-        by sas1-ec30c78b6c5b.qloud-c.yandex.net (mxbackcorp/Yandex) with ESMTP id ZLt6LDHGOR-66sKtEd8;
-        Tue, 21 Jul 2020 14:06:07 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1595329567; bh=KIOhvNceVFN04lXjN2wQU/mlD5zXmpVPJtvbkQeoqcU=;
-        h=Cc:Subject:Date:References:To:From:Message-Id;
-        b=hQIX4Sq+jEDS+ZASkbM7JwYUffwK2ZvcW3uTt0qNiN9fnATVfhLg+F4dEmH3yXyCr
-         d+EmE/r5rhLXnV06BQ93lgRHfJXq94SoZEOXLRspAe3OUH2TYjMha/Q9TeB2PTP4CJ
-         YjoPDQMp0RRpXsQYQXVHdLoi9sBAZ4+nIw+lEwuM=
-Authentication-Results: sas1-ec30c78b6c5b.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-X-Yandex-Sender-Uid: 1120000000093952
-X-Yandex-Avir: 1
-Received: from iva8-d077482f1536.qloud-c.yandex.net (iva8-d077482f1536.qloud-c.yandex.net [2a02:6b8:c0c:2f26:0:640:d077:482f])
-        by iva8-00026c0e2ab1.qloud-c.yandex.net with LMTP id X2RVR1AVzS-JDh86EA1
-        for <zeil@yandex-team.ru>; Tue, 21 Jul 2020 14:05:56 +0300
-Received: by iva8-edafde7c849c.qloud-c.yandex.net with HTTP;
-        Tue, 21 Jul 2020 14:05:56 +0300
-From:   Dmitry Yakunin <zeil@yandex-team.ru>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        "alexei.starovoitov@gmail.com" <alexei.starovoitov@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Cc:     "sdf@google.com" <sdf@google.com>
-References: <20200715195132.4286-1-zeil@yandex-team.ru>
-         <20200715195132.4286-5-zeil@yandex-team.ru> <0308c9ab-04aa-f367-14e9-8289f30e7fcf@iogearbox.net>
-Subject: Re: [PATCH bpf-next v3 4/4] bpf: try to use existing cgroup storage in bpf_prog_test_run_skb
+        id S1728288AbgGUL6j (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Jul 2020 07:58:39 -0400
+Received: from mga17.intel.com ([192.55.52.151]:50577 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727043AbgGUL6i (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Jul 2020 07:58:38 -0400
+IronPort-SDR: 6HbRACPQxAoOWW/9U64jtv3C3k2fXawldYJASZ32x1F8Lasl/UFl//U+nntfZ26tC/Gd88hLBj
+ vKX9mS3I5aoQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9688"; a="130182754"
+X-IronPort-AV: E=Sophos;i="5.75,378,1589266800"; 
+   d="scan'208";a="130182754"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2020 04:58:37 -0700
+IronPort-SDR: WiGdAsLKUOIU+QESAgA6KARlsckqIIMDloPUFLIY0PWPtkD7vSVWIZHsdgDJStRxleBvatYRe2
+ qPJhCR2HeVZg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,378,1589266800"; 
+   d="scan'208";a="431968443"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by orsmga004.jf.intel.com with ESMTP; 21 Jul 2020 04:58:35 -0700
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     ast@kernel.org, daniel@iogearbox.net
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v2 bpf-next 1/6] bpf, x64: use %rcx instead of %rax for tail call retpolines
+Date:   Tue, 21 Jul 2020 13:53:16 +0200
+Message-Id: <20200721115321.3099-2-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200721115321.3099-1-maciej.fijalkowski@intel.com>
+References: <20200721115321.3099-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-X-Mailer: Yamail [ http://yandex.ru ] 5.0
-Date:   Tue, 21 Jul 2020 14:06:06 +0300
-Message-Id: <211321595327924@mail.yandex-team.ru>
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset=utf-8
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Currently, %rax is used to store the jump target when BPF program is
+emitting the retpoline instructions that are handling the indirect
+tailcall.
 
+There is a plan to use %rax for different purpose, which is storing the
+tail call counter. In order to preserve this value across the tailcalls,
+adjust the BPF indirect tailcalls so that the target program will reside
+in %rcx and teach the retpoline instructions about new location of jump
+target.
 
-16.07.2020, 23:19, "Daniel Borkmann" <daniel@iogearbox.net>:
-> On 7/15/20 9:51 PM, Dmitry Yakunin wrote:
->>  Now we cannot check results in cgroup storage after running
->>  BPF_PROG_TEST_RUN command because it allocates dummy cgroup storage
->>  during test. This patch implements simple logic for searching already
->>  allocated cgroup storage through iterating effective programs of current
->>  cgroup and finding the first match. If match is not found fallback to
->>  temporary storage is happened.
->>
->>  v2:
->>     - fix build without CONFIG_CGROUP_BPF (kernel test robot <lkp@intel.com>)
->>
->>  Signed-off-by: Dmitry Yakunin <zeil@yandex-team.ru>
->>  ---
->>    net/bpf/test_run.c | 64 +++++++++++++++++-
->>    .../selftests/bpf/prog_tests/cgroup_skb_prog_run.c | 78 ++++++++++++++++++++++
->>    2 files changed, 139 insertions(+), 3 deletions(-)
->>    create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
->>
->>  diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
->>  index 050390d..7382b22 100644
->>  --- a/net/bpf/test_run.c
->>  +++ b/net/bpf/test_run.c
->>  @@ -15,15 +15,67 @@
->>    #define CREATE_TRACE_POINTS
->>    #include <trace/events/bpf_test_run.h>
->>
->>  +#ifdef CONFIG_CGROUP_BPF
->>  +
->>  +static struct bpf_prog_array_item *bpf_prog_find_active(struct bpf_prog *prog,
->>  + struct bpf_prog_array *effective)
->>  +{
->>  + struct bpf_prog_array_item *item;
->>  + struct bpf_prog_array *array;
->>  + struct bpf_prog *p;
->>  +
->>  + array = rcu_dereference(effective);
->>  + if (!array)
->>  + return NULL;
->>  +
->>  + item = &array->items[0];
->>  + while ((p = READ_ONCE(item->prog))) {
->>  + if (p == prog)
->>  + return item;
->>  + item++;
->>  + }
->>  +
->>  + return NULL;
->>  +}
->>  +
->>  +static struct bpf_cgroup_storage **bpf_prog_find_active_storage(struct bpf_prog *prog)
->>  +{
->>  + struct bpf_prog_array_item *item;
->>  + struct cgroup *cgrp;
->>  +
->>  + if (prog->type != BPF_PROG_TYPE_CGROUP_SKB)
->>  + return NULL;
->>  +
->>  + cgrp = task_dfl_cgroup(current);
->>  +
->>  + item = bpf_prog_find_active(prog,
->>  + cgrp->bpf.effective[BPF_CGROUP_INET_INGRESS]);
->>  + if (!item)
->>  + item = bpf_prog_find_active(prog,
->>  + cgrp->bpf.effective[BPF_CGROUP_INET_EGRESS]);
->>  +
->>  + return item ? item->cgroup_storage : NULL;
->>  +}
->>  +
->>  +#else
->>  +
->>  +static struct bpf_cgroup_storage **bpf_prog_find_active_storage(struct bpf_prog *prog)
->>  +{
->>  + return NULL;
->>  +}
->>  +
->>  +#endif
->>  +
->>    static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
->>                            u32 *retval, u32 *time, bool xdp)
->>    {
->>  - struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
->>  + struct bpf_cgroup_storage *dummy_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = { NULL };
->>  + struct bpf_cgroup_storage **storage = dummy_storage;
->>            u64 time_start, time_spent = 0;
->>            int ret = 0;
->>            u32 i;
->>
->>  - ret = bpf_cgroup_storages_alloc(storage, prog);
->>  + ret = bpf_cgroup_storages_alloc(dummy_storage, prog);
->>            if (ret)
->>                    return ret;
->>
->>  @@ -31,6 +83,9 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
->>                    repeat = 1;
->>
->>            rcu_read_lock();
->>  + storage = bpf_prog_find_active_storage(prog);
->>  + if (!storage)
->>  + storage = dummy_storage;
->>            migrate_disable();
->>            time_start = ktime_get_ns();
->>            for (i = 0; i < repeat; i++) {
->>  @@ -54,6 +109,9 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
->>                            cond_resched();
->>
->>                            rcu_read_lock();
->>  + storage = bpf_prog_find_active_storage(prog);
->>  + if (!storage)
->>  + storage = dummy_storage;
->>                            migrate_disable();
->>                            time_start = ktime_get_ns();
->>                    }
->>  @@ -65,7 +123,7 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
->>            do_div(time_spent, repeat);
->>            *time = time_spent > U32_MAX ? U32_MAX : (u32)time_spent;
->>
->>  - bpf_cgroup_storages_free(storage);
->>  + bpf_cgroup_storages_free(dummy_storage);
->>
->>            return ret;
->>    }
->>  diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
->>  new file mode 100644
->>  index 0000000..12ca881
->>  --- /dev/null
->>  +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_prog_run.c
->>  @@ -0,0 +1,78 @@
->>  +// SPDX-License-Identifier: GPL-2.0
->>  +
->>  +#include <test_progs.h>
->>  +
->>  +#include "cgroup_helpers.h"
->>  +#include "network_helpers.h"
->>  +
->>  +static char bpf_log_buf[BPF_LOG_BUF_SIZE];
->>  +
->>  +void test_cgroup_skb_prog_run(void)
->>  +{
->>  + struct bpf_insn prog[] = {
->>  + BPF_LD_MAP_FD(BPF_REG_1, 0), /* map fd */
->>  + BPF_MOV64_IMM(BPF_REG_2, 0), /* flags, not used */
->>  + BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_local_storage),
->>  + BPF_MOV64_IMM(BPF_REG_1, 1),
->>  + BPF_RAW_INSN(BPF_STX | BPF_XADD | BPF_W, BPF_REG_0, BPF_REG_1, 0, 0),
->>  +
->>  + BPF_MOV64_IMM(BPF_REG_0, 1), /* r0 = 1 */
->>  + BPF_EXIT_INSN(),
->>  + };
->>  + size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
->>  + int storage_fd = -1, prog_fd = -1, cg_fd = -1;
->>  + struct bpf_cgroup_storage_key key;
->>  + __u32 duration, retval, size;
->>  + char buf[128];
->>  + __u64 value;
->>  + int err;
->>  +
->>  + storage_fd = bpf_create_map(BPF_MAP_TYPE_CGROUP_STORAGE,
->>  + sizeof(struct bpf_cgroup_storage_key),
->>  + 8, 0, 0);
->>  + if (CHECK(storage_fd < 0, "create_map", "%s\n", strerror(errno)))
->>  + goto out;
->>  +
->>  + prog[0].imm = storage_fd;
->>  +
->>  + prog_fd = bpf_load_program(BPF_PROG_TYPE_CGROUP_SKB,
->>  + prog, insns_cnt, "GPL", 0,
->>  + bpf_log_buf, BPF_LOG_BUF_SIZE);
->>  + if (CHECK(prog_fd < 0, "prog_load",
->>  + "verifier output:\n%s\n-------\n", bpf_log_buf))
->>  + goto out;
->>  +
->>  + if (CHECK_FAIL(setup_cgroup_environment()))
->>  + goto out;
->>  +
->>  + cg_fd = create_and_get_cgroup("/cg");
->>  + if (CHECK_FAIL(cg_fd < 0))
->>  + goto out;
->>  +
->>  + if (CHECK_FAIL(join_cgroup("/cg")))
->>  + goto out;
->>  +
->>  + if (CHECK(bpf_prog_attach(prog_fd, cg_fd, BPF_CGROUP_INET_EGRESS, 0),
->>  + "prog_attach", "%s\n", strerror(errno)))
->>  + goto out;
->>  +
->>  + err = bpf_prog_test_run(prog_fd, NUM_ITER, &pkt_v4, sizeof(pkt_v4),
->>  + buf, &size, &retval, &duration);
->
-> Hm, I think this approach is rather suboptimal, meaning, you need to load & even
-> actively attach the test program also to the cgroup aside from pushing this via
-> BPF prog test infra. So any other potential background traffic egressing from the
-> application will also go through the test program via BPF_CGROUP_INET_EGRESS.
-> Can't we instead extend the test infra to prepopulate and fetch the content from
-> the temp storage instead so this does not have any other side-effects?
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ arch/x86/include/asm/nospec-branch.h | 16 ++++++++--------
+ arch/x86/net/bpf_jit_comp.c          | 20 ++++++++++----------
+ 2 files changed, 18 insertions(+), 18 deletions(-)
 
-Thanks for you response, Daniel! Yes, I forgot to mention that this change can affect existing storage values if we run PROG_TEST_RUN command on the online program. But I thought that the case of testing bpf programs on production environments is uncommon and such solution is acceptable trade-off. I see potential rework of this patch through extending bpf_attr for PROG_TEST_RUN with user pointer to memory for cgroup storage contents and dumping cgroup storage with lookup_batch callback after test ends. Does this solution sounds good for you?
-
->>  + CHECK(err || retval != 1, "prog_test_run",
->>  + "err %d errno %d retval %d\n", err, errno, retval);
->>  +
->>  + /* check that cgroup storage results are available after test run */
->>  +
->>  + err = bpf_map_get_next_key(storage_fd, NULL, &key);
->>  + CHECK(err, "map_get_next_key", "%s\n", strerror(errno));
->>  +
->>  + err = bpf_map_lookup_elem(storage_fd, &key, &value);
->>  + CHECK(err || value != NUM_ITER,
->>  + "map_lookup_elem",
->>  + "err %d errno %d cnt %lld(%d)\n", err, errno, value, NUM_ITER);
->>  +out:
->>  + close(storage_fd);
->>  + close(prog_fd);
->>  + close(cg_fd);
->>  + cleanup_cgroup_environment();
->>  +}
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index e7752b4038ff..e491c3d9f227 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -314,19 +314,19 @@ static inline void mds_idle_clear_cpu_buffers(void)
+  *    lfence
+  *    jmp spec_trap
+  *  do_rop:
+- *    mov %rax,(%rsp) for x86_64
++ *    mov %rcx,(%rsp) for x86_64
+  *    mov %edx,(%esp) for x86_32
+  *    retq
+  *
+  * Without retpolines configured:
+  *
+- *    jmp *%rax for x86_64
++ *    jmp *%rcx for x86_64
+  *    jmp *%edx for x86_32
+  */
+ #ifdef CONFIG_RETPOLINE
+ # ifdef CONFIG_X86_64
+-#  define RETPOLINE_RAX_BPF_JIT_SIZE	17
+-#  define RETPOLINE_RAX_BPF_JIT()				\
++#  define RETPOLINE_RCX_BPF_JIT_SIZE	17
++#  define RETPOLINE_RCX_BPF_JIT()				\
+ do {								\
+ 	EMIT1_off32(0xE8, 7);	 /* callq do_rop */		\
+ 	/* spec_trap: */					\
+@@ -334,7 +334,7 @@ do {								\
+ 	EMIT3(0x0F, 0xAE, 0xE8); /* lfence */			\
+ 	EMIT2(0xEB, 0xF9);       /* jmp spec_trap */		\
+ 	/* do_rop: */						\
+-	EMIT4(0x48, 0x89, 0x04, 0x24); /* mov %rax,(%rsp) */	\
++	EMIT4(0x48, 0x89, 0x0C, 0x24); /* mov %rcx,(%rsp) */	\
+ 	EMIT1(0xC3);             /* retq */			\
+ } while (0)
+ # else /* !CONFIG_X86_64 */
+@@ -352,9 +352,9 @@ do {								\
+ # endif
+ #else /* !CONFIG_RETPOLINE */
+ # ifdef CONFIG_X86_64
+-#  define RETPOLINE_RAX_BPF_JIT_SIZE	2
+-#  define RETPOLINE_RAX_BPF_JIT()				\
+-	EMIT2(0xFF, 0xE0);       /* jmp *%rax */
++#  define RETPOLINE_RCX_BPF_JIT_SIZE	2
++#  define RETPOLINE_RCX_BPF_JIT()				\
++	EMIT2(0xFF, 0xE1);       /* jmp *%rcx */
+ # else /* !CONFIG_X86_64 */
+ #  define RETPOLINE_EDX_BPF_JIT()				\
+ 	EMIT2(0xFF, 0xE2)        /* jmp *%edx */
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 42b6709e6dc7..5b3f19799efb 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -370,7 +370,7 @@ static void emit_bpf_tail_call_indirect(u8 **pprog)
+ 	EMIT2(0x89, 0xD2);                        /* mov edx, edx */
+ 	EMIT3(0x39, 0x56,                         /* cmp dword ptr [rsi + 16], edx */
+ 	      offsetof(struct bpf_array, map.max_entries));
+-#define OFFSET1 (41 + RETPOLINE_RAX_BPF_JIT_SIZE) /* Number of bytes to jump */
++#define OFFSET1 (41 + RETPOLINE_RCX_BPF_JIT_SIZE) /* Number of bytes to jump */
+ 	EMIT2(X86_JBE, OFFSET1);                  /* jbe out */
+ 	label1 = cnt;
+ 
+@@ -380,36 +380,36 @@ static void emit_bpf_tail_call_indirect(u8 **pprog)
+ 	 */
+ 	EMIT2_off32(0x8B, 0x85, -36 - MAX_BPF_STACK); /* mov eax, dword ptr [rbp - 548] */
+ 	EMIT3(0x83, 0xF8, MAX_TAIL_CALL_CNT);     /* cmp eax, MAX_TAIL_CALL_CNT */
+-#define OFFSET2 (30 + RETPOLINE_RAX_BPF_JIT_SIZE)
++#define OFFSET2 (30 + RETPOLINE_RCX_BPF_JIT_SIZE)
+ 	EMIT2(X86_JA, OFFSET2);                   /* ja out */
+ 	label2 = cnt;
+ 	EMIT3(0x83, 0xC0, 0x01);                  /* add eax, 1 */
+ 	EMIT2_off32(0x89, 0x85, -36 - MAX_BPF_STACK); /* mov dword ptr [rbp -548], eax */
+ 
+ 	/* prog = array->ptrs[index]; */
+-	EMIT4_off32(0x48, 0x8B, 0x84, 0xD6,       /* mov rax, [rsi + rdx * 8 + offsetof(...)] */
++	EMIT4_off32(0x48, 0x8B, 0x8C, 0xD6,       /* mov rcx, [rsi + rdx * 8 + offsetof(...)] */
+ 		    offsetof(struct bpf_array, ptrs));
+ 
+ 	/*
+ 	 * if (prog == NULL)
+ 	 *	goto out;
+ 	 */
+-	EMIT3(0x48, 0x85, 0xC0);		  /* test rax,rax */
+-#define OFFSET3 (8 + RETPOLINE_RAX_BPF_JIT_SIZE)
++	EMIT3(0x48, 0x85, 0xC9);		  /* test rcx,rcx */
++#define OFFSET3 (8 + RETPOLINE_RCX_BPF_JIT_SIZE)
+ 	EMIT2(X86_JE, OFFSET3);                   /* je out */
+ 	label3 = cnt;
+ 
+ 	/* goto *(prog->bpf_func + prologue_size); */
+-	EMIT4(0x48, 0x8B, 0x40,                   /* mov rax, qword ptr [rax + 32] */
++	EMIT4(0x48, 0x8B, 0x49,                   /* mov rcx, qword ptr [rcx + 32] */
+ 	      offsetof(struct bpf_prog, bpf_func));
+-	EMIT4(0x48, 0x83, 0xC0, PROLOGUE_SIZE);   /* add rax, prologue_size */
++	EMIT4(0x48, 0x83, 0xC1, PROLOGUE_SIZE);   /* add rcx, prologue_size */
+ 
+ 	/*
+-	 * Wow we're ready to jump into next BPF program
++	 * Now we're ready to jump into next BPF program
+ 	 * rdi == ctx (1st arg)
+-	 * rax == prog->bpf_func + prologue_size
++	 * rcx == prog->bpf_func + prologue_size
+ 	 */
+-	RETPOLINE_RAX_BPF_JIT();
++	RETPOLINE_RCX_BPF_JIT();
+ 
+ 	/* out: */
+ 	BUILD_BUG_ON(cnt - label1 != OFFSET1);
+-- 
+2.20.1
 
