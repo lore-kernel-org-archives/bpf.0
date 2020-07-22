@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5F37C43458
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 21:13:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78CBDC43459
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 21:13:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 84A6C22B3F
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 21:13:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 548F622B3F
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 21:13:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595452400;
-	bh=DkBBew3PKG+6ZWmhTL+m4ZFFNka9hZQ2cIJuA4WeQjk=;
+	s=default; t=1595452402;
+	bh=mYetXmCgqYD/5VLike7qr6OlTT1BEoMocPQy4UoAeoA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=X2dZ0MDS+2zDjVWoxKeROcoR02Zxt6blmjb58/kAxfDX6GEIAguO41g0F/CGcicVy
-	 j54KQkqT1W19F9/Sn5+sDTS7lye/1W3HiluJY6a6JdXFtikuU2nL/AWDtD4+LmHJ4N
-	 U7E5IROWPPhFCI3av1me0gOH8El0eE8lefmQPhuM=
+	b=VlJRdaehr+hACzs8gqUqj1dZVmIK/G8aBuPNCNOQ7BfiF9pvPi1nzc24Eym4U8cve
+	 HrmK2sEtsicZeOSEAwDV6OnquyN1tays2JkF6b01MDtsX5WjIPdPtBKP3s0NkAcZPW
+	 cUNGG2CJ5V8bxHacAJcaasHok1j89T7MXzESN9Jg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732896AbgGVVNT convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Jul 2020 17:13:19 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:38256 "EHLO
+        id S1733004AbgGVVNR convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Jul 2020 17:13:17 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:24802 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1733008AbgGVVNS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Jul 2020 17:13:18 -0400
+        with ESMTP id S1732992AbgGVVNQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jul 2020 17:13:16 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-210-4zPo-J4PMjazTJXQoCRi8w-1; Wed, 22 Jul 2020 17:12:48 -0400
-X-MC-Unique: 4zPo-J4PMjazTJXQoCRi8w-1
+ us-mta-463-BaSweAAkMvWvyrT75k2W3w-1; Wed, 22 Jul 2020 17:13:11 -0400
+X-MC-Unique: BaSweAAkMvWvyrT75k2W3w-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 15288800688;
-        Wed, 22 Jul 2020 21:12:46 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 29322800465;
+        Wed, 22 Jul 2020 21:13:09 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.194.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0782D19C4F;
-        Wed, 22 Jul 2020 21:12:42 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2317519C4F;
+        Wed, 22 Jul 2020 21:13:05 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -52,9 +52,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Brendan Gregg <bgregg@netflix.com>,
         Florent Revest <revest@chromium.org>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH v8 bpf-next 05/13] bpf: Add type_id pointer as argument to __btf_resolve_size
-Date:   Wed, 22 Jul 2020 23:12:15 +0200
-Message-Id: <20200722211223.1055107-6-jolsa@kernel.org>
+Subject: [PATCH v8 bpf-next 11/13] selftests/bpf: Add verifier test for d_path helper
+Date:   Wed, 22 Jul 2020 23:12:21 +0200
+Message-Id: <20200722211223.1055107-12-jolsa@kernel.org>
 In-Reply-To: <20200722211223.1055107-1-jolsa@kernel.org>
 References: <20200722211223.1055107-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -68,81 +68,99 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding type_id pointer as argument to __btf_resolve_size
-to return also BTF ID of the resolved type. It will be
-used in following changes.
+Adding verifier test for attaching tracing program and
+calling d_path helper from within and testing that it's
+allowed for dentry_open function and denied for 'd_path'
+function with appropriate error.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/bpf/btf.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/test_verifier.c   | 19 +++++++++-
+ tools/testing/selftests/bpf/verifier/d_path.c | 37 +++++++++++++++++++
+ 2 files changed, 55 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/verifier/d_path.c
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index d9a723a8c040..841be6c49f11 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -1082,6 +1082,7 @@ static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)
-  * *elem_id: id of u32
-  * *total_nelems: (x * y).  Hence, individual elem size is
-  *                (*type_size / *total_nelems)
-+ * *type_id: id of type if it's changed within the function, 0 if not
-  *
-  * type: is not an array (e.g. const struct X)
-  * return type: type "struct X"
-@@ -1089,15 +1090,16 @@ static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)
-  * *elem_type: same as return type ("struct X")
-  * *elem_id: 0
-  * *total_nelems: 1
-+ * *type_id: id of type if it's changed within the function, 0 if not
-  */
- static const struct btf_type *
- __btf_resolve_size(const struct btf *btf, const struct btf_type *type,
- 		   u32 *type_size, const struct btf_type **elem_type,
--		   u32 *elem_id, u32 *total_nelems)
-+		   u32 *elem_id, u32 *total_nelems, u32 *type_id)
- {
- 	const struct btf_type *array_type = NULL;
- 	const struct btf_array *array = NULL;
--	u32 i, size, nelems = 1;
-+	u32 i, size, nelems = 1, id = 0;
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 78a6bae56ea6..9be395d9dc64 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -114,6 +114,7 @@ struct bpf_test {
+ 		bpf_testdata_struct_t retvals[MAX_TEST_RUNS];
+ 	};
+ 	enum bpf_attach_type expected_attach_type;
++	const char *kfunc;
+ };
  
- 	for (i = 0; i < MAX_RESOLVE_DEPTH; i++) {
- 		switch (BTF_INFO_KIND(type->info)) {
-@@ -1118,6 +1120,7 @@ __btf_resolve_size(const struct btf *btf, const struct btf_type *type,
- 		case BTF_KIND_VOLATILE:
- 		case BTF_KIND_CONST:
- 		case BTF_KIND_RESTRICT:
-+			id = type->type;
- 			type = btf_type_by_id(btf, type->type);
- 			break;
+ /* Note we want this to be 64 bit aligned so that the end of our array is
+@@ -984,8 +985,24 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 		attr.log_level = 4;
+ 	attr.prog_flags = pflags;
  
-@@ -1150,6 +1153,8 @@ __btf_resolve_size(const struct btf *btf, const struct btf_type *type,
- 		*elem_type = type;
- 	if (elem_id)
- 		*elem_id = array ? array->type : 0;
-+	if (type_id && id)
-+		*type_id = id;
- 
- 	return array_type ? : type;
- }
-@@ -1158,7 +1163,7 @@ const struct btf_type *
- btf_resolve_size(const struct btf *btf, const struct btf_type *type,
- 		 u32 *type_size)
- {
--	return __btf_resolve_size(btf, type, type_size, NULL, NULL);
-+	return __btf_resolve_size(btf, type, type_size, NULL, NULL, NULL, NULL);
- }
- 
- /* The input param "type_id" must point to a needs_resolve type */
-@@ -3975,7 +3980,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 		mname = __btf_name_by_offset(btf_vmlinux, member->name_off);
- 
- 		mtype = __btf_resolve_size(btf_vmlinux, mtype, &msize,
--					   &elem_type, NULL, &total_nelems);
-+					   &elem_type, NULL, &total_nelems, NULL);
- 		if (IS_ERR(mtype)) {
- 			bpf_log(log, "field %s doesn't have size\n", mname);
- 			return -EFAULT;
++	if (prog_type == BPF_PROG_TYPE_TRACING && test->kfunc) {
++		attr.attach_btf_id = libbpf_find_vmlinux_btf_id(test->kfunc,
++						attr.expected_attach_type);
++		if (attr.attach_btf_id < 0) {
++			printf("FAIL\nFailed to find BTF ID for '%s'!\n",
++				test->kfunc);
++			(*errors)++;
++			return;
++		}
++	}
++
+ 	fd_prog = bpf_load_program_xattr(&attr, bpf_vlog, sizeof(bpf_vlog));
+-	if (fd_prog < 0 && !bpf_probe_prog_type(prog_type, 0)) {
++
++	/* BPF_PROG_TYPE_TRACING requires more setup and
++	 * bpf_probe_prog_type won't give correct answer
++	 */
++	if (fd_prog < 0 && prog_type != BPF_PROG_TYPE_TRACING &&
++	    !bpf_probe_prog_type(prog_type, 0)) {
+ 		printf("SKIP (unsupported program type %d)\n", prog_type);
+ 		skips++;
+ 		goto close_fds;
+diff --git a/tools/testing/selftests/bpf/verifier/d_path.c b/tools/testing/selftests/bpf/verifier/d_path.c
+new file mode 100644
+index 000000000000..b988396379a7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier/d_path.c
+@@ -0,0 +1,37 @@
++{
++	"d_path accept",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_1, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_MOV64_IMM(BPF_REG_6, 0),
++	BPF_STX_MEM(BPF_DW, BPF_REG_2, BPF_REG_6, 0),
++	BPF_LD_IMM64(BPF_REG_3, 8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_d_path),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACING,
++	.expected_attach_type = BPF_TRACE_FENTRY,
++	.kfunc = "dentry_open",
++},
++{
++	"d_path reject",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_1, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_MOV64_IMM(BPF_REG_6, 0),
++	BPF_STX_MEM(BPF_DW, BPF_REG_2, BPF_REG_6, 0),
++	BPF_LD_IMM64(BPF_REG_3, 8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_d_path),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.errstr = "helper call is not allowed in probe",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_TRACING,
++	.expected_attach_type = BPF_TRACE_FENTRY,
++	.kfunc = "d_path",
++},
 -- 
 2.25.4
 
