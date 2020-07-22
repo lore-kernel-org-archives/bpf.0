@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AFB0C4345C
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 22:12:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DB59C43446
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 22:12:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 783C020825
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 22:12:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4497C22B45
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 22:12:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=marvell.com header.i=@marvell.com header.b="v3wgaAQ8"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=marvell.com header.i=@marvell.com header.b="OyyvejPf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387425AbgGVWMb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jul 2020 18:12:31 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:51578 "EHLO
+        id S2387481AbgGVWMw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jul 2020 18:12:52 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:39130 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387421AbgGVWMb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 18:12:31 -0400
+        by vger.kernel.org with ESMTP id S1733156AbgGVWMv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 18:12:51 -0400
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MM6NwB027312;
-        Wed, 22 Jul 2020 15:12:15 -0700
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MM6NwC027312;
+        Wed, 22 Jul 2020 15:12:35 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=pfpt0818;
- bh=YdH18anOnOfotz7dCcu2Qk951gXqE+vLtMEFYOTUaAo=;
- b=v3wgaAQ84SK5P5+JcGAiY1vnuPQIEzL0YI51XGogO7TPgW69XqNhLdfwLUIebd01pGpN
- dVBC88Sq4UX+tz0OkkMwP1/8vnLZyPnaJjinr40rAIFYpSU92CkQTV494pdaSQ/jD1QZ
- bAenH+UPntjNqQnAeEwbYIva53io+NU46bgw2P3HGEdu3B1uPPADlDnS4SoVDqNU0YDE
- 6ribthwqsCp/lRNU03tD7atV07jTYRlkx7LzdwBLTmDZdZuj6OQrbza3WVsQtQ3dejns
- H/XvuMXM8WTTmuygJFyLwUm3PBX/aqB61HzwnIR9dNq4Jq5LF8R5Cj6TUkpWtWh8KHOf Ww== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0a-0016f401.pphosted.com with ESMTP id 32bxentx93-1
+ bh=Ssj4J4qySheODq3g8D9MIv3C9Zs4Q9sn3HtKtpEr3Pc=;
+ b=OyyvejPfiz52NLhxS51C3ta+UCJWNxNrKUgRzDJ0XoheInoAp+A4MiAViZsRX8e4etb4
+ 6SC7NU763s4Ee3AEjwZm7UGCjN2n70Lubx2gk/W41gRrOdslMy2SFljpMNAXha9vAwg0
+ J9INMhEcIt3IhRxYhqZOSpnaeUa1JXomW0heVMW/YqMK0WJIJf+tjDwZ17JzW8Zo1gDF
+ CZELG3b83UXUaJv54/RK6Z/hEubw2XeICvDT60iYOoUCQQ4eCCYQVygbylMNP4PhJitn
+ 8D6LC8BZBs0kPxYfvN+qb/ty07P9mzWURFPsGSu+PXALGF9etMytIezvqK8zk5mrHmn2 Bg== 
+Received: from sc-exch04.marvell.com ([199.233.58.184])
+        by mx0a-0016f401.pphosted.com with ESMTP id 32bxentxa8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 22 Jul 2020 15:12:15 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 22 Jul
- 2020 15:12:13 -0700
+        Wed, 22 Jul 2020 15:12:35 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by SC-EXCH04.marvell.com
+ (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 22 Jul
+ 2020 15:12:34 -0700
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 22 Jul 2020 15:12:14 -0700
+ Transport; Wed, 22 Jul 2020 15:12:34 -0700
 Received: from NN-LT0049.marvell.com (NN-LT0049.marvell.com [10.193.54.6])
-        by maili.marvell.com (Postfix) with ESMTP id 6C4513F703F;
-        Wed, 22 Jul 2020 15:12:07 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id E97F53F7040;
+        Wed, 22 Jul 2020 15:12:27 -0700 (PDT)
 From:   Alexander Lobakin <alobakin@marvell.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>
@@ -67,9 +67,9 @@ CC:     Alexander Lobakin <alobakin@marvell.com>,
         <GR-everest-linux-l2@marvell.com>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 net-next 10/15] qed: optimize common chain accessors
-Date:   Thu, 23 Jul 2020 01:10:40 +0300
-Message-ID: <20200722221045.5436-11-alobakin@marvell.com>
+Subject: [PATCH v2 net-next 13/15] qede: reformat net_device_ops declarations
+Date:   Thu, 23 Jul 2020 01:10:43 +0300
+Message-ID: <20200722221045.5436-14-alobakin@marvell.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200722221045.5436-1-alobakin@marvell.com>
 References: <20200722221045.5436-1-alobakin@marvell.com>
@@ -83,126 +83,160 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Constify chain pointers and refactor qed_chain_get_elem_left{,u32}() a bit.
+Correct the indentation of net_device_ops declarations for fancier look.
 
 Signed-off-by: Alexander Lobakin <alobakin@marvell.com>
 Signed-off-by: Igor Russkikh <irusskikh@marvell.com>
 Signed-off-by: Michal Kalderon <michal.kalderon@marvell.com>
 ---
- include/linux/qed/qed_chain.h | 60 +++++++++++++++++++----------------
- 1 file changed, 33 insertions(+), 27 deletions(-)
+ drivers/net/ethernet/qlogic/qede/qede_main.c | 122 +++++++++----------
+ 1 file changed, 61 insertions(+), 61 deletions(-)
 
-diff --git a/include/linux/qed/qed_chain.h b/include/linux/qed/qed_chain.h
-index 8a96c361cc19..434479e2ab65 100644
---- a/include/linux/qed/qed_chain.h
-+++ b/include/linux/qed/qed_chain.h
-@@ -182,73 +182,79 @@ struct qed_chain_init_params {
- 	((p)->cnt_type == QED_CHAIN_CNT_TYPE_U32)
- 
- /* Accessors */
--static inline u16 qed_chain_get_prod_idx(struct qed_chain *p_chain)
-+
-+static inline u16 qed_chain_get_prod_idx(const struct qed_chain *chain)
-+{
-+	return chain->u.chain16.prod_idx;
-+}
-+
-+static inline u16 qed_chain_get_cons_idx(const struct qed_chain *chain)
- {
--	return p_chain->u.chain16.prod_idx;
-+	return chain->u.chain16.cons_idx;
+diff --git a/drivers/net/ethernet/qlogic/qede/qede_main.c b/drivers/net/ethernet/qlogic/qede/qede_main.c
+index b5a95f165520..92bcdfa27961 100644
+--- a/drivers/net/ethernet/qlogic/qede/qede_main.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_main.c
+@@ -639,79 +639,79 @@ qede_setup_tc_offload(struct net_device *dev, enum tc_setup_type type,
  }
  
--static inline u16 qed_chain_get_cons_idx(struct qed_chain *p_chain)
-+static inline u32 qed_chain_get_prod_idx_u32(const struct qed_chain *chain)
- {
--	return p_chain->u.chain16.cons_idx;
-+	return chain->u.chain32.prod_idx;
- }
+ static const struct net_device_ops qede_netdev_ops = {
+-	.ndo_open = qede_open,
+-	.ndo_stop = qede_close,
+-	.ndo_start_xmit = qede_start_xmit,
+-	.ndo_select_queue = qede_select_queue,
+-	.ndo_set_rx_mode = qede_set_rx_mode,
+-	.ndo_set_mac_address = qede_set_mac_addr,
+-	.ndo_validate_addr = eth_validate_addr,
+-	.ndo_change_mtu = qede_change_mtu,
+-	.ndo_do_ioctl = qede_ioctl,
+-	.ndo_tx_timeout = qede_tx_timeout,
++	.ndo_open		= qede_open,
++	.ndo_stop		= qede_close,
++	.ndo_start_xmit		= qede_start_xmit,
++	.ndo_select_queue	= qede_select_queue,
++	.ndo_set_rx_mode	= qede_set_rx_mode,
++	.ndo_set_mac_address	= qede_set_mac_addr,
++	.ndo_validate_addr	= eth_validate_addr,
++	.ndo_change_mtu		= qede_change_mtu,
++	.ndo_do_ioctl		= qede_ioctl,
++	.ndo_tx_timeout		= qede_tx_timeout,
+ #ifdef CONFIG_QED_SRIOV
+-	.ndo_set_vf_mac = qede_set_vf_mac,
+-	.ndo_set_vf_vlan = qede_set_vf_vlan,
+-	.ndo_set_vf_trust = qede_set_vf_trust,
++	.ndo_set_vf_mac		= qede_set_vf_mac,
++	.ndo_set_vf_vlan	= qede_set_vf_vlan,
++	.ndo_set_vf_trust	= qede_set_vf_trust,
+ #endif
+-	.ndo_vlan_rx_add_vid = qede_vlan_rx_add_vid,
+-	.ndo_vlan_rx_kill_vid = qede_vlan_rx_kill_vid,
+-	.ndo_fix_features = qede_fix_features,
+-	.ndo_set_features = qede_set_features,
+-	.ndo_get_stats64 = qede_get_stats64,
++	.ndo_vlan_rx_add_vid	= qede_vlan_rx_add_vid,
++	.ndo_vlan_rx_kill_vid	= qede_vlan_rx_kill_vid,
++	.ndo_fix_features	= qede_fix_features,
++	.ndo_set_features	= qede_set_features,
++	.ndo_get_stats64	= qede_get_stats64,
+ #ifdef CONFIG_QED_SRIOV
+-	.ndo_set_vf_link_state = qede_set_vf_link_state,
+-	.ndo_set_vf_spoofchk = qede_set_vf_spoofchk,
+-	.ndo_get_vf_config = qede_get_vf_config,
+-	.ndo_set_vf_rate = qede_set_vf_rate,
++	.ndo_set_vf_link_state	= qede_set_vf_link_state,
++	.ndo_set_vf_spoofchk	= qede_set_vf_spoofchk,
++	.ndo_get_vf_config	= qede_get_vf_config,
++	.ndo_set_vf_rate	= qede_set_vf_rate,
+ #endif
+-	.ndo_udp_tunnel_add = udp_tunnel_nic_add_port,
+-	.ndo_udp_tunnel_del = udp_tunnel_nic_del_port,
+-	.ndo_features_check = qede_features_check,
+-	.ndo_bpf = qede_xdp,
++	.ndo_udp_tunnel_add	= udp_tunnel_nic_add_port,
++	.ndo_udp_tunnel_del	= udp_tunnel_nic_del_port,
++	.ndo_features_check	= qede_features_check,
++	.ndo_bpf		= qede_xdp,
+ #ifdef CONFIG_RFS_ACCEL
+-	.ndo_rx_flow_steer = qede_rx_flow_steer,
++	.ndo_rx_flow_steer	= qede_rx_flow_steer,
+ #endif
+-	.ndo_setup_tc = qede_setup_tc_offload,
++	.ndo_setup_tc		= qede_setup_tc_offload,
+ };
  
--static inline u32 qed_chain_get_cons_idx_u32(struct qed_chain *p_chain)
-+static inline u32 qed_chain_get_cons_idx_u32(const struct qed_chain *chain)
- {
--	return p_chain->u.chain32.cons_idx;
-+	return chain->u.chain32.cons_idx;
- }
+ static const struct net_device_ops qede_netdev_vf_ops = {
+-	.ndo_open = qede_open,
+-	.ndo_stop = qede_close,
+-	.ndo_start_xmit = qede_start_xmit,
+-	.ndo_select_queue = qede_select_queue,
+-	.ndo_set_rx_mode = qede_set_rx_mode,
+-	.ndo_set_mac_address = qede_set_mac_addr,
+-	.ndo_validate_addr = eth_validate_addr,
+-	.ndo_change_mtu = qede_change_mtu,
+-	.ndo_vlan_rx_add_vid = qede_vlan_rx_add_vid,
+-	.ndo_vlan_rx_kill_vid = qede_vlan_rx_kill_vid,
+-	.ndo_fix_features = qede_fix_features,
+-	.ndo_set_features = qede_set_features,
+-	.ndo_get_stats64 = qede_get_stats64,
+-	.ndo_udp_tunnel_add = udp_tunnel_nic_add_port,
+-	.ndo_udp_tunnel_del = udp_tunnel_nic_del_port,
+-	.ndo_features_check = qede_features_check,
++	.ndo_open		= qede_open,
++	.ndo_stop		= qede_close,
++	.ndo_start_xmit		= qede_start_xmit,
++	.ndo_select_queue	= qede_select_queue,
++	.ndo_set_rx_mode	= qede_set_rx_mode,
++	.ndo_set_mac_address	= qede_set_mac_addr,
++	.ndo_validate_addr	= eth_validate_addr,
++	.ndo_change_mtu		= qede_change_mtu,
++	.ndo_vlan_rx_add_vid	= qede_vlan_rx_add_vid,
++	.ndo_vlan_rx_kill_vid	= qede_vlan_rx_kill_vid,
++	.ndo_fix_features	= qede_fix_features,
++	.ndo_set_features	= qede_set_features,
++	.ndo_get_stats64	= qede_get_stats64,
++	.ndo_udp_tunnel_add	= udp_tunnel_nic_add_port,
++	.ndo_udp_tunnel_del	= udp_tunnel_nic_del_port,
++	.ndo_features_check	= qede_features_check,
+ };
  
--static inline u16 qed_chain_get_elem_left(struct qed_chain *p_chain)
-+static inline u16 qed_chain_get_elem_left(const struct qed_chain *chain)
- {
--	u16 elem_per_page = p_chain->elem_per_page;
--	u32 prod = p_chain->u.chain16.prod_idx;
--	u32 cons = p_chain->u.chain16.cons_idx;
-+	u32 prod = qed_chain_get_prod_idx(chain);
-+	u32 cons = qed_chain_get_cons_idx(chain);
-+	u16 elem_per_page = chain->elem_per_page;
- 	u16 used;
+ static const struct net_device_ops qede_netdev_vf_xdp_ops = {
+-	.ndo_open = qede_open,
+-	.ndo_stop = qede_close,
+-	.ndo_start_xmit = qede_start_xmit,
+-	.ndo_select_queue = qede_select_queue,
+-	.ndo_set_rx_mode = qede_set_rx_mode,
+-	.ndo_set_mac_address = qede_set_mac_addr,
+-	.ndo_validate_addr = eth_validate_addr,
+-	.ndo_change_mtu = qede_change_mtu,
+-	.ndo_vlan_rx_add_vid = qede_vlan_rx_add_vid,
+-	.ndo_vlan_rx_kill_vid = qede_vlan_rx_kill_vid,
+-	.ndo_fix_features = qede_fix_features,
+-	.ndo_set_features = qede_set_features,
+-	.ndo_get_stats64 = qede_get_stats64,
+-	.ndo_udp_tunnel_add = udp_tunnel_nic_add_port,
+-	.ndo_udp_tunnel_del = udp_tunnel_nic_del_port,
+-	.ndo_features_check = qede_features_check,
+-	.ndo_bpf = qede_xdp,
++	.ndo_open		= qede_open,
++	.ndo_stop		= qede_close,
++	.ndo_start_xmit		= qede_start_xmit,
++	.ndo_select_queue	= qede_select_queue,
++	.ndo_set_rx_mode	= qede_set_rx_mode,
++	.ndo_set_mac_address	= qede_set_mac_addr,
++	.ndo_validate_addr	= eth_validate_addr,
++	.ndo_change_mtu		= qede_change_mtu,
++	.ndo_vlan_rx_add_vid	= qede_vlan_rx_add_vid,
++	.ndo_vlan_rx_kill_vid	= qede_vlan_rx_kill_vid,
++	.ndo_fix_features	= qede_fix_features,
++	.ndo_set_features	= qede_set_features,
++	.ndo_get_stats64	= qede_get_stats64,
++	.ndo_udp_tunnel_add	= udp_tunnel_nic_add_port,
++	.ndo_udp_tunnel_del	= udp_tunnel_nic_del_port,
++	.ndo_features_check	= qede_features_check,
++	.ndo_bpf		= qede_xdp,
+ };
  
- 	if (prod < cons)
- 		prod += (u32)U16_MAX + 1;
- 
- 	used = (u16)(prod - cons);
--	if (p_chain->mode == QED_CHAIN_MODE_NEXT_PTR)
--		used -= prod / elem_per_page - cons / elem_per_page;
-+	if (chain->mode == QED_CHAIN_MODE_NEXT_PTR)
-+		used -= (u16)(prod / elem_per_page - cons / elem_per_page);
- 
--	return (u16)(p_chain->capacity - used);
-+	return (u16)(chain->capacity - used);
- }
- 
--static inline u32 qed_chain_get_elem_left_u32(struct qed_chain *p_chain)
-+static inline u32 qed_chain_get_elem_left_u32(const struct qed_chain *chain)
- {
--	u16 elem_per_page = p_chain->elem_per_page;
--	u64 prod = p_chain->u.chain32.prod_idx;
--	u64 cons = p_chain->u.chain32.cons_idx;
-+	u64 prod = qed_chain_get_prod_idx_u32(chain);
-+	u64 cons = qed_chain_get_cons_idx_u32(chain);
-+	u16 elem_per_page = chain->elem_per_page;
- 	u32 used;
- 
- 	if (prod < cons)
- 		prod += (u64)U32_MAX + 1;
- 
- 	used = (u32)(prod - cons);
--	if (p_chain->mode == QED_CHAIN_MODE_NEXT_PTR)
-+	if (chain->mode == QED_CHAIN_MODE_NEXT_PTR)
- 		used -= (u32)(prod / elem_per_page - cons / elem_per_page);
- 
--	return p_chain->capacity - used;
-+	return chain->capacity - used;
- }
- 
--static inline u16 qed_chain_get_usable_per_page(struct qed_chain *p_chain)
-+static inline u16 qed_chain_get_usable_per_page(const struct qed_chain *chain)
- {
--	return p_chain->usable_per_page;
-+	return chain->usable_per_page;
- }
- 
--static inline u8 qed_chain_get_unusable_per_page(struct qed_chain *p_chain)
-+static inline u8 qed_chain_get_unusable_per_page(const struct qed_chain *chain)
- {
--	return p_chain->elem_unusable;
-+	return chain->elem_unusable;
- }
- 
--static inline u32 qed_chain_get_page_cnt(struct qed_chain *p_chain)
-+static inline u32 qed_chain_get_page_cnt(const struct qed_chain *chain)
- {
--	return p_chain->page_cnt;
-+	return chain->page_cnt;
- }
- 
--static inline dma_addr_t qed_chain_get_pbl_phys(struct qed_chain *p_chain)
-+static inline dma_addr_t qed_chain_get_pbl_phys(const struct qed_chain *chain)
- {
--	return p_chain->pbl_sp.table_phys;
-+	return chain->pbl_sp.table_phys;
- }
- 
- /**
+ /* -------------------------------------------------------------------------
 -- 
 2.25.1
 
