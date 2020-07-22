@@ -2,44 +2,45 @@ Return-Path: <SRS0=WYs6=BB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BCF1C433E4
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:49:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BB2DC433E6
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:49:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A62E20717
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:49:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 22B2520781
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:49:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="DNQ9KAVC"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="FGms2hsL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732530AbgGVStx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jul 2020 14:49:53 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:3218 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732422AbgGVStv (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 14:49:51 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06MIZK6N026689
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:49:49 -0700
+        id S1732579AbgGVSt4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jul 2020 14:49:56 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:43504 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732543AbgGVSt4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 14:49:56 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MIcIcM012189
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:49:55 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=Wor6D2PKm8jkdJMCv/vXQDEMt2aEmQY5kQy4f8tqXJI=;
- b=DNQ9KAVCwcfYhHPcBNyf9Lp9GzL/ubdwJGG6kEmOnp/s/HnixI9JKFEGWRm49fkC1M/h
- GSJwH657nIcGdPHrg4pDj1TWhfkluQ0hyGmlUESV4ombwpWSyrzFx/k5s48acLA4NpN0
- hcZ65OpFPG3kO+ZeXrDxvLO2L0uTgEK81ik= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=MeSp6YJimNz4EDj5AU69yUG+jJ+MXrqRNjGW64u3JpA=;
+ b=FGms2hsLJHNLztE3e5ZGukC7XbJFiyrFJX3FtMSdZd/lAAbBeXwXTEzGkeF1YpxtlsVJ
+ JoohHTKK8I0zP15ZONm6ND/eTlV/hGAoimf61LuzFpscQmAv7vnECWhr/WLfgUohuTO5
+ J4Em2HJQ3N126i0Srjc37UNRvGxT7RY9GSA= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 32esdjgm7j-5
+        by mx0a-00082601.pphosted.com with ESMTP id 32embc28gu-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:49:49 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:49:55 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 22 Jul 2020 11:49:47 -0700
+ 15.1.1979.3; Wed, 22 Jul 2020 11:49:54 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id BDCA73702F09; Wed, 22 Jul 2020 11:49:45 -0700 (PDT)
+        id 3DA1B3702F09; Wed, 22 Jul 2020 11:49:52 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -48,20 +49,22 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 00/13] bpf: implement bpf iterator for map elements
-Date:   Wed, 22 Jul 2020 11:49:45 -0700
-Message-ID: <20200722184945.3777103-1-yhs@fb.com>
+Subject: [PATCH bpf-next v2 06/13] bpf: implement bpf iterator for array maps
+Date:   Wed, 22 Jul 2020 11:49:52 -0700
+Message-ID: <20200722184952.3777650-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200722184945.3777103-1-yhs@fb.com>
+References: <20200722184945.3777103-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-22_10:2020-07-22,2020-07-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 clxscore=1015
- malwarescore=0 spamscore=0 adultscore=0 impostorscore=0 phishscore=0
- suspectscore=8 bulkscore=0 priorityscore=1501 mlxlogscore=447
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ mlxlogscore=999 impostorscore=0 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 phishscore=0 mlxscore=0 suspectscore=8
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2007220119
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -69,98 +72,202 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Bpf iterator has been implemented for task, task_file,
-bpf_map, ipv6_route, netlink, tcp and udp so far.
+The bpf iterators for array and percpu array
+are implemented. Similar to hash maps, for percpu
+array map, bpf program will receive values
+from all cpus.
 
-For map elements, there are two ways to traverse all elements from
-user space:
-  1. using BPF_MAP_GET_NEXT_KEY bpf subcommand to get elements
-     one by one.
-  2. using BPF_MAP_LOOKUP_BATCH bpf subcommand to get a batch of
-     elements.
-Both these approaches need to copy data from kernel to user space
-in order to do inspection.
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ kernel/bpf/arraymap.c | 138 ++++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/map_iter.c |   6 +-
+ 2 files changed, 142 insertions(+), 2 deletions(-)
 
-This patch implements bpf iterator for map elements.
-User can have a bpf program in kernel to run with each map element,
-do checking, filtering, aggregation, modifying values etc.
-without copying data to user space.
-
-Patch #1 and #2 are refactoring. Patch #3 implements readonly/readwrite
-buffer support in verifier. Patches #4 - #7 implements map element
-support for hash, percpu hash, lru hash lru percpu hash, array,
-percpu array and sock local storage maps. Patches #8 - #9 are libbpf
-and bpftool support. Patches #10 - #13 are selftests for implemented
-map element iterators.
-
-Changelogs:
-  v1 -> v2:
-    . support to modify map element values. (Alexei)
-    . map key/values can be used with helper arguments
-      for those arguments with ARG_PTR_TO_MEM or
-      ARG_PTR_TO_INIT_MEM register type. (Alexei)
-    . remove usused variable. (kernel test robot)
-
-Yonghong Song (13):
-  bpf: refactor bpf_iter_reg to have separate seq_info member
-  bpf: refactor to provide aux info to bpf_iter_init_seq_priv_t
-  bpf: support readonly/readwrite buffers in verifier
-  bpf: implement bpf iterator for map elements
-  bpf: implement bpf iterator for hash maps
-  bpf: implement bpf iterator for array maps
-  bpf: implement bpf iterator for sock local storage map
-  tools/libbpf: add support for bpf map element iterator
-  tools/bpftool: add bpftool support for bpf map element iterator
-  selftests/bpf: add test for bpf hash map iterators
-  selftests/bpf: add test for bpf array map iterators
-  selftests/bpf: add a test for bpf sk_storage_map iterator
-  selftests/bpf: add a test for out of bound rdonly buf access
-
- fs/proc/proc_net.c                            |   2 +-
- include/linux/bpf.h                           |  42 +-
- include/linux/proc_fs.h                       |   3 +-
- include/uapi/linux/bpf.h                      |   7 +
- kernel/bpf/arraymap.c                         | 138 ++++++
- kernel/bpf/bpf_iter.c                         |  89 +++-
- kernel/bpf/btf.c                              |  13 +
- kernel/bpf/hashtab.c                          | 194 ++++++++
- kernel/bpf/map_iter.c                         |  62 ++-
- kernel/bpf/task_iter.c                        |  18 +-
- kernel/bpf/verifier.c                         |  91 +++-
- net/core/bpf_sk_storage.c                     | 206 ++++++++
- net/ipv4/tcp_ipv4.c                           |  12 +-
- net/ipv4/udp.c                                |  12 +-
- net/ipv6/route.c                              |   8 +-
- net/netlink/af_netlink.c                      |   8 +-
- .../bpftool/Documentation/bpftool-iter.rst    |  18 +-
- tools/bpf/bpftool/bash-completion/bpftool     |  18 +-
- tools/bpf/bpftool/iter.c                      |  33 +-
- tools/include/uapi/linux/bpf.h                |   7 +
- tools/lib/bpf/bpf.c                           |   1 +
- tools/lib/bpf/bpf.h                           |   3 +-
- tools/lib/bpf/libbpf.c                        |  10 +-
- tools/lib/bpf/libbpf.h                        |   3 +-
- .../selftests/bpf/prog_tests/bpf_iter.c       | 442 ++++++++++++++++++
- .../bpf/progs/bpf_iter_bpf_array_map.c        |  40 ++
- .../bpf/progs/bpf_iter_bpf_hash_map.c         | 100 ++++
- .../bpf/progs/bpf_iter_bpf_percpu_array_map.c |  46 ++
- .../bpf/progs/bpf_iter_bpf_percpu_hash_map.c  |  50 ++
- .../bpf/progs/bpf_iter_bpf_sk_storage_map.c   |  34 ++
- .../selftests/bpf/progs/bpf_iter_test_kern5.c |  35 ++
- 31 files changed, 1682 insertions(+), 63 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_bpf_array_=
-map.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_bpf_hash_m=
-ap.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_bpf_percpu=
-_array_map.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_bpf_percpu=
-_hash_map.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_sto=
-rage_map.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_test_kern5=
-.c
-
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index c66e8273fccd..8ff419b632a6 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -487,6 +487,142 @@ static int array_map_mmap(struct bpf_map *map, stru=
+ct vm_area_struct *vma)
+ 				   vma->vm_pgoff + pgoff);
+ }
+=20
++struct bpf_iter_seq_array_map_info {
++	struct bpf_map *map;
++	void *percpu_value_buf;
++	u32 index;
++};
++
++static void *bpf_array_map_seq_start(struct seq_file *seq, loff_t *pos)
++{
++	struct bpf_iter_seq_array_map_info *info =3D seq->private;
++	struct bpf_map *map =3D info->map;
++	struct bpf_array *array;
++	u32 index;
++
++	if (info->index >=3D map->max_entries)
++		return NULL;
++
++	if (*pos =3D=3D 0)
++		++*pos;
++	array =3D container_of(map, struct bpf_array, map);
++	index =3D info->index & array->index_mask;
++	if (info->percpu_value_buf)
++	       return array->pptrs[index];
++	return array->value + array->elem_size * index;
++}
++
++static void *bpf_array_map_seq_next(struct seq_file *seq, void *v, loff_=
+t *pos)
++{
++	struct bpf_iter_seq_array_map_info *info =3D seq->private;
++	struct bpf_map *map =3D info->map;
++	struct bpf_array *array;
++	u32 index;
++
++	++*pos;
++	++info->index;
++	if (info->index >=3D map->max_entries)
++		return NULL;
++
++	array =3D container_of(map, struct bpf_array, map);
++	index =3D info->index & array->index_mask;
++	if (info->percpu_value_buf)
++	       return array->pptrs[index];
++	return array->value + array->elem_size * index;
++}
++
++static int __bpf_array_map_seq_show(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_seq_array_map_info *info =3D seq->private;
++	struct bpf_iter__bpf_map_elem ctx =3D {};
++	struct bpf_map *map =3D info->map;
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++	int off =3D 0, cpu =3D 0;
++	void __percpu **pptr;
++	u32 size;
++
++	meta.seq =3D seq;
++	prog =3D bpf_iter_get_info(&meta, v =3D=3D NULL);
++	if (!prog)
++		return 0;
++
++	ctx.meta =3D &meta;
++	ctx.map =3D info->map;
++	if (v) {
++		ctx.key =3D &info->index;
++
++		if (!info->percpu_value_buf) {
++			ctx.value =3D v;
++		} else {
++			pptr =3D v;
++			size =3D round_up(map->value_size, 8);
++			for_each_possible_cpu(cpu) {
++				bpf_long_memcpy(info->percpu_value_buf + off,
++						per_cpu_ptr(pptr, cpu),
++						size);
++				off +=3D size;
++			}
++			ctx.value =3D info->percpu_value_buf;
++		}
++	}
++
++	return bpf_iter_run_prog(prog, &ctx);
++}
++
++static int bpf_array_map_seq_show(struct seq_file *seq, void *v)
++{
++	return __bpf_array_map_seq_show(seq, v);
++}
++
++static void bpf_array_map_seq_stop(struct seq_file *seq, void *v)
++{
++	if (!v)
++		(void)__bpf_array_map_seq_show(seq, NULL);
++}
++
++static int bpf_iter_init_array_map(void *priv_data,
++				   struct bpf_iter_aux_info *aux)
++{
++	struct bpf_iter_seq_array_map_info *seq_info =3D priv_data;
++	struct bpf_map *map =3D aux->map;
++	void *value_buf;
++	u32 buf_size;
++
++	if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY) {
++		buf_size =3D round_up(map->value_size, 8) * num_possible_cpus();
++		value_buf =3D kmalloc(buf_size, GFP_USER | __GFP_NOWARN);
++		if (!value_buf)
++			return -ENOMEM;
++
++		seq_info->percpu_value_buf =3D value_buf;
++	}
++
++	seq_info->map =3D map;
++	return 0;
++}
++
++static void bpf_iter_fini_array_map(void *priv_data)
++{
++	struct bpf_iter_seq_array_map_info *seq_info =3D priv_data;
++
++	kfree(seq_info->percpu_value_buf);
++}
++
++static const struct seq_operations bpf_array_map_seq_ops =3D {
++	.start	=3D bpf_array_map_seq_start,
++	.next	=3D bpf_array_map_seq_next,
++	.stop	=3D bpf_array_map_seq_stop,
++	.show	=3D bpf_array_map_seq_show,
++};
++
++static const struct bpf_iter_seq_info iter_seq_info =3D {
++	.seq_ops		=3D &bpf_array_map_seq_ops,
++	.init_seq_private	=3D bpf_iter_init_array_map,
++	.fini_seq_private	=3D bpf_iter_fini_array_map,
++	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_array_map_info),
++};
++
+ static int array_map_btf_id;
+ const struct bpf_map_ops array_map_ops =3D {
+ 	.map_alloc_check =3D array_map_alloc_check,
+@@ -506,6 +642,7 @@ const struct bpf_map_ops array_map_ops =3D {
+ 	.map_update_batch =3D generic_map_update_batch,
+ 	.map_btf_name =3D "bpf_array",
+ 	.map_btf_id =3D &array_map_btf_id,
++	.iter_seq_info =3D &iter_seq_info,
+ };
+=20
+ static int percpu_array_map_btf_id;
+@@ -521,6 +658,7 @@ const struct bpf_map_ops percpu_array_map_ops =3D {
+ 	.map_check_btf =3D array_map_check_btf,
+ 	.map_btf_name =3D "bpf_array",
+ 	.map_btf_id =3D &percpu_array_map_btf_id,
++	.iter_seq_info =3D &iter_seq_info,
+ };
+=20
+ static int fd_array_map_alloc_check(union bpf_attr *attr)
+diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
+index 6cd532f26836..5d834b9dc005 100644
+--- a/kernel/bpf/map_iter.c
++++ b/kernel/bpf/map_iter.c
+@@ -110,10 +110,12 @@ static int bpf_iter_check_map(struct bpf_prog *prog=
+,
+ 	bool is_percpu =3D false;
+=20
+ 	if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_HASH ||
+-	    map->map_type =3D=3D BPF_MAP_TYPE_LRU_PERCPU_HASH)
++	    map->map_type =3D=3D BPF_MAP_TYPE_LRU_PERCPU_HASH ||
++	    map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY)
+ 		is_percpu =3D true;
+ 	else if (map->map_type !=3D BPF_MAP_TYPE_HASH &&
+-		 map->map_type !=3D BPF_MAP_TYPE_LRU_HASH)
++		 map->map_type !=3D BPF_MAP_TYPE_LRU_HASH &&
++		 map->map_type !=3D BPF_MAP_TYPE_ARRAY)
+ 		return -EINVAL;
+=20
+ 	key_acc_size =3D prog->aux->max_rdonly_access;
 --=20
 2.24.1
 
