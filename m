@@ -2,375 +2,285 @@ Return-Path: <SRS0=WYs6=BB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1148CC433E3
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:49:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EA75C433E1
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 19:18:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D937B20781
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:49:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="K0nEPrnn"
+	by mail.kernel.org (Postfix) with ESMTP id 37D4F2065D
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 19:18:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732475AbgGVStu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jul 2020 14:49:50 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11358 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731267AbgGVStu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 14:49:50 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MIcJs9012214
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:49:47 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=pl1PTWP11kIUsglaW5IdDhm+e14+SzxsRJ+xr5GArec=;
- b=K0nEPrnncVjy4Sq2VLBoNSqUrlMwj7VzVFsPwFI1ete2dbmmmVa9GdjaHvuaNunbJUnb
- 4aNQeFjKtgQgXyg+1m+2vYzfPdsBcp3SPon06iw9/1ejA7fetPr90+AY8NRVSjWv8yvA
- 7N97ngvWcge+EoaMfcO6Xjl9pwC2wLqxZ38= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32embc28fv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:49:47 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 22 Jul 2020 11:49:47 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 046FD3704B5A; Wed, 22 Jul 2020 11:49:45 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 01/13] bpf: refactor bpf_iter_reg to have separate seq_info member
-Date:   Wed, 22 Jul 2020 11:49:45 -0700
-Message-ID: <20200722184945.3777163-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200722184945.3777103-1-yhs@fb.com>
-References: <20200722184945.3777103-1-yhs@fb.com>
+        id S1726462AbgGVTSU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jul 2020 15:18:20 -0400
+Received: from mga01.intel.com ([192.55.52.88]:24713 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726157AbgGVTSU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jul 2020 15:18:20 -0400
+IronPort-SDR: 28df/czH63vY01Idh2AnAdQYQKcqhw0nxdOHYTGBHKSRBlK2yNFRK0ma+kI8rhx9ecmCLacy87
+ x++7R8OYOQaA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9690"; a="168549343"
+X-IronPort-AV: E=Sophos;i="5.75,383,1589266800"; 
+   d="scan'208";a="168549343"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2020 12:18:20 -0700
+IronPort-SDR: iHlPcRjVTLW3toZUI+mwfsaQl9EhxVDinVg6F6LIc27rHlddMLyK044IdAOCdeVnzXh9o8zc/e
+ +7HoQjDLPJmg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,383,1589266800"; 
+   d="scan'208";a="432484813"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by orsmga004.jf.intel.com with ESMTP; 22 Jul 2020 12:18:17 -0700
+Date:   Wed, 22 Jul 2020 21:13:20 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
+        daniel@iogearbox.net, dsahern@gmail.com, andrii.nakryiko@gmail.com,
+        kernel-team@fb.com
+Subject: Re: [PATCH v4 bpf-next 3/9] bpf, xdp: extract common XDP program
+ attachment logic
+Message-ID: <20200722191320.GC8874@ranger.igk.intel.com>
+References: <20200722064603.3350758-1-andriin@fb.com>
+ <20200722064603.3350758-4-andriin@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-22_10:2020-07-22,2020-07-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- mlxlogscore=855 impostorscore=0 clxscore=1015 priorityscore=1501
- lowpriorityscore=0 adultscore=0 phishscore=0 mlxscore=0 suspectscore=8
- spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007220119
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200722064603.3350758-4-andriin@fb.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There is no functionality change for this patch.
-Struct bpf_iter_reg is used to register a bpf_iter target,
-which includes information for both prog_load, link_create
-and seq_file creation.
+On Tue, Jul 21, 2020 at 11:45:56PM -0700, Andrii Nakryiko wrote:
+> Further refactor XDP attachment code. dev_change_xdp_fd() is split into two
+> parts: getting bpf_progs from FDs and attachment logic, working with
+> bpf_progs. This makes attachment  logic a bit more straightforward and
+> prepares code for bpf_xdp_link inclusion, which will share the common logic.
+> 
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> ---
+>  net/core/dev.c | 165 +++++++++++++++++++++++++++----------------------
+>  1 file changed, 91 insertions(+), 74 deletions(-)
+> 
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 7e753e248cef..abf573b2dcf4 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -8815,111 +8815,128 @@ static void dev_xdp_uninstall(struct net_device *dev)
+>  	}
+>  }
+>  
+> -/**
+> - *	dev_change_xdp_fd - set or clear a bpf program for a device rx path
+> - *	@dev: device
+> - *	@extack: netlink extended ack
+> - *	@fd: new program fd or negative value to clear
+> - *	@expected_fd: old program fd that userspace expects to replace or clear
+> - *	@flags: xdp-related flags
+> - *
+> - *	Set or clear a bpf program for a device
+> - */
+> -int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
+> -		      int fd, int expected_fd, u32 flags)
+> +static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack,
+> +			  struct bpf_prog *new_prog, struct bpf_prog *old_prog,
+> +			  u32 flags)
+>  {
+> -	const struct net_device_ops *ops = dev->netdev_ops;
+> -	enum bpf_xdp_mode mode = dev_xdp_mode(flags);
+> -	bool offload = mode == XDP_MODE_HW;
+> -	u32 prog_id, expected_id = 0;
+> -	struct bpf_prog *prog;
+> +	struct bpf_prog *cur_prog;
+> +	enum bpf_xdp_mode mode;
+>  	bpf_op_t bpf_op;
+>  	int err;
+>  
+>  	ASSERT_RTNL();
 
-This patch puts fields related seq_file creation into
-a different structure. This will be useful for map
-elements iterator where one iterator covers different
-map types and different map types may have different
-seq_ops, init/fini private_data function and
-private_data size.
+couldn't we rely on caller's rtnl assertion? dev_change_xdp_fd() already
+has one.
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- include/linux/bpf.h      | 17 ++++++++++-------
- kernel/bpf/bpf_iter.c    | 12 ++++++------
- kernel/bpf/map_iter.c    |  8 ++++++--
- kernel/bpf/task_iter.c   | 16 ++++++++++++----
- net/ipv4/tcp_ipv4.c      |  8 ++++++--
- net/ipv4/udp.c           |  8 ++++++--
- net/ipv6/route.c         |  8 ++++++--
- net/netlink/af_netlink.c |  8 ++++++--
- 8 files changed, 58 insertions(+), 27 deletions(-)
+>  
+> -	bpf_op = dev_xdp_bpf_op(dev, mode);
+> -	if (!bpf_op) {
+> -		NL_SET_ERR_MSG(extack, "underlying driver does not support XDP in native mode");
+> -		return -EOPNOTSUPP;
+> +	/* just one XDP mode bit should be set, zero defaults to SKB mode */
+> +	if (hweight32(flags & XDP_FLAGS_MODES) > 1) {
+> +		NL_SET_ERR_MSG(extack, "Only one XDP mode flag can be set");
+> +		return -EINVAL;
+> +	}
+> +	/* old_prog != NULL implies XDP_FLAGS_REPLACE is set */
+> +	if (old_prog && !(flags & XDP_FLAGS_REPLACE)) {
+> +		NL_SET_ERR_MSG(extack, "XDP_FLAGS_REPLACE is not specified");
+> +		return -EINVAL;
+>  	}
+>  
+> -	prog_id = dev_xdp_prog_id(dev, mode);
+> -	if (flags & XDP_FLAGS_REPLACE) {
+> -		if (expected_fd >= 0) {
+> -			prog = bpf_prog_get_type_dev(expected_fd,
+> -						     BPF_PROG_TYPE_XDP,
+> -						     bpf_op == ops->ndo_bpf);
+> -			if (IS_ERR(prog))
+> -				return PTR_ERR(prog);
+> -			expected_id = prog->aux->id;
+> -			bpf_prog_put(prog);
+> -		}
+> -
+> -		if (prog_id != expected_id) {
+> -			NL_SET_ERR_MSG(extack, "Active program does not match expected");
+> -			return -EEXIST;
+> -		}
+> +	mode = dev_xdp_mode(flags);
+> +	cur_prog = dev_xdp_prog(dev, mode);
+> +	if ((flags & XDP_FLAGS_REPLACE) && cur_prog != old_prog) {
+> +		NL_SET_ERR_MSG(extack, "Active program does not match expected");
+> +		return -EEXIST;
+>  	}
+> -	if (fd >= 0) {
+> +	if ((flags & XDP_FLAGS_UPDATE_IF_NOEXIST) && cur_prog) {
+> +		NL_SET_ERR_MSG(extack, "XDP program already attached");
+> +		return -EBUSY;
+> +	}
+> +
+> +	if (new_prog) {
+> +		bool offload = mode == XDP_MODE_HW;
+>  		enum bpf_xdp_mode other_mode = mode == XDP_MODE_SKB
+>  					       ? XDP_MODE_DRV : XDP_MODE_SKB;
+>  
+> -		if (!offload && dev_xdp_prog_id(dev, other_mode)) {
+> +		if (!offload && dev_xdp_prog(dev, other_mode)) {
+>  			NL_SET_ERR_MSG(extack, "Native and generic XDP can't be active at the same time");
+>  			return -EEXIST;
+>  		}
+> -
+> -		if ((flags & XDP_FLAGS_UPDATE_IF_NOEXIST) && prog_id) {
+> -			NL_SET_ERR_MSG(extack, "XDP program already attached");
+> -			return -EBUSY;
+> -		}
+> -
+> -		prog = bpf_prog_get_type_dev(fd, BPF_PROG_TYPE_XDP,
+> -					     bpf_op == ops->ndo_bpf);
+> -		if (IS_ERR(prog))
+> -			return PTR_ERR(prog);
+> -
+> -		if (!offload && bpf_prog_is_dev_bound(prog->aux)) {
+> +		if (!offload && bpf_prog_is_dev_bound(new_prog->aux)) {
+>  			NL_SET_ERR_MSG(extack, "Using device-bound program without HW_MODE flag is not supported");
+> -			bpf_prog_put(prog);
+>  			return -EINVAL;
+>  		}
+> -
+> -		if (prog->expected_attach_type == BPF_XDP_DEVMAP) {
+> +		if (new_prog->expected_attach_type == BPF_XDP_DEVMAP) {
+>  			NL_SET_ERR_MSG(extack, "BPF_XDP_DEVMAP programs can not be attached to a device");
+> -			bpf_prog_put(prog);
+>  			return -EINVAL;
+>  		}
+> -
+> -		if (prog->expected_attach_type == BPF_XDP_CPUMAP) {
+> -			NL_SET_ERR_MSG(extack,
+> -				       "BPF_XDP_CPUMAP programs can not be attached to a device");
+> -			bpf_prog_put(prog);
+> +		if (new_prog->expected_attach_type == BPF_XDP_CPUMAP) {
+> +			NL_SET_ERR_MSG(extack, "BPF_XDP_CPUMAP programs can not be attached to a device");
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index bae557ff2da8..cb14fbe68a75 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -37,6 +37,15 @@ struct seq_operations;
- extern struct idr btf_idr;
- extern spinlock_t btf_idr_lock;
-=20
-+typedef int (*bpf_iter_init_seq_priv_t)(void *private_data);
-+typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
-+struct bpf_iter_seq_info {
-+	const struct seq_operations *seq_ops;
-+	bpf_iter_init_seq_priv_t init_seq_private;
-+	bpf_iter_fini_seq_priv_t fini_seq_private;
-+	u32 seq_priv_size;
-+};
-+
- /* map is generic key/value storage optionally accesible by eBPF program=
-s */
- struct bpf_map_ops {
- 	/* funcs callable from userspace (via syscall) */
-@@ -1188,18 +1197,12 @@ int bpf_obj_get_user(const char __user *pathname,=
- int flags);
- 	extern int bpf_iter_ ## target(args);			\
- 	int __init bpf_iter_ ## target(args) { return 0; }
-=20
--typedef int (*bpf_iter_init_seq_priv_t)(void *private_data);
--typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
--
- #define BPF_ITER_CTX_ARG_MAX 2
- struct bpf_iter_reg {
- 	const char *target;
--	const struct seq_operations *seq_ops;
--	bpf_iter_init_seq_priv_t init_seq_private;
--	bpf_iter_fini_seq_priv_t fini_seq_private;
--	u32 seq_priv_size;
- 	u32 ctx_arg_info_size;
- 	struct bpf_ctx_arg_aux ctx_arg_info[BPF_ITER_CTX_ARG_MAX];
-+	const struct bpf_iter_seq_info *seq_info;
- };
-=20
- struct bpf_iter_meta {
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index dd612b80b9fe..5b2387d6aa1f 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -218,8 +218,8 @@ static int iter_release(struct inode *inode, struct f=
-ile *file)
- 	iter_priv =3D container_of(seq->private, struct bpf_iter_priv_data,
- 				 target_private);
-=20
--	if (iter_priv->tinfo->reg_info->fini_seq_private)
--		iter_priv->tinfo->reg_info->fini_seq_private(seq->private);
-+	if (iter_priv->tinfo->reg_info->seq_info->fini_seq_private)
-+		iter_priv->tinfo->reg_info->seq_info->fini_seq_private(seq->private);
-=20
- 	bpf_prog_put(iter_priv->prog);
- 	seq->private =3D iter_priv;
-@@ -433,16 +433,16 @@ static int prepare_seq_file(struct file *file, stru=
-ct bpf_iter_link *link)
-=20
- 	tinfo =3D link->tinfo;
- 	total_priv_dsize =3D offsetof(struct bpf_iter_priv_data, target_private=
-) +
--			   tinfo->reg_info->seq_priv_size;
--	priv_data =3D __seq_open_private(file, tinfo->reg_info->seq_ops,
-+			   tinfo->reg_info->seq_info->seq_priv_size;
-+	priv_data =3D __seq_open_private(file, tinfo->reg_info->seq_info->seq_o=
-ps,
- 				       total_priv_dsize);
- 	if (!priv_data) {
- 		err =3D -ENOMEM;
- 		goto release_prog;
- 	}
-=20
--	if (tinfo->reg_info->init_seq_private) {
--		err =3D tinfo->reg_info->init_seq_private(priv_data->target_private);
-+	if (tinfo->reg_info->seq_info->init_seq_private) {
-+		err =3D tinfo->reg_info->seq_info->init_seq_private(priv_data->target_=
-private);
- 		if (err)
- 			goto release_seq_file;
- 	}
-diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-index 8a7af11b411f..5812dd465c49 100644
---- a/kernel/bpf/map_iter.c
-+++ b/kernel/bpf/map_iter.c
-@@ -85,17 +85,21 @@ static const struct seq_operations bpf_map_seq_ops =3D=
- {
- BTF_ID_LIST(btf_bpf_map_id)
- BTF_ID(struct, bpf_map)
-=20
--static struct bpf_iter_reg bpf_map_reg_info =3D {
--	.target			=3D "bpf_map",
-+static const struct bpf_iter_seq_info bpf_map_seq_info =3D {
- 	.seq_ops		=3D &bpf_map_seq_ops,
- 	.init_seq_private	=3D NULL,
- 	.fini_seq_private	=3D NULL,
- 	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_map_info),
-+};
-+
-+static struct bpf_iter_reg bpf_map_reg_info =3D {
-+	.target			=3D "bpf_map",
- 	.ctx_arg_info_size	=3D 1,
- 	.ctx_arg_info		=3D {
- 		{ offsetof(struct bpf_iter__bpf_map, map),
- 		  PTR_TO_BTF_ID_OR_NULL },
- 	},
-+	.seq_info		=3D &bpf_map_seq_info,
- };
-=20
- static int __init bpf_map_iter_init(void)
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index 2feecf095609..5e387e2cd309 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -317,25 +317,32 @@ BTF_ID_LIST(btf_task_file_ids)
- BTF_ID(struct, task_struct)
- BTF_ID(struct, file)
-=20
--static struct bpf_iter_reg task_reg_info =3D {
--	.target			=3D "task",
-+static const struct bpf_iter_seq_info task_seq_info =3D {
- 	.seq_ops		=3D &task_seq_ops,
- 	.init_seq_private	=3D init_seq_pidns,
- 	.fini_seq_private	=3D fini_seq_pidns,
- 	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_task_info),
-+};
-+
-+static struct bpf_iter_reg task_reg_info =3D {
-+	.target			=3D "task",
- 	.ctx_arg_info_size	=3D 1,
- 	.ctx_arg_info		=3D {
- 		{ offsetof(struct bpf_iter__task, task),
- 		  PTR_TO_BTF_ID_OR_NULL },
- 	},
-+	.seq_info		=3D &task_seq_info,
- };
-=20
--static struct bpf_iter_reg task_file_reg_info =3D {
--	.target			=3D "task_file",
-+static const struct bpf_iter_seq_info task_file_seq_info =3D {
- 	.seq_ops		=3D &task_file_seq_ops,
- 	.init_seq_private	=3D init_seq_pidns,
- 	.fini_seq_private	=3D fini_seq_pidns,
- 	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_task_file_info),
-+};
-+
-+static struct bpf_iter_reg task_file_reg_info =3D {
-+	.target			=3D "task_file",
- 	.ctx_arg_info_size	=3D 2,
- 	.ctx_arg_info		=3D {
- 		{ offsetof(struct bpf_iter__task_file, task),
-@@ -343,6 +350,7 @@ static struct bpf_iter_reg task_file_reg_info =3D {
- 		{ offsetof(struct bpf_iter__task_file, file),
- 		  PTR_TO_BTF_ID_OR_NULL },
- 	},
-+	.seq_info		=3D &task_file_seq_info,
- };
-=20
- static int __init task_iter_init(void)
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index a7f1b41482f8..4ef85c97c183 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -2955,17 +2955,21 @@ static void bpf_iter_fini_tcp(void *priv_data)
- 	bpf_iter_fini_seq_net(priv_data);
- }
-=20
--static struct bpf_iter_reg tcp_reg_info =3D {
--	.target			=3D "tcp",
-+static const struct bpf_iter_seq_info tcp_seq_info =3D {
- 	.seq_ops		=3D &bpf_iter_tcp_seq_ops,
- 	.init_seq_private	=3D bpf_iter_init_tcp,
- 	.fini_seq_private	=3D bpf_iter_fini_tcp,
- 	.seq_priv_size		=3D sizeof(struct tcp_iter_state),
-+};
-+
-+static struct bpf_iter_reg tcp_reg_info =3D {
-+	.target			=3D "tcp",
- 	.ctx_arg_info_size	=3D 1,
- 	.ctx_arg_info		=3D {
- 		{ offsetof(struct bpf_iter__tcp, sk_common),
- 		  PTR_TO_BTF_ID_OR_NULL },
- 	},
-+	.seq_info		=3D &tcp_seq_info,
- };
-=20
- static void __init bpf_iter_register(void)
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index b5231ab350e0..1c017427330f 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -3233,17 +3233,21 @@ static void bpf_iter_fini_udp(void *priv_data)
- 	bpf_iter_fini_seq_net(priv_data);
- }
-=20
--static struct bpf_iter_reg udp_reg_info =3D {
--	.target			=3D "udp",
-+static const struct bpf_iter_seq_info udp_seq_info =3D {
- 	.seq_ops		=3D &bpf_iter_udp_seq_ops,
- 	.init_seq_private	=3D bpf_iter_init_udp,
- 	.fini_seq_private	=3D bpf_iter_fini_udp,
- 	.seq_priv_size		=3D sizeof(struct udp_iter_state),
-+};
-+
-+static struct bpf_iter_reg udp_reg_info =3D {
-+	.target			=3D "udp",
- 	.ctx_arg_info_size	=3D 1,
- 	.ctx_arg_info		=3D {
- 		{ offsetof(struct bpf_iter__udp, udp_sk),
- 		  PTR_TO_BTF_ID_OR_NULL },
- 	},
-+	.seq_info		=3D &udp_seq_info,
- };
-=20
- static void __init bpf_iter_register(void)
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index 33f5efbad0a9..8bfc57b0802a 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -6427,17 +6427,21 @@ DEFINE_BPF_ITER_FUNC(ipv6_route, struct bpf_iter_=
-meta *meta, struct fib6_info *r
- BTF_ID_LIST(btf_fib6_info_id)
- BTF_ID(struct, fib6_info)
-=20
--static struct bpf_iter_reg ipv6_route_reg_info =3D {
--	.target			=3D "ipv6_route",
-+static const struct bpf_iter_seq_info ipv6_route_seq_info =3D {
- 	.seq_ops		=3D &ipv6_route_seq_ops,
- 	.init_seq_private	=3D bpf_iter_init_seq_net,
- 	.fini_seq_private	=3D bpf_iter_fini_seq_net,
- 	.seq_priv_size		=3D sizeof(struct ipv6_route_iter),
-+};
-+
-+static struct bpf_iter_reg ipv6_route_reg_info =3D {
-+	.target			=3D "ipv6_route",
- 	.ctx_arg_info_size	=3D 1,
- 	.ctx_arg_info		=3D {
- 		{ offsetof(struct bpf_iter__ipv6_route, rt),
- 		  PTR_TO_BTF_ID_OR_NULL },
- 	},
-+	.seq_info		=3D &ipv6_route_seq_info,
- };
-=20
- static int __init bpf_iter_register(void)
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 3cd58f0c2de4..19ec8cdd7a2f 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -2807,17 +2807,21 @@ static const struct rhashtable_params netlink_rha=
-shtable_params =3D {
- BTF_ID_LIST(btf_netlink_sock_id)
- BTF_ID(struct, netlink_sock)
-=20
--static struct bpf_iter_reg netlink_reg_info =3D {
--	.target			=3D "netlink",
-+static const struct bpf_iter_seq_info netlink_seq_info =3D {
- 	.seq_ops		=3D &netlink_seq_ops,
- 	.init_seq_private	=3D bpf_iter_init_seq_net,
- 	.fini_seq_private	=3D bpf_iter_fini_seq_net,
- 	.seq_priv_size		=3D sizeof(struct nl_seq_iter),
-+};
-+
-+static struct bpf_iter_reg netlink_reg_info =3D {
-+	.target			=3D "netlink",
- 	.ctx_arg_info_size	=3D 1,
- 	.ctx_arg_info		=3D {
- 		{ offsetof(struct bpf_iter__netlink, sk),
- 		  PTR_TO_BTF_ID_OR_NULL },
- 	},
-+	.seq_info		=3D &netlink_seq_info,
- };
-=20
- static int __init bpf_iter_register(void)
---=20
-2.24.1
+bpf_prog_put() missing?
 
+>  			return -EINVAL;
+>  		}
+> +	}
+>  
+> -		/* prog->aux->id may be 0 for orphaned device-bound progs */
+> -		if (prog->aux->id && prog->aux->id == prog_id) {
+> -			bpf_prog_put(prog);
+> -			return 0;
+> +	/* don't call drivers if the effective program didn't change */
+> +	if (new_prog != cur_prog) {
+> +		bpf_op = dev_xdp_bpf_op(dev, mode);
+> +		if (!bpf_op) {
+> +			NL_SET_ERR_MSG(extack, "Underlying driver does not support XDP in native mode");
+> +			return -EOPNOTSUPP;
+>  		}
+> -	} else {
+> -		if (!prog_id)
+> -			return 0;
+> -		prog = NULL;
+> -	}
+>  
+> -	err = dev_xdp_install(dev, mode, bpf_op, extack, flags, prog);
+> -	if (err < 0 && prog) {
+> -		bpf_prog_put(prog);
+> -		return err;
+> +		err = dev_xdp_install(dev, mode, bpf_op, extack, flags, new_prog);
+> +		if (err)
+> +			return err;
+>  	}
+> -	dev_xdp_set_prog(dev, mode, prog);
+> +
+> +	dev_xdp_set_prog(dev, mode, new_prog);
+> +	if (cur_prog)
+> +		bpf_prog_put(cur_prog);
+>  
+>  	return 0;
+>  }
+>  
+> +/**
+> + *	dev_change_xdp_fd - set or clear a bpf program for a device rx path
+> + *	@dev: device
+> + *	@extack: netlink extended ack
+> + *	@fd: new program fd or negative value to clear
+> + *	@expected_fd: old program fd that userspace expects to replace or clear
+> + *	@flags: xdp-related flags
+> + *
+> + *	Set or clear a bpf program for a device
+> + */
+> +int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
+> +		      int fd, int expected_fd, u32 flags)
+> +{
+> +	enum bpf_xdp_mode mode = dev_xdp_mode(flags);
+> +	struct bpf_prog *new_prog = NULL, *old_prog = NULL;
+> +	int err;
+> +
+> +	ASSERT_RTNL();
+> +
+> +	if (fd >= 0) {
+> +		new_prog = bpf_prog_get_type_dev(fd, BPF_PROG_TYPE_XDP,
+> +						 mode != XDP_MODE_SKB);
+> +		if (IS_ERR(new_prog))
+> +			return PTR_ERR(new_prog);
+> +	}
+> +
+> +	if (expected_fd >= 0) {
+> +		old_prog = bpf_prog_get_type_dev(expected_fd, BPF_PROG_TYPE_XDP,
+> +						 mode != XDP_MODE_SKB);
+> +		if (IS_ERR(old_prog)) {
+> +			err = PTR_ERR(old_prog);
+> +			old_prog = NULL;
+> +			goto err_out;
+> +		}
+> +	}
+> +
+> +	err = dev_xdp_attach(dev, extack, new_prog, old_prog, flags);
+> +
+> +err_out:
+> +	if (err && new_prog)
+> +		bpf_prog_put(new_prog);
+> +	if (old_prog)
+> +		bpf_prog_put(old_prog);
+> +	return err;
+> +}
+> +
+>  /**
+>   *	dev_new_index	-	allocate an ifindex
+>   *	@net: the applicable net namespace
+> -- 
+> 2.24.1
+> 
