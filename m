@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9F45C433F2
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:50:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0F2BC433EC
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:50:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A80E20717
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:50:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F82420717
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:50:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Q4hhSL95"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZT0l6mmC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732646AbgGVSuD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jul 2020 14:50:03 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:30930 "EHLO
+        id S1732588AbgGVSuA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jul 2020 14:50:00 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:43814 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732135AbgGVSuC (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 14:50:02 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MIb6fN030447
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:50:02 -0700
+        by vger.kernel.org with ESMTP id S1732596AbgGVSt7 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 14:49:59 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MIcHPp002736
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:49:58 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Es12UCbU+GG0i7Ken9gHvg9Yr+y4Lfi+NlD4hl1ixRI=;
- b=Q4hhSL957QTJSCaD1ynnmk9sIpi2OOWjupD/KqHYIcKgux8b//whK3NIFsQMb3FNZa6Z
- LbevVWS96phn9OPe3w5aHH/P0qzmYZOIvdJY6kZlLJ5rdOuDW4IYhcYR0VbZzSnGtevT
- O+tqUh4rhcmk85M4PejQ9SVV88E3CemQmp4= 
+ bh=ghRWIAEEw73tVwkF1awAhejj2FU2wOb03HNXuz0VqSA=;
+ b=ZT0l6mmCBOtdhOmiAHvIJ+TqEMwkbYJVC9aiRBHv42ARmnhmhixqlXwMvKSTjE5LNfZa
+ btbPgKh5szcGEDnjC1/PmojFHfJYoRfcuxbCxNoWLoR825BsAOiz6SJne0XaQTjX1OnM
+ W9gymcuk01BQbf4eVlpVHHg8YSids0zBvbU= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 32etbg0913-3
+        by mx0a-00082601.pphosted.com with ESMTP id 32esyn8dsn-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:50:02 -0700
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:49:58 -0700
 Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:208::f) by
  mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 22 Jul 2020 11:50:00 -0700
+ 15.1.1979.3; Wed, 22 Jul 2020 11:49:58 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id B059E3702F09; Wed, 22 Jul 2020 11:49:59 -0700 (PDT)
+        id 76FB83702F09; Wed, 22 Jul 2020 11:49:53 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -49,9 +49,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 12/13] selftests/bpf: add a test for bpf sk_storage_map iterator
-Date:   Wed, 22 Jul 2020 11:49:59 -0700
-Message-ID: <20200722184959.3778097-1-yhs@fb.com>
+Subject: [PATCH bpf-next v2 07/13] bpf: implement bpf iterator for sock local storage map
+Date:   Wed, 22 Jul 2020 11:49:53 -0700
+Message-ID: <20200722184953.3777781-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200722184945.3777103-1-yhs@fb.com>
 References: <20200722184945.3777103-1-yhs@fb.com>
@@ -61,169 +61,253 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-22_10:2020-07-22,2020-07-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- lowpriorityscore=0 mlxlogscore=817 spamscore=0 adultscore=0
- suspectscore=25 clxscore=1015 bulkscore=0 phishscore=0 malwarescore=0
- priorityscore=1501 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2007220119
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 clxscore=1015
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 adultscore=0 mlxlogscore=691 malwarescore=0 mlxscore=0
+ suspectscore=9 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007220119
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Added one test for bpf sk_storage_map_iterator.
-  $ ./test_progs -n 4
-  ...
-  #4/22 bpf_sk_storage_map:OK
-  ...
+The bpf iterator for bpf sock local storage map
+is implemented. User space interacts with sock
+local storage map with fd as a key and storage value.
+In kernel, passing fd to the bpf program does not
+really make sense. In this case, the sock itself is
+passed to bpf program.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- .../selftests/bpf/prog_tests/bpf_iter.c       | 72 +++++++++++++++++++
- .../bpf/progs/bpf_iter_bpf_sk_storage_map.c   | 34 +++++++++
- 2 files changed, 106 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_sto=
-rage_map.c
+ net/core/bpf_sk_storage.c | 206 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 206 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
-sting/selftests/bpf/prog_tests/bpf_iter.c
-index 4a02b2222a6d..ffbbeb9fa268 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -19,6 +19,7 @@
- #include "bpf_iter_bpf_percpu_hash_map.skel.h"
- #include "bpf_iter_bpf_array_map.skel.h"
- #include "bpf_iter_bpf_percpu_array_map.skel.h"
-+#include "bpf_iter_bpf_sk_storage_map.skel.h"
-=20
- static int duration;
-=20
-@@ -795,6 +796,75 @@ static void test_bpf_percpu_array_map(void)
- 	bpf_iter_bpf_percpu_array_map__destroy(skel);
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index 6f921c4ddc2c..eafcd15e7dfd 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -6,6 +6,7 @@
+ #include <linux/types.h>
+ #include <linux/spinlock.h>
+ #include <linux/bpf.h>
++#include <linux/btf_ids.h>
+ #include <net/bpf_sk_storage.h>
+ #include <net/sock.h>
+ #include <uapi/linux/sock_diag.h>
+@@ -1217,3 +1218,208 @@ int bpf_sk_storage_diag_put(struct bpf_sk_storage=
+_diag *diag,
+ 	return err;
  }
-=20
-+static void test_bpf_sk_storage_map(void)
+ EXPORT_SYMBOL_GPL(bpf_sk_storage_diag_put);
++
++struct bpf_iter_seq_sk_storage_map_info {
++	struct bpf_map *map;
++	unsigned int bucket_id;
++	unsigned skip_elems;
++};
++
++static struct bpf_sk_storage_elem *
++bpf_sk_storage_map_seq_find_next(struct bpf_iter_seq_sk_storage_map_info=
+ *info,
++				 struct bpf_sk_storage_elem *prev_selem)
 +{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	int err, i, len, map_fd, iter_fd, num_sockets;
-+	struct bpf_iter_bpf_sk_storage_map *skel;
-+	int sock_fd[3] =3D {-1, -1, -1};
-+	__u32 val, expected_val =3D 0;
-+	struct bpf_link *link;
-+	char buf[64];
++	struct bpf_sk_storage *sk_storage;
++	struct bpf_sk_storage_elem *selem;
++	u32 skip_elems =3D info->skip_elems;
++	struct bpf_sk_storage_map *smap;
++	u32 bucket_id =3D info->bucket_id;
++	u32 i, count, n_buckets;
++	struct bucket *b;
 +
-+	skel =3D bpf_iter_bpf_sk_storage_map__open_and_load();
-+	if (CHECK(!skel, "bpf_iter_bpf_sk_storage_map__open_and_load",
-+		  "skeleton open_and_load failed\n"))
-+		return;
++	smap =3D (struct bpf_sk_storage_map *)info->map;
++	n_buckets =3D 1U << smap->bucket_log;
++	if (bucket_id >=3D n_buckets)
++		return NULL;
 +
-+	map_fd =3D bpf_map__fd(skel->maps.sk_stg_map);
-+	num_sockets =3D ARRAY_SIZE(sock_fd);
-+	for (i =3D 0; i < num_sockets; i++) {
-+		sock_fd[i] =3D socket(AF_INET6, SOCK_STREAM, 0);
-+		if (CHECK(sock_fd[i] < 0, "socket", "errno: %d\n", errno))
-+			goto out;
-+
-+		val =3D i + 1;
-+		expected_val +=3D val;
-+
-+		err =3D bpf_map_update_elem(map_fd, &sock_fd[i], &val,
-+					  BPF_NOEXIST);
-+		if (CHECK(err, "map_update", "map_update failed\n"))
-+			goto out;
++	/* try to find next selem in the same bucket */
++	selem =3D prev_selem;
++	count =3D 0;
++	while (selem) {
++		selem =3D hlist_entry_safe(selem->map_node.next,
++					 struct bpf_sk_storage_elem, map_node);
++		if (!selem) {
++			/* not found, unlock and go to the next bucket */
++			b =3D &smap->buckets[bucket_id++];
++			raw_spin_unlock_bh(&b->lock);
++			skip_elems =3D 0;
++			break;
++		}
++		sk_storage =3D rcu_dereference_raw(selem->sk_storage);
++		if (sk_storage) {
++			info->skip_elems =3D skip_elems + count;
++			return selem;
++		}
++		count++;
 +	}
 +
-+	opts.map_fd =3D map_fd;
-+	link =3D bpf_program__attach_iter(skel->progs.dump_bpf_sk_storage_map, =
-&opts);
-+	if (CHECK(IS_ERR(link), "attach_iter", "attach_iter failed\n"))
-+		goto out;
-+
-+	iter_fd =3D bpf_iter_create(bpf_link__fd(link));
-+	if (CHECK(iter_fd < 0, "create_iter", "create_iter failed\n"))
-+		goto free_link;
-+
-+	/* do some tests */
-+	while ((len =3D read(iter_fd, buf, sizeof(buf))) > 0)
-+		;
-+	if (CHECK(len < 0, "read", "read failed: %s\n", strerror(errno)))
-+		goto close_iter;
-+
-+	/* test results */
-+	if (CHECK(skel->bss->ipv6_sk_count !=3D num_sockets,
-+		  "ipv6_sk_count", "got %u expected %u\n",
-+		  skel->bss->ipv6_sk_count, num_sockets))
-+		goto close_iter;
-+
-+	if (CHECK(skel->bss->val_sum !=3D expected_val,
-+		  "val_sum", "got %u expected %u\n",
-+		  skel->bss->val_sum, expected_val))
-+		goto close_iter;
-+
-+close_iter:
-+	close(iter_fd);
-+free_link:
-+	bpf_link__destroy(link);
-+out:
-+	for (i =3D 0; i < num_sockets; i++) {
-+		if (sock_fd[i] >=3D 0)
-+			close(sock_fd[i]);
++	for (i =3D bucket_id; i < (1U << smap->bucket_log); i++) {
++		b =3D &smap->buckets[i];
++		raw_spin_lock_bh(&b->lock);
++		count =3D 0;
++		hlist_for_each_entry(selem, &b->list, map_node) {
++			sk_storage =3D rcu_dereference_raw(selem->sk_storage);
++			if (sk_storage && count >=3D skip_elems) {
++				info->bucket_id =3D i;
++				info->skip_elems =3D count;
++				return selem;
++			}
++			count++;
++		}
++		raw_spin_unlock_bh(&b->lock);
++		skip_elems =3D 0;
 +	}
-+	bpf_iter_bpf_sk_storage_map__destroy(skel);
++
++	info->bucket_id =3D i;
++	info->skip_elems =3D 0;
++	return NULL;
 +}
 +
- void test_bpf_iter(void)
- {
- 	if (test__start_subtest("btf_id_or_null"))
-@@ -839,4 +909,6 @@ void test_bpf_iter(void)
- 		test_bpf_array_map();
- 	if (test__start_subtest("bpf_percpu_array_map"))
- 		test_bpf_percpu_array_map();
-+	if (test__start_subtest("bpf_sk_storage_map"))
-+		test_bpf_sk_storage_map();
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_ma=
-p.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_map.c
-new file mode 100644
-index 000000000000..6b70ccaba301
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_map.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include "bpf_iter.h"
-+#include "bpf_tracing_net.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, int);
-+} sk_stg_map SEC(".maps");
-+
-+__u32 val_sum =3D 0;
-+__u32 ipv6_sk_count =3D 0;
-+
-+SEC("iter/bpf_sk_storage_map")
-+int dump_bpf_sk_storage_map(struct bpf_iter__bpf_sk_storage_map *ctx)
++static void *bpf_sk_storage_map_seq_start(struct seq_file *seq, loff_t *=
+pos)
 +{
-+	struct sock *sk =3D ctx->sk;
-+	__u32 *val =3D ctx->value;
++	struct bpf_sk_storage_elem *selem;
 +
-+	if (sk =3D=3D (void *)0 || val =3D=3D (void *)0)
-+		return 0;
++	selem =3D bpf_sk_storage_map_seq_find_next(seq->private, NULL);
++	if (!selem)
++		return NULL;
 +
-+	if (sk->sk_family =3D=3D AF_INET6)
-+		ipv6_sk_count++;
++	if (*pos =3D=3D 0)
++		++*pos;
++	return selem;
++}
 +
-+	val_sum +=3D *val;
++static void *bpf_sk_storage_map_seq_next(struct seq_file *seq, void *v,
++					 loff_t *pos)
++{
++	struct bpf_iter_seq_sk_storage_map_info *info =3D seq->private;
++
++	++*pos;
++	++info->skip_elems;
++	return bpf_sk_storage_map_seq_find_next(seq->private, v);
++}
++
++struct bpf_iter__bpf_sk_storage_map {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct bpf_map *, map);
++	__bpf_md_ptr(struct sock *, sk);
++	__bpf_md_ptr(void *, value);
++};
++
++DEFINE_BPF_ITER_FUNC(bpf_sk_storage_map, struct bpf_iter_meta *meta,
++		     struct bpf_map *map, struct sock *sk,
++		     void *value)
++
++static int __bpf_sk_storage_map_seq_show(struct seq_file *seq,
++					 struct bpf_sk_storage_elem *selem)
++{
++	struct bpf_iter_seq_sk_storage_map_info *info =3D seq->private;
++	struct bpf_iter__bpf_sk_storage_map ctx =3D {};
++	struct bpf_sk_storage *sk_storage;
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++	int ret =3D 0;
++
++	meta.seq =3D seq;
++	prog =3D bpf_iter_get_info(&meta, selem =3D=3D NULL);
++	if (prog) {
++		ctx.meta =3D &meta;
++		ctx.map =3D info->map;
++		if (selem) {
++			sk_storage =3D rcu_dereference_raw(selem->sk_storage);
++			ctx.sk =3D sk_storage->sk;
++			ctx.value =3D SDATA(selem)->data;
++		}
++		ret =3D bpf_iter_run_prog(prog, &ctx);
++	}
++
++	return ret;
++}
++
++static int bpf_sk_storage_map_seq_show(struct seq_file *seq, void *v)
++{
++	return __bpf_sk_storage_map_seq_show(seq, v);
++}
++
++static void bpf_sk_storage_map_seq_stop(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_seq_sk_storage_map_info *info =3D seq->private;
++	struct bpf_sk_storage_map *smap;
++	struct bucket *b;
++
++	if (!v) {
++		(void)__bpf_sk_storage_map_seq_show(seq, v);
++	} else {
++		smap =3D (struct bpf_sk_storage_map *)info->map;
++		b =3D &smap->buckets[info->bucket_id];
++		raw_spin_unlock_bh(&b->lock);
++	}
++}
++
++static int bpf_iter_init_sk_storage_map(void *priv_data,
++					struct bpf_iter_aux_info *aux)
++{
++	struct bpf_iter_seq_sk_storage_map_info *seq_info =3D priv_data;
++
++	seq_info->map =3D aux->map;
 +	return 0;
 +}
++
++static int bpf_iter_check_map(struct bpf_prog *prog,
++			      struct bpf_iter_aux_info *aux)
++{
++	struct bpf_map *map =3D aux->map;
++
++	if (map->map_type !=3D BPF_MAP_TYPE_SK_STORAGE)
++		return -EINVAL;
++
++	if (prog->aux->max_rdonly_access > map->value_size)
++		return -EACCES;
++
++	return 0;
++}
++
++static const struct seq_operations bpf_sk_storage_map_seq_ops =3D {
++	.start  =3D bpf_sk_storage_map_seq_start,
++	.next   =3D bpf_sk_storage_map_seq_next,
++	.stop   =3D bpf_sk_storage_map_seq_stop,
++	.show   =3D bpf_sk_storage_map_seq_show,
++};
++
++static const struct bpf_iter_seq_info iter_seq_info =3D {
++	.seq_ops		=3D &bpf_sk_storage_map_seq_ops,
++	.init_seq_private	=3D bpf_iter_init_sk_storage_map,
++	.fini_seq_private	=3D NULL,
++	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_sk_storage_map_info),
++};
++
++static struct bpf_iter_reg bpf_sk_storage_map_reg_info =3D {
++	.target			=3D "bpf_sk_storage_map",
++	.check_target		=3D bpf_iter_check_map,
++	.req_linfo		=3D BPF_ITER_LINK_MAP_FD,
++	.ctx_arg_info_size	=3D 2,
++	.ctx_arg_info		=3D {
++		{ offsetof(struct bpf_iter__bpf_sk_storage_map, sk),
++		  PTR_TO_BTF_ID_OR_NULL },
++		{ offsetof(struct bpf_iter__bpf_sk_storage_map, value),
++		  PTR_TO_RDWR_BUF_OR_NULL },
++	},
++	.seq_info		=3D &iter_seq_info,
++};
++
++static int __init bpf_sk_storage_map_iter_init(void)
++{
++	bpf_sk_storage_map_reg_info.ctx_arg_info[0].btf_id =3D
++		btf_sock_ids[BTF_SOCK_TYPE_SOCK];
++	return bpf_iter_reg_target(&bpf_sk_storage_map_reg_info);
++}
++late_initcall(bpf_sk_storage_map_iter_init);
 --=20
 2.24.1
 
