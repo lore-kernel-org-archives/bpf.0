@@ -2,113 +2,109 @@ Return-Path: <SRS0=WYs6=BB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1466C43467
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 15:57:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85F07C433EA
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 16:17:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B97CE22CB1
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 15:57:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 626BC207E8
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 16:17:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=marvell.com header.i=@marvell.com header.b="vKTtrI3R"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="opywprfQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732997AbgGVPz2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jul 2020 11:55:28 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:53302 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732693AbgGVPz2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 11:55:28 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MFUKaQ010157;
-        Wed, 22 Jul 2020 08:54:56 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0818;
- bh=NHYXpnEUf5iCHZyZ8LU8/WVrH0I6Dnunraq5pn7e6Rg=;
- b=vKTtrI3Rt10r4u6YIyNAZ1b5Y69FCnLKfc7zl71zgvwJZUdJmZeJ1ur0Wr2hnUrlsBOB
- G9gY27ne35AG2zwhxm+1/jlag4UfB1hI/e0Axn0fD01igfjU4TnSNZUgPSyTJTpWpFSE
- jLyP/5KOYEh5LUxxKPfmtxX611y+wgTWY+ZCMrNa6pobpqV4JusITu1klIE7IABwowcC
- 6fcdSDgGsKYKR0FAsAEoiyyo8az8F3Wjg8RCrbbE/p/rB1Nxlk7T/tz65gv/FpHCWtr4
- nTP+ysORXz+xDLdIYhlggtIM9kAdY3D8uP9KYrJUCTvk5eV1sf7k7+cx1hdkzgRh2wp6 qg== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0a-0016f401.pphosted.com with ESMTP id 32bxensfq6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 22 Jul 2020 08:54:56 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 22 Jul
- 2020 08:54:55 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 22 Jul 2020 08:54:55 -0700
-Received: from NN-LT0049.marvell.com (unknown [10.193.54.6])
-        by maili.marvell.com (Postfix) with ESMTP id C140C3F703F;
-        Wed, 22 Jul 2020 08:54:49 -0700 (PDT)
-From:   Alexander Lobakin <alobakin@marvell.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-CC:     Alexander Lobakin <alobakin@marvell.com>,
-        Igor Russkikh <irusskikh@marvell.com>,
-        Michal Kalderon <michal.kalderon@marvell.com>,
-        "Ariel Elior" <aelior@marvell.com>,
-        Denis Bolotin <denis.bolotin@marvell.com>,
-        "Doug Ledford" <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "Alexei Starovoitov" <ast@kernel.org>,
+        id S1727840AbgGVQRZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jul 2020 12:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728299AbgGVQRZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jul 2020 12:17:25 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4997C0619E0
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 09:17:24 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id q7so3135924ljm.1
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 09:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YcCci5oZDTRx2X/8yjdaRKhoWryBvlmTtX6fXcGwwbI=;
+        b=opywprfQ8qPOuJPzpjMUMV3i9P66ak+X5KShiDQDZM80sbm61ffQg2OPB/9Drv/LfP
+         MKN0uIarAUBAApexD3HZ49vIM4Yzv8+7Jvfc/XI2xe86gmGMrZyaOZWJcotGqTaD7FFX
+         C3yXE4AAu4OXUQj11gaLQ+EPjcJ+HFCV0Wk0Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YcCci5oZDTRx2X/8yjdaRKhoWryBvlmTtX6fXcGwwbI=;
+        b=WrgAcD3IdCb+9m/ljRjO5CxJwhYFh0TgNinqL4XxWBVpv/xInuP8jtD/wT3RRSBs08
+         vO9fgBWEd/Q0CdX7SsiPeBEYwWAOPMfRvbUGCyn72AOEFRsrNQeaSTG5AmbctIopJHOF
+         Ugq2O5Ydw20I+KFxtozP5aI2UM89i9OAkXBWbMqBbKB8rb2s7rL5iOfPYZ2uOWEGBo3m
+         WI1NqHaRuRB+kFB0Z4adNj4Qe3Rr5TJsiOe8Z98WY/bUE82L6GVFYoTvuu6s8PRvNk8g
+         laGnx3QQejgdbAFwaJ5Oa2FDwHE9Dt6H34uMSap+bViGzLLglsG42kHOeJ1GMGESHxi3
+         Uokg==
+X-Gm-Message-State: AOAM531oJQ84VBGDlIUx3zLoGzmIa/8U8F/mLrjM0wHj7HKG1/tWnRha
+        WInsz3K+yHP56so+PZFXSc/nll7DNeo=
+X-Google-Smtp-Source: ABdhPJz/hRyKjb7squ+7NeEyEMA5gDos75a8lA62+aO0eJTFadEqqoQEjH04sn7IScc1oQoKNK5T3Q==
+X-Received: by 2002:a2e:81ce:: with SMTP id s14mr7079ljg.57.1595434642560;
+        Wed, 22 Jul 2020 09:17:22 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id y2sm119806lfh.1.2020.07.22.09.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2020 09:17:21 -0700 (PDT)
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        KP Singh <kpsingh@chromium.org>,
-        <GR-everest-linux-l2@marvell.com>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net-next 04/15] qed: prevent possible double-frees of the chains
-Date:   Wed, 22 Jul 2020 18:53:38 +0300
-Message-ID: <20200722155349.747-5-alobakin@marvell.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200722155349.747-1-alobakin@marvell.com>
-References: <20200722155349.747-1-alobakin@marvell.com>
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Subject: [PATCH bpf-next 0/2] Fix BPF socket lookup with reuseport groups with connections
+Date:   Wed, 22 Jul 2020 18:17:18 +0200
+Message-Id: <20200722161720.940831-1-jakub@cloudflare.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-22_09:2020-07-22,2020-07-22 signatures=0
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Zero-initialize chain on qed_chain_free(), so it couldn't be freed
-twice and provoke undefined behaviour.
+This mini series contains a fix for a bug noticed when analyzing a reported
+merge conflict between bpf-next and net tree [0].
 
-Signed-off-by: Alexander Lobakin <alobakin@marvell.com>
-Signed-off-by: Igor Russkikh <irusskikh@marvell.com>
-Signed-off-by: Michal Kalderon <michal.kalderon@marvell.com>
----
- drivers/net/ethernet/qlogic/qed/qed_chain.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Apart from fixing a corner-case that affects use of BPF sk_lookup in tandem
+with UDP reuseport groups with connected sockets, it should make the
+conflict resolution with net tree easier.
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_chain.c b/drivers/net/ethernet/qlogic/qed/qed_chain.c
-index 40cc26f7f20b..fd2d985793dc 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_chain.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_chain.c
-@@ -90,8 +90,10 @@ void qed_chain_free(struct qed_dev *cdev, struct qed_chain *chain)
- 		qed_chain_free_pbl(cdev, chain);
- 		break;
- 	default:
--		break;
-+		return;
- 	}
-+
-+	qed_chain_init_mem(chain, NULL, 0);
- }
- 
- static int
+These changes don't replicate the improved UDP socket lookup behavior from
+net tree, where commit efc6b6f6c311 ("udp: Improve load balancing for
+SO_REUSEPORT.") is present.
+
+Happy to do it as a follow up. For the moment I didn't want to make things
+more confusing when it comes to what got fixed where and why.
+
+Thanks,
+-jkbs
+
+Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+
+[0] https://lore.kernel.org/linux-next/20200722132143.700a5ccc@canb.auug.org.au/
+
+Jakub Sitnicki (2):
+  udp: Don't discard reuseport selection when group has connections
+  selftests/bpf: Test BPF socket lookup and reuseport with connections
+
+ net/ipv4/udp.c                                |  5 +-
+ net/ipv6/udp.c                                |  5 +-
+ .../selftests/bpf/prog_tests/sk_lookup.c      | 54 ++++++++++++++++++-
+ 3 files changed, 55 insertions(+), 9 deletions(-)
+
 -- 
-2.25.1
+2.25.4
 
