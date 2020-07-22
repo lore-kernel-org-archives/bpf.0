@@ -5,69 +5,66 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 173A7C433E2
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:47:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F13EDC433DF
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:49:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0CFA20781
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:47:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CDCE520787
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 18:49:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fPphctbf"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Vtv6vGJ+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730843AbgGVSr4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jul 2020 14:47:56 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:63144 "EHLO
+        id S1732505AbgGVStx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jul 2020 14:49:53 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:25436 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728124AbgGVSr4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 14:47:56 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MIcHXZ002711
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:47:56 -0700
+        by vger.kernel.org with ESMTP id S1726390AbgGVStx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 14:49:53 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MIb6fI030447
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:49:52 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=HC19BocnzqfbZdasNet2djSQezi7uoWDz8ER7wUvdIo=;
- b=fPphctbfnldciNBDH2k+9Bwe7AyMkEdjuVnfa4LdwaO8PZetnq6RCzeFiqy713Q7914B
- YI/dAUhA9eY0WNZUG8r0Ef0SWmFrohwOWNPOS9ujsHOamaXaKHhjRag/291WpVYNEMuy
- jhd+Q0JB7sYGLPNlRsMbcwk0sy0CO5ml/K8= 
+ bh=Qk19kIwjkqB1A54V2/PyYa8XpSAaPmHnZ6msm3VbtSw=;
+ b=Vtv6vGJ+8HR+ReJRKcvocoxrneI9K4WWcRPmtGuRjtdhGQOGkxBL0kVCas8oCjt0crDy
+ AEZxHZefkMaxXPUY7WWpXlckbRurg3QDD8y6TlNj/itAs/X3qURTUb90HY10jb0SA6uT
+ DvuGaQDON589UEi6bz9HTUqaED1l1MBM2RA= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 32esyn8de5-2
+        by mx0a-00082601.pphosted.com with ESMTP id 32etbg0908-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:47:56 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 11:49:52 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 22 Jul 2020 11:47:55 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 76F7562E5024; Wed, 22 Jul 2020 11:42:24 -0700 (PDT)
+ 15.1.1979.3; Wed, 22 Jul 2020 11:49:52 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 4041C3702F09; Wed, 22 Jul 2020 11:49:47 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
-From:   Song Liu <songliubraving@fb.com>
-Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
-To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
-        <brouer@redhat.com>, <peterz@infradead.org>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 3/4] selftests/bpf: add callchain_stackid
-Date:   Wed, 22 Jul 2020 11:42:09 -0700
-Message-ID: <20200722184210.4078256-4-songliubraving@fb.com>
+Subject: [PATCH bpf-next v2 02/13] bpf: refactor to provide aux info to bpf_iter_init_seq_priv_t
+Date:   Wed, 22 Jul 2020 11:49:47 -0700
+Message-ID: <20200722184947.3777239-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200722184210.4078256-1-songliubraving@fb.com>
-References: <20200722184210.4078256-1-songliubraving@fb.com>
+In-Reply-To: <20200722184945.3777103-1-yhs@fb.com>
+References: <20200722184945.3777103-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-22_10:2020-07-22,2020-07-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 clxscore=1015
- bulkscore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
- phishscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=932 spamscore=0 adultscore=0 suspectscore=8
+ clxscore=1015 bulkscore=0 phishscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2007220119
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -75,213 +72,163 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This tests new helper function bpf_get_stackid_pe and bpf_get_stack_pe.
-These two helpers have different implementation for perf_event with PEB
-entries.
+This patch refactored target bpf_iter_init_seq_priv_t callback
+function to accept additional information. This will be needed
+in later patches for map element targets since a particular
+map should be passed to traverse elements for that particular
+map. In the future, other information may be passed to target
+as well, e.g., pid, cgroup id, etc. to customize the iterator.
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- .../bpf/prog_tests/perf_event_stackmap.c      | 116 ++++++++++++++++++
- .../selftests/bpf/progs/perf_event_stackmap.c |  59 +++++++++
- 2 files changed, 175 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_event_sta=
-ckmap.c
- create mode 100644 tools/testing/selftests/bpf/progs/perf_event_stackmap=
-.c
+ fs/proc/proc_net.c      | 2 +-
+ include/linux/bpf.h     | 7 ++++++-
+ include/linux/proc_fs.h | 3 ++-
+ kernel/bpf/bpf_iter.c   | 2 +-
+ kernel/bpf/task_iter.c  | 2 +-
+ net/ipv4/tcp_ipv4.c     | 4 ++--
+ net/ipv4/udp.c          | 4 ++--
+ 7 files changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/perf_event_stackmap.c=
- b/tools/testing/selftests/bpf/prog_tests/perf_event_stackmap.c
-new file mode 100644
-index 0000000000000..72c3690844fba
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/perf_event_stackmap.c
-@@ -0,0 +1,116 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Facebook
-+#define _GNU_SOURCE
-+#include <pthread.h>
-+#include <sched.h>
-+#include <test_progs.h>
-+#include "perf_event_stackmap.skel.h"
+diff --git a/fs/proc/proc_net.c b/fs/proc/proc_net.c
+index dba63b2429f0..ed8a6306990c 100644
+--- a/fs/proc/proc_net.c
++++ b/fs/proc/proc_net.c
+@@ -98,7 +98,7 @@ static const struct proc_ops proc_net_seq_ops =3D {
+ 	.proc_release	=3D seq_release_net,
+ };
+=20
+-int bpf_iter_init_seq_net(void *priv_data)
++int bpf_iter_init_seq_net(void *priv_data, struct bpf_iter_aux_info *aux=
+)
+ {
+ #ifdef CONFIG_NET_NS
+ 	struct seq_net_private *p =3D priv_data;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index cb14fbe68a75..392fd4cb2996 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -33,11 +33,13 @@ struct btf;
+ struct btf_type;
+ struct exception_table_entry;
+ struct seq_operations;
++struct bpf_iter_aux_info;
+=20
+ extern struct idr btf_idr;
+ extern spinlock_t btf_idr_lock;
+=20
+-typedef int (*bpf_iter_init_seq_priv_t)(void *private_data);
++typedef int (*bpf_iter_init_seq_priv_t)(void *private_data,
++					struct bpf_iter_aux_info *aux);
+ typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
+ struct bpf_iter_seq_info {
+ 	const struct seq_operations *seq_ops;
+@@ -1197,6 +1199,9 @@ int bpf_obj_get_user(const char __user *pathname, i=
+nt flags);
+ 	extern int bpf_iter_ ## target(args);			\
+ 	int __init bpf_iter_ ## target(args) { return 0; }
+=20
++struct bpf_iter_aux_info {
++};
 +
-+#ifndef noinline
-+#define noinline __attribute__((noinline))
-+#endif
-+
-+noinline int func_1(void)
-+{
-+	static int val =3D 1;
-+
-+	val +=3D 1;
-+
-+	usleep(100);
-+	return val;
-+}
-+
-+noinline int func_2(void)
-+{
-+	return func_1();
-+}
-+
-+noinline int func_3(void)
-+{
-+	return func_2();
-+}
-+
-+noinline int func_4(void)
-+{
-+	return func_3();
-+}
-+
-+noinline int func_5(void)
-+{
-+	return func_4();
-+}
-+
-+noinline int func_6(void)
-+{
-+	int i, val =3D 1;
-+
-+	for (i =3D 0; i < 100; i++)
-+		val +=3D func_5();
-+
-+	return val;
-+}
-+
-+void test_perf_event_stackmap(void)
-+{
-+	struct perf_event_attr attr =3D {
-+		/* .type =3D PERF_TYPE_SOFTWARE, */
-+		.type =3D PERF_TYPE_HARDWARE,
-+		.config =3D PERF_COUNT_HW_CPU_CYCLES,
-+		.precise_ip =3D 2,
-+		.sample_type =3D PERF_SAMPLE_IP | PERF_SAMPLE_BRANCH_STACK |
-+			PERF_SAMPLE_CALLCHAIN,
-+		.branch_sample_type =3D PERF_SAMPLE_BRANCH_USER |
-+			PERF_SAMPLE_BRANCH_NO_FLAGS |
-+			PERF_SAMPLE_BRANCH_NO_CYCLES |
-+			PERF_SAMPLE_BRANCH_CALL_STACK,
-+		.sample_period =3D 5000,
-+		.size =3D sizeof(struct perf_event_attr),
-+	};
-+	struct perf_event_stackmap *skel;
-+	__u32 duration =3D 0;
-+	cpu_set_t cpu_set;
-+	int pmu_fd, err;
-+
-+	skel =3D perf_event_stackmap__open();
-+
-+	if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
-+		return;
-+
-+	err =3D perf_event_stackmap__load(skel);
-+	if (CHECK(err, "skel_load", "skeleton load failed: %d\n", err))
-+		goto cleanup;
-+
-+	CPU_ZERO(&cpu_set);
-+	CPU_SET(0, &cpu_set);
-+	err =3D pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &cpu_se=
-t);
-+	if (CHECK(err, "set_affinity", "err %d, errno %d\n", err, errno))
-+		goto cleanup;
-+
-+	pmu_fd =3D syscall(__NR_perf_event_open, &attr, -1 /* pid */,
-+			 0 /* cpu 0 */, -1 /* group id */,
-+			 0 /* flags */);
-+	if (pmu_fd < 0) {
-+		printf("%s:SKIP:cpu doesn't support the event\n", __func__);
-+		test__skip();
-+		goto cleanup;
-+	}
-+
-+	skel->links.oncpu =3D bpf_program__attach_perf_event(skel->progs.oncpu,
-+							   pmu_fd);
-+	if (CHECK(IS_ERR(skel->links.oncpu), "attach_perf_event",
-+		  "err %ld\n", PTR_ERR(skel->links.oncpu))) {
-+		close(pmu_fd);
-+		goto cleanup;
-+	}
-+
-+	/* create kernel and user stack traces for testing */
-+	func_6();
-+
-+	CHECK(skel->data->stackid_kernel !=3D 2, "get_stackid_kernel", "failed\=
-n");
-+	CHECK(skel->data->stackid_user !=3D 2, "get_stackid_user", "failed\n");
-+	CHECK(skel->data->stack_kernel !=3D 2, "get_stack_kernel", "failed\n");
-+	CHECK(skel->data->stack_user !=3D 2, "get_stack_user", "failed\n");
-+
-+cleanup:
-+	perf_event_stackmap__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/perf_event_stackmap.c b/to=
-ols/testing/selftests/bpf/progs/perf_event_stackmap.c
-new file mode 100644
-index 0000000000000..25467d13c356a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/perf_event_stackmap.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Facebook
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+#ifndef PERF_MAX_STACK_DEPTH
-+#define PERF_MAX_STACK_DEPTH         127
-+#endif
-+
-+typedef __u64 stack_trace_t[PERF_MAX_STACK_DEPTH];
-+struct {
-+	__uint(type, BPF_MAP_TYPE_STACK_TRACE);
-+	__uint(max_entries, 16384);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(stack_trace_t));
-+} stackmap SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, stack_trace_t);
-+} stackdata_map SEC(".maps");
-+
-+long stackid_kernel =3D 1;
-+long stackid_user =3D 1;
-+long stack_kernel =3D 1;
-+long stack_user =3D 1;
-+
-+SEC("perf_event")
-+int oncpu(void *ctx)
-+{
-+	stack_trace_t *trace;
-+	__u32 key =3D 0;
-+	long val;
-+
-+	val =3D bpf_get_stackid(ctx, &stackmap, 0);
-+	if (val > 0)
-+		stackid_kernel =3D 2;
-+	val =3D bpf_get_stackid(ctx, &stackmap, BPF_F_USER_STACK);
-+	if (val > 0)
-+		stackid_user =3D 2;
-+
-+	trace =3D bpf_map_lookup_elem(&stackdata_map, &key);
-+	if (!trace)
-+		return 0;
-+
-+	val =3D bpf_get_stack(ctx, trace, sizeof(stack_trace_t), 0);
-+	if (val > 0)
-+		stack_kernel =3D 2;
-+
-+	val =3D bpf_get_stack(ctx, trace, sizeof(stack_trace_t), BPF_F_USER_STA=
-CK);
-+	if (val > 0)
-+		stack_user =3D 2;
-+
-+	return 0;
-+}
-+
-+char LICENSE[] SEC("license") =3D "GPL";
+ #define BPF_ITER_CTX_ARG_MAX 2
+ struct bpf_iter_reg {
+ 	const char *target;
+diff --git a/include/linux/proc_fs.h b/include/linux/proc_fs.h
+index d1eed1b43651..2df965cd0974 100644
+--- a/include/linux/proc_fs.h
++++ b/include/linux/proc_fs.h
+@@ -133,7 +133,8 @@ struct proc_dir_entry *proc_create_net_single_write(c=
+onst char *name, umode_t mo
+ 						    void *data);
+ extern struct pid *tgid_pidfd_to_pid(const struct file *file);
+=20
+-extern int bpf_iter_init_seq_net(void *priv_data);
++struct bpf_iter_aux_info;
++extern int bpf_iter_init_seq_net(void *priv_data, struct bpf_iter_aux_in=
+fo *aux);
+ extern void bpf_iter_fini_seq_net(void *priv_data);
+=20
+ #ifdef CONFIG_PROC_PID_ARCH_STATUS
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index 5b2387d6aa1f..8fa94cb1b5a0 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -442,7 +442,7 @@ static int prepare_seq_file(struct file *file, struct=
+ bpf_iter_link *link)
+ 	}
+=20
+ 	if (tinfo->reg_info->seq_info->init_seq_private) {
+-		err =3D tinfo->reg_info->seq_info->init_seq_private(priv_data->target_=
+private);
++		err =3D tinfo->reg_info->seq_info->init_seq_private(priv_data->target_=
+private, NULL);
+ 		if (err)
+ 			goto release_seq_file;
+ 	}
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index 5e387e2cd309..eca3d80cdfd4 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -291,7 +291,7 @@ static void task_file_seq_stop(struct seq_file *seq, =
+void *v)
+ 	}
+ }
+=20
+-static int init_seq_pidns(void *priv_data)
++static int init_seq_pidns(void *priv_data, struct bpf_iter_aux_info *aux=
+)
+ {
+ 	struct bpf_iter_seq_task_common *common =3D priv_data;
+=20
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index 4ef85c97c183..fbe7ce58f23d 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -2929,7 +2929,7 @@ static struct pernet_operations __net_initdata tcp_=
+sk_ops =3D {
+ DEFINE_BPF_ITER_FUNC(tcp, struct bpf_iter_meta *meta,
+ 		     struct sock_common *sk_common, uid_t uid)
+=20
+-static int bpf_iter_init_tcp(void *priv_data)
++static int bpf_iter_init_tcp(void *priv_data, struct bpf_iter_aux_info *=
+aux)
+ {
+ 	struct tcp_iter_state *st =3D priv_data;
+ 	struct tcp_seq_afinfo *afinfo;
+@@ -2941,7 +2941,7 @@ static int bpf_iter_init_tcp(void *priv_data)
+=20
+ 	afinfo->family =3D AF_UNSPEC;
+ 	st->bpf_seq_afinfo =3D afinfo;
+-	ret =3D bpf_iter_init_seq_net(priv_data);
++	ret =3D bpf_iter_init_seq_net(priv_data, aux);
+ 	if (ret)
+ 		kfree(afinfo);
+ 	return ret;
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 1c017427330f..50da385aae81 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -3206,7 +3206,7 @@ static struct pernet_operations __net_initdata udp_=
+sysctl_ops =3D {
+ DEFINE_BPF_ITER_FUNC(udp, struct bpf_iter_meta *meta,
+ 		     struct udp_sock *udp_sk, uid_t uid, int bucket)
+=20
+-static int bpf_iter_init_udp(void *priv_data)
++static int bpf_iter_init_udp(void *priv_data, struct bpf_iter_aux_info *=
+aux)
+ {
+ 	struct udp_iter_state *st =3D priv_data;
+ 	struct udp_seq_afinfo *afinfo;
+@@ -3219,7 +3219,7 @@ static int bpf_iter_init_udp(void *priv_data)
+ 	afinfo->family =3D AF_UNSPEC;
+ 	afinfo->udp_table =3D &udp_table;
+ 	st->bpf_seq_afinfo =3D afinfo;
+-	ret =3D bpf_iter_init_seq_net(priv_data);
++	ret =3D bpf_iter_init_seq_net(priv_data, aux);
+ 	if (ret)
+ 		kfree(afinfo);
+ 	return ret;
 --=20
 2.24.1
 
