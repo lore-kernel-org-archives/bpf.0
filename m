@@ -7,48 +7,45 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB1A4C433F1
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 15:57:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7176C43445
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 15:57:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A95EF22BEF
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 15:57:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BEAC722BEF
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 15:57:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=marvell.com header.i=@marvell.com header.b="RfYbzHxq"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=marvell.com header.i=@marvell.com header.b="QUdwAzem"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733051AbgGVPzk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jul 2020 11:55:40 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:59074 "EHLO
+        id S1733012AbgGVPzb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jul 2020 11:55:31 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:26920 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733043AbgGVPzi (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 11:55:38 -0400
+        by vger.kernel.org with ESMTP id S1726098AbgGVPz3 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 11:55:29 -0400
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MFsWdE008856;
-        Wed, 22 Jul 2020 08:54:45 -0700
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MFsX21008864;
+        Wed, 22 Jul 2020 08:55:10 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=pfpt0818;
- bh=GmEgsOs6h9b3iKtTR1f7ZzvpfMSp6NwSWPeac8kAzwo=;
- b=RfYbzHxqMFOvKQxA6zPHYp/WewdOVhdM6GOvt5hHeApuUkrX1pfjX24SvSb1hnujzj2b
- JW6Z3Q4UZnWUN/nZ1ECg5iz5RKcFSoqfUwR7zogK5irYAonlCJJn8Dk1JFIgg6nQNggH
- 56S2QqDTE80Oy81I8Dux2LCU4UB5lmUzc7PJOsFXZj7OyszxUZhoampFvWNeNblXFbqP
- RgfqLWWTrAy0TBt8W5fdiIKF8rfM+Mh269udFFE3st7H7jr9Gz1yg/R/RpoKT2sBZV0B
- 1YvCHPQ0+B3h1Ae9uISpSRY7SrwxHEKqabqEdKVnaQlMcjDc6o8prlqxy0EE2E1uVDGo pQ== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0b-0016f401.pphosted.com with ESMTP id 32c0kkrkkm-2
+ bh=r1IL7Mc4UCRNx/O9zTgQltzHrYRsbknuZ0cq1jTpN8w=;
+ b=QUdwAzem+5iIUKmOV0bjemv6EU7RJ2kBqQjIvtXz2uSdS0/rTDOYR4cqXXkAA3gwe53D
+ z/HNpuwPt58OwCcG1p+zKkHSbDIdKzYJCNkUT5UL2dcYDk7QiH9oXWZsUVHf2TQWlhAM
+ rPHGA1ESw4kb3mubsCM7lEVZNFGTdV9aUlePWP+gWGUofJCmHYLidKNiVNkSHH8V4mvY
+ npeEFOSy4TSY30yUPqomnI+f93Y2CQRFKey9xliK/3lkxZSoS6dlYX17DpdW1gyN0F9h
+ RRQUEqRMLJgm0OvUi5FN7hXQBIr9zbQ6RzNgI6oqTVBHyTVgF+qt8qkVKgiHUBXvX+Et mQ== 
+Received: from sc-exch01.marvell.com ([199.233.58.181])
+        by mx0b-0016f401.pphosted.com with ESMTP id 32c0kkrkn1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 22 Jul 2020 08:54:45 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 22 Jul
- 2020 08:54:44 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 22 Jul
- 2020 08:54:43 -0700
+        Wed, 22 Jul 2020 08:55:10 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 22 Jul
+ 2020 08:55:07 -0700
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
  (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 22 Jul 2020 08:54:43 -0700
+ Transport; Wed, 22 Jul 2020 08:55:08 -0700
 Received: from NN-LT0049.marvell.com (unknown [10.193.54.6])
-        by maili.marvell.com (Postfix) with ESMTP id 5EDCC3F703F;
-        Wed, 22 Jul 2020 08:54:37 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id 4923A3F7050;
+        Wed, 22 Jul 2020 08:55:02 -0700 (PDT)
 From:   Alexander Lobakin <alobakin@marvell.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>
@@ -70,9 +67,9 @@ CC:     Alexander Lobakin <alobakin@marvell.com>,
         <GR-everest-linux-l2@marvell.com>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH net-next 02/15] qed: reformat Makefile
-Date:   Wed, 22 Jul 2020 18:53:36 +0300
-Message-ID: <20200722155349.747-3-alobakin@marvell.com>
+Subject: [PATCH net-next 06/15] qed: move chain initialization inlines next to allocation functions
+Date:   Wed, 22 Jul 2020 18:53:40 +0300
+Message-ID: <20200722155349.747-7-alobakin@marvell.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200722155349.747-1-alobakin@marvell.com>
 References: <20200722155349.747-1-alobakin@marvell.com>
@@ -86,62 +83,198 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-List one entry per line and sort them alphabetically to simplify the
-addition of the new ones.
+qed_chain_init*() are used in one file/place on "cold" path only, so they
+can be uninlined and moved next to the call sites.
 
 Signed-off-by: Alexander Lobakin <alobakin@marvell.com>
 Signed-off-by: Igor Russkikh <irusskikh@marvell.com>
 Signed-off-by: Michal Kalderon <michal.kalderon@marvell.com>
 ---
- drivers/net/ethernet/qlogic/qed/Makefile | 36 +++++++++++++++++++-----
- 1 file changed, 29 insertions(+), 7 deletions(-)
+ drivers/net/ethernet/qlogic/qed/qed_chain.c |  47 ++++++++
+ include/linux/qed/qed_chain.h               | 112 --------------------
+ 2 files changed, 47 insertions(+), 112 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qed/Makefile b/drivers/net/ethernet/qlogic/qed/Makefile
-index 4176bbf2a22b..3c75e4fa9b02 100644
---- a/drivers/net/ethernet/qlogic/qed/Makefile
-+++ b/drivers/net/ethernet/qlogic/qed/Makefile
-@@ -3,12 +3,34 @@
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_chain.c b/drivers/net/ethernet/qlogic/qed/qed_chain.c
+index b1a3fe4d35b6..e2c5741ed160 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_chain.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_chain.c
+@@ -5,6 +5,53 @@
  
- obj-$(CONFIG_QED) := qed.o
+ #include "qed_dev_api.h"
  
--qed-y := qed_cxt.o qed_dev.o qed_hw.o qed_init_fw_funcs.o qed_init_ops.o \
--	 qed_int.o qed_main.o qed_mcp.o qed_sp_commands.o qed_spq.o qed_l2.o \
--	 qed_selftest.o qed_dcbx.o qed_debug.o qed_ptp.o qed_mng_tlv.o
--qed-$(CONFIG_QED_SRIOV) += qed_sriov.o qed_vf.o
--qed-$(CONFIG_QED_LL2) += qed_ll2.o
--qed-$(CONFIG_QED_RDMA) += qed_roce.o qed_rdma.o qed_iwarp.o
--qed-$(CONFIG_QED_ISCSI) += qed_iscsi.o
-+qed-y :=			\
-+	qed_cxt.o		\
-+	qed_dcbx.o		\
-+	qed_debug.o		\
-+	qed_dev.o		\
-+	qed_hw.o		\
-+	qed_init_fw_funcs.o	\
-+	qed_init_ops.o		\
-+	qed_int.o		\
-+	qed_l2.o		\
-+	qed_main.o		\
-+	qed_mcp.o		\
-+	qed_mng_tlv.o		\
-+	qed_ptp.o		\
-+	qed_selftest.o		\
-+	qed_sp_commands.o	\
-+	qed_spq.o
++static void qed_chain_init_params(struct qed_chain *chain,
++				  u32 page_cnt, u8 elem_size,
++				  enum qed_chain_use_mode intended_use,
++				  enum qed_chain_mode mode,
++				  enum qed_chain_cnt_type cnt_type)
++{
++	memset(chain, 0, sizeof(*chain));
 +
- qed-$(CONFIG_QED_FCOE) += qed_fcoe.o
-+qed-$(CONFIG_QED_ISCSI) += qed_iscsi.o
-+qed-$(CONFIG_QED_LL2) += qed_ll2.o
- qed-$(CONFIG_QED_OOO) += qed_ooo.o
++	chain->elem_size = elem_size;
++	chain->intended_use = intended_use;
++	chain->mode = mode;
++	chain->cnt_type = cnt_type;
 +
-+qed-$(CONFIG_QED_RDMA) +=	\
-+	qed_iwarp.o		\
-+	qed_rdma.o		\
-+	qed_roce.o
++	chain->elem_per_page = ELEMS_PER_PAGE(elem_size);
++	chain->usable_per_page = USABLE_ELEMS_PER_PAGE(elem_size, mode);
++	chain->elem_unusable = UNUSABLE_ELEMS_PER_PAGE(elem_size, mode);
 +
-+qed-$(CONFIG_QED_SRIOV) +=	\
-+	qed_sriov.o		\
-+	qed_vf.o
++	chain->elem_per_page_mask = chain->elem_per_page - 1;
++	chain->next_page_mask = chain->usable_per_page &
++				chain->elem_per_page_mask;
++
++	chain->page_cnt = page_cnt;
++	chain->capacity = chain->usable_per_page * page_cnt;
++	chain->size = chain->elem_per_page * page_cnt;
++}
++
++static void qed_chain_init_next_ptr_elem(const struct qed_chain *chain,
++					 void *virt_curr, void *virt_next,
++					 dma_addr_t phys_next)
++{
++	struct qed_chain_next *next;
++	u32 size;
++
++	size = chain->elem_size * chain->usable_per_page;
++	next = virt_curr + size;
++
++	DMA_REGPAIR_LE(next->next_phys, phys_next);
++	next->next_virt = virt_next;
++}
++
++static void qed_chain_init_mem(struct qed_chain *chain, void *virt_addr,
++			       dma_addr_t phys_addr)
++{
++	chain->p_virt_addr = virt_addr;
++	chain->p_phys_addr = phys_addr;
++}
++
+ static void qed_chain_free_next_ptr(struct qed_dev *cdev,
+ 				    struct qed_chain *chain)
+ {
+diff --git a/include/linux/qed/qed_chain.h b/include/linux/qed/qed_chain.h
+index 265e0b671a5c..a0d83095dc73 100644
+--- a/include/linux/qed/qed_chain.h
++++ b/include/linux/qed/qed_chain.h
+@@ -490,118 +490,6 @@ static inline void qed_chain_reset(struct qed_chain *p_chain)
+ 	}
+ }
+ 
+-/**
+- * @brief qed_chain_init - Initalizes a basic chain struct
+- *
+- * @param p_chain
+- * @param p_virt_addr
+- * @param p_phys_addr	physical address of allocated buffer's beginning
+- * @param page_cnt	number of pages in the allocated buffer
+- * @param elem_size	size of each element in the chain
+- * @param intended_use
+- * @param mode
+- */
+-static inline void qed_chain_init_params(struct qed_chain *p_chain,
+-					 u32 page_cnt,
+-					 u8 elem_size,
+-					 enum qed_chain_use_mode intended_use,
+-					 enum qed_chain_mode mode,
+-					 enum qed_chain_cnt_type cnt_type)
+-{
+-	/* chain fixed parameters */
+-	p_chain->p_virt_addr = NULL;
+-	p_chain->p_phys_addr = 0;
+-	p_chain->elem_size	= elem_size;
+-	p_chain->intended_use = (u8)intended_use;
+-	p_chain->mode		= mode;
+-	p_chain->cnt_type = (u8)cnt_type;
+-
+-	p_chain->elem_per_page = ELEMS_PER_PAGE(elem_size);
+-	p_chain->usable_per_page = USABLE_ELEMS_PER_PAGE(elem_size, mode);
+-	p_chain->elem_per_page_mask = p_chain->elem_per_page - 1;
+-	p_chain->elem_unusable = UNUSABLE_ELEMS_PER_PAGE(elem_size, mode);
+-	p_chain->next_page_mask = (p_chain->usable_per_page &
+-				   p_chain->elem_per_page_mask);
+-
+-	p_chain->page_cnt = page_cnt;
+-	p_chain->capacity = p_chain->usable_per_page * page_cnt;
+-	p_chain->size = p_chain->elem_per_page * page_cnt;
+-
+-	p_chain->pbl_sp.table_phys = 0;
+-	p_chain->pbl_sp.table_virt = NULL;
+-	p_chain->pbl.pp_addr_tbl = NULL;
+-}
+-
+-/**
+- * @brief qed_chain_init_mem -
+- *
+- * Initalizes a basic chain struct with its chain buffers
+- *
+- * @param p_chain
+- * @param p_virt_addr	virtual address of allocated buffer's beginning
+- * @param p_phys_addr	physical address of allocated buffer's beginning
+- *
+- */
+-static inline void qed_chain_init_mem(struct qed_chain *p_chain,
+-				      void *p_virt_addr, dma_addr_t p_phys_addr)
+-{
+-	p_chain->p_virt_addr = p_virt_addr;
+-	p_chain->p_phys_addr = p_phys_addr;
+-}
+-
+-/**
+- * @brief qed_chain_init_pbl_mem -
+- *
+- * Initalizes a basic chain struct with its pbl buffers
+- *
+- * @param p_chain
+- * @param p_virt_pbl	pointer to a pre allocated side table which will hold
+- *                      virtual page addresses.
+- * @param p_phys_pbl	pointer to a pre-allocated side table which will hold
+- *                      physical page addresses.
+- * @param pp_virt_addr_tbl
+- *                      pointer to a pre-allocated side table which will hold
+- *                      the virtual addresses of the chain pages.
+- *
+- */
+-static inline void qed_chain_init_pbl_mem(struct qed_chain *p_chain,
+-					  void *p_virt_pbl,
+-					  dma_addr_t p_phys_pbl,
+-					  struct addr_tbl_entry *pp_addr_tbl)
+-{
+-	p_chain->pbl_sp.table_phys = p_phys_pbl;
+-	p_chain->pbl_sp.table_virt = p_virt_pbl;
+-	p_chain->pbl.pp_addr_tbl = pp_addr_tbl;
+-}
+-
+-/**
+- * @brief qed_chain_init_next_ptr_elem -
+- *
+- * Initalizes a next pointer element
+- *
+- * @param p_chain
+- * @param p_virt_curr	virtual address of a chain page of which the next
+- *                      pointer element is initialized
+- * @param p_virt_next	virtual address of the next chain page
+- * @param p_phys_next	physical address of the next chain page
+- *
+- */
+-static inline void
+-qed_chain_init_next_ptr_elem(struct qed_chain *p_chain,
+-			     void *p_virt_curr,
+-			     void *p_virt_next, dma_addr_t p_phys_next)
+-{
+-	struct qed_chain_next *p_next;
+-	u32 size;
+-
+-	size = p_chain->elem_size * p_chain->usable_per_page;
+-	p_next = (struct qed_chain_next *)((u8 *)p_virt_curr + size);
+-
+-	DMA_REGPAIR_LE(p_next->next_phys, p_phys_next);
+-
+-	p_next->next_virt = p_virt_next;
+-}
+-
+ /**
+  * @brief qed_chain_get_last_elem -
+  *
 -- 
 2.25.1
 
