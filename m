@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AC2BC433EC
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 06:46:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50DBAC433EB
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 06:46:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D97A620684
+	by mail.kernel.org (Postfix) with ESMTP id 27B8E20684
 	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 06:46:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="iyfDlKcM"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZcbgvE8R"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730288AbgGVGqY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jul 2020 02:46:24 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:20666 "EHLO
+        id S1730263AbgGVGqX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jul 2020 02:46:23 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:10770 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728734AbgGVGqY (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 02:46:24 -0400
+        by vger.kernel.org with ESMTP id S1729873AbgGVGqW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 02:46:22 -0400
 Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06M6kKRd030697
-        for <bpf@vger.kernel.org>; Tue, 21 Jul 2020 23:46:23 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06M6kK0l030704
+        for <bpf@vger.kernel.org>; Tue, 21 Jul 2020 23:46:21 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=bGi4XZnpqB7a6Z4kQ3hccbyujkKUP1JNjaTNyROtwsU=;
- b=iyfDlKcMPCIBBRzQocowGfWfbljtrHJ3svjgUiDkiZ+fnMT7G1/X4G0paOu9IeP30MaA
- VHJ/Ku1F3WmZiDEz8sJCfzM24t1mXZrbi25FA5TIfeFkxuo8pgi5AZ2xu6ffNTQw9wmo
- v8QKP+RhHUH2022lnrQG4d6Sir/Ln3Xxn6g= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 32cgx3d73x-10
+ bh=dVSUSeG7jGowPOMuvGmVxqCOBRq56+WzQUqb0O6jRxY=;
+ b=ZcbgvE8RKncL9N6UKZxxEjIkrzCY9r7UC5BqbKYhyz3QCMwY0T0iZM+288UotWl/JFas
+ hLM8u+Rl2qX8MNzXnYo6IS2I8IPsdDYs3OPsIDW2I0IGYTvhYv2isQ1SEy4jJTzjK5Nz
+ wpOHdMHoqc+A9DrjVh0ItiHqEhNXVSH9PUc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 32cgx3d74j-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 21 Jul 2020 23:46:23 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 21 Jul 2020 23:46:21 -0700
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 21 Jul 2020 23:46:17 -0700
+ 15.1.1979.3; Tue, 21 Jul 2020 23:46:15 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 5A7762EC494E; Tue, 21 Jul 2020 23:46:15 -0700 (PDT)
+        id 9E2352EC494E; Tue, 21 Jul 2020 23:46:06 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>, <dsahern@gmail.com>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
+        Andrii Nakryiko <andriin@fb.com>,
+        kernel test robot <lkp@intel.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v4 bpf-next 5/9] bpf, xdp: implement LINK_UPDATE for BPF XDP link
-Date:   Tue, 21 Jul 2020 23:45:58 -0700
-Message-ID: <20200722064603.3350758-6-andriin@fb.com>
+Subject: [PATCH v4 bpf-next 1/9] bpf: make bpf_link API available indepently of CONFIG_BPF_SYSCALL
+Date:   Tue, 21 Jul 2020 23:45:54 -0700
+Message-ID: <20200722064603.3350758-2-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200722064603.3350758-1-andriin@fb.com>
 References: <20200722064603.3350758-1-andriin@fb.com>
@@ -62,7 +63,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-22_03:2020-07-22,2020-07-22 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- impostorscore=0 mlxlogscore=694 lowpriorityscore=0 bulkscore=0
+ impostorscore=0 mlxlogscore=741 lowpriorityscore=0 bulkscore=0
  adultscore=0 mlxscore=0 phishscore=0 priorityscore=1501 suspectscore=8
  spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2007220050
@@ -72,75 +73,127 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for LINK_UPDATE command for BPF XDP link to enable reliable
-replacement of underlying BPF program.
+Similarly to bpf_prog, make bpf_link and related generic API available
+unconditionally to make it easier to have bpf_link support in various par=
+ts of
+the kernel. Stub out init/prime/settle/cleanup and inc/put APIs.
 
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- net/core/dev.c | 43 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ include/linux/bpf.h | 81 ++++++++++++++++++++++++++++++---------------
+ 1 file changed, 55 insertions(+), 26 deletions(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index f916072f31de..44264eff7f1c 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -8996,9 +8996,52 @@ static void bpf_xdp_link_dealloc(struct bpf_link *=
-link)
- 	kfree(xdp_link);
- }
-=20
-+static int bpf_xdp_link_update(struct bpf_link *link, struct bpf_prog *n=
-ew_prog,
-+			       struct bpf_prog *old_prog)
-+{
-+	struct bpf_xdp_link *xdp_link =3D container_of(link, struct bpf_xdp_lin=
-k, link);
-+	enum bpf_xdp_mode mode;
-+	bpf_op_t bpf_op;
-+	int err =3D 0;
-+
-+	rtnl_lock();
-+
-+	/* link might have been auto-released already, so fail */
-+	if (!xdp_link->dev) {
-+		err =3D -ENOLINK;
-+		goto out_unlock;
-+	}
-+
-+	if (old_prog && link->prog !=3D old_prog) {
-+		err =3D -EPERM;
-+		goto out_unlock;
-+	}
-+	old_prog =3D link->prog;
-+	if (old_prog =3D=3D new_prog) {
-+		/* no-op, don't disturb drivers */
-+		bpf_prog_put(new_prog);
-+		goto out_unlock;
-+	}
-+
-+	mode =3D dev_xdp_mode(xdp_link->flags);
-+	bpf_op =3D dev_xdp_bpf_op(xdp_link->dev, mode);
-+	err =3D dev_xdp_install(xdp_link->dev, mode, bpf_op, NULL,
-+			      xdp_link->flags, new_prog);
-+	if (err)
-+		goto out_unlock;
-+
-+	old_prog =3D xchg(&link->prog, new_prog);
-+	bpf_prog_put(old_prog);
-+
-+out_unlock:
-+	rtnl_unlock();
-+	return err;
-+}
-+
- static const struct bpf_link_ops bpf_xdp_link_lops =3D {
- 	.release =3D bpf_xdp_link_release,
- 	.dealloc =3D bpf_xdp_link_dealloc,
-+	.update_prog =3D bpf_xdp_link_update,
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index bae557ff2da8..33bb21b1dfe5 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -761,6 +761,32 @@ struct bpf_array_aux {
+ 	struct work_struct work;
  };
 =20
- int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *pro=
-g)
++struct bpf_link {
++	atomic64_t refcnt;
++	u32 id;
++	enum bpf_link_type type;
++	const struct bpf_link_ops *ops;
++	struct bpf_prog *prog;
++	struct work_struct work;
++};
++
++struct bpf_link_ops {
++	void (*release)(struct bpf_link *link);
++	void (*dealloc)(struct bpf_link *link);
++	int (*update_prog)(struct bpf_link *link, struct bpf_prog *new_prog,
++			   struct bpf_prog *old_prog);
++	void (*show_fdinfo)(const struct bpf_link *link, struct seq_file *seq);
++	int (*fill_link_info)(const struct bpf_link *link,
++			      struct bpf_link_info *info);
++};
++
++struct bpf_link_primer {
++	struct bpf_link *link;
++	struct file *file;
++	int fd;
++	u32 id;
++};
++
+ struct bpf_struct_ops_value;
+ struct btf_type;
+ struct btf_member;
+@@ -1143,32 +1169,6 @@ static inline bool bpf_bypass_spec_v4(void)
+ int bpf_map_new_fd(struct bpf_map *map, int flags);
+ int bpf_prog_new_fd(struct bpf_prog *prog);
+=20
+-struct bpf_link {
+-	atomic64_t refcnt;
+-	u32 id;
+-	enum bpf_link_type type;
+-	const struct bpf_link_ops *ops;
+-	struct bpf_prog *prog;
+-	struct work_struct work;
+-};
+-
+-struct bpf_link_primer {
+-	struct bpf_link *link;
+-	struct file *file;
+-	int fd;
+-	u32 id;
+-};
+-
+-struct bpf_link_ops {
+-	void (*release)(struct bpf_link *link);
+-	void (*dealloc)(struct bpf_link *link);
+-	int (*update_prog)(struct bpf_link *link, struct bpf_prog *new_prog,
+-			   struct bpf_prog *old_prog);
+-	void (*show_fdinfo)(const struct bpf_link *link, struct seq_file *seq);
+-	int (*fill_link_info)(const struct bpf_link *link,
+-			      struct bpf_link_info *info);
+-};
+-
+ void bpf_link_init(struct bpf_link *link, enum bpf_link_type type,
+ 		   const struct bpf_link_ops *ops, struct bpf_prog *prog);
+ int bpf_link_prime(struct bpf_link *link, struct bpf_link_primer *primer=
+);
+@@ -1370,6 +1370,35 @@ static inline void __bpf_prog_uncharge(struct user=
+_struct *user, u32 pages)
+ {
+ }
+=20
++static inline void bpf_link_init(struct bpf_link *link, enum bpf_link_ty=
+pe type,
++				 const struct bpf_link_ops *ops,
++				 struct bpf_prog *prog)
++{
++}
++
++static inline int bpf_link_prime(struct bpf_link *link,
++				 struct bpf_link_primer *primer)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline int bpf_link_settle(struct bpf_link_primer *primer)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline void bpf_link_cleanup(struct bpf_link_primer *primer)
++{
++}
++
++static inline void bpf_link_inc(struct bpf_link *link)
++{
++}
++
++static inline void bpf_link_put(struct bpf_link *link)
++{
++}
++
+ static inline int bpf_obj_get_user(const char __user *pathname, int flag=
+s)
+ {
+ 	return -EOPNOTSUPP;
 --=20
 2.24.1
 
