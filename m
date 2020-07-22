@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB3EDC433F8
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 21:13:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36787C433E0
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 21:13:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97D9D22B3F
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 21:13:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D7EB22B42
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 21:13:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595452384;
-	bh=hcp1v9xVMKQl/5GlMs9QGdMrjuy9yCUz2CJcwIwMBUg=;
+	s=default; t=1595452390;
+	bh=vcuvS82h5Ylmb12o22yYxqL8DRr3k/NavAhiq2HTEzQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=fDWxGSjfoFqU9LSaD1pCNvnbGxwPal7+U6Z4ezaEFFi4jAfamqpFRaSxFDpzAPweD
-	 KBWSA0RL0fhkYw8moMYQ8o76KgitJvWkao8M1cPyXgJUrfK459s1gFjC9S9bG9STTP
-	 Y5eKAQRL1r8R6K7UP8QaMvgdWM15Q9zk4hZr00r8=
+	b=vrTqhl7cNYhFJD+rk1Jz2STz8PHKnRi2rqf7NcJHIVsO/5hF3ixbR6aueejRc3smG
+	 qCfEZWuTjbRQK3GPp2WTy8j00AETkV0d8kcJ3NLjWV0gCWb1tPDPKxRhzbtdgjJeiq
+	 Slui+zevJqOkUP3YxiiNxHO1P+C8HrWv2Rh5LZAc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732943AbgGVVNC convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Jul 2020 17:13:02 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:50173 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726452AbgGVVNB (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 17:13:01 -0400
+        id S1732953AbgGVVNJ convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Jul 2020 17:13:09 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:38519 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1732952AbgGVVNJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jul 2020 17:13:09 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-161-xfrSFg_hPvCrTprMBR3CEQ-1; Wed, 22 Jul 2020 17:12:52 -0400
-X-MC-Unique: xfrSFg_hPvCrTprMBR3CEQ-1
+ us-mta-458-0GRtPzWbMpCNWFR7sh-tJw-1; Wed, 22 Jul 2020 17:13:00 -0400
+X-MC-Unique: 0GRtPzWbMpCNWFR7sh-tJw-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 75EA5800469;
-        Wed, 22 Jul 2020 21:12:49 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9C393106B258;
+        Wed, 22 Jul 2020 21:12:58 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.194.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6C20719C4F;
-        Wed, 22 Jul 2020 21:12:46 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 359B51A888;
+        Wed, 22 Jul 2020 21:12:53 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -52,9 +52,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Brendan Gregg <bgregg@netflix.com>,
         Florent Revest <revest@chromium.org>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH v8 bpf-next 06/13] bpf: Factor btf_struct_access function
-Date:   Wed, 22 Jul 2020 23:12:16 +0200
-Message-Id: <20200722211223.1055107-7-jolsa@kernel.org>
+Subject: [PATCH v8 bpf-next 08/13] bpf: Add BTF_SET_START/END macros
+Date:   Wed, 22 Jul 2020 23:12:18 +0200
+Message-Id: <20200722211223.1055107-9-jolsa@kernel.org>
 In-Reply-To: <20200722211223.1055107-1-jolsa@kernel.org>
 References: <20200722211223.1055107-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -68,182 +68,254 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding btf_struct_walk function that walks through the
-struct type + given offset and returns following values:
+Adding support to define sorted set of BTF ID values.
 
-  enum walk_return {
-       /* < 0 error */
-       walk_scalar = 0,
-       walk_ptr,
-       walk_struct,
-  };
+Following defines sorted set of BTF ID values:
 
-walk_scalar - when SCALAR_VALUE is found
-walk_ptr    - when pointer value is found, its ID is stored
-              in 'rid' output param
-walk_struct - when nested struct object is found, its ID is stored
-              in 'rid' output param
+  BTF_SET_START(btf_whitelist_d_path)
+  BTF_ID(func, vfs_truncate)
+  BTF_ID(func, vfs_fallocate)
+  BTF_ID(func, dentry_open)
+  BTF_ID(func, vfs_getattr)
+  BTF_ID(func, filp_close)
+  BTF_SET_END(btf_whitelist_d_path)
 
-It will be used in following patches to get all nested
-struct objects for given type and offset.
+It defines following 'struct btf_id_set' variable to access
+values and count:
 
-The btf_struct_access now calls btf_struct_walk function,
-as long as it gets nested structs as return value.
+  struct btf_id_set btf_whitelist_d_path;
+
+Adding 'allowed' callback to struct bpf_func_proto, to allow
+verifier the check on allowed callers.
+
+Adding btf_id_set_contains function, which will be used by
+allowed callbacks to verify the caller's BTF ID value is
+within allowed set.
+
+Also removing extra '\' in __BTF_ID_LIST macro.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/bpf/btf.c | 73 +++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 60 insertions(+), 13 deletions(-)
+ include/linux/bpf.h           |  4 ++++
+ include/linux/btf_ids.h       | 43 ++++++++++++++++++++++++++++++++++-
+ kernel/bpf/btf.c              | 14 ++++++++++++
+ kernel/bpf/verifier.c         |  5 ++++
+ tools/include/linux/btf_ids.h | 43 ++++++++++++++++++++++++++++++++++-
+ 5 files changed, 107 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 841be6c49f11..1ab5fd5bf992 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3873,16 +3873,22 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 	return true;
- }
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c981e258fed3..e5d81c31ed8e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -295,6 +295,7 @@ struct bpf_func_proto {
+ 						    * for this argument.
+ 						    */
+ 	int *ret_btf_id; /* return value btf_id */
++	bool (*allowed)(const struct bpf_prog *prog);
+ };
  
--int btf_struct_access(struct bpf_verifier_log *log,
--		      const struct btf_type *t, int off, int size,
--		      enum bpf_access_type atype,
--		      u32 *next_btf_id)
-+enum walk_return {
-+	/* < 0 error */
-+	walk_scalar = 0,
-+	walk_ptr,
-+	walk_struct,
+ /* bpf_context is intentionally undefined structure. Pointer to bpf_context is
+@@ -1787,4 +1788,7 @@ enum bpf_text_poke_type {
+ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 		       void *addr1, void *addr2);
+ 
++struct btf_id_set;
++bool btf_id_set_contains(struct btf_id_set *set, u32 id);
++
+ #endif /* _LINUX_BPF_H */
+diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+index 4867d549e3c1..840c3e63cc13 100644
+--- a/include/linux/btf_ids.h
++++ b/include/linux/btf_ids.h
+@@ -3,6 +3,11 @@
+ #ifndef _LINUX_BTF_IDS_H
+ #define _LINUX_BTF_IDS_H
+ 
++struct btf_id_set {
++	u32 cnt;
++	u32 ids[];
 +};
 +
-+static int btf_struct_walk(struct bpf_verifier_log *log,
-+			   const struct btf_type *t, int off, int size,
-+			   u32 *rid)
+ #ifdef CONFIG_DEBUG_INFO_BTF
+ 
+ #include <linux/compiler.h> /* for __PASTE */
+@@ -62,7 +67,7 @@ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
+ "." #scope " " #name ";                        \n"	\
+ #name ":;                                      \n"	\
+-".popsection;                                  \n");	\
++".popsection;                                  \n");
+ 
+ #define BTF_ID_LIST(name)				\
+ __BTF_ID_LIST(name, local)				\
+@@ -88,12 +93,48 @@ asm(							\
+ ".zero 4                                       \n"	\
+ ".popsection;                                  \n");
+ 
++/*
++ * The BTF_SET_START/END macros pair defines sorted list of
++ * BTF IDs plus its members count, with following layout:
++ *
++ * BTF_SET_START(list)
++ * BTF_ID(type1, name1)
++ * BTF_ID(type2, name2)
++ * BTF_SET_END(list)
++ *
++ * __BTF_ID__set__list:
++ * .zero 4
++ * list:
++ * __BTF_ID__type1__name1__3:
++ * .zero 4
++ * __BTF_ID__type2__name2__4:
++ * .zero 4
++ *
++ */
++#define BTF_SET_START(name)				\
++__BTF_ID_LIST(name, local)				\
++asm(							\
++".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
++".local __BTF_ID__set__" #name ";              \n"	\
++"__BTF_ID__set__" #name ":;                    \n"	\
++".zero 4                                       \n"	\
++".popsection;                                  \n");
++
++#define BTF_SET_END(name)				\
++asm(							\
++".pushsection " BTF_IDS_SECTION ",\"a\";      \n"	\
++".size __BTF_ID__set__" #name ", .-" #name "  \n"	\
++".popsection;                                 \n");	\
++extern struct btf_id_set name;
++
+ #else
+ 
+ #define BTF_ID_LIST(name) static u32 name[5];
+ #define BTF_ID(prefix, name)
+ #define BTF_ID_UNUSED
+ #define BTF_ID_LIST_GLOBAL(name) u32 name[1];
++#define BTF_SET_START(name) static struct btf_id_set name = { 0 };
++#define BTF_SET_END(name)
+ 
+ #endif /* CONFIG_DEBUG_INFO_BTF */
+ 
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 562d4453fad3..06714cdda0a9 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -21,6 +21,8 @@
+ #include <linux/btf_ids.h>
+ #include <linux/skmsg.h>
+ #include <linux/perf_event.h>
++#include <linux/bsearch.h>
++#include <linux/btf_ids.h>
+ #include <net/sock.h>
+ 
+ /* BTF (BPF Type Format) is the meta data format which describes
+@@ -4740,3 +4742,15 @@ u32 btf_id(const struct btf *btf)
  {
- 	u32 i, moff, mtrue_end, msize = 0, total_nelems = 0;
- 	const struct btf_type *mtype, *elem_type = NULL;
- 	const struct btf_member *member;
- 	const char *tname, *mname;
--	u32 vlen;
-+	u32 vlen, elem_id, mid;
- 
- again:
- 	tname = __btf_name_by_offset(btf_vmlinux, t->name_off);
-@@ -3924,8 +3930,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 			goto error;
- 
- 		off = (off - moff) % elem_type->size;
--		return btf_struct_access(log, elem_type, off, size, atype,
--					 next_btf_id);
-+		return btf_struct_walk(log, elem_type, off, size, rid);
- 
- error:
- 		bpf_log(log, "access beyond struct %s at off %u size %u\n",
-@@ -3954,7 +3959,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 			 */
- 			if (off <= moff &&
- 			    BITS_ROUNDUP_BYTES(end_bit) <= off + size)
--				return SCALAR_VALUE;
-+				return walk_scalar;
- 
- 			/* off may be accessing a following member
- 			 *
-@@ -3976,11 +3981,13 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 			break;
- 
- 		/* type of the field */
-+		mid = member->type;
- 		mtype = btf_type_by_id(btf_vmlinux, member->type);
- 		mname = __btf_name_by_offset(btf_vmlinux, member->name_off);
- 
- 		mtype = __btf_resolve_size(btf_vmlinux, mtype, &msize,
--					   &elem_type, NULL, &total_nelems, NULL);
-+					   &elem_type, &elem_id, &total_nelems,
-+					   &mid);
- 		if (IS_ERR(mtype)) {
- 			bpf_log(log, "field %s doesn't have size\n", mname);
- 			return -EFAULT;
-@@ -4042,6 +4049,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 			elem_idx = (off - moff) / msize;
- 			moff += elem_idx * msize;
- 			mtype = elem_type;
-+			mid = elem_id;
- 		}
- 
- 		/* the 'off' we're looking for is either equal to start
-@@ -4051,6 +4059,12 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 			/* our field must be inside that union or struct */
- 			t = mtype;
- 
-+			/* return if the offset matches the member offset */
-+			if (off == moff) {
-+				*rid = mid;
-+				return walk_struct;
-+			}
-+
- 			/* adjust offset we're looking for */
- 			off -= moff;
- 			goto again;
-@@ -4066,11 +4080,10 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 					mname, moff, tname, off, size);
- 				return -EACCES;
- 			}
--
- 			stype = btf_type_skip_modifiers(btf_vmlinux, mtype->type, &id);
- 			if (btf_type_is_struct(stype)) {
--				*next_btf_id = id;
--				return PTR_TO_BTF_ID;
-+				*rid = id;
-+				return walk_ptr;
- 			}
- 		}
- 
-@@ -4087,12 +4100,46 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 			return -EACCES;
- 		}
- 
--		return SCALAR_VALUE;
-+		return walk_scalar;
- 	}
- 	bpf_log(log, "struct %s doesn't have field at offset %d\n", tname, off);
- 	return -EINVAL;
+ 	return btf->id;
  }
- 
-+int btf_struct_access(struct bpf_verifier_log *log,
-+		      const struct btf_type *t, int off, int size,
-+		      enum bpf_access_type atype __maybe_unused,
-+		      u32 *next_btf_id)
++
++static int btf_id_cmp_func(const void *a, const void *b)
 +{
-+	int err;
-+	u32 id;
++	const int *pa = a, *pb = b;
 +
-+	do {
-+		err = btf_struct_walk(log, t, off, size, &id);
-+		if (err < 0)
-+			return err;
-+
-+		/* We found the pointer or scalar on t+off,
-+		 * we're done.
-+		 */
-+		if (err == walk_ptr) {
-+			*next_btf_id = id;
-+			return PTR_TO_BTF_ID;
-+		}
-+		if (err == walk_scalar)
-+			return SCALAR_VALUE;
-+
-+		/* We found nested struct, so continue the search
-+		 * by diving in it. At this point the offset is
-+		 * aligned with the new type, so set it to 0.
-+		 */
-+		t = btf_type_by_id(btf_vmlinux, id);
-+		off = 0;
-+	} while (t);
-+
-+	return -EINVAL;
++	return *pa - *pb;
 +}
 +
- int btf_resolve_helper_id(struct bpf_verifier_log *log,
- 			  const struct bpf_func_proto *fn, int arg)
- {
++bool btf_id_set_contains(struct btf_id_set *set, u32 id)
++{
++	return bsearch(&id, set->ids, set->cnt, sizeof(int), btf_id_cmp_func) != NULL;
++}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 39922fa07154..49f728c696a9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4706,6 +4706,11 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
+ 		return -EINVAL;
+ 	}
+ 
++	if (fn->allowed && !fn->allowed(env->prog)) {
++		verbose(env, "helper call is not allowed in probe\n");
++		return -EINVAL;
++	}
++
+ 	/* With LD_ABS/IND some JITs save/restore skb from r1. */
+ 	changes_data = bpf_helper_changes_pkt_data(fn->func);
+ 	if (changes_data && fn->arg1_type != ARG_PTR_TO_CTX) {
+diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.h
+index 4867d549e3c1..840c3e63cc13 100644
+--- a/tools/include/linux/btf_ids.h
++++ b/tools/include/linux/btf_ids.h
+@@ -3,6 +3,11 @@
+ #ifndef _LINUX_BTF_IDS_H
+ #define _LINUX_BTF_IDS_H
+ 
++struct btf_id_set {
++	u32 cnt;
++	u32 ids[];
++};
++
+ #ifdef CONFIG_DEBUG_INFO_BTF
+ 
+ #include <linux/compiler.h> /* for __PASTE */
+@@ -62,7 +67,7 @@ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
+ "." #scope " " #name ";                        \n"	\
+ #name ":;                                      \n"	\
+-".popsection;                                  \n");	\
++".popsection;                                  \n");
+ 
+ #define BTF_ID_LIST(name)				\
+ __BTF_ID_LIST(name, local)				\
+@@ -88,12 +93,48 @@ asm(							\
+ ".zero 4                                       \n"	\
+ ".popsection;                                  \n");
+ 
++/*
++ * The BTF_SET_START/END macros pair defines sorted list of
++ * BTF IDs plus its members count, with following layout:
++ *
++ * BTF_SET_START(list)
++ * BTF_ID(type1, name1)
++ * BTF_ID(type2, name2)
++ * BTF_SET_END(list)
++ *
++ * __BTF_ID__set__list:
++ * .zero 4
++ * list:
++ * __BTF_ID__type1__name1__3:
++ * .zero 4
++ * __BTF_ID__type2__name2__4:
++ * .zero 4
++ *
++ */
++#define BTF_SET_START(name)				\
++__BTF_ID_LIST(name, local)				\
++asm(							\
++".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
++".local __BTF_ID__set__" #name ";              \n"	\
++"__BTF_ID__set__" #name ":;                    \n"	\
++".zero 4                                       \n"	\
++".popsection;                                  \n");
++
++#define BTF_SET_END(name)				\
++asm(							\
++".pushsection " BTF_IDS_SECTION ",\"a\";      \n"	\
++".size __BTF_ID__set__" #name ", .-" #name "  \n"	\
++".popsection;                                 \n");	\
++extern struct btf_id_set name;
++
+ #else
+ 
+ #define BTF_ID_LIST(name) static u32 name[5];
+ #define BTF_ID(prefix, name)
+ #define BTF_ID_UNUSED
+ #define BTF_ID_LIST_GLOBAL(name) u32 name[1];
++#define BTF_SET_START(name) static struct btf_id_set name = { 0 };
++#define BTF_SET_END(name)
+ 
+ #endif /* CONFIG_DEBUG_INFO_BTF */
+ 
 -- 
 2.25.4
 
