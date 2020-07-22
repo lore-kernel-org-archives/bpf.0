@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 591BBC433F2
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 21:13:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D21F6C433FE
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 21:13:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2EB4D22B45
-	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 21:13:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A2A3322B3F
+	for <bpf@archiver.kernel.org>; Wed, 22 Jul 2020 21:13:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595452382;
-	bh=ZvuCpq2+jzw2CPdp0FBcaTDIRvCwHmpnV8udkxviIBM=;
+	s=default; t=1595452393;
+	bh=TElq2iDLIWPnpZTsVRK7uTiZ+vQTXYN26Q6K19aA+1M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=KW6dxR07j0ZClBhCdmFIQZ4kVwgBXPD2G6c1F+gO/R1PmZzMyTWn7U9aRXnTvWCMC
-	 3SQeqIqNbEumuQ7B100zrrOd9i4HE0WKkmUVyBqonSSV13VBTfxmjrSKveT2RMOw5u
-	 Ie2zVmhX0ZhbcbTaD9OnMHU6fRhpuEOLS5tUNm7U=
+	b=HI9Xl+NxstomyD5OLpFMY9/2c3/57La7nLBLHGU0k2R87OLuxbSU9U1owNWZgKP3j
+	 /D84SWLo+cxRHAfANz5K39zEGRVjpuII2bnFZPxK9/yb9qG37usyQD9pDuSbA181ZE
+	 oMmU0TDs+hY44BocRiGhzY49ZT6QPYHMT50Hgs1o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732921AbgGVVNB convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Jul 2020 17:13:01 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:55955 "EHLO
+        id S1732984AbgGVVNN convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Jul 2020 17:13:13 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:24738 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731931AbgGVVNB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Jul 2020 17:13:01 -0400
+        with ESMTP id S1732957AbgGVVNM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jul 2020 17:13:12 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-329-NJ2TPhdBO0KIYlch7ka9RA-1; Wed, 22 Jul 2020 17:12:54 -0400
-X-MC-Unique: NJ2TPhdBO0KIYlch7ka9RA-1
+ us-mta-366-ru16wf5MMjKWsEVK3By8Mw-1; Wed, 22 Jul 2020 17:13:07 -0400
+X-MC-Unique: ru16wf5MMjKWsEVK3By8Mw-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D34C98015F3;
-        Wed, 22 Jul 2020 21:12:52 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C1D60800465;
+        Wed, 22 Jul 2020 21:13:05 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.194.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CEA0919C4F;
-        Wed, 22 Jul 2020 21:12:49 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DB5E19C4F;
+        Wed, 22 Jul 2020 21:13:02 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -52,9 +52,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Brendan Gregg <bgregg@netflix.com>,
         Florent Revest <revest@chromium.org>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH v8 bpf-next 07/13] bpf: Add btf_struct_ids_match function
-Date:   Wed, 22 Jul 2020 23:12:17 +0200
-Message-Id: <20200722211223.1055107-8-jolsa@kernel.org>
+Subject: [PATCH v8 bpf-next 10/13] bpf: Update .BTF_ids section in btf.rst with sets info
+Date:   Wed, 22 Jul 2020 23:12:20 +0200
+Message-Id: <20200722211223.1055107-11-jolsa@kernel.org>
 In-Reply-To: <20200722211223.1055107-1-jolsa@kernel.org>
 References: <20200722211223.1055107-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -68,125 +68,49 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding btf_struct_ids_match function to check if given address provided
-by BTF object + offset is also address of another nested BTF object.
-
-This allows to pass an argument to helper, which is defined via parent
-BTF object + offset, like for bpf_d_path (added in following changes):
-
-  SEC("fentry/filp_close")
-  int BPF_PROG(prog_close, struct file *file, void *id)
-  {
-    ...
-    ret = bpf_d_path(&file->f_path, ...
-
-The first bpf_d_path argument is hold by verifier as BTF file object
-plus offset of f_path member.
-
-The btf_struct_ids_match function will walk the struct file object and
-check if there's nested struct path object on the given offset.
+Updating btf.rst doc with info about BTF_SET_START/END macros.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/bpf.h   |  2 ++
- kernel/bpf/btf.c      | 29 +++++++++++++++++++++++++++++
- kernel/bpf/verifier.c | 18 ++++++++++++------
- 3 files changed, 43 insertions(+), 6 deletions(-)
+ Documentation/bpf/btf.rst | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index bae557ff2da8..c981e258fed3 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1306,6 +1306,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 		      const struct btf_type *t, int off, int size,
- 		      enum bpf_access_type atype,
- 		      u32 *next_btf_id);
-+bool btf_struct_ids_match(struct bpf_verifier_log *log,
-+			  int off, u32 id, u32 mid);
- int btf_resolve_helper_id(struct bpf_verifier_log *log,
- 			  const struct bpf_func_proto *fn, int);
+diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+index b5361b8621c9..44dc789de2b4 100644
+--- a/Documentation/bpf/btf.rst
++++ b/Documentation/bpf/btf.rst
+@@ -724,6 +724,31 @@ want to define unused entry in BTF_ID_LIST, like::
+       BTF_ID_UNUSED
+       BTF_ID(struct, task_struct)
  
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 1ab5fd5bf992..562d4453fad3 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4140,6 +4140,35 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 	return -EINVAL;
- }
++The ``BTF_SET_START/END`` macros pair defines sorted list of BTF ID values
++and their count, with following syntax::
++
++  BTF_SET_START(set)
++  BTF_ID(type1, name1)
++  BTF_ID(type2, name2)
++  BTF_SET_END(set)
++
++resulting in following layout in .BTF_ids section::
++
++  __BTF_ID__set__set:
++  .zero 4
++  __BTF_ID__type1__name1__3:
++  .zero 4
++  __BTF_ID__type2__name2__4:
++  .zero 4
++
++The ``struct btf_id_set set;`` variable is defined to access the list.
++
++The ``typeX`` name can be one of following::
++
++   struct, union, typedef, func
++
++and is used as a filter when resolving the BTF ID value.
++
+ All the BTF ID lists and sets are compiled in the .BTF_ids section and
+ resolved during the linking phase of kernel build by ``resolve_btfids`` tool.
  
-+bool btf_struct_ids_match(struct bpf_verifier_log *log,
-+			  int off, u32 id, u32 mid)
-+{
-+	const struct btf_type *type;
-+	u32 nid;
-+	int err;
-+
-+	do {
-+		type = btf_type_by_id(btf_vmlinux, id);
-+		if (!type)
-+			return false;
-+		err = btf_struct_walk(log, type, off, 1, &nid);
-+		if (err < 0)
-+			return false;
-+
-+		/* We found nested struct object. If it matches
-+		 * the requested ID, we're done. Otherwise let's
-+		 * continue the search with offset 0 in the new
-+		 * type.
-+		 */
-+		if (err == walk_struct && mid == nid)
-+			return true;
-+		off = 0;
-+		id = nid;
-+	} while (err == walk_struct);
-+
-+	return false;
-+}
-+
- int btf_resolve_helper_id(struct bpf_verifier_log *log,
- 			  const struct bpf_func_proto *fn, int arg)
- {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9a6703bc3f36..39922fa07154 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3887,16 +3887,21 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 				goto err_type;
- 		}
- 	} else if (arg_type == ARG_PTR_TO_BTF_ID) {
-+		bool ids_match = false;
-+
- 		expected_type = PTR_TO_BTF_ID;
- 		if (type != expected_type)
- 			goto err_type;
- 		if (!fn->check_btf_id) {
- 			if (reg->btf_id != meta->btf_id) {
--				verbose(env, "Helper has type %s got %s in R%d\n",
--					kernel_type_name(meta->btf_id),
--					kernel_type_name(reg->btf_id), regno);
--
--				return -EACCES;
-+				ids_match = btf_struct_ids_match(&env->log, reg->off, reg->btf_id,
-+								 meta->btf_id);
-+				if (!ids_match) {
-+					verbose(env, "Helper has type %s got %s in R%d\n",
-+						kernel_type_name(meta->btf_id),
-+						kernel_type_name(reg->btf_id), regno);
-+					return -EACCES;
-+				}
- 			}
- 		} else if (!fn->check_btf_id(reg->btf_id, arg)) {
- 			verbose(env, "Helper does not support %s in R%d\n",
-@@ -3904,7 +3909,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 
- 			return -EACCES;
- 		}
--		if (!tnum_is_const(reg->var_off) || reg->var_off.value || reg->off) {
-+		if (!ids_match &&
-+		    (!tnum_is_const(reg->var_off) || reg->var_off.value || reg->off)) {
- 			verbose(env, "R%d is a pointer to in-kernel struct with non-zero offset\n",
- 				regno);
- 			return -EACCES;
 -- 
 2.25.4
 
