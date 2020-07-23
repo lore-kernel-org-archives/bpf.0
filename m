@@ -8,40 +8,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D24A9C433FB
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:15:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DDCCC433F8
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:15:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A9F1120658
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:15:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F2A9420658
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:15:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Zzu8Ovl0"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LZk28OBV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726824AbgGWGPk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jul 2020 02:15:40 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:59606 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726642AbgGWGPj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 Jul 2020 02:15:39 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06N6BGrd028895
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 23:15:39 -0700
+        id S1726957AbgGWGPp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jul 2020 02:15:45 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:41220 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726830AbgGWGPo (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 23 Jul 2020 02:15:44 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06N6C64U016632
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 23:15:42 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=k24QbokE9aX9nRasEeGjVF0GQRdNwwU03AMNX29hlWw=;
- b=Zzu8Ovl0Jbj9OO2glEsbg3RqxHsXoFhg+lpP2diawRDHx42JDjIJfMkpblz4+IjsSf5H
- h0z1vtPrLzseVjIHG6odUPtmJlzeiE6GQmP2es8f9zsnI/ncsWhBkvUPVZqbvQwlSJ41
- p/o9+ixZoVENyDNZSbMApfgBy8KpQKx1Q2w= 
+ bh=+9KubJXYxJJ/l3tRTzRnipj4pjgHMWl/pvOZPLWs+FM=;
+ b=LZk28OBVqDqrja0FKXY6+ZwuLPmsB6LlKabkR4ek8W4R6Rm79glcRaHKe7U5tx5iXb/8
+ 3CyZa1g4Hzb1tNY16HtWA9e0AlhraOBiY4yU1WuniaI/YU9paNjYLLTegNttCf9W9f5E
+ pbYESZ/EMSffcGVRzYsK65Peh6TnVdHAUBw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32etbg2np2-1
+        by m0089730.ppops.net with ESMTP id 32esdjk19e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 23:15:39 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 23:15:42 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 22 Jul 2020 23:15:37 -0700
+ 15.1.1979.3; Wed, 22 Jul 2020 23:15:42 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 257B43705266; Wed, 22 Jul 2020 23:15:35 -0700 (PDT)
+        id 412833705266; Wed, 22 Jul 2020 23:15:40 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -50,9 +50,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v3 02/13] bpf: refactor to provide aux info to bpf_iter_init_seq_priv_t
-Date:   Wed, 22 Jul 2020 23:15:35 -0700
-Message-ID: <20200723061535.2099990-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 06/13] bpf: implement bpf iterator for array maps
+Date:   Wed, 22 Jul 2020 23:15:40 -0700
+Message-ID: <20200723061540.2100293-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200723061533.2099842-1-yhs@fb.com>
 References: <20200723061533.2099842-1-yhs@fb.com>
@@ -62,10 +62,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-23_02:2020-07-22,2020-07-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- lowpriorityscore=0 mlxlogscore=942 spamscore=0 adultscore=0 suspectscore=8
- clxscore=1015 bulkscore=0 phishscore=0 malwarescore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 clxscore=1015
+ malwarescore=0 spamscore=0 adultscore=0 impostorscore=0 phishscore=0
+ suspectscore=8 bulkscore=0 priorityscore=1501 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2007230050
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -73,163 +73,202 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch refactored target bpf_iter_init_seq_priv_t callback
-function to accept additional information. This will be needed
-in later patches for map element targets since a particular
-map should be passed to traverse elements for that particular
-map. In the future, other information may be passed to target
-as well, e.g., pid, cgroup id, etc. to customize the iterator.
+The bpf iterators for array and percpu array
+are implemented. Similar to hash maps, for percpu
+array map, bpf program will receive values
+from all cpus.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- fs/proc/proc_net.c      | 2 +-
- include/linux/bpf.h     | 7 ++++++-
- include/linux/proc_fs.h | 3 ++-
- kernel/bpf/bpf_iter.c   | 2 +-
- kernel/bpf/task_iter.c  | 2 +-
- net/ipv4/tcp_ipv4.c     | 4 ++--
- net/ipv4/udp.c          | 4 ++--
- 7 files changed, 15 insertions(+), 9 deletions(-)
+ kernel/bpf/arraymap.c | 138 ++++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/map_iter.c |   6 +-
+ 2 files changed, 142 insertions(+), 2 deletions(-)
 
-diff --git a/fs/proc/proc_net.c b/fs/proc/proc_net.c
-index dba63b2429f0..ed8a6306990c 100644
---- a/fs/proc/proc_net.c
-+++ b/fs/proc/proc_net.c
-@@ -98,7 +98,7 @@ static const struct proc_ops proc_net_seq_ops =3D {
- 	.proc_release	=3D seq_release_net,
- };
-=20
--int bpf_iter_init_seq_net(void *priv_data)
-+int bpf_iter_init_seq_net(void *priv_data, struct bpf_iter_aux_info *aux=
-)
- {
- #ifdef CONFIG_NET_NS
- 	struct seq_net_private *p =3D priv_data;
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 127067f71fd4..ef52717336cf 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -33,11 +33,13 @@ struct btf;
- struct btf_type;
- struct exception_table_entry;
- struct seq_operations;
-+struct bpf_iter_aux_info;
-=20
- extern struct idr btf_idr;
- extern spinlock_t btf_idr_lock;
-=20
--typedef int (*bpf_iter_init_seq_priv_t)(void *private_data);
-+typedef int (*bpf_iter_init_seq_priv_t)(void *private_data,
-+					struct bpf_iter_aux_info *aux);
- typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
- struct bpf_iter_seq_info {
- 	const struct seq_operations *seq_ops;
-@@ -1198,6 +1200,9 @@ int bpf_obj_get_user(const char __user *pathname, i=
-nt flags);
- 	extern int bpf_iter_ ## target(args);			\
- 	int __init bpf_iter_ ## target(args) { return 0; }
-=20
-+struct bpf_iter_aux_info {
-+};
-+
- #define BPF_ITER_CTX_ARG_MAX 2
- struct bpf_iter_reg {
- 	const char *target;
-diff --git a/include/linux/proc_fs.h b/include/linux/proc_fs.h
-index d1eed1b43651..2df965cd0974 100644
---- a/include/linux/proc_fs.h
-+++ b/include/linux/proc_fs.h
-@@ -133,7 +133,8 @@ struct proc_dir_entry *proc_create_net_single_write(c=
-onst char *name, umode_t mo
- 						    void *data);
- extern struct pid *tgid_pidfd_to_pid(const struct file *file);
-=20
--extern int bpf_iter_init_seq_net(void *priv_data);
-+struct bpf_iter_aux_info;
-+extern int bpf_iter_init_seq_net(void *priv_data, struct bpf_iter_aux_in=
-fo *aux);
- extern void bpf_iter_fini_seq_net(void *priv_data);
-=20
- #ifdef CONFIG_PROC_PID_ARCH_STATUS
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index 5b2387d6aa1f..8fa94cb1b5a0 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -442,7 +442,7 @@ static int prepare_seq_file(struct file *file, struct=
- bpf_iter_link *link)
- 	}
-=20
- 	if (tinfo->reg_info->seq_info->init_seq_private) {
--		err =3D tinfo->reg_info->seq_info->init_seq_private(priv_data->target_=
-private);
-+		err =3D tinfo->reg_info->seq_info->init_seq_private(priv_data->target_=
-private, NULL);
- 		if (err)
- 			goto release_seq_file;
- 	}
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index 6d9cd23869bf..232df29793e9 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -293,7 +293,7 @@ static void task_file_seq_stop(struct seq_file *seq, =
-void *v)
- 	}
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index c66e8273fccd..8ff419b632a6 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -487,6 +487,142 @@ static int array_map_mmap(struct bpf_map *map, stru=
+ct vm_area_struct *vma)
+ 				   vma->vm_pgoff + pgoff);
  }
 =20
--static int init_seq_pidns(void *priv_data)
-+static int init_seq_pidns(void *priv_data, struct bpf_iter_aux_info *aux=
-)
- {
- 	struct bpf_iter_seq_task_common *common =3D priv_data;
++struct bpf_iter_seq_array_map_info {
++	struct bpf_map *map;
++	void *percpu_value_buf;
++	u32 index;
++};
++
++static void *bpf_array_map_seq_start(struct seq_file *seq, loff_t *pos)
++{
++	struct bpf_iter_seq_array_map_info *info =3D seq->private;
++	struct bpf_map *map =3D info->map;
++	struct bpf_array *array;
++	u32 index;
++
++	if (info->index >=3D map->max_entries)
++		return NULL;
++
++	if (*pos =3D=3D 0)
++		++*pos;
++	array =3D container_of(map, struct bpf_array, map);
++	index =3D info->index & array->index_mask;
++	if (info->percpu_value_buf)
++	       return array->pptrs[index];
++	return array->value + array->elem_size * index;
++}
++
++static void *bpf_array_map_seq_next(struct seq_file *seq, void *v, loff_=
+t *pos)
++{
++	struct bpf_iter_seq_array_map_info *info =3D seq->private;
++	struct bpf_map *map =3D info->map;
++	struct bpf_array *array;
++	u32 index;
++
++	++*pos;
++	++info->index;
++	if (info->index >=3D map->max_entries)
++		return NULL;
++
++	array =3D container_of(map, struct bpf_array, map);
++	index =3D info->index & array->index_mask;
++	if (info->percpu_value_buf)
++	       return array->pptrs[index];
++	return array->value + array->elem_size * index;
++}
++
++static int __bpf_array_map_seq_show(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_seq_array_map_info *info =3D seq->private;
++	struct bpf_iter__bpf_map_elem ctx =3D {};
++	struct bpf_map *map =3D info->map;
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++	int off =3D 0, cpu =3D 0;
++	void __percpu **pptr;
++	u32 size;
++
++	meta.seq =3D seq;
++	prog =3D bpf_iter_get_info(&meta, v =3D=3D NULL);
++	if (!prog)
++		return 0;
++
++	ctx.meta =3D &meta;
++	ctx.map =3D info->map;
++	if (v) {
++		ctx.key =3D &info->index;
++
++		if (!info->percpu_value_buf) {
++			ctx.value =3D v;
++		} else {
++			pptr =3D v;
++			size =3D round_up(map->value_size, 8);
++			for_each_possible_cpu(cpu) {
++				bpf_long_memcpy(info->percpu_value_buf + off,
++						per_cpu_ptr(pptr, cpu),
++						size);
++				off +=3D size;
++			}
++			ctx.value =3D info->percpu_value_buf;
++		}
++	}
++
++	return bpf_iter_run_prog(prog, &ctx);
++}
++
++static int bpf_array_map_seq_show(struct seq_file *seq, void *v)
++{
++	return __bpf_array_map_seq_show(seq, v);
++}
++
++static void bpf_array_map_seq_stop(struct seq_file *seq, void *v)
++{
++	if (!v)
++		(void)__bpf_array_map_seq_show(seq, NULL);
++}
++
++static int bpf_iter_init_array_map(void *priv_data,
++				   struct bpf_iter_aux_info *aux)
++{
++	struct bpf_iter_seq_array_map_info *seq_info =3D priv_data;
++	struct bpf_map *map =3D aux->map;
++	void *value_buf;
++	u32 buf_size;
++
++	if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY) {
++		buf_size =3D round_up(map->value_size, 8) * num_possible_cpus();
++		value_buf =3D kmalloc(buf_size, GFP_USER | __GFP_NOWARN);
++		if (!value_buf)
++			return -ENOMEM;
++
++		seq_info->percpu_value_buf =3D value_buf;
++	}
++
++	seq_info->map =3D map;
++	return 0;
++}
++
++static void bpf_iter_fini_array_map(void *priv_data)
++{
++	struct bpf_iter_seq_array_map_info *seq_info =3D priv_data;
++
++	kfree(seq_info->percpu_value_buf);
++}
++
++static const struct seq_operations bpf_array_map_seq_ops =3D {
++	.start	=3D bpf_array_map_seq_start,
++	.next	=3D bpf_array_map_seq_next,
++	.stop	=3D bpf_array_map_seq_stop,
++	.show	=3D bpf_array_map_seq_show,
++};
++
++static const struct bpf_iter_seq_info iter_seq_info =3D {
++	.seq_ops		=3D &bpf_array_map_seq_ops,
++	.init_seq_private	=3D bpf_iter_init_array_map,
++	.fini_seq_private	=3D bpf_iter_fini_array_map,
++	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_array_map_info),
++};
++
+ static int array_map_btf_id;
+ const struct bpf_map_ops array_map_ops =3D {
+ 	.map_alloc_check =3D array_map_alloc_check,
+@@ -506,6 +642,7 @@ const struct bpf_map_ops array_map_ops =3D {
+ 	.map_update_batch =3D generic_map_update_batch,
+ 	.map_btf_name =3D "bpf_array",
+ 	.map_btf_id =3D &array_map_btf_id,
++	.iter_seq_info =3D &iter_seq_info,
+ };
 =20
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index 5e029c0c0907..09fea0650009 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -2921,7 +2921,7 @@ static struct pernet_operations __net_initdata tcp_=
-sk_ops =3D {
- DEFINE_BPF_ITER_FUNC(tcp, struct bpf_iter_meta *meta,
- 		     struct sock_common *sk_common, uid_t uid)
+ static int percpu_array_map_btf_id;
+@@ -521,6 +658,7 @@ const struct bpf_map_ops percpu_array_map_ops =3D {
+ 	.map_check_btf =3D array_map_check_btf,
+ 	.map_btf_name =3D "bpf_array",
+ 	.map_btf_id =3D &percpu_array_map_btf_id,
++	.iter_seq_info =3D &iter_seq_info,
+ };
 =20
--static int bpf_iter_init_tcp(void *priv_data)
-+static int bpf_iter_init_tcp(void *priv_data, struct bpf_iter_aux_info *=
-aux)
- {
- 	struct tcp_iter_state *st =3D priv_data;
- 	struct tcp_seq_afinfo *afinfo;
-@@ -2933,7 +2933,7 @@ static int bpf_iter_init_tcp(void *priv_data)
+ static int fd_array_map_alloc_check(union bpf_attr *attr)
+diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
+index bcb68b55bf65..fbe1f557cb88 100644
+--- a/kernel/bpf/map_iter.c
++++ b/kernel/bpf/map_iter.c
+@@ -106,10 +106,12 @@ static int bpf_iter_check_map(struct bpf_prog *prog=
+,
+ 	bool is_percpu =3D false;
 =20
- 	afinfo->family =3D AF_UNSPEC;
- 	st->bpf_seq_afinfo =3D afinfo;
--	ret =3D bpf_iter_init_seq_net(priv_data);
-+	ret =3D bpf_iter_init_seq_net(priv_data, aux);
- 	if (ret)
- 		kfree(afinfo);
- 	return ret;
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 6879ff80c3d0..9397690b3737 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -3179,7 +3179,7 @@ static struct pernet_operations __net_initdata udp_=
-sysctl_ops =3D {
- DEFINE_BPF_ITER_FUNC(udp, struct bpf_iter_meta *meta,
- 		     struct udp_sock *udp_sk, uid_t uid, int bucket)
+ 	if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_HASH ||
+-	    map->map_type =3D=3D BPF_MAP_TYPE_LRU_PERCPU_HASH)
++	    map->map_type =3D=3D BPF_MAP_TYPE_LRU_PERCPU_HASH ||
++	    map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY)
+ 		is_percpu =3D true;
+ 	else if (map->map_type !=3D BPF_MAP_TYPE_HASH &&
+-		 map->map_type !=3D BPF_MAP_TYPE_LRU_HASH)
++		 map->map_type !=3D BPF_MAP_TYPE_LRU_HASH &&
++		 map->map_type !=3D BPF_MAP_TYPE_ARRAY)
+ 		return -EINVAL;
 =20
--static int bpf_iter_init_udp(void *priv_data)
-+static int bpf_iter_init_udp(void *priv_data, struct bpf_iter_aux_info *=
-aux)
- {
- 	struct udp_iter_state *st =3D priv_data;
- 	struct udp_seq_afinfo *afinfo;
-@@ -3192,7 +3192,7 @@ static int bpf_iter_init_udp(void *priv_data)
- 	afinfo->family =3D AF_UNSPEC;
- 	afinfo->udp_table =3D &udp_table;
- 	st->bpf_seq_afinfo =3D afinfo;
--	ret =3D bpf_iter_init_seq_net(priv_data);
-+	ret =3D bpf_iter_init_seq_net(priv_data, aux);
- 	if (ret)
- 		kfree(afinfo);
- 	return ret;
+ 	key_acc_size =3D prog->aux->max_rdonly_access;
 --=20
 2.24.1
 
