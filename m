@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB666C433EA
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 11:43:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65032C433DF
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 11:43:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2DC720B1F
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 11:43:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 427A82086A
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 11:43:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595504583;
-	bh=D0Cio1tQM+aIdvgA4bobhr8cRVjSx3kh/xhDo6EfaSs=;
+	s=default; t=1595504602;
+	bh=D9LURMY6QhNvXrtQTcDScEC9ufStkgARe7amVtSXPVw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aGTFAsFxBsjs+A1f207qN09eqBWCyf6jn88yZmJ0Leu5rG93NLfS1qQAuacHvjU8J
-	 CLJLYsytzA1xl+owizJZjiN3j35T96j9JGGr+5HTk8c0JSOh47gGqy9wrhCOsWe47A
-	 dSDofF0CbmWMEaFHtjKTbpmdy8y/Sf2Z56BdYHRA=
+	b=Chsc1CGOKJhDilOSm0KjDdA6xqDTl6xs5U79LEhoehstL9UgaF2EvyCzCSqaGbqAv
+	 ThmU+ZD0FcVu5oR10w8tVq7rADXfXBIEuGOMWw191GDPhZpsdPMqi/8nuoeirsyDxx
+	 yh+0cYpc62XKiBlwPjo93dpSeQMl6dzCH9znt83M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728619AbgGWLnB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jul 2020 07:43:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45934 "EHLO mail.kernel.org"
+        id S1728688AbgGWLnW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jul 2020 07:43:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46228 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727916AbgGWLnB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Jul 2020 07:43:01 -0400
+        id S1728567AbgGWLnV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jul 2020 07:43:21 -0400
 Received: from lore-desk.redhat.com (unknown [151.48.142.198])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9721B2086A;
-        Thu, 23 Jul 2020 11:42:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6D70322B47;
+        Thu, 23 Jul 2020 11:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595504580;
-        bh=D0Cio1tQM+aIdvgA4bobhr8cRVjSx3kh/xhDo6EfaSs=;
+        s=default; t=1595504601;
+        bh=D9LURMY6QhNvXrtQTcDScEC9ufStkgARe7amVtSXPVw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a7sCghhtXm46uqE8SUlUPcTXDFpdLsN8vgC1XdQxZgolPmINKzna/z8SDylCKIscd
-         VBSqLkjNC4Tq2HKpWADgghKtmkRo6yLnHJx+/lvrH7R9NnOwKkF63/vi0wJvVbRT8d
-         gkfd4z+cQEyf2cTI5YOgIFjSqjzWu9Y+9RMBqnKs=
+        b=f2Ek87az/HPM16vhw0E9gd8oNSmlWf30Ms83SjOPscy9N/4+uQs0Dv9batzop4Je7
+         uMMSqS5wYS50a7whT0kJb9Tr3UU9/pVJAtoIg9cwCeXKxg1XKewhA2I35umg+ouYdC
+         Y9Q+vyPljOrzi2VAH6E+4hNE3ydi1gNCCFhzRvWg=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, davem@davemloft.net, ast@kernel.org,
         brouer@redhat.com, daniel@iogearbox.net,
         lorenzo.bianconi@redhat.com, echaudro@redhat.com,
         sameehj@amazon.com, kuba@kernel.org
-Subject: [RFC net-next 01/22] xdp: introduce mb in xdp_buff/xdp_frame
-Date:   Thu, 23 Jul 2020 13:42:13 +0200
-Message-Id: <1d3c0f39d41fd8268523c190c36fa7934d3b2e01.1595503780.git.lorenzo@kernel.org>
+Subject: [RFC net-next 06/22] net: hv_netvsc: initialize mb bit of xdp_buff to 0
+Date:   Thu, 23 Jul 2020 13:42:18 +0200
+Message-Id: <b974b617c54122f90a9e8a6f63b93960543477b7.1595503780.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1595503780.git.lorenzo@kernel.org>
 References: <cover.1595503780.git.lorenzo@kernel.org>
@@ -57,55 +57,26 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce multi-buffer bit (mb) in xdp_frame/xdp_buffer to specify
-if shared_info area has been properly initialized for non-linear
-xdp buffers
+Initialize multi-buffer bit (mb) to 0 in xdp_buff data structure.
+This is a preliminary patch to enable xdp multi-buffer support.
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- include/net/xdp.h | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/net/hyperv/netvsc_bpf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index dbe9c60797e1..2ef6935c5646 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -72,7 +72,8 @@ struct xdp_buff {
- 	void *data_hard_start;
- 	struct xdp_rxq_info *rxq;
- 	struct xdp_txq_info *txq;
--	u32 frame_sz; /* frame size to deduce data_hard_end/reserved tailroom*/
-+	u32 frame_sz:31; /* frame size to deduce data_hard_end/reserved tailroom*/
-+	u32 mb:1; /* xdp non-linear buffer */
- };
+diff --git a/drivers/net/hyperv/netvsc_bpf.c b/drivers/net/hyperv/netvsc_bpf.c
+index 8e4141552423..e26c60413128 100644
+--- a/drivers/net/hyperv/netvsc_bpf.c
++++ b/drivers/net/hyperv/netvsc_bpf.c
+@@ -50,6 +50,7 @@ u32 netvsc_run_xdp(struct net_device *ndev, struct netvsc_channel *nvchan,
+ 	xdp->data_end = xdp->data + len;
+ 	xdp->rxq = &nvchan->xdp_rxq;
+ 	xdp->frame_sz = PAGE_SIZE;
++	xdp->mb = 0;
  
- /* Reserve memory area at end-of data area.
-@@ -96,7 +97,8 @@ struct xdp_frame {
- 	u16 len;
- 	u16 headroom;
- 	u32 metasize:8;
--	u32 frame_sz:24;
-+	u32 frame_sz:23;
-+	u32 mb:1; /* xdp non-linear frame */
- 	/* Lifetime of xdp_rxq_info is limited to NAPI/enqueue time,
- 	 * while mem info is valid on remote CPU.
- 	 */
-@@ -141,6 +143,7 @@ void xdp_convert_frame_to_buff(struct xdp_frame *frame, struct xdp_buff *xdp)
- 	xdp->data_end = frame->data + frame->len;
- 	xdp->data_meta = frame->data - frame->metasize;
- 	xdp->frame_sz = frame->frame_sz;
-+	xdp->mb = frame->mb;
- }
+ 	memcpy(xdp->data, data, len);
  
- static inline
-@@ -167,6 +170,7 @@ int xdp_update_frame_from_buff(struct xdp_buff *xdp,
- 	xdp_frame->headroom = headroom - sizeof(*xdp_frame);
- 	xdp_frame->metasize = metasize;
- 	xdp_frame->frame_sz = xdp->frame_sz;
-+	xdp_frame->mb = xdp->mb;
- 
- 	return 0;
- }
 -- 
 2.26.2
 
