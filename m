@@ -2,45 +2,46 @@ Return-Path: <SRS0=Cb5B=BC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4338FC433DF
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 01:03:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 905B5C433E5
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 01:03:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1DE392086A
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 01:03:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6FEA12086A
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 01:03:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="gCiaMbuL"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="O8DOSFZ4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387469AbgGWBDm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jul 2020 21:03:42 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:57094 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1733175AbgGWBDm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 21:03:42 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06N0lZao026149
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 18:03:41 -0700
+        id S2387414AbgGWBDy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jul 2020 21:03:54 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22634 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387500AbgGWBDx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 21:03:53 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06N0hiOl018015
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 18:03:52 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=facebook;
- bh=I0sSMB8jzgrYoc7104CidJ+wBtTu0+QUata4+XMyTgA=;
- b=gCiaMbuLWv1ZDfn9tmvYubc7yBQnE4NhB+5oYJtuFHfwyocO0uc2TirJMP4M/z1SPTtD
- mguqR1wT/c5O1mgi9gySQC0zM6KtAAXVB0Z60Ch+AaMLFeEZdQk5Hj9q6jkcizozvCPx
- 51Pj5rA7IQWtFIbAM5st4SMwdcldd8Rhj7E= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=QDcZGjcRcN8iU6kjcqNhTgCk0rKCr0rU1R6fsst3OEQ=;
+ b=O8DOSFZ4/qlXKOkSbCyEDbT0Lma04VnBiLf+hLY8iwoOXk4XgcdJPQ0QbbhJraZQuDBc
+ R/FQTTRYPNE2MtC3datpI7XiO6Xs2tXZU/lCpaWIamYIQ+4Vzeo0wJajWA7smMdoiLGk
+ 2kNQaqtgc3ipC8qGBQgSZJCtgy7PiuLPcUA= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 32esdjj615-5
+        by mx0a-00082601.pphosted.com with ESMTP id 32esyut0mx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 18:03:41 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 18:03:52 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 22 Jul 2020 18:03:39 -0700
+ 15.1.1979.3; Wed, 22 Jul 2020 18:03:50 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id AF7242945AD1; Wed, 22 Jul 2020 18:03:34 -0700 (PDT)
+        id 3FA052945AD1; Wed, 22 Jul 2020 18:03:47 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -52,20 +53,22 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Neal Cardwell <ncardwell@google.com>, <netdev@vger.kernel.org>,
         Yuchung Cheng <ycheng@google.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 0/9] BPF TCP header options
-Date:   Wed, 22 Jul 2020 18:03:34 -0700
-Message-ID: <20200723010334.1905574-1-kafai@fb.com>
+Subject: [PATCH v2 bpf-next 2/9] tcp: bpf: Add TCP_BPF_DELACK_MAX setsockopt
+Date:   Wed, 22 Jul 2020 18:03:47 -0700
+Message-ID: <20200723010347.1906800-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200723010334.1905574-1-kafai@fb.com>
+References: <20200723010334.1905574-1-kafai@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-22_17:2020-07-22,2020-07-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 clxscore=1015
- malwarescore=0 spamscore=0 adultscore=0 impostorscore=0 phishscore=0
- suspectscore=13 bulkscore=0 priorityscore=1501 mlxlogscore=929
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
+ suspectscore=13 impostorscore=0 mlxlogscore=999 phishscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2007230002
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -73,113 +76,130 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The earlier effort in BPF-TCP-CC allows the TCP Congestion Control
-algorithm to be written in BPF.  It opens up opportunities to allow
-a faster turnaround time in testing/releasing new congestion control
-ideas to production environment.
+This change is mostly from an internal patch and adapts it from sysctl
+config to the bpf_setsockopt setup.
 
-The same flexibility can be extended to writing TCP header option.
-It is not uncommon that people want to test new TCP header option
-to improve the TCP performance.  Another use case is for data-center
-that has a more controlled environment and has more flexibility in
-putting header options for internal traffic only.
-   =20
-This patch set introduces the necessary BPF logic and API to
-allow bpf program to write and parse header options.
+The bpf_prog can set the max delay ack by using
+bpf_setsockopt(TCP_BPF_DELACK_MAX).  This max delay ack can be communicat=
+ed
+to its peer through bpf header option.  The receiving peer can then use
+this max delay ack and set a potentially lower rto by using
+bpf_setsockopt(TCP_BPF_RTO_MIN) which will be introduced
+in the next patch.
 
-There are also some changes to TCP and they are mostly to provide
-the needed sk and skb info to the bpf program to make decision.
+Another latter seltest patch will also use it like the above to show
+how to write and parse bpf tcp header option.
 
-Patch 6 is the main patch and has more details on the API and design.
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ include/net/inet_connection_sock.h | 1 +
+ include/uapi/linux/bpf.h           | 1 +
+ net/core/filter.c                  | 8 ++++++++
+ net/ipv4/tcp.c                     | 2 ++
+ net/ipv4/tcp_output.c              | 2 ++
+ tools/include/uapi/linux/bpf.h     | 1 +
+ 6 files changed, 15 insertions(+)
 
-The set includes an example which sends the max delay ack in
-the BPF TCP header option and the receiving side can
-then adjust its RTO accordingly.
-
-v2:
-- Instead of limiting the bpf prog to write experimental
-  option (kind:254, magic:0xeB9F), this revision allows the bpf prog to
-  write any TCP header option through the bpf_store_hdr_opt() helper.
-  That will allow different bpf-progs to write its own
-  option and the helper will guarantee there is no duplication.
-
-- Add bpf_load_hdr_opt() helper to search a particular option by kind.
-  Some of the get_syn logic is refactored to bpf_sock_ops_get_syn().
-
-- Since bpf prog is no longer limited to option (254, 0xeB9F),
-  the TCP_SKB_CB(skb)->bpf_hdr_opt_off is no longer needed.
-  Instead, when there is any option kernel cannot recognize,
-  the bpf prog will be called if the
-  BPF_SOCK_OPS_PARSE_UNKWN_HDR_OPT_CB_FLAG is set.
-  [ The "unknown_opt" is learned in tcp_parse_options() in patch 4. ]
-
-- Add BPF_SOCK_OPS_PARSE_ALL_HDR_OPT_CB_FLAG.
-  If this flag is set, the bpf-prog will be called
-  on all tcp packet received at an established sk.
-  It will be useful to ensure a previously written header option is
-  received by the peer.
-  e.g. The latter test is using this on the active-side during syncookie.
-
-- The test_tcp_hdr_options.c is adjusted accordingly
-  to test writing both experimental and regular TCP header option.
-
-- The test_misc_tcp_hdr_options.c is added to mainly
-  test different cases on the new helpers.
- =20
-- Break up the TCP_BPF_RTO_MIN and TCP_BPF_DELACK_MAX into
-  two patches.
-
-- Directly store the tcp_hdrlen in "struct saved_syn" instead of
-  going back to the tcp header to obtain it by "th->doff * 4"
-
-- Add a new optval(=3D=3D2) for setsockopt(TCP_SAVE_SYN) such
-  that it will also store the mac header (patch 9).
-
-Martin KaFai Lau (9):
-  tcp: Use a struct to represent a saved_syn
-  tcp: bpf: Add TCP_BPF_DELACK_MAX setsockopt
-  tcp: bpf: Add TCP_BPF_RTO_MIN for bpf_setsockopt
-  tcp: Add unknown_opt arg to tcp_parse_options
-  bpf: sock_ops: Change some members of sock_ops_kern from u32 to u8
-  bpf: tcp: Allow bpf prog to write and parse TCP header option
-  bpf: selftests: Add fastopen_connect to network_helpers
-  bpf: selftests: tcp header options
-  tcp: bpf: Optionally store mac header in TCP_SAVE_SYN
-
- drivers/infiniband/hw/cxgb4/cm.c              |   2 +-
- include/linux/bpf-cgroup.h                    |  25 +
- include/linux/filter.h                        |   8 +-
- include/linux/tcp.h                           |  18 +-
- include/net/inet_connection_sock.h            |   2 +
- include/net/request_sock.h                    |   9 +-
- include/net/tcp.h                             |  58 +-
- include/uapi/linux/bpf.h                      | 218 +++++-
- net/core/filter.c                             | 416 ++++++++++-
- net/ipv4/syncookies.c                         |   2 +-
- net/ipv4/tcp.c                                |  16 +-
- net/ipv4/tcp_fastopen.c                       |   2 +-
- net/ipv4/tcp_input.c                          | 151 +++-
- net/ipv4/tcp_ipv4.c                           |   3 +-
- net/ipv4/tcp_minisocks.c                      |   5 +-
- net/ipv4/tcp_output.c                         | 165 ++++-
- net/ipv6/syncookies.c                         |   2 +-
- net/ipv6/tcp_ipv6.c                           |   3 +-
- tools/include/uapi/linux/bpf.h                | 218 +++++-
- tools/testing/selftests/bpf/network_helpers.c |  37 +
- tools/testing/selftests/bpf/network_helpers.h |   2 +
- .../bpf/prog_tests/tcp_hdr_options.c          | 636 +++++++++++++++++
- .../bpf/progs/test_misc_tcp_hdr_options.c     | 314 +++++++++
- .../bpf/progs/test_tcp_hdr_options.c          | 652 ++++++++++++++++++
- .../selftests/bpf/test_tcp_hdr_options.h      | 150 ++++
- 25 files changed, 3050 insertions(+), 64 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tcp_hdr_option=
-s.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_o=
-ptions.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_tcp_hdr_option=
-s.c
- create mode 100644 tools/testing/selftests/bpf/test_tcp_hdr_options.h
-
+diff --git a/include/net/inet_connection_sock.h b/include/net/inet_connec=
+tion_sock.h
+index 157c60cca0ca..8fd5c55b6756 100644
+--- a/include/net/inet_connection_sock.h
++++ b/include/net/inet_connection_sock.h
+@@ -85,6 +85,7 @@ struct inet_connection_sock {
+  	struct timer_list	  icsk_retransmit_timer;
+  	struct timer_list	  icsk_delack_timer;
+ 	__u32			  icsk_rto;
++	__u32                     icsk_delack_max;
+ 	__u32			  icsk_pmtu_cookie;
+ 	const struct tcp_congestion_ops *icsk_ca_ops;
+ 	const struct inet_connection_sock_af_ops *icsk_af_ops;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 54d0c886e3ba..227a2a4b7157 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4229,6 +4229,7 @@ enum {
+ enum {
+ 	TCP_BPF_IW		=3D 1001,	/* Set TCP initial congestion window */
+ 	TCP_BPF_SNDCWND_CLAMP	=3D 1002,	/* Set sndcwnd_clamp */
++	TCP_BPF_DELACK_MAX	=3D 1003, /* Max delay ack in usecs */
+ };
+=20
+ struct bpf_perf_event_value {
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 04c4d89d56c3..c8dae35ab5f1 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4459,6 +4459,7 @@ static int _bpf_setsockopt(struct sock *sk, int lev=
+el, int optname,
+ 		} else {
+ 			struct inet_connection_sock *icsk =3D inet_csk(sk);
+ 			struct tcp_sock *tp =3D tcp_sk(sk);
++			unsigned long timeout;
+=20
+ 			if (optlen !=3D sizeof(int))
+ 				return -EINVAL;
+@@ -4480,6 +4481,13 @@ static int _bpf_setsockopt(struct sock *sk, int le=
+vel, int optname,
+ 					tp->snd_ssthresh =3D val;
+ 				}
+ 				break;
++			case TCP_BPF_DELACK_MAX:
++				timeout =3D usecs_to_jiffies(val);
++				if (timeout > TCP_DELACK_MAX ||
++				    timeout < TCP_TIMEOUT_MIN)
++					return -EINVAL;
++				inet_csk(sk)->icsk_delack_max =3D timeout;
++				break;
+ 			case TCP_SAVE_SYN:
+ 				if (val < 0 || val > 1)
+ 					ret =3D -EINVAL;
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 123100057890..d8076d95f6a9 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -418,6 +418,7 @@ void tcp_init_sock(struct sock *sk)
+ 	INIT_LIST_HEAD(&tp->tsorted_sent_queue);
+=20
+ 	icsk->icsk_rto =3D TCP_TIMEOUT_INIT;
++	icsk->icsk_delack_max =3D TCP_DELACK_MAX;
+ 	tp->mdev_us =3D jiffies_to_usecs(TCP_TIMEOUT_INIT);
+ 	minmax_reset(&tp->rtt_min, tcp_jiffies32, ~0U);
+=20
+@@ -2685,6 +2686,7 @@ int tcp_disconnect(struct sock *sk, int flags)
+ 	icsk->icsk_backoff =3D 0;
+ 	icsk->icsk_probes_out =3D 0;
+ 	icsk->icsk_rto =3D TCP_TIMEOUT_INIT;
++	icsk->icsk_delack_max =3D TCP_DELACK_MAX;
+ 	tp->snd_ssthresh =3D TCP_INFINITE_SSTHRESH;
+ 	tp->snd_cwnd =3D TCP_INIT_CWND;
+ 	tp->snd_cwnd_cnt =3D 0;
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index dc0117013ba5..4595dd495f6f 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -3738,6 +3738,8 @@ void tcp_send_delayed_ack(struct sock *sk)
+ 		ato =3D min(ato, max_ato);
+ 	}
+=20
++	ato =3D min_t(u32, ato, inet_csk(sk)->icsk_delack_max);
++
+ 	/* Stay within the limit we were given */
+ 	timeout =3D jiffies + ato;
+=20
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index 54d0c886e3ba..227a2a4b7157 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4229,6 +4229,7 @@ enum {
+ enum {
+ 	TCP_BPF_IW		=3D 1001,	/* Set TCP initial congestion window */
+ 	TCP_BPF_SNDCWND_CLAMP	=3D 1002,	/* Set sndcwnd_clamp */
++	TCP_BPF_DELACK_MAX	=3D 1003, /* Max delay ack in usecs */
+ };
+=20
+ struct bpf_perf_event_value {
 --=20
 2.24.1
 
