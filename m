@@ -2,113 +2,179 @@ Return-Path: <SRS0=Cb5B=BC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A8E1C433E3
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 05:55:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EE8DC433E0
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:09:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66DBA20825
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 05:55:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B5F420825
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:09:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q4IHV0nX"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="AHWMVgl+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726109AbgGWFzX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jul 2020 01:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S1726559AbgGWGJb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jul 2020 02:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725773AbgGWFzW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Jul 2020 01:55:22 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901B1C0619DC;
-        Wed, 22 Jul 2020 22:55:22 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id w2so2507084pgg.10;
-        Wed, 22 Jul 2020 22:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=etSFHncgg7r4mzGjmHt/9kGqiemZafuATTVFbIBTcFY=;
-        b=Q4IHV0nXh9SbmnWEKPn83HGJ1Z4tgKqIyB/e2fCbJqe3M22dTGrWizItChLKQaj/P5
-         NVxm9g2XljfQY+LsWzKZPwEN0Xg9fXOoCPPOEkWOcolrMKGvQBibRdGpzPcVUHNEUIiP
-         4gZMqcju8OsyljV40eJg0WGlJa3BcPi5LVe+pPWymrtrCUSWor2H6gethkDVX80dFxTP
-         0vNU6T1z6JnV+JpJ9j/SFGB7xXS50JBLnBDxJHMe9nS6mVBERTXx7UD4GausIlaxA+hQ
-         97ARxLycfWwT7biqyxeKLaAUpDS1V8xvQuBE8QMYZv3xOGnQvhfSUB+k5oPdJJ1JPgBy
-         s+4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=etSFHncgg7r4mzGjmHt/9kGqiemZafuATTVFbIBTcFY=;
-        b=B8rFYzY7I7fJGz8K8mX4fG7pUux8YK+fE+pX/UO/xfbtRhZyOaDhKx6Hac0TyQgZ59
-         qaOhXz/WX/46wDoCOYRiZrqaf0K1gLrniHorVcINjho3fKuli7zHcGf+Ht2DkoQDO2mH
-         gwEaaCfCkWQ9OE6kBPXs7JDwZNwyJkx1U4Z2f6q0Avn37p80A5XvKf+AinyPMQpZ2Ozz
-         nWg2gdcaLBA1g0BzaQQFGYpVR5pmkOl+waH65pVjEoLmoy4dKD/7RK2lIS93DeVXLD7N
-         hascjU31BxXPg3G1LtWuzRuqxV5P7efB5tBQuh1iZkqMUEK1CnPXjsV5rgv3umxDNl8I
-         yNSA==
-X-Gm-Message-State: AOAM533KezotoHysmG+JP2LBnw3G+ZjTpYQnj7j7/j7WoPXlo8CZjYfI
-        Q7czwW9lV/zf45X2eeVXztk=
-X-Google-Smtp-Source: ABdhPJwchaE7ldo73CSHbrS4ei8c2gGAwybeV4GQ0H5YOtWzMzh1pidGnm9KWKEvRQpvZoOMkJ410Q==
-X-Received: by 2002:a63:df56:: with SMTP id h22mr2815814pgj.140.1595483722008;
-        Wed, 22 Jul 2020 22:55:22 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:6cd6])
-        by smtp.gmail.com with ESMTPSA id a3sm1540743pgd.73.2020.07.22.22.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2020 22:55:20 -0700 (PDT)
-Date:   Wed, 22 Jul 2020 22:55:18 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com, john.fastabend@gmail.com, kpsingh@chromium.org,
-        brouer@redhat.com, peterz@infradead.org
-Subject: Re: [PATCH v4 bpf-next 2/4] bpf: fail PERF_EVENT_IOC_SET_BPF when
- bpf_get_[stack|stackid] cannot work
-Message-ID: <20200723055518.onydx7uhmzomt7ud@ast-mbp.dhcp.thefacebook.com>
-References: <20200722184210.4078256-1-songliubraving@fb.com>
- <20200722184210.4078256-3-songliubraving@fb.com>
+        with ESMTP id S1726522AbgGWGJb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jul 2020 02:09:31 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31CEC0619E3;
+        Wed, 22 Jul 2020 23:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=jnNftkdWuHutn0l5/V2Gz6Qvt1s8tXbdDMQLxkwuHBo=; b=AHWMVgl+gZI3ppeRUJG22CnuN2
+        mXsqGUtHr7hHIshIeM0BR3FDFu7P8hUJdDKWEDjaeFBPFzHAKS1/J2NqqrgVWAiWy0PDBIJV6MaAk
+        gPot77jPYt8McodlLqHe4rYj1xwXIh3dwL7d5dP2a47D69tnzjzBjxRqbyL4qtqPcLy6LsSPLTz8/
+        YOabKmimQamGM4cxDNfekHWNUuwVnDebo84hbzn4arDbH1CmgtyNxmN2OFQxyAhRHpoT37cldfrc6
+        Ax/DteamlOzerpb/bK5cMQkwL7vWGfqduGUdI9Ez5lzvt3eBZC1+o7Ayqr6UYOa2Jd5AGGDGAZ45S
+        4D3R2EfQ==;
+Received: from [2001:4bb8:18c:2acc:91df:aae8:fa3b:de9c] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jyUPo-0003jj-5f; Thu, 23 Jul 2020 06:09:12 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-sctp@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-can@vger.kernel.org, dccp@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net,
+        linux-wpan@vger.kernel.org, linux-s390@vger.kernel.org,
+        mptcp@lists.01.org, lvs-devel@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
+        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
+Subject: [PATCH 02/26] net/bpfilter: split __bpfilter_process_sockopt
+Date:   Thu, 23 Jul 2020 08:08:44 +0200
+Message-Id: <20200723060908.50081-3-hch@lst.de>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200723060908.50081-1-hch@lst.de>
+References: <20200723060908.50081-1-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200722184210.4078256-3-songliubraving@fb.com>
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 11:42:08AM -0700, Song Liu wrote:
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 856d98c36f562..f77d009fcce95 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -9544,6 +9544,24 @@ static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
->  	if (IS_ERR(prog))
->  		return PTR_ERR(prog);
->  
-> +	if (event->attr.precise_ip &&
-> +	    prog->call_get_stack &&
-> +	    (!(event->attr.sample_type & __PERF_SAMPLE_CALLCHAIN_EARLY) ||
-> +	     event->attr.exclude_callchain_kernel ||
-> +	     event->attr.exclude_callchain_user)) {
-> +		/*
-> +		 * On perf_event with precise_ip, calling bpf_get_stack()
-> +		 * may trigger unwinder warnings and occasional crashes.
-> +		 * bpf_get_[stack|stackid] works around this issue by using
-> +		 * callchain attached to perf_sample_data. If the
-> +		 * perf_event does not full (kernel and user) callchain
-> +		 * attached to perf_sample_data, do not allow attaching BPF
-> +		 * program that calls bpf_get_[stack|stackid].
-> +		 */
-> +		bpf_prog_put(prog);
-> +		return -EINVAL;
+Split __bpfilter_process_sockopt into a low-level send request routine and
+the actual setsockopt hook to split the init time ping from the actual
+setsockopt processing.
 
-I suspect this will be a common error. bpftrace and others will be hitting
-this issue and would need to fix how they do perf_event_open.
-But EINVAL is too ambiguous and sys_perf_event_open has no ability to
-return a string.
-So how about we pick some different errno here to make future debugging
-a bit less painful?
-May be EBADFD or EPROTO or EPROTOTYPE ?
-I think anything would be better than EINVAL.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ net/bpfilter/bpfilter_kern.c | 51 +++++++++++++++++++-----------------
+ 1 file changed, 27 insertions(+), 24 deletions(-)
+
+diff --git a/net/bpfilter/bpfilter_kern.c b/net/bpfilter/bpfilter_kern.c
+index 3bac5820062af1..78d561f2c54da7 100644
+--- a/net/bpfilter/bpfilter_kern.c
++++ b/net/bpfilter/bpfilter_kern.c
+@@ -31,48 +31,51 @@ static void __stop_umh(void)
+ 		shutdown_umh();
+ }
+ 
+-static int __bpfilter_process_sockopt(struct sock *sk, int optname,
+-				      char __user *optval,
+-				      unsigned int optlen, bool is_set)
++static int bpfilter_send_req(struct mbox_request *req)
+ {
+-	struct mbox_request req;
+ 	struct mbox_reply reply;
+ 	loff_t pos;
+ 	ssize_t n;
+-	int ret = -EFAULT;
+ 
+-	req.is_set = is_set;
+-	req.pid = current->pid;
+-	req.cmd = optname;
+-	req.addr = (uintptr_t)optval;
+-	req.len = optlen;
+ 	if (!bpfilter_ops.info.tgid)
+-		goto out;
++		return -EFAULT;
+ 	pos = 0;
+-	n = kernel_write(bpfilter_ops.info.pipe_to_umh, &req, sizeof(req),
++	n = kernel_write(bpfilter_ops.info.pipe_to_umh, req, sizeof(*req),
+ 			   &pos);
+-	if (n != sizeof(req)) {
++	if (n != sizeof(*req)) {
+ 		pr_err("write fail %zd\n", n);
+-		__stop_umh();
+-		ret = -EFAULT;
+-		goto out;
++		goto stop;
+ 	}
+ 	pos = 0;
+ 	n = kernel_read(bpfilter_ops.info.pipe_from_umh, &reply, sizeof(reply),
+ 			&pos);
+ 	if (n != sizeof(reply)) {
+ 		pr_err("read fail %zd\n", n);
+-		__stop_umh();
+-		ret = -EFAULT;
+-		goto out;
++		goto stop;
+ 	}
+-	ret = reply.status;
+-out:
+-	return ret;
++	return reply.status;
++stop:
++	__stop_umh();
++	return -EFAULT;
++}
++
++static int bpfilter_process_sockopt(struct sock *sk, int optname,
++				    char __user *optval, unsigned int optlen,
++				    bool is_set)
++{
++	struct mbox_request req = {
++		.is_set		= is_set,
++		.pid		= current->pid,
++		.cmd		= optname,
++		.addr		= (uintptr_t)optval,
++		.len		= optlen,
++	};
++	return bpfilter_send_req(&req);
+ }
+ 
+ static int start_umh(void)
+ {
++	struct mbox_request req = { .pid = current->pid };
+ 	int err;
+ 
+ 	/* fork usermode process */
+@@ -82,7 +85,7 @@ static int start_umh(void)
+ 	pr_info("Loaded bpfilter_umh pid %d\n", pid_nr(bpfilter_ops.info.tgid));
+ 
+ 	/* health check that usermode process started correctly */
+-	if (__bpfilter_process_sockopt(NULL, 0, NULL, 0, 0) != 0) {
++	if (bpfilter_send_req(&req) != 0) {
+ 		shutdown_umh();
+ 		return -EFAULT;
+ 	}
+@@ -103,7 +106,7 @@ static int __init load_umh(void)
+ 	mutex_lock(&bpfilter_ops.lock);
+ 	err = start_umh();
+ 	if (!err && IS_ENABLED(CONFIG_INET)) {
+-		bpfilter_ops.sockopt = &__bpfilter_process_sockopt;
++		bpfilter_ops.sockopt = &bpfilter_process_sockopt;
+ 		bpfilter_ops.start = &start_umh;
+ 	}
+ 	mutex_unlock(&bpfilter_ops.lock);
+-- 
+2.27.0
+
