@@ -4,39 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25A98C4347E
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:10:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89AA3C433E8
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:11:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 000662086A
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:10:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68D8C206C1
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:11:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="aIaMhclE"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MjJqnKUL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727834AbgGWGKe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jul 2020 02:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        id S1728017AbgGWGKu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jul 2020 02:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727808AbgGWGJz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Jul 2020 02:09:55 -0400
+        with ESMTP id S1727779AbgGWGJy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jul 2020 02:09:54 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910CCC0619DC;
-        Wed, 22 Jul 2020 23:09:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845FAC0619E2;
+        Wed, 22 Jul 2020 23:09:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=UdgYuJlmWZokLcAOPnfw8PlZRvn7vjQf/6iOObq/cjM=; b=aIaMhclEEnD1ULwrKvn78xfvE4
-        8LhP29U8BKD5dCx/PZ4xzwjJk056rLJlvUegZOy3Vu6Yef9on/jdjTYZDrYzfTZl8bVQbbTop0UWR
-        M8Yx1TSJ9NA/9mJk31ud6h2bSkcvPf+C2+x6wKPLcYNdkFZ6us0Lb3ds14cqloxiLsw3vi7XqwMx5
-        hpYczsqWiGeLGvsYypY38x3+nsPb17XruzF454E+faRyBokX2ig/VaOf+Jyic1oOFiasUFAxiY5zh
-        h3Y5fDzIOIWdfMwKL7ZrXjv5DnfDd7AZWh3ZQ4AiSNMLsHjYpJvbeUT3B/4GZ+BqlGh21EpzBzSK+
-        4fcp8kXw==;
+        bh=B8ko5pqj9E5RJoiDMAT4LWCptgAPGsTT9yGUOg+zWgY=; b=MjJqnKULSWCVH3PByQuNM/qNXX
+        HtMB9dNpDBTWgJugcO7sE/5ko9tHLFvQQR2XB+seIcDgNTq0BIUT+jAS9YnxntKaMacKvA3QzLDz+
+        zGlGK28S4DDyYfe4AW2lZ7egTVp764ymWynHmgHFOMbVH5dRl56eBZKRzkiXR6tj4nh5pm3fHpJ0C
+        D7KIViHus2vbs8lwyCCqFoTyuA7CUg8gUDjDutcOgepeoe8H4V4VclrD+KVF5iFtHs5JYWGRp57sI
+        ctRlfcOu0L+2rfrA9FFOOVRguL7CObocmaxk45GM10m0ZW5jysNmi0VmrX1q8LwS7ICnZPKjKkGuJ
+        piwC5ebg==;
 Received: from [2001:4bb8:18c:2acc:91df:aae8:fa3b:de9c] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jyUQJ-0003pG-7a; Thu, 23 Jul 2020 06:09:43 +0000
+        id 1jyUQG-0003oW-J1; Thu, 23 Jul 2020 06:09:41 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         mptcp@lists.01.org, lvs-devel@vger.kernel.org,
         rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
         tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
-Subject: [PATCH 24/26] net/tcp: switch do_tcp_setsockopt to sockptr_t
-Date:   Thu, 23 Jul 2020 08:09:06 +0200
-Message-Id: <20200723060908.50081-25-hch@lst.de>
+Subject: [PATCH 22/26] net/udp: switch udp_lib_setsockopt to sockptr_t
+Date:   Thu, 23 Jul 2020 08:09:04 +0200
+Message-Id: <20200723060908.50081-23-hch@lst.de>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200723060908.50081-1-hch@lst.de>
 References: <20200723060908.50081-1-hch@lst.de>
@@ -75,92 +75,38 @@ pointer from bpf-cgroup.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- net/ipv4/tcp.c | 34 ++++++++++++++++------------------
- 1 file changed, 16 insertions(+), 18 deletions(-)
+ include/net/udp.h | 2 +-
+ net/ipv4/udp.c    | 7 ++++---
+ net/ipv6/udp.c    | 3 ++-
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 49bf15c27deac7..71cbc61c335f71 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -2764,7 +2764,7 @@ static inline bool tcp_can_repair_sock(const struct sock *sk)
- 		(sk->sk_state != TCP_LISTEN);
- }
- 
--static int tcp_repair_set_window(struct tcp_sock *tp, char __user *optbuf, int len)
-+static int tcp_repair_set_window(struct tcp_sock *tp, sockptr_t optbuf, int len)
- {
- 	struct tcp_repair_window opt;
- 
-@@ -2774,7 +2774,7 @@ static int tcp_repair_set_window(struct tcp_sock *tp, char __user *optbuf, int l
- 	if (len != sizeof(opt))
- 		return -EINVAL;
- 
--	if (copy_from_user(&opt, optbuf, sizeof(opt)))
-+	if (copy_from_sockptr(&opt, optbuf, sizeof(opt)))
- 		return -EFAULT;
- 
- 	if (opt.max_window < opt.snd_wnd)
-@@ -2796,17 +2796,17 @@ static int tcp_repair_set_window(struct tcp_sock *tp, char __user *optbuf, int l
- 	return 0;
- }
- 
--static int tcp_repair_options_est(struct sock *sk,
--		struct tcp_repair_opt __user *optbuf, unsigned int len)
-+static int tcp_repair_options_est(struct sock *sk, sockptr_t optbuf,
-+		unsigned int len)
- {
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	struct tcp_repair_opt opt;
- 
- 	while (len >= sizeof(opt)) {
--		if (copy_from_user(&opt, optbuf, sizeof(opt)))
-+		if (copy_from_sockptr(&opt, optbuf, sizeof(opt)))
- 			return -EFAULT;
- 
--		optbuf++;
-+		sockptr_advance(optbuf, sizeof(opt));
- 		len -= sizeof(opt);
- 
- 		switch (opt.opt_code) {
-@@ -3020,8 +3020,8 @@ EXPORT_SYMBOL(tcp_sock_set_keepcnt);
- /*
-  *	Socket option code for TCP.
+diff --git a/include/net/udp.h b/include/net/udp.h
+index 17a9e86a807638..295d52a7359827 100644
+--- a/include/net/udp.h
++++ b/include/net/udp.h
+@@ -306,7 +306,7 @@ struct sk_buff *skb_udp_tunnel_segment(struct sk_buff *skb,
+ int udp_lib_getsockopt(struct sock *sk, int level, int optname,
+ 		       char __user *optval, int __user *optlen);
+ int udp_lib_setsockopt(struct sock *sk, int level, int optname,
+-		       char __user *optval, unsigned int optlen,
++		       sockptr_t optval, unsigned int optlen,
+ 		       int (*push_pending_frames)(struct sock *));
+ struct sock *udp4_lib_lookup(struct net *net, __be32 saddr, __be16 sport,
+ 			     __be32 daddr, __be16 dport, int dif);
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index bb95cddcb040a6..c6cb2d09dbc75e 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -2588,7 +2588,7 @@ void udp_destroy_sock(struct sock *sk)
+  *	Socket option code for UDP
   */
--static int do_tcp_setsockopt(struct sock *sk, int level,
--		int optname, char __user *optval, unsigned int optlen)
-+static int do_tcp_setsockopt(struct sock *sk, int level, int optname,
-+		sockptr_t optval, unsigned int optlen)
+ int udp_lib_setsockopt(struct sock *sk, int level, int optname,
+-		       char __user *optval, unsigned int optlen,
++		       sockptr_t optval, unsigned int optlen,
+ 		       int (*push_pending_frames)(struct sock *))
  {
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	struct inet_connection_sock *icsk = inet_csk(sk);
-@@ -3037,7 +3037,7 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
- 		if (optlen < 1)
- 			return -EINVAL;
- 
--		val = strncpy_from_user(name, optval,
-+		val = strncpy_from_sockptr(name, optval,
- 					min_t(long, TCP_CA_NAME_MAX-1, optlen));
- 		if (val < 0)
- 			return -EFAULT;
-@@ -3056,7 +3056,7 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
- 		if (optlen < 1)
- 			return -EINVAL;
- 
--		val = strncpy_from_user(name, optval,
-+		val = strncpy_from_sockptr(name, optval,
- 					min_t(long, TCP_ULP_NAME_MAX - 1,
- 					      optlen));
- 		if (val < 0)
-@@ -3079,7 +3079,7 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
- 		    optlen != TCP_FASTOPEN_KEY_BUF_LENGTH)
- 			return -EINVAL;
- 
--		if (copy_from_user(key, optval, optlen))
-+		if (copy_from_sockptr(key, optval, optlen))
- 			return -EFAULT;
- 
- 		if (optlen == TCP_FASTOPEN_KEY_BUF_LENGTH)
-@@ -3095,7 +3095,7 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
+ 	struct udp_sock *up = udp_sk(sk);
+@@ -2599,7 +2599,7 @@ int udp_lib_setsockopt(struct sock *sk, int level, int optname,
  	if (optlen < sizeof(int))
  		return -EINVAL;
  
@@ -168,38 +114,31 @@ index 49bf15c27deac7..71cbc61c335f71 100644
 +	if (copy_from_sockptr(&val, optval, sizeof(val)))
  		return -EFAULT;
  
- 	lock_sock(sk);
-@@ -3174,9 +3174,7 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
- 		if (!tp->repair)
- 			err = -EINVAL;
- 		else if (sk->sk_state == TCP_ESTABLISHED)
--			err = tcp_repair_options_est(sk,
--					(struct tcp_repair_opt __user *)optval,
--					optlen);
-+			err = tcp_repair_options_est(sk, optval, optlen);
- 		else
- 			err = -EPERM;
- 		break;
-@@ -3249,8 +3247,7 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
- #ifdef CONFIG_TCP_MD5SIG
- 	case TCP_MD5SIG:
- 	case TCP_MD5SIG_EXT:
--		err = tp->af_specific->md5_parse(sk, optname,
--						 USER_SOCKPTR(optval), optlen);
-+		err = tp->af_specific->md5_parse(sk, optname, optval, optlen);
- 		break;
- #endif
- 	case TCP_USER_TIMEOUT:
-@@ -3334,7 +3331,8 @@ int tcp_setsockopt(struct sock *sk, int level, int optname, char __user *optval,
- 	if (level != SOL_TCP)
- 		return icsk->icsk_af_ops->setsockopt(sk, level, optname,
- 						     optval, optlen);
--	return do_tcp_setsockopt(sk, level, optname, optval, optlen);
-+	return do_tcp_setsockopt(sk, level, optname, USER_SOCKPTR(optval),
-+				 optlen);
+ 	valbool = val ? 1 : 0;
+@@ -2707,7 +2707,8 @@ int udp_setsockopt(struct sock *sk, int level, int optname,
+ 		   char __user *optval, unsigned int optlen)
+ {
+ 	if (level == SOL_UDP  ||  level == SOL_UDPLITE)
+-		return udp_lib_setsockopt(sk, level, optname, optval, optlen,
++		return udp_lib_setsockopt(sk, level, optname,
++					  USER_SOCKPTR(optval), optlen,
+ 					  udp_push_pending_frames);
+ 	return ip_setsockopt(sk, level, optname, optval, optlen);
  }
- EXPORT_SYMBOL(tcp_setsockopt);
- 
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 7c1143feb2bf7e..2df1e6c9d7cbf6 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -1622,7 +1622,8 @@ int udpv6_setsockopt(struct sock *sk, int level, int optname,
+ 		     char __user *optval, unsigned int optlen)
+ {
+ 	if (level == SOL_UDP  ||  level == SOL_UDPLITE)
+-		return udp_lib_setsockopt(sk, level, optname, optval, optlen,
++		return udp_lib_setsockopt(sk, level, optname,
++					  USER_SOCKPTR(optval), optlen,
+ 					  udp_v6_push_pending_frames);
+ 	return ipv6_setsockopt(sk, level, optname, optval, optlen);
+ }
 -- 
 2.27.0
 
