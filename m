@@ -8,40 +8,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8402AC433E8
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 01:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 532C4C433EB
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 01:03:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 64EB92086A
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 01:03:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 301F22086A
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 01:03:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hQVYdps7"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="HB9cLtHf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387497AbgGWBDw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jul 2020 21:03:52 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:60898 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387480AbgGWBDv (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 21:03:51 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06N11GnP024915
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 18:03:51 -0700
+        id S1733229AbgGWBD5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jul 2020 21:03:57 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:28236 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387482AbgGWBD5 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Jul 2020 21:03:57 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06N0hiOm018015
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 18:03:56 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=SEb6CJFJODbPtpo8vM0yJqgfTpUVmFdF3PYhZy+v/a8=;
- b=hQVYdps7fvDCdChNY7Lb6GGa5xF5OxsPgwEg0LtZZCFjY3WufhSeMQfSxe3Qm4Z/hGfz
- R9IVomn526YNuOVcm5KboGIQiIXuFfLjVAAzFS6Lh2AYcOT++FFFaQIJ+bPevEdBkoVj
- ZHJuQ7MtZVzXI4PJMpk5jXhVOcswuiYb6uk= 
+ bh=CPrxlS/0ouIk2smqKGzOfxgs2TdNNYIFQ5V1UC9Q4Og=;
+ b=HB9cLtHfOZVefs/W3igMtqR+5lXA1gkgF4WmZGGySFIlMbfUQ6UPlDXUaMyg2jIBRYXo
+ geDpcoIVTriJOIuv7oCt1S+2wIWqVdhicy+HQ7inlHr6vNjYH5kB5cc4O1A3omyd10en
+ txFWBt70o/Ruq9zMrHHQZAVJdU9eXrQ9xkk= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 32etg39s2x-2
+        by mx0a-00082601.pphosted.com with ESMTP id 32esyut0n6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 18:03:51 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::f) by
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 18:03:56 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 22 Jul 2020 18:03:50 -0700
+ 15.1.1979.3; Wed, 22 Jul 2020 18:03:54 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id EF02C2945AD1; Wed, 22 Jul 2020 18:03:40 -0700 (PDT)
+        id 7AA242945AD1; Wed, 22 Jul 2020 18:03:53 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -53,9 +53,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Neal Cardwell <ncardwell@google.com>, <netdev@vger.kernel.org>,
         Yuchung Cheng <ycheng@google.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 1/9] tcp: Use a struct to represent a saved_syn
-Date:   Wed, 22 Jul 2020 18:03:40 -0700
-Message-ID: <20200723010340.1906190-1-kafai@fb.com>
+Subject: [PATCH v2 bpf-next 3/9] tcp: bpf: Add TCP_BPF_RTO_MIN for bpf_setsockopt
+Date:   Wed, 22 Jul 2020 18:03:53 -0700
+Message-ID: <20200723010353.1907418-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200723010334.1905574-1-kafai@fb.com>
 References: <20200723010334.1905574-1-kafai@fb.com>
@@ -65,170 +65,128 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-22_17:2020-07-22,2020-07-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- malwarescore=0 suspectscore=38 bulkscore=0 mlxlogscore=726
- priorityscore=1501 phishscore=0 lowpriorityscore=0 impostorscore=0
- mlxscore=0 adultscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2007230005
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
+ suspectscore=13 impostorscore=0 mlxlogscore=999 phishscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007230002
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The TCP_SAVE_SYN has both the network header and tcp header.
-The total length of the saved syn packet is currently stored in
-the first 4 bytes (u32) of an array and the actual packet data is
-stored after that.
+This patch adds bpf_setsockopt(TCP_BPF_RTO_MIN) to allow bpf prog
+to set the min rto of a connection.  It could be used together
+with the earlier patch which has added bpf_setsockopt(TCP_BPF_DELACK_MAX)=
+.
 
-A latter patch will add a bpf helper that allows to get the tcp header
-alone from the saved syn without the network header.  It will be more
-convenient to have a direct offset to a specific header instead of
-re-parsing it.  This requires to separately store the network hdrlen.
-The total header length (i.e. network + tcp) is still needed for the
-current usage in getsockopt.  Although this total length can be obtained
-by looking into the tcphdr and then get the (th->doff << 2), this patch
-chooses to directly store the tcp hdrlen in the second four bytes of
-this newly created "struct saved_syn".  By using a new struct, it can
-give a readable name to each individual header length.
+A latter seltest patch will communicate the max delay ack in a
+bpf tcp header option and then the receiving side can use
+bpf_setsockopt(TCP_BPF_RTO_MIN) to set a shorter rto.
 
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/linux/tcp.h        |  7 ++++++-
- include/net/request_sock.h |  8 +++++++-
- net/core/filter.c          |  4 ++--
- net/ipv4/tcp.c             |  9 +++++----
- net/ipv4/tcp_input.c       | 15 ++++++++-------
- 5 files changed, 28 insertions(+), 15 deletions(-)
+ include/net/inet_connection_sock.h | 1 +
+ include/net/tcp.h                  | 2 +-
+ include/uapi/linux/bpf.h           | 1 +
+ net/core/filter.c                  | 7 +++++++
+ net/ipv4/tcp.c                     | 2 ++
+ tools/include/uapi/linux/bpf.h     | 1 +
+ 6 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/tcp.h b/include/linux/tcp.h
-index 3bdec31ce8f4..54f7b3029880 100644
---- a/include/linux/tcp.h
-+++ b/include/linux/tcp.h
-@@ -404,7 +404,7 @@ struct tcp_sock {
- 	 * socket. Used to retransmit SYNACKs etc.
- 	 */
- 	struct request_sock __rcu *fastopen_rsk;
--	u32	*saved_syn;
-+	struct saved_syn *saved_syn;
+diff --git a/include/net/inet_connection_sock.h b/include/net/inet_connec=
+tion_sock.h
+index 8fd5c55b6756..5fa47e495132 100644
+--- a/include/net/inet_connection_sock.h
++++ b/include/net/inet_connection_sock.h
+@@ -85,6 +85,7 @@ struct inet_connection_sock {
+  	struct timer_list	  icsk_retransmit_timer;
+  	struct timer_list	  icsk_delack_timer;
+ 	__u32			  icsk_rto;
++	__u32                     icsk_rto_min;
+ 	__u32                     icsk_delack_max;
+ 	__u32			  icsk_pmtu_cookie;
+ 	const struct tcp_congestion_ops *icsk_ca_ops;
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 9f7f7c0c1104..b61ae1bc432f 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -697,7 +697,7 @@ static inline void tcp_fast_path_check(struct sock *s=
+k)
+ static inline u32 tcp_rto_min(struct sock *sk)
+ {
+ 	const struct dst_entry *dst =3D __sk_dst_get(sk);
+-	u32 rto_min =3D TCP_RTO_MIN;
++	u32 rto_min =3D inet_csk(sk)->icsk_rto_min;
+=20
+ 	if (dst && dst_metric_locked(dst, RTAX_RTO_MIN))
+ 		rto_min =3D dst_metric_rtt(dst, RTAX_RTO_MIN);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 227a2a4b7157..efc1255dbc6a 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4230,6 +4230,7 @@ enum {
+ 	TCP_BPF_IW		=3D 1001,	/* Set TCP initial congestion window */
+ 	TCP_BPF_SNDCWND_CLAMP	=3D 1002,	/* Set sndcwnd_clamp */
+ 	TCP_BPF_DELACK_MAX	=3D 1003, /* Max delay ack in usecs */
++	TCP_BPF_RTO_MIN		=3D 1004, /* Min delay ack in usecs */
  };
 =20
- enum tsq_enum {
-@@ -482,6 +482,11 @@ static inline void tcp_saved_syn_free(struct tcp_soc=
-k *tp)
- 	tp->saved_syn =3D NULL;
- }
-=20
-+static inline u32 tcp_saved_syn_len(const struct saved_syn *saved_syn)
-+{
-+	return saved_syn->network_hdrlen + saved_syn->tcp_hdrlen;
-+}
-+
- struct sk_buff *tcp_get_timestamping_opt_stats(const struct sock *sk);
-=20
- static inline u16 tcp_mss_clamp(const struct tcp_sock *tp, u16 mss)
-diff --git a/include/net/request_sock.h b/include/net/request_sock.h
-index cf8b33213bbc..b1b101814ecb 100644
---- a/include/net/request_sock.h
-+++ b/include/net/request_sock.h
-@@ -41,6 +41,12 @@ struct request_sock_ops {
-=20
- int inet_rtx_syn_ack(const struct sock *parent, struct request_sock *req=
-);
-=20
-+struct saved_syn {
-+	u32 network_hdrlen;
-+	u32 tcp_hdrlen;
-+	u8 data[];
-+};
-+
- /* struct request_sock - mini sock to represent a connection request
-  */
- struct request_sock {
-@@ -60,7 +66,7 @@ struct request_sock {
- 	struct timer_list		rsk_timer;
- 	const struct request_sock_ops	*rsk_ops;
- 	struct sock			*sk;
--	u32				*saved_syn;
-+	struct saved_syn		*saved_syn;
- 	u32				secid;
- 	u32				peer_secid;
- };
+ struct bpf_perf_event_value {
 diff --git a/net/core/filter.c b/net/core/filter.c
-index 3fa16b8c0d61..04c4d89d56c3 100644
+index c8dae35ab5f1..04266a21229f 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -4550,9 +4550,9 @@ static int _bpf_getsockopt(struct sock *sk, int lev=
-el, int optname,
- 			tp =3D tcp_sk(sk);
-=20
- 			if (optlen <=3D 0 || !tp->saved_syn ||
--			    optlen > tp->saved_syn[0])
-+			    optlen > tcp_saved_syn_len(tp->saved_syn))
- 				goto err_clear;
--			memcpy(optval, tp->saved_syn + 1, optlen);
-+			memcpy(optval, tp->saved_syn->data, optlen);
- 			break;
- 		default:
- 			goto err_clear;
+@@ -4488,6 +4488,13 @@ static int _bpf_setsockopt(struct sock *sk, int le=
+vel, int optname,
+ 					return -EINVAL;
+ 				inet_csk(sk)->icsk_delack_max =3D timeout;
+ 				break;
++			case TCP_BPF_RTO_MIN:
++				timeout =3D usecs_to_jiffies(val);
++				if (timeout > TCP_RTO_MIN ||
++				    timeout < TCP_TIMEOUT_MIN)
++					return -EINVAL;
++				inet_csk(sk)->icsk_rto_min =3D timeout;
++				break;
+ 			case TCP_SAVE_SYN:
+ 				if (val < 0 || val > 1)
+ 					ret =3D -EINVAL;
 diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 58ede3d62b2e..123100057890 100644
+index d8076d95f6a9..38844beacc48 100644
 --- a/net/ipv4/tcp.c
 +++ b/net/ipv4/tcp.c
-@@ -3793,20 +3793,21 @@ static int do_tcp_getsockopt(struct sock *sk, int=
- level,
+@@ -418,6 +418,7 @@ void tcp_init_sock(struct sock *sk)
+ 	INIT_LIST_HEAD(&tp->tsorted_sent_queue);
 =20
- 		lock_sock(sk);
- 		if (tp->saved_syn) {
--			if (len < tp->saved_syn[0]) {
--				if (put_user(tp->saved_syn[0], optlen)) {
-+			if (len < tcp_saved_syn_len(tp->saved_syn)) {
-+				if (put_user(tcp_saved_syn_len(tp->saved_syn),
-+					     optlen)) {
- 					release_sock(sk);
- 					return -EFAULT;
- 				}
- 				release_sock(sk);
- 				return -EINVAL;
- 			}
--			len =3D tp->saved_syn[0];
-+			len =3D tcp_saved_syn_len(tp->saved_syn);
- 			if (put_user(len, optlen)) {
- 				release_sock(sk);
- 				return -EFAULT;
- 			}
--			if (copy_to_user(optval, tp->saved_syn + 1, len)) {
-+			if (copy_to_user(optval, tp->saved_syn->data, len)) {
- 				release_sock(sk);
- 				return -EFAULT;
- 			}
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 82906deb7874..b43b7d043380 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -6597,13 +6597,14 @@ static void tcp_reqsk_record_syn(const struct soc=
-k *sk,
- {
- 	if (tcp_sk(sk)->save_syn) {
- 		u32 len =3D skb_network_header_len(skb) + tcp_hdrlen(skb);
--		u32 *copy;
--
--		copy =3D kmalloc(len + sizeof(u32), GFP_ATOMIC);
--		if (copy) {
--			copy[0] =3D len;
--			memcpy(&copy[1], skb_network_header(skb), len);
--			req->saved_syn =3D copy;
-+		struct saved_syn *saved_syn;
-+
-+		saved_syn =3D kmalloc(len + sizeof(*saved_syn), GFP_ATOMIC);
-+		if (saved_syn) {
-+			saved_syn->network_hdrlen =3D skb_network_header_len(skb);
-+			saved_syn->tcp_hdrlen =3D tcp_hdrlen(skb);
-+			memcpy(saved_syn->data, skb_network_header(skb), len);
-+			req->saved_syn =3D saved_syn;
- 		}
- 	}
- }
+ 	icsk->icsk_rto =3D TCP_TIMEOUT_INIT;
++	icsk->icsk_rto_min =3D TCP_RTO_MIN;
+ 	icsk->icsk_delack_max =3D TCP_DELACK_MAX;
+ 	tp->mdev_us =3D jiffies_to_usecs(TCP_TIMEOUT_INIT);
+ 	minmax_reset(&tp->rtt_min, tcp_jiffies32, ~0U);
+@@ -2686,6 +2687,7 @@ int tcp_disconnect(struct sock *sk, int flags)
+ 	icsk->icsk_backoff =3D 0;
+ 	icsk->icsk_probes_out =3D 0;
+ 	icsk->icsk_rto =3D TCP_TIMEOUT_INIT;
++	icsk->icsk_rto_min =3D TCP_RTO_MIN;
+ 	icsk->icsk_delack_max =3D TCP_DELACK_MAX;
+ 	tp->snd_ssthresh =3D TCP_INFINITE_SSTHRESH;
+ 	tp->snd_cwnd =3D TCP_INIT_CWND;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index 227a2a4b7157..efc1255dbc6a 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4230,6 +4230,7 @@ enum {
+ 	TCP_BPF_IW		=3D 1001,	/* Set TCP initial congestion window */
+ 	TCP_BPF_SNDCWND_CLAMP	=3D 1002,	/* Set sndcwnd_clamp */
+ 	TCP_BPF_DELACK_MAX	=3D 1003, /* Max delay ack in usecs */
++	TCP_BPF_RTO_MIN		=3D 1004, /* Min delay ack in usecs */
+ };
+=20
+ struct bpf_perf_event_value {
 --=20
 2.24.1
 
