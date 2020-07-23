@@ -2,186 +2,382 @@ Return-Path: <SRS0=Cb5B=BC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C166C433DF
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:20:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FF37C31E5A
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:16:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00D2C2065F
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:20:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5935B20658
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:16:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="la6rYz1r";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="FdfHArwF"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Y1d7wCTL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726178AbgGWGUy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jul 2020 02:20:54 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35200 "EHLO
+        id S1726962AbgGWGPp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jul 2020 02:15:45 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:18070 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725984AbgGWGUx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 Jul 2020 02:20:53 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06N6AlNh006540;
-        Wed, 22 Jul 2020 23:20:33 -0700
+        by vger.kernel.org with ESMTP id S1726141AbgGWGPo (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 23 Jul 2020 02:15:44 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06N6BFCj028839
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 23:15:43 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=UhwR0T2vMUNqABzRoeZrzbAvRhkDEuRcZILTsvvlwLQ=;
- b=la6rYz1rpkVcSmo6EnPBlDyuQM2ak/LTaSZPW3Zu3Bp0hR6PIBVX8g8gyyxQLdWrmCUq
- 9hUxSdJnO/asIAgMlbZ3nDFgAyv1MGMsQRcFXHyiYza/L/KjqEE7j/ygVQcRtH17c/24
- PnbxkZFzC1pcVx11zo2t7MnuGqS6lZzQp1A= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=tgIy8zksWHk2zSIZyWd0+1ajtCgWt/KSiJnfftHbu4I=;
+ b=Y1d7wCTLr4sCNAOiQ1RC5m9kALlGB0Nlib02G7dcf/WvYMOcvb13f1UYz/2BcWc29Oq0
+ csa2XaEP8rz/1TpHJItn8YShho8kRNycpJ6GDkhk8avr6xUwAR+UP1rtqHVdvXGYIIIx
+ p64FdNV3n8QWQ8Yw3yTB1IPhJop/JFkich8= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32etmwajhd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 22 Jul 2020 23:20:33 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.172) with Microsoft SMTP Server
+        by mx0a-00082601.pphosted.com with ESMTP id 32etbg2np5-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 23:15:43 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 22 Jul 2020 23:20:31 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TOaIimL2vUNvgfz7C/6id2c8GU7yyc+v17W4IFuW11UE17MP1S3AQa9o7/d5pza3QauV1AFvzjOwTgJqmmu7DizPj6Lb6ZsePj28dWVb7sRsqnQxmre2ELkQFiqFVU/enXMVOxhk2xYZycBF+mX6jAbuTyyM2KYMooz0OTyOup2ZWsGIZnfSkbxie8MOqPQLkPTZaXP4Gh2kvEnIG6gmCcrC/A5ekZldPbddOTJKVTslzszxTbJSrBDkG+SO8pbh//MpN0V0DprRKFyrQfd2cfo5dMpgfBkilea7k37MbppM3K4aNtVPbELYv2Kh8dQdgnxkL37iwjqousrScvttQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UhwR0T2vMUNqABzRoeZrzbAvRhkDEuRcZILTsvvlwLQ=;
- b=a1fg9LyZ4fcIDKpAgwy6uDOLRK4CttEF0pG1eGq62WbZ83M7VE4BFvdBD6hITmFezSpnvEQSjDWWjyeSmJlkkUTPEjsjPzCeEQv6TfY+Nnd6gHdgztX/g61hjpQ07qJmH4+3FsmZ2mxBuqqFY065vQQD4vt/bIEZr3bErhA0gSfJr+x78fGQIGSCFzOK6MlN/sIV0WzkzU+J+SrH9JjE3uBlE0rSA21ZHSAREIpqfVrJFBCzhhhAoGsnmzXpPqMUhNKDcCpeirxSh3UCxilutyKUfO8jWOaewqjRZ5BGVAI7vV/5ReUctloL79LFdJCr0BboKsUp6CC0dWBkPRTXaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UhwR0T2vMUNqABzRoeZrzbAvRhkDEuRcZILTsvvlwLQ=;
- b=FdfHArwFStdsgsHFvCURQ5jfki2o5DZWZqOuySos+AALmRuzGmjhObxAxegvLZS4N5C3fqI/JlRA1dhscMuDjeo8lNG+Em6dUTvTMAtUjbtnOb/cfir4cMrIDfawy+qXL2oAvJjfzZ1v7gADeDpKUhVex1AKuFjuEpLzS79uiTQ=
-Received: from BN8PR15MB2995.namprd15.prod.outlook.com (2603:10b6:408:8a::16)
- by BN7PR15MB2483.namprd15.prod.outlook.com (2603:10b6:406:87::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.23; Thu, 23 Jul
- 2020 06:20:29 +0000
-Received: from BN8PR15MB2995.namprd15.prod.outlook.com
- ([fe80::a89e:b0f9:d0b9:51a2]) by BN8PR15MB2995.namprd15.prod.outlook.com
- ([fe80::a89e:b0f9:d0b9:51a2%5]) with mapi id 15.20.3195.028; Thu, 23 Jul 2020
- 06:20:29 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>
-Subject: Re: [PATCH v4 bpf-next 2/4] bpf: fail PERF_EVENT_IOC_SET_BPF when
- bpf_get_[stack|stackid] cannot work
-Thread-Topic: [PATCH v4 bpf-next 2/4] bpf: fail PERF_EVENT_IOC_SET_BPF when
- bpf_get_[stack|stackid] cannot work
-Thread-Index: AQHWYFg8vuUCJ74xFUm7fXSqHe+MGakUqv8AgAAHCAA=
-Date:   Thu, 23 Jul 2020 06:20:29 +0000
-Message-ID: <684DA506-6780-4CB5-B99C-24D939CDE6DF@fb.com>
-References: <20200722184210.4078256-1-songliubraving@fb.com>
- <20200722184210.4078256-3-songliubraving@fb.com>
- <20200723055518.onydx7uhmzomt7ud@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20200723055518.onydx7uhmzomt7ud@ast-mbp.dhcp.thefacebook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3608.80.23.2.2)
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
-x-originating-ip: [2620:10d:c090:400::5:b2a1]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 473dd7a5-9ff3-497c-e88e-08d82ed07f1f
-x-ms-traffictypediagnostic: BN7PR15MB2483:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BN7PR15MB248366052172F7D06FBC90E8B3760@BN7PR15MB2483.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: p+tvIytnJycn7Bg/I4y9nevEPQtgss/9fDneOk+zQ72OEzwImLDvzy28k/0Mb5O9bTnxzSO8S7k5ApDq3+7PmMt6+qSvSe1Z3XLu8lxacyD7yr6X9YCSxsAKk5M0UzO3eJ0AL63vZ+yh0yXBeN+xwoCXHEBX9awvaTgoaCbpWzVy3vueomObZAhTCzRL3N0Bb6rGGyPhNxWJ+bK3F2xZ/ZjfK1RUc21w5gcYkGGdz79kIa+6fsiTHE0GDqEwneO4MIaY08jvWaXBNeC8W/b+X3pYmiaE5FCaTDesU3DpRsOn/0fgtTDQFVEABixnquFSC3GSYQIkEnPGGm9Qcs9Esw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR15MB2995.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(376002)(39860400002)(136003)(396003)(346002)(366004)(8936002)(33656002)(316002)(2906002)(86362001)(6486002)(8676002)(71200400001)(186003)(83380400001)(66446008)(66946007)(66556008)(66476007)(7416002)(478600001)(4326008)(5660300002)(6506007)(6916009)(54906003)(53546011)(91956017)(6512007)(76116006)(64756008)(2616005)(36756003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: AwP9K7xihoJAdFhvQ5FCbiudCXXCDISZzzCfrMeTlGNB8e55fvqx3ybdwhRGWK0SlTVlc4zv60BI5mksYxhSSowd6/7L7Cj/RD7LV0EU9lG4HXFkHXcIAyhI6S+N9BiRJyBLOCapKJltQA8SMx5t4c5QdVrKQtOnopa+rVbbB8mkPmLJw7NHJWpsBELTKSD4dkCM6QV+HLtl2R7c2+5686DMsVQCFf/v+GFV6I9AmzYEaKfU0mdtX7Wy5f7ba7fiVEsUdT8gyAICqf+/CdCRf1Smrz2KUqdOPmIO8S6ZCYnldTJWL6MYgC1/yx+ur9Ewb9gQGTbjdi+AHlV31JqP1Me3xfrWGFRaGGKJgo0Cqejum3oVavdgstTnQaCQPS2R0RuxmT2zR3GteTDuRvkA4jhecKL+y2Cf2HFeWMZ1m0yNExYY2YPQw38+knFlen93MM8nK2pnnUJJJEjlB+4uxxHOyyIWfle5wG27d3FsP5ThwNgWCYUQ3Cxr3Lrv1pyb4DELFoovg+saI1ph22agXg==
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <4C7094C581011D4E9F3722B2F188D225@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ 15.1.1979.3; Wed, 22 Jul 2020 23:15:41 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 06A6F3705266; Wed, 22 Jul 2020 23:15:38 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Yonghong Song <yhs@fb.com>
+Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next v3 05/13] bpf: implement bpf iterator for hash maps
+Date:   Wed, 22 Jul 2020 23:15:38 -0700
+Message-ID: <20200723061538.2100222-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200723061533.2099842-1-yhs@fb.com>
+References: <20200723061533.2099842-1-yhs@fb.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR15MB2995.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 473dd7a5-9ff3-497c-e88e-08d82ed07f1f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jul 2020 06:20:29.2638
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vAU2WF8NegWfn6WGcbfOaf7helyzLdqdctl7Nieuml9VmelVWgbj9K51oAuUC9I8RcJQf32yLwalpuY/13HbYA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR15MB2483
-X-OriginatorOrg: fb.com
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-23_02:2020-07-22,2020-07-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- suspectscore=0 bulkscore=0 spamscore=0 clxscore=1015 phishscore=0
- mlxscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- impostorscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2007230050
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=897 spamscore=0 adultscore=0 suspectscore=8
+ clxscore=1015 bulkscore=0 phishscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007230050
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+The bpf iterators for hash, percpu hash, lru hash
+and lru percpu hash are implemented. During link time,
+bpf_iter_reg->check_target() will check map type
+and ensure the program access key/value region is
+within the map defined key/value size limit.
 
+For percpu hash and lru hash maps, the bpf program
+will receive values for all cpus. The map element
+bpf iterator infrastructure will prepare value
+properly before passing the value pointer to the
+bpf program.
 
-> On Jul 22, 2020, at 10:55 PM, Alexei Starovoitov <alexei.starovoitov@gmai=
-l.com> wrote:
->=20
-> On Wed, Jul 22, 2020 at 11:42:08AM -0700, Song Liu wrote:
->> diff --git a/kernel/events/core.c b/kernel/events/core.c
->> index 856d98c36f562..f77d009fcce95 100644
->> --- a/kernel/events/core.c
->> +++ b/kernel/events/core.c
->> @@ -9544,6 +9544,24 @@ static int perf_event_set_bpf_handler(struct perf=
-_event *event, u32 prog_fd)
->> 	if (IS_ERR(prog))
->> 		return PTR_ERR(prog);
->>=20
->> +	if (event->attr.precise_ip &&
->> +	    prog->call_get_stack &&
->> +	    (!(event->attr.sample_type & __PERF_SAMPLE_CALLCHAIN_EARLY) ||
->> +	     event->attr.exclude_callchain_kernel ||
->> +	     event->attr.exclude_callchain_user)) {
->> +		/*
->> +		 * On perf_event with precise_ip, calling bpf_get_stack()
->> +		 * may trigger unwinder warnings and occasional crashes.
->> +		 * bpf_get_[stack|stackid] works around this issue by using
->> +		 * callchain attached to perf_sample_data. If the
->> +		 * perf_event does not full (kernel and user) callchain
->> +		 * attached to perf_sample_data, do not allow attaching BPF
->> +		 * program that calls bpf_get_[stack|stackid].
->> +		 */
->> +		bpf_prog_put(prog);
->> +		return -EINVAL;
->=20
-> I suspect this will be a common error. bpftrace and others will be hittin=
-g
-> this issue and would need to fix how they do perf_event_open.
-> But EINVAL is too ambiguous and sys_perf_event_open has no ability to
-> return a string.
-> So how about we pick some different errno here to make future debugging
-> a bit less painful?
-> May be EBADFD or EPROTO or EPROTOTYPE ?
-> I think anything would be better than EINVAL.
+This patch set supports readonly map keys and
+read/write map values. It does not support deleting
+map elements, e.g., from hash tables. If there is
+a user case for this, the following mechanism can
+be used to support map deletion for hashtab, etc.
+  - permit a new bpf program return value, e.g., 2,
+    to let bpf iterator know the map element should
+    be removed.
+  - since bucket lock is taken, the map element will be
+    queued.
+  - once bucket lock is released after all elements under
+    this bucket are traversed, all to-be-deleted map
+    elements can be deleted.
 
-I like EPROTO most. I will change it to EPROTO if we don't have better idea=
-s.
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ kernel/bpf/hashtab.c  | 194 ++++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/map_iter.c |  24 +++++-
+ 2 files changed, 217 insertions(+), 1 deletion(-)
 
-Btw, this is not the error code on sys_perf_event_open(). It is the ioctl()
-on the perf_event fd. So debugging this error will be less painful than=20
-debugging sys_perf_event_open() errors.=20
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index d4378d7d442b..024276787055 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1612,6 +1612,196 @@ htab_lru_map_lookup_and_delete_batch(struct bpf_m=
+ap *map,
+ 						  true, false);
+ }
+=20
++struct bpf_iter_seq_hash_map_info {
++	struct bpf_map *map;
++	struct bpf_htab *htab;
++	void *percpu_value_buf; // non-zero means percpu hash
++	unsigned long flags;
++	u32 bucket_id;
++	u32 skip_elems;
++};
++
++static struct htab_elem *
++bpf_hash_map_seq_find_next(struct bpf_iter_seq_hash_map_info *info,
++			   struct htab_elem *prev_elem)
++{
++	const struct bpf_htab *htab =3D info->htab;
++	unsigned long flags =3D info->flags;
++	u32 skip_elems =3D info->skip_elems;
++	u32 bucket_id =3D info->bucket_id;
++	struct hlist_nulls_head *head;
++	struct hlist_nulls_node *n;
++	struct htab_elem *elem;
++	struct bucket *b;
++	u32 i, count;
++
++	if (bucket_id >=3D htab->n_buckets)
++		return NULL;
++
++	/* try to find next elem in the same bucket */
++	if (prev_elem) {
++		/* no update/deletion on this bucket, prev_elem should be still valid
++		 * and we won't skip elements.
++		 */
++		n =3D rcu_dereference_raw(hlist_nulls_next_rcu(&prev_elem->hash_node))=
+;
++		elem =3D hlist_nulls_entry_safe(n, struct htab_elem, hash_node);
++		if (elem)
++			return elem;
++
++		/* not found, unlock and go to the next bucket */
++		b =3D &htab->buckets[bucket_id++];
++		htab_unlock_bucket(htab, b, flags);
++		skip_elems =3D 0;
++	}
++
++	for (i =3D bucket_id; i < htab->n_buckets; i++) {
++		b =3D &htab->buckets[i];
++		flags =3D htab_lock_bucket(htab, b);
++
++		count =3D 0;
++		head =3D &b->head;
++		hlist_nulls_for_each_entry_rcu(elem, n, head, hash_node) {
++			if (count >=3D skip_elems) {
++				info->flags =3D flags;
++				info->bucket_id =3D i;
++				info->skip_elems =3D count;
++				return elem;
++			}
++			count++;
++		}
++
++		htab_unlock_bucket(htab, b, flags);
++		skip_elems =3D 0;
++	}
++
++	info->bucket_id =3D i;
++	info->skip_elems =3D 0;
++	return NULL;
++}
++
++static void *bpf_hash_map_seq_start(struct seq_file *seq, loff_t *pos)
++{
++	struct bpf_iter_seq_hash_map_info *info =3D seq->private;
++	struct htab_elem *elem;
++
++	elem =3D bpf_hash_map_seq_find_next(info, NULL);
++	if (!elem)
++		return NULL;
++
++	if (*pos =3D=3D 0)
++		++*pos;
++	return elem;
++}
++
++static void *bpf_hash_map_seq_next(struct seq_file *seq, void *v, loff_t=
+ *pos)
++{
++	struct bpf_iter_seq_hash_map_info *info =3D seq->private;
++
++	++*pos;
++	++info->skip_elems;
++	return bpf_hash_map_seq_find_next(info, v);
++}
++
++static int __bpf_hash_map_seq_show(struct seq_file *seq, struct htab_ele=
+m *elem)
++{
++	struct bpf_iter_seq_hash_map_info *info =3D seq->private;
++	u32 roundup_key_size, roundup_value_size;
++	struct bpf_iter__bpf_map_elem ctx =3D {};
++	struct bpf_map *map =3D info->map;
++	struct bpf_iter_meta meta;
++	int ret =3D 0, off =3D 0, cpu;
++	struct bpf_prog *prog;
++	void __percpu *pptr;
++
++	meta.seq =3D seq;
++	prog =3D bpf_iter_get_info(&meta, elem =3D=3D NULL);
++	if (prog) {
++		ctx.meta =3D &meta;
++		ctx.map =3D info->map;
++		if (elem) {
++			roundup_key_size =3D round_up(map->key_size, 8);
++			ctx.key =3D elem->key;
++			if (!info->percpu_value_buf) {
++				ctx.value =3D elem->key + roundup_key_size;
++			} else {
++				roundup_value_size =3D round_up(map->value_size, 8);
++				pptr =3D htab_elem_get_ptr(elem, map->key_size);
++				for_each_possible_cpu(cpu) {
++					bpf_long_memcpy(info->percpu_value_buf + off,
++							per_cpu_ptr(pptr, cpu),
++							roundup_value_size);
++					off +=3D roundup_value_size;
++				}
++				ctx.value =3D info->percpu_value_buf;
++			}
++		}
++		ret =3D bpf_iter_run_prog(prog, &ctx);
++	}
++
++	return ret;
++}
++
++static int bpf_hash_map_seq_show(struct seq_file *seq, void *v)
++{
++	return __bpf_hash_map_seq_show(seq, v);
++}
++
++static void bpf_hash_map_seq_stop(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_seq_hash_map_info *info =3D seq->private;
++
++	if (!v)
++		(void)__bpf_hash_map_seq_show(seq, NULL);
++	else
++		htab_unlock_bucket(info->htab,
++				   &info->htab->buckets[info->bucket_id],
++				   info->flags);
++}
++
++static int bpf_iter_init_hash_map(void *priv_data,
++				  struct bpf_iter_aux_info *aux)
++{
++	struct bpf_iter_seq_hash_map_info *seq_info =3D priv_data;
++	struct bpf_map *map =3D aux->map;
++	void *value_buf;
++	u32 buf_size;
++
++	if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_HASH ||
++	    map->map_type =3D=3D BPF_MAP_TYPE_LRU_PERCPU_HASH) {
++		buf_size =3D round_up(map->value_size, 8) * num_possible_cpus();
++		value_buf =3D kmalloc(buf_size, GFP_USER | __GFP_NOWARN);
++		if (!value_buf)
++			return -ENOMEM;
++
++		seq_info->percpu_value_buf =3D value_buf;
++	}
++
++	seq_info->map =3D map;
++	seq_info->htab =3D container_of(map, struct bpf_htab, map);
++	return 0;
++}
++
++static void bpf_iter_fini_hash_map(void *priv_data)
++{
++	struct bpf_iter_seq_hash_map_info *seq_info =3D priv_data;
++
++	kfree(seq_info->percpu_value_buf);
++}
++
++static const struct seq_operations bpf_hash_map_seq_ops =3D {
++	.start	=3D bpf_hash_map_seq_start,
++	.next	=3D bpf_hash_map_seq_next,
++	.stop	=3D bpf_hash_map_seq_stop,
++	.show	=3D bpf_hash_map_seq_show,
++};
++
++static const struct bpf_iter_seq_info iter_seq_info =3D {
++	.seq_ops		=3D &bpf_hash_map_seq_ops,
++	.init_seq_private	=3D bpf_iter_init_hash_map,
++	.fini_seq_private	=3D bpf_iter_fini_hash_map,
++	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_hash_map_info),
++};
++
+ static int htab_map_btf_id;
+ const struct bpf_map_ops htab_map_ops =3D {
+ 	.map_alloc_check =3D htab_map_alloc_check,
+@@ -1626,6 +1816,7 @@ const struct bpf_map_ops htab_map_ops =3D {
+ 	BATCH_OPS(htab),
+ 	.map_btf_name =3D "bpf_htab",
+ 	.map_btf_id =3D &htab_map_btf_id,
++	.iter_seq_info =3D &iter_seq_info,
+ };
+=20
+ static int htab_lru_map_btf_id;
+@@ -1643,6 +1834,7 @@ const struct bpf_map_ops htab_lru_map_ops =3D {
+ 	BATCH_OPS(htab_lru),
+ 	.map_btf_name =3D "bpf_htab",
+ 	.map_btf_id =3D &htab_lru_map_btf_id,
++	.iter_seq_info =3D &iter_seq_info,
+ };
+=20
+ /* Called from eBPF program */
+@@ -1760,6 +1952,7 @@ const struct bpf_map_ops htab_percpu_map_ops =3D {
+ 	BATCH_OPS(htab_percpu),
+ 	.map_btf_name =3D "bpf_htab",
+ 	.map_btf_id =3D &htab_percpu_map_btf_id,
++	.iter_seq_info =3D &iter_seq_info,
+ };
+=20
+ static int htab_lru_percpu_map_btf_id;
+@@ -1775,6 +1968,7 @@ const struct bpf_map_ops htab_lru_percpu_map_ops =3D=
+ {
+ 	BATCH_OPS(htab_lru_percpu),
+ 	.map_btf_name =3D "bpf_htab",
+ 	.map_btf_id =3D &htab_lru_percpu_map_btf_id,
++	.iter_seq_info =3D &iter_seq_info,
+ };
+=20
+ static int fd_htab_map_alloc_check(union bpf_attr *attr)
+diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
+index 8a1f9b3355d0..bcb68b55bf65 100644
+--- a/kernel/bpf/map_iter.c
++++ b/kernel/bpf/map_iter.c
+@@ -101,7 +101,29 @@ static struct bpf_iter_reg bpf_map_reg_info =3D {
+ static int bpf_iter_check_map(struct bpf_prog *prog,
+ 			      struct bpf_iter_aux_info *aux)
+ {
+-	return -EINVAL;
++	u32 key_acc_size, value_acc_size, key_size, value_size;
++	struct bpf_map *map =3D aux->map;
++	bool is_percpu =3D false;
++
++	if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_HASH ||
++	    map->map_type =3D=3D BPF_MAP_TYPE_LRU_PERCPU_HASH)
++		is_percpu =3D true;
++	else if (map->map_type !=3D BPF_MAP_TYPE_HASH &&
++		 map->map_type !=3D BPF_MAP_TYPE_LRU_HASH)
++		return -EINVAL;
++
++	key_acc_size =3D prog->aux->max_rdonly_access;
++	value_acc_size =3D prog->aux->max_rdwr_access;
++	key_size =3D map->key_size;
++	if (!is_percpu)
++		value_size =3D map->value_size;
++	else
++		value_size =3D round_up(map->value_size, 8) * num_possible_cpus();
++
++	if (key_acc_size > key_size || value_acc_size > value_size)
++		return -EACCES;
++
++	return 0;
+ }
+=20
+ DEFINE_BPF_ITER_FUNC(bpf_map_elem, struct bpf_iter_meta *meta,
+--=20
+2.24.1
 
-Thanks,
-Song=
