@@ -8,40 +8,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B01FCC2D0AC
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:15:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D19A1C2D0AD
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:15:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 907EA22D03
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:15:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE0AB20658
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:15:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="riZA27mz"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="kekSLEDS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727798AbgGWGPy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jul 2020 02:15:54 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:15836 "EHLO
+        id S1726303AbgGWGP6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jul 2020 02:15:58 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:53386 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727121AbgGWGPw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 Jul 2020 02:15:52 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06N6ExKx007061
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 23:15:51 -0700
+        by vger.kernel.org with ESMTP id S1727811AbgGWGP4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 23 Jul 2020 02:15:56 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06N6BbQ2015701
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 23:15:54 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Es12UCbU+GG0i7Ken9gHvg9Yr+y4Lfi+NlD4hl1ixRI=;
- b=riZA27mz3yD6SAL0SXosGyFz2A8upoxkMtzduUlW96Dv681yntHdUdTinTp9NaEmlXtg
- 98GEzSzLTEX/hbWmpsEudZikXFAQfY4O6LJb4zbccKVX4dt8qEsXCxALALR/ev06eb3l
- 6U6t1kt+wl1NLSshiI1ZkDdxqldEf/JEXyc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 32er2fbhmh-3
+ bh=pkaNdkCDo7wzVDw/Byov36fhv8zeU9YvtkMg5kX8lQQ=;
+ b=kekSLEDSJzNuUABNI9ZnZpmPUrXNNoz3QBkS3uYi5CON6bVkDnKlpqirkoN9LkH8zskX
+ RknWntX1ToFTGTMKbZCdVn6JEjfA1Vpgyqu5bmHGFdhNtBoby5UtGKDCALkze6Jn7NZW
+ KlI65h9hz2wGoNnsJSQtHhM+huophClWSsU= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net with ESMTP id 32esdjk1a5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 23:15:51 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 23:15:54 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 22 Jul 2020 23:15:50 -0700
+ 15.1.1979.3; Wed, 22 Jul 2020 23:15:53 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id BF1E63705266; Wed, 22 Jul 2020 23:15:47 -0700 (PDT)
+        id 09B2F3705266; Wed, 22 Jul 2020 23:15:43 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -50,9 +50,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v3 12/13] selftests/bpf: add a test for bpf sk_storage_map iterator
-Date:   Wed, 22 Jul 2020 23:15:47 -0700
-Message-ID: <20200723061547.2100800-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 09/13] tools/bpftool: add bpftool support for bpf map element iterator
+Date:   Wed, 22 Jul 2020 23:15:43 -0700
+Message-ID: <20200723061543.2100526-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200723061533.2099842-1-yhs@fb.com>
 References: <20200723061533.2099842-1-yhs@fb.com>
@@ -62,169 +62,201 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-23_02:2020-07-22,2020-07-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- impostorscore=0 mlxscore=0 malwarescore=0 bulkscore=0 mlxlogscore=827
- phishscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
- spamscore=0 suspectscore=25 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2007230050
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 clxscore=1015
+ malwarescore=0 spamscore=0 adultscore=0 impostorscore=0 phishscore=0
+ suspectscore=8 bulkscore=0 priorityscore=1501 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007230050
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Added one test for bpf sk_storage_map_iterator.
-  $ ./test_progs -n 4
-  ...
-  #4/22 bpf_sk_storage_map:OK
-  ...
+The optional parameter "map MAP" can be added to "bpftool iter"
+command to create a bpf iterator for map elements. For example,
+  bpftool iter pin ./prog.o /sys/fs/bpf/p1 map id 333
+
+For map element bpf iterator "map MAP" parameter is required.
+Otherwise, bpf link creation will return an error.
+
+Quentin Monnet kindly provided bash-completion implementation
+for new "map MAP" option.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- .../selftests/bpf/prog_tests/bpf_iter.c       | 72 +++++++++++++++++++
- .../bpf/progs/bpf_iter_bpf_sk_storage_map.c   | 34 +++++++++
- 2 files changed, 106 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_sto=
-rage_map.c
+ .../bpftool/Documentation/bpftool-iter.rst    | 18 ++++++++--
+ tools/bpf/bpftool/bash-completion/bpftool     | 18 +++++++++-
+ tools/bpf/bpftool/iter.c                      | 33 ++++++++++++++++---
+ 3 files changed, 62 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
-sting/selftests/bpf/prog_tests/bpf_iter.c
-index 4a02b2222a6d..ffbbeb9fa268 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -19,6 +19,7 @@
- #include "bpf_iter_bpf_percpu_hash_map.skel.h"
- #include "bpf_iter_bpf_array_map.skel.h"
- #include "bpf_iter_bpf_percpu_array_map.skel.h"
-+#include "bpf_iter_bpf_sk_storage_map.skel.h"
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-iter.rst b/tools/bpf=
+/bpftool/Documentation/bpftool-iter.rst
+index 8dce698eab79..070ffacb42b5 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-iter.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-iter.rst
+@@ -17,14 +17,15 @@ SYNOPSIS
+ ITER COMMANDS
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 =20
- static int duration;
+-|	**bpftool** **iter pin** *OBJ* *PATH*
++|	**bpftool** **iter pin** *OBJ* *PATH* [**map** *MAP*]
+ |	**bpftool** **iter help**
+ |
+ |	*OBJ* :=3D /a/file/of/bpf_iter_target.o
++|	*MAP* :=3D { **id** *MAP_ID* | **pinned** *FILE* }
 =20
-@@ -795,6 +796,75 @@ static void test_bpf_percpu_array_map(void)
- 	bpf_iter_bpf_percpu_array_map__destroy(skel);
- }
+ DESCRIPTION
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+-	**bpftool iter pin** *OBJ* *PATH*
++	**bpftool iter pin** *OBJ* *PATH* [**map** *MAP*]
+ 		  A bpf iterator combines a kernel iterating of
+ 		  particular kernel data (e.g., tasks, bpf_maps, etc.)
+ 		  and a bpf program called for each kernel data object
+@@ -37,6 +38,12 @@ DESCRIPTION
+ 		  character ('.'), which is reserved for future extensions
+ 		  of *bpffs*.
 =20
-+static void test_bpf_sk_storage_map(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	int err, i, len, map_fd, iter_fd, num_sockets;
-+	struct bpf_iter_bpf_sk_storage_map *skel;
-+	int sock_fd[3] =3D {-1, -1, -1};
-+	__u32 val, expected_val =3D 0;
-+	struct bpf_link *link;
-+	char buf[64];
++		  Map element bpf iterator requires an additional parameter
++		  *MAP* so bpf program can iterate over map elements for
++		  that map. User can have a bpf program in kernel to run
++		  with each map element, do checking, filtering, aggregation,
++		  etc. without copying data to user space.
 +
-+	skel =3D bpf_iter_bpf_sk_storage_map__open_and_load();
-+	if (CHECK(!skel, "bpf_iter_bpf_sk_storage_map__open_and_load",
-+		  "skeleton open_and_load failed\n"))
-+		return;
+ 		  User can then *cat PATH* to see the bpf iterator output.
+=20
+ 	**bpftool iter help**
+@@ -64,6 +71,13 @@ EXAMPLES
+    Create a file-based bpf iterator from bpf_iter_netlink.o and pin it
+    to /sys/fs/bpf/my_netlink
+=20
++**# bpftool iter pin bpf_iter_hashmap.o /sys/fs/bpf/my_hashmap map id 20=
+**
 +
-+	map_fd =3D bpf_map__fd(skel->maps.sk_stg_map);
-+	num_sockets =3D ARRAY_SIZE(sock_fd);
-+	for (i =3D 0; i < num_sockets; i++) {
-+		sock_fd[i] =3D socket(AF_INET6, SOCK_STREAM, 0);
-+		if (CHECK(sock_fd[i] < 0, "socket", "errno: %d\n", errno))
-+			goto out;
++::
 +
-+		val =3D i + 1;
-+		expected_val +=3D val;
++   Create a file-based bpf iterator from bpf_iter_hashmap.o and map with
++   id 20, and pin it to /sys/fs/bpf/my_hashmap
 +
-+		err =3D bpf_map_update_elem(map_fd, &sock_fd[i], &val,
-+					  BPF_NOEXIST);
-+		if (CHECK(err, "map_update", "map_update failed\n"))
-+			goto out;
-+	}
-+
-+	opts.map_fd =3D map_fd;
-+	link =3D bpf_program__attach_iter(skel->progs.dump_bpf_sk_storage_map, =
-&opts);
-+	if (CHECK(IS_ERR(link), "attach_iter", "attach_iter failed\n"))
-+		goto out;
-+
-+	iter_fd =3D bpf_iter_create(bpf_link__fd(link));
-+	if (CHECK(iter_fd < 0, "create_iter", "create_iter failed\n"))
-+		goto free_link;
-+
-+	/* do some tests */
-+	while ((len =3D read(iter_fd, buf, sizeof(buf))) > 0)
-+		;
-+	if (CHECK(len < 0, "read", "read failed: %s\n", strerror(errno)))
-+		goto close_iter;
-+
-+	/* test results */
-+	if (CHECK(skel->bss->ipv6_sk_count !=3D num_sockets,
-+		  "ipv6_sk_count", "got %u expected %u\n",
-+		  skel->bss->ipv6_sk_count, num_sockets))
-+		goto close_iter;
-+
-+	if (CHECK(skel->bss->val_sum !=3D expected_val,
-+		  "val_sum", "got %u expected %u\n",
-+		  skel->bss->val_sum, expected_val))
-+		goto close_iter;
-+
-+close_iter:
-+	close(iter_fd);
-+free_link:
-+	bpf_link__destroy(link);
-+out:
-+	for (i =3D 0; i < num_sockets; i++) {
-+		if (sock_fd[i] >=3D 0)
-+			close(sock_fd[i]);
-+	}
-+	bpf_iter_bpf_sk_storage_map__destroy(skel);
-+}
-+
- void test_bpf_iter(void)
+ SEE ALSO
+ =3D=3D=3D=3D=3D=3D=3D=3D
+ 	**bpf**\ (2),
+diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftoo=
+l/bash-completion/bpftool
+index 7b137264ea3a..257fa310ea2b 100644
+--- a/tools/bpf/bpftool/bash-completion/bpftool
++++ b/tools/bpf/bpftool/bash-completion/bpftool
+@@ -615,7 +615,23 @@ _bpftool()
+         iter)
+             case $command in
+                 pin)
+-                    _filedir
++                    case $prev in
++                        $command)
++                            _filedir
++                            ;;
++                        id)
++                            _bpftool_get_map_ids
++                            ;;
++                        name)
++                            _bpftool_get_map_names
++                            ;;
++                        pinned)
++                            _filedir
++                            ;;
++                        *)
++                            _bpftool_one_of_list $MAP_TYPE
++                            ;;
++                    esac
+                     return 0
+                     ;;
+                 *)
+diff --git a/tools/bpf/bpftool/iter.c b/tools/bpf/bpftool/iter.c
+index 33240fcc6319..c9dba7543dba 100644
+--- a/tools/bpf/bpftool/iter.c
++++ b/tools/bpf/bpftool/iter.c
+@@ -2,6 +2,7 @@
+ // Copyright (C) 2020 Facebook
+=20
+ #define _GNU_SOURCE
++#include <unistd.h>
+ #include <linux/err.h>
+ #include <bpf/libbpf.h>
+=20
+@@ -9,11 +10,12 @@
+=20
+ static int do_pin(int argc, char **argv)
  {
- 	if (test__start_subtest("btf_id_or_null"))
-@@ -839,4 +909,6 @@ void test_bpf_iter(void)
- 		test_bpf_array_map();
- 	if (test__start_subtest("bpf_percpu_array_map"))
- 		test_bpf_percpu_array_map();
-+	if (test__start_subtest("bpf_sk_storage_map"))
-+		test_bpf_sk_storage_map();
++	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, iter_opts);
+ 	const char *objfile, *path;
+ 	struct bpf_program *prog;
+ 	struct bpf_object *obj;
+ 	struct bpf_link *link;
+-	int err;
++	int err =3D -1, map_fd =3D -1;
+=20
+ 	if (!REQ_ARGS(2))
+ 		usage();
+@@ -21,10 +23,26 @@ static int do_pin(int argc, char **argv)
+ 	objfile =3D GET_ARG();
+ 	path =3D GET_ARG();
+=20
++	/* optional arguments */
++	if (argc) {
++		if (is_prefix(*argv, "map")) {
++			NEXT_ARG();
++
++			if (!REQ_ARGS(2)) {
++				p_err("incorrect map spec");
++				return -1;
++			}
++
++			map_fd =3D map_parse_fd(&argc, &argv);
++			if (map_fd < 0)
++				return -1;
++		}
++	}
++
+ 	obj =3D bpf_object__open(objfile);
+ 	if (IS_ERR(obj)) {
+ 		p_err("can't open objfile %s", objfile);
+-		return -1;
++		goto close_map_fd;
+ 	}
+=20
+ 	err =3D bpf_object__load(obj);
+@@ -39,7 +57,10 @@ static int do_pin(int argc, char **argv)
+ 		goto close_obj;
+ 	}
+=20
+-	link =3D bpf_program__attach_iter(prog, NULL);
++	if (map_fd >=3D 0)
++		iter_opts.map_fd =3D map_fd;
++
++	link =3D bpf_program__attach_iter(prog, &iter_opts);
+ 	if (IS_ERR(link)) {
+ 		err =3D PTR_ERR(link);
+ 		p_err("attach_iter failed for program %s",
+@@ -62,14 +83,18 @@ static int do_pin(int argc, char **argv)
+ 	bpf_link__destroy(link);
+ close_obj:
+ 	bpf_object__close(obj);
++close_map_fd:
++	if (map_fd >=3D 0)
++		close(map_fd);
+ 	return err;
  }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_ma=
-p.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_map.c
-new file mode 100644
-index 000000000000..6b70ccaba301
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_map.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include "bpf_iter.h"
-+#include "bpf_tracing_net.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, int);
-+} sk_stg_map SEC(".maps");
-+
-+__u32 val_sum =3D 0;
-+__u32 ipv6_sk_count =3D 0;
-+
-+SEC("iter/bpf_sk_storage_map")
-+int dump_bpf_sk_storage_map(struct bpf_iter__bpf_sk_storage_map *ctx)
-+{
-+	struct sock *sk =3D ctx->sk;
-+	__u32 *val =3D ctx->value;
-+
-+	if (sk =3D=3D (void *)0 || val =3D=3D (void *)0)
-+		return 0;
-+
-+	if (sk->sk_family =3D=3D AF_INET6)
-+		ipv6_sk_count++;
-+
-+	val_sum +=3D *val;
-+	return 0;
-+}
+=20
+ static int do_help(int argc, char **argv)
+ {
+ 	fprintf(stderr,
+-		"Usage: %1$s %2$s pin OBJ PATH\n"
++		"Usage: %1$s %2$s pin OBJ PATH [map MAP]\n"
+ 		"       %1$s %2$s help\n"
++		"       " HELP_SPEC_MAP "\n"
+ 		"",
+ 		bin_name, "iter");
+=20
 --=20
 2.24.1
 
