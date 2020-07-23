@@ -2,117 +2,97 @@ Return-Path: <SRS0=Cb5B=BC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35644C433F4
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 08:40:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96B19C433E1
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 09:59:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 135B32080D
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 08:40:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7144C20737
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 09:59:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=tessares-net.20150623.gappssmtp.com header.i=@tessares-net.20150623.gappssmtp.com header.b="CNsYMCaC"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="LEEMGiaW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727034AbgGWIkP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jul 2020 04:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
+        id S1728232AbgGWJ76 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jul 2020 05:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726719AbgGWIjz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Jul 2020 04:39:55 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F894C05BD0F
-        for <bpf@vger.kernel.org>; Thu, 23 Jul 2020 01:39:55 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id b13so1516753edz.7
-        for <bpf@vger.kernel.org>; Thu, 23 Jul 2020 01:39:55 -0700 (PDT)
+        with ESMTP id S1727111AbgGWJ74 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jul 2020 05:59:56 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AAAC0619E2
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2020 02:59:56 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id s9so2947462lfs.4
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2020 02:59:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=t34u4KAm1gK/f1oDA6+0ZgZ3T1IDP3Ad7b21M8jn9IE=;
-        b=CNsYMCaC5YFx1sCHrUnGTyxK55+RElxWw1Y4CgVq4WviDSpLe5tvZRQNhbw/o8NHkS
-         5lNPKTvPIJgzELza08HXzETuGDGqESAjMwaETk5Mmah7A76FYju7HEJcSxVz2Z68Ez32
-         Fe8bkyg3EIliyQfIE0WUqAFYcrQUJWfpZsNbAdl/ll0KB40GMQt1yoxZTtepzlC4KdnZ
-         GnSg5TjVpPWt7FlYOZYnnYqZEV4wmhNftYUlMk2HjS0eEZRDa0Aihb7OonspbY3XBKmu
-         gfkANWXjINxT44g2wwmEPqLtqbE4VWM7CM7H0NR7+q8PAGIse1jhucMrcCJVf3oeSFy2
-         TE7Q==
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=peNb8+RImxTNVZkyG9ELZ4fhv916Nu+DkwVdstZXkiA=;
+        b=LEEMGiaW0nGTr5CFiq3SrGNGE6dboorHG1aLnfiDOl6MgWGLACzz+29+izd56QHWX/
+         TFRL7Rl0K3TDZiAD8lfmZ5vGG++cbTMvrnTx09rs142zLnZ0LAj5Mau2JsTfiXaVFDte
+         b0cz3XGMizWT0ToH6w7sapzAuv9fTK0JKr4F0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=t34u4KAm1gK/f1oDA6+0ZgZ3T1IDP3Ad7b21M8jn9IE=;
-        b=OYiStjajmghRMpa+UtYRt9W59DpxLtrGCY+1FTSr+81CWaB5aqRuU+2x+9CJvEjNVN
-         WeMrTSBy3T0eWav1hrYssZ53y/lg3w+zYWR3Ur+boeJJki+CMZ8DknQlFpk5lMLe9hIy
-         z0pMD+qY5irAq/bpI5QWYzTKfWEJGaCclMa45xnHtGaBXVWXtQadtxx4pCxtjtuL0Nrs
-         92qVPHuLjcRilTu6BZRcpAvVVTTLkqkdn5bQ6ymDcVW2IbdHyThGZFxNJhXneW/+5eMu
-         RRyMZpflI223iUEshrJPKnAmR3k5mP87FsVr8xR2YHOZuPbOTqr6hzu2MHdEjaOMMaXU
-         amUA==
-X-Gm-Message-State: AOAM5313Z6gyVQM0ssGibq5zd1sAijqUlgKosCS2p6Y77ieD3uOOj4OC
-        5s1wHRf5KgSvJLlaDmYsYEh8cA==
-X-Google-Smtp-Source: ABdhPJwbyZj4th/Ks5mvB+ElB/xiz0sHXiy/UKIrJCc8QLLBnJl9HfUHFNhTU1trrZNOtrIehMUs+A==
-X-Received: by 2002:aa7:da4c:: with SMTP id w12mr3098522eds.122.1595493593384;
-        Thu, 23 Jul 2020 01:39:53 -0700 (PDT)
-Received: from tsr-lap-08.nix.tessares.net ([79.132.248.22])
-        by smtp.gmail.com with ESMTPSA id q7sm1560608eja.69.2020.07.23.01.39.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jul 2020 01:39:52 -0700 (PDT)
-Subject: Re: [MPTCP] [PATCH 08/26] net: switch sock_set_timeout to sockptr_t
-To:     Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        bh=peNb8+RImxTNVZkyG9ELZ4fhv916Nu+DkwVdstZXkiA=;
+        b=D7srZBNTj6ndmbWjh3dk2+saXTGR7f2tGggd1otWwd206n535sloowzwB5gml+EKWn
+         lPP1CkPwLRRd4BINHNxZJl+894uuqnE2FE7HDetvcZZFWtx3PQEQp/R6f1mekPJmazgO
+         RmIQ9WRFyUN0B041IDJ4lP0tLMDMOstjlQOn6q3VObWs40A0JJ/LRkKiko6wZ7LN6kRL
+         ssLoK6em/N9gc/LaT4lYLH4qBJstGLxyaG2WPr8ea7mOwHacpLL7tQrnD3n8hPB1SRCl
+         Hxko1UY4zUzBhp1VRpbO9M7hDePojNq+oEyigSuV/jzuZNixG4/4uW4KjdIcK9N3qfcm
+         zQkw==
+X-Gm-Message-State: AOAM530/6/moqUQ1n8B6dWzbQXfqdNwNdYDyNOCAm+aOmrXo1+5t32P0
+        NcLFhYxi918/xF3K5wwttUkPLD0W4oc=
+X-Google-Smtp-Source: ABdhPJxnsRyX1mdKT6YyBQWc6mtmdE+xNqWANhT+eqFjJoSxfc8QSpwXrCh9Oibo8KKdc9Av+fbLIQ==
+X-Received: by 2002:ac2:4294:: with SMTP id m20mr1848076lfh.147.1595498394639;
+        Thu, 23 Jul 2020 02:59:54 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id h22sm2330598ljg.1.2020.07.23.02.59.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2020 02:59:54 -0700 (PDT)
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, kernel-team@cloudflare.com,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-sctp@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-can@vger.kernel.org, dccp@vger.kernel.org,
-        linux-decnet-user@lists.sourceforge.net,
-        linux-wpan@vger.kernel.org, linux-s390@vger.kernel.org,
-        mptcp@lists.01.org, lvs-devel@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
-        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
-References: <20200723060908.50081-1-hch@lst.de>
- <20200723060908.50081-9-hch@lst.de>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Message-ID: <092368db-122f-60bc-6a32-3cd5c70727da@tessares.net>
-Date:   Thu, 23 Jul 2020 10:39:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf v2 0/2] Fix narrow loads from an offset outside of target field
+Date:   Thu, 23 Jul 2020 11:59:51 +0200
+Message-Id: <20200723095953.1003302-1-jakub@cloudflare.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-In-Reply-To: <20200723060908.50081-9-hch@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Christoph,
+This is a second attempt at fixing narrow loads from context fields backed
+by smaller-in-size target fields, when load offset is beyond the target
+field.
 
-On 23/07/2020 08:08, Christoph Hellwig wrote:
-> Pass a sockptr_t to prepare for set_fs-less handling of the kernel
-> pointer from bpf-cgroup.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->   net/mptcp/protocol.c |  6 ++++--
+Following Yonghong suggestion, verifier now emits an 'wX = 0' or 'rX = 0'
+instruction for loads from offsets outside of target field.
 
-Thank you for looking at that!
+Cc: Yonghong Song <yhs@fb.com>
 
-For MPTCP-related code:
+[v1] https://lore.kernel.org/bpf/20200710173123.427983-1-jakub@cloudflare.com/
 
-Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Jakub Sitnicki (2):
+  bpf: Load zeros for narrow loads beyond target field
+  selftests/bpf: Add test for narrow loads from context at an offset
 
-Cheers,
-Matt
+ kernel/bpf/verifier.c                         | 23 ++++-
+ .../selftests/bpf/prog_tests/narrow_load.c    | 84 +++++++++++++++++++
+ .../selftests/bpf/progs/test_narrow_load.c    | 43 ++++++++++
+ 3 files changed, 148 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/narrow_load.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_narrow_load.c
+
 -- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+2.25.4
+
