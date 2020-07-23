@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27CE2C433EB
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 11:43:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22AB8C433F7
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 11:43:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 044D220B1F
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 11:43:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF2CE2086A
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 11:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595504589;
-	bh=bEqWNVHLaaPCKQTgLqQQH5kpGpp2VD7M69JOxRx3qmA=;
+	s=default; t=1595504598;
+	bh=Fw24wTjhX6/veV0b6MJa4ylEAknEnmUlJ5/TqSGR07c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=S+KwO7/hFNYxFR5OkQitiQqocjCNvHRm3Ni7uoItjuIpyrJ1iOAOZi9M+A2yuVraz
-	 ILB7XEnSFkbHfbKMdfxEzXrdQqW/OnWKNEytX7U4sFXMNHfEv58DN4CPQWGboStWG0
-	 g2PTazunRrRZttpq6NDL14TflY2G/PcGKUeu//Y8=
+	b=CrV/5bLm/iOBJOWJ9z2hmGrz5r8fg18MOr74T+H3V3FLP3ROSNEOPCYegeCLq81TG
+	 /KT+bgx4T7s0XAq9iZVXj6eM9lW5tJAjl/fAJYE4X1dCyPb+g8HzYixVX0w/Y+BBMS
+	 msB0uYW9vGcdsXBcXHzk8HfhcsauESA+0RCTGlWk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727769AbgGWLnI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jul 2020 07:43:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46014 "EHLO mail.kernel.org"
+        id S1728672AbgGWLnR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jul 2020 07:43:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46160 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728627AbgGWLnI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Jul 2020 07:43:08 -0400
+        id S1728567AbgGWLnR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jul 2020 07:43:17 -0400
 Received: from lore-desk.redhat.com (unknown [151.48.142.198])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AEBDA208E4;
-        Thu, 23 Jul 2020 11:43:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA68520B1F;
+        Thu, 23 Jul 2020 11:43:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595504588;
-        bh=bEqWNVHLaaPCKQTgLqQQH5kpGpp2VD7M69JOxRx3qmA=;
+        s=default; t=1595504597;
+        bh=Fw24wTjhX6/veV0b6MJa4ylEAknEnmUlJ5/TqSGR07c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bNuypVMH9aB9N9DTka1kG2fiv/h/Wbahbfe2b3hTfaOJZBS+tU8GB85qwioKcAArZ
-         rR/6UqzgsfC4/0S+OtJo5r613eYch48dvNBjy8hcOfGtS4M/uUpcX7QgaEJ45fkzhs
-         sIHUKveQJKVQ5+Fy1jE0t9rI2wWFktfA+vZYDsqg=
+        b=XRMLtFzeJJK9jx4pu5W8ym16Q2atoYT4gcywh+FfskDt/ioaa3LhAyNrtxzjT3TzX
+         rvTo0MxcXNLv65ELEx60lcKR/mtKvvweASEi9Z3Jx3eOADd9Y+XsS/rB0gpzwq8hg0
+         /nZbEYAe7FKhIez4xIVQ7pzW5G7xr5EPHUv9mrOw=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, davem@davemloft.net, ast@kernel.org,
         brouer@redhat.com, daniel@iogearbox.net,
         lorenzo.bianconi@redhat.com, echaudro@redhat.com,
         sameehj@amazon.com, kuba@kernel.org
-Subject: [RFC net-next 02/22] xdp: initialize xdp_buff mb bit to 0 in netif_receive_generic_xdp
-Date:   Thu, 23 Jul 2020 13:42:14 +0200
-Message-Id: <0c3c29b8d87259cd54bb7b1ec5892f71d12d62bb.1595503780.git.lorenzo@kernel.org>
+Subject: [RFC net-next 05/22] net: veth: initialize mb bit of xdp_buff to 0
+Date:   Thu, 23 Jul 2020 13:42:17 +0200
+Message-Id: <40621d3a47889b83eb79a4d519872f84c89dd558.1595503780.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1595503780.git.lorenzo@kernel.org>
 References: <cover.1595503780.git.lorenzo@kernel.org>
@@ -62,21 +62,21 @@ This is a preliminary patch to enable xdp multi-buffer support.
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- net/core/dev.c | 1 +
+ drivers/net/veth.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 316349f6cea5..eb3e54df198c 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4641,6 +4641,7 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index b594f03eeddb..463865c513b2 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -711,6 +711,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
  	/* SKB "head" area always have tailroom for skb_shared_info */
- 	xdp->frame_sz  = (void *)skb_end_pointer(skb) - xdp->data_hard_start;
- 	xdp->frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-+	xdp->mb = 0;
+ 	xdp.frame_sz = (void *)skb_end_pointer(skb) - xdp.data_hard_start;
+ 	xdp.frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
++	xdp.mb = 0;
  
- 	orig_data_end = xdp->data_end;
- 	orig_data = xdp->data;
+ 	orig_data = xdp.data;
+ 	orig_data_end = xdp.data_end;
 -- 
 2.26.2
 
