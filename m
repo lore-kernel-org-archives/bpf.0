@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B66A4C433E1
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:13:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1FB9C388D1
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:13:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 909CD22CA1
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:13:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7942E22CB2
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:13:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZjRkbKsN"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="LQ4n46+A"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbgGWGJc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jul 2020 02:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
+        id S1726972AbgGWGNe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jul 2020 02:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725773AbgGWGJb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Jul 2020 02:09:31 -0400
+        with ESMTP id S1726304AbgGWGJa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jul 2020 02:09:30 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF00C0619E2;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CABC0619DC;
         Wed, 22 Jul 2020 23:09:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=tMSRX19x4iZFav/RhfRomxQNPhw3MkRzM2UG4zJNYUs=; b=ZjRkbKsN32Y9td9wz3fQ2PPjcg
-        tNWB2b1T7UhAxfZr9U5bMy8pRw41tA+BEuacHybHFtOtya84/t+vp9s4fVF0g64fIHo2cAfUni18L
-        STKIAbJ+vR2wfiAkEB3Bx9u1lh4K1aKD28lXbDznVgv0IbGEm9oeUwmwmwB90s+bH3+0vjtCEYzIs
-        L9uZxeSzuaPHmKq5fGMICl8C3Ivesl8yoyuBUgcrzCB1w5Xlr7UJwTmGQINzFPF2GhqbHAE6NOOqe
-        jRg/utPjWC/MgowE0Ga66W6lNrRV1vFCriVpF7Tel/0HVKMC6xDMjjfnpYf/p9nuQBvUjarss4Xf6
-        wrY8TEmQ==;
+        bh=4ol6++ZHLzLW7TDwHlZddqUginEv5bBRSa0jVjvGkxw=; b=LQ4n46+A9hpfp8zwc4fmkS7cJo
+        d5IqR7Kl4e0TO036FT8xWuGybCPl2s2InAIro23/53LCinHbTKiq/Tnub5/sgbeB8OvtVn2Fb8T3x
+        cy//cs6JjumkNHaZgsjWuneXbSE3bV91ZNenOTCXKvvKVo3iMbNIfcuHEHy0jL/1haCANgajZtHlM
+        OmyzXP8bHeIwV24m5r6zEtVXEFNxvWUQym3x+LwR2wkRgHMMnIbpuUfNlwS4BNr+jYwxsADZ+QZcp
+        nqi2JyfZ3TNmf2p6KSTQP4wHWgQxfvy5ytYsalHed/VoVuESlHAkZj1jRhA4Bsr7iHZTdGZ+FlzSQ
+        Hvfa7s1g==;
 Received: from [2001:4bb8:18c:2acc:91df:aae8:fa3b:de9c] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jyUPt-0003ka-LB; Thu, 23 Jul 2020 06:09:18 +0000
+        id 1jyUPq-0003k4-Pf; Thu, 23 Jul 2020 06:09:15 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         mptcp@lists.01.org, lvs-devel@vger.kernel.org,
         rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
         tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
-Subject: [PATCH 06/26] net: switch sock_setbindtodevice to sockptr_t
-Date:   Thu, 23 Jul 2020 08:08:48 +0200
-Message-Id: <20200723060908.50081-7-hch@lst.de>
+Subject: [PATCH 04/26] net: add a new sockptr_t type
+Date:   Thu, 23 Jul 2020 08:08:46 +0200
+Message-Id: <20200723060908.50081-5-hch@lst.de>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200723060908.50081-1-hch@lst.de>
 References: <20200723060908.50081-1-hch@lst.de>
@@ -70,46 +70,125 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Pass a sockptr_t to prepare for set_fs-less handling of the kernel
-pointer from bpf-cgroup.
+Add a uptr_t type that can hold a pointer to either a user or kernel
+memory region, and simply helpers to copy to and from it.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- net/core/sock.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ include/linux/sockptr.h | 104 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+ create mode 100644 include/linux/sockptr.h
 
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 71fc7e4ddd0648..5b55bc9397f282 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -609,8 +609,7 @@ int sock_bindtoindex(struct sock *sk, int ifindex, bool lock_sk)
- }
- EXPORT_SYMBOL(sock_bindtoindex);
- 
--static int sock_setbindtodevice(struct sock *sk, char __user *optval,
--				int optlen)
-+static int sock_setbindtodevice(struct sock *sk, sockptr_t optval, int optlen)
- {
- 	int ret = -ENOPROTOOPT;
- #ifdef CONFIG_NETDEVICES
-@@ -632,7 +631,7 @@ static int sock_setbindtodevice(struct sock *sk, char __user *optval,
- 	memset(devname, 0, sizeof(devname));
- 
- 	ret = -EFAULT;
--	if (copy_from_user(devname, optval, optlen))
-+	if (copy_from_sockptr(devname, optval, optlen))
- 		goto out;
- 
- 	index = 0;
-@@ -840,7 +839,7 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
- 	 */
- 
- 	if (optname == SO_BINDTODEVICE)
--		return sock_setbindtodevice(sk, optval, optlen);
-+		return sock_setbindtodevice(sk, USER_SOCKPTR(optval), optlen);
- 
- 	if (optlen < sizeof(int))
- 		return -EINVAL;
+diff --git a/include/linux/sockptr.h b/include/linux/sockptr.h
+new file mode 100644
+index 00000000000000..700856e13ea0c4
+--- /dev/null
++++ b/include/linux/sockptr.h
+@@ -0,0 +1,104 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2020 Christoph Hellwig.
++ *
++ * Support for "universal" pointers that can point to either kernel or userspace
++ * memory.
++ */
++#ifndef _LINUX_SOCKPTR_H
++#define _LINUX_SOCKPTR_H
++
++#include <linux/slab.h>
++#include <linux/uaccess.h>
++
++typedef struct {
++	union {
++		void		*kernel;
++		void __user	*user;
++	};
++	bool		is_kernel : 1;
++} sockptr_t;
++
++static inline bool sockptr_is_kernel(sockptr_t sockptr)
++{
++	return sockptr.is_kernel;
++}
++
++static inline sockptr_t KERNEL_SOCKPTR(void *p)
++{
++	return (sockptr_t) { .kernel = p, .is_kernel = true };
++}
++
++static inline sockptr_t USER_SOCKPTR(void __user *p)
++{
++	return (sockptr_t) { .user = p };
++}
++
++static inline bool sockptr_is_null(sockptr_t sockptr)
++{
++	return !sockptr.user && !sockptr.kernel;
++}
++
++static inline int copy_from_sockptr(void *dst, sockptr_t src, size_t size)
++{
++	if (!sockptr_is_kernel(src))
++		return copy_from_user(dst, src.user, size);
++	memcpy(dst, src.kernel, size);
++	return 0;
++}
++
++static inline int copy_to_sockptr(sockptr_t dst, const void *src, size_t size)
++{
++	if (!sockptr_is_kernel(dst))
++		return copy_to_user(dst.user, src, size);
++	memcpy(dst.kernel, src, size);
++	return 0;
++}
++
++static inline void *memdup_sockptr(sockptr_t src, size_t len)
++{
++	void *p = kmalloc_track_caller(len, GFP_USER | __GFP_NOWARN);
++
++	if (!p)
++		return ERR_PTR(-ENOMEM);
++	if (copy_from_sockptr(p, src, len)) {
++		kfree(p);
++		return ERR_PTR(-EFAULT);
++	}
++	return p;
++}
++
++static inline void *memdup_sockptr_nul(sockptr_t src, size_t len)
++{
++	char *p = kmalloc_track_caller(len + 1, GFP_KERNEL);
++
++	if (!p)
++		return ERR_PTR(-ENOMEM);
++	if (copy_from_sockptr(p, src, len)) {
++		kfree(p);
++		return ERR_PTR(-EFAULT);
++	}
++	p[len] = '\0';
++	return p;
++}
++
++static inline void sockptr_advance(sockptr_t sockptr, size_t len)
++{
++	if (sockptr_is_kernel(sockptr))
++		sockptr.kernel += len;
++	else
++		sockptr.user += len;
++}
++
++static inline long strncpy_from_sockptr(char *dst, sockptr_t src, size_t count)
++{
++	if (sockptr_is_kernel(src)) {
++		size_t len = min(strnlen(src.kernel, count - 1) + 1, count);
++
++		memcpy(dst, src.kernel, len);
++		return len;
++	}
++	return strncpy_from_user(dst, src.user, count);
++}
++
++#endif /* _LINUX_SOCKPTR_H */
 -- 
 2.27.0
 
