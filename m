@@ -2,382 +2,162 @@ Return-Path: <SRS0=Cb5B=BC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FF37C31E5A
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:16:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07461C433DF
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:53:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5935B20658
-	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:16:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D0F1620709
+	for <bpf@archiver.kernel.org>; Thu, 23 Jul 2020 06:53:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Y1d7wCTL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lr4pORw0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726962AbgGWGPp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jul 2020 02:15:45 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:18070 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726141AbgGWGPo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 Jul 2020 02:15:44 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06N6BFCj028839
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 23:15:43 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=tgIy8zksWHk2zSIZyWd0+1ajtCgWt/KSiJnfftHbu4I=;
- b=Y1d7wCTLr4sCNAOiQ1RC5m9kALlGB0Nlib02G7dcf/WvYMOcvb13f1UYz/2BcWc29Oq0
- csa2XaEP8rz/1TpHJItn8YShho8kRNycpJ6GDkhk8avr6xUwAR+UP1rtqHVdvXGYIIIx
- p64FdNV3n8QWQ8Yw3yTB1IPhJop/JFkich8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32etbg2np5-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2020 23:15:43 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 22 Jul 2020 23:15:41 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 06A6F3705266; Wed, 22 Jul 2020 23:15:38 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        id S1725846AbgGWGxd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jul 2020 02:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725774AbgGWGxd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jul 2020 02:53:33 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA42BC0619DC;
+        Wed, 22 Jul 2020 23:53:32 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id w2so2586012pgg.10;
+        Wed, 22 Jul 2020 23:53:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MKeI10oAeukD6znqZG6253pIZloE+begkglToKzlJ/0=;
+        b=lr4pORw07DhPNC2bfi9AgknxtOAjLQBJ0De1ohELNHH0fC4lO7PQ4eiZDyn0aDzjgm
+         I8zDRcqznWvO4SX6mz7MnzOkM5p8+G0eDJ100kiHhYXejuME+P+YBzz2XoOSRw5Cnavk
+         900AGrTuxQFBStbaZFIjb2Msvjj5L16LypESwqnkuPdpj6Q0EaTfmKKk/ugiZnVDPOaJ
+         lkmgQRNnQEJocE+QmPBrVNWfIwHfcavjZUG94a4Krm+H9zeb0+csnCzpEKtYAegn34+N
+         N1E2EZzHw5HYxU33h33xOxH/3w/sZdg/OYYr+Az+UJviJrFqYCz0W8mIlsBpBA++Nn4b
+         elRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MKeI10oAeukD6znqZG6253pIZloE+begkglToKzlJ/0=;
+        b=IuhGCOahocvb7QHHoeoKOtkTEmew1JdgzuwBToJyWVSQMO+iiFqV6gKmjffsBSq2F7
+         uNZSAfLj1cPSXqFSko+Lz2Fukt3BIdo2y6IIR8FLAYWSCSKPy8anMYmSK3+0kBrMY9vb
+         Se+ZsyCRzewfZVR8aLCsthlt17saDmIvnAlkI7GzVyZ/VwBdtIsyXK/RmJSlaVhGq7ii
+         4a1IB4yX2AI91F/xWcInXBQdyzMmrvLHZNszxhItugvp7QfracCvFTbbj4SL1oreqfIa
+         pWSWA/nO+UAznN12kAZfMZMp6KzbI0FzJ1679gRCRuTOwuKiHrifdvn8dqMB5VTe8u1x
+         YqBA==
+X-Gm-Message-State: AOAM532pGylOquo8Lqg5leiVkK5j4EUyddFVZRVZe0xrrCYa3mrSvWeR
+        oP3WbYsf7sbxo+WL2g9iUUo=
+X-Google-Smtp-Source: ABdhPJySlLuLMTnPxayB9GJb5cstQeH9GWTnAUcauyVaVphzrZoGASUAUij/icP73xvQbl8RvYeTzA==
+X-Received: by 2002:a62:be02:: with SMTP id l2mr2823365pff.163.1595487212451;
+        Wed, 22 Jul 2020 23:53:32 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:6cd6])
+        by smtp.gmail.com with ESMTPSA id y7sm1729879pfq.69.2020.07.22.23.53.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2020 23:53:31 -0700 (PDT)
+Date:   Wed, 22 Jul 2020 23:53:29 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
         Martin KaFai Lau <kafai@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v3 05/13] bpf: implement bpf iterator for hash maps
-Date:   Wed, 22 Jul 2020 23:15:38 -0700
-Message-ID: <20200723061538.2100222-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200723061533.2099842-1-yhs@fb.com>
+Subject: Re: [PATCH bpf-next v3 00/13] bpf: implement bpf iterator for map
+ elements
+Message-ID: <20200723065329.yuw4dey27n2w5a4i@ast-mbp.dhcp.thefacebook.com>
 References: <20200723061533.2099842-1-yhs@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-23_02:2020-07-22,2020-07-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- lowpriorityscore=0 mlxlogscore=897 spamscore=0 adultscore=0 suspectscore=8
- clxscore=1015 bulkscore=0 phishscore=0 malwarescore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007230050
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200723061533.2099842-1-yhs@fb.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf iterators for hash, percpu hash, lru hash
-and lru percpu hash are implemented. During link time,
-bpf_iter_reg->check_target() will check map type
-and ensure the program access key/value region is
-within the map defined key/value size limit.
+On Wed, Jul 22, 2020 at 11:15:33PM -0700, Yonghong Song wrote:
+> Bpf iterator has been implemented for task, task_file,
+> bpf_map, ipv6_route, netlink, tcp and udp so far.
+> 
+> For map elements, there are two ways to traverse all elements from
+> user space:
+>   1. using BPF_MAP_GET_NEXT_KEY bpf subcommand to get elements
+>      one by one.
+>   2. using BPF_MAP_LOOKUP_BATCH bpf subcommand to get a batch of
+>      elements.
+> Both these approaches need to copy data from kernel to user space
+> in order to do inspection.
+> 
+> This patch implements bpf iterator for map elements.
+> User can have a bpf program in kernel to run with each map element,
+> do checking, filtering, aggregation, modifying values etc.
+> without copying data to user space.
+> 
+> Patch #1 and #2 are refactoring. Patch #3 implements readonly/readwrite
+> buffer support in verifier. Patches #4 - #7 implements map element
+> support for hash, percpu hash, lru hash lru percpu hash, array,
+> percpu array and sock local storage maps. Patches #8 - #9 are libbpf
+> and bpftool support. Patches #10 - #13 are selftests for implemented
+> map element iterators.
 
-For percpu hash and lru hash maps, the bpf program
-will receive values for all cpus. The map element
-bpf iterator infrastructure will prepare value
-properly before passing the value pointer to the
-bpf program.
+kasan is not happy:
 
-This patch set supports readonly map keys and
-read/write map values. It does not support deleting
-map elements, e.g., from hash tables. If there is
-a user case for this, the following mechanism can
-be used to support map deletion for hashtab, etc.
-  - permit a new bpf program return value, e.g., 2,
-    to let bpf iterator know the map element should
-    be removed.
-  - since bucket lock is taken, the map element will be
-    queued.
-  - once bucket lock is released after all elements under
-    this bucket are traversed, all to-be-deleted map
-    elements can be deleted.
+[   16.896170] ==================================================================
+[   16.896994] BUG: KASAN: use-after-free in __do_sys_bpf+0x34f3/0x3860
+[   16.897657] Read of size 4 at addr ffff8881f105b208 by task test_progs/1958
+[   16.898416]
+[   16.898577] CPU: 0 PID: 1958 Comm: test_progs Not tainted 5.8.0-rc4-01920-g6276000cd38e #2828
+[   16.899505] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2.el7 04/01/2014
+[   16.900405] Call Trace:
+[   16.900679]  dump_stack+0x7d/0xb0
+[   16.901068]  print_address_description.constprop.0+0x3a/0x60
+[   16.901689]  ? __do_sys_bpf+0x34f3/0x3860
+[   16.902125]  kasan_report.cold+0x1f/0x37
+[   16.902595]  ? __do_sys_bpf+0x34f3/0x3860
+[   16.903029]  __do_sys_bpf+0x34f3/0x3860
+[   16.903494]  ? bpf_trace_run2+0xd1/0x210
+[   16.903971]  ? bpf_link_get_from_fd+0xe0/0xe0
+[   16.907802]  do_syscall_64+0x38/0x60
+[   16.908187]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[   16.908730] RIP: 0033:0x7f014cdfe7f9
+[   16.909148] Code: Bad RIP value.
+[   16.909524] RSP: 002b:00007ffe1d1e8b28 EFLAGS: 00000206 ORIG_RAX: 0000000000000141
+[   16.910345] RAX: ffffffffffffffda RBX: 00007f014dd27690 RCX: 00007f014cdfe7f9
+[   16.911058] RDX: 0000000000000078 RSI: 00007ffe1d1e8b60 RDI: 000000000000001e
+[   16.911820] RBP: 00007ffe1d1e8b40 R08: 00007ffe1d1e8b40 R09: 00007ffe1d1e8b60
+[   16.912575] R10: 0000000000000044 R11: 0000000000000206 R12: 0000000000000002
+[   16.913304] R13: 0000000000000000 R14: 0000000000000002 R15: 0000000000000002
+[   16.914026]
+[   16.914189] Allocated by task 1958:
+[   16.914562]  save_stack+0x1b/0x40
+[   16.914944]  __kasan_kmalloc.constprop.0+0xc2/0xd0
+[   16.915476]  bpf_iter_link_attach+0x235/0x4e0
+[   16.915975]  __do_sys_bpf+0x1832/0x3860
+[   16.916371]  do_syscall_64+0x38/0x60
+[   16.916750]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[   16.917338]
+[   16.917524] Freed by task 1958:
+[   16.917874]  save_stack+0x1b/0x40
+[   16.918241]  __kasan_slab_free+0x12f/0x180
+[   16.918681]  kfree+0xc6/0x280
+[   16.919024]  bpf_iter_link_attach+0x3e3/0x4e0
+[   16.919488]  __do_sys_bpf+0x1832/0x3860
+[   16.919915]  do_syscall_64+0x38/0x60
+[   16.920301]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- kernel/bpf/hashtab.c  | 194 ++++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/map_iter.c |  24 +++++-
- 2 files changed, 217 insertions(+), 1 deletion(-)
+To reproduce:
+./test_progs -n 5
+#5 bpf_obj_id:OK
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index d4378d7d442b..024276787055 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -1612,6 +1612,196 @@ htab_lru_map_lookup_and_delete_batch(struct bpf_m=
-ap *map,
- 						  true, false);
- }
-=20
-+struct bpf_iter_seq_hash_map_info {
-+	struct bpf_map *map;
-+	struct bpf_htab *htab;
-+	void *percpu_value_buf; // non-zero means percpu hash
-+	unsigned long flags;
-+	u32 bucket_id;
-+	u32 skip_elems;
-+};
-+
-+static struct htab_elem *
-+bpf_hash_map_seq_find_next(struct bpf_iter_seq_hash_map_info *info,
-+			   struct htab_elem *prev_elem)
-+{
-+	const struct bpf_htab *htab =3D info->htab;
-+	unsigned long flags =3D info->flags;
-+	u32 skip_elems =3D info->skip_elems;
-+	u32 bucket_id =3D info->bucket_id;
-+	struct hlist_nulls_head *head;
-+	struct hlist_nulls_node *n;
-+	struct htab_elem *elem;
-+	struct bucket *b;
-+	u32 i, count;
-+
-+	if (bucket_id >=3D htab->n_buckets)
-+		return NULL;
-+
-+	/* try to find next elem in the same bucket */
-+	if (prev_elem) {
-+		/* no update/deletion on this bucket, prev_elem should be still valid
-+		 * and we won't skip elements.
-+		 */
-+		n =3D rcu_dereference_raw(hlist_nulls_next_rcu(&prev_elem->hash_node))=
-;
-+		elem =3D hlist_nulls_entry_safe(n, struct htab_elem, hash_node);
-+		if (elem)
-+			return elem;
-+
-+		/* not found, unlock and go to the next bucket */
-+		b =3D &htab->buckets[bucket_id++];
-+		htab_unlock_bucket(htab, b, flags);
-+		skip_elems =3D 0;
-+	}
-+
-+	for (i =3D bucket_id; i < htab->n_buckets; i++) {
-+		b =3D &htab->buckets[i];
-+		flags =3D htab_lock_bucket(htab, b);
-+
-+		count =3D 0;
-+		head =3D &b->head;
-+		hlist_nulls_for_each_entry_rcu(elem, n, head, hash_node) {
-+			if (count >=3D skip_elems) {
-+				info->flags =3D flags;
-+				info->bucket_id =3D i;
-+				info->skip_elems =3D count;
-+				return elem;
-+			}
-+			count++;
-+		}
-+
-+		htab_unlock_bucket(htab, b, flags);
-+		skip_elems =3D 0;
-+	}
-+
-+	info->bucket_id =3D i;
-+	info->skip_elems =3D 0;
-+	return NULL;
-+}
-+
-+static void *bpf_hash_map_seq_start(struct seq_file *seq, loff_t *pos)
-+{
-+	struct bpf_iter_seq_hash_map_info *info =3D seq->private;
-+	struct htab_elem *elem;
-+
-+	elem =3D bpf_hash_map_seq_find_next(info, NULL);
-+	if (!elem)
-+		return NULL;
-+
-+	if (*pos =3D=3D 0)
-+		++*pos;
-+	return elem;
-+}
-+
-+static void *bpf_hash_map_seq_next(struct seq_file *seq, void *v, loff_t=
- *pos)
-+{
-+	struct bpf_iter_seq_hash_map_info *info =3D seq->private;
-+
-+	++*pos;
-+	++info->skip_elems;
-+	return bpf_hash_map_seq_find_next(info, v);
-+}
-+
-+static int __bpf_hash_map_seq_show(struct seq_file *seq, struct htab_ele=
-m *elem)
-+{
-+	struct bpf_iter_seq_hash_map_info *info =3D seq->private;
-+	u32 roundup_key_size, roundup_value_size;
-+	struct bpf_iter__bpf_map_elem ctx =3D {};
-+	struct bpf_map *map =3D info->map;
-+	struct bpf_iter_meta meta;
-+	int ret =3D 0, off =3D 0, cpu;
-+	struct bpf_prog *prog;
-+	void __percpu *pptr;
-+
-+	meta.seq =3D seq;
-+	prog =3D bpf_iter_get_info(&meta, elem =3D=3D NULL);
-+	if (prog) {
-+		ctx.meta =3D &meta;
-+		ctx.map =3D info->map;
-+		if (elem) {
-+			roundup_key_size =3D round_up(map->key_size, 8);
-+			ctx.key =3D elem->key;
-+			if (!info->percpu_value_buf) {
-+				ctx.value =3D elem->key + roundup_key_size;
-+			} else {
-+				roundup_value_size =3D round_up(map->value_size, 8);
-+				pptr =3D htab_elem_get_ptr(elem, map->key_size);
-+				for_each_possible_cpu(cpu) {
-+					bpf_long_memcpy(info->percpu_value_buf + off,
-+							per_cpu_ptr(pptr, cpu),
-+							roundup_value_size);
-+					off +=3D roundup_value_size;
-+				}
-+				ctx.value =3D info->percpu_value_buf;
-+			}
-+		}
-+		ret =3D bpf_iter_run_prog(prog, &ctx);
-+	}
-+
-+	return ret;
-+}
-+
-+static int bpf_hash_map_seq_show(struct seq_file *seq, void *v)
-+{
-+	return __bpf_hash_map_seq_show(seq, v);
-+}
-+
-+static void bpf_hash_map_seq_stop(struct seq_file *seq, void *v)
-+{
-+	struct bpf_iter_seq_hash_map_info *info =3D seq->private;
-+
-+	if (!v)
-+		(void)__bpf_hash_map_seq_show(seq, NULL);
-+	else
-+		htab_unlock_bucket(info->htab,
-+				   &info->htab->buckets[info->bucket_id],
-+				   info->flags);
-+}
-+
-+static int bpf_iter_init_hash_map(void *priv_data,
-+				  struct bpf_iter_aux_info *aux)
-+{
-+	struct bpf_iter_seq_hash_map_info *seq_info =3D priv_data;
-+	struct bpf_map *map =3D aux->map;
-+	void *value_buf;
-+	u32 buf_size;
-+
-+	if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_HASH ||
-+	    map->map_type =3D=3D BPF_MAP_TYPE_LRU_PERCPU_HASH) {
-+		buf_size =3D round_up(map->value_size, 8) * num_possible_cpus();
-+		value_buf =3D kmalloc(buf_size, GFP_USER | __GFP_NOWARN);
-+		if (!value_buf)
-+			return -ENOMEM;
-+
-+		seq_info->percpu_value_buf =3D value_buf;
-+	}
-+
-+	seq_info->map =3D map;
-+	seq_info->htab =3D container_of(map, struct bpf_htab, map);
-+	return 0;
-+}
-+
-+static void bpf_iter_fini_hash_map(void *priv_data)
-+{
-+	struct bpf_iter_seq_hash_map_info *seq_info =3D priv_data;
-+
-+	kfree(seq_info->percpu_value_buf);
-+}
-+
-+static const struct seq_operations bpf_hash_map_seq_ops =3D {
-+	.start	=3D bpf_hash_map_seq_start,
-+	.next	=3D bpf_hash_map_seq_next,
-+	.stop	=3D bpf_hash_map_seq_stop,
-+	.show	=3D bpf_hash_map_seq_show,
-+};
-+
-+static const struct bpf_iter_seq_info iter_seq_info =3D {
-+	.seq_ops		=3D &bpf_hash_map_seq_ops,
-+	.init_seq_private	=3D bpf_iter_init_hash_map,
-+	.fini_seq_private	=3D bpf_iter_fini_hash_map,
-+	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_hash_map_info),
-+};
-+
- static int htab_map_btf_id;
- const struct bpf_map_ops htab_map_ops =3D {
- 	.map_alloc_check =3D htab_map_alloc_check,
-@@ -1626,6 +1816,7 @@ const struct bpf_map_ops htab_map_ops =3D {
- 	BATCH_OPS(htab),
- 	.map_btf_name =3D "bpf_htab",
- 	.map_btf_id =3D &htab_map_btf_id,
-+	.iter_seq_info =3D &iter_seq_info,
- };
-=20
- static int htab_lru_map_btf_id;
-@@ -1643,6 +1834,7 @@ const struct bpf_map_ops htab_lru_map_ops =3D {
- 	BATCH_OPS(htab_lru),
- 	.map_btf_name =3D "bpf_htab",
- 	.map_btf_id =3D &htab_lru_map_btf_id,
-+	.iter_seq_info =3D &iter_seq_info,
- };
-=20
- /* Called from eBPF program */
-@@ -1760,6 +1952,7 @@ const struct bpf_map_ops htab_percpu_map_ops =3D {
- 	BATCH_OPS(htab_percpu),
- 	.map_btf_name =3D "bpf_htab",
- 	.map_btf_id =3D &htab_percpu_map_btf_id,
-+	.iter_seq_info =3D &iter_seq_info,
- };
-=20
- static int htab_lru_percpu_map_btf_id;
-@@ -1775,6 +1968,7 @@ const struct bpf_map_ops htab_lru_percpu_map_ops =3D=
- {
- 	BATCH_OPS(htab_lru_percpu),
- 	.map_btf_name =3D "bpf_htab",
- 	.map_btf_id =3D &htab_lru_percpu_map_btf_id,
-+	.iter_seq_info =3D &iter_seq_info,
- };
-=20
- static int fd_htab_map_alloc_check(union bpf_attr *attr)
-diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-index 8a1f9b3355d0..bcb68b55bf65 100644
---- a/kernel/bpf/map_iter.c
-+++ b/kernel/bpf/map_iter.c
-@@ -101,7 +101,29 @@ static struct bpf_iter_reg bpf_map_reg_info =3D {
- static int bpf_iter_check_map(struct bpf_prog *prog,
- 			      struct bpf_iter_aux_info *aux)
- {
--	return -EINVAL;
-+	u32 key_acc_size, value_acc_size, key_size, value_size;
-+	struct bpf_map *map =3D aux->map;
-+	bool is_percpu =3D false;
-+
-+	if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_HASH ||
-+	    map->map_type =3D=3D BPF_MAP_TYPE_LRU_PERCPU_HASH)
-+		is_percpu =3D true;
-+	else if (map->map_type !=3D BPF_MAP_TYPE_HASH &&
-+		 map->map_type !=3D BPF_MAP_TYPE_LRU_HASH)
-+		return -EINVAL;
-+
-+	key_acc_size =3D prog->aux->max_rdonly_access;
-+	value_acc_size =3D prog->aux->max_rdwr_access;
-+	key_size =3D map->key_size;
-+	if (!is_percpu)
-+		value_size =3D map->value_size;
-+	else
-+		value_size =3D round_up(map->value_size, 8) * num_possible_cpus();
-+
-+	if (key_acc_size > key_size || value_acc_size > value_size)
-+		return -EACCES;
-+
-+	return 0;
- }
-=20
- DEFINE_BPF_ITER_FUNC(bpf_map_elem, struct bpf_iter_meta *meta,
---=20
-2.24.1
+./test_progs -n 4/18
+#4/18 bpf_hash_map:OK
+#4 bpf_iter:OK
+Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+
+./test_progs -n 5
+[   37.569154] ==================================================================
+[   37.570020] BUG: KASAN: use-after-free in __do_sys_bpf+0x34f3/0x3860
 
