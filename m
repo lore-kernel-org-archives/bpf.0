@@ -2,151 +2,161 @@ Return-Path: <SRS0=UdEV=BD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF722C433E5
-	for <bpf@archiver.kernel.org>; Fri, 24 Jul 2020 15:44:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B25BC433DF
+	for <bpf@archiver.kernel.org>; Fri, 24 Jul 2020 16:02:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE83F206EB
-	for <bpf@archiver.kernel.org>; Fri, 24 Jul 2020 15:44:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EMQ5KBE6"
+	by mail.kernel.org (Postfix) with ESMTP id 5A7182065E
+	for <bpf@archiver.kernel.org>; Fri, 24 Jul 2020 16:02:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726539AbgGXPoy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Jul 2020 11:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726493AbgGXPoy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 Jul 2020 11:44:54 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E153DC0619E5
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2020 08:44:53 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id b6so8719255wrs.11
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2020 08:44:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RUZyK2oU0Kd8idZ8Q9ejhsbuyqiNW01xj/ZfwiLfu3Y=;
-        b=EMQ5KBE6Jkx1Hq9yV6Usrjv1X6tWqxTG5U4bGAqMz5nnH1eJV7PnEDH1UUbsjhyWtQ
-         Ebi+meVf5qoPU4QZk7oL6cGBtNEaoRQ1hiwseEtqXClbDNh0xXkZ8/WBuBYBrEuUuNYa
-         tjAAAyqwBFcxnkr/RXqFfirta526U71ZFXceU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RUZyK2oU0Kd8idZ8Q9ejhsbuyqiNW01xj/ZfwiLfu3Y=;
-        b=AmSbfKJNAsZ5/QvIUyz+8T8uvBYsjjmrPhr+4rkURBZWuqKPlUN9D+v5CvrfA66//z
-         dXxD9wXxloous1DG9THfkecf8HvyEOT0u5QSG+jr6nYzMX/FD8ngV+AC9a78uVIT6C6e
-         bD5kQwSh6Zm1ZQbdhT/XXbrAkq+rSHSgcTXe0Nc+ozdSC3Ob3uakcPWIVsLFDi/3YZU+
-         WNMcF3Ggov7WZI34fFMLmwgrI3/j+4jlwbmu5DEvN1EfdBT7QAExtoEHeBdjsp73I6Ve
-         UX9DU0NifZ2XgFYNGye37GZg/qt0bfUgfwFCQhmiA7d/i8KEUrsGa3+XWCP2KFj9iBZB
-         qBNQ==
-X-Gm-Message-State: AOAM530aauXGQm83rndeE7nE79q98HWsxYKh9kEWuhHB6FpS1KEgRxaA
-        hYneAuxAvtEuaAzQXmznW6LaJg==
-X-Google-Smtp-Source: ABdhPJyubYtzFJZJ4vI6f7H318py/PzhqfA5Udew1hMnX9MephVhzKdADMZaKj+rNVL+WACQP/X9hA==
-X-Received: by 2002:a5d:4109:: with SMTP id l9mr9312784wrp.398.1595605492515;
-        Fri, 24 Jul 2020 08:44:52 -0700 (PDT)
-Received: from kpsingh-macbookpro2.roam.corp.google.com ([81.6.44.51])
-        by smtp.gmail.com with ESMTPSA id c25sm7782316wml.18.2020.07.24.08.44.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jul 2020 08:44:52 -0700 (PDT)
-Subject: Re: [PATCH bpf-next v6 1/7] bpf: Renames to prepare for generalizing
- sk_storage.
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
-        Florent Revest <revest@chromium.org>
-References: <20200723115032.460770-1-kpsingh@chromium.org>
- <20200723115032.460770-2-kpsingh@chromium.org>
- <20200724053135.itp5qrqaplbyzxxw@kafai-mbp>
-From:   KP Singh <kpsingh@chromium.org>
-Message-ID: <9e421c6e-14a2-f0a7-1260-0debfbbf9308@chromium.org>
-Date:   Fri, 24 Jul 2020 17:44:51 +0200
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.10.0
+        id S1726455AbgGXQCh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Jul 2020 12:02:37 -0400
+Received: from www62.your-server.de ([213.133.104.62]:54644 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726381AbgGXQCg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Jul 2020 12:02:36 -0400
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jz09X-0001kG-Hz; Fri, 24 Jul 2020 18:02:31 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jz09X-0007EY-Ae; Fri, 24 Jul 2020 18:02:31 +0200
+Subject: Re: [PATCH v4 bpf-next 2/6] bpf: propagate poke descriptors to
+ subprograms
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>, ast@kernel.org
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com
+References: <20200724123644.5096-1-maciej.fijalkowski@intel.com>
+ <20200724123644.5096-3-maciej.fijalkowski@intel.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <1545902f-3cbb-73bc-e241-d2e8a3118cd4@iogearbox.net>
+Date:   Fri, 24 Jul 2020 18:02:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20200724053135.itp5qrqaplbyzxxw@kafai-mbp>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200724123644.5096-3-maciej.fijalkowski@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.3/25883/Fri Jul 24 16:43:10 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-
-On 24.07.20 07:31, Martin KaFai Lau wrote:
-> On Thu, Jul 23, 2020 at 01:50:26PM +0200, KP Singh wrote:
->> From: KP Singh <kpsingh@google.com>
->>
->> A purely mechanical change to split the renaming from the actual
->> generalization.
->>
->> Flags/consts:
->>
->>   SK_STORAGE_CREATE_FLAG_MASK	BPF_LOCAL_STORAGE_CREATE_FLAG_MASK
->>   BPF_SK_STORAGE_CACHE_SIZE	BPF_LOCAL_STORAGE_CACHE_SIZE
->>   MAX_VALUE_SIZE		BPF_LOCAL_STORAGE_MAX_VALUE_SIZE
->>
->> Structs:
->>
->>   bucket			bpf_local_storage_map_bucket
->>   bpf_sk_storage_map		bpf_local_storage_map
->>   bpf_sk_storage_data		bpf_local_storage_data
->>   bpf_sk_storage_elem		bpf_local_storage_elem
->>   bpf_sk_storage		bpf_local_storage
->>   selem_linked_to_sk		selem_linked_to_storage
->>   selem_alloc			bpf_selem_alloc
->>
->> The "sk" member in bpf_local_storage is also updated to "owner"
->> in preparation for changing the type to void * in a subsequent patch.
->>
->> Functions:
->>
->>   __selem_unlink_sk			bpf_selem_unlink_storage
->>   __selem_link_sk			bpf_selem_link_storage
->>   selem_unlink_sk			__bpf_selem_unlink_storage
->>   sk_storage_update			bpf_local_storage_update
->>   __sk_storage_lookup			bpf_local_storage_lookup
->>   bpf_sk_storage_map_free		bpf_local_storage_map_free
->>   bpf_sk_storage_map_alloc		bpf_local_storage_map_alloc
->>   bpf_sk_storage_map_alloc_check	bpf_local_storage_map_alloc_check
->>   bpf_sk_storage_map_check_btf		bpf_local_storage_map_check_btf
-> Thanks for separating this mechanical name change in a separate patch.
-> It is much easier to follow.  This patch looks good.
+On 7/24/20 2:36 PM, Maciej Fijalkowski wrote:
+> Previously, there was no need for poke descriptors being present in
+> subprogram's bpf_prog_aux struct since tailcalls were simply not allowed
+> in them. Each subprog is JITed independently so in order to enable
+> JITing such subprograms, simply copy poke descriptors from main program
+> to subprogram's poke tab.
 > 
-> A minor thought is, when I look at unlink_map() and unlink_storage(),
-> it keeps me looking back for the lock situation.  I think
-> the main reason is the bpf_selem_unlink_map() is locked but
-> bpf_selem_unlink_storage() is unlocked now.  May be:
+> Add also subprog's aux struct to the BPF map poke_progs list by calling
+> on it map_poke_track().
 > 
-> bpf_selem_unlink_map()		=> bpf_selem_unlink_map_locked()
-> bpf_selem_link_map()		=> bpf_selem_link_map_locked()
-> __bpf_selem_unlink_storage() 	=> bpf_selem_unlink_storage_locked()
-> bpf_link_storage() means unlocked
-> bpf_unlink_storage() means unlocked.
+> In case of any error, call the map_poke_untrack() on subprog's aux
+> structs that have already been registered to prog array map.
 > 
-> I think it could be one follow-up patch later instead of interrupting
-> multiple patches in this set for this minor thing.  For now, lets
-> continue with this and remember default is nolock for storage.
+> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> ---
+>   kernel/bpf/verifier.c | 41 +++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 41 insertions(+)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 9a6703bc3f36..3e931e3e2239 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9900,9 +9900,12 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+>   {
+>   	struct bpf_prog *prog = env->prog, **func, *tmp;
+>   	int i, j, subprog_start, subprog_end = 0, len, subprog;
+> +	struct bpf_map *map_ptr;
+>   	struct bpf_insn *insn;
+>   	void *old_bpf_func;
+>   	int err, num_exentries;
+> +	int last_poke_desc = 0;
+> +	int last_subprog = 0;
+>   
+>   	if (env->subprog_cnt <= 1)
+>   		return 0;
+> @@ -9967,6 +9970,26 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+>   		func[i]->aux->btf = prog->aux->btf;
+>   		func[i]->aux->func_info = prog->aux->func_info;
+>   
+> +		for (j = 0; j < prog->aux->size_poke_tab; j++) {
+> +			int ret;
+> +
+> +			ret = bpf_jit_add_poke_descriptor(func[i],
+> +							  &prog->aux->poke_tab[j]);
+> +			if (ret < 0) {
+> +				verbose(env, "adding tail call poke descriptor failed\n");
+> +				goto out_untrack;
+> +			}
+> +			map_ptr = func[i]->aux->poke_tab[j].tail_call.map;
+> +			ret = map_ptr->ops->map_poke_track(map_ptr, func[i]->aux);
+> +			if (ret < 0) {
+> +				verbose(env, "tracking tail call prog failed\n");
+> +				goto out_untrack;
+> +			}
+> +			last_poke_desc = j;
+> +		}
+> +		last_poke_desc = 0;
+> +		last_subprog = i;
+> +
+>   		/* Use bpf_prog_F_tag to indicate functions in stack traces.
+>   		 * Long term would need debug info to populate names
+>   		 */
+> @@ -10059,7 +10082,25 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+>   	prog->aux->func_cnt = env->subprog_cnt;
+>   	bpf_prog_free_unused_jited_linfo(prog);
+>   	return 0;
+> +out_untrack:
+> +	/* this loop is only for handling the case where propagating all of
+> +	 * the main prog's poke descs was not successful for a particular
+> +	 * subprog; last_poke_desc is zeroed once we walked through all
+> +	 * of the poke descs; if last_poke_desc != 0 then 'i' is valid since
+> +	 * it is pointing to the subprog that we were at when got an error
+> +	 */
+> +	while (last_poke_desc--) {
+> +		map_ptr = func[i]->aux->poke_tab[last_poke_desc].tail_call.map;
+> +		map_ptr->ops->map_poke_untrack(map_ptr, func[i]->aux);
+> +	}
+> +	last_subprog = i - 1;
+>   out_free:
+> +	for (i = last_subprog; i >= 0; i--) {
+> +		for (j = 0; j < prog->aux->size_poke_tab; j++) {
+> +			map_ptr = func[i]->aux->poke_tab[j].tail_call.map;
+> +			map_ptr->ops->map_poke_untrack(map_ptr, func[i]->aux);
+> +		}
+> +	}
+
+After staring at this code for a while, the logic looks correct to me, but feels overly
+complicated with making sure all the corner cases do function above. I wonder, why didn't
+you consider just something like ...
+
+    	for (i = 0; i < env->subprog_cnt; i++)
+    		if (func[i]) {
+			for (j = 0; j < func[i]->aux->size_poke_tab; j++) {
+				map_ptr = func[i]->aux->poke_tab[j].tail_call.map;
+				map_ptr->ops->map_poke_untrack(map_ptr, func[i]->aux);
+			}
+    			bpf_jit_free(func[i]);
+		}
+
+... instead of last_poke_desc/last_subprog tracking and the fallthrough trick above. Am
+I missing something?
+
+>   	for (i = 0; i < env->subprog_cnt; i++)
+>   		if (func[i])
+>   			bpf_jit_free(func[i]);
 > 
 
-Makes sense. I can update these in a separate patch if there are no
-major changes needed in this one.
-
-> I will continue tomorrow.
-
-Awesome! Thanks :)
-
-- KP
-
-> 
